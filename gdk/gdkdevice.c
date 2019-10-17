@@ -314,7 +314,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -330,7 +330,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE, 1, GDK_TYPE_DEVICE_TOOL);
 }
 
@@ -510,7 +510,7 @@ gdk_device_get_property (GObject    *object,
  * Gets the current state of a pointer device relative to @surface. As a slave
  * device’s coordinates are those of its master pointer, this
  * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them. See gdk_device_grab().
+ * unless there is an ongoing grab on them. See gdk_seat_grab().
  */
 void
 gdk_device_get_state (GdkDevice       *device,
@@ -528,24 +528,20 @@ gdk_device_get_state (GdkDevice       *device,
     GDK_DEVICE_GET_CLASS (device)->get_state (device, surface, axes, mask);
 }
 
-/**
- * gdk_device_get_position_double:
+/*
+ * gdk_device_get_position:
  * @device: pointer device to query status about.
- * @x: (out) (allow-none): location to store root window X coordinate of @device, or %NULL.
- * @y: (out) (allow-none): location to store root window Y coordinate of @device, or %NULL.
+ * @x: (out): location to store root window X coordinate of @device
+ * @y: (out): location to store root window Y coordinate of @device
  *
- * Gets the current location of @device in double precision. As a slave device's
- * coordinates are those of its master pointer, this function
- * may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them. See gdk_device_grab().
- **/
+ * Gets the current location of @device in double precision.
+ */
 void
-gdk_device_get_position_double (GdkDevice        *device,
-                                gdouble          *x,
-                                gdouble          *y)
+gdk_device_get_position (GdkDevice *device,
+                         double    *x,
+                         double    *y)
 {
   GdkDisplay *display;
-  gdouble tmp_x, tmp_y;
 
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
@@ -555,46 +551,11 @@ gdk_device_get_position_double (GdkDevice        *device,
   g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
                     gdk_display_device_is_grabbed (display, device));
 
-  _gdk_device_query_state (device,
-                           NULL,
-                           NULL,
-                           &tmp_x, &tmp_y,
-                           NULL, NULL, NULL);
-
-  if (x)
-    *x = tmp_x;
-  if (y)
-    *y = tmp_y;
+  _gdk_device_query_state (device, NULL, NULL, x, y, NULL, NULL, NULL);
 }
 
 /**
- * gdk_device_get_position:
- * @device: pointer device to query status about.
- * @x: (out) (allow-none): location to store root window X coordinate of @device, or %NULL.
- * @y: (out) (allow-none): location to store root window Y coordinate of @device, or %NULL.
- *
- * Gets the current location of @device. As a slave device
- * coordinates are those of its master pointer, This function
- * may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them, see gdk_device_grab().
- **/
-void
-gdk_device_get_position (GdkDevice *device,
-                         gint      *x,
-                         gint      *y)
-{
-  gdouble tmp_x, tmp_y;
-
-  gdk_device_get_position_double (device, &tmp_x, &tmp_y);
-  if (x)
-    *x = round (tmp_x);
-  if (y)
-    *y = round (tmp_y);
-}
-
-
-/**
- * gdk_device_get_surface_at_position_double:
+ * gdk_device_get_surface_at_position:
  * @device: pointer #GdkDevice to query info to.
  * @win_x: (out) (allow-none): return location for the X coordinate of the device location,
  *         relative to the surface origin, or %NULL.
@@ -607,15 +568,15 @@ gdk_device_get_position (GdkDevice *device,
  *
  * As a slave device coordinates are those of its master pointer, This
  * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them, see gdk_device_grab().
+ * unless there is an ongoing grab on them, see gdk_seat_grab().
  *
  * Returns: (nullable) (transfer none): the #GdkSurface under the
  *   device position, or %NULL.
  **/
 GdkSurface *
-gdk_device_get_surface_at_position_double (GdkDevice  *device,
-                                          gdouble    *win_x,
-                                          gdouble    *win_y)
+gdk_device_get_surface_at_position (GdkDevice *device,
+                                    double    *win_x,
+                                    double    *win_y)
 {
   gdouble tmp_x, tmp_y;
   GdkSurface *surface;
@@ -627,54 +588,10 @@ gdk_device_get_surface_at_position_double (GdkDevice  *device,
 
   surface = _gdk_device_surface_at_position (device, &tmp_x, &tmp_y, NULL, FALSE);
 
-  /* This might need corrections, as the native surface returned
-     may contain client side children */
-  if (surface)
-    surface = _gdk_surface_find_descendant_at (surface,
-                                             tmp_x, tmp_y,
-                                             &tmp_x, &tmp_y);
-
   if (win_x)
     *win_x = tmp_x;
   if (win_y)
     *win_y = tmp_y;
-
-  return surface;
-}
-
-/**
- * gdk_device_get_surface_at_position:
- * @device: pointer #GdkDevice to query info to.
- * @win_x: (out) (allow-none): return location for the X coordinate of the device location,
- *         relative to the surface origin, or %NULL.
- * @win_y: (out) (allow-none): return location for the Y coordinate of the device location,
- *         relative to the surface origin, or %NULL.
- *
- * Obtains the surface underneath @device, returning the location of the device in @win_x and @win_y. Returns
- * %NULL if the surface tree under @device is not known to GDK (for example, belongs to another application).
- *
- * As a slave device coordinates are those of its master pointer, This
- * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them, see gdk_device_grab().
- *
- * Returns: (nullable) (transfer none): the #GdkSurface under the
- * device position, or %NULL.
- **/
-GdkSurface *
-gdk_device_get_surface_at_position (GdkDevice  *device,
-                                   gint       *win_x,
-                                   gint       *win_y)
-{
-  gdouble tmp_x, tmp_y;
-  GdkSurface *surface;
-
-  surface =
-    gdk_device_get_surface_at_position_double (device, &tmp_x, &tmp_y);
-
-  if (win_x)
-    *win_x = round (tmp_x);
-  if (win_y)
-    *win_y = round (tmp_y);
 
   return surface;
 }
@@ -1305,59 +1222,9 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
        GDK_BUTTON3_MOTION_MASK));
 }
 
-/**
- * gdk_device_grab:
- * @device: a #GdkDevice. To get the device you can use gtk_get_current_event_device()
- *   or gdk_event_get_device() if the grab is in reaction to an event. Also, you can use
- *   gdk_seat_get_pointer() but only in code that isn’t triggered by a
- *   #GdkEvent and there aren’t other means to get a meaningful #GdkDevice to operate on.
- * @surface: the #GdkSurface which will own the grab (the grab surface)
- * @grab_ownership: specifies the grab ownership.
- * @owner_events: if %FALSE then all device events are reported with respect to
- *                @surface and are only reported if selected by @event_mask. If
- *                %TRUE then pointer events for this application are reported
- *                as normal, but pointer events outside this application are
- *                reported with respect to @surface and only if selected by
- *                @event_mask. In either mode, unreported events are discarded.
- * @event_mask: specifies the event mask, which is used in accordance with
- *              @owner_events.
- * @cursor: (allow-none): the cursor to display while the grab is active if the device is
- *          a pointer. If this is %NULL then the normal cursors are used for
- *          @surface and its descendants, and the cursor for @surface is used
- *          elsewhere.
- * @time_: the timestamp of the event which led to this pointer grab. This
- *         usually comes from the #GdkEvent struct, though %GDK_CURRENT_TIME
- *         can be used if the time isn’t known.
- *
- * Grabs the device so that all events coming from this device are passed to
- * this application until the device is ungrabbed with gdk_device_ungrab(),
- * or the surface becomes unviewable. This overrides any previous grab on the device
- * by this client.
- *
- * Note that @device and @surface need to be on the same display.
- *
- * Device grabs are used for operations which need complete control over the
- * given device events (either pointer or keyboard). For example in GTK+ this
- * is used for Drag and Drop operations, popup menus and such.
- *
- * Note that if the event mask of an X window has selected both button press
- * and button release events, then a button press event will cause an automatic
- * pointer grab until the button is released. X does this automatically since
- * most applications expect to receive button press and release events in pairs.
- * It is equivalent to a pointer grab on the surface with @owner_events set to
- * %TRUE.
- *
- * If you set up anything at the time you take the grab that needs to be
- * cleaned up when the grab ends, you should handle the #GdkEventGrabBroken
- * events that are emitted when the grab ends unvoluntarily.
- *
- * Returns: %GDK_GRAB_SUCCESS if the grab was successful.
- *
- * Deprecated: Use gdk_seat_grab() instead.
- **/
 GdkGrabStatus
 gdk_device_grab (GdkDevice        *device,
-                 GdkSurface        *surface,
+                 GdkSurface       *surface,
                  GdkGrabOwnership  grab_ownership,
                  gboolean          owner_events,
                  GdkEventMask      event_mask,
@@ -1365,19 +1232,16 @@ gdk_device_grab (GdkDevice        *device,
                  guint32           time_)
 {
   GdkGrabStatus res;
-  GdkSurface *native;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_GRAB_FAILED);
   g_return_val_if_fail (GDK_IS_SURFACE (surface), GDK_GRAB_FAILED);
   g_return_val_if_fail (gdk_surface_get_display (surface) == gdk_device_get_display (device), GDK_GRAB_FAILED);
 
-  native = gdk_surface_get_toplevel (surface);
-
-  if (native == NULL || GDK_SURFACE_DESTROYED (native))
+  if (GDK_SURFACE_DESTROYED (surface))
     return GDK_GRAB_NOT_VIEWABLE;
 
   res = GDK_DEVICE_GET_CLASS (device)->grab (device,
-                                             native,
+                                             surface,
                                              owner_events,
                                              get_native_grab_event_mask (event_mask),
                                              NULL,
@@ -1395,7 +1259,6 @@ gdk_device_grab (GdkDevice        *device,
       _gdk_display_add_device_grab (display,
                                     device,
                                     surface,
-                                    native,
                                     grab_ownership,
                                     owner_events,
                                     event_mask,
@@ -1407,15 +1270,6 @@ gdk_device_grab (GdkDevice        *device,
   return res;
 }
 
-/**
- * gdk_device_ungrab:
- * @device: a #GdkDevice
- * @time_: a timestap (e.g. %GDK_CURRENT_TIME).
- *
- * Release any grab on @device.
- *
- * Deprecated: 3.20. Use gdk_seat_ungrab() instead.
- */
 void
 gdk_device_ungrab (GdkDevice  *device,
                    guint32     time_)
@@ -1423,34 +1277,6 @@ gdk_device_ungrab (GdkDevice  *device,
   g_return_if_fail (GDK_IS_DEVICE (device));
 
   GDK_DEVICE_GET_CLASS (device)->ungrab (device, time_);
-}
-
-/**
- * gdk_device_warp:
- * @device: the device to warp.
- * @x: the X coordinate of the destination.
- * @y: the Y coordinate of the destination.
- *
- * Warps @device in @display to the point @x,@y,
- * unless the device is confined to a surface by a grab,
- * in which case it will be moved
- * as far as allowed by the grab. Warping the pointer
- * creates events as if the user had moved the mouse
- * instantaneously to the destination.
- *
- * Note that the pointer should normally be under the
- * control of the user. This function was added to cover
- * some rare use cases like keyboard navigation support
- * for the color picker in the #GtkColorSelectionDialog.
- **/
-void
-gdk_device_warp (GdkDevice  *device,
-                 gint        x,
-                 gint        y)
-{
-  g_return_if_fail (GDK_IS_DEVICE (device));
-
-  GDK_DEVICE_GET_CLASS (device)->warp (device, x, y);
 }
 
 /* Private API */
@@ -1698,7 +1524,7 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
       else
         scale = 1;
 
-      offset = - surface_root_x - surface->abs_x;
+      offset = - surface_root_x;
     }
   else
     {
@@ -1707,7 +1533,7 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
       else
         scale = 1;
 
-      offset = - surface_root_y - surface->abs_y;
+      offset = - surface_root_y;
     }
 
   if (axis_value)

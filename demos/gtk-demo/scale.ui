@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.6 -->
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">4</property>
     <property name="value">2</property>
@@ -33,11 +32,11 @@
             <accessibility>
               <relation type="label-for" target="scale_plain"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkScale" id="scale_plain">
@@ -49,11 +48,11 @@
             <accessibility>
               <relation type="labelled-by" target="label_plain"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label_marks">
@@ -62,11 +61,11 @@
             <accessibility>
               <relation type="label-for" target="scale_marks"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkScale" id="scale_marks">
@@ -76,20 +75,20 @@
             <property name="adjustment">adjustment2</property>
             <property name="hexpand">1</property>
             <marks>
-              <mark value="0" position="bottom"></mark>
-              <mark value="1" position="bottom"></mark>
-              <mark value="2" position="bottom"></mark>
-              <mark value="3" position="bottom"></mark>
-              <mark value="4" position="bottom"></mark>
+              <mark value="0" position="bottom"/>
+              <mark value="1" position="bottom"/>
+              <mark value="2" position="bottom"/>
+              <mark value="3" position="bottom"/>
+              <mark value="4" position="bottom"/>
             </marks>
             <accessibility>
               <relation type="labelled-by" target="label_marks"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label_discrete">
@@ -98,11 +97,11 @@
             <accessibility>
               <relation type="label-for" target="scale_discrete"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkScale" id="scale_discrete">
@@ -116,17 +115,17 @@
               <relation type="labelled-by" target="label_discrete"/>
             </accessibility>
             <marks>
-              <mark value="0" position="bottom"></mark>
-              <mark value="1" position="bottom"></mark>
-              <mark value="2" position="bottom"></mark>
-              <mark value="3" position="bottom"></mark>
-              <mark value="4" position="bottom"></mark>
+              <mark value="0" position="bottom"/>
+              <mark value="1" position="bottom"/>
+              <mark value="2" position="bottom"/>
+              <mark value="3" position="bottom"/>
+              <mark value="4" position="bottom"/>
             </marks>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
       </object>
     </child>

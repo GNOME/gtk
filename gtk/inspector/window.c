@@ -32,12 +32,9 @@
 #include "controllers.h"
 #include "css-editor.h"
 #include "css-node-tree.h"
-#include "object-hierarchy.h"
 #include "object-tree.h"
-#include "selector.h"
 #include "size-groups.h"
 #include "data-list.h"
-#include "signals-list.h"
 #include "actions.h"
 #include "menu.h"
 #include "misc-info.h"
@@ -51,10 +48,15 @@
 #include "gtklabel.h"
 #include "gtkmodulesprivate.h"
 #include "gtkprivate.h"
+#include "gtknative.h"
 #include "gtkstack.h"
 #include "gtktreeviewcolumn.h"
 #include "gtkwindowgroup.h"
-#include "gtkwindowprivate.h"
+#include "gtkrevealer.h"
+#include "gtklayoutmanager.h"
+#include "gtkcssprovider.h"
+#include "gtkstylecontext.h"
+
 
 G_DEFINE_TYPE (GtkInspectorWindow, gtk_inspector_window, GTK_TYPE_WINDOW)
 
@@ -72,10 +74,7 @@ set_selected_object (GtkInspectorWindow *iw,
   gtk_label_set_label (GTK_LABEL (iw->object_title), title);
   g_free (title);
 
-  gtk_inspector_prop_list_set_object (GTK_INSPECTOR_PROP_LIST (iw->child_prop_list), selected);
-  gtk_inspector_signals_list_set_object (GTK_INSPECTOR_SIGNALS_LIST (iw->signals_list), selected);
-  gtk_inspector_object_hierarchy_set_object (GTK_INSPECTOR_OBJECT_HIERARCHY (iw->object_hierarchy), selected);
-  gtk_inspector_selector_set_object (GTK_INSPECTOR_SELECTOR (iw->selector), selected);
+  gtk_inspector_prop_list_set_layout_child (GTK_INSPECTOR_PROP_LIST (iw->layout_prop_list), selected);
   gtk_inspector_misc_info_set_object (GTK_INSPECTOR_MISC_INFO (iw->misc_info), selected);
   gtk_inspector_css_node_tree_set_object (GTK_INSPECTOR_CSS_NODE_TREE (iw->widget_css_node_tree), selected);
   gtk_inspector_size_groups_set_object (GTK_INSPECTOR_SIZE_GROUPS (iw->size_groups), selected);
@@ -259,6 +258,14 @@ gtk_inspector_window_constructed (GObject *object)
 }
 
 static void
+gtk_inspector_window_dispose (GObject *object)
+{
+  g_object_set_data (G_OBJECT (gdk_display_get_default ()), "-gtk-inspector", NULL);
+
+  G_OBJECT_CLASS (gtk_inspector_window_parent_class)->dispose (object);
+}
+
+static void
 object_details_changed (GtkWidget          *combo,
                         GParamSpec         *pspec,
                         GtkInspectorWindow *iw)
@@ -267,14 +274,38 @@ object_details_changed (GtkWidget          *combo,
 }
 
 static void
+toggle_sidebar (GtkWidget          *button,
+                GtkInspectorWindow *iw)
+{
+  if (gtk_revealer_get_child_revealed (GTK_REVEALER (iw->sidebar_revealer)))
+    {
+      gtk_revealer_set_reveal_child (GTK_REVEALER (iw->sidebar_revealer), FALSE);
+      gtk_button_set_icon_name (GTK_BUTTON (button), "go-next-symbolic");
+    }
+  else
+    {
+      gtk_revealer_set_reveal_child (GTK_REVEALER (iw->sidebar_revealer), TRUE);
+      gtk_button_set_icon_name (GTK_BUTTON (button), "go-previous-symbolic");
+    }
+}
+
+static void
 gtk_inspector_window_realize (GtkWidget *widget)
 {
   GskRenderer *renderer;
+  GtkCssProvider *provider;
 
   GTK_WIDGET_CLASS (gtk_inspector_window_parent_class)->realize (widget);
 
-  renderer = gtk_window_get_renderer (GTK_WINDOW (widget));
+  renderer = gtk_native_get_renderer (GTK_NATIVE (widget));
   gsk_renderer_set_debug_flags (renderer, 0);
+
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_resource (provider, "/org/gtk/libgtk/inspector/inspector.css");
+  gtk_style_context_add_provider_for_display (gtk_widget_get_display (widget),
+                                              GTK_STYLE_PROVIDER (provider),
+                                              800);
+  g_object_unref (provider);
 }
 
 static void
@@ -284,7 +315,19 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = gtk_inspector_window_constructed;
+  object_class->dispose = gtk_inspector_window_dispose;
   widget_class->realize = gtk_inspector_window_realize;
+
+  g_signal_new (g_intern_static_string ("event"),
+                G_OBJECT_CLASS_TYPE (object_class),
+                G_SIGNAL_RUN_LAST,
+                0,
+                g_signal_accumulator_true_handled,
+                NULL,
+                NULL,
+                G_TYPE_BOOLEAN,
+                1,
+                GDK_TYPE_EVENT);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/window.ui");
 
@@ -299,13 +342,10 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_details_button);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, select_object);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, prop_list);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, child_prop_list);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, signals_list);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, layout_prop_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, widget_css_node_tree);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, widget_recorder);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_hierarchy);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_title);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, selector);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, size_groups);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, data_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, actions);
@@ -313,6 +353,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, misc_info);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, controllers);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, magnifier);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, sidebar_revealer);
 
   gtk_widget_class_bind_template_callback (widget_class, gtk_inspector_on_inspect);
   gtk_widget_class_bind_template_callback (widget_class, on_object_activated);
@@ -321,6 +362,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, close_object_details);
   gtk_widget_class_bind_template_callback (widget_class, object_details_changed);
   gtk_widget_class_bind_template_callback (widget_class, notify_node);
+  gtk_widget_class_bind_template_callback (widget_class, toggle_sidebar);
 }
 
 static GdkDisplay *
@@ -366,6 +408,9 @@ get_inspector_display (void)
 
   if (!display)
     display = gdk_display_get_default ();
+
+  if (display == gdk_display_get_default ())
+    g_message ("Using default display for GtkInspector; expect some spillover");
 
   return display;
 }
@@ -466,6 +511,21 @@ gtk_inspector_is_recording (GtkWidget *widget)
     return FALSE;
 
   return gtk_inspector_recorder_is_recording (GTK_INSPECTOR_RECORDER (iw->widget_recorder));
+}
+
+gboolean
+gtk_inspector_handle_event (GdkEvent *event)
+{
+  GtkInspectorWindow *iw;
+  gboolean handled = FALSE;
+
+  iw = gtk_inspector_window_get_for_display (gdk_event_get_display (event));
+  if (iw == NULL)
+    return FALSE;
+
+  g_signal_emit_by_name (iw, "event", event, &handled);
+
+  return handled;
 }
 
 // vim: set et sw=2 ts=2:

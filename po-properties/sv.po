@@ -108,7 +108,7 @@ msgstr "Leverantörs-ID"
 msgid "Product ID"
 msgstr "Produkt-ID"
 
-# The GdkSeat object represents a collection of input devices that belong to an user.
+# The GdkSeat object represents a collection of input devices that belong to a user.
 #: gdk/gdkdevice.c:289 gdk/gdkdevice.c:290
 msgid "Seat"
 msgstr "Säte"

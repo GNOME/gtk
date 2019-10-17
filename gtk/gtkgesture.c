@@ -123,6 +123,8 @@
 #include "gtkprivate.h"
 #include "gtkmain.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
+#include "gtknative.h"
 
 typedef struct _GtkGesturePrivate GtkGesturePrivate;
 typedef struct _PointData PointData;
@@ -600,23 +602,12 @@ _gtk_gesture_cancel_all (GtkGesture *gesture)
 
 static gboolean
 gesture_within_surface (GtkGesture *gesture,
-                        GdkSurface  *parent)
+                        GdkSurface  *surface)
 {
-  GdkSurface *surface;
   GtkWidget *widget;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-  surface = gtk_widget_get_surface (widget);
-
-  while (surface)
-    {
-      if (surface == parent)
-        return TRUE;
-
-      surface = gdk_surface_get_parent (surface);
-    }
-
-  return FALSE;
+  return surface == gtk_native_get_surface (gtk_widget_get_native (widget));
 }
 
 static gboolean
@@ -628,7 +619,10 @@ gtk_gesture_filter_event (GtkEventController *controller,
    * subclasses which punch the holes in for the events
    * they can possibly handle.
    */
-  return EVENT_IS_TOUCHPAD_GESTURE (event);
+  if (EVENT_IS_TOUCHPAD_GESTURE (event))
+    return FALSE;
+
+  return GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_parent_class)->filter_event (controller, event);
 }
 
 static gboolean
@@ -887,9 +881,13 @@ gtk_gesture_class_init (GtkGestureClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureClass, sequence_state_changed),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  _gtk_marshal_VOID__BOXED_ENUM,
                   G_TYPE_NONE, 2, GDK_TYPE_EVENT_SEQUENCE,
                   GTK_TYPE_EVENT_SEQUENCE_STATE);
+  g_signal_set_va_marshaller (signals[SEQUENCE_STATE_CHANGED],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__BOXED_ENUMv);
 }
 
 static void

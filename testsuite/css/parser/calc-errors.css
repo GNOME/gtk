@@ -1,7 +1,3 @@
-a {
-  margin-left: calc(calc(1px));
-}
-
 b {
   margin-left: calc(1px + 2s);
 }
@@ -59,7 +55,7 @@ o {
 }
 
 p {
-  margin-left: calc((((((1px))));
+  margin-left: calc((((((1px))));));
 }
 
 q {
@@ -72,4 +68,8 @@ r {
 
 s {
   margin-left: calc(1px + (error));
+}
+
+t {
+  margin-left: calc((3px + 4px and a lot of junk));
 }

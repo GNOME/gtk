@@ -55,6 +55,17 @@
 #include "gtkintl.h"
 
 
+typedef struct _GtkAspectFrameClass GtkAspectFrameClass;
+
+struct _GtkAspectFrame
+{
+  GtkFrame parent_instance;
+};
+
+struct _GtkAspectFrameClass
+{
+  GtkFrameClass parent_class;
+};
 
 typedef struct
 {

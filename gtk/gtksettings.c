@@ -18,21 +18,22 @@
 
 #include "config.h"
 
-#include <string.h>
-
-#include "gtksettings.h"
-
 #include "gtksettingsprivate.h"
-#include "gtkintl.h"
-#include "gtkwidget.h"
-#include "gtkprivate.h"
+
 #include "gtkcssproviderprivate.h"
 #include "gtkhslaprivate.h"
+#include "gtkintl.h"
+#include "gtkprivate.h"
+#include "gtkscrolledwindow.h"
+#include "gtkstylecontext.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
-#include "gtkscrolledwindow.h"
+#include "gtkwidget.h"
+
 #include "gdk/gdk-private.h"
+
+#include <string.h>
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -74,7 +75,7 @@
  * [XSettings](http://www.freedesktop.org/wiki/Specifications/xsettings-spec)
  * manager that is usually part of the desktop environment, along with
  * utilities that let the user change these settings. In the absence of
- * an Xsettings manager, GTK+ reads default values for settings from
+ * an Xsettings manager, GTK reads default values for settings from
  * `settings.ini` files in
  * `/etc/gtk-4.0`, `$XDG_CONFIG_DIRS/gtk-4.0`
  * and `$XDG_CONFIG_HOME/gtk-4.0`.
@@ -86,18 +87,7 @@
  * Applications can override system-wide settings by setting the property
  * of the GtkSettings object with g_object_set(). This should be restricted
  * to special cases though; GtkSettings are not meant as an application
- * configuration facility. When doing so, you need to be aware that settings
- * that are specific to individual widgets may not be available before the
- * widget type has been realized at least once. The following example
- * demonstrates a way to do this:
- * |[<!-- language="C" -->
- *   gtk_init ();
- *
- *   // make sure the type is realized
- *   g_type_class_unref (g_type_class_ref (GTK_TYPE_BUTTON));
- *
- *   g_object_set (gtk_settings_get_default (), "gtk-enable-animations", FALSE, NULL);
- * ]|
+ * configuration facility.
  *
  * There is one GtkSettings instance per display. It can be obtained with
  * gtk_settings_get_for_display(), but in many cases, it is more convenient
@@ -110,8 +100,23 @@
 #define DEFAULT_TIMEOUT_REPEAT   50
 #define DEFAULT_TIMEOUT_EXPAND  500
 
+typedef struct _GtkSettingsClass GtkSettingsClass;
+
+struct _GtkSettingsClass
+{
+  GObjectClass parent_class;
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
+};
+
 typedef struct _GtkSettingsPropertyValue GtkSettingsPropertyValue;
 typedef struct _GtkSettingsValuePrivate GtkSettingsValuePrivate;
+
+typedef struct _GtkSettingsPrivate GtkSettingsPrivate;
 
 struct _GtkSettingsPrivate
 {
@@ -120,7 +125,6 @@ struct _GtkSettingsPrivate
   GdkDisplay *display;
   GSList *style_cascades;
   GtkCssProvider *theme_provider;
-  GtkCssProvider *key_theme_provider;
   gint font_size;
   gboolean font_size_absolute;
   gchar *font_family;
@@ -149,7 +153,6 @@ enum {
   PROP_SPLIT_CURSOR,
   PROP_THEME_NAME,
   PROP_ICON_THEME_NAME,
-  PROP_KEY_THEME_NAME,
   PROP_DND_DRAG_THRESHOLD,
   PROP_FONT_NAME,
   PROP_XFT_ANTIALIAS,
@@ -188,7 +191,8 @@ enum {
   PROP_ENABLE_PRIMARY_PASTE,
   PROP_RECENT_FILES_ENABLED,
   PROP_LONG_PRESS_TIME,
-  PROP_KEYNAV_USE_CARET
+  PROP_KEYNAV_USE_CARET,
+  PROP_OVERLAY_SCROLLING
 };
 
 /* --- prototypes --- */
@@ -215,7 +219,6 @@ static void    settings_update_font_options      (GtkSettings           *setting
 static void    settings_update_font_values       (GtkSettings           *settings);
 static gboolean settings_update_fontconfig       (GtkSettings           *settings);
 static void    settings_update_theme             (GtkSettings           *settings);
-static void    settings_update_key_theme         (GtkSettings           *settings);
 static gboolean settings_update_xsetting         (GtkSettings           *settings,
                                                   GParamSpec            *pspec,
                                                   gboolean               force);
@@ -253,7 +256,6 @@ gtk_settings_init (GtkSettings *settings)
   const gchar * const *config_dirs;
 
   priv = gtk_settings_get_instance_private (settings);
-  settings->priv = priv;
 
   g_datalist_init (&priv->queued_settings);
   object_list = g_slist_prepend (object_list, settings);
@@ -420,15 +422,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_assert (result == PROP_ICON_THEME_NAME);
 
   result = settings_install_property_parser (class,
-                                             g_param_spec_string ("gtk-key-theme-name",
-                                                                  P_("Key Theme Name"),
-                                                                  P_("Name of key theme to load"),
-                                                                  NULL,
-                                                                  GTK_PARAM_READWRITE),
-                                             NULL);
-  g_assert (result == PROP_KEY_THEME_NAME);
-
-  result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-dnd-drag-threshold",
                                                                P_("Drag threshold"),
                                                                P_("Number of pixels the cursor can move before dragging"),
@@ -440,7 +433,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-font-name:
    *
-   * The default font to use. GTK+ uses the family name and size from this string.
+   * The default font to use. GTK uses the family name and size from this string.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-font-name",
@@ -578,7 +571,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:gtk-print-backends:
    *
    * A comma-separated list of print backends to use in the print
-   * dialog. Available print backends depend on the GTK+ installation,
+   * dialog. Available print backends depend on the GTK installation,
    * and may include "file", "cups", "lpr" or "papi".
    */
   result = settings_install_property_parser (class,
@@ -633,7 +626,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * Which IM (input method) module should be used by default. This is the
    * input method that will be used if the user has not explicitly chosen
    * another input method from the IM context menu.
-   * This also can be a colon-separated list of input methods, which GTK+
+   * This also can be a colon-separated list of input methods, which GTK
    * will try in turn until it finds one available on the system.
    *
    * See #GtkIMContext.
@@ -683,7 +676,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * See the [Sound Theme Specifications](http://www.freedesktop.org/wiki/Specifications/sound-theme-spec)
    * for more information on event sounds and sound themes.
    *
-   * GTK+ itself does not support event sounds, you have to use a loadable
+   * GTK itself does not support event sounds, you have to use a loadable
    * module like the one that comes with libcanberra.
    */
   result = settings_install_property_parser (class,
@@ -703,7 +696,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * See the [Sound Theme Specifications](http://www.freedesktop.org/wiki/Specifications/sound-theme-spec)
    * for more information on event sounds and sound themes.
    *
-   * GTK+ itself does not support event sounds, you have to use a loadable
+   * GTK itself does not support event sounds, you have to use a loadable
    * module like the one that comes with libcanberra.
    */
   result = settings_install_property_parser (class,
@@ -724,7 +717,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * See the [Sound Theme Specifications](http://www.freedesktop.org/wiki/Specifications/sound-theme-spec)
    * for more information on event sounds and sound themes.
    *
-   * GTK+ itself does not support event sounds, you have to use a loadable
+   * GTK itself does not support event sounds, you have to use a loadable
    * module like the one that comes with libcanberra.
    */
   result = settings_install_property_parser (class,
@@ -745,7 +738,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * slider/value to move by the range’s page-size towards the point clicked.
    *
    * Whichever action you choose for the primary button, the other action will
-   * be available by holding Shift and primary-clicking, or (since GTK+ 3.22.25)
+   * be available by holding Shift and primary-clicking, or (since GTK 3.22.25)
    * clicking the middle mouse button.
    */
   result = settings_install_property_parser (class,
@@ -760,7 +753,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-application-prefer-dark-theme:
    *
-   * Whether the application prefers to use a dark theme. If a GTK+ theme
+   * Whether the application prefers to use a dark theme. If a GTK theme
    * includes a dark variant, it will be used instead of the configured
    * theme.
    *
@@ -935,7 +928,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-dialogs-use-header:
    *
-   * Whether builtin GTK+ dialogs such as the file chooser, the
+   * Whether builtin GTK dialogs such as the file chooser, the
    * color chooser or the font chooser will use a header bar at
    * the top to show action widgets, or an action area at the bottom.
    *
@@ -945,7 +938,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-dialogs-use-header",
                                                                    P_("Dialogs use header bar"),
-                                                                   P_("Whether builtin GTK+ dialogs should use a header bar instead of an action area."),
+                                                                   P_("Whether builtin GTK dialogs should use a header bar instead of an action area."),
                                                                    FALSE,
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
@@ -969,13 +962,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-recent-files-enabled:
    *
-   * Whether GTK+ should keep track of items inside the recently used
+   * Whether GTK should keep track of items inside the recently used
    * resources list. If set to %FALSE, the list will always be empty.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-recent-files-enabled",
                                                                    P_("Recent Files Enabled"),
-                                                                   P_("Whether GTK+ remembers recent files"),
+                                                                   P_("Whether GTK remembers recent files"),
                                                                    TRUE,
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
@@ -998,7 +991,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-keynav-use-caret:
    *
-   * Whether GTK+ should make sure that text can be navigated with
+   * Whether GTK should make sure that text can be navigated with
    * a caret, even if it is not editable. This is useful when using
    * a screen reader.
    */
@@ -1010,6 +1003,22 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_KEYNAV_USE_CARET);
+
+  /**
+   * GtkSettings:gtk-overlay-scrolling:
+   *
+   * Whether scrolled windows may use overlayed scrolling indicators.
+   * If this is set to %FALSE, scrolled windows will have permanent
+   * scrollbars.
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-overlay-scrolling",
+                                                                   P_("Whether to use overlay scrollbars"),
+                                                                   P_("Whether to use overlay scrollbars"),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_OVERLAY_SCROLLING);
 }
 
 static GtkSettings *
@@ -1028,7 +1037,7 @@ static void
 gtk_settings_finalize (GObject *object)
 {
   GtkSettings *settings = GTK_SETTINGS (object);
-  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   guint i;
 
   object_list = g_slist_remove (object_list, settings);
@@ -1040,7 +1049,6 @@ gtk_settings_finalize (GObject *object)
   g_datalist_clear (&priv->queued_settings);
 
   settings_update_provider (priv->display, &priv->theme_provider, NULL);
-  settings_update_provider (priv->display, &priv->key_theme_provider, NULL);
   g_slist_free_full (priv->style_cascades, g_object_unref);
 
   if (priv->font_options)
@@ -1055,7 +1063,7 @@ GtkStyleCascade *
 _gtk_settings_get_style_cascade (GtkSettings *settings,
                                  gint         scale)
 {
-  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   GtkStyleCascade *new_cascade;
   GSList *list;
 
@@ -1084,6 +1092,7 @@ _gtk_settings_get_style_cascade (GtkSettings *settings,
 static void
 settings_init_style (GtkSettings *settings)
 {
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   static GtkCssProvider *css_provider = NULL;
   GtkStyleCascade *cascade;
 
@@ -1115,11 +1124,10 @@ settings_init_style (GtkSettings *settings)
                                    GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
 
   _gtk_style_cascade_add_provider (cascade,
-                                   GTK_STYLE_PROVIDER (settings->priv->theme_provider),
+                                   GTK_STYLE_PROVIDER (priv->theme_provider),
                                    GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
 
   settings_update_theme (settings);
-  settings_update_key_theme (settings);
 }
 
 static void
@@ -1143,6 +1151,7 @@ static GtkSettings *
 gtk_settings_create_for_display (GdkDisplay *display)
 {
   GtkSettings *settings;
+  GtkSettingsPrivate *priv;
 
 #ifdef GDK_WINDOWING_QUARTZ
   if (GDK_IS_QUARTZ_DISPLAY (display))
@@ -1153,36 +1162,11 @@ gtk_settings_create_for_display (GdkDisplay *display)
                              NULL);
   else
 #endif
-#ifdef GDK_WINDOWING_BROADWAY
-    if (GDK_IS_BROADWAY_DISPLAY (display))
-      settings = g_object_new (GTK_TYPE_SETTINGS,
-                               "gtk-im-module", "broadway",
-                               NULL);
-  else
-#endif
-#ifdef GDK_WINDOWING_WAYLAND
-    if (GDK_IS_WAYLAND_DISPLAY (display))
-      {
-        if (gdk_wayland_display_query_registry (display,
-                                                "gtk_text_input_manager"))
-          {
-            settings = g_object_new (GTK_TYPE_SETTINGS,
-                                     "gtk-im-module", "wayland",
-                                     NULL);
-          }
-        else
-          {
-            /* Fallback to other IM methods if the compositor does not
-             * implement the interface(s).
-             */
-            settings = g_object_new (GTK_TYPE_SETTINGS, NULL);
-          }
-      }
-  else
-#endif
     settings = g_object_new (GTK_TYPE_SETTINGS, NULL);
 
-  settings->priv->display = display;
+  priv = gtk_settings_get_instance_private (settings);
+
+  priv->display = display;
 
   g_signal_connect_object (display, "setting-changed", G_CALLBACK (setting_changed), settings, 0);
 
@@ -1219,7 +1203,8 @@ gtk_settings_get_for_display (GdkDisplay *display)
   for (i = 0; i < display_settings->len; i++)
     {
       GtkSettings *settings = g_ptr_array_index (display_settings, i);
-      if (settings->priv->display == display)
+      GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
+      if (priv->display == display)
         return settings;
     }
 
@@ -1255,7 +1240,7 @@ gtk_settings_set_property (GObject      *object,
                            GParamSpec   *pspec)
 {
   GtkSettings *settings = GTK_SETTINGS (object);
-  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
 
   g_value_copy (value, &priv->property_values[property_id - 1].value);
   priv->property_values[property_id - 1].source = GTK_SETTINGS_SOURCE_APPLICATION;
@@ -1270,7 +1255,7 @@ settings_invalidate_style (GtkSettings *settings)
 static void
 settings_update_font_values (GtkSettings *settings)
 {
-  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   PangoFontDescription *desc;
   const gchar *font_name;
 
@@ -1310,7 +1295,7 @@ gtk_settings_notify (GObject    *object,
                      GParamSpec *pspec)
 {
   GtkSettings *settings = GTK_SETTINGS (object);
-  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   guint property_id = pspec->param_id;
 
   if (priv->display == NULL) /* initialization */
@@ -1326,9 +1311,6 @@ gtk_settings_notify (GObject    *object,
       settings_update_font_values (settings);
       settings_invalidate_style (settings);
       gtk_style_context_reset_widgets (priv->display);
-      break;
-    case PROP_KEY_THEME_NAME:
-      settings_update_key_theme (settings);
       break;
     case PROP_THEME_NAME:
     case PROP_APPLICATION_PREFER_DARK_THEME:
@@ -1364,7 +1346,7 @@ gtk_settings_notify (GObject    *object,
     }
 }
 
-gboolean
+static gboolean
 _gtk_settings_parse_convert (GtkRcPropertyParser parser,
                              const GValue       *src_value,
                              GParamSpec         *pspec,
@@ -1437,7 +1419,7 @@ apply_queued_setting (GtkSettings             *settings,
                       GParamSpec              *pspec,
                       GtkSettingsValuePrivate *qvalue)
 {
-  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   GValue tmp_value = G_VALUE_INIT;
   GtkRcPropertyParser parser = (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser);
 
@@ -1519,7 +1501,7 @@ settings_install_property_parser (GtkSettingsClass   *class,
   for (node = object_list; node; node = node->next)
     {
       GtkSettings *settings = node->data;
-      GtkSettingsPrivate *priv = settings->priv;
+      GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
       GtkSettingsValuePrivate *qvalue;
 
       priv->property_values = g_renew (GtkSettingsPropertyValue, priv->property_values, class_n_properties);
@@ -1543,21 +1525,6 @@ settings_install_property_parser (GtkSettingsClass   *class,
   return class_n_properties;
 }
 
-GtkRcPropertyParser
-_gtk_rc_property_parser_from_type (GType type)
-{
-  if (type == GTK_TYPE_REQUISITION)
-    return gtk_rc_property_parse_requisition;
-  else if (type == GTK_TYPE_BORDER)
-    return gtk_rc_property_parse_border;
-  else if (G_TYPE_FUNDAMENTAL (type) == G_TYPE_ENUM && G_TYPE_IS_DERIVED (type))
-    return gtk_rc_property_parse_enum;
-  else if (G_TYPE_FUNDAMENTAL (type) == G_TYPE_FLAGS && G_TYPE_IS_DERIVED (type))
-    return gtk_rc_property_parse_flags;
-  else
-    return NULL;
-}
-
 static void
 free_value (gpointer data)
 {
@@ -1574,7 +1541,7 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
                                           const GtkSettingsValue *new_value,
                                           GtkSettingsSource       source)
 {
-  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   GtkSettingsValuePrivate *qvalue;
   GParamSpec *pspec;
   gchar *name;
@@ -1612,19 +1579,6 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
   pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), g_quark_to_string (name_quark));
   if (pspec)
     apply_queued_setting (settings, pspec, qvalue);
-}
-
-void
-_gtk_settings_set_property_value_from_rc (GtkSettings            *settings,
-                                          const gchar            *prop_name,
-                                          const GtkSettingsValue *new_value)
-{
-  g_return_if_fail (GTK_SETTINGS (settings));
-  g_return_if_fail (prop_name != NULL);
-  g_return_if_fail (new_value != NULL);
-
-  gtk_settings_set_property_value_internal (settings, prop_name, new_value,
-                                            GTK_SETTINGS_SOURCE_THEME);
 }
 
 static const GScannerConfig gtk_rc_scanner_config =
@@ -1968,64 +1922,9 @@ gtk_rc_property_parse_border (const GParamSpec *pspec,
 }
 
 static void
-reset_rc_values_foreach (GQuark   key_id,
-                         gpointer data,
-                         gpointer user_data)
-{
-  GtkSettingsValuePrivate *qvalue = data;
-  GSList **to_reset = user_data;
-
-  if (qvalue->source == GTK_SETTINGS_SOURCE_THEME)
-    *to_reset = g_slist_prepend (*to_reset, GUINT_TO_POINTER (key_id));
-}
-
-void
-_gtk_settings_reset_rc_values (GtkSettings *settings)
-{
-  GtkSettingsPrivate *priv = settings->priv;
-  GSList *to_reset = NULL;
-  GSList *tmp_list;
-  GParamSpec **pspecs, **p;
-  gint i;
-
-  /* Remove any queued settings */
-  g_datalist_foreach (&priv->queued_settings,
-                      reset_rc_values_foreach,
-                      &to_reset);
-
-  for (tmp_list = to_reset; tmp_list; tmp_list = tmp_list->next)
-    {
-      GQuark key_id = GPOINTER_TO_UINT (tmp_list->data);
-      g_datalist_id_remove_data (&priv->queued_settings, key_id);
-    }
-
-   g_slist_free (to_reset);
-
-  /* Now reset the active settings
-   */
-  pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (settings), NULL);
-  i = 0;
-
-  g_object_freeze_notify (G_OBJECT (settings));
-  for (p = pspecs; *p; p++)
-    {
-      if (priv->property_values[i].source == GTK_SETTINGS_SOURCE_THEME)
-        {
-          GParamSpec *pspec = *p;
-
-          g_param_value_set_default (pspec, &priv->property_values[i].value);
-          g_object_notify_by_pspec (G_OBJECT (settings), pspec);
-        }
-      i++;
-    }
-  g_object_thaw_notify (G_OBJECT (settings));
-  g_free (pspecs);
-}
-
-static void
 settings_update_double_click (GtkSettings *settings)
 {
-  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   gint double_click_time;
   gint double_click_distance;
 
@@ -2041,7 +1940,7 @@ settings_update_double_click (GtkSettings *settings)
 static void
 settings_update_cursor_theme (GtkSettings *settings)
 {
-  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   gchar *theme = NULL;
   gint size = 0;
 
@@ -2059,7 +1958,7 @@ settings_update_cursor_theme (GtkSettings *settings)
 static void
 settings_update_font_options (GtkSettings *settings)
 {
-  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   gint hinting;
   gchar *hint_style_str;
   cairo_hint_style_t hint_style;
@@ -2080,7 +1979,7 @@ settings_update_font_options (GtkSettings *settings)
 
   priv->font_options = cairo_font_options_create ();
 
-  cairo_font_options_set_hint_metrics (priv->font_options, CAIRO_HINT_METRICS_ON);
+  cairo_font_options_set_hint_metrics (priv->font_options, CAIRO_HINT_METRICS_OFF);
 
   hint_style = CAIRO_HINT_STYLE_DEFAULT;
   if (hinting == 0)
@@ -2250,7 +2149,7 @@ get_theme_name (GtkSettings  *settings,
 static void
 settings_update_theme (GtkSettings *settings)
 {
-  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   gchar *theme_name;
   gchar *theme_variant;
   const gchar *theme_dir;
@@ -2258,8 +2157,9 @@ settings_update_theme (GtkSettings *settings)
 
   get_theme_name (settings, &theme_name, &theme_variant);
 
-  _gtk_css_provider_load_named (priv->theme_provider,
-                                theme_name, theme_variant);
+  gtk_css_provider_load_named (priv->theme_provider,
+                               theme_name,
+                               theme_variant);
 
   /* reload per-theme settings */
   theme_dir = _gtk_css_provider_get_theme_dir (priv->theme_provider);
@@ -2275,34 +2175,18 @@ settings_update_theme (GtkSettings *settings)
   g_free (theme_variant);
 }
 
-static void
-settings_update_key_theme (GtkSettings *settings)
-{
-  GtkSettingsPrivate *priv = settings->priv;
-  GtkCssProvider *provider = NULL;
-  gchar *key_theme_name;
-
-  g_object_get (settings,
-                "gtk-key-theme-name", &key_theme_name,
-                NULL);
-
-  if (key_theme_name && *key_theme_name)
-    provider = gtk_css_provider_get_named (key_theme_name, "keys");
-
-  settings_update_provider (priv->display, &priv->key_theme_provider, provider);
-  g_free (key_theme_name);
-}
-
 const cairo_font_options_t *
 gtk_settings_get_font_options (GtkSettings *settings)
 {
-  return settings->priv->font_options;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
+  return priv->font_options;
 }
 
 GdkDisplay *
 _gtk_settings_get_display (GtkSettings *settings)
 {
-  return settings->priv->display;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
+  return priv->display;
 }
 
 static void
@@ -2448,7 +2332,7 @@ settings_update_xsetting (GtkSettings *settings,
                           GParamSpec  *pspec,
                           gboolean     force)
 {
-  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   GType value_type;
   GType fundamental_type;
   gboolean retval = FALSE;
@@ -2535,7 +2419,7 @@ gtk_settings_get_property (GObject     *object,
                            GParamSpec  *pspec)
 {
   GtkSettings *settings = GTK_SETTINGS (object);
-  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
 
   settings_update_xsetting (settings, pspec, FALSE);
 
@@ -2546,7 +2430,7 @@ GtkSettingsSource
 _gtk_settings_get_setting_source (GtkSettings *settings,
                                   const gchar *name)
 {
-  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   GParamSpec *pspec;
 
   pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), name);
@@ -2570,7 +2454,7 @@ void
 gtk_settings_reset_property (GtkSettings *settings,
                              const gchar *name)
 {
-  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   GParamSpec *pspec;
   GtkRcPropertyParser parser;
   GValue *value;
@@ -2596,7 +2480,7 @@ gtk_settings_reset_property (GtkSettings *settings,
 gboolean
 gtk_settings_get_enable_animations (GtkSettings *settings)
 {
-  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   GtkSettingsPropertyValue *svalue = &priv->property_values[PROP_ENABLE_ANIMATIONS - 1];
 
   if (svalue->source < GTK_SETTINGS_SOURCE_XSETTING)
@@ -2614,7 +2498,7 @@ gtk_settings_get_enable_animations (GtkSettings *settings)
 gint
 gtk_settings_get_dnd_drag_threshold (GtkSettings *settings)
 {
-  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   GtkSettingsPropertyValue *svalue = &priv->property_values[PROP_DND_DRAG_THRESHOLD - 1];
 
   if (svalue->source < GTK_SETTINGS_SOURCE_XSETTING)
@@ -2632,7 +2516,7 @@ gtk_settings_get_dnd_drag_threshold (GtkSettings *settings)
 static void
 settings_update_font_name (GtkSettings *settings)
 {
-  GtkSettingsPrivate *priv = settings->priv;
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   GtkSettingsPropertyValue *svalue = &priv->property_values[PROP_FONT_NAME - 1];
 
   if (svalue->source < GTK_SETTINGS_SOURCE_XSETTING)
@@ -2648,23 +2532,26 @@ settings_update_font_name (GtkSettings *settings)
 const gchar *
 gtk_settings_get_font_family (GtkSettings *settings)
 {
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   settings_update_font_name (settings);
 
-  return settings->priv->font_family;
+  return priv->font_family;
 }
 
 gint
 gtk_settings_get_font_size (GtkSettings *settings)
 {
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   settings_update_font_name (settings);
 
-  return settings->priv->font_size;
+  return priv->font_size;
 }
 
 gboolean
 gtk_settings_get_font_size_is_absolute (GtkSettings *settings)
 {
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   settings_update_font_name (settings);
 
-  return settings->priv->font_size_absolute;
+  return priv->font_size_absolute;
 }

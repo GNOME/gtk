@@ -26,7 +26,7 @@ test_bug_546005 (void)
   GtkListStore *list_store;
   GtkWidget *view;
 
-  g_test_bug ("546005");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=546005 */
 
   /* Tests provided by Bjorn Lindqvist, Paul Pogonyshev */
   view = gtk_tree_view_new ();
@@ -78,7 +78,7 @@ test_bug_539377 (void)
   GtkTreePath *path;
   GtkListStore *list_store;
 
-  g_test_bug ("539377");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=539377 */
 
   /* Test provided by Bjorn Lindqvist */
 
@@ -236,7 +236,7 @@ test_selection_count (void)
   GtkTreeSelection *selection;
   GtkWidget *view;
 
-  g_test_bug ("702957");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=702957 */
 
   list_store = gtk_list_store_new (1, G_TYPE_STRING);
   view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (list_store));
@@ -299,7 +299,7 @@ test_selection_empty (void)
   GtkWidget *view;
   GtkTreeIter iter;
 
-  g_test_bug ("712760");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=712760 */
 
   list_store = gtk_list_store_new (1, G_TYPE_STRING);
   view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (list_store));
@@ -340,7 +340,6 @@ main (int    argc,
       char **argv)
 {
   gtk_test_init (&argc, &argv, NULL);
-  g_test_bug_base ("http://bugzilla.gnome.org/");
 
   g_test_add_func ("/TreeView/cursor/bug-546005", test_bug_546005);
   g_test_add_func ("/TreeView/cursor/bug-539377", test_bug_539377);

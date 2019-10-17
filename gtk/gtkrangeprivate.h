@@ -42,6 +42,8 @@ gint               _gtk_range_get_stop_positions           (GtkRange      *range
                                                             gint         **values);
 
 GtkWidget         *gtk_range_get_slider_widget             (GtkRange *range);
+GtkWidget         *gtk_range_get_trough_widget             (GtkRange *range);
+
 
 void               gtk_range_start_autoscroll              (GtkRange      *range,
                                                             GtkScrollType  scroll_type);

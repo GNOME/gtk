@@ -95,7 +95,6 @@ gdk_display_list_seats
 gdk_display_get_n_monitors
 gdk_display_get_monitor
 gdk_display_get_primary_monitor
-gdk_display_get_monitor_at_point
 gdk_display_get_monitor_at_surface
 gdk_display_get_clipboard
 gdk_display_get_primary_clipboard
@@ -179,19 +178,19 @@ GdkSurfaceEdge
 GdkSurfaceTypeHint
 GdkSurfaceState
 gdk_surface_new_toplevel
-gdk_surface_new_popup
 gdk_surface_new_temp
-gdk_surface_new_child
+gdk_surface_new_popup
+gdk_surface_get_parent
 gdk_surface_destroy
 gdk_surface_get_surface_type
 gdk_surface_get_display
 gdk_surface_show
 gdk_surface_show_unraised
+gdk_surface_show_with_auto_dismissal
 gdk_surface_hide
 gdk_surface_is_destroyed
 gdk_surface_is_visible
 gdk_surface_is_viewable
-gdk_surface_is_input_only
 gdk_surface_get_state
 gdk_surface_iconify
 gdk_surface_deiconify
@@ -208,12 +207,8 @@ gdk_surface_set_fullscreen_mode
 gdk_surface_set_keep_above
 gdk_surface_set_keep_below
 gdk_surface_set_opacity
-gdk_surface_set_pass_through
-gdk_surface_get_pass_through
-gdk_surface_move
 gdk_surface_resize
-gdk_surface_move_resize
-gdk_surface_has_native
+gdk_surface_move_to_rect
 gdk_surface_raise
 gdk_surface_lower
 gdk_surface_restack
@@ -230,30 +225,24 @@ gdk_surface_get_scale_factor
 gdk_surface_set_opaque_region
 gdk_surface_create_gl_context
 gdk_surface_create_vulkan_context
+gdk_surface_create_cairo_context
 
 <SUBSECTION>
-gdk_surface_invalidate_rect
-gdk_surface_invalidate_region
 gdk_surface_queue_expose
 gdk_surface_freeze_updates
 gdk_surface_thaw_updates
 gdk_surface_get_frame_clock
 
 <SUBSECTION>
-gdk_surface_set_user_data
 gdk_surface_set_accept_focus
 gdk_surface_get_accept_focus
 gdk_surface_set_focus_on_map
 gdk_surface_get_focus_on_map
 gdk_surface_input_shape_combine_region
-gdk_surface_set_child_input_shapes
-gdk_surface_merge_child_input_shapes
 gdk_surface_set_title
 GDK_PARENT_RELATIVE
 gdk_surface_set_cursor
 gdk_surface_get_cursor
-gdk_surface_get_user_data
-gdk_surface_get_geometry
 gdk_surface_set_geometry_hints
 gdk_surface_get_width
 gdk_surface_get_height
@@ -263,29 +252,13 @@ gdk_surface_get_modal_hint
 gdk_surface_set_type_hint
 gdk_surface_get_type_hint
 gdk_surface_set_shadow_width
-gdk_surface_set_skip_taskbar_hint
-gdk_surface_set_skip_pager_hint
-gdk_surface_set_urgency_hint
 gdk_surface_get_position
-gdk_surface_get_root_origin
-gdk_surface_get_frame_extents
-gdk_surface_get_origin
-gdk_surface_get_root_coords
 gdk_surface_get_device_position
-gdk_surface_get_device_position_double
 GdkModifierType
 GdkModifierIntent
-gdk_surface_get_parent
-gdk_surface_get_toplevel
-gdk_surface_get_children
-gdk_surface_get_children_with_user_data
-gdk_surface_peek_children
 gdk_surface_set_icon_name
 gdk_surface_set_transient_for
-gdk_surface_set_role
 gdk_surface_set_startup_id
-gdk_surface_set_group
-gdk_surface_get_group
 gdk_surface_set_decorations
 gdk_surface_get_decorations
 GdkWMDecoration
@@ -297,10 +270,6 @@ gdk_surface_get_support_multidevice
 gdk_surface_set_support_multidevice
 gdk_surface_get_device_cursor
 gdk_surface_set_device_cursor
-
-<SUBSECTION>
-gdk_surface_coords_from_parent
-gdk_surface_coords_to_parent
 
 <SUBSECTION Standard>
 GDK_SURFACE
@@ -377,6 +346,7 @@ gdk_content_formats_builder_to_formats
 GDK_TYPE_FILE_LIST
 gdk_file_list_get_type
 gdk_content_formats_get_type
+gdk_content_formats_builder_get_type
 </SECTION>
 
 <SECTION>
@@ -442,6 +412,7 @@ gdk_keymap_get_modifier_state
 gdk_keymap_add_virtual_modifiers
 gdk_keymap_map_virtual_modifiers
 gdk_keymap_get_modifier_mask
+gdk_keymap_get_display
 
 <SUBSECTION>
 gdk_keyval_name
@@ -502,19 +473,11 @@ gdk_device_get_has_cursor
 gdk_device_get_n_axes
 gdk_device_get_n_keys
 gdk_device_get_axes
-gdk_device_warp
 gdk_device_get_seat
 
 <SUBSECTION>
-gdk_device_grab
-gdk_device_ungrab
-
-<SUBSECTION>
 gdk_device_get_state
-gdk_device_get_position
-gdk_device_get_position_double
 gdk_device_get_surface_at_position
-gdk_device_get_surface_at_position_double
 gdk_device_get_history
 gdk_device_free_history
 GdkTimeCoord
@@ -622,12 +585,12 @@ GDK_BUTTON_SECONDARY
 gdk_event_new
 gdk_event_copy
 gdk_event_get_axes
+gdk_event_get_axis
 gdk_event_get_button
 gdk_event_get_click_count
 gdk_event_get_coords
 gdk_event_get_keycode
 gdk_event_get_keyval
-gdk_event_get_root_coords
 gdk_event_get_scroll_direction
 gdk_event_get_scroll_deltas
 gdk_event_is_scroll_stop_event
@@ -662,9 +625,6 @@ gdk_event_get_touchpad_gesture_n_fingers
 gdk_event_get_touchpad_gesture_phase
 gdk_event_get_touchpad_scale
 gdk_event_is_sent
-<SUBSECTION>
-gdk_event_handler_set
-GdkEventFunc
 
 <SUBSECTION>
 gdk_get_show_events
@@ -687,6 +647,7 @@ GDK_TYPE_SCROLL_DIRECTION
 GDK_TYPE_NOTIFY_TYPE
 GDK_IS_EVENT
 gdk_event_get_type
+gdk_event_sequence_get_type
 </SECTION>
 
 <SECTION>
@@ -782,7 +743,6 @@ GDK_ACTION_ALL
 
 gdk_drag_get_display
 gdk_drag_get_actions
-gdk_drag_get_suggested_action
 gdk_drag_get_selected_action
 gdk_drag_get_formats
 gdk_drag_get_device
@@ -840,7 +800,6 @@ gdk_x11_lookup_xdisplay
 gdk_x11_get_server_time
 gdk_x11_device_get_id
 gdk_x11_device_manager_lookup
-gdk_disable_multidevice
 gdk_x11_display_open
 gdk_x11_display_set_program_class
 gdk_x11_display_get_user_time
@@ -898,18 +857,6 @@ GDK_X11_APP_LAUNCH_CONTEXT_CLASS
 GDK_IS_X11_APP_LAUNCH_CONTEXT
 GDK_IS_X11_APP_LAUNCH_CONTEXT_CLASS
 GDK_X11_APP_LAUNCH_CONTEXT_GET_CLASS
-GDK_TYPE_X11_DEVICE_CORE
-GDK_X11_DEVICE_CORE
-GDK_X11_DEVICE_CORE_CLASS
-GDK_IS_X11_DEVICE_CORE
-GDK_IS_X11_DEVICE_CORE_CLASS
-GDK_X11_DEVICE_CORE_GET_CLASS
-GDK_TYPE_X11_DEVICE_MANAGER_CORE
-GDK_X11_DEVICE_MANAGER_CORE
-GDK_X11_DEVICE_MANAGER_CORE_CLASS
-GDK_IS_X11_DEVICE_MANAGER_CORE
-GDK_IS_X11_DEVICE_MANAGER_CORE_CLASS
-GDK_X11_DEVICE_MANAGER_CORE_GET_CLASS
 GDK_TYPE_X11_DEVICE_MANAGER_XI2
 GDK_X11_DEVICE_MANAGER_XI2
 GDK_X11_DEVICE_MANAGER_XI2_CLASS
@@ -979,8 +926,6 @@ GDK_X11_SURFACE_GET_CLASS
 <SUBSECTION Private>
 gdk_x11_app_launch_context_get_type
 gdk_x11_cursor_get_type
-gdk_x11_device_core_get_type
-gdk_x11_device_manager_core_get_type
 gdk_x11_device_manager_xi2_get_type
 gdk_x11_device_manager_xi_get_type
 gdk_x11_device_xi2_get_type
@@ -1006,9 +951,7 @@ gdk_wayland_device_get_wl_seat
 gdk_wayland_display_get_wl_compositor
 gdk_wayland_display_get_wl_display
 gdk_wayland_display_query_registry
-gdk_wayland_surface_new_subsurface
 gdk_wayland_surface_get_wl_surface
-gdk_wayland_surface_set_use_custom_surface
 GdkWaylandSurfaceExported
 gdk_wayland_surface_export_handle
 gdk_wayland_surface_unexport_handle
@@ -1185,6 +1128,7 @@ gdk_monitor_get_width_mm
 gdk_monitor_get_height_mm
 gdk_monitor_get_manufacturer
 gdk_monitor_get_model
+gdk_monitor_get_connector
 gdk_monitor_get_scale_factor
 gdk_monitor_get_refresh_rate
 GdkSubpixelLayout

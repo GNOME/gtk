@@ -19,9 +19,11 @@
 #define __GTK_CSS_LOOKUP_PRIVATE_H__
 
 #include <glib-object.h>
+
 #include "gtk/gtkbitmaskprivate.h"
 #include "gtk/gtkcssstaticstyleprivate.h"
-#include "gtk/gtkcsssection.h"
+
+#include "gtk/css/gtkcsssection.h"
 
 
 G_BEGIN_DECLS
@@ -34,17 +36,15 @@ typedef struct {
 } GtkCssLookupValue;
 
 struct _GtkCssLookup {
-  GtkBitmask        *missing;
+  guint              n_set_values;
   GtkCssLookupValue  values[GTK_CSS_PROPERTY_N_PROPERTIES];
 };
 
-void                    _gtk_css_lookup_init                    (GtkCssLookup               *lookup,
-                                                                 const GtkBitmask           *relevant);
+void                    _gtk_css_lookup_init                    (GtkCssLookup               *lookup);
 void                    _gtk_css_lookup_destroy                 (GtkCssLookup               *lookup);
-
-static inline const GtkBitmask *_gtk_css_lookup_get_missing     (const GtkCssLookup         *lookup);
 gboolean                _gtk_css_lookup_is_missing              (const GtkCssLookup         *lookup,
                                                                  guint                       id);
+gboolean                _gtk_css_lookup_all_set                 (const GtkCssLookup         *lookup);
 void                    _gtk_css_lookup_set                     (GtkCssLookup               *lookup,
                                                                  guint                       id,
                                                                  GtkCssSection              *section,
@@ -53,14 +53,6 @@ void                    _gtk_css_lookup_resolve                 (GtkCssLookup   
                                                                  GtkStyleProvider           *provider,
                                                                  GtkCssStaticStyle          *style,
                                                                  GtkCssStyle                *parent_style);
-
-static inline const GtkBitmask *
-_gtk_css_lookup_get_missing (const GtkCssLookup *lookup)
-{
-  return lookup->missing;
-}
-
-
 
 G_END_DECLS
 

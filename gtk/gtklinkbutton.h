@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * gtklinkbutton.h - an hyperlink-enabled button
+ * gtklinkbutton.h - a hyperlink-enabled button
  *
  * Copyright (C) 2005 Emmanuele Bassi <ebassi@gmail.com>
  * All rights reserved.
@@ -35,48 +35,8 @@ G_BEGIN_DECLS
 #define GTK_TYPE_LINK_BUTTON		(gtk_link_button_get_type ())
 #define GTK_LINK_BUTTON(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_LINK_BUTTON, GtkLinkButton))
 #define GTK_IS_LINK_BUTTON(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_LINK_BUTTON))
-#define GTK_LINK_BUTTON_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_LINK_BUTTON, GtkLinkButtonClass))
-#define GTK_IS_LINK_BUTTON_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LINK_BUTTON))
-#define GTK_LINK_BUTTON_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_LINK_BUTTON, GtkLinkButtonClass))
 
-typedef struct _GtkLinkButton		GtkLinkButton;
-typedef struct _GtkLinkButtonClass	GtkLinkButtonClass;
-typedef struct _GtkLinkButtonPrivate	GtkLinkButtonPrivate;
-
-/**
- * GtkLinkButton:
- *
- * The #GtkLinkButton-struct contains only
- * private data and should be accessed using the provided API.
- */
-struct _GtkLinkButton
-{
-  /*< private >*/
-  GtkButton parent_instance;
-};
-
-/**
- * GtkLinkButtonClass:
- * @activate_link: class handler for the #GtkLinkButton::activate-link signal
- *
- * The #GtkLinkButtonClass contains only
- * private data.
- */
-struct _GtkLinkButtonClass
-{
-  /*< private >*/
-  GtkButtonClass parent_class;
-
-  /*< public >*/
-  gboolean (* activate_link) (GtkLinkButton *button);
-
-  /*< private >*/
-  /* Padding for future expansion */
-  void (*_gtk_padding1) (void);
-  void (*_gtk_padding2) (void);
-  void (*_gtk_padding3) (void);
-  void (*_gtk_padding4) (void);
-};
+typedef struct _GtkLinkButton GtkLinkButton;
 
 GDK_AVAILABLE_IN_ALL
 GType                 gtk_link_button_get_type          (void) G_GNUC_CONST;

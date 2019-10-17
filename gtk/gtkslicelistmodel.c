@@ -21,14 +21,13 @@
 
 #include "gtkslicelistmodel.h"
 
-#include "gtkcssrbtreeprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
 /**
  * SECTION:gtkslicelistmodel
  * @title: GtkSliceListModel
- * @short_description: a #GListModel that presents a slice out of a larger list
+ * @short_description: A list model that presents a slice out of a larger list
  * @see_also: #GListModel
  *
  * #GtkSliceListModel is a list model that takes a list model and presents a slice of
@@ -157,13 +156,19 @@ gtk_slice_list_model_items_changed_cb (GListModel        *model,
   else
     {
       guint n_after, n_before;
+      guint skip;
+
+      if (position > self->offset)
+        skip = position - self->offset;
+      else
+        skip = 0;
 
       n_after = g_list_model_get_n_items (self->model);
       n_before = n_after - added + removed;
       n_after = CLAMP (n_after, self->offset, self->offset + self->size) - self->offset;
       n_before = CLAMP (n_before, self->offset, self->offset + self->size) - self->offset;
 
-      g_list_model_items_changed (G_LIST_MODEL (self), 0, n_before, n_after);
+      g_list_model_items_changed (G_LIST_MODEL (self), skip, n_before - skip, n_after - skip);
     }
 }
 

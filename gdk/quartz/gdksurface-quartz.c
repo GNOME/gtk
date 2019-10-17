@@ -62,7 +62,7 @@ static FullscreenSavedGeometry *get_fullscreen_geometry (GdkSurface *window);
 static void update_toplevel_order (void);
 static void clear_toplevel_order  (void);
 
-#define SURFACE_IS_TOPLEVEL(window)      (GDK_SURFACE_TYPE (window) != GDK_SURFACE_CHILD)
+#define SURFACE_IS_TOPLEVEL(window)      TRUE
 
 /*
  * GdkQuartzSurface
@@ -734,8 +734,7 @@ get_nsscreen_for_point (gint x, gint y)
 void
 _gdk_quartz_display_create_surface_impl (GdkDisplay    *display,
                                         GdkSurface     *window,
-                                        GdkSurface     *real_parent,
-                                        GdkSurfaceAttr *attributes)
+                                        GdkSurface     *real_parent)
 {
   GdkSurfaceImplQuartz *impl;
   GdkSurfaceImplQuartz *parent_impl;
@@ -824,29 +823,6 @@ _gdk_quartz_display_create_surface_impl (GdkDisplay    *display,
 	[impl->view setGdkSurface:window];
 	[impl->toplevel setContentView:impl->view];
 	[impl->view release];
-      }
-      break;
-
-    case GDK_SURFACE_CHILD:
-      {
-	GdkSurfaceImplQuartz *parent_impl = GDK_SURFACE_IMPL_QUARTZ (window->parent->impl);
-
-	if (!window->input_only)
-	  {
-	    NSRect frame_rect = NSMakeRect (window->x + window->parent->abs_x,
-                                            window->y + window->parent->abs_y,
-                                            window->width,
-                                            window->height);
-	
-	    impl->view = [[GdkQuartzView alloc] initWithFrame:frame_rect];
-	    
-	    [impl->view setGdkSurface:window];
-
-	    /* GdkSurfaces should be hidden by default */
-	    [impl->view setHidden:YES];
-	    [parent_impl->view addSubview:impl->view];
-	    [impl->view release];
-	  }
       }
       break;
 
@@ -1162,56 +1138,53 @@ move_resize_window_internal (GdkSurface *window,
     }
   else 
     {
-      if (!window->input_only)
+      NSRect nsrect;
+
+      nsrect = NSMakeRect (window->x, window->y, window->width, window->height);
+
+      /* The newly visible area of this window in a coordinate
+       * system rooted at the origin of this window.
+       */
+      new_visible.x = -window->x;
+      new_visible.y = -window->y;
+      new_visible.width = old_visible.width;   /* parent has not changed size */
+      new_visible.height = old_visible.height; /* parent has not changed size */
+
+      expose_region = cairo_region_create_rectangle (&new_visible);
+      old_region = cairo_region_create_rectangle (&old_visible);
+      cairo_region_subtract (expose_region, old_region);
+
+      /* Determine what (if any) part of the previously visible
+       * part of the window can be copied without a redraw
+       */
+      scroll_rect = old_visible;
+      scroll_rect.x -= delta.width;
+      scroll_rect.y -= delta.height;
+      gdk_rectangle_intersect (&scroll_rect, &old_visible, &scroll_rect);
+
+      if (!cairo_region_is_empty (expose_region))
         {
-          NSRect nsrect;
-
-          nsrect = NSMakeRect (window->x, window->y, window->width, window->height);
-
-          /* The newly visible area of this window in a coordinate
-           * system rooted at the origin of this window.
-           */
-          new_visible.x = -window->x;
-          new_visible.y = -window->y;
-          new_visible.width = old_visible.width;   /* parent has not changed size */
-          new_visible.height = old_visible.height; /* parent has not changed size */
-
-          expose_region = cairo_region_create_rectangle (&new_visible);
-          old_region = cairo_region_create_rectangle (&old_visible);
-          cairo_region_subtract (expose_region, old_region);
-
-          /* Determine what (if any) part of the previously visible
-           * part of the window can be copied without a redraw
-           */
-          scroll_rect = old_visible;
-          scroll_rect.x -= delta.width;
-          scroll_rect.y -= delta.height;
-          gdk_rectangle_intersect (&scroll_rect, &old_visible, &scroll_rect);
-
-          if (!cairo_region_is_empty (expose_region))
+          if (scroll_rect.width != 0 && scroll_rect.height != 0)
             {
-              if (scroll_rect.width != 0 && scroll_rect.height != 0)
-                {
-                  [impl->view scrollRect:NSMakeRect (scroll_rect.x,
-                                                     scroll_rect.y,
-                                                     scroll_rect.width,
-                                                     scroll_rect.height)
+              [impl->view scrollRect:NSMakeRect (scroll_rect.x,
+                                                 scroll_rect.y,
+                                                 scroll_rect.width,
+                                                 scroll_rect.height)
 			              by:delta];
-                }
-
-              [impl->view setFrame:nsrect];
-
-              gdk_quartz_surface_set_needs_display_in_region (window, expose_region);
-            }
-          else
-            {
-              [impl->view setFrame:nsrect];
-              [impl->view setNeedsDisplay:YES];
             }
 
-          cairo_region_destroy (expose_region);
-          cairo_region_destroy (old_region);
+          [impl->view setFrame:nsrect];
+
+          gdk_quartz_surface_set_needs_display_in_region (window, expose_region);
         }
+      else
+        {
+          [impl->view setFrame:nsrect];
+          [impl->view setNeedsDisplay:YES];
+        }
+
+      cairo_region_destroy (expose_region);
+      cairo_region_destroy (old_region);
     }
 
   GDK_QUARTZ_RELEASE_POOL;
@@ -1264,22 +1237,59 @@ window_quartz_move_resize (GdkSurface *window,
 }
 
 static void
-gdk_surface_quartz_move_resize (GdkSurface *window,
-                               gboolean   with_move,
-                               gint       x,
-                               gint       y,
-                               gint       width,
-                               gint       height)
+gdk_surface_quartz_toplevel_resize (GdkSurface *surface,
+                                    gint        width,
+                                    gint        height)
 {
-  if (with_move && (width < 0 && height < 0))
-    window_quartz_move (window, x, y);
+  window_quartz_resize (window, width, height);
+}
+
+static void
+gdk_quartz_surface_moved_to_rect (GdkSurface   *surface,
+                                  GdkRectangle  final_rect)
+{
+  GdkSurface *toplevel;
+  int x, y;
+
+  if (surface->surface_type == GDK_SURFACE_POPUP)
+    toplevel = surface->parent;
+  else
+    toplevel = surface->transient_for;
+
+  gdk_surface_get_origin (toplevel, &x, &y);
+  x += final_rect.x;
+  y += final_rect.y;
+
+  if (final_rect.width != surface->width ||
+      final_rect.height != surface->height)
+    {
+      window_quartz_move_resize (surface,
+                                 x, y,
+                                 final_rect.width, final_rect.height);
+    }
   else
     {
-      if (with_move)
-        window_quartz_move_resize (window, x, y, width, height);
-      else
-        window_quartz_resize (window, width, height);
+      window_quartz_resize (surface, final_rect.width, final_rect.height);
     }
+}
+
+static void
+gdk_quartz_surface_move_to_rect (GdkSurface         *surface,
+                                 const GdkRectangle *rect,
+                                 GdkGravity          rect_anchor,
+                                 GdkGravity          surface_anchor,
+                                 GdkAnchorHints      anchor_hints,
+                                 gint                rect_anchor_dx,
+                                 gint                rect_anchor_dy)
+{
+  gdk_surface_move_to_rect_helper (surface,
+                                   rect,
+                                   rect_anchor,
+                                   surface_anchor,
+                                   anchor_hints,
+                                   rect_anchor_dx,
+                                   rect_anchor_dy,
+                                   gdk_quartz_surface_moved_to_rect);
 }
 
 /* Get the toplevel ordering from NSApp and update our own list. We do
@@ -1528,11 +1538,8 @@ gdk_surface_quartz_get_root_coords (GdkSurface *window,
 
   while (window != toplevel)
     {
-      if (_gdk_surface_has_impl ((GdkSurface *)window))
-        {
-          tmp_x += window->x;
-          tmp_y += window->y;
-        }
+      tmp_x += window->x;
+      tmp_y += window->y;
 
       window = window->parent;
     }
@@ -1616,17 +1623,6 @@ gdk_surface_quartz_get_device_state (GdkSurface       *window,
   return gdk_surface_quartz_get_device_state_helper (window,
                                                     device,
                                                     x, y, mask) != NULL;
-}
-
-static void
-gdk_quartz_surface_set_urgency_hint (GdkSurface *window,
-                                    gboolean   urgent)
-{
-  if (GDK_SURFACE_DESTROYED (window) ||
-      !SURFACE_IS_TOPLEVEL (window))
-    return;
-
-  /* FIXME: Implement */
 }
 
 static void
@@ -1737,17 +1733,6 @@ gdk_quartz_surface_set_title (GdkSurface   *window,
       [impl->toplevel setTitle:[NSString stringWithUTF8String:title]];
       GDK_QUARTZ_RELEASE_POOL;
     }
-}
-
-static void
-gdk_quartz_surface_set_role (GdkSurface   *window,
-                            const gchar *role)
-{
-  if (GDK_SURFACE_DESTROYED (window) ||
-      SURFACE_IS_TOPLEVEL (window))
-    return;
-
-  /* FIXME: Implement */
 }
 
 static void
@@ -2000,28 +1985,6 @@ gdk_quartz_surface_get_type_hint (GdkSurface *window)
 static void
 gdk_quartz_surface_set_modal_hint (GdkSurface *window,
                                   gboolean   modal)
-{
-  if (GDK_SURFACE_DESTROYED (window) ||
-      !SURFACE_IS_TOPLEVEL (window))
-    return;
-
-  /* FIXME: Implement */
-}
-
-static void
-gdk_quartz_surface_set_skip_taskbar_hint (GdkSurface *window,
-                                         gboolean   skips_taskbar)
-{
-  if (GDK_SURFACE_DESTROYED (window) ||
-      !SURFACE_IS_TOPLEVEL (window))
-    return;
-
-  /* FIXME: Implement */
-}
-
-static void
-gdk_quartz_surface_set_skip_pager_hint (GdkSurface *window,
-                                       gboolean   skips_pager)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
       !SURFACE_IS_TOPLEVEL (window))
@@ -2628,27 +2591,6 @@ gdk_quartz_surface_set_keep_below (GdkSurface *window,
   [impl->toplevel setLevel: level - (setting ? 1 : 0)];
 }
 
-static GdkSurface *
-gdk_quartz_surface_get_group (GdkSurface *window)
-{
-  g_return_val_if_fail (GDK_SURFACE_TYPE (window) != GDK_SURFACE_CHILD, NULL);
-
-  if (GDK_SURFACE_DESTROYED (window) ||
-      !SURFACE_IS_TOPLEVEL (window))
-    return NULL;
-
-  /* FIXME: Implement */
-
-  return NULL;
-}
-
-static void
-gdk_quartz_surface_set_group (GdkSurface *window,
-                             GdkSurface *leader)
-{
-  /* FIXME: Implement */	
-}
-
 static void
 gdk_quartz_surface_destroy_notify (GdkSurface *window)
 {
@@ -2736,7 +2678,8 @@ gdk_surface_impl_quartz_class_init (GdkSurfaceImplQuartzClass *klass)
   impl_class->raise = gdk_surface_quartz_raise;
   impl_class->lower = gdk_surface_quartz_lower;
   impl_class->restack_toplevel = gdk_surface_quartz_restack_toplevel;
-  impl_class->move_resize = gdk_surface_quartz_move_resize;
+  impl_class->toplevel_resize = gdk_surface_quartz_toplevel_resize;
+  impl_class->move_to_rect = gdk_surface_quartz_move_to_rect;
   impl_class->get_geometry = gdk_surface_quartz_get_geometry;
   impl_class->get_root_coords = gdk_surface_quartz_get_root_coords;
   impl_class->get_device_state = gdk_surface_quartz_get_device_state;
@@ -2749,12 +2692,8 @@ gdk_surface_impl_quartz_class_init (GdkSurfaceImplQuartzClass *klass)
   impl_class->set_type_hint = gdk_quartz_surface_set_type_hint;
   impl_class->get_type_hint = gdk_quartz_surface_get_type_hint;
   impl_class->set_modal_hint = gdk_quartz_surface_set_modal_hint;
-  impl_class->set_skip_taskbar_hint = gdk_quartz_surface_set_skip_taskbar_hint;
-  impl_class->set_skip_pager_hint = gdk_quartz_surface_set_skip_pager_hint;
-  impl_class->set_urgency_hint = gdk_quartz_surface_set_urgency_hint;
   impl_class->set_geometry_hints = gdk_quartz_surface_set_geometry_hints;
   impl_class->set_title = gdk_quartz_surface_set_title;
-  impl_class->set_role = gdk_quartz_surface_set_role;
   impl_class->set_startup_id = gdk_quartz_surface_set_startup_id;
   impl_class->set_transient_for = gdk_quartz_surface_set_transient_for;
   impl_class->get_frame_extents = gdk_quartz_surface_get_frame_extents;
@@ -2772,8 +2711,6 @@ gdk_surface_impl_quartz_class_init (GdkSurfaceImplQuartzClass *klass)
   impl_class->unfullscreen = gdk_quartz_surface_unfullscreen;
   impl_class->set_keep_above = gdk_quartz_surface_set_keep_above;
   impl_class->set_keep_below = gdk_quartz_surface_set_keep_below;
-  impl_class->get_group = gdk_quartz_surface_get_group;
-  impl_class->set_group = gdk_quartz_surface_set_group;
   impl_class->set_decorations = gdk_quartz_surface_set_decorations;
   impl_class->get_decorations = gdk_quartz_surface_get_decorations;
   impl_class->set_functions = gdk_quartz_surface_set_functions;

@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkactionobservable.h"
+#include "gtkactionobservableprivate.h"
 
 G_DEFINE_INTERFACE (GtkActionObservable, gtk_action_observable, G_TYPE_OBJECT)
 

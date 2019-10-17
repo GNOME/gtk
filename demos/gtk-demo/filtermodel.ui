@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.1 -->
 <interface>
   <requires lib="gtk+" version="3.16"/>
   <object class="GtkListStore" id="liststore1">
     <columns>
-      <!-- column-name width -->
       <column type="gint"/>
-      <!-- column-name height -->
       <column type="gint"/>
     </columns>
     <data>
@@ -43,16 +40,16 @@
             <property name="label" translatable="yes">Original</property>
             <property name="xalign">0</property>
             <attributes>
-              <attribute name="weight" value="bold"/>
+              <attribute name="weight" value="bold"></attribute>
             </attributes>
             <accessibility>
               <relation type="label-for" target="treeview1"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkTreeView" id="treeview1">
@@ -87,11 +84,11 @@
             <accessibility>
               <relation type="labelled-by" target="label1"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkTreeView" id="treeview2">
@@ -138,43 +135,43 @@
             <accessibility>
               <relation type="labelled-by" target="label2"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label2">
             <property name="label" translatable="yes">Computed Columns</property>
             <property name="xalign">0</property>
             <attributes>
-              <attribute name="weight" value="bold"/>
+              <attribute name="weight" value="bold"></attribute>
             </attributes>
             <accessibility>
               <relation type="label-for" target="treeview2"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label3">
             <property name="label" translatable="yes">Filtered</property>
             <property name="xalign">0</property>
             <attributes>
-              <attribute name="weight" value="bold"/>
+              <attribute name="weight" value="bold"></attribute>
             </attributes>
             <accessibility>
               <relation type="label-for" target="treeview3"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkTreeView" id="treeview3">
@@ -203,11 +200,11 @@
             <accessibility>
               <relation type="labelled-by" target="label3"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">3</property>
-          </packing>
         </child>
       </object>
     </child>

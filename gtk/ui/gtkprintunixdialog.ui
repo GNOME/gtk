@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <!-- interface-requires gtk+ 3.6 -->
-  <!-- interface-requires gtkprivate 3.10 -->
   <object class="GtkAdjustment" id="copies_spin_adjustment">
     <property name="lower">1</property>
     <property name="upper">999</property>
@@ -10,31 +8,22 @@
   </object>
   <object class="GtkListStore" id="custom_paper_list">
     <columns>
-      <!-- column-name custom -->
       <column type="GObject"/>
     </columns>
   </object>
   <object class="GtkListStore" id="page_setup_list">
     <columns>
-      <!-- column-name page-setup -->
       <column type="GObject"/>
-      <!-- column-name is-separator -->
       <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkListStore" id="printer_list">
     <columns>
-      <!-- column-name icon -->
       <column type="GIcon"/>
-      <!-- column-name name -->
       <column type="gchararray"/>
-      <!-- column-name state -->
       <column type="gchararray"/>
-      <!-- column-name jobs -->
       <column type="gint"/>
-      <!-- column-name location -->
       <column type="gchararray"/>
-      <!-- column-name printer -->
       <column type="GObject"/>
     </columns>
   </object>
@@ -51,7 +40,7 @@
     <property name="type-hint">dialog</property>
     <signal name="notify::page-setup" handler="redraw_page_layout_preview" swapped="no"/>
     <signal name="response" handler="error_dialogs" swapped="no"/>
-    <child internal-child="vbox">
+    <child internal-child="content_area">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
@@ -67,1091 +56,1039 @@
                 <property name="can-focus">1</property>
                 <property name="show-border">0</property>
                 <child>
-                  <object class="GtkBox" id="general_main_box">
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">18</property>
-                    <property name="margin">12</property>
-                    <child>
-                      <object class="GtkBox" id="box2">
+                  <object class="GtkNotebookPage">
+                    <property name="child">
+                      <object class="GtkBox" id="general_main_box">
                         <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
+                        <property name="spacing">18</property>
+                        <property name="margin">12</property>
                         <child>
-                          <object class="GtkScrolledWindow" id="printer_swin">
-                            <property name="can-focus">1</property>
-                            <property name="shadow-type">in</property>
-                            <property name="vexpand">1</property>
+                          <object class="GtkBox" id="box2">
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
                             <child>
-                              <object class="GtkTreeView" id="printer_treeview">
+                              <object class="GtkScrolledWindow" id="printer_swin">
                                 <property name="can-focus">1</property>
-                                <property name="model">printer_list_filter</property>
-                                <signal name="row-activated" handler="emit_ok_response" swapped="no"/>
-                                <child internal-child="selection">
-                                  <object class="GtkTreeSelection" id="treeview-selection1">
-                                    <property name="mode">browse</property>
-                                    <signal name="changed" handler="selected_printer_changed" swapped="no"/>
-                                  </object>
-                                </child>
+                                <property name="shadow-type">in</property>
+                                <property name="vexpand">1</property>
                                 <child>
-                                  <object class="GtkTreeViewColumn" id="printer_icon_column">
-                                    <child>
-                                      <object class="GtkCellRendererPixbuf" id="printer_icon_renderer"/>
-                                      <attributes>
-                                        <attribute name="gicon">0</attribute>
-                                      </attributes>
-                                    </child>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkTreeViewColumn" id="printer_name_column">
-                                    <property name="title" translatable="yes">Printer</property>
-                                    <child>
-                                      <object class="GtkCellRendererText" id="printer_name_renderer"/>
-                                      <attributes>
-                                        <attribute name="text">1</attribute>
-                                      </attributes>
-                                    </child>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkTreeViewColumn" id="printer_location_column">
-                                    <property name="title" translatable="yes" comments="this is the header for the location column in the print dialog">Location</property>
-                                    <child>
-                                      <object class="GtkCellRendererText" id="printer_location_renderer"/>
-                                      <attributes>
-                                        <attribute name="text">4</attribute>
-                                      </attributes>
-                                    </child>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkTreeViewColumn" id="printer_status_column">
-                                    <property name="title" translatable="yes" comments="this is the header for the printer status column in the print dialog">Status</property>
-                                    <child>
-                                      <object class="GtkCellRendererText" id="printer_status_renderer">
-                                        <property name="ellipsize">end</property>
+                                  <object class="GtkTreeView" id="printer_treeview">
+                                    <property name="can-focus">1</property>
+                                    <property name="model">printer_list_filter</property>
+                                    <signal name="row-activated" handler="emit_ok_response" swapped="no"/>
+                                    <child internal-child="selection">
+                                      <object class="GtkTreeSelection" id="treeview-selection1">
+                                        <property name="mode">browse</property>
+                                        <signal name="changed" handler="selected_printer_changed" swapped="no"/>
                                       </object>
-                                      <attributes>
-                                        <attribute name="text">2</attribute>
-                                      </attributes>
+                                    </child>
+                                    <child>
+                                      <object class="GtkTreeViewColumn" id="printer_icon_column">
+                                        <child>
+                                          <object class="GtkCellRendererPixbuf" id="printer_icon_renderer"/>
+                                          <attributes>
+                                            <attribute name="gicon">0</attribute>
+                                          </attributes>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkTreeViewColumn" id="printer_name_column">
+                                        <property name="title" translatable="yes">Printer</property>
+                                        <child>
+                                          <object class="GtkCellRendererText" id="printer_name_renderer"/>
+                                          <attributes>
+                                            <attribute name="text">1</attribute>
+                                          </attributes>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkTreeViewColumn" id="printer_location_column">
+                                        <property name="title" translatable="yes" comments="this is the header for the location column in the print dialog">Location</property>
+                                        <child>
+                                          <object class="GtkCellRendererText" id="printer_location_renderer"/>
+                                          <attributes>
+                                            <attribute name="text">4</attribute>
+                                          </attributes>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkTreeViewColumn" id="printer_status_column">
+                                        <property name="title" translatable="yes" comments="this is the header for the printer status column in the print dialog">Status</property>
+                                        <child>
+                                          <object class="GtkCellRendererText" id="printer_status_renderer">
+                                            <property name="ellipsize">end</property>
+                                          </object>
+                                          <attributes>
+                                            <attribute name="text">2</attribute>
+                                          </attributes>
+                                        </child>
+                                      </object>
                                     </child>
                                   </object>
                                 </child>
                               </object>
                             </child>
+                            <child>
+                              <object class="GtkBox" id="extension_point">
+                                <property name="spacing">18</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkBox" id="extension_point">
+                          <object class="GtkBox" id="box3">
                             <property name="spacing">18</property>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="box3">
-                        <property name="spacing">18</property>
-                        <child>
-                          <object class="GtkBox" id="frame_template1">
-                            <property name="orientation">vertical</property>
-                            <property name="spacing">6</property>
-                            <property name="hexpand">1</property>
                             <child>
-                              <object class="GtkLabel" id="label_widget1">
-                                <property name="halign">start</property>
-                                <property name="valign">center</property>
-                                <property name="label" translatable="yes">Range</property>
-                                <attributes>
-                                  <attribute name="weight" value="bold"/>
-                                </attributes>
-                                <accessibility>
-                                  <relation type="label-for" target="range_table"/>
-                                </accessibility>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkGrid" id="range_table">
-                                <property name="margin-start">12</property>
-                                <property name="row-spacing">6</property>
-                                <property name="column-spacing">12</property>
+                              <object class="GtkBox" id="frame_template1">
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">6</property>
+                                <property name="hexpand">1</property>
                                 <child>
-                                  <object class="GtkRadioButton" id="all_pages_radio">
-                                    <property name="label" translatable="yes">_All Pages</property>
-                                    <property name="can-focus">1</property>
-                                    <property name="use-underline">1</property>
-                                    <property name="active">1</property>
-                                    <property name="draw-indicator">1</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">0</property>
-                                    <property name="width">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkRadioButton" id="current_page_radio">
-                                    <property name="label" translatable="yes">C_urrent Page</property>
-                                    <property name="sensitive">0</property>
-                                    <property name="can-focus">1</property>
-                                    <property name="use-underline">1</property>
-                                    <property name="active">1</property>
-                                    <property name="draw-indicator">1</property>
-                                    <property name="group">all_pages_radio</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">1</property>
-                                    <property name="width">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkRadioButton" id="selection_radio">
-                                    <property name="label" translatable="yes">Se_lection</property>
-                                    <property name="sensitive">0</property>
-                                    <property name="can-focus">1</property>
-                                    <property name="use-underline">1</property>
-                                    <property name="active">1</property>
-                                    <property name="draw-indicator">1</property>
-                                    <property name="group">all_pages_radio</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">2</property>
-                                    <property name="width">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkRadioButton" id="page_range_radio">
-                                    <property name="label" translatable="yes">Pag_es:</property>
-                                    <property name="can-focus">1</property>
-                                    <property name="tooltip-text" translatable="yes">Specify one or more page ranges,
- e.g. 1–3, 7, 11</property>
-                                    <property name="use-underline">1</property>
-                                    <property name="active">1</property>
-                                    <property name="draw-indicator">1</property>
-                                    <property name="group">all_pages_radio</property>
-                                    <signal name="toggled" handler="update_page_range_entry_sensitivity" swapped="no"/>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">3</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkEntry" id="page_range_entry">
-                                    <property name="sensitive">0</property>
-                                    <property name="can-focus">1</property>
-                                    <property name="tooltip-text" translatable="yes">Specify one or more page ranges,
- e.g. 1–3, 7, 11</property>
-                                    <property name="activates-default">1</property>
-                                    <child internal-child="accessible">
-                                      <object class="AtkObject" id="page_range_entry-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="yes">Pages</property>
-                                        <property name="AtkObject::accessible-description" translatable="yes">Specify one or more page ranges,
- e.g. 1–3, 7, 11</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">3</property>
-                                  </packing>
-                                </child>
-                                <accessibility>
-                                  <relation type="labelled-by" target="label_widget1"/>
-                                </accessibility>
-                              </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkBox" id="frame_template2">
-                            <property name="orientation">vertical</property>
-                            <property name="spacing">6</property>
-                            <property name="hexpand">1</property>
-                            <child>
-                              <object class="GtkLabel" id="label_widget2">
-                                <property name="halign">start</property>
-                                <property name="valign">center</property>
-                                <property name="label" translatable="yes">Copies</property>
-                                <attributes>
-                                  <attribute name="weight" value="bold"/>
-                                </attributes>
-                                <accessibility>
-                                  <relation type="label-for" target="grid1"/>
-                                </accessibility>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkGrid" id="grid1">
-                                <property name="margin-start">12</property>
-                                <property name="row-spacing">6</property>
-                                <property name="column-spacing">12</property>
-                                <child>
-                                  <object class="GtkLabel" id="label4">
+                                  <object class="GtkLabel" id="label_widget1">
                                     <property name="halign">start</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="label" translatable="yes">Copie_s:</property>
-                                    <property name="use-underline">1</property>
-                                    <property name="mnemonic-widget">copies_spin</property>
+                                    <property name="valign">center</property>
+                                    <property name="label" translatable="yes">Range</property>
+                                    <attributes>
+                                      <attribute name="weight" value="bold"></attribute>
+                                    </attributes>
+                                    <accessibility>
+                                      <relation type="label-for" target="range_table"/>
+                                    </accessibility>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">0</property>
-                                  </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkSpinButton" id="copies_spin">
-                                    <property name="can-focus">1</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="adjustment">copies_spin_adjustment</property>
-                                    <signal name="changed" handler="update_dialog_from_capabilities" object="GtkPrintUnixDialog" swapped="yes"/>
-                                    <signal name="value-changed" handler="update_dialog_from_capabilities" object="GtkPrintUnixDialog" swapped="yes"/>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckButton" id="collate_check">
-                                    <property name="label" translatable="yes">C_ollate</property>
-                                    <property name="can-focus">1</property>
-                                    <property name="use-underline">1</property>
-                                    <signal name="toggled" handler="update_collate_icon" swapped="no"/>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckButton" id="reverse_check">
-                                    <property name="label" translatable="yes">_Reverse</property>
-                                    <property name="can-focus">1</property>
-                                    <property name="use-underline">1</property>
-                                    <signal name="toggled" handler="update_collate_icon" swapped="no"/>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkDrawingArea" id="collate_image">
-                                    <property name="content-width">70</property>
-                                    <property name="content-height">90</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">1</property>
-                                    <property name="height">2</property>
-                                  </packing>
-                                </child>
-                                <accessibility>
-                                  <relation type="labelled-by" target="label_widget2"/>
-                                </accessibility>
-                              </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                </child>
-                <child type="tab">
-                  <object class="GtkLabel" id="label1">
-                    <property name="label" translatable="yes">General</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox" id="page_setup_main_box">
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">18</property>
-                    <property name="margin">12</property>
-                    <child>
-                      <object class="GtkBox" id="box4">
-                        <property name="spacing">18</property>
-                        <child>
-                          <object class="GtkBox" id="frame_template3">
-                            <property name="orientation">vertical</property>
-                            <property name="spacing">6</property>
-                            <property name="hexpand">1</property>
-                            <child>
-                              <object class="GtkLabel" id="label_widget3">
-                                <property name="halign">start</property>
-                                <property name="valign">center</property>
-                                <property name="label" translatable="yes">Layout</property>
-                                <attributes>
-                                  <attribute name="weight" value="bold"/>
-                                </attributes>
-                                <accessibility>
-                                  <relation type="label-for" target="grid2"/>
-                                </accessibility>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkGrid" id="grid2">
-                                <property name="margin-start">12</property>
-                                <property name="row-spacing">6</property>
-                                <property name="column-spacing">12</property>
-                                <child>
-                                  <object class="GtkLabel" id="label5">
-                                    <property name="halign">start</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="label" translatable="yes">T_wo-sided:</property>
-                                    <property name="use-underline">1</property>
-                                    <property name="mnemonic-widget">duplex</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkPrinterOptionWidget" id="duplex">
-                                    <property name="valign">baseline</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label6">
-                                    <property name="halign">start</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="label" translatable="yes">Pages per _side:</property>
-                                    <property name="use-underline">1</property>
-                                    <property name="mnemonic-widget">pages_per_sheet</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkPrinterOptionWidget" id="pages_per_sheet">
-                                    <property name="valign">baseline</property>
-                                    <signal name="changed" handler="redraw_page_layout_preview" object="GtkPrintUnixDialog" swapped="yes"/>
-                                    <signal name="changed" handler="update_number_up_layout" object="GtkPrintUnixDialog" swapped="yes"/>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label7">
-                                    <property name="halign">start</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="label" translatable="yes">Page or_dering:</property>
-                                    <property name="use-underline">1</property>
-                                    <property name="mnemonic-widget">number_up_layout</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkPrinterOptionWidget" id="number_up_layout">
-                                    <property name="valign">baseline</property>
-                                    <signal name="changed" handler="redraw_page_layout_preview" object="GtkPrintUnixDialog" swapped="yes"/>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label8">
-                                    <property name="halign">start</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="label" translatable="yes">_Only print:</property>
-                                    <property name="use-underline">1</property>
-                                    <property name="mnemonic-widget">page_set_combo</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">3</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBoxText" id="page_set_combo">
-                                    <property name="valign">baseline</property>
-                                    <property name="active">0</property>
-                                    <property name="entry-text-column">0</property>
-                                    <property name="id-column">1</property>
-                                    <items>
-                                      <item translatable="yes">All sheets</item>
-                                      <item translatable="yes">Even sheets</item>
-                                      <item translatable="yes">Odd sheets</item>
-                                    </items>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">3</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label9">
-                                    <property name="halign">start</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="label" translatable="yes">Sc_ale:</property>
-                                    <property name="use-underline">1</property>
-                                    <property name="mnemonic-widget">scale_spin</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">4</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkBox" id="box5">
-                                    <property name="spacing">6</property>
-                                    <property name="valign">baseline</property>
+                                  <object class="GtkGrid" id="range_table">
+                                    <property name="margin-start">12</property>
+                                    <property name="row-spacing">6</property>
+                                    <property name="column-spacing">12</property>
                                     <child>
-                                      <object class="GtkSpinButton" id="scale_spin">
-                                        <property name="valign">baseline</property>
+                                      <object class="GtkRadioButton" id="all_pages_radio">
+                                        <property name="label" translatable="yes">_All Pages</property>
                                         <property name="can-focus">1</property>
-                                        <property name="adjustment">scale_spin_adjustment</property>
-                                        <property name="digits">1</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="active">1</property>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">0</property>
+                                          <property name="column-span">2</property>
+                                        </layout>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label10">
-                                        <property name="valign">baseline</property>
-                                        <property name="label">%</property>
+                                      <object class="GtkRadioButton" id="current_page_radio">
+                                        <property name="label" translatable="yes">C_urrent Page</property>
+                                        <property name="sensitive">0</property>
+                                        <property name="can-focus">1</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="active">1</property>
+                                        <property name="group">all_pages_radio</property>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">1</property>
+                                          <property name="column-span">2</property>
+                                        </layout>
                                       </object>
-                                      <packing>
-                                        <property name="position">1</property>
-                                      </packing>
                                     </child>
+                                    <child>
+                                      <object class="GtkRadioButton" id="selection_radio">
+                                        <property name="label" translatable="yes">Se_lection</property>
+                                        <property name="sensitive">0</property>
+                                        <property name="can-focus">1</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="active">1</property>
+                                        <property name="group">all_pages_radio</property>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">2</property>
+                                          <property name="column-span">2</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkRadioButton" id="page_range_radio">
+                                        <property name="label" translatable="yes">Pag_es:</property>
+                                        <property name="can-focus">1</property>
+                                        <property name="tooltip-text" translatable="yes">Specify one or more page ranges,
+ e.g. 1–3, 7, 11</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="active">1</property>
+                                        <property name="group">all_pages_radio</property>
+                                        <signal name="toggled" handler="update_page_range_entry_sensitivity" swapped="no"/>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">3</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="page_range_entry">
+                                        <property name="can-focus">1</property>
+                                        <property name="tooltip-text" translatable="yes">Specify one or more page ranges,
+ e.g. 1–3, 7, 11</property>
+                                        <property name="activates-default">1</property>
+                                        <signal name="notify::has-focus" handler="page_range_entry_focus_changed" swapped="no"/>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="page_range_entry-atkobject">
+                                            <property name="AtkObject::accessible-name" translatable="yes">Pages</property>
+                                            <property name="AtkObject::accessible-description" translatable="yes">Specify one or more page ranges,
+ e.g. 1–3, 7, 11</property>
+                                          </object>
+                                        </child>
+                                        <layout>
+                                          <property name="left-attach">1</property>
+                                          <property name="top-attach">3</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="label_widget1"/>
+                                    </accessibility>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">4</property>
-                                  </packing>
                                 </child>
-                                <accessibility>
-                                  <relation type="labelled-by" target="label_widget3"/>
-                                </accessibility>
                               </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="frame_template2">
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">6</property>
+                                <property name="hexpand">1</property>
+                                <child>
+                                  <object class="GtkLabel" id="label_widget2">
+                                    <property name="halign">start</property>
+                                    <property name="valign">center</property>
+                                    <property name="label" translatable="yes">Copies</property>
+                                    <attributes>
+                                      <attribute name="weight" value="bold"></attribute>
+                                    </attributes>
+                                    <accessibility>
+                                      <relation type="label-for" target="grid1"/>
+                                    </accessibility>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkGrid" id="grid1">
+                                    <property name="margin-start">12</property>
+                                    <property name="row-spacing">6</property>
+                                    <property name="column-spacing">12</property>
+                                    <child>
+                                      <object class="GtkLabel" id="label4">
+                                        <property name="halign">start</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="label" translatable="yes">Copie_s:</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="mnemonic-widget">copies_spin</property>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">0</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSpinButton" id="copies_spin">
+                                        <property name="can-focus">1</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="adjustment">copies_spin_adjustment</property>
+                                        <signal name="changed" handler="update_dialog_from_capabilities" object="GtkPrintUnixDialog" swapped="yes"/>
+                                        <signal name="value-changed" handler="update_dialog_from_capabilities" object="GtkPrintUnixDialog" swapped="yes"/>
+                                        <layout>
+                                          <property name="left-attach">1</property>
+                                          <property name="top-attach">0</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="collate_check">
+                                        <property name="label" translatable="yes">C_ollate</property>
+                                        <property name="can-focus">1</property>
+                                        <property name="use-underline">1</property>
+                                        <signal name="toggled" handler="update_collate_icon" swapped="no"/>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">1</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="reverse_check">
+                                        <property name="label" translatable="yes">_Reverse</property>
+                                        <property name="can-focus">1</property>
+                                        <property name="use-underline">1</property>
+                                        <signal name="toggled" handler="update_collate_icon" swapped="no"/>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">2</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkDrawingArea" id="collate_image">
+                                        <property name="content-width">70</property>
+                                        <property name="content-height">90</property>
+                                        <layout>
+                                          <property name="left-attach">1</property>
+                                          <property name="top-attach">1</property>
+                                          <property name="row-span">2</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="label_widget2"/>
+                                    </accessibility>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                    <property name="tab">
+                      <object class="GtkLabel" id="label1">
+                        <property name="label" translatable="yes">General</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkNotebookPage">
+                    <property name="child">
+                      <object class="GtkBox" id="page_setup_main_box">
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">18</property>
+                        <property name="margin">12</property>
+                        <child>
+                          <object class="GtkBox" id="box4">
+                            <property name="spacing">18</property>
+                            <child>
+                              <object class="GtkBox" id="frame_template3">
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">6</property>
+                                <property name="hexpand">1</property>
+                                <child>
+                                  <object class="GtkLabel" id="label_widget3">
+                                    <property name="halign">start</property>
+                                    <property name="valign">center</property>
+                                    <property name="label" translatable="yes">Layout</property>
+                                    <attributes>
+                                      <attribute name="weight" value="bold"></attribute>
+                                    </attributes>
+                                    <accessibility>
+                                      <relation type="label-for" target="grid2"/>
+                                    </accessibility>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkGrid" id="grid2">
+                                    <property name="margin-start">12</property>
+                                    <property name="row-spacing">6</property>
+                                    <property name="column-spacing">12</property>
+                                    <child>
+                                      <object class="GtkLabel" id="label5">
+                                        <property name="halign">start</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="label" translatable="yes">T_wo-sided:</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="mnemonic-widget">duplex</property>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">0</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkPrinterOptionWidget" id="duplex">
+                                        <property name="valign">baseline</property>
+                                        <layout>
+                                          <property name="left-attach">1</property>
+                                          <property name="top-attach">0</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label6">
+                                        <property name="halign">start</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="label" translatable="yes">Pages per _side:</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="mnemonic-widget">pages_per_sheet</property>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">1</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkPrinterOptionWidget" id="pages_per_sheet">
+                                        <property name="valign">baseline</property>
+                                        <signal name="changed" handler="redraw_page_layout_preview" object="GtkPrintUnixDialog" swapped="yes"/>
+                                        <signal name="changed" handler="update_number_up_layout" object="GtkPrintUnixDialog" swapped="yes"/>
+                                        <layout>
+                                          <property name="left-attach">1</property>
+                                          <property name="top-attach">1</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label7">
+                                        <property name="halign">start</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="label" translatable="yes">Page or_dering:</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="mnemonic-widget">number_up_layout</property>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">2</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkPrinterOptionWidget" id="number_up_layout">
+                                        <property name="valign">baseline</property>
+                                        <signal name="changed" handler="redraw_page_layout_preview" object="GtkPrintUnixDialog" swapped="yes"/>
+                                        <layout>
+                                          <property name="left-attach">1</property>
+                                          <property name="top-attach">2</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label8">
+                                        <property name="halign">start</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="label" translatable="yes">_Only print:</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="mnemonic-widget">page_set_combo</property>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">3</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBoxText" id="page_set_combo">
+                                        <property name="valign">baseline</property>
+                                        <property name="active">0</property>
+                                        <property name="entry-text-column">0</property>
+                                        <property name="id-column">1</property>
+                                        <items>
+                                          <item translatable="yes">All sheets</item>
+                                          <item translatable="yes">Even sheets</item>
+                                          <item translatable="yes">Odd sheets</item>
+                                        </items>
+                                        <layout>
+                                          <property name="left-attach">1</property>
+                                          <property name="top-attach">3</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label9">
+                                        <property name="halign">start</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="label" translatable="yes">Sc_ale:</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="mnemonic-widget">scale_spin</property>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">4</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkBox" id="box5">
+                                        <property name="spacing">6</property>
+                                        <property name="valign">baseline</property>
+                                        <child>
+                                          <object class="GtkSpinButton" id="scale_spin">
+                                            <property name="valign">baseline</property>
+                                            <property name="can-focus">1</property>
+                                            <property name="adjustment">scale_spin_adjustment</property>
+                                            <property name="digits">1</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label10">
+                                            <property name="valign">baseline</property>
+                                            <property name="label">%</property>
+                                          </object>
+                                        </child>
+                                        <layout>
+                                          <property name="left-attach">1</property>
+                                          <property name="top-attach">4</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="label_widget3"/>
+                                    </accessibility>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="frame_template4">
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">6</property>
+                                <property name="hexpand">1</property>
+                                <child>
+                                  <object class="GtkLabel" id="label_widget4">
+                                    <property name="halign">start</property>
+                                    <property name="valign">center</property>
+                                    <property name="label" translatable="yes">Paper</property>
+                                    <attributes>
+                                      <attribute name="weight" value="bold"></attribute>
+                                    </attributes>
+                                    <accessibility>
+                                      <relation type="label-for" target="grid3"/>
+                                    </accessibility>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkGrid" id="grid3">
+                                    <property name="margin-start">12</property>
+                                    <property name="row-spacing">6</property>
+                                    <property name="column-spacing">12</property>
+                                    <child>
+                                      <object class="GtkLabel" id="label11">
+                                        <property name="halign">start</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="label" translatable="yes">Paper _type:</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="mnemonic-widget">paper_type</property>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">0</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkPrinterOptionWidget" id="paper_type">
+                                        <property name="valign">baseline</property>
+                                        <layout>
+                                          <property name="left-attach">1</property>
+                                          <property name="top-attach">0</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label12">
+                                        <property name="halign">start</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="label" translatable="yes">Paper _source:</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="mnemonic-widget">paper_source</property>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">1</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkPrinterOptionWidget" id="paper_source">
+                                        <property name="valign">baseline</property>
+                                        <layout>
+                                          <property name="left-attach">1</property>
+                                          <property name="top-attach">1</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label13">
+                                        <property name="halign">start</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="label" translatable="yes">Output t_ray:</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="mnemonic-widget">output_tray</property>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">2</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkPrinterOptionWidget" id="output_tray">
+                                        <property name="valign">baseline</property>
+                                        <layout>
+                                          <property name="left-attach">1</property>
+                                          <property name="top-attach">2</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="paper_size_combo_label">
+                                        <property name="halign">start</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="label" translatable="yes">_Paper size:</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="mnemonic-widget">paper_size_combo</property>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">3</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="paper_size_combo">
+                                        <property name="sensitive">0</property>
+                                        <property name="model">page_setup_list</property>
+                                        <property name="valign">baseline</property>
+                                        <child>
+                                          <object class="GtkCellRendererText" id="paper_size_renderer"/>
+                                        </child>
+                                        <layout>
+                                          <property name="left-attach">1</property>
+                                          <property name="top-attach">3</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="orientation_combo_label">
+                                        <property name="halign">start</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="label" translatable="yes">Or_ientation:</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="mnemonic-widget">orientation_combo</property>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">4</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBoxText" id="orientation_combo">
+                                        <property name="sensitive">0</property>
+                                        <property name="active">0</property>
+                                        <property name="entry-text-column">0</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="id-column">1</property>
+                                        <items>
+                                          <item translatable="yes">Portrait</item>
+                                          <item translatable="yes">Landscape</item>
+                                          <item translatable="yes">Reverse portrait</item>
+                                          <item translatable="yes">Reverse landscape</item>
+                                        </items>
+                                        <layout>
+                                          <property name="left-attach">1</property>
+                                          <property name="top-attach">4</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="label_widget4"/>
+                                    </accessibility>
+                                  </object>
+                                </child>
+                              </object>
                             </child>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkBox" id="frame_template4">
+                          <object class="GtkBox" id="box6">
+                            <child>
+                              <object class="GtkDrawingArea" id="page_layout_preview">
+                                <property name="content-width">320</property>
+                                <property name="content-height">160</property>
+                                <property name="hexpand">1</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                    <property name="tab">
+                      <object class="GtkLabel" id="label2">
+                        <property name="label" translatable="yes">Page Setup</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkNotebookPage">
+                    <property name="child">
+                      <object class="GtkGrid" id="job_page">
+                        <property name="row-spacing">18</property>
+                        <property name="column-spacing">18</property>
+                        <property name="margin">12</property>
+                        <child>
+                          <object class="GtkBox" id="frame_template5">
                             <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
-                            <property name="hexpand">1</property>
                             <child>
-                              <object class="GtkLabel" id="label_widget4">
+                              <object class="GtkLabel" id="label_widget5">
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
-                                <property name="label" translatable="yes">Paper</property>
+                                <property name="label" translatable="yes">Job Details</property>
                                 <attributes>
-                                  <attribute name="weight" value="bold"/>
+                                  <attribute name="weight" value="bold"></attribute>
                                 </attributes>
                                 <accessibility>
-                                  <relation type="label-for" target="grid3"/>
+                                  <relation type="label-for" target="grid5"/>
                                 </accessibility>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkGrid" id="grid3">
+                              <object class="GtkGrid" id="grid5">
                                 <property name="margin-start">12</property>
                                 <property name="row-spacing">6</property>
                                 <property name="column-spacing">12</property>
                                 <child>
-                                  <object class="GtkLabel" id="label11">
+                                  <object class="GtkLabel" id="label16">
                                     <property name="halign">start</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="label" translatable="yes">Paper _type:</property>
+                                    <property name="valign">center</property>
+                                    <property name="label" translatable="yes">Pri_ority:</property>
                                     <property name="use-underline">1</property>
-                                    <property name="mnemonic-widget">paper_type</property>
+                                    <property name="mnemonic-widget">job_prio</property>
+                                    <layout>
+                                      <property name="left-attach">0</property>
+                                      <property name="top-attach">0</property>
+                                    </layout>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">0</property>
-                                  </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkPrinterOptionWidget" id="paper_type">
-                                    <property name="valign">baseline</property>
+                                  <object class="GtkPrinterOptionWidget" id="job_prio">
+                                    <layout>
+                                      <property name="left-attach">1</property>
+                                      <property name="top-attach">0</property>
+                                    </layout>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">0</property>
-                                  </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel" id="label12">
+                                  <object class="GtkLabel" id="label17">
                                     <property name="halign">start</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="label" translatable="yes">Paper _source:</property>
+                                    <property name="valign">center</property>
+                                    <property name="label" translatable="yes">_Billing info:</property>
                                     <property name="use-underline">1</property>
-                                    <property name="mnemonic-widget">paper_source</property>
+                                    <property name="mnemonic-widget">billing_info</property>
+                                    <layout>
+                                      <property name="left-attach">0</property>
+                                      <property name="top-attach">1</property>
+                                    </layout>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">1</property>
-                                  </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkPrinterOptionWidget" id="paper_source">
-                                    <property name="valign">baseline</property>
+                                  <object class="GtkPrinterOptionWidget" id="billing_info">
+                                    <layout>
+                                      <property name="left-attach">1</property>
+                                      <property name="top-attach">1</property>
+                                    </layout>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label13">
-                                    <property name="halign">start</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="label" translatable="yes">Output t_ray:</property>
-                                    <property name="use-underline">1</property>
-                                    <property name="mnemonic-widget">output_tray</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkPrinterOptionWidget" id="output_tray">
-                                    <property name="valign">baseline</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="paper_size_combo_label">
-                                    <property name="halign">start</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="label" translatable="yes">_Paper size:</property>
-                                    <property name="use-underline">1</property>
-                                    <property name="mnemonic-widget">paper_size_combo</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">3</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBox" id="paper_size_combo">
-                                    <property name="sensitive">0</property>
-                                    <property name="model">page_setup_list</property>
-                                    <property name="valign">baseline</property>
-                                    <child>
-                                      <object class="GtkCellRendererText" id="paper_size_renderer"/>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">3</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="orientation_combo_label">
-                                    <property name="halign">start</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="label" translatable="yes">Or_ientation:</property>
-                                    <property name="use-underline">1</property>
-                                    <property name="mnemonic-widget">orientation_combo</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">4</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBoxText" id="orientation_combo">
-                                    <property name="sensitive">0</property>
-                                    <property name="active">0</property>
-                                    <property name="entry-text-column">0</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="id-column">1</property>
-                                    <items>
-                                      <item translatable="yes">Portrait</item>
-                                      <item translatable="yes">Landscape</item>
-                                      <item translatable="yes">Reverse portrait</item>
-                                      <item translatable="yes">Reverse landscape</item>
-                                    </items>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">4</property>
-                                  </packing>
                                 </child>
                                 <accessibility>
-                                  <relation type="labelled-by" target="label_widget4"/>
+                                  <relation type="labelled-by" target="label_widget5"/>
                                 </accessibility>
                               </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
                             </child>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="box6">
-                        <child>
-                          <object class="GtkDrawingArea" id="page_layout_preview">
-                            <property name="content-width">320</property>
-                            <property name="content-height">160</property>
-                            <property name="hexpand">1</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child type="tab">
-                  <object class="GtkLabel" id="label2">
-                    <property name="label" translatable="yes">Page Setup</property>
-                  </object>
-                  <packing>
-                    <property name="position">1</property>
-                    <property name="tab-fill">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkGrid" id="job_page">
-                    <property name="row-spacing">18</property>
-                    <property name="column-spacing">18</property>
-                    <property name="margin">12</property>
-                    <child>
-                      <object class="GtkBox" id="frame_template5">
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
-                        <child>
-                          <object class="GtkLabel" id="label_widget5">
-                            <property name="halign">start</property>
-                            <property name="valign">center</property>
-                            <property name="label" translatable="yes">Job Details</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
-                            <accessibility>
-                              <relation type="label-for" target="grid5"/>
-                            </accessibility>
+                            <layout>
+                              <property name="left-attach">0</property>
+                              <property name="top-attach">0</property>
+                            </layout>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkGrid" id="grid5">
-                            <property name="margin-start">12</property>
-                            <property name="row-spacing">6</property>
-                            <property name="column-spacing">12</property>
+                          <object class="GtkBox" id="frame_template6">
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
                             <child>
-                              <object class="GtkLabel" id="label16">
+                              <object class="GtkLabel" id="label_widget6">
                                 <property name="halign">start</property>
                                 <property name="valign">center</property>
-                                <property name="label" translatable="yes">Pri_ority:</property>
-                                <property name="use-underline">1</property>
-                                <property name="mnemonic-widget">job_prio</property>
+                                <property name="label" translatable="yes">Print Document</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"></attribute>
+                                </attributes>
+                                <accessibility>
+                                  <relation type="label-for" target="grid6"/>
+                                </accessibility>
                               </object>
-                              <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">0</property>
-                              </packing>
                             </child>
                             <child>
-                              <object class="GtkPrinterOptionWidget" id="job_prio"/>
-                              <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label17">
-                                <property name="halign">start</property>
-                                <property name="valign">center</property>
-                                <property name="label" translatable="yes">_Billing info:</property>
-                                <property name="use-underline">1</property>
-                                <property name="mnemonic-widget">billing_info</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkPrinterOptionWidget" id="billing_info"/>
-                              <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">1</property>
-                              </packing>
-                            </child>
-                            <accessibility>
-                              <relation type="labelled-by" target="label_widget5"/>
-                            </accessibility>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="frame_template6">
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
-                        <child>
-                          <object class="GtkLabel" id="label_widget6">
-                            <property name="halign">start</property>
-                            <property name="valign">center</property>
-                            <property name="label" translatable="yes">Print Document</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
-                            <accessibility>
-                              <relation type="label-for" target="grid6"/>
-                            </accessibility>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkGrid" id="grid6">
-                            <property name="margin-start">12</property>
-                            <property name="row-spacing">6</property>
-                            <property name="column-spacing">12</property>
-                            <child>
-                              <object class="GtkRadioButton" id="print_now_radio">
-                                <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog">_Now</property>
-                                <property name="can-focus">1</property>
-                                <property name="use-underline">1</property>
-                                <property name="active">1</property>
-                                <property name="draw-indicator">1</property>
-                                <signal name="toggled" handler="update_print_at_option" object="GtkPrintUnixDialog" swapped="yes"/>
-                              </object>
-                              <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">0</property>
-                                <property name="width">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkRadioButton" id="print_at_radio">
-                                <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.">A_t:</property>
-                                <property name="can-focus">1</property>
-                                <property name="has-tooltip">1</property>
-                                <property name="tooltip-markup" translatable="yes">Specify the time of print,
- e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
-                                <property name="tooltip-text" translatable="yes" comments="Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.">Specify the time of print,
- e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
-                                <property name="use-underline">1</property>
-                                <property name="draw-indicator">1</property>
-                                <property name="group">print_now_radio</property>
-                                <signal name="toggled" handler="update_print_at_entry_sensitivity" swapped="no"/>
-                                <signal name="toggled" handler="update_print_at_option" object="GtkPrintUnixDialog" swapped="yes"/>
-                              </object>
-                              <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="print_at_entry">
-                                <property name="sensitive">0</property>
-                                <property name="can-focus">1</property>
-                                <property name="has-tooltip">1</property>
-                                <property name="tooltip-markup" translatable="yes">Specify the time of print,
- e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
-                                <property name="tooltip-text" translatable="yes" comments="Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.">Specify the time of print,
- e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="print_at_entry-atkobject">
-                                    <property name="AtkObject::accessible-name" translatable="yes">Time of print</property>
-                                    <property name="AtkObject::accessible-description" translatable="yes">Specify the time of print,
- e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
+                              <object class="GtkGrid" id="grid6">
+                                <property name="margin-start">12</property>
+                                <property name="row-spacing">6</property>
+                                <property name="column-spacing">12</property>
+                                <child>
+                                  <object class="GtkRadioButton" id="print_now_radio">
+                                    <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog">_Now</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="use-underline">1</property>
+                                    <property name="active">1</property>
+                                    <signal name="toggled" handler="update_print_at_option" object="GtkPrintUnixDialog" swapped="yes"/>
+                                    <layout>
+                                      <property name="left-attach">0</property>
+                                      <property name="top-attach">0</property>
+                                      <property name="column-span">2</property>
+                                    </layout>
                                   </object>
                                 </child>
-                                <signal name="changed" handler="update_print_at_option" object="GtkPrintUnixDialog" swapped="yes"/>
+                                <child>
+                                  <object class="GtkRadioButton" id="print_at_radio">
+                                    <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.">A_t:</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="has-tooltip">1</property>
+                                    <property name="tooltip-markup" translatable="yes">Specify the time of print,
+ e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
+                                    <property name="tooltip-text" translatable="yes" comments="Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.">Specify the time of print,
+ e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
+                                    <property name="use-underline">1</property>
+                                    <property name="group">print_now_radio</property>
+                                    <signal name="toggled" handler="update_print_at_entry_sensitivity" swapped="no"/>
+                                    <signal name="toggled" handler="update_print_at_option" object="GtkPrintUnixDialog" swapped="yes"/>
+                                    <layout>
+                                      <property name="left-attach">0</property>
+                                      <property name="top-attach">1</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkEntry" id="print_at_entry">
+                                    <property name="sensitive">0</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="has-tooltip">1</property>
+                                    <property name="tooltip-markup" translatable="yes">Specify the time of print,
+ e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
+                                    <property name="tooltip-text" translatable="yes" comments="Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.">Specify the time of print,
+ e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="print_at_entry-atkobject">
+                                        <property name="AtkObject::accessible-name" translatable="yes">Time of print</property>
+                                        <property name="AtkObject::accessible-description" translatable="yes">Specify the time of print,
+ e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
+                                      </object>
+                                    </child>
+                                    <signal name="changed" handler="update_print_at_option" object="GtkPrintUnixDialog" swapped="yes"/>
+                                    <layout>
+                                      <property name="left-attach">1</property>
+                                      <property name="top-attach">1</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkRadioButton" id="print_hold_radio">
+                                    <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets &apos;released&apos;.">On _hold</property>
+                                    <property name="can-focus">1</property>
+                                    <property name="has-tooltip">1</property>
+                                    <property name="tooltip-markup" translatable="yes">Hold the job until it is explicitly released</property>
+                                    <property name="tooltip-text" translatable="yes">Hold the job until it is explicitly released</property>
+                                    <property name="use-underline">1</property>
+                                    <property name="group">print_now_radio</property>
+                                    <signal name="toggled" handler="update_print_at_option" object="GtkPrintUnixDialog" swapped="yes"/>
+                                    <layout>
+                                      <property name="left-attach">0</property>
+                                      <property name="top-attach">2</property>
+                                      <property name="column-span">2</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label_widget6"/>
+                                </accessibility>
                               </object>
-                              <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">1</property>
-                              </packing>
                             </child>
-                            <child>
-                              <object class="GtkRadioButton" id="print_hold_radio">
-                                <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets &apos;released&apos;.">On _hold</property>
-                                <property name="can-focus">1</property>
-                                <property name="has-tooltip">1</property>
-                                <property name="tooltip-markup" translatable="yes">Hold the job until it is explicitly released</property>
-                                <property name="tooltip-text" translatable="yes">Hold the job until it is explicitly released</property>
-                                <property name="use-underline">1</property>
-                                <property name="draw-indicator">1</property>
-                                <property name="group">print_now_radio</property>
-                                <signal name="toggled" handler="update_print_at_option" object="GtkPrintUnixDialog" swapped="yes"/>
-                              </object>
-                              <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">2</property>
-                                <property name="width">2</property>
-                              </packing>
-                            </child>
-                            <accessibility>
-                              <relation type="labelled-by" target="label_widget6"/>
-                            </accessibility>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="frame_template7">
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">6</property>
-                        <child>
-                          <object class="GtkLabel" id="label_widget7">
-                            <property name="halign">start</property>
-                            <property name="valign">center</property>
-                            <property name="label" translatable="yes">Add Cover Page</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
-                            <accessibility>
-                              <relation type="label-for" target="grid7"/>
-                            </accessibility>
+                            <layout>
+                              <property name="left-attach">0</property>
+                              <property name="top-attach">1</property>
+                            </layout>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkGrid" id="grid7">
-                            <property name="margin-start">12</property>
-                            <property name="row-spacing">6</property>
-                            <property name="column-spacing">12</property>
-                            <child>
-                              <object class="GtkLabel" id="label18">
-                                <property name="halign">start</property>
-                                <property name="valign">center</property>
-                                <property name="label" translatable="yes" comments="this is the label used for the option in the print dialog that controls the front cover page.">Be_fore:</property>
-                                <property name="use-underline">1</property>
-                                <property name="mnemonic-widget">cover_before</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkPrinterOptionWidget" id="cover_before"/>
-                              <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label19">
-                                <property name="halign">start</property>
-                                <property name="valign">center</property>
-                                <property name="label" translatable="yes" comments="this is the label used for the option in the print dialog that controls the back cover page.">_After:</property>
-                                <property name="use-underline">1</property>
-                                <property name="mnemonic-widget">cover_after</property>
-                              </object>
-                              <packing>
-                                <property name="left-attach">0</property>
-                                <property name="top-attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkPrinterOptionWidget" id="cover_after"/>
-                              <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">1</property>
-                              </packing>
-                            </child>
-                            <accessibility>
-                              <relation type="labelled-by" target="label_widget7"/>
-                            </accessibility>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-                <child type="tab">
-                  <object class="GtkLabel" id="label3">
-                    <property name="label" translatable="yes">Job</property>
-                  </object>
-                  <packing>
-                    <property name="position">2</property>
-                    <property name="tab-fill">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkScrolledWindow" id="image_quality_page">
-                    <property name="can-focus">1</property>
-                    <property name="hscrollbar-policy">never</property>
-                    <property name="hexpand">1</property>
-                    <child>
-                      <object class="GtkViewport" id="viewport1">
-                        <property name="shadow-type">none</property>
-                        <child>
-                          <object class="GtkGrid" id="image_quality_table">
-                            <property name="row-spacing">6</property>
-                            <property name="column-spacing">12</property>
-                            <property name="margin">12</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
-                <child type="tab">
-                  <object class="GtkLabel" id="label20">
-                    <property name="label" translatable="yes" comments="This will appear as a tab label in the print dialog.">Image Quality</property>
-                  </object>
-                  <packing>
-                    <property name="position">3</property>
-                    <property name="tab-fill">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkScrolledWindow" id="color_page">
-                    <property name="can-focus">1</property>
-                    <property name="hscrollbar-policy">never</property>
-                    <child>
-                      <object class="GtkViewport" id="viewport2">
-                        <property name="shadow-type">none</property>
-                        <child>
-                          <object class="GtkGrid" id="color_table">
-                            <property name="row-spacing">6</property>
-                            <property name="column-spacing">12</property>
-                            <property name="margin">12</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="position">4</property>
-                  </packing>
-                </child>
-                <child type="tab">
-                  <object class="GtkLabel" id="label21">
-                    <property name="label" translatable="yes" comments="This will appear as a tab label in the print dialog.">Color</property>
-                  </object>
-                  <packing>
-                    <property name="position">4</property>
-                    <property name="tab-fill">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkScrolledWindow" id="finishing_page">
-                    <property name="can-focus">1</property>
-                    <property name="hscrollbar-policy">never</property>
-                    <child>
-                      <object class="GtkViewport" id="viewport3">
-                        <property name="shadow-type">none</property>
-                        <child>
-                          <object class="GtkGrid" id="finishing_table">
-                            <property name="row-spacing">6</property>
-                            <property name="column-spacing">12</property>
-                            <property name="margin">12</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="position">5</property>
-                  </packing>
-                </child>
-                <child type="tab">
-                  <object class="GtkLabel" id="label22">
-                    <property name="label" translatable="yes" comments="This will appear as a tab label in the print dialog. It&apos;s a typographical term, as in &quot;Binding and finishing&quot;">Finishing</property>
-                  </object>
-                  <packing>
-                    <property name="position">5</property>
-                    <property name="tab-fill">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkScrolledWindow" id="advanced_page">
-                    <property name="can-focus">1</property>
-                    <property name="hscrollbar-policy">never</property>
-                    <child>
-                      <object class="GtkViewport" id="viewport4">
-                        <property name="shadow-type">none</property>
-                        <child>
-                          <object class="GtkBox" id="advanced_vbox">
+                          <object class="GtkBox" id="frame_template7">
                             <property name="orientation">vertical</property>
-                            <property name="spacing">18</property>
-                            <property name="margin">12</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel" id="label_widget7">
+                                <property name="halign">start</property>
+                                <property name="valign">center</property>
+                                <property name="label" translatable="yes">Add Cover Page</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"></attribute>
+                                </attributes>
+                                <accessibility>
+                                  <relation type="label-for" target="grid7"/>
+                                </accessibility>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkGrid" id="grid7">
+                                <property name="margin-start">12</property>
+                                <property name="row-spacing">6</property>
+                                <property name="column-spacing">12</property>
+                                <child>
+                                  <object class="GtkLabel" id="label18">
+                                    <property name="halign">start</property>
+                                    <property name="valign">center</property>
+                                    <property name="label" translatable="yes" comments="this is the label used for the option in the print dialog that controls the front cover page.">Be_fore:</property>
+                                    <property name="use-underline">1</property>
+                                    <property name="mnemonic-widget">cover_before</property>
+                                    <layout>
+                                      <property name="left-attach">0</property>
+                                      <property name="top-attach">0</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkPrinterOptionWidget" id="cover_before">
+                                    <layout>
+                                      <property name="left-attach">1</property>
+                                      <property name="top-attach">0</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label19">
+                                    <property name="halign">start</property>
+                                    <property name="valign">center</property>
+                                    <property name="label" translatable="yes" comments="this is the label used for the option in the print dialog that controls the back cover page.">_After:</property>
+                                    <property name="use-underline">1</property>
+                                    <property name="mnemonic-widget">cover_after</property>
+                                    <layout>
+                                      <property name="left-attach">0</property>
+                                      <property name="top-attach">1</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkPrinterOptionWidget" id="cover_after">
+                                    <layout>
+                                      <property name="left-attach">1</property>
+                                      <property name="top-attach">1</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label_widget7"/>
+                                </accessibility>
+                              </object>
+                            </child>
+                            <layout>
+                              <property name="left-attach">1</property>
+                              <property name="top-attach">0</property>
+                            </layout>
                           </object>
                         </child>
                       </object>
-                    </child>
+                    </property>
+                    <property name="tab">
+                      <object class="GtkLabel" id="label3">
+                        <property name="label" translatable="yes">Job</property>
+                      </object>
+                    </property>
                   </object>
-                  <packing>
-                    <property name="position">6</property>
-                  </packing>
                 </child>
-                <child type="tab">
-                  <object class="GtkLabel" id="label23">
-                    <property name="label" translatable="yes">Advanced</property>
+                <child>
+                  <object class="GtkNotebookPage">
+                    <property name="position">3</property>
+                    <property name="child">
+                      <object class="GtkScrolledWindow" id="image_quality_page">
+                        <property name="can-focus">1</property>
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="hexpand">1</property>
+                        <child>
+                          <object class="GtkViewport" id="viewport1">
+                            <property name="shadow-type">none</property>
+                            <child>
+                              <object class="GtkGrid" id="image_quality_table">
+                                <property name="row-spacing">6</property>
+                                <property name="column-spacing">12</property>
+                                <property name="margin">12</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                    <property name="tab">
+                      <object class="GtkLabel" id="label20">
+                        <property name="label" translatable="yes" comments="This will appear as a tab label in the print dialog.">Image Quality</property>
+                      </object>
+                    </property>
                   </object>
-                  <packing>
+                </child>
+                <child>
+                  <object class="GtkNotebookPage">
+                    <property name="position">4</property>
+                    <property name="child">
+                      <object class="GtkScrolledWindow" id="color_page">
+                        <property name="can-focus">1</property>
+                        <property name="hscrollbar-policy">never</property>
+                        <child>
+                          <object class="GtkViewport" id="viewport2">
+                            <property name="shadow-type">none</property>
+                            <child>
+                              <object class="GtkGrid" id="color_table">
+                                <property name="row-spacing">6</property>
+                                <property name="column-spacing">12</property>
+                                <property name="margin">12</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                    <property name="tab">
+                      <object class="GtkLabel" id="label21">
+                        <property name="label" translatable="yes" comments="This will appear as a tab label in the print dialog.">Color</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkNotebookPage">
+                    <property name="position">5</property>
+                    <property name="child">
+                      <object class="GtkScrolledWindow" id="finishing_page">
+                        <property name="can-focus">1</property>
+                        <property name="hscrollbar-policy">never</property>
+                        <child>
+                          <object class="GtkViewport" id="viewport3">
+                            <property name="shadow-type">none</property>
+                            <child>
+                              <object class="GtkGrid" id="finishing_table">
+                                <property name="row-spacing">6</property>
+                                <property name="column-spacing">12</property>
+                                <property name="margin">12</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                    <property name="tab">
+                      <object class="GtkLabel" id="label22">
+                        <property name="label" translatable="yes" comments="This will appear as a tab label in the print dialog. It&apos;s a typographical term, as in &quot;Binding and finishing&quot;">Finishing</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkNotebookPage">
                     <property name="position">6</property>
-                    <property name="tab-fill">0</property>
-                  </packing>
+                    <property name="child">
+                      <object class="GtkScrolledWindow" id="advanced_page">
+                        <property name="can-focus">1</property>
+                        <property name="hscrollbar-policy">never</property>
+                        <child>
+                          <object class="GtkViewport" id="viewport4">
+                            <property name="shadow-type">none</property>
+                            <child>
+                              <object class="GtkBox" id="advanced_vbox">
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">18</property>
+                                <property name="margin">12</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                    <property name="tab">
+                      <object class="GtkLabel" id="label23">
+                        <property name="label" translatable="yes">Advanced</property>
+                      </object>
+                    </property>
+                  </object>
                 </child>
               </object>
             </child>
@@ -1168,10 +1105,6 @@
                   </object>
                 </child>
               </object>
-              <packing>
-                <property name="pack-type">end</property>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
         </child>

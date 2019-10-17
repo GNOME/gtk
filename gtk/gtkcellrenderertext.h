@@ -37,15 +37,11 @@ G_BEGIN_DECLS
 #define GTK_CELL_RENDERER_TEXT_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CELL_RENDERER_TEXT, GtkCellRendererTextClass))
 
 typedef struct _GtkCellRendererText              GtkCellRendererText;
-typedef struct _GtkCellRendererTextPrivate       GtkCellRendererTextPrivate;
 typedef struct _GtkCellRendererTextClass         GtkCellRendererTextClass;
 
 struct _GtkCellRendererText
 {
   GtkCellRenderer parent;
-
-  /*< private >*/
-  GtkCellRendererTextPrivate *priv;
 };
 
 struct _GtkCellRendererTextClass
@@ -56,11 +52,9 @@ struct _GtkCellRendererTextClass
 		   const gchar         *path,
 		   const gchar         *new_text);
 
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
+  /*< private >*/
+
+  gpointer padding[8];
 };
 
 GDK_AVAILABLE_IN_ALL

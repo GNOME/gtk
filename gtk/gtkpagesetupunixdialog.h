@@ -28,39 +28,11 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_PAGE_SETUP_UNIX_DIALOG                  (gtk_page_setup_unix_dialog_get_type ())
 #define GTK_PAGE_SETUP_UNIX_DIALOG(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PAGE_SETUP_UNIX_DIALOG, GtkPageSetupUnixDialog))
-#define GTK_PAGE_SETUP_UNIX_DIALOG_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PAGE_SETUP_UNIX_DIALOG, GtkPageSetupUnixDialogClass))
 #define GTK_IS_PAGE_SETUP_UNIX_DIALOG(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PAGE_SETUP_UNIX_DIALOG))
-#define GTK_IS_PAGE_SETUP_UNIX_DIALOG_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PAGE_SETUP_UNIX_DIALOG))
-#define GTK_PAGE_SETUP_UNIX_DIALOG_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PAGE_SETUP_UNIX_DIALOG, GtkPageSetupUnixDialogClass))
 
 
-typedef struct _GtkPageSetupUnixDialog         GtkPageSetupUnixDialog;
-typedef struct _GtkPageSetupUnixDialogClass    GtkPageSetupUnixDialogClass;
-typedef struct _GtkPageSetupUnixDialogPrivate  GtkPageSetupUnixDialogPrivate;
+typedef struct _GtkPageSetupUnixDialog GtkPageSetupUnixDialog;
 
-struct _GtkPageSetupUnixDialog
-{
-  GtkDialog parent_instance;
-
-  GtkPageSetupUnixDialogPrivate *priv;
-};
-
-/**
- * GtkPageSetupUnixDialogClass:
- * @parent_class: The parent class.
- */
-struct _GtkPageSetupUnixDialogClass
-{
-  GtkDialogClass parent_class;
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType 		  gtk_page_setup_unix_dialog_get_type	        (void) G_GNUC_CONST;

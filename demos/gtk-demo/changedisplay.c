@@ -7,7 +7,7 @@
  * computers, as long as there is a network connection to the
  * computer where the application is running.
  *
- * Only some of the windowing systems where GTK+ runs have the
+ * Only some of the windowing systems where GTK runs have the
  * concept of multiple displays. (The X Window System is the
  * main example.) Other windowing systems can only handle one
  * keyboard and mouse, and combine all monitors into
@@ -71,28 +71,20 @@ find_toplevel_at_pointer (GdkDisplay *display)
   GdkSurface *pointer_window;
   GtkWidget *widget = NULL;
 
-  pointer_window = gdk_device_get_surface_at_position (gtk_get_current_event_device (),
-                                                      NULL, NULL);
+  pointer_window = gdk_device_get_surface_at_position (gtk_get_current_event_device (), NULL, NULL);
 
-  /* The user data field of a GdkSurface is used to store a pointer
-   * to the widget that created it.
-   */
   if (pointer_window)
-    {
-      gpointer widget_ptr;
-      gdk_surface_get_user_data (pointer_window, &widget_ptr);
-      widget = widget_ptr;
-    }
+    widget = GTK_WIDGET (gtk_native_get_for_surface (pointer_window));
 
-  return widget ? gtk_widget_get_toplevel (widget) : NULL;
+  return widget;
 }
 
 static void
-released_cb (GtkGestureMultiPress *gesture,
-             guint                 n_press,
-             gdouble               x,
-             gdouble               y,
-             gboolean             *clicked)
+released_cb (GtkGestureClick *gesture,
+             guint            n_press,
+             gdouble          x,
+             gdouble          y,
+             gboolean        *clicked)
 {
   *clicked = TRUE;
 }
@@ -113,7 +105,6 @@ query_for_toplevel (GdkDisplay *display,
   popup = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_window_set_display (GTK_WINDOW (popup), display);
   gtk_window_set_modal (GTK_WINDOW (popup), TRUE);
-  gtk_window_set_position (GTK_WINDOW (popup), GTK_WIN_POS_CENTER);
 
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_OUT);
@@ -128,11 +119,11 @@ query_for_toplevel (GdkDisplay *display,
   device = gtk_get_current_event_device ();
 
   if (gdk_seat_grab (gdk_device_get_seat (device),
-                     gtk_widget_get_surface (popup),
+                     gtk_native_get_surface (GTK_NATIVE (popup)),
                      GDK_SEAT_CAPABILITY_ALL_POINTING,
                      FALSE, cursor, NULL, NULL, NULL) == GDK_GRAB_SUCCESS)
     {
-      GtkGesture *gesture = gtk_gesture_multi_press_new ();
+      GtkGesture *gesture = gtk_gesture_click_new ();
       gboolean clicked = FALSE;
 
       g_signal_connect (gesture, "released",
@@ -315,7 +306,7 @@ create_frame (ChangeDisplayInfo *info,
                                   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrollwin),
                                        GTK_SHADOW_IN);
-  gtk_box_pack_start (GTK_BOX (hbox), scrollwin);
+  gtk_container_add (GTK_CONTAINER (hbox), scrollwin);
 
   *tree_view = gtk_tree_view_new ();
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (*tree_view), FALSE);
@@ -325,7 +316,7 @@ create_frame (ChangeDisplayInfo *info,
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 
   *button_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-  gtk_box_pack_start (GTK_BOX (hbox), *button_vbox);
+  gtk_container_add (GTK_CONTAINER (hbox), *button_vbox);
 
   if (!info->size_group)
     info->size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
@@ -365,11 +356,11 @@ create_display_frame (ChangeDisplayInfo *info)
 
   button = left_align_button_new ("_Open...");
   g_signal_connect (button, "clicked",  G_CALLBACK (open_display_cb), info);
-  gtk_box_pack_start (GTK_BOX (button_vbox), button);
+  gtk_container_add (GTK_CONTAINER (button_vbox), button);
 
   button = left_align_button_new ("_Close");
   g_signal_connect (button, "clicked",  G_CALLBACK (close_display_cb), info);
-  gtk_box_pack_start (GTK_BOX (button_vbox), button);
+  gtk_container_add (GTK_CONTAINER (button_vbox), button);
 
   info->display_model = (GtkTreeModel *)gtk_list_store_new (DISPLAY_NUM_COLUMNS,
                                                             G_TYPE_STRING,
@@ -542,10 +533,10 @@ do_changedisplay (GtkWidget *do_widget)
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
       g_object_set (vbox, "margin", 8, NULL);
-      gtk_box_pack_start (GTK_BOX (content_area), vbox);
+      gtk_container_add (GTK_CONTAINER (content_area), vbox);
 
       frame = create_display_frame (info);
-      gtk_box_pack_start (GTK_BOX (vbox), frame);
+      gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       initialize_displays (info);
 

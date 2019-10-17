@@ -124,7 +124,7 @@ create_label (void)
 {
   GtkWidget *w = gtk_label_new ("pLorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.");
 
-  gtk_label_set_line_wrap (GTK_LABEL (w), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (w), TRUE);
   gtk_label_set_max_width_chars (GTK_LABEL (w), 100);
 
   return w;
@@ -164,6 +164,26 @@ create_switch (void)
   return w;
 }
 
+static void
+mapped (GtkWidget *w)
+{
+  gtk_menu_button_popup (GTK_MENU_BUTTON (w));
+}
+
+static GtkWidget *
+create_menu_button (void)
+{
+  GtkWidget *w = gtk_menu_button_new ();
+  GtkWidget *popover = gtk_popover_new (NULL);
+
+  gtk_container_add (GTK_CONTAINER (popover), gtk_button_new_with_label ("Hey!"));
+  gtk_popover_set_autohide (GTK_POPOVER (popover), FALSE);
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (w), popover);
+  g_signal_connect (w, "map", G_CALLBACK (mapped), NULL);
+
+  return w;
+}
+
 static const struct {
   const char *name;
   GtkWidget * (*create_func) (void);
@@ -179,6 +199,7 @@ static const struct {
   { "Video",      create_video          },
   { "Gears",      create_gears          },
   { "Switch",     create_switch         },
+  { "Menubutton", create_menu_button    },
 };
 
 static int selected_widget_type = -1;
@@ -198,7 +219,7 @@ set_widget_type (GtkFishbowl *fishbowl,
   gtk_fishbowl_set_creation_func (fishbowl,
                                   widget_types[selected_widget_type].create_func);
 
-  window = gtk_widget_get_toplevel (GTK_WIDGET (fishbowl));
+  window = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (fishbowl)));
   headerbar = gtk_window_get_titlebar (GTK_WINDOW (window));
   gtk_header_bar_set_title (GTK_HEADER_BAR (headerbar),
                             widget_types[selected_widget_type].name);
@@ -234,6 +255,15 @@ prev_button_clicked_cb (GtkButton *source,
   set_widget_type (fishbowl, new_index);
 }
 
+void
+changes_toggled_cb (GtkToggleButton *button,
+                    gpointer         user_data)
+{
+  if (gtk_toggle_button_get_active (button))
+    gtk_button_set_icon_name (GTK_BUTTON (button), "changes-prevent");
+  else
+    gtk_button_set_icon_name (GTK_BUTTON (button), "changes-allow");
+}
 
 GtkWidget *
 do_fishbowl (GtkWidget *do_widget)
@@ -261,10 +291,14 @@ do_fishbowl (GtkWidget *do_widget)
       gtk_builder_add_callback_symbols (builder,
                                         "next_button_clicked_cb", G_CALLBACK (next_button_clicked_cb),
                                         "prev_button_clicked_cb", G_CALLBACK (prev_button_clicked_cb),
+                                        "changes_toggled_cb", G_CALLBACK (changes_toggled_cb),
                                         NULL);
       gtk_builder_connect_signals (builder, NULL);
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
+      g_signal_connect (window, "destroy",
+                        G_CALLBACK (gtk_widget_destroyed), &window);
       bowl = GTK_WIDGET (gtk_builder_get_object (builder, "bowl"));
+      selected_widget_type = -1;
       set_widget_type (GTK_FISHBOWL (bowl), 0);
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
@@ -272,13 +306,13 @@ do_fishbowl (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       gtk_widget_realize (window);
+      g_object_unref (builder);
     }
 
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
     gtk_widget_destroy (window);
-
 
   return window;
 }

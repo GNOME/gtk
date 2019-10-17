@@ -1,7 +1,7 @@
 window1
   "window"
   index: 0
-  state: enabled resizable sensitive showing visible
+  state: active enabled resizable sensitive showing visible
   toolkit: gtk
   window-type: normal
   <AtkComponent>
@@ -30,7 +30,7 @@ window1
       <AtkText>
       text: entry:
       character count: 6
-      caret offset: 0
+      caret offset: -1
       default attributes: bg-color: <omitted>
                           bg-full-height: 0
                           direction: <omitted>
@@ -71,7 +71,7 @@ window1
       <AtkText>
       text: password entry:
       character count: 15
-      caret offset: 0
+      caret offset: -1
       default attributes: bg-color: <omitted>
                           bg-full-height: 0
                           direction: <omitted>
@@ -112,7 +112,7 @@ window1
       <AtkText>
       text: spinbutton:
       character count: 11
-      caret offset: 0
+      caret offset: -1
       default attributes: bg-color: <omitted>
                           bg-full-height: 0
                           direction: <omitted>
@@ -144,7 +144,7 @@ window1
       parent: box1
       index: 3
       labelled-by: label1
-      state: editable enabled focusable sensitive showing single-line visible
+      state: editable enabled sensitive showing single-line visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
@@ -152,7 +152,8 @@ window1
       <AtkText>
       text: text
       character count: 4
-      caret offset: 0
+      caret offset: 4
+      selection 0: (0, 4) text
       default attributes: bg-color: <omitted>
                           bg-full-height: 0
                           direction: <omitted>
@@ -183,11 +184,11 @@ window1
       action 0 description: Activates the entry
       action 0 keybinding: <Alt>e
     entry2
-      "password text"
+      "text"
       parent: box1
       index: 4
       labelled-by: label2
-      state: editable enabled focusable sensitive showing single-line visible
+      state: editable enabled sensitive showing single-line visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
@@ -195,7 +196,7 @@ window1
       <AtkText>
       text: *************
       character count: 13
-      caret offset: 0
+      caret offset: -1
       default attributes: bg-color: <omitted>
                           bg-full-height: 0
                           direction: <omitted>
@@ -229,7 +230,7 @@ window1
       "text"
       parent: box1
       index: 5
-      state: editable enabled focusable sensitive showing single-line visible
+      state: editable enabled sensitive showing single-line visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
@@ -237,7 +238,7 @@ window1
       <AtkText>
       text: icons
       character count: 5
-      caret offset: 0
+      caret offset: -1
       default attributes: bg-color: <omitted>
                           bg-full-height: 0
                           direction: <omitted>

@@ -24,14 +24,13 @@
 #include <cairo.h>
 
 #include "gtkcsstypesprivate.h"
+#include "gtkcssboxesprivate.h"
 #include "gtktypes.h"
 
 G_BEGIN_DECLS
 
-void            gtk_css_style_snapshot_background               (GtkCssStyle          *style,
-                                                                 GtkSnapshot          *snapshot,
-                                                                 gdouble               width,
-                                                                 gdouble               height);
+void            gtk_css_style_snapshot_background               (GtkCssBoxes          *boxes,
+                                                                 GtkSnapshot          *snapshot);
 
 
 

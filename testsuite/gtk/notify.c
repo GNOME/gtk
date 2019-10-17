@@ -370,6 +370,7 @@ test_type (gconstpointer data)
   /* These can't be freely constructed/destroyed */
   if (g_type_is_a (type, GTK_TYPE_APPLICATION) ||
       g_type_is_a (type, GDK_TYPE_PIXBUF_LOADER) ||
+      g_type_is_a (type, GTK_TYPE_LAYOUT_CHILD) ||
 #ifdef G_OS_UNIX
       g_type_is_a (type, GTK_TYPE_PRINT_JOB) ||
 #endif
@@ -405,7 +406,7 @@ test_type (gconstpointer data)
     instance = G_OBJECT (g_object_ref (gtk_settings_get_default ()));
   else if (g_type_is_a (type, GDK_TYPE_SURFACE))
     {
-      instance = G_OBJECT (g_object_ref (gdk_surface_new_popup (display,
+      instance = G_OBJECT (g_object_ref (gdk_surface_new_temp (display,
                                                                &(GdkRectangle) { 0, 0, 100, 100 })));
     }
   else if (g_str_equal (g_type_name (type), "GdkX11Cursor"))
@@ -430,7 +431,9 @@ test_type (gconstpointer data)
                                NULL);
       gdk_content_formats_unref (formats);
     }
-  else if (g_type_is_a (type, GTK_TYPE_FILTER_LIST_MODEL))
+  else if (g_type_is_a (type, GTK_TYPE_FILTER_LIST_MODEL) ||
+           g_type_is_a (type, GTK_TYPE_NO_SELECTION) ||
+           g_type_is_a (type, GTK_TYPE_SINGLE_SELECTION))
     {
       GListStore *list_store = g_list_store_new (G_TYPE_OBJECT);
       instance = g_object_new (type,
@@ -529,9 +532,7 @@ test_type (gconstpointer data)
 
       /* Special restrictions on allowed values */
       if (pspec->owner_type == GTK_TYPE_COMBO_BOX &&
-          (g_str_equal (pspec->name, "row-span-column") ||
-           g_str_equal (pspec->name, "column-span-column") ||
-           g_str_equal (pspec->name, "id-column") ||
+          (g_str_equal (pspec->name, "id-column") ||
            g_str_equal (pspec->name, "active-id") ||
            g_str_equal (pspec->name, "entry-text-column")))
         continue;
@@ -555,6 +556,15 @@ test_type (gconstpointer data)
 
       if (pspec->owner_type == GTK_TYPE_STACK &&
           g_str_equal (pspec->name, "visible-child-name"))
+        continue;
+
+      if (pspec->owner_type == GTK_TYPE_STACK_PAGE && /* Can't change position without a stack */
+          g_str_equal (pspec->name, "position"))
+        continue;
+
+      /* Can't realize a popover without a parent */
+      if (g_type_is_a (type, GTK_TYPE_POPOVER) &&
+          g_str_equal (pspec->name, "visible"))
         continue;
 
       if (pspec->owner_type == GTK_TYPE_POPOVER_MENU &&
@@ -608,6 +618,17 @@ test_type (gconstpointer data)
       if (g_type_is_a (type, GTK_TYPE_TREE_LIST_ROW) &&
 	  g_str_equal (pspec->name, "expanded"))
 	continue;
+
+       /* can't select items without an underlying, populated model */
+       if (g_type_is_a (type, GTK_TYPE_SINGLE_SELECTION) &&
+           (g_str_equal (pspec->name, "selected") ||
+            g_str_equal (pspec->name, "selected-item")))
+         continue;
+
+       /* can't set position without a notebook */
+       if (g_type_is_a (type, GTK_TYPE_NOTEBOOK_PAGE) &&
+           g_str_equal (pspec->name, "position"))
+         continue;
 
       if (g_test_verbose ())
         g_print ("Property %s.%s\n", g_type_name (pspec->owner_type), pspec->name);

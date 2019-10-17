@@ -12,84 +12,86 @@
   </object>
   <template class="GtkInspectorActions" parent="GtkBox">
     <property name="orientation">vertical</property>
+    <style>
+      <class name="view"/>
+    </style>
+    <child>
+      <object class="GtkBox">
+        <style>
+          <class name="header"/>
+        </style>
+        <child>
+          <object class="GtkLabel" id="name_heading">
+            <property name="label" translatable="yes">Name</property>
+            <property name="xalign">0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="enabled_heading">
+            <property name="label" translatable="yes">Enabled</property>
+            <property name="xalign">0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="parameter_heading">
+            <property name="label" translatable="yes">Parameter Type</property>
+            <property name="xalign">0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="state_heading">
+            <property name="label" translatable="yes">State</property>
+            <property name="xalign">0</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="changes_heading">
+            <property name="label" translatable="yes"></property>
+            <property name="xalign">0</property>
+          </object>
+        </child>
+      </object>
+    </child>
     <child>
       <object class="GtkScrolledWindow">
         <property name="expand">1</property>
         <property name="hscrollbar-policy">never</property>
         <child>
-          <object class="GtkTreeView">
-            <property name="model">model</property>
-            <property name="enable-search">0</property>
-            <property name="activate-on-single-click">1</property>
-            <signal name="row-activated" handler="row_activated"/>
-            <child>
-              <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">Prefix</property>
-                <child>
-                  <object class="GtkCellRendererText">
-                    <property name="scale">0.8</property>
-                  </object>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">Name</property>
-                <child>
-                  <object class="GtkCellRendererText">
-                    <property name="scale">0.8</property>
-                  </object>
-                  <attributes>
-                    <attribute name="text">1</attribute>
-                  </attributes>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">Enabled</property>
-                <child>
-                  <object class="GtkCellRendererText">
-                    <property name="scale">0.8</property>
-                  </object>
-                  <attributes>
-                    <attribute name="text">2</attribute>
-                  </attributes>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">Parameter Type</property>
-                <child>
-                  <object class="GtkCellRendererText">
-                    <property name="scale">0.8</property>
-                  </object>
-                  <attributes>
-                    <attribute name="text">3</attribute>
-                  </attributes>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">State</property>
-                <child>
-                  <object class="GtkCellRendererText">
-                    <property name="scale">0.8</property>
-                  </object>
-                  <attributes>
-                    <attribute name="text">4</attribute>
-                  </attributes>
-                </child>
-              </object>
-            </child>
+          <object class="GtkListBox" id="list">
+            <style>
+              <class name="list"/>
+            </style>
+            <property name="selection-mode">none</property>
           </object>
         </child>
       </object>
     </child>
   </template>
+  <object class="GtkSizeGroup" id="name">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="name_heading"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="enabled">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="enabled_heading"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="parameter">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="parameter_heading"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="state">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="state_heading"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="activate">
+    <property name="mode">horizontal</property>
+  </object>
 </interface>

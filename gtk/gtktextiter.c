@@ -245,6 +245,8 @@ iter_init_common (GtkTextIter *_iter,
   g_return_val_if_fail (iter != NULL, NULL);
   g_return_val_if_fail (tree != NULL, NULL);
 
+  memset (iter, 0, sizeof (GtkTextRealIter));
+
   iter->tree = tree;
 
   iter->chars_changed_stamp =
@@ -5354,6 +5356,25 @@ gtk_text_iter_equal (const GtkTextIter *lhs,
       ensure_char_offsets (real_rhs);
       return real_lhs->line_char_offset == real_rhs->line_char_offset;
     }
+}
+
+gboolean
+_gtk_text_iter_same_line (const GtkTextIter *lhs,
+                          const GtkTextIter *rhs)
+{
+  GtkTextRealIter *real_lhs;
+  GtkTextRealIter *real_rhs;
+
+  real_lhs = gtk_text_iter_make_surreal (lhs);
+  real_rhs = gtk_text_iter_make_surreal (rhs);
+
+  if (real_lhs == NULL || real_rhs == NULL)
+    return FALSE;
+
+  check_invariants (lhs);
+  check_invariants (rhs);
+
+  return real_lhs->line == real_rhs->line;
 }
 
 /**

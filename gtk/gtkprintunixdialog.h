@@ -30,34 +30,11 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_PRINT_UNIX_DIALOG                  (gtk_print_unix_dialog_get_type ())
 #define GTK_PRINT_UNIX_DIALOG(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PRINT_UNIX_DIALOG, GtkPrintUnixDialog))
-#define GTK_PRINT_UNIX_DIALOG_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PRINT_UNIX_DIALOG, GtkPrintUnixDialogClass))
 #define GTK_IS_PRINT_UNIX_DIALOG(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PRINT_UNIX_DIALOG))
-#define GTK_IS_PRINT_UNIX_DIALOG_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PRINT_UNIX_DIALOG))
-#define GTK_PRINT_UNIX_DIALOG_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PRINT_UNIX_DIALOG, GtkPrintUnixDialogClass))
 
 
-typedef struct _GtkPrintUnixDialog         GtkPrintUnixDialog;
-typedef struct _GtkPrintUnixDialogClass    GtkPrintUnixDialogClass;
-typedef struct GtkPrintUnixDialogPrivate   GtkPrintUnixDialogPrivate;
+typedef struct _GtkPrintUnixDialog GtkPrintUnixDialog;
 
-struct _GtkPrintUnixDialog
-{
-  GtkDialog parent_instance;
-
-  /*< private >*/
-  GtkPrintUnixDialogPrivate *priv;
-};
-
-struct _GtkPrintUnixDialogClass
-{
-  GtkDialogClass parent_class;
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType                gtk_print_unix_dialog_get_type                (void) G_GNUC_CONST;

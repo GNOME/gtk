@@ -129,7 +129,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkIMContextSimple, gtk_im_context_simple, GTK_TYPE_IM_
                          g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "gtk-im-context-simple",
-                                                         10))
+                                                         G_MININT))
 
 static void
 gtk_im_context_simple_class_init (GtkIMContextSimpleClass *class)
@@ -1476,7 +1476,7 @@ gtk_im_context_simple_add_table (GtkIMContextSimple *context_simple,
   G_UNLOCK (global_tables);
 }
 
-/*
+/**
  * gtk_im_context_simple_add_compose_file:
  * @context_simple: A #GtkIMContextSimple
  * @compose_file: The path of compose file

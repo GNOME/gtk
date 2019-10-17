@@ -73,29 +73,35 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEngineQuartz, _gtk_search_engine_quartz, GT
 {
   int i;
   GList *hits = NULL;
+  /* The max was originally set to 1000 to mimic the Beagle backend. */
+  const unsigned int max_hits = 1000;
+  const unsigned int max_iter = submitted_hits + [ns_query resultCount];
 
   /* Here we submit hits "submitted_hits" to "resultCount" */
-  for (i = submitted_hits; i < [ns_query resultCount]; i++)
+  for (i = submitted_hits; i < max_iter && i < max_hits; ++i)
     {
       id result = [ns_query resultAtIndex:i];
-      char *result_path;
+      const char *result_path;
+      GFile *file;
+      GtkSearchHit *hit;
 
-      result_path = g_strdup_printf ("file://%s", [[result valueForAttribute:@"kMDItemPath"] cString]);
-      hits = g_list_prepend (hits, result_path);
+      result_path = [[result valueForAttribute:@"kMDItemPath"] UTF8String];
+      file = g_file_new_for_path (result_path);
+
+      hit = g_new (GtkSearchHit, 1);
+      hit->file = file;
+      hit->info = NULL;
+
+      hits = g_list_prepend (hits, hit);
     }
 
   _gtk_search_engine_hits_added (engine, hits);
-  g_list_free (hits);
+  g_list_free_full (hits, (GDestroyNotify) _gtk_search_hit_free);
 
-  submitted_hits = [ns_query resultCount];
-
-  /* The beagle backend stops at 1000 hits, so guess we do so too here.
-   * It works pretty snappy on my MacBook, if we get rid of this limit
-   * we are almost definitely going to need some code to submit hits
-   * in batches.
-   */
-  if (submitted_hits > 1000)
+  if (max_iter >= max_hits)
     [ns_query stopQuery];
+
+  submitted_hits = max_iter;
 }
 
 - (void) queryUpdate:(id)sender

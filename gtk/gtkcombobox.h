@@ -63,10 +63,7 @@ struct _GtkComboBoxClass
 
   /*< private >*/
 
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
+  gpointer padding[8];
 };
 
 
@@ -81,23 +78,6 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget    *gtk_combo_box_new_with_model           (GtkTreeModel *model);
 GDK_AVAILABLE_IN_ALL
 GtkWidget    *gtk_combo_box_new_with_model_and_entry (GtkTreeModel *model);
-
-/* grids */
-GDK_AVAILABLE_IN_ALL
-gint          gtk_combo_box_get_wrap_width         (GtkComboBox *combo_box);
-GDK_AVAILABLE_IN_ALL
-void          gtk_combo_box_set_wrap_width         (GtkComboBox *combo_box,
-                                                    gint         width);
-GDK_AVAILABLE_IN_ALL
-gint          gtk_combo_box_get_row_span_column    (GtkComboBox *combo_box);
-GDK_AVAILABLE_IN_ALL
-void          gtk_combo_box_set_row_span_column    (GtkComboBox *combo_box,
-                                                    gint         row_span);
-GDK_AVAILABLE_IN_ALL
-gint          gtk_combo_box_get_column_span_column (GtkComboBox *combo_box);
-GDK_AVAILABLE_IN_ALL
-void          gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
-                                                    gint         column_span);
 
 /* get/set active item */
 GDK_AVAILABLE_IN_ALL

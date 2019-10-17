@@ -61,6 +61,7 @@ struct _HandleWindow
 struct _GtkTextHandlePrivate
 {
   HandleWindow windows[2];
+  GtkWidget *toplevel;
   GtkWidget *parent;
   GtkScrollable *parent_scrollable;
   GtkAdjustment *vadj;
@@ -110,34 +111,6 @@ _text_handle_pos_from_widget (GtkTextHandle *handle,
 }
 
 static void
-gtk_text_handle_set_state (GtkTextHandle *handle,
-                           gint           pos,
-                           GtkStateFlags  state)
-{
-  GtkTextHandlePrivate *priv = handle->priv;
-
-  if (!priv->windows[pos].widget)
-    return;
-
-  gtk_widget_set_state_flags (priv->windows[pos].widget, state, FALSE);
-  gtk_widget_queue_draw (priv->windows[pos].widget);
-}
-
-static void
-gtk_text_handle_unset_state (GtkTextHandle *handle,
-                             gint           pos,
-                             GtkStateFlags  state)
-{
-  GtkTextHandlePrivate *priv = handle->priv;
-
-  if (!priv->windows[pos].widget)
-    return;
-
-  gtk_widget_unset_state_flags (priv->windows[pos].widget, state);
-  gtk_widget_queue_draw (priv->windows[pos].widget);
-}
-
-static void
 handle_drag_begin (GtkGestureDrag *gesture,
                    gdouble         x,
                    gdouble         y,
@@ -164,7 +137,6 @@ handle_drag_begin (GtkGestureDrag *gesture,
   priv->windows[pos].dx = x;
   priv->windows[pos].dy = y;
   priv->windows[pos].dragged = TRUE;
-  gtk_text_handle_set_state (handle, pos, GTK_STATE_FLAG_ACTIVE);
   g_signal_emit (handle, signals[DRAG_STARTED], 0, pos);
 }
 
@@ -202,10 +174,9 @@ handle_drag_end (GtkGestureDrag *gesture,
                                       gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)));
   g_signal_emit (handle, signals[DRAG_FINISHED], 0, pos);
   priv->windows[pos].dragged = FALSE;
-  gtk_text_handle_unset_state (handle, pos, GTK_STATE_FLAG_ACTIVE);
 }
 
-static gboolean
+static void
 snapshot_func (GtkGizmo    *gizmo,
                GtkSnapshot *snapshot)
 {
@@ -216,7 +187,6 @@ snapshot_func (GtkGizmo    *gizmo,
                                gtk_widget_get_width (GTK_WIDGET (gizmo)),
                                gtk_widget_get_height (GTK_WIDGET (gizmo)),
                                GTK_CSS_IMAGE_BUILTIN_HANDLE);
-  return TRUE;
 }
 
 static GtkWidget *
@@ -233,8 +203,7 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
       GtkStyleContext *context;
       GtkEventController *controller;
 
-      widget = gtk_gizmo_new (I_("cursor-handle"),
-                              NULL, NULL, snapshot_func);
+      widget = gtk_gizmo_new (I_("cursor-handle"), NULL, NULL, snapshot_func, NULL);
 
       gtk_widget_set_direction (widget, priv->windows[pos].dir);
 
@@ -248,7 +217,7 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
       gtk_widget_add_controller (widget, controller);
 
       priv->windows[pos].widget = g_object_ref_sink (widget);
-      window = gtk_widget_get_ancestor (priv->parent, GTK_TYPE_WINDOW);
+      priv->toplevel = window = gtk_widget_get_ancestor (priv->parent, GTK_TYPE_WINDOW);
       _gtk_window_add_popover (GTK_WINDOW (window), widget, priv->parent, FALSE);
 
       context = gtk_widget_get_style_context (widget);
@@ -499,7 +468,7 @@ gtk_text_handle_lookup_scrollable (GtkTextHandle *handle)
 
 static void
 _gtk_text_handle_parent_hierarchy_changed (GtkWidget     *widget,
-                                           GtkWindow     *previous_toplevel,
+                                           GParamSpec    *pspec,
                                            GtkTextHandle *handle)
 {
   GtkWidget *toplevel, *scrollable;
@@ -508,11 +477,11 @@ _gtk_text_handle_parent_hierarchy_changed (GtkWidget     *widget,
   priv = handle->priv;
   toplevel = gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
 
-  if (previous_toplevel && !toplevel)
+  if (priv->toplevel && !toplevel)
     {
       if (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget)
         {
-          _gtk_window_remove_popover (GTK_WINDOW (previous_toplevel),
+          _gtk_window_remove_popover (GTK_WINDOW (priv->toplevel),
                                       priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget);
           g_object_unref (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget);
           priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget = NULL;
@@ -520,11 +489,13 @@ _gtk_text_handle_parent_hierarchy_changed (GtkWidget     *widget,
 
       if (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].widget)
         {
-          _gtk_window_remove_popover (GTK_WINDOW (previous_toplevel),
+          _gtk_window_remove_popover (GTK_WINDOW (priv->toplevel),
                                       priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].widget);
           g_object_unref (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].widget);
           priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].widget = NULL;
         }
+
+      priv->toplevel = NULL;
     }
 
   scrollable = gtk_text_handle_lookup_scrollable (handle);
@@ -552,7 +523,7 @@ _gtk_text_handle_set_parent (GtkTextHandle *handle,
   if (parent)
     {
       priv->hierarchy_changed_id =
-        g_signal_connect (parent, "hierarchy-changed",
+        g_signal_connect (parent, "notify::root",
                           G_CALLBACK (_gtk_text_handle_parent_hierarchy_changed),
                           handle);
 
@@ -645,7 +616,7 @@ _gtk_text_handle_class_init (GtkTextHandleClass *klass)
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST, 0,
 		  NULL, NULL,
-                  g_cclosure_marshal_VOID__ENUM,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_TEXT_HANDLE_POSITION);
   signals[DRAG_FINISHED] =
@@ -653,7 +624,7 @@ _gtk_text_handle_class_init (GtkTextHandleClass *klass)
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST, 0,
 		  NULL, NULL,
-                  g_cclosure_marshal_VOID__ENUM,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_TEXT_HANDLE_POSITION);
 

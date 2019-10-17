@@ -95,10 +95,12 @@ _gdk_broadway_display_size_changed (GdkDisplay                      *display,
   toplevels =  broadway_display->toplevels;
   for (l = toplevels; l != NULL; l = l->next)
     {
-      GdkSurfaceImplBroadway *toplevel_impl = l->data;
+      GdkBroadwaySurface *toplevel = l->data;
 
-      if (toplevel_impl->maximized)
-        gdk_surface_move_resize (toplevel_impl->wrapper, 0, 0, msg->width, msg->height);
+      if (toplevel->maximized)
+        gdk_broadway_surface_move_resize (GDK_SURFACE (toplevel),
+                                          0, 0,
+                                          msg->width, msg->height);
     }
 }
 
@@ -174,7 +176,7 @@ _gdk_broadway_display_open (const gchar *display_name)
   if (display_name == NULL)
     display_name = g_getenv ("BROADWAY_DISPLAY");
 
-  broadway_display->server = _gdk_broadway_server_new (display_name, &error);
+  broadway_display->server = _gdk_broadway_server_new (display, display_name, &error);
   if (broadway_display->server == NULL)
     {
       g_printerr ("Unable to init Broadway server: %s\n", error->message);
@@ -380,11 +382,36 @@ gdk_broadway_display_ensure_texture (GdkDisplay *display,
       data = g_new0 (BroadwayTextureData, 1);
       data->id = id;
       data->display = g_object_ref (display);
-      g_object_set_data_full (G_OBJECT (texture), "broadway-data", data, (GDestroyNotify)broadway_texture_data_free);
+     g_object_set_data_full (G_OBJECT (texture), "broadway-data", data, (GDestroyNotify)broadway_texture_data_free);
     }
 
   return data->id;
 }
+
+static gboolean
+flush_idle (gpointer data)
+{
+  GdkDisplay *display = data;
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
+
+  broadway_display->idle_flush_id = 0;
+  gdk_display_flush (display);
+
+  return FALSE;
+}
+
+void
+gdk_broadway_display_flush_in_idle (GdkDisplay *display)
+{
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
+
+  if (broadway_display->idle_flush_id == 0)
+    {
+      broadway_display->idle_flush_id = g_idle_add (flush_idle, g_object_ref (display));
+      g_source_set_name_by_id (broadway_display->idle_flush_id, "[gtk] flush_idle");
+    }
+}
+
 
 static void
 gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
@@ -395,7 +422,6 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   object_class->dispose = gdk_broadway_display_dispose;
   object_class->finalize = gdk_broadway_display_finalize;
 
-  display_class->surface_type = GDK_TYPE_BROADWAY_SURFACE;
   display_class->cairo_context_type = GDK_TYPE_BROADWAY_CAIRO_CONTEXT;
 
   display_class->get_name = gdk_broadway_display_get_name;
@@ -410,7 +436,7 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
 
   display_class->get_next_serial = gdk_broadway_display_get_next_serial;
   display_class->notify_startup_complete = gdk_broadway_display_notify_startup_complete;
-  display_class->create_surface_impl = _gdk_broadway_display_create_surface_impl;
+  display_class->create_surface = _gdk_broadway_display_create_surface;
   display_class->get_keymap = _gdk_broadway_display_get_keymap;
   display_class->text_property_to_utf8_list = _gdk_broadway_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_broadway_display_utf8_to_string_target;

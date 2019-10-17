@@ -27,7 +27,6 @@
  * @Short_description: A container which allows you to position
  * widgets at fixed coordinates
  * @Title: GtkFixed
- * @See_also: #GtkLayout
  *
  * The #GtkFixed widget is a container which can place child widgets
  * at fixed positions and with fixed sizes, given in pixels. #GtkFixed
@@ -52,7 +51,7 @@
  *
  * In addition, #GtkFixed does not pay attention to text direction and thus may
  * produce unwanted results if your app is run under right-to-left languages
- * such as Hebrew or Arabic. That is: normally GTK+ will order containers
+ * such as Hebrew or Arabic. That is: normally GTK will order containers
  * appropriately for the text direction, e.g. to put labels to the right of the
  * thing they label when using an RTL language, but it can’t do that with
  * #GtkFixed. So if you need to reorder widgets depending on the text direction,
@@ -66,9 +65,6 @@
  * If you know none of these things are an issue for your application,
  * and prefer the simplicity of #GtkFixed, by all means use the
  * widget. But you should be aware of the tradeoffs.
- *
- * See also #GtkLayout, which shares the ability to perform fixed positioning
- * of child widgets and additionally adds custom drawing and scrollability.
  */
 
 #include "config.h"
@@ -76,37 +72,11 @@
 #include "gtkfixed.h"
 
 #include "gtkcontainerprivate.h"
-#include "gtkwidgetprivate.h"
-#include "gtkprivate.h"
+#include "gtkfixedlayout.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
+#include "gtkwidgetprivate.h"
 
-typedef struct
-{
-  gint x;
-  gint y;
-} GtkFixedChild;
-
-enum {
-  CHILD_PROP_0,
-  CHILD_PROP_X,
-  CHILD_PROP_Y
-};
-
-static GQuark child_data_quark = 0;
-
-static void gtk_fixed_measure (GtkWidget      *widget,
-                               GtkOrientation  orientation,
-                               int             for_size,
-                               int            *minimum,
-                               int            *natural,
-                               int            *minimum_baseline,
-                               int            *natural_baseline);
-
-
-static void gtk_fixed_size_allocate (GtkWidget *widget,
-                                     int        width,
-                                     int        height,
-                                     int        baseline);
 static void gtk_fixed_add           (GtkContainer     *container,
                                      GtkWidget        *widget);
 static void gtk_fixed_remove        (GtkContainer     *container,
@@ -116,63 +86,24 @@ static void gtk_fixed_forall        (GtkContainer     *container,
                                      gpointer          callback_data);
 static GType gtk_fixed_child_type   (GtkContainer     *container);
 
-static void gtk_fixed_set_child_property (GtkContainer *container,
-                                          GtkWidget    *child,
-                                          guint         property_id,
-                                          const GValue *value,
-                                          GParamSpec   *pspec);
-static void gtk_fixed_get_child_property (GtkContainer *container,
-                                          GtkWidget    *child,
-                                          guint         property_id,
-                                          GValue       *value,
-                                          GParamSpec   *pspec);
+typedef struct {
+  GtkLayoutManager *layout;
+} GtkFixedPrivate;
 
-G_DEFINE_TYPE (GtkFixed, gtk_fixed, GTK_TYPE_CONTAINER)
-
-static GtkFixedChild *
-get_fixed_child (GtkWidget *widget)
-{
-  g_assert (GTK_IS_FIXED (gtk_widget_get_parent (widget)));
-
-  return (GtkFixedChild *) g_object_get_qdata (G_OBJECT (widget), child_data_quark);
-}
+G_DEFINE_TYPE_WITH_PRIVATE (GtkFixed, gtk_fixed, GTK_TYPE_CONTAINER)
 
 static void
-gtk_fixed_class_init (GtkFixedClass *class)
+gtk_fixed_class_init (GtkFixedClass *klass)
 {
-  GtkWidgetClass *widget_class;
-  GtkContainerClass *container_class;
-
-  widget_class = (GtkWidgetClass*) class;
-  container_class = (GtkContainerClass*) class;
-
-  widget_class->measure = gtk_fixed_measure;
-  widget_class->size_allocate = gtk_fixed_size_allocate;
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   container_class->add = gtk_fixed_add;
   container_class->remove = gtk_fixed_remove;
   container_class->forall = gtk_fixed_forall;
   container_class->child_type = gtk_fixed_child_type;
-  container_class->set_child_property = gtk_fixed_set_child_property;
-  container_class->get_child_property = gtk_fixed_get_child_property;
 
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_X,
-                                              g_param_spec_int ("x",
-                                                                P_("X position"),
-                                                                P_("X position of child widget"),
-                                                                G_MININT, G_MAXINT, 0,
-                                                                GTK_PARAM_READWRITE));
-
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_Y,
-                                              g_param_spec_int ("y",
-                                                                P_("Y position"),
-                                                                P_("Y position of child widget"),
-                                                                G_MININT, G_MAXINT, 0,
-                                                                GTK_PARAM_READWRITE));
-
-  child_data_quark = g_quark_from_static_string ("gtk-fixed-child-data");
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_FIXED_LAYOUT);
 }
 
 static GType
@@ -182,9 +113,13 @@ gtk_fixed_child_type (GtkContainer *container)
 }
 
 static void
-gtk_fixed_init (GtkFixed *fixed)
+gtk_fixed_init (GtkFixed *self)
 {
-  gtk_widget_set_has_surface (GTK_WIDGET (fixed), FALSE);
+  GtkFixedPrivate *priv = gtk_fixed_get_instance_private (self);
+
+  gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
+
+  priv->layout = gtk_widget_get_layout_manager (GTK_WIDGET (self)); 
 }
 
 /**
@@ -207,7 +142,8 @@ gtk_fixed_new (void)
  * @x: the horizontal position to place the widget at.
  * @y: the vertical position to place the widget at.
  *
- * Adds a widget to a #GtkFixed container at the given position.
+ * Adds a widget to a #GtkFixed container and assigns a translation
+ * transformation to the given @x and @y coordinates to it.
  */
 void
 gtk_fixed_put (GtkFixed  *fixed,
@@ -215,48 +151,112 @@ gtk_fixed_put (GtkFixed  *fixed,
                gint       x,
                gint       y)
 {
-  GtkFixedChild *child_info;
+  GtkFixedPrivate *priv = gtk_fixed_get_instance_private (fixed);
+  GtkFixedLayoutChild *child_info;
+  GskTransform *transform = NULL;
 
   g_return_if_fail (GTK_IS_FIXED (fixed));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (_gtk_widget_get_parent (widget) == NULL);
 
-  child_info = g_new (GtkFixedChild, 1);
-  child_info->x = x;
-  child_info->y = y;
-
-  g_object_set_qdata_full (G_OBJECT (widget), child_data_quark, child_info, g_free);
   gtk_widget_set_parent (widget, GTK_WIDGET (fixed));
+
+  child_info = GTK_FIXED_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout, widget));
+
+  transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (x, y));
+  gtk_fixed_layout_child_set_transform (child_info, transform);
+  gsk_transform_unref (transform);
 }
 
-static void
-gtk_fixed_move_internal (GtkFixed      *fixed,
-                         GtkWidget     *widget,
-                         GtkFixedChild *child,
-                         gint           x,
-                         gint           y)
+/**
+ * gtk_fixed_get_child_position:
+ * @fixed: a #GtkFixed
+ * @widget: a child of @fixed
+ * @x: (out): the horizontal position of the @widget
+ * @y: (out): the vertical position of the @widget
+ *
+ * Retrieves the translation transformation of the given child #GtkWidget
+ * in the given #GtkFixed container.
+ *
+ * See also: gtk_fixed_get_child_transform().
+ */
+void
+gtk_fixed_get_child_position (GtkFixed  *fixed,
+                              GtkWidget *widget,
+                              int       *x,
+                              int       *y)
 {
+  GtkFixedPrivate *priv = gtk_fixed_get_instance_private (fixed);
+  GtkFixedLayoutChild *child_info;
+  float pos_x = 0.f, pos_y = 0.f;
+  GskTransform *transform;
+
   g_return_if_fail (GTK_IS_FIXED (fixed));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (x != NULL);
+  g_return_if_fail (y != NULL);
+  g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (fixed));
 
-  gtk_widget_freeze_child_notify (widget);
+  child_info = GTK_FIXED_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout, widget));
+  transform = gtk_fixed_layout_child_get_transform (child_info);
+  gsk_transform_to_translate (transform, &pos_x, &pos_y);
 
-  if (child->x != x)
-    {
-      child->x = x;
-      gtk_widget_child_notify (widget, "x");
-    }
+  *x = floorf (pos_x);
+  *y = floorf (pos_y);
+}
 
-  if (child->y != y)
-    {
-      child->y = y;
-      gtk_widget_child_notify (widget, "y");
-    }
+/**
+ * gtk_fixed_set_child_transform:
+ * @fixed: a #GtkFixed
+ * @widget: a #GtkWidget, child of @fixed
+ * @transform: (nullable): the transformation assigned to @widget or %NULL
+ *   to reset @widget's transform
+ *
+ * Sets the transformation for @widget.
+ *
+ * This is a convenience function that retrieves the #GtkFixedLayoutChild
+ * instance associated to @widget and calls gtk_fixed_layout_child_set_transform().
+ */
+void
+gtk_fixed_set_child_transform (GtkFixed     *fixed,
+                               GtkWidget    *widget,
+                               GskTransform *transform)
+{
+  GtkFixedPrivate *priv = gtk_fixed_get_instance_private (fixed);
+  GtkFixedLayoutChild *child_info;
 
-  gtk_widget_thaw_child_notify (widget);
+  g_return_if_fail (GTK_IS_FIXED (fixed));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (fixed));
 
-  if (gtk_widget_get_visible (widget) &&
-      gtk_widget_get_visible (GTK_WIDGET (fixed)))
-    gtk_widget_queue_resize (GTK_WIDGET (fixed));
+  child_info = GTK_FIXED_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout, widget));
+  gtk_fixed_layout_child_set_transform (child_info, transform);
+}
+
+/**
+ * gtk_fixed_get_child_transform:
+ * @fixed: a #GtkFixed
+ * @widget: a #GtkWidget, child of @fixed
+ *
+ * Retrieves the transformation for @widget set using
+ * gtk_fixed_set_child_transform().
+ *
+ * Returns: (transfer none) (nullable): a #GskTransform or %NULL
+ *   in case no transform has been set on @widget
+ */
+GskTransform *
+gtk_fixed_get_child_transform (GtkFixed  *fixed,
+                               GtkWidget *widget)
+{
+  GtkFixedPrivate *priv = gtk_fixed_get_instance_private (fixed);
+  GtkFixedLayoutChild *child_info;
+
+  g_return_val_if_fail (GTK_IS_FIXED (fixed), NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (fixed), NULL);
+
+  child_info = GTK_FIXED_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout, widget));
+  return gtk_fixed_layout_child_get_transform (child_info);
 }
 
 /**
@@ -266,7 +266,8 @@ gtk_fixed_move_internal (GtkFixed      *fixed,
  * @x: the horizontal position to move the widget to.
  * @y: the vertical position to move the widget to.
  *
- * Moves a child of a #GtkFixed container to the given position.
+ * Sets a translation transformation to the given @x and @y coordinates to
+ * the child @widget of the given #GtkFixed container.
  */
 void
 gtk_fixed_move (GtkFixed  *fixed,
@@ -274,131 +275,19 @@ gtk_fixed_move (GtkFixed  *fixed,
                 gint       x,
                 gint       y)
 {
+  GtkFixedPrivate *priv = gtk_fixed_get_instance_private (fixed);
+  GtkFixedLayoutChild *child_info;
+  GskTransform *transform = NULL;
+
+  g_return_if_fail (GTK_IS_FIXED (fixed));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (fixed));
 
-  gtk_fixed_move_internal (fixed, widget, get_fixed_child (widget), x, y);
-}
+  child_info = GTK_FIXED_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout,  widget));
 
-static void
-gtk_fixed_set_child_property (GtkContainer *container,
-                              GtkWidget    *child,
-                              guint         property_id,
-                              const GValue *value,
-                              GParamSpec   *pspec)
-{
-  GtkFixed *fixed = GTK_FIXED (container);
-  GtkFixedChild *fixed_child = get_fixed_child (child);
-
-  switch (property_id)
-    {
-    case CHILD_PROP_X:
-      gtk_fixed_move_internal (fixed,
-                               child,
-                               fixed_child,
-                               g_value_get_int (value),
-                               fixed_child->y);
-      break;
-    case CHILD_PROP_Y:
-      gtk_fixed_move_internal (fixed,
-                               child,
-                               fixed_child,
-                               fixed_child->x,
-                               g_value_get_int (value));
-      break;
-    default:
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
-      break;
-    }
-}
-
-static void
-gtk_fixed_get_child_property (GtkContainer *container,
-                              GtkWidget    *child,
-                              guint         property_id,
-                              GValue       *value,
-                              GParamSpec   *pspec)
-{
-  GtkFixedChild *fixed_child = get_fixed_child (child);
-
-  switch (property_id)
-    {
-    case CHILD_PROP_X:
-      g_value_set_int (value, fixed_child->x);
-      break;
-    case CHILD_PROP_Y:
-      g_value_set_int (value, fixed_child->y);
-      break;
-    default:
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
-      break;
-    }
-}
-
-static void
-gtk_fixed_measure (GtkWidget      *widget,
-                   GtkOrientation  orientation,
-                   int             for_size,
-                   int            *minimum,
-                   int            *natural,
-                   int            *minimum_baseline,
-                   int            *natural_baseline)
-{
-  int child_min, child_nat;
-  GtkWidget *child;
-  GtkFixedChild *child_info;
-
-  for (child = gtk_widget_get_first_child (widget);
-       child != NULL;
-       child = gtk_widget_get_next_sibling (child))
-    {
-      child_info = get_fixed_child (child);
-
-      if (!gtk_widget_get_visible (child))
-        continue;
-
-      gtk_widget_measure (child, orientation, -1, &child_min, &child_nat, NULL, NULL);
-
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        {
-          *minimum = MAX (*minimum, child_info->x + child_min);
-          *natural = MAX (*natural, child_info->x + child_nat);
-        }
-      else /* VERTICAL */
-        { 
-          *minimum = MAX (*minimum, child_info->y + child_min);
-          *natural = MAX (*natural, child_info->y + child_nat);
-        }
-    }
-}
-
-static void
-gtk_fixed_size_allocate (GtkWidget *widget,
-                         int        width,
-                         int        height,
-                         int        baseline)
-{
-  GtkWidget *child;
-  GtkFixedChild *child_info;
-  GtkAllocation child_allocation;
-  GtkRequisition child_requisition;
-
-  for (child = gtk_widget_get_first_child (widget);
-       child != NULL;
-       child = gtk_widget_get_next_sibling (child))
-    {
-      child_info = get_fixed_child (child);
-
-      if (!gtk_widget_get_visible (child))
-        continue;
-
-      gtk_widget_get_preferred_size (child, &child_requisition, NULL);
-      child_allocation.x = child_info->x;
-      child_allocation.y = child_info->y;
-
-      child_allocation.width = child_requisition.width;
-      child_allocation.height = child_requisition.height;
-      gtk_widget_size_allocate (child, &child_allocation, -1);
-    }
+  transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (x, y));
+  gtk_fixed_layout_child_set_transform (child_info, transform);
+  gsk_transform_unref (transform);
 }
 
 static void

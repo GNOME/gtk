@@ -17,7 +17,10 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include "gtkmnemonichash.h"
+#include "gtknative.h"
 
 struct _GtkMnemnonicHash
 {
@@ -124,7 +127,7 @@ _gtk_mnemonic_hash_activate (GtkMnemonicHash *mnemonic_hash,
   for (list = targets; list; list = list->next)
     {
       widget = GTK_WIDGET (list->data);
-      surface = gtk_widget_get_surface (widget);
+      surface = gtk_native_get_surface (gtk_widget_get_native (widget));
 
       if (gtk_widget_is_sensitive (widget) &&
 	  gtk_widget_get_mapped (widget) &&

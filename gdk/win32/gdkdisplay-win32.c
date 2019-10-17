@@ -38,6 +38,8 @@
 
 #include <dwmapi.h>
 
+#include "gdkwin32langnotification.h"
+
 static int debug_indent = 0;
 
 /**
@@ -536,6 +538,7 @@ _gdk_win32_display_open (const gchar *display_name)
                                       NULL);
   _gdk_device_manager->display = _gdk_display;
 
+  _gdk_win32_lang_notification_init ();
   _gdk_drag_init ();
   _gdk_drop_init ();
 
@@ -701,6 +704,7 @@ gdk_win32_display_finalize (GObject *object)
 
   _gdk_win32_display_finalize_cursors (display_win32);
   _gdk_win32_dnd_exit ();
+  _gdk_win32_lang_notification_exit ();
 
   g_ptr_array_free (display_win32->monitors, TRUE);
 
@@ -1094,7 +1098,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   object_class->dispose = gdk_win32_display_dispose;
   object_class->finalize = gdk_win32_display_finalize;
 
-  display_class->surface_type = GDK_TYPE_WIN32_SURFACE;
   display_class->cairo_context_type = GDK_TYPE_WIN32_CAIRO_CONTEXT;
 
   display_class->get_name = gdk_win32_display_get_name;
@@ -1112,7 +1115,7 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
 
   display_class->get_next_serial = gdk_win32_display_get_next_serial;
   display_class->notify_startup_complete = gdk_win32_display_notify_startup_complete;
-  display_class->create_surface_impl = _gdk_win32_display_create_surface_impl;
+  display_class->create_surface = _gdk_win32_display_create_surface;
 
   display_class->get_keymap = _gdk_win32_display_get_keymap;
   display_class->text_property_to_utf8_list = _gdk_win32_display_text_property_to_utf8_list;

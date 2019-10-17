@@ -26,6 +26,11 @@ G_BEGIN_DECLS
 
 GtkCssValue *   _gtk_css_initial_value_new            (void);
 GtkCssValue *   _gtk_css_initial_value_get            (void);
+GtkCssValue *   _gtk_css_initial_value_new_compute    (guint             property_id,
+                                                       GtkStyleProvider *provider,
+                                                       GtkCssStyle      *style,
+                                                       GtkCssStyle      *parent_style);
+
 
 G_END_DECLS
 

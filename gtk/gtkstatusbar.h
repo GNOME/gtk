@@ -36,38 +36,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_STATUSBAR            (gtk_statusbar_get_type ())
 #define GTK_STATUSBAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_STATUSBAR, GtkStatusbar))
-#define GTK_STATUSBAR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_STATUSBAR, GtkStatusbarClass))
 #define GTK_IS_STATUSBAR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_STATUSBAR))
-#define GTK_IS_STATUSBAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_STATUSBAR))
-#define GTK_STATUSBAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STATUSBAR, GtkStatusbarClass))
 
-
-typedef struct _GtkStatusbar              GtkStatusbar;
-typedef struct _GtkStatusbarClass         GtkStatusbarClass;
-
-struct _GtkStatusbar
-{
-  GtkWidget parent_instance;
-};
-
-struct _GtkStatusbarClass
-{
-  GtkWidgetClass parent_class;
-
-  void	(*text_pushed)	(GtkStatusbar	*statusbar,
-			 guint		 context_id,
-			 const gchar	*text);
-  void	(*text_popped)	(GtkStatusbar	*statusbar,
-			 guint		 context_id,
-			 const gchar	*text);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
-
+typedef struct _GtkStatusbar GtkStatusbar;
 
 GDK_AVAILABLE_IN_ALL
 GType      gtk_statusbar_get_type     	(void) G_GNUC_CONST;

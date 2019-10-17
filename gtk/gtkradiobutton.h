@@ -37,34 +37,10 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_RADIO_BUTTON		       (gtk_radio_button_get_type ())
 #define GTK_RADIO_BUTTON(obj)		       (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_RADIO_BUTTON, GtkRadioButton))
-#define GTK_RADIO_BUTTON_CLASS(klass)	       (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_RADIO_BUTTON, GtkRadioButtonClass))
 #define GTK_IS_RADIO_BUTTON(obj)	       (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_RADIO_BUTTON))
-#define GTK_IS_RADIO_BUTTON_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RADIO_BUTTON))
-#define GTK_RADIO_BUTTON_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_RADIO_BUTTON, GtkRadioButtonClass))
 
 
-typedef struct _GtkRadioButton              GtkRadioButton;
-typedef struct _GtkRadioButtonClass         GtkRadioButtonClass;
-
-struct _GtkRadioButton
-{
-  GtkCheckButton parent_instance;
-};
-
-struct _GtkRadioButtonClass
-{
-  GtkCheckButtonClass parent_class;
-
-  /* Signals */
-  void (*group_changed) (GtkRadioButton *radio_button);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
-
+typedef struct _GtkRadioButton GtkRadioButton;
 
 GDK_AVAILABLE_IN_ALL
 GType	   gtk_radio_button_get_type	     (void) G_GNUC_CONST;

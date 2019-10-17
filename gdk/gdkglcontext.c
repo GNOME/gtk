@@ -105,6 +105,8 @@ typedef struct {
   guint use_texture_rectangle : 1;
   guint has_gl_framebuffer_blit : 1;
   guint has_frame_terminator : 1;
+  guint has_khr_debug : 1;
+  guint use_khr_debug : 1;
   guint has_unpack_subimage : 1;
   guint has_debug_output : 1;
   guint extensions_checked : 1;
@@ -113,6 +115,8 @@ typedef struct {
   guint is_legacy : 1;
 
   int use_es;
+
+  int max_debug_label_length;
 
   GdkGLContextPaintData *paint_data;
 } GdkGLContextPrivate;
@@ -306,6 +310,12 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
     }
 
   damage = GDK_GL_CONTEXT_GET_CLASS (context)->get_damage (context);
+
+  if (context->old_updated_area[1])
+    cairo_region_destroy (context->old_updated_area[1]);
+  context->old_updated_area[1] = context->old_updated_area[0];
+  context->old_updated_area[0] = cairo_region_copy (region);
+
   cairo_region_union (region, damage);
   cairo_region_destroy (damage);
 
@@ -337,11 +347,6 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
       GDK_DRAW_CONTEXT_GET_CLASS (GDK_DRAW_CONTEXT (shared))->end_frame (GDK_DRAW_CONTEXT (shared), painted);
       return;
     }
-
-  if (context->old_updated_area[1])
-    cairo_region_destroy (context->old_updated_area[1]);
-  context->old_updated_area[1] = context->old_updated_area[0];
-  context->old_updated_area[0] = cairo_region_reference (painted);
 }
 
 static void
@@ -433,6 +438,87 @@ gdk_gl_context_has_frame_terminator (GdkGLContext *context)
 
   return priv->has_frame_terminator;
 }
+
+void
+gdk_gl_context_push_debug_group (GdkGLContext *context,
+                                 const char   *message)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  if (priv->use_khr_debug)
+    glPushDebugGroupKHR (GL_DEBUG_SOURCE_APPLICATION, 0, -1, message);
+}
+
+void
+gdk_gl_context_push_debug_group_printf (GdkGLContext *context,
+                                        const char   *format,
+                                        ...)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  gchar *message;
+  va_list args;
+
+  if (priv->use_khr_debug)
+    {
+      int msg_len;
+
+      va_start (args, format);
+      message = g_strdup_vprintf (format, args);
+      va_end (args);
+
+      msg_len = MIN (priv->max_debug_label_length, strlen (message) - 1);
+      glPushDebugGroupKHR (GL_DEBUG_SOURCE_APPLICATION, 0, msg_len, message);
+      g_free (message);
+    }
+}
+
+void
+gdk_gl_context_pop_debug_group (GdkGLContext *context)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  if (priv->use_khr_debug)
+    glPopDebugGroupKHR ();
+}
+
+void
+gdk_gl_context_label_object (GdkGLContext *context,
+                             guint         identifier,
+                             guint         name,
+                             const char   *label)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  if (priv->use_khr_debug)
+    glObjectLabel (identifier, name, -1, label);
+}
+
+void
+gdk_gl_context_label_object_printf  (GdkGLContext *context,
+                                     guint         identifier,
+                                     guint         name,
+                                     const char   *format,
+                                     ...)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  gchar *message;
+  va_list args;
+
+  if (priv->use_khr_debug)
+    {
+      int msg_len;
+
+      va_start (args, format);
+      message = g_strdup_vprintf (format, args);
+      va_end (args);
+
+      msg_len = MIN (priv->max_debug_label_length, strlen (message) - 1);
+
+      glObjectLabel (identifier, name, msg_len, message);
+      g_free (message);
+    }
+}
+
 
 gboolean
 gdk_gl_context_has_unpack_subimage (GdkGLContext *context)
@@ -684,7 +770,7 @@ gdk_gl_context_set_is_legacy (GdkGLContext *context,
  * @use_es: whether the context should use OpenGL ES instead of OpenGL,
  *   or -1 to allow auto-detection
  *
- * Requests that GDK create a OpenGL ES context instead of an OpenGL one,
+ * Requests that GDK create an OpenGL ES context instead of an OpenGL one,
  * if the platform and windowing system allows it.
  *
  * The @context must not have been realized.
@@ -896,6 +982,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       priv->has_frame_terminator = FALSE;
 
       priv->has_unpack_subimage = epoxy_has_gl_extension ("GL_EXT_unpack_subimage");
+      priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
     }
   else
     {
@@ -905,6 +992,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       priv->has_gl_framebuffer_blit = epoxy_has_gl_extension ("GL_EXT_framebuffer_blit");
       priv->has_frame_terminator = epoxy_has_gl_extension ("GL_GREMEDY_frame_terminator");
       priv->has_unpack_subimage = TRUE;
+      priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
 
       /* We asked for a core profile, but we didn't get one, so we're in legacy mode */
       if (priv->gl_version < 32)
@@ -913,6 +1001,11 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
 
   display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
 
+  if (priv->has_khr_debug && GDK_DISPLAY_DEBUG_CHECK (display, GL_DEBUG))
+    {
+      priv->use_khr_debug = TRUE;
+      glGetIntegerv (GL_MAX_LABEL_LENGTH, &priv->max_debug_label_length);
+    }
   if (!priv->use_es && GDK_DISPLAY_DEBUG_CHECK (display, GL_TEXTURE_RECT))
     priv->use_texture_rectangle = TRUE;
   else if (has_npot)
@@ -930,6 +1023,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        " - GL_ARB_texture_rectangle: %s\n"
                        " - GL_EXT_framebuffer_blit: %s\n"
                        " - GL_GREMEDY_frame_terminator: %s\n"
+                       " - GL_KHR_debug: %s\n"
                        "* Using texture rectangle: %s",
                        priv->use_es ? "OpenGL ES" : "OpenGL",
                        priv->gl_version / 10, priv->gl_version % 10,
@@ -939,6 +1033,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        has_texture_rectangle ? "yes" : "no",
                        priv->has_gl_framebuffer_blit ? "yes" : "no",
                        priv->has_frame_terminator ? "yes" : "no",
+                       priv->has_khr_debug ? "yes" : "no",
                        priv->use_texture_rectangle ? "yes" : "no"));
 
   priv->extensions_checked = TRUE;

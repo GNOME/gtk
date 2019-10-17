@@ -15,6 +15,9 @@ struct _GskShaderBuilder
   char *vertex_preamble;
   char *fragment_preamble;
 
+
+  int common_vertex_shader_id;
+
   int version;
 
   GPtrArray *defines;
@@ -36,6 +39,9 @@ gsk_shader_builder_finalize (GObject *gobject)
   g_string_free (self->shader_code, TRUE);
 
   g_clear_pointer (&self->defines, g_ptr_array_unref);
+
+  if (self->common_vertex_shader_id > 0)
+    glDeleteShader (self->common_vertex_shader_id);
 
   G_OBJECT_CLASS (gsk_shader_builder_parent_class)->finalize (gobject);
 }
@@ -230,26 +236,48 @@ gsk_shader_builder_compile_shader (GskShaderBuilder *builder,
   return shader_id;
 }
 
+void
+gsk_shader_builder_set_common_vertex_shader (GskShaderBuilder  *self,
+                                             const char        *vertex_shader,
+                                             GError           **error)
+{
+  int shader_id;
+
+
+  shader_id = gsk_shader_builder_compile_shader (self,
+                                                 GL_VERTEX_SHADER,
+                                                 self->vertex_preamble,
+                                                 vertex_shader,
+                                                 error);
+
+  g_assert (shader_id > 0);
+  self->common_vertex_shader_id = shader_id;
+}
+
 int
 gsk_shader_builder_create_program (GskShaderBuilder *builder,
-                                   const char       *vertex_shader,
                                    const char       *fragment_shader,
+                                   const char       *vertex_shader,
                                    GError          **error)
 {
-  int vertex_id, fragment_id;
+  int vertex_id;
+  int fragment_id;
   int program_id;
   int status;
 
   g_return_val_if_fail (GSK_IS_SHADER_BUILDER (builder), -1);
-  g_return_val_if_fail (vertex_shader != NULL, -1);
   g_return_val_if_fail (fragment_shader != NULL, -1);
+  g_return_val_if_fail (builder->common_vertex_shader_id != 0, -1);
 
-  vertex_id = gsk_shader_builder_compile_shader (builder, GL_VERTEX_SHADER,
-                                                 builder->vertex_preamble,
-                                                 vertex_shader,
-                                                 error);
+  if (vertex_shader == NULL)
+    vertex_id = builder->common_vertex_shader_id;
+  else
+    vertex_id = gsk_shader_builder_compile_shader (builder, GL_VERTEX_SHADER,
+                                                   builder->vertex_preamble,
+                                                   vertex_shader,
+                                                   error);
   if (vertex_id < 0)
-    return -1;
+      return -1;
 
   fragment_id = gsk_shader_builder_compile_shader (builder, GL_FRAGMENT_SHADER,
                                                    builder->fragment_preamble,
@@ -290,8 +318,8 @@ gsk_shader_builder_create_program (GskShaderBuilder *builder,
 out:
   if (vertex_id > 0)
     {
+      /* We delete the common vertex shader when destroying the shader builder */
       glDetachShader (program_id, vertex_id);
-      glDeleteShader (vertex_id);
     }
 
   if (fragment_id > 0)

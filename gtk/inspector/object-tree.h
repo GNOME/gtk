@@ -62,6 +62,8 @@ char *     gtk_inspector_get_object_title                (GObject               
 
 void       gtk_inspector_object_tree_select_object       (GtkInspectorObjectTree *wt,
                                                           GObject                *object);
+void       gtk_inspector_object_tree_activate_object     (GtkInspectorObjectTree *wt,
+                                                          GObject                *object);
 
 GObject   *gtk_inspector_object_tree_get_selected        (GtkInspectorObjectTree *wt);
 

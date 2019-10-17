@@ -17,11 +17,11 @@
             <style>
               <class name="dim-label"/>
             </style>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkScrolledWindow" id="scrolledwindow">
@@ -29,22 +29,22 @@
             <property name="vexpand">1</property>
             <property name="shadow-type">in</property>
             <property name="min-content-width">150</property>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkStackSwitcher">
             <property name="halign">center</property>
             <property name="hexpand">1</property>
             <property name="stack">stack</property>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkStack" id="stack">
@@ -54,279 +54,284 @@
             <property name="vhomogeneous">0</property>
             <property name="transition-type">crossfade</property>
             <child>
-              <object class="GtkGrid">
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="vexpand">1</property>
-                <property name="row-spacing">12</property>
-                <property name="column-spacing">12</property>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">Duck</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">Background</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage">
-                    <style>
-                      <class name="duck"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage">
-                    <style>
-                      <class name="gradient"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">
-Blended picture</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage">
-                    <property name="halign">center</property>
-                    <style>
-                      <class name="blend0"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">3</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
+              <object class="GtkStackPage">
                 <property name="name">page0</property>
                 <property name="title" translatable="yes">Ducky</property>
-              </packing>
+                <property name="child">
+                  <object class="GtkGrid">
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="vexpand">1</property>
+                    <property name="row-spacing">12</property>
+                    <property name="column-spacing">12</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">Duck</property>
+                        <layout>
+                          <property name="left-attach">0</property>
+                          <property name="top-attach">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">Background</property>
+                        <layout>
+                          <property name="left-attach">1</property>
+                          <property name="top-attach">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style>
+                          <class name="duck"/>
+                        </style>
+                        <layout>
+                          <property name="left-attach">0</property>
+                          <property name="top-attach">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style>
+                          <class name="gradient"/>
+                        </style>
+                        <layout>
+                          <property name="left-attach">1</property>
+                          <property name="top-attach">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">
+Blended picture</property>
+                        <layout>
+                          <property name="left-attach">0</property>
+                          <property name="top-attach">2</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="halign">center</property>
+                        <style>
+                          <class name="blend0"/>
+                        </style>
+                        <layout>
+                          <property name="left-attach">0</property>
+                          <property name="top-attach">3</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
             </child>
             <child>
-              <object class="GtkGrid">
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="vexpand">1</property>
-                <property name="row-spacing">12</property>
-                <property name="column-spacing">12</property>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">Red</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">Blue</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage">
-                    <style>
-                      <class name="red"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage">
-                    <style>
-                      <class name="blue"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">
-Blended picture</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage">
-                    <property name="halign">center</property>
-                    <style>
-                      <class name="blend1"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">3</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
+              <object class="GtkStackPage">
                 <property name="name">page1</property>
                 <property name="title" translatable="yes">Blends</property>
-              </packing>
+                <property name="child">
+                  <object class="GtkGrid">
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="vexpand">1</property>
+                    <property name="row-spacing">12</property>
+                    <property name="column-spacing">12</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">Red</property>
+                        <layout>
+                          <property name="left-attach">0</property>
+                          <property name="top-attach">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">Blue</property>
+                        <layout>
+                          <property name="left-attach">1</property>
+                          <property name="top-attach">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style>
+                          <class name="red"/>
+                        </style>
+                        <layout>
+                          <property name="left-attach">0</property>
+                          <property name="top-attach">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style>
+                          <class name="blue"/>
+                        </style>
+                        <layout>
+                          <property name="left-attach">1</property>
+                          <property name="top-attach">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">
+Blended picture</property>
+                        <layout>
+                          <property name="left-attach">0</property>
+                          <property name="top-attach">2</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="halign">center</property>
+                        <style>
+                          <class name="blend1"/>
+                        </style>
+                        <layout>
+                          <property name="left-attach">0</property>
+                          <property name="top-attach">3</property>
+                          <property name="column-span">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
             </child>
             <child>
-              <object class="GtkGrid">
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="hexpand">1</property>
-                <property name="vexpand">1</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">12</property>
-                <child>
-                  <object class="GtkImage">
-                    <style>
-                      <class name="cyan"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage">
-                    <style>
-                      <class name="magenta"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage">
-                    <style>
-                      <class name="yellow"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkImage">
-                    <property name="halign">center</property>
-                    <style>
-                      <class name="blend2"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">Cyan</property>
-                    <property name="xalign">0</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">Magenta</property>
-                    <property name="xalign">0</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">Yellow</property>
-                    <property name="xalign">0</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">Blended picture</property>
-                    <property name="xalign">0</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
+              <object class="GtkStackPage">
                 <property name="name">page2</property>
                 <property name="title" translatable="yes">CMYK</property>
-              </packing>
+                <property name="child">
+                  <object class="GtkGrid">
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">1</property>
+                    <property name="vexpand">1</property>
+                    <property name="row-spacing">6</property>
+                    <property name="column-spacing">12</property>
+                    <child>
+                      <object class="GtkImage">
+                        <style>
+                          <class name="cyan"/>
+                        </style>
+                        <layout>
+                          <property name="left-attach">0</property>
+                          <property name="top-attach">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style>
+                          <class name="magenta"/>
+                        </style>
+                        <layout>
+                          <property name="left-attach">1</property>
+                          <property name="top-attach">1</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <style>
+                          <class name="yellow"/>
+                        </style>
+                        <layout>
+                          <property name="left-attach">0</property>
+                          <property name="top-attach">3</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="halign">center</property>
+                        <style>
+                          <class name="blend2"/>
+                        </style>
+                        <layout>
+                          <property name="left-attach">1</property>
+                          <property name="top-attach">3</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">Cyan</property>
+                        <property name="xalign">0</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                        <layout>
+                          <property name="left-attach">0</property>
+                          <property name="top-attach">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">Magenta</property>
+                        <property name="xalign">0</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                        <layout>
+                          <property name="left-attach">1</property>
+                          <property name="top-attach">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">Yellow</property>
+                        <property name="xalign">0</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                        <layout>
+                          <property name="left-attach">0</property>
+                          <property name="top-attach">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">Blended picture</property>
+                        <property name="xalign">0</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"></attribute>
+                        </attributes>
+                        <layout>
+                          <property name="left-attach">1</property>
+                          <property name="top-attach">2</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
             </child>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
       </object>
     </child>
-    <child type="titlebar">
-    </child>
+    <child type="titlebar"/>
   </object>
 </interface>

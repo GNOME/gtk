@@ -19,6 +19,7 @@
 
 #include "gdkseatdefaultprivate.h"
 #include "gdkdevicetoolprivate.h"
+#include "gdkinternals.h"
 
 typedef struct _GdkSeatDefaultPrivate GdkSeatDefaultPrivate;
 
@@ -282,7 +283,8 @@ gdk_seat_default_get_slaves (GdkSeat             *seat,
 
 static GdkDeviceTool *
 gdk_seat_default_get_tool (GdkSeat *seat,
-                           guint64  serial)
+                           guint64  serial,
+                           guint64  hw_id)
 {
   GdkSeatDefaultPrivate *priv;
   GdkDeviceTool *tool;
@@ -297,7 +299,7 @@ gdk_seat_default_get_tool (GdkSeat *seat,
     {
       tool = g_ptr_array_index (priv->tools, i);
 
-      if (tool->serial == serial)
+      if (tool->serial == serial && tool->hw_id == hw_id)
         return tool;
     }
 
@@ -457,8 +459,7 @@ gdk_seat_default_remove_tool (GdkSeatDefault *seat,
 
   priv = gdk_seat_default_get_instance_private (seat);
 
-  if (tool != gdk_seat_get_tool (GDK_SEAT (seat),
-                                 gdk_device_tool_get_serial (tool)))
+  if (tool != gdk_seat_get_tool (GDK_SEAT (seat), tool->serial, tool->hw_id))
     return;
 
   g_signal_emit_by_name (seat, "tool-removed", tool);

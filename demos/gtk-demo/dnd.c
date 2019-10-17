@@ -196,10 +196,10 @@ edit_label_done (GtkWidget *entry, gpointer data)
   GtkWidget *label;
   int x, y;
 
-  gtk_container_child_get (GTK_CONTAINER (fixed), entry, "x", &x, "y", &y, NULL);
+  gtk_fixed_get_child_position (GTK_FIXED (fixed), entry, &x, &y);
 
   label = GTK_WIDGET (g_object_get_data (G_OBJECT (entry), "label"));
-  gtk_label_set_text (GTK_LABEL (label), gtk_entry_get_text (GTK_ENTRY (entry)));
+  gtk_label_set_text (GTK_LABEL (label), gtk_editable_get_text (GTK_EDITABLE (entry)));
 
   gtk_widget_destroy (entry);
 }
@@ -210,7 +210,7 @@ edit_cb (GtkWidget *child)
   GtkWidget *fixed = gtk_widget_get_parent (child);
   int x, y;
 
-  gtk_container_child_get (GTK_CONTAINER (fixed), child, "x", &x, "y", &y, NULL);
+  gtk_fixed_get_child_position (GTK_FIXED (fixed), child, &x, &y);
 
   if (GTK_IS_LABEL (child))
     {
@@ -218,7 +218,7 @@ edit_cb (GtkWidget *child)
 
       g_object_set_data (G_OBJECT (entry), "label", child);
 
-      gtk_entry_set_text (GTK_ENTRY (entry), gtk_label_get_text (GTK_LABEL (child)));
+      gtk_editable_set_text (GTK_EDITABLE (entry), gtk_label_get_text (GTK_LABEL (child)));
       g_signal_connect (entry, "activate", G_CALLBACK (edit_label_done), NULL);
       gtk_fixed_put (GTK_FIXED (fixed), entry, x, y);
       gtk_widget_grab_focus (entry);
@@ -243,7 +243,7 @@ pressed_cb (GtkGesture *gesture,
   GtkWidget *child;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-  child = gtk_widget_pick (widget, x, y);
+  child = gtk_widget_pick (widget, x, y, GTK_PICK_DEFAULT);
 
   if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) == GDK_BUTTON_SECONDARY)
     {
@@ -299,7 +299,7 @@ pressed_cb (GtkGesture *gesture,
       rect.height = 0;
 
       gtk_menu_popup_at_rect (GTK_MENU (menu),
-                              gtk_widget_get_surface (widget),
+                              gtk_native_get_surface (gtk_widget_get_native (widget)),
                               &rect,
                               GDK_GRAVITY_NORTH_WEST,
                               GDK_GRAVITY_NORTH_WEST,
@@ -320,7 +320,7 @@ released_cb (GtkGesture *gesture,
   GtkWidget *child;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-  child = gtk_widget_pick (widget, x, y);
+  child = gtk_widget_pick (widget, x, y, 0);
 
   if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) == GDK_BUTTON_PRIMARY)
     {
@@ -352,11 +352,11 @@ do_dnd (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       fixed = gtk_fixed_new ();
-      gtk_box_pack_start (GTK_BOX (vbox), fixed);
+      gtk_container_add (GTK_CONTAINER (vbox), fixed);
       gtk_widget_set_hexpand (fixed, TRUE);
       gtk_widget_set_vexpand (fixed, TRUE);
 
-      multipress = gtk_gesture_multi_press_new ();
+      multipress = gtk_gesture_click_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (multipress), 0);
       g_signal_connect (multipress, "pressed", G_CALLBACK (pressed_cb), NULL);
       g_signal_connect (multipress, "released", G_CALLBACK (released_cb), NULL);

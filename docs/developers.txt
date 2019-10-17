@@ -1,5 +1,5 @@
-Things to care about when using/programing for GTK+
-===================================================
+Things to care about when using/programing for GTK
+==================================================
 
 This file is meant to collect some frequently triggered failures when
 programming for/with Gtk, having the spirit of a developers FAQ.

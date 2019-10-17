@@ -5,9 +5,7 @@ gdk_x11_sources = files([
   'gdkcairocontext-x11.c',
   'gdkclipboard-x11.c',
   'gdkcursor-x11.c',
-  'gdkdevice-core-x11.c',
   'gdkdevice-xi2.c',
-  'gdkdevicemanager-core-x11.c',
   'gdkdevicemanager-x11.c',
   'gdkdevicemanager-xi2.c',
   'gdkdisplay-x11.c',
@@ -36,10 +34,8 @@ gdk_x11_sources = files([
 gdk_x11_public_headers = files([
   'gdkx-autocleanups.h',
   'gdkx11applaunchcontext.h',
-  'gdkx11device-core.h',
   'gdkx11device-xi2.h',
   'gdkx11device.h',
-  'gdkx11devicemanager-core.h',
   'gdkx11devicemanager-xi2.h',
   'gdkx11devicemanager.h',
   'gdkx11display.h',
@@ -54,8 +50,7 @@ gdk_x11_public_headers = files([
   'gdkx11surface.h',
 ])
 
-install_headers(gdk_x11_public_headers, subdir: 'gtk-4.0/gdk/x11/')
-install_headers('gdkx.h', subdir: 'gtk-4.0/gdk/')
+install_headers(gdk_x11_public_headers, 'gdkx.h', subdir: 'gtk-4.0/gdk/x11/')
 
 gdk_x11_deps = [
   xrender_dep,

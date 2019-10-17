@@ -305,7 +305,7 @@ update_display (void)
   char *font_desc;
   char *features;
 
-  text = gtk_entry_get_text (GTK_ENTRY (entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
 
   if (gtk_label_get_selection_bounds (GTK_LABEL (label), &ins, &bound))
     {
@@ -495,7 +495,11 @@ update_script_combo (void)
   gboolean have_active = FALSE;
 
   lang = gtk_font_chooser_get_language (GTK_FONT_CHOOSER (font));
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   active = hb_ot_tag_from_language (hb_language_from_string (lang, -1));
+  G_GNUC_END_IGNORE_DEPRECATIONS
+
   g_free (lang);
 
   store = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_UINT);
@@ -728,7 +732,7 @@ adjustment_changed (GtkAdjustment *adjustment,
   char *str;
 
   str = g_strdup_printf ("%g", gtk_adjustment_get_value (adjustment));
-  gtk_entry_set_text (GTK_ENTRY (entry), str);
+  gtk_editable_set_text (GTK_EDITABLE (entry), str);
   g_free (str);
 
   update_display ();
@@ -741,7 +745,7 @@ entry_activated (GtkEntry *entry,
   gdouble value;
   gchar *err = NULL;
 
-  value = g_strtod (gtk_entry_get_text (entry), &err);
+  value = g_strtod (gtk_editable_get_text (GTK_EDITABLE (entry)), &err);
   if (err != NULL)
     gtk_adjustment_set_value (adjustment, value);
 }
@@ -821,7 +825,7 @@ add_axis (FT_Var_Axis *ax, FT_Fixed value, int i)
   gtk_grid_attach (GTK_GRID (variations_grid), axis_scale, 1, i, 1, 1);
   axis_entry = gtk_entry_new ();
   gtk_widget_set_valign (axis_entry, GTK_ALIGN_BASELINE);
-  gtk_entry_set_width_chars (GTK_ENTRY (axis_entry), 4);
+  gtk_editable_set_width_chars (GTK_EDITABLE (axis_entry), 4);
   gtk_grid_attach (GTK_GRID (variations_grid), axis_entry, 2, i, 1, 1);
 
   axis = g_new (Axis, 1);
@@ -1639,7 +1643,7 @@ static char *text;
 static void
 switch_to_entry (void)
 {
-  text = g_strdup (gtk_entry_get_text (GTK_ENTRY (entry)));
+  text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry)));
   gtk_stack_set_visible_child_name (GTK_STACK (stack), "entry");
   gtk_widget_grab_focus (entry);
 }
@@ -1665,7 +1669,7 @@ toggle_edit (void)
 static void
 stop_edit (void)
 {
-  gtk_button_clicked (GTK_BUTTON (edit_toggle));
+  g_signal_emit_by_name (edit_toggle, "clicked");
 }
 
 static gboolean
@@ -1677,7 +1681,7 @@ entry_key_press (GtkEventController *controller,
 {
   if (keyval == GDK_KEY_Escape)
     {
-      gtk_entry_set_text (GTK_ENTRY (entry), text);
+      gtk_editable_set_text (GTK_EDITABLE (entry), text);
       stop_edit ();
       return GDK_EVENT_STOP;
     }

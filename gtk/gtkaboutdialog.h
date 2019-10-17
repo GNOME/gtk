@@ -33,13 +33,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_ABOUT_DIALOG            (gtk_about_dialog_get_type ())
 #define GTK_ABOUT_DIALOG(object)         (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_ABOUT_DIALOG, GtkAboutDialog))
-#define GTK_ABOUT_DIALOG_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ABOUT_DIALOG, GtkAboutDialogClass))
 #define GTK_IS_ABOUT_DIALOG(object)      (G_TYPE_CHECK_INSTANCE_TYPE ((object), GTK_TYPE_ABOUT_DIALOG))
-#define GTK_IS_ABOUT_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ABOUT_DIALOG))
-#define GTK_ABOUT_DIALOG_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ABOUT_DIALOG, GtkAboutDialogClass))
 
 typedef struct _GtkAboutDialog        GtkAboutDialog;
-typedef struct _GtkAboutDialogClass   GtkAboutDialogClass;
 
 /**
  * GtkLicense:
@@ -88,30 +84,6 @@ typedef enum {
   GTK_LICENSE_AGPL_3_0_ONLY
 } GtkLicense;
 
-/**
- * GtkAboutDialog:
- *
- * The #GtkAboutDialog-struct contains
- * only private fields and should not be directly accessed.
- */
-struct _GtkAboutDialog
-{
-  GtkDialog parent_instance;
-};
-
-struct _GtkAboutDialogClass
-{
-  GtkDialogClass parent_class;
-
-  gboolean (*activate_link) (GtkAboutDialog *dialog,
-                             const gchar    *uri);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType                  gtk_about_dialog_get_type               (void) G_GNUC_CONST;

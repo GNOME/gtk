@@ -31,13 +31,14 @@ do_expander (GtkWidget *do_widget)
   GtkWidget *toplevel;
   GtkWidget *area;
   GtkWidget *expander;
+  GtkWidget *label;
   GtkWidget *sw;
   GtkWidget *tv;
   GtkTextBuffer *buffer;
 
   if (!window)
     {
-      toplevel = gtk_widget_get_toplevel (do_widget);
+      toplevel = GTK_WIDGET (gtk_widget_get_root (do_widget));
       window = gtk_message_dialog_new_with_markup (GTK_WINDOW (toplevel),
                                                    0,
                                                    GTK_MESSAGE_ERROR,
@@ -50,13 +51,19 @@ do_expander (GtkWidget *do_widget)
 
       area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (window));
 
+      label = gtk_widget_get_last_child (area);
+      gtk_label_set_wrap (GTK_LABEL (label), FALSE);
+      gtk_widget_set_vexpand (label, FALSE);
+
       expander = gtk_expander_new ("Details:");
+      gtk_widget_set_vexpand (expander, TRUE);
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (sw), 100);
       gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_IN);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                       GTK_POLICY_NEVER,
                                       GTK_POLICY_AUTOMATIC);
+      gtk_scrolled_window_set_propagate_natural_height (GTK_SCROLLED_WINDOW (sw), TRUE);
 
       tv = gtk_text_view_new ();
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (tv));
@@ -73,7 +80,7 @@ do_expander (GtkWidget *do_widget)
                                 "resize the window. Do it already !", -1);
       gtk_container_add (GTK_CONTAINER (sw), tv);
       gtk_container_add (GTK_CONTAINER (expander), sw);
-      gtk_box_pack_end (GTK_BOX (area), expander);
+      gtk_container_add (GTK_CONTAINER (area), expander);
       g_signal_connect (expander, "notify::expanded",
                         G_CALLBACK (expander_cb), window);
 

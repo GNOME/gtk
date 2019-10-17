@@ -20,6 +20,7 @@
 
 
 #include <gtk/gtkbox.h>
+#include <gtk/gtksizegroup.h>
 
 
 #define GTK_TYPE_INSPECTOR_ACTION_EDITOR            (gtk_inspector_action_editor_get_type())
@@ -48,8 +49,11 @@ G_BEGIN_DECLS
 
 GType      gtk_inspector_action_editor_get_type (void);
 GtkWidget *gtk_inspector_action_editor_new      (GActionGroup *group,
-                                                 const gchar  *prefix,
-                                                 const gchar  *name);
+                                                 const gchar  *name,
+                                                 GtkSizeGroup *activate);
+void       gtk_inspector_action_editor_update   (GtkInspectorActionEditor *r,
+                                                 gboolean                  enabled,
+                                                 GVariant                 *state);
 
 G_END_DECLS
 

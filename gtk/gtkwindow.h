@@ -57,7 +57,6 @@ struct _GtkWindow
 /**
  * GtkWindowClass:
  * @parent_class: The parent class.
- * @set_focus: Sets child as the focus widget for the window.
  * @activate_focus: Activates the current focused widget within the window.
  * @activate_default: Activates the default widget for the window.
  * @keys_changed: Signal gets emitted when the set of accelerators or
@@ -72,9 +71,6 @@ struct _GtkWindowClass
 
   /*< public >*/
 
-  void     (* set_focus)   (GtkWindow *window,
-                            GtkWidget *focus);
-
   /* G_SIGNAL_ACTION signals for keybindings */
 
   void     (* activate_focus)   (GtkWindow *window);
@@ -85,11 +81,7 @@ struct _GtkWindowClass
   gboolean (* close_request)    (GtkWindow *window);
 
   /*< private >*/
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
+  gpointer padding[8];
 };
 
 /**
@@ -117,29 +109,6 @@ typedef enum
   GTK_WINDOW_POPUP
 } GtkWindowType;
 
-/**
- * GtkWindowPosition:
- * @GTK_WIN_POS_NONE: No influence is made on placement.
- * @GTK_WIN_POS_CENTER: Windows should be placed in the center of the screen.
- * @GTK_WIN_POS_MOUSE: Windows should be placed at the current mouse position.
- * @GTK_WIN_POS_CENTER_ALWAYS: Keep window centered as it changes size, etc.
- * @GTK_WIN_POS_CENTER_ON_PARENT: Center the window on its transient
- *  parent (see gtk_window_set_transient_for()).
- *
- * Window placement can be influenced using this enumeration. Note that
- * using #GTK_WIN_POS_CENTER_ALWAYS is almost always a bad idea.
- * It won’t necessarily work well with all window managers or on all windowing systems.
- */
-typedef enum
-{
-  GTK_WIN_POS_NONE,
-  GTK_WIN_POS_CENTER,
-  GTK_WIN_POS_MOUSE,
-  GTK_WIN_POS_CENTER_ALWAYS,
-  GTK_WIN_POS_CENTER_ON_PARENT
-} GtkWindowPosition;
-
-
 GDK_AVAILABLE_IN_ALL
 GType      gtk_window_get_type                 (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
@@ -150,13 +119,8 @@ void       gtk_window_set_title                (GtkWindow           *window,
 GDK_AVAILABLE_IN_ALL
 const gchar * gtk_window_get_title             (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_role                 (GtkWindow           *window,
-                                                const gchar         *role);
-GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_startup_id           (GtkWindow           *window,
                                                 const gchar         *startup_id);
-GDK_AVAILABLE_IN_ALL
-const gchar * gtk_window_get_role              (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_add_accel_group          (GtkWindow           *window,
 						GtkAccelGroup	    *accel_group);
@@ -164,22 +128,15 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_window_remove_accel_group       (GtkWindow           *window,
 						GtkAccelGroup	    *accel_group);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_position             (GtkWindow           *window,
-						GtkWindowPosition    position);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_window_activate_focus	       (GtkWindow           *window);
-GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_focus                (GtkWindow           *window,
 						GtkWidget           *focus);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_window_get_focus                (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_default              (GtkWindow           *window,
+void       gtk_window_set_default_widget       (GtkWindow           *window,
 						GtkWidget           *default_widget);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_window_get_default_widget       (GtkWindow           *window);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_window_activate_default	       (GtkWindow           *window);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_transient_for        (GtkWindow           *window,
@@ -196,21 +153,6 @@ void       gtk_window_set_type_hint            (GtkWindow           *window,
 						GdkSurfaceTypeHint    hint);
 GDK_AVAILABLE_IN_ALL
 GdkSurfaceTypeHint gtk_window_get_type_hint     (GtkWindow           *window);
-GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_skip_taskbar_hint    (GtkWindow           *window,
-                                                gboolean             setting);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_window_get_skip_taskbar_hint    (GtkWindow           *window);
-GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_skip_pager_hint      (GtkWindow           *window,
-                                                gboolean             setting);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_window_get_skip_pager_hint      (GtkWindow           *window);
-GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_urgency_hint         (GtkWindow           *window,
-                                                gboolean             setting);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_window_get_urgency_hint         (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_accept_focus         (GtkWindow           *window,
                                                 gboolean             setting);
@@ -249,12 +191,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean   gtk_window_get_resizable            (GtkWindow           *window);
 
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_gravity              (GtkWindow           *window,
-                                                GdkGravity           gravity);
-GDK_AVAILABLE_IN_ALL
-GdkGravity gtk_window_get_gravity              (GtkWindow           *window);
-
-GDK_AVAILABLE_IN_ALL
 void	   gtk_window_set_display              (GtkWindow	    *window,
 						GdkDisplay          *display);
 
@@ -273,37 +209,14 @@ GDK_AVAILABLE_IN_ALL
 gboolean   gtk_window_get_deletable            (GtkWindow *window);
 
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_icon_list                (GtkWindow  *window,
-                                                    GList      *list);
-GDK_AVAILABLE_IN_ALL
-GList*     gtk_window_get_icon_list                (GtkWindow  *window);
-GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_icon                     (GtkWindow  *window,
-                                                    GdkTexture *icon);
-GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_icon_name                (GtkWindow   *window,
 						    const gchar *name);
 GDK_AVAILABLE_IN_ALL
-gboolean   gtk_window_set_icon_from_file           (GtkWindow   *window,
-						    const gchar *filename,
-						    GError     **err);
-GDK_AVAILABLE_IN_ALL
-GdkTexture *  gtk_window_get_icon                  (GtkWindow  *window);
-GDK_AVAILABLE_IN_ALL
 const gchar * gtk_window_get_icon_name             (GtkWindow  *window);
-GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_default_icon_list        (GList      *list);
-GDK_AVAILABLE_IN_ALL
-GList*     gtk_window_get_default_icon_list        (void);
-GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_default_icon             (GdkTexture  *icon);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_default_icon_name        (const gchar *name);
 GDK_AVAILABLE_IN_ALL
 const gchar * gtk_window_get_default_icon_name     (void);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_window_set_default_icon_from_file   (const gchar *filename,
-						    GError     **err);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_auto_startup_notification (gboolean setting);
@@ -382,14 +295,14 @@ GDK_AVAILABLE_IN_ALL
 void gtk_window_begin_resize_drag (GtkWindow     *window,
                                    GdkSurfaceEdge  edge,
                                    gint           button,
-                                   gint           root_x,
-                                   gint           root_y,
+                                   gint           x,
+                                   gint           y,
                                    guint32        timestamp);
 GDK_AVAILABLE_IN_ALL
 void gtk_window_begin_move_drag   (GtkWindow     *window,
                                    gint           button,
-                                   gint           root_x,
-                                   gint           root_y,
+                                   gint           x,
+                                   gint           y,
                                    guint32        timestamp);
 
 /* Set initial default size of the window (does not constrain user
@@ -411,14 +324,6 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_window_get_size         (GtkWindow   *window,
                                       gint        *width,
                                       gint        *height);
-GDK_AVAILABLE_IN_ALL
-void     gtk_window_move             (GtkWindow   *window,
-                                      gint         x,
-                                      gint         y);
-GDK_AVAILABLE_IN_ALL
-void     gtk_window_get_position     (GtkWindow   *window,
-                                      gint        *root_x,
-                                      gint        *root_y);
 
 GDK_AVAILABLE_IN_ALL
 GtkWindowGroup *gtk_window_get_group (GtkWindow   *window);

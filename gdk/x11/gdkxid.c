@@ -62,8 +62,7 @@ _gdk_x11_display_add_window (GdkDisplay *display,
 
   g_hash_table_insert (display_x11->xid_ht, xid, data);
 
-  if (gdk_surface_get_parent (GDK_SURFACE (data)) == NULL)
-    display_x11->toplevels = g_list_prepend (display_x11->toplevels, data);
+  display_x11->toplevels = g_list_prepend (display_x11->toplevels, data);
 }
 
 void
@@ -81,7 +80,7 @@ _gdk_x11_display_remove_window (GdkDisplay *display,
     return;
 
   surface = g_hash_table_lookup (display_x11->xid_ht, &xid);
-  if (surface && gdk_surface_get_parent (surface) == NULL)
+  if (surface)
     display_x11->toplevels = g_list_remove (display_x11->toplevels, surface);
 
   g_hash_table_remove (display_x11->xid_ht, &xid);

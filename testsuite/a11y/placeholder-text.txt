@@ -1,7 +1,7 @@
 window1
   "window"
   index: 0
-  state: enabled resizable sensitive showing visible
+  state: active enabled resizable sensitive showing visible
   toolkit: gtk
   window-type: normal
   <AtkComponent>
@@ -20,7 +20,7 @@ window1
       "text"
       parent: box1
       index: 0
-      state: editable enabled focusable sensitive showing single-line visible
+      state: editable enabled sensitive showing single-line visible
       toolkit: gtk
       placeholder-text: Subject or Addresses contain
       <AtkComponent>
@@ -29,7 +29,7 @@ window1
       <AtkText>
       text: 
       character count: 0
-      caret offset: 0
+      caret offset: -1
       default attributes: bg-color: <omitted>
                           bg-full-height: 0
                           direction: <omitted>
@@ -62,7 +62,7 @@ window1
       "text"
       parent: box1
       index: 1
-      state: editable enabled focusable sensitive showing single-line visible
+      state: editable enabled sensitive showing single-line visible
       toolkit: gtk
       placeholder-text: Message contains
       <AtkComponent>
@@ -71,7 +71,7 @@ window1
       <AtkText>
       text: Some text
       character count: 9
-      caret offset: 0
+      caret offset: -1
       default attributes: bg-color: <omitted>
                           bg-full-height: 0
                           direction: <omitted>
@@ -104,7 +104,7 @@ window1
       "text"
       parent: box1
       index: 2
-      state: editable enabled focusable sensitive showing single-line visible
+      state: editable enabled sensitive showing single-line visible
       toolkit: gtk
       placeholder-text: Body contains
       <AtkComponent>
@@ -113,7 +113,7 @@ window1
       <AtkText>
       text: 
       character count: 0
-      caret offset: 0
+      caret offset: -1
       default attributes: bg-color: <omitted>
                           bg-full-height: 0
                           direction: <omitted>

@@ -175,57 +175,68 @@ gtk_css_image_fallback_compute (GtkCssImage      *image,
     return GTK_CSS_IMAGE (g_object_ref (fallback));
 }
 
+typedef struct
+{
+  GtkCssValue *color;
+  GPtrArray *images;
+} ParseData;
+
+static guint
+gtk_css_image_fallback_parse_arg (GtkCssParser *parser,
+                                  guint         arg,
+                                  gpointer      _data)
+{
+  ParseData *data = _data;
+
+  if (data->color != NULL)
+    {
+      gtk_css_parser_error_syntax (parser, "The color must be the last parameter");
+      return 0;
+    }
+  else if (_gtk_css_image_can_parse (parser))
+    {
+      GtkCssImage *image = _gtk_css_image_new_parse (parser);
+      if (image == NULL)
+        return 0;
+
+      g_ptr_array_add (data->images, image);
+      return 1;
+    }
+  else
+    {
+      data->color = _gtk_css_color_value_parse (parser);
+      if (data->color == NULL)
+        return 0;
+
+      return 1;
+    }
+}
+
 static gboolean
 gtk_css_image_fallback_parse (GtkCssImage  *image,
                               GtkCssParser *parser)
 {
-  GtkCssImageFallback *fallback = GTK_CSS_IMAGE_FALLBACK (image);
-  GPtrArray *images;
-  GtkCssImage *child;
+  GtkCssImageFallback *self = GTK_CSS_IMAGE_FALLBACK (image);
+  ParseData data = { NULL, NULL };
 
-  if (!_gtk_css_parser_try (parser, "image", TRUE))
+  if (!gtk_css_parser_has_function (parser, "image"))
     {
-      _gtk_css_parser_error (parser, "'image'");
+      gtk_css_parser_error_syntax (parser, "Expected 'image('");
       return FALSE;
     }
 
-  if (!_gtk_css_parser_try (parser, "(", TRUE))
+  data.images = g_ptr_array_new_with_free_func (g_object_unref);
+
+  if (!gtk_css_parser_consume_function (parser, 1, G_MAXUINT, gtk_css_image_fallback_parse_arg, &data))
     {
-      _gtk_css_parser_error (parser,
-                             "Expected '(' after 'image'");
+      g_clear_pointer (&data.color, _gtk_css_value_unref);
+      g_ptr_array_free (data.images, TRUE);
       return FALSE;
     }
 
-  images = g_ptr_array_new_with_free_func (g_object_unref);
-
-  do
-    {
-      child = NULL;
-      if (_gtk_css_image_can_parse (parser))
-        child = _gtk_css_image_new_parse (parser);
-      if (child == NULL)
-        {
-          fallback->color = _gtk_css_color_value_parse (parser);
-          if (fallback->color)
-            break;
-
-          g_ptr_array_free (images, TRUE);
-          return FALSE;
-        }
-      g_ptr_array_add (images, child);
-    }
-  while ( _gtk_css_parser_try (parser, ",", TRUE));
-
-  if (!_gtk_css_parser_try (parser, ")", TRUE))
-    {
-      g_ptr_array_free (images, TRUE);
-      _gtk_css_parser_error (parser,
-                             "Expected ')' at end of 'image'");
-      return FALSE;
-    }
-
-  fallback->n_images = images->len;
-  fallback->images = (GtkCssImage **) g_ptr_array_free (images, FALSE);
+  self->color = data.color;
+  self->n_images = data.images->len;
+  self->images = (GtkCssImage **) g_ptr_array_free (data.images, FALSE);
 
   return TRUE;
 }

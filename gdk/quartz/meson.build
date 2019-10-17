@@ -33,8 +33,7 @@ gdk_quartz_public_headers = files([
   'gdkquartzsurface.h',
 ])
 
-install_headers(gdk_quartz_public_headers, subdir: 'gtk-4.0/gdk/quartz/')
-install_headers('gdkquartz.h', subdir: 'gtk-4.0/gdk/')
+install_headers(gdk_quartz_public_headers, 'gdkquartz.h', subdir: 'gtk-4.0/gdk/quartz/')
 
 gdk_quartz_deps = [ # FIXME
 ]

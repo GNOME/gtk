@@ -218,17 +218,17 @@ puzzle_key_pressed (GtkEventControllerKey *controller,
 }
 
 static void
-puzzle_button_pressed (GtkGestureMultiPress *gesture,
-                       int                   n_press,
-                       double                x,
-                       double                y,
-                       GtkWidget            *grid)
+puzzle_button_pressed (GtkGestureClick *gesture,
+                       int              n_press,
+                       double           x,
+                       double           y,
+                       GtkWidget       *grid)
 {
   GtkWidget *child;
   int l, t, i;
   int pos;
 
-  child = gtk_widget_pick (grid, x, y);
+  child = gtk_widget_pick (grid, x, y, GTK_PICK_DEFAULT);
 
   if (!child)
     {
@@ -236,10 +236,7 @@ puzzle_button_pressed (GtkGestureMultiPress *gesture,
       return;
     }
 
-  gtk_container_child_get (GTK_CONTAINER (grid), child,
-                           "left-attach", &l,
-                           "top-attach", &t,
-                           NULL);
+  gtk_grid_query_child (GTK_GRID (grid), child, &l, &t, NULL, NULL);
 
   if (l == pos_x && t == pos_y)
     {
@@ -285,6 +282,7 @@ start_puzzle (GdkPaintable *puzzle)
   GtkWidget *picture, *grid;
   GtkEventController *controller;
   guint x, y;
+  float aspect_ratio;
 
   /* Remove the old grid (if there is one) */
   grid = gtk_bin_get_child (GTK_BIN (frame));
@@ -295,7 +293,10 @@ start_puzzle (GdkPaintable *puzzle)
   grid = gtk_grid_new ();
   gtk_widget_set_can_focus (grid, TRUE);
   gtk_container_add (GTK_CONTAINER (frame), grid);
-  gtk_aspect_frame_set (GTK_ASPECT_FRAME (frame), 0.5, 0.5, (float) gdk_paintable_get_intrinsic_aspect_ratio (puzzle), FALSE);
+  aspect_ratio = gdk_paintable_get_intrinsic_aspect_ratio (puzzle);
+  if (aspect_ratio == 0.0)
+    aspect_ratio = 1.0;
+  gtk_aspect_frame_set (GTK_ASPECT_FRAME (frame), 0.5, 0.5, aspect_ratio, FALSE);
 
   /* Add a key event controller so people can use the arrow
    * keys to move the puzzle */
@@ -305,7 +306,7 @@ start_puzzle (GdkPaintable *puzzle)
                     grid);
   gtk_widget_add_controller (GTK_WIDGET (grid), controller);
 
-  controller = GTK_EVENT_CONTROLLER (gtk_gesture_multi_press_new ());
+  controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
   g_signal_connect (controller, "pressed",
                     G_CALLBACK (puzzle_button_pressed),
                     grid);
@@ -448,12 +449,11 @@ do_sliding_puzzle (GtkWidget *do_widget)
       g_signal_connect (apply, "clicked", G_CALLBACK (reconfigure), NULL);
 
       popover = gtk_popover_new (NULL);
-      gtk_popover_set_modal (GTK_POPOVER (popover), TRUE);
       gtk_container_add (GTK_CONTAINER (popover), tweaks);
 
       tweak = gtk_menu_button_new ();
       gtk_menu_button_set_popover (GTK_MENU_BUTTON (tweak), popover);
-      gtk_button_set_icon_name (GTK_BUTTON (tweak), "emblem-system-symbolic");
+      gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (tweak), "emblem-system-symbolic");
 
       restart = gtk_button_new_from_icon_name ("view-refresh-symbolic");
       g_signal_connect (restart, "clicked", G_CALLBACK (reshuffle), NULL);

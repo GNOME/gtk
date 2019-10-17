@@ -42,16 +42,16 @@ typedef struct _GdkGeometry          GdkGeometry;
 /**
  * GdkSurfaceType:
  * @GDK_SURFACE_TOPLEVEL: toplevel window (used to implement #GtkWindow)
- * @GDK_SURFACE_CHILD: child surface (used to implement e.g. #GtkEntry)
  * @GDK_SURFACE_TEMP: override redirect temporary surface (used to implement #GtkMenu)
+ * @GDK_SURFACE_POPUP: popup window with semantics like xdg-popover
  *
  * Describes the kind of surface.
  */
 typedef enum
 {
   GDK_SURFACE_TOPLEVEL,
-  GDK_SURFACE_CHILD,
-  GDK_SURFACE_TEMP
+  GDK_SURFACE_TEMP,
+  GDK_SURFACE_POPUP
 } GdkSurfaceType;
 
 /* Size restriction enumeration.
@@ -246,7 +246,7 @@ typedef enum
   GDK_SURFACE_EDGE_EAST,
   GDK_SURFACE_EDGE_SOUTH_WEST,
   GDK_SURFACE_EDGE_SOUTH,
-  GDK_SURFACE_EDGE_SOUTH_EAST  
+  GDK_SURFACE_EDGE_SOUTH_EAST
 } GdkSurfaceEdge;
 
 /**
@@ -356,16 +356,15 @@ struct _GdkGeometry
 
 /**
  * GdkSurfaceState:
- * @GDK_SURFACE_STATE_WITHDRAWN: the surface is not shown.
- * @GDK_SURFACE_STATE_ICONIFIED: the surface is minimized.
- * @GDK_SURFACE_STATE_MAXIMIZED: the surface is maximized.
- * @GDK_SURFACE_STATE_STICKY: the surface is sticky.
- * @GDK_SURFACE_STATE_FULLSCREEN: the surface is maximized without
- *   decorations.
- * @GDK_SURFACE_STATE_ABOVE: the surface is kept above other surfaces.
- * @GDK_SURFACE_STATE_BELOW: the surface is kept below other surfaces.
- * @GDK_SURFACE_STATE_FOCUSED: the surface is presented as focused (with active decorations).
- * @GDK_SURFACE_STATE_TILED: the surface is in a tiled state. Deprecated
+ * @GDK_SURFACE_STATE_WITHDRAWN: the surface is not shown
+ * @GDK_SURFACE_STATE_ICONIFIED: the surface is minimized
+ * @GDK_SURFACE_STATE_MAXIMIZED: the surface is maximized
+ * @GDK_SURFACE_STATE_STICKY: the surface is sticky
+ * @GDK_SURFACE_STATE_FULLSCREEN: the surface is maximized without decorations
+ * @GDK_SURFACE_STATE_ABOVE: the surface is kept above other surfaces
+ * @GDK_SURFACE_STATE_BELOW: the surface is kept below other surfaces
+ * @GDK_SURFACE_STATE_FOCUSED: the surface is presented as focused (with active decorations)
+ * @GDK_SURFACE_STATE_TILED: the surface is in a tiled state
  * @GDK_SURFACE_STATE_TOP_TILED: whether the top edge is tiled
  * @GDK_SURFACE_STATE_TOP_RESIZABLE: whether the top edge is resizable
  * @GDK_SURFACE_STATE_RIGHT_TILED: whether the right edge is tiled
@@ -376,6 +375,11 @@ struct _GdkGeometry
  * @GDK_SURFACE_STATE_LEFT_RESIZABLE: whether the left edge is resizable
  *
  * Specifies the state of a toplevel surface.
+ *
+ * On platforms that support information about individual edges, the %GDK_SURFACE_STATE_TILED
+ * state will be set whenever any of the individual tiled states is set. On platforms
+ * that lack that support, the tiled state will give an indication of tiledness without
+ * any of the per-edge states being set.
  */
 typedef enum
 {
@@ -409,23 +413,6 @@ typedef struct _GdkSurfaceClass GdkSurfaceClass;
 #define GDK_SURFACE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SURFACE, GdkSurfaceClass))
 
 
-struct _GdkSurfaceClass
-{
-  GObjectClass      parent_class;
-
-  /* Padding for future expansion */
-  void (*_gdk_reserved1) (void);
-  void (*_gdk_reserved2) (void);
-  void (*_gdk_reserved3) (void);
-  void (*_gdk_reserved4) (void);
-  void (*_gdk_reserved5) (void);
-  void (*_gdk_reserved6) (void);
-  void (*_gdk_reserved7) (void);
-  void (*_gdk_reserved8) (void);
-};
-
-/* Surfaces
- */
 GDK_AVAILABLE_IN_ALL
 GType         gdk_surface_get_type              (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
@@ -433,13 +420,12 @@ GdkSurface *   gdk_surface_new_toplevel         (GdkDisplay    *display,
                                                  int            width,
                                                  int            height);
 GDK_AVAILABLE_IN_ALL
+GdkSurface *   gdk_surface_new_temp             (GdkDisplay    *display,
+                                                 const GdkRectangle *position);
+GDK_AVAILABLE_IN_ALL
 GdkSurface *   gdk_surface_new_popup            (GdkDisplay    *display,
-                                                 const GdkRectangle *position);
-GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_surface_new_temp             (GdkDisplay    *display);
-GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_surface_new_child            (GdkSurface     *parent,
-                                                 const GdkRectangle *position);
+                                                 GdkSurface    *parent,
+                                                 gboolean       autohide);
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_destroy               (GdkSurface     *surface);
@@ -447,6 +433,9 @@ GDK_AVAILABLE_IN_ALL
 GdkSurfaceType gdk_surface_get_surface_type     (GdkSurface     *surface);
 GDK_AVAILABLE_IN_ALL
 gboolean      gdk_surface_is_destroyed          (GdkSurface     *surface);
+
+GDK_AVAILABLE_IN_ALL
+GdkSurface *  gdk_surface_get_parent            (GdkSurface     *surface);
 
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *  gdk_surface_get_display           (GdkSurface     *surface);
@@ -457,17 +446,7 @@ void          gdk_surface_hide                  (GdkSurface     *surface);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_show_unraised         (GdkSurface     *surface);
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_move                  (GdkSurface     *surface,
-                                                 gint           x,
-                                                 gint           y);
-GDK_AVAILABLE_IN_ALL
 void          gdk_surface_resize                (GdkSurface     *surface,
-                                                 gint           width,
-                                                 gint           height);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_move_resize           (GdkSurface     *surface,
-                                                 gint           x,
-                                                 gint           y,
                                                  gint           width,
                                                  gint           height);
 GDK_AVAILABLE_IN_ALL
@@ -491,9 +470,6 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_surface_focus                 (GdkSurface     *surface,
                                                  guint32        timestamp);
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_user_data         (GdkSurface     *surface,
-                                                 gpointer       user_data);
-GDK_AVAILABLE_IN_ALL
 gboolean      gdk_surface_get_accept_focus      (GdkSurface     *surface);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_accept_focus      (GdkSurface     *surface,
@@ -509,39 +485,15 @@ void gdk_surface_input_shape_combine_region (GdkSurface       *surface,
                                              const cairo_region_t *shape_region,
                                              gint             offset_x,
                                              gint             offset_y);
-GDK_AVAILABLE_IN_ALL
-void gdk_surface_set_child_input_shapes     (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-void gdk_surface_merge_child_input_shapes   (GdkSurface       *surface);
 
-
-GDK_AVAILABLE_IN_ALL
-void gdk_surface_set_pass_through (GdkSurface *surface,
-                                   gboolean   pass_through);
-GDK_AVAILABLE_IN_ALL
-gboolean gdk_surface_get_pass_through (GdkSurface *surface);
-
-/*
- * Check if a surface has been shown, and whether all its
- * parents up to a toplevel have been shown, respectively.
- * Note that a surface that is_viewable below is not necessarily
- * viewable in the X sense.
- */
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_surface_is_visible     (GdkSurface *surface);
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_surface_is_viewable    (GdkSurface *surface);
-GDK_AVAILABLE_IN_ALL
-gboolean gdk_surface_is_input_only  (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
 GdkSurfaceState gdk_surface_get_state (GdkSurface *surface);
 
-
-/* GdkSurface */
-
-GDK_AVAILABLE_IN_ALL
-gboolean      gdk_surface_has_native         (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
 void              gdk_surface_set_type_hint (GdkSurface        *surface,
                                              GdkSurfaceTypeHint hint);
@@ -555,16 +507,6 @@ void          gdk_surface_set_modal_hint   (GdkSurface       *surface,
                                             gboolean         modal);
 
 GDK_AVAILABLE_IN_ALL
-void gdk_surface_set_skip_taskbar_hint (GdkSurface *surface,
-                                        gboolean   skips_taskbar);
-GDK_AVAILABLE_IN_ALL
-void gdk_surface_set_skip_pager_hint   (GdkSurface *surface,
-                                        gboolean   skips_pager);
-GDK_AVAILABLE_IN_ALL
-void gdk_surface_set_urgency_hint      (GdkSurface *surface,
-                                        gboolean   urgent);
-
-GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_geometry_hints (GdkSurface          *surface,
                                               const GdkGeometry  *geometry,
                                               GdkSurfaceHints      geom_mask);
@@ -572,9 +514,6 @@ void          gdk_surface_set_geometry_hints (GdkSurface          *surface,
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_title         (GdkSurface   *surface,
                                              const gchar  *title);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_role          (GdkSurface     *surface,
-                                             const gchar   *role);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_startup_id    (GdkSurface     *surface,
                                              const gchar   *startup_id);
@@ -595,15 +534,6 @@ GDK_AVAILABLE_IN_ALL
 GdkCursor    *gdk_surface_get_device_cursor (GdkSurface     *surface,
                                              GdkDevice     *device);
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_get_user_data  (GdkSurface      *surface,
-                                          gpointer        *data);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_get_geometry   (GdkSurface      *surface,
-                                          gint            *x,
-                                          gint            *y,
-                                          gint            *width,
-                                          gint            *height);
-GDK_AVAILABLE_IN_ALL
 int           gdk_surface_get_width       (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
 int           gdk_surface_get_height      (GdkSurface       *surface);
@@ -612,75 +542,26 @@ void          gdk_surface_get_position   (GdkSurface      *surface,
                                           gint            *x,
                                           gint            *y);
 GDK_AVAILABLE_IN_ALL
-gint          gdk_surface_get_origin     (GdkSurface      *surface,
-                                          gint            *x,
-                                          gint            *y);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_get_root_coords (GdkSurface     *surface,
-                                           gint             x,
-                                           gint             y,
-                                           gint            *root_x,
-                                           gint            *root_y);
-GDK_AVAILABLE_IN_ALL
-void       gdk_surface_coords_to_parent   (GdkSurface       *surface,
-                                           gdouble          x,
-                                           gdouble          y,
-                                           gdouble         *parent_x,
-                                           gdouble         *parent_y);
-GDK_AVAILABLE_IN_ALL
-void       gdk_surface_coords_from_parent (GdkSurface       *surface,
-                                           gdouble          parent_x,
-                                           gdouble          parent_y,
-                                           gdouble         *x,
-                                           gdouble         *y);
-
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_get_root_origin (GdkSurface     *surface,
-                                           gint            *x,
-                                           gint            *y);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_get_frame_extents (GdkSurface     *surface,
-                                             GdkRectangle  *rect);
+gboolean gdk_surface_translate_coordinates (GdkSurface *from,
+                                            GdkSurface *to,
+                                            double     *x,
+                                            double     *y);
 
 GDK_AVAILABLE_IN_ALL
 gint          gdk_surface_get_scale_factor  (GdkSurface     *surface);
 
 GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_surface_get_device_position (GdkSurface       *surface,
-                                                GdkDevice       *device,
-                                                gint            *x,
-                                                gint            *y,
-                                                GdkModifierType *mask);
-GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_surface_get_device_position_double (GdkSurface       *surface,
-                                                       GdkDevice       *device,
-                                                       gdouble         *x,
-                                                       gdouble         *y,
-                                                       GdkModifierType *mask);
-GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_surface_get_parent      (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_surface_get_toplevel    (GdkSurface       *surface);
-
-GDK_AVAILABLE_IN_ALL
-GList *       gdk_surface_get_children   (GdkSurface      *surface);
-GDK_AVAILABLE_IN_ALL
-GList *       gdk_surface_peek_children   (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-GList *       gdk_surface_get_children_with_user_data (GdkSurface *surface,
-                                                       gpointer   user_data);
-
+void          gdk_surface_get_device_position (GdkSurface      *surface,
+                                               GdkDevice       *device,
+                                               double          *x,
+                                               double          *y,
+                                               GdkModifierType *mask);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_icon_list   (GdkSurface       *surface,
                                            GList           *surfaces);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_icon_name  (GdkSurface      *surface,
                                           const gchar     *name);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_group      (GdkSurface      *surface,
-                                          GdkSurface      *leader);
-GDK_AVAILABLE_IN_ALL
-GdkSurface*    gdk_surface_get_group     (GdkSurface      *surface);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_decorations (GdkSurface     *surface,
                                            GdkWMDecoration  decorations);
@@ -740,41 +621,34 @@ void          gdk_surface_register_dnd    (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
 void gdk_surface_begin_resize_drag            (GdkSurface     *surface,
                                                GdkSurfaceEdge  edge,
-                                               gint           button,
-                                               gint           root_x,
-                                               gint           root_y,
-                                               guint32        timestamp);
+                                               gint            button,
+                                               gint            x,
+                                               gint            y,
+                                               guint32         timestamp);
 GDK_AVAILABLE_IN_ALL
 void gdk_surface_begin_resize_drag_for_device (GdkSurface     *surface,
                                                GdkSurfaceEdge  edge,
-                                               GdkDevice     *device,
-                                               gint           button,
-                                               gint           root_x,
-                                               gint           root_y,
-                                               guint32        timestamp);
+                                               GdkDevice      *device,
+                                               gint            button,
+                                               gint            x,
+                                               gint            y,
+                                               guint32         timestamp);
 GDK_AVAILABLE_IN_ALL
 void gdk_surface_begin_move_drag              (GdkSurface     *surface,
-                                               gint           button,
-                                               gint           root_x,
-                                               gint           root_y,
-                                               guint32        timestamp);
+                                               gint            button,
+                                               gint            x,
+                                               gint            y,
+                                               guint32         timestamp);
 GDK_AVAILABLE_IN_ALL
 void gdk_surface_begin_move_drag_for_device   (GdkSurface     *surface,
-                                               GdkDevice     *device,
-                                               gint           button,
-                                               gint           root_x,
-                                               gint           root_y,
-                                               guint32        timestamp);
+                                               GdkDevice      *device,
+                                               gint            button,
+                                               gint            x,
+                                               gint            y,
+                                               guint32         timestamp);
 
-/* Interface for dirty-region queueing */
 GDK_AVAILABLE_IN_ALL
 void       gdk_surface_queue_expose              (GdkSurface          *surface);
-GDK_AVAILABLE_IN_ALL
-void       gdk_surface_invalidate_rect           (GdkSurface          *surface,
-                                                  const GdkRectangle   *rect);
-GDK_AVAILABLE_IN_ALL
-void       gdk_surface_invalidate_region         (GdkSurface          *surface,
-                                                  const cairo_region_t *region);
 
 GDK_AVAILABLE_IN_ALL
 void       gdk_surface_freeze_updates      (GdkSurface    *surface);
@@ -789,14 +663,12 @@ void       gdk_surface_constrain_size      (GdkGeometry    *geometry,
                                             gint           *new_width,
                                             gint           *new_height);
 
-/* Multidevice support */
 GDK_AVAILABLE_IN_ALL
 void       gdk_surface_set_support_multidevice (GdkSurface *surface,
                                                 gboolean   support_multidevice);
 GDK_AVAILABLE_IN_ALL
 gboolean   gdk_surface_get_support_multidevice (GdkSurface *surface);
 
-/* Frame clock */
 GDK_AVAILABLE_IN_ALL
 GdkFrameClock* gdk_surface_get_frame_clock      (GdkSurface     *surface);
 

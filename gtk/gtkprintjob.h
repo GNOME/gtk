@@ -31,14 +31,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_PRINT_JOB                  (gtk_print_job_get_type ())
 #define GTK_PRINT_JOB(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PRINT_JOB, GtkPrintJob))
-#define GTK_PRINT_JOB_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PRINT_JOB, GtkPrintJobClass))
 #define GTK_IS_PRINT_JOB(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PRINT_JOB))
-#define GTK_IS_PRINT_JOB_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PRINT_JOB))
-#define GTK_PRINT_JOB_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PRINT_JOB, GtkPrintJobClass))
 
 typedef struct _GtkPrintJob          GtkPrintJob;
-typedef struct _GtkPrintJobClass     GtkPrintJobClass;
-typedef struct _GtkPrintJobPrivate   GtkPrintJobPrivate;
 
 /**
  * GtkPrintJobCompleteFunc:
@@ -54,27 +49,6 @@ typedef void (*GtkPrintJobCompleteFunc) (GtkPrintJob  *print_job,
                                          gpointer      user_data,
                                          const GError *error);
 
-struct _GtkPrinter;
-
-struct _GtkPrintJob
-{
-  GObject parent_instance;
-
-  GtkPrintJobPrivate *priv;
-};
-
-struct _GtkPrintJobClass
-{
-  GObjectClass parent_class;
-
-  void (*status_changed) (GtkPrintJob *job);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType                    gtk_print_job_get_type               (void) G_GNUC_CONST;

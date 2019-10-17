@@ -352,6 +352,7 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtksnapshot.h"
+#include "gtkstylecontext.h"
 
 #include <gobject/gvaluecollector.h>
 
@@ -553,6 +554,8 @@ typedef struct {
   gboolean      is_expanded;
 } AttributeData;
 
+typedef struct _GtkCellAreaPrivate       GtkCellAreaPrivate;
+
 struct _GtkCellAreaPrivate
 {
   /* The GtkCellArea bookkeeps any connected
@@ -613,10 +616,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkCellArea, gtk_cell_area, G_TYPE_INITIALLY_U
 static void
 gtk_cell_area_init (GtkCellArea *area)
 {
-  GtkCellAreaPrivate *priv;
-
-  area->priv = gtk_cell_area_get_instance_private (area);
-  priv = area->priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
 
   priv->cell_info = g_hash_table_new_full (g_direct_hash,
                                            g_direct_equal,
@@ -893,7 +893,7 @@ static void
 gtk_cell_area_finalize (GObject *object)
 {
   GtkCellArea        *area   = GTK_CELL_AREA (object);
-  GtkCellAreaPrivate *priv   = area->priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
 
   /* All cell renderers should already be removed at this point,
    * just kill our (empty) hash tables here.
@@ -950,7 +950,7 @@ gtk_cell_area_get_property (GObject     *object,
                             GParamSpec  *pspec)
 {
   GtkCellArea        *area = GTK_CELL_AREA (object);
-  GtkCellAreaPrivate *priv = area->priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
 
   switch (prop_id)
     {
@@ -1018,7 +1018,7 @@ gtk_cell_area_real_event (GtkCellArea          *area,
                           const GdkRectangle   *cell_area,
                           GtkCellRendererState  flags)
 {
-  GtkCellAreaPrivate *priv = area->priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
   gboolean            retval = FALSE;
   GdkEventType        event_type = gdk_event_get_event_type (event);
 
@@ -1212,13 +1212,13 @@ apply_cell_attributes (GtkCellRenderer *renderer,
    * provided by the view (as these states can vary across views
    * accessing the same model).
    */
-  g_object_get (renderer, "is-expander", &is_expander, NULL);
+  is_expander = gtk_cell_renderer_get_is_expander (renderer);
   if (is_expander != data->is_expander)
-    g_object_set (renderer, "is-expander", data->is_expander, NULL);
+    gtk_cell_renderer_set_is_expander (renderer, data->is_expander);
 
-  g_object_get (renderer, "is-expanded", &is_expanded, NULL);
+  is_expanded = gtk_cell_renderer_get_is_expanded (renderer);
   if (is_expanded != data->is_expanded)
-    g_object_set (renderer, "is-expanded", data->is_expanded, NULL);
+    gtk_cell_renderer_set_is_expanded (renderer, data->is_expanded);
 
   /* Apply the attributes directly to the renderer */
   for (list = info->attributes; list; list = list->next)
@@ -1246,12 +1246,9 @@ gtk_cell_area_real_apply_attributes (GtkCellArea           *area,
                                      gboolean               is_expander,
                                      gboolean               is_expanded)
 {
-
-  GtkCellAreaPrivate *priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
   AttributeData       data;
   GtkTreePath        *path;
-
-  priv = area->priv;
 
   /* Feed in data needed to apply to every renderer */
   data.area        = area;
@@ -1378,7 +1375,7 @@ gtk_cell_area_real_activate (GtkCellArea         *area,
                              GtkCellRendererState flags,
                              gboolean             edit_only)
 {
-  GtkCellAreaPrivate *priv = area->priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
   GdkRectangle        renderer_area;
   GtkCellRenderer    *activate_cell = NULL;
   GtkCellRendererMode mode;
@@ -1511,7 +1508,7 @@ gtk_cell_area_clear_attributes (GtkCellLayout         *cell_layout,
                                 GtkCellRenderer       *renderer)
 {
   GtkCellArea        *area = GTK_CELL_AREA (cell_layout);
-  GtkCellAreaPrivate *priv = area->priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
   CellInfo           *info;
 
   info = g_hash_table_lookup (priv->cell_info, renderer);
@@ -1613,13 +1610,11 @@ void
 gtk_cell_area_remove (GtkCellArea        *area,
                       GtkCellRenderer    *renderer)
 {
-  GtkCellAreaPrivate *priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
   GList              *renderers, *l;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
-
-  priv  = area->priv;
 
   /* Remove any custom attributes and custom cell data func here first */
   g_hash_table_remove (priv->cell_info, renderer);
@@ -2154,7 +2149,7 @@ gtk_cell_area_attribute_connect (GtkCellArea        *area,
                                  const gchar        *attribute,
                                  gint                column)
 {
-  GtkCellAreaPrivate *priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
   CellInfo           *info;
   CellAttribute      *cell_attribute;
 
@@ -2163,7 +2158,6 @@ gtk_cell_area_attribute_connect (GtkCellArea        *area,
   g_return_if_fail (attribute != NULL);
   g_return_if_fail (gtk_cell_area_has_renderer (area, renderer));
 
-  priv = area->priv;
   info = g_hash_table_lookup (priv->cell_info, renderer);
 
   if (!info)
@@ -2220,7 +2214,7 @@ gtk_cell_area_attribute_disconnect (GtkCellArea        *area,
                                     GtkCellRenderer    *renderer,
                                     const gchar        *attribute)
 {
-  GtkCellAreaPrivate *priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
   CellInfo           *info;
   CellAttribute      *cell_attribute;
   GSList             *node;
@@ -2230,7 +2224,6 @@ gtk_cell_area_attribute_disconnect (GtkCellArea        *area,
   g_return_if_fail (attribute != NULL);
   g_return_if_fail (gtk_cell_area_has_renderer (area, renderer));
 
-  priv = area->priv;
   info = g_hash_table_lookup (priv->cell_info, renderer);
 
   if (info)
@@ -2264,12 +2257,11 @@ gtk_cell_area_attribute_get_column (GtkCellArea     *area,
                                     GtkCellRenderer *renderer,
                                     const gchar     *attribute)
 {
-  GtkCellAreaPrivate *priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
   CellInfo           *info;
   CellAttribute      *cell_attribute;
   GSList             *node;
 
-  priv = area->priv;
   info = g_hash_table_lookup (priv->cell_info, renderer);
 
   if (info)
@@ -2330,11 +2322,9 @@ gtk_cell_area_apply_attributes (GtkCellArea  *area,
 const gchar *
 gtk_cell_area_get_current_path_string (GtkCellArea *area)
 {
-  GtkCellAreaPrivate *priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
 
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
-
-  priv = area->priv;
 
   return priv->current_path;
 }
@@ -2876,12 +2866,10 @@ void
 gtk_cell_area_set_focus_cell (GtkCellArea     *area,
                               GtkCellRenderer *renderer)
 {
-  GtkCellAreaPrivate *priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (renderer == NULL || GTK_IS_CELL_RENDERER (renderer));
-
-  priv = area->priv;
 
   if (priv->focus_cell != renderer)
     {
@@ -2915,11 +2903,9 @@ gtk_cell_area_set_focus_cell (GtkCellArea     *area,
 GtkCellRenderer *
 gtk_cell_area_get_focus_cell (GtkCellArea *area)
 {
-  GtkCellAreaPrivate *priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
 
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
-
-  priv = area->priv;
 
   return priv->focus_cell;
 }
@@ -2947,7 +2933,7 @@ gtk_cell_area_add_focus_sibling (GtkCellArea     *area,
                                  GtkCellRenderer *renderer,
                                  GtkCellRenderer *sibling)
 {
-  GtkCellAreaPrivate *priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
   GList              *siblings;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
@@ -2962,8 +2948,6 @@ gtk_cell_area_add_focus_sibling (GtkCellArea     *area,
    * list already, a renderer can be sibling of only one focusable renderer
    * at a time.
    */
-
-  priv = area->priv;
 
   siblings = g_hash_table_lookup (priv->focus_siblings, renderer);
 
@@ -2990,15 +2974,13 @@ gtk_cell_area_remove_focus_sibling (GtkCellArea     *area,
                                     GtkCellRenderer *renderer,
                                     GtkCellRenderer *sibling)
 {
-  GtkCellAreaPrivate *priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
   GList              *siblings;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
   g_return_if_fail (GTK_IS_CELL_RENDERER (sibling));
   g_return_if_fail (gtk_cell_area_is_focus_sibling (area, renderer, sibling));
-
-  priv = area->priv;
 
   siblings = g_hash_table_lookup (priv->focus_siblings, renderer);
 
@@ -3027,14 +3009,12 @@ gtk_cell_area_is_focus_sibling (GtkCellArea     *area,
                                 GtkCellRenderer *renderer,
                                 GtkCellRenderer *sibling)
 {
-  GtkCellAreaPrivate *priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
   GList              *siblings, *l;
 
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), FALSE);
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (renderer), FALSE);
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (sibling), FALSE);
-
-  priv = area->priv;
 
   siblings = g_hash_table_lookup (priv->focus_siblings, renderer);
 
@@ -3063,12 +3043,10 @@ const GList *
 gtk_cell_area_get_focus_siblings (GtkCellArea     *area,
                                   GtkCellRenderer *renderer)
 {
-  GtkCellAreaPrivate *priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
 
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (renderer), NULL);
-
-  priv = area->priv;
 
   return g_hash_table_lookup (priv->focus_siblings, renderer);
 }
@@ -3132,8 +3110,10 @@ gtk_cell_area_add_editable (GtkCellArea        *area,
                             GtkCellEditable    *editable,
                             const GdkRectangle *cell_area)
 {
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
+
   g_signal_emit (area, cell_area_signals[SIGNAL_ADD_EDITABLE], 0,
-                 renderer, editable, cell_area, area->priv->current_path);
+                 renderer, editable, cell_area, priv->current_path);
 }
 
 static void
@@ -3148,7 +3128,7 @@ static void
 cell_area_remove_widget_cb (GtkCellEditable *editable,
                             GtkCellArea     *area)
 {
-  GtkCellAreaPrivate *priv = area->priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
 
   g_assert (priv->edit_widget == editable);
   g_assert (priv->edited_cell != NULL);
@@ -3165,12 +3145,10 @@ static void
 gtk_cell_area_set_edited_cell (GtkCellArea     *area,
                                GtkCellRenderer *renderer)
 {
-  GtkCellAreaPrivate *priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (renderer == NULL || GTK_IS_CELL_RENDERER (renderer));
-
-  priv = area->priv;
 
   if (priv->edited_cell != renderer)
     {
@@ -3190,12 +3168,10 @@ static void
 gtk_cell_area_set_edit_widget (GtkCellArea     *area,
                                GtkCellEditable *editable)
 {
-  GtkCellAreaPrivate *priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (editable == NULL || GTK_IS_CELL_EDITABLE (editable));
-
-  priv = area->priv;
 
   if (priv->edit_widget != editable)
     {
@@ -3233,11 +3209,9 @@ gtk_cell_area_set_edit_widget (GtkCellArea     *area,
 GtkCellRenderer   *
 gtk_cell_area_get_edited_cell (GtkCellArea *area)
 {
-  GtkCellAreaPrivate *priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
 
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
-
-  priv = area->priv;
 
   return priv->edited_cell;
 }
@@ -3254,11 +3228,9 @@ gtk_cell_area_get_edited_cell (GtkCellArea *area)
 GtkCellEditable *
 gtk_cell_area_get_edit_widget (GtkCellArea *area)
 {
-  GtkCellAreaPrivate *priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
 
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
-
-  priv = area->priv;
 
   return priv->edit_widget;
 }
@@ -3288,15 +3260,13 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
                              const GdkRectangle   *cell_area,
                              GtkCellRendererState  flags)
 {
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
   GtkCellRendererMode mode;
-  GtkCellAreaPrivate *priv;
 
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (renderer), FALSE);
   g_return_val_if_fail (cell_area != NULL, FALSE);
-
-  priv = area->priv;
 
   if (!gtk_cell_renderer_get_sensitive (renderer))
     return FALSE;
@@ -3379,11 +3349,9 @@ void
 gtk_cell_area_stop_editing (GtkCellArea *area,
                             gboolean     canceled)
 {
-  GtkCellAreaPrivate *priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
-
-  priv = area->priv;
 
   if (priv->edited_cell)
     {
@@ -3532,13 +3500,11 @@ _gtk_cell_area_set_cell_data_func_with_proxy (GtkCellArea           *area,
 					      GDestroyNotify         destroy,
 					      gpointer               proxy)
 {
-  GtkCellAreaPrivate *priv;
+  GtkCellAreaPrivate *priv = gtk_cell_area_get_instance_private (area);
   CellInfo           *info;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
-
-  priv = area->priv;
 
   info = g_hash_table_lookup (priv->cell_info, cell);
 

@@ -27,5 +27,6 @@
 #include <gsk/gskenums.h>
 
 typedef struct _GskRenderer             GskRenderer;
+typedef struct _GskTransform            GskTransform;
 
 #endif /* __GSK_TYPES_H__ */

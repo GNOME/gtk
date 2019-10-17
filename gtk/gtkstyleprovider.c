@@ -50,7 +50,7 @@ gtk_style_provider_default_init (GtkStyleProviderInterface *iface)
                                    G_SIGNAL_RUN_LAST,
                                    G_STRUCT_OFFSET (GtkStyleProviderInterface, changed),
                                    NULL, NULL,
-                                   g_cclosure_marshal_VOID__VOID,
+                                   NULL,
                                    G_TYPE_NONE, 0);
 
 }

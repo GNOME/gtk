@@ -9,8 +9,6 @@ expander_cb (GtkExpander *expander, GParamSpec *pspec, GtkWindow *dialog)
 static void
 do_not_expand (GtkWidget *child, gpointer data)
 {
-  gtk_container_child_set (GTK_CONTAINER (gtk_widget_get_parent (child)), child,
-                           "expand", FALSE, "fill", FALSE, NULL);
 }
 
 static void
@@ -24,7 +22,6 @@ main (int argc, char *argv[])
 {
   GtkWidget *dialog;
   GtkWidget *area;
-  GtkWidget *box;
   GtkWidget *expander;
   GtkWidget *sw;
   GtkWidget *tv;
@@ -43,10 +40,6 @@ main (int argc, char *argv[])
                                             "but not the full story.");
 
   area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (dialog));
-  /* make the hbox expand */
-  box = gtk_widget_get_parent (area);
-  gtk_container_child_set (GTK_CONTAINER (gtk_widget_get_parent (box)), box,
-                           "expand", TRUE, "fill", TRUE, NULL);
   /* make the labels not expand */
   gtk_container_foreach (GTK_CONTAINER (area), do_not_expand, NULL);
 
@@ -74,7 +67,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (expander), sw);
   gtk_widget_set_hexpand (expander, TRUE);
   gtk_widget_set_vexpand (expander, TRUE);
-  gtk_box_pack_end (GTK_BOX (area), expander);
+  gtk_container_add (GTK_CONTAINER (area), expander);
   g_signal_connect (expander, "notify::expanded",
                     G_CALLBACK (expander_cb), dialog);
 

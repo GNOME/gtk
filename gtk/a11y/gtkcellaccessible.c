@@ -46,11 +46,13 @@ static const struct {
 static GtkCellRendererState gtk_cell_accessible_get_state (GtkCellAccessible *cell);
 static void atk_action_interface_init    (AtkActionIface    *iface);
 static void atk_component_interface_init (AtkComponentIface *iface);
+static void atk_table_cell_interface_init    (AtkTableCellIface    *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkCellAccessible, gtk_cell_accessible, GTK_TYPE_ACCESSIBLE,
                          G_ADD_PRIVATE (GtkCellAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
-                         G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TABLE_CELL, atk_table_cell_interface_init))
 
 static gint
 gtk_cell_accessible_get_index_in_parent (AtkObject *obj)
@@ -364,6 +366,90 @@ atk_component_interface_init (AtkComponentIface *iface)
 {
   iface->get_extents = gtk_cell_accessible_get_extents;
   iface->grab_focus = gtk_cell_accessible_grab_focus;
+}
+
+static int
+gtk_cell_accessible_get_column_span (AtkTableCell *table_cell)
+{
+  return 1;
+}
+
+static GPtrArray *
+gtk_cell_accessible_get_column_header_cells (AtkTableCell *table_cell)
+{
+  GtkCellAccessible *cell;
+  AtkObject *parent;
+
+  cell = GTK_CELL_ACCESSIBLE (table_cell);
+  parent = gtk_widget_get_accessible (gtk_accessible_get_widget (GTK_ACCESSIBLE (cell)));
+
+  return gtk_cell_accessible_parent_get_column_header_cells (GTK_CELL_ACCESSIBLE_PARENT (parent),
+                                                             cell);
+}
+
+static gboolean
+gtk_cell_accessible_get_position (AtkTableCell *table_cell,
+                                  gint         *row,
+                                  gint         *column)
+{
+  GtkCellAccessible *cell;
+  AtkObject *parent;
+
+  cell = GTK_CELL_ACCESSIBLE (table_cell);
+  parent = gtk_widget_get_accessible (gtk_accessible_get_widget (GTK_ACCESSIBLE (cell)));
+
+  gtk_cell_accessible_parent_get_cell_position (GTK_CELL_ACCESSIBLE_PARENT (parent),
+                                                cell,
+                                                row, column);
+  return ((row && *row > 0) || (column && *column > 0));
+}
+
+static int
+gtk_cell_accessible_get_row_span (AtkTableCell *table_cell)
+{
+  return 1;
+}
+
+static GPtrArray *
+gtk_cell_accessible_get_row_header_cells (AtkTableCell *table_cell)
+{
+  GtkCellAccessible *cell;
+  AtkObject *parent;
+
+  cell = GTK_CELL_ACCESSIBLE (table_cell);
+  parent = gtk_widget_get_accessible (gtk_accessible_get_widget (GTK_ACCESSIBLE (cell)));
+
+  return gtk_cell_accessible_parent_get_row_header_cells (GTK_CELL_ACCESSIBLE_PARENT (parent),
+                                                          cell);
+}
+
+static AtkObject *
+gtk_cell_accessible_get_table (AtkTableCell *table_cell)
+{
+  AtkObject *obj;
+
+  obj = ATK_OBJECT (table_cell);
+  do
+    {
+      AtkRole role;
+      obj = atk_object_get_parent (obj);
+      role = atk_object_get_role (obj);
+      if (role == ATK_ROLE_TABLE || role == ATK_ROLE_TREE_TABLE)
+        break;
+    }
+  while (obj);
+  return obj;
+}
+
+static void
+atk_table_cell_interface_init (AtkTableCellIface *iface)
+{
+  iface->get_column_span = gtk_cell_accessible_get_column_span;
+  iface->get_column_header_cells = gtk_cell_accessible_get_column_header_cells;
+  iface->get_position = gtk_cell_accessible_get_position;
+  iface->get_row_span = gtk_cell_accessible_get_row_span;
+  iface->get_row_header_cells = gtk_cell_accessible_get_row_header_cells;
+  iface->get_table = gtk_cell_accessible_get_table;
 }
 
 static GtkCellRendererState

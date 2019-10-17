@@ -6,7 +6,7 @@
  * GTK uses for videos. This allows treating the icon like a
  * regular video, so we can for example attach controls to it.
  *
- * After all, what good is an media_stream if one cannot pause
+ * After all, what good is a media_stream if one cannot pause
  * it.
  */
 

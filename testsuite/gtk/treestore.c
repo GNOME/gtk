@@ -1026,7 +1026,7 @@ specific_bug_77977 (void)
 
   /* Stripped down version of test case for bug 77977 by Damon Chaplin */
 
-  g_test_bug ("77977");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=77977 */
 
   tree_store = gtk_tree_store_new (1, G_TYPE_STRING);
 
@@ -1064,7 +1064,7 @@ specific_bug_698396 (void)
   GtkTreeStore *tree_store;
   gint new_order[1] = { 0 };
 
-  g_test_bug ("698396");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=698396 */
 
   tree_store = gtk_tree_store_new (1, G_TYPE_STRING);
 

@@ -149,8 +149,8 @@ gdk_drop_read_local_async (GdkDrop             *self,
 
 static GInputStream *
 gdk_drop_read_local_finish (GdkDrop         *self,
-                            const char     **out_mime_type,
                             GAsyncResult    *result,
+                            const char     **out_mime_type,
                             GError         **error)
 {
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
@@ -622,8 +622,8 @@ gdk_drop_read_async (GdkDrop             *self,
 /**
  * gdk_drop_read_finish:
  * @self: a #GdkDrop
- * @out_mime_type: (out) (type utf8): return location for the used mime type
  * @result: a #GAsyncResult
+ * @out_mime_type: (out) (type utf8): return location for the used mime type
  * @error: (allow-none): location to store error information on failure, or %NULL
  *
  * Finishes an async drop read operation, see gdk_drop_read_async().
@@ -632,8 +632,8 @@ gdk_drop_read_async (GdkDrop             *self,
  */
 GInputStream *
 gdk_drop_read_finish (GdkDrop       *self,
-                      const char   **out_mime_type,
                       GAsyncResult  *result,
+                      const char   **out_mime_type,
                       GError       **error)
 {
   g_return_val_if_fail (GDK_IS_DROP (self), NULL);
@@ -641,11 +641,11 @@ gdk_drop_read_finish (GdkDrop       *self,
 
   if (g_async_result_is_tagged (result, gdk_drop_read_local_async))
     {
-      return gdk_drop_read_local_finish (self, out_mime_type, result, error);
+      return gdk_drop_read_local_finish (self, result, out_mime_type, error);
     }
   else
     {
-      return GDK_DROP_GET_CLASS (self)->read_finish (self, out_mime_type, result, error);
+      return GDK_DROP_GET_CLASS (self)->read_finish (self, result, out_mime_type, error);
     }
 }
 
@@ -678,7 +678,7 @@ gdk_drop_read_value_got_stream (GObject      *source,
   GTask *task = data;
   const char *mime_type;
 
-  stream = gdk_drop_read_finish (GDK_DROP (source), &mime_type, result, &error);
+  stream = gdk_drop_read_finish (GDK_DROP (source), result, &mime_type, &error);
   if (stream == NULL)
     {
       g_task_return_error (task, error);

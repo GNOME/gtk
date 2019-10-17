@@ -1,4 +1,4 @@
-N_("GTK+ Version");
+N_("GTK Version");
 N_("GDK Backend");
 N_("Prefix");
 N_("X display");

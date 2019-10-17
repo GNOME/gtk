@@ -26,8 +26,37 @@
 #include "gtktreemodelfilter.h"
 #include "gtktreeviewcolumn.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtktextprivate.h"
 
 G_BEGIN_DECLS
+
+typedef struct _GtkEntryCompletionClass       GtkEntryCompletionClass;
+typedef struct _GtkEntryCompletionPrivate     GtkEntryCompletionPrivate;
+
+struct _GtkEntryCompletion
+{
+  GObject parent_instance;
+
+  /*< private >*/
+  GtkEntryCompletionPrivate *priv;
+};
+
+struct _GtkEntryCompletionClass
+{
+  GObjectClass parent_class;
+
+  gboolean (* match_selected)   (GtkEntryCompletion *completion,
+                                 GtkTreeModel       *model,
+                                 GtkTreeIter        *iter);
+  void     (* action_activated) (GtkEntryCompletion *completion,
+                                 gint                index_);
+  gboolean (* insert_prefix)    (GtkEntryCompletion *completion,
+                                 const gchar        *prefix);
+  gboolean (* cursor_on_match)  (GtkEntryCompletion *completion,
+                                 GtkTreeModel       *model,
+                                 GtkTreeIter        *iter);
+  void     (* no_matches)       (GtkEntryCompletion *completion);
+};
 
 struct _GtkEntryCompletionPrivate
 {
@@ -84,20 +113,12 @@ void     _gtk_entry_completion_connect      (GtkEntryCompletion *completion,
                                              GtkEntry           *entry);
 void     _gtk_entry_completion_disconnect   (GtkEntryCompletion *completion);
 
-gchar*   _gtk_entry_get_display_text       (GtkEntry *entry,
-                                            gint      start_pos,
-                                            gint      end_pos);
 GtkIMContext* _gtk_entry_get_im_context    (GtkEntry  *entry);
-void     _gtk_entry_grab_focus             (GtkEntry  *entry,
-                                            gboolean   select_all);
-
 void     gtk_entry_enter_text              (GtkEntry   *entry,
                                             const char *text);
-void     gtk_entry_set_positions           (GtkEntry   *entry,
-                                            int         current_pos,
-                                            int         selection_bound);
 
 GtkEventController * gtk_entry_get_key_controller (GtkEntry *entry);
+GtkText *gtk_entry_get_text_widget (GtkEntry *entry);
 
 G_END_DECLS
 

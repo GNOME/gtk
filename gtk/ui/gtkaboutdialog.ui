@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkAboutDialog" parent="GtkDialog">
     <property name="resizable">0</property>
     <property name="type-hint">dialog</property>
@@ -15,8 +14,8 @@
         </child>
       </object>
     </child>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox1">
+    <child internal-child="content_area">
+      <object class="GtkBox">
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <property name="margin">5</property>
@@ -29,6 +28,9 @@
             <child>
               <object class="GtkImage" id="logo_image">
                 <property name="icon-name">image-missing</property>
+                <style>
+                  <class name="icon-dropshadow"/>
+                </style>
               </object>
             </child>
             <child>
@@ -37,9 +39,6 @@
                 <property name="justify">center</property>
                 <property name="selectable">1</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkStack" id="stack">
@@ -50,188 +49,191 @@
                 <property name="vexpand">1</property>
                 <signal name="notify::visible-child" handler="stack_visible_child_notify" swapped="no"/>
                 <child>
-                  <object class="GtkBox" id="page_vbox">
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">8</property>
-                    <child>
-                      <object class="GtkLabel" id="version_label">
-                        <property name="visible">0</property>
-                        <property name="label">version 1.0</property>
-                        <property name="justify">center</property>
-                        <property name="selectable">1</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="comments_label">
-                        <property name="visible">0</property>
-                        <property name="label">comments</property>
-                        <property name="justify">center</property>
-                        <property name="wrap">1</property>
-                        <property name="selectable">1</property>
-                        <property name="max-width-chars">60</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="website_label">
-                        <property name="visible">0</property>
-                        <property name="label">http://website.com</property>
-                        <property name="selectable">1</property>
-                        <signal name="activate-link" handler="emit_activate_link" object="GtkAboutDialog" swapped="yes"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="copyright_label">
-                        <property name="visible">0</property>
-                        <property name="label">copyright</property>
-                        <property name="justify">center</property>
-                        <property name="wrap">1</property>
-                        <property name="selectable">1</property>
-                        <property name="max-width-chars">60</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="license_label">
-                        <property name="visible">0</property>
-                        <property name="label">license</property>
-                        <property name="use-markup">1</property>
-                        <property name="justify">center</property>
-                        <property name="wrap">1</property>
-                        <property name="selectable">1</property>
-                        <property name="max-width-chars">60</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
+                  <object class="GtkStackPage">
                     <property name="name">main</property>
                     <property name="title" translatable="yes">About</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="credits_page">
-                    <property name="visible">0</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">8</property>
-                    <child>
-                      <object class="GtkScrolledWindow" id="scrolledwindow1">
-                        <property name="hscrollbar-policy">never</property>
-                        <property name="shadow-type">in</property>
-                        <property name="vexpand">1</property>
+                    <property name="child">
+                      <object class="GtkBox" id="page_vbox">
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">8</property>
                         <child>
-                          <object class="GtkViewport" id="viewport1">
-                            <style>
-                              <class name="view"/>
-                            </style>
-                            <child>
-                              <object class="GtkGrid" id="credits_grid">
-                                <property name="halign">center</property>
-                                <property name="valign">start</property>
-                                <property name="orientation">vertical</property>
-                                <property name="row-spacing">2</property>
-                                <property name="column-spacing">8</property>
-                                <property name="margin">5</property>
-                              </object>
-                            </child>
+                          <object class="GtkLabel" id="version_label">
+                            <property name="visible">0</property>
+                            <property name="label">version 1.0</property>
+                            <property name="justify">center</property>
+                            <property name="selectable">1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="comments_label">
+                            <property name="visible">0</property>
+                            <property name="label">comments</property>
+                            <property name="justify">center</property>
+                            <property name="wrap">1</property>
+                            <property name="selectable">1</property>
+                            <property name="max-width-chars">60</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="website_label">
+                            <property name="visible">0</property>
+                            <property name="label">http://website.com</property>
+                            <property name="selectable">1</property>
+                            <signal name="activate-link" handler="emit_activate_link" object="GtkAboutDialog" swapped="yes"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="copyright_label">
+                            <property name="visible">0</property>
+                            <property name="label">copyright</property>
+                            <property name="justify">center</property>
+                            <property name="wrap">1</property>
+                            <property name="selectable">1</property>
+                            <property name="max-width-chars">60</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="license_label">
+                            <property name="visible">0</property>
+                            <property name="label">license</property>
+                            <property name="use-markup">1</property>
+                            <property name="justify">center</property>
+                            <property name="wrap">1</property>
+                            <property name="selectable">1</property>
+                            <property name="max-width-chars">60</property>
+                            <signal name="activate-link" handler="emit_activate_link" object="GtkAboutDialog" swapped="yes"/>
                           </object>
                         </child>
                       </object>
-                    </child>
+                    </property>
                   </object>
-                  <packing>
+                </child>
+                <child>
+                  <object class="GtkStackPage">
                     <property name="name">credits</property>
+                    <property name="visible">0</property>
                     <property name="title" translatable="yes">Credits</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="license_page">
-                    <property name="visible">0</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">8</property>
-                    <child>
-                      <object class="GtkScrolledWindow" id="scrolledwindow2">
-                        <property name="hscrollbar-policy">never</property>
-                        <property name="shadow-type">in</property>
-                        <property name="vexpand">1</property>
+                    <property name="child">
+                      <object class="GtkBox" id="credits_page">
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">8</property>
                         <child>
-                          <object class="GtkTextView" id="license_view">
-                            <property name="editable">0</property>
-                            <property name="left-margin">8</property>
-                            <property name="right-margin">8</property>
-                            <property name="cursor-visible">0</property>
+                          <object class="GtkScrolledWindow" id="scrolledwindow1">
+                            <property name="hscrollbar-policy">never</property>
+                            <property name="shadow-type">in</property>
+                            <property name="vexpand">1</property>
                             <child>
-                              <object class="GtkGestureMultiPress">
-                                <signal name="released" handler="text_view_released" swapped="no"/>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkEventControllerMotion">
-                                <signal name="motion" handler="text_view_motion" swapped="no"/>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkEventControllerKey">
-                                <signal name="key-pressed" handler="text_view_key_pressed" swapped="no"/>
+                              <object class="GtkViewport" id="viewport1">
+                                <style>
+                                  <class name="view"/>
+                                </style>
+                                <child>
+                                  <object class="GtkGrid" id="credits_grid">
+                                    <property name="halign">center</property>
+                                    <property name="valign">start</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="row-spacing">2</property>
+                                    <property name="column-spacing">8</property>
+                                    <property name="margin">5</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
                         </child>
                       </object>
-                    </child>
+                    </property>
                   </object>
-                  <packing>
+                </child>
+                <child>
+                  <object class="GtkStackPage">
                     <property name="name">license</property>
-                    <property name="title" translatable="yes">License</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="system_page">
                     <property name="visible">0</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">8</property>
-                    <child>
-                      <object class="GtkScrolledWindow">
-                        <property name="hscrollbar-policy">never</property>
-                        <property name="shadow-type">in</property>
-                        <property name="vexpand">1</property>
+                    <property name="title" translatable="yes">License</property>
+                    <property name="child">
+                      <object class="GtkBox" id="license_page">
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">8</property>
                         <child>
-                          <object class="GtkTextView" id="system_view">
-                            <property name="editable">0</property>
-                            <property name="left-margin">8</property>
-                            <property name="right-margin">8</property>
-                            <property name="cursor-visible">0</property>
+                          <object class="GtkScrolledWindow" id="scrolledwindow2">
+                            <property name="hscrollbar-policy">never</property>
+                            <property name="shadow-type">in</property>
+                            <property name="vexpand">1</property>
                             <child>
-                              <object class="GtkGestureMultiPress">
-                                <signal name="released" handler="text_view_released" swapped="no"/>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkEventControllerMotion">
-                                <signal name="motion" handler="text_view_motion" swapped="no"/>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkEventControllerKey">
-                                <signal name="key-pressed" handler="text_view_key_pressed" swapped="no"/>
+                              <object class="GtkTextView" id="license_view">
+                                <property name="editable">0</property>
+                                <property name="left-margin">8</property>
+                                <property name="right-margin">8</property>
+                                <property name="cursor-visible">0</property>
+                                <child>
+                                  <object class="GtkGestureClick">
+                                    <signal name="released" handler="text_view_released" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkEventControllerMotion">
+                                    <signal name="motion" handler="text_view_motion" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkEventControllerKey">
+                                    <signal name="key-pressed" handler="text_view_key_pressed" swapped="no"/>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
                         </child>
                       </object>
-                    </child>
+                    </property>
                   </object>
-                  <packing>
+                </child>
+                <child>
+                  <object class="GtkStackPage">
                     <property name="name">system</property>
+                    <property name="visible">0</property>
                     <property name="title" translatable="yes">System</property>
-                  </packing>
+                    <property name="child">
+                      <object class="GtkBox" id="system_page">
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">8</property>
+                        <child>
+                          <object class="GtkScrolledWindow">
+                            <property name="hscrollbar-policy">never</property>
+                            <property name="shadow-type">in</property>
+                            <property name="vexpand">1</property>
+                            <child>
+                              <object class="GtkTextView" id="system_view">
+                                <property name="editable">0</property>
+                                <property name="left-margin">8</property>
+                                <property name="right-margin">8</property>
+                                <property name="cursor-visible">0</property>
+                                <child>
+                                  <object class="GtkGestureClick">
+                                    <signal name="released" handler="text_view_released" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkEventControllerMotion">
+                                    <signal name="motion" handler="text_view_motion" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkEventControllerKey">
+                                    <signal name="key-pressed" handler="text_view_key_pressed" swapped="no"/>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
                 </child>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
     </child>

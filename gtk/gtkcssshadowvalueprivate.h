@@ -23,6 +23,7 @@
 #include <cairo.h>
 #include <pango/pango.h>
 
+#include "gtkborder.h"
 #include "gtktypes.h"
 #include "gtkcssparserprivate.h"
 #include "gtkcssvalueprivate.h"

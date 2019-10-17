@@ -12,7 +12,6 @@
         <property name="visible">True</property>
         <property name="label">_Go</property>
         <property name="use_underline">True</property>
-        <property name="can_default">True</property>
       </object>
     </child>
     <action-widgets>

@@ -3,7 +3,6 @@
   <object class="GtkDialog">
     <child type="action">
       <object class="GtkButton" id="button_ok">
-        <property name="can_default">1</property>
       </object>
     </child>
   </object>

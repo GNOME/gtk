@@ -87,6 +87,8 @@ enum {
 
 static guint signals[LAST_SIGNAL];
 
+static guint fps_counter;
+
 #define FRAME_HISTORY_MAX_LENGTH 16
 
 struct _GdkFrameClockPrivate
@@ -95,9 +97,13 @@ struct _GdkFrameClockPrivate
   gint n_timings;
   gint current;
   GdkFrameTimings *timings[FRAME_HISTORY_MAX_LENGTH];
+  gint n_freeze_inhibitors;
 };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkFrameClock, gdk_frame_clock, G_TYPE_OBJECT)
+
+static void
+_gdk_frame_clock_freeze (GdkFrameClock *clock);
 
 static void
 gdk_frame_clock_finalize (GObject *object)
@@ -113,11 +119,20 @@ gdk_frame_clock_finalize (GObject *object)
 }
 
 static void
+gdk_frame_clock_constructed (GObject *object)
+{
+  G_OBJECT_CLASS (gdk_frame_clock_parent_class)->constructed (object);
+
+  _gdk_frame_clock_freeze (GDK_FRAME_CLOCK (object));
+}
+
+static void
 gdk_frame_clock_class_init (GdkFrameClockClass *klass)
 {
   GObjectClass *gobject_class = (GObjectClass*) klass;
 
   gobject_class->finalize     = gdk_frame_clock_finalize;
+  gobject_class->constructed  = gdk_frame_clock_constructed;
 
   /**
    * GdkFrameClock::flush-events:
@@ -132,8 +147,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -148,8 +162,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -168,8 +181,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -179,15 +191,14 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    * This signal is emitted as the second step of toolkit and
    * application processing of the frame. Any work to update
    * sizes and positions of application elements should be
-   * performed. GTK+ normally handles this internally.
+   * performed. GTK normally handles this internally.
    */
   signals[LAYOUT] =
     g_signal_new (g_intern_static_string ("layout"),
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -197,7 +208,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    * This signal is emitted as the third step of toolkit and
    * application processing of the frame. The frame is
    * repainted. GDK normally handles this internally and
-   * produces expose events, which are turned into GTK+
+   * produces expose events, which are turned into GTK
    * #GtkWidget::draw signals.
    */
   signals[PAINT] =
@@ -205,8 +216,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -221,8 +231,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -230,7 +239,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    * @clock: the frame clock emitting the signal
    *
    * This signal is emitted after processing of the frame is
-   * finished, and is handled internally by GTK+ to resume normal
+   * finished, and is handled internally by GTK to resume normal
    * event processing. Applications should not handle this signal.
    */
   signals[RESUME_EVENTS] =
@@ -238,8 +247,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 }
 
@@ -252,6 +260,11 @@ gdk_frame_clock_init (GdkFrameClock *clock)
 
   priv->frame_counter = -1;
   priv->current = FRAME_HISTORY_MAX_LENGTH - 1;
+
+#ifdef G_ENABLE_DEBUG
+  if (fps_counter == 0)
+    fps_counter = gdk_profiler_define_counter ("fps", "Frames per Second");
+#endif
 }
 
 /**
@@ -289,7 +302,7 @@ gdk_frame_clock_get_frame_time (GdkFrameClock *frame_clock)
  * content and want to continually request the
  * %GDK_FRAME_CLOCK_PHASE_UPDATE phase for a period of time,
  * you should use gdk_frame_clock_begin_updating() instead, since
- * this allows GTK+ to adjust system parameters to get maximally
+ * this allows GTK to adjust system parameters to get maximally
  * smooth animations.
  */
 void
@@ -335,7 +348,7 @@ gdk_frame_clock_end_updating (GdkFrameClock *frame_clock)
   GDK_FRAME_CLOCK_GET_CLASS (frame_clock)->end_updating (frame_clock);
 }
 
-void
+static void
 _gdk_frame_clock_freeze (GdkFrameClock *clock)
 {
   g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
@@ -344,12 +357,41 @@ _gdk_frame_clock_freeze (GdkFrameClock *clock)
 }
 
 
-void
+static void
 _gdk_frame_clock_thaw (GdkFrameClock *clock)
 {
   g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
 
   GDK_FRAME_CLOCK_GET_CLASS (clock)->thaw (clock);
+}
+
+void
+_gdk_frame_clock_inhibit_freeze (GdkFrameClock *clock)
+{
+  GdkFrameClockPrivate *priv;
+
+  g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
+
+  priv = clock->priv;
+
+  priv->n_freeze_inhibitors++;
+  if (priv->n_freeze_inhibitors == 1)
+    _gdk_frame_clock_thaw (clock);
+}
+
+
+void
+_gdk_frame_clock_uninhibit_freeze (GdkFrameClock *clock)
+{
+  GdkFrameClockPrivate *priv;
+
+  g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
+
+  priv = clock->priv;
+
+  priv->n_freeze_inhibitors--;
+  if (priv->n_freeze_inhibitors == 0)
+    _gdk_frame_clock_freeze (clock);
 }
 
 /**
@@ -440,8 +482,8 @@ _gdk_frame_clock_begin_frame (GdkFrameClock *frame_clock)
  * for the current frame or a recent frame. The #GdkFrameTimings
  * object may not yet be complete: see gdk_frame_timings_get_complete().
  *
- * Returns: (nullable): the #GdkFrameTimings object for the specified
- *  frame, or %NULL if it is not available. See
+ * Returns: (nullable) (transfer none): the #GdkFrameTimings object for
+ *  the specified frame, or %NULL if it is not available. See
  *  gdk_frame_clock_get_history_start().
  */
 GdkFrameTimings *
@@ -472,10 +514,10 @@ gdk_frame_clock_get_timings (GdkFrameClock *frame_clock,
  *
  * Gets the frame timings for the current frame.
  *
- * Returns: (nullable): the #GdkFrameTimings for the frame currently
- *  being processed, or even no frame is being processed, for the
- *  previous frame. Before any frames have been processed, returns
- *  %NULL.
+ * Returns: (nullable) (transfer none): the #GdkFrameTimings for the
+ *  frame currently being processed, or even no frame is being
+ *  processed, for the previous frame. Before any frames have been
+ *  processed, returns %NULL.
  */
 GdkFrameTimings *
 gdk_frame_clock_get_current_timings (GdkFrameClock *frame_clock)
@@ -644,4 +686,106 @@ void
 _gdk_frame_clock_emit_resume_events (GdkFrameClock *frame_clock)
 {
   g_signal_emit (frame_clock, signals[RESUME_EVENTS], 0);
+}
+
+#ifdef G_ENABLE_DEBUG
+static gint64
+guess_refresh_interval (GdkFrameClock *frame_clock)
+{
+  gint64 interval;
+  gint64 i;
+
+  interval = G_MAXINT64;
+
+  for (i = gdk_frame_clock_get_history_start (frame_clock);
+       i < gdk_frame_clock_get_frame_counter (frame_clock);
+       i++)
+    {
+      GdkFrameTimings *t, *before;
+      gint64 ts, before_ts;
+
+      t = gdk_frame_clock_get_timings (frame_clock, i);
+      before = gdk_frame_clock_get_timings (frame_clock, i - 1);
+      if (t == NULL || before == NULL)
+        continue;
+
+      ts = gdk_frame_timings_get_frame_time (t);
+      before_ts = gdk_frame_timings_get_frame_time (before);
+      if (ts == 0 || before_ts == 0)
+        continue;
+
+      interval = MIN (interval, ts - before_ts);
+    }
+
+  if (interval == G_MAXINT64)
+    return 0;
+
+  return interval;
+}
+
+static double
+frame_clock_get_fps (GdkFrameClock *frame_clock)
+{
+  GdkFrameTimings *start, *end;
+  gint64 start_counter, end_counter;
+  gint64 start_timestamp, end_timestamp;
+  gint64 interval;
+
+  start_counter = gdk_frame_clock_get_history_start (frame_clock);
+  end_counter = gdk_frame_clock_get_frame_counter (frame_clock);
+  start = gdk_frame_clock_get_timings (frame_clock, start_counter);
+  for (end = gdk_frame_clock_get_timings (frame_clock, end_counter);
+       end_counter > start_counter && end != NULL && !gdk_frame_timings_get_complete (end);
+       end = gdk_frame_clock_get_timings (frame_clock, end_counter))
+    end_counter--;
+  if (end_counter - start_counter < 4)
+    return 0.0;
+
+  start_timestamp = gdk_frame_timings_get_presentation_time (start);
+  end_timestamp = gdk_frame_timings_get_presentation_time (end);
+  if (start_timestamp == 0 || end_timestamp == 0)
+    {
+      start_timestamp = gdk_frame_timings_get_frame_time (start);
+      end_timestamp = gdk_frame_timings_get_frame_time (end);
+    }
+  interval = gdk_frame_timings_get_refresh_interval (end);
+  if (interval == 0)
+    {
+      interval = guess_refresh_interval (frame_clock);
+      if (interval == 0)
+        return 0.0;
+    }   
+    
+  return ((double) end_counter - start_counter) * G_USEC_PER_SEC / (end_timestamp - start_timestamp);
+}
+#endif
+
+void
+_gdk_frame_clock_add_timings_to_profiler (GdkFrameClock   *clock,
+                                          GdkFrameTimings *timings)
+{
+#ifdef G_ENABLE_DEBUG
+  gdk_profiler_add_mark (timings->frame_time * 1000,
+                         (timings->frame_end_time - timings->frame_time) * 1000,
+                         "frame", "");
+
+  if (timings->layout_start_time != 0)
+    gdk_profiler_add_mark (timings->layout_start_time * 1000,
+                           (timings->paint_start_time - timings->layout_start_time) * 1000,
+                            "layout", "");
+
+  if (timings->paint_start_time != 0)
+    gdk_profiler_add_mark (timings->paint_start_time * 1000,
+                           (timings->frame_end_time - timings->paint_start_time) * 1000,
+                            "paint", "");
+
+  if (timings->presentation_time != 0)
+    gdk_profiler_add_mark (timings->presentation_time * 1000,
+                           0,
+                           "presentation", "");
+
+  gdk_profiler_set_counter (fps_counter,
+                            timings->frame_end_time * 1000,
+                            frame_clock_get_fps (clock)); 
+#endif
 }

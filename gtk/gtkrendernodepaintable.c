@@ -43,24 +43,17 @@ gtk_render_node_paintable_paintable_snapshot (GdkPaintable *paintable,
                                               double        height)
 {
   GtkRenderNodePaintable *self = GTK_RENDER_NODE_PAINTABLE (paintable);
-  gboolean needs_transform;
 
-  needs_transform = self->bounds.size.width != width ||
-                    self->bounds.size.height != height;
+  if (self->bounds.size.width <= 0 ||
+      self->bounds.size.height <= 0)
+    return;
 
-  if (needs_transform)
-    {
-      graphene_matrix_t transform;
+  gtk_snapshot_save (snapshot);
 
-      graphene_matrix_init_scale (&transform,
-                                  width / (self->bounds.size.width),
-                                  height / (self->bounds.size.height),
-                                  1.0);
-      gtk_snapshot_push_transform (snapshot,
-                                   &transform);
-    }
-
-  gtk_snapshot_offset (snapshot, -self->bounds.origin.x, -self->bounds.origin.y);
+  gtk_snapshot_scale (snapshot,
+                      width / (self->bounds.size.width),
+                      height / (self->bounds.size.height));
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-self->bounds.origin.x, -self->bounds.origin.y));
 
   gtk_snapshot_push_clip (snapshot, &self->bounds);
 
@@ -69,10 +62,7 @@ gtk_render_node_paintable_paintable_snapshot (GdkPaintable *paintable,
 
   gtk_snapshot_pop (snapshot);
 
-  gtk_snapshot_offset (snapshot, self->bounds.origin.x, self->bounds.origin.y);
-
-  if (needs_transform)
-    gtk_snapshot_pop (snapshot);
+  gtk_snapshot_restore (snapshot);
 }
 
 static GdkPaintableFlags

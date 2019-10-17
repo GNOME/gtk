@@ -35,110 +35,24 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
+#include <gtk/gtktypes.h>
 
 G_BEGIN_DECLS
 
 typedef struct _GtkBindingSet    GtkBindingSet;
-typedef struct _GtkBindingEntry  GtkBindingEntry;
-typedef struct _GtkBindingSignal GtkBindingSignal;
-typedef struct _GtkBindingArg    GtkBindingArg;
 
 /**
- * GtkBindingSet:
- * @set_name: unique name of this binding set
- * @priority: unused
- * @widget_path_pspecs: unused
- * @widget_class_pspecs: unused
- * @class_branch_pspecs: unused
- * @entries: the key binding entries in this binding set
- * @current: implementation detail
- * @parsed: whether this binding set stems from a CSS file and is reset upon theme changes
+ * GtkBindingCallback:
+ * @widget: The object to invoke the callback on
+ * @args: (allow-none): The arguments or %NULL if none
+ * @user_data: The user data passed when registering the callback
  *
- * A binding set maintains a list of activatable key bindings.
- * A single binding set can match multiple types of widgets.
- * Similar to style contexts, can be matched by any information contained
- * in a widgets #GtkWidgetPath. When a binding within a set is matched upon
- * activation, an action signal is emitted on the target widget to carry out
- * the actual activation.
+ * Prototype of the callback function registered with
+ * gtk_binding_entry_add_callback.
  */
-struct _GtkBindingSet
-{
-  gchar           *set_name;
-  gint             priority;
-  GSList          *widget_path_pspecs;
-  GSList          *widget_class_pspecs;
-  GSList          *class_branch_pspecs;
-  GtkBindingEntry *entries;
-  GtkBindingEntry *current;
-  guint            parsed : 1;
-};
-
-/**
- * GtkBindingEntry:
- * @keyval: key value to match
- * @modifiers: key modifiers to match
- * @binding_set: binding set this entry belongs to
- * @destroyed: implementation detail
- * @in_emission: implementation detail
- * @marks_unbound: implementation detail
- * @set_next: linked list of entries maintained by binding set
- * @hash_next: implementation detail
- * @signals: action signals of this entry
- *
- * Each key binding element of a binding sets binding list is
- * represented by a GtkBindingEntry.
- */
-struct _GtkBindingEntry
-{
-  /* key portion */
-  guint             keyval;
-  GdkModifierType   modifiers;
-
-  GtkBindingSet    *binding_set;
-  guint             destroyed     : 1;
-  guint             in_emission   : 1;
-  guint             marks_unbound : 1;
-  GtkBindingEntry  *set_next;
-  GtkBindingEntry  *hash_next;
-  GtkBindingSignal *signals;
-};
-
-/**
- * GtkBindingArg:
- * @arg_type: implementation detail
- *
- * A #GtkBindingArg holds the data associated with
- * an argument for a key binding signal emission as
- * stored in #GtkBindingSignal.
- */
-struct _GtkBindingArg
-{
-  GType      arg_type;
-  union {
-    glong    long_data;
-    gdouble  double_data;
-    gchar   *string_data;
-  } d;
-};
-
-/**
- * GtkBindingSignal:
- * @next: implementation detail
- * @signal_name: the action signal to be emitted
- * @n_args: number of arguments specified for the signal
- * @args: (array length=n_args): the arguments specified for the signal
- *
- * A GtkBindingSignal stores the necessary information to
- * activate a widget in response to a key press via a signal
- * emission.
- */
-struct _GtkBindingSignal
-{
-  GtkBindingSignal *next;
-  gchar            *signal_name;
-  guint             n_args;
-  GtkBindingArg    *args;
-};
+typedef void   (* GtkBindingCallback)        (GtkWidget           *widget,
+                                              GVariant            *args,
+                                              gpointer             user_data);
 
 GDK_AVAILABLE_IN_ALL
 GtkBindingSet *gtk_binding_set_new           (const gchar         *set_name);
@@ -171,17 +85,34 @@ void           gtk_binding_entry_add_signal  (GtkBindingSet       *binding_set,
                                               const gchar         *signal_name,
                                               guint                n_args,
                                               ...);
-GDK_AVAILABLE_IN_ALL
-void           gtk_binding_entry_add_signall (GtkBindingSet       *binding_set,
-                                              guint                keyval,
-                                              GdkModifierType      modifiers,
-                                              const gchar         *signal_name,
-                                              GSList              *binding_args);
 
 GDK_AVAILABLE_IN_ALL
 GTokenType     gtk_binding_entry_add_signal_from_string
                                              (GtkBindingSet       *binding_set,
                                               const gchar         *signal_desc);
+GDK_AVAILABLE_IN_ALL
+void           gtk_binding_entry_add_action_variant
+                                             (GtkBindingSet       *binding_set,
+                                              guint                keyval,
+                                              GdkModifierType      modifiers,
+                                              const char          *action_name,
+                                              GVariant            *args);
+GDK_AVAILABLE_IN_ALL
+void           gtk_binding_entry_add_action  (GtkBindingSet       *binding_set,
+                                              guint                keyval,
+                                              GdkModifierType      modifiers,
+                                              const char          *action_name,
+                                              const char          *format_string,
+                                              ...);
+
+GDK_AVAILABLE_IN_ALL
+void           gtk_binding_entry_add_callback(GtkBindingSet       *binding_set,
+                                              guint                keyval,
+                                              GdkModifierType      modifiers,
+                                              GtkBindingCallback   callback,
+                                              GVariant            *args,
+                                              gpointer             user_data,
+                                              GDestroyNotify       user_destroy);
 
 GDK_AVAILABLE_IN_ALL
 void           gtk_binding_entry_remove      (GtkBindingSet       *binding_set,

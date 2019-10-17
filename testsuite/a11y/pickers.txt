@@ -1,7 +1,7 @@
 window1
   "window"
   index: 0
-  state: enabled resizable sensitive showing visible
+  state: active enabled resizable sensitive showing visible
   toolkit: gtk
   window-type: normal
   <AtkComponent>
@@ -17,7 +17,7 @@ window1
     layer: widget
     alpha: 1
     button1
-      "combo box"
+      "unknown"
       parent: grid1
       index: 0
       state: enabled sensitive showing visible
@@ -25,20 +25,6 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      <AtkAction>
-      action 0 name: press
-      action 0 description: Presses the combobox
-      <AtkSelection>
-      popup_widget
-        "menu"
-        parent: button1
-        index: 0
-        state: enabled sensitive visible
-        toolkit: gtk
-        <AtkComponent>
-        layer: popup
-        alpha: 1
-        <AtkSelection>
     button2
       "unknown"
       parent: grid1

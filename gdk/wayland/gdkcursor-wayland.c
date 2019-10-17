@@ -169,14 +169,7 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
       struct wl_cursor *c;
 
       if (g_str_equal (gdk_cursor_get_name (cursor), "none"))
-        {
-          *hotspot_x = 0;
-          *hotspot_y = 0;
-          *width = 0;
-          *height = 0;
-          *scale = 1;
-          return NULL;
-        }
+        goto none;
 
       c = gdk_wayland_cursor_load_for_name (display,
                                             _gdk_wayland_display_get_scaled_cursor_theme (display, desired_scale),
@@ -249,6 +242,13 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
                                            hotspot_x, hotspot_y,
                                            width, height,
                                            scale);
+
+none:
+  *hotspot_x = 0;
+  *hotspot_y = 0;
+  *width = 0;
+  *height = 0;
+  *scale = 1;
 
   return NULL;
 }

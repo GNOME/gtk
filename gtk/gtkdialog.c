@@ -31,11 +31,10 @@
 #include "gtkdialog.h"
 #include "gtkdialogprivate.h"
 #include "gtkheaderbar.h"
-#include "gtkbbox.h"
+#include "gtkheaderbarprivate.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkbox.h"
-#include "gtkboxprivate.h"
 #include "gtkcontainerprivate.h"
 #include "gtkmain.h"
 #include "gtkintl.h"
@@ -46,6 +45,7 @@
 #include "gtksettings.h"
 #include "gtktypebuiltins.h"
 #include "gtksizegroup.h"
+#include "gtkstylecontext.h"
 
 /**
  * SECTION:gtkdialog
@@ -133,8 +133,8 @@
  * # GtkDialog as GtkBuildable
  *
  * The GtkDialog implementation of the #GtkBuildable interface exposes the
- * @vbox and @action_area as internal children with the names “vbox” and
- * “action_area”.
+ * @content_area and @action_area as internal children with the names
+ * “content_area” and “action_area”.
  *
  * GtkDialog supports a custom <action-widgets> element, which can contain
  * multiple <action-widget> elements. The “response” attribute specifies a
@@ -157,7 +157,6 @@
  *   </child>
  *   <child type="action">
  *     <object class="GtkButton" id="button_ok">
- *       <property name="can-default">True</property>
  *     </object>
  *   </child>
  *   <action-widgets>
@@ -170,9 +169,9 @@
 
 typedef struct
 {
-  GtkWidget *vbox;
   GtkWidget *headerbar;
   GtkWidget *action_area;
+  GtkWidget *content_area;
   GtkWidget *action_box;
   GtkSizeGroup *size_group;
 
@@ -199,22 +198,22 @@ static void      gtk_dialog_close                (GtkDialog    *dialog);
 static ResponseData * get_response_data          (GtkWidget    *widget,
                                                   gboolean      create);
 
-static void      gtk_dialog_buildable_interface_init     (GtkBuildableIface *iface);
-static gboolean  gtk_dialog_buildable_custom_tag_start   (GtkBuildable  *buildable,
-                                                          GtkBuilder    *builder,
-                                                          GObject       *child,
-                                                          const gchar   *tagname,
-                                                          GMarkupParser *parser,
-                                                          gpointer      *data);
-static void      gtk_dialog_buildable_custom_finished    (GtkBuildable  *buildable,
-                                                          GtkBuilder    *builder,
-                                                          GObject       *child,
-                                                          const gchar   *tagname,
-                                                          gpointer       user_data);
-static void      gtk_dialog_buildable_add_child          (GtkBuildable  *buildable,
-                                                          GtkBuilder    *builder,
-                                                          GObject       *child,
-                                                          const gchar   *type);
+static void     gtk_dialog_buildable_interface_init   (GtkBuildableIface  *iface);
+static gboolean gtk_dialog_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                                       GtkBuilder         *builder,
+                                                       GObject            *child,
+                                                       const gchar        *tagname,
+                                                       GtkBuildableParser *parser,
+                                                       gpointer           *data);
+static void     gtk_dialog_buildable_custom_finished  (GtkBuildable       *buildable,
+                                                       GtkBuilder         *builder,
+                                                       GObject            *child,
+                                                       const gchar        *tagname,
+                                                       gpointer            user_data);
+static void     gtk_dialog_buildable_add_child        (GtkBuildable       *buildable,
+                                                       GtkBuilder         *builder,
+                                                       GObject            *child,
+                                                       const gchar        *type);
 
 
 enum {
@@ -345,29 +344,6 @@ add_response_data (GtkDialog *dialog,
 }
 
 static void
-apply_response_for_header_bar (GtkDialog *dialog,
-                               GtkWidget *child,
-                               gint       response_id)
-{
-  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
-  GtkPackType pack;
-
-  g_assert (gtk_widget_get_parent (child) == priv->headerbar);
-
-  if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_HELP)
-    pack = GTK_PACK_START;
-  else
-    pack = GTK_PACK_END;
-
-  gtk_container_child_set (GTK_CONTAINER (priv->headerbar), child,
-                           "pack-type", pack,
-                           NULL);
-
-  if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_CLOSE)
-    gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (priv->headerbar), FALSE);
-}
-
-static void
 add_to_header_bar (GtkDialog *dialog,
                    GtkWidget *child,
                    gint       response_id)
@@ -375,10 +351,16 @@ add_to_header_bar (GtkDialog *dialog,
   GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
   gtk_widget_set_valign (child, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (priv->headerbar), child);
-  gtk_size_group_add_widget (priv->size_group, child);
-  apply_response_for_header_bar (dialog, child, response_id);
 
+  if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_HELP)
+    gtk_header_bar_pack_start (GTK_HEADER_BAR (priv->headerbar), child);
+  else
+    gtk_header_bar_pack_end (GTK_HEADER_BAR (priv->headerbar), child);
+
+  gtk_size_group_add_widget (priv->size_group, child);
+
+  if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_CLOSE)
+    gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (priv->headerbar), FALSE);
 }
 
 static void
@@ -389,9 +371,6 @@ apply_response_for_action_area (GtkDialog *dialog,
   GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
   g_assert (gtk_widget_get_parent (child) == priv->action_area);
-
-  if (response_id == GTK_RESPONSE_HELP)
-    gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (priv->action_area), child, TRUE);
 }
 
 static void
@@ -477,11 +456,12 @@ gtk_dialog_constructed (GObject *object)
           g_object_unref (child);
 
           if (has_default)
-            gtk_widget_grab_default (child);
+            gtk_window_set_default_widget (GTK_WINDOW (dialog), child);
         }
       g_list_free (children);
 
       update_suggested_action (dialog);
+      _gtk_header_bar_track_default_decoration (GTK_HEADER_BAR (priv->headerbar));
 
       g_signal_connect (priv->action_area, "add", G_CALLBACK (add_cb), dialog);
     }
@@ -592,9 +572,9 @@ gtk_dialog_class_init (GtkDialogClass *class)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkdialog.ui");
-  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, vbox);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, headerbar);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, action_area);
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, content_area);
   gtk_widget_class_bind_template_child_private (widget_class, GtkDialog, action_box);
 
   gtk_widget_class_set_css_name (widget_class, I_("dialog"));
@@ -727,7 +707,7 @@ gtk_dialog_close (GtkDialog *dialog)
  * Creates a new dialog box.
  *
  * Widgets should not be packed into this #GtkWindow
- * directly, but into the @vbox and @action_area, as described above.
+ * directly, but into the @content_area and @action_area, as described above.
  *
  * Returns: the new dialog as a #GtkWidget
  */
@@ -886,7 +866,7 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
 
       if (gtk_widget_has_default (child))
         {
-          gtk_widget_grab_default (child);
+          gtk_window_set_default_widget (GTK_WINDOW (dialog), child);
           update_suggested_action (dialog);
         }
     }
@@ -920,10 +900,6 @@ gtk_dialog_add_button (GtkDialog   *dialog,
 
   button = gtk_button_new_with_label (button_text);
   gtk_button_set_use_underline (GTK_BUTTON (button), TRUE);
-
-  gtk_widget_set_can_default (button, TRUE);
-
-  gtk_widget_show (button);
 
   gtk_dialog_add_action_widget (dialog, button, response_id);
 
@@ -1049,7 +1025,7 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
       ResponseData *rd = get_response_data (widget, FALSE);
 
       if (rd && rd->response_id == response_id)
-	gtk_widget_grab_default (widget);
+        gtk_window_set_default_widget (GTK_WINDOW (dialog), widget);
 
       tmp_list = tmp_list->next;
     }
@@ -1339,12 +1315,12 @@ free_action_widget_info (gpointer data)
 }
 
 static void
-parser_start_element (GMarkupParseContext *context,
-                      const gchar         *element_name,
-                      const gchar        **names,
-                      const gchar        **values,
-                      gpointer             user_data,
-                      GError             **error)
+parser_start_element (GtkBuildableParseContext *context,
+                      const gchar              *element_name,
+                      const gchar             **names,
+                      const gchar             **values,
+                      gpointer                  user_data,
+                      GError                  **error)
 {
   SubParserData *data = (SubParserData*)user_data;
 
@@ -1376,7 +1352,7 @@ parser_start_element (GMarkupParseContext *context,
       data->is_default = is_default;
       data->is_text = TRUE;
       g_string_set_size (data->string, 0);
-      g_markup_parse_context_get_position (context, &data->line, &data->col);
+      gtk_buildable_parse_context_get_position (context, &data->line, &data->col);
     }
   else if (strcmp (element_name, "action-widgets") == 0)
     {
@@ -1399,11 +1375,11 @@ parser_start_element (GMarkupParseContext *context,
 }
 
 static void
-parser_text_element (GMarkupParseContext *context,
-                     const gchar         *text,
-                     gsize                text_len,
-                     gpointer             user_data,
-                     GError             **error)
+parser_text_element (GtkBuildableParseContext *context,
+                     const gchar              *text,
+                     gsize                     text_len,
+                     gpointer                  user_data,
+                     GError                  **error)
 {
   SubParserData *data = (SubParserData*)user_data;
 
@@ -1412,10 +1388,10 @@ parser_text_element (GMarkupParseContext *context,
 }
 
 static void
-parser_end_element (GMarkupParseContext  *context,
-                    const gchar          *element_name,
-                    gpointer              user_data,
-                    GError              **error)
+parser_end_element (GtkBuildableParseContext  *context,
+                    const gchar               *element_name,
+                    gpointer                   user_data,
+                    GError                   **error)
 {
   SubParserData *data = (SubParserData*)user_data;
 
@@ -1436,7 +1412,7 @@ parser_end_element (GMarkupParseContext  *context,
     }
 }
 
-static const GMarkupParser sub_parser =
+static const GtkBuildableParser sub_parser =
   {
     parser_start_element,
     parser_end_element,
@@ -1444,12 +1420,12 @@ static const GMarkupParser sub_parser =
   };
 
 static gboolean
-gtk_dialog_buildable_custom_tag_start (GtkBuildable  *buildable,
-                                       GtkBuilder    *builder,
-                                       GObject       *child,
-                                       const gchar   *tagname,
-                                       GMarkupParser *parser,
-                                       gpointer      *parser_data)
+gtk_dialog_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                       GtkBuilder         *builder,
+                                       GObject            *child,
+                                       const gchar        *tagname,
+                                       GtkBuildableParser *parser,
+                                       gpointer           *parser_data)
 {
   SubParserData *data;
 
@@ -1537,14 +1513,19 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
         {
           apply_response_for_action_area (dialog, GTK_WIDGET (object), ad->response_id);
         }
-      else if (gtk_widget_get_parent (GTK_WIDGET (object)) == priv->headerbar)
+      else if (gtk_widget_get_ancestor (GTK_WIDGET (object), GTK_TYPE_HEADER_BAR) == priv->headerbar)
         {
           if (is_action)
-            apply_response_for_header_bar (dialog, GTK_WIDGET (object), ad->response_id);
+            {
+              g_object_ref (object);
+              gtk_container_remove (GTK_CONTAINER (priv->headerbar), GTK_WIDGET (object));
+              add_to_header_bar (dialog, GTK_WIDGET (object), ad->response_id);
+              g_object_unref (object);
+            }
         }
 
       if (item->is_default)
-        gtk_widget_grab_default (GTK_WIDGET (object));
+        gtk_window_set_default_widget (GTK_WINDOW (dialog), GTK_WIDGET (object));
     }
 
   g_slist_free_full (data->items, free_action_widget_info);
@@ -1568,6 +1549,7 @@ gtk_dialog_buildable_add_child (GtkBuildable  *buildable,
   else if (g_str_equal (type, "titlebar"))
     {
       priv->headerbar = GTK_WIDGET (child);
+      _gtk_header_bar_track_default_decoration (GTK_HEADER_BAR (priv->headerbar));
       gtk_window_set_titlebar (GTK_WINDOW (buildable), priv->headerbar);
     }
   else if (g_str_equal (type, "action"))
@@ -1621,5 +1603,5 @@ gtk_dialog_get_content_area (GtkDialog *dialog)
 
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), NULL);
 
-  return priv->vbox;
+  return priv->content_area;
 }

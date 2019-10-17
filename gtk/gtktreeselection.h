@@ -29,12 +29,7 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_TREE_SELECTION			(gtk_tree_selection_get_type ())
 #define GTK_TREE_SELECTION(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_SELECTION, GtkTreeSelection))
-#define GTK_TREE_SELECTION_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_SELECTION, GtkTreeSelectionClass))
 #define GTK_IS_TREE_SELECTION(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TREE_SELECTION))
-#define GTK_IS_TREE_SELECTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE_SELECTION))
-#define GTK_TREE_SELECTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TREE_SELECTION, GtkTreeSelectionClass))
-
-typedef struct _GtkTreeSelectionPrivate      GtkTreeSelectionPrivate;
 
 /**
  * GtkTreeSelectionFunc:
@@ -71,36 +66,6 @@ typedef void (* GtkTreeSelectionForeachFunc) (GtkTreeModel      *model,
 					      GtkTreePath       *path,
 					      GtkTreeIter       *iter,
 					      gpointer           data);
-
-struct _GtkTreeSelection
-{
-  /*< private >*/
-  GObject parent;
-
-  GtkTreeSelectionPrivate *priv;
-};
-
-/**
- * GtkTreeSelectionClass:
- * @parent_class: The parent class.
- * @changed: Signal emitted whenever the selection has (possibly) changed.
- */
-struct _GtkTreeSelectionClass
-{
-  GObjectClass parent_class;
-
-  /*< public >*/
-
-  void (* changed) (GtkTreeSelection *selection);
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 
 GDK_AVAILABLE_IN_ALL

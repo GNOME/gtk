@@ -66,6 +66,8 @@
 #include "gtkdebug.h"
 #include "gtktextmarkprivate.h"
 #include "gtktextsegment.h"
+#include "gtkpango.h"
+#include "gdk-private.h"
 
 /*
  * Types
@@ -595,8 +597,7 @@ gtk_text_btree_resolve_bidi (GtkTextIter *start,
             {
 	      PangoDirection pango_dir;
 
-              pango_dir = pango_find_base_dir (seg->body.chars,
-					       seg->byte_count);
+              pango_dir = gdk_find_base_dir (seg->body.chars, seg->byte_count);
 	      
               if (pango_dir != PANGO_DIRECTION_NEUTRAL)
                 {

@@ -23,6 +23,8 @@
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
+#include "gtksnapshot.h"
+#include "gdk/gdkrgbaprivate.h"
 
 /**
  * SECTION:gtkcolorchooser
@@ -222,23 +224,18 @@ gtk_color_chooser_add_palette (GtkColorChooser *chooser,
     GTK_COLOR_CHOOSER_GET_IFACE (chooser)->add_palette (chooser, orientation, colors_per_line, n_colors, colors);
 }
 
-cairo_pattern_t *
-_gtk_color_chooser_get_checkered_pattern (void)
+void
+_gtk_color_chooser_snapshot_checkered_pattern (GtkSnapshot *snapshot,
+                                               int          width,
+                                               int          height)
 {
-  /* need to respect pixman's stride being a multiple of 4 */
-  static unsigned char data[8] = { 0xFF, 0x00, 0x00, 0x00,
-                                   0x00, 0xFF, 0x00, 0x00 };
-  static cairo_surface_t *checkered = NULL;
-  cairo_pattern_t *pattern;
+  const GdkRGBA color1 = GDK_RGBA("A8A8A8");
+  const GdkRGBA color2 = GDK_RGBA("545445");
 
-  if (checkered == NULL)
-    checkered = cairo_image_surface_create_for_data (data,
-                                                     CAIRO_FORMAT_A8,
-                                                     2, 2, 4);
-
-  pattern = cairo_pattern_create_for_surface (checkered);
-  cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-  cairo_pattern_set_filter (pattern, CAIRO_FILTER_NEAREST);
-
-  return pattern;
+  gtk_snapshot_push_repeat (snapshot, &GRAPHENE_RECT_INIT (0, 0, width, height), NULL);
+  gtk_snapshot_append_color (snapshot, &color1, &GRAPHENE_RECT_INIT (0,  0,  10, 10));
+  gtk_snapshot_append_color (snapshot, &color2, &GRAPHENE_RECT_INIT (10, 0,  10, 10));
+  gtk_snapshot_append_color (snapshot, &color2, &GRAPHENE_RECT_INIT (0,  10, 10, 10));
+  gtk_snapshot_append_color (snapshot, &color1, &GRAPHENE_RECT_INIT (10, 10, 10, 10));
+  gtk_snapshot_pop (snapshot);
 }

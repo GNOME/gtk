@@ -12,7 +12,7 @@
 <refnamediv>
 <refname>Common Questions</refname>
 <refpurpose>
-Find answers to common questions in the GTK+ manual
+Find answers to common questions in the GTK manual
 </refpurpose>
 </refnamediv>
 
@@ -31,13 +31,13 @@ the question you have, this list is a good place to start.
 
 <qandaentry>
 <question><para>
-How do I get started with GTK+?
+How do I get started with GTK?
 </para></question>
 
 <answer><para>
-The GTK+ <ulink url="https://www.gtk.org">website</ulink> offers some
+The GTK <ulink url="https://www.gtk.org">website</ulink> offers some
 <ulink url="https://www.gtk.org/documentation.php">tutorials</ulink> and other
-documentation (most of it about GTK+ 2.x, but mostly still applicable).
+documentation (most of it about GTK 2.x, but mostly still applicable).
 More documentation ranging from whitepapers to online books can be found at
 the <ulink url="https://developer.gnome.org">GNOME developer's site</ulink>.
 After studying these materials you should be well prepared to come back to
@@ -47,8 +47,7 @@ this reference manual for details.
 
 <qandaentry>
 <question><para>
-Where can I get help with GTK+, submit a bug report, or make a feature
-request?
+Where can I get help with GTK, submit a bug report, or make a feature request?
 </para></question>
 
 <answer>
@@ -63,13 +62,14 @@ See the <link linkend="gtk-resources">documentation on this topic</link>.
 
 
 <qandaentry>
-<question><para>How do I port from one GTK+
-version to another?</para></question>
+<question><para>
+How do I port from one GTK version to another?
+</para></question>
 
 <answer>
 
 <para>
-See <xref linkend="gtk-migrating-2-to-3"/>.
+See <xref linkend="migrating"/>.
 You may also find useful information in the documentation for
 specific widgets and functions.
 </para>
@@ -77,8 +77,8 @@ specific widgets and functions.
 <para>
 If you have a question not covered in the manual, feel free to
 ask on the mailing lists and please <ulink
-url="https://bugzilla.gnome.org">file a bug report</ulink> against the
-documentation.
+url="https://gitlab.gnome.org/GNOME/gtk/issues/new">file a bug report</ulink>
+against the documentation.
 </para>
 
 </answer>
@@ -88,8 +88,7 @@ documentation.
 
 <qandaentry>
 <question><para>
-How does memory management work in GTK+? Should I free data returned
-from functions?
+How does memory management work in GTK? Should I free data returned from functions?
 </para></question>
 
 <answer>
@@ -105,8 +104,8 @@ state (explained in its documentation).
 For strings returned from functions, they will be declared "const"
 if they should not be freed. Non-const strings should be
 freed with g_free(). Arrays follow the same rule. If you find an
-undocumented exception to the rules, please report a bug to <ulink
-url="https://bugzilla.gnome.org">https://bugzilla.gnome.org</ulink>.
+undocumented exception to the rules, please
+<ulink url="https://gitlab.gnome.org/GNOME/gtk/issues/new">file a bug report</ulink>.
 </para>
 
 </answer>
@@ -135,7 +134,7 @@ reference counting, not floating reference counting.
 
 <para>
 To get this, you must acquire a reference to the widget and drop the
-floating reference (<quote>ref and sink</quote> in GTK+ parlance) after
+floating reference (<quote>ref and sink</quote> in GTK parlance) after
 creating it:
 <informalexample><programlisting>
  foo = gtk_foo_new (<!-- -->);
@@ -158,7 +157,7 @@ to get rid of the widget.
 
 <qandaentry>
 <question><para>
-How do I use GTK+ with threads?
+How do I use GTK with threads?
 </para></question>
 
 <answer>
@@ -175,7 +174,7 @@ documentation for portable threading primitives.
 
 <qandaentry>
 <question><para>
-How do I internationalize a GTK+ program?
+How do I internationalize a GTK program?
 </para></question>
 
 <answer>
@@ -257,13 +256,13 @@ the following convenience:
 <qandaentry>
 <question>
 <para>
-How do I use non-ASCII characters in GTK+ programs ?
+How do I use non-ASCII characters in GTK programs ?
 </para>
 </question>
 
 <answer>
 <para>
-GTK+ uses <ulink url="http://www.unicode.org">Unicode</ulink> (more exactly
+GTK uses <ulink url="http://www.unicode.org">Unicode</ulink> (more exactly
 UTF-8) for all text. UTF-8 encodes each Unicode codepoint as a sequence of
 one to six bytes and has a number of nice properties which make it a good
 choice for working with Unicode text in C programs:
@@ -288,7 +287,7 @@ encodings, see g_locale_to_utf8() and g_convert().
 </para>
 <para>
 Text coming from external sources (e.g. files or user input), has to be
-converted to UTF-8 before being handed over to GTK+. The following example
+converted to UTF-8 before being handed over to GTK. The following example
 writes the content of a IS0-8859-1 encoded text file to
 <literal>stdout</literal>:
 <informalexample><programlisting>
@@ -368,24 +367,24 @@ returned in UTF-8 encoding.
 
 <qandaentry>
 <question><para>
-How do I use GTK+ with C++?
+How do I use GTK with C++?
 </para></question>
 
 <answer>
 <para>
-There are two ways to approach this. The GTK+ header files use the subset
-of C that's also valid C++, so you can simply use the normal GTK+ API
+There are two ways to approach this. The GTK header files use the subset
+of C that's also valid C++, so you can simply use the normal GTK API
 in a C++ program. Alternatively, you can use a "C++ binding"
 such as <ulink url="https://www.gtkmm.org/">gtkmm</ulink>
 which provides a native C++ API.
 </para>
 <para>
-When using GTK+ directly, keep in mind that only functions can be
+When using GTK directly, keep in mind that only functions can be
 connected to signals, not methods. So you will need to use global
 functions or "static" class functions for signal connections.
 </para>
 <para>
-Another common issue when using GTK+ directly is that
+Another common issue when using GTK directly is that
 C++ will not implicitly convert an integer to an enumeration.
 This comes up when using bitfields; in C you can write the following
 code:
@@ -410,7 +409,7 @@ There are very few functions that require this cast, however.
 
 <qandaentry>
 <question><para>
-How do I use GTK+ with other non-C languages?
+How do I use GTK with other non-C languages?
 </para></question>
 
 <answer>
@@ -528,10 +527,9 @@ the call away if it appears that the value is not being used.
 </para>
 
 <para>
-A common workaround for this problem is to store the result in a volatile
-variable, which keeps the compiler from optimizing the call away.
+GLib provides the g_type_ensure() function to work around this problem.
 <informalexample><programlisting>
-volatile GType dummy = GTK_TYPE_BLAH;
+  g_type_ensure (GTK_TYPE_BLAH);
 </programlisting></informalexample>
 </para>
 </answer>
@@ -546,32 +544,9 @@ How do I create a transparent toplevel window ?
 
 <answer>
 <para>
-To make a window transparent, it needs to use a visual which supports that.
-This is done by getting the RGBA visual of the screen with
-gdk_screen_get_rgba_visual() and setting it on the window. Note that
-gdk_screen_get_rgba_visual() will return %NULL if transparent windows
-are not supported on the screen, you should fall back to
-gdk_screen_get_system_visual() in that case. Additionally, note that this
-will change from screen to screen, so it needs to be repeated whenever the
-window is moved to a different screen.
-<informalexample><programlisting>
-GdkVisual *visual;
-
-visual = gdk_screen_get_rgba_visual (screen);
-if (visual == NULL)
-  visual = gdk_screen_get_system_visual (screen);
-
-gtk_widget_set_visual (GTK_WIDGET (window), visual);
-</programlisting></informalexample>
-To fill the alpha channel on the window simply use cairos
-RGBA drawing capabilities.
-</para>
-<para>
-Note that the presence of an RGBA visual is no guarantee that the
-window will actually appear transparent on screen. On X11, this
-requires a compositing manager to be running. See
-gdk_display_is_composited() for a way to find out if the alpha
-channel will be respected.
+Any toplevel window can be transparent.
+It is just a matter of setting a transparent background
+in the CSS style for it.
 </para>
 </answer>
 </qandaentry>
@@ -587,9 +562,19 @@ channel will be respected.
 
 <answer>
 <para>
-See <link linkend="TreeWidget">tree widget overview</link> &mdash; you
-should use the #GtkTreeView widget. (A list is just a tree with no branches,
-so the tree widget is used for lists as well).
+This question has different answers, depending on the size of the dataset
+and the required formatting flexibility.
+</para>
+<para>
+If you want to display a large amount of data in a uniform way, your
+best option is a #GtkTreeView widget. See <link linkend="TreeWidget">tree
+widget overview</link>. A list is just a tree with no branches, so the treeview
+widget is used for lists as well.
+</para>
+<para>
+If you want to display a small amount of items, but need flexible formatting
+and widgetry inside the list, then you probably want to use a #GtkListBox,
+which uses regular widgets for display.
 </para>
 </answer>
 </qandaentry>
@@ -620,7 +605,11 @@ single-line text entry, see #GtkEntry.
 
 <answer>
 <para>
-#GtkImage can display images in just about any format GTK+ understands.
+GTK has two widgets that are dedicated to displaying images. #GtkImage, for
+small, fixed-size icons and #GtkPicture for content images.
+</para>
+<para>
+Both can display images in just about any format GTK understands.
 You can also use #GtkDrawingArea if you need to do something more complex,
 such as draw text or graphics over the top of the image.
 </para>
@@ -635,7 +624,7 @@ would use a combo box?
 
 <answer>
 <para>
-With GTK+, a #GtkComboBox is the recommended widget to use for this use case.
+With GTK, a #GtkComboBox is the recommended widget to use for this use case.
 This widget looks like either a combo box or the current option menu, depending
 on the current theme. If you need an editable text entry, use the
 #GtkComboBox:has-entry property.
@@ -653,9 +642,10 @@ How do I change the color of a widget?
 </para></question>
 
 <answer><para>
-See gtk_widget_override_color() and gtk_widget_override_background_color().
-You can also change the appearance of a widget by installing a
-custom style provider, see gtk_style_context_add_provider().
+The background color of a widget is determined by the CSS style that applies
+to it. To change that, you can set style classes on the widget, and provide
+custom CSS to change the appearance. Such CSS can be loaded with
+gtk_css_provider_load_from_file() and its variants. See gtk_style_context_add_provider().
 </para></answer>
 </qandaentry>
 
@@ -665,16 +655,6 @@ How do I change the font of a widget?
 </para></question>
 
 <answer><para>
-This has several possible answers, depending on what exactly you want to
-achieve. One option is gtk_widget_override_font().
-<informalexample><programlisting>
- PangoFontDesc *font_desc = pango_font_description_new (<!-- -->);
- pango_font_description_set_size (font_desc, 40);
- gtk_widget_override_font (widget, font);
- pango_font_description_free (font_desc);
-</programlisting></informalexample>
-</para>
-<para>
 If you want to make the text of a label larger, you can use
 gtk_label_set_markup():
 <informalexample><programlisting>
@@ -707,7 +687,7 @@ How do I disable/ghost/desensitize a widget?
 </para></question>
 
 <answer><para>
-In GTK+ a disabled widget is termed "insensitive."
+In GTK a disabled widget is termed "insensitive."
 See gtk_widget_set_sensitive().
 </para></answer>
 </qandaentry>
@@ -931,40 +911,36 @@ See gtk_tree_view_set_expander_column() and gtk_tree_view_column_set_visible().
 
 </qandadiv>
 
-<qandadiv><title>Using cairo with GTK+</title>
+<qandadiv><title>Using cairo with GTK</title>
 
 <qandaentry>
 <question><para>
-How do I use cairo to draw in GTK+ applications ?
+How do I use cairo to draw in GTK applications ?
 </para></question>
 
 <answer><para>
-The #GtkWidget::draw signal gets a ready-to-use cairo context
-as parameter that you should use.
-</para>
-<para>
-All drawing in GTK+ is normally done in a draw handler, and GTK+
-creates a temporary pixmap for double-buffering the drawing.
-It is possible to turn off double-buffering, with
-gtk_widget_set_double_buffered(), but this is not ideal,
-since it can cause some flickering.
+Use gtk_snapshot_append_cairo() in your #GtkWidget::snapshot signal handler
+to optain a cairo context and draw with that.
 </para>
 </answer>
 </qandaentry>
 
 <qandaentry>
 <question><para>
-Can I improve the performance of my application by using the
-Glitz or GL backend of cairo ?
+Can I improve the performance of my application by using another backend
+of cairo (such as GL) ?
 </para></question>
 
 <answer><para>
-No. The GDK X11 backend uses the cairo X backend (and the other
-GDK backends use their respective native cairo backends). The
-GTK+ developers believe that the best way to improving the GDK
-drawing performance is to optimize the cairo X backend and the
-relevant code paths in the X server that is uses (mostly the
-Render extension).
+No. Most drawing in GTK is not done via cairo anymore (but instead
+by the GL or Vulkan renderers of GSK).
+</para>
+<para>
+If you use cairo for drawing your own widgets, gtk_snapshot_append_cairo()
+will choose the most appropriate surface type for you.
+</para>
+<para>
+If you are interested in using GL for your own drawing, see #GtkGLArea.
 </para></answer>
 </qandaentry>
 
@@ -974,8 +950,11 @@ Can I use cairo to draw on a #GdkPixbuf ?
 </para></question>
 
 <answer><para>
-No, at least not yet. The cairo image surface does not support the
-pixel format used by GdkPixbuf.
+No. The cairo image surface does not support the pixel format used by GdkPixbuf.
+</para>
+<para>
+If you need to get cairo drawing into a format that can be displayed efficiently
+by GTK, you may want to use an image surface and gdk_memory_texture_new().
 </para></answer>
 </qandaentry>
 

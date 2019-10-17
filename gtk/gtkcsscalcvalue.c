@@ -316,24 +316,34 @@ static GtkCssValue *
 gtk_css_calc_value_parse_value (GtkCssParser           *parser,
                                 GtkCssNumberParseFlags  flags)
 {
-  if (_gtk_css_parser_has_prefix (parser, "calc"))
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_OPEN_PARENS))
     {
-      _gtk_css_parser_error (parser, "Nested calc() expressions are not allowed.");
-      return NULL;
-    }
+      GtkCssValue *result;
 
-  if (_gtk_css_parser_try (parser, "(", TRUE))
-    {
-      GtkCssValue *result = gtk_css_calc_value_parse_sum (parser, flags);
+      gtk_css_parser_start_block (parser);
+
+      result = gtk_css_calc_value_parse_sum (parser, flags);
       if (result == NULL)
-        return NULL;
-
-      if (!_gtk_css_parser_try (parser, ")", TRUE))
         {
-          _gtk_css_parser_error (parser, "Missing closing ')' in calc() subterm");
-          _gtk_css_value_unref (result);
+          gtk_css_parser_end_block (parser);
           return NULL;
         }
+
+      if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+        {
+          GtkCssLocation start = *gtk_css_parser_get_start_location (parser);
+          gtk_css_parser_skip_until (parser, GTK_CSS_TOKEN_EOF);
+          gtk_css_parser_error (parser,
+                                GTK_CSS_PARSER_ERROR_SYNTAX,
+                                &start,
+                                gtk_css_parser_get_start_location (parser),
+                                "Expected closing ')' in calc() subterm");
+          gtk_css_value_unref (result);
+          gtk_css_parser_end_block (parser);
+          return NULL;
+        }
+
+      gtk_css_parser_end_block (parser);
 
       return result;
     }
@@ -354,19 +364,21 @@ gtk_css_calc_value_parse_product (GtkCssParser           *parser,
 {
   GtkCssValue *result, *value, *temp;
   GtkCssNumberParseFlags actual_flags;
+  GtkCssLocation start;
 
   actual_flags = flags | GTK_CSS_PARSE_NUMBER;
-
+  gtk_css_parser_get_token (parser);
+  start = *gtk_css_parser_get_start_location (parser);
   result = gtk_css_calc_value_parse_value (parser, actual_flags);
   if (result == NULL)
     return NULL;
 
-  while (_gtk_css_parser_begins_with (parser, '*') || _gtk_css_parser_begins_with (parser, '/'))
+  while (TRUE)
     {
       if (actual_flags != GTK_CSS_PARSE_NUMBER && !is_number (result))
         actual_flags = GTK_CSS_PARSE_NUMBER;
 
-      if (_gtk_css_parser_try (parser, "*", TRUE))
+      if (gtk_css_parser_try_delim (parser, '*'))
         {
           value = gtk_css_calc_value_parse_product (parser, actual_flags);
           if (value == NULL)
@@ -379,7 +391,7 @@ gtk_css_calc_value_parse_product (GtkCssParser           *parser,
           _gtk_css_value_unref (result);
           result = temp;
         }
-      else if (_gtk_css_parser_try (parser, "/", TRUE))
+      else if (gtk_css_parser_try_delim (parser, '/'))
         {
           value = gtk_css_calc_value_parse_product (parser, GTK_CSS_PARSE_NUMBER);
           if (value == NULL)
@@ -391,14 +403,17 @@ gtk_css_calc_value_parse_product (GtkCssParser           *parser,
         }
       else
         {
-          g_assert_not_reached ();
-          goto fail;
+          break;
         }
     }
 
   if (is_number (result) && !(flags & GTK_CSS_PARSE_NUMBER))
     {
-      _gtk_css_parser_error (parser, "calc() product term has no units");
+      gtk_css_parser_error (parser,
+                            GTK_CSS_PARSER_ERROR_SYNTAX,
+                            &start,
+                            gtk_css_parser_get_start_location (parser),
+                            "calc() product term has no units");
       goto fail;
     }
 
@@ -419,17 +434,17 @@ gtk_css_calc_value_parse_sum (GtkCssParser           *parser,
   if (result == NULL)
     return NULL;
 
-  while (_gtk_css_parser_begins_with (parser, '+') || _gtk_css_parser_begins_with (parser, '-'))
+  while (TRUE)
     {
       GtkCssValue *next, *temp;
 
-      if (_gtk_css_parser_try (parser, "+", TRUE))
+      if (gtk_css_parser_try_delim (parser, '+'))
         {
           next = gtk_css_calc_value_parse_product (parser, flags);
           if (next == NULL)
             goto fail;
         }
-      else if (_gtk_css_parser_try (parser, "-", TRUE))
+      else if (gtk_css_parser_try_delim (parser, '-'))
         {
           temp = gtk_css_calc_value_parse_product (parser, flags);
           if (temp == NULL)
@@ -439,8 +454,7 @@ gtk_css_calc_value_parse_sum (GtkCssParser           *parser,
         }
       else
         {
-          g_assert_not_reached ();
-          goto fail;
+          break;
         }
 
       temp = gtk_css_number_value_add (result, next);
@@ -456,32 +470,45 @@ fail:
   return NULL;
 }
 
+typedef struct
+{
+  GtkCssNumberParseFlags flags;
+  GtkCssValue *value;
+} ParseCalcData;
+
+static guint
+gtk_css_calc_value_parse_arg (GtkCssParser *parser,
+                              guint         arg,
+                              gpointer      data_)
+{
+  ParseCalcData *data = data_;
+
+  data->value = gtk_css_calc_value_parse_sum (parser, data->flags);
+  if (data->value == NULL)
+    return 0;
+
+  return 1;
+}
+
 GtkCssValue *
 gtk_css_calc_value_parse (GtkCssParser           *parser,
                           GtkCssNumberParseFlags  flags)
 {
-  GtkCssValue *value;
+  ParseCalcData data;
 
   /* This can only be handled at compute time, we allow '-' after all */
-  flags &= ~GTK_CSS_POSITIVE_ONLY;
+  data.flags = flags & ~GTK_CSS_POSITIVE_ONLY;
+  data.value = NULL;
 
-  if (!_gtk_css_parser_try (parser, "calc(", TRUE))
+  if (!gtk_css_parser_has_function (parser, "calc"))
     {
-      _gtk_css_parser_error (parser, "Expected 'calc('");
+      gtk_css_parser_error_syntax (parser, "Expected 'calc('");
       return NULL;
     }
 
-  value = gtk_css_calc_value_parse_sum (parser, flags);
-  if (value == NULL)
+  if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_calc_value_parse_arg, &data))
     return NULL;
 
-  if (!_gtk_css_parser_try (parser, ")", TRUE))
-    {
-      _gtk_css_value_unref (value);
-      _gtk_css_parser_error (parser, "Expected ')' after calc() statement");
-      return NULL;
-    }
-
-  return value;
+  return data.value;
 }
 

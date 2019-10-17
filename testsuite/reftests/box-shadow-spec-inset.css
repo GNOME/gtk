@@ -9,7 +9,7 @@
 }
 
 .column1 {
-  /* border-radius: 20px */;
+  /* border-radius: 20px; */
 }
 
 .column2 {
@@ -20,7 +20,7 @@
   box-shadow:
     rgba(0,0,0,1)
     15px 15px
-    inset
+    inset;
 }
 
 .row3 {
@@ -28,7 +28,7 @@
     rgba(0,0,0,1)
     15px 15px 0
     10px /*spread*/
-    inset
+    inset;
 }
 
 .reference-border {

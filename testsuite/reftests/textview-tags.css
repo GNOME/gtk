@@ -1,6 +1,6 @@
 @import "reset-to-defaults.css";
 
-GtkTextView {
+textview {
   color: yellow;
   background-color: yellow;
 }

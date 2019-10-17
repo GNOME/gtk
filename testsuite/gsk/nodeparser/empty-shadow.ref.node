@@ -1,0 +1,7 @@
+shadow {
+  child: color {
+    bounds: 0 0 50 50;
+    color: rgb(255,0,204);
+  }
+  shadows: rgb(0,0,0) 1 1;
+}

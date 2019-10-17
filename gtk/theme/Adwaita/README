@@ -34,4 +34,4 @@ _common.scss        - actual definitions of style for each widget. This is
                       where you are likely to add/remove your changes.
                       
 You can read about SASS at http://sass-lang.com/documentation/. Once you make
-your changes to the _common.scss file, GTK+ will rebuild the CSS files.
+your changes to the _common.scss file, GTK will rebuild the CSS files.

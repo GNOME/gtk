@@ -30,32 +30,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_ACTION_BAR            (gtk_action_bar_get_type ())
 #define GTK_ACTION_BAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ACTION_BAR, GtkActionBar))
-#define GTK_ACTION_BAR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ACTION_BAR, GtkActionBarClass))
 #define GTK_IS_ACTION_BAR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ACTION_BAR))
-#define GTK_IS_ACTION_BAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ACTION_BAR))
-#define GTK_ACTION_BAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ACTION_BAR, GtkActionBarClass))
 
 typedef struct _GtkActionBar              GtkActionBar;
-typedef struct _GtkActionBarPrivate       GtkActionBarPrivate;
-typedef struct _GtkActionBarClass         GtkActionBarClass;
-
-struct _GtkActionBar
-{
-  /*< private >*/
-  GtkContainer container;
-};
-
-struct _GtkActionBarClass
-{
-  /*< private >*/
-  GtkContainerClass parent_class;
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType        gtk_action_bar_get_type          (void) G_GNUC_CONST;

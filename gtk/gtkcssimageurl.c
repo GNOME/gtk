@@ -27,6 +27,8 @@
 #include "gtkcssimagepaintableprivate.h"
 #include "gtkstyleproviderprivate.h"
 
+#include "gtk/css/gtkcssdataurlprivate.h"
+
 G_DEFINE_TYPE (GtkCssImageUrl, _gtk_css_image_url, GTK_TYPE_CSS_IMAGE)
 
 static GtkCssImage *
@@ -65,8 +67,8 @@ gtk_css_image_url_load_image (GtkCssImageUrl  *url,
 
           uri = g_file_get_uri (url->file);
           g_set_error (error,
-                       GTK_CSS_PROVIDER_ERROR,
-                       GTK_CSS_PROVIDER_ERROR_FAILED,
+                       GTK_CSS_PARSER_ERROR,
+                       GTK_CSS_PARSER_ERROR_FAILED,
                        "Error loading image '%s': %s", uri, local_error->message);
           g_free (uri);
        }
@@ -163,11 +165,51 @@ static gboolean
 gtk_css_image_url_parse (GtkCssImage  *image,
                          GtkCssParser *parser)
 {
-  GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
+  GtkCssImageUrl *self = GTK_CSS_IMAGE_URL (image);
+  char *url, *scheme;
 
-  url->file = _gtk_css_parser_read_url (parser);
-  if (url->file == NULL)
+  url = gtk_css_parser_consume_url (parser);
+  if (url == NULL)
     return FALSE;
+
+  scheme = g_uri_parse_scheme (url);
+  if (scheme && g_ascii_strcasecmp (scheme, "data") == 0)
+    {
+      GInputStream *stream;
+      GdkPixbuf *pixbuf;
+      GBytes *bytes;
+      GError *error = NULL;
+
+      bytes = gtk_css_data_url_parse (url, NULL, &error);
+      if (bytes)
+        {
+          stream = g_memory_input_stream_new_from_bytes (bytes);
+          pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, &error);
+          g_object_unref (stream);
+          if (pixbuf == NULL)
+            {
+              gtk_css_parser_emit_error (parser,
+                                         gtk_css_parser_get_start_location (parser),
+                                         gtk_css_parser_get_end_location (parser),
+                                         error);
+              g_clear_error (&error);
+            }
+          else
+            {
+              GdkTexture *texture = gdk_texture_new_for_pixbuf (pixbuf);
+              self->loaded_image = gtk_css_image_paintable_new (GDK_PAINTABLE (texture), GDK_PAINTABLE (texture));
+              g_object_unref (texture);
+              g_object_unref (pixbuf);
+            }
+        }
+    }
+  else
+    {
+      self->file = gtk_css_parser_resolve_url (parser, url);
+    }
+
+  g_free (url);
+  g_free (scheme);
 
   return TRUE;
 }

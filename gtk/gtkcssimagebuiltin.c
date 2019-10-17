@@ -457,9 +457,9 @@ static gboolean
 gtk_css_image_builtin_parse (GtkCssImage  *image,
                              GtkCssParser *parser)
 {
-  if (!_gtk_css_parser_try (parser, "builtin", TRUE))
+  if (!gtk_css_parser_try_ident (parser, "builtin"))
     {
-      _gtk_css_parser_error (parser, "Expected 'builtin'");
+      gtk_css_parser_error_syntax (parser, "Expected 'builtin'");
       return FALSE;
     }
 
@@ -494,8 +494,8 @@ static gboolean
 gtk_css_image_builtin_equal (GtkCssImage *image1,
                              GtkCssImage *image2)
 {
-  GtkCssImageBuiltin *builtin1 = GTK_CSS_IMAGE_BUILTIN (image1);
-  GtkCssImageBuiltin *builtin2 = GTK_CSS_IMAGE_BUILTIN (image2);
+  GtkCssImageBuiltin *builtin1 = (GtkCssImageBuiltin *) image1;
+  GtkCssImageBuiltin *builtin2 = (GtkCssImageBuiltin *) image2;
 
   return gdk_rgba_equal (&builtin1->fg_color, &builtin2->fg_color)
       && gdk_rgba_equal (&builtin1->bg_color, &builtin2->bg_color);
@@ -649,8 +649,6 @@ gtk_css_image_builtin_snapshot (GtkCssImage            *image,
                                 double                  height,
                                 GtkCssImageBuiltinType  image_type)
 {
-  cairo_t *cr;
-
   g_return_if_fail (GTK_IS_CSS_IMAGE (image));
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (width > 0);
@@ -662,10 +660,11 @@ gtk_css_image_builtin_snapshot (GtkCssImage            *image,
       return;
     }
 
-  cr = gtk_snapshot_append_cairo (snapshot,
-                                  &GRAPHENE_RECT_INIT (0, 0, width, height));
-  gtk_css_image_builtin_draw (image, cr, width, height, image_type);
-  cairo_destroy (cr);
+  if (image_type != GTK_CSS_IMAGE_BUILTIN_NONE)
+    {
+      cairo_t *cr = gtk_snapshot_append_cairo (snapshot,
+                                      &GRAPHENE_RECT_INIT (0, 0, width, height));
+      gtk_css_image_builtin_draw (image, cr, width, height, image_type);
+      cairo_destroy (cr);
+    }
 }
-
-

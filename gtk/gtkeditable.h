@@ -45,82 +45,131 @@ typedef struct _GtkEditableInterface GtkEditableInterface;
 
 struct _GtkEditableInterface
 {
-  GTypeInterface		   base_iface;
+  GTypeInterface                   base_iface;
 
   /* signals */
   void (* insert_text)              (GtkEditable    *editable,
-				     const gchar    *new_text,
-				     gint            new_text_length,
-				     gint           *position);
+                                     const gchar    *text,
+                                     int             length,
+                                     int            *position);
   void (* delete_text)              (GtkEditable    *editable,
-				     gint            start_pos,
-				     gint            end_pos);
+                                     int             start_pos,
+                                     int             end_pos);
   void (* changed)                  (GtkEditable    *editable);
 
   /* vtable */
-  void (* do_insert_text)           (GtkEditable    *editable,
-				     const gchar    *new_text,
-				     gint            new_text_length,
-				     gint           *position);
-  void (* do_delete_text)           (GtkEditable    *editable,
-				     gint            start_pos,
-				     gint            end_pos);
+  const char * (* get_text)         (GtkEditable    *editable);
+  void     (* do_insert_text)       (GtkEditable    *editable,
+                                     const char     *text,
+                                     int             length,
+                                     int            *position);
+  void     (* do_delete_text)       (GtkEditable    *editable,
+                                     int             start_pos,
+                                     int             end_pos);
 
-  gchar* (* get_chars)              (GtkEditable    *editable,
-				     gint            start_pos,
-				     gint            end_pos);
-  void (* set_selection_bounds)     (GtkEditable    *editable,
-				     gint            start_pos,
-				     gint            end_pos);
   gboolean (* get_selection_bounds) (GtkEditable    *editable,
-				     gint           *start_pos,
-				     gint           *end_pos);
-  void (* set_position)             (GtkEditable    *editable,
-				     gint            position);
-  gint (* get_position)             (GtkEditable    *editable);
+                                     int            *start_pos,
+                                     int            *end_pos);
+  void     (* set_selection_bounds) (GtkEditable    *editable,
+                                     int             start_pos,
+                                     int             end_pos);
+  GtkEditable * (* get_delegate)    (GtkEditable    *editable);
 };
 
 GDK_AVAILABLE_IN_ALL
 GType    gtk_editable_get_type             (void) G_GNUC_CONST;
+
 GDK_AVAILABLE_IN_ALL
-void     gtk_editable_select_region        (GtkEditable *editable,
-					    gint         start_pos,
-					    gint         end_pos);
+const char * gtk_editable_get_text         (GtkEditable *editable);
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_editable_get_selection_bounds (GtkEditable *editable,
-					    gint        *start_pos,
-					    gint        *end_pos);
+void     gtk_editable_set_text             (GtkEditable *editable,
+                                            const char  *text);
+GDK_AVAILABLE_IN_ALL
+char *   gtk_editable_get_chars            (GtkEditable *editable,
+                                            int          start_pos,
+                                            int          end_pos);
 GDK_AVAILABLE_IN_ALL
 void     gtk_editable_insert_text          (GtkEditable *editable,
-					    const gchar *new_text,
-					    gint         new_text_length,
-					    gint        *position);
+                                            const char  *text,
+                                            int          length,
+                                            int         *position);
 GDK_AVAILABLE_IN_ALL
 void     gtk_editable_delete_text          (GtkEditable *editable,
-					    gint         start_pos,
-					    gint         end_pos);
+                                            int          start_pos,
+                                            int          end_pos);
+
 GDK_AVAILABLE_IN_ALL
-gchar*   gtk_editable_get_chars            (GtkEditable *editable,
-					    gint         start_pos,
-					    gint         end_pos);
-GDK_AVAILABLE_IN_ALL
-void     gtk_editable_cut_clipboard        (GtkEditable *editable);
-GDK_AVAILABLE_IN_ALL
-void     gtk_editable_copy_clipboard       (GtkEditable *editable);
-GDK_AVAILABLE_IN_ALL
-void     gtk_editable_paste_clipboard      (GtkEditable *editable);
+gboolean gtk_editable_get_selection_bounds (GtkEditable *editable,
+                                            int         *start_pos,
+                                            int         *end_pos);
 GDK_AVAILABLE_IN_ALL
 void     gtk_editable_delete_selection     (GtkEditable *editable);
 GDK_AVAILABLE_IN_ALL
+void     gtk_editable_select_region        (GtkEditable *editable,
+                                            int          start_pos,
+                                            int          end_pos);
+
+GDK_AVAILABLE_IN_ALL
 void     gtk_editable_set_position         (GtkEditable *editable,
-					    gint         position);
+                                            int          position);
 GDK_AVAILABLE_IN_ALL
-gint     gtk_editable_get_position         (GtkEditable *editable);
-GDK_AVAILABLE_IN_ALL
-void     gtk_editable_set_editable         (GtkEditable *editable,
-					    gboolean     is_editable);
+int      gtk_editable_get_position         (GtkEditable *editable);
+
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_editable_get_editable         (GtkEditable *editable);
+GDK_AVAILABLE_IN_ALL
+void     gtk_editable_set_editable         (GtkEditable *editable,
+                                            gboolean     is_editable);
+
+GDK_AVAILABLE_IN_ALL
+float    gtk_editable_get_alignment        (GtkEditable *editable);
+GDK_AVAILABLE_IN_ALL
+void     gtk_editable_set_alignment        (GtkEditable *editable,
+                                            float        xalign);
+
+GDK_AVAILABLE_IN_ALL
+int      gtk_editable_get_width_chars      (GtkEditable *editable);
+GDK_AVAILABLE_IN_ALL
+void     gtk_editable_set_width_chars      (GtkEditable *editable,
+                                            int          n_chars);
+
+GDK_AVAILABLE_IN_ALL
+int      gtk_editable_get_max_width_chars  (GtkEditable *editable);
+GDK_AVAILABLE_IN_ALL
+void     gtk_editable_set_max_width_chars  (GtkEditable *editable,
+                                            int          n_chars);
+
+/* api for implementations */
+
+typedef enum {
+  GTK_EDITABLE_PROP_TEXT,
+  GTK_EDITABLE_PROP_CURSOR_POSITION,
+  GTK_EDITABLE_PROP_SELECTION_BOUND,
+  GTK_EDITABLE_PROP_EDITABLE,
+  GTK_EDITABLE_PROP_WIDTH_CHARS,
+  GTK_EDITABLE_PROP_MAX_WIDTH_CHARS,
+  GTK_EDITABLE_PROP_XALIGN,
+  GTK_EDITABLE_NUM_PROPERTIES
+} GtkEditableProperties;
+
+GDK_AVAILABLE_IN_ALL
+guint        gtk_editable_install_properties    (GObjectClass *object_class,
+                                                 guint         first_prop);
+GDK_AVAILABLE_IN_ALL
+void         gtk_editable_init_delegate         (GtkEditable  *editable);
+GDK_AVAILABLE_IN_ALL
+void         gtk_editable_finish_delegate       (GtkEditable  *editable);
+GDK_AVAILABLE_IN_ALL
+gboolean     gtk_editable_delegate_set_property (GObject      *object,
+                                                 guint         prop_id,
+                                                 const GValue *value,
+                                                 GParamSpec   *pspec);
+GDK_AVAILABLE_IN_ALL
+gboolean     gtk_editable_delegate_get_property (GObject      *object,
+                                                 guint         prop_id,
+                                                 GValue       *value,
+                                                 GParamSpec   *pspec);
+
 
 G_END_DECLS
 

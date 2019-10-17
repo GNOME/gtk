@@ -30,11 +30,6 @@
                 <property name="receives_default">True</property>
                 <property name="use_action_appearance">False</property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkToggleButton" id="button2">
@@ -48,11 +43,6 @@
                   <class name="suggested-action"/>
                 </style>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
         </child>

@@ -1,55 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkWindow" id="window1">
-    <property name="can_focus">False</property>
     <property name="type">popup</property>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="spacing">6</property>
         <child>
-          <object class="GtkButton">
-            <property name="visible">True</property>
-            <property name="label">1</property>
-          </object>         
-          <packing>
-            <property name="pack-type">start</property>
-          </packing>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkButton">
+                <property name="label">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="label">2</property>
+              </object>
+            </child>
+          </object>
         </child>
         <child>
           <object class="GtkButton">
-            <property name="visible">True</property>
-            <property name="label">2</property>
-          </object>         
-          <packing>
-            <property name="pack-type">start</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton">
-            <property name="visible">True</property>
             <property name="label">Center</property>
-          </object>         
+          </object>
         </child>
         <child>
-          <object class="GtkButton">
-            <property name="visible">True</property>
-            <property name="label">1</property>
-          </object>         
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton">
-            <property name="visible">True</property>
-            <property name="label">2</property>
-          </object>         
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkButton">
+                <property name="label">2</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="label">1</property>
+              </object>
+            </child>
+          </object>
         </child>
       </object>
     </child>

@@ -54,7 +54,7 @@ G_BEGIN_DECLS
 #define GDK_PRIORITY_EVENTS	(G_PRIORITY_DEFAULT)
 
 /**
- * GDK_PRIORITY_REDRAW:
+ * GDK_PRIORITY_REDRAW: (value 120)
  *
  * This is the priority that the idle handler processing surface updates
  * is given in the
@@ -126,18 +126,6 @@ typedef struct _GdkEventSequence    GdkEventSequence;
 typedef union  _GdkEvent	    GdkEvent;
 
 /**
- * GdkEventFunc:
- * @event: the #GdkEvent to process.
- * @data: (closure): user data set when the event handler was installed with
- *   gdk_event_handler_set().
- *
- * Specifies the type of function passed to gdk_event_handler_set() to
- * handle all GDK events.
- */
-typedef void (*GdkEventFunc) (GdkEvent *event,
-			      gpointer	data);
-
-/**
  * GdkEventType:
  * @GDK_NOTHING: a special code to indicate a null event.
  * @GDK_DELETE: the window manager has requested that the toplevel surface be
@@ -153,7 +141,6 @@ typedef void (*GdkEventFunc) (GdkEvent *event,
  * @GDK_LEAVE_NOTIFY: the pointer has left the surface.
  * @GDK_FOCUS_CHANGE: the keyboard focus has entered or left the surface.
  * @GDK_CONFIGURE: the size, position or stacking order of the surface has changed.
- *   Note that GTK+ discards these events for %GDK_SURFACE_CHILD surfaces.
  * @GDK_PROXIMITY_IN: an input device has moved into contact with a sensing
  *   surface (e.g. a touchscreen or graphics tablet).
  * @GDK_PROXIMITY_OUT: an input device has moved out of contact with a sensing
@@ -377,10 +364,6 @@ void      gdk_event_set_coords          (GdkEvent *event,
                                          gdouble   x,
                                          gdouble   y);
 GDK_AVAILABLE_IN_ALL
-gboolean  gdk_event_get_root_coords	(const GdkEvent *event,
-					 gdouble	*x_root,
-					 gdouble	*y_root);
-GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_button          (const GdkEvent *event,
                                          guint          *button);
 GDK_AVAILABLE_IN_ALL
@@ -447,11 +430,6 @@ gboolean  gdk_events_get_center         (GdkEvent        *event1,
                                          gdouble         *y);
 
 GDK_AVAILABLE_IN_ALL
-void	  gdk_event_handler_set 	(GdkEventFunc    func,
-					 gpointer        data,
-					 GDestroyNotify  notify);
-
-GDK_AVAILABLE_IN_ALL
 void       gdk_event_set_display        (GdkEvent        *event,
                                          GdkDisplay      *display);
 GDK_AVAILABLE_IN_ALL
@@ -483,10 +461,6 @@ int            gdk_event_get_scancode    (GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_get_pointer_emulated (GdkEvent *event);
-
-GDK_AVAILABLE_IN_ALL
-void           gdk_event_set_user_data (GdkEvent *event,
-                                        GObject  *user_data);
 
 GDK_AVAILABLE_IN_ALL
 gboolean       gdk_event_is_sent       (const GdkEvent *event);

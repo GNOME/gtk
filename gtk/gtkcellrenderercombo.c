@@ -48,6 +48,19 @@
  * The #GtkCellRendererCombo cell renderer was added in GTK+ 2.6.
  */
 
+typedef struct _GtkCellRendererComboPrivate GtkCellRendererComboPrivate;
+typedef struct _GtkCellRendererComboClass   GtkCellRendererComboClass;
+
+struct _GtkCellRendererCombo
+{
+  GtkCellRendererText parent;
+};
+
+struct _GtkCellRendererComboClass
+{
+  GtkCellRendererTextClass parent;
+};
+
 
 struct _GtkCellRendererComboPrivate
 {
@@ -194,15 +207,15 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
 		  G_TYPE_NONE, 2,
 		  G_TYPE_STRING,
 		  GTK_TYPE_TREE_ITER);
+  g_signal_set_va_marshaller (cell_renderer_combo_signals[CHANGED],
+                              G_TYPE_FROM_CLASS (object_class),
+                              _gtk_marshal_VOID__STRING_BOXEDv);
 }
 
 static void
 gtk_cell_renderer_combo_init (GtkCellRendererCombo *self)
 {
-  GtkCellRendererComboPrivate *priv;
-
-  self->priv = gtk_cell_renderer_combo_get_instance_private (self);
-  priv = self->priv;
+  GtkCellRendererComboPrivate *priv = gtk_cell_renderer_combo_get_instance_private (self);
 
   priv->model = NULL;
   priv->text_column = -1;
@@ -233,7 +246,7 @@ static void
 gtk_cell_renderer_combo_finalize (GObject *object)
 {
   GtkCellRendererCombo *cell = GTK_CELL_RENDERER_COMBO (object);
-  GtkCellRendererComboPrivate *priv = cell->priv;
+  GtkCellRendererComboPrivate *priv = gtk_cell_renderer_combo_get_instance_private (cell);
   
   if (priv->model)
     {
@@ -251,7 +264,7 @@ gtk_cell_renderer_combo_get_property (GObject    *object,
 				      GParamSpec *pspec)
 {
   GtkCellRendererCombo *cell = GTK_CELL_RENDERER_COMBO (object);
-  GtkCellRendererComboPrivate *priv = cell->priv;
+  GtkCellRendererComboPrivate *priv = gtk_cell_renderer_combo_get_instance_private (cell);
 
   switch (prop_id)
     {
@@ -277,7 +290,7 @@ gtk_cell_renderer_combo_set_property (GObject      *object,
 				      GParamSpec   *pspec)
 {
   GtkCellRendererCombo *cell = GTK_CELL_RENDERER_COMBO (object);
-  GtkCellRendererComboPrivate *priv = cell->priv;
+  GtkCellRendererComboPrivate *priv = gtk_cell_renderer_combo_get_instance_private (cell);
 
   switch (prop_id)
     {
@@ -333,17 +346,14 @@ static void
 gtk_cell_renderer_combo_editing_done (GtkCellEditable *combo,
 				      gpointer         data)
 {
+  GtkCellRendererCombo *cell = GTK_CELL_RENDERER_COMBO (data);
+  GtkCellRendererComboPrivate *priv = gtk_cell_renderer_combo_get_instance_private (cell);
   const gchar *path;
   gchar *new_text = NULL;
   GtkTreeModel *model;
   GtkTreeIter iter;
-  GtkCellRendererCombo *cell;
   GtkEntry *entry;
   gboolean canceled;
-  GtkCellRendererComboPrivate *priv;
-
-  cell = GTK_CELL_RENDERER_COMBO (data);
-  priv = cell->priv;
 
   if (priv->focus_out_id > 0)
     {
@@ -364,7 +374,7 @@ gtk_cell_renderer_combo_editing_done (GtkCellEditable *combo,
   if (gtk_combo_box_get_has_entry (GTK_COMBO_BOX (combo)))
     {
       entry = GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo)));
-      new_text = g_strdup (gtk_entry_get_text (entry));
+      new_text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry)));
     }
   else 
     {
@@ -405,12 +415,10 @@ find_text (GtkTreeModel *model,
 	   GtkTreeIter  *iter, 
 	   gpointer      data)
 {
-  GtkCellRendererComboPrivate *priv;
   SearchData *search_data = (SearchData *)data;
+  GtkCellRendererComboPrivate *priv = gtk_cell_renderer_combo_get_instance_private (search_data->cell);
   gchar *text, *cell_text;
 
-  priv = search_data->cell->priv;
-  
   gtk_tree_model_get (model, iter, priv->text_column, &text, -1);
   g_object_get (GTK_CELL_RENDERER_TEXT (search_data->cell),
                 "text", &cell_text,
@@ -436,21 +444,16 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
                                        const GdkRectangle  *cell_area,
                                        GtkCellRendererState flags)
 {
-  GtkCellRendererCombo *cell_combo;
-  GtkCellRendererText *cell_text;
+  GtkCellRendererCombo *cell_combo = GTK_CELL_RENDERER_COMBO (cell);
+  GtkCellRendererComboPrivate *priv = gtk_cell_renderer_combo_get_instance_private (cell_combo);
   GtkWidget *combo;
   SearchData search_data;
-  GtkCellRendererComboPrivate *priv;
   gboolean editable;
   gchar *text;
 
-  cell_text = GTK_CELL_RENDERER_TEXT (cell);
-  g_object_get (cell_text, "editable", &editable, NULL);
+  g_object_get (cell, "editable", &editable, NULL);
   if (editable == FALSE)
     return NULL;
-
-  cell_combo = GTK_CELL_RENDERER_COMBO (cell);
-  priv = cell_combo->priv;
 
   if (priv->text_column < 0)
     return NULL;
@@ -464,10 +467,9 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
       gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX (combo),
                                            priv->text_column);
 
-      g_object_get (cell_text, "text", &text, NULL);
+      g_object_get (cell, "text", &text, NULL);
       if (text)
-	gtk_entry_set_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo))),
-			    text);
+	gtk_editable_set_text (GTK_EDITABLE (gtk_bin_get_child (GTK_BIN (combo))), text);
       g_free (text);
     }
   else

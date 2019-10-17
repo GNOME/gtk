@@ -3,35 +3,55 @@
 
 #include "gskgldriverprivate.h"
 #include "gskglimageprivate.h"
-#include "gskrendererprivate.h"
+#include "gskgltextureatlasprivate.h"
 #include <pango/pango.h>
 #include <gdk/gdk.h>
 
 typedef struct
 {
-  GskGLDriver *gl_driver;
-  GskRenderer *renderer;
+  int ref_count;
 
+  GdkDisplay *display;
   GHashTable *hash_table;
-  GPtrArray *atlases;
+  GskGLTextureAtlases *atlases;
 
-  guint64 timestamp;
+  int timestamp;
 } GskGLGlyphCache;
 
-
 typedef struct
 {
-  GskGLImage *image;
-  int width, height;
-  int x, y, y0;
-  int num_glyphs;
-  GList *dirty_glyphs;
-  guint old_pixels;
-} GskGLGlyphAtlas;
+  PangoFont *font;
+  PangoGlyph glyph;
+  guint xshift : 3;
+  guint yshift : 3;
+  guint scale  : 26; /* times 1024 */
+  guint hash;
+} GlyphCacheKey;
 
-typedef struct
+#define PHASE(x) ((int)(floor (4 * (x + 0.125)) - 4 * floor (x + 0.125)))
+
+static inline void
+glyph_cache_key_set_glyph_and_shift (GlyphCacheKey *key,
+                                     PangoGlyph glyph,
+                                     float x,
+                                     float y)
 {
-  GskGLGlyphAtlas *atlas;
+  key->glyph = glyph;
+  key->xshift = PHASE (x);
+  key->yshift = PHASE (y);
+  key->hash = GPOINTER_TO_UINT (key->font) ^
+              key->glyph ^
+              (key->xshift << 24) ^
+              (key->yshift << 26) ^
+              key->scale;
+}
+
+typedef struct _GskGLCachedGlyph GskGLCachedGlyph;
+
+struct _GskGLCachedGlyph
+{
+  GskGLTextureAtlas *atlas;
+  guint texture_id;
 
   float tx;
   float ty;
@@ -43,20 +63,21 @@ typedef struct
   int draw_width;
   int draw_height;
 
-  guint64 timestamp;
-} GskGLCachedGlyph;
+  guint accessed : 1; /* accessed since last check */
+  guint used     : 1; /* accounted as used in the atlas */
+};
 
-void                     gsk_gl_glyph_cache_init            (GskGLGlyphCache        *self,
-                                                             GskRenderer            *renderer,
-                                                             GskGLDriver            *gl_driver);
-void                     gsk_gl_glyph_cache_free            (GskGLGlyphCache        *self);
-void                     gsk_gl_glyph_cache_begin_frame     (GskGLGlyphCache        *self);
-GskGLImage *             gsk_gl_glyph_cache_get_glyph_image (GskGLGlyphCache        *self,
-                                                             const GskGLCachedGlyph *glyph);
-const GskGLCachedGlyph * gsk_gl_glyph_cache_lookup          (GskGLGlyphCache        *self,
-                                                             gboolean                create,
-                                                             PangoFont              *font,
-                                                             PangoGlyph              glyph,
-                                                             float                   scale);
+
+GskGLGlyphCache *        gsk_gl_glyph_cache_new             (GdkDisplay *display,
+                                                             GskGLTextureAtlases *atlases);
+GskGLGlyphCache *        gsk_gl_glyph_cache_ref             (GskGLGlyphCache *self);
+void                     gsk_gl_glyph_cache_unref           (GskGLGlyphCache        *self);
+void                     gsk_gl_glyph_cache_begin_frame     (GskGLGlyphCache        *self,
+                                                             GskGLDriver            *driver,
+                                                             GPtrArray              *removed_atlases);
+void                     gsk_gl_glyph_cache_lookup_or_add   (GskGLGlyphCache        *self,
+                                                             GlyphCacheKey          *lookup,
+                                                             GskGLDriver            *driver,
+                                                             const GskGLCachedGlyph **cached_glyph_out);
 
 #endif

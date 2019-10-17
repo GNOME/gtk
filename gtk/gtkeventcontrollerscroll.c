@@ -243,7 +243,7 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
   GtkEventControllerScroll *scroll = GTK_EVENT_CONTROLLER_SCROLL (controller);
   GdkScrollDirection direction = GDK_SCROLL_SMOOTH;
   gdouble dx = 0, dy = 0;
-  gboolean handled = TRUE;
+  gboolean handled = GDK_EVENT_PROPAGATE;
 
   if (gdk_event_get_event_type (event) != GDK_SCROLL)
     return FALSE;
@@ -385,7 +385,7 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
                   GTK_TYPE_EVENT_CONTROLLER_SCROLL,
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
   /**
    * GtkEventControllerScroll::scroll:
@@ -403,8 +403,11 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
                   GTK_TYPE_EVENT_CONTROLLER_SCROLL,
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
-		  _gtk_marshal_BOOLEAN__DOUBLE_DOUBLE,
+                  _gtk_marshal_BOOLEAN__DOUBLE_DOUBLE,
                   G_TYPE_BOOLEAN, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[SCROLL],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_BOOLEAN__DOUBLE_DOUBLEv);
   /**
    * GtkEventControllerScroll::scroll-end:
    * @controller: The object that received the signal
@@ -417,7 +420,7 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
                   GTK_TYPE_EVENT_CONTROLLER_SCROLL,
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -436,8 +439,11 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
                   GTK_TYPE_EVENT_CONTROLLER_SCROLL,
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL,
-		  _gtk_marshal_VOID__DOUBLE_DOUBLE,
+                  _gtk_marshal_VOID__DOUBLE_DOUBLE,
                   G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[DECELERATE],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__DOUBLE_DOUBLEv);
 
   g_object_class_install_properties (object_class, N_PROPS, pspecs);
 }

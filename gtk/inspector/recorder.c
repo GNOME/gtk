@@ -33,6 +33,7 @@
 #include <gsk/gskrendererprivate.h>
 #include <gsk/gskrendernodeprivate.h>
 #include <gsk/gskroundedrectprivate.h>
+#include <gsk/gsktransformprivate.h>
 
 #include <glib/gi18n-lib.h>
 #include <gdk/gdktextureprivate.h>
@@ -117,9 +118,6 @@ create_list_model_for_render_node (GskRenderNode *node)
     case GSK_OUTSET_SHADOW_NODE:
       /* no children */
       return NULL;
-
-    case GSK_OFFSET_NODE:
-      return create_render_node_list_model ((GskRenderNode *[1]) { gsk_offset_node_get_child (node) }, 1);
 
     case GSK_TRANSFORM_NODE:
       return create_render_node_list_model ((GskRenderNode *[1]) { gsk_transform_node_get_child (node) }, 1);
@@ -230,8 +228,6 @@ node_type_name (GskRenderNodeType type)
       return "Outset Shadow";
     case GSK_TRANSFORM_NODE:
       return "Transform";
-    case GSK_OFFSET_NODE:
-      return "Offset";
     case GSK_OPACITY_NODE:
       return "Opacity";
     case GSK_COLOR_MATRIX_NODE:
@@ -282,9 +278,6 @@ node_name (GskRenderNode *node)
     case GSK_TEXT_NODE:
     case GSK_BLUR_NODE:
       return g_strdup (node_type_name (gsk_render_node_get_node_type (node)));
-
-    case GSK_OFFSET_NODE:
-      return g_strdup_printf ("Offset %g, %g", gsk_offset_node_get_x_offset (node), gsk_offset_node_get_y_offset (node));
 
     case GSK_DEBUG_NODE:
       return g_strdup (gsk_debug_node_get_message (node));
@@ -396,13 +389,14 @@ recordings_list_row_selected (GtkListBox           *box,
                                                          NULL, NULL);
       g_object_unref (root_model);
       g_object_unref (paintable);
+
+      g_print ("%u render nodes\n", g_list_model_get_n_items (G_LIST_MODEL (priv->render_node_model)));
     }
   else
     {
       gtk_picture_set_paintable (GTK_PICTURE (priv->render_node_view), NULL);
     }
 
-  g_print ("%u render nodes\n", g_list_model_get_n_items (G_LIST_MODEL (priv->render_node_model)));
 
   gtk_list_box_bind_model (GTK_LIST_BOX (priv->render_node_list),
                            G_LIST_MODEL (priv->render_node_model),
@@ -642,8 +636,7 @@ populate_render_node_properties (GtkListStore  *store,
         const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node);
         const GdkRGBA *color = gsk_text_node_peek_color (node);
         guint num_glyphs = gsk_text_node_get_num_glyphs (node);
-        float x = gsk_text_node_get_x (node);
-        float y = gsk_text_node_get_y (node);
+        const graphene_point_t *offset = gsk_text_node_get_offset (node);
         PangoFontDescription *desc;
         GString *s;
         int i;
@@ -660,7 +653,7 @@ populate_render_node_properties (GtkListStore  *store,
         add_text_row (store, "Glyphs", s->str);
         g_string_free (s, TRUE);
 
-        tmp = g_strdup_printf ("%.2f %.2f", x, y);
+        tmp = g_strdup_printf ("%.2f %.2f", offset->x, offset->y);
         add_text_row (store, "Position", tmp);
         g_free (tmp);
 
@@ -893,13 +886,29 @@ populate_render_node_properties (GtkListStore  *store,
       }
       break;
 
-    case GSK_OFFSET_NODE:
-      add_float_row (store, "x offset", gsk_offset_node_get_x_offset (node));
-      add_float_row (store, "y offset", gsk_offset_node_get_y_offset (node));
+    case GSK_TRANSFORM_NODE:
+      {
+        static const char * category_names[] = {
+          [GSK_TRANSFORM_CATEGORY_UNKNOWN] = "unknown",
+          [GSK_TRANSFORM_CATEGORY_ANY] = "any",
+          [GSK_TRANSFORM_CATEGORY_3D] = "3D",
+          [GSK_TRANSFORM_CATEGORY_2D] = "2D",
+          [GSK_TRANSFORM_CATEGORY_2D_AFFINE] = "2D affine",
+          [GSK_TRANSFORM_CATEGORY_2D_TRANSLATE] = "2D translate",
+          [GSK_TRANSFORM_CATEGORY_IDENTITY] = "identity"
+        };
+        GskTransform *transform;
+        char *s;
+
+        transform = gsk_transform_node_get_transform (node);
+        s = gsk_transform_to_string (transform);
+        add_text_row (store, "Matrix", s);
+        g_free (s);
+        add_text_row (store, "Category", category_names[gsk_transform_get_category (transform)]);
+      }
       break;
 
     case GSK_NOT_A_RENDER_NODE:
-    case GSK_TRANSFORM_NODE:
     default:
       break;
     }
@@ -1012,7 +1021,7 @@ render_node_save (GtkButton            *button,
     return;
 
   dialog = gtk_file_chooser_dialog_new ("",
-                                        GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (recorder))),
+                                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (recorder))),
                                         GTK_FILE_CHOOSER_ACTION_SAVE,
                                         _("_Cancel"), GTK_RESPONSE_CANCEL,
                                         _("_Save"), GTK_RESPONSE_ACCEPT,
@@ -1065,7 +1074,7 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
       widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-      gtk_box_pack_start (GTK_BOX (widget), hbox);
+      gtk_container_add (GTK_CONTAINER (widget), hbox);
 
       for (i = 0; i < g_list_model_get_n_items (priv->recordings); i++)
         {
@@ -1106,17 +1115,17 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
       label = gtk_label_new (str);
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
       g_free (str);
-      gtk_box_pack_start (GTK_BOX (hbox), label);
+      gtk_container_add (GTK_CONTAINER (hbox), label);
 
       button = gtk_toggle_button_new ();
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
       gtk_button_set_icon_name (GTK_BUTTON (button), "view-more-symbolic");
 
-      gtk_box_pack_end (GTK_BOX (hbox), button);
+      gtk_container_add (GTK_CONTAINER (hbox), button);
 
       label = gtk_label_new (gtk_inspector_render_recording_get_profiler_info (GTK_INSPECTOR_RENDER_RECORDING (recording)));
       gtk_widget_hide (label);
-      gtk_box_pack_end (GTK_BOX (widget), label);
+      gtk_container_add (GTK_CONTAINER (widget), label);
       g_object_bind_property (button, "active", label, "visible", 0);
     }
   else

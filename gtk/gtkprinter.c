@@ -24,8 +24,8 @@
 #include "gtkprivate.h"
 
 #include "gtkprinter.h"
-#include "gtkprinter-private.h"
-#include "gtkprintbackend.h"
+#include "gtkprinterprivate.h"
+#include "gtkprintbackendprivate.h"
 #include "gtkprintjob.h"
 
 /**
@@ -65,7 +65,7 @@ struct _GtkPrinterPrivate
   guint accepts_pdf       : 1;
   guint accepts_ps        : 1;
 
-  gchar *state_message;  
+  gchar *state_message;
   gint job_count;
 
   GtkPrintBackend *backend;
@@ -223,16 +223,14 @@ gtk_printer_class_init (GtkPrinterClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrinterClass, details_acquired),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__BOOLEAN,
+		  NULL,
 		  G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 }
 
 static void
 gtk_printer_init (GtkPrinter *printer)
 {
-  GtkPrinterPrivate *priv;
-
-  priv = printer->priv = gtk_printer_get_instance_private (printer);
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 
   priv->name = NULL;
   priv->location = NULL;
@@ -255,7 +253,7 @@ static void
 gtk_printer_finalize (GObject *object)
 {
   GtkPrinter *printer = GTK_PRINTER (object);
-  GtkPrinterPrivate *priv = printer->priv;
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 
   g_free (priv->name);
   g_free (priv->location);
@@ -276,7 +274,7 @@ gtk_printer_set_property (GObject         *object,
 			  GParamSpec      *pspec)
 {
   GtkPrinter *printer = GTK_PRINTER (object);
-  GtkPrinterPrivate *priv = printer->priv;
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 
   switch (prop_id)
     {
@@ -313,7 +311,7 @@ gtk_printer_get_property (GObject    *object,
 			  GParamSpec *pspec)
 {
   GtkPrinter *printer = GTK_PRINTER (object);
-  GtkPrinterPrivate *priv = printer->priv;
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 
   switch (prop_id)
     {
@@ -405,9 +403,11 @@ gtk_printer_new (const gchar     *name,
 GtkPrintBackend *
 gtk_printer_get_backend (GtkPrinter *printer)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
   
-  return printer->priv->backend;
+  return priv->backend;
 }
 
 /**
@@ -421,9 +421,11 @@ gtk_printer_get_backend (GtkPrinter *printer)
 const gchar *
 gtk_printer_get_name (GtkPrinter *printer)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
 
-  return printer->priv->name;
+  return priv->name;
 }
 
 /**
@@ -437,20 +439,20 @@ gtk_printer_get_name (GtkPrinter *printer)
 const gchar *
 gtk_printer_get_description (GtkPrinter *printer)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
   
-  return printer->priv->description;
+  return priv->description;
 }
 
 gboolean
 gtk_printer_set_description (GtkPrinter  *printer,
 			     const gchar *description)
 {
-  GtkPrinterPrivate *priv;
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 
   g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
-
-  priv = printer->priv;
 
   if (g_strcmp0 (priv->description, description) == 0)
     return FALSE;
@@ -473,20 +475,20 @@ gtk_printer_set_description (GtkPrinter  *printer,
 const gchar *
 gtk_printer_get_state_message (GtkPrinter *printer)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
 
-  return printer->priv->state_message;
+  return priv->state_message;
 }
 
 gboolean
 gtk_printer_set_state_message (GtkPrinter  *printer,
 			       const gchar *message)
 {
-  GtkPrinterPrivate *priv;
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 
   g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
-
-  priv = printer->priv;
 
   if (g_strcmp0 (priv->state_message, message) == 0)
     return FALSE;
@@ -509,20 +511,20 @@ gtk_printer_set_state_message (GtkPrinter  *printer,
 const gchar *
 gtk_printer_get_location (GtkPrinter *printer)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
 
-  return printer->priv->location;
+  return priv->location;
 }
 
 gboolean
 gtk_printer_set_location (GtkPrinter  *printer,
 			  const gchar *location)
 {
-  GtkPrinterPrivate *priv;
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 
   g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
-
-  priv = printer->priv;
 
   if (g_strcmp0 (priv->location, location) == 0)
     return FALSE;
@@ -545,20 +547,20 @@ gtk_printer_set_location (GtkPrinter  *printer,
 const gchar *
 gtk_printer_get_icon_name (GtkPrinter *printer)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
 
-  return printer->priv->icon_name;
+  return priv->icon_name;
 }
 
 void
 gtk_printer_set_icon_name (GtkPrinter  *printer,
 			   const gchar *icon)
 {
-  GtkPrinterPrivate *priv;
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 
   g_return_if_fail (GTK_IS_PRINTER (printer));
-
-  priv = printer->priv;
 
   g_free (priv->icon_name);
   priv->icon_name = g_strdup (icon);
@@ -576,20 +578,20 @@ gtk_printer_set_icon_name (GtkPrinter  *printer,
 gint 
 gtk_printer_get_job_count (GtkPrinter *printer)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), 0);
 
-  return printer->priv->job_count;
+  return priv->job_count;
 }
 
 gboolean
 gtk_printer_set_job_count (GtkPrinter *printer,
 			   gint        count)
 {
-  GtkPrinterPrivate *priv;
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 
   g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
-
-  priv = printer->priv;
 
   if (priv->job_count == count)
     return FALSE;
@@ -612,16 +614,20 @@ gtk_printer_set_job_count (GtkPrinter *printer,
 gboolean
 gtk_printer_has_details (GtkPrinter *printer)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
 
-  return printer->priv->has_details;
+  return priv->has_details;
 }
 
 void
 gtk_printer_set_has_details (GtkPrinter *printer,
-			     gboolean val)
+			     gboolean    val)
 {
-  printer->priv->has_details = val;
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
+  priv->has_details = val;
 }
 
 /**
@@ -636,18 +642,22 @@ gtk_printer_set_has_details (GtkPrinter *printer,
 gboolean
 gtk_printer_is_active (GtkPrinter *printer)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), TRUE);
   
-  return printer->priv->is_active;
+  return priv->is_active;
 }
 
 void
 gtk_printer_set_is_active (GtkPrinter *printer,
 			   gboolean val)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_if_fail (GTK_IS_PRINTER (printer));
 
-  printer->priv->is_active = val;
+  priv->is_active = val;
 }
 
 /**
@@ -663,20 +673,20 @@ gtk_printer_set_is_active (GtkPrinter *printer,
 gboolean
 gtk_printer_is_paused (GtkPrinter *printer)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), TRUE);
   
-  return printer->priv->is_paused;
+  return priv->is_paused;
 }
 
 gboolean
 gtk_printer_set_is_paused (GtkPrinter *printer,
 			   gboolean    val)
 {
-  GtkPrinterPrivate *priv;
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 
   g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
-
-  priv = printer->priv;
 
   if (val == priv->is_paused)
     return FALSE;
@@ -697,20 +707,20 @@ gtk_printer_set_is_paused (GtkPrinter *printer,
 gboolean
 gtk_printer_is_accepting_jobs (GtkPrinter *printer)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), TRUE);
   
-  return printer->priv->is_accepting_jobs;
+  return priv->is_accepting_jobs;
 }
 
 gboolean
 gtk_printer_set_is_accepting_jobs (GtkPrinter *printer,
 				   gboolean val)
 {
-  GtkPrinterPrivate *priv;
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
 
   g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
-
-  priv = printer->priv;
 
   if (val == priv->is_accepting_jobs)
     return FALSE;
@@ -733,9 +743,11 @@ gtk_printer_set_is_accepting_jobs (GtkPrinter *printer,
 gboolean
 gtk_printer_is_virtual (GtkPrinter *printer)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), TRUE);
   
-  return printer->priv->is_virtual;
+  return priv->is_virtual;
 }
 
 /**
@@ -750,18 +762,22 @@ gtk_printer_is_virtual (GtkPrinter *printer)
 gboolean 
 gtk_printer_accepts_pdf (GtkPrinter *printer)
 { 
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), TRUE);
   
-  return printer->priv->accepts_pdf;
+  return priv->accepts_pdf;
 }
 
 void
 gtk_printer_set_accepts_pdf (GtkPrinter *printer,
 			     gboolean val)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_if_fail (GTK_IS_PRINTER (printer));
 
-  printer->priv->accepts_pdf = val;
+  priv->accepts_pdf = val;
 }
 
 /**
@@ -776,35 +792,43 @@ gtk_printer_set_accepts_pdf (GtkPrinter *printer,
 gboolean 
 gtk_printer_accepts_ps (GtkPrinter *printer)
 { 
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), TRUE);
   
-  return printer->priv->accepts_ps;
+  return priv->accepts_ps;
 }
 
 void
 gtk_printer_set_accepts_ps (GtkPrinter *printer,
 			    gboolean val)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_if_fail (GTK_IS_PRINTER (printer));
 
-  printer->priv->accepts_ps = val;
+  priv->accepts_ps = val;
 }
 
 gboolean
 gtk_printer_is_new (GtkPrinter *printer)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
   
-  return printer->priv->is_new;
+  return priv->is_new;
 }
 
 void
 gtk_printer_set_is_new (GtkPrinter *printer,
 			gboolean val)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_if_fail (GTK_IS_PRINTER (printer));
 
-  printer->priv->is_new = val;
+  priv->is_new = val;
 }
 
 
@@ -819,18 +843,22 @@ gtk_printer_set_is_new (GtkPrinter *printer,
 gboolean
 gtk_printer_is_default (GtkPrinter *printer)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_val_if_fail (GTK_IS_PRINTER (printer), FALSE);
   
-  return printer->priv->is_default;
+  return priv->is_default;
 }
 
 void
 gtk_printer_set_is_default (GtkPrinter *printer,
 			    gboolean    val)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+
   g_return_if_fail (GTK_IS_PRINTER (printer));
 
-  printer->priv->is_default = val;
+  priv->is_default = val;
 }
 
 /**
@@ -843,11 +871,12 @@ gtk_printer_set_is_default (GtkPrinter *printer,
 void
 gtk_printer_request_details (GtkPrinter *printer)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
   GtkPrintBackendClass *backend_class;
 
   g_return_if_fail (GTK_IS_PRINTER (printer));
 
-  backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  backend_class = GTK_PRINT_BACKEND_GET_CLASS (priv->backend);
   backend_class->printer_request_details (printer);
 }
 
@@ -857,7 +886,9 @@ _gtk_printer_get_options (GtkPrinter           *printer,
 			  GtkPageSetup         *page_setup,
 			  GtkPrintCapabilities  capabilities)
 {
-  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (priv->backend);
+
   return backend_class->printer_get_options (printer, settings, page_setup, capabilities);
 }
 
@@ -865,7 +896,9 @@ gboolean
 _gtk_printer_mark_conflicts (GtkPrinter          *printer,
 			     GtkPrinterOptionSet *options)
 {
-  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (priv->backend);
+
   return backend_class->printer_mark_conflicts (printer, options);
 }
   
@@ -874,7 +907,9 @@ _gtk_printer_get_settings_from_options (GtkPrinter          *printer,
 					GtkPrinterOptionSet *options,
 					GtkPrintSettings    *settings)
 {
-  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (priv->backend);
+
   backend_class->printer_get_settings_from_options (printer, options, settings);
 }
 
@@ -884,7 +919,9 @@ _gtk_printer_prepare_for_print (GtkPrinter       *printer,
 				GtkPrintSettings *settings,
 				GtkPageSetup     *page_setup)
 {
-  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (priv->backend);
+
   backend_class->printer_prepare_for_print (printer, print_job, settings, page_setup);
 }
 
@@ -895,7 +932,8 @@ _gtk_printer_create_cairo_surface (GtkPrinter       *printer,
 				   gdouble           height,
 				   GIOChannel       *cache_io)
 {
-  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (priv->backend);
 
   return backend_class->printer_create_cairo_surface (printer, settings,
 						      width, height, cache_io);
@@ -914,11 +952,12 @@ _gtk_printer_create_cairo_surface (GtkPrinter       *printer,
 GList  *
 gtk_printer_list_papers (GtkPrinter *printer)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
   GtkPrintBackendClass *backend_class;
 
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
 
-  backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  backend_class = GTK_PRINT_BACKEND_GET_CLASS (priv->backend);
   return backend_class->printer_list_papers (printer);
 }
 
@@ -933,11 +972,12 @@ gtk_printer_list_papers (GtkPrinter *printer)
 GtkPageSetup  *
 gtk_printer_get_default_page_size (GtkPrinter *printer)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
   GtkPrintBackendClass *backend_class;
 
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
 
-  backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  backend_class = GTK_PRINT_BACKEND_GET_CLASS (priv->backend);
   return backend_class->printer_get_default_page_size (printer);
 }
 
@@ -964,7 +1004,8 @@ gtk_printer_get_hard_margins (GtkPrinter *printer,
 			      gdouble    *left,
 			      gdouble    *right)
 {
-  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (priv->backend);
 
   return backend_class->printer_get_hard_margins (printer, top, bottom, left, right);
 }
@@ -995,7 +1036,8 @@ gtk_printer_get_hard_margins_for_paper_size (GtkPrinter   *printer,
 					     gdouble      *left,
 					     gdouble      *right)
 {
-  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
+  GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (priv->backend);
 
   return backend_class->printer_get_hard_margins_for_paper_size (printer, paper_size, top, bottom, left, right);
 }
@@ -1018,11 +1060,12 @@ gtk_printer_get_hard_margins_for_paper_size (GtkPrinter   *printer,
 GtkPrintCapabilities
 gtk_printer_get_capabilities (GtkPrinter *printer)
 {
+  GtkPrinterPrivate *priv = gtk_printer_get_instance_private (printer);
   GtkPrintBackendClass *backend_class;
 
   g_return_val_if_fail (GTK_IS_PRINTER (printer), 0);
 
-  backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
+  backend_class = GTK_PRINT_BACKEND_GET_CLASS (priv->backend);
   return backend_class->printer_get_capabilities (printer);
 }
 

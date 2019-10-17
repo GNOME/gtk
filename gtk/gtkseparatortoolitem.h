@@ -30,35 +30,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_SEPARATOR_TOOL_ITEM            (gtk_separator_tool_item_get_type ())
 #define GTK_SEPARATOR_TOOL_ITEM(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SEPARATOR_TOOL_ITEM, GtkSeparatorToolItem))
-#define GTK_SEPARATOR_TOOL_ITEM_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_SEPARATOR_TOOL_ITEM, GtkSeparatorToolItemClass))
 #define GTK_IS_SEPARATOR_TOOL_ITEM(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SEPARATOR_TOOL_ITEM))
-#define GTK_IS_SEPARATOR_TOOL_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SEPARATOR_TOOL_ITEM))
-#define GTK_SEPARATOR_TOOL_ITEM_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_SEPARATOR_TOOL_ITEM, GtkSeparatorToolItemClass))
 
 typedef struct _GtkSeparatorToolItem        GtkSeparatorToolItem;
-typedef struct _GtkSeparatorToolItemClass   GtkSeparatorToolItemClass;
-
-struct _GtkSeparatorToolItem
-{
-  GtkToolItem parent_instance;
-};
-
-/**
- * GtkSeparatorToolItemClass:
- * @parent_class: The parent class.
- */
-struct _GtkSeparatorToolItemClass
-{
-  GtkToolItemClass parent_class;
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  void (* _gtk_reserved1) (void);
-  void (* _gtk_reserved2) (void);
-  void (* _gtk_reserved3) (void);
-  void (* _gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType        gtk_separator_tool_item_get_type (void) G_GNUC_CONST;

@@ -41,16 +41,12 @@ G_BEGIN_DECLS
 #define GTK_APPLICATION_WINDOW_GET_CLASS(inst) (G_TYPE_INSTANCE_GET_CLASS ((inst),  \
                                                 GTK_TYPE_APPLICATION_WINDOW, GtkApplicationWindowClass))
 
-typedef struct _GtkApplicationWindowPrivate GtkApplicationWindowPrivate;
 typedef struct _GtkApplicationWindowClass   GtkApplicationWindowClass;
 typedef struct _GtkApplicationWindow        GtkApplicationWindow;
 
 struct _GtkApplicationWindow
 {
   GtkWindow parent_instance;
-
-  /*< private >*/
-  GtkApplicationWindowPrivate *priv;
 };
 
 /**
@@ -62,7 +58,7 @@ struct _GtkApplicationWindowClass
   GtkWindowClass parent_class;
 
   /*< private >*/
-  gpointer padding[14];
+  gpointer padding[8];
 };
 
 GDK_AVAILABLE_IN_ALL

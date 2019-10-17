@@ -29,13 +29,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_REVEALER (gtk_revealer_get_type ())
 #define GTK_REVEALER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_REVEALER, GtkRevealer))
-#define GTK_REVEALER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_REVEALER, GtkRevealerClass))
 #define GTK_IS_REVEALER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_REVEALER))
-#define GTK_IS_REVEALER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_REVEALER))
-#define GTK_REVEALER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_REVEALER, GtkRevealerClass))
 
 typedef struct _GtkRevealer GtkRevealer;
-typedef struct _GtkRevealerClass GtkRevealerClass;
 
 typedef enum {
   GTK_REVEALER_TRANSITION_TYPE_NONE,
@@ -43,20 +39,12 @@ typedef enum {
   GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT,
   GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT,
   GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP,
-  GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN
+  GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN,
+  GTK_REVEALER_TRANSITION_TYPE_SWING_RIGHT,
+  GTK_REVEALER_TRANSITION_TYPE_SWING_LEFT,
+  GTK_REVEALER_TRANSITION_TYPE_SWING_UP,
+  GTK_REVEALER_TRANSITION_TYPE_SWING_DOWN
 } GtkRevealerTransitionType;
-
-struct _GtkRevealer {
-  GtkBin parent_instance;
-};
-
-/**
- * GtkRevealerClass:
- * @parent_class: The parent class.
- */
-struct _GtkRevealerClass {
-  GtkBinClass parent_class;
-};
 
 GDK_AVAILABLE_IN_ALL
 GType                      gtk_revealer_get_type                (void) G_GNUC_CONST;
@@ -83,4 +71,4 @@ GtkRevealerTransitionType  gtk_revealer_get_transition_type     (GtkRevealer    
 
 G_END_DECLS
 
-#endif
+#endif  /* __GTK_REVEALER_H__ */

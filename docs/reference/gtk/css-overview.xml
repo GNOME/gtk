@@ -4,15 +4,15 @@
 ]>
 <refentry id="chap-css-overview">
 <refmeta>
-<refentrytitle>GTK+ CSS Overview</refentrytitle>
+<refentrytitle>GTK CSS Overview</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>GTK Library</refmiscinfo>
 </refmeta>
 
 <refnamediv>
-<refname>GTK+ CSS Overview</refname>
+<refname>GTK CSS Overview</refname>
 <refpurpose>
-Overview of CSS in GTK+
+Overview of CSS in GTK
 </refpurpose>
 </refnamediv>
 
@@ -31,10 +31,10 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
 -->
 
 <refsect1 id="css-overview">
-  <title>Overview of CSS in GTK+</title>
+  <title>Overview of CSS in GTK</title>
 
   <para>
-    This chapter describes in detail how GTK+ uses CSS for styling
+    This chapter describes in detail how GTK uses CSS for styling
     and layout.
   </para>
 
@@ -61,7 +61,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
     <title>CSS nodes</title>
 
     <para>
-      GTK+ applies the style information found in style sheets by matching
+      GTK applies the style information found in style sheets by matching
       the selectors against a tree of nodes. Each node in the tree has a
       name, a state and possibly style classes. The children of each node
       are linearly ordered.
@@ -99,7 +99,7 @@ scale[.fine-tune]
     <title>Style sheets</title>
 
     <para>
-      The basic structure of the style sheets understood by GTK+ is
+      The basic structure of the style sheets understood by GTK is
       a series of statements, which are either rule sets or “@-rules”,
       separated by whitespace.
     </para>
@@ -128,7 +128,7 @@ button, entry {
     <title>Importing style sheets</title>
 
     <para>
-      GTK+ supports the CSS @import rule, in order to load another
+      GTK supports the CSS @import rule, in order to load another
       style sheet in addition to the currently parsed one.
     </para>
 
@@ -339,8 +339,8 @@ checkbutton:indeterminate {
     </para>
 
     <para>
-      The full syntax for selectors understood by GTK+ can be found in the
-      table below. The main difference to CSS is that GTK+ does not currently
+      The full syntax for selectors understood by GTK can be found in the
+      table below. The main difference to CSS is that GTK does not currently
       support attribute selectors.
     </para>
 
@@ -373,7 +373,7 @@ checkbutton:indeterminate {
             <entry><phrase role="nowrap">E#id</phrase></entry>
             <entry>any E node with the given ID</entry>
             <entry><ulink url="https://www.w3.org/TR/css3-selectors/#id-selectors">CSS</ulink></entry>
-            <entry>GTK+ uses the widget name as ID</entry>
+            <entry>GTK uses the widget name as ID</entry>
           </row>
           <row>
             <entry><phrase role="nowrap">E:nth-child(〈nth-child〉)</phrase></entry>
@@ -543,10 +543,10 @@ checkbutton:indeterminate {
     </example>
 
     <para>
-      GTK+ adds several additional ways to specify colors.
+      GTK adds several additional ways to specify colors.
     </para>
 
-<literallayout><code>〈gtk color〉 = 〈symbolic color〉 | 〈color expression〉 | 〈win32 color〉</code>
+<literallayout><code>〈gtk color〉 = 〈symbolic color〉 | 〈color expression〉</code>
 </literallayout>
 
     <para>
@@ -576,7 +576,7 @@ checkbutton:indeterminate {
     </example>
 
     <para>
-      GTK+ also supports color expressions, which allow colors to be transformed
+      GTK also supports color expressions, which allow colors to be transformed
       to new ones and can be nested, providing a rich language to define colors.
       Color expressions resemble functions, taking 1 or more colors and in some
       cases a number as arguments.
@@ -592,13 +592,6 @@ checkbutton:indeterminate {
 
 <literallayout><code>〈color expression〉 = lighter( 〈color〉 ) | darker( 〈color〉 ) | shade( 〈color〉, 〈number〉 ) |</code>
 <code>                     alpha( 〈color〉, 〈number〉 ) | mix( 〈color〉, 〈color〉, 〈number〉 )</code>
-</literallayout>
-
-    <para>
-      On Windows, GTK+ allows to refer to system colors, as follows:
-    </para>
-
-<literallayout><code>〈win32 color〉 = -gtk-win32-color( 〈name〉, 〈integer〉 )</code>
 </literallayout>
 
   </refsect2>
@@ -632,7 +625,7 @@ checkbutton:indeterminate {
     <para>
       The simplest way to specify an image in CSS is to load an image
       file from a URL. CSS does not specify anything about supported file
-      formats; within GTK+, you can expect at least PNG, JPEG and SVG to
+      formats; within GTK, you can expect at least PNG, JPEG and SVG to
       work. The full list of supported image formats is determined by the
       available gdk-pixbuf image loaders and may vary between systems.
     </para>
@@ -734,14 +727,14 @@ label {
     </para>
 
     <para>
-      GTK+ extends the CSS syntax for images and also uses it for specifying icons.
+      GTK extends the CSS syntax for images and also uses it for specifying icons.
     </para>
 
-<literallayout><code>〈gtk image〉 = 〈themed icon〉 | 〈scaled image〉 | 〈recolored image〉 | 〈win32 theme part〉</code>
+<literallayout><code>〈gtk image〉 = 〈themed icon〉 | 〈scaled image〉 | 〈recolored image〉</code>
 </literallayout>
 
     <para>
-      GTK+ has extensive support for loading icons from icon themes. It is
+      GTK has extensive support for loading icons from icon themes. It is
       accessible from CSS with the -gtk-icontheme syntax.
     </para>
 
@@ -770,7 +763,7 @@ arrow.fancy {
     </example>
 
     <para>
-      GTK+ supports scaled rendering on hi-resolution displays. This works
+      GTK supports scaled rendering on hi-resolution displays. This works
       best if images can specify normal and hi-resolution variants. From
       CSS, this can be done with the -gtk-scaled syntax.
     </para>
@@ -815,13 +808,6 @@ arrow {
 }
 ]]></programlisting>
     </example>
-    <para>
-      On Windows, GTK+ allows to refer to system theme parts as images, as follows:
-    </para>
-
-<literallayout><code>〈win32 theme part〉 = -gtk-win32-theme-part( 〈name〉, 〈integer〉 〈integer〉</code>
-<code>                                              [ , [ over( 〈integer〉 〈integer〉 [ , 〈alpha value〉 ]? ) | margins( 〈integer〉{1,4} ) ] ]* )</code>
-</literallayout>
 
   </refsect2>
 
@@ -830,7 +816,7 @@ arrow {
 
     <para>
       CSS defines a mechanism by which changes in CSS property values can
-      be made to take effect gradually, instead of all at once. GTK+ supports
+      be made to take effect gradually, instead of all at once. GTK supports
       these transitions as well.
     </para>
 
@@ -903,55 +889,6 @@ spinner {
       <ulink url="www.w3.org/TR/css3-animations/">Animations</ulink>
       module of the CSS specification.
     </para>
-
-  </refsect2>
-
-  <refsect2>
-    <title>Key bindings</title>
-
-    <para>
-      In order to extend key bindings affecting different widgets,
-      GTK+ supports the @binding-set rule to parse a set of bind/unbind
-      directives. Note that in order to take effect, the binding sets
-      defined in this way must be associated with rule sets by setting
-      the -gtk-key-bindings property.
-    </para>
-
-    <para>
-      The syntax for @binding-set rules is as follows:
-    </para>
-
-<literallayout><code>〈binding set rule〉 = @binding-set 〈binding name〉 { [ [ 〈binding〉 | 〈unbinding〉 ] ; ]* }</code>
-<code>〈binding〉 = bind "〈accelerator〉" { 〈signal emission〉* }</code>
-<code>〈signal emission〉 = "〈signal name〉" ( [ 〈argument〉 [ , 〈argument〉 ]* ]? }</code>
-<code>〈unbinding〉 = unbind "〈accelerator〉"</code>
-</literallayout>
-
-    <para>
-      where 〈accelerator〉 is a string that can be parsed by gtk_accelerator_parse(),
-      〈signal name〉 is the name of a keybinding signal of the widget in question,
-      and the 〈argument〉 list must be according to the signals declaration.
-    </para>
-
-    <example>
-      <title>An example for using the @binding-set rule</title>
-      <programlisting><![CDATA[
-@binding-set binding-set1 {
-  bind "<alt>Left" { "move-cursor" (visual-positions, -3, 0) };
-  unbind "End";
-};
-
-@binding-set binding-set2 {
-  bind "<alt>Right" { "move-cursor" (visual-positions, 3, 0) };
-  bind "<alt>KP_space" { "delete-from-cursor" (whitespace, 1)
-                         "insert-at-cursor" (" ") };
-};
-
-entry {
-  -gtk-key-bindings: binding-set1, binding-set2;
-}
-]]></programlisting>
-    </example>
 
   </refsect2>
 

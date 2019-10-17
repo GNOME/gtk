@@ -34,7 +34,6 @@
 
 #include "gtkaboutdialog.h"
 #include "gtkbutton.h"
-#include "gtkbbox.h"
 #include "gtkdialog.h"
 #include "gtkgrid.h"
 #include "gtkbox.h"
@@ -61,7 +60,7 @@
 #include "gtkdialogprivate.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerkey.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 
 
 /**
@@ -138,6 +137,22 @@ typedef struct
   gchar *heading;
   gchar **people;
 } CreditSection;
+
+typedef struct _GtkAboutDialogClass   GtkAboutDialogClass;
+
+struct _GtkAboutDialog
+{
+  GtkDialog parent_instance;
+};
+
+struct _GtkAboutDialogClass
+{
+  GtkDialogClass parent_class;
+
+  gboolean (*activate_link) (GtkAboutDialog *dialog,
+                             const gchar    *uri);
+};
+
 
 typedef struct
 {
@@ -245,7 +260,7 @@ static gboolean             text_view_key_pressed           (GtkEventController 
                                                              guint               keycode,
                                                              GdkModifierType     state,
 							     GtkAboutDialog     *about);
-static void                 text_view_released              (GtkGestureMultiPress *press,
+static void                 text_view_released              (GtkGestureClick *press,
                                                              int                   n,
                                                              double                x,
                                                              double                y,
@@ -554,7 +569,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   props[PROP_LOGO] =
     g_param_spec_object ("logo",
                          P_("Logo"),
-                         P_("A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"),
+                         P_("A logo for the about box."),
                          GDK_TYPE_PAINTABLE,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -628,24 +643,37 @@ static void
 update_stack_switcher_visibility (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv = gtk_about_dialog_get_instance_private (about);
+  GtkStackPage *page;
+  gboolean visible;
+  gboolean any_visible;
 
-  if (gtk_widget_get_visible (priv->credits_page) ||
-      gtk_widget_get_visible (priv->license_page) ||
-      gtk_widget_get_visible (priv->system_page))
-    gtk_widget_show (priv->stack_switcher);
-  else
-    gtk_widget_hide (priv->stack_switcher);
+  any_visible = FALSE;
+  
+  page = gtk_stack_get_page (GTK_STACK (priv->stack), priv->credits_page);
+  g_object_get (page, "visible", &visible, NULL);
+  any_visible |= visible;
+  page = gtk_stack_get_page (GTK_STACK (priv->stack), priv->license_page);
+  g_object_get (page, "visible", &visible, NULL);
+  any_visible |= visible;
+  page = gtk_stack_get_page (GTK_STACK (priv->stack), priv->system_page);
+  g_object_get (page, "visible", &visible, NULL);
+  any_visible |= visible;
+
+  gtk_widget_set_visible (priv->stack_switcher, any_visible);
 }
 
 static void
 update_license_button_visibility (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv = gtk_about_dialog_get_instance_private (about);
+  GtkStackPage *page;
 
-  if (priv->license_type == GTK_LICENSE_CUSTOM && priv->license != NULL && priv->license[0] != '\0')
-    gtk_widget_show (priv->license_page);
-  else
-    gtk_widget_hide (priv->license_page);
+  page = gtk_stack_get_page (GTK_STACK (priv->stack), priv->license_page);
+  g_object_set (page, "visible",
+                priv->license_type == GTK_LICENSE_CUSTOM &&
+                priv->license != NULL &&
+                priv->license[0] != '\0',
+                NULL);
 
   update_stack_switcher_visibility (about);
 }
@@ -654,11 +682,13 @@ static void
 update_system_button_visibility (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv = gtk_about_dialog_get_instance_private (about);
+  GtkStackPage *page;
 
-  if (priv->system_information != NULL && priv->system_information[0] != '\0')
-    gtk_widget_show (priv->system_page);
-  else
-    gtk_widget_hide (priv->system_page);
+  page = gtk_stack_get_page (GTK_STACK (priv->stack), priv->system_page);
+  g_object_set (page, "visible",
+                priv->system_information != NULL &&
+                priv->system_information[0] != '\0',
+                NULL);
 
   update_stack_switcher_visibility (about);
 }
@@ -668,6 +698,9 @@ update_credits_button_visibility (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv = gtk_about_dialog_get_instance_private (about);
   gboolean show;
+  GtkStackPage *page;
+
+  page = gtk_stack_get_page (GTK_STACK (priv->stack), priv->credits_page);
 
   show = (priv->authors != NULL ||
           priv->documenters != NULL ||
@@ -676,10 +709,7 @@ update_credits_button_visibility (GtkAboutDialog *about)
           (priv->translator_credits != NULL &&
            strcmp (priv->translator_credits, "translator_credits") &&
            strcmp (priv->translator_credits, "translator-credits")));
-  if (show)
-    gtk_widget_show (priv->credits_page);
-  else
-    gtk_widget_hide (priv->credits_page);
+  g_object_set (page, "visible", show, NULL);
 
   update_stack_switcher_visibility (about);
 }
@@ -717,21 +747,11 @@ apply_use_header_bar (GtkAboutDialog *about)
       g_signal_connect (priv->credits_button, "toggled", G_CALLBACK (toggle_credits), about);
 
       gtk_dialog_add_action_widget (GTK_DIALOG (about), priv->credits_button, GTK_RESPONSE_NONE);
-      gtk_container_child_set (GTK_CONTAINER (gtk_widget_get_parent (priv->credits_button)),
-                               priv->credits_button,
-                               "secondary", TRUE,
-                               NULL);
 
       priv->license_button = gtk_toggle_button_new_with_mnemonic (_("_License"));
       g_object_bind_property (priv->license_page, "visible",
                               priv->license_button, "visible", G_BINDING_SYNC_CREATE);
       g_signal_connect (priv->license_button, "toggled", G_CALLBACK (toggle_license), about);
-
-      gtk_dialog_add_action_widget (GTK_DIALOG (about), priv->license_button, GTK_RESPONSE_NONE);
-      gtk_container_child_set (GTK_CONTAINER (gtk_widget_get_parent (priv->license_button)),
-                               priv->license_button,
-                               "secondary", TRUE,
-                               NULL);
 
       gtk_dialog_add_button (GTK_DIALOG (about), _("_Close"), GTK_RESPONSE_DELETE_EVENT);
     }
@@ -998,7 +1018,9 @@ gtk_about_dialog_activate_link (GtkAboutDialog *about,
       g_signal_connect (dialog, "response",
                         G_CALLBACK (gtk_widget_destroy), NULL);
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_window_present (GTK_WINDOW (dialog));
+      G_GNUC_END_IGNORE_DEPRECATIONS
     }
 
   return TRUE;
@@ -1756,18 +1778,6 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
 
   if (logo != NULL)
     gtk_image_set_from_paintable (GTK_IMAGE (priv->logo_image), logo);
-  else
-    {
-      GList *surfaces = gtk_window_get_default_icon_list ();
-
-      if (surfaces != NULL)
-        {
-          gtk_image_set_from_paintable (GTK_IMAGE (priv->logo_image),
-				        GDK_PAINTABLE (surfaces->data));
-
-          g_list_free (surfaces);
-        }
-    }
 
   g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LOGO]);
 
@@ -1811,7 +1821,6 @@ gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
                                      const gchar    *icon_name)
 {
   GtkAboutDialogPrivate *priv = gtk_about_dialog_get_instance_private (about);
-  GList *icons;
 
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
 
@@ -1850,11 +1859,6 @@ gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
 
       gtk_image_set_from_icon_name (GTK_IMAGE (priv->logo_image), icon_name);
       gtk_image_set_pixel_size (GTK_IMAGE (priv->logo_image), best_size);
-    }
-  else if ((icons = gtk_window_get_default_icon_list ()))
-    {
-      gtk_image_set_from_paintable (GTK_IMAGE (priv->logo_image), icons->data);
-      g_list_free (icons);
     }
   else
     {
@@ -1934,7 +1938,7 @@ text_view_key_pressed (GtkEventController *controller,
 }
 
 static void
-text_view_released (GtkGestureMultiPress *gesture,
+text_view_released (GtkGestureClick *gesture,
                     int                   n_press,
                     double                x,
                     double                y,
@@ -2167,7 +2171,6 @@ add_credits_section (GtkAboutDialog  *about,
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_grid_attach (grid, label, 0, *row, 1, 1);
-  gtk_widget_show (label);
 
   for (p = people; *p; p++)
     {
@@ -2423,7 +2426,9 @@ gtk_show_about_dialog (GtkWindow   *parent,
 
     }
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_window_present (GTK_WINDOW (dialog));
+  G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 /**

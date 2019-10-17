@@ -41,9 +41,10 @@
 #include "gtkprintoperation-private.h"
 #include "gtkprint-win32.h"
 #include "gtkintl.h"
-#include "gtkinvisible.h"
+#include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtknative.h"
 
 #define MAX_PAGE_RANGES 20
 #define STATUS_POLLING_TIME 2000
@@ -538,7 +539,7 @@ win32_poll_status_timeout (GtkPrintOperation *op)
     op_win32->timeout_id = g_timeout_add (STATUS_POLLING_TIME,
 					  (GSourceFunc)win32_poll_status_timeout,
 					  op);
-    g_source_set_name_by_id (op_win32->timeout_id, "[gtk+] win32_poll_status_timeout");
+    g_source_set_name_by_id (op_win32->timeout_id, "[gtk] win32_poll_status_timeout");
   }
   g_object_unref (op);
   return FALSE;
@@ -582,7 +583,7 @@ win32_end_run (GtkPrintOperation *op,
       op_win32->timeout_id = g_timeout_add (STATUS_POLLING_TIME,
 					    (GSourceFunc)win32_poll_status_timeout,
 					    op);
-      g_source_set_name_by_id (op_win32->timeout_id, "[gtk+] win32_poll_status_timeout");
+      g_source_set_name_by_id (op_win32->timeout_id, "[gtk] win32_poll_status_timeout");
     }
   else
     /* Dunno what happened, pretend its finished */
@@ -676,8 +677,11 @@ op_win32_free (GtkPrintOperationWin32 *op_win32)
 static HWND
 get_parent_hwnd (GtkWidget *widget)
 {
-  gtk_widget_realize (widget);
-  return gdk_win32_surface_get_handle (gtk_widget_get_surface (widget));
+  GtkNative *native;
+
+  native = gtk_widget_get_native (widget);
+  gtk_widget_realize (GTK_WIDGET (native));
+  return gdk_win32_surface_get_handle (gtk_native_get_surface (native));
 }
 
 static void
@@ -1211,6 +1215,7 @@ dialog_from_print_settings (GtkPrintOperation *op,
       switch (print_pages)
 	{
 	default:
+	case GTK_PRINT_PAGES_SELECTION:
 	case GTK_PRINT_PAGES_ALL:
 	  printdlgex->Flags |= PD_ALLPAGES;
 	  break;
@@ -1361,7 +1366,7 @@ plug_grab_notify (GtkWidget        *widget,
 		  gboolean          was_grabbed,
 		  GtkPrintOperation *op)
 {
-  EnableWindow (GetAncestor (GDK_SURFACE_HWND (gtk_widget_get_surface (widget)), GA_ROOT),
+  EnableWindow (GetAncestor (GDK_SURFACE_HWND (gtk_native_get_surface (gtk_widget_get_native (widget))), GA_ROOT),
 		was_grabbed);
 }
 
@@ -1382,14 +1387,12 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
 
       SetWindowLongPtrW (wnd, GWLP_USERDATA, (LONG_PTR)op);
 
-      _gtk_widget_set_is_toplevel (plug, TRUE);
-
       gtk_window_set_modal (GTK_WINDOW (plug), TRUE);
       op_win32->embed_widget = plug;
       gtk_container_add (GTK_CONTAINER (plug), op->priv->custom_widget);
       gtk_widget_show (op->priv->custom_widget);
       gtk_widget_show (plug);
-      gdk_surface_focus (gtk_widget_get_surface (plug), GDK_CURRENT_TIME);
+      gdk_surface_focus (gtk_native_get_surface (gtk_widget_get_native (plug)), GDK_CURRENT_TIME);
 
       /* This dialog is modal, so we grab the embed widget */
       gtk_grab_add (plug);
@@ -1719,10 +1722,10 @@ gtk_print_operation_run_with_dialog (GtkPrintOperation *op,
   
   if (parent == NULL)
     {
-      invisible = gtk_invisible_new ();
+      invisible = gtk_window_new (GTK_WINDOW_POPUP);
       parentHWnd = get_parent_hwnd (invisible);
     }
-  else 
+  else
     parentHWnd = get_parent_hwnd (GTK_WIDGET (parent));
 
   printdlgex = (LPPRINTDLGEXW)GlobalAlloc (GPTR, sizeof (PRINTDLGEXW));

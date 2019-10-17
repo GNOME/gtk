@@ -4,15 +4,15 @@
 ]>
 <refentry id="chap-drawing-model">
 <refmeta>
-<refentrytitle>The GTK+ Drawing Model</refentrytitle>
+<refentrytitle>The GTK Drawing Model</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>GTK Library</refmiscinfo>
 </refmeta>
 
 <refnamediv>
-<refname>The GTK+ Drawing Model</refname>
+<refname>The GTK Drawing Model</refname>
 <refpurpose>
-    The GTK+ drawing model in detail
+    How widgets draw
 </refpurpose>
 </refnamediv>
 
@@ -21,81 +21,62 @@
     <title>Overview of the drawing model</title>
 
     <para>
-      This chapter describes the GTK+ drawing model in detail.  If you
-      are interested in the procedure which GTK+ follows to draw its
+      This chapter describes the GTK drawing model in detail.  If you
+      are interested in the procedure which GTK follows to draw its
       widgets and windows, you should read this chapter; this will be
       useful to know if you decide to implement your own widgets.  This
       chapter will also clarify the reasons behind the ways certain
-      things are done in GTK+; for example, why you cannot change the
-      background color of all widgets with the same method.
+      things are done in GTK.
     </para>
 
     <refsect2 id="drawing model windows">
+
       <title>Windows and events</title>
 
       <para>
-        Programs that run in a windowing system generally create
-        rectangular regions in the screen called
-        <firstterm>windows</firstterm>.  Traditional windowing systems
-        do not automatically save the graphical content of windows, and
-        instead ask client programs to repaint those windows whenever it
-        is needed.  For example, if a window that is stacked below other
-        windows gets raised to the top, then a client program has to
-        repaint the area that was previously obscured.  When the
-        windowing system asks a client program to redraw part of a
-        window, it sends an <firstterm>exposure event</firstterm> to the
-        program for that window.
+        Applications that use a windowing system generally create
+        rectangular regions in the screen called <firstterm>surfaces</firstterm>
+        (GTK is following the Wayland terminology, other windowing systems
+        such as X11 may call these <firstterm>windows</firstterm>).
+        Traditional windowing systems do not automatically save the
+        graphical content of surfaces, and instead ask applications to
+        provide new content whenever it is needed.
+        For example, if a window that is stacked below other
+        windows gets raised to the top, then the application has to
+        repaint it, so the previously obscured area can be shown.
+        When the windowing system asks an application to redraw
+        a window, it sends a <firstterm>frame event</firstterm>
+        (<firstterm>expose event</firstterm> in X11 terminology)
+        for that window.
+      </para>
+      
+      <para>
+        Each GTK toplevel window or dialog is associated with a
+        windowing system surface. Child widgets such as buttons or
+        entries don't have their own surface; they use the surface
+        of their toplevel.
       </para>
 
       <para>
-        Here, "windows" means "rectangular regions with automatic
-        clipping", instead of "toplevel application windows".  Most
-        windowing systems support nested windows, where the contents of
-        child windows get clipped by the boundaries of their parents.
-        Although GTK+ and GDK in particular may run on a windowing
-        system with no such notion of nested windows, GDK presents the
-        illusion of being under such a system.  A toplevel window may
-        contain many subwindows and sub-subwindows, for example, one for
-        the menu bar, one for the document area, one for each scrollbar,
-        and one for the status bar.  In addition, controls that receive
-        user input, such as clickable buttons, are likely to have their
-        own subwindows as well.
-      </para>
-
-      <para>
-        In practice, most windows in modern GTK+ application are client-side
-        constructs. Only few windows (in particular toplevel windows) are
-        <emphasis>native</emphasis>, which means that they represent a
-        window from the underlying windowing system on which GTK+ is running.
-        For example, on X11 it corresponds to a <type>Window</type>; on Win32,
-        it corresponds to a <type>HANDLE</type>.
-      </para>
-
-      <para>
-        Generally, the drawing cycle begins when GTK+ receives an
-        exposure event from the underlying windowing system:  if the
+        Generally, the drawing cycle begins when GTK receives
+        a frame event from the underlying windowing system:  if the
         user drags a window over another one, the windowing system will
-        tell the underlying window that it needs to repaint itself.  The
+        tell the underlying surface that it needs to repaint itself.  The
         drawing cycle can also be initiated when a widget itself decides
         that it needs to update its display.  For example, when the user
-        types a character in a <link
-        linkend="GtkEntry"><classname>GtkEntry</classname></link>
-        widget, the entry asks GTK+ to queue a redraw operation for
-        itself.
+        types a character in an entry widget, the entry asks GTK to queue
+        a redraw operation for itself.
       </para>
 
       <para>
-        The windowing system generates events for native windows. The GDK
-        interface to the windowing system translates such native events into
-        <link linkend="GdkEvent"><structname>GdkEvent</structname></link>
-        structures and sends them on to the GTK layer.  In turn, the GTK layer
-        finds the widget that corresponds to a particular
-        <classname>GdkSurface</classname> and emits the corresponding event
-        signals on that widget.
+        The windowing system generates frame events for surfaces. The GDK
+        interface to the windowing system translates such events into
+        emissions of the ::render signal on the affected surfaces.
+        The GTK toplevel window connects to that signal, and reacts appropriately.
       </para>
 
       <para>
-        The following sections describe how GTK+ decides which widgets
+        The following sections describe how GTK decides which widgets
         need to be repainted in response to such events, and how widgets
         work internally in terms of the resources they use from the
         windowing system.
@@ -106,14 +87,19 @@
       <title>The frame clock</title>
 
       <para>
-        All GTK+ applications are mainloop-driven, which means that most
+        All GTK applications are mainloop-driven, which means that most
         of the time the app is idle inside a loop that just waits for
         something to happen and then calls out to the right place when
-        it does. On top of this GTK+ has a frame clock that gives a
+        it does. On top of this GTK has a frame clock that gives a
         “pulse” to the application. This clock beats at a steady rate,
         which is tied to the framerate of the output (this is synced to
-        the monitor via the window manager/compositor). The clock has
-        several phases:
+        the monitor via the window manager/compositor). A typical
+        refresh rate is 60 frames per second, so a new “pulse” happens
+        roughly every 16 milliseconds.
+      </para>
+
+      <para>
+        The clock has several phases:
         <itemizedlist>
           <listitem><para>Events</para></listitem>
           <listitem><para>Update</para></listitem>
@@ -125,24 +111,24 @@
       </para>
 
       <para>
-        The Events phase is a long stretch of time between each
-        redraw where we get input events from the user and other events
+        The Events phase is a stretch of time between each redraw where
+        GTK processes input events from the user and other events
         (like e.g. network I/O). Some events, like mouse motion are
-        compressed so that we only get a single mouse motion event per
-        clock cycle.
+        compressed so that only a single mouse motion event per clock 
+        cycle needs to be handled.
       </para>
 
       <para>
-        Once the Events phase is over we pause all external events and
-        run the redraw loop. First is the Update phase, where all
+        Once the Events phase is over, external events are paused and
+        the redraw loop is run. First is the Update phase, where all
         animations are run to calculate the new state based on the
         estimated time the next frame will be visible (available via
         the frame clock). This often involves geometry changes which
-        drives the next phase, Layout. If there are any changes in
-        widget size requirements we calculate a new layout for the
-        widget hierarchy (i.e. we assign sizes and positions). Then
-        we go to the Paint phase where we redraw the regions of the
-        window that need redrawing.
+        drive the next phase, Layout. If there are any changes in
+        widget size requirements the new layout is calculated for the
+        widget hierarchy (i.e. sizes and positions for all widgets are
+        determined). Then comes the Paint phase, where we redraw the
+        regions of the window that need redrawing.
       </para>
 
       <para>
@@ -184,162 +170,57 @@
       </para>
     </refsect2>
 
+    <refsect2 id="scene-graph">
+      <title>The scene graph</title>
+
+      <para>
+        The first step in “drawing” a window is that GTK creates
+        <firstterm>render nodes</firstterm> for all the widgets
+        in the window. The render nodes are combined into a tree
+        that you can think of as a <firstterm>scene graph</firstterm>
+        describing your window contents.
+      </para>
+      <para>
+        Render nodes belong to the GSK layer, and there are various kinds
+        of them, for the various kinds of drawing primitives you are likely
+        to need when translating widget content and CSS styling. Typical
+        examples are text nodes, gradient nodes, texture nodes or clip nodes.
+      <para>
+      <para>
+        In the past, all drawing in GTK happened via cairo. It is still possible
+        to use cairo for drawing your custom widget contents, by using a cairo
+        render node.
+      </para>
+      </para>
+        A GSK <firstterm>renderer</firstterm> takes these render nodes, transforms
+        them into rendering commands for the drawing API it targets, and arranges
+        for the resulting drawing to be associated with the right surface. GSK has
+        renderers for OpenGL, Vulkan and cairo.
+      </para>
+    </refsect2>
+
     <refsect2 id="hierarchical-drawing">
       <title>Hierarchical drawing</title>
 
       <para>
-        During the Paint phase we will send a single expose event to
-        the toplevel window. The event handler will create a cairo
-        context for the window and emit a GtkWidget::draw() signal
-        on it, which will propagate down the entire widget hierarchy
-        in back-to-front order, using the clipping and transform of
-        the cairo context. This lets each widget draw its content at
-        the right place and time, correctly handling things like
-        partial transparencies and overlapping widgets.
+        During the Paint phase GTK receives a single ::render signal on the toplevel
+        window. The signal handler will create a snapshot object (which is a
+        helper for creating a scene graph) and emit a GtkWidget::snapshot() signal,
+        which will propagate down the widget hierarchy. This lets each widget
+        snapshot its content at the right place and time, correctly handling things
+        like partial transparencies and overlapping widgets.
       </para>
 
       <para>
-        When generating the event, GDK also sets up double buffering to
-        avoid the flickering that would result from each widget drawing
-        itself in turn.  <xref linkend="double-buffering"/> describes
-        the double buffering mechanism in detail.
-      </para>
-        
-      <para>
-        Normally, there is only a single cairo context which is used in
-        the entire repaint, rather than one per GdkSurface. This means you
-        have to respect (and not reset) existing clip and transformations
-        set on it.
-      </para>
-
-      <para>
-        Most widgets, including those that create their own GdkSurfaces have
-        a transparent background, so they draw on top of whatever widgets
-        are below them. This was not the case in GTK+ 2 where the theme set
-        the background of most widgets to the default background color. (In
-        fact, transparent GdkSurfaces used to be impossible.)
-      </para>
-
-      <para>
-        The whole rendering hierarchy is captured in the call stack, rather
-        than having multiple separate draw emissions, so you can use effects
-        like e.g. cairo_push/pop_group() which will affect all the widgets
-        below you in the hierarchy. This makes it possible to have e.g.
-        partially transparent containers.
+        To avoid excessive work when generating scene graphs, GTK caches render nodes.
+        Each widget keeps a reference to its render node (which in turn, will refer to
+        the render nodes of children, and grandchildren, and so on), and will reuse
+        that node during the Paint phase. Invalidating a widget (by calling
+        gtk_widget_queue_draw()) discards the cached render node, forcing the widget
+        to regenerate it the next time it needs to handle a ::snapshot.
       </para>
     </refsect2>
 
-    <refsect2 id="scrolling drawing model">
-      <title>Scrolling</title>
-
-      <para>
-        Traditionally, GTK+ has used self-copy operations to implement
-        scrolling with native windows. With transparent backgrounds, this
-        no longer works. Instead, we just mark the entire affected area for
-        repainting when these operations are used. This allows (partially)
-        transparent backgrounds, and it also more closely models modern
-        hardware where self-copy operations are problematic (they break the
-        rendering pipeline).
-      </para>
-    </refsect2>
-
-  </refsect1>
-
-  <refsect1 id="double-buffering">
-    <title>Double buffering</title>
-
-    <para>
-      If each of the drawing calls made by each subwidget's
-      <literal>draw</literal> handler were sent directly to the
-      windowing system, flicker could result.  This is because areas may get
-      redrawn repeatedly:  the background, then decorative frames, then text
-      labels, etc.  To avoid flicker, GTK+ employs a <firstterm>double
-	buffering</firstterm> system at the GDK level.  Widgets normally don't
-      know that they are drawing to an off-screen buffer; they just issue their
-      normal drawing commands, and the buffer gets sent to the windowing system
-      when all drawing operations are done.
-    </para>
-
-    <para>
-      Two basic functions in GDK form the core of the double-buffering
-      mechanism:  <link
-      linkend="gdk_surface_begin_paint_region"><function>gdk_surface_begin_paint_region()</function></link>
-      and <link
-      linkend="gdk_surface_end_paint"><function>gdk_surface_end_paint()</function></link>.
-      The first function tells a <classname>GdkSurface</classname> to
-      create a temporary off-screen buffer for drawing.  All
-      subsequent drawing operations to this window get automatically
-      redirected to that buffer.  The second function actually paints
-      the buffer onto the on-screen window, and frees the buffer.
-    </para>
-
-    <refsect2 id="automatic-double-buffering">
-      <title>Automatic double buffering</title>
-
-      <para>
-	It would be inconvenient for all widgets to call
-	<function>gdk_surface_begin_paint_region()</function> and
-	<function>gdk_surface_end_paint()</function> at the beginning
-	and end of their draw handlers.
-      </para>
-
-      <para>
-	To make this easier, GTK+ normally calls
-        <function>gdk_surface_begin_paint_region()</function>
-        before emitting the #GtkWidget::draw signal, and
-	then it calls <function>gdk_surface_end_paint()</function>
-	after the signal has been emitted. This is convenient for
-	most widgets, as they do not need to worry about creating
-	their own temporary drawing buffers or about calling those
-	functions.
-      </para>
-
-      <para>
-	However, some widgets may prefer to disable this kind of
-	automatic double buffering and do things on their own.
-        To do this, call the
-        <function>gtk_widget_set_double_buffered()</function>
-        function in your widget's constructor. Double buffering
-        can only be turned off for widgets that have a native
-        window.
-      </para>
-
-      <example id="disabling-double-buffering">
-	<title>Disabling automatic double buffering</title>
-
-	<programlisting>
-static void
-my_widget_init (MyWidget *widget)
-{
-  ...
-
-  gtk_widget_set_double_buffered (widget, FALSE);
-
-  ...
-}
-	</programlisting>
-      </example>
-
-      <para>
-	When is it convenient to disable double buffering?  Generally,
-	this is the case only if your widget gets drawn in such a way
-	that the different drawing operations do not overlap each
-	other.  For example, this may be the case for a simple image
-	viewer:  it can just draw the image in a single operation.
-	This would <emphasis>not</emphasis> be the case with a word
-	processor, since it will need to draw and over-draw the page's
-	background, then the background for highlighted text, and then
-	the text itself.
-      </para>
-
-      <para>
-	Even if you turn off double buffering on a widget, you
-	can still call
-	<function>gdk_surface_begin_paint_region()</function> and
-	<function>gdk_surface_end_paint()</function> by hand to use
-	temporary drawing buffers.
-      </para>
-    </refsect2>
   </refsect1>
 
 </refentry>

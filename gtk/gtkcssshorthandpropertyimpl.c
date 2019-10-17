@@ -50,10 +50,10 @@
 static gboolean
 value_is_done_parsing (GtkCssParser *parser)
 {
-  return _gtk_css_parser_is_eof (parser) ||
-         _gtk_css_parser_begins_with (parser, ',') ||
-         _gtk_css_parser_begins_with (parser, ';') ||
-         _gtk_css_parser_begins_with (parser, '}');
+  return gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) ||
+         gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA) ||
+         gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SEMICOLON) ||
+         gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_CLOSE_CURLY);
 }
 
 static gboolean
@@ -76,7 +76,7 @@ parse_four_numbers (GtkCssShorthandProperty  *shorthand,
 
   if (i == 0)
     {
-      _gtk_css_parser_error (parser, "Expected a length");
+      gtk_css_parser_error_syntax (parser, "Expected a length");
       return FALSE;
     }
 
@@ -145,7 +145,7 @@ parse_border_radius (GtkCssShorthandProperty  *shorthand,
 
   if (i == 0)
     {
-      _gtk_css_parser_error (parser, "Expected a number");
+      gtk_css_parser_error_syntax (parser, "Expected a number");
       goto fail;
     }
 
@@ -155,7 +155,7 @@ parse_border_radius (GtkCssShorthandProperty  *shorthand,
   for (; i < 4; i++)
     x[i] = _gtk_css_value_ref (x[(i - 1) >> 1]);
 
-  if (_gtk_css_parser_try (parser, "/", TRUE))
+  if (gtk_css_parser_try_delim (parser, '/'))
     {
       for (i = 0; i < 4; i++)
         {
@@ -171,7 +171,7 @@ parse_border_radius (GtkCssShorthandProperty  *shorthand,
 
       if (i == 0)
         {
-          _gtk_css_parser_error (parser, "Expected a number");
+          gtk_css_parser_error_syntax (parser, "Expected a number");
           goto fail;
         }
 
@@ -243,7 +243,7 @@ parse_border_style (GtkCssShorthandProperty  *shorthand,
 
   if (i == 0)
     {
-      _gtk_css_parser_error (parser, "Expected a border style");
+      gtk_css_parser_error_syntax (parser, "Expected a border style");
       return FALSE;
     }
 
@@ -261,12 +261,12 @@ parse_border_image (GtkCssShorthandProperty  *shorthand,
   do
     {
       if (values[0] == NULL &&
-          (_gtk_css_parser_has_prefix (parser, "none") ||
+          (gtk_css_parser_has_ident (parser, "none") ||
            _gtk_css_image_can_parse (parser)))
         {
           GtkCssImage *image;
 
-          if (_gtk_css_parser_try (parser, "none", TRUE))
+          if (gtk_css_parser_try_ident (parser, "none"))
             image = NULL;
           else
             {
@@ -293,7 +293,7 @@ parse_border_image (GtkCssShorthandProperty  *shorthand,
           if (values[1] == NULL)
             return FALSE;
 
-          if (_gtk_css_parser_try (parser, "/", TRUE))
+          if (gtk_css_parser_try_delim (parser, '/'))
             {
               values[2] = _gtk_css_border_value_parse (parser,
                                                        GTK_CSS_PARSE_PERCENT
@@ -418,9 +418,9 @@ parse_border (GtkCssShorthandProperty  *shorthand,
 static GtkCssValue *
 _gtk_css_font_variant_value_try_parse (GtkCssParser *parser)
 {
-  if (_gtk_css_parser_try (parser, "normal", TRUE))
+  if (gtk_css_parser_try_ident (parser, "normal"))
     return _gtk_css_ident_value_new ("normal");
-  else if (_gtk_css_parser_try (parser, "small-caps", TRUE))
+  else if (gtk_css_parser_try_ident (parser, "small-caps"))
     return _gtk_css_ident_value_new ("small-caps");
   return NULL;
 }
@@ -450,7 +450,33 @@ parse_font (GtkCssShorthandProperty  *shorthand,
 
       if (values[3] == NULL)
         {
-          values[3] = _gtk_css_font_weight_value_try_parse (parser);
+          values[3] = gtk_css_font_weight_value_try_parse (parser);
+          if (values[3] == NULL && gtk_css_number_value_can_parse (parser))
+            {
+              /* This needs to check for font-size, too */
+              GtkCssValue *num = _gtk_css_number_value_parse (parser,
+                                                              GTK_CSS_PARSE_NUMBER |
+                                                              GTK_CSS_PARSE_LENGTH |
+                                                              GTK_CSS_PARSE_PERCENT |
+                                                              GTK_CSS_POSITIVE_ONLY);
+              if (num == NULL)
+                return FALSE;
+
+              if (gtk_css_number_value_get_dimension (num) != GTK_CSS_DIMENSION_NUMBER)
+                {
+                  values[5] = num;
+                  goto have_font_size;
+                }
+
+              values[3] = num;
+              if (_gtk_css_number_value_get (values[3], 100) < 1 || 
+                  _gtk_css_number_value_get (values[3], 100) > 1000)
+                {
+                  gtk_css_parser_error_value (parser, "Font weight values must be between 1 and 1000");
+                  g_clear_pointer (&values[3], gtk_css_value_unref);
+                  return FALSE;
+                }
+            }
           parsed_one = parsed_one || values[3] != NULL;
         }
 
@@ -463,10 +489,15 @@ parse_font (GtkCssShorthandProperty  *shorthand,
   while (parsed_one && !value_is_done_parsing (parser));
 
   values[5] = gtk_css_font_size_value_parse (parser);
+  if (values[5] == NULL)
+    return FALSE;
 
+have_font_size:
   values[0] = gtk_css_font_family_value_parse (parser);
+  if (values[0] == NULL)
+    return FALSE;
 
-  return values[0] != NULL && values[5] != NULL;
+  return TRUE;
 }
 
 static gboolean
@@ -480,12 +511,12 @@ parse_one_background (GtkCssShorthandProperty  *shorthand,
     {
       /* the image part */
       if (values[0] == NULL &&
-          (_gtk_css_parser_has_prefix (parser, "none") ||
+          (gtk_css_parser_has_ident (parser, "none") ||
            _gtk_css_image_can_parse (parser)))
         {
           GtkCssImage *image;
 
-          if (_gtk_css_parser_try (parser, "none", TRUE))
+          if (gtk_css_parser_try_ident (parser, "none"))
             image = NULL;
           else
             {
@@ -502,7 +533,7 @@ parse_one_background (GtkCssShorthandProperty  *shorthand,
           values[1] = value;
           value = NULL;
 
-          if (_gtk_css_parser_try (parser, "/", TRUE) &&
+          if (gtk_css_parser_try_delim (parser, '/') &&
               (value = _gtk_css_bg_size_value_parse (parser)))
             {
               values[2] = value;
@@ -595,7 +626,7 @@ parse_background (GtkCssShorthandProperty  *shorthand,
           g_ptr_array_add (arrays[i], step_values[i]);
           step_values[i] = NULL;
         }
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
+  } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
   for (i = 0; i < 6; i++)
     {
@@ -609,56 +640,63 @@ parse_background (GtkCssShorthandProperty  *shorthand,
 }
 
 static gboolean
+has_transition_property (GtkCssParser *parser,
+                         gpointer      option_data,
+                         gpointer      user_data)
+{
+  return gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT);
+}
+
+static gboolean
+parse_transition_property (GtkCssParser *parser,
+                           gpointer      option_data,
+                           gpointer      user_data)
+{
+  GtkCssValue **value = option_data;
+
+  *value = _gtk_css_ident_value_try_parse (parser);
+  g_assert (*value);
+
+  return TRUE;
+}
+
+static gboolean
+parse_transition_time (GtkCssParser *parser,
+                       gpointer      option_data,
+                       gpointer      user_data)
+{
+  GtkCssValue **value = option_data;
+
+  *value = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_TIME);
+
+  return *value != NULL;
+}
+
+static gboolean
+parse_transition_timing_function (GtkCssParser *parser,
+                                  gpointer      option_data,
+                                  gpointer      user_data)
+{
+  GtkCssValue **value = option_data;
+
+  *value = _gtk_css_ease_value_parse (parser);
+
+  return *value != NULL;
+}
+
+static gboolean
 parse_one_transition (GtkCssShorthandProperty  *shorthand,
                       GtkCssValue             **values,
                       GtkCssParser             *parser)
 {
-  do
-    {
-      /* the image part */
-      if (values[2] == NULL &&
-          gtk_css_number_value_can_parse (parser) && !_gtk_css_parser_begins_with (parser, '-'))
-        {
-          GtkCssValue *number = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_TIME);
+  const GtkCssParseOption options[] = {
+    { (void *) _gtk_css_ease_value_can_parse, parse_transition_timing_function, &values[3] },
+    { (void *) gtk_css_number_value_can_parse, parse_transition_time, &values[1] },
+    { (void *) gtk_css_number_value_can_parse, parse_transition_time, &values[2] },
+    { (void *) has_transition_property, parse_transition_property, &values[0] },
+  };
 
-          if (number == NULL)
-            return FALSE;
-
-          if (values[1] == NULL)
-            values[1] = number;
-          else
-            values[2] = number;
-        }
-      else if (values[3] == NULL &&
-               _gtk_css_ease_value_can_parse (parser))
-        {
-          values[3] = _gtk_css_ease_value_parse (parser);
-
-          if (values[3] == NULL)
-            return FALSE;
-        }
-      else if (values[0] == NULL)
-        {
-          values[0] = _gtk_css_ident_value_try_parse (parser);
-          if (values[0] == NULL)
-            {
-              _gtk_css_parser_error (parser, "Unknown value for property");
-              return FALSE;
-            }
-
-        }
-      else
-        {
-          /* We parsed everything and there's still stuff left?
-           * Pretend we didn't notice and let the normal code produce
-           * a 'junk at end of value' error
-           */
-          break;
-        }
-    }
-  while (!value_is_done_parsing (parser));
-
-  return TRUE;
+  return gtk_css_parser_consume_any (parser, options, G_N_ELEMENTS (options), NULL);
 }
 
 static gboolean
@@ -699,7 +737,7 @@ parse_transition (GtkCssShorthandProperty  *shorthand,
           g_ptr_array_add (arrays[i], step_values[i]);
           step_values[i] = NULL;
         }
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
+  } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
   for (i = 0; i < 4; i++)
     {
@@ -717,7 +755,7 @@ parse_one_animation (GtkCssShorthandProperty  *shorthand,
 {
   do
     {
-      if (values[1] == NULL && _gtk_css_parser_try (parser, "infinite", TRUE))
+      if (values[1] == NULL && gtk_css_parser_try_ident (parser, "infinite"))
         {
           values[1] = _gtk_css_number_value_new (HUGE_VAL, GTK_CSS_NUMBER);
         }
@@ -816,7 +854,7 @@ parse_animation (GtkCssShorthandProperty  *shorthand,
           g_ptr_array_add (arrays[i], step_values[i]);
           step_values[i] = NULL;
         }
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
+  } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
   for (i = 0; i < 7; i++)
     {
@@ -870,11 +908,11 @@ parse_font_variant (GtkCssShorthandProperty  *shorthand,
                     GtkCssValue             **values,
                     GtkCssParser             *parser)
 {
-  if (_gtk_css_parser_try (parser, "normal", TRUE))
+  if (gtk_css_parser_try_ident (parser, "normal"))
     {
       /* all initial values */
     }
-  else if (_gtk_css_parser_try (parser, "none", TRUE))
+  else if (gtk_css_parser_try_ident (parser, "none"))
     {
       /* all initial values, except for font-variant-ligatures */
       values[0] = _gtk_css_font_variant_ligature_value_new (GTK_CSS_FONT_VARIANT_LIGATURE_NONE);
@@ -896,13 +934,13 @@ parse_font_variant (GtkCssShorthandProperty  *shorthand,
         parsed_ligature = _gtk_css_font_variant_ligature_try_parse_one (parser, ligatures);
         if (parsed_ligature == 0 && ligatures != 0)
           {
-            _gtk_css_parser_error (parser, "Invalid combination of ligature values");
+            gtk_css_parser_error_value (parser, "Invalid combination of ligature values");
             return FALSE;
           }
         if (parsed_ligature == GTK_CSS_FONT_VARIANT_LIGATURE_NORMAL ||
             parsed_ligature == GTK_CSS_FONT_VARIANT_LIGATURE_NONE)
           {
-            _gtk_css_parser_error (parser, "Unexpected ligature value");
+            gtk_css_parser_error_value (parser, "Unexpected ligature value");
             return FALSE;
           }
         if (parsed_ligature != ligatures)
@@ -914,12 +952,12 @@ parse_font_variant (GtkCssShorthandProperty  *shorthand,
         parsed_numeric = _gtk_css_font_variant_numeric_try_parse_one (parser, numeric);
         if (parsed_numeric == 0 && numeric != 0)
           {
-            _gtk_css_parser_error (parser, "Invalid combination of numeric values");
+            gtk_css_parser_error_value (parser, "Invalid combination of numeric values");
             return FALSE;
           }
         if (parsed_numeric == GTK_CSS_FONT_VARIANT_NUMERIC_NORMAL)
           {
-            _gtk_css_parser_error (parser, "Unexpected numeric value");
+            gtk_css_parser_error_value (parser, "Unexpected numeric value");
             return FALSE;
           }
         if (parsed_numeric != numeric)
@@ -931,12 +969,12 @@ parse_font_variant (GtkCssShorthandProperty  *shorthand,
         parsed_east_asian = _gtk_css_font_variant_east_asian_try_parse_one (parser, east_asian);
         if (parsed_east_asian == 0 && east_asian != 0)
           {
-            _gtk_css_parser_error (parser, "Invalid combination of east asian values");
+            gtk_css_parser_error_value (parser, "Invalid combination of east asian values");
             return FALSE;
           }
         if (parsed_east_asian == GTK_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL)
           {
-            _gtk_css_parser_error (parser, "Unexpected east asian value");
+            gtk_css_parser_error_value (parser, "Unexpected east asian value");
             return FALSE;
           }
         if (parsed_east_asian != east_asian)
@@ -952,7 +990,7 @@ parse_font_variant (GtkCssShorthandProperty  *shorthand,
               {
                 if (_gtk_css_font_variant_position_value_get (values[1]) == GTK_CSS_FONT_VARIANT_POSITION_NORMAL)
                   {
-                    _gtk_css_parser_error (parser, "Unexpected position value");
+                    gtk_css_parser_error_value (parser, "Unexpected position value");
                     return FALSE;
                   }
                 goto found;
@@ -965,7 +1003,7 @@ parse_font_variant (GtkCssShorthandProperty  *shorthand,
               {
                 if (_gtk_css_font_variant_caps_value_get (values[2]) == GTK_CSS_FONT_VARIANT_CAPS_NORMAL)
                   {
-                    _gtk_css_parser_error (parser, "Unexpected caps value");
+                    gtk_css_parser_error_value (parser, "Unexpected caps value");
                     return FALSE;
                   }
                 goto found;
@@ -979,14 +1017,14 @@ parse_font_variant (GtkCssShorthandProperty  *shorthand,
               {
                 if (_gtk_css_font_variant_alternate_value_get (values[4]) == GTK_CSS_FONT_VARIANT_ALTERNATE_NORMAL)
                   {
-                    _gtk_css_parser_error (parser, "Unexpected alternate value");
+                    gtk_css_parser_error_value (parser, "Unexpected alternate value");
                     return FALSE;
                   }
                 goto found;
               }
           }
 
-        _gtk_css_parser_error (parser, "Unknown value for property");
+        gtk_css_parser_error_value (parser, "Unknown value for property");
         return FALSE;
 
 found:
@@ -1000,7 +1038,7 @@ found:
           values[0] = _gtk_css_font_variant_ligature_value_new (ligatures);
           if (values[0] == NULL)
             {
-              _gtk_css_parser_error (parser, "Invalid combination of ligature values");
+              gtk_css_parser_error_value (parser, "Invalid combination of ligature values");
               return FALSE;
             }
         }
@@ -1010,7 +1048,7 @@ found:
           values[3] = _gtk_css_font_variant_numeric_value_new (numeric);
           if (values[3] == NULL)
             {
-              _gtk_css_parser_error (parser, "Invalid combination of numeric values");
+              gtk_css_parser_error_value (parser, "Invalid combination of numeric values");
               return FALSE;
             }
         }
@@ -1020,7 +1058,7 @@ found:
           values[5] = _gtk_css_font_variant_east_asian_value_new (east_asian);
           if (values[5] == NULL)
             {
-              _gtk_css_parser_error (parser, "Invalid combination of east asian values");
+              gtk_css_parser_error_value (parser, "Invalid combination of east asian values");
               return FALSE;
             }
         }
@@ -1034,7 +1072,7 @@ parse_all (GtkCssShorthandProperty  *shorthand,
            GtkCssValue             **values,
            GtkCssParser             *parser)
 {
-  _gtk_css_parser_error (parser, "The 'all' property can only be set to 'initial', 'inherit' or 'unset'");
+  gtk_css_parser_error_syntax (parser, "The 'all' property can only be set to 'initial', 'inherit' or 'unset'");
   return FALSE;
 }
 
@@ -1105,8 +1143,18 @@ pack_font_description (GtkCssShorthandProperty *shorthand,
   v = (* query_func) (GTK_CSS_PROPERTY_FONT_FAMILY, query_data);
   if (v)
     {
-      /* xxx: Can we set all the families here somehow? */
-      pango_font_description_set_family (description, _gtk_css_string_value_get (_gtk_css_array_value_get_nth (v, 0)));
+      int i;
+      GString *s = g_string_new ("");
+
+      for (i = 0; i < _gtk_css_array_value_get_n_values (v); i++)
+        {
+          if (i > 0)
+            g_string_append (s, ",");
+          g_string_append (s, _gtk_css_string_value_get (_gtk_css_array_value_get_nth (v, i)));
+        }
+
+      pango_font_description_set_family (description, s->str);
+      g_string_free (s, TRUE);
     }
 
   v = (* query_func) (GTK_CSS_PROPERTY_FONT_SIZE, query_data);
@@ -1119,7 +1167,7 @@ pack_font_description (GtkCssShorthandProperty *shorthand,
 
   v = (* query_func) (GTK_CSS_PROPERTY_FONT_WEIGHT, query_data);
   if (v)
-    pango_font_description_set_weight (description, _gtk_css_font_weight_value_get (v));
+    pango_font_description_set_weight (description, _gtk_css_number_value_get (v, 100));
 
   v = (* query_func) (GTK_CSS_PROPERTY_FONT_STRETCH, query_data);
   if (v)

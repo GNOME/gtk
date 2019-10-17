@@ -159,6 +159,18 @@ gtk_gst_media_file_seek_done_cb (GstPlayer       *player,
 }
 
 static void
+gtk_gst_media_file_error_cb (GstPlayer       *player,
+                             GError          *error,
+                             GtkGstMediaFile *self)
+{
+  if (gtk_media_stream_get_error (GTK_MEDIA_STREAM (self)))
+    return;
+
+  gtk_media_stream_gerror (GTK_MEDIA_STREAM (self),
+                           g_error_copy (error));
+}
+
+static void
 gtk_gst_media_file_end_of_stream_cb (GstPlayer       *player,
                                      GtkGstMediaFile *self)
 {
@@ -184,6 +196,7 @@ gtk_gst_media_file_destroy_player (GtkGstMediaFile *self)
   g_signal_handlers_disconnect_by_func (self->player, gtk_gst_media_file_position_updated_cb, self);
   g_signal_handlers_disconnect_by_func (self->player, gtk_gst_media_file_end_of_stream_cb, self);
   g_signal_handlers_disconnect_by_func (self->player, gtk_gst_media_file_seek_done_cb, self);
+  g_signal_handlers_disconnect_by_func (self->player, gtk_gst_media_file_error_cb, self);
   g_object_unref (self->player);
   self->player = NULL;
 }
@@ -202,6 +215,7 @@ gtk_gst_media_file_create_player (GtkGstMediaFile *file)
   g_signal_connect (self->player, "position-updated", G_CALLBACK (gtk_gst_media_file_position_updated_cb), self);
   g_signal_connect (self->player, "end-of-stream", G_CALLBACK (gtk_gst_media_file_end_of_stream_cb), self);
   g_signal_connect (self->player, "seek-done", G_CALLBACK (gtk_gst_media_file_seek_done_cb), self);
+  g_signal_connect (self->player, "error", G_CALLBACK (gtk_gst_media_file_error_cb), self);
 }
 
 static void

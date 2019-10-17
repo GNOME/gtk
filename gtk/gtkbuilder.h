@@ -101,15 +101,9 @@ struct _GtkBuilderClass
   GType (* get_type_from_name) (GtkBuilder *builder,
                                 const char *type_name);
 
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-  void (*_gtk_reserved5) (void);
-  void (*_gtk_reserved6) (void);
-  void (*_gtk_reserved7) (void);
-  void (*_gtk_reserved8) (void);
+  /*< private >*/
+
+  gpointer padding[8];
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -128,7 +122,7 @@ gboolean     gtk_builder_add_from_resource       (GtkBuilder    *builder,
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_builder_add_from_string         (GtkBuilder    *builder,
                                                   const gchar   *buffer,
-                                                  gsize          length,
+                                                  gssize         length,
                                                   GError       **error);
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_builder_add_objects_from_file   (GtkBuilder    *builder,
@@ -143,7 +137,7 @@ gboolean     gtk_builder_add_objects_from_resource(GtkBuilder    *builder,
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_builder_add_objects_from_string (GtkBuilder    *builder,
                                                   const gchar   *buffer,
-                                                  gsize          length,
+                                                  gssize         length,
                                                   gchar        **object_ids,
                                                   GError       **error);
 GDK_AVAILABLE_IN_ALL
@@ -228,7 +222,7 @@ gboolean  gtk_builder_extend_with_template  (GtkBuilder    *builder,
                                              GtkWidget     *widget,
                                              GType          template_type,
                                              const gchar   *buffer,
-                                             gsize          length,
+                                             gssize         length,
                                              GError       **error);
 
 G_END_DECLS

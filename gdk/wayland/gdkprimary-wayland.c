@@ -331,8 +331,8 @@ gdk_wayland_primary_read_async (GdkClipboard        *clipboard,
 
 static GInputStream *
 gdk_wayland_primary_read_finish (GdkClipboard  *clipboard,
-                                 const char   **out_mime_type,
                                  GAsyncResult  *result,
+                                 const char   **out_mime_type,
                                  GError       **error)
 {
   GInputStream *stream;

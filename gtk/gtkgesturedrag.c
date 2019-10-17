@@ -34,6 +34,7 @@
 #include "gtkgesturedrag.h"
 #include "gtkgesturedragprivate.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 
 typedef struct _GtkGestureDragPrivate GtkGestureDragPrivate;
 typedef struct _EventData EventData;
@@ -154,8 +155,12 @@ gtk_gesture_drag_class_init (GtkGestureDragClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureDragClass, drag_begin),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  _gtk_marshal_VOID__DOUBLE_DOUBLE,
                   G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[DRAG_BEGIN],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__DOUBLE_DOUBLEv);
   /**
    * GtkGestureDrag::drag-update:
    * @gesture: the object which received the signal
@@ -169,8 +174,12 @@ gtk_gesture_drag_class_init (GtkGestureDragClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureDragClass, drag_update),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  _gtk_marshal_VOID__DOUBLE_DOUBLE,
                   G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[DRAG_UPDATE],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__DOUBLE_DOUBLEv);
   /**
    * GtkGestureDrag::drag-end:
    * @gesture: the object which received the signal
@@ -184,8 +193,12 @@ gtk_gesture_drag_class_init (GtkGestureDragClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureDragClass, drag_end),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  _gtk_marshal_VOID__DOUBLE_DOUBLE,
                   G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[DRAG_END],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__DOUBLE_DOUBLEv);
 }
 
 static void

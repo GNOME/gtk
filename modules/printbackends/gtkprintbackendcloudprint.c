@@ -32,9 +32,9 @@
 
 #include <glib/gi18n-lib.h>
 
-#include <gtk/gtkprintbackend.h>
+#include <gtk/gtkprintbackendprivate.h>
 #include <gtk/gtkunixprint.h>
-#include <gtk/gtkprinter-private.h>
+#include <gtk/gtkprinterprivate.h>
 
 #include "gtkprintbackendcloudprint.h"
 #include "gtkcloudprintaccount.h"

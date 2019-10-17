@@ -22,7 +22,7 @@
 #error "Only <gtk/gtk-a11y.h> can be included directly."
 #endif
 
-#include <gtk/a11y/gtktogglebuttonaccessible.h>
+#include <gtk/a11y/gtkwidgetaccessible.h>
 
 G_BEGIN_DECLS
 
@@ -39,14 +39,14 @@ typedef struct _GtkMenuButtonAccessiblePrivate GtkMenuButtonAccessiblePrivate;
 
 struct _GtkMenuButtonAccessible
 {
-  GtkToggleButtonAccessible parent;
+  GtkWidgetAccessible parent;
 
   GtkMenuButtonAccessiblePrivate *priv;
 };
 
 struct _GtkMenuButtonAccessibleClass
 {
-  GtkToggleButtonAccessibleClass parent_class;
+  GtkWidgetAccessibleClass parent_class;
 };
 
 GDK_AVAILABLE_IN_ALL

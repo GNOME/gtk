@@ -22,8 +22,8 @@ test_parse_selectors (void)
     "#id {}",
     "tab:first-child {}",
     "tab:last-child {}",
-    "tab:nth-child(first) {}",
-    "tab:nth-child(last) {}",
+    "tab:first-child {}",
+    "tab:last-child {}",
     "tab:nth-child(even) {}",
     "tab:nth-child(odd) {}",
     ".some-class {}",
@@ -47,8 +47,8 @@ test_parse_selectors (void)
     "E1.e1_2 #T3_4 {}",
     "E:first-child {}",
     "E:last-child {}",
-    "E:nth-child(first) {}",
-    "E:nth-child(last) {}",
+    "E:first-child {}",
+    "E:last-child {}",
     "E:nth-child(even) {}",
     "E:nth-child(odd) {}",
     "E:focus tab {}",
@@ -148,76 +148,76 @@ test_match (void)
                                   GTK_STYLE_PROVIDER (provider),
                                   GTK_STYLE_PROVIDER_PRIORITY_USER);
 
-  data = "* { color: #fff }";
+  data = "* { color: #fff; }";
   gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
-  data = "* { color: #f00 }\n"
-         "button { color: #fff }";
+  data = "* { color: #f00; }\n"
+         "button { color: #fff; }";
   gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
-  data = "* { color: #f00 }\n"
-         "button { color: #fff }\n"
-         "window > button { color: #000 }";
+  data = "* { color: #f00; }\n"
+         "button { color: #fff; }\n"
+         "window > button { color: #000; }";
   gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
-  data = "* { color: #f00 }\n"
-         ".button { color: #fff }";
+  data = "* { color: #f00; }\n"
+         ".button { color: #fff; }";
   gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
-  data = "* { color: #f00 }\n"
-         "button { color: #000 }\n"
-         ".button { color: #fff }";
+  data = "* { color: #f00; }\n"
+         "button { color: #000; }\n"
+         ".button { color: #fff; }";
   gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
-  data = "* { color: #f00 }\n"
-         "button { color: #000 }\n"
-         "window button { color: #fff }";
+  data = "* { color: #f00; }\n"
+         "button { color: #000; }\n"
+         "window button { color: #fff; }";
   gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
-  data = "* { color: #f00 }\n"
-         ".button { color: #000 }\n"
-         "window .button { color: #fff }";
+  data = "* { color: #f00; }\n"
+         ".button { color: #000; }\n"
+         "window .button { color: #fff; }";
   gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
-  data = "* { color: #f00 }\n"
-         "* .button { color: #000 }\n"
-         "#mywindow .button { color: #fff }";
+  data = "* { color: #f00; }\n"
+         "* .button { color: #000; }\n"
+         "#mywindow .button { color: #fff; }";
   gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
-  data = "* { color: #f00 }\n"
-         "window .button { color: #000 }\n"
-         "window#mywindow .button { color: #fff }";
+  data = "* { color: #f00; }\n"
+         "window .button { color: #000; }\n"
+         "window#mywindow .button { color: #fff; }";
   gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
-  data = "* { color: #f00 }\n"
-         "window .button { color: #000 }\n"
-         "window button.button { color: #fff }";
+  data = "* { color: #f00; }\n"
+         "window .button { color: #000; }\n"
+         "window button.button { color: #fff; }";
   gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
 
-  data = "* { color: #f00 }\n"
-         "window:backdrop .button { color: #000 }\n"
-         "window .button { color: #111 }\n"
-         "window:active .button { color: #fff }";
+  data = "* { color: #f00; }\n"
+         "window:backdrop .button { color: #000; }\n"
+         "window .button { color: #111; }\n"
+         "window:active .button { color: #fff; }";
   gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_get_color (context, &color);
   g_assert (gdk_rgba_equal (&color, &expected));
@@ -532,6 +532,5 @@ main (int argc, char *argv[])
   ADD_PRIORITIES_TEST ("three-context-higher", test_style_priorities_three_context_higher);
 
 #undef ADD_PRIORITIES_TEST
-
   return g_test_run ();
 }

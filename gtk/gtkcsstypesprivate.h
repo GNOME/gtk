@@ -20,7 +20,6 @@
 
 #include <glib-object.h>
 #include <gsk/gsk.h>
-#include <gtk/gtkstylecontext.h>
 
 G_BEGIN_DECLS
 
@@ -97,7 +96,7 @@ typedef guint64 GtkCssChange;
  * GtkCssAffects:
  * @GTK_CSS_AFFECTS_CONTENT: The content rendering is affected.
  *   This does not include things that affect the font. For those,
- *   see @GTK_CSS_AFFECTS_FONT.
+ *   see @GTK_CSS_AFFECTS_TEXT.
  * @GTK_CSS_AFFECTS_BACKGROUND: The background rendering is affected.
  * @GTK_CSS_AFFECTS_BORDER: The border styling is affected.
  * @GTK_CSS_AFFECTS_ICON_SIZE: Icon size is affected.
@@ -107,14 +106,14 @@ typedef guint64 GtkCssChange;
  *   attributes are not.
  * @GTK_CSS_AFFECTS_ICON: Fullcolor icons and their rendering is affected.
  * @GTK_CSS_AFFECTS_SYMBOLIC_ICON: Symbolic icons and their rendering is affected.
- * @GTK_CSS_AFFECTS_OUTLINE: The outline styling is affected. Outlines
- *   only affect elements that can be focused.
+ * @GTK_CSS_AFFECTS_OUTLINE: The outline styling is affected.
  * @GTK_CSS_AFFECTS_SIZE: Changes in this property may have an effect
  *   on the allocated size of the element. Changes in these properties
  *   should cause a recomputation of the element's allocated size.
  * @GTK_CSS_AFFECTS_POSTEFFECT: An effect is applied after drawing that changes
  * @GTK_CSS_AFFECTS_TEXT: Affects anything related to text rendering.
  * @GTK_CSS_AFFECTS_REDRAW: Affects anything that requires redraw.
+ * @GTK_CSS_AFFECTS_TRANSFORM: Affects the element transformation.
  *
  * The generic effects that a CSS property can have. If a value is
  * set, then the property will have an influence on that feature.
@@ -133,7 +132,8 @@ typedef enum {
   GTK_CSS_AFFECTS_SYMBOLIC_ICON = (1 << 8),
   GTK_CSS_AFFECTS_OUTLINE       = (1 << 9),
   GTK_CSS_AFFECTS_SIZE          = (1 << 10),
-  GTK_CSS_AFFECTS_POSTEFFECT    = (1 << 11)
+  GTK_CSS_AFFECTS_POSTEFFECT    = (1 << 11),
+  GTK_CSS_AFFECTS_TRANSFORM     = (1 << 12),
 } GtkCssAffects;
 
 #define GTK_CSS_AFFECTS_REDRAW (GTK_CSS_AFFECTS_CONTENT |       \
@@ -222,6 +222,7 @@ enum { /*< skip >*/
   GTK_CSS_PROPERTY_ICON_TRANSFORM,
   GTK_CSS_PROPERTY_ICON_FILTER,
   GTK_CSS_PROPERTY_BORDER_SPACING,
+  GTK_CSS_PROPERTY_TRANSFORM,
   GTK_CSS_PROPERTY_MIN_WIDTH,
   GTK_CSS_PROPERTY_MIN_HEIGHT,
   GTK_CSS_PROPERTY_TRANSITION_PROPERTY,
@@ -238,7 +239,6 @@ enum { /*< skip >*/
   GTK_CSS_PROPERTY_ANIMATION_FILL_MODE,
   GTK_CSS_PROPERTY_OPACITY,
   GTK_CSS_PROPERTY_FILTER,
-  GTK_CSS_PROPERTY_GTK_KEY_BINDINGS,
   GTK_CSS_PROPERTY_CARET_COLOR,
   GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR,
   GTK_CSS_PROPERTY_FONT_FEATURE_SETTINGS,

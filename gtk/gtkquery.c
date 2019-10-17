@@ -37,13 +37,12 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkQuery, gtk_query, G_TYPE_OBJECT)
 static void
 finalize (GObject *object)
 {
-  GtkQuery *query;
+  GtkQuery *query = GTK_QUERY (object);
+  GtkQueryPrivate *priv = gtk_query_get_instance_private (query);
 
-  query = GTK_QUERY (object);
-
-  g_clear_object (&query->priv->location);
-  g_free (query->priv->text);
-  g_strfreev (query->priv->words);
+  g_clear_object (&priv->location);
+  g_free (priv->text);
+  g_strfreev (priv->words);
 
   G_OBJECT_CLASS (gtk_query_parent_class)->finalize (object);
 }
@@ -60,7 +59,6 @@ gtk_query_class_init (GtkQueryClass *class)
 static void
 gtk_query_init (GtkQuery *query)
 {
-  query->priv = gtk_query_get_instance_private (query);
 }
 
 GtkQuery *
@@ -73,31 +71,39 @@ gtk_query_new (void)
 const gchar *
 gtk_query_get_text (GtkQuery *query)
 {
-  return query->priv->text;
+  GtkQueryPrivate *priv = gtk_query_get_instance_private (query);
+
+  return priv->text;
 }
 
 void
 gtk_query_set_text (GtkQuery    *query,
                     const gchar *text)
 {
-  g_free (query->priv->text);
-  query->priv->text = g_strdup (text);
+  GtkQueryPrivate *priv = gtk_query_get_instance_private (query);
 
-  g_strfreev (query->priv->words);
-  query->priv->words = NULL;
+  g_free (priv->text);
+  priv->text = g_strdup (text);
+
+  g_strfreev (priv->words);
+  priv->words = NULL;
 }
 
 GFile *
 gtk_query_get_location (GtkQuery *query)
 {
-  return query->priv->location;
+  GtkQueryPrivate *priv = gtk_query_get_instance_private (query);
+
+  return priv->location;
 }
 
 void
 gtk_query_set_location (GtkQuery *query,
                         GFile    *file)
 {
-  g_set_object (&query->priv->location, file);
+  GtkQueryPrivate *priv = gtk_query_get_instance_private (query);
+
+  g_set_object (&priv->location, file);
 }
 
 static gchar *
@@ -116,26 +122,27 @@ gboolean
 gtk_query_matches_string (GtkQuery    *query,
                           const gchar *string)
 {
+  GtkQueryPrivate *priv = gtk_query_get_instance_private (query);
   gchar *prepared;
   gboolean found;
   gint i;
 
-  if (!query->priv->text)
+  if (!priv->text)
     return FALSE;
 
-  if (!query->priv->words)
+  if (!priv->words)
     {
-      prepared = prepare_string_for_compare (query->priv->text);
-      query->priv->words = g_strsplit (prepared, " ", -1);
+      prepared = prepare_string_for_compare (priv->text);
+      priv->words = g_strsplit (prepared, " ", -1);
       g_free (prepared);
     }
 
   prepared = prepare_string_for_compare (string);
 
   found = TRUE;
-  for (i = 0; query->priv->words[i]; i++)
+  for (i = 0; priv->words[i]; i++)
     {
-      if (strstr (prepared, query->priv->words[i]) == NULL)
+      if (strstr (prepared, priv->words[i]) == NULL)
         {
           found = FALSE;
           break;

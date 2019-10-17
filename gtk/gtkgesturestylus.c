@@ -32,6 +32,7 @@
 #include "gtkgesturestylusprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 #include "gtkmain.h"
 
 G_DEFINE_TYPE (GtkGestureStylus, gtk_gesture_stylus, GTK_TYPE_GESTURE_SINGLE)
@@ -99,29 +100,48 @@ gtk_gesture_stylus_class_init (GtkGestureStylusClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureStylusClass, proximity),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  _gtk_marshal_VOID__DOUBLE_DOUBLE,
                   G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[PROXIMITY],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__DOUBLE_DOUBLEv);
+
   signals[DOWN] =
     g_signal_new (I_("down"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureStylusClass, down),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  _gtk_marshal_VOID__DOUBLE_DOUBLE,
                   G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[DOWN],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__DOUBLE_DOUBLEv);
+
   signals[MOTION] =
     g_signal_new (I_("motion"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureStylusClass, motion),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  _gtk_marshal_VOID__DOUBLE_DOUBLE,
                   G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[MOTION],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__DOUBLE_DOUBLEv);
+
   signals[UP] =
     g_signal_new (I_("up"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureStylusClass, up),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  _gtk_marshal_VOID__DOUBLE_DOUBLE,
                   G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[UP],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__DOUBLE_DOUBLEv);
 }
 
 static void
@@ -160,8 +180,8 @@ gesture_get_current_event (GtkGestureStylus *gesture)
  * @value: (out): return location for the axis value
  *
  * Returns the current value for the requested @axis. This function
- * must be called from either the #GtkGestureStylus:down,
- * #GtkGestureStylus:motion, #GtkGestureStylus:up or #GtkGestureStylus:proximity
+ * must be called from either the #GtkGestureStylus::down,
+ * #GtkGestureStylus::motion, #GtkGestureStylus::up or #GtkGestureStylus::proximity
  * signals.
  *
  * Returns: #TRUE if there is a current value for the axis
@@ -191,8 +211,8 @@ gtk_gesture_stylus_get_axis (GtkGestureStylus *gesture,
  * @values: (out) (array): return location for the axis values
  *
  * Returns the current values for the requested @axes. This function
- * must be called from either the #GtkGestureStylus:down,
- * #GtkGestureStylus:motion, #GtkGestureStylus:up or #GtkGestureStylus:proximity
+ * must be called from either the #GtkGestureStylus::down,
+ * #GtkGestureStylus::motion, #GtkGestureStylus::up or #GtkGestureStylus::proximity
  * signals.
  *
  * Returns: #TRUE if there is a current value for the axes
@@ -280,15 +300,23 @@ gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
   for (l = history; l; l = l->next)
     {
       GdkTimeCoord *time_coord = l->data;
+      graphene_point_t p;
 
       g_array_append_val (backlog_array, *time_coord);
       time_coord = &g_array_index (backlog_array, GdkTimeCoord, backlog_array->len - 1);
-      gtk_widget_translate_coordinatesf (gtk_get_event_widget (event),
-                                         gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)),
-                                         time_coord->axes[GDK_AXIS_X],
-                                         time_coord->axes[GDK_AXIS_Y],
-                                         &time_coord->axes[GDK_AXIS_X],
-                                         &time_coord->axes[GDK_AXIS_Y]);
+      if (gtk_widget_compute_point (gtk_get_event_widget (event),
+                                    gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)),
+                                    &GRAPHENE_POINT_INIT (time_coord->axes[GDK_AXIS_X],
+                                                          time_coord->axes[GDK_AXIS_Y]),
+                                    &p))
+        {
+          time_coord->axes[GDK_AXIS_X] = p.x;
+          time_coord->axes[GDK_AXIS_Y] = p.y;
+        }
+      else
+        {
+          g_array_set_size (backlog_array, backlog_array->len - 1);
+        }
     }
 
   *n_elems = backlog_array->len;

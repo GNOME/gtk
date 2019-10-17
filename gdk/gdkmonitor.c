@@ -49,6 +49,7 @@ enum {
   PROP_DISPLAY,
   PROP_MANUFACTURER,
   PROP_MODEL,
+  PROP_CONNECTOR,
   PROP_SCALE_FACTOR,
   PROP_GEOMETRY,
   PROP_WORKAREA,
@@ -98,6 +99,10 @@ gdk_monitor_get_property (GObject    *object,
 
     case PROP_MODEL:
       g_value_set_string (value, monitor->model);
+      break;
+
+    case PROP_CONNECTOR:
+      g_value_set_string (value, monitor->connector);
       break;
 
     case PROP_SCALE_FACTOR:
@@ -165,6 +170,7 @@ gdk_monitor_finalize (GObject *object)
 {
   GdkMonitor *monitor = GDK_MONITOR (object);
 
+  g_free (monitor->connector);
   g_free (monitor->manufacturer);
   g_free (monitor->model);
 
@@ -196,6 +202,12 @@ gdk_monitor_class_init (GdkMonitorClass *class)
     g_param_spec_string ("model",
                          "Model",
                          "The model name",
+                         NULL,
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+  props[PROP_CONNECTOR] =
+    g_param_spec_string ("connector",
+                         "Connector",
+                         "The connector name",
                          NULL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
   props[PROP_SCALE_FACTOR] =
@@ -266,7 +278,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                                       G_SIGNAL_RUN_FIRST,
                                       0,
                                       NULL, NULL,
-                                      g_cclosure_marshal_VOID__VOID,
+                                      NULL,
                                       G_TYPE_NONE, 0);
 }
 
@@ -370,10 +382,31 @@ gdk_monitor_get_height_mm (GdkMonitor *monitor)
 }
 
 /**
+ * gdk_monitor_get_connector:
+ * @monitor: a #GdkMonitor
+ *
+ * Gets the name of the monitor's connector, if available.
+ *
+ * Returns: (transfer none) (nullable): the name of the connector
+ */
+const char *
+gdk_monitor_get_connector (GdkMonitor *monitor)
+{
+  g_return_val_if_fail (GDK_IS_MONITOR (monitor), NULL);
+
+  return monitor->connector;
+}
+
+/**
  * gdk_monitor_get_manufacturer:
  * @monitor: a #GdkMonitor
  *
- * Gets the name of the monitor's manufacturer, if available.
+ * Gets the name or PNP ID of the monitor's manufacturer, if available.
+ *
+ * Note that this value might also vary depending on actual
+ * display backend.
+ *
+ * PNP ID registry is located at https://uefi.org/pnp_id_list
  *
  * Returns: (transfer none) (nullable): the name of the manufacturer, or %NULL
  */
@@ -502,6 +535,16 @@ gdk_monitor_set_model (GdkMonitor *monitor,
   monitor->model = g_strdup (model);
 
   g_object_notify (G_OBJECT (monitor), "model");
+}
+
+void
+gdk_monitor_set_connector (GdkMonitor *monitor,
+                           const char *connector)
+{
+  g_free (monitor->connector);
+  monitor->connector = g_strdup (connector);
+
+  g_object_notify (G_OBJECT (monitor), "connector");
 }
 
 void

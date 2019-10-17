@@ -27,19 +27,22 @@
 #endif
 
 #include <gtk/gtkcontainer.h>
+#include <gtk/gtkselectionmodel.h>
 
 G_BEGIN_DECLS
 
 
 #define GTK_TYPE_STACK (gtk_stack_get_type ())
 #define GTK_STACK(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_STACK, GtkStack))
-#define GTK_STACK_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_STACK, GtkStackClass))
 #define GTK_IS_STACK(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_STACK))
-#define GTK_IS_STACK_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_STACK))
-#define GTK_STACK_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STACK, GtkStackClass))
 
 typedef struct _GtkStack GtkStack;
-typedef struct _GtkStackClass GtkStackClass;
+
+#define GTK_TYPE_STACK_PAGE (gtk_stack_page_get_type ())
+#define GTK_STACK_PAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_STACK_PAGE, GtkStackPage))
+#define GTK_IS_STACK_PAGE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_STACK_PAGE))
+
+typedef struct _GtkStackPage GtkStackPage;
 
 typedef enum {
   GTK_STACK_TRANSITION_TYPE_NONE,
@@ -61,16 +64,14 @@ typedef enum {
   GTK_STACK_TRANSITION_TYPE_OVER_UP_DOWN,
   GTK_STACK_TRANSITION_TYPE_OVER_DOWN_UP,
   GTK_STACK_TRANSITION_TYPE_OVER_LEFT_RIGHT,
-  GTK_STACK_TRANSITION_TYPE_OVER_RIGHT_LEFT
+  GTK_STACK_TRANSITION_TYPE_OVER_RIGHT_LEFT,
+  GTK_STACK_TRANSITION_TYPE_ROTATE_LEFT,
+  GTK_STACK_TRANSITION_TYPE_ROTATE_RIGHT,
+  GTK_STACK_TRANSITION_TYPE_ROTATE_LEFT_RIGHT
 } GtkStackTransitionType;
 
-struct _GtkStack {
-  GtkContainer parent_instance;
-};
-
-struct _GtkStackClass {
-  GtkContainerClass parent_class;
-};
+GDK_AVAILABLE_IN_ALL
+GType                  gtk_stack_page_get_type           (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 GType                  gtk_stack_get_type                (void) G_GNUC_CONST;
@@ -86,6 +87,13 @@ void                   gtk_stack_add_titled              (GtkStack              
                                                           GtkWidget              *child,
                                                           const gchar            *name,
                                                           const gchar            *title);
+
+GDK_AVAILABLE_IN_ALL
+GtkStackPage *         gtk_stack_get_page                (GtkStack               *stack,
+                                                          GtkWidget              *child);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *            gtk_stack_page_get_child          (GtkStackPage           *page);
+
 GDK_AVAILABLE_IN_ALL
 GtkWidget *            gtk_stack_get_child_by_name       (GtkStack               *stack,
                                                           const gchar            *name);
@@ -135,6 +143,10 @@ void                   gtk_stack_set_interpolate_size    (GtkStack *stack,
                                                           gboolean  interpolate_size);
 GDK_AVAILABLE_IN_ALL
 gboolean               gtk_stack_get_interpolate_size    (GtkStack *stack);
+
+GDK_AVAILABLE_IN_ALL
+GtkSelectionModel *    gtk_stack_get_pages               (GtkStack *stack);
+
 G_END_DECLS
 
 #endif

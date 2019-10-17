@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <template class="GtkInspectorMagnifier" parent="GtkBox">
     <property name="orientation">vertical</property>

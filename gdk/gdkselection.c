@@ -65,7 +65,7 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay     *display,
  * gdk_utf8_to_string_target:
  * @str: a UTF-8 string
  *
- * Converts an UTF-8 string into the best possible representation
+ * Converts a UTF-8 string into the best possible representation
  * as a STRING. The representation of characters not in STRING
  * is not specified; it may be as pseudo-escape sequences
  * \x{ABCD}, or it may be in some other form of approximation.

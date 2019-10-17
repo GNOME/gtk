@@ -1,17 +1,17 @@
-GTK+ — The GTK toolkit
-======================
+GTK — The GTK toolkit
+=====================
 
 [![Build Status](https://gitlab.gnome.org/GNOME/gtk/badges/master/build.svg)](https://gitlab.gnome.org/GNOME/gtk/pipelines)
 
 General information
 -------------------
 
-GTK+ is a multi-platform toolkit for creating graphical user interfaces.
-Offering a complete set of widgets, GTK+ is suitable for projects ranging
+GTK is a multi-platform toolkit for creating graphical user interfaces.
+Offering a complete set of widgets, GTK is suitable for projects ranging
 from small one-off projects to complete application suites.
 
-GTK+ is free software and part of the GNU Project. However, the
-licensing terms for GTK+, the GNU LGPL, allow it to be used by all
+GTK is free software and part of the GNU Project. However, the
+licensing terms for GTK, the GNU LGPL, allow it to be used by all
 developers, including those developing proprietary software, without any
 license fees or royalties.
 
@@ -39,7 +39,7 @@ Nightly documentation can be found at
 Building and installing
 -----------------------
 
-In order to build GTK+ you will need:
+In order to build GTK you will need:
 
   - [a C99 compatible compiler](https://wiki.gnome.org/Projects/GLib/CompilerRequirements)
   - [Python 3](https://www.python.org/)
@@ -79,7 +79,7 @@ If you are building the Wayland backend, you will also need:
   - Wayland-cursor
   - Wayland-EGL
 
-Once you have all the necessary dependencies, you can build GTK+ by using
+Once you have all the necessary dependencies, you can build GTK by using
 Meson:
 
 ```sh
@@ -94,7 +94,7 @@ You can run the test suite using:
 $ meson test
 ```
 
-And, finally, you can install GTK+ using:
+And, finally, you can install GTK using:
 
 ```
 $ sudo ninja install
@@ -118,10 +118,10 @@ In the bug report please include:
 
 * Information about your system. For instance:
 
-   - which version of GTK+ you are using
+   - which version of GTK you are using
    - what operating system and version
    - for Linux, which distribution
-   - if you built GTK+, the list of options used to configure the build
+   - if you built GTK, the list of options used to configure the build
 
   And anything else you think is relevant.
 
@@ -143,7 +143,7 @@ In the bug report please include:
 Release notes
 -------------
 
-The release notes for GTK+ are part of the migration guide in the API
+The release notes for GTK are part of the migration guide in the API
 reference. See:
 
  - [3.x release notes](https://developer.gnome.org/gtk3/unstable/gtk-migrating-2-to-3.html)
@@ -152,7 +152,7 @@ reference. See:
 Licensing terms
 ---------------
 
-GTK+ is released under the terms of the GNU Lesser General Public License,
+GTK is released under the terms of the GNU Lesser General Public License,
 version 2.1 or, at your option, any later version, as published by the Free
 Software Foundation.
 

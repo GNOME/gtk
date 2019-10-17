@@ -233,11 +233,41 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
   cairo_destroy (cr);
 }
 
-static gboolean
-gtk_css_image_radial_parse (GtkCssImage  *image,
-                            GtkCssParser *parser)
+static guint
+gtk_css_image_radial_parse_color_stop (GtkCssImageRadial *radial,
+                                       GtkCssParser      *parser)
 {
-  GtkCssImageRadial *radial = GTK_CSS_IMAGE_RADIAL (image);
+  GtkCssImageRadialColorStop stop;
+
+  stop.color = _gtk_css_color_value_parse (parser);
+  if (stop.color == NULL)
+    return 0;
+
+  if (gtk_css_number_value_can_parse (parser))
+    {
+      stop.offset = _gtk_css_number_value_parse (parser,
+                                                 GTK_CSS_PARSE_PERCENT
+                                                 | GTK_CSS_PARSE_LENGTH);
+      if (stop.offset == NULL)
+        {
+          _gtk_css_value_unref (stop.color);
+          return 0;
+        }
+    }
+  else
+    {
+      stop.offset = NULL;
+    }
+
+  g_array_append_val (radial->stops, stop);
+
+  return 1;
+}
+
+static guint
+gtk_css_image_radial_parse_first_arg (GtkCssImageRadial *radial,
+                                      GtkCssParser      *parser)
+{
   gboolean has_shape = FALSE;
   gboolean has_size = FALSE;
   gboolean found_one = FALSE;
@@ -252,24 +282,15 @@ gtk_css_image_radial_parse (GtkCssImage  *image,
     { "farthest-corner", GTK_CSS_FARTHEST_CORNER }
   };
 
-  if (_gtk_css_parser_try (parser, "repeating-radial-gradient(", TRUE))
-    radial->repeating = TRUE;
-  else if (_gtk_css_parser_try (parser, "radial-gradient(", TRUE))
-    radial->repeating = FALSE;
-  else
-    {
-      _gtk_css_parser_error (parser, "Not a radial gradient");
-      return FALSE;
-    }
+  found_one = FALSE;
 
   do {
-    found_one = FALSE;
-    if (!has_shape && _gtk_css_parser_try (parser, "circle", TRUE))
+    if (!has_shape && gtk_css_parser_try_ident (parser, "circle"))
       {
         radial->circle = TRUE;
         found_one = has_shape = TRUE;
       }
-    else if (!has_shape && _gtk_css_parser_try (parser, "ellipse", TRUE))
+    else if (!has_shape && gtk_css_parser_try_ident (parser, "ellipse"))
       {
         radial->circle = FALSE;
         found_one = has_shape = TRUE;
@@ -278,7 +299,7 @@ gtk_css_image_radial_parse (GtkCssImage  *image,
       {
         for (i = 0; i < G_N_ELEMENTS (names); i++)
           {
-            if (_gtk_css_parser_try (parser, names[i].name, TRUE))
+            if (gtk_css_parser_try_ident (parser, names[i].name))
               {
                 found_one = has_size = TRUE;
                 radial->size = names[i].value;
@@ -286,40 +307,39 @@ gtk_css_image_radial_parse (GtkCssImage  *image,
               }
           }
 
-        if (!has_size)
+        if (!has_size && gtk_css_number_value_can_parse (parser))
           {
+            radial->sizes[0] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_PARSE_PERCENT);
+            if (radial->sizes[0] == NULL)
+              return 0;
             if (gtk_css_number_value_can_parse (parser))
-              radial->sizes[0] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_PARSE_PERCENT);
-            if (gtk_css_number_value_can_parse (parser))
-              radial->sizes[1] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_PARSE_PERCENT);
-            found_one = has_size = radial->sizes[0] != NULL;
+              {
+                radial->sizes[1] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_PARSE_PERCENT);
+                if (radial->sizes[1] == NULL)
+                  return 0;
+              }
+            found_one = has_size = TRUE;
           }
+        if (!has_size)
+          break;
       }
+    else
+      {
+        break;
+      }
+  } while (!(has_shape && has_size));
 
-  } while (found_one && !(has_shape && has_size));
-
-  if (_gtk_css_parser_try (parser, "at", TRUE))
+  if (gtk_css_parser_try_ident (parser, "at"))
     {
       radial->position = _gtk_css_position_value_parse (parser);
       if (!radial->position)
-        return FALSE;
-      if (!_gtk_css_parser_try (parser, ",", TRUE))
-        {
-          _gtk_css_parser_error (parser, "Expected a comma here");
-          return FALSE;
-        }
+        return 0;
+      found_one = TRUE;
     }
   else
     {
       radial->position = _gtk_css_position_value_new (_gtk_css_number_value_new (50, GTK_CSS_PERCENT),
                                                       _gtk_css_number_value_new (50, GTK_CSS_PERCENT));
-
-      if ((has_shape || has_size) &&
-          !_gtk_css_parser_try (parser, ",", TRUE))
-        {
-          _gtk_css_parser_error (parser, "Expected a comma here");
-          return FALSE;
-        }
     }
 
   if (!has_size)
@@ -339,14 +359,14 @@ gtk_css_image_radial_parse (GtkCssImage  *image,
     {
       if (radial->sizes[0] && radial->sizes[1])
         {
-          _gtk_css_parser_error (parser, "Circular gradient can only have one size");
-          return FALSE;
+          gtk_css_parser_error_syntax (parser, "Circular gradient can only have one size");
+          return 0;
         }
 
       if (radial->sizes[0] && gtk_css_number_value_has_percent (radial->sizes[0]))
         {
-          _gtk_css_parser_error (parser, "Circular gradient cannot have percentage as size");
-          return FALSE;
+          gtk_css_parser_error_syntax (parser, "Circular gradient cannot have percentage as size");
+          return 0;
         }
     }
 
@@ -356,47 +376,46 @@ gtk_css_image_radial_parse (GtkCssImage  *image,
         radial->sizes[1] = _gtk_css_value_ref (radial->sizes[0]);
     }
 
-  do {
-    GtkCssImageRadialColorStop stop;
+  if (found_one)
+    return 1;
 
-    stop.color = _gtk_css_color_value_parse (parser);
-    if (stop.color == NULL)
-      return FALSE;
+  if (!gtk_css_image_radial_parse_color_stop (radial, parser))
+    return 0;
 
-    if (gtk_css_number_value_can_parse (parser))
-      {
-        stop.offset = _gtk_css_number_value_parse (parser,
-                                                   GTK_CSS_PARSE_PERCENT
-                                                   | GTK_CSS_PARSE_LENGTH);
-        if (stop.offset == NULL)
-          {
-            _gtk_css_value_unref (stop.color);
-            return FALSE;
-          }
-      }
-    else
-      {
-        stop.offset = NULL;
-      }
+  return 2;
+}
 
-    g_array_append_val (radial->stops, stop);
+static guint
+gtk_css_image_radial_parse_arg (GtkCssParser *parser,
+                                guint         arg,
+                                gpointer      data)
+{
+  GtkCssImageRadial *self = data;
 
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
+  if (arg == 0)
+    return gtk_css_image_radial_parse_first_arg (self, parser);
+  else
+    return gtk_css_image_radial_parse_color_stop (self, parser);
 
-  if (radial->stops->len < 2)
+}
+
+static gboolean
+gtk_css_image_radial_parse (GtkCssImage  *image,
+                            GtkCssParser *parser)
+{
+  GtkCssImageRadial *self = GTK_CSS_IMAGE_RADIAL (image);
+
+  if (gtk_css_parser_has_function (parser, "repeating-radial-gradient"))
+    self->repeating = TRUE;
+  else if (gtk_css_parser_has_function (parser, "radial-gradient"))
+    self->repeating = FALSE;
+  else
     {
-      _gtk_css_parser_error (parser, "%s() needs at least 2 color stops.",
-                             radial->repeating ? "repeating-radial-gradient" : "radial-gradient");
+      gtk_css_parser_error_syntax (parser, "Not a radial gradient");
       return FALSE;
     }
 
-  if (!_gtk_css_parser_try (parser, ")", TRUE))
-    {
-      _gtk_css_parser_error (parser, "Missing closing bracket at end of radial gradient");
-      return FALSE;
-    }
-
-  return TRUE;
+  return gtk_css_parser_consume_function (parser, 3, G_MAXUINT, gtk_css_image_radial_parse_arg, self);
 }
 
 static void
@@ -610,8 +629,8 @@ static gboolean
 gtk_css_image_radial_equal (GtkCssImage *image1,
                             GtkCssImage *image2)
 {
-  GtkCssImageRadial *radial1 = GTK_CSS_IMAGE_RADIAL (image1);
-  GtkCssImageRadial *radial2 = GTK_CSS_IMAGE_RADIAL (image2);
+  GtkCssImageRadial *radial1 = (GtkCssImageRadial *) image1;
+  GtkCssImageRadial *radial2 = (GtkCssImageRadial *) image2;
   guint i;
 
   if (radial1->repeating != radial2->repeating ||

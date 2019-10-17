@@ -119,8 +119,6 @@ main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
 
-  g_test_bug_base ("http://bugzilla.gnome.org/");
-
   add_value_tests (gtk_spin_button_new_with_range (0, 100, 1));
   add_value_tests (gtk_level_bar_new_for_interval (0, 100));
 

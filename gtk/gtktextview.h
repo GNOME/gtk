@@ -32,7 +32,6 @@
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkimcontext.h>
 #include <gtk/gtktextbuffer.h>
-#include <gtk/gtkmenu.h>
 
 G_BEGIN_DECLS
 
@@ -45,7 +44,6 @@ G_BEGIN_DECLS
 
 /**
  * GtkTextWindowType:
- * @GTK_TEXT_WINDOW_PRIVATE: Private value, used internally
  * @GTK_TEXT_WINDOW_WIDGET: Window that floats over scrolling areas.
  * @GTK_TEXT_WINDOW_TEXT: Scrollable text window.
  * @GTK_TEXT_WINDOW_LEFT: Left side border window.
@@ -57,8 +55,7 @@ G_BEGIN_DECLS
  */
 typedef enum
 {
-  GTK_TEXT_WINDOW_PRIVATE,
-  GTK_TEXT_WINDOW_WIDGET,
+  GTK_TEXT_WINDOW_WIDGET = 1,
   GTK_TEXT_WINDOW_TEXT,
   GTK_TEXT_WINDOW_LEFT,
   GTK_TEXT_WINDOW_RIGHT,
@@ -97,7 +94,7 @@ typedef enum
 } GtkTextExtendSelection;
 
 /**
- * GTK_TEXT_VIEW_PRIORITY_VALIDATE:
+ * GTK_TEXT_VIEW_PRIORITY_VALIDATE: (value 125)
  *
  * The priority at which the text view validates onscreen lines
  * in an idle job in the background.
@@ -120,8 +117,6 @@ struct _GtkTextView
 /**
  * GtkTextViewClass:
  * @parent_class: The object class structure needs to be the first
- * @populate_popup: The class handler for the #GtkTextView::populate-popup
- *   signal.
  * @move_cursor: The class handler for the #GtkTextView::move-cursor
  *   keybinding signal.
  * @set_anchor: The class handler for the #GtkTextView::set-anchor
@@ -159,8 +154,6 @@ struct _GtkTextViewClass
 
   /*< public >*/
 
-  void (* populate_popup)        (GtkTextView      *text_view,
-                                  GtkWidget        *popup);
   void (* move_cursor)           (GtkTextView      *text_view,
                                   GtkMovementStep   step,
                                   gint              count,
@@ -189,11 +182,7 @@ struct _GtkTextViewClass
 
   /*< private >*/
 
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
+  gpointer padding[8];
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -275,12 +264,12 @@ void           gtk_text_view_get_line_at_y         (GtkTextView       *text_view
                                                     gint              *line_top);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_text_view_buffer_to_surface_coords (GtkTextView       *text_view,
-					     GtkTextWindowType  win,
-					     gint               buffer_x,
-					     gint               buffer_y,
-					     gint              *window_x,
-					     gint              *window_y);
+void gtk_text_view_buffer_to_window_coords (GtkTextView       *text_view,
+                                            GtkTextWindowType  win,
+                                            gint               buffer_x,
+                                            gint               buffer_y,
+                                            gint              *window_x,
+                                            gint              *window_y);
 GDK_AVAILABLE_IN_ALL
 void gtk_text_view_window_to_buffer_coords (GtkTextView       *text_view,
                                             GtkTextWindowType  win,
@@ -288,14 +277,6 @@ void gtk_text_view_window_to_buffer_coords (GtkTextView       *text_view,
                                             gint               window_y,
                                             gint              *buffer_x,
                                             gint              *buffer_y);
-
-GDK_AVAILABLE_IN_ALL
-void gtk_text_view_set_border_window_size (GtkTextView       *text_view,
-                                           GtkTextWindowType  type,
-                                           gint               size);
-GDK_AVAILABLE_IN_ALL
-gint gtk_text_view_get_border_window_size (GtkTextView       *text_view,
-					   GtkTextWindowType  type);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_text_view_forward_display_line           (GtkTextView       *text_view,
@@ -325,24 +306,28 @@ void            gtk_text_view_reset_im_context                  (GtkTextView    
 
 /* Adding child widgets */
 GDK_AVAILABLE_IN_ALL
-void gtk_text_view_add_child_at_anchor (GtkTextView          *text_view,
-                                        GtkWidget            *child,
-                                        GtkTextChildAnchor   *anchor);
+GtkWidget *gtk_text_view_get_gutter          (GtkTextView          *text_view,
+                                              GtkTextWindowType     win);
+GDK_AVAILABLE_IN_ALL
+void       gtk_text_view_set_gutter          (GtkTextView          *text_view,
+                                              GtkTextWindowType     win,
+                                              GtkWidget            *widget);
+GDK_AVAILABLE_IN_ALL
+void       gtk_text_view_add_child_at_anchor (GtkTextView          *text_view,
+                                              GtkWidget            *child,
+                                              GtkTextChildAnchor   *anchor);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_text_view_add_child_in_window (GtkTextView          *text_view,
-                                        GtkWidget            *child,
-                                        GtkTextWindowType     which_window,
-                                        /* window coordinates */
-                                        gint                  xpos,
-                                        gint                  ypos);
+void       gtk_text_view_add_overlay         (GtkTextView          *text_view,
+                                              GtkWidget            *child,
+                                              gint                  xpos,
+                                              gint                  ypos);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_text_view_move_child          (GtkTextView          *text_view,
-                                        GtkWidget            *child,
-                                        /* window coordinates */
-                                        gint                  xpos,
-                                        gint                  ypos);
+void       gtk_text_view_move_overlay        (GtkTextView          *text_view,
+                                              GtkWidget            *child,
+                                              gint                  xpos,
+                                              gint                  ypos);
 
 /* Default style settings (fallbacks if no tag affects the property) */
 
@@ -434,6 +419,12 @@ void             gtk_text_view_set_monospace          (GtkTextView      *text_vi
                                                        gboolean          monospace);
 GDK_AVAILABLE_IN_ALL
 gboolean         gtk_text_view_get_monospace          (GtkTextView      *text_view);
+
+GDK_AVAILABLE_IN_ALL
+void             gtk_text_view_set_extra_menu         (GtkTextView      *text_view,
+                                                       GMenuModel       *model);
+GDK_AVAILABLE_IN_ALL
+GMenuModel *     gtk_text_view_get_extra_menu         (GtkTextView      *text_view);
 
 G_END_DECLS
 

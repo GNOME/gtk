@@ -1,94 +1,27 @@
 window1
   "frame"
   index: 0
-  state: enabled resizable sensitive showing visible
+  state: active enabled resizable sensitive showing visible
   toolkit: gtk
   window-type: normal
   <AtkComponent>
   layer: window
   alpha: 1
-  unnamed-GtkPopoverAccessible-0
+  unnamed-GtkContainerAccessible-0
     "panel"
-    parent: menubutton
-    popup-for: menubutton
-    state: enabled modal sensitive
+    parent: window1
+    state: enabled sensitive showing visible
     toolkit: gtk
     <AtkComponent>
     layer: widget
     alpha: 1
-    unnamed-GtkStackAccessible-1
-      "panel"
-      parent: unnamed-GtkWidgetAccessible-2
-      state: enabled sensitive visible
-      toolkit: gtk
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      unnamed-GtkContainerAccessible-3
-        "filler"
-        parent: unnamed-GtkStackAccessible-1
-        index: 0
-        state: enabled sensitive vertical visible
-        toolkit: gtk
-        <AtkComponent>
-        layer: widget
-        alpha: 1
-        unnamed-GtkContainerAccessible-4
-          "filler"
-          parent: unnamed-GtkContainerAccessible-3
-          index: 0
-          state: enabled sensitive vertical visible
-          toolkit: gtk
-          <AtkComponent>
-          layer: widget
-          alpha: 1
-          unnamed-GtkContainerAccessible-5
-            "filler"
-            parent: unnamed-GtkContainerAccessible-4
-            index: 0
-            state: enabled sensitive vertical visible
-            toolkit: gtk
-            <AtkComponent>
-            layer: widget
-            alpha: 1
-            unnamed-GtkContainerAccessible-6
-              "filler"
-              parent: unnamed-GtkContainerAccessible-5
-              index: 0
-              state: enabled sensitive vertical visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              unnamed-GtkButtonAccessible-7
-                "push button"
-                parent: unnamed-GtkContainerAccessible-6
-                index: 0
-                name: New
-                state: enabled focusable sensitive visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                <AtkImage>
-                image size: -1 x -1
-                image description: (null)
-                <AtkAction>
-                action 0 name: click
-                action 0 description: Clicks the button
   menubutton
     "toggle button"
     parent: window1
     index: 0
     name: Menu
-    state: enabled focusable sensitive showing visible
+    state: enabled focusable focused sensitive showing visible
     toolkit: gtk
     <AtkComponent>
     layer: widget
     alpha: 1
-    <AtkImage>
-    image size: 16 x 16
-    image description: (null)
-    <AtkAction>
-    action 0 name: click
-    action 0 description: Clicks the button

@@ -12,11 +12,11 @@ gdk_win32_sources = files([
   'gdkdrag-win32.c',
   'gdkdrop-win32.c',
   'gdkevents-win32.c',
-  'gdkgeometry-win32.c',
   'gdkglcontext-win32.c',
   'gdkglobals-win32.c',
   'gdkhdataoutputstream-win32.c',
   'gdkkeys-win32.c',
+  'gdkwin32langnotification.c',
   'gdkmain-win32.c',
   'gdkmonitor-win32.c',
   'gdkproperty-win32.c',
@@ -41,10 +41,10 @@ gdk_win32_public_headers = files([
   'gdkwin32surface.h',
 ])
 
-install_headers(gdk_win32_public_headers, subdir: 'gtk-4.0/gdk/win32/')
-install_headers('gdkwin32.h', subdir: 'gtk-4.0/gdk/')
+install_headers(gdk_win32_public_headers, 'gdkwin32.h', subdir: 'gtk-4.0/gdk/win32/')
 
 gdk_win32_deps = [ # FIXME
+    pangowin32_dep
 ]
 
 libgdk_win32 = static_library('gdk-win32',

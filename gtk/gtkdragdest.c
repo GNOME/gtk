@@ -29,25 +29,26 @@
 #include "gtkdnd.h"
 #include "gtkdndprivate.h"
 #include "gtkintl.h"
+#include "gtknative.h"
 
 
 static void
 gtk_drag_dest_realized (GtkWidget *widget)
 {
-  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+  GtkNative *native = gtk_widget_get_native (widget);
 
-  if (gtk_widget_is_toplevel (toplevel))
-    gdk_surface_register_dnd (gtk_widget_get_surface (toplevel));
+  gdk_surface_register_dnd (gtk_native_get_surface (native));
 }
 
 static void
-gtk_drag_dest_hierarchy_changed (GtkWidget *widget,
-                                 GtkWidget *previous_toplevel)
+gtk_drag_dest_hierarchy_changed (GtkWidget  *widget,
+                                 GParamSpec *pspec,
+                                 gpointer    data)
 {
-  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+  GtkNative *native = gtk_widget_get_native (widget);
 
-  if (gtk_widget_is_toplevel (toplevel) && gtk_widget_get_realized (toplevel))
-    gdk_surface_register_dnd (gtk_widget_get_surface (toplevel));
+  if (native && gtk_widget_get_realized (GTK_WIDGET (native)))
+    gdk_surface_register_dnd (gtk_native_get_surface (native));
 }
 
 static void
@@ -85,7 +86,7 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
 
   g_signal_connect (widget, "realize",
                     G_CALLBACK (gtk_drag_dest_realized), site);
-  g_signal_connect (widget, "hierarchy-changed",
+  g_signal_connect (widget, "notify::root",
                     G_CALLBACK (gtk_drag_dest_hierarchy_changed), site);
 
   g_object_set_data_full (G_OBJECT (widget), I_("gtk-drag-dest"),
@@ -132,7 +133,7 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  * {
 *   GdkModifierType mask;
  *
- *   gdk_surface_get_pointer (gtk_widget_get_surface (widget),
+ *   gdk_surface_get_pointer (gtk_native_get_surface (gtk_widget_get_native (widget)),
  *                           NULL, NULL, &mask);
  *   if (mask & GDK_CONTROL_MASK)
  *     gdk_drag_status (context, GDK_ACTION_COPY, time);

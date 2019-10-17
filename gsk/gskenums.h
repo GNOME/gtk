@@ -45,7 +45,6 @@
  * @GSK_CROSS_FADE_NODE: A node that cross-fades between two children
  * @GSK_TEXT_NODE: A node containing a glyph string
  * @GSK_BLUR_NODE: A node that applies a blur
- * @GSK_OFFSET_NODE: A node that renders its child after applying a 2D translation
  *
  * The type of a node determines what the node is rendering.
  **/
@@ -71,7 +70,6 @@ typedef enum {
   GSK_CROSS_FADE_NODE,
   GSK_TEXT_NODE,
   GSK_BLUR_NODE,
-  GSK_OFFSET_NODE,
   GSK_DEBUG_NODE
 } GskRenderNodeType;
 
@@ -171,5 +169,43 @@ typedef enum {
   GSK_SERIALIZATION_UNSUPPORTED_VERSION,
   GSK_SERIALIZATION_INVALID_DATA
 } GskSerializationError;
+
+/**
+ * GskTransformCategory:
+ * @GSK_TRANSFORM_CATEGORY_UNKNOWN: The category of the matrix has not been
+ *     determined.
+ * @GSK_TRANSFORM_CATEGORY_ANY: Analyzing the matrix concluded that it does
+ *     not fit in any other category.
+ * @GSK_TRANSFORM_CATEGORY_3D: The matrix is a 3D matrix. This means that
+ *     the w column (the last column) has the values (0, 0, 0, 1).
+ * @GSK_TRANSFORM_CATEGORY_2D: The matrix is a 2D matrix. This is equivalent
+ *     to graphene_matrix_is_2d() returning %TRUE. In particular, this
+ *     means that Cairo can deal with the matrix.
+ * @GSK_TRANSFORM_CATEGORY_2D_AFFINE: The matrix is a combination of 2D scale
+ *     and 2D translation operations. In particular, this means that any
+ *     rectangle can be transformed exactly using this matrix.
+ * @GSK_TRANSFORM_CATEGORY_2D_TRANSLATE: The matrix is a 2D translation.
+ * @GSK_TRANSFORM_CATEGORY_IDENTITY: The matrix is the identity matrix.
+ *
+ * The categories of matrices relevant for GSK and GTK. Note that any
+ * category includes matrices of all later categories. So if you want
+ * to for example check if a matrix is a 2D matrix,
+ * `category >= GSK_TRANSFORM_CATEGORY_2D` is the way to do this.
+ *
+ * Also keep in mind that rounding errors may cause matrices to not
+ * conform to their categories. Otherwise, matrix operations done via
+ * mutliplication will not worsen categories. So for the matrix
+ * multiplication `C = A * B`, `category(C) = MIN (category(A), category(B))`.
+ */
+typedef enum
+{
+  GSK_TRANSFORM_CATEGORY_UNKNOWN,
+  GSK_TRANSFORM_CATEGORY_ANY,
+  GSK_TRANSFORM_CATEGORY_3D,
+  GSK_TRANSFORM_CATEGORY_2D,
+  GSK_TRANSFORM_CATEGORY_2D_AFFINE,
+  GSK_TRANSFORM_CATEGORY_2D_TRANSLATE,
+  GSK_TRANSFORM_CATEGORY_IDENTITY
+} GskTransformCategory;
 
 #endif /* __GSK_TYPES_H__ */

@@ -6,7 +6,7 @@
 
 <refentryinfo>
   <title>gtk4-demo</title>
-  <productname>GTK+</productname>
+  <productname>GTK</productname>
   <authorgroup>
     <author>
       <contrib>Developer</contrib>
@@ -24,7 +24,7 @@
 
 <refnamediv>
   <refname>gtk4-demo</refname>
-  <refpurpose>Demonstrate GTK+ widgets</refpurpose>
+  <refpurpose>Demonstrate GTK widgets</refpurpose>
 </refnamediv>
 
 <refsynopsisdiv>
@@ -40,7 +40,7 @@
 <refsect1><title>Description</title>
 <para>
 <command>gtk4-demo</command> is a collection of examples.
-Its purpose is to demonstrate many GTK+ widgets in a form
+Its purpose is to demonstrate many GTK widgets in a form
 that is useful to application developers.
 </para>
 <para>

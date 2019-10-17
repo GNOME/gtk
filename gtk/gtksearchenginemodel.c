@@ -129,7 +129,7 @@ gtk_search_engine_model_start (GtkSearchEngine *engine)
     return;
 
   model->idle = g_idle_add (do_search, engine);
-  g_source_set_name_by_id (model->idle, "[gtk+] gtk_search_engine_model_start");
+  g_source_set_name_by_id (model->idle, "[gtk] gtk_search_engine_model_start");
 }
 
 static void

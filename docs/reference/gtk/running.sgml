@@ -4,26 +4,26 @@
 ]>
 <refentry id="gtk-running">
 <refmeta>
-<refentrytitle>Running GTK+ Applications</refentrytitle>
+<refentrytitle>Running GTK Applications</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>GTK Library</refmiscinfo>
 </refmeta>
 
 <refnamediv>
-<refname>Running GTK+ Applications</refname>
+<refname>Running GTK Applications</refname>
 <refpurpose>
-How to run and debug your GTK+ application
+How to run and debug your GTK application
 </refpurpose>
 </refnamediv>
 
 <refsect1>
-<title>Running and debugging GTK+ Applications</title>
+<title>Running and debugging GTK Applications</title>
 
 <refsect2>
 <title>Environment variables</title>
 
 <para>
-GTK+ inspects a number of environment variables in addition to standard
+GTK inspects a number of environment variables in addition to standard
 variables like <envar>LANG</envar>, <envar>PATH</envar>, <envar>HOME</envar>
 or <envar>DISPLAY</envar>; mostly to determine paths to look for certain
 files. The <link linkend="x11-envar">X11</link>,
@@ -36,8 +36,8 @@ additional environment variables.
   <title><envar>GTK_DEBUG</envar></title>
 
   <para>
-  Unless GTK+ has been configured with <option>--enable-debug=no</option>,
-  this variable can be set to a list of debug options, which cause GTK+
+  Unless GTK has been configured with <option>--enable-debug=no</option>,
+  this variable can be set to a list of debug options, which cause GTK
   to print out different types of debugging information.
   <variablelist>
     <varlistentry>
@@ -126,45 +126,45 @@ additional environment variables.
   <title><envar>GTK_PATH</envar></title>
 
   <para>
-    Specifies a list of directories to search when GTK+ is looking for
+    Specifies a list of directories to search when GTK is looking for
     dynamically loaded objects such as input method
     modules and print backends. If the path to
     the dynamically loaded object is given as an absolute path name,
-    then GTK+ loads it directly.
-    Otherwise, GTK+ goes in turn through the directories in <envar>GTK_PATH</envar>,
+    then GTK loads it directly.
+    Otherwise, GTK goes in turn through the directories in <envar>GTK_PATH</envar>,
     followed by the directory <filename>.gtk-4.0</filename> in the user's
     home directory, followed by the system default directory,
     which is <filename><replaceable>libdir</replaceable>/gtk-4.0/modules</filename>.
     (If <envar>GTK_EXE_PREFIX</envar> is defined, <replaceable>libdir</replaceable> is
     <filename>$GTK_EXE_PREFIX/lib</filename>. Otherwise it is the libdir
-    specified when GTK+ was configured, usually
+    specified when GTK was configured, usually
     <filename>/usr/lib</filename>, or
     <filename>/usr/local/lib</filename>.)
-    For each directory in this list, GTK+ actually looks in a
+    For each directory in this list, GTK actually looks in a
     subdirectory
     <filename><replaceable>directory</replaceable>/<replaceable>version</replaceable>/<replaceable>host</replaceable>/<replaceable>type</replaceable></filename>
     Where <replaceable>version</replaceable> is derived from the
-    version of GTK+ (use <literal>pkg-config
-    --variable=gtk_binary_version gtk+-3.0</literal> to determine this from a
+    version of GTK (use <literal>pkg-config
+    --variable=gtk_binary_version gtk4</literal> to determine this from a
     script), <replaceable>host</replaceable> is the architecture on
-    which GTK+ was built. (use <literal>pkg-config
-    --variable=gtk_host gtk+-3.0</literal> to determine this from a
+    which GTK was built. (use <literal>pkg-config
+    --variable=gtk_host gtk4</literal> to determine this from a
     script), and <replaceable>type</replaceable> is a directory
     specific to the type of modules; currently it can be
     <literal>modules</literal>, <literal>engines</literal>,
     <literal>immodules</literal>, <literal>filesystems</literal> or
     <literal>printbackends</literal>, corresponding to the types of
     modules mentioned above. Either <replaceable>version</replaceable>,
-    <replaceable>host</replaceable>, or both may be omitted. GTK+ looks
+    <replaceable>host</replaceable>, or both may be omitted. GTK looks
     first in the most specific directory, then in directories with
     fewer components.
     The components of GTK_PATH are separated by the ':' character on
     Linux and Unix, and the ';' character on Windows.
   </para>
   <warning>
-    Note that this environment variable is read by GTK+ 2.x and GTK+ 3.x too,
+    Note that this environment variable is read by GTK 2.x and GTK 3.x too,
     which makes it unsuitable for setting it system-wide (or session-wide),
-    since doing so will cause applications using different GTK+ versions
+    since doing so will cause applications using different GTK versions
     to see incompatible modules.
   </warning>
 </formalpara>
@@ -179,7 +179,7 @@ additional environment variables.
     <literal>Gtk/IMModule</literal>, that will be used for the default
     IM module.
     This also can be a colon-separated list of input-methods, which
-    GTK+ will try in turn until it finds one available on the system.
+    GTK will try in turn until it finds one available on the system.
   </para>
 </formalpara>
 
@@ -187,8 +187,8 @@ additional environment variables.
   <title><envar>GTK_EXE_PREFIX</envar></title>
 
   <para>
-    If set, GTK+ uses <filename>$GTK_EXE_PREFIX/lib</filename> instead of
-    the libdir configured when GTK+ was compiled.
+    If set, GTK uses <filename>$GTK_EXE_PREFIX/lib</filename> instead of
+    the libdir configured when GTK was compiled.
   </para>
 </formalpara>
 
@@ -196,8 +196,8 @@ additional environment variables.
   <title><envar>GTK_DATA_PREFIX</envar></title>
 
   <para>
-    If set, makes GTK+ use <filename>$GTK_DATA_PREFIX</filename>
-    instead of the prefix configured when GTK+ was compiled.
+    If set, makes GTK use <filename>$GTK_DATA_PREFIX</filename>
+    instead of the prefix configured when GTK was compiled.
   </para>
 </formalpara>
 
@@ -205,7 +205,7 @@ additional environment variables.
   <title><envar>GTK_THEME</envar></title>
 
   <para>
-    If set, makes GTK+ use the named theme instead of the theme
+    If set, makes GTK use the named theme instead of the theme
     that is specified by the gtk-theme-name setting. This is intended
     mainly for easy debugging of theme issues.
   </para>
@@ -217,7 +217,7 @@ additional environment variables.
 
 <para>
 The following environment variables are used by GdkPixbuf, GDK or
-Pango, not by GTK+ itself, but we list them here for completeness
+Pango, not by GTK itself, but we list them here for completeness
 nevertheless.
 </para>
 
@@ -229,7 +229,7 @@ nevertheless.
     This environment variable overrides the default value
     <filename><replaceable>libdir</replaceable>/gtk-4.0/4.0.0/loaders.cache</filename>
     (<replaceable>libdir</replaceable> is the sysconfdir specified when
-    GTK+ was configured, usually <filename>/usr/local/lib</filename>.)
+    GTK was configured, usually <filename>/usr/local/lib</filename>.)
   </para>
   <para>
     The <filename>loaders.cache</filename> file is generated by the
@@ -241,7 +241,7 @@ nevertheless.
   <title><envar>GDK_DEBUG</envar></title>
 
   <para>
-  If GTK+ has been configured with <option>--enable-debug=yes</option>,
+  If GTK has been configured with <option>--enable-debug=yes</option>,
   this variable can be set to a list of debug options, which cause GDK
   to print out different types of debugging information.
   <variablelist>
@@ -331,7 +331,7 @@ nevertheless.
   <title><envar>GSK_DEBUG</envar></title>
 
   <para>
-  If GTK+ has been configured with <option>--enable-debug=yes</option>,
+  If GTK has been configured with <option>--enable-debug=yes</option>,
   this variable can be set to a list of debug options, which cause GSK
   to print out different types of debugging information.
   <variablelist>
@@ -406,7 +406,7 @@ nevertheless.
 
   <para>
     If set, selects the GDK backend to use. Selecting a backend requires that
-    GTK+ is compiled with support for that backend. The following backends can
+    GTK is compiled with support for that backend. The following backends can
     be selected, provided they are included in the GDK libraries you are using:
     <variablelist>
 
@@ -498,7 +498,7 @@ nevertheless.
 
   <para>
     The default value of this environment variable is 1. If changed to 0, this
-    disables the default use of client-side decorations on GTK+ windows, thus
+    disables the default use of client-side decorations on GTK windows, thus
     making the window manager responsible for drawing the decorations of
     windows that do not have a custom titlebar widget.
   </para>
@@ -512,7 +512,7 @@ nevertheless.
   <title><envar>XDG_DATA_HOME</envar>, <envar>XDG_DATA_DIRS</envar></title>
 
   <para>
-    GTK+ uses these environment variables to locate icon themes
+    GTK uses these environment variables to locate icon themes
     and MIME information. For more information, see
     <ulink url="https://freedesktop.org/Standards/icon-theme-spec">Icon Theme Specification</ulink>,
     the <ulink url="https://freedesktop.org/Standards/shared-mime-info-spec">Shared MIME-info Database</ulink>
@@ -524,9 +524,9 @@ nevertheless.
   <title><envar>DESKTOP_STARTUP_ID</envar></title>
 
   <para>
-    GTK+ uses this environment variable to provide startup notification
+    GTK uses this environment variable to provide startup notification
     according to the <ulink url="https://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt">Startup Notification Spec</ulink>.
-    Following the specification, GTK+ unsets this variable after reading
+    Following the specification, GTK unsets this variable after reading
     it (to keep it from leaking to child processes). So, if you need its
     value for your own purposes, you have to read it before calling
     gtk_init().
@@ -541,20 +541,20 @@ nevertheless.
   <inlinegraphic fileref="inspector.png" format="PNG"></inlinegraphic>
 
   <para>
-    GTK+ includes an interactive debugger, called the GTK+ Inspector, which
-    lets you explore the widget tree of any GTK+ application at runtime, as
+    GTK includes an interactive debugger, called the GTK Inspector, which
+    lets you explore the widget tree of any GTK application at runtime, as
     well as tweak the theme and trigger visual debugging aids. You can
     easily try out changes at runtime before putting them into the code.
   </para>
   <para>
-    Note that the GTK+ inspector can only show GTK+ internals. It can not
-    understand the application-specific logic of a GTK+ application. Also,
-    the fact that the GTK+ inspector is running in the application process
+    Note that the GTK inspector can only show GTK internals. It can not
+    understand the application-specific logic of a GTK application. Also,
+    the fact that the GTK inspector is running in the application process
     limits what it can do. It is meant as a complement to full-blown debuggers
     and system tracing facilities such as DTrace, not as a replacement.
   </para>
   <para>
-    To enable the GTK+ inspector, you can use the Control-Shift-I or
+    To enable the GTK inspector, you can use the Control-Shift-I or
     Control-Shift-D keyboard shortcuts, or set the
     <envar>GTK_DEBUG=interactive</envar> environment variable.
   </para>
@@ -567,11 +567,37 @@ nevertheless.
 
   <para>
     In some situations, it may be inappropriate to give users access to the
-    GTK+ inspector. The keyboard shortcuts can be disabled with the
+    GTK inspector. The keyboard shortcuts can be disabled with the
     `enable-inspector-keybinding` key in the `org.gtk.Settings.Debug`
     GSettings schema.
   </para>
 
+</refsect2>
+
+<refsect2 id="profiling">
+  <title>Profiling</title>
+
+  <para>
+    GTK supports profiling with sysprof. It exports timing information
+    about frameclock phases and various characteristics of GskRenders
+    in a format that can be displayed by sysprof or GNOME Builder.
+  </para>
+  <para>
+    A simple way to capture data is to set the <envar>GTK_TRACE</envar>
+    environment variable. When it is set, GTK will write profiling
+    data to a file called
+    <filename>gtk.<replaceable>PID</replaceable>.syscap</filename>.
+  </para>
+  <para>
+    When launching the application from sysprof, it will set the
+    <envar>SYSPROF_TRACE_FD</envar> environment variable to point
+    GTK at a file descriptor to write profiling data to.
+  </para>
+  <para>
+    When GtkApplication registers with D-Bus, it exports the
+    <literal>org.gnome.Sysprof2.Profiler</literal> interface
+    that lets sysprof request profiling data at runtime.
+  </para>
 </refsect2>
 
 </refsect1>

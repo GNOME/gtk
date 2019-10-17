@@ -46,6 +46,17 @@
  * gets one of the .horizontal or .vertical style classes.
  */
 
+typedef struct _GtkSeparatorClass         GtkSeparatorClass;
+
+struct _GtkSeparator
+{
+  GtkWidget parent_instance;
+};
+
+struct _GtkSeparatorClass
+{
+  GtkWidgetClass parent_class;
+};
 
 typedef struct _GtkSeparatorPrivate GtkSeparatorPrivate;
 struct _GtkSeparatorPrivate
@@ -117,8 +128,6 @@ gtk_separator_init (GtkSeparator *separator)
   GtkSeparatorPrivate *priv = gtk_separator_get_instance_private (separator);
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
-
-  gtk_widget_set_has_surface (GTK_WIDGET (separator), FALSE);
 
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (separator));
 }

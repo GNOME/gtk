@@ -289,11 +289,11 @@ gtk_css_value_array_transition (GtkCssValue *start,
        * into arrays and start animating them. */
       g_warning ("Don't know how to transition arrays for property '%s'", 
                  _gtk_style_property_get_name (GTK_STYLE_PROPERTY (_gtk_css_style_property_lookup_by_id (property_id))));
+      return NULL;
     case GTK_CSS_PROPERTY_TRANSITION_PROPERTY:
     case GTK_CSS_PROPERTY_TRANSITION_DURATION:
     case GTK_CSS_PROPERTY_TRANSITION_TIMING_FUNCTION:
     case GTK_CSS_PROPERTY_TRANSITION_DELAY:
-    case GTK_CSS_PROPERTY_GTK_KEY_BINDINGS:
       return NULL;
     }
 }
@@ -422,7 +422,7 @@ _gtk_css_array_value_parse (GtkCssParser *parser,
       }
 
     g_ptr_array_add (values, value);
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
+  } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
   result = _gtk_css_array_value_new_from_array ((GtkCssValue **) values->pdata, values->len);
   g_ptr_array_free (values, TRUE);

@@ -736,22 +736,32 @@ pid_get_command_line (GPid pid)
 static GPid
 pid_get_parent (GPid pid)
 {
-  struct kinfo_proc kp;
+  struct kinfo_proc *kp = NULL;
   size_t len;
-  GPid ppid;
+  GPid ppid = 0;
+
+  /* fail if trying to get the parent of the init process (no such thing) */
+  if (pid == 1)
+      goto out;
 
   int mib[] = { CTL_KERN, KERN_PROC, KERN_PROC_PID, pid,
                 sizeof(struct kinfo_proc), 0 };
 
   if (sysctl (mib, G_N_ELEMENTS (mib), NULL, &len, NULL, 0) == -1)
-      return (-1);
+      goto out;
+
   mib[5] = (len / sizeof(struct kinfo_proc));
 
-  if (sysctl (mib, G_N_ELEMENTS (mib), &kp, &len, NULL, 0) < 0)
-      return -1;
+  kp = g_malloc0 (len);
 
-  ppid = kp.p_ppid;
+  if (sysctl (mib, G_N_ELEMENTS (mib), kp, &len, NULL, 0) < 0)
+      goto out;
 
+  ppid = kp->p_ppid;
+
+out:
+  if (kp)
+      g_free (kp);
   return ppid;
 }
 

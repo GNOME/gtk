@@ -42,7 +42,8 @@ struct _GtkCssAnimatedStyle
 
   GPtrArray             *animated_values;      /* NULL or array of animated values/NULL if not animated */
   gint64                 current_time;         /* the current time in our world */
-  GSList                *animations;           /* the running animations, least important one first */
+  gpointer              *animations;           /* GtkStyleAnimation**, least important one first */
+  guint                  n_animations;
 };
 
 struct _GtkCssAnimatedStyleClass
@@ -64,7 +65,7 @@ GtkCssStyle *           gtk_css_animated_style_new_advance      (GtkCssAnimatedS
 void                    gtk_css_animated_style_set_animated_value(GtkCssAnimatedStyle   *style,
                                                                  guint                   id,
                                                                  GtkCssValue            *value);
-                                                                        
+
 GtkCssValue *           gtk_css_animated_style_get_intrinsic_value (GtkCssAnimatedStyle *style,
                                                                  guint                   id);
 

@@ -93,7 +93,7 @@
  * An example of a UI definition fragment with GtkSizeGroup:
  * |[
  * <object class="GtkSizeGroup">
- *   <property name="mode">GTK_SIZE_GROUP_HORIZONTAL</property>
+ *   <property name="mode">horizontal</property>
  *   <widgets>
  *     <widget name="radio1"/>
  *     <widget name="radio2"/>
@@ -102,6 +102,13 @@
  * ]|
  */
 
+typedef struct _GtkSizeGroupClass GtkSizeGroupClass;
+typedef struct _GtkSizeGroupPrivate GtkSizeGroupPrivate;
+
+struct _GtkSizeGroupClass
+{
+  GObjectClass parent_class;
+};
 
 struct _GtkSizeGroupPrivate
 {
@@ -125,18 +132,18 @@ static void gtk_size_group_get_property (GObject      *object,
 					 GParamSpec   *pspec);
 
 /* GtkBuildable */
-static void gtk_size_group_buildable_init (GtkBuildableIface *iface);
-static gboolean gtk_size_group_buildable_custom_tag_start (GtkBuildable  *buildable,
-							   GtkBuilder    *builder,
-							   GObject       *child,
-							   const gchar   *tagname,
-							   GMarkupParser *parser,
-							   gpointer      *data);
-static void gtk_size_group_buildable_custom_finished (GtkBuildable  *buildable,
-						      GtkBuilder    *builder,
-						      GObject       *child,
-						      const gchar   *tagname,
-						      gpointer       user_data);
+static void     gtk_size_group_buildable_init             (GtkBuildableIface  *iface);
+static gboolean gtk_size_group_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                                           GtkBuilder         *builder,
+                                                           GObject            *child,
+                                                           const gchar        *tagname,
+                                                           GtkBuildableParser *parser,
+                                                           gpointer           *data);
+static void     gtk_size_group_buildable_custom_finished  (GtkBuildable       *buildable,
+                                                           GtkBuilder         *builder,
+                                                           GObject            *child,
+                                                           const gchar        *tagname,
+                                                           gpointer            user_data);
 
 G_STATIC_ASSERT (GTK_SIZE_GROUP_HORIZONTAL == (1 << GTK_ORIENTATION_HORIZONTAL));
 G_STATIC_ASSERT (GTK_SIZE_GROUP_VERTICAL == (1 << GTK_ORIENTATION_VERTICAL));
@@ -163,7 +170,7 @@ add_widget_to_closure (GHashTable *widgets,
   for (tmp_groups = _gtk_widget_get_sizegroups (widget); tmp_groups; tmp_groups = tmp_groups->next)
     {
       GtkSizeGroup        *tmp_group = tmp_groups->data;
-      GtkSizeGroupPrivate *tmp_priv  = tmp_group->priv;
+      GtkSizeGroupPrivate *tmp_priv  = gtk_size_group_get_instance_private (tmp_group);
 
       if (g_hash_table_lookup (groups, tmp_group))
         continue;
@@ -197,7 +204,7 @@ _gtk_size_group_get_widget_peers (GtkWidget      *for_widget,
 static void
 queue_resize_on_group (GtkSizeGroup *size_group)
 {
-  GtkSizeGroupPrivate *priv = size_group->priv;
+  GtkSizeGroupPrivate *priv = gtk_size_group_get_instance_private (size_group);
   GSList *list;
 
   for (list = priv->widgets; list; list = list->next)
@@ -230,8 +237,7 @@ gtk_size_group_init (GtkSizeGroup *size_group)
 {
   GtkSizeGroupPrivate *priv;
 
-  size_group->priv = gtk_size_group_get_instance_private (size_group);
-  priv = size_group->priv;
+  priv = gtk_size_group_get_instance_private (size_group);
 
   priv->widgets = NULL;
   priv->mode = GTK_SIZE_GROUP_HORIZONTAL;
@@ -270,7 +276,7 @@ gtk_size_group_get_property (GObject      *object,
 			     GParamSpec   *pspec)
 {
   GtkSizeGroup *size_group = GTK_SIZE_GROUP (object);
-  GtkSizeGroupPrivate *priv = size_group->priv;
+  GtkSizeGroupPrivate *priv = gtk_size_group_get_instance_private (size_group);
 
   switch (prop_id)
     {
@@ -295,7 +301,7 @@ GtkSizeGroup *
 gtk_size_group_new (GtkSizeGroupMode mode)
 {
   GtkSizeGroup *size_group = g_object_new (GTK_TYPE_SIZE_GROUP, NULL);
-  GtkSizeGroupPrivate *priv = size_group->priv;
+  GtkSizeGroupPrivate *priv = gtk_size_group_get_instance_private (size_group);
 
   priv->mode = mode;
 
@@ -318,11 +324,9 @@ void
 gtk_size_group_set_mode (GtkSizeGroup     *size_group,
 			 GtkSizeGroupMode  mode)
 {
-  GtkSizeGroupPrivate *priv;
+  GtkSizeGroupPrivate *priv = gtk_size_group_get_instance_private (size_group);
 
   g_return_if_fail (GTK_IS_SIZE_GROUP (size_group));
-
-  priv = size_group->priv;
 
   if (priv->mode != mode)
     {
@@ -347,9 +351,11 @@ gtk_size_group_set_mode (GtkSizeGroup     *size_group,
 GtkSizeGroupMode
 gtk_size_group_get_mode (GtkSizeGroup *size_group)
 {
+  GtkSizeGroupPrivate *priv = gtk_size_group_get_instance_private (size_group);
+
   g_return_val_if_fail (GTK_IS_SIZE_GROUP (size_group), GTK_SIZE_GROUP_BOTH);
 
-  return size_group->priv->mode;
+  return priv->mode;
 }
 
 /**
@@ -370,13 +376,11 @@ void
 gtk_size_group_add_widget (GtkSizeGroup *size_group,
 			   GtkWidget    *widget)
 {
-  GtkSizeGroupPrivate *priv;
+  GtkSizeGroupPrivate *priv = gtk_size_group_get_instance_private (size_group);
   GSList *groups;
   
   g_return_if_fail (GTK_IS_SIZE_GROUP (size_group));
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv = size_group->priv;
 
   groups = _gtk_widget_get_sizegroups (widget);
 
@@ -403,12 +407,10 @@ void
 gtk_size_group_remove_widget (GtkSizeGroup *size_group,
 			      GtkWidget    *widget)
 {
-  GtkSizeGroupPrivate *priv;
+  GtkSizeGroupPrivate *priv = gtk_size_group_get_instance_private (size_group);
   
   g_return_if_fail (GTK_IS_SIZE_GROUP (size_group));
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv = size_group->priv;
 
   g_return_if_fail (g_slist_find (priv->widgets, widget));
 
@@ -433,7 +435,9 @@ gtk_size_group_remove_widget (GtkSizeGroup *size_group,
 GSList *
 gtk_size_group_get_widgets (GtkSizeGroup *size_group)
 {
-  return size_group->priv->widgets;
+  GtkSizeGroupPrivate *priv = gtk_size_group_get_instance_private (size_group);
+
+  return priv->widgets;
 }
 
 typedef struct {
@@ -458,12 +462,12 @@ typedef struct {
 } GSListSubParserData;
 
 static void
-size_group_start_element (GMarkupParseContext  *context,
-                          const gchar          *element_name,
-                          const gchar         **names,
-                          const gchar         **values,
-                          gpointer              user_data,
-                          GError              **error)
+size_group_start_element (GtkBuildableParseContext  *context,
+                          const gchar               *element_name,
+                          const gchar              **names,
+                          const gchar              **values,
+                          gpointer                   user_data,
+                          GError                   **error)
 {
   GSListSubParserData *data = (GSListSubParserData*)user_data;
 
@@ -485,7 +489,7 @@ size_group_start_element (GMarkupParseContext  *context,
 
       item_data = g_new (ItemData, 1);
       item_data->name = g_strdup (name);
-      g_markup_parse_context_get_position (context, &item_data->line, &item_data->col);
+      gtk_buildable_parse_context_get_position (context, &item_data->line, &item_data->col);
       data->items = g_slist_prepend (data->items, item_data);
     }
   else if (strcmp (element_name, "widgets") == 0)
@@ -506,18 +510,18 @@ size_group_start_element (GMarkupParseContext  *context,
     }
 }
 
-static const GMarkupParser size_group_parser =
+static const GtkBuildableParser size_group_parser =
   {
     size_group_start_element
   };
 
 static gboolean
-gtk_size_group_buildable_custom_tag_start (GtkBuildable  *buildable,
-                                           GtkBuilder    *builder,
-                                           GObject       *child,
-                                           const gchar   *tagname,
-                                           GMarkupParser *parser,
-                                           gpointer      *parser_data)
+gtk_size_group_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                           GtkBuilder         *builder,
+                                           GObject            *child,
+                                           const gchar        *tagname,
+                                           GtkBuildableParser *parser,
+                                           gpointer           *parser_data)
 {
   GSListSubParserData *data;
 

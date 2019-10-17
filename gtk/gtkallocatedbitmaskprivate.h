@@ -42,6 +42,7 @@ typedef struct _GtkBitmask GtkBitmask;
 GtkBitmask *   _gtk_allocated_bitmask_copy              (const GtkBitmask  *mask);
 void           _gtk_allocated_bitmask_free              (GtkBitmask        *mask);
 
+char *         _gtk_allocated_bitmask_to_string         (const GtkBitmask  *mask);
 void           _gtk_allocated_bitmask_print             (const GtkBitmask  *mask,
                                                          GString           *string);
 

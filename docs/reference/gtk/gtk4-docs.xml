@@ -8,28 +8,29 @@
 ]>
 <book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
   <bookinfo>
-    <title>GTK+ 4 Reference Manual</title>
+    <title>GTK 4 Reference Manual</title>
     <releaseinfo>
-      This document is for the GTK+ 4 library, version &version;.
+      This document is for the GTK 4 library, version &version;.
       The latest versions can be found online at
       <ulink role="online-location" url="https://developer.gnome.org/gtk4/">https://developer.gnome.org/gtk4/</ulink>.
-      If you are looking for the older GTK+ 3 series of libraries,
+      If you are looking for the older GTK 3 series of libraries,
       see <ulink role="online-location" url="https://developer.gnome.org/gtk3/">https://developer.gnome.org/gtk3/</ulink>.
     </releaseinfo>
   </bookinfo>
 
   <part id="gtk">
-    <title>GTK+ Overview</title>
+    <title>GTK Overview</title>
     <xi:include href="overview.xml"/>
     <xi:include href="xml/getting_started.xml"/>
     <xi:include href="resources.sgml" />
     <xi:include href="xml/question_index.sgml" />
-    <xi:include href="drawing-model.xml" />
+    <xi:include href="xml/drawing-model.xml" />
     <xi:include href="xml/input-handling.xml" />
+    <xi:include href="xml/actions.xml" />
   </part>
 
   <part id="gtkobjects">
-    <title>GTK+ Widgets and Objects</title>
+    <title>GTK Widgets and Objects</title>
 
     <chapter>
       <title>Object Hierarchy</title>
@@ -49,6 +50,9 @@
       <xi:include href="xml/gtkslicelistmodel.xml" />
       <xi:include href="xml/gtksortlistmodel.xml" />
       <xi:include href="xml/gtktreelistmodel.xml" />
+      <xi:include href="xml/gtkselectionmodel.xml" />
+      <xi:include href="xml/gtknoselection.xml" />
+      <xi:include href="xml/gtksingleselection.xml" />
     </chapter>
 
     <chapter id="Application">
@@ -66,12 +70,12 @@
 
     <chapter id="WindowWidgets">
       <title>Windows</title>
+      <xi:include href="xml/gtkroot.xml" />
       <xi:include href="xml/gtkwindow.xml" />
       <xi:include href="xml/gtkdialog.xml" />
       <xi:include href="xml/gtkmessagedialog.xml" />
       <xi:include href="xml/gtkaboutdialog.xml" />
       <xi:include href="xml/gtkassistant.xml" />
-      <xi:include href="xml/gtkinvisible.xml" />
       <xi:include href="xml/gtkwindowgroup.xml" />
     </chapter>
 
@@ -89,14 +93,26 @@
       <xi:include href="xml/gtkactionbar.xml" />
       <xi:include href="xml/gtkheaderbar.xml" />
       <xi:include href="xml/gtkoverlay.xml" />
-      <xi:include href="xml/gtkbbox.xml" />
       <xi:include href="xml/gtkpaned.xml" />
-      <xi:include href="xml/gtklayout.xml" />
       <xi:include href="xml/gtknotebook.xml" />
       <xi:include href="xml/gtkexpander.xml" />
       <xi:include href="xml/gtkorientable.xml" />
       <xi:include href="xml/gtkaspectframe.xml" />
       <xi:include href="xml/gtkfixed.xml" />
+    </chapter>
+
+    <chapter id="LayoutManagers">
+      <title>Layout Managers</title>
+      <xi:include href="xml/gtklayoutmanager.xml" />
+      <xi:include href="xml/gtklayoutchild.xml" />
+      <xi:include href="xml/gtkbinlayout.xml" />
+      <xi:include href="xml/gtkboxlayout.xml" />
+      <xi:include href="xml/gtkcustomlayout.xml" />
+      <xi:include href="xml/gtkfixedlayout.xml" />
+      <xi:include href="xml/gtkgridlayout.xml" />
+      <xi:include href="xml/gtkconstraintlayout.xml" />
+      <xi:include href="xml/gtkconstraint.xml" />
+      <xi:include href="xml/gtkconstraintguide.xml" />
     </chapter>
 
     <chapter id="DisplayWidgets">
@@ -138,14 +154,16 @@
 
     <chapter id="NumericEntry">
       <title>Numeric and Text Data Entry</title>
-      <xi:include href="xml/gtkentry.xml" />
+      <xi:include href="xml/gtkeditable.xml" />
       <xi:include href="xml/gtkentrybuffer.xml" />
+      <xi:include href="xml/gtktext.xml" />
+      <xi:include href="xml/gtkentry.xml" />
       <xi:include href="xml/gtkentrycompletion.xml" />
+      <xi:include href="xml/gtkpasswordentry.xml" />
       <xi:include href="xml/gtkscale.xml" />
       <xi:include href="xml/gtkspinbutton.xml" />
       <xi:include href="xml/gtksearchentry.xml" />
       <xi:include href="xml/gtksearchbar.xml" />
-      <xi:include href="xml/gtkeditable.xml" />
     </chapter>
 
     <chapter id="TextWidgetObjects">
@@ -210,6 +228,7 @@
       <xi:include href="xml/gtkradiotoolbutton.xml" />
       <xi:include href="xml/gtkpopover.xml" />
       <xi:include href="xml/gtkpopovermenu.xml" />
+      <xi:include href="xml/gtkpopovermenubar.xml" />
     </chapter>
 
     <chapter id="SelectorWidgets">
@@ -277,8 +296,8 @@
       <xi:include href="xml/gtkimcontextsimple.xml" />
       <xi:include href="xml/gtkimmulticontext.xml" />
       <xi:include href="xml/gtksizegroup.xml" />
-      <xi:include href="xml/gtktooltip.xml" />
       <xi:include href="xml/gtksnapshot.xml" />
+      <xi:include href="xml/gtktooltip.xml" />
       <xi:include href="xml/gtkwidgetpaintable.xml" />
     </chapter>
 
@@ -318,7 +337,7 @@
       <xi:include href="xml/gtkgesturesingle.xml" />
       <xi:include href="xml/gtkgesturedrag.xml" />
       <xi:include href="xml/gtkgesturelongpress.xml" />
-      <xi:include href="xml/gtkgesturemultipress.xml" />
+      <xi:include href="xml/gtkgestureclick.xml" />
       <xi:include href="xml/gtkgesturepan.xml" />
       <xi:include href="xml/gtkgestureswipe.xml" />
       <xi:include href="xml/gtkgesturerotate.xml" />
@@ -330,7 +349,7 @@
   </part>
 
   <part  id="gtkbase">
-    <title>GTK+ Core Reference</title>
+    <title>GTK Core Reference</title>
     <xi:include href="xml/gtkmain.xml" />
     <xi:include href="xml/gtkfeatures.xml" />
     <xi:include href="xml/gtkaccelgroup.xml" />
@@ -345,7 +364,7 @@
   </part>
 
   <part id="theming">
-    <title>Theming in GTK+</title>
+    <title>Theming in GTK</title>
     <xi:include href="css-overview.xml" />
     <xi:include href="css-properties.xml" />
     <xi:include href="xml/gtkstylecontext.xml" />
@@ -356,15 +375,15 @@
   </part>
 
   <part id="migrating">
-    <title>Migrating from Previous Versions of GTK+</title>
+    <title>Migrating from Previous Versions of GTK</title>
 
     <partintro>
       <para>
         This part describes what you need to change in programs use
-        older versions of GTK+ so that they can use the new features.
+        older versions of GTK so that they can use the new features.
         It also mentions how to convert applications using widgets
         found in the libgnomeui library to use their counterparts
-        in GTK+.
+        in GTK.
       </para>
     </partintro>
 
@@ -373,7 +392,7 @@
   </part>
 
   <part>
-    <title>GTK+ Tools</title>
+    <title>GTK Tools</title>
     <xi:include href="gtk4-demo.xml" />
     <xi:include href="gtk4-demo-application.xml" />
     <xi:include href="gtk4-widget-factory.xml" />
@@ -387,7 +406,7 @@
   </part>
 
   <part id="platform-support">
-    <title>GTK+ Platform Support</title>
+    <title>GTK Platform Support</title>
     <xi:include href="building.sgml" />
     <xi:include href="xml/compiling.sgml" />
     <xi:include href="running.sgml" />

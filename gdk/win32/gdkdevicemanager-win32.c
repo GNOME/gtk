@@ -432,7 +432,7 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
 			    ndevices, ncursors));
 #endif
   /* Create a dummy window to receive wintab events */
-  wintab_window = gdk_surface_new_popup (display, &(GdkRectangle) { -100, -100, 2, 2 });
+  wintab_window = gdk_surface_new_temp (display, &(GdkRectangle) { -100, -100, 2, 2 });
   g_object_ref (wintab_window);
 
   for (devix = 0; devix < ndevices; devix++)
@@ -883,15 +883,12 @@ gdk_input_other_event (GdkDisplay *display,
   GdkDeviceManagerWin32 *device_manager;
   GdkDeviceWintab *source_device = NULL;
   GdkDeviceGrabInfo *last_grab;
-  GdkEventMask masktest;
   guint key_state;
-  POINT pt;
-  GdkSurfaceImplWin32 *impl;
 
   PACKET packet;
   gint root_x, root_y;
   gint num_axes;
-  gint x, y;
+  double x, y;
   guint translated_buttons, button_diff, button_mask;
   /* Translation from tablet button state to GDK button state for
    * buttons 1-3 - swap button 2 and 3.
@@ -911,7 +908,7 @@ gdk_input_other_event (GdkDisplay *display,
     g_object_ref (window);
 
   GDK_NOTE (EVENTS_OR_INPUT,
-	    g_print ("gdk_input_other_event: window=%p %+d%+d\n",
+	    g_print ("gdk_input_other_event: window=%p %+g%+g\n",
                window ? GDK_SURFACE_HWND (window) : NULL, x, y));
 
   if (msg->message == WT_PACKET || msg->message == WT_CSRCHANGE)

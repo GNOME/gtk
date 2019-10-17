@@ -75,117 +75,6 @@ test_iconview_object_new (void)
   g_object_unref (view);
 }
 
-typedef GtkIconView MyIconView;
-typedef GtkIconViewClass MyIconViewClass;
-
-GType my_icon_view_get_type (void);
-
-G_DEFINE_TYPE (MyIconView, my_icon_view, GTK_TYPE_ICON_VIEW)
-
-static void
-my_icon_view_class_init (MyIconViewClass *klass)
-{
-}
-
-static gint subclass_init;
-
-static void
-my_icon_view_init (MyIconView *view)
-{
-  GtkCellArea *area;
-
-  if (subclass_init == 0)
-    {
-      /* do nothing to area */
-    }
-  else if (subclass_init == 1)
-    {
-      area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view));
-      g_assert (GTK_IS_CELL_AREA_BOX (area));
-      g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
-      gtk_orientable_set_orientation (GTK_ORIENTABLE (area), GTK_ORIENTATION_HORIZONTAL);
-    }
-}
-
-/* test that an iconview subclass has an area */
-static void
-test_iconview_subclass0 (void)
-{
-  GtkWidget *view;
-  GtkCellArea *area;
-
-  subclass_init = 0;
-
-  view = g_object_new (my_icon_view_get_type (), NULL);
-  area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view));
-  g_assert (GTK_IS_CELL_AREA_BOX (area));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
-
-  g_object_ref_sink (view);
-  g_object_unref (view);
-}
-
-/* test that an iconview subclass keeps the provided area */
-static void
-test_iconview_subclass1 (void)
-{
-  GtkWidget *view;
-  GtkCellArea *area;
-
-  subclass_init = 0;
-
-  area = gtk_cell_area_box_new ();
-  view = g_object_new (my_icon_view_get_type (), "cell-area", area, NULL);
-  g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
-
-  g_object_ref_sink (view);
-  g_object_unref (view);
-}
-
-/* test we can access the area in subclass init */
-static void
-test_iconview_subclass2 (void)
-{
-  GtkWidget *view;
-  GtkCellArea *area;
-
-  subclass_init = 1;
-
-  view = g_object_new (my_icon_view_get_type (), NULL);
-  area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view));
-  g_assert (GTK_IS_CELL_AREA_BOX (area));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_HORIZONTAL);
-
-  g_object_ref_sink (view);
-  g_object_unref (view);
-}
-
-static void
-test_iconview_subclass3_subprocess (void)
-{
-  GtkWidget *view;
-  GtkCellArea *area;
-
-  subclass_init = 1;
-
-  area = gtk_cell_area_box_new ();
-  view = g_object_new (my_icon_view_get_type (), "cell-area", area, NULL);
-  g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
-  g_object_ref_sink (view);
-  g_object_unref (view);
-}
-
-/* test we get a warning if an area is provided, but ignored */
-static void
-test_iconview_subclass3 (void)
-{
-  g_test_trap_subprocess ("/tests/iconview-subclass3/subprocess", 0, 0);
-  g_test_trap_assert_failed ();
-  g_test_trap_assert_stderr ("*ignoring construct property*");
-}
-
 /* test that we have a cell area after new() */
 static void
 test_combobox_new (void)
@@ -201,6 +90,8 @@ test_combobox_new (void)
   g_object_ref_sink (view);
   g_object_unref (view);
 }
+
+static int subclass_init;
 
 typedef GtkComboBox MyComboBox;
 typedef GtkComboBoxClass MyComboBoxClass;
@@ -317,116 +208,6 @@ test_cellview_object_new (void)
   g_object_unref (view);
 }
 
-typedef GtkCellView MyCellView;
-typedef GtkCellViewClass MyCellViewClass;
-
-GType my_cell_view_get_type (void);
-
-G_DEFINE_TYPE (MyCellView, my_cell_view, GTK_TYPE_CELL_VIEW)
-
-static void
-my_cell_view_class_init (MyCellViewClass *klass)
-{
-}
-
-static void
-my_cell_view_init (MyCellView *view)
-{
-  GtkCellArea *area;
-
-  if (subclass_init == 0)
-    {
-      /* do nothing to area */
-    }
-  else if (subclass_init == 1)
-    {
-      area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view));
-      g_assert (GTK_IS_CELL_AREA_BOX (area));
-      g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_HORIZONTAL);
-      gtk_orientable_set_orientation (GTK_ORIENTABLE (area), GTK_ORIENTATION_VERTICAL);
-    }
-}
-
-/* test that a cellview subclass has an area */
-static void
-test_cellview_subclass0 (void)
-{
-  GtkWidget *view;
-  GtkCellArea *area;
-
-  subclass_init = 0;
-
-  view = g_object_new (my_cell_view_get_type (), NULL);
-  area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view));
-  g_assert (GTK_IS_CELL_AREA_BOX (area));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_HORIZONTAL);
-
-  g_object_ref_sink (view);
-  g_object_unref (view);
-}
-
-/* test that a cellview subclass keeps the provided area */
-static void
-test_cellview_subclass1 (void)
-{
-  GtkWidget *view;
-  GtkCellArea *area;
-
-  subclass_init = 0;
-
-  area = gtk_cell_area_box_new ();
-  view = g_object_new (my_cell_view_get_type (), "cell-area", area, NULL);
-  g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_HORIZONTAL);
-
-  g_object_ref_sink (view);
-  g_object_unref (view);
-}
-
-/* test we can access the area in subclass init */
-static void
-test_cellview_subclass2 (void)
-{
-  GtkWidget *view;
-  GtkCellArea *area;
-
-  subclass_init = 1;
-
-  view = g_object_new (my_cell_view_get_type (), NULL);
-  area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view));
-  g_assert (GTK_IS_CELL_AREA_BOX (area));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
-
-  g_object_ref_sink (view);
-  g_object_unref (view);
-}
-
-static void
-test_cellview_subclass3_subprocess (void)
-{
-  GtkWidget *view;
-  GtkCellArea *area;
-
-  subclass_init = 1;
-
-  area = gtk_cell_area_box_new ();
-  view = g_object_new (my_cell_view_get_type (), "cell-area", area, NULL);
-  g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
-
-  g_object_ref_sink (view);
-  g_object_unref (view);
-}
-
-/* test we get a warning if an area is provided, but ignored */
-static void
-test_cellview_subclass3 (void)
-{
-  g_test_trap_subprocess ("/tests/cellview-subclass3/subprocess", 0, 0);
-  g_test_trap_assert_failed ();
-  g_test_trap_assert_stderr ("*ignoring construct property*");
-}
-
 /* test that we have a cell area after new() */
 static void
 test_column_new (void)
@@ -472,116 +253,6 @@ test_column_object_new (void)
 
   g_object_ref_sink (col);
   g_object_unref (col);
-}
-
-typedef GtkTreeViewColumn MyTreeViewColumn;
-typedef GtkTreeViewColumnClass MyTreeViewColumnClass;
-
-GType my_tree_view_column_get_type (void);
-
-G_DEFINE_TYPE (MyTreeViewColumn, my_tree_view_column, GTK_TYPE_TREE_VIEW_COLUMN)
-
-static void
-my_tree_view_column_class_init (MyTreeViewColumnClass *klass)
-{
-}
-
-static void
-my_tree_view_column_init (MyTreeViewColumn *col)
-{
-  GtkCellArea *area;
-
-  if (subclass_init == 0)
-    {
-      /* do nothing to area */
-    }
-  else if (subclass_init == 1)
-    {
-      area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (col));
-      g_assert (GTK_IS_CELL_AREA_BOX (area));
-      g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_HORIZONTAL);
-      gtk_orientable_set_orientation (GTK_ORIENTABLE (area), GTK_ORIENTATION_VERTICAL);
-    }
-}
-
-/* test that a column subclass has an area */
-static void
-test_column_subclass0 (void)
-{
-  GtkTreeViewColumn *col;
-  GtkCellArea *area;
-
-  subclass_init = 0;
-
-  col = g_object_new (my_tree_view_column_get_type (), NULL);
-  area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (col));
-  g_assert (GTK_IS_CELL_AREA_BOX (area));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_HORIZONTAL);
-
-  g_object_ref_sink (col);
-  g_object_unref (col);
-}
-
-/* test that a column subclass keeps the provided area */
-static void
-test_column_subclass1 (void)
-{
-  GtkTreeViewColumn *col;
-  GtkCellArea *area;
-
-  subclass_init = 0;
-
-  area = gtk_cell_area_box_new ();
-  col = g_object_new (my_tree_view_column_get_type (), "cell-area", area, NULL);
-  g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (col)));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_HORIZONTAL);
-
-  g_object_ref_sink (col);
-  g_object_unref (col);
-}
-
-/* test we can access the area in subclass init */
-static void
-test_column_subclass2 (void)
-{
-  GtkTreeViewColumn *col;
-  GtkCellArea *area;
-
-  subclass_init = 1;
-
-  col = g_object_new (my_tree_view_column_get_type (), NULL);
-  area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (col));
-  g_assert (GTK_IS_CELL_AREA_BOX (area));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
-
-  g_object_ref_sink (col);
-  g_object_unref (col);
-}
-
-static void
-test_column_subclass3_subprocess (void)
-{
-  GtkTreeViewColumn *col;
-  GtkCellArea *area;
-
-  subclass_init = 1;
-
-  area = gtk_cell_area_box_new ();
-  col = g_object_new (my_tree_view_column_get_type (), "cell-area", area, NULL);
-  g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (col)));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
-
-  g_object_ref_sink (col);
-  g_object_unref (col);
-}
-
-/* test we get a warning if an area is provided, but ignored */
-static void
-test_column_subclass3 (void)
-{
-  g_test_trap_subprocess ("/tests/column-subclass3/subprocess", 0, 0);
-  g_test_trap_assert_failed ();
-  g_test_trap_assert_stderr ("*ignoring construct property*");
 }
 
 /* test that we have a cell area after new() */
@@ -631,131 +302,15 @@ test_completion_object_new (void)
   g_object_unref (c);
 }
 
-typedef GtkEntryCompletion MyEntryCompletion;
-typedef GtkEntryCompletionClass MyEntryCompletionClass;
-
-GType my_entry_completion_get_type (void);
-
-G_DEFINE_TYPE (MyEntryCompletion, my_entry_completion, GTK_TYPE_ENTRY_COMPLETION)
-
-static void
-my_entry_completion_class_init (MyEntryCompletionClass *klass)
-{
-}
-
-static void
-my_entry_completion_init (MyEntryCompletion *c)
-{
-  GtkCellArea *area;
-
-  if (subclass_init == 0)
-    {
-      /* do nothing to area */
-    }
-  else if (subclass_init == 1)
-    {
-      area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c));
-      g_assert (GTK_IS_CELL_AREA_BOX (area));
-      g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_HORIZONTAL);
-      gtk_orientable_set_orientation (GTK_ORIENTABLE (area), GTK_ORIENTATION_VERTICAL);
-    }
-}
-
-/* test that a completion subclass has an area */
-static void
-test_completion_subclass0 (void)
-{
-  GtkEntryCompletion *c;
-  GtkCellArea *area;
-
-  subclass_init = 0;
-
-  c = g_object_new (my_entry_completion_get_type (), NULL);
-  area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c));
-  g_assert (GTK_IS_CELL_AREA_BOX (area));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_HORIZONTAL);
-
-  g_object_ref_sink (c);
-  g_object_unref (c);
-}
-
-/* test that a completion subclass keeps the provided area */
-static void
-test_completion_subclass1 (void)
-{
-  GtkEntryCompletion *c;
-  GtkCellArea *area;
-
-  subclass_init = 0;
-
-  area = gtk_cell_area_box_new ();
-  c = g_object_new (my_entry_completion_get_type (), "cell-area", area, NULL);
-  g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c)));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_HORIZONTAL);
-
-  g_object_ref_sink (c);
-  g_object_unref (c);
-}
-
-/* test we can access the area in subclass init */
-static void
-test_completion_subclass2 (void)
-{
-  GtkEntryCompletion *c;
-  GtkCellArea *area;
-
-  subclass_init = 1;
-
-  c = g_object_new (my_entry_completion_get_type (), NULL);
-  area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c));
-  g_assert (GTK_IS_CELL_AREA_BOX (area));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
-
-  g_object_ref_sink (c);
-  g_object_unref (c);
-}
-
-static void
-test_completion_subclass3_subprocess (void)
-{
-  GtkEntryCompletion *c;
-  GtkCellArea *area;
-
-  subclass_init = 1;
-
-  area = gtk_cell_area_box_new ();
-  c = g_object_new (my_entry_completion_get_type (), "cell-area", area, NULL);
-  g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c)));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
-
-  g_object_ref_sink (c);
-  g_object_unref (c);
-}
-
-/* test we get a warning if an area is provided, but ignored */
-static void
-test_completion_subclass3 (void)
-{
-  g_test_trap_subprocess ("/tests/completion-subclass3/subprocess", 0, 0);
-  g_test_trap_assert_failed ();
-  g_test_trap_assert_stderr ("*ignoring construct property*");
-}
-
 int
 main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv);
-  g_test_bug_base ("http://bugzilla.gnome.org/");
   gtk_test_register_all_types();
 
   g_test_add_func ("/tests/iconview-new", test_iconview_new);
   g_test_add_func ("/tests/iconview-new-with-area", test_iconview_new_with_area);
   g_test_add_func ("/tests/iconview-object-new", test_iconview_object_new);
-  g_test_add_func ("/tests/iconview-subclass0", test_iconview_subclass0);
-  g_test_add_func ("/tests/iconview-subclass1", test_iconview_subclass1);
-  g_test_add_func ("/tests/iconview-subclass2", test_iconview_subclass2);
-  g_test_add_func ("/tests/iconview-subclass3", test_iconview_subclass3);
-  g_test_add_func ("/tests/iconview-subclass3/subprocess", test_iconview_subclass3_subprocess);
 
   g_test_add_func ("/tests/combobox-new", test_combobox_new);
   g_test_add_func ("/tests/combobox-subclass0", test_combobox_subclass0);
@@ -764,29 +319,14 @@ main (int argc, char *argv[])
   g_test_add_func ("/tests/cellview-new", test_cellview_new);
   g_test_add_func ("/tests/cellview-new-with-context", test_cellview_new_with_context);
   g_test_add_func ("/tests/cellview-object-new", test_cellview_object_new);
-  g_test_add_func ("/tests/cellview-subclass0", test_cellview_subclass0);
-  g_test_add_func ("/tests/cellview-subclass1", test_cellview_subclass1);
-  g_test_add_func ("/tests/cellview-subclass2", test_cellview_subclass2);
-  g_test_add_func ("/tests/cellview-subclass3", test_cellview_subclass3);
-  g_test_add_func ("/tests/cellview-subclass3/subprocess", test_cellview_subclass3_subprocess);
 
   g_test_add_func ("/tests/column-new", test_column_new);
   g_test_add_func ("/tests/column-new-with-area", test_column_new_with_area);
   g_test_add_func ("/tests/column-object-new", test_column_object_new);
-  g_test_add_func ("/tests/column-subclass0", test_column_subclass0);
-  g_test_add_func ("/tests/column-subclass1", test_column_subclass1);
-  g_test_add_func ("/tests/column-subclass2", test_column_subclass2);
-  g_test_add_func ("/tests/column-subclass3", test_column_subclass3);
-  g_test_add_func ("/tests/column-subclass3/subprocess", test_column_subclass3_subprocess);
 
   g_test_add_func ("/tests/completion-new", test_completion_new);
   g_test_add_func ("/tests/completion-new-with-area", test_completion_new_with_area);
   g_test_add_func ("/tests/completion-object-new", test_completion_object_new);
-  g_test_add_func ("/tests/completion-subclass0", test_completion_subclass0);
-  g_test_add_func ("/tests/completion-subclass1", test_completion_subclass1);
-  g_test_add_func ("/tests/completion-subclass2", test_completion_subclass2);
-  g_test_add_func ("/tests/completion-subclass3", test_completion_subclass3);
-  g_test_add_func ("/tests/completion-subclass3/subprocess", test_completion_subclass3_subprocess);
 
   return g_test_run();
 }

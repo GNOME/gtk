@@ -1,8 +1,8 @@
-GTK+ Coding Style
+GTK Coding Style
 -------------------------------------------------------------------------------
 
 This document is intended to be a short description of the preferred
-coding style to be used for the GTK+ source code. It was strongly
+coding style to be used for the GTK source code. It was strongly
 inspired by Clutter's CODING_STYLE.
 
 Coding style is a matter of consistency, readability and maintainance;
@@ -12,7 +12,7 @@ and consistent answers to common questions regarding the coding style,
 and will also try to identify the allowed exceptions.
 
 The examples will show the preferred coding style; the negative examples
-will be clearly identified. Please, don't submit code to GTK+ that
+will be clearly identified. Please, don't submit code to GTK that
 looks like any of these.
 
 Part of the rationales for these coding style rules are available either
@@ -38,10 +38,10 @@ using tab characters alone, or using a combination of spaces and tabs.
 
 Do not change the editor's configuration to change the meaning of a
 tab character (see below); code using tabs to indent will not be accepted
-into GTK+.
+into GTK.
 
 Even if two spaces for each indentation level allows deeper nesting than
-8 spaces, GTK+ favours self-documenting function names that can take
+8 spaces, GTK favours self-documenting function names that can take
 quite some space. For this reason you should avoid deeply nested code.
 
 + Tab characters
@@ -399,7 +399,7 @@ patch or commit. Never use empty lines at the beginning or at the end of
 a file.
 
 Do enable the default git pre-commit hook that detect trailing
-whitespace for you and help you to avoid corrupting GTK+'s tree with
+whitespace for you and help you to avoid corrupting GTK's tree with
 it. Do that as follows:
 
   chmod a+x .git/hooks/pre-commit
@@ -410,7 +410,7 @@ duplicate blank lines.
 
 + Headers
 
-Headers are special, for GTK+, in that they don't have to obey the
+Headers are special, for GTK, in that they don't have to obey the
 80 characters limit. The only major rule for headers is that the function
 definitions should be vertically aligned in three columns:
 
@@ -479,7 +479,7 @@ Additionally, public headers should use C++ guards around their declarations:
 
 + Includes
 
-GTK+ source files must never include the global gtk.h header; instead, it
+GTK source files must never include the global gtk.h header; instead, it
 should include the individual headers that are needed.
 
 Every source file must include config.h first, followed by the header matching
@@ -658,7 +658,7 @@ after the license header:
    * @Short_Description: Height-for-width geometry management
    * @Title: GtkSizeRequest
    *
-   * The GtkSizeRequest interface is GTK+'s height-for-width (and
+   * The GtkSizeRequest interface is GTK's height-for-width (and
    * width-for-height) geometry management system.
    * ...
    */
@@ -672,8 +672,8 @@ get_type function needs to listed in gtk3.types.
 
 + Old code
 
-New code that is being added to GTK+ should adhere to the style
-explained above. Existing GTK+ code does largely follow these
+New code that is being added to GTK should adhere to the style
+explained above. Existing GTK code does largely follow these
 conventions, but there are some differences, e.g. occurrences
 of tabs, etc.
 

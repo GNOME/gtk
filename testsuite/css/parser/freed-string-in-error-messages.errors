@@ -1,1 +1,1 @@
-freed-string-in-error-messages.css:2: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
+freed-string-in-error-messages.css:2:23-27: error: GTK_CSS_PARSER_ERROR_SYNTAX

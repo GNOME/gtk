@@ -202,7 +202,7 @@ get_contents_widget (GdkClipboard *clipboard)
   gtk_stack_add_titled (GTK_STACK (stack), child, "image", "Image");
 
   child = gtk_label_new (NULL);
-  gtk_label_set_line_wrap (GTK_LABEL (child), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (child), TRUE);
   gtk_stack_add_titled (GTK_STACK (stack), child, "text", "Text");
 
   return stack;

@@ -1,7 +1,7 @@
 window1
   "window"
   index: 0
-  state: enabled resizable sensitive showing visible
+  state: active enabled resizable sensitive showing visible
   toolkit: gtk
   window-type: normal
   <AtkComponent>
@@ -11,7 +11,7 @@ window1
     "table"
     parent: window1
     index: 0
-    state: enabled focusable sensitive showing visible manages-descendants
+    state: enabled focusable focused sensitive showing visible manages-descendants
     toolkit: gtk
     <AtkComponent>
     layer: widget
@@ -48,7 +48,7 @@ window1
       "table cell"
       parent: tv
       index: 1
-      state: enabled focusable selectable selected sensitive showing transient visible
+      state: active enabled focusable focused selectable selected sensitive showing transient visible
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -59,19 +59,24 @@ window1
       action 1 description: Creates a widget in which the contents of the cell can be edited
       action 2 name: activate
       action 2 description: Activates the cell
+      <AtkTableCell>
+      table: tv
+      column-header[0]: unnamed-GtkButtonAccessible-0
+      column-span: 1
+      row-span: 1
       tv
         "table cell"
         parent: tv
         index: 0
         name: One
-        state: enabled focusable selectable selected sensitive showing single-line transient visible
+        state: active enabled focusable focused selectable selected sensitive showing single-line transient visible
         <AtkComponent>
         layer: widget
         alpha: 1
         <AtkText>
         text: One
         character count: 3
-        caret offset: 0
+        caret offset: -1
         default attributes: bg-color: <omitted>
                             bg-full-height: 0
                             editable: false
@@ -103,19 +108,24 @@ window1
         action 1 description: Creates a widget in which the contents of the cell can be edited
         action 2 name: activate
         action 2 description: Activates the cell
+        <AtkTableCell>
+        table: tv
+        column-header[0]: unnamed-GtkButtonAccessible-0
+        column-span: 1
+        row-span: 1
       tv
         "table cell"
         parent: tv
         index: 1
         name: 234
-        state: enabled focusable selectable selected sensitive showing single-line transient visible
+        state: active enabled focusable focused selectable selected sensitive showing single-line transient visible
         <AtkComponent>
         layer: widget
         alpha: 1
         <AtkText>
         text: 234
         character count: 3
-        caret offset: 0
+        caret offset: -1
         default attributes: bg-color: <omitted>
                             bg-full-height: 0
                             editable: false
@@ -147,6 +157,11 @@ window1
         action 1 description: Creates a widget in which the contents of the cell can be edited
         action 2 name: activate
         action 2 description: Activates the cell
+        <AtkTableCell>
+        table: tv
+        column-header[0]: unnamed-GtkButtonAccessible-0
+        column-span: 1
+        row-span: 1
     tv
       "table cell"
       parent: tv
@@ -162,6 +177,12 @@ window1
       action 1 description: Creates a widget in which the contents of the cell can be edited
       action 2 name: activate
       action 2 description: Activates the cell
+      <AtkTableCell>
+      table: tv
+      column-header[0]: unnamed-GtkButtonAccessible-0
+      column-span: 1
+      row-span: 1
+      position: 1 0
       tv
         "table cell"
         parent: tv
@@ -174,7 +195,7 @@ window1
         <AtkText>
         text: Two
         character count: 3
-        caret offset: 0
+        caret offset: -1
         default attributes: bg-color: <omitted>
                             bg-full-height: 0
                             editable: false
@@ -206,6 +227,12 @@ window1
         action 1 description: Creates a widget in which the contents of the cell can be edited
         action 2 name: activate
         action 2 description: Activates the cell
+        <AtkTableCell>
+        table: tv
+        column-header[0]: unnamed-GtkButtonAccessible-0
+        column-span: 1
+        row-span: 1
+        position: 1 0
       tv
         "table cell"
         parent: tv
@@ -218,7 +245,7 @@ window1
         <AtkText>
         text: 567
         character count: 3
-        caret offset: 0
+        caret offset: -1
         default attributes: bg-color: <omitted>
                             bg-full-height: 0
                             editable: false
@@ -250,6 +277,12 @@ window1
         action 1 description: Creates a widget in which the contents of the cell can be edited
         action 2 name: activate
         action 2 description: Activates the cell
+        <AtkTableCell>
+        table: tv
+        column-header[0]: unnamed-GtkButtonAccessible-0
+        column-span: 1
+        row-span: 1
+        position: 1 0
     tv
       "table cell"
       parent: tv
@@ -265,6 +298,12 @@ window1
       action 1 description: Creates a widget in which the contents of the cell can be edited
       action 2 name: activate
       action 2 description: Activates the cell
+      <AtkTableCell>
+      table: tv
+      column-header[0]: unnamed-GtkButtonAccessible-0
+      column-span: 1
+      row-span: 1
+      position: 2 0
       tv
         "table cell"
         parent: tv
@@ -277,7 +316,7 @@ window1
         <AtkText>
         text: 40.000
         character count: 6
-        caret offset: 0
+        caret offset: -1
         default attributes: bg-color: <omitted>
                             bg-full-height: 0
                             editable: false
@@ -309,6 +348,12 @@ window1
         action 1 description: Creates a widget in which the contents of the cell can be edited
         action 2 name: activate
         action 2 description: Activates the cell
+        <AtkTableCell>
+        table: tv
+        column-header[0]: unnamed-GtkButtonAccessible-0
+        column-span: 1
+        row-span: 1
+        position: 2 0
       tv
         "table cell"
         parent: tv
@@ -321,7 +366,7 @@ window1
         <AtkText>
         text: 999999
         character count: 6
-        caret offset: 0
+        caret offset: -1
         default attributes: bg-color: <omitted>
                             bg-full-height: 0
                             editable: false
@@ -353,3 +398,9 @@ window1
         action 1 description: Creates a widget in which the contents of the cell can be edited
         action 2 name: activate
         action 2 description: Activates the cell
+        <AtkTableCell>
+        table: tv
+        column-header[0]: unnamed-GtkButtonAccessible-0
+        column-span: 1
+        row-span: 1
+        position: 2 0

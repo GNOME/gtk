@@ -33,9 +33,6 @@ struct _GskRenderNodeClass
   void            (* diff)        (GskRenderNode  *node1,
                                    GskRenderNode  *node2,
                                    cairo_region_t *region);
-  GVariant *      (* serialize)   (GskRenderNode  *node);
-  GskRenderNode * (* deserialize) (GVariant       *variant,
-                                   GError        **error);
 };
 
 GskRenderNode * gsk_render_node_new              (const GskRenderNodeClass  *node_class,
@@ -49,21 +46,6 @@ void            gsk_render_node_diff             (GskRenderNode             *nod
 void            gsk_render_node_diff_impossible  (GskRenderNode             *node1,
                                                   GskRenderNode             *node2,
                                                   cairo_region_t            *region);
-
-GVariant *      gsk_render_node_serialize_node   (GskRenderNode             *node);
-GskRenderNode * gsk_render_node_deserialize_node (GskRenderNodeType          type,
-                                                  GVariant                  *variant,
-                                                  GError                   **error);
-
-GskRenderNode * gsk_cairo_node_new_for_surface   (const graphene_rect_t    *bounds,
-                                                  cairo_surface_t          *surface);
-
-GskRenderNode * gsk_text_node_new_with_bounds     (PangoFont                *font,
-                                                   PangoGlyphString         *glyphs,
-                                                   const GdkRGBA            *color,
-                                                   double                    x,
-                                                   double                    y,
-                                                   const graphene_rect_t    *bounds);
 
 
 G_END_DECLS

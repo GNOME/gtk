@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.8 -->
   <template class="ExampleAppWindow" parent="GtkApplicationWindow">
     <property name="title" translatable="yes">Example Application</property>
     <property name="default-width">600</property>
@@ -18,8 +16,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkStack" id="stack">
-          </object>
+          <object class="GtkStack" id="stack"/>
         </child>
       </object>
     </child>

@@ -18,11 +18,14 @@
  */
 
 #include "config.h"
-#include "gtkseparatormenuitem.h"
+
 #include "gtkseparatortoolitem.h"
+
 #include "gtkintl.h"
-#include "gtktoolbarprivate.h"
 #include "gtkprivate.h"
+#include "gtkseparatormenuitem.h"
+#include "gtkstylecontext.h"
+#include "gtktoolbarprivate.h"
 #include "gtkwidgetprivate.h"
 
 /**
@@ -46,6 +49,18 @@
  *
  * GtkSeparatorToolItem has a single CSS node with name separator.
  */
+
+typedef struct _GtkSeparatorToolItemClass   GtkSeparatorToolItemClass;
+
+struct _GtkSeparatorToolItem
+{
+  GtkToolItem parent_instance;
+};
+
+struct _GtkSeparatorToolItemClass
+{
+  GtkToolItemClass parent_class;
+};
 
 #define MENU_ID "gtk-separator-tool-item-menu-id"
 
@@ -102,18 +117,13 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
 static void
 gtk_separator_tool_item_init (GtkSeparatorToolItem *separator_item)
 {
-  GtkWidget *widget;
-
-  widget = GTK_WIDGET (separator_item);
-
-  gtk_widget_set_has_surface (widget, FALSE);
 }
 
 static void
 gtk_separator_tool_item_add (GtkContainer *container,
                              GtkWidget    *child)
 {
-  g_warning ("attempt to add a child to an GtkSeparatorToolItem");
+  g_warning ("attempt to add a child to a GtkSeparatorToolItem");
 }
 
 static gboolean

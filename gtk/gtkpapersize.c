@@ -55,7 +55,7 @@
  * and height) of a paper size and its name, it also provides
  * default [print margins][print-margins].
  *
- * Printing support has been added in GTK+ 2.10.
+ * Printing support has been added in GTK 2.10.
  */
 
 
@@ -765,7 +765,7 @@ gtk_paper_size_set_size (GtkPaperSize *size,
  * depends on the current locale.
  *
  * Returns: the name of the default paper size. The string
- * is owned by GTK+ and should not be modified.
+ * is owned by GTK and should not be modified.
  */
 const gchar *
 gtk_paper_size_get_default (void)
@@ -911,7 +911,7 @@ gtk_paper_size_get_default_right_margin (GtkPaperSize *size,
 /**
  * gtk_paper_size_new_from_key_file:
  * @key_file: the #GKeyFile to retrieve the papersize from
- * @group_name: the name ofthe group in the key file to read,
+ * @group_name: (nullable): the name of the group in the key file to read,
  *     or %NULL to read the first group
  * @error: (allow-none): return location for an error, or %NULL
  *

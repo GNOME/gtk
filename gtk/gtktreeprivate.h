@@ -21,7 +21,7 @@
 
 #include <gtk/gtktreeview.h>
 #include <gtk/gtktreeselection.h>
-#include <gtk/gtkrbtreeprivate.h>
+#include <gtk/gtktreerbtreeprivate.h>
 
 G_BEGIN_DECLS
 
@@ -36,21 +36,21 @@ GtkTreeSelectMode;
 
 /* functions that shouldn't be exported */
 void         _gtk_tree_selection_internal_select_node (GtkTreeSelection  *selection,
-						       GtkRBNode         *node,
-						       GtkRBTree         *tree,
+						       GtkTreeRBNode     *node,
+						       GtkTreeRBTree     *tree,
 						       GtkTreePath       *path,
                                                        GtkTreeSelectMode  mode,
 						       gboolean           override_browse_mode);
 void         _gtk_tree_selection_emit_changed         (GtkTreeSelection  *selection);
 gboolean     _gtk_tree_view_find_node                 (GtkTreeView       *tree_view,
 						       GtkTreePath       *path,
-						       GtkRBTree        **tree,
-						       GtkRBNode        **node);
+						       GtkTreeRBTree    **tree,
+						       GtkTreeRBNode    **node);
 gboolean     _gtk_tree_view_get_cursor_node           (GtkTreeView       *tree_view,
-						       GtkRBTree        **tree,
-						       GtkRBNode        **node);
-GtkTreePath *_gtk_tree_path_new_from_rbtree           (GtkRBTree         *tree,
-						       GtkRBNode         *node);
+						       GtkTreeRBTree    **tree,
+						       GtkTreeRBNode    **node);
+GtkTreePath *_gtk_tree_path_new_from_rbtree           (GtkTreeRBTree     *tree,
+						       GtkTreeRBNode     *node);
 
 void         _gtk_tree_view_add_editable              (GtkTreeView       *tree_view,
                                                        GtkTreeViewColumn *column,
@@ -72,7 +72,7 @@ void         _gtk_tree_view_get_row_separator_func    (GtkTreeView              
 GtkTreePath *_gtk_tree_view_get_anchor_path           (GtkTreeView                 *tree_view);
 void         _gtk_tree_view_set_anchor_path           (GtkTreeView                 *tree_view,
 						       GtkTreePath                 *anchor_path);
-GtkRBTree *  _gtk_tree_view_get_rbtree                (GtkTreeView                 *tree_view);
+GtkTreeRBTree *    _gtk_tree_view_get_rbtree          (GtkTreeView                 *tree_view);
 
 GtkTreeViewColumn *_gtk_tree_view_get_focus_column    (GtkTreeView                 *tree_view);
 void               _gtk_tree_view_set_focus_column    (GtkTreeView                 *tree_view,
@@ -83,7 +83,7 @@ GtkTreeSelection* _gtk_tree_selection_new_with_tree_view (GtkTreeView      *tree
 void              _gtk_tree_selection_set_tree_view      (GtkTreeSelection *selection,
                                                           GtkTreeView      *tree_view);
 gboolean          _gtk_tree_selection_row_is_selectable  (GtkTreeSelection *selection,
-							  GtkRBNode        *node,
+							  GtkTreeRBNode    *node,
 							  GtkTreePath      *path);
 
 

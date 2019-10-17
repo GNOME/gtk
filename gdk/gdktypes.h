@@ -200,7 +200,7 @@ typedef enum
  * @GDK_HYPER_MASK: the Hyper modifier
  * @GDK_META_MASK: the Meta modifier
  * @GDK_MODIFIER_RESERVED_29_MASK: A reserved bit flag; do not use in your own code
- * @GDK_RELEASE_MASK: not used in GDK itself. GTK+ uses it to differentiate
+ * @GDK_RELEASE_MASK: not used in GDK itself. GTK uses it to differentiate
  *  between (keyval, modifiers) pairs from key press and release events.
  * @GDK_MODIFIER_MASK: a mask covering all modifier types.
  *
@@ -454,7 +454,7 @@ typedef enum {
  * GdkSurfaceTypeHint:
  * @GDK_SURFACE_TYPE_HINT_NORMAL: Normal toplevel window.
  * @GDK_SURFACE_TYPE_HINT_DIALOG: Dialog window.
- * @GDK_SURFACE_TYPE_HINT_MENU: Window used to implement a menu; GTK+ uses
+ * @GDK_SURFACE_TYPE_HINT_MENU: Window used to implement a menu; GTK uses
  *  this hint only for torn-off menus, see #GtkTearoffMenuItem.
  * @GDK_SURFACE_TYPE_HINT_TOOLBAR: Window used to implement toolbars.
  * @GDK_SURFACE_TYPE_HINT_SPLASHSCREEN: Window used to display a splash
@@ -514,7 +514,7 @@ typedef enum
  *
  * An enumeration describing the way in which a device
  * axis (valuator) maps onto the predefined valuator
- * types that GTK+ understands.
+ * types that GTK understands.
  *
  * Note that the X and Y axes are not really needed; pointer devices
  * report their location via the x/y members of events regardless. Whether

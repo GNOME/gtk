@@ -459,7 +459,7 @@ test_input_stacking (void)
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), vbox);
-  gtk_overlay_set_overlay_pass_through (GTK_OVERLAY (overlay), vbox, TRUE);
+  gtk_widget_set_can_target (vbox, FALSE);
   gtk_widget_set_halign (vbox, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (vbox, GTK_ALIGN_CENTER);
 
@@ -468,12 +468,12 @@ test_input_stacking (void)
 			 "But the entry does");
   gtk_widget_set_margin_top (label, 8);
   gtk_widget_set_margin_bottom (label, 8);
-  gtk_box_pack_start (GTK_BOX (vbox), label);
+  gtk_container_add (GTK_CONTAINER (vbox), label);
 
   entry = gtk_entry_new ();
   gtk_widget_set_margin_top (entry, 8);
   gtk_widget_set_margin_bottom (entry, 8);
-  gtk_box_pack_start (GTK_BOX (vbox), entry);
+  gtk_container_add (GTK_CONTAINER (vbox), entry);
 
 
   gtk_container_add (GTK_CONTAINER (win), overlay);
@@ -481,126 +481,6 @@ test_input_stacking (void)
   return win;
 }
 
-static void
-reorder_overlay (GtkButton *button, GtkOverlay *overlay)
-{
-  gtk_overlay_reorder_overlay (overlay, gtk_widget_get_parent (GTK_WIDGET (button)), -1);
-}
-
-static GtkWidget *
-test_child_order (void)
-{
-  GtkWidget *win;
-  GtkWidget *overlay;
-  GtkWidget *button;
-  GtkWidget *label;
-  GtkWidget *box;
-  int i;
-
-  win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (win), "Child Order");
-
-  overlay = gtk_overlay_new ();
-  gtk_container_add (GTK_CONTAINER (win), overlay);
-
-  for (i = 0; i < 4; i++)
-    {
-      char *style_classes[] = {
-        "transparent-red", "transparent-green", "transparent-blue", "transparent-purple"
-      };
-      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      button = gtk_button_new_with_label (g_strdup_printf ("Child %d", i));
-      g_signal_connect (button, "clicked", G_CALLBACK (reorder_overlay), overlay);
-      gtk_widget_set_margin_start (button, 20);
-      gtk_widget_set_margin_end (button, 20);
-      gtk_widget_set_margin_top (button, 10);
-      gtk_widget_set_margin_bottom (button, 10);
-
-      gtk_container_add (GTK_CONTAINER (box), button);
-
-      gtk_style_context_add_class (gtk_widget_get_style_context (box), style_classes[i]);
-
-      gtk_widget_set_halign (box, (i == 0 || i == 3) ? GTK_ALIGN_START : GTK_ALIGN_END);
-      gtk_widget_set_valign (box, i < 2 ? GTK_ALIGN_START : GTK_ALIGN_END);
-      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), box);
-    }
-
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_style_context_add_class (gtk_widget_get_style_context (box), "overlay-white");
-
-  label = gtk_label_new ("Main\n"
-			 "Main\n"
-			 "Main\n"
-			 "Main\n");
-  gtk_container_add (GTK_CONTAINER (box), label);
-  gtk_container_add (GTK_CONTAINER (overlay), box);
-
-  return win;
-}
-
-
-static GtkWidget *
-test_effect (void)
-{
-  GtkWidget *win;
-  GtkWidget *overlay;
-  GtkWidget *button;
-  GtkWidget *image;
-  GtkWidget *sw;
-  GtkWidget *box;
-  GtkWidget *label;
-
-  win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_default_size (GTK_WINDOW (win), 600, 400);
-  gtk_window_set_title (GTK_WINDOW (win), "Fancy Effect");
-
-  overlay = gtk_overlay_new ();
-  gtk_container_add (GTK_CONTAINER (win), overlay);
-
-  button = gtk_button_new_with_label ("Don't click this button!");
-  label = gtk_bin_get_child (GTK_BIN (button));
-  g_object_set (label, "margin", 50, NULL);
-
-  gtk_widget_set_opacity (button, 0.7);
-  gtk_widget_set_halign (button, GTK_ALIGN_FILL);
-  gtk_widget_set_valign (button, GTK_ALIGN_START);
-
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), button);
-  gtk_container_child_set (GTK_CONTAINER (overlay), button, "blur", 5.0, NULL);
-
-  button = gtk_button_new_with_label ("Maybe this one?");
-  label = gtk_bin_get_child (GTK_BIN (button));
-  g_object_set (label, "margin", 50, NULL);
-
-  gtk_widget_set_opacity (button, 0.7);
-  gtk_widget_set_halign (button, GTK_ALIGN_FILL);
-  gtk_widget_set_valign (button, GTK_ALIGN_END);
-
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), button);
-  gtk_container_child_set (GTK_CONTAINER (overlay), button, "blur", 5.0, NULL);
-
-  sw = gtk_scrolled_window_new (NULL, NULL);
-  sw = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (overlay), sw);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-                                  GTK_POLICY_AUTOMATIC,
-                                  GTK_POLICY_AUTOMATIC);
-  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (sw), box);
-  image = gtk_image_new ();
-  if (g_file_test ("portland-rose.jpg", G_FILE_TEST_EXISTS))
-    gtk_image_set_from_file (GTK_IMAGE (image), "portland-rose.jpg");
-  else if (g_file_test ("tests/portland-rose.jpg", G_FILE_TEST_EXISTS))
-    gtk_image_set_from_file (GTK_IMAGE (image), "tests/portland-rose.jpg");
-  else if (g_file_test ("../tests/portland-rose.jpg", G_FILE_TEST_EXISTS))
-    gtk_image_set_from_file (GTK_IMAGE (image), "../tests/portland-rose.jpg");
-  else
-    g_error ("portland-rose.jpg not found. No rose for you!\n");
-
-  gtk_container_add (GTK_CONTAINER (box), image);
-
-  return win;
-}
 int
 main (int argc, char *argv[])
 {
@@ -612,8 +492,6 @@ main (int argc, char *argv[])
   GtkWidget *win6;
   GtkWidget *win7;
   GtkWidget *win8;
-  GtkWidget *win9;
-  GtkWidget *win10;
   GtkCssProvider *css_provider;
 
   gtk_init ();
@@ -650,12 +528,6 @@ main (int argc, char *argv[])
 
   win8 = test_input_stacking ();
   gtk_widget_show (win8);
-
-  win9 = test_child_order ();
-  gtk_widget_show (win9);
-
-  win10 = test_effect ();
-  gtk_widget_show (win10);
 
   gtk_main ();
 

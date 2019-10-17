@@ -18,7 +18,7 @@
  */
 
 #include "gtkactionhelperprivate.h"
-#include "gtkactionobservable.h"
+#include "gtkactionobservableprivate.h"
 
 #include "gtkwidgetprivate.h"
 #include "gtkdebug.h"

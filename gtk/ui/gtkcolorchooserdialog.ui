@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkColorChooserDialog" parent="GtkDialog">
     <property name="title" translatable="yes">Select a Color</property>
     <property name="type-hint">dialog</property>
     <property name="resizable">0</property>
-    <child internal-child="vbox">
+    <child internal-child="content_area">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <property name="margin">5</property>
         <child>
           <object class="GtkColorChooserWidget" id="chooser">
-            <property name="orientation">vertical</property>
             <property name="margin">5</property>
             <property name="rgba">rgb(255,255,255)</property>
             <property name="expand">1</property>
@@ -20,9 +18,6 @@
             <signal name="notify::rgba" handler="propagate_notify" swapped="no"/>
             <signal name="notify::show-editor" handler="propagate_notify" swapped="no"/>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
     </child>
@@ -36,7 +31,6 @@
       <object class="GtkButton" id="ok_button">
         <property name="label" translatable="yes">_Select</property>
         <property name="use-underline">1</property>
-        <property name="can-default">1</property>
       </object>
     </child>
     <action-widgets>

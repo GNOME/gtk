@@ -40,7 +40,7 @@
 G_BEGIN_DECLS
 
 /**
- * GTK_PRIORITY_RESIZE:
+ * GTK_PRIORITY_RESIZE: (value 110)
  *
  * Use this priority for functionality related to size allocation.
  *

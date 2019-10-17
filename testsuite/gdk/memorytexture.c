@@ -181,8 +181,6 @@ main (int argc, char *argv[])
 
   g_test_init (&argc, &argv, NULL);
 
-  g_test_bug_base ("http://bugzilla.gnome.org");
-
   enum_class = g_type_class_ref (GDK_TYPE_MEMORY_FORMAT);
 
   for (format = 0; format < GDK_MEMORY_N_FORMATS; format++)

@@ -4,15 +4,15 @@
 ]>
 <refentry id="chap-css-properties">
 <refmeta>
-<refentrytitle>GTK+ CSS Properties</refentrytitle>
+<refentrytitle>GTK CSS Properties</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>GTK Library</refmiscinfo>
 </refmeta>
 
 <refnamediv>
-<refname>GTK+ CSS Properties</refname>
+<refname>GTK CSS Properties</refname>
 <refpurpose>
-CSS Properties in GTK+
+CSS Properties in GTK
 </refpurpose>
 </refnamediv>
 
@@ -34,9 +34,9 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
   <title>Supported CSS Properties</title>
 
     <para>
-      GTK+ supports CSS properties and shorthands as far as they can be applied
+      GTK supports CSS properties and shorthands as far as they can be applied
       in the context of widgets, and adds its own properties only when needed.
-      All GTK+-specific properties have a -gtk prefix.
+      All GTK-specific properties have a -gtk prefix.
     </para>
 
     <para>
@@ -64,20 +64,6 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
       The rem unit is resolved using the initial font size value, which is
       not quite the same as the CSS definition of rem.
     </para>
-
-    <para>
-      Whereever a number is allowed, GTK+ also accepts a Windows-specific
-      theme size:
-    </para>
-
-<literallayout>
-<code>〈win32 theme size〉 = 〈win32 size〉 | 〈win32 part size〉</code>
-<code>〈win32 size〉 = -gtk-win32-size ( 〈theme name〉, 〈metric id〉 )</code>
-<code>〈win32 part size〉 = [ -gtk-win32-part-width | -gtk-win32-part-height |</code>
-<code>                      -gtk-win32-part-border-top | -gtk-win32-part-border-right |</code>
-<code>                      -gtk-win32-part-border-bottom | -gtk-win32-part-border-left ]</code>
-<code>                    ( 〈theme name〉 , 〈integer〉 , 〈integer〉 )</code>
-</literallayout>
 
 <literallayout><code>〈calc expression〉 = calc( 〈calc sum〉 )</code>
 <code>〈calc sum〉 = 〈calc product〉 [ [ + | - ] 〈calc product〉 ]*</code>
@@ -624,6 +610,16 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
           </thead>
           <tbody>
             <row>
+              <entry><phrase role="nowrap">transform</phrase></entry>
+              <entry><code>none | 〈transform〉+</code></entry>
+              <entry><code>none</code></entry>
+              <entry></entry>
+              <entry>✓</entry>
+              <entry><ulink url="https://www.w3.org/TR/css-transforms-1/">CSS3</ulink>,
+                     <ulink url="https://drafts.csswg.org/css-transforms-2/">3D</ulink></entry>
+              <entry></entry>
+            </row>
+            <row>
               <entry><phrase role="nowrap">min-width</phrase></entry>
               <entry><code>〈length〉</code></entry>
               <entry><code>0px</code></entry>
@@ -1159,7 +1155,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
       </table>
 
       <para>
-        GTK+ uses the CSS outline properties to render the 'focus rectangle'.
+        GTK uses the CSS outline properties to render the 'focus rectangle'.
       </para>
 
       <table pgwide="1">
@@ -1474,32 +1470,6 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
 <code>                     〈single-animation-iteration-count〉 || 〈single-animation-direction〉 ||</code>
 <code>                     〈single-animation-play-state〉 || 〈single-animation-fill-mode〉</code>
 </literallayout>
-
-      <table pgwide="1">
-        <title>Key binding properties</title>
-        <tgroup cols="7">
-          <colspec colnum="4" align="center"/>
-          <colspec colnum="5" align="center"/>
-          <thead>
-            <row><entry>Name</entry><entry>Value</entry><entry>Initial</entry><entry>Inh.</entry><entry>Ani.</entry><entry>Reference</entry><entry>Notes</entry></row>
-          </thead>
-          <tbody>
-            <row>
-              <entry><phrase role="nowrap">-gtk-key-bindings</phrase></entry>
-              <entry><code>none | 〈binding name〉 [ , 〈binding name〉 ]*</code></entry>
-              <entry><code>none</code></entry>
-              <entry></entry>
-              <entry></entry>
-              <entry></entry>
-              <entry></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-
-    <para>
-      〈binding name〉 must have been assigned to a binding set with a @binding-set rule.
-    </para>
 
       <table pgwide="1">
         <title>Table-related properties</title>

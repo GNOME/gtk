@@ -289,7 +289,7 @@ match_file (gpointer item, gpointer data)
   
   path = g_file_get_path (file);
 
-  result = strstr (path, gtk_entry_get_text (GTK_ENTRY (search_entry))) != NULL;
+  result = strstr (path, gtk_editable_get_text (GTK_EDITABLE (search_entry))) != NULL;
 
   g_object_unref (info);
   g_free (path);

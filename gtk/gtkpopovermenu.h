@@ -28,33 +28,45 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_POPOVER_MENU           (gtk_popover_menu_get_type ())
 #define GTK_POPOVER_MENU(o)             (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_POPOVER_MENU, GtkPopoverMenu))
-#define GTK_POPOVER_MENU_CLASS(c)       (G_TYPE_CHECK_CLASS_CAST ((c), GTK_TYPE_POPOVER_MENU, GtkPopoverMenuClass))
 #define GTK_IS_POPOVER_MENU(o)          (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_POPOVER_MENU))
-#define GTK_IS_POPOVER_MENU_CLASS(o)    (G_TYPE_CHECK_CLASS_TYPE ((o), GTK_TYPE_POPOVER_MENU))
-#define GTK_POPOVER_MENU_GET_CLASS(o)   (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_POPOVER_MENU, GtkPopoverMenuClass))
 
 typedef struct _GtkPopoverMenu GtkPopoverMenu;
-typedef struct _GtkPopoverMenuClass GtkPopoverMenuClass;
-
-struct _GtkPopoverMenuClass
-{
-  GtkPopoverClass parent_class;
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  gpointer reserved[10];
-};
 
 GDK_AVAILABLE_IN_ALL
 GType       gtk_popover_menu_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget * gtk_popover_menu_new      (void);
+GtkWidget * gtk_popover_menu_new            (GtkWidget   *relative_to);
 
 GDK_AVAILABLE_IN_ALL
+GtkWidget * gtk_popover_menu_new_from_model (GtkWidget  *relative_to,
+                                             GMenuModel *model);
+
+/**
+ * GtkPopoverMenuFlags:
+ * @GTK_POPOVER_MENU_NESTED: Create submenus as nested
+ *    popovers. Without this flag, submenus are created as
+ *    sliding pages that replace the main menu.
+ *
+ * Flags that affect how popover menus are created from
+ * a menu model.
+ */
+typedef enum {
+  GTK_POPOVER_MENU_NESTED = 1 << 0
+} GtkPopoverMenuFlags;
+
+GDK_AVAILABLE_IN_ALL
+GtkWidget * gtk_popover_menu_new_from_model_full (GtkWidget           *relative_to,
+                                                  GMenuModel          *model,
+                                                  GtkPopoverMenuFlags  flags);
+
+GDK_AVAILABLE_IN_ALL
+void        gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
+                                          GtkWidget      *submenu,
+                                          const char     *name);
+GDK_AVAILABLE_IN_ALL
 void        gtk_popover_menu_open_submenu (GtkPopoverMenu *popover,
-                                           const gchar    *name);
+                                           const char     *name);
 
 
 G_END_DECLS

@@ -167,25 +167,9 @@ void     gdk_device_get_state    (GdkDevice         *device,
                                   gdouble           *axes,
                                   GdkModifierType   *mask);
 GDK_AVAILABLE_IN_ALL
-void     gdk_device_get_position (GdkDevice         *device,
-                                  gint              *x,
-                                  gint              *y);
-GDK_AVAILABLE_IN_ALL
-GdkSurface *
-         gdk_device_get_surface_at_position
-                                 (GdkDevice         *device,
-                                  gint              *win_x,
-                                  gint              *win_y);
-GDK_AVAILABLE_IN_ALL
-void     gdk_device_get_position_double (GdkDevice         *device,
-                                         gdouble           *x,
-                                         gdouble           *y);
-GDK_AVAILABLE_IN_ALL
-GdkSurface *
-         gdk_device_get_surface_at_position_double
-                                 (GdkDevice         *device,
-                                  gdouble           *win_x,
-                                  gdouble           *win_y);
+GdkSurface * gdk_device_get_surface_at_position (GdkDevice *device,
+                                                 double    *win_x,
+                                                 double    *win_y);
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_device_get_history  (GdkDevice         *device,
                                   GdkSurface         *surface,
@@ -222,24 +206,6 @@ GList *      gdk_device_list_slave_devices    (GdkDevice     *device);
 
 GDK_AVAILABLE_IN_ALL
 GdkDeviceType gdk_device_get_device_type (GdkDevice *device);
-
-GDK_DEPRECATED_FOR(gdk_seat_grab)
-GdkGrabStatus gdk_device_grab        (GdkDevice        *device,
-                                      GdkSurface        *surface,
-                                      GdkGrabOwnership  grab_ownership,
-                                      gboolean          owner_events,
-                                      GdkEventMask      event_mask,
-                                      GdkCursor        *cursor,
-                                      guint32           time_);
-
-GDK_DEPRECATED_FOR(gdk_seat_ungrab)
-void          gdk_device_ungrab      (GdkDevice        *device,
-                                      guint32           time_);
-
-GDK_AVAILABLE_IN_ALL
-void          gdk_device_warp        (GdkDevice        *device,
-                                      gint              x,
-                                      gint              y);
 
 GDK_AVAILABLE_IN_ALL
 GdkSurface *gdk_device_get_last_event_surface (GdkDevice *device);

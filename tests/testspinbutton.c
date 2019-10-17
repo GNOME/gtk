@@ -60,7 +60,7 @@ prepare_window_for_orientation (GtkOrientation orientation)
       g_object_bind_property (wrap_button, "active", spin, "wrap", G_BINDING_SYNC_CREATE);
 
       GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-      gtk_box_pack_start (GTK_BOX (hbox), spin);
+      gtk_container_add (GTK_CONTAINER (hbox), spin);
       gtk_container_add (GTK_CONTAINER (mainbox), hbox);
     }
 

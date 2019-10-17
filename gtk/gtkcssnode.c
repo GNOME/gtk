@@ -20,12 +20,12 @@
 #include "gtkcssnodeprivate.h"
 
 #include "gtkcssanimatedstyleprivate.h"
-#include "gtkcsssectionprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtksettingsprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtkprivate.h"
 
 /*
  * CSS nodes are the backbone of the GtkStyleContext implementation and
@@ -105,11 +105,6 @@ enum {
   PROP_VISIBLE,
   PROP_WIDGET_TYPE,
   NUM_PROPERTIES
-};
-
-struct _GtkCssNodeStyleChange {
-  GtkCssStyle *old_style;
-  GtkCssStyle *new_style;
 };
 
 static guint cssnode_signals[LAST_SIGNAL] = { 0 };
@@ -392,12 +387,11 @@ static gboolean
 gtk_css_style_needs_recreation (GtkCssStyle  *style,
                                 GtkCssChange  change)
 {
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_STATIC_STYLE (style), TRUE);
+
   /* Try to avoid invalidating if we can */
   if (change & GTK_CSS_RADICAL_CHANGE)
     return TRUE;
-
-  if (GTK_IS_CSS_ANIMATED_STYLE (style))
-    style = GTK_CSS_ANIMATED_STYLE (style)->style;
 
   if (gtk_css_static_style_get_change (GTK_CSS_STATIC_STYLE (style)) & change)
     return TRUE;

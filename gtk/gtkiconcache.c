@@ -40,9 +40,6 @@
 #define _O_BINARY 0
 #endif
 
-#define MAJOR_VERSION 1
-#define MINOR_VERSION 0
-
 #define GET_UINT16(cache, offset) (GUINT16_FROM_BE (*(guint16 *)((cache) + (offset))))
 #define GET_UINT32(cache, offset) (GUINT32_FROM_BE (*(guint32 *)((cache) + (offset))))
 

@@ -28,8 +28,7 @@ G_BEGIN_DECLS
 GtkCssValue *   _gtk_css_transform_value_new_none       (void);
 GtkCssValue *   _gtk_css_transform_value_parse          (GtkCssParser           *parser);
 
-gboolean        gtk_css_transform_value_get_matrix      (const GtkCssValue      *transform,
-                                                         graphene_matrix_t      *matrix);
+GskTransform *  gtk_css_transform_value_get_transform   (const GtkCssValue      *transform);
 
 G_END_DECLS
 

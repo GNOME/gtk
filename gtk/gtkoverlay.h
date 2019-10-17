@@ -31,48 +31,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_OVERLAY             (gtk_overlay_get_type ())
 #define GTK_OVERLAY(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_OVERLAY, GtkOverlay))
-#define GTK_OVERLAY_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_OVERLAY, GtkOverlayClass))
 #define GTK_IS_OVERLAY(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_OVERLAY))
-#define GTK_IS_OVERLAY_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_OVERLAY))
-#define GTK_OVERLAY_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_OVERLAY, GtkOverlayClass))
 
 typedef struct _GtkOverlay         GtkOverlay;
-typedef struct _GtkOverlayClass    GtkOverlayClass;
-typedef struct _GtkOverlayPrivate  GtkOverlayPrivate;
-
-struct _GtkOverlay
-{
-  GtkBin parent_instance;
-};
-
-/**
- * GtkOverlayClass:
- * @parent_class: The parent class.
- * @get_child_position: Signal emitted to determine the position and
- *    size of any overlay child widgets.
- */
-struct _GtkOverlayClass
-{
-  GtkBinClass parent_class;
-
-  /*< public >*/
-
-  gboolean (*get_child_position) (GtkOverlay    *overlay,
-                                  GtkWidget     *widget,
-                                  GtkAllocation *allocation);
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-  void (*_gtk_reserved5) (void);
-  void (*_gtk_reserved6) (void);
-  void (*_gtk_reserved7) (void);
-  void (*_gtk_reserved8) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType      gtk_overlay_get_type    (void) G_GNUC_CONST;
@@ -81,17 +42,6 @@ GtkWidget *gtk_overlay_new         (void);
 GDK_AVAILABLE_IN_ALL
 void       gtk_overlay_add_overlay (GtkOverlay *overlay,
                                     GtkWidget  *widget);
-GDK_AVAILABLE_IN_ALL
-void       gtk_overlay_reorder_overlay (GtkOverlay     *overlay,
-					GtkWidget      *child,
-					gint            position);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_overlay_get_overlay_pass_through (GtkOverlay *overlay,
-						 GtkWidget  *widget);
-GDK_AVAILABLE_IN_ALL
-void       gtk_overlay_set_overlay_pass_through (GtkOverlay *overlay,
-						 GtkWidget  *widget,
-						 gboolean    pass_through);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_overlay_get_measure_overlay (GtkOverlay *overlay,
 					    GtkWidget  *widget);

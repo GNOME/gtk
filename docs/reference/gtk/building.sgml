@@ -4,31 +4,31 @@
 ]>
 <refentry id="gtk-building">
 <refmeta>
-<refentrytitle>Compiling the GTK+ libraries</refentrytitle>
+<refentrytitle>Compiling the GTK libraries</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>GTK Library</refmiscinfo>
 </refmeta>
 
 <refnamediv>
-<refname>Compiling the GTK+ Libraries</refname>
+<refname>Compiling the GTK Libraries</refname>
 <refpurpose>
-How to compile GTK+ itself
+How to compile GTK itself
 </refpurpose>
 </refnamediv>
   <refsect1 id="overview">
-    <title>Building GTK+</title>
+    <title>Building GTK</title>
     <para>
-      Before we get into the details of how to compile GTK+, we should
-      mention that in many cases, binary packages of GTK+ prebuilt for
+      Before we get into the details of how to compile GTK, we should
+      mention that in many cases, binary packages of GTK prebuilt for
       your operating system will be available, either from your
       operating system vendor or from independent sources. If such a
       set of packages is available, installing it will get you
-      programming with GTK+ much faster than building it yourself. In
-      fact, you may well already have GTK+ installed on your system
+      programming with GTK much faster than building it yourself. In
+      fact, you may well already have GTK installed on your system
       already.
     </para>
     <para>
-      In order to build GTK+, you will need <application>meson</application>
+      In order to build GTK, you will need <application>meson</application>
       installed on your system. On Linux, and other UNIX-like operating
       systems, you will also need <application>ninja</application>. This
       guide does not cover how to install these two requirements, but you
@@ -38,11 +38,11 @@ How to compile GTK+ itself
       refer to it in the examples.
     </para>
     <para>
-      If you are building GTK+ from a source distribution or from a Git
+      If you are building GTK from a source distribution or from a Git
       clone, you will need to use <application>meson</application> to
       configure the project. The most commonly useful argument is the
       <systemitem>--prefix</systemitem> one, which determines where the
-      files will go once installed. To install GTK+ under a prefix
+      files will go once installed. To install GTK under a prefix
       like <filename>/opt/gtk</filename> you would run Meson as:
     </para>
     <informalexample>
@@ -83,7 +83,7 @@ How to compile GTK+ itself
       <envar>PKG_CONFIG_PATH</envar> environment variable contains
       a search path that <command>pkg-config</command> (see below)
       uses when looking for files describing how to compile
-      programs using different libraries. If you were installing GTK+
+      programs using different libraries. If you were installing GTK
       and it's dependencies into <filename>/opt/gtk</filename>, you
       might want to set these variables as:
     </para>
@@ -109,26 +109,26 @@ How to compile GTK+ itself
   <refsect1 id="dependencies">
     <title>Dependencies</title>
     <para>
-      Before you can compile the GTK+ widget toolkit, you need to have
+      Before you can compile the GTK widget toolkit, you need to have
       various other tools and libraries installed on your
-      system. Dependencies of GTK+ have their own build systems, so
+      system. Dependencies of GTK have their own build systems, so
       you will need to refer to their own installation instructions.
     </para>
     <para>
-      A particular important tool used by GTK+ to find its dependencies
+      A particular important tool used by GTK to find its dependencies
       is <application>pkg-config</application>.
     </para>
     <para>
       <ulink url="https://www.freedesktop.org/wiki/Software/pkg-config/">pkg-config</ulink>
       is a tool for tracking the compilation flags needed for
-      libraries that are used by the GTK+ libraries. (For each
+      libraries that are used by the GTK libraries. (For each
       library, a small <literal>.pc</literal> text file is installed
       in a standard location that contains the compilation flags
       needed for that library along with version number information.)
     </para>
     <para>
-      Some of the libraries that GTK+ depends on are maintained by
-      by the GTK+ team: GLib, GdkPixbuf, Pango, ATK and GObject Introspection.
+      Some of the libraries that GTK depends on are maintained by
+      by the GTK team: GLib, GdkPixbuf, Pango, ATK and GObject Introspection.
       Other libraries are maintained separately.
     </para>
     <itemizedlist>
@@ -196,7 +196,7 @@ How to compile GTK+ itself
       <listitem>
         <para>
           The libraries from the X window system are needed to build
-          Pango and GTK+. You should already have these installed on
+          Pango and GTK. You should already have these installed on
           your system, but it's possible that you'll need to install
           the development environment for these libraries that your
           operating system vendor provides.
@@ -213,14 +213,14 @@ How to compile GTK+ itself
         <para>
           <ulink url="https://www.cairographics.org">Cairo</ulink>
           is a graphics library that supports vector graphics and image
-          compositing. Both Pango and GTK+ use Cairo for drawing.
+          compositing. Both Pango and GTK use Cairo for drawing.
         </para>
       </listitem>
       <listitem>
         <para>
           <ulink url="https://github.com/anholt/libepoxy">libepoxy</ulink>
           is a library that abstracts the differences between different
-          OpenGL libraries. GTK+ uses it for cross-platform GL support
+          OpenGL libraries. GTK uses it for cross-platform GL support
           and for its own drawing.
         </para>
       </listitem>
@@ -228,20 +228,20 @@ How to compile GTK+ itself
         <para>
           <ulink url="https://github.com/anholt/libepoxy">Graphene</ulink>
           is a library that provides vector and matrix types for 2D and
-          3D transformations. GTK+ uses it internally for drawing.
+          3D transformations. GTK uses it internally for drawing.
         </para>
       </listitem>
       <listitem>
         <para>
           The <ulink url="https://wayland.freedesktop.org">Wayland</ulink> libraries
-          are needed to build GTK+ with the Wayland backend.
+          are needed to build GTK with the Wayland backend.
         </para>
       </listitem>
       <listitem>
         <para>
           The <ulink url="https://www.freedesktop.org/wiki/Software/shared-mime-info">shared-mime-info</ulink>
-          package is not a hard dependency of GTK+, but it contains definitions
-          for mime types that are used by GIO and, indirectly, by GTK+.
+          package is not a hard dependency of GTK, but it contains definitions
+          for mime types that are used by GIO and, indirectly, by GTK.
           gdk-pixbuf will use GIO for mime type detection if possible. For this
           to work, shared-mime-info needs to be installed and
           <envar>XDG_DATA_DIRS</envar> set accordingly at configure time.
@@ -251,7 +251,7 @@ How to compile GTK+ itself
     </itemizedlist>
   </refsect1>
   <refsect1 id="building">
-    <title>Building and testing GTK+</title>
+    <title>Building and testing GTK</title>
     <para>
       First make sure that you have the necessary external
       dependencies installed: <command>pkg-config</command>, Meson, Ninja,
@@ -263,16 +263,16 @@ How to compile GTK+ itself
       accessible through your operating system package repositories.
     </para>
     <para>
-      Then build and install the GTK+ libraries in the order:
-      GLib, Cairo, Pango, ATK, then GTK+. For each library, follow the
+      Then build and install the GTK libraries in the order:
+      GLib, Cairo, Pango, ATK, then GTK. For each library, follow the
       instructions they provide, and make sure to share common settings
-      between them and the GTK+ build; if you are using a separate prefix
-      for GTK+, for instance, you will need to use the same prefix for all
+      between them and the GTK build; if you are using a separate prefix
+      for GTK, for instance, you will need to use the same prefix for all
       its dependencies you build. If you're lucky, this will all go smoothly,
       and you'll be ready to <link linkend="gtk-compiling">start compiling
-      your own GTK+ applications</link>. You can test your GTK+ installation
+      your own GTK applications</link>. You can test your GTK installation
       by running the <command>gtk4-demo</command> program that
-      GTK+ installs.
+      GTK installs.
     </para>
     <para>
       If one of the projects you're configuring or building fails, look
@@ -287,7 +287,7 @@ How to compile GTK+ itself
       <title>Extra Configuration Options</title>
 
       <para>
-        In addition to the normal options provided by Meson, GTK+ defines
+        In addition to the normal options provided by Meson, GTK defines
         various arguments that modify what should be built.
 
         <cmdsynopsis>
@@ -355,8 +355,8 @@ How to compile GTK+ itself
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">-Ddocumentation=true</arg>
-            <arg choice="plain">-Ddocumentation=false</arg>
+            <arg choice="plain">-Dgtk_doc=true</arg>
+            <arg choice="plain">-Dgtk_doc=false</arg>
           </group>
           <sbr/>
           <group>
@@ -375,29 +375,29 @@ How to compile GTK+ itself
         <title><systemitem>xinerama</systemitem></title>
 
         <para>
-          By default GTK+ will try to link against the Xinerama libraries
+          By default GTK will try to link against the Xinerama libraries
           if they are found. This options can be used to explicitly control
           whether Xinerama should be used.
         </para>
       </formalpara>
 
       <formalpara>
-        <title><systemitem>documentation</systemitem> and
+        <title><systemitem>gtk_doc</systemitem> and
           <systemitem>man-pages</systemitem></title>
 
         <para>
           The <application>gtk-doc</application> package is
           used to generate the reference documentation included
-          with GTK+. By default support for <application>gtk-doc</application>
+          with GTK. By default support for <application>gtk-doc</application>
           is disabled because it requires various extra dependencies
           to be installed. If you have
           <application>gtk-doc</application> installed and
-          are modifying GTK+, you may want to enable
+          are modifying GTK, you may want to enable
           <application>gtk-doc</application> support by passing
-          in <systemitem>documentation</systemitem>.
+          in <systemitem>gtk_doc</systemitem>.
         </para>
         <para>
-          Additionally, some tools provided by GTK+ have their own
+          Additionally, some tools provided by GTK have their own
           manual pages generated using a similar set of dependencies;
           if you have <application>xsltproc</application> then you
           can generate manual pages by passing <systemitem>man-pages</systemitem>
@@ -409,7 +409,7 @@ How to compile GTK+ itself
         <title><systemitem>print-backends</systemitem></title>
 
         <para>
-          By default, GTK+ will try to build various print backends if
+          By default, GTK will try to build various print backends if
           their dependencies are found. This option can be used to
           explicitly control which print backends should be built.
         </para>
@@ -439,7 +439,7 @@ How to compile GTK+ itself
         <para>
           Allows to disable building introspection support. This is option
           is mainly useful for shortening turnaround times on developer
-          systems. Installed builds of GTK+ should always have introspection
+          systems. Installed builds of GTK should always have introspection
           support.
         </para>
       </formalpara>
@@ -450,9 +450,9 @@ How to compile GTK+ itself
                <systemitem>demos</systemitem></title>
 
         <para>
-          By default, GTK+ will build quite a few tests and demos.
+          By default, GTK will build quite a few tests and demos.
           While these are useful on a developer system, they are not
-          needed when GTK+ is built e.g. for a flatpak runtime. These
+          needed when GTK is built e.g. for a flatpak runtime. These
           options allow to disable building tests and demos.
         </para>
       </formalpara>

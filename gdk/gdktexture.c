@@ -333,7 +333,6 @@ gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
                                       * gdk_pixbuf_get_rowstride (pixbuf),
                                       g_object_unref,
                                       g_object_ref (pixbuf));
-  
   texture = gdk_memory_texture_new (gdk_pixbuf_get_width (pixbuf),
                                     gdk_pixbuf_get_height (pixbuf),
                                     gdk_pixbuf_get_has_alpha (pixbuf)

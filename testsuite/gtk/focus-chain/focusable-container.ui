@@ -1,0 +1,29 @@
+<interface>
+  <object class="GtkWindow" id="window">
+    <child>
+      <object class="GtkBox">
+        <child>
+          <object class="GtkEntry">
+            <property name="name">entry1</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="name">box</property>
+            <property name="can-focus">1</property>
+            <child>
+              <object class="GtkEntry">
+               <property name="name">entry2</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry">
+               <property name="name">entry3</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

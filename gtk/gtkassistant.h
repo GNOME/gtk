@@ -34,10 +34,7 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_ASSISTANT         (gtk_assistant_get_type ())
 #define GTK_ASSISTANT(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_ASSISTANT, GtkAssistant))
-#define GTK_ASSISTANT_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST    ((c), GTK_TYPE_ASSISTANT, GtkAssistantClass))
 #define GTK_IS_ASSISTANT(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_ASSISTANT))
-#define GTK_IS_ASSISTANT_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE    ((c), GTK_TYPE_ASSISTANT))
-#define GTK_ASSISTANT_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GTK_TYPE_ASSISTANT, GtkAssistantClass))
 
 /**
  * GtkAssistantPageType:
@@ -78,45 +75,12 @@ typedef enum
 } GtkAssistantPageType;
 
 typedef struct _GtkAssistant        GtkAssistant;
-typedef struct _GtkAssistantPrivate GtkAssistantPrivate;
-typedef struct _GtkAssistantClass   GtkAssistantClass;
 
-struct _GtkAssistant
-{
-  GtkWindow  parent;
+#define GTK_TYPE_ASSISTANT_PAGE (gtk_assistant_page_get_type ())
+#define GTK_ASSISTANT_PAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ASSISTANT_PAGE, GtkAssistantPage))
+#define GTK_IS_ASSISTANT_PAGE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ASSISTANT_PAGE))
 
-  /*< private >*/
-  GtkAssistantPrivate *priv;
-};
-
-/**
- * GtkAssistantClass:
- * @parent_class: The parent class.
- * @prepare: Signal emitted when a new page is set as the assistant’s current page, before making the new page visible.
- * @apply: Signal emitted when the apply button is clicked.
- * @close: Signal emitted either when the close button or last page apply button is clicked.
- * @cancel: Signal emitted when the cancel button is clicked.
- */
-struct _GtkAssistantClass
-{
-  GtkWindowClass parent_class;
-
-  /*< public >*/
-
-  void (* prepare) (GtkAssistant *assistant, GtkWidget *page);
-  void (* apply)   (GtkAssistant *assistant);
-  void (* close)   (GtkAssistant *assistant);
-  void (* cancel)  (GtkAssistant *assistant);
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-  void (*_gtk_reserved5) (void);
-};
+typedef struct _GtkAssistantPage GtkAssistantPage;
 
 /**
  * GtkAssistantPageFunc:
@@ -132,6 +96,8 @@ struct _GtkAssistantClass
  */
 typedef gint (*GtkAssistantPageFunc) (gint current_page, gpointer data);
 
+GDK_AVAILABLE_IN_ALL
+GType                 gtk_assistant_page_get_type         (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GType                 gtk_assistant_get_type              (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
@@ -203,12 +169,13 @@ GDK_AVAILABLE_IN_ALL
 void                  gtk_assistant_commit                (GtkAssistant *assistant);
 
 GDK_AVAILABLE_IN_ALL
-void                  gtk_assistant_set_page_has_padding  (GtkAssistant *assistant,
-                                                           GtkWidget    *page,
-                                                           gboolean      has_padding);
+GtkAssistantPage *    gtk_assistant_get_page       (GtkAssistant     *assistant,
+                                                    GtkWidget        *child);
 GDK_AVAILABLE_IN_ALL
-gboolean              gtk_assistant_get_page_has_padding  (GtkAssistant *assistant,
-                                                           GtkWidget    *page);
+GtkWidget *           gtk_assistant_page_get_child (GtkAssistantPage *page);
+
+GDK_AVAILABLE_IN_ALL
+GListModel *          gtk_assistant_get_pages (GtkAssistant *assistant);
 
 G_END_DECLS
 

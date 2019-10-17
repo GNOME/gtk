@@ -1,15 +1,15 @@
 #!/usr/bin/env perl
 
-# Updates http://git.gnome.org/browse/gtk+/tree/gdk/gdkkeysyms.h from upstream (X.org 7.x),
-# from http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h
+# Updates https://gitlab.gnome.org/GNOME/gtk/tree/master/gdk/gdkkeysyms.h from upstream (X.org 7.x),
+# from https://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h
 # 
 # Author  : Simos Xenitellis <simos at gnome dot org>.
 # Author  : Bastien Nocera <hadess@hadess.net>
 # Version : 1.2
 #
-# Input   : http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h
-# Input   : http://cgit.freedesktop.org/xorg/proto/x11proto/plain/XF86keysym.h
-# Output  : http://git.gnome.org/browse/gtk+/tree/gdk/gdkkeysyms.h
+# Input   : https://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h
+# Input   : https://cgit.freedesktop.org/xorg/proto/x11proto/plain/XF86keysym.h
+# Output  : https://gitlab.gnome.org/GNOME/gtk/tree/master/gdk/gdkkeysyms.h
 # 
 # Notes   : It downloads keysymdef.h from the Internet, if not found locally,
 # Notes   : and creates an updated gdkkeysyms.h
@@ -53,7 +53,7 @@ else
 # Source: http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h
 die "Could not open file keysymdef.h: $!\n" unless open(IN_KEYSYMDEF, "<:utf8", "keysymdef.h");
 
-# Output: gtk+/gdk/gdkkeysyms.h
+# Output: gtk/gdk/gdkkeysyms.h
 die "Could not open file gdkkeysyms.h: $!\n" unless open(OUT_GDKKEYSYMS, ">:utf8", "gdkkeysyms.h");
 
 my $LICENSE_HEADER= <<EOF;
@@ -82,7 +82,7 @@ print OUT_GDKKEYSYMS $LICENSE_HEADER;
 print OUT_GDKKEYSYMS<<EOF;
 
 /*
- * File auto-generated from script http://git.gnome.org/browse/gtk+/tree/gdk/gdkkeysyms-update.pl
+ * File auto-generated from script https://gitlab.gnome.org/GNOME/gtk/tree/master/gdk/gdkkeysyms-update.pl
  * using the input file
  * http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h
  * and

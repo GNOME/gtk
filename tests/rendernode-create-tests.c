@@ -426,7 +426,7 @@ text (guint n)
             {
               GskRenderNode *node;
               
-              node = gsk_text_node_new (font, run->glyphs, &color, x, y);
+              node = gsk_text_node_new (font, run->glyphs, &color, &GRAPHENE_POINT_INIT (x, y));
               if (node)
                 g_ptr_array_add (nodes, node);
             }

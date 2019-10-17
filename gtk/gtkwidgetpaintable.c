@@ -91,19 +91,19 @@ gtk_widget_paintable_paintable_snapshot (GdkPaintable *paintable,
     return;
   else if (self->snapshot_count > 0)
     {
-      graphene_matrix_t transform;
+      graphene_rect_t bounds;
 
       gtk_snapshot_push_clip (snapshot,
                               &GRAPHENE_RECT_INIT(0, 0, width, height));
-      graphene_matrix_init_scale (&transform,
-                                  width / gtk_widget_get_allocated_width (self->widget),
-                                  height / gtk_widget_get_allocated_height (self->widget),
-                                  1.0);
-      gtk_snapshot_push_transform (snapshot, &transform);
+
+      if (gtk_widget_compute_bounds (self->widget, self->widget, &bounds))
+        {
+          gtk_snapshot_scale (snapshot, width / bounds.size.width, height / bounds.size.height);
+          gtk_snapshot_translate (snapshot, &bounds.origin);
+        }
 
       gtk_widget_snapshot (self->widget, snapshot);
 
-      gtk_snapshot_pop (snapshot);
       gtk_snapshot_pop (snapshot);
     }
   else
@@ -191,11 +191,23 @@ gtk_widget_paintable_get_property (GObject    *object,
 }
 
 static void
+gtk_widget_paintable_unset_widget (GtkWidgetPaintable *self)
+{
+  if (self->widget == NULL)
+    return;
+
+  self->widget->priv->paintables = g_slist_remove (self->widget->priv->paintables,
+                                                   self);
+
+  self->widget = NULL;
+}
+
+static void
 gtk_widget_paintable_dispose (GObject *object)
 {
   GtkWidgetPaintable *self = GTK_WIDGET_PAINTABLE (object);
 
-  gtk_widget_paintable_set_widget (self, NULL);
+  gtk_widget_paintable_unset_widget (self);
 
   G_OBJECT_CLASS (gtk_widget_paintable_parent_class)->dispose (object);
 }
@@ -267,7 +279,8 @@ gtk_widget_paintable_snapshot_widget (GtkWidgetPaintable *self)
   if (self->widget == NULL)
     return gdk_paintable_new_empty (0, 0);
 
-  gtk_widget_compute_bounds (self->widget, self->widget, &bounds);
+  if (!gtk_widget_compute_bounds (self->widget, self->widget, &bounds))
+    return gdk_paintable_new_empty (0, 0);
 
   if (self->widget->priv->render_node == NULL)
     return gdk_paintable_new_empty (bounds.size.width, bounds.size.height);
@@ -310,11 +323,7 @@ gtk_widget_paintable_set_widget (GtkWidgetPaintable *self,
   if (self->widget == widget)
     return;
 
-  if (self->widget)
-    {
-      self->widget->priv->paintables = g_slist_remove (self->widget->priv->paintables,
-                                                       self);
-    }
+  gtk_widget_paintable_unset_widget (self);
 
   /* We do not ref the widget to not cause ref cycles when a widget
    * is told to observe itself or one of its parent.

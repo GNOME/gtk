@@ -33,14 +33,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_ENTRY_COMPLETION            (gtk_entry_completion_get_type ())
 #define GTK_ENTRY_COMPLETION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ENTRY_COMPLETION, GtkEntryCompletion))
-#define GTK_ENTRY_COMPLETION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ENTRY_COMPLETION, GtkEntryCompletionClass))
 #define GTK_IS_ENTRY_COMPLETION(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ENTRY_COMPLETION))
-#define GTK_IS_ENTRY_COMPLETION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ENTRY_COMPLETION))
-#define GTK_ENTRY_COMPLETION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ENTRY_COMPLETION, GtkEntryCompletionClass))
 
 typedef struct _GtkEntryCompletion            GtkEntryCompletion;
-typedef struct _GtkEntryCompletionClass       GtkEntryCompletionClass;
-typedef struct _GtkEntryCompletionPrivate     GtkEntryCompletionPrivate;
 
 /**
  * GtkEntryCompletionMatchFunc:
@@ -54,7 +49,7 @@ typedef struct _GtkEntryCompletionPrivate     GtkEntryCompletionPrivate;
  * Note that @key is normalized and case-folded (see g_utf8_normalize()
  * and g_utf8_casefold()). If this is not appropriate, match functions
  * have access to the unmodified key via
- * `gtk_entry_get_text (GTK_ENTRY (gtk_entry_completion_get_entry ()))`.
+ * `gtk_editable_get_text (GTK_EDITABLE (gtk_entry_completion_get_entry ()))`.
  *
  * Returns: %TRUE if @iter should be displayed as a possible completion
  *     for @key
@@ -65,37 +60,6 @@ typedef gboolean (* GtkEntryCompletionMatchFunc) (GtkEntryCompletion *completion
                                                   gpointer            user_data);
 
 
-struct _GtkEntryCompletion
-{
-  GObject parent_instance;
-
-  /*< private >*/
-  GtkEntryCompletionPrivate *priv;
-};
-
-struct _GtkEntryCompletionClass
-{
-  GObjectClass parent_class;
-
-  gboolean (* match_selected)   (GtkEntryCompletion *completion,
-                                 GtkTreeModel       *model,
-                                 GtkTreeIter        *iter);
-  void     (* action_activated) (GtkEntryCompletion *completion,
-                                 gint                index_);
-  gboolean (* insert_prefix)    (GtkEntryCompletion *completion,
-                                 const gchar        *prefix);
-  gboolean (* cursor_on_match)  (GtkEntryCompletion *completion,
-                                 GtkTreeModel       *model,
-                                 GtkTreeIter        *iter);
-  void     (* no_matches)       (GtkEntryCompletion *completion);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved0) (void);
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-};
-
-/* core */
 GDK_AVAILABLE_IN_ALL
 GType               gtk_entry_completion_get_type               (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL

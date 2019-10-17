@@ -29,7 +29,6 @@
 #include "gtkcssinitialvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
-#include "gtkcsssectionprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssfontfeaturesvalueprivate.h"
@@ -80,30 +79,6 @@ gtk_css_style_get_section (GtkCssStyle *style,
   gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (style), NULL);
 
   return GTK_CSS_STYLE_GET_CLASS (style)->get_section (style, id);
-}
-
-GtkBitmask *
-gtk_css_style_add_difference (GtkBitmask  *accumulated,
-                              GtkCssStyle *style,
-                              GtkCssStyle *other)
-{
-  gint len, i;
-
-  if (style == other)
-    return accumulated;
-
-  len = _gtk_css_style_property_get_n_properties ();
-  for (i = 0; i < len; i++)
-    {
-      if (_gtk_bitmask_get (accumulated, i))
-        continue;
-
-      if (!_gtk_css_value_equal (gtk_css_style_get_value (style, i),
-                                 gtk_css_style_get_value (other, i)))
-        accumulated = _gtk_bitmask_set (accumulated, i, TRUE);
-    }
-
-  return accumulated;
 }
 
 gboolean
@@ -162,7 +137,7 @@ gtk_css_style_print (GtkCssStyle *style,
       if (section)
         {
           g_string_append (string, " /* ");
-          _gtk_css_section_print (section, string);
+          gtk_css_section_print (section, string);
           g_string_append (string, " */");
         }
 

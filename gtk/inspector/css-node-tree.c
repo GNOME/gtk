@@ -21,7 +21,6 @@
  */
 
 #include "config.h"
-#include <glib/gi18n-lib.h>
 
 #include "css-node-tree.h"
 #include "prop-editor.h"
@@ -33,7 +32,6 @@
 #include "gtk/gtkwidgetprivate.h"
 #include "gtkcssproviderprivate.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkcsssectionprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkcssvalueprivate.h"
 #include "gtkcssselectorprivate.h"
@@ -44,6 +42,9 @@
 #include "gtktypebuiltins.h"
 #include "gtkmodelbutton.h"
 #include "gtkstack.h"
+
+#include <glib/gi18n-lib.h>
+#include <gtk/css/gtkcss.h>
 
 enum {
   COLUMN_NODE_NAME,
@@ -104,13 +105,9 @@ show_node_prop_editor (NodePropEditor *npe)
   popover = gtk_popover_new (GTK_WIDGET (npe->cnt->priv->node_tree));
   gtk_popover_set_pointing_to (GTK_POPOVER (popover), &npe->rect);
 
-  editor = gtk_inspector_prop_editor_new (G_OBJECT (npe->node), npe->prop_name, FALSE);
-  gtk_widget_show (editor);
+  editor = gtk_inspector_prop_editor_new (G_OBJECT (npe->node), npe->prop_name, NULL);
 
   gtk_container_add (GTK_CONTAINER (popover), editor);
-
-  if (gtk_inspector_prop_editor_should_expand (GTK_INSPECTOR_PROP_EDITOR (editor)))
-    gtk_widget_set_vexpand (popover, TRUE);
 
   gtk_popover_popup (GTK_POPOVER (popover));
 
@@ -408,6 +405,8 @@ void
 gtk_inspector_css_node_tree_set_object (GtkInspectorCssNodeTree *cnt,
                                         GObject                 *object)
 {
+  GtkWidget *stack;
+  GtkStackPage *page;
   GtkInspectorCssNodeTreePrivate *priv;
   GtkCssNode *node, *root;
   GtkTreePath *path;
@@ -417,13 +416,16 @@ gtk_inspector_css_node_tree_set_object (GtkInspectorCssNodeTree *cnt,
 
   priv = cnt->priv;
 
+  stack = gtk_widget_get_parent (GTK_WIDGET (cnt));
+  page = gtk_stack_get_page (GTK_STACK (stack), GTK_WIDGET (cnt));
+
   if (!GTK_IS_WIDGET (object))
     {
-      gtk_widget_hide (GTK_WIDGET (cnt));
+      g_object_set (page, "visible", FALSE, NULL);
       return;
     }
 
-  gtk_widget_show (GTK_WIDGET (cnt));
+  g_object_set (page, "visible", TRUE, NULL);
 
   root = node = gtk_widget_get_css_node (GTK_WIDGET (object));
   while (gtk_css_node_get_parent (root))
@@ -468,7 +470,7 @@ gtk_inspector_css_node_tree_update_style (GtkInspectorCssNodeTree *cnt,
 
           section = gtk_css_style_get_section (new_style, i);
           if (section)
-            location = _gtk_css_section_to_string (section);
+            location = gtk_css_section_to_string (section);
           else
             location = NULL;
         }
@@ -530,5 +532,4 @@ gtk_inspector_css_node_tree_get_node (GtkInspectorCssNodeTree *cnt)
   return priv->node;
 }
 
-// vim: set et sw=2 ts=2:
 // vim: set et sw=2 ts=2:

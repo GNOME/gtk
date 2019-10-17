@@ -36,11 +36,11 @@
             <property name="use-underline">1</property>
             <property name="mnemonic-widget">basic_spin</property>
             <property name="xalign">1</property>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkSpinButton" id="basic_spin">
@@ -50,21 +50,21 @@
             <property name="climb-rate">1</property>
             <property name="digits">2</property>
             <property name="numeric">1</property>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="basic_label">
             <property name="width-chars">10</property>
             <property name="xalign">1</property>
+            <layout>
+              <property name="left-attach">2</property>
+              <property name="top-attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">2</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
@@ -72,11 +72,11 @@
             <property name="use-underline">1</property>
             <property name="mnemonic-widget">hex_spin</property>
             <property name="xalign">1</property>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkSpinButton" id="hex_spin">
@@ -86,21 +86,21 @@
             <signal name="input" handler="hex_spin_input"/>
             <signal name="output" handler="hex_spin_output"/>
             <property name="wrap">1</property>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="hex_label">
             <property name="width-chars">10</property>
             <property name="xalign">1</property>
+            <layout>
+              <property name="left-attach">2</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">2</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
@@ -108,11 +108,11 @@
             <property name="use-underline">1</property>
             <property name="mnemonic-widget">time_spin</property>
             <property name="xalign">1</property>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkSpinButton" id="time_spin">
@@ -122,21 +122,21 @@
             <signal name="input" handler="time_spin_input"/>
             <signal name="output" handler="time_spin_output"/>
             <property name="wrap">1</property>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="time_label">
             <property name="width-chars">10</property>
             <property name="xalign">1</property>
+            <layout>
+              <property name="left-attach">2</property>
+              <property name="top-attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">2</property>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
@@ -144,11 +144,11 @@
             <property name="use-underline">1</property>
             <property name="mnemonic-widget">month_spin</property>
             <property name="xalign">1</property>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkSpinButton" id="month_spin">
@@ -159,21 +159,21 @@
             <property name="adjustment">month_adjustment</property>
             <property name="wrap">1</property>
             <property name="update-policy">if-valid</property>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="month_label">
             <property name="width-chars">10</property>
             <property name="xalign">1</property>
+            <layout>
+              <property name="left-attach">2</property>
+              <property name="top-attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">2</property>
-            <property name="top-attach">3</property>
-          </packing>
         </child>
       </object>
     </child>

@@ -27,7 +27,7 @@ test_popover_parent (void)
   GtkWidget *p;
   AtkObject *a;
 
-  g_test_bug ("733923");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=733923 */
 
   w = gtk_entry_new ();
 
@@ -49,8 +49,6 @@ int
 main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
-
-  g_test_bug_base ("http://bugzilla.gnome.org/");
 
   g_test_add_func ("/popover/accessible-parent", test_popover_parent);
 

@@ -24,7 +24,7 @@
 #include "gtkcupsutils.h"
 
 #include <gtk/gtkunixprint.h>
-#include <gtk/gtkprinter-private.h>
+#include <gtk/gtkprinterprivate.h>
 
 #ifdef HAVE_COLORD
 #include <colord.h>
@@ -53,6 +53,10 @@ struct _GtkPrinterCups
   gchar *hostname;
   gint port;
   gchar **auth_info_required;
+  gchar *original_hostname;
+  gchar *original_resource;
+  gint original_port;
+  gboolean request_original_uri; /* Request PPD from original host */
 
   ipp_pstate_t state;
   gboolean reading_ppd;
@@ -81,6 +85,7 @@ struct _GtkPrinterCups
   guint get_remote_ppd_poll;
   gint  get_remote_ppd_attempts;
   GtkCupsConnectionTest *remote_cups_connection_test;
+
 #ifdef HAVE_COLORD
   CdClient     *colord_client;
   CdDevice     *colord_device;
@@ -89,12 +94,12 @@ struct _GtkPrinterCups
   gchar        *colord_title;
   gchar        *colord_qualifier;
 #endif
-#ifdef HAVE_CUPS_API_1_6
+
   gboolean  avahi_browsed;
-  gchar    *avahi_name;
-  gchar    *avahi_type;
-  gchar    *avahi_domain;
-#endif
+  char *avahi_name;
+  char *avahi_type;
+  char *avahi_domain;
+
   guchar ipp_version_major;
   guchar ipp_version_minor;
   gboolean supports_copies;

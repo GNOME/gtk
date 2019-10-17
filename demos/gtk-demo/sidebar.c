@@ -19,7 +19,7 @@ do_sidebar (GtkWidget *do_widget)
   GtkWidget *widget;
   GtkWidget *header;
   const gchar* pages[] = {
-    "Welcome to GTK+",
+    "Welcome to GTK",
     "GtkStackSidebar Widget",
     "Automatic navigation",
     "Consistent appearance",
@@ -49,23 +49,21 @@ do_sidebar (GtkWidget *do_widget)
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       sidebar = gtk_stack_sidebar_new ();
-      gtk_box_pack_start (GTK_BOX (box), sidebar);
+      gtk_container_add (GTK_CONTAINER (box), sidebar);
 
       stack = gtk_stack_new ();
       gtk_stack_set_transition_type (GTK_STACK (stack), GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN);
       gtk_stack_sidebar_set_stack (GTK_STACK_SIDEBAR (sidebar), GTK_STACK (stack));
+      gtk_widget_set_hexpand (stack, TRUE);
 
-      /* Separator between sidebar and stack */
-      widget = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-      gtk_box_pack_start (GTK_BOX(box), widget);
-
-      gtk_box_pack_start (GTK_BOX (box), stack);
+      gtk_container_add (GTK_CONTAINER (box), stack);
 
       for (i=0; (c = *(pages+i)) != NULL; i++ )
         {
           if (i == 0)
             {
-              widget = gtk_image_new_from_icon_name ("help-about");
+              widget = gtk_image_new_from_icon_name ("org.gtk.Demo4");
+              gtk_style_context_add_class (gtk_widget_get_style_context (widget), "icon-dropshadow");
               gtk_image_set_pixel_size (GTK_IMAGE (widget), 256);
             }
           else
@@ -73,7 +71,7 @@ do_sidebar (GtkWidget *do_widget)
               widget = gtk_label_new (c);
             }
           gtk_stack_add_named (GTK_STACK (stack), widget, c);
-          gtk_container_child_set (GTK_CONTAINER (stack), widget, "title", c, NULL);
+          g_object_set (gtk_stack_get_page (GTK_STACK (stack), widget), "title", c, NULL);
         }
 
        gtk_container_add (GTK_CONTAINER (window), box);

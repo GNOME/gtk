@@ -68,6 +68,8 @@ enum {
   PROP_VISIBLE_HORIZONTAL,
   PROP_VISIBLE_VERTICAL,
   PROP_IS_IMPORTANT,
+  PROP_HOMOGENEOUS,
+  PROP_EXPAND_ITEM,
 };
 
 
@@ -143,6 +145,22 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
  							 P_("Whether the toolbar item is considered important. When TRUE, toolbar buttons show text in GTK_TOOLBAR_BOTH_HORIZ mode"),
  							 FALSE,
  							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  g_object_class_install_property (object_class,
+                                   PROP_EXPAND_ITEM,
+                                   g_param_spec_boolean ("expand-item",
+                                                         P_("Expand Item"),
+                                                         P_("Whether the item should receive extra space when the toolbar grows"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  g_object_class_install_property (object_class,
+                                   PROP_HOMOGENEOUS,
+                                   g_param_spec_boolean ("homogeneous",
+                                                         P_("Homogeneous"),
+                                                         P_("Whether the item should be the same size as other homogeneous items"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 /**
  * GtkToolItem::create-menu-proxy:
@@ -261,6 +279,12 @@ gtk_tool_item_set_property (GObject      *object,
     case PROP_IS_IMPORTANT:
       gtk_tool_item_set_is_important (toolitem, g_value_get_boolean (value));
       break;
+    case PROP_EXPAND_ITEM:
+      gtk_tool_item_set_expand (toolitem, g_value_get_boolean (value));
+      break;
+    case PROP_HOMOGENEOUS:
+      gtk_tool_item_set_homogeneous (toolitem, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -285,6 +309,12 @@ gtk_tool_item_get_property (GObject    *object,
       break;
     case PROP_IS_IMPORTANT:
       g_value_set_boolean (value, toolitem->priv->is_important);
+      break;
+    case PROP_EXPAND_ITEM:
+      g_value_set_boolean (value, toolitem->priv->expand);
+      break;
+    case PROP_HOMOGENEOUS:
+      g_value_set_boolean (value, toolitem->priv->homogeneous);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -508,7 +538,7 @@ gtk_tool_item_set_expand (GtkToolItem *tool_item,
   if (tool_item->priv->expand != expand)
     {
       tool_item->priv->expand = expand;
-      gtk_widget_child_notify (GTK_WIDGET (tool_item), "expand");
+      g_object_notify (G_OBJECT (tool_item), "expand-item");
       gtk_widget_queue_resize (GTK_WIDGET (tool_item));
     }
 }
@@ -550,7 +580,7 @@ gtk_tool_item_set_homogeneous (GtkToolItem *tool_item,
   if (tool_item->priv->homogeneous != homogeneous)
     {
       tool_item->priv->homogeneous = homogeneous;
-      gtk_widget_child_notify (GTK_WIDGET (tool_item), "homogeneous");
+      g_object_notify (G_OBJECT (tool_item), "homogeneous");
       gtk_widget_queue_resize (GTK_WIDGET (tool_item));
     }
 }

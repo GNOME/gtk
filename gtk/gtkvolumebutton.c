@@ -45,6 +45,13 @@
  * icons, tooltips and accessible labels.
  */
 
+typedef struct _GtkVolumeButtonClass  GtkVolumeButtonClass;
+
+struct _GtkVolumeButtonClass
+{
+  GtkScaleButtonClass parent_class;
+};
+
 #define EPSILON (1e-10)
 
 static const gchar * const icons[] =

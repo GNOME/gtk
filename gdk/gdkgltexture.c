@@ -91,10 +91,10 @@ gdk_gl_texture_download (GdkTexture         *texture,
     }
   else
     {
-      GdkSurface *surface;
+      GdkSurface *gl_surface;
 
-      surface = gdk_gl_context_get_surface (self->context);
-      gdk_cairo_draw_from_gl (cr, surface, self->id, GL_TEXTURE, 1, 
+      gl_surface = gdk_gl_context_get_surface (self->context);
+      gdk_cairo_draw_from_gl (cr, gl_surface, self->id, GL_TEXTURE, 1, 
                               area->x, area->y,
                               area->width, area->height);
     }
@@ -189,7 +189,7 @@ gdk_gl_texture_release (GdkGLTexture *self)
  *
  * Note that the GL texture must not be modified until @destroy is called,
  * which will happen when the GdkTexture object is finalized, or due to
- * an explicit call of gdk_texture_release_gl().
+ * an explicit call of gdk_gl_texture_release().
  *
  * Return value: (transfer full): A newly-created #GdkTexture
  */

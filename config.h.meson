@@ -24,9 +24,6 @@
 /* Define to 1 if you have the <crt_externs.h> header file. */
 #mesondefine HAVE_CRT_EXTERNS_H
 
-/* Define to 1 if CUPS 1.6 API is available */
-#mesondefine HAVE_CUPS_API_1_6
-
 /* Define to 1 if you have the `dcgettext' function. */
 #mesondefine HAVE_DCGETTEXT
 
@@ -58,12 +55,6 @@
 
 /* Define if GStreamer support is available */
 #mesondefine HAVE_GSTREAMER
-
-/* Define to 1 if you have the `httpGetAuthString' function. */
-#mesondefine HAVE_HTTPGETAUTHSTRING
-
-/* Define if cups http_t authstring field is accessible */
-#mesondefine HAVE_HTTP_AUTHSTRING
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #mesondefine HAVE_INTTYPES_H
@@ -134,6 +125,9 @@
 /* Define to 1 if you have the <sys/param.h> header file. */
 #mesondefine HAVE_SYS_PARAM_H
 
+/* Have the sysprof-capture library */
+#mesondefine HAVE_SYSPROF_CAPTURE
+
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #mesondefine HAVE_SYS_STAT_H
 
@@ -191,9 +185,6 @@
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
 #mesondefine LT_OBJDIR
 
-/* Define if <X11/extensions/XIproto.h> needed for xReply */
-#mesondefine NEED_XIPROTO_H_FOR_XREPLY
-
 /* Define to 1 if your C compiler doesn't accept -c and -o together. */
 #mesondefine NO_MINUS_C_MINUS_O
 
@@ -243,9 +234,6 @@
 # undef __EXTENSIONS__
 #endif
 
-
-/* Define to 1 if XInput 2.0 is available */
-#mesondefine XINPUT_2
 
 /* Define to 1 if XInput 2.2 is available */
 #mesondefine XINPUT_2_2
@@ -300,18 +288,10 @@
 
 #mesondefine GTK_PRINT_BACKENDS
 
+#mesondefine HAVE_CAIRO_SCRIPT_INTERPRETER
+
 #mesondefine HAVE_HARFBUZZ
 
 #mesondefine HAVE_PANGOFT
 
 #mesondefine ISO_CODES_PREFIX
-
-#mesondefine MALLOC_IS_ALIGNED16
-
-#mesondefine HAVE_POSIX_MEMALIGN
-
-#mesondefine HAVE_MEMALIGN
-
-#mesondefine HAVE_ALIGNED_ALLOC
-
-#mesondefine HAVE__ALIGNED_MALLOC

@@ -35,6 +35,8 @@ gdk_wayland_monitor_finalize (GObject *object)
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)object;
 
+  g_free (monitor->name);
+
   wl_output_destroy (monitor->output);
 
   G_OBJECT_CLASS (gdk_wayland_monitor_parent_class)->finalize (object);

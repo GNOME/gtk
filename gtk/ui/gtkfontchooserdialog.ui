@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkFontChooserDialog" parent="GtkDialog">
     <property name="title" translatable="yes">Select Font</property>
     <property name="type-hint">dialog</property>
-    <child internal-child="vbox">
+    <child internal-child="content_area">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
@@ -14,9 +13,6 @@
             <property name="vexpand">1</property>
             <signal name="font-activated" handler="font_activated_cb" swapped="no"/>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
     </child>
@@ -30,7 +26,6 @@
       <object class="GtkButton" id="select_button">
         <property name="label" translatable="yes">_Select</property>
         <property name="use-underline">1</property>
-        <property name="can-default">1</property>
       </object>
     </child>
     <child>

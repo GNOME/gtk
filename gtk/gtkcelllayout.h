@@ -147,21 +147,21 @@ void  gtk_cell_layout_reorder            (GtkCellLayout         *cell_layout,
 GDK_AVAILABLE_IN_ALL
 GtkCellArea *gtk_cell_layout_get_area    (GtkCellLayout         *cell_layout);
 
-gboolean _gtk_cell_layout_buildable_custom_tag_start (GtkBuildable  *buildable,
-						      GtkBuilder    *builder,
-						      GObject       *child,
-						      const gchar   *tagname,
-						      GMarkupParser *parser,
-						      gpointer      *data);
-gboolean _gtk_cell_layout_buildable_custom_tag_end   (GtkBuildable  *buildable,
-						      GtkBuilder    *builder,
-						      GObject       *child,
-						      const gchar   *tagname,
-						      gpointer      *data);
-void _gtk_cell_layout_buildable_add_child            (GtkBuildable  *buildable,
-						      GtkBuilder    *builder,
-						      GObject       *child,
-						      const gchar   *type);
+gboolean _gtk_cell_layout_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                                      GtkBuilder         *builder,
+                                                      GObject            *child,
+                                                      const gchar        *tagname,
+                                                      GtkBuildableParser *parser,
+                                                      gpointer           *data);
+gboolean _gtk_cell_layout_buildable_custom_tag_end   (GtkBuildable       *buildable,
+                                                      GtkBuilder         *builder,
+                                                      GObject            *child,
+                                                      const gchar        *tagname,
+                                                      gpointer           *data);
+void     _gtk_cell_layout_buildable_add_child        (GtkBuildable       *buildable,
+                                                      GtkBuilder         *builder,
+                                                      GObject            *child,
+                                                      const gchar        *type);
 
 G_END_DECLS
 

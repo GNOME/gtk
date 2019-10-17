@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.6 -->
   <object class="GtkWindow" id="window">
     <property name="default-width">300</property>
     <property name="default-height">300</property>
@@ -19,11 +18,11 @@
                 <property name="icon-size">large</property>
               </object>
             </child>
+            <layout>
+              <property name="left-attach">2</property>
+              <property name="top-attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">2</property>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkRevealer" id="revealer1">
@@ -35,11 +34,11 @@
                 <property name="icon-size">large</property>
               </object>
             </child>
+            <layout>
+              <property name="left-attach">2</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">2</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkRevealer" id="revealer2">
@@ -51,11 +50,11 @@
                 <property name="icon-size">large</property>
               </object>
             </child>
+            <layout>
+              <property name="left-attach">3</property>
+              <property name="top-attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">3</property>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkRevealer" id="revealer3">
@@ -66,11 +65,11 @@
                 <property name="icon-size">large</property>
               </object>
             </child>
+            <layout>
+              <property name="left-attach">2</property>
+              <property name="top-attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">2</property>
-            <property name="top-attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkRevealer" id="revealer4">
@@ -82,11 +81,11 @@
                 <property name="icon-size">large</property>
               </object>
             </child>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkRevealer" id="revealer5">
@@ -98,11 +97,11 @@
                 <property name="icon-size">large</property>
               </object>
             </child>
+            <layout>
+              <property name="left-attach">2</property>
+              <property name="top-attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">2</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkRevealer" id="revealer6">
@@ -114,11 +113,11 @@
                 <property name="icon-size">large</property>
               </object>
             </child>
+            <layout>
+              <property name="left-attach">4</property>
+              <property name="top-attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">4</property>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkRevealer" id="revealer7">
@@ -129,11 +128,11 @@
                 <property name="icon-size">large</property>
               </object>
             </child>
+            <layout>
+              <property name="left-attach">2</property>
+              <property name="top-attach">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">2</property>
-            <property name="top-attach">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkRevealer" id="revealer8">
@@ -145,11 +144,11 @@
                 <property name="icon-size">large</property>
               </object>
             </child>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
       </object>
     </child>

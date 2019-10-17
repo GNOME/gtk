@@ -33,6 +33,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdisplay-x11.h"
 #include "gdkdragprivate.h"
+#include "gdksurfaceprivate.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkproperty.h"
@@ -41,6 +42,7 @@
 #include "gdkselectioninputstream-x11.h"
 #include "gdkselectionoutputstream-x11.h"
 
+#include <math.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
@@ -531,14 +533,14 @@ gdk_surface_cache_new (GdkDisplay *display)
     {
       GList *toplevel_windows, *list;
       GdkSurface *surface;
-      GdkSurfaceImplX11 *impl;
+      GdkX11Surface *impl;
       gint x, y, width, height;
 
       toplevel_windows = gdk_x11_display_get_toplevel_windows (display);
       for (list = toplevel_windows; list; list = list->next)
         {
           surface = GDK_SURFACE (list->data);
-	  impl = GDK_SURFACE_IMPL_X11 (surface->impl);
+	  impl = GDK_X11_SURFACE (surface);
           gdk_surface_get_geometry (surface, &x, &y, &width, &height);
           gdk_surface_cache_add (result, GDK_SURFACE_XID (surface),
                                 x * impl->surface_scale, y * impl->surface_scale, 
@@ -1323,7 +1325,7 @@ create_drag_surface (GdkDisplay *display)
 {
   GdkSurface *surface;
 
-  surface = gdk_surface_new_popup (display, &(GdkRectangle) { 0, 0, 100, 100 });
+  surface = gdk_surface_new_temp (display, &(GdkRectangle) { 0, 0, 100, 100 });
 
   gdk_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_DND);
   
@@ -1400,11 +1402,11 @@ drag_find_window_cache (GdkX11Drag *drag_x11,
 }
 
 static Window
-gdk_x11_drag_find_surface (GdkDrag  *drag,
-                                   GdkSurface       *drag_surface,
-                                   gint             x_root,
-                                   gint             y_root,
-                                   GdkDragProtocol *protocol)
+gdk_x11_drag_find_surface (GdkDrag         *drag,
+                           GdkSurface      *drag_surface,
+                           gint             x_root,
+                           gint             y_root,
+                           GdkDragProtocol *protocol)
 {
   GdkX11Screen *screen_x11;
   GdkX11Drag *drag_x11 = GDK_X11_DRAG (drag);
@@ -1419,7 +1421,7 @@ gdk_x11_drag_find_surface (GdkDrag  *drag,
   window_cache = drag_find_window_cache (drag_x11, display);
 
   dest = get_client_window_at_coords (window_cache,
-                                      drag_surface && GDK_SURFACE_IS_X11 (drag_surface) ?
+                                      drag_surface && GDK_IS_X11_SURFACE (drag_surface) ?
                                       GDK_SURFACE_XID (drag_surface) : None,
                                       x_root * screen_x11->surface_scale,
 				      y_root * screen_x11->surface_scale);
@@ -1457,9 +1459,9 @@ move_drag_surface (GdkDrag *drag,
 {
   GdkX11Drag *drag_x11 = GDK_X11_DRAG (drag);
 
-  gdk_surface_move (drag_x11->drag_surface,
-                   x_root - drag_x11->hot_x,
-                   y_root - drag_x11->hot_y);
+  gdk_x11_surface_move (drag_x11->drag_surface,
+                        x_root - drag_x11->hot_x,
+                        y_root - drag_x11->hot_y);
   gdk_surface_raise (drag_x11->drag_surface);
 }
 
@@ -1839,9 +1841,9 @@ gdk_drag_anim_timeout (gpointer data)
   t = ease_out_cubic (f);
 
   gdk_surface_show (drag->drag_surface);
-  gdk_surface_move (drag->drag_surface,
-                   drag->last_x + (drag->start_x - drag->last_x) * t,
-                   drag->last_y + (drag->start_y - drag->last_y) * t);
+  gdk_x11_surface_move (drag->drag_surface,
+                        drag->last_x + (drag->start_x - drag->last_x) * t,
+                        drag->last_y + (drag->start_y - drag->last_y) * t);
   gdk_surface_set_opacity (drag->drag_surface, 1.0 - f);
 
   return G_SOURCE_CONTINUE;
@@ -1917,14 +1919,13 @@ gdk_x11_drag_drop_done (GdkDrag *drag,
   id = g_timeout_add_full (G_PRIORITY_DEFAULT, 17,
                            gdk_drag_anim_timeout, anim,
                            (GDestroyNotify) gdk_drag_anim_destroy);
-  g_source_set_name_by_id (id, "[gtk+] gdk_drag_anim_timeout");
+  g_source_set_name_by_id (id, "[gtk] gdk_drag_anim_timeout");
 }
 
 static gboolean
 drag_grab (GdkDrag *drag)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
-  GdkDevice *device = gdk_drag_get_device (drag);
   GdkSeatCapabilities capabilities;
   GdkDisplay *display;
   Window root;
@@ -1939,12 +1940,7 @@ drag_grab (GdkDrag *drag)
   root = GDK_DISPLAY_XROOTWIN (display);
   seat = gdk_device_get_seat (gdk_drag_get_device (drag));
 
-#ifdef XINPUT_2
-  if (GDK_IS_X11_DEVICE_XI2 (device))
-    capabilities = GDK_SEAT_CAPABILITY_ALL_POINTING;
-  else
-#endif
-    capabilities = GDK_SEAT_CAPABILITY_ALL;
+  capabilities = GDK_SEAT_CAPABILITY_ALL_POINTING;
 
   cursor = gdk_drag_get_cursor (drag, x11_drag->current_action);
   g_set_object (&x11_drag->cursor, cursor);
@@ -1960,52 +1956,38 @@ drag_grab (GdkDrag *drag)
 
   for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
     {
+      gint deviceid = gdk_x11_device_get_id (gdk_seat_get_keyboard (seat));
+      unsigned char mask[XIMaskLen(XI_LASTEVENT)];
+      XIGrabModifiers mods;
+      XIEventMask evmask;
+      gint num_mods;
+
       keycode = XKeysymToKeycode (GDK_DISPLAY_XDISPLAY (display),
                                   grab_keys[i].keysym);
       if (keycode == NoSymbol)
         continue;
 
-#ifdef XINPUT_2
-      if (GDK_IS_X11_DEVICE_XI2 (device))
-        {
-          gint deviceid = gdk_x11_device_get_id (gdk_seat_get_keyboard (seat));
-          unsigned char mask[XIMaskLen(XI_LASTEVENT)];
-          XIGrabModifiers mods;
-          XIEventMask evmask;
-          gint num_mods;
+      memset (mask, 0, sizeof (mask));
+      XISetMask (mask, XI_KeyPress);
+      XISetMask (mask, XI_KeyRelease);
 
-          memset (mask, 0, sizeof (mask));
-          XISetMask (mask, XI_KeyPress);
-          XISetMask (mask, XI_KeyRelease);
+      evmask.deviceid = deviceid;
+      evmask.mask_len = sizeof (mask);
+      evmask.mask = mask;
 
-          evmask.deviceid = deviceid;
-          evmask.mask_len = sizeof (mask);
-          evmask.mask = mask;
+      num_mods = 1;
+      mods.modifiers = grab_keys[i].modifiers;
 
-          num_mods = 1;
-          mods.modifiers = grab_keys[i].modifiers;
-
-          XIGrabKeycode (GDK_DISPLAY_XDISPLAY (display),
-                         deviceid,
-                         keycode,
-                         root,
-                         GrabModeAsync,
-                         GrabModeAsync,
-                         False,
-                         &evmask,
-                         num_mods,
-                         &mods);
-        }
-      else
-#endif
-        {
-          XGrabKey (GDK_DISPLAY_XDISPLAY (display),
-                    keycode, grab_keys[i].modifiers,
-                    root,
-                    FALSE,
-                    GrabModeAsync,
-                    GrabModeAsync);
-        }
+      XIGrabKeycode (GDK_DISPLAY_XDISPLAY (display),
+                     deviceid,
+                     keycode,
+                     root,
+                     GrabModeAsync,
+                     GrabModeAsync,
+                     False,
+                     &evmask,
+                     num_mods,
+                     &mods);
     }
 
   gdk_x11_display_error_trap_pop_ignored (display);
@@ -2034,34 +2016,23 @@ drag_ungrab (GdkDrag *drag)
 
   for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
     {
+      XIGrabModifiers mods;
+      gint num_mods;
+
       keycode = XKeysymToKeycode (GDK_DISPLAY_XDISPLAY (display),
                                   grab_keys[i].keysym);
       if (keycode == NoSymbol)
         continue;
 
-#ifdef XINPUT_2
-      if (GDK_IS_X11_DEVICE_XI2 (keyboard))
-        {
-          XIGrabModifiers mods;
-          gint num_mods;
+      num_mods = 1;
+      mods.modifiers = grab_keys[i].modifiers;
 
-          num_mods = 1;
-          mods.modifiers = grab_keys[i].modifiers;
-
-          XIUngrabKeycode (GDK_DISPLAY_XDISPLAY (display),
-                           gdk_x11_device_get_id (keyboard),
-                           keycode,
-                           root,
-                           num_mods,
-                           &mods);
-        }
-      else
-#endif /* XINPUT_2 */
-        {
-          XUngrabKey (GDK_DISPLAY_XDISPLAY (display),
-                      keycode, grab_keys[i].modifiers,
-                      root);
-        }
+      XIUngrabKeycode (GDK_DISPLAY_XDISPLAY (display),
+                       gdk_x11_device_get_id (keyboard),
+                       keycode,
+                       root,
+                       num_mods,
+                       &mods);
     }
 }
 
@@ -2076,13 +2047,14 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
   GdkX11Drag *x11_drag;
   GdkDrag *drag;
   GdkDisplay *display;
+  double px, py;
   int x_root, y_root;
   Atom xselection;
   GdkSurface *ipc_surface;
 
   display = gdk_surface_get_display (surface);
 
-  ipc_surface = gdk_surface_new_popup (display, &(GdkRectangle) { -99, -99, 1, 1 });
+  ipc_surface = gdk_surface_new_temp (display, &(GdkRectangle) { -99, -99, 1, 1 });
 
   drag = (GdkDrag *) g_object_new (GDK_TYPE_X11_DRAG,
                                    "surface", ipc_surface,
@@ -2096,9 +2068,9 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
 
   precache_target_list (drag);
 
-  gdk_device_get_position (device, &x_root, &y_root);
-  x_root += dx;
-  y_root += dy;
+  gdk_device_get_position (device, &px, &py);
+  x_root = round (px) + dx;
+  y_root = round (py) + dy;
 
   x11_drag->start_x = x_root;
   x11_drag->start_y = y_root;
@@ -2108,8 +2080,8 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
   x11_drag->protocol = GDK_DRAG_PROTO_XDND;
   x11_drag->actions = actions;
   x11_drag->ipc_surface = ipc_surface;
-  if (gdk_surface_get_group (surface))
-    gdk_surface_set_group (x11_drag->ipc_surface, surface);
+  if (gdk_x11_surface_get_group (surface))
+    gdk_x11_surface_set_group (x11_drag->ipc_surface, surface);
   gdk_surface_show (x11_drag->ipc_surface);
 
   x11_drag->drag_surface = create_drag_surface (display);
@@ -2342,9 +2314,22 @@ gdk_dnd_handle_key_event (GdkDrag           *drag,
 
   if (dx != 0 || dy != 0)
     {
+      GdkDisplay *display;
+      Display *xdisplay;
+      GdkX11Screen *screen;
+      Window dest;
+
       x11_drag->last_x += dx;
       x11_drag->last_y += dy;
-      gdk_device_warp (pointer, x11_drag->last_x, x11_drag->last_y);
+
+      display = gdk_event_get_display ((GdkEvent *)event);
+      xdisplay = GDK_DISPLAY_XDISPLAY (display);
+      screen = GDK_X11_DISPLAY (display)->screen;
+      dest = GDK_SCREEN_XROOTWIN (screen);
+
+      XWarpPointer (xdisplay, None, dest, 0, 0, 0, 0,
+                   round (x11_drag->last_x * screen->surface_scale),
+                   round (x11_drag->last_y * screen->surface_scale));
     }
 
   gdk_drag_update (drag, x11_drag->last_x, x11_drag->last_y, state,

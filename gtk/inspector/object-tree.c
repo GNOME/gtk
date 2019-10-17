@@ -41,6 +41,7 @@
 #include "gtklabel.h"
 #include "gtklistbox.h"
 #include "gtkmenuitem.h"
+#include "gtkpopover.h"
 #include "gtksettings.h"
 #include "gtksizegroup.h"
 #include "gtktextview.h"
@@ -672,6 +673,11 @@ gtk_inspector_get_object_name (GObject *object)
         return id;
     }
 
+  if (GTK_IS_EVENT_CONTROLLER (object))
+    {
+      return gtk_event_controller_get_name (GTK_EVENT_CONTROLLER (object));
+    }
+
   return NULL;
 }
 
@@ -684,6 +690,13 @@ gtk_inspector_get_object_title (GObject *object)
     return g_strdup (G_OBJECT_TYPE_NAME (object));
   else
     return g_strconcat (G_OBJECT_TYPE_NAME (object), " — ", name, NULL);
+}
+
+void
+gtk_inspector_object_tree_activate_object (GtkInspectorObjectTree *wt,
+                                           GObject                *object)
+{
+  g_signal_emit (wt, signals[OBJECT_ACTIVATED], 0, object);
 }
 
 static void
@@ -699,7 +712,7 @@ on_row_activated (GtkListBox             *box,
   item = g_list_model_get_item (G_LIST_MODEL (wt->priv->tree_model), pos);
   object = gtk_tree_list_row_get_item (item);
 
-  g_signal_emit (wt, signals[OBJECT_ACTIVATED], 0, object);
+  gtk_inspector_object_tree_activate_object (wt, object);
 
   g_object_unref (item);
   g_object_unref (object);
@@ -807,28 +820,33 @@ destroy_controller (GtkEventController *controller)
 }
 
 static void
-on_hierarchy_changed (GtkWidget *widget,
-                      GtkWidget *previous_toplevel)
+map (GtkWidget *widget)
 {
   GtkInspectorObjectTree *wt = GTK_INSPECTOR_OBJECT_TREE (widget);
   GtkEventController *controller;
   GtkWidget *toplevel;
 
-  if (previous_toplevel)
-    g_object_set_data (G_OBJECT (previous_toplevel), "object-controller", NULL);
+  GTK_WIDGET_CLASS (gtk_inspector_object_tree_parent_class)->map (widget);
 
-  toplevel = gtk_widget_get_toplevel (widget);
-
-  if (!GTK_IS_WINDOW (toplevel))
-    return;
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
 
   controller = gtk_event_controller_key_new ();
   g_object_set_data_full (G_OBJECT (toplevel), "object-controller", controller, (GDestroyNotify)destroy_controller);
   g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), widget);
   gtk_widget_add_controller (toplevel, controller);
 
-  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (wt->priv->search_bar),
-                                         toplevel);
+  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (wt->priv->search_bar), toplevel);
+}
+
+static void
+unmap (GtkWidget *widget)
+{
+  GtkWidget *toplevel;
+
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
+  g_object_set_data (G_OBJECT (toplevel), "object-controller", NULL);
+
+  GTK_WIDGET_CLASS (gtk_inspector_object_tree_parent_class)->unmap (widget);
 }
 
 static gboolean
@@ -909,7 +927,7 @@ search (GtkInspectorObjectTree *wt,
   guint i, selected, n, row;
   const char *text;
 
-  text = gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (priv->search_entry));
   if (gtk_list_box_get_selected_row (priv->list))
     {
       selected = gtk_list_box_row_get_index (gtk_list_box_get_selected_row (priv->list));
@@ -942,7 +960,6 @@ search (GtkInspectorObjectTree *wt,
           result = search_children (child, text, forward);
           if (result)
             {
-              g_print ("selecting!\n");
               gtk_inspector_object_tree_select_object (wt, result);
               g_object_unref (result);
               g_object_unref (child);
@@ -991,7 +1008,7 @@ static void
 stop_search (GtkWidget              *entry,
              GtkInspectorObjectTree *wt)
 {
-  gtk_entry_set_text (GTK_ENTRY (wt->priv->search_entry), "");
+  gtk_editable_set_text (GTK_EDITABLE (wt->priv->search_entry), "");
   gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (wt->priv->search_bar), FALSE);
 }
 
@@ -1148,7 +1165,7 @@ gtk_inspector_object_tree_init (GtkInspectorObjectTree *wt)
   gtk_widget_init_template (GTK_WIDGET (wt));
 
   gtk_search_bar_connect_entry (GTK_SEARCH_BAR (wt->priv->search_bar),
-                                GTK_ENTRY (wt->priv->search_entry));
+                                GTK_EDITABLE (wt->priv->search_entry));
 
   root_model = create_root_model ();
   wt->priv->tree_model = gtk_tree_list_model_new (FALSE,
@@ -1184,6 +1201,9 @@ gtk_inspector_object_tree_class_init (GtkInspectorObjectTreeClass *klass)
 
   object_class->dispose = gtk_inspector_object_tree_dispose;
 
+  widget_class->map = map;
+  widget_class->unmap = unmap;
+
   signals[OBJECT_ACTIVATED] =
       g_signal_new ("object-activated",
                     G_OBJECT_CLASS_TYPE (klass),
@@ -1209,7 +1229,6 @@ gtk_inspector_object_tree_class_init (GtkInspectorObjectTreeClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, type_size_group);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, name_size_group);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, label_size_group);
-  gtk_widget_class_bind_template_callback (widget_class, on_hierarchy_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_search_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, next_match);
@@ -1281,6 +1300,7 @@ gtk_inspector_object_tree_select_object (GtkInspectorObjectTree *wt,
                                               gtk_tree_list_row_get_position (row_item));
   g_return_if_fail (row_widget != NULL);
   gtk_list_box_select_row (wt->priv->list, row_widget);
+  g_signal_emit (wt, signals[OBJECT_SELECTED], 0, object); // FIXME
   g_object_unref (row_item);
 }
 

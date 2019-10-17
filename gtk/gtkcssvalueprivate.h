@@ -21,7 +21,9 @@
 #define __GTK_CSS_VALUE_PRIVATE_H__
 
 #include <glib-object.h>
+
 #include "gtkcsstypesprivate.h"
+#include "gtkstyleprovider.h"
 
 G_BEGIN_DECLS
 

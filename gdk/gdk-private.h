@@ -20,8 +20,6 @@ void            gdk_surface_thaw_toplevel_updates        (GdkSurface *surface);
 
 gboolean        gdk_surface_supports_edge_constraints    (GdkSurface *surface);
 
-GObject *       gdk_event_get_user_data         (const GdkEvent *event);
-
 guint32         gdk_display_get_last_seen_time  (GdkDisplay *display);
 
 void gdk_display_set_double_click_time     (GdkDisplay   *display,
@@ -35,5 +33,13 @@ gboolean gdk_running_in_sandbox (void);
 gboolean gdk_should_use_portal (void);
 
 const gchar *   gdk_get_startup_notification_id (void);
+
+PangoDirection gdk_unichar_direction (gunichar    ch);
+PangoDirection gdk_find_base_dir     (const char *text,
+                                      int         len);
+
+void           gdk_surface_set_widget (GdkSurface *surface,
+                                       gpointer    widget);
+gpointer       gdk_surface_get_widget (GdkSurface *surface);
 
 #endif /* __GDK__PRIVATE_H__ */

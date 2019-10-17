@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "gtkapplicationprivate.h"
+#include "gtknative.h"
 
 #include <gdk/wayland/gdkwayland.h>
 
@@ -44,7 +45,7 @@ gtk_application_impl_wayland_handle_window_realize (GtkApplicationImpl *impl,
   GdkSurface *gdk_surface;
   gchar *window_path;
 
-  gdk_surface = gtk_widget_get_surface (GTK_WIDGET (window));
+  gdk_surface = gtk_native_get_surface (GTK_NATIVE (window));
 
   if (!GDK_IS_WAYLAND_SURFACE (gdk_surface))
     return;

@@ -27,7 +27,7 @@
 
 #include <glib/gi18n-lib.h>
 
-#include "gtkbookmarksmanager.h"
+#include "gtkbookmarksmanagerprivate.h"
 #include "gtkfilechooser.h" /* for the GError types */
 
 static void
@@ -539,7 +539,7 @@ _gtk_bookmarks_manager_set_bookmark_label (GtkBookmarksManager *manager,
   return TRUE;
 }
 
-gboolean
+static gboolean
 _gtk_bookmarks_manager_get_xdg_type (GtkBookmarksManager *manager,
                                      GFile               *file,
                                      GUserDirectory      *directory)

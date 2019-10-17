@@ -66,19 +66,19 @@ add_string (GtkInspectorStrvEditor *editor,
   gtk_widget_show (box);
 
   entry = gtk_entry_new ();
-  gtk_entry_set_text (GTK_ENTRY (entry), str);
+  gtk_editable_set_text (GTK_EDITABLE (entry), str);
   gtk_widget_show (entry);
-  gtk_box_pack_start (GTK_BOX (box), entry);
+  gtk_container_add (GTK_CONTAINER (box), entry);
   g_object_set_data (G_OBJECT (box), "entry", entry);
   g_signal_connect_swapped (entry, "notify::text", G_CALLBACK (emit_changed), editor);
 
   button = gtk_button_new_from_icon_name ("user-trash-symbolic");
   gtk_style_context_add_class (gtk_widget_get_style_context (button), "image-button");
   gtk_widget_show (button);
-  gtk_box_pack_start (GTK_BOX (box), button);
+  gtk_container_add (GTK_CONTAINER (box), button);
   g_signal_connect (button, "clicked", G_CALLBACK (remove_string), editor);
 
-  gtk_box_pack_start (GTK_BOX (editor->box), box);
+  gtk_container_add (GTK_CONTAINER (editor->box), box);
 
   gtk_widget_grab_focus (entry);
 
@@ -107,8 +107,8 @@ gtk_inspector_strv_editor_init (GtkInspectorStrvEditor *editor)
   gtk_widget_show (editor->button);
   g_signal_connect (editor->button, "clicked", G_CALLBACK (add_cb), editor);
 
-  gtk_box_pack_start (GTK_BOX (editor), editor->box);
-  gtk_box_pack_start (GTK_BOX (editor), editor->button);
+  gtk_container_add (GTK_CONTAINER (editor), editor->box);
+  gtk_container_add (GTK_CONTAINER (editor), editor->button);
 }
 
 static void
@@ -163,7 +163,7 @@ gtk_inspector_strv_editor_get_strv (GtkInspectorStrvEditor *editor)
       GtkEntry *entry;
 
       entry = GTK_ENTRY (g_object_get_data (G_OBJECT (l->data), "entry"));
-      g_ptr_array_add (p, g_strdup (gtk_entry_get_text (entry)));
+      g_ptr_array_add (p, g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry))));
     }
   g_list_free (children);
 

@@ -36,34 +36,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_APP_CHOOSER_DIALOG            (gtk_app_chooser_dialog_get_type ())
 #define GTK_APP_CHOOSER_DIALOG(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_APP_CHOOSER_DIALOG, GtkAppChooserDialog))
-#define GTK_APP_CHOOSER_DIALOG_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_APP_CHOOSER_DIALOG, GtkAppChooserDialogClass))
 #define GTK_IS_APP_CHOOSER_DIALOG(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_APP_CHOOSER_DIALOG))
-#define GTK_IS_APP_CHOOSER_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_APP_CHOOSER_DIALOG))
-#define GTK_APP_CHOOSER_DIALOG_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_APP_CHOOSER_DIALOG, GtkAppChooserDialogClass))
 
 typedef struct _GtkAppChooserDialog        GtkAppChooserDialog;
-typedef struct _GtkAppChooserDialogClass   GtkAppChooserDialogClass;
-typedef struct _GtkAppChooserDialogPrivate GtkAppChooserDialogPrivate;
-
-struct _GtkAppChooserDialog {
-  GtkDialog parent;
-
-  /*< private >*/
-  GtkAppChooserDialogPrivate *priv;
-};
-
-/**
- * GtkAppChooserDialogClass:
- * @parent_class: The parent class.
- */
-struct _GtkAppChooserDialogClass {
-  GtkDialogClass parent_class;
-
-  /*< private >*/
-
-  /* padding for future class expansion */
-  gpointer padding[16];
-};
 
 GDK_AVAILABLE_IN_ALL
 GType         gtk_app_chooser_dialog_get_type             (void) G_GNUC_CONST;

@@ -29,21 +29,21 @@
 
 #include "gtkfontbutton.h"
 
-#include "gtkmain.h"
+#include "gtkbinlayout.h"
 #include "gtkbox.h"
-#include "gtklabel.h"
+#include "gtkcssprovider.h"
 #include "gtkfontchooser.h"
 #include "gtkfontchooserdialog.h"
-#include "gtkimage.h"
-#include "gtkmarshalers.h"
-#include "gtkseparator.h"
-#include "gtkprivate.h"
+#include "gtkfontchooserutils.h"
 #include "gtkintl.h"
-#include "gtkcssprovider.h"
+#include "gtklabel.h"
+#include "gtkmarshalers.h"
+#include "gtkprivate.h"
+#include "gtkseparator.h"
+#include "gtkstylecontext.h"
 
 #include <string.h>
 #include <stdio.h>
-#include "gtkfontchooserutils.h"
 
 
 /**
@@ -61,6 +61,19 @@
  * GtkFontButton has a single CSS node with name fontbutton.
  */
 
+typedef struct _GtkFontButtonClass   GtkFontButtonClass;
+
+struct _GtkFontButton
+{
+  GtkWidget parent_instance;
+};
+
+struct _GtkFontButtonClass
+{
+  GtkWidgetClass parent_class;
+
+  void (* font_set) (GtkFontButton *gfp);
+};
 
 typedef struct
 {
@@ -177,23 +190,11 @@ clear_font_data (GtkFontButton *font_button)
 {
   GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (font_button);
 
-  if (priv->font_family)
-    g_object_unref (priv->font_family);
-  priv->font_family = NULL;
-
-  if (priv->font_face)
-    g_object_unref (priv->font_face);
-  priv->font_face = NULL;
-
-  if (priv->font_desc)
-    pango_font_description_free (priv->font_desc);
-  priv->font_desc = NULL;
-
-  g_free (priv->fontname);
-  priv->fontname = NULL;
-
-  g_free (priv->font_features);
-  priv->font_features = NULL;
+  g_clear_object (&priv->font_family);
+  g_clear_object (&priv->font_face);
+  g_clear_pointer (&priv->font_desc, pango_font_description_free);
+  g_clear_pointer (&priv->fontname, g_free);
+  g_clear_pointer (&priv->font_features, g_free);
 }
 
 static void
@@ -470,54 +471,17 @@ gtk_font_button_font_chooser_notify (GObject    *object,
 }
 
 static void
-gtk_font_button_measure (GtkWidget       *widget,
-                         GtkOrientation  orientation,
-                         int             for_size,
-                         int            *minimum,
-                         int            *natural,
-                         int            *minimum_baseline,
-                         int            *natural_baseline)
-{
-  GtkFontButton *button = GTK_FONT_BUTTON (widget);
-  GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (button);
-
-  gtk_widget_measure (priv->button, orientation, for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_font_button_size_allocate (GtkWidget *widget,
-                               int        width,
-                               int        height,
-                               int                  baseline)
-{
-  GtkFontButton *button = GTK_FONT_BUTTON (widget);
-  GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (button);
-
-  gtk_widget_size_allocate (priv->button,
-                            &(GtkAllocation) {
-                              0, 0,
-                              width, height
-                            },
-                            baseline);
-}
-
-static void
 gtk_font_button_class_init (GtkFontButtonClass *klass)
 {
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
-  
+
   gobject_class = (GObjectClass *) klass;
   widget_class = (GtkWidgetClass *) klass;
 
   gobject_class->finalize = gtk_font_button_finalize;
   gobject_class->set_property = gtk_font_button_set_property;
   gobject_class->get_property = gtk_font_button_get_property;
-
-  widget_class->measure = gtk_font_button_measure;
-  widget_class->size_allocate = gtk_font_button_size_allocate;
 
   klass->font_set = NULL;
 
@@ -581,9 +545,10 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                                 G_SIGNAL_RUN_FIRST,
                                                 G_STRUCT_OFFSET (GtkFontButtonClass, font_set),
                                                 NULL, NULL,
-                                                g_cclosure_marshal_VOID__VOID,
+                                                NULL,
                                                 G_TYPE_NONE, 0);
 
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("fontbutton"));
 }
 
@@ -593,8 +558,6 @@ gtk_font_button_init (GtkFontButton *font_button)
   GtkStyleContext *context;
   GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (font_button);
   GtkWidget *box;
-
-  gtk_widget_set_has_surface (GTK_WIDGET (font_button), FALSE);
 
   priv->button = gtk_button_new ();
   g_signal_connect (priv->button, "clicked", G_CALLBACK (gtk_font_button_clicked), font_button);
@@ -938,7 +901,7 @@ gtk_font_button_clicked (GtkButton *button,
     {
       GtkWidget *parent;
       
-      parent = gtk_widget_get_toplevel (GTK_WIDGET (font_button));
+      parent = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (font_button)));
 
       priv->font_dialog = gtk_font_chooser_dialog_new (priv->title, NULL);
       gtk_window_set_hide_on_close (GTK_WINDOW (priv->font_dialog), TRUE);
@@ -970,7 +933,7 @@ gtk_font_button_clicked (GtkButton *button,
           priv->font_filter_data_destroy = NULL;
         }
 
-      if (gtk_widget_is_toplevel (parent) && GTK_IS_WINDOW (parent))
+      if (GTK_IS_WINDOW (parent))
         {
           if (GTK_WINDOW (parent) != gtk_window_get_transient_for (GTK_WINDOW (font_dialog)))
             gtk_window_set_transient_for (GTK_WINDOW (font_dialog), GTK_WINDOW (parent));
@@ -995,7 +958,9 @@ gtk_font_button_clicked (GtkButton *button,
       gtk_font_chooser_set_font_desc (font_dialog, priv->font_desc);
     }
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_window_present (GTK_WINDOW (priv->font_dialog));
+  G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 

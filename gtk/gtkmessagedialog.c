@@ -25,18 +25,19 @@
 
 #include "config.h"
 
-#include <string.h>
-
 #include "gtkmessagedialog.h"
-#include "gtkdialogprivate.h"
+
 #include "gtkaccessible.h"
-#include "gtkbuildable.h"
-#include "gtklabel.h"
 #include "gtkbox.h"
-#include "gtkbbox.h"
+#include "gtkbuildable.h"
+#include "gtkdialogprivate.h"
 #include "gtkintl.h"
+#include "gtklabel.h"
 #include "gtkprivate.h"
+#include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
+
+#include <string.h>
 
 /**
  * SECTION:gtkmessagedialog
@@ -47,10 +48,6 @@
  * #GtkMessageDialog presents a dialog with some message text. It’s simply a
  * convenience widget; you could construct the equivalent of #GtkMessageDialog
  * from #GtkDialog without too much effort, but #GtkMessageDialog saves typing.
- *
- * One difference from #GtkDialog is that #GtkMessageDialog sets the
- * #GtkWindow:skip-taskbar-hint property to %TRUE, so that the dialog is hidden
- * from the taskbar by default.
  *
  * The easiest way to do a modal message dialog is to use gtk_dialog_run(), though
  * you can also pass in the %GTK_DIALOG_MODAL flag, gtk_dialog_run() automatically
@@ -108,6 +105,11 @@ typedef struct
   guint          has_secondary_text : 1;
   guint          message_type       : 3;
 } GtkMessageDialogPrivate;
+
+struct _GtkMessageDialogClass
+{
+  GtkDialogClass parent_class;
+};
 
 static void gtk_message_dialog_constructed  (GObject          *object);
 static void gtk_message_dialog_set_property (GObject          *object,
@@ -281,43 +283,13 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
   action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (action_area), GTK_BUTTONBOX_EXPAND);
+  gtk_widget_set_halign (action_area, GTK_ALIGN_FILL);
+  gtk_box_set_homogeneous (GTK_BOX (action_area), TRUE);
 
   settings = gtk_widget_get_settings (GTK_WIDGET (dialog));
   g_object_get (settings, "gtk-keynav-use-caret", &use_caret, NULL);
   gtk_label_set_selectable (GTK_LABEL (priv->label), use_caret);
   gtk_label_set_selectable (GTK_LABEL (priv->secondary_label), use_caret);
-}
-
-static void
-setup_primary_label_font (GtkMessageDialog *dialog)
-{
-  GtkMessageDialogPrivate *priv = gtk_message_dialog_get_instance_private (dialog);
-
-  if (!priv->has_primary_markup)
-    {
-      PangoAttrList *attributes;
-      PangoAttribute *attr;
-
-      attributes = pango_attr_list_new ();
-
-      attr = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
-      pango_attr_list_insert (attributes, attr);
-
-      if (priv->has_secondary_text)
-        {
-          attr = pango_attr_scale_new (PANGO_SCALE_LARGE);
-          pango_attr_list_insert (attributes, attr);
-        }
-
-      gtk_label_set_attributes (GTK_LABEL (priv->label), attributes);
-      pango_attr_list_unref (attributes);
-    }
-  else
-    {
-      /* unset the font settings */
-      gtk_label_set_attributes (GTK_LABEL (priv->label), NULL);
-    }
 }
 
 static void
@@ -448,7 +420,6 @@ gtk_message_dialog_set_property (GObject      *object,
           gtk_label_set_use_markup (GTK_LABEL (priv->label), priv->has_primary_markup);
           g_object_notify_by_pspec (object, pspec);
         }
-        setup_primary_label_font (dialog);
       break;
     case PROP_SECONDARY_TEXT:
       {
@@ -469,7 +440,6 @@ gtk_message_dialog_set_property (GObject      *object,
 	    priv->has_secondary_text = FALSE;
 	    gtk_widget_hide (priv->secondary_label);
 	  }
-	setup_primary_label_font (dialog);
       }
       break;
     case PROP_SECONDARY_USE_MARKUP:
@@ -716,8 +686,6 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
       priv->has_secondary_text = FALSE;
       gtk_widget_hide (priv->secondary_label);
     }
-
-  setup_primary_label_font (message_dialog);
 }
 
 /**
@@ -774,8 +742,6 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
       priv->has_secondary_text = FALSE;
       gtk_widget_hide (priv->secondary_label);
     }
-
-  setup_primary_label_font (message_dialog);
 }
 
 /**

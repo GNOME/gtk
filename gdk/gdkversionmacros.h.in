@@ -15,7 +15,7 @@
  * License along with this library; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDK_H_INSIDE__) && !defined (__GTK_CSS_H_INSIDE__) && !defined (GDK_COMPILATION) && !defined (GTK_CSS_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
@@ -37,7 +37,7 @@
  *
  * A macro that should be defined before including the gdk.h header.
  * If it is defined, no compiler warnings will be produced for uses
- * of deprecated GDK and GTK+ APIs.
+ * of deprecated GDK and GTK APIs.
  */
 
 #ifdef GDK_DISABLE_DEPRECATION_WARNINGS
@@ -54,6 +54,7 @@
 
 #define GDK_VERSION_3_92        (G_ENCODE_VERSION (3, 92))
 #define GDK_VERSION_3_94        (G_ENCODE_VERSION (3, 94))
+
 /**
  * GDK_VERSION_4_0:
  *
@@ -137,6 +138,13 @@
 # define GDK_AVAILABLE_IN_4_0                _GDK_EXTERN
 #endif
 
+#if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_3_92
+# define GDK_DEPRECATED_IN_4_0                GDK_DEPRECATED
+# define GDK_DEPRECATED_IN_4_0_FOR(f)         GDK_DEPRECATED_FOR(f)
+#else
+# define GDK_DEPRECATED_IN_4_0                _GDK_EXTERN
+# define GDK_DEPRECATED_IN_4_0_FOR(f)         _GDK_EXTERN
+#endif
 
 #endif  /* __GDK_VERSION_MACROS_H__ */
 

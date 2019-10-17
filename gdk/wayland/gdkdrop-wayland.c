@@ -224,8 +224,8 @@ gdk_wayland_drop_read_async (GdkDrop             *drop,
 
 static GInputStream *
 gdk_wayland_drop_read_finish (GdkDrop       *drop,
-                              const char   **out_mime_type,
                               GAsyncResult  *result,
+                              const char   **out_mime_type,
                               GError       **error)
 {
   GTask *task;

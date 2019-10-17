@@ -70,12 +70,6 @@ change_orientation (GtkWidget *button,
   parent = gtk_widget_get_parent (menubar);
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (parent));
   gtk_orientable_set_orientation (GTK_ORIENTABLE (parent), 1 - orientation);
-
-  if (orientation == GTK_ORIENTATION_VERTICAL)
-    g_object_set (menubar, "pack-direction", GTK_PACK_DIRECTION_TTB, NULL);
-  else
-    g_object_set (menubar, "pack-direction", GTK_PACK_DIRECTION_LTR, NULL);
-
 }
 
 static GtkWidget *window = NULL;
@@ -107,51 +101,41 @@ do_menus (GtkWidget *do_widget)
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (window), box);
-      gtk_widget_show (box);
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_container_add (GTK_CONTAINER (box), box1);
-      gtk_widget_show (box1);
 
       menubar = gtk_menu_bar_new ();
       gtk_widget_set_hexpand (menubar, TRUE);
-      gtk_box_pack_start (GTK_BOX (box1), menubar);
-      gtk_widget_show (menubar);
+      gtk_container_add (GTK_CONTAINER (box1), menubar);
 
       menu = create_menu (2);
 
       menuitem = gtk_menu_item_new_with_label ("test\nline2");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
-      gtk_widget_show (menuitem);
 
       menuitem = gtk_menu_item_new_with_label ("foo");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (3));
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
-      gtk_widget_show (menuitem);
 
       menuitem = gtk_menu_item_new_with_label ("bar");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (4));
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
-      gtk_widget_show (menuitem);
 
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
-      gtk_box_pack_start (GTK_BOX (box1), box2);
-      gtk_widget_show (box2);
+      gtk_container_add (GTK_CONTAINER (box1), box2);
 
       button = gtk_button_new_with_label ("Flip");
       g_signal_connect (button, "clicked",
                         G_CALLBACK (change_orientation), menubar);
-      gtk_box_pack_start (GTK_BOX (box2), button);
-      gtk_widget_show (button);
+      gtk_container_add (GTK_CONTAINER (box2), button);
 
       button = gtk_button_new_with_label ("Close");
       g_signal_connect_swapped (button, "clicked",
                                 G_CALLBACK(gtk_widget_destroy), window);
-      gtk_box_pack_start (GTK_BOX (box2), button);
-      gtk_widget_set_can_default (button, TRUE);
-      gtk_widget_grab_default (button);
-      gtk_widget_show (button);
+      gtk_container_add (GTK_CONTAINER (box2), button);
+      gtk_window_set_default_widget (GTK_WINDOW (window), button);
     }
 
   if (!gtk_widget_get_visible (window))

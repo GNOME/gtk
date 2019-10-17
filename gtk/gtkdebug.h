@@ -51,7 +51,8 @@ typedef enum {
   GTK_DEBUG_ACTIONS         = 1 << 13,
   GTK_DEBUG_RESIZE          = 1 << 14,
   GTK_DEBUG_LAYOUT          = 1 << 15,
-  GTK_DEBUG_SNAPSHOT        = 1 << 16
+  GTK_DEBUG_SNAPSHOT        = 1 << 16,
+  GTK_DEBUG_CONSTRAINTS     = 1 << 17,
 } GtkDebugFlag;
 
 #ifdef G_ENABLE_DEBUG

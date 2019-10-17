@@ -28,43 +28,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_FONT_CHOOSER_WIDGET              (gtk_font_chooser_widget_get_type ())
 #define GTK_FONT_CHOOSER_WIDGET(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FONT_CHOOSER_WIDGET, GtkFontChooserWidget))
-#define GTK_FONT_CHOOSER_WIDGET_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FONT_CHOOSER_WIDGET, GtkFontChooserWidgetClass))
 #define GTK_IS_FONT_CHOOSER_WIDGET(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FONT_CHOOSER_WIDGET))
-#define GTK_IS_FONT_CHOOSER_WIDGET_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FONT_CHOOSER_WIDGET))
-#define GTK_FONT_CHOOSER_WIDGET_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FONT_CHOOSER_WIDGET, GtkFontChooserWidgetClass))
 
 typedef struct _GtkFontChooserWidget              GtkFontChooserWidget;
-typedef struct _GtkFontChooserWidgetPrivate       GtkFontChooserWidgetPrivate;
-typedef struct _GtkFontChooserWidgetClass         GtkFontChooserWidgetClass;
-
-struct _GtkFontChooserWidget
-{
-  GtkWidget parent_instance;
-
-  /*< private >*/
-  GtkFontChooserWidgetPrivate *priv;
-};
-
-/**
- * GtkFontChooserWidgetClass:
- * @parent_class: The parent class.
- */
-struct _GtkFontChooserWidgetClass
-{
-  GtkWidgetClass parent_class;
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-  void (*_gtk_reserved5) (void);
-  void (*_gtk_reserved6) (void);
-  void (*_gtk_reserved7) (void);
-  void (*_gtk_reserved8) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType        gtk_font_chooser_widget_get_type                 (void) G_GNUC_CONST;

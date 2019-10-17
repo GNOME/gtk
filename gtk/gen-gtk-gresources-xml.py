@@ -46,11 +46,6 @@ xml += '\n'
 for f in get_files('theme/HighContrast/assets', '.svg'):
   xml += '    <file>theme/HighContrast/assets/{0}</file>\n'.format(f)
 
-xml += '''
-    <file>theme/win32/gtk-win32-base.css</file>
-    <file>theme/win32/gtk.css</file>
-'''
-
 for f in get_files('gesture', '.symbolic.png'):
   xml += '    <file alias=\'icons/64x64/actions/{0}\'>gesture/{0}</file>\n'.format(f)
 
@@ -61,11 +56,13 @@ for f in get_files('ui', '.ui'):
 
 xml += '\n'
 
-for s in ['16x16', '24x24', '32x32', '48x48']:
-  for c in ['categories', 'status']:
+for s in ['16x16', '24x24', '32x32', '48x48', 'scalable']:
+  for c in ['actions', 'categories', 'emblems', 'emotes', 'devices', 'mimetypes', 'places', 'status']:
     icons_dir = 'icons/{0}/{1}'.format(s,c)
     if os.path.exists(os.path.join(srcdir,icons_dir)):
       for f in get_files(icons_dir, '.png'):
+        xml += '    <file>icons/{0}/{1}/{2}</file>\n'.format(s,c,f)
+      for f in get_files(icons_dir, '.svg'):
         xml += '    <file>icons/{0}/{1}/{2}</file>\n'.format(s,c,f)
 
 for f in get_files('inspector', '.ui'):
@@ -73,6 +70,7 @@ for f in get_files('inspector', '.ui'):
 
 xml += '''
     <file>inspector/logo.png</file>
+    <file>inspector/inspector.css</file>
     <file>emoji/emoji.data</file>
   </gresource>
 </gresources>'''

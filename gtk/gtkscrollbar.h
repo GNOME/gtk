@@ -37,30 +37,10 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_SCROLLBAR            (gtk_scrollbar_get_type ())
 #define GTK_SCROLLBAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SCROLLBAR, GtkScrollbar))
-#define GTK_SCROLLBAR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_SCROLLBAR, GtkScrollbarClass))
 #define GTK_IS_SCROLLBAR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SCROLLBAR))
-#define GTK_IS_SCROLLBAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SCROLLBAR))
-#define GTK_SCROLLBAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SCROLLBAR, GtkScrollbarClass))
 
 
 typedef struct _GtkScrollbar        GtkScrollbar;
-typedef struct _GtkScrollbarClass   GtkScrollbarClass;
-
-struct _GtkScrollbar
-{
-  GtkWidget parent_instance;
-};
-
-struct _GtkScrollbarClass
-{
-  GtkWidgetClass parent_class;
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 
 GDK_AVAILABLE_IN_ALL

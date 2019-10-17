@@ -53,11 +53,11 @@ clicked_icon (GtkTreeView  *tv,
 }
 
 static void
-release_event (GtkGestureMultiPress *gesture,
-               guint                 n_press,
-               gdouble               x,
-               gdouble               y,
-               GtkTreeView          *tv)
+release_event (GtkGestureClick *gesture,
+               guint            n_press,
+               gdouble          x,
+               gdouble          y,
+               GtkTreeView     *tv)
 {
   GtkTreePath *path;
   gint tx, ty;
@@ -129,7 +129,7 @@ int main (int argc, char *argv[])
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (tv), GTK_TREE_MODEL (store));
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_CAPTURE);
   g_signal_connect (gesture, "released",

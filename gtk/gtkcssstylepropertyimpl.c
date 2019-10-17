@@ -159,13 +159,16 @@ font_family_parse_one (GtkCssParser *parser)
 {
   char *name;
 
-  name = _gtk_css_parser_try_ident (parser, TRUE);
-  if (name)
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
     {
-      GString *string = g_string_new (name);
+      GString *string = g_string_new (NULL);
+
+      name = gtk_css_parser_consume_ident (parser);
+      g_string_append (string, name);
       g_free (name);
-      while ((name = _gtk_css_parser_try_ident (parser, TRUE)))
+      while (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
         {
+          name = gtk_css_parser_consume_ident (parser);
           g_string_append_c (string, ' ');
           g_string_append (string, name);
           g_free (name);
@@ -174,7 +177,7 @@ font_family_parse_one (GtkCssParser *parser)
     }
   else 
     {
-      name = _gtk_css_parser_read_string (parser);
+      name = gtk_css_parser_consume_string (parser);
       if (name == NULL)
         return NULL;
     }
@@ -224,7 +227,7 @@ font_style_parse (GtkCssStyleProperty *property,
   GtkCssValue *value = _gtk_css_font_style_value_try_parse (parser);
   
   if (value == NULL)
-    _gtk_css_parser_error (parser, "unknown value for property");
+    gtk_css_parser_error_syntax (parser, "unknown font style value");
 
   return value;
 }
@@ -242,10 +245,22 @@ static GtkCssValue *
 font_weight_parse (GtkCssStyleProperty *property,
                    GtkCssParser        *parser)
 {
-  GtkCssValue *value = _gtk_css_font_weight_value_try_parse (parser);
+  GtkCssValue *value;
   
+  value = gtk_css_font_weight_value_try_parse (parser);
   if (value == NULL)
-    _gtk_css_parser_error (parser, "unknown value for property");
+    {
+      value = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_POSITIVE_ONLY);
+      if (value == NULL)
+        return NULL;
+
+      if (_gtk_css_number_value_get (value, 100) < 1 || 
+          _gtk_css_number_value_get (value, 100) > 1000)
+        {
+          gtk_css_parser_error_value (parser, "Font weight values must be between 1 and 1000");
+          g_clear_pointer (&value, gtk_css_value_unref);
+        }
+    }
 
   return value;
 }
@@ -256,7 +271,7 @@ font_weight_query (GtkCssStyleProperty *property,
                    GValue              *value)
 {
   g_value_init (value, PANGO_TYPE_WEIGHT);
-  g_value_set_enum (value, _gtk_css_font_weight_value_get (css_value));
+  g_value_set_enum (value, _gtk_css_number_value_get (css_value, 100));
 }
 
 static GtkCssValue *
@@ -266,7 +281,7 @@ font_stretch_parse (GtkCssStyleProperty *property,
   GtkCssValue *value = _gtk_css_font_stretch_value_try_parse (parser);
 
   if (value == NULL)
-    _gtk_css_parser_error (parser, "unknown value for property");
+    gtk_css_parser_error_syntax (parser, "unknown font stretch value");
 
   return value;
 }
@@ -287,7 +302,7 @@ parse_border_style (GtkCssStyleProperty *property,
   GtkCssValue *value = _gtk_css_border_style_value_try_parse (parser);
   
   if (value == NULL)
-    _gtk_css_parser_error (parser, "unknown value for property");
+    gtk_css_parser_error_syntax (parser, "unknown border style value");
 
   return value;
 }
@@ -307,7 +322,7 @@ parse_css_area_one (GtkCssParser *parser)
   GtkCssValue *value = _gtk_css_area_value_try_parse (parser);
   
   if (value == NULL)
-    _gtk_css_parser_error (parser, "unknown value for property");
+    gtk_css_parser_error_syntax (parser, "unknown box value");
 
   return value;
 }
@@ -325,7 +340,7 @@ parse_one_css_direction (GtkCssParser *parser)
   GtkCssValue *value = _gtk_css_direction_value_try_parse (parser);
   
   if (value == NULL)
-    _gtk_css_parser_error (parser, "unknown value for property");
+    gtk_css_parser_error_syntax (parser, "unknown direction value");
 
   return value;
 }
@@ -360,7 +375,7 @@ parse_one_css_play_state (GtkCssParser *parser)
   GtkCssValue *value = _gtk_css_play_state_value_try_parse (parser);
   
   if (value == NULL)
-    _gtk_css_parser_error (parser, "unknown value for property");
+    gtk_css_parser_error_syntax (parser, "unknown play state value");
 
   return value;
 }
@@ -378,7 +393,7 @@ parse_one_css_fill_mode (GtkCssParser *parser)
   GtkCssValue *value = _gtk_css_fill_mode_value_try_parse (parser);
   
   if (value == NULL)
-    _gtk_css_parser_error (parser, "unknown value for property");
+    gtk_css_parser_error_syntax (parser, "unknown fill mode value");
 
   return value;
 }
@@ -414,78 +429,9 @@ icon_style_parse (GtkCssStyleProperty *property,
   GtkCssValue *value = _gtk_css_icon_style_value_try_parse (parser);
 
   if (value == NULL)
-    _gtk_css_parser_error (parser, "unknown value for property");
+    gtk_css_parser_error_syntax (parser, "unknown icon style value");
 
   return value;
-}
-
-static GtkCssValue *
-bindings_value_parse_one (GtkCssParser *parser)
-{
-  char *name;
-
-  name = _gtk_css_parser_try_ident (parser, TRUE);
-  if (name == NULL)
-    {
-      _gtk_css_parser_error (parser, "Not a valid binding name");
-      return NULL;
-    }
-
-  if (g_ascii_strcasecmp (name, "none") == 0)
-    {
-      name = NULL;
-    }
-  else if (!gtk_binding_set_find (name))
-    {
-      _gtk_css_parser_error (parser, "No binding set named '%s'", name);
-      g_free (name);
-      return NULL;
-    }
-
-  return _gtk_css_string_value_new_take (name);
-}
-
-static GtkCssValue *
-bindings_value_parse (GtkCssStyleProperty *property,
-                      GtkCssParser        *parser)
-{
-  return _gtk_css_array_value_parse (parser, bindings_value_parse_one);
-}
-
-static void
-bindings_value_query (GtkCssStyleProperty *property,
-                      const GtkCssValue   *css_value,
-                      GValue              *value)
-{
-  GPtrArray *array;
-  guint i;
-
-  g_value_init (value, G_TYPE_PTR_ARRAY);
-
-  if (_gtk_css_array_value_get_n_values (css_value) == 0)
-    return;
-
-  array = NULL;
-
-  for (i = 0; i < _gtk_css_array_value_get_n_values (css_value); i++)
-    {
-      const char *name;
-      GtkBindingSet *binding_set;
-      
-      name = _gtk_css_string_value_get (_gtk_css_array_value_get_nth (css_value, i));
-      if (name == NULL)
-        continue;
-
-      binding_set = gtk_binding_set_find (name);
-      if (binding_set == NULL)
-        continue;
-      
-      if (array == NULL)
-        array = g_ptr_array_new ();
-      g_ptr_array_add (array, binding_set);
-    }
-
-  g_value_take_boxed (value, array);
 }
 
 static GtkCssValue *
@@ -502,7 +448,7 @@ parse_text_decoration_line (GtkCssStyleProperty *property,
   GtkCssValue *value = _gtk_css_text_decoration_line_value_try_parse (parser);
 
   if (value == NULL)
-    _gtk_css_parser_error (parser, "unknown value for property");
+    gtk_css_parser_error_syntax (parser, "unknown text decoration line value");
 
   return value;
 }
@@ -514,7 +460,7 @@ parse_text_decoration_style (GtkCssStyleProperty *property,
   GtkCssValue *value = _gtk_css_text_decoration_style_value_try_parse (parser);
 
   if (value == NULL)
-    _gtk_css_parser_error (parser, "unknown value for property");
+    gtk_css_parser_error_syntax (parser, "unknown text decoration style value");
 
   return value;
 }
@@ -526,7 +472,7 @@ parse_font_kerning (GtkCssStyleProperty *property,
   GtkCssValue *value = _gtk_css_font_kerning_value_try_parse (parser);
 
   if (value == NULL)
-    _gtk_css_parser_error (parser, "unknown value for property");
+    gtk_css_parser_error_syntax (parser, "unknown font kerning value");
 
   return value;
 }
@@ -534,10 +480,10 @@ parse_font_kerning (GtkCssStyleProperty *property,
 static gboolean
 value_is_done_parsing (GtkCssParser *parser)
 {
-  return _gtk_css_parser_is_eof (parser) ||
-         _gtk_css_parser_begins_with (parser, ',') ||
-         _gtk_css_parser_begins_with (parser, ';') ||
-         _gtk_css_parser_begins_with (parser, '}');
+  return gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) ||
+         gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA) ||
+         gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SEMICOLON) ||
+         gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_CLOSE_CURLY);
 }
 
 static GtkCssValue *
@@ -554,7 +500,7 @@ parse_font_variant_ligatures (GtkCssStyleProperty *property,
     parsed = _gtk_css_font_variant_ligature_try_parse_one (parser, ligatures);
     if (parsed == 0 || parsed == ligatures)
       {
-        _gtk_css_parser_error (parser, "Not a valid value");
+        gtk_css_parser_error_syntax (parser, "Not a valid value");
         return NULL;
       }
     ligatures = parsed;
@@ -562,7 +508,7 @@ parse_font_variant_ligatures (GtkCssStyleProperty *property,
 
   value = _gtk_css_font_variant_ligature_value_new (ligatures);
   if (value == NULL)
-    _gtk_css_parser_error (parser, "Invalid combination of values");
+    gtk_css_parser_error_syntax (parser, "Invalid combination of values");
 
   return value;
 }
@@ -574,7 +520,7 @@ parse_font_variant_position (GtkCssStyleProperty *property,
   GtkCssValue *value = _gtk_css_font_variant_position_value_try_parse (parser);
 
   if (value == NULL)
-    _gtk_css_parser_error (parser, "unknown value for property");
+    gtk_css_parser_error_syntax (parser, "unknown font variant position value");
 
   return value;
 }
@@ -586,7 +532,7 @@ parse_font_variant_caps (GtkCssStyleProperty *property,
   GtkCssValue *value = _gtk_css_font_variant_caps_value_try_parse (parser);
 
   if (value == NULL)
-    _gtk_css_parser_error (parser, "unknown value for property");
+    gtk_css_parser_error_syntax (parser, "unknown font variant caps value");
 
   return value;
 }
@@ -605,7 +551,7 @@ parse_font_variant_numeric (GtkCssStyleProperty *property,
     parsed = _gtk_css_font_variant_numeric_try_parse_one (parser, numeric);
     if (parsed == 0 || parsed == numeric)
       {
-        _gtk_css_parser_error (parser, "Not a valid value");
+        gtk_css_parser_error_syntax (parser, "Not a valid value");
         return NULL;
       }
     numeric = parsed;
@@ -613,7 +559,7 @@ parse_font_variant_numeric (GtkCssStyleProperty *property,
 
   value = _gtk_css_font_variant_numeric_value_new (numeric);
   if (value == NULL)
-    _gtk_css_parser_error (parser, "Invalid combination of values");
+    gtk_css_parser_error_syntax (parser, "Invalid combination of values");
 
   return value;
 }
@@ -625,7 +571,7 @@ parse_font_variant_alternates (GtkCssStyleProperty *property,
   GtkCssValue *value = _gtk_css_font_variant_alternate_value_try_parse (parser);
 
   if (value == NULL)
-    _gtk_css_parser_error (parser, "unknown value for property");
+    gtk_css_parser_error_syntax (parser, "unknown font variant alternate value");
 
   return value;
 }
@@ -644,7 +590,7 @@ parse_font_variant_east_asian (GtkCssStyleProperty *property,
     parsed = _gtk_css_font_variant_east_asian_try_parse_one (parser, east_asian);
     if (parsed == 0 || parsed == east_asian)
       {
-        _gtk_css_parser_error (parser, "Not a valid value");
+        gtk_css_parser_error_syntax (parser, "Not a valid value");
         return NULL;
       }
     east_asian = parsed;
@@ -652,7 +598,7 @@ parse_font_variant_east_asian (GtkCssStyleProperty *property,
 
   value = _gtk_css_font_variant_east_asian_value_new (east_asian);
   if (value == NULL)
-    _gtk_css_parser_error (parser, "Invalid combination of values");
+    gtk_css_parser_error_syntax (parser, "Invalid combination of values");
 
   return value;
 }
@@ -719,7 +665,7 @@ css_image_value_parse (GtkCssStyleProperty *property,
 {
   GtkCssImage *image;
 
-  if (_gtk_css_parser_try (parser, "none", TRUE))
+  if (gtk_css_parser_try_ident (parser, "none"))
     image = NULL;
   else
     {
@@ -735,7 +681,7 @@ static GtkCssValue *
 css_image_value_parse_with_builtin (GtkCssStyleProperty *property,
                                     GtkCssParser        *parser)
 {
-  if (_gtk_css_parser_try (parser, "builtin", TRUE))
+  if (gtk_css_parser_try_ident (parser, "builtin"))
     return _gtk_css_image_value_new (gtk_css_image_builtin_new ());
 
   return css_image_value_parse (property, parser);
@@ -799,7 +745,7 @@ border_image_repeat_parse (GtkCssStyleProperty *property,
 
   if (value == NULL)
     {
-      _gtk_css_parser_error (parser, "Not a valid value");
+      gtk_css_parser_error_syntax (parser, "Not a valid border repeat value");
       return NULL;
     }
 
@@ -849,7 +795,7 @@ transition_property_parse_one (GtkCssParser *parser)
 
   if (value == NULL)
     {
-      _gtk_css_parser_error (parser, "Expected an identifier");
+      gtk_css_parser_error_syntax (parser, "Expected an identifier");
       return NULL;
     }
 
@@ -886,7 +832,7 @@ transition_timing_function_parse (GtkCssStyleProperty *property,
 static GtkCssValue *
 iteration_count_parse_one (GtkCssParser *parser)
 {
-  if (_gtk_css_parser_try (parser, "infinite", TRUE))
+  if (gtk_css_parser_try_ident (parser, "infinite"))
     return _gtk_css_number_value_new (HUGE_VAL, GTK_CSS_NUMBER);
 
   return _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_POSITIVE_ONLY);
@@ -931,7 +877,7 @@ blend_mode_value_parse_one (GtkCssParser        *parser)
   GtkCssValue *value = _gtk_css_blend_mode_value_try_parse (parser);
 
   if (value == NULL)
-    _gtk_css_parser_error (parser, "unknown value for property");
+    gtk_css_parser_error_syntax (parser, "Unknown blend mode value");
 
   return value;
 }
@@ -950,7 +896,7 @@ background_repeat_value_parse_one (GtkCssParser *parser)
 
   if (value == NULL)
     {
-      _gtk_css_parser_error (parser, "Not a valid value");
+      gtk_css_parser_error_syntax (parser, "Unknown repeat value");
       return NULL;
     }
 
@@ -1001,7 +947,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_CONTENT | GTK_CSS_AFFECTS_SYMBOLIC_ICON,
                                           color_parse,
                                           color_query,
-                                          _gtk_css_color_value_new_rgba (1, 1, 1, 1));
+                                          _gtk_css_rgba_value_new_white ());
   gtk_css_style_property_register        ("-gtk-dpi",
                                           GTK_CSS_PROPERTY_DPI,
                                           G_TYPE_NONE,
@@ -1045,7 +991,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_BACKGROUND,
                                           color_parse,
                                           color_query,
-                                          _gtk_css_color_value_new_rgba (0, 0, 0, 0));
+                                          _gtk_css_rgba_value_new_transparent ());
 
   gtk_css_style_property_register        ("font-family",
                                           GTK_CSS_PROPERTY_FONT_FAMILY,
@@ -1070,7 +1016,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_TEXT_SIZE,
                                           font_weight_parse,
                                           font_weight_query,
-                                          _gtk_css_font_weight_value_new (PANGO_WEIGHT_NORMAL));
+                                          _gtk_css_number_value_new (PANGO_WEIGHT_NORMAL, GTK_CSS_NUMBER));
   gtk_css_style_property_register        ("font-stretch",
                                           GTK_CSS_PROPERTY_FONT_STRETCH,
                                           PANGO_TYPE_STRETCH,
@@ -1084,7 +1030,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_LETTER_SPACING,
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS | GTK_CSS_AFFECTS_TEXT_SIZE,
                                           parse_letter_spacing,
                                           NULL,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
@@ -1117,7 +1063,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_FONT_KERNING,
                                           G_TYPE_NONE,
                                           0,
-                                          GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS | GTK_CSS_AFFECTS_TEXT_SIZE,
                                           parse_font_kerning,
                                           NULL,
                                           _gtk_css_font_kerning_value_new (GTK_CSS_FONT_KERNING_AUTO));
@@ -1609,7 +1555,6 @@ _gtk_css_style_property_init_properties (void)
                                           filter_value_parse,
                                           NULL,
                                           gtk_css_filter_value_new_none ());
-
   gtk_css_style_property_register        ("border-spacing",
                                           GTK_CSS_PROPERTY_BORDER_SPACING,
                                           G_TYPE_NONE,
@@ -1620,6 +1565,14 @@ _gtk_css_style_property_init_properties (void)
                                           _gtk_css_position_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
                                                                        _gtk_css_number_value_new (0, GTK_CSS_PX)));
 
+  gtk_css_style_property_register        ("transform",
+                                          GTK_CSS_PROPERTY_TRANSFORM,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_TRANSFORM,
+                                          transform_value_parse,
+                                          NULL,
+                                          _gtk_css_transform_value_new_none ());
   gtk_css_style_property_register        ("min-width",
                                           GTK_CSS_PROPERTY_MIN_WIDTH,
                                           G_TYPE_INT,
@@ -1753,16 +1706,6 @@ _gtk_css_style_property_init_properties (void)
                                           filter_value_parse,
                                           NULL,
                                           gtk_css_filter_value_new_none ());
-
-  /* Private property holding the binding sets */
-  gtk_css_style_property_register        ("-gtk-key-bindings",
-                                          GTK_CSS_PROPERTY_GTK_KEY_BINDINGS,
-                                          G_TYPE_PTR_ARRAY,
-                                          0,
-                                          0,
-                                          bindings_value_parse,
-                                          bindings_value_query,
-                                          _gtk_css_array_value_new (_gtk_css_string_value_new (NULL)));
 
   gtk_css_style_property_register        ("caret-color",
                                           GTK_CSS_PROPERTY_CARET_COLOR,

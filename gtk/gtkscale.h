@@ -44,7 +44,6 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkScale              GtkScale;
-typedef struct _GtkScalePrivate       GtkScalePrivate;
 typedef struct _GtkScaleClass         GtkScaleClass;
 
 struct _GtkScale
@@ -56,19 +55,29 @@ struct _GtkScaleClass
 {
   GtkRangeClass parent_class;
 
-  gchar* (* format_value) (GtkScale *scale,
-                           gdouble   value);
-
   void (* get_layout_offsets) (GtkScale *scale,
                                gint     *x,
                                gint     *y);
 
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
+  /*< private >*/
+
+  gpointer padding[8];
 };
+
+
+/**
+ * GtkScaleFormatValueFunc:
+ * @scale: The #GtkScale
+ * @value: The numeric value to format
+ * @user_data: (closure): user data
+ *
+ * Returns: (not nullable): A newly allocated string describing a textual representation
+ *   of the given numerical value.
+ */
+typedef char * (*GtkScaleFormatValueFunc) (GtkScale *scale,
+                                           double    value,
+                                           gpointer  user_data);
+
 
 GDK_AVAILABLE_IN_ALL
 GType             gtk_scale_get_type           (void) G_GNUC_CONST;
@@ -116,6 +125,11 @@ void              gtk_scale_add_mark           (GtkScale        *scale,
 GDK_AVAILABLE_IN_ALL
 void              gtk_scale_clear_marks        (GtkScale        *scale);
 
+GDK_AVAILABLE_IN_ALL
+void              gtk_scale_set_format_value_func (GtkScale                *scale,
+                                                   GtkScaleFormatValueFunc  func,
+                                                   gpointer                 user_data,
+                                                   GDestroyNotify           destroy_notify);
 
 G_END_DECLS
 

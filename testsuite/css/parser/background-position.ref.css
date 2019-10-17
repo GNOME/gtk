@@ -109,9 +109,11 @@ db {
 }
 
 eb {
+  background-position: left;
 }
 
 fb {
+  background-position: right;
 }
 
 gb {

@@ -12,7 +12,7 @@
 #include <string.h>
 
 #define HEART "♥"
-const char text[] = "I ♥ GTK+";
+const char text[] = "I ♥ GTK";
 
 static void
 fancy_shape_renderer (cairo_t        *cr,

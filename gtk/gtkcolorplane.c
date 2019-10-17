@@ -72,7 +72,6 @@ plane_snapshot (GtkWidget   *widget,
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
   gint x, y;
   gint width, height;
-  cairo_t *cr;
 
   sv_to_xy (plane, &x, &y);
   width = gtk_widget_get_width (widget);
@@ -81,33 +80,34 @@ plane_snapshot (GtkWidget   *widget,
   gtk_snapshot_append_texture (snapshot,
                                plane->priv->texture,
                                &GRAPHENE_RECT_INIT (0, 0, width, height));
-  cr = gtk_snapshot_append_cairo (snapshot,
-                                  &GRAPHENE_RECT_INIT (0, 0, width, height));
-
-  cairo_move_to (cr, 0,     y + 0.5);
-  cairo_line_to (cr, width, y + 0.5);
-
-  cairo_move_to (cr, x + 0.5, 0);
-  cairo_line_to (cr, x + 0.5, height);
-
   if (gtk_widget_has_visible_focus (widget))
     {
-      cairo_set_line_width (cr, 3.0);
-      cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 0.6);
-      cairo_stroke_preserve (cr);
+      const GdkRGBA c1 = { 1.0, 1.0, 1.0, 0.6 };
+      const GdkRGBA c2 = { 0.0, 0.0, 0.0, 0.8 };
 
-      cairo_set_line_width (cr, 1.0);
-      cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 0.8);
-      cairo_stroke (cr);
+      /* Crosshair border */
+      gtk_snapshot_append_color (snapshot, &c1,
+                                 &GRAPHENE_RECT_INIT (0, y - 1.5, width, 3));
+      gtk_snapshot_append_color (snapshot, &c1,
+                                 &GRAPHENE_RECT_INIT (x - 1.5, 0, 3, height));
+
+      /* Actual crosshair */
+      gtk_snapshot_append_color (snapshot, &c2,
+                                 &GRAPHENE_RECT_INIT (0, y - 0.5, width, 1));
+      gtk_snapshot_append_color (snapshot, &c2,
+                                 &GRAPHENE_RECT_INIT (x - 0.5, 0, 1, height));
     }
   else
     {
-      cairo_set_line_width (cr, 1.0);
-      cairo_set_source_rgba (cr, 0.8, 0.8, 0.8, 0.8);
-      cairo_stroke (cr);
-    }
+      const GdkRGBA c = { 0.8, 0.8, 0.8, 0.8 };
 
-  cairo_destroy (cr);
+      /* Horizontal */
+      gtk_snapshot_append_color (snapshot, &c,
+                                 &GRAPHENE_RECT_INIT (0, y - 0.5, width, 1));
+      /* Vertical */
+      gtk_snapshot_append_color (snapshot, &c,
+                                 &GRAPHENE_RECT_INIT (x - 0.5, 0, 1, height));
+    }
 }
 
 static void
@@ -128,6 +128,9 @@ create_texture (GtkColorPlane *plane)
 
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
+
+  if (width == 0 || height == 0)
+    return;
 
   g_clear_object (&plane->priv->texture);
 
@@ -397,7 +400,6 @@ gtk_color_plane_init (GtkColorPlane *plane)
 
   plane->priv = gtk_color_plane_get_instance_private (plane);
 
-  gtk_widget_set_has_surface (GTK_WIDGET (plane), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (plane), TRUE);
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (plane));

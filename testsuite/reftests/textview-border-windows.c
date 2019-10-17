@@ -17,12 +17,23 @@
 
 #include <gtk/gtk.h>
 
+static void
+set_border_window_size (GtkTextView       *text_view,
+                        GtkTextWindowType  win,
+                        gint               size)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new (NULL);
+  gtk_widget_set_size_request (label, size, size);
+  gtk_text_view_set_gutter (text_view, win, label);
+}
 
 G_MODULE_EXPORT void
 add_border_windows (GtkTextView *text_view)
 {
-  gtk_text_view_set_border_window_size (text_view, GTK_TEXT_WINDOW_LEFT, 30);
-  gtk_text_view_set_border_window_size (text_view, GTK_TEXT_WINDOW_RIGHT, 30);
-  gtk_text_view_set_border_window_size (text_view, GTK_TEXT_WINDOW_TOP, 30);
-  gtk_text_view_set_border_window_size (text_view, GTK_TEXT_WINDOW_BOTTOM, 30);
+  set_border_window_size (text_view, GTK_TEXT_WINDOW_LEFT, 30);
+  set_border_window_size (text_view, GTK_TEXT_WINDOW_RIGHT, 30);
+  set_border_window_size (text_view, GTK_TEXT_WINDOW_TOP, 30);
+  set_border_window_size (text_view, GTK_TEXT_WINDOW_BOTTOM, 30);
 }

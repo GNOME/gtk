@@ -226,16 +226,16 @@ gtk_buildable_construct_child (GtkBuildable *buildable,
  *
  * This is called for each unknown element under <child>.
  * 
- * Returns: %TRUE if a object has a custom implementation, %FALSE
+ * Returns: %TRUE if an object has a custom implementation, %FALSE
  *          if it doesn't.
  **/
 gboolean
-gtk_buildable_custom_tag_start (GtkBuildable  *buildable,
-                                GtkBuilder    *builder,
-                                GObject       *child,
-                                const gchar   *tagname,
-                                GMarkupParser *parser,
-                                gpointer      *data)
+gtk_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                GtkBuilder         *builder,
+                                GObject            *child,
+                                const gchar        *tagname,
+                                GtkBuildableParser *parser,
+                                gpointer           *data)
 {
   GtkBuildableIface *iface;
 

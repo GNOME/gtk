@@ -1,3 +1,105 @@
+Overview of Changes in GTK+ 3.96.0
+==================================
+
+* DND has been refactored. There are now separate GdkDrag and GdkDrop
+  objects. This work is still incomplete
+
+* The GDK_SURFACE_SUBSURFACE surface type has been removed.
+
+* Use of child surfaces has been greatly reduced. This work is still
+  incomplete
+
+* The use of global coordinates in GDK apis has been reduced. This
+  work is still incomplete
+
+* Events have been simplified and are used just for input
+  - expose events have been replaced by a GdkSurface::render signal
+  - configure events have been replaced by a GdkSurface::size-changed signal
+  - map events have been replaced by a GdkSurface::mapped property
+  - gdk_event_handler_set has been replaced by a GdkSurface::event signal
+  - key events no longer contain a string
+  - events on unmapped widgets are ignored
+
+* Warping the pointer is no longer supported
+
+* The Wayland backend now uses the Settings portal for GtkSettings
+
+* The Wayland input module uses the text-input-unstable-v3 protocol
+
+* The Broadway backend has been rewritten to work well with GSK
+
+* The color chooser has a color picker
+
+* GtkApplication tracks screensaver state and has a ::query-end signal
+
+* The file chooser portal backend supports file filters
+
+* A number of list models have been introduced, for internal use
+  and as public api:
+  - GtkMapListModel
+  - GtkSliceListModel
+  - GtkSortListModel
+  - GtkSelectionModel
+  - GtkSingleSelection
+
+* Support for tabular menus and combo boxes has been dropped
+
+* Key themes are no longer supported
+
+* GtkInvisible has been dropped
+
+* A GtkRoot interface has been added that is currently implemented
+  just by GtkWindow. This work is incomplete
+
+* GtkWidgets can transform their children using projective linear
+  transformations. This functionality is available in CSS and
+  as GskTransform argument to gtk_widget_allocate. GtkFixed is
+  a container that exposes this functionality. For examples of this,
+  see the swing transition of GtkRevealer, the rotate transitions
+  of GtkStack or the Fixed Layout example in gtk-demo.
+
+* GtkEntry functionality has been moved into a new GtkText widget,
+  the GtkEditable interface has been expanded, and new a new
+  GtkPasswordEntry widget has been introduced.
+
+* Focus handling has been rewritten, and focus-change event
+  generation has been unified with crossing events.
+
+* All demos and settings schemas have been renamed to avoid collisions
+  with GTK3.
+
+* GtkWidget can now use a GtkLayoutManager for size allocation.
+  Layout managers can optionally use layout children holding layout
+  properties. A number of layout managers are available:
+  - GtkBinLayout
+  - GtkBoxLayout
+  - GtkGridLayout
+  - GtkFixedLayout
+  - GtkCustomLayout
+  More layout manager implementations will appear in the future.
+
+* GtkAssistant, GtkStack and GtkNotebook now have publicly
+  accessible page objects for their children. The page objects
+  are also exposed via a list model.
+
+* GtkContainer no longer supports child properties. All existing
+  child properties have been removed, converted to regular properties,
+  moved to layout properties or moved to child meta objects.
+
+* GtkListBox has gained a ::show-separators property that gets
+  translated into a CSS style class.
+
+* A number of X11-specific GtkWindow and GdkSurface apis have been
+  removed or changed to backend APIs.
+
+* GtkBuilder can specify object-valued properties inline.
+
+* The gtk4-builder-tool simplify command has gained a --3to4 option
+  to convert GTK3 ui files to GTK4.
+
+* The inspector can show child meta objects and layout properties.
+
+
 Overview of Changes in GTK+ 3.94.0
 ==================================
 

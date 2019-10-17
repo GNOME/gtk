@@ -5,14 +5,14 @@
 # Matic Žgur <mr.zgur@gmail.com>, 2006.
 # Martin Srebotnjak <miles@filmsi.net>, 2007.
 # Klemen Košir <klemen.kosir@gmx.com>, 2010–2011.
-# Matej Urbančič <mateju@svn.gnome.org>, 2007–2018.
+# Matej Urbančič <mateju@svn.gnome.org>, 2007–2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-24 08:13+0000\n"
-"PO-Revision-Date: 2018-10-25 20:49+0200\n"
+"POT-Creation-Date: 2019-09-28 11:46+0000\n"
+"PO-Revision-Date: 2019-09-28 18:10+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -22,55 +22,55 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
 msgid "Broadway display type not supported: %s"
 msgstr "Zaslon vrste Broadway ni podprt: %s"
 
-#: gdk/gdk.c:182
+#: gdk/gdk.c:187
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Napaka med razčlenjevanjem možnosti --gdk-debug"
 
-#: gdk/gdk.c:202
+#: gdk/gdk.c:207
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Napaka med razčlenjevanjem možnosti --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: gdk/gdk.c:231
+#: gdk/gdk.c:236
 msgid "Program class as used by the window manager"
 msgstr "Razred programa, kot ga uporablja upravljalnik oken"
 
 #. Placeholder in --class=CLASS in --help output
-#: gdk/gdk.c:232
+#: gdk/gdk.c:237
 msgid "CLASS"
 msgstr "RAZRED"
 
 #. Description of --name=NAME in --help output
-#: gdk/gdk.c:234
+#: gdk/gdk.c:239
 msgid "Program name as used by the window manager"
 msgstr "Ime programa, kot ga uporablja upravljalnik oken"
 
 #. Placeholder in --name=NAME in --help output
-#: gdk/gdk.c:235
+#: gdk/gdk.c:240
 msgid "NAME"
 msgstr "IME"
 
 #. Description of --display=DISPLAY in --help output
-#: gdk/gdk.c:238
+#: gdk/gdk.c:243
 msgid "X display to use"
-msgstr "Prikaz X, ki je uporabljen"
+msgstr "Prikaz X, ki naj bo uporabljen"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: gdk/gdk.c:239
+#: gdk/gdk.c:244
 msgid "DISPLAY"
 msgstr "PRIKAZ"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: gdk/gdk.c:243
+#: gdk/gdk.c:248
 msgid "GDK debugging flags to set"
 msgstr "Zastavice razhroščevanja GDK, ki naj bodo nastavljene"
 
@@ -78,20 +78,20 @@ msgstr "Zastavice razhroščevanja GDK, ki naj bodo nastavljene"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:244 gdk/gdk.c:247 gtk/gtkmain.c:471 gtk/gtkmain.c:474
+#: gdk/gdk.c:249 gdk/gdk.c:252 gtk/gtkmain.c:471 gtk/gtkmain.c:474
 msgid "FLAGS"
 msgstr "ZASTAVICE"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:246
+#: gdk/gdk.c:251
 msgid "GDK debugging flags to unset"
 msgstr "Zastavice rahroščevanja GDK, ki naj ne bodo nastavljene"
 
-#: gdk/gdkwindow.c:2829
+#: gdk/gdkwindow.c:2851
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Podpora GL je onemogočena prek GDK_DEBUG"
 
-#: gdk/gdkwindow.c:2840
+#: gdk/gdkwindow.c:2862
 msgid "The current backend does not support OpenGL"
 msgstr "Trenutno zagnan ozadnji program ne podpira OpenGL"
 
@@ -472,19 +472,16 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "V pripravljenost"
 
-#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:2226
-#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1177
-#: gdk/x11/gdkglcontext-x11.c:1277
-msgid "No GL implementation is available"
-msgstr "Okolje GL ni na voljo"
+#: gdk/quartz/gdkglcontext-quartz.c:122
+msgid "Unable to create a GL pixel format"
+msgstr "Ni mogoče ustvariti zapis sličice GL"
 
-#: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:208
+#: gdk/quartz/gdkglcontext-quartz.c:132 gdk/wayland/gdkglcontext-wayland.c:208
 #: gdk/win32/gdkglcontext-win32.c:1070 gdk/win32/gdkglcontext-win32.c:1110
 #: gdk/x11/gdkglcontext-x11.c:720 gdk/x11/gdkglcontext-x11.c:770
 msgid "Unable to create a GL context"
 msgstr "Ni mogoče ustvariti vsebine GL"
 
-#: gdk/mir/gdkmirwindowimpl.c:2188 gdk/mir/gdkmirwindowimpl.c:2198
 #: gdk/wayland/gdkglcontext-wayland.c:418
 #: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:908
 #: gdk/win32/gdkglcontext-win32.c:918 gdk/win32/gdkglcontext-win32.c:1035
@@ -492,13 +489,10 @@ msgstr "Ni mogoče ustvariti vsebine GL"
 msgid "No available configurations for the given pixel format"
 msgstr "Ni navedenih nastavitev za podan točkovni zapis"
 
-#: gdk/mir/gdkmirwindowimpl.c:2234
-msgid "3.2 core GL profile is not available on EGL implementation"
-msgstr "Profil jedra GL 3.2 ni na voljo v okolju EGL"
-
-#: gdk/quartz/gdkglcontext-quartz.c:37
-msgid "Not implemented on OS X"
-msgstr "Ni vprogramirano v OS X"
+#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1177
+#: gdk/x11/gdkglcontext-x11.c:1277
+msgid "No GL implementation is available"
+msgstr "Okolje GL ni na voljo"
 
 #: gdk/wayland/gdkglcontext-wayland.c:476
 msgid "Core GL is not available on EGL implementation"
@@ -506,15 +500,11 @@ msgstr "Jedrni GL ni na voljo v okolju EGL"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:56
-#, fuzzy
-#| msgid "Don’t batch GDI requests"
 msgid "Don't batch GDI requests"
 msgstr "Ne združuj zahtev GDI"
 
 #. Description of --no-wintab in --help output
 #: gdk/win32/gdkmain-win32.c:58
-#, fuzzy
-#| msgid "Don’t use the Wintab API for tablet support"
 msgid "Don't use the Wintab API for tablet support"
 msgstr "Ne uporabi vmesnika Wintab API kot podporo za tablične računalnike"
 
@@ -582,33 +572,33 @@ msgctxt "Action description"
 msgid "Clicks the button"
 msgstr "Klikne gumb"
 
-#: gtk/a11y/gtkcellaccessible.c:255
+#: gtk/a11y/gtkcellaccessible.c:257
 msgctxt "Action name"
 msgid "Expand or contract"
 msgstr "Razširi ali skrči"
 
-#: gtk/a11y/gtkcellaccessible.c:257
+#: gtk/a11y/gtkcellaccessible.c:259
 msgctxt "Action name"
 msgid "Edit"
 msgstr "Uredi"
 
-#: gtk/a11y/gtkcellaccessible.c:259 gtk/a11y/gtkcolorswatchaccessible.c:149
+#: gtk/a11y/gtkcellaccessible.c:261 gtk/a11y/gtkcolorswatchaccessible.c:149
 #: gtk/a11y/gtkentryaccessible.c:1557 gtk/a11y/gtkexpanderaccessible.c:281
 msgctxt "Action name"
 msgid "Activate"
 msgstr "Omogoči"
 
-#: gtk/a11y/gtkcellaccessible.c:272
+#: gtk/a11y/gtkcellaccessible.c:274
 msgctxt "Action description"
 msgid "Expands or contracts the row in the tree view containing this cell"
 msgstr "Razširi ali skrči vrstico s to celico v drevesnem pogledu"
 
-#: gtk/a11y/gtkcellaccessible.c:274
+#: gtk/a11y/gtkcellaccessible.c:276
 msgctxt "Action description"
 msgid "Creates a widget in which the contents of the cell can be edited"
 msgstr "Ustvari gradnik, v katerem je mogoče urejati vsebino te celice"
 
-#: gtk/a11y/gtkcellaccessible.c:276
+#: gtk/a11y/gtkcellaccessible.c:278
 msgctxt "Action description"
 msgid "Activates the cell"
 msgstr "Omogoči celico"
@@ -691,15 +681,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Zapri"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9253
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9306
 msgid "Minimize"
 msgstr "Skrči"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9262
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9315
 msgid "Maximize"
 msgstr "Razpni"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9219
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9272
 msgid "Restore"
 msgstr "Obnovi"
 
@@ -1240,13 +1230,13 @@ msgstr ""
 "in izberite »Shrani barvo«."
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
-#: gtk/gtkfilechoosernative.c:540 gtk/gtkfilechoosernative.c:632
-#: gtk/gtkfilechooserwidget.c:1475 gtk/gtkfilechooserwidget.c:6330
+#: gtk/gtkfilechoosernative.c:544 gtk/gtkfilechoosernative.c:636
+#: gtk/gtkfilechooserwidget.c:1494 gtk/gtkfilechooserwidget.c:6548
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
-#: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
-#: gtk/gtkprintbackend.c:781 gtk/gtkprinteroptionwidget.c:545
-#: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12722 gtk/inspector/css-editor.c:201
+#: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
+#: gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545
+#: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:747
+#: gtk/gtkwindow.c:12776 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1287,15 +1277,15 @@ msgstr "_Velikost:"
 #. create the text entry widget
 #: gtk/deprecated/gtkfontsel.c:577
 msgid "_Preview:"
-msgstr "_Predogled: "
+msgstr "_Predogled:"
 
-#: gtk/deprecated/gtkfontsel.c:1693 gtk/gtkpagesetupunixdialog.c:197
+#: gtk/deprecated/gtkfontsel.c:1693 gtk/gtkpagesetupunixdialog.c:198
 #: gtk/ui/gtkassistant.ui:50
 msgid "_Apply"
 msgstr "_Uveljavi"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:782 gtk/gtkwindow.c:12723
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12777
 msgid "_OK"
 msgstr "_V redu"
 
@@ -1457,9 +1447,9 @@ msgstr "Ni mogoče shraniti datoteke %s: %s\n"
 #: gtk/encodesymbolic.c:319
 #, c-format
 msgid "Can't close stream"
-msgstr "Ni mogoče zapreti pretoka."
+msgstr "Ni mogoče zapreti pretoka"
 
-#: gtk/gtkaboutdialog.c:114 gtk/ui/gtkaboutdialog.ui:206
+#: gtk/gtkaboutdialog.c:114 gtk/ui/gtkaboutdialog.ui:210
 msgid "License"
 msgstr "Dovoljenje"
 
@@ -1516,10 +1506,8 @@ msgid "GNU Affero General Public License, version 3 or later"
 msgstr "Splošno javno dovoljenje Affero GNU, različice 3 ali kasnejše"
 
 #: gtk/gtkaboutdialog.c:128
-#, fuzzy
-#| msgid "GNU General Public License, version 3 only"
 msgid "GNU Affero General Public License, version 3 only"
-msgstr "Splošno Javno dovoljenje GNU, le različice 3"
+msgstr "Splošno Javno dovoljenje GNU Affero, le različica 3"
 
 #: gtk/gtkaboutdialog.c:697
 msgid "C_redits"
@@ -1538,43 +1526,43 @@ msgstr "_Zapri"
 msgid "Could not show link"
 msgstr "Povezave ni mogoče pokazati"
 
-#: gtk/gtkaboutdialog.c:1035
+#: gtk/gtkaboutdialog.c:1037
 msgid "Website"
 msgstr "Spletišče"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
-#: gtk/gtkaboutdialog.c:1085 gtk/ui/gtkapplication-quartz.ui:7
+#: gtk/gtkaboutdialog.c:1087 gtk/ui/gtkapplication-quartz.ui:7
 #, c-format
 msgid "About %s"
 msgstr "O programu %s"
 
-#: gtk/gtkaboutdialog.c:2312
+#: gtk/gtkaboutdialog.c:2314
 msgid "Created by"
 msgstr "Ustvarili:"
 
-#: gtk/gtkaboutdialog.c:2315
+#: gtk/gtkaboutdialog.c:2317
 msgid "Documented by"
 msgstr "Dokumentacija:"
 
-#: gtk/gtkaboutdialog.c:2325
+#: gtk/gtkaboutdialog.c:2327
 msgid "Translated by"
 msgstr "Prevod:"
 
-#: gtk/gtkaboutdialog.c:2330
+#: gtk/gtkaboutdialog.c:2332
 msgid "Artwork by"
 msgstr "Grafična podoba:"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2490
+#: gtk/gtkaboutdialog.c:2494
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
 "See the <a href=\"%s\">%s</a> for details."
 msgstr ""
 "Ta program je objavljen brez vsakršnega jamstva. Več podrobnosti\n"
-"je zapisanih v datoteki <a href=»%s«>%s</a>"
+"je zapisanih v datoteki <a href=\"%s\">%s</a>."
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -1654,7 +1642,7 @@ msgstr "Leva poševnica"
 
 #: gtk/gtkappchooserbutton.c:295
 msgid "Other application…"
-msgstr "Drug program ..."
+msgstr "Drug program …"
 
 #: gtk/gtkappchooserdialog.c:204 gtk/gtkappchooserdialog.c:211
 #: gtk/gtkappchooserdialog.c:228 gtk/ui/gtkappchooserdialog.ui:5
@@ -1698,7 +1686,7 @@ msgstr "Privzeti program"
 #: gtk/gtkappchooserwidget.c:643
 #, c-format
 msgid "No applications found for “%s”."
-msgstr "Ni mogoče najti programa za »%s«"
+msgstr "Ni mogoče najti programa za »%s«."
 
 #: gtk/gtkappchooserwidget.c:726
 msgid "Recommended Applications"
@@ -1713,7 +1701,7 @@ msgid "Other Applications"
 msgstr "Drugi programi"
 
 #: gtk/gtkapplicationwindow.c:345 gtk/gtkprintoperation-unix.c:485
-#: gtk/gtkprintoperation-win32.c:1453 gtk/inspector/prop-editor.c:1686
+#: gtk/gtkprintoperation-win32.c:1495 gtk/inspector/prop-editor.c:1686
 msgid "Application"
 msgstr "Program"
 
@@ -1758,8 +1746,7 @@ msgid "Property %s::%s not found\n"
 msgstr "Lastnost %s::%s ne obstaja\n"
 
 #: gtk/gtk-builder-tool.c:136
-#, fuzzy, c-format
-#| msgid "Couldn’t parse value for %s::%s: %s\n"
+#, c-format
 msgid "Couldn't parse value for %s::%s: %s\n"
 msgstr "Ni mogoče razčleniti vrednosti za %s::%s: %s\n"
 
@@ -1768,7 +1755,7 @@ msgstr "Ni mogoče razčleniti vrednosti za %s::%s: %s\n"
 msgid "Can't parse file: %s\n"
 msgstr "Ni mogoče razčleniti datoteke: %s\n"
 
-#: gtk/gtk-builder-tool.c:1056
+#: gtk/gtk-builder-tool.c:1058
 #, c-format
 msgid ""
 "Usage:\n"
@@ -1908,7 +1895,7 @@ msgstr "Neveljavno"
 #.
 #: gtk/gtkcellrendereraccel.c:414 gtk/gtkcellrendereraccel.c:488
 msgid "New accelerator…"
-msgstr "Nov pospeševalnik ..."
+msgstr "Nov pospeševalnik …"
 
 #: gtk/gtkcellrendererprogress.c:377 gtk/gtkcellrendererprogress.c:470
 #, c-format
@@ -2162,15 +2149,15 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3336
+#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3337
 msgid "Manage Custom Sizes"
 msgstr "Upravljanje poljubnih velikosti"
 
-#: gtk/gtkcustompaperunixdialog.c:567 gtk/gtkpagesetupunixdialog.c:811
+#: gtk/gtkcustompaperunixdialog.c:567 gtk/gtkpagesetupunixdialog.c:814
 msgid "inch"
 msgstr "palec"
 
-#: gtk/gtkcustompaperunixdialog.c:569 gtk/gtkpagesetupunixdialog.c:809
+#: gtk/gtkcustompaperunixdialog.c:569 gtk/gtkpagesetupunixdialog.c:812
 msgid "mm"
 msgstr "mm"
 
@@ -2215,68 +2202,68 @@ msgstr "_Desno:"
 msgid "Paper Margins"
 msgstr "Robovi papirja"
 
-#: gtk/gtkentry.c:9582 gtk/gtklabel.c:6680 gtk/gtktextview.c:9492
+#: gtk/gtkentry.c:9583 gtk/gtklabel.c:6680 gtk/gtktextview.c:9502
 msgid "Cu_t"
 msgstr "Iz_reži"
 
-#: gtk/gtkentry.c:9586 gtk/gtklabel.c:6681 gtk/gtktextview.c:9496
+#: gtk/gtkentry.c:9587 gtk/gtklabel.c:6681 gtk/gtktextview.c:9506
 msgid "_Copy"
 msgstr "_Kopiraj"
 
-#: gtk/gtkentry.c:9590 gtk/gtklabel.c:6682 gtk/gtktextview.c:9498
+#: gtk/gtkentry.c:9591 gtk/gtklabel.c:6682 gtk/gtktextview.c:9508
 msgid "_Paste"
 msgstr "Pr_ilepi"
 
-#: gtk/gtkentry.c:9593 gtk/gtkfilechooserwidget.c:1476
-#: gtk/gtkfilechooserwidget.c:2276 gtk/gtklabel.c:6684 gtk/gtktextview.c:9501
+#: gtk/gtkentry.c:9594 gtk/gtkfilechooserwidget.c:1495
+#: gtk/gtkfilechooserwidget.c:2321 gtk/gtklabel.c:6684 gtk/gtktextview.c:9511
 msgid "_Delete"
 msgstr "_Izbriši"
 
-#: gtk/gtkentry.c:9604 gtk/gtklabel.c:6693 gtk/gtktextview.c:9515
+#: gtk/gtkentry.c:9605 gtk/gtklabel.c:6693 gtk/gtktextview.c:9525
 msgid "Select _All"
 msgstr "Izberi _vse"
 
-#: gtk/gtkentry.c:9614 gtk/gtktextview.c:9525
+#: gtk/gtkentry.c:9615 gtk/gtktextview.c:9535
 msgid "Insert _Emoji"
 msgstr "Vstavi izrazno _ikono"
 
-#: gtk/gtkentry.c:9790 gtk/gtktextview.c:9745
+#: gtk/gtkentry.c:9791 gtk/gtktextview.c:9755
 msgid "Select all"
 msgstr "Izberi vse"
 
-#: gtk/gtkentry.c:9793 gtk/gtktextview.c:9748
+#: gtk/gtkentry.c:9794 gtk/gtktextview.c:9758
 msgid "Cut"
 msgstr "Izreži"
 
-#: gtk/gtkentry.c:9796 gtk/gtktextview.c:9751
+#: gtk/gtkentry.c:9797 gtk/gtktextview.c:9761
 msgid "Copy"
 msgstr "Kopiraj"
 
-#: gtk/gtkentry.c:9799 gtk/gtktextview.c:9754
+#: gtk/gtkentry.c:9800 gtk/gtktextview.c:9764
 msgid "Paste"
 msgstr "Prilepi"
 
-#: gtk/gtkentry.c:10869
+#: gtk/gtkentry.c:10872
 msgid "Caps Lock is on"
 msgstr "Tipka Caps Lock je vključena"
 
-#: gtk/gtkentry.c:11144
+#: gtk/gtkentry.c:11147
 msgid "Insert Emoji"
 msgstr "Vstavi izrazno ikono"
 
-#: gtk/gtkfilechooserbutton.c:107
+#: gtk/gtkfilechooserbutton.c:112
 msgid "Select a File"
 msgstr "Izberite datoteko"
 
-#: gtk/gtkfilechooserbutton.c:108 gtk/gtkplacessidebar.c:1109
+#: gtk/gtkfilechooserbutton.c:113 gtk/gtkplacessidebar.c:1109
 msgid "Desktop"
 msgstr "Namizje"
 
-#: gtk/gtkfilechooserbutton.c:109 gtk/ui/gtkfilechooserbutton.ui:33
+#: gtk/gtkfilechooserbutton.c:114 gtk/ui/gtkfilechooserbutton.ui:33
 msgid "(None)"
 msgstr "(Brez)"
 
-#: gtk/gtkfilechooserbutton.c:2158
+#: gtk/gtkfilechooserbutton.c:2163
 msgid "Other…"
 msgstr "Drugo ..."
 
@@ -2285,17 +2272,17 @@ msgid "_Name"
 msgstr "_Ime"
 
 #. Open item is always present
-#: gtk/gtkfilechoosernative.c:541 gtk/gtkfilechoosernative.c:626
-#: gtk/gtkplacessidebar.c:3615 gtk/gtkplacessidebar.c:3683
-#: gtk/gtkplacesview.c:1633
+#: gtk/gtkfilechoosernative.c:545 gtk/gtkfilechoosernative.c:630
+#: gtk/gtkplacessidebar.c:3625 gtk/gtkplacessidebar.c:3693
+#: gtk/gtkplacesview.c:1682
 msgid "_Open"
 msgstr "_Odpri"
 
-#: gtk/gtkfilechoosernative.c:626 gtk/inspector/css-editor.c:202
+#: gtk/gtkfilechoosernative.c:630 gtk/inspector/css-editor.c:202
 msgid "_Save"
 msgstr "_Shrani"
 
-#: gtk/gtkfilechoosernativequartz.c:331 gtk/ui/gtkfilechooserwidget.ui:392
+#: gtk/gtkfilechoosernativequartz.c:332 gtk/ui/gtkfilechooserwidget.ui:404
 msgid "Select which types of files are shown"
 msgstr "Izberite, katere vrste datotek naj bodo prikazane"
 
@@ -2308,15 +2295,15 @@ msgstr "Izberite, katere vrste datotek naj bodo prikazane"
 msgid "%1$s on %2$s"
 msgstr "%1$s na %2$s"
 
-#: gtk/gtkfilechooserwidget.c:369
+#: gtk/gtkfilechooserwidget.c:383
 msgid "Type name of new folder"
 msgstr "Vnesite ime nove mape"
 
-#: gtk/gtkfilechooserwidget.c:788
+#: gtk/gtkfilechooserwidget.c:807
 msgid "The folder could not be created"
 msgstr "Mape ni mogoče ustvariti"
 
-#: gtk/gtkfilechooserwidget.c:801
+#: gtk/gtkfilechooserwidget.c:820
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2324,265 +2311,327 @@ msgstr ""
 "Mape ni mogoče ustvariti, saj že obstaja datoteka z enakim imenom. Uporabite "
 "drugo ime ali pa najprej preimenujte datoteko."
 
-#: gtk/gtkfilechooserwidget.c:816
+#: gtk/gtkfilechooserwidget.c:835
 msgid "You need to choose a valid filename."
 msgstr "Izbrati morate veljavno ime datoteke."
 
-#: gtk/gtkfilechooserwidget.c:819
+#: gtk/gtkfilechooserwidget.c:838
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Datoteke pod %s ni mogoče ustvariti, ker ni mapa"
 
-#: gtk/gtkfilechooserwidget.c:829
+#: gtk/gtkfilechooserwidget.c:848
 msgid "Cannot create file as the filename is too long"
 msgstr "Ni mogoče ustvariti datoteke s tako dolgim imenom"
 
-#: gtk/gtkfilechooserwidget.c:830
+#: gtk/gtkfilechooserwidget.c:849
 msgid "Try using a shorter name."
 msgstr "Poskusite znova s krajšim imenom datoteke."
 
-#: gtk/gtkfilechooserwidget.c:840
+#: gtk/gtkfilechooserwidget.c:859
 msgid "You may only select folders"
 msgstr "Izbrati je dovoljeno le mape."
 
-#: gtk/gtkfilechooserwidget.c:841
+#: gtk/gtkfilechooserwidget.c:860
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "Izbran predmet ni mapa. Izberite drug predmet."
 
-#: gtk/gtkfilechooserwidget.c:849
+#: gtk/gtkfilechooserwidget.c:868
 msgid "Invalid file name"
 msgstr "Neveljavno ime datoteke"
 
-#: gtk/gtkfilechooserwidget.c:858
+#: gtk/gtkfilechooserwidget.c:877
 msgid "The folder contents could not be displayed"
 msgstr "Vsebine mape ni mogoče prikazati"
 
-#: gtk/gtkfilechooserwidget.c:866
+#: gtk/gtkfilechooserwidget.c:885
 msgid "The file could not be deleted"
 msgstr "Datoteke ni mogoče izbrisati"
 
-#: gtk/gtkfilechooserwidget.c:874
+#: gtk/gtkfilechooserwidget.c:893
 msgid "The file could not be moved to the Trash"
 msgstr "Datoteke ni mogoče premakniti v smeti."
 
-#: gtk/gtkfilechooserwidget.c:1019
+#: gtk/gtkfilechooserwidget.c:1038
 msgid "A folder with that name already exists"
 msgstr "Mapa z enakim imenom že obstaja."
 
-#: gtk/gtkfilechooserwidget.c:1021
+#: gtk/gtkfilechooserwidget.c:1040
 msgid "A file with that name already exists"
 msgstr "Datoteka s tem imenom že obstaja."
 
-#: gtk/gtkfilechooserwidget.c:1056
+#: gtk/gtkfilechooserwidget.c:1075
 msgid "A folder cannot be called “.”"
 msgstr "Mapa ne sme biti poimenovana » .. «."
 
-#: gtk/gtkfilechooserwidget.c:1057
+#: gtk/gtkfilechooserwidget.c:1076
 msgid "A file cannot be called “.”"
 msgstr "Datoteka ne sme biti poimenovana » . «."
 
-#: gtk/gtkfilechooserwidget.c:1060
+#: gtk/gtkfilechooserwidget.c:1079
 msgid "A folder cannot be called “..”"
 msgstr "Mapa ne sme biti poimenovana » .. «."
 
-#: gtk/gtkfilechooserwidget.c:1061
+#: gtk/gtkfilechooserwidget.c:1080
 msgid "A file cannot be called “..”"
 msgstr "Datoteka ne sme biti poimenovana » .. «."
 
-#: gtk/gtkfilechooserwidget.c:1064
+#: gtk/gtkfilechooserwidget.c:1083
 msgid "Folder names cannot contain “/”"
 msgstr "Ime mape ne sme vsebovati poševnice » / «."
 
-#: gtk/gtkfilechooserwidget.c:1065
+#: gtk/gtkfilechooserwidget.c:1084
 msgid "File names cannot contain “/”"
 msgstr "Imena datotek ne smejo vsebovati poševnice » / «."
 
-#: gtk/gtkfilechooserwidget.c:1091
+#: gtk/gtkfilechooserwidget.c:1110
 msgid "Folder names should not begin with a space"
 msgstr "Ime mape se ne sme začeti s presledkom"
 
-#: gtk/gtkfilechooserwidget.c:1092
+#: gtk/gtkfilechooserwidget.c:1111
 msgid "File names should not begin with a space"
 msgstr "Ime datoteke se ne sme začeti s presledkom"
 
-#: gtk/gtkfilechooserwidget.c:1096
+#: gtk/gtkfilechooserwidget.c:1115
 msgid "Folder names should not end with a space"
 msgstr "Ime mape se ne sme končati s presledkom"
 
-#: gtk/gtkfilechooserwidget.c:1097
+#: gtk/gtkfilechooserwidget.c:1116
 msgid "File names should not end with a space"
 msgstr "Ime datoteke se ne sme končati s presledkom"
 
-#: gtk/gtkfilechooserwidget.c:1100
+#: gtk/gtkfilechooserwidget.c:1119
 msgid "Folder names starting with a “.” are hidden"
 msgstr "Ime mape, ki se začne  z » . « je skrita mapa"
 
-#: gtk/gtkfilechooserwidget.c:1101
+#: gtk/gtkfilechooserwidget.c:1120
 msgid "File names starting with a “.” are hidden"
 msgstr "Ime datoteke, ki se začne  z » . « je skrita datoteka"
 
-#: gtk/gtkfilechooserwidget.c:1471
+#: gtk/gtkfilechooserwidget.c:1490
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Ali ste prepričani, da želite trajno izbrisati »%s«?"
 
-#: gtk/gtkfilechooserwidget.c:1474
+#: gtk/gtkfilechooserwidget.c:1493
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "V primeru, da predmet izbrišete, bo trajno izgubljen."
 
-#: gtk/gtkfilechooserwidget.c:1608
+#: gtk/gtkfilechooserwidget.c:1630
 msgid "The file could not be renamed"
 msgstr "Datoteke ni mogoče preimenovati."
 
-#: gtk/gtkfilechooserwidget.c:1922
+#: gtk/gtkfilechooserwidget.c:1966
 msgid "Could not select file"
 msgstr "Datoteke ni mogoče izbrati"
 
-#: gtk/gtkfilechooserwidget.c:2271
+#: gtk/gtkfilechooserwidget.c:2316
 msgid "_Visit File"
 msgstr "O_bišči datoteko"
 
-#: gtk/gtkfilechooserwidget.c:2272
+#: gtk/gtkfilechooserwidget.c:2317
 msgid "_Open With File Manager"
 msgstr "Odpri z _upravljalnikom datotek"
 
-#: gtk/gtkfilechooserwidget.c:2273
+#: gtk/gtkfilechooserwidget.c:2318
 msgid "_Copy Location"
 msgstr "Kopiraj _mesto"
 
-#: gtk/gtkfilechooserwidget.c:2274
+#: gtk/gtkfilechooserwidget.c:2319
 msgid "_Add to Bookmarks"
 msgstr "_Dodaj med zaznamke"
 
-#: gtk/gtkfilechooserwidget.c:2275 gtk/gtkplacessidebar.c:2731
-#: gtk/ui/gtkfilechooserwidget.ui:526
+#: gtk/gtkfilechooserwidget.c:2320 gtk/gtkplacessidebar.c:2741
+#: gtk/ui/gtkfilechooserwidget.ui:538
 msgid "_Rename"
 msgstr "P_reimenuj"
 
-#: gtk/gtkfilechooserwidget.c:2277
+#: gtk/gtkfilechooserwidget.c:2322
 msgid "_Move to Trash"
 msgstr "Premakni v _smeti"
 
-#: gtk/gtkfilechooserwidget.c:2281
+#: gtk/gtkfilechooserwidget.c:2326
 msgid "Show _Hidden Files"
 msgstr "Pokaži _skrite datoteke"
 
-#: gtk/gtkfilechooserwidget.c:2282
+#: gtk/gtkfilechooserwidget.c:2327
 msgid "Show _Size Column"
 msgstr "Pokaži stolpec _velikosti"
 
-#: gtk/gtkfilechooserwidget.c:2283
+#: gtk/gtkfilechooserwidget.c:2328
+msgid "Show T_ype Column"
+msgstr "Pokaži stolpec _vrste"
+
+#: gtk/gtkfilechooserwidget.c:2329
 msgid "Show _Time"
 msgstr "Pokaži _čas"
 
-#: gtk/gtkfilechooserwidget.c:2284
+#: gtk/gtkfilechooserwidget.c:2330
 msgid "Sort _Folders before Files"
 msgstr "Razvrsti _mape pred datotekami"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2559 gtk/inspector/css-node-tree.ui:141
+#: gtk/gtkfilechooserwidget.c:2609 gtk/inspector/css-node-tree.ui:141
 #: gtk/ui/gtkfilechooserwidget.ui:207 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
 msgstr "Mesto"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2652
+#: gtk/gtkfilechooserwidget.c:2702
 msgid "_Name:"
 msgstr "_Ime:"
 
-#: gtk/gtkfilechooserwidget.c:3277 gtk/gtkfilechooserwidget.c:3291
+#: gtk/gtkfilechooserwidget.c:3327 gtk/gtkfilechooserwidget.c:3341
 #, c-format
 msgid "Searching in %s"
 msgstr "Iskanje v %s"
 
-#: gtk/gtkfilechooserwidget.c:3297
+#: gtk/gtkfilechooserwidget.c:3347
 msgid "Searching"
 msgstr "Poteka iskanje"
 
-#: gtk/gtkfilechooserwidget.c:3304
+#: gtk/gtkfilechooserwidget.c:3354
 msgid "Enter location"
 msgstr "Vpis mesta"
 
-#: gtk/gtkfilechooserwidget.c:3306
+#: gtk/gtkfilechooserwidget.c:3356
 msgid "Enter location or URL"
 msgstr "Vpišite mesto ali naslov URL"
 
-#: gtk/gtkfilechooserwidget.c:4340 gtk/gtkfilechooserwidget.c:7244
-#: gtk/ui/gtkfilechooserwidget.ui:235
+#: gtk/gtkfilechooserwidget.c:4432 gtk/gtkfilechooserwidget.c:7463
+#: gtk/ui/gtkfilechooserwidget.ui:247
 msgid "Modified"
 msgstr "Spremenjeno"
 
-#: gtk/gtkfilechooserwidget.c:4618
+#: gtk/gtkfilechooserwidget.c:4710
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Vsebine %s ni mogoče prebrati"
 
-#: gtk/gtkfilechooserwidget.c:4622
+#: gtk/gtkfilechooserwidget.c:4714
 msgid "Could not read the contents of the folder"
 msgstr "Vsebine mape ni mogoče prebrati"
 
-#: gtk/gtkfilechooserwidget.c:4752 gtk/gtkfilechooserwidget.c:4800
+#: gtk/gtkfilechooserwidget.c:4874 gtk/gtkfilechooserwidget.c:4922
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4754 gtk/gtkfilechooserwidget.c:4802
+#: gtk/gtkfilechooserwidget.c:4876 gtk/gtkfilechooserwidget.c:4924
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4758
+#: gtk/gtkfilechooserwidget.c:4880
 msgid "Yesterday"
 msgstr "Včeraj"
 
-#: gtk/gtkfilechooserwidget.c:4766
+#: gtk/gtkfilechooserwidget.c:4888
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:4770
+#: gtk/gtkfilechooserwidget.c:4892
 msgid "%-e %b %Y"
 msgstr "%-e %b %Y"
 
+#: gtk/gtkfilechooserwidget.c:4991 gtk/gtkfilechooserwidget.c:4999
+msgid "Program"
+msgstr "Program"
+
+#: gtk/gtkfilechooserwidget.c:4992
+msgid "Audio"
+msgstr "Zvok"
+
+#: gtk/gtkfilechooserwidget.c:4993 gtk/inspector/visual.ui:230
+#: gtk/ui/gtkfontbutton.ui:13
+msgid "Font"
+msgstr "Pisava"
+
+#: gtk/gtkfilechooserwidget.c:4994 gtk/inspector/visual.ui:488
+msgid "Image"
+msgstr "Slika"
+
+#: gtk/gtkfilechooserwidget.c:4995
+msgid "Archive"
+msgstr "Arhiv"
+
+#: gtk/gtkfilechooserwidget.c:4996
+msgid "Markup"
+msgstr "Oblikovanje besedila"
+
+#: gtk/gtkfilechooserwidget.c:4997 gtk/gtkfilechooserwidget.c:4998
+msgid "Text"
+msgstr "Besedilo"
+
+#: gtk/gtkfilechooserwidget.c:5000
+msgid "Video"
+msgstr "Video"
+
+#: gtk/gtkfilechooserwidget.c:5001
+msgid "Contacts"
+msgstr "Stiki"
+
+#: gtk/gtkfilechooserwidget.c:5002
+msgid "Calendar"
+msgstr "Koledar"
+
+#: gtk/gtkfilechooserwidget.c:5003
+msgid "Document"
+msgstr "Dokument"
+
+#: gtk/gtkfilechooserwidget.c:5004
+msgid "Presentation"
+msgstr "Predstavitev"
+
+#: gtk/gtkfilechooserwidget.c:5005
+msgid "Spreadsheet"
+msgstr "Preglednica"
+
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5005 gtk/inspector/prop-editor.c:1689
+#: gtk/gtkfilechooserwidget.c:5036 gtk/gtkfilechooserwidget.c:5219
+#: gtk/inspector/prop-editor.c:1689
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Neznano"
 
-#: gtk/gtkfilechooserwidget.c:5044 gtk/gtkplacessidebar.c:1094
+#: gtk/gtkfilechooserwidget.c:5258 gtk/gtkplacessidebar.c:1094
 msgid "Home"
 msgstr "Osebna mapa"
 
-#: gtk/gtkfilechooserwidget.c:5537
+#: gtk/gtkfilechooserwidget.c:5755
 msgid "Cannot change to folder because it is not local"
 msgstr "Mape ni mogoče spremeniti, ker ni krajevna"
 
-#: gtk/gtkfilechooserwidget.c:6323 gtk/gtkprintunixdialog.c:664
+#: gtk/gtkfilechooserwidget.c:6541 gtk/gtkprintunixdialog.c:665
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Datoteka z imenom »%s« že obstaja. Ali jo želite zamenjati?"
 
-#: gtk/gtkfilechooserwidget.c:6326 gtk/gtkprintunixdialog.c:668
+#: gtk/gtkfilechooserwidget.c:6544 gtk/gtkprintunixdialog.c:669
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "Datoteka že obstaja v »%s«. Z zamenjavo bo njena vsebina izgubljena."
 
-#: gtk/gtkfilechooserwidget.c:6331 gtk/gtkprintunixdialog.c:676
+#: gtk/gtkfilechooserwidget.c:6549 gtk/gtkprintunixdialog.c:677
 msgid "_Replace"
 msgstr "_Zamenjaj"
 
-#: gtk/gtkfilechooserwidget.c:6545
+#: gtk/gtkfilechooserwidget.c:6763
 msgid "You do not have access to the specified folder."
 msgstr "Ni ustreznih dovoljenj za dostop do navedene mape."
 
-#: gtk/gtkfilechooserwidget.c:7168
+#: gtk/gtkfilechooserwidget.c:7386
 msgid "Could not send the search request"
 msgstr "Zahteve po iskanju ni mogoče poslati"
 
-#: gtk/gtkfilechooserwidget.c:7454
+#: gtk/gtkfilechooserwidget.c:7674
 msgid "Accessed"
 msgstr "Dostopano"
+
+#: gtk/gtkfilechooserwidget.c:8793 gtk/ui/gtkfilechooserwidget.ui:69
+msgid "Create Folder"
+msgstr "Ustvari mapo"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
@@ -2601,7 +2650,7 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Izberite pisavo"
 
-#: gtk/gtkfontbutton.c:1393
+#: gtk/gtkfontbutton.c:1395
 msgctxt "font"
 msgid "None"
 msgstr "Brez"
@@ -2620,47 +2669,41 @@ msgstr "Ležeče"
 
 #: gtk/gtkfontchooserwidget.c:1526
 msgid "Slant"
-msgstr ""
+msgstr "Nagib"
 
 #: gtk/gtkfontchooserwidget.c:1527
 msgid "Optical Size"
-msgstr ""
+msgstr "Optična velikost"
 
 #: gtk/gtkfontchooserwidget.c:2064 gtk/inspector/prop-editor.c:1676
 msgid "Default"
 msgstr "Privzeto"
 
 #: gtk/gtkfontchooserwidget.c:2111
-#, fuzzy
-#| msgctxt "event phase"
-#| msgid "Capture"
 msgid "Ligatures"
-msgstr "Zajem"
+msgstr "Ligature"
 
 #: gtk/gtkfontchooserwidget.c:2112
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "US Letter Plus"
 msgid "Letter Case"
-msgstr "US Letter Plus"
+msgstr "Črke"
 
 #: gtk/gtkfontchooserwidget.c:2113
 msgid "Number Case"
-msgstr ""
+msgstr "Številke"
 
 #: gtk/gtkfontchooserwidget.c:2114
 msgid "Number Spacing"
-msgstr ""
+msgstr "Številski razmiki"
 
 #: gtk/gtkfontchooserwidget.c:2115
 msgid "Number Formatting"
-msgstr ""
+msgstr "Oblikovanje števil"
 
 #: gtk/gtkfontchooserwidget.c:2116
 msgid "Character Variants"
 msgstr "Različica znakov"
 
-#: gtk/gtkglarea.c:313
+#: gtk/gtkglarea.c:314
 msgid "OpenGL context creation failed"
 msgstr "Ustvarjanje vsebine OpenGL je spodletelo"
 
@@ -2668,16 +2711,16 @@ msgstr "Ustvarjanje vsebine OpenGL je spodletelo"
 msgid "Application menu"
 msgstr "Programski meni"
 
-#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9289
+#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9342
 msgid "Close"
 msgstr "Zapri"
 
-#: gtk/gtkicontheme.c:2341 gtk/gtkicontheme.c:2406
+#: gtk/gtkicontheme.c:2357 gtk/gtkicontheme.c:2422
 #, c-format
 msgid "Icon '%s' not present in theme %s"
 msgstr "Ikone »%s« v temi %s ni."
 
-#: gtk/gtkicontheme.c:4080 gtk/gtkicontheme.c:4447
+#: gtk/gtkicontheme.c:4096 gtk/gtkicontheme.c:4463
 msgid "Failed to load icon"
 msgstr "Ikone ni mogoče naložiti"
 
@@ -2702,19 +2745,19 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Sistem (%s)"
 
-#: gtk/gtkinfobar.c:1152 gtk/gtkmessagedialog.c:385
+#: gtk/gtkinfobar.c:1150 gtk/gtkmessagedialog.c:385
 msgid "Information"
 msgstr "Podrobnosti"
 
-#: gtk/gtkinfobar.c:1156 gtk/gtkmessagedialog.c:389
+#: gtk/gtkinfobar.c:1154 gtk/gtkmessagedialog.c:389
 msgid "Question"
 msgstr "Vprašanje"
 
-#: gtk/gtkinfobar.c:1160 gtk/gtkmessagedialog.c:393
+#: gtk/gtkinfobar.c:1158 gtk/gtkmessagedialog.c:393
 msgid "Warning"
 msgstr "Opozorilo"
 
-#: gtk/gtkinfobar.c:1164 gtk/gtkmessagedialog.c:397
+#: gtk/gtkinfobar.c:1162 gtk/gtkmessagedialog.c:397
 msgid "Error"
 msgstr "Napaka"
 
@@ -2728,17 +2771,17 @@ msgstr "_Odpri povezavo"
 msgid "Copy _Link Address"
 msgstr "Kopiraj _naslov povezave"
 
-#: gtk/gtk-launch.c:40
+#: gtk/gtk-launch.c:42
 msgid "Show program version"
 msgstr "Pokaži različico programa"
 
-#: gtk/gtk-launch.c:74
+#: gtk/gtk-launch.c:76
 msgid "APPLICATION [URI...] — launch an APPLICATION"
-msgstr "PROGRAM [NASLOV_URI ...] – zagon PROGRAMA"
+msgstr "PROGRAM [URI ...] – zagon PROGRAMA z naslovom URI"
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
-#: gtk/gtk-launch.c:78
+#: gtk/gtk-launch.c:80
 msgid ""
 "Launch an application (specified by its desktop file name),\n"
 "optionally passing one or more URIs as arguments."
@@ -2746,24 +2789,24 @@ msgstr ""
 "Zagon določenega programa z namizno datoteko podrobnosti\n"
 "z možnostjo podajanja naslovov URI kot argumentov."
 
-#: gtk/gtk-launch.c:90
+#: gtk/gtk-launch.c:92
 #, c-format
 msgid "Error parsing commandline options: %s\n"
 msgstr "Napaka med razčlenjevanjem možnosti ukazne vrstice: %s\n"
 
-#: gtk/gtk-launch.c:92 gtk/gtk-launch.c:113
+#: gtk/gtk-launch.c:94 gtk/gtk-launch.c:115
 #, c-format
 msgid "Try \"%s --help\" for more information."
 msgstr "Poskusite »%s --help« za več podrobnosti."
 
 #. Translators: the %s is the program name. This error message
 #. means the user is calling gtk-launch without any argument.
-#: gtk/gtk-launch.c:111
+#: gtk/gtk-launch.c:113
 #, c-format
 msgid "%s: missing application name"
 msgstr "%s: ime programa ni določeno"
 
-#: gtk/gtk-launch.c:140
+#: gtk/gtk-launch.c:144
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
 msgstr ""
@@ -2772,14 +2815,14 @@ msgstr ""
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
-#: gtk/gtk-launch.c:148
+#: gtk/gtk-launch.c:152
 #, c-format
 msgid "%s: no such application %s"
 msgstr "%s: programa %s ni"
 
 #. Translators: the first %s is the program name, the second one
 #. is the error message.
-#: gtk/gtk-launch.c:166
+#: gtk/gtk-launch.c:170
 #, c-format
 msgid "%s: error launching application: %s\n"
 msgstr "%s: napaka med zaganjanjem programa: %s\n"
@@ -2879,57 +2922,73 @@ msgstr "_Ne"
 msgid "_Yes"
 msgstr "_Da"
 
-#: gtk/gtkmountoperation.c:546
+#: gtk/gtkmountoperation.c:595
 msgid "Co_nnect"
 msgstr "_Poveži"
 
-#: gtk/gtkmountoperation.c:622
+#: gtk/gtkmountoperation.c:671
 msgid "Connect As"
 msgstr "Poveži kot"
 
-#: gtk/gtkmountoperation.c:631
+#: gtk/gtkmountoperation.c:680
 msgid "_Anonymous"
 msgstr "_Brezimno"
 
-#: gtk/gtkmountoperation.c:640
+#: gtk/gtkmountoperation.c:689
 msgid "Registered U_ser"
 msgstr "Vpisan _uporabnik"
 
-#: gtk/gtkmountoperation.c:651
+#: gtk/gtkmountoperation.c:700
 msgid "_Username"
 msgstr "_Uporabniško ime"
 
-#: gtk/gtkmountoperation.c:656
+#: gtk/gtkmountoperation.c:705
 msgid "_Domain"
 msgstr "_Domena"
 
-#: gtk/gtkmountoperation.c:662
+#: gtk/gtkmountoperation.c:714
+msgid "Volume type"
+msgstr "Vrsta nosilca"
+
+#: gtk/gtkmountoperation.c:724
+msgid "_Hidden"
+msgstr "_Skrito"
+
+#: gtk/gtkmountoperation.c:727
+msgid "_Windows system"
+msgstr "Sistem _Windows"
+
+#: gtk/gtkmountoperation.c:730
+msgid "_PIM"
+msgstr "_PIM"
+
+#: gtk/gtkmountoperation.c:736
 msgid "_Password"
 msgstr "_Geslo"
 
-#: gtk/gtkmountoperation.c:684
+#: gtk/gtkmountoperation.c:758
 msgid "Forget password _immediately"
 msgstr "_Takoj pozabi geslo"
 
-#: gtk/gtkmountoperation.c:694
+#: gtk/gtkmountoperation.c:768
 msgid "Remember password until you _logout"
 msgstr "Zapomni si geslo do _odjave"
 
-#: gtk/gtkmountoperation.c:704
+#: gtk/gtkmountoperation.c:778
 msgid "Remember _forever"
 msgstr "_Zapomni si za vedno"
 
-#: gtk/gtkmountoperation.c:1093
+#: gtk/gtkmountoperation.c:1173
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Neznan program (PID %d)"
 
-#: gtk/gtkmountoperation.c:1278
+#: gtk/gtkmountoperation.c:1358
 #, c-format
 msgid "Unable to end process"
 msgstr "Opravila ni mogoče končati"
 
-#: gtk/gtkmountoperation.c:1312
+#: gtk/gtkmountoperation.c:1392
 msgid "_End Process"
 msgstr "_Končaj opravilo"
 
@@ -2964,7 +3023,7 @@ msgstr "Lupina Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Opravila s PID %d ni mogoče končati: %s"
 
-#: gtk/gtknotebook.c:5123 gtk/gtknotebook.c:7401
+#: gtk/gtknotebook.c:5150 gtk/gtknotebook.c:7428
 #, c-format
 msgid "Page %u"
 msgstr "Stran %u"
@@ -2973,15 +3032,15 @@ msgstr "Stran %u"
 msgid "Not a valid page setup file"
 msgstr "Ni veljavna datoteka nastavitev strani"
 
-#: gtk/gtkpagesetupunixdialog.c:210
+#: gtk/gtkpagesetupunixdialog.c:211
 msgid "Any Printer"
 msgstr "Katerikoli tiskalnik"
 
-#: gtk/gtkpagesetupunixdialog.c:210
+#: gtk/gtkpagesetupunixdialog.c:211
 msgid "For portable documents"
 msgstr "Za prenosljive dokumente"
 
-#: gtk/gtkpagesetupunixdialog.c:829
+#: gtk/gtkpagesetupunixdialog.c:832
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2996,16 +3055,16 @@ msgstr ""
 " Zgoraj: %s %s\n"
 " Spodaj: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:878 gtk/gtkprintunixdialog.c:3390
+#: gtk/gtkpagesetupunixdialog.c:881 gtk/gtkprintunixdialog.c:3393
 msgid "Manage Custom Sizes…"
 msgstr "Upravljanje poljubnih velikosti ..."
 
-#: gtk/gtkpagesetupunixdialog.c:900 gtk/ui/gtkpagesetupunixdialog.ui:31
+#: gtk/gtkpagesetupunixdialog.c:903 gtk/ui/gtkpagesetupunixdialog.ui:31
 #: gtk/ui/gtkprintunixdialog.ui:854
 msgid "Page Setup"
 msgstr "Nastavitev strani"
 
-#: gtk/gtkpathbar.c:1572
+#: gtk/gtkpathbar.c:1571
 msgid "File System Root"
 msgstr "Koren datotečnega sistema"
 
@@ -3057,219 +3116,258 @@ msgid "Open the trash"
 msgstr "Odpri smeti"
 
 #: gtk/gtkplacessidebar.c:1248 gtk/gtkplacessidebar.c:1276
-#: gtk/gtkplacessidebar.c:1484
+#: gtk/gtkplacessidebar.c:1491
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Priklopi in odpri »%s«"
 
-#: gtk/gtkplacessidebar.c:1364
+#: gtk/gtkplacessidebar.c:1371
 msgid "Open the contents of the file system"
 msgstr "Odpri vsebino datotečnega sistema"
 
-#: gtk/gtkplacessidebar.c:1448
+#: gtk/gtkplacessidebar.c:1455
 msgid "New bookmark"
 msgstr "Nov zaznamek"
 
-#: gtk/gtkplacessidebar.c:1450
+#: gtk/gtkplacessidebar.c:1457
 msgid "Add a new bookmark"
 msgstr "Dodaj nov zaznamek"
 
-#: gtk/gtkplacessidebar.c:1463
+#: gtk/gtkplacessidebar.c:1470
 msgid "Connect to Server"
 msgstr "Poveži s strežnikom"
 
-#: gtk/gtkplacessidebar.c:1465
+#: gtk/gtkplacessidebar.c:1472
 msgid "Connect to a network server address"
 msgstr "Poveži z naslovom omrežnega strežnika"
 
-#: gtk/gtkplacessidebar.c:1527
+#: gtk/gtkplacessidebar.c:1534
 msgid "Other Locations"
 msgstr "Druga mesta"
 
-#: gtk/gtkplacessidebar.c:1528
+#: gtk/gtkplacessidebar.c:1535
 msgid "Show other locations"
 msgstr "Pokaži druga mesta"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2324 gtk/gtkplacessidebar.c:3703
+#: gtk/gtkplacessidebar.c:2334 gtk/gtkplacessidebar.c:3713
 msgid "_Start"
 msgstr "_Začni"
 
-#: gtk/gtkplacessidebar.c:2325 gtk/gtkplacessidebar.c:3704
+#: gtk/gtkplacessidebar.c:2335 gtk/gtkplacessidebar.c:3714
 msgid "_Stop"
 msgstr "_Zaustavi"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2332
+#: gtk/gtkplacessidebar.c:2342
 msgid "_Power On"
 msgstr "_Vklopi"
 
-#: gtk/gtkplacessidebar.c:2333
+#: gtk/gtkplacessidebar.c:2343
 msgid "_Safely Remove Drive"
 msgstr "_Varno odstrani pogon"
 
-#: gtk/gtkplacessidebar.c:2337
+#: gtk/gtkplacessidebar.c:2347
 msgid "_Connect Drive"
 msgstr "_Poveži pogon"
 
-#: gtk/gtkplacessidebar.c:2338
+#: gtk/gtkplacessidebar.c:2348
 msgid "_Disconnect Drive"
 msgstr "_Prekini povezavo s pogonom"
 
-#: gtk/gtkplacessidebar.c:2342
+#: gtk/gtkplacessidebar.c:2352
 msgid "_Start Multi-disk Device"
 msgstr "_Zaženi več-diskovno napravo"
 
-#: gtk/gtkplacessidebar.c:2343
+#: gtk/gtkplacessidebar.c:2353
 msgid "_Stop Multi-disk Device"
 msgstr "_Zaustavi več-diskovno napravo"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2348
+#: gtk/gtkplacessidebar.c:2358
 msgid "_Unlock Device"
 msgstr "_Odkleni napravo"
 
-#: gtk/gtkplacessidebar.c:2349
+#: gtk/gtkplacessidebar.c:2359
 msgid "_Lock Device"
 msgstr "_Zakleni napravo"
 
-#: gtk/gtkplacessidebar.c:2387 gtk/gtkplacessidebar.c:3384
+#: gtk/gtkplacessidebar.c:2397 gtk/gtkplacessidebar.c:3394
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Ni mogoče začeti »%s«"
 
-#: gtk/gtkplacessidebar.c:2420
+#: gtk/gtkplacessidebar.c:2430
 #, c-format
 msgid "Error unlocking “%s”"
 msgstr "Napaka odpiranja »%s«."
 
-#: gtk/gtkplacessidebar.c:2422
+#: gtk/gtkplacessidebar.c:2432
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Ni mogoč dostop do »%s«"
 
-#: gtk/gtkplacessidebar.c:2656
+#: gtk/gtkplacessidebar.c:2666
 msgid "This name is already taken"
 msgstr "To ime je že uporabljeno"
 
-#: gtk/gtkplacessidebar.c:2725 gtk/inspector/actions.ui:43
+#: gtk/gtkplacessidebar.c:2735 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
-#: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:500
+#: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:512
 msgid "Name"
 msgstr "Ime"
 
-#: gtk/gtkplacessidebar.c:2925
+#: gtk/gtkplacessidebar.c:2935
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Ni mogoče odstraniti »%s«"
 
-#: gtk/gtkplacessidebar.c:3101
+#: gtk/gtkplacessidebar.c:3111
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Ni mogoče zaustaviti »%s«"
 
-#: gtk/gtkplacessidebar.c:3130
+#: gtk/gtkplacessidebar.c:3140
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Ni mogoče izvreči »%s«"
 
-#: gtk/gtkplacessidebar.c:3159 gtk/gtkplacessidebar.c:3188
+#: gtk/gtkplacessidebar.c:3169 gtk/gtkplacessidebar.c:3198
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Ni mogoče izvreči %s"
 
-#: gtk/gtkplacessidebar.c:3336
+#: gtk/gtkplacessidebar.c:3346
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Ni mogoče preveriti »%s« za spremembe nosilca"
 
-#: gtk/gtkplacessidebar.c:3620 gtk/gtkplacessidebar.c:3686
-#: gtk/gtkplacesview.c:1643
+#: gtk/gtkplacessidebar.c:3630 gtk/gtkplacessidebar.c:3696
+#: gtk/gtkplacesview.c:1692
 msgid "Open in New _Tab"
 msgstr "Odpri v novem _zavihku"
 
-#: gtk/gtkplacessidebar.c:3626 gtk/gtkplacessidebar.c:3689
-#: gtk/gtkplacesview.c:1654
+#: gtk/gtkplacessidebar.c:3636 gtk/gtkplacessidebar.c:3699
+#: gtk/gtkplacesview.c:1703
 msgid "Open in New _Window"
 msgstr "Odpri v novem _oknu"
 
-#: gtk/gtkplacessidebar.c:3693
+#: gtk/gtkplacessidebar.c:3703
 msgid "_Add Bookmark"
 msgstr "_Dodaj zaznamek"
 
-#: gtk/gtkplacessidebar.c:3694
+#: gtk/gtkplacessidebar.c:3704
 msgid "_Remove"
 msgstr "_Odstrani"
 
-#: gtk/gtkplacessidebar.c:3695
+#: gtk/gtkplacessidebar.c:3705
 msgid "Rename…"
-msgstr "Preimenuj ..."
+msgstr "Preimenuj …"
 
-#: gtk/gtkplacessidebar.c:3699 gtk/gtkplacesview.c:1688
+#: gtk/gtkplacessidebar.c:3709 gtk/gtkplacesview.c:1737
 msgid "_Mount"
 msgstr "_Priklopi"
 
-#: gtk/gtkplacessidebar.c:3700 gtk/gtkplacesview.c:1678
+#: gtk/gtkplacessidebar.c:3710 gtk/gtkplacesview.c:1727
 msgid "_Unmount"
 msgstr "_Odklopi"
 
-#: gtk/gtkplacessidebar.c:3701
+#: gtk/gtkplacessidebar.c:3711
 msgid "_Eject"
 msgstr "_Izvrzi"
 
-#: gtk/gtkplacessidebar.c:3702
+#: gtk/gtkplacessidebar.c:3712
 msgid "_Detect Media"
 msgstr "_Zaznaj medij"
 
-#: gtk/gtkplacessidebar.c:4148 gtk/gtkplacesview.c:1121
+#: gtk/gtkplacessidebar.c:4158 gtk/gtkplacesview.c:1122
 msgid "Computer"
 msgstr "Računalnik"
 
-#: gtk/gtkplacesview.c:897
+#: gtk/gtkplacesview.c:898
 msgid "Searching for network locations"
 msgstr "Iskanje omrežnih mest"
 
-#: gtk/gtkplacesview.c:904
+#: gtk/gtkplacesview.c:905
 msgid "No network locations found"
 msgstr "Ni omrežnih mest"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1231 gtk/gtkplacesview.c:1306
+#: gtk/gtkplacesview.c:1232 gtk/gtkplacesview.c:1307
 msgid "Unable to access location"
 msgstr "Dostop do mesta ni mogoč"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1249 gtk/ui/gtkplacesview.ui:449
+#: gtk/gtkplacesview.c:1250 gtk/ui/gtkplacesview.ui:317
 msgid "Con_nect"
 msgstr "_Poveži"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1369
+#: gtk/gtkplacesview.c:1370
 msgid "Unable to unmount volume"
 msgstr "Ni mogoče priklopiti nosilca"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1470
+#: gtk/gtkplacesview.c:1471
 msgid "Cance_l"
 msgstr "_Prekliči"
 
-#: gtk/gtkplacesview.c:1678
+#: gtk/gtkplacesview.c:1634
+msgid "AppleTalk"
+msgstr "AppleTalk"
+
+#. Translators: do not translate ftp:// and ftps://
+#: gtk/gtkplacesview.c:1638
+msgid "File Transfer Protocol"
+msgstr "Protokol prenosa datotek FTP"
+
+#: gtk/gtkplacesview.c:1638
+msgid "ftp:// or ftps://"
+msgstr "ftp:// ali ftps://"
+
+#: gtk/gtkplacesview.c:1641
+msgid "Network File System"
+msgstr "Omrežni datotečni sistem"
+
+#: gtk/gtkplacesview.c:1644
+msgid "Samba"
+msgstr "Samba"
+
+#. Translators: do not translate sftp:// and ssh://
+#: gtk/gtkplacesview.c:1648
+msgid "SSH File Transfer Protocol"
+msgstr "Protokol prenosa datotek SSH"
+
+#: gtk/gtkplacesview.c:1648
+msgid "sftp:// or ssh://"
+msgstr "sftp:// ali ssh://"
+
+#. Translators: do not translate dav:// and davs://
+#: gtk/gtkplacesview.c:1652
+msgid "WebDAV"
+msgstr "WebDAV"
+
+#: gtk/gtkplacesview.c:1652
+msgid "dav:// or davs://"
+msgstr "dav:// ali davs://"
+
+#: gtk/gtkplacesview.c:1727
 msgid "_Disconnect"
 msgstr "_Prekini povezavo"
 
-#: gtk/gtkplacesview.c:1688
+#: gtk/gtkplacesview.c:1737
 msgid "_Connect"
 msgstr "_Poveži"
 
-#: gtk/gtkplacesview.c:1829
+#: gtk/gtkplacesview.c:1878
 msgid "Unable to get remote server location"
 msgstr "Oddaljenega mesta strežnika ni mogoče najti"
 
-#: gtk/gtkplacesview.c:2017 gtk/gtkplacesview.c:2026
+#: gtk/gtkplacesview.c:2073 gtk/gtkplacesview.c:2082
 msgid "Networks"
 msgstr "Omrežja"
 
-#: gtk/gtkplacesview.c:2017 gtk/gtkplacesview.c:2026
+#: gtk/gtkplacesview.c:2073 gtk/gtkplacesview.c:2082
 msgid "On This Computer"
 msgstr "Na tem računalniku"
 
@@ -3295,11 +3393,11 @@ msgstr "Prekini povezavo"
 msgid "Unmount"
 msgstr "Odklopi"
 
-#: gtk/gtkprintbackend.c:780
+#: gtk/gtkprintbackend.c:778
 msgid "Authentication"
 msgstr "Overitev"
 
-#: gtk/gtkprintbackend.c:851
+#: gtk/gtkprintbackend.c:849
 msgid "_Remember password"
 msgstr "Zapomni si _geslo"
 
@@ -3307,7 +3405,7 @@ msgstr "Zapomni si _geslo"
 msgid "Select a filename"
 msgstr "Izbor imena datoteke"
 
-#: gtk/gtkprinteroptionwidget.c:767
+#: gtk/gtkprinteroptionwidget.c:769
 msgid "Not available"
 msgstr "Ni na voljo"
 
@@ -3370,7 +3468,7 @@ msgstr "Končano z napako"
 msgid "Preparing %d"
 msgstr "Pripravljanje %d"
 
-#: gtk/gtkprintoperation.c:2376 gtk/gtkprintoperation.c:3005
+#: gtk/gtkprintoperation.c:2376 gtk/gtkprintoperation.c:3007
 #, c-format
 msgid "Preparing"
 msgstr "Pripravljanje"
@@ -3380,19 +3478,19 @@ msgstr "Pripravljanje"
 msgid "Printing %d"
 msgstr "Tiskanje %d"
 
-#: gtk/gtkprintoperation.c:3036
+#: gtk/gtkprintoperation.c:3038
 #, c-format
 msgid "Error creating print preview"
 msgstr "Napaka med ustvarjanjem predogleda tiskanja"
 
-#: gtk/gtkprintoperation.c:3039
+#: gtk/gtkprintoperation.c:3041
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Najverjetnejši razlog je, da začasne datoteke ni mogoče ustvariti"
 
 #. window
 #: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:542
-#: gtk/gtkprintoperation-portal.c:611 gtk/gtkprintunixdialog.c:3412
+#: gtk/gtkprintoperation-portal.c:611 gtk/gtkprintunixdialog.c:3415
 msgid "Print"
 msgstr "Natisni"
 
@@ -3406,7 +3504,7 @@ msgstr "Brez papirja"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:621
-#: modules/printbackends/cups/gtkprintbackendcups.c:2603
+#: modules/printbackends/cups/gtkprintbackendcups.c:2614
 msgid "Paused"
 msgstr "Premor"
 
@@ -3414,58 +3512,58 @@ msgstr "Premor"
 msgid "Need user intervention"
 msgstr "Zahtevano je posredovanje uporabnika"
 
-#: gtk/gtkprintoperation-win32.c:723
+#: gtk/gtkprintoperation-win32.c:728
 msgid "Custom size"
 msgstr "Velikost po meri"
 
-#: gtk/gtkprintoperation-win32.c:1545
+#: gtk/gtkprintoperation-win32.c:1587
 msgid "No printer found"
 msgstr "Ni najdenega tiskalnika"
 
-#: gtk/gtkprintoperation-win32.c:1572
+#: gtk/gtkprintoperation-win32.c:1614
 msgid "Invalid argument to CreateDC"
 msgstr "Neveljaven argument za CreateDC"
 
-#: gtk/gtkprintoperation-win32.c:1608 gtk/gtkprintoperation-win32.c:1854
+#: gtk/gtkprintoperation-win32.c:1650 gtk/gtkprintoperation-win32.c:1896
 msgid "Error from StartDoc"
 msgstr "Napaka iz StartDoc"
 
-#: gtk/gtkprintoperation-win32.c:1709 gtk/gtkprintoperation-win32.c:1732
-#: gtk/gtkprintoperation-win32.c:1780
+#: gtk/gtkprintoperation-win32.c:1751 gtk/gtkprintoperation-win32.c:1774
+#: gtk/gtkprintoperation-win32.c:1822
 msgid "Not enough free memory"
 msgstr "Ni dovolj prostega pomnilnika"
 
-#: gtk/gtkprintoperation-win32.c:1785
+#: gtk/gtkprintoperation-win32.c:1827
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Neveljaven argument za PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1790
+#: gtk/gtkprintoperation-win32.c:1832
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Neveljaven kazalec na PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1795
+#: gtk/gtkprintoperation-win32.c:1837
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Neveljavna ročica za PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1800
+#: gtk/gtkprintoperation-win32.c:1842
 msgid "Unspecified error"
 msgstr "Nedoločena napaka"
 
-#: gtk/gtkprintunixdialog.c:745
+#: gtk/gtkprintunixdialog.c:746
 msgid "Pre_view"
 msgstr "_Predogled"
 
-#: gtk/gtkprintunixdialog.c:747
+#: gtk/gtkprintunixdialog.c:748
 msgid "_Print"
 msgstr "_Natisni"
 
-#: gtk/gtkprintunixdialog.c:860
+#: gtk/gtkprintunixdialog.c:861
 msgid "Getting printer information failed"
 msgstr "Pridobivanje podatkov tiskalnika ni uspelo"
 
-#: gtk/gtkprintunixdialog.c:2070
+#: gtk/gtkprintunixdialog.c:2071
 msgid "Getting printer information…"
-msgstr "Pridobivanje podatkov tiskalnika ..."
+msgstr "Pridobivanje podatkov tiskalnika …"
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
@@ -3473,63 +3571,63 @@ msgstr "Pridobivanje podatkov tiskalnika ..."
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3119
-#: modules/printbackends/cups/gtkprintbackendcups.c:5441
+#: gtk/gtkprintunixdialog.c:3120
+#: modules/printbackends/cups/gtkprintbackendcups.c:5440
 msgid "Left to right, top to bottom"
 msgstr "Z leve proti desni, od zgoraj navzdol"
 
-#: gtk/gtkprintunixdialog.c:3119
-#: modules/printbackends/cups/gtkprintbackendcups.c:5441
+#: gtk/gtkprintunixdialog.c:3120
+#: modules/printbackends/cups/gtkprintbackendcups.c:5440
 msgid "Left to right, bottom to top"
 msgstr "Z leve proti desni, od spodaj navzgor"
 
-#: gtk/gtkprintunixdialog.c:3120
-#: modules/printbackends/cups/gtkprintbackendcups.c:5442
+#: gtk/gtkprintunixdialog.c:3121
+#: modules/printbackends/cups/gtkprintbackendcups.c:5441
 msgid "Right to left, top to bottom"
 msgstr "Z desne proti levi, od zgoraj navzdol"
 
-#: gtk/gtkprintunixdialog.c:3120
-#: modules/printbackends/cups/gtkprintbackendcups.c:5442
+#: gtk/gtkprintunixdialog.c:3121
+#: modules/printbackends/cups/gtkprintbackendcups.c:5441
 msgid "Right to left, bottom to top"
 msgstr "Z desne proti levi, od spodaj navzgor"
 
-#: gtk/gtkprintunixdialog.c:3121
-#: modules/printbackends/cups/gtkprintbackendcups.c:5443
+#: gtk/gtkprintunixdialog.c:3122
+#: modules/printbackends/cups/gtkprintbackendcups.c:5442
 msgid "Top to bottom, left to right"
 msgstr "Od zgoraj navzdol, z leve proti desni"
 
-#: gtk/gtkprintunixdialog.c:3121
-#: modules/printbackends/cups/gtkprintbackendcups.c:5443
+#: gtk/gtkprintunixdialog.c:3122
+#: modules/printbackends/cups/gtkprintbackendcups.c:5442
 msgid "Top to bottom, right to left"
 msgstr "Od zgoraj navzdol, z desne proti levi"
 
-#: gtk/gtkprintunixdialog.c:3122
-#: modules/printbackends/cups/gtkprintbackendcups.c:5444
+#: gtk/gtkprintunixdialog.c:3123
+#: modules/printbackends/cups/gtkprintbackendcups.c:5443
 msgid "Bottom to top, left to right"
 msgstr "Od spodaj navzgor, z leve proti desni"
 
-#: gtk/gtkprintunixdialog.c:3122
-#: modules/printbackends/cups/gtkprintbackendcups.c:5444
+#: gtk/gtkprintunixdialog.c:3123
+#: modules/printbackends/cups/gtkprintbackendcups.c:5443
 msgid "Bottom to top, right to left"
 msgstr "Od spodaj navzgor, z desne proti levi"
 
-#: gtk/gtkprintunixdialog.c:3126 gtk/gtkprintunixdialog.c:3139
+#: gtk/gtkprintunixdialog.c:3127 gtk/gtkprintunixdialog.c:3140
 msgid "Page Ordering"
 msgstr "Vrstni red strani"
 
-#: gtk/gtkprintunixdialog.c:3155
+#: gtk/gtkprintunixdialog.c:3156
 msgid "Left to right"
 msgstr "Z leve proti desni"
 
-#: gtk/gtkprintunixdialog.c:3156
+#: gtk/gtkprintunixdialog.c:3157
 msgid "Right to left"
 msgstr "Z desne proti levi"
 
-#: gtk/gtkprintunixdialog.c:3168
+#: gtk/gtkprintunixdialog.c:3169
 msgid "Top to bottom"
 msgstr "Od zgoraj navzdol"
 
-#: gtk/gtkprintunixdialog.c:3169
+#: gtk/gtkprintunixdialog.c:3170
 msgid "Bottom to top"
 msgstr "Od spodaj navzgor"
 
@@ -3623,21 +3721,17 @@ msgstr "%d. %s"
 #: gtk/gtkrecentmanager.c:1053 gtk/gtkrecentmanager.c:1066
 #: gtk/gtkrecentmanager.c:1203 gtk/gtkrecentmanager.c:1213
 #: gtk/gtkrecentmanager.c:1265 gtk/gtkrecentmanager.c:1274
-#, fuzzy, c-format
-#| msgid "Unable to find an item with URI “%s”"
+#, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Predmeta z naslovom URI »%s« ni mogoče najti."
 
 #: gtk/gtkrecentmanager.c:1289
-#, fuzzy, c-format
-#| msgid "Unable to move the item with URI “%s” to “%s”"
+#, c-format
 msgid "Unable to move the item with URI '%s' to '%s'"
 msgstr "Predmeta z naslovom URI »%s« ni mogoče premakniti v »%s«."
 
 #: gtk/gtkrecentmanager.c:2507
-#, fuzzy, c-format
-#| msgid ""
-#| "No registered application with name “%s” for item with URI “%s” found"
+#, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr ""
 "Ni mogoče najti programa z imenom »%s« za odpiranje predmetov z naslovom URI "
@@ -3708,31 +3802,14 @@ msgid "Search Shortcuts"
 msgstr "Iskalne bližnjice"
 
 #: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:376
-#: gtk/ui/gtkfilechooserwidget.ui:310
+#: gtk/ui/gtkfilechooserwidget.ui:322
 msgid "No Results Found"
 msgstr "Ni zadetkov"
 
 #: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:390
-#: gtk/ui/gtkfilechooserwidget.ui:324 gtk/ui/gtkplacesview.ui:406
+#: gtk/ui/gtkfilechooserwidget.ui:336 gtk/ui/gtkplacesview.ui:274
 msgid "Try a different search"
 msgstr "Poskusite drugačno iskanje"
-
-#. Translators: if the "on" state label requires more than three
-#. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
-#. * the state
-#.
-#: gtk/gtkswitch.c:306
-msgctxt "switch"
-msgid "ON"
-msgstr "❙"
-
-#. Translators: if the "off" state label requires more than three
-#. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
-#.
-#: gtk/gtkswitch.c:313
-msgctxt "switch"
-msgid "OFF"
-msgstr "○"
 
 #: gtk/gtktextbufferrichtext.c:648
 #, c-format
@@ -3744,133 +3821,112 @@ msgstr "Neznana napaka med poskusom ločevanja iz zaporedja %s"
 msgid "No deserialize function found for format %s"
 msgstr "Funkcije za ločevanje iz zaporedja za obliko %s ni mogoče najti"
 
-#: gtk/gtktextbufferserialize.c:784 gtk/gtktextbufferserialize.c:810
-#, fuzzy, c-format
-#| msgid "Both “id” and “name” were found on the <%s> element"
+#: gtk/gtktextbufferserialize.c:792 gtk/gtktextbufferserialize.c:818
+#, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
-msgstr "Na predmetu <%s> sta določena tako »ID« kot »ime«."
+msgstr "Na predmetu <%s> sta določena »ID« in »Ime«."
 
-#: gtk/gtktextbufferserialize.c:794 gtk/gtktextbufferserialize.c:820
-#, fuzzy, c-format
-#| msgid "The attribute “%s” was found twice on the <%s> element"
+#: gtk/gtktextbufferserialize.c:802 gtk/gtktextbufferserialize.c:828
+#, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "Atribut »%s« je bil v predmetu <%s> najden dvakrat."
 
-#: gtk/gtktextbufferserialize.c:836
-#, fuzzy, c-format
-#| msgid "<%s> element has invalid ID “%s”"
+#: gtk/gtktextbufferserialize.c:844
+#, c-format
 msgid "<%s> element has invalid ID \"%s\""
-msgstr "Element <%s> ima neveljaven ID »%s«."
+msgstr "Predmet <%s> ima določen neveljaven ID »%s«."
 
-#: gtk/gtktextbufferserialize.c:846
-#, fuzzy, c-format
-#| msgid "<%s> element has neither a “name” nor an “id” attribute"
+#: gtk/gtktextbufferserialize.c:855
+#, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
-msgstr "Predmet <%s> nima niti atributa »ime« niti »ID«."
+msgstr "Predmet <%s> nima ne atributa »Ime« ne »ID«."
 
-#: gtk/gtktextbufferserialize.c:933
-#, fuzzy, c-format
-#| msgid "Attribute “%s” repeated twice on the same <%s> element"
+#: gtk/gtktextbufferserialize.c:942
+#, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "Atribut »%s« je v predmetu <%s> ponovljen dvakrat."
 
-#: gtk/gtktextbufferserialize.c:951 gtk/gtktextbufferserialize.c:976
-#, fuzzy, c-format
-#| msgid "Attribute “%s” is invalid on <%s> element in this context"
+#: gtk/gtktextbufferserialize.c:960 gtk/gtktextbufferserialize.c:985
+#, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "Način uporabe atributa »%s« na predmetu <%s> je neveljaven."
 
-#: gtk/gtktextbufferserialize.c:1015
-#, fuzzy, c-format
-#| msgid "Tag “%s” has not been defined."
+#: gtk/gtktextbufferserialize.c:1024
+#, c-format
 msgid "Tag \"%s\" has not been defined."
-msgstr "Oznaka »%s« ni bila določena."
+msgstr "Oznaka »%s« še ni določena."
 
-#: gtk/gtktextbufferserialize.c:1027
+#: gtk/gtktextbufferserialize.c:1036
 msgid "Anonymous tag found and tags can not be created."
 msgstr "Najdena je bila brezimna oznaka in oznak ni mogoče ustvariti."
 
-#: gtk/gtktextbufferserialize.c:1038
-#, fuzzy, c-format
-#| msgid "Tag “%s” does not exist in buffer and tags can not be created."
+#: gtk/gtktextbufferserialize.c:1047
+#, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr "Oznaka »%s« v medpomnilniku ne obstaja in oznak ni mogoče ustvariti."
 
-#: gtk/gtktextbufferserialize.c:1139 gtk/gtktextbufferserialize.c:1214
-#: gtk/gtktextbufferserialize.c:1319 gtk/gtktextbufferserialize.c:1393
+#: gtk/gtktextbufferserialize.c:1148 gtk/gtktextbufferserialize.c:1223
+#: gtk/gtktextbufferserialize.c:1328 gtk/gtktextbufferserialize.c:1402
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "Predmet <%s> ni dovoljen pod <%s>"
 
-#: gtk/gtktextbufferserialize.c:1170
-#, fuzzy, c-format
-#| msgid "“%s” is not a valid attribute type"
+#: gtk/gtktextbufferserialize.c:1179
+#, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr "Vrednost »%s« ni veljavna vrsta atributa."
 
-#: gtk/gtktextbufferserialize.c:1178
-#, fuzzy, c-format
-#| msgid "“%s” is not a valid attribute name"
+#: gtk/gtktextbufferserialize.c:1187
+#, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr "Vrednost »%s« ni veljavno ime atributa."
 
-#: gtk/gtktextbufferserialize.c:1188
-#, fuzzy, c-format
-#| msgid ""
-#| "“%s” could not be converted to a value of type “%s” for attribute “%s”"
+#: gtk/gtktextbufferserialize.c:1197
+#, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
 "Vrednosti »%s« ni mogoče pretvoriti v vrednost vrste »%s« za atribut »%s«."
 
-#: gtk/gtktextbufferserialize.c:1197
-#, fuzzy, c-format
-#| msgid "“%s” is not a valid value for attribute “%s”"
+#: gtk/gtktextbufferserialize.c:1206
+#, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "Vrednost »%s« ni veljavna za atribut »%s«."
 
-#: gtk/gtktextbufferserialize.c:1282
-#, fuzzy, c-format
-#| msgid "Tag “%s” already defined"
+#: gtk/gtktextbufferserialize.c:1291
+#, c-format
 msgid "Tag \"%s\" already defined"
 msgstr "Oznaka »%s« je že določena."
 
-#: gtk/gtktextbufferserialize.c:1295
-#, fuzzy, c-format
-#| msgid "Tag “%s” has invalid priority “%s”"
+#: gtk/gtktextbufferserialize.c:1304
+#, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "Oznaka »%s« ima neveljavno prednost »%s«."
 
-#: gtk/gtktextbufferserialize.c:1348
+#: gtk/gtktextbufferserialize.c:1357
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr ""
 "Najbolj zunanji predmet v besedilu mora biti <text_view_markup> in ne <%s>"
 
-#: gtk/gtktextbufferserialize.c:1357 gtk/gtktextbufferserialize.c:1373
+#: gtk/gtktextbufferserialize.c:1366 gtk/gtktextbufferserialize.c:1382
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "Predmet <%s> je že naveden"
 
-#: gtk/gtktextbufferserialize.c:1379
-#, fuzzy
-#| msgid "A <text> element can’t occur before a <tags> element"
+#: gtk/gtktextbufferserialize.c:1388
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "Predmet <text> se ne sme pojaviti pred predmetom <tags>"
 
-#: gtk/gtktextbufferserialize.c:1785
+#: gtk/gtktextbufferserialize.c:1794
 msgid "Serialized data is malformed"
 msgstr "Podatki, združeni v zaporedje so izmaličeni"
 
-#: gtk/gtktextbufferserialize.c:1864
-#, fuzzy
-#| msgid ""
-#| "Serialized data is malformed. First section isn’t "
-#| "GTKTEXTBUFFERCONTENTS-0001"
+#: gtk/gtktextbufferserialize.c:1873
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
-"Podatki, združeni v zaporedje so izmaličeni. Prvi odsek ni "
+"Podatki, združeni v zaporedje, so neustrezno oblikovani. Prvi odsek ni "
 "GTKTEXTBUFFERCONTENTS-0001."
 
 #: gtk/gtktextutil.c:57
@@ -3936,24 +3992,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9237
+#: gtk/gtkwindow.c:9290
 msgid "Move"
 msgstr "Premakni"
 
-#: gtk/gtkwindow.c:9245
+#: gtk/gtkwindow.c:9298
 msgid "Resize"
 msgstr "Spremeni velikost"
 
-#: gtk/gtkwindow.c:9276
+#: gtk/gtkwindow.c:9329
 msgid "Always on Top"
 msgstr "Vedno na vrhu"
 
-#: gtk/gtkwindow.c:12710
+#: gtk/gtkwindow.c:12764
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Ali želite uporabljati nadzorni program GTK+?"
 
-#: gtk/gtkwindow.c:12712
+#: gtk/gtkwindow.c:12766
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3963,9 +4019,7 @@ msgstr ""
 "Nadzornik GTK+ je razhroščevalnik, ki omogoča raziskovanje in spreminjanje "
 "nastavitev GTK+. Neustrezna raba lahko povzroči nedelovanje okolja."
 
-#: gtk/gtkwindow.c:12717
-#, fuzzy
-#| msgid "Don’t show this message again"
+#: gtk/gtkwindow.c:12771
 msgid "Don't show this message again"
 msgstr "Sporočila ne pokaži več"
 
@@ -3979,7 +4033,7 @@ msgid "State"
 msgstr "Stanje"
 
 #: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:115
-#: gtk/ui/gtkplacesview.ui:158
+#: gtk/ui/gtkplacesview.ui:92
 msgid "Prefix"
 msgstr "Predpona"
 
@@ -4063,8 +4117,6 @@ msgid "Display"
 msgstr "Prikaz"
 
 #: gtk/inspector/general.ui:408
-#, fuzzy
-#| msgid "RGBA Visual"
 msgid "RGBA visual"
 msgstr "Vidni RGBA"
 
@@ -4125,8 +4177,6 @@ msgid "Address"
 msgstr "Naslov"
 
 #: gtk/inspector/misc-info.ui:68
-#, fuzzy
-#| msgid "Reference Count"
 msgid "Reference count"
 msgstr "Števec sklicev"
 
@@ -4154,8 +4204,6 @@ msgid "Mnemonic Label"
 msgstr "Oznaka pomagala"
 
 #: gtk/inspector/misc-info.ui:294
-#, fuzzy
-#| msgid "Request Mode"
 msgid "Request mode"
 msgstr "Način zahteve"
 
@@ -4168,8 +4216,6 @@ msgid "Baseline"
 msgstr "Osnovnica besedila"
 
 #: gtk/inspector/misc-info.ui:396
-#, fuzzy
-#| msgid "Clip Area"
 msgid "Clip area"
 msgstr "Površina predmeta"
 
@@ -4178,38 +4224,26 @@ msgid "Frame Clock"
 msgstr "Okvir ure"
 
 #: gtk/inspector/misc-info.ui:475
-#, fuzzy
-#| msgid "Tick Callback"
 msgid "Tick callback"
 msgstr "Označi povratni sklic"
 
 #: gtk/inspector/misc-info.ui:511
-#, fuzzy
-#| msgid "Frame Count"
 msgid "Frame count"
 msgstr "Števec sličic"
 
 #: gtk/inspector/misc-info.ui:545
-#, fuzzy
-#| msgid "Frame Rate"
 msgid "Frame rate"
 msgstr "Hitrost sličic"
 
 #: gtk/inspector/misc-info.ui:579
-#, fuzzy
-#| msgid "Accessible Role"
 msgid "Accessible role"
 msgstr "Dostopna vloga"
 
 #: gtk/inspector/misc-info.ui:613
-#, fuzzy
-#| msgid "Accessible Name"
 msgid "Accessible name"
 msgstr "Dostopno ime"
 
 #: gtk/inspector/misc-info.ui:649
-#, fuzzy
-#| msgid "Accessible Description"
 msgid "Accessible description"
 msgstr "Dostopni opis"
 
@@ -4321,6 +4355,7 @@ msgid "Property"
 msgstr "Lastnosti"
 
 #: gtk/inspector/prop-list.ui:68 gtk/inspector/statistics.ui:53
+#: gtk/ui/gtkfilechooserwidget.ui:235
 msgid "Type"
 msgstr "Vrsta"
 
@@ -4433,19 +4468,19 @@ msgstr "Združevano"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Omogoči statistiko z GOBJECT_DEBUG=instance-count"
 
-#: gtk/inspector/visual.c:406 gtk/inspector/visual.c:421
+#: gtk/inspector/visual.c:432 gtk/inspector/visual.c:447
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Tema je vključena v privzeto temo GTK_THEME"
 
-#: gtk/inspector/visual.c:631
+#: gtk/inspector/visual.c:657
 msgid "Backend does not support window scaling"
 msgstr "Ozadnji program ne podpira prilagajanja velikosti okna"
 
-#: gtk/inspector/visual.c:726
+#: gtk/inspector/visual.c:752
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Nastavitev je vključena v privzeto vrednost GTK_TEST_TOUCHSCREEN"
 
-#: gtk/inspector/visual.c:791
+#: gtk/inspector/visual.c:817
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
@@ -4453,8 +4488,8 @@ msgstr ""
 "Možnost ni nastavljiva med delovanjem.\n"
 "Uporabiti je treba nastavitvi GDK_GL=always ali GDK_GL=disable"
 
-#: gtk/inspector/visual.c:805 gtk/inspector/visual.c:806
-#: gtk/inspector/visual.c:807
+#: gtk/inspector/visual.c:831 gtk/inspector/visual.c:832
+#: gtk/inspector/visual.c:833
 msgid "GL rendering is disabled"
 msgstr "Izrisovanje GL je onemogočeno"
 
@@ -4478,10 +4513,6 @@ msgstr "Velikost kazalca"
 msgid "Icon Theme"
 msgstr "Tema ikon"
 
-#: gtk/inspector/visual.ui:230 gtk/ui/gtkfontbutton.ui:13
-msgid "Font"
-msgstr "Pisava"
-
 #: gtk/inspector/visual.ui:263
 msgid "Font Scale"
 msgstr "Merilo pisave"
@@ -4500,7 +4531,7 @@ msgstr "Z desne proti levi"
 
 #: gtk/inspector/visual.ui:347
 msgid "Window scaling"
-msgstr "Prilagajanje velikosti okna"
+msgstr "Prilagajanje okna"
 
 #: gtk/inspector/visual.ui:382
 msgid "Animations"
@@ -4517,10 +4548,6 @@ msgstr "Način izrisovanja"
 #: gtk/inspector/visual.ui:487
 msgid "Similar"
 msgstr "Podobno"
-
-#: gtk/inspector/visual.ui:488
-msgid "Image"
-msgstr "Slika"
 
 #: gtk/inspector/visual.ui:489
 msgid "Recording"
@@ -4547,8 +4574,6 @@ msgid "Show Widget Resizes"
 msgstr "Pokaži prilagajanje velikosti gradnika"
 
 #: gtk/inspector/visual.ui:683
-#, fuzzy
-#| msgid "Simulate Touchscreen"
 msgid "Simulate touchscreen"
 msgstr "Simuliraj zaslon na dotik"
 
@@ -4679,237 +4704,222 @@ msgstr "Splošno"
 #: gtk/open-type-layout.h:13
 msgctxt "OpenType layout"
 msgid "Access All Alternates"
-msgstr ""
+msgstr "Dostop do vseh alternativnih variacij znakov"
 
 #: gtk/open-type-layout.h:14
 msgctxt "OpenType layout"
 msgid "Above-base Forms"
-msgstr ""
+msgstr "Oblike nad osnovnico"
 
 #: gtk/open-type-layout.h:15
 msgctxt "OpenType layout"
 msgid "Above-base Mark Positioning"
-msgstr ""
+msgstr "Oblike označne postavitve nad osnovnico"
 
 #: gtk/open-type-layout.h:16
 msgctxt "OpenType layout"
 msgid "Above-base Substitutions"
-msgstr ""
+msgstr "Zamenjave ligature nad osnovnico"
 
 #: gtk/open-type-layout.h:17
-#, fuzzy
-#| msgid "Authentication"
 msgctxt "OpenType layout"
 msgid "Alternative Fractions"
-msgstr "Overitev"
+msgstr "Pokončni ulomki"
 
 #: gtk/open-type-layout.h:18
 msgctxt "OpenType layout"
 msgid "Akhands"
-msgstr ""
+msgstr "Zamenjave zaporedja znakov Akhandi"
 
 #: gtk/open-type-layout.h:19
 msgctxt "OpenType layout"
 msgid "Below-base Forms"
-msgstr ""
+msgstr "Oblike pod osnovnico"
 
 #: gtk/open-type-layout.h:20
 msgctxt "OpenType layout"
 msgid "Below-base Mark Positioning"
-msgstr ""
+msgstr "Oblike označne postavitve pod osnovnico"
 
 #: gtk/open-type-layout.h:21
 msgctxt "OpenType layout"
 msgid "Below-base Substitutions"
-msgstr ""
+msgstr "Zamenjave ligature pod osnovnico"
 
 #: gtk/open-type-layout.h:22
 msgctxt "OpenType layout"
 msgid "Contextual Alternates"
-msgstr ""
+msgstr "Vsebinske zamenjave znakov"
 
 #: gtk/open-type-layout.h:23
 msgctxt "OpenType layout"
 msgid "Case-Sensitive Forms"
-msgstr ""
+msgstr "Prilagoditve za velike črke"
 
 #: gtk/open-type-layout.h:24
 msgctxt "OpenType layout"
 msgid "Glyph Composition / Decomposition"
-msgstr ""
+msgstr "Sestavljivi / Razstavljivi znaki"
 
 #: gtk/open-type-layout.h:25
 msgctxt "OpenType layout"
 msgid "Conjunct Form After Ro"
-msgstr ""
+msgstr "Združene oblike za znakom Ro"
 
 #: gtk/open-type-layout.h:26
 msgctxt "OpenType layout"
 msgid "Conjunct Forms"
-msgstr ""
+msgstr "Konjugirane oblike"
 
 #: gtk/open-type-layout.h:27
 msgctxt "OpenType layout"
 msgid "Contextual Ligatures"
-msgstr ""
+msgstr "Vsebinske ligature"
 
 #: gtk/open-type-layout.h:28
 msgctxt "OpenType layout"
 msgid "Centered CJK Punctuation"
-msgstr ""
+msgstr "Sredinjeni ločilni znaki CJK"
 
 #: gtk/open-type-layout.h:29
 msgctxt "OpenType layout"
 msgid "Capital Spacing"
-msgstr ""
+msgstr "Razmične velike črke"
 
 #: gtk/open-type-layout.h:30
 msgctxt "OpenType layout"
 msgid "Contextual Swash"
-msgstr ""
+msgstr "Znakovni prelivi"
 
 #: gtk/open-type-layout.h:31
 msgctxt "OpenType layout"
 msgid "Cursive Positioning"
-msgstr ""
+msgstr "Položajno prilagajanje kurzive"
 
 #: gtk/open-type-layout.h:32
 msgctxt "OpenType layout"
 msgid "Petite Capitals From Capitals"
-msgstr ""
+msgstr "Male velike črke iz velikih črk"
 
 #: gtk/open-type-layout.h:33
 msgctxt "OpenType layout"
 msgid "Small Capitals From Capitals"
-msgstr ""
+msgstr "Male velike črke"
 
 #: gtk/open-type-layout.h:34
 msgctxt "OpenType layout"
 msgid "Distances"
-msgstr ""
+msgstr "Razdalje"
 
 #: gtk/open-type-layout.h:35
 msgctxt "OpenType layout"
 msgid "Discretionary Ligatures"
-msgstr ""
+msgstr "Diskretne ligature"
 
 #: gtk/open-type-layout.h:36
 msgctxt "OpenType layout"
 msgid "Denominators"
-msgstr ""
+msgstr "Denominatorji"
 
 #: gtk/open-type-layout.h:37
 msgctxt "OpenType layout"
 msgid "Dotless Forms"
-msgstr ""
+msgstr "Ne-točkovne oblike"
 
 #: gtk/open-type-layout.h:38
 msgctxt "OpenType layout"
 msgid "Expert Forms"
-msgstr ""
+msgstr "Napredne oblike"
 
 #: gtk/open-type-layout.h:39
 msgctxt "OpenType layout"
 msgid "Final Glyph on Line Alternates"
-msgstr ""
+msgstr "Končni znaki vrstic"
 
 #: gtk/open-type-layout.h:40
-#, fuzzy
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #2"
-msgstr "Pozivnik terminala"
+msgstr "Končne oblike 2"
 
 #: gtk/open-type-layout.h:41
-#, fuzzy
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #3"
-msgstr "Pozivnik terminala"
+msgstr "Končne oblike 3"
 
 #: gtk/open-type-layout.h:42
-#, fuzzy
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms"
-msgstr "Pozivnik terminala"
+msgstr "Končne oblike"
 
 #: gtk/open-type-layout.h:43
 msgctxt "OpenType layout"
 msgid "Flattened accent forms"
-msgstr ""
+msgstr "Ploske oblike preglasov"
 
 #: gtk/open-type-layout.h:44
-#, fuzzy
-#| msgid "Actions"
 msgctxt "OpenType layout"
 msgid "Fractions"
-msgstr "Dejanja"
+msgstr "Ulomki"
 
 #: gtk/open-type-layout.h:45
-#, fuzzy
-#| msgid "Focus Widget"
 msgctxt "OpenType layout"
 msgid "Full Widths"
-msgstr "Gradnik žarišča"
+msgstr "Polne širine"
 
 #: gtk/open-type-layout.h:46
 msgctxt "OpenType layout"
 msgid "Half Forms"
-msgstr ""
+msgstr "Polovične oblike"
 
 #: gtk/open-type-layout.h:47
 msgctxt "OpenType layout"
 msgid "Halant Forms"
-msgstr ""
+msgstr "Oblike Halant"
 
 #: gtk/open-type-layout.h:48
 msgctxt "OpenType layout"
 msgid "Alternate Half Widths"
-msgstr ""
+msgstr "Nadomestne polovične širine"
 
 #: gtk/open-type-layout.h:49
 msgctxt "OpenType layout"
 msgid "Historical Forms"
-msgstr ""
+msgstr "Zgodovinski znaki"
 
 #: gtk/open-type-layout.h:50
 msgctxt "OpenType layout"
 msgid "Horizontal Kana Alternates"
-msgstr ""
+msgstr "Dodatni vodoravni znaki Kana"
 
 #: gtk/open-type-layout.h:51
 msgctxt "OpenType layout"
 msgid "Historical Ligatures"
-msgstr ""
+msgstr "Zgodovinske ligature"
 
 #: gtk/open-type-layout.h:52
 msgctxt "OpenType layout"
 msgid "Hangul"
-msgstr ""
+msgstr "Hangulska"
 
 #: gtk/open-type-layout.h:53
 msgctxt "OpenType layout"
 msgid "Hojo Kanji Forms"
-msgstr ""
+msgstr "Oblike Hojo Kanji"
 
 #: gtk/open-type-layout.h:54
 msgctxt "OpenType layout"
 msgid "Half Widths"
-msgstr ""
+msgstr "Polovične širine"
 
 #: gtk/open-type-layout.h:55
-#, fuzzy
-#| msgctxt "print operation status"
-#| msgid "Initial state"
 msgctxt "OpenType layout"
 msgid "Initial Forms"
-msgstr "Začetno stanje"
+msgstr "Začetne oblike"
 
 #: gtk/open-type-layout.h:56
 msgctxt "OpenType layout"
 msgid "Isolated Forms"
-msgstr ""
+msgstr "Izolirane oblike"
 
 #: gtk/open-type-layout.h:57
 msgctxt "OpenType layout"
@@ -4919,275 +4929,252 @@ msgstr "Ležeče pisave"
 #: gtk/open-type-layout.h:58
 msgctxt "OpenType layout"
 msgid "Justification Alternates"
-msgstr ""
+msgstr "Poravnalne oblike"
 
 #: gtk/open-type-layout.h:59
 msgctxt "OpenType layout"
 msgid "JIS78 Forms"
-msgstr ""
+msgstr "Oblike JIS78"
 
 #: gtk/open-type-layout.h:60
 msgctxt "OpenType layout"
 msgid "JIS83 Forms"
-msgstr ""
+msgstr "Oblike JIS83"
 
 #: gtk/open-type-layout.h:61
 msgctxt "OpenType layout"
 msgid "JIS90 Forms"
-msgstr ""
+msgstr "Oblike JIS90"
 
 #: gtk/open-type-layout.h:62
 msgctxt "OpenType layout"
 msgid "JIS2004 Forms"
-msgstr ""
+msgstr "Oblike JIS2004"
 
 #: gtk/open-type-layout.h:63
-#, fuzzy
-#| msgid "Warning"
 msgctxt "OpenType layout"
 msgid "Kerning"
-msgstr "Opozorilo"
+msgstr "Spodsekavanje"
 
 #: gtk/open-type-layout.h:64
-#, fuzzy
-#| msgctxt "output-bin"
-#| msgid "Left Bin"
 msgctxt "OpenType layout"
 msgid "Left Bounds"
-msgstr "Vsebnik na levi"
+msgstr "Leve meje"
 
 #: gtk/open-type-layout.h:65
-#, fuzzy
-#| msgctxt "cover page"
-#| msgid "Standard"
 msgctxt "OpenType layout"
 msgid "Standard Ligatures"
-msgstr "Zaupno"
+msgstr "Običajne ligature"
 
 #: gtk/open-type-layout.h:66
 msgctxt "OpenType layout"
 msgid "Leading Jamo Forms"
-msgstr ""
+msgstr "Glavne oblike Jamo"
 
 #: gtk/open-type-layout.h:67
 msgctxt "OpenType layout"
 msgid "Lining Figures"
-msgstr ""
+msgstr "Črtni znaki"
 
 #: gtk/open-type-layout.h:68
 msgctxt "OpenType layout"
 msgid "Localized Forms"
-msgstr ""
+msgstr "Jezikovno prilagojene oblike"
 
 #: gtk/open-type-layout.h:69
-#, fuzzy
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right alternates"
-msgstr "LRM oznaka z _leve proti desni"
+msgstr "Različice za zapis z leve proti desni"
 
 #: gtk/open-type-layout.h:70
-#, fuzzy
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right mirrored forms"
-msgstr "LRM oznaka z _leve proti desni"
+msgstr "Zrcaljene oblike z leve proti desni"
 
 #: gtk/open-type-layout.h:71
 msgctxt "OpenType layout"
 msgid "Mark Positioning"
-msgstr ""
+msgstr "Označne postavitve"
 
 #: gtk/open-type-layout.h:72
 msgctxt "OpenType layout"
 msgid "Medial Forms #2"
-msgstr ""
+msgstr "Sredinske oblike 2"
 
 #: gtk/open-type-layout.h:73
 msgctxt "OpenType layout"
 msgid "Medial Forms"
-msgstr ""
+msgstr "Sredinske oblike"
 
 #: gtk/open-type-layout.h:74
 msgctxt "OpenType layout"
 msgid "Mathematical Greek"
-msgstr ""
+msgstr "Grški matematični znaki"
 
 #: gtk/open-type-layout.h:75
 msgctxt "OpenType layout"
 msgid "Mark to Mark Positioning"
-msgstr ""
+msgstr "Označne postavitve"
 
 #: gtk/open-type-layout.h:76
 msgctxt "OpenType layout"
 msgid "Mark Positioning via Substitution"
-msgstr ""
+msgstr "Oblike označne postavitve z zamenjavo"
 
 #: gtk/open-type-layout.h:77
 msgctxt "OpenType layout"
 msgid "Alternate Annotation Forms"
-msgstr ""
+msgstr "Izmenjujoče anotacijske oblike"
 
 #: gtk/open-type-layout.h:78
 msgctxt "OpenType layout"
 msgid "NLC Kanji Forms"
-msgstr ""
+msgstr "Oblike NLC Kanji"
 
 #: gtk/open-type-layout.h:79
 msgctxt "OpenType layout"
 msgid "Nukta Forms"
-msgstr ""
+msgstr "Oblike nukta"
 
 #: gtk/open-type-layout.h:80
 msgctxt "OpenType layout"
 msgid "Numerators"
-msgstr ""
+msgstr "Numeratorji"
 
 #: gtk/open-type-layout.h:81
 msgctxt "OpenType layout"
 msgid "Oldstyle Figures"
-msgstr ""
+msgstr "Staroslogovni znaki"
 
 #: gtk/open-type-layout.h:82
 msgctxt "OpenType layout"
 msgid "Optical Bounds"
-msgstr ""
+msgstr "Optične meje"
 
 #: gtk/open-type-layout.h:83
-#, fuzzy
-#| msgid "Signals"
 msgctxt "OpenType layout"
 msgid "Ordinals"
-msgstr "Signali"
+msgstr "Ordinalni znaki"
 
 #: gtk/open-type-layout.h:84
 msgctxt "OpenType layout"
 msgid "Ornaments"
-msgstr ""
+msgstr "Ornamenti"
 
 #: gtk/open-type-layout.h:85
 msgctxt "OpenType layout"
 msgid "Proportional Alternate Widths"
-msgstr ""
+msgstr "Proporcionalne nadomestne širine"
 
 #: gtk/open-type-layout.h:86
 msgctxt "OpenType layout"
 msgid "Petite Capitals"
-msgstr ""
+msgstr "Male velike črke"
 
 #: gtk/open-type-layout.h:87
 msgctxt "OpenType layout"
 msgid "Proportional Kana"
-msgstr ""
+msgstr "Sorazmerna Kana"
 
 #: gtk/open-type-layout.h:88
-#, fuzzy
-#| msgid "Properties"
 msgctxt "OpenType layout"
 msgid "Proportional Figures"
-msgstr "Lastnosti"
+msgstr "Sorazmerne sličice"
 
 #: gtk/open-type-layout.h:89
 msgctxt "OpenType layout"
 msgid "Pre-Base Forms"
-msgstr ""
+msgstr "Oblike pred osnovnico"
 
 #: gtk/open-type-layout.h:90
 msgctxt "OpenType layout"
 msgid "Pre-base Substitutions"
-msgstr ""
+msgstr "Zamenjave ligature pred osnovnico"
 
 #: gtk/open-type-layout.h:91
 msgctxt "OpenType layout"
 msgid "Post-base Forms"
-msgstr ""
+msgstr "Oblike za osnovnico"
 
 #: gtk/open-type-layout.h:92
 msgctxt "OpenType layout"
 msgid "Post-base Substitutions"
-msgstr ""
+msgstr "Zamenjave ligature za osnovnico"
 
 #: gtk/open-type-layout.h:93
 msgctxt "OpenType layout"
 msgid "Proportional Widths"
-msgstr ""
+msgstr "Sorazmerna širina"
 
 #: gtk/open-type-layout.h:94
 msgctxt "OpenType layout"
 msgid "Quarter Widths"
-msgstr ""
+msgstr "Četrtinske širine"
 
 #: gtk/open-type-layout.h:95
 msgctxt "OpenType layout"
 msgid "Randomize"
-msgstr ""
+msgstr "Naključno"
 
 #: gtk/open-type-layout.h:96
 msgctxt "OpenType layout"
 msgid "Required Contextual Alternates"
-msgstr ""
+msgstr "Zahtevane vsebinske zamenjave"
 
 #: gtk/open-type-layout.h:97
 msgctxt "OpenType layout"
 msgid "Rakar Forms"
-msgstr ""
+msgstr "Oblike Rakar"
 
 #: gtk/open-type-layout.h:98
 msgctxt "OpenType layout"
 msgid "Required Ligatures"
-msgstr ""
+msgstr "Zahtevane ligature"
 
 #: gtk/open-type-layout.h:99
 msgctxt "OpenType layout"
 msgid "Reph Forms"
-msgstr ""
+msgstr "Oblike Reph"
 
 #: gtk/open-type-layout.h:100
-#, fuzzy
-#| msgctxt "output-bin"
-#| msgid "Right Bin"
 msgctxt "OpenType layout"
 msgid "Right Bounds"
-msgstr "Vsebnik na desni"
+msgstr "Desne meje"
 
 #: gtk/open-type-layout.h:101
-#, fuzzy
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left alternates"
-msgstr "RLM oznaka z _desne proti levi"
+msgstr "Različice za zapis z desne proti levi"
 
 #: gtk/open-type-layout.h:102
-#, fuzzy
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left mirrored forms"
-msgstr "RLM oznaka z _desne proti levi"
+msgstr "Zrcaljene oblike z desne proti levi"
 
 #: gtk/open-type-layout.h:103
 msgctxt "OpenType layout"
 msgid "Ruby Notation Forms"
-msgstr ""
+msgstr "Notacijske oblike Ruby"
 
 #: gtk/open-type-layout.h:104
 msgctxt "OpenType layout"
 msgid "Required Variation Alternates"
-msgstr ""
+msgstr "Zahtevani variacijski znaki"
 
 #: gtk/open-type-layout.h:105
 msgctxt "OpenType layout"
 msgid "Stylistic Alternates"
-msgstr ""
+msgstr "Slogovne različice"
 
 #: gtk/open-type-layout.h:106
 msgctxt "OpenType layout"
 msgid "Scientific Inferiors"
-msgstr ""
+msgstr "Znanstveni  zapisi"
 
 #: gtk/open-type-layout.h:107
 msgctxt "OpenType layout"
 msgid "Optical size"
-msgstr ""
+msgstr "Optična velikost"
 
 #: gtk/open-type-layout.h:108
 msgctxt "OpenType layout"
@@ -5197,119 +5184,117 @@ msgstr "Male velike črke"
 #: gtk/open-type-layout.h:109
 msgctxt "OpenType layout"
 msgid "Simplified Forms"
-msgstr ""
+msgstr "Poenostavljene oblike"
 
 #: gtk/open-type-layout.h:110
 msgctxt "OpenType layout"
 msgid "Stylistic Set 1"
-msgstr ""
+msgstr "Slogovni nabor 1"
 
 #: gtk/open-type-layout.h:111
 msgctxt "OpenType layout"
 msgid "Stylistic Set 2"
-msgstr ""
+msgstr "Slogovni nabor 2"
 
 #: gtk/open-type-layout.h:112
 msgctxt "OpenType layout"
 msgid "Stylistic Set 3"
-msgstr ""
+msgstr "Slogovni nabor 3"
 
 #: gtk/open-type-layout.h:113
 msgctxt "OpenType layout"
 msgid "Stylistic Set 4"
-msgstr ""
+msgstr "Slogovni nabor 4"
 
 #: gtk/open-type-layout.h:114
 msgctxt "OpenType layout"
 msgid "Stylistic Set 5"
-msgstr ""
+msgstr "Slogovni nabor 5"
 
 #: gtk/open-type-layout.h:115
 msgctxt "OpenType layout"
 msgid "Stylistic Set 6"
-msgstr ""
+msgstr "Slogovni nabor 6"
 
 #: gtk/open-type-layout.h:116
 msgctxt "OpenType layout"
 msgid "Stylistic Set 7"
-msgstr ""
+msgstr "Slogovni nabor 7"
 
 #: gtk/open-type-layout.h:117
 msgctxt "OpenType layout"
 msgid "Stylistic Set 8"
-msgstr ""
+msgstr "Slogovni nabor 8"
 
 #: gtk/open-type-layout.h:118
 msgctxt "OpenType layout"
 msgid "Stylistic Set 9"
-msgstr ""
+msgstr "Slogovni nabor 9"
 
 #: gtk/open-type-layout.h:119
 msgctxt "OpenType layout"
 msgid "Stylistic Set 10"
-msgstr ""
+msgstr "Slogovni nabor 10"
 
 #: gtk/open-type-layout.h:120
 msgctxt "OpenType layout"
 msgid "Stylistic Set 11"
-msgstr ""
+msgstr "Slogovni nabor 11"
 
 #: gtk/open-type-layout.h:121
 msgctxt "OpenType layout"
 msgid "Stylistic Set 12"
-msgstr ""
+msgstr "Slogovni nabor 12"
 
 #: gtk/open-type-layout.h:122
 msgctxt "OpenType layout"
 msgid "Stylistic Set 13"
-msgstr ""
+msgstr "Slogovni nabor 13"
 
 #: gtk/open-type-layout.h:123
 msgctxt "OpenType layout"
 msgid "Stylistic Set 14"
-msgstr ""
+msgstr "Slogovni nabor 14"
 
 #: gtk/open-type-layout.h:124
 msgctxt "OpenType layout"
 msgid "Stylistic Set 15"
-msgstr ""
+msgstr "Slogovni nabor 15"
 
 #: gtk/open-type-layout.h:125
 msgctxt "OpenType layout"
 msgid "Stylistic Set 16"
-msgstr ""
+msgstr "Slogovni nabor 16"
 
 #: gtk/open-type-layout.h:126
 msgctxt "OpenType layout"
 msgid "Stylistic Set 17"
-msgstr ""
+msgstr "Slogovni nabor 17"
 
 #: gtk/open-type-layout.h:127
 msgctxt "OpenType layout"
 msgid "Stylistic Set 18"
-msgstr ""
+msgstr "Slogovni nabor 18"
 
 #: gtk/open-type-layout.h:128
 msgctxt "OpenType layout"
 msgid "Stylistic Set 19"
-msgstr ""
+msgstr "Slogovni nabor 19"
 
 #: gtk/open-type-layout.h:129
-#, fuzzy
-#| msgid "Artistic License 2.0"
 msgctxt "OpenType layout"
 msgid "Stylistic Set 20"
-msgstr "Umetniško dovoljenje 2.0"
+msgstr "Slogovni nabor 20"
 
 #: gtk/open-type-layout.h:130
 msgctxt "OpenType layout"
 msgid "Math script style alternates"
-msgstr ""
+msgstr "RLM oznaka z _desne proti levi"
 
 #: gtk/open-type-layout.h:131
 msgctxt "OpenType layout"
 msgid "Stretching Glyph Decomposition"
-msgstr ""
+msgstr "Raztegljivi razstavljivi znaki"
 
 #: gtk/open-type-layout.h:132
 msgctxt "OpenType layout"
@@ -5324,47 +5309,47 @@ msgstr "Nadpisano"
 #: gtk/open-type-layout.h:134
 msgctxt "OpenType layout"
 msgid "Swash"
-msgstr ""
+msgstr "Znakovni prelivi"
 
 #: gtk/open-type-layout.h:135
 msgctxt "OpenType layout"
 msgid "Titling"
-msgstr ""
+msgstr "Naslavljanje"
 
 #: gtk/open-type-layout.h:136
 msgctxt "OpenType layout"
 msgid "Trailing Jamo Forms"
-msgstr ""
+msgstr "Podporne oblike Jamo"
 
 #: gtk/open-type-layout.h:137
 msgctxt "OpenType layout"
 msgid "Traditional Name Forms"
-msgstr ""
+msgstr "Tradicionalne imenske oblike"
 
 #: gtk/open-type-layout.h:138
 msgctxt "OpenType layout"
 msgid "Tabular Figures"
-msgstr ""
+msgstr "Tabularne oblike"
 
 #: gtk/open-type-layout.h:139
 msgctxt "OpenType layout"
 msgid "Traditional Forms"
-msgstr ""
+msgstr "Tradicionalne oblike"
 
 #: gtk/open-type-layout.h:140
 msgctxt "OpenType layout"
 msgid "Third Widths"
-msgstr ""
+msgstr "Tretjinske širine"
 
 #: gtk/open-type-layout.h:141
 msgctxt "OpenType layout"
 msgid "Unicase"
-msgstr ""
+msgstr "Unicase"
 
 #: gtk/open-type-layout.h:142
 msgctxt "OpenType layout"
 msgid "Alternate Vertical Metrics"
-msgstr ""
+msgstr "Metrično razmerje"
 
 #: gtk/open-type-layout.h:143
 msgctxt "OpenType layout"
@@ -5379,45 +5364,42 @@ msgstr "Navpično pisanje"
 #: gtk/open-type-layout.h:145
 msgctxt "OpenType layout"
 msgid "Alternate Vertical Half Metrics"
-msgstr ""
+msgstr "Nadomestne širine za navpično pisanje"
 
 #: gtk/open-type-layout.h:146
 msgctxt "OpenType layout"
 msgid "Vowel Jamo Forms"
-msgstr ""
+msgstr "Samoglasniške oblike Jamo"
 
 #: gtk/open-type-layout.h:147
 msgctxt "OpenType layout"
 msgid "Vertical Kana Alternates"
-msgstr ""
+msgstr "Dodatni navpični znaki Kana"
 
 #: gtk/open-type-layout.h:148
-#, fuzzy
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Kerning"
-msgstr "Navpično"
+msgstr "Navpično spodsekavanje"
 
 #: gtk/open-type-layout.h:149
 msgctxt "OpenType layout"
 msgid "Proportional Alternate Vertical Metrics"
-msgstr ""
+msgstr "Proporcionalne nadomestne širine za navpično pisanje"
 
 #: gtk/open-type-layout.h:150
 msgctxt "OpenType layout"
 msgid "Vertical Alternates and Rotation"
-msgstr ""
+msgstr "Pretvorbe znakov za navpično pisanje"
 
 #: gtk/open-type-layout.h:151
 msgctxt "OpenType layout"
 msgid "Vertical Alternates for Rotation"
-msgstr ""
+msgstr "Zamenjave za navpično pisanje"
 
 #: gtk/open-type-layout.h:152
 msgctxt "OpenType layout"
 msgid "Slashed Zero"
-msgstr ""
+msgstr "Prečrtana ničla"
 
 #: gtk/paper_names_offsets.c:4
 msgctxt "paper size"
@@ -6332,740 +6314,708 @@ msgstr "ROC 8k"
 #: gtk/script-names.c:18
 msgctxt "Script"
 msgid "Arabic"
-msgstr ""
+msgstr "arabski"
 
 #: gtk/script-names.c:19
 msgctxt "Script"
 msgid "Armenian"
-msgstr ""
+msgstr "armenski"
 
 #: gtk/script-names.c:20
 msgctxt "Script"
 msgid "Bengali"
-msgstr ""
+msgstr "bengalski"
 
 #: gtk/script-names.c:21
 msgctxt "Script"
 msgid "Bopomofo"
-msgstr ""
+msgstr "bopomofo"
 
 #: gtk/script-names.c:22
 msgctxt "Script"
 msgid "Cherokee"
-msgstr ""
+msgstr "čerokeški"
 
 #: gtk/script-names.c:23
 msgctxt "Script"
 msgid "Coptic"
-msgstr ""
+msgstr "koptski"
 
 #: gtk/script-names.c:24
 msgctxt "Script"
 msgid "Cyrillic"
-msgstr ""
+msgstr "cirilica"
 
 #: gtk/script-names.c:25
 msgctxt "Script"
 msgid "Deseret"
-msgstr ""
+msgstr "deseretski"
 
 #: gtk/script-names.c:26
 msgctxt "Script"
 msgid "Devanagari"
-msgstr ""
+msgstr "devanagarski"
 
 #: gtk/script-names.c:27
 msgctxt "Script"
 msgid "Ethiopic"
-msgstr ""
+msgstr "etiopski"
 
 #: gtk/script-names.c:28
 msgctxt "Script"
 msgid "Georgian"
-msgstr ""
+msgstr "gruzijski"
 
 #: gtk/script-names.c:29
 msgctxt "Script"
 msgid "Gothic"
-msgstr ""
+msgstr "gotski"
 
 #: gtk/script-names.c:30
-#, fuzzy
-#| msgid "_Green:"
 msgctxt "Script"
 msgid "Greek"
-msgstr "_Zelena:"
+msgstr "grški"
 
 #: gtk/script-names.c:31
 msgctxt "Script"
 msgid "Gujarati"
-msgstr ""
+msgstr "gudžaratski"
 
 #: gtk/script-names.c:32
 msgctxt "Script"
 msgid "Gurmukhi"
-msgstr ""
+msgstr "gurmukhijski"
 
 #: gtk/script-names.c:33
 msgctxt "Script"
 msgid "Han"
-msgstr ""
+msgstr "han"
 
 #: gtk/script-names.c:34
 msgctxt "Script"
 msgid "Hangul"
-msgstr ""
+msgstr "hangulski"
 
 #: gtk/script-names.c:35
 msgctxt "Script"
 msgid "Hebrew"
-msgstr ""
+msgstr "hebrejski"
 
 #: gtk/script-names.c:36
 msgctxt "Script"
 msgid "Hiragana"
-msgstr ""
+msgstr "hiragana"
 
 #: gtk/script-names.c:37
 msgctxt "Script"
 msgid "Kannada"
-msgstr ""
+msgstr "kanada"
 
 #: gtk/script-names.c:38
 msgctxt "Script"
 msgid "Katakana"
-msgstr ""
+msgstr "katakana"
 
 #: gtk/script-names.c:39
 msgctxt "Script"
 msgid "Khmer"
-msgstr ""
+msgstr "kmerski"
 
 #: gtk/script-names.c:40
-#, fuzzy
-#| msgid "Low"
 msgctxt "Script"
 msgid "Lao"
-msgstr "Nizka"
+msgstr "laoški"
 
 #: gtk/script-names.c:41
 msgctxt "Script"
 msgid "Latin"
-msgstr ""
+msgstr "latinski"
 
 #: gtk/script-names.c:42
 msgctxt "Script"
 msgid "Malayalam"
-msgstr ""
+msgstr "malajski"
 
 #: gtk/script-names.c:43
 msgctxt "Script"
 msgid "Mongolian"
-msgstr ""
+msgstr "mongolski"
 
 #: gtk/script-names.c:44
 msgctxt "Script"
 msgid "Myanmar"
-msgstr ""
+msgstr "mjanmarski"
 
 #: gtk/script-names.c:45
 msgctxt "Script"
 msgid "Ogham"
-msgstr ""
+msgstr "ogamski"
 
 #: gtk/script-names.c:46
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgctxt "Script"
 msgid "Old Italic"
-msgstr "_Ležeče"
+msgstr "staroitalski"
 
 #: gtk/script-names.c:47
 msgctxt "Script"
 msgid "Oriya"
-msgstr ""
+msgstr "orijski"
 
 #: gtk/script-names.c:48
 msgctxt "Script"
 msgid "Runic"
-msgstr ""
+msgstr "runski"
 
 #: gtk/script-names.c:49
 msgctxt "Script"
 msgid "Sinhala"
-msgstr ""
+msgstr "sinhalski"
 
 #: gtk/script-names.c:50
 msgctxt "Script"
 msgid "Syriac"
-msgstr ""
+msgstr "siriaški"
 
 #: gtk/script-names.c:51
-#, fuzzy
-#| msgid "_Family:"
 msgctxt "Script"
 msgid "Tamil"
-msgstr "_Družina:"
+msgstr "tamilski"
 
 #: gtk/script-names.c:52
 msgctxt "Script"
 msgid "Telugu"
-msgstr ""
+msgstr "telugujski"
 
 #: gtk/script-names.c:53
 msgctxt "Script"
 msgid "Thaana"
-msgstr ""
+msgstr "thaanski"
 
 #: gtk/script-names.c:54
-#, fuzzy
-#| msgctxt "input method menu"
-#| msgid "Thai-Lao"
 msgctxt "Script"
 msgid "Thai"
-msgstr "tajsko-laoški"
+msgstr "tajski"
 
 #: gtk/script-names.c:55
 msgctxt "Script"
 msgid "Tibetan"
-msgstr ""
+msgstr "tibetanski"
 
 #: gtk/script-names.c:56
 msgctxt "Script"
 msgid "Canadian Aboriginal"
-msgstr ""
+msgstr "kanadski aboriginski"
 
 #: gtk/script-names.c:57
 msgctxt "Script"
 msgid "Yi"
-msgstr ""
+msgstr "ji"
 
 #: gtk/script-names.c:58
 msgctxt "Script"
 msgid "Tagalog"
-msgstr ""
+msgstr "tagaloški"
 
 #: gtk/script-names.c:59
 msgctxt "Script"
 msgid "Hanunoo"
-msgstr ""
+msgstr "hanunojski"
 
 #: gtk/script-names.c:60
 msgctxt "Script"
 msgid "Buhid"
-msgstr ""
+msgstr "buhidski"
 
 #: gtk/script-names.c:61
 msgctxt "Script"
 msgid "Tagbanwa"
-msgstr ""
+msgstr "tagbanvaški"
 
 #: gtk/script-names.c:62
 msgctxt "Script"
 msgid "Braille"
-msgstr ""
+msgstr "brajica"
 
 #: gtk/script-names.c:63
 msgctxt "Script"
 msgid "Cypriot"
-msgstr ""
+msgstr "ciperski"
 
 #: gtk/script-names.c:64
 msgctxt "Script"
 msgid "Limbu"
-msgstr ""
+msgstr "limbujski"
 
 #: gtk/script-names.c:65
 msgctxt "Script"
 msgid "Osmanya"
-msgstr ""
+msgstr "osmanijski"
 
 #: gtk/script-names.c:66
 msgctxt "Script"
 msgid "Shavian"
-msgstr ""
+msgstr "šavijski"
 
 #: gtk/script-names.c:67
-#, fuzzy
-#| msgctxt "output-bin"
-#| msgid "Rear Bin"
 msgctxt "Script"
 msgid "Linear B"
-msgstr "Vsebnik zadaj"
+msgstr "linearni B"
 
 #: gtk/script-names.c:68
 msgctxt "Script"
 msgid "Tai Le"
-msgstr ""
+msgstr "tajlejški"
 
 #: gtk/script-names.c:69
 msgctxt "Script"
 msgid "Ugaritic"
-msgstr ""
+msgstr "ugaritski"
 
 #: gtk/script-names.c:70
 msgctxt "Script"
 msgid "New Tai Lue"
-msgstr ""
+msgstr "novi taj lue"
 
 #: gtk/script-names.c:71
 msgctxt "Script"
 msgid "Buginese"
-msgstr ""
+msgstr "buginski"
 
 #: gtk/script-names.c:72
 msgctxt "Script"
 msgid "Glagolitic"
-msgstr ""
+msgstr "glagolica"
 
 #: gtk/script-names.c:73
 msgctxt "Script"
 msgid "Tifinagh"
-msgstr ""
+msgstr "tifinaški"
 
 #: gtk/script-names.c:74
 msgctxt "Script"
 msgid "Syloti Nagri"
-msgstr ""
+msgstr "siloti nagri"
 
 #: gtk/script-names.c:75
 msgctxt "Script"
 msgid "Old Persian"
-msgstr ""
+msgstr "staroperzijski"
 
 #: gtk/script-names.c:76
 msgctxt "Script"
 msgid "Kharoshthi"
-msgstr ""
+msgstr "kharoški"
 
 #: gtk/script-names.c:77
-#, fuzzy
-#| msgid "Unknown"
 msgctxt "Script"
 msgid "Unknown"
-msgstr "Neznano"
+msgstr "neznani"
 
 #: gtk/script-names.c:78
-#, fuzzy
-#| msgid "Baseline"
 msgctxt "Script"
 msgid "Balinese"
-msgstr "Osnovnica besedila"
+msgstr "balijski"
 
 #: gtk/script-names.c:79
 msgctxt "Script"
 msgid "Cuneiform"
-msgstr ""
+msgstr "kuneiform"
 
 #: gtk/script-names.c:80
 msgctxt "Script"
 msgid "Phoenician"
-msgstr ""
+msgstr "feničanski"
 
 #: gtk/script-names.c:81
 msgctxt "Script"
 msgid "Phags-pa"
-msgstr ""
+msgstr "fags-pa"
 
 #: gtk/script-names.c:82
 msgctxt "Script"
 msgid "N'Ko"
-msgstr ""
+msgstr "nkojski"
 
 #: gtk/script-names.c:83
 msgctxt "Script"
 msgid "Kayah Li"
-msgstr ""
+msgstr "kaja li"
 
 #: gtk/script-names.c:84
 msgctxt "Script"
 msgid "Lepcha"
-msgstr ""
+msgstr "lepški"
 
 #: gtk/script-names.c:85
 msgctxt "Script"
 msgid "Rejang"
-msgstr ""
+msgstr "rejanski"
 
 #: gtk/script-names.c:86
 msgctxt "Script"
 msgid "Sundanese"
-msgstr ""
+msgstr "sundanejski"
 
 #: gtk/script-names.c:87
 msgctxt "Script"
 msgid "Saurashtra"
-msgstr ""
+msgstr "savraštrski"
 
 #: gtk/script-names.c:88
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Chameleon"
 msgctxt "Script"
 msgid "Cham"
-msgstr "kameleonska"
+msgstr "čamski"
 
 #: gtk/script-names.c:89
 msgctxt "Script"
 msgid "Ol Chiki"
-msgstr ""
+msgstr "olčiki"
 
 #: gtk/script-names.c:90
 msgctxt "Script"
 msgid "Vai"
-msgstr ""
+msgstr "vajski"
 
 #: gtk/script-names.c:91
 msgctxt "Script"
 msgid "Carian"
-msgstr ""
+msgstr "karijanski"
 
 #: gtk/script-names.c:92
 msgctxt "Script"
 msgid "Lycian"
-msgstr ""
+msgstr "licijski"
 
 #: gtk/script-names.c:93
 msgctxt "Script"
 msgid "Lydian"
-msgstr ""
+msgstr "lidianski"
 
 #: gtk/script-names.c:94
 msgctxt "Script"
 msgid "Avestan"
-msgstr ""
+msgstr "avestanski"
 
 #: gtk/script-names.c:95
 msgctxt "Script"
 msgid "Bamum"
-msgstr ""
+msgstr "bamum"
 
 #: gtk/script-names.c:96
 msgctxt "Script"
 msgid "Egyptian Hieroglyphs"
-msgstr ""
+msgstr "egipčanski hieroglifi"
 
 #: gtk/script-names.c:97
 msgctxt "Script"
 msgid "Imperial Aramaic"
-msgstr ""
+msgstr "aramajski"
 
 #: gtk/script-names.c:98
 msgctxt "Script"
 msgid "Inscriptional Pahlavi"
-msgstr ""
+msgstr "vpisni pahlavijski"
 
 #: gtk/script-names.c:99
 msgctxt "Script"
 msgid "Inscriptional Parthian"
-msgstr ""
+msgstr "vpisni partijski"
 
 #: gtk/script-names.c:100
 msgctxt "Script"
 msgid "Javanese"
-msgstr ""
+msgstr "javanski"
 
 #: gtk/script-names.c:101
 msgctxt "Script"
 msgid "Kaithi"
-msgstr ""
+msgstr "kajtski"
 
 #: gtk/script-names.c:102
 msgctxt "Script"
 msgid "Lisu"
-msgstr ""
+msgstr "lisujski"
 
 #: gtk/script-names.c:103
 msgctxt "Script"
 msgid "Meetei Mayek"
-msgstr ""
+msgstr "mitej majek"
 
 #: gtk/script-names.c:104
 msgctxt "Script"
 msgid "Old South Arabian"
-msgstr ""
+msgstr "starojužnoarabski"
 
 #: gtk/script-names.c:105
 msgctxt "Script"
 msgid "Old Turkic"
-msgstr ""
+msgstr "staroturški"
 
 #: gtk/script-names.c:106
 msgctxt "Script"
 msgid "Samaritan"
-msgstr ""
+msgstr "samaritanski"
 
 #: gtk/script-names.c:107
 msgctxt "Script"
 msgid "Tai Tham"
-msgstr ""
+msgstr "tajtamski"
 
 #: gtk/script-names.c:108
 msgctxt "Script"
 msgid "Tai Viet"
-msgstr ""
+msgstr "tajski"
 
 #: gtk/script-names.c:109
 msgctxt "Script"
 msgid "Batak"
-msgstr ""
+msgstr "batak"
 
 #: gtk/script-names.c:110
 msgctxt "Script"
 msgid "Brahmi"
-msgstr ""
+msgstr "brahmski"
 
 #: gtk/script-names.c:111
 msgctxt "Script"
 msgid "Mandaic"
-msgstr ""
+msgstr "mandajski"
 
 #: gtk/script-names.c:112
 msgctxt "Script"
 msgid "Chakma"
-msgstr ""
+msgstr "čakmajski"
 
 #: gtk/script-names.c:113
 msgctxt "Script"
 msgid "Meroitic Cursive"
-msgstr ""
+msgstr "meroitski pisani"
 
 #: gtk/script-names.c:114
 msgctxt "Script"
 msgid "Meroitic Hieroglyphs"
-msgstr ""
+msgstr "meroitski hieroglifi"
 
 #: gtk/script-names.c:115
 msgctxt "Script"
 msgid "Miao"
-msgstr ""
+msgstr "mjaoški"
 
 #: gtk/script-names.c:116
 msgctxt "Script"
 msgid "Sharada"
-msgstr ""
+msgstr "šaradski"
 
 #: gtk/script-names.c:117
 msgctxt "Script"
 msgid "Sora Sompeng"
-msgstr ""
+msgstr "sorasompeng"
 
 #: gtk/script-names.c:118
 msgctxt "Script"
 msgid "Takri"
-msgstr ""
+msgstr "takrijski"
 
 #: gtk/script-names.c:119
 msgctxt "Script"
 msgid "Bassa"
-msgstr ""
+msgstr "basajski"
 
 #: gtk/script-names.c:120
 msgctxt "Script"
 msgid "Caucasian Albanian"
-msgstr ""
+msgstr "albanski"
 
 #: gtk/script-names.c:121
 msgctxt "Script"
 msgid "Duployan"
-msgstr ""
+msgstr "duplojski"
 
 #: gtk/script-names.c:122
 msgctxt "Script"
 msgid "Elbasan"
-msgstr ""
+msgstr "elbasanski"
 
 #: gtk/script-names.c:123
 msgctxt "Script"
 msgid "Grantha"
-msgstr ""
+msgstr "grantajski"
 
 #: gtk/script-names.c:124
 msgctxt "Script"
 msgid "Khojki"
-msgstr ""
+msgstr "khojski"
 
 #: gtk/script-names.c:125
 msgctxt "Script"
 msgid "Khudawadi, Sindhi"
-msgstr ""
+msgstr "sindski, kudavadi"
 
 #: gtk/script-names.c:126
 msgctxt "Script"
 msgid "Linear A"
-msgstr ""
+msgstr "linearni A"
 
 #: gtk/script-names.c:127
 msgctxt "Script"
 msgid "Mahajani"
-msgstr ""
+msgstr "mahajani"
 
 #: gtk/script-names.c:128
 msgctxt "Script"
 msgid "Manichaean"
-msgstr ""
+msgstr "maničejski"
 
 #: gtk/script-names.c:129
 msgctxt "Script"
 msgid "Mende Kikakui"
-msgstr ""
+msgstr "mende kikaku"
 
 #: gtk/script-names.c:130
-#, fuzzy
-#| msgid "Modified"
 msgctxt "Script"
 msgid "Modi"
-msgstr "Spremenjeno"
+msgstr "modijsi"
 
 #: gtk/script-names.c:131
 msgctxt "Script"
 msgid "Mro"
-msgstr ""
+msgstr "mrojski"
 
 #: gtk/script-names.c:132
 msgctxt "Script"
 msgid "Nabataean"
-msgstr ""
+msgstr "nabatejski"
 
 #: gtk/script-names.c:133
 msgctxt "Script"
 msgid "Old North Arabian"
-msgstr ""
+msgstr "starosevernoarabski"
 
 #: gtk/script-names.c:134
 msgctxt "Script"
 msgid "Old Permic"
-msgstr ""
+msgstr "staropermski"
 
 #: gtk/script-names.c:135
 msgctxt "Script"
 msgid "Pahawh Hmong"
-msgstr ""
+msgstr "pahavhmong"
 
 #: gtk/script-names.c:136
 msgctxt "Script"
 msgid "Palmyrene"
-msgstr ""
+msgstr "palmirenski"
 
 #: gtk/script-names.c:137
 msgctxt "Script"
 msgid "Pau Cin Hau"
-msgstr ""
+msgstr "paučinhauski"
 
 #: gtk/script-names.c:138
 msgctxt "Script"
 msgid "Psalter Pahlavi"
-msgstr ""
+msgstr "psalter pahlavi"
 
 #: gtk/script-names.c:139
 msgctxt "Script"
 msgid "Siddham"
-msgstr ""
+msgstr "sidhamski"
 
 #: gtk/script-names.c:140
 msgctxt "Script"
 msgid "Tirhuta"
-msgstr ""
+msgstr "tirhuta"
 
 #: gtk/script-names.c:141
 msgctxt "Script"
 msgid "Warang Citi"
-msgstr ""
+msgstr "varang"
 
 #: gtk/script-names.c:142
 msgctxt "Script"
 msgid "Ahom"
-msgstr ""
+msgstr "ahomski"
 
 #: gtk/script-names.c:143
 msgctxt "Script"
 msgid "Anatolian Hieroglyphs"
-msgstr ""
+msgstr "anatolijski hieroglifi"
 
 #: gtk/script-names.c:144
 msgctxt "Script"
 msgid "Hatran"
-msgstr ""
+msgstr "hatranski"
 
 #: gtk/script-names.c:145
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Multi_key"
 msgctxt "Script"
 msgid "Multani"
-msgstr "Multi Key"
+msgstr "multani"
 
 #: gtk/script-names.c:146
 msgctxt "Script"
 msgid "Old Hungarian"
-msgstr ""
+msgstr "staromadžarski"
 
 #: gtk/script-names.c:147
-#, fuzzy
-#| msgctxt "print operation status"
-#| msgid "Printing"
 msgctxt "Script"
 msgid "Signwriting"
-msgstr "Tiskanje"
+msgstr "znakovni"
 
 #: gtk/script-names.c:148
 msgctxt "Script"
 msgid "Adlam"
-msgstr ""
+msgstr "adlamski"
 
 #: gtk/script-names.c:149
 msgctxt "Script"
 msgid "Bhaiksuki"
-msgstr ""
+msgstr "bhaiksuški"
 
 #: gtk/script-names.c:150
-#, fuzzy
-#| msgid "Searching"
 msgctxt "Script"
 msgid "Marchen"
-msgstr "Poteka iskanje"
+msgstr "marčenski"
 
 #: gtk/script-names.c:151
 msgctxt "Script"
 msgid "Newa"
-msgstr ""
+msgstr "nevajski"
 
 #: gtk/script-names.c:152
 msgctxt "Script"
 msgid "Osage"
-msgstr ""
+msgstr "osaški"
 
 #: gtk/script-names.c:153
 msgctxt "Script"
 msgid "Tangut"
-msgstr ""
+msgstr "tangutski"
 
 #: gtk/script-names.c:154
 msgctxt "Script"
 msgid "Masaram Gondi"
-msgstr ""
+msgstr "masaram gondi"
 
 #: gtk/script-names.c:155
 msgctxt "Script"
 msgid "Nushu"
-msgstr ""
+msgstr "nušujski"
 
 #: gtk/script-names.c:156
 msgctxt "Script"
 msgid "Soyombo"
-msgstr ""
+msgstr "sojombojski"
 
 #: gtk/script-names.c:157
 msgctxt "Script"
 msgid "Zanabazar Square"
-msgstr ""
+msgstr "zanzibarski"
 
-#: gtk/ui/gtkaboutdialog.ui:133
+#: gtk/ui/gtkaboutdialog.ui:137
 msgid "About"
 msgstr "O programu"
 
-#: gtk/ui/gtkaboutdialog.ui:173
+#: gtk/ui/gtkaboutdialog.ui:177
 msgid "Credits"
 msgstr "Zasluge"
 
@@ -7077,7 +7027,7 @@ msgstr "Poglej vse _programe"
 msgid "_Find New Applications"
 msgstr "_Najdi nove programe"
 
-#: gtk/ui/gtkappchooserwidget.ui:117
+#: gtk/ui/gtkappchooserwidget.ui:119
 msgid "No applications found."
 msgstr "Ni najdenih programov."
 
@@ -7131,7 +7081,7 @@ msgstr "Izberite barvo"
 
 #: gtk/ui/gtkcoloreditor.ui:57
 msgid "Pick a color from the screen"
-msgstr ""
+msgstr "Izbor barve na zaslonu"
 
 #: gtk/ui/gtkcoloreditor.ui:89
 msgid "Color Name"
@@ -7171,7 +7121,7 @@ msgstr "Nasičenost"
 
 #: gtk/ui/gtkemojichooser.ui:53 gtk/ui/gtkemojichooser.ui:212
 msgid "Smileys & People"
-msgstr "Izrazi in Ljudje"
+msgstr "Izrazne ikone in Ljudje"
 
 #: gtk/ui/gtkemojichooser.ui:68 gtk/ui/gtkemojichooser.ui:227
 msgid "Body & Clothing"
@@ -7206,23 +7156,19 @@ msgstr "Simboli"
 msgid "Flags"
 msgstr "Zastavice"
 
-#: gtk/ui/gtkfilechooserwidget.ui:69
-msgid "Create Folder"
-msgstr "Ustvari mapo"
-
 #: gtk/ui/gtkfilechooserwidget.ui:168
 msgid "Files"
 msgstr "Datoteke"
 
-#: gtk/ui/gtkfilechooserwidget.ui:261
+#: gtk/ui/gtkfilechooserwidget.ui:273
 msgid "Remote location — only searching the current folder"
 msgstr "Oddaljeno mesto — iskanje le trenutne mape"
 
-#: gtk/ui/gtkfilechooserwidget.ui:433
+#: gtk/ui/gtkfilechooserwidget.ui:445
 msgid "Folder Name"
 msgstr "Ime mape"
 
-#: gtk/ui/gtkfilechooserwidget.ui:461
+#: gtk/ui/gtkfilechooserwidget.ui:473
 msgid "_Create"
 msgstr "_Ustvari"
 
@@ -7296,67 +7242,24 @@ msgstr ""
 msgid "Available Protocols"
 msgstr "Razpoložljivi protokoli"
 
-#: gtk/ui/gtkplacesview.ui:92
-msgid "AppleTalk"
-msgstr "AppleTalk"
-
-#: gtk/ui/gtkplacesview.ui:103
-msgid "File Transfer Protocol"
-msgstr "Protokol prenosa datotek FTP"
-
-#: gtk/ui/gtkplacesview.ui:114
-msgid "Network File System"
-msgstr "Omrežni datotečni sistem"
-
-#: gtk/ui/gtkplacesview.ui:125
-msgid "Samba"
-msgstr "Samba"
-
-#: gtk/ui/gtkplacesview.ui:136
-msgid "SSH File Transfer Protocol"
-msgstr "Protokol prenosa datotek SSH"
-
-#: gtk/ui/gtkplacesview.ui:147
-msgid "WebDAV"
-msgstr "WebDAV"
-
-#. Translators: do not translate ftp:// and ftps://
-#: gtk/ui/gtkplacesview.ui:183
-msgid "ftp:// or ftps://"
-msgstr "ftp:// ali ftps://"
-
-#: gtk/ui/gtkplacesview.ui:205
-msgid "smb://"
-msgstr "smb://"
-
-#. Translators: do not translate sftp:// and ssh://
-#: gtk/ui/gtkplacesview.ui:216
-msgid "sftp:// or ssh://"
-msgstr "sftp:// ali ssh://"
-
-#. Translators: do not translate dav:// and davs://
-#: gtk/ui/gtkplacesview.ui:227
-msgid "dav:// or davs://"
-msgstr "dav:// ali davs://"
-
 #. Translators: Server as any successfully connected network address
-#: gtk/ui/gtkplacesview.ui:267
+#: gtk/ui/gtkplacesview.ui:135
 msgid "No recent servers found"
 msgstr "Ni najdenih nedavnih strežnikov"
 
-#: gtk/ui/gtkplacesview.ui:290
+#: gtk/ui/gtkplacesview.ui:158
 msgid "Recent Servers"
 msgstr "Nedavni strežniki"
 
-#: gtk/ui/gtkplacesview.ui:393
+#: gtk/ui/gtkplacesview.ui:261
 msgid "No results found"
 msgstr "Ni zadetkov"
 
-#: gtk/ui/gtkplacesview.ui:439
+#: gtk/ui/gtkplacesview.ui:307
 msgid "Connect to _Server"
 msgstr "Poveži s _strežnikom"
 
-#: gtk/ui/gtkplacesview.ui:472
+#: gtk/ui/gtkplacesview.ui:340
 msgid "Enter server address…"
 msgstr "Vpis naslova strežnika ..."
 
@@ -7653,14 +7556,10 @@ msgid "Overwrite an existing cache, even if up to date"
 msgstr "Prepiši obstoječi predpomnilnik, tudi če je posodobljen"
 
 #: gtk/updateiconcache.c:1655
-#, fuzzy
-#| msgid "Don’t check for the existence of index.theme"
 msgid "Don't check for the existence of index.theme"
 msgstr "Ne preveri obstoja datoteke index.theme"
 
 #: gtk/updateiconcache.c:1656
-#, fuzzy
-#| msgid "Don’t include image data in the cache"
 msgid "Don't include image data in the cache"
 msgstr "Ne vključi slikovnih podatkov v predpomnilnik"
 
@@ -7696,16 +7595,12 @@ msgid "No theme index file.\n"
 msgstr "Ni datoteke kazala teme.\n"
 
 #: gtk/updateiconcache.c:1750
-#, fuzzy, c-format
-#| msgid ""
-#| "No theme index file in “%s”.\n"
-#| "If you really want to create an icon cache here, use --ignore-theme-"
-#| "index.\n"
+#, c-format
 msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
-"V »%s« ni nobene datoteke kazala teme.\n"
+"V »%s« ni datoteke kazala teme.\n"
 "Če res želite ustvariti predpomnilnik ikon, uporabite možnost --ignore-theme-"
 "index.\n"
 
@@ -7786,7 +7681,7 @@ msgid "Vietnamese (VIQR)"
 msgstr "vietnamski (VIQR)"
 
 #. ID
-#: modules/input/imwayland.c:100
+#: modules/input/imwayland.c:104
 msgctxt "input method menu"
 msgid "Wayland"
 msgstr "Wayland"
@@ -7828,438 +7723,438 @@ msgstr "Nedejavno stanje"
 msgid "Pages per _sheet:"
 msgstr "Strani na _list:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1113
-#: modules/printbackends/cups/gtkprintbackendcups.c:1422
+#: modules/printbackends/cups/gtkprintbackendcups.c:1128
+#: modules/printbackends/cups/gtkprintbackendcups.c:1437
 msgid "Username:"
 msgstr "Uporabniško ime:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1114
-#: modules/printbackends/cups/gtkprintbackendcups.c:1431
+#: modules/printbackends/cups/gtkprintbackendcups.c:1129
+#: modules/printbackends/cups/gtkprintbackendcups.c:1446
 msgid "Password:"
 msgstr "Geslo:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1153
-#: modules/printbackends/cups/gtkprintbackendcups.c:1444
+#: modules/printbackends/cups/gtkprintbackendcups.c:1168
+#: modules/printbackends/cups/gtkprintbackendcups.c:1459
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr "Za tiskanje dokumenta »%s« na tiskalniku %s je zahtevana overitev"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1155
+#: modules/printbackends/cups/gtkprintbackendcups.c:1170
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "Za tiskanje dokumenta na %s je zahtevana overitev"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1159
+#: modules/printbackends/cups/gtkprintbackendcups.c:1174
 #, c-format
 msgid "Authentication is required to get attributes of job “%s”"
 msgstr "Za pridobitev atributov posla »%s« je zahtevana overitev"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1161
+#: modules/printbackends/cups/gtkprintbackendcups.c:1176
 msgid "Authentication is required to get attributes of a job"
 msgstr "Za pridobitev atributov posla je zahtevana overitev"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1165
+#: modules/printbackends/cups/gtkprintbackendcups.c:1180
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "Za pridobitev atributov tiskalnika %s je zahtevana overitev"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1167
+#: modules/printbackends/cups/gtkprintbackendcups.c:1182
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Za pridobitev atributov tiskalnika je zahtevana overitev"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1170
+#: modules/printbackends/cups/gtkprintbackendcups.c:1185
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "Za pridobitev privzetega tiskalnika %s je zahtevana overitev"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1173
+#: modules/printbackends/cups/gtkprintbackendcups.c:1188
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Za pridobitev tiskalnikov iz %s je zahtevana overitev"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1178
+#: modules/printbackends/cups/gtkprintbackendcups.c:1193
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "Za pridobitev datoteke iz %s je zahtevana overitev"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1180
+#: modules/printbackends/cups/gtkprintbackendcups.c:1195
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "Na %s je zahtevana overitev"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1416
+#: modules/printbackends/cups/gtkprintbackendcups.c:1431
 msgid "Domain:"
 msgstr "Domena:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1446
+#: modules/printbackends/cups/gtkprintbackendcups.c:1461
 #, c-format
 msgid "Authentication is required to print document “%s”"
 msgstr "Za tiskanje dokumenta »%s« je zahtevana overitev."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1451
+#: modules/printbackends/cups/gtkprintbackendcups.c:1466
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "Za tiskanje tega dokumenta na tiskalniku %s je zahtevana overitev"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1453
+#: modules/printbackends/cups/gtkprintbackendcups.c:1468
 msgid "Authentication is required to print this document"
 msgstr "Za tiskanje tega dokumenta je zahtevana overitev"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2532
+#: modules/printbackends/cups/gtkprintbackendcups.c:2543
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "V tiskalniku »%s« je skoraj prazen toner."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2536
+#: modules/printbackends/cups/gtkprintbackendcups.c:2547
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "V tiskalniku »%s« je prazen toner."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:2541
+#: modules/printbackends/cups/gtkprintbackendcups.c:2552
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "V tiskalniku »%s« je skoraj zmanjkalo razvijalca."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:2546
+#: modules/printbackends/cups/gtkprintbackendcups.c:2557
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "V tiskalniku »%s« je zmanjkalo razvijalca."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:2551
+#: modules/printbackends/cups/gtkprintbackendcups.c:2562
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "V tiskalniku »%s« je skoraj prazna vsaj ena kartuša."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:2556
+#: modules/printbackends/cups/gtkprintbackendcups.c:2567
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "V tiskalniku »%s« je prazna vsaj ena kartuša."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2560
+#: modules/printbackends/cups/gtkprintbackendcups.c:2571
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "Tiskalnik »%s« ima odprt pokrov."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2564
+#: modules/printbackends/cups/gtkprintbackendcups.c:2575
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "Tiskalnik »%s« ima odprta vratca."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2568
+#: modules/printbackends/cups/gtkprintbackendcups.c:2579
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "V tiskalniku »%s« je skoraj zmanjkalo papirja."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2572
+#: modules/printbackends/cups/gtkprintbackendcups.c:2583
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "V tiskalniku »%s« je zmanjkalo papirja."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2576
+#: modules/printbackends/cups/gtkprintbackendcups.c:2587
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "Tiskalnik »%s« trenutno ni povezan."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2580
+#: modules/printbackends/cups/gtkprintbackendcups.c:2591
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "Prišlo je do težav na tiskalniku “%s“."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2600
+#: modules/printbackends/cups/gtkprintbackendcups.c:2611
 msgid "Paused; Rejecting Jobs"
 msgstr "Premor ; zavračanje poslov"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2606
+#: modules/printbackends/cups/gtkprintbackendcups.c:2617
 msgid "Rejecting Jobs"
 msgstr "Zavračanje poslov"
 
 #. Translators: this string connects multiple printer states together.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2647
+#: modules/printbackends/cups/gtkprintbackendcups.c:2658
 msgid "; "
 msgstr ";"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4387
-#: modules/printbackends/cups/gtkprintbackendcups.c:4454
+#: modules/printbackends/cups/gtkprintbackendcups.c:4386
+#: modules/printbackends/cups/gtkprintbackendcups.c:4453
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "Dvostransko"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4388
+#: modules/printbackends/cups/gtkprintbackendcups.c:4387
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Vrsta papirja"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4389
+#: modules/printbackends/cups/gtkprintbackendcups.c:4388
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Vir papirja"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4390
-#: modules/printbackends/cups/gtkprintbackendcups.c:4455
+#: modules/printbackends/cups/gtkprintbackendcups.c:4389
+#: modules/printbackends/cups/gtkprintbackendcups.c:4454
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Pladenj za papir"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4391
+#: modules/printbackends/cups/gtkprintbackendcups.c:4390
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Ločljivost"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4392
+#: modules/printbackends/cups/gtkprintbackendcups.c:4391
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "Predhodno filtriranje GhostScript"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4401
+#: modules/printbackends/cups/gtkprintbackendcups.c:4400
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "Enostransko"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4403
+#: modules/printbackends/cups/gtkprintbackendcups.c:4402
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "Dolga stranica (standardno)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4405
+#: modules/printbackends/cups/gtkprintbackendcups.c:4404
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "Kratka stranica (zrcaljeno)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4407
-#: modules/printbackends/cups/gtkprintbackendcups.c:4409
-#: modules/printbackends/cups/gtkprintbackendcups.c:4417
+#: modules/printbackends/cups/gtkprintbackendcups.c:4406
+#: modules/printbackends/cups/gtkprintbackendcups.c:4408
+#: modules/printbackends/cups/gtkprintbackendcups.c:4416
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Samodejno izberi"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4411
-#: modules/printbackends/cups/gtkprintbackendcups.c:4413
-#: modules/printbackends/cups/gtkprintbackendcups.c:4415
-#: modules/printbackends/cups/gtkprintbackendcups.c:4419
+#: modules/printbackends/cups/gtkprintbackendcups.c:4410
+#: modules/printbackends/cups/gtkprintbackendcups.c:4412
+#: modules/printbackends/cups/gtkprintbackendcups.c:4414
+#: modules/printbackends/cups/gtkprintbackendcups.c:4418
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Privzeto za tiskalnik"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4421
+#: modules/printbackends/cups/gtkprintbackendcups.c:4420
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "Vstavi samo pisave GhostScript"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4423
+#: modules/printbackends/cups/gtkprintbackendcups.c:4422
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "Pretvori v PS ravni 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4425
+#: modules/printbackends/cups/gtkprintbackendcups.c:4424
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "Pretvori v PS ravni 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4427
+#: modules/printbackends/cups/gtkprintbackendcups.c:4426
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Brez predhodnega filtriranja"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:4436
+#: modules/printbackends/cups/gtkprintbackendcups.c:4435
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "Razno"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4463
+#: modules/printbackends/cups/gtkprintbackendcups.c:4462
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Enostransko"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4465
+#: modules/printbackends/cups/gtkprintbackendcups.c:4464
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "Dolga stranica (standardno)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4467
+#: modules/printbackends/cups/gtkprintbackendcups.c:4466
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "Kratka stranica (zrcaljeno)"
 
 #. Translators: Top output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4470
+#: modules/printbackends/cups/gtkprintbackendcups.c:4469
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "Vsebnik na vrhu"
 
 #. Translators: Middle output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4472
+#: modules/printbackends/cups/gtkprintbackendcups.c:4471
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "Vsebnik na sredini"
 
 #. Translators: Bottom output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4474
+#: modules/printbackends/cups/gtkprintbackendcups.c:4473
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "Vsebnik na dnu"
 
 #. Translators: Side output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4476
+#: modules/printbackends/cups/gtkprintbackendcups.c:4475
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "Vsebnik na robu"
 
 #. Translators: Left output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4478
+#: modules/printbackends/cups/gtkprintbackendcups.c:4477
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "Vsebnik na levi"
 
 #. Translators: Right output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4480
+#: modules/printbackends/cups/gtkprintbackendcups.c:4479
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "Vsebnik na desni"
 
 #. Translators: Center output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4482
+#: modules/printbackends/cups/gtkprintbackendcups.c:4481
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "Vsebnik na sredini"
 
 #. Translators: Rear output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4484
+#: modules/printbackends/cups/gtkprintbackendcups.c:4483
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Vsebnik zadaj"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/cups/gtkprintbackendcups.c:4486
+#: modules/printbackends/cups/gtkprintbackendcups.c:4485
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Vsebnik obrnjen navzgor"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/cups/gtkprintbackendcups.c:4488
+#: modules/printbackends/cups/gtkprintbackendcups.c:4487
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "Vsebnik obrnjen navzdol"
 
 #. Translators: Large capacity output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4490
+#: modules/printbackends/cups/gtkprintbackendcups.c:4489
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "Obsežni zmogljivi vsebnik"
 
 #. Translators: Output stacker number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4512
+#: modules/printbackends/cups/gtkprintbackendcups.c:4511
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "Skladalnik %d"
 
 #. Translators: Output mailbox number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4516
+#: modules/printbackends/cups/gtkprintbackendcups.c:4515
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "Poštni predal %d"
 
 #. Translators: Private mailbox
-#: modules/printbackends/cups/gtkprintbackendcups.c:4520
+#: modules/printbackends/cups/gtkprintbackendcups.c:4519
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "Poštni predal"
 
 #. Translators: Output tray number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4524
+#: modules/printbackends/cups/gtkprintbackendcups.c:4523
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "Pladenj %d"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4995
+#: modules/printbackends/cups/gtkprintbackendcups.c:4994
 msgid "Printer Default"
 msgstr "Privzeto za tiskalnik"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5436
+#: modules/printbackends/cups/gtkprintbackendcups.c:5435
 msgid "Urgent"
 msgstr "Nujno"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5436
+#: modules/printbackends/cups/gtkprintbackendcups.c:5435
 msgid "High"
 msgstr "Visoka"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5436
+#: modules/printbackends/cups/gtkprintbackendcups.c:5435
 msgid "Medium"
 msgstr "Srednja"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5436
+#: modules/printbackends/cups/gtkprintbackendcups.c:5435
 msgid "Low"
 msgstr "Nizka"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5466
+#: modules/printbackends/cups/gtkprintbackendcups.c:5465
 msgid "Job Priority"
 msgstr "Prednost posla"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5477
+#: modules/printbackends/cups/gtkprintbackendcups.c:5476
 msgid "Billing Info"
 msgstr "Podatki o plačilu"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5501
+#: modules/printbackends/cups/gtkprintbackendcups.c:5500
 msgctxt "cover page"
 msgid "None"
 msgstr "Brez"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5502
+#: modules/printbackends/cups/gtkprintbackendcups.c:5501
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Omejeno"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5503
+#: modules/printbackends/cups/gtkprintbackendcups.c:5502
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Varovano"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5504
+#: modules/printbackends/cups/gtkprintbackendcups.c:5503
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Tajno"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5505
+#: modules/printbackends/cups/gtkprintbackendcups.c:5504
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Zaupno"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5506
+#: modules/printbackends/cups/gtkprintbackendcups.c:5505
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Strogo zaupno"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5507
+#: modules/printbackends/cups/gtkprintbackendcups.c:5506
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Nerazvrščeno"
@@ -8267,7 +8162,7 @@ msgstr "Nerazvrščeno"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5519
+#: modules/printbackends/cups/gtkprintbackendcups.c:5518
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Število strani na stran"
@@ -8275,7 +8170,7 @@ msgstr "Število strani na stran"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5536
+#: modules/printbackends/cups/gtkprintbackendcups.c:5535
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Vrstni red strani"
@@ -8283,7 +8178,7 @@ msgstr "Vrstni red strani"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5578
+#: modules/printbackends/cups/gtkprintbackendcups.c:5577
 msgctxt "printer option"
 msgid "Before"
 msgstr "Pred"
@@ -8291,7 +8186,7 @@ msgstr "Pred"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5593
+#: modules/printbackends/cups/gtkprintbackendcups.c:5592
 msgctxt "printer option"
 msgid "After"
 msgstr "Po"
@@ -8300,7 +8195,7 @@ msgstr "Po"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5613
+#: modules/printbackends/cups/gtkprintbackendcups.c:5612
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Natisni ob"
@@ -8308,7 +8203,7 @@ msgstr "Natisni ob"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5624
+#: modules/printbackends/cups/gtkprintbackendcups.c:5623
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Natisni ob času"
@@ -8318,35 +8213,35 @@ msgstr "Natisni ob času"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5666
+#: modules/printbackends/cups/gtkprintbackendcups.c:5668
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Po meri %s×%s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5775
+#: modules/printbackends/cups/gtkprintbackendcups.c:5778
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Profil tiskalnika"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/cups/gtkprintbackendcups.c:5782
+#: modules/printbackends/cups/gtkprintbackendcups.c:5785
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Ni na voljo"
 
 #. TRANSLATORS: when we're running an old CUPS, and
 #. * it hasn't registered the device with colord
-#: modules/printbackends/cups/gtkprintercups.c:269
+#: modules/printbackends/cups/gtkprintercups.c:275
 msgid "Color management unavailable"
 msgstr "Upravljanje barv ni na voljo"
 
 #. TRANSLATORS: when there is no color profile available
-#: modules/printbackends/cups/gtkprintercups.c:281
+#: modules/printbackends/cups/gtkprintercups.c:287
 msgid "No profile available"
 msgstr "Profil ni na voljo"
 
 #. TRANSLATORS: when the color profile has no title
-#: modules/printbackends/cups/gtkprintercups.c:292
+#: modules/printbackends/cups/gtkprintercups.c:298
 msgid "Unspecified profile"
 msgstr "Nedoločeno ime profila"
 
@@ -8425,11 +8320,83 @@ msgstr "preizkusni-izhod.%s"
 msgid "Print to Test Printer"
 msgstr "Natisni na preizkusnem tiskalniku"
 
+#~ msgid "3.2 core GL profile is not available on EGL implementation"
+#~ msgstr "Profil jedra GL 3.2 ni na voljo v okolju EGL"
+
+#~ msgid "Not implemented on OS X"
+#~ msgstr "Ni vprogramirano v OS X"
+
+#~ msgctxt "switch"
+#~ msgid "ON"
+#~ msgstr "❙"
+
+#~ msgctxt "switch"
+#~ msgid "OFF"
+#~ msgstr "○"
+
+#~ msgid "smb://"
+#~ msgstr "smb://"
+
+#~ msgid "This clipboard cannot store data."
+#~ msgstr "V tem odložišču ni mogoče shranjevati podatkov."
+
+#~ msgid "Cannot read from empty clipboard."
+#~ msgstr "Ni mogoče brati iz praznega odložišča."
+
+#~ msgid "No compatible formats to transfer clipboard contents."
+#~ msgstr "Ni skladnih zapisov za prenos vsebine odložišča."
+
+#~ msgid "Cannot provide contents as “%s”"
+#~ msgstr "Ni mogoče določiti vsebine kot »%s«."
+
+#, fuzzy
+#~| msgid "Could not read the contents of %s"
+#~ msgid "Cannot provide contents as %s"
+#~ msgstr "Vsebine %s ni mogoče prebrati"
+
+#~ msgid "No compatible formats to transfer contents."
+#~ msgstr "Ni skladnih zapisov za prenos vsebine."
+
 #~ msgid "Vulkan support disabled via GDK_DEBUG"
 #~ msgstr "Podpora Vulkan je onemogočena prek GDK_DEBUG"
 
-#~ msgid "Open “%s”"
-#~ msgstr "Odpri »%s«"
+#~ msgid "Format %s not supported"
+#~ msgstr "Zapis %s ni podprt."
+
+#, fuzzy
+#~ msgid "Not enough space in destination"
+#~ msgstr "Ni dovolj prostora za cilju"
+
+#, fuzzy
+#~ msgid "Invalid byte sequence in conversion input"
+#~ msgstr "Neveljavno zaporedje bajtov na vhodu pretvorbe"
+
+#, fuzzy
+#~| msgid "Opening “%s”."
+#~ msgid "Unsupported encoding “%s”"
+#~ msgstr "Odpiranje datoteke »%s«."
+
+#~ msgid "Design by"
+#~ msgstr "Oblikovanje:"
+
+#~ msgctxt "long time format"
+#~ msgid "%d:%02d:%02d"
+#~ msgstr "%d.%02d.%02d"
+
+#~ msgctxt "long time format"
+#~ msgid "-%d:%02d:%02d"
+#~ msgstr "–%d.%02d.%02d"
+
+#~ msgctxt "short time format"
+#~ msgid "-%d:%02d"
+#~ msgstr "–%d.%02d"
+
+#~ msgctxt "short time format"
+#~ msgid "%d:%02d"
+#~ msgstr "%d.%02d"
+
+#~ msgid "Starred files"
+#~ msgstr "Z zvezdico"
 
 #~ msgid "Swipe left"
 #~ msgstr "Poteg v levo"
@@ -8437,14 +8404,70 @@ msgstr "Natisni na preizkusnem tiskalniku"
 #~ msgid "Swipe right"
 #~ msgstr "Poteg v desno"
 
+#, fuzzy
+#~| msgctxt "font"
+#~| msgid "None"
+#~ msgctxt "Vulkan device"
+#~ msgid "None"
+#~ msgstr "Brez"
+
+#, fuzzy
+#~| msgctxt "font"
+#~| msgid "None"
+#~ msgctxt "Vulkan version"
+#~ msgid "None"
+#~ msgstr "Brez"
+
+#~ msgid "GSK Renderer"
+#~ msgstr "Izrisovalnik GSK"
+
+#, fuzzy
+#~| msgid "_Unlock Device"
+#~ msgid "Vulkan Device"
+#~ msgstr "_Odkleni napravo"
+
 #~ msgid "Saving RenderNode failed"
 #~ msgstr "Shranjevanje izrisovanja vozlišča je spodletelo"
 
-#~ msgid "Snapshot Debug Nodes"
-#~ msgstr "Vozlišča razhroščevanja Snapshot"
+#, fuzzy
+#~| msgid "Recorder"
+#~ msgid "Record frames"
+#~ msgstr "Snemalnik"
+
+#~ msgid "Logging"
+#~ msgstr "Beleženje"
+
+#~ msgid "Global"
+#~ msgstr "Splošno"
 
 #~ msgid "Recorder"
 #~ msgstr "Snemalnik"
+
+#~ msgctxt "emoji category"
+#~ msgid "Recent"
+#~ msgstr "Nedavno"
+
+#~ msgid "horizontal"
+#~ msgstr "vodoravno"
+
+#, fuzzy
+#~| msgid "Unspecified error"
+#~ msgid "Unspecified error decoding video"
+#~ msgstr "Nedoločena napaka"
+
+#~ msgid "Not enough memory"
+#~ msgstr "Ni dovolj pomnilnika"
+
+#, fuzzy
+#~| msgid "Not a valid page setup file"
+#~ msgid "Not a video file"
+#~ msgstr "Ni veljavna datoteka nastavitev strani"
+
+#~ msgid "Open “%s”"
+#~ msgstr "Odpri »%s«"
+
+#~ msgid "Snapshot Debug Nodes"
+#~ msgstr "Vozlišča razhroščevanja Snapshot"
 
 #~ msgid ""
 #~ "The WGL_ARB_create_context extension needed to create core profiles is "

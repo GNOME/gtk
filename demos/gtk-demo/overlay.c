@@ -12,7 +12,7 @@
 static void
 do_number (GtkButton *button, GtkEntry *entry)
 {
-  gtk_entry_set_text (entry, gtk_button_get_label (button));
+  gtk_editable_set_text (GTK_EDITABLE (entry), gtk_button_get_label (button));
 }
 
 GtkWidget *
@@ -57,7 +57,7 @@ do_overlay (GtkWidget *do_widget)
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), vbox);
-      gtk_overlay_set_overlay_pass_through (GTK_OVERLAY (overlay), vbox, TRUE);
+      gtk_widget_set_can_target (vbox, FALSE);
       gtk_widget_set_halign (vbox, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (vbox, GTK_ALIGN_CENTER);
 
@@ -65,7 +65,7 @@ do_overlay (GtkWidget *do_widget)
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
       gtk_widget_set_margin_top (label, 8);
       gtk_widget_set_margin_bottom (label, 50);
-      gtk_box_pack_start (GTK_BOX (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), label);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), vbox);
@@ -74,7 +74,7 @@ do_overlay (GtkWidget *do_widget)
       gtk_entry_set_placeholder_text (GTK_ENTRY (entry), "Your Lucky Number");
       gtk_widget_set_margin_top (entry, 50);
       gtk_widget_set_margin_bottom (entry, 8);
-      gtk_box_pack_start (GTK_BOX (vbox), entry);
+      gtk_container_add (GTK_CONTAINER (vbox), entry);
 
       gtk_container_add (GTK_CONTAINER (window), overlay);
 

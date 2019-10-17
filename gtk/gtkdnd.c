@@ -33,10 +33,12 @@
 #include "gtkpicture.h"
 #include "gtkselectionprivate.h"
 #include "gtksettingsprivate.h"
+#include "gtkstylecontext.h"
 #include "gtktooltipprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
+#include "gtknative.h"
 
 #include "gdk/gdkcontentformatsprivate.h"
 #include "gdk/gdktextureprivate.h"
@@ -243,7 +245,7 @@ gtk_drag_get_data_got_stream (GObject      *source,
   GInputStream *input_stream;
   GOutputStream *output_stream;
 
-  input_stream = gdk_drop_read_finish (GDK_DROP (source), &data->mime_type, result, NULL);
+  input_stream = gdk_drop_read_finish (GDK_DROP (source), result, &data->mime_type, NULL);
   if (input_stream == NULL)
     {
       gtk_drag_get_data_finish (data, NULL, 0);
@@ -400,9 +402,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
       {
-        GdkSurface *surface;
-        gint tx, ty;
-        double x_root, y_root;
+        double x, y;
         gboolean found;
 
         if (event_type == GDK_DROP_START)
@@ -417,16 +417,13 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
               }
           }
 
-        surface = gtk_widget_get_surface (toplevel);
-
-        gdk_surface_get_position (surface, &tx, &ty);
-        gdk_event_get_root_coords (event, &x_root, &y_root);
+        gdk_event_get_coords (event, &x, &y);
 
         found = gtk_drop_find_widget (toplevel,
                                       drop,
                                       info,
-                                      x_root - tx,
-                                      y_root - ty,
+                                      x,
+                                      y,
                                       time,
                                       (event_type == GDK_DRAG_MOTION) ?
                                       gtk_drag_dest_motion :
@@ -451,7 +448,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
 }
 
 static gboolean
-gtk_drop_find_widget (GtkWidget           *widget,
+gtk_drop_find_widget (GtkWidget           *event_widget,
                       GdkDrop             *drop,
                       GtkDragDestInfo     *info,
                       gint                 x,
@@ -459,17 +456,18 @@ gtk_drop_find_widget (GtkWidget           *widget,
                       guint32              time,
                       GtkDragDestCallback  callback)
 {
-  if (!gtk_widget_get_mapped (widget) ||
-      !gtk_widget_get_sensitive (widget))
+  GtkWidget *widget;
+
+  if (!gtk_widget_get_mapped (event_widget) ||
+      !gtk_widget_get_sensitive (event_widget))
     return FALSE;
 
-  /* Get the widget at the pointer coordinates and travel up
-   * the widget hierarchy from there.
-   */
-  widget = _gtk_widget_find_at_coords (gtk_widget_get_surface (widget),
-                                       x, y, &x, &y);
+  widget = gtk_widget_pick (event_widget, x, y, GTK_PICK_DEFAULT);
+
   if (!widget)
     return FALSE;
+
+  gtk_widget_translate_coordinates (event_widget, widget, x, y, &x, &y);
 
   while (widget)
     {
@@ -883,29 +881,29 @@ gtk_drag_begin_internal (GtkWidget          *widget,
                          int                 y)
 {
   GtkDragSourceInfo *info;
-  GtkWidget *toplevel;
+  GtkNative *native;
   GdkDrag *drag;
+  double px, py;
   int dx, dy;
   GtkDragContent *content;
 
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     device = gdk_device_get_associated_device (device);
 
-  toplevel = gtk_widget_get_toplevel (widget);
-  gtk_widget_translate_coordinates (widget, toplevel,
-                                    x, y, &x, &y);
-  gdk_surface_get_device_position (gtk_widget_get_surface (toplevel),
-                                  device,
-                                  &dx, &dy,
-                                  NULL);
-  dx -= x;
-  dy -= y;
+  native = gtk_widget_get_native (widget);
+  gtk_widget_translate_coordinates (widget, GTK_WIDGET (native), x, y, &x, &y);
+  gdk_surface_get_device_position (gtk_native_get_surface (native),
+                                   device,
+                                   &px, &py,
+                                   NULL);
+  dx = round (px) - x;
+  dy = round (py) - y;
 
   content = g_object_new (GTK_TYPE_DRAG_CONTENT, NULL);
   content->widget = g_object_ref (widget);
   content->formats = gdk_content_formats_ref (target_list);
 
-  drag = gdk_drag_begin (gtk_widget_get_surface (toplevel), device, GDK_CONTENT_PROVIDER (content), actions, dx, dy);
+  drag = gdk_drag_begin (gtk_native_get_surface (native), device, GDK_CONTENT_PROVIDER (content), actions, dx, dy);
   if (drag == NULL)
     {
       g_object_unref (content);
@@ -1246,7 +1244,7 @@ gtk_drag_drop (GtkDragSourceInfo *info)
     gtk_widget_hide (info->icon_window);
 
   info->drop_timeout = g_timeout_add (DROP_ABORT_TIME, gtk_drag_abort_timeout, info);
-  g_source_set_name_by_id (info->drop_timeout, "[gtk+] gtk_drag_abort_timeout");
+  g_source_set_name_by_id (info->drop_timeout, "[gtk] gtk_drag_abort_timeout");
 }
 
 /*

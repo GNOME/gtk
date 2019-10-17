@@ -30,41 +30,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_FILE_CHOOSER_BUTTON            (gtk_file_chooser_button_get_type ())
 #define GTK_FILE_CHOOSER_BUTTON(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FILE_CHOOSER_BUTTON, GtkFileChooserButton))
-#define GTK_FILE_CHOOSER_BUTTON_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_CHOOSER_BUTTON, GtkFileChooserButtonClass))
 #define GTK_IS_FILE_CHOOSER_BUTTON(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FILE_CHOOSER_BUTTON))
-#define GTK_IS_FILE_CHOOSER_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FILE_CHOOSER_BUTTON))
-#define GTK_FILE_CHOOSER_BUTTON_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FILE_CHOOSER_BUTTON, GtkFileChooserButtonClass))
 
 typedef struct _GtkFileChooserButton        GtkFileChooserButton;
-typedef struct _GtkFileChooserButtonClass   GtkFileChooserButtonClass;
-
-struct _GtkFileChooserButton
-{
-  GtkWidget parent_instance;
-};
-
-/**
- * GtkFileChooserButtonClass:
- * @parent_class: The parent class.
- * @file_set: Signal emitted when the user selects a file.
- */
-struct _GtkFileChooserButtonClass
-{
-  GtkWidgetClass parent_class;
-
-  /*< public >*/
-
-  void (* file_set) (GtkFileChooserButton *fc);
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  void (*__gtk_reserved1) (void);
-  void (*__gtk_reserved2) (void);
-  void (*__gtk_reserved3) (void);
-  void (*__gtk_reserved4) (void);
-};
-
 
 GDK_AVAILABLE_IN_ALL
 GType                 gtk_file_chooser_button_get_type         (void) G_GNUC_CONST;

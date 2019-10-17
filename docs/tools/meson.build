@@ -1,4 +1,4 @@
-if x11_enabled
+if x11_enabled and get_option('gtk_doc')
   doc_shooter_sources = [
     'shadow.c',
     'shooter.c',

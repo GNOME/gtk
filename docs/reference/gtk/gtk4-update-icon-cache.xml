@@ -6,7 +6,7 @@
 
 <refentryinfo>
   <title>gtk4-update-icon-cache</title>
-  <productname>GTK+</productname>
+  <productname>GTK</productname>
   <authorgroup>
     <author>
       <contrib>Developer</contrib>
@@ -49,14 +49,14 @@
   files for icon themes.
 </para>
 <para>
-  It expects to be given the <replaceable>PATH</replaceable> to a icon theme
+  It expects to be given the <replaceable>PATH</replaceable> to an icon theme
   directory containing an <filename>index.theme</filename>, e.g.
   <filename>/usr/share/icons/hicolor</filename>, and writes a
   <filename>icon-theme.cache</filename> containing cached information about
   the icons in the directory tree below the given directory.
 </para>
 <para>
-  GTK+ can use the cache files created by <command>gtk4-update-icon-cache</command>
+  GTK can use the cache files created by <command>gtk4-update-icon-cache</command>
   to avoid a lot of system call and disk seek overhead when the application
   starts. Since the format of the cache files allows them to be mmaped
   shared between multiple applications, the overall memory consumption is

@@ -47,9 +47,11 @@ gtk_puzzle_piece_snapshot (GdkPaintable *paintable,
   gtk_snapshot_push_clip (snapshot,
                           &GRAPHENE_RECT_INIT (0, 0, width, height));
 
-  gtk_snapshot_offset (snapshot,
-                       - width * self->x,
-                       - height * self->y);
+  gtk_snapshot_translate (snapshot,
+                          &GRAPHENE_POINT_INIT (
+                              - width * self->x,
+                              - height * self->y
+                          ));
   gdk_paintable_snapshot (self->puzzle,
                           snapshot,
                           width * self->width,

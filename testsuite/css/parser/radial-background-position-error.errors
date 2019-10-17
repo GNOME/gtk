@@ -1,1 +1,1 @@
-radial-background-position-error.css:2: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
+radial-background-position-error.css:2:34-38: error: GTK_CSS_PARSER_ERROR_SYNTAX

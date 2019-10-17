@@ -1,6 +1,8 @@
 
 #include "gskglshadowcacheprivate.h"
 
+#define MAX_UNUSED_FRAMES (16 * 5)
+
 typedef struct
 {
   GskRoundedRect outline;
@@ -13,7 +15,7 @@ typedef struct
   float blur_radius;
 
   int texture_id;
-  guint used : 1;
+  int unused_frames;
 } CacheItem;
 
 static gboolean
@@ -60,14 +62,11 @@ gsk_gl_shadow_cache_begin_frame (GskGLShadowCache *self,
 {
   guint i, p;
 
-  /* We remove all textures with used = FALSE since those have not been used in the
-   * last frame. For all others, we reset the `used` value to FALSE instead and see
-   * if they end up with TRUE in the next call to begin_frame. */
   for (i = 0, p = self->textures->len; i < p; i ++)
     {
       CacheItem *item = &g_array_index (self->textures, CacheItem, i);
 
-      if (!item->used)
+      if (item->unused_frames > MAX_UNUSED_FRAMES)
         {
           gsk_gl_driver_destroy_texture (gl_driver, item->texture_id);
           g_array_remove_index_fast (self->textures, i);
@@ -76,7 +75,7 @@ gsk_gl_shadow_cache_begin_frame (GskGLShadowCache *self,
         }
       else
         {
-          item->used = FALSE;
+          item->unused_frames ++;
         }
     }
 }
@@ -113,7 +112,7 @@ gsk_gl_shadow_cache_get_texture_id (GskGLShadowCache     *self,
   if (item == NULL)
     return 0;
 
-  item->used = TRUE;
+  item->unused_frames = 0;
 
   g_assert (item->texture_id != 0);
 
@@ -137,6 +136,6 @@ gsk_gl_shadow_cache_commit (GskGLShadowCache     *self,
 
   item->outline = *shadow_rect;
   item->blur_radius = blur_radius;
-  item->used = TRUE;
+  item->unused_frames = 0;
   item->texture_id = texture_id;
 }

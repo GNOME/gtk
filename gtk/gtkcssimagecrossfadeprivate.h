@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_CSS_IMAGE_CROSS_FADE           (_gtk_css_image_cross_fade_get_type ())
+#define GTK_TYPE_CSS_IMAGE_CROSS_FADE           (gtk_css_image_cross_fade_get_type ())
 #define GTK_CSS_IMAGE_CROSS_FADE(obj)           (G_TYPE_CHECK_INSTANCE_CAST (obj, GTK_TYPE_CSS_IMAGE_CROSS_FADE, GtkCssImageCrossFade))
 #define GTK_CSS_IMAGE_CROSS_FADE_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST (cls, GTK_TYPE_CSS_IMAGE_CROSS_FADE, GtkCssImageCrossFadeClass))
 #define GTK_IS_CSS_IMAGE_CROSS_FADE(obj)        (G_TYPE_CHECK_INSTANCE_TYPE (obj, GTK_TYPE_CSS_IMAGE_CROSS_FADE))
@@ -38,9 +38,8 @@ struct _GtkCssImageCrossFade
 {
   GtkCssImage parent;
 
-  GtkCssImage *start;
-  GtkCssImage *end;
-  double progress;
+  GArray *images;
+  double total_progress;
 };
 
 struct _GtkCssImageCrossFadeClass
@@ -48,7 +47,7 @@ struct _GtkCssImageCrossFadeClass
   GtkCssImageClass parent_class;
 };
 
-GType          _gtk_css_image_cross_fade_get_type             (void) G_GNUC_CONST;
+GType          gtk_css_image_cross_fade_get_type              (void) G_GNUC_CONST;
 
 GtkCssImage *  _gtk_css_image_cross_fade_new                  (GtkCssImage      *start,
                                                                GtkCssImage      *end,

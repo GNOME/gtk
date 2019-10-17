@@ -52,7 +52,7 @@ do_application_demo (GtkWidget *toplevel)
 
   if (watch == 0)
     watch = g_bus_watch_name (G_BUS_TYPE_SESSION,
-                              "org.gtk.Demo2",
+                              "org.gtk.Demo4.App",
                               0,
                               on_name_appeared,
                               on_name_vanished,
@@ -80,8 +80,8 @@ do_application_demo (GtkWidget *toplevel)
   else
     {
       g_dbus_connection_call_sync (g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL),
-                                   "org.gtk.Demo2",
-                                   "/org/gtk/Demo2",
+                                   "org.gtk.Demo4.App",
+                                   "/org/gtk/Demo4/App",
                                    "org.gtk.Actions",
                                    "Activate",
                                    g_variant_new ("(sava{sv})", "quit", NULL, NULL),

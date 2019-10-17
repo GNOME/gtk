@@ -1,0 +1,5 @@
+debug {
+  child: container {
+  }
+  message: "I'm a debug node.";
+}

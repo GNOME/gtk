@@ -22,6 +22,7 @@
 
 #include "gtkimcontextxim.h"
 #include "gtkimmoduleprivate.h"
+#include "gtknative.h"
 
 #include "gtk/gtkintl.h"
 
@@ -149,7 +150,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkIMContextXIM, gtk_im_context_xim, GTK_TYPE_IM_CONTEX
                          g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "xim",
-                                                         10))
+                                                         0))
 
 static GSList *open_ims = NULL;
 
@@ -559,19 +560,9 @@ set_ic_client_surface (GtkIMContextXIM *context_xim,
 
   if (context_xim->client_surface)
     {
-      GdkSurface *native;
-
       context_xim->im_info = get_im (context_xim->client_surface, context_xim->locale);
       context_xim->im_info->ics = g_slist_prepend (context_xim->im_info->ics, context_xim);
-
-      for (native = client_surface; native; native = gdk_surface_get_parent (native))
-        {
-          if (gdk_surface_has_native (native))
-            {
-              context_xim->client_surface_xid = gdk_x11_surface_get_xid (native);
-              break;
-            }
-        }
+      context_xim->client_surface_xid = gdk_x11_surface_get_xid (client_surface);
     }
 
   update_client_widget (context_xim);
@@ -585,7 +576,7 @@ gtk_im_context_xim_set_client_widget (GtkIMContext *context,
   GdkSurface *surface = NULL;
 
   if (widget != NULL)
-    surface = gtk_widget_get_surface (gtk_widget_get_toplevel (widget));
+    surface = gtk_native_get_surface (gtk_widget_get_native (widget));
 
   set_ic_client_surface (context_xim, surface);
 }
@@ -640,7 +631,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   if (event_type == GDK_KEY_RELEASE && !context_xim->filter_key_release)
     return FALSE;
 
-  window = gdk_surface_get_toplevel (gdk_event_get_surface ((GdkEvent *) event));
+  window = gdk_event_get_surface ((GdkEvent *) event);
 
   xevent.type = (event_type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
   xevent.serial = 0;		/* hope it doesn't matter */
@@ -1428,7 +1419,7 @@ gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
  * The toplevel is computed by walking up the GdkSurface
  * hierarchy from context->client_surface until we find a
  * window that is owned by some widget, and then calling
- * gtk_widget_get_toplevel() on that widget. This should
+ * gtk_widget_get_root() on that widget. This should
  * handle both cases where we might have GdkSurfaces without widgets,
  * and cases where GtkWidgets have strange window hierarchies
  * (like a torn off GtkHandleBox.)
@@ -1465,8 +1456,8 @@ claim_status_window (GtkIMContextXIM *context_xim)
 {
   if (!context_xim->status_window && context_xim->client_widget)
     {
-      GtkWidget *toplevel = gtk_widget_get_toplevel (context_xim->client_widget);
-      if (toplevel && gtk_widget_is_toplevel (toplevel))
+      GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (context_xim->client_widget));
+      if (toplevel)
 	{
 	  StatusWindow *status_window = status_window_get (toplevel);
 
@@ -1498,9 +1489,9 @@ update_in_toplevel (GtkIMContextXIM *context_xim)
 {
   if (context_xim->client_widget)
     {
-      GtkWidget *toplevel = gtk_widget_get_toplevel (context_xim->client_widget);
+      GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (context_xim->client_widget));
 
-      context_xim->in_toplevel = (toplevel && gtk_widget_is_toplevel (toplevel));
+      context_xim->in_toplevel = toplevel != NULL;
     }
   else
     context_xim->in_toplevel = FALSE;
@@ -1520,29 +1511,10 @@ update_in_toplevel (GtkIMContextXIM *context_xim)
  */
 static void
 on_client_widget_hierarchy_changed (GtkWidget       *widget,
-				    GtkWidget       *old_toplevel,
+				    GParamSpec      *pspec,
 				    GtkIMContextXIM *context_xim)
 {
   update_in_toplevel (context_xim);
-}
-
-/* Finds the GtkWidget that owns the window, or if none, the
- * widget owning the nearest parent that has a widget.
- */
-static GtkWidget *
-widget_for_window (GdkSurface *window)
-{
-  while (window)
-    {
-      gpointer user_data;
-      gdk_surface_get_user_data (window, &user_data);
-      if (user_data)
-	return user_data;
-
-      window = gdk_surface_get_parent (window);
-    }
-
-  return NULL;
 }
 
 /* Called when context_xim->client_surface changes; takes care of
@@ -1551,7 +1523,10 @@ widget_for_window (GdkSurface *window)
 static void
 update_client_widget (GtkIMContextXIM *context_xim)
 {
-  GtkWidget *new_client_widget = widget_for_window (context_xim->client_surface);
+  GtkWidget *new_client_widget = NULL;
+
+  if (context_xim->client_surface)
+    new_client_widget = gtk_native_get_for_surface (context_xim->client_surface);
 
   if (new_client_widget != context_xim->client_widget)
     {
@@ -1564,7 +1539,7 @@ update_client_widget (GtkIMContextXIM *context_xim)
       context_xim->client_widget = new_client_widget;
       if (context_xim->client_widget)
 	{
-	  g_signal_connect (context_xim->client_widget, "hierarchy-changed",
+	  g_signal_connect (context_xim->client_widget, "notify::root",
 			    G_CALLBACK (on_client_widget_hierarchy_changed),
 			    context_xim);
 	}
@@ -1595,40 +1570,6 @@ on_status_toplevel_notify_display (GtkWindow    *toplevel,
 			    gtk_widget_get_display (GTK_WIDGET (toplevel)));
 }
 
-/* Called when the toplevel window is moved; updates the position of
- * the status window to follow it.
- */
-static gboolean
-on_status_toplevel_configure (GtkWidget     *toplevel,
-			      GdkEvent      *event,
-			      StatusWindow  *status_window)
-{
-  if (gdk_event_get_event_type (event) == GDK_CONFIGURE)
-    {
-      GdkRectangle rect;
-      GtkRequisition requisition;
-      gint y;
-      gint height;
-
-      if (status_window->window)
-        {
-          height = DisplayHeight(GDK_SURFACE_XDISPLAY (gtk_widget_get_surface (toplevel)), 0);
-
-          gdk_surface_get_frame_extents (gtk_widget_get_surface (toplevel), &rect);
-          gtk_widget_get_preferred_size ( (status_window->window), &requisition, NULL);
-
-          if (rect.y + rect.height + requisition.height < height)
-	    y = rect.y + rect.height;
-          else
-	    y = height - requisition.height;
-
-          gtk_window_move (GTK_WINDOW (status_window->window), rect.x, y);
-        }
-    }
-
-  return GDK_EVENT_PROPAGATE;
-}
-
 /* Frees a status window and removes its link from the status_windows list
  */
 static void
@@ -1644,9 +1585,6 @@ status_window_free (StatusWindow *status_window)
 					status_window);
   g_signal_handlers_disconnect_by_func (status_window->toplevel,
 					G_CALLBACK (on_status_toplevel_notify_display),
-					status_window);
-  g_signal_handlers_disconnect_by_func (status_window->toplevel,
-					G_CALLBACK (on_status_toplevel_configure),
 					status_window);
 
   if (status_window->window)
@@ -1675,9 +1613,6 @@ status_window_get (GtkWidget *toplevel)
 
   g_signal_connect (toplevel, "destroy",
 		    G_CALLBACK (on_status_toplevel_destroy),
-		    status_window);
-  g_signal_connect (toplevel, "event",
-		    G_CALLBACK (on_status_toplevel_configure),
 		    status_window);
   g_signal_connect (toplevel, "notify::display",
 		    G_CALLBACK (on_status_toplevel_notify_display),
@@ -1710,8 +1645,6 @@ status_window_make_window (StatusWindow *status_window)
 
   gtk_window_set_display (GTK_WINDOW (status_window->window),
 			  gtk_widget_get_display (status_window->toplevel));
-
-  on_status_toplevel_configure (status_window->toplevel, NULL, status_window);
 }
 
 /* Updates the text in the status window, hiding or

@@ -26,7 +26,6 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkbin.h>
 #include <gtk/gtkstack.h>
 
 G_BEGIN_DECLS
@@ -34,39 +33,18 @@ G_BEGIN_DECLS
 #define GTK_TYPE_STACK_SIDEBAR           (gtk_stack_sidebar_get_type ())
 #define GTK_STACK_SIDEBAR(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_STACK_SIDEBAR, GtkStackSidebar))
 #define GTK_IS_STACK_SIDEBAR(obj)        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_STACK_SIDEBAR))
-#define GTK_STACK_SIDEBAR_CLASS(klass)   (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_STACK_SIDEBAR, GtkStackSidebarClass))
-#define GTK_IS_STACK_SIDEBAR_CLASS(klass)(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_STACK_SIDEBAR))
-#define GTK_STACK_SIDEBAR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STACK_SIDEBAR, GtkStackSidebarClass))
 
-typedef struct _GtkStackSidebar        GtkStackSidebar;
-typedef struct _GtkStackSidebarPrivate GtkStackSidebarPrivate;
-typedef struct _GtkStackSidebarClass   GtkStackSidebarClass;
-
-struct _GtkStackSidebar
-{
-  GtkBin parent;
-};
-
-struct _GtkStackSidebarClass
-{
-  GtkBinClass parent_class;
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
+typedef struct _GtkStackSidebar GtkStackSidebar;
 
 GDK_AVAILABLE_IN_ALL
 GType       gtk_stack_sidebar_get_type  (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_stack_sidebar_new       (void);
 GDK_AVAILABLE_IN_ALL
-void        gtk_stack_sidebar_set_stack (GtkStackSidebar *sidebar,
+void        gtk_stack_sidebar_set_stack (GtkStackSidebar *self,
                                          GtkStack        *stack);
 GDK_AVAILABLE_IN_ALL
-GtkStack *  gtk_stack_sidebar_get_stack (GtkStackSidebar *sidebar);
+GtkStack *  gtk_stack_sidebar_get_stack (GtkStackSidebar *self);
 
 G_END_DECLS
 

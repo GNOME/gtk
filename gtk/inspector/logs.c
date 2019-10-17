@@ -35,7 +35,7 @@
 #include "gtkprivate.h"
 #include "gtkdebug.h"
 #include "gdkinternals.h"
-#include "gtkwindowprivate.h"
+#include "gtknative.h"
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
 
@@ -143,10 +143,10 @@ flag_toggled (GtkWidget        *button,
       GtkWidget *toplevel = l->data;
       GskRenderer *renderer;
 
-      if (toplevel == gtk_widget_get_toplevel (button)) /* skip the inspector */
+      if ((GtkRoot *)toplevel == gtk_widget_get_root (button)) /* skip the inspector */
         continue;
 
-      renderer = gtk_window_get_renderer (GTK_WINDOW (toplevel));
+      renderer = gtk_native_get_renderer (GTK_NATIVE (toplevel));
       if (!renderer)
         continue;
 

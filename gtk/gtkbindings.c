@@ -52,94 +52,6 @@
  * must both be true. For example, by calling gtk_widget_set_can_focus()
  * in the widget’s initialisation function; and by calling
  * gtk_widget_grab_focus() when the widget is clicked.
- *
- * # Installing a key binding
- *
- * A CSS file binding consists of a “binding-set” definition and a match
- * statement to apply the binding set to specific widget types. Details
- * on the matching mechanism are described under
- * [Selectors][gtkcssprovider-selectors]
- * in the #GtkCssProvider documentation. Inside the binding set
- * definition, key combinations are bound to one or more specific
- * signal emissions on the target widget. Key combinations are strings
- * consisting of an optional #GdkModifierType name and
- * [key names][gdk3-Keyboard-Handling]
- * such as those defined in `gdk/gdkkeysyms.h`
- * or returned from gdk_keyval_name(), they have to be parsable by
- * gtk_accelerator_parse(). Specifications of signal emissions consist
- * of a string identifying the signal name, and a list of signal specific
- * arguments in parenthesis.
- *
- * For example for binding Control and the left or right cursor keys
- * of a #GtkEntry widget to the #GtkEntry::move-cursor signal (so
- * movement occurs in 3-character steps), the following binding can be
- * used:
- *
- * |[ <!-- language="CSS" -->
- * @binding-set MoveCursor3
- * {
- *   bind "<Control>Right" { "move-cursor" (visual-positions, 3, 0) };
- *   bind "<Control>Left" { "move-cursor" (visual-positions, -3, 0) };
- * }
- *
- * entry
- * {
- *   -gtk-key-bindings: MoveCursor3;
- * }
- * ]|
- *
- * # Unbinding existing key bindings
- *
- * GTK+ already defines a number of useful bindings for the widgets
- * it provides. Because custom bindings set up in CSS files take
- * precedence over the default bindings shipped with GTK+, overriding
- * existing bindings as demonstrated in
- * [Installing a key binding][gtk-bindings-install]
- * works as expected. The same mechanism can not be used to “unbind”
- * existing bindings, however.
- *
- * |[ <!-- language="CSS" -->
- * @binding-set MoveCursor3
- * {
- *   bind "<Control>Right" {  };
- *   bind "<Control>Left" {  };
- * }
- *
- * entry
- * {
- *   -gtk-key-bindings: MoveCursor3;
- * }
- * ]|
- *
- * The above example will not have the desired effect of causing
- * “<Control>Right” and “<Control>Left” key presses to be ignored by GTK+.
- * Instead, it just causes any existing bindings from the bindings set
- * “MoveCursor3” to be deleted, so when “<Control>Right” or
- * “<Control>Left” are pressed, no binding for these keys is found in
- * binding set “MoveCursor3”. GTK+ will thus continue to search for
- * matching key bindings, and will eventually lookup and find the default
- * GTK+ bindings for entries which implement word movement. To keep GTK+
- * from activating its default bindings, the “unbind” keyword can be used
- * like this:
- *
- * |[ <!-- language="CSS" -->
- * @binding-set MoveCursor3
- * {
- *   unbind "<Control>Right";
- *   unbind "<Control>Left";
- * }
- *
- * entry
- * {
- *   -gtk-key-bindings: MoveCursor3;
- * }
- * ]|
- *
- * Now, GTK+ will find a match when looking up “<Control>Right” and
- * “<Control>Left” key presses before it resorts to its default bindings,
- * and the match instructs it to abort (“unbind”) the search, so the key
- * presses are not consumed by this widget. As usual, further processing
- * of the key presses, e.g. by an entry’s parent widget, is now possible.
  */
 
 /* --- defines --- */
@@ -152,6 +64,129 @@ typedef enum {
   GTK_BINDING_TOKEN_UNBIND
 } GtkBindingTokens;
 
+typedef struct _GtkBindingEntry  GtkBindingEntry;
+typedef struct _GtkBindingSignal GtkBindingSignal;
+typedef struct _GtkBindingArg    GtkBindingArg;
+typedef struct _GtkBindingSignalSignal   GtkBindingSignalSignal;
+typedef struct _GtkBindingSignalAction   GtkBindingSignalAction;
+typedef struct _GtkBindingSignalCallback GtkBindingSignalCallback;
+
+/**
+ * GtkBindingSet:
+ * @set_name: unique name of this binding set
+ * @priority: unused
+ * @entries: the key binding entries in this binding set
+ * @current: implementation detail
+ *
+ * A binding set maintains a list of activatable key bindings.
+ * A single binding set can match multiple types of widgets.
+ * Similar to style contexts, can be matched by any information contained
+ * in a widgets #GtkWidgetPath. When a binding within a set is matched upon
+ * activation, an action signal is emitted on the target widget to carry out
+ * the actual activation.
+ */
+struct _GtkBindingSet
+{
+  gchar           *set_name;
+  gint             priority;
+  GtkBindingEntry *entries;
+  GtkBindingEntry *current;
+};
+
+/**
+ * GtkBindingEntry:
+ * @keyval: key value to match
+ * @modifiers: key modifiers to match
+ * @binding_set: binding set this entry belongs to
+ * @destroyed: implementation detail
+ * @in_emission: implementation detail
+ * @marks_unbound: implementation detail
+ * @set_next: linked list of entries maintained by binding set
+ * @hash_next: implementation detail
+ * @signals: action signals of this entry
+ *
+ * Each key binding element of a binding sets binding list is
+ * represented by a GtkBindingEntry.
+ */
+struct _GtkBindingEntry
+{
+  /* key portion */
+  guint             keyval;
+  GdkModifierType   modifiers;
+
+  GtkBindingSet    *binding_set;
+  guint             destroyed     : 1;
+  guint             in_emission   : 1;
+  guint             marks_unbound : 1;
+  GtkBindingEntry  *set_next;
+  GtkBindingEntry  *hash_next;
+  GtkBindingSignal *signals;
+};
+
+/**
+ * GtkBindingArg:
+ * @arg_type: implementation detail
+ *
+ * A #GtkBindingArg holds the data associated with
+ * an argument for a key binding signal emission as
+ * stored in #GtkBindingSignal.
+ */
+struct _GtkBindingArg
+{
+  GType      arg_type;
+  union {
+    glong    long_data;
+    gdouble  double_data;
+    gchar   *string_data;
+  } d;
+};
+
+typedef enum 
+{
+  GTK_BINDING_SIGNAL,
+  GTK_BINDING_ACTION,
+  GTK_BINDING_CALLBACK
+} GtkBindingActionType;
+
+/**
+ * GtkBindingSignal:
+ * @next: implementation detail
+ * @action_type: Actual type of the action
+ *
+ * A GtkBindingSignal stores the necessary information to
+ * activate a widget in response to a key press via a signal
+ * emission.
+ */
+struct _GtkBindingSignal
+{
+  GtkBindingSignal     *next;
+  GtkBindingActionType  action_type;
+};
+
+struct _GtkBindingSignalSignal
+{
+  GtkBindingSignal  parent;
+  const gchar      *signal_name;
+  guint             n_args;
+  GtkBindingArg    *args;
+};
+
+struct _GtkBindingSignalAction
+{
+  GtkBindingSignal  parent;
+  const gchar      *action_name;
+  GVariant         *variant;
+};
+
+struct _GtkBindingSignalCallback
+{
+  GtkBindingSignal    parent;
+  GtkBindingCallback  callback;
+  GVariant           *args;
+  gpointer            user_data;
+  GDestroyNotify      user_destroy;
+};
+
 /* --- variables --- */
 static GHashTable       *binding_entry_hash_table = NULL;
 static GSList           *binding_key_hashes = NULL;
@@ -163,31 +198,99 @@ static GQuark            key_id_class_binding_set = 0;
 /* --- functions --- */
 
 static GtkBindingSignal*
-binding_signal_new (const gchar *signal_name,
-                    guint        n_args)
+binding_signal_new_signal (const gchar *signal_name,
+                           guint        n_args)
 {
-  GtkBindingSignal *signal;
+  GtkBindingSignalSignal *signal;
 
-  signal = (GtkBindingSignal *) g_slice_alloc0 (sizeof (GtkBindingSignal) + n_args * sizeof (GtkBindingArg));
-  signal->next = NULL;
-  signal->signal_name = (gchar *)g_intern_string (signal_name);
+  signal = (GtkBindingSignalSignal *) g_slice_alloc0 (sizeof (GtkBindingSignalSignal) + n_args * sizeof (GtkBindingArg));
+  signal->parent.next = NULL;
+  signal->parent.action_type = GTK_BINDING_SIGNAL;
+  signal->signal_name = g_intern_string (signal_name);
   signal->n_args = n_args;
   signal->args = (GtkBindingArg *)(signal + 1);
 
-  return signal;
+  return &signal->parent;
+}
+
+static GtkBindingSignal*
+binding_signal_new_action (const gchar *action_name,
+                           GVariant    *variant)
+{
+  GtkBindingSignalAction *signal;
+
+  signal = g_slice_new0 (GtkBindingSignalAction);
+  signal->parent.next = NULL;
+  signal->parent.action_type = GTK_BINDING_ACTION;
+  signal->action_name = g_intern_string (action_name);
+  signal->variant = variant;
+  if (variant)
+    g_variant_ref_sink (variant);
+
+  return &signal->parent;
+}
+
+static GtkBindingSignal *
+binding_signal_new_callback (GtkBindingCallback  callback,
+                             GVariant           *args,
+                             gpointer            user_data,
+                             GDestroyNotify      user_destroy)
+{
+  GtkBindingSignalCallback *signal;
+
+  signal = g_slice_new0 (GtkBindingSignalCallback);
+  signal->parent.next = NULL;
+  signal->parent.action_type = GTK_BINDING_CALLBACK;
+  signal->callback = callback;
+  signal->args = args;
+  if (args)
+    g_variant_ref_sink (args);
+  signal->user_data = user_data;
+  signal->user_destroy = user_destroy;
+
+  return &signal->parent;
 }
 
 static void
-binding_signal_free (GtkBindingSignal *sig)
+binding_signal_free (GtkBindingSignal *signal)
 {
   guint i;
 
-  for (i = 0; i < sig->n_args; i++)
+  switch (signal->action_type)
     {
-      if (G_TYPE_FUNDAMENTAL (sig->args[i].arg_type) == G_TYPE_STRING)
-        g_free (sig->args[i].d.string_data);
+    case GTK_BINDING_SIGNAL:
+      {
+        GtkBindingSignalSignal *sig = (GtkBindingSignalSignal *) signal;
+        for (i = 0; i < sig->n_args; i++)
+          {
+            if (G_TYPE_FUNDAMENTAL (sig->args[i].arg_type) == G_TYPE_STRING)
+              g_free (sig->args[i].d.string_data);
+          }
+        g_slice_free1 (sizeof (GtkBindingSignalSignal) + sig->n_args * sizeof (GtkBindingArg), sig);
+      }
+      break;
+
+    case GTK_BINDING_ACTION:
+      {
+        GtkBindingSignalAction *sig = (GtkBindingSignalAction *) signal;
+        g_clear_pointer (&sig->variant, g_variant_unref);
+        g_slice_free (GtkBindingSignalAction, sig);
+      }
+      break;
+
+    case GTK_BINDING_CALLBACK:
+      {
+        GtkBindingSignalCallback *sig = (GtkBindingSignalCallback *) signal;
+        if (sig->user_destroy)
+          sig->user_destroy (sig->user_data);
+        g_slice_free (GtkBindingSignalCallback, sig);
+      }
+      break;
+
+    default:
+      g_assert_not_reached ();
+      break;
     }
-  g_slice_free1 (sizeof (GtkBindingSignal) + sig->n_args * sizeof (GtkBindingArg), sig);
 }
 
 static guint
@@ -555,13 +658,120 @@ binding_compose_params (GObject         *object,
 }
 
 static gboolean
+binding_signal_activate_signal (GtkBindingSignalSignal *sig,
+                                GObject                *object)
+{
+  GSignalQuery query;
+  guint signal_id;
+  GValue *params = NULL;
+  GValue return_val = G_VALUE_INIT;
+  gboolean handled = FALSE;
+
+  signal_id = g_signal_lookup (sig->signal_name, G_OBJECT_TYPE (object));
+  if (!signal_id)
+    {
+      g_warning ("gtk_binding_entry_activate(): "
+                 "could not find signal \"%s\" in the '%s' class ancestry",
+                 sig->signal_name,
+                 g_type_name (G_OBJECT_TYPE (object)));
+      return FALSE;
+    }
+
+  g_signal_query (signal_id, &query);
+  if (query.n_params != sig->n_args ||
+      (query.return_type != G_TYPE_NONE && query.return_type != G_TYPE_BOOLEAN) ||
+      !binding_compose_params (object, sig->args, &query, &params))
+    {
+      g_warning ("gtk_binding_entry_activate(): "
+                 "signature mismatch for signal \"%s\" in the '%s' class ancestry",
+                 sig->signal_name,
+                 g_type_name (G_OBJECT_TYPE (object)));
+      return FALSE;
+    }
+  else if (!(query.signal_flags & G_SIGNAL_ACTION))
+    {
+      g_warning ("gtk_binding_entry_activate(): "
+                 "signal \"%s\" in the '%s' class ancestry cannot be used for action emissions",
+                 sig->signal_name,
+                 g_type_name (G_OBJECT_TYPE (object)));
+      return FALSE;
+    }
+
+  if (query.return_type == G_TYPE_BOOLEAN)
+    g_value_init (&return_val, G_TYPE_BOOLEAN);
+
+  g_signal_emitv (params, signal_id, 0, &return_val);
+
+  if (query.return_type == G_TYPE_BOOLEAN)
+    {
+      if (g_value_get_boolean (&return_val))
+        handled = TRUE;
+      g_value_unset (&return_val);
+    }
+  else
+    handled = TRUE;
+
+  if (params != NULL)
+    {
+      guint i;
+
+      for (i = 0; i < query.n_params + 1; i++)
+        g_value_unset (&params[i]);
+
+      g_free (params);
+    }
+
+  return handled;
+}
+
+static gboolean
+binding_signal_activate_action (GtkBindingSignalAction *sig,
+                                GObject                *object)
+{
+  if (!GTK_IS_WIDGET (object))
+    {
+      g_warning ("gtk_binding_entry_activate(): "
+                 "actions must be emitted on GtkWidget subtypes, %s is not supported",
+                 G_OBJECT_TYPE_NAME (object));
+      return FALSE;
+    }
+
+  if (!gtk_widget_activate_action_variant (GTK_WIDGET (object), sig->action_name, sig->variant))
+    {
+      g_warning ("gtk_binding_entry_activate(): "
+                 "action \"%s\" does not exist on class \"%s\"",
+                 sig->action_name,
+                 G_OBJECT_TYPE_NAME (object));
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
+binding_signal_activate_callback (GtkBindingSignalCallback *sig,
+                                  GObject                  *object)
+{
+  if (!GTK_IS_WIDGET (object))
+    {
+      g_warning ("gtk_binding_entry_activate(): "
+                 "callbacks must be run on GtkWidget subtypes, %s is not supported",
+                 G_OBJECT_TYPE_NAME (object));
+      return FALSE;
+    }
+
+  sig->callback (GTK_WIDGET (object), sig->args, sig->user_data);
+
+  return TRUE;
+}
+
+static gboolean
 gtk_binding_entry_activate (GtkBindingEntry *entry,
                             GObject         *object)
 {
   GtkBindingSignal *sig;
   gboolean old_emission;
   gboolean handled = FALSE;
-  gint i;
 
   old_emission = entry->in_emission;
   entry->in_emission = TRUE;
@@ -570,73 +780,23 @@ gtk_binding_entry_activate (GtkBindingEntry *entry,
 
   for (sig = entry->signals; sig; sig = sig->next)
     {
-      GSignalQuery query;
-      guint signal_id;
-      GValue *params = NULL;
-      GValue return_val = G_VALUE_INIT;
-      gchar *accelerator = NULL;
-
-      signal_id = g_signal_lookup (sig->signal_name, G_OBJECT_TYPE (object));
-      if (!signal_id)
+      switch (sig->action_type)
         {
-          accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
-          g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
-                     "could not find signal \"%s\" in the '%s' class ancestry",
-                     entry->binding_set->set_name,
-                     accelerator,
-                     sig->signal_name,
-                     g_type_name (G_OBJECT_TYPE (object)));
-          g_free (accelerator);
-          continue;
-        }
+        case GTK_BINDING_SIGNAL:
+          handled = binding_signal_activate_signal ((GtkBindingSignalSignal *) sig, object);
+          break;
 
-      g_signal_query (signal_id, &query);
-      if (query.n_params != sig->n_args ||
-          (query.return_type != G_TYPE_NONE && query.return_type != G_TYPE_BOOLEAN) ||
-          !binding_compose_params (object, sig->args, &query, &params))
-        {
-          accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
-          g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
-                     "signature mismatch for signal \"%s\" in the '%s' class ancestry",
-                     entry->binding_set->set_name,
-                     accelerator,
-                     sig->signal_name,
-                     g_type_name (G_OBJECT_TYPE (object)));
-        }
-      else if (!(query.signal_flags & G_SIGNAL_ACTION))
-        {
-          accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
-          g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
-                     "signal \"%s\" in the '%s' class ancestry cannot be used for action emissions",
-                     entry->binding_set->set_name,
-                     accelerator,
-                     sig->signal_name,
-                     g_type_name (G_OBJECT_TYPE (object)));
-        }
-      g_free (accelerator);
-      if (accelerator)
-        continue;
+        case GTK_BINDING_ACTION:
+          handled = binding_signal_activate_action ((GtkBindingSignalAction *) sig, object);
+          break;
 
-      if (query.return_type == G_TYPE_BOOLEAN)
-        g_value_init (&return_val, G_TYPE_BOOLEAN);
+        case GTK_BINDING_CALLBACK:
+          handled = binding_signal_activate_callback ((GtkBindingSignalCallback *) sig, object);
+          break;
 
-      g_signal_emitv (params, signal_id, 0, &return_val);
-
-      if (query.return_type == G_TYPE_BOOLEAN)
-        {
-          if (g_value_get_boolean (&return_val))
-            handled = TRUE;
-          g_value_unset (&return_val);
-        }
-      else
-        handled = TRUE;
-
-      if (params != NULL)
-        {
-          for (i = 0; i < query.n_params + 1; i++)
-            g_value_unset (&params[i]);
-
-          g_free (params);
+        default:
+          g_assert_not_reached ();
+          break;
         }
 
       if (entry->destroyed)
@@ -670,12 +830,8 @@ gtk_binding_set_new (const gchar *set_name)
 
   binding_set = g_new (GtkBindingSet, 1);
   binding_set->set_name = (gchar *) g_intern_string (set_name);
-  binding_set->widget_path_pspecs = NULL;
-  binding_set->widget_class_pspecs = NULL;
-  binding_set->class_branch_pspecs = NULL;
   binding_set->entries = NULL;
   binding_set->current = NULL;
-  binding_set->parsed = FALSE;
 
   binding_set_list = g_slist_prepend (binding_set_list, binding_set);
 
@@ -857,7 +1013,31 @@ gtk_binding_entry_remove (GtkBindingSet  *binding_set,
     binding_entry_destroy (entry);
 }
 
-/**
+static void
+gtk_binding_entry_add_binding_signal (GtkBindingSet    *binding_set,
+                                      guint             keyval,
+                                      GdkModifierType   modifiers,
+                                      GtkBindingSignal *signal)
+{
+  GtkBindingEntry *entry;
+  GtkBindingSignal **signal_p;
+
+  keyval = gdk_keyval_to_lower (keyval);
+  modifiers = modifiers & BINDING_MOD_MASK ();
+
+  entry = binding_ht_lookup_entry (binding_set, keyval, modifiers);
+  if (!entry)
+    {
+      gtk_binding_entry_clear_internal (binding_set, keyval, modifiers);
+      entry = binding_ht_lookup_entry (binding_set, keyval, modifiers);
+    }
+  signal_p = &entry->signals;
+  while (*signal_p)
+    signal_p = &(*signal_p)->next;
+  *signal_p = signal;
+}
+
+/*
  * gtk_binding_entry_add_signall:
  * @binding_set:  a #GtkBindingSet to add a signal to
  * @keyval:       key value
@@ -869,27 +1049,14 @@ gtk_binding_entry_remove (GtkBindingSet  *binding_set,
  * Override or install a new key binding for @keyval with @modifiers on
  * @binding_set.
  */
-void
+static void
 gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
                                guint           keyval,
                                GdkModifierType modifiers,
                                const gchar    *signal_name,
                                GSList         *binding_args)
 {
-  _gtk_binding_entry_add_signall (binding_set,
-                                  keyval, modifiers,
-                                  signal_name, binding_args);
-}
-
-void
-_gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
-                                guint          keyval,
-                                GdkModifierType modifiers,
-                                const gchar    *signal_name,
-                                GSList        *binding_args)
-{
-  GtkBindingEntry *entry;
-  GtkBindingSignal *signal, **signal_p;
+  GtkBindingSignal *signal;
   GSList *slist;
   guint n = 0;
   GtkBindingArg *arg;
@@ -897,12 +1064,9 @@ _gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
   g_return_if_fail (binding_set != NULL);
   g_return_if_fail (signal_name != NULL);
 
-  keyval = gdk_keyval_to_lower (keyval);
-  modifiers = modifiers & BINDING_MOD_MASK ();
+  signal = binding_signal_new_signal (signal_name, g_slist_length (binding_args));
 
-  signal = binding_signal_new (signal_name, g_slist_length (binding_args));
-
-  arg = signal->args;
+  arg = ((GtkBindingSignalSignal *) signal)->args;
   for (slist = binding_args; slist; slist = slist->next)
     {
       GtkBindingArg *tmp_arg;
@@ -944,16 +1108,7 @@ _gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
       n++;
     }
 
-  entry = binding_ht_lookup_entry (binding_set, keyval, modifiers);
-  if (!entry)
-    {
-      gtk_binding_entry_clear_internal (binding_set, keyval, modifiers);
-      entry = binding_ht_lookup_entry (binding_set, keyval, modifiers);
-    }
-  signal_p = &entry->signals;
-  while (*signal_p)
-    signal_p = &(*signal_p)->next;
-  *signal_p = signal;
+  gtk_binding_entry_add_binding_signal (binding_set, keyval, modifiers, signal);
 }
 
 /**
@@ -1059,7 +1214,7 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
   if (i == n_args || i == 0)
     {
       slist = g_slist_reverse (slist);
-      _gtk_binding_entry_add_signall (binding_set, keyval, modifiers, signal_name, slist);
+      gtk_binding_entry_add_signall (binding_set, keyval, modifiers, signal_name, slist);
     }
 
   free_slist = slist;
@@ -1069,6 +1224,97 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
       slist = slist->next;
     }
   g_slist_free (free_slist);
+}
+
+/**
+ * gtk_binding_entry_add_action_variant:
+ * @binding_set: a #GtkBindingSet to install an entry for
+ * @keyval:      key value of binding to install
+ * @modifiers:   key modifier of binding to install
+ * @action_name: signal to execute upon activation
+ * @args:        #GVariant of the arguments or %NULL if none
+ *
+ * Override or install a new key binding for @keyval with @modifiers on
+ * @binding_set. When the binding is activated, @action_name will be
+ * activated on the target widget, with @args used as arguments.
+ */
+void
+gtk_binding_entry_add_action_variant (GtkBindingSet  *binding_set,
+                                      guint           keyval,
+                                      GdkModifierType modifiers,
+                                      const gchar    *action_name,
+                                      GVariant       *args)
+{
+  g_return_if_fail (binding_set != NULL);
+  g_return_if_fail (action_name != NULL);
+
+  gtk_binding_entry_add_binding_signal (binding_set,
+                                        keyval,
+                                        modifiers,
+                                        binding_signal_new_action (action_name, args));
+}
+
+/**
+ * gtk_binding_entry_add_action:
+ * @binding_set: a #GtkBindingSet to install an entry for
+ * @keyval:      key value of binding to install
+ * @modifiers:   key modifier of binding to install
+ * @action_name: signal to execute upon activation
+ * @format_string: GVariant format string for arguments or %NULL
+ *    for no arguments
+ * @...: arguments, as given by format string
+ *
+ * Override or install a new key binding for @keyval with @modifiers on
+ * @binding_set. When the binding is activated, @action_name will be
+ * activated on the target widget, with arguments read according to
+ * @format_string.
+ */
+void
+gtk_binding_entry_add_action (GtkBindingSet  *binding_set,
+                              guint           keyval,
+                              GdkModifierType modifiers,
+                              const char     *action_name,
+                              const char     *format_string,
+                              ...)
+{
+  GVariant *parameters = NULL;
+
+  g_return_if_fail (binding_set != NULL);
+  g_return_if_fail (action_name != NULL);
+
+  if (format_string != NULL)
+    {
+      va_list args;
+
+      va_start (args, format_string);
+      parameters = g_variant_new_va (format_string, NULL, &args);
+      va_end (args);
+
+      g_variant_ref_sink (parameters);
+    }
+
+  gtk_binding_entry_add_action_variant (binding_set, keyval, modifiers, action_name, parameters);
+
+  g_clear_pointer (&parameters, g_variant_unref);
+}
+
+void
+gtk_binding_entry_add_callback (GtkBindingSet      *binding_set,
+                                guint               keyval,
+                                GdkModifierType     modifiers,
+                                GtkBindingCallback  callback,
+                                GVariant           *args,
+                                gpointer            user_data,
+                                GDestroyNotify      user_destroy)
+{
+  g_return_if_fail (binding_set != NULL);
+  g_return_if_fail (callback != NULL);
+
+  gtk_binding_entry_add_binding_signal (binding_set,
+                                        keyval,
+                                        modifiers,
+                                        binding_signal_new_callback (callback, args, user_data, user_destroy));
+
 }
 
 static guint
@@ -1211,11 +1457,11 @@ gtk_binding_parse_signal (GScanner       *scanner,
           if (!(need_arg && seen_comma) && !negate)
             {
               args = g_slist_reverse (args);
-              _gtk_binding_entry_add_signall (binding_set,
-                                              keyval,
-                                              modifiers,
-                                              signal,
-                                              args);
+              gtk_binding_entry_add_signall (binding_set,
+                                             keyval,
+                                             modifiers,
+                                             signal,
+                                             args);
               expected_token = G_TOKEN_NONE;
             }
 
@@ -1432,39 +1678,12 @@ gtk_bindings_activate_list (GObject  *object,
                             GSList   *entries,
                             gboolean  is_release)
 {
-  GtkStyleContext *context;
   GtkBindingSet *binding_set;
   gboolean handled = FALSE;
   gboolean unbound = FALSE;
-  GPtrArray *array;
 
   if (!entries)
     return FALSE;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (object));
-
-  gtk_style_context_get (context,
-                         "-gtk-key-bindings", &array,
-                         NULL);
-  if (array)
-    {
-      gint i;
-
-      for (i = 0; i < array->len; i++)
-        {
-          binding_set = g_ptr_array_index (array, i);
-          handled = binding_activate (binding_set, entries,
-                                      object, is_release,
-                                      &unbound);
-          if (handled || unbound)
-            break;
-        }
-
-      g_ptr_array_unref (array);
-
-      if (unbound)
-        return FALSE;
-    }
 
   if (!handled)
     {

@@ -25,7 +25,7 @@ search_text_changed (GtkEntry         *entry,
   GtkTextBuffer *buffer;
   GtkTextIter start, match_start, match_end;
 
-  text = gtk_entry_get_text (entry);
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
 
   if (text[0] == '\0')
     return;

@@ -20,6 +20,7 @@
 
 
 #include <gtk/gtkbox.h>
+#include <gtk/gtksizegroup.h>
 
 
 #define GTK_TYPE_INSPECTOR_PROP_EDITOR            (gtk_inspector_prop_editor_get_type())
@@ -52,9 +53,9 @@ G_BEGIN_DECLS
 
 
 GType      gtk_inspector_prop_editor_get_type (void);
-GtkWidget *gtk_inspector_prop_editor_new      (GObject     *object,
-                                               const gchar *name,
-                                               gboolean     is_child_property);
+GtkWidget *gtk_inspector_prop_editor_new      (GObject      *object,
+                                               const gchar  *name,
+                                               GtkSizeGroup *values);
 
 gboolean   gtk_inspector_prop_editor_should_expand (GtkInspectorPropEditor *editor);
 

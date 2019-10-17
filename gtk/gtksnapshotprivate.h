@@ -20,6 +20,8 @@
 
 #include "gtksnapshot.h"
 
+#include "gsk/gskrendernodeprivate.h"
+
 G_BEGIN_DECLS
 
 typedef struct _GtkSnapshotState GtkSnapshotState;
@@ -33,19 +35,15 @@ struct _GtkSnapshotState {
   guint                  start_node_index;
   guint                  n_nodes;
 
-  int                    translate_x;
-  int                    translate_y;
+  GskTransform *         transform;
 
   GtkSnapshotCollectFunc collect_func;
   union {
     struct {
-      graphene_matrix_t transform;
-    } transform;
-    struct {
-      double            opacity;
+      double             opacity;
     } opacity;
     struct {
-      double            radius;
+      double             radius;
     } blur;
     struct {
       graphene_matrix_t matrix;
@@ -90,15 +88,22 @@ struct _GdkSnapshot {
 
   GArray                *state_stack;
   GPtrArray             *nodes;
+
+  guint from_parent : 1;
 };
 
 struct _GtkSnapshotClass {
   GObjectClass           parent_class; /* it's really GdkSnapshotClass, but don't tell anyone! */
 };
 
-void                    gtk_snapshot_append_node_internal       (GtkSnapshot            *snapshot,
-                                                                 GskRenderNode          *node);
+GtkSnapshot *           gtk_snapshot_new_with_parent            (GtkSnapshot            *parent_snapshot);
 
+void                    gtk_snapshot_append_text                (GtkSnapshot            *snapshot,
+                                                                 PangoFont              *font,
+                                                                 PangoGlyphString       *glyphs,
+                                                                 const GdkRGBA          *color,
+                                                                 float                   x,
+                                                                 float                   y);
 G_END_DECLS
 
 #endif /* __GTK_SNAPSHOT_PRIVATE_H__ */

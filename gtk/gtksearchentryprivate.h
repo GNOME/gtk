@@ -26,11 +26,15 @@
 #define __GTK_SEARCH_ENTRY_PRIVATE_H__
 
 #include <gtk/gtksearchentry.h>
+#include <gtk/gtktext.h>
 
 G_BEGIN_DECLS
 
 gboolean gtk_search_entry_is_keynav (guint           keyval,
                                      GdkModifierType state);
+
+GtkText *gtk_search_entry_get_text_widget (GtkSearchEntry *entry);
+GtkEventController * gtk_search_entry_get_key_controller (GtkSearchEntry *entry);
 
 G_END_DECLS
 

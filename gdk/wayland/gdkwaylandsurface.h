@@ -52,9 +52,6 @@ GDK_AVAILABLE_IN_ALL
 struct wl_surface       *gdk_wayland_surface_get_wl_surface       (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
-void                     gdk_wayland_surface_set_use_custom_surface (GdkSurface *surface);
-
-GDK_AVAILABLE_IN_ALL
 void                     gdk_wayland_surface_set_dbus_properties_libgtk_only (GdkSurface  *surface,
                                                                               const char *application_id,
                                                                               const char *app_menu_path,

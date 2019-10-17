@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * gtkprintbackend.h: Abstract printer backend interfaces
+ * gtkprintbackendprivate.h: Abstract printer backend interfaces
  * Copyright (C) 2003, Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@
 #include "gtkmodulesprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-#include "gtkprintbackend.h"
+#include "gtkprintbackendprivate.h"
 
 
 static void gtk_print_backend_dispose      (GObject      *object);
@@ -280,7 +280,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintBackendClass, printer_list_changed),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
   signals[PRINTER_LIST_DONE] =
     g_signal_new (I_("printer-list-done"),
@@ -288,7 +288,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkPrintBackendClass, printer_list_done),
 		    NULL, NULL,
-		    g_cclosure_marshal_VOID__VOID,
+		    NULL,
 		    G_TYPE_NONE, 0);
   signals[PRINTER_ADDED] =
     g_signal_new (I_("printer-added"),
@@ -296,7 +296,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintBackendClass, printer_added),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__OBJECT,
+		  NULL,
 		  G_TYPE_NONE, 1, GTK_TYPE_PRINTER);
   signals[PRINTER_REMOVED] =
     g_signal_new (I_("printer-removed"),
@@ -304,7 +304,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintBackendClass, printer_removed),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__OBJECT,
+		  NULL,
 		  G_TYPE_NONE, 1, GTK_TYPE_PRINTER);
   signals[PRINTER_STATUS_CHANGED] =
     g_signal_new (I_("printer-status-changed"),
@@ -312,7 +312,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintBackendClass, printer_status_changed),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__OBJECT,
+		  NULL,
 		  G_TYPE_NONE, 1, GTK_TYPE_PRINTER);
   signals[REQUEST_PASSWORD] =
     g_signal_new (I_("request-password"),
@@ -591,7 +591,7 @@ store_entry (GtkEntry  *entry,
       g_free (*data);
     }
 
-  *data = g_strdup (gtk_entry_get_text (entry));
+  *data = g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry)));
 }
 
 static void
@@ -677,19 +677,19 @@ request_password (GtkPrintBackend  *backend,
   label = gtk_label_new (NULL);
   markup = g_markup_printf_escaped ("<span weight=\"bold\" size=\"large\">%s</span>", prompt);
   gtk_label_set_markup (GTK_LABEL (label), markup);
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_widget_set_size_request (GTK_WIDGET (label), 320, -1);
   g_free (markup);
 
 
   /* Packing */
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-  gtk_box_pack_start (GTK_BOX (content_area), main_box);
+  gtk_container_add (GTK_CONTAINER (content_area), main_box);
 
-  gtk_box_pack_start (GTK_BOX (main_box), icon);
-  gtk_box_pack_start (GTK_BOX (main_box), vbox);
+  gtk_container_add (GTK_CONTAINER (main_box), icon);
+  gtk_container_add (GTK_CONTAINER (main_box), vbox);
 
-  gtk_box_pack_start (GTK_BOX (vbox), label);
+  gtk_container_add (GTK_CONTAINER (vbox), label);
 
   /* Right - 2. */
   for (i = 0; i < length; i++)
@@ -710,15 +710,15 @@ request_password (GtkPrintBackend  *backend,
           focus = entry;
 
           if (ai_default[i] != NULL)
-            gtk_entry_set_text (GTK_ENTRY (entry), ai_default[i]);
+            gtk_editable_set_text (GTK_EDITABLE (entry), ai_default[i]);
 
           gtk_entry_set_visibility (GTK_ENTRY (entry), ai_visible[i]);
           gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
 
-          gtk_box_pack_start (GTK_BOX (vbox), box);
+          gtk_container_add (GTK_CONTAINER (vbox), box);
 
-          gtk_box_pack_start (GTK_BOX (box), label);
-          gtk_box_pack_start (GTK_BOX (box), entry);
+          gtk_container_add (GTK_CONTAINER (box), label);
+          gtk_container_add (GTK_CONTAINER (box), entry);
 
           g_signal_connect (entry, "changed",
                             G_CALLBACK (store_entry), &(priv->auth_info[i]));
@@ -731,7 +731,7 @@ request_password (GtkPrintBackend  *backend,
       gtk_widget_set_margin_top (chkbtn, 6);
       gtk_widget_set_margin_bottom (chkbtn, 6);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (chkbtn), FALSE);
-      gtk_box_pack_start (GTK_BOX (vbox), chkbtn);
+      gtk_container_add (GTK_CONTAINER (vbox), chkbtn);
       g_signal_connect (chkbtn, "toggled",
                         G_CALLBACK (store_auth_info_toggled),
                         &(priv->store_auth_info));

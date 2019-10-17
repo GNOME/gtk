@@ -16,105 +16,87 @@
     <property name="default-height">480</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
-        <property name="visible">True</property>
-        <child>
+        <child type="start">
           <object class="GtkButton" id="headerbutton">
-            <property name="visible">True</property>
             <style>
               <class name="image-button"/>
             </style>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
                 <property name="icon-name">emblem-system-symbolic</property>
               </object>
             </child>
           </object>
-          <packing>
-            <property name="pack-type">start</property>
-          </packing>
+          <packing/>
         </child>
         <child type="title">
           <object class="GtkStack" id="titlestack">
-            <property name="visible">True</property>
             <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="label">Docker Docker Docker</property>
-                <property name="ellipsize">end</property>
-              </object>
-              <packing>
+              <object class="GtkStackPage">
                 <property name="name">title</property>
-              </packing>
+                <property name="child">
+                  <object class="GtkLabel">
+                    <property name="label">Docker Docker Docker</property>
+                    <property name="ellipsize">end</property>
+                  </object>
+                </property>
+              </object>
             </child>
             <child>
-              <object class="GtkMenuButton">
-                <property name="visible">True</property>
-                <property name="menu-model">selectionmenu</property>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="orientation">horizontal</property>
-                    <property name="spacing">4</property>
+              <object class="GtkStackPage">
+                <property name="name">selection</property>
+                <property name="child">
+                  <object class="GtkMenuButton">
+                    <property name="menu-model">selectionmenu</property>
                     <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="label">Click on items to select them</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">True</property>
-                        <property name="icon-name">pan-down-symbolic</property>
+                      <object class="GtkBox">
+                        <property name="spacing">4</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">Click on items to select them</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">pan-down-symbolic</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
-              <packing>
-                <property name="name">selection</property>
-              </packing>
             </child>
           </object>
         </child>
-        <child>
+        <child type="end">
           <object class="GtkButton" id="select-button">
-            <property name="visible">True</property>
             <style>
               <class name="image-button"/>
             </style>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
                 <property name="icon-name">object-select-symbolic</property>
               </object>
             </child>
           </object>
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
+          <packing/>
         </child>
-        <child>
+        <child type="end">
           <object class="GtkButton" id="cancel-button">
             <property name="visible">0</property>
             <property name="label">Cancel</property>
           </object>
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
+          <packing/>
         </child>
       </object>
     </child>
     <child>
       <object class="GtkScrolledWindow">
-        <property name="visible">True</property>
         <property name="hscrollbar-policy">never</property>
-        <property name="vscrollbar-policy">automatic</property>
         <child>
           <object class="GtkListBox" id="list">
-            <property name="visible">True</property>
             <property name="selection-mode">none</property>
-            <property name="activate-on-single-click">True</property>
           </object>
         </child>
       </object>

@@ -187,12 +187,12 @@ _gtk_css_bg_size_value_parse (GtkCssParser *parser)
 {
   GtkCssValue *x, *y;
 
-  if (_gtk_css_parser_try (parser, "cover", TRUE))
+  if (gtk_css_parser_try_ident (parser, "cover"))
     return _gtk_css_value_ref (&cover_singleton);
-  else if (_gtk_css_parser_try (parser, "contain", TRUE))
+  else if (gtk_css_parser_try_ident (parser, "contain"))
     return _gtk_css_value_ref (&contain_singleton);
 
-  if (_gtk_css_parser_try (parser, "auto", TRUE))
+  if (gtk_css_parser_try_ident (parser, "auto"))
     x = NULL;
   else
     {
@@ -204,7 +204,7 @@ _gtk_css_bg_size_value_parse (GtkCssParser *parser)
         return NULL;
     }
 
-  if (_gtk_css_parser_try (parser, "auto", TRUE))
+  if (gtk_css_parser_try_ident (parser, "auto"))
     y = NULL;
   else if (!gtk_css_number_value_can_parse (parser))
     y = NULL;

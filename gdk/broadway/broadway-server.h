@@ -19,12 +19,22 @@ typedef struct _BroadwayServerClass BroadwayServerClass;
 #define BROADWAY_SERVER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), BROADWAY_TYPE_SERVER, BroadwayServerClass))
 
 typedef struct _BroadwayNode BroadwayNode;
+typedef struct _BroadwayTexture BroadwayTexture;
 
 struct _BroadwayNode {
+  grefcount refcount;
   guint32 type;
+  guint32 id;
+  guint32 output_id;
   guint32 hash; /* deep hash */
   guint32 n_children;
   BroadwayNode **children;
+  guint32 texture_id;
+
+  /* Scratch stuff used during diff */
+  gboolean reused;
+  gboolean consumed;
+
   guint32 n_data;
   guint32 data[1];
 };
@@ -33,6 +43,12 @@ gboolean            broadway_node_equal                       (BroadwayNode    *
                                                                BroadwayNode    *b);
 gboolean            broadway_node_deep_equal                  (BroadwayNode    *a,
                                                                BroadwayNode    *b);
+void                broadway_node_mark_deep_reused            (BroadwayNode    *node,
+                                                               gboolean         reused);
+void                broadway_node_mark_deep_consumed          (BroadwayNode    *node,
+                                                               gboolean         consumed);
+void                broadway_node_add_to_lookup               (BroadwayNode    *node,
+                                                               GHashTable      *node_lookup);
 BroadwayServer     *broadway_server_new                       (char            *address,
                                                                int              port,
                                                                const char      *ssl_cert,
@@ -70,6 +86,7 @@ gint32              broadway_server_get_mouse_surface         (BroadwayServer  *
 void                broadway_server_set_show_keyboard         (BroadwayServer  *server,
                                                                gboolean         show);
 guint32             broadway_server_new_surface               (BroadwayServer  *server,
+                                                               guint32          client,
                                                                int              x,
                                                                int              y,
                                                                int              width,
@@ -99,9 +116,11 @@ void                broadway_server_release_texture           (BroadwayServer  *
                                                                guint32          id);
 cairo_surface_t   * broadway_server_create_surface            (int              width,
                                                                int              height);
-void                broadway_server_surface_set_nodes         (BroadwayServer  *server,
+void                broadway_server_surface_update_nodes      (BroadwayServer  *server,
                                                                gint             id,
-                                                               BroadwayNode    *root);
+                                                               guint32          data[],
+                                                               int              len,
+                                                               GHashTable      *client_texture_map);
 gboolean            broadway_server_surface_move_resize       (BroadwayServer  *server,
                                                                gint             id,
                                                                gboolean         with_move,

@@ -99,6 +99,7 @@ recent_manager_add (void)
 }
 
 typedef struct {
+  GtkRecentManager *manager;
   GMainLoop *main_loop;
   gint counter;
 } AddManyClosure;
@@ -118,24 +119,16 @@ check_bulk (GtkRecentManager *manager,
     g_main_loop_quit (closure->main_loop);
 }
 
-static void
-recent_manager_add_many (void)
+static gboolean
+add_bulk (gpointer data_)
 {
-  GtkRecentManager *manager = g_object_new (GTK_TYPE_RECENT_MANAGER,
-                                            "filename", "recently-used.xbel",
-                                            NULL);
-  AddManyClosure *closure = g_new (AddManyClosure, 1);
+  AddManyClosure *closure = data_;
   GtkRecentData *data = g_slice_new0 (GtkRecentData);
-  gint i;
-
-  closure->main_loop = g_main_loop_new (NULL, FALSE);
-  closure->counter = 0;
-
-  g_signal_connect (manager, "changed", G_CALLBACK (check_bulk), closure);
+  int i;
 
   for (i = 0; i < 100; i++)
     {
-      gchar *new_uri;
+      char *new_uri;
 
       data->mime_type = "text/plain";
       data->app_name = "testrecentchooser";
@@ -145,18 +138,38 @@ recent_manager_add_many (void)
         g_print (G_STRLOC ": adding item %d\n", i);
 
       new_uri = g_strdup_printf ("file:///doesnotexist-%d.txt", i);
-      gtk_recent_manager_add_full (manager, new_uri, data);
+      gtk_recent_manager_add_full (closure->manager, new_uri, data);
       g_free (new_uri);
 
       closure->counter += 1;
     }
 
+  g_slice_free (GtkRecentData, data);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+recent_manager_add_many (void)
+{
+  GtkRecentManager *manager = g_object_new (GTK_TYPE_RECENT_MANAGER,
+                                            "filename", "recently-used.xbel",
+                                            NULL);
+  AddManyClosure *closure = g_new (AddManyClosure, 1);
+
+  closure->main_loop = g_main_loop_new (NULL, FALSE);
+  closure->counter = 0;
+  closure->manager = manager;
+
+  g_signal_connect (manager, "changed", G_CALLBACK (check_bulk), closure);
+
+  g_idle_add (add_bulk, closure);
+
   g_main_loop_run (closure->main_loop);
 
   g_main_loop_unref (closure->main_loop);
-  g_slice_free (GtkRecentData, data);
+  g_object_unref (closure->manager);
   g_free (closure);
-  g_object_unref (manager);
 
   g_assert_cmpint (g_unlink ("recently-used.xbel"), ==, 0);
 }

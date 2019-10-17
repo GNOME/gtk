@@ -36,6 +36,7 @@
 #include "gtktooltip.h"
 #include "gtktextiter.h"
 
+#include "gtk/css/gtkcss.h"
 
 struct _GtkInspectorCssEditorPrivate
 {
@@ -104,17 +105,52 @@ query_tooltip_cb (GtkWidget             *widget,
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorCssEditor, gtk_inspector_css_editor, GTK_TYPE_BOX)
 
+static char *
+get_autosave_path (void)
+{
+  return g_build_filename (g_get_user_cache_dir (), "gtk-4.0", "inspector-css-autosave", NULL);
+}
+
 static void
 set_initial_text (GtkInspectorCssEditor *ce)
 {
-  gchar *initial_text;
-  initial_text = g_strconcat ("/*\n",
-                              _("You can type here any CSS rule recognized by GTK+."), "\n",
-                              _("You can temporarily disable this custom CSS by clicking on the “Pause” button above."), "\n\n",
-                              _("Changes are applied instantly and globally, for the whole application."), "\n",
-                              "*/\n\n", NULL);
+  char *initial_text = NULL;
+  char *autosave_file = NULL;
+  gsize len;
+
+  autosave_file = get_autosave_path ();
+
+  if (g_file_get_contents (autosave_file, &initial_text, &len, NULL))
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ce->priv->disable_button), TRUE);
+  else
+    initial_text = g_strconcat ("/*\n",
+                                _("You can type here any CSS rule recognized by GTK."), "\n",
+                                _("You can temporarily disable this custom CSS by clicking on the “Pause” button above."), "\n\n",
+                                _("Changes are applied instantly and globally, for the whole application."), "\n",
+                                "*/\n\n", NULL);
   gtk_text_buffer_set_text (GTK_TEXT_BUFFER (ce->priv->text), initial_text, -1);
   g_free (initial_text);
+  g_free (autosave_file);
+}
+
+static void
+autosave_contents (GtkInspectorCssEditor *ce)
+{
+  char *autosave_file = NULL;
+  char *dir = NULL;
+  char *contents;
+  GtkTextIter start, end;
+
+  gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (ce->priv->text), &start, &end);
+  contents = gtk_text_buffer_get_text (GTK_TEXT_BUFFER (ce->priv->text), &start, &end, TRUE);
+  autosave_file = get_autosave_path ();
+  dir = g_path_get_dirname (autosave_file);
+  g_mkdir_with_parents (dir, 0755);
+  g_file_set_contents (autosave_file, contents, -1, NULL);
+
+  g_free (dir);
+  g_free (autosave_file);
+  g_free (contents);
 }
 
 static void
@@ -155,7 +191,7 @@ save_to_file (GtkInspectorCssEditor *ce,
     {
       GtkWidget *dialog;
 
-      dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (ce))),
+      dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (ce))),
                                        GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
                                        GTK_MESSAGE_INFO,
                                        GTK_BUTTONS_OK,
@@ -196,7 +232,7 @@ save_clicked (GtkButton             *button,
   GtkWidget *dialog;
 
   dialog = gtk_file_chooser_dialog_new ("",
-                                        GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (ce))),
+                                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (ce))),
                                         GTK_FILE_CHOOSER_ACTION_SAVE,
                                         _("_Cancel"), GTK_RESPONSE_CANCEL,
                                         _("_Save"), GTK_RESPONSE_ACCEPT,
@@ -229,6 +265,7 @@ update_timeout (gpointer data)
 
   ce->priv->timeout = 0;
 
+  autosave_contents (ce);
   update_style (ce);
 
   return G_SOURCE_REMOVE;
@@ -255,21 +292,24 @@ show_parsing_error (GtkCssProvider        *provider,
 {
   const char *tag_name;
   GtkTextBuffer *buffer = GTK_TEXT_BUFFER (ce->priv->text);
+  const GtkCssLocation *start, *end;
   CssError *css_error;
 
   css_error = g_new (CssError, 1);
   css_error->error = g_error_copy (error);
 
+  start = gtk_css_section_get_start_location (section);
   gtk_text_buffer_get_iter_at_line_index (buffer,
                                           &css_error->start,
-                                          gtk_css_section_get_start_line (section),
-                                          gtk_css_section_get_start_position (section));
+                                          start->lines,
+                                          start->line_bytes);
+  end = gtk_css_section_get_end_location (section);
   gtk_text_buffer_get_iter_at_line_index (buffer,
                                           &css_error->end,
-                                          gtk_css_section_get_end_line (section),
-                                          gtk_css_section_get_end_position (section));
+                                          end->lines,
+                                          end->line_bytes);
 
-  if (g_error_matches (error, GTK_CSS_PROVIDER_ERROR, GTK_CSS_PROVIDER_ERROR_DEPRECATED))
+  if (error->domain == GTK_CSS_PARSER_WARNING)
     tag_name = "warning";
   else
     tag_name = "error";

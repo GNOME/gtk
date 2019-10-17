@@ -1,7 +1,7 @@
 window1
   "window"
   index: 0
-  state: enabled resizable sensitive showing visible
+  state: active enabled resizable sensitive showing visible
   toolkit: gtk
   window-type: normal
   <AtkComponent>
@@ -14,7 +14,7 @@ window1
     name: Lock
     description: Dialog is unlocked.
 Click to prevent further changes
-    state: enabled focusable sensitive showing visible has-tooltip
+    state: enabled focusable focused sensitive showing visible has-tooltip
     toolkit: gtk
     <AtkComponent>
     layer: widget

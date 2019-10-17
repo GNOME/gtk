@@ -27,8 +27,8 @@ set_text (GtkWidget   *widget,
 {
   if (GTK_IS_LABEL (widget))
     gtk_label_set_text (GTK_LABEL (widget), text);
-  else if (GTK_IS_ENTRY (widget))
-    gtk_entry_set_text (GTK_ENTRY (widget), text);
+  else if (GTK_IS_EDITABLE (widget))
+    gtk_editable_set_text (GTK_EDITABLE (widget), text);
   else if (GTK_IS_TEXT_VIEW (widget))
     gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget)), text, -1);
   else
@@ -47,12 +47,12 @@ append_text (GtkWidget   *widget,
       gtk_label_set_text (GTK_LABEL (widget), tmp);
       g_free (tmp);
     }
-  else if (GTK_IS_ENTRY (widget))
+  else if (GTK_IS_EDITABLE (widget))
     {
       gchar *tmp;
 
-      tmp = g_strconcat (gtk_entry_get_text (GTK_ENTRY (widget)), text, NULL);
-      gtk_entry_set_text (GTK_ENTRY (widget), tmp);
+      tmp = g_strconcat (gtk_editable_get_text (GTK_EDITABLE (widget)), text, NULL);
+      gtk_editable_set_text (GTK_EDITABLE (widget), tmp);
       g_free (tmp);
     }
   else if (GTK_IS_TEXT_VIEW (widget))
@@ -134,7 +134,7 @@ test_text_changed (GtkWidget *widget)
   SignalData insert_data;
   gboolean cant_append = FALSE;
 
-  if (GTK_IS_LABEL (widget) || GTK_IS_ENTRY (widget))
+  if (GTK_IS_LABEL (widget) || GTK_IS_TEXT (widget))
     cant_append = TRUE;
 
   atk_text = ATK_TEXT (gtk_widget_get_accessible (widget));
@@ -874,9 +874,9 @@ test_words (GtkWidget *widget)
 
   for (i = 0; expected[i].offset != -1; i++)
     {
-      if (GTK_IS_ENTRY (widget))
+      if (GTK_IS_TEXT (widget))
         {
-          /* GtkEntry sets single-paragraph mode on its pango layout */
+          /* GtkText sets single-paragraph mode on its pango layout */
           if (expected[i].boundary == ATK_TEXT_BOUNDARY_LINE_START ||
               expected[i].boundary == ATK_TEXT_BOUNDARY_LINE_END)
             continue;
@@ -1064,7 +1064,7 @@ test_bold_label (void)
   AtkObject *atk_obj;
   gchar *text;
 
-  g_test_bug ("126797");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=126797 */
 
   label = gtk_label_new ("<b>Bold?</b>");
   g_object_ref_sink (label);
@@ -1089,12 +1089,10 @@ main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
 
-  g_test_bug_base ("http://bugzilla.gnome.org/");
-
   g_test_add_func ("/text/bold/GtkLabel", test_bold_label);
 
   add_text_tests (gtk_label_new (""));
-  add_text_tests (gtk_entry_new ());
+  add_text_tests (gtk_text_new ());
   add_text_tests (gtk_text_view_new ());
 
   return g_test_run ();

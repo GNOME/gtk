@@ -41,6 +41,8 @@
 guint32 gdk_broadway_display_ensure_texture (GdkDisplay *display,
                                              GdkTexture *texture);
 
+void gdk_broadway_display_flush_in_idle (GdkDisplay *display);
+
 void gdk_broadway_surface_set_nodes (GdkSurface *surface,
                                      GArray *nodes,
                                      GPtrArray *node_textures);
@@ -66,6 +68,13 @@ void     _gdk_broadway_roundtrip_notify           (GdkSurface  *surface,
 void     _gdk_broadway_surface_grab_check_destroy (GdkSurface *surface);
 void     _gdk_broadway_surface_grab_check_unmap   (GdkSurface *surface,
                                                    gulong     serial);
+void     gdk_broadway_surface_update_popups       (GdkSurface *surface);
+
+void gdk_broadway_surface_move_resize (GdkSurface *surface,
+                                       gint        x,
+                                       gint        y,
+                                       gint        width,
+                                       gint        height);
 
 void _gdk_keymap_keys_changed     (GdkDisplay      *display);
 gint _gdk_broadway_get_group_for_state (GdkDisplay      *display,
@@ -78,7 +87,8 @@ gboolean _gdk_keymap_key_is_modifier   (GdkKeymap       *keymap,
 void _gdk_broadway_display_size_changed (GdkDisplay *display,
                                          BroadwayInputScreenResizeNotify *msg);
 
-void _gdk_broadway_events_got_input      (BroadwayInputMsg *message);
+void _gdk_broadway_events_got_input      (GdkDisplay *display,
+                                          BroadwayInputMsg *message);
 
 void _gdk_broadway_display_init_root_window (GdkDisplay *display);
 void _gdk_broadway_display_init_dnd (GdkDisplay *display);
@@ -98,10 +108,13 @@ void _gdk_broadway_display_get_default_cursor_size (GdkDisplay *display,
 void _gdk_broadway_display_get_maximal_cursor_size (GdkDisplay *display,
                                                     guint       *width,
                                                     guint       *height);
-void       _gdk_broadway_display_create_surface_impl    (GdkDisplay    *display,
-                                                         GdkSurface     *surface,
-                                                         GdkSurface     *real_parent,
-                                                         GdkSurfaceAttr *attributes);
+GdkSurface * _gdk_broadway_display_create_surface (GdkDisplay     *display,
+                                                   GdkSurfaceType  surface_type,
+                                                   GdkSurface     *parent,
+                                                   int             x,
+                                                   int             y,
+                                                   int             width,
+                                                   int             height);
 gint _gdk_broadway_display_text_property_to_utf8_list (GdkDisplay    *display,
                                                        GdkAtom        encoding,
                                                        gint           format,
@@ -122,7 +135,5 @@ void _gdk_broadway_surface_resize_surface        (GdkSurface *surface);
 
 void _gdk_broadway_cursor_update_theme (GdkCursor *cursor);
 void _gdk_broadway_cursor_display_finalize (GdkDisplay *display);
-
-#define GDK_SURFACE_IS_BROADWAY(win)   (GDK_IS_SURFACE_IMPL_BROADWAY (((GdkSurface *)win)->impl))
 
 #endif /* __GDK_PRIVATE_BROADWAY_H__ */

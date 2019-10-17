@@ -79,7 +79,7 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
       g_assert (icon_info != NULL);
 
       symbolic = gtk_icon_info_is_symbolic (icon_info);
-      texture = gtk_icon_info_load_texture (icon_info);
+      texture = GDK_TEXTURE (gtk_icon_info_load_icon (icon_info, NULL));
 
       g_clear_object (&icon_theme->cached_texture);
 
@@ -126,30 +126,31 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
     gtk_snapshot_pop (snapshot);
 }
 
+static guint
+gtk_css_image_icon_theme_parse_arg (GtkCssParser *parser,
+                                    guint         arg,
+                                    gpointer      data)
+{
+  GtkCssImageIconTheme *icon_theme = data;
+
+  icon_theme->name = gtk_css_parser_consume_string (parser);
+  if (icon_theme->name == NULL)
+    return 0;
+
+  return 1;
+}
 
 static gboolean
 gtk_css_image_icon_theme_parse (GtkCssImage  *image,
                                 GtkCssParser *parser)
 {
-  GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (image);
-
-  if (!_gtk_css_parser_try (parser, "-gtk-icontheme(", TRUE))
+  if (!gtk_css_parser_has_function (parser, "-gtk-icontheme"))
     {
-      _gtk_css_parser_error (parser, "Expected '-gtk-icontheme('");
+      gtk_css_parser_error_syntax (parser, "Expected '-gtk-icontheme('");
       return FALSE;
     }
 
-  icon_theme->name = _gtk_css_parser_read_string (parser);
-  if (icon_theme->name == NULL)
-    return FALSE;
-
-  if (!_gtk_css_parser_try (parser, ")", TRUE))
-    {
-      _gtk_css_parser_error (parser, "Missing closing bracket at end of '-gtk-icontheme'");
-      return FALSE;
-    }
-
-  return TRUE;
+  return gtk_css_parser_consume_function (parser, 1, 1, gtk_css_image_icon_theme_parse_arg, image);
 }
 
 static void
@@ -186,8 +187,8 @@ static gboolean
 gtk_css_image_icon_theme_equal (GtkCssImage *image1,
                                 GtkCssImage *image2)
 {
-  GtkCssImageIconTheme *icon_theme1 = GTK_CSS_IMAGE_ICON_THEME (image1);
-  GtkCssImageIconTheme *icon_theme2 = GTK_CSS_IMAGE_ICON_THEME (image2);
+  GtkCssImageIconTheme *icon_theme1 = (GtkCssImageIconTheme *) image1;
+  GtkCssImageIconTheme *icon_theme2 = (GtkCssImageIconTheme *) image2;
 
   return g_str_equal (icon_theme1->name, icon_theme2->name);
 }

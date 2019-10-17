@@ -155,6 +155,16 @@ accel_entry_equal (gconstpointer key1,
   return g_str_equal (entry1->accel_path, entry2->accel_path);
 }
 
+static int
+accel_entry_compare (gconstpointer a,
+                     gconstpointer b)
+{
+  const AccelEntry *entry1 = a;
+  const AccelEntry *entry2 = b;
+
+  return strcmp (entry1->accel_path, entry2->accel_path);
+}
+
 static inline AccelEntry*
 accel_path_lookup (const gchar *accel_path)
 {
@@ -817,17 +827,23 @@ gtk_accel_map_foreach (gpointer           data,
   g_return_if_fail (foreach_func != NULL);
 
   entries = g_hash_table_slist_values (accel_entry_ht);
+  entries = g_slist_sort (entries, accel_entry_compare);
+
   for (slist = entries; slist; slist = slist->next)
     {
       AccelEntry *entry = slist->data;
       gboolean changed = entry->accel_key != entry->std_accel_key || entry->accel_mods != entry->std_accel_mods;
+      gboolean skip = FALSE;
 
       for (node = accel_filters; node; node = node->next)
-	if (g_pattern_match_string (node->data, entry->accel_path))
-	  goto skip_accel;
-      foreach_func (data, entry->accel_path, entry->accel_key, entry->accel_mods, changed);
-    skip_accel:
-      /* noop */;
+        if (g_pattern_match_string (node->data, entry->accel_path))
+          {
+            skip = TRUE;
+            break;
+          }
+
+      if (!skip)
+        foreach_func (data, entry->accel_path, entry->accel_key, entry->accel_mods, changed);
     }
   g_slist_free (entries);
 }

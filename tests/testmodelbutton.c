@@ -68,21 +68,9 @@ on_application_activate (GApplication *gapplication,
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   gtk_container_add (GTK_CONTAINER (box), widget);
 
-  widget = gtk_toggle_button_new_with_label (":centered");
-  g_object_bind_property (widget, "active",
-                          model_button, "centered",
-                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  gtk_container_add (GTK_CONTAINER (box), widget);
-
   widget = gtk_toggle_button_new_with_label (":iconic");
   g_object_bind_property (widget, "active",
                           model_button, "iconic",
-                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  gtk_container_add (GTK_CONTAINER (box), widget);
-
-  widget = gtk_toggle_button_new_with_label (":inverted");
-  g_object_bind_property (widget, "active",
-                          model_button, "inverted",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   gtk_container_add (GTK_CONTAINER (box), widget);
 

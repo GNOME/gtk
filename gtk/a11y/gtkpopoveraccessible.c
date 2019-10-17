@@ -82,7 +82,7 @@ popover_update_modality (AtkObject  *object,
                          GtkPopover *popover)
 {
   atk_object_notify_state_change (object, ATK_STATE_MODAL,
-                                  gtk_popover_get_modal (popover));
+                                  gtk_popover_get_autohide (popover));
 }
 
 static void
@@ -125,7 +125,7 @@ gtk_popover_accessible_ref_state_set (AtkObject *obj)
   state_set = ATK_OBJECT_CLASS (gtk_popover_accessible_parent_class)->ref_state_set (obj);
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
 
-  if (gtk_popover_get_modal (GTK_POPOVER (widget)))
+  if (gtk_popover_get_autohide (GTK_POPOVER (widget)))
     atk_state_set_add_state (state_set, ATK_STATE_MODAL);
 
   return state_set;

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.94 -->
   <object class="GdkCursor" id="default_cursor">
     <property name="name">default</property>
   </object>

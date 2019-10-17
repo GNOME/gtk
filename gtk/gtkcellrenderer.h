@@ -176,10 +176,7 @@ struct _GtkCellRendererClass
 
   GtkCellRendererClassPrivate *priv;
 
-  /* Padding for future expansion */
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
+  gpointer padding[8];
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -285,6 +282,21 @@ gboolean         gtk_cell_renderer_get_sensitive  (GtkCellRenderer      *cell);
 
 GDK_AVAILABLE_IN_ALL
 gboolean         gtk_cell_renderer_is_activatable (GtkCellRenderer      *cell);
+
+GDK_AVAILABLE_IN_ALL
+void             gtk_cell_renderer_set_is_expander (GtkCellRenderer     *cell,
+                                                    gboolean             is_expander);
+GDK_AVAILABLE_IN_ALL
+gboolean         gtk_cell_renderer_get_is_expander (GtkCellRenderer     *cell);
+
+GDK_AVAILABLE_IN_ALL
+void             gtk_cell_renderer_set_is_expanded (GtkCellRenderer     *cell,
+                                                    gboolean             is_expander);
+GDK_AVAILABLE_IN_ALL
+gboolean         gtk_cell_renderer_get_is_expanded (GtkCellRenderer     *cell);
+
+
+
 
 /* For use by cell renderer implementations only */
 GDK_AVAILABLE_IN_ALL

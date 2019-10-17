@@ -178,7 +178,7 @@ _gtk_css_background_repeat_style_try (GtkCssParser      *parser,
 
   for (i = 0; i < G_N_ELEMENTS (background_repeat_values); i++)
     {
-      if (_gtk_css_parser_try (parser, background_repeat_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, background_repeat_values[i].name))
         {
           *result = i;
           return TRUE;
@@ -195,9 +195,9 @@ _gtk_css_background_repeat_value_try_parse (GtkCssParser *parser)
 
   g_return_val_if_fail (parser != NULL, NULL);
 
-  if (_gtk_css_parser_try (parser, "repeat-x", TRUE))
+  if (gtk_css_parser_try_ident (parser, "repeat-x"))
     return _gtk_css_background_repeat_value_new (GTK_CSS_REPEAT_STYLE_REPEAT, GTK_CSS_REPEAT_STYLE_NO_REPEAT);
-  if (_gtk_css_parser_try (parser, "repeat-y", TRUE))
+  if (gtk_css_parser_try_ident (parser, "repeat-y"))
     return _gtk_css_background_repeat_value_new (GTK_CSS_REPEAT_STYLE_NO_REPEAT, GTK_CSS_REPEAT_STYLE_REPEAT);
 
   if (!_gtk_css_background_repeat_style_try (parser, &x))
@@ -272,7 +272,7 @@ _gtk_css_border_repeat_style_try (GtkCssParser      *parser,
 
   for (i = 0; i < G_N_ELEMENTS (border_repeat_values); i++)
     {
-      if (_gtk_css_parser_try (parser, border_repeat_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, border_repeat_values[i].name))
         {
           *result = i;
           return TRUE;

@@ -56,20 +56,20 @@ interactive_dialog_clicked (GtkButton *button,
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-  gtk_box_pack_start (GTK_BOX (content_area), hbox);
+  gtk_container_add (GTK_CONTAINER (content_area), hbox);
 
   image = gtk_image_new_from_icon_name ("dialog-question");
   gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
-  gtk_box_pack_start (GTK_BOX (hbox), image);
+  gtk_container_add (GTK_CONTAINER (hbox), image);
 
   table = gtk_grid_new ();
   gtk_grid_set_row_spacing (GTK_GRID (table), 4);
   gtk_grid_set_column_spacing (GTK_GRID (table), 4);
-  gtk_box_pack_start (GTK_BOX (hbox), table);
+  gtk_container_add (GTK_CONTAINER (hbox), table);
   label = gtk_label_new_with_mnemonic ("_Entry 1");
   gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);
   local_entry1 = gtk_entry_new ();
-  gtk_entry_set_text (GTK_ENTRY (local_entry1), gtk_entry_get_text (GTK_ENTRY (entry1)));
+  gtk_editable_set_text (GTK_EDITABLE (local_entry1), gtk_editable_get_text (GTK_EDITABLE (entry1)));
   gtk_grid_attach (GTK_GRID (table), local_entry1, 1, 0, 1, 1);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), local_entry1);
 
@@ -77,7 +77,7 @@ interactive_dialog_clicked (GtkButton *button,
   gtk_grid_attach (GTK_GRID (table), label, 0, 1, 1, 1);
 
   local_entry2 = gtk_entry_new ();
-  gtk_entry_set_text (GTK_ENTRY (local_entry2), gtk_entry_get_text (GTK_ENTRY (entry2)));
+  gtk_editable_set_text (GTK_EDITABLE (local_entry2), gtk_editable_get_text (GTK_EDITABLE (entry2)));
   gtk_grid_attach (GTK_GRID (table), local_entry2, 1, 1, 1, 1);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), local_entry2);
 
@@ -85,8 +85,8 @@ interactive_dialog_clicked (GtkButton *button,
 
   if (response == GTK_RESPONSE_OK)
     {
-      gtk_entry_set_text (GTK_ENTRY (entry1), gtk_entry_get_text (GTK_ENTRY (local_entry1)));
-      gtk_entry_set_text (GTK_ENTRY (entry2), gtk_entry_get_text (GTK_ENTRY (local_entry2)));
+      gtk_editable_set_text (GTK_EDITABLE (entry1), gtk_editable_get_text (GTK_EDITABLE (local_entry1)));
+      gtk_editable_set_text (GTK_EDITABLE (entry2), gtk_editable_get_text (GTK_EDITABLE (local_entry2)));
     }
 
   gtk_widget_destroy (dialog);
@@ -123,29 +123,29 @@ do_dialog (GtkWidget *do_widget)
 
       /* Standard message dialog */
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-      gtk_box_pack_start (GTK_BOX (vbox), hbox);
+      gtk_container_add (GTK_CONTAINER (vbox), hbox);
       button = gtk_button_new_with_mnemonic ("_Message Dialog");
       g_signal_connect (button, "clicked",
                         G_CALLBACK (message_dialog_clicked), NULL);
-      gtk_box_pack_start (GTK_BOX (hbox), button);
+      gtk_container_add (GTK_CONTAINER (hbox), button);
 
-      gtk_box_pack_start (GTK_BOX (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+      gtk_container_add (GTK_CONTAINER (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 
       /* Interactive dialog*/
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-      gtk_box_pack_start (GTK_BOX (vbox), hbox);
+      gtk_container_add (GTK_CONTAINER (vbox), hbox);
       vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
       button = gtk_button_new_with_mnemonic ("_Interactive Dialog");
       g_signal_connect (button, "clicked",
                         G_CALLBACK (interactive_dialog_clicked), NULL);
-      gtk_box_pack_start (GTK_BOX (hbox), vbox2);
-      gtk_box_pack_start (GTK_BOX (vbox2), button);
+      gtk_container_add (GTK_CONTAINER (hbox), vbox2);
+      gtk_container_add (GTK_CONTAINER (vbox2), button);
 
       table = gtk_grid_new ();
       gtk_grid_set_row_spacing (GTK_GRID (table), 4);
       gtk_grid_set_column_spacing (GTK_GRID (table), 4);
-      gtk_box_pack_start (GTK_BOX (hbox), table);
+      gtk_container_add (GTK_CONTAINER (hbox), table);
 
       label = gtk_label_new_with_mnemonic ("_Entry 1");
       gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);

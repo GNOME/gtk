@@ -25,6 +25,7 @@
 
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcssbgsizevalueprivate.h"
+#include "gtkcssboxesprivate.h"
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssimagevalueprivate.h"
@@ -47,49 +48,43 @@
  */
 #include "fallback-c89.c"
 
-typedef struct _GtkThemingBackground GtkThemingBackground;
-
-#define N_BOXES (3)
-
-struct _GtkThemingBackground {
-  GtkCssStyle *style;
-
-  GskRoundedRect boxes[N_BOXES];
-};
-
 static void
-gtk_theming_background_snapshot_color (const GtkThemingBackground *bg,
-                                       GtkSnapshot                *snapshot,
-                                       const GdkRGBA              *bg_color,
-                                       const GtkCssValue          *background_image)
+gtk_theming_background_snapshot_color (GtkCssBoxes       *boxes,
+                                       GtkSnapshot       *snapshot,
+                                       const GdkRGBA     *bg_color,
+                                       const GtkCssValue *background_image)
 {
-  gint n_values = _gtk_css_array_value_get_n_values (background_image);
-  GtkCssArea clip = _gtk_css_area_value_get 
+  const GskRoundedRect *box;
+  gint n_values;
+  GtkCssArea clip;
+    
+  n_values = _gtk_css_array_value_get_n_values (background_image);
+  clip = _gtk_css_area_value_get 
     (_gtk_css_array_value_get_nth 
-     (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_CLIP), 
+     (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BACKGROUND_CLIP), 
       n_values - 1));
+  box = gtk_css_boxes_get_box (boxes, clip);
 
-  if (gsk_rounded_rect_is_rectilinear (&bg->boxes[clip]))
+  if (gsk_rounded_rect_is_rectilinear (box))
     {
       gtk_snapshot_append_color (snapshot,
                                  bg_color,
-                                 &bg->boxes[clip].bounds);
+                                 &box->bounds);
     }
   else
     {
-      gtk_snapshot_push_rounded_clip (snapshot,
-                                      &bg->boxes[clip]);
+      gtk_snapshot_push_rounded_clip (snapshot, box);
       gtk_snapshot_append_color (snapshot,
                                  bg_color,
-                                 &bg->boxes[clip].bounds);
+                                 &box->bounds);
       gtk_snapshot_pop (snapshot);
     }
 }
 
 static void
-gtk_theming_background_snapshot_layer (const GtkThemingBackground *bg,
-                                       guint                       idx,
-                                       GtkSnapshot                *snapshot)
+gtk_theming_background_snapshot_layer (GtkCssBoxes *bg,
+                                       guint        idx,
+                                       GtkSnapshot *snapshot)
 {
   GtkCssRepeatStyle hrepeat, vrepeat;
   const GtkCssValue *pos, *repeat;
@@ -112,11 +107,11 @@ gtk_theming_background_snapshot_layer (const GtkThemingBackground *bg,
   vrepeat = _gtk_css_background_repeat_value_get_y (repeat);
 
 
-  origin = &bg->boxes[
-               _gtk_css_area_value_get (
-                   _gtk_css_array_value_get_nth (
-                       gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_ORIGIN),
-                       idx))];
+  origin = gtk_css_boxes_get_box (bg,
+                                  _gtk_css_area_value_get (
+                                      _gtk_css_array_value_get_nth (
+                                          gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_ORIGIN),
+                                          idx)));
 
   width = origin->bounds.size.width;
   height = origin->bounds.size.height;
@@ -124,11 +119,11 @@ gtk_theming_background_snapshot_layer (const GtkThemingBackground *bg,
   if (width <= 0 || height <= 0)
     return;
 
-  clip = &bg->boxes[
-              _gtk_css_area_value_get (
-                                _gtk_css_array_value_get_nth (
-                                                    gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_CLIP),
-                                                                      idx))];
+  clip = gtk_css_boxes_get_box (bg,
+                                _gtk_css_area_value_get (
+                                    _gtk_css_array_value_get_nth (
+                                        gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_CLIP),
+                                        idx)));
 
   _gtk_css_bg_size_value_compute_size (_gtk_css_array_value_get_nth (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_SIZE), idx),
                                        image,
@@ -149,7 +144,7 @@ gtk_theming_background_snapshot_layer (const GtkThemingBackground *bg,
   gtk_snapshot_push_debug (snapshot, "Layer %u", idx);
   gtk_snapshot_push_rounded_clip (snapshot, clip);
 
-  gtk_snapshot_offset (snapshot, origin->bounds.origin.x, origin->bounds.origin.y);
+  gtk_snapshot_translate (snapshot, &origin->bounds.origin);
 
   if (hrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT && vrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
     {
@@ -159,11 +154,12 @@ gtk_theming_background_snapshot_layer (const GtkThemingBackground *bg,
       x = _gtk_css_position_value_get_x (pos, width - image_width);
       y = _gtk_css_position_value_get_y (pos, height - image_height);
 
-      gtk_snapshot_offset (snapshot, x, y);
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
 
       gtk_css_image_snapshot (image, snapshot, image_width, image_height);
 
-      gtk_snapshot_offset (snapshot, -x, -y);
+      gtk_snapshot_restore (snapshot);
     }
   else
     {
@@ -260,42 +256,22 @@ gtk_theming_background_snapshot_layer (const GtkThemingBackground *bg,
                                     repeat_width, repeat_height
                                 ));
                                 
-      gtk_snapshot_offset (snapshot,
-                           position_x + 0.5 * (repeat_width - image_width),
-                           position_y + 0.5 * (repeat_height - image_height));
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (
+                              position_x + 0.5 * (repeat_width - image_width),
+                              position_y + 0.5 * (repeat_height - image_height)));
       gtk_css_image_snapshot (image, snapshot, image_width, image_height);
 
       gtk_snapshot_pop (snapshot);
     }
 
-  gtk_snapshot_offset (snapshot, - origin->bounds.origin.x, - origin->bounds.origin.y);
-
   gtk_snapshot_pop (snapshot);
   gtk_snapshot_pop (snapshot);
-}
-
-static void
-gtk_theming_background_init (GtkThemingBackground *bg,
-                             GtkCssStyle          *style,
-                             double                width,
-                             double                height)
-{
-  bg->style = style;
-
-  gtk_rounded_boxes_init_for_style (&bg->boxes[GTK_CSS_AREA_BORDER_BOX],
-                                    &bg->boxes[GTK_CSS_AREA_PADDING_BOX],
-                                    &bg->boxes[GTK_CSS_AREA_CONTENT_BOX],
-                                    style,
-                                    0, 0, width, height);
 }
 
 void
-gtk_css_style_snapshot_background (GtkCssStyle      *style,
-                                   GtkSnapshot      *snapshot,
-                                   gdouble           width,
-                                   gdouble           height)
+gtk_css_style_snapshot_background (GtkCssBoxes *boxes,
+                                   GtkSnapshot *snapshot)
 {
-  GtkThemingBackground bg;
   gint idx;
   GtkCssValue *background_image;
   GtkCssValue *box_shadow;
@@ -304,9 +280,9 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
   gint number_of_layers;
   GskBlendMode *blend_mode_values;
 
-  background_image = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
-  bg_color = _gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
-  box_shadow = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BOX_SHADOW);
+  background_image = gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
+  bg_color = _gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+  box_shadow = gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BOX_SHADOW);
 
   /* This is the common default case of no background */
   if (gdk_rgba_is_clear (bg_color) &&
@@ -315,15 +291,13 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
       _gtk_css_shadows_value_is_none (box_shadow))
     return;
 
-  gtk_theming_background_init (&bg, style, width, height);
-
   gtk_snapshot_push_debug (snapshot, "CSS background");
 
   gtk_css_shadows_value_snapshot_outset (box_shadow,
                                          snapshot,
-                                         &bg.boxes[GTK_CSS_AREA_BORDER_BOX]);
+                                         gtk_css_boxes_get_border_box (boxes));
 
-  blend_modes = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE);
+  blend_modes = gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE);
   number_of_layers = _gtk_css_array_value_get_n_values (background_image);
   blend_mode_values = g_alloca (sizeof (GskBlendMode) * number_of_layers);
 
@@ -336,25 +310,25 @@ gtk_css_style_snapshot_background (GtkCssStyle      *style,
     }
 
   if (!gdk_rgba_is_clear (bg_color))
-    gtk_theming_background_snapshot_color (&bg, snapshot, bg_color, background_image);
+    gtk_theming_background_snapshot_color (boxes, snapshot, bg_color, background_image);
 
   for (idx = number_of_layers - 1; idx >= 0; idx--)
     {
       if (blend_mode_values[idx] == GSK_BLEND_MODE_DEFAULT)
         {
-          gtk_theming_background_snapshot_layer (&bg, idx, snapshot);
+          gtk_theming_background_snapshot_layer (boxes, idx, snapshot);
         }
       else
         {
           gtk_snapshot_pop (snapshot);
-          gtk_theming_background_snapshot_layer (&bg, idx, snapshot);
+          gtk_theming_background_snapshot_layer (boxes, idx, snapshot);
           gtk_snapshot_pop (snapshot);
         }
     }
 
   gtk_css_shadows_value_snapshot_inset (box_shadow,
                                         snapshot,
-                                        &bg.boxes[GTK_CSS_AREA_PADDING_BOX]);
+                                        gtk_css_boxes_get_padding_box (boxes));
 
   gtk_snapshot_pop (snapshot);
 }

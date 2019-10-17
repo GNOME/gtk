@@ -33,48 +33,16 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkbox.h>
+#include <gtk/gtkwidget.h>
 #include <gtk/gtkenums.h>
 
 G_BEGIN_DECLS
 
-/*
- * Type checking and casting macros
- */
 #define GTK_TYPE_INFO_BAR              (gtk_info_bar_get_type())
 #define GTK_INFO_BAR(obj)              (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INFO_BAR, GtkInfoBar))
-#define GTK_INFO_BAR_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_INFO_BAR, GtkInfoBarClass))
 #define GTK_IS_INFO_BAR(obj)           (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_INFO_BAR))
-#define GTK_IS_INFO_BAR_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_INFO_BAR))
-#define GTK_INFO_BAR_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_INFO_BAR, GtkInfoBarClass))
 
-
-typedef struct _GtkInfoBarClass GtkInfoBarClass;
 typedef struct _GtkInfoBar GtkInfoBar;
-
-
-struct _GtkInfoBar
-{
-  GtkBox parent_instance;
-};
-
-
-struct _GtkInfoBarClass
-{
-  GtkBoxClass parent_class;
-
-  /* Signals */
-  void (* response) (GtkInfoBar *info_bar, gint response_id);
-
-  /* Keybinding signals */
-  void (* close)    (GtkInfoBar *info_bar);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType          gtk_info_bar_get_type               (void) G_GNUC_CONST;
@@ -109,7 +77,6 @@ GDK_AVAILABLE_IN_ALL
 void           gtk_info_bar_set_default_response   (GtkInfoBar     *info_bar,
                                                     gint            response_id);
 
-/* Emit response signal */
 GDK_AVAILABLE_IN_ALL
 void           gtk_info_bar_response               (GtkInfoBar     *info_bar,
                                                     gint            response_id);

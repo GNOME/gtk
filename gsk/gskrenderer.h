@@ -39,13 +39,10 @@ GDK_AVAILABLE_IN_ALL
 GType gsk_renderer_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GskRenderer *           gsk_renderer_new_for_surface           (GdkSurface               *surface);
+GskRenderer *           gsk_renderer_new_for_surface            (GdkSurface               *surface);
 
 GDK_AVAILABLE_IN_ALL
-GdkSurface *             gsk_renderer_get_surface               (GskRenderer             *renderer);
-
-GDK_AVAILABLE_IN_ALL
-GdkDisplay *            gsk_renderer_get_display                (GskRenderer             *renderer);
+GdkSurface *            gsk_renderer_get_surface                (GskRenderer             *renderer);
 
 GDK_AVAILABLE_IN_ALL
 gboolean                gsk_renderer_realize                    (GskRenderer             *renderer,
@@ -53,6 +50,8 @@ gboolean                gsk_renderer_realize                    (GskRenderer    
                                                                  GError                 **error);
 GDK_AVAILABLE_IN_ALL
 void                    gsk_renderer_unrealize                  (GskRenderer             *renderer);
+GDK_AVAILABLE_IN_ALL
+gboolean                gsk_renderer_is_realized                (GskRenderer             *renderer);
 
 GDK_AVAILABLE_IN_ALL
 GdkTexture *            gsk_renderer_render_texture             (GskRenderer             *renderer,

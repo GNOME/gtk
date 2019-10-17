@@ -215,116 +215,6 @@ get_client_serial (BroadwayClient *client, guint32 daemon_serial)
   return client_serial;
 }
 
-#define NODE_SIZE_COLOR 1
-#define NODE_SIZE_FLOAT 1
-#define NODE_SIZE_POINT 2
-#define NODE_SIZE_SIZE 2
-#define NODE_SIZE_RECT (NODE_SIZE_POINT + NODE_SIZE_SIZE)
-#define NODE_SIZE_RRECT (NODE_SIZE_RECT + 4 * NODE_SIZE_SIZE)
-#define NODE_SIZE_COLOR_STOP (NODE_SIZE_FLOAT + NODE_SIZE_COLOR)
-#define NODE_SIZE_SHADOW (NODE_SIZE_COLOR + 3 * NODE_SIZE_FLOAT)
-
-static guint32
-rotl (guint32 value, int shift)
-{
-  if ((shift &= 32 - 1) == 0)
-    return value;
-  return (value << shift) | (value >> (32 - shift));
-}
-
-static BroadwayNode *
-decode_nodes (BroadwayClient *client,
-              int len, guint32 data[], int *pos)
-{
-  BroadwayNode *node;
-  guint32 type;
-  guint32 i, n_stops, n_shadows;
-  guint32 size, n_children;
-  gint32 texture_offset;
-  guint32 hash;
-
-  g_assert (*pos < len);
-
-  size = 0;
-  n_children = 0;
-  texture_offset = -1;
-
-  type = data[(*pos)++];
-  switch (type) {
-  case BROADWAY_NODE_COLOR:
-    size = NODE_SIZE_RECT + NODE_SIZE_COLOR;
-    break;
-  case BROADWAY_NODE_BORDER:
-    size = NODE_SIZE_RRECT + 4 * NODE_SIZE_FLOAT + 4 * NODE_SIZE_COLOR;
-    break;
-  case BROADWAY_NODE_INSET_SHADOW:
-  case BROADWAY_NODE_OUTSET_SHADOW:
-    size = NODE_SIZE_RRECT + NODE_SIZE_COLOR + 4 * NODE_SIZE_FLOAT;
-    break;
-  case BROADWAY_NODE_TEXTURE:
-    texture_offset = 4;
-    size = 5;
-    break;
-  case BROADWAY_NODE_CONTAINER:
-    size = 1;
-    n_children = data[*pos];
-    break;
-  case BROADWAY_NODE_ROUNDED_CLIP:
-    size = NODE_SIZE_RRECT;
-    n_children = 1;
-    break;
-  case BROADWAY_NODE_CLIP:
-    size = NODE_SIZE_RECT;
-    n_children = 1;
-    break;
-  case BROADWAY_NODE_LINEAR_GRADIENT:
-    size = NODE_SIZE_RECT + 2 * NODE_SIZE_POINT;
-    n_stops = data[*pos + size++];
-    size += n_stops * NODE_SIZE_COLOR_STOP;
-    break;
-  case BROADWAY_NODE_SHADOW:
-    size = 1;
-    n_shadows = data[*pos];
-    size += n_shadows * NODE_SIZE_SHADOW;
-    n_children = 1;
-    break;
-  case BROADWAY_NODE_OPACITY:
-    size = NODE_SIZE_FLOAT;
-    n_children = 1;
-    break;
-  default:
-    g_assert_not_reached ();
-  }
-
-  node = g_malloc (sizeof(BroadwayNode) + (size - 1) * sizeof(guint32) + n_children * sizeof (BroadwayNode *));
-  node->type = type;
-  node->n_children = n_children;
-  node->children = (BroadwayNode **)((char *)node + sizeof(BroadwayNode) + (size - 1) * sizeof(guint32));
-  node->n_data = size;
-  for (i = 0; i < size; i++)
-    {
-      node->data[i] = data[(*pos)++];
-      if (i == texture_offset)
-        node->data[i] = GPOINTER_TO_INT (g_hash_table_lookup (client->textures,
-                                                              GINT_TO_POINTER (node->data[i])));
-    }
-
-  for (i = 0; i < n_children; i++)
-    node->children[i] = decode_nodes (client, len, data, pos);
-
-  hash = node->type << 16;
-
-  for (i = 0; i < size; i++)
-    hash ^= rotl (node->data[i], i);
-
-  for (i = 0; i < n_children; i++)
-    hash ^= rotl (node->children[i]->hash, i);
-
-  node->hash = hash;
-
-  return node;
-}
-
 static void
 client_handle_request (BroadwayClient *client,
                        BroadwayRequest *request)
@@ -344,7 +234,7 @@ client_handle_request (BroadwayClient *client,
     {
     case BROADWAY_REQUEST_NEW_SURFACE:
       reply_new_surface.id =
-        broadway_server_new_surface (server,
+        broadway_server_new_surface (server, client->id,
                                      request->new_surface.x,
                                      request->new_surface.y,
                                      request->new_surface.width,
@@ -400,13 +290,10 @@ client_handle_request (BroadwayClient *client,
       {
         gsize array_size = request->base.size - sizeof (BroadwayRequestSetNodes) + sizeof(guint32);
         int n_data = array_size / sizeof(guint32);
-        int pos = 0;
-        BroadwayNode *node;
 
-        node = decode_nodes (client, n_data, request->set_nodes.data, &pos);
-
-        broadway_server_surface_set_nodes (server, request->set_nodes.id,
-                                           node);
+        broadway_server_surface_update_nodes (server, request->set_nodes.id,
+                                              request->set_nodes.data, n_data,
+                                              client->textures);
       }
       break;
     case BROADWAY_REQUEST_UPLOAD_TEXTURE:

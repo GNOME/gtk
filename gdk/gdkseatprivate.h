@@ -57,7 +57,8 @@ struct _GdkSeatClass
                               GdkSeatCapabilities  capabilities);
 
   GdkDeviceTool * (* get_tool) (GdkSeat *seat,
-                                guint64  serial);
+                                guint64  serial,
+                                guint64  tool_id);
   GList *     (* get_master_pointers) (GdkSeat             *seat,
                                        GdkSeatCapabilities  capabilities);
 };
@@ -74,6 +75,7 @@ void gdk_seat_tool_removed   (GdkSeat       *seat,
 
 GdkDeviceTool *
      gdk_seat_get_tool       (GdkSeat   *seat,
-                              guint64    serial);
+                              guint64    serial,
+                              guint64    hw_id);
 
 #endif /* __GDK_SEAT_PRIVATE_H__ */

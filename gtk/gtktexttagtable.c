@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include "gtktexttagtable.h"
+#include "gtktexttagtableprivate.h"
 
 #include "gtkbuildable.h"
 #include "gtktexttagprivate.h"
@@ -60,6 +61,25 @@
  * </object>
  * ]|
  */
+
+typedef struct _GtkTextTagTablePrivate       GtkTextTagTablePrivate;
+typedef struct _GtkTextTagTableClass         GtkTextTagTableClass;
+
+struct _GtkTextTagTable
+{
+  GObject parent_instance;
+
+  GtkTextTagTablePrivate *priv;
+};
+
+struct _GtkTextTagTableClass
+{
+  GObjectClass parent_class;
+
+  void (* tag_changed) (GtkTextTagTable *table, GtkTextTag *tag, gboolean size_changed);
+  void (* tag_added) (GtkTextTagTable *table, GtkTextTag *tag);
+  void (* tag_removed) (GtkTextTagTable *table, GtkTextTag *tag);
+};
 
 struct _GtkTextTagTablePrivate
 {
@@ -116,6 +136,9 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                   2,
                   GTK_TYPE_TEXT_TAG,
                   G_TYPE_BOOLEAN);  
+  g_signal_set_va_marshaller (signals[TAG_CHANGED],
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              _gtk_marshal_VOID__OBJECT_BOOLEANv);
 
   /**
    * GtkTextTagTable::tag-added:
@@ -460,4 +483,12 @@ _gtk_text_tag_table_remove_buffer (GtkTextTagTable *table,
   gtk_text_tag_table_foreach (table, foreach_remove_tag, buffer);
 
   priv->buffers = g_slist_remove (priv->buffers, buffer);
+}
+
+void
+_gtk_text_tag_table_tag_changed (GtkTextTagTable *table,
+                                 GtkTextTag      *tag,
+                                 gboolean         size_changed)
+{
+  g_signal_emit (table, signals[TAG_CHANGED], 0, tag, size_changed);
 }

@@ -105,60 +105,65 @@ _gtk_im_module_create (const gchar *context_id)
 }
 
 static gboolean
-is_platform (const char *context_id)
+match_backend (GdkDisplay *display,
+               const char *context_id)
 {
-  return g_strcmp0 (context_id, "wayland") == 0 ||
-         g_strcmp0 (context_id, "broadway") == 0 ||
-         g_strcmp0 (context_id, "xim") == 0 ||
-         g_strcmp0 (context_id, "quartz") == 0 ||
-         g_strcmp0 (context_id, "ime") == 0;
-}
-
-static gboolean
-match_backend (const char *context_id)
-{
-#ifdef GDK_WINDOWING_WAYLAND
   if (g_strcmp0 (context_id, "wayland") == 0)
     {
-      GdkDisplay *display = gdk_display_get_default ();
-
+#ifdef GDK_WINDOWING_WAYLAND
       return GDK_IS_WAYLAND_DISPLAY (display) &&
              gdk_wayland_display_query_registry (display,
-                                                 "gtk_text_input_manager");
+                                                 "zwp_text_input_manager_v3");
+#else
+      return FALSE;
+#endif
     }
-#endif
 
-#ifdef GDK_WINDOWING_BROADWAY
   if (g_strcmp0 (context_id, "broadway") == 0)
-    return GDK_IS_BROADWAY_DISPLAY (gdk_display_get_default ());
+#ifdef GDK_WINDOWING_BROADWAY
+    return GDK_IS_BROADWAY_DISPLAY (display);
+#else
+    return FALSE;
 #endif
 
-#ifdef GDK_WINDOWING_X11
   if (g_strcmp0 (context_id, "xim") == 0)
-    return GDK_IS_X11_DISPLAY (gdk_display_get_default ());
+#ifdef GDK_WINDOWING_X11
+    return GDK_IS_X11_DISPLAY (display);
+#else
+    return FALSE;
 #endif
 
-#ifdef GDK_WINDOWING_WIN32
   if (g_strcmp0 (context_id, "ime") == 0)
-    return GDK_IS_WIN32_DISPLAY (gdk_display_get_default ());
+#ifdef GDK_WINDOWING_WIN32
+    return GDK_IS_WIN32_DISPLAY (display);
+#else
+    return FALSE;
 #endif
 
-#ifdef GDK_WINDOWING_QUARTZ
   if (g_strcmp0 (context_id, "quartz") == 0)
-    return GDK_IS_QUARTZ_DISPLAY (gdk_display_get_default ());
+#ifdef GDK_WINDOWING_QUARTZ
+    return GDK_IS_QUARTZ_DISPLAY (display);
+#else
+    return FALSE;
 #endif
 
   return TRUE;
 }
 
 static const gchar *
-lookup_immodule (gchar **immodules_list)
+lookup_immodule (GdkDisplay  *display,
+                 gchar      **immodules_list)
 {
-  while (immodules_list && *immodules_list)
+  guint i;
+
+  for (i = 0; immodules_list[i]; i++)
     {
-      if (g_strcmp0 (*immodules_list, SIMPLE_ID) == 0)
+      if (!match_backend (display, immodules_list[i]))
+        continue;
+
+      if (g_strcmp0 (immodules_list[i], SIMPLE_ID) == 0)
         return SIMPLE_ID;
-      else if (g_strcmp0 (*immodules_list, NONE_ID) == 0)
+      else if (g_strcmp0 (immodules_list[i], NONE_ID) == 0)
         return NONE_ID;
       else
         {
@@ -166,11 +171,10 @@ lookup_immodule (gchar **immodules_list)
           GIOExtension *ext;
 
           ep = g_io_extension_point_lookup (GTK_IM_MODULE_EXTENSION_POINT_NAME);
-          ext = g_io_extension_point_get_extension_by_name (ep, *immodules_list);
+          ext = g_io_extension_point_get_extension_by_name (ep, immodules_list[i]);
           if (ext)
             return g_io_extension_get_name (ext);
         }
-      immodules_list++;
     }
 
   return NULL;
@@ -178,18 +182,21 @@ lookup_immodule (gchar **immodules_list)
 
 /**
  * _gtk_im_module_get_default_context_id:
- * 
+ * @display: The display to look up the module for
+ *
  * Return the context_id of the best IM context type 
  * for the given window.
  * 
  * Returns: the context ID (will never be %NULL)
  */
 const gchar *
-_gtk_im_module_get_default_context_id (void)
+_gtk_im_module_get_default_context_id (GdkDisplay *display)
 {
   const gchar *context_id = NULL;
   const gchar *envvar;
   GtkSettings *settings;
+  GIOExtensionPoint *ep;
+  GList *l;
   char *tmp;
 
   envvar = g_getenv ("GTK_IM_MODULE");
@@ -197,7 +204,7 @@ _gtk_im_module_get_default_context_id (void)
     {
       char **immodules;
       immodules = g_strsplit (envvar, ":", 0);
-      context_id = lookup_immodule (immodules);
+      context_id = lookup_immodule (display, immodules);
       g_strfreev (immodules);
 
       if (context_id)
@@ -205,14 +212,14 @@ _gtk_im_module_get_default_context_id (void)
     }
 
   /* Check if the certain immodule is set in XSETTINGS. */
-  settings = gtk_settings_get_default ();
+  settings = gtk_settings_get_for_display (display);
   g_object_get (G_OBJECT (settings), "gtk-im-module", &tmp, NULL);
   if (tmp)
     {
       char **immodules;
 
       immodules = g_strsplit (tmp, ":", 0);
-      context_id = lookup_immodule (immodules);
+      context_id = lookup_immodule (display, immodules);
       g_strfreev (immodules);
       g_free (tmp);
 
@@ -220,26 +227,19 @@ _gtk_im_module_get_default_context_id (void)
         return context_id;
     }
 
-  GIOExtensionPoint *ep;
-  GList *list, *l;
-
   ep = g_io_extension_point_lookup (GTK_IM_MODULE_EXTENSION_POINT_NAME);
-  list = g_io_extension_point_get_extensions (ep);
-  for (l = list; l; l = l->next)
+  for (l = g_io_extension_point_get_extensions (ep); l; l = l->next)
     {
       GIOExtension *ext = l->data;
-      const char *context_id;
 
       context_id = g_io_extension_get_name (ext);
-      if (match_backend (context_id))
-        return context_id;
-
-      // FIXME: locale matching
-      if (!is_platform (context_id))
+      if (match_backend (display, context_id))
         return context_id;
     }
 
-  return context_id ? context_id : SIMPLE_ID;
+  g_error ("GTK was run without any IM module being present. This must not happen.");
+
+  return SIMPLE_ID;
 }
 
 void

@@ -29,6 +29,7 @@
 #include "gdkinternals.h"
 #include "gdkframeclockprivate.h"
 #include "gdk.h"
+#include "gdkprofilerprivate.h"
 
 #ifdef G_OS_WIN32
 #include <windows.h>
@@ -38,12 +39,12 @@
 
 struct _GdkFrameClockIdlePrivate
 {
-  GTimer *timer;
-  /* timer_base is used to avoid ever going backward */
-  gint64 timer_base;
   gint64 frame_time;
   gint64 min_next_frame_time;
   gint64 sleep_serial;
+#ifdef G_ENABLE_DEBUG
+  gint64 freeze_time;
+#endif
 
   guint flush_idle_id;
   guint paint_idle_id;
@@ -161,22 +162,12 @@ compute_frame_time (GdkFrameClockIdle *idle)
 {
   GdkFrameClockIdlePrivate *priv = idle->priv;
   gint64 computed_frame_time;
-  gint64 elapsed;
 
-  elapsed = g_get_monotonic_time () + priv->timer_base;
-  if (elapsed < priv->frame_time)
-    {
-      /* clock went backward. adapt to that by forevermore increasing
-       * timer_base.  For now, assume we've gone forward in time 1ms.
-       */
-      /* hmm. just fix GTimer? */
+  computed_frame_time = g_get_monotonic_time ();
+
+  /* ensure monotonicity of frame time */
+  if (computed_frame_time <= priv->frame_time)
       computed_frame_time = priv->frame_time + 1;
-      priv->timer_base += (priv->frame_time - elapsed) + 1;
-    }
-  else
-    {
-      computed_frame_time = elapsed;
-    }
 
   return computed_frame_time;
 }
@@ -243,7 +234,7 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
                                                     gdk_frame_clock_flush_idle,
                                                     g_object_ref (clock_idle),
                                                     (GDestroyNotify) g_object_unref);
-          g_source_set_name_by_id (priv->flush_idle_id, "[gtk+] gdk_frame_clock_flush_idle");
+          g_source_set_name_by_id (priv->flush_idle_id, "[gtk] gdk_frame_clock_flush_idle");
         }
 
       if (!priv->in_paint_idle &&
@@ -254,7 +245,7 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
                                                     gdk_frame_clock_paint_idle,
                                                     g_object_ref (clock_idle),
                                                     (GDestroyNotify) g_object_unref);
-          g_source_set_name_by_id (priv->paint_idle_id, "[gtk+] gdk_frame_clock_paint_idle");
+          g_source_set_name_by_id (priv->paint_idle_id, "[gtk] gdk_frame_clock_paint_idle");
         }
     }
 }
@@ -399,7 +390,8 @@ gdk_frame_clock_paint_idle (void *data)
               _gdk_frame_clock_emit_before_paint (clock);
               priv->phase = GDK_FRAME_CLOCK_PHASE_UPDATE;
             }
-          /* fallthrough */
+          G_GNUC_FALLTHROUGH;
+
         case GDK_FRAME_CLOCK_PHASE_UPDATE:
           if (priv->freeze_count == 0)
             {
@@ -410,13 +402,14 @@ gdk_frame_clock_paint_idle (void *data)
                   _gdk_frame_clock_emit_update (clock);
                 }
             }
-          /* fallthrough */
+          G_GNUC_FALLTHROUGH;
+
         case GDK_FRAME_CLOCK_PHASE_LAYOUT:
           if (priv->freeze_count == 0)
             {
 	      int iter;
 #ifdef G_ENABLE_DEBUG
-              if (GDK_DEBUG_CHECK (FRAMES))
+              if (GDK_DEBUG_CHECK (FRAMES) || gdk_profiler_is_running ())
                 {
                   if (priv->phase != GDK_FRAME_CLOCK_PHASE_LAYOUT &&
                       (priv->requested & GDK_FRAME_CLOCK_PHASE_LAYOUT))
@@ -440,12 +433,13 @@ gdk_frame_clock_paint_idle (void *data)
 	      if (iter == 5)
 		g_warning ("gdk-frame-clock: layout continuously requested, giving up after 4 tries");
             }
-          /* fallthrough */
+          G_GNUC_FALLTHROUGH;
+
         case GDK_FRAME_CLOCK_PHASE_PAINT:
           if (priv->freeze_count == 0)
             {
 #ifdef G_ENABLE_DEBUG
-              if (GDK_DEBUG_CHECK (FRAMES))
+              if (GDK_DEBUG_CHECK (FRAMES) || gdk_profiler_is_running ())
                 {
                   if (priv->phase != GDK_FRAME_CLOCK_PHASE_PAINT &&
                       (priv->requested & GDK_FRAME_CLOCK_PHASE_PAINT))
@@ -460,7 +454,8 @@ gdk_frame_clock_paint_idle (void *data)
                   _gdk_frame_clock_emit_paint (clock);
                 }
             }
-          /* fallthrough */
+          G_GNUC_FALLTHROUGH;
+
         case GDK_FRAME_CLOCK_PHASE_AFTER_PAINT:
           if (priv->freeze_count == 0)
             {
@@ -469,26 +464,18 @@ gdk_frame_clock_paint_idle (void *data)
               /* the ::after-paint phase doesn't get repeated on freeze/thaw,
                */
               priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
-
-#ifdef G_ENABLE_DEBUG
-              if (GDK_DEBUG_CHECK (FRAMES))
-                timings->frame_end_time = g_get_monotonic_time ();
-#endif /* G_ENABLE_DEBUG */
             }
-          /* fallthrough */
+#ifdef G_ENABLE_DEBUG
+            if (GDK_DEBUG_CHECK (FRAMES) || gdk_profiler_is_running ())
+              timings->frame_end_time = g_get_monotonic_time ();
+#endif /* G_ENABLE_DEBUG */
+          G_GNUC_FALLTHROUGH;
+
         case GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS:
         default:
           ;
         }
     }
-
-#ifdef G_ENABLE_DEBUG
-  if (GDK_DEBUG_CHECK (FRAMES))
-    {
-      if (timings && timings->complete)
-        _gdk_frame_clock_debug_print_timings (clock, timings);
-    }
-#endif /* G_ENABLE_DEBUG */
 
   if (priv->requested & GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS)
     {
@@ -574,6 +561,14 @@ gdk_frame_clock_idle_freeze (GdkFrameClock *clock)
   GdkFrameClockIdle *clock_idle = GDK_FRAME_CLOCK_IDLE (clock);
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
 
+#ifdef G_ENABLE_DEBUG
+  if (priv->freeze_count == 0)
+    {
+      if (gdk_profiler_is_running ())
+        priv->freeze_time = g_get_monotonic_time ();
+    }
+#endif
+
   priv->freeze_count++;
   maybe_stop_idle (clock_idle);
 }
@@ -598,6 +593,20 @@ gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
         priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
 
       priv->sleep_serial = get_sleep_serial ();
+
+#ifdef G_ENABLE_DEBUG
+      if (gdk_profiler_is_running ())
+        {
+          if (priv->freeze_time != 0)
+            {
+              gint64 thaw_time = g_get_monotonic_time ();
+              gdk_profiler_add_mark (priv->freeze_time * 1000,
+                                     (thaw_time - priv->freeze_time) * 1000,
+                                     "freeze", "");
+              priv->freeze_time = 0;
+            }
+        }
+#endif
     }
 }
 

@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Wed Nov 13 16:45:55 2013 -->
 <interface>
-  <!-- interface-requires gtk+ 3.10 -->
   <object class="GtkListStore" id="liststore1">
     <columns>
-      <!-- column-name Name -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -81,9 +78,6 @@
               </object>
             </child>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
     </child>

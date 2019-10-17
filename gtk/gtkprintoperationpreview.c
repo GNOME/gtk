@@ -77,7 +77,7 @@ gtk_print_operation_preview_base_init (gpointer g_iface)
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkPrintOperationPreviewIface, ready),
 		    NULL, NULL,
-		    g_cclosure_marshal_VOID__OBJECT,
+		    NULL,
 		    G_TYPE_NONE, 1,
 		    GTK_TYPE_PRINT_CONTEXT);
 

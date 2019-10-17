@@ -1,37 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkDialog" id="window1">
-    <property name="can_focus">False</property>
     <property name="title" translatable="yes">Dubstep</property>
     <property name="type_hint">dialog</property>
-    <property name="resizable">False</property>
-    <property name="modal">True</property>
+    <property name="resizable">0</property>
+    <property name="modal">1</property>
     <property name="use_header_bar">1</property>
-    <child internal-child="vbox">
+    <child internal-child="content_area">
       <object class="GtkBox" id="dialog-vbox2">
-        <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
           <object class="GtkLabel" id="screen_reader_blurb">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="margin_start">12</property>
             <property name="margin_end">6</property>
             <property name="margin_top">6</property>
             <property name="xalign">0</property>
             <property name="max-width-chars">1</property>
             <property name="label" translatable="yes">WubWubWubWubWubWubWubWubWubWubWubWubWub Ts</property>
-            <property name="wrap">True</property>
+            <property name="wrap">1</property>
           </object>
-          <packing>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkGrid" id="grid3">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="margin_start">12</property>
             <property name="margin_end">6</property>
             <property name="margin_top">12</property>
@@ -40,38 +31,32 @@
             <property name="column_spacing">6</property>
             <child>
               <object class="GtkLabel" id="screen_reader_label">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
+                <property name="hexpand">1</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">The _Base</property>
-                <property name="use_underline">True</property>
+                <property name="use_underline">1</property>
                 <property name="mnemonic_widget">screen_reader_switch</property>
+                <layout>
+                  <property name="left_attach">0</property>
+                  <property name="top_attach">0</property>
+                  <property name="column-span">1</property>
+                  <property name="row-span">1</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkSwitch" id="screen_reader_switch">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">1</property>
                 <property name="halign">end</property>
+                <layout>
+                  <property name="left_attach">1</property>
+                  <property name="top_attach">0</property>
+                  <property name="column-span">1</property>
+                  <property name="row-span">1</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
         </child>
       </object>
     </child>

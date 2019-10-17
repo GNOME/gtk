@@ -72,52 +72,39 @@ test_get_errors_file (const char *css_file)
   return g_string_free (file, FALSE);
 }
 
-static char *
+static GBytes *
 diff_with_file (const char  *file1,
                 char        *text,
                 gssize       len,
                 GError     **error)
 {
-  const char *command[] = { "diff", "-u", file1, NULL, NULL };
-  char *diff, *tmpfile;
-  int fd;
+  GSubprocess *process;
+  GBytes *input, *output;
 
-  diff = NULL;
-
-  if (len < 0)
-    len = strlen (text);
-  
-  /* write the text buffer to a temporary file */
-  fd = g_file_open_tmp (NULL, &tmpfile, error);
-  if (fd < 0)
+  process = g_subprocess_new (G_SUBPROCESS_FLAGS_STDIN_PIPE
+                              | G_SUBPROCESS_FLAGS_STDOUT_PIPE,
+                              error,
+                              "diff", "-u", file1, "-", NULL);
+  if (process == NULL)
     return NULL;
 
-  if (write (fd, text, len) != (int) len)
+  input = g_bytes_new_static (text, len >= 0 ? len : strlen (text));
+  if (!g_subprocess_communicate (process,
+                                 input,
+                                 NULL,
+                                 &output,
+                                 NULL,
+                                 error))
     {
-      close (fd);
-      g_set_error (error,
-                   G_FILE_ERROR, G_FILE_ERROR_FAILED,
-                   "Could not write data to temporary file '%s'", tmpfile);
-      goto done;
+      g_object_unref (process);
+      g_bytes_unref (input);
+      return NULL;
     }
-  close (fd);
-  command[3] = tmpfile;
 
-  /* run diff command */
-  g_spawn_sync (NULL, 
-                (char **) command,
-                NULL,
-                G_SPAWN_SEARCH_PATH,
-                NULL, NULL,
-	        &diff,
-                NULL, NULL,
-                error);
+  g_object_unref (process);
+  g_bytes_unref (input);
 
-done:
-  g_unlink (tmpfile);
-  g_free (tmpfile);
-
-  return diff;
+  return output;
 }
 
 static void
@@ -142,16 +129,19 @@ parsing_error_cb (GtkCssProvider *provider,
                   const GError   *error,
                   GString        *errors)
 {
-  char *basename;
+  char *section_string;
 
-  basename = g_file_get_basename (gtk_css_section_get_file (section));
+  section_string = gtk_css_section_to_string (section);
+
   g_string_append_printf (errors,
-                          "%s:%u: error: ",
-                          basename, gtk_css_section_get_end_line (section) + 1);
-  g_free (basename);
+                          "%s: error: ",
+                          section_string);
+  g_free (section_string);
 
-  if (error->domain == GTK_CSS_PROVIDER_ERROR)
-      append_error_value (errors, GTK_TYPE_CSS_PROVIDER_ERROR, error->code);
+  if (error->domain == GTK_CSS_PARSER_ERROR)
+    append_error_value (errors, GTK_TYPE_CSS_PARSER_ERROR, error->code);
+  else if (error->domain == GTK_CSS_PARSER_WARNING)
+    append_error_value (errors, GTK_TYPE_CSS_PARSER_WARNING, error->code);
   else
     g_string_append_printf (errors, 
                             "%s %u\n",
@@ -165,9 +155,9 @@ static void
 parse_css_file (GFile *file, gboolean generate)
 {
   GtkCssProvider *provider;
-  char *css, *diff;
-  char *css_file, *reference_file, *errors_file;
+  char *css, *css_file, *reference_file, *errors_file;
   GString *errors;
+  GBytes *diff;
   GError *error = NULL;
 
   css_file = g_file_get_path (file);
@@ -193,12 +183,14 @@ parse_css_file (GFile *file, gboolean generate)
   diff = diff_with_file (reference_file, css, -1, &error);
   g_assert_no_error (error);
 
-  if (diff && diff[0])
+  if (diff && g_bytes_get_size (diff) > 0)
     {
-      g_test_message ("Resulting CSS doesn't match reference:\n%s", diff);
+      g_test_message ("Resulting CSS doesn't match reference:\n%s",
+                      (const char *) g_bytes_get_data (diff, NULL));
       g_test_fail ();
     }
   g_free (reference_file);
+  g_clear_pointer (&diff, g_bytes_unref);
 
   errors_file = test_get_errors_file (css_file);
 
@@ -207,11 +199,13 @@ parse_css_file (GFile *file, gboolean generate)
       diff = diff_with_file (errors_file, errors->str, errors->len, &error);
       g_assert_no_error (error);
 
-      if (diff && diff[0])
+      if (diff && g_bytes_get_size (diff) > 0)
         {
-          g_test_message ("Errors don't match expected errors:\n%s", diff);
+          g_test_message ("Errors don't match expected errors:\n%s",
+                          (const char *) g_bytes_get_data (diff, NULL));
           g_test_fail ();
         }
+      g_clear_pointer (&diff, g_bytes_unref);
     }
   else if (errors->str[0])
     {
@@ -221,8 +215,6 @@ parse_css_file (GFile *file, gboolean generate)
 
   g_free (errors_file);
   g_string_free (errors, TRUE);
-
-  g_free (diff);
 
 out:
   g_free (css_file);

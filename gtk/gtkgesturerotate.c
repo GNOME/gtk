@@ -242,8 +242,12 @@ gtk_gesture_rotate_class_init (GtkGestureRotateClass *klass)
                   GTK_TYPE_GESTURE_ROTATE,
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkGestureRotateClass, angle_changed),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  _gtk_marshal_VOID__DOUBLE_DOUBLE,
                   G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[ANGLE_CHANGED],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__DOUBLE_DOUBLEv);
 }
 
 /**

@@ -133,9 +133,10 @@ gtk_picture_snapshot (GtkWidget   *widget,
       x = (width - ceil (w)) / 2;
       y = floor(height - ceil (h)) / 2;
 
-      gtk_snapshot_offset (snapshot, x, y);
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
       gdk_paintable_snapshot (self->paintable, snapshot, w, h);
-      gtk_snapshot_offset (snapshot, -x, -y);
+      gtk_snapshot_restore (snapshot);
     }
 }
 
@@ -369,8 +370,6 @@ gtk_picture_class_init (GtkPictureClass *class)
 static void
 gtk_picture_init (GtkPicture *self)
 {
-  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
-
   self->can_shrink = TRUE;
   self->keep_aspect_ratio = TRUE;
 }
@@ -603,6 +602,7 @@ load_scalable_with_loader (GFile *file,
 out2:
   g_bytes_unref (bytes);
 out1:
+  gdk_pixbuf_loader_close (loader, NULL);
   g_object_unref (loader);
 
   return result;
@@ -636,7 +636,7 @@ gtk_picture_set_file (GtkPicture *self,
 
   paintable = load_scalable_with_loader (file, gtk_widget_get_scale_factor (GTK_WIDGET (self)));
   gtk_picture_set_paintable (self, paintable);
-  g_object_unref (paintable);
+  g_clear_object (&paintable);
 
   g_object_thaw_notify (G_OBJECT (self));
 }
@@ -798,26 +798,38 @@ gtk_picture_set_paintable (GtkPicture   *self,
 
   if (self->paintable)
     {
-      g_signal_handlers_disconnect_by_func (self->paintable,
-                                            gtk_picture_paintable_invalidate_contents,
-                                            self);
-      g_signal_handlers_disconnect_by_func (self->paintable,
-                                            gtk_picture_paintable_invalidate_size,
-                                            self);
+      const guint flags = gdk_paintable_get_flags (self->paintable);
+
+      if ((flags & GDK_PAINTABLE_STATIC_CONTENTS) == 0)
+        g_signal_handlers_disconnect_by_func (self->paintable,
+                                              gtk_picture_paintable_invalidate_contents,
+                                              self);
+
+      if ((flags & GDK_PAINTABLE_STATIC_SIZE) == 0)
+        g_signal_handlers_disconnect_by_func (self->paintable,
+                                              gtk_picture_paintable_invalidate_size,
+                                              self);
+
+      g_object_unref (self->paintable);
     }
 
   self->paintable = paintable;
 
   if (paintable)
     {
-      g_signal_connect (paintable,
-                        "invalidate-contents",
-                        G_CALLBACK (gtk_picture_paintable_invalidate_contents),
-                        self);
-      g_signal_connect (paintable,
-                        "invalidate-size",
-                        G_CALLBACK (gtk_picture_paintable_invalidate_size),
-                        self);
+      const guint flags = gdk_paintable_get_flags (paintable);
+
+      if ((flags & GDK_PAINTABLE_STATIC_CONTENTS) == 0)
+        g_signal_connect (paintable,
+                          "invalidate-contents",
+                          G_CALLBACK (gtk_picture_paintable_invalidate_contents),
+                          self);
+
+      if ((flags & GDK_PAINTABLE_STATIC_SIZE) == 0)
+        g_signal_connect (paintable,
+                          "invalidate-size",
+                          G_CALLBACK (gtk_picture_paintable_invalidate_size),
+                          self);
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (self));

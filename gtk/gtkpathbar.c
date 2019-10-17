@@ -151,8 +151,8 @@ static gboolean gtk_path_bar_slider_down_defocus  (GtkWidget        *widget,
 						   GdkEventButton   *event,
 						   GtkPathBar       *path_bar);
 static void gtk_path_bar_style_updated            (GtkWidget        *widget);
-static void gtk_path_bar_display_changed          (GtkWidget        *widget,
-						   GdkDisplay       *previous_display);
+static void gtk_path_bar_root                     (GtkWidget        *widget);
+static void gtk_path_bar_unroot                   (GtkWidget        *widget);
 static void gtk_path_bar_check_icon_theme         (GtkPathBar       *path_bar);
 static void gtk_path_bar_update_button_appearance (GtkPathBar       *path_bar,
 						   ButtonData       *button_data,
@@ -239,8 +239,6 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   g_signal_connect_swapped (priv->down_slider_button, "clicked",
 			    G_CALLBACK (gtk_path_bar_scroll_down), path_bar);
 
-  gtk_widget_set_has_surface (GTK_WIDGET (path_bar), FALSE);
-
   context = gtk_widget_get_style_context (GTK_WIDGET (path_bar));
   gtk_style_context_add_class (context, "path-bar");
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LINKED);
@@ -273,7 +271,8 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   widget_class->measure = gtk_path_bar_measure;
   widget_class->size_allocate = gtk_path_bar_size_allocate;
   widget_class->style_updated = gtk_path_bar_style_updated;
-  widget_class->display_changed = gtk_path_bar_display_changed;
+  widget_class->root = gtk_path_bar_root;
+  widget_class->unroot = gtk_path_bar_unroot;
 
   container_class->add = gtk_path_bar_add;
   container_class->forall = gtk_path_bar_forall;
@@ -729,17 +728,19 @@ gtk_path_bar_style_updated (GtkWidget *widget)
 }
 
 static void
-gtk_path_bar_display_changed (GtkWidget  *widget,
-			      GdkDisplay *previous_display)
+gtk_path_bar_root (GtkWidget *widget)
 {
-  if (GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->display_changed)
-    GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->display_changed (widget, previous_display);
-
-  /* We might nave a new settings, so we remove the old one */
-  if (previous_display)
-    remove_settings_signal (GTK_PATH_BAR (widget), previous_display);
+  GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->root (widget);
 
   gtk_path_bar_check_icon_theme (GTK_PATH_BAR (widget));
+}
+
+static void
+gtk_path_bar_unroot (GtkWidget *widget)
+{
+  remove_settings_signal (GTK_PATH_BAR (widget), gtk_widget_get_display (widget));
+
+  GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->unroot (widget);
 }
 
 static gboolean
@@ -1362,8 +1363,8 @@ make_directory_button (GtkPathBar  *path_bar,
       button_data->image = gtk_image_new ();
       button_data->label = gtk_label_new (NULL);
       child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_box_pack_start (GTK_BOX (child), button_data->image);
-      gtk_box_pack_start (GTK_BOX (child), button_data->label);
+      gtk_container_add (GTK_CONTAINER (child), button_data->image);
+      gtk_container_add (GTK_CONTAINER (child), button_data->label);
       break;
     case NORMAL_BUTTON:
     default:

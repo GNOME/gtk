@@ -64,22 +64,8 @@
  * of related touch events.
  */
 
-typedef struct _GdkIOClosure GdkIOClosure;
-
-struct _GdkIOClosure
-{
-  GDestroyNotify notify;
-  gpointer data;
-};
-
 /* Private variable declarations
  */
-
-static GdkEventFunc   _gdk_event_func = NULL;    /* Callback for events */
-static gpointer       _gdk_event_data = NULL;
-static GDestroyNotify _gdk_event_notify = NULL;
-
-static GQuark quark_event_user_data = 0;
 
 static void gdk_event_constructed (GObject *object);
 static void gdk_event_finalize (GObject *object);
@@ -158,21 +144,54 @@ gdk_event_class_init (GdkEventClass *klass)
                        G_PARAM_READWRITE |
                        G_PARAM_CONSTRUCT_ONLY);
   g_object_class_install_properties (object_class, N_PROPS, event_props);
+}
 
-  quark_event_user_data = g_quark_from_static_string ("gdk-event-user-data");
+gboolean
+check_event_sanity (GdkEvent *event)
+{
+  GdkDisplay *display;
+  GdkSurface *surface;
+  GdkDevice *device;
+
+  display = gdk_event_get_display (event);
+  surface = gdk_event_get_surface (event);
+  device = gdk_event_get_device (event);
+
+  if (gdk_event_get_event_type (event) == GDK_NOTHING)
+    {
+      g_warning ("Ignoring GDK_NOTHING events; they're good for nothing");
+      return FALSE;
+    }
+
+  if (surface && display != gdk_surface_get_display (surface))
+    {
+      char *type = g_enum_to_string (GDK_TYPE_EVENT_TYPE, event->any.type);
+      g_warning ("Event of type %s with mismatched surface display", type);
+      g_free (type);
+      return FALSE;
+    }
+
+  if (device && display != gdk_device_get_display (device))
+    {
+      char *type = g_enum_to_string (GDK_TYPE_EVENT_TYPE, event->any.type);
+      g_warning ("Event of type %s with mismatched device display", type);
+      g_free (type);
+      return FALSE;
+    }
+
+  return TRUE;
 }
 
 void
 _gdk_event_emit (GdkEvent *event)
 {
+  if (!check_event_sanity (event))
+    return;
+
   if (gdk_drag_handle_source_event (event))
     return;
 
-  if (gdk_surface_handle_event (event))
-    return;
-
-  if (_gdk_event_func)
-    (*_gdk_event_func) (event, _gdk_event_data);
+  gdk_surface_handle_event (event);
 }
 
 /*********************************************
@@ -197,7 +216,7 @@ _gdk_event_queue_find_first (GdkDisplay *display)
 
   gboolean paused = display->event_pause_count > 0;
 
-  tmp_list = display->queued_events;
+  tmp_list = g_queue_peek_head_link (&display->queued_events);
   while (tmp_list)
     {
       GdkEvent *event = tmp_list->data;
@@ -233,14 +252,9 @@ GList *
 _gdk_event_queue_append (GdkDisplay *display,
 			 GdkEvent   *event)
 {
-  display->queued_tail = g_list_append (display->queued_tail, event);
-  
-  if (!display->queued_events)
-    display->queued_events = display->queued_tail;
-  else
-    display->queued_tail = display->queued_tail->next;
+  g_queue_push_tail (&display->queued_events, event);
 
-  return display->queued_tail;
+  return g_queue_peek_tail_link (&display->queued_events);
 }
 
 /**
@@ -251,22 +265,18 @@ _gdk_event_queue_append (GdkDisplay *display,
  *
  * Appends an event after the specified event, or if it isn’t in
  * the queue, onto the tail of the event queue.
- *
- * Returns: the newly appended list node.
  */
-GList*
+void
 _gdk_event_queue_insert_after (GdkDisplay *display,
                                GdkEvent   *sibling,
                                GdkEvent   *event)
 {
-  GList *prev = g_list_find (display->queued_events, sibling);
-  if (prev && prev->next)
-    {
-      display->queued_events = g_list_insert_before (display->queued_events, prev->next, event);
-      return prev->next;
-    }
+  GList *prev = g_queue_find (&display->queued_events, sibling);
+
+  if (prev)
+    g_queue_insert_after (&display->queued_events, prev, event);
   else
-    return _gdk_event_queue_append (display, event);
+    g_queue_push_tail (&display->queued_events, event);
 }
 
 /**
@@ -280,19 +290,17 @@ _gdk_event_queue_insert_after (GdkDisplay *display,
  *
  * Returns: the newly prepended list node.
  */
-GList*
+void
 _gdk_event_queue_insert_before (GdkDisplay *display,
 				GdkEvent   *sibling,
 				GdkEvent   *event)
 {
-  GList *next = g_list_find (display->queued_events, sibling);
+  GList *next = g_queue_find (&display->queued_events, sibling);
+
   if (next)
-    {
-      display->queued_events = g_list_insert_before (display->queued_events, next, event);
-      return next->prev;
-    }
+    g_queue_insert_before (&display->queued_events, next, event);
   else
-    return _gdk_event_queue_append (display, event);
+    g_queue_push_head (&display->queued_events, event);
 }
 
 
@@ -307,15 +315,7 @@ void
 _gdk_event_queue_remove_link (GdkDisplay *display,
 			      GList      *node)
 {
-  if (node->prev)
-    node->prev->next = node->next;
-  else
-    display->queued_events = node->next;
-  
-  if (node->next)
-    node->next->prev = node->prev;
-  else
-    display->queued_tail = node->prev;
+  g_queue_unlink (&display->queued_events, node);
 }
 
 /**
@@ -380,7 +380,7 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
   /* If the last N events in the event queue are motion notify
    * events for the same surface, drop all but the last */
 
-  tmp_list = display->queued_tail;
+  tmp_list = g_queue_peek_tail_link (&display->queued_events);
 
   while (tmp_list)
     {
@@ -421,14 +421,12 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
         gdk_event_push_history (last_motion, pending_motions->data);
 
       g_object_unref (pending_motions->data);
-      display->queued_events = g_list_delete_link (display->queued_events,
-                                                   pending_motions);
+      g_queue_delete_link (&display->queued_events, pending_motions);
       pending_motions = next;
     }
 
-  if (pending_motions &&
-      pending_motions == display->queued_events &&
-      pending_motions == display->queued_tail)
+  if (g_queue_get_length (&display->queued_events) == 1 &&
+      g_queue_peek_head_link (&display->queued_events) == pending_motions)
     {
       GdkFrameClock *clock = gdk_surface_get_frame_clock (pending_motion_surface);
       if (clock) /* might be NULL if surface was destroyed */
@@ -441,38 +439,11 @@ _gdk_event_queue_flush (GdkDisplay *display)
 {
   GList *tmp_list;
 
-  for (tmp_list = display->queued_events; tmp_list; tmp_list = tmp_list->next)
+  for (tmp_list = display->queued_events.head; tmp_list; tmp_list = tmp_list->next)
     {
       GdkEvent *event = tmp_list->data;
       event->any.flags |= GDK_EVENT_FLUSHED;
     }
-}
-
-/**
- * gdk_event_handler_set:
- * @func: the function to call to handle events from GDK.
- * @data: user data to pass to the function. 
- * @notify: the function to call when the handler function is removed, i.e. when
- *          gdk_event_handler_set() is called with another event handler.
- * 
- * Sets the function to call to handle all events from GDK.
- *
- * Note that GTK+ uses this to install its own event handler, so it is
- * usually not useful for GTK+ applications. (Although an application
- * can call this function then call gtk_main_do_event() to pass
- * events to GTK+.)
- **/
-void 
-gdk_event_handler_set (GdkEventFunc   func,
-		       gpointer       data,
-		       GDestroyNotify notify)
-{
-  if (_gdk_event_notify)
-    (*_gdk_event_notify) (_gdk_event_data);
-
-  _gdk_event_func = func;
-  _gdk_event_data = data;
-  _gdk_event_notify = notify;
 }
 
 /**
@@ -626,8 +597,8 @@ gdk_event_copy (const GdkEvent *event)
     g_object_ref (new_event->any.device);
   if (new_event->any.source_device)
     g_object_ref (new_event->any.source_device);
-
-  gdk_event_set_user_data (new_event, gdk_event_get_user_data (event));
+  if (new_event->any.target)
+    g_object_ref (new_event->any.target);
 
   switch ((guint) event->any.type)
     {
@@ -635,6 +606,13 @@ gdk_event_copy (const GdkEvent *event)
     case GDK_LEAVE_NOTIFY:
       if (event->crossing.child_surface != NULL)
         g_object_ref (event->crossing.child_surface);
+      if (event->crossing.related_target)
+        g_object_ref (event->crossing.related_target);
+      break;
+
+    case GDK_FOCUS_CHANGE:
+      if (event->focus_change.related_target)
+        g_object_ref (event->focus_change.related_target);
       break;
 
     case GDK_DRAG_ENTER:
@@ -696,6 +674,11 @@ gdk_event_finalize (GObject *object)
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
       g_clear_object (&event->crossing.child_surface);
+      g_clear_object (&event->crossing.related_target);
+      break;
+
+    case GDK_FOCUS_CHANGE:
+      g_clear_object (&event->focus_change.related_target);
       break;
 
     case GDK_DRAG_ENTER:
@@ -737,6 +720,7 @@ gdk_event_finalize (GObject *object)
 
   g_clear_object (&event->any.device);
   g_clear_object (&event->any.source_device);
+  g_clear_object (&event->any.target);
 
   G_OBJECT_CLASS (gdk_event_parent_class)->finalize (object);
 }
@@ -972,81 +956,6 @@ gdk_event_get_coords (const GdkEvent *event,
     *x_win = x;
   if (y_win)
     *y_win = y;
-
-  return fetched;
-}
-
-/**
- * gdk_event_get_root_coords:
- * @event: a #GdkEvent
- * @x_root: (out) (optional): location to put root window x coordinate
- * @y_root: (out) (optional): location to put root window y coordinate
- *
- * Extract the root window relative x/y coordinates from an event.
- *
- * Returns: %TRUE if the event delivered root window coordinates
- **/
-gboolean
-gdk_event_get_root_coords (const GdkEvent *event,
-			   gdouble        *x_root,
-			   gdouble        *y_root)
-{
-  gdouble x = 0, y = 0;
-  gboolean fetched = TRUE;
-  
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  switch ((guint) event->any.type)
-    {
-    case GDK_MOTION_NOTIFY:
-      x = event->motion.x_root;
-      y = event->motion.y_root;
-      break;
-    case GDK_SCROLL:
-      x = event->scroll.x_root;
-      y = event->scroll.y_root;
-      break;
-    case GDK_BUTTON_PRESS:
-    case GDK_BUTTON_RELEASE:
-      x = event->button.x_root;
-      y = event->button.y_root;
-      break;
-    case GDK_TOUCH_BEGIN:
-    case GDK_TOUCH_UPDATE:
-    case GDK_TOUCH_END:
-    case GDK_TOUCH_CANCEL:
-      x = event->touch.x_root;
-      y = event->touch.y_root;
-      break;
-    case GDK_ENTER_NOTIFY:
-    case GDK_LEAVE_NOTIFY:
-      x = event->crossing.x_root;
-      y = event->crossing.y_root;
-      break;
-    case GDK_DRAG_ENTER:
-    case GDK_DRAG_LEAVE:
-    case GDK_DRAG_MOTION:
-    case GDK_DROP_START:
-      x = event->dnd.x_root;
-      y = event->dnd.y_root;
-      break;
-    case GDK_TOUCHPAD_SWIPE:
-      x = event->touchpad_swipe.x_root;
-      y = event->touchpad_swipe.y_root;
-      break;
-    case GDK_TOUCHPAD_PINCH:
-      x = event->touchpad_pinch.x_root;
-      y = event->touchpad_pinch.y_root;
-      break;
-    default:
-      fetched = FALSE;
-      break;
-    }
-
-  if (x_root)
-    *x_root = x;
-  if (y_root)
-    *y_root = y;
 
   return fetched;
 }
@@ -1403,7 +1312,7 @@ gdk_event_get_scroll_deltas (const GdkEvent *event,
  * stop scroll event is the signal that a widget may trigger kinetic
  * scrolling based on the current velocity.
  *
- * Stop scroll events always have a a delta of 0/0.
+ * Stop scroll events always have a delta of 0/0.
  *
  * Returns: %TRUE if the event is a scroll stop event
  */
@@ -1965,25 +1874,39 @@ gdk_event_get_scancode (GdkEvent *event)
 }
 
 void
-gdk_event_set_user_data (GdkEvent *event,
-                         GObject  *user_data)
+gdk_event_set_target (GdkEvent *event,
+                      GObject  *target)
 {
-  if (user_data)
-    {
-      g_object_set_qdata_full (G_OBJECT (event), quark_event_user_data,
-                               g_object_ref (user_data),
-                               g_object_unref);
-    }
-  else
-    {
-      g_object_steal_qdata (G_OBJECT (event), quark_event_user_data);
-    }
+  g_set_object (&event->any.target, target);
 }
 
 GObject *
-gdk_event_get_user_data (const GdkEvent *event)
+gdk_event_get_target (const GdkEvent *event)
 {
-  return g_object_get_qdata (G_OBJECT (event), quark_event_user_data);
+  return event->any.target;
+}
+
+void
+gdk_event_set_related_target (GdkEvent *event,
+                              GObject  *target)
+{
+  if (event->any.type == GDK_ENTER_NOTIFY ||
+      event->any.type == GDK_LEAVE_NOTIFY)
+    g_set_object (&event->crossing.related_target, target);
+  else if (event->any.type == GDK_FOCUS_CHANGE)
+    g_set_object (&event->focus_change.related_target, target);
+}
+
+GObject *
+gdk_event_get_related_target (const GdkEvent *event)
+{
+  if (event->any.type == GDK_ENTER_NOTIFY ||
+      event->any.type == GDK_LEAVE_NOTIFY)
+    return event->crossing.related_target;
+  else if (event->any.type == GDK_FOCUS_CHANGE)
+    return event->focus_change.related_target;
+
+  return NULL;
 }
 
 /**
@@ -2050,6 +1973,11 @@ gdk_event_get_crossing_mode (const GdkEvent  *event,
       *mode = event->crossing.mode;
       return TRUE;
     }
+  else if (event->any.type == GDK_FOCUS_CHANGE)
+    {
+      *mode = event->focus_change.mode;
+      return TRUE;
+    }
 
   return FALSE;
 }
@@ -2074,6 +2002,11 @@ gdk_event_get_crossing_detail (const GdkEvent *event,
       event->any.type == GDK_LEAVE_NOTIFY)
     {
       *detail = event->crossing.detail;
+      return TRUE;
+    }
+  else if (event->any.type == GDK_FOCUS_CHANGE)
+    {
+      *detail = event->focus_change.detail;
       return TRUE;
     }
 

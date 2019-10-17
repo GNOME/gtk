@@ -37,6 +37,9 @@
   <gresource prefix="/theming_style_classes">
     <file>theming.ui</file>
   </gresource>
+  <gresource prefix="/themes">
+    <file>themes.ui</file>
+  </gresource>
   <gresource prefix="/css_pixbufs">
     <file alias="gtk.css">css_pixbufs.css</file>
     <file>cssview.css</file>
@@ -101,6 +104,9 @@
     <file>gtkfishbowl.c</file>
     <file>gtkfishbowl.h</file>
   </gresource>
+  <gresource prefix="/iconscroll">
+    <file>iconscroll.ui</file>
+  </gresource>
   <gresource prefix="/iconview">
     <file>gnome-fs-directory.png</file>
     <file>gnome-fs-regular.png</file>
@@ -143,11 +149,13 @@
     <file>application_demo.c</file>
     <file>assistant.c</file>
     <file>builder.c</file>
-    <file>button_box.c</file>
     <file>changedisplay.c</file>
     <file>clipboard.c</file>
     <file>colorsel.c</file>
     <file>combobox.c</file>
+    <file>constraints.c</file>
+    <file>constraints2.c</file>
+    <file>constraints3.c</file>
     <file>css_accordion.c</file>
     <file>css_basics.c</file>
     <file>css_blendmodes.c</file>
@@ -164,14 +172,17 @@
     <file>expander.c</file>
     <file>filtermodel.c</file>
     <file>fishbowl.c</file>
+    <file>fixed.c</file>
     <file>flowbox.c</file>
     <file>foreigndrawing.c</file>
     <file>font_features.c</file>
     <file>fontplane.c</file>
+    <file>fontrendering.c</file>
     <file>gestures.c</file>
     <file>glarea.c</file>
     <file>headerbar.c</file>
     <file>hypertext.c</file>
+    <file>iconscroll.c</file>
     <file>iconview.c</file>
     <file>iconview_edit.c</file>
     <file>images.c</file>
@@ -190,6 +201,7 @@
     <file>paintable_animated.c</file>
     <file>paintable_mediastream.c</file>
     <file>panes.c</file>
+    <file>password_entry.c</file>
     <file>pickers.c</file>
     <file>pixbufs.c</file>
     <file>popover.c</file>
@@ -207,9 +219,11 @@
     <file>spinbutton.c</file>
     <file>spinner.c</file>
     <file>tabs.c</file>
+    <file>tagged_entry.c</file>
     <file>textview.c</file>
     <file>textscroll.c</file>
     <file>theming_style_classes.c</file>
+    <file>themes.c</file>
     <file>transparent.c</file>
     <file>tree_store.c</file>
     <file>textmask.c</file>
@@ -217,6 +231,9 @@
   </gresource>
   <gresource prefix="/textview">
     <file>floppybuddy.gif</file>
+  </gresource>
+  <gresource prefix="/tagged_entry">
+    <file>tagstyle.css</file>
   </gresource>
   <gresource prefix="/listbox">
     <file>listbox.ui</file>
@@ -248,6 +265,7 @@
   </gresource>
   <gresource prefix="/transparent">
     <file>portland-rose.jpg</file>
+    <file>bluroverlay.c</file>
   </gresource>
   <gresource prefix="/markup">
     <file>markup.txt</file>
@@ -260,5 +278,34 @@
   </gresource>
   <gresource prefix="/dnd">
     <file>dnd.css</file>
+  </gresource>
+  <gresource prefix="/tagged_entry">
+    <file>demotaggedentry.c</file>
+    <file>demotaggedentry.h</file>
+  </gresource>
+  <gresource prefix="/fixed">
+    <file>fixed.css</file>
+  </gresource>
+  <gresource prefix="/fontrendering">
+    <file>fontrendering.ui</file>
+  </gresource>
+  <gresource prefix="/org/gtk/Demo4">
+    <file>icons/16x16/actions/application-exit.png</file>
+    <file>icons/16x16/actions/document-new.png</file>
+    <file>icons/16x16/actions/document-open.png</file>
+    <file>icons/16x16/actions/document-save.png</file>
+    <file>icons/16x16/actions/edit-copy.png</file>
+    <file>icons/16x16/actions/edit-cut.png</file>
+    <file>icons/16x16/actions/edit-paste.png</file>
+    <file>icons/16x16/actions/process-stop.png</file>
+    <file>icons/16x16/actions/go-home.png</file>
+    <file>icons/16x16/actions/go-up.png</file>
+    <file>icons/16x16/actions/mail-send-receive-symbolic.symbolic.png</file>
+    <file>icons/16x16/actions/view-fullscreen-symbolic.symbolic.png</file>
+    <file>icons/16x16/actions/document-edit-symbolic.symbolic.png</file>
+    <file>icons/16x16/emotes/face-cool.png</file>
+    <file>icons/16x16/emotes/face-laugh-symbolic.symbolic.png</file>
+    <file>icons/16x16/status/battery-caution-charging-symbolic.symbolic.png</file>
+    <file>icons/16x16/categories/applications-other.png</file>
   </gresource>
 </gresources>

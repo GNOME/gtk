@@ -228,14 +228,13 @@ gtk_css_font_variations_value_parse (GtkCssParser *parser)
   GtkCssValue *result, *coord;
   char *name;
 
-  if (_gtk_css_parser_try (parser, "normal", TRUE))
+  if (gtk_css_parser_try_ident (parser, "normal"))
     return gtk_css_font_variations_value_new_default ();
 
   result = gtk_css_font_variations_value_new_empty ();
 
   do {
-    _gtk_css_parser_skip_whitespace (parser);
-    name = _gtk_css_parser_read_string (parser);
+    name = gtk_css_parser_consume_string (parser);
     if (name == NULL)
       {
         _gtk_css_value_unref (result);
@@ -244,7 +243,7 @@ gtk_css_font_variations_value_parse (GtkCssParser *parser)
 
     if (!is_valid_opentype_tag (name))
       {
-        _gtk_css_parser_error (parser, "Not a valid OpenType tag.");
+        gtk_css_parser_error_value (parser, "Not a valid OpenType tag.");
         g_free (name);
         _gtk_css_value_unref (result);
         return NULL;
@@ -260,7 +259,7 @@ gtk_css_font_variations_value_parse (GtkCssParser *parser)
 
     gtk_css_font_variations_value_add_axis (result, name, coord);
     g_free (name);
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
+  } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
   return result;
 }

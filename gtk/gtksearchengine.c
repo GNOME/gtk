@@ -174,7 +174,7 @@ _gtk_search_engine_class_init (GtkSearchEngineClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkSearchEngineClass, hits_added),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__POINTER,
+                  NULL,
                   G_TYPE_NONE, 1,
                   G_TYPE_POINTER);
 
@@ -184,7 +184,7 @@ _gtk_search_engine_class_init (GtkSearchEngineClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkSearchEngineClass, finished),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   signals[ERROR] =
@@ -193,7 +193,7 @@ _gtk_search_engine_class_init (GtkSearchEngineClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkSearchEngineClass, error),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__STRING,
+                  NULL,
                   G_TYPE_NONE, 1,
                   G_TYPE_STRING);
 }

@@ -64,15 +64,15 @@ do_overlay2 (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
-      image = gtk_image_new_from_resource ("/overlay2/decor1.png");
+      image = gtk_picture_new_for_resource ("/overlay2/decor1.png");
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), image);
-      gtk_overlay_set_overlay_pass_through (GTK_OVERLAY (overlay), image, TRUE);
+      gtk_widget_set_can_target (image, FALSE);
       gtk_widget_set_halign (image, GTK_ALIGN_START);
       gtk_widget_set_valign (image, GTK_ALIGN_START);
 
-      image = gtk_image_new_from_resource ("/overlay2/decor2.png");
+      image = gtk_picture_new_for_resource ("/overlay2/decor2.png");
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), image);
-      gtk_overlay_set_overlay_pass_through (GTK_OVERLAY (overlay), image, TRUE);
+      gtk_widget_set_can_target (image, FALSE);
       gtk_widget_set_halign (image, GTK_ALIGN_END);
       gtk_widget_set_valign (image, GTK_ALIGN_END);
 

@@ -201,31 +201,41 @@ gdk_x11_gl_context_get_damage (GdkGLContext *context)
     {
       GdkGLContext *shared;
       GdkX11GLContext *shared_x11;
-     
+
       shared = gdk_gl_context_get_shared_context (context);
       if (shared == NULL)
         shared = context;
       shared_x11 = GDK_X11_GL_CONTEXT (shared);
 
       gdk_gl_context_make_current (shared);
-      glXQueryDrawable(dpy, shared_x11->attached_drawable,
-		       GLX_BACK_BUFFER_AGE_EXT, &buffer_age);
+      glXQueryDrawable (dpy, shared_x11->attached_drawable,
+                        GLX_BACK_BUFFER_AGE_EXT, &buffer_age);
 
-      if (buffer_age == 2)
+      switch (buffer_age)
         {
-          if (context->old_updated_area[0])
-            return cairo_region_copy (context->old_updated_area[0]);
+          case 1:
+            return cairo_region_create ();
+            break;
+
+          case 2:
+            if (context->old_updated_area[0])
+              return cairo_region_copy (context->old_updated_area[0]);
+            break;
+
+          case 3:
+            if (context->old_updated_area[0] &&
+                context->old_updated_area[1])
+              {
+                cairo_region_t *damage = cairo_region_copy (context->old_updated_area[0]);
+                cairo_region_union (damage, context->old_updated_area[1]);
+                return damage;
+              }
+            break;
+
+          default:
+            ;
         }
-      else if (buffer_age == 3)
-        {
-          if (context->old_updated_area[0] &&
-              context->old_updated_area[1])
-            {
-              cairo_region_t *damage = cairo_region_copy (context->old_updated_area[0]);
-              cairo_region_union (damage, context->old_updated_area[1]);
-              return damage;
-            }
-        }
+
     }
 
   return GDK_GL_CONTEXT_CLASS (gdk_x11_gl_context_parent_class)->get_damage (context);
@@ -400,7 +410,7 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
 
   GDK_DISPLAY_NOTE (GDK_DISPLAY (display_x11), OPENGL, g_message ("Using GLX_EXT_texture_from_pixmap to draw surface"));
 
-  surface = gdk_gl_context_get_surface (paint_context)->impl_surface;
+  surface = gdk_gl_context_get_surface (paint_context);
   surface_scale = gdk_surface_get_scale_factor (surface);
   gdk_surface_get_unscaled_size (surface, NULL, &unscaled_surface_height);
 
@@ -566,6 +576,7 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   Display *dpy;
   DrawableInfo *info;
   GdkGLContext *share;
+  GdkGLContext *shared_data_context;
   GdkSurface *surface;
   gboolean debug_bit, compat_bit, legacy_bit, es_bit;
   int major, minor, flags;
@@ -576,6 +587,7 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   context_x11 = GDK_X11_GL_CONTEXT (context);
   display_x11 = GDK_X11_DISPLAY (display);
   share = gdk_gl_context_get_shared_context (context);
+  shared_data_context = gdk_surface_get_shared_data_gl_context (surface);
 
   gdk_gl_context_get_required_version (context, &major, &minor);
   debug_bit = gdk_gl_context_get_debug_enabled (context);
@@ -615,7 +627,7 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   if (legacy_bit && !GDK_X11_DISPLAY (display)->has_glx_create_context)
     {
       GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Creating legacy GL context on request"));
-      context_x11->glx_context = create_legacy_context (display, context_x11->glx_config, share);
+      context_x11->glx_context = create_legacy_context (display, context_x11->glx_config, share ? share : shared_data_context);
     }
   else
     {
@@ -640,14 +652,14 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
       GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Creating GL3 context"));
       context_x11->glx_context = create_gl3_context (display,
                                                      context_x11->glx_config,
-                                                     share,
+                                                     share ? share : shared_data_context,
                                                      profile, flags, major, minor);
 
       /* Fall back to legacy in case the GL3 context creation failed */
       if (context_x11->glx_context == NULL)
         {
           GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Creating fallback legacy context"));
-          context_x11->glx_context = create_legacy_context (display, context_x11->glx_config, share);
+          context_x11->glx_context = create_legacy_context (display, context_x11->glx_config, share ? share : shared_data_context);
           legacy_bit = TRUE;
           es_bit = FALSE;
         }
@@ -664,12 +676,12 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   /* Ensure that any other context is created with a legacy bit set */
   gdk_gl_context_set_is_legacy (context, legacy_bit);
 
-  /* Ensure that any other context is created with a ES bit set */
+  /* Ensure that any other context is created with an ES bit set */
   gdk_gl_context_set_use_es (context, es_bit);
 
   xvisinfo = find_xvisinfo_for_fbconfig (display, context_x11->glx_config);
 
-  info = get_glx_drawable_info (surface->impl_surface);
+  info = get_glx_drawable_info (surface);
   if (info == NULL)
     {
       XSetWindowAttributes attrs;
@@ -698,7 +710,7 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
       if (GDK_X11_DISPLAY (display)->glx_version >= 13)
         {
           info->glx_drawable = glXCreateWindow (dpy, context_x11->glx_config,
-                                                gdk_x11_surface_get_xid (surface->impl_surface),
+                                                gdk_x11_surface_get_xid (surface),
                                                 NULL);
           info->dummy_glx = glXCreateWindow (dpy, context_x11->glx_config, info->dummy_xwin, NULL);
         }
@@ -717,12 +729,12 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
           return FALSE;
         }
 
-      set_glx_drawable_info (surface->impl_surface, info);
+      set_glx_drawable_info (surface, info);
     }
 
   XFree (xvisinfo);
 
-  context_x11->attached_drawable = info->glx_drawable ? info->glx_drawable : gdk_x11_surface_get_xid (surface->impl_surface);
+  context_x11->attached_drawable = info->glx_drawable ? info->glx_drawable : gdk_x11_surface_get_xid (surface);
   context_x11->unattached_drawable = info->dummy_glx ? info->dummy_glx : info->dummy_xwin;
 
   context_x11->is_direct = glXIsDirect (dpy, context_x11->glx_context);

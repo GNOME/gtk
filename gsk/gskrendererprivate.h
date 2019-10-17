@@ -51,8 +51,6 @@ struct _GskRendererClass
                                                                  const cairo_region_t   *invalid);
 };
 
-gboolean                gsk_renderer_is_realized                (GskRenderer    *renderer);
-
 GskRenderNode *         gsk_renderer_get_root_node              (GskRenderer    *renderer);
 
 GskProfiler *           gsk_renderer_get_profiler               (GskRenderer    *renderer);

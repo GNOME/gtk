@@ -31,72 +31,14 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_ICON_INFO              (gtk_icon_info_get_type ())
 #define GTK_ICON_INFO(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ICON_INFO, GtkIconInfo))
-#define GTK_ICON_INFO_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ICON_INFO, GtkIconInfoClass))
 #define GTK_IS_ICON_INFO(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ICON_INFO))
-#define GTK_IS_ICON_INFO_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ICON_INFO))
-#define GTK_ICON_INFO_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ICON_INFO, GtkIconInfoClass))
 
 #define GTK_TYPE_ICON_THEME             (gtk_icon_theme_get_type ())
 #define GTK_ICON_THEME(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ICON_THEME, GtkIconTheme))
-#define GTK_ICON_THEME_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ICON_THEME, GtkIconThemeClass))
 #define GTK_IS_ICON_THEME(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ICON_THEME))
-#define GTK_IS_ICON_THEME_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ICON_THEME))
-#define GTK_ICON_THEME_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ICON_THEME, GtkIconThemeClass))
 
-/**
- * GtkIconInfo:
- *
- * Contains information found when looking up an icon in
- * an icon theme.
- */
 typedef struct _GtkIconInfo         GtkIconInfo;
-typedef struct _GtkIconInfoClass    GtkIconInfoClass;
 typedef struct _GtkIconTheme        GtkIconTheme;
-typedef struct _GtkIconThemeClass   GtkIconThemeClass;
-typedef struct _GtkIconThemePrivate GtkIconThemePrivate;
-
-/**
- * GtkIconTheme:
- *
- * Acts as a database of information about an icon theme.
- * Normally, you retrieve the icon theme for a particular
- * display using gtk_icon_theme_get_for_display() and it
- * will contain information about current icon theme for
- * that display, but you can also create a new #GtkIconTheme
- * object and set the icon theme name explicitly using
- * gtk_icon_theme_set_custom_theme().
- */
-struct _GtkIconTheme
-{
-  /*< private >*/
-  GObject parent_instance;
-
-  GtkIconThemePrivate *priv;
-};
-
-/**
- * GtkIconThemeClass:
- * @parent_class: The parent class.
- * @changed: Signal emitted when the current icon theme is switched or
- *    GTK+ detects that a change has occurred in the contents of the
- *    current icon theme.
- */
-struct _GtkIconThemeClass
-{
-  GObjectClass parent_class;
-
-  /*< public >*/
-
-  void (* changed)  (GtkIconTheme *icon_theme);
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 /**
  * GtkIconLookupFlags:
@@ -123,7 +65,7 @@ struct _GtkIconThemeClass
  *   text direction
  * @GTK_ICON_LOOKUP_DIR_RTL: Try to load a variant of the icon for right-to-left
  *   text direction
- * 
+ *
  * Used to specify options for gtk_icon_theme_lookup_icon()
  */
 typedef enum
@@ -150,7 +92,7 @@ typedef enum
  * GtkIconThemeError:
  * @GTK_ICON_THEME_NOT_FOUND: The icon specified does not exist in the theme
  * @GTK_ICON_THEME_FAILED: An unspecified error occurred.
- * 
+ *
  * Error codes for GtkIconTheme operations.
  **/
 typedef enum {
@@ -171,69 +113,69 @@ GtkIconTheme *gtk_icon_theme_get_default           (void);
 GDK_AVAILABLE_IN_ALL
 GtkIconTheme *gtk_icon_theme_get_for_display       (GdkDisplay                  *display);
 GDK_AVAILABLE_IN_ALL
-void          gtk_icon_theme_set_display           (GtkIconTheme                *icon_theme,
+void          gtk_icon_theme_set_display           (GtkIconTheme                *self,
 						    GdkDisplay                  *display);
 
 GDK_AVAILABLE_IN_ALL
-void          gtk_icon_theme_set_search_path       (GtkIconTheme                *icon_theme,
+void          gtk_icon_theme_set_search_path       (GtkIconTheme                *self,
 						    const gchar                 *path[],
 						    gint                         n_elements);
 GDK_AVAILABLE_IN_ALL
-void          gtk_icon_theme_get_search_path       (GtkIconTheme                *icon_theme,
+void          gtk_icon_theme_get_search_path       (GtkIconTheme                *self,
 						    gchar                      **path[],
 						    gint                        *n_elements);
 GDK_AVAILABLE_IN_ALL
-void          gtk_icon_theme_append_search_path    (GtkIconTheme                *icon_theme,
+void          gtk_icon_theme_append_search_path    (GtkIconTheme                *self,
 						    const gchar                 *path);
 GDK_AVAILABLE_IN_ALL
-void          gtk_icon_theme_prepend_search_path   (GtkIconTheme                *icon_theme,
+void          gtk_icon_theme_prepend_search_path   (GtkIconTheme                *self,
 						    const gchar                 *path);
 
 GDK_AVAILABLE_IN_ALL
-void          gtk_icon_theme_add_resource_path     (GtkIconTheme                *icon_theme,
+void          gtk_icon_theme_add_resource_path     (GtkIconTheme                *self,
                                                     const gchar                 *path);
 
 GDK_AVAILABLE_IN_ALL
-void          gtk_icon_theme_set_custom_theme      (GtkIconTheme                *icon_theme,
+void          gtk_icon_theme_set_custom_theme      (GtkIconTheme                *self,
 						    const gchar                 *theme_name);
 
 GDK_AVAILABLE_IN_ALL
-gboolean      gtk_icon_theme_has_icon              (GtkIconTheme                *icon_theme,
+gboolean      gtk_icon_theme_has_icon              (GtkIconTheme                *self,
 						    const gchar                 *icon_name);
 GDK_AVAILABLE_IN_ALL
-gint         *gtk_icon_theme_get_icon_sizes        (GtkIconTheme                *icon_theme,
+gint         *gtk_icon_theme_get_icon_sizes        (GtkIconTheme                *self,
 						    const gchar                 *icon_name);
 GDK_AVAILABLE_IN_ALL
-GtkIconInfo * gtk_icon_theme_lookup_icon           (GtkIconTheme                *icon_theme,
+GtkIconInfo * gtk_icon_theme_lookup_icon           (GtkIconTheme                *self,
 						    const gchar                 *icon_name,
 						    gint                         size,
 						    GtkIconLookupFlags           flags);
 GDK_AVAILABLE_IN_ALL
-GtkIconInfo * gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme                *icon_theme,
+GtkIconInfo * gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme                *self,
                                                     const gchar                 *icon_name,
                                                     gint                         size,
                                                     gint                         scale,
                                                     GtkIconLookupFlags           flags);
 
 GDK_AVAILABLE_IN_ALL
-GtkIconInfo * gtk_icon_theme_choose_icon           (GtkIconTheme                *icon_theme,
+GtkIconInfo * gtk_icon_theme_choose_icon           (GtkIconTheme                *self,
 						    const gchar                 *icon_names[],
 						    gint                         size,
 						    GtkIconLookupFlags           flags);
 GDK_AVAILABLE_IN_ALL
-GtkIconInfo * gtk_icon_theme_choose_icon_for_scale (GtkIconTheme                *icon_theme,
+GtkIconInfo * gtk_icon_theme_choose_icon_for_scale (GtkIconTheme                *self,
 						    const gchar                 *icon_names[],
 						    gint                         size,
                                                     gint                         scale,
 						    GtkIconLookupFlags           flags);
 GDK_AVAILABLE_IN_ALL
-GdkPixbuf *   gtk_icon_theme_load_icon             (GtkIconTheme                *icon_theme,
-						    const gchar                 *icon_name,
-						    gint                         size,
-						    GtkIconLookupFlags           flags,
-						    GError                     **error);
+GdkPaintable *gtk_icon_theme_load_icon             (GtkIconTheme                *self,
+                                                    const char                  *icon_name,
+                                                    int                          size,
+                                                    GtkIconLookupFlags           flags,
+                                                    GError                     **error);
 GDK_AVAILABLE_IN_ALL
-GdkPixbuf *   gtk_icon_theme_load_icon_for_scale   (GtkIconTheme                *icon_theme,
+GdkPaintable *gtk_icon_theme_load_icon_for_scale   (GtkIconTheme                *self,
                                                     const gchar                 *icon_name,
                                                     gint                         size,
                                                     gint                         scale,
@@ -241,12 +183,12 @@ GdkPixbuf *   gtk_icon_theme_load_icon_for_scale   (GtkIconTheme                
                                                     GError                     **error);
 
 GDK_AVAILABLE_IN_ALL
-GtkIconInfo * gtk_icon_theme_lookup_by_gicon       (GtkIconTheme                *icon_theme,
+GtkIconInfo * gtk_icon_theme_lookup_by_gicon       (GtkIconTheme                *self,
                                                     GIcon                       *icon,
                                                     gint                         size,
                                                     GtkIconLookupFlags           flags);
 GDK_AVAILABLE_IN_ALL
-GtkIconInfo * gtk_icon_theme_lookup_by_gicon_for_scale (GtkIconTheme             *icon_theme,
+GtkIconInfo * gtk_icon_theme_lookup_by_gicon_for_scale (GtkIconTheme             *self,
                                                         GIcon                    *icon,
                                                         gint                      size,
                                                         gint                      scale,
@@ -254,15 +196,15 @@ GtkIconInfo * gtk_icon_theme_lookup_by_gicon_for_scale (GtkIconTheme            
 
 
 GDK_AVAILABLE_IN_ALL
-GList *       gtk_icon_theme_list_icons            (GtkIconTheme                *icon_theme,
+GList *       gtk_icon_theme_list_icons            (GtkIconTheme                *self,
 						    const gchar                 *context);
 GDK_AVAILABLE_IN_ALL
-GList *       gtk_icon_theme_list_contexts         (GtkIconTheme                *icon_theme);
+GList *       gtk_icon_theme_list_contexts         (GtkIconTheme                *self);
 GDK_AVAILABLE_IN_ALL
-char *        gtk_icon_theme_get_example_icon_name (GtkIconTheme                *icon_theme);
+char *        gtk_icon_theme_get_example_icon_name (GtkIconTheme                *self);
 
 GDK_AVAILABLE_IN_ALL
-gboolean      gtk_icon_theme_rescan_if_needed      (GtkIconTheme                *icon_theme);
+gboolean      gtk_icon_theme_rescan_if_needed      (GtkIconTheme                *self);
 
 GDK_AVAILABLE_IN_ALL
 GType                 gtk_icon_info_get_type           (void) G_GNUC_CONST;
@@ -272,30 +214,27 @@ GtkIconInfo *         gtk_icon_info_new_for_pixbuf     (GtkIconTheme  *icon_them
                                                         GdkPixbuf     *pixbuf);
 
 GDK_AVAILABLE_IN_ALL
-gint                  gtk_icon_info_get_base_size      (GtkIconInfo   *icon_info);
+gint                  gtk_icon_info_get_base_size      (GtkIconInfo   *self);
 GDK_AVAILABLE_IN_ALL
-gint                  gtk_icon_info_get_base_scale     (GtkIconInfo   *icon_info);
+gint                  gtk_icon_info_get_base_scale     (GtkIconInfo   *self);
 GDK_AVAILABLE_IN_ALL
-const gchar *         gtk_icon_info_get_filename       (GtkIconInfo   *icon_info);
+const gchar *         gtk_icon_info_get_filename       (GtkIconInfo   *self);
 GDK_AVAILABLE_IN_ALL
-gboolean              gtk_icon_info_is_symbolic        (GtkIconInfo   *icon_info);
+gboolean              gtk_icon_info_is_symbolic        (GtkIconInfo   *self);
 GDK_AVAILABLE_IN_ALL
-GdkPixbuf *           gtk_icon_info_load_icon          (GtkIconInfo   *icon_info,
-							GError       **error);
+GdkPaintable *        gtk_icon_info_load_icon          (GtkIconInfo   *self,
+                                                        GError       **error);
 GDK_AVAILABLE_IN_ALL
-GdkTexture *          gtk_icon_info_load_texture       (GtkIconInfo   *icon_info);
-
+void                  gtk_icon_info_load_icon_async   (GtkIconInfo          *self,
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
 GDK_AVAILABLE_IN_ALL
-void                  gtk_icon_info_load_icon_async   (GtkIconInfo          *icon_info,
-						       GCancellable         *cancellable,
-						       GAsyncReadyCallback   callback,
-						       gpointer              user_data);
+GdkPaintable *        gtk_icon_info_load_icon_finish  (GtkIconInfo          *self,
+                                                       GAsyncResult         *res,
+                                                       GError              **error);
 GDK_AVAILABLE_IN_ALL
-GdkPixbuf *           gtk_icon_info_load_icon_finish  (GtkIconInfo          *icon_info,
-						       GAsyncResult         *res,
-						       GError              **error);
-GDK_AVAILABLE_IN_ALL
-GdkPixbuf *           gtk_icon_info_load_symbolic      (GtkIconInfo   *icon_info,
+GdkPaintable *        gtk_icon_info_load_symbolic      (GtkIconInfo   *self,
                                                         const GdkRGBA *fg,
                                                         const GdkRGBA *success_color,
                                                         const GdkRGBA *warning_color,
@@ -303,35 +242,35 @@ GdkPixbuf *           gtk_icon_info_load_symbolic      (GtkIconInfo   *icon_info
                                                         gboolean      *was_symbolic,
                                                         GError       **error);
 GDK_AVAILABLE_IN_ALL
-void                  gtk_icon_info_load_symbolic_async (GtkIconInfo   *icon_info,
-							 const GdkRGBA *fg,
-							 const GdkRGBA *success_color,
-							 const GdkRGBA *warning_color,
-							 const GdkRGBA *error_color,
-							 GCancellable         *cancellable,
-							 GAsyncReadyCallback   callback,
-							 gpointer              user_data);
+void                  gtk_icon_info_load_symbolic_async (GtkIconInfo   *self,
+                                                         const GdkRGBA *fg,
+                                                         const GdkRGBA *success_color,
+                                                         const GdkRGBA *warning_color,
+                                                         const GdkRGBA *error_color,
+                                                         GCancellable         *cancellable,
+                                                         GAsyncReadyCallback   callback,
+                                                         gpointer              user_data);
 GDK_AVAILABLE_IN_ALL
-GdkPixbuf *           gtk_icon_info_load_symbolic_finish (GtkIconInfo   *icon_info,
-							  GAsyncResult         *res,
-							  gboolean      *was_symbolic,
-							  GError       **error);
+GdkPaintable *        gtk_icon_info_load_symbolic_finish (GtkIconInfo   *self,
+                                                          GAsyncResult  *res,
+                                                          gboolean      *was_symbolic,
+                                                          GError       **error);
 GDK_AVAILABLE_IN_ALL
-GdkPixbuf *           gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
+GdkPaintable *        gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *self,
                                                                GtkStyleContext  *context,
                                                                gboolean         *was_symbolic,
                                                                GError          **error);
 GDK_AVAILABLE_IN_ALL
-void                  gtk_icon_info_load_symbolic_for_context_async (GtkIconInfo      *icon_info,
-								     GtkStyleContext  *context,
-								     GCancellable     *cancellable,
-								     GAsyncReadyCallback callback,
-								     gpointer          user_data);
+void                  gtk_icon_info_load_symbolic_for_context_async (GtkIconInfo         *self,
+                                                                     GtkStyleContext     *context,
+                                                                     GCancellable        *cancellable,
+                                                                     GAsyncReadyCallback callback,
+                                                                     gpointer            user_data);
 GDK_AVAILABLE_IN_ALL
-GdkPixbuf *           gtk_icon_info_load_symbolic_for_context_finish (GtkIconInfo      *icon_info,
-								      GAsyncResult     *res,
-								      gboolean         *was_symbolic,
-								      GError          **error);
+GdkPaintable *        gtk_icon_info_load_symbolic_for_context_finish (GtkIconInfo      *self,
+                                                                      GAsyncResult     *res,
+                                                                      gboolean         *was_symbolic,
+                                                                      GError          **error);
 
 
 G_END_DECLS

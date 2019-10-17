@@ -476,28 +476,33 @@ destroy_controller (GtkEventController *controller)
 }
 
 static void
-on_hierarchy_changed (GtkWidget *widget,
-                      GtkWidget *previous_toplevel)
+root (GtkWidget *widget)
 {
   GtkInspectorResourceList *sl = GTK_INSPECTOR_RESOURCE_LIST (widget);
   GtkEventController *controller;
   GtkWidget *toplevel;
 
-  if (previous_toplevel)
-    g_object_set_data (G_OBJECT (previous_toplevel), "resource-controller", NULL);
+  GTK_WIDGET_CLASS (gtk_inspector_resource_list_parent_class)->root (widget);
 
-  toplevel = gtk_widget_get_toplevel (widget);
-
-  if (!GTK_IS_WINDOW (toplevel))
-    return;
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
 
   controller = gtk_event_controller_key_new ();
   g_object_set_data_full (G_OBJECT (toplevel), "resource-controller", controller, (GDestroyNotify)destroy_controller);
   g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), widget);
   gtk_widget_add_controller (toplevel, controller);
 
-  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (sl->priv->search_bar),
-                                         toplevel);
+  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (sl->priv->search_bar), toplevel);
+}
+
+static void
+unroot (GtkWidget *widget)
+{
+  GtkWidget *toplevel;
+
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
+  g_object_set_data (G_OBJECT (toplevel), "resource-controller", NULL);
+
+  GTK_WIDGET_CLASS (gtk_inspector_resource_list_parent_class)->unroot (widget);
 }
 
 static void
@@ -508,7 +513,7 @@ on_search_changed (GtkSearchEntry           *entry,
   gint length;
   gboolean backwards;
 
-  length = strlen (gtk_entry_get_text (GTK_ENTRY (entry)));
+  length = strlen (gtk_editable_get_text (GTK_EDITABLE (entry)));
   backwards = length < sl->priv->search_length;
   sl->priv->search_length = length;
 
@@ -548,7 +553,7 @@ match_row (GtkTreeModel *model,
   const gchar *text;
   gboolean match;
 
-  text = gtk_entry_get_text (GTK_ENTRY (sl->priv->search_entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (sl->priv->search_entry));
   gtk_tree_model_get (model, iter,
                       COLUMN_NAME, &name,
                       COLUMN_PATH, &path,
@@ -622,7 +627,7 @@ gtk_inspector_resource_list_init (GtkInspectorResourceList *sl)
   g_signal_connect (sl, "map", G_CALLBACK (on_map), NULL);
 
   gtk_search_bar_connect_entry (GTK_SEARCH_BAR (sl->priv->search_bar),
-                                GTK_ENTRY (sl->priv->search_entry));
+                                GTK_EDITABLE (sl->priv->search_entry));
 
   g_signal_connect (sl->priv->search_bar, "notify::search-mode-enabled",
                     G_CALLBACK (search_mode_changed), sl);
@@ -705,6 +710,9 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
   object_class->constructed = constructed;
   object_class->finalize = finalize;
 
+  widget_class->root = root;
+  widget_class->unroot = unroot;
+
   g_object_class_install_property (object_class, PROP_BUTTONS,
       g_param_spec_object ("buttons", NULL, NULL,
                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
@@ -731,7 +739,6 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_selection_changed);
-  gtk_widget_class_bind_template_callback (widget_class, on_hierarchy_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_search_changed);
   gtk_widget_class_bind_template_callback (widget_class, next_match);
   gtk_widget_class_bind_template_callback (widget_class, previous_match);

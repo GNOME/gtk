@@ -82,7 +82,7 @@ swap_child (GtkWidget *window)
 
   gtk_container_remove (GTK_CONTAINER (window), gtk_bin_get_child (GTK_BIN (window)));
 
-  image = gtk_image_new_from_icon_name ("go-next", GTK_ICON_SIZE_BUTTON);
+  image = gtk_image_new_from_icon_name ("go-next");
   gtk_widget_show (image);
   gtk_container_add (GTK_CONTAINER (window), image);
 }

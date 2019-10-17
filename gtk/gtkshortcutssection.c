@@ -20,6 +20,7 @@
 
 #include "gtkshortcutssection.h"
 
+#include "gtkbox.h"
 #include "gtkshortcutsgroup.h"
 #include "gtkbutton.h"
 #include "gtklabel.h"
@@ -34,6 +35,7 @@
 #include "gtkmarshalers.h"
 #include "gtkgesturepan.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcenterbox.h"
 #include "gtkintl.h"
 
 /**
@@ -69,7 +71,6 @@ struct _GtkShortcutsSection
   GList            *groups;
 
   gboolean          has_filtered_group;
-  gboolean          need_reflow;
 };
 
 struct _GtkShortcutsSectionClass
@@ -110,7 +111,6 @@ static void gtk_shortcuts_section_add_group        (GtkShortcutsSection *self,
 static void gtk_shortcuts_section_show_all         (GtkShortcutsSection *self);
 static void gtk_shortcuts_section_filter_groups    (GtkShortcutsSection *self);
 static void gtk_shortcuts_section_reflow_groups    (GtkShortcutsSection *self);
-static void gtk_shortcuts_section_maybe_reflow     (GtkShortcutsSection *self);
 
 static gboolean gtk_shortcuts_section_change_current_page (GtkShortcutsSection *self,
                                                            gint                 offset);
@@ -178,9 +178,6 @@ static void
 gtk_shortcuts_section_map (GtkWidget *widget)
 {
   GtkShortcutsSection *self = GTK_SHORTCUTS_SECTION (widget);
-
-  if (self->need_reflow)
-    gtk_shortcuts_section_reflow_groups (self);
 
   GTK_WIDGET_CLASS (gtk_shortcuts_section_parent_class)->map (widget);
 
@@ -372,7 +369,7 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
    * The maximum number of lines to allow per column. This property can
    * be used to influence how the groups in this section are distributed
    * across pages and columns. The default value of 15 should work in
-   * for most cases.
+   * most cases.
    */
   properties[PROP_MAX_HEIGHT] =
     g_param_spec_uint ("max-height", P_("Maximum Height"), P_("Maximum Height"),
@@ -433,7 +430,6 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
   self->switcher = g_object_new (GTK_TYPE_STACK_SWITCHER,
                                  "halign", GTK_ALIGN_CENTER,
                                  "stack", self->stack,
-                                 "spacing", 12,
                                  "visible", FALSE,
                                  NULL);
 
@@ -444,13 +440,13 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
   g_signal_connect_swapped (self->show_all, "clicked",
                             G_CALLBACK (gtk_shortcuts_section_show_all), self);
 
-  self->footer = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 20);
+  self->footer = gtk_center_box_new ();
   GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->add (GTK_CONTAINER (self), self->footer);
 
   gtk_widget_set_hexpand (GTK_WIDGET (self->switcher), TRUE);
   gtk_widget_set_halign (GTK_WIDGET (self->switcher), GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (self->footer), GTK_WIDGET (self->switcher));
-  gtk_box_pack_end (GTK_BOX (self->footer), self->show_all);
+  gtk_center_box_set_center_widget (GTK_CENTER_BOX (self->footer), GTK_WIDGET (self->switcher));
+  gtk_center_box_set_end_widget (GTK_CENTER_BOX (self->footer), self->show_all);
   gtk_widget_set_halign (self->show_all, GTK_ALIGN_END);
 
   gesture = gtk_gesture_pan_new (GTK_ORIENTATION_HORIZONTAL);
@@ -484,7 +480,7 @@ gtk_shortcuts_section_set_max_height (GtkShortcutsSection *self,
 
   self->max_height = max_height;
 
-  gtk_shortcuts_section_maybe_reflow (self);
+  gtk_shortcuts_section_reflow_groups (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MAX_HEIGHT]);
 }
@@ -519,7 +515,7 @@ gtk_shortcuts_section_add_group (GtkShortcutsSection *self,
   gtk_container_add (GTK_CONTAINER (column), GTK_WIDGET (group));
   self->groups = g_list_append (self->groups, group);
 
-  gtk_shortcuts_section_maybe_reflow (self);
+  gtk_shortcuts_section_reflow_groups (self);
 }
 
 static void
@@ -565,27 +561,6 @@ gtk_shortcuts_section_filter_groups (GtkShortcutsSection *self)
   gtk_widget_set_visible (gtk_widget_get_parent (GTK_WIDGET (self->show_all)),
                           gtk_widget_get_visible (GTK_WIDGET (self->show_all)) ||
                           gtk_widget_get_visible (GTK_WIDGET (self->switcher)));
-}
-
-static void
-gtk_shortcuts_section_maybe_reflow (GtkShortcutsSection *self)
-{
-  if (gtk_widget_get_mapped (GTK_WIDGET (self)))
-    gtk_shortcuts_section_reflow_groups (self);
-  else
-    self->need_reflow = TRUE;
-}
-
-static void
-adjust_page_buttons (GtkWidget *widget,
-                     gpointer   data)
-{
-  GtkWidget *label;
-
-  gtk_style_context_add_class (gtk_widget_get_style_context (widget), "circular");
-
-  label = gtk_bin_get_child (GTK_BIN (widget));
-  gtk_label_set_use_underline (GTK_LABEL (label), TRUE);
 }
 
 static void
@@ -751,17 +726,33 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
     }
 
   /* fix up stack switcher */
-  gtk_container_foreach (GTK_CONTAINER (self->switcher), adjust_page_buttons, NULL);
-  gtk_widget_set_visible (GTK_WIDGET (self->switcher), (n_pages > 1));
-  gtk_widget_set_visible (gtk_widget_get_parent (GTK_WIDGET (self->switcher)),
-                          gtk_widget_get_visible (GTK_WIDGET (self->show_all)) ||
-                          gtk_widget_get_visible (GTK_WIDGET (self->switcher)));
+  {
+    GtkWidget *w;
+
+    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (self->switcher)),
+                                 "circular");
+
+    for (w = gtk_widget_get_first_child (GTK_WIDGET (self->switcher));
+         w != NULL;
+         w = gtk_widget_get_next_sibling (w))
+      {
+        GtkWidget *label;
+
+        gtk_style_context_add_class (gtk_widget_get_style_context (w), "circular");
+
+        label = gtk_bin_get_child (GTK_BIN (w));
+        gtk_label_set_use_underline (GTK_LABEL (label), TRUE);
+      }
+
+    gtk_widget_set_visible (GTK_WIDGET (self->switcher), (n_pages > 1));
+    gtk_widget_set_visible (gtk_widget_get_parent (GTK_WIDGET (self->switcher)),
+                            gtk_widget_get_visible (GTK_WIDGET (self->show_all)) ||
+                            gtk_widget_get_visible (GTK_WIDGET (self->switcher)));
+  }
 
   /* clean up */
   g_list_free (groups);
   g_list_free (pages);
-
-  self->need_reflow = FALSE;
 }
 
 static gboolean

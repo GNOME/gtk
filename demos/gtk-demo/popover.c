@@ -55,10 +55,11 @@ create_complex_popover (GtkWidget       *parent,
 }
 
 static void
-entry_size_allocate_cb (GtkEntry            *entry,
-                        const GtkAllocation *allocation,
-                        int                  baseline,
-                        gpointer             user_data)
+entry_size_allocate_cb (GtkEntry *entry,
+                        int       width,
+                        int       height,
+                        int       baseline,
+                        gpointer  user_data)
 {
   GtkEntryIconPosition popover_pos;
   GtkPopover *popover = user_data;
@@ -142,7 +143,7 @@ do_popover (GtkWidget *do_widget)
       popover = create_popover (widget,
                                 gtk_label_new ("This popover does not grab input"),
                                 GTK_POS_TOP);
-      gtk_popover_set_modal (GTK_POPOVER (popover), FALSE);
+      gtk_popover_set_autohide (GTK_POPOVER (popover), FALSE);
       g_signal_connect (widget, "toggled",
                         G_CALLBACK (toggle_changed_cb), popover);
       gtk_container_add (GTK_CONTAINER (box), widget);

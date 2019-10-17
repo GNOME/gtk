@@ -21,13 +21,13 @@
 
 #include "gtktreelistmodel.h"
 
-#include "gtkcssrbtreeprivate.h"
+#include "gtkrbtreeprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
 /**
  * SECTION:gtktreelistmodel
- * @Short_description: a List model that can create child models on demand
+ * @Short_description: A list model that can create child models on demand
  * @Title: GtkTreeListModel
  * @See_also: #GListModel
  *
@@ -50,7 +50,7 @@ struct _TreeNode
 {
   GListModel *model;
   GtkTreeListRow *row;
-  GtkCssRbTree *children;
+  GtkRbTree *children;
   union {
     TreeNode *parent;
     GtkTreeListModel *list;
@@ -112,19 +112,19 @@ static TreeNode *
 tree_node_get_nth_child (TreeNode *node,
                          guint     position)
 {
-  GtkCssRbTree *tree;
+  GtkRbTree *tree;
   TreeNode *child, *tmp;
   TreeAugment *aug;
 
   tree = node->children;
-  child = gtk_css_rb_tree_get_root (tree);
+  child = gtk_rb_tree_get_root (tree);
 
   while (child)
     {
-      tmp = gtk_css_rb_tree_get_left (tree, child);
+      tmp = gtk_rb_tree_node_get_left (child);
       if (tmp)
         {
-          aug = gtk_css_rb_tree_get_augment (tree, tmp);
+          aug = gtk_rb_tree_get_augment (tree, tmp);
           if (position < aug->n_local)
             {
               child = tmp;
@@ -138,7 +138,7 @@ tree_node_get_nth_child (TreeNode *node,
 
       position--;
 
-      child = gtk_css_rb_tree_get_right (tree, child);
+      child = gtk_rb_tree_node_get_right (child);
     }
 
   return NULL;
@@ -153,27 +153,27 @@ tree_node_get_n_children (TreeNode *node)
   if (node->children == NULL)
     return 0;
 
-  child_node = gtk_css_rb_tree_get_root (node->children);
+  child_node = gtk_rb_tree_get_root (node->children);
   if (child_node == NULL)
     return 0;
 
-  child_aug = gtk_css_rb_tree_get_augment (node->children, child_node);
+  child_aug = gtk_rb_tree_get_augment (node->children, child_node);
 
   return child_aug->n_items;
 }
 
 static guint
-tree_node_get_local_position (GtkCssRbTree *tree,
-                              TreeNode     *node)
+tree_node_get_local_position (GtkRbTree *tree,
+                              TreeNode  *node)
 {
   TreeNode *left, *parent;
   TreeAugment *left_aug;
   guint n;
   
-  left = gtk_css_rb_tree_get_left (tree, node);
+  left = gtk_rb_tree_node_get_left (node);
   if (left)
     {
-      left_aug = gtk_css_rb_tree_get_augment (tree, left);
+      left_aug = gtk_rb_tree_get_augment (tree, left);
       n = left_aug->n_local;
     }
   else
@@ -181,11 +181,11 @@ tree_node_get_local_position (GtkCssRbTree *tree,
       n = 0;
     }
 
-  for (parent = gtk_css_rb_tree_get_parent (tree, node);
+  for (parent = gtk_rb_tree_node_get_parent (node);
        parent;
-       parent = gtk_css_rb_tree_get_parent (tree, node))
+       parent = gtk_rb_tree_node_get_parent (node))
     {
-      left = gtk_css_rb_tree_get_left (tree, parent);
+      left = gtk_rb_tree_node_get_left (parent);
       if (left == node)
         {
           /* we are the left node, nothing changes */
@@ -196,7 +196,7 @@ tree_node_get_local_position (GtkCssRbTree *tree,
           n++;
           if (left)
             {
-              left_aug = gtk_css_rb_tree_get_augment (tree, left);
+              left_aug = gtk_rb_tree_get_augment (tree, left);
               n += left_aug->n_local;
             }
         }
@@ -209,7 +209,7 @@ tree_node_get_local_position (GtkCssRbTree *tree,
 static guint
 tree_node_get_position (TreeNode *node)
 {
-  GtkCssRbTree *tree;
+  GtkRbTree *tree;
   TreeNode *left, *parent;
   TreeAugment *left_aug;
   guint n;
@@ -220,18 +220,18 @@ tree_node_get_position (TreeNode *node)
     {
       tree = node->parent->children;
 
-      left = gtk_css_rb_tree_get_left (tree, node);
+      left = gtk_rb_tree_node_get_left (node);
       if (left)
         {
-          left_aug = gtk_css_rb_tree_get_augment (tree, left);
+          left_aug = gtk_rb_tree_get_augment (tree, left);
           n += left_aug->n_items;
         }
 
-      for (parent = gtk_css_rb_tree_get_parent (tree, node);
+      for (parent = gtk_rb_tree_node_get_parent (node);
            parent;
-           parent = gtk_css_rb_tree_get_parent (tree, node))
+           parent = gtk_rb_tree_node_get_parent (node))
         {
-          left = gtk_css_rb_tree_get_left (tree, parent);
+          left = gtk_rb_tree_node_get_left (parent);
           if (left == node)
             {
               /* we are the left node, nothing changes */
@@ -242,7 +242,7 @@ tree_node_get_position (TreeNode *node)
               n += 1 + tree_node_get_n_children (parent);
               if (left)
                 {
-                  left_aug = gtk_css_rb_tree_get_augment (tree, left);
+                  left_aug = gtk_rb_tree_get_augment (tree, left);
                   n += left_aug->n_items;
                 }
             }
@@ -262,7 +262,7 @@ tree_node_mark_dirty (TreeNode *node)
        !node->is_root;
        node = node->parent)
     {
-      gtk_css_rb_tree_mark_dirty (node->parent->children, node);
+      gtk_rb_tree_node_mark_dirty (node);
     }
 }
 
@@ -270,7 +270,7 @@ static TreeNode *
 gtk_tree_list_model_get_nth (GtkTreeListModel *self,
                              guint             position)
 {
-  GtkCssRbTree *tree;
+  GtkRbTree *tree;
   TreeNode *node, *tmp;
   guint n_children;
 
@@ -279,14 +279,14 @@ gtk_tree_list_model_get_nth (GtkTreeListModel *self,
     return NULL;
 
   tree = self->root_node.children;
-  node = gtk_css_rb_tree_get_root (tree);
+  node = gtk_rb_tree_get_root (tree);
 
   while (TRUE)
     {
-      tmp = gtk_css_rb_tree_get_left (tree, node);
+      tmp = gtk_rb_tree_node_get_left (node);
       if (tmp)
         {
-          TreeAugment *aug = gtk_css_rb_tree_get_augment (tree, tmp);
+          TreeAugment *aug = gtk_rb_tree_get_augment (tree, tmp);
           if (position < aug->n_items)
             {
               node = tmp;
@@ -304,12 +304,12 @@ gtk_tree_list_model_get_nth (GtkTreeListModel *self,
       if (position < n_children)
         {
           tree = node->children;
-          node = gtk_css_rb_tree_get_root (tree);
+          node = gtk_rb_tree_get_root (tree);
           continue;
         }
       position -= n_children;
 
-      node = gtk_css_rb_tree_get_right (tree, node);
+      node = gtk_rb_tree_node_get_right (node);
     }
 
   g_return_val_if_reached (NULL);
@@ -406,8 +406,8 @@ gtk_tree_list_model_items_changed_cb (GListModel *model,
       for (i = 0; i < removed; i++)
         {
           tmp = child;
-          child = gtk_css_rb_tree_get_next (node->children, child);
-          gtk_css_rb_tree_remove (node->children, tmp);
+          child = gtk_rb_tree_node_get_next (child);
+          gtk_rb_tree_remove (node->children, tmp);
         }
     }
   else
@@ -418,7 +418,7 @@ gtk_tree_list_model_items_changed_cb (GListModel *model,
   tree_added = added;
   for (i = 0; i < added; i++)
     {
-      child = gtk_css_rb_tree_insert_before (node->children, child);
+      child = gtk_rb_tree_insert_before (node->children, child);
       child->parent = node;
     }
   if (self->autoexpand)
@@ -426,7 +426,7 @@ gtk_tree_list_model_items_changed_cb (GListModel *model,
       for (i = 0; i < added; i++)
         {
           tree_added += gtk_tree_list_model_expand_node (self, child);
-          child = gtk_css_rb_tree_get_next (node->children, child);
+          child = gtk_rb_tree_node_get_next (child);
         }
     }
 
@@ -456,15 +456,15 @@ gtk_tree_list_model_clear_node (gpointer data)
       g_object_unref (node->model);
     }
   if (node->children)
-    gtk_css_rb_tree_unref (node->children);
+    gtk_rb_tree_unref (node->children);
 }
 
 static void
-gtk_tree_list_model_augment (GtkCssRbTree *tree,
-                             gpointer      _aug,
-                             gpointer      _node,
-                             gpointer      left,
-                             gpointer      right)
+gtk_tree_list_model_augment (GtkRbTree *tree,
+                             gpointer   _aug,
+                             gpointer   _node,
+                             gpointer   left,
+                             gpointer   right)
 {
   TreeAugment *aug = _aug;
 
@@ -474,13 +474,13 @@ gtk_tree_list_model_augment (GtkCssRbTree *tree,
 
   if (left)
     {
-      TreeAugment *left_aug = gtk_css_rb_tree_get_augment (tree, left);
+      TreeAugment *left_aug = gtk_rb_tree_get_augment (tree, left);
       aug->n_items += left_aug->n_items;
       aug->n_local += left_aug->n_local;
     }
   if (right)
     {
-      TreeAugment *right_aug = gtk_css_rb_tree_get_augment (tree, right);
+      TreeAugment *right_aug = gtk_rb_tree_get_augment (tree, right);
       aug->n_items += right_aug->n_items;
       aug->n_local += right_aug->n_local;
     }
@@ -499,17 +499,17 @@ gtk_tree_list_model_init_node (GtkTreeListModel *list,
                     "items-changed",
                     G_CALLBACK (gtk_tree_list_model_items_changed_cb),
                     self);
-  self->children = gtk_css_rb_tree_new (TreeNode,
-                                        TreeAugment,
-                                        gtk_tree_list_model_augment,
-                                        gtk_tree_list_model_clear_node,
-                                        NULL);
+  self->children = gtk_rb_tree_new (TreeNode,
+                                    TreeAugment,
+                                    gtk_tree_list_model_augment,
+                                    gtk_tree_list_model_clear_node,
+                                    NULL);
 
   n = g_list_model_get_n_items (model);
   node = NULL;
   for (i = 0; i < n; i++)
     {
-      node = gtk_css_rb_tree_insert_after (self->children, node);
+      node = gtk_rb_tree_insert_after (self->children, node);
       node->parent = self;
       if (list->autoexpand)
         gtk_tree_list_model_expand_node (list, node);
@@ -561,7 +561,7 @@ gtk_tree_list_model_collapse_node (GtkTreeListModel *self,
 
   n_items = tree_node_get_n_children (node);
 
-  g_clear_pointer (&node->children, gtk_css_rb_tree_unref);
+  g_clear_pointer (&node->children, gtk_rb_tree_unref);
   g_clear_object (&node->model);
 
   tree_node_mark_dirty (node);
@@ -683,7 +683,7 @@ gtk_tree_list_model_finalize (GObject *object)
     self->user_destroy (self->user_data);
 
   G_OBJECT_CLASS (gtk_tree_list_model_parent_class)->finalize (object);
-};
+}
 
 static void
 gtk_tree_list_model_class_init (GtkTreeListModelClass *class)
@@ -1026,7 +1026,7 @@ gtk_tree_list_row_dispose (GObject *object)
     self->node->row = NULL;
 
   G_OBJECT_CLASS (gtk_tree_list_row_parent_class)->dispose (object);
-};
+}
 
 static void
 gtk_tree_list_row_class_init (GtkTreeListRowClass *class)

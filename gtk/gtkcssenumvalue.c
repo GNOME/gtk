@@ -117,7 +117,7 @@ _gtk_css_border_style_value_try_parse (GtkCssParser *parser)
 
   for (i = 0; i < G_N_ELEMENTS (border_style_values); i++)
     {
-      if (_gtk_css_parser_try (parser, border_style_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, border_style_values[i].name))
         return _gtk_css_value_ref (&border_style_values[i]);
     }
 
@@ -180,7 +180,7 @@ _gtk_css_blend_mode_value_try_parse (GtkCssParser *parser)
 
   for (i = 0; i < G_N_ELEMENTS (blend_mode_values); i++)
     {
-      if (_gtk_css_parser_try (parser, blend_mode_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, blend_mode_values[i].name))
         return _gtk_css_value_ref (&blend_mode_values[i]);
     }
 
@@ -323,7 +323,7 @@ _gtk_css_font_size_value_try_parse (GtkCssParser *parser)
 
   for (i = 0; i < G_N_ELEMENTS (font_size_values); i++)
     {
-      if (_gtk_css_parser_try (parser, font_size_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, font_size_values[i].name))
         return _gtk_css_value_ref (&font_size_values[i]);
     }
 
@@ -373,7 +373,7 @@ _gtk_css_font_style_value_try_parse (GtkCssParser *parser)
 
   for (i = 0; i < G_N_ELEMENTS (font_style_values); i++)
     {
-      if (_gtk_css_parser_try (parser, font_style_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, font_style_values[i].name))
         return _gtk_css_value_ref (&font_style_values[i]);
     }
 
@@ -407,27 +407,27 @@ gtk_css_value_font_weight_compute (GtkCssValue      *value,
     return _gtk_css_value_ref (value);
 
   if (parent_style)
-    parent_value = gtk_css_style_get_value (parent_style, property_id)->value;
+    parent_value = _gtk_css_number_value_get (gtk_css_style_get_value (parent_style, property_id), 100);
   else
     parent_value = 400;
 
   if (value->value == BOLDER)
     {
-      if (parent_value < 400)
-        new_weight = PANGO_WEIGHT_NORMAL;
-      else if (parent_value < 600)
-        new_weight = PANGO_WEIGHT_BOLD;
+      if (parent_value < 350)
+        new_weight = 400;
+      else if (parent_value < 550)
+        new_weight = 700;
       else
-        new_weight = PANGO_WEIGHT_HEAVY;
+        new_weight = 900;
     }
   else if (value->value == LIGHTER)
     {
-      if (parent_value > 700)
-        new_weight = PANGO_WEIGHT_BOLD;
-      else if (parent_value > 500)
-        new_weight = PANGO_WEIGHT_NORMAL;
+      if (parent_value > 750)
+        new_weight = 700;
+      else if (parent_value > 550)
+        new_weight = 400;
       else
-        new_weight = PANGO_WEIGHT_THIN;
+        new_weight = 100;
     }
   else
     {
@@ -435,30 +435,14 @@ gtk_css_value_font_weight_compute (GtkCssValue      *value,
       new_weight = PANGO_WEIGHT_NORMAL;
     }
 
-  return _gtk_css_font_weight_value_new (new_weight);
-}
-
-static GtkCssValue *
-gtk_css_value_font_weight_transition (GtkCssValue *start,
-                                      GtkCssValue *end,
-                                      guint        property_id,
-                                      double       progress)
-{
-  PangoWeight new_weight;
-
-  if (start->value < 0 || end->value < 0)
-    return NULL;
-
-  new_weight = (start->value + end->value + 50) / 200 * 100;
-
-  return _gtk_css_font_weight_value_new (new_weight);
+  return _gtk_css_number_value_new (new_weight, GTK_CSS_NUMBER);
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_WEIGHT = {
   gtk_css_value_enum_free,
   gtk_css_value_font_weight_compute,
   gtk_css_value_enum_equal,
-  gtk_css_value_font_weight_transition,
+  NULL,
   NULL,
   NULL,
   gtk_css_value_enum_print
@@ -467,36 +451,10 @@ static const GtkCssValueClass GTK_CSS_VALUE_FONT_WEIGHT = {
 static GtkCssValue font_weight_values[] = {
   { &GTK_CSS_VALUE_FONT_WEIGHT, 1, BOLDER, "bolder" },
   { &GTK_CSS_VALUE_FONT_WEIGHT, 1, LIGHTER, "lighter" },
-  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_THIN, "100" },
-  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_ULTRALIGHT, "200" },
-  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_LIGHT, "300" },
-  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_NORMAL, "normal" },
-  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_MEDIUM, "500" },
-  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_SEMIBOLD, "600" },
-  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_BOLD, "bold" },
-  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_ULTRABOLD, "800" },
-  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_HEAVY, "900" }
 };
 
 GtkCssValue *
-_gtk_css_font_weight_value_new (PangoWeight font_weight)
-{
-  guint i;
-  gint w;
-
-  w = ((font_weight + 50) / 100) * 100;
-
-  for (i = 2; i < G_N_ELEMENTS (font_weight_values); i++)
-    {
-      if (font_weight_values[i].value == w)
-        return _gtk_css_value_ref (&font_weight_values[i]);
-    }
-
-  g_return_val_if_reached (NULL);
-}
-
-GtkCssValue *
-_gtk_css_font_weight_value_try_parse (GtkCssParser *parser)
+gtk_css_font_weight_value_try_parse (GtkCssParser *parser)
 {
   guint i;
 
@@ -504,20 +462,20 @@ _gtk_css_font_weight_value_try_parse (GtkCssParser *parser)
 
   for (i = 0; i < G_N_ELEMENTS (font_weight_values); i++)
     {
-      if (_gtk_css_parser_try (parser, font_weight_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, font_weight_values[i].name))
         return _gtk_css_value_ref (&font_weight_values[i]);
     }
-  /* special cases go here */
-  if (_gtk_css_parser_try (parser, "400", TRUE))
-    return _gtk_css_value_ref (&font_weight_values[5]);
-  if (_gtk_css_parser_try (parser, "700", TRUE))
-    return _gtk_css_value_ref (&font_weight_values[8]);
+
+  if (gtk_css_parser_try_ident (parser, "normal"))
+    return _gtk_css_number_value_new (PANGO_WEIGHT_NORMAL, GTK_CSS_NUMBER);
+  if (gtk_css_parser_try_ident (parser, "bold"))
+    return _gtk_css_number_value_new (PANGO_WEIGHT_BOLD, GTK_CSS_NUMBER);
 
   return NULL;
 }
 
 PangoWeight
-_gtk_css_font_weight_value_get (const GtkCssValue *value)
+gtk_css_font_weight_value_get (const GtkCssValue *value)
 {
   g_return_val_if_fail (value->class == &GTK_CSS_VALUE_FONT_WEIGHT, PANGO_WEIGHT_NORMAL);
 
@@ -568,7 +526,7 @@ _gtk_css_font_stretch_value_try_parse (GtkCssParser *parser)
 
   for (i = 0; i < G_N_ELEMENTS (font_stretch_values); i++)
     {
-      if (_gtk_css_parser_try (parser, font_stretch_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, font_stretch_values[i].name))
         return _gtk_css_value_ref (&font_stretch_values[i]);
     }
 
@@ -618,7 +576,7 @@ _gtk_css_text_decoration_line_value_try_parse (GtkCssParser *parser)
 
   for (i = 0; i < G_N_ELEMENTS (text_decoration_line_values); i++)
     {
-      if (_gtk_css_parser_try (parser, text_decoration_line_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, text_decoration_line_values[i].name))
         return _gtk_css_value_ref (&text_decoration_line_values[i]);
     }
 
@@ -668,7 +626,7 @@ _gtk_css_text_decoration_style_value_try_parse (GtkCssParser *parser)
 
   for (i = 0; i < G_N_ELEMENTS (text_decoration_style_values); i++)
     {
-      if (_gtk_css_parser_try (parser, text_decoration_style_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, text_decoration_style_values[i].name))
         return _gtk_css_value_ref (&text_decoration_style_values[i]);
     }
 
@@ -724,7 +682,7 @@ _gtk_css_area_value_try_parse (GtkCssParser *parser)
 
   for (i = 0; i < G_N_ELEMENTS (area_values); i++)
     {
-      if (_gtk_css_parser_try (parser, area_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, area_values[i].name))
         return _gtk_css_value_ref (&area_values[i]);
     }
 
@@ -784,7 +742,7 @@ _gtk_css_direction_value_try_parse (GtkCssParser *parser)
    */
   for (i = G_N_ELEMENTS (direction_values) - 1; i >= 0; i--)
     {
-      if (_gtk_css_parser_try (parser, direction_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, direction_values[i].name))
         return _gtk_css_value_ref (&direction_values[i]);
     }
 
@@ -839,7 +797,7 @@ _gtk_css_play_state_value_try_parse (GtkCssParser *parser)
 
   for (i = 0; i < G_N_ELEMENTS (play_state_values); i++)
     {
-      if (_gtk_css_parser_try (parser, play_state_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, play_state_values[i].name))
         return _gtk_css_value_ref (&play_state_values[i]);
     }
 
@@ -896,7 +854,7 @@ _gtk_css_fill_mode_value_try_parse (GtkCssParser *parser)
 
   for (i = 0; i < G_N_ELEMENTS (fill_mode_values); i++)
     {
-      if (_gtk_css_parser_try (parser, fill_mode_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, fill_mode_values[i].name))
         return _gtk_css_value_ref (&fill_mode_values[i]);
     }
 
@@ -952,7 +910,7 @@ _gtk_css_icon_style_value_try_parse (GtkCssParser *parser)
 
   for (i = 0; i < G_N_ELEMENTS (icon_style_values); i++)
     {
-      if (_gtk_css_parser_try (parser, icon_style_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, icon_style_values[i].name))
         return _gtk_css_value_ref (&icon_style_values[i]);
     }
 
@@ -1008,7 +966,7 @@ _gtk_css_font_kerning_value_try_parse (GtkCssParser *parser)
 
   for (i = 0; i < G_N_ELEMENTS (font_kerning_values); i++)
     {
-      if (_gtk_css_parser_try (parser, font_kerning_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, font_kerning_values[i].name))
         return _gtk_css_value_ref (&font_kerning_values[i]);
     }
 
@@ -1064,7 +1022,7 @@ _gtk_css_font_variant_position_value_try_parse (GtkCssParser *parser)
 
   for (i = 0; i < G_N_ELEMENTS (font_variant_position_values); i++)
     {
-      if (_gtk_css_parser_try (parser, font_variant_position_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, font_variant_position_values[i].name))
         return _gtk_css_value_ref (&font_variant_position_values[i]);
     }
 
@@ -1124,7 +1082,7 @@ _gtk_css_font_variant_caps_value_try_parse (GtkCssParser *parser)
 
   for (i = 0; i < G_N_ELEMENTS (font_variant_caps_values); i++)
     {
-      if (_gtk_css_parser_try (parser, font_variant_caps_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, font_variant_caps_values[i].name))
         return _gtk_css_value_ref (&font_variant_caps_values[i]);
     }
 
@@ -1179,7 +1137,7 @@ _gtk_css_font_variant_alternate_value_try_parse (GtkCssParser *parser)
 
   for (i = 0; i < G_N_ELEMENTS (font_variant_alternate_values); i++)
     {
-      if (_gtk_css_parser_try (parser, font_variant_alternate_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, font_variant_alternate_values[i].name))
         return _gtk_css_value_ref (&font_variant_alternate_values[i]);
     }
 
@@ -1310,7 +1268,7 @@ _gtk_css_font_variant_ligature_try_parse_one (GtkCssParser              *parser,
 
   for (i = 0; i < G_N_ELEMENTS (font_variant_ligature_values); i++)
     {
-      if (_gtk_css_parser_try (parser, font_variant_ligature_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, font_variant_ligature_values[i].name))
         {
           value = font_variant_ligature_values[i].value;
           break;
@@ -1412,7 +1370,7 @@ _gtk_css_font_variant_numeric_try_parse_one (GtkCssParser             *parser,
 
   for (i = 0; i < G_N_ELEMENTS (font_variant_numeric_values); i++)
     {
-      if (_gtk_css_parser_try (parser, font_variant_numeric_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, font_variant_numeric_values[i].name))
         {
           value = font_variant_numeric_values[i].value;
           break;
@@ -1554,7 +1512,7 @@ _gtk_css_font_variant_east_asian_try_parse_one (GtkCssParser               *pars
 
   for (i = 0; i < G_N_ELEMENTS (font_variant_east_asian_values); i++)
     {
-      if (_gtk_css_parser_try (parser, font_variant_east_asian_values[i].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, font_variant_east_asian_values[i].name))
         {
           value = font_variant_east_asian_values[i].value;
           break;

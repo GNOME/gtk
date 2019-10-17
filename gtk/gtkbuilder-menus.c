@@ -80,12 +80,12 @@ gtk_builder_menu_pop_frame (GtkBuilderMenuState *state)
 }
 
 static void
-gtk_builder_menu_start_element (GMarkupParseContext  *context,
-                                const gchar          *element_name,
-                                const gchar         **attribute_names,
-                                const gchar         **attribute_values,
-                                gpointer              user_data,
-                                GError              **error)
+gtk_builder_menu_start_element (GtkBuildableParseContext  *context,
+                                const gchar               *element_name,
+                                const gchar              **attribute_names,
+                                const gchar              **attribute_values,
+                                gpointer                   user_data,
+                                GError                   **error)
 {
   GtkBuilderMenuState *state = user_data;
 
@@ -214,14 +214,15 @@ gtk_builder_menu_start_element (GMarkupParseContext  *context,
     }
 
   {
-    const GSList *element_stack;
+    GPtrArray *element_stack;
 
-    element_stack = g_markup_parse_context_get_element_stack (context);
+    element_stack = gtk_buildable_parse_context_get_element_stack (context);
 
-    if (element_stack->next)
+    if (element_stack->len > 1)
       g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_UNKNOWN_ELEMENT,
                    _("Element <%s> not allowed inside <%s>"),
-                   element_name, (const gchar *) element_stack->next->data);
+                   element_name,
+                   (const gchar *) g_ptr_array_index (element_stack, element_stack->len - 2));
 
     else
       g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_UNKNOWN_ELEMENT,
@@ -230,10 +231,10 @@ gtk_builder_menu_start_element (GMarkupParseContext  *context,
 }
 
 static void
-gtk_builder_menu_end_element (GMarkupParseContext  *context,
-                              const gchar          *element_name,
-                              gpointer              user_data,
-                              GError              **error)
+gtk_builder_menu_end_element (GtkBuildableParseContext  *context,
+                              const gchar               *element_name,
+                              gpointer                   user_data,
+                              GError                   **error)
 {
   GtkBuilderMenuState *state = user_data;
 
@@ -297,11 +298,11 @@ gtk_builder_menu_end_element (GMarkupParseContext  *context,
 }
 
 static void
-gtk_builder_menu_text (GMarkupParseContext  *context,
-                       const gchar          *text,
-                       gsize                 text_len,
-                       gpointer              user_data,
-                       GError              **error)
+gtk_builder_menu_text (GtkBuildableParseContext  *context,
+                       const gchar               *text,
+                       gsize                      text_len,
+                       gpointer                   user_data,
+                       GError                   **error)
 {
   GtkBuilderMenuState *state = user_data;
   gint i;
@@ -315,15 +316,15 @@ gtk_builder_menu_text (GMarkupParseContext  *context,
         else
           g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
                        _("Text may not appear inside <%s>"),
-                       g_markup_parse_context_get_element (context));
+                       gtk_buildable_parse_context_get_element (context));
         break;
       }
 }
 
 static void
-gtk_builder_menu_error (GMarkupParseContext *context,
-                        GError              *error,
-                        gpointer             user_data)
+gtk_builder_menu_error (GtkBuildableParseContext *context,
+                        GError                   *error,
+                        gpointer                  user_data)
 {
   GtkBuilderMenuState *state = user_data;
 
@@ -348,12 +349,11 @@ gtk_builder_menu_error (GMarkupParseContext *context,
   g_slice_free (GtkBuilderMenuState, state);
 }
 
-static GMarkupParser gtk_builder_menu_subparser =
+static GtkBuildableParser gtk_builder_menu_subparser =
 {
   gtk_builder_menu_start_element,
   gtk_builder_menu_end_element,
   gtk_builder_menu_text,
-  NULL,                            /* passthrough */
   gtk_builder_menu_error
 };
 
@@ -369,7 +369,7 @@ _gtk_builder_menu_start (ParserData   *parser_data,
 
   state = g_slice_new0 (GtkBuilderMenuState);
   state->parser_data = parser_data;
-  g_markup_parse_context_push (parser_data->ctx, &gtk_builder_menu_subparser, state);
+  gtk_buildable_parse_context_push (&parser_data->ctx, &gtk_builder_menu_subparser, state);
 
   if (COLLECT (STRING, "id", &id))
     {
@@ -387,7 +387,7 @@ _gtk_builder_menu_end (ParserData *parser_data)
 {
   GtkBuilderMenuState *state;
 
-  state = g_markup_parse_context_pop (parser_data->ctx);
+  state = gtk_buildable_parse_context_pop (&parser_data->ctx);
   gtk_builder_menu_pop_frame (state);
 
   g_assert (state->frame.prev == NULL);

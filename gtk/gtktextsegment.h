@@ -150,7 +150,6 @@ struct _GtkTextLineSegment {
 };
 
 
-GDK_AVAILABLE_IN_ALL
 GtkTextLineSegment  *gtk_text_line_segment_split (const GtkTextIter *iter);
 
 GtkTextLineSegment *_gtk_char_segment_new                  (const gchar    *text,

@@ -1,7 +1,7 @@
 stages:
   - build
   - flatpak
-  - deploy
+#  - deploy
 
 .cache-paths: &cache-paths
   paths:
@@ -13,15 +13,22 @@ stages:
     - subprojects/pango/
 
 fedora-x86_64:
-  image: registry.gitlab.gnome.org/gnome/gtk/master:v1
+  image: registry.gitlab.gnome.org/gnome/gtk/master:v6
   stage: build
   script:
     - bash -x ./.gitlab-ci/test-docker.sh
   artifacts:
-    when: on_failure
+    when: always
+    reports:
+      junit:
+        - "${CI_PROJECT_DIR}/_build/report.xml" 
     name: "gtk-${CI_COMMIT_REF_NAME}"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
+      - "${CI_PROJECT_DIR}/_build/report.xml"
+      - "${CI_PROJECT_DIR}/_build/report.html"
+      - "${CI_PROJECT_DIR}/_build/testsuite/reftests/output/*.png"
+      - "${CI_PROJECT_DIR}/_build/testsuite/gsk/compare/*/*.png"
   cache:
     key: "$CI_JOB_NAME"
     <<: *cache-paths
@@ -53,30 +60,60 @@ msys2-mingw32:
   script:
     - bash -x ./.gitlab-ci/flatpak-build.sh "${APPID}"
 
-flatpak:demo:
-  variables:
-    APPID: org.gtk.Demo
+# Manual jobs, for branches and MRs
+.flatpak-manual: &flatpak-manual
   <<: *flatpak-defaults
+  when: manual
 
-flatpak:widget-factory:
-  variables:
-    APPID: org.gtk.WidgetFactory
+# Only build Flatpak bundles automatically on master
+.flatpak-master: &flatpak-master
   <<: *flatpak-defaults
-
-pages:
-  image: registry.gitlab.gnome.org/gnome/gtk/master:v1
-  stage: deploy 
-  script:
-    - meson -Ddocumentation=true _build .
-    - ninja -C _build
-    - ninja -C _build gdk4-doc gsk4-doc gtk4-doc
-
-    - mkdir -p public/
-    - mv _build/docs/reference/gtk/html/ public/gtk/
-    - mv _build/docs/reference/gdk/html/ public/gdk/
-    - mv _build/docs/reference/gsk/html/ public/gsk/
-  artifacts:
-    paths:
-      - public
   only:
     - master
+
+flatpak-manual:demo:
+  variables:
+    APPID: org.gtk.Demo4
+  <<: *flatpak-manual
+
+flatpak-master:demo:
+  variables:
+    APPID: org.gtk.Demo4
+  <<: *flatpak-master
+
+flatpak-manual:widget-factory:
+  variables:
+    APPID: org.gtk.WidgetFactory4
+  <<: *flatpak-manual
+
+flatpak-master:widget-factory:
+  variables:
+    APPID: org.gtk.WidgetFactory4
+  <<: *flatpak-master
+
+flatpak-manual:icon-browser:
+  variables:
+    APPID: org.gtk.IconBrowser4
+  <<: *flatpak-manual
+
+flatpak-master:icon-browser:
+  variables:
+    APPID: org.gtk.IconBrowser4
+  <<: *flatpak-master
+
+#pages:
+#  image: registry.gitlab.gnome.org/gnome/gtk/master:v6
+#  stage: deploy 
+#  script:
+#    - meson -Dgtk_doc=true _build .
+#    - ninja -C _build
+#    - ninja -C _build gdk4-doc gsk4-doc gtk4-doc
+#    - mkdir -p public/
+#    - mv _build/docs/reference/gtk/html/ public/gtk/
+#    - mv _build/docs/reference/gdk/html/ public/gdk/
+#    - mv _build/docs/reference/gsk/html/ public/gsk/
+#  artifacts:
+#    paths:
+#      - public
+#  only:
+#    - master

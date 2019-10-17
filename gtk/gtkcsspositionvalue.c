@@ -179,42 +179,34 @@ position_value_parse (GtkCssParser *parser, gboolean try)
     const char *name;
     guint       percentage;
     gboolean    horizontal;
-    gboolean    vertical;
+    gboolean    swap;
   } names[] = {
     { "left",     0, TRUE,  FALSE },
     { "right",  100, TRUE,  FALSE },
     { "center",  50, TRUE,  TRUE  },
-    { "top",      0, FALSE, TRUE  },
-    { "bottom", 100, FALSE, TRUE  },
-    { NULL    ,   0, TRUE,  FALSE }, /* used for numbers */
-    { NULL    ,  50, TRUE,  TRUE  }  /* used for no value */
+    { "top",      0, FALSE, FALSE },
+    { "bottom", 100, FALSE, FALSE  },
   };
-  GtkCssValue *x, *y;
-  GtkCssValue **missing;
-  guint first, second;
+  GtkCssValue *x = NULL, *y = NULL;
+  gboolean swap = FALSE;
+  guint i;
 
-  for (first = 0; names[first].name != NULL; first++)
+  for (i = 0; i < G_N_ELEMENTS (names); i++)
     {
-      if (_gtk_css_parser_try (parser, names[first].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, names[i].name))
         {
-          if (names[first].horizontal)
-            {
-	      x = _gtk_css_number_value_new (names[first].percentage, GTK_CSS_PERCENT);
-              missing = &y;
-            }
+          if (names[i].horizontal)
+	    x = _gtk_css_number_value_new (names[i].percentage, GTK_CSS_PERCENT);
           else
-            {
-	      y = _gtk_css_number_value_new (names[first].percentage, GTK_CSS_PERCENT);
-              missing = &x;
-            }
+	    y = _gtk_css_number_value_new (names[i].percentage, GTK_CSS_PERCENT);
+          swap = names[i].swap;
           break;
         }
     }
-  if (names[first].name == NULL)
+  if (i == G_N_ELEMENTS (names))
     {
       if (gtk_css_number_value_can_parse (parser))
         {
-          missing = &y;
           x = _gtk_css_number_value_parse (parser,
                                            GTK_CSS_PARSE_PERCENT
                                            | GTK_CSS_PARSE_LENGTH);
@@ -225,28 +217,52 @@ position_value_parse (GtkCssParser *parser, gboolean try)
       else
         {
           if (!try)
-            _gtk_css_parser_error (parser, "Unrecognized position value");
+            gtk_css_parser_error_syntax (parser, "Unrecognized position value");
           return NULL;
         }
     }
 
-  for (second = 0; names[second].name != NULL; second++)
+  for (i = 0; i < G_N_ELEMENTS (names); i++)
     {
-      if (_gtk_css_parser_try (parser, names[second].name, TRUE))
+      if (!swap && !names[i].swap)
         {
-	  *missing = _gtk_css_number_value_new (names[second].percentage, GTK_CSS_PERCENT);
+          if (names[i].horizontal && x != NULL)
+            continue;
+          if (!names[i].horizontal && y != NULL)
+            continue;
+        }
+
+      if (gtk_css_parser_try_ident (parser, names[i].name))
+        {
+          if (x)
+            {
+              if (names[i].horizontal && !names[i].swap)
+                {
+                  y = x;
+	          x = _gtk_css_number_value_new (names[i].percentage, GTK_CSS_PERCENT);
+                }
+              else
+                {
+	          y = _gtk_css_number_value_new (names[i].percentage, GTK_CSS_PERCENT);
+                }
+            }
+          else
+            {
+              g_assert (names[i].horizontal || names[i].swap);
+	      x = _gtk_css_number_value_new (names[i].percentage, GTK_CSS_PERCENT);
+            }
           break;
         }
     }
 
-  if (names[second].name == NULL)
+  if (i == G_N_ELEMENTS (names))
     {
       if (gtk_css_number_value_can_parse (parser))
         {
-          if (missing != &y)
+          if (y != NULL)
             {
               if (!try)
-                _gtk_css_parser_error (parser, "Invalid combination of values");
+                gtk_css_parser_error_syntax (parser, "Invalid combination of values");
               _gtk_css_value_unref (y);
               return NULL;
             }
@@ -261,20 +277,10 @@ position_value_parse (GtkCssParser *parser, gboolean try)
         }
       else
         {
-          second++;
-          *missing = _gtk_css_number_value_new (50, GTK_CSS_PERCENT);
-        }
-    }
-  else
-    {
-      if ((names[first].horizontal && !names[second].vertical) ||
-          (!names[first].horizontal && !names[second].horizontal))
-        {
-          if (!try)
-            _gtk_css_parser_error (parser, "Invalid combination of values");
-          _gtk_css_value_unref (x);
-          _gtk_css_value_unref (y);
-          return NULL;
+          if (y)
+            x = _gtk_css_number_value_new (50, GTK_CSS_PERCENT);
+          else
+            y = _gtk_css_number_value_new (50, GTK_CSS_PERCENT);
         }
     }
 

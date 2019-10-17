@@ -33,7 +33,7 @@
 #include "gtkprintoperation-portal.h"
 #include "gtkprintsettings.h"
 #include "gtkpagesetup.h"
-#include "gtkprintbackend.h"
+#include "gtkprintbackendprivate.h"
 #include "gtkshow.h"
 #include "gtkintl.h"
 #include "gtkwindowprivate.h"

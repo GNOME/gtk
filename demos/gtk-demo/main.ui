@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.10 -->
+  <menu id="gear_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Inspector</attribute>
+        <attribute name="action">app.inspector</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_About GTK Demo</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+    </section>
+  </menu>
   <object class="GtkTreeStore" id="treestore">
     <columns>
-      <!-- column-name NAME -->
       <column type="gchararray"/>
-      <!-- column-name TITLE -->
       <column type="gchararray"/>
-      <!-- column-name FILENAME -->
       <column type="gchararray"/>
-      <!-- column-name FUNC -->
       <column type="gpointer"/>
-      <!-- column-name STYLE -->
       <column type="gint"/>
     </columns>
   </object>
   <object class="GtkApplicationWindow" id="window">
-    <style><class name="devel"/></style>
+    <style>
+      <class name="devel"/>
+    </style>
     <property name="default-width">800</property>
     <property name="default-height">600</property>
-    <property name="title">GTK+ Demo</property>
+    <property name="title">GTK Demo</property>
     <signal name="destroy" handler="gtk_main_quit" swapped="no"/>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar">
@@ -37,6 +45,13 @@
                 <property name="label" translatable="yes">Run</property>
               </object>
             </child>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkMenuButton" id="gear_menu_button">
+            <property name="valign">center</property>
+            <property name="menu-model">gear_menu</property>
+            <property name="icon-name">open-menu-symbolic</property>
           </object>
         </child>
       </object>
@@ -91,70 +106,63 @@
             <property name="show-border">0</property>
             <property name="expand">1</property>
             <child>
-              <object class="GtkScrolledWindow">
-                <property name="can-focus">1</property>
-                <child>
-                  <object class="GtkTextView" id="info-textview">
+              <object class="GtkNotebookPage">
+                <property name="tab-expand">1</property>
+                <property name="child">
+                  <object class="GtkScrolledWindow">
                     <property name="can-focus">1</property>
-                    <property name="left-margin">20</property>
-                    <property name="right-margin">20</property>
-                    <property name="top-margin">20</property>
-                    <property name="bottom-margin">20</property>
-                    <property name="pixels-above-lines">2</property>
-                    <property name="pixels-below-lines">2</property>
-                    <property name="editable">0</property>
-                    <property name="wrap-mode">word</property>
-                    <property name="cursor-visible">0</property>
+                    <child>
+                      <object class="GtkTextView" id="info-textview">
+                        <property name="can-focus">1</property>
+                        <property name="left-margin">20</property>
+                        <property name="right-margin">20</property>
+                        <property name="top-margin">20</property>
+                        <property name="bottom-margin">20</property>
+                        <property name="pixels-above-lines">2</property>
+                        <property name="pixels-below-lines">2</property>
+                        <property name="editable">0</property>
+                        <property name="wrap-mode">word</property>
+                        <property name="cursor-visible">0</property>
+                      </object>
+                    </child>
                   </object>
-                </child>
+                </property>
+                <property name="tab">
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">_Info</property>
+                    <property name="use-underline">1</property>
+                  </object>
+                </property>
               </object>
-              <packing>
-                <property name="tab-expand">1</property>
-              </packing>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">_Info</property>
-                <property name="use-underline">1</property>
-              </object>
-              <packing>
-                <property name="tab-expand">1</property>
-                <property name="tab-fill">0</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkScrolledWindow" id="source-scrolledwindow">
-                <property name="can-focus">1</property>
-                <child>
-                  <object class="GtkTextView" id="source-textview">
-                    <property name="can-focus">1</property>
-                    <property name="left-margin">20</property>
-                    <property name="right-margin">20</property>
-                    <property name="top-margin">20</property>
-                    <property name="bottom-margin">20</property>
-                    <property name="editable">0</property>
-                    <property name="cursor-visible">0</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
+              <object class="GtkNotebookPage">
                 <property name="position">1</property>
                 <property name="tab-expand">1</property>
-              </packing>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">Source</property>
+                <property name="child">
+                  <object class="GtkScrolledWindow" id="source-scrolledwindow">
+                    <property name="can-focus">1</property>
+                    <child>
+                      <object class="GtkTextView" id="source-textview">
+                        <property name="can-focus">1</property>
+                        <property name="left-margin">20</property>
+                        <property name="right-margin">20</property>
+                        <property name="top-margin">20</property>
+                        <property name="bottom-margin">20</property>
+                        <property name="editable">0</property>
+                        <property name="cursor-visible">0</property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+                <property name="tab">
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">Source</property>
+                  </object>
+                </property>
               </object>
-              <packing>
-                <property name="position">1</property>
-                <property name="tab-fill">0</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
     </child>

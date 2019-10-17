@@ -40,6 +40,7 @@
 #include "gtkdnd.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 
 typedef struct _GtkGestureLongPressPrivate GtkGestureLongPressPrivate;
 
@@ -143,7 +144,7 @@ gtk_gesture_long_press_begin (GtkGesture       *gesture,
   gtk_gesture_get_point (gesture, sequence,
                          &priv->initial_x, &priv->initial_y);
   priv->timeout_id = g_timeout_add (delay, _gtk_gesture_long_press_timeout, gesture);
-  g_source_set_name_by_id (priv->timeout_id, "[gtk+] _gtk_gesture_long_press_timeout");
+  g_source_set_name_by_id (priv->timeout_id, "[gtk] _gtk_gesture_long_press_timeout");
 }
 
 static void
@@ -226,14 +227,10 @@ gtk_gesture_long_press_get_property (GObject    *object,
                                      GValue     *value,
                                      GParamSpec *pspec)
 {
-  GtkGestureLongPressPrivate *priv;
-
-  priv = gtk_gesture_long_press_get_instance_private (GTK_GESTURE_LONG_PRESS (object));
-
   switch (property_id)
     {
     case PROP_DELAY_FACTOR:
-      g_value_set_double (value, priv->delay_factor);
+      g_value_set_double (value, gtk_gesture_long_press_get_delay_factor (GTK_GESTURE_LONG_PRESS (object)));
       break;
 
     default:
@@ -248,14 +245,11 @@ gtk_gesture_long_press_set_property (GObject      *object,
                                      const GValue *value,
                                      GParamSpec   *pspec)
 {
-  GtkGestureLongPressPrivate *priv;
-
-  priv = gtk_gesture_long_press_get_instance_private (GTK_GESTURE_LONG_PRESS (object));
-
   switch (property_id)
     {
     case PROP_DELAY_FACTOR:
-      priv->delay_factor = g_value_get_double (value);
+      gtk_gesture_long_press_set_delay_factor (GTK_GESTURE_LONG_PRESS (object),
+                                               g_value_get_double (value));
       break;
 
     default:
@@ -287,7 +281,7 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
                                                         P_("Delay factor"),
                                                         P_("Factor by which to modify the default timeout"),
                                                         0.5, 2.0, 1.0,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkGestureLongPress::pressed:
@@ -303,8 +297,12 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureLongPressClass, pressed),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  _gtk_marshal_VOID__DOUBLE_DOUBLE,
                   G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[PRESSED],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__DOUBLE_DOUBLEv);
   /**
    * GtkGestureLongPress::cancelled:
    * @gesture: the object which received the signal
@@ -333,4 +331,44 @@ gtk_gesture_long_press_new (void)
 {
   return g_object_new (GTK_TYPE_GESTURE_LONG_PRESS,
                        NULL);
+}
+
+/**
+ * gtk_gesture_long_press_set_property:
+ * @gesture: A #GtkGestureLongPress
+ * @delay_factor: The delay factor to apply
+ *
+ * Applies the given delay factor. The default long press time will be
+ * multiplied by this value.
+ * Valid values are in the range [0.5..2.0].
+ */
+void
+gtk_gesture_long_press_set_delay_factor (GtkGestureLongPress *gesture,
+                                         double               delay_factor)
+{
+  GtkGestureLongPressPrivate *priv = gtk_gesture_long_press_get_instance_private (gesture);
+
+  g_return_if_fail (GTK_IS_GESTURE_LONG_PRESS (gesture));
+  g_return_if_fail (delay_factor >= 0.5);
+  g_return_if_fail (delay_factor <= 2.0);
+
+  priv->delay_factor = delay_factor;
+
+  g_object_notify (G_OBJECT (gesture), "delay-factor");
+}
+
+/**
+ * gtk_gesture_long_press_get_property:
+ * @gesture: A #GtkGestureLongPress
+ *
+ * Returns the delay factor as set by gtk_gesture_long_press_set_delay_factor().
+ */
+double
+gtk_gesture_long_press_get_delay_factor (GtkGestureLongPress *gesture)
+{
+  GtkGestureLongPressPrivate *priv = gtk_gesture_long_press_get_instance_private (gesture);
+
+  g_return_val_if_fail (GTK_IS_GESTURE_LONG_PRESS (gesture), 0);
+
+  return priv->delay_factor;
 }

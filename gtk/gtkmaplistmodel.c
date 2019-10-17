@@ -21,15 +21,14 @@
 
 #include "gtkmaplistmodel.h"
 
-#include "gtkcssrbtreeprivate.h"
+#include "gtkrbtreeprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
 /**
  * SECTION:gtkmaplistmodel
  * @title: GtkMapListModel
- * @short_description: a #GListModel that maps items from a child list model to
- *     a different item
+ * @short_description: A list model that transforms its items
  * @see_also: #GListModel
  *
  * #GtkMapListModel is a list model that takes a list model and maps the items
@@ -73,7 +72,7 @@ struct _GtkMapListModel
   gpointer user_data;
   GDestroyNotify user_destroy;
 
-  GtkCssRbTree *items; /* NULL if map_func == NULL */
+  GtkRbTree *items; /* NULL if map_func == NULL */
 };
 
 struct _GtkMapListModelClass
@@ -84,21 +83,21 @@ struct _GtkMapListModelClass
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
 static MapNode *
-gtk_map_list_model_get_nth (GtkCssRbTree *tree,
-                            guint         position,
-                            guint        *out_start_pos)
+gtk_map_list_model_get_nth (GtkRbTree *tree,
+                            guint      position,
+                            guint     *out_start_pos)
 {
   MapNode *node, *tmp;
   guint start_pos = position;
 
-  node = gtk_css_rb_tree_get_root (tree);
+  node = gtk_rb_tree_get_root (tree);
 
   while (node)
     {
-      tmp = gtk_css_rb_tree_get_left (tree, node);
+      tmp = gtk_rb_tree_node_get_left (node);
       if (tmp)
         {
-          MapAugment *aug = gtk_css_rb_tree_get_augment (tree, tmp);
+          MapAugment *aug = gtk_rb_tree_get_augment (tree, tmp);
           if (position < aug->n_items)
             {
               node = tmp;
@@ -114,7 +113,7 @@ gtk_map_list_model_get_nth (GtkCssRbTree *tree,
         }
       position -= node->n_items;
 
-      node = gtk_css_rb_tree_get_right (tree, node);
+      node = gtk_rb_tree_node_get_right (node);
     }
 
   if (out_start_pos)
@@ -165,18 +164,18 @@ gtk_map_list_model_get_item (GListModel *list,
 
   if (offset != position)
     {
-      MapNode *before = gtk_css_rb_tree_insert_before (self->items, node);
+      MapNode *before = gtk_rb_tree_insert_before (self->items, node);
       before->n_items = position - offset;
       node->n_items -= before->n_items;
-      gtk_css_rb_tree_mark_dirty (self->items, node);
+      gtk_rb_tree_node_mark_dirty (node);
     }
 
   if (node->n_items > 1)
     {
-      MapNode *after = gtk_css_rb_tree_insert_after (self->items, node);
+      MapNode *after = gtk_rb_tree_insert_after (self->items, node);
       after->n_items = node->n_items - 1;
       node->n_items = 1;
-      gtk_css_rb_tree_mark_dirty (self->items, node);
+      gtk_rb_tree_node_mark_dirty (node);
     }
 
   node->item = self->map_func (g_list_model_get_item (self->model, position), self->user_data);
@@ -225,9 +224,9 @@ gtk_map_list_model_items_changed_cb (GListModel      *model,
       end = start + node->n_items;
       if (start == position && end <= position + removed)
         {
-          MapNode *next = gtk_css_rb_tree_get_next (self->items, node);
+          MapNode *next = gtk_rb_tree_node_get_next (node);
           removed -= node->n_items;
-          gtk_css_rb_tree_remove (self->items, node);
+          gtk_rb_tree_remove (self->items, node);
           node = next;
         }
       else
@@ -236,16 +235,16 @@ gtk_map_list_model_items_changed_cb (GListModel      *model,
             {
               node->n_items -= removed;
               removed = 0;
-              gtk_css_rb_tree_mark_dirty (self->items, node);
+              gtk_rb_tree_node_mark_dirty (node);
             }
           else if (start < position)
             {
               guint overlap = node->n_items - (position - start);
               node->n_items -= overlap;
-              gtk_css_rb_tree_mark_dirty (self->items, node);
+              gtk_rb_tree_node_mark_dirty (node);
               removed -= overlap;
               start = position;
-              node = gtk_css_rb_tree_get_next (self->items, node);
+              node = gtk_rb_tree_node_get_next (node);
             }
         }
     }
@@ -253,12 +252,12 @@ gtk_map_list_model_items_changed_cb (GListModel      *model,
   if (added)
     {
       if (node == NULL)
-        node = gtk_css_rb_tree_insert_before (self->items, NULL);
+        node = gtk_rb_tree_insert_before (self->items, NULL);
       else if (node->item)
-        node = gtk_css_rb_tree_insert_after (self->items, node);
+        node = gtk_rb_tree_insert_after (self->items, node);
 
       node->n_items += added;
-      gtk_css_rb_tree_mark_dirty (self->items, node);
+      gtk_rb_tree_node_mark_dirty (node);
     }
 
   g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
@@ -337,10 +336,10 @@ gtk_map_list_model_dispose (GObject *object)
   self->map_func = NULL;
   self->user_data = NULL;
   self->user_destroy = NULL;
-  g_clear_pointer (&self->items, gtk_css_rb_tree_unref);
+  g_clear_pointer (&self->items, gtk_rb_tree_unref);
 
   G_OBJECT_CLASS (gtk_map_list_model_parent_class)->dispose (object);
-};
+}
 
 static void
 gtk_map_list_model_class_init (GtkMapListModelClass *class)
@@ -397,25 +396,25 @@ gtk_map_list_model_init (GtkMapListModel *self)
 
 
 static void
-gtk_map_list_model_augment (GtkCssRbTree *map,
-                            gpointer      _aug,
-                            gpointer      _node,
-                            gpointer      left,
-                            gpointer      right)
+gtk_map_list_model_augment (GtkRbTree *map,
+                            gpointer   _aug,
+                            gpointer   _node,
+                            gpointer   left,
+                            gpointer   right)
 {
-  MapNode *node= _node;
+  MapNode *node = _node;
   MapAugment *aug = _aug;
 
   aug->n_items = node->n_items;
 
   if (left)
     {
-      MapAugment *left_aug = gtk_css_rb_tree_get_augment (map, left);
+      MapAugment *left_aug = gtk_rb_tree_get_augment (map, left);
       aug->n_items += left_aug->n_items;
     }
   if (right)
     {
-      MapAugment *right_aug = gtk_css_rb_tree_get_augment (map, right);
+      MapAugment *right_aug = gtk_rb_tree_get_augment (map, right);
       aug->n_items += right_aug->n_items;
     }
 }
@@ -473,28 +472,28 @@ gtk_map_list_model_init_items (GtkMapListModel *self)
 
       if (self->items)
         {
-          gtk_css_rb_tree_remove_all (self->items);
+          gtk_rb_tree_remove_all (self->items);
         }
       else
         {
-          self->items = gtk_css_rb_tree_new (MapNode,
-                                             MapAugment, 
-                                             gtk_map_list_model_augment,
-                                             gtk_map_list_model_clear_node,
-                                             NULL);
+          self->items = gtk_rb_tree_new (MapNode,
+                                         MapAugment,
+                                         gtk_map_list_model_augment,
+                                         gtk_map_list_model_clear_node,
+                                         NULL);
         }
 
       n_items = g_list_model_get_n_items (self->model);
       if (n_items)
         {
-          MapNode *node = gtk_css_rb_tree_insert_before (self->items, NULL);
+          MapNode *node = gtk_rb_tree_insert_before (self->items, NULL);
           node->n_items = g_list_model_get_n_items (self->model);
-          gtk_css_rb_tree_mark_dirty (self->items, node);
+          gtk_rb_tree_node_mark_dirty (node);
         }
     }
   else
     {
-      g_clear_pointer (&self->items, gtk_css_rb_tree_unref);
+      g_clear_pointer (&self->items, gtk_rb_tree_unref);
     }
 }
 

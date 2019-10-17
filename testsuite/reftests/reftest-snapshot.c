@@ -25,16 +25,11 @@
 #include "reftest-module.h"
 
 #ifdef GDK_WINDOWING_X11
-#include <gdk/gdkx.h>
+#include <gdk/x11/gdkx.h>
 #include <cairo-xlib.h>
 #endif
 
 #include <string.h>
-
-typedef enum {
-  SNAPSHOT_WINDOW,
-  SNAPSHOT_DRAW
-} SnapshotMode;
 
 static GtkWidget *
 builder_get_toplevel (GtkBuilder *builder)
@@ -69,13 +64,13 @@ quit_when_idle (gpointer loop)
 static gint inhibit_count;
 static GMainLoop *loop;
 
-void
+G_MODULE_EXPORT void
 reftest_inhibit_snapshot (void)
 {
   inhibit_count++;
 }
 
-void
+G_MODULE_EXPORT void
 reftest_uninhibit_snapshot (void)
 {
   g_assert (inhibit_count > 0);
@@ -86,112 +81,65 @@ reftest_uninhibit_snapshot (void)
 }
 
 static void
-check_for_draw (GdkEvent *event, gpointer data)
+draw_paintable (GdkPaintable *paintable,
+                gpointer      out_surface)
 {
-  if (gdk_event_get_event_type (event) == GDK_EXPOSE)
-    {
-      reftest_uninhibit_snapshot ();
-      gdk_event_handler_set ((GdkEventFunc) gtk_main_do_event, NULL, NULL);
-    }
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
+  cairo_surface_t *surface;
+  cairo_t *cr;
 
-  gtk_main_do_event (event);
-}
 
-static void
-snapshot_window_native (GdkSurface *window,
-                        cairo_t   *cr)
-{
-#ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_SURFACE (window))
-    {
-      cairo_surface_t *surface;
-      XWindowAttributes attrs;
+  snapshot = gtk_snapshot_new ();
+  gdk_paintable_snapshot (paintable,
+                          snapshot,
+                          gdk_paintable_get_intrinsic_width (paintable),
+                          gdk_paintable_get_intrinsic_height (paintable));
+  node = gtk_snapshot_free_to_node (snapshot);
 
-      if (gdk_surface_get_surface_type (window) == GDK_SURFACE_TOPLEVEL ||
-          gdk_surface_get_surface_type (window) == GDK_SURFACE_TEMP)
-        {
-          /* give the WM/server some time to sync. They need it.
-           * Also, do use popups instead of toplevels in your tests
-           * whenever you can.
-           */
-          gdk_display_sync (gdk_surface_get_display (window));
-          g_timeout_add (500, quit_when_idle, loop);
-          g_main_loop_run (loop);
-        }
+  /* If the window literally draws nothing, we assume it hasn't been mapped yet and as such
+   * the invalidations were only side effects of resizes.
+   */
+  if (node == NULL)
+    return;
 
-      XGetWindowAttributes (gdk_x11_display_get_xdisplay (gdk_surface_get_display (window)),
-                            gdk_x11_surface_get_xid (window),
-                            &attrs);
-      surface = cairo_xlib_surface_create (gdk_x11_display_get_xdisplay (gdk_surface_get_display (window)),
-                                           gdk_x11_surface_get_xid (window),
-                                           attrs.visual,
-                                           attrs.width,
-                                           attrs.height);
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                        gdk_paintable_get_intrinsic_width (paintable),
+                                        gdk_paintable_get_intrinsic_height (paintable));
 
-      cairo_set_source_surface (cr, surface, 0, 0);
-      cairo_paint (cr);
-      cairo_surface_destroy (surface);
-    }
-#endif
+  cr = cairo_create (surface);
+  gsk_render_node_draw (node, cr);
+  cairo_destroy (cr);
+  gsk_render_node_unref (node);
+
+  reftest_uninhibit_snapshot ();
+  g_signal_handlers_disconnect_by_func (paintable, draw_paintable, out_surface);
+
+  *(cairo_surface_t **) out_surface = surface;
 }
 
 static cairo_surface_t *
-snapshot_widget (GtkWidget *widget, SnapshotMode mode)
+snapshot_widget (GtkWidget *widget)
 {
+  GdkPaintable *paintable;
   cairo_surface_t *surface;
-  cairo_t *cr;
 
   g_assert (gtk_widget_get_realized (widget));
 
   loop = g_main_loop_new (NULL, FALSE);
 
   /* We wait until the widget is drawn for the first time.
-   * We can not wait for a GtkWidget::draw event, because that might not
-   * happen if the window is fully obscured by windowed child widgets.
-   * Alternatively, we could wait for an expose event on widget's window.
-   * Both of these are rather hairy, not sure what's best.
    *
    * We also use an inhibit mechanism, to give module functions a chance
    * to delay the snapshot.
    */
   reftest_inhibit_snapshot ();
-  gdk_event_handler_set (check_for_draw, NULL, NULL);
+  paintable = gtk_widget_paintable_new (widget);
+  g_signal_connect (paintable, "invalidate-contents", G_CALLBACK (draw_paintable), &surface);
   g_main_loop_run (loop);
 
-  surface = gdk_surface_create_similar_surface (gtk_widget_get_surface (widget),
-                                               CAIRO_CONTENT_COLOR,
-                                               gtk_widget_get_allocated_width (widget),
-                                               gtk_widget_get_allocated_height (widget));
-
-  cr = cairo_create (surface);
-
-  switch (mode)
-    {
-    case SNAPSHOT_WINDOW:
-      snapshot_window_native (gtk_widget_get_surface (widget), cr);
-      break;
-    case SNAPSHOT_DRAW:
-      {
-        GtkSnapshot *snapshot = gtk_snapshot_new (FALSE, "ReftestSnapshot");
-        GdkPaintable *paintable = gtk_widget_paintable_new (widget);
-        GskRenderNode *node;
-
-        gdk_paintable_snapshot (paintable,
-                                snapshot,
-                                gtk_widget_get_allocated_width (widget),
-                                gtk_widget_get_allocated_height (widget));
-        g_object_unref (paintable);
-        node = gtk_snapshot_free_to_node (snapshot);
-        gsk_render_node_draw (node, cr);
-      }
-      break;
-    default:
-      g_assert_not_reached();
-      break;
-    }
-
-  cairo_destroy (cr);
   g_main_loop_unref (loop);
+  g_object_unref (paintable);
   gtk_widget_destroy (widget);
 
   return surface;
@@ -305,5 +253,5 @@ reftest_snapshot_ui_file (const char *ui_file)
 
   gtk_widget_show (window);
 
-  return snapshot_widget (window, SNAPSHOT_WINDOW);
+  return snapshot_widget (window);
 }

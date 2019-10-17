@@ -64,13 +64,20 @@ test_finalize_object (gconstpointer data)
                              NULL);
       gdk_content_formats_unref (formats);
     }
-  else if (g_type_is_a (test_type, GTK_TYPE_FILTER_LIST_MODEL))
+  else if (g_type_is_a (test_type, GTK_TYPE_FILTER_LIST_MODEL) ||
+           g_type_is_a (test_type, GTK_TYPE_NO_SELECTION) ||
+           g_type_is_a (test_type, GTK_TYPE_SINGLE_SELECTION))
     {
       GListStore *list_store = g_list_store_new (G_TYPE_OBJECT);
       object = g_object_new (test_type,
                              "model", list_store,
                              NULL);
       g_object_unref (list_store);
+    }
+  else if (g_type_is_a (test_type, GTK_TYPE_LAYOUT_CHILD))
+    {
+      g_test_skip ("Skipping GtkLayoutChild type");
+      return;
     }
   else
     object = g_object_new (test_type, NULL);
@@ -84,7 +91,7 @@ test_finalize_object (gconstpointer data)
   g_object_weak_ref (object, check_finalized, &finalized);
 
   /* Toplevels are owned by GTK+, just tell GTK+ to destroy it */
-  if (GTK_IS_WINDOW (object) || GTK_IS_INVISIBLE (object))
+  if (GTK_IS_WINDOW (object))
     gtk_widget_destroy (GTK_WIDGET (object));
   else
     g_object_unref (object);
@@ -127,7 +134,6 @@ main (int argc, char **argv)
 	  all_types[i] != GDK_TYPE_X11_SURFACE &&
 	  all_types[i] != GDK_TYPE_X11_SCREEN &&
 	  all_types[i] != GDK_TYPE_X11_DISPLAY &&
-	  all_types[i] != GDK_TYPE_X11_DEVICE_MANAGER_CORE &&
 	  all_types[i] != GDK_TYPE_X11_DEVICE_MANAGER_XI2 &&
 	  all_types[i] != GDK_TYPE_X11_GL_CONTEXT &&
 #endif

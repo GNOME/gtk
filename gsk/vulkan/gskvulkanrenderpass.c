@@ -8,6 +8,7 @@
 #include "gskrenderer.h"
 #include "gskrendererprivate.h"
 #include "gskroundedrectprivate.h"
+#include "gsktransform.h"
 #include "gskvulkanblendmodepipelineprivate.h"
 #include "gskvulkanblurpipelineprivate.h"
 #include "gskvulkanborderpipelineprivate.h"
@@ -24,8 +25,6 @@
 #include "gskvulkanpushconstantsprivate.h"
 #include "gskvulkanrendererprivate.h"
 #include "gskprivate.h"
-
-#include <cairo-ft.h>
 
 #define ORTHO_NEAR_PLANE        -10000
 #define ORTHO_FAR_PLANE          10000
@@ -171,7 +170,7 @@ gsk_vulkan_render_pass_new (GdkVulkanContext  *context,
                                               .samples = VK_SAMPLE_COUNT_1_BIT,
                                               .loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
                                               .storeOp = VK_ATTACHMENT_STORE_OP_STORE,
-                                              .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
+                                              .initialLayout = VK_IMAGE_LAYOUT_GENERAL,
                                               .finalLayout = final_layout
                                            }
                                         },
@@ -233,23 +232,6 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
 
 
   g_slice_free (GskVulkanRenderPass, self);
-}
-
-static gboolean
-font_has_color_glyphs (const PangoFont *font)
-{
-  cairo_scaled_font_t *scaled_font;
-  gboolean has_color = FALSE;
-
-  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)font);
-  if (cairo_scaled_font_get_type (scaled_font) == CAIRO_FONT_TYPE_FT)
-    {
-      FT_Face ft_face = cairo_ft_scaled_font_lock_face (scaled_font);
-      has_color = (FT_HAS_COLOR (ft_face) != 0);
-      cairo_ft_scaled_font_unlock_face (scaled_font);
-    }
-
-  return has_color;
 }
 
 #define FALLBACK(...) G_STMT_START { \
@@ -366,12 +348,14 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
         const PangoFont *font = gsk_text_node_peek_font (node);
         const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node);
         guint num_glyphs = gsk_text_node_get_num_glyphs (node);
+        gboolean has_color_glyphs = gsk_text_node_has_color_glyphs (node);
         int i;
         guint count;
         guint texture_index;
+        gint x_position;
         GskVulkanRenderer *renderer = GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render));
 
-        if (font_has_color_glyphs (font))
+        if (has_color_glyphs)
           {
             if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
               pipeline_type = GSK_VULKAN_PIPELINE_COLOR_TEXT;
@@ -401,11 +385,17 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
         op.text.texture_index = G_MAXUINT;
         op.text.scale = self->scale_factor;
 
+        x_position = 0;
         for (i = 0, count = 0; i < num_glyphs; i++)
           {
             const PangoGlyphInfo *gi = &glyphs[i];
 
-            texture_index = gsk_vulkan_renderer_cache_glyph (renderer, (PangoFont *)font, gi->glyph, op.text.scale);
+            texture_index = gsk_vulkan_renderer_cache_glyph (renderer,
+                                                             (PangoFont *)font,
+                                                             gi->glyph,
+                                                             x_position + gi->geometry.x_offset,
+                                                             gi->geometry.y_offset,
+                                                             op.text.scale);
             if (op.text.texture_index == G_MAXUINT)
               op.text.texture_index = texture_index;
             if (texture_index != op.text.texture_index)
@@ -420,6 +410,8 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
               }
             else
               count++;
+
+            x_position += gi->geometry.width;
           }
 
         if (op.text.texture_index != G_MAXUINT && count != 0)
@@ -549,7 +541,6 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       gsk_vulkan_render_pass_add_node (self, render, constants, gsk_debug_node_get_child (node));
       return;
 
-    case GSK_OFFSET_NODE:
     case GSK_TRANSFORM_NODE:
       {
         graphene_matrix_t transform, mv;
@@ -560,21 +551,8 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
           FALLBACK ("Transform nodes can't deal with clip type %u\n", clip->type);
 #endif
 
-        if (gsk_render_node_get_node_type (node) == GSK_TRANSFORM_NODE)
-          {
-            child = gsk_transform_node_get_child (node);
-            graphene_matrix_init_from_matrix (&transform, gsk_transform_node_peek_transform (node));
-          }
-        else
-          {
-            child = gsk_offset_node_get_child (node);
-            graphene_matrix_init_translate (&transform,
-                                            &GRAPHENE_POINT3D_INIT(
-                                                gsk_offset_node_get_x_offset (node),
-                                                gsk_offset_node_get_y_offset (node),
-                                                0.0
-                                            ));
-          }
+        child = gsk_transform_node_get_child (node);
+        gsk_transform_to_matrix (gsk_transform_node_get_transform (node), &transform);
         graphene_matrix_init_from_matrix (&mv, &self->mv);
         graphene_matrix_multiply (&transform, &mv, &self->mv);
         if (!gsk_vulkan_push_constants_transform (&op.constants.constants, constants, &transform, &child->bounds))
@@ -1219,8 +1197,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                                           gsk_text_node_get_num_glyphs (op->text.node),
                                                           gsk_text_node_peek_glyphs (op->text.node),
                                                           gsk_text_node_peek_color (op->text.node),
-                                                          gsk_text_node_get_x (op->text.node),
-                                                          gsk_text_node_get_y (op->text.node),
+                                                          gsk_text_node_get_offset (op->text.node),
                                                           op->text.start_glyph,
                                                           op->text.num_glyphs,
                                                           op->text.scale);
@@ -1238,8 +1215,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                                                 (PangoFont *)gsk_text_node_peek_font (op->text.node),
                                                                 gsk_text_node_get_num_glyphs (op->text.node),
                                                                 gsk_text_node_peek_glyphs (op->text.node),
-                                                                gsk_text_node_get_x (op->text.node),
-                                                                gsk_text_node_get_y (op->text.node),
+                                                                gsk_text_node_get_offset (op->text.node),
                                                                 op->text.start_glyph,
                                                                 op->text.num_glyphs,
                                                                 op->text.scale);
@@ -1787,10 +1763,10 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
           break;
 
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
-          for (int i = 0; i < layout_count; i++)
+          for (int j = 0; j < layout_count; j++)
             gsk_vulkan_push_constants_push (&op->constants.constants,
                                             command_buffer,
-                                            pipeline_layout[i]);
+                                            pipeline_layout[j]);
           break;
 
         case GSK_VULKAN_OP_CROSS_FADE:

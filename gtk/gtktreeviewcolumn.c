@@ -35,6 +35,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkgesturedrag.h"
+#include "gtkeventcontrollerkey.h"
 
 #include "a11y/gtktreeviewaccessibleprivate.h"
 
@@ -131,6 +132,23 @@ static void gtk_tree_view_column_set_attributesv               (GtkTreeViewColum
 
 /* GtkBuildable implementation */
 static void gtk_tree_view_column_buildable_init                 (GtkBuildableIface     *iface);
+
+typedef struct _GtkTreeViewColumnClass   GtkTreeViewColumnClass;
+typedef struct _GtkTreeViewColumnPrivate GtkTreeViewColumnPrivate;
+
+struct _GtkTreeViewColumn
+{
+  GInitiallyUnowned parent_instance;
+
+  GtkTreeViewColumnPrivate *priv;
+};
+
+struct _GtkTreeViewColumnClass
+{
+  GInitiallyUnownedClass parent_class;
+
+  void (*clicked) (GtkTreeViewColumn *tree_column);
+};
 
 
 struct _GtkTreeViewColumnPrivate 
@@ -811,6 +829,15 @@ gtk_tree_view_column_cell_layout_get_area (GtkCellLayout   *cell_layout)
   return priv->cell_area;
 }
 
+static void
+focus_in (GtkEventControllerKey *controller,
+          GdkCrossingMode        mode,
+          GdkNotifyType          detail,
+          GtkTreeViewColumn     *column)
+{
+  _gtk_tree_view_set_focus_column (GTK_TREE_VIEW (column->priv->tree_view), column);
+}
+
 /* Button handling code
  */
 static void
@@ -838,6 +865,10 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
   gtk_widget_add_controller (priv->button, controller);
 
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "focus-in", G_CALLBACK (focus_in), tree_column);
+  gtk_widget_add_controller (priv->button, controller);
+
   priv->frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (priv->frame), GTK_SHADOW_NONE);
   gtk_widget_set_hexpand (priv->frame, TRUE);
@@ -859,13 +890,13 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
 
   if (priv->xalign <= 0.5)
     {
-      gtk_box_pack_start (GTK_BOX (hbox), priv->frame);
-      gtk_box_pack_start (GTK_BOX (hbox), priv->arrow);
+      gtk_container_add (GTK_CONTAINER (hbox), priv->frame);
+      gtk_container_add (GTK_CONTAINER (hbox), priv->arrow);
     }
   else
     {
-      gtk_box_pack_start (GTK_BOX (hbox), priv->arrow);
-      gtk_box_pack_start (GTK_BOX (hbox), priv->frame);
+      gtk_container_add (GTK_CONTAINER (hbox), priv->arrow);
+      gtk_container_add (GTK_CONTAINER (hbox), priv->frame);
     }
 
   gtk_container_add (GTK_CONTAINER (priv->frame), child);
@@ -964,9 +995,9 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
    * reverse things
    */
   if (priv->xalign <= 0.5)
-    gtk_box_reorder_child (GTK_BOX (hbox), arrow, 1);
+    gtk_box_reorder_child_after (GTK_BOX (hbox), arrow, gtk_widget_get_last_child (hbox));
   else
-    gtk_box_reorder_child (GTK_BOX (hbox), arrow, 0);
+    gtk_box_reorder_child_after (GTK_BOX (hbox), arrow, NULL);
 
   if (priv->show_sort_indicator
       || (GTK_IS_TREE_SORTABLE (model) && priv->sort_column_id >= 0))
@@ -1004,11 +1035,8 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
       gtk_widget_set_can_focus (priv->button, FALSE);
       if (gtk_widget_has_focus (priv->button))
 	{
-	  GtkWidget *toplevel = gtk_widget_get_toplevel (priv->tree_view);
-	  if (gtk_widget_is_toplevel (toplevel))
-	    {
-	      gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
-	    }
+          GtkRoot *root = gtk_widget_get_root (priv->tree_view);
+	  gtk_root_set_focus (root, NULL);
 	}
     }
   /* Queue a resize on the assumption that we always want to catch all changes
@@ -1076,7 +1104,7 @@ gtk_tree_view_column_mnemonic_activate (GtkWidget *widget,
   _gtk_tree_view_set_focus_column (GTK_TREE_VIEW (priv->tree_view), column);
 
   if (priv->clickable)
-    gtk_button_clicked (GTK_BUTTON (priv->button));
+     g_signal_emit_by_name (priv->button, "clicked");
   else if (gtk_widget_get_can_focus (priv->button))
     gtk_widget_grab_focus (priv->button);
   else
@@ -2233,9 +2261,8 @@ gtk_tree_view_column_clicked (GtkTreeViewColumn *tree_column)
 
   priv = tree_column->priv;
 
-  if (priv->visible &&
-      priv->clickable)
-    gtk_button_clicked (GTK_BUTTON (priv->button));
+  if (priv->visible && priv->clickable)
+    g_signal_emit_by_name (priv->button, "clicked");
 }
 
 /**
@@ -2720,7 +2747,6 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
 /**
  * gtk_tree_view_column_cell_get_size:
  * @tree_column: A #GtkTreeViewColumn.
- * @cell_area: (allow-none): The area a cell in the column will be allocated, or %NULL
  * @x_offset: (out) (optional): location to return x offset of a cell relative to @cell_area, or %NULL
  * @y_offset: (out) (optional): location to return y offset of a cell relative to @cell_area, or %NULL
  * @width: (out) (optional): location to return width needed to render a cell, or %NULL
@@ -2731,11 +2757,10 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
  **/
 void
 gtk_tree_view_column_cell_get_size (GtkTreeViewColumn  *tree_column,
-				    const GdkRectangle *cell_area,
-				    gint               *x_offset,
-				    gint               *y_offset,
-				    gint               *width,
-				    gint               *height)
+                                    int                *x_offset,
+                                    int                *y_offset,
+                                    int                *width,
+                                    int                *height)
 {
   GtkTreeViewColumnPrivate *priv;
   gint min_width = 0, min_height = 0;
@@ -3060,7 +3085,8 @@ _gtk_tree_view_column_coords_in_resize_rect (GtkTreeViewColumn *column,
       !priv->visible)
     return FALSE;
 
-  gtk_widget_compute_bounds (priv->button, priv->tree_view, &button_bounds);
+  if (!gtk_widget_compute_bounds (priv->button, priv->tree_view, &button_bounds))
+    return FALSE;
 
   if (gtk_widget_get_direction (priv->tree_view) == GTK_TEXT_DIR_LTR)
     button_bounds.origin.x += button_bounds.size.width - TREE_VIEW_DRAG_WIDTH;

@@ -39,7 +39,6 @@
 #include "gtkheaderbar.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
-#include "gtkinvisible.h"
 #include "gtkfilechooserentry.h"
 #include "gtkfilefilterprivate.h"
 #include "gtkwindowprivate.h"
@@ -332,10 +331,13 @@ show_portal_file_chooser (GtkFileChooserNative *self,
   g_variant_builder_add (&opt_builder, "{sv}", "modal",
                          g_variant_new_boolean (data->modal));
   g_variant_builder_add (&opt_builder, "{sv}", "filters", get_filters (GTK_FILE_CHOOSER (self)));
-  if (GTK_FILE_CHOOSER_NATIVE (self)->current_name)
+  if (self->current_filter)
+    g_variant_builder_add (&opt_builder, "{sv}", "current_filter",
+                           gtk_file_filter_to_gvariant (self->current_filter));
+  if (self->current_name)
     g_variant_builder_add (&opt_builder, "{sv}", "current_name",
                            g_variant_new_string (GTK_FILE_CHOOSER_NATIVE (self)->current_name));
-  if (GTK_FILE_CHOOSER_NATIVE (self)->current_folder)
+  if (self->current_folder)
     {
       gchar *path;
 
@@ -344,7 +346,7 @@ show_portal_file_chooser (GtkFileChooserNative *self,
                              g_variant_new_bytestring (path));
       g_free (path);
     }
-  if (GTK_FILE_CHOOSER_NATIVE (self)->current_file)
+  if (self->current_file)
     {
       gchar *path;
 
@@ -354,7 +356,7 @@ show_portal_file_chooser (GtkFileChooserNative *self,
       g_free (path);
     }
 
-  if (GTK_FILE_CHOOSER_NATIVE (self)->choices)
+  if (self->choices)
     g_variant_builder_add (&opt_builder, "{sv}", "choices",
                            serialize_choices (GTK_FILE_CHOOSER_NATIVE (self)));
 
@@ -388,9 +390,7 @@ window_handle_exported (GtkWindow  *window,
 
   if (data->modal)
     {
-      GdkDisplay *display = gtk_widget_get_display (GTK_WIDGET (window));
-
-      data->grab_widget = gtk_invisible_new_for_display (display);
+      data->grab_widget = gtk_label_new ("");
       gtk_grab_add (GTK_WIDGET (data->grab_widget));
     }
 

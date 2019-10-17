@@ -40,10 +40,7 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_SPIN_BUTTON                  (gtk_spin_button_get_type ())
 #define GTK_SPIN_BUTTON(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SPIN_BUTTON, GtkSpinButton))
-#define GTK_SPIN_BUTTON_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_SPIN_BUTTON, GtkSpinButtonClass))
 #define GTK_IS_SPIN_BUTTON(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SPIN_BUTTON))
-#define GTK_IS_SPIN_BUTTON_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SPIN_BUTTON))
-#define GTK_SPIN_BUTTON_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SPIN_BUTTON, GtkSpinButtonClass))
 
 /**
  * GTK_INPUT_ERROR:
@@ -97,41 +94,6 @@ typedef enum
 
 
 typedef struct _GtkSpinButton              GtkSpinButton;
-typedef struct _GtkSpinButtonClass         GtkSpinButtonClass;
-
-/**
- * GtkSpinButton:
- *
- * The #GtkSpinButton-struct contains only private data and should
- * not be directly modified.
- */
-struct _GtkSpinButton
-{
-  GtkWidget parent_instance;
-};
-
-struct _GtkSpinButtonClass
-{
-  GtkWidgetClass parent_class;
-
-  gint (*input)  (GtkSpinButton *spin_button,
-		  gdouble       *new_value);
-  gint (*output) (GtkSpinButton *spin_button);
-  void (*value_changed) (GtkSpinButton *spin_button);
-
-  /* Action signals for keybindings, do not connect to these */
-  void (*change_value) (GtkSpinButton *spin_button,
-			GtkScrollType  scroll);
-
-  void (*wrapped) (GtkSpinButton *spin_button);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
-
 
 GDK_AVAILABLE_IN_ALL
 GType		gtk_spin_button_get_type	   (void) G_GNUC_CONST;
@@ -223,21 +185,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean        gtk_spin_button_get_snap_to_ticks  (GtkSpinButton  *spin_button);
 GDK_AVAILABLE_IN_ALL
 void            gtk_spin_button_update             (GtkSpinButton  *spin_button);
-GDK_AVAILABLE_IN_ALL
-const char *    gtk_spin_button_get_text           (GtkSpinButton *spin_button);
-GDK_AVAILABLE_IN_ALL
-void            gtk_spin_button_set_text           (GtkSpinButton *spin_button,
-                                                    const char    *text);
-GDK_AVAILABLE_IN_ALL
-int             gtk_spin_button_get_max_width_chars (GtkSpinButton *spin_button);
-GDK_AVAILABLE_IN_ALL
-void            gtk_spin_button_set_max_width_chars (GtkSpinButton *spin_button,
-                                                     int            max_width_chars);
-GDK_AVAILABLE_IN_ALL
-int             gtk_spin_button_get_width_chars     (GtkSpinButton *spin_button);
-GDK_AVAILABLE_IN_ALL
-void            gtk_spin_button_set_width_chars     (GtkSpinButton *spin_button,
-                                                     int            width_chars);
 
 
 

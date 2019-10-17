@@ -48,7 +48,7 @@ change_transition_state (GSimpleAction *action,
   GtkStackTransitionType transition;
 
   if (g_variant_get_boolean (state))
-    transition = GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT;
+    transition = GTK_STACK_TRANSITION_TYPE_ROTATE_LEFT_RIGHT;
   else
     transition = GTK_STACK_TRANSITION_TYPE_NONE;
 
@@ -64,7 +64,7 @@ get_idle (gpointer data)
   GtkApplication *app = gtk_window_get_application (GTK_WINDOW (window));
 
   gtk_widget_set_sensitive (window, TRUE);
-  gdk_surface_set_cursor (gtk_widget_get_surface (window), NULL);
+  gdk_surface_set_cursor (gtk_native_get_surface (GTK_NATIVE (window)), NULL);
   g_application_unmark_busy (G_APPLICATION (app));
 
   return G_SOURCE_REMOVE;
@@ -81,7 +81,7 @@ get_busy (GSimpleAction *action,
 
   g_application_mark_busy (G_APPLICATION (app));
   cursor = gdk_cursor_new_from_name ("wait", NULL);
-  gdk_surface_set_cursor (gtk_widget_get_surface (window), cursor);
+  gdk_surface_set_cursor (gtk_native_get_surface (GTK_NATIVE (window)), cursor);
   g_object_unref (cursor);
   g_timeout_add (5000, get_idle, window);
 
@@ -117,6 +117,8 @@ activate_delete (GSimpleAction *action,
 {
   GtkWidget *window = user_data;
   GtkWidget *infobar;
+
+  g_print ("Activate action delete\n");
 
   if (!on_page (2))
     return;
@@ -158,7 +160,7 @@ activate_open (GSimpleAction *action,
     return;
 
   button = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "open_menubutton"));
-  gtk_button_clicked (GTK_BUTTON (button));
+  g_signal_emit_by_name (button, "clicked");
 }
 
 static void
@@ -173,7 +175,7 @@ activate_record (GSimpleAction *action,
     return;
 
   button = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "record_button"));
-  gtk_button_clicked (GTK_BUTTON (button));
+  g_signal_emit_by_name (button, "clicked");
 }
 
 static void
@@ -188,7 +190,7 @@ activate_lock (GSimpleAction *action,
     return;
 
   button = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "lockbutton"));
-  gtk_button_clicked (GTK_BUTTON (button));
+  g_signal_emit_by_name (button, "clicked");
 }
 
 static void
@@ -212,28 +214,28 @@ activate_about (GSimpleAction *action,
                           glib_major_version,
                           glib_minor_version,
                           glib_micro_version);
-  g_string_append_printf (s, "\tGTK+\t%d.%d.%d\n",
+  g_string_append_printf (s, "\tGTK\t%d.%d.%d\n",
                           gtk_get_major_version (),
                           gtk_get_minor_version (),
                           gtk_get_micro_version ());
   g_string_append_printf (s, "\nA link can apppear here: <http://www.gtk.org>");
 
-  version = g_strdup_printf ("%s\nRunning against GTK+ %d.%d.%d",
+  version = g_strdup_printf ("%s\nRunning against GTK %d.%d.%d",
                              PACKAGE_VERSION,
                              gtk_get_major_version (),
                              gtk_get_minor_version (),
                              gtk_get_micro_version ());
 
   gtk_show_about_dialog (GTK_WINDOW (gtk_application_get_active_window (app)),
-                         "program-name", "GTK+ Widget Factory",
+                         "program-name", "GTK Widget Factory",
                          "version", version,
-                         "copyright", "(C) 1997-2013 The GTK+ Team",
+                         "copyright", "© 1997—2019 The GTK Team",
                          "license-type", GTK_LICENSE_LGPL_2_1,
                          "website", "http://www.gtk.org",
-                         "comments", "Program to demonstrate GTK+ themes and widgets",
+                         "comments", "Program to demonstrate GTK themes and widgets",
                          "authors", authors,
-                         "logo-icon-name", "gtk4-widget-factory",
-                         "title", "About GTK+ Widget Factory",
+                         "logo-icon-name", "org.gtk.WidgetFactory4",
+                         "title", "About GTK Widget Factory",
                          "system-information", s->str,
                          NULL);
 
@@ -260,6 +262,14 @@ activate_quit (GSimpleAction *action,
 
       list = next;
     }
+}
+
+static void
+activate_inspector (GSimpleAction *action,
+                    GVariant      *parameter,
+                    gpointer       user_data)
+{
+  gtk_window_set_interactive_debugging (TRUE);
 }
 
 static void
@@ -516,22 +526,6 @@ on_range_to_changed (GtkSpinButton *to)
 }
 
 static void
-update_header (GtkListBoxRow *row,
-               GtkListBoxRow *before,
-               gpointer       data)
-{
-  if (before != NULL &&
-      gtk_list_box_row_get_header (row) == NULL)
-    {
-      GtkWidget *separator;
-
-      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_widget_show (separator);
-      gtk_list_box_row_set_header (row, separator);
-    }
-}
-
-static void
 info_bar_response (GtkWidget *infobar, gint response_id)
 {
   if (response_id == GTK_RESPONSE_CLOSE)
@@ -556,7 +550,7 @@ set_needs_attention (GtkWidget *page, gboolean needs_attention)
   GtkWidget *stack;
 
   stack = gtk_widget_get_parent (page);
-  gtk_container_child_set (GTK_CONTAINER (stack), page,
+  g_object_set (gtk_stack_get_page (GTK_STACK (stack), page),
                            "needs-attention", needs_attention,
                            NULL);
 }
@@ -803,7 +797,7 @@ overshot (GtkScrolledWindow *sw, GtkPositionType pos, GtkWidget *widget)
                 "margin", 6,
                 "xalign", 0.0,
                 NULL);
-  gtk_box_pack_start (GTK_BOX (row), label);
+  gtk_container_add (GTK_CONTAINER (row), label);
   gdk_rgba_parse (&rgba, color);
   swatch = g_object_new (g_type_from_name ("GtkColorSwatch"),
                          "rgba", &rgba,
@@ -815,7 +809,7 @@ overshot (GtkScrolledWindow *sw, GtkPositionType pos, GtkWidget *widget)
                          NULL);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (box), swatch);
-  gtk_box_pack_start (GTK_BOX (row), box);
+  gtk_container_add (GTK_CONTAINER (row), box);
   gtk_list_box_insert (GTK_LIST_BOX (widget), row, -1);
   row = gtk_widget_get_parent (row);
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
@@ -914,7 +908,7 @@ populate_colors (GtkWidget *widget, GtkWidget *chooser)
                     "hexpand", TRUE,
                     "xalign", 0.0,
                     NULL);
-      gtk_box_pack_start (GTK_BOX (row), label);
+      gtk_container_add (GTK_CONTAINER (row), label);
       gdk_rgba_parse (&rgba, colors[i].color);
       swatch = g_object_new (g_type_from_name ("GtkColorSwatch"),
                              "rgba", &rgba,
@@ -926,7 +920,7 @@ populate_colors (GtkWidget *widget, GtkWidget *chooser)
                              NULL);
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (box), swatch);
-      gtk_box_pack_start (GTK_BOX (row), box);
+      gtk_container_add (GTK_CONTAINER (row), box);
       gtk_list_box_insert (GTK_LIST_BOX (widget), row, -1);
       row = gtk_widget_get_parent (row);
       gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
@@ -1009,6 +1003,9 @@ populate_flowbox (GtkWidget *flowbox)
 
   while ((name = g_dir_read_name (dir)) != NULL)
     {
+      if (g_str_has_suffix (name, ".xml"))
+        continue;
+
       filename = g_build_filename (location, name, NULL);
       file = g_file_new_for_path (filename);
       stream = G_INPUT_STREAM (g_file_read (file, NULL, &error));
@@ -1023,7 +1020,7 @@ populate_flowbox (GtkWidget *flowbox)
           bd = g_new (BackgroundData, 1);
           bd->flowbox = flowbox;
           bd->filename = filename;
-          gdk_pixbuf_new_from_stream_at_scale_async (stream, 110, 110, TRUE, NULL, 
+          gdk_pixbuf_new_from_stream_at_scale_async (stream, 110, 110, TRUE, NULL,
                                                      background_loaded_cb, bd);
         }
 
@@ -1276,11 +1273,11 @@ textbuffer_notify_selection (GObject *object, GParamSpec *pspec, GtkWidget *butt
 }
 
 static gboolean
-osd_frame_pressed (GtkGestureMultiPress *gesture,
-                   int                   press,
-                   double                x,
-                   double                y,
-                   gpointer              data)
+osd_frame_pressed (GtkGestureClick *gesture,
+                   int              press,
+                   double           x,
+                   double           y,
+                   gpointer         data)
 {
   GtkWidget *frame = data;
   GtkWidget *osd;
@@ -1309,96 +1306,115 @@ page_combo_separator_func (GtkTreeModel *model,
 }
 
 static void
-activate_item (GtkWidget *item, GtkTextView *tv)
+toggle_format (GSimpleAction *action,
+               GVariant      *value,
+               gpointer       user_data)
 {
-  const gchar *tag;
+  GtkTextView *text_view = user_data;
   GtkTextIter start, end;
-  gboolean active;
+  const char *name;
 
-  g_object_get (item, "active", &active, NULL);
-  tag = (const gchar *)g_object_get_data (G_OBJECT (item), "tag");
-  gtk_text_buffer_get_selection_bounds (gtk_text_view_get_buffer (tv), &start, &end);
-  if (active)
-    gtk_text_buffer_apply_tag_by_name (gtk_text_view_get_buffer (tv), tag, &start, &end);
+  name = g_action_get_name (G_ACTION (action));
+
+  g_simple_action_set_state (action, value);
+
+  gtk_text_buffer_get_selection_bounds (gtk_text_view_get_buffer (text_view), &start, &end);
+  if (g_variant_get_boolean (value))
+    gtk_text_buffer_apply_tag_by_name (gtk_text_view_get_buffer (text_view), name, &start, &end);
   else
-    gtk_text_buffer_remove_tag_by_name (gtk_text_view_get_buffer (tv), tag, &start, &end);
+    gtk_text_buffer_remove_tag_by_name (gtk_text_view_get_buffer (text_view), name, &start, &end);
 }
 
-static void
-add_item (GtkTextView *tv,
-          GtkWidget   *popup,
-          const gchar *text,
-          const gchar *tag,
-          gboolean     set)
-{
-  GtkWidget *item, *label;
-
-  if (GTK_IS_MENU (popup))
-    {
-      item = gtk_check_menu_item_new ();
-      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), set);
-      g_signal_connect (item, "toggled", G_CALLBACK (activate_item), tv);
-    }
-  else
-    {
-      item = gtk_check_button_new ();
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item), set);
-      gtk_widget_set_focus_on_click (item, FALSE);
-      g_signal_connect (item, "clicked", G_CALLBACK (activate_item), tv);
-    }
-
-  label = gtk_label_new ("");
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_label_set_markup (GTK_LABEL (label), text);
-  gtk_widget_show (label);
-  gtk_container_add (GTK_CONTAINER (item), label);
-  g_object_set_data (G_OBJECT (item), "tag", (gpointer)tag);
-  gtk_widget_show (item);
-  gtk_container_add (GTK_CONTAINER (popup), item);
-}
+static GActionGroup *actions;
 
 static void
-populate_popup (GtkTextView *tv,
-                GtkWidget   *popup)
+text_changed (GtkTextBuffer *buffer)
 {
-  gboolean has_selection;
-  GtkWidget *item;
-  GtkTextIter start, end, iter;
+  GAction *bold;
+  GAction *italic;
+  GAction *underline;
+  GtkTextIter iter;
   GtkTextTagTable *tags;
-  GtkTextTag *bold, *italic, *underline;
+  GtkTextTag *bold_tag, *italic_tag, *underline_tag;
   gboolean all_bold, all_italic, all_underline;
+  GtkTextIter start, end;
+  gboolean has_selection;
 
-  has_selection = gtk_text_buffer_get_selection_bounds (gtk_text_view_get_buffer (tv), &start, &end);
+  bold = g_action_map_lookup_action (G_ACTION_MAP (actions), "bold");
+  italic = g_action_map_lookup_action (G_ACTION_MAP (actions), "italic");
+  underline = g_action_map_lookup_action (G_ACTION_MAP (actions), "underline");
 
+  has_selection = gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (bold), has_selection);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (italic), has_selection);
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (underline), has_selection);
   if (!has_selection)
     return;
 
-  tags = gtk_text_buffer_get_tag_table (gtk_text_view_get_buffer (tv));
-  bold = gtk_text_tag_table_lookup (tags, "bold");
-  italic = gtk_text_tag_table_lookup (tags, "italic");
-  underline = gtk_text_tag_table_lookup (tags, "underline");
+  tags = gtk_text_buffer_get_tag_table (buffer);
+  bold_tag = gtk_text_tag_table_lookup (tags, "bold");
+  italic_tag = gtk_text_tag_table_lookup (tags, "italic");
+  underline_tag = gtk_text_tag_table_lookup (tags, "underline");
   all_bold = TRUE;
   all_italic = TRUE;
   all_underline = TRUE;
   gtk_text_iter_assign (&iter, &start);
   while (!gtk_text_iter_equal (&iter, &end))
     {
-      all_bold &= gtk_text_iter_has_tag (&iter, bold);
-      all_italic &= gtk_text_iter_has_tag (&iter, italic);
-      all_underline &= gtk_text_iter_has_tag (&iter, underline);
+      all_bold &= gtk_text_iter_has_tag (&iter, bold_tag);
+      all_italic &= gtk_text_iter_has_tag (&iter, italic_tag);
+      all_underline &= gtk_text_iter_has_tag (&iter, underline_tag);
       gtk_text_iter_forward_char (&iter);
     }
 
-  if (GTK_IS_MENU (popup))
-    {
-      item = gtk_separator_menu_item_new ();
-      gtk_widget_show (item);
-      gtk_container_add (GTK_CONTAINER (popup), item);
-    }
+  g_simple_action_set_state (G_SIMPLE_ACTION (bold), g_variant_new_boolean (all_bold));
+  g_simple_action_set_state (G_SIMPLE_ACTION (italic), g_variant_new_boolean (all_italic));
+  g_simple_action_set_state (G_SIMPLE_ACTION (underline), g_variant_new_boolean (all_underline));
+}
 
-  add_item (tv, popup, "<b>Bold</b>", "bold", all_bold);
-  add_item (tv, popup, "<i>Italics</i>", "italic", all_italic);
-  add_item (tv, popup, "<u>Underline</u>", "underline", all_underline);
+static void
+text_view_add_to_context_menu (GtkTextView *text_view)
+{
+  GMenu *menu;
+  GActionEntry entries[] = {
+    { "bold", NULL, NULL, "false", toggle_format },
+    { "italic", NULL, NULL, "false", toggle_format },
+    { "underline", NULL, NULL, "false", toggle_format },
+  };
+  GMenuItem *item;
+  GAction *action;
+
+  actions = G_ACTION_GROUP (g_simple_action_group_new ());
+  g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS (entries), text_view);
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "bold");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "italic");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "underline");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+
+  gtk_widget_insert_action_group (GTK_WIDGET (text_view), "format", G_ACTION_GROUP (actions));
+
+  menu = g_menu_new ();
+  item = g_menu_item_new (_("Bold"), "format.bold");
+  g_menu_item_set_attribute (item, "touch-icon", "s", "format-text-bold-symbolic");
+  g_menu_append_item (G_MENU (menu), item);
+  g_object_unref (item);
+  item = g_menu_item_new (_("Italics"), "format.italic");
+  g_menu_item_set_attribute (item, "touch-icon", "s", "format-text-italic-symbolic");
+  g_menu_append_item (G_MENU (menu), item);
+  g_object_unref (item);
+  item = g_menu_item_new (_("Underline"), "format.underline");
+  g_menu_item_set_attribute (item, "touch-icon", "s", "format-text-underline-symbolic");
+  g_menu_append_item (G_MENU (menu), item);
+  g_object_unref (item);
+
+  gtk_text_view_set_extra_menu (text_view, G_MENU_MODEL (menu));
+  g_object_unref (menu);
+
+  g_signal_connect (gtk_text_view_get_buffer (text_view), "changed", G_CALLBACK (text_changed), NULL);
+  g_signal_connect (gtk_text_view_get_buffer (text_view), "mark-set", G_CALLBACK (text_changed), NULL);
 }
 
 static void
@@ -1406,7 +1422,7 @@ open_popover_text_changed (GtkEntry *entry, GParamSpec *pspec, GtkWidget *button
 {
   const gchar *text;
 
-  text = gtk_entry_get_text (entry);
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
   gtk_widget_set_sensitive (button, strlen (text) > 0);
 }
 
@@ -1590,14 +1606,14 @@ reset_icon_size (GtkWidget *iv)
   gtk_widget_queue_resize (iv);
 }
 
-static gchar *
-scale_format_value_blank (GtkScale *scale, gdouble value)
+static char *
+scale_format_value_blank (GtkScale *scale, double value, gpointer user_data)
 {
   return g_strdup (" ");
 }
 
-static gchar *
-scale_format_value (GtkScale *scale, gdouble value)
+static char *
+scale_format_value (GtkScale *scale, double value, gpointer user_data)
 {
   return g_strdup_printf ("%0.*f", 1, value);
 }
@@ -1613,6 +1629,37 @@ adjustment3_value_changed (GtkAdjustment *adj, GtkProgressBar *pbar)
 }
 
 static void
+clicked_cb (GtkGesture *gesture,
+            int         n_press,
+            double      x,
+            double      y,
+            GtkPopover *popover)
+{
+  GdkRectangle rect;
+
+  rect.x = x;
+  rect.y = y;
+  rect.width = 1;
+  rect.height = 1;
+  gtk_popover_set_pointing_to (popover, &rect);
+  gtk_popover_popup (popover);
+}
+
+static void
+set_up_context_popover (GtkWidget *widget,
+                        GMenuModel *model)
+{
+  GtkWidget *popover = gtk_popover_menu_new_from_model (widget, model);
+  GtkGesture *gesture;
+
+  gtk_popover_set_has_arrow (GTK_POPOVER (popover), FALSE);
+  gesture = gtk_gesture_click_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (clicked_cb), popover);
+  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -1625,6 +1672,7 @@ activate (GApplication *app)
   GtkWidget *dialog;
   GtkAdjustment *adj;
   GtkCssProvider *provider;
+  GMenuModel *model;
   static GActionEntry win_entries[] = {
     { "dark", NULL, NULL, "false", change_theme_state },
     { "transition", NULL, NULL, "false", change_transition_state },
@@ -1642,6 +1690,10 @@ activate (GApplication *app)
   } accels[] = {
     { "app.about", { "F1", NULL } },
     { "app.quit", { "<Primary>q", NULL } },
+    { "app.open-in", { "<Primary>n", NULL } },
+    { "app.cut", { "<Primary>x", NULL } },
+    { "app.copy", { "<Primary>c", NULL } },
+    { "app.paste", { "<Primary>v", NULL } },
     { "win.dark", { "<Primary>d", NULL } },
     { "win.search", { "<Primary>s", NULL } },
     { "win.delete", { "Delete", NULL } },
@@ -1657,13 +1709,13 @@ activate (GApplication *app)
   g_type_ensure (my_text_view_get_type ());
 
   provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_resource (provider, "/org/gtk/WidgetFactory/widget-factory.css");
+  gtk_css_provider_load_from_resource (provider, "/org/gtk/WidgetFactory4/widget-factory.css");
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
                                               GTK_STYLE_PROVIDER (provider),
-                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
+                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   g_object_unref (provider);
 
-  builder = gtk_builder_new_from_resource ("/org/gtk/WidgetFactory/widget-factory.ui");
+  builder = gtk_builder_new_from_resource ("/org/gtk/WidgetFactory4/widget-factory.ui");
   gtk_builder_add_callback_symbol (builder, "on_entry_icon_release", (GCallback)on_entry_icon_release);
   gtk_builder_add_callback_symbol (builder, "on_scale_button_value_changed", (GCallback)on_scale_button_value_changed);
   gtk_builder_add_callback_symbol (builder, "on_scale_button_query_tooltip", (GCallback)on_scale_button_query_tooltip);
@@ -1675,8 +1727,6 @@ activate (GApplication *app)
   gtk_builder_add_callback_symbol (builder, "increase_icon_size", (GCallback)increase_icon_size);
   gtk_builder_add_callback_symbol (builder, "decrease_icon_size", (GCallback)decrease_icon_size);
   gtk_builder_add_callback_symbol (builder, "reset_icon_size", (GCallback)reset_icon_size);
-  gtk_builder_add_callback_symbol (builder, "scale_format_value", (GCallback)scale_format_value);
-  gtk_builder_add_callback_symbol (builder, "scale_format_value_blank", (GCallback)scale_format_value_blank);
   gtk_builder_add_callback_symbol (builder, "osd_frame_pressed", (GCallback)osd_frame_pressed);
 
   gtk_builder_connect_signals (builder, NULL);
@@ -1723,7 +1773,6 @@ activate (GApplication *app)
   g_signal_connect (adj, "value-changed", G_CALLBACK (spin_value_changed), widget);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "listbox");
-  gtk_list_box_set_header_func (GTK_LIST_BOX (widget), update_header, NULL, NULL);
   g_signal_connect (widget, "row-activated", G_CALLBACK (row_activated), NULL);
 
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "listboxrow1switch");
@@ -1848,8 +1897,7 @@ activate (GApplication *app)
   g_object_set_data (G_OBJECT (widget), "osd", widget2);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "textview1");
-  g_signal_connect (widget, "populate-popup",
-                    G_CALLBACK (populate_popup), NULL);
+  text_view_add_to_context_menu (GTK_TEXT_VIEW (widget));
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "open_popover");
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "open_popover_entry");
@@ -1895,6 +1943,19 @@ activate (GApplication *app)
   g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment3_value_changed), widget);
   g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment3_value_changed), widget2);
 
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "extra_info_entry");
+  g_timeout_add (100, (GSourceFunc)pulse_it, widget);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "scale3");
+  gtk_scale_set_format_value_func (GTK_SCALE (widget), scale_format_value, NULL, NULL);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "scale4");
+  gtk_scale_set_format_value_func (GTK_SCALE (widget), scale_format_value_blank, NULL, NULL);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "box_for_context");
+  model = (GMenuModel *)gtk_builder_get_object (builder, "new_style_context_menu_model");
+  set_up_context_popover (widget, model);
+
   gtk_widget_show (GTK_WIDGET (window));
 
   g_object_unref (builder);
@@ -1927,6 +1988,41 @@ local_options (GApplication *app,
   return -1;
 }
 
+static void
+activate_action (GSimpleAction *action,
+                 GVariant      *parameter,
+                 gpointer       user_data)
+{
+  g_print ("Activate action %s\n", g_action_get_name (G_ACTION (action)));
+}
+
+static void
+select_action (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
+{
+  g_print ("Select action %s value %s\n",
+           g_action_get_name (G_ACTION (action)),
+           g_variant_get_string (parameter, NULL));
+
+  g_simple_action_set_state (action, parameter);
+}
+
+static void
+toggle_action (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
+{
+  GVariant *state = g_action_get_state (G_ACTION (action));
+
+  g_print ("Toggle action %s to %s\n",
+           g_action_get_name (G_ACTION (action)),
+           g_variant_get_boolean (state) ? "false" : "true");
+
+  g_simple_action_set_state (action,
+                             g_variant_new_boolean (!g_variant_get_boolean (state)));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -1935,21 +2031,57 @@ main (int argc, char *argv[])
   static GActionEntry app_entries[] = {
     { "about", activate_about, NULL, NULL, NULL },
     { "quit", activate_quit, NULL, NULL, NULL },
+    { "inspector", activate_inspector, NULL, NULL, NULL },
     { "main", NULL, "s", "'steak'", NULL },
     { "wine", NULL, NULL, "false", NULL },
     { "beer", NULL, NULL, "false", NULL },
     { "water", NULL, NULL, "true", NULL },
     { "dessert", NULL, "s", "'bars'", NULL },
-    { "pay", NULL, "s", NULL, NULL }
+    { "pay", NULL, "s", NULL, NULL },
+    { "print", activate_action, NULL, NULL, NULL },
+    { "share", activate_action, NULL, NULL, NULL },
+    { "labels", activate_action, NULL, NULL, NULL },
+    { "new", activate_action, NULL, NULL, NULL },
+    { "open", activate_action, NULL, NULL, NULL },
+    { "open-in", activate_action, NULL, NULL, NULL },
+    { "open-tab", activate_action, NULL, NULL, NULL },
+    { "open-window", activate_action, NULL, NULL, NULL },
+    { "save", activate_action, NULL, NULL, NULL },
+    { "save-as", activate_action, NULL, NULL, NULL },
+    { "cut", activate_action, NULL, NULL, NULL },
+    { "copy", activate_action, NULL, NULL, NULL },
+    { "paste", activate_action, NULL, NULL, NULL },
+    { "pin", toggle_action, NULL, "true", NULL },
+    { "size", select_action, "s", "'medium'", NULL },
+    { "berk", toggle_action, NULL, "true", NULL },
+    { "broni", toggle_action, NULL, "true", NULL },
+    { "drutt", toggle_action, NULL, "true", NULL },
+    { "upstairs", toggle_action, NULL, "true", NULL },
+    { "option-a", activate_action, NULL, NULL, NULL },
+    { "option-b", activate_action, NULL, NULL, NULL },
+    { "option-c", activate_action, NULL, NULL, NULL },
+    { "option-d", activate_action, NULL, NULL, NULL },
+    { "check-on", NULL, NULL, "true", NULL },
+    { "check-off", NULL, NULL, "false", NULL },
+    { "radio-x", NULL, "s", "'x'", NULL },
+    { "check-on-disabled", NULL, NULL, "true", NULL },
+    { "check-off-disabled", NULL, NULL, "false", NULL },
+    { "radio-x-disabled", NULL, "s", "'x'", NULL },
   };
   gint status;
 
-  app = gtk_application_new ("org.gtk.WidgetFactory", G_APPLICATION_NON_UNIQUE);
+  app = gtk_application_new ("org.gtk.WidgetFactory4", G_APPLICATION_NON_UNIQUE);
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),
                                    app);
   action = g_action_map_lookup_action (G_ACTION_MAP (app), "wine");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (app), "check-on-disabled");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (app), "check-off-disabled");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (app), "radio-x-disabled");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
 
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <object class="GtkListStore" id="model">
     <columns>
@@ -13,145 +12,148 @@
     </columns>
   </object>
   <template class="GtkInspectorStatistics" parent="GtkBox">
-    <property name="visible">True</property>
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkStack" id="stack">
         <child>
-          <object class="GtkBox">
-            <property name="orientation">vertical</property>
-            <child>
-              <object class="GtkSearchBar" id="search_bar">
-                <property name="show-close-button">1</property>
-                <child>
-                  <object class="GtkSearchEntry" id="search_entry">
-                    <property name="max-width-chars">40</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="expand">1</property>
-                <property name="vscrollbar-policy">always</property>
-                <child>
-                  <object class="GtkTreeView" id="view">
-                    <property name="model">model</property>
-                    <property name="search-column">1</property>
-                    <child>
-                      <object class="GtkTreeViewColumn">
-                        <property name="sort-column-id">1</property>
-                        <property name="title" translatable="yes">Type</property>
-                        <child>
-                          <object class="GtkCellRendererText">
-                            <property name="scale">0.8</property>
-                          </object>
-                          <attributes>
-                            <attribute name="text">1</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="column_self1">
-                        <property name="sort-column-id">2</property>
-                        <property name="title" translatable="yes">Self 1</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="renderer_self1">
-                            <property name="scale">0.8</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="column_cumulative1">
-                        <property name="sort-column-id">3</property>
-                        <property name="title" translatable="yes">Cumulative 1</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="renderer_cumulative1">
-                            <property name="scale">0.8</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="column_self2">
-                        <property name="sort-column-id">4</property>
-                        <property name="title" translatable="yes">Self 2</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="renderer_self2">
-                            <property name="scale">0.8</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="column_cumulative2">
-                        <property name="sort-column-id">5</property>
-                        <property name="title" translatable="yes">Cumulative 2</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="renderer_cumulative2">
-                            <property name="scale">0.8</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="column_self_graph">
-                        <property name="sort-column-id">4</property>
-                        <property name="title" translatable="yes">Self</property>
-                        <child>
-                          <object class="GtkCellRendererGraph" id="renderer_self_graph">
-                            <property name="minimum">0</property>
-                            <property name="xpad">1</property>
-                            <property name="ypad">1</property>
-                          </object>
-                          <attributes>
-                            <attribute name="data">6</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="column_cumulative_graph">
-                        <property name="sort-column-id">5</property>
-                        <property name="title" translatable="yes">Cumulative</property>
-                        <child>
-                          <object class="GtkCellRendererGraph" id="renderer_cumulative_graph">
-                            <property name="minimum">0</property>
-                            <property name="xpad">1</property>
-                            <property name="ypad">1</property>
-                          </object>
-                          <attributes>
-                            <attribute name="data">7</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-          <packing>
+          <object class="GtkStackPage">
             <property name="name">statistics</property>
-          </packing>
+            <property name="child">
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkSearchBar" id="search_bar">
+                    <property name="show-close-button">1</property>
+                    <child>
+                      <object class="GtkSearchEntry" id="search_entry">
+                        <property name="max-width-chars">40</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="expand">1</property>
+                    <property name="vscrollbar-policy">always</property>
+                    <child>
+                      <object class="GtkTreeView" id="view">
+                        <property name="model">model</property>
+                        <property name="search-column">1</property>
+                        <child>
+                          <object class="GtkTreeViewColumn">
+                            <property name="sort-column-id">1</property>
+                            <property name="title" translatable="yes">Type</property>
+                            <child>
+                              <object class="GtkCellRendererText">
+                                <property name="scale">0.8</property>
+                              </object>
+                              <attributes>
+                                <attribute name="text">1</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="column_self1">
+                            <property name="sort-column-id">2</property>
+                            <property name="title" translatable="yes">Self 1</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="renderer_self1">
+                                <property name="scale">0.8</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="column_cumulative1">
+                            <property name="sort-column-id">3</property>
+                            <property name="title" translatable="yes">Cumulative 1</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="renderer_cumulative1">
+                                <property name="scale">0.8</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="column_self2">
+                            <property name="sort-column-id">4</property>
+                            <property name="title" translatable="yes">Self 2</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="renderer_self2">
+                                <property name="scale">0.8</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="column_cumulative2">
+                            <property name="sort-column-id">5</property>
+                            <property name="title" translatable="yes">Cumulative 2</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="renderer_cumulative2">
+                                <property name="scale">0.8</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="column_self_graph">
+                            <property name="sort-column-id">4</property>
+                            <property name="title" translatable="yes">Self</property>
+                            <child>
+                              <object class="GtkCellRendererGraph" id="renderer_self_graph">
+                                <property name="minimum">0</property>
+                                <property name="xpad">1</property>
+                                <property name="ypad">1</property>
+                              </object>
+                              <attributes>
+                                <attribute name="data">6</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="column_cumulative_graph">
+                            <property name="sort-column-id">5</property>
+                            <property name="title" translatable="yes">Cumulative</property>
+                            <child>
+                              <object class="GtkCellRendererGraph" id="renderer_cumulative_graph">
+                                <property name="minimum">0</property>
+                                <property name="xpad">1</property>
+                                <property name="ypad">1</property>
+                              </object>
+                              <attributes>
+                                <attribute name="data">7</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
         </child>
         <child>
-          <object class="GtkBox">
-            <property name="can-focus">1</property>
-            <property name="halign">center</property>
-            <property name="valign">center</property>
-            <child>
-              <object class="GtkLabel" id="excuse">
-                <property name="selectable">1</property>
-                <property name="label" translatable="yes">Enable statistics with GOBJECT_DEBUG=instance-count</property>
-              </object>
-            </child>
-          </object>
-          <packing>
+          <object class="GtkStackPage">
             <property name="name">excuse</property>
-          </packing>
+            <property name="child">
+              <object class="GtkBox">
+                <property name="can-focus">1</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <child>
+                  <object class="GtkLabel" id="excuse">
+                    <property name="selectable">1</property>
+                    <property name="label" translatable="yes">Enable statistics with GOBJECT_DEBUG=instance-count</property>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
         </child>
       </object>
     </child>

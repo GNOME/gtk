@@ -5,26 +5,26 @@
          xmlns:gnome="http://api.gnome.org/doap-extensions#"
          xmlns="http://usefulinc.com/ns/doap#">
 
-  <name xml:lang="en">gtk+</name>
-  <shortname>gtk+</shortname>
+  <name xml:lang="en">gtk</name>
+  <shortname>gtk</shortname>
   <shortdesc xml:lang="en">Multi-platform toolkit</shortdesc>
-  <description xml:lang="en">GTK+ is a multi-platform toolkit for creating graphical user
-interfaces. Offering a complete set of widgets, GTK+ is suitable for
+  <description xml:lang="en">GTK is a multi-platform toolkit for creating graphical user
+interfaces. Offering a complete set of widgets, GTK is suitable for
 projects ranging from small one-off tools to complete application
 suites.
 
-GTK+ has been designed from the ground up to support a range of
-languages, not only C/C++. Using GTK+ from languages such as Perl and
+GTK has been designed from the ground up to support a range of
+languages, not only C/C++. Using GTK from languages such as Perl and
 Python (especially in combination with the Glade GUI builder) provides
 an effective method of rapid application development.
 
-GTK+ is free software and part of the GNU Project. However, the
-licensing terms for GTK+, the GNU LGPL, allow it to be used by all
+GTK is free software and part of the GNU Project. However, the
+licensing terms for GTK, the GNU LGPL, allow it to be used by all
 developers, including those developing proprietary software, without
 any license fees or royalties.</description>
   <homepage rdf:resource="http://www.gtk.org/" />
   <license rdf:resource="http://usefulinc.com/doap/licenses/lgpl" />
-  <bug-database rdf:resource="http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2B" />
+  <bug-database rdf:resource="https://gitlab.gnome.org/GNOME/gtk/issues/" />
   <download-page rdf:resource="http://download.gnome.org/sources/gtk+/" />
   <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-list" />
   <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-app-devel-list" />
@@ -39,8 +39,8 @@ any license fees or royalties.</description>
 
   <repository>
     <GitRepository>
-        <browse rdf:resource="http://git.gnome.org/browse/gtk+/"/>
-      <location rdf:resource="git://git.gnome.org/gtk+"/>
+        <browse rdf:resource="https://gitlab.gnome.org/GNOME/gtk/"/>
+      <location rdf:resource="https://gitlab.gnome.org/GNOME/gtk.git"/>
     </GitRepository>
   </repository>
 

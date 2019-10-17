@@ -26,8 +26,7 @@ gdk_wayland_public_headers = files([
   'gdkwaylandsurface.h'
 ])
 
-install_headers(gdk_wayland_public_headers, subdir: 'gtk-4.0/gdk/wayland/')
-install_headers('gdkwayland.h', subdir: 'gtk-4.0/gdk/')
+install_headers(gdk_wayland_public_headers, 'gdkwayland.h', subdir: 'gtk-4.0/gdk/wayland/')
 
 gdk_wayland_deps = [
   shmlib,
@@ -58,6 +57,7 @@ proto_sources = [
   ['tablet', 'unstable', 'v2', ],
   ['keyboard-shortcuts-inhibit', 'unstable', 'v1', ],
   ['server-decoration', 'private' ],
+  ['xdg-output', 'unstable', 'v1', ],
 ]
 
 gdk_wayland_gen_headers = []

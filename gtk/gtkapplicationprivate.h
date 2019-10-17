@@ -139,6 +139,7 @@ typedef struct
   GSList *inhibit_handles;
   guint            state_changed_handler;
   char *           session_id;
+  guint            session_state;
 } GtkApplicationImplDBus;
 
 typedef struct

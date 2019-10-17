@@ -298,7 +298,7 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
  * @width: The width of the region to draw
  * @height: The height of the region to draw
  *
- * This is the main way to draw GL content in GTK+. It takes a render buffer ID 
+ * This is the main way to draw GL content in GTK. It takes a render buffer ID 
  * (@source_type == #GL_RENDERBUFFER) or a texture id (@source_type == #GL_TEXTURE)
  * and draws it onto @cr with an OVER operation, respecting the current clip.
  * The top left corner of the rectangle specified by @x, @y, @width and @height

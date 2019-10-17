@@ -24,15 +24,16 @@
 
 #include "config.h"
 
-#include "gtktogglebutton.h"
+#include "gtktogglebuttonprivate.h"
 
 #include "gtkbuttonprivate.h"
-#include "gtktogglebuttonprivate.h"
+#include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
+#include "gtkstylecontext.h"
+
 #include "a11y/gtktogglebuttonaccessible.h"
 
 
@@ -307,7 +308,7 @@ gtk_toggle_button_set_active (GtkToggleButton *toggle_button,
 
   if (priv->active != is_active)
     {
-      gtk_button_clicked (GTK_BUTTON (toggle_button));
+      g_signal_emit_by_name (toggle_button, "clicked");
       g_object_notify_by_pspec (G_OBJECT (toggle_button), toggle_button_props[PROP_ACTIVE]);
     }
 }

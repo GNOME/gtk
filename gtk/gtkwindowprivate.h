@@ -47,13 +47,11 @@ gboolean        _gtk_window_group_widget_is_blocked_for_device (GtkWindowGroup *
 void            _gtk_window_unset_focus_and_default (GtkWindow *window,
                                                      GtkWidget *widget);
 
-void            _gtk_window_set_is_active          (GtkWindow *window,
-                                                    gboolean   is_active);
-
 void            _gtk_window_set_allocation         (GtkWindow     *window,
                                                     int            width,
                                                     int            height,
                                                     GtkAllocation *allocation_out);
+void            gtk_window_check_resize            (GtkWindow     *self);
 
 typedef void (*GtkWindowKeysForeachFunc) (GtkWindow      *window,
                                           guint           keyval,
@@ -114,13 +112,11 @@ GtkWidget * _gtk_window_get_popover_parent (GtkWindow *window,
 gboolean    _gtk_window_is_popover_widget  (GtkWindow *window,
                                             GtkWidget *popover);
 
-GdkTexture *     gtk_window_get_icon_for_size (GtkWindow *window,
-					       int        size);
+GdkPaintable *    gtk_window_get_icon_for_size (GtkWindow *window,
+                                                int        size);
 
 void       gtk_window_set_hardcoded_surface (GtkWindow *window,
 					     GdkSurface *surface);
-
-GdkDisplay *gtk_window_get_display (GtkWindow *window);
 
 /* Exported handles */
 
@@ -132,8 +128,6 @@ gboolean      gtk_window_export_handle   (GtkWindow               *window,
                                           GtkWindowHandleExported  callback,
                                           gpointer                 user_data);
 void          gtk_window_unexport_handle (GtkWindow               *window);
-
-GskRenderer *gtk_window_get_renderer (GtkWindow *window);
 
 GtkWidget *      gtk_window_lookup_pointer_focus_widget (GtkWindow        *window,
                                                          GdkDevice        *device,
@@ -165,6 +159,10 @@ void             gtk_window_maybe_revoke_implicit_grab (GtkWindow *window,
 void             gtk_window_maybe_update_cursor (GtkWindow *window,
                                                  GtkWidget *widget,
                                                  GdkDevice *device);
+GtkWidget *      gtk_window_pick_popover (GtkWindow   *window,
+                                          double       x,
+                                          double       y,
+                                          GtkPickFlags flags);
 
 G_END_DECLS
 

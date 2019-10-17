@@ -86,19 +86,33 @@
  * children, and the .linked class to the node of its internal box.
  */
 
-static void     gtk_combo_box_text_buildable_interface_init     (GtkBuildableIface *iface);
-static gboolean gtk_combo_box_text_buildable_custom_tag_start   (GtkBuildable     *buildable,
-								 GtkBuilder       *builder,
-								 GObject          *child,
-								 const gchar      *tagname,
-								 GMarkupParser    *parser,
-								 gpointer         *data);
+typedef struct _GtkComboBoxTextClass GtkComboBoxTextClass;
 
-static void     gtk_combo_box_text_buildable_custom_finished    (GtkBuildable     *buildable,
-								 GtkBuilder       *builder,
-								 GObject          *child,
-								 const gchar      *tagname,
-								 gpointer          user_data);
+struct _GtkComboBoxText
+{
+  GtkComboBox parent_instance;
+};
+
+struct _GtkComboBoxTextClass
+{
+  GtkComboBoxClass parent_class;
+};
+
+
+static void     gtk_combo_box_text_buildable_interface_init   (GtkBuildableIface  *iface);
+static gboolean gtk_combo_box_text_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                                               GtkBuilder         *builder,
+                                                               GObject            *child,
+                                                               const gchar        *tagname,
+                                                               GtkBuildableParser *parser,
+                                                               gpointer           *data);
+
+static void     gtk_combo_box_text_buildable_custom_finished  (GtkBuildable       *buildable,
+                                                               GtkBuilder         *builder,
+                                                               GObject            *child,
+                                                               const gchar        *tagname,
+                                                               gpointer            user_data);
+
 
 static GtkBuildableIface *buildable_parent_iface = NULL;
 
@@ -171,12 +185,12 @@ typedef struct {
 } ItemParserData;
 
 static void
-item_start_element (GMarkupParseContext  *context,
-                    const gchar          *element_name,
-                    const gchar         **names,
-                    const gchar         **values,
-                    gpointer              user_data,
-                    GError              **error)
+item_start_element (GtkBuildableParseContext  *context,
+                    const gchar               *element_name,
+                    const gchar              **names,
+                    const gchar              **values,
+                    gpointer                   user_data,
+                    GError                   **error)
 {
   ItemParserData *data = (ItemParserData*)user_data;
 
@@ -224,11 +238,11 @@ item_start_element (GMarkupParseContext  *context,
 }
 
 static void
-item_text (GMarkupParseContext  *context,
-           const gchar          *text,
-           gsize                 text_len,
-           gpointer              user_data,
-           GError              **error)
+item_text (GtkBuildableParseContext  *context,
+           const gchar               *text,
+           gsize                      text_len,
+           gpointer                   user_data,
+           GError                   **error)
 {
   ItemParserData *data = (ItemParserData*)user_data;
 
@@ -237,10 +251,10 @@ item_text (GMarkupParseContext  *context,
 }
 
 static void
-item_end_element (GMarkupParseContext  *context,
-                  const gchar          *element_name,
-                  gpointer              user_data,
-                  GError              **error)
+item_end_element (GtkBuildableParseContext  *context,
+                  const gchar               *element_name,
+                  gpointer                   user_data,
+                  GError                   **error)
 {
   ItemParserData *data = (ItemParserData*)user_data;
 
@@ -267,7 +281,7 @@ item_end_element (GMarkupParseContext  *context,
   data->is_text = FALSE;
 }
 
-static const GMarkupParser item_parser =
+static const GtkBuildableParser item_parser =
   {
     item_start_element,
     item_end_element,
@@ -275,12 +289,12 @@ static const GMarkupParser item_parser =
   };
 
 static gboolean
-gtk_combo_box_text_buildable_custom_tag_start (GtkBuildable  *buildable,
-                                               GtkBuilder    *builder,
-                                               GObject       *child,
-                                               const gchar   *tagname,
-                                               GMarkupParser *parser,
-                                               gpointer      *parser_data)
+gtk_combo_box_text_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                               GtkBuilder         *builder,
+                                               GObject            *child,
+                                               const gchar        *tagname,
+                                               GtkBuildableParser *parser,
+                                               gpointer           *parser_data)
 {
   if (buildable_parent_iface->custom_tag_start (buildable, builder, child,
 						tagname, parser, parser_data))
@@ -567,7 +581,7 @@ gtk_combo_box_text_remove_all (GtkComboBoxText *combo_box)
  * function will return its contents (which will not necessarily
  * be an item from the list).
  *
- * Returns: (transfer full): a newly allocated string containing the
+ * Returns: (nullable) (transfer full): a newly allocated string containing the
  *     currently active text. Must be freed with g_free().
  */
 gchar *
@@ -583,7 +597,7 @@ gtk_combo_box_text_get_active_text (GtkComboBoxText *combo_box)
      GtkWidget *entry;
 
      entry = gtk_bin_get_child (GTK_BIN (combo_box));
-     text = g_strdup (gtk_entry_get_text (GTK_ENTRY (entry)));
+     text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry)));
    }
   else if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo_box), &iter))
     {

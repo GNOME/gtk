@@ -29,6 +29,7 @@
 #include "gtkadjustment.h"
 #include "gtkbuildable.h"
 #include "gtkbox.h"
+#include "gtkbinlayout.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkentry.h"
@@ -53,8 +54,9 @@
 #include "gtkdialog.h"
 #include "gtkradiobutton.h"
 #include "gtkcombobox.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkeventcontrollerscroll.h"
+#include "gtkroot.h"
 
 #if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
 #include <pango/pangofc-font.h>
@@ -94,6 +96,19 @@
  *
  * GtkFontChooserWidget has a single CSS node with name fontchooser.
  */
+
+typedef struct _GtkFontChooserWidgetPrivate       GtkFontChooserWidgetPrivate;
+typedef struct _GtkFontChooserWidgetClass         GtkFontChooserWidgetClass;
+
+struct _GtkFontChooserWidget
+{
+  GtkWidget parent_instance;
+};
+
+struct _GtkFontChooserWidgetClass
+{
+  GtkWidgetClass parent_class;
+};
 
 struct _GtkFontChooserWidgetPrivate
 {
@@ -167,9 +182,6 @@ static void gtk_font_chooser_widget_get_property         (GObject         *objec
                                                           GValue          *value,
                                                           GParamSpec      *pspec);
 static void gtk_font_chooser_widget_finalize             (GObject         *object);
-
-static void gtk_font_chooser_widget_display_changed      (GtkWidget       *widget,
-                                                          GdkDisplay      *previous_display);
 
 static gboolean gtk_font_chooser_widget_find_font        (GtkFontChooserWidget *fontchooser,
                                                           const PangoFontDescription *font_desc,
@@ -324,11 +336,12 @@ gtk_font_chooser_widget_get_property (GObject         *object,
                                       GParamSpec      *pspec)
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (object);
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
 
   switch (prop_id)
     {
     case PROP_TWEAK_ACTION:
-      g_value_set_object (value, G_OBJECT (fontchooser->priv->tweak_action));
+      g_value_set_object (value, G_OBJECT (priv->tweak_action));
       break;
     case GTK_FONT_CHOOSER_PROP_FONT:
       g_value_take_string (value, gtk_font_chooser_widget_get_font (fontchooser));
@@ -346,10 +359,10 @@ gtk_font_chooser_widget_get_property (GObject         *object,
       g_value_set_flags (value, gtk_font_chooser_widget_get_level (fontchooser));
       break;
     case GTK_FONT_CHOOSER_PROP_FONT_FEATURES:
-      g_value_set_string (value, fontchooser->priv->font_features);
+      g_value_set_string (value, priv->font_features);
       break;
     case GTK_FONT_CHOOSER_PROP_LANGUAGE:
-      g_value_set_string (value, pango_language_to_string (fontchooser->priv->language));
+      g_value_set_string (value, pango_language_to_string (priv->language));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -360,7 +373,9 @@ gtk_font_chooser_widget_get_property (GObject         *object,
 static void
 gtk_font_chooser_widget_refilter_font_list (GtkFontChooserWidget *fontchooser)
 {
-  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (fontchooser->priv->filter_model));
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
+
+  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
   gtk_font_chooser_widget_ensure_selection (fontchooser);
 }
 
@@ -372,11 +387,11 @@ text_changed_cb (GtkEntry             *entry,
 }
 
 static void
-stop_search_cb (GtkEntry             *entry,
+stop_search_cb (GtkSearchEntry       *entry,
                 GtkFontChooserWidget *fc)
 {
-  if (gtk_entry_get_text (entry)[0] != 0)
-    gtk_entry_set_text (entry, "");
+  if (gtk_editable_get_text (GTK_EDITABLE (entry))[0] != 0)
+    gtk_editable_set_text (GTK_EDITABLE (entry), "");
   else
     {
       GtkWidget *dialog;
@@ -396,7 +411,7 @@ size_change_cb (GtkAdjustment *adjustment,
                 gpointer       user_data)
 {
   GtkFontChooserWidget *fontchooser = user_data;
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   PangoFontDescription *font_desc;
   gdouble size = gtk_adjustment_get_value (adjustment);
 
@@ -420,7 +435,7 @@ output_cb (GtkSpinButton *spin,
   adjustment = gtk_spin_button_get_adjustment (spin);
   value = gtk_adjustment_get_value (adjustment);
   text = g_strdup_printf ("%2.4g", value);
-  gtk_spin_button_set_text (spin, text);
+  gtk_editable_set_text (GTK_EDITABLE (spin), text);
   g_free (text);
 
   return TRUE;
@@ -429,7 +444,7 @@ output_cb (GtkSpinButton *spin,
 static void
 gtk_font_chooser_widget_update_marks (GtkFontChooserWidget *fontchooser)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   GtkAdjustment *adj, *spin_adj;
   const int *sizes;
   gint *font_sizes;
@@ -529,7 +544,7 @@ cursor_changed_cb (GtkTreeView *treeview,
                    gpointer     user_data)
 {
   GtkFontChooserWidget *fontchooser = user_data;
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   GtkDelayedFontDescription *desc;
   GtkTreeIter filter_iter, iter;
   GtkTreePath *path = NULL;
@@ -569,7 +584,7 @@ resize_by_scroll_cb (GtkEventControllerScroll *controller,
                      gpointer                  user_data)
 {
   GtkFontChooserWidget *fc = user_data;
-  GtkFontChooserWidgetPrivate *priv = fc->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fc);
   GtkAdjustment *adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin));
 
   gtk_adjustment_set_value (adj,
@@ -580,10 +595,8 @@ resize_by_scroll_cb (GtkEventControllerScroll *controller,
 static void
 gtk_font_chooser_widget_update_preview_attributes (GtkFontChooserWidget *fontchooser)
 {
-  GtkFontChooserWidgetPrivate *priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   PangoAttrList *attrs;
-
-  priv = fontchooser->priv;
 
   attrs = pango_attr_list_new ();
 
@@ -605,7 +618,7 @@ gtk_font_chooser_widget_update_preview_attributes (GtkFontChooserWidget *fontcho
 static void
 rows_changed_cb (GtkFontChooserWidget *fontchooser)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   const char *page;
 
   if (gtk_tree_model_iter_n_children (priv->filter_model, NULL) == 0)
@@ -618,50 +631,91 @@ rows_changed_cb (GtkFontChooserWidget *fontchooser)
 }
 
 static void
+update_key_capture (GtkWidget *chooser)
+{
+  GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (chooser);
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
+  GtkWidget *capture_widget;
+
+  if (gtk_widget_get_mapped (chooser) &&
+      g_str_equal (gtk_stack_get_visible_child_name (GTK_STACK (priv->stack)), "list"))
+    {
+      GtkWidget *toplevel;
+      GtkWidget *focus;
+
+      toplevel = GTK_WIDGET (gtk_widget_get_root (chooser));
+      focus = gtk_root_get_focus (GTK_ROOT (toplevel));
+
+      if (GTK_IS_EDITABLE (focus) && focus != priv->search_entry)
+        capture_widget = NULL;
+      else
+        capture_widget = chooser;
+    }
+  else
+    capture_widget = NULL;
+
+  gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (priv->search_entry),
+                                           capture_widget);
+}
+
+static void
 gtk_font_chooser_widget_map (GtkWidget *widget)
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (widget);
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
 
-  gtk_entry_set_text (GTK_ENTRY (priv->search_entry), "");
+  gtk_editable_set_text (GTK_EDITABLE (priv->search_entry), "");
   gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "list");
   g_simple_action_set_state (G_SIMPLE_ACTION (priv->tweak_action), g_variant_new_boolean (FALSE));
 
   GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->map (widget);
+
+  update_key_capture (widget);
 }
 
 static void
-gtk_font_chooser_widget_measure (GtkWidget       *widget,
-                                 GtkOrientation  orientation,
-                                 int             for_size,
-                                 int            *minimum,
-                                 int            *natural,
-                                 int            *minimum_baseline,
-                                 int            *natural_baseline)
+gtk_font_chooser_widget_unmap (GtkWidget *widget)
 {
-  GtkFontChooserWidget *self = GTK_FONT_CHOOSER_WIDGET (widget);
-  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (self);
+  update_key_capture (widget);
 
-  gtk_widget_measure (priv->stack, orientation, for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
+  GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->unmap (widget);
 }
 
 static void
-gtk_font_chooser_widget_size_allocate (GtkWidget *widget,
-                                       int        width,
-                                       int        height,
-                                       int        baseline)
-
+fontconfig_changed (GtkFontChooserWidget *fontchooser)
 {
-  GtkFontChooserWidget *self = GTK_FONT_CHOOSER_WIDGET (widget);
-  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (self);
+  gtk_font_chooser_widget_load_fonts (fontchooser, TRUE);
+}
 
-  gtk_widget_size_allocate (priv->stack,
-                            &(GtkAllocation) {
-                              0, 0,
-                              width, height
-                            }, -1);
+static void
+gtk_font_chooser_widget_root (GtkWidget *widget)
+{
+  GtkSettings *settings;
+
+  GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->root (widget);
+
+  g_signal_connect_swapped (gtk_widget_get_root (widget), "notify::focus-widget",
+                            G_CALLBACK (update_key_capture), widget);
+
+  settings = gtk_widget_get_settings (widget);
+  g_signal_connect_object (settings, "notify::gtk-fontconfig-timestamp",
+                           G_CALLBACK (fontconfig_changed), widget, G_CONNECT_SWAPPED);
+
+  gtk_font_chooser_widget_load_fonts (GTK_FONT_CHOOSER_WIDGET (widget), FALSE);
+ }
+
+static void
+gtk_font_chooser_widget_unroot (GtkWidget *widget)
+{
+  GtkSettings *settings;
+
+  g_signal_handlers_disconnect_by_func (gtk_widget_get_root (widget),
+                                        update_key_capture, widget);
+
+  settings = gtk_widget_get_settings (widget);
+  g_signal_handlers_disconnect_by_func (settings, fontconfig_changed, widget);
+
+  GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->unroot (widget);
 }
 
 static void
@@ -685,10 +739,10 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   g_type_ensure (GTK_TYPE_DELAYED_FONT_DESCRIPTION);
   g_type_ensure (G_TYPE_THEMED_ICON);
 
-  widget_class->display_changed = gtk_font_chooser_widget_display_changed;
-  widget_class->measure = gtk_font_chooser_widget_measure;
-  widget_class->size_allocate = gtk_font_chooser_widget_size_allocate;
+  widget_class->root = gtk_font_chooser_widget_root;
+  widget_class->unroot = gtk_font_chooser_widget_unroot;
   widget_class->map = gtk_font_chooser_widget_map;
+  widget_class->unmap = gtk_font_chooser_widget_unmap;
 
   gobject_class->finalize = gtk_font_chooser_widget_finalize;
   gobject_class->dispose = gtk_font_chooser_widget_dispose;
@@ -749,6 +803,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, resize_by_scroll_cb);
 
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("fontchooser"));
 }
 
@@ -758,17 +813,18 @@ change_tweak (GSimpleAction *action,
               gpointer       data)
 {
   GtkFontChooserWidget *fontchooser = data;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   gboolean tweak = g_variant_get_boolean (state);
 
   if (tweak)
     {
-      gtk_entry_grab_focus_without_selecting (GTK_ENTRY (fontchooser->priv->preview2));
-      gtk_stack_set_visible_child_name (GTK_STACK (fontchooser->priv->stack), "tweaks");
+      gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->preview2));
+      gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "tweaks");
     }
   else
     {
-      gtk_entry_grab_focus_without_selecting (GTK_ENTRY (fontchooser->priv->search_entry));
-      gtk_stack_set_visible_child_name (GTK_STACK (fontchooser->priv->stack), "list");
+      gtk_widget_grab_focus (priv->search_entry);
+      gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "list");
     }
 
   g_simple_action_set_state (action, state);
@@ -823,12 +879,7 @@ axis_free (gpointer v)
 static void
 gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 {
-  GtkFontChooserWidgetPrivate *priv;
-
-  fontchooser->priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
-  priv = fontchooser->priv;
-
-  gtk_widget_set_has_surface (GTK_WIDGET (fontchooser), FALSE);
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
 
   gtk_widget_init_template (GTK_WIDGET (fontchooser));
 
@@ -844,7 +895,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   priv->language = pango_language_get_default ();
 
   /* Set default preview text */
-  gtk_entry_set_text (GTK_ENTRY (priv->preview), priv->preview_text);
+  gtk_editable_set_text (GTK_EDITABLE (priv->preview), priv->preview_text);
 
   gtk_font_chooser_widget_update_preview_attributes (fontchooser);
 
@@ -876,9 +927,6 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 
   gtk_font_chooser_widget_set_cell_size (fontchooser);
   gtk_font_chooser_widget_take_font_desc (fontchooser, NULL);
-
-  gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (priv->search_entry),
-                                           GTK_WIDGET (fontchooser));
 }
 
 /**
@@ -908,7 +956,7 @@ static void
 gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser,
                                     gboolean              force)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   GtkListStore *list_store;
   gint n_families, i;
   PangoFontFamily **families;
@@ -1034,7 +1082,7 @@ visible_func (GtkTreeModel *model,
     }
 
   /* If there's no filter string we show the item */
-  search_text = gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
+  search_text = gtk_editable_get_text (GTK_EDITABLE (priv->search_entry));
   if (strlen (search_text) == 0)
     return TRUE;
 
@@ -1069,7 +1117,8 @@ visible_func (GtkTreeModel *model,
 static int
 gtk_font_chooser_widget_get_preview_text_height (GtkFontChooserWidget *fontchooser)
 {
-  GtkWidget *treeview = fontchooser->priv->family_face_list;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
+  GtkWidget *treeview = priv->family_face_list;
   GtkStyleContext *context;
   double dpi, font_size;
 
@@ -1140,7 +1189,7 @@ gtk_font_chooser_widget_cell_data_func (GtkTreeViewColumn *column,
 static void
 gtk_font_chooser_widget_set_cell_size (GtkFontChooserWidget *fontchooser)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   PangoAttrList *attrs;
   GtkRequisition size;
 
@@ -1168,7 +1217,7 @@ static void
 gtk_font_chooser_widget_finalize (GObject *object)
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (object);
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
 
   if (priv->font_desc)
     pango_font_description_free (priv->font_desc);
@@ -1204,7 +1253,7 @@ gtk_font_chooser_widget_find_font (GtkFontChooserWidget        *fontchooser,
                                    /* out arguments */
                                    GtkTreeIter                 *iter)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   gboolean valid;
 
   if (pango_font_description_get_family (font_desc) == NULL)
@@ -1250,45 +1299,11 @@ gtk_font_chooser_widget_find_font (GtkFontChooserWidget        *fontchooser,
   return valid;
 }
 
-static void
-fontconfig_changed (GtkFontChooserWidget *fontchooser)
-{
-  gtk_font_chooser_widget_load_fonts (fontchooser, TRUE);
-}
-
-static void
-gtk_font_chooser_widget_display_changed (GtkWidget  *widget,
-                                         GdkDisplay *previous_display)
-{
-  GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (widget);
-  GtkSettings *settings;
-
-  if (GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->display_changed)
-    GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->display_changed (widget, previous_display);
-
-  if (previous_display)
-    {
-      settings = gtk_settings_get_for_display (previous_display);
-      g_signal_handlers_disconnect_by_func (settings, fontconfig_changed, widget);
-    }
-  settings = gtk_widget_get_settings (widget);
-  g_signal_connect_object (settings, "notify::gtk-fontconfig-timestamp",
-                           G_CALLBACK (fontconfig_changed), widget, G_CONNECT_SWAPPED);
-
-  if (previous_display == NULL)
-    previous_display = gdk_display_get_default ();
-
-  if (previous_display == gtk_widget_get_display (widget))
-    return;
-
-  gtk_font_chooser_widget_load_fonts (fontchooser, FALSE);
-}
-
 static PangoFontFamily *
 gtk_font_chooser_widget_get_family (GtkFontChooser *chooser)
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (chooser);
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   PangoFontFamily *family;
 
   if (!gtk_list_store_iter_is_valid (GTK_LIST_STORE (priv->model), &priv->font_iter))
@@ -1306,7 +1321,7 @@ static PangoFontFace *
 gtk_font_chooser_widget_get_face (GtkFontChooser *chooser)
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (chooser);
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   PangoFontFace *face;
 
   if (!gtk_list_store_iter_is_valid (GTK_LIST_STORE (priv->model), &priv->font_iter))
@@ -1346,12 +1361,12 @@ gtk_font_chooser_widget_get_font (GtkFontChooserWidget *fontchooser)
 static PangoFontDescription *
 gtk_font_chooser_widget_get_font_desc (GtkFontChooserWidget *fontchooser)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   GtkTreeSelection *selection;
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->family_face_list));
   if (gtk_tree_selection_count_selected_rows (selection) > 0)
-    return fontchooser->priv->font_desc;
+    return priv->font_desc;
 
   return NULL;
 }
@@ -1370,7 +1385,7 @@ static void
 gtk_font_chooser_widget_update_font_name (GtkFontChooserWidget *fontchooser,
                                           GtkTreeSelection     *selection)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   GtkTreeModel *model;
   GtkTreeIter iter;
   PangoFontFamily *family;
@@ -1414,7 +1429,7 @@ static void
 selection_changed (GtkTreeSelection     *selection,
                    GtkFontChooserWidget *fontchooser)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
 
   g_object_notify (G_OBJECT (fontchooser), "font");
   g_object_notify (G_OBJECT (fontchooser), "font-desc");
@@ -1434,7 +1449,7 @@ selection_changed (GtkTreeSelection     *selection,
 static void
 gtk_font_chooser_widget_ensure_selection (GtkFontChooserWidget *fontchooser)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   GtkTreeSelection *selection;
   GtkTreeIter filter_iter;
 
@@ -1469,12 +1484,13 @@ static void
 add_font_variations (GtkFontChooserWidget *fontchooser,
                      GString              *s)
 {
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   GHashTableIter iter;
   Axis *axis;
   const char *sep = "";
   char buf[G_ASCII_DTOSTR_BUF_SIZE];
 
-  g_hash_table_iter_init (&iter, fontchooser->priv->axes);
+  g_hash_table_iter_init (&iter, priv->axes);
   while (g_hash_table_iter_next (&iter, (gpointer *)NULL, (gpointer *)&axis))
     {
       char tag[5];
@@ -1496,7 +1512,7 @@ adjustment_changed (GtkAdjustment *adjustment,
                     Axis          *axis)
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (axis->fontchooser);
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   PangoFontDescription *font_desc;
   GString *s;
 
@@ -1551,7 +1567,7 @@ add_axis (GtkFontChooserWidget *fontchooser,
           FT_Fixed              value,
           int                   row)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   Axis *axis;
   const char *name;
   int i;
@@ -1608,7 +1624,7 @@ add_axis (GtkFontChooserWidget *fontchooser,
 static gboolean
 gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchooser)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   PangoFont *pango_font;
   FT_Face ft_face;
   FT_MM_Var *ft_mm_var;
@@ -1676,7 +1692,7 @@ find_language_and_script (GtkFontChooserWidget *fontchooser,
                           hb_tag_t             *lang_tag,
                           hb_tag_t             *script_tag)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   gint i, j, k;
   hb_tag_t scripts[80];
   unsigned int n_scripts;
@@ -1798,7 +1814,11 @@ find_affected_text (hb_tag_t   feature_tag,
   chars = g_string_new ("");
 
   hb_ot_layout_table_find_script (hb_face, HB_OT_TAG_GSUB, script_tag, &script_index);
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   hb_ot_layout_script_find_language (hb_face, HB_OT_TAG_GSUB, script_index, lang_tag, &lang_index);
+  G_GNUC_END_IGNORE_DEPRECATIONS
+
   if (hb_ot_layout_language_find_feature (hb_face, HB_OT_TAG_GSUB, script_index, lang_index, feature_tag, &feature_index))
     {
       unsigned int lookup_indexes[32];
@@ -1964,7 +1984,7 @@ add_check_group (GtkFontChooserWidget *fontchooser,
                  const char  *title,
                  const char **tags)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   GtkWidget *label;
   GtkWidget *group;
   PangoAttrList *attrs;
@@ -2000,7 +2020,7 @@ add_check_group (GtkFontChooserWidget *fontchooser,
       g_signal_connect_swapped (feat, "notify::inconsistent", G_CALLBACK (update_font_features), fontchooser);
       g_signal_connect (feat, "clicked", G_CALLBACK (feat_clicked), NULL);
 
-      gesture = gtk_gesture_multi_press_new ();
+      gesture = gtk_gesture_click_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
       g_signal_connect (gesture, "pressed", G_CALLBACK (feat_pressed), feat);
       gtk_widget_add_controller (feat, GTK_EVENT_CONTROLLER (gesture));
@@ -2033,7 +2053,7 @@ add_radio_group (GtkFontChooserWidget *fontchooser,
                  const char  *title,
                  const char **tags)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   GtkWidget *label;
   GtkWidget *group;
   int i;
@@ -2123,7 +2143,7 @@ gtk_font_chooser_widget_populate_features (GtkFontChooserWidget *fontchooser)
 static gboolean
 gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   PangoFont *pango_font;
   FT_Face ft_face;
   hb_font_t *hb_font;
@@ -2166,7 +2186,11 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
       for (i = 0; i < 2; i++)
         {
           hb_ot_layout_table_find_script (hb_face, table[i], script_tag, &script_index);
+
+          G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           hb_ot_layout_script_find_language (hb_face, table[i], script_index, lang_tag, &lang_index);
+          G_GNUC_END_IGNORE_DEPRECATIONS
+
           count = G_N_ELEMENTS (features);
           hb_ot_layout_language_get_feature_tags (hb_face,
                                                   table[i],
@@ -2216,7 +2240,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
 static void
 update_font_features (GtkFontChooserWidget *fontchooser)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   GString *s;
   GList *l;
 
@@ -2267,7 +2291,7 @@ gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget       *fontchooser
                                          const PangoFontDescription *font_desc,
                                          GtkTreeIter                *iter)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   PangoFontMask mask;
 
   g_assert (font_desc != NULL);
@@ -2326,7 +2350,7 @@ static void
 gtk_font_chooser_widget_take_font_desc (GtkFontChooserWidget *fontchooser,
                                         PangoFontDescription *font_desc)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   PangoFontMask mask;
 
   if (font_desc == NULL)
@@ -2354,19 +2378,21 @@ gtk_font_chooser_widget_take_font_desc (GtkFontChooserWidget *fontchooser,
 static const gchar*
 gtk_font_chooser_widget_get_preview_text (GtkFontChooserWidget *fontchooser)
 {
-  return fontchooser->priv->preview_text;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
+
+  return priv->preview_text;
 }
 
 static void
 gtk_font_chooser_widget_set_preview_text (GtkFontChooserWidget *fontchooser,
                                           const gchar          *text)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
 
   g_free (priv->preview_text);
   priv->preview_text = g_strdup (text);
 
-  gtk_entry_set_text (GTK_ENTRY (priv->preview), text);
+  gtk_editable_set_text (GTK_EDITABLE (priv->preview), text);
 
   g_object_notify (G_OBJECT (fontchooser), "preview-text");
 
@@ -2378,23 +2404,25 @@ gtk_font_chooser_widget_set_preview_text (GtkFontChooserWidget *fontchooser,
 static gboolean
 gtk_font_chooser_widget_get_show_preview_entry (GtkFontChooserWidget *fontchooser)
 {
-  return fontchooser->priv->show_preview_entry;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
+
+  return priv->show_preview_entry;
 }
 
 static void
 gtk_font_chooser_widget_set_show_preview_entry (GtkFontChooserWidget *fontchooser,
                                                 gboolean              show_preview_entry)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
 
   if (priv->show_preview_entry != show_preview_entry)
     {
-      fontchooser->priv->show_preview_entry = show_preview_entry;
+      priv->show_preview_entry = show_preview_entry;
 
       if (show_preview_entry)
-        gtk_widget_show (fontchooser->priv->preview);
+        gtk_widget_show (priv->preview);
       else
-        gtk_widget_hide (fontchooser->priv->preview);
+        gtk_widget_hide (priv->preview);
 
       g_object_notify (G_OBJECT (fontchooser), "show-preview-entry");
     }
@@ -2405,7 +2433,7 @@ gtk_font_chooser_widget_set_font_map (GtkFontChooser *chooser,
                                       PangoFontMap   *fontmap)
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (chooser);
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
 
   if (g_set_object (&priv->font_map, fontmap))
     {
@@ -2428,7 +2456,7 @@ static PangoFontMap *
 gtk_font_chooser_widget_get_font_map (GtkFontChooser *chooser)
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (chooser);
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
 
   return priv->font_map;
 }
@@ -2440,7 +2468,7 @@ gtk_font_chooser_widget_set_filter_func (GtkFontChooser  *chooser,
                                          GDestroyNotify    destroy)
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (chooser);
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
 
   if (priv->filter_data_destroy)
     priv->filter_data_destroy (priv->filter_data);
@@ -2456,7 +2484,7 @@ static void
 gtk_font_chooser_widget_set_level (GtkFontChooserWidget *fontchooser,
                                    GtkFontChooserLevel   level)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
 
   if (priv->level == level)
     return;
@@ -2484,7 +2512,7 @@ gtk_font_chooser_widget_set_level (GtkFontChooserWidget *fontchooser,
 static GtkFontChooserLevel
 gtk_font_chooser_widget_get_level (GtkFontChooserWidget *fontchooser)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
 
   return priv->level;
 }
@@ -2493,7 +2521,7 @@ static void
 gtk_font_chooser_widget_set_language (GtkFontChooserWidget *fontchooser,
                                       const char           *language)
 {
-  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   PangoLanguage *lang;
 
   lang = pango_language_from_string (language);
@@ -2520,6 +2548,9 @@ gtk_font_chooser_widget_iface_init (GtkFontChooserIface *iface)
 GAction *
 gtk_font_chooser_widget_get_tweak_action (GtkWidget *widget)
 {
-  return GTK_FONT_CHOOSER_WIDGET (widget)->priv->tweak_action;
+  GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (widget);
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
+
+  return priv->tweak_action;
 }
 

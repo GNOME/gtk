@@ -44,7 +44,7 @@ gdk_public_sources = files([
   'gdktexture.c',
   'gdkvulkancontext.c',
   'gdksurface.c',
-  'gdksurfaceimpl.c',
+  'gdkprofiler.c'
 ])
 
 gdk_public_headers = files([
@@ -160,6 +160,7 @@ gdkx11_inc = include_directories('x11')
 gdkwayland_inc = include_directories('wayland')
 
 wlinc = include_directories('.')
+win32rcinc = include_directories('win32/rc')
 
 gdk_gen_headers = [gdkenum_h, gdkmarshal_h, gdkconfig, gdkversionmacros]
 
@@ -168,6 +169,7 @@ gdk_deps = [
   pixbuf_dep,
   cairo_dep,
   pango_dep,
+  fribidi_dep,
   cairogobj_dep,
   glib_dep,
   gobject_dep,
@@ -178,6 +180,12 @@ gdk_deps = [
   pangocairo_dep,
   vulkan_dep,
 ]
+
+if profiler_enabled
+  if profiler_dep.found()
+    gdk_deps += [profiler_dep]
+  endif
+endif
 
 # add generated gdk sources
 gdk_sources += [
@@ -222,7 +230,8 @@ endif
 # FIXME: might have to add '-xobjective-c' to c_args for quartz backend?
 libgdk = static_library('gdk',
   sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
-  dependencies: gdk_deps,
+  dependencies: gdk_deps + [libgtk_css_dep],
+  link_with: [libgtk_css, ],
   include_directories: [confinc, gdkx11_inc, wlinc],
   c_args: [
     '-DGDK_COMPILATION',
@@ -237,4 +246,4 @@ libgdk = static_library('gdk',
 libgdk_dep = declare_dependency(
   sources: ['gdk.h', gdkconfig, gdkenum_h],
   include_directories: [confinc, gdkx11_inc, wlinc],
-  dependencies: gdk_deps)
+  dependencies: gdk_deps + [libgtk_css_dep])

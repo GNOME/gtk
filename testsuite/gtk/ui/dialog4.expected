@@ -1,2 +1,2 @@
 ERROR: gtk-builder-error-quark 1
-.:10:15 Unsupported tag for GtkDialog: <warbl>
+.:9:15 Unsupported tag for GtkDialog: <warbl>

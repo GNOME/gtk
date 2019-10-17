@@ -17,19 +17,35 @@
 #include "gtklabel.h"
 #include "gtkintl.h"
 
-G_DEFINE_TYPE (GtkFileChooserErrorStack, gtk_file_chooser_error_stack, GTK_TYPE_STACK)
+G_DEFINE_TYPE (GtkFileChooserErrorStack, gtk_file_chooser_error_stack, GTK_TYPE_WIDGET)
+
+static void
+gtk_file_chooser_error_stack_finalize (GObject *object)
+{
+  GtkFileChooserErrorStack *self = GTK_FILE_CHOOSER_ERROR_STACK (object);
+
+  g_clear_pointer (&self->stack, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (gtk_file_chooser_error_stack_parent_class)->finalize (object);
+}
 
 static void
 gtk_file_chooser_error_stack_class_init (GtkFileChooserErrorStackClass *class)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
 
+  object_class->finalize = gtk_file_chooser_error_stack_finalize;
 }
 
 static void
 gtk_file_chooser_error_stack_init (GtkFileChooserErrorStack *self)
 {
   GtkWidget *label;
-  GtkStack *stack = GTK_STACK (self);
+  GtkStack *stack;
+
+  self->stack = gtk_stack_new ();
+  gtk_widget_set_parent (self->stack, GTK_WIDGET (self));
+  stack = GTK_STACK (self->stack);
 
   gtk_stack_set_transition_type (stack, GTK_STACK_TRANSITION_TYPE_CROSSFADE);
   gtk_stack_set_transition_duration (stack, 50);
@@ -110,7 +126,7 @@ gtk_file_chooser_error_stack_set_error (GtkFileChooserErrorStack *self,
 
   if (g_strcmp0 (label_name, "no-error") == 0)
     {
-      gtk_stack_set_visible_child_name (GTK_STACK (self), "no-error");
+      gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "no-error");
       return;
     }
 
@@ -118,7 +134,7 @@ gtk_file_chooser_error_stack_set_error (GtkFileChooserErrorStack *self,
                                 is_folder ? "folder" : "file",
                                 label_name);
 
-  gtk_stack_set_visible_child_name (GTK_STACK (self), child_name);
+  gtk_stack_set_visible_child_name (GTK_STACK (self->stack), child_name);
 
   g_free (child_name);
 }
@@ -128,9 +144,9 @@ void
 gtk_file_chooser_error_stack_set_custom_error  (GtkFileChooserErrorStack *self,
                                                 const char               *label_text)
 {
-  GtkWidget *label = gtk_stack_get_child_by_name (GTK_STACK (self), "cutsom");
+  GtkWidget *label = gtk_stack_get_child_by_name (GTK_STACK (self->stack), "cutsom");
 
   gtk_label_set_text (GTK_LABEL (label), label_text);
 
-  gtk_stack_set_visible_child_name (GTK_STACK (self), "custom");
+  gtk_stack_set_visible_child_name (GTK_STACK (self->stack), "custom");
 }

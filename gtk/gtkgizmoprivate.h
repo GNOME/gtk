@@ -25,9 +25,11 @@ typedef void    (* GtkGizmoAllocateFunc)  (GtkGizmo *gizmo,
                                            int       width,
                                            int       height,
                                            int       baseline);
-typedef gboolean (* GtkGizmoSnapshotFunc) (GtkGizmo    *gizmo,
+typedef void    (* GtkGizmoSnapshotFunc)  (GtkGizmo    *gizmo,
                                            GtkSnapshot *snapshot);
-
+typedef gboolean (* GtkGizmoContainsFunc) (GtkGizmo  *gizmo,
+                                           double     x,
+                                           double     y);
 
 struct _GtkGizmo
 {
@@ -36,6 +38,7 @@ struct _GtkGizmo
   GtkGizmoMeasureFunc  measure_func;
   GtkGizmoAllocateFunc allocate_func;
   GtkGizmoSnapshotFunc snapshot_func;
+  GtkGizmoContainsFunc contains_func;
 };
 
 struct _GtkGizmoClass
@@ -48,7 +51,8 @@ GType      gtk_gizmo_get_type (void) G_GNUC_CONST;
 GtkWidget *gtk_gizmo_new (const char          *css_name,
                           GtkGizmoMeasureFunc  measure_func,
                           GtkGizmoAllocateFunc allocate_func,
-                          GtkGizmoSnapshotFunc snapshot_func);
+                          GtkGizmoSnapshotFunc snapshot_func,
+                          GtkGizmoContainsFunc contains_func);
 
 
 #endif

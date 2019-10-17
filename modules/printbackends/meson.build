@@ -14,42 +14,14 @@ endif
 # The 'file' print backend cannot be disabled
 print_backends = ['file']
 
-# Checks to see if we should compile with CUPS backend for GTK+
+# Checks to see if we should compile with CUPS backend for GTK
 enable_cups = enabled_print_backends.contains('cups')
 if enable_cups
-  #cups_config = find_program('cups-config', required : true)
-  #if cups_config.found()
-  # FIXME: eek, see configure.ac (we're just not going to support non-standar prefix for now)
-  #endif
-  if cc.has_header('cups/cups.h')
-    # TODO: include_directories from cups-config
-    cups_major_version = cc.compute_int('CUPS_VERSION_MAJOR', prefix : '#include <cups/cups.h>')
-    cups_minor_version = cc.compute_int('CUPS_VERSION_MINOR', prefix : '#include <cups/cups.h>')
-    message('Found CUPS version: @0@.@1@'.format(cups_major_version, cups_minor_version))
-    if cups_major_version > 1 or cups_minor_version >= 2
-      if cups_major_version > 1 or cups_minor_version >= 6
-        cdata.set('HAVE_CUPS_API_1_6', 1)
-      endif
-
-      if cc.compiles('#include <cups/http.h> \n http_t http; char *s = http.authstring;')
-        cdata.set('HAVE_HTTP_AUTHSTRING', 1,
-          description :'Define if cups http_t authstring field is accessible')
-      endif
-      libcups = cc.find_library('cups', required : true)
-      if libcups.found() and cc.has_function('httpGetAuthString', dependencies : libcups)
-        cdata.set('HAVE_HTTPGETAUTHSTRING', 1)
-      endif
-
-      print_backends += ['cups']
-    else
-      error('Need CUPS version >= 1.2')
-    endif
-  else
-    error('Cannot find CUPS headers in default prefix.')
-  endif
+  cups_dep = dependency('cups', version : '>=2.0', required: true)
+  print_backends += ['cups']
 endif
 
-# Checks to see if we should compile with cloudprint backend for GTK+
+# Checks to see if we should compile with cloudprint backend for GTK
 enable_cloudprint = enabled_print_backends.contains('cloudprint')
 if enable_cloudprint
   rest_dep = dependency('rest-0.7', required : true)
@@ -105,7 +77,7 @@ if print_backends.contains('cups')
                 'gtkcupsutils.c',
                 'gtkcupssecretsutils.c',
                 c_args: printbackends_args,
-                dependencies: [libgtk_dep, libcups, colord_dep],
+                dependencies: [libgtk_dep, cups_dep, colord_dep],
                 install_dir: printbackends_install_dir,
                 install : true)
 endif

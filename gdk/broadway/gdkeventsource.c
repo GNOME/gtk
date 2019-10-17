@@ -20,7 +20,7 @@
 #include "gdkeventsource.h"
 #include "gdkseat.h"
 
-#include "gdkinternals.h"
+#include "gdksurfaceprivate.h"
 #include "gdkframeclockprivate.h"
 
 #include <stdlib.h>
@@ -83,30 +83,14 @@ gdk_event_source_check (GSource *source)
 }
 
 void
-_gdk_broadway_events_got_input (BroadwayInputMsg *message)
+_gdk_broadway_events_got_input (GdkDisplay *display,
+                                BroadwayInputMsg *message)
 {
-  GdkDisplay *display;
   GdkBroadwayDisplay *display_broadway;
   GdkSeat *seat;
   GdkSurface *surface;
   GdkEvent *event = NULL;
   GList *node;
-  GSList *list, *d;
-
-  display = NULL;
-
-  list = gdk_display_manager_list_displays (gdk_display_manager_get ());
-  for (d = list; d; d = d->next)
-    {
-      if (GDK_IS_BROADWAY_DISPLAY (d->data))
-        {
-          display = d->data;
-          break;
-        }
-    }
-  g_slist_free (list);
-
-  g_assert (display != NULL);
 
   display_broadway = GDK_BROADWAY_DISPLAY (display);
   seat = gdk_display_get_default_seat (display);
@@ -176,14 +160,14 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
     break;
   case BROADWAY_EVENT_BUTTON_PRESS:
   case BROADWAY_EVENT_BUTTON_RELEASE:
-    if (message->base.type != 'b' &&
+    if (message->base.type != BROADWAY_EVENT_BUTTON_PRESS &&
         _gdk_broadway_moveresize_handle_event (display, message))
       break;
 
     surface = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.event_surface_id));
     if (surface)
       {
-        event = gdk_event_new (message->base.type == 'b' ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
+        event = gdk_event_new (message->base.type == BROADWAY_EVENT_BUTTON_PRESS ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
         event->any.surface = g_object_ref (surface);
         event->button.time = message->base.time;
         event->button.x = message->pointer.win_x;
@@ -278,7 +262,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
                                   GINT_TO_POINTER (message->key.surface_id));
     if (surface)
       {
-        event = gdk_event_new (message->base.type == 'k' ? GDK_KEY_PRESS : GDK_KEY_RELEASE);
+        event = gdk_event_new (message->base.type == BROADWAY_EVENT_KEY_PRESS ? GDK_KEY_PRESS : GDK_KEY_RELEASE);
         event->any.surface = g_object_ref (surface);
         event->key.time = message->base.time;
         event->key.keyval = message->key.key;
@@ -303,6 +287,8 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
       {
         surface->x = message->configure_notify.x;
         surface->y = message->configure_notify.y;
+
+        gdk_broadway_surface_update_popups (surface);
 
         event = gdk_event_new (GDK_CONFIGURE);
         event->any.surface = g_object_ref (surface);

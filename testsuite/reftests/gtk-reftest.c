@@ -86,33 +86,36 @@ parse_command_line (int *argc, char ***argv)
 }
 
 static const char *
-get_output_dir (void)
+get_output_dir (GError **error)
 {
   static const char *output_dir = NULL;
-  GError *error = NULL;
 
   if (output_dir)
     return output_dir;
 
   if (arg_output_dir)
     {
-      GFile *file = g_file_new_for_commandline_arg (arg_output_dir);
+      GError *err = NULL;
+      GFile *file;
+
+      file = g_file_new_for_commandline_arg (arg_output_dir);
+      if (!g_file_make_directory_with_parents (file, NULL, &err))
+        {
+          if (!g_error_matches (err, G_IO_ERROR, G_IO_ERROR_EXISTS))
+            {
+              g_propagate_error (error, err);
+              g_object_unref (file);
+              return NULL;
+            }
+          g_clear_error (&err);
+        }
+
       output_dir = g_file_get_path (file);
       g_object_unref (file);
     }
   else
     {
       output_dir = g_get_tmp_dir ();
-    }
-
-  if (!g_file_test (output_dir, G_FILE_TEST_EXISTS))
-    {
-      GFile *file;
-
-      file = g_file_new_for_path (output_dir);
-      g_assert (g_file_make_directory_with_parents (file, NULL, &error));
-      g_assert_no_error (error);
-      g_object_unref (file);
     }
 
   return output_dir;
@@ -140,11 +143,16 @@ get_components_of_test_file (const char  *test_file,
 }
 
 static char *
-get_output_file (const char *test_file,
-                 const char *extension)
+get_output_file (const char  *test_file,
+                 const char  *extension,
+                 GError     **error)
 {
-  const char *output_dir = get_output_dir ();
+  const char *output_dir;
   char *result, *base;
+
+  output_dir = get_output_dir (error);
+  if (output_dir == NULL)
+    return NULL;
 
   get_components_of_test_file (test_file, NULL, &base);
 
@@ -242,7 +250,16 @@ save_image (cairo_surface_t *surface,
             const char      *test_name,
             const char      *extension)
 {
-  char *filename = get_output_file (test_name, extension);
+  GError *error = NULL;
+  char *filename;
+  
+  filename = get_output_file (test_name, extension, &error);
+  if (filename == NULL)
+    {
+      g_test_message ("Not storing test result image: %s", error->message);
+      g_error_free (error);
+      return;
+    }
 
   g_test_message ("Storing test result image at %s", filename);
   g_assert (cairo_surface_write_to_png (surface, filename) == CAIRO_STATUS_SUCCESS);

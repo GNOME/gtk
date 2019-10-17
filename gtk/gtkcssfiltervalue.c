@@ -729,96 +729,46 @@ gtk_css_filter_value_is_none (const GtkCssValue *value)
   return value->n_filters == 0;
 }
 
-static gboolean
-gtk_css_filter_parse (GtkCssFilter *filter,
-                         GtkCssParser    *parser)
+static guint
+gtk_css_filter_parse_number (GtkCssParser *parser,
+                             guint         n,
+                             gpointer      data)
 {
-  if (_gtk_css_parser_try (parser, "brightness(", TRUE))
-    {
-      filter->type = GTK_CSS_FILTER_BRIGHTNESS;
+  GtkCssValue **values = data;
 
-      filter->brightness.value = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_PARSE_PERCENT);
-      if (filter->brightness.value == NULL)
-        return FALSE;
-    }
-  else if (_gtk_css_parser_try (parser, "contrast(", TRUE))
-    {
-      filter->type = GTK_CSS_FILTER_CONTRAST;
+  values[n] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_PARSE_PERCENT);
+  if (values[n] == NULL)
+    return 0;
 
-      filter->contrast.value = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_PARSE_PERCENT);
-      if (filter->contrast.value == NULL)
-        return FALSE;
-    }
-  else if (_gtk_css_parser_try (parser, "grayscale(", TRUE))
-    {
-      filter->type = GTK_CSS_FILTER_GRAYSCALE;
+  return 1;
+}
 
-      filter->grayscale.value = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_PARSE_PERCENT);
-      if (filter->grayscale.value == NULL)
-        return FALSE;
-    }
-  else if (_gtk_css_parser_try (parser, "hue-rotate(", TRUE))
-    {
-      filter->type = GTK_CSS_FILTER_HUE_ROTATE;
+static guint
+gtk_css_filter_parse_length (GtkCssParser *parser,
+                             guint         n,
+                             gpointer      data)
+{
+  GtkCssValue **values = data;
 
-      filter->hue_rotate.value = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
-      if (filter->hue_rotate.value == NULL)
-        return FALSE;
-    }
-  else if (_gtk_css_parser_try (parser, "invert(", TRUE))
-    {
-      filter->type = GTK_CSS_FILTER_INVERT;
+  values[n] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH);
+  if (values[n] == NULL)
+    return 0;
 
-      filter->invert.value = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_PARSE_PERCENT);
-      if (filter->invert.value == NULL)
-        return FALSE;
-    }
-  else if (_gtk_css_parser_try (parser, "opacity(", TRUE))
-    {
-      filter->type = GTK_CSS_FILTER_OPACITY;
+  return 1;
+}
 
-      filter->opacity.value = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_PARSE_PERCENT);
-      if (filter->opacity.value == NULL)
-        return FALSE;
-    }
-  else if (_gtk_css_parser_try (parser, "saturate(", TRUE))
-    {
-      filter->type = GTK_CSS_FILTER_SATURATE;
+static guint
+gtk_css_filter_parse_angle (GtkCssParser *parser,
+                            guint         n,
+                            gpointer      data)
+{
+  GtkCssValue **values = data;
 
-      filter->saturate.value = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_PARSE_PERCENT);
-      if (filter->saturate.value == NULL)
-        return FALSE;
-    }
-  else if (_gtk_css_parser_try (parser, "sepia(", TRUE))
-    {
-      filter->type = GTK_CSS_FILTER_SEPIA;
+  values[n] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
+  if (values[n] == NULL)
+    return 0;
 
-      filter->sepia.value = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_PARSE_PERCENT);
-      if (filter->sepia.value == NULL)
-        return FALSE;
-    }
-  else if (_gtk_css_parser_try (parser, "blur(", TRUE))
-    {
-      filter->type = GTK_CSS_FILTER_BLUR;
-
-      filter->blur.value = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH);
-      if (filter->blur.value == NULL)
-        return FALSE;
-    }
-  else
-    {
-      _gtk_css_parser_error (parser, "unknown syntax for filter");
-      return FALSE;
-    }
-
-  if (!_gtk_css_parser_try (parser, ")", TRUE))
-    {
-      gtk_css_filter_clear (filter);
-      _gtk_css_parser_error (parser, "Expected closing ')'");
-      return FALSE;
-    }
-
-  return TRUE;
+  return 1;
 }
 
 GtkCssValue *
@@ -828,25 +778,91 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
   GArray *array;
   guint i;
 
-  if (_gtk_css_parser_try (parser, "none", TRUE))
+  if (gtk_css_parser_try_ident (parser, "none"))
     return gtk_css_filter_value_new_none ();
 
   array = g_array_new (FALSE, FALSE, sizeof (GtkCssFilter));
 
-  do {
-    GtkCssFilter filter;
+  while (TRUE)
+    {
+      GtkCssFilter filter;
 
-    if (!gtk_css_filter_parse (&filter, parser))
-      {
-        for (i = 0; i < array->len; i++)
-          {
-            gtk_css_filter_clear (&g_array_index (array, GtkCssFilter, i));
-          }
-        g_array_free (array, TRUE);
-        return NULL;
-      }
-    g_array_append_val (array, filter);
-  } while (!_gtk_css_parser_begins_with (parser, ';'));
+      if (gtk_css_parser_has_function (parser, "blur"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_filter_parse_length, &filter.blur.value))
+            goto fail;
+
+          filter.type = GTK_CSS_FILTER_BLUR;
+        }
+      else if (gtk_css_parser_has_function (parser, "brightness"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_filter_parse_number, &filter.brightness.value))
+            goto fail;
+
+          filter.type = GTK_CSS_FILTER_BRIGHTNESS;
+        }
+      else if (gtk_css_parser_has_function (parser, "contrast"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_filter_parse_number, &filter.contrast.value))
+            goto fail;
+
+          filter.type = GTK_CSS_FILTER_CONTRAST;
+        }
+      else if (gtk_css_parser_has_function (parser, "grayscale"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_filter_parse_number, &filter.grayscale.value))
+            goto fail;
+
+          filter.type = GTK_CSS_FILTER_GRAYSCALE;
+        }
+      else if (gtk_css_parser_has_function (parser, "hue-rotate"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_filter_parse_angle, &filter.blur.value))
+            goto fail;
+
+          filter.type = GTK_CSS_FILTER_HUE_ROTATE;
+        }
+      else if (gtk_css_parser_has_function (parser, "invert"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_filter_parse_number, &filter.invert.value))
+            goto fail;
+
+          filter.type = GTK_CSS_FILTER_INVERT;
+        }
+      else if (gtk_css_parser_has_function (parser, "opacity"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_filter_parse_number, &filter.opacity.value))
+            goto fail;
+
+          filter.type = GTK_CSS_FILTER_OPACITY;
+        }
+      else if (gtk_css_parser_has_function (parser, "saturate"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_filter_parse_number, &filter.saturate.value))
+            goto fail;
+
+          filter.type = GTK_CSS_FILTER_SATURATE;
+        }
+      else if (gtk_css_parser_has_function (parser, "sepia"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_filter_parse_number, &filter.sepia.value))
+            goto fail;
+
+          filter.type = GTK_CSS_FILTER_SEPIA;
+        }
+      else
+        {
+          break;
+        }
+
+      g_array_append_val (array, filter);
+    }
+
+  if (array->len == 0)
+    {
+      gtk_css_parser_error_syntax (parser, "Expected a filter");
+      goto fail;
+    }
 
   value = gtk_css_filter_value_alloc (array->len);
   memcpy (value->filters, array->data, sizeof (GtkCssFilter) * array->len);
@@ -854,6 +870,14 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
   g_array_free (array, TRUE);
 
   return value;
+
+fail:
+  for (i = 0; i < array->len; i++)
+    {
+      gtk_css_filter_clear (&g_array_index (array, GtkCssFilter, i));
+    }
+  g_array_free (array, TRUE);
+  return NULL;
 }
 
 void

@@ -62,11 +62,7 @@ struct _GtkBoxClass
 
   /*< private >*/
 
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
+  gpointer padding[8];
 };
 
 
@@ -75,14 +71,6 @@ GType       gtk_box_get_type            (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget*  gtk_box_new                 (GtkOrientation  orientation,
                                          gint            spacing);
-
-GDK_AVAILABLE_IN_ALL
-void        gtk_box_pack_start          (GtkBox         *box,
-                                         GtkWidget      *child);
-GDK_AVAILABLE_IN_ALL
-void        gtk_box_pack_end            (GtkBox         *box,
-                                         GtkWidget      *child);
-
 GDK_AVAILABLE_IN_ALL
 void        gtk_box_set_homogeneous     (GtkBox         *box,
                                          gboolean        homogeneous);
@@ -100,18 +88,15 @@ GDK_AVAILABLE_IN_ALL
 GtkBaselinePosition gtk_box_get_baseline_position (GtkBox         *box);
 
 GDK_AVAILABLE_IN_ALL
-void        gtk_box_reorder_child       (GtkBox         *box,
-                                         GtkWidget      *child,
-                                         gint            position);
+void        gtk_box_insert_child_after (GtkBox         *box,
+                                        GtkWidget      *child,
+                                        GtkWidget      *sibling);
 
 GDK_AVAILABLE_IN_ALL
-void        gtk_box_query_child_packing (GtkBox         *box,
+void        gtk_box_reorder_child_after (GtkBox         *box,
                                          GtkWidget      *child,
-                                         GtkPackType    *pack_type);
-GDK_AVAILABLE_IN_ALL
-void        gtk_box_set_child_packing   (GtkBox         *box,
-                                         GtkWidget      *child,
-                                         GtkPackType     pack_type);
+                                         GtkWidget      *sibling);
+
 
 G_END_DECLS
 

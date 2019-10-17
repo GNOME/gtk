@@ -13,6 +13,7 @@
 #include "gskvulkanglyphcacheprivate.h"
 
 #include "gdk/gdktextureprivate.h"
+#include "gdk/gdkprofilerprivate.h"
 
 #include <graphene.h>
 
@@ -37,6 +38,9 @@ typedef struct {
   GQuark gpu_time;
 } ProfileTimers;
 #endif
+
+static guint texture_pixels_counter;
+static guint fallback_pixels_counter;
 
 struct _GskVulkanRenderer
 {
@@ -170,7 +174,7 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
   GdkTexture *texture;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
-  gint64 cpu_time;
+  gint64 cpu_time, start_time;
 #endif
 
 #ifdef G_ENABLE_DEBUG
@@ -201,10 +205,22 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
   gsk_vulkan_render_free (render);
 
 #ifdef G_ENABLE_DEBUG
+  start_time = gsk_profiler_timer_get_start (profiler, self->profile_timers.cpu_time);
   cpu_time = gsk_profiler_timer_end (profiler, self->profile_timers.cpu_time);
   gsk_profiler_timer_set (profiler, self->profile_timers.cpu_time, cpu_time);
 
   gsk_profiler_push_samples (profiler);
+
+  if (gdk_profiler_is_running ())
+    {
+      gdk_profiler_add_mark (start_time, cpu_time, "render", "");
+      gdk_profiler_set_int_counter (texture_pixels_counter,
+                                    start_time + cpu_time,
+                                    gsk_profiler_counter_get (profiler, self->profile_counters.texture_pixels));
+      gdk_profiler_set_int_counter (fallback_pixels_counter,
+                                    start_time + cpu_time,
+                                    gsk_profiler_counter_get (profiler, self->profile_counters.fallback_pixels));
+    }
 #endif
 
   return texture;
@@ -284,6 +300,13 @@ gsk_vulkan_renderer_init (GskVulkanRenderer *self)
   self->profile_timers.cpu_time = gsk_profiler_add_timer (profiler, "cpu-time", "CPU time", FALSE, TRUE);
   if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), SYNC))
     self->profile_timers.gpu_time = gsk_profiler_add_timer (profiler, "gpu-time", "GPU time", FALSE, TRUE);
+
+  if (texture_pixels_counter == 0)
+    {
+      texture_pixels_counter = gdk_profiler_define_int_counter ("texture-pixels", "Texture Pixels");
+      fallback_pixels_counter = gdk_profiler_define_int_counter ("fallback-pixels", "Fallback Pixels");
+    }
+
 #endif
 }
 
@@ -339,15 +362,6 @@ gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
   return image;
 }
 
-guint
-gsk_vulkan_renderer_cache_glyph (GskVulkanRenderer *self,
-                                 PangoFont         *font,
-                                 PangoGlyph         glyph,
-                                 float              scale)
-{
-  return gsk_vulkan_glyph_cache_lookup (self->glyph_cache, TRUE, font, glyph, scale)->texture_index;
-}
-
 GskVulkanImage *
 gsk_vulkan_renderer_ref_glyph_image (GskVulkanRenderer  *self,
                                      GskVulkanUploader  *uploader,
@@ -356,11 +370,43 @@ gsk_vulkan_renderer_ref_glyph_image (GskVulkanRenderer  *self,
   return g_object_ref (gsk_vulkan_glyph_cache_get_glyph_image (self->glyph_cache, uploader, index));
 }
 
+guint
+gsk_vulkan_renderer_cache_glyph (GskVulkanRenderer *self,
+                                 PangoFont         *font,
+                                 PangoGlyph         glyph,
+                                 int                x,
+                                 int                y,
+                                 float              scale)
+{
+  return gsk_vulkan_glyph_cache_lookup (self->glyph_cache, TRUE, font, glyph, x, y, scale)->texture_index;
+}
+
 GskVulkanCachedGlyph *
 gsk_vulkan_renderer_get_cached_glyph (GskVulkanRenderer *self,
                                       PangoFont         *font,
                                       PangoGlyph         glyph,
+                                      int                x,
+                                      int                y,
                                       float              scale)
 {
-  return gsk_vulkan_glyph_cache_lookup (self->glyph_cache, FALSE, font, glyph, scale);
+  return gsk_vulkan_glyph_cache_lookup (self->glyph_cache, FALSE, font, glyph, x, y, scale);
+}
+
+/**
+ * gsk_vulkan_renderer_new:
+ *
+ * Creates a new Vulkan renderer.
+ *
+ * The Vulkan renderer is a renderer that uses the Vulkan library for
+ * rendering.
+ *
+ * This function is only available when GTK was compiled with Vulkan
+ * support.
+ *
+ * Returns: a new Vulkan renderer
+ **/
+GskRenderer *
+gsk_vulkan_renderer_new (void)
+{
+  return g_object_new (GSK_TYPE_VULKAN_RENDERER, NULL);
 }

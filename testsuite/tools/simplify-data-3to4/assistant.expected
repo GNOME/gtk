@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkAssistant" id="window1">
+    <property name="type">popup</property>
+    <child>
+      <object class="GtkAssistantPage">
+        <property name="title" translatable="yes">Page 1</property>
+        <property name="child">
+          <object class="GtkButton" id="button1">
+            <property name="label" translatable="yes">Button 1</property>
+            <property name="can_focus">1</property>
+          </object>
+        </property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAssistantPage">
+        <property name="title" translatable="yes">Page 2</property>
+        <property name="child">
+          <object class="GtkButton" id="button2">
+            <property name="label" translatable="yes">Button 2</property>
+            <property name="can_focus">1</property>
+          </object>
+        </property>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -26,6 +26,7 @@
 #include "gtkcellrenderertext.h"
 #include "gtktogglebutton.h"
 #include "gtklabel.h"
+#include "gtkstack.h"
 
 
 struct _GtkInspectorDataListPrivate
@@ -116,7 +117,12 @@ void
 gtk_inspector_data_list_set_object (GtkInspectorDataList *sl,
                                     GObject              *object)
 {
+  GtkWidget *stack;
+  GtkStackPage *page;
   gchar *title;
+
+  stack = gtk_widget_get_parent (GTK_WIDGET (sl));
+  page = gtk_stack_get_page (GTK_STACK (stack), GTK_WIDGET (sl));
 
   clear_view (sl);
   sl->priv->object = NULL;
@@ -124,7 +130,7 @@ gtk_inspector_data_list_set_object (GtkInspectorDataList *sl,
 
   if (!GTK_IS_TREE_MODEL (object))
     {
-      gtk_widget_hide (GTK_WIDGET (sl));
+      g_object_set (page, "visible", FALSE, NULL);
       return;
     }
 
@@ -132,7 +138,7 @@ gtk_inspector_data_list_set_object (GtkInspectorDataList *sl,
   gtk_label_set_label (GTK_LABEL (sl->priv->object_title), title);
   g_free (title);
 
-  gtk_widget_show (GTK_WIDGET (sl));
+  g_object_set (page, "visible", TRUE, NULL);
 
   sl->priv->object = GTK_TREE_MODEL (object);
   add_columns (sl);

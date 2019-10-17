@@ -21,14 +21,14 @@
 
 #include "gtkfilterlistmodel.h"
 
-#include "gtkcssrbtreeprivate.h"
+#include "gtkrbtreeprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
 /**
  * SECTION:gtkfilterlistmodel
  * @title: GtkFilterListModel
- * @short_description: a #GListModel that filters its items
+ * @short_description: A list model that filters its items
  * @see_also: #GListModel
  *
  * #GtkFilterListModel is a list model that filters a given other
@@ -69,7 +69,7 @@ struct _GtkFilterListModel
   gpointer user_data;
   GDestroyNotify user_destroy;
 
-  GtkCssRbTree *items; /* NULL if filter_func == NULL */
+  GtkRbTree *items; /* NULL if filter_func == NULL */
 };
 
 struct _GtkFilterListModelClass
@@ -80,22 +80,22 @@ struct _GtkFilterListModelClass
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
 static FilterNode *
-gtk_filter_list_model_get_nth_filtered (GtkCssRbTree *tree,
-                                        guint         position,
-                                        guint        *out_unfiltered)
+gtk_filter_list_model_get_nth_filtered (GtkRbTree *tree,
+                                        guint      position,
+                                        guint     *out_unfiltered)
 {
   FilterNode *node, *tmp;
   guint unfiltered;
 
-  node = gtk_css_rb_tree_get_root (tree);
+  node = gtk_rb_tree_get_root (tree);
   unfiltered = 0;
 
   while (node)
     {
-      tmp = gtk_css_rb_tree_get_left (tree, node);
+      tmp = gtk_rb_tree_node_get_left (node);
       if (tmp)
         {
-          FilterAugment *aug = gtk_css_rb_tree_get_augment (tree, tmp);
+          FilterAugment *aug = gtk_rb_tree_get_augment (tree, tmp);
           if (position < aug->n_visible)
             {
               node = tmp;
@@ -114,7 +114,7 @@ gtk_filter_list_model_get_nth_filtered (GtkCssRbTree *tree,
 
       unfiltered++;
 
-      node = gtk_css_rb_tree_get_right (tree, node);
+      node = gtk_rb_tree_node_get_right (node);
     }
 
   if (out_unfiltered)
@@ -124,22 +124,22 @@ gtk_filter_list_model_get_nth_filtered (GtkCssRbTree *tree,
 }
 
 static FilterNode *
-gtk_filter_list_model_get_nth (GtkCssRbTree *tree,
-                               guint         position,
-                               guint        *out_filtered)
+gtk_filter_list_model_get_nth (GtkRbTree *tree,
+                               guint      position,
+                               guint     *out_filtered)
 {
   FilterNode *node, *tmp;
   guint filtered;
 
-  node = gtk_css_rb_tree_get_root (tree);
+  node = gtk_rb_tree_get_root (tree);
   filtered = 0;
 
   while (node)
     {
-      tmp = gtk_css_rb_tree_get_left (tree, node);
+      tmp = gtk_rb_tree_node_get_left (node);
       if (tmp)
         {
-          FilterAugment *aug = gtk_css_rb_tree_get_augment (tree, tmp);
+          FilterAugment *aug = gtk_rb_tree_get_augment (tree, tmp);
           if (position < aug->n_items)
             {
               node = tmp;
@@ -156,7 +156,7 @@ gtk_filter_list_model_get_nth (GtkCssRbTree *tree,
       if (node->visible)
         filtered++;
 
-      node = gtk_css_rb_tree_get_right (tree, node);
+      node = gtk_rb_tree_node_get_right (node);
     }
 
   if (out_filtered)
@@ -186,11 +186,11 @@ gtk_filter_list_model_get_n_items (GListModel *list)
   if (!self->items)
     return g_list_model_get_n_items (self->model);
 
-  node = gtk_css_rb_tree_get_root (self->items);
+  node = gtk_rb_tree_get_root (self->items);
   if (node == NULL)
     return 0;
 
-  aug = gtk_css_rb_tree_get_augment (self->items, node);
+  aug = gtk_rb_tree_get_augment (self->items, node);
   return aug->n_visible;
 }
 
@@ -250,7 +250,7 @@ gtk_filter_list_model_add_items (GtkFilterListModel *self,
   
   for (i = 0; i < n_items; i++)
     {
-      node = gtk_css_rb_tree_insert_before (self->items, after);
+      node = gtk_rb_tree_insert_before (self->items, after);
       node->visible = gtk_filter_list_model_run_filter (self, position + i);
       if (node->visible)
         n_visible++;
@@ -280,10 +280,10 @@ gtk_filter_list_model_items_changed_cb (GListModel         *model,
   filter_removed = 0;
   for (i = 0; i < removed; i++)
     {
-      FilterNode *next = gtk_css_rb_tree_get_next (self->items, node);
+      FilterNode *next = gtk_rb_tree_node_get_next (node);
       if (node->visible)
         filter_removed++;
-      gtk_css_rb_tree_remove (self->items, node);
+      gtk_rb_tree_remove (self->items, node);
       node = next;
     }
 
@@ -354,7 +354,7 @@ gtk_filter_list_model_clear_model (GtkFilterListModel *self)
   g_signal_handlers_disconnect_by_func (self->model, gtk_filter_list_model_items_changed_cb, self);
   g_clear_object (&self->model);
   if (self->items)
-    gtk_css_rb_tree_remove_all (self->items);
+    gtk_rb_tree_remove_all (self->items);
 }
 
 static void
@@ -368,10 +368,10 @@ gtk_filter_list_model_dispose (GObject *object)
   self->filter_func = NULL;
   self->user_data = NULL;
   self->user_destroy = NULL;
-  g_clear_pointer (&self->items, gtk_css_rb_tree_unref);
+  g_clear_pointer (&self->items, gtk_rb_tree_unref);
 
   G_OBJECT_CLASS (gtk_filter_list_model_parent_class)->dispose (object);
-};
+}
 
 static void
 gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
@@ -428,13 +428,13 @@ gtk_filter_list_model_init (GtkFilterListModel *self)
 
 
 static void
-gtk_filter_list_model_augment (GtkCssRbTree *filter,
-                               gpointer      _aug,
-                               gpointer      _node,
-                               gpointer      left,
-                               gpointer      right)
+gtk_filter_list_model_augment (GtkRbTree *filter,
+                               gpointer   _aug,
+                               gpointer   _node,
+                               gpointer   left,
+                               gpointer   right)
 {
-  FilterNode *node= _node;
+  FilterNode *node = _node;
   FilterAugment *aug = _aug;
 
   aug->n_items = 1;
@@ -442,13 +442,13 @@ gtk_filter_list_model_augment (GtkCssRbTree *filter,
 
   if (left)
     {
-      FilterAugment *left_aug = gtk_css_rb_tree_get_augment (filter, left);
+      FilterAugment *left_aug = gtk_rb_tree_get_augment (filter, left);
       aug->n_items += left_aug->n_items;
       aug->n_visible += left_aug->n_visible;
     }
   if (right)
     {
-      FilterAugment *right_aug = gtk_css_rb_tree_get_augment (filter, right);
+      FilterAugment *right_aug = gtk_rb_tree_get_augment (filter, right);
       aug->n_items += right_aug->n_items;
       aug->n_visible += right_aug->n_visible;
     }
@@ -543,22 +543,22 @@ gtk_filter_list_model_set_filter_func (GtkFilterListModel           *self,
   
   if (!will_be_filtered)
     {
-      g_clear_pointer (&self->items, gtk_css_rb_tree_unref);
+      g_clear_pointer (&self->items, gtk_rb_tree_unref);
     }
   else if (!was_filtered)
     {
       guint i, n_items;
 
-      self->items = gtk_css_rb_tree_new (FilterNode,
-                                         FilterAugment, 
-                                         gtk_filter_list_model_augment,
-                                         NULL, NULL);
+      self->items = gtk_rb_tree_new (FilterNode,
+                                     FilterAugment,
+                                     gtk_filter_list_model_augment,
+                                     NULL, NULL);
       if (self->model)
         {
           n_items = g_list_model_get_n_items (self->model);
           for (i = 0; i < n_items; i++)
             {
-              FilterNode *node = gtk_css_rb_tree_insert_before (self->items, NULL);
+              FilterNode *node = gtk_rb_tree_insert_before (self->items, NULL);
               node->visible = TRUE;
             }
         }
@@ -675,9 +675,9 @@ gtk_filter_list_model_refilter (GtkFilterListModel *self)
   last_change = 0;
   n_is_visible = 0;
   n_was_visible = 0;
-  for (i = 0, node = gtk_css_rb_tree_get_first (self->items);
+  for (i = 0, node = gtk_rb_tree_get_first (self->items);
        node != NULL;
-       i++, node = gtk_css_rb_tree_get_next (self->items, node))
+       i++, node = gtk_rb_tree_node_get_next (node))
     {
       visible = gtk_filter_list_model_run_filter (self, i);
       if (visible == node->visible)
@@ -691,7 +691,7 @@ gtk_filter_list_model_refilter (GtkFilterListModel *self)
         }
 
       node->visible = visible;
-      gtk_css_rb_tree_mark_dirty (self->items, node);
+      gtk_rb_tree_node_mark_dirty (node);
       first_change = MIN (n_is_visible, first_change);
       if (visible)
         n_is_visible++;

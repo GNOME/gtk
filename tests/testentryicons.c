@@ -5,7 +5,7 @@ static void
 clear_pressed (GtkEntry *entry, gint icon, gpointer data)
 {
    if (icon == GTK_ENTRY_ICON_SECONDARY)
-     gtk_entry_set_text (entry, "");
+     gtk_editable_set_text (GTK_EDITABLE (entry), "");
 }
 
 static void
@@ -180,7 +180,7 @@ main (int argc, char **argv)
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 1, 1, 1);
-  gtk_entry_set_text (GTK_ENTRY (entry), "‏Right-to-left");
+  gtk_editable_set_text (GTK_EDITABLE (entry), "‏Right-to-left");
   gtk_widget_set_direction (entry, GTK_TEXT_DIR_RTL);
   
   gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
@@ -241,22 +241,10 @@ main (int argc, char **argv)
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
 
-  entry = gtk_entry_new ();
+  entry = gtk_password_entry_new ();
+  gtk_password_entry_set_show_peek_icon (GTK_PASSWORD_ENTRY (entry), TRUE);
   gtk_widget_set_hexpand (entry, TRUE);
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 3, 1, 1);
-  gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
-
-  gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
-                                     GTK_ENTRY_ICON_PRIMARY,
-                                     "dialog-password-symbolic");
-
-  gtk_entry_set_icon_activatable (GTK_ENTRY (entry),
-				  GTK_ENTRY_ICON_PRIMARY,
-				  FALSE);
-
-  gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
-                                   GTK_ENTRY_ICON_PRIMARY,
-                                   "The password is hidden for security");
 
   /* Name - Does not set any icons. */
   label = gtk_label_new ("Name:");
@@ -320,7 +308,7 @@ main (int argc, char **argv)
   gtk_widget_set_tooltip_text (image, "Click me");
 
   GtkGesture *gesture;
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "pressed", G_CALLBACK (icon_pressed_cb), NULL);
   gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (gesture));
   gtk_container_add (GTK_CONTAINER (box), image);

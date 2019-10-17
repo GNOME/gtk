@@ -33,39 +33,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_APP_CHOOSER_BUTTON            (gtk_app_chooser_button_get_type ())
 #define GTK_APP_CHOOSER_BUTTON(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_APP_CHOOSER_BUTTON, GtkAppChooserButton))
-#define GTK_APP_CHOOSER_BUTTON_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_APP_CHOOSER_BUTTON, GtkAppChooserButtonClass))
 #define GTK_IS_APP_CHOOSER_BUTTON(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_APP_CHOOSER_BUTTON))
-#define GTK_IS_APP_CHOOSER_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_APP_CHOOSER_BUTTON))
-#define GTK_APP_CHOOSER_BUTTON_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_APP_CHOOSER_BUTTON, GtkAppChooserButtonClass))
 
 typedef struct _GtkAppChooserButton        GtkAppChooserButton;
-typedef struct _GtkAppChooserButtonClass   GtkAppChooserButtonClass;
-
-struct _GtkAppChooserButton {
-  GtkWidget parent_instance;
-};
-
-/**
- * GtkAppChooserButtonClass:
- * @parent_class: The parent class.
- * @custom_item_activated: Signal emitted when a custom item,
- *    previously added with gtk_app_chooser_button_append_custom_item(),
- *    is activated from the dropdown menu.
- */
-struct _GtkAppChooserButtonClass {
-  GtkWidgetClass parent_class;
-
-  /*< public >*/
-
-  void (* changed)               (GtkAppChooserButton *self);
-  void (* custom_item_activated) (GtkAppChooserButton *self,
-                                  const gchar *item_name);
-
-  /*< private >*/
-
-  /* padding for future class expansion */
-  gpointer padding[16];
-};
 
 GDK_AVAILABLE_IN_ALL
 GType       gtk_app_chooser_button_get_type           (void) G_GNUC_CONST;

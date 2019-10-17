@@ -26,8 +26,6 @@
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkprivate.h"
-#include "gtkradiomenuitem.h"
-#include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
 
 
@@ -101,8 +99,6 @@ static gboolean gtk_im_multicontext_delete_surrounding_cb   (GtkIMContext      *
 							     GtkIMMulticontext *multicontext);
 
 static void propagate_purpose (GtkIMMulticontext *context);
-
-static const gchar *global_context_id = NULL;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkIMMulticontext, gtk_im_multicontext, GTK_TYPE_IM_CONTEXT)
 
@@ -246,23 +242,23 @@ static const gchar *
 get_effective_context_id (GtkIMMulticontext *multicontext)
 {
   GtkIMMulticontextPrivate *priv = multicontext->priv;
+  GdkDisplay *display;
 
   if (priv->context_id_aux)
     return priv->context_id_aux;
 
-  if (!global_context_id)
-    global_context_id = _gtk_im_module_get_default_context_id ();
+  if (priv->client_widget)
+    display = gtk_widget_get_display (priv->client_widget);
+  else
+    display = gdk_display_get_default ();
 
-  return global_context_id;
+  return _gtk_im_module_get_default_context_id (display);
 }
 
 static GtkIMContext *
 gtk_im_multicontext_get_slave (GtkIMMulticontext *multicontext)
 {
   GtkIMMulticontextPrivate *priv = multicontext->priv;
-
-  if (g_strcmp0 (priv->context_id, get_effective_context_id (multicontext)) != 0)
-    gtk_im_multicontext_set_slave (multicontext, NULL, FALSE);
 
   if (!priv->slave)
     {
@@ -284,22 +280,30 @@ gtk_im_multicontext_get_slave (GtkIMMulticontext *multicontext)
 }
 
 static void
-im_module_setting_changed (GtkSettings *settings, 
-                           gpointer     data)
+im_module_setting_changed (GtkSettings       *settings, 
+                           GParamSpec        *pspec,
+                           GtkIMMulticontext *self)
 {
-  global_context_id = NULL;
+  gtk_im_multicontext_set_slave (self, NULL, FALSE);
 }
-
 
 static void
 gtk_im_multicontext_set_client_widget (GtkIMContext *context,
 				       GtkWidget    *widget)
 {
-  GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
-  GtkIMMulticontextPrivate *priv = multicontext->priv;
+  GtkIMMulticontext *self = GTK_IM_MULTICONTEXT (context);
+  GtkIMMulticontextPrivate *priv = self->priv;
   GtkIMContext *slave;
   GtkSettings *settings;
-  gboolean connected;
+
+  if (priv->client_widget != NULL)
+    {
+      settings = gtk_widget_get_settings (priv->client_widget);
+
+      g_signal_handlers_disconnect_by_func (settings,
+                                            im_module_setting_changed,
+                                            self);
+    }
 
   priv->client_widget = widget;
 
@@ -307,20 +311,12 @@ gtk_im_multicontext_set_client_widget (GtkIMContext *context,
     {
       settings = gtk_widget_get_settings (widget);
 
-      connected = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (settings),
-                                                      "gtk-im-module-connected"));
-      if (!connected)
-        {
-          g_signal_connect (settings, "notify::gtk-im-module",
-                            G_CALLBACK (im_module_setting_changed), NULL);
-          g_object_set_data (G_OBJECT (settings), "gtk-im-module-connected",
-                             GINT_TO_POINTER (TRUE));
-
-          global_context_id = NULL;
-        }
+      g_signal_connect (settings, "notify::gtk-im-module",
+                        G_CALLBACK (im_module_setting_changed),
+                        self);
     }
 
-  slave = gtk_im_multicontext_get_slave (multicontext);
+  slave = gtk_im_multicontext_get_slave (self);
   if (slave)
     gtk_im_context_set_client_widget (slave, widget);
 }
@@ -559,9 +555,14 @@ gtk_im_multicontext_delete_surrounding_cb (GtkIMContext      *slave,
 const char *
 gtk_im_multicontext_get_context_id (GtkIMMulticontext *context)
 {
+  GtkIMMulticontextPrivate *priv = context->priv;
+
   g_return_val_if_fail (GTK_IS_IM_MULTICONTEXT (context), NULL);
 
-  return context->priv->context_id;
+  if (priv->context_id == NULL)
+    gtk_im_multicontext_get_slave (context);
+
+  return priv->context_id;
 }
 
 /**

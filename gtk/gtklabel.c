@@ -35,7 +35,7 @@
 #include "gtkdnd.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkgesturedrag.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
@@ -55,6 +55,8 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
+#include "gtkpopovermenu.h"
+#include "gtknative.h"
 
 #include "a11y/gtklabelaccessibleprivate.h"
 
@@ -206,7 +208,7 @@
  * understood by Pango.
  *
  * Labels can automatically wrap text if you call
- * gtk_label_set_line_wrap().
+ * gtk_label_set_wrap().
  *
  * gtk_label_set_justify() sets how the lines in a label align
  * with one another. If you want to set how the label as a whole
@@ -250,6 +252,29 @@
  * the #GtkLabel::activate-link signal and the gtk_label_get_current_uri() function.
  */
 
+typedef struct _GtkLabelPrivate       GtkLabelPrivate;
+typedef struct _GtkLabelClass         GtkLabelClass;
+typedef struct _GtkLabelSelectionInfo GtkLabelSelectionInfo;
+
+struct _GtkLabel
+{
+  GtkWidget parent_instance;
+};
+
+struct _GtkLabelClass
+{
+  GtkWidgetClass parent_class;
+
+  void (* move_cursor)     (GtkLabel       *label,
+                            GtkMovementStep step,
+                            gint            count,
+                            gboolean        extend_selection);
+  void (* copy_clipboard)  (GtkLabel       *label);
+
+  gboolean (*activate_link) (GtkLabel       *label,
+                             const gchar    *uri);
+};
+
 struct _GtkLabelPrivate
 {
   GtkLabelSelectionInfo *select_info;
@@ -259,6 +284,9 @@ struct _GtkLabelPrivate
   PangoAttrList *attrs;
   PangoAttrList *markup_attrs;
   PangoLayout   *layout;
+
+  GtkWidget *popup_menu;
+  GMenuModel *extra_menu;
 
   gchar   *label;
   gchar   *text;
@@ -329,15 +357,15 @@ struct _GtkLabelSelectionInfo
 {
   gint selection_anchor;
   gint selection_end;
-  GtkWidget *popup_menu;
   GtkCssNode *selection_node;
   GdkContentProvider *provider;
 
   GList *links;
   GtkLabelLink *active_link;
+  GtkLabelLink *context_link;
 
   GtkGesture *drag_gesture;
-  GtkGesture *multipress_gesture;
+  GtkGesture *click_gesture;
   GtkEventController *motion_controller;
 
   gint drag_start_x;
@@ -352,7 +380,6 @@ struct _GtkLabelSelectionInfo
 enum {
   MOVE_CURSOR,
   COPY_CLIPBOARD,
-  POPULATE_POPUP,
   ACTIVATE_LINK,
   ACTIVATE_CURRENT_LINK,
   LAST_SIGNAL
@@ -381,6 +408,7 @@ enum {
   PROP_LINES,
   PROP_XALIGN,
   PROP_YALIGN,
+  PROP_EXTRA_MENU,
   NUM_PROPERTIES
 };
 
@@ -416,18 +444,18 @@ static void gtk_label_snapshot          (GtkWidget        *widget,
 static gboolean gtk_label_focus         (GtkWidget         *widget,
                                          GtkDirectionType   direction);
 
-static void gtk_label_realize           (GtkWidget        *widget);
 static void gtk_label_unrealize         (GtkWidget        *widget);
-static void gtk_label_unmap             (GtkWidget        *widget);
 
 static void gtk_label_motion            (GtkEventControllerMotion *controller,
                                          double                    x,
                                          double                    y,
                                          gpointer                  data);
 static void gtk_label_leave             (GtkEventControllerMotion *controller,
+                                         GdkCrossingMode           mode,
+                                         GdkNotifyType             detail,
                                          gpointer                  data);
 
-static void     gtk_label_grab_focus        (GtkWidget        *widget);
+static gboolean gtk_label_grab_focus        (GtkWidget        *widget);
 
 static gboolean gtk_label_query_tooltip     (GtkWidget        *widget,
                                              gint              x,
@@ -452,13 +480,13 @@ static void gtk_label_set_markup_internal        (GtkLabel      *label,
 						  const gchar   *str,
 						  gboolean       with_uline);
 static void gtk_label_recalculate                (GtkLabel      *label);
-static void gtk_label_hierarchy_changed          (GtkWidget     *widget,
-						  GtkWidget     *old_toplevel);
-static void gtk_label_display_changed            (GtkWidget     *widget,
-						  GdkDisplay    *old_display);
+static void gtk_label_root                       (GtkWidget     *widget);
+static void gtk_label_unroot                     (GtkWidget     *widget);
 static gboolean gtk_label_popup_menu             (GtkWidget     *widget);
+static void gtk_label_do_popup                   (GtkLabel      *label,
+                                                  double         x,
+                                                  double         y);
 
-static void gtk_label_set_selectable_hint (GtkLabel *label);
 static void gtk_label_ensure_select_info  (GtkLabel *label);
 static void gtk_label_clear_select_info   (GtkLabel *label);
 static void gtk_label_update_cursor       (GtkLabel *label);
@@ -475,24 +503,26 @@ static void gtk_label_update_active_link  (GtkWidget *widget,
 static gboolean gtk_label_mnemonic_activate (GtkWidget         *widget,
 					     gboolean           group_cycling);
 static void     gtk_label_setup_mnemonic    (GtkLabel          *label,
+                                             GtkWidget         *toplevel,
 					     guint              last_key);
 static void     gtk_label_drag_data_get     (GtkWidget         *widget,
 					     GdkDrag           *drag,
 					     GtkSelectionData  *selection_data);
 
-static void     gtk_label_buildable_interface_init     (GtkBuildableIface *iface);
-static gboolean gtk_label_buildable_custom_tag_start   (GtkBuildable     *buildable,
-							GtkBuilder       *builder,
-							GObject          *child,
-							const gchar      *tagname,
-							GMarkupParser    *parser,
-							gpointer         *data);
+static void     gtk_label_buildable_interface_init   (GtkBuildableIface  *iface);
+static gboolean gtk_label_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                                      GtkBuilder         *builder,
+                                                      GObject            *child,
+                                                      const gchar        *tagname,
+                                                      GtkBuildableParser *parser,
+                                                      gpointer           *data);
 
-static void     gtk_label_buildable_custom_finished    (GtkBuildable     *buildable,
-							GtkBuilder       *builder,
-							GObject          *child,
-							const gchar      *tagname,
-							gpointer          user_data);
+static void     gtk_label_buildable_custom_finished  (GtkBuildable       *buildable,
+                                                      GtkBuilder         *builder,
+                                                      GObject            *child,
+                                                      const gchar        *tagname,
+                                                      gpointer            user_data);
+
 
 
 static void connect_mnemonics_visible_notify    (GtkLabel   *label);
@@ -509,8 +539,6 @@ static void gtk_label_move_cursor        (GtkLabel        *label,
 					  gboolean         extend_selection);
 static void gtk_label_copy_clipboard     (GtkLabel        *label);
 static void gtk_label_select_all         (GtkLabel        *label);
-static void gtk_label_do_popup           (GtkLabel        *label,
-					  const GdkEvent  *event);
 static gint gtk_label_move_forward_word  (GtkLabel        *label,
 					  gint             start);
 static gint gtk_label_move_backward_word (GtkLabel        *label,
@@ -526,12 +554,12 @@ static void          emit_activate_link         (GtkLabel     *label,
                                                  GtkLabelLink *link);
 
 /* Event controller callbacks */
-static void   gtk_label_multipress_gesture_pressed  (GtkGestureMultiPress *gesture,
+static void   gtk_label_click_gesture_pressed  (GtkGestureClick *gesture,
                                                      gint                  n_press,
                                                      gdouble               x,
                                                      gdouble               y,
                                                      GtkLabel             *label);
-static void   gtk_label_multipress_gesture_released (GtkGestureMultiPress *gesture,
+static void   gtk_label_click_gesture_released (GtkGestureClick *gesture,
                                                      gint                  n_press,
                                                      gdouble               x,
                                                      gdouble               y,
@@ -545,6 +573,26 @@ static void   gtk_label_drag_gesture_update         (GtkGestureDrag *gesture,
                                                      gdouble         offset_y,
                                                      GtkLabel       *label);
 
+/* Actions */
+
+static void      gtk_label_activate_clipboard_copy       (GtkWidget  *label,
+                                                          const char *name,
+                                                          GVariant   *parameter);
+static void      gtk_label_activate_selection_select_all (GtkWidget  *label,
+                                                          const char *name,
+                                                          GVariant   *parameter);
+static void      gtk_label_activate_link_open            (GtkWidget  *label,
+                                                          const char *name,
+                                                          GVariant   *parameter);
+static void      gtk_label_activate_link_copy            (GtkWidget  *label,
+                                                          const char *name,
+                                                          GVariant   *parameter);
+static void      gtk_label_nop                           (GtkWidget  *label,
+                                                          const char *name,
+                                                          GVariant   *parameter);
+
+static void gtk_label_update_actions (GtkLabel *label);
+
 static GtkSizeRequestMode gtk_label_get_request_mode                (GtkWidget           *widget);
 static void     gtk_label_measure (GtkWidget     *widget,
                                    GtkOrientation  orientation,
@@ -553,6 +601,8 @@ static void     gtk_label_measure (GtkWidget     *widget,
                                    int            *natural,
                                    int            *minimum_baseline,
                                    int            *natural_baseline);
+
+
 
 static GtkBuildableIface *buildable_parent_iface = NULL;
 
@@ -601,15 +651,13 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->style_updated = gtk_label_style_updated;
   widget_class->query_tooltip = gtk_label_query_tooltip;
   widget_class->snapshot = gtk_label_snapshot;
-  widget_class->realize = gtk_label_realize;
   widget_class->unrealize = gtk_label_unrealize;
-  widget_class->unmap = gtk_label_unmap;
-  widget_class->hierarchy_changed = gtk_label_hierarchy_changed;
-  widget_class->display_changed = gtk_label_display_changed;
+  widget_class->root = gtk_label_root;
+  widget_class->unroot = gtk_label_unroot;
   widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
+  widget_class->popup_menu = gtk_label_popup_menu;
   widget_class->drag_data_get = gtk_label_drag_data_get;
   widget_class->grab_focus = gtk_label_grab_focus;
-  widget_class->popup_menu = gtk_label_popup_menu;
   widget_class->focus = gtk_label_focus;
   widget_class->get_request_mode = gtk_label_get_request_mode;
   widget_class->measure = gtk_label_measure;
@@ -674,28 +722,6 @@ gtk_label_class_init (GtkLabelClass *class)
 		  NULL,
 		  G_TYPE_NONE, 0);
   
-  /**
-   * GtkLabel::populate-popup:
-   * @label: The label on which the signal is emitted
-   * @menu: the menu that is being populated
-   *
-   * The ::populate-popup signal gets emitted before showing the
-   * context menu of the label. Note that only selectable labels
-   * have context menus.
-   *
-   * If you need to add items to the context menu, connect
-   * to this signal and append your menuitems to the @menu.
-   */
-  signals[POPULATE_POPUP] =
-    g_signal_new (I_("populate-popup"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkLabelClass, populate_popup),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 1,
-		  GTK_TYPE_MENU);
-
     /**
      * GtkLabel::activate-current-link:
      * @label: The label on which the signal was emitted
@@ -992,6 +1018,19 @@ gtk_label_class_init (GtkLabelClass *class)
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkLabel:extra-menu:
+   *
+   * A menu model whose contents will be appended to
+   * the context menu.
+   */
+  label_props[PROP_EXTRA_MENU] =
+      g_param_spec_object ("extra-menu",
+                          P_("Extra menu"),
+                          P_("Menu model to append to the context menu"),
+                          G_TYPE_MENU_MODEL,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, label_props);
 
   /*
@@ -1118,6 +1157,21 @@ gtk_label_class_init (GtkLabelClass *class)
   quark_mnemonics_visible_connected = g_quark_from_static_string ("gtk-label-mnemonics-visible-connected");
   quark_gtk_signal = g_quark_from_static_string ("gtk-signal");
   quark_link = g_quark_from_static_string ("link");
+
+  gtk_widget_class_install_action (widget_class, "clipboard.cut", NULL,
+                                   gtk_label_nop);
+  gtk_widget_class_install_action (widget_class, "clipboard.copy", NULL,
+                                   gtk_label_activate_clipboard_copy);
+  gtk_widget_class_install_action (widget_class, "clipboard.paste", NULL,
+                                   gtk_label_nop);
+  gtk_widget_class_install_action (widget_class, "selection.delete", NULL,
+                                   gtk_label_nop);
+  gtk_widget_class_install_action (widget_class, "selection.select-all", NULL,
+                                   gtk_label_activate_selection_select_all);
+  gtk_widget_class_install_action (widget_class, "link.open", NULL,
+                                   gtk_label_activate_link_open);
+  gtk_widget_class_install_action (widget_class, "link.copy", NULL,
+                                   gtk_label_activate_link_copy);
 }
 
 static void 
@@ -1149,10 +1203,10 @@ gtk_label_set_property (GObject      *object,
       gtk_label_set_pattern (label, g_value_get_string (value));
       break;
     case PROP_WRAP:
-      gtk_label_set_line_wrap (label, g_value_get_boolean (value));
+      gtk_label_set_wrap (label, g_value_get_boolean (value));
       break;	  
     case PROP_WRAP_MODE:
-      gtk_label_set_line_wrap_mode (label, g_value_get_enum (value));
+      gtk_label_set_wrap_mode (label, g_value_get_enum (value));
       break;	  
     case PROP_SELECTABLE:
       gtk_label_set_selectable (label, g_value_get_boolean (value));
@@ -1183,6 +1237,9 @@ gtk_label_set_property (GObject      *object,
       break;
     case PROP_YALIGN:
       gtk_label_set_yalign (label, g_value_get_float (value));
+      break;
+    case PROP_EXTRA_MENU:
+      gtk_label_set_extra_menu (label, g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1261,6 +1318,9 @@ gtk_label_get_property (GObject     *object,
     case PROP_YALIGN:
       g_value_set_float (value, gtk_label_get_yalign (label));
       break;
+    case PROP_EXTRA_MENU:
+      g_value_set_object (value, gtk_label_get_extra_menu (label));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1271,8 +1331,6 @@ static void
 gtk_label_init (GtkLabel *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-
-  gtk_widget_set_has_surface (GTK_WIDGET (label), FALSE);
 
   priv->width_chars = -1;
   priv->max_width_chars = -1;
@@ -1300,7 +1358,7 @@ gtk_label_init (GtkLabel *label)
   priv->mnemonic_widget = NULL;
   priv->mnemonic_window = NULL;
 
-  priv->mnemonics_visible = TRUE;
+  priv->mnemonics_visible = FALSE;
 }
 
 
@@ -1483,6 +1541,16 @@ attribute_from_text (GtkBuilder   *builder,
       if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
         attribute = pango_attr_background_alpha_new ((guint16)g_value_get_int (&val));
       break;
+#if PANGO_VERSION_CHECK(1,44,0)
+    case PANGO_ATTR_ALLOW_BREAKS:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, value, &val, error))
+        attribute = pango_attr_allow_breaks_new (g_value_get_boolean (&val));
+      break;
+    case PANGO_ATTR_SHOW:
+      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_SHOW_FLAGS, value, &val, error))
+	attribute = pango_attr_show_new (g_value_get_flags (&val));
+      break;
+#endif
     case PANGO_ATTR_INVALID:
     default:
       break;
@@ -1495,12 +1563,12 @@ attribute_from_text (GtkBuilder   *builder,
 
 
 static void
-pango_start_element (GMarkupParseContext *context,
-		     const gchar         *element_name,
-		     const gchar        **names,
-		     const gchar        **values,
-		     gpointer             user_data,
-		     GError             **error)
+pango_start_element (GtkBuildableParseContext *context,
+                     const gchar              *element_name,
+                     const gchar             **names,
+                     const gchar             **values,
+                     gpointer                  user_data,
+                     GError                  **error)
 {
   PangoParserData *data = (PangoParserData*)user_data;
 
@@ -1584,18 +1652,18 @@ pango_start_element (GMarkupParseContext *context,
     }
 }
 
-static const GMarkupParser pango_parser =
+static const GtkBuildableParser pango_parser =
   {
     pango_start_element,
   };
 
 static gboolean
-gtk_label_buildable_custom_tag_start (GtkBuildable     *buildable,
-				      GtkBuilder       *builder,
-				      GObject          *child,
-				      const gchar      *tagname,
-				      GMarkupParser    *parser,
-				      gpointer         *data)
+gtk_label_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                      GtkBuilder         *builder,
+                                      GObject            *child,
+                                      const gchar        *tagname,
+                                      GtkBuildableParser *parser,
+                                      gpointer           *data)
 {
   if (buildable_parent_iface->custom_tag_start (buildable, builder, child,
 						tagname, parser, data))
@@ -1738,12 +1806,12 @@ gtk_label_mnemonic_activate (GtkWidget *widget,
 }
 
 static void
-gtk_label_setup_mnemonic (GtkLabel *label,
-			  guint     last_key)
+gtk_label_setup_mnemonic (GtkLabel  *label,
+                          GtkWidget *toplevel,
+			  guint      last_key)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
   GtkWidget *widget = GTK_WIDGET (label);
-  GtkWidget *toplevel;
   GtkWidget *mnemonic_menu;
   
   mnemonic_menu = g_object_get_qdata (G_OBJECT (label), quark_mnemonic_menu);
@@ -1765,17 +1833,16 @@ gtk_label_setup_mnemonic (GtkLabel *label,
 	  mnemonic_menu = NULL;
 	}
     }
-  
+
   if (priv->mnemonic_keyval == GDK_KEY_VoidSymbol)
       goto done;
 
   connect_mnemonics_visible_notify (GTK_LABEL (widget));
 
-  toplevel = gtk_widget_get_toplevel (widget);
-  if (gtk_widget_is_toplevel (toplevel))
+  if (GTK_IS_WINDOW (toplevel))
     {
       GtkWidget *menu_shell;
-      
+
       menu_shell = gtk_widget_get_ancestor (widget,
 					    GTK_TYPE_MENU_SHELL);
 
@@ -1786,7 +1853,7 @@ gtk_label_setup_mnemonic (GtkLabel *label,
 					widget);
 	  mnemonic_menu = menu_shell;
 	}
-      
+
       if (!GTK_IS_MENU (menu_shell))
 	{
 	  gtk_window_add_mnemonic (GTK_WINDOW (toplevel),
@@ -1795,19 +1862,9 @@ gtk_label_setup_mnemonic (GtkLabel *label,
 	  priv->mnemonic_window = GTK_WINDOW (toplevel);
 	}
     }
-  
+
  done:
   g_object_set_qdata (G_OBJECT (label), quark_mnemonic_menu, mnemonic_menu);
-}
-
-static void
-gtk_label_hierarchy_changed (GtkWidget *widget,
-			     GtkWidget *old_toplevel)
-{
-  GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-
-  gtk_label_setup_mnemonic (label, priv->mnemonic_keyval);
 }
 
 static void
@@ -1847,63 +1904,16 @@ label_shortcut_setting_changed (GtkSettings *settings)
 }
 
 static void
-mnemonics_visible_apply (GtkWidget *widget,
-                         gboolean   mnemonics_visible)
+gtk_label_root (GtkWidget *widget)
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-
-  mnemonics_visible = mnemonics_visible != FALSE;
-
-  if (priv->mnemonics_visible != mnemonics_visible)
-    {
-      priv->mnemonics_visible = mnemonics_visible;
-
-      gtk_label_recalculate (label);
-    }
-}
-
-static void
-label_mnemonics_visible_traverse_container (GtkWidget *widget,
-                                            gpointer   data)
-{
-  gboolean mnemonics_visible = GPOINTER_TO_INT (data);
-
-  _gtk_label_mnemonics_visible_apply_recursively (widget, mnemonics_visible);
-}
-
-void
-_gtk_label_mnemonics_visible_apply_recursively (GtkWidget *widget,
-                                                gboolean   mnemonics_visible)
-{
-  if (GTK_IS_LABEL (widget))
-    mnemonics_visible_apply (widget, mnemonics_visible);
-  else if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget),
-                          label_mnemonics_visible_traverse_container,
-                          GINT_TO_POINTER (mnemonics_visible));
-}
-
-static void
-label_mnemonics_visible_changed (GtkWindow  *window,
-                                 GParamSpec *pspec,
-                                 gpointer    data)
-{
-  gboolean mnemonics_visible;
-
-  g_object_get (window, "mnemonics-visible", &mnemonics_visible, NULL);
-
-  gtk_container_forall (GTK_CONTAINER (window),
-                        label_mnemonics_visible_traverse_container,
-                        GINT_TO_POINTER (mnemonics_visible));
-}
-
-static void
-gtk_label_display_changed (GtkWidget  *widget,
-			   GdkDisplay *old_display)
-{
   GtkSettings *settings;
   gboolean shortcuts_connected;
+
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->root (widget);
+
+  gtk_label_setup_mnemonic (label, GTK_WIDGET (gtk_widget_get_root (widget)), priv->mnemonic_keyval);
 
   /* The PangoContext is replaced when the display changes, so clear the layouts */
   gtk_label_clear_layout (GTK_LABEL (widget));
@@ -1926,6 +1936,55 @@ gtk_label_display_changed (GtkWidget  *widget,
   label_shortcut_setting_apply (GTK_LABEL (widget));
 }
 
+static void
+gtk_label_unroot (GtkWidget *widget)
+{
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+
+  gtk_label_setup_mnemonic (label, NULL, priv->mnemonic_keyval);
+
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->unroot (widget);
+}
+
+void
+_gtk_label_mnemonics_visible_apply_recursively (GtkWidget *widget,
+                                                gboolean   visible)
+{
+  if (GTK_IS_LABEL (widget))
+    {
+      GtkLabel *label = GTK_LABEL (widget);
+      GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+
+      if (priv->mnemonics_visible != visible)
+        {
+          priv->mnemonics_visible = visible;
+          gtk_label_recalculate (label);
+        }
+    }
+  else
+    {
+      GtkWidget *child;
+
+      for (child = gtk_widget_get_first_child (widget);
+           child;
+           child = gtk_widget_get_next_sibling (child))
+        {
+          _gtk_label_mnemonics_visible_apply_recursively (child, visible);
+        }
+    }
+}
+
+static void
+label_mnemonics_visible_changed (GtkWindow  *window,
+                                 GParamSpec *pspec,
+                                 gpointer    data)
+{
+  gboolean visible;
+
+  g_object_get (window, "mnemonics-visible", &visible, NULL);
+  _gtk_label_mnemonics_visible_apply_recursively (GTK_WIDGET (window), visible);
+}
 
 static void
 label_mnemonic_widget_weak_notify (gpointer      data,
@@ -1943,7 +2002,7 @@ label_mnemonic_widget_weak_notify (gpointer      data,
  * @label: a #GtkLabel
  * @widget: (nullable): the target #GtkWidget, or %NULL to unset
  *
- * If the label has been set so that it has an mnemonic key (using
+ * If the label has been set so that it has a mnemonic key (using
  * i.e. gtk_label_set_markup_with_mnemonic(),
  * gtk_label_set_text_with_mnemonic(), gtk_label_new_with_mnemonic()
  * or the “use_underline” property) the label can be associated with a
@@ -2012,7 +2071,7 @@ gtk_label_get_mnemonic_widget (GtkLabel *label)
  * gtk_label_get_mnemonic_keyval:
  * @label: a #GtkLabel
  *
- * If the label has been set so that it has an mnemonic key this function
+ * If the label has been set so that it has a mnemonic key this function
  * returns the keyval used for the mnemonic accelerator. If there is no
  * mnemonic set up it returns #GDK_KEY_VoidSymbol.
  *
@@ -2131,7 +2190,7 @@ gtk_label_recalculate (GtkLabel *label)
 
   if (keyval != priv->mnemonic_keyval)
     {
-      gtk_label_setup_mnemonic (label, keyval);
+      gtk_label_setup_mnemonic (label, GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (label))), keyval);
       g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_MNEMONIC_KEYVAL]);
     }
 
@@ -3055,7 +3114,7 @@ gtk_label_get_max_width_chars (GtkLabel *label)
 }
 
 /**
- * gtk_label_set_line_wrap:
+ * gtk_label_set_wrap:
  * @label: a #GtkLabel
  * @wrap: the setting
  *
@@ -3070,8 +3129,8 @@ gtk_label_get_max_width_chars (GtkLabel *label)
  * set the label’s width using gtk_widget_set_size_request().
  **/
 void
-gtk_label_set_line_wrap (GtkLabel *label,
-			 gboolean  wrap)
+gtk_label_set_wrap (GtkLabel *label,
+                    gboolean  wrap)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
 
@@ -3090,16 +3149,16 @@ gtk_label_set_line_wrap (GtkLabel *label,
 }
 
 /**
- * gtk_label_get_line_wrap:
+ * gtk_label_get_wrap:
  * @label: a #GtkLabel
  *
- * Returns whether lines in the label are automatically wrapped. 
- * See gtk_label_set_line_wrap().
+ * Returns whether lines in the label are automatically wrapped.
+ * See gtk_label_set_wrap().
  *
  * Returns: %TRUE if the lines of the label are automatically wrapped.
  */
 gboolean
-gtk_label_get_line_wrap (GtkLabel *label)
+gtk_label_get_wrap (GtkLabel *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
 
@@ -3109,17 +3168,17 @@ gtk_label_get_line_wrap (GtkLabel *label)
 }
 
 /**
- * gtk_label_set_line_wrap_mode:
+ * gtk_label_set_wrap_mode:
  * @label: a #GtkLabel
  * @wrap_mode: the line wrapping mode
  *
- * If line wrapping is on (see gtk_label_set_line_wrap()) this controls how
+ * If line wrapping is on (see gtk_label_set_wrap()) this controls how
  * the line wrapping is done. The default is %PANGO_WRAP_WORD which means
  * wrap on word boundaries.
  **/
 void
-gtk_label_set_line_wrap_mode (GtkLabel *label,
-			      PangoWrapMode wrap_mode)
+gtk_label_set_wrap_mode (GtkLabel *label,
+                         PangoWrapMode wrap_mode)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
 
@@ -3135,15 +3194,15 @@ gtk_label_set_line_wrap_mode (GtkLabel *label,
 }
 
 /**
- * gtk_label_get_line_wrap_mode:
+ * gtk_label_get_wrap_mode:
  * @label: a #GtkLabel
  *
- * Returns line wrap mode used by the label. See gtk_label_set_line_wrap_mode().
+ * Returns line wrap mode used by the label. See gtk_label_set_wrap_mode().
  *
  * Returns: %TRUE if the lines of the label are automatically wrapped.
  */
 PangoWrapMode
-gtk_label_get_line_wrap_mode (GtkLabel *label)
+gtk_label_get_wrap_mode (GtkLabel *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
 
@@ -3182,6 +3241,9 @@ gtk_label_finalize (GObject *object)
 
   gtk_label_clear_links (label);
   g_free (priv->select_info);
+
+  g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
+  g_clear_object (&priv->extra_menu);
 
   G_OBJECT_CLASS (gtk_label_parent_class)->finalize (object);
 }
@@ -3665,33 +3727,31 @@ gtk_label_size_allocate (GtkWidget *widget,
       else
         pango_layout_set_width (priv->layout, -1);
     }
+
+  if (priv->popup_menu)
+    gtk_native_check_resize (GTK_NATIVE (priv->popup_menu));
 }
 
 static void
 gtk_label_update_cursor (GtkLabel *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GtkWidget *widget;
+  GtkWidget *widget = GTK_WIDGET (label);
 
   if (!priv->select_info)
     return;
 
-  widget = GTK_WIDGET (label);
-
-  if (gtk_widget_get_realized (widget))
+  if (gtk_widget_is_sensitive (widget))
     {
-      if (gtk_widget_is_sensitive (widget))
-        {
-          if (priv->select_info->active_link)
-            gtk_widget_set_cursor_from_name (widget, "pointer");
-          else if (priv->select_info->selectable)
-            gtk_widget_set_cursor_from_name (widget, "text");
-          else
-            gtk_widget_set_cursor (widget, NULL);
-        }
+      if (priv->select_info->active_link)
+        gtk_widget_set_cursor_from_name (widget, "pointer");
+      else if (priv->select_info->selectable)
+        gtk_widget_set_cursor_from_name (widget, "text");
       else
         gtk_widget_set_cursor (widget, NULL);
     }
+  else
+    gtk_widget_set_cursor (widget, NULL);
 }
 
 static void
@@ -4073,18 +4133,6 @@ gtk_label_set_text_with_mnemonic (GtkLabel    *label,
 }
 
 static void
-gtk_label_realize (GtkWidget *widget)
-{
-  GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-
-  GTK_WIDGET_CLASS (gtk_label_parent_class)->realize (widget);
-
-  if (priv->select_info)
-    gtk_label_set_selectable_hint (label);
-}
-
-static void
 gtk_label_unrealize (GtkWidget *widget)
 {
   GtkLabel *label = GTK_LABEL (widget);
@@ -4097,24 +4145,6 @@ gtk_label_unrealize (GtkWidget *widget)
     gdk_clipboard_set_content (clipboard, NULL);
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->unrealize (widget);
-}
-
-static void
-gtk_label_unmap (GtkWidget *widget)
-{
-  GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-
-  if (priv->select_info)
-    {
-      if (priv->select_info->popup_menu)
-        {
-          gtk_widget_destroy (priv->select_info->popup_menu);
-          priv->select_info->popup_menu = NULL;
-        }
-    }
-
-  GTK_WIDGET_CLASS (gtk_label_parent_class)->unmap (widget);
 }
 
 static gboolean
@@ -4242,7 +4272,7 @@ gtk_label_select_word (GtkLabel *label)
   gtk_label_select_region_index (label, min, max);
 }
 
-static void
+static gboolean
 gtk_label_grab_focus (GtkWidget *widget)
 {
   GtkLabel *label = GTK_LABEL (widget);
@@ -4252,9 +4282,10 @@ gtk_label_grab_focus (GtkWidget *widget)
   GList *l;
 
   if (priv->select_info == NULL)
-    return;
+    return FALSE;
 
-  GTK_WIDGET_CLASS (gtk_label_parent_class)->grab_focus (widget);
+  if (!GTK_WIDGET_CLASS (gtk_label_parent_class)->grab_focus (widget))
+    return FALSE;
 
   if (priv->select_info->selectable)
     {
@@ -4283,6 +4314,8 @@ gtk_label_grab_focus (GtkWidget *widget)
             }
         }
     }
+
+  return TRUE;
 }
 
 static gboolean
@@ -4429,11 +4462,11 @@ out:
 }
 
 static void
-gtk_label_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
-                                      gint                  n_press,
-                                      gdouble               widget_x,
-                                      gdouble               widget_y,
-                                      GtkLabel             *label)
+gtk_label_click_gesture_pressed (GtkGestureClick *gesture,
+                                 gint             n_press,
+                                 gdouble          widget_x,
+                                 gdouble          widget_y,
+                                 GtkLabel        *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
   GtkLabelSelectionInfo *info = priv->select_info;
@@ -4453,14 +4486,14 @@ gtk_label_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
     {
       if (gdk_event_triggers_context_menu (event))
         {
-          info->link_clicked = 1;
+          info->link_clicked = TRUE;
           update_link_state (label);
-          gtk_label_do_popup (label, event);
+          gtk_label_do_popup (label, widget_x, widget_y);
           return;
         }
       else if (button == GDK_BUTTON_PRIMARY)
         {
-          info->link_clicked = 1;
+          info->link_clicked = TRUE;
           update_link_state (label);
           gtk_widget_queue_draw (widget);
           if (!info->selectable)
@@ -4478,7 +4511,7 @@ gtk_label_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   info->select_words = FALSE;
 
   if (gdk_event_triggers_context_menu (event))
-    gtk_label_do_popup (label, event);
+    gtk_label_do_popup (label, widget_x, widget_y);
   else if (button == GDK_BUTTON_PRIMARY)
     {
       if (!gtk_widget_has_focus (widget))
@@ -4507,11 +4540,11 @@ gtk_label_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 }
 
 static void
-gtk_label_multipress_gesture_released (GtkGestureMultiPress *gesture,
-                                       gint                  n_press,
-                                       gdouble               x,
-                                       gdouble               y,
-                                       GtkLabel             *label)
+gtk_label_click_gesture_released (GtkGestureClick *gesture,
+                                  gint             n_press,
+                                  gdouble          x,
+                                  gdouble          y,
+                                  GtkLabel        *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
   GtkLabelSelectionInfo *info = priv->select_info;
@@ -4540,7 +4573,7 @@ gtk_label_multipress_gesture_released (GtkGestureMultiPress *gesture,
            info->link_clicked)
     {
       emit_activate_link (label, info->active_link);
-      info->link_clicked = 0;
+      info->link_clicked = FALSE;
     }
 }
 
@@ -4548,37 +4581,37 @@ static void
 connect_mnemonics_visible_notify (GtkLabel *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GtkWidget *toplevel;
+  GtkRoot *root;
   gboolean connected;
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (label));
+  root = gtk_widget_get_root (GTK_WIDGET (label));
 
-  if (!GTK_IS_WINDOW (toplevel))
+  if (!GTK_IS_WINDOW (root))
     return;
 
   /* always set up this widgets initial value */
   priv->mnemonics_visible =
-    gtk_window_get_mnemonics_visible (GTK_WINDOW (toplevel));
+    gtk_window_get_mnemonics_visible (GTK_WINDOW (root));
 
   connected =
-    GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (toplevel), quark_mnemonics_visible_connected));
+    GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (root), quark_mnemonics_visible_connected));
 
   if (!connected)
     {
-      g_signal_connect (toplevel,
+      g_signal_connect (root,
                         "notify::mnemonics-visible",
                         G_CALLBACK (label_mnemonics_visible_changed),
                         label);
-      g_object_set_qdata (G_OBJECT (toplevel),
+      g_object_set_qdata (G_OBJECT (root),
                           quark_mnemonics_visible_connected,
                           GINT_TO_POINTER (1));
     }
 }
 
 static void
-drag_begin_cb (GtkWidget      *widget,
-               GdkDrag        *drag,
-               gpointer        data)
+drag_begin_cb (GtkWidget *widget,
+               GdkDrag   *drag,
+               gpointer   data)
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
@@ -4825,7 +4858,7 @@ gtk_label_update_active_link (GtkWidget *widget,
         {
           if (info->active_link != link)
             {
-              info->link_clicked = 0;
+              info->link_clicked = FALSE;
               info->active_link = link;
               update_link_state (label);
               gtk_label_update_cursor (label);
@@ -4836,13 +4869,15 @@ gtk_label_update_active_link (GtkWidget *widget,
         {
           if (info->active_link != NULL)
             {
-              info->link_clicked = 0;
+              info->link_clicked = FALSE;
               info->active_link = NULL;
               update_link_state (label);
               gtk_label_update_cursor (label);
               gtk_widget_queue_draw (widget);
             }
         }
+
+      gtk_label_update_actions (label);
     }
 }
 
@@ -4857,6 +4892,8 @@ gtk_label_motion (GtkEventControllerMotion *controller,
 
 static void
 gtk_label_leave (GtkEventControllerMotion *controller,
+                 GdkCrossingMode           mode,
+                 GdkNotifyType             detail,
                  gpointer                  data)
 {
   GtkLabel *label = GTK_LABEL (data);
@@ -4867,25 +4904,6 @@ gtk_label_leave (GtkEventControllerMotion *controller,
       priv->select_info->active_link = NULL;
       gtk_label_update_cursor (label);
       gtk_widget_queue_draw (GTK_WIDGET (label));
-    }
-}
-
-static void
-gtk_label_set_selectable_hint (GtkLabel *label)
-{
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GtkWidget *widget;
-
-  g_assert (priv->select_info);
-  widget = GTK_WIDGET (label);
-
-  if (priv->select_info->selectable)
-    {
-      GdkCursor *cursor;
-
-      cursor = gdk_cursor_new_from_name ("text", NULL);
-      gtk_widget_set_cursor (widget, cursor);
-      g_object_unref (cursor);
     }
 }
 
@@ -5011,9 +5029,6 @@ gtk_label_ensure_select_info (GtkLabel *label)
 
       gtk_widget_set_can_focus (GTK_WIDGET (label), TRUE);
 
-      if (gtk_widget_get_realized (GTK_WIDGET (label)))
-	gtk_label_set_selectable_hint (label);
-
       priv->select_info->drag_gesture = gtk_gesture_drag_new ();
       g_signal_connect (priv->select_info->drag_gesture, "drag-begin",
                         G_CALLBACK (gtk_label_drag_gesture_begin), label);
@@ -5022,14 +5037,14 @@ gtk_label_ensure_select_info (GtkLabel *label)
       gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->select_info->drag_gesture), TRUE);
       gtk_widget_add_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->drag_gesture));
 
-      priv->select_info->multipress_gesture = gtk_gesture_multi_press_new ();
-      g_signal_connect (priv->select_info->multipress_gesture, "pressed",
-                        G_CALLBACK (gtk_label_multipress_gesture_pressed), label);
-      g_signal_connect (priv->select_info->multipress_gesture, "released",
-                        G_CALLBACK (gtk_label_multipress_gesture_released), label);
-      gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->select_info->multipress_gesture), 0);
-      gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->select_info->multipress_gesture), TRUE);
-      gtk_widget_add_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->multipress_gesture));
+      priv->select_info->click_gesture = gtk_gesture_click_new ();
+      g_signal_connect (priv->select_info->click_gesture, "pressed",
+                        G_CALLBACK (gtk_label_click_gesture_pressed), label);
+      g_signal_connect (priv->select_info->click_gesture, "released",
+                        G_CALLBACK (gtk_label_click_gesture_released), label);
+      gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->select_info->click_gesture), 0);
+      gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->select_info->click_gesture), TRUE);
+      gtk_widget_add_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->click_gesture));
 
       priv->select_info->motion_controller = gtk_event_controller_motion_new ();
       g_signal_connect (priv->select_info->motion_controller, "motion",
@@ -5040,6 +5055,8 @@ gtk_label_ensure_select_info (GtkLabel *label)
 
       priv->select_info->provider = g_object_new (GTK_TYPE_LABEL_CONTENT, NULL);
       GTK_LABEL_CONTENT (priv->select_info->provider)->label = label;
+
+      gtk_label_update_cursor (label);
     }
 }
 
@@ -5054,7 +5071,7 @@ gtk_label_clear_select_info (GtkLabel *label)
   if (!priv->select_info->selectable && !priv->select_info->links)
     {
       gtk_widget_remove_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->drag_gesture));
-      gtk_widget_remove_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->multipress_gesture));
+      gtk_widget_remove_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->click_gesture));
       gtk_widget_remove_controller (GTK_WIDGET (label), priv->select_info->motion_controller);
       GTK_LABEL_CONTENT (priv->select_info->provider)->label = NULL;
       g_object_unref (priv->select_info->provider);
@@ -5103,7 +5120,6 @@ gtk_label_set_selectable (GtkLabel *label,
 
           priv->select_info->selectable = FALSE;
           gtk_label_clear_select_info (label);
-          gtk_label_update_cursor (label);
         }
     }
   if (setting != old_setting)
@@ -5287,6 +5303,8 @@ gtk_label_select_region_index (GtkLabel *label,
               priv->select_info->selection_node = NULL;
             }
         }
+
+      gtk_label_update_actions (label);
 
       gtk_widget_queue_draw (GTK_WIDGET (label));
 
@@ -5638,15 +5656,15 @@ gtk_label_move_logically (GtkLabel *label,
 
   if (priv->text)
     {
-      PangoLogAttr *log_attrs;
+      const PangoLogAttr *log_attrs;
       gint n_attrs;
       gint length;
 
       gtk_label_ensure_layout (label);
-      
+
       length = g_utf8_strlen (priv->text, -1);
 
-      pango_layout_get_log_attrs (priv->layout, &log_attrs, &n_attrs);
+      log_attrs = pango_layout_get_log_attrs_readonly (priv->layout, &n_attrs);
 
       while (count > 0 && offset < length)
 	{
@@ -5664,8 +5682,6 @@ gtk_label_move_logically (GtkLabel *label,
 	  
 	  count++;
 	}
-      
-      g_free (log_attrs);
     }
 
   return g_utf8_offset_to_pointer (priv->text, offset) - priv->text;
@@ -5738,19 +5754,17 @@ gtk_label_move_forward_word (GtkLabel *label,
   length = g_utf8_strlen (priv->text, -1);
   if (new_pos < length)
     {
-      PangoLogAttr *log_attrs;
+      const PangoLogAttr *log_attrs;
       gint n_attrs;
 
       gtk_label_ensure_layout (label);
 
-      pango_layout_get_log_attrs (priv->layout, &log_attrs, &n_attrs);
+      log_attrs = pango_layout_get_log_attrs_readonly (priv->layout, &n_attrs);
 
       /* Find the next word end */
       new_pos++;
       while (new_pos < n_attrs && !log_attrs[new_pos].is_word_end)
-	new_pos++;
-
-      g_free (log_attrs);
+        new_pos++;
     }
 
   return g_utf8_offset_to_pointer (priv->text, new_pos) - priv->text;
@@ -5767,20 +5781,18 @@ gtk_label_move_backward_word (GtkLabel *label,
 
   if (new_pos > 0)
     {
-      PangoLogAttr *log_attrs;
+      const PangoLogAttr *log_attrs;
       gint n_attrs;
 
       gtk_label_ensure_layout (label);
 
-      pango_layout_get_log_attrs (priv->layout, &log_attrs, &n_attrs);
+      log_attrs = pango_layout_get_log_attrs_readonly (priv->layout, &n_attrs);
 
       new_pos -= 1;
 
       /* Find the previous word beginning */
       while (new_pos > 0 && !log_attrs[new_pos].is_word_start)
-	new_pos--;
-
-      g_free (log_attrs);
+        new_pos--;
     }
 
   return g_utf8_offset_to_pointer (priv->text, new_pos) - priv->text;
@@ -5864,12 +5876,10 @@ gtk_label_move_cursor (GtkLabel       *label,
                                                  count > 0 ?
                                                  GTK_DIR_RIGHT : GTK_DIR_LEFT))
                     {
-                      GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (label));
+                      GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (label));
 
-                      if (toplevel)
-                        gtk_widget_child_focus (toplevel,
-                                                count > 0 ?
-                                                GTK_DIR_RIGHT : GTK_DIR_LEFT);
+                      if (root)
+                        gtk_widget_child_focus (GTK_WIDGET (root), count > 0 ? GTK_DIR_RIGHT : GTK_DIR_LEFT);
                     }
                 }
               else
@@ -5968,167 +5978,176 @@ gtk_label_select_all (GtkLabel *label)
   gtk_label_select_region_index (label, 0, strlen (priv->text));
 }
 
-/* Quick hack of a popup menu
- */
 static void
-activate_cb (GtkWidget *menuitem,
-	     GtkLabel  *label)
+gtk_label_activate_link_open (GtkWidget  *widget,
+                              const char *name,
+                              GVariant   *parameter)
 {
-  const gchar *signal = g_object_get_qdata (G_OBJECT (menuitem), quark_gtk_signal);
-  g_signal_emit_by_name (label, signal);
-}
-
-static void
-append_action_signal (GtkLabel     *label,
-		      GtkWidget    *menu,
-		      const gchar  *text,
-		      const gchar  *signal,
-                      gboolean      sensitive)
-{
-  GtkWidget *menuitem = gtk_menu_item_new_with_mnemonic (text);
-
-  g_object_set_qdata (G_OBJECT (menuitem), quark_gtk_signal, (char *)signal);
-  g_signal_connect (menuitem, "activate",
-		    G_CALLBACK (activate_cb), label);
-
-  gtk_widget_set_sensitive (menuitem, sensitive);
-  
-  gtk_widget_show (menuitem);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-}
-
-static void
-popup_menu_detach (GtkWidget *attach_widget,
-		   GtkMenu   *menu)
-{
-  GtkLabel *label = GTK_LABEL (attach_widget);
+  GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+   GtkLabelLink *link = priv->select_info->context_link;
+
+  if (link)
+    emit_activate_link (label, link);
+}
+
+static void
+gtk_label_activate_link_copy (GtkWidget  *widget,
+                              const char *name,
+                              GVariant   *parameter)
+{
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+  GtkLabelLink *link = priv->select_info->context_link;
+
+  if (link)
+    {
+      GdkClipboard *clipboard;
+
+      clipboard = gtk_widget_get_clipboard (widget);
+      gdk_clipboard_set_text (clipboard, link->uri);
+    }
+  else
+    g_print ("no link ?!\n");
+}
+
+static void
+gtk_label_activate_clipboard_copy (GtkWidget  *widget,
+                                   const char *name,
+                                   GVariant   *parameter)
+{
+  g_signal_emit_by_name (widget, "copy-clipboard");
+}
+
+static void
+gtk_label_activate_selection_select_all (GtkWidget  *widget,
+                                         const char *name,
+                                         GVariant   *parameter)
+{
+  gtk_label_select_all (GTK_LABEL (widget));
+}
+
+static void
+gtk_label_nop (GtkWidget  *widget,
+               const char *name,
+               GVariant   *parameter)
+{
+}
+
+static void
+gtk_label_update_actions (GtkLabel *label)
+{
+  GtkWidget *widget = GTK_WIDGET (label);
+  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+  gboolean has_selection;
+  GtkLabelLink *link;
 
   if (priv->select_info)
-    priv->select_info->popup_menu = NULL;
+    has_selection = priv->select_info->selection_anchor != priv->select_info->selection_end;
+  else
+    has_selection = FALSE;
+
+  if (priv->select_info->link_clicked)
+    link = priv->select_info->active_link;
+  else
+    link = gtk_label_get_focus_link (label);
+
+  gtk_widget_action_set_enabled (widget, "clipboard.copy", has_selection);
+  gtk_widget_action_set_enabled (widget, "selection.select-all",
+                                 gtk_label_get_selectable (label));
+  gtk_widget_action_set_enabled (widget, "link.open", !has_selection && link);
+  gtk_widget_action_set_enabled (widget, "link.copy", !has_selection && link);
+}
+
+static GMenuModel *
+gtk_label_get_menu_model (GtkLabel *label)
+{
+  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+  GMenu *menu, *section;
+  GMenuItem *item;
+
+  menu = g_menu_new ();
+
+  section = g_menu_new ();
+  g_menu_append (section, _("Cu_t"), "clipboard.cut");
+  g_menu_append (section, _("_Copy"), "clipboard.copy");
+  g_menu_append (section, _("_Paste"), "clipboard.paste");
+  g_menu_append (section, _("_Delete"), "selection.delete");
+  g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
+  g_object_unref (section);
+
+  section = g_menu_new ();
+  g_menu_append (section, _("Select _All"), "selection.select-all");
+  g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
+  g_object_unref (section);
+
+  section = g_menu_new ();
+  item = g_menu_item_new (_("_Open Link"), "link.open");
+  g_menu_item_set_attribute (item, "hidden-when", "s", "action-disabled");
+  g_menu_append_item (section, item);
+  g_object_unref (item);
+  item = g_menu_item_new (_("Copy _Link Address"), "link.copy");
+  g_menu_item_set_attribute (item, "hidden-when", "s", "action-disabled");
+  g_menu_append_item (section, item);
+  g_object_unref (item);
+  g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
+  g_object_unref (section);
+
+  if (priv->extra_menu)
+    g_menu_append_section (menu, NULL, priv->extra_menu);
+
+  return G_MENU_MODEL (menu);
 }
 
 static void
-open_link_activate_cb (GtkMenuItem *menuitem,
-                       GtkLabel    *label)
+gtk_label_do_popup (GtkLabel *label,
+                    double    x,
+                    double    y)
 {
-  GtkLabelLink *link;
+  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
 
-  link = g_object_get_qdata (G_OBJECT (menuitem), quark_link);
-  emit_activate_link (label, link);
-}
+  if (!priv->select_info)
+    return;
 
-static void
-copy_link_activate_cb (GtkMenuItem *menuitem,
-                       GtkLabel    *label)
-{
-  GtkLabelLink *link;
-  GdkClipboard *clipboard;
+  if (priv->select_info->link_clicked)
+    priv->select_info->context_link = priv->select_info->active_link;
+  else
+    priv->select_info->context_link = gtk_label_get_focus_link (label);
 
-  link = g_object_get_qdata (G_OBJECT (menuitem), quark_link);
-  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label));
-  gdk_clipboard_set_text (clipboard, link->uri);
+  gtk_label_update_actions (label);
+
+  if (!priv->popup_menu)
+    {
+      GMenuModel *model;
+
+      model = gtk_label_get_menu_model (label);
+      priv->popup_menu = gtk_popover_menu_new_from_model (GTK_WIDGET (label), model);
+      gtk_popover_set_position (GTK_POPOVER (priv->popup_menu), GTK_POS_BOTTOM);
+
+      gtk_popover_set_has_arrow (GTK_POPOVER (priv->popup_menu), FALSE);
+      gtk_widget_set_halign (priv->popup_menu, GTK_ALIGN_START);
+
+      g_object_unref (model);
+    }
+
+  if (x != -1 && y != -1)
+    {
+      GdkRectangle rect = { x, y, 1, 1 };
+      gtk_popover_set_pointing_to (GTK_POPOVER (priv->popup_menu), &rect);
+    }
+  else
+    gtk_popover_set_pointing_to (GTK_POPOVER (priv->popup_menu), NULL);
+
+  gtk_popover_popup (GTK_POPOVER (priv->popup_menu));
 }
 
 static gboolean
 gtk_label_popup_menu (GtkWidget *widget)
 {
-  gtk_label_do_popup (GTK_LABEL (widget), NULL);
+  GtkLabel *label = GTK_LABEL (widget);
 
+  gtk_label_do_popup (label, -1, -1);
   return TRUE;
-}
-
-static void
-gtk_label_do_popup (GtkLabel       *label,
-                    const GdkEvent *event)
-{
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GtkWidget *menuitem;
-  GtkWidget *menu;
-  gboolean have_selection;
-  GtkLabelLink *link;
-
-  if (!priv->select_info)
-    return;
-
-  if (priv->select_info->popup_menu)
-    gtk_widget_destroy (priv->select_info->popup_menu);
-
-  priv->select_info->popup_menu = menu = gtk_menu_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (menu),
-                               GTK_STYLE_CLASS_CONTEXT_MENU);
-
-  gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (label), popup_menu_detach);
-
-  have_selection =
-    priv->select_info->selection_anchor != priv->select_info->selection_end;
-
-  if (event)
-    {
-      if (priv->select_info->link_clicked)
-        link = priv->select_info->active_link;
-      else
-        link = NULL;
-    }
-  else
-    link = gtk_label_get_focus_link (label);
-
-  if (!have_selection && link)
-    {
-      /* Open Link */
-      menuitem = gtk_menu_item_new_with_mnemonic (_("_Open Link"));
-      g_object_set_qdata (G_OBJECT (menuitem), quark_link, link);
-      gtk_widget_show (menuitem);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-
-      g_signal_connect (G_OBJECT (menuitem), "activate",
-                        G_CALLBACK (open_link_activate_cb), label);
-
-      /* Copy Link Address */
-      menuitem = gtk_menu_item_new_with_mnemonic (_("Copy _Link Address"));
-      g_object_set_qdata (G_OBJECT (menuitem), quark_link, link);
-      gtk_widget_show (menuitem);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-
-      g_signal_connect (G_OBJECT (menuitem), "activate",
-                        G_CALLBACK (copy_link_activate_cb), label);
-    }
-  else
-    {
-      append_action_signal (label, menu, _("Cu_t"), "cut-clipboard", FALSE);
-      append_action_signal (label, menu, _("_Copy"), "copy-clipboard", have_selection);
-      append_action_signal (label, menu, _("_Paste"), "paste-clipboard", FALSE);
-  
-      menuitem = gtk_menu_item_new_with_mnemonic (_("_Delete"));
-      gtk_widget_set_sensitive (menuitem, FALSE);
-      gtk_widget_show (menuitem);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-
-      menuitem = gtk_separator_menu_item_new ();
-      gtk_widget_show (menuitem);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-
-      menuitem = gtk_menu_item_new_with_mnemonic (_("Select _All"));
-      g_signal_connect_swapped (menuitem, "activate",
-			        G_CALLBACK (gtk_label_select_all), label);
-      gtk_widget_show (menuitem);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-    }
-
-  g_signal_emit (label, signals[POPULATE_POPUP], 0, menu);
-
-  if (event && gdk_event_triggers_context_menu (event))
-    gtk_menu_popup_at_pointer (GTK_MENU (menu), event);
-  else
-    {
-      gtk_menu_popup_at_widget (GTK_MENU (menu),
-                                GTK_WIDGET (label),
-                                GDK_GRAVITY_SOUTH,
-                                GDK_GRAVITY_NORTH_WEST,
-                                event);
-
-      gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
-    }
 }
 
 static void
@@ -6151,11 +6170,14 @@ gtk_label_activate_link (GtkLabel    *label,
                          const gchar *uri)
 {
   GtkWidget *widget = GTK_WIDGET (label);
-  GtkWidget *top_level = gtk_widget_get_toplevel (widget);
+  GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
   guint32 timestamp = gtk_get_current_event_time ();
   GError *error = NULL;
 
-  if (!gtk_show_uri_on_window (GTK_WINDOW (top_level), uri, timestamp, &error))
+  if (!GTK_IS_WINDOW (toplevel))
+    return FALSE;
+
+  if (!gtk_show_uri_on_window (GTK_WINDOW (toplevel), uri, timestamp, &error))
     {
       g_warning ("Unable to show '%s': %s", uri, error->message);
       g_error_free (error);
@@ -6173,6 +6195,11 @@ emit_activate_link (GtkLabel     *label,
   GtkStateFlags state;
 
   g_signal_emit (label, signals[ACTIVATE_LINK], 0, link->uri, &handled);
+
+  /* signal handler might have invalidated the layout */
+  if (!priv->layout)
+    return;
+
   if (handled && priv->track_links && !link->visited &&
       priv->select_info && priv->select_info->links)
     {
@@ -6193,31 +6220,9 @@ gtk_label_activate_current_link (GtkLabel *label)
   link = gtk_label_get_focus_link (label);
 
   if (link)
-    {
-      emit_activate_link (label, link);
-    }
+    emit_activate_link (label, link);
   else
-    {
-      GtkWidget *toplevel;
-      GtkWindow *window;
-      GtkWidget *default_widget, *focus_widget;
-
-      toplevel = gtk_widget_get_toplevel (widget);
-      if (GTK_IS_WINDOW (toplevel))
-        {
-          window = GTK_WINDOW (toplevel);
-
-          if (window)
-            {
-              default_widget = gtk_window_get_default_widget (window);
-              focus_widget = gtk_window_get_focus (window);
-
-              if (default_widget != widget &&
-                  !(widget == focus_widget && (!default_widget || !gtk_widget_is_sensitive (default_widget))))
-                gtk_window_activate_default (window);
-            }
-        }
-    }
+    gtk_widget_activate_default (widget);
 }
 
 static GtkLabelLink *
@@ -6249,8 +6254,8 @@ gtk_label_get_current_link (GtkLabel *label)
  * This function is intended for use in a #GtkLabel::activate-link handler
  * or for use in a #GtkWidget::query-tooltip handler.
  *
- * Returns: the currently active URI. The string is owned by GTK+ and must
- *   not be freed or modified.
+ * Returns: (nullable): the currently active URI or %NULL if there is none.
+ *   The string is owned by GTK+ and must not be freed or modified.
  */
 const gchar *
 gtk_label_get_current_uri (GtkLabel *label)
@@ -6655,4 +6660,45 @@ gtk_label_get_yalign (GtkLabel *label)
   g_return_val_if_fail (GTK_IS_LABEL (label), 0.5);
 
   return priv->yalign;
+}
+
+/**
+ * gtk_label_set_extra_menu:
+ * @label: a #GtkLabel
+ * @model: (allow-none): a #GMenuModel
+ *
+ * Sets a menu model to add when constructing
+ * the context menu for @label.
+ */
+void
+gtk_label_set_extra_menu (GtkLabel   *label,
+                          GMenuModel *model)
+{
+  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+
+  g_return_if_fail (GTK_IS_LABEL (label));
+
+  if (g_set_object (&priv->extra_menu, model))
+    {
+      g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
+      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_EXTRA_MENU]);
+    }
+}
+
+/**
+ * gtk_label_get_extra_menu:
+ * @label: a #GtkLabel
+ *
+ * Gets the menu model set with gtk_label_set_extra_menu().
+ *
+ * Returns: (transfer none): (nullable): the menu model
+ */
+GMenuModel *
+gtk_label_get_extra_menu (GtkLabel *label)
+{
+  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+
+  g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
+
+  return priv->extra_menu;
 }

@@ -2,6 +2,8 @@
 
 window {
   color: alpha(currentColor, 0.0);
+  /* So we draw something */
+  border: 1px solid rebeccapurple;
 }
 
 #reference {

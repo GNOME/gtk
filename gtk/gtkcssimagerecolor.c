@@ -155,9 +155,9 @@ gtk_css_image_recolor_load (GtkCssImageRecolor  *recolor,
 
           uri = g_file_get_uri (recolor->file);
           g_set_error (gerror,
-                       GTK_CSS_PROVIDER_ERROR,
-                       GTK_CSS_PROVIDER_ERROR_FAILED,
-                       "Error loading image '%s': %s", uri, local_error->message);
+                       GTK_CSS_PARSER_ERROR,
+                       GTK_CSS_PARSER_ERROR_FAILED,
+                       "Error loading image '%s': %s", uri, local_error ? local_error->message : "");
           g_free (uri);
        }
     }
@@ -235,49 +235,50 @@ gtk_css_image_recolor_compute (GtkCssImage      *image,
   return img;
 }
 
+static guint
+gtk_css_image_recolor_parse_arg (GtkCssParser *parser,
+                                 guint         arg,
+                                 gpointer      data)
+{
+  GtkCssImageRecolor *self = data;
+
+  switch (arg)
+  {
+    case 0:
+      {
+        char *url = gtk_css_parser_consume_url (parser);
+        if (url == NULL)
+          return 0;
+        self->file = gtk_css_parser_resolve_url (parser, url);
+        g_free (url);
+        if (self->file == NULL)
+          return 0;
+        return 1;
+      }
+
+    case 1:
+      self->palette = gtk_css_palette_value_parse (parser);
+      if (self->palette == NULL)
+        return 0;
+      return 1;
+
+    default:
+      g_assert_not_reached ();
+      return 0;
+  }
+}
+
 static gboolean
 gtk_css_image_recolor_parse (GtkCssImage  *image,
-                             GtkCssParser *parser)
+                                GtkCssParser *parser)
 {
-  GtkCssImageRecolor *recolor = GTK_CSS_IMAGE_RECOLOR (image);
-
-  if (!_gtk_css_parser_try (parser, "-gtk-recolor", TRUE))
+  if (!gtk_css_parser_has_function (parser, "-gtk-recolor"))
     {
-      _gtk_css_parser_error (parser, "'-gtk-recolor'");
+      gtk_css_parser_error_syntax (parser, "Expected '-gtk-recolor('");
       return FALSE;
     }
 
-  if (!_gtk_css_parser_try (parser, "(", TRUE))
-    {
-      _gtk_css_parser_error (parser, "Expected '(' after '-gtk-recolor'");
-      return FALSE;
-    }
-
-  recolor->file = _gtk_css_parser_read_url (parser);
-  if (recolor->file == NULL)
-    {
-      _gtk_css_parser_error (parser, "Expected a url here");
-      return FALSE;
-    }
-
-  if ( _gtk_css_parser_try (parser, ",", TRUE))
-    {
-      recolor->palette = gtk_css_palette_value_parse (parser);
-      if (recolor->palette == NULL)
-        {
-          _gtk_css_parser_error (parser, "A palette is required here");
-          return FALSE;
-        }
-    }
-
-  if (!_gtk_css_parser_try (parser, ")", TRUE))
-    {
-      _gtk_css_parser_error (parser,
-                             "Expected ')' at end of '-gtk-recolor'");
-      return FALSE;
-    }
-
-  return TRUE;
+  return gtk_css_parser_consume_function (parser, 1, 2, gtk_css_image_recolor_parse_arg, image);
 }
 
 static int

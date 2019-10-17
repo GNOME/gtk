@@ -16,7 +16,7 @@
  */
 
 #include "gtkwidgetprivate.h"
-#include "gtkwindow.h"
+#include "gtknative.h"
 
 typedef struct _CompareInfo CompareInfo;
 
@@ -81,8 +81,9 @@ tab_sort_func (gconstpointer a,
   GtkTextDirection text_direction = GPOINTER_TO_INT (user_data);
   float y1, y2;
 
-  gtk_widget_compute_bounds (child1, gtk_widget_get_parent (child1), &child_bounds1);
-  gtk_widget_compute_bounds (child2, gtk_widget_get_parent (child2), &child_bounds2);
+  if (!gtk_widget_compute_bounds (child1, gtk_widget_get_parent (child1), &child_bounds1) ||
+      !gtk_widget_compute_bounds (child2, gtk_widget_get_parent (child2), &child_bounds2))
+    return 0;
 
   y1 = child_bounds1.origin.y + (child_bounds1.size.height / 2.0f);
   y2 = child_bounds2.origin.y + (child_bounds2.size.height / 2.0f);
@@ -155,15 +156,11 @@ static gboolean
 old_focus_coords (GtkWidget       *widget,
                   graphene_rect_t *old_focus_bounds)
 {
-  GtkWidget *toplevel = _gtk_widget_get_toplevel (widget);
   GtkWidget *old_focus;
 
-  if (GTK_IS_WINDOW (toplevel))
-    {
-      old_focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
-      if (old_focus)
-        return gtk_widget_compute_bounds (old_focus, widget, old_focus_bounds);
-    }
+  old_focus = gtk_root_get_focus (gtk_widget_get_root (widget));
+  if (old_focus)
+    return gtk_widget_compute_bounds (old_focus, widget, old_focus_bounds);
 
   return FALSE;
 }
@@ -179,8 +176,9 @@ axis_compare (gconstpointer a,
   int start1, end1;
   int start2, end2;
 
-  gtk_widget_compute_bounds (*((GtkWidget **)a), compare->widget, &bounds1);
-  gtk_widget_compute_bounds (*((GtkWidget **)b), compare->widget, &bounds2);
+  if (!gtk_widget_compute_bounds (*((GtkWidget **)a), compare->widget, &bounds1) ||
+      !gtk_widget_compute_bounds (*((GtkWidget **)b), compare->widget, &bounds2))
+    return 0;
 
   get_axis_info (&bounds1, compare->axis, &start1, &end1);
   get_axis_info (&bounds2, compare->axis, &start2, &end2);
@@ -279,7 +277,8 @@ focus_sort_left_right (GtkWidget        *widget,
       graphene_rect_t old_focus_bounds;
 
       parent = gtk_widget_get_parent (widget);
-      gtk_widget_compute_bounds (widget, parent ? parent : widget, &bounds);
+      if (!gtk_widget_compute_bounds (widget, parent ? parent : widget, &bounds))
+        graphene_rect_init (&bounds, 0, 0, 0, 0);
 
       if (old_focus_coords (widget, &old_focus_bounds))
         {
@@ -287,13 +286,13 @@ focus_sort_left_right (GtkWidget        *widget,
         }
       else
         {
-          if (!_gtk_widget_get_has_surface (widget))
+          if (!GTK_IS_NATIVE (widget))
             compare_info.y = bounds.origin.y + bounds.size.height;
           else
             compare_info.y = bounds.size.height / 2.0f;
         }
 
-      if (!_gtk_widget_get_has_surface (widget))
+      if (!GTK_IS_NATIVE (widget))
         compare_info.x = (direction == GTK_DIR_RIGHT) ? bounds.origin.x : bounds.origin.x + bounds.size.width;
       else
         compare_info.x = (direction == GTK_DIR_RIGHT) ? 0 : bounds.size.width;
@@ -380,7 +379,8 @@ focus_sort_up_down (GtkWidget        *widget,
       graphene_rect_t old_focus_bounds;
 
       parent = gtk_widget_get_parent (widget);
-      gtk_widget_compute_bounds (widget, parent ? parent : widget, &bounds);
+      if (!gtk_widget_compute_bounds (widget, parent ? parent : widget, &bounds))
+        graphene_rect_init (&bounds, 0, 0, 0, 0);
 
       if (old_focus_coords (widget, &old_focus_bounds))
         {
@@ -388,13 +388,13 @@ focus_sort_up_down (GtkWidget        *widget,
         }
       else
         {
-          if (!_gtk_widget_get_has_surface (widget))
+          if (!GTK_IS_NATIVE (widget))
             compare_info.x = bounds.origin.x + (bounds.size.width / 2.0f);
           else
             compare_info.x = bounds.size.width / 2.0f;
         }
 
-      if (!_gtk_widget_get_has_surface (widget))
+      if (!GTK_IS_NATIVE (widget))
         compare_info.y = (direction == GTK_DIR_DOWN) ? bounds.origin.y : bounds.origin.y + bounds.size.height;
       else
         compare_info.y = (direction == GTK_DIR_DOWN) ? 0 : + bounds.size.height;
@@ -423,7 +423,9 @@ gtk_widget_focus_sort (GtkWidget        *widget,
            child != NULL;
            child = _gtk_widget_get_next_sibling (child))
         {
-          if (_gtk_widget_get_realized (child))
+          if (_gtk_widget_get_realized (child) &&
+              _gtk_widget_is_drawable (child) &&
+              gtk_widget_get_sensitive (child))
             g_ptr_array_add (focus_order, child);
         }
     }
@@ -451,13 +453,17 @@ gtk_widget_focus_sort (GtkWidget        *widget,
 
 gboolean
 gtk_widget_focus_move (GtkWidget        *widget,
-                       GtkDirectionType  direction,
-                       GPtrArray        *focus_order)
+                       GtkDirectionType  direction)
 {
+  GPtrArray *focus_order;
   GtkWidget *focus_child = gtk_widget_get_focus_child (widget);
   int i;
+  gboolean ret = FALSE;
 
-  for (i = 0; i < focus_order->len; i ++)
+  focus_order = g_ptr_array_new ();
+  gtk_widget_focus_sort (widget, direction, focus_order);
+
+  for (i = 0; i < focus_order->len && !ret; i++)
     {
       GtkWidget *child = g_ptr_array_index (focus_order, i);
 
@@ -466,18 +472,17 @@ gtk_widget_focus_move (GtkWidget        *widget,
           if (focus_child == child)
             {
               focus_child = NULL;
-
-                if (gtk_widget_child_focus (child, direction))
-                  return TRUE;
+              ret = gtk_widget_child_focus (child, direction);
             }
         }
       else if (_gtk_widget_is_drawable (child) &&
                gtk_widget_is_ancestor (child, widget))
         {
-          if (gtk_widget_child_focus (child, direction))
-            return TRUE;
+          ret = gtk_widget_child_focus (child, direction);
         }
     }
 
-  return FALSE;
+  g_ptr_array_unref (focus_order);
+
+  return ret;
 }

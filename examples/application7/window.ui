@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.8 -->
   <template class="ExampleAppWindow" parent="GtkApplicationWindow">
     <property name="title" translatable="yes">Example Application</property>
     <property name="default-width">600</property>
@@ -15,14 +14,11 @@
                 <property name="stack">stack</property>
               </object>
             </child>
-            <child>
+            <child type="end">
               <object class="GtkToggleButton" id="search">
                 <property name="sensitive">0</property>
                 <property name="icon-name">edit-find-symbolic</property>
               </object>
-              <packing>
-                <property name="pack-type">end</property>
-              </packing>
             </child>
           </object>
         </child>

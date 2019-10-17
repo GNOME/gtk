@@ -23,6 +23,7 @@
 #include "gtkcssstylechangeprivate.h"
 #include "gtkbitmaskprivate.h"
 #include "gtkcsstypesprivate.h"
+#include "gtkstylecontext.h"
 
 G_BEGIN_DECLS
 
@@ -106,28 +107,28 @@ void                    gtk_css_node_insert_before      (GtkCssNode            *
                                                          GtkCssNode            *cssnode,
                                                          GtkCssNode            *next_sibling);
 
-GtkCssNode *            gtk_css_node_get_parent         (GtkCssNode            *cssnode);
-GtkCssNode *            gtk_css_node_get_first_child    (GtkCssNode            *cssnode);
-GtkCssNode *            gtk_css_node_get_last_child     (GtkCssNode            *cssnode);
-GtkCssNode *            gtk_css_node_get_previous_sibling(GtkCssNode           *cssnode);
-GtkCssNode *            gtk_css_node_get_next_sibling   (GtkCssNode            *cssnode);
+GtkCssNode *            gtk_css_node_get_parent         (GtkCssNode            *cssnode) G_GNUC_PURE;
+GtkCssNode *            gtk_css_node_get_first_child    (GtkCssNode            *cssnode) G_GNUC_PURE;
+GtkCssNode *            gtk_css_node_get_last_child     (GtkCssNode            *cssnode) G_GNUC_PURE;
+GtkCssNode *            gtk_css_node_get_previous_sibling(GtkCssNode           *cssnode) G_GNUC_PURE;
+GtkCssNode *            gtk_css_node_get_next_sibling   (GtkCssNode            *cssnode) G_GNUC_PURE;
 
 void                    gtk_css_node_set_visible        (GtkCssNode            *cssnode,
                                                          gboolean               visible);
-gboolean                gtk_css_node_get_visible        (GtkCssNode            *cssnode);
+gboolean                gtk_css_node_get_visible        (GtkCssNode            *cssnode) G_GNUC_PURE;
 
 void                    gtk_css_node_set_name           (GtkCssNode            *cssnode,
                                                          /*interned*/const char*name);
-/*interned*/const char *gtk_css_node_get_name           (GtkCssNode            *cssnode);
+/*interned*/const char *gtk_css_node_get_name           (GtkCssNode            *cssnode) G_GNUC_PURE;
 void                    gtk_css_node_set_widget_type    (GtkCssNode            *cssnode,
                                                          GType                  widget_type);
-GType                   gtk_css_node_get_widget_type    (GtkCssNode            *cssnode);
+GType                   gtk_css_node_get_widget_type    (GtkCssNode            *cssnode) G_GNUC_PURE;
 void                    gtk_css_node_set_id             (GtkCssNode            *cssnode,
                                                          /*interned*/const char*id);
-/*interned*/const char *gtk_css_node_get_id             (GtkCssNode            *cssnode);
+/*interned*/const char *gtk_css_node_get_id             (GtkCssNode            *cssnode) G_GNUC_PURE;
 void                    gtk_css_node_set_state          (GtkCssNode            *cssnode,
                                                          GtkStateFlags          state_flags);
-GtkStateFlags           gtk_css_node_get_state          (GtkCssNode            *cssnode);
+GtkStateFlags           gtk_css_node_get_state          (GtkCssNode            *cssnode) G_GNUC_PURE;
 void                    gtk_css_node_set_classes        (GtkCssNode            *cssnode,
                                                          const char           **classes);
 char **                 gtk_css_node_get_classes        (GtkCssNode            *cssnode);
@@ -136,13 +137,13 @@ void                    gtk_css_node_add_class          (GtkCssNode            *
 void                    gtk_css_node_remove_class       (GtkCssNode            *cssnode,
                                                          GQuark                 style_class);
 gboolean                gtk_css_node_has_class          (GtkCssNode            *cssnode,
-                                                         GQuark                 style_class);
+                                                         GQuark                 style_class) G_GNUC_PURE;
 const GQuark *          gtk_css_node_list_classes       (GtkCssNode            *cssnode,
                                                          guint                 *n_classes);
 
 const GtkCssNodeDeclaration *
-                        gtk_css_node_get_declaration    (GtkCssNode            *cssnode);
-GtkCssStyle *           gtk_css_node_get_style          (GtkCssNode            *cssnode);
+                        gtk_css_node_get_declaration    (GtkCssNode            *cssnode) G_GNUC_PURE;
+GtkCssStyle *           gtk_css_node_get_style          (GtkCssNode            *cssnode) G_GNUC_PURE;
 
 
 void                    gtk_css_node_invalidate_style_provider
@@ -157,8 +158,8 @@ void                    gtk_css_node_validate           (GtkCssNode            *
 gboolean                gtk_css_node_init_matcher       (GtkCssNode            *cssnode,
                                                          GtkCssMatcher         *matcher);
 GtkWidgetPath *         gtk_css_node_create_widget_path (GtkCssNode            *cssnode);
-const GtkWidgetPath *   gtk_css_node_get_widget_path    (GtkCssNode            *cssnode);
-GtkStyleProvider *      gtk_css_node_get_style_provider (GtkCssNode            *cssnode);
+const GtkWidgetPath *   gtk_css_node_get_widget_path    (GtkCssNode            *cssnode) G_GNUC_PURE;
+GtkStyleProvider *      gtk_css_node_get_style_provider (GtkCssNode            *cssnode) G_GNUC_PURE;
 
 void                    gtk_css_node_print              (GtkCssNode                *cssnode,
                                                          GtkStyleContextPrintFlags  flags,

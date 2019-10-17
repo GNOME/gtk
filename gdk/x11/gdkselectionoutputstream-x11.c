@@ -503,6 +503,7 @@ gdk_x11_selection_output_stream_invoke_close (gpointer stream)
   g_signal_handlers_disconnect_by_func (priv->display,
                                         gdk_x11_selection_output_stream_xevent,
                                         stream);
+  g_object_unref (stream);
 
   return G_SOURCE_REMOVE;
 }
@@ -512,7 +513,7 @@ gdk_x11_selection_output_stream_close (GOutputStream  *stream,
                                        GCancellable   *cancellable,
                                        GError        **error)
 {
-  g_main_context_invoke (NULL, gdk_x11_selection_output_stream_invoke_close, stream);
+  g_main_context_invoke (NULL, gdk_x11_selection_output_stream_invoke_close, g_object_ref (stream));
 
   return TRUE;
 }
@@ -869,7 +870,6 @@ gdk_x11_selection_output_streams_request (GdkDisplay                   *display,
                                           gpointer                      user_data)
 {
   const char *mime_type, *selection, *target, *property;
-  gsize i;
 
   selection = gdk_x11_get_xatom_name_for_display (display, xselection);
   target = gdk_x11_get_xatom_name_for_display (display, xtarget);
@@ -991,6 +991,8 @@ gdk_x11_selection_output_streams_request (GdkDisplay                   *display,
     }
   else
     {
+      gsize i;
+
       for (i = 0; i < G_N_ELEMENTS (special_targets); i++)
         {
           if (g_str_equal (target, special_targets[i].x_target) &&

@@ -27,6 +27,7 @@
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtklistbox.h"
+#include "gtkmain.h"
 #include "gtkmenubutton.h"
 #include "gtkpopover.h"
 #include "gtkprivate.h"
@@ -38,13 +39,10 @@
 #include "gtkshortcutsshortcutprivate.h"
 #include "gtksizegroup.h"
 #include "gtkstack.h"
+#include "gtkstylecontext.h"
 #include "gtktogglebutton.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "gtkeventcontrollerkey.h"
-#include "gtkprivate.h"
-#include "gtkintl.h"
-#include "gtkmain.h"
 
 /**
  * SECTION:gtkshortcutswindow
@@ -72,7 +70,7 @@
  * are arranged in columns, and spread across several pages if there are too
  * many to find on a single page.
  *
- * The .ui file for this example can be found [here](https://git.gnome.org/browse/gtk+/tree/demos/gtk-demo/shortcuts-gedit.ui).
+ * The .ui file for this example can be found [here](https://gitlab.gnome.org/GNOME/gtk/tree/master/demos/gtk-demo/shortcuts-gedit.ui).
  *
  * # An example with multiple views:
  *
@@ -81,7 +79,7 @@
  * This example shows a #GtkShortcutsWindow that has been configured to show only
  * the shortcuts relevant to the "stopwatch" view.
  *
- * The .ui file for this example can be found [here](https://git.gnome.org/browse/gtk+/tree/demos/gtk-demo/shortcuts-clocks.ui).
+ * The .ui file for this example can be found [here](https://gitlab.gnome.org/GNOME/gtk/tree/master/demos/gtk-demo/shortcuts-clocks.ui).
  *
  * # An example with multiple sections:
  *
@@ -90,8 +88,16 @@
  * This example shows a #GtkShortcutsWindow with two sections, "Editor Shortcuts"
  * and "Terminal Shortcuts".
  *
- * The .ui file for this example can be found [here](https://git.gnome.org/browse/gtk+/tree/demos/gtk-demo/shortcuts-builder.ui).
+ * The .ui file for this example can be found [here](https://gitlab.gnome.org/GNOME/gtk/tree/master/demos/gtk-demo/shortcuts-builder.ui).
  */
+
+struct _GtkShortcutsWindowClass
+{
+  GtkWindowClass parent_class;
+
+  void (*close)  (GtkShortcutsWindow *self);
+  void (*search) (GtkShortcutsWindow *self);
+};
 
 typedef struct
 {
@@ -106,7 +112,6 @@ typedef struct
   GtkStack       *stack;
   GtkStack       *title_stack;
   GtkMenuButton  *menu_button;
-  GtkLabel       *menu_label;
   GtkSearchBar   *search_bar;
   GtkSearchEntry *search_entry;
   GtkHeaderBar   *header_bar;
@@ -179,7 +184,7 @@ update_title_stack (GtkShortcutsWindow *self)
 
           gtk_stack_set_visible_child_name (priv->title_stack, "sections");
           g_object_get (visible_child, "title", &title, NULL);
-          gtk_label_set_label (priv->menu_label, title);
+          gtk_menu_button_set_label (priv->menu_button, title);
           g_free (title);
         }
       else
@@ -298,7 +303,7 @@ section_notify_cb (GObject    *section,
       gchar *name;
 
       g_object_get (section, "section-name", &name, NULL);
-      gtk_container_child_set (GTK_CONTAINER (priv->stack), GTK_WIDGET (section), "name", name, NULL);
+      g_object_set (gtk_stack_get_page (priv->stack, GTK_WIDGET (section)), "name", name, NULL);
       g_free (name);
     }
   else if (strcmp (pspec->name, "title") == 0)
@@ -549,7 +554,7 @@ gtk_shortcuts_window__entry__changed (GtkShortcutsWindow *self,
   gpointer value;
   gboolean has_result;
 
-  text = gtk_entry_get_text (GTK_ENTRY (search_entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (search_entry));
 
   if (!text || !*text)
     {
@@ -702,7 +707,7 @@ gtk_shortcuts_window_get_property (GObject    *object,
           {
             gchar *name = NULL;
 
-            gtk_container_child_get (GTK_CONTAINER (priv->stack), child,
+            g_object_get (gtk_stack_get_page (priv->stack, child),
                                      "name", &name,
                                      NULL);
             g_value_take_string (value, name);
@@ -855,40 +860,19 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
   g_type_ensure (GTK_TYPE_SHORTCUTS_SHORTCUT);
 }
 
-static gboolean
-window_key_pressed (GtkEventController *controller,
-                    guint               keyval,
-                    guint               keycode,
-                    GdkModifierType     state,
-                    gpointer            data)
-{
-  GtkShortcutsWindow *self = GTK_SHORTCUTS_WINDOW (gtk_event_controller_get_widget (controller));
-  GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
-
-  return gtk_search_bar_handle_event (priv->search_bar, gtk_get_current_event ());
-}
-
 static void
 gtk_shortcuts_window_init (GtkShortcutsWindow *self)
 {
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
   GtkWidget *search_button;
-  GtkBox *menu_box;
   GtkBox *box;
-  GtkWidget *arrow;
   GtkWidget *scroller;
   GtkWidget *label;
   GtkWidget *empty;
   PangoAttrList *attributes;
-  GtkEventController *controller;
 
   gtk_window_set_resizable (GTK_WINDOW (self), FALSE);
   gtk_window_set_type_hint (GTK_WINDOW (self), GDK_SURFACE_TYPE_HINT_DIALOG);
-
-  controller = gtk_event_controller_key_new ();
-  g_signal_connect (controller, "key-pressed",
-                    G_CALLBACK (window_key_pressed), NULL);
-  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   priv->keywords = g_hash_table_new_full (NULL, NULL, NULL, g_free);
   priv->search_items_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
@@ -917,6 +901,8 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                           search_button, "active",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   gtk_container_add (GTK_CONTAINER (priv->main_box), GTK_WIDGET (priv->search_bar));
+  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (priv->search_bar),
+                                         GTK_WIDGET (self));
 
   priv->stack = g_object_new (GTK_TYPE_STACK,
                               "expand", TRUE,
@@ -941,23 +927,9 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
 
   priv->menu_button = g_object_new (GTK_TYPE_MENU_BUTTON,
                                     "focus-on-click", FALSE,
-                                    "relief", GTK_RELIEF_NONE,
                                     NULL);
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (priv->menu_button)), "flat");
   gtk_stack_add_named (priv->title_stack, GTK_WIDGET (priv->menu_button), "sections");
-
-  menu_box = g_object_new (GTK_TYPE_BOX,
-                           "orientation", GTK_ORIENTATION_HORIZONTAL,
-                           "spacing", 6,
-                           "visible", TRUE,
-                           NULL);
-  gtk_container_add (GTK_CONTAINER (priv->menu_button), GTK_WIDGET (menu_box));
-
-  priv->menu_label = g_object_new (GTK_TYPE_LABEL,
-                                   NULL);
-  gtk_container_add (GTK_CONTAINER (menu_box), GTK_WIDGET (priv->menu_label));
-
-  arrow = gtk_image_new_from_icon_name ("pan-down-symbolic");
-  gtk_container_add (GTK_CONTAINER (menu_box), GTK_WIDGET (arrow));
 
   priv->popover = g_object_new (GTK_TYPE_POPOVER,
                                 "relative-to", priv->menu_button,

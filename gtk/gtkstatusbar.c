@@ -27,10 +27,10 @@
 
 #include "gtkstatusbar.h"
 
+#include "gtkbinlayout.h"
 #include "gtkframe.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
-#include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkorientable.h"
@@ -78,6 +78,25 @@
  */
 
 typedef struct _GtkStatusbarMsg GtkStatusbarMsg;
+
+typedef struct _GtkStatusbarClass         GtkStatusbarClass;
+
+struct _GtkStatusbar
+{
+  GtkWidget parent_instance;
+};
+
+struct _GtkStatusbarClass
+{
+  GtkWidgetClass parent_class;
+
+  void  (*text_pushed)  (GtkStatusbar   *statusbar,
+                         guint           context_id,
+                         const gchar    *text);
+  void  (*text_popped)  (GtkStatusbar   *statusbar,
+                         guint           context_id,
+                         const gchar    *text);
+};
 
 typedef struct
 {
@@ -127,37 +146,6 @@ gtk_statusbar_dispose (GObject *object)
 }
 
 static void
-gtk_statusbar_measure (GtkWidget      *widget,
-                       GtkOrientation  orientation,
-                       int             for_size,
-                       int            *minimum,
-                       int            *natural,
-                       int            *minimum_baseline,
-                       int            *natural_baseline)
-{
-  GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (GTK_STATUSBAR (widget));
-
-  gtk_widget_measure (priv->frame, orientation, for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_statusbar_size_allocate (GtkWidget *widget,
-                             int        width,
-                             int        height,
-                             int        baseline)
-{
-  GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (GTK_STATUSBAR (widget));
-
-  gtk_widget_size_allocate (priv->frame,
-                            &(GtkAllocation) {
-                              0, 0,
-                              width, height
-                            }, baseline);
-}
-
-static void
 gtk_statusbar_class_init (GtkStatusbarClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -165,8 +153,6 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 
   object_class->dispose = gtk_statusbar_dispose;
 
-  widget_class->measure = gtk_statusbar_measure;
-  widget_class->size_allocate = gtk_statusbar_size_allocate;
   widget_class->destroy = gtk_statusbar_destroy;
 
   class->text_pushed = gtk_statusbar_update;
@@ -218,6 +204,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkStatusbar, label);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_STATUSBAR_ACCESSIBLE);
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("statusbar"));
 }
 
@@ -225,8 +212,6 @@ static void
 gtk_statusbar_init (GtkStatusbar *statusbar)
 {
   GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (statusbar);
-
-  gtk_widget_set_has_surface (GTK_WIDGET (statusbar), FALSE);
 
   priv->seq_context_id = 1;
   priv->seq_message_id = 1;

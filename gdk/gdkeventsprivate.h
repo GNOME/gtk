@@ -61,6 +61,7 @@ struct _GdkEventAny
   GdkDevice *device;
   GdkDevice *source_device;
   GdkDisplay *display;
+  GObject *target;
 };
 
 /*
@@ -302,6 +303,7 @@ struct _GdkEventCrossing
   GdkNotifyType detail;
   gboolean focus;
   guint state;
+  GObject *related_target;
 };
 
 /*
@@ -311,6 +313,8 @@ struct _GdkEventCrossing
  * @send_event: %TRUE if the event was sent explicitly.
  * @in: %TRUE if the surface has gained the keyboard focus, %FALSE if
  *   it has lost the focus.
+ * @mode: the crossing mode
+ * @detail: the kind of crossing that happened
  *
  * Describes a change of keyboard focus.
  */
@@ -318,6 +322,9 @@ struct _GdkEventFocus
 {
   GdkEventAny any;
   gint16 in;
+  GdkCrossingMode mode;
+  GdkNotifyType detail;
+  GObject *related_target;
 };
 
 /*
@@ -630,5 +637,15 @@ union _GdkEvent
   GdkEventPadAxis           pad_axis;
   GdkEventPadGroupMode      pad_group_mode;
 };
+
+void           gdk_event_set_target              (GdkEvent *event,
+                                                  GObject  *user_data);
+GObject *      gdk_event_get_target              (const GdkEvent *event);
+void           gdk_event_set_related_target       (GdkEvent *event,
+                                                  GObject  *user_data);
+GObject *      gdk_event_get_related_target      (const GdkEvent *event);
+
+gboolean       check_event_sanity (GdkEvent *event);
+
 
 #endif /* __GDK_EVENTS_PRIVATE_H__ */

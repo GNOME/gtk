@@ -6,7 +6,7 @@
 
 <refentryinfo>
   <title>gtk4-encode-symbolic-svg</title>
-  <productname>GTK+</productname>
+  <productname>GTK</productname>
   <authorgroup>
     <author>
       <contrib>Developer</contrib>
@@ -39,7 +39,7 @@
 <refsect1><title>Description</title>
 <para>
   <command>gtk4-encode-symbolic-svg</command> converts symbolic svg icons into
-  specially prepared png files. GTK+ can load and recolor these pngs, just like
+  specially prepared png files. GTK can load and recolor these pngs, just like
   original svgs, but loading them is much faster.
 </para>
 <para>

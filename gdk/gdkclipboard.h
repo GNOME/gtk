@@ -66,8 +66,8 @@ void                    gdk_clipboard_read_async        (GdkClipboard          *
                                                          gpointer               user_data);
 GDK_AVAILABLE_IN_ALL
 GInputStream *          gdk_clipboard_read_finish       (GdkClipboard          *clipboard,
-                                                         const char           **out_mime_type,
                                                          GAsyncResult          *result,
+                                                         const char           **out_mime_type,
                                                          GError               **error);
 GDK_AVAILABLE_IN_ALL
 void                    gdk_clipboard_read_value_async  (GdkClipboard          *clipboard,
@@ -81,14 +81,14 @@ const GValue *          gdk_clipboard_read_value_finish (GdkClipboard          *
                                                          GAsyncResult          *result,
                                                          GError               **error);
 GDK_AVAILABLE_IN_ALL
-void                    gdk_clipboard_read_texture_async(GdkClipboard          *clipboard,
-                                                         GCancellable          *cancellable,
-                                                         GAsyncReadyCallback    callback,
-                                                         gpointer               user_data);
+void                    gdk_clipboard_read_texture_async (GdkClipboard          *clipboard,
+                                                          GCancellable          *cancellable,
+                                                          GAsyncReadyCallback    callback,
+                                                          gpointer               user_data);
 GDK_AVAILABLE_IN_ALL
-GdkTexture *            gdk_clipboard_read_texture_finish (GdkClipboard        *clipboard,
-                                                         GAsyncResult          *result,
-                                                         GError               **error);
+GdkTexture *            gdk_clipboard_read_texture_finish (GdkClipboard         *clipboard,
+                                                           GAsyncResult          *result,
+                                                           GError               **error);
 GDK_AVAILABLE_IN_ALL
 void                    gdk_clipboard_read_text_async   (GdkClipboard          *clipboard,
                                                          GCancellable          *cancellable,

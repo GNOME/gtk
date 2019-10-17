@@ -32,12 +32,13 @@
 #include "gtkbutton.h"
 #include "gtkcenterbox.h"
 #include "gtkentryprivate.h"
+#include "gtkeventcontrollerkey.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkrevealer.h"
 #include "gtksearchentryprivate.h"
 #include "gtksnapshot.h"
-#include "gtkeventcontrollerkey.h"
+#include "gtkstylecontext.h"
 
 /**
  * SECTION:gtksearchbar
@@ -78,8 +79,20 @@
  *
  * ## Creating a search bar
  *
- * [A simple example](https://git.gnome.org/browse/gtk+/tree/examples/search-bar.c)
+ * [A simple example](https://gitlab.gnome.org/GNOME/gtk/tree/master/examples/search-bar.c)
  */
+
+typedef struct _GtkSearchBarClass   GtkSearchBarClass;
+
+struct _GtkSearchBar
+{
+  GtkBin parent;
+};
+
+struct _GtkSearchBarClass
+{
+  GtkBinClass parent_class;
+};
 
 typedef struct {
   GtkWidget   *revealer;
@@ -113,132 +126,6 @@ stop_search_cb (GtkWidget    *entry,
 }
 
 static void
-preedit_changed_cb (GtkEntry  *entry,
-                    GtkWidget *popup,
-                    gboolean  *preedit_changed)
-{
-  *preedit_changed = TRUE;
-}
-
-static gboolean
-gtk_search_bar_handle_event_for_entry (GtkSearchBar *bar,
-                                       GdkEvent     *event)
-{
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-  gboolean handled;
-  gboolean preedit_changed;
-  guint preedit_change_id;
-  gboolean res;
-  char *old_text, *new_text;
-  guint keyval, state;
-
-  gdk_event_get_keyval (event, &keyval);
-  gdk_event_get_state (event, &state);
-
-  if (gtk_search_entry_is_keynav (keyval, state) ||
-      keyval == GDK_KEY_space ||
-      keyval == GDK_KEY_Menu)
-    return GDK_EVENT_PROPAGATE;
-
-  if (!gtk_widget_get_realized (priv->entry))
-    gtk_widget_realize (priv->entry);
-
-  handled = GDK_EVENT_PROPAGATE;
-  preedit_changed = FALSE;
-  preedit_change_id = g_signal_connect (priv->entry, "preedit-changed",
-                                        G_CALLBACK (preedit_changed_cb), &preedit_changed);
-
-  old_text = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->entry)));
-  res = gtk_widget_event (priv->entry, event);
-  new_text = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->entry)));
-
-  g_signal_handler_disconnect (priv->entry, preedit_change_id);
-
-  if ((res && g_strcmp0 (new_text, old_text) != 0) || preedit_changed)
-    handled = GDK_EVENT_STOP;
-
-  g_free (old_text);
-  g_free (new_text);
-
-  return handled;
-}
-
-/**
- * gtk_search_bar_handle_event:
- * @bar: a #GtkSearchBar
- * @event: a #GdkEvent containing key press events
- *
- * This function should be called when the top-level
- * window which contains the search bar received a key event.
- *
- * If the key event is handled by the search bar, the bar will
- * be shown, the entry populated with the entered text and %GDK_EVENT_STOP
- * will be returned. The caller should ensure that events are
- * not propagated further.
- *
- * If no entry has been connected to the search bar, using
- * gtk_search_bar_connect_entry(), this function will return
- * immediately with a warning.
- *
- * ## Showing the search bar on key presses
- *
- * |[<!-- language="C" -->
- * static gboolean
- * on_key_press_event (GtkWidget *widget,
- *                     GdkEvent  *event,
- *                     gpointer   user_data)
- * {
- *   GtkSearchBar *bar = GTK_SEARCH_BAR (user_data);
- *   return gtk_search_bar_handle_event (bar, event);
- * }
- *
- * static void
- * create_toplevel (void)
- * {
- *   GtkWidget *window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
- *   GtkWindow *search_bar = gtk_search_bar_new ();
- *
- *  // Add more widgets to the window...
- *
- *   g_signal_connect (window,
- *                    "key-press-event",
- *                     G_CALLBACK (on_key_press_event),
- *                     search_bar);
- * }
- * ]|
- *
- * Returns: %GDK_EVENT_STOP if the key press event resulted
- *     in text being entered in the search entry (and revealing
- *     the search bar if necessary), %GDK_EVENT_PROPAGATE otherwise.
- */
-gboolean
-gtk_search_bar_handle_event (GtkSearchBar *bar,
-                             GdkEvent     *event)
-{
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-  gboolean handled;
-
-  if (priv->reveal_child)
-    return GDK_EVENT_PROPAGATE;
-
-  if (priv->entry == NULL)
-    {
-      g_warning ("The search bar does not have an entry connected to it. Call gtk_search_bar_connect_entry() to connect one.");
-      return GDK_EVENT_PROPAGATE;
-    }
-
-  if (GTK_IS_SEARCH_ENTRY (priv->entry))
-    handled = gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->entry), event);
-  else
-    handled = gtk_search_bar_handle_event_for_entry (bar, event);
-
-  if (handled == GDK_EVENT_STOP)
-    gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), TRUE);
-
-  return handled;
-}
-
-static void
 reveal_child_changed_cb (GObject      *object,
                          GParamSpec   *pspec,
                          GtkSearchBar *bar)
@@ -255,10 +142,12 @@ reveal_child_changed_cb (GObject      *object,
 
   if (priv->entry)
     {
-      if (reveal_child)
-        _gtk_entry_grab_focus (GTK_ENTRY (priv->entry), FALSE);
+      if (reveal_child && GTK_IS_ENTRY (priv->entry))
+        gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->entry));
+      else if (GTK_IS_SEARCH_ENTRY (priv->entry))
+        gtk_widget_grab_focus (priv->entry);
       else
-        gtk_entry_set_text (GTK_ENTRY (priv->entry), "");
+        gtk_editable_set_text (GTK_EDITABLE (priv->entry), "");
     }
 
   g_object_notify (G_OBJECT (bar), "search-mode-enabled");
@@ -284,8 +173,8 @@ gtk_search_bar_add (GtkContainer *container,
   /* If an entry is the only child, save the developer a couple of
    * lines of code
    */
-  if (GTK_IS_ENTRY (child))
-    gtk_search_bar_connect_entry (bar, GTK_ENTRY (child));
+  if (GTK_IS_EDITABLE (child))
+    gtk_search_bar_connect_entry (bar, GTK_EDITABLE (child));
 
   _gtk_bin_set_child (GTK_BIN (container), child);
 }
@@ -297,7 +186,7 @@ gtk_search_bar_remove (GtkContainer *container,
   GtkSearchBar *bar = GTK_SEARCH_BAR (container);
   GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
 
-  if (GTK_IS_ENTRY (child))
+  if (GTK_IS_EDITABLE (child))
     gtk_search_bar_connect_entry (bar, NULL);
 
   gtk_center_box_set_center_widget (GTK_CENTER_BOX (priv->box_center), NULL);
@@ -350,7 +239,7 @@ gtk_search_bar_get_property (GObject    *object,
 }
 
 static void gtk_search_bar_set_entry (GtkSearchBar *bar,
-                                      GtkEntry     *entry);
+                                      GtkEditable  *editable);
 
 static void
 gtk_search_bar_dispose (GObject *object)
@@ -494,7 +383,7 @@ gtk_search_bar_new (void)
 
 static void
 gtk_search_bar_set_entry (GtkSearchBar *bar,
-                          GtkEntry     *entry)
+                          GtkEditable  *entry)
 {
   GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
 
@@ -527,7 +416,7 @@ gtk_search_bar_set_entry (GtkSearchBar *bar,
 /**
  * gtk_search_bar_connect_entry:
  * @bar: a #GtkSearchBar
- * @entry: a #GtkEntry
+ * @entry: a #GtkEditable
  *
  * Connects the #GtkEntry widget passed as the one to be used in
  * this search bar. The entry should be a descendant of the search bar.
@@ -536,10 +425,10 @@ gtk_search_bar_set_entry (GtkSearchBar *bar,
  */
 void
 gtk_search_bar_connect_entry (GtkSearchBar *bar,
-                              GtkEntry     *entry)
+                              GtkEditable  *entry)
 {
   g_return_if_fail (GTK_IS_SEARCH_BAR (bar));
-  g_return_if_fail (entry == NULL || GTK_IS_ENTRY (entry));
+  g_return_if_fail (entry == NULL || GTK_IS_EDITABLE (entry));
 
   gtk_search_bar_set_entry (bar, entry);
 }

@@ -7,8 +7,8 @@
 <!--
   You should try and reproduce with the demos applications available
   under the `demos` directory, or the test programs in the `tests` directory.
-  Alternatively, please attach a *small and self-contained* example that
-  exhibits the issue.
+  Alternatively, please attach a *small and self-contained* example
+  *written in C* that exhibits the issue.
 -->
 
 ## Current behavior
@@ -23,10 +23,10 @@
 
 ## Version information
 <!--
- - Which version of GTK+ you are using
+ - Which version of GTK you are using
  - What operating system and version
   - For Linux, which distribution
- - If you built GTK+ yourself, the list of options used to configure the build
+ - If you built GTK yourself, the list of options used to configure the build
 -->
 
 ## Additional information

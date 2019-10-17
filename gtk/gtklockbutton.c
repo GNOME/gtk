@@ -67,6 +67,17 @@
  * #GtkLockButton:tooltip-not-authorized properties.
  */
 
+struct _GtkLockButton
+{
+  GtkButton parent_instance;
+};
+
+typedef struct _GtkLockButtonClass   GtkLockButtonClass;
+struct _GtkLockButtonClass
+{
+  GtkButtonClass parent_class;
+};
+
 typedef struct _GtkLockButtonPrivate GtkLockButtonPrivate;
 struct _GtkLockButtonPrivate
 {

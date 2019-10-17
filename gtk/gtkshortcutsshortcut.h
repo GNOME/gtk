@@ -29,10 +29,7 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_SHORTCUTS_SHORTCUT (gtk_shortcuts_shortcut_get_type())
 #define GTK_SHORTCUTS_SHORTCUT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SHORTCUTS_SHORTCUT, GtkShortcutsShortcut))
-#define GTK_SHORTCUTS_SHORTCUT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_SHORTCUTS_SHORTCUT, GtkShortcutsShortcutClass))
 #define GTK_IS_SHORTCUTS_SHORTCUT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SHORTCUTS_SHORTCUT))
-#define GTK_IS_SHORTCUTS_SHORTCUT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SHORTCUTS_SHORTCUT))
-#define GTK_SHORTCUTS_SHORTCUT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SHORTCUTS_SHORTCUT, GtkShortcutsShortcutClass))
 
 
 typedef struct _GtkShortcutsShortcut      GtkShortcutsShortcut;

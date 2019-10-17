@@ -37,48 +37,9 @@ G_BEGIN_DECLS
 #define GTK_TYPE_SWITCH                 (gtk_switch_get_type ())
 #define GTK_SWITCH(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SWITCH, GtkSwitch))
 #define GTK_IS_SWITCH(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SWITCH))
-#define GTK_SWITCH_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_SWITCH, GtkSwitchClass))
-#define GTK_IS_SWITCH_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SWITCH))
-#define GTK_SWITCH_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SWITCH, GtkSwitchClass))
 
 typedef struct _GtkSwitch               GtkSwitch;
-typedef struct _GtkSwitchClass          GtkSwitchClass;
 
-/**
- * GtkSwitch:
- *
- * The #GtkSwitch-struct contains private
- * data and it should only be accessed using the provided API.
- */
-struct _GtkSwitch
-{
-  /*< private >*/
-  GtkWidget parent_instance;
-};
-
-/**
- * GtkSwitchClass:
- * @parent_class: The parent class.
- * @activate: An action signal and emitting it causes the switch to animate.
- * @state_set: Class handler for the ::state-set signal.
- */
-struct _GtkSwitchClass
-{
-  GtkWidgetClass parent_class;
-
-  /*< public >*/
-
-  void (* activate) (GtkSwitch *sw);
-
-  gboolean (* state_set) (GtkSwitch *sw, gboolean state);
-  /*< private >*/
-
-  void (* _switch_padding_1) (void);
-  void (* _switch_padding_2) (void);
-  void (* _switch_padding_3) (void);
-  void (* _switch_padding_4) (void);
-  void (* _switch_padding_5) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType gtk_switch_get_type (void) G_GNUC_CONST;
@@ -87,16 +48,16 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_switch_new          (void);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_switch_set_active   (GtkSwitch *sw,
+void            gtk_switch_set_active   (GtkSwitch *self,
                                          gboolean   is_active);
 GDK_AVAILABLE_IN_ALL
-gboolean        gtk_switch_get_active   (GtkSwitch *sw);
+gboolean        gtk_switch_get_active   (GtkSwitch *self);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_switch_set_state   (GtkSwitch *sw,
+void            gtk_switch_set_state   (GtkSwitch *self,
                                         gboolean   state);
 GDK_AVAILABLE_IN_ALL
-gboolean        gtk_switch_get_state   (GtkSwitch *sw);
+gboolean        gtk_switch_get_state   (GtkSwitch *self);
 
 G_END_DECLS
 

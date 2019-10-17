@@ -109,15 +109,7 @@ gdk_device_virtual_set_surface_cursor (GdkDevice  *device,
   if (win32_hcursor != NULL)
     SetCursor (gdk_win32_hcursor_get_handle (win32_hcursor));
 
-  g_set_object (&GDK_SURFACE_IMPL_WIN32 (window->impl)->cursor, win32_hcursor);
-}
-
-static void
-gdk_device_virtual_warp (GdkDevice *device,
-			 gdouble   x,
-			 gdouble   y)
-{
-  SetCursorPos (x - _gdk_offset_x, y - _gdk_offset_y);
+  g_set_object (&GDK_WIN32_SURFACE (window)->cursor, win32_hcursor);
 }
 
 static void
@@ -152,7 +144,11 @@ gdk_device_virtual_grab (GdkDevice    *device,
     {
       GdkWin32HCursor *win32_hcursor;
       GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_device_get_display (device));
-      win32_hcursor = gdk_win32_display_get_win32hcursor (display, cursor);
+      win32_hcursor = NULL;
+
+      if (cursor != NULL)
+        win32_hcursor = gdk_win32_display_get_win32hcursor (display, cursor);
+
       g_set_object (&display->grab_cursor, win32_hcursor);
 
       if (display->grab_cursor != NULL)
@@ -198,7 +194,6 @@ gdk_device_virtual_class_init (GdkDeviceVirtualClass *klass)
   device_class->get_history = gdk_device_virtual_get_history;
   device_class->get_state = gdk_device_virtual_get_state;
   device_class->set_surface_cursor = gdk_device_virtual_set_surface_cursor;
-  device_class->warp = gdk_device_virtual_warp;
   device_class->query_state = gdk_device_virtual_query_state;
   device_class->grab = gdk_device_virtual_grab;
   device_class->ungrab = gdk_device_virtual_ungrab;

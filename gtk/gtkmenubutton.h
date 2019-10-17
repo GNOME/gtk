@@ -33,30 +33,21 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_MENU_BUTTON            (gtk_menu_button_get_type ())
 #define GTK_MENU_BUTTON(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_MENU_BUTTON, GtkMenuButton))
-#define GTK_MENU_BUTTON_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_MENU_BUTTON, GtkMenuButtonClass))
 #define GTK_IS_MENU_BUTTON(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_MENU_BUTTON))
-#define GTK_IS_MENU_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MENU_BUTTON))
-#define GTK_MENU_BUTTON_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_MENU_BUTTON, GtkMenuButtonClass))
 
 typedef struct _GtkMenuButton        GtkMenuButton;
-typedef struct _GtkMenuButtonClass   GtkMenuButtonClass;
-typedef struct _GtkMenuButtonPrivate GtkMenuButtonPrivate;
 
-struct _GtkMenuButton
-{
-  GtkToggleButton parent_instance;
-};
-
-struct _GtkMenuButtonClass
-{
-  GtkToggleButtonClass parent_class;
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
+/**
+ * GtkMenuButtonCreatePopupFunc:
+ * @menu_button: the #GtkMenuButton
+ *
+ * User-provided callback function to create a popup for @menu_button on demand.
+ * This function is called when the popoup of @menu_button is shown, but none has
+ * been provided via gtk_menu_buton_set_popup(), gtk_menu_button_set_popover()
+ * or gtk_menu_button_set_menu_model().
+ */
+typedef void  (*GtkMenuButtonCreatePopupFunc) (GtkMenuButton *menu_button,
+                                               gpointer       user_data);
 
 GDK_AVAILABLE_IN_ALL
 GType        gtk_menu_button_get_type       (void) G_GNUC_CONST;
@@ -100,6 +91,34 @@ void         gtk_menu_button_set_use_popover (GtkMenuButton *menu_button,
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_menu_button_get_use_popover (GtkMenuButton *menu_button);
 
+GDK_AVAILABLE_IN_ALL
+void         gtk_menu_button_set_icon_name (GtkMenuButton *menu_button,
+                                            const char    *icon_name);
+GDK_AVAILABLE_IN_ALL
+const char * gtk_menu_button_get_icon_name (GtkMenuButton *menu_button);
+
+GDK_AVAILABLE_IN_ALL
+void         gtk_menu_button_set_label (GtkMenuButton *menu_button,
+                                        const char    *label);
+GDK_AVAILABLE_IN_ALL
+const char * gtk_menu_button_get_label (GtkMenuButton *menu_button);
+
+GDK_AVAILABLE_IN_ALL
+void           gtk_menu_button_set_relief   (GtkMenuButton  *menu_button,
+                                             GtkReliefStyle  relief);
+GDK_AVAILABLE_IN_ALL
+GtkReliefStyle gtk_menu_button_get_relief   (GtkMenuButton  *menu_button);
+
+GDK_AVAILABLE_IN_ALL
+void          gtk_menu_button_popup (GtkMenuButton *menu_button);
+GDK_AVAILABLE_IN_ALL
+void          gtk_menu_button_popdown (GtkMenuButton *menu_button);
+
+GDK_AVAILABLE_IN_ALL
+void          gtk_menu_button_set_create_popup_func (GtkMenuButton                *menu_button,
+                                                     GtkMenuButtonCreatePopupFunc  func,
+                                                     gpointer                      user_data,
+                                                     GDestroyNotify                destroy_notify);
 
 G_END_DECLS
 

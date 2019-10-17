@@ -202,7 +202,7 @@ languages_variant_init (const char *variant)
   else
     g_warning ("Failed to load '%s': %s\n", filename, error->message);
 
-  g_free (error);
+  g_clear_error (&error);
   g_free (filename);
   g_free (buf);
 }

@@ -3,11 +3,11 @@
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 ]>
 <chapter id="gtk-getting-started" xmlns:xi="http://www.w3.org/2003/XInclude">
-  <title>Getting Started with GTK+</title>
+  <title>Getting Started with GTK</title>
 
-  <para>GTK+ is a <ulink url="http://en.wikipedia.org/wiki/Widget_toolkit">
+  <para>GTK is a <ulink url="http://en.wikipedia.org/wiki/Widget_toolkit">
   widget toolkit</ulink>. Each user interface created by 
-  GTK+ consists of widgets. This is implemented in C using 
+  GTK consists of widgets. This is implemented in C using 
   <link linkend="gobject">GObject</link>, an object-oriented framework for C.
   Widgets are organized in a hierachy. The window widget is the main container.
   The user interface is then built by adding buttons, drop-down menus, input 
@@ -17,14 +17,14 @@
   assembling the interface manually. You can also use a visual user interface
   editor, like <ulink url="https://glade.gnome.org/">Glade</ulink>.</para>
   
-  <para>GTK+ is event-driven. The toolkit listens for events such as
+  <para>GTK is event-driven. The toolkit listens for events such as
   a click on a button, and passes the event to your application.</para>
 
   <para>This chapter contains some tutorial information to get you
-  started with GTK+ programming. It assumes that you have GTK+, its
+  started with GTK programming. It assumes that you have GTK, its
   dependencies and a C compiler installed and ready to use. If you
-  need to build GTK+ itself first, refer to the
-  <link linkend="gtk-compiling">Compiling the GTK+ libraries</link>
+  need to build GTK itself first, refer to the
+  <link linkend="gtk-compiling">Compiling the GTK libraries</link>
   section in this reference.</para>
 
   <section>
@@ -50,24 +50,24 @@
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk+-4.0` -o example-0 example-0.c `pkg-config --libs gtk+-4.0`</literal>
+        <literal>gcc `pkg-config --cflags gtk4` -o example-0 example-0.c `pkg-config --libs gtk4`</literal>
       </literallayout>
     </para>
 
-    <note><para>For more information on how to compile a GTK+ application, please
-    refer to the <link linkend="gtk-compiling">Compiling GTK+ Applications</link>
+    <note><para>For more information on how to compile a GTK application, please
+    refer to the <link linkend="gtk-compiling">Compiling GTK Applications</link>
     section in this reference.</para></note>
 
-    <para>All GTK+ applications will, of course, include
+    <para>All GTK applications will, of course, include
     <filename>gtk/gtk.h</filename>, which declares functions, types and
-    macros required by GTK+ applications.</para>
+    macros required by GTK applications.</para>
 
-    <warning><para>Even if GTK+ installs multiple header files, only the
+    <warning><para>Even if GTK installs multiple header files, only the
     top-level <filename>gtk/gtk.h</filename> header can be directly included
     by third party code. The compiler will abort with an error if any other
     header is directly included.</para></warning>
 
-    <para>In a GTK+ application, the purpose of the main() function is to
+    <para>In a GTK application, the purpose of the main() function is to
     create a #GtkApplication object and run it. In this example a
     #GtkApplication pointer named <varname>app</varname> is called and then
     initialized using gtk_application_new().</para>
@@ -88,9 +88,9 @@
     The <varname>activate</varname> signal will be sent
     when your application is launched with
     g_application_run() on the line below.
-    The gtk_application_run() also takes as arguments the pointers to the command line arguments
-    counter and string array; this allows GTK+ to parse specific command line
-    arguments that control the behavior of GTK+ itself. The parsed arguments
+    The g_application_run() also takes as arguments the command line arguments counter
+    and the pointer to string array; this allows GTK to parse specific command line
+    arguments that control the behavior of GTK itself. The parsed arguments
     will be removed from the array, leaving the unrecognized ones for your
     application to parse.
     </para>
@@ -128,16 +128,16 @@
     #GtkApplication object is freed from memory with g_object_unref().
     Finally the status integer is returned and the GTK application exits.</para>
 
-    <para>While the program is running, GTK+ is receiving
+    <para>While the program is running, GTK is receiving
     <firstterm>events</firstterm>. These are typically input events caused by
     the user interacting with your program, but also things like messages from
-    the window manager or other applications. GTK+ processes these and as a
+    the window manager or other applications. GTK processes these and as a
     result, <firstterm>signals</firstterm> may be emitted on your widgets.
     Connecting handlers for these signals is how you normally make your
     program do something in response to user input.</para>
 
     <para>The following example is slightly more complex, and tries to
-    showcase some of the capabilities of GTK+.</para>
+    showcase some of the capabilities of GTK.</para>
 
     <para>In the long tradition of programming languages and libraries,
     it is called <emphasis>Hello, World</emphasis>.</para>
@@ -151,7 +151,7 @@
     </informalfigure>
 
     <example id="gtk-getting-started-hello-world">
-      <title>Hello World in GTK+</title>
+      <title>Hello World in GTK</title>
       <para>Create a new file with the following content named example-1.c.</para>
       <programlisting><xi:include href="@SRC_DIR@/examples/hello-world.c" parse="text">
           <xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
@@ -160,7 +160,7 @@
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk+-4.0` -o example-1 example-1.c `pkg-config --libs gtk+-4.0`</literal>
+        <literal>gcc `pkg-config --cflags gtk4` -o example-1 example-1.c `pkg-config --libs gtk4`</literal>
       </literallayout>
     </para>
   </section>
@@ -169,8 +169,8 @@
   button to our window, with the label "Hello World". Two new GtkWidget pointers
   are declared to accomplish this, <varname>button</varname> and
   <varname>button_box</varname>. The button_box variable is created to store a
-  #GtkButtonBox which is GTK+'s way of controlling the size and layout of buttons.
-  The #GtkButtonBox is created and assigned to gtk_button_box_new() which takes a
+  #GtkBox which is GTK's way of controlling the size and layout of buttons.
+  The #GtkBox is created and assigned to gtk_box_new() which takes a
   #GtkOrientation enum as parameter. The buttons which this box will contain can
   either be stored horizontally or vertically but this does not matter in this
   particular case as we are dealing with only one button. After initializing
@@ -215,7 +215,7 @@
     it becomes important to control how each widget is positioned and sized.
     This is where packing comes in.</para>
 
-    <para>GTK+ comes with a large variety of <firstterm>layout containers</firstterm>
+    <para>GTK comes with a large variety of <firstterm>layout containers</firstterm>
     whose purpose it is to control the layout of the child widgets that are
     added to them. See <xref linkend="LayoutContainers"/> for an overview.</para>
 
@@ -238,7 +238,7 @@
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk+-4.0` -o example-2 example-2.c `pkg-config --libs gtk+-4.0`</literal>
+        <literal>gcc `pkg-config --cflags gtk4` -o example-2 example-2.c `pkg-config --libs gtk4`</literal>
       </literallayout>
     </para>
   </section>
@@ -250,7 +250,7 @@
     or hundreds of widgets, doing all the setup work in C code is
     cumbersome, and making changes becomes next to impossible.</para>
 
-    <para>Thankfully, GTK+ supports the separation of user interface
+    <para>Thankfully, GTK supports the separation of user interface
     layout from your business logic, by using UI descriptions in an
     XML format that can be parsed by the #GtkBuilder class.</para>
 
@@ -264,7 +264,7 @@
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk+-4.0` -o example-3 example-3.c `pkg-config --libs gtk+-4.0`</literal>
+        <literal>gcc `pkg-config --cflags gtk4` -o example-3 example-3.c `pkg-config --libs gtk4`</literal>
       </literallayout>
     </para>
 
@@ -324,7 +324,7 @@
     </variablelist>
     </para>
 
-    <para>GTK+ includes application support that is built on top of
+    <para>GTK includes application support that is built on top of
     #GApplication. In this tutorial we'll build a simple application by
     starting from scratch, adding more and more pieces over time. Along
     the way, we'll learn about #GtkApplication, templates, resources,
@@ -332,8 +332,8 @@
     #GtkListBox, and more.</para>
 
     <para>The full, buildable sources for these examples can be found
-    in the examples/ directory of the GTK+ source distribution, or
-    <ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/master/examples">online</ulink> in the GTK+ git repository.
+    in the examples/ directory of the GTK source distribution, or
+    <ulink url="https://gitlab.gnome.org/GNOME/gtk/blob/master/examples">online</ulink> in the GTK git repository.
     You can build each example separately by using make with the <filename>Makefile.example</filename>
     file. For more information, see the <filename>README</filename> included in the
     examples directory.</para>
@@ -368,7 +368,7 @@
       </informalexample>
 
       <para>Another important class that is part of the application support
-      in GTK+ is #GtkApplicationWindow. It is typically subclassed as well.
+      in GTK is #GtkApplicationWindow. It is typically subclassed as well.
       Our subclass does not do anything yet, so we will just get an empty
       window.</para>
 
@@ -797,7 +797,7 @@ preferences_activated (GSimpleAction *action,
       <title>Adding a search bar</title>
 
       <para>We continue to flesh out the functionality of our application.
-      For now, we add search. GTK+ supports this with #GtkSearchEntry and
+      For now, we add search. GTK supports this with #GtkSearchEntry and
       #GtkSearchBar. The search bar is a widget that can slide in from the
       top to present a search entry.</para>
 
@@ -827,7 +827,7 @@ search_text_changed (GtkEntry         *entry,
   GtkTextBuffer *buffer;
   GtkTextIter start, match_start, match_end;
 
-  text = gtk_entry_get_text (entry);
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
 
   if (text[0] == '\0')
     return;
@@ -1007,7 +1007,7 @@ example_app_window_init (ExampleAppWindow *win)
 
       <para>Our application already uses a GtkHeaderBar, but so far it
       still gets a 'normal' window titlebar on top of that. This is a
-      bit redundant, and we will now tell GTK+ to use the header bar
+      bit redundant, and we will now tell GTK to use the header bar
       as replacement for the titlebar. To do so, we move it around to
       be a direct child of the window, and set its type to be titlebar.</para>
 
@@ -1048,7 +1048,7 @@ example_app_window_init (ExampleAppWindow *win)
     e.g. when another window is moved and uncovers part of the widget, or
     when the window containing it is resized. It is also possible to explicitly
     cause part or all of the widget to be redrawn, by calling
-    gtk_widget_queue_draw() or its variants. GTK+ takes care of most of the
+    gtk_widget_queue_draw() or its variants. GTK takes care of most of the
     details by providing a ready-to-use cairo context to the ::draw signal
     handler.</para>
 
@@ -1073,7 +1073,7 @@ example_app_window_init (ExampleAppWindow *win)
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk+-4.0` -o example-4 example-4.c `pkg-config --libs gtk+-4.0`</literal>
+        <literal>gcc `pkg-config --cflags gtk4` -o example-4 example-4.c `pkg-config --libs gtk4`</literal>
       </literallayout>
     </para>
   </section>

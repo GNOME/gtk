@@ -14,7 +14,7 @@ edit_widget (GtkWidget *button)
   if (!dialog)
     {
       dialog = gtk_dialog_new_with_buttons ("",
-                                            GTK_WINDOW (gtk_widget_get_toplevel (button)),
+                                            GTK_WINDOW (gtk_widget_get_root (button)),
                                             GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_USE_HEADER_BAR,
                                             NULL, NULL);
 
@@ -89,12 +89,12 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_box_pack_start (GTK_BOX (box), test_widget ("1"));
-  gtk_box_pack_start (GTK_BOX (box), test_widget ("2"));
-  gtk_box_pack_start (GTK_BOX (box), test_widget ("3"));
-  gtk_box_pack_start (GTK_BOX (box), test_widget ("4"));
-  gtk_box_pack_end (GTK_BOX (box), test_widget ("5"));
-  gtk_box_pack_end (GTK_BOX (box), test_widget ("6"));
+  gtk_container_add (GTK_CONTAINER (box), test_widget ("1"));
+  gtk_container_add (GTK_CONTAINER (box), test_widget ("2"));
+  gtk_container_add (GTK_CONTAINER (box), test_widget ("3"));
+  gtk_container_add (GTK_CONTAINER (box), test_widget ("4"));
+  gtk_container_add (GTK_CONTAINER (box), test_widget ("5"));
+  gtk_container_add (GTK_CONTAINER (box), test_widget ("6"));
 
   gtk_container_add (GTK_CONTAINER (vbox), box);
 
@@ -112,14 +112,14 @@ main (int argc, char *argv[])
   gtk_widget_set_halign (b, GTK_ALIGN_CENTER);
   label = gtk_label_new ("Spacing:");
   gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_box_pack_start (GTK_BOX (b), label);
+  gtk_container_add (GTK_CONTAINER (b), label);
 
   spin = gtk_spin_button_new_with_range (0, 10, 1);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin), TRUE);
   gtk_widget_set_halign (spin, GTK_ALIGN_START);
   g_signal_connect (spin, "value-changed",
                     G_CALLBACK (spacing_changed), box);
-  gtk_box_pack_start (GTK_BOX (b), spin);
+  gtk_container_add (GTK_CONTAINER (b), spin);
   gtk_container_add (GTK_CONTAINER (vbox), b);
 
   gtk_widget_show (window);

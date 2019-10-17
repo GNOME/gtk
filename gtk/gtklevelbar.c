@@ -119,6 +119,7 @@
  */
 #include "config.h"
 
+#include "gtkbinlayout.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkintl.h"
@@ -163,6 +164,18 @@ typedef struct {
   gchar *name;
   gdouble value;
 } GtkLevelBarOffset;
+
+struct _GtkLevelBar {
+  GtkWidget parent_instance;
+};
+
+typedef struct _GtkLevelBarClass   GtkLevelBarClass;
+struct _GtkLevelBarClass {
+  GtkWidgetClass parent_class;
+
+  void (* offset_changed) (GtkLevelBar *self,
+                           const gchar *name);
+};
 
 typedef struct _GtkLevelBarPrivate GtkLevelBarPrivate;
 struct _GtkLevelBarPrivate {
@@ -337,7 +350,7 @@ gtk_level_bar_get_real_inverted (GtkLevelBar *self)
   return priv->inverted;
 }
 
-static gboolean
+static void
 gtk_level_bar_render_trough (GtkGizmo    *gizmo,
                              GtkSnapshot *snapshot)
 {
@@ -367,8 +380,6 @@ gtk_level_bar_render_trough (GtkGizmo    *gizmo,
       for (i = 0; i < num_blocks; i++)
         gtk_widget_snapshot_child (widget, priv->block_widget[i], snapshot);
     }
-
-  return FALSE;
 }
 
 static void
@@ -406,24 +417,6 @@ gtk_level_bar_measure_trough (GtkGizmo       *gizmo,
 
   *minimum = size;
   *natural = size;
-}
-
-static void
-gtk_level_bar_measure (GtkWidget      *widget,
-                       GtkOrientation  orientation,
-                       int             for_size,
-                       int            *minimum,
-                       int            *natural,
-                       int            *minimum_baseline,
-                       int            *natural_baseline)
-{
-  GtkLevelBarPrivate *priv = gtk_level_bar_get_instance_private (GTK_LEVEL_BAR (widget));
-
-  gtk_widget_measure (priv->trough_widget,
-                      orientation,
-                      for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
 }
 
 static void
@@ -543,21 +536,6 @@ gtk_level_bar_allocate_trough (GtkGizmo *gizmo,
 }
 
 static void
-gtk_level_bar_size_allocate (GtkWidget *widget,
-                             int        width,
-                             int        height,
-                             int        baseline)
-{
-  GtkLevelBarPrivate *priv = gtk_level_bar_get_instance_private (GTK_LEVEL_BAR (widget));
-
-  gtk_widget_size_allocate (priv->trough_widget,
-                            &(GtkAllocation) {
-                              0, 0,
-                              width, height
-                            }, baseline);
-}
-
-static void
 update_block_nodes (GtkLevelBar *self)
 {
   GtkLevelBarPrivate *priv = gtk_level_bar_get_instance_private (self);
@@ -582,7 +560,7 @@ update_block_nodes (GtkLevelBar *self)
       priv->block_widget = g_renew (GtkWidget*, priv->block_widget, n_blocks);
       for (i = priv->n_blocks; i < n_blocks; i++)
         {
-          priv->block_widget[i] = gtk_gizmo_new ("block", NULL, NULL, NULL);
+          priv->block_widget[i] = gtk_gizmo_new ("block", NULL, NULL, NULL, NULL);
           gtk_widget_insert_before (priv->block_widget[i], GTK_WIDGET (priv->trough_widget), NULL);
         }
       priv->n_blocks = n_blocks;
@@ -718,12 +696,12 @@ typedef struct {
 } OffsetsParserData;
 
 static void
-offset_start_element (GMarkupParseContext  *context,
-                      const gchar          *element_name,
-                      const gchar         **names,
-                      const gchar         **values,
-                      gpointer              user_data,
-                      GError              **error)
+offset_start_element (GtkBuildableParseContext *context,
+                      const gchar              *element_name,
+                      const gchar             **names,
+                      const gchar             **values,
+                      gpointer                  user_data,
+                      GError                  **error)
 {
   OffsetsParserData *data = user_data;
 
@@ -773,18 +751,18 @@ offset_start_element (GMarkupParseContext  *context,
     }
 }
 
-static const GMarkupParser offset_parser =
+static const GtkBuildableParser offset_parser =
 {
   offset_start_element
 };
 
 static gboolean
-gtk_level_bar_buildable_custom_tag_start (GtkBuildable  *buildable,
-                                          GtkBuilder    *builder,
-                                          GObject       *child,
-                                          const gchar   *tagname,
-                                          GMarkupParser *parser,
-                                          gpointer      *parser_data)
+gtk_level_bar_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                          GtkBuilder         *builder,
+                                          GObject            *child,
+                                          const gchar        *tagname,
+                                          GtkBuildableParser *parser,
+                                          gpointer           *parser_data)
 {
   OffsetsParserData *data;
 
@@ -952,8 +930,6 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
   oclass->set_property = gtk_level_bar_set_property;
   oclass->finalize = gtk_level_bar_finalize;
 
-  wclass->size_allocate = gtk_level_bar_size_allocate;
-  wclass->measure = gtk_level_bar_measure;
   wclass->direction_changed = gtk_level_bar_direction_changed;
 
   g_object_class_override_property (oclass, PROP_ORIENTATION, "orientation");
@@ -1055,6 +1031,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
   g_object_class_install_properties (oclass, LAST_PROPERTY, properties);
 
   gtk_widget_class_set_accessible_type (wclass, GTK_TYPE_LEVEL_BAR_ACCESSIBLE);
+  gtk_widget_class_set_layout_manager_type (wclass, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (wclass, I_("levelbar"));
 }
 
@@ -1073,12 +1050,11 @@ gtk_level_bar_init (GtkLevelBar *self)
 
   priv->inverted = FALSE;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
-
   priv->trough_widget = gtk_gizmo_new ("trough",
                                        gtk_level_bar_measure_trough,
                                        gtk_level_bar_allocate_trough,
-                                       gtk_level_bar_render_trough);
+                                       gtk_level_bar_render_trough,
+                                       NULL);
   gtk_widget_set_parent (priv->trough_widget, GTK_WIDGET (self));
 
   gtk_level_bar_ensure_offset (self, GTK_LEVEL_BAR_OFFSET_LOW, 0.25);

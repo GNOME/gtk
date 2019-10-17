@@ -1,5 +1,4 @@
-<?xml version="1.0" standalone="no"?>
-<!--*- mode: xml -*-->
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkListStore" id="liststore1">
     <columns>
@@ -76,8 +75,7 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkSeparatorMenuItem">
-                      </object>
+                      <object class="GtkSeparatorMenuItem"/>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="quit_item">
@@ -174,8 +172,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkSeparatorToolItem">
-              </object>
+              <object class="GtkSeparatorToolItem"/>
             </child>
             <child>
               <object class="GtkToolButton">
@@ -199,9 +196,6 @@
               </object>
             </child>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkScrolledWindow" id="scrolledwindow1">
@@ -255,16 +249,9 @@
               </object>
             </child>
           </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
         </child>
         <child>
-          <object class="GtkStatusbar" id="statusbar1">
-          </object>
-          <packing>
-            <property name="position">3</property>
-          </packing>
+          <object class="GtkStatusbar" id="statusbar1"/>
         </child>
       </object>
     </child>

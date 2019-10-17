@@ -44,15 +44,11 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkCheckMenuItem              GtkCheckMenuItem;
-typedef struct _GtkCheckMenuItemPrivate       GtkCheckMenuItemPrivate;
 typedef struct _GtkCheckMenuItemClass         GtkCheckMenuItemClass;
 
 struct _GtkCheckMenuItem
 {
   GtkMenuItem menu_item;
-
-  /*< private >*/
-  GtkCheckMenuItemPrivate *priv;
 };
 
 /**
@@ -70,11 +66,7 @@ struct _GtkCheckMenuItemClass
 
   /*< private >*/
 
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
+  gpointer padding[8];
 };
 
 

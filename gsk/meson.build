@@ -1,6 +1,4 @@
 gsk_private_gl_shaders = [
-  'resources/glsl/blend.fs.glsl',
-  'resources/glsl/blend.vs.glsl',
   'resources/glsl/blit.fs.glsl',
   'resources/glsl/blit.vs.glsl',
   'resources/glsl/color.fs.glsl',
@@ -13,6 +11,8 @@ gsk_private_gl_shaders = [
   'resources/glsl/unblurred_outset_shadow.fs.glsl',
   'resources/glsl/border.fs.glsl',
   'resources/glsl/cross_fade.fs.glsl',
+  'resources/glsl/blend.fs.glsl',
+  'resources/glsl/repeat.fs.glsl',
   'resources/glsl/es2_common.fs.glsl',
   'resources/glsl/es2_common.vs.glsl',
   'resources/glsl/gl3_common.fs.glsl',
@@ -23,38 +23,63 @@ gsk_private_gl_shaders = [
 
 gsk_public_sources = files([
   'gskdiff.c',
+  'gskcairorenderer.c',
   'gskrenderer.c',
   'gskrendernode.c',
   'gskrendernodeimpl.c',
-  'gskroundedrect.c'
+  'gskrendernodeparser.c',
+  'gskroundedrect.c',
+  'gsktransform.c',
+  'gl/gskglrenderer.c',
 ])
 
 gsk_private_sources = files([
   'gskcairoblur.c',
-  'gskcairorenderer.c',
   'gskdebug.c',
   'gskprivate.c',
   'gskprofiler.c',
   'gl/gskshaderbuilder.c',
   'gl/gskglprofiler.c',
-  'gl/gskglrenderer.c',
   'gl/gskglglyphcache.c',
   'gl/gskglimage.c',
   'gl/gskgldriver.c',
   'gl/gskglrenderops.c',
   'gl/gskglshadowcache.c',
+  'gl/gskglnodesample.c',
+  'gl/gskgltextureatlas.c',
+  'gl/gskgliconcache.c',
+  'gl/stb_rect_pack.c',
 ])
 
 gsk_public_headers = files([
+  'gskcairorenderer.h',
   'gskenums.h',
   'gskrenderer.h',
   'gskrendernode.h',
   'gskroundedrect.h',
+  'gsktransform.h',
   'gsktypes.h',
-  'gsk-autocleanup.h'
+  'gsk-autocleanup.h',
 ])
-
 install_headers(gsk_public_headers, 'gsk.h', subdir: 'gtk-4.0/gsk')
+
+gsk_public_gl_headers = files([
+  'gl/gskglrenderer.h'
+])
+install_headers(gsk_public_gl_headers, subdir: 'gtk-4.0/gsk/gl')
+gsk_public_headers += gsk_public_gl_headers
+
+gsk_public_broadway_headers = files([
+  'broadway/gskbroadwayrenderer.h'
+])
+install_headers(gsk_public_broadway_headers, subdir: 'gtk-4.0/gsk/broadway')
+gsk_public_headers += gsk_public_broadway_headers
+
+gsk_public_vulkan_headers = files([
+  'vulkan/gskvulkanrenderer.h'
+])
+install_headers(gsk_public_vulkan_headers, subdir: 'gtk-4.0/gsk/vulkan')
+gsk_public_headers += gsk_public_vulkan_headers
 
 gsk_private_vulkan_shaders = []
 # This is an odd split because we use configure_file() below to workaround
@@ -95,8 +120,8 @@ if have_vulkan
 endif # have_vulkan
 
 if get_variable('broadway_enabled')
-  gsk_private_sources += files([
-    'gskbroadwayrenderer.c',
+  gsk_public_sources += files([
+    'broadway/gskbroadwayrenderer.c',
   ])
 endif
 
@@ -135,6 +160,7 @@ gsk_deps = [
   graphene_dep,
   pango_dep,
   cairo_dep,
+  cairo_csi_dep,
   pixbuf_dep,
   libgdk_dep,
 ]

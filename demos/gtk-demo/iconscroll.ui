@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow" id="window">
+    <property name="resizable">0</property>
+    <property name="default-width">500</property>
+    <property name="default-height">500</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="show-title-buttons">1</property>
+        <child>
+          <object class="GtkBox">
+            <style>
+              <class name="linked"/>
+            </style>
+            <child>
+              <object class="GtkButton">
+                <property name="icon-name">pan-start-symbolic</property>
+                <signal name="clicked" handler="prev_clicked_cb"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="icon-name">pan-end-symbolic</property>
+                <signal name="clicked" handler="next_clicked_cb"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow" id="scrolledwindow">
+        <property name="hscrollbar-policy">never</property>
+        <property name="vscrollbar-policy">automatic</property>
+        <property name="vadjustment"><object class="GtkAdjustment" id="adjustment"/></property> 
+      </object>
+    </child>
+  </object>
+</interface>

@@ -6,7 +6,7 @@ anyone who hopes to work with the code in the future.
 HOW THE GTKTREEVIEW CALCULATES SIZE:
 ====================================
  When the view is given a new model, the first thing it does is walk
-through the model at the top level, creating an GtkRBNode for each
+through the model at the top level, creating a GtkRBNode for each
 element of the model.  Each node has a height of 0.  The RBTree is kept
 updated as the models structure changes.  Additionally, the user can
 expand, collapse, and select rows at this stage.  The RBTree is accurate

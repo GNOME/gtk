@@ -327,28 +327,33 @@ destroy_controller (GtkEventController *controller)
 }
 
 static void
-hierarchy_changed (GtkWidget *widget,
-                   GtkWidget *previous_toplevel)
+root (GtkWidget *widget)
 {
   GtkInspectorStatistics *sl = GTK_INSPECTOR_STATISTICS (widget);
   GtkEventController *controller;
   GtkWidget *toplevel;
 
-  if (previous_toplevel)
-    g_object_set_data (G_OBJECT (previous_toplevel), "statistics-controller", NULL);
+  GTK_WIDGET_CLASS (gtk_inspector_statistics_parent_class)->root (widget);
 
-  toplevel = gtk_widget_get_toplevel (widget);
-
-  if (!GTK_IS_WINDOW (toplevel))
-    return;
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
 
   controller = gtk_event_controller_key_new ();
   g_object_set_data_full (G_OBJECT (toplevel), "statistics-controller", controller, (GDestroyNotify)destroy_controller);
   g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), widget);
   gtk_widget_add_controller (toplevel, controller);
 
-  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (sl->priv->search_bar),
-                                         toplevel);
+  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (sl->priv->search_bar), toplevel);
+}
+
+static void
+unroot (GtkWidget *widget)
+{
+  GtkWidget *toplevel;
+
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
+  g_object_set_data (G_OBJECT (toplevel), "statistics-controller", NULL);
+
+  GTK_WIDGET_CLASS (gtk_inspector_statistics_parent_class)->unroot (widget);
 }
 
 static void
@@ -374,9 +379,8 @@ gtk_inspector_statistics_init (GtkInspectorStatistics *sl)
                                       GINT_TO_POINTER (COLUMN_CUMULATIVE2), NULL);
   sl->priv->counts = g_hash_table_new_full (NULL, NULL, NULL, type_data_free);
 
-  gtk_tree_view_set_search_entry (sl->priv->view, GTK_ENTRY (sl->priv->search_entry));
+  gtk_tree_view_set_search_entry (sl->priv->view, GTK_EDITABLE (sl->priv->search_entry));
   gtk_tree_view_set_search_equal_func (sl->priv->view, match_row, sl, NULL);
-  g_signal_connect (sl, "hierarchy-changed", G_CALLBACK (hierarchy_changed), NULL);
 }
 
 static void
@@ -461,6 +465,9 @@ gtk_inspector_statistics_class_init (GtkInspectorStatisticsClass *klass)
   object_class->set_property = set_property;
   object_class->constructed = constructed;
   object_class->finalize = finalize;
+
+  widget_class->root = root;
+  widget_class->unroot = unroot;
 
   g_object_class_install_property (object_class, PROP_BUTTON,
       g_param_spec_object ("button", NULL, NULL,

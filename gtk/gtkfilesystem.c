@@ -145,7 +145,7 @@ _gtk_file_system_class_init (GtkFileSystemClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkFileSystemClass, volumes_changed),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 }
 

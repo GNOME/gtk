@@ -1,4 +1,4 @@
-# TRANSLATORS:  Please note that gtk+ has both po/ and po-properties/
+# TRANSLATORS:  Please note that gtk has both po/ and po-properties/
 # directories.  If you add a new language in this file, please make
 # sure that both po/ and po-properties/ have .po files that correspond
 # to your language.  If you only add one to po/, the build will break
@@ -71,6 +71,7 @@ lt
 lv
 mai
 mi
+mjw
 mk
 ml
 mn

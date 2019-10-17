@@ -378,7 +378,7 @@
 378|GTK+ and friends|GTKtoolkit|#GNUStep gets #GTK+ theming http://is.gd/95vHl more at http://is.gd/95wt8|1267029498|0||0|1
 379|GTK+ and friends|GTKtoolkit|GTK+ 2.19.6 released: http://mail.gnome.org/archives/gtk-devel-list/2010-February/msg00050.html #gtk|1266966985|0||0|0
 380|GTK+ and friends|GTKtoolkit|Did you know that #GTK+ is the official toolkit for the #LiMo software stack? http://bit.ly/cuEdHx|1266925406|0||0|0
-381|GTK+ and friends|GTKtoolkit|@lmedinas publishes a #javascript #example on how to put an status icon with #Gtk+ http://bit.ly/9py1uC Thanks a lot Luis!|1266886644|0||1|1
+381|GTK+ and friends|GTKtoolkit|@lmedinas publishes a #javascript #example on how to put a status icon with #Gtk+ http://bit.ly/9py1uC Thanks a lot Luis!|1266886644|0||1|1
 382|GTK+ and friends|GTKtoolkit|♺ @ebassi: I should really finish up the GDom API as well|1266880653|0||0|0
 383|GTK+ and friends|GTKtoolkit|♺ @ebassi: I hope to work on this for the next GIO release, and the GTK+ side for 3.0|1266880641|0||0|0
 384|GTK+ and friends|GTKtoolkit|♺ @ebassi: just updated the ApplicationClass design wiki page with the stuff @Cwiiis did for Mx - http://bit.ly/cfAOJk|1266880559|0||0|0

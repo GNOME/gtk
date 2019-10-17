@@ -7,7 +7,7 @@
 @define-color color_base #c8c4c0;
 @define-color color_sel #406080;
 @define-color color_tip #ffffc0;
-@define-color color_dark shade (@color_base, 0.6);
+@define-color color_dark shade(@color_base, 0.6);
 
 * {
     background-color: @color_base;
@@ -47,30 +47,26 @@ GtkCheckButton:selected {
 }
 
 .slider, .pane-separator {
-    background-color: alpha (black, 0);
-    color: alpha (black, 0);
+    background-color: alpha(black, 0);
+    color: alpha(black, 0);
 }
 
 /* GRADIENTS */
 
 button, .notebook tab:active, .slider {
-    background-image: -gtk-gradient (linear, left top, left bottom,
-     from (shade (@color_base, 1.2)), to (@color_base));
+    background-image: linear-gradient(to bottom, shade(@color_base, 1.2), @color_base);
 }
 
 button:active, .notebook tab, .trough {
-    background-image: -gtk-gradient (linear, left top, left bottom,
-     from (shade (@color_base, 0.8)), to (@color_base));
+    background-image: linear-gradient(to bottom, shade(@color_base, 0.8), @color_base);
 }
 
 button.vertical, .slider.vertical {
-    background-image: -gtk-gradient (linear, left top, right top,
-     from (shade (@color_base, 1.2)), to (@color_base));
+    background-image: linear-gradient(to right, shade(@color_base, 1.2), @color_base);
 }
 
 button.vertical:active, .trough.vertical {
-    background-image: -gtk-gradient (linear, left top, right top,
-     from (shade (@color_base, 0.8)), to (@color_base));
+    background-image: linear-gradient(to right, shade(@color_base, 0.8), @color_base);
 }
 
 column-header > .button {
@@ -78,14 +74,12 @@ column-header > .button {
 }
 
 .progressbar {
-    background-image: -gtk-gradient (linear, left top, left bottom,
-     from (shade (@color_sel, 1.2)), to (@color_sel));
-    border-color: shade (@color_sel, 0.7);
+    background-image: linear-gradient(to bottom, shade(@color_sel, 1.2), @color_sel);
+    border-color: shade(@color_sel, 0.7);
 }
 
 .progressbar.vertical {
-    background-image: -gtk-gradient (linear, left top, right top,
-     from (shade (@color_sel, 1.2)), to (@color_sel));
+    background-image: linear-gradient(to right, shade(@color_sel, 1.2), @color_sel);
 }
 
 /* SPACING */

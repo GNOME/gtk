@@ -1,7 +1,7 @@
 /* Color Chooser
  *
  * A GtkColorChooser lets the user choose a color. There are several
- * implementations of the GtkColorChooser interface in GTK+. The
+ * implementations of the GtkColorChooser interface in GTK. The
  * GtkColorChooserDialog is a prebuilt dialog containing a
  * GtkColorChooserWidget.
  */
@@ -88,7 +88,7 @@ do_colorsel (GtkWidget *do_widget)
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
-      gtk_box_pack_start (GTK_BOX (vbox), frame);
+      gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       da = gtk_drawing_area_new ();
       gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (da), 200);
@@ -101,7 +101,7 @@ do_colorsel (GtkWidget *do_widget)
       gtk_widget_set_halign (button, GTK_ALIGN_END);
       gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
 
-      gtk_box_pack_start (GTK_BOX (vbox), button);
+      gtk_container_add (GTK_CONTAINER (vbox), button);
 
       g_signal_connect (button, "clicked",
                         G_CALLBACK (change_color_callback), NULL);

@@ -68,7 +68,7 @@ search_text_changed (GtkEntry *entry, IconBrowserWindow *win)
 {
   const gchar *text;
 
-  text = gtk_entry_get_text (entry);
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
 
   if (text[0] == '\0')
     return;
@@ -81,11 +81,14 @@ get_icon (GtkWidget *image, const gchar *name, gint size)
 {
   GtkIconInfo *info;
   GtkStyleContext *context;
+  GdkTexture *texture;
   GdkPixbuf *pixbuf;
 
   context = gtk_widget_get_style_context (image);
   info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), name, size, 0);
-  pixbuf = gtk_icon_info_load_symbolic_for_context (info, context, NULL, NULL);
+  texture = GDK_TEXTURE (gtk_icon_info_load_symbolic_for_context (info, context, NULL, NULL));
+  pixbuf = gdk_pixbuf_get_from_texture (texture);
+  g_object_unref (texture);
   g_object_unref (info);
 
   return pixbuf;
@@ -205,6 +208,7 @@ add_context (IconBrowserWindow *win,
   g_hash_table_insert (win->contexts, c->id, c);
 
   row = gtk_label_new (name);
+  gtk_label_set_xalign (GTK_LABEL (row), 0);
   g_object_set_data (G_OBJECT (row), "context", c);
   gtk_widget_show (row);
   g_object_set (row, "margin", 10, NULL);
@@ -285,19 +289,6 @@ populate (IconBrowserWindow *win)
   g_strfreev (groups);
 }
 
-static gboolean
-key_event_cb (GtkEventController *controller,
-              guint               keyval,
-              guint               keycode,
-              GdkModifierType     state,
-              gpointer            data)
-{
-  IconBrowserWindow *win = data;
-
-  return gtk_search_bar_handle_event (GTK_SEARCH_BAR (win->searchbar),
-                                      gtk_get_current_event ());
-}
-
 static void
 copy_to_clipboard (GtkButton         *button,
                    IconBrowserWindow *win)
@@ -322,7 +313,7 @@ icon_visible_func (GtkTreeModel *model,
   gboolean visible;
 
   search = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (win->search));
-  search_text = gtk_entry_get_text (GTK_ENTRY (win->searchentry));
+  search_text = gtk_editable_get_text (GTK_EDITABLE (win->searchentry));
 
   if (win->symbolic)
     column = ICON_STORE_SYMBOLIC_NAME_COLUMN;
@@ -452,7 +443,6 @@ static void
 icon_browser_window_init (IconBrowserWindow *win)
 {
   GdkContentFormats *list;
-  GtkEventController *controller;
 
   gtk_widget_init_template (GTK_WIDGET (win));
 
@@ -479,12 +469,10 @@ icon_browser_window_init (IconBrowserWindow *win)
 
   g_signal_connect (win->searchbar, "notify::search-mode-enabled",
                     G_CALLBACK (search_mode_toggled), win);
+  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (win->searchbar),
+                                         GTK_WIDGET (win));
 
   symbolic_toggled (GTK_TOGGLE_BUTTON (win->symbolic_radio), win);
-
-  controller = gtk_event_controller_key_new ();
-  g_signal_connect (controller, "key-pressed", G_CALLBACK (key_event_cb), win);
-  gtk_widget_add_controller (GTK_WIDGET (win), controller);
 
   populate (win);
 }

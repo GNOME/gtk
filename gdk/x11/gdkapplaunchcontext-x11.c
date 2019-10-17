@@ -216,7 +216,7 @@ startup_timeout (void *data)
     std->timeout_id = 0;
   else {
     std->timeout_id = g_timeout_add_seconds ((min_timeout + 500)/1000, startup_timeout, std);
-    g_source_set_name_by_id (std->timeout_id, "[gtk+] startup_timeout");
+    g_source_set_name_by_id (std->timeout_id, "[gtk] startup_timeout");
   }
 
   /* always remove this one, but we may have reinstalled another one. */
@@ -253,7 +253,7 @@ add_startup_timeout (GdkX11Screen *screen,
   if (data->timeout_id == 0) {
     data->timeout_id = g_timeout_add_seconds (STARTUP_TIMEOUT_LENGTH_SECONDS,
                                               startup_timeout, data);
-    g_source_set_name_by_id (data->timeout_id, "[gtk+] startup_timeout");
+    g_source_set_name_by_id (data->timeout_id, "[gtk] startup_timeout");
   }
 }
 
@@ -289,7 +289,7 @@ gdk_x11_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
   files_count = g_list_length (files);
   if (files_count == 0)
     {
-      description = g_strdup_printf (_("Starting %s"), g_app_info_get_name (info));
+      description = g_strdup_printf (_("Starting “%s”"), g_app_info_get_name (info));
     }
   else if (files_count == 1)
     {
@@ -302,7 +302,7 @@ gdk_x11_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
                                       0, NULL, NULL);
 
       display_name = get_display_name (files->data, fileinfo);
-      description = g_strdup_printf (_("Opening %s"), display_name);
+      description = g_strdup_printf (_("Opening “%s”"), display_name);
       g_free (display_name);
     }
   else

@@ -56,10 +56,9 @@ typedef struct
   GtkWidget *object_center_stack;
   GtkWidget *object_title;
   GtkWidget *prop_list;
-  GtkWidget *child_prop_list;
+  GtkWidget *layout_prop_list;
   GtkWidget *selector;
   GtkWidget *signals_list;
-  GtkWidget *style_prop_list;
   GtkWidget *classes_list;
   GtkWidget *widget_css_node_tree;
   GtkWidget *widget_recorder;
@@ -71,8 +70,8 @@ typedef struct
   GtkWidget *misc_info;
   GtkWidget *controllers;
   GtkWidget *magnifier;
+  GtkWidget *sidebar_revealer;
 
-  GtkWidget *invisible;
   GtkWidget *selected_widget;
 
   GList *extra_pages;
@@ -117,6 +116,8 @@ GskRenderNode *         gtk_inspector_prepare_render                            
                                                                                  GdkSurface             *surface,
                                                                                  const cairo_region_t   *region,
                                                                                  GskRenderNode          *node);
+gboolean                gtk_inspector_handle_event                              (GdkEvent               *event);
+                                                                                
 
 G_END_DECLS
 

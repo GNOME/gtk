@@ -37,38 +37,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_RADIO_MENU_ITEM	      (gtk_radio_menu_item_get_type ())
 #define GTK_RADIO_MENU_ITEM(obj)	      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_RADIO_MENU_ITEM, GtkRadioMenuItem))
-#define GTK_RADIO_MENU_ITEM_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_RADIO_MENU_ITEM, GtkRadioMenuItemClass))
 #define GTK_IS_RADIO_MENU_ITEM(obj)	      (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_RADIO_MENU_ITEM))
-#define GTK_IS_RADIO_MENU_ITEM_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RADIO_MENU_ITEM))
-#define GTK_RADIO_MENU_ITEM_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_RADIO_MENU_ITEM, GtkRadioMenuItemClass))
-
 
 typedef struct _GtkRadioMenuItem              GtkRadioMenuItem;
-typedef struct _GtkRadioMenuItemPrivate       GtkRadioMenuItemPrivate;
-typedef struct _GtkRadioMenuItemClass         GtkRadioMenuItemClass;
-
-struct _GtkRadioMenuItem
-{
-  GtkCheckMenuItem check_menu_item;
-
-  /*< private >*/
-  GtkRadioMenuItemPrivate *priv;
-};
-
-struct _GtkRadioMenuItemClass
-{
-  GtkCheckMenuItemClass parent_class;
-
-  /* Signals */
-  void (*group_changed) (GtkRadioMenuItem *radio_menu_item);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
-
 
 GDK_AVAILABLE_IN_ALL
 GType      gtk_radio_menu_item_get_type	         (void) G_GNUC_CONST;

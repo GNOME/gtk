@@ -3,8 +3,7 @@
   <requires lib="gtk+" version="3.16"/>
   <template class="GtkPlacesViewRow" parent="GtkListBoxRow">
     <property name="width-request">100</property>
-    <property name="visible">True</property>
-    <property name="can-focus">True</property>
+    <property name="can-focus">1</property>
     <child>
       <object class="GtkBox" id="box">
         <property name="margin-start">12</property>
@@ -23,9 +22,6 @@
             <property name="xalign">0</property>
             <property name="ellipsize">end</property>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="available_space_label">
@@ -34,9 +30,6 @@
               <class name="dim-label"/>
             </style>
           </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="path_label">
@@ -48,44 +41,48 @@
               <class name="dim-label"/>
             </style>
           </object>
-          <packing>
-            <property name="position">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkStack" id="mount_stack">
             <child>
-              <object class="GtkButton" id="eject_button">
-                <property name="visible">0</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="tooltip-text" translatable="yes">Unmount</property>
-                <child>
-                  <object class="GtkImage" id="eject_icon">
-                    <property name="icon-name">media-eject-symbolic</property>
+              <object class="GtkStackPage">
+                <property name="name">button</property>
+                <property name="child">
+                  <object class="GtkButton" id="eject_button">
+                    <property name="visible">0</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="tooltip-text" translatable="yes">Unmount</property>
+                    <child>
+                      <object class="GtkImage" id="eject_icon">
+                        <property name="icon-name">media-eject-symbolic</property>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="image-button"/>
+                      <class name="sidebar-button"/>
+                    </style>
                   </object>
-                </child>
-                <style>
-                  <class name="image-button"/>
-                  <class name="sidebar-button"/>
-                </style>
+                </property>
               </object>
             </child>
             <child>
-              <object class="GtkSpinner" id="busy_spinner">
-                <property name="halign">center</property>
-                <property name="valign">center</property>
+              <object class="GtkStackPage">
+                <property name="name">spinner</property>
+                <property name="child">
+                  <object class="GtkSpinner" id="busy_spinner">
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                  </object>
+                </property>
               </object>
             </child>
           </object>
-          <packing>
-            <property name="position">4</property>
-          </packing>
         </child>
       </object>
     </child>
     <child>
-      <object class="GtkGestureMultiPress">
+      <object class="GtkGestureClick">
         <property name="button">3</property>
         <signal name="pressed" handler="pressed_cb" swapped="no"/>
       </object>

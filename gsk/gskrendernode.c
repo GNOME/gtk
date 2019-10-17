@@ -42,6 +42,7 @@
 
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
+#include "gskrendernodeparserprivate.h"
 
 #include <graphene-gobject.h>
 
@@ -98,7 +99,7 @@ gsk_render_node_new (const GskRenderNodeClass *node_class, gsize extra_size)
  *
  * Acquires a reference on the given #GskRenderNode.
  *
- * Returns: (transfer none): the #GskRenderNode with an additional reference
+ * Returns: (transfer full): the #GskRenderNode with an additional reference
  */
 GskRenderNode *
 gsk_render_node_ref (GskRenderNode *node)
@@ -112,7 +113,7 @@ gsk_render_node_ref (GskRenderNode *node)
 
 /**
  * gsk_render_node_unref:
- * @node: a #GskRenderNode
+ * @node: (transfer full): a #GskRenderNode
  *
  * Releases a reference on the given #GskRenderNode.
  *
@@ -141,6 +142,13 @@ gsk_render_node_get_node_type (GskRenderNode *node)
 {
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), GSK_NOT_A_RENDER_NODE);
 
+  return node->node_class->node_type;
+}
+
+static inline
+GskRenderNodeType
+_gsk_render_node_get_node_type (GskRenderNode *node)
+{
   return node->node_class->node_type;
 }
 
@@ -230,9 +238,9 @@ gsk_render_node_draw (GskRenderNode *node,
  * @node1: a #GskRenderNode
  * @node2: the #GskRenderNode to compare with
  *
- * Checks if 2 render nodes can be expected to be compared via
+ * Checks if two render nodes can be expected to be compared via
  * gsk_render_node_diff(). The node diffing algorithm uses this function
- * to match up similar nodes to compare when trying to minimze the
+ * to match up similar nodes to compare when trying to minimize the
  * resulting region.
  *
  * Nodes of different type always return %FALSE here.
@@ -246,7 +254,7 @@ gsk_render_node_can_diff (GskRenderNode *node1,
   if (node1 == node2)
     return TRUE;
 
-  if (gsk_render_node_get_node_type (node1) != gsk_render_node_get_node_type (node2))
+  if (_gsk_render_node_get_node_type (node1) != _gsk_render_node_get_node_type (node2))
     return FALSE;
 
   return node1->node_class->can_diff (node1, node2);
@@ -300,7 +308,7 @@ gsk_render_node_diff (GskRenderNode  *node1,
   if (node1 == node2)
     return;
 
-  if (gsk_render_node_get_node_type (node1) != gsk_render_node_get_node_type (node2))
+  if (_gsk_render_node_get_node_type (node1) != _gsk_render_node_get_node_type (node2))
     return gsk_render_node_diff_impossible (node1, node2, region);
 
   return node1->node_class->diff (node1, node2, region);
@@ -308,42 +316,6 @@ gsk_render_node_diff (GskRenderNode  *node1,
 
 #define GSK_RENDER_NODE_SERIALIZATION_VERSION 0
 #define GSK_RENDER_NODE_SERIALIZATION_ID "GskRenderNode"
-
-/**
- * gsk_render_node_serialize:
- * @node: a #GskRenderNode
- *
- * Serializes the @node for later deserialization via
- * gsk_render_node_deserialize(). No guarantees are made about the format
- * used other than that the same version of GTK+ will be able to deserialize
- * the result of a call to gsk_render_node_serialize() and
- * gsk_render_node_deserialize() will correctly reject files it cannot open
- * that were created with previous versions of GTK+.
- *
- * The intended use of this functions is testing, benchmarking and debugging.
- * The format is not meant as a permanent storage format.
- *
- * Returns: a #GBytes representing the node.
- **/
-GBytes *
-gsk_render_node_serialize (GskRenderNode *node)
-{
-  GVariant *node_variant, *variant;
-  GBytes *result;
-
-  node_variant = gsk_render_node_serialize_node (node);
-
-  variant = g_variant_new ("(suuv)",
-                           GSK_RENDER_NODE_SERIALIZATION_ID,
-                           (guint32) GSK_RENDER_NODE_SERIALIZATION_VERSION,
-                           (guint32) gsk_render_node_get_node_type (node),
-                           node_variant);
-
-  result = g_variant_get_data_as_bytes (variant);
-  g_variant_unref (variant);
-
-  return result;
-}
 
 /**
  * gsk_render_node_write_to_file:
@@ -385,7 +357,8 @@ gsk_render_node_write_to_file (GskRenderNode *node,
 /**
  * gsk_render_node_deserialize:
  * @bytes: the bytes containing the data
- * @error: (allow-none): location to store error or %NULL
+ * @error_func: (nullable) (scope call): Callback on parsing errors or %NULL
+ * @user_data: (closure error_func): user_data for @error_func
  *
  * Loads data previously created via gsk_render_node_serialize(). For a
  * discussion of the supported format, see that function.
@@ -394,39 +367,13 @@ gsk_render_node_write_to_file (GskRenderNode *node,
  *     error.
  **/
 GskRenderNode *
-gsk_render_node_deserialize (GBytes  *bytes,
-                             GError **error)
+gsk_render_node_deserialize (GBytes            *bytes,
+                             GskParseErrorFunc  error_func,
+                             gpointer           user_data)
 {
-  char *id_string;
-  guint32 version, node_type;
-  GVariant *variant, *node_variant;
   GskRenderNode *node = NULL;
 
-  variant = g_variant_new_from_bytes (G_VARIANT_TYPE ("(suuv)"), bytes, FALSE);
-
-  g_variant_get (variant, "(suuv)", &id_string, &version, &node_type, &node_variant);
-
-  if (!g_str_equal (id_string, GSK_RENDER_NODE_SERIALIZATION_ID))
-    {
-      g_set_error (error, GSK_SERIALIZATION_ERROR, GSK_SERIALIZATION_UNSUPPORTED_FORMAT,
-                   "Data not in GskRenderNode serialization format.");
-      goto out;
-    }
-
-  if (version != GSK_RENDER_NODE_SERIALIZATION_VERSION)
-    {
-      g_set_error (error, GSK_SERIALIZATION_ERROR, GSK_SERIALIZATION_UNSUPPORTED_VERSION,
-                   "Format version %u not supported.", version);
-      goto out;
-    }
-
-  node = gsk_render_node_deserialize_node (node_type, node_variant, error);
-
-out:
-  g_free (id_string);
-  g_variant_unref (node_variant);
-  g_variant_unref (variant);
+  node = gsk_render_node_deserialize_from_bytes (bytes, error_func, user_data);
 
   return node;
 }
-

@@ -5727,7 +5727,7 @@ specific_bug_301558 (void)
   int i;
   gboolean add;
 
-  g_test_bug ("301558");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=301558 */
 
   tree = gtk_tree_store_new (2, G_TYPE_INT, G_TYPE_BOOLEAN);
   gtk_tree_store_append (tree, &iter, NULL);
@@ -5803,7 +5803,7 @@ specific_bug_311955 (void)
   int n;
   GtkTreePath *path;
 
-  g_test_bug ("311955");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=311955 */
 
   store = gtk_tree_store_new (1, G_TYPE_INT);
 
@@ -5972,7 +5972,7 @@ specific_bug_346800 (void)
   store = gtk_tree_store_newv (2, columns);
   model = GTK_TREE_MODEL (store);
 
-  g_test_bug ("346800");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=346800 */
 
   filter = GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (model, NULL));
   gtk_tree_model_filter_set_visible_column (filter, 1);
@@ -6031,7 +6031,7 @@ specific_bug_464173 (void)
   GtkWidget *view G_GNUC_UNUSED;
   gboolean visible = TRUE;
 
-  g_test_bug ("464173");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=464173 */
 
   model = gtk_tree_store_new (1, G_TYPE_STRING);
   gtk_tree_store_append (model, &iter1, NULL);
@@ -6075,7 +6075,7 @@ specific_bug_540201 (void)
 
   GtkWidget *tree_view G_GNUC_UNUSED;
 
-  g_test_bug ("540201");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=540201 */
 
   store = gtk_tree_store_new (1, G_TYPE_INT);
 
@@ -6128,7 +6128,7 @@ specific_bug_549287 (void)
   GtkTreeIter iter;
   GtkTreeIter *swap, *parent, *child;
 
-  g_test_bug ("529287");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=529287 */
 
   store = gtk_tree_store_new (1, G_TYPE_STRING);
   filtered = gtk_tree_model_filter_new (GTK_TREE_MODEL (store), NULL);
@@ -6227,7 +6227,7 @@ specific_bug_621076 (void)
   GtkTreeIter item_iter;
   SignalMonitor *monitor;
 
-  g_test_bug ("621076");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=621076 */
 
   store = gtk_tree_store_new (1, G_TYPE_STRING);
   filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (store), NULL);

@@ -47,10 +47,6 @@ in this Software without prior written authorization from The Open Group.
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
 
-#ifdef NEED_XIPROTO_H_FOR_XREPLY
-#include <X11/extensions/XIproto.h>
-#endif
-
 #include <X11/Xlibint.h>
 
 
@@ -175,7 +171,7 @@ send_event_handler (Display *dpy,
         {
           guint id;
           id = g_idle_add (callback_idle, state);
-          g_source_set_name_by_id (id, "[gtk+] callback_idle");
+          g_source_set_name_by_id (id, "[gtk] callback_idle");
         }
 
       DeqAsyncHandler(state->dpy, &state->async);
@@ -711,7 +707,7 @@ roundtrip_handler (Display *dpy,
         {
           guint id;
           id = g_idle_add (roundtrip_callback_idle, state);
-          g_source_set_name_by_id (id, "[gtk+] roundtrip_callback_idle");
+          g_source_set_name_by_id (id, "[gtk] roundtrip_callback_idle");
         }
 
       DeqAsyncHandler(state->dpy, &state->async);

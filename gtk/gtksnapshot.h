@@ -69,9 +69,6 @@ void            gtk_snapshot_push_debug                 (GtkSnapshot            
                                                          const char             *message,
                                                          ...) G_GNUC_PRINTF (2, 3);
 GDK_AVAILABLE_IN_ALL
-void            gtk_snapshot_push_transform             (GtkSnapshot            *snapshot,
-                                                         const graphene_matrix_t*transform);
-GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_opacity               (GtkSnapshot            *snapshot,
                                                          double                  opacity);
 GDK_AVAILABLE_IN_ALL
@@ -105,14 +102,40 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_pop                        (GtkSnapshot            *snapshot);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_snapshot_offset                     (GtkSnapshot            *snapshot,
-                                                         int                     x,
-                                                         int                     y);
+void            gtk_snapshot_save                       (GtkSnapshot            *snapshot);
 GDK_AVAILABLE_IN_ALL
-void            gtk_snapshot_get_offset                 (GtkSnapshot            *snapshot,
-                                                         int                    *x,
-                                                         int                    *y);
-
+void            gtk_snapshot_restore                    (GtkSnapshot            *snapshot);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_transform                  (GtkSnapshot            *snapshot,
+                                                         GskTransform           *transform);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_transform_matrix           (GtkSnapshot            *snapshot,
+                                                         const graphene_matrix_t*matrix);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_translate                  (GtkSnapshot            *snapshot,
+                                                         const graphene_point_t *point);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_translate_3d               (GtkSnapshot            *snapshot,
+                                                         const graphene_point3d_t*point);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_rotate                     (GtkSnapshot            *snapshot,
+                                                         float                  angle);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_rotate_3d                  (GtkSnapshot            *snapshot,
+                                                         float                   angle,
+                                                         const graphene_vec3_t  *axis);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_scale                      (GtkSnapshot            *snapshot,
+                                                         float                   factor_x,
+                                                         float                   factor_y);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_scale_3d                   (GtkSnapshot            *snapshot,
+                                                         float                   factor_x,
+                                                         float                   factor_y,
+                                                         float                   factor_z);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_perspective                (GtkSnapshot            *snapshot,
+                                                         float                   depth);
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_append_node                (GtkSnapshot            *snapshot,
                                                          GskRenderNode          *node);
@@ -141,6 +164,27 @@ void            gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot      
                                                                const graphene_point_t *end_point,
                                                                const GskColorStop     *stops,
                                                                gsize                   n_stops);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_append_border              (GtkSnapshot            *snapshot,
+                                                         const GskRoundedRect   *outline,
+                                                         const float             border_width[4],
+                                                         const GdkRGBA           border_color[4]);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_append_inset_shadow        (GtkSnapshot            *snapshot,
+                                                         const GskRoundedRect   *outline,
+                                                         const GdkRGBA          *color,
+                                                         float                   dx,
+                                                         float                   dy,
+                                                         float                   spread,
+                                                         float                   blur_radius);
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_append_outset_shadow       (GtkSnapshot            *snapshot,
+                                                         const GskRoundedRect   *outline,
+                                                         const GdkRGBA          *color,
+                                                         float                   dx,
+                                                         float                   dy,
+                                                         float                   spread,
+                                                         float                   blur_radius);
 /* next function implemented in gskpango.c */
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_append_layout              (GtkSnapshot            *snapshot,

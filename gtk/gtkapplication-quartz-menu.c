@@ -21,7 +21,7 @@
 #include "config.h"
 
 #include "gtkapplicationprivate.h"
-#include "gtkmenutracker.h"
+#include "gtkmenutrackerprivate.h"
 #include "gtkicontheme.h"
 #include "gtktoolbarprivate.h"
 #include "gtkquartz.h"

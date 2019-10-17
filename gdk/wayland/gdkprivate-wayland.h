@@ -34,6 +34,7 @@
 #include <gdk/gdkcursor.h>
 #include <gdk/wayland/gdkwayland.h>
 #include <gdk/wayland/gdkdisplay-wayland.h>
+#include <gdk/wayland/gdkseat-wayland.h>
 
 #include <xkbcommon/xkbcommon.h>
 
@@ -42,8 +43,6 @@
 
 #define WL_SURFACE_HAS_BUFFER_SCALE 3
 #define WL_POINTER_HAS_FRAME 5
-
-#define GDK_SURFACE_IS_WAYLAND(win)    (GDK_IS_SURFACE_IMPL_WAYLAND (((GdkSurface *)win)->impl))
 
 GdkKeymap *_gdk_wayland_keymap_new (GdkDisplay *display);
 void       _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
@@ -115,10 +114,13 @@ void             gdk_wayland_drop_set_source_actions       (GdkDrop             
 void             gdk_wayland_drop_set_action               (GdkDrop               *drop,
                                                             uint32_t               action);
 
-void _gdk_wayland_display_create_surface_impl (GdkDisplay     *display,
-                                               GdkSurface     *surface,
-                                               GdkSurface     *real_parent,
-                                               GdkSurfaceAttr *attributes);
+GdkSurface * _gdk_wayland_display_create_surface (GdkDisplay *display,
+                                                  GdkSurfaceType surface_type,
+                                                  GdkSurface *parent,
+                                                  int         x,
+                                                  int         y,
+                                                  int         width,
+                                                  int         height);
 
 gint        _gdk_wayland_display_text_property_to_utf8_list (GdkDisplay    *display,
                                                              GdkAtom        encoding,
@@ -138,7 +140,7 @@ void        _gdk_wayland_display_remove_seat    (GdkWaylandDisplay       *displa
 GdkKeymap *_gdk_wayland_device_get_keymap (GdkDevice *device);
 uint32_t _gdk_wayland_device_get_implicit_grab_serial(GdkWaylandDevice *device,
                                                       const GdkEvent   *event);
-uint32_t _gdk_wayland_seat_get_last_implicit_grab_serial (GdkSeat           *seat,
+uint32_t _gdk_wayland_seat_get_last_implicit_grab_serial (GdkWaylandSeat     *seat,
                                                           GdkEventSequence **seqence);
 struct wl_data_device * gdk_wayland_device_get_data_device (GdkDevice *gdk_device);
 void gdk_wayland_device_set_selection (GdkDevice             *gdk_device,

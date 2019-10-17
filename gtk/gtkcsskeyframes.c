@@ -215,40 +215,35 @@ keyframes_set_value (GtkCssKeyframes     *keyframes,
 }
 
 static gboolean
-parse_declaration (GtkCssKeyframes *keyframes,
-                   guint            k,
-                   GtkCssParser    *parser)
+gtk_css_keyframes_parse_declaration (GtkCssKeyframes *keyframes,
+                                     guint            k,
+                                     GtkCssParser    *parser)
 {
   GtkStyleProperty *property;
   GtkCssValue *value;
   char *name;
 
-  while (_gtk_css_parser_try (parser, ";", TRUE))
-    {
-      /* SKIP ALL THE THINGS! */
-    }
-
-  name = _gtk_css_parser_try_ident (parser, TRUE);
+  name = gtk_css_parser_consume_ident (parser);
   if (name == NULL)
     {
-      _gtk_css_parser_error (parser, "No property name given");
+      if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+        gtk_css_parser_error_syntax (parser, "Expected a property name");
       return FALSE;
     }
 
   property = _gtk_style_property_lookup (name);
   if (property == NULL)
     {
-      /* should be GTK_CSS_PROVIDER_ERROR_NAME */
-      _gtk_css_parser_error (parser, "No property named '%s'", name);
+      gtk_css_parser_error_value (parser, "No property named '%s'", name);
       g_free (name);
       return FALSE;
     }
 
   g_free (name);
 
-  if (!_gtk_css_parser_try (parser, ":", TRUE))
+  if (!gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COLON))
     {
-      _gtk_css_parser_error (parser, "Expected a ':'");
+      gtk_css_parser_error_syntax (parser, "Expected a ':'");
       return FALSE;
     }
 
@@ -256,10 +251,9 @@ parse_declaration (GtkCssKeyframes *keyframes,
   if (value == NULL)
     return FALSE;
 
-  if (!_gtk_css_parser_try (parser, ";", TRUE) &&
-      !_gtk_css_parser_begins_with (parser, '}'))
+  if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
     {
-      _gtk_css_parser_error (parser, "Junk at end of value");
+      gtk_css_parser_error_syntax (parser, "Junk at end of value");
       _gtk_css_value_unref (value);
       return FALSE;
     }
@@ -279,12 +273,12 @@ parse_declaration (GtkCssKeyframes *keyframes,
         }
 
       if (!animatable)
-        _gtk_css_parser_error (parser, "shorthand '%s' cannot be animated", _gtk_style_property_get_name (property));
+        gtk_css_parser_error_value (parser, "shorthand '%s' cannot be animated", _gtk_style_property_get_name (property));
     }
   else if (GTK_IS_CSS_STYLE_PROPERTY (property))
     {
       if (!keyframes_set_value (keyframes, k, GTK_CSS_STYLE_PROPERTY (property), value))
-        _gtk_css_parser_error (parser, "Cannot animate property '%s'", _gtk_style_property_get_name (property));
+        gtk_css_parser_error_value (parser, "Cannot animate property '%s'", _gtk_style_property_get_name (property));
     }
   else
     {
@@ -297,27 +291,26 @@ parse_declaration (GtkCssKeyframes *keyframes,
 }
 
 static gboolean
-parse_block (GtkCssKeyframes *keyframes,
-             guint            k,
-             GtkCssParser    *parser)
+gtk_css_keyframes_parse_block (GtkCssKeyframes *keyframes,
+                               guint            k,
+                               GtkCssParser    *parser)
 {
-  if (!_gtk_css_parser_try (parser, "{", TRUE))
+  if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_OPEN_CURLY))
     {
-      _gtk_css_parser_error (parser, "Expected closing bracket after keyframes block");
+      gtk_css_parser_error_syntax (parser, "Expected '{'");
       return FALSE;
     }
 
-  while (!_gtk_css_parser_try (parser, "}", TRUE))
-    {
-      if (!parse_declaration (keyframes, k, parser))
-        _gtk_css_parser_resync (parser, TRUE, '}');
+  gtk_css_parser_start_block (parser);
 
-      if (_gtk_css_parser_is_eof (parser))
-        {
-          _gtk_css_parser_error (parser, "Expected closing '}' after keyframes block");
-          return FALSE;
-        }
+  while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+    {
+      gtk_css_parser_start_semicolon_block (parser, GTK_CSS_TOKEN_EOF);
+      gtk_css_keyframes_parse_declaration (keyframes, k, parser);
+      gtk_css_parser_end_block (parser);
     }
+
+  gtk_css_parser_end_block (parser);
 
   return TRUE;
 }
@@ -333,19 +326,18 @@ _gtk_css_keyframes_parse (GtkCssParser *parser)
 
   keyframes = gtk_css_keyframes_new ();
 
-  while (!_gtk_css_parser_begins_with (parser, '}'))
+  while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
     {
-      if (_gtk_css_parser_try (parser, "from", TRUE))
+      if (gtk_css_parser_try_ident (parser, "from"))
         progress = 0;
-      else if (_gtk_css_parser_try (parser, "to", TRUE))
+      else if (gtk_css_parser_try_ident (parser, "to"))
         progress = 1;
-      else if (_gtk_css_parser_try_double (parser, &progress) &&
-               _gtk_css_parser_try (parser, "%", TRUE))
+      else if (gtk_css_parser_consume_percentage (parser, &progress))
         {
           if (progress < 0 || progress > 100)
             {
               /* XXX: should we skip over the block here? */
-              _gtk_css_parser_error (parser, "percentages must be between 0%% and 100%%");
+              gtk_css_parser_error_value (parser, "percentages must be between 0%% and 100%%");
               _gtk_css_keyframes_unref (keyframes);
               return NULL;
             }
@@ -353,14 +345,13 @@ _gtk_css_keyframes_parse (GtkCssParser *parser)
         }
       else
         {
-          _gtk_css_parser_error (parser, "expected a percentage");
           _gtk_css_keyframes_unref (keyframes);
           return NULL;
         }
 
       k = gtk_css_keyframes_add_keyframe (keyframes, progress);
 
-      if (!parse_block (keyframes, k, parser))
+      if (!gtk_css_keyframes_parse_block (keyframes, k, parser))
         {
           _gtk_css_keyframes_unref (keyframes);
           return NULL;

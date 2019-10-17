@@ -1,15 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gtk/WidgetFactory">
+  <gresource prefix="/org/gtk/WidgetFactory4">
     <file preprocess="xml-stripblanks">widget-factory.ui</file>
   </gresource>
-  <gresource prefix="/org/gtk/WidgetFactory">
+  <gresource prefix="/org/gtk/WidgetFactory4">
     <file>widget-factory.css</file>
   </gresource>
-  <gresource prefix="/org/gtk/WidgetFactory/gtk">
-    <file preprocess="xml-stripblanks">menus.ui</file>
-  </gresource>
-  <gresource prefix="/org/gtk/WidgetFactory/gtk">
+  <gresource prefix="/org/gtk/WidgetFactory4/gtk">
     <file preprocess="xml-stripblanks">help-overlay.ui</file>
+  </gresource>
+  <gresource prefix="/org/gtk/WidgetFactory4">
+    <file>icons/16x16/actions/document-new.png</file>
+    <file>icons/16x16/actions/document-save.png</file>
+    <file>icons/16x16/actions/edit-find.png</file>
+    <file>icons/16x16/actions/insert-image.png</file>
+    <file>icons/16x16/actions/send-to-symbolic.symbolic.png</file>
+    <file>icons/16x16/actions/view-fullscreen-symbolic.symbolic.png</file>
+    <file>icons/16x16/actions/document-send-symbolic.symbolic.png</file>
+    <file>icons/16x16/actions/star-new-symbolic.symbolic.png</file>
+    <file>icons/16x16/actions/view-grid-symbolic.symbolic.png</file>
+    <file>icons/16x16/actions/zoom-in.png</file>
+    <file>icons/16x16/actions/zoom-in-symbolic.symbolic.png</file>
+    <file>icons/16x16/actions/zoom-original.png</file>
+    <file>icons/16x16/actions/zoom-original-symbolic.symbolic.png</file>
+    <file>icons/16x16/actions/zoom-out.png</file>
+    <file>icons/16x16/actions/zoom-out-symbolic.symbolic.png</file>
+    <file>icons/16x16/emblems/emblem-default-symbolic.symbolic.png</file>
+    <file>icons/16x16/status/appointment-soon-symbolic.symbolic.png</file>
+    <file>icons/16x16/status/microphone-sensitivity-muted-symbolic.symbolic.png</file>
+    <file>icons/16x16/status/microphone-sensitivity-low-symbolic.symbolic.png</file>
+    <file>icons/16x16/status/microphone-sensitivity-medium-symbolic.symbolic.png</file>
+    <file>icons/16x16/status/microphone-sensitivity-high-symbolic.symbolic.png</file>
+    <file>icons/16x16/status/weather-clear-night-symbolic.symbolic.png</file>
+    <file>icons/16x16/emotes/face-monkey-symbolic.symbolic.png</file>
+    <file>icons/16x16/apps/preferences-desktop-locale-symbolic.symbolic.png</file>
   </gresource>
 </gresources>

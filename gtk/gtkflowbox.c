@@ -82,7 +82,7 @@
 #include "gtkcontainerprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkgesturedrag.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -444,7 +444,7 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
                   G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkFlowBoxChildClass, activate),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
   widget_class->activate_signal = child_signals[CHILD_ACTIVATE];
 
@@ -594,6 +594,29 @@ enum {
 };
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
+
+typedef struct _GtkFlowBoxClass       GtkFlowBoxClass;
+
+struct _GtkFlowBox
+{
+  GtkContainer container;
+};
+
+struct _GtkFlowBoxClass
+{
+  GtkContainerClass parent_class;
+
+  void (*child_activated)            (GtkFlowBox        *box,
+                                      GtkFlowBoxChild   *child);
+  void (*selected_children_changed)  (GtkFlowBox        *box);
+  void (*activate_cursor_child)      (GtkFlowBox        *box);
+  void (*toggle_cursor_child)        (GtkFlowBox        *box);
+  gboolean (*move_cursor)            (GtkFlowBox        *box,
+                                      GtkMovementStep    step,
+                                      gint               count);
+  void (*select_all)                 (GtkFlowBox        *box);
+  void (*unselect_all)               (GtkFlowBox        *box);
+};
 
 typedef struct _GtkFlowBoxPrivate GtkFlowBoxPrivate;
 struct _GtkFlowBoxPrivate {
@@ -2362,7 +2385,7 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
         {
           cairo_path_t *path;
           GtkBorder border;
-          GdkRGBA border_color;
+          GdkRGBA *border_color;
 
           if (vertical)
             path_from_vertical_line_rects (cr, (GdkRectangle *)lines->data, lines->len);
@@ -2382,14 +2405,13 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
           cairo_append_path (cr, path);
           cairo_path_destroy (path);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-          gtk_style_context_get_border_color (context, &border_color);
-G_GNUC_END_IGNORE_DEPRECATIONS
+          gtk_style_context_get (context, "border-color", &border_color, NULL);
           gtk_style_context_get_border (context, &border);
 
           cairo_set_line_width (cr, border.left);
-          gdk_cairo_set_source_rgba (cr, &border_color);
+          gdk_cairo_set_source_rgba (cr, border_color);
           cairo_stroke (cr);
+          gdk_rgba_free (border_color);
         }
       g_array_free (lines, TRUE);
 
@@ -2616,11 +2638,11 @@ gtk_flow_box_drag_gesture_update (GtkGestureDrag *gesture,
 }
 
 static void
-gtk_flow_box_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
-                                         guint                 n_press,
-                                         gdouble               x,
-                                         gdouble               y,
-                                         GtkFlowBox           *box)
+gtk_flow_box_click_gesture_pressed (GtkGestureClick *gesture,
+                                    guint            n_press,
+                                    gdouble          x,
+                                    gdouble          y,
+                                    GtkFlowBox      *box)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
   GtkFlowBoxChild *child;
@@ -2634,21 +2656,24 @@ gtk_flow_box_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   if (n_press != 1)
     gtk_gesture_set_state (priv->drag_gesture, GTK_EVENT_SEQUENCE_DENIED);
 
-  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
   priv->active_child = child;
   gtk_widget_queue_draw (GTK_WIDGET (box));
 
   if (n_press == 2 && !priv->activate_on_single_click)
-    g_signal_emit (box, signals[CHILD_ACTIVATED], 0, child);
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture),
+                             GTK_EVENT_SEQUENCE_CLAIMED);
+      g_signal_emit (box, signals[CHILD_ACTIVATED], 0, child);
+    }
 }
 
 static void
-gtk_flow_box_multipress_unpaired_release (GtkGestureMultiPress *gesture,
-                                          gdouble               x,
-                                          gdouble               y,
-                                          guint                 button,
-                                          GdkEventSequence     *sequence,
-                                          GtkFlowBox           *box)
+gtk_flow_box_click_unpaired_release (GtkGestureClick  *gesture,
+                                     gdouble           x,
+                                     gdouble           y,
+                                     guint             button,
+                                     GdkEventSequence *sequence,
+                                     GtkFlowBox       *box)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
   GtkFlowBoxChild *child;
@@ -2663,17 +2688,20 @@ gtk_flow_box_multipress_unpaired_release (GtkGestureMultiPress *gesture,
 }
 
 static void
-gtk_flow_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
-                                          guint                 n_press,
-                                          gdouble               x,
-                                          gdouble               y,
-                                          GtkFlowBox           *box)
+gtk_flow_box_click_gesture_released (GtkGestureClick *gesture,
+                                     guint            n_press,
+                                     gdouble          x,
+                                     gdouble          y,
+                                     GtkFlowBox      *box)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
 
   if (priv->active_child != NULL &&
       priv->active_child == gtk_flow_box_get_child_at_pos (box, x, y))
     {
+      gtk_gesture_set_state (GTK_GESTURE (gesture),
+                             GTK_EVENT_SEQUENCE_CLAIMED);
+
       if (priv->activate_on_single_click)
         gtk_flow_box_select_and_activate (box, priv->active_child);
       else
@@ -2704,8 +2732,8 @@ gtk_flow_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
 }
 
 static void
-gtk_flow_box_multipress_gesture_stopped (GtkGestureMultiPress *gesture,
-                                         GtkFlowBox           *box)
+gtk_flow_box_click_gesture_stopped (GtkGestureClick *gesture,
+                                    GtkFlowBox      *box)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
 
@@ -3503,7 +3531,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                            G_SIGNAL_RUN_LAST,
                                            G_STRUCT_OFFSET (GtkFlowBoxClass, child_activated),
                                            NULL, NULL,
-                                           g_cclosure_marshal_VOID__OBJECT,
+                                           NULL,
                                            G_TYPE_NONE, 1,
                                            GTK_TYPE_FLOW_BOX_CHILD);
 
@@ -3523,7 +3551,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                                      G_SIGNAL_RUN_FIRST,
                                                      G_STRUCT_OFFSET (GtkFlowBoxClass, selected_children_changed),
                                                      NULL, NULL,
-                                                     g_cclosure_marshal_VOID__VOID,
+                                                     NULL,
                                                      G_TYPE_NONE, 0);
 
   /**
@@ -3539,7 +3567,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                                  G_STRUCT_OFFSET (GtkFlowBoxClass, activate_cursor_child),
                                                  NULL, NULL,
-                                                 g_cclosure_marshal_VOID__VOID,
+                                                 NULL,
                                                  G_TYPE_NONE, 0);
 
   /**
@@ -3557,7 +3585,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                                G_STRUCT_OFFSET (GtkFlowBoxClass, toggle_cursor_child),
                                                NULL, NULL,
-                                               g_cclosure_marshal_VOID__VOID,
+                                               NULL,
                                                G_TYPE_NONE, 0);
 
   /**
@@ -3593,6 +3621,9 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                        _gtk_marshal_BOOLEAN__ENUM_INT,
                                        G_TYPE_BOOLEAN, 2,
                                        GTK_TYPE_MOVEMENT_STEP, G_TYPE_INT);
+  g_signal_set_va_marshaller (signals[MOVE_CURSOR],
+                              G_TYPE_FROM_CLASS (class),
+                              _gtk_marshal_BOOLEAN__ENUM_INTv);
   /**
    * GtkFlowBox::select-all:
    * @box: the #GtkFlowBox on which the signal is emitted
@@ -3609,7 +3640,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                       G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                       G_STRUCT_OFFSET (GtkFlowBoxClass, select_all),
                                       NULL, NULL,
-                                      g_cclosure_marshal_VOID__VOID,
+                                      NULL,
                                       G_TYPE_NONE, 0);
 
   /**
@@ -3628,7 +3659,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                         G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                         G_STRUCT_OFFSET (GtkFlowBoxClass, unselect_all),
                                         NULL, NULL,
-                                        g_cclosure_marshal_VOID__VOID,
+                                        NULL,
                                         G_TYPE_NONE, 0);
 
   widget_class->activate_signal = signals[ACTIVATE_CURSOR_CHILD];
@@ -3689,8 +3720,6 @@ gtk_flow_box_init (GtkFlowBox *box)
   GtkEventController *controller;
   GtkGesture *gesture;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (box), FALSE);
-
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   priv->selection_mode = GTK_SELECTION_SINGLE;
   priv->max_children_per_line = DEFAULT_MAX_CHILDREN_PER_LINE;
@@ -3702,7 +3731,7 @@ gtk_flow_box_init (GtkFlowBox *box)
 
   priv->children = g_sequence_new (NULL);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture),
                                      FALSE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
@@ -3710,13 +3739,13 @@ gtk_flow_box_init (GtkFlowBox *box)
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_BUBBLE);
   g_signal_connect (gesture, "pressed",
-                    G_CALLBACK (gtk_flow_box_multipress_gesture_pressed), box);
+                    G_CALLBACK (gtk_flow_box_click_gesture_pressed), box);
   g_signal_connect (gesture, "released",
-                    G_CALLBACK (gtk_flow_box_multipress_gesture_released), box);
+                    G_CALLBACK (gtk_flow_box_click_gesture_released), box);
   g_signal_connect (gesture, "stopped",
-                    G_CALLBACK (gtk_flow_box_multipress_gesture_stopped), box);
+                    G_CALLBACK (gtk_flow_box_click_gesture_stopped), box);
   g_signal_connect (gesture, "unpaired-release",
-                    G_CALLBACK (gtk_flow_box_multipress_unpaired_release), box);
+                    G_CALLBACK (gtk_flow_box_click_unpaired_release), box);
   gtk_widget_add_controller (GTK_WIDGET (box), GTK_EVENT_CONTROLLER (gesture));
 
   priv->drag_gesture = gtk_gesture_drag_new ();
@@ -3912,7 +3941,7 @@ gtk_flow_box_get_child_at_index (GtkFlowBox *box,
  * @y: the y coordinate of the child
  *
  * Gets the child in the (@x, @y) position. Both @x and @y are
- * assumed to be relative to the allocation of @box.
+ * assumed to be relative to the origin of @box.
  *
  * Returns: (transfer none) (nullable): the child widget, which will
  *     always be a #GtkFlowBoxChild or %NULL in case no child widget
@@ -3923,24 +3952,12 @@ gtk_flow_box_get_child_at_pos (GtkFlowBox *box,
                                gint        x,
                                gint        y)
 {
-  GtkWidget *child;
-  GSequenceIter *iter;
-  GtkAllocation allocation;
+  GtkWidget *child = gtk_widget_pick (GTK_WIDGET (box), x, y, GTK_PICK_DEFAULT);
 
-  for (iter = g_sequence_get_begin_iter (BOX_PRIV (box)->children);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter))
-    {
-      child = g_sequence_get (iter);
-      if (!child_is_visible (child))
-        continue;
+  if (!child)
+    return NULL;
 
-      gtk_widget_get_allocation (child, &allocation);
-      if (gdk_rectangle_contains_point (&allocation, x, y))
-        return GTK_FLOW_BOX_CHILD (child);
-    }
-
-  return NULL;
+  return (GtkFlowBoxChild *)gtk_widget_get_ancestor (child, GTK_TYPE_FLOW_BOX_CHILD);
 }
 
 /**

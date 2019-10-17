@@ -39,7 +39,7 @@
 #include "gdkdisplay-wayland.h"
 #include "gdkmonitor-wayland.h"
 #include "gdkseat-wayland.h"
-#include "gdkinternals.h"
+#include "gdksurfaceprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkkeysprivate.h"
 #include "gdkprivate-wayland.h"
@@ -64,8 +64,7 @@
  *
  * The functions in this section are specific to the GDK Wayland backend.
  * To use them, you need to include the `<gdk/gdkwayland.h>` header and use
- * the Wayland-specific pkg-config files to build your application (either
- * `gdk-wayland-3.0` or `gtk+-wayland-3.0`).
+ * the Wayland-specific pkg-config `gtk4-wayland` file to build your application.
  *
  * To make your code compile with other GDK backends, guard backend-specific
  * calls by an ifdef as follows. Since GDK may be built with multiple
@@ -94,6 +93,7 @@
 
 #define GTK_SHELL1_VERSION       2
 #define OUTPUT_VERSION_WITH_DONE 2
+#define NO_XDG_OUTPUT_DONE_SINCE_VERSION 3
 
 static void _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland);
 
@@ -397,6 +397,8 @@ static void gdk_wayland_display_add_output        (GdkWaylandDisplay *display_wa
                                                    guint32            version);
 static void gdk_wayland_display_remove_output     (GdkWaylandDisplay *display_wayland,
                                                    guint32            id);
+static void gdk_wayland_display_init_xdg_output   (GdkWaylandDisplay *display_wayland);
+static void gdk_wayland_display_get_xdg_output    (GdkWaylandMonitor *monitor);
 
 static void
 gdk_registry_handle_global (void               *data,
@@ -414,8 +416,8 @@ gdk_registry_handle_global (void               *data,
   if (strcmp (interface, "wl_compositor") == 0)
     {
       display_wayland->compositor =
-        wl_registry_bind (display_wayland->wl_registry, id, &wl_compositor_interface, MIN (version, 3));
-      display_wayland->compositor_version = MIN (version, 3);
+        wl_registry_bind (display_wayland->wl_registry, id, &wl_compositor_interface, MIN (version, 4));
+      display_wayland->compositor_version = MIN (version, 4);
     }
   else if (strcmp (interface, "wl_shm") == 0)
     {
@@ -527,6 +529,16 @@ gdk_registry_handle_global (void               *data,
       org_kde_kwin_server_decoration_manager_add_listener (display_wayland->server_decoration_manager,
                                                            &server_decoration_listener,
                                                            display_wayland);
+    }
+  else if (strcmp(interface, "zxdg_output_manager_v1") == 0)
+    {
+      display_wayland->xdg_output_manager_version = MIN (version, 3);
+      display_wayland->xdg_output_manager =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &zxdg_output_manager_v1_interface,
+                          display_wayland->xdg_output_manager_version);
+      gdk_wayland_display_init_xdg_output (display_wayland);
+      _gdk_wayland_display_async_roundtrip (display_wayland);
     }
 
   g_hash_table_insert (display_wayland->known_globals,
@@ -996,7 +1008,6 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   object_class->dispose = gdk_wayland_display_dispose;
   object_class->finalize = gdk_wayland_display_finalize;
 
-  display_class->surface_type = gdk_wayland_surface_get_type ();
   display_class->cairo_context_type = GDK_TYPE_WAYLAND_CAIRO_CONTEXT;
 
 #ifdef GDK_RENDERING_VULKAN
@@ -1018,7 +1029,7 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->get_next_serial = gdk_wayland_display_get_next_serial;
   display_class->get_startup_notification_id = gdk_wayland_display_get_startup_notification_id;
   display_class->notify_startup_complete = gdk_wayland_display_notify_startup_complete;
-  display_class->create_surface_impl = _gdk_wayland_display_create_surface_impl;
+  display_class->create_surface = _gdk_wayland_display_create_surface;
   display_class->get_keymap = _gdk_wayland_display_get_keymap;
   display_class->text_property_to_utf8_list = _gdk_wayland_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_wayland_display_utf8_to_string_target;
@@ -1620,6 +1631,7 @@ static TranslationEntry translations[] = {
   { FALSE, "org.gnome.desktop.interface", "gtk-im-module", "gtk-im-module", G_TYPE_STRING, { .s = "simple" } },
   { FALSE, "org.gnome.desktop.interface", "enable-animations", "gtk-enable-animations", G_TYPE_BOOLEAN, { .b = TRUE } },
   { FALSE, "org.gnome.desktop.interface", "gtk-enable-primary-paste", "gtk-enable-primary-paste", G_TYPE_BOOLEAN, { .b = TRUE } },
+  { FALSE, "org.gnome.desktop.interface", "overlay-scrolling", "gtk-overlay-scrolling", G_TYPE_BOOLEAN, { .b = TRUE } },
   { FALSE, "org.gnome.settings-daemon.peripherals.mouse", "double-click", "gtk-double-click-time", G_TYPE_INT, { .i = 400 } },
   { FALSE, "org.gnome.settings-daemon.peripherals.mouse", "drag-threshold", "gtk-dnd-drag-threshold", G_TYPE_INT, {.i = 8 } },
   { FALSE, "org.gnome.desktop.sound", "theme-name", "gtk-sound-theme-name", G_TYPE_STRING, { .s = "freedesktop" } },
@@ -1637,7 +1649,7 @@ static TranslationEntry translations[] = {
   { FALSE, "org.gnome.desktop.wm.preferences", "action-middle-click-titlebar", "gtk-titlebar-middle-click", G_TYPE_STRING, { .s = "none" } },
   { FALSE, "org.gnome.desktop.wm.preferences", "action-right-click-titlebar", "gtk-titlebar-right-click", G_TYPE_STRING, { .s = "menu" } },
   { FALSE, "org.gnome.desktop.a11y", "always-show-text-caret", "gtk-keynav-use-caret", G_TYPE_BOOLEAN, { .b = FALSE } },
-  { FALSE, "org.gnome.fontconfig", "serial", "gtk-fontconfig-timestamp", G_TYPE_NONE, { .i = 0 } }
+  { FALSE, "org.gnome.fontconfig", "serial", "gtk-fontconfig-timestamp", G_TYPE_NONE, { .i = 0 } },
 };
 
 
@@ -1789,7 +1801,7 @@ init_settings (GdkDisplay *display)
     {
       GVariant *ret;
       GError *error = NULL;
-      const char *schema;
+      const char *schema_str;
       GVariant *val;
       GVariantIter *iter;
       const char *patterns[] = { "org.gnome.*", NULL }; 
@@ -1829,7 +1841,7 @@ init_settings (GdkDisplay *display)
 
       g_variant_get (ret, "(a{sa{sv}})", &iter);
 
-      while (g_variant_iter_loop (iter, "{s@a{sv}}", &schema, &val))
+      while (g_variant_iter_loop (iter, "{s@a{sv}}", &schema_str, &val))
         {
           GVariantIter *iter2 = g_variant_iter_new (val);
           const char *key;
@@ -1837,17 +1849,17 @@ init_settings (GdkDisplay *display)
 
           while (g_variant_iter_loop (iter2, "{sv}", &key, &v))
             {
-              TranslationEntry *entry = find_translation_entry_by_schema (schema, key);
+              TranslationEntry *entry = find_translation_entry_by_schema (schema_str, key);
               if (entry)
                 {
                   char *a = g_variant_print (v, FALSE);
-                  g_debug ("Using portal setting for %s %s: %s\n", schema, key, a);
+                  g_debug ("Using portal setting for %s %s: %s\n", schema_str, key, a);
                   g_free (a);
                   apply_portal_setting (entry, v, display);
                 }
               else
                 {
-                  g_debug ("Ignoring portal setting for %s %s", schema, key);
+                  g_debug ("Ignoring portal setting for %s %s", schema_str, key);
                 }
             }
           g_variant_iter_free (iter2);
@@ -2172,6 +2184,160 @@ update_scale (GdkDisplay *display)
 }
 
 static void
+gdk_wayland_display_init_xdg_output (GdkWaylandDisplay *display_wayland)
+{
+  int i;
+
+  GDK_NOTE (MISC,
+            g_message ("init xdg-output support, %d monitor(s) already present",
+                       display_wayland->monitors->len));
+
+  for (i = 0; i < display_wayland->monitors->len; i++)
+    gdk_wayland_display_get_xdg_output (display_wayland->monitors->pdata[i]);
+}
+
+static gboolean
+display_has_xdg_output_support (GdkWaylandDisplay *display_wayland)
+{
+  return (display_wayland->xdg_output_manager != NULL);
+}
+
+static gboolean
+monitor_has_xdg_output (GdkWaylandMonitor *monitor)
+{
+  return (monitor->xdg_output != NULL);
+}
+
+static gboolean
+should_update_monitor (GdkWaylandMonitor *monitor)
+{
+  return (GDK_MONITOR (monitor)->geometry.width != 0 &&
+          monitor->version < OUTPUT_VERSION_WITH_DONE);
+}
+
+static gboolean
+should_expect_xdg_output_done (GdkWaylandMonitor *monitor)
+{
+  GdkDisplay *display = GDK_MONITOR (monitor)->display;
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  return (monitor_has_xdg_output (monitor) &&
+          display_wayland->xdg_output_manager_version < NO_XDG_OUTPUT_DONE_SINCE_VERSION);
+}
+
+static void
+apply_monitor_change (GdkWaylandMonitor *monitor)
+{
+  GDK_NOTE (MISC,
+            g_message ("monitor %d changed position %d %d, size %d %d",
+                       monitor->id,
+                       monitor->x, monitor->y,
+                       monitor->width, monitor->height));
+
+  gdk_monitor_set_position (GDK_MONITOR (monitor), monitor->x, monitor->y);
+  gdk_monitor_set_size (GDK_MONITOR (monitor), monitor->width, monitor->height);
+  gdk_monitor_set_connector (GDK_MONITOR (monitor), monitor->name);
+  monitor->wl_output_done = FALSE;
+  monitor->xdg_output_done = FALSE;
+
+  update_scale (GDK_MONITOR (monitor)->display);
+}
+
+static void
+xdg_output_handle_logical_position (void                  *data,
+                                    struct zxdg_output_v1 *xdg_output,
+                                    int32_t                x,
+                                    int32_t                y)
+{
+  GdkWaylandMonitor *monitor = (GdkWaylandMonitor *) data;
+
+  GDK_NOTE (MISC,
+            g_message ("handle logical position xdg-output %d, position %d %d",
+                       monitor->id, x, y));
+  monitor->x = x;
+  monitor->y = y;
+}
+
+static void
+xdg_output_handle_logical_size (void                  *data,
+                                struct zxdg_output_v1 *xdg_output,
+                                int32_t                width,
+                                int32_t                height)
+{
+  GdkWaylandMonitor *monitor = (GdkWaylandMonitor *) data;
+
+  GDK_NOTE (MISC,
+            g_message ("handle logical size xdg-output %d, size %d %d",
+                       monitor->id, width, height));
+  monitor->width = width;
+  monitor->height = height;
+}
+
+static void
+xdg_output_handle_done (void                  *data,
+                        struct zxdg_output_v1 *xdg_output)
+{
+  GdkWaylandMonitor *monitor = (GdkWaylandMonitor *) data;
+
+  GDK_NOTE (MISC,
+            g_message ("handle done xdg-output %d", monitor->id));
+
+  monitor->xdg_output_done = TRUE;
+  if (monitor->wl_output_done && should_expect_xdg_output_done (monitor))
+    apply_monitor_change (monitor);
+}
+
+static void
+xdg_output_handle_name (void                  *data,
+                        struct zxdg_output_v1 *xdg_output,
+                        const char            *name)
+{
+  GdkWaylandMonitor *monitor = (GdkWaylandMonitor *) data;
+
+  GDK_NOTE (MISC,
+            g_message ("handle name xdg-output %d", monitor->id));
+
+  monitor->name = g_strdup (name);
+}
+
+static void
+xdg_output_handle_description (void                  *data,
+                               struct zxdg_output_v1 *xdg_output,
+                               const char            *description)
+{
+  GdkWaylandMonitor *monitor = (GdkWaylandMonitor *) data;
+
+  GDK_NOTE (MISC,
+            g_message ("handle description xdg-output %d", monitor->id));
+}
+
+static const struct zxdg_output_v1_listener xdg_output_listener = {
+    xdg_output_handle_logical_position,
+    xdg_output_handle_logical_size,
+    xdg_output_handle_done,
+    xdg_output_handle_name,
+    xdg_output_handle_description,
+};
+
+static void
+gdk_wayland_display_get_xdg_output (GdkWaylandMonitor *monitor)
+{
+  GdkDisplay *display = GDK_MONITOR (monitor)->display;
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  GDK_NOTE (MISC,
+            g_message ("get xdg-output for monitor %d", monitor->id));
+
+  monitor->xdg_output =
+    zxdg_output_manager_v1_get_xdg_output (display_wayland->xdg_output_manager,
+                                           monitor->output);
+
+  zxdg_output_v1_add_listener (monitor->xdg_output,
+                               &xdg_output_listener,
+                               monitor);
+}
+
+static void
 output_handle_geometry (void             *data,
                         struct wl_output *wl_output,
                         int               x,
@@ -2189,13 +2355,17 @@ output_handle_geometry (void             *data,
             g_message ("handle geometry output %d, position %d %d, phys. size %d %d, subpixel layout %s, manufacturer %s, model %s, transform %s",
                        monitor->id, x, y, physical_width, physical_height, subpixel_to_string (subpixel), make, model, transform_to_string (transform)));
 
-  gdk_monitor_set_position (GDK_MONITOR (monitor), x, y);
+  monitor->x = x;
+  monitor->y = y;
   gdk_monitor_set_physical_size (GDK_MONITOR (monitor), physical_width, physical_height);
   gdk_monitor_set_subpixel_layout (GDK_MONITOR (monitor), subpixel);
   gdk_monitor_set_manufacturer (GDK_MONITOR (monitor), make);
   gdk_monitor_set_model (GDK_MONITOR (monitor), model);
 
-  if (GDK_MONITOR (monitor)->geometry.width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)
+  if (should_update_monitor (monitor) || !monitor_has_xdg_output (monitor))
+    apply_monitor_change (monitor);
+
+  if (should_update_monitor (monitor))
     update_scale (GDK_MONITOR (monitor)->display);
 }
 
@@ -2204,19 +2374,14 @@ output_handle_done (void             *data,
                     struct wl_output *wl_output)
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
-  GdkDisplay *display = gdk_monitor_get_display (GDK_MONITOR (monitor));
 
   GDK_NOTE (MISC,
             g_message ("handle done output %d", monitor->id));
 
-  if (!monitor->added)
-    {
-      monitor->added = TRUE;
-      g_ptr_array_add (GDK_WAYLAND_DISPLAY (display)->monitors, monitor);
-      gdk_display_monitor_added (display, GDK_MONITOR (monitor));
-    }
+  monitor->wl_output_done = TRUE;
 
-  update_scale (display);
+  if (!should_expect_xdg_output_done (monitor) || monitor->xdg_output_done)
+    apply_monitor_change (monitor);
 }
 
 static void
@@ -2236,14 +2401,20 @@ output_handle_scale (void             *data,
   gdk_monitor_get_geometry (GDK_MONITOR (monitor), &previous_geometry);
   previous_scale = gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
 
+  /* Set the scale from wl_output protocol, regardless of xdg-output support */
+  gdk_monitor_set_scale_factor (GDK_MONITOR (monitor), scale);
+
+  if (monitor_has_xdg_output (monitor))
+    return;
+
   width = previous_geometry.width * previous_scale;
   height = previous_geometry.height * previous_scale;
 
-  gdk_monitor_set_scale_factor (GDK_MONITOR (monitor), scale);
-  gdk_monitor_set_size (GDK_MONITOR (monitor), width / scale, height / scale);
+  monitor->width = width / scale;
+  monitor->height = height / scale;
 
-  if (GDK_MONITOR (monitor)->geometry.width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)
-    update_scale (GDK_MONITOR (monitor)->display);
+  if (should_update_monitor (monitor))
+    apply_monitor_change (monitor);
 }
 
 static void
@@ -2265,11 +2436,12 @@ output_handle_mode (void             *data,
     return;
 
   scale = gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
-  gdk_monitor_set_size (GDK_MONITOR (monitor), width / scale, height / scale);
+  monitor->width = width / scale;
+  monitor->height = height / scale;
   gdk_monitor_set_refresh_rate (GDK_MONITOR (monitor), refresh);
 
-  if (width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)
-    update_scale (GDK_MONITOR (monitor)->display);
+  if (should_update_monitor (monitor) || !monitor_has_xdg_output (monitor))
+    apply_monitor_change (monitor);
 }
 
 static const struct wl_output_listener output_listener =
@@ -2296,13 +2468,17 @@ gdk_wayland_display_add_output (GdkWaylandDisplay *display_wayland,
   monitor->output = output;
   monitor->version = version;
 
-  if (monitor->version < OUTPUT_VERSION_WITH_DONE)
-    {
-      g_ptr_array_add (display_wayland->monitors, monitor);
-      gdk_display_monitor_added (GDK_DISPLAY (display_wayland), GDK_MONITOR (monitor));
-    }
+  g_ptr_array_add (display_wayland->monitors, monitor);
+  gdk_display_monitor_added (GDK_DISPLAY (display_wayland), GDK_MONITOR (monitor));
 
   wl_output_add_listener (output, &output_listener, monitor);
+
+  GDK_NOTE (MISC,
+            g_message ("xdg_output_manager %p",
+                       display_wayland->xdg_output_manager));
+
+  if (display_has_xdg_output_support (display_wayland))
+    gdk_wayland_display_get_xdg_output (monitor);
 }
 
 struct wl_output *

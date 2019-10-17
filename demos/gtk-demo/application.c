@@ -200,20 +200,20 @@ activate_about (GSimpleAction *action,
   };
 
   gtk_show_about_dialog (GTK_WINDOW (window),
-                         "program-name", "GTK+ Code Demos",
-                         "version", g_strdup_printf ("%s,\nRunning against GTK+ %d.%d.%d",
+                         "program-name", "GTK Code Demos",
+                         "version", g_strdup_printf ("%s,\nRunning against GTK %d.%d.%d",
                                                      PACKAGE_VERSION,
                                                      gtk_get_major_version (),
                                                      gtk_get_minor_version (),
                                                      gtk_get_micro_version ()),
-                         "copyright", "(C) 1997-2013 The GTK+ Team",
+                         "copyright", "(C) 1997-2013 The GTK Team",
                          "license-type", GTK_LICENSE_LGPL_2_1,
                          "website", "http://www.gtk.org",
-                         "comments", "Program to demonstrate GTK+ functions.",
+                         "comments", "Program to demonstrate GTK functions.",
                          "authors", authors,
                          "documenters", documentors,
-                         "logo-icon-name", "gtk4-demo",
-                         "title", "About GTK+ Code Demos",
+                         "logo-icon-name", "org.gtk.Demo4",
+                         "title", "About GTK Code Demos",
                          NULL);
 }
 
@@ -370,7 +370,7 @@ demo_application_init (DemoApplication *app)
   GSettings *settings;
   GAction *action;
 
-  settings = g_settings_new ("org.gtk.Demo");
+  settings = g_settings_new ("org.gtk.Demo4");
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),
@@ -397,7 +397,7 @@ demo_application_window_store_state (DemoApplicationWindow *win)
 {
   GSettings *settings;
 
-  settings = g_settings_new ("org.gtk.Demo");
+  settings = g_settings_new ("org.gtk.Demo4");
   g_settings_set (settings, "window-size", "(ii)", win->width, win->height);
   g_settings_set_boolean (settings, "maximized", win->maximized);
   g_settings_set_boolean (settings, "fullscreen", win->fullscreen);
@@ -409,7 +409,7 @@ demo_application_window_load_state (DemoApplicationWindow *win)
 {
   GSettings *settings;
 
-  settings = g_settings_new ("org.gtk.Demo");
+  settings = g_settings_new ("org.gtk.Demo4");
   g_settings_get (settings, "window-size", "(ii)", &win->width, &win->height);
   win->maximized = g_settings_get_boolean (settings, "maximized");
   win->fullscreen = g_settings_get_boolean (settings, "fullscreen");
@@ -477,7 +477,7 @@ surface_state_changed (GtkWidget *widget)
   DemoApplicationWindow *window = (DemoApplicationWindow *)widget;
   GdkSurfaceState new_state;
 
-  new_state = gdk_surface_get_state (gtk_widget_get_surface (widget));
+  new_state = gdk_surface_get_state (gtk_native_get_surface (GTK_NATIVE (widget)));
   window->maximized = (new_state & GDK_SURFACE_STATE_MAXIMIZED) != 0;
   window->fullscreen = (new_state & GDK_SURFACE_STATE_FULLSCREEN) != 0;
 }
@@ -487,14 +487,14 @@ demo_application_window_realize (GtkWidget *widget)
 {
   GTK_WIDGET_CLASS (demo_application_window_parent_class)->realize (widget);
 
-  g_signal_connect_swapped (gtk_widget_get_surface (widget), "notify::state",
+  g_signal_connect_swapped (gtk_native_get_surface (GTK_NATIVE (widget)), "notify::state",
                             G_CALLBACK (surface_state_changed), widget);
 }
 
 static void
 demo_application_window_unrealize (GtkWidget *widget)
 {
-  g_signal_handlers_disconnect_by_func (gtk_widget_get_surface (widget),
+  g_signal_handlers_disconnect_by_func (gtk_native_get_surface (GTK_NATIVE (widget)),
                                         surface_state_changed, widget);
 
   GTK_WIDGET_CLASS (demo_application_window_parent_class)->unrealize (widget);
@@ -541,7 +541,7 @@ main (int argc, char *argv[])
   GtkApplication *app;
 
   app = GTK_APPLICATION (g_object_new (demo_application_get_type (),
-                                       "application-id", "org.gtk.Demo2",
+                                       "application-id", "org.gtk.Demo4.App",
                                        "flags", G_APPLICATION_HANDLES_OPEN,
                                        NULL));
 

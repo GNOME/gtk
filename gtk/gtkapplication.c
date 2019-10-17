@@ -21,6 +21,11 @@
 #include "config.h"
 
 #include "gtkapplication.h"
+#include "gdkprofilerprivate.h"
+
+#ifdef G_OS_UNIX
+#include <gio/gunixfdlist.h>
+#endif
 
 #include <stdlib.h>
 
@@ -52,7 +57,7 @@
  * of a GTK+ application in a convenient fashion, without enforcing
  * a one-size-fits-all application model.
  *
- * Currently, GtkApplication handles GTK+ initialization, application
+ * Currently, GtkApplication handles GTK initialization, application
  * uniqueness, session management, provides some basic scriptability and
  * desktop shell integration by exporting actions and menus and manages a
  * list of toplevel windows whose life-cycle is automatically tied to the
@@ -106,7 +111,7 @@
  *
  * ## A simple application ## {#gtkapplication}
  *
- * [A simple example](https://git.gnome.org/browse/gtk+/tree/examples/bp/bloatpad.c)
+ * [A simple example](https://gitlab.gnome.org/GNOME/gtk/tree/master/examples/bp/bloatpad.c)
  *
  * GtkApplication optionally registers with a session manager
  * of the users session (if you set the #GtkApplication:register-session
@@ -123,12 +128,13 @@
  *
  * ## See Also ## {#seealso}
  * [HowDoI: Using GtkApplication](https://wiki.gnome.org/HowDoI/GtkApplication),
- * [Getting Started with GTK+: Basics](https://developer.gnome.org/gtk3/stable/gtk-getting-started.html#id-1.2.3.3)
+ * [Getting Started with GTK: Basics](https://developer.gnome.org/gtk3/stable/gtk-getting-started.html#id-1.2.3.3)
  */
 
 enum {
   WINDOW_ADDED,
   WINDOW_REMOVED,
+  QUERY_END,
   LAST_SIGNAL
 };
 
@@ -162,6 +168,7 @@ typedef struct
   GtkActionMuxer  *muxer;
   GtkBuilder      *menus_builder;
   gchar           *help_overlay_path;
+  guint            profiler_id;
 } GtkApplicationPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
@@ -387,9 +394,7 @@ gtk_application_init (GtkApplication *application)
 {
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
-  priv = gtk_application_get_instance_private (application);
-
-  priv->muxer = gtk_action_muxer_new ();
+  priv->muxer = gtk_action_muxer_new (NULL, NULL);
 
   priv->accels = gtk_application_accels_new ();
 }
@@ -456,68 +461,6 @@ gtk_application_window_removed (GtkApplication *application,
     {
       gtk_application_impl_active_window_changed (priv->impl, priv->windows ? priv->windows->data : NULL);
       g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_ACTIVE_WINDOW]);
-    }
-}
-
-static void
-extract_accel_from_menu_item (GMenuModel     *model,
-                              gint            item,
-                              GtkApplication *app)
-{
-  GMenuAttributeIter *iter;
-  const gchar *key;
-  GVariant *value;
-  const gchar *accel = NULL;
-  const gchar *action = NULL;
-  GVariant *target = NULL;
-
-  iter = g_menu_model_iterate_item_attributes (model, item);
-  while (g_menu_attribute_iter_get_next (iter, &key, &value))
-    {
-      if (g_str_equal (key, "action") && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
-        action = g_variant_get_string (value, NULL);
-      else if (g_str_equal (key, "accel") && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
-        accel = g_variant_get_string (value, NULL);
-      else if (g_str_equal (key, "target"))
-        target = g_variant_ref (value);
-      g_variant_unref (value);
-    }
-  g_object_unref (iter);
-
-  if (accel && action)
-    {
-      const gchar *accels[2] = { accel, NULL };
-      gchar *detailed_action_name;
-
-      detailed_action_name = g_action_print_detailed_name (action, target);
-      gtk_application_set_accels_for_action (app, detailed_action_name, accels);
-      g_free (detailed_action_name);
-    }
-
-  if (target)
-    g_variant_unref (target);
-}
-
-static void
-extract_accels_from_menu (GMenuModel     *model,
-                          GtkApplication *app)
-{
-  gint i;
-
-  for (i = 0; i < g_menu_model_get_n_items (model); i++)
-    {
-      GMenuLinkIter *iter;
-      GMenuModel *sub_model;
-
-      extract_accel_from_menu_item (model, i, app);
-
-      iter = g_menu_model_iterate_item_links (model, i);
-      while (g_menu_link_iter_get_next (iter, NULL, &sub_model))
-        {
-          extract_accels_from_menu (sub_model, app);
-          g_object_unref (sub_model);
-        }
-      g_object_unref (iter);
     }
 }
 
@@ -604,6 +547,153 @@ gtk_application_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_application_parent_class)->finalize (object);
 }
 
+#ifdef G_OS_UNIX
+
+static const gchar org_gnome_Sysprof3_Profiler_xml[] =
+  "<node>"
+    "<interface name='org.gnome.Sysprof3.Profiler'>"
+      "<property name='Capabilities' type='a{sv}' access='read'/>"
+      "<method name='Start'>"
+        "<arg type='a{sv}' name='options' direction='in'/>"
+        "<arg type='h' name='fd' direction='in'/>"
+      "</method>"
+      "<method name='Stop'>"
+      "</method>"
+    "</interface>"
+  "</node>";
+
+static GDBusInterfaceInfo *org_gnome_Sysprof3_Profiler;
+
+static void
+sysprof_profiler_method_call (GDBusConnection       *connection,
+                              const gchar           *sender,
+                              const gchar           *object_path,
+                              const gchar           *interface_name,
+                              const gchar           *method_name,
+                              GVariant              *parameters,
+                              GDBusMethodInvocation *invocation,
+                              gpointer               user_data)
+{
+  if (strcmp (method_name, "Start") == 0)
+    {
+      GDBusMessage *message;
+      GUnixFDList *fd_list;
+      GVariant *options;
+      int fd = -1;
+      int idx;
+
+      if (gdk_profiler_is_running ())
+        {
+          g_dbus_method_invocation_return_error (invocation,
+                                                 G_DBUS_ERROR,
+                                                 G_DBUS_ERROR_FAILED,
+                                                 "Profiler already running");
+          return;
+        }
+
+      g_variant_get (parameters, "(@a{sv}h)", &options, &idx);
+
+      message = g_dbus_method_invocation_get_message (invocation);
+      fd_list = g_dbus_message_get_unix_fd_list (message);
+      if (fd_list)
+        fd = g_unix_fd_list_get (fd_list, idx, NULL);
+
+      gdk_profiler_start (fd);
+
+      g_variant_unref (options);
+    }
+  else if (strcmp (method_name, "Stop") == 0)
+    {
+      if (!gdk_profiler_is_running ())
+        {
+          g_dbus_method_invocation_return_error (invocation,
+                                                 G_DBUS_ERROR,
+                                                 G_DBUS_ERROR_FAILED,
+                                                 "Profiler not running");
+          return;
+        }
+
+      gdk_profiler_stop ();
+    }
+  else
+    {
+      g_dbus_method_invocation_return_error (invocation,
+                                             G_DBUS_ERROR,
+                                             G_DBUS_ERROR_UNKNOWN_METHOD,
+                                             "Unknown method");
+      return;
+    }
+
+  g_dbus_method_invocation_return_value (invocation, NULL);
+}
+
+static gboolean
+gtk_application_dbus_register (GApplication     *application,
+                               GDBusConnection  *connection,
+                               const char       *obect_path,
+                               GError          **error)
+{
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (GTK_APPLICATION (application));
+  GDBusInterfaceVTable vtable = {
+    sysprof_profiler_method_call,
+    NULL,
+    NULL
+  };
+
+  if (org_gnome_Sysprof3_Profiler == NULL)
+    {
+      GDBusNodeInfo *info;
+
+      info = g_dbus_node_info_new_for_xml (org_gnome_Sysprof3_Profiler_xml, error);
+      if (info == NULL)
+        return FALSE;
+
+      org_gnome_Sysprof3_Profiler = g_dbus_node_info_lookup_interface (info, "org.gnome.Sysprof3.Profiler");
+      g_dbus_interface_info_ref (org_gnome_Sysprof3_Profiler);
+      g_dbus_node_info_unref (info);
+    }
+
+  priv->profiler_id = g_dbus_connection_register_object (connection,
+                                                         "/org/gtk/Profiler",
+                                                         org_gnome_Sysprof3_Profiler,
+                                                         &vtable,
+                                                         NULL,
+                                                         NULL,
+                                                         error);
+
+  return TRUE;
+}
+
+static void
+gtk_application_dbus_unregister (GApplication     *application,
+                                 GDBusConnection  *connection,
+                                 const char       *obect_path)
+{
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (GTK_APPLICATION (application));
+
+  g_dbus_connection_unregister_object (connection, priv->profiler_id);
+}
+
+#else
+
+static gboolean
+gtk_application_dbus_register (GApplication     *application,
+                               GDBusConnection  *connection,
+                               const char       *obect_path,
+                               GError          **error)
+{
+  return TRUE;
+}
+
+static void
+gtk_application_dbus_unregister (GApplication     *application,
+                                 GDBusConnection  *connection,
+                                 const char       *obect_path)
+{
+}
+
+#endif
+
 static void
 gtk_application_class_init (GtkApplicationClass *class)
 {
@@ -620,6 +710,8 @@ gtk_application_class_init (GtkApplicationClass *class)
   application_class->after_emit = gtk_application_after_emit;
   application_class->startup = gtk_application_startup;
   application_class->shutdown = gtk_application_shutdown;
+  application_class->dbus_register = gtk_application_dbus_register;
+  application_class->dbus_unregister = gtk_application_dbus_unregister;
 
   class->window_added = gtk_application_window_added;
   class->window_removed = gtk_application_window_removed;
@@ -636,7 +728,7 @@ gtk_application_class_init (GtkApplicationClass *class)
     g_signal_new (I_("window-added"), GTK_TYPE_APPLICATION, G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkApplicationClass, window_added),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE, 1, GTK_TYPE_WINDOW);
 
   /**
@@ -652,9 +744,25 @@ gtk_application_class_init (GtkApplicationClass *class)
     g_signal_new (I_("window-removed"), GTK_TYPE_APPLICATION, G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkApplicationClass, window_removed),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE, 1, GTK_TYPE_WINDOW);
 
+  /**
+   * GtkApplication::query-end:
+   * @application: the #GtkApplication which emitted the signal
+   *
+   * Emitted when the session manager is about to end the session, only
+   * if #GtkApplication::register-session is %TRUE. Applications can
+   * connect to this signal and call gtk_application_inhibit() with
+   * %GTK_APPLICATION_INHIBIT_LOGOUT to delay the end of the session
+   * until state has been saved.
+   */
+  gtk_application_signals[QUERY_END] =
+    g_signal_new (I_("query-end"), GTK_TYPE_APPLICATION, G_SIGNAL_RUN_FIRST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
   /**
    * GtkApplication:register-session:
    *
@@ -1005,9 +1113,6 @@ gtk_application_set_app_menu (GtkApplication *application,
 
   if (g_set_object (&priv->app_menu, app_menu))
     {
-      if (app_menu)
-        extract_accels_from_menu (app_menu, application);
-
       gtk_application_impl_set_app_menu (priv->impl, app_menu);
 
       g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_APP_MENU]);
@@ -1071,9 +1176,6 @@ gtk_application_set_menubar (GtkApplication *application,
 
   if (g_set_object (&priv->menubar, menubar))
     {
-      if (menubar)
-        extract_accels_from_menu (menubar, application);
-
       gtk_application_impl_set_menubar (priv->impl, menubar);
 
       g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_MENUBAR]);

@@ -74,6 +74,21 @@
  * with name radio, which gets the .left or .right style class.
  */
 
+typedef struct _GtkRadioMenuItemPrivate GtkRadioMenuItemPrivate;
+typedef struct _GtkRadioMenuItemClass   GtkRadioMenuItemClass;
+
+struct _GtkRadioMenuItem
+{
+  GtkCheckMenuItem check_menu_item;
+};
+
+struct _GtkRadioMenuItemClass
+{
+  GtkCheckMenuItemClass parent_class;
+
+  void (*group_changed) (GtkRadioMenuItem *radio_menu_item);
+};
+
 struct _GtkRadioMenuItemPrivate
 {
   GSList *group;
@@ -172,13 +187,11 @@ void
 gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
 			       GSList           *group)
 {
-  GtkRadioMenuItemPrivate *priv;
+  GtkRadioMenuItemPrivate *priv = gtk_radio_menu_item_get_instance_private (radio_menu_item);
   GtkWidget *old_group_singleton = NULL;
   GtkWidget *new_group_singleton = NULL;
 
   g_return_if_fail (GTK_IS_RADIO_MENU_ITEM (radio_menu_item));
-
-  priv = radio_menu_item->priv;
 
   if (priv->group == group)
     return;
@@ -194,11 +207,10 @@ gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
 
       for (slist = priv->group; slist; slist = slist->next)
 	{
-	  GtkRadioMenuItem *tmp_item;
-	  
-	  tmp_item = slist->data;
+	  GtkRadioMenuItem *tmp_item = slist->data;
+          GtkRadioMenuItemPrivate *tmp_priv = gtk_radio_menu_item_get_instance_private (tmp_item);
 
-	  tmp_item->priv->group = priv->group;
+	  tmp_priv->group = priv->group;
 	}
     }
   
@@ -213,11 +225,10 @@ gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
       
       for (slist = group; slist; slist = slist->next)
 	{
-	  GtkRadioMenuItem *tmp_item;
-	  
-	  tmp_item = slist->data;
+	  GtkRadioMenuItem *tmp_item = slist->data;
+          GtkRadioMenuItemPrivate *tmp_priv = gtk_radio_menu_item_get_instance_private (tmp_item);
 
-	  tmp_item->priv->group = priv->group;
+	  tmp_priv->group = priv->group;
 	}
 
       _gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (radio_menu_item), FALSE);
@@ -379,9 +390,11 @@ gtk_radio_menu_item_new_with_label_from_widget (GtkRadioMenuItem *group,
 GSList*
 gtk_radio_menu_item_get_group (GtkRadioMenuItem *radio_menu_item)
 {
+  GtkRadioMenuItemPrivate *priv = gtk_radio_menu_item_get_instance_private (radio_menu_item);
+
   g_return_val_if_fail (GTK_IS_RADIO_MENU_ITEM (radio_menu_item), NULL);
 
-  return radio_menu_item->priv->group;
+  return priv->group;
 }
 
 static void
@@ -440,10 +453,7 @@ gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
 static void
 gtk_radio_menu_item_init (GtkRadioMenuItem *radio_menu_item)
 {
-  GtkRadioMenuItemPrivate *priv;
-
-  radio_menu_item->priv = gtk_radio_menu_item_get_instance_private (radio_menu_item);
-  priv = radio_menu_item->priv;
+  GtkRadioMenuItemPrivate *priv = gtk_radio_menu_item_get_instance_private (radio_menu_item);
 
   priv->group = g_slist_prepend (NULL, radio_menu_item);
   gtk_check_menu_item_set_draw_as_radio (GTK_CHECK_MENU_ITEM (radio_menu_item), TRUE);
@@ -453,9 +463,8 @@ static void
 gtk_radio_menu_item_destroy (GtkWidget *widget)
 {
   GtkRadioMenuItem *radio_menu_item = GTK_RADIO_MENU_ITEM (widget);
-  GtkRadioMenuItemPrivate *priv = radio_menu_item->priv;
+  GtkRadioMenuItemPrivate *priv = gtk_radio_menu_item_get_instance_private (radio_menu_item);
   GtkWidget *old_group_singleton = NULL;
-  GtkRadioMenuItem *tmp_menu_item;
   GSList *tmp_list;
   gboolean was_in_group;
 
@@ -469,10 +478,11 @@ gtk_radio_menu_item_destroy (GtkWidget *widget)
 
   while (tmp_list)
     {
-      tmp_menu_item = tmp_list->data;
+      GtkRadioMenuItem *tmp_item = tmp_list->data;
+      GtkRadioMenuItemPrivate *tmp_priv = gtk_radio_menu_item_get_instance_private (tmp_item);
       tmp_list = tmp_list->next;
 
-      tmp_menu_item->priv->group = priv->group;
+      tmp_priv->group = priv->group;
     }
 
   /* this radio menu item is no longer in the group */
@@ -490,7 +500,7 @@ static void
 gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
 {
   GtkRadioMenuItem *radio_menu_item = GTK_RADIO_MENU_ITEM (menu_item);
-  GtkRadioMenuItemPrivate *priv = radio_menu_item->priv;
+  GtkRadioMenuItemPrivate *priv = gtk_radio_menu_item_get_instance_private (radio_menu_item);
   GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (menu_item);
   GtkCheckMenuItem *tmp_menu_item;
   GSList *tmp_list;

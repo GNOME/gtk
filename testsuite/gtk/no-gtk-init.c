@@ -49,7 +49,6 @@ main (int   argc,
   g_test_init (&argc, &argv, NULL);
   g_setenv ("GTK_MODULES", "", TRUE);
   setlocale (LC_ALL, "C");
-  g_test_bug_base ("http://bugzilla.gnome.org/show_bug.cgi?id=%s");
 
 
   g_test_add_func ("/no_gtk_init/gdk_cairo_set_source_pixbuf", test_gdk_cairo_set_source_pixbuf);

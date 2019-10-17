@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkAssistant" parent="GtkWindow">
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar"/>
@@ -20,10 +19,8 @@
             <property name="orientation">vertical</property>
             <property name="hexpand">1</property>
             <child>
-              <object class="GtkNotebook" id="content">
+              <object class="GtkStack" id="content">
                 <property name="can-focus">1</property>
-                <property name="show-tabs">0</property>
-                <property name="show-border">0</property>
                 <property name="vexpand">1</property>
                 <signal name="remove" handler="assistant_remove_page_cb" swapped="no"/>
                 <child type="tab"/>
@@ -35,71 +32,17 @@
                 <property name="spacing">6</property>
                 <property name="margin">6</property>
                 <child>
-                  <object class="GtkButton" id="apply">
+                  <object class="GtkButton" id="close">
                     <property name="visible">0</property>
-                    <property name="label" translatable="yes">_Apply</property>
-                    <property name="can-focus">1</property>
-                    <property name="can-default">1</property>
-                    <property name="receives-default">1</property>
-                    <property name="use-underline">1</property>
-                    <style>
-                      <class name="text-button"/>
-                    </style>
-                    <signal name="clicked" handler="on_assistant_apply" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="pack-type">end</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="forward">
-                    <property name="label" translatable="yes">_Next</property>
-                    <property name="can-focus">1</property>
-                    <property name="can-default">1</property>
-                    <property name="receives-default">1</property>
-                    <property name="use-underline">1</property>
-                    <style>
-                      <class name="text-button"/>
-                    </style>
-                    <signal name="clicked" handler="on_assistant_forward" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="pack-type">end</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="back">
-                    <property name="label" translatable="yes">_Back</property>
+                    <property name="label" translatable="yes">_Close</property>
                     <property name="can-focus">1</property>
                     <property name="receives-default">1</property>
                     <property name="use-underline">1</property>
                     <style>
                       <class name="text-button"/>
                     </style>
-                    <signal name="clicked" handler="on_assistant_back" swapped="no"/>
+                    <signal name="clicked" handler="on_assistant_close" swapped="no"/>
                   </object>
-                  <packing>
-                    <property name="pack-type">end</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="last">
-                    <property name="visible">0</property>
-                    <property name="label" translatable="yes">_Finish</property>
-                    <property name="can-focus">1</property>
-                    <property name="receives-default">1</property>
-                    <property name="use-underline">1</property>
-                    <style>
-                      <class name="text-button"/>
-                    </style>
-                    <signal name="clicked" handler="on_assistant_last" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="pack-type">end</property>
-                    <property name="position">3</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkButton" id="cancel">
@@ -113,38 +56,60 @@
                     </style>
                     <signal name="clicked" handler="on_assistant_cancel" swapped="no"/>
                   </object>
-                  <packing>
-                    <property name="pack-type">end</property>
-                    <property name="position">4</property>
-                  </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="close">
+                  <object class="GtkButton" id="last">
                     <property name="visible">0</property>
-                    <property name="label" translatable="yes">_Close</property>
+                    <property name="label" translatable="yes">_Finish</property>
                     <property name="can-focus">1</property>
-                    <property name="can-default">1</property>
                     <property name="receives-default">1</property>
                     <property name="use-underline">1</property>
                     <style>
                       <class name="text-button"/>
                     </style>
-                    <signal name="clicked" handler="on_assistant_close" swapped="no"/>
+                    <signal name="clicked" handler="on_assistant_last" swapped="no"/>
                   </object>
-                  <packing>
-                    <property name="pack-type">end</property>
-                    <property name="position">5</property>
-                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="back">
+                    <property name="label" translatable="yes">_Back</property>
+                    <property name="can-focus">1</property>
+                    <property name="receives-default">1</property>
+                    <property name="use-underline">1</property>
+                    <style>
+                      <class name="text-button"/>
+                    </style>
+                    <signal name="clicked" handler="on_assistant_back" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="forward">
+                    <property name="label" translatable="yes">_Next</property>
+                    <property name="can-focus">1</property>
+                    <property name="receives-default">1</property>
+                    <property name="use-underline">1</property>
+                    <style>
+                      <class name="text-button"/>
+                    </style>
+                    <signal name="clicked" handler="on_assistant_forward" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="apply">
+                    <property name="visible">0</property>
+                    <property name="label" translatable="yes">_Apply</property>
+                    <property name="can-focus">1</property>
+                    <property name="receives-default">1</property>
+                    <property name="use-underline">1</property>
+                    <style>
+                      <class name="text-button"/>
+                    </style>
+                    <signal name="clicked" handler="on_assistant_apply" swapped="no"/>
+                  </object>
                 </child>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
     </child>

@@ -1,31 +1,19 @@
-test_env = environment()
-test_env.set('G_TEST_SRCDIR', meson.current_source_dir())
-test_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
-test_env.set('REFTEST_MODULE_DIR', meson.current_build_dir())
-test_env.set('GTK_IM_MODULE', 'gtk-im-context-simple')
-test_env.set('GSETTINGS_BACKEND', 'memory')
-test_env.set('GSETTINGS_SCHEMA_DIR', gtk_schema_build_dir)
-test_env.set('G_ENABLE_DIAGNOSTIC', '0')
-
-gtk_reftest_cargs = ['-DGDK_DISABLE_DEPRECATED', '-DGTK_DISABLE_DEPRECATED']
-
 # FIXME: $(no_undefined) ?
-libgtkreftestprivate = static_library('gtkreftestprivate',
+libgtkreftestprivate = shared_library('gtkreftestprivate',
   'reftest-compare.c', 'reftest-module.c', 'reftest-snapshot.c',
-  c_args : gtk_reftest_cargs,
   dependencies : libgtk_dep)
 
-libreftest = static_library('gtkreftest',
-  'expand-expander.c',
-  'frame-inhibitor.c',
-  'image-recording-surface.c',
-  'letter-spacing.c',
-  'set-default-direction.c',
-  'statusbar-remove-all.c',
-  'textview-border-windows.c',
-  'textview-tags.c',
-  'animation-direction.c',
-  c_args : gtk_reftest_cargs,
+libreftest = shared_library('reftest',
+  [ 'expand-expander.c',
+    'frame-inhibitor.c',
+    'letter-spacing.c',
+    'set-default-direction.c',
+    'statusbar-remove-all.c',
+    'textview-border-windows.c',
+    'textview-tags.c',
+    'animation-direction.c',
+  ],
+  link_with: libgtkreftestprivate,
   dependencies : libgtk_dep)
 
 tcdata = configuration_data()
@@ -39,12 +27,12 @@ tcdata.set('libexecdir', join_paths(get_option('prefix'), get_option('libexecdir
 #endforeach
 
 gtk_reftest = executable('gtk-reftest', 'gtk-reftest.c',
-  c_args : gtk_reftest_cargs,
   link_with : [libgtkreftestprivate, libreftest],
   dependencies : libgtk_dep)
 
-test('gtk-reftest', gtk_reftest, env : test_env)
-
+image_compare = executable('image-compare', 'image-compare.c',
+  link_with : [libgtkreftestprivate, libreftest],
+  dependencies : libgtk_dep)
 # Installed data (TODO)
 
 testdata = [
@@ -123,9 +111,6 @@ testdata = [
   'border-image-excess-size.css',
   'border-image-excess-size.ref.ui',
   'border-image-excess-size.ui',
-  'border-image-gradient.css',
-  'border-image-gradient.ref.ui',
-  'border-image-gradient.ui',
   'border-image-url-scaled.css',
   'border-image-url-scaled.ref.ui',
   'border-image-url-scaled.ui',
@@ -143,14 +128,9 @@ testdata = [
   'border-style.css',
   'border-style.ref.ui',
   'border-style.ui',
-  'box-child-expand.ref.ui',
-  'box-child-expand.ui',
   'box-order.css',
   'box-order.ref.ui',
   'box-order.ui',
-  'box-packing.css',
-  'box-packing.ref.ui',
-  'box-packing.ui',
   'box-pseudo-classes.css',
   'box-pseudo-classes.ref.ui',
   'box-pseudo-classes.ui',
@@ -171,6 +151,9 @@ testdata = [
   'color-transition.css',
   'color-transition.ref.ui',
   'color-transition.ui',
+  'cross-fade-syntax.css',
+  'cross-fade-syntax.ref.ui',
+  'cross-fade-syntax.ui',
   'css-em-label-size.css',
   'css-em-label-size.ui',
   'css-em-label-size.ref.ui',
@@ -214,6 +197,9 @@ testdata = [
   'css-multi-state.css',
   'css-multi-state.ref.ui',
   'css-multi-state.ui',
+  'data-url.css',
+  'data-url.ref.ui',
+  'data-url.ui',
   'fixed-widget-stacking.ref.ui',
   'fixed-widget-stacking.ui',
   'flipping-icons.ref.ui',
@@ -268,11 +254,6 @@ testdata = [
   'image-load-from-file.css',
   'image-load-from-file.ref.ui',
   'image-load-from-file.ui',
-  'image-recording-surface.ref.ui',
-  'image-recording-surface.ui',
-  'info-bar-message-types.css',
-  'info-bar-message-types.ref.ui',
-  'info-bar-message-types.ui',
   'inherit-and-initial.css',
   'inherit-and-initial.ref.ui',
   'inherit-and-initial.ui',
@@ -292,6 +273,9 @@ testdata = [
   'label-ellipsize-small.ui',
   'label-ellipsize-with-big.ref.ui',
   'label-ellipsize-with-big.ui',
+  'label-fonts.css',
+  'label-fonts.ref.ui',
+  'label-fonts.ui',
   'label-shadows.css',
   'label-shadows.ref.ui',
   'label-shadows.ui',
@@ -333,9 +317,6 @@ testdata = [
   'no-colors.ui',
   'nonresizable-size.ref.ui',
   'nonresizable-size.ui',
-  'notebook-childproperties.css',
-  'notebook-childproperties.ui',
-  'notebook-childproperties.ref.ui',
   'notebook-tab-position.css',
   'notebook-tab-position.ui',
   'notebook-tab-position.ref.ui',
@@ -353,6 +334,11 @@ testdata = [
   'paned-undersized.css',
   'paned-undersized.ref.ui',
   'paned-undersized.ui',
+  'partial-rounded-border.css',
+  'partial-rounded-border.ref.ui',
+  'partial-rounded-border.ui',
+  'picture-load-invalid-file.ui',
+  'picture-load-invalid-file.ref.ui',
   'pseudoclass-on-box.css',
   'pseudoclass-on-box.ref.ui',
   'pseudoclass-on-box.ui',
@@ -400,9 +386,6 @@ testdata = [
   'style-context-save-inheritance.css',
   'style-context-save-inheritance.ref.ui',
   'style-context-save-inheritance.ui',
-  'style-properties-nth-child.css',
-  'style-properties-nth-child.ref.ui',
-  'style-properties-nth-child.ui',
   'style-properties-only-child.css',
   'style-properties-only-child.ref.ui',
   'style-properties-only-child.ui',
@@ -438,4 +421,45 @@ testdata = [
   'window-show-contents-on-map.ref.ui',
   'window-show-contents-on-map.ui',
 ]
+
+# These need to be fixed but the issue hasn't been tracked down.
+xfails = [
+  'background-color-transparent.ui',
+  'background-image-multiple.ui',
+  'background-origin.ui',
+  'border-half-pixel.ui',
+  'border-image-url.ui',
+  'sizegroups-evolution-identity-page.ui',
+  'textview-border-windows.ui',
+  'window-show-contents-on-map.ui',
+  'toplevel-vs-popup.ui',
+  # these depend on details of text layout
+  'label-background.ui',
+  'label-wrap-justify.ui',
+  'quit-mnemonic.ui',
+]
+
+foreach testname : testdata
+  if testname.endswith('.ui') and not testname.endswith('.ref.ui')
+    test('reftest ' + testname, gtk_reftest,
+         args: [ '--tap',
+                 '-k',
+                 '--verbose',
+                 '-o', join_paths(meson.current_build_dir(), 'output'),
+                 join_paths(meson.current_source_dir(), testname),
+         ],
+         env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+                'GSETTINGS_BACKEND=memory',
+                'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
+                'GTK_CSD=1',
+                'G_ENABLE_DIAGNOSTIC=0',
+                'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+                'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+                'GSK_RENDERER=opengl',
+                'REFTEST_MODULE_DIR=@0@'.format(meson.current_build_dir()),
+              ],
+         suite: 'reftest',
+         should_fail: xfails.contains(testname))
+  endif
+endforeach
 

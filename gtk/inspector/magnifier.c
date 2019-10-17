@@ -24,6 +24,7 @@
 
 #include "gtklabel.h"
 #include "gtkadjustment.h"
+#include "gtkstack.h"
 
 enum
 {
@@ -51,16 +52,22 @@ void
 gtk_inspector_magnifier_set_object (GtkInspectorMagnifier *sl,
                                     GObject              *object)
 {
+  GtkWidget *stack;
+  GtkStackPage *page;
+
+  stack = gtk_widget_get_parent (GTK_WIDGET (sl));
+  page = gtk_stack_get_page (GTK_STACK (stack), GTK_WIDGET (sl));
+
   sl->priv->object = NULL;
 
   if (!GTK_IS_WIDGET (object) || !gtk_widget_is_visible (GTK_WIDGET (object)))
     {
-      gtk_widget_hide (GTK_WIDGET (sl));
+      g_object_set (page, "visible", FALSE, NULL);
       _gtk_magnifier_set_inspected (GTK_MAGNIFIER (sl->priv->magnifier), NULL);
       return;
     }
 
-  gtk_widget_show (GTK_WIDGET (sl));
+  g_object_set (page, "visible", TRUE, NULL);
 
   sl->priv->object = GTK_WIDGET (object);
 

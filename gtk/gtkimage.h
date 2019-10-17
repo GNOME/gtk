@@ -38,15 +38,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_IMAGE                  (gtk_image_get_type ())
 #define GTK_IMAGE(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IMAGE, GtkImage))
-#define GTK_IMAGE_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_IMAGE, GtkImageClass))
 #define GTK_IS_IMAGE(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_IMAGE))
-#define GTK_IS_IMAGE_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_IMAGE))
-#define GTK_IMAGE_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_IMAGE, GtkImageClass))
-
 
 typedef struct _GtkImage              GtkImage;
-typedef struct _GtkImagePrivate       GtkImagePrivate;
-typedef struct _GtkImageClass         GtkImageClass;
 
 /**
  * GtkImageType:
@@ -73,28 +67,6 @@ typedef enum
   GTK_IMAGE_GICON,
   GTK_IMAGE_PAINTABLE
 } GtkImageType;
-
-/**
- * GtkImage:
- *
- * This struct contain private data only and should be accessed by the functions
- * below.
- */
-struct _GtkImage
-{
-  GtkWidget parent_instance;
-};
-
-struct _GtkImageClass
-{
-  GtkWidgetClass parent_class;
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType      gtk_image_get_type (void) G_GNUC_CONST;

@@ -107,7 +107,7 @@ window_group_cleanup_grabs (GtkWindowGroup *group,
   tmp_list = priv->grabs;
   while (tmp_list)
     {
-      if (gtk_widget_get_toplevel (tmp_list->data) == (GtkWidget*) window)
+      if (gtk_widget_get_root (tmp_list->data) == (GtkRoot*) window)
         to_remove = g_slist_prepend (to_remove, g_object_ref (tmp_list->data));
       tmp_list = tmp_list->next;
     }
@@ -125,7 +125,7 @@ window_group_cleanup_grabs (GtkWindowGroup *group,
     {
       info = tmp_list->data;
 
-      if (gtk_widget_get_toplevel (info->widget) == (GtkWidget *) window)
+      if (gtk_widget_get_root (info->widget) == (GtkRoot *) window)
         to_remove = g_slist_prepend (to_remove, info);
 
       tmp_list = tmp_list->next;

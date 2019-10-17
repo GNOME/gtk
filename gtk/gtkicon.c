@@ -87,7 +87,6 @@ gtk_icon_class_init (GtkIconClass *klass)
 static void
 gtk_icon_init (GtkIcon *self)
 {
-  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
   self->image = GTK_CSS_IMAGE_BUILTIN_NONE;
 }
 

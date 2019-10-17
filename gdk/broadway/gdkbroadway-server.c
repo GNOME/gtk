@@ -38,6 +38,7 @@ typedef struct BroadwayInput BroadwayInput;
 
 struct _GdkBroadwayServer {
   GObject parent_instance;
+  GdkDisplay *display;
 
   guint32 next_serial;
   guint32 next_texture_id;
@@ -96,7 +97,9 @@ _gdk_broadway_server_get_next_serial (GdkBroadwayServer *server)
 }
 
 GdkBroadwayServer *
-_gdk_broadway_server_new (const char *display, GError **error)
+_gdk_broadway_server_new (GdkDisplay *display,
+                          const char *display_name,
+                          GError **error)
 {
   GdkBroadwayServer *server;
   GSocketClient *client;
@@ -108,14 +111,14 @@ _gdk_broadway_server_new (const char *display, GError **error)
   char *local_socket_type = NULL;
   int port;
 
-  if (display == NULL)
-    display = ":0";
+  if (display_name == NULL)
+    display_name = ":0";
 
-  if (display[0] == ':' && g_ascii_isdigit(display[1]))
+  if (display_name[0] == ':' && g_ascii_isdigit(display_name[1]))
     {
       char *path, *basename;
 
-      port = strtol (display + strlen (":"), NULL, 10);
+      port = strtol (display_name + strlen (":"), NULL, 10);
       basename = g_strdup_printf ("broadway%d.socket", port + 1);
       path = g_build_filename (g_get_user_runtime_dir (), basename, NULL);
       g_free (basename);
@@ -127,7 +130,7 @@ _gdk_broadway_server_new (const char *display, GError **error)
   else
     {
       g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
-                   _("Broadway display type not supported: %s"), display);
+                   _("Broadway display type not supported: %s"), display_name);
       return NULL;
     }
 
@@ -145,6 +148,7 @@ _gdk_broadway_server_new (const char *display, GError **error)
 
   server = g_object_new (GDK_TYPE_BROADWAY_SERVER, NULL);
   server->connection = connection;
+  server->display = display;
 
   in = g_io_stream_get_input_stream (G_IO_STREAM (server->connection));
   pollable = G_POLLABLE_INPUT_STREAM (in);
@@ -346,7 +350,7 @@ process_input_messages (GdkBroadwayServer *server)
                             server->incomming);
 
       if (reply->base.type == BROADWAY_REPLY_EVENT)
-        _gdk_broadway_events_got_input (&reply->event.msg);
+        _gdk_broadway_events_got_input (server->display, &reply->event.msg);
       else
         g_warning ("Unhandled reply type %d", reply->base.type);
       g_free (reply);

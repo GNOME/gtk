@@ -10,6 +10,10 @@ toolbar {
   border-radius: 0;
 }
 
+grid {
+  background-color: #000;
+}
+
 grid * {
   background-color: lime;
   border-style: none;

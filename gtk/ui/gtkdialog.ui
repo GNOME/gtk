@@ -1,41 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkDialog" parent="GtkWindow">
-    <property name="window-position">center-on-parent</property>
     <property name="type-hint">dialog</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar">
         <property name="show-title-buttons">1</property>
+        <property name="has-subtitle">false</property>
       </object>
     </child>
     <child>
-      <object class="GtkBox" id="vbox">
+      <object class="GtkBox">
         <property name="orientation">vertical</property>
         <style>
           <class name="dialog-vbox"/>
         </style>
+        <child>
+          <object class="GtkBox" id="content_area"/>
+        </child>
         <child>
           <object class="GtkBox" id="action_box">
             <style>
               <class name="dialog-action-box"/>
             </style>
             <child>
-              <object class="GtkButtonBox" id="action_area">
-                <property name="layout-style">end</property>
+              <object class="GtkBox" id="action_area">
                 <property name="hexpand">1</property>
+                <property name="halign">end</property>
                 <style>
                   <class name="dialog-action-area"/>
                 </style>
               </object>
-              <packing>
-                <property name="pack-type">end</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
         </child>
       </object>
     </child>

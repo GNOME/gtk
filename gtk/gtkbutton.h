@@ -70,11 +70,7 @@ struct _GtkButtonClass
 
   /*< private >*/
 
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
+  gpointer padding[8];
 };
 
 
@@ -88,8 +84,6 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_button_new_from_icon_name (const gchar    *icon_name);
 GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_button_new_with_mnemonic (const gchar    *label);
-GDK_AVAILABLE_IN_ALL
-void           gtk_button_clicked           (GtkButton      *button);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_button_set_relief         (GtkButton      *button,

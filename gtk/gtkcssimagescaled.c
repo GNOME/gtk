@@ -143,76 +143,62 @@ gtk_css_image_scaled_compute (GtkCssImage      *image,
   return GTK_CSS_IMAGE (res);
 }
 
+typedef struct
+{
+  GPtrArray *images;
+  GArray *scales;
+} GtkCssImageScaledParseData;
+
+static guint
+gtk_css_image_scaled_parse_arg (GtkCssParser *parser,
+                                guint         arg,
+                                gpointer      data_)
+{
+  GtkCssImageScaledParseData *data = data_;
+  GtkCssImage *child;
+  int scale;
+
+  child = _gtk_css_image_new_parse (parser);
+  if (child == NULL)
+    return 0;
+
+  if (!gtk_css_parser_has_integer (parser))
+    scale = arg > 0 ? g_array_index (data->scales, int, arg - 1) + 1 : 1;
+  else if (!gtk_css_parser_consume_integer (parser, &scale))
+    return 0;
+
+  g_ptr_array_add (data->images, child);
+  g_array_append_val (data->scales, scale);
+
+  return 1;
+}
 
 static gboolean
 gtk_css_image_scaled_parse (GtkCssImage  *image,
                             GtkCssParser *parser)
 {
-  GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);
-  GPtrArray *images;
-  GArray *scales;
-  int last_scale;
-  GtkCssImage *child;
+  GtkCssImageScaled *self = GTK_CSS_IMAGE_SCALED (image);
+  GtkCssImageScaledParseData data;
 
-  if (!_gtk_css_parser_try (parser, "-gtk-scaled", TRUE))
+  if (!gtk_css_parser_has_function (parser, "-gtk-scaled"))
     {
-      _gtk_css_parser_error (parser, "'-gtk-scaled'");
+      gtk_css_parser_error_syntax (parser, "Expected '-gtk-scaled('");
       return FALSE;
     }
 
-  if (!_gtk_css_parser_try (parser, "(", TRUE))
+  data.images = g_ptr_array_new_with_free_func (g_object_unref);
+  data.scales = g_array_new (FALSE, FALSE, sizeof (int));
+
+  if (!gtk_css_parser_consume_function (parser, 1, G_MAXUINT, gtk_css_image_scaled_parse_arg, &data))
     {
-      _gtk_css_parser_error (parser,
-                             "Expected '(' after '-gtk-scaled'");
+      g_ptr_array_unref (data.images);
+      g_array_unref (data.scales);
       return FALSE;
     }
 
-  images = g_ptr_array_new_with_free_func (g_object_unref);
-  scales = g_array_new (FALSE, FALSE, sizeof (int));
-
-  last_scale = 0;
-  do
-    {
-      child = _gtk_css_image_new_parse (parser);
-      if (child == NULL)
-        {
-          g_ptr_array_free (images, TRUE);
-          g_array_free (scales, TRUE);
-          return FALSE;
-        }
-      g_ptr_array_add (images, child);
-      if (!_gtk_css_parser_try (parser, ",", TRUE))
-        {
-          last_scale += 1;
-          g_array_append_val (scales, last_scale);
-          break;
-        }
-      else if (_gtk_css_parser_try_int (parser, &last_scale))
-        {
-          g_array_append_val (scales, last_scale);
-          if (!_gtk_css_parser_try (parser, ",", TRUE))
-            break;
-        }
-      else
-        {
-          last_scale += 1;
-          g_array_append_val (scales, last_scale);
-        }
-    }
-  while (TRUE);
-
-  if (!_gtk_css_parser_try (parser, ")", TRUE))
-    {
-      g_ptr_array_free (images, TRUE);
-      g_array_free (scales, TRUE);
-      _gtk_css_parser_error (parser,
-                             "Expected ')' at end of '-gtk-scaled'");
-      return FALSE;
-    }
-
-  scaled->n_images = images->len;
-  scaled->images = (GtkCssImage **) g_ptr_array_free (images, FALSE);
-  scaled->scales = (int *) g_array_free (scales, FALSE);
+  self->n_images = data.images->len;
+  self->images = (GtkCssImage **) g_ptr_array_free (data.images, FALSE);
+  self->scales = (int *) g_array_free (data.scales, FALSE);
 
   return TRUE;
 }

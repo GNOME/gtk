@@ -36,30 +36,10 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_MENU			(gtk_menu_get_type ())
 #define GTK_MENU(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_MENU, GtkMenu))
-#define GTK_MENU_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_MENU, GtkMenuClass))
 #define GTK_IS_MENU(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_MENU))
-#define GTK_IS_MENU_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MENU))
-#define GTK_MENU_GET_CLASS(obj)         (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_MENU, GtkMenuClass))
 
 
-typedef struct _GtkMenu        GtkMenu;
-typedef struct _GtkMenuClass   GtkMenuClass;
-typedef struct _GtkMenuPrivate GtkMenuPrivate;
-
-/**
- * GtkArrowPlacement:
- * @GTK_ARROWS_BOTH: Place one arrow on each end of the menu.
- * @GTK_ARROWS_START: Place both arrows at the top of the menu.
- * @GTK_ARROWS_END: Place both arrows at the bottom of the menu.
- *
- * Used to specify the placement of scroll arrows in scrolling menus.
- */
-typedef enum
-{
-  GTK_ARROWS_BOTH,
-  GTK_ARROWS_START,
-  GTK_ARROWS_END
-} GtkArrowPlacement;
+typedef struct _GtkMenu GtkMenu;
 
 /**
  * GtkMenuDetachFunc:
@@ -72,26 +52,6 @@ typedef enum
 typedef void (*GtkMenuDetachFunc)   (GtkWidget *attach_widget,
 				     GtkMenu   *menu);
 
-struct _GtkMenu
-{
-  GtkMenuShell menu_shell;
-
-  /*< private >*/
-  GtkMenuPrivate *priv;
-};
-
-struct _GtkMenuClass
-{
-  GtkMenuShellClass parent_class;
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
-
-
 GDK_AVAILABLE_IN_ALL
 GType	   gtk_menu_get_type		  (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
@@ -99,7 +59,6 @@ GtkWidget* gtk_menu_new			  (void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_menu_new_from_model        (GMenuModel *model);
 
-/* Display the menu onscreen */
 GDK_AVAILABLE_IN_ALL
 void       gtk_menu_popup_at_rect         (GtkMenu             *menu,
                                            GdkSurface          *rect_surface,
@@ -117,27 +76,18 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_menu_popup_at_pointer      (GtkMenu             *menu,
                                            const GdkEvent      *trigger_event);
 
-/* Position the menu according to its position function. Called
- * from gtkmenuitem.c when a menu-item changes its allocation
- */
 GDK_AVAILABLE_IN_ALL
 void	   gtk_menu_reposition		  (GtkMenu	       *menu);
 
 GDK_AVAILABLE_IN_ALL
 void	   gtk_menu_popdown		  (GtkMenu	       *menu);
 
-/* Keep track of the last menu item selected. (For the purposes
- * of the option menu
- */
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_menu_get_active		  (GtkMenu	       *menu);
 GDK_AVAILABLE_IN_ALL
 void	   gtk_menu_set_active		  (GtkMenu	       *menu,
 					   guint		index);
 
-/* set/get the accelerator group that holds global accelerators (should
- * be added to the corresponding toplevel with gtk_window_add_accel_group().
- */
 GDK_AVAILABLE_IN_ALL
 void	       gtk_menu_set_accel_group	  (GtkMenu	       *menu,
 					   GtkAccelGroup       *accel_group);
@@ -149,10 +99,6 @@ void           gtk_menu_set_accel_path    (GtkMenu             *menu,
 GDK_AVAILABLE_IN_ALL
 const gchar*   gtk_menu_get_accel_path    (GtkMenu             *menu);
 
-/* A reference count is kept for a widget when it is attached to
- * a particular widget. This is typically a menu item; it may also
- * be a widget with a popup menu - for instance, the Notebook widget.
- */
 GDK_AVAILABLE_IN_ALL
 void	   gtk_menu_attach_to_widget	  (GtkMenu	       *menu,
 					   GtkWidget	       *attach_widget,
@@ -160,10 +106,6 @@ void	   gtk_menu_attach_to_widget	  (GtkMenu	       *menu,
 GDK_AVAILABLE_IN_ALL
 void	   gtk_menu_detach		  (GtkMenu	       *menu);
 
-/* This should be dumped in favor of data set when the menu is popped
- * up - that is currently in the ItemFactory code, but should be
- * in the Menu code.
- */
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_menu_get_attach_widget	  (GtkMenu	       *menu);
 
@@ -171,18 +113,6 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_menu_reorder_child         (GtkMenu             *menu,
                                            GtkWidget           *child,
                                            gint                position);
-
-GDK_AVAILABLE_IN_ALL
-void	   gtk_menu_set_display           (GtkMenu	       *menu,
-					   GdkDisplay          *display);
-
-GDK_AVAILABLE_IN_ALL
-void       gtk_menu_attach                (GtkMenu             *menu,
-                                           GtkWidget           *child,
-                                           guint                left_attach,
-                                           guint                right_attach,
-                                           guint                top_attach,
-                                           guint                bottom_attach);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_menu_set_monitor           (GtkMenu             *menu,

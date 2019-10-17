@@ -64,6 +64,8 @@ gdk_broadway_draw_context_end_frame (GdkDrawContext *draw_context,
 
   g_array_unref (self->nodes);
   self->nodes = NULL;
+
+  /* We now sent all new texture refs to the daemon via the nodes, so we can drop them here */
   g_ptr_array_unref (self->node_textures);
   self->node_textures = NULL;
 }

@@ -240,7 +240,7 @@ _gtk_css_shadows_value_parse (GtkCssParser *parser,
   GtkCssValue *value, *result;
   GPtrArray *values;
 
-  if (_gtk_css_parser_try (parser, "none", TRUE))
+  if (gtk_css_parser_try_ident (parser, "none"))
     return _gtk_css_shadows_value_new_none ();
 
   values = g_ptr_array_new ();
@@ -256,7 +256,7 @@ _gtk_css_shadows_value_parse (GtkCssParser *parser,
       }
 
     g_ptr_array_add (values, value);
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
+  } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
   result = gtk_css_shadows_value_new ((GtkCssValue **) values->pdata, values->len);
   g_ptr_array_free (values, TRUE);
@@ -285,20 +285,6 @@ gtk_css_shadows_value_get_shadows (const GtkCssValue  *shadows,
 
   for (i = 0; i < shadows->len; i++)
     gtk_css_shadow_value_get_shadow (shadows->values[i], &out_shadows[i]);
-}
-
-void
-_gtk_css_shadows_value_paint_icon (const GtkCssValue *shadows,
-                                   cairo_t           *cr)
-{
-  guint i;
-
-  g_return_if_fail (shadows->class == &GTK_CSS_VALUE_SHADOWS);
-
-  for (i = 0; i < shadows->len; i++)
-    {
-      _gtk_css_shadow_value_paint_icon (shadows->values[i], cr);
-    }
 }
 
 void

@@ -1,51 +1,30 @@
-
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkWindow" id="window1">
-    <property name="can_focus">False</property>
     <property name="type">popup</property>
     <child>
       <object class="GtkActionBar" id="actionbar">
-        <property name="visible">True</property>
-        <child>
+        <child type="start">
           <object class="GtkButton" id="button1">
-            <property name="visible">True</property>
             <property name="label">Start 1</property>
           </object>
-          <packing>
-            <property name="pack-type">start</property>
-          </packing>
         </child>
-        <child>
+        <child type="start">
           <object class="GtkButton" id="button2">
-            <property name="visible">True</property>
             <property name="label">Start 2</property>
           </object>
-          <packing>
-            <property name="pack-type">start</property>
-          </packing>
         </child>
-        <child>
+        <child type="end">
           <object class="GtkButton" id="button3">
-            <property name="visible">True</property>
             <property name="label">End 1</property>
           </object>
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
         </child>
-        <child>
+        <child type="end">
           <object class="GtkButton" id="button4">
-            <property name="visible">True</property>
             <property name="label">End 2</property>
           </object>
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
         </child>
         <child type="center">
           <object class="GtkButton" id="button5">
-            <property name="visible">True</property>
             <property name="label">Center</property>
           </object>
         </child>

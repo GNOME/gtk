@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.8 -->
   <object class="IconStore" id="store"/>
   <object class="GtkTreeModelFilter" id="filter_model">
     <property name="child-model">store</property>
   </object>
   <template class="IconBrowserWindow" parent="GtkApplicationWindow">
-    <style><class name="devel"/></style>
+    <style>
+      <class name="devel"/>
+    </style>
     <property name="title" translatable="yes">Icon Browser</property>
     <property name="default-width">1024</property>
     <property name="default-height">768</property>
@@ -35,7 +36,7 @@
             </child>
           </object>
         </child>
-        <child>
+        <child type="end">
           <object class="GtkToggleButton" id="search">
             <style>
               <class name="image-button"/>
@@ -46,9 +47,6 @@
               </object>
             </child>
           </object>
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
         </child>
       </object>
     </child>
@@ -121,8 +119,9 @@
     <property name="use-header-bar">1</property>
     <property name="resizable">0</property>
     <property name="hide-on-close">1</property>
-    <child internal-child="vbox">
+    <child internal-child="content_area">
       <object class="GtkBox">
+        <property name="orientation">vertical</property>
         <child>
           <object class="GtkGrid">
             <property name="margin">10</property>
@@ -136,11 +135,11 @@
                 <accessibility>
                   <relation type="labelled-by" target="label1"/>
                 </accessibility>
+                <layout>
+                  <property name="left-attach">0</property>
+                  <property name="top-attach">1</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkImage" id="image2">
@@ -149,11 +148,11 @@
                 <accessibility>
                   <relation type="labelled-by" target="label2"/>
                 </accessibility>
+                <layout>
+                  <property name="left-attach">1</property>
+                  <property name="top-attach">1</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkImage" id="image3">
@@ -162,11 +161,11 @@
                 <accessibility>
                   <relation type="labelled-by" target="label3"/>
                 </accessibility>
+                <layout>
+                  <property name="left-attach">2</property>
+                  <property name="top-attach">1</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">2</property>
-                <property name="top-attach">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkImage" id="image4">
@@ -175,11 +174,11 @@
                 <accessibility>
                   <relation type="labelled-by" target="label4"/>
                 </accessibility>
+                <layout>
+                  <property name="left-attach">3</property>
+                  <property name="top-attach">1</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">3</property>
-                <property name="top-attach">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkImage" id="image5">
@@ -188,11 +187,11 @@
                 <accessibility>
                   <relation type="labelled-by" target="label5"/>
                 </accessibility>
+                <layout>
+                  <property name="left-attach">4</property>
+                  <property name="top-attach">1</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">4</property>
-                <property name="top-attach">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkImage" id="image6">
@@ -201,11 +200,11 @@
                 <accessibility>
                   <relation type="labelled-by" target="label6"/>
                 </accessibility>
+                <layout>
+                  <property name="left-attach">5</property>
+                  <property name="top-attach">1</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">5</property>
-                <property name="top-attach">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label1">
@@ -218,11 +217,11 @@
                 <accessibility>
                   <relation type="label-for" target="image1"/>
                 </accessibility>
+                <layout>
+                  <property name="left-attach">0</property>
+                  <property name="top-attach">2</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label2">
@@ -235,11 +234,11 @@
                 <accessibility>
                   <relation type="label-for" target="image2"/>
                 </accessibility>
+                <layout>
+                  <property name="left-attach">1</property>
+                  <property name="top-attach">2</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">2</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label3">
@@ -252,11 +251,11 @@
                 <accessibility>
                   <relation type="label-for" target="image3"/>
                 </accessibility>
+                <layout>
+                  <property name="left-attach">2</property>
+                  <property name="top-attach">2</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">2</property>
-                <property name="top-attach">2</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label4">
@@ -269,11 +268,11 @@
                 <accessibility>
                   <relation type="label-for" target="image4"/>
                 </accessibility>
+                <layout>
+                  <property name="left-attach">3</property>
+                  <property name="top-attach">2</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">3</property>
-                <property name="top-attach">2</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label5">
@@ -286,11 +285,11 @@
                 <accessibility>
                   <relation type="label-for" target="image5"/>
                 </accessibility>
+                <layout>
+                  <property name="left-attach">4</property>
+                  <property name="top-attach">2</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">4</property>
-                <property name="top-attach">2</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label6">
@@ -303,11 +302,11 @@
                 <accessibility>
                   <relation type="label-for" target="image6"/>
                 </accessibility>
+                <layout>
+                  <property name="left-attach">5</property>
+                  <property name="top-attach">2</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">5</property>
-                <property name="top-attach">2</property>
-              </packing>
             </child>
           </object>
         </child>

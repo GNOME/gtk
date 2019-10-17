@@ -27,7 +27,7 @@
 /**
  * SECTION:gtksortlistmodel
  * @title: GtkSortListModel
- * @short_description: a #GListModel that sorts a listmodel
+ * @short_description: A list model that sorts its items
  * @see_also: #GListModel
  *
  * #GtkSortListModel is a list model that takes a list model and

@@ -1,27 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <!-- interface-requires gtk+ 3.10 -->
   <object class="GtkListStore" id="program_list_store">
     <columns>
-      <!-- column-name app-info -->
       <column type="GAppInfo"/>
-      <!-- column-name app-icon -->
       <column type="GIcon"/>
-      <!-- column-name name -->
       <column type="gchararray"/>
-      <!-- column-name description -->
       <column type="gchararray"/>
-      <!-- column-name exec -->
       <column type="gchararray"/>
-      <!-- column-name default -->
       <column type="gboolean"/>
-      <!-- column-name heading -->
       <column type="gboolean"/>
-      <!-- column-name heading-text -->
       <column type="gchararray"/>
-      <!-- column-name recommended -->
       <column type="gboolean"/>
-      <!-- column-name fallback -->
       <column type="gboolean"/>
     </columns>
   </object>
@@ -112,7 +101,7 @@
                 <property name="valign">center</property>
                 <property name="wrap">1</property>
                 <attributes>
-                  <attribute name="scale" value="1.2"/>
+                  <attribute name="scale" value="1.2"></attribute>
                 </attributes>
                 <style>
                   <class name="dim-label"/>

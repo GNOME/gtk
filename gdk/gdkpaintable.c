@@ -38,10 +38,9 @@ void            gtk_snapshot_pop                        (GdkSnapshot            
  * #GdkPaintable is a simple interface used by GDK and GDK to represent
  * objects that can be painted anywhere at any size without requiring any
  * sort of layout. The interface is inspired by similar concepts elsewhere,
- * such as #ClutterContent, <ulink
- * linkend="https://www.w3.org/TR/css-images-4/#paint-source">HTML/CSS Paint
- * Sources</ulink> or <ulink linkend="https://www.w3.org/TR/SVG2/pservers.html">
- * SVG Paint Servers</ulink>.
+ * such as [ClutterContent](https://developer.gnome.org/clutter/stable/ClutterContent.html),
+ * [HTML/CSS Paint Sources](https://www.w3.org/TR/css-images-4/#paint-source),
+ * or [SVG Paint Servers](https://www.w3.org/TR/SVG2/pservers.html).
  *
  * A #GdkPaintable can be snapshot at any time and size using
  * gdk_paintable_snapshot(). How the paintable interprets that size and if it
@@ -162,7 +161,7 @@ gdk_paintable_default_init (GdkPaintableInterface *iface)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -183,7 +182,7 @@ gdk_paintable_default_init (GdkPaintableInterface *iface)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 }
 

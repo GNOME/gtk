@@ -6,7 +6,7 @@
 
 <refentryinfo>
   <title>gtk4-builder-tool</title>
-  <productname>GTK+</productname>
+  <productname>GTK</productname>
   <authorgroup>
     <author>
       <contrib>Developer</contrib>
@@ -78,6 +78,10 @@
     <varlistentry>
     <term><option>--replace</option></term>
       <listitem><para>Write the content back to the .ui file instead of stdout.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+    <term><option>--3to4</option></term>
+      <listitem><para>Transform a GTK 3 ui file to GTK 4</para></listitem>
     </varlistentry>
   </variablelist>
 </refsect1>

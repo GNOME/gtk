@@ -122,7 +122,7 @@ test_insert (void)
   entry = gtk_entry_new ();
   g_object_ref_sink (entry);
 
-  gtk_entry_set_text (GTK_ENTRY (entry), "bar");
+  gtk_editable_set_text (GTK_EDITABLE (entry), "bar");
   gtk_editable_set_position (GTK_EDITABLE (entry), -1);
   pos = gtk_editable_get_position (GTK_EDITABLE (entry));
   g_assert_cmpint (pos, ==, 3);
@@ -224,7 +224,7 @@ test_delete (void)
   entry = gtk_entry_new ();
   g_object_ref_sink (entry);
 
-  gtk_entry_set_text (GTK_ENTRY (entry), "foobar");
+  gtk_editable_set_text (GTK_EDITABLE (entry), "foobar");
   gtk_editable_set_position (GTK_EDITABLE (entry), -1);
   pos = gtk_editable_get_position (GTK_EDITABLE (entry));
   g_assert_cmpint (pos, ==, 6);

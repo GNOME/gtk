@@ -190,18 +190,13 @@ static void
 test_resize_popup (void)
 {
   GtkWidget *window;
-  gint x, y, w, h;
+  gint w, h;
 
   /* testcase for the dnd window */
   window = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_window_set_display (GTK_WINDOW (window), gdk_display_get_default ());
   gtk_window_resize (GTK_WINDOW (window), 1, 1);
-  gtk_window_move (GTK_WINDOW (window), -99, -99);
-
-  gtk_window_get_position (GTK_WINDOW (window), &x, &y);
   gtk_window_get_size (GTK_WINDOW (window), &w, &h);
-  g_assert_cmpint (x, ==, -99);
-  g_assert_cmpint (y, ==, -99);
   g_assert_cmpint (w, ==, 1);
   g_assert_cmpint (h, ==, 1);
 
@@ -210,10 +205,7 @@ test_resize_popup (void)
   g_timeout_add (200, stop_main, NULL);
   gtk_main ();
 
-  gtk_window_get_position (GTK_WINDOW (window), &x, &y);
   gtk_window_get_size (GTK_WINDOW (window), &w, &h);
-  g_assert_cmpint (x, ==, -99);
-  g_assert_cmpint (y, ==, -99);
   g_assert_cmpint (w, ==, 1);
   g_assert_cmpint (h, ==, 1);
 
@@ -226,7 +218,7 @@ test_show_hide (void)
   GtkWidget *window;
   gint w, h, w1, h1;
 
-  g_test_bug ("696882");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=696882 */
 
   /* test that hide/show does not affect the size */
 
@@ -260,101 +252,12 @@ test_show_hide (void)
   gtk_widget_destroy (window);
 }
 
-static void
-test_show_hide2 (void)
-{
-  GtkWidget *window;
-  gint x, y, w, h, w1, h1;
-
-  g_test_bug ("696882");
-
-  /* test that hide/show does not affect the size,
-   * even when get_position/move is called
-   */
-
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
-  gtk_widget_show (window);
-
-  g_timeout_add (100, stop_main, NULL);
-  gtk_main ();
-
-  gtk_window_get_position (GTK_WINDOW (window), &x, &y);
-  gtk_window_get_size (GTK_WINDOW (window), &w, &h);
-  gtk_widget_hide (window);
-
-  g_timeout_add (100, stop_main, NULL);
-  gtk_main ();
-
-  gtk_window_get_size (GTK_WINDOW (window), &w1, &h1);
-  g_assert_cmpint (w, ==, w1);
-  g_assert_cmpint (h, ==, h1);
-
-  gtk_window_move (GTK_WINDOW (window), x, y);
-  gtk_widget_show (window);
-
-  g_timeout_add (100, stop_main, NULL);
-  gtk_main ();
-
-  gtk_window_get_size (GTK_WINDOW (window), &w1, &h1);
-  g_assert_cmpint (w, ==, w1);
-  g_assert_cmpint (h, ==, h1);
-
-  gtk_widget_destroy (window);
-}
-
-static void
-test_show_hide3 (void)
-{
-  GtkWidget *window;
-  gint x, y, w, h, w1, h1;
-
-  g_test_bug ("696882");
-
-  /* test that hide/show does not affect the size,
-   * even when get_position/move is called and
-   * a default size is set
-   */
-
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_default_size (GTK_WINDOW (window), 200, 200);
-
-  gtk_widget_show (window);
-
-  g_timeout_add (100, stop_main, NULL);
-  gtk_main ();
-
-  gtk_window_get_position (GTK_WINDOW (window), &x, &y);
-  gtk_window_get_size (GTK_WINDOW (window), &w, &h);
-  gtk_widget_hide (window);
-
-  g_timeout_add (100, stop_main, NULL);
-  gtk_main ();
-
-  gtk_window_get_size (GTK_WINDOW (window), &w1, &h1);
-  g_assert_cmpint (w, ==, w1);
-  g_assert_cmpint (h, ==, h1);
-
-  gtk_window_move (GTK_WINDOW (window), x, y);
-  gtk_widget_show (window);
-
-  g_timeout_add (100, stop_main, NULL);
-  gtk_main ();
-
-  gtk_window_get_size (GTK_WINDOW (window), &w1, &h1);
-  g_assert_cmpint (w, ==, w1);
-  g_assert_cmpint (h, ==, h1);
-
-  gtk_widget_destroy (window);
-}
-
 int
 main (int argc, char *argv[])
 {
   gint i;
 
   gtk_test_init (&argc, &argv);
-  g_test_bug_base ("http://bugzilla.gnome.org/");
 
   for (i = 0; i < argc; i++)
     {
@@ -366,8 +269,6 @@ main (int argc, char *argv[])
   g_test_add_func ("/window/resize", test_resize);
   g_test_add_func ("/window/resize-popup", test_resize_popup);
   g_test_add_func ("/window/show-hide", test_show_hide);
-  g_test_add_func ("/window/show-hide2", test_show_hide2);
-  g_test_add_func ("/window/show-hide3", test_show_hide3);
 
   return g_test_run ();
 }

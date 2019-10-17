@@ -37,10 +37,7 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_MESSAGE_DIALOG                  (gtk_message_dialog_get_type ())
 #define GTK_MESSAGE_DIALOG(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_MESSAGE_DIALOG, GtkMessageDialog))
-#define GTK_MESSAGE_DIALOG_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_MESSAGE_DIALOG, GtkMessageDialogClass))
 #define GTK_IS_MESSAGE_DIALOG(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_MESSAGE_DIALOG))
-#define GTK_IS_MESSAGE_DIALOG_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MESSAGE_DIALOG))
-#define GTK_MESSAGE_DIALOG_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_MESSAGE_DIALOG, GtkMessageDialogClass))
 
 typedef struct _GtkMessageDialog              GtkMessageDialog;
 typedef struct _GtkMessageDialogClass         GtkMessageDialogClass;
@@ -48,17 +45,6 @@ typedef struct _GtkMessageDialogClass         GtkMessageDialogClass;
 struct _GtkMessageDialog
 {
   GtkDialog parent_instance;
-};
-
-struct _GtkMessageDialogClass
-{
-  GtkDialogClass parent_class;
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 /**

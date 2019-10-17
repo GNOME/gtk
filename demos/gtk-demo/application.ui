@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="DemoApplicationWindow" parent="GtkApplicationWindow">
     <property name="title" translatable="yes">Application Class</property>
@@ -25,8 +25,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkSeparatorToolItem">
-              </object>
+              <object class="GtkSeparatorToolItem"/>
             </child>
             <child>
               <object class="GtkToolButton">
@@ -34,11 +33,11 @@
                 <property name="action-name">win.logo</property>
               </object>
             </child>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkInfoBar" id="infobar">
@@ -65,11 +64,11 @@
                 </child>
               </object>
             </child>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkScrolledWindow">
@@ -81,20 +80,20 @@
                 <property name="buffer">buffer</property>
               </object>
             </child>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkStatusbar" id="status">
             <property name="hexpand">1</property>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">3</property>
-          </packing>
         </child>
       </object>
     </child>

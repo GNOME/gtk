@@ -342,12 +342,28 @@ typedef enum
 } GtkOrientation;
 
 /**
+ * GtkOverflow:
+ * @GTK_OVERFLOW_VISIBLE: No change is applied. Content is drawn at the specified
+ *     position.
+ * @GTK_OVERFLOW_HIDDEN: Content is clipped to the bounds of the area. Content
+ *     outside the area is not drawn and cannot be interacted with.
+ *
+ * Defines how content overflowing a given area should be handled, such as
+ * with gtk_widget_set_overflow(). This property is modeled after the CSS overflow
+ * property, but implements it only partially.
+ */
+typedef enum
+{
+  GTK_OVERFLOW_VISIBLE,
+  GTK_OVERFLOW_HIDDEN
+} GtkOverflow;
+
+/**
  * GtkPackType:
  * @GTK_PACK_START: The child is packed into the start of the box
  * @GTK_PACK_END: The child is packed into the end of the box
  *
- * Represents the packing location #GtkBox children. (See: #GtkVBox,
- * #GtkHBox, and #GtkButtonBox).
+ * Represents the packing location #GtkBox children
  */
 typedef enum
 {
@@ -532,24 +548,6 @@ typedef enum
   GTK_SORT_ASCENDING,
   GTK_SORT_DESCENDING
 } GtkSortType;
-
-/**
- * GtkPackDirection:
- * @GTK_PACK_DIRECTION_LTR: Widgets are packed left-to-right
- * @GTK_PACK_DIRECTION_RTL: Widgets are packed right-to-left
- * @GTK_PACK_DIRECTION_TTB: Widgets are packed top-to-bottom
- * @GTK_PACK_DIRECTION_BTT: Widgets are packed bottom-to-top
- *
- * Determines how widgets should be packed inside menubars
- * and menuitems contained in menubars.
- */
-typedef enum
-{
-  GTK_PACK_DIRECTION_LTR,
-  GTK_PACK_DIRECTION_RTL,
-  GTK_PACK_DIRECTION_TTB,
-  GTK_PACK_DIRECTION_BTT
-} GtkPackDirection;
 
 /**
  * GtkPrintPages:
@@ -970,6 +968,23 @@ typedef enum
 } GtkPropagationPhase;
 
 /**
+ * GtkPropagationLimit:
+ * @GTK_LIMIT_NONE: Events are handled regardless of what their
+ *   target is.
+ * @GTK_LIMIT_SAME_NATIVE: Events are only handled if their target
+ *   is in the same #GtkNative as the event controllers widget. Note
+ *   that some event types have two targets (origin and destination).
+ *
+ * Describes limits of a #GtkEventController for handling events
+ * targeting other widgets.
+ */
+typedef enum
+{
+  GTK_LIMIT_NONE,
+  GTK_LIMIT_SAME_NATIVE
+} GtkPropagationLimit;
+
+/**
  * GtkEventSequenceState:
  * @GTK_EVENT_SEQUENCE_NONE: The sequence is handled, but not grabbed.
  * @GTK_EVENT_SEQUENCE_CLAIMED: The sequence is handled and grabbed.
@@ -1023,5 +1038,113 @@ typedef enum {
   GTK_PLACES_OPEN_NEW_TAB    = 1 << 1,
   GTK_PLACES_OPEN_NEW_WINDOW = 1 << 2
 } GtkPlacesOpenFlags;
+
+/**
+ * GtkPickFlags:
+ * @GTK_PICK_DEFAULT: The default behavior, include widgets that are receiving events
+ * @GTK_PICK_INSENSITIVE: Include widgets that are insensitive
+ * @GTK_PICK_NON_TARGETABLE: Include widgets that are marked as non-targetable. See #GtkWidget::can-target 
+ * 
+ * Flags that influence the behavior of gtk_widget_pick()
+ */
+typedef enum {
+  GTK_PICK_DEFAULT        = 0,
+  GTK_PICK_INSENSITIVE    = 1 << 0,
+  GTK_PICK_NON_TARGETABLE = 1 << 1
+} GtkPickFlags;
+
+/**
+ * GtkConstraintRelation:
+ * @GTK_CONSTRAINT_RELATION_EQ: Equal
+ * @GTK_CONSTRAINT_RELATION_LE: Less than, or equal
+ * @GTK_CONSTRAINT_RELATION_GE: Greater than, or equal
+ *
+ * The relation between two terms of a constraint.
+ */
+typedef enum {
+  GTK_CONSTRAINT_RELATION_LE = -1,
+  GTK_CONSTRAINT_RELATION_EQ = 0,
+  GTK_CONSTRAINT_RELATION_GE = 1
+} GtkConstraintRelation;
+
+/**
+ * GtkConstraintStrength:
+ * @GTK_CONSTRAINT_STRENGTH_REQUIRED: The constraint is required towards solving the layout
+ * @GTK_CONSTRAINT_STRENGTH_STRONG: A strong constraint
+ * @GTK_CONSTRAINT_STRENGTH_MEDIUM: A medium constraint
+ * @GTK_CONSTRAINT_STRENGTH_WEAK: A weak constraint
+ *
+ * The strength of a constraint, expressed as a symbolic constant.
+ *
+ * The strength of a #GtkConstraint can be expressed with any positive
+ * integer; the values of this enumeration can be used for readability.
+ */
+typedef enum {
+  GTK_CONSTRAINT_STRENGTH_REQUIRED = 1001001000,
+  GTK_CONSTRAINT_STRENGTH_STRONG   = 1000000000,
+  GTK_CONSTRAINT_STRENGTH_MEDIUM   = 1000,
+  GTK_CONSTRAINT_STRENGTH_WEAK     = 1
+} GtkConstraintStrength;
+
+/**
+ * GtkConstraintAttribute:
+ * @GTK_CONSTRAINT_ATTRIBUTE_NONE: No attribute, used for constant
+ *   relations
+ * @GTK_CONSTRAINT_ATTRIBUTE_LEFT: The left edge of a widget, regardless of
+ *   text direction
+ * @GTK_CONSTRAINT_ATTRIBUTE_RIGHT: The right edge of a widget, regardless
+ *   of text direction
+ * @GTK_CONSTRAINT_ATTRIBUTE_TOP: The top edge of a widget
+ * @GTK_CONSTRAINT_ATTRIBUTE_BOTTOM: The bottom edge of a widget
+ * @GTK_CONSTRAINT_ATTRIBUTE_START: The leading edge of a widget, depending
+ *   on text direction; equivalent to %GTK_CONSTRAINT_ATTRIBUTE_LEFT for LTR
+ *   languages, and %GTK_CONSTRAINT_ATTRIBUTE_RIGHT for RTL ones
+ * @GTK_CONSTRAINT_ATTRIBUTE_END: The trailing edge of a widget, depending
+ *   on text direction; equivalent to %GTK_CONSTRAINT_ATTRIBUTE_RIGHT for LTR
+ *   languages, and %GTK_CONSTRAINT_ATTRIBUTE_LEFT for RTL ones
+ * @GTK_CONSTRAINT_ATTRIBUTE_WIDTH: The width of a widget
+ * @GTK_CONSTRAINT_ATTRIBUTE_HEIGHT: The height of a widget
+ * @GTK_CONSTRAINT_ATTRIBUTE_CENTER_X: The center of a widget, on the
+ *   horizontal axis
+ * @GTK_CONSTRAINT_ATTRIBUTE_CENTER_Y: The center of a widget, on the
+ *   vertical axis
+ * @GTK_CONSTRAINT_ATTRIBUTE_BASELINE: The baseline of a widget
+ *
+ * The widget attributes that can be used when creating a #GtkConstraint.
+ */
+typedef enum {
+  GTK_CONSTRAINT_ATTRIBUTE_NONE,
+  GTK_CONSTRAINT_ATTRIBUTE_LEFT,
+  GTK_CONSTRAINT_ATTRIBUTE_RIGHT,
+  GTK_CONSTRAINT_ATTRIBUTE_TOP,
+  GTK_CONSTRAINT_ATTRIBUTE_BOTTOM,
+  GTK_CONSTRAINT_ATTRIBUTE_START,
+  GTK_CONSTRAINT_ATTRIBUTE_END,
+  GTK_CONSTRAINT_ATTRIBUTE_WIDTH,
+  GTK_CONSTRAINT_ATTRIBUTE_HEIGHT,
+  GTK_CONSTRAINT_ATTRIBUTE_CENTER_X,
+  GTK_CONSTRAINT_ATTRIBUTE_CENTER_Y,
+  GTK_CONSTRAINT_ATTRIBUTE_BASELINE
+} GtkConstraintAttribute;
+
+/**
+ * GtkConstraintVflParserError:
+ * @GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_SYMBOL: Invalid or unknown symbol
+ * @GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_ATTRIBUTE: Invalid or unknown attribute
+ * @GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_VIEW: Invalid or unknown view
+ * @GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_METRIC: Invalid or unknown metric
+ * @GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_PRIORITY: Invalid or unknown priority
+ * @GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_RELATION: Invalid or unknown relation
+ *
+ * Domain for VFL parsing errors.
+ */
+typedef enum {
+  GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_SYMBOL,
+  GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_ATTRIBUTE,
+  GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_VIEW,
+  GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_METRIC,
+  GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_PRIORITY,
+  GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_RELATION
+} GtkConstraintVflParserError;
 
 #endif /* __GTK_ENUMS_H__ */

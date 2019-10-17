@@ -26,6 +26,7 @@
 
 #include "gdkversionmacros.h"
 
+#include "gdkprofilerprivate.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
 
@@ -33,12 +34,16 @@
 
 #include "gdk-private.h"
 
+#include "gdkconstructor.h"
+
 #ifndef HAVE_XCONVERTCASE
 #include "gdkkeysyms.h"
 #endif
 
 #include <string.h>
 #include <stdlib.h>
+
+#include <fribidi.h>
 
 
 /**
@@ -49,12 +54,12 @@
  * This section describes the GDK initialization functions and miscellaneous
  * utility functions, as well as deprecation facilities.
  *
- * The GDK and GTK+ headers annotate deprecated APIs in a way that produces
+ * The GDK and GTK headers annotate deprecated APIs in a way that produces
  * compiler warnings if these deprecated APIs are used. The warnings
  * can be turned off by defining the macro %GDK_DISABLE_DEPRECATION_WARNINGS
  * before including the glib.h header.
  *
- * GDK and GTK+ also provide support for building applications against
+ * GDK and GTK also provide support for building applications against
  * defined subsets of deprecated or new APIs. Define the macro
  * %GDK_VERSION_MIN_REQUIRED to specify up to what version
  * you want to receive warnings about deprecated APIs. Define the
@@ -106,14 +111,6 @@
  * of deprecated GDK APIs.
  */
 
-typedef struct _GdkPredicate  GdkPredicate;
-
-struct _GdkPredicate
-{
-  GdkEventFunc func;
-  gpointer data;
-};
-
 typedef struct _GdkThreadsDispatch GdkThreadsDispatch;
 
 struct _GdkThreadsDispatch
@@ -149,6 +146,7 @@ static const GDebugKey gdk_debug_keys[] = {
   { "gl-texture-rect", GDK_DEBUG_GL_TEXTURE_RECT },
   { "gl-legacy",       GDK_DEBUG_GL_LEGACY },
   { "gl-gles",         GDK_DEBUG_GL_GLES },
+  { "gl-debug",        GDK_DEBUG_GL_DEBUG },
   { "vulkan-disable",  GDK_DEBUG_VULKAN_DISABLE },
   { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE }
 };
@@ -214,6 +212,11 @@ gdk_pre_parse (void)
       _gdk_debug_flags = g_parse_debug_string (debug_string,
                                               (GDebugKey *) gdk_debug_keys,
                                               G_N_ELEMENTS (gdk_debug_keys));
+
+    if (g_getenv ("GTK_TRACE_FD"))
+      gdk_profiler_start (atoi (g_getenv ("GTK_TRACE_FD")));
+    else if (g_getenv ("GTK_TRACE"))
+      gdk_profiler_start (-1);
   }
 #endif  /* G_ENABLE_DEBUG */
 
@@ -305,11 +308,11 @@ gdk_should_use_portal (void)
  * locked for performance reasons. So e.g. you must coordinate
  * accesses to the same #GHashTable from multiple threads.
  *
- * GTK+, however, is not thread safe. You should only use GTK+ and GDK
+ * GTK, however, is not thread safe. You should only use GTK and GDK
  * from the thread gtk_init() and gtk_main() were called on.
  * This is usually referred to as the “main thread”.
  *
- * Signals on GTK+ and GDK types, as well as non-signal callbacks, are
+ * Signals on GTK and GDK types, as well as non-signal callbacks, are
  * emitted in the main thread.
  *
  * You can schedule work in the main thread safely from other threads
@@ -342,4 +345,46 @@ gdk_should_use_portal (void)
  * expensive tasks from worker threads, and will handle thread
  * management for you.
  */
+
+PangoDirection
+gdk_unichar_direction (gunichar ch)
+{
+  FriBidiCharType fribidi_ch_type;
+
+  G_STATIC_ASSERT (sizeof (FriBidiChar) == sizeof (gunichar));
+
+  fribidi_ch_type = fribidi_get_bidi_type (ch);
+
+  if (!FRIBIDI_IS_STRONG (fribidi_ch_type))
+    return PANGO_DIRECTION_NEUTRAL;
+  else if (FRIBIDI_IS_RTL (fribidi_ch_type))
+    return PANGO_DIRECTION_RTL;
+  else
+    return PANGO_DIRECTION_LTR;
+}
+
+PangoDirection
+gdk_find_base_dir (const gchar *text,
+                   gint         length)
+{
+  PangoDirection dir = PANGO_DIRECTION_NEUTRAL;
+  const gchar *p;
+
+  g_return_val_if_fail (text != NULL || length == 0, PANGO_DIRECTION_NEUTRAL);
+
+  p = text;
+  while ((length < 0 || p < text + length) && *p)
+    {
+      gunichar wc = g_utf8_get_char (p);
+
+      dir = gdk_unichar_direction (wc);
+
+      if (dir != PANGO_DIRECTION_NEUTRAL)
+        break;
+
+      p = g_utf8_next_char (p);
+    }
+
+  return dir;
+}
 

@@ -30,6 +30,7 @@
 
 #include "gtkcolorbutton.h"
 
+#include "gtkbinlayout.h"
 #include "gtkbutton.h"
 #include "gtkcolorchooser.h"
 #include "gtkcolorchooserprivate.h"
@@ -43,6 +44,7 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtksnapshot.h"
+#include "gtkstylecontext.h"
 
 
 /**
@@ -61,6 +63,17 @@
  * it from a plain #GtkButton, it gets the .color style class.
  */
 
+typedef struct _GtkColorButtonClass     GtkColorButtonClass;
+
+struct _GtkColorButton {
+  GtkWidget parent_instance;
+};
+
+struct _GtkColorButtonClass {
+  GtkWidgetClass parent_class;
+
+  void (* color_set) (GtkColorButton *cp);
+};
 
 typedef struct
 {
@@ -136,50 +149,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkColorButton, gtk_color_button, GTK_TYPE_WIDGET,
                                                 gtk_color_button_iface_init))
 
 static void
-gtk_color_button_measure (GtkWidget       *widget,
-                          GtkOrientation  orientation,
-                          int             for_size,
-                          int            *minimum,
-                          int            *natural,
-                          int            *minimum_baseline,
-                          int            *natural_baseline)
-{
-  GtkColorButton *button = GTK_COLOR_BUTTON (widget);
-  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
-
-  gtk_widget_measure (priv->button, orientation, for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_color_button_snapshot (GtkWidget   *widget,
-                           GtkSnapshot *snapshot)
-{
-  GtkColorButton *button = GTK_COLOR_BUTTON (widget);
-  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
-
-  gtk_widget_snapshot_child (widget, priv->button, snapshot);
-}
-
-static void
-gtk_color_button_size_allocate (GtkWidget *widget,
-                                int        width,
-                                int        height,
-                                int        baseline)
-{
-  GtkColorButton *button = GTK_COLOR_BUTTON (widget);
-  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
-
-  gtk_widget_size_allocate (priv->button,
-                            &(GtkAllocation) {
-                              0, 0,
-                              width, height
-                            },
-                            baseline);
-}
-
-static void
 gtk_color_button_class_init (GtkColorButtonClass *klass)
 {
   GObjectClass *gobject_class;
@@ -192,9 +161,6 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
   gobject_class->set_property = gtk_color_button_set_property;
   gobject_class->finalize = gtk_color_button_finalize;
 
-  widget_class->snapshot = gtk_color_button_snapshot;
-  widget_class->measure = gtk_color_button_measure;
-  widget_class->size_allocate = gtk_color_button_size_allocate;
   klass->color_set = NULL;
 
   /**
@@ -274,6 +240,8 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
                                                          P_("Whether to show the color editor right away"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
 static void
@@ -372,8 +340,6 @@ gtk_color_button_init (GtkColorButton *button)
   PangoRectangle rect;
   GtkStyleContext *context;
   GdkContentFormats *targets;
-
-  gtk_widget_set_has_surface (GTK_WIDGET (button), FALSE);
 
   priv->button = gtk_button_new ();
   g_signal_connect (priv->button, "clicked", G_CALLBACK (gtk_color_button_clicked), button);
@@ -518,12 +484,12 @@ ensure_dialog (GtkColorButton *button)
   if (priv->cs_dialog != NULL)
     return;
 
-  parent = gtk_widget_get_toplevel (GTK_WIDGET (button));
+  parent = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (button)));
 
   priv->cs_dialog = dialog = gtk_color_chooser_dialog_new (priv->title, NULL);
   gtk_window_set_hide_on_close (GTK_WINDOW (dialog), TRUE);
 
-  if (gtk_widget_is_toplevel (parent) && GTK_IS_WINDOW (parent))
+  if (GTK_IS_WINDOW (parent))
   {
     if (GTK_WINDOW (parent) != gtk_window_get_transient_for (GTK_WINDOW (dialog)))
       gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
@@ -555,7 +521,9 @@ gtk_color_button_clicked (GtkButton *b,
 
   gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (priv->cs_dialog), &priv->rgba);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_window_present (GTK_WINDOW (priv->cs_dialog));
+  G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void

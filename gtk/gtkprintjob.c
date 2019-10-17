@@ -19,6 +19,7 @@
  * SECTION:gtkprintjob
  * @Title: GtkPrintJob
  * @Short_description: Represents a print job
+ * @Include: gtk/gtkunixprint.h
  *
  * A #GtkPrintJob object represents a job that is sent to a
  * printer. You only need to deal directly with print jobs if
@@ -48,12 +49,29 @@
 
 #include "gtkprintjob.h"
 #include "gtkprinter.h"
-#include "gtkprinter-private.h"
-#include "gtkprintbackend.h"
+#include "gtkprinterprivate.h"
+#include "gtkprintbackendprivate.h"
 
 #ifndef O_BINARY
 #define O_BINARY 0
 #endif
+
+typedef struct _GtkPrintJobClass     GtkPrintJobClass;
+typedef struct _GtkPrintJobPrivate   GtkPrintJobPrivate;
+
+struct _GtkPrintJob
+{
+  GObject parent_instance;
+
+  GtkPrintJobPrivate *priv;
+};
+
+struct _GtkPrintJobClass
+{
+  GObjectClass parent_class;
+
+  void (*status_changed) (GtkPrintJob *job);
+};
 
 struct _GtkPrintJobPrivate
 {
@@ -186,7 +204,7 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintJobClass, status_changed),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 }
 

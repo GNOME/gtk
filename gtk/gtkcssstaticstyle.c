@@ -27,7 +27,6 @@
 #include "gtkcssinheritvalueprivate.h"
 #include "gtkcssinitialvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkcsssectionprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
@@ -116,7 +115,8 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *style,
 {
   if (style->values[id])
     _gtk_css_value_unref (style->values[id]);
-  style->values[id] = _gtk_css_value_ref (value);
+
+  style->values[id] = value;
 
   if (style->sections && style->sections->len > id && g_ptr_array_index (style->sections, id))
     {
@@ -175,7 +175,7 @@ gtk_css_static_style_new_compute (GtkStyleProvider    *provider,
   GtkCssLookup lookup;
   GtkCssChange change = GTK_CSS_CHANGE_ANY_SELF | GTK_CSS_CHANGE_ANY_SIBLING | GTK_CSS_CHANGE_ANY_PARENT;
 
-  _gtk_css_lookup_init (&lookup, NULL);
+  _gtk_css_lookup_init (&lookup);
 
   if (matcher)
     gtk_style_provider_lookup (provider,
@@ -207,9 +207,6 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
 {
   GtkCssValue *value;
 
-  gtk_internal_return_if_fail (GTK_IS_CSS_STATIC_STYLE (style));
-  gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
-  gtk_internal_return_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style));
   gtk_internal_return_if_fail (id < GTK_CSS_PROPERTY_N_PROPERTIES);
 
   /* http://www.w3.org/TR/css3-cascade/#cascade
@@ -221,20 +218,22 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
     {
       GtkCssStyleProperty *prop = _gtk_css_style_property_lookup_by_id (id);
 
-      if (_gtk_css_style_property_is_inherit (prop))
-        specified = _gtk_css_inherit_value_new ();
+      if (parent_style && _gtk_css_style_property_is_inherit (prop))
+        {
+          /* Just take the style from the parent */
+          value = _gtk_css_value_ref (gtk_css_style_get_value (parent_style, id));
+        }
       else
-        specified = _gtk_css_initial_value_new ();
+        {
+          value = _gtk_css_initial_value_new_compute (id, provider, (GtkCssStyle *)style, parent_style);
+        }
     }
   else
-    _gtk_css_value_ref (specified);
-
-  value = _gtk_css_value_compute (specified, id, provider, GTK_CSS_STYLE (style), parent_style);
+    {
+      value = _gtk_css_value_compute (specified, id, provider, (GtkCssStyle *)style, parent_style);
+    }
 
   gtk_css_static_style_set_value (style, id, value, section);
-
-  _gtk_css_value_unref (value);
-  _gtk_css_value_unref (specified);
 }
 
 GtkCssChange

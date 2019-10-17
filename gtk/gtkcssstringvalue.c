@@ -160,7 +160,7 @@ _gtk_css_string_value_parse (GtkCssParser *parser)
 
   g_return_val_if_fail (parser != NULL, NULL);
 
-  s = _gtk_css_parser_read_string (parser);
+  s = gtk_css_parser_consume_string (parser);
   if (s == NULL)
     return NULL;
   
@@ -200,9 +200,14 @@ _gtk_css_ident_value_try_parse (GtkCssParser *parser)
 
   g_return_val_if_fail (parser != NULL, NULL);
 
-  ident = _gtk_css_parser_try_ident (parser, TRUE);
-  if (ident == NULL)
+  if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
     return NULL;
+
+  ident = gtk_css_parser_consume_ident (parser);
+  if (ident == NULL)
+    {
+      g_assert_not_reached ();
+    }
   
   return _gtk_css_ident_value_new_take (ident);
 }

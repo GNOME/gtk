@@ -23,6 +23,7 @@
 
 #include "gtkcssstyleprivate.h"
 #include "gtksnapshot.h"
+#include "gtkprivate.h"
 
 /* for the types only */
 #include "gtk/gtkcssimagecrossfadeprivate.h"
@@ -33,7 +34,6 @@
 #include "gtk/gtkcssimagescaledprivate.h"
 #include "gtk/gtkcssimagerecolorprivate.h"
 #include "gtk/gtkcssimagefallbackprivate.h"
-#include "gtk/gtkcssimagewin32private.h"
 
 G_DEFINE_ABSTRACT_TYPE (GtkCssImage, _gtk_css_image, G_TYPE_OBJECT)
 
@@ -173,9 +173,9 @@ _gtk_css_image_compute (GtkCssImage      *image,
 {
   GtkCssImageClass *klass;
 
-  g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), NULL);
-  g_return_val_if_fail (GTK_IS_CSS_STYLE (style), NULL);
-  g_return_val_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style), NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_IMAGE (image), NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (style), NULL);
+  gtk_internal_return_val_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style), NULL);
 
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
 
@@ -190,8 +190,8 @@ _gtk_css_image_transition (GtkCssImage *start,
 {
   GtkCssImageClass *klass;
 
-  g_return_val_if_fail (start == NULL || GTK_IS_CSS_IMAGE (start), NULL);
-  g_return_val_if_fail (end == NULL || GTK_IS_CSS_IMAGE (end), NULL);
+  gtk_internal_return_val_if_fail (start == NULL || GTK_IS_CSS_IMAGE (start), NULL);
+  gtk_internal_return_val_if_fail (end == NULL || GTK_IS_CSS_IMAGE (end), NULL);
 
   progress = CLAMP (progress, 0.0, 1.0);
 
@@ -218,8 +218,8 @@ _gtk_css_image_equal (GtkCssImage *image1,
 {
   GtkCssImageClass *klass;
 
-  g_return_val_if_fail (image1 == NULL || GTK_IS_CSS_IMAGE (image1), FALSE);
-  g_return_val_if_fail (image2 == NULL || GTK_IS_CSS_IMAGE (image2), FALSE);
+  gtk_internal_return_val_if_fail (image1 == NULL || GTK_IS_CSS_IMAGE (image1), FALSE);
+  gtk_internal_return_val_if_fail (image2 == NULL || GTK_IS_CSS_IMAGE (image2), FALSE);
 
   if (image1 == image2)
     return TRUE;
@@ -244,10 +244,10 @@ _gtk_css_image_draw (GtkCssImage        *image,
   GtkSnapshot *snapshot;
   GskRenderNode *node;
 
-  g_return_if_fail (GTK_IS_CSS_IMAGE (image));
-  g_return_if_fail (cr != NULL);
-  g_return_if_fail (width > 0);
-  g_return_if_fail (height > 0);
+  gtk_internal_return_if_fail (GTK_IS_CSS_IMAGE (image));
+  gtk_internal_return_if_fail (cr != NULL);
+  gtk_internal_return_if_fail (width > 0);
+  gtk_internal_return_if_fail (height > 0);
 
   cairo_save (cr);
 
@@ -272,10 +272,10 @@ gtk_css_image_snapshot (GtkCssImage *image,
 {
   GtkCssImageClass *klass;
 
-  g_return_if_fail (GTK_IS_CSS_IMAGE (image));
-  g_return_if_fail (snapshot != NULL);
-  g_return_if_fail (width > 0);
-  g_return_if_fail (height > 0);
+  gtk_internal_return_if_fail (GTK_IS_CSS_IMAGE (image));
+  gtk_internal_return_if_fail (snapshot != NULL);
+  gtk_internal_return_if_fail (width > 0);
+  gtk_internal_return_if_fail (height > 0);
 
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
 
@@ -287,7 +287,7 @@ gtk_css_image_is_invalid (GtkCssImage *image)
 {
   GtkCssImageClass *klass;
 
-  g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), FALSE);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_IMAGE (image), FALSE);
 
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
 
@@ -299,7 +299,7 @@ gtk_css_image_is_dynamic (GtkCssImage *image)
 {
   GtkCssImageClass *klass;
 
-  g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), FALSE);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_IMAGE (image), FALSE);
 
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
 
@@ -312,7 +312,7 @@ gtk_css_image_get_dynamic_image (GtkCssImage *image,
 {
   GtkCssImageClass *klass;
 
-  g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_IMAGE (image), NULL);
 
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
 
@@ -325,8 +325,8 @@ _gtk_css_image_print (GtkCssImage *image,
 {
   GtkCssImageClass *klass;
 
-  g_return_if_fail (GTK_IS_CSS_IMAGE (image));
-  g_return_if_fail (string != NULL);
+  gtk_internal_return_if_fail (GTK_IS_CSS_IMAGE (image));
+  gtk_internal_return_if_fail (string != NULL);
 
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
 
@@ -347,13 +347,13 @@ _gtk_css_image_get_concrete_size (GtkCssImage *image,
 {
   double image_width, image_height, image_aspect;
 
-  g_return_if_fail (GTK_IS_CSS_IMAGE (image));
-  g_return_if_fail (specified_width >= 0);
-  g_return_if_fail (specified_height >= 0);
-  g_return_if_fail (default_width > 0);
-  g_return_if_fail (default_height > 0);
-  g_return_if_fail (concrete_width != NULL);
-  g_return_if_fail (concrete_height != NULL);
+  gtk_internal_return_if_fail (GTK_IS_CSS_IMAGE (image));
+  gtk_internal_return_if_fail (specified_width >= 0);
+  gtk_internal_return_if_fail (specified_height >= 0);
+  gtk_internal_return_if_fail (default_width > 0);
+  gtk_internal_return_if_fail (default_height > 0);
+  gtk_internal_return_if_fail (concrete_width != NULL);
+  gtk_internal_return_if_fail (concrete_height != NULL);
 
   /* If the specified size is a definite width and height,
    * the concrete object size is given that width and height.
@@ -467,9 +467,9 @@ _gtk_css_image_get_surface (GtkCssImage     *image,
   cairo_surface_t *result;
   cairo_t *cr;
 
-  g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), NULL);
-  g_return_val_if_fail (surface_width > 0, NULL);
-  g_return_val_if_fail (surface_height > 0, NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_IMAGE (image), NULL);
+  gtk_internal_return_val_if_fail (surface_width > 0, NULL);
+  gtk_internal_return_val_if_fail (surface_height > 0, NULL);
 
   if (target)
     result = cairo_surface_create_similar (target,
@@ -499,21 +499,23 @@ gtk_css_image_get_parser_type (GtkCssParser *parser)
     { "-gtk-icontheme", _gtk_css_image_icon_theme_get_type },
     { "-gtk-scaled", _gtk_css_image_scaled_get_type },
     { "-gtk-recolor", _gtk_css_image_recolor_get_type },
-    { "-gtk-win32-theme-part", _gtk_css_image_win32_get_type },
     { "linear-gradient", _gtk_css_image_linear_get_type },
     { "repeating-linear-gradient", _gtk_css_image_linear_get_type },
     { "radial-gradient", _gtk_css_image_radial_get_type },
     { "repeating-radial-gradient", _gtk_css_image_radial_get_type },
-    { "cross-fade", _gtk_css_image_cross_fade_get_type },
+    { "cross-fade", gtk_css_image_cross_fade_get_type },
     { "image", _gtk_css_image_fallback_get_type }
   };
   guint i;
 
   for (i = 0; i < G_N_ELEMENTS (image_types); i++)
     {
-      if (_gtk_css_parser_has_prefix (parser, image_types[i].prefix))
+      if (gtk_css_parser_has_function (parser, image_types[i].prefix))
         return image_types[i].type_func ();
     }
+
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_URL))
+    return _gtk_css_image_url_get_type ();
 
   return G_TYPE_INVALID;
 }
@@ -542,12 +544,12 @@ _gtk_css_image_new_parse (GtkCssParser *parser)
   GtkCssImage *image;
   GType image_type;
 
-  g_return_val_if_fail (parser != NULL, NULL);
+  gtk_internal_return_val_if_fail (parser != NULL, NULL);
 
   image_type = gtk_css_image_get_parser_type (parser);
   if (image_type == G_TYPE_INVALID)
     {
-      _gtk_css_parser_error (parser, "Not a valid image");
+      gtk_css_parser_error_syntax (parser, "Not a valid image");
       return NULL;
     }
 

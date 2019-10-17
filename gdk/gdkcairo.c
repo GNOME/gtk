@@ -30,7 +30,7 @@
  *
  * [Cairo](http://cairographics.org) is a graphics
  * library that supports vector graphics and image compositing that
- * can be used with GDK. GTK+ does all of its drawing using cairo.
+ * can be used with GDK and GTK.
  *
  * GDK does not wrap the cairo API, instead it allows to create cairo
  * contexts which can be used to draw on #GdkSurfaces. Additional

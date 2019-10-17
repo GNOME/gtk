@@ -30,30 +30,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_HEADER_BAR            (gtk_header_bar_get_type ())
 #define GTK_HEADER_BAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HEADER_BAR, GtkHeaderBar))
-#define GTK_HEADER_BAR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_HEADER_BAR, GtkHeaderBarClass))
 #define GTK_IS_HEADER_BAR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_HEADER_BAR))
-#define GTK_IS_HEADER_BAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HEADER_BAR))
-#define GTK_HEADER_BAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_HEADER_BAR, GtkHeaderBarClass))
 
 typedef struct _GtkHeaderBar              GtkHeaderBar;
-typedef struct _GtkHeaderBarPrivate       GtkHeaderBarPrivate;
-typedef struct _GtkHeaderBarClass         GtkHeaderBarClass;
-
-struct _GtkHeaderBar
-{
-  GtkContainer container;
-};
-
-struct _GtkHeaderBarClass
-{
-  GtkContainerClass parent_class;
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType        gtk_header_bar_get_type          (void) G_GNUC_CONST;

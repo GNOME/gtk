@@ -63,7 +63,7 @@
  * RELAX NG schema below. We refer to these descriptions as “GtkBuilder
  * UI definitions” or just “UI definitions” if the context is clear.
  *
- * [RELAX NG Compact Syntax](https://git.gnome.org/browse/gtk+/tree/gtk/gtkbuilder.rnc)
+ * [RELAX NG Compact Syntax](https://gitlab.gnome.org/GNOME/gtk/tree/master/gtk/gtkbuilder.rnc)
  *
  * The toplevel element is <interface>. It optionally takes a “domain”
  * attribute, which will make the builder look for translated strings
@@ -131,10 +131,10 @@
  *
  * It is also possible to bind a property value to another object's
  * property value using the attributes
- * "bind-source" to specify the source object of the binding,
- * "bind-property" to specify the source property and optionally
- * "bind-flags" to specify the binding flags
- * Internally builder implement this using GBinding objects.
+ * "bind-source" to specify the source object of the binding, and
+ * optionally, "bind-property" and "bind-flags" to specify the
+ * source property and source binding flags respectively.
+ * Internally builder implements this using GBinding objects.
  * For more information see g_object_bind_property()
  *
  * Signal handlers are set up with the <signal> element. The “name”
@@ -153,7 +153,7 @@
  * been constructed by GTK+ as part of a composite widget, to set
  * properties on them or to add further children (e.g. the @vbox of
  * a #GtkDialog). This can be achieved by setting the “internal-child”
- * propery of the <child> element to a true value. Note that GtkBuilder
+ * property of the <child> element to a true value. Note that GtkBuilder
  * still requires an <object> element for the internal child, even if it
  * has already been constructed.
  *
@@ -171,7 +171,7 @@
  *     <child internal-child="vbox">
  *       <object class="GtkBox" id="vbox1">
  *         <child internal-child="action_area">
- *           <object class="GtkButtonBox" id="hbuttonbox1">
+ *           <object class="GtkBox" id="hbuttonbox1">
  *             <child>
  *               <object class="GtkButton" id="ok_button">
  *                 <property name="label">gtk-ok</property>
@@ -213,7 +213,6 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkwindow.h"
 #include "gtkicontheme.h"
 #include "gtktestutils.h"
 
@@ -290,7 +289,6 @@ gtk_builder_init (GtkBuilder *builder)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
 
-  priv = gtk_builder_get_instance_private (builder);
   priv->domain = NULL;
   priv->objects = g_hash_table_new_full (g_str_hash, g_str_equal,
                                          g_free, g_object_unref);
@@ -537,7 +535,7 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
           (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != G_TYPE_FILE))
         {
           GObject *object = g_hash_table_lookup (priv->objects,
-                                                 prop->text->str);
+                                                 g_strstrip (prop->text->str));
 
           if (object)
             {
@@ -723,7 +721,9 @@ _gtk_builder_construct (GtkBuilder  *builder,
    * be set once.
    */
   if (info->constructor ||
-      (info->parent && ((ChildInfo*)info->parent)->internal_child != NULL))
+      (info->parent &&
+       info->parent->tag_type == TAG_CHILD &&
+       ((ChildInfo*)info->parent)->internal_child != NULL))
     param_filter_flags = G_PARAM_CONSTRUCT_ONLY;
   else
     param_filter_flags = G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY;
@@ -759,7 +759,9 @@ _gtk_builder_construct (GtkBuilder  *builder,
       if (construct_parameters->len)
         g_warning ("Can't pass in construct-only parameters to %s", info->id);
     }
-  else if (info->parent && ((ChildInfo*)info->parent)->internal_child != NULL)
+  else if (info->parent &&
+           info->parent->tag_type == TAG_CHILD &&
+           ((ChildInfo*)info->parent)->internal_child != NULL)
     {
       gchar *childname = ((ChildInfo*)info->parent)->internal_child;
       obj = gtk_builder_get_internal_child (builder, info, childname, error);
@@ -922,13 +924,27 @@ _gtk_builder_add (GtkBuilder *builder,
   g_assert (object != NULL);
 
   parent = ((ObjectInfo*)child_info->parent)->object;
-  g_assert (GTK_IS_BUILDABLE (parent));
 
   GTK_NOTE (BUILDER,
             g_message ("adding %s to %s", object_get_name (object), object_get_name (parent)));
 
-  gtk_buildable_add_child (GTK_BUILDABLE (parent), builder, object,
-                           child_info->type);
+  if (G_IS_LIST_STORE (parent))
+    {
+      if (child_info->type != NULL)
+        {
+          GTK_BUILDER_WARN_INVALID_CHILD_TYPE (parent, child_info->type);
+        }
+      else
+        {
+          g_list_store_append (G_LIST_STORE (parent), object);
+        }
+    }
+  else
+    {
+      g_assert (GTK_IS_BUILDABLE (parent));
+      gtk_buildable_add_child (GTK_BUILDABLE (parent), builder, object,
+                               child_info->type);
+    }
 
   child_info->added = TRUE;
 }
@@ -1091,7 +1107,7 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
   priv->resource_prefix = NULL;
 
   _gtk_builder_parser_parse_buffer (builder, filename,
-                                    buffer, length,
+                                    buffer, (gssize)length,
                                     NULL,
                                     &tmp_error);
 
@@ -1157,7 +1173,7 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
   priv->resource_prefix = NULL;
 
   _gtk_builder_parser_parse_buffer (builder, filename,
-                                    buffer, length,
+                                    buffer, (gssize)length,
                                     object_ids,
                                     &tmp_error);
 
@@ -1195,7 +1211,7 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
                                   GtkWidget    *widget,
                                   GType         template_type,
                                   const gchar  *buffer,
-                                  gsize         length,
+                                  gssize        length,
                                   GError      **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
@@ -1391,7 +1407,7 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
  *
  * Most users will probably want to use gtk_builder_new_from_string().
  *
- * Upon errors 0 will be returned and @error will be assigned a
+ * Upon errors %FALSE will be returned and @error will be assigned a
  * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or
  * #G_VARIANT_PARSE_ERROR domain.
  *
@@ -1404,7 +1420,7 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
 gboolean
 gtk_builder_add_from_string (GtkBuilder   *builder,
                              const gchar  *buffer,
-                             gsize         length,
+                             gssize        length,
                              GError      **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
@@ -1446,7 +1462,7 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
  * building only the requested objects and merges
  * them with the current contents of @builder.
  *
- * Upon errors 0 will be returned and @error will be assigned a
+ * Upon errors %FALSE will be returned and @error will be assigned a
  * #GError from the #GTK_BUILDER_ERROR or #G_MARKUP_ERROR domain.
  *
  * If you are adding an object that depends on an object that is not
@@ -1458,7 +1474,7 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
 gboolean
 gtk_builder_add_objects_from_string (GtkBuilder   *builder,
                                      const gchar  *buffer,
-                                     gsize         length,
+                                     gssize        length,
                                      gchar       **object_ids,
                                      GError      **error)
 {
@@ -2058,6 +2074,22 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
               ret = FALSE;
             }
         }
+      else if (G_VALUE_HOLDS (value, GSK_TYPE_TRANSFORM))
+        {
+          GskTransform *transform;
+
+          if (gsk_transform_parse (string, &transform))
+            g_value_take_boxed (value, transform);
+          else
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "Could not parse transform '%s'",
+                           string);
+              ret = FALSE;
+            }
+        }
       else if (G_VALUE_HOLDS (value, G_TYPE_STRV))
         {
           gchar **vector = g_strsplit (string, "\n", 0);
@@ -2076,7 +2108,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
     case G_TYPE_OBJECT:
     case G_TYPE_INTERFACE:
       if (G_VALUE_HOLDS (value, GDK_TYPE_PIXBUF) ||
-          G_VALUE_HOLDS (value, GDK_TYPE_PAINTABLE) || 
+          G_VALUE_HOLDS (value, GDK_TYPE_PAINTABLE) ||
           G_VALUE_HOLDS (value, GDK_TYPE_TEXTURE))
         {
           gchar *filename;
@@ -2124,6 +2156,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
           if (pixbuf == NULL)
             {
               GtkIconTheme *theme;
+              GdkPaintable *texture;
 
               g_warning ("Could not load image '%s': %s",
                          string, tmp_error->message);
@@ -2131,11 +2164,13 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
 
               /* fall back to a missing image */
               theme = gtk_icon_theme_get_default ();
-              pixbuf = gtk_icon_theme_load_icon (theme,
+              texture = gtk_icon_theme_load_icon (theme,
                                                  "image-missing",
                                                  16,
                                                  GTK_ICON_LOOKUP_USE_BUILTIN,
                                                  NULL);
+              pixbuf = gdk_pixbuf_get_from_texture (GDK_TEXTURE (texture));
+              g_object_unref (texture);
             }
 
           if (pixbuf)
@@ -2176,6 +2211,27 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
           file = g_file_new_for_uri (string);
           g_value_set_object (value, file);
           g_object_unref (G_OBJECT (file));
+
+          ret = TRUE;
+        }
+      else
+        ret = FALSE;
+      break;
+    case G_TYPE_POINTER:
+      if (G_VALUE_HOLDS (value, G_TYPE_GTYPE))
+        {
+          GType resolved_type;
+
+          resolved_type = gtk_builder_get_type_from_name (builder, string);
+          if (resolved_type == G_TYPE_INVALID)
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "Unsupported GType '%s' for value of type 'GType'", string);
+              return FALSE;
+            }
+          g_value_set_gtype (value, resolved_type);
 
           ret = TRUE;
         }
@@ -2749,7 +2805,7 @@ gtk_builder_get_application (GtkBuilder *builder)
 /*< private >
  * _gtk_builder_prefix_error:
  * @builder: a #GtkBuilder
- * @context: the #GMarkupParseContext
+ * @context: the #GtkBuildableParseContext
  * @error: an error
  *
  * Calls g_prefix_error() to prepend a filename:line:column marker
@@ -2761,21 +2817,21 @@ gtk_builder_get_application (GtkBuilder *builder)
  * g_markup_collect_attributes() in a start_element vfunc.
  */
 void
-_gtk_builder_prefix_error (GtkBuilder           *builder,
-                           GMarkupParseContext  *context,
-                           GError              **error)
+_gtk_builder_prefix_error (GtkBuilder                *builder,
+                           GtkBuildableParseContext  *context,
+                           GError                   **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   gint line, col;
 
-  g_markup_parse_context_get_position (context, &line, &col);
+  gtk_buildable_parse_context_get_position (context, &line, &col);
   g_prefix_error (error, "%s:%d:%d ", priv->filename, line, col);
 }
 
 /*< private >
  * _gtk_builder_error_unhandled_tag:
  * @builder: a #GtkBuilder
- * @context: the #GMarkupParseContext
+ * @context: the #GtkBuildableParseContext
  * @object: name of the object that is being handled
  * @element_name: name of the element whose start tag is being handled
  * @error: return location for the error
@@ -2786,16 +2842,16 @@ _gtk_builder_prefix_error (GtkBuilder           *builder,
  * This is intended to be called in a start_element vfunc.
  */
 void
-_gtk_builder_error_unhandled_tag (GtkBuilder           *builder,
-                                  GMarkupParseContext  *context,
-                                  const gchar          *object,
-                                  const gchar          *element_name,
-                                  GError              **error)
+_gtk_builder_error_unhandled_tag (GtkBuilder                *builder,
+                                  GtkBuildableParseContext  *context,
+                                  const gchar               *object,
+                                  const gchar               *element_name,
+                                  GError                   **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   gint line, col;
 
-  g_markup_parse_context_get_position (context, &line, &col);
+  gtk_buildable_parse_context_get_position (context, &line, &col);
   g_set_error (error,
                GTK_BUILDER_ERROR,
                GTK_BUILDER_ERROR_UNHANDLED_TAG,
@@ -2806,7 +2862,7 @@ _gtk_builder_error_unhandled_tag (GtkBuilder           *builder,
 
 /*< private >
  * @builder: a #GtkBuilder
- * @context: the #GMarkupParseContext
+ * @context: the #GtkBuildableParseContext
  * @parent_name: the name of the expected parent element
  * @error: return location for an error
  *
@@ -2819,27 +2875,27 @@ _gtk_builder_error_unhandled_tag (GtkBuilder           *builder,
  * Returns: %TRUE if @parent_name is the parent element
  */
 gboolean
-_gtk_builder_check_parent (GtkBuilder           *builder,
-                           GMarkupParseContext  *context,
-                           const gchar          *parent_name,
-                           GError              **error)
+_gtk_builder_check_parent (GtkBuilder                *builder,
+                           GtkBuildableParseContext  *context,
+                           const gchar               *parent_name,
+                           GError                   **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
-  const GSList *stack;
+  GPtrArray *stack;
   gint line, col;
   const gchar *parent;
   const gchar *element;
 
-  stack = g_markup_parse_context_get_element_stack (context);
+  stack = gtk_buildable_parse_context_get_element_stack (context);
 
-  element = (const gchar *)stack->data;
-  parent = stack->next ? (const gchar *)stack->next->data : "";
+  element = g_ptr_array_index (stack, stack->len - 1);
+  parent = stack->len > 1 ? g_ptr_array_index (stack, stack->len - 2) : "";
 
   if (g_str_equal (parent_name, parent) ||
       (g_str_equal (parent_name, "object") && g_str_equal (parent, "template")))
     return TRUE;
 
-  g_markup_parse_context_get_position (context, &line, &col);
+  gtk_buildable_parse_context_get_position (context, &line, &col);
   g_set_error (error,
                GTK_BUILDER_ERROR,
                GTK_BUILDER_ERROR_INVALID_TAG,

@@ -6,7 +6,7 @@
 
 <refentryinfo>
   <title>gtk4-broadwayd</title>
-  <productname>GTK+</productname>
+  <productname>GTK</productname>
   <authorgroup>
     <author>
       <contrib>Developer</contrib>
@@ -40,7 +40,7 @@
 <refsect1><title>Description</title>
 <para>
 <command>gtk4-broadwayd</command> is a display server for the Broadway
-GDK backend. It allows multiple GTK+ applications to display their
+GDK backend. It allows multiple GTK applications to display their
 windows in the same web browser, by connecting to gtk4-broadwayd.
 </para>
 <para>
@@ -54,16 +54,6 @@ Start your applications like this:
 <programlisting>
 GDK_BACKEND=broadway BROADWAY_DISPLAY=:5 gtk4-demo
 </programlisting>
-
-You can add password protection for your session by creating a file in
-<filename>$XDG_CONFIG_HOME/broadway.passwd</filename> or <filename>$HOME/.config/broadway.passwd</filename>
-with a crypt(3) style password hash.
-
-A simple way to generate it is with openssl:
-<programlisting>
-openssl passwd -1  > ~/.config/broadway.passwd
-</programlisting>
-
 </para>
 </refsect1>
 

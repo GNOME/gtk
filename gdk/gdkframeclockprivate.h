@@ -28,6 +28,7 @@
 #define __GDK_FRAME_CLOCK_PRIVATE_H__
 
 #include <gdk/gdkframeclock.h>
+#include <gdk/gdkprofilerprivate.h>
 
 G_BEGIN_DECLS
 
@@ -104,12 +105,14 @@ struct _GdkFrameTimings
   guint slept_before : 1;
 };
 
-void _gdk_frame_clock_freeze (GdkFrameClock *clock);
-void _gdk_frame_clock_thaw   (GdkFrameClock *clock);
+void _gdk_frame_clock_inhibit_freeze (GdkFrameClock *clock);
+void _gdk_frame_clock_uninhibit_freeze (GdkFrameClock *clock);
 
 void _gdk_frame_clock_begin_frame         (GdkFrameClock   *clock);
 void _gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,
                                            GdkFrameTimings *timings);
+void _gdk_frame_clock_add_timings_to_profiler (GdkFrameClock *frame_clock,
+                                               GdkFrameTimings *timings);
 
 GdkFrameTimings *_gdk_frame_timings_new   (gint64           frame_counter);
 gboolean         _gdk_frame_timings_steal (GdkFrameTimings *timings,

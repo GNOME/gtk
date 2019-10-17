@@ -144,7 +144,7 @@ create_capital_store (void)
     { NULL, "Jackson" },
     { NULL, "Jefferson City" },
     { NULL, "Juneau" },
-    { "K - O" },
+    { "K - O", NULL },
     { NULL, "Lansing" },
     { NULL, "Lincoln" },
     { NULL, "Little Rock" },
@@ -154,7 +154,7 @@ create_capital_store (void)
     { NULL, "Nashville" },
     { NULL, "Oklahoma City" },
     { NULL, "Olympia" },
-    { NULL, "P - S" },
+    { "P - S", NULL },
     { NULL, "Phoenix" },
     { NULL, "Pierre" },
     { NULL, "Providence" },
@@ -256,7 +256,7 @@ mask_entry_set_background (MaskEntry *entry)
 {
   if (entry->mask)
     {
-      if (!g_regex_match_simple (entry->mask, gtk_entry_get_text (GTK_ENTRY (entry)), 0, 0))
+      if (!g_regex_match_simple (entry->mask, gtk_editable_get_text (GTK_EDITABLE (entry)), 0, 0))
         {
           PangoAttrList *attrs;
 
@@ -326,7 +326,7 @@ do_combobox (GtkWidget *do_widget)
      *  insensitive rows
      */
     frame = gtk_frame_new ("Items with icons");
-    gtk_box_pack_start (GTK_BOX (vbox), frame);
+    gtk_container_add (GTK_CONTAINER (vbox), frame);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     g_object_set (box, "margin", 5, NULL);
@@ -367,7 +367,7 @@ do_combobox (GtkWidget *do_widget)
     /* A combobox demonstrating trees.
      */
     frame = gtk_frame_new ("Where are we ?");
-    gtk_box_pack_start (GTK_BOX (vbox), frame);
+    gtk_container_add (GTK_CONTAINER (vbox), frame);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     g_object_set (box, "margin", 5, NULL);
@@ -395,7 +395,7 @@ do_combobox (GtkWidget *do_widget)
 
     /* A GtkComboBoxEntry with validation */
     frame = gtk_frame_new ("Editable");
-    gtk_box_pack_start (GTK_BOX (vbox), frame);
+    gtk_container_add (GTK_CONTAINER (vbox), frame);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     g_object_set (box, "margin", 5, NULL);
@@ -413,7 +413,7 @@ do_combobox (GtkWidget *do_widget)
 
     /* A combobox with string IDs */
     frame = gtk_frame_new ("String IDs");
-    gtk_box_pack_start (GTK_BOX (vbox), frame);
+    gtk_container_add (GTK_CONTAINER (vbox), frame);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     g_object_set (box, "margin", 5, NULL);

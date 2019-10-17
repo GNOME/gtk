@@ -1,108 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <object class="GtkListStore" id="model">
-    <columns>
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-      <column type="gboolean"/>
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <template class="GtkInspectorPropList" parent="GtkBox">
     <property name="orientation">vertical</property>
-    <signal name="hierarchy-changed" handler="hierarchy_changed"/>
     <child>
-      <object class="GtkScrolledWindow">
-        <property name="expand">1</property>
-        <property name="hscrollbar-policy">never</property>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <style>
+          <class name="view"/>
+        </style>
         <child>
-          <object class="GtkTreeView" id="tree">
-            <property name="model">model</property>
-            <property name="tooltip-column">4</property>
-            <property name="search-column">0</property>
-            <property name="enable-grid-lines">vertical</property>
-            <signal name="row-activated" handler="row_activated"/>
+          <object class="GtkBox">
+            <style>
+              <class name="header"/>
+            </style>
             <child>
-              <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">Property</property>
-                <property name="resizable">1</property>
-                <property name="sort-column-id">0</property>
+              <object class="GtkBox" id="name_heading">
+                <property name="hexpand">0</property>
                 <child>
-                  <object class="GtkCellRendererText">
-                    <property name="scale">0.8</property>
+                  <object class="GtkGestureClick">
+                    <signal name="pressed" handler="sort_changed" swapped="no"/>
+
                   </object>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                    <attribute name="sensitive">5</attribute>
-                  </attributes>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">Name</property>
+                    <property name="xalign">0</property>
+                    <property name="hexpand">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkImage" id="name_sort_indicator">
+                    <style>
+                      <class name="sort_indicator"/>
+                    </style>
+                  </object>
                 </child>
               </object>
             </child>
             <child>
-              <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">Value</property>
-                <property name="resizable">1</property>
+              <object class="GtkLabel" id="type_heading">
+                <property name="label">Type</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="origin_heading">
+                <property name="hexpand">0</property>
                 <child>
-                  <object class="GtkCellRendererText">
-                    <property name="scale">0.8</property>
-                    <property name="width-chars">20</property>
-                    <property name="ellipsize">end</property>
+                  <object class="GtkGestureClick">
+                    <signal name="pressed" handler="sort_changed" swapped="no"/>
+
                   </object>
-                  <attributes>
-                    <attribute name="text">1</attribute>
-                    <attribute name="sensitive">5</attribute>
-                  </attributes>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">Defined at</property>
+                    <property name="xalign">0</property>
+                    <property name="hexpand">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkImage" id="origin_sort_indicator">
+                    <style>
+                      <class name="sort_indicator"/>
+                    </style>
+                  </object>
                 </child>
               </object>
             </child>
             <child>
-              <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">Type</property>
-                <property name="resizable">1</property>
-                <child>
-                  <object class="GtkCellRendererText">
-                    <property name="scale">0.8</property>
-                    <property name="width-chars">20</property>
-                    <property name="ellipsize">end</property>
-                  </object>
-                  <attributes>
-                    <attribute name="text">2</attribute>
-                    <attribute name="sensitive">5</attribute>
-                  </attributes>
-                </child>
+              <object class="GtkLabel" id="value_heading">
+                <property name="label">Value</property>
+                <property name="xalign">0</property>
+                <property name="hexpand">0</property>
               </object>
             </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="expand">1</property>
+            <property name="hscrollbar-policy">never</property>
             <child>
-              <object class="GtkTreeViewColumn" id="attribute_column">
-                <property name="title" translatable="yes">Attribute</property>
-                <property name="resizable">1</property>
-                <child>
-                  <object class="GtkCellRendererText">
-                    <property name="scale">0.8</property>
-                  </object>
-                  <attributes>
-                    <attribute name="text">6</attribute>
-                    <attribute name="sensitive">5</attribute>
-                  </attributes>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">Defined At</property>
-                <property name="sort-column-id">2</property>
-                <child>
-                  <object class="GtkCellRendererText">
-                    <property name="scale">0.8</property>
-                  </object>
-                  <attributes>
-                    <attribute name="text">3</attribute>
-                    <attribute name="sensitive">5</attribute>
-                  </attributes>
-                </child>
+              <object class="GtkListBox" id="list2">
+                <style>
+                  <class name="list"/>
+                </style>
+                <property name="selection-mode">none</property>
               </object>
             </child>
           </object>
@@ -110,4 +95,28 @@
       </object>
     </child>
   </template>
+  <object class="GtkSizeGroup" id="names">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="name_heading"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="types">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="type_heading"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="origins">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="origin_heading"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="values">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="value_heading"/>
+    </widgets>
+  </object>
 </interface>

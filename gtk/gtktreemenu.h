@@ -26,7 +26,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkmenu.h>
+#include <gtk/gtkmenuprivate.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreeview.h>
 #include <gtk/gtkcellarea.h>

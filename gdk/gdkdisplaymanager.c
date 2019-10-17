@@ -70,7 +70,7 @@
  *
  * You can use gdk_display_manager_get() to obtain the #GdkDisplayManager
  * singleton, but that should be rarely necessary. Typically, initializing
- * GTK+ opens a display that you can work with without ever accessing the
+ * GTK opens a display that you can work with without ever accessing the
  * #GdkDisplayManager.
  *
  * The GDK library can be built with support for multiple backends.
@@ -156,7 +156,7 @@ gdk_display_manager_class_init (GdkDisplayManagerClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkDisplayManagerClass, display_opened),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE,
                   1,
                   GDK_TYPE_DISPLAY);

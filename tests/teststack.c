@@ -35,9 +35,10 @@ static void
 toggle_icon_name (GtkWidget *button, gpointer data)
 {
   gboolean active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
-  gtk_container_child_set (GTK_CONTAINER (stack), w1,
-			   "icon-name", active ? "edit-find-symbolic" : NULL,
-			   NULL);
+  GtkStackPage *page;
+
+  page = gtk_stack_get_page (GTK_STACK (gtk_widget_get_parent (button)), button);
+  g_object_set (page, "icon-name", active ? "edit-find-symbolic" : NULL, NULL);
 }
 
 static void
@@ -117,6 +118,7 @@ main (gint argc,
   int i;
   GtkTreeIter iter;
   GEnumClass *class;
+  GtkStackPage *page;
 
   gtk_init ();
 
@@ -127,7 +129,7 @@ main (gint argc,
   gtk_container_add (GTK_CONTAINER (window), box);
 
   switcher = gtk_stack_switcher_new ();
-  gtk_box_pack_start (GTK_BOX (box), switcher);
+  gtk_container_add (GTK_CONTAINER (box), switcher);
 
   stack = gtk_stack_new ();
 
@@ -141,9 +143,9 @@ main (gint argc,
   sidebar = gtk_stack_sidebar_new ();
   gtk_stack_sidebar_set_stack (GTK_STACK_SIDEBAR (sidebar), GTK_STACK (stack));
   layout = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_box_pack_start (GTK_BOX (layout), sidebar);
+  gtk_container_add (GTK_CONTAINER (layout), sidebar);
   gtk_widget_set_hexpand (stack, TRUE);
-  gtk_box_pack_start (GTK_BOX (layout), stack);
+  gtk_container_add (GTK_CONTAINER (layout), stack);
 
   gtk_container_add (GTK_CONTAINER (box), layout);
 
@@ -153,18 +155,12 @@ main (gint argc,
   gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (w1)),
 			    "This is a\nTest\nBalh!", -1);
 
-  gtk_container_add_with_properties (GTK_CONTAINER (stack), w1,
-				     "name", "1",
-				     "title", "1",
-				     NULL);
+  gtk_stack_add_titled (GTK_STACK (stack), w1, "1", "1");
 
   w2 = gtk_button_new_with_label ("Gazoooooooooooooooonk");
-  gtk_container_add (GTK_CONTAINER (stack), w2);
-  gtk_container_child_set (GTK_CONTAINER (stack), w2,
-			   "name", "2",
-			   "title", "2",
-                           "needs-attention", TRUE,
-			   NULL);
+  gtk_stack_add_titled (GTK_STACK (stack), w2, "2", "2");
+  page = gtk_stack_get_page (GTK_STACK (stack), w2);
+  g_object_set (page, "needs-attention", TRUE, NULL);
 
 
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);

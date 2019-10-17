@@ -33,14 +33,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_ICON_VIEW            (gtk_icon_view_get_type ())
 #define GTK_ICON_VIEW(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ICON_VIEW, GtkIconView))
-#define GTK_ICON_VIEW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ICON_VIEW, GtkIconViewClass))
 #define GTK_IS_ICON_VIEW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ICON_VIEW))
-#define GTK_IS_ICON_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ICON_VIEW))
-#define GTK_ICON_VIEW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ICON_VIEW, GtkIconViewClass))
 
 typedef struct _GtkIconView           GtkIconView;
-typedef struct _GtkIconViewClass      GtkIconViewClass;
-typedef struct _GtkIconViewPrivate    GtkIconViewPrivate;
 
 /**
  * GtkIconViewForeachFunc:
@@ -75,39 +70,6 @@ typedef enum
   GTK_ICON_VIEW_DROP_ABOVE,
   GTK_ICON_VIEW_DROP_BELOW
 } GtkIconViewDropPosition;
-
-struct _GtkIconView
-{
-  GtkContainer parent;
-
-  /*< private >*/
-  GtkIconViewPrivate *priv;
-};
-
-struct _GtkIconViewClass
-{
-  GtkContainerClass parent_class;
-
-  void    (* item_activated)         (GtkIconView      *icon_view,
-				      GtkTreePath      *path);
-  void    (* selection_changed)      (GtkIconView      *icon_view);
-
-  /* Key binding signals */
-  void    (* select_all)             (GtkIconView      *icon_view);
-  void    (* unselect_all)           (GtkIconView      *icon_view);
-  void    (* select_cursor_item)     (GtkIconView      *icon_view);
-  void    (* toggle_cursor_item)     (GtkIconView      *icon_view);
-  gboolean (* move_cursor)           (GtkIconView      *icon_view,
-				      GtkMovementStep   step,
-				      gint              count);
-  gboolean (* activate_cursor_item)  (GtkIconView      *icon_view);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType          gtk_icon_view_get_type          (void) G_GNUC_CONST;

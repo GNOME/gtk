@@ -28,7 +28,7 @@
 
 /**
  * SECTION:gdkseat
- * @Short_description: Object representing an user seat
+ * @Short_description: Object representing a user seat
  * @Title: GdkSeat
  * @See_also: #GdkDisplay, #GdkDevice
  *
@@ -129,7 +129,7 @@ gdk_seat_class_init (GdkSeatClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkSeatClass, device_added),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GDK_TYPE_DEVICE);
 
@@ -147,7 +147,7 @@ gdk_seat_class_init (GdkSeatClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkSeatClass, device_removed),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GDK_TYPE_DEVICE);
 
@@ -168,7 +168,7 @@ gdk_seat_class_init (GdkSeatClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
-                  g_cclosure_marshal_VOID__BOXED,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GDK_TYPE_DEVICE_TOOL);
 
@@ -185,7 +185,7 @@ gdk_seat_class_init (GdkSeatClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
-                  g_cclosure_marshal_VOID__BOXED,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GDK_TYPE_DEVICE_TOOL);
 
@@ -264,7 +264,7 @@ gdk_seat_get_capabilities (GdkSeat *seat)
  * commonly.
  *
  * Grabs are used for operations which need complete control over the
- * events corresponding to the given capabilities. For example in GTK+ this
+ * events corresponding to the given capabilities. For example in GTK this
  * is used for Drag and Drop operations, popup menus and such.
  *
  * Note that if the event mask of a #GdkSurface has selected both button press
@@ -293,6 +293,7 @@ gdk_seat_grab (GdkSeat                *seat,
 
   g_return_val_if_fail (GDK_IS_SEAT (seat), GDK_GRAB_FAILED);
   g_return_val_if_fail (GDK_IS_SURFACE (surface), GDK_GRAB_FAILED);
+  g_return_val_if_fail (gdk_surface_get_display (surface) == gdk_seat_get_display (seat), GDK_GRAB_FAILED);
 
   capabilities &= GDK_SEAT_CAPABILITY_ALL;
   g_return_val_if_fail (capabilities != GDK_SEAT_CAPABILITY_NONE, GDK_GRAB_FAILED);
@@ -350,7 +351,7 @@ gdk_seat_get_slaves (GdkSeat             *seat,
  * Returns the master device that routes pointer events.
  *
  * Returns: (transfer none) (nullable): a master #GdkDevice with pointer
- *          capabilities. This object is owned by GTK+ and must not be freed.
+ *          capabilities. This object is owned by GTK and must not be freed.
  **/
 GdkDevice *
 gdk_seat_get_pointer (GdkSeat *seat)
@@ -370,7 +371,7 @@ gdk_seat_get_pointer (GdkSeat *seat)
  * Returns the master device that routes keyboard events.
  *
  * Returns: (transfer none) (nullable): a master #GdkDevice with keyboard
- *          capabilities. This object is owned by GTK+ and must not be freed.
+ *          capabilities. This object is owned by GTK and must not be freed.
  **/
 GdkDevice *
 gdk_seat_get_keyboard (GdkSeat *seat)
@@ -405,7 +406,7 @@ gdk_seat_device_removed (GdkSeat   *seat,
  *
  * Returns the #GdkDisplay this seat belongs to.
  *
- * Returns: (transfer none): a #GdkDisplay. This object is owned by GTK+
+ * Returns: (transfer none): a #GdkDisplay. This object is owned by GTK
  *          and must not be freed.
  **/
 GdkDisplay *
@@ -434,14 +435,15 @@ gdk_seat_tool_removed (GdkSeat       *seat,
 
 GdkDeviceTool *
 gdk_seat_get_tool (GdkSeat *seat,
-                   guint64  serial)
+                   guint64  serial,
+                   guint64  hw_id)
 {
   GdkSeatClass *seat_class;
 
   g_return_val_if_fail (GDK_IS_SEAT (seat), NULL);
 
   seat_class = GDK_SEAT_GET_CLASS (seat);
-  return seat_class->get_tool (seat, serial);
+  return seat_class->get_tool (seat, serial, hw_id);
 }
 
 /**

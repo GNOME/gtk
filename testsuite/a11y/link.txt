@@ -1,7 +1,7 @@
 window1
   "window"
   index: 0
-  state: enabled resizable sensitive showing visible
+  state: active enabled resizable sensitive showing visible
   toolkit: gtk
   window-type: normal
   <AtkComponent>
@@ -12,7 +12,7 @@ window1
     parent: window1
     index: 0
     name: Hello World!
-    state: enabled focusable sensitive showing visible visited has-tooltip
+    state: enabled focusable focused sensitive showing visible visited has-tooltip
     toolkit: gtk
     <AtkComponent>
     layer: widget

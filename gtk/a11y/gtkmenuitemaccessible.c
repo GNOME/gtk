@@ -527,19 +527,18 @@ gtk_menu_item_accessible_get_keybinding (AtkAction *action,
       if (gtk_bin_get_child (GTK_BIN (temp_item)) == NULL)
         return NULL;
 
-      parent = gtk_widget_get_parent (temp_item);
+      parent = gtk_widget_get_ancestor (temp_item, GTK_TYPE_MENU_SHELL);
       if (!parent)
         /* parent can be NULL when activating a window from the panel */
         return NULL;
 
       if (GTK_IS_MENU_BAR (parent))
         {
-          GtkWidget *toplevel;
+          GtkRoot *root;
 
-          toplevel = gtk_widget_get_toplevel (parent);
-          if (toplevel && GTK_IS_WINDOW (toplevel))
-            mnemonic_modifier =
-              gtk_window_get_mnemonic_modifier (GTK_WINDOW (toplevel));
+          root = gtk_widget_get_root (parent);
+          if (root && GTK_IS_WINDOW (root))
+            mnemonic_modifier = gtk_window_get_mnemonic_modifier (GTK_WINDOW (root));
         }
 
       child = find_item_label (temp_item);
@@ -587,7 +586,7 @@ gtk_menu_item_accessible_get_keybinding (AtkAction *action,
         }
     }
 
-  parent = gtk_widget_get_parent (item);
+  parent = gtk_widget_get_ancestor (item, GTK_TYPE_MENU_SHELL);
   if (GTK_IS_MENU (parent))
     {
       child = find_item_label (item);

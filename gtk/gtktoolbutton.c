@@ -265,7 +265,7 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkToolButtonClass, clicked),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
   
   g_type_class_add_private (object_class, sizeof (GtkToolButtonPrivate));
@@ -503,9 +503,11 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
         box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       else
         box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL,0);
+
       if (icon)
-          gtk_box_pack_start (GTK_BOX (box), icon);
-      gtk_box_pack_end (GTK_BOX (box), label);
+        gtk_container_add (GTK_CONTAINER (box), icon);
+
+      gtk_container_add (GTK_CONTAINER (box), label);
       gtk_container_add (GTK_CONTAINER (button->priv->button), box);
       gtk_style_context_add_class (gtk_widget_get_style_context (button->priv->button), "image-button");
       gtk_style_context_add_class (gtk_widget_get_style_context (button->priv->button), "text-button");
@@ -517,24 +519,24 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
           box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	  if (icon)
             {
-              gtk_box_pack_start (GTK_BOX (box), icon);
+              gtk_container_add (GTK_CONTAINER (box), icon);
               if (!label)
                 gtk_widget_set_hexpand (icon, TRUE);
             }
 	  if (label)
-            gtk_box_pack_end (GTK_BOX (box), label);
+            gtk_container_add (GTK_CONTAINER (box), label);
 	}
       else
 	{
           box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	  if (icon)
             {
-              gtk_box_pack_end (GTK_BOX (box), icon);
+              gtk_container_add (GTK_CONTAINER (box), icon);
               if (!label)
                 gtk_widget_set_vexpand (icon, TRUE);
             }
 	  if (label)
-            gtk_box_pack_start (GTK_BOX (box), label);
+            gtk_container_add (GTK_CONTAINER (box), label);
 	}
       gtk_container_add (GTK_CONTAINER (button->priv->button), box);
       gtk_style_context_add_class (gtk_widget_get_style_context (button->priv->button), "image-button");
@@ -725,6 +727,12 @@ clone_image_menu_size (GtkImage *image)
   return NULL;
 }
 
+static void
+click_button (GtkButton *button)
+{
+  g_signal_emit_by_name (button, "clicked");
+}
+
 static gboolean
 gtk_tool_button_create_menu_proxy (GtkToolItem *item)
 {
@@ -775,7 +783,7 @@ gtk_tool_button_create_menu_proxy (GtkToolItem *item)
 
   g_signal_connect_closure_by_id (menu_item,
 				  g_signal_lookup ("activate", G_OBJECT_TYPE (menu_item)), 0,
-				  g_cclosure_new_object_swap (G_CALLBACK (gtk_button_clicked),
+				  g_cclosure_new_object_swap (G_CALLBACK (click_button),
 							      G_OBJECT (GTK_TOOL_BUTTON (button)->priv->button)),
 				  FALSE);
 

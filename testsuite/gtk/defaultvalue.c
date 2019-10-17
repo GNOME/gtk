@@ -77,6 +77,7 @@ test_type (gconstpointer data)
   /* These can't be freely constructed/destroyed */
   if (g_type_is_a (type, GTK_TYPE_APPLICATION) ||
       g_type_is_a (type, GDK_TYPE_PIXBUF_LOADER) ||
+      g_type_is_a (type, GTK_TYPE_LAYOUT_CHILD) ||
 #ifdef G_OS_UNIX
       g_type_is_a (type, GTK_TYPE_PRINT_JOB) ||
 #endif
@@ -105,10 +106,12 @@ test_type (gconstpointer data)
     instance = G_OBJECT (g_object_ref (gtk_settings_get_default ()));
   else if (g_type_is_a (type, GDK_TYPE_SURFACE))
     {
-      instance = G_OBJECT (g_object_ref (gdk_surface_new_popup (display,
+      instance = G_OBJECT (g_object_ref (gdk_surface_new_temp (display,
                                                                 &(GdkRectangle) { 0, 0, 100, 100 })));
     }
-  else if (g_type_is_a (type, GTK_TYPE_FILTER_LIST_MODEL))
+  else if (g_type_is_a (type, GTK_TYPE_FILTER_LIST_MODEL) ||
+           g_type_is_a (type, GTK_TYPE_NO_SELECTION) ||
+           g_type_is_a (type, GTK_TYPE_SINGLE_SELECTION))
     {
       GListStore *list_store = g_list_store_new (G_TYPE_OBJECT);
       instance = g_object_new (type,
@@ -157,7 +160,16 @@ test_type (gconstpointer data)
 	continue;
 
       if (g_type_is_a (type, GTK_TYPE_ASSISTANT) &&
-	  (strcmp (pspec->name, "use-header-bar") == 0))
+	  (strcmp (pspec->name, "use-header-bar") == 0 ||
+           strcmp (pspec->name, "pages") == 0)) /* pages always gets a non-NULL value */
+	continue;
+
+      if (g_type_is_a (type, GTK_TYPE_STACK) &&
+	  (strcmp (pspec->name, "pages") == 0)) /* pages always gets a non-NULL value */
+	continue;
+
+      if (g_type_is_a (type, GTK_TYPE_NOTEBOOK) &&
+	  (strcmp (pspec->name, "pages") == 0)) /* pages always gets a non-NULL value */
 	continue;
 
       if (g_type_is_a (type, GTK_TYPE_POPOVER) &&
@@ -223,8 +235,15 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 G_GNUC_END_IGNORE_DEPRECATIONS
 
-      /* Default invisible char is determined at runtime */
+      /* Default invisible char is determined at runtime,
+       * and buffer gets created on-demand
+       */
       if (g_type_is_a (type, GTK_TYPE_ENTRY) &&
+	  (strcmp (pspec->name, "invisible-char") == 0 ||
+           strcmp (pspec->name, "buffer") == 0))
+	continue;
+
+      if (g_type_is_a (type, GTK_TYPE_TEXT) &&
 	  (strcmp (pspec->name, "invisible-char") == 0 ||
            strcmp (pspec->name, "buffer") == 0))
 	continue;
@@ -238,7 +257,9 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 G_GNUC_END_IGNORE_DEPRECATIONS
 
-      if (g_type_is_a (type, GTK_TYPE_FILTER_LIST_MODEL) &&
+      if ((g_type_is_a (type, GTK_TYPE_FILTER_LIST_MODEL) ||
+           g_type_is_a (type, GTK_TYPE_NO_SELECTION) ||
+           g_type_is_a (type, GTK_TYPE_SINGLE_SELECTION)) &&
           strcmp (pspec->name, "model") == 0)
         continue;
 
@@ -255,11 +276,6 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 	continue;
 
 G_GNUC_END_IGNORE_DEPRECATIONS
-
-      if (g_type_is_a (type, GTK_TYPE_LAYOUT) &&
-	  (strcmp (pspec->name, "hadjustment") == 0 ||
-           strcmp (pspec->name, "vadjustment") == 0))
-	continue;
 
       if (g_type_is_a (type, GTK_TYPE_MESSAGE_DIALOG) &&
           (strcmp (pspec->name, "image") == 0 ||

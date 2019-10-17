@@ -10,10 +10,10 @@ window1
   alpha: 1
   button1
     "push button"
-    parent: unnamed-GtkContainerAccessible-0
+    parent: content
     index: 0
     name: Page 1
-    state: enabled focusable sensitive showing visible
+    state: enabled focusable focused sensitive showing visible
     toolkit: gtk
     <AtkComponent>
     layer: widget
@@ -26,8 +26,8 @@ window1
     action 0 description: Clicks the button
   button2
     "push button"
-    parent: unnamed-GtkContainerAccessible-1
-    index: 0
+    parent: content
+    index: 1
     name: Page 2
     state: enabled focusable sensitive visible
     toolkit: gtk
@@ -63,7 +63,7 @@ window1
       parent: headerbar
       index: 0
       name: Cancel
-      state: enabled focusable sensitive visible
+      state: enabled focusable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget

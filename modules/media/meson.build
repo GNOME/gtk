@@ -23,6 +23,13 @@ endif
 media_subdir = 'gtk-4.0/@0@/media'.format(gtk_binary_version)
 media_install_dir = join_paths(get_option('libdir'), media_subdir)
 
+extra_c_args = ['-DGTK_COMPILATION']
+
+# Detect and set symbol visibility
+if cc.get_id() == 'msvc'
+  extra_c_args += ['-D_GLIB_EXTERN=__declspec (dllexport) extern']
+endif
+
 if media_backends.contains('ffmpeg')
   libavfilter_dep = dependency('libavfilter', version: '>= 6.47.100', required: true)
   libavformat_dep = dependency('libavformat', version: '>= 57.41.100', required: true)
@@ -34,9 +41,7 @@ if media_backends.contains('ffmpeg')
 
   shared_module('media-ffmpeg',
                 'gtkffmediafile.c',
-                c_args: [
-                  '-DGTK_COMPILATION'
-                ],
+                c_args: extra_c_args,
                 dependencies: [ libgtk_dep, ffmpeg_deps ],
                 install_dir: media_install_dir,
                 install : true)
@@ -50,9 +55,7 @@ if media_backends.contains('gstreamer')
                 'gtkgstmediafile.c',
                 'gtkgstpaintable.c',
                 'gtkgstsink.c',
-                c_args: [
-                  '-DGTK_COMPILATION'
-                ],
+                c_args: extra_c_args,
                 dependencies: [ libgtk_dep, gstplayer_dep ],
                 install_dir: media_install_dir,
                 install : true)

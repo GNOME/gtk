@@ -57,11 +57,9 @@ struct _GtkToggleButtonClass
 
   void (* toggled) (GtkToggleButton *toggle_button);
 
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
+  /*< private >*/
+
+  gpointer padding[8];
 };
 
 

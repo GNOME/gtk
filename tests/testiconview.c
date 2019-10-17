@@ -356,11 +356,11 @@ do_popup_menu (GtkWidget   *icon_list,
 }
 
 static void
-press_handler (GtkGestureMultiPress *gesture,
-               guint                 n_press,
-               gdouble               x,
-               gdouble               y,
-               GtkWidget            *widget)
+press_handler (GtkGestureClick *gesture,
+               guint            n_press,
+               gdouble          x,
+               gdouble          y,
+               GtkWidget       *widget)
 {
   GtkTreePath *path = NULL;
 
@@ -425,7 +425,7 @@ main (gint argc, gchar **argv)
 
   paned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_widget_set_vexpand (paned, TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox), paned);
+  gtk_container_add (GTK_CONTAINER (vbox), paned);
 
   icon_list = gtk_icon_view_new ();
   gtk_icon_view_set_selection_mode (GTK_ICON_VIEW (icon_list), GTK_SELECTION_MULTIPLE);
@@ -434,7 +434,7 @@ main (gint argc, gchar **argv)
   tvc = gtk_tree_view_column_new ();
   gtk_tree_view_append_column (GTK_TREE_VIEW (tv), tvc);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
                                  GDK_BUTTON_SECONDARY);
   g_signal_connect (gesture, "pressed",
@@ -539,45 +539,45 @@ main (gint argc, gchar **argv)
 
   gtk_paned_add2 (GTK_PANED (paned), scrolled_window);
 
-  bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_START);
-  gtk_box_pack_start (GTK_BOX (vbox), bbox);
+  bbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_halign (bbox, GTK_ALIGN_START);
+  gtk_container_add (GTK_CONTAINER (vbox), bbox);
 
   button = gtk_button_new_with_label ("Add some");
   g_signal_connect (button, "clicked", G_CALLBACK (add_some), icon_list);
-  gtk_box_pack_start (GTK_BOX (bbox), button);
+  gtk_container_add (GTK_CONTAINER (bbox), button);
 
   button = gtk_button_new_with_label ("Add many");
   g_signal_connect (button, "clicked", G_CALLBACK (add_many), icon_list);
-  gtk_box_pack_start (GTK_BOX (bbox), button);
+  gtk_container_add (GTK_CONTAINER (bbox), button);
 
   button = gtk_button_new_with_label ("Add large");
   g_signal_connect (button, "clicked", G_CALLBACK (add_large), icon_list);
-  gtk_box_pack_start (GTK_BOX (bbox), button);
+  gtk_container_add (GTK_CONTAINER (bbox), button);
 
   button = gtk_button_new_with_label ("Remove selected");
   g_signal_connect (button, "clicked", G_CALLBACK (foreach_selected_remove), icon_list);
-  gtk_box_pack_start (GTK_BOX (bbox), button);
+  gtk_container_add (GTK_CONTAINER (bbox), button);
 
   button = gtk_button_new_with_label ("Swap");
   g_signal_connect (button, "clicked", G_CALLBACK (swap_rows), icon_list);
-  gtk_box_pack_start (GTK_BOX (bbox), button);
+  gtk_container_add (GTK_CONTAINER (bbox), button);
 
-  bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_START);
-  gtk_box_pack_start (GTK_BOX (vbox), bbox);
+  bbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_halign (bbox, GTK_ALIGN_START);
+  gtk_container_add (GTK_CONTAINER (vbox), bbox);
 
   button = gtk_button_new_with_label ("Select all");
   g_signal_connect (button, "clicked", G_CALLBACK (select_all), icon_list);
-  gtk_box_pack_start (GTK_BOX (bbox), button);
+  gtk_container_add (GTK_CONTAINER (bbox), button);
 
   button = gtk_button_new_with_label ("Unselect all");
   g_signal_connect (button, "clicked", G_CALLBACK (unselect_all), icon_list);
-  gtk_box_pack_start (GTK_BOX (bbox), button);
+  gtk_container_add (GTK_CONTAINER (bbox), button);
 
   button = gtk_button_new_with_label ("Select nonexisting");
   g_signal_connect (button, "clicked", G_CALLBACK (select_nonexisting), icon_list);
-  gtk_box_pack_start (GTK_BOX (bbox), button);
+  gtk_container_add (GTK_CONTAINER (bbox), button);
 
   icon_list = gtk_icon_view_new ();
 

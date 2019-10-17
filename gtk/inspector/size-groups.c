@@ -28,8 +28,10 @@
 #include "gtklabel.h"
 #include "gtklistbox.h"
 #include "gtksizegroup.h"
+#include "gtkstylecontext.h"
 #include "gtkswitch.h"
 #include "gtkwidgetprivate.h"
+#include "gtkstack.h"
 
 
 typedef struct {
@@ -142,7 +144,7 @@ size_group_state_flags_changed (GtkWidget     *widget,
   state = gtk_widget_get_state_flags (widget);
   if ((state & GTK_STATE_FLAG_PRELIGHT) != (old_state & GTK_STATE_FLAG_PRELIGHT))
     {
-      GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_toplevel (widget));
+      GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_root (widget));
 
       if (state & GTK_STATE_FLAG_PRELIGHT)
         {
@@ -209,7 +211,6 @@ add_widget (GtkInspectorSizeGroups *sl,
   g_object_set (label, "margin", 10, NULL);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_widget_show (label);
   gtk_container_add (GTK_CONTAINER (row), label);
   gtk_container_add (GTK_CONTAINER (listbox), row);
 }
@@ -236,7 +237,7 @@ add_size_group (GtkInspectorSizeGroups *sl,
   g_object_set (label, "margin", 10, NULL);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_box_pack_start (GTK_BOX (box2), label);
+  gtk_container_add (GTK_CONTAINER (box2), label);
 
   combo = gtk_combo_box_text_new ();
   g_object_set (combo, "margin", 10, NULL);
@@ -249,7 +250,7 @@ add_size_group (GtkInspectorSizeGroups *sl,
   g_object_bind_property (group, "mode",
                           combo, "active",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-  gtk_box_pack_start (GTK_BOX (box2), combo);
+  gtk_container_add (GTK_CONTAINER (box2), combo);
 
   listbox = gtk_list_box_new ();
   gtk_container_add (GTK_CONTAINER (box), listbox);
@@ -265,18 +266,22 @@ gtk_inspector_size_groups_set_object (GtkInspectorSizeGroups *sl,
                                       GObject                *object)
 {
   GSList *groups, *l;
+  GtkWidget *stack;
+  GtkStackPage *page;
+
+  stack = gtk_widget_get_parent (GTK_WIDGET (sl));
+  page = gtk_stack_get_page (GTK_STACK (stack), GTK_WIDGET (sl));
+
+  g_object_set (page, "visible", FALSE, NULL);
 
   clear_view (sl);
 
   if (!GTK_IS_WIDGET (object))
-    {
-      gtk_widget_hide (GTK_WIDGET (sl));
-      return;
-    }
+    return;
 
   groups = _gtk_widget_get_sizegroups (GTK_WIDGET (object));
   if (groups)
-    gtk_widget_show (GTK_WIDGET (sl));
+    g_object_set (page, "visible", TRUE, NULL);
   for (l = groups; l; l = l->next)
     {
       GtkSizeGroup *group = l->data;

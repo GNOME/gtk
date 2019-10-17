@@ -64,9 +64,9 @@ _gdk_win32_gl_context_dispose (GObject *gobject)
       ReleaseDC (display_win32->gl_hwnd, context_win32->gl_hdc);
     }
 
-  if (surface != NULL && surface->impl != NULL)
+  if (surface != NULL)
     {
-      GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (surface->impl);
+      GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
 
       if (impl->suppress_layered > 0)
         impl->suppress_layered--;
@@ -166,6 +166,27 @@ gdk_win32_gl_context_begin_frame (GdkDrawContext *draw_context,
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkSurface *surface;
+  GdkWin32Surface *impl;
+  RECT queued_window_rect;
+
+  surface = gdk_gl_context_get_surface (context);
+  impl = GDK_WIN32_SURFACE (surface);
+
+  gdk_win32_surface_get_queued_window_rect (surface,
+                                            gdk_surface_get_scale_factor (surface),
+                                            &queued_window_rect);
+
+  /* Apply queued resizes GL windows before painting them
+   *  (we paint on the window DC directly, it must have the right size).
+   * Due to some poorly-understood issue delayed
+   * resizing of double-buffered windows can produce weird
+   * artefacts, so these are also resized before we paint.
+   */
+  if (impl->drag_move_resize_context.native_move_resize_pending)
+    {
+      impl->drag_move_resize_context.native_move_resize_pending = FALSE;
+      gdk_win32_surface_apply_queued_move_resize (surface, queued_window_rect);
+    }
 
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_parent_class)->begin_frame (draw_context, update_area);
   if (gdk_gl_context_get_shared_context (context))
@@ -176,7 +197,6 @@ gdk_win32_gl_context_begin_frame (GdkDrawContext *draw_context,
 
   /* If nothing else is known, repaint everything so that the back
      buffer is fully up-to-date for the swapbuffer */
-  surface = gdk_gl_context_get_surface (context);
   cairo_region_union_rectangle (update_area, &(GdkRectangle) {
                                                  0, 0,
                                                  gdk_surface_get_width (surface),
@@ -647,7 +667,7 @@ gdk_win32_gl_context_realize (GdkGLContext *context,
   gint glver_minor = 0;
 
   GdkSurface *surface = gdk_gl_context_get_surface (context);
-  GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (surface->impl);
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
   GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface));
 
   if (!_set_pixformat_for_hdc (context_win32->gl_hdc,

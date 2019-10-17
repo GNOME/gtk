@@ -27,17 +27,24 @@
 
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkcssnodeprivate.h>
-#include <gtk/gtkgesturemultipress.h>
+#include <gtk/gtkgestureclick.h>
 
 G_BEGIN_DECLS
 
-/* Directions for submenus */
-typedef enum
-{
-  GTK_DIRECTION_LEFT,
-  GTK_DIRECTION_RIGHT
-} GtkSubmenuDirection;
+typedef struct _GtkMenuClass   GtkMenuClass;
+typedef struct _GtkMenuPrivate GtkMenuPrivate;
 
+struct _GtkMenu
+{
+  GtkMenuShell menu_shell;
+
+  GtkMenuPrivate *priv;
+};
+
+struct _GtkMenuClass
+{
+  GtkMenuShellClass parent_class;
+};
 
 struct _GtkMenuPrivate
 {
@@ -46,9 +53,6 @@ struct _GtkMenuPrivate
 
   GtkAccelGroup *accel_group;
   const char    *accel_path;
-
-  gint                position_x;
-  gint                position_y;
 
   GdkSurface         *rect_surface;
   GdkRectangle       rect;
@@ -68,53 +72,15 @@ struct _GtkMenuPrivate
    * before operating on these widgets
    */
   GtkWidget *toplevel;
-
-  GtkWidget *top_arrow_widget;
-  GtkWidget *bottom_arrow_widget;
-
-  gint scroll_offset;
-  gint saved_scroll_offset;
-  gint scroll_step;
-
-  guint scroll_timeout;
+  GtkWidget *swin;
+  GtkWidget *box;
 
   guint needs_destruction_ref : 1;
-  guint scroll_fast           : 1;
 
-  guint upper_arrow_prelight  : 1;
-  guint lower_arrow_prelight  : 1;
-
-  guint have_layout           : 1;
   guint ignore_button_release : 1;
   guint no_toggle_size        : 1;
-  guint drag_already_pressed  : 1;
-  guint drag_scroll_started   : 1;
-
-  /* info used for the table */
-  guint *heights;
-  gint heights_length;
-  gint requested_height;
 
   gint monitor_num;
-
-  /* Cached layout information */
-  gint n_rows;
-  gint n_columns;
-
- /* Arrow states */
-  GtkStateFlags lower_arrow_state;
-  GtkStateFlags upper_arrow_state;
-
-  /* navigation region */
-  gint navigation_x;
-  gint navigation_y;
-  gint navigation_width;
-  gint navigation_height;
-
-  guint navigation_timeout;
-
-  gdouble drag_start_y;
-  gint initial_drag_offset;
 };
 
 G_GNUC_INTERNAL

@@ -113,8 +113,8 @@
  *                                                          "I’m the second radio button.");
  *
  *    // Pack them into a box, then show all the widgets
- *    gtk_box_pack_start (GTK_BOX (box), radio1);
- *    gtk_box_pack_start (GTK_BOX (box), radio2);
+ *    gtk_container_add (GTK_CONTAINER (box), radio1);
+ *    gtk_container_add (GTK_CONTAINER (box), radio2);
  *    gtk_container_add (GTK_CONTAINER (window), box);
  *    gtk_widget_show (window);
  *    return;
@@ -128,6 +128,19 @@
  * can be used to determine if the button has been selected or deselected.
  */
 
+typedef struct _GtkRadioButtonClass         GtkRadioButtonClass;
+
+struct _GtkRadioButton
+{
+  GtkCheckButton parent_instance;
+};
+
+struct _GtkRadioButtonClass
+{
+  GtkCheckButtonClass parent_class;
+
+  void (*group_changed) (GtkRadioButton *radio_button);
+};
 
 typedef struct
 {
@@ -379,7 +392,7 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
  *
  *   while (some_condition)
  *     {
- *        radio_button = gtk_radio_button_new (NULL);
+ *        radio_button = GTK_RADIO_BUTTON (gtk_radio_button_new (NULL));
  *
  *        gtk_radio_button_join_group (radio_button, last_button);
  *        last_button = radio_button;
@@ -760,7 +773,7 @@ gtk_radio_button_clicked (GtkButton *button)
 
 	  if (gtk_toggle_button_get_active (tmp_button) && (tmp_button != toggle_button))
 	    {
-	      gtk_button_clicked (GTK_BUTTON (tmp_button));
+              g_signal_emit_by_name (tmp_button, "clicked");
 	      break;
 	    }
 	}

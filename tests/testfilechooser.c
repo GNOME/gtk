@@ -475,7 +475,7 @@ confirm_overwrite_cb (GtkFileChooser *chooser,
   int response;
   GtkFileChooserConfirmation conf;
 
-  dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (chooser))),
+  dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (chooser))),
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_QUESTION,
 				   GTK_BUTTONS_NONE,
@@ -663,11 +663,11 @@ main (int argc, char **argv)
   gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (dialog), preview_vbox);
 
   preview_label = gtk_label_new (NULL);
-  gtk_box_pack_start (GTK_BOX (preview_vbox), preview_label, TRUE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (preview_vbox), preview_label, TRUE, TRUE, 0);
   g_object_set (preview_label, "margin", 6, NULL);
 
   preview_image = gtk_image_new ();
-  gtk_box_pack_start (GTK_BOX (preview_vbox), preview_image, TRUE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (preview_vbox), preview_image, TRUE, TRUE, 0);
   g_object_set (preview_image, "margin", 6, NULL);
 
   update_preview_cb (GTK_FILE_CHOOSER (dialog));
@@ -706,7 +706,7 @@ main (int argc, char **argv)
 
   control_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-  vbbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
+  vbbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (control_window), vbbox);
 
   button = gtk_button_new_with_mnemonic ("_Select all");

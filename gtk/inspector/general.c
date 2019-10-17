@@ -60,6 +60,8 @@
 
 struct _GtkInspectorGeneralPrivate
 {
+  GtkWidget *swin;
+  GtkWidget *box;
   GtkWidget *version_box;
   GtkWidget *env_box;
   GtkWidget *display_box;
@@ -69,6 +71,7 @@ struct _GtkInspectorGeneralPrivate
   GtkWidget *gtk_version;
   GtkWidget *gdk_backend;
   GtkWidget *gsk_renderer;
+  GtkWidget *pango_fontmap;
   GtkWidget *gl_version;
   GtkWidget *gl_vendor;
   GtkWidget *vk_device;
@@ -88,7 +91,7 @@ struct _GtkInspectorGeneralPrivate
   GtkAdjustment *focus_adjustment;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorGeneral, gtk_inspector_general, GTK_TYPE_SCROLLED_WINDOW)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorGeneral, gtk_inspector_general, GTK_TYPE_WIDGET)
 
 static void
 init_version (GtkInspectorGeneral *gen)
@@ -168,13 +171,13 @@ add_check_row (GtkInspectorGeneral *gen,
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_widget_set_hexpand (label, TRUE);
-  gtk_box_pack_start (GTK_BOX (box), label);
+  gtk_container_add (GTK_CONTAINER (box), label);
 
   check = gtk_image_new_from_icon_name ("object-select-symbolic");
   gtk_widget_set_halign (check, GTK_ALIGN_END);
   gtk_widget_set_valign (check, GTK_ALIGN_BASELINE);
   gtk_widget_set_opacity (check, value ? 1.0 : 0.0);
-  gtk_box_pack_start (GTK_BOX (box), check);
+  gtk_container_add (GTK_CONTAINER (box), check);
 
   row = gtk_list_box_row_new ();
   gtk_container_add (GTK_CONTAINER (row), box);
@@ -208,14 +211,14 @@ add_label_row (GtkInspectorGeneral *gen,
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_widget_set_hexpand (label, TRUE);
-  gtk_box_pack_start (GTK_BOX (box), label);
+  gtk_container_add (GTK_CONTAINER (box), label);
 
   label = gtk_label_new (value);
   gtk_label_set_selectable (GTK_LABEL (label), TRUE);
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_label_set_xalign (GTK_LABEL (label), 1.0);
-  gtk_box_pack_start (GTK_BOX (box), label);
+  gtk_container_add (GTK_CONTAINER (box), label);
 
   row = gtk_list_box_row_new ();
   gtk_container_add (GTK_CONTAINER (row), box);
@@ -623,6 +626,27 @@ init_display (GtkInspectorGeneral *gen)
   populate_display (display, gen);
 }
 
+static void
+init_pango (GtkInspectorGeneral *gen)
+{
+  PangoFontMap *fontmap;
+  const char *type;
+  const char *name;
+
+  fontmap = pango_cairo_font_map_get_default ();
+  type = G_OBJECT_TYPE_NAME (fontmap);
+  if (strcmp (type, "PangoCairoFcFontMap") == 0)
+    name = "fontconfig";
+  else if (strcmp (type, "PangoCairoCoreTextFontMap") == 0)
+    name = "coretext";
+  else if (strcmp (type, "PangoCairoWin32FontMap") == 0)
+    name = "win32";
+  else
+    name = type;
+
+  gtk_label_set_label (GTK_LABEL (gen->priv->pango_fontmap), name);
+}
+
 static void populate_seats (GtkInspectorGeneral *gen);
 
 static void
@@ -791,6 +815,7 @@ gtk_inspector_general_init (GtkInspectorGeneral *gen)
   init_version (gen);
   init_env (gen);
   init_display (gen);
+  init_pango (gen);
   init_gl (gen);
   init_vulkan (gen);
   init_device (gen);
@@ -857,8 +882,8 @@ gtk_inspector_general_constructed (GObject *object)
 
   G_OBJECT_CLASS (gtk_inspector_general_parent_class)->constructed (object);
 
-  gen->priv->focus_adjustment = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (gen));
-  gtk_container_set_focus_vadjustment (GTK_CONTAINER (gtk_bin_get_child (GTK_BIN (gen))),
+  gen->priv->focus_adjustment = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (gen->priv->swin));
+  gtk_container_set_focus_vadjustment (GTK_CONTAINER (gen->priv->box),
                                        gen->priv->focus_adjustment);
 
    g_signal_connect (gen->priv->version_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
@@ -870,6 +895,37 @@ gtk_inspector_general_constructed (GObject *object)
 }
 
 static void
+measure (GtkWidget      *widget,
+         GtkOrientation  orientation,
+         int             for_size,
+         int            *minimum,
+         int            *natural,
+         int            *minimum_baseline,
+         int            *natural_baseline)
+{
+  GtkInspectorGeneral *gen = GTK_INSPECTOR_GENERAL (widget);
+
+  gtk_widget_measure (gen->priv->swin,
+                      orientation,
+                      for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
+}
+
+static void
+size_allocate (GtkWidget *widget,
+               int        width,
+               int        height,
+               int        baseline)
+{
+  GtkInspectorGeneral *gen = GTK_INSPECTOR_GENERAL (widget);
+
+  gtk_widget_size_allocate (gen->priv->swin,
+                            &(GtkAllocation) { 0, 0, width, height },
+                            baseline);
+}
+
+static void
 gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -877,7 +933,12 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
 
   object_class->constructed = gtk_inspector_general_constructed;
 
+  widget_class->measure = measure;
+  widget_class->size_allocate = size_allocate;
+
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/general.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, swin);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, version_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, env_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, display_box);
@@ -886,6 +947,7 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gtk_version);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gdk_backend);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gsk_renderer);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, pango_fontmap);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gl_version);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gl_vendor);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, vk_device);
