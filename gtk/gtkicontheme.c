@@ -3276,16 +3276,17 @@ gtk_icon_info_get_filename (GtkIconInfo *icon_info)
 gboolean
 gtk_icon_info_is_symbolic (GtkIconInfo *icon_info)
 {
-  const char *path;
+  gchar *icon_uri;
   gboolean is_symbolic;
 
   g_return_val_if_fail (GTK_IS_ICON_INFO (icon_info), FALSE);
 
-  path = NULL;
+  icon_uri = NULL;
   if (icon_info->icon_file)
-    path = g_file_peek_path (icon_info->icon_file);
+    icon_uri = g_file_get_uri (icon_info->icon_file);
 
-  is_symbolic = (path != NULL) && (icon_uri_is_symbolic (path, -1));
+  is_symbolic = (icon_uri != NULL) && (icon_uri_is_symbolic (icon_uri, -1));
+  g_free (icon_uri);
 
   return is_symbolic;
 }
