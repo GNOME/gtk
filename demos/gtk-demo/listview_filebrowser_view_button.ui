@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <child>
+      <object class="GtkImage">
+        <binding name="icon-name">GtkListItem.item:FileBrowserView.icon-name</binding>
+      </object>
+    </child>
+  </template>
+</interface>

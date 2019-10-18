@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <child>
+      <object class="GtkBox">
+        <child>
+          <object class="GtkImage">
+            <binding name="gicon">file-info(GtkListItem.item:GFileInfo, "standard::icon", object):GIcon</binding>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">start</property>
+            <binding name="label">file-info(GtkListItem.item:GFileInfo, "standard::display-name", string)</binding>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
