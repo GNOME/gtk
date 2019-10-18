@@ -3332,8 +3332,8 @@ icon_info_ensure_scale_and_texture (GtkIconInfo *icon_info)
               else
                 size = icon_info->dir_size * dir_scale * icon_info->scale;
 
-              if (gtk_icon_info_is_symbolic (icon_info) && icon_info->icon_file)
-                source_pixbuf = gtk_make_symbolic_pixbuf_from_file (icon_info->icon_file,
+              if (gtk_icon_info_is_symbolic (icon_info))
+                source_pixbuf = gtk_make_symbolic_pixbuf_from_path (icon_info->filename,
                                                                     size, size,
                                                                     icon_info->desired_scale,
                                                                     &icon_info->load_error);
