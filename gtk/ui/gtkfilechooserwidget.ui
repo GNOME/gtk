@@ -153,7 +153,7 @@
                                             </child>
                                             <child>
                                               <object class="GtkEventControllerKey">
-                                                <signal name="key-pressed" handler="key_press_cb" swapped="no"/>
+                                                <signal name="key-pressed" handler="treeview_key_press_cb" swapped="no"/>
                                               </object>
                                             </child>
                                             <signal name="drag-data-received" handler="file_list_drag_data_received_cb" swapped="no"/>
