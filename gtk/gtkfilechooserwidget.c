@@ -1364,11 +1364,11 @@ should_trigger_location_entry (GtkFileChooserWidget *impl,
  * pressed.
  */
 static gboolean
-key_press_cb (GtkEventControllerKey *controller,
-              guint                  keyval,
-              guint                  keycode,
-              GdkModifierType        state,
-              gpointer               data)
+treeview_key_press_cb (GtkEventControllerKey *controller,
+                       guint                  keyval,
+                       guint                  keycode,
+                       GdkModifierType        state,
+                       gpointer               data)
 {
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
@@ -8520,7 +8520,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, rename_file_end);
   gtk_widget_class_bind_template_callback (widget_class, click_cb);
   gtk_widget_class_bind_template_callback (widget_class, long_press_cb);
-  gtk_widget_class_bind_template_callback (widget_class, key_press_cb);
+  gtk_widget_class_bind_template_callback (widget_class, treeview_key_press_cb);
   gtk_widget_class_bind_template_callback (widget_class, widget_key_press_cb);
 
   gtk_widget_class_set_css_name (widget_class, I_("filechooser"));
