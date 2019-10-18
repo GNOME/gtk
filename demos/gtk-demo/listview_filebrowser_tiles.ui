@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <child>
+      <object class="GtkBox">
+        <child>
+          <object class="GtkImage">
+            <property name="icon-size">large</property>
+            <binding name="gicon">file-info(GtkListItem.item:GFileInfo, "standard::icon", object):GIcon</binding>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="halign">start</property>
+                <binding name="label">file-info(GtkListItem.item:GFileInfo, "standard::display-name", string)</binding>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="halign">start</property>
+                <binding name="label">file-info(GtkListItem.item:GFileInfo, "standard::size", uint64) + " bytes"</binding>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="halign">start</property>
+                <binding name="label">file-info(GtkListItem.item:GFileInfo, "standard::content-type", string)</binding>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
