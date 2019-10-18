@@ -21,6 +21,7 @@
 #include "gtkshortcutsshortcutprivate.h"
 
 #include "gtkimage.h"
+#include "gtkbox.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkprivate.h"
