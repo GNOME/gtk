@@ -2077,6 +2077,8 @@ menubar > item:disabled { color: #919190; box-shadow: none; }
 
 menubar .csd.popup decoration { border-radius: 0; }
 
+popover.menu { padding: 0px; }
+
 popover.menu button.image-button.model { padding: 0; border: none; background: none; box-shadow: none; }
 
 popover.menu button.image-button.model:selected { border: none; color: #ffffff; background: #15539e; }
