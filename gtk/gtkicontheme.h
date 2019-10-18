@@ -206,10 +206,6 @@ GDK_AVAILABLE_IN_ALL
 GType                 gtk_icon_info_get_type           (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkIconInfo *         gtk_icon_info_new_for_pixbuf     (GtkIconTheme  *icon_theme,
-                                                        GdkPixbuf     *pixbuf);
-
-GDK_AVAILABLE_IN_ALL
 gint                  gtk_icon_info_get_base_size      (GtkIconInfo   *self);
 GDK_AVAILABLE_IN_ALL
 gint                  gtk_icon_info_get_base_scale     (GtkIconInfo   *self);

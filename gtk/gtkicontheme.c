@@ -4280,6 +4280,19 @@ gtk_icon_info_new_for_file (GFile *file,
  return info;
 }
 
+static GtkIconInfo *
+gtk_icon_info_new_for_pixbuf (GtkIconTheme *icon_theme,
+                              GdkPixbuf    *pixbuf)
+{
+  GtkIconInfo *info;
+
+  info = icon_info_new (ICON_THEME_DIR_UNTHEMED, 0, 1);
+  info->texture = gdk_texture_new_for_pixbuf (pixbuf);
+  info->scale = 1.0;
+
+  return info;
+}
+
 /**
  * gtk_icon_theme_lookup_by_gicon_for_scale:
  * @self: a #GtkIconTheme
@@ -4379,29 +4392,4 @@ gtk_icon_theme_lookup_by_gicon_for_scale (GtkIconTheme       *self,
     }
 
   return NULL;
-}
-
-/**
- * gtk_icon_info_new_for_pixbuf:
- * @icon_theme: a #GtkIconTheme
- * @pixbuf: the pixbuf to wrap in a #GtkIconInfo
- *
- * Creates a #GtkIconInfo for a #GdkPixbuf.
- *
- * Returns: (transfer full): a #GtkIconInfo
- */
-GtkIconInfo *
-gtk_icon_info_new_for_pixbuf (GtkIconTheme *icon_theme,
-                              GdkPixbuf    *pixbuf)
-{
-  GtkIconInfo *info;
-
-  g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), NULL);
-  g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
-
-  info = icon_info_new (ICON_THEME_DIR_UNTHEMED, 0, 1);
-  info->texture = gdk_texture_new_for_pixbuf (pixbuf);
-  info->scale = 1.0;
-
-  return info;
 }
