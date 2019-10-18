@@ -5,9 +5,25 @@
       <object class="GtkTreeExpander" id="expander">
         <binding name="list-row">GtkListItem.item</binding>
         <property name="child">
-          <object class="GtkLabel">
-            <property name="halign">start</property>
-            <binding name="label">expander.item:GtkDemo.title</binding>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="halign">start</property>
+                <binding name="label">expander.item:GtkDemo.title</binding>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <binding name="visible">!expander.list-row.expandable</binding>
+                <property name="halign">start</property>
+                <property name="use-markup">1</property>
+                <binding name="label">"&lt;small&gt;" + expander.item:GtkDemo.filename + "&lt;/small&gt;"</binding>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+            </child>
           </object>
         </property>
       </object>
