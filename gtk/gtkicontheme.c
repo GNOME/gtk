@@ -3201,6 +3201,31 @@ icon_info_get_pixbuf_ready (GtkIconInfo *icon_info)
   return FALSE;
 }
 
+static GLoadableIcon *
+icon_info_get_loadable (GtkIconInfo *icon_info)
+{
+  GFile *file;
+  GLoadableIcon *loadable;
+
+  if (icon_info->loadable)
+    return g_object_ref (icon_info->loadable);
+
+  if (icon_info->is_resource)
+    {
+      char *uri = g_strconcat ("resource://", icon_info->filename, NULL);
+      file = g_file_new_for_uri (uri);
+      g_free (uri);
+    }
+  else
+    file = g_file_new_for_path (icon_info->filename);
+
+  loadable = G_LOADABLE_ICON (g_file_icon_new (file));
+
+  g_object_unref (file);
+
+  return loadable;
+}
+
 /* This function contains the complicated logic for deciding
  * on the size at which to load the icon and loading it at
  * that size.
@@ -3218,9 +3243,6 @@ icon_info_ensure_scale_and_texture (GtkIconInfo *icon_info)
 
   if (icon_info->load_error)
     return FALSE;
-
-  if (icon_info->icon_file && !icon_info->loadable)
-    icon_info->loadable = G_LOADABLE_ICON (g_file_icon_new (icon_info->icon_file));
 
   scaled_desired_size = icon_info->desired_size * icon_info->desired_scale;
 
@@ -3295,13 +3317,16 @@ icon_info_ensure_scale_and_texture (GtkIconInfo *icon_info)
     }
   else
     {
+      GLoadableIcon *loadable;
       GInputStream *stream;
 
-      /* TODO: We should have a load_at_scale */
-      stream = g_loadable_icon_load (icon_info->loadable,
+      loadable = icon_info_get_loadable (icon_info);
+      stream = g_loadable_icon_load (loadable,
                                      scaled_desired_size,
                                      NULL, NULL,
                                      &icon_info->load_error);
+      g_object_unref (loadable);
+
       if (stream)
         {
           /* SVG icons are a special case - we just immediately scale them
