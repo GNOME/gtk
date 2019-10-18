@@ -19,7 +19,7 @@
 #ifndef __GTK_SHORTCUT_LABEL_H__
 #define __GTK_SHORTCUT_LABEL_H__
 
-#include <gtk/gtkbox.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
