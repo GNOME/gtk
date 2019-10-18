@@ -1437,6 +1437,8 @@ widget_key_press_cb (GtkEventControllerKey *controller,
       priv->starting_search = TRUE;
       if (gtk_event_controller_key_forward (controller, priv->search_entry))
         {
+          gtk_widget_grab_focus (priv->search_entry);
+
           if (priv->operation_mode != OPERATION_MODE_SEARCH &&
               priv->starting_search)
             operation_mode_set (impl, OPERATION_MODE_SEARCH);
