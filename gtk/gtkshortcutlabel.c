@@ -19,6 +19,7 @@
 #include "config.h"
 
 #include "gtkshortcutlabel.h"
+#include "gtkboxlayout.h"
 #include "gtklabel.h"
 #include "gtkframe.h"
 #include "gtkstylecontext.h"
@@ -37,17 +38,17 @@
 
 struct _GtkShortcutLabel
 {
-  GtkBox  parent_instance;
+  GtkWidget parent_instance;
   gchar  *accelerator;
   gchar  *disabled_text;
 };
 
 struct _GtkShortcutLabelClass
 {
-  GtkBoxClass parent_class;
+  GtkWidgetClass parent_class;
 };
 
-G_DEFINE_TYPE (GtkShortcutLabel, gtk_shortcut_label, GTK_TYPE_BOX)
+G_DEFINE_TYPE (GtkShortcutLabel, gtk_shortcut_label, GTK_TYPE_WIDGET)
 
 enum {
   PROP_0,
@@ -263,7 +264,7 @@ dim_label (const gchar *text)
 }
 
 static void
-display_shortcut (GtkContainer    *self,
+display_shortcut (GtkWidget       *self,
                   guint            key,
                   GdkModifierType  modifier)
 {
@@ -277,7 +278,7 @@ display_shortcut (GtkContainer    *self,
       GtkWidget *disp;
 
       if (i > 0)
-        gtk_container_add (self, dim_label ("+"));
+        gtk_widget_set_parent (dim_label ("+"), self);
 
       disp = gtk_label_new (keys[i]);
       if (i < n_mods)
@@ -286,7 +287,7 @@ display_shortcut (GtkContainer    *self,
       gtk_style_context_add_class (gtk_widget_get_style_context (disp), "keycap");
       gtk_label_set_use_markup (GTK_LABEL (disp), TRUE);
 
-      gtk_container_add (self, disp);
+      gtk_widget_set_parent (disp, self);
     }
   g_strfreev (keys);
 }
@@ -311,9 +312,9 @@ parse_combination (GtkShortcutLabel *self,
           break;
         }
       if (k > 0)
-        gtk_container_add (GTK_CONTAINER (self), dim_label ("+"));
+        gtk_widget_set_parent (dim_label ("+"), GTK_WIDGET (self));
 
-      display_shortcut (GTK_CONTAINER (self), key, modifier);
+      display_shortcut (GTK_WIDGET (self), key, modifier);
     }
   g_strfreev (accels);
 
@@ -357,7 +358,7 @@ parse_range (GtkShortcutLabel *self,
   if (!parse_sequence (self, str))
     return FALSE;
 
-  gtk_container_add (GTK_CONTAINER (self), dim_label ("⋯"));
+  gtk_widget_set_parent (dim_label ("⋯"), GTK_WIDGET (self));
 
   if (!parse_sequence (self, dots + 3))
     return FALSE;
@@ -366,12 +367,29 @@ parse_range (GtkShortcutLabel *self,
 }
 
 static void
+clear_children (GtkShortcutLabel *self)
+{
+  GtkWidget *child;
+
+  child = gtk_widget_get_first_child (GTK_WIDGET (self));
+
+  while (child)
+    {
+      GtkWidget *next = gtk_widget_get_next_sibling (child);
+
+      gtk_widget_unparent (child);
+
+      child = next;
+    }
+}
+
+static void
 gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
 {
   gchar **accels;
   gint k;
 
-  gtk_container_foreach (GTK_CONTAINER (self), (GtkCallback)gtk_widget_destroy, NULL);
+  clear_children (self);
 
   if (self->accelerator == NULL || self->accelerator[0] == '\0')
     {
@@ -379,7 +397,7 @@ gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
 
       label = dim_label (self->disabled_text);
 
-      gtk_container_add (GTK_CONTAINER (self), label);
+      gtk_widget_set_parent (label, GTK_WIDGET (self));
       return;
     }
 
@@ -387,7 +405,7 @@ gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
   for (k = 0; accels[k]; k++)
     {
       if (k > 0)
-        gtk_container_add (GTK_CONTAINER (self), dim_label ("/"));
+        gtk_widget_set_parent (dim_label ("/"), GTK_WIDGET (self));
 
       if (!parse_range (self, accels[k]))
         {
@@ -405,6 +423,8 @@ gtk_shortcut_label_finalize (GObject *object)
 
   g_free (self->accelerator);
   g_free (self->disabled_text);
+
+  clear_children (self);
 
   G_OBJECT_CLASS (gtk_shortcut_label_parent_class)->finalize (object);
 }
@@ -459,6 +479,7 @@ static void
 gtk_shortcut_label_class_init (GtkShortcutLabelClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->finalize = gtk_shortcut_label_finalize;
   object_class->get_property = gtk_shortcut_label_get_property;
@@ -486,13 +507,14 @@ gtk_shortcut_label_class_init (GtkShortcutLabelClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
+  gtk_widget_class_set_css_name (widget_class, I_("shortcut"));
 }
 
 static void
 gtk_shortcut_label_init (GtkShortcutLabel *self)
 {
-  gtk_box_set_spacing (GTK_BOX (self), 6);
-
   /* Always use LTR so that modifiers are always left to the keyval */
   gtk_widget_set_direction (GTK_WIDGET (self), GTK_TEXT_DIR_LTR);
 }
