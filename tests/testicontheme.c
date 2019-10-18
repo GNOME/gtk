@@ -29,8 +29,6 @@ usage (void)
 	   "usage: test-icon-theme list <theme name> [context]\n"
 	   " or\n"
 	   "usage: test-icon-theme display <theme name> <icon name> [size] [scale]\n"
-	   " or\n"
-	   "usage: test-icon-theme contexts <theme name>\n"
 	   );
 }
 
@@ -173,16 +171,6 @@ main (int argc, char *argv[])
 
       list = gtk_icon_theme_list_icons (icon_theme,
 					   context);
-      
-      while (list)
-	{
-	  g_print ("%s\n", (char *)list->data);
-	  list = list->next;
-	}
-    }
-  else if (strcmp (argv[1], "contexts") == 0)
-    {
-      list = gtk_icon_theme_list_contexts (icon_theme);
       
       while (list)
 	{

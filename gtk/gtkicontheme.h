@@ -198,20 +198,12 @@ GtkIconInfo * gtk_icon_theme_lookup_by_gicon_for_scale (GtkIconTheme            
 GDK_AVAILABLE_IN_ALL
 GList *       gtk_icon_theme_list_icons            (GtkIconTheme                *self,
 						    const gchar                 *context);
-GDK_AVAILABLE_IN_ALL
-GList *       gtk_icon_theme_list_contexts         (GtkIconTheme                *self);
-GDK_AVAILABLE_IN_ALL
-char *        gtk_icon_theme_get_example_icon_name (GtkIconTheme                *self);
 
 GDK_AVAILABLE_IN_ALL
 gboolean      gtk_icon_theme_rescan_if_needed      (GtkIconTheme                *self);
 
 GDK_AVAILABLE_IN_ALL
 GType                 gtk_icon_info_get_type           (void) G_GNUC_CONST;
-
-GDK_AVAILABLE_IN_ALL
-GtkIconInfo *         gtk_icon_info_new_for_pixbuf     (GtkIconTheme  *icon_theme,
-                                                        GdkPixbuf     *pixbuf);
 
 GDK_AVAILABLE_IN_ALL
 gint                  gtk_icon_info_get_base_size      (GtkIconInfo   *self);

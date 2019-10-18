@@ -52,6 +52,12 @@ GdkPixbuf *_gdk_pixbuf_new_from_resource_scaled (const char   *resource_path,
                                                  double        scale,
                                                  GError      **error);
 
+GdkPixbuf *gtk_color_symbolic_pixbuf              (GdkPixbuf     *symbolic,
+                                                                                                                           const GdkRGBA *fg_color,
+                                                   const GdkRGBA *success_color,
+                                                   const GdkRGBA *warning_color,
+                                                   const GdkRGBA *error_color);
+
 GdkPixbuf *gtk_make_symbolic_pixbuf_from_data     (const char    *data,
                                                    gsize          len,
                                                    int            width,
@@ -59,6 +65,11 @@ GdkPixbuf *gtk_make_symbolic_pixbuf_from_data     (const char    *data,
                                                    double         scale,
                                                    GError       **error);
 GdkPixbuf *gtk_make_symbolic_pixbuf_from_file     (GFile         *file,
+                                                   int            width,
+                                                   int            height,
+                                                   double         scale,
+                                                   GError       **error);
+GdkPixbuf *gtk_make_symbolic_pixbuf_from_path     (const char    *path,
                                                    int            width,
                                                    int            height,
                                                    double         scale,
