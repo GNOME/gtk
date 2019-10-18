@@ -22,6 +22,7 @@
 #include "gtkbuilderlistitemfactory.h"
 
 #include "gtkbuilder.h"
+#include "gtkintl.h"
 #include "gtklistitemfactoryprivate.h"
 #include "gtklistitemprivate.h"
 
@@ -59,6 +60,7 @@ struct _GtkBuilderListItemFactory
   GtkListItemFactory parent_instance;
 
   GBytes *bytes;
+  char *resource;
 };
 
 struct _GtkBuilderListItemFactoryClass
@@ -66,7 +68,17 @@ struct _GtkBuilderListItemFactoryClass
   GtkListItemFactoryClass parent_class;
 };
 
+enum {
+  PROP_0,
+  PROP_BYTES,
+  PROP_RESOURCE,
+
+  N_PROPS
+};
+
 G_DEFINE_TYPE (GtkBuilderListItemFactory, gtk_builder_list_item_factory, GTK_TYPE_LIST_ITEM_FACTORY)
+
+static GParamSpec *properties[N_PROPS] = { NULL, };
 
 static void
 gtk_builder_list_item_factory_setup (GtkListItemFactory *factory,
@@ -101,11 +113,98 @@ gtk_builder_list_item_factory_setup (GtkListItemFactory *factory,
 }
 
 static void
+gtk_builder_list_item_factory_get_property (GObject    *object,
+                                            guint       property_id,
+                                            GValue     *value,
+                                            GParamSpec *pspec)
+{
+  GtkBuilderListItemFactory *self = GTK_BUILDER_LIST_ITEM_FACTORY (object);
+
+  switch (property_id)
+    {
+    case PROP_BYTES:
+      g_value_set_boxed (value, self->bytes);
+      break;
+
+    case PROP_RESOURCE:
+      g_value_set_string (value, self->resource);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static gboolean
+gtk_builder_list_item_factory_set_bytes (GtkBuilderListItemFactory *self,
+                                         GBytes                    *bytes)
+{
+  if (bytes == NULL)
+    return FALSE;
+
+  if (self->bytes)
+    {
+      g_critical ("Data for GtkBuilderListItemFactory has already been set.");
+      return FALSE;
+    }
+
+  self->bytes = g_bytes_ref (bytes);
+  return TRUE;
+}
+
+static void
+gtk_builder_list_item_factory_set_property (GObject      *object,
+                                            guint         property_id,
+                                            const GValue *value,
+                                            GParamSpec   *pspec)
+{
+  GtkBuilderListItemFactory *self = GTK_BUILDER_LIST_ITEM_FACTORY (object);
+
+  switch (property_id)
+    {
+    case PROP_BYTES:
+      gtk_builder_list_item_factory_set_bytes (self, g_value_get_boxed (value));
+      break;
+
+    case PROP_RESOURCE:
+      {
+        GError *error = NULL;
+        GBytes *bytes;  
+        const char *resource;
+
+        resource = g_value_get_string (value);
+        if (resource == NULL)
+          break;
+
+        bytes = g_resources_lookup_data (resource, 0, &error);
+        if (bytes)
+          {
+            if (gtk_builder_list_item_factory_set_bytes (self, bytes))
+              self->resource = g_strdup (resource);
+            g_bytes_unref (bytes);
+          }
+        else
+          {
+            g_critical ("Unable to load resource for list item template: %s", error->message);
+            g_error_free (error);
+          }
+      }
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_builder_list_item_factory_finalize (GObject *object)
 {
   GtkBuilderListItemFactory *self = GTK_BUILDER_LIST_ITEM_FACTORY (object);
 
   g_bytes_unref (self->bytes);
+  g_free (self->resource);
 
   G_OBJECT_CLASS (gtk_builder_list_item_factory_parent_class)->finalize (object);
 }
@@ -113,12 +212,41 @@ gtk_builder_list_item_factory_finalize (GObject *object)
 static void
 gtk_builder_list_item_factory_class_init (GtkBuilderListItemFactoryClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkListItemFactoryClass *factory_class = GTK_LIST_ITEM_FACTORY_CLASS (klass);
 
-  object_class->finalize = gtk_builder_list_item_factory_finalize;
+  gobject_class->finalize = gtk_builder_list_item_factory_finalize;
+  gobject_class->get_property = gtk_builder_list_item_factory_get_property;
+  gobject_class->set_property = gtk_builder_list_item_factory_set_property;
 
   factory_class->setup = gtk_builder_list_item_factory_setup;
+
+  /**
+   * GtkBuilderListItemFactory:bytes:
+   *
+   * bytes containing the UI definition
+   */
+  properties[PROP_BYTES] =
+    g_param_spec_boxed ("bytes",
+                        P_("Bytes"),
+                        P_("bytes containing the UI definition"),
+                        G_TYPE_BYTES,
+                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkBuilderListItemFactory:resource:
+   *
+   * resource containing the UI definition
+   */
+  properties[PROP_RESOURCE] =
+    g_param_spec_string ("resource",
+                         P_("Resource"),
+                         P_("resource containing the UI definition"),
+                         NULL,
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, properties);
+
 }
 
 static void
@@ -138,15 +266,11 @@ gtk_builder_list_item_factory_init (GtkBuilderListItemFactory *self)
 GtkListItemFactory *
 gtk_builder_list_item_factory_new_from_bytes (GBytes *bytes)
 {
-  GtkBuilderListItemFactory *self;
-
   g_return_val_if_fail (bytes != NULL, NULL);
 
-  self = g_object_new (GTK_TYPE_BUILDER_LIST_ITEM_FACTORY, NULL);
-
-  self->bytes = g_bytes_ref (bytes);
-
-  return GTK_LIST_ITEM_FACTORY (self);
+  return g_object_new (GTK_TYPE_BUILDER_LIST_ITEM_FACTORY,
+                       "bytes", bytes,
+                       NULL);
 }
 
 /**
@@ -161,24 +285,45 @@ gtk_builder_list_item_factory_new_from_bytes (GBytes *bytes)
 GtkListItemFactory *
 gtk_builder_list_item_factory_new_from_resource (const char *resource_path)
 {
-  GtkListItemFactory *result;
-  GError *error = NULL;
-  GBytes *bytes;
-
   g_return_val_if_fail (resource_path != NULL, NULL);
 
-  bytes = g_resources_lookup_data (resource_path, 0, &error);
-  if (!bytes)
-    {
-      g_critical ("Unable to load resource for list item template: %s", error->message);
-      g_error_free (error);
-      return NULL;
-    }
+  return g_object_new (GTK_TYPE_BUILDER_LIST_ITEM_FACTORY,
+                       "resource", resource_path,
+                       NULL);
+}
 
-  result = gtk_builder_list_item_factory_new_from_bytes (bytes);
+/**
+ * gtk_builder_list_item_factory_get_bytes:
+ * @self: a #GtkBuilderListItemFactory
+ *
+ * Gets the data used as the #GtkBuilder UI template for constructing
+ * listitems.
+ *
+ * Returns: (transfer none): The GtkBuilder data
+ *
+ **/
+GBytes *
+gtk_builder_list_item_factory_get_bytes (GtkBuilderListItemFactory *self)
+{
+  g_return_val_if_fail (GTK_IS_BUILDER_LIST_ITEM_FACTORY (self), NULL);
 
-  g_bytes_unref (bytes);
+  return self->bytes;
+}
 
-  return result;
+/**
+ * gtk_builder_list_item_factory_get_resource:
+ * @self: a #GtkBuilderListItemFactory
+ *
+ * If the data references a resource, gets the path of that resource.
+ *
+ * Returns: (transfer none) (nullable): The path to the resource or %NULL
+ *     if none
+ **/
+const char *
+gtk_builder_list_item_factory_get_resource (GtkBuilderListItemFactory *self)
+{
+  g_return_val_if_fail (GTK_IS_BUILDER_LIST_ITEM_FACTORY (self), NULL);
+
+  return self->resource;
 }
 
