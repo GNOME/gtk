@@ -2244,8 +2244,8 @@ file_list_build_popover (GtkFileChooserWidget *impl)
     return;
 
   priv->browse_files_popover = gtk_popover_new (priv->browse_files_tree_view);
+  gtk_style_context_add_class (gtk_widget_get_style_context (priv->browse_files_popover), "menu");
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  g_object_set (box, "margin", 10, NULL);
   gtk_container_add (GTK_CONTAINER (priv->browse_files_popover), box);
 
   priv->visit_file_item = add_button (box, _("_Visit File"), "item.visit");
