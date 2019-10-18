@@ -426,6 +426,27 @@ gtk_make_symbolic_pixbuf_from_resource (const char  *path,
 }
 
 GdkPixbuf *
+gtk_make_symbolic_pixbuf_from_path (const char  *path,
+                                    int          width,
+                                    int          height,
+                                    double       scale,
+                                    GError     **error)
+{
+  char *data;
+  gsize size;
+  GdkPixbuf *pixbuf;
+
+  if (!g_file_get_contents (path, &data, &size, error))
+    return NULL;
+
+  pixbuf = gtk_make_symbolic_pixbuf_from_data (data, size, width, height, scale, error);
+
+  g_free (data);
+
+  return pixbuf;
+}
+
+GdkPixbuf *
 gtk_make_symbolic_pixbuf_from_file (GFile       *file,
                                     int          width,
                                     int          height,
