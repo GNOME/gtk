@@ -218,7 +218,6 @@ struct _GtkIconInfo
   GtkIconTheme *in_cache;
 
   gchar *filename;
-  GFile *icon_file;
   GLoadableIcon *loadable;
 
   /* Cache pixbuf (if there is any) */
@@ -1586,16 +1585,6 @@ real_choose_icon (GtkIconTheme       *self,
           goto out;
         }
 
-      if (unthemed_icon->is_resource)
-        {
-          gchar *uri;
-          uri = g_strconcat ("resource://", icon_info->filename, NULL);
-          icon_info->icon_file = g_file_new_for_uri (uri);
-          g_free (uri);
-        }
-      else
-        icon_info->icon_file = g_file_new_for_path (icon_info->filename);
-
       icon_info->is_svg = suffix_from_name (icon_info->filename) == ICON_SUFFIX_SVG;
       icon_info->is_resource = unthemed_icon->is_resource;
     }
@@ -2669,16 +2658,6 @@ theme_lookup_icon (IconTheme   *theme,
           file = g_strconcat (icon_name, string_from_suffix (suffix), NULL);
           icon_info->filename = g_build_filename (min_dir->dir, file, NULL);
 
-          if (min_dir->is_resource)
-            {
-              gchar *uri;
-              uri = g_strconcat ("resource://", icon_info->filename, NULL);
-              icon_info->icon_file = g_file_new_for_uri (uri);
-              g_free (uri);
-            }
-          else
-            icon_info->icon_file = g_file_new_for_path (icon_info->filename);
-
           icon_info->is_svg = suffix == ICON_SUFFIX_SVG;
           icon_info->is_resource = min_dir->is_resource;
           g_free (file);
@@ -2686,7 +2665,6 @@ theme_lookup_icon (IconTheme   *theme,
       else
         {
           icon_info->filename = NULL;
-          icon_info->icon_file = NULL;
         }
 
       if (min_dir->cache)
@@ -3037,8 +3015,6 @@ icon_info_dup (GtkIconInfo *icon_info)
   dup->filename = g_strdup (icon_info->filename);
   dup->is_svg = icon_info->is_svg;
 
-  if (icon_info->icon_file)
-    dup->icon_file = g_object_ref (icon_info->icon_file);
   if (icon_info->loadable)
     dup->loadable = g_object_ref (icon_info->loadable);
   if (icon_info->texture)
@@ -3072,7 +3048,6 @@ gtk_icon_info_finalize (GObject *object)
   g_strfreev (icon_info->key.icon_names);
 
   g_free (icon_info->filename);
-  g_clear_object (&icon_info->icon_file);
 
   g_clear_object (&icon_info->loadable);
   g_clear_object (&icon_info->texture);
@@ -4375,7 +4350,6 @@ gtk_icon_info_new_for_file (GFile *file,
 
   info = icon_info_new (ICON_THEME_DIR_UNTHEMED, size, 1);
   info->loadable = G_LOADABLE_ICON (g_file_icon_new (file));
-  info->icon_file = g_object_ref (file);
   info->is_resource = g_file_has_uri_scheme (file, "resource");
 
   if (info->is_resource)
