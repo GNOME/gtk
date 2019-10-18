@@ -118,6 +118,9 @@
     <file>gnome-fs-directory.png</file>
     <file>gnome-fs-regular.png</file>
   </gresource>
+  <gresource prefix="/listview_filebrowser">
+    <file>listview_filebrowser.ui</file>
+  </gresource>
   <gresource prefix="/listview_settings">
     <file>listview_settings.ui</file>
   </gresource>
@@ -201,6 +204,7 @@
     <file>infobar.c</file>
     <file>links.c</file>
     <file>listbox.c</file>
+    <file>listview_filebrowser.c</file>
     <file>listview_settings.c</file>
     <file>listview_weather.c</file>
     <file>list_store.c</file>
