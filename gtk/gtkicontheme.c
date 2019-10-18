@@ -258,7 +258,6 @@ typedef struct
   gchar *name;
   gchar *display_name;
   gchar *comment;
-  gchar *example;
 
   /* In search order */
   GList *dirs;
@@ -1140,10 +1139,6 @@ insert_theme (GtkIconTheme *self,
     g_key_file_get_locale_string (theme_file, 
                                   "Icon Theme", "Comment",
                                   NULL, NULL);
-  theme->example = 
-    g_key_file_get_string (theme_file, 
-                           "Icon Theme", "Example",
-                           NULL);
 
   theme->dirs = NULL;
   for (i = 0; dirs[i] != NULL; i++)
@@ -2322,41 +2317,6 @@ gtk_icon_theme_list_icons (GtkIconTheme *self,
   return list;
 }
 
-/**
- * gtk_icon_theme_get_example_icon_name:
- * @self: a #GtkIconTheme
- * 
- * Gets the name of an icon that is representative of the
- * current theme (for instance, to use when presenting
- * a list of themes to the user.)
- * 
- * Returns: (nullable): the name of an example icon or %NULL.
- *     Free with g_free().
- */
-gchar *
-gtk_icon_theme_get_example_icon_name (GtkIconTheme *self)
-{
-  GList *l;
-  IconTheme *theme;
-
-  g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
-  
-  ensure_valid_themes (self);
-
-  l = self->themes;
-  while (l != NULL)
-    {
-      theme = l->data;
-      if (theme->example)
-        return g_strdup (theme->example);
-      
-      l = l->next;
-    }
-  
-  return NULL;
-}
-
-
 static gboolean
 rescan_themes (GtkIconTheme *self)
 {
@@ -2422,7 +2382,6 @@ theme_destroy (IconTheme *theme)
   g_free (theme->display_name);
   g_free (theme->comment);
   g_free (theme->name);
-  g_free (theme->example);
 
   g_list_free_full (theme->dirs, (GDestroyNotify) theme_dir_destroy);
   

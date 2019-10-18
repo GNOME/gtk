@@ -198,8 +198,6 @@ GtkIconInfo * gtk_icon_theme_lookup_by_gicon_for_scale (GtkIconTheme            
 GDK_AVAILABLE_IN_ALL
 GList *       gtk_icon_theme_list_icons            (GtkIconTheme                *self,
 						    const gchar                 *context);
-GDK_AVAILABLE_IN_ALL
-char *        gtk_icon_theme_get_example_icon_name (GtkIconTheme                *self);
 
 GDK_AVAILABLE_IN_ALL
 gboolean      gtk_icon_theme_rescan_if_needed      (GtkIconTheme                *self);
