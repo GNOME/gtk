@@ -3562,115 +3562,6 @@ gtk_icon_info_load_icon_finish (GtkIconInfo   *icon_info,
   return gtk_icon_info_load_icon (icon_info, error);
 }
 
-#define MAX_RGB_STRING_LENGTH (3 + 1 + ((3 + 1) * 3) + 1 + 1)
-static inline void
-rgba_to_string_noalpha (const GdkRGBA *rgba,
-                        char          *buff)
-{
-  /* gdk_rgba_to_string inlined in here for the alpha == 1 case,
-   * and g_strdup_printf replaced with g_snprintf */
-  g_snprintf (buff,
-              MAX_RGB_STRING_LENGTH,
-              "rgb(%d,%d,%d)",
-              (int)(0.5 + CLAMP (rgba->red, 0., 1.) * 255.),
-              (int)(0.5 + CLAMP (rgba->green, 0., 1.) * 255.),
-              (int)(0.5 + CLAMP (rgba->blue, 0., 1.) * 255.));
-}
-
-static void
-rgba_to_pixel(const GdkRGBA  *rgba,
-	      guint8 pixel[4])
-{
-  pixel[0] = rgba->red * 255;
-  pixel[1] = rgba->green * 255;
-  pixel[2] = rgba->blue * 255;
-  pixel[3] = 255;
-}
-
-static GdkPixbuf *
-gtk_icon_theme_color_symbolic_pixbuf (GdkPixbuf     *symbolic,
-                                      const GdkRGBA *fg_color,
-                                      const GdkRGBA *success_color,
-                                      const GdkRGBA *warning_color,
-                                      const GdkRGBA *error_color)
-{
-  int width, height, x, y, src_stride, dst_stride;
-  guchar *src_data, *dst_data;
-  guchar *src_row, *dst_row;
-  int alpha;
-  GdkPixbuf *colored;
-  guint8 fg_pixel[4], success_pixel[4], warning_pixel[4], error_pixel[4];
-
-  alpha = fg_color->alpha * 255;
-
-  rgba_to_pixel (fg_color, fg_pixel);
-  rgba_to_pixel (success_color, success_pixel);
-  rgba_to_pixel (warning_color, warning_pixel);
-  rgba_to_pixel (error_color, error_pixel);
-
-  width = gdk_pixbuf_get_width (symbolic);
-  height = gdk_pixbuf_get_height (symbolic);
-
-  colored = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, width, height);
-
-  src_stride = gdk_pixbuf_get_rowstride (symbolic);
-  src_data = gdk_pixbuf_get_pixels (symbolic);
-
-  dst_data = gdk_pixbuf_get_pixels (colored);
-  dst_stride = gdk_pixbuf_get_rowstride (colored);
-
-  for (y = 0; y < height; y++)
-    {
-      src_row = src_data + src_stride * y;
-      dst_row = dst_data + dst_stride * y;
-      for (x = 0; x < width; x++)
-        {
-          guint r, g, b, a;
-          int c1, c2, c3, c4;
-
-          a = src_row[3];
-          dst_row[3] = a * alpha / 255;
-
-          if (a == 0)
-            {
-              dst_row[0] = 0;
-              dst_row[1] = 0;
-              dst_row[2] = 0;
-            }
-          else
-            {
-              c2 = src_row[0];
-              c3 = src_row[1];
-              c4 = src_row[2];
-
-              if (c2 == 0 && c3 == 0 && c4 == 0)
-                {
-                  dst_row[0] = fg_pixel[0];
-                  dst_row[1] = fg_pixel[1];
-                  dst_row[2] = fg_pixel[2];
-                }
-              else
-                {
-                  c1 = 255 - c2 - c3 - c4;
-
-                  r = fg_pixel[0] * c1 + success_pixel[0] * c2 +  warning_pixel[0] * c3 +  error_pixel[0] * c4;
-                  g = fg_pixel[1] * c1 + success_pixel[1] * c2 +  warning_pixel[1] * c3 +  error_pixel[1] * c4;
-                  b = fg_pixel[2] * c1 + success_pixel[2] * c2 +  warning_pixel[2] * c3 +  error_pixel[2] * c4;
-
-                  dst_row[0] = r / 255;
-                  dst_row[1] = g / 255;
-                  dst_row[2] = b / 255;
-                }
-            }
-
-          src_row += 4;
-          dst_row += 4;
-        }
-    }
-
-  return colored;
-}
-
 static GdkPixbuf *
 gtk_icon_info_load_symbolic_png (GtkIconInfo    *icon_info,
                                  const GdkRGBA  *fg,
@@ -3705,13 +3596,28 @@ gtk_icon_info_load_symbolic_png (GtkIconInfo    *icon_info,
     }
 
   pixbuf = gdk_pixbuf_get_from_texture (icon_info->texture);
-  colored = gtk_icon_theme_color_symbolic_pixbuf (pixbuf,
-                                                  fg ? fg : &fg_default,
-                                                  success_color ? success_color : &success_default,
-                                                  warning_color ? warning_color : &warning_default,
-                                                  error_color ? error_color : &error_default);
+  colored = gtk_color_symbolic_pixbuf (pixbuf,
+                                       fg ? fg : &fg_default,
+                                       success_color ? success_color : &success_default,
+                                       warning_color ? warning_color : &warning_default,
+                                       error_color ? error_color : &error_default);
   g_object_unref (pixbuf);
   return colored;
+}
+
+#define MAX_RGB_STRING_LENGTH (3 + 1 + ((3 + 1) * 3) + 1 + 1)
+static inline void
+rgba_to_string_noalpha (const GdkRGBA *rgba,
+                        char          *buff)
+{
+  /* gdk_rgba_to_string inlined in here for the alpha == 1 case,
+   * and g_strdup_printf replaced with g_snprintf */
+  g_snprintf (buff,
+              MAX_RGB_STRING_LENGTH,
+              "rgb(%d,%d,%d)",
+              (int)(0.5 + CLAMP (rgba->red, 0., 1.) * 255.),
+              (int)(0.5 + CLAMP (rgba->green, 0., 1.) * 255.),
+              (int)(0.5 + CLAMP (rgba->blue, 0., 1.) * 255.));
 }
 
 static GdkPixbuf *
