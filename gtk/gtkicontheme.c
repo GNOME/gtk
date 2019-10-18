@@ -3753,11 +3753,10 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
   char css_warning[MAX_RGB_STRING_LENGTH] = "rgb(245,121,62)";
   char css_success[MAX_RGB_STRING_LENGTH] = "rgb(78,154,6)";
   char css_error[MAX_RGB_STRING_LENGTH] = "rgb(204,0,0)";
-  gchar *data;
+  gchar *svg_data;
   gchar *width;
   gchar *height;
-  gchar *file_data, *escaped_file_data;
-  gsize file_len;
+  char *escaped_file_data;
   gint symbolic_size;
   double alpha;
   gchar alphastr[G_ASCII_DTOSTR_BUF_SIZE];
@@ -3775,14 +3774,35 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
   if (success_color)
     rgba_to_string_noalpha (success_color, css_success);
 
-  if (!g_file_load_contents (icon_info->icon_file, NULL, &file_data, &file_len, NULL, error))
-    return NULL;
+  if (icon_info->is_resource)
+    {
+      GBytes *bytes;
+      const char *data;
+      gsize file_len;
+
+      bytes = g_resources_lookup_data (icon_info->filename, G_RESOURCE_LOOKUP_FLAGS_NONE, error);
+      if (bytes == NULL)
+        return NULL;
+      data = g_bytes_get_data (bytes, &file_len);
+      escaped_file_data = g_base64_encode ((guchar *) data, file_len);
+      g_bytes_unref (bytes);
+    }
+  else
+    {
+      char *file_data;
+      gsize file_len;
+
+      if (!g_file_get_contents (icon_info->filename, &file_data, &file_len, error))
+        return NULL;
+      escaped_file_data = g_base64_encode ((guchar *) file_data, file_len);
+      g_free (file_data);
+    }
 
   if (!icon_info_ensure_scale_and_texture (icon_info))
     {
       g_propagate_error (error, icon_info->load_error);
       icon_info->load_error = NULL;
-      g_free (file_data);
+      g_free (escaped_file_data);
       return NULL;
     }
 
@@ -3790,13 +3810,14 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
       icon_info->symbolic_height == 0)
     {
       /* Fetch size from the original icon */
-      stream = g_memory_input_stream_new_from_data (file_data, file_len, NULL);
-      pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, error);
-      g_object_unref (stream);
+      if (icon_info->is_resource)
+        pixbuf = gdk_pixbuf_new_from_resource (icon_info->filename, error);
+      else
+        pixbuf = gdk_pixbuf_new_from_file (icon_info->filename, error);
 
       if (!pixbuf)
         {
-          g_free (file_data);
+          g_free (escaped_file_data);
           return NULL;
         }
 
@@ -3821,12 +3842,9 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
   width = g_strdup_printf ("%d", icon_info->symbolic_width);
   height = g_strdup_printf ("%d", icon_info->symbolic_height);
 
-  escaped_file_data = g_base64_encode ((guchar *) file_data, file_len);
-  g_free (file_data);
-
   g_ascii_dtostr (alphastr, G_ASCII_DTOSTR_BUF_SIZE, CLAMP (alpha, 0, 1));
 
-  data = g_strconcat ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+  svg_data = g_strconcat ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
                       "<svg version=\"1.1\"\n"
                       "     xmlns=\"http://www.w3.org/2000/svg\"\n"
                       "     xmlns:xi=\"http://www.w3.org/2001/XInclude\"\n"
@@ -3853,7 +3871,7 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
   g_free (width);
   g_free (height);
 
-  stream = g_memory_input_stream_new_from_data (data, -1, g_free);
+  stream = g_memory_input_stream_new_from_data (svg_data, -1, g_free);
   pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream,
                                                  "svg",
                                                 gdk_texture_get_width (icon_info->texture),
@@ -3876,15 +3894,11 @@ gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
                                       GError        **error)
 {
   GdkPixbuf *pixbuf;
-  char *icon_uri;
 
-  icon_uri = g_file_get_uri (icon_info->icon_file);
-  if (g_str_has_suffix (icon_uri, ".symbolic.png"))
+  if (g_str_has_suffix (icon_info->filename, ".symbolic.png"))
     pixbuf = gtk_icon_info_load_symbolic_png (icon_info, fg, success_color, warning_color, error_color, error);
   else
     pixbuf = gtk_icon_info_load_symbolic_svg (icon_info, fg, success_color, warning_color, error_color, error);
-
-  g_free (icon_uri);
 
   return pixbuf;
 }
