@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkDirectoryList" id="dirlist">
+    <property name="attributes">standard::name,standard::display-name,standard::icon</property>
+  </object>
+  <object class="GtkWindow" id="window">
+    <property name="title" translatable="yes">File browser</property>
+    <property name="default-width">600</property>
+    <property name="default-height">400</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="">
+        <property name="show-title-buttons">1</property>
+        <child>
+          <object class="GtkButton">
+            <property name="icon-name">go-up</property>
+            <signal name="clicked" handler="up_clicked_cb" object="dirlist" swapped="no"/>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkBox">
+            <style>
+              <class name="linked"/>
+            </style>
+            <child>
+              <object class="GtkButton">
+                <property name="icon-name">view-list-symbolic</property>
+                <signal name="clicked" handler="view_button_clicked_cb" object="view" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="icon-name">view-grid-symbolic</property>
+                <signal name="clicked" handler="view_button_clicked_cb" object="view" swapped="no"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="can-focus">1</property>
+        <child>
+          <object class="GtkGridView" id="view">
+            <property name="model">dirlist</property>
+            <property name="factory">
+              <object class="GtkBuilderListItemFactory">
+                <property name="resource">/listview_filebrowser/listview_filebrowser_list.ui</property>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
