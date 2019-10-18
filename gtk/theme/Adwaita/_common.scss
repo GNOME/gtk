@@ -1695,10 +1695,18 @@ headerbar {
   entry,
   spinbutton,
   separator:not(.sidebar),
-  button {
+  button,
+  menubutton {
     margin-top: 6px;
     margin-bottom: 6px;
   }
+
+  // Reset margins for buttons inside menubutton
+  menubutton > button {
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
   switch {
     margin-top: 10px;
     margin-bottom: 10px;
