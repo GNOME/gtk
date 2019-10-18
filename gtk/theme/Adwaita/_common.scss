@@ -4634,7 +4634,11 @@ shortcuts-section {
 }
 
 // shortcut window keys
-.keycap {
+shortcut {
+  border-spacing: 6px;
+}
+
+shortcut > .keycap {
   min-width: 20px;
   min-height: 25px;
   margin-top: 2px;
