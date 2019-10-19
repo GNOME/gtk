@@ -2070,6 +2070,133 @@ gtk_text_unrealize (GtkWidget *widget)
 }
 
 static void
+update_im_cursor_location (GtkText *self)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  GdkRectangle area;
+  GtkAllocation text_area;
+  int strong_x;
+  int strong_xoffset;
+
+  gtk_text_get_cursor_locations (self, &strong_x, NULL);
+  gtk_text_get_text_allocation (self, &text_area);
+
+  strong_xoffset = strong_x - priv->scroll_offset;
+  if (strong_xoffset < 0)
+    strong_xoffset = 0;
+  else if (strong_xoffset > text_area.width)
+    strong_xoffset = text_area.width;
+
+  area.x = strong_xoffset;
+  area.y = 0;
+  area.width = 0;
+  area.height = text_area.height;
+
+  gtk_im_context_set_cursor_location (priv->im_context, &area);
+}
+
+static void
+gtk_text_move_handle (GtkText               *self,
+                      GtkTextHandlePosition  pos,
+                      int                    x,
+                      int                    y,
+                      int                    height)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  GtkAllocation text_allocation;
+
+  gtk_text_get_text_allocation (self, &text_allocation);
+
+  if (!_gtk_text_handle_get_is_dragged (priv->text_handle, pos) &&
+      (x < 0 || x > text_allocation.width))
+    {
+      /* Hide the handle if it's not being manipulated
+       * and fell outside of the visible text area.
+       */
+      _gtk_text_handle_set_visible (priv->text_handle, pos, FALSE);
+    }
+  else
+    {
+      GdkRectangle rect;
+
+      rect.x = x + text_allocation.x;
+      rect.y = y + text_allocation.y;
+      rect.width = 1;
+      rect.height = height;
+
+      _gtk_text_handle_set_visible (priv->text_handle, pos, TRUE);
+      _gtk_text_handle_set_position (priv->text_handle, pos, &rect);
+      _gtk_text_handle_set_direction (priv->text_handle, pos, priv->resolved_dir);
+    }
+}
+
+static int
+gtk_text_get_selection_bound_location (GtkText *self)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  PangoLayout *layout;
+  PangoRectangle pos;
+  int x;
+  const char *text;
+  int index;
+
+  layout = gtk_text_ensure_layout (self, FALSE);
+  text = pango_layout_get_text (layout);
+  index = g_utf8_offset_to_pointer (text, priv->selection_bound) - text;
+  pango_layout_index_to_pos (layout, index, &pos);
+
+  if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
+    x = (pos.x + pos.width) / PANGO_SCALE;
+  else
+    x = pos.x / PANGO_SCALE;
+
+  return x;
+}
+
+static void
+gtk_text_update_handles (GtkText           *self,
+                         GtkTextHandleMode  mode)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  GtkAllocation text_allocation;
+  int strong_x;
+  int cursor, bound;
+
+  _gtk_text_handle_set_mode (priv->text_handle, mode);
+  gtk_text_get_text_allocation (self, &text_allocation);
+
+  gtk_text_get_cursor_locations (self, &strong_x, NULL);
+  cursor = strong_x - priv->scroll_offset;
+
+  if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
+    {
+      int start, end;
+
+      bound = gtk_text_get_selection_bound_location (self) - priv->scroll_offset;
+
+      if (priv->selection_bound > priv->current_pos)
+        {
+          start = cursor;
+          end = bound;
+        }
+      else
+        {
+          start = bound;
+          end = cursor;
+        }
+
+      /* Update start selection bound */
+      gtk_text_move_handle (self, GTK_TEXT_HANDLE_POSITION_SELECTION_START,
+                             start, 0, text_allocation.height);
+      gtk_text_move_handle (self, GTK_TEXT_HANDLE_POSITION_SELECTION_END,
+                             end, 0, text_allocation.height);
+    }
+  else
+    gtk_text_move_handle (self, GTK_TEXT_HANDLE_POSITION_CURSOR,
+                           cursor, 0, text_allocation.height);
+}
+
+static void
 gtk_text_measure (GtkWidget      *widget,
                   GtkOrientation  orientation,
                   int             for_size,
@@ -2189,12 +2316,21 @@ gtk_text_size_allocate (GtkWidget *widget,
                                 -1);
     }
 
-  if (gtk_widget_get_realized (widget))
-    gtk_text_recompute (self);
+  gtk_text_adjust_scroll (self);
+  gtk_text_check_cursor_blink (self);
+  update_im_cursor_location (self);
 
   chooser = g_object_get_data (G_OBJECT (self), "gtk-emoji-chooser");
   if (chooser)
     gtk_native_check_resize (GTK_NATIVE (chooser));
+
+  if (priv->text_handle)
+    {
+      GtkTextHandleMode handle_mode = _gtk_text_handle_get_mode (priv->text_handle);
+
+      if (handle_mode != GTK_TEXT_HANDLE_MODE_NONE)
+        gtk_text_update_handles (self, handle_mode);
+    }
 
   if (priv->emoji_completion)
     gtk_native_check_resize (GTK_NATIVE (priv->emoji_completion));
@@ -2336,107 +2472,6 @@ in_selection (GtkText *self,
 
   g_free (ranges);
   return retval;
-}
-
-static void
-gtk_text_move_handle (GtkText               *self,
-                      GtkTextHandlePosition  pos,
-                      int                    x,
-                      int                    y,
-                      int                    height)
-{
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GtkAllocation text_allocation;
-
-  gtk_text_get_text_allocation (self, &text_allocation);
-
-  if (!_gtk_text_handle_get_is_dragged (priv->text_handle, pos) &&
-      (x < 0 || x > text_allocation.width))
-    {
-      /* Hide the handle if it's not being manipulated
-       * and fell outside of the visible text area.
-       */
-      _gtk_text_handle_set_visible (priv->text_handle, pos, FALSE);
-    }
-  else
-    {
-      GdkRectangle rect;
-
-      rect.x = x + text_allocation.x;
-      rect.y = y + text_allocation.y;
-      rect.width = 1;
-      rect.height = height;
-
-      _gtk_text_handle_set_visible (priv->text_handle, pos, TRUE);
-      _gtk_text_handle_set_position (priv->text_handle, pos, &rect);
-      _gtk_text_handle_set_direction (priv->text_handle, pos, priv->resolved_dir);
-    }
-}
-
-static int
-gtk_text_get_selection_bound_location (GtkText *self)
-{
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  PangoLayout *layout;
-  PangoRectangle pos;
-  int x;
-  const char *text;
-  int index;
-
-  layout = gtk_text_ensure_layout (self, FALSE);
-  text = pango_layout_get_text (layout);
-  index = g_utf8_offset_to_pointer (text, priv->selection_bound) - text;
-  pango_layout_index_to_pos (layout, index, &pos);
-
-  if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
-    x = (pos.x + pos.width) / PANGO_SCALE;
-  else
-    x = pos.x / PANGO_SCALE;
-
-  return x;
-}
-
-static void
-gtk_text_update_handles (GtkText           *self,
-                         GtkTextHandleMode  mode)
-{
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GtkAllocation text_allocation;
-  int strong_x;
-  int cursor, bound;
-
-  _gtk_text_handle_set_mode (priv->text_handle, mode);
-  gtk_text_get_text_allocation (self, &text_allocation);
-
-  gtk_text_get_cursor_locations (self, &strong_x, NULL);
-  cursor = strong_x - priv->scroll_offset;
-
-  if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
-    {
-      int start, end;
-
-      bound = gtk_text_get_selection_bound_location (self) - priv->scroll_offset;
-
-      if (priv->selection_bound > priv->current_pos)
-        {
-          start = cursor;
-          end = bound;
-        }
-      else
-        {
-          start = bound;
-          end = cursor;
-        }
-
-      /* Update start selection bound */
-      gtk_text_move_handle (self, GTK_TEXT_HANDLE_POSITION_SELECTION_START,
-                             start, 0, text_allocation.height);
-      gtk_text_move_handle (self, GTK_TEXT_HANDLE_POSITION_SELECTION_END,
-                             end, 0, text_allocation.height);
-    }
-  else
-    gtk_text_move_handle (self, GTK_TEXT_HANDLE_POSITION_CURSOR,
-                           cursor, 0, text_allocation.height);
 }
 
 static void
@@ -4116,32 +4151,6 @@ gtk_text_reset_layout (GtkText *self)
       g_object_unref (priv->cached_layout);
       priv->cached_layout = NULL;
     }
-}
-
-static void
-update_im_cursor_location (GtkText *self)
-{
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GdkRectangle area;
-  GtkAllocation text_area;
-  int strong_x;
-  int strong_xoffset;
-
-  gtk_text_get_cursor_locations (self, &strong_x, NULL);
-  gtk_text_get_text_allocation (self, &text_area);
-
-  strong_xoffset = strong_x - priv->scroll_offset;
-  if (strong_xoffset < 0)
-    strong_xoffset = 0;
-  else if (strong_xoffset > text_area.width)
-    strong_xoffset = text_area.width;
-
-  area.x = strong_xoffset;
-  area.y = 0;
-  area.width = 0;
-  area.height = text_area.height;
-
-  gtk_im_context_set_cursor_location (priv->im_context, &area);
 }
 
 static void
