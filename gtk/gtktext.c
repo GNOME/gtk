@@ -136,7 +136,6 @@
 #define UNDERSHOOT_SIZE 20
 
 static GQuark          quark_password_hint  = 0;
-static GQuark          quark_gtk_signal = 0;
 
 typedef struct _GtkTextPasswordHint GtkTextPasswordHint;
 
@@ -211,7 +210,6 @@ struct _GtkTextPrivate
   guint         activates_default       : 1;
   guint         cache_includes_preedit  : 1;
   guint         change_count            : 8;
-  guint         editing_canceled        : 1; /* Only used by GtkCellRendererText */
   guint         in_click                : 1; /* Flag so we don't select all when clicking in entry to focus in */
   guint         invisible_char_set      : 1;
   guint         mouse_cursor_obscured   : 1;
@@ -721,9 +719,8 @@ gtk_text_class_init (GtkTextClass *class)
   class->toggle_overwrite = gtk_text_toggle_overwrite;
   class->insert_emoji = gtk_text_insert_emoji;
   class->activate = gtk_text_real_activate;
- 
+
   quark_password_hint = g_quark_from_static_string ("gtk-entry-password-hint");
-  quark_gtk_signal = g_quark_from_static_string ("gtk-signal");
 
   text_props[PROP_BUFFER] =
       g_param_spec_object ("buffer",
@@ -1677,7 +1674,6 @@ gtk_text_init (GtkText *self)
   priv->dnd_position = -1;
   priv->width_chars = -1;
   priv->max_width_chars = -1;
-  priv->editing_canceled = FALSE;
   priv->truncate_multiline = FALSE;
   priv->xalign = 0.0;
   priv->insert_pos = -1;
