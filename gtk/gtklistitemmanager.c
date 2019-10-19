@@ -930,11 +930,13 @@ gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
   g_return_val_if_fail (prev_sibling == NULL || GTK_IS_WIDGET (prev_sibling), NULL);
 
   result = gtk_list_item_new (self->item_css_name);
-  gtk_list_item_factory_setup (self->factory, result);
+  if (self->factory)
+    gtk_list_item_factory_setup (self->factory, result);
 
   item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
   selected = gtk_selection_model_is_selected (self->model, position);
-  gtk_list_item_factory_bind (self->factory, result, position, item, selected);
+  if (self->factory)
+    gtk_list_item_factory_bind (self->factory, result, position, item, selected);
   g_object_unref (item);
   gtk_widget_insert_after (GTK_WIDGET (result), self->widget, prev_sibling);
 
@@ -972,7 +974,8 @@ gtk_list_item_manager_try_reacquire_list_item (GtkListItemManager *self,
   item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
   if (g_hash_table_steal_extended (change, item, NULL, (gpointer *) &result))
     {
-      gtk_list_item_factory_update (self->factory, result, position, FALSE);
+      if (self->factory)
+        gtk_list_item_factory_update (self->factory, result, position, FALSE);
       gtk_widget_insert_after (GTK_WIDGET (result), self->widget, prev_sibling);
       /* XXX: Should we let the listview do this? */
       gtk_widget_queue_resize (GTK_WIDGET (result));
@@ -1010,7 +1013,8 @@ gtk_list_item_manager_move_list_item (GtkListItemManager     *self,
 
   item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
   selected = gtk_selection_model_is_selected (self->model, position);
-  gtk_list_item_factory_rebind (self->factory, GTK_LIST_ITEM (list_item), position, item, selected);
+  if (self->factory)
+    gtk_list_item_factory_rebind (self->factory, GTK_LIST_ITEM (list_item), position, item, selected);
   gtk_widget_insert_after (list_item, _gtk_widget_get_parent (list_item), prev_sibling);
   g_object_unref (item);
 }
@@ -1035,7 +1039,8 @@ gtk_list_item_manager_update_list_item (GtkListItemManager *self,
   g_return_if_fail (GTK_IS_LIST_ITEM (item));
 
   selected = gtk_selection_model_is_selected (self->model, position);
-  gtk_list_item_factory_update (self->factory, GTK_LIST_ITEM (item), position, selected);
+  if (self->factory)
+    gtk_list_item_factory_update (self->factory, GTK_LIST_ITEM (item), position, selected);
 }
 
 /*
@@ -1065,8 +1070,11 @@ gtk_list_item_manager_release_list_item (GtkListItemManager *self,
       g_warning ("FIXME: Handle the same item multiple times in the list.\nLars says this totally should not happen, but here we are.");
     }
 
-  gtk_list_item_factory_unbind (self->factory, GTK_LIST_ITEM (item));
-  gtk_list_item_factory_teardown (self->factory, GTK_LIST_ITEM (item));
+  if (self->factory)
+    {
+      gtk_list_item_factory_unbind (self->factory, GTK_LIST_ITEM (item));
+      gtk_list_item_factory_teardown (self->factory, GTK_LIST_ITEM (item));
+    }
   gtk_widget_unparent (item);
 }
 
