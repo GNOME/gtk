@@ -1996,25 +1996,6 @@ gtk_text_get_display_text (GtkText *self,
 }
 
 static void
-update_node_state (GtkText *self)
-{
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GtkStateFlags state;
-
-  state = gtk_widget_get_state_flags (GTK_WIDGET (self));
-  state &= ~GTK_STATE_FLAG_DROP_ACTIVE;
-
-  if (priv->selection_node)
-    gtk_css_node_set_state (priv->selection_node, state);
-
-  if (priv->block_cursor_node)
-    gtk_css_node_set_state (priv->block_cursor_node, state);
-
-  gtk_css_node_set_state (priv->undershoot_node[0], state);
-  gtk_css_node_set_state (priv->undershoot_node[1], state);
-}
-
-static void
 gtk_text_unmap (GtkWidget *widget)
 {
   GtkText *self = GTK_TEXT (widget);
@@ -3096,6 +3077,9 @@ gtk_text_state_flags_changed (GtkWidget     *widget,
 {
   GtkText *self = GTK_TEXT (widget);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  GtkStateFlags state;
+
+  state = gtk_widget_get_state_flags (GTK_WIDGET (self));
 
   if (gtk_widget_get_realized (widget))
     {
@@ -3109,7 +3093,15 @@ gtk_text_state_flags_changed (GtkWidget     *widget,
       gtk_text_set_selection_bounds (self, priv->current_pos, priv->current_pos);
     }
 
-  update_node_state (self);
+  state &= ~GTK_STATE_FLAG_DROP_ACTIVE;
+  if (priv->selection_node)
+    gtk_css_node_set_state (priv->selection_node, state);
+
+  if (priv->block_cursor_node)
+    gtk_css_node_set_state (priv->block_cursor_node, state);
+
+  gtk_css_node_set_state (priv->undershoot_node[0], state);
+  gtk_css_node_set_state (priv->undershoot_node[1], state);
 
   gtk_text_update_cached_style_values (self);
 }
