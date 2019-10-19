@@ -382,3 +382,90 @@ gtk_selection_model_selection_changed (GtkSelectionModel *model,
   g_signal_emit (model, signals[SELECTION_CHANGED], 0, position, n_items);
 }
 
+/**
+ * gtk_selection_model_user_select_item:
+ * @self: a #GtkSelectionModel
+ * @pos: position selected by the user. If this position is invalid
+ *     no selection will be done.
+ * @modify: %TRUE if the selection should be modified, %FALSE
+ *     if a new selection should be done. This is usually set
+ *     to %TRUE if the user keeps the <Shift> key pressed.
+ * @extend_pos: the position to extend the selection from or
+ *     an invalid position like #GTK_INVALID_LIST_POSITION to not
+ *     extend the selection. Selections are usually extended
+ *     from the last selected position if the user presses the
+ *     <Ctrl> key. The last selected position is stored by the
+ *     widget
+ *
+ * Does a selection according to how GTK list widgets modify
+ * selections, both when clicking rows with the mouse or when using
+ * the keyboard.
+ *
+ * Returns: %TRUE if the last selected position for further calls
+ *     to this function should be updated to @pos, %FALSE if the
+ *     last selected position should not change.
+ **/
+gboolean
+gtk_selection_model_user_select_item (GtkSelectionModel *self,
+                                      guint              pos,
+                                      gboolean           modify,
+                                      guint              extend_pos)
+{
+  gboolean success = FALSE;
+  guint n_items;
+
+  g_return_val_if_fail (GTK_IS_SELECTION_MODEL (self), FALSE);
+
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (self));
+  if (pos >= n_items)
+    return FALSE;
+
+  if (extend_pos < n_items)
+    {
+      guint max = MAX (extend_pos, pos);
+      guint min = MIN (extend_pos, pos);
+      if (modify)
+        {
+          if (gtk_selection_model_is_selected (self, extend_pos))
+            {
+              success = gtk_selection_model_select_range (self,
+                                                          min,
+                                                          max - min + 1,
+                                                          FALSE);
+            }
+          else
+            {
+              success = gtk_selection_model_unselect_range (self,
+                                                            min,
+                                                            max - min + 1);
+            }
+        }
+      else
+        {
+          success = gtk_selection_model_select_range (self,
+                                                      min,
+                                                      max - min + 1,
+                                                      TRUE);
+        }
+      /* If there's no range to select or selecting ranges isn't supported
+       * by the model, fall through to normal setting.
+       */
+    }
+  if (success)
+    return FALSE;
+
+  if (modify)
+    {
+      if (gtk_selection_model_is_selected (self, pos))
+        success = gtk_selection_model_unselect_item (self, pos);
+      else
+        success = gtk_selection_model_select_item (self, pos, FALSE);
+    }
+  else
+    {
+      success = gtk_selection_model_select_item (self, pos, TRUE);
+    }
+
+  return success;
+}
+
