@@ -175,8 +175,6 @@ struct _GtkPlacesSidebar {
 
   GtkPlacesOpenFlags open_flags;
 
-  GActionGroup *action_group;
-
   guint mounting               : 1;
   guint  drag_data_received    : 1;
   guint drop_occurred          : 1;
@@ -189,7 +187,6 @@ struct _GtkPlacesSidebar {
   guint show_trash             : 1;
   guint show_starred_location  : 1;
   guint local_only             : 1;
-  guint populate_all           : 1;
 };
 
 struct _GtkPlacesSidebarClass {
