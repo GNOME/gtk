@@ -1,8 +1,7 @@
-/* Icon View/Icon View Basics
+/* Lists/File browser
  *
- * The GtkIconView widget is used to display and manipulate icons.
- * It uses a GtkTreeModel for data storage, so the list store
- * example might be helpful.
+ * This demo shows off the different layouts that are quickly achievable
+ * with GtkGridView by implementing a file browser with different views.
  */
 
 #include <glib/gi18n.h>
@@ -59,7 +58,7 @@ do_listview_filebrowser (GtkWidget *do_widget)
       g_object_unref (file);
 
       /* grab focus in the view */
-      view = gtk_list_view_new_with_factory (gtk_builder_list_item_factory_new_from_resource ("/listview_filebrowser/listview_filebrowser_list.ui"));
+      view = GTK_WIDGET (gtk_builder_get_object (builder, "view"));
       gtk_widget_grab_focus (view);
 
       g_object_unref (builder);

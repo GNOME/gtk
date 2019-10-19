@@ -43,9 +43,10 @@
         <child>
           <object class="GtkGridView" id="view">
             <property name="model">dirlist</property>
+            <property name="max-columns">15</property>
             <property name="factory">
               <object class="GtkBuilderListItemFactory">
-                <property name="resource">/listview_filebrowser/listview_filebrowser_list.ui</property>
+                <property name="resource">/listview_filebrowser/listview_filebrowser_icons.ui</property>
               </object>
             </property>
           </object>
