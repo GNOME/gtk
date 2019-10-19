@@ -4407,6 +4407,7 @@ gtk_widget_get_allocation
 gtk_widget_get_allocated_baseline
 gtk_widget_get_width
 gtk_widget_get_height
+gtk_widget_get_size
 gtk_widget_compute_bounds
 gtk_widget_compute_transform
 gtk_widget_compute_point

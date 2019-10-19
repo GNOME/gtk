@@ -12574,6 +12574,31 @@ gtk_widget_get_height (GtkWidget *widget)
 }
 
 /**
+ * gtk_widget_get_size:
+ * @widget: a #GtkWidget
+ * @orientation: the orientation to query
+ *
+ * Returns the content width or height of the widget, depending on @orientation.
+ * This is equivalent to calling gtk_widget_get_width() for %GTK_ORIENTATION_HORIZONTAL
+ * or gtk_widget_get_height() for %GTK_ORIENTATION_VERTICAL, but can be used when
+ * writing orientation-independent code, such as when implementing #GtkOrientable
+ * widgets.
+ *
+ * Returns: The size of @widget in @orientation.
+ */
+int
+gtk_widget_get_size (GtkWidget      *widget,
+                     GtkOrientation  orientation)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    return gtk_widget_get_width (widget);
+  else
+    return gtk_widget_get_height (widget);
+}
+
+/**
  * gtk_widget_class_set_layout_manager_type:
  * @widget_class: class to set the layout manager type for
  * @type: The object type that implements the #GtkLayoutManager for @widget_class
