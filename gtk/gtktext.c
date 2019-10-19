@@ -2028,16 +2028,6 @@ gtk_text_unmap (GtkWidget *widget)
 }
 
 static void
-gtk_text_get_text_allocation (GtkText      *self,
-                              GdkRectangle *allocation)
-{
-  allocation->x = 0;
-  allocation->y = 0;
-  allocation->width = gtk_widget_get_width (GTK_WIDGET (self));
-  allocation->height = gtk_widget_get_height (GTK_WIDGET (self));
-}
-
-static void
 gtk_text_realize (GtkWidget *widget)
 {
   GtkText *self = GTK_TEXT (widget);
@@ -2073,24 +2063,23 @@ static void
 update_im_cursor_location (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  const int text_width = gtk_widget_get_width (GTK_WIDGET (self));
   GdkRectangle area;
-  GtkAllocation text_area;
   int strong_x;
   int strong_xoffset;
 
   gtk_text_get_cursor_locations (self, &strong_x, NULL);
-  gtk_text_get_text_allocation (self, &text_area);
 
   strong_xoffset = strong_x - priv->scroll_offset;
   if (strong_xoffset < 0)
     strong_xoffset = 0;
-  else if (strong_xoffset > text_area.width)
-    strong_xoffset = text_area.width;
+  else if (strong_xoffset > text_width)
+    strong_xoffset = text_width;
 
   area.x = strong_xoffset;
   area.y = 0;
   area.width = 0;
-  area.height = text_area.height;
+  area.height = gtk_widget_get_height (GTK_WIDGET (self));
 
   gtk_im_context_set_cursor_location (priv->im_context, &area);
 }
@@ -2103,12 +2092,9 @@ gtk_text_move_handle (GtkText               *self,
                       int                    height)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GtkAllocation text_allocation;
-
-  gtk_text_get_text_allocation (self, &text_allocation);
 
   if (!_gtk_text_handle_get_is_dragged (priv->text_handle, pos) &&
-      (x < 0 || x > text_allocation.width))
+      (x < 0 || x > gtk_widget_get_width (GTK_WIDGET (self))))
     {
       /* Hide the handle if it's not being manipulated
        * and fell outside of the visible text area.
@@ -2119,8 +2105,8 @@ gtk_text_move_handle (GtkText               *self,
     {
       GdkRectangle rect;
 
-      rect.x = x + text_allocation.x;
-      rect.y = y + text_allocation.y;
+      rect.x = x;
+      rect.y = y;
       rect.width = 1;
       rect.height = height;
 
@@ -2158,12 +2144,11 @@ gtk_text_update_handles (GtkText           *self,
                          GtkTextHandleMode  mode)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GtkAllocation text_allocation;
+  const int text_height = gtk_widget_get_height (GTK_WIDGET (self));
   int strong_x;
   int cursor, bound;
 
   _gtk_text_handle_set_mode (priv->text_handle, mode);
-  gtk_text_get_text_allocation (self, &text_allocation);
 
   gtk_text_get_cursor_locations (self, &strong_x, NULL);
   cursor = strong_x - priv->scroll_offset;
@@ -2187,13 +2172,13 @@ gtk_text_update_handles (GtkText           *self,
 
       /* Update start selection bound */
       gtk_text_move_handle (self, GTK_TEXT_HANDLE_POSITION_SELECTION_START,
-                             start, 0, text_allocation.height);
+                             start, 0, text_height);
       gtk_text_move_handle (self, GTK_TEXT_HANDLE_POSITION_SELECTION_END,
-                             end, 0, text_allocation.height);
+                             end, 0, text_height);
     }
   else
     gtk_text_move_handle (self, GTK_TEXT_HANDLE_POSITION_CURSOR,
-                           cursor, 0, text_allocation.height);
+                           cursor, 0, text_height);
 }
 
 static void
@@ -2350,29 +2335,28 @@ gtk_text_draw_undershoot (GtkText     *self,
                           GtkSnapshot *snapshot)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  const int text_width = gtk_widget_get_width (GTK_WIDGET (self));
+  const int text_height = gtk_widget_get_height (GTK_WIDGET (self));
   GtkStyleContext *context;
   int min_offset, max_offset;
-  GdkRectangle rect;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (self));
 
   gtk_text_get_scroll_limits (self, &min_offset, &max_offset);
 
-  gtk_text_get_text_allocation (self, &rect);
-
   if (priv->scroll_offset > min_offset)
     {
       gtk_style_context_save_to_node (context, priv->undershoot_node[0]);
-      gtk_snapshot_render_background (snapshot, context, rect.x, rect.y, UNDERSHOOT_SIZE, rect.height);
-      gtk_snapshot_render_frame (snapshot, context, rect.x, rect.y, UNDERSHOOT_SIZE, rect.height);
+      gtk_snapshot_render_background (snapshot, context, 0, 0, UNDERSHOOT_SIZE, text_height);
+      gtk_snapshot_render_frame (snapshot, context, 0, 0, UNDERSHOOT_SIZE, text_height);
       gtk_style_context_restore (context);
     }
 
   if (priv->scroll_offset < max_offset)
     {
       gtk_style_context_save_to_node (context, priv->undershoot_node[1]);
-      gtk_snapshot_render_background (snapshot, context, rect.x + rect.width - UNDERSHOOT_SIZE, rect.y, UNDERSHOOT_SIZE, rect.height);
-      gtk_snapshot_render_frame (snapshot, context, rect.x + rect.width - UNDERSHOOT_SIZE, rect.y, UNDERSHOOT_SIZE, rect.height);
+      gtk_snapshot_render_background (snapshot, context, text_width - UNDERSHOOT_SIZE, 0, UNDERSHOOT_SIZE, text_height);
+      gtk_snapshot_render_frame (snapshot, context, text_width - UNDERSHOOT_SIZE, 0, UNDERSHOOT_SIZE, text_height);
       gtk_style_context_restore (context);
     }
 }
@@ -2747,17 +2731,15 @@ gtk_text_show_magnifier (GtkText *self,
                          int      y)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  const int text_height = gtk_widget_get_height (GTK_WIDGET (self));
   cairo_rectangle_int_t rect;
-  GtkAllocation text_allocation;
-
-  gtk_text_get_text_allocation (self, &text_allocation);
 
   gtk_text_ensure_magnifier (self);
 
-  rect.x = x + text_allocation.x;
+  rect.x = x;
   rect.width = 1;
-  rect.y = text_allocation.y;
-  rect.height = text_allocation.height;
+  rect.y = 0;
+  rect.height = text_height;
 
   _gtk_magnifier_set_coords (GTK_MAGNIFIER (priv->magnifier), rect.x,
                              rect.y + rect.height / 2);
@@ -2838,18 +2820,16 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
     }
   else
     {
-      GtkAllocation text_allocation;
       GdkInputSource input_source;
       GdkDevice *source;
       guint length;
       int tmp_pos;
 
       length = gtk_entry_buffer_get_length (get_buffer (self));
-      gtk_text_get_text_allocation (self, &text_allocation);
 
       if (y < 0)
         tmp_pos = 0;
-      else if (y >= text_allocation.height)
+      else if (y >= gtk_widget_get_height (GTK_WIDGET (self)))
         tmp_pos = length;
       else
         tmp_pos = gtk_text_find_position (self, x);
@@ -4302,17 +4282,15 @@ get_layout_position (GtkText *self,
                      int     *y)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  const int text_height = gtk_widget_get_height (GTK_WIDGET (self));
   PangoLayout *layout;
   PangoRectangle logical_rect;
   int y_pos, area_height;
   PangoLayoutLine *line;
-  GtkAllocation text_allocation;
-
-  gtk_text_get_text_allocation (self, &text_allocation);
 
   layout = gtk_text_ensure_layout (self, TRUE);
 
-  area_height = PANGO_SCALE * text_allocation.height;
+  area_height = PANGO_SCALE * text_height;
 
   line = pango_layout_get_lines_readonly (layout)->data;
   pango_layout_line_get_extents (line, NULL, &logical_rect);
@@ -4737,16 +4715,14 @@ static void
 gtk_text_adjust_scroll (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  const int text_width = gtk_widget_get_width (GTK_WIDGET (self));
   int min_offset, max_offset;
   int strong_x, weak_x;
   int strong_xoffset, weak_xoffset;
   GtkTextHandleMode handle_mode;
-  GtkAllocation text_allocation;
 
   if (!gtk_widget_get_realized (GTK_WIDGET (self)))
     return;
-
-  gtk_text_get_text_allocation (self, &text_allocation);
 
   gtk_text_get_scroll_limits (self, &min_offset, &max_offset);
 
@@ -4786,22 +4762,22 @@ gtk_text_adjust_scroll (GtkText *self)
       priv->scroll_offset += strong_xoffset;
       strong_xoffset = 0;
     }
-  else if (strong_xoffset > text_allocation.width)
+  else if (strong_xoffset > text_width)
     {
-      priv->scroll_offset += strong_xoffset - text_allocation.width;
-      strong_xoffset = text_allocation.width;
+      priv->scroll_offset += strong_xoffset - text_width;
+      strong_xoffset = text_width;
     }
 
   weak_xoffset = weak_x - priv->scroll_offset;
 
-  if (weak_xoffset < 0 && strong_xoffset - weak_xoffset <= text_allocation.width)
+  if (weak_xoffset < 0 && strong_xoffset - weak_xoffset <= text_width)
     {
       priv->scroll_offset += weak_xoffset;
     }
-  else if (weak_xoffset > text_allocation.width &&
-           strong_xoffset - (weak_xoffset - text_allocation.width) >= 0)
+  else if (weak_xoffset > text_width &&
+           strong_xoffset - (weak_xoffset - text_width) >= 0)
     {
-      priv->scroll_offset += weak_xoffset - text_allocation.width;
+      priv->scroll_offset += weak_xoffset - text_width;
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), text_props[PROP_SCROLL_OFFSET]);
@@ -5918,19 +5894,18 @@ gtk_text_selection_bubble_popup_show (gpointer user_data)
 {
   GtkText *self = user_data;
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  const int text_width = gtk_widget_get_width (GTK_WIDGET (self));
+  const int text_height = gtk_widget_get_height (GTK_WIDGET (self));
   cairo_rectangle_int_t rect;
   GtkAllocation allocation;
   gboolean has_selection;
   int start_x, end_x;
   GtkWidget *box;
   GtkWidget *toolbar;
-  GtkAllocation text_allocation;
   GMenuModel *model;
   int i;
 
   gtk_text_update_clipboard_actions (self);
-
-  gtk_text_get_text_allocation (self, &text_allocation);
 
   has_selection = priv->selection_bound != priv->current_pos;
 
@@ -5970,21 +5945,21 @@ gtk_text_selection_bubble_popup_show (gpointer user_data)
   gtk_text_get_cursor_locations (self, &start_x, NULL);
 
   start_x -= priv->scroll_offset;
-  start_x = CLAMP (start_x, 0, text_allocation.width);
-  rect.y = text_allocation.y - allocation.y;
-  rect.height = text_allocation.height;
+  start_x = CLAMP (start_x, 0, text_width);
+  rect.y = - allocation.y;
+  rect.height = text_height;
 
   if (has_selection)
     {
       end_x = gtk_text_get_selection_bound_location (self) - priv->scroll_offset;
-      end_x = CLAMP (end_x, 0, text_allocation.width);
+      end_x = CLAMP (end_x, 0, text_width);
 
-      rect.x = text_allocation.x - allocation.x + MIN (start_x, end_x);
+      rect.x = - allocation.x + MIN (start_x, end_x);
       rect.width = ABS (end_x - start_x);
     }
   else
     {
-      rect.x = text_allocation.x - allocation.x + start_x;
+      rect.x = - allocation.x + start_x;
       rect.width = 0;
     }
 
