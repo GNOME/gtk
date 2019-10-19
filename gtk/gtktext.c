@@ -2528,7 +2528,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
 
   if (gdk_event_triggers_context_menu (event))
     {
-      gtk_text_do_popup (self, x, y);
+      gtk_text_do_popup (self, widget_x, widget_y);
     }
   else if (n_press == 1 && button == GDK_BUTTON_MIDDLE &&
            get_middle_click_paste (self))
