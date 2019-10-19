@@ -617,61 +617,11 @@ gtk_list_view_select_item (GtkListView *self,
                            gboolean     modify,
                            gboolean     extend)
 {
-  GtkSelectionModel *selection_model;
-  gboolean success = FALSE;
-
-  selection_model = gtk_list_item_manager_get_model (self->item_manager);
-
-  if (extend)
-    {
-      guint start_pos = gtk_list_item_tracker_get_position (self->item_manager, self->selected);
-      if (start_pos != GTK_INVALID_LIST_POSITION)
-        {
-          guint max = MAX (start_pos, pos);
-          guint min = MIN (start_pos, pos);
-          if (modify)
-            {
-              if (gtk_selection_model_is_selected (selection_model, start_pos))
-                {
-                  success = gtk_selection_model_select_range (selection_model,
-                                                              min,
-                                                              max - min + 1,
-                                                              FALSE);
-                }
-              else
-                {
-                  success = gtk_selection_model_unselect_range (selection_model,
-                                                                min,
-                                                                max - min + 1);
-                }
-            }
-          else
-            {
-              success = gtk_selection_model_select_range (selection_model,
-                                                          min,
-                                                          max - min + 1,
-                                                          TRUE);
-            }
-        }
-      /* If there's no range to select or selecting ranges isn't supported
-       * by the model, fall through to normal setting.
-       */
-    }
-  if (success)
-    return;
-
-  if (modify)
-    {
-      if (gtk_selection_model_is_selected (selection_model, pos))
-        success = gtk_selection_model_unselect_item (selection_model, pos);
-      else
-        success = gtk_selection_model_select_item (selection_model, pos, FALSE);
-    }
-  else
-    {
-      success = gtk_selection_model_select_item (selection_model, pos, TRUE);
-    }
-  if (success)
+  if (gtk_selection_model_user_select_item (gtk_list_item_manager_get_model (self->item_manager),
+                                            pos,
+                                            modify,
+                                            extend ? gtk_list_item_tracker_get_position (self->item_manager, self->selected)
+                                                   : GTK_INVALID_LIST_POSITION))
     {
       gtk_list_item_tracker_set_position (self->item_manager,
                                           self->selected,
