@@ -39,7 +39,7 @@
  * We multiply this number with GtkGridView:max-columns so
  * that we can always display at least this many rows.
  */
-#define GTK_GRID_VIEW_MIN_VISIBLE_ROWS (30)
+#define GTK_GRID_VIEW_MAX_VISIBLE_ROWS (30)
 
 #define DEFAULT_MAX_COLUMNS (7)
 
@@ -355,8 +355,8 @@ gtk_grid_view_set_anchor (GtkGridView *self,
   gtk_list_item_tracker_set_position (self->item_manager,
                                       self->anchor,
                                       position,
-                                      (GTK_GRID_VIEW_MIN_VISIBLE_ROWS * yalign + 1) * self->max_columns,
-                                      (GTK_GRID_VIEW_MIN_VISIBLE_ROWS * (1 - yalign) + 1) * self->max_columns);
+                                      (ceil (GTK_GRID_VIEW_MAX_VISIBLE_ROWS * yalign) + 1) * self->max_columns,
+                                      (ceil (GTK_GRID_VIEW_MAX_VISIBLE_ROWS * (1 - yalign)) + 1) * self->max_columns);
 
   if (self->anchor_xalign != xalign ||
       self->anchor_xstart != xstart ||
@@ -856,13 +856,14 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
   GtkGridView *self = GTK_GRID_VIEW (widget);
   Cell *cell, *start;
   GArray *heights;
-  int row_height, col_min, col_nat;
+  int min_row_height, row_height, col_min, col_nat;
   GtkOrientation opposite_orientation;
   gboolean known;
   int x, y;
   guint i;
 
   opposite_orientation = OPPOSITE_ORIENTATION (self->orientation);
+  min_row_height = ceil ((double) height / GTK_GRID_VIEW_MAX_VISIBLE_ROWS);
 
   /* step 0: exit early if list is empty */
   if (gtk_list_item_manager_get_root (self->item_manager) == NULL)
@@ -899,6 +900,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
             size = min;
           else
             size = nat;
+          size = MAX (size, min_row_height);
           g_array_append_val (heights, size);
           row_height = MAX (row_height, size);
         }
