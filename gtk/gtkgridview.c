@@ -76,6 +76,8 @@ struct _GtkGridView
   double anchor_yalign;
   guint anchor_xstart : 1;
   guint anchor_ystart : 1;
+  /* the last item that was selected - basically the location to extend selections from */
+  GtkListItemTracker *selected;
 };
 
 struct _Cell
@@ -366,6 +368,25 @@ gtk_grid_view_set_anchor (GtkGridView *self,
       self->anchor_yalign = yalign;
       self->anchor_ystart = ystart;
       gtk_widget_queue_allocate (GTK_WIDGET (self));
+    }
+}
+
+static void
+gtk_grid_view_select_item (GtkGridView *self,
+                           guint        pos,
+                           gboolean     modify,
+                           gboolean     extend)
+{
+  if (gtk_selection_model_user_select_item (gtk_list_item_manager_get_model (self->item_manager),
+                                            pos,
+                                            modify,
+                                            extend ? gtk_list_item_tracker_get_position (self->item_manager, self->selected)
+                                                   : GTK_INVALID_LIST_POSITION))
+    {
+      gtk_list_item_tracker_set_position (self->item_manager,
+                                          self->selected,
+                                          pos,
+                                          0, 0);
     }
 }
 
@@ -1007,6 +1028,11 @@ gtk_grid_view_dispose (GObject *object)
       gtk_list_item_tracker_free (self->item_manager, self->anchor);
       self->anchor = NULL;
     }
+  if (self->selected)
+    {
+      gtk_list_item_tracker_free (self->item_manager, self->selected);
+      self->selected = NULL;
+    }
   g_clear_object (&self->item_manager);
 
   G_OBJECT_CLASS (gtk_grid_view_parent_class)->dispose (object);
@@ -1167,6 +1193,20 @@ gtk_grid_view_set_property (GObject      *object,
 }
 
 static void
+gtk_grid_view_select_item_action (GtkWidget  *widget,
+                                  const char *action_name,
+                                  GVariant   *parameter)
+{
+  GtkGridView *self = GTK_GRID_VIEW (widget);
+  guint pos;
+  gboolean modify, extend;
+
+  g_variant_get (parameter, "(ubb)", &pos, &modify, &extend);
+
+  gtk_grid_view_select_item (self, pos, modify, extend);
+}
+
+static void
 gtk_grid_view_class_init (GtkGridViewClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -1263,6 +1303,29 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
+  /**
+   * GtkGridView|list.select-item:
+   * @position: position of item to select
+   * @modify: %TRUE to toggle the existing selection, %FALSE to select
+   * @extend: %TRUE to extend the selection
+   *
+   * Changes selection.
+   *
+   * If @extend is %TRUE and the model supports selecting ranges, the
+   * affected items are all items from the last selected item to the item
+   * in @position.
+   * If @extend is %FALSE or selecting ranges is not supported, only the
+   * item in @position is affected.
+   *
+   * If @modify is %TRUE, the affected items will be set to the same state.
+   * If @modify is %FALSE, the affected items will be selected and
+   * all other items will be deselected.
+   */
+  gtk_widget_class_install_action (widget_class,
+                                   "list.select-item",
+                                   "(ubb)",
+                                   gtk_grid_view_select_item_action);
+
   gtk_widget_class_set_css_name (widget_class, I_("flowbox"));
 
 }
@@ -1301,6 +1364,9 @@ gtk_grid_view_init (GtkGridView *self)
 {
   self->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self), "flowboxchild", Cell, CellAugment, cell_augment);
   self->anchor = gtk_list_item_tracker_new (self->item_manager);
+  self->anchor_xstart = TRUE;
+  self->anchor_ystart = TRUE;
+  self->selected = gtk_list_item_tracker_new (self->item_manager);
 
   self->min_columns = 1;
   self->max_columns = DEFAULT_MAX_COLUMNS;
