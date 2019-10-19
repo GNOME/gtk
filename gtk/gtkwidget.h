@@ -528,6 +528,9 @@ GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_width              (GtkWidget     *widget);
 GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_height             (GtkWidget     *widget);
+GDK_AVAILABLE_IN_ALL
+int                   gtk_widget_get_size               (GtkWidget     *widget,
+                                                         GtkOrientation orientation);
 
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_child_focus         (GtkWidget           *widget,
