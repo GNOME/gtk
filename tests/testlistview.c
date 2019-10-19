@@ -513,6 +513,8 @@ setup_widget (GtkListItem *list_item,
   gtk_container_add (GTK_CONTAINER (box), data->icon);
 
   data->name = gtk_label_new (NULL);
+  gtk_label_set_max_width_chars (GTK_LABEL (data->name), 25);
+  gtk_label_set_ellipsize (GTK_LABEL (data->name), PANGO_ELLIPSIZE_END);
   gtk_container_add (GTK_CONTAINER (box), data->name);
 }
 
@@ -601,7 +603,7 @@ main (int argc, char *argv[])
   gtk_init ();
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_default_size (GTK_WINDOW (win), 400, 600);
+  gtk_window_set_default_size (GTK_WINDOW (win), 800, 600);
   g_signal_connect (win, "destroy", G_CALLBACK (gtk_main_quit), win);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
@@ -615,7 +617,7 @@ main (int argc, char *argv[])
   gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (search_entry), sw);
   gtk_container_add (GTK_CONTAINER (vbox), sw);
 
-  listview = gtk_list_view_new_with_factory (
+  listview = gtk_grid_view_new_with_factory (
     gtk_functions_list_item_factory_new (setup_widget,
                                          NULL,
                                          NULL, NULL));
@@ -642,7 +644,7 @@ main (int argc, char *argv[])
   selectionmodel = file_info_selection_new (G_LIST_MODEL (filter));
   g_object_unref (filter);
 
-  gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (selectionmodel));
+  gtk_grid_view_set_model (GTK_GRID_VIEW (listview), G_LIST_MODEL (selectionmodel));
 
   statusbar = gtk_statusbar_new ();
   gtk_widget_add_tick_callback (statusbar, (GtkTickCallback) update_statusbar, NULL, NULL);
