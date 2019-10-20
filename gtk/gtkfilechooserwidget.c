@@ -2949,8 +2949,7 @@ set_local_only (GtkFileChooserWidget *impl,
 /* Sets the file chooser to multiple selection mode */
 static void
 set_select_multiple (GtkFileChooserWidget *impl,
-                     gboolean               select_multiple,
-                     gboolean               property_notify)
+                     gboolean               select_multiple)
 {
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
   GtkTreeSelection *selection;
@@ -3232,7 +3231,7 @@ update_appearance (GtkFileChooserWidget *impl)
         {
           g_warning ("Save mode cannot be set in conjunction with multiple selection mode.  "
                      "Re-setting to single selection mode.");
-          set_select_multiple (impl, FALSE, TRUE);
+          set_select_multiple (impl, FALSE);
         }
 
     }
@@ -3368,7 +3367,7 @@ gtk_file_chooser_widget_set_property (GObject      *object,
                 g_warning ("Tried to change the file chooser action to SAVE or CREATE_FOLDER, but "
                            "this is not allowed in multiple selection mode.  Resetting the file chooser "
                            "to single selection mode.");
-                set_select_multiple (impl, FALSE, TRUE);
+                set_select_multiple (impl, FALSE);
               }
             priv->action = action;
             update_cell_renderer_attributes (impl);
@@ -3417,7 +3416,7 @@ gtk_file_chooser_widget_set_property (GObject      *object,
             return;
           }
 
-        set_select_multiple (impl, select_multiple, FALSE);
+        set_select_multiple (impl, select_multiple);
       }
       break;
 
