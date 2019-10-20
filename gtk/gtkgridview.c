@@ -25,6 +25,7 @@
 #include "gtkintl.h"
 #include "gtklistitemfactory.h"
 #include "gtklistitemmanagerprivate.h"
+#include "gtkmain.h"
 #include "gtkorientableprivate.h"
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
@@ -78,6 +79,8 @@ struct _GtkGridView
   guint anchor_ystart : 1;
   /* the last item that was selected - basically the location to extend selections from */
   GtkListItemTracker *selected;
+  /* the item that has input focus */
+  GtkListItemTracker *focus;
 };
 
 struct _Cell
@@ -394,6 +397,62 @@ gtk_grid_view_select_item (GtkGridView *self,
                                           pos,
                                           0, 0);
     }
+}
+
+static gboolean
+gtk_grid_view_focus (GtkWidget        *widget,
+                     GtkDirectionType  direction)
+{
+  GtkGridView *self = GTK_GRID_VIEW (widget);
+  GtkWidget *old_focus_child, *new_focus_child;
+
+  old_focus_child = gtk_widget_get_focus_child (widget);
+
+  if (old_focus_child == NULL &&
+      (direction == GTK_DIR_TAB_FORWARD || direction == GTK_DIR_TAB_BACKWARD))
+    {
+      Cell *cell;
+      guint pos;
+
+      /* When tabbing into the listview, don't focus the first/last item,
+       * but keep the previously focused item
+       */
+      pos = gtk_list_item_tracker_get_position (self->item_manager, self->focus);
+      cell = gtk_list_item_manager_get_nth (self->item_manager, pos, NULL);
+      if (cell && gtk_widget_grab_focus (cell->parent.widget))
+        goto moved_focus;
+    }
+
+  if (!GTK_WIDGET_CLASS (gtk_grid_view_parent_class)->focus (widget, direction))
+    return FALSE;
+
+moved_focus:
+  new_focus_child = gtk_widget_get_focus_child (widget);
+
+  if (old_focus_child != new_focus_child &&
+      GTK_IS_LIST_ITEM (new_focus_child))
+    {
+      GdkModifierType state;
+      GdkModifierType mask;
+      gboolean extend = FALSE, modify = FALSE;
+
+      if (old_focus_child && gtk_get_current_event_state (&state))
+        {
+          mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
+          if ((state & mask) == mask)
+            modify = TRUE;
+          mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_EXTEND_SELECTION);
+          if ((state & mask) == mask)
+            extend = TRUE;
+        }
+
+      gtk_grid_view_select_item (self,
+                                 gtk_list_item_get_position (GTK_LIST_ITEM (new_focus_child)),
+                                 modify,
+                                 extend);
+    }
+
+  return TRUE;
 }
 
 static gboolean
@@ -1041,6 +1100,11 @@ gtk_grid_view_dispose (GObject *object)
       gtk_list_item_tracker_free (self->item_manager, self->selected);
       self->selected = NULL;
     }
+  if (self->focus)
+    {
+      gtk_list_item_tracker_free (self->item_manager, self->focus);
+      self->focus = NULL;
+    }
   g_clear_object (&self->item_manager);
 
   G_OBJECT_CLASS (gtk_grid_view_parent_class)->dispose (object);
@@ -1276,6 +1340,27 @@ gtk_grid_view_compute_scroll_align (GtkGridView   *self,
 }
 
 static void
+gtk_grid_view_update_focus_tracker (GtkGridView *self)
+{
+  GtkWidget *focus_child;
+  guint pos;
+
+  focus_child = gtk_widget_get_focus_child (GTK_WIDGET (self));
+  if (!GTK_IS_LIST_ITEM (focus_child))
+    return;
+
+  pos = gtk_list_item_get_position (GTK_LIST_ITEM (focus_child));
+  if (pos != gtk_list_item_tracker_get_position (self->item_manager, self->focus))
+    {
+      gtk_list_item_tracker_set_position (self->item_manager,
+                                          self->focus,
+                                          pos,
+                                          self->max_columns,
+                                          self->max_columns);
+    }
+}
+
+static void
 gtk_grid_view_scroll_to_item (GtkWidget  *widget,
                               const char *action_name,
                               GVariant   *parameter)
@@ -1312,6 +1397,14 @@ gtk_grid_view_scroll_to_item (GtkWidget  *widget,
                                       &xalign, &xstart);
 
   gtk_grid_view_set_anchor (self, pos, xalign, xstart, yalign, ystart);
+
+  /* HACK HACK HACK
+   *
+   * GTK has no way to track the focused child. But we now that when a listitem
+   * gets focus, it calls this action. So we update our focus tracker from here
+   * because it's the closest we can get to accurate tracking.
+   */
+  gtk_grid_view_update_focus_tracker (self);
 }
 
 static void
@@ -1339,6 +1432,7 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   gpointer iface;
 
+  widget_class->focus = gtk_grid_view_focus;
   widget_class->measure = gtk_grid_view_measure;
   widget_class->size_allocate = gtk_grid_view_size_allocate;
 
@@ -1541,6 +1635,7 @@ gtk_grid_view_init (GtkGridView *self)
   self->anchor_xstart = TRUE;
   self->anchor_ystart = TRUE;
   self->selected = gtk_list_item_tracker_new (self->item_manager);
+  self->focus = gtk_list_item_tracker_new (self->item_manager);
 
   self->min_columns = 1;
   self->max_columns = DEFAULT_MAX_COLUMNS;
@@ -1745,6 +1840,7 @@ gtk_grid_view_set_max_columns (GtkGridView *self,
                             self->anchor_xstart,
                             self->anchor_yalign,
                             self->anchor_ystart);
+  gtk_grid_view_update_focus_tracker (self);
 
   gtk_widget_queue_resize (GTK_WIDGET (self));
 
