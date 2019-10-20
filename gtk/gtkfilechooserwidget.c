@@ -617,9 +617,6 @@ static void     recent_start_loading         (GtkFileChooserWidget *impl);
 static void     recent_clear_model           (GtkFileChooserWidget *impl,
                                               gboolean               remove_from_treeview);
 static gboolean recent_should_respond        (GtkFileChooserWidget *impl);
-static void     set_file_system_backend      (GtkFileChooserWidget *impl);
-static void     unset_file_system_backend    (GtkFileChooserWidget *impl);
-
 static void     clear_model_cache            (GtkFileChooserWidget *impl,
                                               gint                  column);
 static void     set_model_filter             (GtkFileChooserWidget *impl,
@@ -701,7 +698,7 @@ gtk_file_chooser_widget_finalize (GObject *object)
   if (priv->location_changed_id > 0)
     g_source_remove (priv->location_changed_id);
 
-  unset_file_system_backend (impl);
+  g_clear_object (&priv->file_system);
 
   g_free (priv->browse_files_last_selected_name);
 
@@ -2973,28 +2970,6 @@ set_select_multiple (GtkFileChooserWidget *impl,
   g_object_notify (G_OBJECT (impl), "select-multiple");
 
   check_preview_change (impl);
-}
-
-static void
-set_file_system_backend (GtkFileChooserWidget *impl)
-{
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-
-  profile_start ("start for backend", "default");
-
-  priv->file_system = _gtk_file_system_new ();
-
-  profile_end ("end", NULL);
-}
-
-static void
-unset_file_system_backend (GtkFileChooserWidget *impl)
-{
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-
-  g_object_unref (priv->file_system);
-
-  priv->file_system = NULL;
 }
 
 /* Takes the folder stored in a row in the recent_model, and puts it in the pathbar */
@@ -8668,8 +8643,7 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   g_signal_connect (impl, "notify::display,", G_CALLBACK (display_changed_cb), impl);
   check_icon_theme (impl);
 
-  set_file_system_backend (impl);
-
+  priv->file_system = _gtk_file_system_new ();
   priv->bookmarks_manager = _gtk_bookmarks_manager_new (NULL, NULL);
 
   /* Setup various attributes and callbacks in the UI
