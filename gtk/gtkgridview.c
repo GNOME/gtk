@@ -1283,6 +1283,32 @@ gtk_grid_view_select_item_action (GtkWidget  *widget,
 }
 
 static void
+gtk_grid_view_select_all (GtkWidget  *widget,
+                          const char *action_name,
+                          GVariant   *parameter)
+{
+  GtkGridView *self = GTK_GRID_VIEW (widget);
+  GtkSelectionModel *selection_model;
+
+  selection_model = gtk_list_item_manager_get_model (self->item_manager);
+
+  gtk_selection_model_select_all (selection_model);
+}
+
+static void
+gtk_grid_view_unselect_all (GtkWidget  *widget,
+                            const char *action_name,
+                            GVariant   *parameter)
+{
+  GtkGridView *self = GTK_GRID_VIEW (widget);
+  GtkSelectionModel *selection_model;
+
+  selection_model = gtk_list_item_manager_get_model (self->item_manager);
+
+  gtk_selection_model_unselect_all (selection_model);
+}
+
+static void
 gtk_grid_view_compute_scroll_align (GtkGridView   *self,
                                     GtkOrientation orientation,
                                     int            cell_start,
@@ -1587,6 +1613,28 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
                                    gtk_grid_view_select_item_action);
 
   /**
+   * GtkGridView|list.select-all:
+   *
+   * If the selection model supports it, select all items in the model.
+   * If not, do nothing.
+   */
+  gtk_widget_class_install_action (widget_class,
+                                   "list.select-all",
+                                   NULL,
+                                   gtk_grid_view_select_all);
+
+  /**
+   * GtkGridView|list.unselect-all:
+   *
+   * If the selection model supports it, unselect all items in the model.
+   * If not, do nothing.
+   */
+  gtk_widget_class_install_action (widget_class,
+                                   "list.unselect-all",
+                                   NULL,
+                                   gtk_grid_view_unselect_all);
+
+  /**
    * GtkGridView|list.scroll-to-item:
    * @position: position of item to scroll to
    *
@@ -1597,6 +1645,12 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
                                    "list.scroll-to-item",
                                    "u",
                                    gtk_grid_view_scroll_to_item);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_a, GDK_CONTROL_MASK, "list.select-all", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_slash, GDK_CONTROL_MASK, "list.select-all", NULL);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_A, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "list.unselect-all", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_backslash, GDK_CONTROL_MASK, "list.unselect-all", NULL);
 
   gtk_widget_class_set_css_name (widget_class, I_("flowbox"));
 
