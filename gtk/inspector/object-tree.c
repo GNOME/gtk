@@ -1053,13 +1053,13 @@ gtk_inspector_object_tree_create_list_widget (gpointer row_item,
       GtkWidget *title, *arrow;
 
       child = g_object_new (GTK_TYPE_BOX, "css-name", "expander", NULL);
-      
+
       title = g_object_new (GTK_TYPE_TOGGLE_BUTTON, "css-name", "title", NULL);
       gtk_button_set_relief (GTK_BUTTON (title), GTK_RELIEF_NONE);
       g_object_bind_property (row_item, "expanded", title, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
       gtk_container_add (GTK_CONTAINER (child), title);
 
-      arrow = gtk_icon_new ("arrow");
+      arrow = gtk_icon_new ("expander");
       gtk_container_add (GTK_CONTAINER (title), arrow);
     }
   else
