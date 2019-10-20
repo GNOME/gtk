@@ -6467,6 +6467,7 @@ gtk_text_set_placeholder_text (GtkText    *self,
                                         "xalign", 0.0f,
                                         "ellipsize", PANGO_ELLIPSIZE_END,
                                         NULL);
+      gtk_label_set_attributes (GTK_LABEL (priv->placeholder), priv->attrs);
       gtk_widget_insert_after (priv->placeholder, GTK_WIDGET (self), NULL);
     }
   else
@@ -6620,6 +6621,9 @@ gtk_text_set_attributes (GtkText       *self,
   if (priv->attrs)
     pango_attr_list_unref (priv->attrs);
   priv->attrs = attrs;
+
+  if (priv->placeholder)
+    gtk_label_set_attributes (GTK_LABEL (priv->placeholder), attrs);
 
   g_object_notify_by_pspec (G_OBJECT (self), text_props[PROP_ATTRIBUTES]);
 
