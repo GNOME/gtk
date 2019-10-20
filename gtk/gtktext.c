@@ -6601,16 +6601,17 @@ gtk_text_get_input_hints (GtkText *self)
 /**
  * gtk_text_set_attributes:
  * @self: a #GtkText
- * @attrs: a #PangoAttrList
+ * @attrs: (nullable): a #PangoAttrList or %NULL to unset
  *
  * Sets a #PangoAttrList; the attributes in the list are applied to the
- * self text.
+ * text.
  */
 void
 gtk_text_set_attributes (GtkText       *self,
                          PangoAttrList *attrs)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
   g_return_if_fail (GTK_IS_TEXT (self));
 
   if (attrs)
