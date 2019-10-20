@@ -3474,15 +3474,6 @@ gtk_entry_get_tabs (GtkEntry *entry)
   return gtk_text_get_tabs (GTK_TEXT (priv->text));
 }
 
-void
-gtk_entry_enter_text (GtkEntry *entry,
-                      const char *text)
-{
-  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-
-  gtk_text_enter_text (GTK_TEXT (priv->text), text);
-}
-
 static void
 pick_emoji (GtkEntry *entry,
             int       icon,
