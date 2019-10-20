@@ -15,6 +15,7 @@
   </object>
   <object class="GtkPopover" id="server_adresses_popover">
     <property name="relative-to">address_entry</property>
+    <property name="position">top</property>
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
