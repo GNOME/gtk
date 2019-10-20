@@ -1215,6 +1215,106 @@ gtk_grid_view_select_item_action (GtkWidget  *widget,
 }
 
 static void
+gtk_grid_view_compute_scroll_align (GtkGridView   *self,
+                                    GtkOrientation orientation,
+                                    int            cell_start,
+                                    int            cell_end,
+                                    double         current_align,
+                                    gboolean       current_start,
+                                    double        *new_align,
+                                    gboolean      *new_start)
+{
+  int visible_start, visible_size, visible_end;
+  int cell_size;
+
+  visible_start = gtk_adjustment_get_value (self->adjustment[orientation]);
+  visible_size = gtk_adjustment_get_page_size (self->adjustment[orientation]);
+  if (gtk_grid_view_adjustment_is_flipped (self, orientation))
+    visible_start = gtk_adjustment_get_upper (self->adjustment[orientation]) - visible_size - visible_start;
+  visible_end = visible_start + visible_size;
+  cell_size = cell_end - cell_start;
+
+  if (cell_size <= visible_size)
+    {
+      if (cell_start < visible_start)
+        {
+          *new_align = 0.0;
+          *new_start = TRUE;
+        }
+      else if (cell_end > visible_end)
+        {
+          *new_align = 1.0;
+          *new_start = FALSE;
+        }
+      else
+        {
+          /* XXX: start or end here? */
+          *new_start = TRUE;
+          *new_align = (double) (cell_start - visible_start) / visible_size;
+        }
+    }
+  else
+    {
+      /* This is the unlikely case of the cell being higher than the visible area */
+      if (cell_start > visible_start)
+        {
+          *new_align = 0.0;
+          *new_start = TRUE;
+        }
+      else if (cell_end < visible_end)
+        {
+          *new_align = 1.0;
+          *new_start = FALSE;
+        }
+      else
+        {
+          /* the cell already covers the whole screen */
+          *new_align = current_align;
+          *new_start = current_start;
+        }
+    }
+}
+
+static void
+gtk_grid_view_scroll_to_item (GtkWidget  *widget,
+                              const char *action_name,
+                              GVariant   *parameter)
+{
+  GtkGridView *self = GTK_GRID_VIEW (widget);
+  int start, end;
+  double xalign, yalign;
+  gboolean xstart, ystart;
+  guint pos;
+
+  if (!g_variant_check_format_string (parameter, "u", FALSE))
+    return;
+
+  g_variant_get (parameter, "u", &pos);
+
+  /* figure out primary orientation and if position is valid */
+  if (!gtk_grid_view_get_size_at_position (self, pos, &start, &end))
+    return;
+
+  end += start;
+  gtk_grid_view_compute_scroll_align (self,
+                                      self->orientation,
+                                      start, end,
+                                      self->anchor_yalign, self->anchor_ystart,
+                                      &yalign, &ystart);
+
+  /* now do the same thing with the other orientation */
+  start = floor (self->column_width * (pos % self->n_columns));
+  end = floor (self->column_width * ((pos % self->n_columns) + 1));
+  gtk_grid_view_compute_scroll_align (self,
+                                      OPPOSITE_ORIENTATION (self->orientation),
+                                      start, end,
+                                      self->anchor_xalign, self->anchor_xstart,
+                                      &xalign, &xstart);
+
+  gtk_grid_view_set_anchor (self, pos, xalign, xstart, yalign, ystart);
+}
+
+static void
 gtk_grid_view_activate_item (GtkWidget  *widget,
                              const char *action_name,
                              GVariant   *parameter)
@@ -1387,6 +1487,18 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
                                    "list.select-item",
                                    "(ubb)",
                                    gtk_grid_view_select_item_action);
+
+  /**
+   * GtkGridView|list.scroll-to-item:
+   * @position: position of item to scroll to
+   *
+   * Scrolls to the item given in @position with the minimum amount
+   * of scrolling required. If the item is already visible, nothing happens.
+   */
+  gtk_widget_class_install_action (widget_class,
+                                   "list.scroll-to-item",
+                                   "u",
+                                   gtk_grid_view_scroll_to_item);
 
   gtk_widget_class_set_css_name (widget_class, I_("flowbox"));
 
