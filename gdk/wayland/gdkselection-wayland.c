@@ -1140,10 +1140,6 @@ gdk_wayland_selection_unset_data_source (GdkDisplay *display,
 
   if (selection == atoms[ATOM_CLIPBOARD])
     {
-      GdkSeat *seat = gdk_display_get_default_seat (display);
-
-      gdk_wayland_seat_set_selection (seat, NULL);
-
       if (wayland_selection->clipboard_source)
         {
           wl_data_source_destroy (wayland_selection->clipboard_source);
@@ -1152,10 +1148,6 @@ gdk_wayland_selection_unset_data_source (GdkDisplay *display,
     }
   else if (selection == atoms[ATOM_PRIMARY])
     {
-      GdkSeat *seat = gdk_display_get_default_seat (display);
-
-      gdk_wayland_seat_set_primary (seat, NULL);
-
       if (wayland_selection->primary_source)
         {
           gtk_primary_selection_source_destroy (wayland_selection->primary_source);
@@ -1192,19 +1184,26 @@ _gdk_wayland_display_set_selection_owner (GdkDisplay *display,
                                           gboolean    send_event)
 {
   GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
+  GdkSeat *seat = gdk_display_get_default_seat (display);
 
   if (selection == atoms[ATOM_CLIPBOARD])
     {
       wayland_selection->clipboard_owner = owner;
       if (send_event && !owner)
-        gdk_wayland_selection_unset_data_source (display, selection);
+        {
+          gdk_wayland_seat_set_selection (seat, NULL);
+          gdk_wayland_selection_unset_data_source (display, selection);
+        }
       return TRUE;
     }
   else if (selection == atoms[ATOM_PRIMARY])
     {
       wayland_selection->primary_owner = owner;
       if (send_event && !owner)
-        gdk_wayland_selection_unset_data_source (display, selection);
+        {
+          gdk_wayland_seat_set_primary (seat, NULL);
+          gdk_wayland_selection_unset_data_source (display, selection);
+        }
       return TRUE;
     }
   else if (selection == atoms[ATOM_DND])
