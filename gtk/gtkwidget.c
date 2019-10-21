@@ -7206,6 +7206,10 @@ static gboolean
 gtk_widget_real_key_press_event (GtkWidget         *widget,
 				 GdkEventKey       *event)
 {
+  if (_gtk_widget_run_controllers (widget, (GdkEvent *) event,
+                                   GTK_PHASE_BUBBLE))
+    return GDK_EVENT_STOP;
+
   return gtk_bindings_activate_event (G_OBJECT (widget), event);
 }
 
@@ -7213,6 +7217,10 @@ static gboolean
 gtk_widget_real_key_release_event (GtkWidget         *widget,
 				   GdkEventKey       *event)
 {
+  if (_gtk_widget_run_controllers (widget, (GdkEvent *) event,
+                                   GTK_PHASE_BUBBLE))
+    return GDK_EVENT_STOP;
+
   return gtk_bindings_activate_event (G_OBJECT (widget), event);
 }
 
