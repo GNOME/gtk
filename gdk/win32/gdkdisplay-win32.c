@@ -523,8 +523,6 @@ gdk_win32_display_supports_selection_notification (GdkDisplay *display)
   return TRUE;
 }
 
-static HWND _hwnd_next_viewer = NULL;
-
 /*
  * maybe this should be integrated with the default message loop - or maybe not ;-)
  */
@@ -538,24 +536,11 @@ inner_clipboard_window_procedure (HWND   hwnd,
     {
     case WM_DESTROY: /* remove us from chain */
       {
-        ChangeClipboardChain (hwnd, _hwnd_next_viewer);
+        RemoveClipboardFormatListener (hwnd);
         PostQuitMessage (0);
         return 0;
       }
-    case WM_CHANGECBCHAIN:
-      {
-        HWND hwndRemove = (HWND) wparam; /* handle of window being removed */
-        HWND hwndNext   = (HWND) lparam; /* handle of next window in chain */
-
-        if (hwndRemove == _hwnd_next_viewer)
-          _hwnd_next_viewer = hwndNext == hwnd ? NULL : hwndNext;
-        else if (_hwnd_next_viewer != NULL)
-          return SendMessage (_hwnd_next_viewer, message, wparam, lparam);
-
-        return 0;
-      }
     case WM_CLIPBOARDUPDATE:
-    case WM_DRAWCLIPBOARD:
       {
         HWND hwnd_owner;
         HWND stored_hwnd_owner;
@@ -632,9 +617,6 @@ inner_clipboard_window_procedure (HWND   hwnd,
         event->owner_change.selection_time = GDK_CURRENT_TIME;
         _gdk_win32_append_event (event);
 
-        if (_hwnd_next_viewer != NULL)
-          return SendMessage (_hwnd_next_viewer, message, wparam, lparam);
-
         /* clear error to avoid confusing SetClipboardViewer() return */
         SetLastError (0);
         return 0;
@@ -694,15 +676,9 @@ register_clipboard_notification (GdkDisplay *display)
     goto failed;
 
   SetLastError (0);
-  _hwnd_next_viewer = SetClipboardViewer (display_win32->clipboard_hwnd);
 
-  if (_hwnd_next_viewer == NULL && GetLastError() != 0)
+  if (AddClipboardFormatListener (display_win32->clipboard_hwnd) == FALSE)
     goto failed;
-
-  /* FIXME: http://msdn.microsoft.com/en-us/library/ms649033(v=VS.85).aspx */
-  /* This is only supported by Vista, and not yet by mingw64 */
-  /* if (AddClipboardFormatListener (hwnd) == FALSE) */
-  /*   goto failed; */
 
   return TRUE;
 
@@ -850,7 +826,6 @@ gdk_win32_display_dispose (GObject *object)
     {
       DestroyWindow (display_win32->clipboard_hwnd);
       display_win32->clipboard_hwnd = NULL;
-      _hwnd_next_viewer = NULL;
     }
 
   if (display_win32->have_at_least_win81)
