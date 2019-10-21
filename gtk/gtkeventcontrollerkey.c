@@ -200,11 +200,11 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
                   GTK_TYPE_EVENT_CONTROLLER_KEY,
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
-                  _gtk_marshal_BOOLEAN__UINT_UINT_FLAGS,
+                  _gtk_marshal_VOID__UINT_UINT_FLAGS,
                   G_TYPE_NONE, 3, G_TYPE_UINT, G_TYPE_UINT, GDK_TYPE_MODIFIER_TYPE);
   g_signal_set_va_marshaller (signals[KEY_RELEASED],
                               G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__UINT_UINT_FLAGSv);
+                              _gtk_marshal_VOID__UINT_UINT_FLAGSv);
 
   signals[MODIFIERS] =
     g_signal_new (I_("modifiers"),
