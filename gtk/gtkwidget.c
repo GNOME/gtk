@@ -673,6 +673,8 @@ static gboolean _gtk_widget_run_controllers      (GtkWidget           *widget,
 static void	gtk_widget_dispatch_child_properties_changed	(GtkWidget        *object,
 								 guint             n_pspecs,
 								 GParamSpec      **pspecs);
+static gboolean         gtk_widget_real_scroll_event            (GtkWidget        *widget,
+                                                                 GdkEventScroll   *event);
 static gboolean         gtk_widget_real_button_event            (GtkWidget        *widget,
                                                                  GdkEventButton   *event);
 static gboolean         gtk_widget_real_motion_event            (GtkWidget        *widget,
@@ -1061,6 +1063,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->move_focus = gtk_widget_real_move_focus;
   klass->keynav_failed = gtk_widget_real_keynav_failed;
   klass->event = NULL;
+  klass->scroll_event = gtk_widget_real_scroll_event;
   klass->button_press_event = gtk_widget_real_button_event;
   klass->button_release_event = gtk_widget_real_button_event;
   klass->motion_notify_event = gtk_widget_real_motion_event;
@@ -7184,6 +7187,14 @@ gtk_widget_draw (GtkWidget *widget,
   gtk_cairo_set_marked_for_draw (cr, was_marked);
 
   cairo_restore (cr);
+}
+
+static gboolean
+gtk_widget_real_scroll_event (GtkWidget      *widget,
+                              GdkEventScroll *event)
+{
+  return _gtk_widget_run_controllers (widget, (GdkEvent *) event,
+                                      GTK_PHASE_BUBBLE);
 }
 
 static gboolean
