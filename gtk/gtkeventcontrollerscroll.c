@@ -455,6 +455,9 @@ gtk_event_controller_scroll_init (GtkEventControllerScroll *scroll)
 {
   scroll->scroll_history = g_array_new (FALSE, FALSE,
                                         sizeof (ScrollHistoryElem));
+  gtk_event_controller_set_event_mask (GTK_EVENT_CONTROLLER (scroll),
+                                       GDK_SCROLL_MASK |
+                                       GDK_SMOOTH_SCROLL_MASK);
 }
 
 /**
