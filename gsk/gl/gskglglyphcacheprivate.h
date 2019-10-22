@@ -16,7 +16,6 @@ typedef struct
   GskGLTextureAtlases *atlases;
 
   int timestamp;
-  int atlas_timestamp; /* incremented whenever an atlas is dropped */
 } GskGLGlyphCache;
 
 struct _CacheKeyData
@@ -89,7 +88,5 @@ void                     gsk_gl_glyph_cache_lookup_or_add   (GskGLGlyphCache    
                                                              GlyphCacheKey          *lookup,
                                                              GskGLDriver            *driver,
                                                              const GskGLCachedGlyph **cached_glyph_out);
-void                    gsk_gl_glyph_cache_entry_validate   (GskGLGlyphCache *cache,
-                                                             GskGLCachedGlyph *entry);
 
 #endif
