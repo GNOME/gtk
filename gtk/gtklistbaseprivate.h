@@ -30,7 +30,22 @@ struct _GtkListBase
 struct _GtkListBaseClass
 {
   GtkWidgetClass parent_class;
+
+  void                 (* adjustment_value_changed)             (GtkListBase            *self,
+                                                                 GtkOrientation          orientation);
 };
 
+GtkScrollablePolicy    gtk_list_base_get_scroll_policy          (GtkListBase            *self,
+                                                                 GtkOrientation          orientation);
+void                   gtk_list_base_get_adjustment_values      (GtkListBase            *self,
+                                                                 GtkOrientation          orientation,
+                                                                 int                    *value,
+                                                                 int                    *size,
+                                                                 int                    *page_size);
+int                    gtk_list_base_set_adjustment_values      (GtkListBase            *self,
+                                                                 GtkOrientation          orientation,
+                                                                 int                     value,
+                                                                 int                     size,
+                                                                 int                     page_size);
 
 #endif /* __GTK_LIST_BASE_PRIVATE_H__ */
