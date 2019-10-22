@@ -24,14 +24,28 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkwidget.h>
+#include <gtk/gtklistbase.h>
 
 G_BEGIN_DECLS
 
 #define GTK_TYPE_GRID_VIEW         (gtk_grid_view_get_type ())
+#define GTK_GRID_VIEW(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_GRID_VIEW, GtkGridView))
+#define GTK_GRID_VIEW_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GTK_TYPE_GRID_VIEW, GtkGridViewClass))
+#define GTK_IS_GRID_VIEW(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_GRID_VIEW))
+#define GTK_IS_GRID_VIEW_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_GRID_VIEW))
+#define GTK_GRID_VIEW_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_GRID_VIEW, GtkGridViewClass))
+
+/**
+ * GtkGridView:
+ *
+ * GtkGridView is a list widget implementation that arranges its items in
+ * a grid.
+ */
+typedef struct _GtkGridView GtkGridView;
+typedef struct _GtkGridViewClass GtkGridViewClass;
 
 GDK_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (GtkGridView, gtk_grid_view, GTK, GRID_VIEW, GtkWidget)
+GType           gtk_grid_view_get_type                          (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_grid_view_new                               (void);
