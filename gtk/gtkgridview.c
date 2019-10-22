@@ -21,7 +21,6 @@
 
 #include "gtkgridview.h"
 
-#include "gtkadjustment.h"
 #include "gtkbindings.h"
 #include "gtkintl.h"
 #include "gtklistbaseprivate.h"
@@ -30,7 +29,6 @@
 #include "gtkmain.h"
 #include "gtkorientableprivate.h"
 #include "gtkprivate.h"
-#include "gtkscrollable.h"
 #include "gtksingleselection.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
@@ -64,8 +62,6 @@ struct _GtkGridView
 
   GListModel *model;
   GtkListItemManager *item_manager;
-  GtkAdjustment *adjustment[2];
-  GtkScrollablePolicy scroll_policy[2];
   GtkOrientation orientation;
   guint min_columns;
   guint max_columns;
@@ -106,14 +102,10 @@ enum
 {
   PROP_0,
   PROP_FACTORY,
-  PROP_HADJUSTMENT,
-  PROP_HSCROLL_POLICY,
   PROP_MAX_COLUMNS,
   PROP_MIN_COLUMNS,
   PROP_MODEL,
   PROP_ORIENTATION,
-  PROP_VADJUSTMENT,
-  PROP_VSCROLL_POLICY,
 
   N_PROPS
 };
@@ -124,8 +116,7 @@ enum {
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkGridView, gtk_grid_view, GTK_TYPE_LIST_BASE,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -462,35 +453,22 @@ moved_focus:
   return TRUE;
 }
 
-static gboolean
-gtk_grid_view_adjustment_is_flipped (GtkGridView    *self,
-                                     GtkOrientation  orientation)
-{
-  if (orientation == GTK_ORIENTATION_VERTICAL)
-    return FALSE;
-
-  return gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL;
-}
-
 static void
-gtk_grid_view_adjustment_value_changed_cb (GtkAdjustment *adjustment,
-                                           GtkGridView   *self)
+gtk_grid_view_adjustment_value_changed (GtkListBase    *base,
+                                        GtkOrientation  orientation)
 {
+  GtkGridView *self = GTK_GRID_VIEW (base);
   int page_size, total_size, value, from_start;
   guint pos, anchor_pos, n_items;
   int offset, height, top, bottom;
   double xalign, yalign;
   gboolean xstart, ystart;
 
-  page_size = gtk_adjustment_get_page_size (adjustment);
-  value = gtk_adjustment_get_value (adjustment);
-  total_size = gtk_adjustment_get_upper (adjustment);
+  gtk_list_base_get_adjustment_values (base, orientation, &value, &total_size, &page_size);
   anchor_pos = gtk_list_item_tracker_get_position (self->item_manager, self->anchor);
   n_items = g_list_model_get_n_items (self->model);
-  if (gtk_grid_view_adjustment_is_flipped (self, self->orientation))
-    value = total_size - page_size - value;
 
-  if (adjustment == self->adjustment[self->orientation])
+  if (orientation == self->orientation)
     {
       /* Compute how far down we've scrolled. That's the height
        * we want to align to. */
@@ -587,48 +565,18 @@ gtk_grid_view_adjustment_value_changed_cb (GtkAdjustment *adjustment,
       /* Ugh, we're in the last row and don't have enough items
        * to fill the row.
        * Do it the hard way then... */
-      adjustment = self->adjustment[OPPOSITE_ORIENTATION (self->orientation)];
+      gtk_list_base_get_adjustment_values (base, 
+                                           OPPOSITE_ORIENTATION (self->orientation),
+                                           &value, &total_size, &page_size);
 
       pos = n_items - 1;
       xstart = FALSE;
-      xalign = (ceil (self->column_width * (pos % self->n_columns + 1)) 
-                - gtk_adjustment_get_value (adjustment))
-               / gtk_adjustment_get_page_size (adjustment);
+      xalign = (ceil (self->column_width * (pos % self->n_columns + 1)) - value) / page_size;
     }
 
   gtk_grid_view_set_anchor (self, pos, xalign, xstart, yalign, ystart);
   
   gtk_widget_queue_allocate (GTK_WIDGET (self));
-}
-
-static int
-gtk_grid_view_update_adjustment_with_values (GtkGridView    *self,
-                                             GtkOrientation  orientation,
-                                             int             value,
-                                             int             upper,
-                                             int             page_size)
-{
-  upper = MAX (upper, page_size);
-  value = MAX (0, value);
-  value = MIN (value, upper - page_size);
-
-  g_signal_handlers_block_by_func (self->adjustment[orientation],
-                                   gtk_grid_view_adjustment_value_changed_cb,
-                                   self);
-  gtk_adjustment_configure (self->adjustment[orientation],
-                            gtk_grid_view_adjustment_is_flipped (self, orientation)
-                                ? value = upper - page_size - value
-                                : value,
-                            0,
-                            upper,
-                            page_size * 0.1,
-                            page_size * 0.9,
-                            page_size);
-  g_signal_handlers_unblock_by_func (self->adjustment[orientation],
-                                     gtk_grid_view_adjustment_value_changed_cb,
-                                     self);
-
-  return value;
 }
 
 static int
@@ -640,10 +588,7 @@ gtk_grid_view_update_adjustment (GtkGridView    *self,
 
   anchor_pos = gtk_list_item_tracker_get_position (self->item_manager, self->anchor);
   if (anchor_pos == GTK_INVALID_LIST_POSITION)
-    {
-      gtk_grid_view_update_adjustment_with_values (self, orientation, 0, 0, 0);
-      return 0;
-    }
+    return gtk_list_base_set_adjustment_values (GTK_LIST_BASE (self),  orientation, 0, 0, 0);
 
   page_size = gtk_widget_get_size (GTK_WIDGET (self), orientation);
 
@@ -665,11 +610,11 @@ gtk_grid_view_update_adjustment (GtkGridView    *self,
       if (!self->anchor_ystart)
         value += cell_size;
 
-      value = gtk_grid_view_update_adjustment_with_values (self,
-                                                           self->orientation,
-                                                           value - self->anchor_yalign * page_size,
-                                                           aug->size,
-                                                           page_size);
+      value = gtk_list_base_set_adjustment_values (GTK_LIST_BASE (self),
+                                                   self->orientation,
+                                                   value - self->anchor_yalign * page_size,
+                                                   aug->size,
+                                                   page_size);
     }
   else
     {
@@ -681,11 +626,11 @@ gtk_grid_view_update_adjustment (GtkGridView    *self,
         value = ceil (self->column_width * (i + 1));
       total_size = round (self->n_columns * self->column_width);
 
-      value = gtk_grid_view_update_adjustment_with_values (self,
-                                                           OPPOSITE_ORIENTATION (self->orientation),
-                                                           value - self->anchor_xalign * page_size,
-                                                           total_size,
-                                                           page_size);
+      value = gtk_list_base_set_adjustment_values (GTK_LIST_BASE (self),
+                                                   OPPOSITE_ORIENTATION (self->orientation),
+                                                   value - self->anchor_xalign * page_size,
+                                                   total_size,
+                                                   page_size);
     }
 
   return value;
@@ -765,7 +710,7 @@ gtk_grid_view_compute_n_columns (GtkGridView *self,
   guint n_columns;
 
   /* rounding down is exactly what we want here, so int division works */
-  if (self->scroll_policy[OPPOSITE_ORIENTATION (self->orientation)] == GTK_SCROLL_MINIMUM)
+  if (gtk_list_base_get_scroll_policy (GTK_LIST_BASE (self), OPPOSITE_ORIENTATION (self->orientation)) == GTK_SCROLL_MINIMUM)
     n_columns = for_size / MAX (1, min);
   else
     n_columns = for_size / MAX (1, nat);
@@ -782,6 +727,7 @@ gtk_grid_view_measure_list (GtkWidget *widget,
                             int       *natural)
 {
   GtkGridView *self = GTK_GRID_VIEW (widget);
+  GtkScrollablePolicy scroll_policy;
   Cell *cell;
   int height, row_height, child_min, child_nat, column_size, col_min, col_nat;
   gboolean measured;
@@ -789,6 +735,7 @@ gtk_grid_view_measure_list (GtkWidget *widget,
   guint n_unknown, n_columns;
   guint i;
 
+  scroll_policy = gtk_list_base_get_scroll_policy (GTK_LIST_BASE (self), self->orientation);
   heights = g_array_new (FALSE, FALSE, sizeof (int));
   n_unknown = 0;
   height = 0;
@@ -810,7 +757,7 @@ gtk_grid_view_measure_list (GtkWidget *widget,
           gtk_widget_measure (cell->parent.widget,
                               self->orientation, column_size,
                               &child_min, &child_nat, NULL, NULL);
-          if (self->scroll_policy[self->orientation] == GTK_SCROLL_MINIMUM)
+          if (scroll_policy == GTK_SCROLL_MINIMUM)
             row_height = MAX (row_height, child_min);
           else
             row_height = MAX (row_height, child_nat);
@@ -930,10 +877,12 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
   GArray *heights;
   int min_row_height, row_height, col_min, col_nat;
   GtkOrientation opposite_orientation;
+  GtkScrollablePolicy scroll_policy;
   gboolean known;
   int x, y;
   guint i;
 
+  scroll_policy = gtk_list_base_get_scroll_policy (GTK_LIST_BASE (self), self->orientation);
   opposite_orientation = OPPOSITE_ORIENTATION (self->orientation);
   min_row_height = ceil ((double) height / GTK_GRID_VIEW_MAX_VISIBLE_ROWS);
 
@@ -968,7 +917,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
           gtk_widget_measure (cell->parent.widget, self->orientation,
                               self->column_width,
                               &min, &nat, NULL, NULL);
-          if (self->scroll_policy[self->orientation] == GTK_SCROLL_MINIMUM)
+          if (scroll_policy == GTK_SCROLL_MINIMUM)
             size = min;
           else
             size = nat;
@@ -1089,27 +1038,11 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
 }
 
 static void
-gtk_grid_view_clear_adjustment (GtkGridView    *self,
-                                GtkOrientation  orientation)
-{
-  if (self->adjustment[orientation] == NULL)
-    return;
-
-  g_signal_handlers_disconnect_by_func (self->adjustment[orientation],
-                                        gtk_grid_view_adjustment_value_changed_cb,
-                                        self);
-  g_clear_object (&self->adjustment[orientation]);
-}
-
-static void
 gtk_grid_view_dispose (GObject *object)
 {
   GtkGridView *self = GTK_GRID_VIEW (object);
 
   g_clear_object (&self->model);
-
-  gtk_grid_view_clear_adjustment (self, GTK_ORIENTATION_HORIZONTAL);
-  gtk_grid_view_clear_adjustment (self, GTK_ORIENTATION_VERTICAL);
 
   if (self->anchor)
     {
@@ -1145,14 +1078,6 @@ gtk_grid_view_get_property (GObject    *object,
       g_value_set_object (value, gtk_list_item_manager_get_factory (self->item_manager));
       break;
 
-    case PROP_HADJUSTMENT:
-      g_value_set_object (value, self->adjustment[GTK_ORIENTATION_HORIZONTAL]);
-      break;
-
-    case PROP_HSCROLL_POLICY:
-      g_value_set_enum (value, self->scroll_policy[GTK_ORIENTATION_HORIZONTAL]);
-      break;
-
     case PROP_MAX_COLUMNS:
       g_value_set_uint (value, self->max_columns);
       break;
@@ -1169,59 +1094,10 @@ gtk_grid_view_get_property (GObject    *object,
       g_value_set_enum (value, self->orientation);
       break;
 
-    case PROP_VADJUSTMENT:
-      g_value_set_object (value, self->adjustment[GTK_ORIENTATION_VERTICAL]);
-      break;
-
-    case PROP_VSCROLL_POLICY:
-      g_value_set_enum (value, self->scroll_policy[GTK_ORIENTATION_VERTICAL]);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
     }
-}
-
-static void
-gtk_grid_view_set_adjustment (GtkGridView    *self,
-                              GtkOrientation  orientation,
-                              GtkAdjustment  *adjustment)
-{
-  if (self->adjustment[orientation] == adjustment)
-    return;
-
-  if (adjustment == NULL)
-    adjustment = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-  g_object_ref_sink (adjustment);
-
-  gtk_grid_view_clear_adjustment (self, orientation);
-
-  self->adjustment[orientation] = adjustment;
-
-  g_signal_connect (adjustment, "value-changed",
-		    G_CALLBACK (gtk_grid_view_adjustment_value_changed_cb),
-		    self);
-
-  gtk_widget_queue_allocate (GTK_WIDGET (self));
-}
-
-static void
-gtk_grid_view_set_scroll_policy (GtkGridView         *self,
-                                 GtkOrientation       orientation,
-                                 GtkScrollablePolicy  scroll_policy)
-{
-  if (self->scroll_policy[orientation] == scroll_policy)
-    return;
-
-  self->scroll_policy[orientation] = scroll_policy;
-
-  gtk_widget_queue_resize (GTK_WIDGET (self));
-
-  g_object_notify_by_pspec (G_OBJECT (self),
-                            orientation == GTK_ORIENTATION_HORIZONTAL
-                            ? properties[PROP_HSCROLL_POLICY]
-                            : properties[PROP_VSCROLL_POLICY]);
 }
 
 static void
@@ -1236,14 +1112,6 @@ gtk_grid_view_set_property (GObject      *object,
     {
     case PROP_FACTORY:
       gtk_grid_view_set_factory (self, g_value_get_object (value));
-      break;
-
-    case PROP_HADJUSTMENT:
-      gtk_grid_view_set_adjustment (self, GTK_ORIENTATION_HORIZONTAL, g_value_get_object (value));
-      break;
-
-    case PROP_HSCROLL_POLICY:
-      gtk_grid_view_set_scroll_policy (self, GTK_ORIENTATION_HORIZONTAL, g_value_get_enum (value));
       break;
 
     case PROP_MAX_COLUMNS:
@@ -1269,14 +1137,6 @@ gtk_grid_view_set_property (GObject      *object,
 
     case PROP_MODEL:
       gtk_grid_view_set_model (self, g_value_get_object (value));
-      break;
-
-    case PROP_VADJUSTMENT:
-      gtk_grid_view_set_adjustment (self, GTK_ORIENTATION_VERTICAL, g_value_get_object (value));
-      break;
-
-    case PROP_VSCROLL_POLICY:
-      gtk_grid_view_set_scroll_policy (self, GTK_ORIENTATION_VERTICAL, g_value_get_enum (value));
       break;
 
     default:
@@ -1338,10 +1198,9 @@ gtk_grid_view_compute_scroll_align (GtkGridView   *self,
   int visible_start, visible_size, visible_end;
   int cell_size;
 
-  visible_start = gtk_adjustment_get_value (self->adjustment[orientation]);
-  visible_size = gtk_adjustment_get_page_size (self->adjustment[orientation]);
-  if (gtk_grid_view_adjustment_is_flipped (self, orientation))
-    visible_start = gtk_adjustment_get_upper (self->adjustment[orientation]) - visible_size - visible_start;
+  gtk_list_base_get_adjustment_values (GTK_LIST_BASE (self),
+                                       orientation,
+                                       &visible_start, NULL, &visible_size);
   visible_end = visible_start + visible_size;
   cell_size = cell_end - cell_start;
 
@@ -1603,7 +1462,9 @@ gtk_grid_view_move_cursor_page_up (GtkWidget *widget,
     return;
   if (!gtk_grid_view_get_size_at_position (self, pos, &start, &size))
     return;
-  page_size = gtk_adjustment_get_page_size(self->adjustment[self->orientation]);
+  gtk_list_base_get_adjustment_values (GTK_LIST_BASE (self),
+                                       self->orientation,
+                                       NULL, NULL, &page_size);
   if (!gtk_grid_view_get_cell_at_y (self,
                                     MAX (0, start + size - page_size),
                                     &new_pos,
@@ -1638,7 +1499,9 @@ gtk_grid_view_move_cursor_page_down (GtkWidget *widget,
     return;
   if (!gtk_grid_view_get_size_at_position (self, pos, &start, NULL))
     return;
-  page_size = gtk_adjustment_get_page_size(self->adjustment[self->orientation]);
+  gtk_list_base_get_adjustment_values (GTK_LIST_BASE (self),
+                                       self->orientation,
+                                       NULL, NULL, &page_size);
   if (gtk_grid_view_get_cell_at_y (self,
                                    start + page_size,
                                    &new_pos,
@@ -1731,10 +1594,12 @@ gtk_grid_view_add_move_binding (GtkBindingSet  *binding_set,
 static void
 gtk_grid_view_class_init (GtkGridViewClass *klass)
 {
+  GtkListBaseClass *list_base_class = GTK_LIST_BASE_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkBindingSet *binding_set;
-  gpointer iface;
+
+  list_base_class->adjustment_value_changed = gtk_grid_view_adjustment_value_changed;
 
   widget_class->focus = gtk_grid_view_focus;
   widget_class->measure = gtk_grid_view_measure;
@@ -1743,21 +1608,6 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
   gobject_class->dispose = gtk_grid_view_dispose;
   gobject_class->get_property = gtk_grid_view_get_property;
   gobject_class->set_property = gtk_grid_view_set_property;
-
-  /* GtkScrollable implementation */
-  iface = g_type_default_interface_peek (GTK_TYPE_SCROLLABLE);
-  properties[PROP_HADJUSTMENT] =
-      g_param_spec_override ("hadjustment",
-                             g_object_interface_find_property (iface, "hadjustment"));
-  properties[PROP_HSCROLL_POLICY] =
-      g_param_spec_override ("hscroll-policy",
-                             g_object_interface_find_property (iface, "hscroll-policy"));
-  properties[PROP_VADJUSTMENT] =
-      g_param_spec_override ("vadjustment",
-                             g_object_interface_find_property (iface, "vadjustment"));
-  properties[PROP_VSCROLL_POLICY] =
-      g_param_spec_override ("vscroll-policy",
-                             g_object_interface_find_property (iface, "vscroll-policy"));
 
   /**
    * GtkGridView:factory:
@@ -1992,9 +1842,6 @@ gtk_grid_view_init (GtkGridView *self)
   self->min_columns = 1;
   self->max_columns = DEFAULT_MAX_COLUMNS;
   self->orientation = GTK_ORIENTATION_VERTICAL;
-
-  self->adjustment[GTK_ORIENTATION_HORIZONTAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-  self->adjustment[GTK_ORIENTATION_VERTICAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 }
 
 /**
