@@ -150,6 +150,7 @@
 #include <gtk/gtklayoutmanager.h>
 #include <gtk/gtklayoutchild.h>
 #include <gtk/gtklevelbar.h>
+#include <gtk/gtklistbase.h>
 #include <gtk/gtklinkbutton.h>
 #include <gtk/gtklistbox.h>
 #include <gtk/gtklistitem.h>
