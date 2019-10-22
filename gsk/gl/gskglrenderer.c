@@ -537,19 +537,18 @@ render_fallback_node (GskGLRenderer       *self,
 
 typedef struct {
   int timestamp;
-  int stored;
   GskGLCachedGlyph *glyphs[];
 } TextRenderData;
 
 static inline TextRenderData *
-get_render_data (GskRenderNode   *node,
-                 GskGLGlyphCache *cache)
+ensure_render_data (GskRenderNode *node,
+                    GskGLGlyphCache *cache)
 {
   TextRenderData *data;
   int num_glyphs;
 
   num_glyphs = gsk_text_node_get_num_glyphs (node);
-  data = gsk_text_node_get_render_data (node, cache);
+  data = gsk_text_node_get_render_data (node);
   if (data)
     {
       if (data->timestamp < cache->atlas_timestamp)
@@ -562,22 +561,11 @@ get_render_data (GskRenderNode   *node,
     {
       data = g_new0 (TextRenderData, sizeof (TextRenderData) + sizeof (gpointer) * num_glyphs);
       data->timestamp = cache->atlas_timestamp;
+
+      gsk_text_node_set_render_data (node, data);
     }
 
   return data;
-}
-
-static inline void
-set_render_data (GskRenderNode   *node,
-                 GskGLGlyphCache *cache,
-                 TextRenderData  *data)
-{
-  if (!data->stored)
-    {
-      data->stored = 1;
-      if (!gsk_text_node_set_render_data (node, cache, data))
-        g_free (data);
-    }
 }
 
 static inline void
@@ -610,7 +598,7 @@ render_text_node (GskGLRenderer   *self,
       ops_set_color (builder, color);
     }
 
-  render_data = get_render_data (node, self->glyph_cache);
+  render_data = ensure_render_data (node, self->glyph_cache);
 
   memset (&lookup, 0, sizeof (CacheKeyData));
   lookup.data.font = (PangoFont *)font;
@@ -675,8 +663,6 @@ render_text_node (GskGLRenderer   *self,
 next:
       x_position += gi->geometry.width;
     }
-
-  set_render_data (node, self->glyph_cache, render_data);
 }
 
 static inline void
