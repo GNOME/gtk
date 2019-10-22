@@ -46,12 +46,6 @@ void            gsk_render_node_diff             (GskRenderNode             *nod
 void            gsk_render_node_diff_impossible  (GskRenderNode             *node1,
                                                   GskRenderNode             *node2,
                                                   cairo_region_t            *region);
-gboolean        gsk_text_node_set_render_data    (GskRenderNode *node,
-                                                  gpointer       key,
-                                                  gpointer       data);
-gpointer        gsk_text_node_get_render_data    (GskRenderNode *node,
-                                                  gpointer       key);
-                                                  
 
 
 G_END_DECLS
