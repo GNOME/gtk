@@ -262,7 +262,13 @@ gsk_gl_glyph_cache_lookup_or_add (GskGLGlyphCache         *cache,
 
   if (value)
     {
-      gsk_gl_glyph_cache_entry_validate (cache, value);
+      if (value->atlas && !value->used)
+        {
+          gsk_gl_texture_atlas_mark_used (value->atlas, value->draw_width, value->draw_height);
+          value->used = TRUE;
+        }
+      value->accessed = TRUE;
+
       *cached_glyph_out = value;
       return;
     }
@@ -320,6 +326,8 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
 
   if (removed_atlases->len > 0)
     {
+      guint dropped = 0;
+
       g_hash_table_iter_init (&iter, self->hash_table);
       while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
         {
@@ -366,19 +374,4 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
     }
 
   GSK_NOTE(GLYPH_CACHE, if (dropped > 0) g_message ("Dropped %d glyphs", dropped));
-
-  if (dropped > 0)
-    self->atlas_timestamp++;
-}
-
-void
-gsk_gl_glyph_cache_entry_validate (GskGLGlyphCache  *cache,
-                                   GskGLCachedGlyph *value)
-{
-  value->accessed = TRUE;
-  if (value->atlas && !value->used)
-    {
-      gsk_gl_texture_atlas_mark_used (value->atlas, value->draw_width, value->draw_height);
-      value->used = TRUE;
-    }
 }
