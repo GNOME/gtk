@@ -937,7 +937,7 @@ data_source_cancelled (void                  *data,
     gdk_drag_context_cancel (context, GDK_DRAG_CANCEL_ERROR);
 
   emit_selection_clear (display, atom);
-  gdk_selection_owner_set (NULL, atom, GDK_CURRENT_TIME, TRUE);
+  gdk_selection_owner_set (NULL, atom, GDK_CURRENT_TIME, FALSE);
   gdk_wayland_selection_unset_data_source (display, atom);
 }
 
@@ -1048,7 +1048,7 @@ primary_source_cancelled (void                                *data,
 
   atom = atoms[ATOM_PRIMARY];
   emit_selection_clear (display, atom);
-  gdk_selection_owner_set (NULL, atom, GDK_CURRENT_TIME, TRUE);
+  gdk_selection_owner_set (NULL, atom, GDK_CURRENT_TIME, FALSE);
   gdk_wayland_selection_unset_data_source (display, atom);
 }
 
