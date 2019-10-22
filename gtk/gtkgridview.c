@@ -1022,46 +1022,40 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
   x = - gtk_grid_view_update_adjustment (self, opposite_orientation);
   y = - gtk_grid_view_update_adjustment (self, self->orientation);
 
-  i = 0;
+  i = self->n_columns; /* so we run the sizing step at the beginning of the for loop */
   row_height = 0;
+
   for (cell = gtk_list_item_manager_get_first (self->item_manager);
        cell != NULL;
        cell = gtk_rb_tree_node_get_next (cell))
     {
+      if (i >= self->n_columns)
+        {
+          y += row_height;
+          row_height = cell->size;
+          i -= self->n_columns;
+
+          if (i > self->n_columns)
+            {
+              guint unknown_rows = (i - 1) / self->n_columns;
+              int unknown_height = unknown_rows * self->unknown_row_height;
+              row_height -= unknown_height;
+              y += unknown_height;
+              i %= self->n_columns;
+            }
+        }
+
       if (cell->parent.widget)
         {
-          if (i == 0)
-            {
-              y += row_height;
-              row_height = cell->size;
-            }
           gtk_grid_view_size_allocate_child (self,
                                              cell->parent.widget,
                                              x + ceil (self->column_width * i),
                                              y,
                                              ceil (self->column_width * (i + 1)) - ceil (self->column_width * i),
                                              row_height);
-          i = (i + 1) % self->n_columns;
         }
-      else
-        {
-          i += cell->parent.n_items;
-          if (i > self->n_columns)
-            {
-              i -= self->n_columns;
-              y += row_height;
-              row_height = cell->size;
 
-              if (i > self->n_columns)
-                {
-                  guint unknown_rows = (i - 1) / self->n_columns;
-                  int unknown_height = unknown_rows * self->unknown_row_height;
-                  row_height -= unknown_height;
-                  y += unknown_height;
-                  i %= self->n_columns;
-                }
-            }
-        }
+      i += cell->parent.n_items;
     }
 }
 
