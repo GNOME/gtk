@@ -24,6 +24,7 @@
 #include "gtkadjustment.h"
 #include "gtkbindings.h"
 #include "gtkintl.h"
+#include "gtklistbaseprivate.h"
 #include "gtklistitemfactory.h"
 #include "gtklistitemmanagerprivate.h"
 #include "gtkmain.h"
@@ -59,7 +60,7 @@ typedef struct _CellAugment CellAugment;
 
 struct _GtkGridView
 {
-  GtkWidget parent_instance;
+  GtkListBase parent_instance;
 
   GListModel *model;
   GtkListItemManager *item_manager;
@@ -82,6 +83,11 @@ struct _GtkGridView
   GtkListItemTracker *selected;
   /* the item that has input focus */
   GtkListItemTracker *focus;
+};
+
+struct _GtkGridViewClass
+{
+  GtkListBaseClass parent_class;
 };
 
 struct _Cell
@@ -117,7 +123,7 @@ enum {
   LAST_SIGNAL
 };
 
-G_DEFINE_TYPE_WITH_CODE (GtkGridView, gtk_grid_view, GTK_TYPE_WIDGET,
+G_DEFINE_TYPE_WITH_CODE (GtkGridView, gtk_grid_view, GTK_TYPE_LIST_BASE,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
@@ -1989,8 +1995,6 @@ gtk_grid_view_init (GtkGridView *self)
 
   self->adjustment[GTK_ORIENTATION_HORIZONTAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   self->adjustment[GTK_ORIENTATION_VERTICAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-
-  gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
 }
 
 /**
@@ -2024,7 +2028,7 @@ gtk_grid_view_new (void)
  * argument, so you can write code like
  * ```
  *   grid_view = gtk_grid_view_new_with_factory (
- *     gtk_builder_list_item_factory_new_from_resource ("/resource.ui"));
+ *     gtk_builder_list_item_factory_newfrom_resource ("/resource.ui"));
  * ```
  *
  * Returns: a new #GtkGridView using the given @factory
