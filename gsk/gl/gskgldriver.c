@@ -46,8 +46,8 @@ struct _GskGLDriver
 
   Fbo default_fbo;
 
-  GHashTable *textures;
-  GHashTable *pointer_textures;
+  GHashTable *textures;         /* texture_id -> Texture */
+  GHashTable *pointer_textures; /* pointer -> texture_id */
 
   const Texture *bound_source_texture;
 
