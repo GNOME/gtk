@@ -5687,6 +5687,8 @@ gtk_window_unrealize (GtkWidget *widget)
       info->last.flags = 0;
     }
 
+  gsk_renderer_unrealize (priv->renderer);
+
   if (priv->popup_menu)
     {
       gtk_widget_destroy (priv->popup_menu);
@@ -5700,7 +5702,6 @@ gtk_window_unrealize (GtkWidget *widget)
                         (GtkCallback) gtk_widget_unrealize,
                         NULL);
 
-  gsk_renderer_unrealize (priv->renderer);
   g_clear_object (&priv->renderer);
 
   surface = priv->surface;
