@@ -6,15 +6,17 @@
 #include <gtk/gtk.h>
 
 static guint tick_cb;
-static GtkAdjustment *adjustment;
+static GtkAdjustment *hadjustment;
+static GtkAdjustment *vadjustment;
 static GtkWidget *window = NULL;
 static GtkWidget *scrolledwindow;
 static int selected;
 
-#define N_WIDGET_TYPES 3
+#define N_WIDGET_TYPES 4
 
 
-int increment = 5;
+static int hincrement = 5;
+static int vincrement = 5;
 
 static gboolean
 scroll_cb (GtkWidget *widget,
@@ -23,12 +25,19 @@ scroll_cb (GtkWidget *widget,
 {
   double value;
 
-  value = gtk_adjustment_get_value (adjustment);
-  if (value + increment <= gtk_adjustment_get_lower (adjustment) ||
-     (value + increment >= gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_page_size (adjustment)))
-    increment = - increment;
+  value = gtk_adjustment_get_value (vadjustment);
+  if (value + vincrement <= gtk_adjustment_get_lower (vadjustment) ||
+     (value + vincrement >= gtk_adjustment_get_upper (vadjustment) - gtk_adjustment_get_page_size (vadjustment)))
+    vincrement = - vincrement;
 
-  gtk_adjustment_set_value (adjustment, value + increment);
+  gtk_adjustment_set_value (vadjustment, value + vincrement);
+
+  value = gtk_adjustment_get_value (hadjustment);
+  if (value + hincrement <= gtk_adjustment_get_lower (hadjustment) ||
+     (value + hincrement >= gtk_adjustment_get_upper (hadjustment) - gtk_adjustment_get_page_size (hadjustment)))
+    hincrement = - hincrement;
+
+  gtk_adjustment_set_value (hadjustment, value + hincrement);
 
   return G_SOURCE_CONTINUE;
 }
@@ -51,6 +60,11 @@ populate_icons (void)
     for (left = 0; left < 15; left++)
       gtk_grid_attach (GTK_GRID (grid), create_icon (), left, top, 1, 1);
 
+  hincrement = 0;
+
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow),
+		                  GTK_POLICY_NEVER,
+		                  GTK_POLICY_AUTOMATIC);
   gtk_container_add (GTK_CONTAINER (scrolledwindow), grid);
 }
 
@@ -82,7 +96,36 @@ populate_text (gboolean hilight)
   textview = gtk_text_view_new ();
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (textview), buffer);
 
+  hincrement = 0;
+
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow),
+		                  GTK_POLICY_NEVER,
+		                  GTK_POLICY_AUTOMATIC);
   gtk_container_add (GTK_CONTAINER (scrolledwindow), textview);
+}
+
+static void
+populate_image (void)
+{
+  GtkWidget *image;
+
+  if (!content)
+    {
+      GBytes *bytes;
+
+      bytes = g_resources_lookup_data ("/sources/font_features.c", 0, NULL);
+      content = g_bytes_unref_to_data (bytes, &content_len);
+    }
+
+  image = gtk_picture_new_for_resource ("/sliding_puzzle/portland-rose.jpg");
+  gtk_picture_set_can_shrink (GTK_PICTURE (image), FALSE);
+
+  hincrement = 5;
+
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow),
+		                  GTK_POLICY_AUTOMATIC,
+		                  GTK_POLICY_AUTOMATIC);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow), image);
 }
 
 static void
@@ -112,6 +155,11 @@ set_widget_type (int type)
     case 2:
       gtk_window_set_title (GTK_WINDOW (window), "Scrolling complex text");
       populate_text (TRUE);
+      break;
+
+    case 3:
+      gtk_window_set_title (GTK_WINDOW (window), "Scrolling a big image");
+      populate_image ();
       break;
 
     default:
@@ -172,7 +220,8 @@ do_iconscroll (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
       scrolledwindow = GTK_WIDGET (gtk_builder_get_object (builder, "scrolledwindow"));
       gtk_widget_realize (window);
-      adjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "adjustment"));
+      hadjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "hadjustment"));
+      vadjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "vadjustment"));
       set_widget_type (0);
     }
 

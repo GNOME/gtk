@@ -32,7 +32,8 @@
       <object class="GtkScrolledWindow" id="scrolledwindow">
         <property name="hscrollbar-policy">never</property>
         <property name="vscrollbar-policy">automatic</property>
-        <property name="vadjustment"><object class="GtkAdjustment" id="adjustment"/></property> 
+        <property name="hadjustment"><object class="GtkAdjustment" id="hadjustment"/></property> 
+        <property name="vadjustment"><object class="GtkAdjustment" id="vadjustment"/></property> 
       </object>
     </child>
   </object>
