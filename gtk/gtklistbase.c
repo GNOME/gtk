@@ -31,6 +31,9 @@ struct _GtkListBasePrivate
   GtkListItemManager *item_manager;
   GtkAdjustment *adjustment[2];
   GtkScrollablePolicy scroll_policy[2];
+
+  /* the last item that was selected - basically the location to extend selections from */
+  GtkListItemTracker *selected;
 };
 
 enum
@@ -84,6 +87,47 @@ gtk_list_base_clear_adjustment (GtkListBase    *self,
   g_clear_object (&priv->adjustment[orientation]);
 }
 
+/*
+ * gtk_list_base_select_item:
+ * @self: a %GtkListBase
+ * @pos: item to select
+ * @modify: %TRUE if the selection should be modified, %FALSE
+ *     if a new selection should be done. This is usually set
+ *     to %TRUE if the user keeps the <Shift> key pressed.
+ * @extend_pos: %TRUE if the selection should be extended.
+ *     Selections are usually extended from the last selected
+ *     position if the user presses the <Ctrl> key.
+ *
+ * Selects the item at @pos according to how GTK list widgets modify
+ * selections, both when clicking rows with the mouse or when using
+ * the keyboard.
+ **/
+void
+gtk_list_base_select_item (GtkListBase *self,
+                           guint        pos,
+                           gboolean     modify,
+                           gboolean     extend)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkSelectionModel *model;
+
+  model = gtk_list_item_manager_get_model (priv->item_manager);
+  if (model == NULL)
+    return;
+
+  if (gtk_selection_model_user_select_item (model,
+                                            pos,
+                                            modify,
+                                            extend ? gtk_list_item_tracker_get_position (priv->item_manager, priv->selected)
+                                                   : GTK_INVALID_LIST_POSITION))
+    {
+      gtk_list_item_tracker_set_position (priv->item_manager,
+                                          priv->selected,
+                                          pos,
+                                          0, 0);
+    }
+}
+
 static void
 gtk_list_base_dispose (GObject *object)
 {
@@ -93,6 +137,11 @@ gtk_list_base_dispose (GObject *object)
   gtk_list_base_clear_adjustment (self, GTK_ORIENTATION_HORIZONTAL);
   gtk_list_base_clear_adjustment (self, GTK_ORIENTATION_VERTICAL);
 
+  if (priv->selected)
+    {
+      gtk_list_item_tracker_free (priv->item_manager, priv->selected);
+      priv->selected = NULL;
+    }
   g_clear_object (&priv->item_manager);
 
   G_OBJECT_CLASS (gtk_list_base_parent_class)->dispose (object);
@@ -209,8 +258,55 @@ gtk_list_base_set_property (GObject      *object,
 }
 
 static void
+gtk_list_base_select_item_action (GtkWidget  *widget,
+                                  const char *action_name,
+                                  GVariant   *parameter)
+{
+  GtkListBase *self = GTK_LIST_BASE (widget);
+  guint pos;
+  gboolean modify, extend;
+
+  g_variant_get (parameter, "(ubb)", &pos, &modify, &extend);
+
+  gtk_list_base_select_item (self, pos, modify, extend);
+}
+
+static void
+gtk_list_base_select_all (GtkWidget  *widget,
+                          const char *action_name,
+                          GVariant   *parameter)
+{
+  GtkListBase *self = GTK_LIST_BASE (widget);
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkSelectionModel *selection_model;
+
+  selection_model = gtk_list_item_manager_get_model (priv->item_manager);
+  if (selection_model == NULL)
+    return;
+
+  gtk_selection_model_select_all (selection_model);
+}
+
+static void
+gtk_list_base_unselect_all (GtkWidget  *widget,
+                            const char *action_name,
+                            GVariant   *parameter)
+{
+  GtkListBase *self = GTK_LIST_BASE (widget);
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkSelectionModel *selection_model;
+
+  selection_model = gtk_list_item_manager_get_model (priv->item_manager);
+  if (selection_model == NULL)
+    return;
+
+  gtk_selection_model_unselect_all (selection_model);
+}
+
+static void
 gtk_list_base_class_init (GtkListBaseClass *klass)
 {
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   gpointer iface;
 
@@ -234,6 +330,52 @@ gtk_list_base_class_init (GtkListBaseClass *klass)
                              g_object_interface_find_property (iface, "vscroll-policy"));
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
+
+  /**
+   * GtkListBase|list.select-item:
+   * @position: position of item to select
+   * @modify: %TRUE to toggle the existing selection, %FALSE to select
+   * @extend: %TRUE to extend the selection
+   *
+   * Changes selection.
+   *
+   * If @extend is %TRUE and the model supports selecting ranges, the
+   * affected items are all items from the last selected item to the item
+   * in @position.
+   * If @extend is %FALSE or selecting ranges is not supported, only the
+   * item in @position is affected.
+   *
+   * If @modify is %TRUE, the affected items will be set to the same state.
+   * If @modify is %FALSE, the affected items will be selected and
+   * all other items will be deselected.
+   */
+  gtk_widget_class_install_action (widget_class,
+                                   "list.select-item",
+                                   "(ubb)",
+                                   gtk_list_base_select_item_action);
+
+  /**
+   * GtkListBase|list.select-all:
+   *
+   * If the selection model supports it, select all items in the model.
+   * If not, do nothing.
+   */
+  gtk_widget_class_install_action (widget_class,
+                                   "list.select-all",
+                                   NULL,
+                                   gtk_list_base_select_all);
+
+  /**
+   * GtkListBase|list.unselect-all:
+   *
+   * If the selection model supports it, unselect all items in the model.
+   * If not, do nothing.
+   */
+  gtk_widget_class_install_action (widget_class,
+                                   "list.unselect-all",
+                                   NULL,
+                                   gtk_list_base_unselect_all);
+
 }
 
 static void
@@ -247,6 +389,8 @@ gtk_list_base_init_real (GtkListBase      *self,
                                                            g_class->list_item_size,
                                                            g_class->list_item_augment_size,
                                                            g_class->list_item_augment_func);
+
+  priv->selected = gtk_list_item_tracker_new (priv->item_manager);
 
   priv->adjustment[GTK_ORIENTATION_HORIZONTAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   priv->adjustment[GTK_ORIENTATION_VERTICAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -335,5 +479,65 @@ gtk_list_base_get_manager (GtkListBase *self)
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
 
   return priv->item_manager;
+}
+
+/*
+ * gtk_list_base_grab_focus_on_item:
+ * @self: a #GtkListBase
+ * @pos: position of the item to focus
+ * @select: %TRUE to select the item
+ * @modify: if selecting, %TRUE to modify the selected
+ *     state, %FALSE to always select
+ * @extend: if selecting, %TRUE to extend the selection,
+ *     %FALSE to only operate on this item
+ *
+ * Tries to grab focus on the given item. If there is no item
+ * at this position or grabbing focus failed, %FALSE will be
+ * returned.
+ *
+ * Returns: %TRUE if focusing the item succeeded
+ **/
+gboolean
+gtk_list_base_grab_focus_on_item (GtkListBase *self,
+                                  guint        pos,
+                                  gboolean     select,
+                                  gboolean     modify,
+                                  gboolean     extend)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkListItemManagerItem *item;
+
+  item = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
+  if (item == NULL)
+    return FALSE;
+
+  if (!item->widget)
+    {
+      GtkListItemTracker *tracker = gtk_list_item_tracker_new (priv->item_manager);
+
+      /* We need a tracker here to create the widget.
+       * That needs to have happened or we can't grab it.
+       * And we can't use a different tracker, because they manage important rows,
+       * so we create a temporary one. */
+      gtk_list_item_tracker_set_position (priv->item_manager, tracker, pos, 0, 0);
+
+      item = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
+      g_assert (item->widget);
+
+      if (!gtk_widget_grab_focus (item->widget))
+          return FALSE;
+
+      gtk_list_item_tracker_free (priv->item_manager, tracker);
+    }
+  else
+    {
+      if (!gtk_widget_grab_focus (item->widget))
+          return FALSE;
+    }
+
+  if (select)
+    gtk_list_base_select_item (self, pos, modify, extend);
+
+  return TRUE;
 }
 
