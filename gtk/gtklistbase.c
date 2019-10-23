@@ -28,6 +28,7 @@ typedef struct _GtkListBasePrivate GtkListBasePrivate;
 
 struct _GtkListBasePrivate
 {
+  GtkListItemManager *item_manager;
   GtkAdjustment *adjustment[2];
   GtkScrollablePolicy scroll_policy[2];
 };
@@ -43,9 +44,14 @@ enum
   N_PROPS
 };
 
+/* HACK: We want the g_class argument in our instance init func and G_DEFINE_TYPE() won't let us */
+static void gtk_list_base_init_real (GtkListBase *self, GtkListBaseClass *g_class);
+#define g_type_register_static_simple(a,b,c,d,e,evil,f) g_type_register_static_simple(a,b,c,d,e, (GInstanceInitFunc) gtk_list_base_init_real, f);
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkListBase, gtk_list_base, GTK_TYPE_WIDGET,
                                                               G_ADD_PRIVATE (GtkListBase)
                                                               G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
+#undef g_type_register_static_simple
+G_GNUC_UNUSED static void gtk_list_base_init (GtkListBase *self) { }
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 
@@ -82,9 +88,12 @@ static void
 gtk_list_base_dispose (GObject *object)
 {
   GtkListBase *self = GTK_LIST_BASE (object);
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
 
   gtk_list_base_clear_adjustment (self, GTK_ORIENTATION_HORIZONTAL);
   gtk_list_base_clear_adjustment (self, GTK_ORIENTATION_VERTICAL);
+
+  g_clear_object (&priv->item_manager);
 
   G_OBJECT_CLASS (gtk_list_base_parent_class)->dispose (object);
 }
@@ -228,9 +237,16 @@ gtk_list_base_class_init (GtkListBaseClass *klass)
 }
 
 static void
-gtk_list_base_init (GtkListBase *self)
+gtk_list_base_init_real (GtkListBase      *self,
+                         GtkListBaseClass *g_class)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  priv->item_manager = gtk_list_item_manager_new_for_size (GTK_WIDGET (self),
+                                                           g_class->list_item_name,
+                                                           g_class->list_item_size,
+                                                           g_class->list_item_augment_size,
+                                                           g_class->list_item_augment_func);
 
   priv->adjustment[GTK_ORIENTATION_HORIZONTAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   priv->adjustment[GTK_ORIENTATION_VERTICAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -311,5 +327,13 @@ gtk_list_base_get_scroll_policy (GtkListBase    *self,
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
 
   return priv->scroll_policy[orientation];
+}
+
+GtkListItemManager *
+gtk_list_base_get_manager (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  return priv->item_manager;
 }
 
