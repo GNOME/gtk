@@ -22,6 +22,8 @@
 
 #include "gtklistbase.h"
 
+#include "gtklistitemmanagerprivate.h"
+
 struct _GtkListBase
 {
   GtkWidget parent_instance;
@@ -31,10 +33,16 @@ struct _GtkListBaseClass
 {
   GtkWidgetClass parent_class;
 
+  const char *         list_item_name;
+  gsize                list_item_size;
+  gsize                list_item_augment_size;
+  GtkRbTreeAugmentFunc list_item_augment_func;
+
   void                 (* adjustment_value_changed)             (GtkListBase            *self,
                                                                  GtkOrientation          orientation);
 };
 
+GtkListItemManager *   gtk_list_base_get_manager                (GtkListBase            *self);
 GtkScrollablePolicy    gtk_list_base_get_scroll_policy          (GtkListBase            *self,
                                                                  GtkOrientation          orientation);
 void                   gtk_list_base_get_adjustment_values      (GtkListBase            *self,
