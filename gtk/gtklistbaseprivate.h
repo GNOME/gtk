@@ -56,4 +56,14 @@ int                    gtk_list_base_set_adjustment_values      (GtkListBase    
                                                                  int                     size,
                                                                  int                     page_size);
 
+void                   gtk_list_base_select_item                (GtkListBase            *self,
+                                                                 guint                   pos,
+                                                                 gboolean                modify,
+                                                                 gboolean                extend);
+gboolean               gtk_list_base_grab_focus_on_item         (GtkListBase            *self,
+                                                                 guint                   pos,
+                                                                 gboolean                select,
+                                                                 gboolean                modify,
+                                                                 gboolean                extend);
+
 #endif /* __GTK_LIST_BASE_PRIVATE_H__ */
