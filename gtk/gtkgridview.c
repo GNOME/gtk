@@ -74,8 +74,6 @@ struct _GtkGridView
   double anchor_yalign;
   guint anchor_xstart : 1;
   guint anchor_ystart : 1;
-  /* the last item that was selected - basically the location to extend selections from */
-  GtkListItemTracker *selected;
   /* the item that has input focus */
   GtkListItemTracker *focus;
 };
@@ -406,25 +404,6 @@ gtk_grid_view_set_anchor (GtkGridView *self,
     }
 }
 
-static void
-gtk_grid_view_select_item (GtkGridView *self,
-                           guint        pos,
-                           gboolean     modify,
-                           gboolean     extend)
-{
-  if (gtk_selection_model_user_select_item (gtk_list_item_manager_get_model (self->item_manager),
-                                            pos,
-                                            modify,
-                                            extend ? gtk_list_item_tracker_get_position (self->item_manager, self->selected)
-                                                   : GTK_INVALID_LIST_POSITION))
-    {
-      gtk_list_item_tracker_set_position (self->item_manager,
-                                          self->selected,
-                                          pos,
-                                          0, 0);
-    }
-}
-
 static gboolean
 gtk_grid_view_focus (GtkWidget        *widget,
                      GtkDirectionType  direction)
@@ -476,7 +455,7 @@ moved_focus:
             }
         }
 
-      gtk_grid_view_select_item (self,
+      gtk_list_base_select_item (GTK_LIST_BASE (self),
                                  gtk_list_item_get_position (GTK_LIST_ITEM (new_focus_child)),
                                  modify,
                                  extend);
@@ -1081,11 +1060,6 @@ gtk_grid_view_dispose (GObject *object)
       gtk_list_item_tracker_free (self->item_manager, self->anchor);
       self->anchor = NULL;
     }
-  if (self->selected)
-    {
-      gtk_list_item_tracker_free (self->item_manager, self->selected);
-      self->selected = NULL;
-    }
   if (self->focus)
     {
       gtk_list_item_tracker_free (self->item_manager, self->focus);
@@ -1175,46 +1149,6 @@ gtk_grid_view_set_property (GObject      *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
     }
-}
-
-static void
-gtk_grid_view_select_item_action (GtkWidget  *widget,
-                                  const char *action_name,
-                                  GVariant   *parameter)
-{
-  GtkGridView *self = GTK_GRID_VIEW (widget);
-  guint pos;
-  gboolean modify, extend;
-
-  g_variant_get (parameter, "(ubb)", &pos, &modify, &extend);
-
-  gtk_grid_view_select_item (self, pos, modify, extend);
-}
-
-static void
-gtk_grid_view_select_all (GtkWidget  *widget,
-                          const char *action_name,
-                          GVariant   *parameter)
-{
-  GtkGridView *self = GTK_GRID_VIEW (widget);
-  GtkSelectionModel *selection_model;
-
-  selection_model = gtk_list_item_manager_get_model (self->item_manager);
-
-  gtk_selection_model_select_all (selection_model);
-}
-
-static void
-gtk_grid_view_unselect_all (GtkWidget  *widget,
-                            const char *action_name,
-                            GVariant   *parameter)
-{
-  GtkGridView *self = GTK_GRID_VIEW (widget);
-  GtkSelectionModel *selection_model;
-
-  selection_model = gtk_list_item_manager_get_model (self->item_manager);
-
-  gtk_selection_model_unselect_all (selection_model);
 }
 
 static void
@@ -1363,47 +1297,6 @@ gtk_grid_view_activate_item (GtkWidget  *widget,
   g_signal_emit (widget, signals[ACTIVATE], 0, pos);
 }
 
-static void
-gtk_grid_view_move_to (GtkGridView *self,
-                       guint        pos,
-                       gboolean     select,
-                       gboolean     modify,
-                       gboolean     extend)
-{
-  Cell *cell;
-
-  cell = gtk_list_item_manager_get_nth (self->item_manager, pos, NULL);
-  if (cell == NULL)
-    return;
-
-  if (!cell->parent.widget)
-    {
-      GtkListItemTracker *tracker = gtk_list_item_tracker_new (self->item_manager);
-
-      /* We need a tracker here to create the widget.
-       * That needs to have happened or we can't grab it.
-       * And we can't use a different tracker, because they manage important rows,
-       * so we create a temporary one. */
-      gtk_list_item_tracker_set_position (self->item_manager, tracker, pos, 0, 0);
-
-      cell = gtk_list_item_manager_get_nth (self->item_manager, pos, NULL);
-      g_assert (cell->parent.widget);
-
-      if (!gtk_widget_grab_focus (cell->parent.widget))
-          return; /* FIXME: What now? Can this even happen? */
-
-      gtk_list_item_tracker_free (self->item_manager, tracker);
-    }
-  else
-    {
-      if (!gtk_widget_grab_focus (cell->parent.widget))
-          return; /* FIXME: What now? Can this even happen? */
-    }
-
-  if (select)
-    gtk_grid_view_select_item (self, pos, modify, extend);
-}
-
 static gboolean
 gtk_grid_view_move_cursor (GtkWidget *widget,
                            GVariant  *args,
@@ -1439,7 +1332,7 @@ gtk_grid_view_move_cursor (GtkWidget *widget,
         return TRUE;
     }
 
-  gtk_grid_view_move_to (self, pos + amount, select, modify, extend);
+  gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), pos + amount, select, modify, extend);
 
   return TRUE;
 }
@@ -1457,7 +1350,7 @@ gtk_grid_view_move_cursor_to_start (GtkWidget *widget,
 
   g_variant_get (args, "(bbb)", &select, &modify, &extend);
 
-  gtk_grid_view_move_to (self, 0, select, modify, extend);
+  gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), 0, select, modify, extend);
 
   return TRUE;
 }
@@ -1480,7 +1373,7 @@ gtk_grid_view_move_cursor_to_end (GtkWidget *widget,
 
   g_variant_get (args, "(bbb)", &select, &modify, &extend);
 
-  gtk_grid_view_move_to (self, n_items - 1, select, modify, extend);
+  gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), n_items - 1, select, modify, extend);
 
   return TRUE;
 }
@@ -1518,7 +1411,7 @@ gtk_grid_view_move_cursor_page_up (GtkWidget *widget,
 
   g_variant_get (args, "(bbb)", &select, &modify, &extend);
 
-  gtk_grid_view_move_to (self, new_pos, select, modify, extend);
+  gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), new_pos, select, modify, extend);
 
   return TRUE;
 }
@@ -1571,7 +1464,7 @@ gtk_grid_view_move_cursor_page_down (GtkWidget *widget,
 
   g_variant_get (args, "(bbb)", &select, &modify, &extend);
 
-  gtk_grid_view_move_to (self, new_pos, select, modify, extend);
+  gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), new_pos, select, modify, extend);
 
   return TRUE;
 }
@@ -1752,51 +1645,6 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
                                    gtk_grid_view_activate_item);
 
   /**
-   * GtkGridView|list.select-item:
-   * @position: position of item to select
-   * @modify: %TRUE to toggle the existing selection, %FALSE to select
-   * @extend: %TRUE to extend the selection
-   *
-   * Changes selection.
-   *
-   * If @extend is %TRUE and the model supports selecting ranges, the
-   * affected items are all items from the last selected item to the item
-   * in @position.
-   * If @extend is %FALSE or selecting ranges is not supported, only the
-   * item in @position is affected.
-   *
-   * If @modify is %TRUE, the affected items will be set to the same state.
-   * If @modify is %FALSE, the affected items will be selected and
-   * all other items will be deselected.
-   */
-  gtk_widget_class_install_action (widget_class,
-                                   "list.select-item",
-                                   "(ubb)",
-                                   gtk_grid_view_select_item_action);
-
-  /**
-   * GtkGridView|list.select-all:
-   *
-   * If the selection model supports it, select all items in the model.
-   * If not, do nothing.
-   */
-  gtk_widget_class_install_action (widget_class,
-                                   "list.select-all",
-                                   NULL,
-                                   gtk_grid_view_select_all);
-
-  /**
-   * GtkGridView|list.unselect-all:
-   *
-   * If the selection model supports it, unselect all items in the model.
-   * If not, do nothing.
-   */
-  gtk_widget_class_install_action (widget_class,
-                                   "list.unselect-all",
-                                   NULL,
-                                   gtk_grid_view_unselect_all);
-
-  /**
    * GtkGridView|list.scroll-to-item:
    * @position: position of item to scroll to
    *
@@ -1842,7 +1690,6 @@ gtk_grid_view_init (GtkGridView *self)
   self->anchor = gtk_list_item_tracker_new (self->item_manager);
   self->anchor_xstart = TRUE;
   self->anchor_ystart = TRUE;
-  self->selected = gtk_list_item_tracker_new (self->item_manager);
   self->focus = gtk_list_item_tracker_new (self->item_manager);
 
   self->min_columns = 1;
