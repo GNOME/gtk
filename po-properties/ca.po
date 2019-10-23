@@ -256,7 +256,7 @@ msgstr "Nom"
 
 #: gtk/deprecated/gtkaction.c:244
 msgid "A unique name for the action."
-msgstr "Un nom únic per a una acció."
+msgstr "Un nom únic per a l'acció."
 
 #: gtk/deprecated/gtkaction.c:264 gtk/gtkbutton.c:281 gtk/gtkexpander.c:308
 #: gtk/gtkframe.c:231 gtk/gtklabel.c:805 gtk/gtkmenuitem.c:789
@@ -488,7 +488,7 @@ msgid ""
 "of it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
 "Si l'espai horitzontal disponible és més gran que el necessari per al fill, "
-"quan se n'ha d'utilitzar per al fill. 0.0 vol dir res, 1.0 vol dir tot"
+"quant se n'ha d'utilitzar per al fill. 0.0 vol dir res, 1.0 vol dir tot"
 
 #: gtk/deprecated/gtkalignment.c:206
 msgid "Vertical scale"
@@ -1267,7 +1267,7 @@ msgstr "Equip de traducció"
 #: gtk/gtkaboutdialog.c:531
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
-msgstr "El nom dels traductors. Aquesta cadena s'ha de marcar com a traduïble"
+msgstr "Reconeixement a l'equip de traducció. Aquesta cadena s'ha de marcar com a traduïble"
 
 #: gtk/gtkaboutdialog.c:545
 msgid "Logo"
@@ -8726,7 +8726,7 @@ msgstr "Exclusiu"
 
 #: gtk/gtktoolpalette.c:1013
 msgid "Whether the item group should be the only expanded at a given time"
-msgstr "Si el grup d'elements ha d'ésser l'únic que s'expandeixi a la vegada"
+msgstr "Si el grup d'elements ha de ser l'únic que s'expandeixi a la vegada"
 
 #: gtk/gtktoolpalette.c:1028
 msgid ""
@@ -8967,7 +8967,7 @@ msgstr "Color de la fila parell"
 
 #: gtk/gtktreeview.c:1276
 msgid "Color to use for even rows"
-msgstr "Color a utilitzar a les files parells"
+msgstr "Color a utilitzar a les files parelles"
 
 #: gtk/gtktreeview.c:1282
 msgid "Odd Row Color"
@@ -8975,7 +8975,7 @@ msgstr "Color de la fila imparell"
 
 #: gtk/gtktreeview.c:1283
 msgid "Color to use for odd rows"
-msgstr "Color a utilitzar a les files imparells"
+msgstr "Color a utilitzar a les files imparelles"
 
 #: gtk/gtktreeview.c:1290
 msgid "Grid line width"
