@@ -792,19 +792,9 @@ gtk_list_view_dispose (GObject *object)
       gtk_list_item_tracker_free (self->item_manager, self->focus);
       self->focus = NULL;
     }
-  g_clear_object (&self->item_manager);
+  self->item_manager = NULL;
 
   G_OBJECT_CLASS (gtk_list_view_parent_class)->dispose (object);
-}
-
-static void
-gtk_list_view_finalize (GObject *object)
-{
-  GtkListView *self = GTK_LIST_VIEW (object);
-
-  g_clear_object (&self->item_manager);
-
-  G_OBJECT_CLASS (gtk_list_view_parent_class)->finalize (object);
 }
 
 static void
@@ -1322,6 +1312,10 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkBindingSet *binding_set;
 
+  list_base_class->list_item_name = "row";
+  list_base_class->list_item_size = sizeof (ListRow);
+  list_base_class->list_item_augment_size = sizeof (ListRowAugment);
+  list_base_class->list_item_augment_func = list_row_augment;
   list_base_class->adjustment_value_changed = gtk_list_view_adjustment_value_changed;
 
   widget_class->measure = gtk_list_view_measure;
@@ -1329,7 +1323,6 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   widget_class->focus = gtk_list_view_focus;
 
   gobject_class->dispose = gtk_list_view_dispose;
-  gobject_class->finalize = gtk_list_view_finalize;
   gobject_class->get_property = gtk_list_view_get_property;
   gobject_class->set_property = gtk_list_view_set_property;
 
@@ -1510,7 +1503,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
 static void
 gtk_list_view_init (GtkListView *self)
 {
-  self->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self), "row", ListRow, ListRowAugment, list_row_augment);
+  self->item_manager = gtk_list_base_get_manager (GTK_LIST_BASE (self));
   self->focus = gtk_list_item_tracker_new (self->item_manager);
   self->anchor = gtk_list_item_tracker_new (self->item_manager);
   self->selected = gtk_list_item_tracker_new (self->item_manager);
