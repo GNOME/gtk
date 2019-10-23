@@ -149,6 +149,35 @@ dump (GtkGridView *self)
   g_print ("  => %u widgets in %u list rows\n", n_widgets, n_list_rows);
 }
 
+static void
+cell_augment (GtkRbTree *tree,
+              gpointer   node_augment,
+              gpointer   node,
+              gpointer   left,
+              gpointer   right)
+{
+  Cell *cell = node;
+  CellAugment *aug = node_augment;
+
+  gtk_list_item_manager_augment_node (tree, node_augment, node, left, right);
+
+  aug->size = cell->size;
+
+  if (left)
+    {
+      CellAugment *left_aug = gtk_rb_tree_get_augment (tree, left);
+
+      aug->size += left_aug->size;
+    }
+
+  if (right)
+    {
+      CellAugment *right_aug = gtk_rb_tree_get_augment (tree, right);
+
+      aug->size += right_aug->size;
+    }
+}
+
 /*<private>
  * gtk_grid_view_get_cell_at_y:
  * @self: a #GtkGridView
@@ -1059,7 +1088,7 @@ gtk_grid_view_dispose (GObject *object)
       gtk_list_item_tracker_free (self->item_manager, self->focus);
       self->focus = NULL;
     }
-  g_clear_object (&self->item_manager);
+  self->item_manager = NULL;
 
   G_OBJECT_CLASS (gtk_grid_view_parent_class)->dispose (object);
 }
@@ -1599,6 +1628,10 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkBindingSet *binding_set;
 
+  list_base_class->list_item_name = "flowboxchild";
+  list_base_class->list_item_size = sizeof (Cell);
+  list_base_class->list_item_augment_size = sizeof (CellAugment);
+  list_base_class->list_item_augment_func = cell_augment;
   list_base_class->adjustment_value_changed = gtk_grid_view_adjustment_value_changed;
 
   widget_class->focus = gtk_grid_view_focus;
@@ -1801,38 +1834,9 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
 }
 
 static void
-cell_augment (GtkRbTree *tree,
-              gpointer   node_augment,
-              gpointer   node,
-              gpointer   left,
-              gpointer   right)
-{
-  Cell *cell = node;
-  CellAugment *aug = node_augment;
-
-  gtk_list_item_manager_augment_node (tree, node_augment, node, left, right);
-
-  aug->size = cell->size;
-
-  if (left)
-    {
-      CellAugment *left_aug = gtk_rb_tree_get_augment (tree, left);
-
-      aug->size += left_aug->size;
-    }
-
-  if (right)
-    {
-      CellAugment *right_aug = gtk_rb_tree_get_augment (tree, right);
-
-      aug->size += right_aug->size;
-    }
-}
-
-static void
 gtk_grid_view_init (GtkGridView *self)
 {
-  self->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self), "flowboxchild", Cell, CellAugment, cell_augment);
+  self->item_manager = gtk_list_base_get_manager (GTK_LIST_BASE (self));
   self->anchor = gtk_list_item_tracker_new (self->item_manager);
   self->anchor_xstart = TRUE;
   self->anchor_ystart = TRUE;
