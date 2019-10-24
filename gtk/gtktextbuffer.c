@@ -30,6 +30,7 @@
 #include "gtkdnd.h"
 #include "gtkmarshalers.h"
 #include "gtktextbuffer.h"
+#include "gtktexthistoryprivate.h"
 #include "gtktextbufferprivate.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
@@ -62,11 +63,15 @@ struct _GtkTextBufferPrivate
 
   GtkTextLogAttrCache *log_attr_cache;
 
+  GtkTextHistory *history;
+
   guint user_action_count;
 
   /* Whether the buffer has been modified since last save */
   guint modified : 1;
   guint has_selection : 1;
+  guint can_undo : 1;
+  guint can_redo : 1;
 };
 
 typedef struct _ClipboardRequest ClipboardRequest;
@@ -93,6 +98,8 @@ enum {
   BEGIN_USER_ACTION,
   END_USER_ACTION,
   PASTE_DONE,
+  UNDO,
+  REDO,
   LAST_SIGNAL
 };
 
@@ -108,6 +115,8 @@ enum {
   PROP_CURSOR_POSITION,
   PROP_COPY_TARGET_LIST,
   PROP_PASTE_TARGET_LIST,
+  PROP_CAN_UNDO,
+  PROP_CAN_REDO,
   LAST_PROP
 };
 
@@ -138,6 +147,8 @@ static void gtk_text_buffer_real_changed               (GtkTextBuffer     *buffe
 static void gtk_text_buffer_real_mark_set              (GtkTextBuffer     *buffer,
                                                         const GtkTextIter *iter,
                                                         GtkTextMark       *mark);
+static void gtk_text_buffer_real_undo                  (GtkTextBuffer     *buffer);
+static void gtk_text_buffer_real_redo                  (GtkTextBuffer     *buffer);
 
 static GtkTextBTree* get_btree (GtkTextBuffer *buffer);
 static void          free_log_attr_cache (GtkTextLogAttrCache *cache);
@@ -153,6 +164,24 @@ static void gtk_text_buffer_get_property (GObject         *object,
 				          guint            prop_id,
 				          GValue          *value,
 				          GParamSpec      *pspec);
+
+static void gtk_text_buffer_history_change_state (gpointer     funcs_data,
+                                                  gboolean     is_modified,
+                                                  gboolean     can_undo,
+                                                  gboolean     can_redo);
+static void gtk_text_buffer_history_insert       (gpointer     funcs_data,
+                                                  guint        begin,
+                                                  guint        end,
+                                                  const char  *text,
+                                                  guint        len);
+static void gtk_text_buffer_history_delete       (gpointer     funcs_data,
+                                                  guint        begin,
+                                                  guint        end,
+                                                  const char  *expected_text,
+                                                  guint        len);
+static void gtk_text_buffer_history_select       (gpointer     funcs_data,
+                                                  int          selection_insert,
+                                                  int          selection_bound);
 
 static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *text_buffer_props[LAST_PROP];
@@ -184,6 +213,13 @@ struct _GtkTextBufferContentClass
 GType gtk_text_buffer_content_get_type (void) G_GNUC_CONST;
 
 G_DEFINE_TYPE (GtkTextBufferContent, gtk_text_buffer_content, GDK_TYPE_CONTENT_PROVIDER)
+
+static GtkTextHistoryFuncs history_funcs = {
+  gtk_text_buffer_history_change_state,
+  gtk_text_buffer_history_insert,
+  gtk_text_buffer_history_delete,
+  gtk_text_buffer_history_select,
+};
 
 static GdkContentFormats *
 gtk_text_buffer_content_ref_formats (GdkContentProvider *provider)
@@ -403,6 +439,8 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   klass->remove_tag = gtk_text_buffer_real_remove_tag;
   klass->changed = gtk_text_buffer_real_changed;
   klass->mark_set = gtk_text_buffer_real_mark_set;
+  klass->undo = gtk_text_buffer_real_undo;
+  klass->redo = gtk_text_buffer_real_redo;
 
   /* Construct */
   text_buffer_props[PROP_TAG_TABLE] =
@@ -438,6 +476,32 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                             P_("Whether the buffer has some text currently selected"),
                             FALSE,
                             GTK_PARAM_READABLE);
+
+  /**
+   * GtkTextBuffer:can-undo:
+   *
+   * The "can-undo" property denotes that the buffer can have the
+   * last operation undone by calling gtk_text_buffer_undo().
+   */
+  text_buffer_props[PROP_CAN_UNDO] =
+    g_param_spec_boolean ("can-undo",
+                          P_("Can Undo"),
+                          P_("If the buffer can have the last action undone"),
+                          FALSE,
+                          G_PARAM_READABLE);
+
+  /**
+   * GtkTextBuffer:can-redo:
+   *
+   * The "can-redo" property denotes that the buffer can reapply the
+   * last operation which was undone by calling gtk_text_buffer_redo().
+   */
+  text_buffer_props[PROP_CAN_REDO] =
+    g_param_spec_boolean ("can-redo",
+                          P_("Can Redo"),
+                          P_("If the buffer can have the last undone action reapplied"),
+                          FALSE,
+                          G_PARAM_READABLE);
 
   /**
    * GtkTextBuffer:cursor-position:
@@ -840,6 +904,34 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   1,
                   GDK_TYPE_CLIPBOARD);
 
+  /**
+   * GtkTextBuffer::redo:
+   * @buffer: a #GtkTextBuffer
+   *
+   * The "redo" signal is emitted when a request has been made to redo the
+   * previously undone operation.
+   */
+  signals[REDO] =
+    g_signal_new (I_("redo"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTextBufferClass, redo),
+                  NULL, NULL, NULL, G_TYPE_NONE, 0);
+
+  /**
+   * GtkTextBuffer::undo:
+   * @buffer: a #GtkTextBuffer
+   *
+   * The "undo" signal is emitted when a request has been made to undo the
+   * previous operation or set of operations that have been grouped together.
+   */
+  signals[UNDO] =
+    g_signal_new (I_("undo"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTextBufferClass, undo),
+                  NULL, NULL, NULL, G_TYPE_NONE, 0);
+
   gtk_text_buffer_register_serializers ();
 }
 
@@ -848,6 +940,7 @@ gtk_text_buffer_init (GtkTextBuffer *buffer)
 {
   buffer->priv = gtk_text_buffer_get_instance_private (buffer);
   buffer->priv->tag_table = NULL;
+  buffer->priv->history = gtk_text_history_new (&history_funcs, buffer);
 }
 
 static void
@@ -946,6 +1039,14 @@ gtk_text_buffer_get_property (GObject         *object,
       g_value_set_int (value, gtk_text_iter_get_offset (&iter));
       break;
 
+    case PROP_CAN_UNDO:
+      g_value_set_boolean (value, gtk_text_buffer_get_can_undo (text_buffer));
+      break;
+
+    case PROP_CAN_REDO:
+      g_value_set_boolean (value, gtk_text_buffer_get_can_redo (text_buffer));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -980,6 +1081,8 @@ gtk_text_buffer_finalize (GObject *object)
   priv = buffer->priv;
 
   remove_all_selection_clipboards (buffer);
+
+  g_clear_object (&buffer->priv->history);
 
   if (priv->tag_table)
     {
@@ -1058,6 +1161,8 @@ gtk_text_buffer_set_text (GtkTextBuffer *buffer,
   if (len < 0)
     len = strlen (text);
 
+  gtk_text_history_begin_irreversible_action (buffer->priv->history);
+
   gtk_text_buffer_get_bounds (buffer, &start, &end);
 
   gtk_text_buffer_delete (buffer, &start, &end);
@@ -1067,6 +1172,8 @@ gtk_text_buffer_set_text (GtkTextBuffer *buffer,
       gtk_text_buffer_get_iter_at_offset (buffer, &start, 0);
       gtk_text_buffer_insert (buffer, &start, text, len);
     }
+
+  gtk_text_history_end_irreversible_action (buffer->priv->history);
 }
 
  
@@ -1084,6 +1191,11 @@ gtk_text_buffer_real_insert_text (GtkTextBuffer *buffer,
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
   g_return_if_fail (iter != NULL);
   
+  gtk_text_history_text_inserted (buffer->priv->history,
+                                  gtk_text_iter_get_offset (iter),
+                                  text,
+                                  len);
+
   _gtk_text_btree_insert (iter, text, len);
 
   g_signal_emit (buffer, signals[CHANGED], 0);
@@ -1792,11 +1904,19 @@ gtk_text_buffer_real_delete_range (GtkTextBuffer *buffer,
                                    GtkTextIter   *start,
                                    GtkTextIter   *end)
 {
+  gchar *text;
   gboolean has_selection;
 
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
   g_return_if_fail (start != NULL);
   g_return_if_fail (end != NULL);
+
+  text = gtk_text_iter_get_slice (start, end);
+  gtk_text_history_text_deleted (buffer->priv->history,
+                                 gtk_text_iter_get_offset (start),
+                                 gtk_text_iter_get_offset (end),
+                                 text, -1);
+  g_free (text);
 
   _gtk_text_btree_delete (start, end);
 
@@ -1812,6 +1932,8 @@ gtk_text_buffer_real_delete_range (GtkTextBuffer *buffer,
 
   g_signal_emit (buffer, signals[CHANGED], 0);
   g_object_notify_by_pspec (G_OBJECT (buffer), text_buffer_props[PROP_CURSOR_POSITION]);
+  g_object_notify_by_pspec (G_OBJECT (buffer), text_buffer_props[PROP_CAN_UNDO]);
+  g_object_notify_by_pspec (G_OBJECT (buffer), text_buffer_props[PROP_CAN_REDO]);
 }
 
 static void
@@ -3274,17 +3396,14 @@ void
 gtk_text_buffer_set_modified (GtkTextBuffer *buffer,
                               gboolean       setting)
 {
-  gboolean fixed_setting;
-
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
 
-  fixed_setting = setting != FALSE;
+  setting = !!setting;
 
-  if (buffer->priv->modified == fixed_setting)
-    return;
-  else
+  if (buffer->priv->modified != setting)
     {
-      buffer->priv->modified = fixed_setting;
+      buffer->priv->modified = setting;
+      gtk_text_history_modified_changed (buffer->priv->history, setting);
       g_signal_emit (buffer, signals[MODIFIED_CHANGED], 0);
     }
 }
@@ -4722,4 +4841,123 @@ gtk_text_buffer_insert_markup (GtkTextBuffer *buffer,
 
   pango_attr_list_unref (attributes);
   g_free (text); 
+}
+
+static void
+gtk_text_buffer_real_undo (GtkTextBuffer *buffer)
+{
+  if (gtk_text_history_get_can_undo (buffer->priv->history))
+    gtk_text_history_undo (buffer->priv->history);
+}
+
+static void
+gtk_text_buffer_real_redo (GtkTextBuffer *buffer)
+{
+  if (gtk_text_history_get_can_redo (buffer->priv->history))
+    gtk_text_history_redo (buffer->priv->history);
+}
+
+gboolean
+gtk_text_buffer_get_can_undo (GtkTextBuffer *buffer)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
+
+  return gtk_text_history_get_can_undo (buffer->priv->history);
+}
+
+gboolean
+gtk_text_buffer_get_can_redo (GtkTextBuffer *buffer)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
+
+  return gtk_text_history_get_can_redo (buffer->priv->history);
+}
+
+static void
+gtk_text_buffer_history_change_state (gpointer funcs_data,
+                                      gboolean is_modified,
+                                      gboolean can_undo,
+                                      gboolean can_redo)
+{
+  GtkTextBuffer *buffer = funcs_data;
+
+  if (buffer->priv->can_undo != can_undo)
+    {
+      buffer->priv->can_undo = can_undo;
+      g_object_notify_by_pspec (G_OBJECT (buffer), text_buffer_props[PROP_CAN_UNDO]);
+    }
+
+  if (buffer->priv->can_redo != can_redo)
+    {
+      buffer->priv->can_redo = can_redo;
+      g_object_notify_by_pspec (G_OBJECT (buffer), text_buffer_props[PROP_CAN_REDO]);
+    }
+
+  if (buffer->priv->modified != is_modified)
+    gtk_text_buffer_set_modified (buffer, is_modified);
+}
+
+static void
+gtk_text_buffer_history_insert (gpointer    funcs_data,
+                                guint       begin,
+                                guint       end,
+                                const char *text,
+                                guint       len)
+{
+  GtkTextBuffer *buffer = funcs_data;
+  GtkTextIter iter;
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, begin);
+  gtk_text_buffer_insert (buffer, &iter, text, len);
+}
+
+static void
+gtk_text_buffer_history_delete (gpointer    funcs_data,
+                                guint       begin,
+                                guint       end,
+                                const char *expected_text,
+                                guint       len)
+{
+  GtkTextBuffer *buffer = funcs_data;
+  GtkTextIter iter;
+  GtkTextIter end_iter;
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, begin);
+  gtk_text_buffer_get_iter_at_offset (buffer, &end_iter, end);
+  gtk_text_buffer_delete (buffer, &iter, &end_iter);
+}
+
+static void
+gtk_text_buffer_history_select (gpointer funcs_data,
+                                int      selection_insert,
+                                int      selection_bound)
+{
+  GtkTextBuffer *buffer = funcs_data;
+  GtkTextIter insert;
+  GtkTextIter bound;
+
+  if (selection_insert == -1 || selection_bound == -1)
+    return;
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &insert, selection_insert);
+  gtk_text_buffer_get_iter_at_offset (buffer, &bound, selection_bound);
+  gtk_text_buffer_select_range (buffer, &insert, &bound);
+
+  //g_print ("Select: %d:%d\n", selection_insert, selection_bound);
+}
+
+void
+gtk_text_buffer_undo (GtkTextBuffer *buffer)
+{
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+
+  g_signal_emit (buffer, signals[UNDO], 0);
+}
+
+void
+gtk_text_buffer_redo (GtkTextBuffer *buffer)
+{
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+
+  g_signal_emit (buffer, signals[REDO], 0);
 }

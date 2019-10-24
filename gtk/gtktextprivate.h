@@ -85,6 +85,8 @@ struct _GtkTextClass
   void (* paste_clipboard)    (GtkText         *self);
   void (* toggle_overwrite)   (GtkText         *self);
   void (* insert_emoji)       (GtkText         *self);
+  void (* undo)               (GtkText         *self);
+  void (* redo)               (GtkText         *self);
 };
 
 char *              gtk_text_get_display_text   (GtkText    *entry,

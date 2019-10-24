@@ -243,6 +243,8 @@ enum {
   TOGGLE_OVERWRITE,
   PREEDIT_CHANGED,
   INSERT_EMOJI,
+  UNDO,
+  REDO,
   LAST_SIGNAL
 };
 
@@ -559,6 +561,8 @@ static void gtk_text_activate_selection_select_all   (GtkWidget  *widget,
 static void gtk_text_activate_misc_insert_emoji      (GtkWidget  *widget,
                                                       const char *action_name,
                                                       GVariant   *parameter);
+static void gtk_text_real_undo                       (GtkText    *text);
+static void gtk_text_real_redo                       (GtkText    *text);
 
 /* GtkTextContent implementation
  */
@@ -719,7 +723,9 @@ gtk_text_class_init (GtkTextClass *class)
   class->toggle_overwrite = gtk_text_toggle_overwrite;
   class->insert_emoji = gtk_text_insert_emoji;
   class->activate = gtk_text_real_activate;
-
+  class->undo = gtk_text_real_undo;
+  class->redo = gtk_text_real_redo;
+ 
   quark_password_hint = g_quark_from_static_string ("gtk-entry-password-hint");
 
   text_props[PROP_BUFFER] =
@@ -1173,6 +1179,40 @@ gtk_text_class_init (GtkTextClass *class)
                   NULL,
                   G_TYPE_NONE, 0);
 
+  /**
+   * GtkText::undo:
+   * @self: the object which received the signal
+   *
+   * The ::undo signal is a
+   * [keybinding signal][GtkBindingSignal]
+   * which gets emitted to undo the last operation.
+   */
+  signals[UNDO] =
+    g_signal_new (I_("undo"),
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkTextClass, undo),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
+
+  /**
+   * GtkText::redo:
+   * @self: the object which received the signal
+   *
+   * The ::redo signal is a
+   * [keybinding signal][GtkBindingSignal]
+   * which gets emitted to redo the last undone operation.
+   */
+  signals[REDO] =
+    g_signal_new (I_("redo"),
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkTextClass, redo),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
+
   /*
    * Key bindings
    */
@@ -1345,6 +1385,12 @@ gtk_text_class_init (GtkTextClass *class)
                                 "insert-emoji", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_semicolon, GDK_CONTROL_MASK,
                                 "insert-emoji", 0);
+
+  /* Undo/Redo */
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_z, GDK_CONTROL_MASK,
+                                "undo", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_z, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "redo", 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("text"));
@@ -6814,4 +6860,24 @@ gtk_text_get_extra_menu (GtkText *self)
   g_return_val_if_fail (GTK_IS_TEXT (self), NULL);
 
   return priv->extra_menu;
+}
+
+static void
+gtk_text_real_undo (GtkText *text)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (text);
+
+  g_return_if_fail (GTK_IS_TEXT (text));
+
+  gtk_entry_buffer_undo (priv->buffer);
+}
+
+static void
+gtk_text_real_redo (GtkText *text)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (text);
+
+  g_return_if_fail (GTK_IS_TEXT (text));
+
+  gtk_entry_buffer_redo (priv->buffer);
 }
