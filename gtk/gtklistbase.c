@@ -116,22 +116,73 @@ gtk_list_base_select_item (GtkListBase *self,
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   GtkSelectionModel *model;
+  gboolean success = FALSE;
+  guint n_items;
 
   model = gtk_list_item_manager_get_model (priv->item_manager);
   if (model == NULL)
     return;
 
-  if (gtk_selection_model_user_select_item (model,
-                                            pos,
-                                            modify,
-                                            extend ? gtk_list_item_tracker_get_position (priv->item_manager, priv->selected)
-                                                   : GTK_INVALID_LIST_POSITION))
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (model));
+  if (pos >= n_items)
+    return;
+
+  if (extend)
     {
-      gtk_list_item_tracker_set_position (priv->item_manager,
-                                          priv->selected,
-                                          pos,
-                                          0, 0);
+      guint extend_pos = gtk_list_item_tracker_get_position (priv->item_manager, priv->selected);
+
+      if (extend_pos < n_items)
+        {
+          guint max = MAX (extend_pos, pos);
+          guint min = MIN (extend_pos, pos);
+
+          if (modify)
+            {
+              if (gtk_selection_model_is_selected (model, extend_pos))
+                {
+                  success = gtk_selection_model_select_range (model,
+                                                              min,
+                                                              max - min + 1,
+                                                              FALSE);
+                }
+              else
+                {
+                  success = gtk_selection_model_unselect_range (model,
+                                                                min,
+                                                                max - min + 1);
+                }
+            }
+          else
+            {
+              success = gtk_selection_model_select_range (model,
+                                                          min,
+                                                          max - min + 1,
+                                                          TRUE);
+            }
+        }
+      /* If there's no range to select or selecting ranges isn't supported
+       * by the model, fall through to normal setting.
+       */
     }
+  if (success)
+    return;
+
+  if (modify)
+    {
+      if (gtk_selection_model_is_selected (model, pos))
+        success = gtk_selection_model_unselect_item (model, pos);
+      else
+        success = gtk_selection_model_select_item (model, pos, FALSE);
+    }
+  else
+    {
+      success = gtk_selection_model_select_item (model, pos, TRUE);
+    }
+
+  gtk_list_item_tracker_set_position (priv->item_manager,
+                                      priv->selected,
+                                      pos,
+                                      0, 0);
 }
 
 static void
