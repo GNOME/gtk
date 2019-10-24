@@ -23,6 +23,7 @@
 #include "gtklistbase.h"
 
 #include "gtklistitemmanagerprivate.h"
+#include "gtkprivate.h"
 
 struct _GtkListBase
 {
@@ -42,6 +43,8 @@ struct _GtkListBaseClass
                                                                  GtkOrientation          orientation);
 };
 
+GtkOrientation         gtk_list_base_get_orientation            (GtkListBase            *self);
+#define gtk_list_base_get_opposite_orientation(self) OPPOSITE_ORIENTATION(gtk_list_base_get_orientation(self))
 GtkListItemManager *   gtk_list_base_get_manager                (GtkListBase            *self);
 GtkScrollablePolicy    gtk_list_base_get_scroll_policy          (GtkListBase            *self,
                                                                  GtkOrientation          orientation);
