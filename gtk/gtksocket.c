@@ -51,6 +51,8 @@
 
 #include "gtkxembed.h"
 
+#include "a11y/gtksocketaccessible.h"
+
 
 /**
  * SECTION:gtksocket
@@ -151,6 +153,9 @@ static GdkFilterReturn gtk_socket_filter_func   (GdkXEvent        *gdk_xevent,
 static gboolean xembed_get_info                 (GdkWindow        *gdk_window,
                                                  unsigned long    *version,
                                                  unsigned long    *flags);
+
+static void     _gtk_socket_accessible_embed    (GtkWidget *socket,
+                                                 GdkWindow *window);
 
 /* From Tk */
 #define EMBEDDED_APP_WANTS_FOCUS NotifyNormal+20
@@ -264,6 +269,9 @@ gtk_socket_class_init (GtkSocketClass *class)
                   _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
+
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SOCKET_ACCESSIBLE);
 }
 
 static void
@@ -1153,6 +1161,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       socket_update_focus_in (socket);
 
       gtk_widget_queue_resize (GTK_WIDGET (socket));
+
+      _gtk_socket_accessible_embed (GTK_WIDGET (socket), private->plug_window);
     }
 
   if (private->plug_window)
@@ -1374,6 +1384,58 @@ handle_xembed_message (GtkSocket        *socket,
 		g_message ("GtkSocket: Ignoring unknown _XEMBED message of type %d", message));
       break;
     }
+}
+
+static void
+_gtk_socket_accessible_embed (GtkWidget *socket, GdkWindow *window)
+{
+  GdkDisplay *display = gdk_window_get_display (window);
+  Atom net_at_spi_path_atom = gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED_AT_SPI_PATH");
+  Atom type;
+  int format;
+  unsigned long nitems, bytes_after;
+  unsigned char *data;
+  int status;
+
+  gdk_x11_display_error_trap_push (display);
+  status = XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
+			       GDK_WINDOW_XID (window),
+			       net_at_spi_path_atom,
+			       0, INT_MAX / 4, False,
+			       net_at_spi_path_atom, &type, &format,
+			       &nitems, &bytes_after, &data);
+  gdk_x11_display_error_trap_pop_ignored (display);
+
+  if (status != Success)
+    return;			/* Window vanished? */
+
+  if (type == None)		/* No info property */
+    return;
+
+  if (type != net_at_spi_path_atom)
+    {
+      g_warning ("_XEMBED_AT_SPI_PATH property has wrong type");
+      return;
+    }
+
+  if (nitems == 0)
+    {
+      g_warning ("_XEMBED_AT_SPI_PATH too short");
+      XFree (data);
+      return;
+    }
+
+  if (nitems > INT_MAX)
+    {
+      g_warning ("_XEMBED_AT_SPI_PATH too long");
+      XFree (data);
+      return;
+    }
+
+  gtk_socket_accessible_embed (GTK_SOCKET_ACCESSIBLE (gtk_widget_get_accessible (socket)), (gchar*) data);
+  XFree (data);
+
+  return;
 }
 
 static GdkFilterReturn
