@@ -140,6 +140,13 @@ void            gtk_text_set_extra_menu                 (GtkText         *self,
 GDK_AVAILABLE_IN_ALL
 GMenuModel *    gtk_text_get_extra_menu                 (GtkText         *self);
 
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_text_get_enable_undo                (GtkText         *self);
+
+GDK_AVAILABLE_IN_ALL
+void            gtk_text_set_enable_undo                (GtkText         *self,
+                                                         gboolean         enable_undo);
+
 G_END_DECLS
 
 #endif /* __GTK_TEXT_H__ */

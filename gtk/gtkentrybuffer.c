@@ -192,7 +192,6 @@ gtk_entry_buffer_normal_delete_text (GtkEntryBuffer *buffer,
                                      guint           n_chars)
 {
   GtkEntryBufferPrivate *pv = gtk_entry_buffer_get_instance_private (buffer);
-  gsize start, end;
 
   if (position > pv->normal_text_chars)
     position = pv->normal_text_chars;
@@ -200,23 +199,7 @@ gtk_entry_buffer_normal_delete_text (GtkEntryBuffer *buffer,
     n_chars = pv->normal_text_chars - position;
 
   if (n_chars > 0)
-    {
-      start = g_utf8_offset_to_pointer (pv->normal_text, position) - pv->normal_text;
-      end = g_utf8_offset_to_pointer (pv->normal_text, position + n_chars) - pv->normal_text;
-
-      memmove (pv->normal_text + start, pv->normal_text + end, pv->normal_text_bytes + 1 - end);
-      pv->normal_text_chars -= n_chars;
-      pv->normal_text_bytes -= (end - start);
-
-      /*
-       * Could be a password, make sure we don't leave anything sensitive after
-       * the terminating zero.  Note, that the terminating zero already trashed
-       * one byte.
-       */
-      trash_area (pv->normal_text + pv->normal_text_bytes + 1, end - start - 1);
-
-      gtk_entry_buffer_emit_deleted_text (buffer, position, n_chars);
-    }
+    gtk_entry_buffer_emit_deleted_text (buffer, position, n_chars);
 
   return n_chars;
 }
@@ -240,6 +223,23 @@ gtk_entry_buffer_real_deleted_text (GtkEntryBuffer *buffer,
                                     guint           position,
                                     guint           n_chars)
 {
+  GtkEntryBufferPrivate *pv = gtk_entry_buffer_get_instance_private (buffer);
+  gsize start, end;
+
+  start = g_utf8_offset_to_pointer (pv->normal_text, position) - pv->normal_text;
+  end = g_utf8_offset_to_pointer (pv->normal_text, position + n_chars) - pv->normal_text;
+
+  memmove (pv->normal_text + start, pv->normal_text + end, pv->normal_text_bytes + 1 - end);
+  pv->normal_text_chars -= n_chars;
+  pv->normal_text_bytes -= (end - start);
+
+  /*
+   * Could be a password, make sure we don't leave anything sensitive after
+   * the terminating zero.  Note, that the terminating zero already trashed
+   * one byte.
+   */
+  trash_area (pv->normal_text + pv->normal_text_bytes + 1, end - start - 1);
+
   g_object_notify_by_pspec (G_OBJECT (buffer), entry_buffer_props[PROP_TEXT]);
   g_object_notify_by_pspec (G_OBJECT (buffer), entry_buffer_props[PROP_LENGTH]);
 }
@@ -405,11 +405,13 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
    * @position: the position the text was deleted at.
    * @n_chars: The number of characters that were deleted.
    *
-   * This signal is emitted after text is deleted from the buffer.
+   * The text is altered in the default handler for this signal. If you want
+   * access to the text after the text has been modified, use
+   * %G_CONNECT_AFTER.
    */
   signals[DELETED_TEXT] =  g_signal_new (I_("deleted-text"),
                                          GTK_TYPE_ENTRY_BUFFER,
-                                         G_SIGNAL_RUN_FIRST,
+                                         G_SIGNAL_RUN_LAST,
                                          G_STRUCT_OFFSET (GtkEntryBufferClass, deleted_text),
                                          NULL, NULL,
                                          _gtk_marshal_VOID__UINT_UINT,

@@ -169,6 +169,7 @@
     <file>editable_cells.c</file>
     <file>entry_buffer.c</file>
     <file>entry_completion.c</file>
+    <file>entry_undo.c</file>
     <file>expander.c</file>
     <file>filtermodel.c</file>
     <file>fishbowl.c</file>
@@ -220,6 +221,7 @@
     <file>spinner.c</file>
     <file>tabs.c</file>
     <file>tagged_entry.c</file>
+    <file>textundo.c</file>
     <file>textview.c</file>
     <file>textscroll.c</file>
     <file>theming_style_classes.c</file>
