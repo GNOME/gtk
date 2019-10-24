@@ -26,7 +26,12 @@ endif
 glib_req           = '>= @0@.@1@.@2@'.format(glib_major_req, glib_minor_req, glib_micro_req)
 pango_req          = '>= 1.41.0'
 fribidi_req        = '>= 0.19.7'
-atk_req            = '>= 2.15.1'
+if host_machine.system() == 'windows'
+  atk_req            = '>= 2.15.1'
+else
+  atk_req            = '>= 2.35.1'
+endif
+at_spi2_atk_req    = '>= 2.15.1'
 cairo_req          = '>= 1.14.0'
 gdk_pixbuf_req     = '>= 2.30.0'
 introspection_req  = '>= 1.39.0'
@@ -561,7 +566,7 @@ if x11_enabled
   xfixes_dep     = dependency('xfixes', required: false)
   xcomposite_dep = dependency('xcomposite', required: false)
   fontconfig_dep = dependency('fontconfig', fallback: ['fontconfig', 'fontconfig_dep'])
-  atkbridge_dep  = dependency('atk-bridge-2.0', version: atk_req)
+  atkbridge_dep  = dependency('atk-bridge-2.0', version: at_spi2_atk_req, fallback: ['at-spi2-atk', 'libatk_bridge_dep'])
 
   x11_pkgs = ['fontconfig', 'x11', 'xext', 'xi', 'xrandr']
 

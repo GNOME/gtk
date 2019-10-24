@@ -39,6 +39,8 @@
 #include "gtkwindowprivate.h"
 #include "gtkxembed.h"
 
+#include "a11y/gtkplugaccessible.h"
+
 #include <gdk/gdkx.h>
 
 /**
@@ -227,6 +229,10 @@ gtk_plug_class_init (GtkPlugClass *class)
 		  NULL, NULL,
 		  NULL,
 		  G_TYPE_NONE, 0);
+
+#ifdef GTK_HAVE_ATK_PLUG_SET_CHILD
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_PLUG_ACCESSIBLE);
+#endif /* GTK_HAVE_ATK_PLUG_SET_CHILD */
 }
 
 static void
@@ -710,6 +716,26 @@ xembed_set_info (GdkWindow     *window,
 		   (unsigned char *)buffer, 2);
 }
 
+#ifdef GTK_HAVE_ATK_PLUG_SET_CHILD
+static void
+_gtk_plug_accessible_embed_set_info (GtkWidget *widget, GdkWindow *window)
+{
+  GdkDisplay *display = gdk_window_get_display (window);
+  gchar *buffer = gtk_plug_accessible_get_id (GTK_PLUG_ACCESSIBLE (gtk_widget_get_accessible (widget)));
+  Atom net_at_spi_path_atom = gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED_AT_SPI_PATH");
+
+  if (!buffer)
+    return;
+
+  XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
+		   GDK_WINDOW_XID (window),
+		   net_at_spi_path_atom, net_at_spi_path_atom, 8,
+		   PropModeReplace,
+		   (unsigned char *)buffer, strlen(buffer));
+  g_free (buffer);
+}
+#endif /* GTK_HAVE_ATK_PLUG_SET_CHILD */
+
 /**
  * gtk_plug_focus_first_last:
  * @plug: a #GtkPlug
@@ -1098,6 +1124,10 @@ gtk_plug_realize (GtkWidget *widget)
     }
 
   gtk_widget_register_window (widget, gdk_window);
+
+#ifdef GTK_HAVE_ATK_PLUG_SET_CHILD
+  _gtk_plug_accessible_embed_set_info (widget, gdk_window);
+#endif /* GTK_HAVE_ATK_PLUG_SET_CHILD */
 }
 
 static void
