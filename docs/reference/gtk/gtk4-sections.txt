@@ -450,8 +450,6 @@ gtk_selection_model_select_all
 gtk_selection_model_unselect_all
 gtk_selection_model_query_range
 <SUBSECTION>
-gtk_selection_model_user_select_item
-<SUBSECTION>
 gtk_selection_model_selection_changed
 <SUBSECTION Standard>
 GTK_SELECTION_MODEL
