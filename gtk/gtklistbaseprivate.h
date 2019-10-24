@@ -41,10 +41,17 @@ struct _GtkListBaseClass
 
   void                 (* adjustment_value_changed)             (GtkListBase            *self,
                                                                  GtkOrientation          orientation);
+  guint                (* move_focus_along)                     (GtkListBase            *self,
+                                                                 guint                   pos,
+                                                                 int                     steps);
+  guint                (* move_focus_across)                    (GtkListBase            *self,
+                                                                 guint                   pos,
+                                                                 int                     steps);
 };
 
 GtkOrientation         gtk_list_base_get_orientation            (GtkListBase            *self);
 #define gtk_list_base_get_opposite_orientation(self) OPPOSITE_ORIENTATION(gtk_list_base_get_orientation(self))
+guint                  gtk_list_base_get_focus_position         (GtkListBase            *self);
 GtkListItemManager *   gtk_list_base_get_manager                (GtkListBase            *self);
 GtkScrollablePolicy    gtk_list_base_get_scroll_policy          (GtkListBase            *self,
                                                                  GtkOrientation          orientation);
