@@ -130,11 +130,6 @@ void                    gtk_selection_model_query_range         (GtkSelectionMod
                                                                  guint                  *n_items,
                                                                  gboolean               *selected);
 
-GDK_AVAILABLE_IN_ALL
-gboolean                gtk_selection_model_user_select_item    (GtkSelectionModel      *self,
-                                                                 guint                   pos,
-                                                                 gboolean                modify,
-                                                                 guint                   extend_pos);
 /* for implementations only */
 GDK_AVAILABLE_IN_ALL
 void                    gtk_selection_model_selection_changed   (GtkSelectionModel      *model,
