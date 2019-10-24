@@ -393,6 +393,32 @@ gtk_list_view_adjustment_value_changed (GtkListBase    *base,
   gtk_widget_queue_allocate (GTK_WIDGET (self));
 }
 
+static guint
+gtk_list_view_move_focus_along (GtkListBase *base,
+                                guint        pos,
+                                int          steps)
+{
+  GtkListView *self = GTK_LIST_VIEW (base);
+
+  if (steps < 0)
+    return pos - MIN (pos, -steps);
+  else
+    {
+      guint n_items = self->model ? g_list_model_get_n_items (self->model) : 0;
+      pos += MIN (n_items - pos - 1, steps);
+    }
+
+  return pos;
+}
+
+static guint
+gtk_list_view_move_focus_across (GtkListBase *base,
+                                 guint        pos,
+                                 int          steps)
+{
+  return pos;
+}
+
 static int 
 gtk_list_view_update_adjustments (GtkListView    *self,
                                   GtkOrientation  orientation)
@@ -689,62 +715,6 @@ gtk_list_view_size_allocate (GtkWidget *widget,
     }
 }
 
-static gboolean
-gtk_list_view_focus (GtkWidget        *widget,
-                     GtkDirectionType  direction)
-{
-  GtkListView *self = GTK_LIST_VIEW (widget);
-  GtkWidget *old_focus_child, *new_focus_child;
-
-  old_focus_child = gtk_widget_get_focus_child (widget);
-
-  if (old_focus_child == NULL &&
-      (direction == GTK_DIR_TAB_FORWARD || direction == GTK_DIR_TAB_BACKWARD))
-    {
-      ListRow *row;
-      guint pos;
-
-      /* When tabbing into the listview, don't focus the first/last item,
-       * but keep the previously focused item
-       */
-      pos = gtk_list_item_tracker_get_position (self->item_manager, self->focus);
-      row = gtk_list_item_manager_get_nth (self->item_manager, pos, NULL);
-      if (row && gtk_widget_grab_focus (row->parent.widget))
-        goto moved_focus;
-    }
-
-  if (!GTK_WIDGET_CLASS (gtk_list_view_parent_class)->focus (widget, direction))
-    return FALSE;
-
-moved_focus:
-  new_focus_child = gtk_widget_get_focus_child (widget);
-
-  if (old_focus_child != new_focus_child &&
-      GTK_IS_LIST_ITEM (new_focus_child))
-    {
-      GdkModifierType state;
-      GdkModifierType mask;
-      gboolean extend = FALSE, modify = FALSE;
-
-      if (old_focus_child && gtk_get_current_event_state (&state))
-        {
-          mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
-          if ((state & mask) == mask)
-            modify = TRUE;
-          mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_EXTEND_SELECTION);
-          if ((state & mask) == mask)
-            extend = TRUE;
-        }
-
-      gtk_list_base_select_item (GTK_LIST_BASE (self),
-                                 gtk_list_item_get_position (GTK_LIST_ITEM (new_focus_child)),
-                                 modify,
-                                 extend);
-    }
-
-  return TRUE;
-}
-
 static void
 gtk_list_view_dispose (GObject *object)
 {
@@ -963,76 +933,6 @@ gtk_list_view_activate_item (GtkWidget  *widget,
 }
 
 static void
-gtk_list_view_move_cursor (GtkWidget *widget,
-                           GVariant  *args,
-                           gpointer   unused)
-{
-  GtkListView *self = GTK_LIST_VIEW (widget);
-  int amount;
-  guint orientation;
-  guint pos, new_pos, n_items;
-  gboolean select, modify, extend;
-
-  g_variant_get (args, "(ubbbi)", &orientation, &select, &modify, &extend, &amount);
-
-  if (gtk_list_base_get_orientation (GTK_LIST_BASE (self)) != orientation)
-    return;
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL &&
-      gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    amount = -amount;
-
-  pos = gtk_list_item_tracker_get_position (self->item_manager, self->focus);
-  n_items = self->model ? g_list_model_get_n_items (self->model) : 0;
-  if (pos >= n_items)
-    return;
-
-  new_pos = pos + amount;
-  /* This overflow check only works reliably for amount == 1 */
-  if (new_pos >= n_items)
-    return;
-
-  gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), new_pos, select, modify, extend);
-}
-
-static void
-gtk_list_view_move_cursor_to_start (GtkWidget *widget,
-                                    GVariant  *args,
-                                    gpointer   unused)
-{
-  GtkListView *self = GTK_LIST_VIEW (widget);
-  gboolean select, modify, extend;
-
-  if (self->model == NULL || g_list_model_get_n_items (self->model) == 0)
-    return;
-
-  g_variant_get (args, "(bbb)", &select, &modify, &extend);
-
-  gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), 0, select, modify, extend);
-}
-
-static void
-gtk_list_view_move_cursor_to_end (GtkWidget *widget,
-                                  GVariant  *args,
-                                  gpointer   unused)
-{
-  GtkListView *self = GTK_LIST_VIEW (widget);
-  gboolean select, modify, extend;
-  guint n_items;
-
-  if (self->model == NULL)
-    return;
-
-  n_items = g_list_model_get_n_items (self->model);
-  if (n_items == 0)
-    return;
-
-  g_variant_get (args, "(bbb)", &select, &modify, &extend);
-
-  gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), n_items - 1, select, modify, extend);
-}
-
-static void
 gtk_list_view_move_cursor_page_up (GtkWidget *widget,
                                    GVariant  *args,
                                    gpointer   unused)
@@ -1145,32 +1045,6 @@ gtk_list_view_add_custom_move_binding (GtkBindingSet      *binding_set,
 }
 
 static void
-gtk_list_view_add_move_binding (GtkBindingSet  *binding_set,
-                                guint           keyval,
-                                GtkOrientation  orientation,
-                                int             amount)
-{
-  gtk_binding_entry_add_callback (binding_set,
-                                  keyval,
-                                  GDK_CONTROL_MASK,
-                                  gtk_list_view_move_cursor,
-                                  g_variant_new ("(ubbbi)", orientation, FALSE, FALSE, FALSE, amount),
-                                  NULL, NULL);
-  gtk_binding_entry_add_callback (binding_set,
-                                  keyval,
-                                  GDK_SHIFT_MASK,
-                                  gtk_list_view_move_cursor,
-                                  g_variant_new ("(ubbbi)", orientation, TRUE, FALSE, TRUE, amount),
-                                  NULL, NULL);
-  gtk_binding_entry_add_callback (binding_set,
-                                  keyval,
-                                  GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-                                  gtk_list_view_move_cursor,
-                                  g_variant_new ("(ubbbi)", orientation, TRUE, TRUE, TRUE, amount),
-                                  NULL, NULL);
-}
-
-static void
 gtk_list_view_class_init (GtkListViewClass *klass)
 {
   GtkListBaseClass *list_base_class = GTK_LIST_BASE_CLASS (klass);
@@ -1183,10 +1057,11 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   list_base_class->list_item_augment_size = sizeof (ListRowAugment);
   list_base_class->list_item_augment_func = list_row_augment;
   list_base_class->adjustment_value_changed = gtk_list_view_adjustment_value_changed;
+  list_base_class->move_focus_along = gtk_list_view_move_focus_along;
+  list_base_class->move_focus_across = gtk_list_view_move_focus_across;
 
   widget_class->measure = gtk_list_view_measure;
   widget_class->size_allocate = gtk_list_view_size_allocate;
-  widget_class->focus = gtk_list_view_focus;
 
   gobject_class->dispose = gtk_list_view_dispose;
   gobject_class->get_property = gtk_list_view_get_property;
@@ -1280,29 +1155,10 @@ gtk_list_view_class_init (GtkListViewClass *klass)
 
   binding_set = gtk_binding_set_by_class (klass);
 
-  gtk_list_view_add_move_binding (binding_set, GDK_KEY_Up, GTK_ORIENTATION_VERTICAL, -1);
-  gtk_list_view_add_move_binding (binding_set, GDK_KEY_KP_Up, GTK_ORIENTATION_VERTICAL, -1);
-  gtk_list_view_add_move_binding (binding_set, GDK_KEY_Down, GTK_ORIENTATION_VERTICAL, 1);
-  gtk_list_view_add_move_binding (binding_set, GDK_KEY_KP_Down, GTK_ORIENTATION_VERTICAL, 1);
-  gtk_list_view_add_move_binding (binding_set, GDK_KEY_Left, GTK_ORIENTATION_HORIZONTAL, -1);
-  gtk_list_view_add_move_binding (binding_set, GDK_KEY_KP_Left, GTK_ORIENTATION_HORIZONTAL, -1);
-  gtk_list_view_add_move_binding (binding_set, GDK_KEY_Right, GTK_ORIENTATION_HORIZONTAL, 1);
-  gtk_list_view_add_move_binding (binding_set, GDK_KEY_KP_Right, GTK_ORIENTATION_HORIZONTAL, 1);
-
-  gtk_list_view_add_custom_move_binding (binding_set, GDK_KEY_Home, gtk_list_view_move_cursor_to_start);
-  gtk_list_view_add_custom_move_binding (binding_set, GDK_KEY_KP_Home, gtk_list_view_move_cursor_to_start);
-  gtk_list_view_add_custom_move_binding (binding_set, GDK_KEY_End, gtk_list_view_move_cursor_to_end);
-  gtk_list_view_add_custom_move_binding (binding_set, GDK_KEY_KP_End, gtk_list_view_move_cursor_to_end);
   gtk_list_view_add_custom_move_binding (binding_set, GDK_KEY_Page_Up, gtk_list_view_move_cursor_page_up);
   gtk_list_view_add_custom_move_binding (binding_set, GDK_KEY_KP_Page_Up, gtk_list_view_move_cursor_page_up);
   gtk_list_view_add_custom_move_binding (binding_set, GDK_KEY_Page_Down, gtk_list_view_move_cursor_page_down);
   gtk_list_view_add_custom_move_binding (binding_set, GDK_KEY_KP_Page_Down, gtk_list_view_move_cursor_page_down);
-
-  gtk_binding_entry_add_action (binding_set, GDK_KEY_a, GDK_CONTROL_MASK, "list.select-all", NULL);
-  gtk_binding_entry_add_action (binding_set, GDK_KEY_slash, GDK_CONTROL_MASK, "list.select-all", NULL);
-
-  gtk_binding_entry_add_action (binding_set, GDK_KEY_A, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "list.unselect-all", NULL);
-  gtk_binding_entry_add_action (binding_set, GDK_KEY_backslash, GDK_CONTROL_MASK, "list.unselect-all", NULL);
 
   gtk_widget_class_set_css_name (widget_class, I_("list"));
 }
