@@ -56,7 +56,7 @@ GLIB_VERSION_CFLAGS="-DGLIB_MIN_REQUIRED_VERSION=glib_min_required_version -DGLI
 
 m4_define([pango_required_version], [1.41.0])
 m4_define([fribidi_required_version], [0.19.7])
-m4_define([atk_required_version], [2.15.1])
+m4_define([atk_required_version], [2.35.1])
 m4_define([cairo_required_version], [1.14.0])
 m4_define([gdk_pixbuf_required_version], [2.30.0])
 m4_define([introspection_required_version], [1.39.0])
