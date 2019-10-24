@@ -179,6 +179,8 @@ struct _GtkTextViewClass
                                   GtkTextIter            *start,
                                   GtkTextIter            *end);
   void (* insert_emoji)          (GtkTextView      *text_view);
+  void (* undo)                  (GtkTextView      *text_view);
+  void (* redo)                  (GtkTextView      *text_view);
 
   /*< private >*/
 

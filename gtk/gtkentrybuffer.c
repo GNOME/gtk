@@ -21,6 +21,7 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
+#include "gtktexthistoryprivate.h"
 #include "gtkwidget.h"
 
 #include <gdk/gdk.h>
@@ -50,6 +51,8 @@
 
 enum {
   PROP_0,
+  PROP_CAN_REDO,
+  PROP_CAN_UNDO,
   PROP_TEXT,
   PROP_LENGTH,
   PROP_MAX_LENGTH,
@@ -76,6 +79,8 @@ struct _GtkEntryBufferPrivate
   guint  normal_text_chars;
 
   gint   max_length;
+
+  GtkTextHistory *history;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkEntryBuffer, gtk_entry_buffer, G_TYPE_OBJECT)
@@ -249,9 +254,64 @@ gtk_entry_buffer_real_deleted_text (GtkEntryBuffer *buffer,
  */
 
 static void
+gtk_entry_buffer_history_state_change (gpointer funcs_data,
+                                       gboolean is_modified,
+                                       gboolean can_undo,
+                                       gboolean can_redo)
+{
+  GtkEntryBuffer *buffer = funcs_data;
+
+  g_object_notify_by_pspec (G_OBJECT (buffer), entry_buffer_props[PROP_CAN_UNDO]);
+  g_object_notify_by_pspec (G_OBJECT (buffer), entry_buffer_props[PROP_CAN_REDO]);
+}
+
+static void
+gtk_entry_buffer_history_insert (gpointer     funcs_data,
+                                 guint        begin,
+                                 guint        end,
+                                 const gchar *text,
+                                 guint        len)
+{
+  GtkEntryBuffer *buffer = funcs_data;
+
+  gtk_entry_buffer_insert_text (buffer,
+                                begin,
+                                text,
+                                g_utf8_strlen (text, len));
+}
+
+static void
+gtk_entry_buffer_history_delete (gpointer     funcs_data,
+                                 guint        begin,
+                                 guint        end,
+                                 const gchar *expected_text,
+                                 guint        len)
+{
+  GtkEntryBuffer *buffer = funcs_data;
+
+  gtk_entry_buffer_delete_text (buffer, begin, end - begin);
+}
+
+static void
+gtk_entry_buffer_history_select (gpointer funcs_data,
+                                 int      selection_insert,
+                                 int      selection_bound)
+{
+}
+
+static const GtkTextHistoryFuncs history_funcs = {
+  gtk_entry_buffer_history_state_change,
+  gtk_entry_buffer_history_insert,
+  gtk_entry_buffer_history_delete,
+  gtk_entry_buffer_history_select,
+};
+
+static void
 gtk_entry_buffer_init (GtkEntryBuffer *buffer)
 {
   GtkEntryBufferPrivate *pv = gtk_entry_buffer_get_instance_private (buffer);
+
+  pv->history = gtk_text_history_new (&history_funcs, buffer);
 
   pv->normal_text = NULL;
   pv->normal_text_chars = 0;
@@ -264,6 +324,8 @@ gtk_entry_buffer_finalize (GObject *obj)
 {
   GtkEntryBuffer *buffer = GTK_ENTRY_BUFFER (obj);
   GtkEntryBufferPrivate *pv = gtk_entry_buffer_get_instance_private (buffer);
+
+  g_clear_object (&pv->history);
 
   if (pv->normal_text)
     {
@@ -309,6 +371,12 @@ gtk_entry_buffer_get_property (GObject    *obj,
 
   switch (prop_id)
     {
+    case PROP_CAN_REDO:
+      g_value_set_boolean (value, gtk_entry_buffer_get_can_redo (buffer));
+      break;
+    case PROP_CAN_UNDO:
+      g_value_set_boolean (value, gtk_entry_buffer_get_can_undo (buffer));
+      break;
     case PROP_TEXT:
       g_value_set_string (value, gtk_entry_buffer_get_text (buffer));
       break;
@@ -340,6 +408,32 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
 
   klass->inserted_text = gtk_entry_buffer_real_inserted_text;
   klass->deleted_text = gtk_entry_buffer_real_deleted_text;
+
+  /**
+   * GtkEntryBuffer:can-redo:
+   *
+   * The :can-redo property denotes that the entry buffer can
+   * redo the last undone operation.
+   */
+  entry_buffer_props[PROP_CAN_REDO] =
+    g_param_spec_boolean ("can-redo",
+                          P_("can-redo"),
+                          P_("If the entry buffer can redo the last undone operation"),
+                          FALSE,
+                          GTK_PARAM_READABLE);
+
+  /**
+   * GtkEntryBuffer:can-undo:
+   *
+   * The :can-undo property denotes that the entry buffer can
+   * undo the last operation.
+   */
+  entry_buffer_props[PROP_CAN_UNDO] =
+    g_param_spec_boolean ("can-undo",
+                          P_("can-undo"),
+                          P_("If the entry buffer can undo the last operation"),
+                          FALSE,
+                          GTK_PARAM_READABLE);
 
   /**
    * GtkEntryBuffer:text:
@@ -648,6 +742,11 @@ gtk_entry_buffer_insert_text (GtkEntryBuffer *buffer,
   klass = GTK_ENTRY_BUFFER_GET_CLASS (buffer);
   g_return_val_if_fail (klass->insert_text != NULL, 0);
 
+  gtk_text_history_text_inserted (pv->history,
+                                  position,
+                                  chars,
+                                  strlen (chars));
+
   return (*klass->insert_text) (buffer, position, chars, n_chars);
 }
 
@@ -673,7 +772,10 @@ gtk_entry_buffer_delete_text (GtkEntryBuffer *buffer,
                               guint           position,
                               gint            n_chars)
 {
+  GtkEntryBufferPrivate *priv = gtk_entry_buffer_get_instance_private (buffer);
   GtkEntryBufferClass *klass;
+  const gchar *text;
+  gchar *removed;
   guint length;
 
   g_return_val_if_fail (GTK_IS_ENTRY_BUFFER (buffer), 0);
@@ -688,6 +790,16 @@ gtk_entry_buffer_delete_text (GtkEntryBuffer *buffer,
 
   klass = GTK_ENTRY_BUFFER_GET_CLASS (buffer);
   g_return_val_if_fail (klass->delete_text != NULL, 0);
+
+  text = gtk_entry_buffer_get_text (buffer);
+
+  removed = g_utf8_substring (text, position, position + n_chars);
+  gtk_text_history_text_deleted (priv->history,
+                                 position,
+                                 position + n_chars,
+                                 removed,
+                                 -1);
+  g_free (removed);
 
   return (*klass->delete_text) (buffer, position, n_chars);
 }
@@ -726,4 +838,64 @@ gtk_entry_buffer_emit_deleted_text (GtkEntryBuffer *buffer,
 {
   g_return_if_fail (GTK_IS_ENTRY_BUFFER (buffer));
   g_signal_emit (buffer, signals[DELETED_TEXT], 0, position, n_chars);
+}
+
+gboolean
+gtk_entry_buffer_get_can_redo (GtkEntryBuffer *buffer)
+{
+  GtkEntryBufferPrivate *priv = gtk_entry_buffer_get_instance_private (buffer);
+
+  g_return_val_if_fail (GTK_IS_ENTRY_BUFFER (buffer), FALSE);
+
+  return gtk_text_history_get_can_redo (priv->history);
+}
+
+gboolean
+gtk_entry_buffer_get_can_undo (GtkEntryBuffer *buffer)
+{
+  GtkEntryBufferPrivate *priv = gtk_entry_buffer_get_instance_private (buffer);
+
+  g_return_val_if_fail (GTK_IS_ENTRY_BUFFER (buffer), FALSE);
+
+  return gtk_text_history_get_can_undo (priv->history);
+}
+
+void
+gtk_entry_buffer_undo (GtkEntryBuffer *buffer)
+{
+  GtkEntryBufferPrivate *priv = gtk_entry_buffer_get_instance_private (buffer);
+
+  g_return_if_fail (GTK_IS_ENTRY_BUFFER (buffer));
+
+  return gtk_text_history_undo (priv->history);
+}
+
+void
+gtk_entry_buffer_redo (GtkEntryBuffer *buffer)
+{
+  GtkEntryBufferPrivate *priv = gtk_entry_buffer_get_instance_private (buffer);
+
+  g_return_if_fail (GTK_IS_ENTRY_BUFFER (buffer));
+
+  return gtk_text_history_redo (priv->history);
+}
+
+void
+gtk_entry_buffer_begin_user_action (GtkEntryBuffer *buffer)
+{
+  GtkEntryBufferPrivate *priv = gtk_entry_buffer_get_instance_private (buffer);
+
+  g_return_if_fail (GTK_IS_ENTRY_BUFFER (buffer));
+
+  return gtk_text_history_begin_user_action (priv->history);
+}
+
+void
+gtk_entry_buffer_end_user_action (GtkEntryBuffer *buffer)
+{
+  GtkEntryBufferPrivate *priv = gtk_entry_buffer_get_instance_private (buffer);
+
+  g_return_if_fail (GTK_IS_ENTRY_BUFFER (buffer));
+
+  return gtk_text_history_end_user_action (priv->history);
 }
