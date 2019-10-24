@@ -76,6 +76,10 @@ struct _GtkEntryBufferClass
                                           guint           position,
                                           guint           n_chars);
 
+  void         (*undo)                   (GtkEntryBuffer *buffer);
+
+  void         (*redo)                   (GtkEntryBuffer *buffer);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
@@ -136,6 +140,24 @@ GDK_AVAILABLE_IN_ALL
 void                      gtk_entry_buffer_emit_deleted_text      (GtkEntryBuffer  *buffer,
                                                                    guint            position,
                                                                    guint            n_chars);
+
+GDK_AVAILABLE_IN_ALL
+void                      gtk_entry_buffer_begin_user_action      (GtkEntryBuffer  *buffer);
+
+GDK_AVAILABLE_IN_ALL
+void                      gtk_entry_buffer_end_user_action        (GtkEntryBuffer  *buffer);
+
+GDK_AVAILABLE_IN_ALL
+gboolean                  gtk_entry_buffer_get_can_undo           (GtkEntryBuffer  *buffer);
+
+GDK_AVAILABLE_IN_ALL
+gboolean                  gtk_entry_buffer_get_can_redo           (GtkEntryBuffer  *buffer);
+
+GDK_AVAILABLE_IN_ALL
+void                      gtk_entry_buffer_undo                   (GtkEntryBuffer  *buffer);
+
+GDK_AVAILABLE_IN_ALL
+void                      gtk_entry_buffer_redo                   (GtkEntryBuffer  *buffer);
 
 G_END_DECLS
 
