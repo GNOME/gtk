@@ -146,6 +146,8 @@ struct _GtkTextBufferClass
 
   void (* paste_done)             (GtkTextBuffer      *buffer,
                                    GdkClipboard       *clipboard);
+  void (* undo)                   (GtkTextBuffer      *buffer);
+  void (* redo)                   (GtkTextBuffer      *buffer);
 
   /*< private >*/
 
@@ -450,6 +452,20 @@ GDK_AVAILABLE_IN_ALL
 gboolean        gtk_text_buffer_delete_selection        (GtkTextBuffer *buffer,
                                                          gboolean       interactive,
                                                          gboolean       default_editable);
+
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_text_buffer_get_can_undo            (GtkTextBuffer *buffer);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_text_buffer_get_can_redo            (GtkTextBuffer *buffer);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_text_buffer_get_enable_undo         (GtkTextBuffer *buffer);
+GDK_AVAILABLE_IN_ALL
+void            gtk_text_buffer_set_enable_undo         (GtkTextBuffer *buffer,
+                                                         gboolean       enable_undo);
+GDK_AVAILABLE_IN_ALL
+void            gtk_text_buffer_undo                    (GtkTextBuffer *buffer);
+GDK_AVAILABLE_IN_ALL
+void            gtk_text_buffer_redo                    (GtkTextBuffer *buffer);
 
 /* Called to specify atomic user actions, used to implement undo */
 GDK_AVAILABLE_IN_ALL

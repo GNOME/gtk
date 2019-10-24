@@ -258,6 +258,7 @@ do_hypertext (GtkWidget *do_widget)
       gtk_widget_add_controller (view, controller);
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+      gtk_text_buffer_set_enable_undo (buffer, TRUE);
 
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
