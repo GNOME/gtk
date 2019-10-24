@@ -400,60 +400,46 @@ gtk_grid_view_set_anchor (GtkGridView *self,
     }
 }
 
-static gboolean
-gtk_grid_view_focus (GtkWidget        *widget,
-                     GtkDirectionType  direction)
+static guint
+gtk_grid_view_move_focus_along (GtkListBase *base,
+                                guint        pos,
+                                int          steps)
 {
-  GtkGridView *self = GTK_GRID_VIEW (widget);
-  GtkWidget *old_focus_child, *new_focus_child;
+  GtkGridView *self = GTK_GRID_VIEW (base);
 
-  old_focus_child = gtk_widget_get_focus_child (widget);
+  steps *= self->n_columns;
 
-  if (old_focus_child == NULL &&
-      (direction == GTK_DIR_TAB_FORWARD || direction == GTK_DIR_TAB_BACKWARD))
+  if (steps < 0)
     {
-      Cell *cell;
-      guint pos;
-
-      /* When tabbing into the listview, don't focus the first/last item,
-       * but keep the previously focused item
-       */
-      pos = gtk_list_item_tracker_get_position (self->item_manager, self->focus);
-      cell = gtk_list_item_manager_get_nth (self->item_manager, pos, NULL);
-      if (cell && gtk_widget_grab_focus (cell->parent.widget))
-        goto moved_focus;
+      if (pos >= self->n_columns)
+        pos -= MIN (pos, -steps);
+    }
+  else
+    {
+      guint n_items = self->model ? g_list_model_get_n_items (self->model) : 0;
+      if (n_items / self->n_columns > pos / self->n_columns)
+        pos += MIN (n_items - pos - 1, steps);
     }
 
-  if (!GTK_WIDGET_CLASS (gtk_grid_view_parent_class)->focus (widget, direction))
-    return FALSE;
+  return pos;
+}
 
-moved_focus:
-  new_focus_child = gtk_widget_get_focus_child (widget);
+static guint
+gtk_grid_view_move_focus_across (GtkListBase *base,
+                                 guint        pos,
+                                 int          steps)
+{
+  GtkGridView *self = GTK_GRID_VIEW (base);
 
-  if (old_focus_child != new_focus_child &&
-      GTK_IS_LIST_ITEM (new_focus_child))
+  if (steps < 0)
+    return pos - MIN (pos, -steps);
+  else
     {
-      GdkModifierType state;
-      GdkModifierType mask;
-      gboolean extend = FALSE, modify = FALSE;
-
-      if (old_focus_child && gtk_get_current_event_state (&state))
-        {
-          mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
-          if ((state & mask) == mask)
-            modify = TRUE;
-          mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_EXTEND_SELECTION);
-          if ((state & mask) == mask)
-            extend = TRUE;
-        }
-
-      gtk_list_base_select_item (GTK_LIST_BASE (self),
-                                 gtk_list_item_get_position (GTK_LIST_ITEM (new_focus_child)),
-                                 modify,
-                                 extend);
+      guint n_items = self->model ? g_list_model_get_n_items (self->model) : 0;
+      pos += MIN (n_items - pos - 1, steps);
     }
 
-  return TRUE;
+  return pos;
 }
 
 static void
@@ -1277,81 +1263,6 @@ gtk_grid_view_activate_item (GtkWidget  *widget,
 }
 
 static void
-gtk_grid_view_move_cursor (GtkWidget *widget,
-                           GVariant  *args,
-                           gpointer   unused)
-{
-  GtkGridView *self = GTK_GRID_VIEW (widget);
-  int amount;
-  guint orientation;
-  guint pos, n_items;
-  gboolean select, modify, extend;
-
-  g_variant_get (args, "(ubbbi)", &orientation, &select, &modify, &extend, &amount);
-
-  if (gtk_list_base_get_orientation (GTK_LIST_BASE (self)) == orientation)
-    amount *= self->n_columns;
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL &&
-      gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    amount = -amount;
-
-  pos = gtk_list_item_tracker_get_position (self->item_manager, self->focus);
-  n_items = self->model ? g_list_model_get_n_items (self->model) : 0;
-  if (pos >= n_items || /* no focused item */
-      (amount < 0 && pos < -amount))
-    return;
-  if (amount > 0 && amount > n_items - pos)
-    {
-      /* pressing down with no item below the current item is more complicated
-       * because we want to move to the last row if we're not there yet */
-      if (pos / self->n_columns < (n_items - 1) / self->n_columns)
-        amount = n_items - pos - 1;
-      else
-        return;
-    }
-
-  gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), pos + amount, select, modify, extend);
-}
-
-static void
-gtk_grid_view_move_cursor_to_start (GtkWidget *widget,
-                                    GVariant  *args,
-                                    gpointer   unused)
-{
-  GtkGridView *self = GTK_GRID_VIEW (widget);
-  gboolean select, modify, extend;
-
-  if (self->model == NULL || g_list_model_get_n_items (self->model) == 0)
-    return;
-
-  g_variant_get (args, "(bbb)", &select, &modify, &extend);
-
-  gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), 0, select, modify, extend);
-}
-
-static void
-gtk_grid_view_move_cursor_to_end (GtkWidget *widget,
-                                  GVariant  *args,
-                                  gpointer   unused)
-{
-  GtkGridView *self = GTK_GRID_VIEW (widget);
-  gboolean select, modify, extend;
-  guint n_items;
-
-  if (self->model == NULL)
-    return;
-
-  n_items = g_list_model_get_n_items (self->model);
-  if (n_items == 0)
-    return;
-
-  g_variant_get (args, "(bbb)", &select, &modify, &extend);
-
-  gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), n_items - 1, select, modify, extend);
-}
-
-static void
 gtk_grid_view_move_cursor_page_up (GtkWidget *widget,
                                    GVariant  *args,
                                    gpointer   unused)
@@ -1470,32 +1381,6 @@ gtk_grid_view_add_custom_move_binding (GtkBindingSet      *binding_set,
 }
 
 static void
-gtk_grid_view_add_move_binding (GtkBindingSet  *binding_set,
-                                guint           keyval,
-                                GtkOrientation  orientation,
-                                int             amount)
-{
-  gtk_binding_entry_add_callback (binding_set,
-                                  keyval,
-                                  GDK_CONTROL_MASK,
-                                  gtk_grid_view_move_cursor,
-                                  g_variant_new ("(ubbbi)", orientation, FALSE, FALSE, FALSE, amount),
-                                  NULL, NULL);
-  gtk_binding_entry_add_callback (binding_set,
-                                  keyval,
-                                  GDK_SHIFT_MASK,
-                                  gtk_grid_view_move_cursor,
-                                  g_variant_new ("(ubbbi)", orientation, TRUE, FALSE, TRUE, amount),
-                                  NULL, NULL);
-  gtk_binding_entry_add_callback (binding_set,
-                                  keyval,
-                                  GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-                                  gtk_grid_view_move_cursor,
-                                  g_variant_new ("(ubbbi)", orientation, TRUE, TRUE, TRUE, amount),
-                                  NULL, NULL);
-}
-
-static void
 gtk_grid_view_class_init (GtkGridViewClass *klass)
 {
   GtkListBaseClass *list_base_class = GTK_LIST_BASE_CLASS (klass);
@@ -1508,8 +1393,9 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
   list_base_class->list_item_augment_size = sizeof (CellAugment);
   list_base_class->list_item_augment_func = cell_augment;
   list_base_class->adjustment_value_changed = gtk_grid_view_adjustment_value_changed;
+  list_base_class->move_focus_along = gtk_grid_view_move_focus_along;
+  list_base_class->move_focus_across = gtk_grid_view_move_focus_across;
 
-  widget_class->focus = gtk_grid_view_focus;
   widget_class->measure = gtk_grid_view_measure;
   widget_class->size_allocate = gtk_grid_view_size_allocate;
 
@@ -1621,32 +1507,12 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
 
   binding_set = gtk_binding_set_by_class (klass);
 
-  gtk_grid_view_add_move_binding (binding_set, GDK_KEY_Up, GTK_ORIENTATION_VERTICAL, -1);
-  gtk_grid_view_add_move_binding (binding_set, GDK_KEY_KP_Up, GTK_ORIENTATION_VERTICAL, -1);
-  gtk_grid_view_add_move_binding (binding_set, GDK_KEY_Down, GTK_ORIENTATION_VERTICAL, 1);
-  gtk_grid_view_add_move_binding (binding_set, GDK_KEY_KP_Down, GTK_ORIENTATION_VERTICAL, 1);
-  gtk_grid_view_add_move_binding (binding_set, GDK_KEY_Left, GTK_ORIENTATION_HORIZONTAL, -1);
-  gtk_grid_view_add_move_binding (binding_set, GDK_KEY_KP_Left, GTK_ORIENTATION_HORIZONTAL, -1);
-  gtk_grid_view_add_move_binding (binding_set, GDK_KEY_Right, GTK_ORIENTATION_HORIZONTAL, 1);
-  gtk_grid_view_add_move_binding (binding_set, GDK_KEY_KP_Right, GTK_ORIENTATION_HORIZONTAL, 1);
-
-  gtk_grid_view_add_custom_move_binding (binding_set, GDK_KEY_Home, gtk_grid_view_move_cursor_to_start);
-  gtk_grid_view_add_custom_move_binding (binding_set, GDK_KEY_KP_Home, gtk_grid_view_move_cursor_to_start);
-  gtk_grid_view_add_custom_move_binding (binding_set, GDK_KEY_End, gtk_grid_view_move_cursor_to_end);
-  gtk_grid_view_add_custom_move_binding (binding_set, GDK_KEY_KP_End, gtk_grid_view_move_cursor_to_end);
   gtk_grid_view_add_custom_move_binding (binding_set, GDK_KEY_Page_Up, gtk_grid_view_move_cursor_page_up);
   gtk_grid_view_add_custom_move_binding (binding_set, GDK_KEY_KP_Page_Up, gtk_grid_view_move_cursor_page_up);
   gtk_grid_view_add_custom_move_binding (binding_set, GDK_KEY_Page_Down, gtk_grid_view_move_cursor_page_down);
   gtk_grid_view_add_custom_move_binding (binding_set, GDK_KEY_KP_Page_Down, gtk_grid_view_move_cursor_page_down);
 
-  gtk_binding_entry_add_action (binding_set, GDK_KEY_a, GDK_CONTROL_MASK, "list.select-all", NULL);
-  gtk_binding_entry_add_action (binding_set, GDK_KEY_slash, GDK_CONTROL_MASK, "list.select-all", NULL);
-
-  gtk_binding_entry_add_action (binding_set, GDK_KEY_A, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "list.unselect-all", NULL);
-  gtk_binding_entry_add_action (binding_set, GDK_KEY_backslash, GDK_CONTROL_MASK, "list.unselect-all", NULL);
-
   gtk_widget_class_set_css_name (widget_class, I_("flowbox"));
-
 }
 
 static void
