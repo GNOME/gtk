@@ -41,6 +41,19 @@ struct _GtkListBaseClass
 
   void                 (* adjustment_value_changed)             (GtkListBase            *self,
                                                                  GtkOrientation          orientation);
+  gboolean             (* get_allocation_along)                 (GtkListBase            *self,
+                                                                 guint                   pos,
+                                                                 int                    *offset,
+                                                                 int                    *size);
+  gboolean             (* get_allocation_across)                (GtkListBase            *self,
+                                                                 guint                   pos,
+                                                                 int                    *offset,
+                                                                 int                    *size);
+  gboolean             (* get_position_from_allocation)         (GtkListBase            *self,
+                                                                 int                     across,
+                                                                 int                     along,
+                                                                 guint                  *pos,
+                                                                 cairo_rectangle_int_t  *area);
   guint                (* move_focus_along)                     (GtkListBase            *self,
                                                                  guint                   pos,
                                                                  int                     steps);
@@ -55,6 +68,10 @@ guint                  gtk_list_base_get_focus_position         (GtkListBase    
 GtkListItemManager *   gtk_list_base_get_manager                (GtkListBase            *self);
 GtkScrollablePolicy    gtk_list_base_get_scroll_policy          (GtkListBase            *self,
                                                                  GtkOrientation          orientation);
+gboolean               gtk_list_base_get_allocation_along       (GtkListBase            *base,
+                                                                 guint                   pos,
+                                                                 int                    *offset,
+                                                                 int                    *size);
 void                   gtk_list_base_get_adjustment_values      (GtkListBase            *self,
                                                                  GtkOrientation          orientation,
                                                                  int                    *value,
