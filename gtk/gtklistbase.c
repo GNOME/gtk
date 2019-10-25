@@ -157,8 +157,83 @@ gtk_list_base_move_focus (GtkListBase    *self,
 }
 
 /*
+ * gtk_list_base_get_allocation_along:
+ * @self: a #GtkListBase
+ * @pos: item to get the size of
+ * @offset: (out caller-allocates) (allow-none) set to the offset
+ *     of the top/left of the item
+ * @size: (out caller-allocates) (allow-none) set to the size of
+ *     the item in the direction
+ *
+ * Computes the allocation of the item in the direction along the sizing
+ * axis.
+ *
+ * Returns: %TRUE if the item exists and has an allocation, %FALSE otherwise
+ **/
+gboolean
+gtk_list_base_get_allocation_along (GtkListBase *self,
+                                    guint        pos,
+                                    int         *offset,
+                                    int         *size)
+{
+  return GTK_LIST_BASE_GET_CLASS (self)->get_allocation_along (self, pos, offset, size);
+}
+
+/*
+ * gtk_list_base_get_allocation_across:
+ * @self: a #GtkListBase
+ * @pos: item to get the size of
+ * @offset: (out caller-allocates) (allow-none) set to the offset
+ *     of the top/left of the item
+ * @size: (out caller-allocates) (allow-none) set to the size of
+ *     the item in the direction
+ *
+ * Computes the allocation of the item in the direction across to the sizing
+ * axis.
+ *
+ * Returns: %TRUE if the item exists and has an allocation, %FALSE otherwise
+ **/
+static gboolean
+gtk_list_base_get_allocation_across (GtkListBase *self,
+                                     guint        pos,
+                                     int         *offset,
+                                     int         *size)
+{
+  return GTK_LIST_BASE_GET_CLASS (self)->get_allocation_across (self, pos, offset, size);
+}
+
+/*
+ * gtk_list_base_get_position_from_allocation:
+ * @self: a #GtkListBase
+ * @across: position in pixels in the direction cross to the list
+ * @along:  position in pixels in the direction of the list
+ * @pos: (out caller-allocates): set to the looked up position
+ * @area: (out caller-allocates) (allow-none): set to the area occupied
+ *     by the returned position.
+ *
+ * Given a coordinate in list coordinates, determine the position of the
+ * item that occupies that position.
+ *
+ * It is possible for @area to not include the point given by (across, along).
+ * This will happen for example in the last row of a gridview, where the
+ * last item will be returned for the whole width, even if there are empty
+ * cells.
+ *
+ * Returns: %TRUE on success or %FALSE if no position occupies the given offset.
+ **/
+static guint
+gtk_list_base_get_position_from_allocation (GtkListBase           *self,
+                                            int                    across,
+                                            int                    along,
+                                            guint                 *pos,
+                                            cairo_rectangle_int_t *area)
+{
+  return GTK_LIST_BASE_GET_CLASS (self)->get_position_from_allocation (self, across, along, pos, area);
+}
+
+/*
  * gtk_list_base_select_item:
- * @self: a %GtkListBase
+ * @self: a #GtkListBase
  * @pos: item to select
  * @modify: %TRUE if the selection should be modified, %FALSE
  *     if a new selection should be done. This is usually set
@@ -559,6 +634,221 @@ gtk_list_base_move_cursor_to_start (GtkWidget *widget,
   gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), 0, select, modify, extend);
 }
 
+#if 0
+static void
+gtk_grid_view_compute_scroll_align (GtkGridView   *self,
+                                    GtkOrientation orientation,
+                                    int            cell_start,
+                                    int            cell_end,
+                                    double         current_align,
+                                    gboolean       current_start,
+                                    double        *new_align,
+                                    gboolean      *new_start)
+{
+  int visible_start, visible_size, visible_end;
+  int cell_size;
+
+  gtk_list_base_get_adjustment_values (GTK_LIST_BASE (self),
+                                       orientation,
+                                       &visible_start, NULL, &visible_size);
+  visible_end = visible_start + visible_size;
+  cell_size = cell_end - cell_start;
+
+  if (cell_size <= visible_size)
+    {
+      if (cell_start < visible_start)
+        {
+          *new_align = 0.0;
+          *new_start = TRUE;
+        }
+      else if (cell_end > visible_end)
+        {
+          *new_align = 1.0;
+          *new_start = FALSE;
+        }
+      else
+        {
+          /* XXX: start or end here? */
+          *new_start = TRUE;
+          *new_align = (double) (cell_start - visible_start) / visible_size;
+        }
+    }
+  else
+    {
+      /* This is the unlikely case of the cell being higher than the visible area */
+      if (cell_start > visible_start)
+        {
+          *new_align = 0.0;
+          *new_start = TRUE;
+        }
+      else if (cell_end < visible_end)
+        {
+          *new_align = 1.0;
+          *new_start = FALSE;
+        }
+      else
+        {
+          /* the cell already covers the whole screen */
+          *new_align = current_align;
+          *new_start = current_start;
+        }
+    }
+}
+
+static void
+gtk_grid_view_update_focus_tracker (GtkGridView *self)
+{
+  GtkWidget *focus_child;
+  guint pos;
+
+  focus_child = gtk_widget_get_focus_child (GTK_WIDGET (self));
+  if (!GTK_IS_LIST_ITEM (focus_child))
+    return;
+
+  pos = gtk_list_item_get_position (GTK_LIST_ITEM (focus_child));
+  if (pos != gtk_list_item_tracker_get_position (self->item_manager, self->focus))
+    {
+      gtk_list_item_tracker_set_position (self->item_manager,
+                                          self->focus,
+                                          pos,
+                                          self->max_columns,
+                                          self->max_columns);
+    }
+}
+
+static void
+gtk_grid_view_scroll_to_item (GtkWidget  *widget,
+                              const char *action_name,
+                              GVariant   *parameter)
+{
+  GtkGridView *self = GTK_GRID_VIEW (widget);
+  int start, end;
+  double xalign, yalign;
+  gboolean xstart, ystart;
+  guint pos;
+
+  if (!g_variant_check_format_string (parameter, "u", FALSE))
+    return;
+
+  g_variant_get (parameter, "u", &pos);
+
+  /* figure out primary orientation and if position is valid */
+  if (!gtk_grid_view_get_size_at_position (self, pos, &start, &end))
+    return;
+
+  end += start;
+  gtk_grid_view_compute_scroll_align (self,
+                                      gtk_list_base_get_orientation (GTK_LIST_BASE (self)),
+                                      start, end,
+                                      self->anchor_yalign, self->anchor_ystart,
+                                      &yalign, &ystart);
+
+  /* now do the same thing with the other orientation */
+  start = floor (self->column_width * (pos % self->n_columns));
+  end = floor (self->column_width * ((pos % self->n_columns) + 1));
+  gtk_grid_view_compute_scroll_align (self,
+                                      gtk_list_base_get_opposite_orientation (GTK_LIST_BASE (self)),
+                                      start, end,
+                                      self->anchor_xalign, self->anchor_xstart,
+                                      &xalign, &xstart);
+
+  gtk_grid_view_set_anchor (self, pos, xalign, xstart, yalign, ystart);
+
+  /* HACK HACK HACK
+   *
+   * GTK has no way to track the focused child. But we now that when a listitem
+   * gets focus, it calls this action. So we update our focus tracker from here
+   * because it's the closest we can get to accurate tracking.
+   */
+  gtk_grid_view_update_focus_tracker (self);
+}
+#endif
+
+static void
+gtk_list_base_move_cursor_page_up (GtkWidget *widget,
+                                   GVariant  *args,
+                                   gpointer   unused)
+{
+  GtkListBase *self = GTK_LIST_BASE (widget);
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  gboolean select, modify, extend;
+  cairo_rectangle_int_t area, new_area;
+  int page_size;
+  guint pos, new_pos;
+
+  pos = gtk_list_base_get_focus_position (self);
+  page_size = gtk_adjustment_get_page_size (priv->adjustment[priv->orientation]);
+  if (!gtk_list_base_get_allocation_along (self, pos, &area.y, &area.height) ||
+      !gtk_list_base_get_allocation_across (self, pos, &area.x, &area.width))
+    return;
+  if (!gtk_list_base_get_position_from_allocation (self,
+                                                   area.x + area.width / 2,
+                                                   MAX (0, area.y + area.height - page_size),
+                                                   &new_pos,
+                                                   &new_area))
+    return;
+
+  /* We want the whole row to be visible */
+  if (new_area.y < MAX (0, area.y + area.height - page_size))
+    new_pos = gtk_list_base_move_focus_along (self, new_pos, 1);
+  /* But we definitely want to move if we can */
+  if (new_pos >= pos)
+    {
+      new_pos = gtk_list_base_move_focus_along (self, new_pos, -1);
+      if (new_pos == pos)
+        return;
+    }
+
+  g_variant_get (args, "(bbb)", &select, &modify, &extend);
+
+  gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), new_pos, select, modify, extend);
+}
+
+static void
+gtk_list_base_move_cursor_page_down (GtkWidget *widget,
+                                     GVariant  *args,
+                                     gpointer   unused)
+{
+  GtkListBase *self = GTK_LIST_BASE (widget);
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  gboolean select, modify, extend;
+  cairo_rectangle_int_t area, new_area;
+  int page_size, end;
+  guint pos, new_pos;
+
+  pos = gtk_list_base_get_focus_position (self);
+  page_size = gtk_adjustment_get_page_size (priv->adjustment[priv->orientation]);
+  end = gtk_adjustment_get_upper (priv->adjustment[priv->orientation]);
+  if (end == 0)
+    return;
+
+  if (!gtk_list_base_get_allocation_along (self, pos, &area.y, &area.height) ||
+      !gtk_list_base_get_allocation_across (self, pos, &area.x, &area.width))
+    return;
+
+  if (!gtk_list_base_get_position_from_allocation (self,
+                                                   area.x + area.width / 2,
+                                                   MIN (end, area.y + page_size) - 1,
+                                                   &new_pos,
+                                                   &new_area))
+    return;
+
+  /* We want the whole row to be visible */
+  if (new_area.y + new_area.height > MIN (end, area.y + page_size))
+    new_pos = gtk_list_base_move_focus_along (self, new_pos, -1);
+  /* But we definitely want to move if we can */
+  if (new_pos <= pos)
+    {
+      new_pos = gtk_list_base_move_focus_along (self, new_pos, 1);
+      if (new_pos == pos)
+        return;
+    }
+
+  g_variant_get (args, "(bbb)", &select, &modify, &extend);
+
+  gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), new_pos, select, modify, extend);
+}
+
 static void
 gtk_list_base_move_cursor_to_end (GtkWidget *widget,
                                   GVariant  *args,
@@ -758,6 +1048,10 @@ gtk_list_base_class_init (GtkListBaseClass *klass)
   gtk_list_base_add_custom_move_binding (binding_set, GDK_KEY_KP_Home, gtk_list_base_move_cursor_to_start);
   gtk_list_base_add_custom_move_binding (binding_set, GDK_KEY_End, gtk_list_base_move_cursor_to_end);
   gtk_list_base_add_custom_move_binding (binding_set, GDK_KEY_KP_End, gtk_list_base_move_cursor_to_end);
+  gtk_list_base_add_custom_move_binding (binding_set, GDK_KEY_Page_Up, gtk_list_base_move_cursor_page_up);
+  gtk_list_base_add_custom_move_binding (binding_set, GDK_KEY_KP_Page_Up, gtk_list_base_move_cursor_page_up);
+  gtk_list_base_add_custom_move_binding (binding_set, GDK_KEY_Page_Down, gtk_list_base_move_cursor_page_down);
+  gtk_list_base_add_custom_move_binding (binding_set, GDK_KEY_KP_Page_Down, gtk_list_base_move_cursor_page_down);
 
   gtk_binding_entry_add_action (binding_set, GDK_KEY_a, GDK_CONTROL_MASK, "list.select-all", NULL);
   gtk_binding_entry_add_action (binding_set, GDK_KEY_slash, GDK_CONTROL_MASK, "list.select-all", NULL);
