@@ -113,6 +113,7 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkbindings.h"
+#include "gtkbinlayout.h"
 #include "gtkenums.h"
 #include "gtktypebuiltins.h"
 #include "gtkmnemonichash.h"
@@ -505,39 +506,6 @@ surface_moved_to_rect (GdkSurface   *surface,
 }
 
 static void
-measure_contents (GtkGizmo       *gizmo,
-                  GtkOrientation  orientation,
-                  int             for_size,
-                  int            *minimum,
-                  int            *natural,
-                  int            *minimum_baseline,
-                  int            *natural_baseline)
-{
-  GtkPopover *popover = GTK_POPOVER (gtk_widget_get_parent (GTK_WIDGET (gizmo)));
-  GtkWidget *child = gtk_bin_get_child (GTK_BIN (popover));
-
-  if (child)
-    gtk_widget_measure (child, orientation, for_size,
-                        minimum, natural,
-                        minimum_baseline, natural_baseline);
-}
-
-static void
-allocate_contents (GtkGizmo *gizmo,
-                   int       width,
-                   int       height,
-                   int       baseline)
-{
-  GtkPopover *popover = GTK_POPOVER (gtk_widget_get_parent (GTK_WIDGET (gizmo)));
-  GtkWidget *child = gtk_bin_get_child (GTK_BIN (popover));
-
-  if (child)
-    gtk_widget_size_allocate (child,
-                              &(GtkAllocation) { 0, 0, width, height
-                              }, -1);
-}
-
-static void
 gtk_popover_activate_default (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
@@ -622,11 +590,8 @@ gtk_popover_init (GtkPopover *popover)
                            G_CALLBACK (node_style_changed_cb), popover, 0);
   g_object_unref (priv->arrow_node);
 
-  priv->contents_widget = gtk_gizmo_new ("contents",
-                                         measure_contents,
-                                         allocate_contents,
-                                         NULL,
-                                         NULL);
+  priv->contents_widget = gtk_gizmo_new ("contents", NULL, NULL, NULL, NULL);
+  gtk_widget_set_layout_manager (priv->contents_widget, gtk_bin_layout_new ());
   gtk_widget_set_parent (priv->contents_widget, GTK_WIDGET (popover));
 
   context = gtk_widget_get_style_context (GTK_WIDGET (popover));
