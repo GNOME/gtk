@@ -27,7 +27,6 @@
 #include "gtkradiobutton.h"
 
 #include "gtkwidgetprivate.h"
-#include "gtktogglebuttonprivate.h"
 #include "gtkcheckbuttonprivate.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
@@ -242,7 +241,7 @@ gtk_radio_button_init (GtkRadioButton *radio_button)
 
   gtk_widget_set_receives_default (GTK_WIDGET (radio_button), FALSE);
 
-  _gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio_button), TRUE);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio_button), TRUE);
 
   priv->group = g_slist_prepend (NULL, radio_button);
 
@@ -729,9 +728,6 @@ gtk_radio_button_clicked (GtkButton *button)
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (button);
   GtkToggleButton *tmp_button;
   GSList *tmp_list;
-  gint toggled;
-
-  toggled = FALSE;
 
   g_object_ref (GTK_WIDGET (button));
 
@@ -753,17 +749,13 @@ gtk_radio_button_clicked (GtkButton *button)
 	}
 
       if (tmp_button)
-	{
-	  toggled = TRUE;
-          _gtk_toggle_button_set_active (toggle_button,
-                                         !gtk_toggle_button_get_active (toggle_button));
-	}
+        gtk_toggle_button_set_active (toggle_button,
+                                      !gtk_toggle_button_get_active (toggle_button));
     }
   else
     {
-      toggled = TRUE;
-      _gtk_toggle_button_set_active (toggle_button,
-                                     !gtk_toggle_button_get_active (toggle_button));
+      gtk_toggle_button_set_active (toggle_button,
+                                    !gtk_toggle_button_get_active (toggle_button));
 
       tmp_list = priv->group;
       while (tmp_list)
@@ -777,13 +769,6 @@ gtk_radio_button_clicked (GtkButton *button)
 	      break;
 	    }
 	}
-    }
-
-  if (toggled)
-    {
-      gtk_toggle_button_toggled (toggle_button);
-
-      g_object_notify (G_OBJECT (toggle_button), "active");
     }
 
   gtk_widget_queue_draw (GTK_WIDGET (button));
