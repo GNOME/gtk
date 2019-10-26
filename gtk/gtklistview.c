@@ -27,8 +27,6 @@
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtkrbtreeprivate.h"
-#include "gtkselectionmodel.h"
-#include "gtksingleselection.h"
 #include "gtkstylecontext.h"
 #include "gtkwidgetprivate.h"
 
@@ -57,17 +55,10 @@ struct _GtkListView
 {
   GtkListBase parent_instance;
 
-  GListModel *model;
   GtkListItemManager *item_manager;
   gboolean show_separators;
 
   int list_width;
-
-  GtkListItemTracker *anchor;
-  double anchor_align;
-  gboolean anchor_start;
-  /* the item that has input focus */
-  GtkListItemTracker *focus;
 };
 
 struct _GtkListViewClass
@@ -195,37 +186,6 @@ gtk_list_view_get_row_at_y (GtkListView *self,
 }
 
 static int
-gtk_list_view_get_position_at_y (GtkListView *self,
-                                 int          y,
-                                 int         *offset,
-                                 int         *height)
-{
-  ListRow *row;
-  guint pos;
-  int remaining;
-
-  row = gtk_list_view_get_row_at_y (self, y, &remaining);
-  if (row == NULL)
-    {
-      pos = GTK_INVALID_LIST_POSITION;
-      if (offset)
-        *offset = 0;
-      if (height)
-        *height = 0;
-      return GTK_INVALID_LIST_POSITION;
-    }
-  pos = gtk_list_item_manager_get_item_position (self->item_manager, row);
-  g_assert (remaining < row->height * row->parent.n_items);
-  pos += remaining / row->height;
-  if (offset)
-    *offset = remaining % row->height;
-  if (height)
-    *height = row->height;
-
-  return pos;
-}
-
-static int
 list_row_get_y (GtkListView *self,
                 ListRow     *row)
 {
@@ -275,90 +235,6 @@ gtk_list_view_get_list_height (GtkListView *self)
 
   aug = gtk_list_item_manager_get_item_augment (self->item_manager, row);
   return aug->height;
-}
-
-static void
-gtk_list_view_set_anchor (GtkListView *self,
-                          guint        position,
-                          double       align,
-                          gboolean     start)
-{
-  gtk_list_item_tracker_set_position (self->item_manager,
-                                      self->anchor,
-                                      position,
-                                      GTK_LIST_VIEW_EXTRA_ITEMS + GTK_LIST_VIEW_MAX_LIST_ITEMS * align,
-                                      GTK_LIST_VIEW_EXTRA_ITEMS + GTK_LIST_VIEW_MAX_LIST_ITEMS - 1 - GTK_LIST_VIEW_MAX_LIST_ITEMS * align);
-  if (self->anchor_align != align || self->anchor_start != start)
-    {
-      self->anchor_align = align;
-      self->anchor_start = start;
-      gtk_widget_queue_allocate (GTK_WIDGET (self));
-    }
-}
-
-static void
-gtk_list_view_adjustment_value_changed (GtkListBase    *base,
-                                        GtkOrientation  orientation)
-{
-  GtkListView *self = GTK_LIST_VIEW (base);
-
-  if (orientation == gtk_list_base_get_orientation (GTK_LIST_BASE (self)))
-    {
-      int page_size, total_size, value, from_start;
-      int row_start, row_end;
-      double align;
-      gboolean top;
-      guint pos;
-
-      gtk_list_base_get_adjustment_values (base, orientation, &value, &total_size, &page_size);
-
-      /* Compute how far down we've scrolled. That's the height
-       * we want to align to. */
-      align = (double) value / (total_size - page_size);
-      from_start = round (align * page_size);
-      
-      pos = gtk_list_view_get_position_at_y (self,
-                                             value + from_start,
-                                             &row_start, &row_end);
-      if (pos != GTK_INVALID_LIST_POSITION)
-        {
-          /* offset from value - which is where we wanna scroll to */
-          row_start = from_start - row_start;
-          row_end += row_start;
-
-          /* find an anchor that is in the visible area */
-          if (row_start > 0 && row_end < page_size)
-            top = from_start - row_start <= row_end - from_start;
-          else if (row_start > 0)
-            top = TRUE;
-          else if (row_end < page_size)
-            top = FALSE;
-          else
-            {
-              /* This is the case where the row occupies the whole visible area.
-               * It's also the only case where align will not end up in [0..1] */
-              top = from_start - row_start <= row_end - from_start;
-            }
-
-          /* Now compute the align so that when anchoring to the looked
-           * up row, the position is pixel-exact.
-           */
-          align = (double) (top ? row_start : row_end) / page_size;
-        }
-      else
-        {
-          /* Happens if we scroll down to the end - we will query
-           * exactly the pixel behind the last one we can get a row for.
-           * So take the last row. */
-          pos = g_list_model_get_n_items (self->model) - 1;
-          align = 1.0;
-          top = FALSE;
-        }
-
-      gtk_list_view_set_anchor (self, pos, align, top);
-    }
-  
-  gtk_widget_queue_allocate (GTK_WIDGET (self));
 }
 
 static gboolean
@@ -414,14 +290,11 @@ gtk_list_view_move_focus_along (GtkListBase *base,
                                 guint        pos,
                                 int          steps)
 {
-  GtkListView *self = GTK_LIST_VIEW (base);
-
   if (steps < 0)
     return pos - MIN (pos, -steps);
   else
     {
-      guint n_items = self->model ? g_list_model_get_n_items (self->model) : 0;
-      pos += MIN (n_items - pos - 1, steps);
+      pos += MIN (gtk_list_base_get_n_items (base) - pos - 1, steps);
     }
 
   return pos;
@@ -466,43 +339,6 @@ gtk_list_view_move_focus_across (GtkListBase *base,
                                  int          steps)
 {
   return pos;
-}
-
-static int 
-gtk_list_view_update_adjustments (GtkListView    *self,
-                                  GtkOrientation  orientation)
-{
-  int upper, page_size, value;
-
-  page_size = gtk_widget_get_size (GTK_WIDGET (self), orientation);
-
-  if (orientation == gtk_list_base_get_orientation (GTK_LIST_BASE (self)))
-    {
-      int offset, size;
-      guint anchor_pos;
-
-      upper = gtk_list_view_get_list_height (self);
-      anchor_pos = gtk_list_item_tracker_get_position (self->item_manager, self->anchor);
-
-      if (!gtk_list_base_get_allocation_along (GTK_LIST_BASE (self),
-                                               anchor_pos,
-                                               &offset,
-                                               &size))
-        {
-          g_assert_not_reached ();
-        }
-      if (!self->anchor_start)
-        offset += size;
-
-      value = offset - self->anchor_align * page_size;
-    }
-  else
-    {
-      upper = self->list_width;
-      gtk_list_base_get_adjustment_values (GTK_LIST_BASE (self), orientation, &value, NULL, NULL);
-    }
-
-  return gtk_list_base_set_adjustment_values (GTK_LIST_BASE (self), orientation, value, upper, page_size);
 }
 
 static int
@@ -741,8 +577,14 @@ gtk_list_view_size_allocate (GtkWidget *widget,
     }
 
   /* step 3: update the adjustments */
-  x = - gtk_list_view_update_adjustments (self, opposite_orientation);
-  y = - gtk_list_view_update_adjustments (self, orientation);
+  gtk_list_base_update_adjustments (GTK_LIST_BASE (self),
+                                    self->list_width,
+                                    gtk_list_view_get_list_height (self),
+                                    gtk_widget_get_size (widget, opposite_orientation),
+                                    gtk_widget_get_size (widget, orientation),
+                                    &x, &y);
+  x = -x;
+  y = -y;
 
   /* step 4: actually allocate the widgets */
 
@@ -769,18 +611,6 @@ gtk_list_view_dispose (GObject *object)
 {
   GtkListView *self = GTK_LIST_VIEW (object);
 
-  g_clear_object (&self->model);
-
-  if (self->anchor)
-    {
-      gtk_list_item_tracker_free (self->item_manager, self->anchor);
-      self->anchor = NULL;
-    }
-  if (self->focus)
-    {
-      gtk_list_item_tracker_free (self->item_manager, self->focus);
-      self->focus = NULL;
-    }
   self->item_manager = NULL;
 
   G_OBJECT_CLASS (gtk_list_view_parent_class)->dispose (object);
@@ -801,7 +631,7 @@ gtk_list_view_get_property (GObject    *object,
       break;
 
     case PROP_MODEL:
-      g_value_set_object (value, self->model);
+      g_value_set_object (value, gtk_list_base_get_model (GTK_LIST_BASE (self)));
       break;
 
     case PROP_SHOW_SEPARATORS:
@@ -843,127 +673,6 @@ gtk_list_view_set_property (GObject      *object,
 }
 
 static void
-gtk_list_view_update_focus_tracker (GtkListView *self)
-{
-  GtkWidget *focus_child;
-  guint pos;
-
-  focus_child = gtk_widget_get_focus_child (GTK_WIDGET (self));
-  if (!GTK_IS_LIST_ITEM (focus_child))
-    return;
-
-  pos = gtk_list_item_get_position (GTK_LIST_ITEM (focus_child));
-  if (pos != gtk_list_item_tracker_get_position (self->item_manager, self->focus))
-    {
-      gtk_list_item_tracker_set_position (self->item_manager,
-                                          self->focus,
-                                          pos,
-                                          GTK_LIST_VIEW_EXTRA_ITEMS,
-                                          GTK_LIST_VIEW_EXTRA_ITEMS);
-    }
-}
-
-static void
-gtk_list_view_compute_scroll_align (GtkListView    *self,
-                                    GtkOrientation  orientation,
-                                    int             cell_start,
-                                    int             cell_end,
-                                    double          current_align,
-                                    gboolean        current_start,
-                                    double         *new_align,
-                                    gboolean       *new_start)
-{
-  int visible_start, visible_size, visible_end;
-  int cell_size;
-
-  gtk_list_base_get_adjustment_values (GTK_LIST_BASE (self),
-                                       orientation,
-                                       &visible_start,
-                                       NULL,
-                                       &visible_size);
-  visible_end = visible_start + visible_size;
-  cell_size = cell_end - cell_start;
-
-  if (cell_size <= visible_size)
-    {
-      if (cell_start < visible_start)
-        {
-          *new_align = 0.0;
-          *new_start = TRUE;
-        }
-      else if (cell_end > visible_end)
-        {
-          *new_align = 1.0;
-          *new_start = FALSE;
-        }
-      else
-        {
-          /* XXX: start or end here? */
-          *new_start = TRUE;
-          *new_align = (double) (cell_start - visible_start) / visible_size;
-        }
-    }
-  else
-    {
-      /* This is the unlikely case of the cell being higher than the visible area */
-      if (cell_start > visible_start)
-        {
-          *new_align = 0.0;
-          *new_start = TRUE;
-        }
-      else if (cell_end < visible_end)
-        {
-          *new_align = 1.0;
-          *new_start = FALSE;
-        }
-      else
-        {
-          /* the cell already covers the whole screen */
-          *new_align = current_align;
-          *new_start = current_start;
-        }
-    }
-}
-
-static void
-gtk_list_view_scroll_to_item (GtkWidget  *widget,
-                              const char *action_name,
-                              GVariant   *parameter)
-{
-  GtkListView *self = GTK_LIST_VIEW (widget);
-  int start, end;
-  double align;
-  gboolean top;
-  guint pos;
-
-  if (!g_variant_check_format_string (parameter, "u", FALSE))
-    return;
-
-  g_variant_get (parameter, "u", &pos);
-
-  /* figure out primary orientation and if position is valid */
-  if (!gtk_list_base_get_allocation_along (GTK_LIST_BASE (self), pos, &start, &end))
-    return;
-
-  end += start;
-  gtk_list_view_compute_scroll_align (self,
-                                      gtk_list_base_get_orientation (GTK_LIST_BASE (self)),
-                                      start, end,
-                                      self->anchor_align, self->anchor_start,
-                                      &align, &top);
-
-  gtk_list_view_set_anchor (self, pos, align, top);
-
-  /* HACK HACK HACK
-   *
-   * GTK has no way to track the focused child. But we now that when a listitem
-   * gets focus, it calls this action. So we update our focus tracker from here
-   * because it's the closest we can get to accurate tracking.
-   */
-  gtk_list_view_update_focus_tracker (self);
-}
-
-static void
 gtk_list_view_activate_item (GtkWidget  *widget,
                              const char *action_name,
                              GVariant   *parameter)
@@ -975,7 +684,7 @@ gtk_list_view_activate_item (GtkWidget  *widget,
     return;
 
   g_variant_get (parameter, "u", &pos);
-  if (self->model == NULL || pos >= g_list_model_get_n_items (self->model))
+  if (pos >= gtk_list_base_get_n_items (GTK_LIST_BASE (self)))
     return;
 
   g_signal_emit (widget, signals[ACTIVATE], 0, pos);
@@ -992,7 +701,6 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   list_base_class->list_item_size = sizeof (ListRow);
   list_base_class->list_item_augment_size = sizeof (ListRowAugment);
   list_base_class->list_item_augment_func = list_row_augment;
-  list_base_class->adjustment_value_changed = gtk_list_view_adjustment_value_changed;
   list_base_class->get_allocation_along = gtk_list_view_get_allocation_along;
   list_base_class->get_allocation_across = gtk_list_view_get_allocation_across;
   list_base_class->get_position_from_allocation = gtk_list_view_get_position_from_allocation;
@@ -1080,18 +788,6 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                                    "u",
                                    gtk_list_view_activate_item);
 
-  /**
-   * GtkListView|list.scroll-to-item:
-   * @position: position of item to scroll to
-   *
-   * Scrolls to the item given in @position with the minimum amount
-   * of scrolling required. If the item is already visible, nothing happens.
-   */
-  gtk_widget_class_install_action (widget_class,
-                                   "list.scroll-to-item",
-                                   "u",
-                                   gtk_list_view_scroll_to_item);
-
   gtk_widget_class_set_css_name (widget_class, I_("list"));
 }
 
@@ -1099,8 +795,10 @@ static void
 gtk_list_view_init (GtkListView *self)
 {
   self->item_manager = gtk_list_base_get_manager (GTK_LIST_BASE (self));
-  self->focus = gtk_list_item_tracker_new (self->item_manager);
-  self->anchor = gtk_list_item_tracker_new (self->item_manager);
+
+  gtk_list_base_set_anchor_max_widgets (GTK_LIST_BASE (self),
+                                        GTK_LIST_VIEW_MAX_LIST_ITEMS,
+                                        GTK_LIST_VIEW_EXTRA_ITEMS);
 }
 
 /**
@@ -1168,7 +866,7 @@ gtk_list_view_get_model (GtkListView *self)
 {
   g_return_val_if_fail (GTK_IS_LIST_VIEW (self), NULL);
 
-  return self->model;
+  return gtk_list_base_get_model (GTK_LIST_BASE (self));
 }
 
 /**
@@ -1188,31 +886,8 @@ gtk_list_view_set_model (GtkListView *self,
   g_return_if_fail (GTK_IS_LIST_VIEW (self));
   g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
 
-  if (self->model == model)
+  if (!gtk_list_base_set_model (GTK_LIST_BASE (self), model))
     return;
-
-  g_clear_object (&self->model);
-
-  if (model)
-    {
-      GtkSelectionModel *selection_model;
-
-      self->model = g_object_ref (model);
-
-      if (GTK_IS_SELECTION_MODEL (model))
-        selection_model = GTK_SELECTION_MODEL (g_object_ref (model));
-      else
-        selection_model = GTK_SELECTION_MODEL (gtk_single_selection_new (model));
-
-      gtk_list_item_manager_set_model (self->item_manager, selection_model);
-      gtk_list_view_set_anchor (self, 0, 0.0, TRUE);
-
-      g_object_unref (selection_model);
-    }
-  else
-    {
-      gtk_list_item_manager_set_model (self->item_manager, NULL);
-    }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
 }
