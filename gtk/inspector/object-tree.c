@@ -133,24 +133,8 @@ static GListModel *
 object_tree_widget_get_children (GObject *object)
 {
   GtkWidget *widget = GTK_WIDGET (object);
-  GtkFlattenListModel *flatten;
-  GListStore *list;
-  GListModel *sublist;
 
-  list = g_list_store_new (G_TYPE_LIST_MODEL);
-
-  sublist = gtk_widget_observe_children (widget);
-  g_list_store_append (list, sublist);
-  g_object_unref (sublist);
-
-  sublist = gtk_widget_observe_controllers (widget);
-  g_list_store_append (list, sublist);
-  g_object_unref (sublist);
-
-  flatten = gtk_flatten_list_model_new (G_TYPE_OBJECT, G_LIST_MODEL (list));
-  g_object_unref (list);
-
-  return G_LIST_MODEL (flatten);
+  return gtk_widget_observe_children (widget);
 }
 
 static GListModel *
@@ -480,12 +464,6 @@ object_tree_application_get_children (GObject *object)
   return list_model_for_properties (object, (const char *[3]) { "app-menu", "menubar", NULL });
 }
 
-static GObject *
-object_tree_event_controller_get_parent (GObject *object)
-{
-  return G_OBJECT (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (object)));
-}
-
 /* Note:
  * This tree must be sorted with the most specific types first.
  * We iterate over it top to bottom and return the first match
@@ -561,11 +539,6 @@ static const ObjectTreeClassFuncs object_tree_class_funcs[] = {
     gtk_cell_layout_get_type,
     object_tree_get_parent_default,
     object_tree_cell_layout_get_children
-  },
-  {
-    gtk_event_controller_get_type,
-    object_tree_event_controller_get_parent,
-    object_tree_get_children_default
   },
   {
     g_object_get_type,
@@ -671,11 +644,6 @@ gtk_inspector_get_object_name (GObject *object)
       id = gtk_buildable_get_name (GTK_BUILDABLE (object));
       if (id != NULL && !g_str_has_prefix (id, "___object_"))
         return id;
-    }
-
-  if (GTK_IS_EVENT_CONTROLLER (object))
-    {
-      return gtk_event_controller_get_name (GTK_EVENT_CONTROLLER (object));
     }
 
   return NULL;
