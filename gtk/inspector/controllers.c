@@ -58,7 +58,7 @@ row_activated (GtkListBox              *box,
                GtkInspectorControllers *sl)
 {
   GObject *controller;
-  
+
   controller = G_OBJECT (g_object_get_data (G_OBJECT (row), "controller"));
   gtk_inspector_object_tree_select_object (sl->priv->object_tree, controller);
 }
@@ -120,7 +120,6 @@ create_controller_widget (gpointer item,
   GtkWidget *combo;
 
   row = gtk_list_box_row_new ();
-  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
   gtk_container_add (GTK_CONTAINER (row), box);
   g_object_set (box, "margin", 10, NULL);
