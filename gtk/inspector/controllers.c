@@ -60,7 +60,7 @@ row_activated (GtkListBox              *box,
   GObject *controller;
 
   controller = G_OBJECT (g_object_get_data (G_OBJECT (row), "controller"));
-  gtk_inspector_object_tree_select_object (sl->priv->object_tree, controller);
+  gtk_inspector_object_tree_activate_object (sl->priv->object_tree, controller);
 }
 
 static void
