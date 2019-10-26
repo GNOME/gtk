@@ -68,21 +68,27 @@ guint                  gtk_list_base_get_focus_position         (GtkListBase    
 GtkListItemManager *   gtk_list_base_get_manager                (GtkListBase            *self);
 GtkScrollablePolicy    gtk_list_base_get_scroll_policy          (GtkListBase            *self,
                                                                  GtkOrientation          orientation);
-gboolean               gtk_list_base_get_allocation_along       (GtkListBase            *base,
-                                                                 guint                   pos,
-                                                                 int                    *offset,
-                                                                 int                    *size);
-void                   gtk_list_base_get_adjustment_values      (GtkListBase            *self,
-                                                                 GtkOrientation          orientation,
-                                                                 int                    *value,
-                                                                 int                    *size,
-                                                                 int                    *page_size);
-int                    gtk_list_base_set_adjustment_values      (GtkListBase            *self,
-                                                                 GtkOrientation          orientation,
-                                                                 int                     value,
-                                                                 int                     size,
-                                                                 int                     page_size);
+guint                  gtk_list_base_get_n_items                (GtkListBase            *self);
+GListModel *           gtk_list_base_get_model                  (GtkListBase            *self);
+gboolean               gtk_list_base_set_model                  (GtkListBase            *self,
+                                                                 GListModel             *model);
+void                   gtk_list_base_update_adjustments         (GtkListBase            *self,
+                                                                 int                     total_across,
+                                                                 int                     total_along,
+                                                                 int                     page_across,
+                                                                 int                     page_along,
+                                                                 int                    *across,
+                                                                 int                    *along);
 
+void                   gtk_list_base_set_anchor                 (GtkListBase            *self,
+                                                                 guint                   anchor_pos,
+                                                                 double                  anchor_align_across,
+                                                                 GtkPackType             anchor_side_across,
+                                                                 double                  anchor_align_along,
+                                                                 GtkPackType             anchor_side_along);
+void                   gtk_list_base_set_anchor_max_widgets     (GtkListBase            *self,
+                                                                 guint                   n_center,
+                                                                 guint                   n_above_below);
 void                   gtk_list_base_select_item                (GtkListBase            *self,
                                                                  guint                   pos,
                                                                  gboolean                modify,
