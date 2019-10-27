@@ -49,6 +49,8 @@ flowbox flowboxchild { padding: 3px; }
 
 flowbox flowboxchild:selected { outline-offset: -2px; }
 
+coverflow cover { color: white; background-color: #2d2d2d; border: 1px solid black; }
+
 .content-view .tile { margin: 2px; background-color: black; border-radius: 0; padding: 0; }
 
 .content-view .tile:backdrop { background-color: #232323; }
