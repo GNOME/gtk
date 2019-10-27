@@ -80,6 +80,7 @@ void                   gtk_list_base_update_adjustments         (GtkListBase    
                                                                  int                    *across,
                                                                  int                    *along);
 
+guint                  gtk_list_base_get_anchor                 (GtkListBase            *self);
 void                   gtk_list_base_set_anchor                 (GtkListBase            *self,
                                                                  guint                   anchor_pos,
                                                                  double                  anchor_align_across,
