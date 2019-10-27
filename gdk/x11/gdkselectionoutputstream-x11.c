@@ -44,7 +44,7 @@ struct _GdkX11SelectionOutputStreamPrivate {
   Atom xtarget;
   char *property;
   Atom xproperty;
-  const char *type;
+  char *type;
   Atom xtype;
   int format;
   gulong timestamp;
@@ -564,6 +564,7 @@ gdk_x11_selection_output_stream_finalize (GObject *object)
   g_free (priv->selection);
   g_free (priv->target);
   g_free (priv->property);
+  g_free (priv->type);
 
   G_OBJECT_CLASS (gdk_x11_selection_output_stream_parent_class)->finalize (object);
 }
