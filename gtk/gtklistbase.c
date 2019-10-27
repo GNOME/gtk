@@ -1323,6 +1323,15 @@ gtk_list_base_get_manager (GtkListBase *self)
   return priv->item_manager;
 }
 
+guint
+gtk_list_base_get_anchor (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  return gtk_list_item_tracker_get_position (priv->item_manager,
+                                             priv->anchor);
+}
+
 /*
  * gtk_list_base_set_anchor:
  * @self: a #GtkListBase
