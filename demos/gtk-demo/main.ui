@@ -67,7 +67,7 @@
                 <property name="min-content-width">150</property>
 
                 <child>
-                  <object class="GtkListView" id="listview">
+                  <object class="GtkCoverFlow" id="listview">
                     <signal name="activate" handler="listview_activate_cb" swapped="no" />
                     <property name="factory">
                       <object class="GtkBuilderListItemFactory">
