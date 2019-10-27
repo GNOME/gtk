@@ -88,6 +88,7 @@
 #include <gtk/gtkconstraintlayout.h>
 #include <gtk/gtkconstraint.h>
 #include <gtk/gtkcontainer.h>
+#include <gtk/gtkcoverflow.h>
 #include <gtk/gtkcssprovider.h>
 #include <gtk/gtkcustomlayout.h>
 #include <gtk/gtkdebug.h>
