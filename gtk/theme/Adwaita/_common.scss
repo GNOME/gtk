@@ -145,6 +145,12 @@ flowbox {
   }
 }
 
+coverflow cover {
+  color: $text_color;
+  background-color: $base_color;
+  border: 1px solid black;
+}
+
 .content-view .tile {
   margin: 2px;
   background-color: if($variant=='light', transparent, black);
