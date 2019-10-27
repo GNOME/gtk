@@ -1036,11 +1036,11 @@ scrollbar_popup (GtkWidget *scrollbar, GtkWidget *menu)
 }
 
 static void
-listview_activate_cb (GtkListView *listview,
-                      guint        position,
-                      gpointer     user_data)
+listview_activate_cb (GtkCoverFlow *listview,
+                      guint         position,
+                      gpointer      user_data)
 {
-  GtkTreeListRow *row = g_list_model_get_item (gtk_list_view_get_model (listview), position);
+  GtkTreeListRow *row = g_list_model_get_item (gtk_cover_flow_get_model (listview), position);
   GtkDemo *demo = gtk_tree_list_row_get_item (row);
 
   gtk_demo_run (demo, window);
@@ -1111,8 +1111,8 @@ activate (GApplication *app)
                                        NULL);
   selection = gtk_single_selection_new (G_LIST_MODEL (treemodel));
   g_signal_connect (selection, "notify::selected-item", G_CALLBACK (selection_cb), NULL);
-  gtk_list_view_set_model (GTK_LIST_VIEW (listview),
-                           G_LIST_MODEL (selection));
+  gtk_cover_flow_set_model (GTK_COVER_FLOW (listview),
+                            G_LIST_MODEL (selection));
 
   award ("demo-start");
 
