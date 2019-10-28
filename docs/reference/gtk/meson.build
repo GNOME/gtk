@@ -24,6 +24,7 @@ private_headers = [
   'gtkcolorplaneprivate.h',
   'gtkcolorscaleprivate.h',
   'gtkcolorswatchprivate.h',
+  'gtkcolumnviewcolumnprivate.h',
   'gtkcomboboxprivate.h',
   'gtkconstraintexpressionprivate.h',
   'gtkconstraintguideprivate.h',
