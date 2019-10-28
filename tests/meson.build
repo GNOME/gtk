@@ -20,6 +20,7 @@ gtk_tests = [
   ['testcalendar'],
   ['testclipboard2'],
   ['testcombo'],
+  ['testcolumnview'],
   ['testcombochange'],
   ['testcellrenderertext'],
   ['testdialog'],
