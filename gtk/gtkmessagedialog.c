@@ -122,7 +122,6 @@ static void gtk_message_dialog_get_property (GObject          *object,
 					     GParamSpec       *pspec);
 static void gtk_message_dialog_add_buttons  (GtkMessageDialog *message_dialog,
 					     GtkButtonsType    buttons);
-static void      gtk_message_dialog_buildable_interface_init     (GtkBuildableIface *iface);
 
 enum {
   PROP_0,
@@ -136,20 +135,7 @@ enum {
   PROP_MESSAGE_AREA
 };
 
-G_DEFINE_TYPE_WITH_CODE (GtkMessageDialog, gtk_message_dialog, GTK_TYPE_DIALOG,
-                         G_ADD_PRIVATE (GtkMessageDialog)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-                                                gtk_message_dialog_buildable_interface_init))
-
-static GtkBuildableIface *parent_buildable_iface;
-
-static void
-gtk_message_dialog_buildable_interface_init (GtkBuildableIface *iface)
-{
-  parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->custom_tag_start = parent_buildable_iface->custom_tag_start;
-  iface->custom_finished = parent_buildable_iface->custom_finished;
-}
+G_DEFINE_TYPE_WITH_PRIVATE (GtkMessageDialog, gtk_message_dialog, GTK_TYPE_DIALOG)
 
 static void
 gtk_message_dialog_class_init (GtkMessageDialogClass *class)
