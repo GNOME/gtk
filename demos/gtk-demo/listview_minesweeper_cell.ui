@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        <binding name="label">GtkListItem.item:SweeperCell.label</binding>
+      </object>
+    </child>
+  </template>
+</interface>
