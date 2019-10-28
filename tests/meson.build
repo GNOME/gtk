@@ -26,6 +26,7 @@ gtk_tests = [
   ['testcolorchooser'],
   ['testcolorchooser2'],
   ['testcombo'],
+  ['testcolumnview'],
   ['testcombochange'],
   ['testcellrenderertext'],
   ['testdialog'],
