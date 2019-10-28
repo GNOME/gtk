@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="SweeperGame" id="game">
+  </object>
+  <object class="GtkWindow" id="window">
+    <property name="title" translatable="yes">Minesweeper</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="">
+        <property name="show-title-buttons">1</property>
+        <child>
+          <object class="GtkButton">
+            <property name="label">New Game</property>
+            <signal name="clicked" handler="new_game_cb" object="game" swapped="no"/>
+          </object>
+        </child>
+        <child type="title">
+          <object class="GtkImage">
+            <property name="icon-name">trophy-gold</property>
+            <binding name="visible">game.win</binding>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkGridView" id="view">
+        <property name="model">
+          <object class="GtkNoSelection">
+            <property name="model">game</property>
+          </object>
+        </property>
+        <binding name="max-columns">game.width</binding>
+        <binding name="min-columns">game.width</binding>
+        <property name="factory">
+          <object class="GtkBuilderListItemFactory">
+            <property name="resource">/listview_minesweeper/listview_minesweeper_cell.ui</property>
+          </object>
+        </property>
+        <signal name="activate" handler="cell_clicked_cb" object="game" swapped="no"/>
+      </object>
+    </child>
+  </object>
+</interface>
