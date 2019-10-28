@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkcolumnviewcolumn.h"
+#include "gtkcolumnviewcolumnprivate.h"
 
 #include "gtkintl.h"
 #include "gtklistbaseprivate.h"
@@ -257,6 +257,18 @@ gtk_column_view_column_get_column_view (GtkColumnViewColumn *self)
   g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self), NULL);
 
   return self->view;
+}
+
+void
+gtk_column_view_column_set_column_view (GtkColumnViewColumn *self,
+                                        GtkColumnView       *view)
+{
+  if (self->view == view)
+    return;
+
+  self->view = view;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLUMN_VIEW]);
 }
 
 /**
