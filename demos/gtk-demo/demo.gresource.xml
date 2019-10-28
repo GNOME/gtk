@@ -121,6 +121,10 @@
   <gresource prefix="/listview_filebrowser">
     <file>listview_filebrowser.ui</file>
   </gresource>
+  <gresource prefix="/listview_minesweeper">
+    <file>listview_minesweeper.ui</file>
+    <file>listview_minesweeper_cell.ui</file>
+  </gresource>
   <gresource prefix="/listview_weather">
     <file compressed="true">listview_weather.txt</file>
   </gresource>
