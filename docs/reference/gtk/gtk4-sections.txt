@@ -575,6 +575,8 @@ gtk_list_view_get_type
 <TITLE>GtkColumnView</TITLE>
 GtkColumnView
 gtk_column_view_new
+gtk_column_view_append_column
+gtk_column_view_remove_column
 gtk_column_view_get_columns
 gtk_column_view_get_model
 gtk_column_view_set_model
