@@ -50,6 +50,8 @@ gtk_color_button_get_type
 gtk_color_chooser_get_type
 gtk_color_chooser_dialog_get_type
 gtk_color_chooser_widget_get_type
+gtk_column_view_get_type
+gtk_column_view_column_get_type
 gtk_combo_box_get_type
 gtk_combo_box_text_get_type
 gtk_constraint_get_type
