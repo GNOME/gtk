@@ -121,6 +121,10 @@
   <gresource prefix="/listview_filebrowser">
     <file>listview_filebrowser.ui</file>
   </gresource>
+  <gresource prefix="/listview_minesweeper">
+    <file>listview_minesweeper.ui</file>
+    <file>listview_minesweeper_cell.ui</file>
+  </gresource>
   <gresource prefix="/listview_settings">
     <file>listview_settings.ui</file>
   </gresource>
@@ -205,6 +209,7 @@
     <file>links.c</file>
     <file>listbox.c</file>
     <file>listview_filebrowser.c</file>
+    <file>listview_minesweeper.c</file>
     <file>listview_settings.c</file>
     <file>listview_weather.c</file>
     <file>list_store.c</file>
