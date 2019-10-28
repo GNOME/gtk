@@ -79,6 +79,8 @@
 #include <gtk/gtkcolorchooserdialog.h>
 #include <gtk/gtkcolorchooserwidget.h>
 #include <gtk/gtkcolorutils.h>
+#include <gtk/gtkcolumnview.h>
+#include <gtk/gtkcolumnviewcolumn.h>
 #include <gtk/gtkcombobox.h>
 #include <gtk/gtkcomboboxtext.h>
 #include <gtk/gtkconstraintlayout.h>
