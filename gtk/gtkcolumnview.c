@@ -22,7 +22,8 @@
 #include "gtkcolumnview.h"
 
 #include "gtkboxlayout.h"
-#include "gtkcolumnviewcolumn.h"
+#include "gtkbuildable.h"
+#include "gtkcolumnviewcolumnprivate.h"
 #include "gtkintl.h"
 #include "gtklistview.h"
 #include "gtkmain.h"
@@ -68,7 +69,41 @@ enum {
   LAST_SIGNAL
 };
 
-G_DEFINE_TYPE (GtkColumnView, gtk_column_view, GTK_TYPE_WIDGET)
+static GtkBuildableIface *parent_buildable_iface;
+
+static void
+gtk_column_view_buildable_add_child (GtkBuildable  *buildable,
+                                     GtkBuilder    *builder,
+                                     GObject       *child,
+                                     const gchar   *type)
+{
+  if (GTK_IS_COLUMN_VIEW_COLUMN (child))
+    {
+      if (type != NULL)
+        {
+          GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
+        }
+      else
+        {
+          gtk_column_view_append_column (GTK_COLUMN_VIEW (buildable),
+                                         GTK_COLUMN_VIEW_COLUMN (child));
+        }
+    }
+  else
+    {
+      parent_buildable_iface->add_child (buildable, builder, child, type);
+    }
+}
+
+static void
+gtk_column_view_buildable_interface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
+  iface->add_child = gtk_column_view_buildable_add_child;
+}
+G_DEFINE_TYPE_WITH_CODE (GtkColumnView, gtk_column_view, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_column_view_buildable_interface_init))
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -86,7 +121,12 @@ gtk_column_view_dispose (GObject *object)
 {
   GtkColumnView *self = GTK_COLUMN_VIEW (object);
 
-  g_list_store_remove_all (self->columns);
+  while (g_list_model_get_n_items (G_LIST_MODEL (self->columns)) > 0)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), 0);
+      gtk_column_view_remove_column (self, column);
+      g_object_unref (column);
+    }
 
   g_clear_pointer ((GtkWidget **) &self->listview, gtk_widget_unparent);
 
@@ -356,3 +396,57 @@ gtk_column_view_get_show_separators (GtkColumnView *self)
 
   return gtk_list_view_get_show_separators (self->listview);
 }
+
+/**
+ * gtk_column_view_append_column:
+ * @self: a #GtkColumnView
+ * @column: a #GtkColumnViewColumn that hasn't been added to a
+ *     #GtkColumnView yet
+ *
+ * Appends the @column to the end of the columns in @self.
+ **/
+void
+gtk_column_view_append_column (GtkColumnView       *self,
+                               GtkColumnViewColumn *column)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+  g_return_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (column));
+  g_return_if_fail (gtk_column_view_column_get_column_view (column) == NULL);
+
+  gtk_column_view_column_set_column_view (column, self);
+  g_list_store_append (self->columns, column);
+}
+
+/**
+ * gtk_column_view_remove_column:
+ * @self: a #GtkColumnView
+ * @column: a #GtkColumnViewColumn that's part of @self
+ *
+ * Removes the @column from the list of columns of @self.
+ **/
+void
+gtk_column_view_remove_column (GtkColumnView       *self,
+                               GtkColumnViewColumn *column)
+{
+  guint i;
+
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+  g_return_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (column));
+  g_return_if_fail (gtk_column_view_column_get_column_view (column) == self);
+
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->columns)); i++)
+    {
+      GtkColumnViewColumn *item = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+
+      g_object_unref (item);
+      if (item == column)
+        {
+          gtk_column_view_column_set_column_view (column, NULL);
+          g_list_store_remove (self->columns, i);
+          return;
+        }
+    }
+
+  g_assert_not_reached ();
+}
+
