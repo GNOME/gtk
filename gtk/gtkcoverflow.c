@@ -24,6 +24,7 @@
 #include "gtkintl.h"
 #include "gtklistbaseprivate.h"
 #include "gtkmain.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkrbtreeprivate.h"
 #include "gtkwidgetprivate.h"
@@ -564,6 +565,9 @@ gtk_cover_flow_init (GtkCoverFlow *self)
   gtk_list_base_set_anchor_max_widgets (GTK_LIST_BASE (self),
                                         0,
                                         GTK_COVER_FLOW_DISPLAY_ITEMS);
+
+  /* FIXME: this should overwrite the property default, but gobject properties... */
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_HORIZONTAL);
 }
 
 /**
