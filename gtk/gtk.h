@@ -222,6 +222,7 @@
 #include <gtk/gtkshortcutsshortcut.h>
 #include <gtk/gtkshortcutswindow.h>
 #include <gtk/gtkshow.h>
+#include <gtk/gtksignallistitemfactory.h>
 #include <gtk/gtksingleselection.h>
 #include <gtk/gtkslicelistmodel.h>
 #include <gtk/gtksnapshot.h>
