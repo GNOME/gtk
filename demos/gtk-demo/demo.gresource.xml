@@ -208,6 +208,7 @@
     <file>infobar.c</file>
     <file>links.c</file>
     <file>listbox.c</file>
+    <file>listview_applauncher.c</file>
     <file>listview_filebrowser.c</file>
     <file>listview_minesweeper.c</file>
     <file>listview_settings.c</file>
