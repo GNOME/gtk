@@ -548,6 +548,22 @@ gtk_builder_list_item_factory_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtksignallistitemfactory</FILE>
+<TITLE>GtkSignalListItemFactory</TITLE>
+GtkSignalListItemFactory
+gtk_signal_list_item_factory_new
+<SUBSECTION Standard>
+GTK_SIGNAL_LIST_ITEM_FACTORY
+GTK_SIGNAL_LIST_ITEM_FACTORY_CLASS
+GTK_SIGNAL_LIST_ITEM_FACTORY_GET_CLASS
+GTK_IS_SIGNAL_LIST_ITEM_FACTORY
+GTK_IS_SIGNAL_LIST_ITEM_FACTORY_CLASS
+GTK_TYPE_SIGNAL_LIST_ITEM_FACTORY
+<SUBSECTION Private>
+gtk_signal_list_item_factory_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtklistview</FILE>
 <TITLE>GtkListView</TITLE>
 GtkListView
