@@ -145,14 +145,14 @@ gtk_action_helper_action_added (GtkActionHelper    *helper,
                           (helper->target != NULL && parameter_type != NULL &&
                           g_variant_is_of_type (helper->target, parameter_type));
 
-  if (!helper->can_activate)
+  if (helper->target != NULL && !helper->can_activate)
     {
       g_warning ("%s: action %s can't be activated due to parameter type mismatch "
                  "(parameter type %s, target type %s)",
                  "actionhelper",
                  helper->action_name,
                  parameter_type ? g_variant_type_peek_string (parameter_type) : "NULL",
-                 helper->target ? g_variant_get_type_string (helper->target) : "NULL");
+                 g_variant_get_type_string (helper->target));
       return;
     }
 
