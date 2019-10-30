@@ -231,6 +231,10 @@ test_type (gconstpointer data)
 	   strcmp (pspec->name, "rgba") == 0))
 	continue;
 
+      if (g_type_is_a (type, GTK_TYPE_COLUMN_VIEW) &&
+	  strcmp (pspec->name, "columns") == 0)
+	continue;
+
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
       if (g_type_is_a (type, GTK_TYPE_COMBO_BOX) &&
