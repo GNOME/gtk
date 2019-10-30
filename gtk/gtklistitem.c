@@ -319,6 +319,7 @@ gtk_list_item_set_child (GtkListItem *self,
     {
       g_object_ref_sink (child);
       self->child = child;
+
       if (self->owner)
         gtk_list_item_widget_add_child (self->owner, child);
     }
