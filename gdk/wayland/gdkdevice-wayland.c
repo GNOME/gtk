@@ -241,7 +241,6 @@ struct _GdkWaylandSeat
   guint32 repeat_key;
   guint32 repeat_count;
   gint64 repeat_deadline;
-  GSettings *keyboard_settings;
   uint32_t keyboard_time;
   uint32_t keyboard_key_serial;
 
@@ -2012,26 +2011,6 @@ keyboard_handle_leave (void               *data,
 }
 
 static gboolean keyboard_repeat (gpointer data);
-
-static GSettings *
-get_keyboard_settings (GdkWaylandSeat *seat)
-{
-  if (!seat->keyboard_settings)
-    {
-      GSettingsSchemaSource *source;
-      GSettingsSchema *schema;
-
-      source = g_settings_schema_source_get_default ();
-      schema = g_settings_schema_source_lookup (source, "org.gnome.settings-daemon.peripherals.keyboard", FALSE);
-      if (schema != NULL)
-        {
-          seat->keyboard_settings = g_settings_new_full (schema, NULL, NULL);
-          g_settings_schema_unref (schema);
-        }
-    }
-
-  return seat->keyboard_settings;
-}
 
 static gboolean
 get_key_repeat (GdkWaylandSeat *seat,
@@ -4556,7 +4535,6 @@ gdk_wayland_seat_finalize (GObject *object)
   g_object_unref (seat->keymap);
   gdk_wayland_pointer_data_finalize (&seat->pointer_info);
   /* FIXME: destroy data_device */
-  g_clear_object (&seat->keyboard_settings);
   g_clear_object (&seat->drag);
   g_clear_object (&seat->drop);
   g_clear_object (&seat->clipboard);
