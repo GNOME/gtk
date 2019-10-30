@@ -2055,20 +2055,9 @@ get_key_repeat (GdkWaylandSeat *seat,
     }
   else
     {
-      GSettings *keyboard_settings = get_keyboard_settings (seat);
-
-      if (keyboard_settings)
-        {
-          repeat = g_settings_get_boolean (keyboard_settings, "repeat");
-          *delay = g_settings_get_uint (keyboard_settings, "delay");
-          *interval = g_settings_get_uint (keyboard_settings, "repeat-interval");
-        }
-      else
-        {
-          repeat = TRUE;
-          *delay = 400;
-          *interval = 80;
-        }
+      repeat = TRUE;
+      *delay = 400;
+      *interval = 80;
     }
 
   return repeat;
