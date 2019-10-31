@@ -194,7 +194,6 @@ gtk_inspector_logs_class_init (GtkInspectorLogsClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorLogs, vulkan_gsk);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorLogs, shaders);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorLogs, surface);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorLogs, fallback);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorLogs, glyphcache);
 
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorLogs, actions);

@@ -36,7 +36,6 @@
 #define ORTHO_NEAR_PLANE        -10000
 #define ORTHO_FAR_PLANE          10000
 
-#define HIGHLIGHT_FALLBACK 0
 #define DEBUG_OPS          0
 
 #define SHADOW_EXTRA_SIZE  4
@@ -502,12 +501,20 @@ render_fallback_node (GskGLRenderer       *self,
   cairo_fill (cr);
   cairo_restore (cr);
 
-#if HIGHLIGHT_FALLBACK
-  if (gsk_render_node_get_node_type (node) != GSK_CAIRO_NODE)
+#if G_ENABLE_DEBUG
+  if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), FALLBACK))
     {
       cairo_move_to (cr, 0, 0);
       cairo_rectangle (cr, 0, 0, node->bounds.size.width, node->bounds.size.height);
-      cairo_set_source_rgba (cr, 1, 0, 0, 1);
+      if (gsk_render_node_get_node_type (node) == GSK_CAIRO_NODE)
+        cairo_set_source_rgba (cr, 0.3, 0, 1, 0.25);
+      else
+        cairo_set_source_rgba (cr, 1, 0, 0, 0.25);
+      cairo_fill_preserve (cr);
+      if (gsk_render_node_get_node_type (node) == GSK_CAIRO_NODE)
+        cairo_set_source_rgba (cr, 0.3, 0, 1, 1);
+      else
+        cairo_set_source_rgba (cr, 1, 0, 0, 1);
       cairo_stroke (cr);
     }
 #endif

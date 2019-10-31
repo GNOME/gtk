@@ -138,12 +138,6 @@
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton" id="fallback">
-                <property name="label">Fallback</property>
-                <signal name="toggled" handler="flag_toggled"/>
-              </object>
-            </child>
-            <child>
               <object class="GtkCheckButton" id="glyphcache">
                 <property name="label">Glyph Cache</property>
                 <signal name="toggled" handler="flag_toggled"/>
