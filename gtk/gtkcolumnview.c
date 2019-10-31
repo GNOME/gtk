@@ -29,6 +29,7 @@
 #include "gtklistview.h"
 #include "gtkmain.h"
 #include "gtkprivate.h"
+#include "gtkscrollable.h"
 #include "gtkwidgetprivate.h"
 
 /**
@@ -60,8 +61,12 @@ enum
 {
   PROP_0,
   PROP_COLUMNS,
+  PROP_HADJUSTMENT,
+  PROP_HSCROLL_POLICY,
   PROP_MODEL,
   PROP_SHOW_SEPARATORS,
+  PROP_VADJUSTMENT,
+  PROP_VSCROLL_POLICY,
 
   N_PROPS
 };
@@ -106,7 +111,8 @@ gtk_column_view_buildable_interface_init (GtkBuildableIface *iface)
 }
 
 G_DEFINE_TYPE_WITH_CODE (GtkColumnView, gtk_column_view, GTK_TYPE_WIDGET,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_column_view_buildable_interface_init))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_column_view_buildable_interface_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -185,12 +191,28 @@ gtk_column_view_get_property (GObject    *object,
       g_value_set_object (value, self->columns);
       break;
 
+    case PROP_HADJUSTMENT:
+      g_value_set_object (value, gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (self->listview)));
+      break;
+
+    case PROP_HSCROLL_POLICY:
+      g_value_set_enum (value, gtk_scrollable_get_hscroll_policy (GTK_SCROLLABLE (self->listview)));
+      break;
+
     case PROP_MODEL:
       g_value_set_object (value, gtk_list_view_get_model (self->listview));
       break;
 
     case PROP_SHOW_SEPARATORS:
       g_value_set_boolean (value, gtk_list_view_get_show_separators (self->listview));
+      break;
+
+    case PROP_VADJUSTMENT:
+      g_value_set_object (value, gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->listview)));
+      break;
+
+    case PROP_VSCROLL_POLICY:
+      g_value_set_enum (value, gtk_scrollable_get_vscroll_policy (GTK_SCROLLABLE (self->listview)));
       break;
 
     default:
@@ -209,12 +231,44 @@ gtk_column_view_set_property (GObject      *object,
 
   switch (property_id)
     {
+    case PROP_HADJUSTMENT:
+      if (gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (self->listview)) != g_value_get_object (value))
+        {
+          gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (self->listview), g_value_get_object (value));
+          g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HADJUSTMENT]);
+        }
+      break;
+
+    case PROP_HSCROLL_POLICY:
+      if (gtk_scrollable_get_hscroll_policy (GTK_SCROLLABLE (self->listview)) != g_value_get_enum (value))
+        {
+          gtk_scrollable_set_hscroll_policy (GTK_SCROLLABLE (self->listview), g_value_get_enum (value));
+          g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HSCROLL_POLICY]);
+        }
+      break;
+
     case PROP_MODEL:
       gtk_column_view_set_model (self, g_value_get_object (value));
       break;
 
     case PROP_SHOW_SEPARATORS:
       gtk_column_view_set_show_separators (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_VADJUSTMENT:
+      if (gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self->listview)) != g_value_get_object (value))
+        {
+          gtk_scrollable_set_vadjustment (GTK_SCROLLABLE (self->listview), g_value_get_object (value));
+          g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_VADJUSTMENT]);
+        }
+      break;
+
+    case PROP_VSCROLL_POLICY:
+      if (gtk_scrollable_get_vscroll_policy (GTK_SCROLLABLE (self->listview)) != g_value_get_enum (value))
+        {
+          gtk_scrollable_set_vscroll_policy (GTK_SCROLLABLE (self->listview), g_value_get_enum (value));
+          g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_VSCROLL_POLICY]);
+        }
       break;
 
     default:
@@ -228,11 +282,27 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  gpointer iface;
 
   gobject_class->dispose = gtk_column_view_dispose;
   gobject_class->finalize = gtk_column_view_finalize;
   gobject_class->get_property = gtk_column_view_get_property;
   gobject_class->set_property = gtk_column_view_set_property;
+
+  /* GtkScrollable implementation */
+  iface = g_type_default_interface_peek (GTK_TYPE_SCROLLABLE);
+  properties[PROP_HADJUSTMENT] =
+      g_param_spec_override ("hadjustment",
+                             g_object_interface_find_property (iface, "hadjustment"));
+  properties[PROP_HSCROLL_POLICY] =
+      g_param_spec_override ("hscroll-policy",
+                             g_object_interface_find_property (iface, "hscroll-policy"));
+  properties[PROP_VADJUSTMENT] =
+      g_param_spec_override ("vadjustment",
+                             g_object_interface_find_property (iface, "vadjustment"));
+  properties[PROP_VSCROLL_POLICY] =
+      g_param_spec_override ("vscroll-policy",
+                             g_object_interface_find_property (iface, "vscroll-policy"));
 
   /**
    * GtkColumnView:columns:
@@ -312,6 +382,8 @@ gtk_column_view_init (GtkColumnView *self)
   gtk_widget_set_vexpand (GTK_WIDGET (self->listview), TRUE);
   g_signal_connect (self->listview, "activate", G_CALLBACK (gtk_column_view_activate_cb), self);
   gtk_widget_set_parent (GTK_WIDGET (self->listview), GTK_WIDGET (self));
+
+  gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
 }
 
 /**
