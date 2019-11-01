@@ -221,6 +221,7 @@
     <file>spinner.c</file>
     <file>tabs.c</file>
     <file>tagged_entry.c</file>
+    <file>textundo.c</file>
     <file>textview.c</file>
     <file>textscroll.c</file>
     <file>theming_style_classes.c</file>
