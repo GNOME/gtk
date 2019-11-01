@@ -22,11 +22,26 @@
 
 #include "gtklistitem.h"
 
-#include "gtklistitemmanagerprivate.h"
+#include "gtklistitemwidgetprivate.h"
 
 G_BEGIN_DECLS
 
-GtkListItem *   gtk_list_item_new                               (const char             *css_name);
+struct _GtkListItem
+{
+  GObject parent_instance;
+
+  GtkListItemWidget *owner; /* has a reference */
+
+  GObject *item;
+  GtkWidget *child;
+  guint position;
+
+  guint activatable : 1;
+  guint selectable : 1;
+  guint selected : 1;
+};
+
+GtkListItem *   gtk_list_item_new                               (GtkListItemWidget      *owner);
 
 void            gtk_list_item_set_item                          (GtkListItem            *self,
                                                                  gpointer                item);
