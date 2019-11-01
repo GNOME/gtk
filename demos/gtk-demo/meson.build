@@ -24,6 +24,7 @@ demos = files([
   'editable_cells.c',
   'entry_buffer.c',
   'entry_completion.c',
+  'entry_undo.c',
   'expander.c',
   'filtermodel.c',
   'fishbowl.c',
