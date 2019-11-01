@@ -291,6 +291,7 @@ gtk_public_sources = files([
   'gtklistitem.c',
   'gtklistitemfactory.c',
   'gtklistitemmanager.c',
+  'gtklistitemwidget.c',
   'gtklistlistmodel.c',
   'gtkliststore.c',
   'gtklistview.c',
