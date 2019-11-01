@@ -314,6 +314,8 @@ enum
   PREEDIT_CHANGED,
   EXTEND_SELECTION,
   INSERT_EMOJI,
+  UNDO,
+  REDO,
   LAST_SIGNAL
 };
 
@@ -619,6 +621,9 @@ static void gtk_text_view_activate_misc_insert_emoji    (GtkWidget  *widget,
                                                          const char *action_name,
                                                          GVariant   *parameter);
 
+static void gtk_text_view_real_undo (GtkTextView *text_view);
+static void gtk_text_view_real_redo (GtkTextView *text_view);
+
 
 /* FIXME probably need the focus methods. */
 
@@ -734,6 +739,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   klass->create_buffer = gtk_text_view_create_buffer;
   klass->extend_selection = gtk_text_view_extend_selection;
   klass->insert_emoji = gtk_text_view_insert_emoji;
+  klass->undo = gtk_text_view_real_undo;
+  klass->redo = gtk_text_view_real_redo;
 
   /*
    * Properties
@@ -1358,6 +1365,40 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                   NULL,
                   G_TYPE_NONE, 0);
 
+  /**
+   * GtkTextView::undo:
+   * @text_view: the object which received the signal
+   *
+   * The ::undo signal is a
+   * [keybinding signal][GtkBindingSignal]
+   * which gets emitted to undo the last operation in the @text_view.
+   *
+   * The default binding for this signal is Ctrl-z.
+   */
+  signals[UNDO] =
+    g_signal_new (I_("undo"),
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkTextViewClass, undo),
+                  NULL, NULL, NULL, G_TYPE_NONE, 0);
+
+  /**
+   * GtkTextView::redo:
+   * @text_view: the object which received the signal
+   *
+   * The ::redo signal is a
+   * [keybinding signal][GtkBindingSignal]
+   * which gets emitted to redo the last undone operation in the @text_view.
+   *
+   * The default binding for this signal is Ctrl-Shift-z.
+   */
+  signals[REDO] =
+    g_signal_new (I_("redo"),
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkTextViewClass, redo),
+                  NULL, NULL, NULL, G_TYPE_NONE, 0);
+
   /*
    * Key bindings
    */
@@ -1549,6 +1590,14 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                 "copy-clipboard", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Insert, GDK_SHIFT_MASK,
                                 "paste-clipboard", 0);
+
+  /* Undo/Redo */
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_z, GDK_CONTROL_MASK,
+                                "undo", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_y, GDK_CONTROL_MASK,
+                                "redo", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_z, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "redo", 0);
 
   /* Overwrite */
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Insert, 0,
@@ -9834,4 +9883,18 @@ gtk_text_view_get_extra_menu (GtkTextView *text_view)
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
 
   return priv->extra_menu;
+}
+
+static void
+gtk_text_view_real_undo (GtkTextView *text_view)
+{
+  if (gtk_text_view_get_editable (text_view))
+    gtk_text_buffer_undo (text_view->priv->buffer);
+}
+
+static void
+gtk_text_view_real_redo (GtkTextView *text_view)
+{
+  if (gtk_text_view_get_editable (text_view))
+    gtk_text_buffer_redo (text_view->priv->buffer);
 }
