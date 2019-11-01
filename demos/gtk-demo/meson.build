@@ -74,6 +74,7 @@ demos = files([
   'tabs.c',
   'tagged_entry.c',
   'textmask.c',
+  'textundo.c',
   'textview.c',
   'textscroll.c',
   'themes.c',
