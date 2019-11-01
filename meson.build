@@ -27,7 +27,7 @@ else
 endif
 
 glib_req           = '>= @0@.@1@.@2@'.format(glib_major_req, glib_minor_req, glib_micro_req)
-pango_req          = '>= 1.41.0'
+pango_req          = '>= 1.44.0'
 fribidi_req        = '>= 0.19.7'
 atk_req            = '>= 2.15.1'
 cairo_req          = '>= 1.14.0'
