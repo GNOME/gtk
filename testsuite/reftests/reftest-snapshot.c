@@ -194,7 +194,7 @@ connect_signals (GtkBuilder    *builder,
       module = reftest_module_new (directory, split[0]);
       if (module == NULL)
         {
-          g_error ("Could not load module '%s' from '%s' when looking up '%s'", split[0], directory, handler_name);
+          g_error ("Could not load module '%s' from '%s' when looking up '%s': %s", split[0], directory, handler_name, g_module_error ());
           return;
         }
       func = reftest_module_lookup (module, split[1]);
