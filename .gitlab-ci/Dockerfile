@@ -1,7 +1,6 @@
 FROM fedora:31
 
 RUN dnf -y install \
-    hicolor-icon-theme \
     adwaita-icon-theme \
     atk-devel \
     at-spi2-atk-devel \
@@ -14,6 +13,7 @@ RUN dnf -y install \
     dbus-daemon \
     dejavu-sans-mono-fonts \
     desktop-file-utils \
+    diffutils \
     elfutils-libelf-devel \
     fribidi-devel \
     gcc \
@@ -32,6 +32,7 @@ RUN dnf -y install \
     gstreamer1-plugins-bad-free-devel \
     gstreamer1-plugins-base-devel \
     gtk-doc \
+    hicolor-icon-theme \
     iso-codes \
     itstool \
     json-glib-devel \
