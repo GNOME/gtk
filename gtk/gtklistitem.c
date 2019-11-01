@@ -21,15 +21,7 @@
 
 #include "gtklistitemprivate.h"
 
-#include "gtkbindings.h"
-#include "gtkbinlayout.h"
-#include "gtkcssnodeprivate.h"
-#include "gtkeventcontrollerfocus.h"
-#include "gtkgestureclick.h"
 #include "gtkintl.h"
-#include "gtkmain.h"
-#include "gtkwidget.h"
-#include "gtkwidgetprivate.h"
 
 /**
  * SECTION:gtklistitem
@@ -54,24 +46,9 @@
  *    The #GtkListItem:item property is not %NULL.
  */
 
-struct _GtkListItem
-{
-  GtkWidget parent_instance;
-
-  GObject *item;
-  GtkWidget *child;
-  guint position;
-
-  guint activatable : 1;
-  guint selectable : 1;
-  guint selected : 1;
-};
-
 struct _GtkListItemClass
 {
-  GtkWidgetClass parent_class;
-
-  void          (* activate_signal)                             (GtkListItem            *self);
+  GObjectClass parent_class;
 };
 
 enum
@@ -87,81 +64,17 @@ enum
   N_PROPS
 };
 
-enum
-{
-  ACTIVATE_SIGNAL,
-  LAST_SIGNAL
-};
-
-G_DEFINE_TYPE (GtkListItem, gtk_list_item, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE (GtkListItem, gtk_list_item, G_TYPE_OBJECT)
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
-static guint signals[LAST_SIGNAL] = { 0 };
-
-static void
-gtk_list_item_activate_signal (GtkListItem *self)
-{
-  if (!self->activatable)
-    return;
-
-  gtk_widget_activate_action (GTK_WIDGET (self),
-                              "list.activate-item",
-                              "u",
-                              self->position);
-}
-
-static gboolean
-gtk_list_item_focus (GtkWidget        *widget,
-                     GtkDirectionType  direction)
-{
-  GtkListItem *self = GTK_LIST_ITEM (widget);
-
-  /* The idea of this function is the following:
-   * 1. If any child can take focus, do not ever attempt
-   *    to take focus.
-   * 2. Otherwise, if this item is selectable or activatable,
-   *    allow focusing this widget.
-   *
-   * This makes sure every item in a list is focusable for
-   * activation and selection handling, but no useless widgets
-   * get focused and moving focus is as fast as possible.
-   */
-  if (self->child)
-    {
-      if (gtk_widget_get_focus_child (widget))
-        return FALSE;
-      if (gtk_widget_child_focus (self->child, direction))
-        return TRUE;
-    }
-
-  if (gtk_widget_is_focus (widget))
-    return FALSE;
-
-  if (!gtk_widget_get_can_focus (widget) ||
-      !self->selectable)
-    return FALSE;
-
-  return gtk_widget_grab_focus (widget);
-}
-
-static gboolean
-gtk_list_item_grab_focus (GtkWidget *widget)
-{
-  GtkListItem *self = GTK_LIST_ITEM (widget);
-
-  if (self->child && gtk_widget_grab_focus (self->child))
-    return TRUE;
-
-  return GTK_WIDGET_CLASS (gtk_list_item_parent_class)->grab_focus (widget);
-}
 
 static void
 gtk_list_item_dispose (GObject *object)
 {
   GtkListItem *self = GTK_LIST_ITEM (object);
 
-  g_assert (self->item == NULL);
-  g_clear_pointer (&self->child, gtk_widget_unparent);
+  g_assert (self->owner == NULL); /* would hold a reference */
+  g_clear_object (&self->child);
 
   G_OBJECT_CLASS (gtk_list_item_parent_class)->dispose (object);
 }
@@ -235,35 +148,9 @@ gtk_list_item_set_property (GObject      *object,
 }
 
 static void
-gtk_list_item_select_action (GtkWidget  *widget,
-                             const char *action_name,
-                             GVariant   *parameter)
-{
-  GtkListItem *self = GTK_LIST_ITEM (widget);
-  gboolean modify, extend;
-
-  if (!self->selectable)
-    return;
-
-  g_variant_get (parameter, "(bb)", &modify, &extend);
-
-  gtk_widget_activate_action (GTK_WIDGET (self),
-                              "list.select-item",
-                              "(ubb)",
-                              self->position, modify, extend);
-}
-
-static void
 gtk_list_item_class_init (GtkListItemClass *klass)
 {
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkBindingSet *binding_set;
-
-  klass->activate_signal = gtk_list_item_activate_signal;
-
-  widget_class->focus = gtk_list_item_focus;
-  widget_class->grab_focus = gtk_list_item_grab_focus;
 
   gobject_class->dispose = gtk_list_item_dispose;
   gobject_class->get_property = gtk_list_item_get_property;
@@ -342,203 +229,25 @@ gtk_list_item_class_init (GtkListItemClass *klass)
                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
-
-  /**
-   * GtkListItem::activate-signal:
-   *
-   * This is a keybinding signal, which will cause this row to be activated.
-   *
-   * Do not use it, it is an implementation detail.
-   *
-   * If you want to be notified when the user activates a listitem (by key or not),
-   * look at the list widget this item is contained in.
-   */
-  signals[ACTIVATE_SIGNAL] =
-    g_signal_new (I_("activate-keybinding"),
-                  G_OBJECT_CLASS_TYPE (gobject_class),
-                  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkListItemClass, activate_signal),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 0);
-
-  widget_class->activate_signal = signals[ACTIVATE_SIGNAL];
-
-  /**
-   * GtkListItem|listitem.select:
-   * @modify: %TRUE to toggle the existing selection, %FALSE to select
-   * @extend: %TRUE to extend the selection
-   *
-   * Changes selection if the item is selectable.
-   * If the item is not selectable, nothing happens.
-   *
-   * This function will emit the list.select-item action and the resulting
-   * behavior, in particular the interpretation of @modify and @extend
-   * depends on the view containing this listitem. See for example
-   * GtkListView|list.select-item or GtkGridView|list.select-item.
-   */
-  gtk_widget_class_install_action (widget_class,
-                                   "listitem.select",
-                                   "(bb)",
-                                   gtk_list_item_select_action);
-
-  binding_set = gtk_binding_set_by_class (klass);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Return, 0,
-                                "activate-keybinding", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_ISO_Enter, 0,
-                                "activate-keybinding", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0,
-                                "activate-keybinding", 0);
-
-  /* note that some of these may get overwritten by child widgets,
-   * such as GtkTreeExpander */
-  gtk_binding_entry_add_action (binding_set, GDK_KEY_space, 0,
-                                "listitem.select", "(bb)", TRUE, FALSE);
-  gtk_binding_entry_add_action (binding_set, GDK_KEY_space, GDK_CONTROL_MASK,
-                                "listitem.select", "(bb)", TRUE, FALSE);
-  gtk_binding_entry_add_action (binding_set, GDK_KEY_space, GDK_SHIFT_MASK,
-                                "listitem.select", "(bb)", TRUE, FALSE);
-  gtk_binding_entry_add_action (binding_set, GDK_KEY_space, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-                                "listitem.select", "(bb)", TRUE, FALSE);
-  gtk_binding_entry_add_action (binding_set, GDK_KEY_KP_Space, 0,
-                                "listitem.select", "(bb)", TRUE, FALSE);
-  gtk_binding_entry_add_action (binding_set, GDK_KEY_KP_Space, GDK_CONTROL_MASK,
-                                "listitem.select", "(bb)", TRUE, FALSE);
-  gtk_binding_entry_add_action (binding_set, GDK_KEY_KP_Space, GDK_SHIFT_MASK,
-                                "listitem.select", "(bb)", TRUE, FALSE);
-  gtk_binding_entry_add_action (binding_set, GDK_KEY_KP_Space, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-                                "listitem.select", "(bb)", TRUE, FALSE);
-
-  /* This gets overwritten by gtk_list_item_new() but better safe than sorry */
-  gtk_widget_class_set_css_name (widget_class, I_("row"));
-  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
-}
-
-static void
-gtk_list_item_click_gesture_pressed (GtkGestureClick *gesture,
-                                     int              n_press,
-                                     double           x,
-                                     double           y,
-                                     GtkListItem     *self)
-{
-  GtkWidget *widget = GTK_WIDGET (self);
-
-  if (!self->selectable && !self->activatable)
-    {
-      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
-      return;
-    }
-
-  if (self->selectable)
-    {
-      GdkModifierType state;
-      GdkModifierType mask;
-      gboolean extend = FALSE, modify = FALSE;
-
-      if (gtk_get_current_event_state (&state))
-        {
-          mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
-          if ((state & mask) == mask)
-            modify = TRUE;
-          mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_EXTEND_SELECTION);
-          if ((state & mask) == mask)
-            extend = TRUE;
-        }
-
-      gtk_widget_activate_action (GTK_WIDGET (self),
-                                  "list.select-item",
-                                  "(ubb)",
-                                  self->position, modify, extend);
-    }
-
-  if (self->activatable)
-    {
-      if (n_press == 2)
-        {
-          gtk_widget_activate_action (GTK_WIDGET (self),
-                                      "list.activate-item",
-                                      "u",
-                                      self->position);
-        }
-    }
-
-  gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_ACTIVE, FALSE);
-
-  if (gtk_widget_get_focus_on_click (widget))
-    gtk_widget_grab_focus (widget);
-}
-
-static void
-gtk_list_item_enter_cb (GtkEventControllerFocus *controller,
-                        GtkListItem             *self)
-{
-  GtkWidget *widget = GTK_WIDGET (self);
-
-  gtk_widget_activate_action (widget,
-                              "list.scroll-to-item",
-                              "u",
-                              self->position);
-}
-
-static void
-gtk_list_item_click_gesture_released (GtkGestureClick *gesture,
-                                      int              n_press,
-                                      double           x,
-                                      double           y,
-                                      GtkListItem     *self)
-{
-  gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_ACTIVE);
-}
-
-static void
-gtk_list_item_click_gesture_canceled (GtkGestureClick  *gesture,
-                                      GdkEventSequence *sequence,
-                                      GtkListItem      *self)
-{
-  gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_ACTIVE);
 }
 
 static void
 gtk_list_item_init (GtkListItem *self)
 {
-  GtkEventController *controller;
-  GtkGesture *gesture;
-
   self->selectable = TRUE;
   self->activatable = TRUE;
-  gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
-
-  gesture = gtk_gesture_click_new ();
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
-                                              GTK_PHASE_BUBBLE);
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture),
-                                     FALSE);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
-                                 GDK_BUTTON_PRIMARY);
-  g_signal_connect (gesture, "pressed",
-                    G_CALLBACK (gtk_list_item_click_gesture_pressed), self);
-  g_signal_connect (gesture, "released",
-                    G_CALLBACK (gtk_list_item_click_gesture_released), self);
-  g_signal_connect (gesture, "cancel",
-                    G_CALLBACK (gtk_list_item_click_gesture_canceled), self);
-  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
-
-  controller = gtk_event_controller_focus_new ();
-  g_signal_connect (controller, "enter", G_CALLBACK (gtk_list_item_enter_cb), self);
-  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 }
 
 GtkListItem *
-gtk_list_item_new (const char *css_name)
+gtk_list_item_new (GtkListItemWidget *owner)
 {
   GtkListItem *result;
 
-  g_return_val_if_fail (css_name != NULL, NULL);
+  g_return_val_if_fail (owner != NULL, NULL);
 
   result = g_object_new (GTK_TYPE_LIST_ITEM,
-                         "css-name", css_name,
                          NULL);
+  result->owner = owner;
 
   return result;
 }
@@ -598,12 +307,17 @@ gtk_list_item_set_child (GtkListItem *self,
   if (self->child == child)
     return;
 
-  g_clear_pointer (&self->child, gtk_widget_unparent);
+  if (self->child && self->owner)
+    gtk_list_item_widget_remove_child (self->owner, self->child);
+
+  g_clear_object (&self->child);
 
   if (child)
     {
-      gtk_widget_insert_after (child, GTK_WIDGET (self), NULL);
+      g_object_ref_sink (child);
       self->child = child;
+      if (self->owner)
+        gtk_list_item_widget_add_child (self->owner, child);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ITEM]);
@@ -622,8 +336,6 @@ gtk_list_item_set_item (GtkListItem *self,
   g_clear_object (&self->item);
   if (item)
     self->item = g_object_ref (item);
-
-  gtk_css_node_invalidate (gtk_widget_get_css_node (GTK_WIDGET (self)), GTK_CSS_CHANGE_ANIMATIONS);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ITEM]);
 }
@@ -687,11 +399,6 @@ gtk_list_item_set_selected (GtkListItem *self,
     return;
 
   self->selected = selected;
-
-  if (selected)
-    gtk_widget_set_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED, FALSE);
-  else
-    gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
 }
