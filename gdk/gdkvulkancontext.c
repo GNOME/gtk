@@ -104,7 +104,7 @@ gdk_vulkan_strerror (VkResult result)
    * Becuse the Vulkan people don't make adding this too easy, here's
    * the process to manage it:
    * 1. go to
-   *    https://github.com/KhronosGroup/Vulkan-LoaderAndValidationLayers/blame/master/include/vulkan/vulkan.h
+   *    https://github.com/KhronosGroup/Vulkan-Headers/blob/master/include/vulkan/vulkan_core.h
    * 2. Find the line where this enum value was added.
    * 3. Click the commit that added this line.
    * 4. The commit you're looking at now should also change
@@ -200,6 +200,10 @@ gdk_vulkan_strerror (VkResult result)
 #if VK_HEADER_VERSION >= 97
     case VK_ERROR_INVALID_DEVICE_ADDRESS_EXT:
       return "Invalid device address";
+#endif
+#if VK_HEADER_VERSION >= 105
+    case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT:
+      return "An operation on a swapchain created with VK_FULL_SCREEN_EXCLUSIVE_APPLICATION_CONTROLLED_EXT failed as it did not have exlusive full-screen access.";
 #endif
 
     case VK_RESULT_RANGE_SIZE:

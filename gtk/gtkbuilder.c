@@ -2095,6 +2095,10 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
           gchar **vector = g_strsplit (string, "\n", 0);
           g_value_take_boxed (value, vector);
         }
+      else if (G_VALUE_HOLDS (value, G_TYPE_BYTES))
+        {
+          g_value_take_boxed (value, g_bytes_new (string, strlen (string)));
+        }
       else
         {
           g_set_error (error,
