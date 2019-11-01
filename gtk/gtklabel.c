@@ -1550,11 +1550,24 @@ attribute_from_text (GtkBuilder   *builder,
       if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_SHOW_FLAGS, value, &val, error))
 	attribute = pango_attr_show_new (g_value_get_flags (&val));
       break;
-#endif
-#if PANGO_VERSION_CHECK(1,44,4)
     case PANGO_ATTR_INSERT_HYPHENS:
       if (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, value, &val, error))
 	attribute = pango_attr_insert_hyphens_new (g_value_get_boolean (&val));
+      break;
+#endif
+#if PANGO_VERSION_CHECK(1,45,0)
+    case PANGO_ATTR_OVERLINE:
+      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_OVERLINE, value, &val, NULL))
+	attribute = pango_attr_overline_new (g_value_get_enum (&val));
+      break;
+    case PANGO_ATTR_OVERLINE_COLOR:
+      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_RGBA, value, &val, error))
+	{
+	  color = g_value_get_boxed (&val);
+          attribute = pango_attr_overline_color_new (color->red * 65535,
+                                                     color->green * 65535,
+                                                     color->blue * 65535);
+	}
       break;
 #endif
     case PANGO_ATTR_INVALID:
