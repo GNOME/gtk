@@ -197,7 +197,7 @@ GClosure *   gtk_builder_create_closure          (GtkBuilder    *builder,
 
 GDK_AVAILABLE_IN_ALL
 gboolean  gtk_builder_extend_with_template  (GtkBuilder    *builder,
-                                             GtkWidget     *widget,
+                                             GObject       *object,
                                              GType          template_type,
                                              const gchar   *buffer,
                                              gssize         length,
