@@ -27,7 +27,7 @@ else
 endif
 
 glib_req           = '>= @0@.@1@.@2@'.format(glib_major_req, glib_minor_req, glib_micro_req)
-pango_req          = '>= 1.41.0'
+pango_req          = '>= 1.44.0'
 fribidi_req        = '>= 0.19.7'
 atk_req            = '>= 2.15.1'
 cairo_req          = '>= 1.14.0'
@@ -334,33 +334,6 @@ fribidi_dep    = dependency('fribidi', version: fribidi_req,
 # Require PangoFT2 if on X11 or wayland
 require_pangoft2 = wayland_enabled or x11_enabled
 pangoft_dep    = dependency('pangoft2', required: false)
-
-if pangoft_dep.found()
-  # Need at least 2.7.1 for FT_Get_Var_Design_Coordinates()
-  # We get the dependency itself from pango, but pango doesn't care
-  # about ft2 version, so an extra check is needed.
-  ft2_dep      = dependency('freetype2', version: '>= 2.7.1', required: require_pangoft2)
-
-  # Fallback case: Look for the FreeType2 headers and library manually when its .pc
-  # file is not available, such as on Visual Studio
-  if not ft2_dep.found()
-    ft2lib = ft2_dep
-    if cc.has_header('ft2build.h')
-      ft2_libnames = ['freetype', 'freetypemt']
-      foreach lib: ft2_libnames
-        if not ft2_dep.found()
-          ft2lib = cc.find_library(lib)
-          # If the FreeType2 library is found, check for FT_Get_Var_Design_Coordinates()
-          if ft2lib.found()
-            if cc.has_function('FT_Get_Var_Design_Coordinates', dependencies: ft2lib)
-              ft2_dep = ft2lib
-            endif
-          endif
-        endif
-      endforeach
-    endif
-  endif
-endif
 
 if require_pangoft2
   pangoft_dep    = dependency('pangoft2', fallback : ['pango', 'libpangoft2_dep'])
