@@ -169,6 +169,7 @@
     <file>editable_cells.c</file>
     <file>entry_buffer.c</file>
     <file>entry_completion.c</file>
+    <file>entry_undo.c</file>
     <file>expander.c</file>
     <file>filtermodel.c</file>
     <file>fishbowl.c</file>
