@@ -1007,6 +1007,10 @@ gtk_entry_get_input_hints
 gtk_entry_grab_focus_without_selecting
 gtk_entry_set_extra_menu
 gtk_entry_get_extra_menu
+gtk_entry_get_enable_undo
+gtk_entry_set_enable_undo
+gtk_entry_get_max_undo_levels
+gtk_entry_set_max_undo_levels
 
 <SUBSECTION Standard>
 GTK_ENTRY

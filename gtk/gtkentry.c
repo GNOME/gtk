@@ -224,6 +224,7 @@ enum {
   PROP_EXTRA_MENU,
   PROP_SHOW_EMOJI_ICON,
   PROP_ENABLE_EMOJI_COMPLETION,
+  PROP_ENABLE_UNDO,
   PROP_EDITING_CANCELED,
   NUM_PROPERTIES = PROP_EDITING_CANCELED,
 };
@@ -841,6 +842,19 @@ gtk_entry_class_init (GtkEntryClass *class)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkEntry:enable-undo:
+   *
+   * Setting this to %TRUE allows the user to use keyboard shortcuts to
+   * undo or redo actions on the #GtkEntry.
+   */
+  entry_props[PROP_ENABLE_UNDO] =
+      g_param_spec_boolean ("enable-undo",
+                            P_("Enable Undo"),
+                            P_("Whether to enable undo support"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, entry_props);
   g_object_class_override_property (gobject_class, PROP_EDITING_CANCELED, "editing-canceled");
   gtk_editable_install_properties (gobject_class, PROP_EDITING_CANCELED + 1);
@@ -944,6 +958,10 @@ gtk_entry_set_property (GObject         *object,
     case PROP_ATTRIBUTES:
     case PROP_TABS:
     case PROP_ENABLE_EMOJI_COMPLETION:
+      g_object_set_property (G_OBJECT (priv->text), pspec->name, value);
+      break;
+
+    case PROP_ENABLE_UNDO:
       g_object_set_property (G_OBJECT (priv->text), pspec->name, value);
       break;
 
@@ -1099,6 +1117,10 @@ gtk_entry_get_property (GObject         *object,
     case PROP_ATTRIBUTES:
     case PROP_TABS:
     case PROP_ENABLE_EMOJI_COMPLETION:
+      g_object_get_property (G_OBJECT (priv->text), pspec->name, value);
+      break;
+
+    case PROP_ENABLE_UNDO:
       g_object_get_property (G_OBJECT (priv->text), pspec->name, value);
       break;
 
@@ -3590,4 +3612,77 @@ gtk_entry_get_extra_menu (GtkEntry *entry)
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
 
   return gtk_text_get_extra_menu (GTK_TEXT (priv->text));
+}
+
+/**
+ * gtk_entry_get_enable_undo:
+ * @entry: a #GtkEntry
+ *
+ * Gets if undo is enabled for the entry.
+ *
+ * Returns: %TRUE if undo is enabled
+ */
+gboolean
+gtk_entry_get_enable_undo (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
+
+  return gtk_text_get_enable_undo (GTK_TEXT (priv->text));
+}
+
+/**
+ * gtk_entry_set_enable_undo:
+ * @entry: a #GtkEntry
+ * @enable_undo: if undo should be enabled
+ *
+ * Enables or disables undo for the entry.
+ */
+void
+gtk_entry_set_enable_undo (GtkEntry *entry,
+                           gboolean  enable_undo)
+{
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  if (enable_undo != gtk_entry_get_enable_undo (entry))
+    gtk_text_set_enable_undo (GTK_TEXT (priv->text), enable_undo);
+}
+
+/**
+ * gtk_entry_get_max_undo_levels:
+ * @entry: a #GtkEntry
+ *
+ * Gets the maximum number of undo actions to store while editing
+ * within the #GtkEntry.
+ */
+guint
+gtk_entry_get_max_undo_levels (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
+
+  return gtk_text_get_max_undo_levels (GTK_TEXT (priv->text));
+}
+
+/**
+ * gtk_entry_set_max_undo_levels:
+ * @entry: a #GtkEntry
+ * @max_undo_levels: maximum number of undo actions
+ *
+ * Sets the maximum number of undo actions that can be performed on the
+ * entry. Setting this to 0 results in unlimited undo operations.
+ */
+void
+gtk_entry_set_max_undo_levels (GtkEntry *entry,
+                               guint     max_undo_levels)
+{
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  gtk_text_set_max_undo_levels (GTK_TEXT (priv->text), max_undo_levels);
 }

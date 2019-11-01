@@ -311,6 +311,16 @@ void           gtk_entry_set_extra_menu                      (GtkEntry          
                                                               GMenuModel           *model);
 GDK_AVAILABLE_IN_ALL
 GMenuModel *   gtk_entry_get_extra_menu                      (GtkEntry             *entry);
+GDK_AVAILABLE_IN_ALL
+gboolean       gtk_entry_get_enable_undo                     (GtkEntry             *entry);
+GDK_AVAILABLE_IN_ALL
+void           gtk_entry_set_enable_undo                     (GtkEntry             *entry,
+                                                              gboolean              enable_undo);
+GDK_AVAILABLE_IN_ALL
+guint          gtk_entry_get_max_undo_levels                 (GtkEntry             *entry);
+GDK_AVAILABLE_IN_ALL
+void           gtk_entry_set_max_undo_levels                 (GtkEntry             *entry,
+                                                              guint                 max_undo_levels);
 
 G_END_DECLS
 
