@@ -931,6 +931,10 @@ gtk_text_get_tabs
 gtk_text_grab_focus_without_selecting
 gtk_text_set_extra_menu
 gtk_text_get_extra_menu
+gtk_text_get_enable_undo
+gtk_text_set_enable_undo
+gtk_text_get_max_undo_levels
+gtk_text_set_max_undo_levels
 <SUBSECTION Private>
 gtk_text_get_type
 </SECTION>
