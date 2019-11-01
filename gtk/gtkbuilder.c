@@ -1249,7 +1249,7 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
 /**
  * gtk_builder_extend_with_template:
  * @builder: a #GtkBuilder
- * @widget: the widget that is being extended
+ * @object: the object that is being extended
  * @template_type: the type that the template is for
  * @buffer: the string to parse
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
@@ -1265,7 +1265,7 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
  */
 gboolean
 gtk_builder_extend_with_template (GtkBuilder   *builder,
-                                  GtkWidget    *widget,
+                                  GObject      *object,
                                   GType         template_type,
                                   const gchar  *buffer,
                                   gssize        length,
@@ -1276,9 +1276,9 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
   char *filename;
 
   g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+  g_return_val_if_fail (G_IS_OBJECT (object), 0);
   g_return_val_if_fail (g_type_name (template_type) != NULL, 0);
-  g_return_val_if_fail (g_type_is_a (G_OBJECT_TYPE (widget), template_type), 0);
+  g_return_val_if_fail (g_type_is_a (G_OBJECT_TYPE (object), template_type), 0);
   g_return_val_if_fail (buffer && buffer[0], 0);
 
   tmp_error = NULL;
@@ -1290,7 +1290,7 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
   priv->template_type = template_type;
 
   filename = g_strconcat ("<", g_type_name (template_type), " template>", NULL);
-  gtk_builder_expose_object (builder, g_type_name (template_type), G_OBJECT (widget));
+  gtk_builder_expose_object (builder, g_type_name (template_type), object);
   _gtk_builder_parser_parse_buffer (builder, filename,
                                     buffer, length,
                                     NULL,

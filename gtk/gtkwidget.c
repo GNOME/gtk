@@ -11343,7 +11343,7 @@ gtk_widget_init_template (GtkWidget *widget)
    * will validate that the template is created for the correct GType and assert that
    * there is no infinite recursion.
    */
-  if (!gtk_builder_extend_with_template  (builder, widget, class_type,
+  if (!gtk_builder_extend_with_template  (builder, G_OBJECT (widget), class_type,
 					  (const gchar *)g_bytes_get_data (template->data, NULL),
 					  g_bytes_get_size (template->data),
 					  &error))
