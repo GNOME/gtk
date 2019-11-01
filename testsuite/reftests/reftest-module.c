@@ -98,25 +98,8 @@ reftest_module_new (const char *directory,
   module = g_module_open (full_path, G_MODULE_BIND_LOCAL | G_MODULE_BIND_LAZY);
   if (module == NULL)
     {
-      /* libtool hack */
-      char *libtool_dir = g_build_filename (directory, ".libs", NULL);
-
       g_free (full_path);
-      full_path = g_module_build_path (libtool_dir, module_name);
-
-      result = reftest_module_find_existing (full_path);
-      if (result)
-        {
-          g_free (full_path);
-          return reftest_module_ref (result);
-        }
-
-      module = g_module_open (full_path, G_MODULE_BIND_LOCAL | G_MODULE_BIND_LAZY);
-      if (module == NULL)
-        {
-          g_free (full_path);
-          return NULL;
-        }
+      return NULL;
     }
 
   return reftest_module_new_take (module, full_path);
