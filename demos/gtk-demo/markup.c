@@ -29,8 +29,10 @@ source_toggled (GtkToggleButton *button)
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
       gtk_text_buffer_get_bounds (buffer, &start, &end);
+      gtk_text_buffer_begin_irreversible_action (buffer);
       gtk_text_buffer_delete (buffer, &start, &end);
       gtk_text_buffer_insert_markup (buffer, &start, markup, -1);
+      gtk_text_buffer_end_irreversible_action (buffer);
       g_free (markup);
 
       gtk_stack_set_visible_child_name (GTK_STACK (stack), "formatted");
@@ -106,11 +108,15 @@ do_markup (GtkWidget *do_widget)
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
       gtk_text_buffer_get_start_iter (buffer, &iter);
+      gtk_text_buffer_begin_irreversible_action (buffer);
       gtk_text_buffer_insert_markup (buffer, &iter, markup, -1);
+      gtk_text_buffer_end_irreversible_action (buffer);
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view2));
       gtk_text_buffer_get_start_iter (buffer, &iter);
+      gtk_text_buffer_begin_irreversible_action (buffer);
       gtk_text_buffer_insert (buffer, &iter, markup, -1);
+      gtk_text_buffer_end_irreversible_action (buffer);
 
       g_bytes_unref (bytes);
 
