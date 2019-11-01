@@ -748,6 +748,9 @@ load_file (const gchar *demoname,
 
   source_buffer = gtk_text_buffer_new (NULL);
 
+  gtk_text_buffer_begin_irreversible_action (info_buffer);
+  gtk_text_buffer_begin_irreversible_action (source_buffer);
+
   resource_filename = g_strconcat ("/sources/", filename, NULL);
   bytes = g_resources_lookup_data (resource_filename, 0, &err);
   g_free (resource_filename);
@@ -880,9 +883,11 @@ load_file (const gchar *demoname,
 
   fontify (source_buffer);
 
+  gtk_text_buffer_end_irreversible_action (source_buffer);
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (source_view), source_buffer);
   g_object_unref (source_buffer);
 
+  gtk_text_buffer_end_irreversible_action (info_buffer);
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (info_view), info_buffer);
   g_object_unref (info_buffer);
 }
