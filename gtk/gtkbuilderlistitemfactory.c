@@ -98,7 +98,7 @@ gtk_builder_list_item_factory_setup (GtkListItemFactory *factory,
   if (self->scope)
     gtk_builder_set_scope (builder, self->scope);
 
-  if (!gtk_builder_extend_with_template  (builder, GTK_WIDGET (list_item), G_OBJECT_TYPE (list_item),
+  if (!gtk_builder_extend_with_template  (builder, G_OBJECT (list_item), G_OBJECT_TYPE (list_item),
 					  (const gchar *)g_bytes_get_data (self->bytes, NULL),
 					  g_bytes_get_size (self->bytes),
 					  &error))
