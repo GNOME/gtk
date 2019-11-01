@@ -24,6 +24,7 @@
 #include "gtkadjustment.h"
 #include "gtkbindings.h"
 #include "gtkintl.h"
+#include "gtklistitemwidgetprivate.h"
 #include "gtkorientableprivate.h"
 #include "gtkscrollable.h"
 #include "gtksingleselection.h"
@@ -750,10 +751,10 @@ gtk_list_base_update_focus_tracker (GtkListBase *self)
   guint pos;
 
   focus_child = gtk_widget_get_focus_child (GTK_WIDGET (self));
-  if (!GTK_IS_LIST_ITEM (focus_child))
+  if (!GTK_IS_LIST_ITEM_WIDGET (focus_child))
     return;
 
-  pos = gtk_list_item_get_position (GTK_LIST_ITEM (focus_child));
+  pos = gtk_list_item_widget_get_position (GTK_LIST_ITEM_WIDGET (focus_child));
   if (pos != gtk_list_item_tracker_get_position (priv->item_manager, priv->focus))
     {
       gtk_list_item_tracker_set_position (priv->item_manager,
