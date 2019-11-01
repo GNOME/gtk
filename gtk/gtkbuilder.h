@@ -219,7 +219,7 @@ GtkApplication * gtk_builder_get_application     (GtkBuilder     *builder);
 
 GDK_AVAILABLE_IN_ALL
 gboolean  gtk_builder_extend_with_template  (GtkBuilder    *builder,
-                                             GtkWidget     *widget,
+                                             GObject       *object,
                                              GType          template_type,
                                              const gchar   *buffer,
                                              gssize         length,
