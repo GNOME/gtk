@@ -644,7 +644,7 @@ create_ascii_glyphs (PangoFont *font)
   PangoLanguage *language = pango_language_from_string ("en_US"); /* just pick one */
   PangoCoverage *coverage;
   PangoAnalysis not_a_hack = {
-    .shape_engine = pango_font_find_shaper (font, language, MIN_ASCII_GLYPH), /* never changes */
+    .shape_engine = NULL, /* unused */
     .lang_engine = NULL, /* unused by pango_shape() */
     .font = font,
     .level = 0,
