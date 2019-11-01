@@ -25,7 +25,6 @@
 #endif
 
 #include <gtk/gtkwidget.h>
-#include <gtk/gtklistitem.h>
 
 G_BEGIN_DECLS
 
