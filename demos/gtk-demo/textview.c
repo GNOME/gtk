@@ -144,6 +144,7 @@ insert_text (GtkTextBuffer *buffer)
    */
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
 
+  gtk_text_buffer_begin_irreversible_action (buffer);
   gtk_text_buffer_insert (buffer, &iter,
       "The text widget can display text with all kinds of nifty attributes. "
       "It also supports multiple views of the same buffer; this demo is "
@@ -376,6 +377,8 @@ insert_text (GtkTextBuffer *buffer)
   /* Apply word_wrap tag to whole buffer */
   gtk_text_buffer_get_bounds (buffer, &start, &end);
   gtk_text_buffer_apply_tag_by_name (buffer, "word_wrap", &start, &end);
+
+  gtk_text_buffer_end_irreversible_action (buffer);
 
   g_object_unref (texture);
 }
