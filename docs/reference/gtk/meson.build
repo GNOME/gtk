@@ -135,6 +135,7 @@ private_headers = [
   'gtklistitemprivate.h',
   'gtklistitemfactoryprivate.h',
   'gtklistitemmanagerprivate.h',
+  'gtklistitemwidgetprivate.h',
   'gtklockbuttonprivate.h',
   'gtkmagnifierprivate.h',
   'gtkmediafileprivate.h',
