@@ -58,6 +58,7 @@
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktexthandleprivate.h"
+#include "gtktexthistoryprivate.h"
 #include "gtktextutil.h"
 #include "gtktooltip.h"
 #include "gtktreeselection.h"
@@ -135,6 +136,8 @@
 
 #define UNDERSHOOT_SIZE 20
 
+#define DEFAULT_MAX_UNDO 200
+
 static GQuark          quark_password_hint  = 0;
 
 typedef struct _GtkTextPasswordHint GtkTextPasswordHint;
@@ -174,6 +177,8 @@ struct _GtkTextPrivate
 
   GtkWidget     *popup_menu;
   GMenuModel    *extra_menu;
+
+  GtkTextHistory *history;
 
   float         xalign;
 
@@ -559,6 +564,29 @@ static void gtk_text_activate_selection_select_all   (GtkWidget  *widget,
 static void gtk_text_activate_misc_insert_emoji      (GtkWidget  *widget,
                                                       const char *action_name,
                                                       GVariant   *parameter);
+static void gtk_text_real_undo                       (GtkWidget  *widget,
+                                                      const char *action_name,
+                                                      GVariant   *parameters);
+static void gtk_text_real_redo                       (GtkWidget  *widget,
+                                                      const char *action_name,
+                                                      GVariant   *parameters);
+static void gtk_text_history_change_state_cb         (gpointer    funcs_data,
+                                                      gboolean    is_modified,
+                                                      gboolean    can_undo,
+                                                      gboolean    can_redo);
+static void gtk_text_history_insert_cb               (gpointer    funcs_data,
+                                                      guint       begin,
+                                                      guint       end,
+                                                      const char *text,
+                                                      guint       len);
+static void gtk_text_history_delete_cb               (gpointer    funcs_data,
+                                                      guint       begin,
+                                                      guint       end,
+                                                      const char *expected_text,
+                                                      guint       len);
+static void gtk_text_history_select_cb               (gpointer    funcs_data,
+                                                      int         selection_insert,
+                                                      int         selection_bound);
 
 /* GtkTextContent implementation
  */
@@ -644,6 +672,13 @@ gtk_text_content_init (GtkTextContent *content)
 
 /* GtkText
  */
+
+static const GtkTextHistoryFuncs history_funcs = {
+  gtk_text_history_change_state_cb,
+  gtk_text_history_insert_cb,
+  gtk_text_history_delete_cb,
+  gtk_text_history_select_cb,
+};
 
 G_DEFINE_TYPE_WITH_CODE (GtkText, gtk_text, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkText)
@@ -1173,6 +1208,9 @@ gtk_text_class_init (GtkTextClass *class)
                   NULL,
                   G_TYPE_NONE, 0);
 
+  gtk_widget_class_install_action (widget_class, "text.undo", NULL, gtk_text_real_undo);
+  gtk_widget_class_install_action (widget_class, "text.redo", NULL, gtk_text_real_redo);
+
   /*
    * Key bindings
    */
@@ -1346,6 +1384,14 @@ gtk_text_class_init (GtkTextClass *class)
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_semicolon, GDK_CONTROL_MASK,
                                 "insert-emoji", 0);
 
+  /* Undo/Redo */
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_z, GDK_CONTROL_MASK,
+                                "text.undo", NULL);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_y, GDK_CONTROL_MASK,
+                                "text.redo", NULL);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_z, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "text.redo", NULL);
+
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("text"));
 
@@ -1445,6 +1491,14 @@ gtk_text_set_property (GObject      *object,
 
     case NUM_PROPERTIES + GTK_EDITABLE_PROP_XALIGN:
       gtk_text_set_alignment (self, g_value_get_float (value));
+      break;
+
+    case NUM_PROPERTIES + GTK_EDITABLE_PROP_ENABLE_UNDO:
+      if (g_value_get_boolean (value) != gtk_text_history_get_enabled (priv->history))
+        {
+          gtk_text_history_set_enabled (priv->history, g_value_get_boolean (value));
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
 
     /* GtkText properties */
@@ -1575,7 +1629,10 @@ gtk_text_get_property (GObject    *object,
       break;
 
     case NUM_PROPERTIES + GTK_EDITABLE_PROP_XALIGN:
-      g_value_set_float (value, priv->xalign);
+      g_value_set_boolean (value, gtk_text_history_get_enabled (priv->history));
+      break;
+
+    case NUM_PROPERTIES + GTK_EDITABLE_PROP_ENABLE_UNDO:
       break;
 
     /* GtkText properties */
@@ -1678,6 +1735,9 @@ gtk_text_init (GtkText *self)
   priv->xalign = 0.0;
   priv->insert_pos = -1;
   priv->cursor_alpha = 1.0;
+  priv->history = gtk_text_history_new (&history_funcs, self);
+
+  gtk_text_history_set_max_undo_levels (priv->history, DEFAULT_MAX_UNDO);
 
   priv->selection_content = g_object_new (GTK_TYPE_TEXT_CONTENT, NULL);
   GTK_TEXT_CONTENT (priv->selection_content)->self = self;
@@ -1812,6 +1872,7 @@ gtk_text_finalize (GObject *object)
 
   g_clear_object (&priv->selection_content);
 
+  g_clear_object (&priv->history);
   g_clear_object (&priv->cached_layout);
   g_clear_object (&priv->im_context);
   g_clear_pointer (&priv->magnifier_popover, gtk_widget_destroy);
@@ -3344,6 +3405,8 @@ buffer_inserted_text (GtkEntryBuffer *buffer,
   gtk_text_set_positions (self, current_pos, selection_bound);
   gtk_text_recompute (self);
 
+  gtk_text_history_text_inserted (priv->history, position, chars, -1);
+
   /* Calculate the password hint if it needs to be displayed. */
   if (n_chars == 1 && !priv->visible)
     {
@@ -3378,6 +3441,35 @@ buffer_deleted_text (GtkEntryBuffer *buffer,
                      guint           position,
                      guint           n_chars,
                      GtkText        *self)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  guint end_pos = position + n_chars;
+
+  if (gtk_text_history_get_enabled (priv->history))
+    {
+      char *deleted_text;
+
+      deleted_text = gtk_editable_get_chars (GTK_EDITABLE (self),
+                                             position,
+                                             end_pos);
+      gtk_text_history_selection_changed (priv->history,
+                                          priv->current_pos,
+                                          priv->selection_bound);
+      gtk_text_history_text_deleted (priv->history,
+                                     position,
+                                     end_pos,
+                                     deleted_text,
+                                     -1);
+
+      g_free (deleted_text);
+    }
+}
+
+static void
+buffer_deleted_text_after (GtkEntryBuffer *buffer,
+                           guint           position,
+                           guint           n_chars,
+                           GtkText        *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   guint end_pos = position + n_chars;
@@ -3435,6 +3527,7 @@ buffer_connect_signals (GtkText *self)
 {
   g_signal_connect (get_buffer (self), "inserted-text", G_CALLBACK (buffer_inserted_text), self);
   g_signal_connect (get_buffer (self), "deleted-text", G_CALLBACK (buffer_deleted_text), self);
+  g_signal_connect_after (get_buffer (self), "deleted-text", G_CALLBACK (buffer_deleted_text_after), self);
   g_signal_connect (get_buffer (self), "notify::text", G_CALLBACK (buffer_notify_text), self);
   g_signal_connect (get_buffer (self), "notify::max-length", G_CALLBACK (buffer_notify_max_length), self);
 }
@@ -3444,6 +3537,7 @@ buffer_disconnect_signals (GtkText *self)
 {
   g_signal_handlers_disconnect_by_func (get_buffer (self), buffer_inserted_text, self);
   g_signal_handlers_disconnect_by_func (get_buffer (self), buffer_deleted_text, self);
+  g_signal_handlers_disconnect_by_func (get_buffer (self), buffer_deleted_text_after, self);
   g_signal_handlers_disconnect_by_func (get_buffer (self), buffer_notify_text, self);
   g_signal_handlers_disconnect_by_func (get_buffer (self), buffer_notify_max_length, self);
 }
@@ -5236,6 +5330,7 @@ static void
 gtk_text_set_text (GtkText     *self,
                    const char *text)
 {
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   int tmp_pos;
 
   g_return_if_fail (GTK_IS_TEXT (self));
@@ -5247,6 +5342,8 @@ gtk_text_set_text (GtkText     *self,
   if (strcmp (gtk_entry_buffer_get_text (get_buffer (self)), text) == 0)
     return;
 
+  gtk_text_history_begin_irreversible_action (priv->history);
+
   begin_change (self);
   g_object_freeze_notify (G_OBJECT (self));
   gtk_text_delete_text (self, 0, -1);
@@ -5254,6 +5351,8 @@ gtk_text_set_text (GtkText     *self,
   gtk_text_insert_text (self, text, strlen (text), &tmp_pos);
   g_object_thaw_notify (G_OBJECT (self));
   end_change (self);
+
+  gtk_text_history_end_irreversible_action (priv->history);
 }
 
 /**
@@ -5292,6 +5391,9 @@ gtk_text_set_visibility (GtkText  *self,
 
       g_object_notify (G_OBJECT (self), "visibility");
       gtk_text_recompute (self);
+
+      /* disable undo when invisible text is used */
+      gtk_text_history_set_enabled (priv->history, visible);
 
       gtk_text_update_clipboard_actions (self);
     }
@@ -6814,4 +6916,72 @@ gtk_text_get_extra_menu (GtkText *self)
   g_return_val_if_fail (GTK_IS_TEXT (self), NULL);
 
   return priv->extra_menu;
+}
+
+static void
+gtk_text_real_undo (GtkWidget  *widget,
+                    const char *action_name,
+                    GVariant   *parameters)
+{
+  GtkText *text = GTK_TEXT (widget);
+  GtkTextPrivate *priv = gtk_text_get_instance_private (text);
+
+  gtk_text_history_undo (priv->history);
+}
+
+static void
+gtk_text_real_redo (GtkWidget  *widget,
+                    const char *action_name,
+                    GVariant   *parameters)
+{
+  GtkText *text = GTK_TEXT (widget);
+  GtkTextPrivate *priv = gtk_text_get_instance_private (text);
+
+  gtk_text_history_redo (priv->history);
+}
+
+static void
+gtk_text_history_change_state_cb (gpointer funcs_data,
+                                  gboolean is_modified,
+                                  gboolean can_undo,
+                                  gboolean can_redo)
+{
+  /* Do nothing */
+}
+
+static void
+gtk_text_history_insert_cb (gpointer    funcs_data,
+                            guint       begin,
+                            guint       end,
+                            const char *str,
+                            guint       len)
+{
+  GtkText *text = funcs_data;
+  int location = begin;
+
+  gtk_editable_insert_text (GTK_EDITABLE (text), str, len, &location);
+}
+
+static void
+gtk_text_history_delete_cb (gpointer    funcs_data,
+                            guint       begin,
+                            guint       end,
+                            const char *expected_text,
+                            guint       len)
+{
+  GtkText *text = funcs_data;
+
+  gtk_editable_delete_text (GTK_EDITABLE (text), begin, end);
+}
+
+static void
+gtk_text_history_select_cb (gpointer funcs_data,
+                            int      selection_insert,
+                            int      selection_bound)
+{
+  GtkText *text = funcs_data;
+
+  gtk_editable_select_region (GTK_EDITABLE (text),
+                              selection_insert,
+                              selection_bound);
 }
