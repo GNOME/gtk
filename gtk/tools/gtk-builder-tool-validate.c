@@ -57,7 +57,7 @@ do_validate_template (const gchar *filename,
                       const gchar *parent_name)
 {
   GType template_type;
-  GtkWidget *widget;
+  GObject *object;
   GtkBuilder *builder;
   GError *error = NULL;
   gint ret;
@@ -69,15 +69,15 @@ do_validate_template (const gchar *filename,
   if (template_type == G_TYPE_INVALID)
     template_type = make_fake_type (type_name, parent_name);
 
-  widget = g_object_new (template_type, NULL);
-  if (!widget)
+  object = g_object_new (template_type, NULL);
+  if (!object)
     {
       g_printerr ("Failed to create an instance of the template type %s\n", type_name);
       exit (1);
     }
 
   builder = gtk_builder_new ();
-  ret = gtk_builder_extend_with_template (builder, widget, template_type, " ", 1, &error);
+  ret = gtk_builder_extend_with_template (builder, object , template_type, " ", 1, &error);
   if (ret)
     ret = gtk_builder_add_from_file (builder, filename, &error);
   g_object_unref (builder);
