@@ -493,8 +493,6 @@ setup_widget (GtkListItem *list_item,
   RowData *data;
 
   data = g_slice_new0 (RowData);
-  g_signal_connect (list_item, "notify::item", G_CALLBACK (row_data_notify_item), data);
-  g_object_set_data_full (G_OBJECT (list_item), "row-data", data, row_data_free);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   gtk_list_item_set_child (list_item, box);
@@ -516,6 +514,9 @@ setup_widget (GtkListItem *list_item,
   gtk_label_set_max_width_chars (GTK_LABEL (data->name), 25);
   gtk_label_set_ellipsize (GTK_LABEL (data->name), PANGO_ELLIPSIZE_END);
   gtk_container_add (GTK_CONTAINER (box), data->name);
+
+  g_signal_connect (list_item, "notify::item", G_CALLBACK (row_data_notify_item), data);
+  g_object_set_data_full (G_OBJECT (list_item), "row-data", data, row_data_free);
 }
 
 static GListModel *
