@@ -23,7 +23,7 @@
 
 #include "gtk/gtktypes.h"
 
-#include "gtk/gtklistitemfactoryprivate.h"
+#include "gtk/gtklistitemfactory.h"
 #include "gtk/gtkrbtreeprivate.h"
 #include "gtk/gtkselectionmodel.h"
 
