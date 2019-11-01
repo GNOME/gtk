@@ -9293,7 +9293,7 @@ anchored_child_new (GtkWidget          *child,
 {
   AnchoredChild *vc;
 
-  vc = g_slice_new (AnchoredChild);
+  vc = g_slice_new0 (AnchoredChild);
   vc->link.data = vc;
   vc->widget = g_object_ref (child);
   vc->anchor = g_object_ref (anchor);
