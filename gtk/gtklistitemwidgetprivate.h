@@ -55,18 +55,10 @@ GType                   gtk_list_item_widget_get_type           (void) G_GNUC_CO
 GtkWidget *             gtk_list_item_widget_new                (GtkListItemFactory     *factory,
                                                                  const char             *css_name);
 
-void                    gtk_list_item_widget_bind               (GtkListItemWidget      *self,
-                                                                 guint                   position,
-                                                                 gpointer                item,
-                                                                 gboolean                selected);
-void                    gtk_list_item_widget_rebind             (GtkListItemWidget      *self,
-                                                                 guint                   position,
-                                                                 gpointer                item,
-                                                                 gboolean                selected);
 void                    gtk_list_item_widget_update             (GtkListItemWidget      *self,
                                                                  guint                   position,
+                                                                 gpointer                item,
                                                                  gboolean                selected);
-void                    gtk_list_item_widget_unbind             (GtkListItemWidget      *self);
 
 void                    gtk_list_item_widget_add_child          (GtkListItemWidget      *self,
                                                                  GtkWidget              *child);
@@ -75,6 +67,7 @@ void                    gtk_list_item_widget_remove_child       (GtkListItemWidg
 
 guint                   gtk_list_item_widget_get_position       (GtkListItemWidget      *self);
 gpointer                gtk_list_item_widget_get_item           (GtkListItemWidget      *self);
+gboolean                gtk_list_item_widget_get_selected       (GtkListItemWidget      *self);
 
 G_END_DECLS
 
