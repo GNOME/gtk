@@ -117,30 +117,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkColumnView, gtk_column_view, GTK_TYPE_WIDGET,
 static GParamSpec *properties[N_PROPS] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
 
-/* For now we do the iter with the children. We might switch that
- * to use the item manager or track children directly in the factory
- * later (depending on how code changes), so having this abstraction makes sense.
- */
-GtkColumnViewIter *
-gtk_column_view_iter_init (GtkColumnView *self)
-{
-  return (GtkColumnViewIter *) gtk_widget_get_first_child (GTK_WIDGET (self->listview));
-}
-
-GtkWidget *
-gtk_column_view_iter_get_widget (GtkColumnView     *self,
-                                 GtkColumnViewIter *iter)
-{
-  return GTK_WIDGET (iter);
-}
-
-GtkColumnViewIter *
-gtk_column_view_iter_next (GtkColumnView     *self,
-                           GtkColumnViewIter *iter)
-{
-  return (GtkColumnViewIter *) gtk_widget_get_next_sibling (GTK_WIDGET (iter));
-}
-
 static void
 gtk_column_view_activate_cb (GtkListView   *listview,
                              guint          pos,
@@ -513,24 +489,12 @@ void
 gtk_column_view_append_column (GtkColumnView       *self,
                                GtkColumnViewColumn *column)
 {
-  GtkColumnViewIter *iter;
-
   g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
   g_return_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (column));
   g_return_if_fail (gtk_column_view_column_get_column_view (column) == NULL);
 
   gtk_column_view_column_set_column_view (column, self);
   g_list_store_append (self->columns, column);
-
-  for (iter = gtk_column_view_iter_init (self);
-       iter != NULL;
-       iter = gtk_column_view_iter_next (self, iter))
-    {
-      gtk_column_list_item_factory_add_column (self->factory,
-                                               GTK_LIST_ITEM_WIDGET (gtk_column_view_iter_get_widget (self, iter)),
-                                               column,
-                                               TRUE);
-    }
 }
 
 /**
@@ -544,7 +508,6 @@ void
 gtk_column_view_remove_column (GtkColumnView       *self,
                                GtkColumnViewColumn *column)
 {
-  GtkColumnViewIter *iter;
   guint i;
 
   g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
@@ -558,18 +521,6 @@ gtk_column_view_remove_column (GtkColumnView       *self,
       g_object_unref (item);
       if (item == column)
         break;
-    }
-
-  g_assert (i < g_list_model_get_n_items (G_LIST_MODEL (self->columns)));
-
-  for (iter = gtk_column_view_iter_init (self);
-       iter != NULL;
-       iter = gtk_column_view_iter_next (self, iter))
-    {
-      gtk_column_list_item_factory_remove_column (self->factory,
-                                                  GTK_LIST_ITEM_WIDGET (gtk_column_view_iter_get_widget (self, iter)),
-                                                  i,
-                                                  column);
     }
 
   gtk_column_view_column_set_column_view (column, NULL);
