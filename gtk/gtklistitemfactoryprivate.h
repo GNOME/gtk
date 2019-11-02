@@ -43,26 +43,13 @@ struct _GtkListItemFactoryClass
   void                  (* teardown)                            (GtkListItemFactory     *self,
                                                                  GtkListItem            *list_item);
 
-  /* bind @list_item to the given @item, which is in @position and @selected state */
-  void                  (* bind)                                (GtkListItemFactory     *self,
-                                                                 GtkListItem            *list_item,
-                                                                 guint                   position,
-                                                                 gpointer                item,
-                                                                 gboolean                selected);
-  /* unbind the current item and bind a new one */
-  void                  (* rebind)                              (GtkListItemFactory     *self,
-                                                                 GtkListItem            *list_item,
-                                                                 guint                   position,
-                                                                 gpointer                item,
-                                                                 gboolean                selected);
-  /* like GtkListItemFactoryClass::rebind(), but the item didn't change */
+  /* Update properties on @list_item to the given @item, which is in @position and @selected state.
+   * One or more of those properties might be unchanged. */
   void                  (* update)                              (GtkListItemFactory     *self,
                                                                  GtkListItem            *list_item,
                                                                  guint                   position,
+                                                                 gpointer                item,
                                                                  gboolean                selected);
-  /* undo the effects of GtkListItemFactoryClass::bind() */
-  void                  (* unbind)                              (GtkListItemFactory     *self,
-                                                                 GtkListItem            *list_item);
 };
 
 void                    gtk_list_item_factory_setup             (GtkListItemFactory     *self,
@@ -70,22 +57,11 @@ void                    gtk_list_item_factory_setup             (GtkListItemFact
 void                    gtk_list_item_factory_teardown          (GtkListItemFactory     *self,
                                                                  GtkListItem            *list_item);
 
-void                    gtk_list_item_factory_bind              (GtkListItemFactory     *self,
-                                                                 GtkListItem            *list_item,
-                                                                 guint                   position,
-                                                                 gpointer                item,
-                                                                 gboolean                selected);
-void                    gtk_list_item_factory_rebind            (GtkListItemFactory     *self,
-                                                                 GtkListItem            *list_item,
-                                                                 guint                   position,
-                                                                 gpointer                item,
-                                                                 gboolean                selected);
 void                    gtk_list_item_factory_update            (GtkListItemFactory     *self,
                                                                  GtkListItem            *list_item,
                                                                  guint                   position,
+                                                                 gpointer                item,
                                                                  gboolean                selected);
-void                    gtk_list_item_factory_unbind            (GtkListItemFactory     *self,
-                                                                 GtkListItem            *list_item);
 
 
 G_END_DECLS

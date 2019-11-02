@@ -107,8 +107,6 @@ gtk_list_item_widget_dispose (GObject *object)
 
   if (self->item)
     {
-      if (self->item->item)
-        gtk_list_item_factory_unbind (self->factory, self->item);
       gtk_list_item_factory_teardown (self->factory, self->item);
       self->item->owner = NULL;
       g_clear_object (&self->item);
@@ -349,61 +347,17 @@ gtk_list_item_widget_new (GtkListItemFactory *factory,
 }
 
 void
-gtk_list_item_widget_bind (GtkListItemWidget *self,
-                           guint              position,
-                           gpointer           item,
-                           gboolean           selected)
-{
-  if (self->factory)
-    gtk_list_item_factory_bind (self->factory, self->item, position, item, selected);
-
-  if (selected)
-    gtk_widget_set_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED, FALSE);
-  else
-    gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED);
-}
-
-void
-gtk_list_item_widget_rebind (GtkListItemWidget *self,
+gtk_list_item_widget_update (GtkListItemWidget *self,
                              guint              position,
                              gpointer           item,
                              gboolean           selected)
 {
-  if (self->factory)
-    gtk_list_item_factory_rebind (self->factory, self->item, position, item, selected);
+  gtk_list_item_factory_update (self->factory, self->item, position, item, selected);
 
   if (selected)
     gtk_widget_set_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED, FALSE);
   else
     gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED);
-
-  gtk_css_node_invalidate (gtk_widget_get_css_node (GTK_WIDGET (self)), GTK_CSS_CHANGE_ANIMATIONS);
-}
-
-void
-gtk_list_item_widget_update (GtkListItemWidget *self,
-                             guint              position,
-                             gboolean           selected)
-{
-  if (self->factory)
-    gtk_list_item_factory_update (self->factory, self->item, position, selected);
-
-  if (selected)
-    gtk_widget_set_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED, FALSE);
-  else
-    gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED);
-
-}
-
-void
-gtk_list_item_widget_unbind (GtkListItemWidget *self)
-{
-  if (self->factory)
-    gtk_list_item_factory_unbind (self->factory, self->item);
-
-  gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED);
-
-  gtk_css_node_invalidate (gtk_widget_get_css_node (GTK_WIDGET (self)), GTK_CSS_CHANGE_ANIMATIONS);
 }
 
 void
@@ -430,5 +384,11 @@ gpointer
 gtk_list_item_widget_get_item (GtkListItemWidget *self)
 {
   return self->item->item;
+}
+
+gboolean
+gtk_list_item_widget_get_selected (GtkListItemWidget *self)
+{
+  return self->item->selected;
 }
 
