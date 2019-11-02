@@ -54,22 +54,7 @@ gtk_functions_list_item_factory_setup (GtkListItemFactory *factory,
 }
 
 static void                  
-gtk_functions_list_item_factory_bind (GtkListItemFactory *factory,
-                                      GtkListItem        *list_item,
-                                      guint               position,
-                                      gpointer            item,
-                                      gboolean            selected)
-{
-  GtkFunctionsListItemFactory *self = GTK_FUNCTIONS_LIST_ITEM_FACTORY (factory);
-
-  GTK_LIST_ITEM_FACTORY_CLASS (gtk_functions_list_item_factory_parent_class)->bind (factory, list_item, position, item, selected);
-
-  if (self->bind_func)  
-    self->bind_func (list_item, self->user_data);
-}
-
-static void
-gtk_functions_list_item_factory_rebind (GtkListItemFactory *factory,
+gtk_functions_list_item_factory_update (GtkListItemFactory *factory,
                                         GtkListItem        *list_item,
                                         guint               position,
                                         gpointer            item,
@@ -77,9 +62,9 @@ gtk_functions_list_item_factory_rebind (GtkListItemFactory *factory,
 {
   GtkFunctionsListItemFactory *self = GTK_FUNCTIONS_LIST_ITEM_FACTORY (factory);
 
-  GTK_LIST_ITEM_FACTORY_CLASS (gtk_functions_list_item_factory_parent_class)->bind (factory, list_item, position, item, selected);
+  GTK_LIST_ITEM_FACTORY_CLASS (gtk_functions_list_item_factory_parent_class)->update (factory, list_item, position, item, selected);
 
-  if (self->bind_func)  
+  if (item != NULL && self->bind_func)  
     self->bind_func (list_item, self->user_data);
 }
 
@@ -103,8 +88,7 @@ gtk_functions_list_item_factory_class_init (GtkFunctionsListItemFactoryClass *kl
   object_class->finalize = gtk_functions_list_item_factory_finalize;
 
   factory_class->setup = gtk_functions_list_item_factory_setup;
-  factory_class->bind = gtk_functions_list_item_factory_bind;
-  factory_class->rebind = gtk_functions_list_item_factory_rebind;
+  factory_class->update = gtk_functions_list_item_factory_update;
 }
 
 static void

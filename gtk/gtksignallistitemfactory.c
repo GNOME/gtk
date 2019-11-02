@@ -117,44 +117,28 @@ gtk_signal_list_item_factory_setup (GtkListItemFactory *factory,
 }
 
 static void                  
-gtk_signal_list_item_factory_bind (GtkListItemFactory *factory,
-                                   GtkListItem        *list_item,
-                                   guint               position,
-                                   gpointer            item,
-                                   gboolean            selected)
-{
-  GTK_LIST_ITEM_FACTORY_CLASS (gtk_signal_list_item_factory_parent_class)->bind (factory, list_item, position, item, selected);
-
-  g_signal_emit (factory, signals[BIND], 0, list_item);
-}
-
-static void
-gtk_signal_list_item_factory_rebind (GtkListItemFactory *factory,
+gtk_signal_list_item_factory_update (GtkListItemFactory *factory,
                                      GtkListItem        *list_item,
                                      guint               position,
                                      gpointer            item,
                                      gboolean            selected)
 {
-  g_signal_emit (factory, signals[UNBIND], 0, list_item);
+  if (gtk_list_item_get_item (list_item))
+    g_signal_emit (factory, signals[UNBIND], 0, list_item);
 
-  GTK_LIST_ITEM_FACTORY_CLASS (gtk_signal_list_item_factory_parent_class)->bind (factory, list_item, position, item, selected);
+  GTK_LIST_ITEM_FACTORY_CLASS (gtk_signal_list_item_factory_parent_class)->update (factory, list_item, position, item, selected);
 
-  g_signal_emit (factory, signals[BIND], 0, list_item);
-}
-
-static void
-gtk_signal_list_item_factory_unbind (GtkListItemFactory *factory,
-                                     GtkListItem        *list_item)
-{
-  g_signal_emit (factory, signals[UNBIND], 0, list_item);
-
-  GTK_LIST_ITEM_FACTORY_CLASS (gtk_signal_list_item_factory_parent_class)->unbind (factory, list_item);
+  if (item)
+    g_signal_emit (factory, signals[BIND], 0, list_item);
 }
 
 static void
 gtk_signal_list_item_factory_teardown (GtkListItemFactory *factory,
                                        GtkListItem        *list_item)
 {
+  if (gtk_list_item_get_item (list_item))
+    g_signal_emit (factory, signals[UNBIND], 0, list_item);
+
   g_signal_emit (factory, signals[TEARDOWN], 0, list_item);
 
   GTK_LIST_ITEM_FACTORY_CLASS (gtk_signal_list_item_factory_parent_class)->teardown (factory, list_item);
@@ -166,10 +150,8 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
   GtkListItemFactoryClass *factory_class = GTK_LIST_ITEM_FACTORY_CLASS (klass);
 
   factory_class->setup = gtk_signal_list_item_factory_setup;
-  factory_class->bind = gtk_signal_list_item_factory_bind;
-  factory_class->rebind = gtk_signal_list_item_factory_rebind;
-  factory_class->unbind = gtk_signal_list_item_factory_unbind;
   factory_class->teardown = gtk_signal_list_item_factory_teardown;
+  factory_class->update = gtk_signal_list_item_factory_update;
 
   /**
    * GtkSignalListItemFactory::setup:
