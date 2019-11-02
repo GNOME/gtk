@@ -23,6 +23,7 @@ private_headers = [
   'gtkcolorscaleprivate.h',
   'gtkcolorswatchprivate.h',
   'gtkcolumnlistitemfactoryprivate.h',
+  'gtkcolumnviewcellprivate.h',
   'gtkcolumnviewcolumnprivate.h',
   'gtkcolumnviewprivate.h',
   'gtkcomboboxprivate.h',

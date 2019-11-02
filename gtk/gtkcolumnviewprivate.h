@@ -22,14 +22,5 @@
 
 #include "gtk/gtkcolumnview.h"
 
-/* This is really just a GtkListItemManagerItem for now, but
- * proper layering ftw */
-typedef struct _GtkColumnViewIter GtkColumnViewIter;
-
-GtkColumnViewIter *     gtk_column_view_iter_init               (GtkColumnView          *self);
-GtkWidget *             gtk_column_view_iter_get_widget         (GtkColumnView          *self,
-                                                                 GtkColumnViewIter      *iter);
-GtkColumnViewIter *     gtk_column_view_iter_next               (GtkColumnView          *self,
-                                                                 GtkColumnViewIter      *iter);
 
 #endif  /* __GTK_COLUMN_VIEW_PRIVATE_H__ */

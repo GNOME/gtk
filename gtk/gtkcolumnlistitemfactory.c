@@ -40,20 +40,6 @@ struct _GtkColumnListItemFactoryClass
 
 G_DEFINE_TYPE (GtkColumnListItemFactory, gtk_column_list_item_factory, GTK_TYPE_LIST_ITEM_FACTORY)
 
-static GtkListItemWidget *
-get_nth_child (GtkListItemWidget *parent,
-               guint              pos)
-{
-  GtkWidget *child;
-  guint i;
-
-  child = gtk_widget_get_first_child (GTK_WIDGET (parent));
-  for (i = 1; i < pos && child; i++)
-    child = gtk_widget_get_next_sibling (child);
-
-  return GTK_LIST_ITEM_WIDGET (child);
-}
-
 static void
 gtk_column_list_item_factory_setup (GtkListItemFactory *factory,
                                     GtkListItemWidget  *widget,
@@ -63,7 +49,8 @@ gtk_column_list_item_factory_setup (GtkListItemFactory *factory,
   GListModel *columns;
   guint i;
 
-  gtk_widget_set_layout_manager (GTK_WIDGET (list_item->owner),
+  /* FIXME: evil */
+  gtk_widget_set_layout_manager (GTK_WIDGET (widget),
                                  gtk_box_layout_new (GTK_ORIENTATION_HORIZONTAL));
 
   GTK_LIST_ITEM_FACTORY_CLASS (gtk_column_list_item_factory_parent_class)->setup (factory, widget, list_item);
@@ -90,11 +77,9 @@ gtk_column_list_item_factory_teardown (GtkListItemFactory *factory,
 
   GTK_LIST_ITEM_FACTORY_CLASS (gtk_column_list_item_factory_parent_class)->teardown (factory, widget, list_item);
 
-  for (child = gtk_widget_get_first_child (GTK_WIDGET (list_item->owner));
-       child;
-       child = gtk_widget_get_first_child (GTK_WIDGET (list_item->owner)))
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (widget))))
     {
-      gtk_list_item_widget_remove_child (list_item->owner, child);
+      gtk_list_item_widget_remove_child (GTK_LIST_ITEM_WIDGET (widget), child);
     }
 }
 
@@ -151,28 +136,12 @@ gtk_column_list_item_factory_add_column (GtkColumnListItemFactory *factory,
                                          GtkColumnViewColumn      *column,
                                          gboolean                  check_bind)
 {
-  GtkListItemFactory *column_factory;
   GtkWidget *cell;
 
-  column_factory = gtk_column_view_column_get_factory (column);
-
-  cell = gtk_list_item_widget_new (column_factory, "cell");
+  cell = gtk_column_view_cell_new (column);
   gtk_list_item_widget_add_child (GTK_LIST_ITEM_WIDGET (list_item), GTK_WIDGET (cell));
   gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (cell),
                                gtk_list_item_widget_get_position (list_item),
                                gtk_list_item_widget_get_item (list_item),
                                gtk_list_item_widget_get_selected (list_item));
-}
-
-void
-gtk_column_list_item_factory_remove_column (GtkColumnListItemFactory *factory,
-                                            GtkListItemWidget        *list_item,
-                                            guint                     col_pos,
-                                            GtkColumnViewColumn      *column)
-{
-  GtkListItemWidget *cell;
-
-  cell = get_nth_child (list_item, col_pos);
-
-  gtk_list_item_widget_remove_child (GTK_LIST_ITEM_WIDGET (list_item), GTK_WIDGET (cell));
 }
