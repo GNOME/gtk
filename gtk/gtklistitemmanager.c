@@ -934,7 +934,7 @@ gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
 
   item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
   selected = gtk_selection_model_is_selected (self->model, position);
-  gtk_list_item_widget_bind (GTK_LIST_ITEM_WIDGET (result), position, item, selected);
+  gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (result), position, item, selected);
   g_object_unref (item);
   gtk_widget_insert_after (result, self->widget, prev_sibling);
 
@@ -972,7 +972,11 @@ gtk_list_item_manager_try_reacquire_list_item (GtkListItemManager *self,
   item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
   if (g_hash_table_steal_extended (change, item, NULL, (gpointer *) &result))
     {
-      gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (result), position, FALSE);
+      GtkListItemWidget *list_item = GTK_LIST_ITEM_WIDGET (result);
+      gtk_list_item_widget_update (list_item,
+                                   position,
+                                   gtk_list_item_widget_get_item (list_item),
+                                   gtk_list_item_widget_get_selected (list_item));
       gtk_widget_insert_after (result, self->widget, prev_sibling);
       /* XXX: Should we let the listview do this? */
       gtk_widget_queue_resize (result);
@@ -1010,7 +1014,10 @@ gtk_list_item_manager_move_list_item (GtkListItemManager     *self,
 
   item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
   selected = gtk_selection_model_is_selected (self->model, position);
-  gtk_list_item_widget_rebind (GTK_LIST_ITEM_WIDGET (list_item), position, item, selected);
+  gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (list_item),
+                               position,
+                               item,
+                               selected);
   gtk_widget_insert_after (list_item, _gtk_widget_get_parent (list_item), prev_sibling);
   g_object_unref (item);
 }
@@ -1029,13 +1036,17 @@ gtk_list_item_manager_update_list_item (GtkListItemManager *self,
                                         GtkWidget          *item,
                                         guint               position)
 {
+  GtkListItemWidget *list_item = GTK_LIST_ITEM_WIDGET (item);
   gboolean selected;
 
   g_return_if_fail (GTK_IS_LIST_ITEM_MANAGER (self));
   g_return_if_fail (GTK_IS_LIST_ITEM_WIDGET (item));
 
   selected = gtk_selection_model_is_selected (self->model, position);
-  gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (item), position, selected);
+  gtk_list_item_widget_update (list_item,
+                               position,
+                               gtk_list_item_widget_get_item (list_item),
+                               selected);
 }
 
 /*
