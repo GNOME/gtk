@@ -195,6 +195,7 @@ gtk_public_sources = files([
   'gtkcolorutils.c',
   'gtkcolumnlistitemfactory.c',
   'gtkcolumnview.c',
+  'gtkcolumnviewcell.c',
   'gtkcolumnviewcolumn.c',
   'gtkcombobox.c',
   'gtkcomboboxtext.c',
