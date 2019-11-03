@@ -4688,7 +4688,12 @@ stackswitcher button.text-button.circular { // FIXME aggregate with buttons
  * Emoji *
  ********/
 
-popover.emoji-picker { padding-left: 0; padding-right: 0; }
+popover.emoji-picker { 
+  padding-left: 0;
+  padding-right: 0;
+
+  entry.search { margin: 3px 5px 5px 5px; }
+}
 
 button.emoji-section {
   border-color: transparent;
@@ -4708,8 +4713,11 @@ button.emoji-section {
 
   outline-offset: -5px;
 
+  &:first-child { margin-left: 7px; }
+  &:last-child { margin-right: 7px; }
+
   &:backdrop:not(:checked) { border-color: transparent; }
-  &:hover { border-color: $borders_color; }
+  &:hover { border-color: if($variant == 'light', $borders_color, transparentize($fg_color, .9)); }
   &:checked { border-color: $selected_bg_color; }
 
   label {
@@ -4725,10 +4733,10 @@ button.emoji-section {
 popover.emoji-picker .emoji {
   font-size: x-large;
   padding: 6px;
-  border-radius: 6px;
 
   :hover {
     background: $selected_bg_color;
+    border-radius: 6px;
   }
 }
 
