@@ -100,11 +100,13 @@ gtk_list_item_get_property (GObject    *object,
       break;
 
     case PROP_ITEM:
-      g_value_set_object (value, self->item);
+      if (self->owner)
+        g_value_set_object (value, gtk_list_item_widget_get_item (self->owner));
       break;
 
     case PROP_POSITION:
-      g_value_set_uint (value, self->position);
+      if (self->owner)
+        g_value_set_uint (value, gtk_list_item_widget_get_position (self->owner));
       break;
 
     case PROP_SELECTABLE:
@@ -112,7 +114,8 @@ gtk_list_item_get_property (GObject    *object,
       break;
 
     case PROP_SELECTED:
-      g_value_set_boolean (value, self->selected);
+      if (self->owner)
+        g_value_set_boolean (value, gtk_list_item_widget_get_selected (self->owner));
       break;
 
     default:
@@ -261,7 +264,10 @@ gtk_list_item_get_item (GtkListItem *self)
 {
   g_return_val_if_fail (GTK_IS_LIST_ITEM (self), NULL);
 
-  return self->item;
+  if (self->owner == NULL)
+    return NULL;
+
+  return gtk_list_item_widget_get_item (self->owner);
 }
 
 /**
@@ -318,23 +324,6 @@ gtk_list_item_set_child (GtkListItem *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ITEM]);
 }
 
-void
-gtk_list_item_set_item (GtkListItem *self,
-                        gpointer     item)
-{
-  g_return_if_fail (GTK_IS_LIST_ITEM (self));
-  g_return_if_fail (item == NULL || G_IS_OBJECT (item));
-
-  if (self->item == item)
-    return;
-
-  g_clear_object (&self->item);
-  if (item)
-    self->item = g_object_ref (item);
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ITEM]);
-}
-
 /**
  * gtk_list_item_get_position:
  * @self: a #GtkListItem
@@ -349,21 +338,10 @@ gtk_list_item_get_position (GtkListItem *self)
 {
   g_return_val_if_fail (GTK_IS_LIST_ITEM (self), 0);
 
-  return self->position;
-}
+  if (self->owner == NULL)
+    return GTK_INVALID_LIST_POSITION;
 
-void
-gtk_list_item_set_position (GtkListItem *self,
-                            guint        position)
-{
-  g_return_if_fail (GTK_IS_LIST_ITEM (self));
-
-  if (self->position == position)
-    return;
-
-  self->position = position;
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_POSITION]);
+  return gtk_list_item_widget_get_position (self->owner);
 }
 
 /**
@@ -381,21 +359,10 @@ gtk_list_item_get_selected (GtkListItem *self)
 {
   g_return_val_if_fail (GTK_IS_LIST_ITEM (self), FALSE);
 
-  return self->selected;
-}
+  if (self->owner == NULL)
+    return FALSE;
 
-void
-gtk_list_item_set_selected (GtkListItem *self,
-                            gboolean     selected)
-{
-  g_return_if_fail (GTK_IS_LIST_ITEM (self));
-
-  if (self->selected == selected)
-    return;
-
-  self->selected = selected;
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
+  return gtk_list_item_widget_get_selected (self->owner);
 }
 
 /**
