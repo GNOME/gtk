@@ -109,15 +109,20 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 static void
 gtk_signal_list_item_factory_setup (GtkListItemFactory *factory,
+                                    GtkListItemWidget  *widget,
                                     GtkListItem        *list_item)
 {
-  GTK_LIST_ITEM_FACTORY_CLASS (gtk_signal_list_item_factory_parent_class)->setup (factory, list_item);
-
   g_signal_emit (factory, signals[SETUP], 0, list_item);
+
+  GTK_LIST_ITEM_FACTORY_CLASS (gtk_signal_list_item_factory_parent_class)->setup (factory, widget, list_item);
+
+  if (gtk_list_item_get_item (list_item))
+    g_signal_emit (factory, signals[BIND], 0, list_item);
 }
 
 static void                  
 gtk_signal_list_item_factory_update (GtkListItemFactory *factory,
+                                     GtkListItemWidget  *widget,
                                      GtkListItem        *list_item,
                                      guint               position,
                                      gpointer            item,
@@ -126,7 +131,7 @@ gtk_signal_list_item_factory_update (GtkListItemFactory *factory,
   if (gtk_list_item_get_item (list_item))
     g_signal_emit (factory, signals[UNBIND], 0, list_item);
 
-  GTK_LIST_ITEM_FACTORY_CLASS (gtk_signal_list_item_factory_parent_class)->update (factory, list_item, position, item, selected);
+  GTK_LIST_ITEM_FACTORY_CLASS (gtk_signal_list_item_factory_parent_class)->update (factory, widget, list_item, position, item, selected);
 
   if (item)
     g_signal_emit (factory, signals[BIND], 0, list_item);
@@ -134,14 +139,15 @@ gtk_signal_list_item_factory_update (GtkListItemFactory *factory,
 
 static void
 gtk_signal_list_item_factory_teardown (GtkListItemFactory *factory,
+                                       GtkListItemWidget  *widget,
                                        GtkListItem        *list_item)
 {
   if (gtk_list_item_get_item (list_item))
     g_signal_emit (factory, signals[UNBIND], 0, list_item);
 
-  g_signal_emit (factory, signals[TEARDOWN], 0, list_item);
+  GTK_LIST_ITEM_FACTORY_CLASS (gtk_signal_list_item_factory_parent_class)->teardown (factory, widget, list_item);
 
-  GTK_LIST_ITEM_FACTORY_CLASS (gtk_signal_list_item_factory_parent_class)->teardown (factory, list_item);
+  g_signal_emit (factory, signals[TEARDOWN], 0, list_item);
 }
 
 static void
