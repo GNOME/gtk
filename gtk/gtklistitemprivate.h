@@ -32,23 +32,14 @@ struct _GtkListItem
 
   GtkListItemWidget *owner; /* has a reference */
 
-  GObject *item;
   GtkWidget *child;
-  guint position;
 
   guint activatable : 1;
   guint selectable : 1;
-  guint selected : 1;
 };
 
 GtkListItem *   gtk_list_item_new                               (void);
 
-void            gtk_list_item_set_item                          (GtkListItem            *self,
-                                                                 gpointer                item);
-void            gtk_list_item_set_position                      (GtkListItem            *self,
-                                                                 guint                   position);
-void            gtk_list_item_set_selected                      (GtkListItem            *self,
-                                                                 gboolean                selected);
 
 G_END_DECLS
 
