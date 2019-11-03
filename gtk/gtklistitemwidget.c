@@ -30,6 +30,7 @@
 #include "gtklistitemfactoryprivate.h"
 #include "gtklistitemprivate.h"
 #include "gtkmain.h"
+#include "gtkselectionmodel.h"
 #include "gtkwidget.h"
 #include "gtkwidgetprivate.h"
 
@@ -38,6 +39,10 @@ struct _GtkListItemWidgetPrivate
 {
   GtkListItemFactory *factory;
   GtkListItem *list_item;
+
+  GObject *item;
+  guint position;
+  gboolean selected;
 };
 
 enum
@@ -55,13 +60,13 @@ gtk_list_item_widget_activate_signal (GtkListItemWidget *self)
 {
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
 
-  if (!priv->list_item->activatable)
+  if (priv->list_item && !priv->list_item->activatable)
     return;
 
   gtk_widget_activate_action (GTK_WIDGET (self),
                               "list.activate-item",
                               "u",
-                              priv->list_item->position);
+                              priv->position);
 }
 
 static gboolean
@@ -122,6 +127,7 @@ gtk_list_item_widget_dispose (GObject *object)
       gtk_list_item_factory_teardown (priv->factory, self);
       g_assert (priv->list_item == NULL);
     }
+  g_clear_object (&priv->item);
   g_clear_object (&priv->factory);
 
   G_OBJECT_CLASS (gtk_list_item_widget_parent_class)->dispose (object);
@@ -136,7 +142,7 @@ gtk_list_item_widget_select_action (GtkWidget  *widget,
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
   gboolean modify, extend;
 
-  if (!priv->list_item->selectable)
+  if (priv->list_item && !priv->list_item->selectable)
     return;
 
   g_variant_get (parameter, "(bb)", &modify, &extend);
@@ -144,7 +150,7 @@ gtk_list_item_widget_select_action (GtkWidget  *widget,
   gtk_widget_activate_action (GTK_WIDGET (self),
                               "list.select-item",
                               "(ubb)",
-                              priv->list_item->position, modify, extend);
+                              priv->position, modify, extend);
 }
 
 static void
@@ -233,13 +239,13 @@ gtk_list_item_widget_click_gesture_pressed (GtkGestureClick   *gesture,
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
   GtkWidget *widget = GTK_WIDGET (self);
 
-  if (!priv->list_item->selectable && !priv->list_item->activatable)
+  if (priv->list_item && !priv->list_item->selectable && !priv->list_item->activatable)
     {
       gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
       return;
     }
 
-  if (priv->list_item->selectable)
+  if (!priv->list_item || priv->list_item->selectable)
     {
       GdkModifierType state;
       GdkModifierType mask;
@@ -258,17 +264,17 @@ gtk_list_item_widget_click_gesture_pressed (GtkGestureClick   *gesture,
       gtk_widget_activate_action (GTK_WIDGET (self),
                                   "list.select-item",
                                   "(ubb)",
-                                  priv->list_item->position, modify, extend);
+                                  priv->position, modify, extend);
     }
 
-  if (priv->list_item->activatable)
+  if (!priv->list_item || priv->list_item->activatable)
     {
       if (n_press == 2)
         {
           gtk_widget_activate_action (GTK_WIDGET (self),
                                       "list.activate-item",
                                       "u",
-                                      priv->list_item->position);
+                                      priv->position);
         }
     }
 
@@ -288,7 +294,7 @@ gtk_list_item_widget_enter_cb (GtkEventControllerFocus *controller,
   gtk_widget_activate_action (widget,
                               "list.scroll-to-item",
                               "u",
-                              priv->list_item->position);
+                              priv->position);
 }
 
 static void
@@ -389,6 +395,13 @@ gtk_list_item_widget_default_setup (GtkListItemWidget *self,
 
   if (list_item->child)
     gtk_list_item_widget_add_child (self, list_item->child);
+
+  if (priv->item)
+    g_object_notify (G_OBJECT (list_item), "item");
+  if (priv->position != GTK_INVALID_LIST_POSITION)
+    g_object_notify (G_OBJECT (list_item), "position");
+  if (priv->selected)
+    g_object_notify (G_OBJECT (list_item), "selected");
 }
 
 void
@@ -404,6 +417,13 @@ gtk_list_item_widget_default_teardown (GtkListItemWidget *self,
 
   if (list_item->child)
     gtk_list_item_widget_remove_child (self, list_item->child);
+
+  if (priv->item)
+    g_object_notify (G_OBJECT (list_item), "item");
+  if (priv->position != GTK_INVALID_LIST_POSITION)
+    g_object_notify (G_OBJECT (list_item), "position");
+  if (priv->selected)
+    g_object_notify (G_OBJECT (list_item), "selected");
 }
 
 void
@@ -413,9 +433,24 @@ gtk_list_item_widget_default_update (GtkListItemWidget *self,
                                      gpointer           item,
                                      gboolean           selected)
 {
-  gtk_list_item_set_item (list_item, item);
-  gtk_list_item_set_position (list_item, position);
-  gtk_list_item_set_selected (list_item, selected);
+  GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
+
+  /* FIXME: It's kinda evil to notify external objects from here... */
+  
+  if (g_set_object (&priv->item, item))
+    g_object_notify (G_OBJECT (list_item), "item");
+
+  if (priv->position != position)
+    {
+      priv->position = position;
+      g_object_notify (G_OBJECT (list_item), "position");
+    }
+
+  if (priv->selected != selected)
+    {
+      priv->selected = selected;
+      g_object_notify (G_OBJECT (list_item), "selected");
+    }
 }
 
 void
@@ -445,7 +480,7 @@ gtk_list_item_widget_get_position (GtkListItemWidget *self)
 {
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
 
-  return priv->list_item->position;
+  return priv->position;
 }
 
 gpointer
@@ -453,7 +488,7 @@ gtk_list_item_widget_get_item (GtkListItemWidget *self)
 {
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
 
-  return priv->list_item->item;
+  return priv->item;
 }
 
 gboolean
@@ -461,6 +496,6 @@ gtk_list_item_widget_get_selected (GtkListItemWidget *self)
 {
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
 
-  return priv->list_item->selected;
+  return priv->selected;
 }
 
