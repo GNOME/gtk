@@ -239,17 +239,10 @@ gtk_list_item_init (GtkListItem *self)
 }
 
 GtkListItem *
-gtk_list_item_new (GtkListItemWidget *owner)
+gtk_list_item_new (void)
 {
-  GtkListItem *result;
-
-  g_return_val_if_fail (owner != NULL, NULL);
-
-  result = g_object_new (GTK_TYPE_LIST_ITEM,
-                         NULL);
-  result->owner = owner;
-
-  return result;
+  return g_object_new (GTK_TYPE_LIST_ITEM,
+                       NULL);
 }
 
 /**
