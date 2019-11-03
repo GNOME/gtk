@@ -43,18 +43,23 @@ G_DEFINE_TYPE (GtkFunctionsListItemFactory, gtk_functions_list_item_factory, GTK
 
 static void
 gtk_functions_list_item_factory_setup (GtkListItemFactory *factory,
+                                       GtkListItemWidget  *widget,
                                        GtkListItem        *list_item)
 {
   GtkFunctionsListItemFactory *self = GTK_FUNCTIONS_LIST_ITEM_FACTORY (factory);
 
-  GTK_LIST_ITEM_FACTORY_CLASS (gtk_functions_list_item_factory_parent_class)->setup (factory, list_item);
-
   if (self->setup_func)
     self->setup_func (list_item, self->user_data);
+
+  GTK_LIST_ITEM_FACTORY_CLASS (gtk_functions_list_item_factory_parent_class)->setup (factory, widget, list_item);
+
+  if (gtk_list_item_get_item (list_item) != NULL && self->bind_func)  
+    self->bind_func (list_item, self->user_data);
 }
 
 static void                  
 gtk_functions_list_item_factory_update (GtkListItemFactory *factory,
+                                        GtkListItemWidget  *widget,
                                         GtkListItem        *list_item,
                                         guint               position,
                                         gpointer            item,
@@ -62,7 +67,7 @@ gtk_functions_list_item_factory_update (GtkListItemFactory *factory,
 {
   GtkFunctionsListItemFactory *self = GTK_FUNCTIONS_LIST_ITEM_FACTORY (factory);
 
-  GTK_LIST_ITEM_FACTORY_CLASS (gtk_functions_list_item_factory_parent_class)->update (factory, list_item, position, item, selected);
+  GTK_LIST_ITEM_FACTORY_CLASS (gtk_functions_list_item_factory_parent_class)->update (factory, widget, list_item, position, item, selected);
 
   if (item != NULL && self->bind_func)  
     self->bind_func (list_item, self->user_data);
