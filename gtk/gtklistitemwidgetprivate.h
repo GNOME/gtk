@@ -59,6 +59,17 @@ void                    gtk_list_item_widget_update             (GtkListItemWidg
                                                                  guint                   position,
                                                                  gpointer                item,
                                                                  gboolean                selected);
+GtkListItem *           gtk_list_item_widget_get_list_item      (GtkListItemWidget      *self);
+
+void                    gtk_list_item_widget_default_setup      (GtkListItemWidget      *self,
+                                                                 GtkListItem            *list_item);
+void                    gtk_list_item_widget_default_teardown   (GtkListItemWidget      *self,
+                                                                 GtkListItem            *list_item);
+void                    gtk_list_item_widget_default_update     (GtkListItemWidget      *self,
+                                                                 GtkListItem            *list_item,
+                                                                 guint                   position,
+                                                                 gpointer                item,
+                                                                 gboolean                selected);
 
 void                    gtk_list_item_widget_add_child          (GtkListItemWidget      *self,
                                                                  GtkWidget              *child);

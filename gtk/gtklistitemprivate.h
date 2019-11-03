@@ -41,7 +41,7 @@ struct _GtkListItem
   guint selected : 1;
 };
 
-GtkListItem *   gtk_list_item_new                               (GtkListItemWidget      *owner);
+GtkListItem *   gtk_list_item_new                               (void);
 
 void            gtk_list_item_set_item                          (GtkListItem            *self,
                                                                  gpointer                item);

@@ -84,13 +84,14 @@ static GParamSpec *properties[N_PROPS] = { NULL, };
 
 static void
 gtk_builder_list_item_factory_setup (GtkListItemFactory *factory,
+                                     GtkListItemWidget  *widget,
                                      GtkListItem        *list_item)
 {
   GtkBuilderListItemFactory *self = GTK_BUILDER_LIST_ITEM_FACTORY (factory);
   GtkBuilder *builder;
   GError *error = NULL;
 
-  GTK_LIST_ITEM_FACTORY_CLASS (gtk_builder_list_item_factory_parent_class)->setup (factory, list_item);
+  GTK_LIST_ITEM_FACTORY_CLASS (gtk_builder_list_item_factory_parent_class)->setup (factory, widget, list_item);
 
   builder = gtk_builder_new ();
 
