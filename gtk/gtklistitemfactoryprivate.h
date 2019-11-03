@@ -22,8 +22,7 @@
 #define __GTK_LIST_ITEM_FACTORY_PRIVATE_H__
 
 #include <gtk/gtklistitem.h>
-#include <gtk/gtklistitemfactory.h>
-#include <gtk/gtklistview.h>
+#include "gtk/gtklistitemwidgetprivate.h"
 
 G_BEGIN_DECLS
 
@@ -38,14 +37,17 @@ struct _GtkListItemFactoryClass
 
   /* setup @list_item so it can be bound */
   void                  (* setup)                               (GtkListItemFactory     *self,
+                                                                 GtkListItemWidget      *widget,
                                                                  GtkListItem            *list_item);
   /* undo the effects of GtkListItemFactoryClass::setup() */
   void                  (* teardown)                            (GtkListItemFactory     *self,
+                                                                 GtkListItemWidget      *widget,
                                                                  GtkListItem            *list_item);
 
   /* Update properties on @list_item to the given @item, which is in @position and @selected state.
    * One or more of those properties might be unchanged. */
   void                  (* update)                              (GtkListItemFactory     *self,
+                                                                 GtkListItemWidget      *widget,
                                                                  GtkListItem            *list_item,
                                                                  guint                   position,
                                                                  gpointer                item,
@@ -53,12 +55,12 @@ struct _GtkListItemFactoryClass
 };
 
 void                    gtk_list_item_factory_setup             (GtkListItemFactory     *self,
-                                                                 GtkListItem            *list_item);
+                                                                 GtkListItemWidget      *widget);
 void                    gtk_list_item_factory_teardown          (GtkListItemFactory     *self,
-                                                                 GtkListItem            *list_item);
+                                                                 GtkListItemWidget      *widget);
 
 void                    gtk_list_item_factory_update            (GtkListItemFactory     *self,
-                                                                 GtkListItem            *list_item,
+                                                                 GtkListItemWidget      *widget,
                                                                  guint                   position,
                                                                  gpointer                item,
                                                                  gboolean                selected);
