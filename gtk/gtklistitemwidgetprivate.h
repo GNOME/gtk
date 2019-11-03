@@ -68,6 +68,8 @@ void                    gtk_list_item_widget_default_update     (GtkListItemWidg
                                                                  gpointer                item,
                                                                  gboolean                selected);
 
+void                    gtk_list_item_widget_set_factory        (GtkListItemWidget      *self,
+                                                                 GtkListItemFactory     *factory);
 void                    gtk_list_item_widget_add_child          (GtkListItemWidget      *self,
                                                                  GtkWidget              *child);
 void                    gtk_list_item_widget_remove_child       (GtkListItemWidget      *self,
