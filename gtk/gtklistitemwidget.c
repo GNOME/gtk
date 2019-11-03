@@ -45,6 +45,13 @@ struct _GtkListItemWidgetPrivate
   gboolean selected;
 };
 
+enum {
+  PROP_0,
+  PROP_FACTORY,
+
+  N_PROPS
+};
+
 enum
 {
   ACTIVATE_SIGNAL,
@@ -53,6 +60,7 @@ enum
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkListItemWidget, gtk_list_item_widget, GTK_TYPE_WIDGET)
 
+static GParamSpec *properties[N_PROPS] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
 
 static void
@@ -110,10 +118,54 @@ gtk_list_item_widget_grab_focus (GtkWidget *widget)
   GtkListItemWidget *self = GTK_LIST_ITEM_WIDGET (widget);
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
 
-  if (priv->list_item->child && gtk_widget_grab_focus (priv->list_item->child))
+  if (priv->list_item && priv->list_item->child && gtk_widget_grab_focus (priv->list_item->child))
     return TRUE;
 
   return GTK_WIDGET_CLASS (gtk_list_item_widget_parent_class)->grab_focus (widget);
+}
+
+static void
+gtk_list_item_widget_root (GtkWidget *widget)
+{
+  GtkListItemWidget *self = GTK_LIST_ITEM_WIDGET (widget);
+  GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
+
+  GTK_WIDGET_CLASS (gtk_list_item_widget_parent_class)->root (widget);
+
+  if (priv->factory)
+    gtk_list_item_factory_setup (priv->factory, self);
+}
+
+static void
+gtk_list_item_widget_unroot (GtkWidget *widget)
+{
+  GtkListItemWidget *self = GTK_LIST_ITEM_WIDGET (widget);
+  GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
+
+  GTK_WIDGET_CLASS (gtk_list_item_widget_parent_class)->unroot (widget);
+
+  if (priv->list_item)
+      gtk_list_item_factory_teardown (priv->factory, self);
+}
+
+static void
+gtk_list_item_widget_set_property (GObject      *object,
+                                   guint         property_id,
+                                   const GValue *value,
+                                   GParamSpec   *pspec)
+{
+  GtkListItemWidget *self = GTK_LIST_ITEM_WIDGET (object);
+
+  switch (property_id)
+    {
+    case PROP_FACTORY:
+      gtk_list_item_widget_set_factory (self, g_value_get_object (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
 }
 
 static void
@@ -122,11 +174,8 @@ gtk_list_item_widget_dispose (GObject *object)
   GtkListItemWidget *self = GTK_LIST_ITEM_WIDGET (object);
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
 
-  if (priv->list_item)
-    {
-      gtk_list_item_factory_teardown (priv->factory, self);
-      g_assert (priv->list_item == NULL);
-    }
+  g_assert (priv->list_item == NULL);
+
   g_clear_object (&priv->item);
   g_clear_object (&priv->factory);
 
@@ -164,8 +213,20 @@ gtk_list_item_widget_class_init (GtkListItemWidgetClass *klass)
 
   widget_class->focus = gtk_list_item_widget_focus;
   widget_class->grab_focus = gtk_list_item_widget_grab_focus;
+  widget_class->root = gtk_list_item_widget_root;
+  widget_class->unroot = gtk_list_item_widget_unroot;
 
+  gobject_class->set_property = gtk_list_item_widget_set_property;
   gobject_class->dispose = gtk_list_item_widget_dispose;
+
+  properties[PROP_FACTORY] =
+    g_param_spec_object ("factory",
+                         "Factory",
+                         "Factory managing this list item",
+                         GTK_TYPE_LIST_ITEM_FACTORY,
+                         G_PARAM_WRITABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
   signals[ACTIVATE_SIGNAL] =
     g_signal_new (I_("activate-keybinding"),
@@ -347,24 +408,12 @@ GtkWidget *
 gtk_list_item_widget_new (GtkListItemFactory *factory,
                           const char         *css_name)
 {
-  GtkListItemWidget *result;
-
   g_return_val_if_fail (css_name != NULL, NULL);
 
-  result = g_object_new (GTK_TYPE_LIST_ITEM_WIDGET,
-                         "css-name", css_name,
-                         NULL);
-  if (factory)
-    {
-      GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (result);
-
-      priv->factory = g_object_ref (factory);
-
-      gtk_list_item_factory_setup (factory, result);
-      g_assert (priv->list_item != NULL);
-    }
-
-  return GTK_WIDGET (result);
+  return g_object_new (GTK_TYPE_LIST_ITEM_WIDGET,
+                       "css-name", css_name,
+                       "factory", factory,
+                       NULL);
 }
 
 void
@@ -375,8 +424,10 @@ gtk_list_item_widget_update (GtkListItemWidget *self,
 {
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
 
-  if (priv->factory)
+  if (priv->list_item)
     gtk_list_item_factory_update (priv->factory, self, position, item, selected);
+  else
+    gtk_list_item_widget_default_update (self, NULL, position, item, selected);
 
   if (selected)
     gtk_widget_set_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED, FALSE);
@@ -438,19 +489,51 @@ gtk_list_item_widget_default_update (GtkListItemWidget *self,
   /* FIXME: It's kinda evil to notify external objects from here... */
   
   if (g_set_object (&priv->item, item))
-    g_object_notify (G_OBJECT (list_item), "item");
+    {
+      if (list_item)
+        g_object_notify (G_OBJECT (list_item), "item");
+    }
 
   if (priv->position != position)
     {
       priv->position = position;
-      g_object_notify (G_OBJECT (list_item), "position");
+      if (list_item)
+        g_object_notify (G_OBJECT (list_item), "position");
     }
 
   if (priv->selected != selected)
     {
       priv->selected = selected;
-      g_object_notify (G_OBJECT (list_item), "selected");
+      if (list_item)
+        g_object_notify (G_OBJECT (list_item), "selected");
     }
+}
+
+void
+gtk_list_item_widget_set_factory (GtkListItemWidget  *self,
+                                  GtkListItemFactory *factory)
+{
+  GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
+
+  if (priv->factory == factory)
+    return;
+
+  if (priv->factory)
+    {
+      if (priv->list_item)
+        gtk_list_item_factory_teardown (factory, self);
+      g_clear_object (&priv->factory);
+    }
+
+  if (factory)
+    {
+      priv->factory = g_object_ref (factory);
+
+      if (gtk_widget_get_root (GTK_WIDGET (self)))
+        gtk_list_item_factory_setup (factory, self);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
 }
 
 void
