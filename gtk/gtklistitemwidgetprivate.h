@@ -38,9 +38,6 @@ typedef struct _GtkListItemWidgetClass GtkListItemWidgetClass;
 struct _GtkListItemWidget
 {
   GtkWidget parent_instance;
-
-  GtkListItemFactory *factory;
-  GtkListItem *item;
 };
 
 struct _GtkListItemWidgetClass
