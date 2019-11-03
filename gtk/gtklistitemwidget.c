@@ -107,9 +107,8 @@ gtk_list_item_widget_dispose (GObject *object)
 
   if (self->item)
     {
-      gtk_list_item_factory_teardown (self->factory, self->item);
-      self->item->owner = NULL;
-      g_clear_object (&self->item);
+      gtk_list_item_factory_teardown (self->factory, self);
+      g_assert (self->item == NULL);
     }
   g_clear_object (&self->factory);
 
@@ -321,8 +320,6 @@ gtk_list_item_widget_init (GtkListItemWidget *self)
   controller = gtk_event_controller_focus_new ();
   g_signal_connect (controller, "enter", G_CALLBACK (gtk_list_item_widget_enter_cb), self);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
-
-  self->item = gtk_list_item_new (self);
 }
 
 GtkWidget *
@@ -340,7 +337,8 @@ gtk_list_item_widget_new (GtkListItemFactory *factory,
     {
       result->factory = g_object_ref (factory);
 
-      gtk_list_item_factory_setup (factory, result->item);
+      gtk_list_item_factory_setup (factory, result);
+      g_assert (result->item != NULL);
     }
 
   return GTK_WIDGET (result);
@@ -352,12 +350,49 @@ gtk_list_item_widget_update (GtkListItemWidget *self,
                              gpointer           item,
                              gboolean           selected)
 {
-  gtk_list_item_factory_update (self->factory, self->item, position, item, selected);
+  if (self->factory)
+    gtk_list_item_factory_update (self->factory, self, position, item, selected);
 
   if (selected)
     gtk_widget_set_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED, FALSE);
   else
     gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED);
+}
+
+void
+gtk_list_item_widget_default_setup (GtkListItemWidget *self,
+                                    GtkListItem       *list_item)
+{
+  self->item = list_item;
+  list_item->owner = self;
+
+  if (list_item->child)
+    gtk_list_item_widget_add_child (self, list_item->child);
+}
+
+void
+gtk_list_item_widget_default_teardown (GtkListItemWidget *self,
+                                       GtkListItem       *list_item)
+{
+  g_assert (self->item == list_item);
+
+  self->item = NULL;
+  list_item->owner = NULL;
+
+  if (list_item->child)
+    gtk_list_item_widget_remove_child (self, list_item->child);
+}
+
+void
+gtk_list_item_widget_default_update (GtkListItemWidget *self,
+                                     GtkListItem       *list_item,
+                                     guint              position,
+                                     gpointer           item,
+                                     gboolean           selected)
+{
+  gtk_list_item_set_item (list_item, item);
+  gtk_list_item_set_position (list_item, position);
+  gtk_list_item_set_selected (list_item, selected);
 }
 
 void
@@ -372,6 +407,12 @@ gtk_list_item_widget_remove_child (GtkListItemWidget *self,
                                    GtkWidget         *child)
 {
   gtk_widget_unparent (child);
+}
+
+GtkListItem *
+gtk_list_item_widget_get_list_item (GtkListItemWidget *self)
+{
+  return self->item;
 }
 
 guint
