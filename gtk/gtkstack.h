@@ -79,11 +79,11 @@ GType                  gtk_stack_get_type                (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget *            gtk_stack_new                     (void);
 GDK_AVAILABLE_IN_ALL
-void                   gtk_stack_add_named               (GtkStack               *stack,
+GtkStackPage *         gtk_stack_add_named               (GtkStack               *stack,
                                                           GtkWidget              *child,
                                                           const gchar            *name);
 GDK_AVAILABLE_IN_ALL
-void                   gtk_stack_add_titled              (GtkStack               *stack,
+GtkStackPage *         gtk_stack_add_titled              (GtkStack               *stack,
                                                           GtkWidget              *child,
                                                           const gchar            *name,
                                                           const gchar            *title);
