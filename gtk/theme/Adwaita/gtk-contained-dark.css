@@ -1984,11 +1984,17 @@ stackswitcher button.circular, stackswitcher button.text-button.circular { min-w
 /********* Emoji * */
 popover.emoji-picker { padding-left: 0; padding-right: 0; }
 
+popover.emoji-picker entry.search { margin: 3px 5px 5px 5px; }
+
 button.emoji-section { border-color: transparent; border-width: 3px; border-style: none none solid; border-radius: 0; margin: 2px 4px 2px 4px; padding: 3px 0 0; min-width: 32px; min-height: 28px; /* reset props inherited from the button style */ background: none; box-shadow: none; text-shadow: none; outline-offset: -5px; }
+
+button.emoji-section:first-child { margin-left: 7px; }
+
+button.emoji-section:last-child { margin-right: 7px; }
 
 button.emoji-section:backdrop:not(:checked) { border-color: transparent; }
 
-button.emoji-section:hover { border-color: #1b1b1b; }
+button.emoji-section:hover { border-color: rgba(238, 238, 236, 0.1); }
 
 button.emoji-section:checked { border-color: #15539e; }
 
@@ -1998,9 +2004,9 @@ button.emoji-section:hover label { opacity: 0.775; }
 
 button.emoji-section:checked label { opacity: 1; }
 
-popover.emoji-picker .emoji { font-size: x-large; padding: 6px; border-radius: 6px; }
+popover.emoji-picker .emoji { font-size: x-large; padding: 6px; }
 
-popover.emoji-picker .emoji :hover { background: #15539e; }
+popover.emoji-picker .emoji :hover { background: #15539e; border-radius: 6px; }
 
 popover.emoji-completion arrow { border: none; background: none; }
 
