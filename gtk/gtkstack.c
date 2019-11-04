@@ -1336,6 +1336,8 @@ gtk_stack_add_internal (GtkStack *stack,
  * The child is identified by the @name. The @title
  * will be used by #GtkStackSwitcher to represent
  * @child in a tab bar, so it should be short.
+ *
+ * Returns: (transfer none): the #GtkStackPage for @child
  */
 void
 gtk_stack_add_titled (GtkStack   *stack,
@@ -1346,7 +1348,7 @@ gtk_stack_add_titled (GtkStack   *stack,
   g_return_if_fail (GTK_IS_STACK (stack));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
-  gtk_stack_add_internal (stack, child, name, title);
+  return gtk_stack_add_internal (stack, child, name, title);
 }
 
 /**
@@ -1357,8 +1359,10 @@ gtk_stack_add_titled (GtkStack   *stack,
  *
  * Adds a child to @stack.
  * The child is identified by the @name.
+ *
+ * Returns: (transfer none): the #GtkStackPage for @child
  */
-void
+GtkStackPage *
 gtk_stack_add_named (GtkStack   *stack,
                     GtkWidget   *child,
                     const gchar *name)
@@ -1366,7 +1370,7 @@ gtk_stack_add_named (GtkStack   *stack,
   g_return_if_fail (GTK_IS_STACK (stack));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
-  gtk_stack_add_internal (stack, child, name, NULL);
+  return gtk_stack_add_internal (stack, child, name, NULL);
 }
 
 static void
@@ -1375,10 +1379,10 @@ gtk_stack_add (GtkContainer *container,
 {
   GtkStack *stack = GTK_STACK (container);
 
-  gtk_stack_add_internal (stack, child, NULL, NULL);
+  return gtk_stack_add_internal (stack, child, NULL, NULL);
 }
 
-static void
+static GtkStackPage *
 gtk_stack_add_internal (GtkStack   *stack,
                         GtkWidget  *child,
                         const char *name,
@@ -1399,6 +1403,8 @@ gtk_stack_add_internal (GtkStack   *stack,
   gtk_stack_add_page (stack, child_info);
 
   g_object_unref (child_info);
+
+  return child_info;
 }
 
 static void
