@@ -122,6 +122,7 @@ struct _GtkWidgetPrivate
 
   int width_request;
   int height_request;
+  void (* resize_func) (GtkWidget *);
   GtkBorder margin;
 
   /* Animations and other things to update on clock ticks */
