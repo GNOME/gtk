@@ -2932,20 +2932,44 @@ radio {
   border: 1px solid;
   -gtk-icon-source: none;
 
-  @include button(normal-alt, $edge: $shadow_color);
-  &:hover { @include button(hover-alt, $c:$checkradio_bg_color, $tc:$checkradio_fg_color, $edge: $shadow_color); }
-  &:hover:not(:checked) { @include button(hover-alt, $edge: $shadow_color); }
-  &:active { @include button(active, $c:$checkradio_bg_color, $tc:$checkradio_fg_color); }
-  &:checked { @include button(normal-alt, $c:$checkradio_bg_color, $tc:$checkradio_fg_color, $edge: $shadow_color); }
-  &:disabled { @include button(insensitive); }
-  &:backdrop {
-    @include button(backdrop);
+  & {
+    // for unchecked
+    border: 1px solid;
+    $_c: if($variant=='light', white, $bg_color);
 
-    transition: $backdrop_transition;
-
-    &:disabled { @include button(backdrop-insensitive); }
+    @each $state, $t in ("", "normal"),
+                        (":hover", "hover"),
+                        (":hover:backdrop", "backdrop-hover"),
+                        (":active", "active"),
+                        (":disabled", "insensitive"),
+                        (":backdrop", "backdrop"),
+                        (":backdrop:disabled", 'backdrop-insensitive') {
+      &#{$state} {
+        @include check($t, $_c);
+      }
+    }
   }
 
+  & {
+    // for checked
+    @each $t in (':checked:not(:indeterminate)'), (':indeterminate') {
+      &#{$t} {
+        @each $state, $t in ("", "normal"),
+                            (":hover", "hover"),
+                            (":hover:backdrop", "backdrop-hover"),
+                            (":disabled", "insensitive"),
+                            (":backdrop", "backdrop"),
+                            (":backdrop:disabled", 'backdrop-insensitive') {
+          &#{$state} {
+            @include check($t, $checkradio_bg_color, $checkradio_fg_color, $checked: true);
+          }
+        }
+      }
+    }
+  }
+
+  &:backdrop { transition: $backdrop_transition; }
+  
   @if $variant == 'light' {
     // the borders of the light variant versions of checks and radios are too similar in luminosity to the selected background
     // color, hence we need special casing.
@@ -2973,6 +2997,12 @@ radio {
       -gtk-icon-shadow: none;
       color: inherit;
       border-color: currentColor;
+    }
+    &:indeterminate, &:checked {
+      &:hover {
+        color: $checkradio_fg_color;
+        border-color: darken($checkradio_bg_color, if($variant=='light', 15%, 30%));
+      }      
     }
   }
 }
@@ -3031,15 +3061,7 @@ treeview.view radio {
 
       @if $variant == 'light' { border-color: $selected_borders_color; }
     }
-
-    &:disabled {
-      color: $insensitive_fg_color;
-
-      &:backdrop { color: $backdrop_insensitive_color; }
-    }
   }
-
-  &:backdrop { &:selected, & { color: $backdrop_fg_color; }}
 }
 
 treeview.view radio:selected { &:focus, & { @extend %radio; }} // This is a workaround
