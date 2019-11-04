@@ -436,6 +436,7 @@ xfails = [
   # these depend on details of text layout
   'label-background.ui',
   'label-wrap-justify.ui',
+  'label-sizing.ui',
   'quit-mnemonic.ui',
 ]
 
