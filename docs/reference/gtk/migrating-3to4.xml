@@ -813,6 +813,21 @@
       </para>
     </section>
 
+    <section>
+      <title>GtkEntryBuffer ::deleted-text has changed</title>
+      <para>
+        To allow signal handlers to access the deleted text before it
+        has been deleted #GtkEntryBuffer::deleted-text has changed from
+        %G_SIGNAL_RUN_FIRST to %G_SIGNAL_RUN_LAST. The default handler
+        removes the text from the #GtkEntryBuffer.
+      </para>
+      <para>
+        To adapt existing code, use g_signal_connect_after() or
+        %G_CONNECT_AFTER when using g_signal_connect_data() or
+        g_signal_connect_object().
+      </para>
+    </section>
+
   </section>
 
 </chapter>
