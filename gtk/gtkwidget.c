@@ -3694,6 +3694,9 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
   priv->resize_needed = TRUE;
   gtk_widget_set_alloc_needed (widget);
 
+  if (priv->resize_func)
+    priv->resize_func (widget);
+
   groups = _gtk_widget_get_sizegroups (widget);
 
   for (l = groups; l; l = l->next)
