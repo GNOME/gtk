@@ -35,6 +35,30 @@ fedora-x86_64:
     key: "$CI_JOB_NAME"
     <<: *cache-paths
 
+all-dependencies:
+  image: registry.gitlab.gnome.org/gnome/gtk/master:v7
+  stage: build
+  variables:
+    WRAP_MODE: forcefallback
+  script:
+    - bash -x ./.gitlab-ci/test-docker.sh
+  allow_failure: true
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - "${CI_PROJECT_DIR}/_build/report.xml"
+    name: "gtk-all-deps-${CI_COMMIT_REF_NAME}"
+    paths:
+      - "${CI_PROJECT_DIR}/_build/meson-list"
+      - "${CI_PROJECT_DIR}/_build/report.xml"
+      - "${CI_PROJECT_DIR}/_build/report.html"
+      - "${CI_PROJECT_DIR}/_build/testsuite/reftests/output/*.png"
+      - "${CI_PROJECT_DIR}/_build/testsuite/gsk/compare/*/*.png"
+  cache:
+    key: "$CI_JOB_NAME"
+    <<: *cache-paths
+
 .mingw-defaults: &mingw-defaults
   stage: build
   tags:
