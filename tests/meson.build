@@ -126,6 +126,7 @@ gtk_tests = [
   ['testblur'],
   ['testtexture'],
   ['testwindowdrag'],
+  ['testtexthistory', ['../gtk/gtktexthistory.c']],
 ]
 
 if os_unix

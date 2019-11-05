@@ -619,6 +619,13 @@ static void gtk_text_view_activate_misc_insert_emoji    (GtkWidget  *widget,
                                                          const char *action_name,
                                                          GVariant   *parameter);
 
+static void gtk_text_view_real_undo (GtkWidget   *widget,
+                                     const gchar *action_name,
+                                     GVariant    *parameter);
+static void gtk_text_view_real_redo (GtkWidget   *widget,
+                                     const gchar *action_name,
+                                     GVariant    *parameter);
+
 
 /* FIXME probably need the focus methods. */
 
@@ -1358,6 +1365,9 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                   NULL,
                   G_TYPE_NONE, 0);
 
+  gtk_widget_class_install_action (widget_class, "text.undo", NULL, gtk_text_view_real_undo);
+  gtk_widget_class_install_action (widget_class, "text.redo", NULL, gtk_text_view_real_redo);
+
   /*
    * Key bindings
    */
@@ -1549,6 +1559,14 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                 "copy-clipboard", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Insert, GDK_SHIFT_MASK,
                                 "paste-clipboard", 0);
+
+  /* Undo/Redo */
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_z, GDK_CONTROL_MASK,
+                                "text.undo", NULL);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_y, GDK_CONTROL_MASK,
+                                "text.redo", NULL);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_z, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "text.redo", NULL);
 
   /* Overwrite */
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Insert, 0,
@@ -9834,4 +9852,26 @@ gtk_text_view_get_extra_menu (GtkTextView *text_view)
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
 
   return priv->extra_menu;
+}
+
+static void
+gtk_text_view_real_undo (GtkWidget   *widget,
+                         const gchar *action_name,
+                         GVariant    *parameters)
+{
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+
+  if (gtk_text_view_get_editable (text_view))
+    gtk_text_buffer_undo (text_view->priv->buffer);
+}
+
+static void
+gtk_text_view_real_redo (GtkWidget   *widget,
+                         const gchar *action_name,
+                         GVariant    *parameters)
+{
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+
+  if (gtk_text_view_get_editable (text_view))
+    gtk_text_buffer_redo (text_view->priv->buffer);
 }
