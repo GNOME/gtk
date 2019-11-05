@@ -882,6 +882,8 @@ gtk_editable_get_width_chars
 gtk_editable_set_width_chars
 gtk_editable_get_max_width_chars
 gtk_editable_set_max_width_chars
+gtk_editable_get_enable_undo
+gtk_editable_set_enable_undo
 <SUBSECTION>
 gtk_editable_install_properties
 gtk_editable_init_delegate
