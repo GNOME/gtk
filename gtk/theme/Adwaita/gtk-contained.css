@@ -1173,7 +1173,7 @@ check, radio { border: 1px solid; }
 
 check, radio { background-clip: padding-box; background-image: linear-gradient(to bottom, white 20%, white 90%); border-color: #bfb8b1; box-shadow: 0 1px rgba(0, 0, 0, 0.05); color: #ffffff; }
 
-check:hover, radio:hover { -gtk-icon-effect: highlight; background-image: #f2f2f2; }
+check:hover, radio:hover { -gtk-icon-effect: highlight; background-image: image(#f2f2f2); }
 
 check:active, radio:active { box-shadow: inset 0 1px 1px 0px rgba(0, 0, 0, 0.2); }
 

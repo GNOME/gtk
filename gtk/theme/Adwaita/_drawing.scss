@@ -609,7 +609,7 @@
 
   @if $t==hover {
     -gtk-icon-effect: highlight;
-    background-image: if($c == white, darken($c, 5%), linear-gradient(to bottom, lighten($c, 9%) 10%, lighten($c, 4%) 90%));
+    background-image: if($c == white, image(darken($c, 5%)), linear-gradient(to bottom, lighten($c, 9%) 10%, lighten($c, 4%) 90%));
   }
 
   @if $t==active {
