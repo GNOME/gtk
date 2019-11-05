@@ -23,6 +23,21 @@
 #include "gdk/wayland/gdkwayland.h"
 #endif
 
+static void
+assert_notifies (GObject    *object,
+                 const char *property,
+                 guint       expected,
+                 guint       counted)
+{
+  if (expected == counted)
+    return;
+
+  g_test_message ("ERROR: While testing %s::%s: %u notify emissions expected, but got %u",
+                  G_OBJECT_TYPE_NAME (object), property,
+                  expected, counted);
+  g_test_fail ();
+}
+
 typedef struct
 {
   const gchar *name;
@@ -65,7 +80,7 @@ check_property (GObject *instance, GParamSpec *pspec)
       g_object_get (instance, pspec->name, &value, NULL);
       g_object_set (instance, pspec->name, value, NULL);
 
-      g_assert_cmpint (data.count, ==, 0);
+      assert_notifies (instance, pspec->name, data.count, 0);
 
       if (class->values[0].value == value)
         first = 1;
@@ -76,7 +91,7 @@ check_property (GObject *instance, GParamSpec *pspec)
         {
           current_count = data.count + 1;
           g_object_set (instance, pspec->name, class->values[i].value, NULL);
-          g_assert_cmpint (data.count, ==, current_count);  
+          assert_notifies (instance, pspec->name, data.count, current_count);
 
           if (current_count == 10) /* just test a few */
             break;
@@ -103,7 +118,7 @@ check_property (GObject *instance, GParamSpec *pspec)
       g_object_get (instance, pspec->name, &value, NULL);
       g_object_set (instance, pspec->name, value, NULL);
 
-      g_assert_cmpint (data.count, ==, 0);
+      assert_notifies (instance, pspec->name, data.count, 0);
 
       for (i = 0; i < class->n_values; i++)
         {
@@ -117,7 +132,7 @@ check_property (GObject *instance, GParamSpec *pspec)
           value |= class->values[i].value;
           current_count = data.count + 1;
           g_object_set (instance, pspec->name, value, NULL);
-          g_assert_cmpint (data.count, ==, current_count);  
+          assert_notifies (instance, pspec->name, data.count, current_count);
 
           if (current_count == 10) /* just test a few */
             break;
@@ -139,11 +154,11 @@ check_property (GObject *instance, GParamSpec *pspec)
       g_object_get (instance, pspec->name, &value, NULL);
       g_object_set (instance, pspec->name, value, NULL);
 
-      g_assert_cmpint (data.count, ==, 0);
+      assert_notifies (instance, pspec->name, data.count, 0);
 
       g_object_set (instance, pspec->name, 1 - value, NULL);
 
-      g_assert_cmpint (data.count, ==, 1);
+      assert_notifies (instance, pspec->name, data.count, 1);
 
       g_signal_handler_disconnect (instance, id);
     } 
@@ -163,7 +178,7 @@ check_property (GObject *instance, GParamSpec *pspec)
       g_object_get (instance, pspec->name, &value, NULL);
       g_object_set (instance, pspec->name, value, NULL);
 
-      g_assert_cmpint (data.count, ==, 0);
+      assert_notifies (instance, pspec->name, data.count, 0);
 
       for (i = p->minimum; i <= p->maximum; i++)
         {
@@ -173,7 +188,7 @@ check_property (GObject *instance, GParamSpec *pspec)
 
           current_count = data.count + 1;
           g_object_set (instance, pspec->name, i, NULL);
-          g_assert_cmpint (data.count, ==, current_count);  
+          assert_notifies (instance, pspec->name, data.count, current_count);
 
           if (current_count == 10) /* just test a few */
             break;
@@ -208,7 +223,7 @@ check_property (GObject *instance, GParamSpec *pspec)
       g_object_get (instance, pspec->name, &value, NULL);
       g_object_set (instance, pspec->name, value, NULL);
 
-      g_assert_cmpint (data.count, ==, 0);
+      assert_notifies (instance, pspec->name, data.count, 0);
 
       for (i = minimum; i <= maximum; i++)
         {
@@ -218,7 +233,7 @@ check_property (GObject *instance, GParamSpec *pspec)
 
           current_count = data.count + 1;
           g_object_set (instance, pspec->name, i, NULL);
-          g_assert_cmpint (data.count, ==, current_count);  
+          assert_notifies (instance, pspec->name, data.count, current_count);
 
           if (current_count == 10) /* just test a few */
             break;
@@ -244,7 +259,7 @@ check_property (GObject *instance, GParamSpec *pspec)
 
       g_object_set (instance, pspec->name, new_value, NULL);
 
-      g_assert_cmpint (data.count, ==, 1);
+      assert_notifies (instance, pspec->name, data.count, 1);
 
       g_free (value);
       g_free (new_value);
@@ -287,7 +302,7 @@ check_property (GObject *instance, GParamSpec *pspec)
 
           current_count = data.count + 1;
           g_object_set (instance, pspec->name, new_value, NULL);
-          g_assert_cmpint (data.count, ==, current_count);  
+          assert_notifies (instance, pspec->name, data.count, current_count);
         }
 
       g_signal_handler_disconnect (instance, id);
@@ -322,7 +337,7 @@ check_property (GObject *instance, GParamSpec *pspec)
             break;
 
           g_object_set (instance, pspec->name, new_value, NULL);
-          g_assert_cmpint (data.count, ==, current_count);  
+          assert_notifies (instance, pspec->name, data.count, current_count);
         }
 
       g_signal_handler_disconnect (instance, id);
