@@ -138,6 +138,11 @@ int      gtk_editable_get_max_width_chars  (GtkEditable *editable);
 GDK_AVAILABLE_IN_ALL
 void     gtk_editable_set_max_width_chars  (GtkEditable *editable,
                                             int          n_chars);
+GDK_AVAILABLE_IN_ALL
+gboolean gtk_editable_get_enable_undo      (GtkEditable *editable);
+GDK_AVAILABLE_IN_ALL
+void     gtk_editable_set_enable_undo      (GtkEditable *editable,
+                                            gboolean     enable_undo);
 
 /* api for implementations */
 
@@ -149,6 +154,7 @@ typedef enum {
   GTK_EDITABLE_PROP_WIDTH_CHARS,
   GTK_EDITABLE_PROP_MAX_WIDTH_CHARS,
   GTK_EDITABLE_PROP_XALIGN,
+  GTK_EDITABLE_PROP_ENABLE_UNDO,
   GTK_EDITABLE_NUM_PROPERTIES
 } GtkEditableProperties;
 
