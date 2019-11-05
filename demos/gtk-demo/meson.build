@@ -22,7 +22,6 @@ demos = files([
   'drawingarea.c',
   'dnd.c',
   'editable_cells.c',
-  'entry_buffer.c',
   'entry_completion.c',
   'entry_undo.c',
   'expander.c',

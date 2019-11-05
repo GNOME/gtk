@@ -167,7 +167,6 @@
     <file>drawingarea.c</file>
     <file>dnd.c</file>
     <file>editable_cells.c</file>
-    <file>entry_buffer.c</file>
     <file>entry_completion.c</file>
     <file>entry_undo.c</file>
     <file>expander.c</file>
