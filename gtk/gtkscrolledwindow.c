@@ -337,8 +337,8 @@ static void     gtk_scrolled_window_get_property       (GObject           *objec
                                                         guint              prop_id,
                                                         GValue            *value,
                                                         GParamSpec        *pspec);
+static void     gtk_scrolled_window_dispose            (GObject           *object);
 
-static void     gtk_scrolled_window_destroy            (GtkWidget         *widget);
 static void     gtk_scrolled_window_snapshot           (GtkWidget         *widget,
                                                         GtkSnapshot       *snapshot);
 static void     gtk_scrolled_window_size_allocate      (GtkWidget         *widget,
@@ -519,17 +519,14 @@ static void
 gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-  GtkWidgetClass *widget_class;
-  GtkContainerClass *container_class;
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
   GtkBindingSet *binding_set;
-
-  widget_class = (GtkWidgetClass*) class;
-  container_class = (GtkContainerClass*) class;
 
   gobject_class->set_property = gtk_scrolled_window_set_property;
   gobject_class->get_property = gtk_scrolled_window_get_property;
+  gobject_class->dispose = gtk_scrolled_window_dispose;
 
-  widget_class->destroy = gtk_scrolled_window_destroy;
   widget_class->snapshot = gtk_scrolled_window_snapshot;
   widget_class->size_allocate = gtk_scrolled_window_size_allocate;
   widget_class->focus = gtk_scrolled_window_focus;
@@ -2573,24 +2570,27 @@ gtk_scrolled_window_get_capture_button_press (GtkScrolledWindow *scrolled_window
 }
 
 static void
-gtk_scrolled_window_destroy (GtkWidget *widget)
+gtk_scrolled_window_dispose (GObject *object)
 {
-  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
-  GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
+  GtkScrolledWindow *self = GTK_SCROLLED_WINDOW (object);
+  GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (self);
   GtkWidget *child;
 
-  child = gtk_bin_get_child (GTK_BIN (widget));
+  child = gtk_bin_get_child (GTK_BIN (self));
   if (child)
-    gtk_widget_destroy (child);
+    {
+      gtk_widget_unparent (child);
+      _gtk_bin_set_child (GTK_BIN (self), NULL);
+    }
 
-  remove_indicator (scrolled_window, &priv->hindicator);
-  remove_indicator (scrolled_window, &priv->vindicator);
+  remove_indicator (self, &priv->hindicator);
+  remove_indicator (self, &priv->vindicator);
 
   if (priv->hscrollbar)
     {
       GtkAdjustment *hadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
 
-      g_signal_handlers_disconnect_by_data (hadjustment, scrolled_window);
+      g_signal_handlers_disconnect_by_data (hadjustment, self);
       g_signal_handlers_disconnect_by_data (hadjustment, &priv->hindicator);
 
       gtk_widget_unparent (priv->hscrollbar);
@@ -2601,7 +2601,7 @@ gtk_scrolled_window_destroy (GtkWidget *widget)
     {
       GtkAdjustment *vadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar));
 
-      g_signal_handlers_disconnect_by_data (vadjustment, scrolled_window);
+      g_signal_handlers_disconnect_by_data (vadjustment, self);
       g_signal_handlers_disconnect_by_data (vadjustment, &priv->vindicator);
 
       gtk_widget_unparent (priv->vscrollbar);
@@ -2610,7 +2610,7 @@ gtk_scrolled_window_destroy (GtkWidget *widget)
 
   if (priv->deceleration_id)
     {
-      gtk_widget_remove_tick_callback (widget, priv->deceleration_id);
+      gtk_widget_remove_tick_callback (GTK_WIDGET (self), priv->deceleration_id);
       priv->deceleration_id = 0;
     }
 
@@ -2620,7 +2620,7 @@ gtk_scrolled_window_destroy (GtkWidget *widget)
       priv->scroll_events_overshoot_id = 0;
     }
 
-  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_scrolled_window_parent_class)->dispose (object);
 }
 
 static void
