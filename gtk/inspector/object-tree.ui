@@ -40,20 +40,46 @@
         <property name="hexpand">1</property>
         <property name="vexpand">1</property>
         <child>
-          <object class="GtkListBox" id="list">
-            <signal name="row-activated" handler="on_row_activated"/>
+          <object class="GtkColumnView" id="list">
+            <signal name="activate" handler="on_row_activated"/>
+            <child>
+              <object class="GtkColumnViewColumn">
+                <property name="title">Type</property>
+                <property name="factory">
+                  <object class="GtkSignalListItemFactory">
+                    <signal name="setup" handler="setup_type_cb"/>
+                    <signal name="bind" handler="bind_type_cb"/>
+                    <signal name="unbind" handler="unbind_type_cb"/>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkColumnViewColumn">
+                <property name="title">Name</property>
+                <property name="factory">
+                  <object class="GtkSignalListItemFactory">
+                    <signal name="setup" handler="setup_name_cb"/>
+                    <signal name="bind" handler="bind_name_cb"/>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkColumnViewColumn">
+                <property name="title">Label</property>
+                <property name="factory">
+                  <object class="GtkSignalListItemFactory">
+                    <signal name="setup" handler="setup_label_cb"/>
+                    <signal name="bind" handler="bind_label_cb"/>
+                    <signal name="unbind" handler="unbind_label_cb"/>
+                  </object>
+                </property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
     </child>
   </template>
-  <object class="GtkSizeGroup" id="type_size_group">
-    <property name="mode">both</property>
-  </object>
-  <object class="GtkSizeGroup" id="name_size_group">
-    <property name="mode">both</property>
-  </object>
-  <object class="GtkSizeGroup" id="label_size_group">
-    <property name="mode">both</property>
-  </object>
 </interface>
