@@ -17,6 +17,7 @@ meson \
         -Dbroadway-backend=true \
         -Dvulkan=yes \
         --werror \
+        --wrap-mode=${WRAP_MODE:-default} \
         _build $srcdir
 unset CCACHE_DISABLE
 
