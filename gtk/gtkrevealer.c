@@ -306,9 +306,11 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
                                    GtkAllocation *allocation,
                                    GtkAllocation *child_allocation)
 {
+  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   GtkWidget *child;
   GtkRevealerTransitionType transition;
   GtkBorder padding;
+  gint minimum_width, minimum_height;
   gint vertical_padding, horizontal_padding;
 
   g_return_if_fail (revealer != NULL);
@@ -321,24 +323,46 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
 
   child_allocation->x = 0;
   child_allocation->y = 0;
-  child_allocation->width = 0;
-  child_allocation->height = 0;
-
+  child_allocation->width = allocation->width - horizontal_padding;
+  child_allocation->height = allocation->height - vertical_padding;
   child = gtk_bin_get_child (GTK_BIN (revealer));
   if (child != NULL && gtk_widget_get_visible (child))
     {
       transition = effective_transition (revealer);
-      if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
-          transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
-        gtk_widget_get_preferred_width_for_height (child, MAX (0, allocation->height - vertical_padding), NULL,
-                                                   &child_allocation->width);
-      else
-        gtk_widget_get_preferred_height_for_width (child, MAX (0, allocation->width - horizontal_padding), NULL,
-                                                   &child_allocation->height);
-    }
+      switch (transition)
+        {
+        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT:
+          gtk_widget_get_preferred_width_for_height (child, child_allocation->height,
+                                                     &minimum_width, NULL);
+          child_allocation->width = MAX (minimum_width,
+                                         child_allocation->width * priv->current_pos);
+          child_allocation->x = (allocation->width - horizontal_padding) - child_allocation->width;
+          break;
+        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT:
+          gtk_widget_get_preferred_width_for_height (child, child_allocation->height,
+                                                     &minimum_width, NULL);
+          child_allocation->width = MAX (minimum_width,
+                                         child_allocation->width * priv->current_pos);
+          break;
+        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN:
+          gtk_widget_get_preferred_height_for_width (child, child_allocation->width,
+                                                     &minimum_height, NULL);
+          child_allocation->height = MAX (minimum_height,
+                                          child_allocation->height * priv->current_pos);
+          child_allocation->y = (allocation->height - vertical_padding) - child_allocation->height;
+        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP:
+          gtk_widget_get_preferred_height_for_width (child, child_allocation->width,
+                                                     &minimum_height, NULL);
+          child_allocation->height = MAX (minimum_height,
+                                          child_allocation->height * priv->current_pos);
+          break;
 
-  child_allocation->width = MAX (child_allocation->width, allocation->width - horizontal_padding);
-  child_allocation->height = MAX (child_allocation->height, allocation->height - vertical_padding);
+        case GTK_REVEALER_TRANSITION_TYPE_NONE:
+        case GTK_REVEALER_TRANSITION_TYPE_CROSSFADE:
+        default:
+          break;
+        }
+    }
 }
 
 static void
