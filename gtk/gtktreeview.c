@@ -868,9 +868,6 @@ static gboolean gtk_tree_view_search_key_pressed        (GtkEventControllerKey *
                                                          guint                  keycode,
                                                          GdkModifierType        state,
                                                          GtkTreeView           *tree_view);
-static gboolean gtk_tree_view_search_move               (GtkWidget        *window,
-							 GtkTreeView      *tree_view,
-							 gboolean          up);
 static gboolean gtk_tree_view_search_equal_func         (GtkTreeModel     *model,
 							 gint              column,
 							 const gchar      *key,
@@ -13942,9 +13939,9 @@ gtk_tree_view_search_scroll_event (GtkWidget   *widget,
   direction = dy > 0 ? GDK_SCROLL_DOWN : GDK_SCROLL_UP;
 
   if (direction == GDK_SCROLL_UP)
-    gtk_tree_view_search_move (widget, tree_view, TRUE);
+    gtk_tree_view_search_move (tree_view, TRUE);
   else if (direction == GDK_SCROLL_DOWN)
-    gtk_tree_view_search_move (widget, tree_view, FALSE);
+    gtk_tree_view_search_move (tree_view, FALSE);
 
   /* renew the flush timeout */
   if (tree_view->priv->typeselect_flush_timeout &&
@@ -13990,7 +13987,7 @@ gtk_tree_view_search_key_pressed (GtkEventControllerKey *key,
   /* select previous matching iter */
   if (keyval == GDK_KEY_Up || keyval == GDK_KEY_KP_Up)
     {
-      if (!gtk_tree_view_search_move (widget, tree_view, TRUE))
+      if (!gtk_tree_view_search_move (tree_view, TRUE))
         gtk_widget_error_bell (widget);
 
       retval = TRUE;
@@ -13999,7 +13996,7 @@ gtk_tree_view_search_key_pressed (GtkEventControllerKey *key,
   if (((state & (default_accel | GDK_SHIFT_MASK)) == (default_accel | GDK_SHIFT_MASK))
       && (keyval == GDK_KEY_g || keyval == GDK_KEY_G))
     {
-      if (!gtk_tree_view_search_move (widget, tree_view, TRUE))
+      if (!gtk_tree_view_search_move (tree_view, TRUE))
         gtk_widget_error_bell (widget);
 
       retval = TRUE;
@@ -14008,7 +14005,7 @@ gtk_tree_view_search_key_pressed (GtkEventControllerKey *key,
   /* select next matching iter */
   if (keyval == GDK_KEY_Down || keyval == GDK_KEY_KP_Down)
     {
-      if (!gtk_tree_view_search_move (widget, tree_view, FALSE))
+      if (!gtk_tree_view_search_move (tree_view, FALSE))
         gtk_widget_error_bell (widget);
 
       retval = TRUE;
@@ -14017,7 +14014,7 @@ gtk_tree_view_search_key_pressed (GtkEventControllerKey *key,
   if (((state & (default_accel | GDK_SHIFT_MASK)) == default_accel)
       && (keyval == GDK_KEY_g || keyval == GDK_KEY_G))
     {
-      if (!gtk_tree_view_search_move (widget, tree_view, FALSE))
+      if (!gtk_tree_view_search_move (tree_view, FALSE))
         gtk_widget_error_bell (widget);
 
       retval = TRUE;
@@ -14041,13 +14038,19 @@ gtk_tree_view_search_key_pressed (GtkEventControllerKey *key,
   return retval;
 }
 
-/*  this function returns FALSE if there is a search string but
- *  nothing was found, and TRUE otherwise.
+/**
+ * gtk_tree_search_move:
+ * @tree_view: a #GtkTreeView
+ * @up: TRUE if move goes up, FALSE if move goes down
+ *
+ * Creates a new #GtkTreeView widget.
+ *
+ * Returns: FALSE if there is a search string but nothing was found,
+ * and TRUE otherwise.
  */
-static gboolean
-gtk_tree_view_search_move (GtkWidget   *window,
-			   GtkTreeView *tree_view,
-			   gboolean     up)
+gboolean
+gtk_tree_view_search_move (GtkTreeView *tree_view,
+                           gboolean     up)
 {
   gboolean ret;
   gint len;

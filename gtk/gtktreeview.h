@@ -381,6 +381,8 @@ void                          gtk_tree_view_set_search_position_func (GtkTreeVie
 								      GtkTreeViewSearchPositionFunc  func,
 								      gpointer                       data,
 								      GDestroyNotify                 destroy);
+gboolean                      gtk_tree_view_search_move              (GtkTreeView *tree_view,
+                                                                      gboolean     up);
 
 /* Convert between the different coordinate systems */
 GDK_AVAILABLE_IN_ALL
