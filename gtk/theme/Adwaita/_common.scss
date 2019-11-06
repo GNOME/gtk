@@ -2934,7 +2934,6 @@ radio {
 
   & {
     // for unchecked
-    border: 1px solid;
     $_c: if($variant=='light', white, $bg_color);
 
     @each $state, $t in ("", "normal"),
