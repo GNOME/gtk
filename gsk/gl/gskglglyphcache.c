@@ -83,14 +83,7 @@ gsk_gl_glyph_cache_unref (GskGLGlyphCache *self)
 static gboolean
 glyph_cache_equal (gconstpointer v1, gconstpointer v2)
 {
-  const GlyphCacheKey *key1 = v1;
-  const GlyphCacheKey *key2 = v2;
-
-  return key1->font == key2->font &&
-         key1->glyph == key2->glyph &&
-         key1->xshift == key2->xshift &&
-         key1->yshift == key2->yshift &&
-         key1->scale == key2->scale;
+  return memcmp (v1, v2, sizeof (CacheKeyData)) == 0;
 }
 
 static guint
@@ -106,7 +99,7 @@ glyph_cache_key_free (gpointer v)
 {
   GlyphCacheKey *f = v;
 
-  g_object_unref (f->font);
+  g_object_unref (f->data.font);
   g_free (f);
 }
 
@@ -130,29 +123,29 @@ render_glyph (GlyphCacheKey    *key,
   int stride;
   unsigned char *data;
 
-  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)key->font);
+  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)key->data.font);
   if (G_UNLIKELY (!scaled_font || cairo_scaled_font_status (scaled_font) != CAIRO_STATUS_SUCCESS))
     {
       g_warning ("Failed to get a font");
       return FALSE;
     }
 
-  surface_width = value->draw_width * key->scale / 1024;
-  surface_height = value->draw_height * key->scale / 1024;
+  surface_width = value->draw_width * key->data.scale / 1024;
+  surface_height = value->draw_height * key->data.scale / 1024;
 
   stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, surface_width);
   data = g_malloc0 (stride * surface_height);
   surface = cairo_image_surface_create_for_data (data, CAIRO_FORMAT_ARGB32,
                                                  surface_width, surface_height,
                                                  stride);
-  cairo_surface_set_device_scale (surface, key->scale / 1024.0, key->scale / 1024.0);
+  cairo_surface_set_device_scale (surface, key->data.scale / 1024.0, key->data.scale / 1024.0);
 
   cr = cairo_create (surface);
 
   cairo_set_scaled_font (cr, scaled_font);
   cairo_set_source_rgba (cr, 1, 1, 1, 1);
 
-  glyph_info.glyph = key->glyph;
+  glyph_info.glyph = key->data.glyph;
   glyph_info.geometry.width = value->draw_width * 1024;
   if (glyph_info.glyph & PANGO_GLYPH_UNKNOWN_FLAG)
     glyph_info.geometry.x_offset = 0;
@@ -163,7 +156,7 @@ render_glyph (GlyphCacheKey    *key,
   glyph_string.num_glyphs = 1;
   glyph_string.glyphs = &glyph_info;
 
-  pango_cairo_show_glyph_string (cr, key->font, &glyph_string);
+  pango_cairo_show_glyph_string (cr, key->data.font, &glyph_string);
   cairo_destroy (cr);
 
   cairo_surface_flush (surface);
@@ -196,7 +189,7 @@ upload_glyph (GlyphCacheKey    *key,
 
   gdk_gl_context_push_debug_group_printf (gdk_gl_context_get_current (),
                                           "Uploading glyph %d",
-                                          key->glyph);
+                                          key->data.glyph);
 
   if (render_glyph (key, value, &r))
     {
@@ -219,8 +212,8 @@ add_to_cache (GskGLGlyphCache  *self,
               GskGLDriver      *driver,
               GskGLCachedGlyph *value)
 {
-  const int width = value->draw_width * key->scale / 1024;
-  const int height = value->draw_height * key->scale / 1024;
+  const int width = value->draw_width * key->data.scale / 1024;
+  const int height = value->draw_height * key->data.scale / 1024;
 
   if (width < MAX_GLYPH_SIZE && height < MAX_GLYPH_SIZE)
     {
@@ -284,11 +277,11 @@ gsk_gl_glyph_cache_lookup_or_add (GskGLGlyphCache         *cache,
     GlyphCacheKey *key;
     PangoRectangle ink_rect;
 
-    pango_font_get_glyph_extents (lookup->font, lookup->glyph, &ink_rect, NULL);
+    pango_font_get_glyph_extents (lookup->data.font, lookup->data.glyph, &ink_rect, NULL);
     pango_extents_to_pixels (&ink_rect, NULL);
-    if (lookup->xshift != 0)
+    if (lookup->data.xshift != 0)
       ink_rect.width += 1;
-    if (lookup->yshift != 0)
+    if (lookup->data.yshift != 0)
       ink_rect.height += 1;
 
     value = g_new0 (GskGLCachedGlyph, 1);
@@ -302,16 +295,16 @@ gsk_gl_glyph_cache_lookup_or_add (GskGLGlyphCache         *cache,
 
     key = g_new0 (GlyphCacheKey, 1);
 
-    key->font = g_object_ref (lookup->font);
-    key->glyph = lookup->glyph;
-    key->xshift = lookup->xshift;
-    key->yshift = lookup->yshift;
-    key->scale = lookup->scale;
+    key->data.font = g_object_ref (lookup->data.font);
+    key->data.glyph = lookup->data.glyph;
+    key->data.xshift = lookup->data.xshift;
+    key->data.yshift = lookup->data.yshift;
+    key->data.scale = lookup->data.scale;
     key->hash = lookup->hash;
 
-    if (key->scale > 0 &&
-        value->draw_width * key->scale / 1024 > 0 &&
-        value->draw_height * key->scale / 1024 > 0)
+    if (key->data.scale > 0 &&
+        value->draw_width * key->data.scale / 1024 > 0 &&
+        value->draw_height * key->data.scale / 1024 > 0)
       add_to_cache (cache, key, driver, value);
 
     *cached_glyph_out = value;
@@ -327,13 +320,12 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
   GHashTableIter iter;
   GlyphCacheKey *key;
   GskGLCachedGlyph *value;
+  guint dropped = 0;
 
   self->timestamp++;
 
   if (removed_atlases->len > 0)
     {
-      guint dropped = 0;
-
       g_hash_table_iter_init (&iter, self->hash_table);
       while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
         {
@@ -343,8 +335,6 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
               dropped++;
             }
         }
-
-      GSK_NOTE(GLYPH_CACHE, if (dropped > 0) g_message ("Dropped %d glyphs", dropped));
     }
 
   if (self->timestamp % MAX_FRAME_AGE == 30)
@@ -366,6 +356,12 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
                 {
                   gsk_gl_driver_destroy_texture (driver, value->texture_id);
                   g_hash_table_iter_remove (&iter);
+
+                  /* Sadly, if we drop an atlas-less cached glyph, we
+                   * have to treat it like a dropped atlas and purge
+                   * text node render data.
+                   */
+                  dropped++;
                 }
             }
           else
@@ -374,4 +370,6 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
 
       GSK_NOTE(GLYPH_CACHE, g_message ("%d glyphs cached", g_hash_table_size (self->hash_table)));
     }
+
+  GSK_NOTE(GLYPH_CACHE, if (dropped > 0) g_message ("Dropped %d glyphs", dropped));
 }

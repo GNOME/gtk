@@ -7,15 +7,6 @@
 
 #define MAX_FRAME_AGE 60
 
-typedef struct
-{
-  graphene_rect_t texture_rect;
-  GskGLTextureAtlas *atlas;
-  GdkTexture *source_texture;
-  guint accessed : 1;
-  guint used     : 1;
-} IconData;
-
 static void
 icon_data_free (gpointer p)
 {
@@ -100,9 +91,9 @@ gsk_gl_icon_cache_begin_frame (GskGLIconCache *self,
             {
               if (icon_data->used)
                 { 
-                  const int w = icon_data->texture_rect.size.width  * icon_data->atlas->width;
-                  const int h = icon_data->texture_rect.size.height * icon_data->atlas->height;
-                  gsk_gl_texture_atlas_mark_unused (icon_data->atlas, w + 2, h + 2);
+                  const int width = icon_data->source_texture->width;
+                  const int height = icon_data->source_texture->height;
+                  gsk_gl_texture_atlas_mark_unused (icon_data->atlas, width + 2, height + 2);
                   icon_data->used = FALSE;
                 }
             }
@@ -117,8 +108,7 @@ gsk_gl_icon_cache_begin_frame (GskGLIconCache *self,
 void
 gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
                                  GdkTexture      *texture,
-                                 int             *out_texture_id,
-                                 graphene_rect_t *out_texture_rect)
+                                 const IconData **out_icon_data)
 {
   IconData *icon_data = g_hash_table_lookup (self->icons, texture);
 
@@ -126,23 +116,19 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     {
       if (!icon_data->used)
         {
-          const int w = icon_data->texture_rect.size.width  * icon_data->atlas->width;
-          const int h = icon_data->texture_rect.size.height * icon_data->atlas->height;
-
-          gsk_gl_texture_atlas_mark_used (icon_data->atlas, w + 2, h + 2);
+          gsk_gl_texture_atlas_mark_used (icon_data->atlas, texture->width + 2, texture->height + 2);
           icon_data->used = TRUE;
         }
       icon_data->accessed = TRUE;
 
-      *out_texture_id = icon_data->atlas->texture_id;
-      *out_texture_rect = icon_data->texture_rect;
+      *out_icon_data = icon_data;
       return;
     }
 
   /* texture not on any atlas yet. Find a suitable one. */
   {
-    const int width = gdk_texture_get_width (texture);
-    const int height = gdk_texture_get_height (texture);
+    const int width = texture->width;
+    const int height = texture->height;
     GskGLTextureAtlas *atlas = NULL;
     int packed_x = 0;
     int packed_y = 0;
@@ -155,12 +141,12 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     icon_data->atlas = atlas;
     icon_data->accessed = TRUE;
     icon_data->used = TRUE;
+    icon_data->texture_id = atlas->texture_id;
     icon_data->source_texture = g_object_ref (texture);
-    graphene_rect_init (&icon_data->texture_rect,
-                        (float)(packed_x + 1) / atlas->width,
-                        (float)(packed_y + 1) / atlas->height,
-                        (float)width / atlas->width,
-                        (float)height / atlas->height);
+    icon_data->x = (float)(packed_x + 1) / atlas->width;
+    icon_data->y = (float)(packed_y + 1) / atlas->width;
+    icon_data->x2 = icon_data->x + (float)width / atlas->width;
+    icon_data->y2 = icon_data->y + (float)height / atlas->height;
 
     g_hash_table_insert (self->icons, texture, icon_data);
 
@@ -240,8 +226,7 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
 
     gdk_gl_context_pop_debug_group (gdk_gl_context_get_current ());
 
-    *out_texture_id = atlas->texture_id;
-    *out_texture_rect = icon_data->texture_rect;
+    *out_icon_data = icon_data;
 
     cairo_surface_destroy (surface);
 

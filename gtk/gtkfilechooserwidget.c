@@ -617,9 +617,6 @@ static void     recent_start_loading         (GtkFileChooserWidget *impl);
 static void     recent_clear_model           (GtkFileChooserWidget *impl,
                                               gboolean               remove_from_treeview);
 static gboolean recent_should_respond        (GtkFileChooserWidget *impl);
-static void     set_file_system_backend      (GtkFileChooserWidget *impl);
-static void     unset_file_system_backend    (GtkFileChooserWidget *impl);
-
 static void     clear_model_cache            (GtkFileChooserWidget *impl,
                                               gint                  column);
 static void     set_model_filter             (GtkFileChooserWidget *impl,
@@ -701,7 +698,7 @@ gtk_file_chooser_widget_finalize (GObject *object)
   if (priv->location_changed_id > 0)
     g_source_remove (priv->location_changed_id);
 
-  unset_file_system_backend (impl);
+  g_clear_object (&priv->file_system);
 
   g_free (priv->browse_files_last_selected_name);
 
@@ -1364,11 +1361,11 @@ should_trigger_location_entry (GtkFileChooserWidget *impl,
  * pressed.
  */
 static gboolean
-key_press_cb (GtkEventControllerKey *controller,
-              guint                  keyval,
-              guint                  keycode,
-              GdkModifierType        state,
-              gpointer               data)
+treeview_key_press_cb (GtkEventControllerKey *controller,
+                       guint                  keyval,
+                       guint                  keycode,
+                       GdkModifierType        state,
+                       gpointer               data)
 {
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
@@ -1437,6 +1434,8 @@ widget_key_press_cb (GtkEventControllerKey *controller,
       priv->starting_search = TRUE;
       if (gtk_event_controller_key_forward (controller, priv->search_entry))
         {
+          gtk_widget_grab_focus (priv->search_entry);
+
           if (priv->operation_mode != OPERATION_MODE_SEARCH &&
               priv->starting_search)
             operation_mode_set (impl, OPERATION_MODE_SEARCH);
@@ -2242,8 +2241,8 @@ file_list_build_popover (GtkFileChooserWidget *impl)
     return;
 
   priv->browse_files_popover = gtk_popover_new (priv->browse_files_tree_view);
+  gtk_style_context_add_class (gtk_widget_get_style_context (priv->browse_files_popover), "menu");
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  g_object_set (box, "margin", 10, NULL);
   gtk_container_add (GTK_CONTAINER (priv->browse_files_popover), box);
 
   priv->visit_file_item = add_button (box, _("_Visit File"), "item.visit");
@@ -2950,8 +2949,7 @@ set_local_only (GtkFileChooserWidget *impl,
 /* Sets the file chooser to multiple selection mode */
 static void
 set_select_multiple (GtkFileChooserWidget *impl,
-                     gboolean               select_multiple,
-                     gboolean               property_notify)
+                     gboolean               select_multiple)
 {
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
   GtkTreeSelection *selection;
@@ -2971,28 +2969,6 @@ set_select_multiple (GtkFileChooserWidget *impl,
   g_object_notify (G_OBJECT (impl), "select-multiple");
 
   check_preview_change (impl);
-}
-
-static void
-set_file_system_backend (GtkFileChooserWidget *impl)
-{
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-
-  profile_start ("start for backend", "default");
-
-  priv->file_system = _gtk_file_system_new ();
-
-  profile_end ("end", NULL);
-}
-
-static void
-unset_file_system_backend (GtkFileChooserWidget *impl)
-{
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-
-  g_object_unref (priv->file_system);
-
-  priv->file_system = NULL;
 }
 
 /* Takes the folder stored in a row in the recent_model, and puts it in the pathbar */
@@ -3255,7 +3231,7 @@ update_appearance (GtkFileChooserWidget *impl)
         {
           g_warning ("Save mode cannot be set in conjunction with multiple selection mode.  "
                      "Re-setting to single selection mode.");
-          set_select_multiple (impl, FALSE, TRUE);
+          set_select_multiple (impl, FALSE);
         }
 
     }
@@ -3391,7 +3367,7 @@ gtk_file_chooser_widget_set_property (GObject      *object,
                 g_warning ("Tried to change the file chooser action to SAVE or CREATE_FOLDER, but "
                            "this is not allowed in multiple selection mode.  Resetting the file chooser "
                            "to single selection mode.");
-                set_select_multiple (impl, FALSE, TRUE);
+                set_select_multiple (impl, FALSE);
               }
             priv->action = action;
             update_cell_renderer_attributes (impl);
@@ -3440,7 +3416,7 @@ gtk_file_chooser_widget_set_property (GObject      *object,
             return;
           }
 
-        set_select_multiple (impl, select_multiple, FALSE);
+        set_select_multiple (impl, select_multiple);
       }
       break;
 
@@ -8520,7 +8496,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, rename_file_end);
   gtk_widget_class_bind_template_callback (widget_class, click_cb);
   gtk_widget_class_bind_template_callback (widget_class, long_press_cb);
-  gtk_widget_class_bind_template_callback (widget_class, key_press_cb);
+  gtk_widget_class_bind_template_callback (widget_class, treeview_key_press_cb);
   gtk_widget_class_bind_template_callback (widget_class, widget_key_press_cb);
 
   gtk_widget_class_set_css_name (widget_class, I_("filechooser"));
@@ -8666,8 +8642,7 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   g_signal_connect (impl, "notify::display,", G_CALLBACK (display_changed_cb), impl);
   check_icon_theme (impl);
 
-  set_file_system_backend (impl);
-
+  priv->file_system = _gtk_file_system_new ();
   priv->bookmarks_manager = _gtk_bookmarks_manager_new (NULL, NULL);
 
   /* Setup various attributes and callbacks in the UI

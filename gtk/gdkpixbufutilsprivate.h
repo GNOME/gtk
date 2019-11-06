@@ -22,13 +22,41 @@
 
 G_BEGIN_DECLS
 
-GdkPixbuf *_gdk_pixbuf_new_from_stream_scaled   (GInputStream  *stream,
-                                                 gdouble        scale,
+GdkPixbuf *_gdk_pixbuf_new_from_stream (GInputStream  *stream,
+                                        const char    *format,
+                                        GCancellable  *cancellable,
+                                        GError       **error);
+GdkPixbuf *_gdk_pixbuf_new_from_stream_at_scale (GInputStream  *stream,
+                                                 const char    *format,
+                                                 int            width,
+                                                 int            height,
+                                                 gboolean       aspect,
                                                  GCancellable  *cancellable,
                                                  GError       **error);
-GdkPixbuf *_gdk_pixbuf_new_from_resource_scaled (const gchar   *resource_path,
-                                                 gdouble        scale,
+GdkPixbuf *_gdk_pixbuf_new_from_stream_scaled   (GInputStream  *stream,
+                                                 const char    *format,
+                                                 double         scale,
+                                                 GCancellable  *cancellable,
                                                  GError       **error);
+GdkPixbuf *_gdk_pixbuf_new_from_resource (const char   *resource_path,
+                                          const char   *format,
+                                          GError      **error);
+GdkPixbuf *_gdk_pixbuf_new_from_resource_at_scale (const char   *resource_path,
+                                                   const char   *format,
+                                                   int           width,
+                                                   int           height,
+                                                   gboolean      preserve_aspect,
+                                                   GError      **error);
+GdkPixbuf *_gdk_pixbuf_new_from_resource_scaled (const char   *resource_path,
+                                                 const char   *format,
+                                                 double        scale,
+                                                 GError      **error);
+
+GdkPixbuf *gtk_color_symbolic_pixbuf              (GdkPixbuf     *symbolic,
+                                                                                                                           const GdkRGBA *fg_color,
+                                                   const GdkRGBA *success_color,
+                                                   const GdkRGBA *warning_color,
+                                                   const GdkRGBA *error_color);
 
 GdkPixbuf *gtk_make_symbolic_pixbuf_from_data     (const char    *data,
                                                    gsize          len,
@@ -37,6 +65,11 @@ GdkPixbuf *gtk_make_symbolic_pixbuf_from_data     (const char    *data,
                                                    double         scale,
                                                    GError       **error);
 GdkPixbuf *gtk_make_symbolic_pixbuf_from_file     (GFile         *file,
+                                                   int            width,
+                                                   int            height,
+                                                   double         scale,
+                                                   GError       **error);
+GdkPixbuf *gtk_make_symbolic_pixbuf_from_path     (const char    *path,
                                                    int            width,
                                                    int            height,
                                                    double         scale,

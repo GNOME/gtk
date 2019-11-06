@@ -1695,10 +1695,18 @@ headerbar {
   entry,
   spinbutton,
   separator:not(.sidebar),
-  button {
+  button,
+  menubutton {
     margin-top: 6px;
     margin-bottom: 6px;
   }
+
+  // Reset margins for buttons inside menubutton
+  menubutton > button {
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
   switch {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -4634,7 +4642,11 @@ shortcuts-section {
 }
 
 // shortcut window keys
-.keycap {
+shortcut {
+  border-spacing: 6px;
+}
+
+shortcut > .keycap {
   min-width: 20px;
   min-height: 25px;
   margin-top: 2px;
@@ -4781,6 +4793,8 @@ menubar {
 }
 
 popover.menu {
+  padding: 0px;
+
   & button.image-button.model {
     padding: 0;
     border: none;

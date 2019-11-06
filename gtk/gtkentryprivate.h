@@ -114,9 +114,6 @@ void     _gtk_entry_completion_connect      (GtkEntryCompletion *completion,
 void     _gtk_entry_completion_disconnect   (GtkEntryCompletion *completion);
 
 GtkIMContext* _gtk_entry_get_im_context    (GtkEntry  *entry);
-void     gtk_entry_enter_text              (GtkEntry   *entry,
-                                            const char *text);
-
 GtkEventController * gtk_entry_get_key_controller (GtkEntry *entry);
 GtkText *gtk_entry_get_text_widget (GtkEntry *entry);
 

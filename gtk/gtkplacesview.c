@@ -2069,15 +2069,11 @@ listbox_header_func (GtkListBoxRow *row,
           GtkWidget *header_name;
           GtkWidget *network_header_spinner;
 
-          g_object_set (label,
-                        "margin-end", 6,
-                        NULL);
+          gtk_widget_set_margin_end (label, 6);
 
           header_name = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
           network_header_spinner = gtk_spinner_new ();
-          g_object_set (network_header_spinner,
-                        "margin-end", 12,
-                        NULL);
+          gtk_widget_set_margin_end (network_header_spinner, 12);
           g_object_bind_property (GTK_PLACES_VIEW (user_data),
                                   "fetching-networks",
                                   network_header_spinner,
@@ -2090,10 +2086,8 @@ listbox_header_func (GtkListBoxRow *row,
         }
       else
         {
-          g_object_set (label,
-                        "hexpand", TRUE,
-                        "margin-end", 12,
-                        NULL);
+          gtk_widget_set_hexpand (label, TRUE);
+          gtk_widget_set_margin_end (label, 12);
           gtk_container_add (GTK_CONTAINER (header), label);
         }
 

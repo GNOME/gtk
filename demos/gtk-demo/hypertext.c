@@ -41,6 +41,7 @@ show_page (GtkTextBuffer *buffer,
 
   gtk_text_buffer_set_text (buffer, "", 0);
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
+  gtk_text_buffer_begin_irreversible_action (buffer);
   if (page == 1)
     {
       gtk_text_buffer_insert (buffer, &iter, "Some text to show that simple ", -1);
@@ -73,6 +74,7 @@ show_page (GtkTextBuffer *buffer,
                               "so that related items of information are connected.\n", -1);
       insert_link (buffer, &iter, "Go back", 1);
     }
+  gtk_text_buffer_end_irreversible_action (buffer);
 }
 
 /* Looks at all tags covering the position of iter in the text view,
@@ -258,6 +260,7 @@ do_hypertext (GtkWidget *do_widget)
       gtk_widget_add_controller (view, controller);
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+      gtk_text_buffer_set_enable_undo (buffer, TRUE);
 
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),

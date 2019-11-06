@@ -46,8 +46,8 @@ struct _GskGLDriver
 
   Fbo default_fbo;
 
-  GHashTable *textures;
-  GHashTable *pointer_textures;
+  GHashTable *textures;         /* texture_id -> Texture */
+  GHashTable *pointer_textures; /* pointer -> texture_id */
 
   const Texture *bound_source_texture;
 
@@ -554,21 +554,12 @@ gsk_gl_driver_get_texture_for_pointer (GskGLDriver *self,
 
   if (id != 0)
     {
-      GHashTableIter iter;
-      gpointer value_p;
-      /* Find the texture in self->textures and mark it used */
+      Texture *t;
 
-      g_hash_table_iter_init (&iter, self->textures);
-      while (g_hash_table_iter_next (&iter, NULL, &value_p))
-        {
-          Texture *t = value_p;
+      t = g_hash_table_lookup (self->textures, GINT_TO_POINTER (id));
 
-          if (t->texture_id == id)
-            {
-              t->in_use = TRUE;
-              break;
-            }
-        }
+      if (t != NULL)
+        t->in_use = TRUE;
     }
 
   return id;

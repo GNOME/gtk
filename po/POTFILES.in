@@ -211,6 +211,7 @@ gtk/gtkmountoperation-stub.c
 gtk/gtkmountoperation-x11.c
 gtk/gtknativedialog.c
 gtk/gtknomediafile.c
+gtk/gtknoselection.c
 gtk/gtknotebook.c
 gtk/gtkorientable.c
 gtk/gtkoverlay.c

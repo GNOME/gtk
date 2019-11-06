@@ -380,6 +380,13 @@ gtk_editable_default_init (GtkEditableInterface *iface)
                         GTK_PARAM_READABLE));
 
   g_object_interface_install_property (iface,
+      g_param_spec_boolean ("enable-undo",
+                            P_("Enable Undo"),
+                            P_("If undo/redo should be enabled for the editable"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  g_object_interface_install_property (iface,
       g_param_spec_int ("selection-bound",
                         P_("Selection Bound"),
                         P_("The position of the opposite end of the selection from the cursor in chars"),
@@ -836,6 +843,46 @@ gtk_editable_set_max_width_chars (GtkEditable *editable,
 }
 
 /**
+ * gtk_editable_get_enable_undo:
+ * @editable: a #GtkEditable
+ *
+ * Gets if undo/redo actions are enabled for @editable
+ *
+ * Returns: %TRUE if undo is enabled
+ */
+gboolean
+gtk_editable_get_enable_undo (GtkEditable *editable)
+{
+  gboolean enable_undo;
+
+  g_return_val_if_fail (GTK_IS_EDITABLE (editable), 0);
+
+  g_object_get (editable, "enable-undo", &enable_undo, NULL);
+
+  return enable_undo;
+}
+
+/**
+ * gtk_editable_set_enable_undo:
+ * @editable: a #GtkEditable
+ * @enable_undo: if undo/redo should be enabled
+ *
+ * If enabled, changes to @editable will be saved for undo/redo actions.
+ *
+ * This results in an additional copy of text changes and are not stored in
+ * secure memory. As such, undo is forcefully disabled when #GtkText:visibility
+ * is set to %FALSE.
+ */
+void
+gtk_editable_set_enable_undo (GtkEditable *editable,
+                              gboolean     enable_undo)
+{
+  g_return_if_fail (GTK_IS_EDITABLE (editable));
+
+  g_object_set (editable, "enable-undo", enable_undo, NULL);
+}
+
+/**
  * gtk_editable_install_properties:
  * @object_class: a #GObjectClass
  * @first_prop: property ID to use for the first property
@@ -869,6 +916,7 @@ gtk_editable_install_properties (GObjectClass *object_class,
   g_object_class_override_property (object_class, first_prop + GTK_EDITABLE_PROP_WIDTH_CHARS, "width-chars");
   g_object_class_override_property (object_class, first_prop + GTK_EDITABLE_PROP_MAX_WIDTH_CHARS, "max-width-chars");
   g_object_class_override_property (object_class, first_prop + GTK_EDITABLE_PROP_XALIGN, "xalign");
+  g_object_class_override_property (object_class, first_prop + GTK_EDITABLE_PROP_ENABLE_UNDO, "enable-undo");
 
   return GTK_EDITABLE_NUM_PROPERTIES;
 }
@@ -982,6 +1030,10 @@ gtk_editable_delegate_set_property (GObject      *object,
       gtk_editable_set_alignment (delegate, g_value_get_float (value));
       break;
 
+    case GTK_EDITABLE_PROP_ENABLE_UNDO:
+      gtk_editable_set_enable_undo (delegate, g_value_get_boolean (value));
+      break;
+
     default:
       return FALSE;
     }
@@ -1052,6 +1104,10 @@ gtk_editable_delegate_get_property (GObject    *object,
 
     case GTK_EDITABLE_PROP_XALIGN:
       g_value_set_float (value, gtk_editable_get_alignment (delegate));
+      break;
+
+    case GTK_EDITABLE_PROP_ENABLE_UNDO:
+      g_value_set_boolean (value, gtk_editable_get_enable_undo (delegate));
       break;
 
     default:

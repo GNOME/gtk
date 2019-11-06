@@ -13,7 +13,7 @@ stages:
     - subprojects/pango/
 
 fedora-x86_64:
-  image: registry.gitlab.gnome.org/gnome/gtk/master:v6
+  image: registry.gitlab.gnome.org/gnome/gtk/master:v7
   stage: build
   script:
     - bash -x ./.gitlab-ci/test-docker.sh
@@ -40,6 +40,7 @@ fedora-x86_64:
   script:
     - C:\msys64\usr\bin\pacman --noconfirm -Syyuu
     - C:\msys64\usr\bin\bash -lc "bash -x ./.gitlab-ci/test-msys2.sh"
+  allow_failure: true
   cache:
     key: "%CI_JOB_NAME%"
     <<: *cache-paths

@@ -10,6 +10,8 @@
 #include "gskglrenderer.h"
 #include "gskrendernodeprivate.h"
 
+#include "opbuffer.h"
+
 #define GL_N_VERTICES 6
 #define GL_N_PROGRAMS 13
 
@@ -32,38 +34,7 @@ typedef struct
   OpsMatrixMetadata metadata;
 } MatrixStackEntry;
 
-enum {
-  OP_NONE,
-  OP_CHANGE_OPACITY         =  1,
-  OP_CHANGE_COLOR           =  2,
-  OP_CHANGE_PROJECTION      =  3,
-  OP_CHANGE_MODELVIEW       =  4,
-  OP_CHANGE_PROGRAM         =  5,
-  OP_CHANGE_RENDER_TARGET   =  6,
-  OP_CHANGE_CLIP            =  7,
-  OP_CHANGE_VIEWPORT        =  8,
-  OP_CHANGE_SOURCE_TEXTURE  =  9,
-  OP_CHANGE_VAO             =  10,
-  OP_CHANGE_LINEAR_GRADIENT =  11,
-  OP_CHANGE_COLOR_MATRIX    =  12,
-  OP_CHANGE_BLUR            =  13,
-  OP_CHANGE_INSET_SHADOW    =  14,
-  OP_CHANGE_OUTSET_SHADOW   =  15,
-  OP_CHANGE_BORDER          =  16,
-  OP_CHANGE_BORDER_COLOR    =  17,
-  OP_CHANGE_BORDER_WIDTH    =  18,
-  OP_CHANGE_CROSS_FADE      =  19,
-  OP_CHANGE_UNBLURRED_OUTSET_SHADOW = 20,
-  OP_CLEAR                  =  21,
-  OP_DRAW                   =  22,
-  OP_DUMP_FRAMEBUFFER       =  23,
-  OP_PUSH_DEBUG_GROUP       =  24,
-  OP_POP_DEBUG_GROUP        =  25,
-  OP_CHANGE_BLEND           =  26,
-  OP_CHANGE_REPEAT          =  27,
-};
-
-typedef struct
+struct _Program
 {
   int index;        /* Into the renderer's program array */
 
@@ -145,101 +116,7 @@ typedef struct
       int texture_rect_location;
     } repeat;
   };
-
-} Program;
-
-typedef struct
-{
-  guint op;
-
-  union {
-    float opacity;
-    graphene_matrix_t modelview;
-    graphene_matrix_t projection;
-    const Program *program;
-    int texture_id;
-    int render_target_id;
-    const GdkRGBA *color;
-    GskQuadVertex vertex_data[6];
-    GskRoundedRect clip;
-    graphene_rect_t viewport;
-    struct {
-      int n_color_stops;
-      float color_offsets[8];
-      float color_stops[4 * 8];
-      graphene_point_t start_point;
-      graphene_point_t end_point;
-    } linear_gradient;
-    struct {
-      gsize vao_offset;
-      gsize vao_size;
-    } draw;
-    struct {
-      graphene_matrix_t matrix;
-      graphene_vec4_t offset;
-    } color_matrix;
-    struct {
-      float radius;
-      graphene_size_t size;
-      float dir[2];
-    } blur;
-    struct {
-      float outline[4];
-      float corner_widths[4];
-      float corner_heights[4];
-      float radius;
-      float spread;
-      float offset[2];
-      float color[4];
-    } inset_shadow;
-    struct {
-      float outline[4];
-      float corner_widths[4];
-      float corner_heights[4];
-      float radius;
-      float spread;
-      float offset[2];
-      float color[4];
-    } outset_shadow;
-    struct {
-      float outline[4];
-      float corner_widths[4];
-      float corner_heights[4];
-      float radius;
-      float spread;
-      float offset[2];
-      float color[4];
-    } unblurred_outset_shadow;
-    struct {
-      float color[4];
-    } shadow;
-    struct {
-      float widths[4];
-      float color[4];
-      GskRoundedRect outline;
-    } border;
-    struct {
-      float progress;
-      int source2;
-    } cross_fade;
-    struct {
-      int source2;
-      int mode;
-    } blend;
-    struct {
-      float child_bounds[4];
-      float texture_rect[4];
-    } repeat;
-    struct {
-      char *filename;
-      int width;
-      int height;
-    } dump;
-    struct {
-      char text[180]; /* Size of linear_gradient, so 'should be enough' without growing RenderOp */
-    } debug_group;
-  };
-} RenderOp;
+};
 
 typedef struct
 {
@@ -276,9 +153,9 @@ typedef struct
   float current_opacity;
   float dx, dy;
 
-  gsize buffer_size;
+  OpBuffer render_ops;
+  GArray *vertices;
 
-  GArray *render_ops;
   GskGLRenderer *renderer;
 
   /* Stack of modelview matrices */
@@ -298,6 +175,7 @@ void              ops_dump_framebuffer   (RenderOpBuilder         *builder,
                                           int                      height);
 void              ops_init               (RenderOpBuilder         *builder);
 void              ops_free               (RenderOpBuilder         *builder);
+void              ops_reset              (RenderOpBuilder         *builder);
 void              ops_push_debug_group    (RenderOpBuilder         *builder,
                                            const char              *text);
 void              ops_pop_debug_group     (RenderOpBuilder         *builder);
@@ -358,7 +236,8 @@ void              ops_offset             (RenderOpBuilder        *builder,
                                           float                   x,
                                           float                   y);
 
-RenderOp         *ops_begin              (RenderOpBuilder        *builder,
-                                          guint                   kind);
+gpointer          ops_begin              (RenderOpBuilder        *builder,
+                                          OpKind                  kind);
+OpBuffer         *ops_get_buffer         (RenderOpBuilder        *builder);
 
 #endif
