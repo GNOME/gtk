@@ -838,9 +838,6 @@ static gboolean gtk_tree_view_search_scroll_event       (GtkWidget        *entry
 static gboolean gtk_tree_view_search_key_press_event    (GtkWidget        *entry,
 							 GdkEventKey      *event,
 							 GtkTreeView      *tree_view);
-static gboolean gtk_tree_view_search_move               (GtkWidget        *window,
-							 GtkTreeView      *tree_view,
-							 gboolean          up);
 static gboolean gtk_tree_view_search_equal_func         (GtkTreeModel     *model,
 							 gint              column,
 							 const gchar      *key,
@@ -15297,12 +15294,12 @@ gtk_tree_view_search_scroll_event (GtkWidget *widget,
 
   if (event->direction == GDK_SCROLL_UP)
     {
-      gtk_tree_view_search_move (widget, tree_view, TRUE);
+      gtk_tree_view_search_move (tree_view, TRUE);
       retval = TRUE;
     }
   else if (event->direction == GDK_SCROLL_DOWN)
     {
-      gtk_tree_view_search_move (widget, tree_view, FALSE);
+      gtk_tree_view_search_move (tree_view, FALSE);
       retval = TRUE;
     }
 
@@ -15347,7 +15344,7 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
   /* select previous matching iter */
   if (event->keyval == GDK_KEY_Up || event->keyval == GDK_KEY_KP_Up)
     {
-      if (!gtk_tree_view_search_move (widget, tree_view, TRUE))
+      if (!gtk_tree_view_search_move (tree_view, TRUE))
         gtk_widget_error_bell (widget);
 
       retval = TRUE;
@@ -15356,7 +15353,7 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
   if (((event->state & (default_accel | GDK_SHIFT_MASK)) == (default_accel | GDK_SHIFT_MASK))
       && (event->keyval == GDK_KEY_g || event->keyval == GDK_KEY_G))
     {
-      if (!gtk_tree_view_search_move (widget, tree_view, TRUE))
+      if (!gtk_tree_view_search_move (tree_view, TRUE))
         gtk_widget_error_bell (widget);
 
       retval = TRUE;
@@ -15365,7 +15362,7 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
   /* select next matching iter */
   if (event->keyval == GDK_KEY_Down || event->keyval == GDK_KEY_KP_Down)
     {
-      if (!gtk_tree_view_search_move (widget, tree_view, FALSE))
+      if (!gtk_tree_view_search_move (tree_view, FALSE))
         gtk_widget_error_bell (widget);
 
       retval = TRUE;
@@ -15374,7 +15371,7 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
   if (((event->state & (default_accel | GDK_SHIFT_MASK)) == default_accel)
       && (event->keyval == GDK_KEY_g || event->keyval == GDK_KEY_G))
     {
-      if (!gtk_tree_view_search_move (widget, tree_view, FALSE))
+      if (!gtk_tree_view_search_move (tree_view, FALSE))
         gtk_widget_error_bell (widget);
 
       retval = TRUE;
@@ -15395,12 +15392,18 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
   return retval;
 }
 
-/*  this function returns FALSE if there is a search string but
- *  nothing was found, and TRUE otherwise.
+/**
+ * gtk_tree_search_move:
+ * @tree_view: a #GtkTreeView
+ * @up: TRUE if move goes up, FALSE if move goes down
+ *
+ * Creates a new #GtkTreeView widget.
+ *
+ * Returns: FALSE if there is a search string but nothing was found,
+ * and TRUE otherwise.
  */
-static gboolean
-gtk_tree_view_search_move (GtkWidget   *window,
-			   GtkTreeView *tree_view,
+gboolean
+gtk_tree_view_search_move (GtkTreeView *tree_view,
 			   gboolean     up)
 {
   gboolean ret;
