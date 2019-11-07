@@ -119,6 +119,93 @@ static GParamSpec *properties[N_PROPS] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
 
 static void
+gtk_column_view_measure (GtkWidget      *widget,
+                         GtkOrientation  orientation,
+                         int             for_size,
+                         int            *minimum,
+                         int            *natural,
+                         int            *minimum_baseline,
+                         int            *natural_baseline)
+{
+  GtkColumnView *self = GTK_COLUMN_VIEW (widget);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      gtk_column_view_measure_across (self, minimum, natural);
+    }
+  else
+    {
+      gtk_widget_measure (GTK_WIDGET (self->listview),
+                          orientation, for_size,
+                          minimum, natural, 
+                          minimum_baseline, natural_baseline);
+    }
+}
+
+static int
+gtk_column_view_allocate_columns (GtkColumnView *self,
+                                  int            width)
+{
+  GtkScrollablePolicy scroll_policy;
+  int col_min, col_nat, widget_min, widget_nat, extra, col_size, x;
+  guint i;
+
+  gtk_column_view_measure_across (self, &col_min, &col_nat);
+  gtk_widget_measure (GTK_WIDGET (self->listview),
+                      GTK_ORIENTATION_HORIZONTAL, -1,
+                      &widget_min, &widget_nat,
+                      NULL, NULL);
+
+  scroll_policy = gtk_scrollable_get_hscroll_policy (GTK_SCROLLABLE (self->listview));
+  if (scroll_policy == GTK_SCROLL_MINIMUM)
+    {
+      extra = widget_min - col_min;
+      col_size = col_min;
+    }
+  else
+    {
+      extra = widget_nat - col_nat;
+      col_size = col_nat;
+    }
+  width -= extra;
+  width = MAX (width, col_size);
+
+  x = 0;
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->columns)); i++)
+    {
+      GtkColumnViewColumn *column;
+
+      column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+      gtk_column_view_column_measure (column, &col_min, &col_nat);
+      if (scroll_policy == GTK_SCROLL_MINIMUM)
+        col_size = col_min;
+      else
+        col_size = col_nat;
+
+      gtk_column_view_column_allocate (column, x, col_size);
+      x += col_size;
+
+      g_object_unref (column);
+    }
+
+  return width + extra;
+}
+
+static void
+gtk_column_view_allocate (GtkWidget *widget,
+                          int        width,
+                          int        height,
+                          int        baseline)
+{
+  GtkColumnView *self = GTK_COLUMN_VIEW (widget);
+  int full_width;
+
+  full_width = gtk_column_view_allocate_columns (self, width);
+
+  gtk_widget_allocate (GTK_WIDGET (self->listview), full_width, height, baseline, NULL);
+}
+
+static void
 gtk_column_view_activate_cb (GtkListView   *listview,
                              guint          pos,
                              GtkColumnView *self)
@@ -261,6 +348,9 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   gpointer iface;
 
+  widget_class->measure = gtk_column_view_measure;
+  widget_class->size_allocate = gtk_column_view_allocate;
+
   gobject_class->dispose = gtk_column_view_dispose;
   gobject_class->finalize = gtk_column_view_finalize;
   gobject_class->get_property = gtk_column_view_get_property;
@@ -362,7 +452,6 @@ gtk_column_view_init (GtkColumnView *self)
   gtk_css_node_add_class (gtk_widget_get_css_node (GTK_WIDGET (self)),
                           g_quark_from_static_string (I_("view")));
 
-  gtk_widget_set_layout_manager (GTK_WIDGET (self), gtk_box_layout_new (GTK_ORIENTATION_VERTICAL));
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
 }
 
@@ -529,5 +618,33 @@ gtk_column_view_remove_column (GtkColumnView       *self,
 
   gtk_column_view_column_set_column_view (column, NULL);
   g_list_store_remove (self->columns, i);
+}
+
+void
+gtk_column_view_measure_across (GtkColumnView *self,
+                                int           *minimum,
+                                int           *natural)
+{
+  guint i;
+  int min, nat;
+
+  min = 0;
+  nat = 0;
+
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->columns)); i++)
+    {
+      GtkColumnViewColumn *column;
+      int col_min, col_nat;
+
+      column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+      gtk_column_view_column_measure (column, &col_min, &col_nat);
+      min += col_min;
+      nat += col_nat;
+
+      g_object_unref (column);
+    }
+
+  *minimum = min;
+  *natural = nat;
 }
 
