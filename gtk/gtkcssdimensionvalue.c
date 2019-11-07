@@ -318,6 +318,12 @@ gtk_css_dimension_value_new (double     value,
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_S, 0 },
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_S, 1 },
   };
+  static GtkCssValue deg_singletons[] = {
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_DEG, 0   },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_DEG, 90  },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_DEG, 180 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_DEG, 270 },
+  };
   GtkCssValue *result;
 
   switch ((guint)unit)
@@ -362,6 +368,18 @@ gtk_css_dimension_value_new (double     value,
     case GTK_CSS_S:
       if (value == 0 || value == 1)
         return _gtk_css_value_ref (&second_singletons[(int)value]);
+
+      break;
+
+    case GTK_CSS_DEG:
+      if (value == 0)
+        return _gtk_css_value_ref (&deg_singletons[0]);
+      if (value == 90)
+        return _gtk_css_value_ref (&deg_singletons[1]);
+      if (value == 180)
+        return _gtk_css_value_ref (&deg_singletons[2]);
+      if (value == 270)
+        return _gtk_css_value_ref (&deg_singletons[3]);
 
       break;
 
