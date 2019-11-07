@@ -1014,6 +1014,12 @@ modelbutton.flat,
 
   &:hover { background-color: $popover_hover_color; }
 
+  &:disabled {
+    color: $insensitive_fg_color;
+
+    &:backdrop { color: $backdrop_insensitive_color; }
+  }
+
   &:selected { @extend %selected_items; }
 
   &:backdrop,
@@ -2884,6 +2890,7 @@ radio {
     &:disabled { @include button(osd-insensitive); }
   }
 
+  @at-root %menu_check_radio,
   menu menuitem & {
     margin: 0; // this is a workaround for a menu check/radio size allocation issue
 
@@ -2942,6 +2949,7 @@ check {
 }
 
 menu menuitem {
+  @at-root %menu_check_radio,
   radio,
   check {
      &:checked:not(:backdrop), &:indeterminate:not(:backdrop) { transition: none; }
@@ -4846,6 +4854,11 @@ popover.menu {
 
     &:dir(ltr) { margin-left: 20px; }
     &:dir(rtl) { margin-right: 20px; }
+  }
+
+  & check,
+  & radio {
+    @extend %menu_check_radio;
   }
 
   & arrow.left,
