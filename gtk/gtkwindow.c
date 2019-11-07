@@ -8858,34 +8858,6 @@ _gtk_window_set_popover_position (GtkWindow                   *window,
 }
 
 void
-_gtk_window_get_popover_position (GtkWindow             *window,
-                                  GtkWidget             *popover,
-                                  GtkPositionType       *pos,
-                                  cairo_rectangle_int_t *rect)
-{
-  GtkWindowPopover *data;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (GTK_IS_WIDGET (popover));
-
-  data = _gtk_window_has_popover (window, popover);
-
-  if (!data)
-    {
-      g_warning ("Widget %s(%p) is not a popover of window %s(%p)",
-                 gtk_widget_get_name (popover), popover,
-                 gtk_widget_get_name (GTK_WIDGET (window)), window);
-      return;
-    }
-
-  if (pos)
-    *pos = data->pos;
-
-  if (rect)
-    *rect = data->rect;
-}
-
-void
 _gtk_window_raise_popover (GtkWindow *window,
                            GtkWidget *widget)
 {
