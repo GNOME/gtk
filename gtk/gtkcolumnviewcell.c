@@ -44,17 +44,6 @@ struct _GtkColumnViewCellClass
 
 G_DEFINE_TYPE (GtkColumnViewCell, gtk_column_view_cell, GTK_TYPE_LIST_ITEM_WIDGET)
 
-void
-gtk_column_view_cell_measure_contents (GtkColumnViewCell *self,
-                                       int               *minimum,
-                                       int               *natural)
-{
-  GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self));
-
-  if (child)
-    gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, -1, minimum, natural, NULL, NULL);
-}
-
 static void
 gtk_column_view_cell_measure (GtkWidget      *widget,
                               GtkOrientation  orientation,
@@ -64,19 +53,10 @@ gtk_column_view_cell_measure (GtkWidget      *widget,
                               int            *minimum_baseline,
                               int            *natural_baseline)
 {
-  GtkColumnViewCell *self = GTK_COLUMN_VIEW_CELL (widget);
+  GtkWidget *child = gtk_widget_get_first_child (widget);
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      gtk_column_view_column_measure (self->column, minimum, natural);
-    }
-  else
-    {
-      GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self));
-
-      if (child)
-        gtk_widget_measure (child, orientation, for_size, minimum, natural, minimum_baseline, natural_baseline);
-    }
+  if (child)
+    gtk_widget_measure (child, orientation, for_size, minimum, natural, minimum_baseline, natural_baseline);
 }
 
 static void
@@ -201,4 +181,10 @@ GtkColumnViewCell *
 gtk_column_view_cell_get_prev (GtkColumnViewCell *self)
 {
   return self->prev_cell;
+}
+
+GtkColumnViewColumn *
+gtk_column_view_cell_get_column (GtkColumnViewCell *self)
+{
+  return self->column;
 }
