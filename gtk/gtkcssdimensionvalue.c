@@ -311,6 +311,7 @@ gtk_css_dimension_value_new (double     value,
   };
   static GtkCssValue percent_singletons[] = {
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PERCENT, 0 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PERCENT, 50 },
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PERCENT, 100 },
   };
   static GtkCssValue second_singletons[] = {
@@ -351,9 +352,10 @@ gtk_css_dimension_value_new (double     value,
     case GTK_CSS_PERCENT:
       if (value == 0)
         return _gtk_css_value_ref (&percent_singletons[0]);
-
-      if (value == 100)
+      if (value == 50)
         return _gtk_css_value_ref (&percent_singletons[1]);
+      if (value == 100)
+        return _gtk_css_value_ref (&percent_singletons[2]);
 
       break;
 
