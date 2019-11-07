@@ -23,6 +23,7 @@
 
 #include "gtkboxlayout.h"
 #include "gtkcolumnviewcolumnprivate.h"
+#include "gtkcolumnviewlayoutprivate.h"
 #include "gtklistitemfactoryprivate.h"
 #include "gtklistitemprivate.h"
 
@@ -51,7 +52,7 @@ gtk_column_list_item_factory_setup (GtkListItemFactory *factory,
 
   /* FIXME: evil */
   gtk_widget_set_layout_manager (GTK_WIDGET (widget),
-                                 gtk_box_layout_new (GTK_ORIENTATION_HORIZONTAL));
+                                 gtk_column_view_layout_new (self->view));
 
   GTK_LIST_ITEM_FACTORY_CLASS (gtk_column_list_item_factory_parent_class)->setup (factory, widget, list_item);
 
