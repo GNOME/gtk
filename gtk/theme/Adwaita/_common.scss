@@ -2951,7 +2951,7 @@ radio {
 
   & {
     // for checked
-    @each $t in (':checked:not(:indeterminate)'), (':indeterminate') {
+    @each $t in (':checked'), (':indeterminate') {
       &#{$t} {
         @each $state, $t in ("", "normal"),
                             (":hover", "hover"),
