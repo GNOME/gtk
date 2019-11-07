@@ -174,24 +174,25 @@ gtk_css_image_recolor_snapshot (GtkCssImage *image,
                                 double       height)
 {
   GtkCssImageRecolor *recolor = GTK_CSS_IMAGE_RECOLOR (image);
+  const GdkRGBA *fg = &recolor->color;
+  const GdkRGBA *sc = &recolor->success;
+  const GdkRGBA *wc = &recolor->warning;
+  const GdkRGBA *ec = &recolor->error;
   graphene_matrix_t matrix;
   graphene_vec4_t offset;
-  GdkRGBA fg = recolor->color;
-  GdkRGBA sc = recolor->success;
-  GdkRGBA wc = recolor->warning;
-  GdkRGBA ec = recolor->error;
 
   if (recolor->texture == NULL)
     return;
 
   graphene_matrix_init_from_float (&matrix,
           (float[16]) {
-                       sc.red - fg.red, sc.green - fg.green, sc.blue - fg.blue, 0,
-                       wc.red - fg.red, wc.green - fg.green, wc.blue - fg.blue, 0,
-                       ec.red - fg.red, ec.green - fg.green, ec.blue - fg.blue, 0,
-                       0, 0, 0, fg.alpha
+                       sc->red - fg->red, sc->green - fg->green, sc->blue - fg->blue, 0,
+                       wc->red - fg->red, wc->green - fg->green, wc->blue - fg->blue, 0,
+                       ec->red - fg->red, ec->green - fg->green, ec->blue - fg->blue, 0,
+                       0, 0, 0, fg->alpha
                       });
-  graphene_vec4_init (&offset, fg.red, fg.green, fg.blue, 0);
+
+  graphene_vec4_init (&offset, fg->red, fg->green, fg->blue, 0);
   gtk_snapshot_push_color_matrix (snapshot, &matrix, &offset);
 
   gtk_snapshot_append_texture (snapshot,
