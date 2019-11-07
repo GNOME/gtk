@@ -25,6 +25,7 @@
 #include "gtkbuildable.h"
 #include "gtkcolumnlistitemfactoryprivate.h"
 #include "gtkcolumnviewcolumnprivate.h"
+#include "gtkcssnodeprivate.h"
 #include "gtkintl.h"
 #include "gtklistview.h"
 #include "gtkmain.h"
@@ -342,8 +343,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                               G_TYPE_FROM_CLASS (gobject_class),
                               g_cclosure_marshal_VOID__UINTv);
 
-  gtk_widget_class_set_css_name (widget_class, I_("columnview"));
-  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
+  gtk_widget_class_set_css_name (widget_class, I_("treeview"));
 }
 
 static void
@@ -359,6 +359,10 @@ gtk_column_view_init (GtkColumnView *self)
   g_signal_connect (self->listview, "activate", G_CALLBACK (gtk_column_view_activate_cb), self);
   gtk_widget_set_parent (GTK_WIDGET (self->listview), GTK_WIDGET (self));
 
+  gtk_css_node_add_class (gtk_widget_get_css_node (GTK_WIDGET (self)),
+                          g_quark_from_static_string (I_("view")));
+
+  gtk_widget_set_layout_manager (GTK_WIDGET (self), gtk_box_layout_new (GTK_ORIENTATION_VERTICAL));
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
 }
 
