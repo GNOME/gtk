@@ -184,58 +184,6 @@ max_input (GtkSpinButton *spin_button,
   return FALSE;
 }
 
-static gboolean
-min_output (GtkSpinButton *spin_button)
-{
-  GtkAdjustment *adjustment;
-  double value;
-  GtkWidget *box, *text;
-
-  adjustment = gtk_spin_button_get_adjustment (spin_button);
-  value = gtk_adjustment_get_value (adjustment);
-
-  box = gtk_widget_get_first_child (GTK_WIDGET (spin_button));
-  text = gtk_widget_get_first_child (box);
-
-  if (value == 0.0)
-    {
-      gtk_editable_set_text (GTK_EDITABLE (spin_button), "");
-      gtk_text_set_placeholder_text (GTK_TEXT (text), "unset");
-      return TRUE;
-    }
-  else
-    {
-      gtk_text_set_placeholder_text (GTK_TEXT (text), "");
-      return FALSE;
-    }
-}
-
-static gboolean
-max_output (GtkSpinButton *spin_button)
-{
-  GtkAdjustment *adjustment;
-  double value;
-  GtkWidget *box, *text;
-
-  adjustment = gtk_spin_button_get_adjustment (spin_button);
-  value = gtk_adjustment_get_value (adjustment);
-
-  box = gtk_widget_get_first_child (GTK_WIDGET (spin_button));
-  text = gtk_widget_get_first_child (box);
-
-  if (value == (double)G_MAXINT)
-    {
-      gtk_editable_set_text (GTK_EDITABLE (spin_button), "");
-      gtk_text_set_placeholder_text (GTK_TEXT (text), "unset");
-      return TRUE;
-    }
-  else
-    {
-      gtk_text_set_placeholder_text (GTK_TEXT (text), "");
-      return FALSE;
-    }
-}
-
 static void
 guide_editor_constructed (GObject *object)
 {
@@ -244,16 +192,12 @@ guide_editor_constructed (GObject *object)
   guide_strength_combo (editor->strength);
 
   g_signal_connect (editor->min_width, "input", G_CALLBACK (min_input), NULL);
-  g_signal_connect (editor->min_width, "output", G_CALLBACK (min_output), NULL);
 
   g_signal_connect (editor->min_height, "input", G_CALLBACK (min_input), NULL);
-  g_signal_connect (editor->min_height, "output", G_CALLBACK (min_output), NULL);
 
   g_signal_connect (editor->max_width, "input", G_CALLBACK (max_input), NULL);
-  g_signal_connect (editor->max_width, "output", G_CALLBACK (max_output), NULL);
 
   g_signal_connect (editor->max_height, "input", G_CALLBACK (max_input), NULL);
-  g_signal_connect (editor->max_height, "output", G_CALLBACK (max_output), NULL);
 
   if (editor->guide)
     {
