@@ -17,13 +17,19 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_COLUMN_VIEW_PRIVATE_H__
-#define __GTK_COLUMN_VIEW_PRIVATE_H__
+#ifndef __GTK_COLUMN_VIEW_LAYOUT_PRIVATE_H__
+#define __GTK_COLUMN_VIEW_LAYOUT_PRIVATE_H__
 
-#include "gtk/gtkcolumnview.h"
+#include <gtk/gtkcolumnview.h>
+#include <gtk/gtklayoutmanager.h>
 
-void                    gtk_column_view_measure_across          (GtkColumnView          *self,
-                                                                 int                    *minimum,
-                                                                 int                    *natural);
+G_BEGIN_DECLS
 
-#endif  /* __GTK_COLUMN_VIEW_PRIVATE_H__ */
+#define GTK_TYPE_COLUMN_VIEW_LAYOUT (gtk_column_view_layout_get_type ())
+
+G_DECLARE_FINAL_TYPE (GtkColumnViewLayout, gtk_column_view_layout, GTK, COLUMN_VIEW_LAYOUT, GtkLayoutManager)
+
+GtkLayoutManager *      gtk_column_view_layout_new              (GtkColumnView          *view);
+
+
+#endif  /* __GTK_COLUMN_VIEW_LAYOUT_PRIVATE_H__ */
