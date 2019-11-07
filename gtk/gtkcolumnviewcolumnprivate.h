@@ -37,5 +37,11 @@ void                    gtk_column_view_column_queue_resize             (GtkColu
 void                    gtk_column_view_column_measure                  (GtkColumnViewColumn    *self,
                                                                          int                    *minimum,
                                                                          int                    *natural);
+void                    gtk_column_view_column_allocate                 (GtkColumnViewColumn    *self,
+                                                                         int                     offset,
+                                                                         int                     size);
+void                    gtk_column_view_column_get_allocation           (GtkColumnViewColumn    *self,
+                                                                         int                    *offset,
+                                                                         int                    *size);
 
 #endif  /* __GTK_COLUMN_VIEW_COLUMN_PRIVATE_H__ */
