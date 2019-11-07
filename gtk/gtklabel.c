@@ -419,8 +419,6 @@ static guint signals[LAST_SIGNAL] = { 0 };
 static GQuark quark_shortcuts_connected;
 static GQuark quark_mnemonic_menu;
 static GQuark quark_mnemonics_visible_connected;
-static GQuark quark_gtk_signal;
-static GQuark quark_link;
 
 static void gtk_label_set_property      (GObject          *object,
 					 guint             prop_id,
@@ -1155,8 +1153,6 @@ gtk_label_class_init (GtkLabelClass *class)
   quark_shortcuts_connected = g_quark_from_static_string ("gtk-label-shortcuts-connected");
   quark_mnemonic_menu = g_quark_from_static_string ("gtk-mnemonic-menu");
   quark_mnemonics_visible_connected = g_quark_from_static_string ("gtk-label-mnemonics-visible-connected");
-  quark_gtk_signal = g_quark_from_static_string ("gtk-signal");
-  quark_link = g_quark_from_static_string ("link");
 
   gtk_widget_class_install_action (widget_class, "clipboard.cut", NULL,
                                    gtk_label_nop);
