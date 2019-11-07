@@ -52,6 +52,8 @@ struct _GtkColumnViewColumn
 
   int minimum_size_request;
   int natural_size_request;
+  int allocation_offset;
+  int allocation_size;
 
   /* This list isn't sorted - this is just caching for performance */
   GtkColumnViewCell *first_cell; /* no reference, just caching */
@@ -310,7 +312,11 @@ gtk_column_view_column_measure (GtkColumnViewColumn *self,
 
       for (cell = self->first_cell; cell; cell = gtk_column_view_cell_get_next (cell))
         {
-          gtk_column_view_cell_measure_contents (cell, &cell_min, &cell_nat);
+          gtk_widget_measure (GTK_WIDGET (cell),
+                              GTK_ORIENTATION_HORIZONTAL,
+                              -1,
+                              &cell_min, &cell_nat,
+                              NULL, NULL);
 
           min = MAX (min, cell_min);
           nat = MAX (nat, cell_nat);
@@ -322,6 +328,26 @@ gtk_column_view_column_measure (GtkColumnViewColumn *self,
 
   *minimum = self->minimum_size_request;
   *natural = self->natural_size_request;
+}
+
+void
+gtk_column_view_column_allocate (GtkColumnViewColumn *self,
+                                 int                  offset,
+                                 int                  size)
+{
+  self->allocation_offset = offset;
+  self->allocation_size = size;
+}
+
+void
+gtk_column_view_column_get_allocation (GtkColumnViewColumn *self,
+                                       int                 *offset,
+                                       int                 *size)
+{
+  if (offset)
+    *offset = self->allocation_offset;
+  if (size)
+    *size = self->allocation_size;
 }
 
 static void
