@@ -2938,7 +2938,6 @@ radio {
 
     @each $state, $t in ("", "normal"),
                         (":hover", "hover"),
-                        (":hover:backdrop", "backdrop-hover"),
                         (":active", "active"),
                         (":disabled", "insensitive"),
                         (":backdrop", "backdrop"),
@@ -2955,7 +2954,7 @@ radio {
       &#{$t} {
         @each $state, $t in ("", "normal"),
                             (":hover", "hover"),
-                            (":hover:backdrop", "backdrop-hover"),
+                            (":active", "active"),
                             (":disabled", "insensitive"),
                             (":backdrop", "backdrop"),
                             (":backdrop:disabled", 'backdrop-insensitive') {
