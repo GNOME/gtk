@@ -42,10 +42,7 @@ void                    gtk_column_view_cell_remove             (GtkColumnViewCe
 
 GtkColumnViewCell *     gtk_column_view_cell_get_next           (GtkColumnViewCell      *self);
 GtkColumnViewCell *     gtk_column_view_cell_get_prev           (GtkColumnViewCell      *self);
-
-void                    gtk_column_view_cell_measure_contents   (GtkColumnViewCell      *self,
-                                                                 int                    *minimum,
-                                                                 int                    *natural);
+GtkColumnViewColumn *   gtk_column_view_cell_get_column         (GtkColumnViewCell      *self);
 
 G_END_DECLS
 
