@@ -1092,10 +1092,6 @@ check, radio { margin: 0 4px; min-height: 14px; min-width: 14px; border: 1px sol
 
 check:only-child, radio:only-child { margin: 0; }
 
-popover check.left:dir(rtl), popover radio.left:dir(rtl) { margin-left: 0; margin-right: 12px; }
-
-popover check.right:dir(ltr), popover radio.right:dir(ltr) { margin-left: 12px; margin-right: 0; }
-
 check, radio { background-clip: padding-box; background-image: linear-gradient(to bottom, #424242 20%, #353535 90%); border-color: #070707; box-shadow: 0 1px rgba(0, 0, 0, 0.05); color: #eeeeec; }
 
 check:hover, radio:hover { background-image: linear-gradient(to bottom, #4c4c4c 10%, #3f3f3f 90%); }
