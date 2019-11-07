@@ -415,6 +415,10 @@ modelbutton.flat, .menuitem.button.flat { min-height: 26px; padding-left: 5px; p
 
 modelbutton.flat:hover, .menuitem.button.flat:hover { background-color: #424242; }
 
+modelbutton.flat:disabled, .menuitem.button.flat:disabled { color: #919190; }
+
+modelbutton.flat:disabled:backdrop, .menuitem.button.flat:disabled:backdrop { color: #5b5b5b; }
+
 modelbutton.flat arrow { background: none; min-width: 16px; min-height: 16px; }
 
 modelbutton.flat arrow:hover { background: none; }
@@ -1140,9 +1144,9 @@ check:backdrop, radio:backdrop { transition: 200ms ease-out; }
 
 .osd check:disabled, .osd radio:disabled { color: #8a8a89; border-color: rgba(0, 0, 0, 0.7); background-color: transparent; background-image: image(rgba(58, 58, 57, 0.5)); background-clip: padding-box; box-shadow: none; text-shadow: none; -gtk-icon-shadow: none; }
 
-menu menuitem check, menu menuitem radio { margin: 0; }
+popover.menu check, popover.menu radio, menu menuitem check, menu menuitem radio { margin: 0; }
 
-menu menuitem check, menu menuitem check:hover, menu menuitem check:disabled, menu menuitem check:checked, menu menuitem check:checked:hover, menu menuitem check:checked:disabled, menu menuitem check:indeterminate, menu menuitem check:indeterminate:hover, menu menuitem check:indeterminate:disabled, menu menuitem radio, menu menuitem radio:hover, menu menuitem radio:disabled, menu menuitem radio:checked, menu menuitem radio:checked:hover, menu menuitem radio:checked:disabled, menu menuitem radio:indeterminate, menu menuitem radio:indeterminate:hover, menu menuitem radio:indeterminate:disabled { min-height: 14px; min-width: 14px; background-image: none; background-color: transparent; box-shadow: none; -gtk-icon-shadow: none; color: inherit; border-color: currentColor; }
+popover.menu check, popover.menu radio, popover.menu check:hover, popover.menu radio:hover, popover.menu check:disabled, popover.menu radio:disabled, popover.menu check:checked, popover.menu radio:checked, popover.menu check:checked:hover, popover.menu radio:checked:hover, popover.menu check:checked:disabled, popover.menu radio:checked:disabled, popover.menu check:indeterminate, popover.menu radio:indeterminate, popover.menu check:indeterminate:hover, popover.menu radio:indeterminate:hover, popover.menu check:indeterminate:disabled, popover.menu radio:indeterminate:disabled, menu menuitem check, menu menuitem check:hover, menu menuitem check:disabled, menu menuitem check:checked, menu menuitem check:checked:hover, menu menuitem check:checked:disabled, menu menuitem check:indeterminate, menu menuitem check:indeterminate:hover, menu menuitem check:indeterminate:disabled, menu menuitem radio, menu menuitem radio:hover, menu menuitem radio:disabled, menu menuitem radio:checked, menu menuitem radio:checked:hover, menu menuitem radio:checked:disabled, menu menuitem radio:indeterminate, menu menuitem radio:indeterminate:hover, menu menuitem radio:indeterminate:disabled { min-height: 14px; min-width: 14px; background-image: none; background-color: transparent; box-shadow: none; -gtk-icon-shadow: none; color: inherit; border-color: currentColor; }
 
 check { border-radius: 3px; -gtk-icon-size: 14px; }
 
@@ -1164,7 +1168,7 @@ radio:active, check:active { -gtk-icon-transform: scale(0, 1); }
 
 radio:checked:not(:backdrop), radio:indeterminate:not(:backdrop), check:checked:not(:backdrop), check:indeterminate:not(:backdrop) { -gtk-icon-transform: unset; transition: 400ms; }
 
-menu menuitem radio:checked:not(:backdrop), menu menuitem radio:indeterminate:not(:backdrop), menu menuitem check:checked:not(:backdrop), menu menuitem check:indeterminate:not(:backdrop) { transition: none; }
+popover.menu check:checked:not(:backdrop), popover.menu radio:checked:not(:backdrop), popover.menu check:indeterminate:not(:backdrop), popover.menu radio:indeterminate:not(:backdrop), radio:checked:not(:backdrop), radio:indeterminate:not(:backdrop), check:checked:not(:backdrop), check:indeterminate:not(:backdrop) { transition: none; }
 
 treeview.view check:selected:focus, treeview.view check:selected, treeview.view radio:selected:focus, treeview.view radio:selected { color: #ffffff; }
 
