@@ -66,8 +66,8 @@ gtk_css_number_value_add (GtkCssValue *value1,
 }
 
 GtkCssValue *
-gtk_css_number_value_try_add (const GtkCssValue *value1,
-                              const GtkCssValue *value2)
+gtk_css_number_value_try_add (GtkCssValue *value1,
+                              GtkCssValue *value2)
 {
   GtkCssNumberValueClass *number_value_class;
   

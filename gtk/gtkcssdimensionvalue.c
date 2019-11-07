@@ -235,11 +235,17 @@ gtk_css_value_dimension_multiply (const GtkCssValue *value,
 }
 
 static GtkCssValue *
-gtk_css_value_dimension_try_add (const GtkCssValue *value1,
-                                 const GtkCssValue *value2)
+gtk_css_value_dimension_try_add (GtkCssValue *value1,
+                                 GtkCssValue *value2)
 {
   if (value1->unit != value2->unit)
     return NULL;
+
+  if (value1->value == 0)
+    return _gtk_css_value_ref (value2);
+
+  if (value2->value == 0)
+    return _gtk_css_value_ref (value1);
 
   return gtk_css_dimension_value_new (value1->value + value2->value, value1->unit);
 }

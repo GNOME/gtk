@@ -46,8 +46,8 @@ struct _GtkCssNumberValueClass {
   gboolean              (* has_percent)             (const GtkCssValue      *value);
   GtkCssValue *         (* multiply)                (const GtkCssValue      *value,
                                                      double                  factor);
-  GtkCssValue *         (* try_add)                 (const GtkCssValue      *value1,
-                                                     const GtkCssValue      *value2);
+  GtkCssValue *         (* try_add)                 (GtkCssValue            *value1,
+                                                     GtkCssValue            *value2);
   gint                  (* get_calc_term_order)     (const GtkCssValue      *value);
 };
 
@@ -67,8 +67,8 @@ GtkCssValue *   gtk_css_number_value_multiply       (const GtkCssValue      *val
                                                      double                  factor);
 GtkCssValue *   gtk_css_number_value_add            (GtkCssValue            *value1,
                                                      GtkCssValue            *value2);
-GtkCssValue *   gtk_css_number_value_try_add        (const GtkCssValue      *value1,
-                                                     const GtkCssValue      *value2);
+GtkCssValue *   gtk_css_number_value_try_add        (GtkCssValue            *value1,
+                                                     GtkCssValue            *value2);
 gint            gtk_css_number_value_get_calc_term_order (const GtkCssValue *value);
 
 double          _gtk_css_number_value_get           (const GtkCssValue      *number,
