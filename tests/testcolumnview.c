@@ -524,6 +524,18 @@ struct {
 #define G_FILE_ATTRIBUTE_RECENT_MODIFIED "recent::modified"          /* int64 (time_t) */
 #endif
 
+const char *factory_ui =
+"<?xml version='1.0' encoding='UTF-8'?>\n" \
+"<interface>\n" \
+"  <template class='GtkListItem'>\n" \
+"    <property name='child'>\n" \
+"      <object class='GtkLabel'>\n" \
+"        <binding name='label'>GtkListItem.item:GtkColumnViewColumn.title</binding>\n" \
+"      </object>\n" \
+"    </property>\n" \
+"  </template>\n" \
+"</interface>\n";
+
 static void
 add_extra_columns (GtkColumnView *view)
 {
@@ -544,7 +556,7 @@ add_extra_columns (GtkColumnView *view)
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *win, *vbox, *sw, *view, *search_entry, *statusbar;
+  GtkWidget *win, *hbox, *vbox, *sw, *view, *list, *search_entry, *statusbar;
   GListModel *dirmodel;
   GtkTreeListModel *tree;
   GtkFilterListModel *filter;
@@ -557,13 +569,17 @@ main (int argc, char *argv[])
   gtk_window_set_default_size (GTK_WINDOW (win), 800, 600);
   g_signal_connect (win, "destroy", G_CALLBACK (gtk_main_quit), win);
 
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_container_add (GTK_CONTAINER (win), hbox);
+
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (win), vbox);
+  gtk_container_add (GTK_CONTAINER (hbox), vbox);
 
   search_entry = gtk_search_entry_new ();
   gtk_container_add (GTK_CONTAINER (vbox), search_entry);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_set_hexpand (sw, TRUE);
   gtk_widget_set_vexpand (sw, TRUE);
   gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (search_entry), sw);
   gtk_container_add (GTK_CONTAINER (vbox), sw);
@@ -604,6 +620,11 @@ main (int argc, char *argv[])
 
   g_object_unref (tree);
   g_object_unref (filter);
+
+  list = gtk_list_view_new_with_factory (
+             gtk_builder_list_item_factory_new_from_bytes (g_bytes_new_static (factory_ui, strlen (factory_ui))));
+  gtk_list_view_set_model (GTK_LIST_VIEW (list), gtk_column_view_get_columns (GTK_COLUMN_VIEW (view)));
+  gtk_container_add (GTK_CONTAINER (hbox), list);
 
   gtk_widget_show (win);
 
