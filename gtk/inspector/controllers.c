@@ -21,8 +21,9 @@
 #include "controllers.h"
 #include "object-tree.h"
 
-#include "gtksizegroup.h"
+#include "gtkbinlayout.h"
 #include "gtkcomboboxtext.h"
+#include "gtkcustomsorter.h"
 #include "gtkflattenlistmodel.h"
 #include "gtkframe.h"
 #include "gtkgesture.h"
@@ -31,15 +32,15 @@
 #include "gtkmaplistmodel.h"
 #include "gtkpropertylookuplistmodelprivate.h"
 #include "gtkscrolledwindow.h"
+#include "gtksizegroup.h"
 #include "gtksortlistmodel.h"
-#include "gtkwidgetprivate.h"
 #include "gtkstack.h"
 #include "gtkstylecontext.h"
-#include "gtkcustomsorter.h"
+#include "gtkwidgetprivate.h"
 
 struct _GtkInspectorControllers
 {
-  GtkBox parent_instance;
+  GtkWidget parent_instance;
 
   GtkWidget *listbox;
   GtkPropertyLookupListModel *model;
@@ -49,7 +50,7 @@ struct _GtkInspectorControllers
 
 struct _GtkInspectorControllersClass
 {
-  GtkBoxClass parent_class;
+  GtkWidgetClass parent_class;
 };
 
 enum
@@ -58,7 +59,7 @@ enum
   PROP_OBJECT_TREE
 };
 
-G_DEFINE_TYPE (GtkInspectorControllers, gtk_inspector_controllers, GTK_TYPE_BOX)
+G_DEFINE_TYPE (GtkInspectorControllers, gtk_inspector_controllers, GTK_TYPE_WIDGET)
 
 static void
 row_activated (GtkListBox              *box,
@@ -98,7 +99,7 @@ gtk_inspector_controllers_init (GtkInspectorControllers *self)
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (self->listbox), GTK_SELECTION_NONE);
   gtk_container_add (GTK_CONTAINER (box), self->listbox);
 
-  gtk_container_add (GTK_CONTAINER (self), sw);
+  gtk_widget_set_parent (sw, GTK_WIDGET (self));
 }
 
 static void
@@ -260,10 +261,10 @@ gtk_inspector_controllers_set_object (GtkInspectorControllers *self,
 }
 
 static void
-get_property (GObject    *object,
-              guint       param_id,
-              GValue     *value,
-              GParamSpec *pspec)
+gtk_inspector_controllers_get_property (GObject    *object,
+                                        guint       param_id,
+                                        GValue     *value,
+                                        GParamSpec *pspec)
 {
   GtkInspectorControllers *self = GTK_INSPECTOR_CONTROLLERS (object);
 
@@ -280,10 +281,10 @@ get_property (GObject    *object,
 }
 
 static void
-set_property (GObject      *object,
-              guint         param_id,
-              const GValue *value,
-              GParamSpec   *pspec)
+gtk_inspector_controllers_set_property (GObject      *object,
+                                        guint         param_id,
+                                        const GValue *value,
+                                        GParamSpec   *pspec)
 {
   GtkInspectorControllers *self = GTK_INSPECTOR_CONTROLLERS (object);
 
@@ -300,16 +301,30 @@ set_property (GObject      *object,
 }
 
 static void
+gtk_inspector_controllers_dispose (GObject *object)
+{
+  GtkInspectorControllers *self = GTK_INSPECTOR_CONTROLLERS (object);
+
+  gtk_widget_unparent (gtk_widget_get_first_child (GTK_WIDGET (self)));
+
+  G_OBJECT_CLASS (gtk_inspector_controllers_parent_class)->dispose (object);
+}
+
+static void
 gtk_inspector_controllers_class_init (GtkInspectorControllersClass *klass)
 {
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->get_property = get_property;
-  object_class->set_property = set_property;
+  object_class->get_property = gtk_inspector_controllers_get_property;
+  object_class->set_property = gtk_inspector_controllers_set_property;
+  object_class->dispose= gtk_inspector_controllers_dispose;
 
   g_object_class_install_property (object_class, PROP_OBJECT_TREE,
       g_param_spec_object ("object-tree", "Widget Tree", "Widget tree",
                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
 // vim: set et sw=2 ts=2:
