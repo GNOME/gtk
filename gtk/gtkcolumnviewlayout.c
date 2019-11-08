@@ -24,6 +24,7 @@
 #include "gtkcolumnviewcellprivate.h"
 #include "gtkcolumnviewcolumnprivate.h"
 #include "gtkcolumnviewprivate.h"
+#include "gtkcolumnviewtitleprivate.h"
 #include "gtkwidgetprivate.h"
 
 struct _GtkColumnViewLayout
@@ -113,9 +114,13 @@ gtk_column_view_layout_allocate (GtkLayoutManager *layout_manager,
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      GtkColumnViewCell *cell = GTK_COLUMN_VIEW_CELL (child);
-      GtkColumnViewColumn *column = gtk_column_view_cell_get_column (cell);
+      GtkColumnViewColumn *column;
       int col_x, col_width;
+
+      if (GTK_IS_COLUMN_VIEW_CELL (child))
+        column = gtk_column_view_cell_get_column (GTK_COLUMN_VIEW_CELL (child));
+      else
+        column = gtk_column_view_title_get_column (GTK_COLUMN_VIEW_TITLE (child));
 
       gtk_column_view_column_get_allocation (column, &col_x, &col_width);
       gtk_widget_size_allocate (child, &(GtkAllocation) { col_x, 0, col_width, height }, baseline);
