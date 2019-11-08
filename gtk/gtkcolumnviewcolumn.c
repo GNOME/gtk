@@ -21,6 +21,8 @@
 
 #include "gtkcolumnviewcolumnprivate.h"
 
+#include "gtkcolumnviewprivate.h"
+#include "gtkcolumnviewtitleprivate.h"
 #include "gtkintl.h"
 #include "gtklistbaseprivate.h"
 #include "gtklistitemwidgetprivate.h"
@@ -49,6 +51,7 @@ struct _GtkColumnViewColumn
 
   /* data for the view */
   GtkColumnView *view;
+  GtkWidget *header;
 
   int minimum_size_request;
   int natural_size_request;
@@ -291,6 +294,9 @@ gtk_column_view_column_queue_resize (GtkColumnViewColumn *self)
   self->minimum_size_request = -1;
   self->natural_size_request = -1;
 
+  if (self->header)
+    gtk_widget_queue_resize (self->header);
+
   for (cell = self->first_cell; cell; cell = gtk_column_view_cell_get_next (cell))
     {
       gtk_widget_queue_resize (GTK_WIDGET (cell));
@@ -307,8 +313,15 @@ gtk_column_view_column_measure (GtkColumnViewColumn *self,
       GtkColumnViewCell *cell;
       int min, nat, cell_min, cell_nat;
 
-      min = 0;
-      nat = 0;
+      if (self->header)
+        {
+          gtk_widget_measure (self->header, GTK_ORIENTATION_HORIZONTAL, -1, &min, &nat, NULL, NULL);
+        }
+      else
+        {
+          min = 0;
+          nat = 0;
+        }
 
       for (cell = self->first_cell; cell; cell = gtk_column_view_cell_get_next (cell))
         {
@@ -386,12 +399,41 @@ gtk_column_view_column_remove_cells (GtkColumnViewColumn *self)
 }
 
 static void
+gtk_column_view_column_create_header (GtkColumnViewColumn *self)
+{
+  if (self->header != NULL)
+    return;
+
+  self->header = gtk_column_view_title_new (self);
+  gtk_list_item_widget_add_child (gtk_column_view_get_header_widget (self->view),
+                                  self->header);
+  gtk_column_view_column_queue_resize (self);
+}
+
+static void
+gtk_column_view_column_remove_header (GtkColumnViewColumn *self)
+{
+  if (self->header == NULL)
+    return;
+
+  gtk_list_item_widget_remove_child (gtk_column_view_get_header_widget (self->view),
+                                     self->header);
+  self->header = NULL;
+  gtk_column_view_column_queue_resize (self);
+}
+
+static void
 gtk_column_view_column_ensure_cells (GtkColumnViewColumn *self)
 {
   if (self->view && gtk_widget_get_root (GTK_WIDGET (self->view)))
     gtk_column_view_column_create_cells (self);
   else
     gtk_column_view_column_remove_cells (self);
+
+  if (self->view)
+    gtk_column_view_column_create_header (self);
+  else
+    gtk_column_view_column_remove_header (self);
 }
 
 /**
@@ -419,10 +461,12 @@ gtk_column_view_column_set_column_view (GtkColumnViewColumn *self,
   if (self->view == view)
     return;
 
+  gtk_column_view_column_remove_cells (self);
+  gtk_column_view_column_remove_header (self);
+
   self->view = view;
 
-  if (view)
-    gtk_column_view_column_ensure_cells (self);
+  gtk_column_view_column_ensure_cells (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLUMN_VIEW]);
 }
@@ -485,6 +529,9 @@ gtk_column_view_column_set_title (GtkColumnViewColumn *self,
 
   g_free (self->title);
   self->title = g_strdup (title);
+
+  if (self->header)
+    gtk_column_view_title_update (GTK_COLUMN_VIEW_TITLE (self->header));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_TITLE]);
 }
