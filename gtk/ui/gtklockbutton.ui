@@ -16,15 +16,23 @@
         <child>
           <object class="GtkStack" id="stack">
             <child>
-              <object class="GtkLabel" id="label_lock">
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">Lock</property>
+              <object class="GtkStackPage">
+                <property name="child">
+                  <object class="GtkLabel" id="label_lock">
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Lock</property>
+                  </object>
+                </property>
               </object>
             </child>
             <child>
-              <object class="GtkLabel" id="label_unlock">
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">Unlock</property>
+              <object class="GtkStackPage">
+                <property name="child">
+                  <object class="GtkLabel" id="label_unlock">
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Unlock</property>
+                  </object>
+                </property>
               </object>
             </child>
           </object>
