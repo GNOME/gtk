@@ -18,32 +18,13 @@
 #ifndef _GTK_INSPECTOR_CONTROLLERS_H_
 #define _GTK_INSPECTOR_CONTROLLERS_H_
 
-#include <gtk/gtkbox.h>
-
-#define GTK_TYPE_INSPECTOR_CONTROLLERS            (gtk_inspector_controllers_get_type())
-#define GTK_INSPECTOR_CONTROLLERS(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_CONTROLLERS, GtkInspectorControllers))
-#define GTK_INSPECTOR_CONTROLLERS_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_INSPECTOR_CONTROLLERS, GtkInspectorControllersClass))
-#define GTK_INSPECTOR_IS_GESTURES(obj)            (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_INSPECTOR_CONTROLLERS))
-#define GTK_INSPECTOR_IS_GESTURES_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_INSPECTOR_CONTROLLERS))
-#define GTK_INSPECTOR_CONTROLLERS_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_INSPECTOR_CONTROLLERS, GtkInspectorControllersClass))
-
-
-typedef struct _GtkInspectorControllersPrivate GtkInspectorControllersPrivate;
-
-typedef struct _GtkInspectorControllers
-{
-  GtkBox parent;
-  GtkInspectorControllersPrivate *priv;
-} GtkInspectorControllers;
-
-typedef struct _GtkInspectorControllersClass
-{
-  GtkBoxClass parent;
-} GtkInspectorControllersClass;
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-GType           gtk_inspector_controllers_get_type              (void);
+#define GTK_TYPE_INSPECTOR_CONTROLLERS gtk_inspector_controllers_get_type()
+
+G_DECLARE_FINAL_TYPE (GtkInspectorControllers, gtk_inspector_controllers, GTK, INSPECTOR_CONTROLLERS, GtkBox)
 
 void            gtk_inspector_controllers_set_object            (GtkInspectorControllers        *sl,
                                                                  GObject                        *object);
