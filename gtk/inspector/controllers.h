@@ -18,13 +18,13 @@
 #ifndef _GTK_INSPECTOR_CONTROLLERS_H_
 #define _GTK_INSPECTOR_CONTROLLERS_H_
 
-#include <gtk/gtk.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
 #define GTK_TYPE_INSPECTOR_CONTROLLERS gtk_inspector_controllers_get_type()
 
-G_DECLARE_FINAL_TYPE (GtkInspectorControllers, gtk_inspector_controllers, GTK, INSPECTOR_CONTROLLERS, GtkBox)
+G_DECLARE_FINAL_TYPE (GtkInspectorControllers, gtk_inspector_controllers, GTK, INSPECTOR_CONTROLLERS, GtkWidget)
 
 void            gtk_inspector_controllers_set_object            (GtkInspectorControllers        *sl,
                                                                  GObject                        *object);
