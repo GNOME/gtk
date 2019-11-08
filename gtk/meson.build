@@ -40,6 +40,7 @@ gtk_private_sources = files([
   'gtkcolumnlistitemfactory.c',
   'gtkcolumnviewcell.c',
   'gtkcolumnviewlayout.c',
+  'gtkcolumnviewtitle.c',
   'gtkconstraintexpression.c',
   'gtkconstraintsolver.c',
   'gtkconstraintvflparser.c',
