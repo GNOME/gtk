@@ -25,6 +25,7 @@
 #include "gtkbuildable.h"
 #include "gtkcolumnlistitemfactoryprivate.h"
 #include "gtkcolumnviewcolumnprivate.h"
+#include "gtkcolumnviewlayoutprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkintl.h"
 #include "gtklistview.h"
@@ -48,6 +49,8 @@ struct _GtkColumnView
   GtkWidget parent_instance;
 
   GListStore *columns;
+
+  GtkWidget *header;
 
   GtkListView *listview;
   GtkColumnListItemFactory *factory;
@@ -135,10 +138,18 @@ gtk_column_view_measure (GtkWidget      *widget,
     }
   else
     {
+      int header_min, header_nat, list_min, list_nat;
+
       gtk_widget_measure (GTK_WIDGET (self->listview),
                           orientation, for_size,
-                          minimum, natural, 
-                          minimum_baseline, natural_baseline);
+                          &header_min, &header_nat,
+                          NULL, NULL);
+      gtk_widget_measure (GTK_WIDGET (self->listview),
+                          orientation, for_size,
+                          &list_min, &list_nat,
+                          NULL, NULL);
+      *minimum = header_min + list_min;
+      *natural = header_nat + list_nat;
     }
 }
 
@@ -151,7 +162,7 @@ gtk_column_view_allocate_columns (GtkColumnView *self,
   guint i;
 
   gtk_column_view_measure_across (self, &col_min, &col_nat);
-  gtk_widget_measure (GTK_WIDGET (self->listview),
+  gtk_widget_measure (GTK_WIDGET (self),
                       GTK_ORIENTATION_HORIZONTAL, -1,
                       &widget_min, &widget_nat,
                       NULL, NULL);
@@ -198,11 +209,20 @@ gtk_column_view_allocate (GtkWidget *widget,
                           int        baseline)
 {
   GtkColumnView *self = GTK_COLUMN_VIEW (widget);
-  int full_width;
+  int full_width, header_height, min, nat;
 
   full_width = gtk_column_view_allocate_columns (self, width);
 
-  gtk_widget_allocate (GTK_WIDGET (self->listview), full_width, height, baseline, NULL);
+  gtk_widget_measure (self->header, GTK_ORIENTATION_VERTICAL, full_width, &min, &nat, NULL, NULL);
+  if (gtk_scrollable_get_vscroll_policy (GTK_SCROLLABLE (self->listview)) == GTK_SCROLL_MINIMUM)
+    header_height = min;
+  else
+    header_height = nat;
+  gtk_widget_allocate (self->header, full_width, header_height, -1, NULL);
+
+  gtk_widget_allocate (GTK_WIDGET (self->listview),
+                       full_width, height - header_height, -1,
+                       gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (0, header_height)));
 }
 
 static void
@@ -224,6 +244,8 @@ gtk_column_view_dispose (GObject *object)
       gtk_column_view_remove_column (self, column);
       g_object_unref (column);
     }
+
+  g_clear_pointer (&self->header, gtk_widget_unparent);
 
   g_clear_pointer ((GtkWidget **) &self->listview, gtk_widget_unparent);
   g_clear_object (&self->factory);
@@ -441,6 +463,11 @@ gtk_column_view_init (GtkColumnView *self)
 {
   self->columns = g_list_store_new (GTK_TYPE_COLUMN_VIEW_COLUMN);
 
+  self->header = gtk_list_item_widget_new (NULL, "header");
+  gtk_widget_set_can_focus (self->header, FALSE);
+  gtk_widget_set_layout_manager (self->header, gtk_column_view_layout_new (self));
+  gtk_widget_set_parent (self->header, GTK_WIDGET (self));
+
   self->factory = gtk_column_list_item_factory_new (self);
   self->listview = GTK_LIST_VIEW (gtk_list_view_new_with_factory (
         GTK_LIST_ITEM_FACTORY (g_object_ref (self->factory))));
@@ -646,5 +673,11 @@ gtk_column_view_measure_across (GtkColumnView *self,
 
   *minimum = min;
   *natural = nat;
+}
+
+GtkListItemWidget *
+gtk_column_view_get_header_widget (GtkColumnView *self)
+{
+  return GTK_LIST_ITEM_WIDGET (self->header);
 }
 
