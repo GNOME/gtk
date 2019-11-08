@@ -22,6 +22,10 @@
 
 #include "gtk/gtkcolumnview.h"
 
+#include "gtk/gtklistitemwidgetprivate.h"
+
+GtkListItemWidget *     gtk_column_view_get_header_widget       (GtkColumnView          *self);
+
 void                    gtk_column_view_measure_across          (GtkColumnView          *self,
                                                                  int                    *minimum,
                                                                  int                    *natural);
