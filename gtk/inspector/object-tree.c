@@ -728,7 +728,6 @@ gtk_inspector_object_tree_get_selected (GtkInspectorObjectTree *wt)
     return NULL;
 
   object = gtk_tree_list_row_get_item (selected_item);
-  g_object_unref (selected_item);
 
   g_object_unref (object); /* ahem */
   return object;
