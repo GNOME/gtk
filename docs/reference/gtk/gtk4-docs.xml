@@ -45,6 +45,9 @@
     <chapter id="Lists">
       <title>GListModel support</title>
       <xi:include href="xml/gtkfilterlistmodel.xml" />
+      <section>
+        <xi:include href="xml/gtkfilter.xml" />
+      </section>
       <xi:include href="xml/gtkflattenlistmodel.xml" />
       <xi:include href="xml/gtkmaplistmodel.xml" />
       <xi:include href="xml/gtkslicelistmodel.xml" />
