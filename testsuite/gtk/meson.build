@@ -31,6 +31,7 @@ tests = [
   ['firefox-stylecontext'],
   ['floating'],
   ['focus'],
+  ['fontlist'],
   ['gestures'],
   ['grid'],
   ['grid-layout'],
