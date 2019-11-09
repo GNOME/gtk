@@ -50,10 +50,11 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * from #GtkBox. No further changes are needed, since the default
  * value of the #GtkOrientable:orientation property is
  * %GTK_ORIENTATION_HORIZONTAL.
- * If you don’t need first-child or last-child styling, and want your code
- * to be future-proof, the recommendation is to switch to #GtkGrid instead
- * of nested boxes. For more information about migrating to #GtkGrid,
- * see [Migrating from other containers to GtkGrid][gtk-migrating-GtkGrid].
+ *
+ * If you have a grid-like layout composed of nested boxes, and you don’t
+ * need first-child or last-child styling, the recommendation is to switch
+ * to #GtkGrid. For more information about migrating to #GtkGrid, see
+ * [Migrating from other containers to GtkGrid][gtk-migrating-GtkGrid].
  */
 
 
