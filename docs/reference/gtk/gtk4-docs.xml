@@ -54,6 +54,7 @@
       <xi:include href="xml/gtknoselection.xml" />
       <xi:include href="xml/gtksingleselection.xml" />
       <xi:include href="xml/gtkdirectorylist.xml" />
+      <xi:include href="xml/gtkfontlist.xml" />
     </chapter>
 
     <chapter id="Application">
