@@ -273,6 +273,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           strcmp (pspec->name, "tweak-action") == 0)
         continue;
 
+      /* This is set in init() */
+      if (g_type_is_a (type, GTK_TYPE_FONT_LIST) &&
+          strcmp (pspec->name, "display") == 0)
+        continue;
+
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
       if (g_type_is_a (type, GTK_TYPE_ICON_VIEW) &&
