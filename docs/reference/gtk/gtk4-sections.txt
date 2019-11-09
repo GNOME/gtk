@@ -1475,8 +1475,6 @@ gtk_directory_list_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkspinbutton</FILE>
-<SECTION>
 <FILE>gtkfilterlistmodel</FILE>
 <TITLE>GtkFilterListModel</TITLE>
 GtkFilterListModel
