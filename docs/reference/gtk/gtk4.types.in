@@ -79,6 +79,7 @@ gtk_file_chooser_dialog_get_type
 gtk_file_chooser_get_type
 gtk_file_chooser_widget_get_type
 gtk_file_filter_get_type
+gtk_filter_get_type
 gtk_filter_list_model_get_type
 gtk_fixed_get_type
 gtk_fixed_layout_get_type
