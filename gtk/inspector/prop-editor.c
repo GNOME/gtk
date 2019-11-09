@@ -19,6 +19,7 @@
 #include <glib/gi18n-lib.h>
 
 #include "prop-editor.h"
+
 #include "strv-editor.h"
 #include "object-tree.h"
 #include "prop-list.h"
@@ -47,11 +48,13 @@
 #include "gtkcomboboxtext.h"
 #include "gtkmenubutton.h"
 
-struct _GtkInspectorPropEditorPrivate
+struct _GtkInspectorPropEditor
 {
+  GtkBox parent_instance;
+
   GObject *object;
   gchar *name;
-  GtkWidget *editor;
+  GtkWidget *self;
   GtkSizeGroup *size_group;
 };
 
@@ -71,12 +74,12 @@ enum
 
 static guint signals[N_SIGNALS] = { 0 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorPropEditor, gtk_inspector_prop_editor, GTK_TYPE_BOX);
+G_DEFINE_TYPE (GtkInspectorPropEditor, gtk_inspector_prop_editor, GTK_TYPE_BOX);
 
 static GParamSpec *
-find_property (GtkInspectorPropEditor *editor)
+find_property (GtkInspectorPropEditor *self)
 {
-  return g_object_class_find_property (G_OBJECT_GET_CLASS (editor->priv->object), editor->priv->name);
+  return g_object_class_find_property (G_OBJECT_GET_CLASS (self->object), self->name);
 }
 
 typedef struct
@@ -132,18 +135,18 @@ g_object_connect_property (GObject    *object,
 }
 
 static void
-block_notify (GObject *editor)
+block_notify (GObject *self)
 {
-  DisconnectData *dd = (DisconnectData *)g_object_get_data (editor, "alive-object-data");
+  DisconnectData *dd = (DisconnectData *)g_object_get_data (self, "alive-object-data");
 
   if (dd)
     g_signal_handler_block (dd->instance, dd->id);
 }
 
 static void
-unblock_notify (GObject *editor)
+unblock_notify (GObject *self)
 {
-  DisconnectData *dd = (DisconnectData *)g_object_get_data (editor, "alive-object-data");
+  DisconnectData *dd = (DisconnectData *)g_object_get_data (self, "alive-object-data");
 
   if (dd)
     g_signal_handler_unblock (dd->instance, dd->id);
@@ -384,24 +387,24 @@ string_changed (GObject *object, GParamSpec *pspec, gpointer data)
 }
 
 static void
-strv_modified (GtkInspectorStrvEditor *editor, ObjectProperty *p)
+strv_modified (GtkInspectorStrvEditor *self, ObjectProperty *p)
 {
   GValue val = G_VALUE_INIT;
   gchar **strv;
 
   g_value_init (&val, G_TYPE_STRV);
-  strv = gtk_inspector_strv_editor_get_strv (editor);
+  strv = gtk_inspector_strv_editor_get_strv (self);
   g_value_take_boxed (&val, strv);
-  block_notify (G_OBJECT (editor));
+  block_notify (G_OBJECT (self));
   set_property_value (p->obj, p->spec, &val);
-  unblock_notify (G_OBJECT (editor));
+  unblock_notify (G_OBJECT (self));
   g_value_unset (&val);
 }
 
 static void
 strv_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
-  GtkInspectorStrvEditor *editor = data;
+  GtkInspectorStrvEditor *self = data;
   GValue val = G_VALUE_INIT;
   gchar **strv;
 
@@ -409,9 +412,9 @@ strv_changed (GObject *object, GParamSpec *pspec, gpointer data)
   get_property_value (object, pspec, &val);
 
   strv = g_value_get_boxed (&val);
-  block_controller (G_OBJECT (editor));
-  gtk_inspector_strv_editor_set_strv (editor, strv);
-  unblock_controller (G_OBJECT (editor));
+  block_controller (G_OBJECT (self));
+  gtk_inspector_strv_editor_set_strv (self, strv);
+  unblock_controller (G_OBJECT (self));
 
   g_value_unset (&val);
 }
@@ -688,13 +691,13 @@ object_changed (GObject *object, GParamSpec *pspec, gpointer data)
 }
 
 static void
-object_properties (GtkInspectorPropEditor *editor)
+object_properties (GtkInspectorPropEditor *self)
 {
   GObject *obj;
 
-  g_object_get (editor->priv->object, editor->priv->name, &obj, NULL);
+  g_object_get (self->object, self->name, &obj, NULL);
   if (G_IS_OBJECT (obj))
-    g_signal_emit (editor, signals[SHOW_OBJECT], 0, obj, editor->priv->name, "properties");
+    g_signal_emit (self, signals[SHOW_OBJECT], 0, obj, self->name, "properties");
 }
 
 static void
@@ -770,11 +773,11 @@ font_changed (GObject *object, GParamSpec *pspec, gpointer data)
 }
 
 static void
-item_properties (GtkButton *button, GtkInspectorPropEditor *editor)
+item_properties (GtkButton *button, GtkInspectorPropEditor *self)
 {
   GObject *item;
   item = g_object_get_data (G_OBJECT (button), "item");
-  g_signal_emit (editor, signals[SHOW_OBJECT], 0, item, "Item", "properties");
+  g_signal_emit (self, signals[SHOW_OBJECT], 0, item, "Item", "properties");
 }
 
 static GtkWidget *
@@ -802,7 +805,7 @@ create_row (gpointer item,
 static GtkWidget *
 property_editor (GObject                *object,
                  GParamSpec             *spec,
-                 GtkInspectorPropEditor *editor)
+                 GtkInspectorPropEditor *self)
 {
   GtkWidget *prop_edit;
   GtkAdjustment *adj;
@@ -1031,7 +1034,7 @@ property_editor (GObject                *object,
 
       box = gtk_list_box_new ();
       gtk_list_box_set_selection_mode (GTK_LIST_BOX (box), GTK_SELECTION_NONE);
-      gtk_list_box_bind_model (GTK_LIST_BOX (box), model, create_row, editor, NULL);
+      gtk_list_box_bind_model (GTK_LIST_BOX (box), model, create_row, self, NULL);
       g_object_unref (model);
 
       gtk_container_add (GTK_CONTAINER (sw), box);
@@ -1046,7 +1049,7 @@ property_editor (GObject                *object,
       button = gtk_button_new_with_label (_("Properties"));
       g_signal_connect_swapped (button, "clicked",
                                 G_CALLBACK (object_properties),
-                                editor);
+                                self);
       gtk_container_add (GTK_CONTAINER (prop_edit), label);
       gtk_container_add (GTK_CONTAINER (prop_edit), button);
       gtk_widget_show (label);
@@ -1117,10 +1120,9 @@ property_editor (GObject                *object,
 }
 
 static void
-gtk_inspector_prop_editor_init (GtkInspectorPropEditor *editor)
+gtk_inspector_prop_editor_init (GtkInspectorPropEditor *self)
 {
-  editor->priv = gtk_inspector_prop_editor_get_instance_private (editor);
-  g_object_set (editor,
+  g_object_set (self,
                 "orientation", GTK_ORIENTATION_HORIZONTAL,
                 "spacing", 10,
                 NULL);
@@ -1152,17 +1154,17 @@ gtk_cell_layout_get_widget (GtkCellLayout *layout)
 
 static void
 model_properties (GtkButton              *button,
-                  GtkInspectorPropEditor *editor)
+                  GtkInspectorPropEditor *self)
 {
   GObject *model;
 
   model = g_object_get_data (G_OBJECT (button), "model");
-  g_signal_emit (editor, signals[SHOW_OBJECT], 0, model, "model", "data");
+  g_signal_emit (self, signals[SHOW_OBJECT], 0, model, "model", "data");
 }
 
 static void
 attribute_mapping_changed (GtkComboBox            *combo,
-                           GtkInspectorPropEditor *editor)
+                           GtkInspectorPropEditor *self)
 {
   gint col;
   gpointer layout;
@@ -1170,16 +1172,16 @@ attribute_mapping_changed (GtkComboBox            *combo,
   GtkCellArea *area;
 
   col = gtk_combo_box_get_active (combo) - 1;
-  layout = g_object_get_data (editor->priv->object, "gtk-inspector-cell-layout");
+  layout = g_object_get_data (self->object, "gtk-inspector-cell-layout");
   if (GTK_IS_CELL_LAYOUT (layout))
     {
-      cell = GTK_CELL_RENDERER (editor->priv->object);
+      cell = GTK_CELL_RENDERER (self->object);
       area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (layout));
-      gtk_cell_area_attribute_disconnect (area, cell, editor->priv->name);
+      gtk_cell_area_attribute_disconnect (area, cell, self->name);
       if (col != -1)
-        gtk_cell_area_attribute_connect (area, cell, editor->priv->name, col);
-      gtk_widget_set_sensitive (editor->priv->editor, col == -1);
-      notify_property (editor->priv->object, find_property (editor));
+        gtk_cell_area_attribute_connect (area, cell, self->name, col);
+      gtk_widget_set_sensitive (self->self, col == -1);
+      notify_property (self->object, find_property (self));
       gtk_widget_queue_draw (gtk_cell_layout_get_widget (GTK_CELL_LAYOUT (layout)));
     }
 }
@@ -1187,7 +1189,7 @@ attribute_mapping_changed (GtkComboBox            *combo,
 static GtkWidget *
 attribute_editor (GObject                *object,
                   GParamSpec             *spec,
-                  GtkInspectorPropEditor *editor)
+                  GtkInspectorPropEditor *self)
 {
   gpointer layout;
   GtkCellArea *area;
@@ -1210,7 +1212,7 @@ attribute_editor (GObject                *object,
       area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (layout));
       col = gtk_cell_area_attribute_get_column (area,
                                                 GTK_CELL_RENDERER (object), 
-                                                editor->priv->name);
+                                                self->name);
       model = gtk_cell_layout_get_model (GTK_CELL_LAYOUT (layout));
     }
 
@@ -1221,7 +1223,7 @@ attribute_editor (GObject                *object,
 
   button = gtk_button_new_with_label (_("Model"));
   g_object_set_data (G_OBJECT (button), "model", model);
-  g_signal_connect (button, "clicked", G_CALLBACK (model_properties), editor);
+  g_signal_connect (button, "clicked", G_CALLBACK (model_properties), self);
   gtk_container_add (GTK_CONTAINER (box), button);
 
   gtk_container_add (GTK_CONTAINER (box), gtk_label_new (_("Column:")));
@@ -1245,9 +1247,9 @@ attribute_editor (GObject                *object,
       g_free (text);
     }
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), col + 1);
-  attribute_mapping_changed (GTK_COMBO_BOX (combo), editor);
+  attribute_mapping_changed (GTK_COMBO_BOX (combo), self);
   g_signal_connect (combo, "changed",
-                    G_CALLBACK (attribute_mapping_changed), editor);
+                    G_CALLBACK (attribute_mapping_changed), self);
   gtk_container_add (GTK_CONTAINER (box), combo);
 
   return box;
@@ -1292,17 +1294,17 @@ find_action_owner (GtkActionable *actionable)
 
 static void
 show_action_owner (GtkButton              *button,
-                   GtkInspectorPropEditor *editor)
+                   GtkInspectorPropEditor *self)
 {
   GObject *owner;
 
   owner = g_object_get_data (G_OBJECT (button), "owner");
-  g_signal_emit (editor, signals[SHOW_OBJECT], 0, owner, NULL, "actions");
+  g_signal_emit (self, signals[SHOW_OBJECT], 0, owner, NULL, "actions");
 }
 
 static GtkWidget *
 action_editor (GObject                *object,
-               GtkInspectorPropEditor *editor)
+               GtkInspectorPropEditor *self)
 {
   GtkWidget *box;
   GtkWidget *button;
@@ -1321,7 +1323,7 @@ action_editor (GObject                *object,
       button = gtk_button_new_with_label (_("Properties"));
       g_object_set_data (G_OBJECT (button), "owner", owner);
       g_signal_connect (button, "clicked",
-                        G_CALLBACK (show_action_owner), editor);
+                        G_CALLBACK (show_action_owner), self);
       gtk_container_add (GTK_CONTAINER (box), button);
     }
 
@@ -1374,25 +1376,25 @@ typedef struct
 } GSettingsBinding;
 
 static void
-add_attribute_info (GtkInspectorPropEditor *editor,
+add_attribute_info (GtkInspectorPropEditor *self,
                     GParamSpec             *spec)
 {
-  if (GTK_IS_CELL_RENDERER (editor->priv->object))
-    gtk_container_add (GTK_CONTAINER (editor),
-                       attribute_editor (editor->priv->object, spec, editor));
+  if (GTK_IS_CELL_RENDERER (self->object))
+    gtk_container_add (GTK_CONTAINER (self),
+                       attribute_editor (self->object, spec, self));
 }
 
 static void
-add_actionable_info (GtkInspectorPropEditor *editor)
+add_actionable_info (GtkInspectorPropEditor *self)
 {
-  if (GTK_IS_ACTIONABLE (editor->priv->object) &&
-      g_strcmp0 (editor->priv->name, "action-name") == 0)
-    gtk_container_add (GTK_CONTAINER (editor),
-                       action_editor (editor->priv->object, editor));
+  if (GTK_IS_ACTIONABLE (self->object) &&
+      g_strcmp0 (self->name, "action-name") == 0)
+    gtk_container_add (GTK_CONTAINER (self),
+                       action_editor (self->object, self));
 }
 
 static void
-add_settings_info (GtkInspectorPropEditor *editor)
+add_settings_info (GtkInspectorPropEditor *self)
 {
   gchar *key;
   GSettingsBinding *binding;
@@ -1404,8 +1406,8 @@ add_settings_info (GtkInspectorPropEditor *editor)
   GtkWidget *label;
   gchar *str;
 
-  object = editor->priv->object;
-  name = editor->priv->name;
+  object = self->object;
+  name = self->name;
 
   key = g_strconcat ("gsettingsbinding-", name, NULL);
   binding = (GSettingsBinding *)g_object_get_data (object, key);
@@ -1449,18 +1451,18 @@ add_settings_info (GtkInspectorPropEditor *editor)
   gtk_container_add (GTK_CONTAINER (row), label);
   g_free (str);
 
-  gtk_container_add (GTK_CONTAINER (editor), row);
+  gtk_container_add (GTK_CONTAINER (self), row);
 }
 
 static void
-reset_setting (GtkInspectorPropEditor *editor)
+reset_setting (GtkInspectorPropEditor *self)
 {
-  gtk_settings_reset_property (GTK_SETTINGS (editor->priv->object),
-                               editor->priv->name);
+  gtk_settings_reset_property (GTK_SETTINGS (self->object),
+                               self->name);
 }
 
 static void
-add_gtk_settings_info (GtkInspectorPropEditor *editor)
+add_gtk_settings_info (GtkInspectorPropEditor *self)
 {
   GObject *object;
   const gchar *name;
@@ -1468,8 +1470,8 @@ add_gtk_settings_info (GtkInspectorPropEditor *editor)
   const gchar *source;
   GtkWidget *button;
 
-  object = editor->priv->object;
-  name = editor->priv->name;
+  object = self->object;
+  name = self->name;
 
   if (!GTK_IS_SETTINGS (object))
     return;
@@ -1479,7 +1481,7 @@ add_gtk_settings_info (GtkInspectorPropEditor *editor)
   button = gtk_button_new_with_label (_("Reset"));
   gtk_container_add (GTK_CONTAINER (row), button);
   gtk_widget_set_sensitive (button, FALSE);
-  g_signal_connect_swapped (button, "clicked", G_CALLBACK (reset_setting), editor);
+  g_signal_connect_swapped (button, "clicked", G_CALLBACK (reset_setting), self);
 
   switch (_gtk_settings_get_setting_source (GTK_SETTINGS (object), name))
     {
@@ -1503,7 +1505,7 @@ add_gtk_settings_info (GtkInspectorPropEditor *editor)
   gtk_container_add (GTK_CONTAINER (row), gtk_label_new (_("Source:")));
   gtk_container_add (GTK_CONTAINER (row), gtk_label_new (source));
 
-  gtk_container_add (GTK_CONTAINER (editor), row);
+  gtk_container_add (GTK_CONTAINER (self), row);
 }
 
 static void
@@ -1529,13 +1531,13 @@ readonly_changed (GObject    *object,
 static void
 constructed (GObject *object)
 {
-  GtkInspectorPropEditor *editor = GTK_INSPECTOR_PROP_EDITOR (object);
+  GtkInspectorPropEditor *self = GTK_INSPECTOR_PROP_EDITOR (object);
   GParamSpec *spec;
   GtkWidget *label;
   gboolean can_modify;
   GtkWidget *box;
 
-  spec = find_property (editor);
+  spec = find_property (self);
 
   can_modify = ((spec->flags & G_PARAM_WRITABLE) != 0 &&
                 (spec->flags & G_PARAM_CONSTRUCT_ONLY) == 0);
@@ -1568,35 +1570,35 @@ constructed (GObject *object)
       gtk_style_context_add_class (gtk_widget_get_style_context (label), GTK_STYLE_CLASS_DIM_LABEL);
       gtk_container_add (GTK_CONTAINER (box), label);
 
-      readonly_changed (editor->priv->object, spec, label);
-      g_object_connect_property (editor->priv->object, spec,
+      readonly_changed (self->object, spec, label);
+      g_object_connect_property (self->object, spec,
                                  G_CALLBACK (readonly_changed),
                                  label, G_OBJECT (label));
 
-      if (editor->priv->size_group)
-        gtk_size_group_add_widget (editor->priv->size_group, box);
-      gtk_container_add (GTK_CONTAINER (editor), box);
+      if (self->size_group)
+        gtk_size_group_add_widget (self->size_group, box);
+      gtk_container_add (GTK_CONTAINER (self), box);
       return;
     }
 
-  editor->priv->editor = property_editor (editor->priv->object, spec, editor);
-  gtk_container_add (GTK_CONTAINER (box), editor->priv->editor);
-  if (editor->priv->size_group)
-    gtk_size_group_add_widget (editor->priv->size_group, box);
-  gtk_container_add (GTK_CONTAINER (editor), box);
+  self->self = property_editor (self->object, spec, self);
+  gtk_container_add (GTK_CONTAINER (box), self->self);
+  if (self->size_group)
+    gtk_size_group_add_widget (self->size_group, box);
+  gtk_container_add (GTK_CONTAINER (self), box);
 
-  add_attribute_info (editor, spec);
-  add_actionable_info (editor);
-  add_settings_info (editor);
-  add_gtk_settings_info (editor);
+  add_attribute_info (self, spec);
+  add_actionable_info (self);
+  add_settings_info (self);
+  add_gtk_settings_info (self);
 }
 
 static void
 finalize (GObject *object)
 {
-  GtkInspectorPropEditor *editor = GTK_INSPECTOR_PROP_EDITOR (object);
+  GtkInspectorPropEditor *self = GTK_INSPECTOR_PROP_EDITOR (object);
 
-  g_free (editor->priv->name);
+  g_free (self->name);
 
   G_OBJECT_CLASS (gtk_inspector_prop_editor_parent_class)->finalize (object);
 }
@@ -1607,20 +1609,20 @@ get_property (GObject    *object,
               GValue     *value,
               GParamSpec *pspec)
 {
-  GtkInspectorPropEditor *r = GTK_INSPECTOR_PROP_EDITOR (object);
+  GtkInspectorPropEditor *self = GTK_INSPECTOR_PROP_EDITOR (object);
 
   switch (param_id)
     {
     case PROP_OBJECT:
-      g_value_set_object (value, r->priv->object);
+      g_value_set_object (value, self->object);
       break;
 
     case PROP_NAME:
-      g_value_set_string (value, r->priv->name);
+      g_value_set_string (value, self->name);
       break;
 
     case PROP_SIZE_GROUP:
-      g_value_set_object (value, r->priv->size_group);
+      g_value_set_object (value, self->size_group);
       break;
 
     default:
@@ -1635,21 +1637,21 @@ set_property (GObject      *object,
               const GValue *value,
               GParamSpec   *pspec)
 {
-  GtkInspectorPropEditor *r = GTK_INSPECTOR_PROP_EDITOR (object);
+  GtkInspectorPropEditor *self = GTK_INSPECTOR_PROP_EDITOR (object);
 
   switch (param_id)
     {
     case PROP_OBJECT:
-      r->priv->object = g_value_get_object (value);
+      self->object = g_value_get_object (value);
       break;
 
     case PROP_NAME:
-      g_free (r->priv->name);
-      r->priv->name = g_value_dup_string (value);
+      g_free (self->name);
+      self->name = g_value_dup_string (value);
       break;
 
     case PROP_SIZE_GROUP:
-      r->priv->size_group = g_value_get_object (value);
+      self->size_group = g_value_get_object (value);
       break;
 
     default:
@@ -1672,7 +1674,7 @@ gtk_inspector_prop_editor_class_init (GtkInspectorPropEditorClass *klass)
     g_signal_new ("show-object",
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkInspectorPropEditorClass, show_object),
+                  0,
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 3, G_TYPE_OBJECT, G_TYPE_STRING, G_TYPE_STRING);
 
@@ -1702,13 +1704,13 @@ gtk_inspector_prop_editor_new (GObject      *object,
 }
 
 gboolean
-gtk_inspector_prop_editor_should_expand (GtkInspectorPropEditor *editor)
+gtk_inspector_prop_editor_should_expand (GtkInspectorPropEditor *self)
 {
-  if (GTK_IS_SCROLLED_WINDOW (editor->priv->editor))
+  if (GTK_IS_SCROLLED_WINDOW (self->self))
     {
       GtkPolicyType policy;
 
-      g_object_get (editor->priv->editor, "vscrollbar-policy", &policy, NULL);
+      g_object_get (self->self, "vscrollbar-policy", &policy, NULL);
       if (policy != GTK_POLICY_NEVER)
         return TRUE;
     }
