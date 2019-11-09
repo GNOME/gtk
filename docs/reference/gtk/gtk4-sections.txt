@@ -1475,6 +1475,28 @@ gtk_directory_list_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkfontlist</FILE>
+<TITLE>GtkFontList</TITLE>
+GtkFontList
+gtk_font_list_new
+gtk_font_list_get_display
+gtk_font_list_set_display
+gtk_font_list_get_font_map
+gtk_font_list_set_font_map
+gtk_font_list_get_families_only
+gtk_font_list_set_families_only
+<SUBSECTION Standard>
+GTK_FONT_LIST
+GTK_IS_FONT_LIST
+GTK_TYPE_FONT_LIST
+GTK_FONT_LIST_CLASS
+GTK_IS_FONT_LIST_CLASS
+GTK_FONT_LIST_GET_CLASS
+<SUBSECTION Private>
+gtk_font_list_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkfilter</FILE>
 <TITLE>GtkFilter</TITLE>
 GtkFilter
