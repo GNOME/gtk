@@ -19,40 +19,16 @@
 #define _GTK_INSPECTOR_PROP_EDITOR_H_
 
 
-#include <gtk/gtkbox.h>
+#include <gtk/gtk.h>
 #include <gtk/gtksizegroup.h>
-
-
-#define GTK_TYPE_INSPECTOR_PROP_EDITOR            (gtk_inspector_prop_editor_get_type())
-#define GTK_INSPECTOR_PROP_EDITOR(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_PROP_EDITOR, GtkInspectorPropEditor))
-#define GTK_INSPECTOR_PROP_EDITOR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GTK_TYPE_INSPECTOR_PROP_EDITOR, GtkInspectorPropEditorClass))
-#define GTK_INSPECTOR_IS_PROP_EDITOR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_INSPECTOR_PROP_EDITOR))
-#define GTK_INSPECTOR_IS_PROP_EDITOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GTK_TYPE_INSPECTOR_PROP_EDITOR))
-#define GTK_INSPECTOR_PROP_EDITOR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_INSPECTOR_PROP_EDITOR, GtkInspectorPropEditorClass))
-
-typedef struct _GtkInspectorPropEditorPrivate GtkInspectorPropEditorPrivate;
-
-typedef struct
-{
-  GtkBox parent;
-  GtkInspectorPropEditorPrivate *priv;
-} GtkInspectorPropEditor;
-
-typedef struct
-{
-  GtkBoxClass parent;
-
-  void (*show_object) (GtkInspectorPropEditor *editor,
-                       GObject                *object,
-                       const gchar            *name,
-                       const gchar            *tab);
-} GtkInspectorPropEditorClass;
-
 
 G_BEGIN_DECLS
 
 
-GType      gtk_inspector_prop_editor_get_type (void);
+#define GTK_TYPE_INSPECTOR_PROP_EDITOR            (gtk_inspector_prop_editor_get_type())
+
+G_DECLARE_FINAL_TYPE (GtkInspectorPropEditor, gtk_inspector_prop_editor, GTK, INSPECTOR_PROP_EDITOR, GtkBox)
+
 GtkWidget *gtk_inspector_prop_editor_new      (GObject      *object,
                                                const gchar  *name,
                                                GtkSizeGroup *values);
