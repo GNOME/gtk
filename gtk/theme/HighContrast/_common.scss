@@ -99,6 +99,7 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     color: $insensitive_fg_color;
     background-color: $insensitive_bg_color;
   }
+  @at-root %view_selected,
   &:selected,
   &:selected:focus,
   &:selected:hover { @extend %selected_items; }
@@ -416,6 +417,7 @@ button {
       }
     }
 
+    @at-root %button_basic_flat,
     &.flat {
       @include button(undecorated);
 
@@ -473,6 +475,7 @@ button {
       }
     }
 
+    @at-root %button_basic_drop_active,
     &:drop(active) {
       color: $fg_color;
       border-color: $fg_color;
@@ -763,11 +766,11 @@ toolbar.inline-toolbar toolbutton,
 toolbar.inline-toolbar toolbutton:backdrop {
   & > button.flat { @extend %linked_middle; }
 
-  &:first-child > button.flat { @extend %linked:first-child; }
+  &:first-child > button.flat { @extend %linked_left; }
 
-  &:last-child > button.flat { @extend %linked:last-child; }
+  &:last-child > button.flat { @extend %linked_right; }
 
-  &:only-child > button.flat { @extend %linked:only-child; }
+  &:only-child > button.flat { @extend %linked_only_child; }
 }
 
 %linked_middle {
@@ -791,17 +794,18 @@ toolbar.inline-toolbar toolbutton:backdrop {
     border-right-style: solid;
 }
 
+%linked_only_child {
+    border-radius: 3px;
+    border-style: solid;
+}
+
 // .linked assumes Box, which reverses nodes in RTL, so 1st child is always left
 %linked {
   @extend %linked_middle;
 
   &:first-child { @extend %linked_left; }
   &:last-child { @extend %linked_right; }
-
-  &:only-child {
-    border-radius: 3px;
-    border-style: solid;
-  }
+  &:only-child { @extend %linked_only_child; }
 }
 
 // Other widgets use widget child order, so 1st/last child are at text start/end
@@ -829,24 +833,30 @@ toolbar.inline-toolbar toolbutton:backdrop {
   border-radius: 0;
 }
 
+%linked_vertical_top {
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+%linked_vertical_bottom {
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-style: solid;
+}
+
+%linked_vertical_only_child {
+  border-radius: 3px;
+  border-style: solid;
+}
+
 %linked_vertical{
   @extend %linked_vertical_middle;
 
-  &:first-child {
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-  }
+  &:first-child { @extend %linked_vertical_top; }
 
-  &:last-child {
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
-    border-style: solid;
-  }
+  &:last-child { @extend %linked_vertical_bottom; }
 
-  &:only-child {
-    border-radius: 3px;
-    border-style: solid;
-  }
+  &:only-child { @extend %linked_vertical_only_child; }
 }
 
 %undecorated_button {
@@ -860,7 +870,8 @@ toolbar.inline-toolbar toolbutton:backdrop {
 }
 
 /* menu buttons */
-modelbutton.flat,
+
+%menubutton_flat,
 .menuitem.button.flat {
   min-height: 26px;
   padding-left: 5px;
@@ -885,14 +896,19 @@ modelbutton.flat,
   radio:first-child { margin-right: 8px; }
 }
 
-modelbutton.flat arrow {
-  background: none;
+%modelbutton_flat,
+modelbutton.flat {
+  @extend %menubutton_flat;
 
-  &:hover { background: none; }
+  arrow {
+    background: none;
 
-  &.left { -gtk-icon-source: -gtk-icontheme("pan-start-symbolic"); }
+    &:hover { background: none; }
 
-  &.right { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+    &.left { -gtk-icon-source: -gtk-icontheme("pan-start-symbolic"); }
+
+    &.right { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+  }
 }
 
 button.color {
@@ -1159,15 +1175,15 @@ combobox {
 
   &.linked {
     button:nth-child(2) {
-      &:dir(ltr) { @extend %linked:last-child; }
-      &:dir(rtl) { @extend %linked:first-child; }
+      &:dir(ltr) { @extend %linked_right; }
+      &:dir(rtl) { @extend %linked_left; }
     }
   }
 
   &:drop(active) { // FIXME: untested
     box-shadow: none;
 
-    button.combo { @extend %button_basic:drop(active); }
+    button.combo { @extend %button_basic_drop_active; }
   }
 }
 
@@ -1180,14 +1196,14 @@ combobox {
   &:dir(rtl) { @extend %linked_middle; } // specificity bump
 }
 
-.linked:not(.vertical) > combobox:first-child > box > button.combo { @extend %linked:first-child; }
-.linked:not(.vertical) > combobox:last-child > box > button.combo { @extend %linked:last-child; }
-.linked:not(.vertical) > combobox:only-child > box > button.combo { @extend %linked:only-child; }
+.linked:not(.vertical) > combobox:first-child > box > button.combo { @extend %linked_left; }
+.linked:not(.vertical) > combobox:last-child > box > button.combo { @extend %linked_right; }
+.linked:not(.vertical) > combobox:only-child > box > button.combo { @extend %linked_only_child; }
 
 .linked.vertical > combobox > box > button.combo { @extend %linked_vertical_middle; }
-.linked.vertical > combobox:first-child > box > button.combo { @extend %linked_vertical:first-child;}
-.linked.vertical > combobox:last-child > box > button.combo { @extend %linked_vertical:last-child; }
-.linked.vertical > combobox:only-child > box > button.combo { @extend %linked_vertical:only-child; }
+.linked.vertical > combobox:first-child > box > button.combo { @extend %linked_vertical_top;}
+.linked.vertical > combobox:last-child > box > button.combo { @extend %linked_vertical_bottom; }
+.linked.vertical > combobox:only-child > box > button.combo { @extend %linked_vertical_only_child; }
 
 
 /************
@@ -1685,7 +1701,7 @@ popover.background {
   list separator { margin: 0px; }
 
   checkbutton,
-  radiobutton { @extend modelbutton.flat; }
+  radiobutton { @extend %modelbutton_flat; }
 }
 
 /*****************
@@ -2891,7 +2907,7 @@ expander {
 calendar {
   border: 1px solid $borders_color;
   &:selected {
-    @extend .view:selected;
+    @extend %view_selected;
   }
   &.button {
     @extend %undecorated_button;
@@ -3115,7 +3131,7 @@ placessidebar {
     }
 
     @at-root button.sidebar-button {
-      @extend %button_basic.flat;
+      @extend %button_basic_flat;
 
       @extend %button_selected.flat;
 
@@ -3447,7 +3463,7 @@ decoration {
 button.titlebutton {
   @extend %button_basic;
 
-  @extend %button_basic.flat;
+  @extend %button_basic_flat;
 }
 
 /**********************
