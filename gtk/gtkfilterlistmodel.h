@@ -26,6 +26,7 @@
 #endif
 
 #include <gio/gio.h>
+#include <gtk/gtkfilter.h>
 #include <gtk/gtkwidget.h>
 
 
@@ -51,27 +52,20 @@ typedef gboolean (* GtkFilterListModelFilterFunc) (gpointer item, gpointer user_
 
 GDK_AVAILABLE_IN_ALL
 GtkFilterListModel *    gtk_filter_list_model_new               (GListModel             *model,
-                                                                 GtkFilterListModelFilterFunc filter_func,
-                                                                 gpointer                user_data,
-                                                                 GDestroyNotify          user_destroy);
+                                                                 GtkFilter              *filter);
 GDK_AVAILABLE_IN_ALL
 GtkFilterListModel *    gtk_filter_list_model_new_for_type      (GType                   item_type);
 
 GDK_AVAILABLE_IN_ALL
-void                    gtk_filter_list_model_set_filter_func   (GtkFilterListModel     *self,
-                                                                 GtkFilterListModelFilterFunc filter_func,
-                                                                 gpointer                user_data,
-                                                                 GDestroyNotify          user_destroy);
+void                    gtk_filter_list_model_set_filter        (GtkFilterListModel     *self,
+                                                                 GtkFilter              *filter);
+GDK_AVAILABLE_IN_ALL
+GtkFilter *             gtk_filter_list_model_get_filter        (GtkFilterListModel     *self);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_filter_list_model_set_model         (GtkFilterListModel     *self,
                                                                  GListModel             *model);
 GDK_AVAILABLE_IN_ALL
 GListModel *            gtk_filter_list_model_get_model         (GtkFilterListModel     *self);
-GDK_AVAILABLE_IN_ALL
-gboolean                gtk_filter_list_model_has_filter        (GtkFilterListModel     *self);
-
-GDK_AVAILABLE_IN_ALL
-void                    gtk_filter_list_model_refilter          (GtkFilterListModel     *self);
 
 G_END_DECLS
 
