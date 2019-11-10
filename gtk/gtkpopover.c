@@ -712,7 +712,6 @@ gtk_popover_map (GtkWidget *widget)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GtkWidget *child;
   GdkRectangle parent_rect;
 
   gdk_surface_show (priv->surface);
@@ -726,10 +725,6 @@ gtk_popover_map (GtkWidget *widget)
                                                        unset_surface_transform_changed_cb);
 
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->map (widget);
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  if (child != NULL && gtk_widget_get_visible (child))
-    gtk_widget_map (child);
 }
 
 static void
