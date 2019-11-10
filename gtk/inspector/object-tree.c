@@ -36,6 +36,7 @@
 #include "gtkcelllayout.h"
 #include "gtkcomboboxprivate.h"
 #include "gtkfilterlistmodel.h"
+#include "gtkcustomfilter.h"
 #include "gtkflattenlistmodel.h"
 #include "gtkbuiltiniconprivate.h"
 #include "gtkiconview.h"
@@ -1095,6 +1096,7 @@ toplevel_filter_func (gpointer item,
 static GListModel *
 create_root_model (GdkDisplay *display)
 {
+  GtkFilter *custom_filter;
   GtkFilterListModel *filter;
   GtkFlattenListModel *flatten;
   GListStore *list, *special;
@@ -1111,9 +1113,9 @@ create_root_model (GdkDisplay *display)
   g_object_unref (special);
 
   filter = gtk_filter_list_model_new_for_type (G_TYPE_OBJECT);
-  gtk_filter_list_model_set_filter_func (filter, 
-                                         toplevel_filter_func,
+  custom_filter = gtk_custom_filter_new (toplevel_filter_func,
                                          display, NULL);
+  gtk_filter_list_model_set_filter (filter, custom_filter);
   gtk_filter_list_model_set_model (filter, gtk_window_get_toplevels ());
   g_list_store_append (list, filter);
   g_object_unref (filter);
