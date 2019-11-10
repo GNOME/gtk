@@ -196,7 +196,7 @@ label {
   &:disabled {
     color: $insensitive_fg_color;
 
-    selection { @extend %selected_items:disabled; }
+    selection { @extend %selected_items_disabled; }
 
     &:backdrop { color: $backdrop_insensitive_color; }
   }
@@ -204,7 +204,7 @@ label {
   &:backdrop {
     color: $backdrop_fg_color;
 
-    selection { @extend %selected_items:backdrop; }
+    selection { @extend %selected_items_backdrop; }
   }
 }
 
@@ -543,6 +543,7 @@ button {
 
     @include button(normal);
 
+    @at-root %button_basic_flat,
     &.flat {
       @include button(undecorated);
       // to avoid adiacent buttons borders clashing when transitioning, the transition on the normal state is set
@@ -620,6 +621,7 @@ button {
       }
     }
 
+    @at-root %button_basic_drop_active,
     &:drop(active) {
       color: $drop_target_color;
       border-color: $drop_target_color;
@@ -961,11 +963,11 @@ toolbar.inline-toolbar toolbutton,
 toolbar.inline-toolbar toolbutton:backdrop {
   > button.flat { @extend %linked_middle; }
 
-  &:first-child > button.flat { @extend %linked:first-child; }
+  &:first-child > button.flat { @extend %linked_left; }
 
-  &:last-child > button.flat { @extend %linked:last-child; }
+  &:last-child > button.flat { @extend %linked_right; }
 
-  &:only-child > button.flat { @extend %linked:only-child; }
+  &:only-child > button.flat { @extend %linked_only_child; }
 }
 
 %linked_middle {
@@ -989,6 +991,11 @@ toolbar.inline-toolbar toolbutton:backdrop {
     border-right-style: solid;
 }
 
+%linked_only_child {
+    border-radius: $button_radius;
+    border-style: solid;
+}
+
 // .linked assumes Box, which reverses nodes in RTL, so 1st child is always left
 %linked {
   @extend %linked_middle;
@@ -996,10 +1003,7 @@ toolbar.inline-toolbar toolbutton:backdrop {
   &:first-child { @extend %linked_left; }
   &:last-child { @extend %linked_right; }
 
-  &:only-child {
-    border-radius: $button_radius;
-    border-style: solid;
-  }
+  &:only-child { @extend %linked_only_child; }
 }
 
 // Other widgets use widget child order, so 1st/last child are at text start/end
@@ -1016,10 +1020,7 @@ toolbar.inline-toolbar toolbutton:backdrop {
     &:last-child { @extend %linked_left; }
   }
 
-  &:only-child {
-    border-radius: $button_radius;
-    border-style: solid;
-  }
+  &:only-child { @extend %linked_only_child; }
 }
 
 %linked_vertical_middle {
@@ -1027,24 +1028,30 @@ toolbar.inline-toolbar toolbutton:backdrop {
   border-radius: 0;
 }
 
+%linked_vertical_top {
+  border-top-left-radius: $button_radius;
+  border-top-right-radius: $button_radius;
+}
+
+%linked_vertical_bottom {
+  border-bottom-left-radius: $button_radius;
+  border-bottom-right-radius: $button_radius;
+  border-style: solid;
+}
+
+%linked_vertical_only_child {
+  border-radius: $button_radius;
+  border-style: solid;
+}
+
 %linked_vertical{
   @extend %linked_vertical_middle;
 
-  &:first-child {
-    border-top-left-radius: $button_radius;
-    border-top-right-radius: $button_radius;
-  }
+  &:first-child { @extend %linked_vertical_top; }
 
-  &:last-child {
-    border-bottom-left-radius: $button_radius;
-    border-bottom-right-radius: $button_radius;
-    border-style: solid;
-  }
+  &:last-child { @extend %linked_vertical_bottom; }
 
-  &:only-child {
-    border-radius: $button_radius;
-    border-style: solid;
-  }
+  &:only-child { @extend %linked_vertical_only_child; }
 }
 
 %undecorated_button {
@@ -1158,7 +1165,7 @@ button:link,
 button:visited {
   @extend %undecorated_button;
 
-  @extend *:link;
+  @extend %link;
 
   text-shadow: none;
 
@@ -1395,15 +1402,15 @@ combobox {
 
   &.linked {
     button:nth-child(2) {
-      &:dir(ltr) { @extend %linked:last-child; }
-      &:dir(rtl) { @extend %linked:first-child; }
+      &:dir(ltr) { @extend %linked_right; }
+      &:dir(rtl) { @extend %linked_left; }
     }
   }
 
   &:drop(active) { // FIXME: untested
     box-shadow: none;
 
-    button.combo { @extend %button_basic:drop(active); }
+    button.combo { @extend %button_basic_drop_active; }
   }
 }
 
@@ -1416,14 +1423,14 @@ combobox {
   &:dir(rtl) { @extend %linked_middle; } // specificity bump
 }
 
-.linked:not(.vertical) > combobox:first-child > box > button.combo { @extend %linked:first-child; }
-.linked:not(.vertical) > combobox:last-child > box > button.combo { @extend %linked:last-child; }
-.linked:not(.vertical) > combobox:only-child > box > button.combo { @extend %linked:only-child; }
+.linked:not(.vertical) > combobox:first-child > box > button.combo { @extend %linked_left; }
+.linked:not(.vertical) > combobox:last-child > box > button.combo { @extend %linked_right; }
+.linked:not(.vertical) > combobox:only-child > box > button.combo { @extend %linked_only_child; }
 
 .linked.vertical > combobox > box > button.combo { @extend %linked_vertical_middle; }
-.linked.vertical > combobox:first-child > box > button.combo { @extend %linked_vertical:first-child;}
-.linked.vertical > combobox:last-child > box > button.combo { @extend %linked_vertical:last-child; }
-.linked.vertical > combobox:only-child > box > button.combo { @extend %linked_vertical:only-child; }
+.linked.vertical > combobox:first-child > box > button.combo { @extend %linked_vertical_top;}
+.linked.vertical > combobox:last-child > box > button.combo { @extend %linked_vertical_bottom; }
+.linked.vertical > combobox:only-child > box > button.combo { @extend %linked_vertical_only_child; }
 
 
 /************
@@ -1583,7 +1590,7 @@ headerbar {
       }
     }
 
-    .subtitle:link { @extend *:link:selected;  }
+    .subtitle:link { @extend %link_selected; }
 
     button {
       @include button(normal, $suggested_bg_color, $selected_fg_color);
@@ -2429,7 +2436,7 @@ notebook {
     > tabs > arrow {
       @extend %button_basic;
 
-      @extend %button_basic.flat;
+      @extend %button_basic_flat;
 
       min-height: 16px;
       min-width: 16px;
@@ -4058,7 +4065,7 @@ placessidebar {
     }
 
     @at-root button.sidebar-button {
-      @extend %button_basic.flat;
+      @extend %button_basic_flat;
 
       @extend %button_selected.flat;
 
@@ -4574,8 +4581,10 @@ headerbar.selection-mode button.titlebutton,
   @at-root %nobg_selected_items, & {
     color: $selected_fg_color;
 
+    @at-root %selected_items_disabled,
     &:disabled { color: mix($selected_fg_color, $selected_bg_color, 50%); }
 
+    @at-root %selected_items_backdrop,
     &:backdrop {
       color: $backdrop_selected_fg_color;
 
