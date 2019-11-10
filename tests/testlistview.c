@@ -605,6 +605,13 @@ match_file (gpointer item, gpointer data)
   return result;
 }
 
+static void
+search_changed_cb (GtkSearchEntry *entry,
+                   GtkFilter      *custom_filter)
+{
+  gtk_filter_changed (custom_filter, GTK_FILTER_CHANGE_DIFFERENT);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -612,6 +619,7 @@ main (int argc, char *argv[])
   GListModel *dirmodel;
   GtkTreeListModel *tree;
   GtkFilterListModel *filter;
+  GtkFilter *custom_filter;
   FileInfoSelection *selectionmodel;
   GFile *root;
 
@@ -651,11 +659,10 @@ main (int argc, char *argv[])
   g_object_unref (dirmodel);
   g_object_unref (root);
 
-  filter = gtk_filter_list_model_new (G_LIST_MODEL (tree),
-                                      match_file,
-                                      search_entry,
-                                      NULL);
-  g_signal_connect_swapped (search_entry, "search-changed", G_CALLBACK (gtk_filter_list_model_refilter), filter);
+  custom_filter = gtk_custom_filter_new (match_file, search_entry, NULL);
+  filter = gtk_filter_list_model_new (G_LIST_MODEL (tree), custom_filter);
+  g_signal_connect (search_entry, "search-changed", G_CALLBACK (search_changed_cb), custom_filter);
+  g_object_unref (custom_filter);
 
   selectionmodel = file_info_selection_new (G_LIST_MODEL (filter));
   g_object_unref (filter);
