@@ -106,7 +106,6 @@ gtk_tests = [
   ['teststack'],
   ['testrevealer'],
   ['testrevealer2'],
-  ['testtreelistmodel'],
   ['testsplitheaders'],
   ['teststackedheaders'],
   ['testwindowsize'],
