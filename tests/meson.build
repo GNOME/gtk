@@ -92,7 +92,6 @@ gtk_tests = [
   ['teststack'],
   ['testrevealer'],
   ['testrevealer2'],
-  ['testtreelistmodel'],
   ['testwindowsize'],
   ['testpopover'],
   ['listmodel'],
