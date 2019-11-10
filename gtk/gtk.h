@@ -120,6 +120,7 @@
 #include <gtk/gtkfilefilter.h>
 #include <gtk/gtkfilter.h>
 #include <gtk/gtkfilterlistmodel.h>
+#include <gtk/gtkcustomfilter.h>
 #include <gtk/gtkflattenlistmodel.h>
 #include <gtk/gtkflowbox.h>
 #include <gtk/gtkfontbutton.h>

@@ -1305,6 +1305,8 @@ gtk_filter_get_strictness
 <SUBSECTION>
 GtkFilterChange
 gtk_filter_changed
+<SUBSECTION>
+gtk_custom_filter_new
 <SUBSECTION Standard>
 GTK_FILTER
 GTK_IS_FILTER
@@ -1314,6 +1316,23 @@ GTK_IS_FILTER_CLASS
 GTK_FILTER_GET_CLASS
 <SUBSECTION Private>
 gtk_filter_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkcustomfilter</FILE>
+<TITLE>GtkCustomFilter</TITLE>
+GtkCustomFilter
+GtkCustomFilterFunc
+gtk_custom_filter_new
+<SUBSECTION Standard>
+GTK_CUSTOM_FILTER
+GTK_IS_CUSTOM_FILTER
+GTK_TYPE_CUSTOM_FILTER
+GTK_CUSTOM_FILTER_CLASS
+GTK_IS_CUSTOM_FILTER_CLASS
+GTK_CUSTOM_FILTER_GET_CLASS
+<SUBSECTION Private>
+gtk_custom_filter_get_type
 </SECTION>
 
 <SECTION>
