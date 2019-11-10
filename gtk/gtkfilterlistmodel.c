@@ -29,17 +29,17 @@
  * SECTION:gtkfilterlistmodel
  * @title: GtkFilterListModel
  * @short_description: A list model that filters its items
- * @see_also: #GListModel
+ * @see_also: #GListModel, #GtkFilter
  *
  * #GtkFilterListModel is a list model that filters a given other
  * listmodel.
  * It hides some elements from the other model according to
- * criteria given by a #GtkFilterListModelFilterFunc.
+ * criteria given by a #GtkFilter.
  */
 
 enum {
   PROP_0,
-  PROP_HAS_FILTER,
+  PROP_FILTER,
   PROP_ITEM_TYPE,
   PROP_MODEL,
   NUM_PROPERTIES
@@ -65,11 +65,10 @@ struct _GtkFilterListModel
 
   GType item_type;
   GListModel *model;
-  GtkFilterListModelFilterFunc filter_func;
-  gpointer user_data;
-  GDestroyNotify user_destroy;
+  GtkFilter *filter;
+  GtkFilterMatch strictness;
 
-  GtkRbTree *items; /* NULL if filter_func == NULL */
+  GtkRbTree *items; /* NULL if strictness != GTK_FILTER_MATCH_SOME */
 };
 
 struct _GtkFilterListModelClass
@@ -78,6 +77,33 @@ struct _GtkFilterListModelClass
 };
 
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
+
+static void
+gtk_filter_list_model_augment (GtkRbTree *filter,
+                               gpointer   _aug,
+                               gpointer   _node,
+                               gpointer   left,
+                               gpointer   right)
+{
+  FilterNode *node = _node;
+  FilterAugment *aug = _aug;
+
+  aug->n_items = 1;
+  aug->n_visible = node->visible ? 1 : 0;
+
+  if (left)
+    {
+      FilterAugment *left_aug = gtk_rb_tree_get_augment (filter, left);
+      aug->n_items += left_aug->n_items;
+      aug->n_visible += left_aug->n_visible;
+    }
+  if (right)
+    {
+      FilterAugment *right_aug = gtk_rb_tree_get_augment (filter, right);
+      aug->n_items += right_aug->n_items;
+      aug->n_visible += right_aug->n_visible;
+    }
+}
 
 static FilterNode *
 gtk_filter_list_model_get_nth_filtered (GtkRbTree *tree,
@@ -180,11 +206,20 @@ gtk_filter_list_model_get_n_items (GListModel *list)
   FilterAugment *aug;
   FilterNode *node;
 
-  if (self->model == NULL)
-    return 0;
+  switch (self->strictness)
+    {
+    case GTK_FILTER_MATCH_NONE:
+      return 0;
 
-  if (!self->items)
-    return g_list_model_get_n_items (self->model);
+    case GTK_FILTER_MATCH_ALL:
+      return g_list_model_get_n_items (self->model);
+
+    default:
+      g_assert_not_reached ();
+      G_GNUC_FALLTHROUGH;
+    case GTK_FILTER_MATCH_SOME:
+      break;
+    }
 
   node = gtk_rb_tree_get_root (self->items);
   if (node == NULL)
@@ -201,13 +236,22 @@ gtk_filter_list_model_get_item (GListModel *list,
   GtkFilterListModel *self = GTK_FILTER_LIST_MODEL (list);
   guint unfiltered;
 
-  if (self->model == NULL)
-    return NULL;
+  switch (self->strictness)
+    {
+    case GTK_FILTER_MATCH_NONE:
+      return NULL;
 
-  if (self->items)
-    gtk_filter_list_model_get_nth_filtered (self->items, position, &unfiltered);
-  else
-    unfiltered = position;
+    case GTK_FILTER_MATCH_ALL:
+      unfiltered = position;
+      break;
+
+    default:
+      g_assert_not_reached ();
+      G_GNUC_FALLTHROUGH;
+    case GTK_FILTER_MATCH_SOME:
+      gtk_filter_list_model_get_nth_filtered (self->items, position, &unfiltered);
+      break;
+    }
 
   return g_list_model_get_item (self->model, unfiltered);
 }
@@ -230,8 +274,11 @@ gtk_filter_list_model_run_filter (GtkFilterListModel *self,
   gpointer item;
   gboolean visible;
 
+  /* all other cases should have beeen optimized away */
+  g_assert (self->strictness == GTK_FILTER_MATCH_SOME);
+
   item = g_list_model_get_item (self->model, position);
-  visible = self->filter_func (item, self->user_data);
+  visible = gtk_filter_match (self->filter, item);
   g_object_unref (item);
 
   return visible;
@@ -269,10 +316,20 @@ gtk_filter_list_model_items_changed_cb (GListModel         *model,
   FilterNode *node;
   guint i, filter_position, filter_removed, filter_added;
 
-  if (self->items == NULL)
+  switch (self->strictness)
     {
+    case GTK_FILTER_MATCH_NONE:
+      return;
+
+    case GTK_FILTER_MATCH_ALL:
       g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
       return;
+
+    default:
+      g_assert_not_reached ();
+      G_GNUC_FALLTHROUGH;
+    case GTK_FILTER_MATCH_SOME:
+      break;
     }
 
   node = gtk_filter_list_model_get_nth (self->items, position, &filter_position);
@@ -303,6 +360,10 @@ gtk_filter_list_model_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_FILTER:
+      gtk_filter_list_model_set_filter (self, g_value_get_object (value));
+      break;
+
     case PROP_ITEM_TYPE:
       self->item_type = g_value_get_gtype (value);
       break;
@@ -327,8 +388,8 @@ gtk_filter_list_model_get_property (GObject     *object,
 
   switch (prop_id)
     {
-    case PROP_HAS_FILTER:
-      g_value_set_boolean (value, self->items != NULL);
+    case PROP_FILTER:
+      g_value_set_object (value, self->filter);
       break;
 
     case PROP_ITEM_TYPE:
@@ -357,17 +418,223 @@ gtk_filter_list_model_clear_model (GtkFilterListModel *self)
     gtk_rb_tree_remove_all (self->items);
 }
 
+/*<private>
+ * gtk_filter_list_model_find_filtered:
+ * @self: a #GtkFilterListModel
+ * @start: (out) (caller-allocates): number of unfiltered items
+ *     at start of list
+ * @end: (out) (caller-allocates): number of unfiltered items
+ *     at end of list
+ * @n_items: (out) (caller-allocates): number of unfiltered items in
+ *     list
+ *
+ * Checks if elements in self->items are filtered out and returns
+ * the range that they occupy.  
+ * This function is intended to be used for GListModel::items-changed
+ * emissions, so it is called in an intermediate state for @self.
+ *
+ * Returns: %TRUE if elements are filtered out, %FALSE if none are
+ **/
+static gboolean
+gtk_filter_list_model_find_filtered (GtkFilterListModel *self,
+                                     guint              *start,
+                                     guint              *end,
+                                     guint              *n_items)
+{
+  FilterNode *root, *node, *tmp;
+  FilterAugment *aug;
+
+  if (self->items == NULL || self->model == NULL)
+    return FALSE;
+
+  root = gtk_rb_tree_get_root (self->items);
+  if (root == NULL)
+    return FALSE; /* empty parent model */
+
+  aug = gtk_rb_tree_get_augment (self->items, root);
+  if (aug->n_items == aug->n_visible)
+    return FALSE; /* all items visible */
+
+  /* find first filtered */
+  *start = 0;
+  *end = 0;
+  *n_items = aug->n_visible;
+
+  node = root;
+  while (node)
+    {
+      tmp = gtk_rb_tree_node_get_left (node);
+      if (tmp)
+        {
+          aug = gtk_rb_tree_get_augment (self->items, tmp);
+          if (aug->n_visible < aug->n_items)
+            {
+              node = tmp;
+              continue;
+            }
+          *start += aug->n_items;
+        }
+
+      if (!node->visible)
+        break;
+
+      (*start)++;
+
+      node = gtk_rb_tree_node_get_right (node);
+    }
+
+  /* find last filtered by doing everything the opposite way */
+  node = root;
+  while (node)
+    {
+      tmp = gtk_rb_tree_node_get_right (node);
+      if (tmp)
+        {
+          aug = gtk_rb_tree_get_augment (self->items, tmp);
+          if (aug->n_visible < aug->n_items)
+            {
+              node = tmp;
+              continue;
+            }
+          *end += aug->n_items;
+        }
+
+      if (!node->visible)
+        break;
+
+      (*end)++;
+
+      node = gtk_rb_tree_node_get_left (node);
+    }
+
+  return TRUE;
+}
+
+static void
+gtk_filter_list_model_refilter (GtkFilterListModel *self);
+
+static void
+gtk_filter_list_model_update_strictness_and_refilter (GtkFilterListModel *self)
+{
+  GtkFilterMatch new_strictness;
+
+  if (self->model == NULL)
+    new_strictness = GTK_FILTER_MATCH_NONE;
+  else if (self->filter == NULL)
+    new_strictness = GTK_FILTER_MATCH_ALL;
+  else
+    new_strictness = gtk_filter_get_strictness (self->filter);
+
+  /* don't set self->strictness yet so get_n_items() and friends return old values */
+
+  switch (new_strictness)
+    {
+    case GTK_FILTER_MATCH_NONE:
+      {
+        guint n_before = g_list_model_get_n_items (G_LIST_MODEL (self));
+        g_clear_pointer (&self->items, gtk_rb_tree_unref);
+        self->strictness = new_strictness;
+        if (n_before > 0)
+          g_list_model_items_changed (G_LIST_MODEL (self), 0, n_before, 0);
+      }
+      break;
+
+    case GTK_FILTER_MATCH_ALL:
+      switch (self->strictness)
+        {
+        case GTK_FILTER_MATCH_NONE:
+          self->strictness = new_strictness;
+          g_list_model_items_changed (G_LIST_MODEL (self), 0, 0, g_list_model_get_n_items (self->model));
+          break;
+        case GTK_FILTER_MATCH_ALL:
+          self->strictness = new_strictness;
+          break;
+        default:
+        case GTK_FILTER_MATCH_SOME:
+          {
+            guint start, end, n_before, n_after;
+            self->strictness = new_strictness;
+            if (gtk_filter_list_model_find_filtered (self, &start, &end, &n_before))
+              {
+                n_after = g_list_model_get_n_items (G_LIST_MODEL (self));
+                g_clear_pointer (&self->items, gtk_rb_tree_unref);
+                g_list_model_items_changed (G_LIST_MODEL (self), start, n_before - end - start, n_after - end - start);
+              }
+            else
+              {
+                g_clear_pointer (&self->items, gtk_rb_tree_unref);
+              }
+          }
+          break;
+        }
+      break;
+    
+    default:
+      g_assert_not_reached ();
+      G_GNUC_FALLTHROUGH;
+    case GTK_FILTER_MATCH_SOME:
+      switch (self->strictness)
+        {
+        case GTK_FILTER_MATCH_NONE:
+          {
+            guint n_after;
+            self->strictness = new_strictness;
+            self->items = gtk_rb_tree_new (FilterNode,
+                                           FilterAugment,
+                                           gtk_filter_list_model_augment,
+                                           NULL, NULL);
+            n_after = gtk_filter_list_model_add_items (self, NULL, 0, g_list_model_get_n_items (self->model));
+            if (n_after > 0)
+              g_list_model_items_changed (G_LIST_MODEL (self), 0, 0, n_after);
+          }
+          break;
+        case GTK_FILTER_MATCH_ALL:
+          {
+            guint start, end, n_before, n_after;
+            self->strictness = new_strictness;
+            self->items = gtk_rb_tree_new (FilterNode,
+                                           FilterAugment,
+                                           gtk_filter_list_model_augment,
+                                           NULL, NULL);
+            n_before = g_list_model_get_n_items (self->model);
+            gtk_filter_list_model_add_items (self, NULL, 0, n_before);
+            if (gtk_filter_list_model_find_filtered (self, &start, &end, &n_after))
+              g_list_model_items_changed (G_LIST_MODEL (self), start, n_before - end - start, n_after - end - start);
+          }
+          break;
+        default:
+        case GTK_FILTER_MATCH_SOME:
+          gtk_filter_list_model_refilter (self);
+          break;
+        }
+    }
+}
+
+static void
+gtk_filter_list_model_filter_changed_cb (GtkFilter          *filter,
+                                         GtkFilterChange     change,
+                                         GtkFilterListModel *self)
+{
+  gtk_filter_list_model_update_strictness_and_refilter (self);
+}
+
+static void
+gtk_filter_list_model_clear_filter (GtkFilterListModel *self)
+{
+  if (self->filter == NULL)
+    return;
+
+  g_signal_handlers_disconnect_by_func (self->filter, gtk_filter_list_model_filter_changed_cb, self);
+  g_clear_object (&self->filter);
+}
+
 static void
 gtk_filter_list_model_dispose (GObject *object)
 {
   GtkFilterListModel *self = GTK_FILTER_LIST_MODEL (object);
 
   gtk_filter_list_model_clear_model (self);
-  if (self->user_destroy)
-    self->user_destroy (self->user_data);
-  self->filter_func = NULL;
-  self->user_data = NULL;
-  self->user_destroy = NULL;
+  gtk_filter_list_model_clear_filter (self);
   g_clear_pointer (&self->items, gtk_rb_tree_unref);
 
   G_OBJECT_CLASS (gtk_filter_list_model_parent_class)->dispose (object);
@@ -383,16 +650,16 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
   gobject_class->dispose = gtk_filter_list_model_dispose;
 
   /**
-   * GtkFilterListModel:has-filter:
+   * GtkFilterListModel:filter:
    *
-   * If a filter is set for this model
+   * The filter for this model
    */
-  properties[PROP_HAS_FILTER] =
-      g_param_spec_boolean ("has-filter",
-                            P_("has filter"),
-                            P_("If a filter is set for this model"),
-                            FALSE,
-                            GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
+  properties[PROP_FILTER] =
+      g_param_spec_object ("filter",
+                           P_("Filter"),
+                           P_("The filter set for this model"),
+                           GTK_TYPE_FILTER,
+                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkFilterListModel:item-type:
@@ -424,53 +691,22 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
 static void
 gtk_filter_list_model_init (GtkFilterListModel *self)
 {
-}
-
-
-static void
-gtk_filter_list_model_augment (GtkRbTree *filter,
-                               gpointer   _aug,
-                               gpointer   _node,
-                               gpointer   left,
-                               gpointer   right)
-{
-  FilterNode *node = _node;
-  FilterAugment *aug = _aug;
-
-  aug->n_items = 1;
-  aug->n_visible = node->visible ? 1 : 0;
-
-  if (left)
-    {
-      FilterAugment *left_aug = gtk_rb_tree_get_augment (filter, left);
-      aug->n_items += left_aug->n_items;
-      aug->n_visible += left_aug->n_visible;
-    }
-  if (right)
-    {
-      FilterAugment *right_aug = gtk_rb_tree_get_augment (filter, right);
-      aug->n_items += right_aug->n_items;
-      aug->n_visible += right_aug->n_visible;
-    }
+  self->strictness = GTK_FILTER_MATCH_NONE;
 }
 
 /**
  * gtk_filter_list_model_new:
  * @model: the model to sort
- * @filter_func: (allow-none): filter function or %NULL to not filter items
- * @user_data: (closure): user data passed to @filter_func
- * @user_destroy: destroy notifier for @user_data
+ * @filter: (allow-none): filter or %NULL to not filter items
  *
  * Creates a new #GtkFilterListModel that will filter @model using the given
- * @filter_func.
+ * @filter.
  *
  * Returns: a new #GtkFilterListModel
  **/
 GtkFilterListModel *
-gtk_filter_list_model_new (GListModel                   *model,
-                           GtkFilterListModelFilterFunc  filter_func,
-                           gpointer                      user_data,
-                           GDestroyNotify                user_destroy)
+gtk_filter_list_model_new (GListModel *model,
+                           GtkFilter  *filter)
 {
   GtkFilterListModel *result;
 
@@ -479,10 +715,8 @@ gtk_filter_list_model_new (GListModel                   *model,
   result = g_object_new (GTK_TYPE_FILTER_LIST_MODEL,
                          "item-type", g_list_model_get_item_type (model),
                          "model", model,
+                         "filter", filter,
                          NULL);
-
-  if (filter_func)
-    gtk_filter_list_model_set_filter_func (result, filter_func, user_data, user_destroy);
 
   return result;
 }
@@ -492,7 +726,7 @@ gtk_filter_list_model_new (GListModel                   *model,
  * @item_type: the type of the items that will be returned
  *
  * Creates a new empty filter list model set up to return items of type @item_type.
- * It is up to the application to set a proper filter function and model to ensure
+ * It is up to the application to set a proper filter and model to ensure
  * the item type is matched.
  *
  * Returns: a new #GtkFilterListModel
@@ -508,66 +742,53 @@ gtk_filter_list_model_new_for_type (GType item_type)
 }
 
 /**
- * gtk_filter_list_model_set_filter_func:
+ * gtk_filter_list_model_set_filter:
  * @self: a #GtkFilterListModel
- * @filter_func: (allow-none): filter function or %NULL to not filter items
- * @user_data: (closure): user data passed to @filter_func
- * @user_destroy: destroy notifier for @user_data
+ * @filter: (allow-none) (transfer none): filter to use or %NULL to not filter items
  *
- * Sets the function used to filter items. The function will be called for every
- * item and if it returns %TRUE the item is considered visible.
+ * Sets the filter used to filter items.
  **/
 void
-gtk_filter_list_model_set_filter_func (GtkFilterListModel           *self,
-                                       GtkFilterListModelFilterFunc  filter_func,
-                                       gpointer                      user_data,
-                                       GDestroyNotify                user_destroy)
+gtk_filter_list_model_set_filter (GtkFilterListModel *self,
+                                  GtkFilter          *filter)
 {
-  gboolean was_filtered, will_be_filtered;
-
   g_return_if_fail (GTK_IS_FILTER_LIST_MODEL (self));
-  g_return_if_fail (filter_func != NULL || (user_data == NULL && !user_destroy));
+  g_return_if_fail (filter == NULL || GTK_IS_FILTER (filter));
 
-  was_filtered = self->filter_func != NULL;
-  will_be_filtered = filter_func != NULL;
-
-  if (!was_filtered && !will_be_filtered)
+  if (self->filter == filter)
     return;
 
-  if (self->user_destroy)
-    self->user_destroy (self->user_data);
+  gtk_filter_list_model_clear_filter (self);
 
-  self->filter_func = filter_func;
-  self->user_data = user_data;
-  self->user_destroy = user_destroy;
-  
-  if (!will_be_filtered)
+  if (filter)
     {
-      g_clear_pointer (&self->items, gtk_rb_tree_unref);
+      self->filter = g_object_ref (filter);
+      g_signal_connect (filter, "changed", G_CALLBACK (gtk_filter_list_model_filter_changed_cb), self);
+      gtk_filter_list_model_filter_changed_cb (filter, GTK_FILTER_CHANGE_DIFFERENT, self);
     }
-  else if (!was_filtered)
+  else
     {
-      guint i, n_items;
-
-      self->items = gtk_rb_tree_new (FilterNode,
-                                     FilterAugment,
-                                     gtk_filter_list_model_augment,
-                                     NULL, NULL);
-      if (self->model)
-        {
-          n_items = g_list_model_get_n_items (self->model);
-          for (i = 0; i < n_items; i++)
-            {
-              FilterNode *node = gtk_rb_tree_insert_before (self->items, NULL);
-              node->visible = TRUE;
-            }
-        }
+      gtk_filter_list_model_update_strictness_and_refilter (self);
     }
 
-  gtk_filter_list_model_refilter (self);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FILTER]);
+}
 
-  if (was_filtered != will_be_filtered)
-    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HAS_FILTER]);
+/**
+ * gtk_filter_list_model_get_filter:
+ * @self: a #GtkFilterListModel
+ *
+ * Gets the #GtkFilter currently set on @self.
+ *
+ * Returns: (nullable) (transfer none): The filter currently in use
+ *     or %NULL if the list isn't filtered
+ **/
+GtkFilter *
+gtk_filter_list_model_get_filter (GtkFilterListModel *self)
+{
+  g_return_val_if_fail (GTK_IS_FILTER_LIST_MODEL (self), FALSE);
+
+  return self->filter;
 }
 
 /**
@@ -579,8 +800,8 @@ gtk_filter_list_model_set_filter_func (GtkFilterListModel           *self,
  *
  * Note that GTK makes no effort to ensure that @model conforms to
  * the item type of @self. It assumes that the caller knows what they
- * are doing and have set up an appropriate filter function to ensure
- * that item types match.
+ * are doing and have set up an appropriate filter to ensure that item
+ * types match.
  **/
 void
 gtk_filter_list_model_set_model (GtkFilterListModel *self,
@@ -603,14 +824,23 @@ gtk_filter_list_model_set_model (GtkFilterListModel *self,
     {
       self->model = g_object_ref (model);
       g_signal_connect (model, "items-changed", G_CALLBACK (gtk_filter_list_model_items_changed_cb), self);
-      if (self->items)
+      if (removed == 0)
+        {
+          self->strictness = GTK_FILTER_MATCH_NONE;
+          gtk_filter_list_model_update_strictness_and_refilter (self);
+          added = 0;
+        }
+      else if (self->items)
         added = gtk_filter_list_model_add_items (self, NULL, 0, g_list_model_get_n_items (model));
       else
         added = g_list_model_get_n_items (model);
     }
   else
-    added = 0;
-  
+    {
+      self->strictness = GTK_FILTER_MATCH_NONE;
+      added = 0;
+    }
+
   if (removed > 0 || added > 0)
     g_list_model_items_changed (G_LIST_MODEL (self), 0, removed, added);
 
@@ -633,32 +863,7 @@ gtk_filter_list_model_get_model (GtkFilterListModel *self)
   return self->model;
 }
 
-/**
- * gtk_filter_list_model_has_filter:
- * @self: a #GtkFilterListModel
- *
- * Checks if a filter function is currently set on @self
- *
- * Returns: %TRUE if a filter function is set
- **/
-gboolean
-gtk_filter_list_model_has_filter (GtkFilterListModel *self)
-{
-  g_return_val_if_fail (GTK_IS_FILTER_LIST_MODEL (self), FALSE);
-
-  return self->filter_func != NULL;
-}
-
-/**
- * gtk_filter_list_model_refilter:
- * @self: a #GtkFilterListModel
- *
- * Causes @self to refilter all items in the model.
- *
- * Calling this function is necessary when data used by the filter
- * function has changed.
- **/
-void
+static void
 gtk_filter_list_model_refilter (GtkFilterListModel *self)
 {
   FilterNode *node;
