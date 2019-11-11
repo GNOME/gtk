@@ -2,4 +2,4 @@
 directory=libepoxy
 url=https://github.com/anholt/libepoxy.git
 push-url=git@github.com:anholt/libepoxy.git
-revision=meson
+revision=master
