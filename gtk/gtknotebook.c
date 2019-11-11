@@ -43,7 +43,7 @@
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtkpopovermenu.h"
+#include "gtkpopovermenuprivate.h"
 #include "gtkorientable.h"
 #include "gtksizerequest.h"
 #include "gtkstylecontextprivate.h"

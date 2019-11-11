@@ -59,7 +59,7 @@
 #include "gtkentry.h"
 #include "gtkgesturelongpress.h"
 #include "gtkbox.h"
-#include "gtkmodelbutton.h"
+#include "gtkmodelbuttonprivate.h"
 #include "gtkprivate.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkgestureclick.h"

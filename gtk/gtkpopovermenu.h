@@ -36,9 +36,6 @@ GDK_AVAILABLE_IN_ALL
 GType       gtk_popover_menu_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget * gtk_popover_menu_new            (GtkWidget   *relative_to);
-
-GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_popover_menu_new_from_model (GtkWidget  *relative_to,
                                              GMenuModel *model);
 
@@ -61,12 +58,10 @@ GtkWidget * gtk_popover_menu_new_from_model_full (GtkWidget           *relative_
                                                   GtkPopoverMenuFlags  flags);
 
 GDK_AVAILABLE_IN_ALL
-void        gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
-                                          GtkWidget      *submenu,
-                                          const char     *name);
+void        gtk_popover_menu_set_menu_model (GtkPopoverMenu *popover,
+                                             GMenuModel     *model);
 GDK_AVAILABLE_IN_ALL
-void        gtk_popover_menu_open_submenu (GtkPopoverMenu *popover,
-                                           const char     *name);
+GMenuModel *gtk_popover_menu_get_menu_model (GtkPopoverMenu *popover);
 
 
 G_END_DECLS
