@@ -126,7 +126,7 @@
       </description>
     </key>
     <key name='window-size' type='(ii)'>
-      <default>(-1, -1)</default>
+      <default>(750, 550)</default>
       <summary>Window size</summary>
       <description>
 	The size (width, height) of the GtkFileChooserDialog's window, in pixels.
