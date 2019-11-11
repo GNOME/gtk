@@ -17,6 +17,7 @@ meson \
         -Dbroadway-backend=true \
         -Dvulkan=yes \
         --werror \
+        ${EXTRA_MESON_FLAGS:-} \
         _build $srcdir
 unset CCACHE_DISABLE
 
