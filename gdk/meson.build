@@ -286,20 +286,20 @@ if cc.get_id() == 'msvc'
   gdk_link_args += [ '-export:gdk_win32_display_manager_get_type' ]
 endif
 
-libgdk = shared_library('gdk-3',
-                        soversion: gtk_soversion,
-                        version: gtk_library_version,
-                        sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
-                        dependencies: gdk_deps,
-                        include_directories: [confinc, gdkx11_inc, wlinc],
-                        c_args: [
-                          '-DGDK_COMPILATION',
-                          '-DG_LOG_DOMAIN="Gdk"',
-                        ] + common_cflags,
-                        link_whole: gdk_backends,
-                        link_args: gdk_link_args,
-                        darwin_versions : gtk_osxversions,
-                        install: true)
+libgdk = library('gdk-3',
+                 soversion: gtk_soversion,
+                 version: gtk_library_version,
+                 sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
+                 dependencies: gdk_deps,
+                 include_directories: [confinc, gdkx11_inc, wlinc],
+                 c_args: [
+                   '-DGDK_COMPILATION',
+                   '-DG_LOG_DOMAIN="Gdk"',
+                 ] + common_cflags,
+                 link_whole: gdk_backends,
+                 link_args: gdk_link_args,
+                 darwin_versions : gtk_osxversions,
+                 install: true)
 
 gdk_dep_sources = [gdkconfig, gdkenum_h]
 # Introspection
