@@ -2053,6 +2053,85 @@ gtk_scrolled_window_new (GtkAdjustment *hadjustment,
   return scrolled_window;
 }
 
+typedef void (*WidgetInsertFunc)(GtkWidget *, GtkWidget *, GtkWidget *);
+typedef void (*ScrollableSetAdjustmentFunc)(GtkScrollable *, GtkAdjustment *);
+
+static void
+gtk_scrolled_window_set_adjustment (GtkScrolledWindow            *scrolled_window,
+                                    GtkAdjustment                *adjustment,
+                                    GtkOrientation                orientation,
+                                    GtkWidget                   **scrollbar,
+                                    guint                         prop_id,
+                                    ScrollableSetAdjustmentFunc   scrollable_set_adjustment,
+                                    WidgetInsertFunc              widget_insert,
+                                    GtkWidget                    *other_scrollbar)
+{
+  GtkBin *bin;
+  GtkWidget *child;
+
+  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
+
+  if (adjustment)
+    g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+  else
+    adjustment = (GtkAdjustment*) g_object_new (GTK_TYPE_ADJUSTMENT, NULL);
+
+  bin = GTK_BIN (scrolled_window);
+
+  if (!*scrollbar)
+    {
+      *scrollbar = gtk_scrollbar_new (orientation, adjustment);
+
+      widget_insert (*scrollbar, GTK_WIDGET (scrolled_window), other_scrollbar);
+      update_scrollbar_positions (scrolled_window);
+    }
+  else
+    {
+      GtkAdjustment *old_adjustment;
+
+      old_adjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (*scrollbar));
+
+      if (old_adjustment == adjustment)
+        return;
+
+      g_signal_handlers_disconnect_by_func (old_adjustment,
+                                            gtk_scrolled_window_adjustment_changed,
+                                            scrolled_window);
+
+      g_signal_handlers_disconnect_by_func (old_adjustment,
+                                            gtk_scrolled_window_adjustment_value_changed,
+                                            scrolled_window);
+
+      gtk_adjustment_enable_animation (old_adjustment, NULL, 0);
+      gtk_scrollbar_set_adjustment (GTK_SCROLLBAR (*scrollbar), adjustment);
+    }
+
+  adjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (*scrollbar));
+
+  g_signal_connect (adjustment,
+                    "changed",
+                    G_CALLBACK (gtk_scrolled_window_adjustment_changed),
+                    scrolled_window);
+
+  g_signal_connect (adjustment,
+                    "value-changed",
+                    G_CALLBACK (gtk_scrolled_window_adjustment_value_changed),
+                    scrolled_window);
+
+  gtk_scrolled_window_adjustment_changed (adjustment, scrolled_window);
+  gtk_scrolled_window_adjustment_value_changed (adjustment, scrolled_window);
+
+  child = gtk_bin_get_child (bin);
+
+  if (child)
+    scrollable_set_adjustment (GTK_SCROLLABLE (child), adjustment);
+
+  if (gtk_widget_should_animate (GTK_WIDGET (scrolled_window)))
+    gtk_adjustment_enable_animation (adjustment, gtk_widget_get_frame_clock (GTK_WIDGET (scrolled_window)), ANIMATION_DURATION);
+
+  g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties[prop_id]);
+}
+
 /**
  * gtk_scrolled_window_set_hadjustment:
  * @scrolled_window: a #GtkScrolledWindow
@@ -2065,66 +2144,11 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
                                      GtkAdjustment     *hadjustment)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-  GtkBin *bin;
-  GtkWidget *child;
 
-  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
-
-  if (hadjustment)
-    g_return_if_fail (GTK_IS_ADJUSTMENT (hadjustment));
-  else
-    hadjustment = (GtkAdjustment*) g_object_new (GTK_TYPE_ADJUSTMENT, NULL);
-
-  bin = GTK_BIN (scrolled_window);
-
-  if (!priv->hscrollbar)
-    {
-      priv->hscrollbar = gtk_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, hadjustment);
-
-      gtk_widget_insert_before (priv->hscrollbar, GTK_WIDGET (scrolled_window), priv->vscrollbar);
-      update_scrollbar_positions (scrolled_window);
-    }
-  else
-    {
-      GtkAdjustment *old_adjustment;
-
-      old_adjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
-      if (old_adjustment == hadjustment)
-	return;
-
-      g_signal_handlers_disconnect_by_func (old_adjustment,
-                                            gtk_scrolled_window_adjustment_changed,
-                                            scrolled_window);
-      g_signal_handlers_disconnect_by_func (old_adjustment,
-                                            gtk_scrolled_window_adjustment_value_changed,
-                                            scrolled_window);
-
-      gtk_adjustment_enable_animation (old_adjustment, NULL, 0);
-      gtk_scrollbar_set_adjustment (GTK_SCROLLBAR (priv->hscrollbar), hadjustment);
-    }
-
-  hadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
-
-  g_signal_connect (hadjustment,
-                    "changed",
-		    G_CALLBACK (gtk_scrolled_window_adjustment_changed),
-		    scrolled_window);
-  g_signal_connect (hadjustment,
-                    "value-changed",
-		    G_CALLBACK (gtk_scrolled_window_adjustment_value_changed),
-		    scrolled_window);
-
-  gtk_scrolled_window_adjustment_changed (hadjustment, scrolled_window);
-  gtk_scrolled_window_adjustment_value_changed (hadjustment, scrolled_window);
-
-  child = gtk_bin_get_child (bin);
-  if (child)
-    gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (child), hadjustment);
-
-  if (gtk_widget_should_animate (GTK_WIDGET (scrolled_window)))
-    gtk_adjustment_enable_animation (hadjustment, gtk_widget_get_frame_clock (GTK_WIDGET (scrolled_window)), ANIMATION_DURATION);
-
-  g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties[PROP_HADJUSTMENT]);
+  gtk_scrolled_window_set_adjustment (scrolled_window, hadjustment,
+                                      GTK_ORIENTATION_HORIZONTAL, &priv->hscrollbar, PROP_HADJUSTMENT,
+                                      gtk_scrollable_set_hadjustment,
+                                      gtk_widget_insert_before, priv->vscrollbar);
 }
 
 /**
@@ -2139,66 +2163,11 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
                                      GtkAdjustment     *vadjustment)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-  GtkBin *bin;
-  GtkWidget *child;
 
-  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
-
-  if (vadjustment)
-    g_return_if_fail (GTK_IS_ADJUSTMENT (vadjustment));
-  else
-    vadjustment = (GtkAdjustment*) g_object_new (GTK_TYPE_ADJUSTMENT, NULL);
-
-  bin = GTK_BIN (scrolled_window);
-
-  if (!priv->vscrollbar)
-    {
-      priv->vscrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, vadjustment);
-
-      gtk_widget_insert_after (priv->vscrollbar, GTK_WIDGET (scrolled_window), priv->hscrollbar);
-      update_scrollbar_positions (scrolled_window);
-    }
-  else
-    {
-      GtkAdjustment *old_adjustment;
-      
-      old_adjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar));
-      if (old_adjustment == vadjustment)
-	return;
-
-      g_signal_handlers_disconnect_by_func (old_adjustment,
-                                            gtk_scrolled_window_adjustment_changed,
-                                            scrolled_window);
-      g_signal_handlers_disconnect_by_func (old_adjustment,
-                                            gtk_scrolled_window_adjustment_value_changed,
-                                            scrolled_window);
-
-      gtk_adjustment_enable_animation (old_adjustment, NULL, 0);
-      gtk_scrollbar_set_adjustment (GTK_SCROLLBAR (priv->vscrollbar), vadjustment);
-    }
-
-  vadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar));
-
-  g_signal_connect (vadjustment,
-                    "changed",
-		    G_CALLBACK (gtk_scrolled_window_adjustment_changed),
-		    scrolled_window);
-  g_signal_connect (vadjustment,
-                    "value-changed",
-		    G_CALLBACK (gtk_scrolled_window_adjustment_value_changed),
-		    scrolled_window);
-
-  gtk_scrolled_window_adjustment_changed (vadjustment, scrolled_window);
-  gtk_scrolled_window_adjustment_value_changed (vadjustment, scrolled_window);
-
-  child = gtk_bin_get_child (bin);
-  if (child)
-    gtk_scrollable_set_vadjustment (GTK_SCROLLABLE (child), vadjustment);
-
-  if (gtk_widget_should_animate (GTK_WIDGET (scrolled_window)))
-    gtk_adjustment_enable_animation (vadjustment, gtk_widget_get_frame_clock (GTK_WIDGET (scrolled_window)), ANIMATION_DURATION);
-
-  g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties[PROP_VADJUSTMENT]);
+  gtk_scrolled_window_set_adjustment (scrolled_window, vadjustment,
+                                      GTK_ORIENTATION_VERTICAL, &priv->vscrollbar, PROP_VADJUSTMENT,
+                                      gtk_scrollable_set_vadjustment,
+                                      gtk_widget_insert_after, priv->hscrollbar);
 }
 
 /**
