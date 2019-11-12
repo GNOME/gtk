@@ -45,7 +45,7 @@ static guint signals[LAST_SIGNAL];
 static void
 gtk_style_provider_default_init (GtkStyleProviderInterface *iface)
 {
-  signals[CHANGED] = g_signal_new (I_("-gtk-private-changed"),
+  signals[CHANGED] = g_signal_new (I_("gtk-private-changed"),
                                    G_TYPE_FROM_INTERFACE (iface),
                                    G_SIGNAL_RUN_LAST,
                                    G_STRUCT_OFFSET (GtkStyleProviderInterface, changed),
