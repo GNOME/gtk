@@ -806,25 +806,6 @@ gtk_header_bar_get_custom_title (GtkHeaderBar *bar)
 }
 
 static void
-gtk_header_bar_dispose (GObject *object)
-{
-  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (object));
-
-  if (priv->label_sizing_box)
-    {
-      gtk_widget_destroy (priv->label_sizing_box);
-      g_clear_object (&priv->label_sizing_box);
-    }
-
-  g_clear_pointer (&priv->custom_title, gtk_widget_unparent);
-  g_clear_pointer (&priv->label_box, gtk_widget_unparent);
-  g_clear_pointer (&priv->start_box, gtk_widget_unparent);
-  g_clear_pointer (&priv->end_box, gtk_widget_unparent);
-
-  G_OBJECT_CLASS (gtk_header_bar_parent_class)->dispose (object);
-}
-
-static void
 gtk_header_bar_finalize (GObject *object)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (object));
@@ -981,11 +962,13 @@ gtk_header_bar_remove (GtkContainer *container,
 
   if (parent == priv->start_box)
     {
+      g_signal_handlers_disconnect_by_func (widget, notify_child_cb, bar);
       gtk_container_remove (GTK_CONTAINER (priv->start_box), widget);
       removed = TRUE;
     }
   else if (parent == priv->end_box)
     {
+      g_signal_handlers_disconnect_by_func (widget, notify_child_cb, bar);
       gtk_container_remove (GTK_CONTAINER (priv->end_box), widget);
       removed = TRUE;
     }
@@ -1044,6 +1027,34 @@ gtk_header_bar_forall (GtkContainer *container,
           w = next;
         }
     }
+}
+
+static void
+disconnect_notify_child_cb (GtkWidget *widget,
+                            GtkHeaderBar *bar)
+{
+  g_signal_handlers_disconnect_by_func (widget, notify_child_cb, bar);
+}
+
+static void
+gtk_header_bar_dispose (GObject *object)
+{
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (object));
+
+  gtk_header_bar_forall (GTK_CONTAINER (object), (GtkCallback) disconnect_notify_child_cb, object);
+
+  if (priv->label_sizing_box)
+    {
+      gtk_widget_destroy (priv->label_sizing_box);
+      g_clear_object (&priv->label_sizing_box);
+    }
+
+  g_clear_pointer (&priv->custom_title, gtk_widget_unparent);
+  g_clear_pointer (&priv->label_box, gtk_widget_unparent);
+  g_clear_pointer (&priv->start_box, gtk_widget_unparent);
+  g_clear_pointer (&priv->end_box, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (gtk_header_bar_parent_class)->dispose (object);
 }
 
 static GType
