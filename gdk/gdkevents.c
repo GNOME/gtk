@@ -1363,7 +1363,45 @@ gdk_event_get_keycode (const GdkEvent *event,
  *
  * Extracts the scroll direction from an event.
  *
+ * If @event is not of type %GDK_SCROLL, the contents of @direction
+ * are undefined.
+ *
+ * If you wish to handle both discrete and smooth scrolling, you
+ * should check the return value of this function, or of
+ * gdk_event_get_scroll_deltas(); for instance:
+ *
+ * |[<!-- language="C" -->
+ *   GdkScrollDirection direction;
+ *   double vscroll_factor = 0.0;
+ *   double x_scroll, y_scroll;
+ *
+ *   if (gdk_event_get_scroll_direction (event, &direction))
+ *     {
+ *       // Handle discrete scrolling with a known constant delta;
+ *       const double delta = 12.0;
+ *
+ *       switch (direction)
+ *         {
+ *         case GDK_SCROLL_UP:
+ *           vscroll_factor = -delta;
+ *           break;
+ *         case GDK_SCROLL_DOWN:
+ *           vscroll_factor = delta;
+ *           break;
+ *         default:
+ *           // no scrolling
+ *           break;
+ *         }
+ *     }
+ *   else if (gdk_event_get_scroll_deltas (event, &x_scroll, &y_scroll))
+ *     {
+ *       // Handle smooth scrolling directly
+ *       vscroll_factor = y_scroll;
+ *     }
+ * ]|
+ *
  * Returns: %TRUE if the event delivered a scroll direction
+ *   and %FALSE otherwise
  *
  * Since: 3.2
  */
@@ -1401,7 +1439,10 @@ gdk_event_get_scroll_direction (const GdkEvent *event,
  *
  * Retrieves the scroll deltas from a #GdkEvent
  *
+ * See also: gdk_event_get_scroll_direction()
+ *
  * Returns: %TRUE if the event contains smooth scroll information
+ *   and %FALSE otherwise
  *
  * Since: 3.4
  **/
