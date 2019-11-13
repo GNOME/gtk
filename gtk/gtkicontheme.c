@@ -3204,8 +3204,12 @@ theme_list_contexts (IconTheme  *theme,
     {
       dir = l->data;
 
-      context = g_quark_to_string (dir->context);
-      g_hash_table_replace (contexts, (gpointer) context, NULL);
+      /* The "Context" key can be unset */
+      if (dir->context != 0)
+        {
+          context = g_quark_to_string (dir->context);
+          g_hash_table_replace (contexts, (gpointer) context, NULL);
+        }
 
       l = l->next;
     }
