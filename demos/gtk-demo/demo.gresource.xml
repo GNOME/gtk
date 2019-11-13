@@ -125,6 +125,9 @@
     <file>listview_minesweeper.ui</file>
     <file>listview_minesweeper_cell.ui</file>
   </gresource>
+  <gresource prefix="/listview_settings">
+    <file>listview_settings.ui</file>
+  </gresource>
   <gresource prefix="/listview_weather">
     <file compressed="true">listview_weather.txt</file>
   </gresource>

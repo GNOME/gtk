@@ -7,6 +7,104 @@
 
 #include <gtk/gtk.h>
 
+/* Create an object that wraps GSettingsSchemaKey because that's a boxed type */
+typedef struct _SettingsKey SettingsKey;
+struct _SettingsKey
+{
+  GObject parent_instance;
+
+  GSettings *settings;
+  GSettingsSchemaKey *key;
+};
+
+enum {
+  PROP_0,
+  PROP_NAME,
+  PROP_SUMMARY,
+  PROP_DESCRIPTION,
+  PROP_VALUE,
+
+  N_PROPS
+};
+
+#define SETTINGS_TYPE_KEY (settings_key_get_type ())
+G_DECLARE_FINAL_TYPE (SettingsKey, settings_key, SETTINGS, KEY, GObject);
+
+G_DEFINE_TYPE (SettingsKey, settings_key, G_TYPE_OBJECT);
+static GParamSpec *properties[N_PROPS] = { NULL, };
+
+static void
+settings_key_get_property (GObject    *object,
+                           guint       property_id,
+                           GValue     *value,
+                           GParamSpec *pspec)
+{
+  SettingsKey *self = SETTINGS_KEY (object);
+
+  switch (property_id)
+    {
+    case PROP_DESCRIPTION:
+      g_value_set_string (value, g_settings_schema_key_get_description (self->key));
+      break;
+
+    case PROP_NAME:
+      g_value_set_string (value, g_settings_schema_key_get_name (self->key));
+      break;
+
+    case PROP_SUMMARY:
+      g_value_set_string (value, g_settings_schema_key_get_summary (self->key));
+      break;
+
+    case PROP_VALUE:
+      {
+        GVariant *variant = g_settings_get_value (self->settings, g_settings_schema_key_get_name (self->key));
+        g_value_take_string (value, g_variant_print (variant, FALSE));
+        g_variant_unref (variant);
+      }
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+settings_key_class_init (SettingsKeyClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->get_property = settings_key_get_property;
+
+  properties[PROP_DESCRIPTION] =
+    g_param_spec_string ("description", NULL, NULL, NULL, G_PARAM_READABLE);
+  properties[PROP_NAME] =
+    g_param_spec_string ("name", NULL, NULL, NULL, G_PARAM_READABLE);
+  properties[PROP_SUMMARY] =
+    g_param_spec_string ("summary", NULL, NULL, NULL, G_PARAM_READABLE);
+  properties[PROP_VALUE] =
+    g_param_spec_string ("value", NULL, NULL, NULL, G_PARAM_READABLE);
+
+  g_object_class_install_properties (gobject_class, N_PROPS, properties);
+}
+
+static void
+settings_key_init (SettingsKey *self)
+{
+}
+
+static SettingsKey *
+settings_key_new (GSettings          *settings,
+                  GSettingsSchemaKey *key)
+{
+  SettingsKey *result = g_object_new (SETTINGS_TYPE_KEY, NULL);
+
+  result->settings = g_object_ref (settings);
+  result->key = g_settings_schema_key_ref (key);
+
+  return result;
+}
+
 static int
 strvcmp (gconstpointer p1,
          gconstpointer p2)
@@ -15,6 +113,48 @@ strvcmp (gconstpointer p1,
   const char * const *s2 = p2;
 
   return strcmp (*s1, *s2);
+}
+
+static gboolean
+transform_settings_to_keys (GBinding     *binding,
+                            const GValue *from_value,
+                            GValue       *to_value,
+                            gpointer      unused)
+{
+  GtkTreeListRow *treelistrow;
+  GSettings *settings;
+  GSettingsSchema *schema;
+  GListStore *store;
+  char **keys;
+  guint i;
+
+  treelistrow = g_value_get_object (from_value);
+  if (treelistrow == NULL)
+    return TRUE;
+  settings = gtk_tree_list_row_get_item (treelistrow);
+  g_object_get (settings, "settings-schema", &schema, NULL);
+
+  store = g_list_store_new (SETTINGS_TYPE_KEY);
+
+  keys = g_settings_schema_list_keys (schema);
+  qsort (keys, g_strv_length (keys), sizeof (char *), strvcmp);
+
+  for (i = 0; keys[i] != NULL; i++)
+    {
+      GSettingsSchemaKey *almost_there = g_settings_schema_get_key (schema, keys[i]);
+      SettingsKey *finally = settings_key_new (settings, almost_there);
+      g_list_store_append (store, finally);
+      g_object_unref (finally);
+      g_settings_schema_key_unref (almost_there);
+    }
+
+  g_strfreev (keys);
+  g_settings_schema_unref (schema);
+  g_object_unref (settings);
+
+  g_value_take_object (to_value, store);
+
+  return TRUE;
 }
 
 static GListModel *
@@ -63,40 +203,6 @@ create_settings_model (gpointer item,
   return G_LIST_MODEL (result);
 }
 
-static void
-setup_widget (GtkListItem *list_item,
-              gpointer     unused)
-{
-  GtkWidget *label, *expander;
-
-  expander = gtk_tree_expander_new ();
-  gtk_list_item_set_child (list_item, expander);
-
-  label = gtk_label_new (NULL);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_tree_expander_set_child (GTK_TREE_EXPANDER (expander), label);
-}
-
-static void
-bind_widget (GtkListItem *list_item,
-             gpointer     unused)
-{
-  GSettings *settings;
-  GtkWidget *label, *expander;
-  GSettingsSchema *schema;
-
-  expander = gtk_list_item_get_child (list_item);
-  gtk_tree_expander_set_list_row (GTK_TREE_EXPANDER (expander), gtk_list_item_get_item (list_item));
-  label = gtk_tree_expander_get_child (GTK_TREE_EXPANDER (expander));
-  settings = gtk_tree_expander_get_item (GTK_TREE_EXPANDER (expander));
-
-  g_object_get (settings, "settings-schema", &schema, NULL);
-
-  gtk_label_set_label (GTK_LABEL (label), g_settings_schema_get_id (schema));
-
-  g_settings_schema_unref (schema);
-}
-
 static GtkWidget *window = NULL;
 
 GtkWidget *
@@ -104,26 +210,26 @@ do_listview_settings (GtkWidget *do_widget)
 {
   if (window == NULL)
     {
-      GtkWidget *listview, *sw;;
+      GtkWidget *listview, *columnview;
       GListModel *model;
       GtkTreeListModel *treemodel;
+      GtkSingleSelection *selection;
+      GtkBuilder *builder;
 
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      gtk_window_set_default_size (GTK_WINDOW (window), 400, 600);
+      g_type_ensure (SETTINGS_TYPE_KEY);
+
+      builder = gtk_builder_new_from_resource ("/listview_settings/listview_settings.ui");
+      gtk_builder_add_callback_symbols (builder,
+                                        "transform_settings_to_keys", G_CALLBACK (transform_settings_to_keys),
+                                        NULL);
+      window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      gtk_window_set_title (GTK_WINDOW (window), "Settings");
       g_signal_connect (window, "destroy",
-                        G_CALLBACK(gtk_widget_destroyed), &window);
+                        G_CALLBACK (gtk_widget_destroyed), &window);
 
-      sw = gtk_scrolled_window_new (NULL, NULL);
-      gtk_container_add (GTK_CONTAINER (window), sw);
-    
-      listview = gtk_list_view_new_with_factory (
-        gtk_functions_list_item_factory_new (setup_widget,
-                                             bind_widget,
-                                             NULL, NULL));
-
+      listview = GTK_WIDGET (gtk_builder_get_object (builder, "listview"));
+      columnview = GTK_WIDGET (gtk_builder_get_object (builder, "columnview"));
       model = create_settings_model (NULL, NULL);
       treemodel = gtk_tree_list_model_new (FALSE,
                                            model,
@@ -131,11 +237,17 @@ do_listview_settings (GtkWidget *do_widget)
                                            create_settings_model,
                                            NULL,
                                            NULL);
-      gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (treemodel));
+      selection = gtk_single_selection_new (G_LIST_MODEL (treemodel));
+      g_object_bind_property_full (selection, "selected-item",
+                                   columnview, "model",
+                                   G_BINDING_SYNC_CREATE,
+                                   transform_settings_to_keys,
+                                   NULL,
+                                   NULL, NULL);
+      gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (selection));
+      g_object_unref (selection);
       g_object_unref (treemodel);
       g_object_unref (model);
-
-      gtk_container_add (GTK_CONTAINER (sw), listview);
     }
 
   if (!gtk_widget_get_visible (window))
