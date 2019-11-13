@@ -107,10 +107,6 @@ static const GtkCssValueClass GTK_CSS_VALUE_RGBA = {
   gtk_css_value_rgba_print
 };
 
-static GtkCssValue transparent_black_singleton = (GtkCssValue) { &GTK_CSS_VALUE_RGBA, 1, { 0, 0, 0, 0 }};
-static GtkCssValue transparent_white_singleton = (GtkCssValue) { &GTK_CSS_VALUE_RGBA, 1, { 1, 1, 1, 0 }};
-static GtkCssValue opaque_white_singleton      = (GtkCssValue) { &GTK_CSS_VALUE_RGBA, 1, { 1, 1, 1, 1 }};
-
 GtkCssValue *
 _gtk_css_rgba_value_new_from_rgba (const GdkRGBA *rgba)
 {
@@ -120,6 +116,11 @@ _gtk_css_rgba_value_new_from_rgba (const GdkRGBA *rgba)
 
   if (gdk_rgba_is_clear (rgba))
     {
+      GtkCssValue transparent_black_singleton = (GtkCssValue) { &GTK_CSS_VALUE_RGBA,
+                                                                1, { 0, 0, 0, 0 }};
+      GtkCssValue transparent_white_singleton = (GtkCssValue) { &GTK_CSS_VALUE_RGBA,
+                                                                1, { 1, 1, 1, 0 }};
+
       if (rgba->red == 1 &&
           rgba->green == 1 &&
           rgba->blue == 1)
@@ -132,6 +133,8 @@ _gtk_css_rgba_value_new_from_rgba (const GdkRGBA *rgba)
     }
   else if (gdk_rgba_is_opaque (rgba))
     {
+      GtkCssValue opaque_white_singleton = (GtkCssValue) { &GTK_CSS_VALUE_RGBA,
+                                                           1, { 1, 1, 1, 1 }};
       if (rgba->red == 1 &&
           rgba->green == 1 &&
           rgba->blue == 1)
@@ -147,12 +150,18 @@ _gtk_css_rgba_value_new_from_rgba (const GdkRGBA *rgba)
 GtkCssValue *
 _gtk_css_rgba_value_new_transparent (void)
 {
+  GtkCssValue transparent_black_singleton = (GtkCssValue) { &GTK_CSS_VALUE_RGBA,
+                                                            1, { 0, 0, 0, 0 }};
+
   return _gtk_css_value_ref (&transparent_black_singleton);
 }
 
 GtkCssValue *
 _gtk_css_rgba_value_new_white (void)
 {
+  GtkCssValue opaque_white_singleton = (GtkCssValue) { &GTK_CSS_VALUE_RGBA,
+                                                       1, { 1, 1, 1, 1 }};
+
   return _gtk_css_value_ref (&opaque_white_singleton);
 }
 
