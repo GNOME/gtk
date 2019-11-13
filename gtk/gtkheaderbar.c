@@ -818,10 +818,11 @@ gtk_header_bar_dispose (GObject *object)
 
   g_clear_pointer (&priv->custom_title, gtk_widget_unparent);
   g_clear_pointer (&priv->label_box, gtk_widget_unparent);
-  g_clear_pointer (&priv->start_box, gtk_widget_unparent);
-  g_clear_pointer (&priv->end_box, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_header_bar_parent_class)->dispose (object);
+
+  g_clear_pointer (&priv->start_box, gtk_widget_unparent);
+  g_clear_pointer (&priv->end_box, gtk_widget_unparent);
 }
 
 static void
@@ -981,11 +982,13 @@ gtk_header_bar_remove (GtkContainer *container,
 
   if (parent == priv->start_box)
     {
+      g_signal_handlers_disconnect_by_func (widget, notify_child_cb, bar);
       gtk_container_remove (GTK_CONTAINER (priv->start_box), widget);
       removed = TRUE;
     }
   else if (parent == priv->end_box)
     {
+      g_signal_handlers_disconnect_by_func (widget, notify_child_cb, bar);
       gtk_container_remove (GTK_CONTAINER (priv->end_box), widget);
       removed = TRUE;
     }
