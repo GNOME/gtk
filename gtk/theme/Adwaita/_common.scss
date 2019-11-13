@@ -1764,6 +1764,8 @@ headerbar { // headerbar border rounding
   @extend %titlebar;
 }
 
+box.titlebar:not(headerbar) { border-spacing: 0px; }
+
 // Development versions of apps to use a differently styled headerbar
 
 window.devel {
