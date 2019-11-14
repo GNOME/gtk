@@ -2059,15 +2059,15 @@ stackswitcher.circular > button.circular, stackswitcher.circular > button.text-b
 .icon-dropshadow { -gtk-icon-shadow: 0 2px 12px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.7); }
 
 /********* Emoji * */
-popover.emoji-picker { padding-left: 0; padding-right: 0; }
+popover.emoji-picker > contents { padding: 0; }
 
-popover.emoji-picker entry.search { margin: 3px 5px 5px 5px; }
+popover.emoji-picker > contents entry.search { margin: 5px; }
 
-button.emoji-section { border-color: transparent; border-width: 3px; border-style: none none solid; border-radius: 0; margin: 2px 4px 2px 4px; padding: 3px 0 0; min-width: 32px; min-height: 28px; /* reset props inherited from the button style */ background: none; box-shadow: none; text-shadow: none; outline-offset: -5px; }
+button.emoji-section { border-color: transparent; border-width: 3px; border-style: none none solid; border-radius: 0; margin: 2px 8px 4px; padding: 3px 0 0; min-width: 32px; min-height: 28px; /* reset props inherited from the button style */ background: none; box-shadow: none; text-shadow: none; outline-offset: -5px; }
 
-button.emoji-section:first-child { margin-left: 7px; }
+button.emoji-section:dir(ltr):not(:last-child) { margin-right: 0; }
 
-button.emoji-section:last-child { margin-right: 7px; }
+button.emoji-section:dir(rtl):not(:last-child) { margin-left: 0; }
 
 button.emoji-section:backdrop:not(:checked) { border-color: transparent; }
 
@@ -2081,9 +2081,9 @@ button.emoji-section:hover label { opacity: 0.775; }
 
 button.emoji-section:checked label { opacity: 1; }
 
-popover.emoji-picker .emoji { font-size: x-large; padding: 6px; }
+popover.emoji-picker .emoji { font-size: x-large; padding: 6px; border-radius: 6px; }
 
-popover.emoji-picker .emoji :hover { background: #3584e4; border-radius: 6px; }
+popover.emoji-picker .emoji:hover { background: #3584e4; }
 
 popover.emoji-completion contents row box { border-spacing: 10px; padding: 2px 10px; }
 
