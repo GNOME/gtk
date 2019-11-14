@@ -2077,7 +2077,9 @@ menu_grab_transfer_surface_destroy (GtkMenu *menu)
       g_object_set_data (G_OBJECT (menu), I_("gtk-menu-transfer-surface"), NULL);
 
       widget_surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (menu)));
-      g_object_set_data (G_OBJECT (widget_surface), I_("gdk-attached-grab-surface"), surface);
+
+      if (widget_surface != NULL)
+        g_object_set_data (G_OBJECT (widget_surface), I_("gdk-attached-grab-surface"), surface);
     }
 }
 
