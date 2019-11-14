@@ -696,6 +696,7 @@ void
 gtk_inspector_object_tree_activate_object (GtkInspectorObjectTree *wt,
                                            GObject                *object)
 {
+  gtk_inspector_object_tree_select_object (wt, object);
   g_signal_emit (wt, signals[OBJECT_ACTIVATED], 0, object);
 }
 

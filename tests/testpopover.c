@@ -107,6 +107,7 @@ main (int argc, char *argv[])
   popover1 = gtk_popover_menu_new_from_model_full (NULL, model, GTK_POPOVER_MENU_NESTED);
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button1), popover1);
 
+  g_object_unref (builder);
   builder = gtk_builder_new_from_file ("popover2.ui");
   popover2 = (GtkWidget *)gtk_builder_get_object (builder, "popover");
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button2), popover2);
@@ -164,6 +165,7 @@ main (int argc, char *argv[])
   g_object_bind_property (combo, "active", box, "valign", G_BINDING_SYNC_CREATE);
   gtk_grid_attach (GTK_GRID (grid), label , 1, 5, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), combo, 2, 5, 1, 1);
+  g_object_unref (builder);
 
 
   g_signal_connect (win, "destroy", G_CALLBACK (gtk_main_quit), NULL);

@@ -1473,7 +1473,6 @@ headerbar {
   border-style: solid;
   border-color: $alt_borders_color;
   border-radius: 0;
-  border-spacing: 6px;
 
   @include headerbar_fill(darken($bg_color, 10%));
 
@@ -1691,6 +1690,8 @@ headerbar {
 }
 
 headerbar {
+  border-spacing: 6px;
+
   // add vertical margins to common widget on the headerbar to avoid them spanning the whole height
   entry,
   spinbutton,

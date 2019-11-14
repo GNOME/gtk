@@ -235,11 +235,17 @@ gtk_css_value_dimension_multiply (const GtkCssValue *value,
 }
 
 static GtkCssValue *
-gtk_css_value_dimension_try_add (const GtkCssValue *value1,
-                                 const GtkCssValue *value2)
+gtk_css_value_dimension_try_add (GtkCssValue *value1,
+                                 GtkCssValue *value2)
 {
   if (value1->unit != value2->unit)
     return NULL;
+
+  if (value1->value == 0)
+    return _gtk_css_value_ref (value2);
+
+  if (value2->value == 0)
+    return _gtk_css_value_ref (value1);
 
   return gtk_css_dimension_value_new (value1->value + value2->value, value1->unit);
 }
@@ -304,15 +310,25 @@ gtk_css_dimension_value_new (double     value,
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 2 },
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 3 },
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 4 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 8 },
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 16 }, /* Icon size default */
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 32 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 64 },
   };
   static GtkCssValue percent_singletons[] = {
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PERCENT, 0 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PERCENT, 50 },
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PERCENT, 100 },
   };
   static GtkCssValue second_singletons[] = {
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_S, 0 },
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_S, 1 },
+  };
+  static GtkCssValue deg_singletons[] = {
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_DEG, 0   },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_DEG, 90  },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_DEG, 180 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_DEG, 270 },
   };
   GtkCssValue *result;
 
@@ -334,23 +350,42 @@ gtk_css_dimension_value_new (double     value,
           value == 3 ||
           value == 4)
         return _gtk_css_value_ref (&px_singletons[(int) value]);
-      else if (value == 16)
+      if (value == 8)
         return _gtk_css_value_ref (&px_singletons[5]);
+      if (value == 16)
+        return _gtk_css_value_ref (&px_singletons[6]);
+      if (value == 32)
+        return _gtk_css_value_ref (&px_singletons[7]);
+      if (value == 64)
+        return _gtk_css_value_ref (&px_singletons[8]);
 
       break;
 
     case GTK_CSS_PERCENT:
       if (value == 0)
         return _gtk_css_value_ref (&percent_singletons[0]);
-
-      if (value == 100)
+      if (value == 50)
         return _gtk_css_value_ref (&percent_singletons[1]);
+      if (value == 100)
+        return _gtk_css_value_ref (&percent_singletons[2]);
 
       break;
 
     case GTK_CSS_S:
       if (value == 0 || value == 1)
         return _gtk_css_value_ref (&second_singletons[(int)value]);
+
+      break;
+
+    case GTK_CSS_DEG:
+      if (value == 0)
+        return _gtk_css_value_ref (&deg_singletons[0]);
+      if (value == 90)
+        return _gtk_css_value_ref (&deg_singletons[1]);
+      if (value == 180)
+        return _gtk_css_value_ref (&deg_singletons[2]);
+      if (value == 270)
+        return _gtk_css_value_ref (&deg_singletons[3]);
 
       break;
 

@@ -228,8 +228,8 @@ gtk_css_value_calc_multiply (const GtkCssValue *value,
 }
 
 static GtkCssValue *
-gtk_css_value_calc_try_add (const GtkCssValue *value1,
-                            const GtkCssValue *value2)
+gtk_css_value_calc_try_add (GtkCssValue *value1,
+                            GtkCssValue *value2)
 {
   return NULL;
 }
