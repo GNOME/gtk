@@ -4711,11 +4711,10 @@ stackswitcher.circular {
  * Emoji *
  ********/
 
-popover.emoji-picker { 
-  padding-left: 0;
-  padding-right: 0;
+popover.emoji-picker > contents {
+  padding: 0;
 
-  entry.search { margin: 3px 5px 5px 5px; }
+  entry.search { margin: 5px; }
 }
 
 button.emoji-section {
@@ -4724,7 +4723,7 @@ button.emoji-section {
   border-style: none none solid;
   border-radius: 0;
 
-  margin: 2px 4px 2px 4px;
+  margin: 2px 8px 4px;
   padding: 3px 0 0;
   min-width: 32px;
   min-height: 28px;
@@ -4736,8 +4735,8 @@ button.emoji-section {
 
   outline-offset: -5px;
 
-  &:first-child { margin-left: 7px; }
-  &:last-child { margin-right: 7px; }
+  &:dir(ltr):not(:last-child) { margin-right: 0; }
+  &:dir(rtl):not(:last-child) { margin-left: 0; }
 
   &:backdrop:not(:checked) { border-color: transparent; }
   &:hover { border-color: if($variant == 'light', $borders_color, transparentize($fg_color, .9)); }
@@ -4756,10 +4755,10 @@ button.emoji-section {
 popover.emoji-picker .emoji {
   font-size: x-large;
   padding: 6px;
+  border-radius: 6px;
 
-  :hover {
+  &:hover {
     background: $selected_bg_color;
-    border-radius: 6px;
   }
 }
 
