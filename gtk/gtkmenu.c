@@ -3353,7 +3353,9 @@ menu_grab_transfer_window_destroy (GtkMenu *menu)
       g_object_set_data (G_OBJECT (menu), I_("gtk-menu-transfer-window"), NULL);
 
       widget_window = gtk_widget_get_window (GTK_WIDGET (menu));
-      g_object_set_data (G_OBJECT (widget_window), I_("gdk-attached-grab-window"), window);
+
+      if (widget_window != NULL)
+        g_object_set_data (G_OBJECT (widget_window), I_("gdk-attached-grab-window"), window);
     }
 }
 
