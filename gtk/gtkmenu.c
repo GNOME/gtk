@@ -3343,17 +3343,20 @@ menu_grab_transfer_window_get (GtkMenu *menu)
 static void
 menu_grab_transfer_window_destroy (GtkMenu *menu)
 {
+  GtkMenuPrivate *priv = menu->priv;
   GdkWindow *window = g_object_get_data (G_OBJECT (menu), "gtk-menu-transfer-window");
   if (window)
     {
-      GdkWindow *widget_window;
+      GdkWindow *toplevel_window;
 
       gtk_widget_unregister_window (GTK_WIDGET (menu), window);
       gdk_window_destroy (window);
       g_object_set_data (G_OBJECT (menu), I_("gtk-menu-transfer-window"), NULL);
 
-      widget_window = gtk_widget_get_window (GTK_WIDGET (menu));
-      g_object_set_data (G_OBJECT (widget_window), I_("gdk-attached-grab-window"), window);
+      toplevel_window = gtk_widget_get_window (priv->toplevel);
+
+      if (toplevel_window != NULL)
+        g_object_set_data (G_OBJECT (toplevel_window), I_("gdk-attached-grab-window"), NULL);
     }
 }
 
