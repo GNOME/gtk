@@ -1221,9 +1221,7 @@ row:selected check, row:selected radio { border-color: #185fb4; }
 
 menu menuitem check, menu menuitem radio { margin: 0; }
 
-menu menuitem check, menu menuitem check:hover, menu menuitem check:disabled, menu menuitem radio, menu menuitem radio:hover, menu menuitem radio:disabled { min-height: 14px; min-width: 14px; background-image: none; background-color: transparent; box-shadow: none; -gtk-icon-shadow: none; color: inherit; border-color: currentColor; }
-
-menu menuitem check:indeterminate:hover, menu menuitem check:checked:hover, menu menuitem radio:indeterminate:hover, menu menuitem radio:checked:hover { color: #ffffff; border-color: #185fb4; }
+menu menuitem check, menu menuitem check:hover, menu menuitem check:disabled, menu menuitem check:checked, menu menuitem check:checked:hover, menu menuitem check:checked:disabled, menu menuitem check:indeterminate, menu menuitem check:indeterminate:hover, menu menuitem check:indeterminate:disabled, menu menuitem radio, menu menuitem radio:hover, menu menuitem radio:disabled, menu menuitem radio:checked, menu menuitem radio:checked:hover, menu menuitem radio:checked:disabled, menu menuitem radio:indeterminate, menu menuitem radio:indeterminate:hover, menu menuitem radio:indeterminate:disabled { min-height: 14px; min-width: 14px; background-image: none; background-color: transparent; box-shadow: none; -gtk-icon-shadow: none; color: inherit; border-color: currentColor; }
 
 check { border-radius: 3px; }
 

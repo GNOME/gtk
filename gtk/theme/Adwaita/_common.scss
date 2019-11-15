@@ -2986,21 +2986,17 @@ radio {
   menu menuitem & {
     margin: 0; // this is a workaround for a menu check/radio size allocation issue
 
-    &, &:hover, &:disabled { //FIXME use button reset mixin
-      min-height: 14px;
-      min-width: 14px;
-      background-image: none;
-      background-color: transparent;
-      box-shadow: none;
-      -gtk-icon-shadow: none;
-      color: inherit;
-      border-color: currentColor;
-    }
-    &:indeterminate, &:checked {
-      &:hover {
-        color: $checkradio_fg_color;
-        border-color: darken($checkradio_bg_color, if($variant=='light', 15%, 30%));
-      }      
+    &, &:checked, &:indeterminate {
+      &, &:hover, &:disabled { //FIXME use button reset mixin
+        min-height: 14px;
+        min-width: 14px;
+        background-image: none;
+        background-color: transparent;
+        box-shadow: none;
+        -gtk-icon-shadow: none;
+        color: inherit;
+        border-color: currentColor;
+      }
     }
   }
 }
