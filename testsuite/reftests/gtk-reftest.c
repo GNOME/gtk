@@ -78,7 +78,8 @@ parse_command_line (int *argc, char ***argv)
 
   /* g_test_build_filename must be called after gtk_test_init */
   schema_dir = g_test_build_filename (G_TEST_BUILT, "", NULL);
-  g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
+  if (g_getenv ("GTK_TEST_MESON") == NULL)
+    g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
   g_free (schema_dir);
 
   if (g_strcmp0 (arg_direction, "rtl") == 0)
@@ -87,6 +88,8 @@ parse_command_line (int *argc, char ***argv)
     gtk_widget_set_default_direction (GTK_TEXT_DIR_LTR);
   else if (arg_direction != NULL)
     g_printerr ("Invalid argument passed to --direction argument. Valid arguments are 'ltr' and 'rtl'\n");
+
+  g_type_ensure (G_TYPE_THEMED_ICON);
 
   return TRUE;
 }
