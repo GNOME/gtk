@@ -16,3 +16,8 @@ cd _build
     --enable-xinerama \
     --enable-gtk-doc
 make -j8
+
+if [ -n "${DO_DISTCHECK-}" ]; then
+  make -j8 check SKIP_GDKTARGET="echo Not actually running tests for now"
+  make -j8 distcheck SKIP_GDKTARGET="echo Not actually running tests for now"
+fi
