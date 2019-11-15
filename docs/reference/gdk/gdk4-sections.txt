@@ -789,8 +789,6 @@ gdk_drop_get_type
 </SECTION>
 
 <SECTION>
-<INCLUDE>gdk/gdkx.h</INCLUDE>
-<TITLE>X Window System Interaction</TITLE>
 <FILE>x_interaction</FILE>
 GDK_SURFACE_XID
 GDK_DISPLAY_XDISPLAY
