@@ -1007,15 +1007,15 @@ if cc.has_header('langinfo.h')
 endif
 
 # Library
-libgtk = shared_library('gtk-4',
-                        soversion: gtk_soversion,
-                        sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h],
-                        c_args: gtk_cargs + common_cflags,
-                        include_directories: [confinc, gdkinc, gskinc, gtkinc],
-                        dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
-                        link_with: [libgtk_css, libgdk, libgsk, ],
-                        link_args: common_ldflags,
-                        install: true)
+libgtk = library('gtk-4',
+                 soversion: gtk_soversion,
+                 sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h],
+                 c_args: gtk_cargs + common_cflags,
+                 include_directories: [confinc, gdkinc, gskinc, gtkinc],
+                 dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
+                 link_with: [libgtk_css, libgdk, libgsk, ],
+                 link_args: common_ldflags,
+                 install: true)
 
 gtk_dep_sources = [gtkversion, gtktypebuiltins_h]
 # Introspection
