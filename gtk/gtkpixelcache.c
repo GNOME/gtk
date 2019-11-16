@@ -229,17 +229,18 @@ _gtk_pixel_cache_create_surface_if_needed (GtkPixelCache         *cache,
     {
       cache->surface_x = -canvas_rect->x;
       cache->surface_y = -canvas_rect->y;
-      cache->surface_w = surface_w;
-      cache->surface_h = surface_h;
+      cache->surface_w = MAX (surface_w, 1);
+      cache->surface_h = MAX (surface_h, 1);
       cache->surface_scale = gdk_window_get_scale_factor (window);
 
       cache->surface =
         gdk_window_create_similar_surface (window, content,
-                                           surface_w, surface_h);
+                                           cache->surface_w,
+                                           cache->surface_h);
       rect.x = 0;
       rect.y = 0;
-      rect.width = surface_w;
-      rect.height = surface_h;
+      rect.width = cache->surface_w;
+      rect.height = cache->surface_h;
       cache->surface_dirty =
         cairo_region_create_rectangle (&rect);
     }
