@@ -6977,3 +6977,35 @@ GTK_EMOJI_CHOOSER_GET_CLASS
 <SUBSECTION Private>
 gtk_emoji_chooser_get_type
 </SECTION>
+
+<SECTION>
+<FILE>gtkexpression</FILE>
+GtkExpression
+GtkExpressionWatch
+GtkExpressionNotify
+gtk_expression_ref
+gtk_expression_unref
+gtk_expression_get_value_type
+gtk_expression_is_static
+gtk_expression_evaluate
+gtk_expression_watch
+gtk_expression_bind
+gtk_expression_watch_ref
+gtk_expression_watch_unref
+gtk_expression_watch_evaluate
+gtk_expression_watch_unwatch
+
+<SUBSECTION>
+gtk_property_expression_new
+gtk_constant_expression_new
+gtk_constant_expression_new_for_value
+gtk_object_expression
+gtk_closure_expression_new
+gtk_cclosure_expression_new
+
+<SUBSECTION Standard>
+GTK_IS_EXPRESSION
+GTK_TYPE_EXPRESSION
+<SUBSECTION Private>
+gtk_expression_get_type
+</SECTION>

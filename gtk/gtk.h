@@ -110,6 +110,7 @@
 #include <gtk/gtkeventcontrollermotion.h>
 #include <gtk/gtkeventcontrollerscroll.h>
 #include <gtk/gtkexpander.h>
+#include <gtk/gtkexpression.h>
 #include <gtk/gtkfixed.h>
 #include <gtk/gtkfixedlayout.h>
 #include <gtk/gtkfilechooser.h>
