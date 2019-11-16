@@ -50,9 +50,10 @@
  * SECTION:x_interaction
  * @Short_description: X backend-specific functions
  * @Title: X Window System Interaction
+ * @Include: gdk/x11/gdkx.h
  *
  * The functions in this section are specific to the GDK X11 backend.
- * To use them, you need to include the `<gdk/gdkx.h>` header and use
+ * To use them, you need to include the `<gdk/x11/gdkx.h>` header and use
  * the X11-specific pkg-config file `gtk4-x11` to build your application.
  *
  * To make your code compile with other GDK backends, guard backend-specific
