@@ -3275,9 +3275,6 @@ gdk_wayland_surface_set_icon_name (GdkSurface  *surface,
 static void
 gdk_wayland_surface_minimize (GdkSurface *surface)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  GdkWaylandDisplay *display_wayland;
-
   if (GDK_SURFACE_DESTROYED (surface) ||
       !SURFACE_IS_TOPLEVEL (surface))
     return;
@@ -3285,6 +3282,14 @@ gdk_wayland_surface_minimize (GdkSurface *surface)
   if (!is_realized_toplevel (surface))
     return;
 
+#if 0
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandDisplay *display_wayland;
+
+  /* We cannot use set_minimized() because it does not come with a
+   * minimized state that we can query or get notified of. This means
+   * we cannot implement the full GdkSurface API
+   */
   display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   switch (display_wayland->shell_variant)
     {
@@ -3297,6 +3302,7 @@ gdk_wayland_surface_minimize (GdkSurface *surface)
     default:
       g_assert_not_reached ();
     }
+#endif
 }
 
 static void
@@ -3306,15 +3312,16 @@ gdk_wayland_surface_unminimize (GdkSurface *surface)
       !SURFACE_IS_TOPLEVEL (surface))
     return;
 
+#if 0
   if (GDK_SURFACE_IS_MAPPED (surface))
     {
       gdk_surface_show (surface);
     }
   else
     {
-      /* Flip our client side flag, the real work happens on map. */
       gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_MINIMIZED, 0);
     }
+#endif
 }
 
 static void
