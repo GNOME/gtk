@@ -242,7 +242,7 @@ static const GtkIMContextInfo viqr_info = {
   NC_("input method menu", "Vietnamese (VIQR)"), /* Human readable name */
   GETTEXT_PACKAGE,	   /* Translation domain */
    GTK_LOCALEDIR,	   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
-  "vi"			   /* Languages for which this module is the default */
+  ""			   /* Languages for which this module is the default */
 };
 
 static const GtkIMContextInfo *info_list[] = {
