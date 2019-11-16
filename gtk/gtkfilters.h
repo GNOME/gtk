@@ -49,6 +49,20 @@ GtkFilter *             gtk_custom_filter_new                   (GtkCustomFilter
                                                                  gpointer                user_data,
                                                                  GDestroyNotify          user_destroy);
 
+#define GTK_TYPE_ANY_FILTER             (gtk_any_filter_get_type ())
+GDK_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (GtkAnyFilter, gtk_any_filter, GTK, ANY_FILTER, GtkFilter)
+GDK_AVAILABLE_IN_ALL
+GtkFilter *             gtk_any_filter_new                      (void);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_any_filter_append                   (GtkAnyFilter           *self,
+                                                                 GtkFilter              *filter);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_any_filter_remove                   (GtkAnyFilter           *self,
+                                                                 guint                   position);
+
+
+
 
 G_END_DECLS
 
