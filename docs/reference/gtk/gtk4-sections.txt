@@ -7009,3 +7009,21 @@ GTK_TYPE_EXPRESSION
 <SUBSECTION Private>
 gtk_expression_get_type
 </SECTION>
+
+<SECTION>
+<FILE>gtkstringfilter</FILE>
+GtkStringFilter
+GtkStringFilterMatchMode
+gtk_string_filter_new
+gtk_string_filter_get_search
+gtk_string_filter_set_search
+gtk_string_filter_get_expression
+gtk_string_filter_set_expression
+gtk_string_filter_get_ignore_case
+gtk_string_filter_set_ignore_case
+gtk_string_filter_get_match_mode
+gtk_string_filter_set_match_mode
+
+<SUBSECTION Private>
+gtk_string_filter_get_type
+</SECTION>
