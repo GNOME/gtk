@@ -4881,8 +4881,8 @@ surface_state_callback (GdkSurface  *window,
   msg = g_strconcat ((const char *)g_object_get_data (G_OBJECT (label), "title"), ": ",
                      (new_state & GDK_SURFACE_STATE_WITHDRAWN) ?
                      "withdrawn" : "not withdrawn", ", ",
-                     (new_state & GDK_SURFACE_STATE_ICONIFIED) ?
-                     "iconified" : "not iconified", ", ",
+                     (new_state & GDK_SURFACE_STATE_MINIMIZED) ?
+                     "minimized" : "not minimized", ", ",
                      (new_state & GDK_SURFACE_STATE_STICKY) ?
                      "sticky" : "not sticky", ", ",
                      (new_state & GDK_SURFACE_STATE_MAXIMIZED) ?
@@ -4924,18 +4924,18 @@ tracking_label (GtkWidget *window)
                     G_CALLBACK (surface_state_callback),
                     label);
 
-  button = gtk_button_new_with_label ("Deiconify");
+  button = gtk_button_new_with_label ("Unminimize");
   g_signal_connect_object (button,
 			   "clicked",
-			   G_CALLBACK (gtk_window_deiconify),
+			   G_CALLBACK (gtk_window_unminimize),
                            window,
 			   G_CONNECT_SWAPPED);
   gtk_container_add (GTK_CONTAINER (hbox), button);
 
-  button = gtk_button_new_with_label ("Iconify");
+  button = gtk_button_new_with_label ("Minimize");
   g_signal_connect_object (button,
 			   "clicked",
-			   G_CALLBACK (gtk_window_iconify),
+			   G_CALLBACK (gtk_window_minimize),
                            window,
 			   G_CONNECT_SWAPPED);
   gtk_container_add (GTK_CONTAINER (hbox), button);
@@ -5044,10 +5044,10 @@ get_state_controls (GtkWidget *window)
 			   G_CONNECT_SWAPPED);
   gtk_container_add (GTK_CONTAINER (vbox), button);
 
-  button = gtk_button_new_with_label ("Iconify");
+  button = gtk_button_new_with_label ("Minimize");
   g_signal_connect_object (button,
 			   "clicked",
-			   G_CALLBACK (gtk_window_iconify),
+			   G_CALLBACK (gtk_window_minimize),
 			   window,
 			   G_CONNECT_SWAPPED);
   gtk_container_add (GTK_CONTAINER (vbox), button);
@@ -5132,8 +5132,8 @@ create_surface_states (GtkWidget *widget)
 			       G_CALLBACK (gtk_widget_destroy),
 			       window,
 			       G_CONNECT_SWAPPED);
-      gtk_window_iconify (GTK_WINDOW (iconified));
-      gtk_window_set_title (GTK_WINDOW (iconified), "Iconified initially");
+      gtk_window_minimize (GTK_WINDOW (iconified));
+      gtk_window_set_title (GTK_WINDOW (iconified), "Minimized initially");
       controls = get_state_controls (iconified);
       gtk_container_add (GTK_CONTAINER (iconified), controls);
       
@@ -5147,7 +5147,7 @@ create_surface_states (GtkWidget *widget)
 			       window,
 			       G_CONNECT_SWAPPED);
       
-      gtk_window_set_title (GTK_WINDOW (normal), "Deiconified initially");
+      gtk_window_set_title (GTK_WINDOW (normal), "Unminimized initially");
       controls = get_state_controls (normal);
       gtk_container_add (GTK_CONTAINER (normal), controls);
       

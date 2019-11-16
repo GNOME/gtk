@@ -58,8 +58,7 @@
 {
   GdkSurface *window = [[self contentView] gdkSurface];
 
-  gdk_synthesize_surface_state (window, 0, 
-			       GDK_SURFACE_STATE_ICONIFIED);
+  gdk_synthesize_surface_state (window, 0, GDK_SURFACE_STATE_MINIMIZED);
 }
 
 -(void)windowDidDeminiaturize:(NSNotification *)aNotification
@@ -68,7 +67,7 @@
 
   _gdk_quartz_surface_attach_to_parent (window);
 
-  gdk_synthesize_surface_state (window, GDK_SURFACE_STATE_ICONIFIED, 0);
+  gdk_synthesize_surface_state (window, GDK_SURFACE_STATE_MINIMIZED, 0);
 }
 
 -(void)windowDidBecomeKey:(NSNotification *)aNotification

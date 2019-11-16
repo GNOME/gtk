@@ -1033,7 +1033,7 @@ update_wm_hints (GdkSurface *surface,
   wm_hints.input = surface->accept_focus ? True : False;
   wm_hints.initial_state = NormalState;
   
-  if (surface->state & GDK_SURFACE_STATE_ICONIFIED)
+  if (surface->state & GDK_SURFACE_STATE_MINIMIZED)
     {
       wm_hints.flags |= StateHint;
       wm_hints.initial_state = IconicState;
@@ -1154,7 +1154,7 @@ set_initial_hints (GdkSurface *surface)
       ++i;
     }
 
-  if (surface->state & GDK_SURFACE_STATE_ICONIFIED)
+  if (surface->state & GDK_SURFACE_STATE_MINIMIZED)
     {
       atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
 							"_NET_WM_STATE_HIDDEN");
@@ -3034,7 +3034,7 @@ gdk_x11_surface_set_icon_name (GdkSurface   *surface,
 }
 
 static void
-gdk_x11_surface_iconify (GdkSurface *surface)
+gdk_x11_surface_minimize (GdkSurface *surface)
 {
   if (GDK_SURFACE_DESTROYED (surface))
     return;
@@ -3048,9 +3048,7 @@ gdk_x11_surface_iconify (GdkSurface *surface)
   else
     {
       /* Flip our client side flag, the real work happens on map. */
-      gdk_synthesize_surface_state (surface,
-                                   0,
-                                   GDK_SURFACE_STATE_ICONIFIED);
+      gdk_synthesize_surface_state (surface, 0, GDK_SURFACE_STATE_MINIMIZED);
       gdk_wmspec_change_state (TRUE, surface,
                                g_intern_static_string ("_NET_WM_STATE_HIDDEN"),
                                NULL);
@@ -3058,7 +3056,7 @@ gdk_x11_surface_iconify (GdkSurface *surface)
 }
 
 static void
-gdk_x11_surface_deiconify (GdkSurface *surface)
+gdk_x11_surface_unminimize (GdkSurface *surface)
 {
   if (GDK_SURFACE_DESTROYED (surface))
     return;
@@ -3073,9 +3071,7 @@ gdk_x11_surface_deiconify (GdkSurface *surface)
   else
     {
       /* Flip our client side flag, the real work happens on map. */
-      gdk_synthesize_surface_state (surface,
-                                   GDK_SURFACE_STATE_ICONIFIED,
-                                   0);
+      gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_MINIMIZED, 0);
       gdk_wmspec_change_state (FALSE, surface,
                                g_intern_static_string ("_NET_WM_STATE_HIDDEN"),
                                NULL);
@@ -4676,8 +4672,8 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->set_focus_on_map = gdk_x11_surface_set_focus_on_map;
   impl_class->set_icon_list = gdk_x11_surface_set_icon_list;
   impl_class->set_icon_name = gdk_x11_surface_set_icon_name;
-  impl_class->iconify = gdk_x11_surface_iconify;
-  impl_class->deiconify = gdk_x11_surface_deiconify;
+  impl_class->minimize = gdk_x11_surface_minimize;
+  impl_class->unminimize = gdk_x11_surface_unminimize;
   impl_class->stick = gdk_x11_surface_stick;
   impl_class->unstick = gdk_x11_surface_unstick;
   impl_class->maximize = gdk_x11_surface_maximize;
