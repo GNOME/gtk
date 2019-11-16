@@ -748,7 +748,6 @@ endif
 
 if x11_enabled
   gtk_sources += ['gtkapplication-x11.c', 'gtkmountoperation-x11.c']
-  gtk_sources += ['gtkimcontextxim.c']
 endif
 
 if wayland_enabled

@@ -42,7 +42,6 @@
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
-#include "gtkimcontextxim.h"
 #endif
 
 #ifdef GDK_WINDOWING_WAYLAND
@@ -122,13 +121,6 @@ match_backend (GdkDisplay *display,
   if (g_strcmp0 (context_id, "broadway") == 0)
 #ifdef GDK_WINDOWING_BROADWAY
     return GDK_IS_BROADWAY_DISPLAY (display);
-#else
-    return FALSE;
-#endif
-
-  if (g_strcmp0 (context_id, "xim") == 0)
-#ifdef GDK_WINDOWING_X11
-    return GDK_IS_X11_DISPLAY (display);
 #else
     return FALSE;
 #endif
@@ -270,9 +262,6 @@ gtk_im_modules_init (void)
   gtk_im_module_ensure_extension_point ();
 
   g_type_ensure (gtk_im_context_simple_get_type ());
-#ifdef GDK_WINDOWING_X11
-  g_type_ensure (gtk_im_context_xim_get_type ());
-#endif
 #ifdef GDK_WINDOWING_WAYLAND
   g_type_ensure (gtk_im_context_wayland_get_type ());
 #endif
