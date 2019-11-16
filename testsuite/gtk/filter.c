@@ -33,6 +33,90 @@ get (GListModel *model,
 }
 
 static char *
+get_string (gpointer object)
+{
+  return g_strdup_printf ("%u", GPOINTER_TO_UINT (g_object_get_qdata (object, number_quark)));
+}
+
+static void
+append_digit (GString *s,
+              guint    digit)
+{
+  static char *names[10] = { NULL, "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
+
+  if (digit == 0)
+    return;
+
+  g_assert (digit < 10);
+
+  if (s->len)
+    g_string_append_c (s, ' ');
+  g_string_append (s, names[digit]);
+}
+
+static void
+append_below_thousand (GString *s,
+                       guint    n)
+{
+  if (n >= 100)
+    {
+      append_digit (s, n / 100);
+      g_string_append (s, " hundred");
+      n %= 100;
+    }
+
+  if (n >= 20)
+    {
+      const char *names[10] = { NULL, NULL, "twenty", "thirty", "fourty", "fifty", "sixty", "seventy", "eighty", "ninety" };
+      if (s->len)
+        g_string_append_c (s, ' ');
+      g_string_append (s, names [n / 10]);
+      n %= 10;
+    }
+
+  if (n >= 10)
+    {
+      const char *names[10] = { "ten", "eleven", "twelve", "thirteen", "fourteen",
+                                "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" };
+      if (s->len)
+        g_string_append_c (s, ' ');
+      g_string_append (s, names [n - 10]);
+    }
+  else
+    {
+      append_digit (s, n);
+    }
+}
+
+static char *
+get_spelled_out (gpointer object)
+{
+  guint n = GPOINTER_TO_UINT (g_object_get_qdata (object, number_quark));
+  GString *s;
+
+  g_assert (n < 1000000);
+
+  if (n == 0)
+    return g_strdup ("Zero");
+
+  s = g_string_new (NULL);
+
+  if (n >= 1000)
+    {
+      append_below_thousand (s, n / 1000);
+      g_string_append (s, " thousand");
+      n %= 1000;
+    }
+
+  append_below_thousand (s, n);
+
+  /* Capitalize first letter so we can do case-sensitive matching */
+  s->str[0] = g_ascii_toupper (s->str[0]);
+
+  return g_string_free (s, FALSE);
+}
+
+static char *
 model_to_string (GListModel *model)
 {
   GString *string = g_string_new (NULL);
@@ -162,6 +246,76 @@ test_any_simple (void)
   g_object_unref (any);
 }
 
+static void
+test_string_simple (void)
+{
+  GtkFilterListModel *model;
+  GtkFilter *filter;
+  GtkExpression *expr;
+
+  expr = gtk_cclosure_expression_new (G_TYPE_STRING,
+                                      NULL,
+                                      0, NULL,
+                                      G_CALLBACK (get_string),
+                                      NULL, NULL);
+
+  filter = gtk_string_filter_new ();
+  gtk_string_filter_set_expression (GTK_STRING_FILTER (filter), expr);
+
+  model = new_model (20, filter);
+  assert_model (model, "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20");
+
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "1");
+  assert_model (model, "1 10 11 12 13 14 15 16 17 18 19");
+
+  g_object_unref (model);
+  g_object_unref (filter);
+  gtk_expression_unref (expr);
+}
+
+static void
+test_string_properties (void)
+{
+  GtkFilterListModel *model;
+  GtkFilter *filter;
+  GtkExpression *expr;
+
+  expr = gtk_cclosure_expression_new (G_TYPE_STRING,
+                                      NULL,
+                                      0, NULL,
+                                      G_CALLBACK (get_spelled_out),
+                                      NULL, NULL);
+
+  filter = gtk_string_filter_new ();
+  gtk_string_filter_set_expression (GTK_STRING_FILTER (filter), expr);
+
+  model = new_model (1000, filter);
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "thirte");
+  assert_model (model, "13 113 213 313 413 513 613 713 813 913");
+
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "thirteen");
+  assert_model (model, "13 113 213 313 413 513 613 713 813 913");
+
+  gtk_string_filter_set_ignore_case (GTK_STRING_FILTER (filter), FALSE);
+  assert_model (model, "113 213 313 413 513 613 713 813 913");
+
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "Thirteen");
+  assert_model (model, "13");
+
+  gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), GTK_STRING_FILTER_MATCH_MODE_EXACT);
+  assert_model (model, "13");
+
+  gtk_string_filter_set_ignore_case (GTK_STRING_FILTER (filter), TRUE);
+  assert_model (model, "13");
+
+  gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), GTK_STRING_FILTER_MATCH_MODE_SUBSTRING);
+  assert_model (model, "13 113 213 313 413 513 613 713 813 913");
+
+  g_object_unref (model);
+  g_object_unref (filter);
+  gtk_expression_unref (expr);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -172,6 +326,8 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/filter/simple", test_simple);
   g_test_add_func ("/filter/any/simple", test_any_simple);
+  g_test_add_func ("/filter/string/simple", test_string_simple);
+  g_test_add_func ("/filter/string/properties", test_string_properties);
 
   return g_test_run ();
 }
