@@ -12,6 +12,14 @@ fedora-autotools:
   script:
    - bash -x ./.gitlab-ci/test-docker-autotools.sh
 
+fedora-distcheck:
+  variables:
+    DO_DISTCHECK: "yes"
+  when: manual
+  stage: build
+  script:
+   - bash -x ./.gitlab-ci/test-docker-autotools.sh
+
 fedora-meson:
   stage: build
   script:
