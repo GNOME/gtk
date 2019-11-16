@@ -266,9 +266,9 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_window_present_with_time  (GtkWindow *window,
 				        guint32    timestamp);
 GDK_AVAILABLE_IN_ALL
-void     gtk_window_iconify       (GtkWindow *window);
+void     gtk_window_minimize      (GtkWindow *window);
 GDK_AVAILABLE_IN_ALL
-void     gtk_window_deiconify     (GtkWindow *window);
+void     gtk_window_unminimize    (GtkWindow *window);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_stick         (GtkWindow *window);
 GDK_AVAILABLE_IN_ALL

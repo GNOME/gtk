@@ -1014,7 +1014,7 @@ show_window_recurse (GdkSurface *window, gboolean hide_window)
 	{
 	  if (!hide_window)
 	    {
-	      if (gdk_surface_get_state (window) & GDK_SURFACE_STATE_ICONIFIED)
+	      if (gdk_surface_get_state (window) & GDK_SURFACE_STATE_MINIMIZED)
 		{
 		  if (gdk_surface_get_state (window) & GDK_SURFACE_STATE_MAXIMIZED)
 		    {
@@ -3099,9 +3099,9 @@ gdk_event_translate (MSG  *msg,
 	    set_bits |= GDK_SURFACE_STATE_WITHDRAWN;
 
 	  if (IsIconic (msg->hwnd))
-	    set_bits |= GDK_SURFACE_STATE_ICONIFIED;
+	    set_bits |= GDK_SURFACE_STATE_MINIMIZED;
 	  else
-	    unset_bits |= GDK_SURFACE_STATE_ICONIFIED;
+	    unset_bits |= GDK_SURFACE_STATE_MINIMIZED;
 
 	  if (IsZoomed (msg->hwnd))
 	    set_bits |= GDK_SURFACE_STATE_MAXIMIZED;
@@ -3116,15 +3116,15 @@ gdk_event_translate (MSG  *msg,
 	   * change the iconified state in all transient related windows,
 	   * as windows doesn't give icons for transient childrens.
 	   */
-	  if ((old_state & GDK_SURFACE_STATE_ICONIFIED) !=
-	      (new_state & GDK_SURFACE_STATE_ICONIFIED))
-	    do_show_window (window, (new_state & GDK_SURFACE_STATE_ICONIFIED));
+	  if ((old_state & GDK_SURFACE_STATE_MINIMIZED) !=
+	      (new_state & GDK_SURFACE_STATE_MINIMIZED))
+	    do_show_window (window, (new_state & GDK_SURFACE_STATE_MINIMIZED));
 
 
 	  /* When un-minimizing, make sure we're stacked under any
 	     transient-type windows. */
-	  if (!(old_state & GDK_SURFACE_STATE_ICONIFIED) &&
-	      (new_state & GDK_SURFACE_STATE_ICONIFIED))
+	  if (!(old_state & GDK_SURFACE_STATE_MINIMIZED) &&
+	      (new_state & GDK_SURFACE_STATE_MINIMIZED))
             {
 	      ensure_stacking_on_unminimize (msg);
 	      restack_children (window);

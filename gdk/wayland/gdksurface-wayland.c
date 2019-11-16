@@ -3273,7 +3273,7 @@ gdk_wayland_surface_set_icon_name (GdkSurface  *surface,
 }
 
 static void
-gdk_wayland_surface_iconify (GdkSurface *surface)
+gdk_wayland_surface_minimize (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkWaylandDisplay *display_wayland;
@@ -3300,17 +3300,21 @@ gdk_wayland_surface_iconify (GdkSurface *surface)
 }
 
 static void
-gdk_wayland_surface_deiconify (GdkSurface *surface)
+gdk_wayland_surface_unminimize (GdkSurface *surface)
 {
   if (GDK_SURFACE_DESTROYED (surface) ||
       !SURFACE_IS_TOPLEVEL (surface))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (surface))
-    gdk_surface_show (surface);
+    {
+      gdk_surface_show (surface);
+    }
   else
-    /* Flip our client side flag, the real work happens on map. */
-    gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_ICONIFIED, 0);
+    {
+      /* Flip our client side flag, the real work happens on map. */
+      gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_MINIMIZED, 0);
+    }
 }
 
 static void
@@ -3834,8 +3838,8 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   impl_class->set_focus_on_map = gdk_wayland_surface_set_focus_on_map;
   impl_class->set_icon_list = gdk_wayland_surface_set_icon_list;
   impl_class->set_icon_name = gdk_wayland_surface_set_icon_name;
-  impl_class->iconify = gdk_wayland_surface_iconify;
-  impl_class->deiconify = gdk_wayland_surface_deiconify;
+  impl_class->minimize = gdk_wayland_surface_minimize;
+  impl_class->unminimize = gdk_wayland_surface_unminimize;
   impl_class->stick = gdk_wayland_surface_stick;
   impl_class->unstick = gdk_wayland_surface_unstick;
   impl_class->maximize = gdk_wayland_surface_maximize;
