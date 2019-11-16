@@ -220,6 +220,7 @@
 #include <gtk/gtkstack.h>
 #include <gtk/gtkstackswitcher.h>
 #include <gtk/gtkstatusbar.h>
+#include <gtk/gtkstringfilter.h>
 #include <gtk/gtkstylecontext.h>
 #include <gtk/gtkstyleprovider.h>
 #include <gtk/gtkswitch.h>
