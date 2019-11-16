@@ -3048,37 +3048,45 @@ gdk_surface_set_icon_name (GdkSurface   *surface,
 }
 
 /**
- * gdk_surface_iconify:
+ * gdk_surface_minimize:
  * @surface: a toplevel #GdkSurface
  *
- * Asks to iconify (minimize) @surface. The window manager may choose
- * to ignore the request, but normally will honor it. Using
- * gtk_window_iconify() is preferred, if you have a #GtkWindow widget.
+ * Asks to minimize the @surface.
+ *
+ * The windowing system may choose to ignore the request.
+ *
+ * You can track the result of this request by using the #GdkSurface:state
+ * property.
  *
  * This function only makes sense when @surface is a toplevel surface.
- *
- **/
+ */
 void
-gdk_surface_iconify (GdkSurface *surface)
+gdk_surface_minimize (GdkSurface *surface)
 {
-  GDK_SURFACE_GET_CLASS (surface)->iconify (surface);
+  g_return_if_fail (GDK_IS_SURFACE (surface));
+
+  GDK_SURFACE_GET_CLASS (surface)->minimize (surface);
 }
 
 /**
- * gdk_surface_deiconify:
+ * gdk_surface_unminimize:
  * @surface: a toplevel #GdkSurface
  *
- * Attempt to deiconify (unminimize) @surface. On X11 the window manager may
- * choose to ignore the request to deiconify. When using GTK,
- * use gtk_window_deiconify() instead of the #GdkSurface variant. Or better yet,
- * you probably want to use gtk_window_present_with_time(), which raises the surface, focuses it,
- * unminimizes it, and puts it on the current desktop.
+ * Asks to unminimize the @surface.
  *
- **/
+ * The windowing system may choose to ignore the request.
+ *
+ * You can track the result of this request by using the #GdkSurface:state
+ * property.
+ *
+ * This function only makes sense when @surface is a toplevel surface.
+ */
 void
-gdk_surface_deiconify (GdkSurface *surface)
+gdk_surface_unminimize (GdkSurface *surface)
 {
-  GDK_SURFACE_GET_CLASS (surface)->deiconify (surface);
+  g_return_if_fail (GDK_IS_SURFACE (surface));
+
+  GDK_SURFACE_GET_CLASS (surface)->unminimize (surface);
 }
 
 /**

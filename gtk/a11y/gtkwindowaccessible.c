@@ -248,7 +248,7 @@ gtk_window_accessible_ref_state_set (AtkObject *accessible)
   if (gdk_surface)
     {
       state = gdk_surface_get_state (gdk_surface);
-      if (state & GDK_SURFACE_STATE_ICONIFIED)
+      if (state & GDK_SURFACE_STATE_MINIMIZED)
         atk_state_set_add_state (state_set, ATK_STATE_ICONIFIED);
     }
   if (gtk_window_get_modal (window))

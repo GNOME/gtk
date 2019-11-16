@@ -138,7 +138,7 @@ url="http://www.freedesktop.org/standards/">convention</ulink>.
 <para>
 GTK has functions for asking the window manager to do various things;
 see for example <link
-linkend="gtk-window-iconify">gtk_window_iconify()</link> or <link
+linkend="gtk-window-minimize">gtk_window_minimize()</link> or <link
 linkend="gtk-window-maximize">gtk_window_maximize()</link> or <link
 linkend="gtk-window-set-decorated">gtk_window_set_decorated()</link>.
 Keep in mind that most window managers <emphasis>will</emphasis> ignore

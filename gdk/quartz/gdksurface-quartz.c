@@ -960,8 +960,8 @@ gdk_surface_quartz_show (GdkSurface *window, gboolean already_mapped)
   if (window->state & GDK_SURFACE_STATE_MAXIMIZED)
     gdk_surface_maximize (window);
 
-  if (window->state & GDK_SURFACE_STATE_ICONIFIED)
-    gdk_surface_iconify (window);
+  if (window->state & GDK_SURFACE_STATE_MINIMIZED)
+    gdk_surface_minimize (window);
 
   if (impl->transient_for && !GDK_SURFACE_DESTROYED (impl->transient_for))
     _gdk_quartz_surface_attach_to_parent (window);
@@ -2353,7 +2353,7 @@ gdk_quartz_surface_unmaximize (GdkSurface *window)
 }
 
 static void
-gdk_quartz_surface_iconify (GdkSurface *window)
+gdk_quartz_surface_minimize (GdkSurface *window)
 {
   GdkSurfaceImplQuartz *impl;
 
@@ -2374,14 +2374,12 @@ gdk_quartz_surface_iconify (GdkSurface *window)
     }
   else
     {
-      gdk_synthesize_surface_state (window,
-				   0,
-				   GDK_SURFACE_STATE_ICONIFIED);
+      gdk_synthesize_surface_state (window, 0, GDK_SURFACE_STATE_MINIMIZED);
     }
 }
 
 static void
-gdk_quartz_surface_deiconify (GdkSurface *window)
+gdk_quartz_surface_unminimize (GdkSurface *window)
 {
   GdkSurfaceImplQuartz *impl;
 
@@ -2402,9 +2400,7 @@ gdk_quartz_surface_deiconify (GdkSurface *window)
     }
   else
     {
-      gdk_synthesize_surface_state (window,
-				   GDK_SURFACE_STATE_ICONIFIED,
-				   0);
+      gdk_synthesize_surface_state (window, GDK_SURFACE_STATE_MINIMIZED, 0);
     }
 }
 
@@ -2701,8 +2697,8 @@ gdk_surface_impl_quartz_class_init (GdkSurfaceImplQuartzClass *klass)
   impl_class->set_focus_on_map = gdk_quartz_surface_set_focus_on_map;
   impl_class->set_icon_list = gdk_quartz_surface_set_icon_list;
   impl_class->set_icon_name = gdk_quartz_surface_set_icon_name;
-  impl_class->iconify = gdk_quartz_surface_iconify;
-  impl_class->deiconify = gdk_quartz_surface_deiconify;
+  impl_class->minimize = gdk_quartz_surface_minimize;
+  impl_class->unminimize = gdk_quartz_surface_unminimize;
   impl_class->stick = gdk_quartz_surface_stick;
   impl_class->unstick = gdk_quartz_surface_unstick;
   impl_class->maximize = gdk_quartz_surface_maximize;

@@ -296,7 +296,7 @@ _gdk_win32_surface_state_to_string (GdkSurfaceState state)
     (bufp += sprintf (bufp, "MAPPED"), s = "|");
 
   BIT (WITHDRAWN);
-  BIT (ICONIFIED);
+  BIT (MINIMIZED);
   BIT (MAXIMIZED);
   BIT (STICKY);
 #undef BIT

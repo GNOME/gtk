@@ -434,7 +434,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_container_add (GTK_CONTAINER (button), image);
                   gtk_widget_set_can_focus (button, FALSE);
                   g_signal_connect_swapped (button, "clicked",
-                                            G_CALLBACK (gtk_window_iconify), window);
+                                            G_CALLBACK (gtk_window_minimize), window);
 
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))

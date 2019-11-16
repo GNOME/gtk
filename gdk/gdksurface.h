@@ -357,7 +357,7 @@ struct _GdkGeometry
 /**
  * GdkSurfaceState:
  * @GDK_SURFACE_STATE_WITHDRAWN: the surface is not shown
- * @GDK_SURFACE_STATE_ICONIFIED: the surface is minimized
+ * @GDK_SURFACE_STATE_MINIMIZED: the surface is minimized
  * @GDK_SURFACE_STATE_MAXIMIZED: the surface is maximized
  * @GDK_SURFACE_STATE_STICKY: the surface is sticky
  * @GDK_SURFACE_STATE_FULLSCREEN: the surface is maximized without decorations
@@ -384,7 +384,7 @@ struct _GdkGeometry
 typedef enum
 {
   GDK_SURFACE_STATE_WITHDRAWN        = 1 << 0,
-  GDK_SURFACE_STATE_ICONIFIED        = 1 << 1,
+  GDK_SURFACE_STATE_MINIMIZED        = 1 << 1,
   GDK_SURFACE_STATE_MAXIMIZED        = 1 << 2,
   GDK_SURFACE_STATE_STICKY           = 1 << 3,
   GDK_SURFACE_STATE_FULLSCREEN       = 1 << 4,
@@ -582,9 +582,9 @@ cairo_surface_t *
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_beep            (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_iconify         (GdkSurface       *surface);
+void          gdk_surface_minimize        (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_deiconify       (GdkSurface       *surface);
+void          gdk_surface_unminimize      (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_stick           (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL

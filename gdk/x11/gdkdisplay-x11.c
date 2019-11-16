@@ -416,15 +416,15 @@ do_net_wm_state_changes (GdkSurface *surface)
         set |= GDK_SURFACE_STATE_FOCUSED;
     }
 
-  if (old_state & GDK_SURFACE_STATE_ICONIFIED)
+  if (old_state & GDK_SURFACE_STATE_MINIMIZED)
     {
       if (!toplevel->have_hidden)
-        unset |= GDK_SURFACE_STATE_ICONIFIED;
+        unset |= GDK_SURFACE_STATE_MINIMIZED;
     }
   else
     {
       if (toplevel->have_hidden)
-        set |= GDK_SURFACE_STATE_ICONIFIED;
+        set |= GDK_SURFACE_STATE_MINIMIZED;
     }
 
   /* Update edge constraints and tiling */
@@ -862,12 +862,12 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
               /* If we are shown (not withdrawn) and get an unmap, it means we were
                * iconified in the X sense. If we are withdrawn, and get an unmap, it
                * means we hid the window ourselves, so we will have already flipped
-               * the iconified bit off.
+               * the minimized bit off.
                */
               if (GDK_SURFACE_IS_MAPPED (surface))
                 gdk_synthesize_surface_state (surface,
-                                             0,
-                                             GDK_SURFACE_STATE_ICONIFIED);
+                                              0,
+                                              GDK_SURFACE_STATE_MINIMIZED);
             }
 
           if (surface_impl->toplevel &&
@@ -894,11 +894,11 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
       if (surface && !is_substructure)
 	{
-	  /* Unset iconified if it was set */
-	  if (surface->state & GDK_SURFACE_STATE_ICONIFIED)
+	  /* Unset minimized if it was set */
+	  if (surface->state & GDK_SURFACE_STATE_MINIMIZED)
 	    gdk_synthesize_surface_state (surface,
-					 GDK_SURFACE_STATE_ICONIFIED,
-					 0);
+				 	  GDK_SURFACE_STATE_MINIMIZED,
+					  0);
 
 	  if (toplevel)
 	    gdk_surface_thaw_updates (surface);

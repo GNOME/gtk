@@ -248,7 +248,7 @@ typedef struct
   guint    focus_on_map              : 1;
   guint    fullscreen_initially      : 1;
   guint    has_user_ref_count        : 1;
-  guint    iconify_initially         : 1; /* gtk_window_iconify() called before realization */
+  guint    minimize_initially        : 1;
   guint    is_active                 : 1;
   guint    maximize_initially        : 1;
   guint    mnemonics_visible         : 1;
@@ -1339,7 +1339,7 @@ gtk_window_titlebar_action (GtkWindow      *window,
   else if (g_str_equal (action, "lower"))
     gdk_surface_lower (priv->surface);
   else if (g_str_equal (action, "minimize"))
-    gdk_surface_iconify (priv->surface);
+    gdk_surface_minimize (priv->surface);
   else if (g_str_equal (action, "menu"))
     gtk_window_do_popup (window, (GdkEventButton*) event);
   else
@@ -4967,10 +4967,10 @@ gtk_window_map (GtkWidget *widget)
   else
     gdk_surface_unstick (surface);
 
-  if (priv->iconify_initially)
-    gdk_surface_iconify (surface);
+  if (priv->minimize_initially)
+    gdk_surface_minimize (surface);
   else
-    gdk_surface_deiconify (surface);
+    gdk_surface_unminimize (surface);
 
   if (priv->fullscreen_initially)
     {
@@ -5042,7 +5042,7 @@ gtk_window_unmap (GtkWidget *widget)
   priv->configure_notify_received = FALSE;
 
   state = gdk_surface_get_state (priv->surface);
-  priv->iconify_initially = (state & GDK_SURFACE_STATE_ICONIFIED) != 0;
+  priv->minimize_initially = (state & GDK_SURFACE_STATE_MINIMIZED) != 0;
   priv->maximize_initially = (state & GDK_SURFACE_STATE_MAXIMIZED) != 0;
   priv->stick_initially = (state & GDK_SURFACE_STATE_STICKY) != 0;
   priv->above_initially = (state & GDK_SURFACE_STATE_ABOVE) != 0;
@@ -6609,8 +6609,8 @@ restore_window_clicked (GtkMenuItem *menuitem,
 
   state = gtk_window_get_state (window);
 
-  if (state & GDK_SURFACE_STATE_ICONIFIED)
-    gtk_window_deiconify (window);
+  if (state & GDK_SURFACE_STATE_MINIMIZED)
+    gtk_window_unminimize (window);
 }
 
 static void
@@ -6645,11 +6645,11 @@ minimize_window_clicked (GtkMenuItem *menuitem,
   GtkWindow *window = GTK_WINDOW (user_data);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  /* Turns out, we can't iconify a maximized window */
+  /* Turns out, we can't minimize a maximized window */
   if (priv->maximized)
     gtk_window_unmaximize (window);
 
-  gtk_window_iconify (window);
+  gtk_window_minimize (window);
 }
 
 static void
@@ -6661,8 +6661,8 @@ maximize_window_clicked (GtkMenuItem *menuitem,
 
   state = gtk_window_get_state (window);
 
-  if (state & GDK_SURFACE_STATE_ICONIFIED)
-    gtk_window_deiconify (window);
+  if (state & GDK_SURFACE_STATE_MINIMIZED)
+    gtk_window_unminimize (window);
 
   gtk_window_maximize (window);
 }
@@ -6694,7 +6694,7 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *menuitem;
   GdkSurfaceState state;
-  gboolean maximized, iconified;
+  gboolean maximized, minimized;
   GtkWidget *box;
 
   if (priv->popup_menu)
@@ -6702,8 +6702,8 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
 
   state = gtk_window_get_state (window);
 
-  iconified = (state & GDK_SURFACE_STATE_ICONIFIED) == GDK_SURFACE_STATE_ICONIFIED;
-  maximized = priv->maximized && !iconified;
+  minimized = (state & GDK_SURFACE_STATE_MINIMIZED) == GDK_SURFACE_STATE_MINIMIZED;
+  maximized = priv->maximized && !minimized;
 
   priv->popup_menu = gtk_popover_menu_new (priv->title_box);
 
@@ -6721,8 +6721,8 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
    *   - non-normal windows
    */
   if ((gtk_widget_is_visible (GTK_WIDGET (window)) &&
-       !(maximized || iconified)) ||
-      (!iconified && !priv->resizable) ||
+       !(maximized || minimized)) ||
+      (!minimized && !priv->resizable) ||
       priv->type_hint != GDK_SURFACE_TYPE_HINT_NORMAL)
     gtk_widget_set_sensitive (menuitem, FALSE);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
@@ -6732,7 +6732,7 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem, "text", _("Move"), NULL);
 
-  if (maximized || iconified)
+  if (maximized || minimized)
     gtk_widget_set_sensitive (menuitem, FALSE);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (move_window_clicked), window);
@@ -6741,7 +6741,7 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem, "text", _("Resize"), NULL);
 
-  if (!priv->resizable || maximized || iconified)
+  if (!priv->resizable || maximized || minimized)
     gtk_widget_set_sensitive (menuitem, FALSE);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (resize_window_clicked), window);
@@ -6750,7 +6750,7 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem, "text", _("Minimize"), NULL);
 
-  if (iconified ||
+  if (minimized ||
       priv->type_hint != GDK_SURFACE_TYPE_HINT_NORMAL)
     gtk_widget_set_sensitive (menuitem, FALSE);
   g_signal_connect (G_OBJECT (menuitem), "clicked",
@@ -7542,7 +7542,7 @@ gtk_window_present (GtkWindow *window)
  *   button or key press event) which triggered this call
  *
  * Presents a window to the user. This may mean raising the window
- * in the stacking order, deiconifying it, moving it to the current
+ * in the stacking order, unminimizing it, moving it to the current
  * desktop, and/or giving it the keyboard focus, possibly dependent
  * on the user’s platform, window manager, and preferences.
  *
@@ -7606,59 +7606,63 @@ gtk_window_present_with_time (GtkWindow *window,
 }
 
 /**
- * gtk_window_iconify:
+ * gtk_window_minimize:
  * @window: a #GtkWindow
  *
- * Asks to iconify (i.e. minimize) the specified @window. Note that
- * you shouldn’t assume the window is definitely iconified afterward,
- * because other entities (e.g. the user or
- * [window manager][gtk-X11-arch]) could deiconify it
- * again, or there may not be a window manager in which case
- * iconification isn’t possible, etc. But normally the window will end
- * up iconified. Just don’t write code that crashes if not.
+ * Asks to minimize the specified @window.
+ *
+ * Note that you shouldn’t assume the window is definitely minimized
+ * afterward, because the windowing system might not support this
+ * functionality; other entities (e.g. the user or the [window manager][gtk-X11-arch])
+ * could unminimize it again, or there may not be a window manager in
+ * which case minimization isn’t possible, etc.
  *
  * It’s permitted to call this function before showing a window,
- * in which case the window will be iconified before it ever appears
+ * in which case the window will be minimized before it ever appears
  * onscreen.
  *
- * You can track iconification via the #GdkSurface::state property.
+ * You can track result of this operation via the #GdkSurface:state
+ * property.
  */
 void
-gtk_window_iconify (GtkWindow *window)
+gtk_window_minimize (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  priv->iconify_initially = TRUE;
+  priv->minimize_initially = TRUE;
 
   if (priv->surface)
-    gdk_surface_iconify (priv->surface);
+    gdk_surface_minimize (priv->surface);
 }
 
 /**
- * gtk_window_deiconify:
+ * gtk_window_unminimize:
  * @window: a #GtkWindow
  *
- * Asks to deiconify (i.e. unminimize) the specified @window. Note
- * that you shouldn’t assume the window is definitely deiconified
- * afterward, because other entities (e.g. the user or
- * [window manager][gtk-X11-arch])) could iconify it
- * again before your code which assumes deiconification gets to run.
+ * Asks to unminimize the specified @window.
  *
- * You can track iconification via the #GdkSurface::state property.
- **/
+ * Note that you shouldn’t assume the window is definitely unminimized
+ * afterward, because the windowing system might not support this
+ * functionality; other entities (e.g. the user or the [window manager][gtk-X11-arch])
+ * could minimize it again, or there may not be a window manager in
+ * which case minimization isn’t possible, etc.
+ *
+ * You can track result of this operation via the #GdkSurface:state
+ * property.
+ */
 void
-gtk_window_deiconify (GtkWindow *window)
+gtk_window_unminimize (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  priv->iconify_initially = FALSE;
+  priv->minimize_initially = FALSE;
 
   if (priv->surface)
-    gdk_surface_deiconify (priv->surface);
+    gdk_surface_unminimize (priv->surface);
 }
 
 /**
@@ -7675,8 +7679,9 @@ gtk_window_deiconify (GtkWindow *window)
  *
  * It’s permitted to call this function before showing a window.
  *
- * You can track iconification via the #GdkSurface::state property.
- **/
+ * You can track result of this operation via the #GdkSurface:state
+ * property.
+ */
 void
 gtk_window_stick (GtkWindow *window)
 {
@@ -7701,8 +7706,9 @@ gtk_window_stick (GtkWindow *window)
  * stick it again. But normally the window will
  * end up stuck. Just don’t write code that crashes if not.
  *
- * You can track iconification via the #GdkSurface::state property.
- **/
+ * You can track result of this operation via the #GdkSurface:state
+ * property.
+ */
 void
 gtk_window_unstick (GtkWindow *window)
 {
@@ -7732,9 +7738,10 @@ gtk_window_unstick (GtkWindow *window)
  * in which case the window will be maximized when it appears onscreen
  * initially.
  *
- * You can track iconification via the #GdkSurface::state property
- * or by listening to notifications on the #GtkWindow:is-maximized property.
- **/
+ * You can track the result of this operation via the #GdkSurface:state
+ * property, or by listening to notifications on the #GtkWindow:is-maximized
+ * property.
+ */
 void
 gtk_window_maximize (GtkWindow *window)
 {
@@ -7759,8 +7766,10 @@ gtk_window_maximize (GtkWindow *window)
  * managers honor requests to unmaximize. But normally the window will
  * end up unmaximized. Just don’t write code that crashes if not.
  *
- * You can track iconification via the #GdkSurface::state property
- **/
+ * You can track the result of this operation via the #GdkSurface:state
+ * property, or by listening to notifications on the #GtkWindow:is-maximized
+ * property.
+ */
 void
 gtk_window_unmaximize (GtkWindow *window)
 {

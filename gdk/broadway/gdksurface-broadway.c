@@ -710,7 +710,7 @@ gdk_broadway_surface_set_icon_name (GdkSurface   *surface,
 }
 
 static void
-gdk_broadway_surface_iconify (GdkSurface *surface)
+gdk_broadway_surface_minimize (GdkSurface *surface)
 {
   if (GDK_SURFACE_DESTROYED (surface) ||
       !SURFACE_IS_TOPLEVEL (surface))
@@ -718,7 +718,7 @@ gdk_broadway_surface_iconify (GdkSurface *surface)
 }
 
 static void
-gdk_broadway_surface_deiconify (GdkSurface *surface)
+gdk_broadway_surface_unminimize (GdkSurface *surface)
 {
   if (GDK_SURFACE_DESTROYED (surface) ||
       !SURFACE_IS_TOPLEVEL (surface))
@@ -1413,8 +1413,8 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   impl_class->set_focus_on_map = gdk_broadway_surface_set_focus_on_map;
   impl_class->set_icon_list = gdk_broadway_surface_set_icon_list;
   impl_class->set_icon_name = gdk_broadway_surface_set_icon_name;
-  impl_class->iconify = gdk_broadway_surface_iconify;
-  impl_class->deiconify = gdk_broadway_surface_deiconify;
+  impl_class->minimize = gdk_broadway_surface_minimize;
+  impl_class->unminimize = gdk_broadway_surface_unminimize;
   impl_class->stick = gdk_broadway_surface_stick;
   impl_class->unstick = gdk_broadway_surface_unstick;
   impl_class->maximize = gdk_broadway_surface_maximize;
