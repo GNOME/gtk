@@ -44,6 +44,7 @@
 
     <chapter id="Lists">
       <title>GListModel support</title>
+      <xi:include href="xml/gtkexpression.xml" />
       <xi:include href="xml/gtkfilterlistmodel.xml" />
       <section>
         <xi:include href="xml/gtkfilter.xml" />
