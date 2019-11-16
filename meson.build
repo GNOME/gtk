@@ -7,7 +7,7 @@ project('gtk', 'c',
           # https://github.com/mesonbuild/meson/issues/2289
           'c_std=gnu99',
         ],
-        meson_version : '>= 0.48.0',
+        meson_version : '>= 0.50.1',
         license: 'LGPLv2.1+')
 
 glib_major_req = 2
