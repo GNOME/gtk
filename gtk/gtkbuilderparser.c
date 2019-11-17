@@ -928,8 +928,7 @@ parse_property (ParserData   *data,
     {
       BindingInfo *binfo;
 
-      binfo = g_slice_new0 (BindingInfo);
-      binfo->tag_type = TAG_BINDING;
+      binfo = g_slice_new (BindingInfo);
       binfo->target = NULL;
       binfo->target_pspec = pspec;
       binfo->source = g_strdup (bind_source);
@@ -955,87 +954,6 @@ parse_property (ParserData   *data,
   info->translatable = translatable;
   info->bound = bind_source != NULL;
   info->context = g_strdup (context);
-  info->line = line;
-  info->col = col;
-
-  state_push (data, info);
-}
-
-static void
-parse_binding (ParserData   *data,
-               const gchar  *element_name,
-               const gchar **names,
-               const gchar **values,
-               GError      **error)
-{
-  BindingInfo *info;
-  const gchar *name = NULL;
-  const gchar *context = NULL;
-  gboolean translatable = FALSE;
-  ObjectInfo *object_info;
-  GParamSpec *pspec = NULL;
-  gint line, col;
-
-  object_info = state_peek_info (data, ObjectInfo);
-  if (!object_info ||
-      !(object_info->tag_type == TAG_OBJECT ||
-        object_info->tag_type == TAG_TEMPLATE))
-    {
-      error_invalid_tag (data, element_name, NULL, error);
-      return;
-    }
-
-  if (!g_markup_collect_attributes (element_name, names, values, error,
-                                    G_MARKUP_COLLECT_STRING, "name", &name,
-                                    G_MARKUP_COLLECT_BOOLEAN|G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable,
-                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "context", &context,
-                                    G_MARKUP_COLLECT_INVALID))
-    {
-      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
-      return;
-    }
-
-  pspec = g_object_class_find_property (object_info->oclass, name);
-
-  if (!pspec)
-    {
-      g_set_error (error,
-                   GTK_BUILDER_ERROR,
-                   GTK_BUILDER_ERROR_INVALID_PROPERTY,
-                   "Invalid property: %s.%s",
-                   g_type_name (object_info->type), name);
-      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
-      return;
-    }
-  else if (pspec->flags & G_PARAM_CONSTRUCT_ONLY)
-    {
-      g_set_error (error,
-                   GTK_BUILDER_ERROR,
-                   GTK_BUILDER_ERROR_INVALID_PROPERTY,
-                   "%s.%s is a construct-only property",
-                   g_type_name (object_info->type), name);
-      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
-      return;
-    }
-  else if (!(pspec->flags & G_PARAM_WRITABLE))
-    {
-      g_set_error (error,
-                   GTK_BUILDER_ERROR,
-                   GTK_BUILDER_ERROR_INVALID_PROPERTY,
-                   "%s.%s is a non-writable property",
-                   g_type_name (object_info->type), name);
-      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
-      return;
-    }
-
-  gtk_buildable_parse_context_get_position (&data->ctx, &line, &col);
-
-  info = g_slice_new0 (BindingInfo);
-  info->tag_type = TAG_EXPRESSION;
-  info->target = NULL;
-  info->target_pspec = pspec;
-  info->source = NULL;
-  info->flags = 0;
   info->line = line;
   info->col = col;
 
@@ -1133,16 +1051,6 @@ _free_signal_info (SignalInfo *info,
   g_free (info->object_name);
   g_slice_free (SignalInfo, info);
 }
-
-void
-_free_binding_info (BindingInfo *info,
-                    gpointer     user)
-{
-  g_free (info->source);
-  g_free (info->source_property);
-  g_slice_free (BindingInfo, info);
-}
-
 
 static void
 free_requires_info (RequiresInfo *info,
@@ -1384,8 +1292,6 @@ start_element (GtkBuildableParseContext  *context,
     }
   else if (strcmp (element_name, "property") == 0)
     parse_property (data, element_name, names, values, error);
-  else if (strcmp (element_name, "binding") == 0)
-    parse_binding (data, element_name, names, values, error);
   else if (strcmp (element_name, "child") == 0)
     parse_child (data, element_name, names, values, error);
   else if (strcmp (element_name, "signal") == 0)
@@ -1467,23 +1373,6 @@ end_element (GtkBuildableParseContext  *context,
             }
 
           object_info->properties = g_slist_prepend (object_info->properties, prop_info);
-        }
-      else
-        g_assert_not_reached ();
-    }
-  else if (strcmp (element_name, "binding") == 0)
-    {
-      BindingInfo *binfo = state_pop_info (data, BindingInfo);
-      CommonInfo *info = state_peek_info (data, CommonInfo);
-
-      g_assert (info != NULL);
-
-      /* Normal properties */
-      if (info->tag_type == TAG_OBJECT ||
-          info->tag_type == TAG_TEMPLATE)
-        {
-          ObjectInfo *object_info = (ObjectInfo*)info;
-          object_info->bindings = g_slist_prepend (object_info->bindings, binfo);
         }
       else
         g_assert_not_reached ();
@@ -1628,22 +1517,6 @@ text (GtkBuildableParseContext  *context,
 
       g_string_append_len (prop_info->text, text, text_len);
     }
-  else if (strcmp (gtk_buildable_parse_context_get_element (context), "binding") == 0)
-    {
-      BindingInfo *binfo = (BindingInfo *) info;
-
-      if (binfo->source == NULL)
-        {
-          binfo->source = g_strndup (text, text_len);
-        }
-      else
-        {
-          char *s;
-          s = g_strdup_printf ("%s%*s", binfo->source, (guint) text_len, text);
-          g_free (binfo->source);
-          binfo->source = s;
-        }
-    }
 }
 
 static void
@@ -1657,10 +1530,6 @@ free_info (CommonInfo *info)
         break;
       case TAG_CHILD:
         free_child_info ((ChildInfo *)info);
-        break;
-      case TAG_BINDING:
-      case TAG_EXPRESSION:
-        _free_binding_info ((BindingInfo *)info, NULL);
         break;
       case TAG_PROPERTY:
         free_property_info ((PropertyInfo *)info);

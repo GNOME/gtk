@@ -28,7 +28,22 @@
         </child>
         <child type="end">
           <object class="GtkLabel">
-            <binding name="label">bowl.count + " Icons, " + bowl.framerate + "fps"</binding>
+            <property name="label">fps</property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkLabel">
+            <property name="label" bind-source="bowl" bind-property="framerate-string"/>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkLabel">
+            <property name="label">Icons, </property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkLabel">
+            <property name="label" bind-source="bowl" bind-property="count"/>
           </object>
         </child>
         <child type="end">
