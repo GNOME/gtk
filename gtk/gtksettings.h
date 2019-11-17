@@ -73,28 +73,6 @@ GtkSettings*    gtk_settings_get_default             (void);
 GDK_AVAILABLE_IN_ALL
 GtkSettings*    gtk_settings_get_for_display         (GdkDisplay *display);
 
-/* --- precoded parsing functions --- */
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_rc_property_parse_color       (const GParamSpec *pspec,
-                                            const GString    *gstring,
-                                            GValue           *property_value);
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_rc_property_parse_enum        (const GParamSpec *pspec,
-                                            const GString    *gstring,
-                                            GValue           *property_value);
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_rc_property_parse_flags       (const GParamSpec *pspec,
-                                            const GString    *gstring,
-                                            GValue           *property_value);
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_rc_property_parse_requisition (const GParamSpec *pspec,
-                                            const GString    *gstring,
-                                            GValue           *property_value);
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_rc_property_parse_border      (const GParamSpec *pspec,
-                                            const GString    *gstring,
-                                            GValue           *property_value);
-
 GDK_AVAILABLE_IN_ALL
 void     gtk_settings_reset_property       (GtkSettings            *settings,
                                             const gchar            *name);
