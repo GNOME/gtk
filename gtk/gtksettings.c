@@ -210,8 +210,7 @@ static void     gtk_settings_set_property        (GObject               *object,
 static void     gtk_settings_notify              (GObject               *object,
                                                   GParamSpec            *pspec);
 static guint    settings_install_property_parser (GtkSettingsClass      *class,
-                                                  GParamSpec            *pspec,
-                                                  GtkRcPropertyParser    parser);
+                                                  GParamSpec            *pspec);
 static void    settings_update_double_click      (GtkSettings           *settings);
 
 static void    settings_update_cursor_theme      (GtkSettings           *settings);
@@ -232,7 +231,6 @@ static void settings_update_provider             (GdkDisplay            *display
                                                   GtkCssProvider        *new);
 
 /* --- variables --- */
-static GQuark            quark_property_parser = 0;
 static GQuark            quark_gtk_settings = 0;
 static GSList           *object_list = NULL;
 static guint             class_n_properties = 0;
@@ -333,7 +331,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
   gobject_class->set_property = gtk_settings_set_property;
   gobject_class->notify = gtk_settings_notify;
 
-  quark_property_parser = g_quark_from_static_string ("gtk-rc-property-parser");
   quark_gtk_settings = g_quark_from_static_string ("gtk-settings");
 
   result = settings_install_property_parser (class,
@@ -341,16 +338,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Double Click Time"),
                                                                P_("Maximum time allowed between two clicks for them to be considered a double click (in milliseconds)"),
                                                                0, G_MAXINT, 400,
-                                                               GTK_PARAM_READWRITE),
-                                             NULL);
+                                                               GTK_PARAM_READWRITE));
   g_assert (result == PROP_DOUBLE_CLICK_TIME);
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-double-click-distance",
                                                                P_("Double Click Distance"),
                                                                P_("Maximum distance allowed between two clicks for them to be considered a double click (in pixels)"),
                                                                0, G_MAXINT, 5,
-                                                               GTK_PARAM_READWRITE),
-                                             NULL);
+                                                               GTK_PARAM_READWRITE));
   g_assert (result == PROP_DOUBLE_CLICK_DISTANCE);
 
   /**
@@ -366,16 +361,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Cursor Blink"),
                                                                    P_("Whether the cursor should blink"),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE ),
-                                             NULL);
+                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_CURSOR_BLINK);
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-cursor-blink-time",
                                                                P_("Cursor Blink Time"),
                                                                P_("Length of the cursor blink cycle, in milliseconds"),
                                                                100, G_MAXINT, 1200,
-                                                               GTK_PARAM_READWRITE),
-                                             NULL);
+                                                               GTK_PARAM_READWRITE));
   g_assert (result == PROP_CURSOR_BLINK_TIME);
 
   /**
@@ -392,24 +385,21 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Cursor Blink Timeout"),
                                                                P_("Time after which the cursor stops blinking, in seconds"),
                                                                1, G_MAXINT, 10,
-                                                               GTK_PARAM_READWRITE),
-                                             NULL);
+                                                               GTK_PARAM_READWRITE));
   g_assert (result == PROP_CURSOR_BLINK_TIMEOUT);
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-split-cursor",
                                                                    P_("Split Cursor"),
                                                                    P_("Whether two cursors should be displayed for mixed left-to-right and right-to-left text"),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_SPLIT_CURSOR);
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-theme-name",
                                                                    P_("Theme Name"),
                                                                    P_("Name of theme to load"),
                                                                   DEFAULT_THEME_NAME,
-                                                                  GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                  GTK_PARAM_READWRITE));
   g_assert (result == PROP_THEME_NAME);
 
   result = settings_install_property_parser (class,
@@ -417,8 +407,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   P_("Icon Theme Name"),
                                                                   P_("Name of icon theme to use"),
                                                                   DEFAULT_ICON_THEME,
-                                                                  GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                  GTK_PARAM_READWRITE));
   g_assert (result == PROP_ICON_THEME_NAME);
 
   result = settings_install_property_parser (class,
@@ -426,8 +415,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Drag threshold"),
                                                                P_("Number of pixels the cursor can move before dragging"),
                                                                1, G_MAXINT, 8,
-                                                               GTK_PARAM_READWRITE),
-                                             NULL);
+                                                               GTK_PARAM_READWRITE));
   g_assert (result == PROP_DND_DRAG_THRESHOLD);
 
   /**
@@ -440,8 +428,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Font Name"),
                                                                    P_("The default font family and size to use"),
                                                                   "Sans 10",
-                                                                  GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                  GTK_PARAM_READWRITE));
   g_assert (result == PROP_FONT_NAME);
 
   result = settings_install_property_parser (class,
@@ -449,8 +436,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Xft Antialias"),
                                                                P_("Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"),
                                                                -1, 1, -1,
-                                                               GTK_PARAM_READWRITE),
-                                             NULL);
+                                                               GTK_PARAM_READWRITE));
 
   g_assert (result == PROP_XFT_ANTIALIAS);
 
@@ -459,8 +445,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Xft Hinting"),
                                                                P_("Whether to hint Xft fonts; 0=no, 1=yes, -1=default"),
                                                                -1, 1, -1,
-                                                               GTK_PARAM_READWRITE),
-                                             NULL);
+                                                               GTK_PARAM_READWRITE));
 
   g_assert (result == PROP_XFT_HINTING);
 
@@ -469,8 +454,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   P_("Xft Hint Style"),
                                                                   P_("What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"),
                                                                   NULL,
-                                                                  GTK_PARAM_READWRITE),
-                                              NULL);
+                                                                  GTK_PARAM_READWRITE));
 
   g_assert (result == PROP_XFT_HINTSTYLE);
 
@@ -479,8 +463,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   P_("Xft RGBA"),
                                                                   P_("Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"),
                                                                   NULL,
-                                                                  GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                  GTK_PARAM_READWRITE));
 
   g_assert (result == PROP_XFT_RGBA);
 
@@ -489,8 +472,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Xft DPI"),
                                                                P_("Resolution for Xft, in 1024 * dots/inch. -1 to use default value"),
                                                                -1, 1024*1024, -1,
-                                                               GTK_PARAM_READWRITE),
-                                             NULL);
+                                                               GTK_PARAM_READWRITE));
 
   g_assert (result == PROP_XFT_DPI);
 
@@ -499,8 +481,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   P_("Cursor theme name"),
                                                                   P_("Name of the cursor theme to use, or NULL to use the default theme"),
                                                                   NULL,
-                                                                  GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                  GTK_PARAM_READWRITE));
   g_assert (result == PROP_CURSOR_THEME_NAME);
 
   result = settings_install_property_parser (class,
@@ -508,8 +489,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Cursor theme size"),
                                                                P_("Size to use for cursors, or 0 to use the default size"),
                                                                0, 128, 0,
-                                                               GTK_PARAM_READWRITE),
-                                             NULL);
+                                                               GTK_PARAM_READWRITE));
 
   g_assert (result == PROP_CURSOR_THEME_SIZE);
 
@@ -518,8 +498,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Alternative button order"),
                                                                    P_("Whether buttons in dialogs should use the alternative button order"),
                                                                    FALSE,
-                                                                   GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_ALTERNATIVE_BUTTON_ORDER);
 
   /**
@@ -534,8 +513,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Alternative sort indicator direction"),
                                                                    P_("Whether the direction of the sort indicators in list and tree views is inverted compared to the default (where down means ascending)"),
                                                                    FALSE,
-                                                                   GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_ALTERNATIVE_SORT_ARROWS);
 
   result = settings_install_property_parser (class,
@@ -543,8 +521,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Enable Animations"),
                                                                    P_("Whether to enable toolkit-wide animations."),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                   GTK_PARAM_READWRITE));
 
   g_assert (result == PROP_ENABLE_ANIMATIONS);
 
@@ -562,8 +539,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Error Bell"),
                                                                    P_("When TRUE, keyboard navigation and other errors will cause a beep"),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                   GTK_PARAM_READWRITE));
 
   g_assert (result == PROP_ERROR_BELL);
 
@@ -579,8 +555,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   P_("Default print backend"),
                                                                   P_("List of the GtkPrintBackend backends to use by default"),
                                                                   GTK_PRINT_BACKENDS,
-                                                                  GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                  GTK_PARAM_READWRITE));
   g_assert (result == PROP_PRINT_BACKENDS);
 
   /**
@@ -601,8 +576,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   P_("Default command to run when displaying a print preview"),
                                                                   P_("Command to run when displaying a print preview"),
                                                                   PRINT_PREVIEW_COMMAND,
-                                                                  GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                  GTK_PARAM_READWRITE));
   g_assert (result == PROP_PRINT_PREVIEW_COMMAND);
 
   /**
@@ -616,8 +590,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Enable Accelerators"),
                                                                    P_("Whether menu items should have accelerators"),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_ENABLE_ACCELS);
 
   /**
@@ -636,8 +609,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   P_("Default IM module"),
                                                                   P_("Which IM module should be used by default"),
                                                                   NULL,
-                                                                  GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                  GTK_PARAM_READWRITE));
   g_assert (result == PROP_IM_MODULE);
 
   /**
@@ -654,8 +626,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Maximum age of recently used files, in days"),
                                                                -1, G_MAXINT,
                                                                30,
-                                                               GTK_PARAM_READWRITE),
-                                             NULL);
+                                                               GTK_PARAM_READWRITE));
   g_assert (result == PROP_RECENT_FILES_MAX_AGE);
 
   result = settings_install_property_parser (class,
@@ -663,8 +634,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                 P_("Fontconfig configuration timestamp"),
                                                                 P_("Timestamp of current fontconfig configuration"),
                                                                 0, G_MAXUINT, 0,
-                                                                GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                GTK_PARAM_READWRITE));
 
   g_assert (result == PROP_FONTCONFIG_TIMESTAMP);
 
@@ -684,8 +654,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   P_("Sound Theme Name"),
                                                                   P_("XDG sound theme name"),
                                                                   "freedesktop",
-                                                                  GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                  GTK_PARAM_READWRITE));
   g_assert (result == PROP_SOUND_THEME_NAME);
 
   /**
@@ -705,8 +674,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Audible Input Feedback"),
                                                                    P_("Whether to play event sounds as feedback to user input"),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_ENABLE_INPUT_FEEDBACK_SOUNDS);
 
   /**
@@ -725,8 +693,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Enable Event Sounds"),
                                                                    P_("Whether to play any event sounds at all"),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_ENABLE_EVENT_SOUNDS);
 
   /**
@@ -746,8 +713,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Primary button warps slider"),
                                                                    P_("Whether a primary click on the trough should warp the slider into position"),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_PRIMARY_BUTTON_WARPS_SLIDER);
 
   /**
@@ -770,8 +736,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                  P_("Application prefers a dark theme"),
                                                                  P_("Whether the application prefers to have a dark theme."),
                                                                  FALSE,
-                                                                 GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                 GTK_PARAM_READWRITE));
   g_assert (result == PROP_APPLICATION_PREFER_DARK_THEME);
 
   result = settings_install_property_parser (class,
@@ -779,8 +744,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Select on focus"),
                                                                    P_("Whether to select the contents of an entry when it is focused"),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_ENTRY_SELECT_ON_FOCUS);
 
   /**
@@ -796,8 +760,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                 P_("How long to show the last input character in hidden entries"),
                                                                 0, G_MAXUINT,
                                                                 0,
-                                                                GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                GTK_PARAM_READWRITE));
   g_assert (result == PROP_ENTRY_PASSWORD_HINT_TIMEOUT);
 
   result = settings_install_property_parser (class,
@@ -805,8 +768,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Select on focus"),
                                                                    P_("Whether to select the contents of a selectable label when it is focused"),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_LABEL_SELECT_ON_FOCUS);
 
   result = settings_install_property_parser (class,
@@ -815,8 +777,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Set to TRUE if the desktop environment "
                                                                       "is displaying the app menu, FALSE if "
                                                                       "the app should display it itself."),
-                                                                   FALSE, GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                   FALSE, GTK_PARAM_READWRITE));
   g_assert (result == PROP_SHELL_SHOWS_APP_MENU);
 
   result = settings_install_property_parser (class,
@@ -825,8 +786,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Set to TRUE if the desktop environment "
                                                                       "is displaying the menubar, FALSE if "
                                                                       "the app should display it itself."),
-                                                                   FALSE, GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                   FALSE, GTK_PARAM_READWRITE));
   g_assert (result == PROP_SHELL_SHOWS_MENUBAR);
 
   result = settings_install_property_parser (class,
@@ -835,8 +795,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Set to TRUE if the desktop environment "
                                                                       "is displaying the desktop folder, FALSE "
                                                                       "if not."),
-                                                                   TRUE, GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                   TRUE, GTK_PARAM_READWRITE));
   g_assert (result == PROP_SHELL_SHOWS_DESKTOP);
 
   /**
@@ -866,9 +825,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-decoration-layout",
                                                                   P_("Decoration Layout"),
-                                                                   P_("The layout for window decorations"),
-                                                                   "menu:minimize,maximize,close", GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                  P_("The layout for window decorations"),
+                                                                  "menu:minimize,maximize,close", GTK_PARAM_READWRITE));
   g_assert (result == PROP_DECORATION_LAYOUT);
 
   /**
@@ -883,9 +841,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-titlebar-double-click",
                                                                   P_("Titlebar double-click action"),
-                                                                   P_("The action to take on titlebar double-click"),
-                                                                   "toggle-maximize", GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                  P_("The action to take on titlebar double-click"),
+                                                                  "toggle-maximize", GTK_PARAM_READWRITE));
   g_assert (result == PROP_TITLEBAR_DOUBLE_CLICK);
 
   /**
@@ -900,9 +857,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-titlebar-middle-click",
                                                                   P_("Titlebar middle-click action"),
-                                                                   P_("The action to take on titlebar middle-click"),
-                                                                   "none", GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                  P_("The action to take on titlebar middle-click"),
+                                                                  "none", GTK_PARAM_READWRITE));
   g_assert (result == PROP_TITLEBAR_MIDDLE_CLICK);
 
   /**
@@ -917,13 +873,9 @@ gtk_settings_class_init (GtkSettingsClass *class)
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-titlebar-right-click",
                                                                   P_("Titlebar right-click action"),
-                                                                   P_("The action to take on titlebar right-click"),
-                                                                   "menu", GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                  P_("The action to take on titlebar right-click"),
+                                                                  "menu", GTK_PARAM_READWRITE));
   g_assert (result == PROP_TITLEBAR_RIGHT_CLICK);
-
-
-
 
   /**
    * GtkSettings:gtk-dialogs-use-header:
@@ -940,8 +892,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Dialogs use header bar"),
                                                                    P_("Whether builtin GTK dialogs should use a header bar instead of an action area."),
                                                                    FALSE,
-                                                                   GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_DIALOGS_USE_HEADER);
 
   /**
@@ -955,8 +906,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Enable primary paste"),
                                                                    P_("Whether a middle click on a mouse should paste the “PRIMARY” clipboard content at the cursor location."),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_ENABLE_PRIMARY_PASTE);
 
   /**
@@ -970,8 +920,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Recent Files Enabled"),
                                                                    P_("Whether GTK remembers recent files"),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_RECENT_FILES_ENABLED);
 
   /**
@@ -984,8 +933,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								P_("Long press time"),
 								P_("Time for a button/touch press to be considered a long press (in milliseconds)"),
 								0, G_MAXINT, 500,
-								GTK_PARAM_READWRITE),
-                                             NULL);
+								GTK_PARAM_READWRITE));
   g_assert (result == PROP_LONG_PRESS_TIME);
 
   /**
@@ -1000,8 +948,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Whether to show cursor in text"),
                                                                    P_("Whether to show cursor in text"),
                                                                    FALSE,
-                                                                   GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_KEYNAV_USE_CARET);
 
   /**
@@ -1016,8 +963,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Whether to use overlay scrollbars"),
                                                                    P_("Whether to use overlay scrollbars"),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE),
-                                             NULL);
+                                                                   GTK_PARAM_READWRITE));
   g_assert (result == PROP_OVERLAY_SCROLLING);
 }
 
@@ -1347,8 +1293,7 @@ gtk_settings_notify (GObject    *object,
 }
 
 static gboolean
-_gtk_settings_parse_convert (GtkRcPropertyParser parser,
-                             const GValue       *src_value,
+_gtk_settings_parse_convert (const GValue       *src_value,
                              GParamSpec         *pspec,
                              GValue             *dest_value)
 {
@@ -1356,49 +1301,7 @@ _gtk_settings_parse_convert (GtkRcPropertyParser parser,
 
   g_return_val_if_fail (G_VALUE_HOLDS (dest_value, G_PARAM_SPEC_VALUE_TYPE (pspec)), FALSE);
 
-  if (parser)
-    {
-      GString *gstring;
-      gboolean free_gstring = TRUE;
-
-      if (G_VALUE_HOLDS (src_value, G_TYPE_GSTRING))
-        {
-          gstring = g_value_get_boxed (src_value);
-          free_gstring = FALSE;
-        }
-      else if (G_VALUE_HOLDS_LONG (src_value))
-        {
-          gstring = g_string_new (NULL);
-          g_string_append_printf (gstring, "%ld", g_value_get_long (src_value));
-        }
-      else if (G_VALUE_HOLDS_DOUBLE (src_value))
-        {
-          gstring = g_string_new (NULL);
-          g_string_append_printf (gstring, "%f", g_value_get_double (src_value));
-        }
-      else if (G_VALUE_HOLDS_STRING (src_value))
-        {
-          gchar *tstr = g_strescape (g_value_get_string (src_value), NULL);
-
-          gstring = g_string_new (NULL);
-          g_string_append_c (gstring, '\"');
-          g_string_append (gstring, tstr);
-          g_string_append_c (gstring, '\"');
-          g_free (tstr);
-        }
-      else
-        {
-          g_return_val_if_fail (G_VALUE_HOLDS (src_value, G_TYPE_GSTRING), FALSE);
-          gstring = NULL; /* silence compiler */
-        }
-
-      success = (parser (pspec, gstring, dest_value) &&
-                 !g_param_value_validate (pspec, dest_value));
-
-      if (free_gstring)
-        g_string_free (gstring, TRUE);
-    }
-  else if (G_VALUE_HOLDS (src_value, G_TYPE_GSTRING))
+  if (G_VALUE_HOLDS (src_value, G_TYPE_GSTRING))
     {
       if (G_VALUE_HOLDS (dest_value, G_TYPE_STRING))
         {
@@ -1421,10 +1324,9 @@ apply_queued_setting (GtkSettings             *settings,
 {
   GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   GValue tmp_value = G_VALUE_INIT;
-  GtkRcPropertyParser parser = (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser);
 
   g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
-  if (_gtk_settings_parse_convert (parser, &qvalue->public.value,
+  if (_gtk_settings_parse_convert (&qvalue->public.value,
                                    pspec, &tmp_value))
     {
       if (priv->property_values[pspec->param_id - 1].source <= qvalue->source)
@@ -1452,8 +1354,7 @@ apply_queued_setting (GtkSettings             *settings,
 
 static guint
 settings_install_property_parser (GtkSettingsClass   *class,
-                                  GParamSpec         *pspec,
-                                  GtkRcPropertyParser parser)
+                                  GParamSpec         *pspec)
 {
   GSList *node, *next;
 
@@ -1472,18 +1373,10 @@ settings_install_property_parser (GtkSettingsClass   *class,
     case G_TYPE_ENUM:
       break;
     case G_TYPE_BOXED:
-      if (strcmp (g_param_spec_get_name (pspec), "color-hash") == 0)
-        {
-          break;
-        }
-      /* fall through */
     default:
-      if (!parser)
-        {
-          g_warning (G_STRLOC ": parser needs to be specified for property \"%s\" of type '%s'",
-                     pspec->name, g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)));
-          return 0;
-        }
+      g_warning (G_STRLOC ": no parser for property \"%s\" of type '%s'",
+                 pspec->name, g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)));
+      return 0;
     }
   if (g_object_class_find_property (G_OBJECT_CLASS (class), pspec->name))
     {
@@ -1496,7 +1389,6 @@ settings_install_property_parser (GtkSettingsClass   *class,
     g_object_freeze_notify (node->data);
 
   g_object_class_install_property (G_OBJECT_CLASS (class), ++class_n_properties, pspec);
-  g_param_spec_set_qdata (pspec, quark_property_parser, (gpointer) parser);
 
   for (node = object_list; node; node = node->next)
     {
@@ -2368,33 +2260,7 @@ settings_update_xsetting (GtkSettings *settings,
     }
   else
     {
-      GValue tmp_value = G_VALUE_INIT;
-      GValue gstring_value = G_VALUE_INIT;
-      GValue val = G_VALUE_INIT;
-      GtkRcPropertyParser parser = (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser);
-
-      g_value_init (&val, G_TYPE_STRING);
-
-      if (!gdk_display_get_setting (priv->display, pspec->name, &val))
-        return FALSE;
-
-      g_value_init (&gstring_value, G_TYPE_GSTRING);
-      g_value_take_boxed (&gstring_value, g_string_new (g_value_get_string (&val)));
-
-      g_value_init (&tmp_value, value_type);
-      if (parser && _gtk_settings_parse_convert (parser, &gstring_value,
-                                                 pspec, &tmp_value))
-        {
-          g_param_value_validate (pspec, &tmp_value);
-          g_value_copy (&tmp_value, &priv->property_values[pspec->param_id - 1].value);
-          priv->property_values[pspec->param_id - 1].source = GTK_SETTINGS_SOURCE_XSETTING;
-          retval = TRUE;
-        }
-
-      g_value_unset (&gstring_value);
-      g_value_unset (&tmp_value);
-
-      g_value_unset (&val);
+      return FALSE;
     }
 
   return retval;
@@ -2456,7 +2322,6 @@ gtk_settings_reset_property (GtkSettings *settings,
 {
   GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
   GParamSpec *pspec;
-  GtkRcPropertyParser parser;
   GValue *value;
   GValue tmp_value = G_VALUE_INIT;
 
@@ -2464,11 +2329,10 @@ gtk_settings_reset_property (GtkSettings *settings,
 
   g_return_if_fail (pspec != NULL);
 
-  parser = (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser);
   value = g_param_spec_get_qdata (pspec, g_quark_from_string (name));
 
   g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
-  if (value && _gtk_settings_parse_convert (parser, value, pspec, &tmp_value))
+  if (value && _gtk_settings_parse_convert (value, pspec, &tmp_value))
     g_value_copy (&tmp_value, &priv->property_values[pspec->param_id - 1].value);
   else
     g_param_value_set_default (pspec, &priv->property_values[pspec->param_id - 1].value);
