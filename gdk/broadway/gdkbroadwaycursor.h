@@ -26,7 +26,7 @@
 #define __GDK_BROADWAY_CURSOR_H__
 
 #if !defined (__GDKBROADWAY_H_INSIDE__) && !defined (GDK_COMPILATION)
-#error "Only <gdk/gdkbroadway.h> can be included directly."
+#error "Only <gdk/broadway/gdkbroadway.h> can be included directly."
 #endif
 
 #include <gdk/gdk.h>

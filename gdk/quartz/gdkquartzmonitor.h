@@ -21,7 +21,7 @@
 #define __GDK_QUARTZ_MONITOR_H__
 
 #if !defined (__GDKQUARTZ_H_INSIDE__) && !defined (GDK_COMPILATION)
-#error "Only <gdk/gdkquartz.h> can be included directly."
+#error "Only <gdk/quartz/gdkquartz.h> can be included directly."
 #endif
 
 #include <gdk/gdkmonitor.h>
