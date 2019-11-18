@@ -939,8 +939,6 @@ gdk_surface_impl_x11_get_type
 </SECTION>
 
 <SECTION>
-<INCLUDE>gdk/gdkwayland.h</INCLUDE>
-<TITLE>Wayland Interaction</TITLE>
 <FILE>wayland_interaction</FILE>
 gdk_wayland_seat_get_wl_seat
 gdk_wayland_device_get_wl_keyboard
