@@ -1,6 +1,6 @@
 testexecdir = join_paths(installed_test_bindir, 'reftests')
 
-libgtkreftestprivate = shared_library('gtkreftestprivate', [
+libgtkreftestprivate = library('gtkreftestprivate', [
   'reftest-compare.c',
   'reftest-module.c',
   'reftest-snapshot.c'],

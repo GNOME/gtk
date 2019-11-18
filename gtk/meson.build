@@ -964,17 +964,17 @@ foreach l: immodules
 endforeach
 
 # Library
-libgtk = shared_library('gtk-3',
-                        soversion: gtk_soversion,
-                        version: gtk_library_version,
-                        sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h],
-                        c_args: gtk_cargs + common_cflags,
-                        include_directories: [confinc, gdkinc, gtkinc],
-                        dependencies: gtk_deps + [libgdk_dep] + gtk_included_im_deps,
-                        link_with: libgdk,
-                        link_args: common_ldflags,
-                        darwin_versions : gtk_osxversions,
-                        install: true)
+libgtk = library('gtk-3',
+                 soversion: gtk_soversion,
+                 version: gtk_library_version,
+                 sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h],
+                 c_args: gtk_cargs + common_cflags,
+                 include_directories: [confinc, gdkinc, gtkinc],
+                 dependencies: gtk_deps + [libgdk_dep] + gtk_included_im_deps,
+                 link_with: libgdk,
+                 link_args: common_ldflags,
+                 darwin_versions : gtk_osxversions,
+                 install: true)
 
 # Introspection
 if build_gir
