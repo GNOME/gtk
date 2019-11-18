@@ -265,7 +265,7 @@ gtk_style_context_set_cascade (GtkStyleContext *context,
     {
       g_object_ref (cascade);
       priv->cascade_changed_id = g_signal_connect (cascade,
-                                                   "-gtk-private-changed",
+                                                   "gtk-private-changed",
                                                    G_CALLBACK (gtk_style_context_cascade_changed),
                                                    context);
     }
