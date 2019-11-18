@@ -294,7 +294,7 @@ _gtk_style_cascade_set_parent (GtkStyleCascade *cascade,
     {
       g_object_ref (parent);
       g_signal_connect_swapped (parent,
-                                "-gtk-private-changed",
+                                "gtk-private-changed",
                                 G_CALLBACK (gtk_style_provider_changed),
                                 cascade);
     }
@@ -325,7 +325,7 @@ _gtk_style_cascade_add_provider (GtkStyleCascade  *cascade,
   data.provider = g_object_ref (provider);
   data.priority = priority;
   data.changed_signal_id = g_signal_connect_swapped (provider,
-                                                     "-gtk-private-changed",
+                                                     "gtk-private-changed",
                                                      G_CALLBACK (gtk_style_provider_changed),
                                                      cascade);
 
