@@ -2644,7 +2644,7 @@ gtk_builder_add_callback_symbols (GtkBuilder  *builder,
  * with gtk_builder_add_callback_symbols()
  *
  * This function is intended for possible use in language bindings
- * or for any case that one might be cusomizing signal connections
+ * or for any case that one might be customizing signal connections
  * using gtk_builder_connect_signals_full()
  *
  * Returns: (nullable): The callback symbol in @builder for @callback_name, or %NULL
