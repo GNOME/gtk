@@ -249,7 +249,6 @@ typedef struct
   gchar *filename;
   gchar *resource_prefix;
   GType template_type;
-  GtkApplication *application;
 } GtkBuilderPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkBuilder, gtk_builder, G_TYPE_OBJECT)
@@ -2749,66 +2748,6 @@ gtk_builder_new_from_string (const gchar *string,
     g_error ("failed to add UI: %s", error->message);
 
   return builder;
-}
-
-/**
- * gtk_builder_set_application:
- * @builder: a #GtkBuilder
- * @application: a #GtkApplication
- *
- * Sets the application associated with @builder.
- *
- * You only need this function if there is more than one #GApplication
- * in your process. @application cannot be %NULL.
- **/
-void
-gtk_builder_set_application (GtkBuilder     *builder,
-                             GtkApplication *application)
-{
-  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
-
-  g_return_if_fail (GTK_IS_BUILDER (builder));
-  g_return_if_fail (GTK_IS_APPLICATION (application));
-
-  if (priv->application)
-    g_object_unref (priv->application);
-
-  priv->application = g_object_ref (application);
-}
-
-/**
- * gtk_builder_get_application:
- * @builder: a #GtkBuilder
- *
- * Gets the #GtkApplication associated with the builder.
- *
- * The #GtkApplication is used for creating action proxies as requested
- * from XML that the builder is loading.
- *
- * By default, the builder uses the default application: the one from
- * g_application_get_default(). If you want to use another application
- * for constructing proxies, use gtk_builder_set_application().
- *
- * Returns: (nullable) (transfer none): the application being used by the builder,
- *     or %NULL
- **/
-GtkApplication *
-gtk_builder_get_application (GtkBuilder *builder)
-{
-  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
-
-  g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
-
-  if (!priv->application)
-    {
-      GApplication *application;
-
-      application = g_application_get_default ();
-      if (application && GTK_IS_APPLICATION (application))
-        priv->application = g_object_ref (GTK_APPLICATION (application));
-    }
-
-  return priv->application;
 }
 
 /*< private >

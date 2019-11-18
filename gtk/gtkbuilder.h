@@ -198,13 +198,6 @@ GDK_AVAILABLE_IN_ALL
 GCallback    gtk_builder_lookup_callback_symbol  (GtkBuilder    *builder,
 						  const gchar   *callback_name);
 
-GDK_AVAILABLE_IN_ALL
-void         gtk_builder_set_application         (GtkBuilder     *builder,
-                                                  GtkApplication *application);
-
-GDK_AVAILABLE_IN_ALL
-GtkApplication * gtk_builder_get_application     (GtkBuilder     *builder);
-
 
 /**
  * GTK_BUILDER_WARN_INVALID_CHILD_TYPE:
