@@ -76,7 +76,7 @@
 #include "gtkrevealer.h"
 #include "gtkspinner.h"
 #include "gtkseparator.h"
-#include "gtkmodelbutton.h"
+#include "gtkmodelbuttonprivate.h"
 #include "gtkgesturelongpress.h"
 #include "gtkgestureclick.h"
 #include "gtkeventcontrollerkey.h"
