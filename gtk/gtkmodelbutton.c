@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkmodelbutton.h"
+#include "gtkmodelbuttonprivate.h"
 
 #include "gtkactionhelperprivate.h"
 #include "gtkboxlayout.h"
@@ -181,6 +181,30 @@ typedef GtkWidgetClass GtkModelButtonClass;
 static void gtk_model_button_actionable_iface_init (GtkActionableInterface *iface);
 G_DEFINE_TYPE_WITH_CODE (GtkModelButton, gtk_model_button, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE, gtk_model_button_actionable_iface_init))
+
+GType
+gtk_button_role_get_type (void)
+{
+  static gsize gtk_button_role_type;
+
+  if (g_once_init_enter (&gtk_button_role_type))
+    {
+      static const GEnumValue values[] = {
+        { GTK_BUTTON_ROLE_NORMAL, "GTK_BUTTON_ROLE_NORMAL", "normal" },
+        { GTK_BUTTON_ROLE_CHECK, "GTK_BUTTON_ROLE_CHECK", "check" },
+        { GTK_BUTTON_ROLE_RADIO, "GTK_BUTTON_ROLE_RADIO", "radio" },
+        { GTK_BUTTON_ROLE_TITLE, "GTK_BUTTON_ROLE_RADIO", "title" },
+        { 0, NULL, NULL }
+      };
+      GType type;
+
+      type = g_enum_register_static (I_("GtkButtonRole"), values);
+
+      g_once_init_leave (&gtk_button_role_type, type);
+    }
+
+  return gtk_button_role_type;
+}
 
 enum
 {

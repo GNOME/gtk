@@ -32,6 +32,14 @@ GtkWidget *gtk_popover_menu_get_parent_menu  (GtkPopoverMenu *menu);
 void       gtk_popover_menu_set_parent_menu  (GtkPopoverMenu *menu,
                                               GtkWidget      *parent);
 
+GtkWidget * gtk_popover_menu_new (GtkWidget  *relative_to);
+
+void  gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
+                                    GtkWidget      *submenu,
+                                    const char     *name);
+void gtk_popover_menu_open_submenu (GtkPopoverMenu *popover,
+                                    const gchar    *name);
+
 G_END_DECLS
 
-#endif /* __GTK_POPOVER_PRIVATE_H__ */
+#endif /* __GTK_POPOVER_MENU_PRIVATE_H__ */
