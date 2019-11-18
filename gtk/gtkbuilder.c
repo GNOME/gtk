@@ -245,6 +245,7 @@ typedef struct
   GSList *delayed_properties;
   GSList *signals;
   GSList *bindings;
+  GModule *module;
   gchar *filename;
   gchar *resource_prefix;
   GType template_type;
@@ -303,6 +304,8 @@ static void
 gtk_builder_finalize (GObject *object)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (GTK_BUILDER (object));
+
+  g_clear_pointer (&priv->module, g_module_close);
 
   g_free (priv->domain);
   g_free (priv->filename);
@@ -390,16 +393,34 @@ type_name_mangle (const gchar *name)
   return g_string_free (symbol_name, FALSE);
 }
 
-static GType
-_gtk_builder_resolve_type_lazily (const gchar *name)
+GModule *
+gtk_builder_get_module (GtkBuilder *builder)
 {
-  static GModule *module = NULL;
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+
+  if (priv->module == NULL)
+    {
+      if (!g_module_supported ())
+        return NULL;
+
+      priv->module = g_module_open (NULL, G_MODULE_BIND_LAZY);
+    }
+
+  return priv->module;
+}
+
+static GType
+gtk_builder_resolve_type_lazily (GtkBuilder  *builder,
+                                 const gchar *name)
+{
+  GModule *module;
   GTypeGetFunc func;
   gchar *symbol;
   GType gtype = G_TYPE_INVALID;
 
+  module = gtk_builder_get_module (builder);
   if (!module)
-    module = g_module_open (NULL, 0);
+    return G_TYPE_INVALID;
 
   symbol = type_name_mangle (name);
 
@@ -425,7 +446,7 @@ gtk_builder_real_get_type_from_name (GtkBuilder  *builder,
   if (gtype != G_TYPE_INVALID)
     return gtype;
 
-  gtype = _gtk_builder_resolve_type_lazily (type_name);
+  gtype = gtk_builder_resolve_type_lazily (builder, type_name);
   if (gtype != G_TYPE_INVALID)
     return gtype;
 
@@ -1629,12 +1650,6 @@ gtk_builder_expose_object (GtkBuilder    *builder,
                        g_object_ref (object));
 }
 
-
-typedef struct {
-  GModule *module;
-  gpointer data;
-} ConnectArgs;
-
 static void
 gtk_builder_connect_signals_default (GtkBuilder    *builder,
                                      GObject       *object,
@@ -1645,19 +1660,20 @@ gtk_builder_connect_signals_default (GtkBuilder    *builder,
                                      gpointer       user_data)
 {
   GCallback func;
-  ConnectArgs *args = (ConnectArgs*) user_data;
 
   func = gtk_builder_lookup_callback_symbol (builder, handler_name);
 
   if (!func)
     {
+      GModule *module = gtk_builder_get_module (builder);
+
       /* Only error out for missing GModule support if we've not
        * found the symbols explicitly added with gtk_builder_add_callback_symbol()
        */
-      if (args->module == NULL)
+      if (module == NULL)
         g_error ("gtk_builder_connect_signals() requires working GModule");
 
-      if (!g_module_symbol (args->module, handler_name, (gpointer)&func))
+      if (!g_module_symbol (module, handler_name, (gpointer)&func))
         {
           g_warning ("Could not find signal handler '%s'.  Did you compile with -rdynamic?", handler_name);
           return;
@@ -1667,7 +1683,7 @@ gtk_builder_connect_signals_default (GtkBuilder    *builder,
   if (connect_object)
     g_signal_connect_object (object, signal_name, func, connect_object, flags);
   else
-    g_signal_connect_data (object, signal_name, func, args->data, NULL, flags);
+    g_signal_connect_data (object, signal_name, func, user_data, NULL, flags);
 }
 
 
@@ -1702,22 +1718,11 @@ void
 gtk_builder_connect_signals (GtkBuilder *builder,
                              gpointer    user_data)
 {
-  ConnectArgs args;
-
   g_return_if_fail (GTK_IS_BUILDER (builder));
-
-  args.data = user_data;
-
-  if (g_module_supported ())
-    args.module = g_module_open (NULL, G_MODULE_BIND_LAZY);
-  else
-    args.module = NULL;
 
   gtk_builder_connect_signals_full (builder,
                                     gtk_builder_connect_signals_default,
-                                    &args);
-  if (args.module)
-    g_module_close (args.module);
+                                    user_data);
 }
 
 /**
