@@ -21,6 +21,7 @@
 
 #include "gtkbuilder.h"
 #include "gtkbuildable.h"
+#include "gtkexpression.h"
 
 enum {
   TAG_PROPERTY,
@@ -31,6 +32,7 @@ enum {
   TAG_SIGNAL,
   TAG_INTERFACE,
   TAG_TEMPLATE,
+  TAG_EXPRESSION,
 };
 
 typedef struct {
@@ -64,6 +66,7 @@ typedef struct {
 typedef struct {
   guint tag_type;
   GParamSpec *pspec;
+  gpointer value;
   GString *text;
   gboolean translatable:1;
   gboolean bound:1;
@@ -71,6 +74,36 @@ typedef struct {
   gint line;
   gint col;
 } PropertyInfo;
+
+typedef struct _ExpressionInfo ExpressionInfo;
+struct _ExpressionInfo {
+  guint tag_type;
+  enum {
+    EXPRESSION_EXPRESSION,
+    EXPRESSION_CONSTANT,
+    EXPRESSION_CLOSURE,
+    EXPRESSION_PROPERTY
+  } expression_type;
+  union {
+    GtkExpression *expression;
+    struct {
+      GType type;
+      GString *text;
+    } constant;
+    struct {
+      GType type;
+      char *function_name;
+      char *object_name;
+      gboolean swapped;
+      GSList *params;
+    } closure;
+    struct {
+      GType this_type;
+      char *property_name;
+      ExpressionInfo *expression;
+    } property;
+  };
+};
 
 typedef struct {
   guint tag_type;
