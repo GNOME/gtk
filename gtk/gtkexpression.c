@@ -50,6 +50,44 @@
  *
  * Watches can be created for automatically updating the propery of an object,
  * similar to GObject's #GBinding mechanism, by using gtk_expression_bind().
+ *
+ * #GtkExpression in ui files
+ *
+ * GtkBuilder has support for creating expressions. The syntax here can be used where
+ * a #GtkExpression object is needed like in a <property> tag for an expression
+ * property, or in a <binding> tag to bind a property to an expression.
+ *
+ * To create an property expression, use the <lookup> element. It can have a `type`
+ * attribute to specify the object type, and a `name` attribute to specify the property
+ * to look up. The content of <lookup> can either be an element specfiying the expression
+ * to use the object, or a string that specifies the name of the object to use.
+ * 
+ * Example:
+ * |[
+ *   <lookup name='search'>string_filter</lookup>
+ * |]
+ *
+ * To create a constant expression, use the <constant> element. If the type attribute
+ * is specified, the element content is interpreted as a value of that type. Otherwise,
+ * it is assumed to be an object.
+ *
+ * Example:
+ * |[
+ *   <constant>string_filter</constant>
+ *   <constant type='gchararray'>Hello, world</constant>
+ * ]|
+ *
+ * To create a closure expression, use the <closure> element. The `type` and `function`
+ * attributes specify what function to use for the closure, the content of the element
+ * contains the expressions for the parameters.
+ * 
+ * Example:
+ * |[
+ *   <closure type='gchararray' function='combine_args_somehow'>
+ *     <constant type='gchararray'>File size:</constant>
+ *     <lookup type='GFile' name='size'>myfile</lookup>
+ *   </closure>
+ * ]|
  */
 typedef struct _GtkExpressionClass GtkExpressionClass;
 
