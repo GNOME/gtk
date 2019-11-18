@@ -19,7 +19,7 @@
 #define __GDK_WAYLAND_DISPLAY_H__
 
 #if !defined (__GDKWAYLAND_H_INSIDE__) && !defined (GDK_COMPILATION)
-#error "Only <gdk/gdkwayland.h> can be included directly."
+#error "Only <gdk/wayland/gdkwayland.h> can be included directly."
 #endif
 
 #include <gdk/gdk.h>
