@@ -933,7 +933,7 @@ parse_property (ParserData   *data,
       return;
     }
 
-  info = g_slice_new (PropertyInfo);
+  info = g_slice_new0 (PropertyInfo);
   info->tag_type = TAG_PROPERTY;
   info->pspec = pspec;
   info->text = g_string_new ("");
@@ -949,9 +949,347 @@ parse_property (ParserData   *data,
 static void
 free_property_info (PropertyInfo *info)
 {
+  if (info->value)
+    {
+      if (G_PARAM_SPEC_VALUE_TYPE (info->pspec) == GTK_TYPE_EXPRESSION)
+        gtk_expression_unref (info->value);
+      else
+        g_assert_not_reached();
+    }
   g_string_free (info->text, TRUE);
   g_free (info->context);
   g_slice_free (PropertyInfo, info);
+}
+
+static void
+free_expression_info (ExpressionInfo *info)
+{
+  switch (info->expression_type)
+    {
+    case EXPRESSION_EXPRESSION:
+      gtk_expression_unref (info->expression);
+      break;
+
+    case EXPRESSION_CONSTANT:
+      g_string_free (info->constant.text, TRUE);
+      break;
+
+    case EXPRESSION_CLOSURE:
+      g_free (info->closure.function_name);
+      g_free (info->closure.object_name);
+      g_slist_free_full (info->closure.params, (GDestroyNotify) free_expression_info);
+      break;
+
+    case EXPRESSION_PROPERTY:
+      g_clear_pointer (&info->property.expression, free_expression_info);
+      g_free (info->property.property_name);
+      break;
+
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+  g_slice_free (ExpressionInfo, info);
+}
+
+static gboolean
+check_expression_parent (ParserData *data)
+{
+  CommonInfo *common_info = state_peek_info (data, CommonInfo);
+
+  if (common_info == NULL)
+    return FALSE;
+
+  if (common_info->tag_type == TAG_PROPERTY)
+    {
+      PropertyInfo *prop_info = (PropertyInfo *) common_info;
+
+      return G_PARAM_SPEC_VALUE_TYPE (prop_info->pspec) == GTK_TYPE_EXPRESSION;
+    }
+
+  if (common_info->tag_type == TAG_EXPRESSION)
+    {
+      ExpressionInfo *expr_info = (ExpressionInfo *) common_info;
+
+      switch (expr_info->expression_type)
+        {
+        case EXPRESSION_CLOSURE:
+          return TRUE;
+        case EXPRESSION_CONSTANT:
+          return FALSE;
+        case EXPRESSION_PROPERTY:
+          return expr_info->property.expression == NULL;
+        case EXPRESSION_EXPRESSION:
+        default:
+          g_assert_not_reached ();
+          return FALSE;
+        }
+    }
+
+  return FALSE;
+}
+
+static void
+parse_constant_expression (ParserData   *data,
+                           const gchar  *element_name,
+                           const gchar **names,
+                           const gchar **values,
+                           GError      **error)
+{
+  ExpressionInfo *info;
+  const char *type_name;
+  GType type;
+
+  if (!check_expression_parent (data))
+    {
+      error_invalid_tag (data, element_name, NULL, error);
+      return;
+    }
+
+  if (!g_markup_collect_attributes (element_name, names, values, error,
+                                    G_MARKUP_COLLECT_STRING, "type", &type_name,
+                                    G_MARKUP_COLLECT_INVALID))
+    {
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+      return;
+    }
+
+  type = gtk_builder_get_type_from_name (data->builder, type_name);
+  if (type == G_TYPE_INVALID)
+    {
+      g_set_error (error,
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_INVALID_VALUE,
+                   "Invalid type '%s'", type_name);
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+      return;
+    }
+
+  info = g_slice_new0 (ExpressionInfo);
+  info->tag_type = TAG_EXPRESSION;
+  info->expression_type = EXPRESSION_CONSTANT;
+  info->constant.type = type;
+  info->constant.text = g_string_new (NULL);
+
+  state_push (data, info);
+}
+
+static void
+parse_closure_expression (ParserData   *data,
+                          const gchar  *element_name,
+                          const gchar **names,
+                          const gchar **values,
+                          GError      **error)
+{
+  ExpressionInfo *info;
+  const char *type_name;
+  const char *function_name;
+  const char *object_name = NULL;
+  gboolean swapped = -1;
+  GType type;
+
+  if (!check_expression_parent (data))
+    {
+      error_invalid_tag (data, element_name, NULL, error);
+      return;
+    }
+
+  if (!g_markup_collect_attributes (element_name, names, values, error,
+                                    G_MARKUP_COLLECT_STRING, "type", &type_name,
+                                    G_MARKUP_COLLECT_STRING, "function", &function_name,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "object", &object_name,
+                                    G_MARKUP_COLLECT_TRISTATE|G_MARKUP_COLLECT_OPTIONAL, "swapped", &swapped,
+                                    G_MARKUP_COLLECT_INVALID))
+    {
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+      return;
+    }
+
+  type = gtk_builder_get_type_from_name (data->builder, type_name);
+  if (type == G_TYPE_INVALID)
+    {
+      g_set_error (error,
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_INVALID_VALUE,
+                   "Invalid type '%s'", type_name);
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+      return;
+    }
+
+  /* Swapped defaults to FALSE except when object is set */
+  if (swapped == -1)
+    {
+      if (object_name)
+        swapped = TRUE;
+      else
+        swapped = FALSE;
+    }
+
+  info = g_slice_new0 (ExpressionInfo);
+  info->tag_type = TAG_EXPRESSION;
+  info->expression_type = EXPRESSION_CLOSURE;
+  info->closure.type = type;
+  info->closure.swapped = swapped;
+  info->closure.function_name = g_strdup (function_name);
+  info->closure.object_name = g_strdup (object_name);
+
+  state_push (data, info);
+}
+
+static void
+parse_lookup_expression (ParserData   *data,
+                         const gchar  *element_name,
+                         const gchar **names,
+                         const gchar **values,
+                         GError      **error)
+{
+  ExpressionInfo *info;
+  const char *property_name;
+  const char *type_name;
+  GType type;
+
+  if (!check_expression_parent (data))
+    {
+      error_invalid_tag (data, element_name, NULL, error);
+      return;
+    }
+
+  if (!g_markup_collect_attributes (element_name, names, values, error,
+                                    G_MARKUP_COLLECT_STRING, "type", &type_name,
+                                    G_MARKUP_COLLECT_STRING, "name", &property_name,
+                                    G_MARKUP_COLLECT_INVALID))
+    {
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+      return;
+    }
+
+  type = gtk_builder_get_type_from_name (data->builder, type_name);
+  if (type == G_TYPE_INVALID)
+    {
+      g_set_error (error,
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_INVALID_VALUE,
+                   "Invalid type '%s'", type_name);
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+      return;
+    }
+
+  info = g_slice_new0 (ExpressionInfo);
+  info->tag_type = TAG_EXPRESSION;
+  info->expression_type = EXPRESSION_PROPERTY;
+  info->property.this_type = type;
+  info->property.property_name = g_strdup (property_name);
+
+  state_push (data, info);
+}
+
+static GtkExpression *
+expression_info_construct (GtkBuilder      *builder,
+                           ExpressionInfo  *info,
+                           GError         **error)
+{
+  switch (info->expression_type)
+    {
+    case EXPRESSION_EXPRESSION:
+      break;
+
+    case EXPRESSION_CONSTANT:
+      {
+        GtkExpression *expr;
+        GValue value = G_VALUE_INIT;
+
+        if (!gtk_builder_value_from_string_type (builder,
+                                                 info->constant.type,
+                                                 info->constant.text->str,
+                                                 &value,
+                                                 error))
+          return  NULL;
+
+        if (G_VALUE_HOLDS_OBJECT (&value))
+          expr = gtk_object_expression_new (g_value_get_object (&value));
+        else
+          expr = gtk_constant_expression_new_for_value (&value);
+        g_value_unset (&value);
+
+        g_string_free (info->constant.text, TRUE);
+        info->expression_type = EXPRESSION_EXPRESSION;
+        info->expression = expr;
+      }
+      break;
+
+    case EXPRESSION_CLOSURE:
+      {
+        GObject *object;
+        GClosure *closure;
+        guint i, n_params;
+        GtkExpression **params;
+        GtkExpression *expression;
+        GSList *l;
+
+        if (info->closure.object_name)
+          {
+            object = gtk_builder_lookup_object (builder, info->closure.object_name, 0, 0, error);
+            if (object == NULL)
+              return NULL;
+          }
+        else
+          {
+            object = NULL;
+          }
+
+        closure = gtk_builder_create_closure (builder, 
+                                              info->closure.function_name,
+                                              info->closure.swapped,
+                                              object,
+                                              error);
+        if (closure == NULL)
+          return NULL;
+        n_params = g_slist_length (info->closure.params);
+        params = g_newa (GtkExpression *, n_params);
+        i = n_params;
+        for (l = info->closure.params; l; l = l->next)
+          {
+            params[--i] = expression_info_construct (builder, l->data, error);
+            if (params[i] == NULL)
+              return NULL;
+          }
+        expression = gtk_closure_expression_new (info->closure.type, closure, n_params, params);
+        g_free (info->closure.function_name);
+        g_free (info->closure.object_name);
+        g_slist_free_full (info->closure.params, (GDestroyNotify) free_expression_info);
+        info->expression_type = EXPRESSION_EXPRESSION;
+        info->expression = expression;
+      }
+      break;
+
+    case EXPRESSION_PROPERTY:
+      {
+        GtkExpression *expression;
+
+        if (info->property.expression)
+          {
+            expression = expression_info_construct (builder, info->property.expression, error);
+            if (expression == NULL)
+              return NULL;
+            free_expression_info (info->property.expression);
+          }
+        else
+          expression = NULL;
+
+        expression = gtk_property_expression_new (info->property.this_type,
+                                                  expression,
+                                                  info->property.property_name);
+        g_free (info->property.property_name);
+        info->expression_type = EXPRESSION_EXPRESSION;
+        info->expression = expression;
+      }
+      break;
+
+    default:
+      g_return_val_if_reached (NULL);
+    }
+
+  return gtk_expression_ref (info->expression);
 }
 
 static void
@@ -1288,6 +1626,12 @@ start_element (GtkBuildableParseContext  *context,
     parse_requires (data, element_name, names, values, error);
   else if (strcmp (element_name, "interface") == 0)
     parse_interface (data, element_name, names, values, error);
+  else if (strcmp (element_name, "constant") == 0)
+    parse_constant_expression (data, element_name, names, values, error);
+  else if (strcmp (element_name, "closure") == 0)
+    parse_closure_expression (data, element_name, names, values, error);
+  else if (strcmp (element_name, "lookup") == 0)
+    parse_lookup_expression (data, element_name, names, values, error);
   else if (strcmp (element_name, "menu") == 0)
     _gtk_builder_menu_start (data, element_name, names, values, error);
   else if (strcmp (element_name, "placeholder") == 0)
@@ -1423,6 +1767,43 @@ end_element (GtkBuildableParseContext  *context,
       signal_info->object_name = g_strdup (object_info->id);
       object_info->signals = g_slist_prepend (object_info->signals, signal_info);
     }
+  else if (strcmp (element_name, "constant") == 0 ||
+           strcmp (element_name, "closure") == 0 ||
+           strcmp (element_name, "lookup") == 0)
+    {
+      ExpressionInfo *expression_info = state_pop_info (data, ExpressionInfo);
+      CommonInfo *parent_info = state_peek_info (data, CommonInfo);
+
+      if (parent_info->tag_type == TAG_PROPERTY)
+        {
+          PropertyInfo *prop_info = (PropertyInfo *) parent_info;
+
+          prop_info->value = expression_info_construct (data->builder, expression_info, error);
+        }
+      else if (parent_info->tag_type == TAG_EXPRESSION)
+        {
+          ExpressionInfo *expr_info = (ExpressionInfo *) parent_info;
+
+          switch (expr_info->expression_type)
+            {
+            case EXPRESSION_CLOSURE:
+              expr_info->closure.params = g_slist_prepend (expr_info->closure.params, expression_info);
+              break;
+            case EXPRESSION_PROPERTY:
+              expr_info->property.expression = expression_info;
+              break;
+            case EXPRESSION_EXPRESSION:
+            case EXPRESSION_CONSTANT:
+            default:
+              g_assert_not_reached ();
+              break;
+            }
+        }
+      else
+        {
+          g_assert_not_reached ();
+        }
+    }
   else if (strcmp (element_name, "requires") == 0)
     {
       RequiresInfo *req_info = state_pop_info (data, RequiresInfo);
@@ -1503,6 +1884,12 @@ text (GtkBuildableParseContext  *context,
 
       g_string_append_len (prop_info->text, text, text_len);
     }
+  else if (strcmp (gtk_buildable_parse_context_get_element (context), "constant") == 0)
+    {
+      ExpressionInfo *expr_info = (ExpressionInfo *) info;
+
+      g_string_append_len (expr_info->constant.text, text, text_len);
+    }
 }
 
 static void
@@ -1525,6 +1912,9 @@ free_info (CommonInfo *info)
         break;
       case TAG_REQUIRES:
         free_requires_info ((RequiresInfo *)info, NULL);
+        break;
+      case TAG_EXPRESSION:
+        free_expression_info ((ExpressionInfo *)info);
         break;
       default:
         g_assert_not_reached ();

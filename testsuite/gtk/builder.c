@@ -2470,6 +2470,64 @@ test_file_filter (void)
   g_object_unref (builder);
 }
 
+char *
+builder_get_search (gpointer item)
+{
+  return g_strdup (gtk_string_filter_get_search (item));
+}
+
+char *
+builder_copy_arg (gpointer item, const char *arg)
+{
+  return g_strdup (arg);
+}
+
+static void
+test_expressions (void)
+{
+  const char *tests[] = {
+    "<interface>"
+    "  <object class='GtkStringFilter' id='filter'>"
+    "    <property name='search'>Hello World</property>"
+    "    <property name='expression'><constant type='gchararray'>Hello World</constant></property>"
+    "  </object>"
+    "</interface>",
+    "<interface>"
+    "  <object class='GtkStringFilter' id='filter'>"
+    "    <property name='search'>Hello World</property>"
+    "    <property name='expression'><closure type='gchararray' function='builder_get_search'></closure></property>"
+    "  </object>"
+    "</interface>",
+    "<interface>"
+    "  <object class='GtkStringFilter' id='filter'>"
+    "    <property name='search'>Hello World</property>"
+    "    <property name='expression'><lookup type='GtkStringFilter' name='search'></lookup></property>"
+    "  </object>"
+    "</interface>",
+    "<interface>"
+    "  <object class='GtkStringFilter' id='filter'>"
+    "    <property name='search'>Hello World</property>"
+    "    <property name='expression'><closure type='gchararray' function='builder_copy_arg'>"
+    "      <constant type='gchararray'>Hello World</constant>"
+    "    </closure></property>"
+    "  </object>"
+    "</interface>",
+  };
+  GtkBuilder *builder;
+  GObject *obj;
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (tests); i++)
+    {
+      builder = builder_new_from_string (tests[i], -1, NULL);
+      obj = gtk_builder_get_object (builder, "filter");
+      g_assert (GTK_IS_FILTER (obj));
+      g_assert (gtk_filter_match (GTK_FILTER (obj), obj));
+
+      g_object_unref (builder);
+    }
+}
+
 int
 main (int argc, char **argv)
 {
@@ -2515,6 +2573,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Property Bindings", test_property_bindings);
   g_test_add_func ("/Builder/anaconda-signal", test_anaconda_signal);
   g_test_add_func ("/Builder/FileFilter", test_file_filter);
+  g_test_add_func ("/Builder/Expressions", test_expressions);
 
   return g_test_run();
 }

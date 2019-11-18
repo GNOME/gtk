@@ -522,7 +522,18 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
       const char *property_name = g_intern_string (prop->pspec->name);
       GValue property_value = G_VALUE_INIT;
 
-      if (prop->bound && (!prop->text || prop->text->len == 0))
+      if (prop->value)
+        {
+          g_value_init (&property_value, G_PARAM_SPEC_VALUE_TYPE (prop->pspec));
+
+          if (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) == GTK_TYPE_EXPRESSION)
+            g_value_set_boxed (&property_value, prop->value);
+          else
+            {
+              g_assert_not_reached();
+            }
+        }
+      else if (prop->bound && (!prop->text || prop->text->len == 0))
         {
           /* Ignore properties with a binding and no value since they are
            * only there for to express the binding.
