@@ -650,6 +650,9 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   GdkWindow *window;
   XKeyPressedEvent xevent;
 
+  if (context_xim->client_window == NULL)
+    return FALSE;
+
   if (event->type == GDK_KEY_RELEASE && !context_xim->filter_key_release)
     return FALSE;
 
@@ -1342,6 +1345,9 @@ static XIC
 gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
 {
   if (context_xim->im_info == NULL || context_xim->im_info->im == NULL)
+    return NULL;
+
+  if (context_xim->client_window == NULL)
     return NULL;
 
   if (!context_xim->ic)
