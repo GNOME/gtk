@@ -186,8 +186,8 @@ struct _GdkSurfaceClass
                                          GList     *pixbufs);
   void         (* set_icon_name)        (GdkSurface   *surface,
                                          const gchar *name);
-  void         (* iconify)              (GdkSurface *surface);
-  void         (* deiconify)            (GdkSurface *surface);
+  void         (* minimize)             (GdkSurface *surface);
+  void         (* unminimize)           (GdkSurface *surface);
   void         (* stick)                (GdkSurface *surface);
   void         (* unstick)              (GdkSurface *surface);
   void         (* maximize)             (GdkSurface *surface);

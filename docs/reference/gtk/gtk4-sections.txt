@@ -4740,8 +4740,8 @@ gtk_window_set_default_widget
 gtk_window_present
 gtk_window_present_with_time
 gtk_window_close
-gtk_window_iconify
-gtk_window_deiconify
+gtk_window_minimize
+gtk_window_unminimize
 gtk_window_stick
 gtk_window_unstick
 gtk_window_maximize

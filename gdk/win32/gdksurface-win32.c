@@ -809,8 +809,8 @@ adjust_for_gravity_hints (GdkSurface *window,
 
 static void
 show_window_internal (GdkSurface *window,
-                      gboolean   already_mapped,
-		      gboolean   deiconify)
+                      gboolean    already_mapped,
+		      gboolean    unminimize)
 {
   GdkWin32Surface *surface;
   gboolean focus_on_map = FALSE;
@@ -822,34 +822,34 @@ show_window_internal (GdkSurface *window,
   GDK_NOTE (MISC, g_print ("show_window_internal: %p: %s%s\n",
 			   GDK_SURFACE_HWND (window),
 			   _gdk_win32_surface_state_to_string (window->state),
-			   (deiconify ? " deiconify" : "")));
+			   (unminimize ? " unminimize" : "")));
 
-  /* If asked to show (not deiconify) a withdrawn and iconified
+  /* If asked to show (not unminimize) a withdrawn and iconified
    * window, do that.
    */
-  if (!deiconify &&
+  if (!unminimize &&
       !already_mapped &&
-      (window->state & GDK_SURFACE_STATE_ICONIFIED))
+      (window->state & GDK_SURFACE_STATE_MINIMIZED))
     {
       GtkShowWindow (window, SW_SHOWMINNOACTIVE);
       return;
     }
 
   /* If asked to just show an iconified window, do nothing. */
-  if (!deiconify && (window->state & GDK_SURFACE_STATE_ICONIFIED))
+  if (!unminimize && (window->state & GDK_SURFACE_STATE_MINIMIZED))
     return;
 
-  /* If asked to deiconify an already noniconified window, do
+  /* If asked to unminimize an already noniconified window, do
    * nothing. (Especially, don't cause the window to rise and
    * activate. There are different calls for that.)
    */
-  if (deiconify && !(window->state & GDK_SURFACE_STATE_ICONIFIED))
+  if (unminimize && !(window->state & GDK_SURFACE_STATE_MINIMIZED))
     return;
 
   /* If asked to show (but not raise) a window that is already
    * visible, do nothing.
    */
-  if (!deiconify && !already_mapped && IsWindowVisible (GDK_SURFACE_HWND (window)))
+  if (!unminimize && !already_mapped && IsWindowVisible (GDK_SURFACE_HWND (window)))
     return;
 
   /* Other cases */
@@ -1005,7 +1005,7 @@ show_window_internal (GdkSurface *window,
     {
       GtkShowWindow (window, SW_MAXIMIZE);
     }
-  else if (window->state & GDK_SURFACE_STATE_ICONIFIED)
+  else if (window->state & GDK_SURFACE_STATE_MINIMIZED)
     {
       if (focus_on_map)
         GtkShowWindow (window, SW_RESTORE);
@@ -2766,7 +2766,7 @@ _gdk_win32_surface_handle_aerosnap (GdkSurface            *window,
   GdkDisplay *display;
   gint n_monitors;
   GdkSurfaceState surface_state = gdk_surface_get_state (window);
-  gboolean minimized = surface_state & GDK_SURFACE_STATE_ICONIFIED;
+  gboolean minimized = surface_state & GDK_SURFACE_STATE_MINIMIZED;
   gboolean maximized = surface_state & GDK_SURFACE_STATE_MAXIMIZED;
   gboolean halfsnapped;
   GdkMonitor *monitor;
@@ -2805,7 +2805,7 @@ _gdk_win32_surface_handle_aerosnap (GdkSurface            *window,
       else if (halfsnapped)
 	unsnap (window, monitor);
       else if (!minimized)
-	gdk_surface_iconify (window);
+	gdk_surface_minimize (window);
       break;
     case GDK_WIN32_AEROSNAP_COMBO_LEFT:
       if (maximized)
@@ -4502,7 +4502,7 @@ gdk_win32_surface_begin_move_drag (GdkSurface *window,
  * Setting window states
  */
 static void
-gdk_win32_surface_iconify (GdkSurface *window)
+gdk_win32_surface_minimize (GdkSurface *window)
 {
   HWND old_active_window;
 
@@ -4511,7 +4511,7 @@ gdk_win32_surface_iconify (GdkSurface *window)
   if (GDK_SURFACE_DESTROYED (window))
     return;
 
-  GDK_NOTE (MISC, g_print ("gdk_surface_iconify: %p: %s\n",
+  GDK_NOTE (MISC, g_print ("gdk_surface_minimize: %p: %s\n",
 			   GDK_SURFACE_HWND (window),
 			   _gdk_win32_surface_state_to_string (window->state)));
 
@@ -4525,20 +4525,20 @@ gdk_win32_surface_iconify (GdkSurface *window)
   else
     {
       gdk_synthesize_surface_state (window,
-                                   0,
-                                   GDK_SURFACE_STATE_ICONIFIED);
+                                    0,
+                                    GDK_SURFACE_STATE_MINIMIZED);
     }
 }
 
 static void
-gdk_win32_surface_deiconify (GdkSurface *window)
+gdk_win32_surface_unminimize (GdkSurface *window)
 {
   g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (GDK_SURFACE_DESTROYED (window))
     return;
 
-  GDK_NOTE (MISC, g_print ("gdk_surface_deiconify: %p: %s\n",
+  GDK_NOTE (MISC, g_print ("gdk_surface_unminimize: %p: %s\n",
 			   GDK_SURFACE_HWND (window),
 			   _gdk_win32_surface_state_to_string (window->state)));
 
@@ -4549,8 +4549,8 @@ gdk_win32_surface_deiconify (GdkSurface *window)
   else
     {
       gdk_synthesize_surface_state (window,
-                                   GDK_SURFACE_STATE_ICONIFIED,
-                                   0);
+                                    GDK_SURFACE_STATE_MINIMIZED,
+                                    0);
     }
 }
 
@@ -4763,7 +4763,7 @@ gdk_win32_surface_focus (GdkSurface *window,
 
   if (window->state & GDK_SURFACE_STATE_MAXIMIZED)
     GtkShowWindow (window, SW_SHOWMAXIMIZED);
-  else if (window->state & GDK_SURFACE_STATE_ICONIFIED)
+  else if (window->state & GDK_SURFACE_STATE_MINIMIZED)
     GtkShowWindow (window, SW_RESTORE);
   else if (!IsWindowVisible (GDK_SURFACE_HWND (window)))
     GtkShowWindow (window, SW_SHOWNORMAL);
@@ -5185,8 +5185,8 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
   impl_class->set_focus_on_map = gdk_win32_surface_set_focus_on_map;
   impl_class->set_icon_list = gdk_win32_surface_set_icon_list;
   impl_class->set_icon_name = gdk_win32_surface_set_icon_name;
-  impl_class->iconify = gdk_win32_surface_iconify;
-  impl_class->deiconify = gdk_win32_surface_deiconify;
+  impl_class->minimize = gdk_win32_surface_minimize;
+  impl_class->unminimize = gdk_win32_surface_unminimize;
   impl_class->stick = gdk_win32_surface_stick;
   impl_class->unstick = gdk_win32_surface_unstick;
   impl_class->maximize = gdk_win32_surface_maximize;
