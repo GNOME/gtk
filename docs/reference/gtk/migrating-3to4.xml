@@ -828,6 +828,29 @@
       </para>
     </section>
 
+    <section>
+      <title>The "iconified" window state has been renamed to "minimized"</title>
+      <para>
+        The <literal>GDK_SURFACE_STATE_ICONIFIED</literal> value of the
+        #GdkSurfaceState enumeration is now %GDK_SURFACE_STATE_MINIMIZED.
+      </para>
+      <para>
+        The #GdkSurface functions <function>gdk_surface_iconify()</function>
+        and <function>gdk_surface_deiconify()</function> have been renamed to
+        gdk_surface_minimize() and gdk_surface_unminimize(), respectively.
+      </para>
+      <para>
+        The corresponding #GtkWindow functions <function>gtk_window_iconify()</function>
+        and <function>gtk_window_deiconify()</function> have been renamed
+        to gtk_window_minimize() and gtk_window_unminimize(), respectively.
+      </para>
+      <para>
+        The behavior of the minimization and unminimization operations have
+        not been changed, and they still require support from the underlying
+        windowing system.
+      </para>
+    </section>
+
   </section>
 
 </chapter>
