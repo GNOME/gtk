@@ -3545,7 +3545,7 @@ progressbar {
  * Level Bar *
  *************/
 
-$levelbar_size: 12px;
+$levelbar_size: 9px;
 $levelbar_border_radius: 3px;
 
 levelbar {
@@ -3567,11 +3567,32 @@ levelbar {
       }
     }
 
-    &.discrete block {
-      min-height: $levelbar_size - 7px;
-      margin: 0 1px;
-      min-width: 32px;
-      border-radius: $levelbar_border_radius;
+    // segmented level bar
+    &.discrete {
+      // trough
+      trough {
+        // border: 1px solid $borders_color;
+        // padding: 1px;
+        // padding-right:0;
+        // background-color: $base_color;
+        // border-radius: 7px;
+        // box-shadow: inset 0 1px 1px 0 rgba(0,0,0,0.05);
+        // &:dir(rtl) {padding-left:0;}
+        // &:dir(ltr) {padding-right:0;}
+      }
+
+      // block
+      block {
+        min-height: 2px;
+        margin: 1px;
+        min-width: 24px;
+        border-radius:0;
+        &:first-child {border-radius: 2px 0 0 2px;}
+        &:last-child {
+          border-radius: 0 2px 2px 0;
+          // margin-right:0;
+        }
+      }
     }
   }
 
@@ -3599,13 +3620,13 @@ levelbar {
   // level bar colours
   block {
     border: 1px solid;
+    box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.2);
 
     &.low {
       border-color: if($variant == 'light', darken($warning_color, 10%), $borders_color);
       background-color: $warning_color;
 
       &:backdrop { border-color:if($variant == 'light', $warning_color, $borders_color); };
-
     }
 
     &.high,

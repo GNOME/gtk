@@ -1565,7 +1565,7 @@ progressbar.osd progress { border-style: none; border-radius: 0; }
 progressbar trough.empty progress { all: unset; }
 
 /************* Level Bar * */
-levelbar.horizontal block { min-height: 12px; border-radius: 3px; }
+levelbar.horizontal block { min-height: 9px; border-radius: 3px; }
 
 levelbar.horizontal block:dir(rtl) { border-radius: 0 3px 3px 0; }
 
@@ -1573,17 +1573,21 @@ levelbar.horizontal block:dir(ltr) { border-radius: 3px 0 0 3px; }
 
 levelbar.horizontal block.empty, levelbar.horizontal block.full { border-radius: 3px; }
 
-levelbar.horizontal.discrete block { min-height: 5px; margin: 0 1px; min-width: 32px; border-radius: 3px; }
+levelbar.horizontal.discrete block { min-height: 2px; margin: 1px; min-width: 24px; border-radius: 0; }
 
-levelbar.vertical block { min-width: 12px; border-radius: 3px; }
+levelbar.horizontal.discrete block:first-child { border-radius: 2px 0 0 2px; }
 
-levelbar.vertical.discrete block { min-width: 5px; margin: 1px 0; min-height: 32px; }
+levelbar.horizontal.discrete block:last-child { border-radius: 0 2px 2px 0; }
+
+levelbar.vertical block { min-width: 9px; border-radius: 3px; }
+
+levelbar.vertical.discrete block { min-width: 2px; margin: 1px 0; min-height: 32px; }
 
 levelbar:backdrop { transition: 200ms ease-out; }
 
 levelbar trough { padding: 0; }
 
-levelbar block { border: 1px solid; }
+levelbar block { border: 1px solid; box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.2); }
 
 levelbar block.low { border-color: #c26000; background-color: #f57900; }
 
