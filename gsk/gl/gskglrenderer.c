@@ -1119,27 +1119,6 @@ render_clip_node (GskGLRenderer   *self,
 }
 
 static inline void
-get_inner_rect (const GskRoundedRect *rect,
-                graphene_rect_t       *out)
-{
-  const float left = MAX (rect->corner[GSK_CORNER_TOP_LEFT].width,
-                          rect->corner[GSK_CORNER_BOTTOM_LEFT].width);
-  const float top  = MAX (rect->corner[GSK_CORNER_TOP_LEFT].height,
-                          rect->corner[GSK_CORNER_TOP_RIGHT].height);
-
-  out->origin.x = rect->bounds.origin.x + left;
-  out->origin.y = rect->bounds.origin.y + top;
-
-  out->size.width = rect->bounds.size.width - left -
-                    MAX (rect->corner[GSK_CORNER_TOP_RIGHT].width,
-                         rect->corner[GSK_CORNER_BOTTOM_RIGHT].width);
-
-  out->size.height = rect->bounds.size.height - top -
-                     MAX (rect->corner[GSK_CORNER_BOTTOM_LEFT].height,
-                          rect->corner[GSK_CORNER_BOTTOM_RIGHT].height);
-}
-
-static inline void
 render_rounded_clip_node (GskGLRenderer       *self,
                           GskRenderNode       *node,
                           RenderOpBuilder     *builder)
