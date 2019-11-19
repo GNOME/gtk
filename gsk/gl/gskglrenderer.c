@@ -1085,12 +1085,11 @@ render_linear_gradient_node (GskGLRenderer       *self,
 }
 
 static inline void
-render_clip_node (GskGLRenderer   *self,
-                  GskRenderNode   *node,
-                  RenderOpBuilder *builder)
+render_clipped_child (GskGLRenderer         *self,
+                      RenderOpBuilder       *builder,
+                      const graphene_rect_t *clip,
+                      GskRenderNode         *child)
 {
-  const graphene_rect_t *clip = gsk_clip_node_peek_clip (node);
-  GskRenderNode *child = gsk_clip_node_get_child (node);
   graphene_rect_t transformed_clip;
   graphene_rect_t intersection;
   GskRoundedRect child_clip;
@@ -1106,6 +1105,17 @@ render_clip_node (GskGLRenderer   *self,
   ops_push_clip (builder, &child_clip);
   gsk_gl_renderer_add_render_ops (self, child, builder);
   ops_pop_clip (builder);
+}
+
+static inline void
+render_clip_node (GskGLRenderer   *self,
+                  GskRenderNode   *node,
+                  RenderOpBuilder *builder)
+{
+  const graphene_rect_t *clip = gsk_clip_node_peek_clip (node);
+  GskRenderNode *child = gsk_clip_node_get_child (node);
+
+  render_clipped_child (self, builder, clip, child);
 }
 
 static inline void
@@ -1959,6 +1969,15 @@ render_repeat_node (GskGLRenderer   *self,
     {
       /* TODO: Implement these repeat nodes. */
       render_fallback_node (self, node, builder);
+      return;
+    }
+
+  /* If the size of the repeat node is smaller than the size of the
+   * child node, we don't repeat at all and can just draw that part
+   * of the child texture... */
+  if (graphene_rect_contains_rect (child_bounds, &node->bounds))
+    {
+      render_clipped_child (self, builder, &node->bounds, child);
       return;
     }
 
