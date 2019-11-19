@@ -37,7 +37,7 @@ snapshot_blur (GtkWidget   *widget,
 
 static void
 gtk_blur_box_init (GtkBlurBox *box) {
-  box->radius = 1;
+  box->radius = 0;
 }
 
 static void
@@ -83,6 +83,8 @@ main (int argc, char **argv)
   gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+
   blur_box = g_object_new (gtk_blur_box_get_type (),
                            "orientation", GTK_ORIENTATION_VERTICAL,
                            "spacing", 32,
@@ -108,7 +110,6 @@ main (int argc, char **argv)
   gtk_widget_set_hexpand (scale, TRUE);
   g_signal_connect (scale, "value-changed", G_CALLBACK (value_changed_cb), blur_box);
   g_signal_connect (scale, "value-changed", G_CALLBACK (value_changed_cb2), value_label);
-
 
   gtk_container_add (GTK_CONTAINER (blur_box), scale);
   gtk_container_add (GTK_CONTAINER (window), blur_box);
