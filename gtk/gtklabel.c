@@ -1570,6 +1570,12 @@ attribute_from_text (GtkBuilder   *builder,
 	}
       break;
 #endif
+#if PANGO_VERSION_CHECK(1,44,4)
+    case PANGO_ATTR_INSERT_HYPHENS:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, value, &val, error))
+	attribute = pango_attr_insert_hyphens_new (g_value_get_boolean (&val));
+      break;
+#endif
     case PANGO_ATTR_INVALID:
     default:
       break;
