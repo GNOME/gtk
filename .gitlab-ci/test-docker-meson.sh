@@ -16,6 +16,7 @@ meson \
     -Dbroadway_backend=true \
     -Dxinerama=yes \
     -Dprint_backends="file,lpr,test,cloudprint,cups" \
+    ${EXTRA_MESON_FLAGS:-} \
     _build
 
 cd _build

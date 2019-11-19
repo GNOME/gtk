@@ -20,7 +20,7 @@ fedora-distcheck:
   script:
    - bash -x ./.gitlab-ci/test-docker-autotools.sh
 
-fedora-meson:
+fedora-meson: &fedora-meson-defaults
   stage: build
   script:
    - bash -x ./.gitlab-ci/test-docker-meson.sh
@@ -30,6 +30,11 @@ fedora-meson:
     paths:
       - "_build/meson-logs"
       - "_build/testsuite/reftests/output"
+
+fedora-meson-staticlibs:
+  variables:
+    EXTRA_MESON_FLAGS: "-Ddefault_library=both"
+  <<: *fedora-meson-defaults
 
 msys2-mingw32-meson:
   variables:
