@@ -59,6 +59,7 @@ compare_render_tests = [
   'opacity-overlapping-children',
   'repeat',
   'repeat-texture',
+  'repeat-no-repeat',
 ]
 
 # these are too sensitive to differences in the renderers
