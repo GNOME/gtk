@@ -126,11 +126,14 @@ parse_texture (GtkCssParser *parser,
 
   if (texture == NULL)
     {
-      gtk_css_parser_emit_error (parser,
-                                 &start_location,
-                                 gtk_css_parser_get_end_location (parser),
-                                 error);
-      g_clear_error (&error);
+      if (error)
+        {
+          gtk_css_parser_emit_error (parser,
+                                     &start_location,
+                                     gtk_css_parser_get_end_location (parser),
+                                     error);
+          g_clear_error (&error);
+        }
       return FALSE;
     }
 
