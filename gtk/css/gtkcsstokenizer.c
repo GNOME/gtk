@@ -862,7 +862,7 @@ gtk_css_tokenizer_read_name (GtkCssTokenizer *tokenizer)
                   g_string_append_unichar (string, 0xFFFD);
                   break;
                 }
-              
+
               gtk_css_tokenizer_consume_char (tokenizer, string);
             }
         }
@@ -994,10 +994,11 @@ gtk_css_tokenizer_read_ident_like (GtkCssTokenizer  *tokenizer,
 
           if (*data != '"' && *data != '\'')
             {
+              g_free (name);
               return gtk_css_tokenizer_read_url (tokenizer, token, error);
             }
         }
-      
+
       gtk_css_token_init (token, GTK_CSS_TOKEN_FUNCTION, name);
       return TRUE;
     }
