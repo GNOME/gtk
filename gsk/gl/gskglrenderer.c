@@ -1973,8 +1973,8 @@ render_repeat_node (GskGLRenderer   *self,
   ops_set_texture (builder, region.texture_id);
 
   op = ops_begin (builder, OP_CHANGE_REPEAT);
-  op->child_bounds[0] = 0; /* Both currently unused */
-  op->child_bounds[1] = 0;
+  op->child_bounds[0] = (node->bounds.origin.x - child_bounds->origin.x) / child_bounds->size.width;
+  op->child_bounds[1] = (node->bounds.origin.y - child_bounds->origin.y) / child_bounds->size.height;
   op->child_bounds[2] = node->bounds.size.width / child_bounds->size.width;
   op->child_bounds[3] = node->bounds.size.height / child_bounds->size.height;
 
