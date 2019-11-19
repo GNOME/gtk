@@ -109,8 +109,16 @@ parse_texture (GtkCssParser *parser,
       GFile *file;
 
       file = gtk_css_parser_resolve_url (parser, url);
-      texture = gdk_texture_new_from_file (file, &error);
-      g_object_unref (file);
+
+      if (file)
+        {
+          texture = gdk_texture_new_from_file (file, &error);
+          g_object_unref (file);
+        }
+      else
+        {
+          texture = NULL;
+        }
     }
 
   g_free (scheme);
