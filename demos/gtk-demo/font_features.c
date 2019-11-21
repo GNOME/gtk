@@ -1221,7 +1221,7 @@ do_font_features (GtkWidget *do_widget)
       gtk_builder_add_callback_symbol (builder, "reset", reset_features);
       gtk_builder_add_callback_symbol (builder, "stop_edit", G_CALLBACK (stop_edit));
       gtk_builder_add_callback_symbol (builder, "toggle_edit", G_CALLBACK (toggle_edit));
-      gtk_builder_connect_signals (builder, NULL);
+      gtk_builder_connect_signals (builder);
 
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       feature_list = GTK_WIDGET (gtk_builder_get_object (builder, "feature_list"));

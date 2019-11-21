@@ -293,7 +293,7 @@ do_fishbowl (GtkWidget *do_widget)
                                         "prev_button_clicked_cb", G_CALLBACK (prev_button_clicked_cb),
                                         "changes_toggled_cb", G_CALLBACK (changes_toggled_cb),
                                         NULL);
-      gtk_builder_connect_signals (builder, NULL);
+      gtk_builder_connect_signals (builder);
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);

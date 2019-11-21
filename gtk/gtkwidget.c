@@ -12212,7 +12212,7 @@ gtk_widget_init_template (GtkWidget *widget)
   if (template->connect_func)
     gtk_builder_connect_signals_full (builder, template->connect_func, template->connect_data);
   else
-    gtk_builder_connect_signals (builder, object);
+    gtk_builder_connect_signals (builder);
 
   g_object_unref (builder);
 }

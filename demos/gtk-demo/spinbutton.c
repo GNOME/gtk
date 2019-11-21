@@ -199,7 +199,7 @@ do_spinbutton (GtkWidget *do_widget)
                                       "month_spin_input", G_CALLBACK (month_spin_input),
                                       "month_spin_output", G_CALLBACK (month_spin_output),
                                       NULL);
-    gtk_builder_connect_signals (builder, NULL);
+    gtk_builder_connect_signals (builder);
     window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
     gtk_window_set_display (GTK_WINDOW (window),
                             gtk_widget_get_display (do_widget));

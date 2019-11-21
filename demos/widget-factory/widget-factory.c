@@ -1729,7 +1729,7 @@ activate (GApplication *app)
   gtk_builder_add_callback_symbol (builder, "reset_icon_size", (GCallback)reset_icon_size);
   gtk_builder_add_callback_symbol (builder, "osd_frame_pressed", (GCallback)osd_frame_pressed);
 
-  gtk_builder_connect_signals (builder, NULL);
+  gtk_builder_connect_signals (builder);
 
   window = (GtkWindow *)gtk_builder_get_object (builder, "window");
   gtk_application_add_window (GTK_APPLICATION (app), window);

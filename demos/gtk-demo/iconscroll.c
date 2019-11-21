@@ -210,7 +210,7 @@ do_iconscroll (GtkWidget *do_widget)
                                         "next_clicked_cb", G_CALLBACK (next_clicked_cb),
                                         "prev_clicked_cb", G_CALLBACK (prev_clicked_cb),
                                         NULL);
-      gtk_builder_connect_signals (builder, NULL);
+      gtk_builder_connect_signals (builder);
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);

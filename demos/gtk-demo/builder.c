@@ -59,7 +59,7 @@ do_builder (GtkWidget *do_widget)
 
       builder = gtk_builder_new_from_resource ("/builder/demo.ui");
 
-      gtk_builder_connect_signals (builder, NULL);
+      gtk_builder_connect_signals (builder);
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));

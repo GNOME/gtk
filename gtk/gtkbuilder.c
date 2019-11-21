@@ -1689,7 +1689,6 @@ gtk_builder_connect_signals_default (GtkBuilder    *builder,
 /**
  * gtk_builder_connect_signals:
  * @builder: a #GtkBuilder
- * @user_data: user data to pass back with all signals
  *
  * This method is a simpler variation of gtk_builder_connect_signals_full().
  * It uses symbols explicitly added to @builder with prior calls to
@@ -1714,14 +1713,13 @@ gtk_builder_connect_signals_default (GtkBuilder    *builder,
  * gmodule-export-2.0.
  **/
 void
-gtk_builder_connect_signals (GtkBuilder *builder,
-                             gpointer    user_data)
+gtk_builder_connect_signals (GtkBuilder *builder)
 {
   g_return_if_fail (GTK_IS_BUILDER (builder));
 
   gtk_builder_connect_signals_full (builder,
                                     gtk_builder_connect_signals_default,
-                                    user_data);
+                                    NULL);
 }
 
 /**

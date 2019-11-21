@@ -150,8 +150,7 @@ void         gtk_builder_expose_object           (GtkBuilder    *builder,
                                                   const gchar   *name,
                                                   GObject       *object);
 GDK_AVAILABLE_IN_ALL
-void         gtk_builder_connect_signals         (GtkBuilder    *builder,
-						  gpointer       user_data);
+void         gtk_builder_connect_signals         (GtkBuilder    *builder);
 GDK_AVAILABLE_IN_ALL
 void         gtk_builder_connect_signals_full    (GtkBuilder    *builder,
                                                   GtkBuilderConnectFunc func,

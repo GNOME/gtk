@@ -95,7 +95,7 @@ do_shortcuts (GtkWidget *do_widget)
                                         "boxes_shortcuts_wizard", G_CALLBACK (boxes_shortcuts_wizard),
                                         "boxes_shortcuts_display", G_CALLBACK (boxes_shortcuts_display),
                                         NULL);
-      gtk_builder_connect_signals (builder, NULL);
+      gtk_builder_connect_signals (builder);
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));

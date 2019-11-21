@@ -34,7 +34,7 @@ main (int argc, char *argv[])
   gtk_builder_add_callback_symbol (builder, "back_to_main", G_CALLBACK (back_to_main));
   gtk_builder_add_callback_symbol (builder, "go_to_secondary", G_CALLBACK (go_to_secondary));
   gtk_builder_add_from_file (builder, "teststackedheaders.ui", NULL);
-  gtk_builder_connect_signals (builder, NULL);
+  gtk_builder_connect_signals (builder);
 
   win = (GtkWidget *)gtk_builder_get_object (builder, "window");
   header_stack = (GtkWidget *)gtk_builder_get_object (builder, "header_stack");
