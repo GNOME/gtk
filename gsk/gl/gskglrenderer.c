@@ -1277,11 +1277,21 @@ render_blur_node (GskGLRenderer   *self,
                   RenderOpBuilder *builder,
                   GskQuadVertex   *vertex_data)
 {
+  const float scale = ops_get_scale (builder);
   const float blur_radius = gsk_blur_node_get_radius (node);
+  const float texture_width = ceilf (node->bounds.size.width * scale);
+  const float texture_height = ceilf (node->bounds.size.height * scale);
   GskRenderNode *child = gsk_blur_node_get_child (node);
   TextureRegion region;
   gboolean is_offscreen;
   OpBlur *op;
+  int prev_render_target;
+  int pass1_texture_id, pass1_render_target;
+  int pass2_texture_id, pass2_render_target;
+  graphene_matrix_t prev_projection;
+  graphene_rect_t prev_viewport;
+  graphene_matrix_t item_proj;
+  GskRoundedRect r = GSK_ROUNDED_RECT_INIT (0, 0, texture_width, texture_height);
 
   if (blur_radius <= 0)
     {
@@ -1293,25 +1303,92 @@ render_blur_node (GskGLRenderer   *self,
    * so the resulting offscreen texture is bigger by the gaussian blur factor
    * (see gsk_blur_node_new), but we didn't have to do that if the blur
    * shader could handle that situation. */
-
   add_offscreen_ops (self, builder,
                      &node->bounds,
                      child,
                      &region, &is_offscreen,
                      RESET_CLIP | FORCE_OFFSCREEN | RESET_OPACITY);
 
+  g_assert (is_offscreen);
+
+  gsk_gl_driver_create_render_target (self->gl_driver,
+                                      texture_width, texture_height,
+                                      &pass1_texture_id, &pass1_render_target);
+
+  gsk_gl_driver_create_render_target (self->gl_driver,
+                                      texture_width, texture_height,
+                                      &pass2_texture_id, &pass2_render_target);
+
+
+
+  graphene_matrix_init_ortho (&item_proj,
+                              0, texture_width, 0, texture_height,
+                              ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
+  graphene_matrix_scale (&item_proj, 1, -1, 1);
+
+  prev_projection = ops_set_projection (builder, &item_proj);
+  ops_set_modelview (builder, NULL);
+  prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (0, 0, texture_width, texture_height));
+  ops_push_clip (builder, &r);
+
+  prev_render_target = ops_set_render_target (builder, pass1_render_target);
+  ops_begin (builder, OP_CLEAR);
   ops_set_program (builder, &self->blur_program);
 
   op = ops_begin (builder, OP_CHANGE_BLUR);
-  graphene_size_init_from_size (&op->size, &node->bounds.size);
+  op->size.width = texture_width;
+  op->size.height = texture_height;
+  op->size.width = node->bounds.size.width;
+  op->size.height = node->bounds.size.height;
   op->radius = blur_radius;
-
+  op->dir[0] = 1;
+  op->dir[1] = 0;
   ops_set_texture (builder, region.texture_id);
 
-  if (is_offscreen)
-    flip_vertex_data_y (vertex_data);
+  ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+    { { 0,                            }, { 0, 1 }, },
+    { { 0,             texture_height }, { 0, 0 }, },
+    { { texture_width,                }, { 1, 1 }, },
 
-  ops_draw (builder, vertex_data);
+    { { texture_width, texture_height }, { 1, 0 }, },
+    { { 0,             texture_height }, { 0, 0 }, },
+    { { texture_width,                }, { 1, 1 }, },
+  });
+
+  op = ops_begin (builder, OP_CHANGE_BLUR);
+  op->size.width = texture_width;
+  op->size.height = texture_height;
+  op->size.width = texture_width;
+  op->size.height = texture_height;
+  op->size.width = node->bounds.size.width;
+  op->size.height = node->bounds.size.height;
+  op->radius = blur_radius;
+  op->dir[0] = 0;
+  op->dir[1] = 1;
+  ops_set_texture (builder, pass1_texture_id);
+  ops_set_render_target (builder, pass2_render_target);
+  ops_begin (builder, OP_CLEAR);
+  ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) { /* render pass 2 */
+    { { 0,                            }, { 0, 1 }, },
+    { { 0,             texture_height }, { 0, 0 }, },
+    { { texture_width,                }, { 1, 1 }, },
+
+    { { texture_width, texture_height }, { 1, 0 }, },
+    { { 0,             texture_height }, { 0, 0 }, },
+    { { texture_width,                }, { 1, 1 }, },
+  });
+
+  ops_set_render_target (builder, prev_render_target);
+  ops_set_viewport (builder, &prev_viewport);
+  ops_set_projection (builder, &prev_projection);
+  ops_pop_modelview (builder);
+  ops_pop_clip (builder);
+
+  /* Draw the result */
+  flip_vertex_data_y (vertex_data);
+  ops_set_program (builder, &self->blit_program);
+  ops_set_texture (builder, pass2_texture_id);
+  ops_draw (builder, vertex_data); /* Render result to screen */
 }
 
 static inline void
@@ -2282,7 +2359,7 @@ apply_blur_op (const Program *program,
   OP_PRINT (" -> Blur");
   glUniform1f (program->blur.blur_radius_location, op->radius);
   glUniform2f (program->blur.blur_size_location, op->size.width, op->size.height);
-  /*glUniform2f (program->blur.dir_location, op->dir[0], op->dir[1]);*/
+  glUniform2f (program->blur.blur_dir_location, op->dir[0], op->dir[1]);
 }
 
 static inline void
@@ -2449,7 +2526,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   /* blur */
   INIT_PROGRAM_UNIFORM_LOCATION (blur, blur_radius);
   INIT_PROGRAM_UNIFORM_LOCATION (blur, blur_size);
-  /*INIT_PROGRAM_UNIFORM_LOCATION (blur, dir);*/
+  INIT_PROGRAM_UNIFORM_LOCATION (blur, blur_dir);
 
   /* inset shadow */
   INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow, color);
