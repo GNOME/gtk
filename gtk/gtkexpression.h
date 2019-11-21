@@ -26,6 +26,16 @@
 G_BEGIN_DECLS
 
 typedef struct _GtkExpression GtkExpression;
+typedef struct _GtkExpressionWatch GtkExpressionWatch;
+
+/**
+ * GtkExpressionNotify:
+ * @user_data: data passed to gtk_expression_watch()
+ *
+ * Callback called by gtk_expression_watch() when the
+ * expression value changes.
+ */
+typedef void            (* GtkExpressionNotify)                 (gpointer                        user_data);
 
 #define GTK_IS_EXPRESSION(expr) ((expr) != NULL)
 
@@ -42,9 +52,27 @@ void                    gtk_expression_unref                    (GtkExpression  
 GDK_AVAILABLE_IN_ALL
 GType                   gtk_expression_get_value_type           (GtkExpression                  *self);
 GDK_AVAILABLE_IN_ALL
+gboolean                gtk_expression_is_static                (GtkExpression                  *self);
+GDK_AVAILABLE_IN_ALL
 gboolean                gtk_expression_evaluate                 (GtkExpression                  *self,
                                                                  gpointer                        this_,
                                                                  GValue                         *value);
+GDK_AVAILABLE_IN_ALL
+GtkExpressionWatch *    gtk_expression_watch                    (GtkExpression                  *self,
+                                                                 gpointer                        this_,
+                                                                 GtkExpressionNotify             notify,
+                                                                 gpointer                        user_data,
+                                                                 GDestroyNotify                  user_destroy);
+
+GDK_AVAILABLE_IN_ALL
+GtkExpressionWatch *    gtk_expression_watch_ref                (GtkExpressionWatch             *watch);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_expression_watch_unref              (GtkExpressionWatch             *watch);
+GDK_AVAILABLE_IN_ALL
+gboolean                gtk_expression_watch_evaluate           (GtkExpressionWatch             *watch,
+                                                                 GValue                         *value);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_expression_watch_unwatch            (GtkExpressionWatch             *watch);
 
 GDK_AVAILABLE_IN_ALL
 GtkExpression *         gtk_property_expression_new             (GType                           this_type,
