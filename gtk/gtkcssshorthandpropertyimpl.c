@@ -396,7 +396,7 @@ parse_border (GtkCssShorthandProperty  *shorthand,
         values[6] = _gtk_css_value_ref (values[4]);
         values[7] = _gtk_css_value_ref (values[4]);
       }
-    else if (!G_IS_VALUE (&values[8]))
+    else if (values[8] == NULL)
       {
         values[8] = _gtk_css_color_value_parse (parser);
         if (values[8] == NULL)

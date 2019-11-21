@@ -206,6 +206,9 @@ test_data = \
         border-color.ref.css \
 	border-color-currentcolor.css \
 	border-color-currentcolor.ref.css \
+	border-crash-3.24.css \
+	border-crash-3.24.errors \
+	border-crash-3.24.ref.css \
         border-image-source.css \
         border-image-source.ref.css \
         border-image-repeat.css \
