@@ -249,6 +249,10 @@ typedef struct
   gchar *filename;
   gchar *resource_prefix;
   GType template_type;
+
+  GtkBuilderClosureFunc closure_func;
+  gpointer closure_data;
+  GDestroyNotify closure_destroy;
 } GtkBuilderPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkBuilder, gtk_builder, G_TYPE_OBJECT)
@@ -303,6 +307,9 @@ static void
 gtk_builder_finalize (GObject *object)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (GTK_BUILDER (object));
+
+  if (priv->closure_destroy)
+    priv->closure_destroy (priv->closure_data);
 
   g_clear_pointer (&priv->module, g_module_close);
 
@@ -1715,6 +1722,32 @@ gtk_builder_connect_signals (GtkBuilder *builder)
 }
 
 /**
+ * GtkBuilderClosureFunc:
+ * @builder: a #GtkBuilder
+ * @function_name: name of the function to create a closure for
+ * @swapped: if the closure should swap user data and instance
+ * @object: (nullable): object to use as user data for the closure
+ * @user_data: user data passed when setting the function
+ * @error: location for error when creating the closure fails
+ *
+ * Prototype of function used to create closures by @builder. It is meant
+ * for influencing how @function_name is resolved.
+ *
+ * This function is most useful for bindings and can be used with
+ * gtk_builder_set_closure_func() or gtk_widget_class_set_closure_func()
+ * to allow creating closures for functions defined in the binding's
+ * language.
+ *
+ * If the given @function_name does not match a function name or when the
+ * arguments cannot be supported by the bindings, bindings should return
+ * %NULL and set @error. Usually %GTK_BUILDER_ERROR_INVALID_FUNCTION will
+ * be the right error code to use.
+ *
+ * Returns: (nullable): a new #GClosure or %NULL when no closure could
+ *   be created and @error was set.
+ */
+
+/**
  * GtkBuilderConnectFunc:
  * @builder: a #GtkBuilder
  * @object: object to connect a signal to
@@ -2639,7 +2672,7 @@ gtk_builder_add_callback_symbols (GtkBuilder  *builder,
  *
  * This function is intended for possible use in language bindings
  * or for any case that one might be customizing signal connections
- * using gtk_builder_connect_signals_full()
+ * using gtk_builder_set_closure_func().
  *
  * Returns: (nullable): The callback symbol in @builder for @callback_name, or %NULL
  */
@@ -2656,6 +2689,38 @@ gtk_builder_lookup_callback_symbol (GtkBuilder  *builder,
     return NULL;
 
   return g_hash_table_lookup (priv->callbacks, callback_name);
+}
+
+/**
+ * gtk_builder_set_closure_func: (skip)
+ * @builder: a #GtkBuilder
+ * @closure_func: (allow-none) function to call when creating
+ *     closures or %NULL to use the default
+ * @user_data: (nullable): user data to pass to @closure_func
+ * @user_destroy: destroy function for user data
+ *
+ * Sets the function to call for creating closures.
+ * gtk_builder_create_closure() will use this function instead
+ * of gtk_builder_create_cclosure().
+ *
+ * This is useful for bindings.
+ **/
+void
+gtk_builder_set_closure_func (GtkBuilder            *builder,
+                              GtkBuilderClosureFunc  closure_func,
+                              gpointer               user_data,
+                              GDestroyNotify         user_destroy)
+{
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+
+  g_return_if_fail (GTK_IS_BUILDER (builder));
+
+  if (priv->closure_destroy)
+    priv->closure_destroy (priv->closure_data);
+
+  priv->closure_func = closure_func;
+  priv->closure_data = user_data;
+  priv->closure_destroy = user_destroy;
 }
 
 static GClosure *
@@ -2710,12 +2775,17 @@ gtk_builder_create_closure (GtkBuilder *builder,
                             GObject    *object,
                             GError    **error)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+
   g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
   g_return_val_if_fail (function_name, NULL);
   g_return_val_if_fail (object == NULL || G_IS_OBJECT (object), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  return gtk_builder_create_cclosure (builder, function_name, swapped, object, error);
+  if (priv->closure_func)
+    return priv->closure_func (builder, function_name, swapped, object, priv->closure_data, error);
+  else
+    return gtk_builder_create_cclosure (builder, function_name, swapped, object, error);
 }
 
 /**

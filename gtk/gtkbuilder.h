@@ -116,6 +116,11 @@ GDK_AVAILABLE_IN_ALL
 GtkBuilder*  gtk_builder_new                     (void);
 
 GDK_AVAILABLE_IN_ALL
+void         gtk_builder_set_closure_func        (GtkBuilder    *builder,
+                                                  GtkBuilderClosureFunc closure_func,
+                                                  gpointer       user_data,
+                                                  GDestroyNotify user_destroy);
+GDK_AVAILABLE_IN_ALL
 gboolean     gtk_builder_add_from_file           (GtkBuilder    *builder,
                                                   const gchar   *filename,
                                                   GError       **error);

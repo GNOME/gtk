@@ -520,6 +520,7 @@ GTK_BUILDABLE_GET_IFACE
 <FILE>gtkbuilder</FILE>
 <TITLE>GtkBuilder</TITLE>
 GtkBuilder
+GtkBuilderClosureFunc
 GtkBuilderConnectFunc
 GtkBuilderError
 gtk_builder_new
@@ -546,6 +547,7 @@ gtk_builder_connect_signals_full
 gtk_builder_set_translation_domain
 gtk_builder_get_translation_domain
 gtk_builder_get_type_from_name
+gtk_builder_set_closure_func
 gtk_builder_value_from_string
 gtk_builder_value_from_string_type
 GTK_BUILDER_WARN_INVALID_CHILD_TYPE

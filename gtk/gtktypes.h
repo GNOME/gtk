@@ -51,7 +51,12 @@ typedef struct _GtkWidget              GtkWidget;
 typedef struct _GtkWidgetPath          GtkWidgetPath;
 typedef struct _GtkWindow              GtkWindow;
 
-
+typedef GClosure*       (* GtkBuilderClosureFunc)               (GtkBuilder             *builder,
+                                                                 const char             *function_name,
+                                                                 gboolean                swapped,
+                                                                 GObject                *object,
+                                                                 gpointer                user_data,
+                                                                 GError                **error);
 typedef void (*GtkBuilderConnectFunc) (GtkBuilder    *builder,
 				       GObject       *object,
 				       const gchar   *signal_name,
