@@ -52,10 +52,6 @@ typedef struct _GtkWidgetPath          GtkWidgetPath;
 typedef struct _GtkWindow              GtkWindow;
 
 
-typedef gboolean (*GtkRcPropertyParser) (const GParamSpec *pspec,
-                                         const GString    *rc_string,
-                                         GValue           *property_value);
-
 typedef void (*GtkBuilderConnectFunc) (GtkBuilder    *builder,
 				       GObject       *object,
 				       const gchar   *signal_name,
