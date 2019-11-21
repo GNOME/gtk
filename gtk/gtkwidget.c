@@ -12113,6 +12113,34 @@ setup_template_child (GtkWidgetTemplate   *template_data,
   return TRUE;
 }
 
+static void
+gtk_widget_template_connect_func (GtkBuilder    *builder,
+				  GObject       *object,
+				  const gchar   *signal_name,
+				  const gchar   *handler_name,
+				  GObject       *connect_object,
+				  GConnectFlags  flags,
+				  gpointer       user_data)
+{
+  GClosure *closure;
+  GError *error = NULL;
+
+  closure = gtk_builder_create_closure (builder,
+                                        handler_name,
+                                        flags & G_CONNECT_SWAPPED ? TRUE : FALSE,
+                                        connect_object ? connect_object : user_data,
+                                        &error);
+
+  if (error)
+    {
+      g_warning ("%s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  g_signal_connect_closure (object, signal_name, closure, flags & G_CONNECT_AFTER ? TRUE : FALSE);
+}
+
 /**
  * gtk_widget_init_template:
  * @widget: a #GtkWidget
@@ -12212,7 +12240,7 @@ gtk_widget_init_template (GtkWidget *widget)
   if (template->connect_func)
     gtk_builder_connect_signals_full (builder, template->connect_func, template->connect_data);
   else
-    gtk_builder_connect_signals (builder);
+    gtk_builder_connect_signals_full (builder, gtk_widget_template_connect_func, widget);
 
   g_object_unref (builder);
 }
