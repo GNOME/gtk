@@ -1658,31 +1658,23 @@ gtk_builder_connect_signals_default (GtkBuilder    *builder,
                                      GConnectFlags  flags,
                                      gpointer       user_data)
 {
-  GCallback func;
+  GClosure *closure;
+  GError *error = NULL;
 
-  func = gtk_builder_lookup_callback_symbol (builder, handler_name);
+  closure = gtk_builder_create_closure (builder,
+                                        handler_name,
+                                        flags & G_CONNECT_SWAPPED ? TRUE : FALSE,
+                                        connect_object,
+                                        &error);
 
-  if (!func)
+  if (closure == NULL)
     {
-      GModule *module = gtk_builder_get_module (builder);
-
-      /* Only error out for missing GModule support if we've not
-       * found the symbols explicitly added with gtk_builder_add_callback_symbol()
-       */
-      if (module == NULL)
-        g_error ("gtk_builder_connect_signals() requires working GModule");
-
-      if (!g_module_symbol (module, handler_name, (gpointer)&func))
-        {
-          g_warning ("Could not find signal handler '%s'.  Did you compile with -rdynamic?", handler_name);
-          return;
-        }
+      g_warning ("%s", error->message);
+      g_error_free (error);
+      return;
     }
 
-  if (connect_object)
-    g_signal_connect_object (object, signal_name, func, connect_object, flags);
-  else
-    g_signal_connect_data (object, signal_name, func, user_data, NULL, flags);
+  g_signal_connect_closure (object, signal_name, closure, flags & G_CONNECT_AFTER ? TRUE : FALSE);
 }
 
 
@@ -2571,7 +2563,7 @@ _gtk_builder_get_template_type (GtkBuilder *builder)
  *
  * Adds the @callback_symbol to the scope of @builder under the given @callback_name.
  *
- * Using this function overrides the behavior of gtk_builder_connect_signals()
+ * Using this function overrides the behavior of gtk_builder_create_closure()
  * for any callback symbols that are added. Using this method allows for better
  * encapsulation as it does not require that callback symbols be declared in
  * the global namespace.
@@ -2664,6 +2656,122 @@ gtk_builder_lookup_callback_symbol (GtkBuilder  *builder,
     return NULL;
 
   return g_hash_table_lookup (priv->callbacks, callback_name);
+}
+
+static GClosure *
+gtk_builder_create_closure_for_funcptr (GtkBuilder *builder,
+                                        GCallback   callback,
+                                        gboolean    swapped,
+                                        GObject    *object)
+{
+  GClosure *closure;
+
+  if (object)
+    {
+      if (swapped)
+        closure = g_cclosure_new_object_swap (callback, object);
+      else
+        closure = g_cclosure_new_object (callback, object);
+    }
+  else
+    {
+      if (swapped)
+        closure = g_cclosure_new_swap (callback, NULL, NULL);
+      else
+        closure = g_cclosure_new (callback, NULL, NULL);
+    }
+
+  return closure;
+}
+
+/**
+ * gtk_builder_create_closure:
+ * @builder: a #GtkBuilder
+ * @function_name: name of the function to look up
+ * @swapped: %TRUE to create a swapped closure
+ * @object: (nullable): Object to create the closure with
+ * @error: (allow-none): return location for an error, or %NULL
+ *
+ * Creates a closure to invoke the function called @function_name.
+ *
+ * If a closure function was set via gtk_builder_set_closure_func(),
+ * will be invoked.
+ * Otherwise, gtk_builder_create_cclosure() will be called.
+ *
+ * If no closure could be created, %NULL will be returned and @error will
+ * be set.
+ *
+ * Returns: (nullable): A new closure for invoking @function_name
+ **/
+GClosure *
+gtk_builder_create_closure (GtkBuilder *builder,
+                            const char *function_name,
+                            gboolean    swapped,
+                            GObject    *object,
+                            GError    **error)
+{
+  g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
+  g_return_val_if_fail (function_name, NULL);
+  g_return_val_if_fail (object == NULL || G_IS_OBJECT (object), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  return gtk_builder_create_cclosure (builder, function_name, swapped, object, error);
+}
+
+/**
+ * gtk_builder_create_cclosure: (skip)
+ * @builder: a #GtkBuilder
+ * @function_name: name of the function to look up
+ * @swapped: %TRUE to create a swapped closure
+ * @object: (nullable): Object to create the closure with
+ * @error: (allow-none): return location for an error, or %NULL
+ *
+ * This is the default function used by gtk_builder_set_closure_func(). Some bindings
+ * with C support may want to call this function as a fallback from their closure
+ * function.
+ *
+ * This function has no purpose otherwise.
+ *
+ * This function will prefer callbacks added via gtk_builder_add_callback_symbol()
+ * to looking up public symbols.
+ *
+ * Returns: (nullable): A new closure for invoking @function_name
+ **/
+GClosure *
+gtk_builder_create_cclosure (GtkBuilder *builder,
+                             const char *function_name,
+                             gboolean    swapped,
+                             GObject    *object,
+                             GError    **error)
+{
+  GModule *module = gtk_builder_get_module (builder);
+  GCallback func;
+
+  func = gtk_builder_lookup_callback_symbol (builder, function_name);
+  if (func)
+    return gtk_builder_create_closure_for_funcptr (builder, func, swapped, object);
+
+  if (module == NULL)
+    {
+      g_set_error (error,
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_INVALID_FUNCTION,
+                   "Could not look up function `%s`: GModule is not supported.",
+                   function_name);
+      return NULL;
+    }
+
+  if (!g_module_symbol (module, function_name, (gpointer)&func))
+    {
+      g_set_error (error,
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_INVALID_FUNCTION,
+                   "No function named `%s`.",
+                   function_name);
+      return NULL;
+    }
+
+  return gtk_builder_create_closure_for_funcptr (builder, func, swapped, object);
 }
 
 /**
