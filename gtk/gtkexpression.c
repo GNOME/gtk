@@ -33,15 +33,31 @@ struct _GtkExpression
   GtkExpression *owner;
 };
 
+struct _GtkExpressionWatch
+{
+  GtkExpression *expression;
+  GtkExpressionNotify notify;
+  gpointer user_data;
+  GDestroyNotify user_destroy;
+};
+
 struct _GtkExpressionClass
 {
   gsize struct_size;
   const char *type_name;
 
   void                  (* finalize)            (GtkExpression          *expr);
+  gboolean              (* is_static)           (GtkExpression          *expr);
   gboolean              (* evaluate)            (GtkExpression          *expr,
                                                  gpointer                this,
                                                  GValue                 *value);
+
+  gsize watch_size;
+  void                  (* watch)               (GtkExpression          *self,
+                                                 gpointer                this_,
+                                                 GtkExpressionWatch     *watch);
+  void                  (* unwatch)             (GtkExpression          *self,
+                                                 GtkExpressionWatch     *watch);
 };
 
 /**
@@ -77,6 +93,25 @@ gtk_expression_alloc (const GtkExpressionClass *expression_class,
   return self;
 }
 
+static void
+gtk_expression_watch_static (GtkExpression      *self,
+                             gpointer            this_,
+                             GtkExpressionWatch *watch)
+{
+}
+
+static void
+gtk_expression_unwatch_static (GtkExpression      *self,
+                               GtkExpressionWatch *watch)
+{
+}
+
+static void
+gtk_expression_watch_notify (GtkExpressionWatch *watch)
+{
+  watch->notify (watch->user_data);
+}
+
 /*** CONSTANT ***/
 
 typedef struct _GtkConstantExpression GtkConstantExpression;
@@ -97,6 +132,12 @@ gtk_constant_expression_finalize (GtkExpression *expr)
 }
 
 static gboolean
+gtk_constant_expression_is_static (GtkExpression *expr)
+{
+  return TRUE;
+}
+
+static gboolean
 gtk_constant_expression_evaluate (GtkExpression *expr,
                                   gpointer       this,
                                   GValue        *value)
@@ -113,7 +154,11 @@ static const GtkExpressionClass GTK_CONSTANT_EXPRESSION_CLASS =
   sizeof (GtkConstantExpression),
   "GtkConstantExpression",
   gtk_constant_expression_finalize,
+  gtk_constant_expression_is_static,
   gtk_constant_expression_evaluate,
+  sizeof (GtkExpressionWatch),
+  gtk_expression_watch_static,
+  gtk_expression_unwatch_static
 };
 
 GtkExpression *
@@ -304,6 +349,12 @@ gtk_property_expression_finalize (GtkExpression *expr)
 }
 
 static gboolean
+gtk_property_expression_is_static (GtkExpression *expr)
+{
+  return FALSE;
+}
+
+static gboolean
 gtk_property_expression_evaluate (GtkExpression *expr,
                                   gpointer       this,
                                   GValue        *value)
@@ -317,12 +368,54 @@ gtk_property_expression_evaluate (GtkExpression *expr,
   return TRUE;
 }
 
+typedef struct _GtkPropertyExpressionWatch GtkPropertyExpressionWatch;
+struct _GtkPropertyExpressionWatch
+{
+  GtkExpressionWatch watch;
+
+  GClosure *closure;
+};
+
+static void
+gtk_property_expression_watch (GtkExpression      *expr,
+                               gpointer            this_,
+                               GtkExpressionWatch *watch)
+{
+  GtkPropertyExpressionWatch *pwatch = (GtkPropertyExpressionWatch *) watch;
+  GtkPropertyExpression *self = (GtkPropertyExpression *) expr;
+  GObject *object = this_;
+
+  pwatch->closure = g_cclosure_new_swap (G_CALLBACK (gtk_expression_watch_notify), pwatch, NULL);
+  if (!g_signal_connect_closure_by_id (object,
+                                       g_signal_lookup ("notify", G_OBJECT_TYPE (object)),
+                                       g_quark_from_string (self->pspec->name),
+                                       g_closure_ref (pwatch->closure),
+                                       FALSE))
+    {
+      g_assert_not_reached ();
+    }
+}
+
+static void
+gtk_property_expression_unwatch (GtkExpression      *expr,
+                                 GtkExpressionWatch *watch)
+{
+  GtkPropertyExpressionWatch *pwatch = (GtkPropertyExpressionWatch *) watch;
+
+  g_closure_invalidate (pwatch->closure);
+  g_closure_unref (pwatch->closure);
+}
+
 static const GtkExpressionClass GTK_PROPERTY_EXPRESSION_CLASS =
 {
   sizeof (GtkPropertyExpression),
   "GtkPropertyExpression",
   gtk_property_expression_finalize,
+  gtk_property_expression_is_static,
   gtk_property_expression_evaluate,
+  sizeof (GtkPropertyExpressionWatch),
+  gtk_property_expression_watch,
+  gtk_property_expression_unwatch
 };
 
 /**
@@ -402,6 +495,21 @@ gtk_closure_expression_finalize (GtkExpression *expr)
 }
 
 static gboolean
+gtk_closure_expression_is_static (GtkExpression *expr)
+{
+  GtkClosureExpression *self = (GtkClosureExpression *) expr;
+  guint i;
+
+  for (i = 0; i < self->n_params; i++)
+    {
+      if (!gtk_expression_is_static (self->params[i]))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
 gtk_closure_expression_evaluate (GtkExpression *expr,
                                  gpointer       this,
                                  GValue        *value)
@@ -438,12 +546,56 @@ out:
   return result;
 }
 
+typedef struct _GtkClosureExpressionWatch GtkClosureExpressionWatch;
+struct _GtkClosureExpressionWatch
+{
+  GtkExpressionWatch watch;
+
+  GSList *watches;
+};
+
+static void
+gtk_closure_expression_watch (GtkExpression      *expr,
+                              gpointer            this_,
+                              GtkExpressionWatch *watch)
+{
+  GtkClosureExpressionWatch *cwatch = (GtkClosureExpressionWatch *) watch;
+  GtkClosureExpression *self = (GtkClosureExpression *) expr;
+  guint i;
+
+  for (i = 0; i < self->n_params; i++)
+    {
+      if (gtk_expression_is_static (self->params[i]))
+        continue;
+
+      cwatch->watches = g_slist_prepend (cwatch->watches,
+                                         gtk_expression_watch (self->params[i],
+                                                               this_,
+                                                               (GtkExpressionNotify) gtk_expression_watch_notify,
+                                                               watch,
+                                                               NULL));
+    }
+}
+
+static void
+gtk_closure_expression_unwatch (GtkExpression      *expr,
+                                GtkExpressionWatch *watch)
+{
+  GtkClosureExpressionWatch *cwatch = (GtkClosureExpressionWatch *) watch;
+
+  g_slist_free_full (cwatch->watches, (GDestroyNotify) gtk_expression_watch_unwatch);
+}
+
 static const GtkExpressionClass GTK_CLOSURE_EXPRESSION_CLASS =
 {
   sizeof (GtkClosureExpression),
   "GtkClosureExpression",
   gtk_closure_expression_finalize,
+  gtk_closure_expression_is_static,
   gtk_closure_expression_evaluate,
+  sizeof (GtkClosureExpressionWatch),
+  gtk_closure_expression_watch,
+  gtk_closure_expression_unwatch
 };
 
 GtkExpression *
@@ -573,3 +725,90 @@ gtk_expression_evaluate (GtkExpression *self,
   return self->expression_class->evaluate (self, this_, value);
 }
 
+/**
+ * gtk_expression_is_static:
+ * @self: a #GtkExpression
+ *
+ * Checks if the expression is static.
+ *
+ * A static expression will never change its result when 
+ * gtk_expression_evaluate() is called on it with the same arguments.
+ *
+ * That means a call to gtk_expression_watch() is not necessary because
+ * it will never trigger a notify.
+ *
+ * Returns: %TRUE if the expression is static
+ **/
+gboolean
+gtk_expression_is_static (GtkExpression *self)
+{
+  return self->expression_class->is_static (self);
+}
+
+/**
+ * gtk_expression_watch:
+ * @self: a #GtkExpression
+ * @this_: (transfer none) (type GObject): the this argument to
+ *     watch
+ * @notify: (closure user_data): callback to invoke when the
+ *     expression changes
+ * @user_data: user data to pass to @notify callback
+ * @user_destroy: destroy notify for @user_data
+ *
+ * Installs a watch for the given @expression that calls the @notify function
+ * whenever the evaluation of @self may have changed.
+ *
+ * GTK cannot guarantee that the evaluation did indeed change when the @notify
+ * gets invoked, but it guarantees the opposite: When it did in fact change,
+ * the @notify will be invoked.
+ *
+ * Returns: (transfer full) the newly installed watch
+ **/
+GtkExpressionWatch *
+gtk_expression_watch (GtkExpression       *self,
+                      gpointer             this_,
+                      GtkExpressionNotify  notify,
+                      gpointer             user_data,
+                      GDestroyNotify       user_destroy)
+{
+  GtkExpressionWatch *watch;
+
+  g_return_val_if_fail (self != NULL, NULL);
+  g_return_val_if_fail (notify != NULL, NULL);
+
+  watch = g_atomic_rc_box_alloc0 (self->expression_class->watch_size);
+
+  watch->expression = gtk_expression_ref (self);
+  watch->notify = notify;
+  watch->user_data = user_data;
+  watch->user_destroy = user_destroy;
+
+  self->expression_class->watch (self, this_, watch);
+
+  return watch;
+}
+
+static void
+gtk_expression_watch_finalize (gpointer data)
+{
+  GtkExpressionWatch *watch = data;
+
+  watch->expression->expression_class->unwatch (watch->expression, watch);
+
+  if (watch->user_destroy)
+    watch->user_destroy (watch->user_data);
+
+  gtk_expression_unref (watch->expression);
+}
+
+/**
+ * gtk_expression_watch_unwatch:
+ * @watch: (transfer full) watch to release
+ *
+ * Stops watching an expression that was established via gtk_expression_watch().
+ **/
+void
+gtk_expression_watch_unwatch (GtkExpressionWatch *watch)
+{
+  g_atomic_rc_box_release_full (watch, gtk_expression_watch_finalize);
+}
