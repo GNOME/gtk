@@ -26,6 +26,7 @@ tests = [
   ['rbtree-crash', ['../../gtk/gtkrbtree.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
   ['defaultvalue'],
   ['entry'],
+  ['expression'],
   ['filter'],
   ['filterlistmodel'],
   ['flattenlistmodel'],
