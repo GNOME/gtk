@@ -175,7 +175,8 @@ void      _gtk_builder_add (GtkBuilder *builder,
                             ChildInfo *child_info);
 void      _gtk_builder_add_signals (GtkBuilder *builder,
 				    GSList     *signals);
-void      _gtk_builder_finish (GtkBuilder *builder);
+gboolean  _gtk_builder_finish (GtkBuilder  *builder,
+                               GError     **error);
 void _free_signal_info (SignalInfo *info,
                         gpointer user_data);
 
