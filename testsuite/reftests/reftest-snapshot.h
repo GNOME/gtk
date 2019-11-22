@@ -22,6 +22,7 @@
 
 G_BEGIN_DECLS
 
+G_MODULE_EXPORT
 cairo_surface_t *       reftest_snapshot_ui_file                (const char     *ui_file);
 
 G_END_DECLS

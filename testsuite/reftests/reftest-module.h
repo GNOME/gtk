@@ -24,13 +24,19 @@ G_BEGIN_DECLS
 
 typedef struct _ReftestModule ReftestModule;
 
+G_MODULE_EXPORT
 ReftestModule * reftest_module_new              (const char     *directory,
                                                  const char     *module_name);
+G_MODULE_EXPORT
 ReftestModule * reftest_module_new_self         (void);
 
+G_MODULE_EXPORT
 ReftestModule * reftest_module_ref              (ReftestModule  *module);
+
+G_MODULE_EXPORT
 void            reftest_module_unref            (ReftestModule  *module);
 
+G_MODULE_EXPORT
 GCallback       reftest_module_lookup           (ReftestModule  *module,
                                                  const char     *function_name);
 
