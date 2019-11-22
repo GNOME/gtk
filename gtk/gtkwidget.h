@@ -956,10 +956,10 @@ void    gtk_widget_class_bind_template_callback_full    (GtkWidgetClass        *
                                                          const gchar           *callback_name,
                                                          GCallback              callback_symbol);
 GDK_AVAILABLE_IN_ALL
-void    gtk_widget_class_set_connect_func               (GtkWidgetClass        *widget_class,
-                                                         GtkBuilderConnectFunc  connect_func,
-                                                         gpointer               connect_data,
-                                                         GDestroyNotify         connect_data_destroy);
+void    gtk_widget_class_set_closure_func               (GtkWidgetClass        *widget_class,
+	                              			 GtkBuilderClosureFunc  closure_func,
+                                                         gpointer               closure_data,
+                                                         GDestroyNotify         closure_destroy);
 GDK_AVAILABLE_IN_ALL
 void    gtk_widget_class_bind_template_child_full       (GtkWidgetClass        *widget_class,
                                                          const gchar           *name,
