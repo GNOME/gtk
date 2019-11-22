@@ -12232,8 +12232,6 @@ gtk_widget_init_template (GtkWidget *widget)
 	}
     }
 
-  gtk_builder_connect_signals (builder);
-
   g_object_unref (builder);
 }
 

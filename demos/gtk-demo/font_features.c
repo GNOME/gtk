@@ -1213,15 +1213,14 @@ do_font_features (GtkWidget *do_widget)
       GtkWidget *feature_list;
       GtkEventController *controller;
 
-      builder = gtk_builder_new_from_resource ("/font_features/font-features.ui");
-
+      builder = gtk_builder_new ();
       gtk_builder_add_callback_symbol (builder, "update_display", update_display);
       gtk_builder_add_callback_symbol (builder, "font_changed", font_changed);
       gtk_builder_add_callback_symbol (builder, "script_changed", script_changed);
       gtk_builder_add_callback_symbol (builder, "reset", reset_features);
       gtk_builder_add_callback_symbol (builder, "stop_edit", G_CALLBACK (stop_edit));
       gtk_builder_add_callback_symbol (builder, "toggle_edit", G_CALLBACK (toggle_edit));
-      gtk_builder_connect_signals (builder);
+      gtk_builder_add_from_resource (builder, "/font_features/font-features.ui", NULL);
 
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       feature_list = GTK_WIDGET (gtk_builder_get_object (builder, "feature_list"));

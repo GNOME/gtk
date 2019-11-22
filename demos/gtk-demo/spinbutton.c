@@ -190,7 +190,7 @@ do_spinbutton (GtkWidget *do_widget)
     GtkAdjustment *adj;
     GtkWidget *label;
 
-    builder = gtk_builder_new_from_resource ("/spinbutton/spinbutton.ui");
+    builder = gtk_builder_new ();
     gtk_builder_add_callback_symbols (builder,
                                       "hex_spin_input", G_CALLBACK (hex_spin_input),
                                       "hex_spin_output", G_CALLBACK (hex_spin_output),
@@ -199,7 +199,7 @@ do_spinbutton (GtkWidget *do_widget)
                                       "month_spin_input", G_CALLBACK (month_spin_input),
                                       "month_spin_output", G_CALLBACK (month_spin_output),
                                       NULL);
-    gtk_builder_connect_signals (builder);
+    gtk_builder_add_from_resource (builder, "/spinbutton/spinbutton.ui", NULL);
     window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
     gtk_window_set_display (GTK_WINDOW (window),
                             gtk_widget_get_display (do_widget));

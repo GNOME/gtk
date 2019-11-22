@@ -248,7 +248,6 @@ do_fontrendering (GtkWidget *do_widget)
       GtkBuilder *builder;
 
       builder = gtk_builder_new_from_resource ("/fontrendering/fontrendering.ui");
-      gtk_builder_connect_signals (builder);
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));

@@ -521,7 +521,6 @@ GTK_BUILDABLE_GET_IFACE
 <TITLE>GtkBuilder</TITLE>
 GtkBuilder
 GtkBuilderClosureFunc
-GtkBuilderConnectFunc
 GtkBuilderError
 gtk_builder_new
 gtk_builder_new_from_file
@@ -542,8 +541,6 @@ gtk_builder_extend_with_template
 gtk_builder_get_object
 gtk_builder_get_objects
 gtk_builder_expose_object
-gtk_builder_connect_signals
-gtk_builder_connect_signals_full
 gtk_builder_set_translation_domain
 gtk_builder_get_translation_domain
 gtk_builder_get_type_from_name
