@@ -1271,45 +1271,25 @@ flip_vertex_data_y (GskQuadVertex vertex_data[GL_N_VERTICES])
   vertex_data[5].uv[1] = 1 - vertex_data[5].uv[1];
 }
 
-static inline void
-render_blur_node (GskGLRenderer   *self,
-                  GskRenderNode   *node,
-                  RenderOpBuilder *builder,
-                  GskQuadVertex   *vertex_data)
+static inline int
+apply_blur (GskGLRenderer   *self,
+            RenderOpBuilder *builder,
+            int              texture_to_blur,
+            int              texture_to_blur_width,
+            int              texture_to_blur_height,
+            float            blur_radius)
 {
   const float scale = ops_get_scale (builder);
-  const float blur_radius = gsk_blur_node_get_radius (node);
-  const float texture_width = ceilf (node->bounds.size.width * scale);
-  const float texture_height = ceilf (node->bounds.size.height * scale);
-  GskRenderNode *child = gsk_blur_node_get_child (node);
-  TextureRegion region;
-  gboolean is_offscreen;
-  OpBlur *op;
-  int prev_render_target;
+  const int texture_width = ceil (texture_to_blur_width * scale);
+  const int texture_height = ceil (texture_to_blur_height * scale);
   int pass1_texture_id, pass1_render_target;
   int pass2_texture_id, pass2_render_target;
+  int prev_render_target;
   graphene_matrix_t prev_projection;
   graphene_rect_t prev_viewport;
   graphene_matrix_t item_proj;
   GskRoundedRect r = GSK_ROUNDED_RECT_INIT (0, 0, texture_width, texture_height);
-
-  if (blur_radius <= 0)
-    {
-      gsk_gl_renderer_add_render_ops (self, child, builder);
-      return;
-    }
-
-  /* TODO(perf): We're forcing the child offscreen even if it's a texture
-   * so the resulting offscreen texture is bigger by the gaussian blur factor
-   * (see gsk_blur_node_new), but we didn't have to do that if the blur
-   * shader could handle that situation. */
-  add_offscreen_ops (self, builder,
-                     &node->bounds,
-                     child,
-                     &region, &is_offscreen,
-                     RESET_CLIP | FORCE_OFFSCREEN | RESET_OPACITY);
-
-  g_assert (is_offscreen);
+  OpBlur *op;
 
   gsk_gl_driver_create_render_target (self->gl_driver,
                                       texture_width, texture_height,
@@ -1336,14 +1316,12 @@ render_blur_node (GskGLRenderer   *self,
   ops_set_program (builder, &self->blur_program);
 
   op = ops_begin (builder, OP_CHANGE_BLUR);
-  op->size.width = texture_width;
-  op->size.height = texture_height;
-  op->size.width = node->bounds.size.width;
-  op->size.height = node->bounds.size.height;
+  op->size.width = texture_to_blur_width;
+  op->size.height = texture_to_blur_height;
   op->radius = blur_radius;
   op->dir[0] = 1;
   op->dir[1] = 0;
-  ops_set_texture (builder, region.texture_id);
+  ops_set_texture (builder, texture_to_blur);
 
   ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
     { { 0,                            }, { 0, 1 }, },
@@ -1356,12 +1334,8 @@ render_blur_node (GskGLRenderer   *self,
   });
 
   op = ops_begin (builder, OP_CHANGE_BLUR);
-  op->size.width = texture_width;
-  op->size.height = texture_height;
-  op->size.width = texture_width;
-  op->size.height = texture_height;
-  op->size.width = node->bounds.size.width;
-  op->size.height = node->bounds.size.height;
+  op->size.width = texture_to_blur_width;
+  op->size.height = texture_to_blur_height;
   op->radius = blur_radius;
   op->dir[0] = 0;
   op->dir[1] = 1;
@@ -1384,11 +1358,61 @@ render_blur_node (GskGLRenderer   *self,
   ops_pop_modelview (builder);
   ops_pop_clip (builder);
 
+  return pass2_texture_id;
+}
+
+static inline void
+render_blur_node (GskGLRenderer   *self,
+                  GskRenderNode   *node,
+                  RenderOpBuilder *builder,
+                  GskQuadVertex   *vertex_data)
+{
+  const float blur_radius = gsk_blur_node_get_radius (node);
+  GskRenderNode *child = gsk_blur_node_get_child (node);
+  int blurred_texture_id;
+
+  if (blur_radius <= 0)
+    {
+      gsk_gl_renderer_add_render_ops (self, child, builder);
+      return;
+    }
+
+  blurred_texture_id = gsk_gl_driver_get_texture_for_pointer (self->gl_driver, node);
+  if (blurred_texture_id == 0)
+    {
+      TextureRegion region;
+      gboolean is_offscreen;
+
+      /* TODO(perf): We're forcing the child offscreen even if it's a texture
+       * so the resulting offscreen texture is bigger by the gaussian blur factor
+       * (see gsk_blur_node_new), but we didn't have to do that if the blur
+       * shader could handle that situation. */
+      add_offscreen_ops (self, builder,
+                         &node->bounds,
+                         child,
+                         &region, &is_offscreen,
+                         RESET_CLIP | FORCE_OFFSCREEN | RESET_OPACITY);
+
+      g_assert (is_offscreen);
+
+      blurred_texture_id = apply_blur (self, builder,
+                                       region.texture_id,
+                                       node->bounds.size.width,
+                                       node->bounds.size.height,
+                                       blur_radius);
+
+    }
+
+  g_assert (blurred_texture_id != 0);
+
   /* Draw the result */
   flip_vertex_data_y (vertex_data);
   ops_set_program (builder, &self->blit_program);
-  ops_set_texture (builder, pass2_texture_id);
+  ops_set_texture (builder, blurred_texture_id);
   ops_draw (builder, vertex_data); /* Render result to screen */
+
+  /* Add to cache for the blur node */
+  gsk_gl_driver_set_texture_for_pointer (self->gl_driver, node, blurred_texture_id);
 }
 
 static inline void
@@ -1471,7 +1495,6 @@ render_outset_shadow_node (GskGLRenderer       *self,
   const float max_x = min_x + outline->bounds.size.width  + (spread + blur_extra/2.0) * 2;
   const float max_y = min_y + outline->bounds.size.height + (spread + blur_extra/2.0) * 2;
   float texture_width, texture_height;
-  OpBlur *op;
   OpShadow *shadow;
   graphene_matrix_t prev_projection;
   graphene_rect_t prev_viewport;
@@ -1506,9 +1529,7 @@ render_outset_shadow_node (GskGLRenderer       *self,
   if (cached_tid == 0)
     {
       int texture_id, render_target;
-      int blurred_render_target;
       int prev_render_target;
-      GskRoundedRect blit_clip;
 
       gsk_gl_driver_create_render_target (self->gl_driver, texture_width, texture_height,
                                           &texture_id, &render_target);
@@ -1525,7 +1546,7 @@ render_outset_shadow_node (GskGLRenderer       *self,
       prev_render_target = ops_set_render_target (builder, render_target);
       ops_begin (builder, OP_CLEAR);
       prev_projection = ops_set_projection (builder, &item_proj);
-      ops_set_modelview (builder, NULL); /* Modelview */
+      ops_set_modelview (builder, NULL);
       prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (0, 0, texture_width, texture_height));
 
       /* Draw outline */
@@ -1542,45 +1563,18 @@ render_outset_shadow_node (GskGLRenderer       *self,
         { { texture_width,                }, { 1, 1 }, },
       });
 
-      gsk_gl_driver_create_render_target (self->gl_driver, texture_width, texture_height,
-                                          &blurred_texture_id, &blurred_render_target);
-      gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, blurred_texture_id,
-                                          "Outset Shadow Cache %d", blurred_texture_id);
-      gdk_gl_context_label_object_printf  (self->gl_context, GL_FRAMEBUFFER, render_target,
-                                           "Outset Shadow Cache FB %d", render_target);
-
-      ops_set_render_target (builder, blurred_render_target);
-      ops_pop_clip (builder);
-      ops_begin (builder, OP_CLEAR);
-
-      gsk_rounded_rect_init_from_rect (&blit_clip,
-                                       &GRAPHENE_RECT_INIT (0, 0, texture_width, texture_height), 0.0f);
-
-      ops_set_program (builder, &self->blur_program);
-
-      op = ops_begin (builder, OP_CHANGE_BLUR);
-      op->size.width = texture_width;
-      op->size.height = texture_height;
-      op->radius = blur_radius;
-
-      ops_push_clip (builder, &blit_clip);
-      ops_set_texture (builder, texture_id);
-      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-        { { 0,             0              }, { 0, 1 }, },
-        { { 0,             texture_height }, { 0, 0 }, },
-        { { texture_width, 0              }, { 1, 1 }, },
-
-        { { texture_width, texture_height }, { 1, 0 }, },
-        { { 0,             texture_height }, { 0, 0 }, },
-        { { texture_width, 0              }, { 1, 1 }, },
-      });
-
-
       ops_pop_clip (builder);
       ops_set_viewport (builder, &prev_viewport);
       ops_pop_modelview (builder);
       ops_set_projection (builder, &prev_projection);
       ops_set_render_target (builder, prev_render_target);
+
+      /* Now blur the outline */
+      blurred_texture_id = apply_blur (self, builder,
+                                       texture_id,
+                                       texture_width,
+                                       texture_height,
+                                       blur_radius);
 
       gsk_gl_driver_mark_texture_permanent (self->gl_driver, blurred_texture_id);
       gsk_gl_shadow_cache_commit (&self->shadow_cache,
