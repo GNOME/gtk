@@ -241,7 +241,6 @@
 #include "gtkicontheme.h"
 #include "gtktestutils.h"
 
-
 static void gtk_builder_finalize       (GObject         *object);
 static void gtk_builder_set_property   (GObject         *object,
                                         guint            prop_id,
@@ -259,6 +258,16 @@ enum {
 };
 
 static GParamSpec *builder_props[LAST_PROP];
+
+struct _GtkBuilder
+{
+  GObject parent_instance;
+};
+
+struct _GtkBuilderClass
+{
+  GObjectClass parent_class;
+};
 
 typedef struct
 {
