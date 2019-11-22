@@ -175,7 +175,8 @@ void      _gtk_builder_add (GtkBuilder *builder,
                             ChildInfo *child_info);
 void      _gtk_builder_add_signals (GtkBuilder *builder,
 				    GSList     *signals);
-void      _gtk_builder_finish (GtkBuilder *builder);
+gboolean  _gtk_builder_finish (GtkBuilder  *builder,
+                               GError     **error);
 void _free_signal_info (SignalInfo *info,
                         gpointer user_data);
 
@@ -227,6 +228,7 @@ GObject *_gtk_builder_lookup_object       (GtkBuilder                *builder,
                                            gint                       col);
 gboolean _gtk_builder_lookup_failed       (GtkBuilder                *builder,
                                            GError                   **error);
+GModule *gtk_builder_get_module           (GtkBuilder                *builder);
 
 
 

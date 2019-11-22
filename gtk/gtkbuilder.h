@@ -63,7 +63,10 @@ typedef struct _GtkBuilderClass   GtkBuilderClass;
  * @GTK_BUILDER_ERROR_TEMPLATE_MISMATCH: The wrong type was specified in a composite class’s template XML
  * @GTK_BUILDER_ERROR_INVALID_PROPERTY: The specified property is unknown for the object class.
  * @GTK_BUILDER_ERROR_INVALID_SIGNAL: The specified signal is unknown for the object class.
- * @GTK_BUILDER_ERROR_INVALID_ID: An object id is unknown
+ * @GTK_BUILDER_ERROR_INVALID_ID: An object id is unknown.
+ * @GTK_BUILDER_ERROR_INVALID_FUNCTION: A function could not be found. This often happens
+ *     when symbols are set to be kept private. Compiling code with -rdynamic or using the
+ *     `gmodule-export-2.0` pkgconfig module can fix this problem.
  *
  * Error codes that identify various errors that can occur while using
  * #GtkBuilder.
@@ -83,34 +86,23 @@ typedef enum
   GTK_BUILDER_ERROR_TEMPLATE_MISMATCH,
   GTK_BUILDER_ERROR_INVALID_PROPERTY,
   GTK_BUILDER_ERROR_INVALID_SIGNAL,
-  GTK_BUILDER_ERROR_INVALID_ID
+  GTK_BUILDER_ERROR_INVALID_ID,
+  GTK_BUILDER_ERROR_INVALID_FUNCTION
 } GtkBuilderError;
 
 GDK_AVAILABLE_IN_ALL
 GQuark gtk_builder_error_quark (void);
-
-struct _GtkBuilder
-{
-  GObject parent_instance;
-};
-
-struct _GtkBuilderClass
-{
-  GObjectClass parent_class;
-
-  GType (* get_type_from_name) (GtkBuilder *builder,
-                                const char *type_name);
-
-  /*< private >*/
-
-  gpointer padding[8];
-};
 
 GDK_AVAILABLE_IN_ALL
 GType        gtk_builder_get_type                (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkBuilder*  gtk_builder_new                     (void);
 
+GDK_AVAILABLE_IN_ALL
+void         gtk_builder_set_closure_func        (GtkBuilder    *builder,
+                                                  GtkBuilderClosureFunc closure_func,
+                                                  gpointer       user_data,
+                                                  GDestroyNotify user_destroy);
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_builder_add_from_file           (GtkBuilder    *builder,
                                                   const gchar   *filename,
@@ -149,13 +141,6 @@ GDK_AVAILABLE_IN_ALL
 void         gtk_builder_expose_object           (GtkBuilder    *builder,
                                                   const gchar   *name,
                                                   GObject       *object);
-GDK_AVAILABLE_IN_ALL
-void         gtk_builder_connect_signals         (GtkBuilder    *builder,
-						  gpointer       user_data);
-GDK_AVAILABLE_IN_ALL
-void         gtk_builder_connect_signals_full    (GtkBuilder    *builder,
-                                                  GtkBuilderConnectFunc func,
-						  gpointer       user_data);
 GDK_AVAILABLE_IN_ALL
 void         gtk_builder_set_translation_domain  (GtkBuilder   	*builder,
                                                   const gchar  	*domain);
@@ -197,13 +182,19 @@ void         gtk_builder_add_callback_symbols    (GtkBuilder    *builder,
 GDK_AVAILABLE_IN_ALL
 GCallback    gtk_builder_lookup_callback_symbol  (GtkBuilder    *builder,
 						  const gchar   *callback_name);
-
 GDK_AVAILABLE_IN_ALL
-void         gtk_builder_set_application         (GtkBuilder     *builder,
-                                                  GtkApplication *application);
-
+GClosure *   gtk_builder_create_closure          (GtkBuilder    *builder,
+                                                  const char    *function_name,
+                                                  gboolean       swapped,
+                                                  GObject       *object,
+                                                  GError       **error);
 GDK_AVAILABLE_IN_ALL
-GtkApplication * gtk_builder_get_application     (GtkBuilder     *builder);
+GClosure *   gtk_builder_create_cclosure         (GtkBuilder    *builder,
+                                                  const char    *function_name,
+                                                  gboolean       swapped,
+                                                  GObject       *object,
+                                                  GError       **error);
+
 
 
 /**

@@ -490,9 +490,9 @@ typedef struct {
   GBytes               *data;
   GSList               *children;
   GSList               *callbacks;
-  GtkBuilderConnectFunc connect_func;
-  gpointer              connect_data;
-  GDestroyNotify        destroy_notify;
+  GtkBuilderClosureFunc closure_func;
+  gpointer              closure_data;
+  GDestroyNotify        closure_destroy;
 } GtkWidgetTemplate;
 
 struct _GtkWidgetClassPrivate
@@ -12027,9 +12027,9 @@ template_data_free (GtkWidgetTemplate *template_data)
       g_slist_free_full (template_data->children, (GDestroyNotify)template_child_class_free);
       g_slist_free_full (template_data->callbacks, (GDestroyNotify)callback_symbol_free);
 
-      if (template_data->connect_data &&
-	  template_data->destroy_notify)
-	template_data->destroy_notify (template_data->connect_data);
+      if (template_data->closure_data &&
+	  template_data->closure_destroy)
+	template_data->closure_destroy (template_data->closure_data);
 
       g_slice_free (GtkWidgetTemplate, template_data);
     }
@@ -12113,6 +12113,24 @@ setup_template_child (GtkWidgetTemplate   *template_data,
   return TRUE;
 }
 
+static GClosure *
+gtk_widget_template_closure_func (GtkBuilder  *builder,
+                                  const char  *function_name,
+                                  gboolean     swapped,
+                                  GObject     *object,
+                                  gpointer     user_data,
+                                  GError     **error)
+{
+  if (object == NULL)
+    object = user_data;
+
+  return gtk_builder_create_cclosure (builder,
+                                      function_name,
+                                      swapped,
+                                      object,
+                                      error);
+}
+
 /**
  * gtk_widget_init_template:
  * @widget: a #GtkWidget
@@ -12153,6 +12171,17 @@ gtk_widget_init_template (GtkWidget *widget)
   g_return_if_fail (template != NULL);
 
   builder = gtk_builder_new ();
+
+  /* Setup closure handling. All signal data from a template receive the 
+   * template instance as user data automatically.
+   *
+   * A GtkBuilderClosureFunc can be provided to gtk_widget_class_set_signal_closure_func()
+   * in order for templates to be usable by bindings.
+   */
+  if (template->closure_func)
+    gtk_builder_set_closure_func (builder, template->closure_func, template->closure_data, NULL);
+  else
+    gtk_builder_set_closure_func (builder, gtk_widget_template_closure_func, widget, NULL);
 
   /* Add any callback symbols declared for this GType to the GtkBuilder namespace */
   for (l = template->callbacks; l; l = l->next)
@@ -12202,17 +12231,6 @@ gtk_widget_init_template (GtkWidget *widget)
 	  return;
 	}
     }
-
-  /* Connect signals. All signal data from a template receive the 
-   * template instance as user data automatically.
-   *
-   * A GtkBuilderConnectFunc can be provided to gtk_widget_class_set_signal_connect_func()
-   * in order for templates to be usable by bindings.
-   */
-  if (template->connect_func)
-    gtk_builder_connect_signals_full (builder, template->connect_func, template->connect_data);
-  else
-    gtk_builder_connect_signals (builder, object);
 
   g_object_unref (builder);
 }
@@ -12332,36 +12350,36 @@ gtk_widget_class_bind_template_callback_full (GtkWidgetClass *widget_class,
 }
 
 /**
- * gtk_widget_class_set_connect_func:
+ * gtk_widget_class_set_closure_func:
  * @widget_class: A #GtkWidgetClass
- * @connect_func: The #GtkBuilderConnectFunc to use when connecting signals in the class template
- * @connect_data: The data to pass to @connect_func
- * @connect_data_destroy: The #GDestroyNotify to free @connect_data, this will only be used at
+ * @closure_func: The #GtkBuilderClosureFunc to use when creating closure in the class template
+ * @closure_data: The data to pass to @closure_func
+ * @closure_data_destroy: The #GDestroyNotify to free @closure_data, this will only be used at
  *                        class finalization time, when no classes of type @widget_type are in use anymore.
  *
- * For use in language bindings, this will override the default #GtkBuilderConnectFunc to be
+ * For use in language bindings, this will override the default #GtkBuilderClosureFunc to be
  * used when parsing GtkBuilder XML from this class’s template data.
  *
  * Note that this must be called from a composite widget classes class
  * initializer after calling gtk_widget_class_set_template().
  */
 void
-gtk_widget_class_set_connect_func (GtkWidgetClass        *widget_class,
-				   GtkBuilderConnectFunc  connect_func,
-				   gpointer               connect_data,
-				   GDestroyNotify         connect_data_destroy)
+gtk_widget_class_set_closure_func (GtkWidgetClass        *widget_class,
+				   GtkBuilderClosureFunc  closure_func,
+				   gpointer               closure_data,
+				   GDestroyNotify         closure_data_destroy)
 {
   g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
   g_return_if_fail (widget_class->priv->template != NULL);
 
   /* Defensive, destroy any previously set data */
-  if (widget_class->priv->template->connect_data &&
-      widget_class->priv->template->destroy_notify)
-    widget_class->priv->template->destroy_notify (widget_class->priv->template->connect_data);
+  if (widget_class->priv->template->closure_data &&
+      widget_class->priv->template->closure_destroy)
+    widget_class->priv->template->closure_destroy (widget_class->priv->template->closure_data);
 
-  widget_class->priv->template->connect_func   = connect_func;
-  widget_class->priv->template->connect_data   = connect_data;
-  widget_class->priv->template->destroy_notify = connect_data_destroy;
+  widget_class->priv->template->closure_func    = closure_func;
+  widget_class->priv->template->closure_data    = closure_data;
+  widget_class->priv->template->closure_destroy = closure_data_destroy;
 }
 
 /**
