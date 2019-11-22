@@ -68,7 +68,6 @@ main (int argc, char *argv[])
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_file (builder, filename, NULL);
-  gtk_builder_connect_signals (builder);
 
   window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
   g_object_unref (G_OBJECT (builder));

@@ -159,12 +159,6 @@ void         gtk_builder_expose_object           (GtkBuilder    *builder,
                                                   const gchar   *name,
                                                   GObject       *object);
 GDK_AVAILABLE_IN_ALL
-void         gtk_builder_connect_signals         (GtkBuilder    *builder);
-GDK_AVAILABLE_IN_ALL
-void         gtk_builder_connect_signals_full    (GtkBuilder    *builder,
-                                                  GtkBuilderConnectFunc func,
-						  gpointer       user_data);
-GDK_AVAILABLE_IN_ALL
 void         gtk_builder_set_translation_domain  (GtkBuilder   	*builder,
                                                   const gchar  	*domain);
 GDK_AVAILABLE_IN_ALL

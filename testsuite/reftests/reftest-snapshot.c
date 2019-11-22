@@ -260,7 +260,6 @@ reftest_snapshot_ui_file (const char *ui_file)
   gtk_builder_set_closure_func (builder, create_closure, directory, g_free);
   gtk_builder_add_from_file (builder, ui_file, &error);
   g_assert_no_error (error);
-  gtk_builder_connect_signals (builder);
   window = builder_get_toplevel (builder);
   g_object_unref (builder);
   g_assert (window);

@@ -57,13 +57,6 @@ typedef GClosure*       (* GtkBuilderClosureFunc)               (GtkBuilder     
                                                                  GObject                *object,
                                                                  gpointer                user_data,
                                                                  GError                **error);
-typedef void (*GtkBuilderConnectFunc) (GtkBuilder    *builder,
-				       GObject       *object,
-				       const gchar   *signal_name,
-				       const gchar   *handler_name,
-				       GObject       *connect_object,
-				       GConnectFlags  flags,
-				       gpointer       user_data);
 
 G_END_DECLS
 
