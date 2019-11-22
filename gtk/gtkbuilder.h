@@ -93,20 +93,6 @@ typedef enum
 GDK_AVAILABLE_IN_ALL
 GQuark gtk_builder_error_quark (void);
 
-struct _GtkBuilder
-{
-  GObject parent_instance;
-};
-
-struct _GtkBuilderClass
-{
-  GObjectClass parent_class;
-
-  /*< private >*/
-
-  gpointer padding[8];
-};
-
 GDK_AVAILABLE_IN_ALL
 GType        gtk_builder_get_type                (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
