@@ -251,8 +251,6 @@ static void gtk_builder_get_property   (GObject         *object,
                                         guint            prop_id,
                                         GValue          *value,
                                         GParamSpec      *pspec);
-static GType gtk_builder_real_get_type_from_name (GtkBuilder  *builder,
-                                                  const gchar *type_name);
 
 enum {
   PROP_0,
@@ -285,15 +283,11 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkBuilder, gtk_builder, G_TYPE_OBJECT)
 static void
 gtk_builder_class_init (GtkBuilderClass *klass)
 {
-  GObjectClass *gobject_class;
-
-  gobject_class = G_OBJECT_CLASS (klass);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   gobject_class->finalize = gtk_builder_finalize;
   gobject_class->set_property = gtk_builder_set_property;
   gobject_class->get_property = gtk_builder_get_property;
-
-  klass->get_type_from_name = gtk_builder_real_get_type_from_name;
 
  /**
   * GtkBuilder:translation-domain:
@@ -466,24 +460,6 @@ gtk_builder_resolve_type_lazily (GtkBuilder  *builder,
 /*
  * GtkBuilder virtual methods
  */
-
-static GType
-gtk_builder_real_get_type_from_name (GtkBuilder  *builder,
-                                     const gchar *type_name)
-{
-  GType gtype;
-
-  gtype = g_type_from_name (type_name);
-  if (gtype != G_TYPE_INVALID)
-    return gtype;
-
-  gtype = gtk_builder_resolve_type_lazily (builder, type_name);
-  if (gtype != G_TYPE_INVALID)
-    return gtype;
-
-  gtk_test_register_all_types ();
-  return g_type_from_name (type_name);
-}
 
 typedef struct
 {
@@ -2456,7 +2432,16 @@ gtk_builder_get_type_from_name (GtkBuilder  *builder,
   g_return_val_if_fail (GTK_IS_BUILDER (builder), G_TYPE_INVALID);
   g_return_val_if_fail (type_name != NULL, G_TYPE_INVALID);
 
-  type = GTK_BUILDER_GET_CLASS (builder)->get_type_from_name (builder, type_name);
+  type = g_type_from_name (type_name);
+  if (type == G_TYPE_INVALID)
+    {
+      type = gtk_builder_resolve_type_lazily (builder, type_name);
+      if (type == G_TYPE_INVALID)
+        {
+          gtk_test_register_all_types ();
+          type = g_type_from_name (type_name);
+        }
+    }
 
   if (G_TYPE_IS_CLASSED (type))
     g_type_class_unref (g_type_class_ref (type));
