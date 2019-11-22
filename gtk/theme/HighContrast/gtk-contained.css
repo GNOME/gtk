@@ -695,7 +695,7 @@ notebook.frame { border: 1px solid gray; }
 
 notebook.frame:backdrop { border-color: #8d8d8d; }
 
-notebook header { background-color: #d9d9d9; }
+notebook header { background-color: #ececec; }
 
 .frame notebook header { border: 1px solid gray; }
 
@@ -809,11 +809,11 @@ notebook tab:backdrop { background-color: transparent; border-color: transparent
 
 .right notebook tab.reorderable-page:backdrop { border-color: transparent; background-color: transparent; }
 
-notebook tab label { padding: 0 2px; font-weight: bold; color: gray; /* color: inherit doesn't work here */ }
+notebook tab label { padding: 0 2px; font-weight: bold; color: #404040; /* color: inherit doesn't work here */ }
 
 notebook tab label:backdrop { color: gray; }
 
-notebook tab:hover label { color: #404040; }
+notebook tab:hover label { color: #202020; }
 
 notebook tab:checked label { color: #000; }
 
@@ -1185,19 +1185,19 @@ placessidebar .frame, scrolledwindow .frame { border-radius: 2px; }
 
 placessidebar viewport.frame, scrolledwindow viewport.frame { border-style: none; }
 
-placessidebar overshoot.top, scrolledwindow overshoot.top { background-image: -gtk-gradient(radial, center top, 0, center top, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, center top, 0, center top, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent)); background-size: 100% 5%, 100% 100%; background-repeat: no-repeat; background-position: center top; background-color: transparent; border: none; box-shadow: none; }
+placessidebar overshoot.top, scrolledwindow overshoot.top { background-image: -gtk-gradient(radial, center top, 0, center top, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, center top, 0, center top, 0.6, from(rgba(0, 0, 0, 0.5)), to(rgba(0, 0, 0, 0))); background-size: 100% 5%, 100% 100%; background-repeat: no-repeat; background-position: center top; background-color: transparent; border: none; box-shadow: none; }
 
 placessidebar overshoot.top:backdrop, scrolledwindow overshoot.top:backdrop { background-image: -gtk-gradient(radial, center top, 0, center top, 0.5, to(#8d8d8d), to(rgba(141, 141, 141, 0))); background-size: 100% 5%; background-repeat: no-repeat; background-position: center top; background-color: transparent; border: none; box-shadow: none; }
 
-placessidebar overshoot.bottom, scrolledwindow overshoot.bottom { background-image: -gtk-gradient(radial, center bottom, 0, center bottom, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, center bottom, 0, center bottom, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent)); background-size: 100% 5%, 100% 100%; background-repeat: no-repeat; background-position: center bottom; background-color: transparent; border: none; box-shadow: none; }
+placessidebar overshoot.bottom, scrolledwindow overshoot.bottom { background-image: -gtk-gradient(radial, center bottom, 0, center bottom, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, center bottom, 0, center bottom, 0.6, from(rgba(0, 0, 0, 0.5)), to(rgba(0, 0, 0, 0))); background-size: 100% 5%, 100% 100%; background-repeat: no-repeat; background-position: center bottom; background-color: transparent; border: none; box-shadow: none; }
 
 placessidebar overshoot.bottom:backdrop, scrolledwindow overshoot.bottom:backdrop { background-image: -gtk-gradient(radial, center bottom, 0, center bottom, 0.5, to(#8d8d8d), to(rgba(141, 141, 141, 0))); background-size: 100% 5%; background-repeat: no-repeat; background-position: center bottom; background-color: transparent; border: none; box-shadow: none; }
 
-placessidebar overshoot.left, scrolledwindow overshoot.left { background-image: -gtk-gradient(radial, left center, 0, left center, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, left center, 0, left center, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent)); background-size: 5% 100%, 100% 100%; background-repeat: no-repeat; background-position: left center; background-color: transparent; border: none; box-shadow: none; }
+placessidebar overshoot.left, scrolledwindow overshoot.left { background-image: -gtk-gradient(radial, left center, 0, left center, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, left center, 0, left center, 0.6, from(rgba(0, 0, 0, 0.5)), to(rgba(0, 0, 0, 0))); background-size: 5% 100%, 100% 100%; background-repeat: no-repeat; background-position: left center; background-color: transparent; border: none; box-shadow: none; }
 
 placessidebar overshoot.left:backdrop, scrolledwindow overshoot.left:backdrop { background-image: -gtk-gradient(radial, left center, 0, left center, 0.5, to(#8d8d8d), to(rgba(141, 141, 141, 0))); background-size: 5% 100%; background-repeat: no-repeat; background-position: left center; background-color: transparent; border: none; box-shadow: none; }
 
-placessidebar overshoot.right, scrolledwindow overshoot.right { background-image: -gtk-gradient(radial, right center, 0, right center, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, right center, 0, right center, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent)); background-size: 5% 100%, 100% 100%; background-repeat: no-repeat; background-position: right center; background-color: transparent; border: none; box-shadow: none; }
+placessidebar overshoot.right, scrolledwindow overshoot.right { background-image: -gtk-gradient(radial, right center, 0, right center, 0.5, to(#010101), to(rgba(1, 1, 1, 0))), -gtk-gradient(radial, right center, 0, right center, 0.6, from(rgba(0, 0, 0, 0.5)), to(rgba(0, 0, 0, 0))); background-size: 5% 100%, 100% 100%; background-repeat: no-repeat; background-position: right center; background-color: transparent; border: none; box-shadow: none; }
 
 placessidebar overshoot.right:backdrop, scrolledwindow overshoot.right:backdrop { background-image: -gtk-gradient(radial, right center, 0, right center, 0.5, to(#8d8d8d), to(rgba(141, 141, 141, 0))); background-size: 5% 100%; background-repeat: no-repeat; background-position: right center; background-color: transparent; border: none; box-shadow: none; }
 

@@ -691,7 +691,7 @@ notebook.frame { border: 1px solid gray; }
 
 notebook.frame:backdrop { border-color: #737373; }
 
-notebook header { background-color: #262626; }
+notebook header { background-color: #131313; }
 
 .frame notebook header { border: 1px solid gray; }
 
@@ -805,11 +805,11 @@ notebook tab:backdrop { background-color: transparent; border-color: transparent
 
 .right notebook tab.reorderable-page:backdrop { border-color: transparent; background-color: transparent; }
 
-notebook tab label { padding: 0 2px; font-weight: bold; color: gray; /* color: inherit doesn't work here */ }
+notebook tab label { padding: 0 2px; font-weight: bold; color: silver; /* color: inherit doesn't work here */ }
 
 notebook tab label:backdrop { color: gray; }
 
-notebook tab:hover label { color: silver; }
+notebook tab:hover label { color: #dfdfdf; }
 
 notebook tab:checked label { color: #fff; }
 
