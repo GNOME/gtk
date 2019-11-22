@@ -1594,7 +1594,9 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   if (!gtk_buildable_parse_context_parse (&data.ctx, buffer, length, error))
     goto out;
 
-  _gtk_builder_finish (builder);
+  if (!_gtk_builder_finish (builder, error))
+    goto out;
+
   if (_gtk_builder_lookup_failed (builder, error))
     goto out;
 

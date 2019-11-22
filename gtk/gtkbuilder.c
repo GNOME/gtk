@@ -1700,32 +1700,27 @@ gtk_builder_expose_object (GtkBuilder    *builder,
  *   be created and @error was set.
  */
 
-static void
-gtk_builder_connect_signals (GtkBuilder *builder)
+static gboolean
+gtk_builder_connect_signals (GtkBuilder  *builder,
+                             GError     **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GSList *l;
   GObject *object;
   GObject *connect_object;
-  GString *detailed_id = NULL;
-
-  g_return_if_fail (GTK_IS_BUILDER (builder));
+  gboolean result = FALSE;
 
   if (!priv->signals)
-    return;
+    return TRUE;
 
   priv->signals = g_slist_reverse (priv->signals);
   for (l = priv->signals; l; l = l->next)
     {
       SignalInfo *signal = (SignalInfo*)l->data;
-      const gchar *signal_name;
       GClosure *closure;
-      GError *error = NULL;
 
       g_assert (signal != NULL);
       g_assert (signal->id != 0);
-
-      signal_name = g_signal_name (signal->id);
 
       object = g_hash_table_lookup (priv->objects, signal->object_name);
       g_assert (object != NULL);
@@ -1737,50 +1732,47 @@ gtk_builder_connect_signals (GtkBuilder *builder)
           connect_object = g_hash_table_lookup (priv->objects,
                                                 signal->connect_object_name);
           if (!connect_object)
-              g_warning ("Could not lookup object %s on signal %s of object %s",
-                         signal->connect_object_name, signal_name,
-                         signal->object_name);
-        }
-
-      if (signal->detail)
-        {
-          if (detailed_id == NULL)
-            detailed_id = g_string_new ("");
-
-          g_string_printf (detailed_id, "%s::%s", signal_name,
-                           g_quark_to_string (signal->detail));
-          signal_name = detailed_id->str;
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_ID,
+                           "Could not lookup object %s on signal %s of object %s",
+                           signal->connect_object_name, g_signal_name (signal->id),
+                           signal->object_name);
+              break;
+            }
         }
 
       closure = gtk_builder_create_closure (builder,
                                             signal->handler,
                                             signal->flags & G_CONNECT_SWAPPED ? TRUE : FALSE,
                                             connect_object,
-                                            &error);
+                                            error);
 
       if (closure == NULL)
-        {
-          g_warning ("%s", error->message);
-          g_error_free (error);
-          continue;
-        }
+        break;
 
-      g_signal_connect_closure (object, signal_name, closure, signal->flags & G_CONNECT_AFTER ? TRUE : FALSE);
+      g_signal_connect_closure_by_id (object,
+                                      signal->id,
+                                      signal->detail,
+                                      closure,
+                                      signal->flags & G_CONNECT_AFTER ? TRUE : FALSE);
     }
+  if (l == NULL)
+    result = TRUE;
 
   g_slist_free_full (priv->signals, (GDestroyNotify)_free_signal_info);
   priv->signals = NULL;
 
-  if (detailed_id)
-    g_string_free (detailed_id, TRUE);
+  return result;
 }
 
-void
-_gtk_builder_finish (GtkBuilder *builder)
+gboolean
+_gtk_builder_finish (GtkBuilder  *builder,
+                     GError     **error)
 {
   gtk_builder_apply_delayed_properties (builder);
   gtk_builder_create_bindings (builder);
-  gtk_builder_connect_signals (builder);
+  return gtk_builder_connect_signals (builder, error);
 }
 
 /**
