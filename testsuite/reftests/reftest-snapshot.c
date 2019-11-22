@@ -23,6 +23,7 @@
 #include "reftest-snapshot.h"
 
 #include "reftest-module.h"
+#include "gtk-reftest.h"
 
 #include <string.h>
 
