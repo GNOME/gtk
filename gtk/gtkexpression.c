@@ -223,12 +223,17 @@ struct _GtkPropertyExpression
 {
   GtkExpression parent;
 
+  GtkExpression *expr;
+
   GParamSpec *pspec;
 };
 
 static void
 gtk_property_expression_finalize (GtkExpression *expr)
 {
+  GtkPropertyExpression *self = (GtkPropertyExpression *) expr;
+
+  g_clear_pointer (&self->expr, gtk_expression_unref);
 }
 
 static gboolean
@@ -237,17 +242,50 @@ gtk_property_expression_is_static (GtkExpression *expr)
   return FALSE;
 }
 
+static GObject *
+gtk_property_expression_get_object (GtkPropertyExpression *self,
+                                    gpointer               this)
+{
+  GValue expr_value = G_VALUE_INIT;
+  GObject *object;
+
+  if (self->expr == NULL)
+    return g_object_ref (this);
+
+  if (!gtk_expression_evaluate (self->expr, this, &expr_value))
+    return NULL;
+
+  if (!G_VALUE_HOLDS_OBJECT (&expr_value))
+    {
+      g_value_unset (&expr_value);
+      return NULL;
+    }
+
+  object = g_value_dup_object (&expr_value);
+  g_value_unset (&expr_value);
+  return object;
+}
+
 static gboolean
 gtk_property_expression_evaluate (GtkExpression *expr,
                                   gpointer       this,
                                   GValue        *value)
 {
   GtkPropertyExpression *self = (GtkPropertyExpression *) expr;
+  GObject *object;
 
-  if (!G_TYPE_CHECK_INSTANCE_TYPE (this, self->pspec->owner_type))
+  object = gtk_property_expression_get_object (self, this);
+  if (object == NULL)
     return FALSE;
 
-  g_object_get_property (this, self->pspec->name, value);
+  if (!G_TYPE_CHECK_INSTANCE_TYPE (object, self->pspec->owner_type))
+    {
+      g_object_unref (object);
+      return FALSE;
+    }
+
+  g_object_get_property (object, self->pspec->name, value);
+  g_object_unref (object);
   return TRUE;
 }
 
@@ -257,16 +295,44 @@ struct _GtkPropertyExpressionWatch
   GtkExpressionWatch watch;
 
   GClosure *closure;
+  GObject *this;
+  GtkExpressionWatch *expr_watch; 
 };
 
 static void
-gtk_property_expression_watch (GtkExpression      *expr,
-                               gpointer            this_,
-                               GtkExpressionWatch *watch)
+gtk_property_expression_watch_weak_ref_cb (gpointer  data,
+                                           GObject  *object)
 {
-  GtkPropertyExpressionWatch *pwatch = (GtkPropertyExpressionWatch *) watch;
-  GtkPropertyExpression *self = (GtkPropertyExpression *) expr;
-  GObject *object = this_;
+  GtkPropertyExpressionWatch *pwatch = data;
+
+  pwatch->this = NULL;
+
+  gtk_expression_watch_notify (data);
+}
+
+static void
+gtk_property_expression_watch_destroy_closure (GtkPropertyExpressionWatch *pwatch)
+{
+  if (pwatch->closure == NULL)
+    return;
+
+  g_closure_invalidate (pwatch->closure);
+  g_closure_unref (pwatch->closure);
+  pwatch->closure = NULL;
+}
+
+static void
+gtk_property_expression_watch_create_closure (GtkPropertyExpressionWatch *pwatch)
+{
+  GtkExpressionWatch *watch = (GtkExpressionWatch *) pwatch;
+  GtkPropertyExpression *self = (GtkPropertyExpression *) watch->expression;
+  GObject *object;
+
+  if (pwatch->this == NULL)
+    return;
+  object = gtk_property_expression_get_object (self, pwatch->this);
+  if (object == NULL)
+    return;
 
   pwatch->closure = g_cclosure_new_swap (G_CALLBACK (gtk_expression_watch_notify), pwatch, NULL);
   if (!g_signal_connect_closure_by_id (object,
@@ -277,6 +343,41 @@ gtk_property_expression_watch (GtkExpression      *expr,
     {
       g_assert_not_reached ();
     }
+
+  g_object_unref (object);
+}
+
+static void
+gtk_property_expression_watch_expr_notify_cb (gpointer data)
+{
+  GtkPropertyExpressionWatch *pwatch = data;
+
+  gtk_property_expression_watch_destroy_closure (pwatch);
+  gtk_property_expression_watch_create_closure (pwatch);
+  gtk_expression_watch_notify (data);
+}
+
+static void
+gtk_property_expression_watch (GtkExpression      *expr,
+                               gpointer            this,
+                               GtkExpressionWatch *watch)
+{
+  GtkPropertyExpressionWatch *pwatch = (GtkPropertyExpressionWatch *) watch;
+  GtkPropertyExpression *self = (GtkPropertyExpression *) expr;
+
+  pwatch->this = this;
+  g_object_weak_ref (this, gtk_property_expression_watch_weak_ref_cb, pwatch);
+
+  if (self->expr && !gtk_expression_is_static (self->expr))
+    {
+      pwatch->expr_watch = gtk_expression_watch (self->expr,
+                                                 this,
+                                                 gtk_property_expression_watch_expr_notify_cb,
+                                                 pwatch,
+                                                 NULL);
+    }
+
+  gtk_property_expression_watch_create_closure (pwatch);
 }
 
 static void
@@ -287,6 +388,8 @@ gtk_property_expression_unwatch (GtkExpression      *expr,
 
   g_closure_invalidate (pwatch->closure);
   g_closure_unref (pwatch->closure);
+  if (pwatch->this)
+    g_object_weak_unref (pwatch->this, gtk_property_expression_watch_weak_ref_cb, pwatch);
 }
 
 static const GtkExpressionClass GTK_PROPERTY_EXPRESSION_CLASS =
@@ -304,20 +407,27 @@ static const GtkExpressionClass GTK_PROPERTY_EXPRESSION_CLASS =
 /**
  * gtk_property_expression_new:
  * @this_type: The type to expect for the this type
+ * @expression: (nullable) (transfer full): Expression to
+ *     evaluate to get the object to query or %NULL to
+ *     query the `this` object
  * @property_name: name of the property
  *
- * Creates an expression that looks up a property on the
- * passed in object when it is evaluated.
- * If gtk_expresson_evaluate() is called with an object of
- * another type, this expression's evaluation will fail.
+ * Creates an expression that looks up a property via the
+ * given @expression or the `this` argument when @expression
+ * is %NULL.
+ *
+ * If the resulting object conforms to @this_type, its property
+ * named @property_name will be queried.
+ * Otherwise, this expression's evaluation will fail.
  *
  * The given @this_type must have a property with @property_name.  
  *
  * Returns: a new #GtkExpression
  **/
 GtkExpression *
-gtk_property_expression_new (GType       this_type,
-                             const char *property_name)
+gtk_property_expression_new (GType          this_type,
+                             GtkExpression *expression,
+                             const char    *property_name)
 {
   GtkPropertyExpression *result;
   GParamSpec *pspec;
@@ -345,6 +455,7 @@ gtk_property_expression_new (GType       this_type,
   result = gtk_expression_alloc (&GTK_PROPERTY_EXPRESSION_CLASS, pspec->value_type);
 
   result->pspec = pspec;
+  result->expr = expression;
 
   return (GtkExpression *) result;
 }
