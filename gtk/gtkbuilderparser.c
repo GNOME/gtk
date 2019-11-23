@@ -994,6 +994,11 @@ free_expression_info (ExpressionInfo *info)
       g_slist_free_full (info->closure.params, (GDestroyNotify) free_expression_info);
       break;
 
+    case EXPRESSION_PROPERTY:
+      g_clear_pointer (&info->property.expression, free_expression_info);
+      g_free (info->property.property_name);
+      break;
+
     default:
       g_assert_not_reached ();
       break;
@@ -1020,7 +1025,19 @@ check_expression_parent (ParserData *data)
     {
       ExpressionInfo *expr_info = (ExpressionInfo *) common_info;
 
-      return expr_info->expression_type = EXPRESSION_CLOSURE;
+      switch (expr_info->expression_type)
+        {
+        case EXPRESSION_CLOSURE:
+          return TRUE;
+        case EXPRESSION_CONSTANT:
+          return FALSE;
+        case EXPRESSION_PROPERTY:
+          return expr_info->property.expression == NULL;
+        case EXPRESSION_EXPRESSION:
+        default:
+          g_assert_not_reached ();
+          return FALSE;
+        }
     }
 
   return FALSE;
@@ -1173,8 +1190,9 @@ parse_lookup_expression (ParserData   *data,
 
   info = g_slice_new0 (ExpressionInfo);
   info->tag_type = TAG_EXPRESSION;
-  info->expression_type = EXPRESSION_EXPRESSION;
-  info->expression = gtk_property_expression_new (type, property_name);
+  info->expression_type = EXPRESSION_PROPERTY;
+  info->property.this_type = type;
+  info->property.property_name = g_strdup (property_name);
 
   state_push (data, info);
 }
@@ -1251,6 +1269,29 @@ expression_info_construct (GtkBuilder      *builder,
         g_free (info->closure.function_name);
         g_free (info->closure.object_name);
         g_slist_free_full (info->closure.params, (GDestroyNotify) free_expression_info);
+        info->expression_type = EXPRESSION_EXPRESSION;
+        info->expression = expression;
+      }
+      break;
+
+    case EXPRESSION_PROPERTY:
+      {
+        GtkExpression *expression;
+
+        if (info->property.expression)
+          {
+            expression = expression_info_construct (builder, info->property.expression, error);
+            if (expression == NULL)
+              return NULL;
+            free_expression_info (info->property.expression);
+          }
+        else
+          expression = NULL;
+
+        expression = gtk_property_expression_new (info->property.this_type,
+                                                  expression,
+                                                  info->property.property_name);
+        g_free (info->property.property_name);
         info->expression_type = EXPRESSION_EXPRESSION;
         info->expression = expression;
       }
@@ -1759,6 +1800,9 @@ end_element (GtkBuildableParseContext  *context,
             {
             case EXPRESSION_CLOSURE:
               expr_info->closure.params = g_slist_prepend (expr_info->closure.params, expression_info);
+              break;
+            case EXPRESSION_PROPERTY:
+              expr_info->property.expression = expression_info;
               break;
             case EXPRESSION_EXPRESSION:
             case EXPRESSION_CONSTANT:
