@@ -631,6 +631,12 @@ css_provider_commit (GtkCssProvider *css_provider,
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
   GSList *l;
 
+  if (ruleset->styles == NULL)
+    {
+      g_slist_free_full (selectors, (GDestroyNotify) _gtk_css_selector_free);
+      return;
+    }
+
   for (l = selectors; l; l = l->next)
     {
       GtkCssRuleset new;
