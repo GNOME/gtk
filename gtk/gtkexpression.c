@@ -295,12 +295,53 @@ struct _GtkPropertyExpression
 {
   GtkExpression parent;
 
+  GtkExpression *expr;
+
   GParamSpec *pspec;
 };
 
 static void
 gtk_property_expression_finalize (GtkExpression *expr)
 {
+  GtkPropertyExpression *self = (GtkPropertyExpression *) expr;
+
+  g_clear_pointer (&self->expr, gtk_expression_unref);
+}
+
+static GObject *
+gtk_property_expression_get_object (GtkPropertyExpression *self,
+                                    gpointer               this)
+{
+  GValue expr_value = G_VALUE_INIT;
+  GObject *object;
+
+  if (self->expr == NULL)
+    {
+      if (this)
+        return g_object_ref (this);
+      else
+        return NULL;
+    }
+
+  if (!gtk_expression_evaluate (self->expr, this, &expr_value))
+    return NULL;
+
+  if (!G_VALUE_HOLDS_OBJECT (&expr_value))
+    {
+      g_value_unset (&expr_value);
+      return NULL;
+    }
+
+  object = g_value_dup_object (&expr_value);
+  g_value_unset (&expr_value);
+
+  if (!G_TYPE_CHECK_INSTANCE_TYPE (object, self->pspec->owner_type))
+    {
+      g_object_unref (object);
+      return NULL;
+    }
+
+  return object;
 }
 
 static gboolean
@@ -309,11 +350,14 @@ gtk_property_expression_evaluate (GtkExpression *expr,
                                   GValue        *value)
 {
   GtkPropertyExpression *self = (GtkPropertyExpression *) expr;
+  GObject *object;
 
-  if (!G_TYPE_CHECK_INSTANCE_TYPE (this, self->pspec->owner_type))
+  object = gtk_property_expression_get_object (self, this);
+  if (object == NULL)
     return FALSE;
 
-  g_object_get_property (this, self->pspec->name, value);
+  g_object_get_property (object, self->pspec->name, value);
+  g_object_unref (object);
   return TRUE;
 }
 
@@ -328,20 +372,27 @@ static const GtkExpressionClass GTK_PROPERTY_EXPRESSION_CLASS =
 /**
  * gtk_property_expression_new:
  * @this_type: The type to expect for the this type
+ * @expression: (nullable) (transfer full): Expression to
+ *     evaluate to get the object to query or %NULL to
+ *     query the `this` object
  * @property_name: name of the property
  *
- * Creates an expression that looks up a property on the
- * passed in object when it is evaluated.
- * If gtk_expresson_evaluate() is called with an object of
- * another type, this expression's evaluation will fail.
+ * Creates an expression that looks up a property via the
+ * given @expression or the `this` argument when @expression
+ * is %NULL.
+ *
+ * If the resulting object conforms to @this_type, its property
+ * named @property_name will be queried.
+ * Otherwise, this expression's evaluation will fail.
  *
  * The given @this_type must have a property with @property_name.  
  *
  * Returns: a new #GtkExpression
  **/
 GtkExpression *
-gtk_property_expression_new (GType       this_type,
-                             const char *property_name)
+gtk_property_expression_new (GType          this_type,
+                             GtkExpression *expression,
+                             const char    *property_name)
 {
   GtkPropertyExpression *result;
   GParamSpec *pspec;
@@ -369,6 +420,7 @@ gtk_property_expression_new (GType       this_type,
   result = gtk_expression_alloc (&GTK_PROPERTY_EXPRESSION_CLASS, pspec->value_type);
 
   result->pspec = pspec;
+  result->expr = expression;
 
   return (GtkExpression *) result;
 }
