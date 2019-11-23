@@ -39,7 +39,7 @@ test_property (void)
   guint counter = 0;
 
   filter = GTK_STRING_FILTER (gtk_string_filter_new ());
-  expr = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, "search");
+  expr = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, NULL, "search");
   watch = gtk_expression_watch (expr, filter, inc_counter, &counter, NULL);
 
   g_assert (gtk_expression_evaluate (expr, filter, &value));
@@ -80,9 +80,9 @@ test_closure (void)
   guint counter = 0;
 
   filter = GTK_STRING_FILTER (gtk_string_filter_new ());
-  pexpr[0] = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, "search");
-  pexpr[1] = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, "ignore-case");
-  pexpr[2] = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, "match-substring");
+  pexpr[0] = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, NULL, "search");
+  pexpr[1] = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, NULL, "ignore-case");
+  pexpr[2] = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, NULL, "match-substring");
   expr = gtk_cclosure_expression_new (G_TYPE_STRING,
                                       NULL,
                                       3,
