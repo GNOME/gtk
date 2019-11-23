@@ -48,6 +48,7 @@ gboolean                gtk_expression_evaluate                 (GtkExpression  
 
 GDK_AVAILABLE_IN_ALL
 GtkExpression *         gtk_property_expression_new             (GType                           this_type,
+                                                                 GtkExpression                  *expression,
                                                                  const char                     *property_name);
 GDK_AVAILABLE_IN_ALL
 GtkExpression *         gtk_constant_expression_new             (GType                           value_type,
