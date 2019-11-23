@@ -244,7 +244,6 @@ test_connect_signals (void)
     "</interface>";
 
   builder = builder_new_from_string (buffer, -1, NULL);
-  gtk_builder_connect_signals (builder, NULL);
 
   window = gtk_builder_get_object (builder, "window1");
   gtk_window_set_title (GTK_WINDOW (window), "test");
@@ -258,7 +257,6 @@ test_connect_signals (void)
   g_object_unref (builder);
   
   builder = builder_new_from_string (buffer_order, -1, NULL);
-  gtk_builder_connect_signals (builder, NULL);
   window = gtk_builder_get_object (builder, "window1");
   normal = 0;
   gtk_window_set_title (GTK_WINDOW (window), "test");
@@ -270,7 +268,6 @@ test_connect_signals (void)
 			       strlen (buffer_extra), NULL);
   gtk_builder_add_from_string (builder, buffer_extra2,
 			       strlen (buffer_extra2), NULL);
-  gtk_builder_connect_signals (builder, NULL);
   window = gtk_builder_get_object (builder, "window2");
   gtk_window_set_title (GTK_WINDOW (window), "test");
   g_assert (normal == 30);
@@ -289,7 +286,6 @@ test_connect_signals (void)
   
   builder = builder_new_from_string (buffer_after_child, -1, NULL);
   window = gtk_builder_get_object (builder, "window1");
-  gtk_builder_connect_signals (builder, NULL);
   gtk_window_set_title (GTK_WINDOW (window), "test");
 
   g_assert (normal == 1);
@@ -2601,7 +2597,6 @@ test_anaconda_signal (void)
     "</interface>";
 
   builder = builder_new_from_string (buffer, -1, NULL);
-  gtk_builder_connect_signals (builder, NULL);
 
   g_object_unref (builder);
 }

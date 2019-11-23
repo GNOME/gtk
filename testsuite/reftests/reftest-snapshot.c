@@ -145,14 +145,13 @@ snapshot_widget (GtkWidget *widget)
   return surface;
 }
 
-static void
-connect_signals (GtkBuilder    *builder,
-                 GObject       *object,
-                 const gchar   *signal_name,
-                 const gchar   *handler_name,
-                 GObject       *connect_object,
-                 GConnectFlags  flags,
-                 gpointer       user_data)
+static GClosure *
+create_closure (GtkBuilder    *builder,
+                const char    *function_name,
+                gboolean       swapped,
+                GObject       *object,
+                gpointer       user_data,
+                GError        **error)
 {
   ReftestModule *module;
   const char *directory;
@@ -161,7 +160,7 @@ connect_signals (GtkBuilder    *builder,
   char **split;
 
   directory = user_data;
-  split = g_strsplit (handler_name, ":", -1);
+  split = g_strsplit (function_name, ":", -1);
 
   switch (g_strv_length (split))
     {
@@ -177,14 +176,20 @@ connect_signals (GtkBuilder    *builder,
           module = reftest_module_new_self ();
           if (module == NULL)
             {
-              g_error ("glib compiled without module support.");
-              return;
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_FUNCTION,
+                           "glib compiled without module support.");
+              return NULL;
             }
           func = reftest_module_lookup (module, split[0]);
           if (!func)
             {
-              g_error ("failed to lookup handler for name '%s' when connecting signals", split[0]);
-              return;
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_FUNCTION,
+                           "failed to lookup function for name '%s'", split[0]);
+              return NULL;
             }
         }
       break;
@@ -194,33 +199,42 @@ connect_signals (GtkBuilder    *builder,
       module = reftest_module_new (directory, split[0]);
       if (module == NULL)
         {
-          g_error ("Could not load module '%s' from '%s' when looking up '%s': %s", split[0], directory, handler_name, g_module_error ());
-          return;
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_FUNCTION,
+                       "Could not load module '%s' from '%s' when looking up '%s': %s", split[0], directory, function_name, g_module_error ());
+          return NULL;
         }
       func = reftest_module_lookup (module, split[1]);
       if (!func)
         {
-          g_error ("failed to lookup handler for name '%s' in module '%s'", split[1], split[0]);
-          return;
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_FUNCTION,
+                       "failed to lookup function for name '%s' in module '%s'", split[1], split[0]);
+          return NULL;
         }
       break;
     default:
-      g_error ("Could not connect signal handler named '%s'", handler_name);
-      return;
+      g_set_error (error,
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_INVALID_FUNCTION,
+                   "Could not find function named '%s'", function_name);
+      return NULL;
     }
 
   g_strfreev (split);
 
-  if (connect_object)
+  if (object)
     {
-      if (flags & G_CONNECT_SWAPPED)
-        closure = g_cclosure_new_object_swap (func, connect_object);
+      if (swapped)
+        closure = g_cclosure_new_object_swap (func, object);
       else
-        closure = g_cclosure_new_object (func, connect_object);
+        closure = g_cclosure_new_object (func, object);
     }
   else
     {
-      if (flags & G_CONNECT_SWAPPED)
+      if (swapped)
         closure = g_cclosure_new_swap (func, NULL, NULL);
       else
         closure = g_cclosure_new (func, NULL, NULL);
@@ -229,7 +243,7 @@ connect_signals (GtkBuilder    *builder,
   if (module)
     g_closure_add_finalize_notifier (closure, module, (GClosureNotify) reftest_module_unref);
 
-  g_signal_connect_closure (object, signal_name, closure, flags & G_CONNECT_AFTER ? TRUE : FALSE);
+  return closure;
 }
 
 cairo_surface_t *
@@ -243,12 +257,11 @@ reftest_snapshot_ui_file (const char *ui_file)
   directory = g_path_get_dirname (ui_file);
 
   builder = gtk_builder_new ();
+  gtk_builder_set_closure_func (builder, create_closure, directory, g_free);
   gtk_builder_add_from_file (builder, ui_file, &error);
   g_assert_no_error (error);
-  gtk_builder_connect_signals_full (builder, connect_signals, directory);
   window = builder_get_toplevel (builder);
   g_object_unref (builder);
-  g_free (directory);
   g_assert (window);
 
   gtk_widget_show (window);

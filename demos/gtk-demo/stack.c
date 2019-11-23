@@ -18,7 +18,6 @@ do_stack (GtkWidget *do_widget)
       GtkBuilder *builder;
 
       builder = gtk_builder_new_from_resource ("/stack/stack.ui");
-      gtk_builder_connect_signals (builder, NULL);
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));

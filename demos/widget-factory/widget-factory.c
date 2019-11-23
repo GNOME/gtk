@@ -1715,7 +1715,7 @@ activate (GApplication *app)
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   g_object_unref (provider);
 
-  builder = gtk_builder_new_from_resource ("/org/gtk/WidgetFactory4/widget-factory.ui");
+  builder = gtk_builder_new ();
   gtk_builder_add_callback_symbol (builder, "on_entry_icon_release", (GCallback)on_entry_icon_release);
   gtk_builder_add_callback_symbol (builder, "on_scale_button_value_changed", (GCallback)on_scale_button_value_changed);
   gtk_builder_add_callback_symbol (builder, "on_scale_button_query_tooltip", (GCallback)on_scale_button_query_tooltip);
@@ -1728,8 +1728,7 @@ activate (GApplication *app)
   gtk_builder_add_callback_symbol (builder, "decrease_icon_size", (GCallback)decrease_icon_size);
   gtk_builder_add_callback_symbol (builder, "reset_icon_size", (GCallback)reset_icon_size);
   gtk_builder_add_callback_symbol (builder, "osd_frame_pressed", (GCallback)osd_frame_pressed);
-
-  gtk_builder_connect_signals (builder, NULL);
+  gtk_builder_add_from_resource (builder, "/org/gtk/WidgetFactory4/widget-factory.ui", NULL);
 
   window = (GtkWindow *)gtk_builder_get_object (builder, "window");
   gtk_application_add_window (GTK_APPLICATION (app), window);
