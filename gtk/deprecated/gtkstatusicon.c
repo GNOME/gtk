@@ -2284,6 +2284,7 @@ gtk_status_icon_is_embedded (GtkStatusIcon *status_icon)
 #ifdef GDK_WINDOWING_QUARTZ
   return TRUE;
 #endif
+  return TRUE;
 }
 
 /**
