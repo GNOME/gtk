@@ -75,12 +75,14 @@ typedef struct {
   gint col;
 } PropertyInfo;
 
-typedef struct {
+typedef struct _ExpressionInfo ExpressionInfo;
+struct _ExpressionInfo {
   guint tag_type;
   enum {
     EXPRESSION_EXPRESSION,
     EXPRESSION_CONSTANT,
-    EXPRESSION_CLOSURE
+    EXPRESSION_CLOSURE,
+    EXPRESSION_PROPERTY
   } expression_type;
   union {
     GtkExpression *expression;
@@ -95,8 +97,13 @@ typedef struct {
       gboolean swapped;
       GSList *params;
     } closure;
+    struct {
+      GType this_type;
+      char *property_name;
+      ExpressionInfo *expression;
+    } property;
   };
-} ExpressionInfo;
+};
 
 typedef struct {
   guint tag_type;
