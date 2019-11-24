@@ -2272,18 +2272,11 @@ gtk_status_icon_is_embedded (GtkStatusIcon *status_icon)
   g_return_val_if_fail (GTK_IS_STATUS_ICON (status_icon), FALSE);
 
 #ifdef GDK_WINDOWING_X11
-  if (status_icon->priv->tray_icon &&
-      gtk_plug_get_embedded (GTK_PLUG (status_icon->priv->tray_icon)))
-    return TRUE;
-  else
+  if (status_icon->priv->tray_icon == NULL ||
+      !gtk_plug_get_embedded (GTK_PLUG (status_icon->priv->tray_icon)))
     return FALSE;
 #endif
-#ifdef GDK_WINDOWING_WIN32
   return TRUE;
-#endif
-#ifdef GDK_WINDOWING_QUARTZ
-  return TRUE;
-#endif
 }
 
 /**
