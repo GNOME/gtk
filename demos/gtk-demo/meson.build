@@ -43,6 +43,7 @@ demos = files([
   'flowbox.c',
   'list_store.c',
   'listview_applauncher.c',
+  'listview_clocks.c',
   'listview_filebrowser.c',
   'listview_minesweeper.c',
   'listview_settings.c',
@@ -101,7 +102,7 @@ extra_demo_sources = files(['main.c',
 if harfbuzz_dep.found() and pangoft_dep.found()
   demos += files('font_features.c')
   extra_demo_sources += files(['script-names.c', 'language-names.c'])
-  gtkdemo_deps += [ harfbuzz_dep, ]
+  gtkdemo_deps += [ harfbuzz_dep, epoxy_dep ]
 endif
 
 if os_unix
