@@ -63,6 +63,10 @@ GtkExpressionWatch *    gtk_expression_watch                    (GtkExpression  
                                                                  GtkExpressionNotify             notify,
                                                                  gpointer                        user_data,
                                                                  GDestroyNotify                  user_destroy);
+GDK_AVAILABLE_IN_ALL
+GtkExpressionWatch *    gtk_expression_bind                     (GtkExpression                  *self,
+                                                                 gpointer                        object,
+                                                                 const char *                    property);
 
 GDK_AVAILABLE_IN_ALL
 GtkExpressionWatch *    gtk_expression_watch_ref                (GtkExpressionWatch             *watch);

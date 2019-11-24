@@ -1260,3 +1260,122 @@ gtk_expression_watch_evaluate (GtkExpressionWatch *watch,
   return gtk_expression_evaluate (watch->expression, watch->this, value);
 }
 
+typedef struct {
+  GtkExpressionWatch *watch;
+  GtkExpression *expression;
+  GObject *object;
+  GParamSpec *pspec;
+} GtkExpressionBind;
+
+static void
+free_binds (gpointer data)
+{
+  GSList *l;
+
+  for (l = data; l; l = l->next)
+    {
+      GtkExpressionBind *bind = l->data;
+
+      bind->object = NULL;
+      gtk_expression_watch_unwatch (bind->watch);
+    }
+  g_slist_free (data);
+}
+
+static void
+gtk_expression_bind_free (gpointer data)
+{
+  GtkExpressionBind *bind = data;
+
+  if (bind->object)
+    {
+      GSList *binds;
+      binds = g_object_steal_data (bind->object, "gtk-expression-binds");
+      binds = g_slist_remove (binds, bind);
+      if (binds)
+        g_object_set_data_full (bind->object, "gtk-expression-binds", binds, free_binds);
+    }
+  gtk_expression_unref (bind->expression);
+
+  g_slice_free (GtkExpressionBind, bind);
+}
+
+static void
+gtk_expression_bind_notify (gpointer data)
+{
+  GValue value = G_VALUE_INIT;
+  GtkExpressionBind *bind = data;
+
+  if (!gtk_expression_evaluate (bind->expression, bind->object, &value))
+    return;
+
+  g_object_set_property (bind->object, bind->pspec->name, &value);
+  g_value_unset (&value);
+}
+
+/**
+ * gtk_expression_bind:
+ * @self: (transfer full): a #GtkExpression
+ * @object: (transfer none) (type GObject): the object to bind
+ * @property: name of the property to bind to
+ *
+ * Bind @object's property named @property to @self.
+ *
+ * The value that @self evaluates to is set via g_object_set() on
+ * @object. This is repeated whenever @self changes to ensure that
+ * the object's property stays synchronized with @self.
+ *
+ * If @self's evaluation fails, @object's @property is not updated.
+ * You can ensure that this doesn't happen by using a fallback
+ * expression.
+ *
+ * Note that this function takes ownership of @self. If you want
+ * to keep it around, you should gtk_expression_ref() it beforehand.
+ *
+ * Returns: (transfer none): a #GtkExpressionWatch
+ **/
+GtkExpressionWatch *
+gtk_expression_bind (GtkExpression *self,
+                     gpointer       object,
+                     const char    *property)
+{
+  GtkExpressionBind *bind;
+  GParamSpec *pspec;
+  GSList *binds;
+
+  g_return_val_if_fail (GTK_IS_EXPRESSION (self), NULL);
+  g_return_val_if_fail (G_IS_OBJECT (object), NULL);
+  g_return_val_if_fail (property != NULL, NULL);
+  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (object), property);
+  if (G_UNLIKELY (pspec == NULL))
+    {
+      g_critical ("%s: Class '%s' has no property named '%s'",
+                  G_STRFUNC, G_OBJECT_TYPE_NAME (object), property);
+      return NULL;
+    }
+  if (G_UNLIKELY ((pspec->flags & (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY)) != G_PARAM_WRITABLE))
+    {
+      g_critical ("%s: property '%s' of class '%s' is not writable",
+                 G_STRFUNC, pspec->name, G_OBJECT_TYPE_NAME (object));
+      return NULL;
+    }
+
+  bind = g_slice_new0 (GtkExpressionBind);
+  bind->expression = self;
+  bind->object = object;
+  bind->pspec = pspec;
+  bind->watch = gtk_expression_watch (self,
+                                      object,
+                                      gtk_expression_bind_notify,
+                                      bind,
+                                      gtk_expression_bind_free);
+  binds = g_object_steal_data (object, "gtk-expression-binds");
+  binds = g_slist_prepend (binds, bind);
+  g_object_set_data_full (object, "gtk-expression-binds", binds, free_binds);
+
+  gtk_expression_unref (self);
+
+  gtk_expression_bind_notify (bind);
+
+  return bind->watch;
+}
