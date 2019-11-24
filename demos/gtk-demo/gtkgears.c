@@ -651,7 +651,7 @@ gtk_gears_render (GtkGLArea    *area,
   return TRUE;
 }
 
-static const char vertex_shader_gl[] =
+static const char *vertex_shader_gl =
 "#version 150\n"
 "\n"
 "in vec3 position;\n"
