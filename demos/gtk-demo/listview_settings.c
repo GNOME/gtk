@@ -1,6 +1,6 @@
 /* Lists/Settings
  *
- * This demo shows a settings viwer for GSettings.
+ * This demo shows a settings viewer for GSettings.
  *
  * It demonstrates how to implement support for trees with listview.
  */
