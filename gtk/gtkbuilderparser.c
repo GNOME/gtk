@@ -914,7 +914,8 @@ parse_property (ParserData   *data,
     {
       BindingInfo *binfo;
 
-      binfo = g_slice_new (BindingInfo);
+      binfo = g_slice_new0 (BindingInfo);
+      binfo->tag_type = TAG_BINDING;
       binfo->target = NULL;
       binfo->target_pspec = pspec;
       binfo->source = g_strdup (bind_source);
@@ -942,6 +943,78 @@ parse_property (ParserData   *data,
   info->context = g_strdup (context);
   info->line = line;
   info->col = col;
+
+  state_push (data, info);
+}
+
+static void
+parse_binding (ParserData   *data,
+               const gchar  *element_name,
+               const gchar **names,
+               const gchar **values,
+               GError      **error)
+{
+  BindingExpressionInfo *info;
+  const gchar *name = NULL;
+  ObjectInfo *object_info;
+  GParamSpec *pspec = NULL;
+
+  object_info = state_peek_info (data, ObjectInfo);
+  if (!object_info ||
+      !(object_info->tag_type == TAG_OBJECT ||
+        object_info->tag_type == TAG_TEMPLATE))
+    {
+      error_invalid_tag (data, element_name, NULL, error);
+      return;
+    }
+
+  if (!g_markup_collect_attributes (element_name, names, values, error,
+                                    G_MARKUP_COLLECT_STRING, "name", &name,
+                                    G_MARKUP_COLLECT_INVALID))
+    {
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+      return;
+    }
+
+  pspec = g_object_class_find_property (object_info->oclass, name);
+
+  if (!pspec)
+    {
+      g_set_error (error,
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_INVALID_PROPERTY,
+                   "Invalid property: %s.%s",
+                   g_type_name (object_info->type), name);
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+      return;
+    }
+  else if (pspec->flags & G_PARAM_CONSTRUCT_ONLY)
+    {
+      g_set_error (error,
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_INVALID_PROPERTY,
+                   "%s.%s is a construct-only property",
+                   g_type_name (object_info->type), name);
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+      return;
+    }
+  else if (!(pspec->flags & G_PARAM_WRITABLE))
+    {
+      g_set_error (error,
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_INVALID_PROPERTY,
+                   "%s.%s is a non-writable property",
+                   g_type_name (object_info->type), name);
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+      return;
+    }
+
+
+  info = g_slice_new0 (BindingExpressionInfo);
+  info->tag_type = TAG_BINDING_EXPRESSION;
+  info->target = NULL;
+  info->target_pspec = pspec;
+  gtk_buildable_parse_context_get_position (&data->ctx, &info->line, &info->col);
 
   state_push (data, info);
 }
@@ -1006,8 +1079,13 @@ check_expression_parent (ParserData *data)
 
       return G_PARAM_SPEC_VALUE_TYPE (prop_info->pspec) == GTK_TYPE_EXPRESSION;
     }
+  else if (common_info->tag_type == TAG_BINDING_EXPRESSION)
+    {
+      BindingExpressionInfo *expr_info = (BindingExpressionInfo *) common_info;
 
-  if (common_info->tag_type == TAG_EXPRESSION)
+      return expr_info->expr == NULL;
+    }
+  else if (common_info->tag_type == TAG_EXPRESSION)
     {
       ExpressionInfo *expr_info = (ExpressionInfo *) common_info;
 
@@ -1195,7 +1273,7 @@ parse_lookup_expression (ParserData   *data,
   state_push (data, info);
 }
 
-static GtkExpression *
+GtkExpression *
 expression_info_construct (GtkBuilder      *builder,
                            ExpressionInfo  *info,
                            GError         **error)
@@ -1413,6 +1491,23 @@ _free_signal_info (SignalInfo *info,
   g_free (info->connect_object_name);
   g_free (info->object_name);
   g_slice_free (SignalInfo, info);
+}
+
+void
+_free_binding_info (BindingInfo *info,
+                    gpointer     user)
+{
+  g_free (info->source);
+  g_free (info->source_property);
+  g_slice_free (BindingInfo, info);
+}
+
+void
+free_binding_expression_info (BindingExpressionInfo *info)
+{
+  if (info->expr)
+    free_expression_info (info->expr);
+  g_slice_free (BindingExpressionInfo, info);
 }
 
 static void
@@ -1655,6 +1750,8 @@ start_element (GtkBuildableParseContext  *context,
     }
   else if (strcmp (element_name, "property") == 0)
     parse_property (data, element_name, names, values, error);
+  else if (strcmp (element_name, "binding") == 0)
+    parse_binding (data, element_name, names, values, error);
   else if (strcmp (element_name, "child") == 0)
     parse_child (data, element_name, names, values, error);
   else if (strcmp (element_name, "signal") == 0)
@@ -1746,6 +1843,30 @@ end_element (GtkBuildableParseContext  *context,
       else
         g_assert_not_reached ();
     }
+  else if (strcmp (element_name, "binding") == 0)
+    {
+      BindingExpressionInfo *binfo = state_pop_info (data, BindingExpressionInfo);
+      CommonInfo *info = state_peek_info (data, CommonInfo);
+
+      g_assert (info != NULL);
+
+      if (binfo->expr == NULL)
+        {
+            g_set_error (error,
+                         GTK_BUILDER_ERROR,
+                         GTK_BUILDER_ERROR_INVALID_TAG,
+                         "Binding tag requires an expression");
+            free_binding_expression_info (binfo);
+        }
+      else if (info->tag_type == TAG_OBJECT ||
+          info->tag_type == TAG_TEMPLATE)
+        {
+          ObjectInfo *object_info = (ObjectInfo*)info;
+          object_info->bindings = g_slist_prepend (object_info->bindings, binfo);
+        }
+      else
+        g_assert_not_reached ();
+    }
   else if (strcmp (element_name, "object") == 0 ||
            strcmp (element_name, "template") == 0)
     {
@@ -1813,7 +1934,13 @@ end_element (GtkBuildableParseContext  *context,
       ExpressionInfo *expression_info = state_pop_info (data, ExpressionInfo);
       CommonInfo *parent_info = state_peek_info (data, CommonInfo);
 
-      if (parent_info->tag_type == TAG_PROPERTY)
+      if (parent_info->tag_type == TAG_BINDING_EXPRESSION)
+        {
+          BindingExpressionInfo *expr_info = (BindingExpressionInfo *) parent_info;
+
+          expr_info->expr = expression_info;
+        }
+      else if (parent_info->tag_type == TAG_PROPERTY)
         {
           PropertyInfo *prop_info = (PropertyInfo *) parent_info;
 
@@ -1963,6 +2090,12 @@ free_info (CommonInfo *info)
         break;
       case TAG_CHILD:
         free_child_info ((ChildInfo *)info);
+        break;
+      case TAG_BINDING:
+        _free_binding_info ((BindingInfo *)info, NULL);
+        break;
+      case TAG_BINDING_EXPRESSION:
+        free_binding_expression_info ((BindingExpressionInfo *) info);
         break;
       case TAG_PROPERTY:
         free_property_info ((PropertyInfo *)info);
