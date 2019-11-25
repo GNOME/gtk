@@ -1145,7 +1145,7 @@ parse_lookup_expression (ParserData   *data,
 {
   ExpressionInfo *info;
   const char *property_name;
-  const char *type_name;
+  const char *type_name = NULL;
   GType type;
 
   if (!check_expression_parent (data))
@@ -1155,7 +1155,7 @@ parse_lookup_expression (ParserData   *data,
     }
 
   if (!g_markup_collect_attributes (element_name, names, values, error,
-                                    G_MARKUP_COLLECT_STRING, "type", &type_name,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "type", &type_name,
                                     G_MARKUP_COLLECT_STRING, "name", &property_name,
                                     G_MARKUP_COLLECT_INVALID))
     {
@@ -1163,15 +1163,22 @@ parse_lookup_expression (ParserData   *data,
       return;
     }
 
-  type = gtk_builder_get_type_from_name (data->builder, type_name);
-  if (type == G_TYPE_INVALID)
+  if (type_name == NULL)
     {
-      g_set_error (error,
-                   GTK_BUILDER_ERROR,
-                   GTK_BUILDER_ERROR_INVALID_VALUE,
-                   "Invalid type '%s'", type_name);
-      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
-      return;
+      type = G_TYPE_INVALID;
+    }
+  else
+    {
+      type = gtk_builder_get_type_from_name (data->builder, type_name);
+      if (type == G_TYPE_INVALID)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_VALUE,
+                       "Invalid type '%s'", type_name);
+          _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+          return;
+        }
     }
 
   info = g_slice_new0 (ExpressionInfo);
@@ -1265,6 +1272,7 @@ expression_info_construct (GtkBuilder      *builder,
     case EXPRESSION_PROPERTY:
       {
         GtkExpression *expression;
+        GType type;
 
         if (info->property.expression)
           {
@@ -1276,7 +1284,20 @@ expression_info_construct (GtkBuilder      *builder,
         else
           expression = NULL;
 
-        expression = gtk_property_expression_new (info->property.this_type,
+        if (info->property.this_type != G_TYPE_INVALID)
+          type = info->property.this_type;
+        else if (expression != NULL)
+          type = gtk_expression_get_value_type (expression);
+        else
+          {
+            g_set_error (error,
+                         GTK_BUILDER_ERROR,
+                         GTK_BUILDER_ERROR_MISSING_ATTRIBUTE,
+                         "%s:%d:%d Lookups require a type attribute if they don't have an expression.",
+                         "???", 0, 0);
+            return NULL;
+          }
+        expression = gtk_property_expression_new (type,
                                                   expression,
                                                   info->property.property_name);
         g_free (info->property.property_name);
