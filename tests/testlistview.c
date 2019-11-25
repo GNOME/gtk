@@ -6,104 +6,56 @@ GSList *pending = NULL;
 guint active = 0;
 
 static void
-got_files (GObject      *enumerate,
-           GAsyncResult *res,
-           gpointer      store);
-
-static gboolean
-start_enumerate (GListStore *store)
+loading_cb (GtkDirectoryList *dir,
+            GParamSpec       *pspec,
+            gpointer          unused)
 {
-  GFileEnumerator *enumerate;
-  GFile *file = g_object_get_data (G_OBJECT (store), "file");
-  GError *error = NULL;
-
-  enumerate = g_file_enumerate_children (file,
-                                         G_FILE_ATTRIBUTE_STANDARD_TYPE
-                                         "," G_FILE_ATTRIBUTE_STANDARD_ICON
-                                         "," G_FILE_ATTRIBUTE_STANDARD_NAME
-                                         "," G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
-                                         0,
-                                         NULL,
-                                         &error);
-
-  if (enumerate == NULL)
+  if (gtk_directory_list_is_loading (dir))
     {
-      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_TOO_MANY_OPEN_FILES) && active)
-        {
-          g_clear_error (&error);
-          pending = g_slist_prepend (pending, g_object_ref (store));
-          return TRUE;
-        }
-
-      g_clear_error (&error);
-      g_object_unref (store);
-      return FALSE;
+      active++;
+      /* HACK: ensure loading finishes and the dir doesn't get destroyed */
+      g_object_ref (dir);
     }
+  else
+    {
+      active--;
+      g_object_unref (dir);
+
+      while (active < 20 && pending)
+        {
+          GtkDirectoryList *dir2 = pending->data;
+          pending = g_slist_remove (pending, dir2);
+          gtk_directory_list_set_file (dir2, g_object_get_data (G_OBJECT (dir2), "file"));
+          g_object_unref (dir2);
+        }
+    }
+}
+
+static GtkDirectoryList *
+create_directory_list (GFile *file)
+{
+  GtkDirectoryList *dir;
+
+  dir = gtk_directory_list_new (G_FILE_ATTRIBUTE_STANDARD_TYPE
+                                "," G_FILE_ATTRIBUTE_STANDARD_ICON
+                                "," G_FILE_ATTRIBUTE_STANDARD_NAME
+                                "," G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
+                                NULL);
+  gtk_directory_list_set_io_priority (dir, G_PRIORITY_DEFAULT_IDLE);
+  g_signal_connect (dir, "notify::loading", G_CALLBACK (loading_cb), NULL);
+  g_assert (!gtk_directory_list_is_loading (dir));
 
   if (active > 20)
     {
-      g_object_unref (enumerate);
-      pending = g_slist_prepend (pending, g_object_ref (store));
-      return TRUE;
+      g_object_set_data_full (G_OBJECT (dir), "file", g_object_ref (file), g_object_unref);
+      pending = g_slist_prepend (pending, g_object_ref (dir));
     }
-
-  active++;
-  g_file_enumerator_next_files_async (enumerate,
-                                      g_file_is_native (file) ? 5000 : 100,
-                                      G_PRIORITY_DEFAULT_IDLE,
-                                      NULL,
-                                      got_files,
-                                      g_object_ref (store));
-
-  g_object_unref (enumerate);
-  return TRUE;
-}
-
-static void
-got_files (GObject      *enumerate,
-           GAsyncResult *res,
-           gpointer      store)
-{
-  GList *l, *files;
-  GFile *file = g_object_get_data (store, "file");
-  GPtrArray *array;
-
-  files = g_file_enumerator_next_files_finish (G_FILE_ENUMERATOR (enumerate), res, NULL);
-  if (files == NULL)
+  else
     {
-      g_object_unref (store);
-      if (pending)
-        {
-          GListStore *store = pending->data;
-          pending = g_slist_remove (pending, store);
-          start_enumerate (store);
-        }
-      active--;
-      return;
+      gtk_directory_list_set_file (dir, file);
     }
 
-  array = g_ptr_array_new ();
-  g_ptr_array_new_with_free_func (g_object_unref);
-  for (l = files; l; l = l->next)
-    {
-      GFileInfo *info = l->data;
-      GFile *child;
-
-      child = g_file_get_child (file, g_file_info_get_name (info));
-      g_object_set_data_full (G_OBJECT (info), "file", child, g_object_unref);
-      g_ptr_array_add (array, info);
-    }
-  g_list_free (files);
-
-  g_list_store_splice (store, g_list_model_get_n_items (store), 0, array->pdata, array->len);
-  g_ptr_array_unref (array);
-
-  g_file_enumerator_next_files_async (G_FILE_ENUMERATOR (enumerate),
-                                      g_file_is_native (file) ? 5000 : 100,
-                                      G_PRIORITY_DEFAULT_IDLE,
-                                      NULL,
-                                      got_files,
-                                      store);
+  return dir;
 }
 
 static char *
@@ -111,7 +63,7 @@ get_file_path (GFileInfo *info)
 {
   GFile *file;
 
-  file = g_object_get_data (G_OBJECT (info), "file");
+  file = G_FILE (g_file_info_get_attribute_object (info, "standard::file"));
   return g_file_get_path (file);
 }
 
@@ -119,23 +71,19 @@ static GListModel *
 create_list_model_for_directory (gpointer file)
 {
   GtkSortListModel *sort;
-  GListStore *store;
+  GtkDirectoryList *dir;
   GtkSorter *sorter;
 
   if (g_file_query_file_type (file, G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL) != G_FILE_TYPE_DIRECTORY)
     return NULL;
 
-  store = g_list_store_new (G_TYPE_FILE_INFO);
-  g_object_set_data_full (G_OBJECT (store), "file", g_object_ref (file), g_object_unref);
-
-  if (!start_enumerate (store))
-    return NULL;
-
+  dir = create_directory_list (file);
   sorter = gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL, 0, NULL, (GCallback) get_file_path, NULL, NULL));
-  sort = gtk_sort_list_model_new (G_LIST_MODEL (store), sorter);
-  g_object_unref (sorter);
+  sort = gtk_sort_list_model_new (G_LIST_MODEL (dir), sorter);
 
-  g_object_unref (store);
+  g_object_unref (sorter);
+  g_object_unref (dir);
+
   return G_LIST_MODEL (sort);
 }
 
@@ -266,7 +214,7 @@ static GListModel *
 create_list_model_for_file_info (gpointer file_info,
                                  gpointer unused)
 {
-  GFile *file = g_object_get_data (file_info, "file");
+  GFile *file = G_FILE (g_file_info_get_attribute_object (file_info, "standard::file"));
 
   if (file == NULL)
     return NULL;
@@ -311,7 +259,7 @@ match_file (gpointer item, gpointer data)
 {
   GtkWidget *search_entry = data;
   GFileInfo *info = gtk_tree_list_row_get_item (item);
-  GFile *file = g_object_get_data (G_OBJECT (info), "file");
+  GFile *file = G_FILE (g_file_info_get_attribute_object (info, "standard::file"));
   char *path;
   gboolean result;
   
