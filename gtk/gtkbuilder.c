@@ -218,6 +218,7 @@
 #include "gtkbuildable.h"
 #include "gtkbuilderscopeprivate.h"
 #include "gtkdebug.h"
+#include "gtkexpression.h"
 #include "gtkmain.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
@@ -678,8 +679,22 @@ gtk_builder_take_bindings (GtkBuilder *builder,
 
   for (l = bindings; l; l = l->next)
     {
-      BindingInfo *info = l->data;
-      info->target = target;
+      CommonInfo *common_info = l->data;
+
+      if (common_info->tag_type == TAG_BINDING)
+        {
+          BindingInfo *info = l->data;
+          info->target = target;
+        }
+      else if (common_info->tag_type == TAG_BINDING_EXPRESSION)
+        {
+          BindingExpressionInfo *info = l->data;
+          info->target = target;
+        }
+      else
+        {
+          g_assert_not_reached ();
+        }
     }
 
   priv->bindings = g_slist_concat (priv->bindings, bindings);
@@ -1006,17 +1021,6 @@ gtk_builder_apply_delayed_properties (GtkBuilder  *builder,
   return result;
 }
 
-static inline void
-free_binding_info (gpointer data,
-                   gpointer user)
-{
-  BindingInfo *info = data;
-
-  g_free (info->source);
-  g_free (info->source_property);
-  g_slice_free (BindingInfo, data);
-}
-
 static inline gboolean
 gtk_builder_create_bindings (GtkBuilder  *builder,
                              GError     **error)
@@ -1027,26 +1031,44 @@ gtk_builder_create_bindings (GtkBuilder  *builder,
 
   for (l = priv->bindings; l; l = l->next)
     {
-      BindingInfo *info = l->data;
-      GObject *source;
+      CommonInfo *common_info = l->data;
 
-      if (result)
+      if (common_info->tag_type == TAG_BINDING)
         {
-          source = gtk_builder_lookup_object (builder, info->source, info->line, info->col, error);
+          BindingInfo *info = l->data;
+          GObject *source;
+
+          source = _gtk_builder_lookup_object (builder, info->source, info->line, info->col);
           if (source)
             g_object_bind_property (source, info->source_property,
                                     info->target, info->target_pspec->name,
                                     info->flags);
-          else
-            result = FALSE;
-        }
 
-      free_binding_info (info, NULL);
+          _free_binding_info (info, NULL);
+        }
+      else if (common_info->tag_type == TAG_BINDING_EXPRESSION)
+        {
+          BindingExpressionInfo *info = l->data;
+          GtkExpression *expression;
+
+          expression = expression_info_construct (builder, info->expr, error);
+          if (expression == NULL)
+            {
+              g_prefix_error (error, "%s:%d:%d: ", priv->filename, info->line, info->col);
+              error = NULL;
+              result = FALSE;
+            }
+          else
+            {
+              gtk_expression_bind (expression, info->target, info->target_pspec->name);
+            }
+
+          free_binding_expression_info (info);
+        }
     }
 
   g_slist_free (priv->bindings);
   priv->bindings = NULL;
-
   return result;
 }
 
