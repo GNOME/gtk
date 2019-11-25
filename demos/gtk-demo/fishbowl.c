@@ -249,6 +249,14 @@ fishbowl_changes_toggled_cb (GtkToggleButton *button,
     gtk_button_set_icon_name (GTK_BUTTON (button), "changes-allow");
 }
 
+char *
+format_header_cb (GObject *object,
+                  guint    count,
+                  double   fps)
+{
+  return g_strdup_printf ("%u Icons, %.2f fps", count, fps);
+}
+
 GtkWidget *
 do_fishbowl (GtkWidget *do_widget)
 {
