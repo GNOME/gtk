@@ -265,6 +265,14 @@ changes_toggled_cb (GtkToggleButton *button,
     gtk_button_set_icon_name (GTK_BUTTON (button), "changes-allow");
 }
 
+char *
+format_header_cb (GObject *object,
+                  guint    count,
+                  double   fps)
+{
+  return g_strdup_printf ("%u Icons, %.2f fps", count, fps);
+}
+
 GtkWidget *
 do_fishbowl (GtkWidget *do_widget)
 {
@@ -283,6 +291,7 @@ do_fishbowl (GtkWidget *do_widget)
   if (!window)
     {
       GtkBuilder *builder;
+      GError *error = NULL;
       GtkWidget *bowl;
 
       g_type_ensure (GTK_TYPE_FISHBOWL);
@@ -292,8 +301,10 @@ do_fishbowl (GtkWidget *do_widget)
                                         "next_button_clicked_cb", G_CALLBACK (next_button_clicked_cb),
                                         "prev_button_clicked_cb", G_CALLBACK (prev_button_clicked_cb),
                                         "changes_toggled_cb", G_CALLBACK (changes_toggled_cb),
+                                        "format_header_cb", G_CALLBACK (format_header_cb),
                                         NULL);
-      gtk_builder_add_from_resource (builder, "/fishbowl/fishbowl.ui", NULL);
+      gtk_builder_add_from_resource (builder, "/fishbowl/fishbowl.ui", &error);
+      g_assert_no_error (error);
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
