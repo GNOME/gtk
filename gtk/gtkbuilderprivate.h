@@ -25,7 +25,8 @@
 
 enum {
   TAG_PROPERTY,
-  TAG_MENU,
+  TAG_BINDING,
+  TAG_BINDING_EXPRESSION,
   TAG_REQUIRES,
   TAG_OBJECT,
   TAG_CHILD,
@@ -117,6 +118,7 @@ typedef struct {
 
 typedef struct
 {
+  guint tag_type;
   GObject *target;
   GParamSpec *target_pspec;
   gchar *source;
@@ -125,6 +127,16 @@ typedef struct
   gint line;
   gint col;
 } BindingInfo;
+
+typedef struct
+{
+  guint tag_type;
+  GObject *target;
+  GParamSpec *target_pspec;
+  ExpressionInfo *expr;
+  gint line;
+  gint col;
+} BindingExpressionInfo;
 
 typedef struct {
   guint    tag_type;
@@ -212,6 +224,12 @@ gboolean  _gtk_builder_finish (GtkBuilder  *builder,
                                GError     **error);
 void _free_signal_info (SignalInfo *info,
                         gpointer user_data);
+void _free_binding_info (BindingInfo *info,
+                         gpointer user_data);
+void free_binding_expression_info (BindingExpressionInfo *info);
+GtkExpression * expression_info_construct (GtkBuilder      *builder,
+                                           ExpressionInfo  *info,
+                                           GError         **error);
 
 /* Internal API which might be made public at some point */
 gboolean _gtk_builder_boolean_from_string (const gchar  *string,
