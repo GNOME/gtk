@@ -1037,7 +1037,7 @@ parse_constant_expression (ParserData   *data,
                            GError      **error)
 {
   ExpressionInfo *info;
-  const char *type_name;
+  const char *type_name = NULL;
   GType type;
 
   if (!check_expression_parent (data))
@@ -1047,22 +1047,27 @@ parse_constant_expression (ParserData   *data,
     }
 
   if (!g_markup_collect_attributes (element_name, names, values, error,
-                                    G_MARKUP_COLLECT_STRING, "type", &type_name,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "type", &type_name,
                                     G_MARKUP_COLLECT_INVALID))
     {
       _gtk_builder_prefix_error (data->builder, &data->ctx, error);
       return;
     }
 
-  type = gtk_builder_get_type_from_name (data->builder, type_name);
-  if (type == G_TYPE_INVALID)
+  if (type_name == NULL)
+    type = G_TYPE_INVALID;
+  else
     {
-      g_set_error (error,
-                   GTK_BUILDER_ERROR,
-                   GTK_BUILDER_ERROR_INVALID_VALUE,
-                   "Invalid type '%s'", type_name);
-      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
-      return;
+      type = gtk_builder_get_type_from_name (data->builder, type_name);
+      if (type == G_TYPE_INVALID)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_VALUE,
+                       "Invalid type '%s'", type_name);
+          _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+          return;
+        }
     }
 
   info = g_slice_new0 (ExpressionInfo);
@@ -1203,20 +1208,33 @@ expression_info_construct (GtkBuilder      *builder,
     case EXPRESSION_CONSTANT:
       {
         GtkExpression *expr;
-        GValue value = G_VALUE_INIT;
 
-        if (!gtk_builder_value_from_string_type (builder,
-                                                 info->constant.type,
-                                                 info->constant.text->str,
-                                                 &value,
-                                                 error))
-          return  NULL;
+        if (info->constant.type == G_TYPE_INVALID)
+          {
+            GObject *o = gtk_builder_lookup_object (builder, info->constant.text->str, 0, 0, error);
+            if (o == NULL)
+              return NULL;
 
-        if (G_VALUE_HOLDS_OBJECT (&value))
-          expr = gtk_object_expression_new (g_value_get_object (&value));
+            expr = gtk_object_expression_new (o);
+          }
         else
-          expr = gtk_constant_expression_new_for_value (&value);
-        g_value_unset (&value);
+          {
+            GValue value = G_VALUE_INIT;
+
+            if (!gtk_builder_value_from_string_type (builder,
+                                                     info->constant.type,
+                                                     info->constant.text->str,
+                                                     &value,
+                                                     error))
+              return  NULL;
+
+            if (G_VALUE_HOLDS_OBJECT (&value))
+              expr = gtk_object_expression_new (g_value_get_object (&value));
+            else
+              expr = gtk_constant_expression_new_for_value (&value);
+
+            g_value_unset (&value);
+          }
 
         g_string_free (info->constant.text, TRUE);
         info->expression_type = EXPRESSION_EXPRESSION;
