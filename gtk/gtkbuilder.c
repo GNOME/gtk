@@ -2167,7 +2167,31 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
           ret = TRUE;
         }
       else
-        ret = FALSE;
+        {
+          GObject *object = g_hash_table_lookup (priv->objects, string);
+
+          if (object && g_value_type_compatible (G_OBJECT_TYPE (object), type))
+            {
+              g_value_set_object (value, object);
+            }
+          else if (object)
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "Object named \"%s\" is of type \"%s\" which is not compatible with expected type \%s\"",
+                           string, G_OBJECT_TYPE_NAME (object), g_type_name (type));
+              ret = FALSE;
+            }
+          else
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "No object named \"%s\"", string);
+              ret = FALSE;
+            }
+        }
       break;
     case G_TYPE_POINTER:
       if (G_VALUE_HOLDS (value, G_TYPE_GTYPE))
