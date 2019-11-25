@@ -1007,11 +1007,13 @@ _gtk_builder_add_signals (GtkBuilder *builder,
                                   g_slist_copy (signals));
 }
 
-static void
-gtk_builder_apply_delayed_properties (GtkBuilder *builder)
+static gboolean
+gtk_builder_apply_delayed_properties (GtkBuilder  *builder,
+                                      GError     **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GSList *l, *props;
+  gboolean result = TRUE;
 
   /* take the list over from the builder->priv.
    *
@@ -1026,18 +1028,25 @@ gtk_builder_apply_delayed_properties (GtkBuilder *builder)
       DelayedProperty *property = l->data;
       GObject *object, *obj;
 
-      object = g_hash_table_lookup (priv->objects, property->object);
-      g_assert (object != NULL);
+      if (result)
+        {
+          object = g_hash_table_lookup (priv->objects, property->object);
+          g_assert (object != NULL);
 
-      obj = _gtk_builder_lookup_object (builder, property->value, property->line, property->col);
-      if (obj)
-        g_object_set (object, property->pspec->name, obj, NULL);
+          obj = gtk_builder_lookup_object (builder, property->value, property->line, property->col, error);
+          if (obj)
+            g_object_set (object, property->pspec->name, obj, NULL);
+          else
+            result = FALSE;
+        }
 
       g_free (property->value);
       g_free (property->object);
       g_slice_free (DelayedProperty, property);
     }
   g_slist_free (props);
+
+  return result;
 }
 
 static inline void
@@ -1051,28 +1060,37 @@ free_binding_info (gpointer data,
   g_slice_free (BindingInfo, data);
 }
 
-static inline void
-gtk_builder_create_bindings (GtkBuilder *builder)
+static inline gboolean
+gtk_builder_create_bindings (GtkBuilder  *builder,
+                             GError     **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GSList *l;
+  gboolean result = TRUE;
 
   for (l = priv->bindings; l; l = l->next)
     {
       BindingInfo *info = l->data;
       GObject *source;
 
-      source = _gtk_builder_lookup_object (builder, info->source, info->line, info->col);
-      if (source)
-        g_object_bind_property (source, info->source_property,
-                                info->target, info->target_pspec->name,
-                                info->flags);
+      if (result)
+        {
+          source = gtk_builder_lookup_object (builder, info->source, info->line, info->col, error);
+          if (source)
+            g_object_bind_property (source, info->source_property,
+                                    info->target, info->target_pspec->name,
+                                    info->flags);
+          else
+            result = FALSE;
+        }
 
       free_binding_info (info, NULL);
     }
 
   g_slist_free (priv->bindings);
   priv->bindings = NULL;
+
+  return result;
 }
 
 /**
@@ -1766,9 +1784,9 @@ gboolean
 _gtk_builder_finish (GtkBuilder  *builder,
                      GError     **error)
 {
-  gtk_builder_apply_delayed_properties (builder);
-  gtk_builder_create_bindings (builder);
-  return gtk_builder_connect_signals (builder, error);
+  return gtk_builder_apply_delayed_properties (builder, error)
+      && gtk_builder_create_bindings (builder, error)
+      && gtk_builder_connect_signals (builder, error);
 }
 
 /**
@@ -2992,6 +3010,28 @@ _gtk_builder_check_parent (GtkBuilder                *builder,
                priv->filename, line, col, element);
 
   return FALSE;
+}
+
+GObject *
+gtk_builder_lookup_object (GtkBuilder   *builder,
+                           const gchar  *name,
+                           gint          line,
+                           gint          col,
+                           GError      **error)
+{
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+  GObject *obj;
+
+  obj = g_hash_table_lookup (priv->objects, name);
+  if (obj == NULL)
+    {
+      g_set_error (error,
+                   GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_ID,
+                   "%s:%d:%d Object with ID %s not found",
+                   priv->filename, line, col, name);
+    }
+
+  return obj;
 }
 
 /*< private >
