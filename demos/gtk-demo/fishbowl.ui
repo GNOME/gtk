@@ -28,22 +28,12 @@
         </child>
         <child type="end">
           <object class="GtkLabel">
-            <property name="label">fps</property>
-          </object>
-        </child>
-        <child type="end">
-          <object class="GtkLabel">
-            <property name="label" bind-source="bowl" bind-property="framerate-string"/>
-          </object>
-        </child>
-        <child type="end">
-          <object class="GtkLabel">
-            <property name="label">Icons, </property>
-          </object>
-        </child>
-        <child type="end">
-          <object class="GtkLabel">
-            <property name="label" bind-source="bowl" bind-property="count"/>
+            <binding name="label">
+              <closure type="gchararray" function="format_header_cb">
+                <lookup name="count">bowl</lookup>
+                <lookup name="framerate">bowl</lookup>
+              </closure>
+            </binding>
           </object>
         </child>
         <child type="end">
