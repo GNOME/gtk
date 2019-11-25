@@ -285,8 +285,7 @@
   //
     $_bg: if($c != $bg_color, mix($c, $base_color, 85%), $insensitive_bg_color);
 
-    label, & { color: if($tc != $fg_color, mix($tc, $_bg, 50%), $insensitive_fg_color); }
-
+    color: if($tc != $fg_color, mix($tc, $_bg, 50%), $insensitive_fg_color);
     border-color: if($c != $bg_color, _border_color($c), $insensitive_borders_color);
     $button_fill: image($_bg) !global;
     background-image: $button_fill;
@@ -304,8 +303,7 @@
     $_bg: if($variant == 'light', darken(mix($c, $base_color, 85%), 8%), darken(mix($c, $base_color, 85%), 6%));
     $_bc: if($c != $bg_color, _border_color($c), $insensitive_borders_color);
 
-    label, & { color: if($c != $bg_color, mix($tc, $_bg, 60%), $insensitive_fg_color); }
-
+    color: if($c != $bg_color, mix($tc, $_bg, 60%), $insensitive_fg_color);
     border-color: $_bc;
     $button_fill: image($_bg) !global;
     background-image: $button_fill;
@@ -321,8 +319,7 @@
     $_bg: if($c != $bg_color, $c, $backdrop_bg_color);
     $_bc: if($variant == 'light', $c, _border_color($c));
 
-    label, & { color: if($tc != $fg_color, mix($tc, $_bg, 80%), $backdrop_fg_color); }
-
+    color: if($tc != $fg_color, mix($tc, $_bg, 80%), $backdrop_fg_color);
     border-color: if($c != $bg_color, $_bc, $backdrop_borders_color);
     $button_fill: image($_bg) !global;
     background-image: $button_fill;
@@ -338,8 +335,7 @@
     $_bg: if($variant == 'light', darken(mix($c, $base_color, 85%), 8%), darken(mix($c, $base_color, 85%), 4%));
     $_bc: if($variant == 'light', $_bg ,_border_color($c));
 
-    label, & { color: if($tc != $fg_color, mix($tc, $_bg, 80%), $backdrop_fg_color); }
-
+    color: if($tc != $fg_color, mix($tc, $_bg, 80%), $backdrop_fg_color);
     border-color: if($c != $bg_color, $_bc, $backdrop_borders_color);
     $button_fill: image($_bg) !global;
     background-image: $button_fill;
@@ -354,8 +350,7 @@
     $_bg: if($c != $bg_color, mix($c, $base_color, 85%), $insensitive_bg_color);
     $_bc: if($variant == 'light', $_bg,_border_color($c));
 
-    label, & { color: if($c != $bg_color, mix($tc, $_bg, 35%), $backdrop_insensitive_color); }
-
+    color: if($c != $bg_color, mix($tc, $_bg, 35%), $backdrop_insensitive_color);
     border-color: if($c != $bg_color, $_bc, $backdrop_borders_color);
     $button_fill: image($_bg) !global;
     background-image: $button_fill;
@@ -374,8 +369,7 @@
     $_bg: if($variant == 'light', darken(mix($c, $base_color, 85%), 8%), darken(mix($c, $base_color, 85%), 4%));
     $_bc: if($variant == 'light', $_bg, _border_color($c));
 
-    label { color: if($c != $bg_color, mix($tc, $_bg, 35%), $backdrop_insensitive_color); }
-
+    color: if($c != $bg_color, mix($tc, $_bg, 35%), $backdrop_insensitive_color);
     border-color: if($c != $bg_color, $_bc, $backdrop_borders_color);
     $button_fill: image($_bg) !global;
     background-image: $button_fill;
