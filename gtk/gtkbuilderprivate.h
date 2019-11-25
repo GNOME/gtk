@@ -255,6 +255,11 @@ gboolean _gtk_builder_check_parent        (GtkBuilder                *builder,
                                            GtkBuildableParseContext  *context,
                                            const gchar               *parent_name,
                                            GError                   **error);
+GObject *gtk_builder_lookup_object        (GtkBuilder                *builder,
+                                           const gchar               *name,
+                                           gint                       line,
+                                           gint                       col,
+                                           GError                   **error);
 GObject *_gtk_builder_lookup_object       (GtkBuilder                *builder,
                                            const gchar               *name,
                                            gint                       line,
