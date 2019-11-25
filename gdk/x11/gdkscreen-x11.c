@@ -1007,6 +1007,10 @@ _gdk_x11_screen_set_window_scale (GdkX11Screen *x11_screen,
   root = x11_screen->root_window;
   GDK_WINDOW_IMPL_X11 (root->impl)->window_scale = scale;
 
+  if (GDK_WINDOW_IMPL_X11 (root->impl)->cairo_surface)
+    cairo_surface_set_device_scale (GDK_WINDOW_IMPL_X11 (root->impl)->cairo_surface,
+                                    scale, scale);
+
   toplevels = gdk_screen_get_toplevel_windows (GDK_SCREEN (x11_screen));
 
   for (l = toplevels; l != NULL; l = l->next)
