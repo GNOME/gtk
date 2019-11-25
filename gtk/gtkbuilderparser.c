@@ -1929,6 +1929,27 @@ text (GtkBuildableParseContext  *context,
 
       g_string_append_len (expr_info->constant.text, text, text_len);
     }
+  else if (strcmp (gtk_buildable_parse_context_get_element (context), "lookup") == 0)
+    {
+      ExpressionInfo *expr_info = (ExpressionInfo *) info;
+
+      while (g_ascii_isspace (*text) && text_len > 0)
+        {
+          text++;
+          text_len--;
+        }
+      while (text_len > 0 && g_ascii_isspace (text[text_len - 1]))
+        text_len--;
+      if (expr_info->property.expression == NULL && text_len > 0)
+        {
+          ExpressionInfo *constant = g_slice_new0 (ExpressionInfo);
+          constant->tag_type = TAG_EXPRESSION;
+          constant->expression_type = EXPRESSION_CONSTANT;
+          constant->constant.type = G_TYPE_INVALID;
+          constant->constant.text = g_string_new_len (text, text_len);
+          expr_info->property.expression = constant;
+        }
+    }
 }
 
 static void
