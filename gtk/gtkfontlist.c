@@ -65,6 +65,10 @@ struct _GtkFontListClass
 
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
+#if PANGO_VERSION < G_ENCODE_VERSION (1, 46)
+#define pango_font_face_get_family(_face) g_object_get_data (G_OBJECT (_face), "-gtk-font-family")
+#endif
+
 static GType
 gtk_font_list_get_item_type (GListModel *list)
 {
@@ -248,6 +252,9 @@ gtk_font_list_rescan (GtkFontList *self)
                 }
             }
           MARK_CHANGED (iter, TRUE);
+#if PANGO_VERSION < G_ENCODE_VERSION (1, 46)
+          g_object_set_data_full (G_OBJECT (faces[j]), "-gtk-font-family", g_object_ref (families[i]), g_object_unref);
+#endif
           g_sequence_insert_before (iter, g_object_ref (faces[j]));
         }
 
