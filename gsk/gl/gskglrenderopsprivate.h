@@ -73,7 +73,7 @@ struct _Program
     struct {
       int blur_radius_location;
       int blur_size_location;
-      int dir_location;
+      int blur_dir_location;
     } blur;
     struct {
       int color_location;
