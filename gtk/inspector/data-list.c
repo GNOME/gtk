@@ -34,7 +34,7 @@ struct _GtkInspectorDataListPrivate
   GtkTreeModel *object;
   GtkTreeModel *types;
   GtkTreeView *view;
-  GtkWidget *object_title;
+  GtkLabel *object_title;
   gboolean show_data;
 };
 
@@ -135,7 +135,7 @@ gtk_inspector_data_list_set_object (GtkInspectorDataList *sl,
     }
 
   title = gtk_inspector_get_object_title (object);
-  gtk_label_set_label (GTK_LABEL (sl->priv->object_title), title);
+  gtk_label_set_label (sl->priv->object_title, title);
   g_free (title);
 
   g_object_set (page, "visible", TRUE, NULL);

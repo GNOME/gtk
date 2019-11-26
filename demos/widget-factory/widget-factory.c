@@ -273,7 +273,7 @@ activate_inspector (GSimpleAction *action,
 }
 
 static void
-spin_value_changed (GtkAdjustment *adjustment, GtkWidget *label)
+spin_value_changed (GtkAdjustment *adjustment, GtkLabel *label)
 {
   GtkWidget *w;
   gint v;
@@ -284,11 +284,11 @@ spin_value_changed (GtkAdjustment *adjustment, GtkWidget *label)
   if ((v % 3) == 0)
     {
       text = g_strdup_printf ("%d is a multiple of 3", v);
-      gtk_label_set_label (GTK_LABEL (label), text);
+      gtk_label_set_label (label, text);
       g_free (text);
     }
 
-  w = gtk_widget_get_ancestor (label, GTK_TYPE_REVEALER);
+  w = gtk_widget_get_ancestor (GTK_WIDGET (label), GTK_TYPE_REVEALER);
   gtk_revealer_set_reveal_child (GTK_REVEALER (w), (v % 3) == 0);
 }
 
@@ -724,25 +724,25 @@ update_title_header (GtkListBoxRow *row,
                      GtkListBoxRow *before,
                      gpointer       data)
 {
-  GtkWidget *header;
+  GtkLabel *header;
   gchar *title;
 
-  header = gtk_list_box_row_get_header (row);
+  header = GTK_LABEL (gtk_list_box_row_get_header (row));
   title = (gchar *)g_object_get_data (G_OBJECT (row), "title");
   if (!header && title)
     {
       title = g_strdup_printf ("<b>%s</b>", title);
 
       header = gtk_label_new (title);
-      gtk_label_set_use_markup (GTK_LABEL (header), TRUE);
-      gtk_widget_set_halign (header, GTK_ALIGN_START);
-      gtk_widget_set_margin_top (header, 12);
-      gtk_widget_set_margin_start (header, 6);
-      gtk_widget_set_margin_end (header, 6);
-      gtk_widget_set_margin_bottom (header, 6);
-      gtk_widget_show (header);
+      gtk_label_set_use_markup (header, TRUE);
+      gtk_widget_set_halign (GTK_WIDGET (header), GTK_ALIGN_START);
+      gtk_widget_set_margin_top (GTK_WIDGET (header), 12);
+      gtk_widget_set_margin_start (GTK_WIDGET (header), 6);
+      gtk_widget_set_margin_end (GTK_WIDGET (header), 6);
+      gtk_widget_set_margin_bottom (GTK_WIDGET (header), 6);
+      gtk_widget_show (GTK_WIDGET (header));
 
-      gtk_list_box_row_set_header (row, header);
+      gtk_list_box_row_set_header (row, GTK_WIDGET (header));
 
       g_free (title);
     }
@@ -751,7 +751,8 @@ update_title_header (GtkListBoxRow *row,
 static void
 overshot (GtkScrolledWindow *sw, GtkPositionType pos, GtkWidget *widget)
 {
-  GtkWidget *box, *row, *label, *swatch;
+  GtkWidget *box, *row, *swatch;
+  GtkLabel *label;
   GdkRGBA rgba;
   const gchar *color;
   gchar *text;
@@ -797,7 +798,7 @@ overshot (GtkScrolledWindow *sw, GtkPositionType pos, GtkWidget *widget)
                 "margin", 6,
                 "xalign", 0.0,
                 NULL);
-  gtk_container_add (GTK_CONTAINER (row), label);
+  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (label));
   gdk_rgba_parse (&rgba, color);
   swatch = g_object_new (g_type_from_name ("GtkColorSwatch"),
                          "rgba", &rgba,
@@ -891,7 +892,8 @@ populate_colors (GtkWidget *widget, GtkWidget *chooser)
     { "10", "#C68292", NULL }
   };
   gint i;
-  GtkWidget *row, *box, *label, *swatch;
+  GtkWidget *row, *box, *swatch;
+  GtkLabel *label;
   GtkWidget *sw;
   GdkRGBA rgba;
 
@@ -908,7 +910,7 @@ populate_colors (GtkWidget *widget, GtkWidget *chooser)
                     "hexpand", TRUE,
                     "xalign", 0.0,
                     NULL);
-      gtk_container_add (GTK_CONTAINER (row), label);
+      gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (label));
       gdk_rgba_parse (&rgba, colors[i].color);
       swatch = g_object_new (g_type_from_name ("GtkColorSwatch"),
                              "rgba", &rgba,

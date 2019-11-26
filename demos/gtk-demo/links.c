@@ -48,7 +48,7 @@ GtkWidget *
 do_links (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
-  GtkWidget *label;
+  GtkLabel *label;
 
   if (!window)
     {
@@ -69,10 +69,10 @@ do_links (GtkWidget *do_widget)
                              "<span color=\"#F2B50F\">o</span><span color=\"#0266C8\">g</span>"
                              "<span color=\"#00933B\">l</span><span color=\"#F90101\">e</span>"
                              "</a>.");
-      gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+      gtk_label_set_use_markup (label, TRUE);
       g_signal_connect (label, "activate-link", G_CALLBACK (activate_link), NULL);
-      gtk_container_add (GTK_CONTAINER (window), label);
-      gtk_widget_show (label);
+      gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (label));
+      gtk_widget_show (GTK_WIDGET (label));
     }
 
   if (!gtk_widget_get_visible (window))

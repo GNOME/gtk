@@ -154,7 +154,7 @@ button_clicked (GtkButton *b,
 int
 main (int argc, char **argv)
 {
-  GtkWidget *w1;
+  GtkLabel *w1;
   gchar *path;
 
   gtk_init ();
@@ -163,9 +163,9 @@ main (int argc, char **argv)
   grid = gtk_grid_new ();
 
   w1 = gtk_label_new ("File:");
-  gtk_widget_set_halign (w1, GTK_ALIGN_START);
+  gtk_widget_set_halign (GTK_WIDGET (w1), GTK_ALIGN_START);
   gtk_grid_attach (GTK_GRID (grid),
-                   w1, 0, 0, 1, 1);
+                   GTK_WIDGET (w1), 0, 0, 1, 1);
 
   file_l = gtk_button_new ();
   path = g_build_filename (g_get_current_dir (), "apple-red.png", NULL);
@@ -175,7 +175,7 @@ main (int argc, char **argv)
 
   gtk_widget_set_halign (file_l, GTK_ALIGN_START);
   gtk_grid_attach_next_to (GTK_GRID (grid), file_l,
-                           w1, GTK_POS_RIGHT, 3, 1);
+                           GTK_WIDGET (w1), GTK_POS_RIGHT, 3, 1);
   g_signal_connect (file_l, "clicked",
                     G_CALLBACK (button_clicked), NULL);
 

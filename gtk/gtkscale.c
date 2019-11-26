@@ -142,7 +142,7 @@ struct _GtkScalePrivate
 {
   GSList       *marks;
 
-  GtkWidget    *value_widget;
+  GtkLabel     *value_widget;
   GtkWidget    *top_marks_widget;
   GtkWidget    *bottom_marks_widget;
 
@@ -253,27 +253,27 @@ update_label_request (GtkScale *scale)
   lowest_value = gtk_adjustment_get_lower (adjustment);
   highest_value = gtk_adjustment_get_upper (adjustment);
 
-  old_text = g_strdup (gtk_label_get_label (GTK_LABEL (priv->value_widget)));
-  gtk_widget_set_size_request (priv->value_widget, -1, -1);
+  old_text = g_strdup (gtk_label_get_label (priv->value_widget));
+  gtk_widget_set_size_request (GTK_WIDGET (priv->value_widget), -1, -1);
 
   text = gtk_scale_format_value (scale, lowest_value);
-  gtk_label_set_label (GTK_LABEL (priv->value_widget), text);
+  gtk_label_set_label (priv->value_widget, text);
 
-  gtk_widget_measure (priv->value_widget, GTK_ORIENTATION_HORIZONTAL, -1,
+  gtk_widget_measure (GTK_WIDGET (priv->value_widget), GTK_ORIENTATION_HORIZONTAL, -1,
                       &min, NULL, NULL, NULL);
   size = MAX (size, min);
   g_free (text);
 
   text = gtk_scale_format_value (scale, highest_value);
-  gtk_label_set_label (GTK_LABEL (priv->value_widget), text);
+  gtk_label_set_label (priv->value_widget, text);
 
-  gtk_widget_measure (priv->value_widget, GTK_ORIENTATION_HORIZONTAL, -1,
+  gtk_widget_measure (GTK_WIDGET (priv->value_widget), GTK_ORIENTATION_HORIZONTAL, -1,
                       &min, NULL, NULL, NULL);
   size = MAX (size, min);
   g_free (text);
 
-  gtk_widget_set_size_request (priv->value_widget, size, -1);
-  gtk_label_set_label (GTK_LABEL (priv->value_widget), old_text);
+  gtk_widget_set_size_request (GTK_WIDGET (priv->value_widget), size, -1);
+  gtk_label_set_label (priv->value_widget, old_text);
   g_free (old_text);
 }
 
@@ -341,11 +341,11 @@ gtk_scale_allocate_value (GtkScale *scale)
   if (!gtk_widget_compute_bounds (slider_widget, widget, &slider_bounds))
     graphene_rect_init (&slider_bounds, 0, 0, gtk_widget_get_width (widget), gtk_widget_get_height (widget));
 
-  gtk_widget_measure (priv->value_widget,
+  gtk_widget_measure (GTK_WIDGET (priv->value_widget),
                       GTK_ORIENTATION_HORIZONTAL, -1,
                       &value_alloc.width, NULL,
                       NULL, NULL);
-  gtk_widget_measure (priv->value_widget,
+  gtk_widget_measure (GTK_WIDGET (priv->value_widget),
                       GTK_ORIENTATION_VERTICAL, -1,
                       &value_alloc.height, NULL,
                       NULL, NULL);
@@ -408,7 +408,7 @@ gtk_scale_allocate_value (GtkScale *scale)
         }
     }
 
-  gtk_widget_size_allocate (priv->value_widget, &value_alloc, -1);
+  gtk_widget_size_allocate (GTK_WIDGET (priv->value_widget), &value_alloc, -1);
 }
 
 static void
@@ -638,7 +638,7 @@ gtk_scale_value_changed (GtkRange *range)
     {
       char *text = gtk_scale_format_value (GTK_SCALE (range),
                                            gtk_adjustment_get_value (adjustment));
-      gtk_label_set_label (GTK_LABEL (priv->value_widget), text);
+      gtk_label_set_label (priv->value_widget, text);
 
       g_free (text);
     }
@@ -1047,7 +1047,7 @@ update_value_position (GtkScale *scale)
   if (!priv->value_widget)
     return;
 
-  context = gtk_widget_get_style_context (priv->value_widget);
+  context = gtk_widget_get_style_context (GTK_WIDGET (priv->value_widget));
 
   gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TOP);
   gtk_style_context_remove_class (context, GTK_STYLE_CLASS_RIGHT);
@@ -1104,9 +1104,9 @@ gtk_scale_set_draw_value (GtkScale *scale,
           g_free (txt);
 
           if (priv->value_pos == GTK_POS_TOP || priv->value_pos == GTK_POS_LEFT)
-            gtk_widget_insert_after (priv->value_widget, widget, NULL);
+            gtk_widget_insert_after (GTK_WIDGET (priv->value_widget), widget, NULL);
           else
-            gtk_widget_insert_before (priv->value_widget, widget, NULL);
+            gtk_widget_insert_before (GTK_WIDGET (priv->value_widget), widget, NULL);
 
           gtk_range_set_round_digits (GTK_RANGE (scale), priv->digits);
           update_value_position (scale);
@@ -1114,7 +1114,7 @@ gtk_scale_set_draw_value (GtkScale *scale,
         }
       else if (priv->value_widget)
         {
-          g_clear_pointer (&priv->value_widget, gtk_widget_unparent);
+          g_clear_pointer ((GtkWidget **) &priv->value_widget, gtk_widget_unparent);
           gtk_range_set_round_digits (GTK_RANGE (scale), -1);
         }
 
@@ -1250,7 +1250,7 @@ gtk_scale_get_range_border (GtkRange  *range,
       else
         value_orientation = GTK_ORIENTATION_VERTICAL;
 
-      gtk_widget_measure (priv->value_widget,
+      gtk_widget_measure (GTK_WIDGET (priv->value_widget),
                           value_orientation, -1,
                           &value_size, NULL,
                           NULL, NULL);
@@ -1444,7 +1444,7 @@ gtk_scale_measure (GtkWidget      *widget,
     {
       int min, nat;
 
-      gtk_widget_measure (priv->value_widget, orientation, -1, &min, &nat, NULL, NULL);
+      gtk_widget_measure (GTK_WIDGET (priv->value_widget), orientation, -1, &min, &nat, NULL, NULL);
 
       if (priv->value_pos == GTK_POS_TOP ||
           priv->value_pos == GTK_POS_BOTTOM)
@@ -1490,7 +1490,7 @@ gtk_scale_snapshot (GtkWidget   *widget,
     gtk_widget_snapshot_child (widget, priv->bottom_marks_widget, snapshot);
 
   if (priv->value_widget)
-    gtk_widget_snapshot_child (widget, priv->value_widget, snapshot);
+    gtk_widget_snapshot_child (widget, GTK_WIDGET (priv->value_widget), snapshot);
 
   GTK_WIDGET_CLASS (gtk_scale_parent_class)->snapshot (widget, snapshot);
 }
@@ -1504,7 +1504,7 @@ gtk_scale_real_get_layout_offsets (GtkScale *scale,
   graphene_rect_t value_bounds;
 
   if (!priv->value_widget ||
-      !gtk_widget_compute_bounds (priv->value_widget, GTK_WIDGET (scale), &value_bounds))
+      !gtk_widget_compute_bounds (GTK_WIDGET (priv->value_widget), GTK_WIDGET (scale), &value_bounds))
     {
       *x = 0;
       *y = 0;
@@ -1556,7 +1556,7 @@ gtk_scale_finalize (GObject *object)
 
   gtk_scale_clear_marks (scale);
 
-  g_clear_pointer (&priv->value_widget, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **) &priv->value_widget, gtk_widget_unparent);
 
   if (priv->format_value_func_destroy_notify)
     priv->format_value_func_destroy_notify (priv->format_value_func_user_data);
@@ -1583,7 +1583,7 @@ gtk_scale_get_layout (GtkScale *scale)
   g_return_val_if_fail (GTK_IS_SCALE (scale), NULL);
 
   if (priv->value_widget)
-    return gtk_label_get_layout (GTK_LABEL (priv->value_widget));
+    return gtk_label_get_layout (priv->value_widget);
 
   return NULL;
 }
@@ -1734,7 +1734,7 @@ gtk_scale_add_mark (GtkScale        *scale,
                                    GTK_WIDGET (scale),
                                    (priv->value_widget &&
                                     (priv->value_pos == GTK_POS_TOP || priv->value_pos == GTK_POS_LEFT)) ?
-                                     priv->value_widget : NULL);
+                                     GTK_WIDGET (priv->value_widget) : NULL);
           gtk_style_context_add_class (gtk_widget_get_style_context (priv->top_marks_widget),
                                        GTK_STYLE_CLASS_TOP);
         }
@@ -1754,7 +1754,7 @@ gtk_scale_add_mark (GtkScale        *scale,
                                     GTK_WIDGET (scale),
                                     (priv->value_widget &&
                                      (priv->value_pos == GTK_POS_BOTTOM || priv->value_pos == GTK_POS_RIGHT)) ?
-                                      priv->value_widget: NULL);
+                                      GTK_WIDGET (priv->value_widget): NULL);
           gtk_style_context_add_class (gtk_widget_get_style_context (priv->bottom_marks_widget),
                                        GTK_STYLE_CLASS_BOTTOM);
         }
@@ -2084,7 +2084,7 @@ gtk_scale_set_format_value_func (GtkScale                *scale,
   adjustment = gtk_range_get_adjustment (GTK_RANGE (scale));
   text = gtk_scale_format_value (scale,
                                  gtk_adjustment_get_value (adjustment));
-  gtk_label_set_label (GTK_LABEL (priv->value_widget), text);
+  gtk_label_set_label (priv->value_widget, text);
 
   g_free (text);
 }

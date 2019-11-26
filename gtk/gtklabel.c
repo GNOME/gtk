@@ -137,8 +137,8 @@
  * |[<!-- language="C" -->
  *   // Pressing Alt+H will activate this button
  *   GtkWidget *button = gtk_button_new ();
- *   GtkWidget *label = gtk_label_new_with_mnemonic ("_Hello");
- *   gtk_container_add (GTK_CONTAINER (button), label);
+ *   GtkLabel *label = gtk_label_new_with_mnemonic ("_Hello");
+ *   gtk_container_add (GTK_CONTAINER (button), GTK_WIDGET (label));
  * ]|
  *
  * There’s a convenience function to create buttons with a mnemonic label
@@ -156,8 +156,8 @@
  * |[<!-- language="C" -->
  *   // Pressing Alt+H will focus the entry
  *   GtkWidget *entry = gtk_entry_new ();
- *   GtkWidget *label = gtk_label_new_with_mnemonic ("_Hello");
- *   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+ *   GtkLabel *label = gtk_label_new_with_mnemonic ("_Hello");
+ *   gtk_label_set_mnemonic_widget (label, entry);
  * ]|
  *
  * # Markup (styled text)
@@ -168,8 +168,8 @@
  *
  * Here’s how to create a label with a small font:
  * |[<!-- language="C" -->
- *   GtkWidget *label = gtk_label_new (NULL);
- *   gtk_label_set_markup (GTK_LABEL (label), "<small>Small text</small>");
+ *   GtkLabel *label = gtk_label_new (NULL);
+ *   gtk_label_set_markup (label, "<small>Small text</small>");
  * ]|
  *
  * (See [complete documentation][PangoMarkupFormat] of available
@@ -241,8 +241,8 @@
  * "Go to the"
  * "<a href=\"http://www.gtk.org title=\"&lt;i&gt;Our&lt;/i&gt; website\">"
  * "GTK+ website</a> for more...";
- * GtkWidget *label = gtk_label_new (NULL);
- * gtk_label_set_markup (GTK_LABEL (label), text);
+ * GtkLabel *label = gtk_label_new (NULL);
+ * gtk_label_set_markup (label, text);
  * ]|
  *
  * It is possible to implement custom handling for links and their tooltips with
@@ -1733,7 +1733,7 @@ gtk_label_buildable_custom_finished (GtkBuildable *buildable,
  *
  * Returns: the new #GtkLabel
  **/
-GtkWidget*
+GtkLabel*
 gtk_label_new (const gchar *str)
 {
   GtkLabel *label;
@@ -1743,7 +1743,7 @@ gtk_label_new (const gchar *str)
   if (str && *str)
     gtk_label_set_text (label, str);
   
-  return GTK_WIDGET (label);
+  return label;
 }
 
 /**
@@ -1768,7 +1768,7 @@ gtk_label_new (const gchar *str)
  *
  * Returns: the new #GtkLabel
  **/
-GtkWidget*
+GtkLabel*
 gtk_label_new_with_mnemonic (const gchar *str)
 {
   GtkLabel *label;
@@ -1778,7 +1778,7 @@ gtk_label_new_with_mnemonic (const gchar *str)
   if (str && *str)
     gtk_label_set_text_with_mnemonic (label, str);
   
-  return GTK_WIDGET (label);
+  return label;
 }
 
 static gboolean

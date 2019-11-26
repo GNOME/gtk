@@ -78,7 +78,7 @@ main (int argc, char **argv)
   GtkWidget *window;
   GtkWidget *blur_box;
   GtkWidget *scale;
-  GtkWidget *value_label;
+  GtkLabel *value_label;
 
   gtk_init ();
 
@@ -91,16 +91,16 @@ main (int argc, char **argv)
                            NULL);
 
   value_label = gtk_label_new ("FF");
-  gtk_widget_set_margin_top (value_label, 32);
+  gtk_widget_set_margin_top (GTK_WIDGET (value_label), 32);
   {
     PangoAttrList *attrs;
 
     attrs = pango_attr_list_new ();
     pango_attr_list_insert (attrs, pango_attr_scale_new (6.0));
-    gtk_label_set_attributes (GTK_LABEL (value_label), attrs);
+    gtk_label_set_attributes (value_label, attrs);
     pango_attr_list_unref (attrs);
   }
-  gtk_container_add (GTK_CONTAINER (blur_box), value_label);
+  gtk_container_add (GTK_CONTAINER (blur_box), GTK_WIDGET (value_label));
 
 
   scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0, 10, 0.05);

@@ -92,13 +92,13 @@ show_color_chooser_generic (GtkWindow *parent)
 static void
 add_content (GtkWidget *dialog)
 {
-  GtkWidget *label;
+  GtkLabel *label;
 
   label = gtk_label_new ("content");
   g_object_set (label, "margin", 50, NULL);
-  gtk_widget_show (label);
+  gtk_widget_show (GTK_WIDGET (label));
 
-  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), label);
+  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), GTK_WIDGET (label));
 }
 
 static void
