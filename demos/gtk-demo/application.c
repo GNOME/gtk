@@ -11,7 +11,7 @@ G_DEFINE_TYPE (DemoApplication, demo_application, GTK_TYPE_APPLICATION)
 typedef struct {
   GtkApplicationWindow parent_instance;
 
-  GtkWidget *message;
+  GtkLabel *message;
   GtkWidget *infobar;
   GtkWidget *status;
   GtkWidget *menutool;
@@ -65,7 +65,7 @@ show_action_infobar (GSimpleAction *action,
 
   text = g_strdup_printf ("You activated radio action: \"%s\".\n"
                           "Current value: %s", name, value);
-  gtk_label_set_text (GTK_LABEL (window->message), text);
+  gtk_label_set_text (window->message, text);
   gtk_widget_show (window->infobar);
   g_free (text);
 }

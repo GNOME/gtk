@@ -183,12 +183,12 @@ typedef struct
   GtkWidget *system_button;
 
   GtkWidget *logo_image;
-  GtkWidget *name_label;
-  GtkWidget *version_label;
-  GtkWidget *comments_label;
-  GtkWidget *copyright_label;
-  GtkWidget *license_label;
-  GtkWidget *website_label;
+  GtkLabel *name_label;
+  GtkLabel *version_label;
+  GtkLabel *comments_label;
+  GtkLabel *copyright_label;
+  GtkLabel *license_label;
+  GtkLabel *website_label;
 
   GtkWidget *credits_page;
   GtkWidget *license_page;
@@ -1031,7 +1031,7 @@ update_website (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv = gtk_about_dialog_get_instance_private (about);
 
-  gtk_widget_show (priv->website_label);
+  gtk_widget_show (GTK_WIDGET (priv->website_label));
 
   if (priv->website_url)
     {
@@ -1052,15 +1052,15 @@ update_website (GtkAboutDialog *about)
                                     priv->website_url, _("Website"));
         }
 
-      gtk_label_set_markup (GTK_LABEL (priv->website_label), markup);
+      gtk_label_set_markup (priv->website_label, markup);
       g_free (markup);
     }
   else
     {
       if (priv->website_text)
-        gtk_label_set_text (GTK_LABEL (priv->website_label), priv->website_text);
+        gtk_label_set_text (priv->website_label, priv->website_text);
       else
-        gtk_widget_hide (priv->website_label);
+        gtk_widget_hide (GTK_WIDGET (priv->website_label));
     }
 }
 
@@ -1103,15 +1103,15 @@ update_name_version (GtkAboutDialog *about)
 
   if (priv->version != NULL)
     {
-      gtk_label_set_markup (GTK_LABEL (priv->version_label), priv->version);
-      gtk_widget_show (priv->version_label);
+      gtk_label_set_markup (priv->version_label, priv->version);
+      gtk_widget_show (GTK_WIDGET (priv->version_label));
     }
   else
-    gtk_widget_hide (priv->version_label);
+    gtk_widget_hide (GTK_WIDGET (priv->version_label));
 
   name_string = g_markup_printf_escaped ("<span weight=\"bold\">%s</span>",
                                          priv->name);
-  gtk_label_set_markup (GTK_LABEL (priv->name_label), name_string);
+  gtk_label_set_markup (priv->name_label, name_string);
   g_free (name_string);
 }
 
@@ -1230,13 +1230,13 @@ gtk_about_dialog_set_copyright (GtkAboutDialog *about,
     {
       copyright_string = g_markup_printf_escaped ("<span size=\"small\">%s</span>",
                                                   priv->copyright);
-      gtk_label_set_markup (GTK_LABEL (priv->copyright_label), copyright_string);
+      gtk_label_set_markup (priv->copyright_label, copyright_string);
       g_free (copyright_string);
 
-      gtk_widget_show (priv->copyright_label);
+      gtk_widget_show (GTK_WIDGET (priv->copyright_label));
     }
   else
-    gtk_widget_hide (priv->copyright_label);
+    gtk_widget_hide (GTK_WIDGET (priv->copyright_label));
 
   g_object_notify_by_pspec (G_OBJECT (about), props[PROP_COPYRIGHT]);
 }
@@ -1281,13 +1281,13 @@ gtk_about_dialog_set_comments (GtkAboutDialog *about,
   if (comments)
     {
       priv->comments = g_strdup (comments);
-      gtk_label_set_text (GTK_LABEL (priv->comments_label), priv->comments);
-      gtk_widget_show (priv->comments_label);
+      gtk_label_set_text (priv->comments_label, priv->comments);
+      gtk_widget_show (GTK_WIDGET (priv->comments_label));
     }
   else
     {
       priv->comments = NULL;
-      gtk_widget_hide (priv->comments_label);
+      gtk_widget_hide (GTK_WIDGET (priv->comments_label));
     }
   g_free (tmp);
 
@@ -1344,7 +1344,7 @@ gtk_about_dialog_set_license (GtkAboutDialog *about,
     }
   g_free (tmp);
 
-  gtk_widget_hide (priv->license_label);
+  gtk_widget_hide (GTK_WIDGET (priv->license_label));
 
   update_license_button_visibility (about);
 
@@ -2156,7 +2156,7 @@ add_credits_section (GtkAboutDialog  *about,
                      gchar           *title,
                      gchar          **people)
 {
-  GtkWidget *label;
+  GtkLabel *label;
   gchar *markup;
   gchar **p;
   gchar *q0, *q1, *q2, *r1, *r2;
@@ -2166,11 +2166,11 @@ add_credits_section (GtkAboutDialog  *about,
 
   markup = g_strdup_printf ("<span size=\"small\">%s</span>", title);
   label = gtk_label_new (markup);
-  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+  gtk_label_set_use_markup (label, TRUE);
   g_free (markup);
-  gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-  gtk_grid_attach (grid, label, 0, *row, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+  gtk_grid_attach (grid, GTK_WIDGET (label), 0, *row, 1, 1);
 
   for (p = people; *p; p++)
     {
@@ -2259,21 +2259,21 @@ add_credits_section (GtkAboutDialog  *about,
       g_string_append (str, "</span>");
 
       label = gtk_label_new (str->str);
-      gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-      gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+      gtk_label_set_use_markup (label, TRUE);
+      gtk_label_set_selectable (label, TRUE);
       g_signal_connect_swapped (label, "activate-link",
                                 G_CALLBACK (emit_activate_link), about);
       g_string_free (str, TRUE);
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_grid_attach (grid, label, 1, *row, 1, 1);
-      gtk_widget_show (label);
+      gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+      gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+      gtk_grid_attach (grid, GTK_WIDGET (label), 1, *row, 1, 1);
+      gtk_widget_show (GTK_WIDGET (label));
       (*row)++;
     }
 
   /* skip one at the end */
   label = gtk_label_new ("");
-  gtk_grid_attach (grid, label, 1, *row, 1, 1);
+  gtk_grid_attach (grid, GTK_WIDGET (label), 1, *row, 1, 1);
   (*row)++;
 }
 
@@ -2483,9 +2483,9 @@ gtk_about_dialog_set_license_type (GtkAboutDialog *about,
 
           license_string = g_strdup_printf ("<span size=\"small\">%s</span>",
                                             priv->license);
-          gtk_label_set_markup (GTK_LABEL (priv->license_label), license_string);
+          gtk_label_set_markup (priv->license_label, license_string);
           g_free (license_string);
-          gtk_widget_show (priv->license_label);
+          gtk_widget_show (GTK_WIDGET (priv->license_label));
 
           update_license_button_visibility (about);
 
@@ -2494,7 +2494,7 @@ gtk_about_dialog_set_license_type (GtkAboutDialog *about,
         }
       else
         {
-          gtk_widget_show (priv->license_label);
+          gtk_widget_show (GTK_WIDGET (priv->license_label));
         }
 
       g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LICENSE_TYPE]);

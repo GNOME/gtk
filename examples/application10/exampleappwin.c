@@ -15,7 +15,7 @@ struct _ExampleAppWindow
   GtkWidget *gears;
   GtkWidget *sidebar;
   GtkWidget *words;
-  GtkWidget *lines;
+  GtkLabel *lines;
   GtkWidget *lines_label;
 };
 
@@ -135,7 +135,7 @@ update_lines (ExampleAppWindow *win)
 
   count = gtk_text_buffer_get_line_count (buffer);
   lines = g_strdup_printf ("%d", count);
-  gtk_label_set_text (GTK_LABEL (win->lines), lines);
+  gtk_label_set_text (win->lines, lines);
   g_free (lines);
 }
 

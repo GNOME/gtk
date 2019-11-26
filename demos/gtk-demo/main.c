@@ -634,16 +634,16 @@ display_video (const char *resource)
 static GtkWidget *
 display_nothing (const char *resource)
 {
-  GtkWidget *widget;
+  GtkLabel *widget;
   char *str;
 
   str = g_strdup_printf ("The lazy GTK developers forgot to add a way to display the resource '%s'", resource);
   widget = gtk_label_new (str);
-  gtk_label_set_wrap (GTK_LABEL (widget), TRUE);
+  gtk_label_set_wrap (widget, TRUE);
 
   g_free (str);
 
-  return widget;
+  return GTK_WIDGET (widget);
 }
 
 static struct {
@@ -667,7 +667,8 @@ add_data_tab (const gchar *demoname)
 {
   gchar *resource_dir, *resource_name;
   gchar **resources;
-  GtkWidget *widget, *label;
+  GtkWidget *widget;
+  GtkLabel *label;
   guint i, j;
 
   resource_dir = g_strconcat ("/", demoname, NULL);
@@ -694,8 +695,8 @@ add_data_tab (const gchar *demoname)
         widget = display_nothing (resource_name);
 
       label = gtk_label_new (resources[i]);
-      gtk_widget_show (label);
-      gtk_notebook_append_page (GTK_NOTEBOOK (notebook), widget, label);
+      gtk_widget_show (GTK_WIDGET (label));
+      gtk_notebook_append_page (GTK_NOTEBOOK (notebook), widget, GTK_WIDGET (label));
       g_object_set (gtk_notebook_get_page (GTK_NOTEBOOK (notebook), widget),
                     "tab-expand", FALSE,
                     NULL);

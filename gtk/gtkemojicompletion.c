@@ -454,7 +454,7 @@ add_emoji_variation (GtkWidget *box,
                      gunichar   modifier)
 {
   GtkWidget *child;
-  GtkWidget *label;
+  GtkLabel *label;
   PangoAttrList *attrs;
   char text[64];
 
@@ -463,7 +463,7 @@ add_emoji_variation (GtkWidget *box,
   label = gtk_label_new (text);
   attrs = pango_attr_list_new ();
   pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_X_LARGE));
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
+  gtk_label_set_attributes (label, attrs);
   pango_attr_list_unref (attrs);
 
   child = g_object_new (GTK_TYPE_FLOW_BOX_CHILD, "css-name", "emoji", NULL);
@@ -474,7 +474,7 @@ add_emoji_variation (GtkWidget *box,
   if (modifier != 0)
     g_object_set_data (G_OBJECT (child), "modifier", GUINT_TO_POINTER (modifier));
 
-  gtk_container_add (GTK_CONTAINER (child), label);
+  gtk_container_add (GTK_CONTAINER (child), GTK_WIDGET (label));
   gtk_flow_box_insert (GTK_FLOW_BOX (box), child, -1);
 }
 
@@ -484,7 +484,7 @@ add_emoji (GtkWidget          *list,
            GtkEmojiCompletion *completion)
 {
   GtkWidget *child;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *box;
   PangoAttrList *attrs;
   char text[64];
@@ -497,15 +497,15 @@ add_emoji (GtkWidget          *list,
   label = gtk_label_new (text);
   attrs = pango_attr_list_new ();
   pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_X_LARGE));
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
+  gtk_label_set_attributes (label, attrs);
   pango_attr_list_unref (attrs);
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "emoji");
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (label)), "emoji");
 
   child = g_object_new (GTK_TYPE_LIST_BOX_ROW, "css-name", "emoji-completion-row", NULL);
   gtk_widget_set_focus_on_click (child, FALSE);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (child), box);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
   g_object_set_data (G_OBJECT (child), "base", label);
 
   stack = gtk_stack_new ();
@@ -516,9 +516,9 @@ add_emoji (GtkWidget          *list,
 
   g_variant_get_child (emoji_data, 2, "&s", &shortname);
   label = gtk_label_new (shortname);
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_label_set_xalign (label, 0);
 
-  gtk_stack_add_named (GTK_STACK (stack), label, "text");
+  gtk_stack_add_named (GTK_STACK (stack), GTK_WIDGET (label), "text");
 
   if (has_variations (emoji_data))
     {

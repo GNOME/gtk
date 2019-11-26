@@ -97,8 +97,9 @@ overlay_draw (GtkDrawingArea *da,
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *window, *vbox, *label;
+  GtkWidget *window, *vbox;
   GtkWidget *combo, *scale, *overlay, *da;
+  GtkLabel *label;
 
   gtk_init ();
 
@@ -120,8 +121,8 @@ main (int argc, char *argv[])
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "END");
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
-  gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
   da = gtk_drawing_area_new ();
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), overlay_draw, label, NULL);
@@ -129,7 +130,7 @@ main (int argc, char *argv[])
   overlay = gtk_overlay_new ();
   gtk_container_add (GTK_CONTAINER (overlay), da);
   gtk_widget_set_vexpand (overlay, TRUE);
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), label);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), GTK_WIDGET (label));
 
   gtk_container_add (GTK_CONTAINER (vbox), combo);
   gtk_container_add (GTK_CONTAINER (vbox), scale);

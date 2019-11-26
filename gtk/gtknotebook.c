@@ -4334,7 +4334,7 @@ gtk_notebook_update_labels (GtkNotebook *notebook)
             {
               if (!page->tab_label)
                 {
-                  page->tab_label = gtk_label_new ("");
+                  page->tab_label = GTK_WIDGET (gtk_label_new (""));
                   g_object_ref_sink (page->tab_label);
                   g_object_set_data (G_OBJECT (page->tab_label), "notebook", notebook);
                   gtk_widget_set_parent (page->tab_label, page->tab_widget);
@@ -5585,9 +5585,9 @@ gtk_notebook_menu_item_create (GtkNotebook *notebook,
   if (page->default_menu)
     {
       if (GTK_IS_LABEL (page->tab_label))
-        page->menu_label = gtk_label_new (gtk_label_get_text (GTK_LABEL (page->tab_label)));
+        page->menu_label = GTK_WIDGET (gtk_label_new (gtk_label_get_text (GTK_LABEL (page->tab_label))));
       else
-        page->menu_label = gtk_label_new ("");
+        page->menu_label = GTK_WIDGET (gtk_label_new (""));
       g_object_ref_sink (page->menu_label);
       gtk_widget_set_halign (page->menu_label, GTK_ALIGN_START);
       gtk_widget_set_valign (page->menu_label, GTK_ALIGN_CENTER);
@@ -6609,7 +6609,7 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
 
           g_snprintf (string, sizeof(string), _("Page %u"),
                       g_list_position (priv->children, list));
-          page->tab_label = gtk_label_new (string);
+          page->tab_label = GTK_WIDGET (gtk_label_new (string));
           gtk_widget_set_parent (page->tab_label, page->tab_widget);
           g_object_set_data (G_OBJECT (page->tab_label), "notebook", notebook);
         }
@@ -6653,7 +6653,7 @@ gtk_notebook_set_tab_label_text (GtkNotebook *notebook,
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
   if (tab_text)
-    tab_label = gtk_label_new (tab_text);
+    tab_label = GTK_WIDGET (gtk_label_new (tab_text));
   gtk_notebook_set_tab_label (notebook, child, tab_label);
 }
 
@@ -6783,7 +6783,7 @@ gtk_notebook_set_menu_label_text (GtkNotebook *notebook,
 
   if (menu_text)
     {
-      menu_label = gtk_label_new (menu_text);
+      menu_label = GTK_WIDGET (gtk_label_new (menu_text));
       gtk_widget_set_halign (menu_label, GTK_ALIGN_START);
       gtk_widget_set_valign (menu_label, GTK_ALIGN_CENTER);
     }

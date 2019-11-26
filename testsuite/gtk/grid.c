@@ -29,7 +29,7 @@ test_attach (void)
 
   g = (GtkGrid *)gtk_grid_new ();
 
-  child = gtk_label_new ("a");
+  child = GTK_WIDGET (gtk_label_new ("a"));
   gtk_grid_attach_next_to (g, child, NULL, GTK_POS_LEFT, 1, 1);
   gtk_grid_query_child (g, child,
                         &left, &top,
@@ -40,7 +40,7 @@ test_attach (void)
   g_assert_cmpint (height, ==, 1);
 
   sibling = child;
-  child = gtk_label_new ("b");
+  child = GTK_WIDGET (gtk_label_new ("b"));
   gtk_grid_attach_next_to (g, child, sibling, GTK_POS_RIGHT, 2, 2);
   gtk_grid_query_child (g, child,
                         &left, &top,
@@ -51,10 +51,10 @@ test_attach (void)
   g_assert_cmpint (height, ==, 2);
 
   /* this one should just be ignored */
-  z = gtk_label_new ("z");
+  z = GTK_WIDGET (gtk_label_new ("z"));
   gtk_grid_attach (g, z, 4, 4, 1, 1);
 
-  child = gtk_label_new ("c");
+  child = GTK_WIDGET (gtk_label_new ("c"));
   gtk_grid_attach_next_to (g, child, sibling, GTK_POS_BOTTOM, 3, 1);
   gtk_grid_query_child (g, child,
                         &left, &top,
@@ -64,7 +64,7 @@ test_attach (void)
   g_assert_cmpint (width,  ==, 3);
   g_assert_cmpint (height, ==, 1);
 
-  child = gtk_label_new ("u");
+  child = GTK_WIDGET (gtk_label_new ("u"));
   gtk_grid_attach_next_to (g, child, z, GTK_POS_LEFT, 2, 1);
   gtk_grid_query_child (g, child,
                         &left, &top,
@@ -74,7 +74,7 @@ test_attach (void)
   g_assert_cmpint (width,  ==, 2);
   g_assert_cmpint (height, ==, 1);
 
-  child = gtk_label_new ("v");
+  child = GTK_WIDGET (gtk_label_new ("v"));
   gtk_grid_attach_next_to (g, child, z, GTK_POS_RIGHT, 2, 1);
   gtk_grid_query_child (g, child,
                         &left, &top,
@@ -84,7 +84,7 @@ test_attach (void)
   g_assert_cmpint (width,  ==, 2);
   g_assert_cmpint (height, ==, 1);
 
-  child = gtk_label_new ("x");
+  child = GTK_WIDGET (gtk_label_new ("x"));
   gtk_grid_attach_next_to (g, child, z, GTK_POS_TOP, 1, 2);
   gtk_grid_query_child (g, child,
                         &left, &top,
@@ -94,7 +94,7 @@ test_attach (void)
   g_assert_cmpint (width,  ==, 1);
   g_assert_cmpint (height, ==, 2);
 
-  child = gtk_label_new ("x");
+  child = GTK_WIDGET (gtk_label_new ("x"));
   gtk_grid_attach_next_to (g, child, z, GTK_POS_TOP, 1, 2);
   gtk_grid_query_child (g, child,
                         &left, &top,
@@ -104,7 +104,7 @@ test_attach (void)
   g_assert_cmpint (width,  ==, 1);
   g_assert_cmpint (height, ==, 2);
 
-  child = gtk_label_new ("y");
+  child = GTK_WIDGET (gtk_label_new ("y"));
   gtk_grid_attach_next_to (g, child, z, GTK_POS_BOTTOM, 1, 2);
   gtk_grid_query_child (g, child,
                         &left, &top,
@@ -114,12 +114,12 @@ test_attach (void)
   g_assert_cmpint (width,  ==, 1);
   g_assert_cmpint (height, ==, 2);
 
-  A = gtk_label_new ("A");
+  A = GTK_WIDGET (gtk_label_new ("A"));
   gtk_grid_attach (g, A, 10, 10, 1, 1);
-  B = gtk_label_new ("B");
+  B = GTK_WIDGET (gtk_label_new ("B"));
   gtk_grid_attach (g, B, 10, 12, 1, 1);
 
-  child  = gtk_label_new ("D");
+  child  = GTK_WIDGET (gtk_label_new ("D"));
   gtk_grid_attach_next_to (g, child, A, GTK_POS_RIGHT, 1, 3);
   gtk_grid_query_child (g, child,
                         &left, &top,
@@ -141,7 +141,7 @@ test_add (void)
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (g), GTK_ORIENTATION_HORIZONTAL);
 
-  child = gtk_label_new ("a");
+  child = GTK_WIDGET (gtk_label_new ("a"));
   gtk_container_add (GTK_CONTAINER (g), child);
   gtk_grid_query_child (g, child,
                         &left, &top,
@@ -151,7 +151,7 @@ test_add (void)
   g_assert_cmpint (width,  ==, 1);
   g_assert_cmpint (height, ==, 1);
 
-  child = gtk_label_new ("b");
+  child = GTK_WIDGET (gtk_label_new ("b"));
   gtk_container_add (GTK_CONTAINER (g), child);
   gtk_grid_query_child (g, child,
                         &left, &top,
@@ -161,7 +161,7 @@ test_add (void)
   g_assert_cmpint (width,  ==, 1);
   g_assert_cmpint (height, ==, 1);
 
-  child = gtk_label_new ("c");
+  child = GTK_WIDGET (gtk_label_new ("c"));
   gtk_container_add (GTK_CONTAINER (g), child);
   gtk_grid_query_child (g, child,
                         &left, &top,
@@ -173,7 +173,7 @@ test_add (void)
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (g), GTK_ORIENTATION_VERTICAL);
 
-  child = gtk_label_new ("d");
+  child = GTK_WIDGET (gtk_label_new ("d"));
   gtk_container_add (GTK_CONTAINER (g), child);
   gtk_grid_query_child (g, child,
                         &left, &top,
