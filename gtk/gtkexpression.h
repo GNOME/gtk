@@ -55,6 +55,8 @@ GtkExpression *         gtk_constant_expression_new             (GType          
 GDK_AVAILABLE_IN_ALL
 GtkExpression *         gtk_constant_expression_new_for_value   (const GValue                   *value);                           
 GDK_AVAILABLE_IN_ALL
+GtkExpression *         gtk_object_expression_new               (GObject                        *object);
+GDK_AVAILABLE_IN_ALL
 GtkExpression *         gtk_closure_expression_new              (GType                           value_type,
                                                                  GClosure                       *closure,
                                                                  guint                           n_params,

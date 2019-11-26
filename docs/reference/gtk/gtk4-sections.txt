@@ -6999,7 +6999,7 @@ gtk_expression_watch_unwatch
 gtk_property_expression_new
 gtk_constant_expression_new
 gtk_constant_expression_new_for_value
-gtk_object_expression
+gtk_object_expression_new
 gtk_closure_expression_new
 gtk_cclosure_expression_new
 
