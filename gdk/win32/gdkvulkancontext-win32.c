@@ -40,7 +40,9 @@ gdk_win32_vulkan_context_create_surface (GdkVulkanContext *context,
 {
   GdkSurface *window = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
   GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
+  GdkWin32Surface *win32_surface = GDK_WIN32_SURFACE (window);
   VkWin32SurfaceCreateInfoKHR info;
+  VkResult result;
 
   info.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
   info.pNext = NULL;
@@ -55,11 +57,19 @@ gdk_win32_vulkan_context_create_surface (GdkVulkanContext *context,
    */
   gdk_display_sync (display);
 
-  return GDK_VK_CHECK (vkCreateWin32SurfaceKHR,
-                       gdk_vulkan_context_get_instance (context),
-                       &info,
-                       NULL,
-                       surface);
+  result = GDK_VK_CHECK (vkCreateWin32SurfaceKHR,
+                         gdk_vulkan_context_get_instance (context),
+                         &info,
+                         NULL,
+                         surface);
+
+  if (result == VK_SUCCESS)
+    win32_surface->suppress_layered ++;
+
+  if (win32_surface->suppress_layered == 1)
+    _gdk_win32_surface_update_style_bits (window);
+
+  return result;
 }
 
 static void
