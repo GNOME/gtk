@@ -250,7 +250,7 @@ do_list_store (GtkWidget *do_widget)
   if (!window)
     {
       GtkWidget *vbox;
-      GtkWidget *label;
+      GtkLabel *label;
       GtkWidget *sw;
       GtkWidget *treeview;
 
@@ -268,7 +268,7 @@ do_list_store (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       label = gtk_label_new ("This is the bug list (note: not based on real data, it would be nice to have a nice ODBC interface to bugzilla or so, though).");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),

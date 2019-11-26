@@ -637,7 +637,8 @@ request_password (GtkPrintBackend  *backend,
                   gboolean          can_store_auth_info)
 {
   GtkPrintBackendPrivate *priv = backend->priv;
-  GtkWidget *dialog, *box, *main_box, *label, *icon, *vbox, *entry, *chkbtn;
+  GtkWidget *dialog, *box, *main_box, *icon, *vbox, *entry, *chkbtn;
+  GtkLabel *label;
   GtkWidget *focus = NULL;
   GtkWidget *content_area;
   gchar     *markup;
@@ -676,8 +677,8 @@ request_password (GtkPrintBackend  *backend,
   /* Right - 1. */
   label = gtk_label_new (NULL);
   markup = g_markup_printf_escaped ("<span weight=\"bold\" size=\"large\">%s</span>", prompt);
-  gtk_label_set_markup (GTK_LABEL (label), markup);
-  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_markup (label, markup);
+  gtk_label_set_wrap (label, TRUE);
   gtk_widget_set_size_request (GTK_WIDGET (label), 320, -1);
   g_free (markup);
 
@@ -689,7 +690,7 @@ request_password (GtkPrintBackend  *backend,
   gtk_container_add (GTK_CONTAINER (main_box), icon);
   gtk_container_add (GTK_CONTAINER (main_box), vbox);
 
-  gtk_container_add (GTK_CONTAINER (vbox), label);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
   /* Right - 2. */
   for (i = 0; i < length; i++)
@@ -703,8 +704,8 @@ request_password (GtkPrintBackend  *backend,
           gtk_widget_set_margin_bottom (box, 6);
 
           label = gtk_label_new (ai_display[i]);
-          gtk_widget_set_halign (label, GTK_ALIGN_START);
-          gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+          gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+          gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
           entry = gtk_entry_new ();
           focus = entry;
@@ -717,7 +718,7 @@ request_password (GtkPrintBackend  *backend,
 
           gtk_container_add (GTK_CONTAINER (vbox), box);
 
-          gtk_container_add (GTK_CONTAINER (box), label);
+          gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
           gtk_container_add (GTK_CONTAINER (box), entry);
 
           g_signal_connect (entry, "changed",

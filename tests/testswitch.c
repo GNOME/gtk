@@ -20,7 +20,8 @@ make_switch (gboolean is_on,
              gboolean is_sensitive)
 {
   GtkWidget *hbox;
-  GtkWidget *sw, *label;
+  GtkWidget *sw;
+  GtkLabel *label;
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 
@@ -30,8 +31,8 @@ make_switch (gboolean is_on,
   gtk_widget_set_sensitive (sw, is_sensitive);
 
   label = gtk_label_new (is_on ? "Enabled" : "Disabled");
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
   g_object_bind_property_full (sw, "active",
                                label, "label",
@@ -110,7 +111,8 @@ make_delayed_switch (gboolean is_on,
                      gboolean is_sensitive)
 {
   GtkWidget *hbox;
-  GtkWidget *sw, *label, *spinner, *check;
+  GtkWidget *sw, *spinner, *check;
+  GtkLabel *label;
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 
@@ -126,8 +128,8 @@ make_delayed_switch (gboolean is_on,
   gtk_widget_set_opacity (spinner, 0.0);
 
   label = gtk_label_new (is_on ? "Enabled" : "Disabled");
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
   g_object_bind_property_full (sw, "active",
                                label, "label",

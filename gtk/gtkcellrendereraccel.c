@@ -119,7 +119,7 @@ struct _GtkCellRendererAccelClass
 
 struct _GtkCellRendererAccelPrivate
 {
-  GtkWidget *sizing_label;
+  GtkLabel *sizing_label;
 
   GtkCellRendererAccelMode accel_mode;
   GdkModifierType accel_mods;
@@ -441,7 +441,7 @@ gtk_cell_renderer_accel_get_preferred_width (GtkCellRenderer *cell,
       g_object_ref_sink (priv->sizing_label);
     }
 
-  gtk_widget_get_preferred_size (priv->sizing_label, &min_req, &nat_req);
+  gtk_widget_get_preferred_size (GTK_WIDGET (priv->sizing_label), &min_req, &nat_req);
 
   GTK_CELL_RENDERER_CLASS (gtk_cell_renderer_accel_parent_class)->get_preferred_width (cell, widget,
                                                                                        minimum_size, natural_size);
@@ -465,7 +465,7 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (cell);
   GtkCellRendererAccel *accel = GTK_CELL_RENDERER_ACCEL (cell);
   GtkCellRendererAccelPrivate *priv = gtk_cell_renderer_accel_get_instance_private (accel);
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *editable;
   gboolean is_editable;
   GdkSeat *seat = NULL;
@@ -502,17 +502,17 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   editable = gtk_cell_editable_widget_new (cell, priv->accel_mode, path);
 
   label = gtk_label_new (NULL);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
-  gtk_widget_set_state_flags (label, GTK_STATE_FLAG_SELECTED, TRUE);
+  gtk_widget_set_state_flags (GTK_WIDGET (label), GTK_STATE_FLAG_SELECTED, TRUE);
 
   /* This label is displayed in a treeview cell displaying an accelerator
    * when the cell is clicked to change the acelerator.
    */
   gtk_label_set_text (GTK_LABEL (label), _("New accelerator…"));
 
-  gtk_container_add (GTK_CONTAINER (editable), label);
+  gtk_container_add (GTK_CONTAINER (editable), GTK_WIDGET (label));
 
   gtk_grab_add (editable);
 

@@ -7,10 +7,10 @@ main (int argc, char *argv[])
 {
   GtkWidget *window;
   GtkWidget *grid;
-  GtkWidget *label1;
-  GtkWidget *label2;
-  GtkWidget *label3;
-  GtkWidget *label4;
+  GtkLabel *label1;
+  GtkLabel *label2;
+  GtkLabel *label3;
+  GtkLabel *label4;
 
   g_setenv ("GTK_DEBUG", "baselines,layout", TRUE);
   gtk_init ();
@@ -31,14 +31,14 @@ main (int argc, char *argv[])
   g_message ("label3: %p", label3);
   g_message ("label4: %p", label4);
 
-  gtk_widget_set_valign (label1, GTK_ALIGN_BASELINE);
-  gtk_widget_set_valign (label2, GTK_ALIGN_BASELINE);
-  gtk_widget_set_valign (label3, GTK_ALIGN_START);
-  gtk_widget_set_valign (label4, GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label1), GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (GTK_WIDGET (label2), GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (GTK_WIDGET (label3), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label4), GTK_ALIGN_START);
 
-  gtk_widget_set_margin_top (label1, 12);
-  gtk_widget_set_margin_bottom (label2, 18);
-  gtk_widget_set_margin_top (label3, 30);
+  gtk_widget_set_margin_top (GTK_WIDGET (label1), 12);
+  gtk_widget_set_margin_bottom (GTK_WIDGET (label2), 18);
+  gtk_widget_set_margin_top (GTK_WIDGET (label3), 30);
 
 
   /*
@@ -47,10 +47,10 @@ main (int argc, char *argv[])
    */
 
 
-  gtk_grid_attach (GTK_GRID (grid), label1, 0, 0, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), label2, 1, 0, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), label3, 0, 1, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), label4, 1, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label1), 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label2), 1, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label3), 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label4), 1, 1, 1, 1);
 
   gtk_widget_show (window);
   gtk_main ();

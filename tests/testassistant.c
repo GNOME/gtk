@@ -26,7 +26,7 @@
 static GtkWidget*
 get_test_page (const gchar *text)
 {
-  return gtk_label_new (text);
+  return GTK_WIDGET (gtk_label_new (text));
 }
 
 typedef struct {
@@ -61,7 +61,7 @@ add_completion_test_page (GtkWidget   *assistant,
   page = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   check = gtk_check_button_new_with_label ("Complete");
 
-  gtk_container_add (GTK_CONTAINER (page), gtk_label_new (text));
+  gtk_container_add (GTK_CONTAINER (page), GTK_WIDGET (gtk_label_new (text)));
   gtk_container_add (GTK_CONTAINER (page), check);
   
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), complete);

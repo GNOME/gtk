@@ -68,7 +68,8 @@ drag_data_received (GtkWidget        *widget,
 static GtkWidget *
 create_row (const gchar *text)
 {
-  GtkWidget *row, *box, *label, *image;
+  GtkWidget *row, *box, *image;
+  GtkLabel *label;
   GdkContentFormats *targets;
 
   row = gtk_list_box_row_new (); 
@@ -77,8 +78,8 @@ create_row (const gchar *text)
   g_object_set (box, "margin-start", 10, "margin-end", 10, NULL);
   label = gtk_label_new (text);
   gtk_container_add (GTK_CONTAINER (row), box);
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
   gtk_container_add (GTK_CONTAINER (box), image);
 
   targets = gdk_content_formats_new (entries, 1);

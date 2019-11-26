@@ -43,7 +43,7 @@ struct _GtkSidebarRow
   GtkWidget *end_icon_widget;
   gchar *label;
   gchar *tooltip;
-  GtkWidget *label_widget;
+  GtkLabel *label_widget;
   gboolean ejectable;
   GtkWidget *eject_button;
   gint order_index;
@@ -257,7 +257,7 @@ gtk_sidebar_row_set_property (GObject      *object,
     case PROP_LABEL:
       g_free (self->label);
       self->label = g_strdup (g_value_get_string (value));
-      gtk_label_set_text (GTK_LABEL (self->label_widget), self->label);
+      gtk_label_set_text (self->label_widget, self->label);
       break;
 
     case PROP_TOOLTIP:
@@ -282,9 +282,9 @@ gtk_sidebar_row_set_property (GObject      *object,
       self->section_type = g_value_get_int (value);
       if (self->section_type == SECTION_COMPUTER ||
           self->section_type == SECTION_OTHER_LOCATIONS)
-        gtk_label_set_ellipsize (GTK_LABEL (self->label_widget), PANGO_ELLIPSIZE_NONE);
+        gtk_label_set_ellipsize (self->label_widget, PANGO_ELLIPSIZE_NONE);
       else
-        gtk_label_set_ellipsize (GTK_LABEL (self->label_widget), PANGO_ELLIPSIZE_END);
+        gtk_label_set_ellipsize (self->label_widget, PANGO_ELLIPSIZE_END);
       break;
 
     case PROP_PLACE_TYPE:

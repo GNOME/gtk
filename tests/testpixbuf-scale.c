@@ -61,7 +61,8 @@ main(int argc, char **argv)
 {
 	GtkWidget *window, *vbox;
         GtkWidget *combo_box;
-	GtkWidget *hbox, *label, *hscale;
+	GtkWidget *hbox,*hscale;
+	GtkLabel *label;
 	GtkAdjustment *adjustment;
 	GtkRequisition scratch_requisition;
         const gchar *creator;
@@ -114,7 +115,7 @@ main(int argc, char **argv)
 	gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
 	label = gtk_label_new ("Overall Alpha:");
-	gtk_container_add (GTK_CONTAINER (hbox), label);
+	gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
 	adjustment = gtk_adjustment_new (overall_alpha, 0, 255, 1, 10, 0);
 	g_signal_connect (adjustment, "value_changed",

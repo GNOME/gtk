@@ -568,7 +568,8 @@ create_widget_func (gpointer item,
   ConstraintEditorWindow *win = user_data;
   const char *name;
   char *freeme = NULL;
-  GtkWidget *row, *box, *label, *button;
+  GtkWidget *row, *box, *button;
+  GtkLabel *label;
 
   if (GTK_IS_WIDGET (item))
     name = gtk_widget_get_name (GTK_WIDGET (item));
@@ -588,10 +589,10 @@ create_widget_func (gpointer item,
                             label, "label",
                             G_BINDING_DEFAULT);
   g_object_set (label, "margin", 10, NULL);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_widget_set_hexpand (label, TRUE);
+  gtk_label_set_xalign (label, 0.0);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
   gtk_container_add (GTK_CONTAINER (row), box);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   if (GTK_IS_CONSTRAINT (item) || GTK_IS_CONSTRAINT_GUIDE (item))
     {

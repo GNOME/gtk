@@ -39,19 +39,20 @@ static gint           items_type       = SIMPLE_ITEMS;
 static void
 populate_flowbox_simple (GtkFlowBox *flowbox)
 {
-  GtkWidget *widget, *frame;
+  GtkLabel *label;
+  GtkWidget *frame;
   gint i;
 
   for (i = 0; i < N_ITEMS; i++)
     {
       gchar *text = g_strdup_printf ("Item %02d", i);
 
-      widget = gtk_label_new (text);
+      label = gtk_label_new (text);
       frame  = gtk_frame_new (NULL);
-      gtk_widget_show (widget);
+      gtk_widget_show (GTK_WIDGET (label));
       gtk_widget_show (frame);
 
-      gtk_container_add (GTK_CONTAINER (frame), widget);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (label));
 
       g_object_set_data_full (G_OBJECT (frame), "id", (gpointer)g_strdup (text), g_free);
       gtk_container_add (GTK_CONTAINER (flowbox), frame);
@@ -64,6 +65,7 @@ static void
 populate_flowbox_focus (GtkFlowBox *flowbox)
 {
   GtkWidget *widget, *frame, *box;
+  GtkLabel *label;
   gint i;
   gboolean sensitive;
 
@@ -76,8 +78,8 @@ populate_flowbox_focus (GtkFlowBox *flowbox)
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
       gtk_container_add (GTK_CONTAINER (frame), box);
 
-      widget = gtk_label_new ("Label");
-      gtk_container_add (GTK_CONTAINER (box), widget);
+      label = gtk_label_new ("Label");
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
       switch (i % 4)
         {
@@ -88,10 +90,10 @@ populate_flowbox_focus (GtkFlowBox *flowbox)
           widget = gtk_button_new_with_label ("Button");
           break;
         case 2:
-          widget = gtk_label_new ("bla");
+          widget = GTK_WIDGET (gtk_label_new ("bla"));
           break;
         case 3:
-          widget = gtk_label_new ("bla");
+          widget = GTK_WIDGET (gtk_label_new ("bla"));
           sensitive = FALSE;
           break;
         }
@@ -126,7 +128,8 @@ populate_flowbox_buttons (GtkFlowBox *flowbox)
 static void
 populate_flowbox_wrappy (GtkFlowBox *flowbox)
 {
-  GtkWidget *widget, *frame;
+  GtkLabel *label;
+  GtkWidget *frame;
   gint i;
 
   const gchar *strings[] = {
@@ -140,16 +143,16 @@ populate_flowbox_wrappy (GtkFlowBox *flowbox)
 
   for (i = 0; i < G_N_ELEMENTS (strings); i++)
     {
-      widget = gtk_label_new (strings[i]);
+      label = gtk_label_new (strings[i]);
       frame  = gtk_frame_new (NULL);
-      gtk_widget_show (widget);
+      gtk_widget_show (GTK_WIDGET (label));
       gtk_widget_show (frame);
 
-      gtk_container_add (GTK_CONTAINER (frame), widget);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (label));
 
-      gtk_label_set_wrap (GTK_LABEL (widget), TRUE);
-      gtk_label_set_wrap_mode (GTK_LABEL (widget), PANGO_WRAP_WORD);
-      gtk_label_set_width_chars (GTK_LABEL (widget), 10);
+      gtk_label_set_wrap (label, TRUE);
+      gtk_label_set_wrap_mode (label, PANGO_WRAP_WORD);
+      gtk_label_set_width_chars (label, 10);
       g_object_set_data_full (G_OBJECT (frame), "id", (gpointer)g_strdup (strings[i]), g_free);
 
       gtk_container_add (GTK_CONTAINER (flowbox), frame);
@@ -159,7 +162,8 @@ populate_flowbox_wrappy (GtkFlowBox *flowbox)
 static void
 populate_flowbox_images (GtkFlowBox *flowbox)
 {
-  GtkWidget *widget, *image, *label;
+  GtkWidget *widget, *image;
+  GtkLabel *label;
   gint i;
 
   for (i = 0; i < N_ITEMS; i++)
@@ -177,7 +181,7 @@ populate_flowbox_images (GtkFlowBox *flowbox)
       label = gtk_label_new (text);
 
       gtk_container_add (GTK_CONTAINER (widget), image);
-      gtk_container_add (GTK_CONTAINER (widget), label);
+      gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (label));
 
       g_object_set_data_full (G_OBJECT (widget), "id", (gpointer)g_strdup (text), g_free);
       gtk_container_add (GTK_CONTAINER (flowbox), widget);
@@ -378,6 +382,7 @@ create_window (void)
 {
   GtkWidget *window, *hbox, *vbox, *flowbox_cntl, *items_cntl;
   GtkWidget *flowbox, *widget, *expander, *swindow;
+  GtkLabel *label;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   hbox   = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
@@ -530,8 +535,8 @@ create_window (void)
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
   gtk_widget_show (hbox);
 
-  widget = gtk_label_new ("H Spacing");
-  gtk_container_add (GTK_CONTAINER (hbox), widget);
+  label = gtk_label_new ("H Spacing");
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
   widget = gtk_spin_button_new_with_range (0, 30, 1);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), INITIAL_CSPACING);
@@ -550,8 +555,8 @@ create_window (void)
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
   gtk_widget_show (hbox);
 
-  widget = gtk_label_new ("V Spacing");
-  gtk_container_add (GTK_CONTAINER (hbox), widget);
+  label = gtk_label_new ("V Spacing");
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
   widget = gtk_spin_button_new_with_range (0, 30, 1);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), INITIAL_RSPACING);

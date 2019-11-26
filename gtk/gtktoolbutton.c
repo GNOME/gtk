@@ -406,7 +406,7 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	  else
 	    label_text = g_strdup (orig_label);
 
-	  label = gtk_label_new (label_text);
+	  label = GTK_WIDGET (gtk_label_new (label_text));
 
 	  g_free (label_text);
 	}
@@ -742,7 +742,7 @@ gtk_tool_button_create_menu_proxy (GtkToolItem *item)
   gboolean use_mnemonic = TRUE;
   const char *label_text;
   GtkWidget *box;
-  GtkWidget *label;
+  GtkLabel *label;
 
   if (_gtk_tool_item_create_menu_proxy (item))
     return TRUE;
@@ -776,7 +776,7 @@ gtk_tool_button_create_menu_proxy (GtkToolItem *item)
   if (menu_image)
       gtk_container_add (GTK_CONTAINER (box), menu_image);
 
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   menu_item = gtk_menu_item_new ();
   gtk_container_add (GTK_CONTAINER (menu_item), box);

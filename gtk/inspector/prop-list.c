@@ -499,7 +499,7 @@ gtk_inspector_prop_list_create_row (GtkInspectorPropList *pl,
   gboolean writable;
   GtkWidget *row;
   GtkWidget *box;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *widget;
 
   g_value_init (&gvalue, prop->value_type);
@@ -537,25 +537,25 @@ gtk_inspector_prop_list_create_row (GtkInspectorPropList *pl,
   gtk_container_add (GTK_CONTAINER (row), box);
 
   label = gtk_label_new (prop->name);
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "cell");
-  gtk_widget_set_sensitive (label, writable);
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_size_group_add_widget (pl->priv->names, label);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (label)), "cell");
+  gtk_widget_set_sensitive (GTK_WIDGET (label), writable);
+  gtk_label_set_xalign (label, 0);
+  gtk_size_group_add_widget (pl->priv->names, GTK_WIDGET (label));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   label = gtk_label_new (type ? type : "");
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "cell");
-  gtk_widget_set_sensitive (label, writable);
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_size_group_add_widget (pl->priv->types, label);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (label)), "cell");
+  gtk_widget_set_sensitive (GTK_WIDGET (label), writable);
+  gtk_label_set_xalign (label, 0);
+  gtk_size_group_add_widget (pl->priv->types, GTK_WIDGET (label));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   label = gtk_label_new (g_type_name (prop->owner_type));
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "cell");
-  gtk_widget_set_sensitive (label, writable);
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_size_group_add_widget (pl->priv->origins, label);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (label)), "cell");
+  gtk_widget_set_sensitive (GTK_WIDGET (label), writable);
+  gtk_label_set_xalign (label, 0);
+  gtk_size_group_add_widget (pl->priv->origins, GTK_WIDGET (label));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   widget = gtk_inspector_prop_editor_new (pl->priv->object, prop->name, pl->priv->values);
   gtk_style_context_add_class (gtk_widget_get_style_context (widget), "cell");

@@ -30,7 +30,8 @@ set_font_options (GtkWidget *label)
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *window, *label, *grid, *demo;
+  GtkWidget *window, *grid;
+  GtkLabel *label, *demo;
 
   gtk_init ();
 
@@ -40,9 +41,9 @@ main (int argc, char *argv[])
   gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
   gtk_container_add (GTK_CONTAINER (window), grid);
   label = gtk_label_new ("Default font options");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 2, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 0, 2, 1);
   demo = gtk_label_new ("Custom font options");
-  gtk_grid_attach (GTK_GRID (grid), demo, 0, 1, 2, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (demo), 0, 1, 2, 1);
 
   antialias = gtk_combo_box_text_new ();
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (antialias), "Default");
@@ -54,7 +55,7 @@ main (int argc, char *argv[])
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (antialias), "Best");
   g_signal_connect_swapped (antialias, "changed", G_CALLBACK (set_font_options), demo);
   label = gtk_label_new ("Antialias");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 2, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), antialias, 1, 2, 1, 1);
 
   subpixel = gtk_combo_box_text_new ();
@@ -65,7 +66,7 @@ main (int argc, char *argv[])
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (subpixel), "Vertical BGR");
   g_signal_connect_swapped (subpixel, "changed", G_CALLBACK (set_font_options), demo);
   label = gtk_label_new ("Subpixel");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 3, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), subpixel, 1, 3, 1, 1);
 
   hintstyle = gtk_combo_box_text_new ();
@@ -76,7 +77,7 @@ main (int argc, char *argv[])
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (hintstyle), "Full");
   g_signal_connect_swapped (hintstyle, "changed", G_CALLBACK (set_font_options), demo);
   label = gtk_label_new ("Hintstyle");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 4, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 4, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), hintstyle, 1, 4, 1, 1);
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (antialias), 0);

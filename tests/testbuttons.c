@@ -25,7 +25,7 @@ int main (int argc, char *argv[])
         gchar *text;
         const char *icon_name;
 	gboolean use_underline;
-	GtkWidget *label;
+	GtkLabel *label;
 
 	gtk_init ();
 
@@ -50,7 +50,7 @@ int main (int argc, char *argv[])
 	text = g_strdup_printf ("label: \"%s\" icon-name: \"%s\" use-underline: %s\n", text, icon_name, use_underline ? "TRUE" : "FALSE");
 	label = gtk_label_new (text);
 	g_free (text);
-	gtk_container_add (GTK_CONTAINER (hbox), label);
+	gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
 	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_add (GTK_CONTAINER (box), hbox);
@@ -65,7 +65,7 @@ int main (int argc, char *argv[])
 	text = g_strdup_printf ("label: \"%s\" icon-name: \"%s\" use-underline: %s\n", text, icon_name, use_underline ? "TRUE" : "FALSE");
 	label = gtk_label_new (text);
 	g_free (text);
-	gtk_container_add (GTK_CONTAINER (hbox), label);
+	gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
 	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_add (GTK_CONTAINER (box), hbox);
@@ -80,7 +80,7 @@ int main (int argc, char *argv[])
 	text = g_strdup_printf ("label: \"%s\" icon-name: \"%s\" use-underline: %s\n", text, icon_name, use_underline ? "TRUE" : "FALSE");
 	label = gtk_label_new (text);
 	g_free (text);
-	gtk_container_add (GTK_CONTAINER (hbox), label);
+	gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
 	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_add (GTK_CONTAINER (box), hbox);
@@ -95,7 +95,7 @@ int main (int argc, char *argv[])
 	text = g_strdup_printf ("label: \"%s\" icon-name: \"%s\" use-underline: %s\n", text, icon_name, use_underline ? "TRUE" : "FALSE");
 	label = gtk_label_new (text);
 	g_free (text);
-	gtk_container_add (GTK_CONTAINER (hbox), label);
+	gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
 	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_add (GTK_CONTAINER (box), hbox);
@@ -111,7 +111,7 @@ int main (int argc, char *argv[])
 	text = g_strdup_printf ("label: \"%s\" icon-name: \"%s\" use-underline: %s\n", text, icon_name, use_underline ? "TRUE" : "FALSE");
 	label = gtk_label_new (text);
 	g_free (text);
-	gtk_container_add (GTK_CONTAINER (hbox), label);
+	gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
 	gtk_widget_show (window);
 

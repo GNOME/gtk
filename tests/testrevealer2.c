@@ -30,7 +30,7 @@ on_activate (GApplication *app,
       gtk_widget_set_valign (animation_switch, GTK_ALIGN_CENTER);
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), animation_switch);
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header),
-                               gtk_label_new ("Animations"));
+                               GTK_WIDGET (gtk_label_new ("Animations")));
 
       /* content */
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);

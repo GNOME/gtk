@@ -528,7 +528,7 @@ setup_save_entry (GtkFileChooserDialog *dialog)
   if (need_entry && !priv->has_entry)
     {
       GtkWidget *box;
-      GtkWidget *label;
+      GtkLabel *label;
       GtkWidget *entry;
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -536,9 +536,9 @@ setup_save_entry (GtkFileChooserDialog *dialog)
       entry = _gtk_file_chooser_entry_new (FALSE, FALSE);
       g_object_set (label, "margin-start", 6, "margin-end", 6, NULL);
       g_object_set (entry, "margin-start", 6, "margin-end", 6, NULL);
-      gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-      gtk_container_add (GTK_CONTAINER (box), label);
-      gtk_container_add (GTK_CONTAINER (box), entry);
+      gtk_label_set_mnemonic_widget (label, entry);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (entry));
 
       gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header), box);
       gtk_file_chooser_widget_set_save_entry (GTK_FILE_CHOOSER_WIDGET (priv->widget), entry);

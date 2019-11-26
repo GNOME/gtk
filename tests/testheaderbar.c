@@ -74,7 +74,7 @@ static void
 change_header (GtkButton *button, gpointer data)
 {
   GtkWidget *window = GTK_WIDGET (data);
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *widget;
   GtkWidget *image;
 
@@ -85,7 +85,7 @@ change_header (GtkButton *button, gpointer data)
       gtk_style_context_add_class (gtk_widget_get_style_context (header), "header-bar");
       g_object_set (header, "margin", 10, NULL);
       label = gtk_label_new ("Label");
-      gtk_container_add (GTK_CONTAINER (header), label);
+      gtk_container_add (GTK_CONTAINER (header), GTK_WIDGET (label));
       widget = gtk_level_bar_new ();
       gtk_level_bar_set_value (GTK_LEVEL_BAR (widget), 0.4);
       gtk_widget_set_hexpand (widget, TRUE);

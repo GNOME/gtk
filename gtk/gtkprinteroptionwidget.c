@@ -62,8 +62,8 @@ struct GtkPrinterOptionWidgetPrivate
   GtkWidget *combo;
   GtkWidget *entry;
   GtkWidget *image;
-  GtkWidget *label;
-  GtkWidget *info_label;
+  GtkLabel *label;
+  GtkLabel *info_label;
   GtkWidget *box;
   GtkWidget *button;
 
@@ -456,12 +456,12 @@ deconstruct_widgets (GtkPrinterOptionWidget *widget)
 
   if (priv->label)
     {
-      gtk_widget_destroy (priv->label);
+      gtk_widget_destroy (GTK_WIDGET (priv->label));
       priv->label = NULL;
     }
   if (priv->info_label)
     {
-      gtk_widget_destroy (priv->info_label);
+      gtk_widget_destroy (GTK_WIDGET (priv->info_label));
       priv->info_label = NULL;
     }
 }
@@ -824,7 +824,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       text = g_strdup_printf ("%s:", source->display_text);
       priv->label = gtk_label_new_with_mnemonic (text);
       g_free (text);
-      gtk_widget_show (priv->label);
+      gtk_widget_show (GTK_WIDGET (priv->label));
       break;
 
     case GTK_PRINTER_OPTION_TYPE_ALTERNATIVE:
@@ -849,9 +849,9 @@ construct_widgets (GtkPrinterOptionWidget *widget)
 	{
 	  text = g_strdup_printf ("%s:", source->display_text);
 	  priv->label = gtk_label_new_with_mnemonic (text);
-          gtk_widget_set_valign (priv->label, GTK_ALIGN_BASELINE);
+          gtk_widget_set_valign (GTK_WIDGET (priv->label), GTK_ALIGN_BASELINE);
 	  g_free (text);
-	  gtk_widget_show (priv->label);
+	  gtk_widget_show (GTK_WIDGET (priv->label));
 	}
       break;
 
@@ -866,7 +866,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       text = g_strdup_printf ("%s:", source->display_text);
       priv->label = gtk_label_new_with_mnemonic (text);
       g_free (text);
-      gtk_widget_show (priv->label);
+      gtk_widget_show (GTK_WIDGET (priv->label));
 
       break;
 
@@ -879,14 +879,14 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       text = g_strdup_printf ("%s:", source->display_text);
       priv->label = gtk_label_new_with_mnemonic (text);
       g_free (text);
-      gtk_widget_show (priv->label);
+      gtk_widget_show (GTK_WIDGET (priv->label));
 
       break;
 
     case GTK_PRINTER_OPTION_TYPE_INFO:
       priv->info_label = gtk_label_new (NULL);
-      gtk_label_set_selectable (GTK_LABEL (priv->info_label), TRUE);
-      gtk_container_add (GTK_CONTAINER (widget), priv->info_label);
+      gtk_label_set_selectable (priv->info_label, TRUE);
+      gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (priv->info_label));
 
       text = g_strdup_printf ("%s:", source->display_text);
       priv->label = gtk_label_new_with_mnemonic (text);
@@ -1014,7 +1014,7 @@ update_widgets (GtkPrinterOptionWidget *widget)
         break;
       }
     case GTK_PRINTER_OPTION_TYPE_INFO:
-      gtk_label_set_text (GTK_LABEL (priv->info_label), source->value);
+      gtk_label_set_text (priv->info_label, source->value);
       break;
     default:
       break;
@@ -1035,7 +1035,7 @@ gtk_printer_option_widget_has_external_label (GtkPrinterOptionWidget *widget)
 GtkWidget *
 gtk_printer_option_widget_get_external_label (GtkPrinterOptionWidget  *widget)
 {
-  return widget->priv->label;
+  return GTK_WIDGET (widget->priv->label);
 }
 
 const gchar *

@@ -15,7 +15,7 @@ static void
 kinetic_scrolling (void)
 {
   GtkWidget *window, *swindow, *grid;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *button_grid, *button;
   GtkWidget *treeview;
   GtkCellRenderer *renderer;
@@ -31,19 +31,19 @@ kinetic_scrolling (void)
   grid = gtk_grid_new ();
 
   label = gtk_label_new ("Non scrollable widget using viewport");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_widget_show (label);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 0, 1, 1);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_widget_show (GTK_WIDGET (label));
 
   label = gtk_label_new ("Scrollable widget: TreeView");
-  gtk_grid_attach (GTK_GRID (grid), label, 1, 0, 1, 1);
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_widget_show (label);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 1, 0, 1, 1);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_widget_show (GTK_WIDGET (label));
 
   label = gtk_label_new ("Scrollable widget: TextView");
-  gtk_grid_attach (GTK_GRID (grid), label, 2, 0, 1, 1);
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_widget_show (label);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 2, 0, 1, 1);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_widget_show (GTK_WIDGET (label));
 
   button_grid = gtk_grid_new ();
   for (i = 0; i < 80; i++)

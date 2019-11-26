@@ -243,7 +243,7 @@ do_search_entry (GtkWidget *do_widget)
 {
   GtkWidget *vbox;
   GtkWidget *hbox;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *entry;
   GtkWidget *find_button;
   GtkWidget *cancel_button;
@@ -262,8 +262,8 @@ do_search_entry (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label), "Search entry demo");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_label_set_markup (label, "Search entry demo");
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       gtk_container_add (GTK_CONTAINER (vbox), hbox);

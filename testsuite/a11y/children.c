@@ -40,7 +40,7 @@ test_scrolled_window_child_count (void)
   g_object_ref_sink (sw);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_ALWAYS, GTK_POLICY_ALWAYS);
-  gtk_container_add (GTK_CONTAINER (sw), gtk_label_new ("Bla"));
+  gtk_container_add (GTK_CONTAINER (sw), GTK_WIDGET (gtk_label_new ("Bla")));
 
   accessible = gtk_widget_get_accessible (sw);
   g_assert_cmpint (atk_object_get_n_accessible_children (accessible), ==, 3);
@@ -132,7 +132,7 @@ do_create_child (STATE *state, gint i)
   else if (gtk_container_child_type (GTK_CONTAINER (state->widget)) == G_TYPE_NONE)
     return FALSE;
 
-  state->child[i] = gtk_label_new ("bla");
+  state->child[i] = GTK_WIDGET (gtk_label_new ("bla"));
   return TRUE;
 }
 

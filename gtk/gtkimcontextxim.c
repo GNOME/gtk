@@ -1630,7 +1630,7 @@ static void
 status_window_make_window (StatusWindow *status_window)
 {
   GtkWidget *window;
-  GtkWidget *status_label;
+  GtkLabel *status_label;
 
   status_window->window = gtk_window_new (GTK_WINDOW_POPUP);
   window = status_window->window;
@@ -1639,9 +1639,9 @@ status_window_make_window (StatusWindow *status_window)
 
   status_label = gtk_label_new ("");
   g_object_set (status_label, "margin", 1, NULL);
-  gtk_widget_show (status_label);
+  gtk_widget_show (GTK_WIDGET (status_label));
 
-  gtk_container_add (GTK_CONTAINER (window), status_label);
+  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (status_label));
 
   gtk_window_set_display (GTK_WINDOW (status_window->window),
 			  gtk_widget_get_display (status_window->toplevel));

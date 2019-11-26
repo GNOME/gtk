@@ -74,7 +74,7 @@ deserialize_widget (GtkDemoWidget *demo)
 
   if (demo->type == GTK_TYPE_LABEL)
     {
-      widget = gtk_label_new (demo->text);
+      widget = GTK_WIDGET (gtk_label_new (demo->text));
     }
   else if (demo->type == GTK_TYPE_SPINNER)
     {
@@ -96,10 +96,10 @@ new_label_cb (GtkMenuItem *item,
               gpointer     data)
 {
   GtkFixed *fixed = data;
-  GtkWidget *widget;
+  GtkLabel *widget;
 
   widget = gtk_label_new ("Label");
-  gtk_fixed_put (fixed, widget, pos_x, pos_y);
+  gtk_fixed_put (fixed, GTK_WIDGET (widget), pos_x, pos_y);
 }
 
 static void
@@ -193,13 +193,13 @@ static void
 edit_label_done (GtkWidget *entry, gpointer data)
 {
   GtkWidget *fixed = gtk_widget_get_parent (entry);
-  GtkWidget *label;
+  GtkLabel *label;
   int x, y;
 
   gtk_fixed_get_child_position (GTK_FIXED (fixed), entry, &x, &y);
 
-  label = GTK_WIDGET (g_object_get_data (G_OBJECT (entry), "label"));
-  gtk_label_set_text (GTK_LABEL (label), gtk_editable_get_text (GTK_EDITABLE (entry)));
+  label = GTK_LABEL (g_object_get_data (G_OBJECT (entry), "label"));
+  gtk_label_set_text (label, gtk_editable_get_text (GTK_EDITABLE (entry)));
 
   gtk_widget_destroy (entry);
 }

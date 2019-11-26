@@ -98,7 +98,7 @@ change_theme (GtkWidget *widget,
 {
   GtkBuilder *builder = data;
   GtkWidget *header;
-  GtkWidget *label;
+  GtkLabel *label;
   Theme next = themes[theme++ % G_N_ELEMENTS (themes)];
   char *name;
 
@@ -112,17 +112,17 @@ change_theme (GtkWidget *widget,
   gtk_header_bar_set_title (GTK_HEADER_BAR (header), name);
   g_free (name);
 
-  label = GTK_WIDGET (gtk_builder_get_object (builder, "fps"));
+  label = GTK_LABEL (gtk_builder_get_object (builder, "fps"));
   if (frame_clock)
     {
       char *fps;
 
       fps = g_strdup_printf ("%.2f fps", frame_clock_get_fps (frame_clock));
-      gtk_label_set_label (GTK_LABEL (label), fps);
+      gtk_label_set_label (label, fps);
       g_free (fps);
     }
   else
-    gtk_label_set_label (GTK_LABEL (label), "");
+    gtk_label_set_label (label, "");
 
   return G_SOURCE_CONTINUE;
 }

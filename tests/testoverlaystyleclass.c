@@ -42,7 +42,8 @@ overlay_get_child_position (GtkOverlay *overlay,
 int 
 main (int argc, char *argv[])
 {
-  GtkWidget *win, *overlay, *grid, *main_child, *child, *label, *sw;
+  GtkWidget *win, *overlay, *grid, *main_child, *sw;
+  GtkLabel *label;
   GtkCssProvider *provider;
   gchar *str;
 
@@ -65,9 +66,9 @@ main (int argc, char *argv[])
 
   grid = gtk_grid_new ();
   label = gtk_label_new ("Out of overlay");
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_widget_set_vexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (grid), label);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_widget_set_vexpand (GTK_WIDGET (label), TRUE);
+  gtk_container_add (GTK_CONTAINER (grid), GTK_WIDGET (label));
 
   overlay = gtk_overlay_new ();
   sw = gtk_scrolled_window_new (NULL, NULL);
@@ -81,73 +82,73 @@ main (int argc, char *argv[])
   gtk_widget_set_hexpand (main_child, TRUE);
   gtk_widget_set_vexpand (main_child, TRUE);
   label = gtk_label_new ("Main child");
-  gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (main_child), label);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (main_child), GTK_WIDGET (label));
 
-  child = gtk_label_new (NULL);
-  str = g_strdup_printf ("%p", child);
-  gtk_label_set_text (GTK_LABEL (child), str);
+  label = gtk_label_new (NULL);
+  str = g_strdup_printf ("%p", label);
+  gtk_label_set_text (GTK_LABEL (label), str);
   g_free (str);
-  g_print ("Bottom/Right child: %p\n", child);
-  gtk_widget_set_halign (child, GTK_ALIGN_END);
-  gtk_widget_set_valign (child, GTK_ALIGN_END);
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
+  g_print ("Bottom/Right child: %p\n", GTK_WIDGET (label));
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_END);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), GTK_WIDGET (label));
 
-  g_signal_connect (child, "size-allocate",
+  g_signal_connect (label, "size-allocate",
                     G_CALLBACK (child_size_allocate), overlay);
 
-  child = gtk_label_new (NULL);
-  str = g_strdup_printf ("%p", child);
-  gtk_label_set_text (GTK_LABEL (child), str);
+  label = gtk_label_new (NULL);
+  str = g_strdup_printf ("%p", label);
+  gtk_label_set_text (GTK_LABEL (label), str);
   g_free (str);
-  g_print ("Left/Top child: %p\n", child);
-  gtk_widget_set_halign (child, GTK_ALIGN_START);
-  gtk_widget_set_valign (child, GTK_ALIGN_START);
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
+  g_print ("Left/Top label: %p\n", label);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), GTK_WIDGET (label));
 
-  g_signal_connect (child, "size-allocate",
+  g_signal_connect (label, "size-allocate",
                     G_CALLBACK (child_size_allocate), overlay);
 
-  child = gtk_label_new (NULL);
-  str = g_strdup_printf ("%p", child);
-  gtk_label_set_text (GTK_LABEL (child), str);
+  label = gtk_label_new (NULL);
+  str = g_strdup_printf ("%p", label);
+  gtk_label_set_text (GTK_LABEL (label), str);
   g_free (str);
-  g_print ("Right/Center child: %p\n", child);
-  gtk_widget_set_halign (child, GTK_ALIGN_END);
-  gtk_widget_set_valign (child, GTK_ALIGN_CENTER);
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
+  g_print ("Right/Center label: %p\n", label);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), GTK_WIDGET (label));
 
-  g_signal_connect (child, "size-allocate",
+  g_signal_connect (label, "size-allocate",
                     G_CALLBACK (child_size_allocate), overlay);
 
-  child = gtk_label_new (NULL);
-  str = g_strdup_printf ("%p", child);
-  gtk_label_set_text (GTK_LABEL (child), str);
+  label = gtk_label_new (NULL);
+  str = g_strdup_printf ("%p", label);
+  gtk_label_set_text (GTK_LABEL (label), str);
   g_free (str);
-  gtk_widget_set_margin_start (child, 55);
-  gtk_widget_set_margin_top (child, 4);
-  g_print ("Left/Top margined child: %p\n", child);
-  gtk_widget_set_halign (child, GTK_ALIGN_START);
-  gtk_widget_set_valign (child, GTK_ALIGN_START);
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
+  gtk_widget_set_margin_start (GTK_WIDGET (label), 55);
+  gtk_widget_set_margin_top (GTK_WIDGET (label), 4);
+  g_print ("Left/Top margined label: %p\n", label);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), GTK_WIDGET (label));
 
-  g_signal_connect (child, "size-allocate",
+  g_signal_connect (label, "size-allocate",
                     G_CALLBACK (child_size_allocate), overlay);
 
-  child = gtk_label_new (NULL);
-  str = g_strdup_printf ("%p", child);
-  gtk_label_set_text (GTK_LABEL (child), str);
+  label = gtk_label_new (NULL);
+  str = g_strdup_printf ("%p", label);
+  gtk_label_set_text (GTK_LABEL (label), str);
   g_free (str);
-  g_print ("Custom get-child-position child: %p\n", child);
-  gtk_widget_set_halign (child, GTK_ALIGN_START);
-  gtk_widget_set_valign (child, GTK_ALIGN_START);
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
+  g_print ("Custom get-label-position label: %p\n", label);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), GTK_WIDGET (label));
 
-  g_signal_connect (child, "size-allocate",
+  g_signal_connect (label, "size-allocate",
                     G_CALLBACK (child_size_allocate), overlay);
   g_signal_connect (overlay, "get-child-position",
-                    G_CALLBACK (overlay_get_child_position), child);
+                    G_CALLBACK (overlay_get_child_position), label);
 
   gtk_grid_attach (GTK_GRID (grid), overlay, 1, 0, 1, 3);
   gtk_container_add (GTK_CONTAINER (win), grid);

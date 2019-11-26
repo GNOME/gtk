@@ -20,7 +20,7 @@ toggle_reveal (GtkRevealer *revealer)
 int
 main(int argc, char **argv)
 {
-  GtkWidget *window, *revealer, *grid, *widget;
+  GtkWidget *window, *revealer, *grid;
   GtkCssProvider *cssprovider;
   GError *error = NULL;
   guint x, y;
@@ -60,11 +60,13 @@ main(int argc, char **argv)
     {
       for (y = 0; y < 20; y++)
         {
-          widget = gtk_label_new ("Hello World");
-          gtk_style_context_add_provider (gtk_widget_get_style_context (widget),
+          GtkLabel *label;
+
+          label = gtk_label_new ("Hello World");
+          gtk_style_context_add_provider (gtk_widget_get_style_context (GTK_WIDGET (label)),
                                           GTK_STYLE_PROVIDER (cssprovider),
                                           GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-          gtk_grid_attach (GTK_GRID (grid), widget, x, y, 1, 1);
+          gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), x, y, 1, 1);
         }
     }
 

@@ -412,7 +412,7 @@ do_sliding_puzzle (GtkWidget *do_widget)
       GtkWidget *popover;
       GtkWidget *tweaks;
       GtkWidget *apply;
-      GtkWidget *label;
+      GtkLabel *label;
       GtkWidget *sw;
       GtkMediaStream *media;
 
@@ -437,8 +437,8 @@ do_sliding_puzzle (GtkWidget *do_widget)
       gtk_grid_attach (GTK_GRID (tweaks), sw, 0, 0, 2, 1);
 
       label = gtk_label_new ("Size");
-      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-      gtk_grid_attach (GTK_GRID (tweaks), label, 0, 1, 1, 1);
+      gtk_label_set_xalign (label, 0.0);
+      gtk_grid_attach (GTK_GRID (tweaks), GTK_WIDGET (label), 0, 1, 1, 1);
       size_spin = gtk_spin_button_new_with_range (2, 10, 1);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (size_spin), width);
       gtk_grid_attach (GTK_GRID (tweaks), size_spin, 1, 1, 1, 1);

@@ -134,7 +134,7 @@ main (int argc, char *argv[])
   gtk_window_set_title (GTK_WINDOW (window), "Reflow test");
   g_signal_connect (window, "destroy", gtk_main_quit, NULL);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new ("Incremental Reflow Test"));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (gtk_label_new ("Incremental Reflow Test")));
   gtk_container_add (GTK_CONTAINER (window), vbox);
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),

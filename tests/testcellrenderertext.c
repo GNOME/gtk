@@ -251,7 +251,7 @@ main (int argc, char **argv)
 {
   GtkWidget *window;
   GtkWidget *vbox;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *tree;
 
   gtk_init ();
@@ -266,7 +266,7 @@ main (int argc, char **argv)
   /* LTR */
 
   label = gtk_label_new ("Left to right");
-  gtk_container_add (GTK_CONTAINER (vbox), label);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
   tree = create_tree (FALSE);
   gtk_widget_set_vexpand (tree, TRUE);
@@ -275,7 +275,7 @@ main (int argc, char **argv)
   /* RTL */
 
   label = gtk_label_new ("Right to left");
-  gtk_container_add (GTK_CONTAINER (vbox), label);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
   tree = create_tree (TRUE);
   gtk_widget_set_vexpand (tree, TRUE);

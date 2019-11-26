@@ -58,7 +58,7 @@ add_row (GtkButton  *button,
   GtkWidget *row;
 
   row = g_object_new (GTK_TYPE_LIST_BOX_ROW, NULL);
-  gtk_container_add (GTK_CONTAINER (row), gtk_label_new ("test"));
+  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (gtk_label_new ("test")));
   gtk_container_add (GTK_CONTAINER (listbox), row);
 }
 
@@ -81,7 +81,8 @@ static void
 scrollable_policy (void)
 {
   GtkWidget *window, *swindow, *hbox, *vbox, *frame, *cntl, *listbox;
-  GtkWidget *viewport, *label, *expander, *widget, *popover;
+  GtkWidget *viewport, *expander, *widget, *popover;
+  GtkLabel *label;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   hbox   = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
@@ -112,13 +113,13 @@ scrollable_policy (void)
 			 "is enough height to fit the content vertically if the window were "
 			 "to be allocated a width without a vscrollbar present");
 
-  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-  gtk_label_set_width_chars  (GTK_LABEL (label), 40);
-  gtk_label_set_max_width_chars  (GTK_LABEL (label), 100);
+  gtk_label_set_wrap (label, TRUE);
+  gtk_label_set_width_chars (label, 40);
+  gtk_label_set_max_width_chars (label, 100);
 
-  gtk_widget_show (label);
+  gtk_widget_show (GTK_WIDGET (label));
   gtk_widget_show (viewport);
-  gtk_container_add (GTK_CONTAINER (viewport), label);
+  gtk_container_add (GTK_CONTAINER (viewport), GTK_WIDGET (label));
   gtk_container_add (GTK_CONTAINER (swindow), viewport);
 
   /* Add controls here */
@@ -134,9 +135,9 @@ scrollable_policy (void)
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
   gtk_widget_show (hbox);
 
-  widget = gtk_label_new ("hscroll-policy");
-  gtk_widget_set_hexpand (widget, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), widget);
+  label = gtk_label_new ("hscroll-policy");
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
   widget = gtk_combo_box_text_new ();
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Minimum");
@@ -154,9 +155,9 @@ scrollable_policy (void)
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
   gtk_widget_show (hbox);
 
-  widget = gtk_label_new ("vscroll-policy");
-  gtk_widget_set_hexpand (widget, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), widget);
+  label = gtk_label_new ("vscroll-policy");
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
   widget = gtk_combo_box_text_new ();
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Minimum");
@@ -173,9 +174,9 @@ scrollable_policy (void)
   /* Content size controls */
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
 
-  widget = gtk_label_new ("min-content-width");
-  gtk_widget_set_hexpand (widget, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), widget);
+  label = gtk_label_new ("min-content-width");
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
   widget = gtk_spin_button_new_with_range (100.0, 1000.0, 10.0);
   gtk_widget_set_hexpand (widget, TRUE);
@@ -189,9 +190,9 @@ scrollable_policy (void)
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
 
-  widget = gtk_label_new ("min-content-height");
-  gtk_widget_set_hexpand (widget, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), widget);
+  label = gtk_label_new ("min-content-height");
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
   widget = gtk_spin_button_new_with_range (100.0, 1000.0, 10.0);
   gtk_widget_set_hexpand (widget, TRUE);
@@ -238,9 +239,9 @@ scrollable_policy (void)
   /* Min content */
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
 
-  widget = gtk_label_new ("min-content-width");
-  gtk_widget_set_hexpand (widget, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), widget);
+  label = gtk_label_new ("min-content-width");
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
   widget = gtk_spin_button_new_with_range (0.0, 150.0, 10.0);
   gtk_widget_set_hexpand (widget, TRUE);
@@ -252,9 +253,9 @@ scrollable_policy (void)
                           "min-content-width",
                           G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
 
-  widget = gtk_label_new ("min-content-height");
-  gtk_widget_set_hexpand (widget, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), widget);
+  label = gtk_label_new ("min-content-height");
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
 
   widget = gtk_spin_button_new_with_range (0.0, 150.0, 10.0);
@@ -271,9 +272,9 @@ scrollable_policy (void)
   /* Max content */
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
 
-  widget = gtk_label_new ("max-content-width");
-  gtk_widget_set_hexpand (widget, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), widget);
+  label = gtk_label_new ("max-content-width");
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
   widget = gtk_spin_button_new_with_range (250.0, 1000.0, 10.0);
   gtk_widget_set_hexpand (widget, TRUE);
@@ -285,9 +286,9 @@ scrollable_policy (void)
                           "max-content-width",
                           G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
 
-  widget = gtk_label_new ("max-content-height");
-  gtk_widget_set_hexpand (widget, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), widget);
+  label = gtk_label_new ("max-content-height");
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
   widget = gtk_spin_button_new_with_range (250.0, 1000.0, 10.0);
   gtk_widget_set_hexpand (widget, TRUE);

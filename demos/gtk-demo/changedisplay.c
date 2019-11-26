@@ -97,7 +97,8 @@ static GtkWidget *
 query_for_toplevel (GdkDisplay *display,
                     const char *prompt)
 {
-  GtkWidget *popup, *label, *frame;
+  GtkWidget *popup, *frame;
+  GtkLabel *label;
   GdkCursor *cursor;
   GtkWidget *toplevel = NULL;
   GdkDevice *device;
@@ -112,7 +113,7 @@ query_for_toplevel (GdkDisplay *display,
 
   label = gtk_label_new (prompt);
   g_object_set (label, "margin", 10, NULL);
-  gtk_container_add (GTK_CONTAINER (frame), label);
+  gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (label));
 
   gtk_widget_show (popup);
   cursor = gdk_cursor_new_from_name ("crosshair", NULL);
@@ -195,7 +196,7 @@ open_display_cb (GtkWidget         *button,
   GtkWidget *content_area;
   GtkWidget *dialog;
   GtkWidget *display_entry;
-  GtkWidget *dialog_label;
+  GtkLabel *dialog_label;
   gchar *new_screen_name = NULL;
   GdkDisplay *result = NULL;
 
@@ -214,7 +215,7 @@ open_display_cb (GtkWidget         *button,
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
-  gtk_container_add (GTK_CONTAINER (content_area), dialog_label);
+  gtk_container_add (GTK_CONTAINER (content_area), GTK_WIDGET (dialog_label));
   gtk_container_add (GTK_CONTAINER (content_area), display_entry);
 
   gtk_widget_grab_focus (display_entry);
@@ -236,7 +237,7 @@ open_display_cb (GtkWidget         *button,
               gchar *error_msg =
                 g_strdup_printf  ("Can't open display:\n\t%s\nplease try another one\n",
                                   new_screen_name);
-              gtk_label_set_text (GTK_LABEL (dialog_label), error_msg);
+              gtk_label_set_text (dialog_label, error_msg);
               g_free (error_msg);
             }
 

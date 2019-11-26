@@ -109,7 +109,7 @@ struct _ButtonData
   char *dir_name;
   GFile *file;
   GtkWidget *image;
-  GtkWidget *label;
+  GtkLabel *label;
   GCancellable *cancellable;
   guint ignore_changes : 1;
   guint file_is_hidden : 1;
@@ -1273,7 +1273,7 @@ gtk_path_bar_update_button_appearance (GtkPathBar *path_bar,
 
   if (button_data->label != NULL)
     {
-      gtk_label_set_text (GTK_LABEL (button_data->label), dir_name);
+      gtk_label_set_text (button_data->label, dir_name);
       if (button_data->image == NULL)
         gtk_style_context_add_class (context, "text-button");
     }
@@ -1364,12 +1364,12 @@ make_directory_button (GtkPathBar  *path_bar,
       button_data->label = gtk_label_new (NULL);
       child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (child), button_data->image);
-      gtk_container_add (GTK_CONTAINER (child), button_data->label);
+      gtk_container_add (GTK_CONTAINER (child), GTK_WIDGET (button_data->label));
       break;
     case NORMAL_BUTTON:
     default:
       button_data->label = gtk_label_new (NULL);
-      child = button_data->label;
+      child = GTK_WIDGET (button_data->label);
       button_data->image = NULL;
     }
 

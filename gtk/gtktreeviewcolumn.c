@@ -881,7 +881,7 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
     child = priv->child;
   else
     {
-      child = gtk_label_new (priv->title);
+      child = GTK_WIDGET (gtk_label_new (priv->title));
     }
 
   g_signal_connect (child, "mnemonic-activate",
@@ -940,7 +940,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
     {
       if (current_child == NULL)
 	{
-	  current_child = gtk_label_new (NULL);
+	  current_child = GTK_WIDGET (gtk_label_new (NULL));
 	  gtk_widget_show (current_child);
           gtk_container_add (GTK_CONTAINER (frame),
 			     current_child);

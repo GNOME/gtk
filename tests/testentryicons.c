@@ -118,7 +118,7 @@ main (int argc, char **argv)
 {
   GtkWidget *window;
   GtkWidget *grid;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *entry;
   GtkWidget *box;
   GtkWidget *image;
@@ -147,9 +147,9 @@ main (int argc, char **argv)
    * Open File - Sets the icon using a GIcon
    */
   label = gtk_label_new ("Open File:");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 0, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
@@ -173,9 +173,9 @@ main (int argc, char **argv)
    * Save File - sets the icon using an icon name.
    */
   label = gtk_label_new ("Save File:");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 1, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
@@ -204,9 +204,9 @@ main (int argc, char **argv)
    * Search - Uses a helper function
    */
   label = gtk_label_new ("Search:");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 2, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
@@ -237,9 +237,9 @@ main (int argc, char **argv)
    * Password - Sets the icon using an icon name
    */
   label = gtk_label_new ("Password:");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 3, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
   entry = gtk_password_entry_new ();
   gtk_password_entry_set_show_peek_icon (GTK_PASSWORD_ENTRY (entry), TRUE);
@@ -248,9 +248,9 @@ main (int argc, char **argv)
 
   /* Name - Does not set any icons. */
   label = gtk_label_new ("Name:");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 4, 1, 1);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 4, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
@@ -286,9 +286,9 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (box), button4);
 
   label = gtk_label_new ("Emoji:");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 6, 1, 1);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 6, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
   entry = gtk_entry_new ();
   g_object_set (entry, "show-emoji-icon", TRUE, NULL);

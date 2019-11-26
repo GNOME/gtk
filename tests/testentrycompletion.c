@@ -290,7 +290,7 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *vbox;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *entry;
   GtkEntryCompletion *completion;
   GtkTreeModel *completion_model;
@@ -306,8 +306,8 @@ main (int argc, char *argv[])
     
   label = gtk_label_new (NULL);
 
-  gtk_label_set_markup (GTK_LABEL (label), "Completion demo, try writing <b>total</b> or <b>gnome</b> for example.");
-  gtk_container_add (GTK_CONTAINER (vbox), label);
+  gtk_label_set_markup (label, "Completion demo, try writing <b>total</b> or <b>gnome</b> for example.");
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
   /* Create our first entry */
   entry = gtk_entry_new ();
@@ -392,7 +392,7 @@ main (int argc, char *argv[])
   g_timeout_add (1000, (GSourceFunc) animation_timer, completion);
 
   /* Fourth entry */
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new ("Model-less entry completion"));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (gtk_label_new ("Model-less entry completion")));
 
   entry = gtk_entry_new ();
 

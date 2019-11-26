@@ -101,7 +101,7 @@ struct _GtkStatusbarClass
 typedef struct
 {
   GtkWidget     *frame;
-  GtkWidget     *label;
+  GtkLabel      *label;
   GtkWidget     *message_area;
 
   GSList        *messages;
@@ -246,7 +246,7 @@ gtk_statusbar_update (GtkStatusbar *statusbar,
   if (!text)
     text = "";
 
-  gtk_label_set_text (GTK_LABEL (priv->label), text);
+  gtk_label_set_text (priv->label, text);
 }
 
 /**

@@ -46,7 +46,7 @@ struct _NodeEditorWindow
   GtkTextTagTable *tag_table;
 
   GtkWidget *testcase_popover;
-  GtkWidget *testcase_error_label;
+  GtkLabel *testcase_error_label;
   GtkWidget *testcase_cairo_checkbutton;
   GtkWidget *testcase_name_entry;
   GtkWidget *testcase_save_button;
@@ -613,7 +613,7 @@ testcase_save_clicked_cb (GtkWidget        *button,
 
   if (!gdk_texture_save_to_png (texture, png_file))
     {
-      gtk_label_set_label (GTK_LABEL (self->testcase_error_label),
+      gtk_label_set_label (self->testcase_error_label,
                            "Could not save texture file");
       goto out;
     }
@@ -621,7 +621,7 @@ testcase_save_clicked_cb (GtkWidget        *button,
   text = get_current_text (self->text_buffer);
   if (!g_file_set_contents (node_file, text, -1, &error))
     {
-      gtk_label_set_label (GTK_LABEL (self->testcase_error_label), error->message);
+      gtk_label_set_label (self->testcase_error_label, error->message);
       /* TODO: Remove texture file again? */
       goto out;
     }
@@ -757,14 +757,15 @@ node_editor_window_create_renderer_widget (gpointer item,
                                            gpointer user_data)
 {
   GdkPaintable *paintable = item;
-  GtkWidget *box, *label, *picture;
+  GtkWidget *box, *picture;
+  GtkLabel *label;
   GtkWidget *row;
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_set_size_request (box, 120, 90);
 
   label = gtk_label_new (g_object_get_data (G_OBJECT (paintable), "description"));
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   picture = gtk_picture_new_for_paintable (paintable);
   /* don't ever scale up, we want to be as accurate as possible */

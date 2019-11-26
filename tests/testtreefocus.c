@@ -352,7 +352,7 @@ main (int argc, char *argv[])
   gtk_window_set_title (GTK_WINDOW (window), "Card planning sheet");
   g_signal_connect (window, "destroy", gtk_main_quit, NULL);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new ("Jonathan's Holiday Card Planning Sheet"));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (gtk_label_new ("Jonathan's Holiday Card Planning Sheet")));
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
@@ -467,7 +467,7 @@ main (int argc, char *argv[])
   gtk_window_set_title (GTK_WINDOW (window), "Model");
   g_signal_connect (window, "destroy", gtk_main_quit, NULL);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new ("The model revealed"));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (gtk_label_new ("The model revealed")));
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);

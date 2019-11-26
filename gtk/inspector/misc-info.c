@@ -39,44 +39,44 @@ struct _GtkInspectorMiscInfoPrivate {
   GObject *object;
 
   GtkWidget *swin;
-  GtkWidget *address;
+  GtkLabel  *address;
   GtkWidget *type;
   GtkWidget *type_popover;
   GtkWidget *refcount_row;
-  GtkWidget *refcount;
+  GtkLabel  *refcount;
   GtkWidget *state_row;
-  GtkWidget *state;
+  GtkLabel  *state;
   GtkWidget *buildable_id_row;
-  GtkWidget *buildable_id;
+  GtkLabel  *buildable_id;
   GtkWidget *mnemonic_label_row;
   GtkWidget *mnemonic_label;
   GtkWidget *request_mode_row;
-  GtkWidget *request_mode;
+  GtkLabel  *request_mode;
   GtkWidget *allocated_size_row;
-  GtkWidget *allocated_size;
+  GtkLabel  *allocated_size;
   GtkWidget *baseline_row;
-  GtkWidget *baseline;
+  GtkLabel  *baseline;
   GtkWidget *surface_row;
-  GtkWidget *surface;
+  GtkLabel  *surface;
   GtkWidget *surface_button;
   GtkWidget *renderer_row;
-  GtkWidget *renderer;
+  GtkLabel  *renderer;
   GtkWidget *renderer_button;
   GtkWidget *frame_clock_row;
-  GtkWidget *frame_clock;
+  GtkLabel  *frame_clock;
   GtkWidget *frame_clock_button;
   GtkWidget *tick_callback_row;
   GtkWidget *tick_callback;
   GtkWidget *framerate_row;
-  GtkWidget *framerate;
+  GtkLabel  *framerate;
   GtkWidget *framecount_row;
-  GtkWidget *framecount;
+  GtkLabel  *framecount;
   GtkWidget *accessible_role_row;
-  GtkWidget *accessible_role;
+  GtkLabel  *accessible_role;
   GtkWidget *accessible_name_row;
-  GtkWidget *accessible_name;
+  GtkLabel  *accessible_name;
   GtkWidget *accessible_description_row;
-  GtkWidget *accessible_description;
+  GtkLabel  *accessible_description;
   GtkWidget *mapped_row;
   GtkWidget *mapped;
   GtkWidget *realized_row;
@@ -133,7 +133,7 @@ state_flags_changed (GtkWidget *w, GtkStateFlags old_flags, GtkInspectorMiscInfo
   gchar *s;
 
   s = format_state_flags (gtk_widget_get_state_flags (w));
-  gtk_label_set_label (GTK_LABEL (sl->priv->state), s);
+  gtk_label_set_label (sl->priv->state, s);
   g_free (s);
 }
 
@@ -154,16 +154,16 @@ allocation_changed (GtkWidget    *w,
                                 alloc.width, alloc.height,
                                 alloc.x, alloc.y);
 
-  gtk_label_set_label (GTK_LABEL (sl->priv->allocated_size), size_label);
+  gtk_label_set_label (sl->priv->allocated_size, size_label);
   g_free (size_label);
 
   size_label = g_strdup_printf ("%d", gtk_widget_get_allocated_baseline (w));
-  gtk_label_set_label (GTK_LABEL (sl->priv->baseline), size_label);
+  gtk_label_set_label (sl->priv->baseline, size_label);
   g_free (size_label);
 
   class = G_ENUM_CLASS (g_type_class_ref (GTK_TYPE_SIZE_REQUEST_MODE));
   value = g_enum_get_value (class, gtk_widget_get_request_mode (w));
-  gtk_label_set_label (GTK_LABEL (sl->priv->request_mode), value->value_nick);
+  gtk_label_set_label (sl->priv->request_mode, value->value_nick);
   g_type_class_unref (class);
 }
 
@@ -242,7 +242,7 @@ update_surface (GtkInspectorMiscInfo *sl)
 
       obj = (GObject *)gtk_native_get_surface (GTK_NATIVE (sl->priv->object));
       tmp = g_strdup_printf ("%p", obj);
-      gtk_label_set_label (GTK_LABEL (sl->priv->surface), tmp);
+      gtk_label_set_label (sl->priv->surface, tmp);
       g_free (tmp);
     }
   else
@@ -263,7 +263,7 @@ update_renderer (GtkInspectorMiscInfo *sl)
 
       obj = (GObject *)gtk_native_get_surface (GTK_NATIVE (sl->priv->object));
       tmp = g_strdup_printf ("%p", obj);
-      gtk_label_set_label (GTK_LABEL (sl->priv->renderer), tmp);
+      gtk_label_set_label (sl->priv->renderer, tmp);
       g_free (tmp);
     }
   else
@@ -286,13 +286,13 @@ update_frame_clock (GtkInspectorMiscInfo *sl)
         {
           gchar *tmp;
           tmp = g_strdup_printf ("%p", clock);
-          gtk_label_set_label (GTK_LABEL (sl->priv->frame_clock), tmp);
+          gtk_label_set_label (sl->priv->frame_clock, tmp);
           g_free (tmp);
           gtk_widget_set_sensitive (sl->priv->frame_clock_button, TRUE);
         }
       else
         {
-          gtk_label_set_label (GTK_LABEL (sl->priv->frame_clock), "NULL");
+          gtk_label_set_label (sl->priv->frame_clock, "NULL");
           gtk_widget_set_sensitive (sl->priv->frame_clock_button, FALSE);
         }
     }
@@ -310,7 +310,7 @@ update_info (gpointer data)
   GType gtype;
 
   tmp = g_strdup_printf ("%p", sl->priv->object);
-  gtk_label_set_text (GTK_LABEL (sl->priv->address), tmp);
+  gtk_label_set_text (sl->priv->address, tmp);
   g_free (tmp);
 
   gtype = G_TYPE_FROM_INSTANCE (sl->priv->object);
@@ -322,7 +322,7 @@ update_info (gpointer data)
   if (G_IS_OBJECT (sl->priv->object))
     {
       tmp = g_strdup_printf ("%d", sl->priv->object->ref_count);
-      gtk_label_set_text (GTK_LABEL (sl->priv->refcount), tmp);
+      gtk_label_set_text (sl->priv->refcount, tmp);
       g_free (tmp);
     }
 
@@ -352,9 +352,9 @@ update_info (gpointer data)
 
       accessible = ATK_OBJECT (gtk_widget_get_accessible (GTK_WIDGET (sl->priv->object)));
       role = atk_object_get_role (accessible);
-      gtk_label_set_text (GTK_LABEL (sl->priv->accessible_role), atk_role_get_name (role));
-      gtk_label_set_text (GTK_LABEL (sl->priv->accessible_name), atk_object_get_name (accessible));
-      gtk_label_set_text (GTK_LABEL (sl->priv->accessible_description), atk_object_get_description (accessible));
+      gtk_label_set_text (sl->priv->accessible_role, atk_role_get_name (role));
+      gtk_label_set_text (sl->priv->accessible_name, atk_object_get_name (accessible));
+      gtk_label_set_text (sl->priv->accessible_description, atk_object_get_description (accessible));
       gtk_widget_set_visible (sl->priv->mapped, gtk_widget_get_mapped (GTK_WIDGET (sl->priv->object)));
       gtk_widget_set_visible (sl->priv->realized, gtk_widget_get_realized (GTK_WIDGET (sl->priv->object)));
       gtk_widget_set_visible (sl->priv->is_toplevel, GTK_IS_ROOT (sl->priv->object));
@@ -367,7 +367,7 @@ update_info (gpointer data)
 
   if (GTK_IS_BUILDABLE (sl->priv->object))
     {
-      gtk_label_set_text (GTK_LABEL (sl->priv->buildable_id),
+      gtk_label_set_text (sl->priv->buildable_id,
                           gtk_buildable_get_name (GTK_BUILDABLE (sl->priv->object)));
     }
 
@@ -386,7 +386,7 @@ update_info (gpointer data)
       frame_time = gdk_frame_clock_get_frame_time (clock);
 
       tmp = g_strdup_printf ("%"G_GINT64_FORMAT, frame);
-      gtk_label_set_label (GTK_LABEL (sl->priv->framecount), tmp);
+      gtk_label_set_label (sl->priv->framecount, tmp);
       g_free (tmp);
 
       history_start = gdk_frame_clock_get_history_start (clock);
@@ -397,12 +397,12 @@ update_info (gpointer data)
           previous_timings = gdk_frame_clock_get_timings (clock, history_start);
           previous_frame_time = gdk_frame_timings_get_frame_time (previous_timings);
           tmp = g_strdup_printf ("%4.1f ⁄ s", (G_USEC_PER_SEC * history_len) / (double) (frame_time - previous_frame_time));
-          gtk_label_set_label (GTK_LABEL (sl->priv->framerate), tmp);
+          gtk_label_set_label (sl->priv->framerate, tmp);
           g_free (tmp);
         }
       else
         {
-          gtk_label_set_label (GTK_LABEL (sl->priv->framerate), "—");
+          gtk_label_set_label (sl->priv->framerate, "—");
         }
 
       sl->priv->last_frame = frame;

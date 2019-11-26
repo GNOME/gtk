@@ -4,7 +4,7 @@ static GtkWidget *
 oriented_test_widget (const gchar *label, const gchar *color)
 {
   GtkWidget *box;
-  GtkWidget *widget;
+  GtkLabel *widget;
   GtkCssProvider *provider;
   gchar *data;
 
@@ -18,7 +18,7 @@ oriented_test_widget (const gchar *label, const gchar *color)
                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   g_free (data);
   g_object_unref (provider);
-  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (widget));
 
   return box;
 }
@@ -93,7 +93,7 @@ text_grid (void)
   GtkWidget *grid;
   GtkWidget *paned1;
   GtkWidget *box;
-  GtkWidget *label;
+  GtkLabel *label;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Height-for-Width");
@@ -102,28 +102,28 @@ text_grid (void)
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_paned_pack1 (GTK_PANED (paned1), box, TRUE, FALSE);
-  gtk_paned_pack2 (GTK_PANED (paned1), gtk_label_new ("Space"), TRUE, FALSE);
+  gtk_paned_pack2 (GTK_PANED (paned1), GTK_WIDGET (gtk_label_new ("Space")), TRUE, FALSE);
 
   grid = gtk_grid_new ();
   gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), GTK_ORIENTATION_VERTICAL);
-  gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("Above"));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_label_new ("Above")));
   gtk_container_add (GTK_CONTAINER (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
   gtk_container_add (GTK_CONTAINER (box), grid);
   gtk_container_add (GTK_CONTAINER (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
-  gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("Below"));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_label_new ("Below")));
 
   label = gtk_label_new ("Some text that may wrap if it has to");
-  gtk_label_set_width_chars (GTK_LABEL (label), 10);
-  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
+  gtk_label_set_width_chars (label, 10);
+  gtk_label_set_wrap (label, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 0, 1, 1);
 
   gtk_grid_attach (GTK_GRID (grid), test_widget ("1", "red"), 1, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), test_widget ("2", "blue"), 0, 1, 1, 1);
 
   label = gtk_label_new ("Some text that may wrap if it has to");
-  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-  gtk_label_set_width_chars (GTK_LABEL (label), 10);
-  gtk_grid_attach (GTK_GRID (grid), label, 1, 1, 1, 1);
+  gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+  gtk_label_set_width_chars (label, 10);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 1, 1, 1, 1);
 
   gtk_widget_show (window);
 }
@@ -134,7 +134,7 @@ box_comparison (void)
   GtkWidget *window;
   GtkWidget *vbox;
   GtkWidget *box;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *grid;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -142,7 +142,7 @@ box_comparison (void)
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new ("Above"));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (gtk_label_new ("Above")));
   gtk_container_add (GTK_CONTAINER (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -151,16 +151,16 @@ box_comparison (void)
   gtk_container_add (GTK_CONTAINER (box), test_widget ("1", "white"));
 
   label = gtk_label_new ("Some ellipsizing text");
-  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-  gtk_label_set_width_chars (GTK_LABEL (label), 10);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+  gtk_label_set_width_chars (label, 10);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   gtk_container_add (GTK_CONTAINER (box), test_widget ("2", "green"));
 
   label = gtk_label_new ("Some text that may wrap if needed");
-  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-  gtk_label_set_width_chars (GTK_LABEL (label), 10);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_label_set_wrap (label, TRUE);
+  gtk_label_set_width_chars (label, 10);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   gtk_container_add (GTK_CONTAINER (box), test_widget ("3", "red"));
 
@@ -172,23 +172,23 @@ box_comparison (void)
   gtk_grid_attach (GTK_GRID (grid), test_widget ("1", "white"), 0, 0, 1, 1);
 
   label = gtk_label_new ("Some ellipsizing text");
-  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-  gtk_label_set_width_chars (GTK_LABEL (label), 10);
-  gtk_grid_attach (GTK_GRID (grid), label, 1, 0, 1, 1);
-  gtk_widget_set_hexpand (label, TRUE);
+  gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+  gtk_label_set_width_chars (label, 10);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 1, 0, 1, 1);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
 
   gtk_grid_attach (GTK_GRID (grid), test_widget ("2", "green"), 2, 0, 1, 1);
 
   label = gtk_label_new ("Some text that may wrap if needed");
-  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-  gtk_label_set_width_chars (GTK_LABEL (label), 10);
-  gtk_grid_attach (GTK_GRID (grid), label, 3, 0, 1, 1);
-  gtk_widget_set_hexpand (label, TRUE);
+  gtk_label_set_wrap (label, TRUE);
+  gtk_label_set_width_chars (label, 10);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 3, 0, 1, 1);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
 
   gtk_grid_attach (GTK_GRID (grid), test_widget ("3", "red"), 4, 0, 1, 1);
 
   gtk_container_add (GTK_CONTAINER (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new ("Below"));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (gtk_label_new ("Below")));
 
   gtk_widget_show (window);
 }

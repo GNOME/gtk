@@ -42,9 +42,9 @@ G_DEFINE_TYPE (MyTooltip, my_tooltip, GTK_TYPE_BIN)
 static void
 my_tooltip_init (MyTooltip *tt)
 {
-  GtkWidget *label = gtk_label_new ("Some text in a tooltip");
+  GtkLabel *label = gtk_label_new ("Some text in a tooltip");
 
-  gtk_container_add (GTK_CONTAINER (tt), label);
+  gtk_container_add (GTK_CONTAINER (tt), GTK_WIDGET (label));
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (tt)), "background");
 }
@@ -278,11 +278,11 @@ main (int argc, char *argv[])
   GtkWidget *box;
   GtkWidget *drawing_area;
   GtkWidget *button;
-  GtkWidget *label;
+  GtkLabel *label;
+  GtkLabel *label2;
   GtkWidget *tooltip;
 
   GtkWidget *tooltip_window;
-  GtkWidget *tooltip_button;
 
   GtkWidget *tree_view;
   GtkTreeViewColumn *column;
@@ -329,25 +329,25 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (box), button);
 
   /* A label */
-  button = gtk_label_new ("I am just a label");
-  gtk_label_set_selectable (GTK_LABEL (button), FALSE);
-  gtk_widget_set_tooltip_text (button, "Label & and tooltip");
-  gtk_container_add (GTK_CONTAINER (box), button);
+  label = gtk_label_new ("I am just a label");
+  gtk_label_set_selectable (label, FALSE);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (label), "Label & and tooltip");
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
-  text = gtk_widget_get_tooltip_text (button);
-  markup = gtk_widget_get_tooltip_markup (button);
+  text = gtk_widget_get_tooltip_text (GTK_WIDGET (label));
+  markup = gtk_widget_get_tooltip_markup (GTK_WIDGET (label));
   g_assert (g_str_equal ("Label & and tooltip", text));
   g_assert (g_str_equal ("Label &amp; and tooltip", markup));
   g_free (text); g_free (markup);
 
   /* A selectable label */
-  button = gtk_label_new ("I am a selectable label");
-  gtk_label_set_selectable (GTK_LABEL (button), TRUE);
-  gtk_widget_set_tooltip_markup (button, "<b>Another</b> Label tooltip");
-  gtk_container_add (GTK_CONTAINER (box), button);
+  label = gtk_label_new ("I am a selectable label");
+  gtk_label_set_selectable (label, TRUE);
+  gtk_widget_set_tooltip_markup (GTK_WIDGET (label), "<b>Another</b> Label tooltip");
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
-  text = gtk_widget_get_tooltip_text (button);
-  markup = gtk_widget_get_tooltip_markup (button);
+  text = gtk_widget_get_tooltip_text (GTK_WIDGET (label));
+  markup = gtk_widget_get_tooltip_markup (GTK_WIDGET (label));
   g_assert (g_str_equal ("Another Label tooltip", text));
   g_assert (g_str_equal ("<b>Another</b> Label tooltip", markup));
   g_free (text); g_free (markup);
@@ -357,9 +357,9 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (box), button);
 
   tooltip_window = gtk_window_new (GTK_WINDOW_POPUP);
-  tooltip_button = gtk_label_new ("blaat!");
-  gtk_container_add (GTK_CONTAINER (tooltip_window), tooltip_button);
-  gtk_widget_show (tooltip_button);
+  label = gtk_label_new ("blaat!");
+  gtk_container_add (GTK_CONTAINER (tooltip_window), GTK_WIDGET (label));
+  gtk_widget_show (GTK_WIDGET (label));
 
   gtk_widget_set_tooltip_window (button, GTK_WINDOW (tooltip_window));
   gtk_window_set_type_hint (GTK_WINDOW (tooltip_window),
@@ -435,20 +435,20 @@ main (int argc, char *argv[])
 		    G_CALLBACK (query_tooltip_drawing_area_cb), NULL);
   gtk_container_add (GTK_CONTAINER (box), drawing_area);
 
-  button = gtk_label_new ("Custom tooltip I");
+  label2 = gtk_label_new ("Custom tooltip I");
   label = gtk_label_new ("See, custom");
   g_object_ref_sink (label);
-  g_object_set (button, "has-tooltip", TRUE, NULL);
-  g_signal_connect (button, "query-tooltip",
+  g_object_set (label2, "has-tooltip", TRUE, NULL);
+  g_signal_connect (label2, "query-tooltip",
 		    G_CALLBACK (query_tooltip_label_cb), label);
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label2));
 
-  button = gtk_label_new ("Custom tooltip II");
+  label2 = gtk_label_new ("Custom tooltip II");
   label = gtk_label_new ("See, custom, too");
   g_object_ref_sink (label);
-  g_object_set (button, "has-tooltip", TRUE, NULL);
-  gtk_container_add (GTK_CONTAINER (box), button);
-  g_signal_connect (button, "query-tooltip",
+  g_object_set (label2, "has-tooltip", TRUE, NULL);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label2));
+  g_signal_connect (label2, "query-tooltip",
 		    G_CALLBACK (query_tooltip_label_cb), label);
 
   /* Done! */

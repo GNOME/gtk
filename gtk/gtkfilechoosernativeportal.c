@@ -46,7 +46,7 @@
 typedef struct {
   GtkFileChooserNative *self;
 
-  GtkWidget *grab_widget;
+  GtkLabel *grab_widget;
 
   GDBusConnection *connection;
   char *portal_handle;
@@ -72,8 +72,8 @@ filechooser_portal_data_free (FilechooserPortalData *data)
 
   if (data->grab_widget)
     {
-      gtk_grab_remove (data->grab_widget);
-      gtk_widget_destroy (data->grab_widget);
+      gtk_grab_remove (GTK_WIDGET (data->grab_widget));
+      gtk_widget_destroy (GTK_WIDGET (data->grab_widget));
     }
 
   g_clear_object (&data->self);

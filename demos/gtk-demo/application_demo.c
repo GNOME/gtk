@@ -12,7 +12,7 @@
 #include <gtk/gtk.h>
 
 static gboolean name_seen;
-static GtkWidget *placeholder;
+static GtkLabel *placeholder;
 
 static void
 on_name_appeared (GDBusConnection *connection,
@@ -33,7 +33,7 @@ on_name_vanished (GDBusConnection *connection,
 
   if (placeholder)
     {
-      gtk_widget_destroy (placeholder);
+      gtk_widget_destroy (GTK_WIDGET (placeholder));
       g_object_unref (placeholder);
       placeholder = NULL;
     }
@@ -91,5 +91,5 @@ do_application_demo (GtkWidget *toplevel)
                                    NULL, NULL);
     }
 
-  return placeholder;
+  return GTK_WIDGET (placeholder);
 }

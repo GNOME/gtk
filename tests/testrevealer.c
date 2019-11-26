@@ -5,6 +5,7 @@ main (gint argc,
       gchar ** argv)
 {
   GtkWidget *window, *revealer, *box, *widget, *entry;
+  GtkLabel *label;
 
   gtk_init ();
 
@@ -14,19 +15,19 @@ main (gint argc,
   box = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (window), box);
 
-  widget = gtk_label_new ("Some filler text to avoid\nresizing of the window");
-  gtk_widget_set_margin_top (widget, 10);
-  gtk_widget_set_margin_bottom (widget, 10);
-  gtk_widget_set_margin_start (widget, 10);
-  gtk_widget_set_margin_end (widget, 10);
-  gtk_grid_attach (GTK_GRID (box), widget, 1, 1, 1, 1);
+  label = gtk_label_new ("Some filler text to avoid\nresizing of the window");
+  gtk_widget_set_margin_top (GTK_WIDGET (label), 10);
+  gtk_widget_set_margin_bottom (GTK_WIDGET (label), 10);
+  gtk_widget_set_margin_start (GTK_WIDGET (label), 10);
+  gtk_widget_set_margin_end (GTK_WIDGET (label), 10);
+  gtk_grid_attach (GTK_GRID (box), GTK_WIDGET (label), 1, 1, 1, 1);
 
-  widget = gtk_label_new ("Some filler text to avoid\nresizing of the window");
-  gtk_widget_set_margin_top (widget, 10);
-  gtk_widget_set_margin_bottom (widget, 10);
-  gtk_widget_set_margin_start (widget, 10);
-  gtk_widget_set_margin_end (widget, 10);
-  gtk_grid_attach (GTK_GRID (box), widget, 4, 4, 1, 1);
+  label = gtk_label_new ("Some filler text to avoid\nresizing of the window");
+  gtk_widget_set_margin_top (GTK_WIDGET (label), 10);
+  gtk_widget_set_margin_bottom (GTK_WIDGET (label), 10);
+  gtk_widget_set_margin_start (GTK_WIDGET (label), 10);
+  gtk_widget_set_margin_end (GTK_WIDGET (label), 10);
+  gtk_grid_attach (GTK_GRID (box), GTK_WIDGET (label), 4, 4, 1, 1);
 
   widget = gtk_toggle_button_new_with_label ("None");
   gtk_grid_attach (GTK_GRID (box), widget, 0, 0, 1, 1);

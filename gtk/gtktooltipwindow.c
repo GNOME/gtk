@@ -45,7 +45,7 @@ struct _GtkTooltipWindow
 
   GtkWidget *box;
   GtkWidget *image;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *custom_widget;
 };
 
@@ -94,12 +94,12 @@ gtk_tooltip_window_set_label_markup (GtkTooltipWindow *window,
 {
   if (markup != NULL)
     {
-      gtk_label_set_markup (GTK_LABEL (window->label), markup);
-      gtk_widget_show (window->label);
+      gtk_label_set_markup (window->label, markup);
+      gtk_widget_show (GTK_WIDGET (window->label));
     }
   else
     {
-      gtk_widget_hide (window->label);
+      gtk_widget_hide (GTK_WIDGET (window->label));
     }
 }
 
@@ -109,12 +109,12 @@ gtk_tooltip_window_set_label_text (GtkTooltipWindow *window,
 {
   if (text != NULL)
     {
-      gtk_label_set_text (GTK_LABEL (window->label), text);
-      gtk_widget_show (window->label);
+      gtk_label_set_text (window->label, text);
+      gtk_widget_show (GTK_WIDGET (window->label));
     }
   else
     {
-      gtk_widget_hide (window->label);
+      gtk_widget_hide (GTK_WIDGET (window->label));
     }
 }
 
