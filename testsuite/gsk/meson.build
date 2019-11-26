@@ -60,6 +60,7 @@ compare_render_tests = [
   'repeat',
   'repeat-texture',
   'repeat-no-repeat',
+  'repeat-negative-coords',
 ]
 
 # these are too sensitive to differences in the renderers
