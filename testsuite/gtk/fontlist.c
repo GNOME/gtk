@@ -21,6 +21,10 @@
 
 static GQuark changes_quark;
 
+#if PANGO_VERSION < G_ENCODE_VERSION (1, 46)
+#define pango_font_face_get_family(_face) g_object_get_data (G_OBJECT (_face), "-gtk-font-family")
+#endif
+
 static char *
 model_to_string (GListModel *model)
 {
