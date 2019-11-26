@@ -1268,6 +1268,21 @@ typedef struct {
 } GtkExpressionBind;
 
 static void
+invalidate_binds (gpointer unused,
+                  GObject *object)
+{
+  GSList *l, *binds;
+
+  binds = g_object_get_data (object, "gtk-expression-binds");
+  for (l = binds; l; l = l->next)
+    {
+      GtkExpressionBind *bind = l->data;
+
+      bind->object = NULL;
+    }
+}
+
+static void
 free_binds (gpointer data)
 {
   GSList *l;
@@ -1294,6 +1309,8 @@ gtk_expression_bind_free (gpointer data)
       binds = g_slist_remove (binds, bind);
       if (binds)
         g_object_set_data_full (bind->object, "gtk-expression-binds", binds, free_binds);
+      else
+        g_object_weak_unref (bind->object, invalidate_binds, NULL);
     }
   gtk_expression_unref (bind->expression);
 
@@ -1305,6 +1322,9 @@ gtk_expression_bind_notify (gpointer data)
 {
   GValue value = G_VALUE_INIT;
   GtkExpressionBind *bind = data;
+
+  if (bind->object == NULL)
+    return;
 
   if (!gtk_expression_evaluate (bind->expression, bind->object, &value))
     return;
@@ -1361,6 +1381,9 @@ gtk_expression_bind (GtkExpression *self,
     }
 
   bind = g_slice_new0 (GtkExpressionBind);
+  binds = g_object_steal_data (object, "gtk-expression-binds");
+  if (binds == NULL)
+    g_object_weak_ref (object, invalidate_binds, NULL);
   bind->expression = self;
   bind->object = object;
   bind->pspec = pspec;
@@ -1369,7 +1392,6 @@ gtk_expression_bind (GtkExpression *self,
                                       gtk_expression_bind_notify,
                                       bind,
                                       gtk_expression_bind_free);
-  binds = g_object_steal_data (object, "gtk-expression-binds");
   binds = g_slist_prepend (binds, bind);
   g_object_set_data_full (object, "gtk-expression-binds", binds, free_binds);
 
