@@ -170,6 +170,123 @@ gtk_constant_expression_new_for_value (const GValue *value)
   return (GtkExpression *) result;
 }
 
+/*** OBJECT ***/
+
+typedef struct _GtkObjectExpression GtkObjectExpression;
+
+struct _GtkObjectExpression
+{
+  GtkExpression parent;
+
+  GObject *object;
+  GSList *watches;
+};
+
+static void
+gtk_object_expression_weak_ref_cb (gpointer  data,
+                                   GObject  *object)
+{
+  GtkObjectExpression *self = (GtkObjectExpression *) data;
+  GSList *l;
+
+  self->object = NULL;
+
+  for (l = self->watches; l; l = l->next)
+    {
+      gtk_expression_watch_notify (l->data);
+    }
+}
+
+static void
+gtk_object_expression_finalize (GtkExpression *expr)
+{
+  GtkObjectExpression *self = (GtkObjectExpression *) expr;
+
+  if (self->object)
+    g_object_weak_unref (self->object, gtk_object_expression_weak_ref_cb, self);
+
+  g_assert (self->watches == NULL);
+}
+
+static gboolean
+gtk_object_expression_is_static (GtkExpression *expr)
+{
+  return FALSE;
+}
+
+static gboolean
+gtk_object_expression_evaluate (GtkExpression *expr,
+                                gpointer       this,
+                                GValue        *value)
+{
+  GtkObjectExpression *self = (GtkObjectExpression *) expr;
+
+  if (self->object == NULL)
+    return FALSE;
+
+  g_value_init (value, gtk_expression_get_value_type (expr));
+  g_value_set_object (value, self->object);
+  return TRUE;
+}
+
+static void
+gtk_object_expression_watch (GtkExpression      *expr,
+                             gpointer            this,
+                             GtkExpressionWatch *watch)
+{
+  GtkObjectExpression *self = (GtkObjectExpression *) expr;
+
+  self->watches = g_slist_prepend (self->watches, watch);
+}
+
+static void
+gtk_object_expression_unwatch (GtkExpression      *expr,
+                               GtkExpressionWatch *watch)
+{
+  GtkObjectExpression *self = (GtkObjectExpression *) expr;
+
+  self->watches = g_slist_remove (self->watches, watch);
+}
+
+static const GtkExpressionClass GTK_OBJECT_EXPRESSION_CLASS =
+{
+  sizeof (GtkObjectExpression),
+  "GtkObjectExpression",
+  gtk_object_expression_finalize,
+  gtk_object_expression_is_static,
+  gtk_object_expression_evaluate,
+  sizeof (GtkExpressionWatch),
+  gtk_object_expression_watch,
+  gtk_object_expression_unwatch
+};
+
+/**
+ * gtk_object_expression_new:
+ * @object: (transfer none): object to watch
+ *
+ * Creates an expression evaluating to the given @object with a weak reference.
+ * Once the @object is disposed, it will fail to evaluate.
+ * This expression is meant to break reference cycles.
+ *
+ * If you want to keep a reference to @object, use gtk_constant_expression_new().
+ *
+ * Returns: a new #GtkExpression
+ **/
+GtkExpression *
+gtk_object_expression_new (GObject *object)
+{
+  GtkObjectExpression *result;
+
+  g_return_val_if_fail (G_IS_OBJECT (object), NULL);
+
+  result = gtk_expression_alloc (&GTK_OBJECT_EXPRESSION_CLASS, G_OBJECT_TYPE (object));
+
+  result->object = object;
+  g_object_weak_ref (object, gtk_object_expression_weak_ref_cb, result);
+
+  return (GtkExpression *) result;
+}
+
 /*** PROPERTY ***/
 
 typedef struct _GtkPropertyExpression GtkPropertyExpression;
