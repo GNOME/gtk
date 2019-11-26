@@ -43,7 +43,7 @@ static const char *css =
 ".b1 {"
 "  all: unset;"
 "  min-width: 100px;"
-"  min-height:100px;"
+"  min-height: 100px;"
 "  border-radius: 7px 7px 0px 0px;"
 "  box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.5);"
 "}"
@@ -93,6 +93,7 @@ main (int argc, char **argv)
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_decorated (GTK_WINDOW (window), FALSE);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 120);
   top = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 120);
   bottom = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 120);
@@ -124,7 +125,6 @@ main (int argc, char **argv)
   gtk_style_context_add_class (gtk_widget_get_style_context (w), "five");
   gtk_container_add (GTK_CONTAINER (top), w);
 
-
   /* Bottom */
   w = gtk_button_new ();
   gtk_widget_set_valign (w, GTK_ALIGN_CENTER);
@@ -153,6 +153,4 @@ main (int argc, char **argv)
   gtk_widget_show (window);
 
   gtk_main ();
-
-  gtk_widget_destroy (window);
 }
