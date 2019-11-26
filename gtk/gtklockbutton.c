@@ -93,8 +93,8 @@ struct _GtkLockButtonPrivate
   GtkWidget *box;
   GtkWidget *image;
   GtkWidget *stack;
-  GtkWidget *label_lock;
-  GtkWidget *label_unlock;
+  GtkLabel *label_lock;
+  GtkLabel *label_unlock;
 };
 
 enum
@@ -163,11 +163,11 @@ gtk_lock_button_get_property (GObject    *object,
       break;
 
     case PROP_TEXT_LOCK:
-      g_value_set_string (value, gtk_label_get_text (GTK_LABEL (priv->label_lock)));
+      g_value_set_string (value, gtk_label_get_text (priv->label_lock));
       break;
 
     case PROP_TEXT_UNLOCK:
-      g_value_set_string (value, gtk_label_get_text (GTK_LABEL (priv->label_unlock)));
+      g_value_set_string (value, gtk_label_get_text (priv->label_unlock));
       break;
 
     case PROP_TOOLTIP_LOCK:
@@ -204,12 +204,12 @@ gtk_lock_button_set_property (GObject      *object,
       break;
 
     case PROP_TEXT_LOCK:
-      gtk_label_set_text (GTK_LABEL (priv->label_lock), g_value_get_string (value));
+      gtk_label_set_text (priv->label_lock, g_value_get_string (value));
       _gtk_lock_button_accessible_name_changed (button);
       break;
 
     case PROP_TEXT_UNLOCK:
-      gtk_label_set_text (GTK_LABEL (priv->label_unlock), g_value_get_string (value));
+      gtk_label_set_text (priv->label_unlock, g_value_get_string (value));
       _gtk_lock_button_accessible_name_changed (button);
       break;
 
@@ -400,7 +400,7 @@ update_state (GtkLockButton *button)
 
   gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon);
   gtk_stack_set_visible_child (GTK_STACK (priv->stack),
-                               allowed ? priv->label_lock : priv->label_unlock);
+                               allowed ? GTK_WIDGET (priv->label_lock) : GTK_WIDGET (priv->label_unlock));
   _gtk_lock_button_accessible_name_changed (button);
   gtk_widget_set_tooltip_markup (GTK_WIDGET (button), tooltip);
   gtk_widget_set_sensitive (GTK_WIDGET (button), sensitive);
@@ -577,12 +577,12 @@ const char *
 _gtk_lock_button_get_current_text (GtkLockButton *button)
 {
   GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
-  GtkWidget *label;
+  GtkLabel *label;
 
   g_return_val_if_fail (GTK_IS_LOCK_BUTTON (button), NULL);
 
-  label = gtk_stack_get_visible_child (GTK_STACK (priv->stack));
+  label = GTK_LABEL (gtk_stack_get_visible_child (GTK_STACK (priv->stack)));
 
-  return gtk_label_get_text (GTK_LABEL (label));
+  return gtk_label_get_text (label);
 }
 

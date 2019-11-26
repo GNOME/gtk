@@ -24,7 +24,8 @@
 #define CUSTOM_ITEM "custom-item"
 
 static GtkWidget *toplevel, *button, *box;
-static GtkWidget *sel_image, *sel_name;
+static GtkWidget *sel_image;
+static GtkLabel *sel_name;
 
 static void
 combo_changed_cb (GtkAppChooserButton *button,
@@ -38,7 +39,7 @@ combo_changed_cb (GtkAppChooserButton *button,
     return;
 
   gtk_image_set_from_gicon (GTK_IMAGE (sel_image), g_app_info_get_icon (app_info));
-  gtk_label_set_text (GTK_LABEL (sel_name), g_app_info_get_display_name (app_info));
+  gtk_label_set_text (sel_name, g_app_info_get_display_name (app_info));
 
   g_object_unref (app_info);
 }
@@ -49,7 +50,7 @@ special_item_activated_cb (GtkAppChooserButton *b,
                            gpointer user_data)
 {
   gtk_image_set_from_gicon (GTK_IMAGE (sel_image), g_themed_icon_new ("face-smile"));
-  gtk_label_set_text (GTK_LABEL (sel_name), "Special Item");
+  gtk_label_set_text (sel_name, "Special Item");
 }
 
 static void
@@ -64,6 +65,7 @@ int
 main (int argc,
       char **argv)
 {
+  GtkLabel *label;
   GtkWidget *w;
 
   gtk_init ();
@@ -79,9 +81,9 @@ main (int argc,
   g_signal_connect (button, "changed",
                     G_CALLBACK (combo_changed_cb), NULL);
 
-  w = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (w), "<b>Selected app info</b>");
-  gtk_container_add (GTK_CONTAINER (box), w);
+  label = gtk_label_new (NULL);
+  gtk_label_set_markup (label, "<b>Selected app info</b>");
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   w = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_container_add (GTK_CONTAINER (box), w);
@@ -89,7 +91,7 @@ main (int argc,
   sel_image = gtk_image_new ();
   gtk_container_add (GTK_CONTAINER (w), sel_image);
   sel_name = gtk_label_new (NULL);
-  gtk_container_add (GTK_CONTAINER (w), sel_name);
+  gtk_container_add (GTK_CONTAINER (w), GTK_WIDGET (sel_name));
 
   gtk_app_chooser_button_set_heading (GTK_APP_CHOOSER_BUTTON (button), "Choose one, <i>not</i> two");
   gtk_app_chooser_button_append_separator (GTK_APP_CHOOSER_BUTTON (button));

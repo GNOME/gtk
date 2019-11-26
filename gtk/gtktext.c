@@ -166,7 +166,7 @@ struct _GtkTextPrivate
   GtkWidget     *magnifier_popover;
   GtkWidget     *magnifier;
 
-  GtkWidget     *placeholder;
+  GtkLabel      *placeholder;
 
   GtkGesture    *drag_gesture;
   GtkEventController *key_controller;
@@ -1875,7 +1875,7 @@ gtk_text_finalize (GObject *object)
   g_clear_object (&priv->text_handle);
   g_free (priv->im_module);
 
-  g_clear_pointer (&priv->placeholder, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **) &priv->placeholder, gtk_widget_unparent);
 
   if (priv->tabs)
     pango_tab_array_free (priv->tabs);
@@ -2272,7 +2272,7 @@ gtk_text_measure (GtkWidget      *widget,
         {
           int pmin, pnat;
 
-          gtk_widget_measure (priv->placeholder, GTK_ORIENTATION_HORIZONTAL, -1,
+          gtk_widget_measure (GTK_WIDGET (priv->placeholder), GTK_ORIENTATION_HORIZONTAL, -1,
                               &pmin, &pnat, NULL, NULL);
           min = MAX (min, pmin);
           nat = MAX (nat, pnat);
@@ -2303,7 +2303,7 @@ gtk_text_measure (GtkWidget      *widget,
         {
           int min, nat;
 
-          gtk_widget_measure (priv->placeholder, GTK_ORIENTATION_VERTICAL, -1,
+          gtk_widget_measure (GTK_WIDGET (priv->placeholder), GTK_ORIENTATION_VERTICAL, -1,
                               &min, &nat, NULL, NULL);
           *minimum = MAX (*minimum, min);
           *natural = MAX (*natural, nat);
@@ -2332,7 +2332,7 @@ gtk_text_size_allocate (GtkWidget *widget,
 
   if (priv->placeholder)
     {
-      gtk_widget_size_allocate (priv->placeholder,
+      gtk_widget_size_allocate (GTK_WIDGET (priv->placeholder),
                                 &(GtkAllocation) { 0, 0, width, height },
                                 -1);
     }
@@ -2409,7 +2409,7 @@ gtk_text_snapshot (GtkWidget   *widget,
     gtk_text_draw_cursor (self, snapshot, CURSOR_DND);
 
   if (priv->placeholder)
-    gtk_widget_snapshot_child (widget, priv->placeholder, snapshot);
+    gtk_widget_snapshot_child (widget, GTK_WIDGET (priv->placeholder), snapshot);
 
   gtk_text_draw_text (self, snapshot);
 
@@ -3411,7 +3411,7 @@ update_placeholder_visibility (GtkText *self)
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
   if (priv->placeholder)
-    gtk_widget_set_child_visible (priv->placeholder,
+    gtk_widget_set_child_visible (GTK_WIDGET (priv->placeholder),
                                   gtk_entry_buffer_get_length (priv->buffer) == 0);
 }
 
@@ -6546,12 +6546,12 @@ gtk_text_set_placeholder_text (GtkText    *self,
                                         "xalign", 0.0f,
                                         "ellipsize", PANGO_ELLIPSIZE_END,
                                         NULL);
-      gtk_label_set_attributes (GTK_LABEL (priv->placeholder), priv->attrs);
-      gtk_widget_insert_after (priv->placeholder, GTK_WIDGET (self), NULL);
+      gtk_label_set_attributes (priv->placeholder, priv->attrs);
+      gtk_widget_insert_after (GTK_WIDGET (priv->placeholder), GTK_WIDGET (self), NULL);
     }
   else
     {
-      gtk_label_set_text (GTK_LABEL (priv->placeholder), text);
+      gtk_label_set_text (priv->placeholder, text);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), text_props[PROP_PLACEHOLDER_TEXT]);
@@ -6578,7 +6578,7 @@ gtk_text_get_placeholder_text (GtkText *self)
   if (!priv->placeholder)
     return NULL;
 
-  return gtk_label_get_text (GTK_LABEL (priv->placeholder));
+  return gtk_label_get_text (priv->placeholder);
 }
 
 /**
@@ -6702,7 +6702,7 @@ gtk_text_set_attributes (GtkText       *self,
   priv->attrs = attrs;
 
   if (priv->placeholder)
-    gtk_label_set_attributes (GTK_LABEL (priv->placeholder), attrs);
+    gtk_label_set_attributes (priv->placeholder, attrs);
 
   g_object_notify_by_pspec (G_OBJECT (self), text_props[PROP_ATTRIBUTES]);
 

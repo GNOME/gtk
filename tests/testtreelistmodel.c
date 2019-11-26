@@ -166,6 +166,7 @@ create_widget_for_model (gpointer item,
                          gpointer root)
 {
   GtkWidget *row, *box, *child;
+  GtkLabel *label;
   GFileInfo *info;
   GFile *file;
   guint depth;
@@ -216,10 +217,10 @@ create_widget_for_model (gpointer item,
     }
 
   file = g_object_get_data (G_OBJECT (info), "file");
-  child = gtk_label_new (g_file_get_basename (file));
+  label = gtk_label_new (g_file_get_basename (file));
   g_object_unref (info);
 
-  gtk_container_add (GTK_CONTAINER (box), child);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   return row;
 }

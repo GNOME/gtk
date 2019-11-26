@@ -75,8 +75,8 @@ test_window_focus (void)
   GtkWidget *box;
   GtkWidget *box1;
   GtkWidget *box2;
-  GtkWidget *label1;
-  GtkWidget *label2;
+  GtkLabel *label1;
+  GtkLabel *label2;
   GtkWidget *entry1;
   GtkWidget *entry2;
   GString *s = g_string_new ("");
@@ -103,9 +103,9 @@ test_window_focus (void)
   add_controller (box, s);
   gtk_container_add (GTK_CONTAINER (window), box);
   label1 = gtk_label_new ("label1");
-  gtk_widget_set_name (label1, "label1");
-  add_controller (label1, s);
-  gtk_container_add (GTK_CONTAINER (box), label1);
+  gtk_widget_set_name (GTK_WIDGET (label1), "label1");
+  add_controller (GTK_WIDGET (label1), s);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label1));
   box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_set_name (box1, "box1");
   add_controller (box1, s);
@@ -119,9 +119,9 @@ test_window_focus (void)
   add_controller (box2, s);
   gtk_container_add (GTK_CONTAINER (box), box2);
   label2 = gtk_label_new ("label2");
-  gtk_widget_set_name (label2, "label2");
-  add_controller (label2, s);
-  gtk_container_add (GTK_CONTAINER (box2), label2);
+  gtk_widget_set_name (GTK_WIDGET (label2), "label2");
+  add_controller (GTK_WIDGET (label2), s);
+  gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (label2));
   entry2 = gtk_text_new ();
   gtk_widget_set_name (entry2, "entry2");
   add_controller (entry2, s);

@@ -99,8 +99,8 @@ struct _GtkAssistantPage
   gchar *title;
 
   GtkWidget *page;
-  GtkWidget *regular_title;
-  GtkWidget *current_title;
+  GtkLabel  *regular_title;
+  GtkLabel  *current_title;
 };
 
 struct _GtkAssistantPageClass
@@ -917,8 +917,8 @@ update_page_title_state (GtkAssistant *assistant, GList *list)
 
   if (page == priv->current_page)
     {
-      gtk_widget_set_visible (page->regular_title, FALSE);
-      gtk_widget_set_visible (page->current_title, visible);
+      gtk_widget_set_visible (GTK_WIDGET (page->regular_title), FALSE);
+      gtk_widget_set_visible (GTK_WIDGET (page->current_title), visible);
     }
   else
     {
@@ -946,8 +946,8 @@ update_page_title_state (GtkAssistant *assistant, GList *list)
             }
         }
 
-      gtk_widget_set_visible (page->regular_title, visible);
-      gtk_widget_set_visible (page->current_title, FALSE);
+      gtk_widget_set_visible (GTK_WIDGET (page->regular_title), visible);
+      gtk_widget_set_visible (GTK_WIDGET (page->current_title), FALSE);
     }
 
   return visible;
@@ -1176,11 +1176,11 @@ assistant_remove_page_cb (GtkContainer *container,
   g_signal_handlers_disconnect_by_func (page_info->page, on_page_page_notify, assistant);
   g_signal_handlers_disconnect_by_func (page_info, on_page_notify, assistant);
 
-  gtk_size_group_remove_widget (priv->title_size_group, page_info->regular_title);
-  gtk_size_group_remove_widget (priv->title_size_group, page_info->current_title);
+  gtk_size_group_remove_widget (priv->title_size_group, GTK_WIDGET (page_info->regular_title));
+  gtk_size_group_remove_widget (priv->title_size_group, GTK_WIDGET (page_info->current_title));
 
-  gtk_container_remove (GTK_CONTAINER (priv->sidebar), page_info->regular_title);
-  gtk_container_remove (GTK_CONTAINER (priv->sidebar), page_info->current_title);
+  gtk_container_remove (GTK_CONTAINER (priv->sidebar), GTK_WIDGET (page_info->regular_title));
+  gtk_container_remove (GTK_CONTAINER (priv->sidebar), GTK_WIDGET (page_info->current_title));
 
   priv->pages = g_list_remove_link (priv->pages, element);
   priv->visited_pages = g_slist_remove_all (priv->visited_pages, page_info);
@@ -1274,8 +1274,8 @@ gtk_assistant_page_set_property (GObject      *object,
 
       if (assistant)
         {
-          gtk_label_set_text ((GtkLabel*) page->regular_title, page->title);
-          gtk_label_set_text ((GtkLabel*) page->current_title, page->title);
+          gtk_label_set_text (page->regular_title, page->title);
+          gtk_label_set_text (page->current_title, page->title);
           update_title_state (GTK_ASSISTANT (assistant));
         }
 
@@ -1802,17 +1802,17 @@ gtk_assistant_add_page (GtkAssistant *assistant,
   page_info->regular_title = gtk_label_new (page_info->title);
   page_info->current_title = gtk_label_new (page_info->title);
 
-  gtk_label_set_xalign (GTK_LABEL (page_info->regular_title), 0.0);
-  gtk_label_set_xalign (GTK_LABEL (page_info->current_title), 0.0);
+  gtk_label_set_xalign (page_info->regular_title, 0.0);
+  gtk_label_set_xalign (page_info->current_title, 0.0);
 
-  gtk_widget_show (page_info->regular_title);
-  gtk_widget_hide (page_info->current_title);
+  gtk_widget_show (GTK_WIDGET (page_info->regular_title));
+  gtk_widget_hide (GTK_WIDGET (page_info->current_title));
 
-  context = gtk_widget_get_style_context (page_info->current_title);
+  context = gtk_widget_get_style_context (GTK_WIDGET (page_info->current_title));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
 
-  gtk_size_group_add_widget (priv->title_size_group, page_info->regular_title);
-  gtk_size_group_add_widget (priv->title_size_group, page_info->current_title);
+  gtk_size_group_add_widget (priv->title_size_group, GTK_WIDGET (page_info->regular_title));
+  gtk_size_group_add_widget (priv->title_size_group, GTK_WIDGET (page_info->current_title));
 
   g_signal_connect (G_OBJECT (page_info->page), "notify::visible",
                     G_CALLBACK (on_page_page_notify), assistant);
@@ -1840,8 +1840,8 @@ gtk_assistant_add_page (GtkAssistant *assistant,
         sibling = gtk_widget_get_next_sibling (sibling);
     }
 
-  gtk_box_insert_child_after (GTK_BOX (priv->sidebar), page_info->current_title, sibling);
-  gtk_box_insert_child_after (GTK_BOX (priv->sidebar), page_info->regular_title, sibling);
+  gtk_box_insert_child_after (GTK_BOX (priv->sidebar), GTK_WIDGET (page_info->current_title), sibling);
+  gtk_box_insert_child_after (GTK_BOX (priv->sidebar), GTK_WIDGET (page_info->regular_title), sibling);
 
   name = g_strdup_printf ("%p", page_info->page);
   gtk_stack_add_named (GTK_STACK (priv->content), page_info->page, name);

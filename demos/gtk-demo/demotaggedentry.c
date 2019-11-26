@@ -221,7 +221,7 @@ struct _DemoTaggedEntryTag
 {
   GtkWidget parent;
   GtkWidget *box;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *button;
 
   gboolean has_close_button;
@@ -268,7 +268,7 @@ demo_tagged_entry_tag_init (DemoTaggedEntryTag *tag)
   tag->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_parent (tag->box, GTK_WIDGET (tag));
   tag->label = gtk_label_new ("");
-  gtk_container_add (GTK_CONTAINER (tag->box), tag->label);
+  gtk_container_add (GTK_CONTAINER (tag->box), GTK_WIDGET (tag->label));
 
   gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "released", G_CALLBACK (on_released), tag);
@@ -430,7 +430,7 @@ demo_tagged_entry_tag_get_label (DemoTaggedEntryTag *tag)
 {
   g_return_val_if_fail (DEMO_IS_TAGGED_ENTRY_TAG (tag), NULL);
 
-  return gtk_label_get_label (GTK_LABEL (tag->label));
+  return gtk_label_get_label (tag->label);
 }
 
 void
@@ -439,7 +439,7 @@ demo_tagged_entry_tag_set_label (DemoTaggedEntryTag *tag,
 {
   g_return_if_fail (DEMO_IS_TAGGED_ENTRY_TAG (tag));
 
-  gtk_label_set_label (GTK_LABEL (tag->label), label);
+  gtk_label_set_label (tag->label, label);
 }
 
 static void

@@ -106,7 +106,8 @@ static GSList *widgets = NULL;
 static GtkWidget *
 create_widget_tree (void)
 {
-  GtkWidget *window, *box, *grid, *label;
+  GtkWidget *window, *box, *grid;
+  GtkLabel *label;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   widgets = g_slist_prepend (widgets, window);
@@ -118,9 +119,9 @@ create_widget_tree (void)
   gtk_container_add (GTK_CONTAINER (box), grid);
 
   label = gtk_label_new ("Hello World");
-  gtk_container_add (GTK_CONTAINER (grid), label);
+  gtk_container_add (GTK_CONTAINER (grid), GTK_WIDGET (label));
 
-  return label;
+  return GTK_WIDGET (label);
 }
 
 static void

@@ -262,7 +262,7 @@ do_clipboard (GtkWidget *do_widget)
   if (!window)
     {
       GtkWidget *vbox, *hbox;
-      GtkWidget *label;
+      GtkLabel *label;
       GtkWidget *entry, *button;
       GtkWidget *image;
       GtkGesture *gesture;
@@ -290,7 +290,7 @@ do_clipboard (GtkWidget *do_widget)
 
       label = gtk_label_new ("\"Copy\" will copy the text\nin the entry to the clipboard");
 
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
       g_object_set (hbox, "margin", 8, NULL);
@@ -307,7 +307,7 @@ do_clipboard (GtkWidget *do_widget)
                         G_CALLBACK (copy_button_clicked), entry);
 
       label = gtk_label_new ("\"Paste\" will paste the text from the clipboard to the entry");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
       g_object_set (hbox, "margin", 8, NULL);
@@ -324,7 +324,7 @@ do_clipboard (GtkWidget *do_widget)
                         G_CALLBACK (paste_button_clicked), entry);
 
       label = gtk_label_new ("Images can be transferred via the clipboard, too");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
       g_object_set (hbox, "margin", 8, NULL);

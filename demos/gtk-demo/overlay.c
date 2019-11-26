@@ -26,7 +26,7 @@ do_overlay (GtkWidget *do_widget)
       GtkWidget *grid;
       GtkWidget *button;
       GtkWidget *vbox;
-      GtkWidget *label;
+      GtkLabel *label;
       GtkWidget *entry;
       int i, j;
       char *text;
@@ -62,10 +62,10 @@ do_overlay (GtkWidget *do_widget)
       gtk_widget_set_valign (vbox, GTK_ALIGN_CENTER);
 
       label = gtk_label_new ("<span foreground='blue' weight='ultrabold' font='40'>Numbers</span>");
-      gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-      gtk_widget_set_margin_top (label, 8);
-      gtk_widget_set_margin_bottom (label, 50);
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_label_set_use_markup (label, TRUE);
+      gtk_widget_set_margin_top (GTK_WIDGET (label), 8);
+      gtk_widget_set_margin_bottom (GTK_WIDGET (label), 50);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), vbox);

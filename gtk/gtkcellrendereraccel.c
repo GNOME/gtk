@@ -120,7 +120,7 @@ struct _GtkCellRendererAccelClass
 
 struct _GtkCellRendererAccelPrivate
 {
-  GtkWidget *sizing_label;
+  GtkLabel *sizing_label;
 
   GtkCellRendererAccelMode accel_mode;
   GdkModifierType accel_mods;
@@ -440,7 +440,7 @@ gtk_cell_renderer_accel_get_preferred_width (GtkCellRenderer *cell,
       g_object_ref_sink (priv->sizing_label);
     }
 
-  gtk_widget_get_preferred_size (priv->sizing_label, &min_req, &nat_req);
+  gtk_widget_get_preferred_size (GTK_WIDGET (priv->sizing_label), &min_req, &nat_req);
 
   GTK_CELL_RENDERER_CLASS (gtk_cell_renderer_accel_parent_class)->get_preferred_width (cell, widget,
                                                                                        minimum_size, natural_size);
@@ -490,7 +490,7 @@ struct _GtkCellEditableWidget
   GtkCellRendererAccelMode accel_mode;
   gchar *path;
   GtkCellRenderer *cell;
-  GtkWidget *label;
+  GtkLabel *label;
 };
 
 enum {
@@ -684,7 +684,7 @@ gtk_cell_editable_widget_dispose (GObject *object)
 {
   GtkCellEditableWidget *box = (GtkCellEditableWidget*)object;
 
-  g_clear_pointer (&box->label, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **) &box->label, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_cell_editable_widget_parent_class)->dispose (object);
 }
@@ -760,17 +760,17 @@ gtk_cell_editable_widget_new (GtkCellRenderer          *cell,
   box->cell = cell;
 
   box->label = gtk_label_new (NULL);
-  gtk_widget_set_halign (box->label, GTK_ALIGN_START);
-  gtk_widget_set_valign (box->label, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (GTK_WIDGET (box->label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (box->label), GTK_ALIGN_CENTER);
 
-  gtk_widget_set_state_flags (box->label, GTK_STATE_FLAG_SELECTED, TRUE);
+  gtk_widget_set_state_flags (GTK_WIDGET (box->label), GTK_STATE_FLAG_SELECTED, TRUE);
 
   /* This label is displayed in a treeview cell displaying an accelerator
    * when the cell is clicked to change the acelerator.
    */
-  gtk_label_set_text (GTK_LABEL (box->label), _("New accelerator…"));
+  gtk_label_set_text (box->label, _("New accelerator…"));
 
-  gtk_widget_set_parent (box->label, GTK_WIDGET (box));
+  gtk_widget_set_parent (GTK_WIDGET (box->label), GTK_WIDGET (box));
 
   gtk_grab_add (GTK_WIDGET (box));
 

@@ -364,10 +364,10 @@ gtk_frame_set_label (GtkFrame *frame,
     }
   else
     {
-      GtkWidget *child = gtk_label_new (label);
-      gtk_widget_show (child);
+      GtkLabel *child = gtk_label_new (label);
+      gtk_widget_show (GTK_WIDGET (child));
 
-      gtk_frame_set_label_widget (frame, child);
+      gtk_frame_set_label_widget (frame, GTK_WIDGET (child));
     }
 }
 

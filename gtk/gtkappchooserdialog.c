@@ -77,7 +77,7 @@ struct _GtkAppChooserDialogPrivate {
   GFile *gfile;
   char *heading;
 
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *inner_box;
 
   GtkWidget *open_label;
@@ -242,12 +242,12 @@ set_dialog_properties (GtkAppChooserDialog *self)
 
   if (priv->heading != NULL)
     {
-      gtk_label_set_markup (GTK_LABEL (priv->label), priv->heading);
-      gtk_widget_show (priv->label);
+      gtk_label_set_markup (priv->label, priv->heading);
+      gtk_widget_show (GTK_WIDGET (priv->label));
     }
   else
     {
-      gtk_widget_hide (priv->label);
+      gtk_widget_hide (GTK_WIDGET (priv->label));
     }
 
   gtk_app_chooser_widget_set_default_text (GTK_APP_CHOOSER_WIDGET (priv->app_chooser_widget),
@@ -758,12 +758,12 @@ gtk_app_chooser_dialog_set_heading (GtkAppChooserDialog *self,
     {
       if (priv->heading)
         {
-          gtk_label_set_markup (GTK_LABEL (priv->label), priv->heading);
-          gtk_widget_show (priv->label);
+          gtk_label_set_markup (priv->label, priv->heading);
+          gtk_widget_show (GTK_WIDGET (priv->label));
         }
       else
         {
-          gtk_widget_hide (priv->label);
+          gtk_widget_hide (GTK_WIDGET (priv->label));
         }
     }
 

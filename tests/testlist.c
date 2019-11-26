@@ -8,7 +8,7 @@ typedef struct _RowClass RowClass;
 struct _Row
 {
   GtkListBoxRow parent_instance;
-  GtkWidget *label;
+  GtkLabel *label;
   gint sort_id;
 };
 
@@ -50,8 +50,8 @@ row_new (const gchar* text, gint sort_id) {
   if (text != NULL)
     {
       row->label = gtk_label_new (text);
-      gtk_container_add (GTK_CONTAINER (row), row->label);
-      gtk_widget_show (row->label);
+      gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (row->label));
+      gtk_widget_show (GTK_WIDGET (row->label));
     }
   row->sort_id = sort_id;
 
@@ -62,22 +62,23 @@ row_new (const gchar* text, gint sort_id) {
 static void
 update_header_cb (Row *row, Row *before, gpointer data)
 {
-  GtkWidget *hbox, *l, *b;
+  GtkWidget *hbox, *b;
+  GtkLabel *l;
   GList *children;
 
   if (before == NULL ||
       (row->label != NULL &&
-       strcmp (gtk_label_get_text (GTK_LABEL (row->label)), "blah3") == 0))
+       strcmp (gtk_label_get_text (row->label), "blah3") == 0))
     {
       /* Create header if needed */
       if (gtk_list_box_row_get_header (GTK_LIST_BOX_ROW (row)) == NULL)
         {
           hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
           l = gtk_label_new ("Header");
-          gtk_container_add (GTK_CONTAINER (hbox), l);
+          gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (l));
           b = gtk_button_new_with_label ("button");
           gtk_container_add (GTK_CONTAINER (hbox), b);
-          gtk_widget_show (l);
+          gtk_widget_show (GTK_WIDGET (l));
           gtk_widget_show (b);
           gtk_list_box_row_set_header (GTK_LIST_BOX_ROW (row), hbox);
       }
@@ -114,7 +115,7 @@ filter_cb (Row *row, gpointer data)
 
   if (row->label != NULL)
     {
-      text = gtk_label_get_text (GTK_LABEL (row->label));
+      text = gtk_label_get_text (row->label);
       return strcmp (text, "blah3") != 0;
     }
 
@@ -177,14 +178,14 @@ change_clicked_cb (GtkButton *button,
 {
   Row *row = data;
 
-  if (strcmp (gtk_label_get_text (GTK_LABEL (row->label)), "blah3") == 0)
+  if (strcmp (gtk_label_get_text (row->label), "blah3") == 0)
     {
-      gtk_label_set_text (GTK_LABEL (row->label), "blah5");
+      gtk_label_set_text (row->label, "blah5");
       row->sort_id = 5;
     }
   else
     {
-      gtk_label_set_text (GTK_LABEL (row->label), "blah3");
+      gtk_label_set_text (row->label, "blah3");
       row->sort_id = 3;
     }
   gtk_list_box_row_changed (GTK_LIST_BOX_ROW (row));
@@ -251,8 +252,9 @@ int
 main (int argc, char *argv[])
 {
   GtkCssProvider *provider;
-  GtkWidget *window, *hbox, *vbox, *list, *row, *row3, *row_vbox, *row_hbox, *l;
+  GtkWidget *window, *hbox, *vbox, *list, *row, *row3, *row_vbox, *row_hbox;
   GtkWidget *check, *button, *combo, *scrolled;
+  GtkLabel *l;
 
   gtk_init ();
 
@@ -308,7 +310,7 @@ main (int argc, char *argv[])
   row_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   row_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   l = gtk_label_new ("da box for da man");
-  gtk_container_add (GTK_CONTAINER (row_hbox), l);
+  gtk_container_add (GTK_CONTAINER (row_hbox), GTK_WIDGET (l));
   check = gtk_check_button_new ();
   gtk_container_add (GTK_CONTAINER (row_hbox), check);
   button = gtk_button_new_with_label ("ya!");

@@ -109,7 +109,7 @@ typedef struct
 {
   gchar         *text;
 
-  GtkWidget     *label;
+  GtkLabel      *label;
   GtkWidget     *trough_widget;
   GtkWidget     *progress_widget;
 
@@ -583,7 +583,7 @@ gtk_progress_bar_finalize (GObject *object)
 
   g_free (priv->text);
 
-  g_clear_pointer (&priv->label, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **) &priv->label, gtk_widget_unparent);
 
   gtk_widget_unparent (priv->progress_widget);
   gtk_widget_unparent (priv->trough_widget);
@@ -756,7 +756,7 @@ gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
   if (priv->label)
     {
       char *text = get_current_text (pbar);
-      gtk_label_set_label (GTK_LABEL (priv->label), text);
+      gtk_label_set_label (priv->label, text);
 
       g_free (text);
     }
@@ -832,7 +832,7 @@ gtk_progress_bar_set_text (GtkProgressBar *pbar,
   priv->text = g_strdup (text);
 
   if (priv->label)
-    gtk_label_set_label (GTK_LABEL (priv->label), text);
+    gtk_label_set_label (priv->label, text);
 
   gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
@@ -877,13 +877,13 @@ gtk_progress_bar_set_show_text (GtkProgressBar *pbar,
                                   "label", text,
                                   "ellipsize", priv->ellipsize,
                                   NULL);
-      gtk_widget_insert_after (priv->label, GTK_WIDGET (pbar), NULL);
+      gtk_widget_insert_after (GTK_WIDGET (priv->label), GTK_WIDGET (pbar), NULL);
 
       g_free (text);
     }
   else
     {
-      g_clear_pointer (&priv->label, gtk_widget_unparent);
+      g_clear_pointer ((GtkWidget **) &priv->label, gtk_widget_unparent);
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (pbar));
@@ -1105,7 +1105,7 @@ gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
       priv->ellipsize = mode;
 
       if (priv->label)
-        gtk_label_set_ellipsize (GTK_LABEL (priv->label), mode);
+        gtk_label_set_ellipsize (priv->label, mode);
 
       g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_ELLIPSIZE]);
       gtk_widget_queue_resize (GTK_WIDGET (pbar));

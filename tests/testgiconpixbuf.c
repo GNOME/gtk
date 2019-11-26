@@ -24,7 +24,8 @@ main (int argc,
       char **argv)
 {
   GdkPixbuf *pixbuf, *otherpix;
-  GtkWidget *image, *image2, *hbox, *vbox, *label, *toplevel;
+  GtkWidget *image, *image2, *hbox, *vbox, *toplevel;
+  GtkLabel *label;
   GIcon *emblemed;
   GEmblem *emblem;
   gchar *str;
@@ -49,8 +50,8 @@ main (int argc,
 
   label = gtk_label_new (NULL);
   str = g_strdup_printf ("Normal icon, hash %u", g_icon_hash (G_ICON (pixbuf)));
-  gtk_label_set_label (GTK_LABEL (label), str);
-  gtk_container_add (GTK_CONTAINER (vbox), label);
+  gtk_label_set_label (label, str);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
   otherpix = gdk_pixbuf_new_from_file ("gnome-textfile.png", NULL);
   emblem = g_emblem_new (G_ICON (otherpix));
@@ -66,7 +67,7 @@ main (int argc,
   label = gtk_label_new (NULL);
   str = g_strdup_printf ("Emblemed icon, hash %u", g_icon_hash (emblemed));
   gtk_label_set_label (GTK_LABEL (label), str);
-  gtk_container_add (GTK_CONTAINER (vbox), label);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
   gtk_widget_show (toplevel);
 

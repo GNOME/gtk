@@ -46,7 +46,7 @@ test_sort (void)
 {
   GtkListBox *list;
   GtkListBoxRow *row;
-  GtkWidget *label;
+  GtkLabel *label;
   gint i, r;
   gchar *s;
   gint count;
@@ -62,7 +62,7 @@ test_sort (void)
       label = gtk_label_new (s);
       g_object_set_data (G_OBJECT (label), "data", GINT_TO_POINTER (r));
       g_free (s);
-      gtk_container_add (GTK_CONTAINER (list), label);
+      gtk_container_add (GTK_CONTAINER (list), GTK_WIDGET (label));
     }
 
   count = 0;
@@ -102,7 +102,7 @@ test_selection (void)
 {
   GtkListBox *list;
   GtkListBoxRow *row, *row2;
-  GtkWidget *label;
+  GtkLabel *label;
   gint i;
   gchar *s;
   gint count;
@@ -121,7 +121,7 @@ test_selection (void)
       label = gtk_label_new (s);
       g_object_set_data (G_OBJECT (label), "data", GINT_TO_POINTER (i));
       g_free (s);
-      gtk_container_add (GTK_CONTAINER (list), label);
+      gtk_container_add (GTK_CONTAINER (list), GTK_WIDGET (label));
     }
 
   count = 0;
@@ -191,7 +191,7 @@ test_multi_selection (void)
   GtkListBox *list;
   GList *l;
   GtkListBoxRow *row, *row2;
-  GtkWidget *label;
+  GtkLabel *label;
   gint i;
   gchar *s;
   gint count;
@@ -211,7 +211,7 @@ test_multi_selection (void)
       label = gtk_label_new (s);
       g_object_set_data (G_OBJECT (label), "data", GINT_TO_POINTER (i));
       g_free (s);
-      gtk_container_add (GTK_CONTAINER (list), label);
+      gtk_container_add (GTK_CONTAINER (list), GTK_WIDGET (label));
     }
 
   count = 0;
@@ -306,7 +306,7 @@ test_filter (void)
   GtkListBoxRow *row;
   gint i;
   gchar *s;
-  GtkWidget *label;
+  GtkLabel *label;
   gint count;
 
   list = GTK_LIST_BOX (gtk_list_box_new ());
@@ -322,7 +322,7 @@ test_filter (void)
       label = gtk_label_new (s);
       g_object_set_data (G_OBJECT (label), "data", GINT_TO_POINTER (i));
       g_free (s);
-      gtk_container_add (GTK_CONTAINER (list), label);
+      gtk_container_add (GTK_CONTAINER (list), GTK_WIDGET (label));
     }
 
   count = 0;
@@ -351,7 +351,7 @@ header_func (GtkListBoxRow *row,
   GtkWidget *child;
   gint i;
   gint *count = data;
-  GtkWidget *header;
+  GtkLabel *header;
   gchar *s;
 
   (*count)++;
@@ -368,7 +368,7 @@ header_func (GtkListBoxRow *row,
   else
     header = NULL;
 
-  gtk_list_box_row_set_header (row, header);
+  gtk_list_box_row_set_header (row, GTK_WIDGET (header));
 }
 
 static void
@@ -397,7 +397,7 @@ test_header (void)
   GtkListBoxRow *row;
   gint i;
   gchar *s;
-  GtkWidget *label;
+  GtkLabel *label;
   gint count;
 
   list = GTK_LIST_BOX (gtk_list_box_new ());
@@ -413,7 +413,7 @@ test_header (void)
       label = gtk_label_new (s);
       g_object_set_data (G_OBJECT (label), "data", GINT_TO_POINTER (i));
       g_free (s);
-      gtk_container_add (GTK_CONTAINER (list), label);
+      gtk_container_add (GTK_CONTAINER (list), GTK_WIDGET (label));
     }
 
   count = 0;

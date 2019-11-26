@@ -178,7 +178,7 @@ rebuild_child (GtkWidget   *self,
     }
   else if (title != NULL)
     {
-      button_child = gtk_label_new (title);
+      button_child = GTK_WIDGET (gtk_label_new (title));
 
       gtk_widget_set_tooltip_text (GTK_WIDGET (self), NULL);
 

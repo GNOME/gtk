@@ -141,7 +141,7 @@ do_popover (GtkWidget *do_widget)
 
       widget = gtk_toggle_button_new_with_label ("Button");
       popover = create_popover (widget,
-                                gtk_label_new ("This popover does not grab input"),
+                                GTK_WIDGET (gtk_label_new ("This popover does not grab input")),
                                 GTK_POS_TOP);
       gtk_popover_set_autohide (GTK_POPOVER (popover), FALSE);
       g_signal_connect (widget, "toggled",
