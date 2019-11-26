@@ -1,39 +1,38 @@
-uniform float u_blur_radius;// = 40.0;
-uniform vec2 u_blur_size;// = vec2(393, 393);
+uniform float u_blur_radius;
+uniform vec2 u_blur_size;
+uniform vec2 u_blur_dir;
 
-float Gaussian (float sigma, float x) {
-  return exp ( - (x * x) / (2.0 * sigma * sigma));
-}
+const float PI = 3.14159265;
+const float RADIUS_MULTIPLIER = 3.0;
 
-vec4 blur_pixel (in vec2 uv) {
-  float total = 0.0;
-  vec4 ret = vec4 (0);
-  float pixel_size_x = (1.0 / u_blur_size.x);
-  float pixel_size_y = (1.0 / u_blur_size.y);
+// blur_radius 0 is NOT supported and MUST be caught before.
 
-  // XXX The magic value here is GAUSSIAN_SCALE_FACTOR from gskcairoblur.c
-  float radius = u_blur_radius  * 2.30348;
+// Partially from http://callumhay.blogspot.com/2010/09/gaussian-blur-shader-glsl.html
+void main() {
+  float sigma = u_blur_radius; // *shrug*
+  float blur_radius = u_blur_radius * RADIUS_MULTIPLIER;
+  vec3 incrementalGaussian;
+  incrementalGaussian.x = 1.0 / (sqrt(2.0 * PI) * sigma);
+  incrementalGaussian.y = exp(-0.5 / (sigma * sigma));
+  incrementalGaussian.z = incrementalGaussian.y * incrementalGaussian.y;
 
-  int half_radius = max(int(radius / 2.0), 1);
+  vec2 pixel_step = vec2(1.0) / u_blur_size;
 
-  for (int y = -half_radius; y < half_radius; y ++) {
-    float fy = Gaussian (radius / 2.0, float(y));
-    float offset_y = float(y) * pixel_size_y;
+  float coefficientSum = 0;
+  vec4 sum = Texture(u_source, vUv) * incrementalGaussian.x;
+  coefficientSum += incrementalGaussian.x;
+  incrementalGaussian.xy *= incrementalGaussian.yz;
 
-    for (int x = -half_radius; x < half_radius; x ++) {
-      float fx = Gaussian (radius / 2.0, float(x));
-      float offset_x = float(x) * pixel_size_x;
+  int pixels_per_side = int(floor(blur_radius / 2.0));
+  for (int i = 1; i <= pixels_per_side; i++) {
+    vec2 p = i * pixel_step * u_blur_dir;
 
-      vec4 c = Texture(u_source, uv + vec2(offset_x, offset_y));
-      total += fx * fy;
-      ret += c * fx * fy;
-    }
+    sum += Texture(u_source, vUv - p) * incrementalGaussian.x;
+    sum += Texture(u_source, vUv + p) * incrementalGaussian.x;
+
+    coefficientSum += 2.0 * incrementalGaussian.x;
+    incrementalGaussian.xy *= incrementalGaussian.yz;
   }
 
-  return ret / total;
-}
-
-void main() {
-  vec4 color = blur_pixel(vUv);
-  setOutputColor(color);
+  setOutputColor(sum / coefficientSum);
 }
