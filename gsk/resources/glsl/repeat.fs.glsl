@@ -1,4 +1,3 @@
-
 uniform vec4 u_child_bounds;
 uniform vec4 u_texture_rect;
 
@@ -21,8 +20,8 @@ void main() {
   float mapped_x = (vUv.x - u_texture_rect.x) / tw;
   float mapped_y = (vUv.y - u_texture_rect.y) / th;
 
-  float wrapped_x = u_child_bounds.x + wrap(mapped_x * u_child_bounds.z, 1.0);
-  float wrapped_y = u_child_bounds.y + wrap(mapped_y * u_child_bounds.w, 1.0);
+  float wrapped_x = wrap(u_child_bounds.x + mapped_x * u_child_bounds.z, 1.0);
+  float wrapped_y = wrap(u_child_bounds.y + mapped_y * u_child_bounds.w, 1.0);
 
   vec2 tp;
   tp.x = u_texture_rect.x + (wrapped_x * tw);
