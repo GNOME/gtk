@@ -90,7 +90,7 @@ create_pane_options (GtkPaned    *paned,
   GtkWidget *child1, *child2;
   GtkWidget *frame;
   GtkWidget *table;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *check_button;
 
   child1 = gtk_paned_get_child1 (paned);
@@ -103,7 +103,7 @@ create_pane_options (GtkPaned    *paned,
   gtk_container_add (GTK_CONTAINER (frame), table);
 
   label = gtk_label_new (label1);
-  gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 0, 0, 1, 1);
 
   check_button = gtk_check_button_new_with_mnemonic ("_Resize");
   gtk_grid_attach (GTK_GRID (table), check_button, 0, 1, 1, 1);
@@ -117,7 +117,7 @@ create_pane_options (GtkPaned    *paned,
                     G_CALLBACK (toggle_shrink), child1);
 
   label = gtk_label_new (label2);
-  gtk_grid_attach (GTK_GRID (table), label, 1, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 1, 0, 1, 1);
 
   check_button = gtk_check_button_new_with_mnemonic ("_Resize");
   gtk_grid_attach (GTK_GRID (table), check_button, 1, 1, 1, 1);

@@ -5,7 +5,7 @@ edit_widget (GtkWidget *button)
 {
   GtkWidget *dialog;
   GtkWidget *grid;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *entry;
   GtkWidget *check;
 
@@ -27,21 +27,21 @@ edit_widget (GtkWidget *button)
       gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), grid);
 
       label = gtk_label_new ("Label:");
-      gtk_widget_set_halign (label, GTK_ALIGN_END);
+      gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_END);
       entry = gtk_entry_new ();
       g_object_bind_property (button, "label",
                               entry, "text",
                               G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
-      gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
+      gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 0, 1, 1);
       gtk_grid_attach (GTK_GRID (grid), entry, 1, 0, 1, 1);
 
       label = gtk_label_new ("Visible:");
-      gtk_widget_set_halign (label, GTK_ALIGN_END);
+      gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_END);
       check = gtk_check_button_new ();
       g_object_bind_property (button, "visible",
                               check, "active",
                               G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
-      gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
+      gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 1, 1, 1);
       gtk_grid_attach (GTK_GRID (grid), check, 1, 1, 1, 1);
 
       g_object_set_data (G_OBJECT (button), "dialog", dialog);
@@ -78,7 +78,7 @@ main (int argc, char *argv[])
   GtkWidget *box;
   GtkWidget *check;
   GtkWidget *b;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *spin;
 
   gtk_init ();
@@ -111,8 +111,8 @@ main (int argc, char *argv[])
   g_object_set (b, "margin", 10, NULL);
   gtk_widget_set_halign (b, GTK_ALIGN_CENTER);
   label = gtk_label_new ("Spacing:");
-  gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_container_add (GTK_CONTAINER (b), label);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_END);
+  gtk_container_add (GTK_CONTAINER (b), GTK_WIDGET (label));
 
   spin = gtk_spin_button_new_with_range (0, 10, 1);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin), TRUE);

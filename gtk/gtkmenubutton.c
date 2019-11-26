@@ -906,7 +906,7 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
     gtk_container_remove (GTK_CONTAINER (priv->button), child);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_container_add (GTK_CONTAINER (box), gtk_label_new (label));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_label_new (label)));
   gtk_container_add (GTK_CONTAINER (box), gtk_image_new_from_icon_name ("pan-down-symbolic"));
   gtk_container_add (GTK_CONTAINER (priv->button), box);
 

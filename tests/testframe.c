@@ -127,6 +127,7 @@ draw_border_cb (GtkToggleButton *toggle_button, GtkFrame *frame)
 int main (int argc, char **argv)
 {
   GtkWidget *window, *widget;
+  GtkLabel *label;
   GtkBox *vbox;
   GtkFrame *frame;
   GtkGrid *grid;
@@ -159,8 +160,8 @@ int main (int argc, char **argv)
   xalign = gtk_frame_get_label_align (frame);
 
   /* Spin to control :label-xalign */
-  widget = gtk_label_new ("label xalign:");
-  gtk_grid_attach (grid, widget, 0, 0, 1, 1);
+  label = gtk_label_new ("label xalign:");
+  gtk_grid_attach (grid, GTK_WIDGET (label), 0, 0, 1, 1);
 
   widget = gtk_spin_button_new_with_range (0.0, 1.0, 0.1);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), xalign);
@@ -168,8 +169,8 @@ int main (int argc, char **argv)
   gtk_grid_attach (grid, widget, 1, 0, 1, 1);
 
   /* Spin to control vertical padding */
-  widget = gtk_label_new ("vertical padding:");
-  gtk_grid_attach (grid, widget, 0, 1, 1, 1);
+  label = gtk_label_new ("vertical padding:");
+  gtk_grid_attach (grid, GTK_WIDGET (label), 0, 1, 1, 1);
 
   widget = gtk_spin_button_new_with_range (0, 250, 1);
   g_signal_connect (widget, "value-changed", G_CALLBACK (spin_vpadding_cb), frame);
@@ -177,8 +178,8 @@ int main (int argc, char **argv)
   gtk_grid_attach (grid, widget, 1, 1, 1, 1);
 
   /* Spin to control horizontal padding */
-  widget = gtk_label_new ("horizontal padding:");
-  gtk_grid_attach (grid, widget, 0, 2, 1, 1);
+  label = gtk_label_new ("horizontal padding:");
+  gtk_grid_attach (grid, GTK_WIDGET (label), 0, 2, 1, 1);
 
   widget = gtk_spin_button_new_with_range (0, 250, 1);
   g_signal_connect (widget, "value-changed", G_CALLBACK (spin_hpadding_cb), frame);

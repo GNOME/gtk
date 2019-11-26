@@ -80,7 +80,7 @@ struct _GtkColorChooserWidgetPrivate
   GtkWidget *editor;
   GtkSizeGroup *size_group;
 
-  GtkWidget *custom_label;
+  GtkLabel *custom_label;
   GtkWidget *custom;
 
   GtkWidget *button;
@@ -305,7 +305,7 @@ remove_palette (GtkColorChooserWidget *cc)
   for (l = children; l; l = l->next)
     {
       widget = l->data;
-      if (widget == priv->custom_label || widget == priv->custom)
+      if (widget == GTK_WIDGET (priv->custom_label) || widget == priv->custom)
         continue;
       gtk_container_remove (GTK_CONTAINER (priv->palette), widget);
     }
@@ -528,7 +528,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   GtkWidget *box;
   GtkWidget *p;
   GtkWidget *button;
-  GtkWidget *label;
+  GtkLabel *label;
   gint i;
   GdkRGBA color;
   GVariant *variant;
@@ -546,8 +546,8 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
 
   /* translators: label for the custom section in the color chooser */
   priv->custom_label = label = gtk_label_new (_("Custom"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_container_add (GTK_CONTAINER (priv->palette), label);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_container_add (GTK_CONTAINER (priv->palette), GTK_WIDGET (label));
 
   priv->custom = box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   g_object_set (box, "margin-top", 12, NULL);

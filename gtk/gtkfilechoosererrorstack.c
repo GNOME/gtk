@@ -40,7 +40,7 @@ gtk_file_chooser_error_stack_class_init (GtkFileChooserErrorStackClass *class)
 static void
 gtk_file_chooser_error_stack_init (GtkFileChooserErrorStack *self)
 {
-  GtkWidget *label;
+  GtkLabel *label;
   GtkStack *stack;
 
   self->stack = gtk_stack_new ();
@@ -51,68 +51,68 @@ gtk_file_chooser_error_stack_init (GtkFileChooserErrorStack *self)
   gtk_stack_set_transition_duration (stack, 50);
 
   label = gtk_label_new ("");
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_stack_add_named (stack, label, "no-error");
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_stack_add_named (stack, GTK_WIDGET (label), "no-error");
 
   label = gtk_label_new ("");
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_stack_add_named (stack, label, "custom");
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_stack_add_named (stack, GTK_WIDGET (label), "custom");
 
   label = gtk_label_new (_("A folder cannot be called “.”"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_stack_add_named (stack, label, "folder-cannot-be-called-dot");
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_stack_add_named (stack, GTK_WIDGET (label), "folder-cannot-be-called-dot");
 
   label = gtk_label_new (_("A file cannot be called “.”"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_stack_add_named (stack, label, "file-cannot-be-called-dot");
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_stack_add_named (stack, GTK_WIDGET (label), "file-cannot-be-called-dot");
 
   label = gtk_label_new (_("A folder cannot be called “..”"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_stack_add_named (stack, label, "folder-cannot-be-called-dot-dot");
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_stack_add_named (stack, GTK_WIDGET (label), "folder-cannot-be-called-dot-dot");
 
   label = gtk_label_new (_("A file cannot be called “..”"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_stack_add_named (stack, label, "file-cannot-be-called-dot-dot");
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_stack_add_named (stack, GTK_WIDGET (label), "file-cannot-be-called-dot-dot");
 
   label = gtk_label_new (_("Folder names cannot contain “/”"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_stack_add_named (stack, label, "folder-name-cannot-contain-slash");
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_stack_add_named (stack, GTK_WIDGET (label), "folder-name-cannot-contain-slash");
 
   label = gtk_label_new (_("File names cannot contain “/”"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_stack_add_named (stack, label, "file-name-cannot-contain-slash");
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_stack_add_named (stack, GTK_WIDGET (label), "file-name-cannot-contain-slash");
 
   label = gtk_label_new (_("Folder names should not begin with a space"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_stack_add_named (stack, label, "folder-name-should-not-begin-with-space");
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_stack_add_named (stack, GTK_WIDGET (label), "folder-name-should-not-begin-with-space");
 
   label = gtk_label_new (_("File names should not begin with a space"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_stack_add_named (stack, label, "file-name-should-not-begin-with-space");
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_stack_add_named (stack, GTK_WIDGET (label), "file-name-should-not-begin-with-space");
 
   label = gtk_label_new (_("Folder names should not end with a space"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_stack_add_named (stack, label, "folder-name-should-not-end-with-space");
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_stack_add_named (stack, GTK_WIDGET (label), "folder-name-should-not-end-with-space");
 
   label = gtk_label_new (_("File names should not end with a space"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_stack_add_named (stack, label, "file-name-should-not-end-with-space");
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_stack_add_named (stack, GTK_WIDGET (label), "file-name-should-not-end-with-space");
 
   label = gtk_label_new (_("Folder names starting with a “.” are hidden"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_stack_add_named (stack, label, "folder-name-with-dot-is-hidden");
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_stack_add_named (stack, GTK_WIDGET (label), "folder-name-with-dot-is-hidden");
 
   label = gtk_label_new (_("File names starting with a “.” are hidden"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_stack_add_named (stack, label, "file-name-with-dot-is-hidden");
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_stack_add_named (stack, GTK_WIDGET (label), "file-name-with-dot-is-hidden");
 
   label = gtk_label_new (_("A folder with that name already exists"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_stack_add_named (stack, label, "folder-name-already-exists");
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_stack_add_named (stack, GTK_WIDGET (label), "folder-name-already-exists");
 
   label = gtk_label_new (_("A file with that name already exists"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_stack_add_named (stack, label, "file-name-already-exists");
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_stack_add_named (stack, GTK_WIDGET (label), "file-name-already-exists");
 
   gtk_stack_set_visible_child_name (stack, "no-error");
 }

@@ -430,7 +430,7 @@ get_print_dialog (GtkPrintOperation *op,
                   GtkWindow         *parent)
 {
   GtkPrintOperationPrivate *priv = op->priv;
-  GtkWidget *pd, *label;
+  GtkWidget *pd;
   const gchar *custom_tab_label;
 
   pd = gtk_print_unix_dialog_new (NULL, parent);
@@ -470,6 +470,8 @@ get_print_dialog (GtkPrintOperation *op,
 
   if (priv->custom_widget) 
     {
+      GtkLabel *label;
+
       custom_tab_label = priv->custom_tab_label;
       
       if (custom_tab_label == NULL)
@@ -482,7 +484,7 @@ get_print_dialog (GtkPrintOperation *op,
       label = gtk_label_new (custom_tab_label);
       
       gtk_print_unix_dialog_add_custom_tab (GTK_PRINT_UNIX_DIALOG (pd),
-					    priv->custom_widget, label);
+					    priv->custom_widget, GTK_WIDGET (label));
 
       g_signal_connect (pd, "notify::selected-printer", (GCallback) print_setup_changed_cb, op);
       g_signal_connect (pd, "notify::page-setup", (GCallback) print_setup_changed_cb, op);

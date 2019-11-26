@@ -68,7 +68,7 @@ do_sidebar (GtkWidget *do_widget)
             }
           else
             {
-              widget = gtk_label_new (c);
+              widget = GTK_WIDGET (gtk_label_new (c));
             }
           gtk_stack_add_named (GTK_STACK (stack), widget, c);
           g_object_set (gtk_stack_get_page (GTK_STACK (stack), widget), "title", c, NULL);

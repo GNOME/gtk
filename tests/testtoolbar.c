@@ -296,13 +296,13 @@ static gboolean
 toolbar_drag_drop (GtkWidget *widget,
                    GdkDrop   *drop,
 		   gint x, gint y,
-                   GtkWidget *label)
+                   GtkLabel *label)
 {
   gchar buf[32];
 
   g_snprintf(buf, sizeof(buf), "%d",
 	     gtk_toolbar_get_drop_index (GTK_TOOLBAR (widget), x, y));
-  gtk_label_set_label (GTK_LABEL (label), buf);
+  gtk_label_set_label (label, buf);
 
   return TRUE;
 }
@@ -397,7 +397,7 @@ main (gint argc, gchar **argv)
   GtkWidget *menuitem;
   GtkWidget *box;
   GtkWidget *button;
-  GtkWidget *label;
+  GtkLabel *label;
   GIcon *gicon;
   GSList *group;
   
@@ -598,12 +598,12 @@ main (gint argc, gchar **argv)
   gtk_container_add (GTK_CONTAINER (hbox), button);
 
   label = gtk_label_new ("Drop index:");
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
   label = gtk_label_new ("");
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
 
   checkbox = gtk_check_button_new_with_mnemonic("_Right to left");

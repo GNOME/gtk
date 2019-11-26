@@ -47,9 +47,9 @@ struct _GtkMediaControls
   GtkWidget *box;
   GtkWidget *play_button;
   GtkWidget *time_box;
-  GtkWidget *time_label;
+  GtkLabel *time_label;
   GtkWidget *seek_scale;
-  GtkWidget *duration_label;
+  GtkLabel *duration_label;
 };
 
 enum
@@ -352,13 +352,13 @@ update_timestamp (GtkMediaControls *controls)
     }
 
   time_string = totem_time_to_string (timestamp, FALSE, FALSE);
-  gtk_label_set_text (GTK_LABEL (controls->time_label), time_string);
+  gtk_label_set_text (controls->time_label, time_string);
   g_free (time_string);
 
   if (duration > 0)
     {
       time_string = totem_time_to_string (duration > timestamp ? duration - timestamp : 0, TRUE, FALSE);
-      gtk_label_set_text (GTK_LABEL (controls->duration_label), time_string);
+      gtk_label_set_text (controls->duration_label, time_string);
       g_free (time_string);
 
       gtk_adjustment_set_value (controls->time_adjustment, (double) timestamp / G_USEC_PER_SEC);
@@ -383,8 +383,8 @@ update_duration (GtkMediaControls *controls)
     }
 
   time_string = totem_time_to_string (duration > timestamp ? duration - timestamp : 0, TRUE, FALSE);
-  gtk_label_set_text (GTK_LABEL (controls->duration_label), time_string);
-  gtk_widget_set_visible (controls->duration_label, duration > 0);
+  gtk_label_set_text (controls->duration_label, time_string);
+  gtk_widget_set_visible (GTK_WIDGET (controls->duration_label), duration > 0);
   g_free (time_string);
 
   gtk_adjustment_set_upper (controls->time_adjustment,

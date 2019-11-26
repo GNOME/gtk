@@ -73,12 +73,13 @@ add_separator (GtkListBoxRow *row, GtkListBoxRow *before, gpointer data)
 static GtkWidget *
 create_row (const gchar *text)
 {
-  GtkWidget *row_content, *label;
+  GtkWidget *row_content;
+  GtkLabel *label;
 
   row_content = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
 
   label = gtk_label_new (text);
-  gtk_container_add (GTK_CONTAINER (row_content), label);
+  gtk_container_add (GTK_CONTAINER (row_content), GTK_WIDGET (label));
 
   return row_content;
 }
@@ -86,7 +87,8 @@ create_row (const gchar *text)
 static void
 new_window (GApplication *app)
 {
-  GtkWidget *window, *grid, *sw, *list, *label;
+  GtkWidget *window, *grid, *sw, *list;
+  GtkLabel *label;
   GSimpleAction *action;
 
   GtkWidget *row_content;
@@ -112,7 +114,7 @@ new_window (GApplication *app)
   gtk_container_add (GTK_CONTAINER (sw), list);
 
   label = gtk_label_new ("No row activated");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 1, 1, 1);
 
   /* no parameter action row */
   action = g_simple_action_new ("first-row-action", NULL);

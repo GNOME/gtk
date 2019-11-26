@@ -536,9 +536,10 @@ static void unit_widget_changed (GtkCustomPaperUnixDialog *dialog);
 static GtkWidget *
 new_unit_widget (GtkCustomPaperUnixDialog *dialog,
 		 GtkUnit                   unit,
-		 GtkWidget                *mnemonic_label)
+		 GtkLabel                 *mnemonic_label)
 {
-  GtkWidget *hbox, *button, *label;
+  GtkWidget *hbox, *button;
+  GtkLabel *label;
   UnitWidget *data;
 
   data = g_new0 (UnitWidget, 1);
@@ -565,11 +566,11 @@ new_unit_widget (GtkCustomPaperUnixDialog *dialog,
     label = gtk_label_new (_("inch"));
   else
     label = gtk_label_new (_("mm"));
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_BASELINE);
 
-  gtk_container_add (GTK_CONTAINER (hbox), label);
-  gtk_widget_show (label);
-  gtk_label_set_mnemonic_widget (GTK_LABEL (mnemonic_label), button);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
+  gtk_widget_show (GTK_WIDGET (label));
+  gtk_label_set_mnemonic_widget (mnemonic_label, button);
 
   g_object_set_data_full (G_OBJECT (hbox), "unit-data", data, g_free);
 
@@ -964,20 +965,21 @@ static GtkWidget *
 wrap_in_frame (const gchar *label,
                GtkWidget   *child)
 {
-  GtkWidget *frame, *label_widget;
+  GtkLabel *label_widget;
+  GtkWidget *frame;
   gchar *bold_text;
 
   label_widget = gtk_label_new (NULL);
-  gtk_widget_set_halign (label_widget, GTK_ALIGN_START);
-  gtk_widget_set_valign (label_widget, GTK_ALIGN_CENTER);
-  gtk_widget_show (label_widget);
+  gtk_widget_set_halign (GTK_WIDGET (label_widget), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label_widget), GTK_ALIGN_CENTER);
+  gtk_widget_show (GTK_WIDGET (label_widget));
 
   bold_text = g_markup_printf_escaped ("<b>%s</b>", label);
-  gtk_label_set_markup (GTK_LABEL (label_widget), bold_text);
+  gtk_label_set_markup (label_widget, bold_text);
   g_free (bold_text);
 
   frame = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_container_add (GTK_CONTAINER (frame), label_widget);
+  gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (label_widget));
 
   gtk_widget_set_margin_start (child, 12);
   gtk_widget_set_halign (child, GTK_ALIGN_FILL);
@@ -1020,8 +1022,9 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   GtkDialog *cpu_dialog = GTK_DIALOG (dialog);
   GtkWidget *content_area;
-  GtkWidget *grid, *label, *widget, *frame, *combo;
+  GtkWidget *grid, *widget, *frame, *combo;
   GtkWidget *hbox, *vbox, *treeview, *scrolled, *toolbar, *button;
+  GtkLabel *label;
   GtkCellRenderer *cell;
   GtkTreeViewColumn *column;
   GtkTreeIter iter;
@@ -1105,10 +1108,10 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
 
   label = gtk_label_new_with_mnemonic (_("_Width:"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_widget_show (label);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_BASELINE);
+  gtk_widget_show (GTK_WIDGET (label));
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 0, 1, 1);
 
   widget = new_unit_widget (dialog, user_units, label);
   priv->width_widget = widget;
@@ -1116,10 +1119,10 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_widget_show (widget);
 
   label = gtk_label_new_with_mnemonic (_("_Height:"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_widget_show (label);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_BASELINE);
+  gtk_widget_show (GTK_WIDGET (label));
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 1, 1, 1);
 
   widget = new_unit_widget (dialog, user_units, label);
   priv->height_widget = widget;
@@ -1136,10 +1139,10 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
 
   label = gtk_label_new_with_mnemonic (_("_Top:"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
-  gtk_widget_show (label);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_BASELINE);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 0, 1, 1);
+  gtk_widget_show (GTK_WIDGET (label));
 
   widget = new_unit_widget (dialog, user_units, label);
   priv->top_widget = widget;
@@ -1147,10 +1150,10 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_widget_show (widget);
 
   label = gtk_label_new_with_mnemonic (_("_Bottom:"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
-  gtk_widget_show (label);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_BASELINE);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 1, 1, 1);
+  gtk_widget_show (GTK_WIDGET (label));
 
   widget = new_unit_widget (dialog, user_units, label);
   priv->bottom_widget = widget;
@@ -1158,10 +1161,10 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_widget_show (widget);
 
   label = gtk_label_new_with_mnemonic (_("_Left:"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
-  gtk_widget_show (label);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_BASELINE);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 2, 1, 1);
+  gtk_widget_show (GTK_WIDGET (label));
 
   widget = new_unit_widget (dialog, user_units, label);
   priv->left_widget = widget;
@@ -1169,10 +1172,10 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_widget_show (widget);
 
   label = gtk_label_new_with_mnemonic (_("_Right:"));
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
-  gtk_widget_show (label);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_BASELINE);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 3, 1, 1);
+  gtk_widget_show (GTK_WIDGET (label));
 
   widget = new_unit_widget (dialog, user_units, label);
   priv->right_widget = widget;

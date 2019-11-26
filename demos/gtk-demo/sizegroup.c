@@ -42,16 +42,16 @@ add_row (GtkGrid      *table,
          const char  **options)
 {
   GtkWidget *combo_box;
-  GtkWidget *label;
+  GtkLabel *label;
 
   label = gtk_label_new_with_mnemonic (label_text);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_grid_attach (table, label, 0, row, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_BASELINE);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_grid_attach (table, GTK_WIDGET (label), 0, row, 1, 1);
 
   combo_box = create_combo_box (options);
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo_box);
+  gtk_label_set_mnemonic_widget (label, combo_box);
   gtk_widget_set_halign (combo_box, GTK_ALIGN_END);
   gtk_widget_set_valign (combo_box, GTK_ALIGN_BASELINE);
   gtk_size_group_add_widget (size_group, combo_box);

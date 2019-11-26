@@ -104,16 +104,16 @@ drag_data_received (GtkWidget *widget,
 static GtkWidget *
 get_droptarget (void)
 {
-  GtkWidget *label;
+  GtkLabel *label;
   GdkContentFormats *targets;
 
   label = gtk_label_new ("Drop here");
   targets = gdk_content_formats_new (entries, G_N_ELEMENTS (entries));
-  gtk_drag_dest_set (label, GTK_DEST_DEFAULT_ALL, targets, GDK_ACTION_COPY);
+  gtk_drag_dest_set (GTK_WIDGET (label), GTK_DEST_DEFAULT_ALL, targets, GDK_ACTION_COPY);
   g_signal_connect (label, "drag-data-received", G_CALLBACK (drag_data_received), NULL);
   gdk_content_formats_unref (targets);
 
-  return label;
+  return GTK_WIDGET (label);
 }
 
 int

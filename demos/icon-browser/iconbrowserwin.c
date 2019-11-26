@@ -53,7 +53,7 @@ struct _IconBrowserWindow
   GtkWidget *image5;
   GtkWidget *image6;
   GtkWidget *label6;
-  GtkWidget *description;
+  GtkLabel *description;
 };
 
 struct _IconBrowserWindowClass
@@ -146,12 +146,12 @@ item_activated (GtkIconView *icon_view, GtkTreePath *path, IconBrowserWindow *wi
     }
   if (description && description[0])
     {
-      gtk_label_set_text (GTK_LABEL (win->description), description);
-      gtk_widget_show (win->description);
+      gtk_label_set_text (win->description, description);
+      gtk_widget_show (GTK_WIDGET (win->description));
     }
   else
     {
-      gtk_widget_hide (win->description);
+      gtk_widget_hide (GTK_WIDGET (win->description));
     }
 
   gtk_window_present (GTK_WINDOW (win->details));
@@ -198,7 +198,7 @@ add_context (IconBrowserWindow *win,
              const gchar       *description)
 {
   Context *c;
-  GtkWidget *row;
+  GtkLabel *row;
 
   c = g_new (Context, 1);
   c->id = g_strdup (id);
@@ -208,16 +208,15 @@ add_context (IconBrowserWindow *win,
   g_hash_table_insert (win->contexts, c->id, c);
 
   row = gtk_label_new (name);
-  gtk_label_set_xalign (GTK_LABEL (row), 0);
+  gtk_label_set_xalign (row, 0);
   g_object_set_data (G_OBJECT (row), "context", c);
-  gtk_widget_show (row);
+  gtk_widget_show (GTK_WIDGET (row));
   g_object_set (row, "margin", 10, NULL);
 
-  gtk_list_box_insert (GTK_LIST_BOX (win->context_list), row, -1);
+  gtk_list_box_insert (GTK_LIST_BOX (win->context_list), GTK_WIDGET (row), -1);
 
   /* set the tooltip on the list box row */
-  row = gtk_widget_get_parent (row);
-  gtk_widget_set_tooltip_text (row, description);
+  gtk_widget_set_tooltip_text (gtk_widget_get_parent (GTK_WIDGET (row)), description);
 
   if (win->current_context == NULL)
     win->current_context = c;

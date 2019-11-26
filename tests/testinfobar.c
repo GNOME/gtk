@@ -36,7 +36,7 @@ on_activate (GApplication *application,
 
   info_bar = gtk_info_bar_new ();
   gtk_container_add (GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar))),
-                     gtk_label_new ("Hello!\nI am a GtkInfoBar"));
+                     GTK_WIDGET (gtk_label_new ("Hello!\nI am a GtkInfoBar")));
 
   widget = gtk_toggle_button_new_with_label ("Toggle :visible");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);

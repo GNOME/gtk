@@ -582,7 +582,7 @@ main (int argc, char **argv)
 {
   GtkWidget *window;
   GtkWidget *grid;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *pixmap;
   GtkWidget *button;
   GdkPixbuf *drag_icon;
@@ -610,7 +610,7 @@ main (int argc, char **argv)
   label = gtk_label_new ("Drop Here\n");
 
   targets = gdk_content_formats_new (target_table, n_targets - 1); /* no rootwin */
-  gtk_drag_dest_set (label,
+  gtk_drag_dest_set (GTK_WIDGET (label),
 		     GTK_DEST_DEFAULT_ALL,
                      targets,
 		     GDK_ACTION_COPY | GDK_ACTION_MOVE);
@@ -618,20 +618,20 @@ main (int argc, char **argv)
   g_signal_connect (label, "drag_data_received",
 		    G_CALLBACK( label_drag_data_received), NULL);
 
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_widget_set_vexpand (label, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_widget_set_vexpand (GTK_WIDGET (label), TRUE);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 0, 1, 1);
 
   label = gtk_label_new ("Popup\n");
 
-  gtk_drag_dest_set (label,
+  gtk_drag_dest_set (GTK_WIDGET (label),
 		     GTK_DEST_DEFAULT_ALL,
                      targets,
 		     GDK_ACTION_COPY | GDK_ACTION_MOVE);
 
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_widget_set_vexpand (label, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), label, 1, 1, 1, 1);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_widget_set_vexpand (GTK_WIDGET (label), TRUE);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 1, 1, 1, 1);
 
   g_signal_connect (label, "drag-motion",
 		    G_CALLBACK (popsite_motion), NULL);

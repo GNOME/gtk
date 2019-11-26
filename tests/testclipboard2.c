@@ -162,7 +162,7 @@ format_list_add_row (GtkWidget         *list,
   GtkWidget *box;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-  gtk_container_add (GTK_CONTAINER (box), gtk_label_new (format_name));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_label_new (format_name)));
 
   gdk_content_formats_unref (formats);
   gtk_container_add (GTK_CONTAINER (list), box);
@@ -220,6 +220,7 @@ static GtkWidget *
 get_contents_widget (GdkClipboard *clipboard)
 {
   GtkWidget *stack, *child;
+  GtkLabel *label;
 
   stack = gtk_stack_new ();
   gtk_widget_set_hexpand (stack, TRUE);
@@ -233,9 +234,9 @@ get_contents_widget (GdkClipboard *clipboard)
   child = gtk_image_new ();
   gtk_stack_add_titled (GTK_STACK (stack), child, "image", "Image");
 
-  child = gtk_label_new (NULL);
-  gtk_label_set_wrap (GTK_LABEL (child), TRUE);
-  gtk_stack_add_titled (GTK_STACK (stack), child, "text", "Text");
+  label = gtk_label_new (NULL);
+  gtk_label_set_wrap (label, TRUE);
+  gtk_stack_add_titled (GTK_STACK (stack), GTK_WIDGET (label), "text", "Text");
 
   return stack;
 }
@@ -276,7 +277,7 @@ get_button_list (GdkClipboard *clipboard,
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
-  gtk_container_add (GTK_CONTAINER (box), gtk_label_new (info));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_label_new (info)));
 
   add_provider_button (box,
                        NULL,
@@ -341,7 +342,7 @@ get_clipboard_widget (GdkClipboard *clipboard,
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (hbox), vbox);
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new (name));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (gtk_label_new (name)));
   switcher = gtk_stack_switcher_new ();
   gtk_container_add (GTK_CONTAINER (vbox), switcher);
   stack = get_contents_widget (clipboard);

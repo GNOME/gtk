@@ -192,7 +192,7 @@ typedef struct
   GtkWidget *box;
   GtkWidget *button;
   GtkWidget *image;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *combo_box;
   GtkCellRenderer *icon_cell;
   GtkCellRenderer *name_cell;
@@ -449,14 +449,14 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   g_signal_connect (priv->button, "clicked", G_CALLBACK (button_clicked_cb), button);
   priv->image = gtk_image_new ();
   priv->label = gtk_label_new (_(FALLBACK_DISPLAY_NAME));
-  gtk_label_set_xalign (GTK_LABEL (priv->label), 0.0f);
-  gtk_widget_set_hexpand (priv->label, TRUE);
+  gtk_label_set_xalign (priv->label, 0.0f);
+  gtk_widget_set_hexpand (GTK_WIDGET (priv->label), TRUE);
   icon = gtk_image_new_from_icon_name ("document-open-symbolic");
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_valign (priv->image, GTK_ALIGN_BASELINE);
   gtk_container_add (GTK_CONTAINER (box), priv->image);
-  gtk_widget_set_valign (priv->label, GTK_ALIGN_BASELINE);
-  gtk_container_add (GTK_CONTAINER (box), priv->label);
+  gtk_widget_set_valign (GTK_WIDGET (priv->label), GTK_ALIGN_BASELINE);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (priv->label));
   gtk_widget_set_valign (icon, GTK_ALIGN_BASELINE);
   gtk_container_add (GTK_CONTAINER (box), icon);
   gtk_container_add (GTK_CONTAINER (priv->button), box);
@@ -958,7 +958,7 @@ gtk_file_chooser_button_get_property (GObject    *object,
     {
     case PROP_WIDTH_CHARS:
       g_value_set_int (value,
-		       gtk_label_get_width_chars (GTK_LABEL (priv->label)));
+		       gtk_label_get_width_chars (priv->label));
       break;
 
     case PROP_TITLE:
@@ -2342,7 +2342,7 @@ update_label_get_info_cb (GCancellable *cancellable,
   if (cancelled || error)
     goto out;
 
-  gtk_label_set_text (GTK_LABEL (priv->label), g_file_info_get_display_name (info));
+  gtk_label_set_text (priv->label, g_file_info_get_display_name (info));
 
   icon = _gtk_file_info_get_icon (info, ICON_SIZE, gtk_widget_get_scale_factor (GTK_WIDGET (button)));
   gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon);
@@ -2445,12 +2445,12 @@ out:
 
   if (label_text)
     {
-      gtk_label_set_text (GTK_LABEL (priv->label), label_text);
+      gtk_label_set_text (priv->label, label_text);
       g_free (label_text);
     }
   else
     {
-      gtk_label_set_text (GTK_LABEL (priv->label), _(FALLBACK_DISPLAY_NAME));
+      gtk_label_set_text (priv->label, _(FALLBACK_DISPLAY_NAME));
       gtk_image_set_from_gicon (GTK_IMAGE (priv->image), NULL);
     }
 
@@ -2910,7 +2910,7 @@ gtk_file_chooser_button_get_width_chars (GtkFileChooserButton *button)
 
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER_BUTTON (button), -1);
 
-  return gtk_label_get_width_chars (GTK_LABEL (priv->label));
+  return gtk_label_get_width_chars (priv->label);
 }
 
 /**
@@ -2928,6 +2928,6 @@ gtk_file_chooser_button_set_width_chars (GtkFileChooserButton *button,
 
   g_return_if_fail (GTK_IS_FILE_CHOOSER_BUTTON (button));
 
-  gtk_label_set_width_chars (GTK_LABEL (priv->label), n_chars);
+  gtk_label_set_width_chars (priv->label, n_chars);
   g_object_notify (G_OBJECT (button), "width-chars");
 }

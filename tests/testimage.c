@@ -75,8 +75,8 @@ idle_func (gpointer data)
 int
 main (int argc, char **argv)
 {
-  GtkWidget *window, *grid;
-  GtkWidget *label, *image;
+  GtkWidget *window, *grid, *image;
+  GtkLabel *label;
   GtkIconTheme *theme;
   GdkPaintable *paintable;
   gchar *icon_name = "help-browser";
@@ -101,12 +101,12 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (window), grid);
 
   label = gtk_label_new ("symbolic size");
-  gtk_grid_attach (GTK_GRID (grid), label, 1, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 1, 0, 1, 1);
   label = gtk_label_new ("fixed size");
-  gtk_grid_attach (GTK_GRID (grid), label, 2, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 2, 0, 1, 1);
 
   label = gtk_label_new ("GTK_IMAGE_PIXBUF");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 1, 1, 1);
 
   theme = gtk_icon_theme_get_default ();
   icon_info = gtk_icon_theme_lookup_icon_for_scale (theme, icon_name, 48, gtk_widget_get_scale_factor (window), GTK_ICON_LOOKUP_GENERIC_FALLBACK);
@@ -133,7 +133,7 @@ main (int argc, char **argv)
 		    G_CALLBACK (drag_data_received), image);
 
   label = gtk_label_new ("GTK_IMAGE_ICON_NAME");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 4, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 4, 1, 1);
   image = gtk_image_new_from_icon_name (icon_name);
   gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
   gtk_grid_attach (GTK_GRID (grid), image, 1, 4, 1, 1);
@@ -143,7 +143,7 @@ main (int argc, char **argv)
   gtk_grid_attach (GTK_GRID (grid), image, 2, 4, 1, 1);
 
   label = gtk_label_new ("GTK_IMAGE_GICON");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 5, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 5, 1, 1);
   icon = g_themed_icon_new_with_default_fallbacks ("folder-remote");
   image = gtk_image_new_from_gicon (icon);
   gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
@@ -160,7 +160,7 @@ main (int argc, char **argv)
   if (anim_filename)
     {
       label = gtk_label_new ("GTK_IMAGE_ANIMATION (from file)");
-      gtk_grid_attach (GTK_GRID (grid), label, 0, 6, 1, 1);
+      gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 6, 1, 1);
       image = gtk_image_new_from_file (anim_filename);
       gtk_image_set_pixel_size (GTK_IMAGE (image), 30);
       gtk_grid_attach (GTK_GRID (grid), image, 2, 6, 1, 1);
