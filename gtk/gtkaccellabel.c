@@ -111,7 +111,7 @@ struct _GtkAccelLabelClass
 typedef struct _GtkAccelLabelPrivate GtkAccelLabelPrivate;
 struct _GtkAccelLabelPrivate
 {
-  GtkWidget     *text_label;
+  GtkLabel      *text_label;
   GtkWidget     *accel_label;
 
   GtkWidget     *accel_widget;       /* done */
@@ -286,13 +286,13 @@ gtk_accel_label_init (GtkAccelLabel *accel_label)
   priv->accel_group = NULL;
 
   priv->text_label = gtk_label_new ("");
-  gtk_widget_set_hexpand (priv->text_label, TRUE);
-  gtk_label_set_xalign (GTK_LABEL (priv->text_label), 0.0f);
+  gtk_widget_set_hexpand (GTK_WIDGET (priv->text_label), TRUE);
+  gtk_label_set_xalign (priv->text_label, 0.0f);
   priv->accel_label = g_object_new (GTK_TYPE_LABEL,
                                     "css-name", "accelerator",
                                     NULL);
-  gtk_widget_set_parent (priv->text_label, GTK_WIDGET (accel_label));
-  gtk_widget_set_parent (priv->accel_label, GTK_WIDGET (accel_label));
+  gtk_widget_set_parent (GTK_WIDGET (priv->text_label), GTK_WIDGET (accel_label));
+  gtk_widget_set_parent (GTK_WIDGET (priv->accel_label), GTK_WIDGET (accel_label));
 }
 
 /**
@@ -334,8 +334,8 @@ gtk_accel_label_finalize (GObject *object)
   GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (object);
   GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
 
-  gtk_widget_unparent (priv->accel_label);
-  gtk_widget_unparent (priv->text_label);
+  gtk_widget_unparent (GTK_WIDGET (priv->accel_label));
+  gtk_widget_unparent (GTK_WIDGET (priv->text_label));
 
   G_OBJECT_CLASS (gtk_accel_label_parent_class)->finalize (object);
 }
@@ -984,7 +984,7 @@ gtk_accel_label_set_label (GtkAccelLabel *accel_label,
 
   g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
 
-  gtk_label_set_text_with_mnemonic (GTK_LABEL (priv->text_label), text);
+  gtk_label_set_text_with_mnemonic (priv->text_label, text);
 }
 
 /**
@@ -1003,7 +1003,7 @@ gtk_accel_label_get_label (GtkAccelLabel *accel_label)
 
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), NULL);
 
-  return gtk_label_get_label (GTK_LABEL (priv->text_label));
+  return gtk_label_get_label (priv->text_label);
 }
 
 /**
@@ -1024,9 +1024,9 @@ gtk_accel_label_set_use_underline (GtkAccelLabel *accel_label,
 
   setting = !!setting;
 
-  if (setting != gtk_label_get_use_underline (GTK_LABEL (priv->text_label)))
+  if (setting != gtk_label_get_use_underline (priv->text_label))
     {
-      gtk_label_set_use_underline (GTK_LABEL (priv->text_label), setting);
+      gtk_label_set_use_underline (priv->text_label, setting);
 
       g_object_notify_by_pspec (G_OBJECT (accel_label), props[PROP_USE_UNDERLINE]);
     }
@@ -1049,5 +1049,5 @@ gtk_accel_label_get_use_underline (GtkAccelLabel *accel_label)
 
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), FALSE);
 
-  return gtk_label_get_use_underline (GTK_LABEL (priv->text_label));
+  return gtk_label_get_use_underline (priv->text_label);
 }

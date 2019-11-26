@@ -97,9 +97,9 @@
 
 typedef struct
 {
-  GtkWidget     *label;
+  GtkLabel      *label;
   GtkWidget     *message_area; /* vbox for the primary and secondary labels, and any extra content from the caller */
-  GtkWidget     *secondary_label;
+  GtkLabel      *secondary_label;
 
   guint          has_primary_markup : 1;
   guint          has_secondary_text : 1;
@@ -274,8 +274,8 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
 
   settings = gtk_widget_get_settings (GTK_WIDGET (dialog));
   g_object_get (settings, "gtk-keynav-use-caret", &use_caret, NULL);
-  gtk_label_set_selectable (GTK_LABEL (priv->label), use_caret);
-  gtk_label_set_selectable (GTK_LABEL (priv->secondary_label), use_caret);
+  gtk_label_set_selectable (priv->label, use_caret);
+  gtk_label_set_selectable (priv->secondary_label, use_caret);
 }
 
 static void
@@ -331,13 +331,13 @@ setup_type (GtkMessageDialog *dialog,
 static void
 update_title (GObject    *dialog,
               GParamSpec *pspec,
-              GtkWidget  *label)
+              GtkLabel  *label)
 {
   const gchar *title;
 
   title = gtk_window_get_title (GTK_WINDOW (dialog));
-  gtk_label_set_label (GTK_LABEL (label), title);
-  gtk_widget_set_visible (label, title && title[0]);
+  gtk_label_set_label (label, title);
+  gtk_widget_set_visible (GTK_WIDGET (label), title && title[0]);
 }
 
 static void
@@ -355,19 +355,19 @@ gtk_message_dialog_constructed (GObject *object)
   if (use_header)
     {
       GtkWidget *box;
-      GtkWidget *label;
+      GtkLabel *label;
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_widget_show (box);
       gtk_widget_set_size_request (box, -1, 16);
       label = gtk_label_new ("");
-      gtk_widget_hide (label);
-      gtk_widget_set_margin_top (label, 6);
-      gtk_widget_set_margin_bottom (label, 6);
-      gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
-      gtk_widget_set_hexpand (label, TRUE);
-      gtk_style_context_add_class (gtk_widget_get_style_context (label), "title");
-      gtk_container_add (GTK_CONTAINER (box), label);
+      gtk_widget_hide (GTK_WIDGET (label));
+      gtk_widget_set_margin_top (GTK_WIDGET (label), 6);
+      gtk_widget_set_margin_bottom (GTK_WIDGET (label), 6);
+      gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+      gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (label)), "title");
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
       g_signal_connect_object (dialog, "notify::title", G_CALLBACK (update_title), label, 0);
 
       gtk_window_set_titlebar (GTK_WINDOW (dialog), box);
@@ -393,17 +393,17 @@ gtk_message_dialog_set_property (GObject      *object,
       break;
     case PROP_TEXT:
       if (priv->has_primary_markup)
-	gtk_label_set_markup (GTK_LABEL (priv->label),
+	gtk_label_set_markup (priv->label,
 			      g_value_get_string (value));
       else
-	gtk_label_set_text (GTK_LABEL (priv->label),
+	gtk_label_set_text (priv->label,
 			    g_value_get_string (value));
       break;
     case PROP_USE_MARKUP:
       if (priv->has_primary_markup != g_value_get_boolean (value))
         {
           priv->has_primary_markup = g_value_get_boolean (value);
-          gtk_label_set_use_markup (GTK_LABEL (priv->label), priv->has_primary_markup);
+          gtk_label_set_use_markup (priv->label, priv->has_primary_markup);
           g_object_notify_by_pspec (object, pspec);
         }
       break;
@@ -411,27 +411,27 @@ gtk_message_dialog_set_property (GObject      *object,
       {
 	const gchar *txt = g_value_get_string (value);
 
-	if (gtk_label_get_use_markup (GTK_LABEL (priv->secondary_label)))
-	  gtk_label_set_markup (GTK_LABEL (priv->secondary_label), txt);
+	if (gtk_label_get_use_markup (priv->secondary_label))
+	  gtk_label_set_markup (priv->secondary_label, txt);
 	else
-	  gtk_label_set_text (GTK_LABEL (priv->secondary_label), txt);
+	  gtk_label_set_text (priv->secondary_label, txt);
 
 	if (txt)
 	  {
 	    priv->has_secondary_text = TRUE;
-	    gtk_widget_show (priv->secondary_label);
+	    gtk_widget_show (GTK_WIDGET (priv->secondary_label));
 	  }
 	else
 	  {
 	    priv->has_secondary_text = FALSE;
-	    gtk_widget_hide (priv->secondary_label);
+	    gtk_widget_hide (GTK_WIDGET (priv->secondary_label));
 	  }
       }
       break;
     case PROP_SECONDARY_USE_MARKUP:
-      if (gtk_label_get_use_markup (GTK_LABEL (priv->secondary_label)) != g_value_get_boolean (value))
+      if (gtk_label_get_use_markup (priv->secondary_label) != g_value_get_boolean (value))
         {
-          gtk_label_set_use_markup (GTK_LABEL (priv->secondary_label), g_value_get_boolean (value));
+          gtk_label_set_use_markup (priv->secondary_label, g_value_get_boolean (value));
           g_object_notify_by_pspec (object, pspec);
         }
       break;
@@ -457,7 +457,7 @@ gtk_message_dialog_get_property (GObject     *object,
       g_value_set_enum (value, (GtkMessageType) priv->message_type);
       break;
     case PROP_TEXT:
-      g_value_set_string (value, gtk_label_get_label (GTK_LABEL (priv->label)));
+      g_value_set_string (value, gtk_label_get_label (priv->label));
       break;
     case PROP_USE_MARKUP:
       g_value_set_boolean (value, priv->has_primary_markup);
@@ -465,14 +465,14 @@ gtk_message_dialog_get_property (GObject     *object,
     case PROP_SECONDARY_TEXT:
       if (priv->has_secondary_text)
       g_value_set_string (value, 
-			  gtk_label_get_label (GTK_LABEL (priv->secondary_label)));
+			  gtk_label_get_label (priv->secondary_label));
       else
 	g_value_set_string (value, NULL);
       break;
     case PROP_SECONDARY_USE_MARKUP:
       if (priv->has_secondary_text)
 	g_value_set_boolean (value, 
-			     gtk_label_get_use_markup (GTK_LABEL (priv->secondary_label)));
+			     gtk_label_get_use_markup (priv->secondary_label));
       else
 	g_value_set_boolean (value, FALSE);
       break;
@@ -530,7 +530,7 @@ gtk_message_dialog_new (GtkWindow     *parent,
       msg = g_strdup_vprintf (message_format, args);
       va_end (args);
 
-      gtk_label_set_text (GTK_LABEL (priv->label), msg);
+      gtk_label_set_text (priv->label, msg);
 
       g_free (msg);
     }
@@ -631,7 +631,7 @@ gtk_message_dialog_set_markup (GtkMessageDialog *message_dialog,
   g_return_if_fail (GTK_IS_MESSAGE_DIALOG (message_dialog));
 
   priv->has_primary_markup = TRUE;
-  gtk_label_set_markup (GTK_LABEL (priv->label), str);
+  gtk_label_set_markup (priv->label, str);
 }
 
 /**
@@ -662,15 +662,15 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
       msg = g_strdup_vprintf (message_format, args);
       va_end (args);
 
-      gtk_widget_show (priv->secondary_label);
-      gtk_label_set_text (GTK_LABEL (priv->secondary_label), msg);
+      gtk_widget_show (GTK_WIDGET (priv->secondary_label));
+      gtk_label_set_text (priv->secondary_label, msg);
 
       g_free (msg);
     }
   else
     {
       priv->has_secondary_text = FALSE;
-      gtk_widget_hide (priv->secondary_label);
+      gtk_widget_hide (GTK_WIDGET (priv->secondary_label));
     }
 }
 
@@ -718,15 +718,15 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
       msg = g_strdup_vprintf (message_format, args);
       va_end (args);
 
-      gtk_widget_show (priv->secondary_label);
-      gtk_label_set_markup (GTK_LABEL (priv->secondary_label), msg);
+      gtk_widget_show (GTK_WIDGET (priv->secondary_label));
+      gtk_label_set_markup (priv->secondary_label, msg);
 
       g_free (msg);
     }
   else
     {
       priv->has_secondary_text = FALSE;
-      gtk_widget_hide (priv->secondary_label);
+      gtk_widget_hide (GTK_WIDGET (priv->secondary_label));
     }
 }
 

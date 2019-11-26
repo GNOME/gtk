@@ -346,7 +346,7 @@ add_emoji (GtkWidget    *box,
            GtkEmojiChooser *chooser)
 {
   GtkWidget *child;
-  GtkWidget *label;
+  GtkLabel *label;
   PangoAttrList *attrs;
   GVariant *codes;
   char text[64];
@@ -373,17 +373,17 @@ add_emoji (GtkWidget    *box,
   label = gtk_label_new (text);
   attrs = pango_attr_list_new ();
   pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_X_LARGE));
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
+  gtk_label_set_attributes (label, attrs);
   pango_attr_list_unref (attrs);
 
-  layout = gtk_label_get_layout (GTK_LABEL (label));
+  layout = gtk_label_get_layout (label);
   pango_layout_get_extents (layout, &rect, NULL);
 
   /* Check for fallback rendering that generates too wide items */
   if (pango_layout_get_unknown_glyphs_count (layout) > 0 ||
       rect.width >= 1.5 * chooser->emoji_max_width)
     {
-      gtk_widget_destroy (label);
+      gtk_widget_destroy (GTK_WIDGET (label));
       return;
     }
 
@@ -397,7 +397,7 @@ add_emoji (GtkWidget    *box,
   if (chooser)
     g_signal_connect (child, "popup-menu", G_CALLBACK (popup_menu), chooser);
 
-  gtk_container_add (GTK_CONTAINER (child), label);
+  gtk_container_add (GTK_CONTAINER (child), GTK_WIDGET (label));
   gtk_flow_box_insert (GTK_FLOW_BOX (box), child, prepend ? 0 : -1);
 }
 

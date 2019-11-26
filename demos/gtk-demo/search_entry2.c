@@ -60,7 +60,7 @@ do_search_entry2 (GtkWidget *do_widget)
   static GtkWidget *window = NULL;
   GtkWidget *vbox;
   GtkWidget *hbox;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *entry;
   GtkWidget *container;
   GtkWidget *searchbar;
@@ -95,7 +95,7 @@ do_search_entry2 (GtkWidget *do_widget)
 
       /* Help */
       label = gtk_label_new ("Start Typing to search");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       /* Toggle button */
       button = gtk_toggle_button_new_with_label ("Search");
@@ -109,12 +109,12 @@ do_search_entry2 (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
       label = gtk_label_new ("Result:");
-      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-      gtk_widget_set_margin_start (label, 6);
-      gtk_container_add (GTK_CONTAINER (hbox), label);
+      gtk_label_set_xalign (label, 0.0);
+      gtk_widget_set_margin_start (GTK_WIDGET (label), 6);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
       label = gtk_label_new ("");
-      gtk_container_add (GTK_CONTAINER (hbox), label);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
       g_signal_connect (entry, "search-changed",
                         G_CALLBACK (search_changed_cb), label);
@@ -125,12 +125,12 @@ do_search_entry2 (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
       label = gtk_label_new ("Signal:");
-      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-      gtk_widget_set_margin_start (label, 6);
-      gtk_container_add (GTK_CONTAINER (hbox), label);
+      gtk_label_set_xalign (label, 0.0);
+      gtk_widget_set_margin_start (GTK_WIDGET (label), 6);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
       label = gtk_label_new ("");
-      gtk_container_add (GTK_CONTAINER (hbox), label);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
       g_signal_connect (entry, "search-changed",
                         G_CALLBACK (search_changed), label);

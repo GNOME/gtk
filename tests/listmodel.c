@@ -106,12 +106,12 @@ create_widget (gpointer item,
                gpointer user_data)
 {
   MyObject *obj = (MyObject *)item;
-  GtkWidget *label;
+  GtkLabel *label;
 
   label = gtk_label_new ("");
   g_object_bind_property (obj, "label", label, "label", G_BINDING_SYNC_CREATE);
 
-  return label;
+  return GTK_WIDGET (label);
 }
 
 static gint

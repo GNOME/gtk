@@ -25,6 +25,7 @@
 
 
 #include <gtk/gtkwindow.h>
+#include <gtk/gtklabel.h>
 
 #include "inspectoroverlay.h"
 
@@ -54,7 +55,7 @@ typedef struct
   GtkWidget *select_object;
   GtkWidget *object_start_stack;
   GtkWidget *object_center_stack;
-  GtkWidget *object_title;
+  GtkLabel  *object_title;
   GtkWidget *prop_list;
   GtkWidget *layout_prop_list;
   GtkWidget *selector;

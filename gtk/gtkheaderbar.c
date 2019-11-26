@@ -111,11 +111,11 @@ struct _GtkHeaderBarPrivate
 
   gchar *title;
   gchar *subtitle;
-  GtkWidget *title_label;
-  GtkWidget *subtitle_label;
+  GtkLabel *title_label;
+  GtkLabel *subtitle_label;
   GtkWidget *label_box;
   GtkWidget *label_sizing_box;
-  GtkWidget *subtitle_sizing_label;
+  GtkLabel *subtitle_sizing_label;
   GtkWidget *custom_title;
   gboolean has_subtitle;
 
@@ -163,6 +163,7 @@ init_sizing_box (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GtkWidget *w;
+  GtkLabel *label;
   GtkStyleContext *context;
 
   /* We use this box to always request size for the two labels (title
@@ -173,57 +174,57 @@ init_sizing_box (GtkHeaderBar *bar)
   w = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   priv->label_sizing_box = g_object_ref_sink (w);
 
-  w = gtk_label_new (NULL);
-  context = gtk_widget_get_style_context (w);
+  label = gtk_label_new (NULL);
+  context = gtk_widget_get_style_context (GTK_WIDGET (label));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TITLE);
-  gtk_container_add (GTK_CONTAINER (priv->label_sizing_box), w);
-  gtk_label_set_wrap (GTK_LABEL (w), FALSE);
-  gtk_label_set_single_line_mode (GTK_LABEL (w), TRUE);
-  gtk_label_set_ellipsize (GTK_LABEL (w), PANGO_ELLIPSIZE_END);
-  gtk_label_set_width_chars (GTK_LABEL (w), MIN_TITLE_CHARS);
+  gtk_container_add (GTK_CONTAINER (priv->label_sizing_box), GTK_WIDGET (label));
+  gtk_label_set_wrap (label, FALSE);
+  gtk_label_set_single_line_mode (label, TRUE);
+  gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+  gtk_label_set_width_chars (label, MIN_TITLE_CHARS);
 
-  w = gtk_label_new (NULL);
-  context = gtk_widget_get_style_context (w);
+  label = gtk_label_new (NULL);
+  context = gtk_widget_get_style_context (GTK_WIDGET (label));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SUBTITLE);
-  gtk_container_add (GTK_CONTAINER (priv->label_sizing_box), w);
-  gtk_label_set_wrap (GTK_LABEL (w), FALSE);
-  gtk_label_set_single_line_mode (GTK_LABEL (w), TRUE);
-  gtk_label_set_ellipsize (GTK_LABEL (w), PANGO_ELLIPSIZE_END);
-  gtk_widget_set_visible (w, priv->has_subtitle || (priv->subtitle && priv->subtitle[0]));
-  priv->subtitle_sizing_label = w;
+  gtk_container_add (GTK_CONTAINER (priv->label_sizing_box), GTK_WIDGET (label));
+  gtk_label_set_wrap (label, FALSE);
+  gtk_label_set_single_line_mode (label, TRUE);
+  gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+  gtk_widget_set_visible (GTK_WIDGET (label), priv->has_subtitle || (priv->subtitle && priv->subtitle[0]));
+  priv->subtitle_sizing_label = label;
 }
 
 static GtkWidget *
 create_title_box (const char *title,
                   const char *subtitle,
-                  GtkWidget **ret_title_label,
-                  GtkWidget **ret_subtitle_label)
+                  GtkLabel **ret_title_label,
+                  GtkLabel **ret_subtitle_label)
 {
   GtkWidget *label_box;
-  GtkWidget *title_label;
-  GtkWidget *subtitle_label;
+  GtkLabel *title_label;
+  GtkLabel *subtitle_label;
   GtkStyleContext *context;
 
   label_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_set_valign (label_box, GTK_ALIGN_CENTER);
 
   title_label = gtk_label_new (title);
-  context = gtk_widget_get_style_context (title_label);
+  context = gtk_widget_get_style_context (GTK_WIDGET (title_label));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TITLE);
-  gtk_label_set_wrap (GTK_LABEL (title_label), FALSE);
-  gtk_label_set_single_line_mode (GTK_LABEL (title_label), TRUE);
-  gtk_label_set_ellipsize (GTK_LABEL (title_label), PANGO_ELLIPSIZE_END);
-  gtk_container_add (GTK_CONTAINER (label_box), title_label);
-  gtk_label_set_width_chars (GTK_LABEL (title_label), MIN_TITLE_CHARS);
+  gtk_label_set_wrap (title_label, FALSE);
+  gtk_label_set_single_line_mode (title_label, TRUE);
+  gtk_label_set_ellipsize (title_label, PANGO_ELLIPSIZE_END);
+  gtk_container_add (GTK_CONTAINER (label_box), GTK_WIDGET (title_label));
+  gtk_label_set_width_chars (title_label, MIN_TITLE_CHARS);
 
   subtitle_label = gtk_label_new (subtitle);
-  context = gtk_widget_get_style_context (subtitle_label);
+  context = gtk_widget_get_style_context (GTK_WIDGET (subtitle_label));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SUBTITLE);
-  gtk_label_set_wrap (GTK_LABEL (subtitle_label), FALSE);
-  gtk_label_set_single_line_mode (GTK_LABEL (subtitle_label), TRUE);
-  gtk_label_set_ellipsize (GTK_LABEL (subtitle_label), PANGO_ELLIPSIZE_END);
-  gtk_container_add (GTK_CONTAINER (label_box), subtitle_label);
-  gtk_widget_set_visible (subtitle_label, subtitle && subtitle[0]);
+  gtk_label_set_wrap (subtitle_label, FALSE);
+  gtk_label_set_single_line_mode (subtitle_label, TRUE);
+  gtk_label_set_ellipsize (subtitle_label, PANGO_ELLIPSIZE_END);
+  gtk_container_add (GTK_CONTAINER (label_box), GTK_WIDGET (subtitle_label));
+  gtk_widget_set_visible (GTK_WIDGET (subtitle_label), subtitle && subtitle[0]);
 
   if (ret_title_label)
     *ret_title_label = title_label;
@@ -634,7 +635,7 @@ gtk_header_bar_set_title (GtkHeaderBar *bar,
 
   if (priv->title_label != NULL)
     {
-      gtk_label_set_label (GTK_LABEL (priv->title_label), priv->title);
+      gtk_label_set_label (priv->title_label, priv->title);
       gtk_widget_queue_resize (GTK_WIDGET (bar));
     }
 
@@ -688,12 +689,12 @@ gtk_header_bar_set_subtitle (GtkHeaderBar *bar,
 
   if (priv->subtitle_label != NULL)
     {
-      gtk_label_set_label (GTK_LABEL (priv->subtitle_label), priv->subtitle);
-      gtk_widget_set_visible (priv->subtitle_label, priv->subtitle && priv->subtitle[0]);
+      gtk_label_set_label (priv->subtitle_label, priv->subtitle);
+      gtk_widget_set_visible (GTK_WIDGET (priv->subtitle_label), priv->subtitle && priv->subtitle[0]);
       gtk_widget_queue_resize (GTK_WIDGET (bar));
     }
 
-  gtk_widget_set_visible (priv->subtitle_sizing_label, priv->has_subtitle || (priv->subtitle && priv->subtitle[0]));
+  gtk_widget_set_visible (GTK_WIDGET (priv->subtitle_sizing_label), priv->has_subtitle || (priv->subtitle && priv->subtitle[0]));
 
   g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_SUBTITLE]);
 }
@@ -1396,7 +1397,7 @@ gtk_header_bar_set_has_subtitle (GtkHeaderBar *bar,
     return;
 
   priv->has_subtitle = setting;
-  gtk_widget_set_visible (priv->subtitle_sizing_label, setting || (priv->subtitle && priv->subtitle[0]));
+  gtk_widget_set_visible (GTK_WIDGET (priv->subtitle_sizing_label), setting || (priv->subtitle && priv->subtitle[0]));
 
   gtk_widget_queue_resize (GTK_WIDGET (bar));
 

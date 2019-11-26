@@ -666,19 +666,20 @@ object_label (GObject *obj, GParamSpec *pspec)
 static void
 object_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
-  GtkWidget *label, *button;
+  GtkLabel *label;
+  GtkWidget *button;
   gchar *str;
   GObject *obj;
 
   GList *children = gtk_container_get_children (GTK_CONTAINER (data));
-  label = GTK_WIDGET (children->data);
+  label = GTK_LABEL (children->data);
   button = GTK_WIDGET (children->next->data);
   g_object_get (object, pspec->name, &obj, NULL);
   g_list_free (children);
 
   str = object_label (obj, pspec);
 
-  gtk_label_set_text (GTK_LABEL (label), str);
+  gtk_label_set_text (label, str);
   gtk_widget_set_sensitive (button, G_IS_OBJECT (obj));
 
   if (obj)
@@ -781,7 +782,8 @@ static GtkWidget *
 create_row (gpointer item,
             gpointer user_data)
 {
-  GtkWidget *row, *label, *button;
+  GtkWidget *row, *button;
+  GtkLabel *label;
   char *name;
 
   name = object_label (G_OBJECT (item), NULL);
@@ -793,7 +795,7 @@ create_row (gpointer item,
   g_signal_connect (button, "clicked", G_CALLBACK (item_properties), user_data);
 
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-  gtk_container_add (GTK_CONTAINER (row), label);
+  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (label));
   gtk_container_add (GTK_CONTAINER (row), button);
 
   return row;
@@ -996,7 +998,7 @@ property_editor (GObject                *object,
     }
   else if (type == G_TYPE_PARAM_POINTER)
     {
-      prop_edit = gtk_label_new ("");
+      prop_edit = GTK_WIDGET (gtk_label_new (""));
 
       g_object_connect_property (object, spec,
                                  G_CALLBACK (pointer_changed),
@@ -1036,7 +1038,8 @@ property_editor (GObject                *object,
     }
   else if (type == G_TYPE_PARAM_OBJECT)
     {
-      GtkWidget *label, *button;
+      GtkLabel *label;
+      GtkWidget *button;
 
       prop_edit = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
 
@@ -1045,9 +1048,9 @@ property_editor (GObject                *object,
       g_signal_connect_swapped (button, "clicked",
                                 G_CALLBACK (object_properties),
                                 editor);
-      gtk_container_add (GTK_CONTAINER (prop_edit), label);
+      gtk_container_add (GTK_CONTAINER (prop_edit), GTK_WIDGET (label));
       gtk_container_add (GTK_CONTAINER (prop_edit), button);
-      gtk_widget_show (label);
+      gtk_widget_show (GTK_WIDGET (label));
       gtk_widget_show (button);
 
       g_object_connect_property (object, spec,
@@ -1100,7 +1103,7 @@ property_editor (GObject                *object,
     {
       msg = g_strdup_printf (_("Uneditable property type: %s"),
                              g_type_name (G_PARAM_SPEC_TYPE (spec)));
-      prop_edit = gtk_label_new (msg);
+      prop_edit = GTK_WIDGET (gtk_label_new (msg));
       g_free (msg);
       gtk_widget_set_halign (prop_edit, GTK_ALIGN_START);
       gtk_widget_set_valign (prop_edit, GTK_ALIGN_CENTER);
@@ -1191,7 +1194,7 @@ attribute_editor (GObject                *object,
   GtkCellArea *area;
   GtkTreeModel *model = NULL;
   gint col = -1;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *button;
   GtkWidget *box;
   GtkWidget *combo;
@@ -1215,14 +1218,14 @@ attribute_editor (GObject                *object,
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
 
   label = gtk_label_new (_("Attribute:"));
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   button = gtk_button_new_with_label (_("Model"));
   g_object_set_data (G_OBJECT (button), "model", model);
   g_signal_connect (button, "clicked", G_CALLBACK (model_properties), editor);
   gtk_container_add (GTK_CONTAINER (box), button);
 
-  gtk_container_add (GTK_CONTAINER (box), gtk_label_new (_("Column:")));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_label_new (_("Column:"))));
   store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);
   combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (store));
   renderer = gtk_cell_renderer_text_new ();
@@ -1314,7 +1317,7 @@ action_editor (GObject                *object,
     {
       text = g_strdup_printf (_("Action from: %p (%s)"),
                               owner, g_type_name_from_instance ((GTypeInstance *)owner));
-      gtk_container_add (GTK_CONTAINER (box), gtk_label_new (text));
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_label_new (text)));
       g_free (text);
       button = gtk_button_new_with_label (_("Properties"));
       g_object_set_data (G_OBJECT (button), "owner", owner);
@@ -1399,7 +1402,7 @@ add_settings_info (GtkInspectorPropEditor *editor)
   const gchar *direction;
   const gchar *tip;
   GtkWidget *row;
-  GtkWidget *label;
+  GtkLabel *label;
   gchar *str;
 
   object = editor->priv->object;
@@ -1434,17 +1437,17 @@ add_settings_info (GtkInspectorPropEditor *editor)
     }
 
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  gtk_container_add (GTK_CONTAINER (row), gtk_label_new (_("Setting:")));
+  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (gtk_label_new (_("Setting:"))));
   label = gtk_label_new (direction);
   if (tip)
-    gtk_widget_set_tooltip_text (label, tip);
-  gtk_container_add (GTK_CONTAINER (row), label);
+    gtk_widget_set_tooltip_text (GTK_WIDGET (label), tip);
+  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (label));
   
   str = g_strdup_printf ("%s %s",
                          g_settings_schema_get_id (binding->key.schema),
                          binding->key.name);
   label = gtk_label_new (str);
-  gtk_container_add (GTK_CONTAINER (row), label);
+  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (label));
   g_free (str);
 
   gtk_container_add (GTK_CONTAINER (editor), row);
@@ -1498,8 +1501,8 @@ add_gtk_settings_info (GtkInspectorPropEditor *editor)
       source = _("Unknown");
       break;
     }
-  gtk_container_add (GTK_CONTAINER (row), gtk_label_new (_("Source:")));
-  gtk_container_add (GTK_CONTAINER (row), gtk_label_new (source));
+  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (gtk_label_new (_("Source:"))));
+  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (gtk_label_new (source)));
 
   gtk_container_add (GTK_CONTAINER (editor), row);
 }
@@ -1529,7 +1532,7 @@ constructed (GObject *object)
 {
   GtkInspectorPropEditor *editor = GTK_INSPECTOR_PROP_EDITOR (object);
   GParamSpec *spec;
-  GtkWidget *label;
+  GtkLabel *label;
   gboolean can_modify;
   GtkWidget *box;
 
@@ -1549,8 +1552,8 @@ constructed (GObject *object)
 
   if (label)
     {
-      gtk_style_context_add_class (gtk_widget_get_style_context (label), GTK_STYLE_CLASS_DIM_LABEL);
-      gtk_container_add (GTK_CONTAINER (box), label);
+      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (label)), GTK_STYLE_CLASS_DIM_LABEL);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
     }
 
   /* By reaching this, we already know the property is readable.
@@ -1563,8 +1566,8 @@ constructed (GObject *object)
   if (!can_modify)
     {
       label = gtk_label_new ("");
-      gtk_style_context_add_class (gtk_widget_get_style_context (label), GTK_STYLE_CLASS_DIM_LABEL);
-      gtk_container_add (GTK_CONTAINER (box), label);
+      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (label)), GTK_STYLE_CLASS_DIM_LABEL);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
       readonly_changed (editor->priv->object, spec, label);
       g_object_connect_property (editor->priv->object, spec,

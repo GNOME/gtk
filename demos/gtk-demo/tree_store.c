@@ -402,7 +402,7 @@ do_tree_store (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       gtk_container_add (GTK_CONTAINER (vbox),
-                          gtk_label_new ("Jonathan's Holiday Card Planning Sheet"));
+                         GTK_WIDGET (gtk_label_new ("Jonathan's Holiday Card Planning Sheet")));
 
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),

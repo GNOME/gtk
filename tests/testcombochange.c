@@ -229,7 +229,7 @@ main (int argc, char **argv)
   GtkWidget *combo_vbox;
   GtkWidget *button;
   GtkWidget *menu_combo;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *list_combo;
   
   test_init ();
@@ -253,16 +253,16 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (hbox), combo_vbox);
 
   label = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (label), "<b>Menu mode</b>");
-  gtk_container_add (GTK_CONTAINER (combo_vbox), label);
+  gtk_label_set_markup (label, "<b>Menu mode</b>");
+  gtk_container_add (GTK_CONTAINER (combo_vbox), GTK_WIDGET (label));
 
   menu_combo = create_combo ("menu-combo", FALSE);
   gtk_widget_set_margin_start (menu_combo, 12);
   gtk_container_add (GTK_CONTAINER (combo_vbox), menu_combo);
 
   label = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (label), "<b>List mode</b>");
-  gtk_container_add (GTK_CONTAINER (combo_vbox), label);
+  gtk_label_set_markup (label, "<b>List mode</b>");
+  gtk_container_add (GTK_CONTAINER (combo_vbox), GTK_WIDGET (label));
 
   list_combo = create_combo ("list-combo", TRUE);
   gtk_widget_set_margin_start (list_combo, 12);

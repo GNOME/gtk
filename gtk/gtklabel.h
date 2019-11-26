@@ -43,9 +43,9 @@ typedef struct _GtkLabel GtkLabel;
 GDK_AVAILABLE_IN_ALL
 GType                 gtk_label_get_type          (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget*            gtk_label_new               (const gchar   *str);
+GtkLabel*             gtk_label_new               (const gchar   *str);
 GDK_AVAILABLE_IN_ALL
-GtkWidget*            gtk_label_new_with_mnemonic (const gchar   *str);
+GtkLabel*             gtk_label_new_with_mnemonic (const gchar   *str);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_label_set_text          (GtkLabel      *label,
 						   const gchar   *str);
