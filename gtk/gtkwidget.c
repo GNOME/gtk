@@ -12733,9 +12733,9 @@ gtk_widget_class_add_action (GtkWidgetClass  *widget_class,
 
   if (priv->actions == NULL)
     priv->actions = g_ptr_array_new ();
-  else
+  else if (G_TYPE_FROM_CLASS (widget_class) != GTK_TYPE_WIDGET)
     {
-      GtkWidgetClass *parent_class = GTK_WIDGET_CLASS (g_type_class_peek (g_type_parent (G_TYPE_FROM_CLASS (widget_class))));
+      GtkWidgetClass *parent_class = GTK_WIDGET_CLASS (g_type_class_peek_parent (widget_class));
       GtkWidgetClassPrivate *parent_priv = parent_class->priv;
       GPtrArray *parent_actions = parent_priv->actions;
 
