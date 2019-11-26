@@ -283,7 +283,7 @@ static void
 test_overlap2 (void)
 {
   GtkWidget *text;
-  GtkWidget *child;
+  GtkLabel *child;
   GSimpleActionGroup *group1;
   GSimpleActionGroup *group2;
   GActionEntry entries1[] = {
@@ -298,13 +298,13 @@ test_overlap2 (void)
                     G_CALLBACK (visibility_toggled), NULL);
 
   child = gtk_label_new ("");
-  gtk_widget_set_parent (child, text);
+  gtk_widget_set_parent (GTK_WIDGET (child), text);
 
   g_assert_cmpint (toggled, ==, 0);
   g_assert_cmpint (act1, ==, 0);
   g_assert_cmpint (act2, ==, 0);
 
-  gtk_widget_activate_action (child, "misc.toggle-visibility", NULL);
+  gtk_widget_activate_action (GTK_WIDGET (child), "misc.toggle-visibility", NULL);
 
   g_assert_cmpint (toggled, ==, 1);
   g_assert_cmpint (act1, ==, 0);
@@ -316,7 +316,7 @@ test_overlap2 (void)
                                    G_N_ELEMENTS (entries1),
                                    NULL);
   gtk_widget_insert_action_group (text, "misc", G_ACTION_GROUP (group1));
-  gtk_widget_activate_action (child, "misc.toggle-visibility", NULL);
+  gtk_widget_activate_action (GTK_WIDGET (child), "misc.toggle-visibility", NULL);
 
   g_assert_cmpint (toggled, ==, 2);
   g_assert_cmpint (act1, ==, 0);
@@ -327,9 +327,9 @@ test_overlap2 (void)
                                    entries2,
                                    G_N_ELEMENTS (entries2),
                                    NULL);
-  gtk_widget_insert_action_group (child, "misc", G_ACTION_GROUP (group2));
+  gtk_widget_insert_action_group (GTK_WIDGET (child), "misc", G_ACTION_GROUP (group2));
 
-  gtk_widget_activate_action (child, "misc.toggle-visibility", NULL);
+  gtk_widget_activate_action (GTK_WIDGET (child), "misc.toggle-visibility", NULL);
 
   g_assert_cmpint (toggled, ==, 2);
   g_assert_cmpint (act1, ==, 0);

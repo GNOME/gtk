@@ -6,7 +6,7 @@ static GtkWidget *inhibit_logout;
 static GtkWidget *inhibit_switch;
 static GtkWidget *inhibit_suspend;
 static GtkWidget *inhibit_idle;
-static GtkWidget *inhibit_label;
+static GtkLabel *inhibit_label;
 
 static void
 inhibitor_toggled (GtkToggleButton *button, GtkApplication *app)
@@ -50,7 +50,7 @@ inhibitor_toggled (GtkToggleButton *button, GtkApplication *app)
       else
         {
           text = g_strdup_printf ("%#x", cookie);
-          gtk_label_set_label (GTK_LABEL (inhibit_label), text);
+          gtk_label_set_label (inhibit_label, text);
           g_free (text);
         }
     }
@@ -59,7 +59,7 @@ inhibitor_toggled (GtkToggleButton *button, GtkApplication *app)
       cookie = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (button), "cookie"));
       g_print ("Calling gtk_application_uninhibit: %#x\n", cookie);
       gtk_application_uninhibit (app, cookie);
-      gtk_label_set_label (GTK_LABEL (inhibit_label), "");
+      gtk_label_set_label (inhibit_label, "");
     }
 
   gtk_widget_set_sensitive (inhibit_entry, !active);
@@ -77,7 +77,7 @@ activate (GtkApplication *app,
   GtkWidget *separator;
   GtkWidget *grid;
   GtkWidget *button;
-  GtkWidget *label;
+  GtkLabel *label;
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
@@ -92,10 +92,10 @@ activate (GtkApplication *app,
   gtk_container_add (GTK_CONTAINER (box), grid);
 
   label = gtk_label_new ("Inhibitor");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 0, 1, 1);
 
   inhibit_label = gtk_label_new ("");
-  gtk_grid_attach (GTK_GRID (grid), inhibit_label, 1, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (inhibit_label), 1, 0, 1, 1);
 
   inhibit_logout = gtk_check_button_new_with_label ("Logout");
   gtk_grid_attach (GTK_GRID (grid), inhibit_logout, 1, 1, 1, 1);

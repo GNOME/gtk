@@ -404,7 +404,7 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	  else
 	    label_text = g_strdup (orig_label);
 
-	  label = gtk_label_new (label_text);
+	  label = GTK_WIDGET (gtk_label_new (label_text));
 
 	  g_free (label_text);
 	}

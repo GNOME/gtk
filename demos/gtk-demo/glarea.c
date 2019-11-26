@@ -329,7 +329,8 @@ on_axis_value_change (GtkAdjustment *adjustment,
 static GtkWidget *
 create_axis_slider (int axis)
 {
-  GtkWidget *box, *label, *slider;
+  GtkWidget *box, *slider;
+  GtkLabel *label;
   GtkAdjustment *adj;
   const char *text;
 
@@ -354,8 +355,8 @@ create_axis_slider (int axis)
     }
 
   label = gtk_label_new (text);
-  gtk_container_add (GTK_CONTAINER (box), label);
-  gtk_widget_show (label);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
+  gtk_widget_show (GTK_WIDGET (label));
 
   adj = gtk_adjustment_new (0.0, 0.0, 360.0, 1.0, 12.0, 0.0);
   g_signal_connect (adj, "value-changed",

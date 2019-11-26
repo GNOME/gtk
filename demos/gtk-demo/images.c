@@ -324,7 +324,7 @@ do_images (GtkWidget *do_widget)
   GtkWidget *base_vbox;
   GtkWidget *image;
   GtkWidget *picture;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *button;
   GdkPaintable *paintable;
   GIcon *gicon;
@@ -352,9 +352,9 @@ do_images (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (hbox), vbox);
 
       label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
+      gtk_label_set_markup (label,
                             "<u>Image loaded from a file</u>");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
@@ -371,9 +371,9 @@ do_images (GtkWidget *do_widget)
       /* Animation */
 
       label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
+      gtk_label_set_markup (label,
                             "<u>Animation loaded from a file</u>");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
@@ -388,9 +388,9 @@ do_images (GtkWidget *do_widget)
       /* Symbolic icon */
 
       label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
+      gtk_label_set_markup (label,
                             "<u>Symbolic themed icon</u>");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
@@ -410,9 +410,9 @@ do_images (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (hbox), vbox);
 
       label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
+      gtk_label_set_markup (label,
                             "<u>Progressive image loading</u>");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
@@ -433,9 +433,9 @@ do_images (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (hbox), vbox);
 
       label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
+      gtk_label_set_markup (label,
                             "<u>Displaying video</u>");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
@@ -452,9 +452,9 @@ do_images (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (hbox), vbox);
 
       label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
+      gtk_label_set_markup (label,
                             "<u>GtkWidgetPaintable</u>");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       paintable = gtk_widget_paintable_new (do_widget);
       picture = gtk_picture_new_for_paintable (paintable);

@@ -509,8 +509,9 @@ item_padding_changed (GtkSpinButton    *spin_button,
 static void
 background_area (void)
 {
-  GtkWidget *window, *widget, *label, *main_vbox;
+  GtkWidget *window, *widget, *main_vbox;
   GtkWidget *iconview, *frame, *vbox, *hbox;
+  GtkLabel *label;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   hbox  = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
@@ -524,9 +525,9 @@ background_area (void)
   label = gtk_label_new ("In this example, row spacing gets devided into the background area, "
 			 "column spacing is added between each background area, item_padding is "
 			 "prepended space distributed to the background area.");
-  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-  gtk_label_set_width_chars (GTK_LABEL (label), 40);
-  gtk_container_add (GTK_CONTAINER (main_vbox), label);
+  gtk_label_set_wrap (label, TRUE);
+  gtk_label_set_width_chars (label, 40);
+  gtk_container_add (GTK_CONTAINER (main_vbox), GTK_WIDGET (label));
 
   iconview = focus_iconview (TRUE, NULL, NULL);
 
@@ -558,9 +559,9 @@ background_area (void)
 
   widget = gtk_spin_button_new_with_range (0, 10, 1);
   label = gtk_label_new ("Cell spacing");
-  gtk_widget_set_hexpand (label, TRUE);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
   gtk_container_add (GTK_CONTAINER (hbox), widget);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
@@ -571,9 +572,9 @@ background_area (void)
   widget = gtk_spin_button_new_with_range (0, 10, 1);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), gtk_icon_view_get_row_spacing (GTK_ICON_VIEW (iconview)));
   label = gtk_label_new ("Row spacing");
-  gtk_widget_set_hexpand (label, TRUE);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
   gtk_container_add (GTK_CONTAINER (hbox), widget);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
@@ -582,10 +583,10 @@ background_area (void)
 
   widget = gtk_spin_button_new_with_range (0, 30, 1);
   label = gtk_label_new ("Item padding");
-  gtk_widget_set_hexpand (label, TRUE);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), gtk_icon_view_get_item_padding (GTK_ICON_VIEW (iconview)));
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
   gtk_container_add (GTK_CONTAINER (hbox), widget);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
 

@@ -53,10 +53,10 @@ struct _GtkInspectorResourceListPrivate
   GtkTextBuffer *buffer;
   GtkWidget *image;
   GtkWidget *content;
-  GtkWidget *name_label;
+  GtkLabel  *name_label;
   GtkWidget *type;
-  GtkWidget *type_label;
-  GtkWidget *size_label;
+  GtkLabel  *type_label;
+  GtkLabel  *size_label;
   GtkWidget *info_grid;
   GtkWidget *stack;
   GtkWidget *tree;
@@ -178,7 +178,7 @@ populate_details (GtkInspectorResourceList *rl,
      }
 
   markup = g_strconcat ("<span face='Monospace' size='small'>", path, "</span>", NULL);
-  gtk_label_set_markup (GTK_LABEL (rl->priv->name_label), markup);
+  gtk_label_set_markup (rl->priv->name_label, markup);
   g_free (markup);
 
   bytes = g_resources_lookup_data (path, 0, &error);
@@ -201,11 +201,11 @@ populate_details (GtkInspectorResourceList *rl,
       type = g_content_type_guess (name, data, size, NULL);
 
       text = g_content_type_get_description (type);
-      gtk_label_set_text (GTK_LABEL (rl->priv->type_label), text);
+      gtk_label_set_text (rl->priv->type_label, text);
       g_free (text);
 
       text = g_format_size (size);
-      gtk_label_set_text (GTK_LABEL (rl->priv->size_label), text);
+      gtk_label_set_text (rl->priv->size_label, text);
       g_free (text);
 
       if (g_content_type_is_a (type, content_text))

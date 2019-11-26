@@ -158,8 +158,8 @@ struct _GtkModelButton
 
   GtkWidget *box;
   GtkWidget *image;
-  GtkWidget *label;
-  GtkWidget *accel_label;
+  GtkLabel *label;
+  GtkLabel *accel_label;
   GtkWidget *start_box;
   GtkWidget *start_indicator;
   GtkWidget *end_indicator;
@@ -539,12 +539,12 @@ gtk_model_button_set_role (GtkModelButton *self,
   if (role == GTK_BUTTON_ROLE_TITLE)
     {
       gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (self)), "title");
-      gtk_widget_set_halign (self->label, GTK_ALIGN_CENTER);
+      gtk_widget_set_halign (GTK_WIDGET (self->label), GTK_ALIGN_CENTER);
     }
   else
     {
       gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (self)), "title");
-      gtk_widget_set_halign (self->label, GTK_ALIGN_START);
+      gtk_widget_set_halign (GTK_WIDGET (self->label), GTK_ALIGN_START);
     }
 
   update_node_name (self);
@@ -560,17 +560,17 @@ update_visibility (GtkModelButton *self)
   gboolean has_text;
 
   has_icon = self->image && gtk_image_get_storage_type (GTK_IMAGE (self->image)) != GTK_IMAGE_EMPTY;
-  has_text = gtk_label_get_text (GTK_LABEL (self->label))[0] != '\0';
+  has_text = gtk_label_get_text (self->label)[0] != '\0';
 
-  gtk_widget_set_visible (self->label, has_text && (!self->iconic || !has_icon));
-  gtk_widget_set_hexpand (self->label,
-                          gtk_widget_get_visible (self->label) && !has_icon);
+  gtk_widget_set_visible (GTK_WIDGET (self->label), has_text && (!self->iconic || !has_icon));
+  gtk_widget_set_hexpand (GTK_WIDGET (self->label),
+                          gtk_widget_get_visible (GTK_WIDGET (self->label)) && !has_icon);
 
   if (self->image)
     {
       gtk_widget_set_visible (self->image, has_icon && (self->iconic || !has_text));
       gtk_widget_set_hexpand (self->image,
-                              has_icon && (!has_text || !gtk_widget_get_visible (self->label)));
+                              has_icon && (!has_text || !gtk_widget_get_visible (GTK_WIDGET (self->label))));
     }
 }
 
@@ -581,7 +581,7 @@ gtk_model_button_set_icon (GtkModelButton *self,
   if (!self->image && icon)
     {
       self->image = gtk_image_new_from_gicon (icon);
-      gtk_widget_insert_before (self->image, GTK_WIDGET (self), self->label);
+      gtk_widget_insert_before (self->image, GTK_WIDGET (self), GTK_WIDGET (self->label));
     }
   else if (self->image && !icon)
     {
@@ -600,7 +600,7 @@ static void
 gtk_model_button_set_text (GtkModelButton *button,
                            const gchar    *text)
 {
-  gtk_label_set_text_with_mnemonic (GTK_LABEL (button->label),
+  gtk_label_set_text_with_mnemonic (button->label,
                                     text ? text : "");
   update_visibility (button);
   g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_TEXT]);
@@ -611,10 +611,10 @@ gtk_model_button_set_use_markup (GtkModelButton *button,
                                  gboolean        use_markup)
 {
   use_markup = !!use_markup;
-  if (gtk_label_get_use_markup (GTK_LABEL (button->label)) == use_markup)
+  if (gtk_label_get_use_markup (button->label) == use_markup)
     return;
 
-  gtk_label_set_use_markup (GTK_LABEL (button->label), use_markup);
+  gtk_label_set_use_markup (button->label, use_markup);
   update_visibility (button);
   g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_USE_MARKUP]);
 }
@@ -734,20 +734,20 @@ update_accel (GtkModelButton *self,
           self->accel_label = g_object_new (GTK_TYPE_LABEL,
                                             "css-name", "accelerator",
                                             NULL);
-          gtk_widget_insert_before (self->accel_label, GTK_WIDGET (self), NULL);
+          gtk_widget_insert_before (GTK_WIDGET (self->accel_label), GTK_WIDGET (self), NULL);
         }
 
       gtk_accelerator_parse (accel, &key, &mods);
 
       accel_class = g_type_class_ref (GTK_TYPE_ACCEL_LABEL);
       str = _gtk_accel_label_class_get_accelerator_label (accel_class, key, mods);
-      gtk_label_set_label (GTK_LABEL (self->accel_label), str);
+      gtk_label_set_label (self->accel_label, str);
       g_free (str);
       g_type_class_unref (accel_class);
     }
   else
     {
-      g_clear_pointer (&self->accel_label, gtk_widget_unparent);
+      g_clear_pointer ((GtkWidget **) &self->accel_label, gtk_widget_unparent);
     }
 }
 
@@ -781,11 +781,11 @@ gtk_model_button_get_property (GObject    *object,
       break;
 
     case PROP_TEXT:
-      g_value_set_string (value, gtk_label_get_text (GTK_LABEL (self->label)));
+      g_value_set_string (value, gtk_label_get_text (self->label));
       break;
 
     case PROP_USE_MARKUP:
-      g_value_set_boolean (value, gtk_label_get_use_markup (GTK_LABEL (self->label)));
+      g_value_set_boolean (value, gtk_label_get_use_markup (self->label));
       break;
 
     case PROP_ACTIVE:
@@ -969,9 +969,9 @@ gtk_model_button_finalize (GObject *object)
   GtkModelButton *button = GTK_MODEL_BUTTON (object);
 
   g_clear_pointer (&button->image, gtk_widget_unparent);
-  g_clear_pointer (&button->label, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **) &button->label, gtk_widget_unparent);
   g_clear_pointer (&button->start_box, gtk_widget_unparent);
-  g_clear_pointer (&button->accel_label, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **) &button->accel_label, gtk_widget_unparent);
   g_clear_pointer (&button->end_indicator, gtk_widget_unparent);
   g_clear_object (&button->action_helper);
   g_free (button->accel);
@@ -1367,8 +1367,8 @@ gtk_model_button_init (GtkModelButton *self)
 
   self->role = GTK_BUTTON_ROLE_NORMAL;
   self->label = gtk_label_new ("");
-  gtk_widget_set_halign (self->label, GTK_ALIGN_START);
-  gtk_widget_set_parent (self->label, GTK_WIDGET (self));
+  gtk_widget_set_halign (GTK_WIDGET (self->label), GTK_ALIGN_START);
+  gtk_widget_set_parent (GTK_WIDGET (self->label), GTK_WIDGET (self));
 
   self->start_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_insert_after (self->start_box, GTK_WIDGET (self), NULL);

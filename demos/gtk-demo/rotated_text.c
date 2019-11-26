@@ -174,7 +174,7 @@ do_rotated_text (GtkWidget *do_widget)
     {
       GtkWidget *box;
       GtkWidget *drawing_area;
-      GtkWidget *label;
+      GtkLabel *label;
       PangoLayout *layout;
       PangoAttrList *attrs;
 
@@ -202,15 +202,15 @@ do_rotated_text (GtkWidget *do_widget)
 
       /* And a label */
       label = gtk_label_new (text);
-      gtk_container_add (GTK_CONTAINER (box), label);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
       /* Set up fancy stuff on the label */
-      layout = gtk_label_get_layout (GTK_LABEL (label));
+      layout = gtk_label_get_layout (label);
       pango_cairo_context_set_shape_renderer (pango_layout_get_context (layout),
                                               fancy_shape_renderer,
                                               NULL, NULL);
       attrs = create_fancy_attr_list_for_layout (layout);
-      gtk_label_set_attributes (GTK_LABEL (label), attrs);
+      gtk_label_set_attributes (label, attrs);
       pango_attr_list_unref (attrs);
     }
 

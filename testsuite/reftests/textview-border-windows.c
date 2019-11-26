@@ -22,11 +22,11 @@ set_border_window_size (GtkTextView       *text_view,
                         GtkTextWindowType  win,
                         gint               size)
 {
-  GtkWidget *label;
+  GtkLabel *label;
 
   label = gtk_label_new (NULL);
-  gtk_widget_set_size_request (label, size, size);
-  gtk_text_view_set_gutter (text_view, win, label);
+  gtk_widget_set_size_request (GTK_WIDGET (label), size, size);
+  gtk_text_view_set_gutter (text_view, win, GTK_WIDGET (label));
 }
 
 G_MODULE_EXPORT void

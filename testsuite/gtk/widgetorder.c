@@ -4,7 +4,7 @@ static void
 simple (void)
 {
   GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  GtkWidget *l = gtk_label_new ("");
+  GtkWidget *l = GTK_WIDGET (gtk_label_new (""));
 
   gtk_container_add (GTK_CONTAINER (box), l);
 
@@ -22,8 +22,8 @@ static void
 two (void)
 {
   GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  GtkWidget *l1 = gtk_label_new ("");
-  GtkWidget *l2 = gtk_label_new ("");
+  GtkWidget *l1 = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l2 = GTK_WIDGET (gtk_label_new (""));
 
   gtk_container_add (GTK_CONTAINER (box), l1);
   gtk_container_add (GTK_CONTAINER (box), l2);
@@ -43,9 +43,9 @@ two (void)
 static void
 prepend (void)
 {
-  GtkWidget *p = gtk_label_new ("");
-  GtkWidget *l1 = gtk_label_new ("");
-  GtkWidget *l2 = gtk_label_new ("");
+  GtkWidget *p = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l1 = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l2 = GTK_WIDGET (gtk_label_new (""));
 
   gtk_widget_set_parent (l1, p);
   gtk_widget_insert_after (l2, p, NULL);
@@ -67,9 +67,9 @@ prepend (void)
 static void
 append (void)
 {
-  GtkWidget *p = gtk_label_new ("");
-  GtkWidget *l1 = gtk_label_new ("");
-  GtkWidget *l2 = gtk_label_new ("");
+  GtkWidget *p = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l1 = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l2 = GTK_WIDGET (gtk_label_new (""));
 
   gtk_widget_set_parent (l1, p);
   gtk_widget_insert_before (l2, p, NULL);
@@ -89,10 +89,10 @@ append (void)
 static void
 insert_after (void)
 {
-  GtkWidget *p = gtk_label_new ("");
-  GtkWidget *l1 = gtk_label_new ("");
-  GtkWidget *l2 = gtk_label_new ("");
-  GtkWidget *l3 = gtk_label_new ("");
+  GtkWidget *p = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l1 = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l2 = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l3 = GTK_WIDGET (gtk_label_new (""));
 
   gtk_widget_set_parent (l1, p);
   gtk_widget_set_parent (l3, p);
@@ -126,10 +126,10 @@ insert_after (void)
 static void
 insert_before (void)
 {
-  GtkWidget *p = gtk_label_new ("");
-  GtkWidget *l1 = gtk_label_new ("");
-  GtkWidget *l2 = gtk_label_new ("");
-  GtkWidget *l3 = gtk_label_new ("");
+  GtkWidget *p = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l1 = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l2 = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l3 = GTK_WIDGET (gtk_label_new (""));
 
   gtk_widget_set_parent (l1, p);
   gtk_widget_set_parent (l3, p);
@@ -163,8 +163,8 @@ insert_before (void)
 static void
 insert_after_self (void)
 {
-  GtkWidget *p = gtk_label_new ("");
-  GtkWidget *l = gtk_label_new ("");
+  GtkWidget *p = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l = GTK_WIDGET (gtk_label_new (""));
 
   gtk_widget_insert_after (l, p, NULL);
 
@@ -193,8 +193,8 @@ insert_after_self (void)
 static void
 insert_before_self (void)
 {
-  GtkWidget *p = gtk_label_new ("");
-  GtkWidget *l = gtk_label_new ("");
+  GtkWidget *p = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l = GTK_WIDGET (gtk_label_new (""));
 
   gtk_widget_insert_before (l, p, NULL);
 
@@ -223,10 +223,10 @@ insert_before_self (void)
 static void
 reorder_after (void)
 {
-  GtkWidget *p = gtk_label_new ("");
-  GtkWidget *l1 = gtk_label_new ("");
-  GtkWidget *l2 = gtk_label_new ("");
-  GtkWidget *l3 = gtk_label_new ("");
+  GtkWidget *p = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l1 = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l2 = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l3 = GTK_WIDGET (gtk_label_new (""));
 
   gtk_widget_set_parent (l1, p);
   gtk_widget_set_parent (l3, p);
@@ -277,10 +277,10 @@ reorder_after (void)
 static void
 reorder_before (void)
 {
-  GtkWidget *p = gtk_label_new ("");
-  GtkWidget *l1 = gtk_label_new ("");
-  GtkWidget *l2 = gtk_label_new ("");
-  GtkWidget *l3 = gtk_label_new ("");
+  GtkWidget *p = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l1 = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l2 = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l3 = GTK_WIDGET (gtk_label_new (""));
 
   gtk_widget_set_parent (l1, p);
   gtk_widget_set_parent (l3, p);
@@ -331,10 +331,10 @@ reorder_before (void)
 static void
 reorder_start (void)
 {
-  GtkWidget *p = gtk_label_new ("");
-  GtkWidget *l1 = gtk_label_new ("");
-  GtkWidget *l2 = gtk_label_new ("");
-  GtkWidget *l3 = gtk_label_new ("");
+  GtkWidget *p = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l1 = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l2 = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l3 = GTK_WIDGET (gtk_label_new (""));
 
   gtk_widget_set_parent (l1, p);
   gtk_widget_set_parent (l3, p);
@@ -385,10 +385,10 @@ reorder_start (void)
 static void
 reorder_end (void)
 {
-  GtkWidget *p = gtk_label_new ("");
-  GtkWidget *l1 = gtk_label_new ("");
-  GtkWidget *l2 = gtk_label_new ("");
-  GtkWidget *l3 = gtk_label_new ("");
+  GtkWidget *p = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l1 = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l2 = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l3 = GTK_WIDGET (gtk_label_new (""));
 
   gtk_widget_set_parent (l1, p);
   gtk_widget_set_parent (l3, p);
@@ -439,9 +439,9 @@ reorder_end (void)
 static void
 same_after (void)
 {
-  GtkWidget *p = gtk_label_new ("");
-  GtkWidget *l1 = gtk_label_new ("");
-  GtkWidget *l2 = gtk_label_new ("");
+  GtkWidget *p = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l1 = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l2 = GTK_WIDGET (gtk_label_new (""));
 
   gtk_widget_set_parent (l1, p);
   gtk_widget_set_parent (l2, p);
@@ -473,9 +473,9 @@ same_after (void)
 static void
 same_before (void)
 {
-  GtkWidget *p = gtk_label_new ("");
-  GtkWidget *l1 = gtk_label_new ("");
-  GtkWidget *l2 = gtk_label_new ("");
+  GtkWidget *p = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l1 = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l2 = GTK_WIDGET (gtk_label_new (""));
 
   gtk_widget_set_parent (l1, p);
   gtk_widget_set_parent (l2, p);
@@ -507,10 +507,10 @@ same_before (void)
 static void
 no_loop (void)
 {
-  GtkWidget *p = gtk_label_new ("");
-  GtkWidget *l1 = gtk_label_new ("");
-  GtkWidget *l2 = gtk_label_new ("");
-  GtkWidget *l3 = gtk_label_new ("");
+  GtkWidget *p = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l1 = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l2 = GTK_WIDGET (gtk_label_new (""));
+  GtkWidget *l3 = GTK_WIDGET (gtk_label_new (""));
 
   gtk_widget_set_parent (l1, p);
   gtk_widget_set_parent (l2, p);

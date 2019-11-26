@@ -273,7 +273,7 @@ canvas_item_new (int i,
                  double y,
                  double angle)
 {
-  GtkWidget *widget;
+  GtkLabel *widget;
   char *label;
   char *id;
   TransformData *transform_data;
@@ -288,10 +288,10 @@ canvas_item_new (int i,
   gdk_rgba_parse (&rgba, "yellow");
 
   widget = gtk_label_new (label);
-  gtk_style_context_add_class (gtk_widget_get_style_context (widget), "frame");
-  gtk_widget_set_name (widget, id);
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (widget)), "frame");
+  gtk_widget_set_name (GTK_WIDGET (widget), id);
 
-  set_color (widget, &rgba);
+  set_color (GTK_WIDGET (widget), &rgba);
   transform_data = g_new0 (TransformData, 1);
   transform_data->x = x;
   transform_data->y = y;
@@ -305,19 +305,19 @@ canvas_item_new (int i,
   dest = gtk_drop_target_new (formats, GDK_ACTION_COPY);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (item_drag_drop), NULL);
   g_signal_connect (dest, "accept", G_CALLBACK (item_drag_motion), NULL);
-  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (dest));
+  gtk_widget_add_controller (GTK_WIDGET (widget), GTK_EVENT_CONTROLLER (dest));
   gdk_content_formats_unref (formats);
 
   gesture = gtk_gesture_rotate_new ();
   g_signal_connect (gesture, "angle-changed", G_CALLBACK (angle_changed), NULL);
   g_signal_connect (gesture, "end", G_CALLBACK (rotate_done), NULL);
-  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
+  gtk_widget_add_controller (GTK_WIDGET (widget), GTK_EVENT_CONTROLLER (gesture));
 
   gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "released", G_CALLBACK (click_done), NULL);
-  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
+  gtk_widget_add_controller (GTK_WIDGET (widget), GTK_EVENT_CONTROLLER (gesture));
   
-  return widget;
+  return GTK_WIDGET (widget);
 }
 
 int main (int argc, char *argv[])

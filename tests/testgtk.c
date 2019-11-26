@@ -120,7 +120,7 @@ build_alpha_widgets (void)
   GtkWidget *radio_button;
   GtkWidget *check_button;
   GtkWidget *hbox;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *entry;
 
   grid = gtk_grid_new ();
@@ -151,8 +151,8 @@ build_alpha_widgets (void)
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   label = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (label), "<i>Entry: </i>");
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_label_set_markup (label, "<i>Entry: </i>");
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
   gtk_container_add (GTK_CONTAINER (hbox), entry);
@@ -187,7 +187,7 @@ create_alpha_window (GtkWidget *widget)
     {
       GtkWidget *content_area;
       GtkWidget *vbox;
-      GtkWidget *label;
+      GtkLabel *label;
       GdkDisplay *display;
       GtkCssProvider *provider;
       
@@ -212,13 +212,13 @@ create_alpha_window (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (content_area), vbox);
 
       label = gtk_label_new (NULL);
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
       
       label = gtk_label_new (NULL);
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
       display = gtk_widget_get_display (window);
-      on_composited_changed (display, NULL, GTK_LABEL (label));
-      g_signal_connect (display, "notify::composited", G_CALLBACK (on_composited_changed), label);
+      on_composited_changed (display, NULL, label);
+      g_signal_connect (display, "notify::composited", G_CALLBACK (on_composited_changed), GTK_WIDGET (label));
 
       gtk_container_add (GTK_CONTAINER (vbox), build_alpha_widgets ());
 
@@ -409,13 +409,13 @@ create_widget_grid (GType widget_type)
 	  else if (i == 0)
 	    {
 	      tmp = g_strdup_printf ("%d", j);
-	      widget = gtk_label_new (tmp);
+	      widget = GTK_WIDGET (gtk_label_new (tmp));
 	      g_free (tmp);
 	    }
 	  else if (j == 0)
 	    {
 	      tmp = g_strdup_printf ("%c", 'A' + i - 1);
-	      widget = gtk_label_new (tmp);
+	      widget = GTK_WIDGET (gtk_label_new (tmp));
 	      g_free (tmp);
 	    }
 	  else
@@ -909,7 +909,7 @@ activate_link (GtkWidget *label, const gchar *uri, gpointer data)
 
       gtk_window_present (GTK_WINDOW (dialog));
 
-      g_signal_connect (dialog, "response", G_CALLBACK (dialog_response), label);
+      g_signal_connect (dialog, "response", G_CALLBACK (dialog_response), GTK_WIDGET (label));
 
       return TRUE;
     }
@@ -923,7 +923,7 @@ void create_labels (GtkWidget *widget)
   GtkWidget *hbox;
   GtkWidget *vbox;
   GtkWidget *frame;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *button;
 
   if (!window)
@@ -960,55 +960,55 @@ void create_labels (GtkWidget *widget)
 
       frame = gtk_frame_new ("Normal Label");
       label = gtk_label_new ("This is a Normal label");
-      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_START);
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_START);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (label));
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       frame = gtk_frame_new ("Multi-line Label");
       label = gtk_label_new ("This is a Multi-line label.\nSecond line\nThird line");
-      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (label));
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       frame = gtk_frame_new ("Left Justified Label");
       label = gtk_label_new ("This is a Left-Justified\nMulti-line label.\nThird      line");
-      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_MIDDLE);
-      gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_MIDDLE);
+      gtk_label_set_justify (label, GTK_JUSTIFY_LEFT);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (label));
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       frame = gtk_frame_new ("Right Justified Label");
-      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_START);
+      gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_START);
       label = gtk_label_new ("This is a Right-Justified\nMulti-line label.\nFourth line, (j/k)");
-      gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_RIGHT);
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_label_set_justify (label, GTK_JUSTIFY_RIGHT);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (label));
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       frame = gtk_frame_new ("Internationalized Label");
       label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
+      gtk_label_set_markup (label,
 			    "French (Fran\303\247ais) Bonjour, Salut\n"
 			    "Korean (\355\225\234\352\270\200)   \354\225\210\353\205\225\355\225\230\354\204\270\354\232\224, \354\225\210\353\205\225\355\225\230\354\213\255\353\213\210\352\271\214\n"
 			    "Russian (\320\240\321\203\321\201\321\201\320\272\320\270\320\271) \320\227\320\264\321\200\320\260\320\262\321\201\321\202\320\262\321\203\320\271\321\202\320\265!\n"
 			    "Chinese (Simplified) <span lang=\"zh-cn\">\345\205\203\346\260\224	\345\274\200\345\217\221</span>\n"
 			    "Chinese (Traditional) <span lang=\"zh-tw\">\345\205\203\346\260\243	\351\226\213\347\231\274</span>\n"
 			    "Japanese <span lang=\"ja\">\345\205\203\346\260\227	\351\226\213\347\231\272</span>");
-      gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_label_set_justify (label, GTK_JUSTIFY_LEFT);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (label));
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       frame = gtk_frame_new ("Bidirection Label");
       label = gtk_label_new ("\342\200\217Arabic	\330\247\331\204\330\263\331\204\330\247\331\205 \330\271\331\204\331\212\331\203\331\205\n"
 			     "\342\200\217Hebrew	\327\251\327\234\327\225\327\235");
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (label));
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       frame = gtk_frame_new ("Links in a label");
       label = gtk_label_new ("Some <a href=\"http://en.wikipedia.org/wiki/Text\" title=\"plain text\">text</a> may be marked up\n"
                              "as hyperlinks, which can be clicked\n"
                              "or activated via <a href=\"keynav\">keynav</a>");
-      gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_label_set_use_markup (label, TRUE);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (label));
       gtk_container_add (GTK_CONTAINER (vbox), frame);
       g_signal_connect (label, "activate-link", G_CALLBACK (activate_link), NULL);
 
@@ -1023,8 +1023,8 @@ void create_labels (GtkWidget *widget)
 			     "     It supports multiple paragraphs correctly, and  correctly   adds "\
 			     "many          extra  spaces. ");
 
-      gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_label_set_wrap (label, TRUE);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (label));
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       frame = gtk_frame_new ("Filled, wrapped label");
@@ -1035,17 +1035,17 @@ void create_labels (GtkWidget *widget)
 			     "    This is a new paragraph.\n"\
 			     "    This is another newer, longer, better paragraph.  It is coming to an end, "\
 			     "unfortunately.");
-      gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_FILL);
-      gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_label_set_justify (label, GTK_JUSTIFY_FILL);
+      gtk_label_set_wrap (label, TRUE);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (label));
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       frame = gtk_frame_new ("Underlined label");
       label = gtk_label_new ("This label is underlined!\n"
 			     "This one is underlined (\343\201\223\343\202\223\343\201\253\343\201\241\343\201\257) in quite a funky fashion");
-      gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-      gtk_label_set_pattern (GTK_LABEL (label), "_________________________ _ _________ _ _____ _ __ __  ___ ____ _____");
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_label_set_justify (label, GTK_JUSTIFY_LEFT);
+      gtk_label_set_pattern (label, "_________________________ _ _________ _ _____ _ __ __  ___ ____ _____");
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (label));
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       frame = gtk_frame_new ("Markup label");
@@ -1054,7 +1054,7 @@ void create_labels (GtkWidget *widget)
       /* There's also a gtk_label_set_markup() without accel if you
        * don't have an accelerator key
        */
-      gtk_label_set_markup_with_mnemonic (GTK_LABEL (label),
+      gtk_label_set_markup_with_mnemonic (label,
 					  "This <span foreground=\"blue\" background=\"orange\">label</span> has "
 					  "<b>markup</b> _such as "
 					  "<big><i>Big Italics</i></big>\n"
@@ -1070,9 +1070,9 @@ void create_labels (GtkWidget *widget)
 					  "but this _word is <span foreground=\"purple\"><big>purple</big></span>\n"
 					  "<span underline=\"double\">We like <sup>superscript</sup> and <sub>subscript</sub> too</span>");
 
-      g_assert (gtk_label_get_mnemonic_keyval (GTK_LABEL (label)) == GDK_KEY_s);
+      g_assert (gtk_label_get_mnemonic_keyval (label) == GDK_KEY_s);
 
-      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (label));
       gtk_container_add (GTK_CONTAINER (vbox), frame);
     }
 
@@ -1217,7 +1217,7 @@ create_pixbuf (GtkWidget *widget)
   GtkWidget *box2;
   GtkWidget *box3;
   GtkWidget *button;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *separator;
   GtkWidget *pixbufwid;
   GdkSurface *gdk_surface;
@@ -1252,7 +1252,7 @@ create_pixbuf (GtkWidget *widget)
       label = gtk_label_new ("Pixbuf\ntest");
       box3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (box3), pixbufwid);
-      gtk_container_add (GTK_CONTAINER (box3), label);
+      gtk_container_add (GTK_CONTAINER (box3), GTK_WIDGET (label));
       gtk_container_add (GTK_CONTAINER (button), box3);
 
       button = gtk_button_new ();
@@ -1263,7 +1263,7 @@ create_pixbuf (GtkWidget *widget)
       label = gtk_label_new ("Pixbuf\ntest");
       box3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (box3), pixbufwid);
-      gtk_container_add (GTK_CONTAINER (box3), label);
+      gtk_container_add (GTK_CONTAINER (box3), GTK_WIDGET (label));
       gtk_container_add (GTK_CONTAINER (button), box3);
 
       gtk_widget_set_sensitive (button, FALSE);
@@ -1389,7 +1389,7 @@ pack_image (GtkWidget *box,
             GtkWidget *image)
 {
   gtk_container_add (GTK_CONTAINER (box),
-                      gtk_label_new (text));
+                     GTK_WIDGET (gtk_label_new (text)));
 
   gtk_container_add (GTK_CONTAINER (box),
                       image);
@@ -1507,11 +1507,11 @@ add_placeholder_clicked_cb (GtkButton *button,
                             gpointer data)
 {
   GtkListBox *list = data;
-  GtkWidget *label;
+  GtkLabel *label;
 
   label = gtk_label_new ("You filtered everything!!!");
-  gtk_widget_show (label);
-  gtk_list_box_set_placeholder (GTK_LIST_BOX (list), label);
+  gtk_widget_show (GTK_WIDGET (label));
+  gtk_list_box_set_placeholder (GTK_LIST_BOX (list), GTK_WIDGET (label));
 }
 
 static void
@@ -1531,7 +1531,8 @@ create_listbox (GtkWidget *widget)
 
   if (!window)
     {
-      GtkWidget *hbox, *vbox, *scrolled, *scrolled_box, *list, *label, *button;
+      GtkWidget *hbox, *vbox, *scrolled, *scrolled_box, *list, *button;
+      GtkLabel *label;
       GdkDisplay *display = gtk_widget_get_display (widget);
       int i;
 
@@ -1554,7 +1555,7 @@ create_listbox (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (scrolled), scrolled_box);
 
       label = gtk_label_new ("This is \na LABEL\nwith rows");
-      gtk_container_add (GTK_CONTAINER (scrolled_box), label);
+      gtk_container_add (GTK_CONTAINER (scrolled_box), GTK_WIDGET (label));
 
       list = gtk_list_box_new();
       gtk_list_box_set_adjustment (GTK_LIST_BOX (list), gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scrolled)));
@@ -1564,9 +1565,9 @@ create_listbox (GtkWidget *widget)
         {
           gint value = g_random_int_range (0, 10000);
           label = gtk_label_new (g_strdup_printf ("Value %u", value));
-          gtk_widget_show (label);
-          gtk_container_add (GTK_CONTAINER (list), label);
-          g_object_set_data (G_OBJECT (gtk_widget_get_parent (label)), "value", GINT_TO_POINTER (value));
+          gtk_widget_show (GTK_WIDGET (label));
+          gtk_container_add (GTK_CONTAINER (list), GTK_WIDGET (label));
+          g_object_set_data (G_OBJECT (gtk_widget_get_parent (GTK_WIDGET (label))), "value", GINT_TO_POINTER (value));
         }
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
@@ -1623,9 +1624,9 @@ accel_button_new (GtkAccelGroup *accel_group,
 
   label = gtk_accel_label_new (text);
   gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), button);
-  gtk_widget_show (label);
+  gtk_widget_show (GTK_WIDGET (label));
   
-  gtk_container_add (GTK_CONTAINER (button), label);
+  gtk_container_add (GTK_CONTAINER (button), GTK_WIDGET (label));
 
   return button;
 }
@@ -2209,7 +2210,7 @@ create_expander (GtkWidget *widget)
 {
   GtkWidget *box1;
   GtkWidget *expander;
-  GtkWidget *hidden;
+  GtkLabel *hidden;
   static GtkWidget *window = NULL;
 
   if (!window)
@@ -2233,7 +2234,7 @@ create_expander (GtkWidget *widget)
 
       hidden = gtk_label_new ("Revealed!");
 
-      gtk_container_add (GTK_CONTAINER (expander), hidden);
+      gtk_container_add (GTK_CONTAINER (expander), GTK_WIDGET (hidden));
     }
 
   if (!gtk_widget_get_visible (window))
@@ -2603,8 +2604,8 @@ create_spins (GtkWidget *widget)
   GtkWidget *spinner2;
   GtkWidget *spinner;
   GtkWidget *button;
-  GtkWidget *label;
-  GtkWidget *val_label;
+  GtkLabel *label;
+  GtkLabel *val_label;
   GtkAdjustment *adjustment;
 
   if (!window)
@@ -2637,9 +2638,9 @@ create_spins (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (hbox), vbox2);
 
       label = gtk_label_new ("Time :");
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_container_add (GTK_CONTAINER (vbox2), label);
+      gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+      gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+      gtk_container_add (GTK_CONTAINER (vbox2), GTK_WIDGET (label));
 
       adjustment = gtk_adjustment_new (0, 0, 1410, 30, 60, 0);
       spinner = gtk_spin_button_new (adjustment, 0, 0);
@@ -2656,9 +2657,9 @@ create_spins (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (hbox), vbox2);
 
       label = gtk_label_new ("Month :");
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_container_add (GTK_CONTAINER (vbox2), label);
+      gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+      gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+      gtk_container_add (GTK_CONTAINER (vbox2), GTK_WIDGET (label));
 
       adjustment = gtk_adjustment_new (1.0, 1.0, 12.0, 1.0,
 						  5.0, 0.0);
@@ -2681,9 +2682,9 @@ create_spins (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (hbox), vbox2);
 
       label = gtk_label_new ("Hex :");
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_container_add (GTK_CONTAINER (vbox2), label);
+      gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+      gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+      gtk_container_add (GTK_CONTAINER (vbox2), GTK_WIDGET (label));
 
       adjustment = gtk_adjustment_new (0, 0, 255, 1, 16, 0);
       spinner = gtk_spin_button_new (adjustment, 0, 0);
@@ -2713,9 +2714,9 @@ create_spins (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (hbox), vbox2);
 
       label = gtk_label_new ("Value :");
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_container_add (GTK_CONTAINER (vbox2), label);
+      gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+      gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+      gtk_container_add (GTK_CONTAINER (vbox2), GTK_WIDGET (label));
 
       adjustment = gtk_adjustment_new (0.0, -10000.0, 10000.0,
 						  0.5, 100.0, 0.0);
@@ -2727,9 +2728,9 @@ create_spins (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (hbox), vbox2);
 
       label = gtk_label_new ("Digits :");
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_container_add (GTK_CONTAINER (vbox2), label);
+      gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+      gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+      gtk_container_add (GTK_CONTAINER (vbox2), GTK_WIDGET (label));
 
       adjustment = gtk_adjustment_new (2, 1, 15, 1, 1, 0);
       spinner2 = gtk_spin_button_new (adjustment, 0.0, 0);
@@ -2774,8 +2775,8 @@ create_spins (GtkWidget *widget)
 			GINT_TO_POINTER (2));
       gtk_container_add (GTK_CONTAINER (hbox), button);
 
-      gtk_container_add (GTK_CONTAINER (vbox), val_label);
-      gtk_label_set_text (GTK_LABEL (val_label), "0");
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (val_label));
+      gtk_label_set_text (val_label, "0");
 
       frame = gtk_frame_new ("Using Convenience Constructor");
       gtk_container_add (GTK_CONTAINER (main_vbox), frame);
@@ -2790,7 +2791,7 @@ create_spins (GtkWidget *widget)
       g_signal_connect (spinner, "value_changed",
 			G_CALLBACK (get_spin_value), val_label);
       gtk_container_add (GTK_CONTAINER (hbox), spinner);
-      gtk_container_add (GTK_CONTAINER (hbox), val_label);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (val_label));
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (main_vbox), hbox);
@@ -3040,7 +3041,7 @@ create_cursors (GtkWidget *widget)
   GtkWidget *vbox;
   GtkWidget *darea;
   GtkWidget *button;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *any;
   GtkWidget *entry;
   GtkWidget *size;
@@ -3086,9 +3087,9 @@ create_cursors (GtkWidget *widget)
           gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
           label = gtk_label_new ("Cursor Theme:");
-          gtk_widget_set_halign (label, GTK_ALIGN_START);
-          gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-          gtk_container_add (GTK_CONTAINER (hbox), label);
+          gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+          gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+          gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
           entry = gtk_entry_new ();
           gtk_editable_set_text (GTK_EDITABLE (entry), "default");
@@ -3108,9 +3109,9 @@ create_cursors (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
       label = gtk_label_new ("Cursor Name:");
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_container_add (GTK_CONTAINER (hbox), label);
+      gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+      gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
       entry = gtk_entry_new ();
       completion = gtk_entry_completion_new ();
@@ -3176,7 +3177,7 @@ create_color_selection (GtkWidget *widget)
     {
       GtkWidget *picker;
       GtkWidget *hbox;
-      GtkWidget *label;
+      GtkLabel *label;
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_display (GTK_WINDOW (window), 
@@ -3192,7 +3193,7 @@ create_color_selection (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (window), hbox);
       
       label = gtk_label_new ("Pick a color");
-      gtk_container_add (GTK_CONTAINER (hbox), label);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
       picker = gtk_color_button_new ();
       gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (picker), TRUE);
@@ -3353,7 +3354,7 @@ create_font_selection (GtkWidget *widget)
     {
       GtkWidget *picker;
       GtkWidget *hbox;
-      GtkWidget *label;
+      GtkLabel *label;
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_display (GTK_WINDOW (window),
@@ -3369,7 +3370,7 @@ create_font_selection (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (window), hbox);
       
       label = gtk_label_new ("Pick a font");
-      gtk_container_add (GTK_CONTAINER (hbox), label);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
       picker = gtk_font_button_new ();
       gtk_font_button_set_use_font (GTK_FONT_BUTTON (picker), TRUE);
@@ -3411,13 +3412,13 @@ dialog_response_cb (GtkWidget *widget, gint response, gpointer unused)
       /* no label removed, so add one */
       if (l == NULL)
         {
-          GtkWidget *label;
+          GtkLabel *label;
 
           label = gtk_label_new ("Dialog Test");
           g_object_set (label, "margin", 10, NULL);
           gtk_container_add (GTK_CONTAINER (content_area),
-                              label);
-          gtk_widget_show (label);
+                             GTK_WIDGET (label));
+          gtk_widget_show (GTK_WIDGET (label));
         }
 
       g_list_free (children);
@@ -3536,7 +3537,8 @@ void
 create_display_screen (GtkWidget *widget)
 {
   GtkWidget *grid, *frame, *window, *combo_dpy, *vbox;
-  GtkWidget *label_dpy, *applyb, *cancelb;
+  GtkWidget *applyb, *cancelb;
+  GtkLabel *label_dpy;
   GtkWidget *bbox;
   ScreenDisplaySelection *scr_dpy_data;
   GdkDisplay *display = gtk_widget_get_display (widget);
@@ -3568,7 +3570,7 @@ create_display_screen (GtkWidget *widget)
   gtk_editable_set_text (GTK_EDITABLE (gtk_bin_get_child (GTK_BIN (combo_dpy))),
                          "<hostname>:<X Server Num>.<Screen Num>");
 
-  gtk_grid_attach (GTK_GRID (grid), label_dpy, 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label_dpy), 0, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), combo_dpy, 0, 1, 1, 1);
 
   bbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -3825,7 +3827,7 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
 {
   GtkWidget *child = NULL;
   GtkWidget *button;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *hbox;
   GtkWidget *vbox;
   GtkWidget *label_box;
@@ -3878,7 +3880,7 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
       gtk_widget_set_margin_bottom (pixwid, 1);
       gtk_widget_set_margin_top (pixwid, 1);
       label = gtk_label_new_with_mnemonic (accel_buffer);
-      gtk_container_add (GTK_CONTAINER (label_box), label);
+      gtk_container_add (GTK_CONTAINER (label_box), GTK_WIDGET (label));
       gtk_widget_show (label_box);
 
 
@@ -3892,7 +3894,7 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
       gtk_widget_set_margin_bottom (pixwid, 1);
       gtk_widget_set_margin_top (pixwid, 1);
       label = gtk_label_new (buffer);
-      gtk_container_add (GTK_CONTAINER (menu_box), label);
+      gtk_container_add (GTK_CONTAINER (menu_box), GTK_WIDGET (label));
       gtk_widget_show (menu_box);
 
       gtk_notebook_append_page_menu (notebook, child, label_box, menu_box);
@@ -3989,7 +3991,7 @@ create_notebook (GtkWidget *widget)
   GtkWidget *button;
   GtkWidget *separator;
   GtkWidget *omenu;
-  GtkWidget *label;
+  GtkLabel *label;
 
   static gchar *items[] =
   {
@@ -4046,7 +4048,7 @@ create_notebook (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (box1), box2);
 
       label = gtk_label_new ("Notebook Style :");
-      gtk_container_add (GTK_CONTAINER (box2), label);
+      gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (label));
 
       omenu = build_option_menu (items, G_N_ELEMENTS (items), 0,
 				 notebook_type_changed,
@@ -4137,7 +4139,7 @@ create_pane_options (GtkPaned    *paned,
   GtkWidget *child1, *child2;
   GtkWidget *frame;
   GtkWidget *grid;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *check_button;
 
   child1 = gtk_paned_get_child1 (paned);
@@ -4149,7 +4151,7 @@ create_pane_options (GtkPaned    *paned,
   gtk_container_add (GTK_CONTAINER (frame), grid);
   
   label = gtk_label_new (label1);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 0, 1, 1);
   
   check_button = gtk_check_button_new_with_label ("Resize");
   gtk_grid_attach (GTK_GRID (grid), check_button, 0, 1, 1, 1);
@@ -4166,7 +4168,7 @@ create_pane_options (GtkPaned    *paned,
                     child1);
 
   label = gtk_label_new (label2);
-  gtk_grid_attach (GTK_GRID (grid), label, 1, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 1, 0, 1, 1);
   
   check_button = gtk_check_button_new_with_label ("Resize");
   gtk_grid_attach (GTK_GRID (grid), check_button, 1, 1, 1, 1);
@@ -4418,7 +4420,7 @@ paned_keyboard_window3 (GtkWidget *widget)
 {
   GtkWidget *window3;
   GtkWidget *vbox2;
-  GtkWidget *label1;
+  GtkLabel *label1;
   GtkWidget *hpaned3;
   GtkWidget *frame9;
   GtkWidget *button14;
@@ -4443,7 +4445,7 @@ paned_keyboard_window3 (GtkWidget *widget)
   gtk_container_add (GTK_CONTAINER (window3), vbox2);
 
   label1 = gtk_label_new ("Three panes nested inside each other");
-  gtk_container_add (GTK_CONTAINER (vbox2), label1);
+  gtk_container_add (GTK_CONTAINER (vbox2), GTK_WIDGET (label1));
 
   hpaned3 = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_container_add (GTK_CONTAINER (vbox2), hpaned3);
@@ -4490,7 +4492,7 @@ paned_keyboard_window4 (GtkWidget *widget)
 {
   GtkWidget *window4;
   GtkWidget *vbox3;
-  GtkWidget *label2;
+  GtkLabel *label2;
   GtkWidget *hpaned6;
   GtkWidget *vpaned3;
   GtkWidget *button19;
@@ -4517,8 +4519,8 @@ paned_keyboard_window4 (GtkWidget *widget)
   gtk_container_add (GTK_CONTAINER (window4), vbox3);
 
   label2 = gtk_label_new ("Widget tree:\n\nhpaned \n - vpaned\n - hbox\n    - vpaned\n    - vpaned\n    - vpaned\n");
-  gtk_container_add (GTK_CONTAINER (vbox3), label2);
-  gtk_label_set_justify (GTK_LABEL (label2), GTK_JUSTIFY_LEFT);
+  gtk_container_add (GTK_CONTAINER (vbox3), GTK_WIDGET (label2));
+  gtk_label_set_justify (label2, GTK_JUSTIFY_LEFT);
 
   hpaned6 = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_container_add (GTK_CONTAINER (vbox3), hpaned6);
@@ -4643,7 +4645,7 @@ void
 create_wmhints (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *separator;
   GtkWidget *button;
   GtkWidget *box1;
@@ -4689,9 +4691,9 @@ create_wmhints (GtkWidget *widget)
       gtk_widget_show (box1);
 
       label = gtk_label_new ("Try iconizing me!");
-      gtk_widget_set_size_request (label, 150, 50);
-      gtk_container_add (GTK_CONTAINER (box1), label);
-      gtk_widget_show (label);
+      gtk_widget_set_size_request (GTK_WIDGET (label), 150, 50);
+      gtk_container_add (GTK_CONTAINER (box1), GTK_WIDGET (label));
+      gtk_widget_show (GTK_WIDGET (label));
 
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
@@ -4728,7 +4730,7 @@ create_wmhints (GtkWidget *widget)
 static void
 surface_state_callback (GdkSurface  *window,
                        GParamSpec *pspec,
-                       GtkWidget  *label)
+                       GtkLabel  *label)
 {
   gchar *msg;
   GdkSurfaceState new_state;
@@ -4751,7 +4753,7 @@ surface_state_callback (GdkSurface  *window,
                      "below" : "not below", ", ",
                      NULL);
 
-  gtk_label_set_text (GTK_LABEL (label), msg);
+  gtk_label_set_text (label, msg);
 
   g_free (msg);
 }
@@ -4759,7 +4761,7 @@ surface_state_callback (GdkSurface  *window,
 static GtkWidget*
 tracking_label (GtkWidget *window)
 {
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *hbox;
   GtkWidget *button;
 
@@ -4772,8 +4774,8 @@ tracking_label (GtkWidget *window)
 			   G_CONNECT_SWAPPED);
 
   label = gtk_label_new ("<no window state events received>");
-  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_label_set_wrap (label, TRUE);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
   g_object_set_data (G_OBJECT (label), "title", (gpointer)gtk_window_get_title (GTK_WINDOW (window)));
   g_signal_connect (gtk_native_get_surface (GTK_NATIVE (window)), "notify::state",
@@ -5011,10 +5013,10 @@ create_surface_states (GtkWidget *widget)
       gtk_widget_realize (normal);
 
       label = tracking_label (iconified);
-      gtk_container_add (GTK_CONTAINER (box1), label);
+      gtk_container_add (GTK_CONTAINER (box1), GTK_WIDGET (label));
 
       label = tracking_label (normal);
-      gtk_container_add (GTK_CONTAINER (box1), label);
+      gtk_container_add (GTK_CONTAINER (box1), GTK_WIDGET (label));
 
       gtk_widget_show (iconified);
       gtk_widget_show (normal);
@@ -5038,12 +5040,12 @@ size_allocate_callback (GtkWidget *widget,
 			int        baseline,
 			gpointer   data)
 {
-  GtkWidget *label = data;
+  GtkLabel *label = data;
   gchar *msg;
 
   msg = g_strdup_printf ("size: %d x %d\n", width, height);
 
-  gtk_label_set_text (GTK_LABEL (label), msg);
+  gtk_label_set_text (label, msg);
 
   g_free (msg);
 }
@@ -5127,7 +5129,7 @@ static GtkWidget*
 window_controls (GtkWidget *window)
 {
   GtkWidget *control_window;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *vbox;
   GtkWidget *button;
   GtkWidget *spin;
@@ -5155,9 +5157,9 @@ window_controls (GtkWidget *window)
   gtk_container_add (GTK_CONTAINER (control_window), vbox);
 
   label = gtk_label_new ("<no size>");
-  gtk_container_add (GTK_CONTAINER (vbox), label);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
-  g_signal_connect_after (window, "size-allocate", G_CALLBACK (size_allocate_callback), label);
+  g_signal_connect_after (window, "size-allocate", G_CALLBACK (size_allocate_callback), GTK_WIDGET (label));
 
   adjustment = gtk_adjustment_new (10.0, -2000.0, 2000.0, 1.0, 5.0, 0.0);
   spin = gtk_spin_button_new (adjustment, 0, 0);
@@ -5253,15 +5255,15 @@ create_window_sizing (GtkWidget *widget)
 
   if (!target_window)
     {
-      GtkWidget *label;
+      GtkLabel *label;
       
       target_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_display (GTK_WINDOW (target_window),
 			      gtk_widget_get_display (widget));
       label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label), "<span foreground=\"purple\"><big>Window being resized</big></span>\nBlah blah blah blah\nblah blah blah\nblah blah blah blah blah");
-      gtk_container_add (GTK_CONTAINER (target_window), label);
-      gtk_widget_show (label);
+      gtk_label_set_markup (label, "<span foreground=\"purple\"><big>Window being resized</big></span>\nBlah blah blah blah\nblah blah blah\nblah blah blah blah blah");
+      gtk_container_add (GTK_CONTAINER (target_window), GTK_WIDGET (label));
+      gtk_widget_show (GTK_WIDGET (label));
       
       g_signal_connect (target_window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed),
@@ -5298,7 +5300,7 @@ typedef struct _ProgressData {
   GtkWidget *y_align_spin;
   GtkWidget *step_spin;
   GtkWidget *act_blocks_spin;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *omenu1;
   GtkWidget *elmenu;
   GtkWidget *omenu2;
@@ -5330,7 +5332,7 @@ progress_timeout (gpointer data)
       text = g_strdup_printf ("%.0f%%", 100 * new_val);
     }
 
-  gtk_label_set_text (GTK_LABEL (pdata->label), text);
+  gtk_label_set_text (pdata->label, text);
   g_free (text);
 
   return TRUE;
@@ -5436,7 +5438,7 @@ create_progress_bar (GtkWidget *widget)
   GtkWidget *check;
   GtkWidget *frame;
   GtkWidget *grid;
-  GtkWidget *label;
+  GtkLabel *label;
   static ProgressData *pdata = NULL;
 
   static gchar *items1[] =
@@ -5496,9 +5498,9 @@ create_progress_bar (GtkWidget *widget)
       gtk_widget_set_valign (hbox, GTK_ALIGN_CENTER);
       gtk_container_add (GTK_CONTAINER (vbox2), hbox);
       label = gtk_label_new ("Label updated by user :");
-      gtk_container_add (GTK_CONTAINER (hbox), label);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
       pdata->label = gtk_label_new ("");
-      gtk_container_add (GTK_CONTAINER (hbox), pdata->label);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (pdata->label));
 
       frame = gtk_frame_new ("Options");
       gtk_container_add (GTK_CONTAINER (vbox), frame);
@@ -5512,9 +5514,9 @@ create_progress_bar (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (vbox2), grid);
 
       label = gtk_label_new ("Orientation :");
-      gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+      gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 0, 1, 1);
+      gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+      gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
       pdata->omenu1 = build_option_menu (items1, 4, 0,
 					 progressbar_toggle_orientation,
@@ -5538,7 +5540,7 @@ create_progress_bar (GtkWidget *widget)
       gtk_grid_attach (GTK_GRID (grid), hbox, 1, 2, 1, 1);
 
       label = gtk_label_new ("Text: ");
-      gtk_container_add (GTK_CONTAINER (hbox), label);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
       pdata->entry = gtk_entry_new ();
       gtk_widget_set_hexpand (pdata->entry, TRUE);
@@ -5549,10 +5551,10 @@ create_progress_bar (GtkWidget *widget)
       gtk_widget_set_size_request (pdata->entry, 100, -1);
 
       label = gtk_label_new ("Ellipsize text :");
-      gtk_grid_attach (GTK_GRID (grid), label, 0, 10, 1, 1);
+      gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 10, 1, 1);
 
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+      gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+      gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
       pdata->elmenu = build_option_menu (ellipsize_items,
                                          sizeof (ellipsize_items) / sizeof (ellipsize_items[0]),
                                          2, // PANGO_ELLIPSIZE_MIDDLE
@@ -5584,24 +5586,24 @@ create_progress_bar (GtkWidget *widget)
 static int timer = 0;
 
 gint
-timeout_test (GtkWidget *label)
+timeout_test (GtkLabel *label)
 {
   static int count = 0;
   static char buffer[32];
 
   sprintf (buffer, "count: %d", ++count);
-  gtk_label_set_text (GTK_LABEL (label), buffer);
+  gtk_label_set_text (label, buffer);
 
   return TRUE;
 }
 
 void
 start_timeout_test (GtkWidget *widget,
-		    GtkWidget *label)
+		    GtkLabel *label)
 {
   if (!timer)
     {
-      timer = g_timeout_add (100, (GSourceFunc)timeout_test, label);
+      timer = g_timeout_add (100, (GSourceFunc)timeout_test, GTK_WIDGET (label));
     }
 }
 
@@ -5631,7 +5633,7 @@ create_timeout_test (GtkWidget *widget)
   static GtkWidget *window = NULL;
   GtkWidget *action_area, *content_area;
   GtkWidget *button;
-  GtkWidget *label;
+  GtkLabel *label;
 
   if (!window)
     {
@@ -5651,8 +5653,8 @@ create_timeout_test (GtkWidget *widget)
 
       label = gtk_label_new ("count: 0");
       g_object_set (label, "margin", 10, NULL);
-      gtk_container_add (GTK_CONTAINER (content_area), label);
-      gtk_widget_show (label);
+      gtk_container_add (GTK_CONTAINER (content_area), GTK_WIDGET (label));
+      gtk_widget_show (GTK_WIDGET (label));
 
       button = gtk_button_new_with_label ("close");
       g_signal_connect_swapped (button, "clicked",
@@ -5699,7 +5701,7 @@ create_mainloop (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *content_area;
-  GtkWidget *label;
+  GtkLabel *label;
 
   if (!window)
     {
@@ -5719,8 +5721,8 @@ create_mainloop (GtkWidget *widget)
       label = gtk_label_new ("In recursive main loop...");
       g_object_set (label, "margin", 20, NULL);
 
-      gtk_container_add (GTK_CONTAINER (content_area), label);
-      gtk_widget_show (label);
+      gtk_container_add (GTK_CONTAINER (content_area), GTK_WIDGET (label));
+      gtk_widget_show (GTK_WIDGET (label));
 
       gtk_dialog_add_button (GTK_DIALOG (window),
                              "Leave",
@@ -5759,7 +5761,7 @@ hide_native (GtkWidget *button,
 static void
 native_response (GtkNativeDialog *self,
                  gint response_id,
-                 GtkWidget *label)
+                 GtkLabel *label)
 {
   static int count = 0;
   char *res;
@@ -5813,7 +5815,7 @@ native_response (GtkNativeDialog *self,
                            ++count,
                            response,
                            s->str);
-  gtk_label_set_text (GTK_LABEL (label), res);
+  gtk_label_set_text (label, res);
   g_free (response);
   g_string_free (s, TRUE);
 }
@@ -6014,7 +6016,8 @@ void
 create_native_dialogs (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
-  GtkWidget *box, *label;
+  GtkWidget *box;
+  GtkLabel *label;
   GtkWidget *show_button, *hide_button, *check_button;
   GtkFileChooserNative *native;
   GtkWidget *combo;
@@ -6043,7 +6046,7 @@ create_native_dialogs (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (window), box);
 
       label = gtk_label_new ("");
-      gtk_container_add (GTK_CONTAINER (box), label);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
       combo = gtk_combo_box_text_new ();
 
@@ -6098,7 +6101,7 @@ create_native_dialogs (GtkWidget *widget)
 
       /* connect signals */
       g_signal_connect (native, "response",
-                        G_CALLBACK (native_response), label);
+                        G_CALLBACK (native_response), GTK_WIDGET (label));
       g_signal_connect (show_button, "clicked",
                         G_CALLBACK (show_native), native);
       g_signal_connect (hide_button, "clicked",
@@ -6185,7 +6188,7 @@ create_main_window (void)
   GtkWidget *box2;
   GtkWidget *scrolled_window;
   GtkWidget *button;
-  GtkWidget *label;
+  GtkLabel *label;
   gchar buffer[64];
   GtkWidget *separator;
   int i;
@@ -6212,8 +6215,8 @@ create_main_window (void)
 	     gtk_get_minor_version ());
 
   label = gtk_label_new (buffer);
-  gtk_container_add (GTK_CONTAINER (box1), label);
-  gtk_widget_set_name (label, "testgtk-version-label");
+  gtk_container_add (GTK_CONTAINER (box1), GTK_WIDGET (label));
+  gtk_widget_set_name (GTK_WIDGET (label), "testgtk-version-label");
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_vexpand (scrolled_window, TRUE);

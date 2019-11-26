@@ -80,14 +80,14 @@ static void
 add_row (GtkWidget *list, gint i)
 {
   GtkWidget *row;
-  GtkWidget *label;
+  GtkLabel *label;
   gchar *text;
 
   row = selectable_row_new ();
   text = g_strdup_printf ("Docker %d", i);
   label = gtk_label_new (text);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  selectable_row_add ((SelectableRow*)row, label);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  selectable_row_add ((SelectableRow*)row, GTK_WIDGET (label));
   g_free (text);
 
   gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);

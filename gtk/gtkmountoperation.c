@@ -519,13 +519,13 @@ table_add_entry (GtkMountOperation *operation,
                  gpointer           user_data)
 {
   GtkWidget *entry;
-  GtkWidget *label;
+  GtkLabel *label;
 
   label = gtk_label_new_with_mnemonic (label_text);
-  gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-  gtk_widget_set_hexpand (label, FALSE);
-  operation->priv->user_widgets = g_list_prepend (operation->priv->user_widgets, label);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), FALSE);
+  operation->priv->user_widgets = g_list_prepend (operation->priv->user_widgets, GTK_WIDGET (label));
 
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
@@ -533,9 +533,9 @@ table_add_entry (GtkMountOperation *operation,
   if (value)
     gtk_editable_set_text (GTK_EDITABLE (entry), value);
 
-  gtk_grid_attach (GTK_GRID (operation->priv->grid), label, 0, row, 1, 1);
+  gtk_grid_attach (GTK_GRID (operation->priv->grid), GTK_WIDGET (label), 0, row, 1, 1);
   gtk_grid_attach (GTK_GRID (operation->priv->grid), entry, 1, row, 1, 1);
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+  gtk_label_set_mnemonic_widget (label, entry);
   operation->priv->user_widgets = g_list_prepend (operation->priv->user_widgets, entry);
 
   g_signal_connect (entry, "changed",
@@ -559,7 +559,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   GtkWindow *window;
   GtkWidget *hbox, *main_vbox, *icon;
   GtkWidget *grid;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *content_area, *action_area;
   gboolean   can_anonymous;
   guint      rows;
@@ -624,22 +624,22 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
     }
 
   label = gtk_label_new (primary);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+  gtk_label_set_wrap (label, TRUE);
   gtk_container_add (GTK_CONTAINER (main_vbox), GTK_WIDGET (label));
   g_free (primary);
   attrs = pango_attr_list_new ();
   pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
+  gtk_label_set_attributes (label, attrs);
   pango_attr_list_unref (attrs);
 
   if (secondary != NULL)
     {
       label = gtk_label_new (secondary);
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_label_set_wrap (GTK_LABEL (label), TRUE);
+      gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+      gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+      gtk_label_set_wrap (label, TRUE);
       gtk_container_add (GTK_CONTAINER (main_vbox), GTK_WIDGET (label));
     }
 
@@ -662,10 +662,10 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
       GSList    *group;
 
       label = gtk_label_new (_("Connect As"));
-      gtk_widget_set_halign (label, GTK_ALIGN_END);
-      gtk_widget_set_valign (label, GTK_ALIGN_START);
-      gtk_widget_set_hexpand (label, FALSE);
-      gtk_grid_attach (GTK_GRID (grid), label, 0, rows, 1, 1);
+      gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_END);
+      gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_START);
+      gtk_widget_set_hexpand (GTK_WIDGET (label), FALSE);
+      gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, rows, 1, 1);
 
       anon_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_grid_attach (GTK_GRID (grid), anon_box, 1, rows++, 1, 1);
@@ -699,13 +699,13 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   priv->pim_entry = NULL;
   if (priv->ask_flags & G_ASK_PASSWORD_TCRYPT)
     {
-      GtkWidget *volume_type_label;
+      GtkLabel *volume_type_label;
       GtkWidget *volume_type_box;
 
       volume_type_label = gtk_label_new (_("Volume type"));
-      gtk_widget_set_halign (volume_type_label, GTK_ALIGN_END);
-      gtk_widget_set_hexpand (volume_type_label, FALSE);
-      gtk_grid_attach (GTK_GRID (grid), volume_type_label, 0, rows, 1, 1);
+      gtk_widget_set_halign (GTK_WIDGET (volume_type_label), GTK_ALIGN_END);
+      gtk_widget_set_hexpand (GTK_WIDGET (volume_type_label), FALSE);
+      gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (volume_type_label), 0, rows, 1, 1);
       priv->user_widgets = g_list_prepend (priv->user_widgets, volume_type_label);
 
       volume_type_box =  gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
@@ -741,7 +741,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
       priv->user_widgets = g_list_prepend (priv->user_widgets, remember_box);
 
       label = gtk_label_new ("");
-      gtk_container_add (GTK_CONTAINER (remember_box), label);
+      gtk_container_add (GTK_CONTAINER (remember_box), GTK_WIDGET (label));
 
       password_save = g_mount_operation_get_password_save (G_MOUNT_OPERATION (operation));
       priv->password_save = password_save;
@@ -1455,7 +1455,7 @@ create_show_processes_dialog (GtkMountOperation *op,
   const char *secondary = NULL;
   char       *primary;
   int        count, len = 0;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *tree_view;
   GtkWidget *scrolled_window;
   GtkWidget *vbox;
@@ -1498,9 +1498,9 @@ create_show_processes_dialog (GtkMountOperation *op,
 
   g_free (primary);
   label = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (label), s);
+  gtk_label_set_markup (label, s);
   g_free (s);
-  gtk_container_add (GTK_CONTAINER (vbox), label);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
   /* First count the items in the list then
    * add the buttons in reverse order

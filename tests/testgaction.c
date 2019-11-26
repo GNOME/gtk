@@ -1,31 +1,31 @@
 #include <gtk/gtk.h>
 
-GtkWidget *label;
+GtkLabel *label;
 
 
 static void
 change_label_button ()
 {
-  gtk_label_set_label (GTK_LABEL (label), "Text set from button");
+  gtk_label_set_label (label, "Text set from button");
 }
 
 static void
 normal_menu_item ()
 {
-  gtk_label_set_label (GTK_LABEL (label), "Text set from normal menu item");
+  gtk_label_set_label (label, "Text set from normal menu item");
 }
 
 static void
 toggle_menu_item ()
 {
 
-  gtk_label_set_label (GTK_LABEL (label), "Text set from toggle menu item");
+  gtk_label_set_label (label, "Text set from toggle menu item");
 }
 
 static void
 submenu_item ()
 {
-  gtk_label_set_label (GTK_LABEL (label), "Text set from submenu item");
+  gtk_label_set_label (label, "Text set from submenu item");
 }
 
 static void
@@ -37,7 +37,7 @@ radio (GSimpleAction *action, GVariant *parameter, gpointer user_data)
   str = g_strdup_printf ("From Radio menu item %s",
                          g_variant_get_string (new_state, NULL));
 
-  gtk_label_set_label (GTK_LABEL (label), str);
+  gtk_label_set_label (label, str);
 
   g_free (str);
 }
@@ -116,9 +116,9 @@ int main (int argc, char **argv)
 
 
   label = gtk_label_new ("Initial Text");
-  gtk_widget_set_margin_top (label, 12);
-  gtk_widget_set_margin_bottom (label, 12);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_widget_set_margin_top (GTK_WIDGET (label), 12);
+  gtk_widget_set_margin_bottom (GTK_WIDGET (label), 12);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
   gtk_widget_set_halign (menubutton, GTK_ALIGN_CENTER);
   {
     GMenuModel *menu_model;
