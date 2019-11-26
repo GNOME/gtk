@@ -137,6 +137,16 @@ static double gdk_paintable_default_get_intrinsic_aspect_ratio (GdkPaintable *pa
 };
 
 static void
+g_value_object_transform_value (const GValue *src_value,
+				GValue       *dest_value)
+{
+  if (src_value->data[0].v_pointer && g_type_is_a (G_OBJECT_TYPE (src_value->data[0].v_pointer), G_VALUE_TYPE (dest_value)))
+    dest_value->data[0].v_pointer = g_object_ref (src_value->data[0].v_pointer);
+  else
+    dest_value->data[0].v_pointer = NULL;
+}
+
+static void
 gdk_paintable_default_init (GdkPaintableInterface *iface)
 {
   iface->snapshot = gdk_paintable_default_snapshot;
@@ -145,6 +155,9 @@ gdk_paintable_default_init (GdkPaintableInterface *iface)
   iface->get_intrinsic_width = gdk_paintable_default_get_intrinsic_width;
   iface->get_intrinsic_height = gdk_paintable_default_get_intrinsic_height;
   iface->get_intrinsic_aspect_ratio = gdk_paintable_default_get_intrinsic_aspect_ratio;
+
+  g_value_register_transform_func (G_TYPE_OBJECT, GDK_TYPE_PAINTABLE, g_value_object_transform_value);
+  g_value_register_transform_func (GDK_TYPE_PAINTABLE, G_TYPE_OBJECT, g_value_object_transform_value);
 
   /**
    * GdkPaintable::invalidate-contents
