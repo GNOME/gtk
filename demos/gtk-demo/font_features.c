@@ -880,7 +880,7 @@ add_instance (hb_face_t    *face,
   name_id = hb_ot_var_named_instance_get_subfamily_name_id (face, index);
   hb_ot_name_get_utf8 (face, name_id, HB_LANGUAGE_INVALID, &name_len, name);
 
-  instance->name = g_strdup_printf (name);
+  instance->name = g_strdup (name);
   instance->index = index;
 
   g_hash_table_add (instances, instance);
