@@ -532,6 +532,20 @@
 		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
 
+-(void)scrollPageDown: (id)sender
+{
+  GDK_NOTE (EVENTS, g_message ("scrollPageDown"));
+  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
+}
+
+-(void)scrollPageUp: (id)sender
+{
+  GDK_NOTE (EVENTS, g_message ("scrollPageUp"));
+  g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
+		     GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
+}
+
 -(void)selectAll: (id)sender
 {
   GDK_NOTE (EVENTS, g_message ("selectAll"));
