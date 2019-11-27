@@ -20,7 +20,7 @@
 
 #include "gtkquartz.h"
 #include "gtkselectionprivate.h"
-#include <gdk/quartz/gdkquartz.h>
+#include <gdk/quartz/gdkquartz-gtk-only.h>
 
 
 static gboolean

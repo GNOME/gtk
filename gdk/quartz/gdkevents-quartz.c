@@ -34,8 +34,10 @@
 #include "gdkquartz.h"
 #include "gdkquartzdisplay.h"
 #include "gdkprivate-quartz.h"
+#include "gdkinternal-quartz.h"
 #include "gdkquartzdevicemanager-core.h"
 #include "gdkquartzkeys.h"
+#include "gdkkeys-quartz.h"
 
 #define GRIP_WIDTH 15
 #define GRIP_HEIGHT 15
@@ -50,6 +52,7 @@
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN && \
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
+
 
 /* This is the window corresponding to the key window */
 static GdkWindow   *current_keyboard_window;

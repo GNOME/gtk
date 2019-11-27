@@ -25,7 +25,10 @@
 #include "gtk/gtkintl.h"
 #include "gtk/gtkimmodule.h"
 
-#include "gdk/quartz/gdkquartz.h"
+#define GTK_COMPILATION 1 // For gdkquartz-gtk-only.h
+
+#include "gdk/quartz/gdkinternal-quartz.h"
+#include "gdk/quartz/gdkquartz-gtk-only.h"
 #include "gdk/quartz/GdkQuartzView.h"
 
 #define GTK_IM_CONTEXT_TYPE_QUARTZ (type_quartz)
