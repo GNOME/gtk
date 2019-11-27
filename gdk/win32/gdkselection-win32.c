@@ -2251,6 +2251,7 @@ _gdk_win32_display_convert_selection (GdkDisplay *display,
 
           queue_open_clipboard (GDK_WIN32_CLIPBOARD_QUEUE_ACTION_CONVERT, display, requestor, target, time);
           open_clipboard_timeout (NULL);
+          return;
         }
       else
         {
