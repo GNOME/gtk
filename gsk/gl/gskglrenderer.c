@@ -1283,10 +1283,12 @@ render_rounded_clip_node (GskGLRenderer       *self,
         }
 
       ops_push_clip (builder, &child_clip);
-      g_assert (add_offscreen_ops (self, builder, &node->bounds,
-                                   child,
-                                   &region, &is_offscreen,
-                                   FORCE_OFFSCREEN | RESET_OPACITY));
+      if (!add_offscreen_ops (self, builder, &node->bounds,
+                              child,
+                              &region, &is_offscreen,
+                              FORCE_OFFSCREEN | RESET_OPACITY))
+        g_assert_not_reached ();
+
       ops_pop_clip (builder);
 
       ops_set_program (builder, &self->blit_program);
@@ -1321,11 +1323,12 @@ render_color_matrix_node (GskGLRenderer       *self,
   if (node_is_invisible (child))
     return;
 
-  g_assert (add_offscreen_ops (self, builder,
-                               &node->bounds,
-                               child,
-                               &region, &is_offscreen,
-                               RESET_CLIP | RESET_OPACITY));
+  if (!add_offscreen_ops (self, builder,
+                          &node->bounds,
+                          child,
+                          &region, &is_offscreen,
+                          RESET_CLIP | RESET_OPACITY))
+    g_assert_not_reached ();
 
   ops_set_program (builder, &self->color_matrix_program);
   ops_set_color_matrix (builder,
@@ -1390,11 +1393,12 @@ render_blur_node (GskGLRenderer   *self,
    * (see gsk_blur_node_new), but we didn't have to do that if the blur
    * shader could handle that situation. */
 
-  g_assert (add_offscreen_ops (self, builder,
-                               &node->bounds,
-                               child,
-                               &region, &is_offscreen,
-                               RESET_CLIP | FORCE_OFFSCREEN | RESET_OPACITY));
+  if (!add_offscreen_ops (self, builder,
+                          &node->bounds,
+                          child,
+                          &region, &is_offscreen,
+                          RESET_CLIP | FORCE_OFFSCREEN | RESET_OPACITY))
+    g_assert_not_reached ();
 
   ops_set_program (builder, &self->blur_program);
 
@@ -1909,10 +1913,11 @@ render_shadow_node (GskGLRenderer       *self,
         continue;
 
       /* Draw the child offscreen, without the offset. */
-      g_assert (add_offscreen_ops (self, builder,
-                                   &shadow_child->bounds,
-                                   shadow_child, &region, &is_offscreen,
-                                   RESET_CLIP | RESET_OPACITY));
+      if (!add_offscreen_ops (self, builder,
+                              &shadow_child->bounds,
+                              shadow_child, &region, &is_offscreen,
+                              RESET_CLIP | RESET_OPACITY))
+        g_assert_not_reached ();
 
       ops_set_program (builder, &self->coloring_program);
       ops_set_color (builder, &shadow->color);
@@ -1970,17 +1975,19 @@ render_cross_fade_node (GskGLRenderer   *self,
   /* TODO: We create 2 textures here as big as the cross-fade node, but both the
    * start and the end node might be a lot smaller than that. */
 
-  g_assert (add_offscreen_ops (self, builder,
-                               &node->bounds,
-                               start_node,
-                               &start_region, &is_offscreen1,
-                               FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY));
+  if (!add_offscreen_ops (self, builder,
+                          &node->bounds,
+                          start_node,
+                          &start_region, &is_offscreen1,
+                          FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY))
+    g_assert_not_reached ();
 
-  g_assert (add_offscreen_ops (self, builder,
-                               &node->bounds,
-                               end_node,
-                               &end_region, &is_offscreen2,
-                               FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY));
+  if (!add_offscreen_ops (self, builder,
+                          &node->bounds,
+                          end_node,
+                          &end_region, &is_offscreen2,
+                          FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY))
+    g_assert_not_reached ();
 
   ops_set_program (builder, &self->cross_fade_program);
 
@@ -2010,17 +2017,19 @@ render_blend_node (GskGLRenderer   *self,
 
   /* TODO: We create 2 textures here as big as the blend node, but both the
    * start and the end node might be a lot smaller than that. */
-  g_assert (add_offscreen_ops (self, builder,
-                               &node->bounds,
-                               bottom_child,
-                               &bottom_region, &is_offscreen1,
-                               FORCE_OFFSCREEN | RESET_CLIP));
+  if (!add_offscreen_ops (self, builder,
+                          &node->bounds,
+                          bottom_child,
+                          &bottom_region, &is_offscreen1,
+                          FORCE_OFFSCREEN | RESET_CLIP))
+    g_assert_not_reached ();
 
-  g_assert (add_offscreen_ops (self, builder,
-                               &node->bounds,
-                               top_child,
-                               &top_region, &is_offscreen2,
-                               FORCE_OFFSCREEN | RESET_CLIP));
+  if (!add_offscreen_ops (self, builder,
+                          &node->bounds,
+                          top_child,
+                          &top_region, &is_offscreen2,
+                          FORCE_OFFSCREEN | RESET_CLIP))
+    g_assert_not_reached ();
 
   ops_set_program (builder, &self->blend_program);
   ops_set_texture (builder, bottom_region.texture_id);
@@ -2068,11 +2077,12 @@ render_repeat_node (GskGLRenderer   *self,
     }
 
   /* Draw the entire child on a texture */
-  g_assert (add_offscreen_ops (self, builder,
-                               &child->bounds,
-                               child,
-                               &region, &is_offscreen,
-                               RESET_CLIP | RESET_OPACITY | FORCE_OFFSCREEN));
+  if (!add_offscreen_ops (self, builder,
+                          &child->bounds,
+                          child,
+                          &region, &is_offscreen,
+                          RESET_CLIP | RESET_OPACITY | FORCE_OFFSCREEN))
+    g_assert_not_reached ();
 
   ops_set_program (builder, &self->repeat_program);
   ops_set_texture (builder, region.texture_id);
