@@ -18,7 +18,7 @@
 #ifndef __GDK_X11_KEYS_H__
 #define __GDK_X11_KEYS_H__
 
-#if !defined (__GDKX_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDKX_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/x11/gdkx.h> can be included directly."
 #endif
 
@@ -26,7 +26,7 @@
 
 G_BEGIN_DECLS
 
-#ifdef GDK_COMPILATION
+#ifdef GTK_COMPILATION
 typedef struct _GdkX11Keymap GdkX11Keymap;
 #else
 typedef GdkKeymap GdkX11Keymap;

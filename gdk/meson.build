@@ -234,7 +234,7 @@ libgdk = static_library('gdk',
   link_with: [libgtk_css, ],
   include_directories: [confinc, gdkx11_inc, wlinc],
   c_args: [
-    '-DGDK_COMPILATION',
+    '-DGTK_COMPILATION',
     '-DG_LOG_DOMAIN="Gdk"',
   ] + common_cflags,
   link_whole: gdk_backends,

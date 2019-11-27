@@ -17,7 +17,6 @@
 
 #include "config.h"
 
-#define GDK_COMPILATION
 #include "gdk/gdkeventsprivate.h"
 
 #include <glib/gi18n-lib.h>

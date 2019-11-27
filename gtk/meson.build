@@ -1021,6 +1021,7 @@ gtk_dep_sources = [gtkversion, gtktypebuiltins_h]
 build_gir = get_option('introspection')
 if build_gir
   gir_args = [
+    '-DGTK_COMPILATION',
     '--quiet',
   ]
 
@@ -1051,9 +1052,8 @@ if build_gir
                                includes: gdk_gir_inc,
                                header: 'gdk/gdk.h',
                                install: true,
-                               extra_args: gir_args + [
-                                 '-DGDK_COMPILATION',
-                               ])
+                               extra_args: gir_args,
+  )
   gdk_gir_dep = declare_dependency(sources: gdk_gir)
   gtk_dep_sources += gdk_gir
 
@@ -1069,9 +1069,8 @@ if build_gir
                                      install: true,
                                      dependencies: gdk_gir_dep,
                                      header: 'gdk/gdkx.h',
-                                     extra_args: gir_args + [
-                                       '-DGDK_COMPILATION',
-                                     ])
+                                     extra_args: gir_args,
+    )
     gtk_dep_sources += gdk_x11_gir
   endif
 
@@ -1093,9 +1092,8 @@ if build_gir
                                header: 'gsk/gsk.h',
                                install: true,
                                dependencies: [gdk_gir_dep, graphene_dep],
-                               extra_args: gir_args + [
-                                 '-DGSK_COMPILATION',
-                               ])
+                               extra_args: gir_args,
+  )
   gsk_gir_dep = declare_dependency(dependencies: [gdk_gir_dep, graphene_dep],
                                    sources: gsk_gir)
   gtk_dep_sources += gsk_gir

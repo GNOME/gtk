@@ -171,7 +171,7 @@ libgsk = static_library('gsk',
                         dependencies: gsk_deps,
                         include_directories: [ confinc, ],
                         c_args: [
-                          '-DGSK_COMPILATION',
+                          '-DGTK_COMPILATION',
                           '-DG_LOG_DOMAIN="Gsk"',
                           '-DG_LOG_STRUCTURED=1',
                         ] + common_cflags,
