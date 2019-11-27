@@ -1,3 +1,49 @@
+Overview of Changes in GTK+ 3.24.13
+===================================
+
+* listbox: Fix header row reuse
+
+* wayland: Fix handling of tablets
+
+* theme:
+ - Adwaita: Fix menu rounding
+ - Adwaita: Various improvements for the Emoji chooser
+ - Adwaita: Refresh check and radio buttons
+ - HighContrast: Fix entry colors
+
+* input:
+ - Properly handle bubbling of scroll events
+ - Handle modifier key events properly
+ - Run key controllers in the bubble phase
+ - Do not use VIQR for Vietnamese by default 
+
+* statusicons: Render sharply on hi-dpi
+
+* wayland: Fix handling of selection ownership
+
+* win32:
+ - Set WS_BORDER for fullscreen GL windows if requested
+ - Fix clipboard handling
+
+* quartz:
+ - Handle titlebar events properly
+ - Handle page up/down key events properly
+
+* broadway: Fix (lack of) clipboard handling
+
+* Translation updates:
+ Catalan
+ Chinese (Taiwan)
+ Croatian
+ Danish
+ French
+ German
+ Hungarian
+ Indonesian
+ Russian
+ Swedish
+
+
 Overview of Changes in GTK+ 3.24.12
 ===================================
 
