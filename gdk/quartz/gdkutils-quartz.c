@@ -19,10 +19,11 @@
 
 #include "config.h"
 
-#include <AppKit/AppKit.h>
+#include <gdk/gdk.h>
+#include <gdkinternals.h>
 
+#include "gdkquartz-gtk-only.h"
 #include <gdkquartzutils.h>
-#include "gdkprivate-quartz.h"
 
 NSImage *
 gdk_quartz_pixbuf_to_ns_image_libgtk_only (GdkPixbuf *pixbuf)

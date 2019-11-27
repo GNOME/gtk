@@ -24,11 +24,13 @@
 #include <gdk/gdkdisplayprivate.h>
 
 #include "gdkwindowimpl.h"
+#include "gdkwindow-quartz.h"
 #include "gdkprivate-quartz.h"
 #include "gdkglcontext-quartz.h"
 #include "gdkquartzglcontext.h"
 #include "gdkquartzscreen.h"
 #include "gdkquartzcursor.h"
+#include "gdkquartz-gtk-only.h"
 
 #include <Carbon/Carbon.h>
 #include <AvailabilityMacros.h>

@@ -38,12 +38,6 @@
 #endif
 
 #ifdef GDK_WINDOWING_QUARTZ
-/* When the gdk_quartz_display_open function is removed We can
- * immediately include gdkquartzdisplaymanager.h here instead of
- * gdkprivate-quartz.h so that we won’t have to enable -xobjective-c
- * for the “generic” GDK source code.
- * #include "quartz/gdkquartzdisplaymanager.h"
- */
 #include "quartz/gdkprivate-quartz.h"
 #endif
 

@@ -26,6 +26,7 @@
 #include "gdkquartzcursor.h"
 #include "gdkprivate-quartz.h"
 #include "gdkquartzdevice-core.h"
+#include "gdkinternal-quartz.h"
 
 struct _GdkQuartzDeviceCore
 {

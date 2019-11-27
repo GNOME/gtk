@@ -19,8 +19,8 @@
 #ifndef __GDK_QUARTZ_DND_H__
 #define __GDK_QUARTZ_DND_H__
 
-#if !defined(__GDKQUARTZ_H_INSIDE__) && !defined (GDK_COMPILATION)
-#error "Only <gdk/gdkquartz.h> can be included directly."
+#if !defined (GTK_COMPILATION) && !defined (GDK_COMPILATION)
+#error "gdkquartzdnd.h is for Gtk's internal use only"
 #endif
 
 #include <gdk/gdk.h>
