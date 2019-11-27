@@ -25,7 +25,7 @@
 #ifndef __GDK_X11_SURFACE_H__
 #define __GDK_X11_SURFACE_H__
 
-#if !defined (__GDKX_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDKX_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/x11/gdkx.h> can be included directly."
 #endif
 
@@ -43,7 +43,7 @@ G_BEGIN_DECLS
 #define GDK_IS_X11_SURFACE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_X11_SURFACE))
 #define GDK_X11_SURFACE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_X11_SURFACE, GdkX11SurfaceClass))
 
-#ifdef GDK_COMPILATION
+#ifdef GTK_COMPILATION
 typedef struct _GdkX11Surface GdkX11Surface;
 #else
 typedef GdkSurface GdkX11Surface;

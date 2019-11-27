@@ -101,7 +101,7 @@ libgdk_wayland = static_library('gdk-wayland',
                                 gdk_wayland_sources, gdk_wayland_gen_headers, gdkconfig, gdkenum_h,
                                 include_directories: [ confinc, gdkinc, ],
                                 c_args: [
-                                  '-DGDK_COMPILATION',
+                                  '-DGTK_COMPILATION',
                                   '-DG_LOG_DOMAIN="Gdk"',
                                 ] + common_cflags,
                                 link_args: common_ldflags,

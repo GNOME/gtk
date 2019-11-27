@@ -18,7 +18,7 @@
 #ifndef __GDK_WIN32_DISPLAY_MANAGER_H__
 #define __GDK_WIN32_DISPLAY_MANAGER_H__
 
-#if !defined (__GDKWIN32_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDKWIN32_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/gdkwin32.h> can be included directly."
 #endif
 
@@ -26,7 +26,7 @@
 
 G_BEGIN_DECLS
 
-#ifdef GDK_COMPILATION
+#ifdef GTK_COMPILATION
 typedef struct _GdkWin32DisplayManager GdkWin32DisplayManager;
 #else
 typedef GdkDisplayManager GdkWin32DisplayManager;

@@ -18,7 +18,7 @@
 #ifndef __GDK_BROADWAY_DISPLAY_H__
 #define __GDK_BROADWAY_DISPLAY_H__
 
-#if !defined (__GDKBROADWAY_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDKBROADWAY_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/broadway/gdkbroadway.h> can be included directly."
 #endif
 
@@ -26,7 +26,7 @@
 
 G_BEGIN_DECLS
 
-#ifdef GDK_COMPILATION
+#ifdef GTK_COMPILATION
 typedef struct _GdkBroadwayDisplay GdkBroadwayDisplay;
 #else
 typedef GdkDisplay GdkBroadwayDisplay;

@@ -50,5 +50,5 @@ gdk_win32_deps = [ # FIXME
 libgdk_win32 = static_library('gdk-win32',
   gdk_win32_sources, gdkconfig, gdkenum_h,
   include_directories: [confinc, gdkinc],
-  c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"', '-DINSIDE_GDK_WIN32'],
+  c_args: ['-DGTK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"', '-DINSIDE_GDK_WIN32'],
   dependencies: [gdk_deps, gdk_win32_deps])

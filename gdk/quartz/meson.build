@@ -41,5 +41,5 @@ gdk_quartz_deps = [ # FIXME
 libgdk_quartz = static_library('gdk-quartz',
   gdk_quartz_sources, gdkconfig, gdkenum_h,
   include_directories: [confinc, gdkinc],
-  c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"', '-xobjective-c'],
+  c_args: ['-DGTK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"', '-xobjective-c'],
   dependencies: [gdk_deps, gdk_quartz_deps])

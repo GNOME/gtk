@@ -20,7 +20,7 @@
 #ifndef __GDK_QUARTZ_SURFACE_H__
 #define __GDK_QUARTZ_SURFACE_H__
 
-#if !defined (__GDKQUARTZ_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDKQUARTZ_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/quartz/gdkquartz.h> can be included directly."
 #endif
 
@@ -35,7 +35,7 @@ G_BEGIN_DECLS
 #define GDK_IS_QUARTZ_SURFACE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_QUARTZ_SURFACE))
 #define GDK_QUARTZ_SURFACE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_QUARTZ_SURFACE, GdkQuartzSurfaceClass))
 
-#ifdef GDK_COMPILATION
+#ifdef GTK_COMPILATION
 typedef struct _GdkQuartzSurface GdkQuartzSurface;
 #else
 typedef GdkSurface GdkQuartzSurface;

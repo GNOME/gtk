@@ -18,7 +18,7 @@
 #ifndef __GDK_WIN32_DND_PRIVATE_H__
 #define __GDK_WIN32_DND_PRIVATE_H__
 
-#if !defined (__GDKWIN32_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDKWIN32_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/gdkwin32.h> can be included directly."
 #endif
 
