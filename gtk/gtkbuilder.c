@@ -2624,7 +2624,7 @@ gtk_builder_lookup_callback_symbol (GtkBuilder  *builder,
 /**
  * gtk_builder_set_closure_func: (skip)
  * @builder: a #GtkBuilder
- * @closure_func: (allow-none) function to call when creating
+ * @closure_func: (allow-none): function to call when creating
  *     closures or %NULL to use the default
  * @user_data: (nullable): user data to pass to @closure_func
  * @user_destroy: destroy function for user data
