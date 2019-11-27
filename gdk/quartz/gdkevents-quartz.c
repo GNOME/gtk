@@ -457,6 +457,29 @@ get_toplevel_from_ns_event (NSEvent *nsevent,
            * here, not very nice.
            */
           _gdk_quartz_events_break_all_grabs (get_time_from_ns_event (nsevent));
+
+          /* Check if the event occurred on the titlebar. If it did,
+           * explicitly return NULL to prevent going through the
+           * fallback path, which could match the window that is
+           * directly under the titlebar.
+           */
+          if (view_point.y < 0 &&
+              view_point.x >= view_frame.origin.x &&
+              view_point.x < view_frame.origin.x + view_frame.size.width)
+            {
+              NSView *superview = [view superview];
+              if (superview)
+                {
+                  NSRect superview_frame = [superview frame];
+                  int titlebar_height = superview_frame.size.height -
+                                        view_frame.size.height;
+
+                  if (titlebar_height > 0 && view_point.y >= -titlebar_height)
+                    {
+                      return NULL;
+                    }
+                }
+            }
         }
       else
         {
