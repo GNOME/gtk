@@ -15,7 +15,7 @@
  * License along with this library; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined (__GDK_H_INSIDE__) && !defined (__GTK_CSS_H_INSIDE__) && !defined (GDK_COMPILATION) && !defined (GTK_CSS_COMPILATION)
+#if !defined (__GDK_H_INSIDE__) && !defined (__GTK_CSS_H_INSIDE__) && !defined (GTK_COMPILATION) && !defined (GTK_CSS_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 

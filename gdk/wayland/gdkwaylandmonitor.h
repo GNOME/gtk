@@ -22,7 +22,7 @@
 #ifndef __GDK_WAYLAND_MONITOR_H__
 #define __GDK_WAYLAND_MONITOR_H__
 
-#if !defined (__GDKWAYLAND_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDKWAYLAND_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/wayland/gdkwayland.h> can be included directly."
 #endif
 

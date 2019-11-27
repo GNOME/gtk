@@ -19,7 +19,7 @@
 #ifndef __GSK_RENDER_NODE_H__
 #define __GSK_RENDER_NODE_H__
 
-#if !defined (__GSK_H_INSIDE__) && !defined (GSK_COMPILATION)
+#if !defined (__GSK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gsk/gsk.h> can be included directly."
 #endif
 

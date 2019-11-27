@@ -18,7 +18,7 @@
 #ifndef __GTK_CSS_SECTION_H__
 #define __GTK_CSS_SECTION_H__
 
-#if !defined (__GTK_CSS_H_INSIDE__) && !defined (GTK_CSS_COMPILATION)
+#if !defined (__GTK_CSS_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/css/gtkcss.h> can be included directly."
 #endif
 

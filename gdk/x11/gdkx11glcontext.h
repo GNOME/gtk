@@ -21,7 +21,7 @@
 #ifndef __GDK_X11_GL_CONTEXT_H__
 #define __GDK_X11_GL_CONTEXT_H__
 
-#if !defined (__GDKX_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDKX_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/x11/gdkx.h> can be included directly."
 #endif
 

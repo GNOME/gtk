@@ -20,7 +20,7 @@
 #ifndef __GDK_QUARTZ_DISPLAY_MANAGER_H__
 #define __GDK_QUARTZ_DISPLAY_MANAGER_H__
 
-#if !defined(__GDKQUARTZ_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined(__GDKQUARTZ_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/quartz/gdkquartz.h> can be included directly."
 #endif
 
@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 #define GDK_TYPE_QUARTZ_DISPLAY_MANAGER    (gdk_quartz_display_manager_get_type ())
 #define GDK_QUARTZ_DISPLAY_MANAGER(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_QUARTZ_DISPLAY_MANAGER, GdkQuartzDisplayManager))
 
-#ifdef GDK_COMPILATION
+#ifdef GTK_COMPILATION
 typedef struct _GdkQuartzDisplayManager GdkQuartzDisplayManager;
 #else
 typedef GdkDisplayManager _GdkQuartzDisplayManager;

@@ -18,7 +18,7 @@
 #ifndef __GDK_WAYLAND_DISPLAY_H__
 #define __GDK_WAYLAND_DISPLAY_H__
 
-#if !defined (__GDKWAYLAND_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDKWAYLAND_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/wayland/gdkwayland.h> can be included directly."
 #endif
 
@@ -28,7 +28,7 @@
 
 G_BEGIN_DECLS
 
-#ifdef GDK_COMPILATION
+#ifdef GTK_COMPILATION
 typedef struct _GdkWaylandDisplay GdkWaylandDisplay;
 #else
 typedef GdkDisplay GdkWaylandDisplay;

@@ -20,7 +20,7 @@
 #ifndef __GDK_BROADWAY_DISPLAY_MANAGER_H__
 #define __GDK_BROADWAY_DISPLAY_MANAGER_H__
 
-#if !defined(__GDKBROADWAY_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined(__GDKBROADWAY_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/broadway/gdkbroadway.h> can be included directly."
 #endif
 
@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 #define GDK_TYPE_BROADWAY_DISPLAY_MANAGER    (gdk_broadway_display_manager_get_type ())
 #define GDK_BROADWAY_DISPLAY_MANAGER(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_BROADWAY_DISPLAY_MANAGER, GdkBroadwayDisplayManager))
 
-#ifdef GDK_COMPILATION
+#ifdef GTK_COMPILATION
 typedef struct _GdkBroadwayDisplayManager GdkBroadwayDisplayManager;
 #else
 typedef GdkDisplayManager _GdkBroadwayDisplayManager;

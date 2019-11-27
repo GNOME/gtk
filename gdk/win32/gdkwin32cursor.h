@@ -25,7 +25,7 @@
 #ifndef __GDK_WIN32_CURSOR_H__
 #define __GDK_WIN32_CURSOR_H__
 
-#if !defined (__GDKWIN32_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDKWIN32_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/gdkwin32.h> can be included directly."
 #endif
 
@@ -56,7 +56,7 @@ struct _GdkWin32HCursorFake
 
 #define gdk_win32_hcursor_get_handle_fast(x) (((struct _GdkWin32HCursorFake *) x)->readonly_handle)
 
-#if defined (GDK_COMPILATION)
+#if defined (GTK_COMPILATION)
 #define          gdk_win32_hcursor_get_handle gdk_win32_hcursor_get_handle_fast
 #else
 GDK_AVAILABLE_IN_ALL

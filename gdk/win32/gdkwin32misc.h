@@ -26,7 +26,7 @@
 #ifndef __GDK_WIN32_MISC_H__
 #define __GDK_WIN32_MISC_H__
 
-#if !defined (__GDKWIN32_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDKWIN32_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/gdkwin32.h> can be included directly."
 #endif
 
@@ -85,7 +85,7 @@ GDK_AVAILABLE_IN_ALL
 GdkSurface *   gdk_win32_surface_lookup_for_display (GdkDisplay *display,
                                                      HWND        anid);
 
-#if defined (INSIDE_GDK_WIN32) || defined (GDK_COMPILATION) || defined (GTK_COMPILATION)
+#if defined (INSIDE_GDK_WIN32) || defined (GTK_COMPILATION) || defined (GTK_COMPILATION)
 
 /* For internal GTK use only */
 GDK_AVAILABLE_IN_ALL

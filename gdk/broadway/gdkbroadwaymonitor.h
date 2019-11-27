@@ -22,7 +22,7 @@
 #ifndef __GDK_BROADWAY_MONITOR_H__
 #define __GDK_BROADWAY_MONITOR_H__
 
-#if !defined (__GDKBROADWAY_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDKBROADWAY_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gdk/broadway/gdkbroadway.h> can be included directly."
 #endif
 
