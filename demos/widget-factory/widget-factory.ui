@@ -598,10 +598,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="label" translatable="yes">checkbutton</property>
                                     <property name="can-focus">1</property>
                                     <property name="active">1</property>
-                                    <layout>
-                                      <property name="left-attach">0</property>
-                                      <property name="top-attach">0</property>
-                                    </layout>
                                   </object>
                                 </child>
                                 <child>
@@ -609,7 +605,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="label" translatable="yes">checkbutton</property>
                                     <property name="can-focus">1</property>
                                     <layout>
-                                      <property name="left-attach">0</property>
                                       <property name="top-attach">1</property>
                                     </layout>
                                   </object>
@@ -620,7 +615,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="inconsistent">1</property>
                                     <property name="can-focus">1</property>
                                     <layout>
-                                      <property name="left-attach">0</property>
                                       <property name="top-attach">2</property>
                                     </layout>
                                   </object>
@@ -632,7 +626,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="can-focus">1</property>
                                     <property name="active">1</property>
                                     <layout>
-                                      <property name="left-attach">0</property>
                                       <property name="top-attach">3</property>
                                     </layout>
                                   </object>
@@ -643,7 +636,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="sensitive">0</property>
                                     <property name="can-focus">1</property>
                                     <layout>
-                                      <property name="left-attach">0</property>
                                       <property name="top-attach">4</property>
                                     </layout>
                                   </object>
@@ -655,7 +647,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="inconsistent">1</property>
                                     <property name="can-focus">1</property>
                                     <layout>
-                                      <property name="left-attach">0</property>
                                       <property name="top-attach">5</property>
                                     </layout>
                                   </object>
@@ -667,7 +658,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="active">1</property>
                                     <layout>
                                       <property name="left-attach">1</property>
-                                      <property name="top-attach">0</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -740,7 +730,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="active">1</property>
                                     <layout>
                                       <property name="left-attach">2</property>
-                                      <property name="top-attach">0</property>
                                     </layout>
                                   </object>
                                 </child>
@@ -971,11 +960,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="adjustment">adjustment3</property>
                                 <property name="restrict-to-fill-level">0</property>
                                 <marks>
-                                  <mark value="0" position="bottom"/>
-                                  <mark value="1" position="bottom"/>
-                                  <mark value="2" position="bottom"/>
-                                  <mark value="3" position="bottom"/>
-                                  <mark value="4" position="bottom"/>
+                                  <mark value="0" position="bottom"></mark>
+                                  <mark value="1" position="bottom"></mark>
+                                  <mark value="2" position="bottom"></mark>
+                                  <mark value="3" position="bottom"></mark>
+                                  <mark value="4" position="bottom"></mark>
                                 </marks>
                               </object>
                             </child>
@@ -1505,10 +1494,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                         <property name="valign">center</property>
                                         <property name="value">.5</property>
                                         <property name="halign">center</property>
-                                        <layout>
-                                          <property name="left-attach">0</property>
-                                          <property name="top-attach">0</property>
-                                        </layout>
                                       </object>
                                     </child>
                                     <child>
@@ -1524,7 +1509,6 @@ microphone-sensitivity-medium-symbolic</property>
                                         <signal name="query-tooltip" handler="on_scale_button_query_tooltip" swapped="no"/>
                                         <signal name="value-changed" handler="on_scale_button_value_changed" swapped="no"/>
                                         <layout>
-                                          <property name="left-attach">0</property>
                                           <property name="top-attach">1</property>
                                         </layout>
                                       </object>
@@ -1575,7 +1559,7 @@ microphone-sensitivity-medium-symbolic</property>
                                                 <property name="icon-name">org.gtk.WidgetFactory4</property>
                                                 <property name="pixel-size">256</property>
                                                 <style>
-                                                  <class name="icon-dropshadow" />
+                                                  <class name="icon-dropshadow"/>
                                                 </style>
                                               </object>
                                             </property>
@@ -2014,7 +1998,6 @@ microphone-sensitivity-medium-symbolic</property>
                                             </child>
                                           </object>
                                         </child>
-FOO
                                         <child>
                                           <object class="GtkMenuItem" id="menuitem3">
                                             <property name="label" translatable="yes">View</property>
@@ -2134,13 +2117,10 @@ FOO
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkSeparator">
-                                        <property name="orientation">horizontal</property>
-                                      </object>
+                                      <object class="GtkSeparator"/>
                                     </child>
                                     <child>
                                       <object class="GtkScrolledWindow">
-                                        <property name="shadow-type">none</property>
                                         <property name="vexpand">1</property>
                                         <child>
                                           <object class="MyTextView" id="text3">
@@ -2155,9 +2135,7 @@ FOO
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkSeparator">
-                                        <property name="orientation">horizontal</property>
-                                      </object>
+                                      <object class="GtkSeparator"/>
                                     </child>
                                     <child>
                                       <object class="GtkStatusbar" id="statusbar"/>
@@ -2449,11 +2427,9 @@ FOO
                         <property name="spacing">10</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="halign">fill</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkBox" id="lockbox">
-                                <property name="halign">fill</property>
                                 <property name="hexpand">1</property>
                                 <property name="spacing">6</property>
                                 <child>
@@ -2530,9 +2506,6 @@ FOO
                               <object class="GtkMenuButton">
                                 <property name="icon-name">view-more-symbolic</property>
                                 <property name="popover">new_style_menu</property>
-<!--
-                                <property name="menu-model">new_style_menu_model</property>
--->
                               </object>
                             </child>
                           </object>
@@ -3219,10 +3192,6 @@ bad things might happen.</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
-                <layout>
-                  <property name="left-attach">0</property>
-                  <property name="top-attach">0</property>
-                </layout>
               </object>
             </child>
             <child>
@@ -3230,7 +3199,6 @@ bad things might happen.</property>
                 <property name="valign">baseline</property>
                 <layout>
                   <property name="left-attach">1</property>
-                  <property name="top-attach">0</property>
                 </layout>
               </object>
             </child>
@@ -3245,7 +3213,6 @@ bad things might happen.</property>
                   <class name="dim-label"/>
                 </style>
                 <layout>
-                  <property name="left-attach">0</property>
                   <property name="top-attach">1</property>
                 </layout>
               </object>
@@ -3270,7 +3237,6 @@ bad things might happen.</property>
                   <class name="dim-label"/>
                 </style>
                 <layout>
-                  <property name="left-attach">0</property>
                   <property name="top-attach">2</property>
                 </layout>
               </object>
@@ -3297,7 +3263,6 @@ bad things might happen.</property>
                   <class name="dim-label"/>
                 </style>
                 <layout>
-                  <property name="left-attach">0</property>
                   <property name="top-attach">3</property>
                 </layout>
               </object>
@@ -3367,10 +3332,6 @@ bad things might happen.</property>
             <accessibility>
               <relation type="label-for" target="open_popover_entry"/>
             </accessibility>
-            <layout>
-              <property name="left-attach">0</property>
-              <property name="top-attach">0</property>
-            </layout>
           </object>
         </child>
         <child>
@@ -3382,7 +3343,6 @@ bad things might happen.</property>
               <relation type="label-for" target="open_popover_textview"/>
             </accessibility>
             <layout>
-              <property name="left-attach">0</property>
               <property name="top-attach">1</property>
             </layout>
           </object>
@@ -3417,7 +3377,6 @@ bad things might happen.</property>
             </accessibility>
             <layout>
               <property name="left-attach">1</property>
-              <property name="top-attach">0</property>
               <property name="column-span">2</property>
             </layout>
           </object>
@@ -3456,7 +3415,6 @@ bad things might happen.</property>
         </child>
         <child>
           <object class="GtkButton" id="open_popover_button">
-            <property name="halign">fill</property>
             <property name="label">_Open</property>
             <property name="use-underline">1</property>
             <property name="sensitive">0</property>
@@ -3505,7 +3463,7 @@ bad things might happen.</property>
     <property name="autohide">0</property>
     <child>
       <object class="GtkLabel">
-        <property name="label">You're in too deep!</property>
+        <property name="label">You&apos;re in too deep!</property>
         <accessibility>
           <role type="static"/>
         </accessibility>
@@ -3516,7 +3474,6 @@ bad things might happen.</property>
     <property name="autohide">0</property>
     <child>
       <object class="GtkBox">
-        <property name="orientation">horizontal</property>
         <child>
           <object class="GtkLabel">
             <property name="label">Hidden gems:</property>
@@ -3536,219 +3493,246 @@ bad things might happen.</property>
       </object>
     </child>
   </object>
-  <object class="GtkPopoverMenu" id="new_style_menu">
+  <object class="GtkPopover" id="new_style_menu">
     <child>
-      <object class="GtkBox">
-        <property name="name">main</property>
-        <property name="orientation">vertical</property>
+      <object class="GtkStack">
         <child>
-          <object class="GtkBox">
-            <property name="halign">fill</property>
-            <style>
-              <class name="circular-buttons"/>
-            </style>
-            <child>
-              <object class="GtkModelButton">
-                <property name="icon"><object class="GThemedIcon"><property name="name">printer-symbolic</property></object></property>
-                <property name="iconic">1</property>
-                <property name="action-name">app.print</property>
-                <property name="hexpand">1</property>
-                <property name="halign">center</property>
-                <style>
-                  <class name="circular"/>
-                </style>
+          <object class="GtkStackPage">
+            <property name="name">main</property>
+            <property name="child">
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkBox">
+                    <style>
+                      <class name="circular-buttons"/>
+                    </style>
+                    <child>
+                      <object class="GtkModelButton">
+                        <property name="icon">
+                          <object class="GThemedIcon">
+                            <property name="name">printer-symbolic</property>
+                          </object>
+                        </property>
+                        <property name="iconic">1</property>
+                        <property name="action-name">app.print</property>
+                        <property name="hexpand">1</property>
+                        <property name="halign">center</property>
+                        <style>
+                          <class name="circular"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkModelButton">
+                        <property name="icon">
+                          <object class="GThemedIcon">
+                            <property name="name">emblem-shared-symbolic</property>
+                          </object>
+                        </property>
+                        <property name="iconic">1</property>
+                        <property name="action-name">app.share</property>
+                        <property name="hexpand">1</property>
+                        <property name="halign">center</property>
+                        <style>
+                          <class name="circular"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparator"/>
+                </child>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="text">Open in New Window</property>
+                    <property name="action-name">app.open-in</property>
+                    <property name="indicator-size-group">main-indicators</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparator"/>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <style>
+                      <class name="inline-buttons"/>
+                    </style>
+                    <child>
+                      <object class="GtkLabel" id="cut_copy_paste_filler"/>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label">Edit</property>
+                        <property name="xalign">0</property>
+                        <property name="hexpand">1</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkModelButton">
+                        <property name="icon">
+                          <object class="GThemedIcon">
+                            <property name="name">edit-cut-symbolic</property>
+                          </object>
+                        </property>
+                        <property name="iconic">1</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkModelButton">
+                        <property name="icon">
+                          <object class="GThemedIcon">
+                            <property name="name">edit-copy-symbolic</property>
+                          </object>
+                        </property>
+                        <property name="iconic">1</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkModelButton">
+                        <property name="icon">
+                          <object class="GThemedIcon">
+                            <property name="name">edit-paste-symbolic</property>
+                          </object>
+                        </property>
+                        <property name="iconic">1</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparator"/>
+                </child>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="text">Pin</property>
+                    <property name="action-name">app.pin</property>
+                    <property name="indicator-size-group">main-indicators</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="text">Select Labels…</property>
+                    <property name="action-name">app.labels</property>
+                    <property name="indicator-size-group">main-indicators</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="text">Share…</property>
+                    <property name="action-name">app.share</property>
+                    <property name="indicator-size-group">main-indicators</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparator"/>
+                </child>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="text">Basement</property>
+                    <property name="menu-name">basement</property>
+                    <property name="indicator-size-group">main-indicators</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparator"/>
+                </child>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="text">Large</property>
+                    <property name="action-name">app.size</property>
+                    <property name="action-target">&apos;large&apos;</property>
+                    <property name="indicator-size-group">main-indicators</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="text">Medium</property>
+                    <property name="action-name">app.size</property>
+                    <property name="action-target">&apos;medium&apos;</property>
+                    <property name="indicator-size-group">main-indicators</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="text">Small</property>
+                    <property name="action-name">app.size</property>
+                    <property name="action-target">&apos;small&apos;</property>
+                    <property name="indicator-size-group">main-indicators</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparator"/>
+                </child>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="text">Move to Trash</property>
+                    <property name="action-name">win.delete</property>
+                    <property name="indicator-size-group">main-indicators</property>
+                  </object>
+                </child>
               </object>
-            </child>
-            <child>
-              <object class="GtkModelButton">
-                <property name="icon"><object class="GThemedIcon"><property name="name">emblem-shared-symbolic</property></object></property>
-                <property name="iconic">1</property>
-                <property name="action-name">app.share</property>
-                <property name="hexpand">1</property>
-                <property name="halign">center</property>
-                <style>
-                  <class name="circular"/>
-                </style>
-              </object>
-            </child>
+            </property>
           </object>
         </child>
         <child>
-          <object class="GtkSeparator"/>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="text">Open in New Window</property>
-            <property name="action-name">app.open-in</property>
-            <property name="indicator-size-group">main-indicators</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSeparator"/>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <style>
-              <class name="inline-buttons"/>
-            </style>
-            <child>
-              <object class="GtkLabel" id="cut_copy_paste_filler">
+          <object class="GtkStackPage">
+          <property name="name">basement</property>
+          <property name="child">
+            <object class="GtkBox">
+              <property name="orientation">vertical</property>
+              <child>
+                <object class="GtkModelButton">
+                  <property name="text">Basement</property>
+                  <property name="role">title</property>
+                  <property name="menu-name">main</property>
+                </object>
+              </child>
+              <child>
+                <object class="GtkSeparator"/>
+              </child>
+              <child>
+                <object class="GtkModelButton">
+                  <property name="text">Berk</property>
+                  <property name="action-name">app.berk</property>
+                  <property name="indicator-size-group">basement-indicators</property>
+                </object>
+              </child>
+              <child>
+                <object class="GtkModelButton">
+                  <property name="text">Broni</property>
+                  <property name="action-name">app.broni</property>
+                  <property name="indicator-size-group">basement-indicators</property>
+                </object>
+              </child>
+              <child>
+                <object class="GtkModelButton">
+                  <property name="text">Drutt</property>
+                  <property name="action-name">app.drutt</property>
+                  <property name="indicator-size-group">basement-indicators</property>
+                </object>
+              </child>
+              <child>
+                <object class="GtkModelButton">
+                  <property name="text">The Thing Upstairs</property>
+                  <property name="action-name">app.upstairs</property>
+                  <property name="indicator-size-group">basement-indicators</property>
+                </object>
+              </child>
             </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="label">Edit</property>
-                <property name="xalign">0</property>
-                <property name="hexpand">1</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkModelButton">
-                <property name="icon"><object class="GThemedIcon"><property name="name">edit-cut-symbolic</property></object></property>
-                <property name="iconic">1</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkModelButton">
-                <property name="icon"><object class="GThemedIcon"><property name="name">edit-copy-symbolic</property></object></property>
-                <property name="iconic">1</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkModelButton">
-                <property name="icon"><object class="GThemedIcon"><property name="name">edit-paste-symbolic</property></object></property>
-                <property name="iconic">1</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSeparator"/>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="text">Pin</property>
-            <property name="action-name">app.pin</property>
-            <property name="indicator-size-group">main-indicators</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="text">Select Labels…</property>
-            <property name="action-name">app.labels</property>
-            <property name="indicator-size-group">main-indicators</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="text">Share…</property>
-            <property name="action-name">app.share</property>
-            <property name="indicator-size-group">main-indicators</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSeparator"/>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="text">Basement</property>
-            <property name="menu-name">basement</property>
-            <property name="indicator-size-group">main-indicators</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSeparator"/>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="text">Large</property>
-            <property name="action-name">app.size</property>
-            <property name="action-target">'large'</property>
-            <property name="indicator-size-group">main-indicators</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="text">Medium</property>
-            <property name="action-name">app.size</property>
-            <property name="action-target">'medium'</property>
-            <property name="indicator-size-group">main-indicators</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="text">Small</property>
-            <property name="action-name">app.size</property>
-            <property name="action-target">'small'</property>
-            <property name="indicator-size-group">main-indicators</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSeparator"/>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="text">Move to Trash</property>
-            <property name="action-name">win.delete</property>
-            <property name="indicator-size-group">main-indicators</property>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkBox">
-        <property name="name">basement</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkModelButton">
-            <property name="text">Basement</property>
-            <property name="role">title</property>
-            <property name="menu-name">main</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSeparator"/>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="text">Berk</property>
-            <property name="action-name">app.berk</property>
-            <property name="indicator-size-group">basement-indicators</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="text">Broni</property>
-            <property name="action-name">app.broni</property>
-            <property name="indicator-size-group">basement-indicators</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="text">Drutt</property>
-            <property name="action-name">app.drutt</property>
-            <property name="indicator-size-group">basement-indicators</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkModelButton">
-            <property name="text">The Thing Upstairs</property>
-            <property name="action-name">app.upstairs</property>
-            <property name="indicator-size-group">basement-indicators</property>
+          </property>
           </object>
         </child>
       </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="main-indicators">
-    <property name="mode">horizontal</property>
     <widgets>
       <widget name="cut_copy_paste_filler"/>
     </widgets>
   </object>
-  <object class="GtkSizeGroup" id="basement-indicators">
-    <property name="mode">horizontal</property>
-  </object>
+  <object class="GtkSizeGroup" id="basement-indicators"/>
   <menu id="new_style_menu_model">
     <section>
       <attribute name="display-hint">circular-buttons</attribute>
@@ -3838,10 +3822,10 @@ bad things might happen.</property>
       </item>
     </section>
     <section>
-        <item>
-          <attribute name="label" translatable="yes">Move to Trash</attribute>
-          <attribute name="action">win.delete</attribute>
-        </item>
+      <item>
+        <attribute name="label" translatable="yes">Move to Trash</attribute>
+        <attribute name="action">win.delete</attribute>
+      </item>
     </section>
   </menu>
   <menu id="new_style_context_menu_model">
@@ -4032,14 +4016,13 @@ bad things might happen.</property>
           <attribute name="action">win.background</attribute>
         </item>
       </section>
-
     </submenu>
     <submenu>
       <attribute name="label" translatable="yes">_Help</attribute>
-        <item>
-          <attribute name="label" translatable="yes">About</attribute>
-          <attribute name="action">app.about</attribute>
-        </item>
+      <item>
+        <attribute name="label" translatable="yes">About</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
     </submenu>
   </menu>
 </interface>
