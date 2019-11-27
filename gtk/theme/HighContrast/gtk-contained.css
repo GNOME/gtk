@@ -86,7 +86,7 @@ spinner:checked { opacity: 1; animation: spin 1s linear infinite; }
 spinner:checked:disabled { opacity: 0.5; }
 
 /**************** Text Entries * */
-spinbutton:not(.vertical), spinbutton.vertical text, entry { min-height: 32px; padding-left: 8px; padding-right: 8px; border: 1px solid; border-radius: 3px; transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94); background-color: transparent; border-style: solid; background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%); border-color: gray; box-shadow: inset 0 2px 2px -2px gray; }
+spinbutton:not(.vertical), spinbutton.vertical text, entry { min-height: 32px; padding-left: 8px; padding-right: 8px; border: 1px solid; border-radius: 3px; transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94); background-color: transparent; border-style: solid; background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%); color: #000; border-color: gray; box-shadow: inset 0 2px 2px -2px gray; }
 
 spinbutton:not(.vertical) image.left, spinbutton.vertical text image.left, entry image.left { padding-left: 0; padding-right: 6px; }
 
@@ -1126,7 +1126,7 @@ progressbar progress.osd { border-width: 0; border-radius: 0; }
 progressbar trough.empty progress { all: unset; }
 
 /************* Level Bar * */
-levelbar trough { padding: 2px; border-radius: 3px; background-color: transparent; border-style: solid; background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%); border-color: gray; box-shadow: inset 0 2px 2px -2px gray; }
+levelbar trough { padding: 2px; border-radius: 3px; background-color: transparent; border-style: solid; background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%); color: #000; border-color: gray; box-shadow: inset 0 2px 2px -2px gray; }
 
 levelbar trough:backdrop { background-color: transparent; border-style: solid; background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%); color: #000; background-image: linear-gradient(to bottom, #fff, #fff); box-shadow: 0 1px rgba(255, 255, 255, 0); }
 

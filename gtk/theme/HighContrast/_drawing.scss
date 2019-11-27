@@ -56,6 +56,7 @@
   $_entry_edge: none;
   
   @if $t==normal {
+    color: $fg_color;
     border-color: $borders_color;
     @include _shadows(inset 0 2px 2px -2px mix(black, $base_color, 50%),
                       $_entry_edge);
