@@ -112,6 +112,10 @@
 #include <gdk/wayland/gdkwayland.h>
 #endif
 
+#ifdef GDK_WINDOWING_BROADWAY
+#include "broadway/gdkbroadway.h"
+#endif
+
 #undef DEBUG_SELECTION
 
 /* Maximum size of a sent chunk, in bytes. Also the default size of
@@ -1180,6 +1184,25 @@ gtk_selection_convert (GtkWidget *widget,
 	  return TRUE;
 	}
     }
+
+#if defined GDK_WINDOWING_BROADWAY
+  /* This patch is a workaround to circumvent unimplemented
+     clipboard functionality in broadwayd. It eliminates
+     35s delay on popup menu before first clipboard copy,
+     by preventing conversion to be started.
+   
+     https://gitlab.gnome.org/GNOME/gtk/issues/1630
+  */ 
+  if (GDK_IS_BROADWAY_DISPLAY (display))
+  {
+      g_debug("gtk_selection_convert: disabled for broadway backend");
+
+      gtk_selection_retrieval_report (
+          info, GDK_NONE, 0, NULL, -1, GDK_CURRENT_TIME);
+
+      return FALSE;
+  }
+#endif
   
   /* Otherwise, we need to go through X */
   
