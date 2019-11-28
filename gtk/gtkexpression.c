@@ -1262,8 +1262,7 @@ gtk_expression_watch_evaluate (GtkExpressionWatch *watch,
 
 typedef struct {
   GtkExpressionWatch *watch;
-  GtkExpression *expression;
-  GObject *object;
+  GObject *target;
   GParamSpec *pspec;
 } GtkExpressionBind;
 
@@ -1278,7 +1277,12 @@ invalidate_binds (gpointer unused,
     {
       GtkExpressionBind *bind = l->data;
 
-      bind->object = NULL;
+      /* This guarantees we neither try to update bindings
+       * (which would wreck havoc because the object is
+       * dispose()ing itself) nor try to destroy bindings
+       * anymore, so destruction can be done in free_binds().
+       */
+      bind->target = NULL;
     }
 }
 
@@ -1291,8 +1295,10 @@ free_binds (gpointer data)
     {
       GtkExpressionBind *bind = l->data;
 
-      bind->object = NULL;
-      gtk_expression_watch_unwatch (bind->watch);
+      g_assert (bind->target == NULL);
+      if (bind->watch)
+        gtk_expression_watch_unwatch (bind->watch);
+      g_slice_free (GtkExpressionBind, bind);
     }
   g_slist_free (data);
 }
@@ -1302,19 +1308,30 @@ gtk_expression_bind_free (gpointer data)
 {
   GtkExpressionBind *bind = data;
 
-  if (bind->object)
+  if (bind->target)
     {
       GSList *binds;
-      binds = g_object_steal_data (bind->object, "gtk-expression-binds");
+      binds = g_object_steal_data (bind->target, "gtk-expression-binds");
       binds = g_slist_remove (binds, bind);
       if (binds)
-        g_object_set_data_full (bind->object, "gtk-expression-binds", binds, free_binds);
+        g_object_set_data_full (bind->target, "gtk-expression-binds", binds, free_binds);
       else
-        g_object_weak_unref (bind->object, invalidate_binds, NULL);
-    }
-  gtk_expression_unref (bind->expression);
+        g_object_weak_unref (bind->target, invalidate_binds, NULL);
 
-  g_slice_free (GtkExpressionBind, bind);
+      g_slice_free (GtkExpressionBind, bind);
+    }
+  else
+    {
+      /* If a bind gets unwatched after invalidate_binds() but
+       * before free_binds(), we end up here. This can happen if
+       * the bind was watching itself or if the target's dispose()
+       * function freed the object that was watched.
+       * We make sure we don't destroy the binding or free_binds() will do
+       * bad stuff, but we clear the watch, so free_binds() won't try to
+       * unwatch() it.
+       */
+      bind->watch = NULL;
+    }
 }
 
 static void
@@ -1323,29 +1340,31 @@ gtk_expression_bind_notify (gpointer data)
   GValue value = G_VALUE_INIT;
   GtkExpressionBind *bind = data;
 
-  if (bind->object == NULL)
+  if (bind->target == NULL)
     return;
 
-  if (!gtk_expression_evaluate (bind->expression, bind->object, &value))
+  if (!gtk_expression_watch_evaluate (bind->watch, &value))
     return;
 
-  g_object_set_property (bind->object, bind->pspec->name, &value);
+  g_object_set_property (bind->target, bind->pspec->name, &value);
   g_value_unset (&value);
 }
 
 /**
  * gtk_expression_bind:
  * @self: (transfer full): a #GtkExpression
- * @object: (transfer none) (type GObject): the object to bind
- * @property: name of the property to bind to
+ * @target: (transfer none) (type GObject): the target object to bind to
+ * @property: name of the property on @target to bind to
+ * @this_: (transfer none) (type GObject): the this argument for
+ *     the evaluation of @self
  *
- * Bind @object's property named @property to @self.
+ * Bind @target's property named @property to @self.
  *
  * The value that @self evaluates to is set via g_object_set() on
- * @object. This is repeated whenever @self changes to ensure that
+ * @target. This is repeated whenever @self changes to ensure that
  * the object's property stays synchronized with @self.
  *
- * If @self's evaluation fails, @object's @property is not updated.
+ * If @self's evaluation fails, @target's @property is not updated.
  * You can ensure that this doesn't happen by using a fallback
  * expression.
  *
@@ -1356,44 +1375,44 @@ gtk_expression_bind_notify (gpointer data)
  **/
 GtkExpressionWatch *
 gtk_expression_bind (GtkExpression *self,
-                     gpointer       object,
-                     const char    *property)
+                     gpointer       target,
+                     const char    *property,
+                     gpointer       this_)
 {
   GtkExpressionBind *bind;
   GParamSpec *pspec;
   GSList *binds;
 
   g_return_val_if_fail (GTK_IS_EXPRESSION (self), NULL);
-  g_return_val_if_fail (G_IS_OBJECT (object), NULL);
+  g_return_val_if_fail (G_IS_OBJECT (target), NULL);
   g_return_val_if_fail (property != NULL, NULL);
-  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (object), property);
+  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (target), property);
   if (G_UNLIKELY (pspec == NULL))
     {
       g_critical ("%s: Class '%s' has no property named '%s'",
-                  G_STRFUNC, G_OBJECT_TYPE_NAME (object), property);
+                  G_STRFUNC, G_OBJECT_TYPE_NAME (target), property);
       return NULL;
     }
   if (G_UNLIKELY ((pspec->flags & (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY)) != G_PARAM_WRITABLE))
     {
       g_critical ("%s: property '%s' of class '%s' is not writable",
-                 G_STRFUNC, pspec->name, G_OBJECT_TYPE_NAME (object));
+                 G_STRFUNC, pspec->name, G_OBJECT_TYPE_NAME (target));
       return NULL;
     }
 
   bind = g_slice_new0 (GtkExpressionBind);
-  binds = g_object_steal_data (object, "gtk-expression-binds");
+  binds = g_object_steal_data (target, "gtk-expression-binds");
   if (binds == NULL)
-    g_object_weak_ref (object, invalidate_binds, NULL);
-  bind->expression = self;
-  bind->object = object;
+    g_object_weak_ref (target, invalidate_binds, NULL);
+  bind->target = target;
   bind->pspec = pspec;
   bind->watch = gtk_expression_watch (self,
-                                      object,
+                                      this_,
                                       gtk_expression_bind_notify,
                                       bind,
                                       gtk_expression_bind_free);
   binds = g_slist_prepend (binds, bind);
-  g_object_set_data_full (object, "gtk-expression-binds", binds, free_binds);
+  g_object_set_data_full (target, "gtk-expression-binds", binds, free_binds);
 
   gtk_expression_unref (self);
 
