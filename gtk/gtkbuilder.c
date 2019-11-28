@@ -1081,11 +1081,13 @@ gtk_builder_create_bindings (GtkBuilder  *builder,
           BindingInfo *info = l->data;
           GObject *source;
 
-          source = _gtk_builder_lookup_object (builder, info->source, info->line, info->col);
+          source = gtk_builder_lookup_object (builder, info->source, info->line, info->col, error);
           if (source)
             g_object_bind_property (source, info->source_property,
                                     info->target, info->target_pspec->name,
                                     info->flags);
+          else
+            error = NULL;
 
           _free_binding_info (info, NULL);
         }
@@ -1093,17 +1095,30 @@ gtk_builder_create_bindings (GtkBuilder  *builder,
         {
           BindingExpressionInfo *info = l->data;
           GtkExpression *expression;
+          GObject *object;
 
-          expression = expression_info_construct (builder, info->expr, error);
-          if (expression == NULL)
+          if (info->object_name)
             {
-              g_prefix_error (error, "%s:%d:%d: ", priv->filename, info->line, info->col);
+              object = gtk_builder_lookup_object (builder, info->object_name, info->line, info->col, error);
               error = NULL;
               result = FALSE;
             }
           else
+            object = info->target;
+
+          if (object)
             {
-              gtk_expression_bind (expression, info->target, info->target_pspec->name);
+              expression = expression_info_construct (builder, info->expr, error);
+              if (expression == NULL)
+                {
+                  g_prefix_error (error, "%s:%d:%d: ", priv->filename, info->line, info->col);
+                  error = NULL;
+                  result = FALSE;
+                }
+              else
+                {
+                  gtk_expression_bind (expression, info->target, object, info->target_pspec->name);
+                }
             }
 
           free_binding_expression_info (info);
