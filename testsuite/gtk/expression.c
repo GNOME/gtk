@@ -206,10 +206,22 @@ test_nested (void)
   g_assert_cmpstr (g_value_get_string (&value), ==, "salad");
   g_value_unset (&value);
 
+  gtk_filter_list_model_set_filter (filtered, filter);
+  g_assert_cmpint (counter, ==, 0);
+
   g_clear_object (&filter);
   filter = gtk_string_filter_new ();
-  gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "bar");
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "salad");
   gtk_filter_list_model_set_filter (filtered, filter);
+  g_assert_cmpint (counter, >, 0);
+  counter = 0;
+
+  res = gtk_expression_evaluate (expr, NULL, &value);
+  g_assert_true (res);
+  g_assert_cmpstr (g_value_get_string (&value), ==, "salad");
+  g_value_unset (&value);
+
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "bar");
   g_assert_cmpint (counter, >, 0);
   counter = 0;
 
