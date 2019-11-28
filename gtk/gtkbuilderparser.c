@@ -955,7 +955,8 @@ parse_binding (ParserData   *data,
                GError      **error)
 {
   BindingExpressionInfo *info;
-  const gchar *name = NULL;
+  const char *name = NULL;
+  const char *object_name = NULL;
   ObjectInfo *object_info;
   GParamSpec *pspec = NULL;
 
@@ -970,6 +971,7 @@ parse_binding (ParserData   *data,
 
   if (!g_markup_collect_attributes (element_name, names, values, error,
                                     G_MARKUP_COLLECT_STRING, "name", &name,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "object", &object_name,
                                     G_MARKUP_COLLECT_INVALID))
     {
       _gtk_builder_prefix_error (data->builder, &data->ctx, error);
@@ -1014,6 +1016,7 @@ parse_binding (ParserData   *data,
   info->tag_type = TAG_BINDING_EXPRESSION;
   info->target = NULL;
   info->target_pspec = pspec;
+  info->object_name = g_strdup (object_name);
   gtk_buildable_parse_context_get_position (&data->ctx, &info->line, &info->col);
 
   state_push (data, info);
@@ -1507,6 +1510,7 @@ free_binding_expression_info (BindingExpressionInfo *info)
 {
   if (info->expr)
     free_expression_info (info->expr);
+  g_free (info->object_name);
   g_slice_free (BindingExpressionInfo, info);
 }
 
