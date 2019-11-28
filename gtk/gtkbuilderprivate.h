@@ -133,6 +133,7 @@ typedef struct
   guint tag_type;
   GObject *target;
   GParamSpec *target_pspec;
+  char *object_name;
   ExpressionInfo *expr;
   gint line;
   gint col;
