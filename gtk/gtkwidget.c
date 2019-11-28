@@ -12113,24 +12113,6 @@ setup_template_child (GtkWidgetTemplate   *template_data,
   return TRUE;
 }
 
-static GClosure *
-gtk_widget_template_closure_func (GtkBuilder  *builder,
-                                  const char  *function_name,
-                                  gboolean     swapped,
-                                  GObject     *object,
-                                  gpointer     user_data,
-                                  GError     **error)
-{
-  if (object == NULL)
-    object = user_data;
-
-  return gtk_builder_create_cclosure (builder,
-                                      function_name,
-                                      swapped,
-                                      object,
-                                      error);
-}
-
 /**
  * gtk_widget_init_template:
  * @widget: a #GtkWidget
@@ -12172,6 +12154,8 @@ gtk_widget_init_template (GtkWidget *widget)
 
   builder = gtk_builder_new ();
 
+  gtk_builder_set_current_object (builder, G_OBJECT (widget));
+
   /* Setup closure handling. All signal data from a template receive the 
    * template instance as user data automatically.
    *
@@ -12180,8 +12164,6 @@ gtk_widget_init_template (GtkWidget *widget)
    */
   if (template->closure_func)
     gtk_builder_set_closure_func (builder, template->closure_func, template->closure_data, NULL);
-  else
-    gtk_builder_set_closure_func (builder, gtk_widget_template_closure_func, widget, NULL);
 
   /* Add any callback symbols declared for this GType to the GtkBuilder namespace */
   for (l = template->callbacks; l; l = l->next)
