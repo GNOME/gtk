@@ -254,6 +254,7 @@ static void gtk_builder_get_property   (GObject         *object,
 
 enum {
   PROP_0,
+  PROP_CURRENT_OBJECT,
   PROP_TRANSLATION_DOMAIN,
   LAST_PROP
 };
@@ -282,6 +283,7 @@ typedef struct
   gchar *filename;
   gchar *resource_prefix;
   GType template_type;
+  GObject *current_object;
 
   GtkBuilderClosureFunc closure_func;
   gpointer closure_data;
@@ -291,10 +293,21 @@ typedef struct
 G_DEFINE_TYPE_WITH_PRIVATE (GtkBuilder, gtk_builder, G_TYPE_OBJECT)
 
 static void
+gtk_builder_dispose (GObject *object)
+{
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (GTK_BUILDER (object));
+
+  g_clear_object (&priv->current_object);
+
+  G_OBJECT_CLASS (gtk_builder_parent_class)->dispose (object);
+}
+
+static void
 gtk_builder_class_init (GtkBuilderClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+  gobject_class->dispose = gtk_builder_dispose;
   gobject_class->finalize = gtk_builder_finalize;
   gobject_class->set_property = gtk_builder_set_property;
   gobject_class->get_property = gtk_builder_get_property;
@@ -312,6 +325,18 @@ gtk_builder_class_init (GtkBuilderClass *klass)
                            P_("Translation Domain"),
                            P_("The translation domain used by gettext"),
                            NULL,
+                           GTK_PARAM_READWRITE);
+
+ /**
+  * GtkBuilder:current-object:
+  *
+  * The object the builder is evaluating for.
+  */
+  builder_props[PROP_CURRENT_OBJECT] =
+      g_param_spec_object ("current-object",
+                           P_("Current object"),
+                           P_("The object the builder is evaluating for"),
+                           G_TYPE_OBJECT,
                            GTK_PARAM_READWRITE);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, builder_props);
@@ -365,9 +390,14 @@ gtk_builder_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_CURRENT_OBJECT:
+      gtk_builder_set_current_object (builder, g_value_get_object (value));
+      break;
+
     case PROP_TRANSLATION_DOMAIN:
       gtk_builder_set_translation_domain (builder, g_value_get_string (value));
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -385,9 +415,14 @@ gtk_builder_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_CURRENT_OBJECT:
+      g_value_set_object (value, priv->current_object);
+      break;
+
     case PROP_TRANSLATION_DOMAIN:
       g_value_set_string (value, priv->domain);
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1103,8 +1138,14 @@ gtk_builder_create_bindings (GtkBuilder  *builder,
               error = NULL;
               result = FALSE;
             }
+          else if (priv->current_object)
+            {
+              object = priv->current_object;
+            }
           else
-            object = info->target;
+            {
+              object = info->target;
+            }
 
           if (object)
             {
@@ -1723,6 +1764,54 @@ gtk_builder_expose_object (GtkBuilder    *builder,
   g_hash_table_insert (priv->objects,
                        g_strdup (name),
                        g_object_ref (object));
+}
+
+/**
+ * gtk_builder_get_current_object:
+ * @self: a #GtkBuilder
+ *
+ * Gets the current object set via gtk_builder_set_current_object().
+ *
+ * Returns: (nullable) (transfer none): the current object
+ **/
+GObject *
+gtk_builder_get_current_object (GtkBuilder *self)
+{
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (self);
+
+  g_return_val_if_fail (GTK_IS_BUILDER (self), NULL);
+
+  return priv->current_object;
+}
+
+/**
+ * gtk_builder_set_current_object:
+ * @self: a #GtkBuilder
+ * @current_object: (nullable) (transfer none): the new current object or
+ *     %NULL for none
+ *
+ * Sets the current object for the @self. The current object can be
+ * tought of as the `this` object that the builder is working for and
+ * will often be used as the default object when an object is optional.
+ *
+ * gtk_widget_init_template() for example will set the current object to
+ * the widget the template is inited for.  
+ * For functions like gtk_builder_new_from_resource(), the current object
+ * will be %NULL.
+ **/
+void
+gtk_builder_set_current_object (GtkBuilder *self,
+                                GObject    *current_object)
+{
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (self);
+
+  g_return_if_fail (GTK_IS_BUILDER (self));
+  g_return_if_fail (current_object || G_IS_OBJECT (current_object));
+
+  if (!g_set_object (&priv->current_object, current_object))
+    return;
+
+  g_object_notify_by_pspec (G_OBJECT (self), builder_props[PROP_CURRENT_OBJECT]);
 }
 
 /**
@@ -2749,7 +2838,11 @@ gtk_builder_create_closure_for_funcptr (GtkBuilder *builder,
                                         gboolean    swapped,
                                         GObject    *object)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GClosure *closure;
+
+  if (object == NULL)
+    object = priv->current_object;
 
   if (object)
     {

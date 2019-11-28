@@ -64,6 +64,8 @@ gtk_builder_list_item_factory_setup (GtkListItemFactory *factory,
 
   builder = gtk_builder_new ();
 
+  gtk_builder_set_current_object (builder, G_OBJECT (list_item));
+
   if (!gtk_builder_extend_with_template  (builder, G_OBJECT (list_item), GTK_TYPE_LIST_ITEM,
 					  (const gchar *)g_bytes_get_data (self->bytes, NULL),
 					  g_bytes_get_size (self->bytes),
