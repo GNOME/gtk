@@ -1333,6 +1333,8 @@ gtk_expression_bind_notify (gpointer data)
  * gtk_expression_bind:
  * @self: (transfer full): a #GtkExpression
  * @object: (transfer none) (type GObject): the object to bind
+ * @this_: (transfer none) (type GObject): the this argument for
+ *     the evaluation of @self
  * @property: name of the property to bind to
  *
  * Bind @object's property named @property to @self.
@@ -1353,6 +1355,7 @@ gtk_expression_bind_notify (gpointer data)
 GtkExpressionWatch *
 gtk_expression_bind (GtkExpression *self,
                      gpointer       object,
+                     gpointer       this_,
                      const char    *property)
 {
   GtkExpressionBind *bind;
@@ -1384,7 +1387,7 @@ gtk_expression_bind (GtkExpression *self,
   bind->object = object;
   bind->pspec = pspec;
   bind->watch = gtk_expression_watch (self,
-                                      object,
+                                      this_,
                                       gtk_expression_bind_notify,
                                       bind,
                                       gtk_expression_bind_free);
