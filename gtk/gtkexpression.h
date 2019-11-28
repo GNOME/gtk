@@ -59,6 +59,7 @@ GtkExpressionWatch *    gtk_expression_watch                    (GtkExpression  
 GDK_AVAILABLE_IN_ALL
 GtkExpressionWatch *    gtk_expression_bind                     (GtkExpression                  *self,
                                                                  gpointer                        object,
+                                                                 gpointer                        this_,
                                                                  const char *                    property);
 
 GDK_AVAILABLE_IN_ALL
