@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <object class="GtkListStore" id="model">
-    <columns>
-      <column type="PangoFontFamily"/>
-      <column type="PangoFontFace"/>
-      <column type="GtkDelayedFontDescription"/>
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkTreeModelFilter" id="filter_model">
-    <property name="child-model">model</property>
-    <signal name="row-deleted" handler="rows_changed_cb" swapped="yes"/>
-    <signal name="row-inserted" handler="rows_changed_cb" swapped="yes"/>
+  <object class="GtkSingleSelection" id="selection">
+    <signal name="notify::selected-item" handler="selection_changed_cb" object="GtkFontChooserWidget" swapped="0" />
+    <signal name="items-changed" handler="rows_changed_cb" object="GtkFontChooserWidget" swapped="1" />
+    <property name="model">
+      <object class="GtkFilterListModel" id="filter_model">
+        <property name="filter">
+          <object class="GtkEveryFilter">
+            <child>
+              <object class="GtkStringFilter">
+                <binding name="search">
+                  <lookup name="text">search_entry</lookup>
+                </binding>
+                <property name="expression">
+                  <closure type="gchararray" swapped="1" function="get_font_name" />
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCustomFilter" id="custom_filter">
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </property>
   </object>
   <object class="GtkAdjustment" id="slider_adjustment">
     <property name="upper">100</property>
@@ -40,7 +53,6 @@
                     <property name="hexpand">1</property>
                     <property name="activates-default">1</property>
                     <property name="placeholder-text" translatable="yes">Search font name</property>
-                    <signal name="search-changed" handler="text_changed_cb" swapped="no"/>
                     <signal name="stop-search" handler="stop_search_cb" swapped="no"/>
                     <layout>
                       <property name="left-attach">0</property>
@@ -54,11 +66,11 @@
                       <object class="GtkStackPage">
                         <property name="name">list</property>
                         <property name="child">
-                          <object class="GtkGrid" id="font_grid">
+                          <object class="GtkGrid">
                             <property name="row-spacing">6</property>
                             <property name="column-spacing">6</property>
                             <child>
-                              <object class="GtkScrolledWindow" id="list_scrolled_window">
+                              <object class="GtkScrolledWindow">
                                 <property name="width-request">400</property>
                                 <property name="height-request">300</property>
                                 <property name="can-focus">1</property>
@@ -67,31 +79,40 @@
                                 <property name="hscrollbar-policy">never</property>
                                 <property name="shadow-type">etched-in</property>
                                 <child>
-                                  <object class="GtkTreeView" id="family_face_list">
+                                  <object class="GtkListView" id="family_face_list">
                                     <property name="can-focus">1</property>
-                                    <property name="model">filter_model</property>
-                                    <property name="headers-visible">0</property>
-                                    <property name="enable-search">0</property>
-                                    <property name="fixed-height-mode">1</property>
-                                    <signal name="cursor-changed" handler="cursor_changed_cb" swapped="no"/>
-                                    <signal name="row-activated" handler="row_activated_cb" swapped="no"/>
-                                    <child internal-child="selection">
-                                      <object class="GtkTreeSelection" id="treeview-selection1">
-                                        <property name="mode">browse</property>
-                                        <signal name="changed" handler="selection_changed"/>
+                                    <property name="model">selection</property>
+                                    <signal name="activate" handler="row_activated_cb" swapped="no"/>
+                                    <property name="factory">
+                                      <object class="GtkBuilderListItemFactory">
+                                        <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkLabel">
+        <property name="margin-start">20</property>
+        <property name="margin-end">20</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
+        <property name="ellipsize">end</property>
+        <binding name="label">
+          <closure type="gchararray" function="get_font_name">
+            <lookup name="item">GtkListItem</lookup>
+          </closure>
+        </binding>
+        <binding name="attributes">
+          <closure type="PangoAttrList" function="get_font_attributes">
+            <lookup name="item">GtkListItem</lookup>
+          </closure>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                                        ]]></property>
                                       </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkTreeViewColumn" id="family_face_column">
-                                        <property name="sizing">fixed</property>
-                                        <property name="title" translatable="yes">Font Family</property>
-                                        <child>
-                                          <object class="GtkCellRendererText" id="family_face_cell">
-                                            <property name="ellipsize">end</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
+                                    </property>
                                   </object>
                                 </child>
                                 <layout>
@@ -229,6 +250,16 @@
                     <property name="margin-end">12</property>
                     <property name="ellipsize">end</property>
                     <property name="xalign">0</property>
+                    <binding name="label" object="GtkFontChooserWidget">
+                      <closure type="gchararray" function="get_font_name">
+                        <lookup name="selected-item">selection</lookup>
+                      </closure>
+                    </binding>
+                    <binding name="attributes" object="GtkFontChooserWidget">
+                      <closure type="PangoAttrList" function="get_font_attributes">
+                        <lookup name="selected-item">selection</lookup>
+                      </closure>
+                    </binding>
                   </object>
                 </child>
                 <child>
