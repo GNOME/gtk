@@ -616,11 +616,15 @@ gtk_property_expression_new (GType          this_type,
 
   if (g_type_is_a (this_type, G_TYPE_OBJECT))
     {
-      pspec = g_object_class_find_property (g_type_class_peek (this_type), property_name);
+      GObjectClass *class = g_type_class_ref (this_type);
+      pspec = g_object_class_find_property (class, property_name);
+      g_type_class_unref (class);
     }
   else if (g_type_is_a (this_type, G_TYPE_INTERFACE))
     {
-      pspec = g_object_interface_find_property (g_type_default_interface_peek (this_type), property_name);
+      GTypeInterface *iface = g_type_default_interface_ref (this_type);
+      pspec = g_object_interface_find_property (iface, property_name);
+      g_type_default_interface_unref (iface);
     }
   else
     {
