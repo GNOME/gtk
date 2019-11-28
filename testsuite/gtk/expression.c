@@ -239,6 +239,50 @@ test_nested (void)
   gtk_expression_watch_unwatch (watch);
 }
 
+static void
+test_type_mismatch (void)
+{
+  g_autoptr(GtkFilter) filter = NULL;
+  g_autoptr(GtkExpression) expr = NULL;
+  GValue value = G_VALUE_INIT;
+  gboolean res;
+
+  filter = gtk_any_filter_new ();
+
+  expr = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, gtk_constant_expression_new (GTK_TYPE_ANY_FILTER, filter), "search");
+
+  res = gtk_expression_evaluate (expr, NULL, &value);
+  g_assert_false (res);
+}
+
+static void
+test_this (void)
+{
+  g_autoptr(GtkFilter) filter = NULL;
+  g_autoptr(GtkFilter) filter2 = NULL;
+  g_autoptr(GtkExpression) expr = NULL;
+  GValue value = G_VALUE_INIT;
+  gboolean res;
+
+  expr = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, NULL, "search");
+
+  filter = gtk_string_filter_new ();
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "word");
+
+  filter2 = gtk_string_filter_new ();
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter2), "sausage");
+
+  res = gtk_expression_evaluate (expr, filter, &value);
+  g_assert_true (res);
+  g_assert_cmpstr (g_value_get_string (&value), ==, "word");
+  g_value_unset (&value);
+
+  res = gtk_expression_evaluate (expr, filter2, &value);
+  g_assert_true (res);
+  g_assert_cmpstr (g_value_get_string (&value), ==, "sausage");
+  g_value_unset (&value);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -250,6 +294,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/expression/constant", test_constant);
   g_test_add_func ("/expression/object", test_object);
   g_test_add_func ("/expression/nested", test_nested);
+  g_test_add_func ("/expression/type-mismatch", test_type_mismatch);
+  g_test_add_func ("/expression/this", test_this);
 
   return g_test_run ();
 }
