@@ -121,6 +121,112 @@ test_closure (void)
   gtk_expression_watch_unwatch (watch);
 }
 
+static void
+test_constant (void)
+{
+  GtkExpression *expr;
+  GValue value = G_VALUE_INIT;
+  gboolean res;
+
+  expr = gtk_constant_expression_new (G_TYPE_INT, 22);
+  g_assert_cmpint (gtk_expression_get_value_type (expr), ==, G_TYPE_INT);
+  g_assert_true (gtk_expression_is_static (expr));
+
+  res = gtk_expression_evaluate (expr, NULL, &value);
+  g_assert_true (res);
+  g_assert_cmpint (g_value_get_int (&value), ==, 22);
+
+  gtk_expression_unref (expr);
+}
+
+static void
+test_object (void)
+{
+  GtkExpression *expr;
+  GObject *obj;
+  GValue value = G_VALUE_INIT;
+  gboolean res;
+
+  obj = G_OBJECT (gtk_string_filter_new ());
+
+  expr = gtk_object_expression_new (obj);
+  g_assert_true (!gtk_expression_is_static (expr));
+  g_assert_cmpint (gtk_expression_get_value_type (expr), ==, GTK_TYPE_STRING_FILTER);
+
+  res = gtk_expression_evaluate (expr, NULL, &value);
+  g_assert_true (res);
+  g_assert_true (g_value_get_object (&value) == obj);
+  g_value_unset (&value);
+
+  g_clear_object (&obj);
+  res = gtk_expression_evaluate (expr, NULL, &value);
+  g_assert_false (res);
+
+  gtk_expression_unref (expr);
+}
+
+static void
+test_nested (void)
+{
+  GtkExpression *list_expr = NULL;
+  GtkExpression *filter_expr = NULL;
+  g_autoptr(GtkExpression) expr = NULL;
+  g_autoptr(GtkFilter) filter = NULL;
+  g_autoptr(GListModel) list = NULL;
+  g_autoptr(GtkFilterListModel) filtered = NULL;
+  GValue value = G_VALUE_INIT;
+  gboolean res;
+  GtkExpressionWatch *watch;
+  guint counter = 0;
+
+  filter = gtk_string_filter_new ();
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "word");
+  list = G_LIST_MODEL (g_list_store_new (G_TYPE_OBJECT));
+  filtered = gtk_filter_list_model_new (list, filter);
+
+  list_expr = gtk_object_expression_new (G_OBJECT (filtered));
+  filter_expr = gtk_property_expression_new (GTK_TYPE_FILTER_LIST_MODEL, list_expr, "filter");
+  expr = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, filter_expr, "search");
+
+  g_assert_true (!gtk_expression_is_static (expr));
+  g_assert_cmpint (gtk_expression_get_value_type (expr), ==, G_TYPE_STRING);
+
+  res = gtk_expression_evaluate (expr, NULL, &value);
+  g_assert_true (res);
+  g_assert_cmpstr (g_value_get_string (&value), ==, "word");
+  g_value_unset (&value);
+
+  watch = gtk_expression_watch (expr, filter, inc_counter, &counter, NULL);
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "salad");
+  g_assert_cmpint (counter, >, 0);
+  counter = 0;
+
+  res = gtk_expression_evaluate (expr, NULL, &value);
+  g_assert_true (res);
+  g_assert_cmpstr (g_value_get_string (&value), ==, "salad");
+  g_value_unset (&value);
+
+  g_clear_object (&filter);
+  filter = gtk_string_filter_new ();
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "bar");
+  gtk_filter_list_model_set_filter (filtered, filter);
+  g_assert_cmpint (counter, >, 0);
+  counter = 0;
+
+  res = gtk_expression_evaluate (expr, NULL, &value);
+  g_assert_true (res);
+  g_assert_cmpstr (g_value_get_string (&value), ==, "bar");
+  g_value_unset (&value);
+
+  gtk_filter_list_model_set_filter (filtered, NULL);
+  g_assert_cmpint (counter, >, 0);
+
+  res = gtk_expression_evaluate (expr, NULL, &value);
+  g_assert_false (res);
+
+  gtk_expression_watch_unwatch (watch);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -129,6 +235,9 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/expression/property", test_property);
   g_test_add_func ("/expression/closure", test_closure);
+  g_test_add_func ("/expression/constant", test_constant);
+  g_test_add_func ("/expression/object", test_object);
+  g_test_add_func ("/expression/nested", test_nested);
 
   return g_test_run ();
 }
