@@ -401,7 +401,7 @@ setup_listitem_cb (GtkListItemFactory *factory,
                                             "location");
   /* Now create the label and bind the expression to it. */
   location_label = gtk_label_new (NULL);
-  gtk_expression_bind (expression, location_label, "label");
+  gtk_expression_bind (expression, location_label, "label", location_label);
   gtk_container_add (GTK_CONTAINER (box), location_label);
 
 
@@ -411,7 +411,7 @@ setup_listitem_cb (GtkListItemFactory *factory,
   expression = gtk_expression_ref (clock_expression);
   /* Now create the widget and bind the expression to it. */
   picture = gtk_picture_new ();
-  gtk_expression_bind (expression, picture, "paintable");
+  gtk_expression_bind (expression, picture, "paintable", picture);
   gtk_container_add (GTK_CONTAINER (box), picture);
 
 
@@ -430,7 +430,7 @@ setup_listitem_cb (GtkListItemFactory *factory,
                                             NULL, NULL);
   /* Now create the label and bind the expression to it. */
   time_label = gtk_label_new (NULL);
-  gtk_expression_bind (expression, time_label, "label");
+  gtk_expression_bind (expression, time_label, "label", time_label);
   gtk_container_add (GTK_CONTAINER (box), time_label);
 
   gtk_expression_unref (clock_expression);
