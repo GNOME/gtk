@@ -1444,6 +1444,16 @@ blur_texture (GskGLRenderer   *self,
     { { texture_to_blur_width,                        }, { 1, 1 }, },
   });
 
+#if 0
+  {
+    static int k;
+    ops_dump_framebuffer (builder,
+                          g_strdup_printf ("blurred%d.png", k++),
+                          texture_to_blur_width,
+                          texture_to_blur_height);
+  }
+#endif
+
   ops_set_render_target (builder, prev_render_target);
   ops_set_viewport (builder, &prev_viewport);
   ops_set_projection (builder, &prev_projection);
