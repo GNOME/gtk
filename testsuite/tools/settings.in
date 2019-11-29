@@ -1,6 +1,6 @@
 #! /bin/bash
 
-GTK_QUERY_SETTINGS=${GTK_QUERY_SETTINGS:-gtk-query-settings}
+GTK_QUERY_SETTINGS=${GTK_QUERY_SETTINGS:-gtk4-query-settings}
 TEST_RESULT_DIR=${TEST_RESULT_DIR:-/tmp}
 
 shopt -s nullglob
