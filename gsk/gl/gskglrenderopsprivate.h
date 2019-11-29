@@ -152,6 +152,7 @@ typedef struct
   graphene_rect_t current_viewport;
   float current_opacity;
   float dx, dy;
+  float scale_x, scale_y;
 
   OpBuffer render_ops;
   GArray *vertices;
