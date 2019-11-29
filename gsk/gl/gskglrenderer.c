@@ -1503,8 +1503,7 @@ render_blur_node (GskGLRenderer   *self,
                                          region.texture_id,
                                          node->bounds.size.width * scale,
                                          node->bounds.size.height * scale,
-                                         blur_radius);
-
+                                         blur_radius * scale);
     }
 
   g_assert (blurred_texture_id != 0);
@@ -1689,7 +1688,7 @@ render_outset_shadow_node (GskGLRenderer   *self,
                                          texture_id,
                                          texture_width,
                                          texture_height,
-                                         blur_radius);
+                                         blur_radius * scale);
 
       gsk_gl_driver_mark_texture_permanent (self->gl_driver, blurred_texture_id);
       gsk_gl_shadow_cache_commit (&self->shadow_cache,
