@@ -1,9 +1,13 @@
-GtkToggleButton:checked,
+* {
+  all: unset;
+}
+
+button.toggle:checked,
 #reference:disabled {
   color: lime;
 }
 
-GtkToggleButton:checked,
+button.toggle:checked,
 #reference:checked {
   color: blue;
 }
