@@ -116,10 +116,10 @@ strvcmp (gconstpointer p1,
 }
 
 static gboolean
-transform_settings_to_keys (GBinding     *binding,
-                            const GValue *from_value,
-                            GValue       *to_value,
-                            gpointer      unused)
+settings_transform_settings_to_keys (GBinding     *binding,
+                                     const GValue *from_value,
+                                     GValue       *to_value,
+                                     gpointer      unused)
 {
   GtkTreeListRow *treelistrow;
   GSettings *settings;
@@ -219,9 +219,6 @@ do_listview_settings (GtkWidget *do_widget)
       g_type_ensure (SETTINGS_TYPE_KEY);
 
       builder = gtk_builder_new_from_resource ("/listview_settings/listview_settings.ui");
-      gtk_builder_add_callback_symbols (builder,
-                                        "transform_settings_to_keys", G_CALLBACK (transform_settings_to_keys),
-                                        NULL);
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
@@ -241,7 +238,7 @@ do_listview_settings (GtkWidget *do_widget)
       g_object_bind_property_full (selection, "selected-item",
                                    columnview, "model",
                                    G_BINDING_SYNC_CREATE,
-                                   transform_settings_to_keys,
+                                   settings_transform_settings_to_keys,
                                    NULL,
                                    NULL, NULL);
       gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (selection));

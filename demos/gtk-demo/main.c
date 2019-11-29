@@ -1040,10 +1040,10 @@ scrollbar_popup (GtkWidget *scrollbar, GtkWidget *menu)
   return TRUE;
 }
 
-static void
-listview_activate_cb (GtkListView *listview,
-                      guint        position,
-                      gpointer     user_data)
+void
+gtk_demo_listview_activate_cb (GtkListView *listview,
+                               guint        position,
+                               gpointer     user_data)
 {
   GtkTreeListRow *row = g_list_model_get_item (gtk_list_view_get_model (listview), position);
   GtkDemo *demo = gtk_tree_list_row_get_item (row);
@@ -1055,7 +1055,6 @@ static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
-  GError *error = NULL;
   GtkWidget *sw;
   GtkWidget *scrollbar;
   GtkWidget *menu;
@@ -1067,14 +1066,7 @@ activate (GApplication *app)
     { "run", activate_run, NULL, NULL, NULL }
   };
 
-  builder = gtk_builder_new ();
-  gtk_builder_add_callback_symbol (builder, "listview_activate_cb", G_CALLBACK (listview_activate_cb));
-  gtk_builder_add_from_resource (builder, "/ui/main.ui", &error);
-  if (error != NULL)
-    {
-      g_critical ("%s", error->message);
-      exit (1);
-    }
+  builder = gtk_builder_new_from_resource ("/ui/main.ui");
 
   window = (GtkWidget *)gtk_builder_get_object (builder, "window");
   gtk_application_add_window (GTK_APPLICATION (app), GTK_WINDOW (window));

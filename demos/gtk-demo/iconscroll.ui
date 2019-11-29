@@ -15,13 +15,13 @@
             <child>
               <object class="GtkButton">
                 <property name="icon-name">pan-start-symbolic</property>
-                <signal name="clicked" handler="prev_clicked_cb"/>
+                <signal name="clicked" handler="iconscroll_prev_clicked_cb"/>
               </object>
             </child>
             <child>
               <object class="GtkButton">
                 <property name="icon-name">pan-end-symbolic</property>
-                <signal name="clicked" handler="next_clicked_cb"/>
+                <signal name="clicked" handler="iconscroll_next_clicked_cb"/>
               </object>
             </child>
           </object>

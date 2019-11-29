@@ -15,13 +15,13 @@
             <child>
               <object class="GtkButton">
                 <property name="icon-name">pan-start-symbolic</property>
-                <signal name="clicked" handler="prev_button_clicked_cb" object="bowl" swapped="no"/>
+                <signal name="clicked" handler="fishbowl_prev_button_clicked_cb" object="bowl" swapped="no"/>
               </object>
             </child>
             <child>
               <object class="GtkButton">
                 <property name="icon-name">pan-end-symbolic</property>
-                <signal name="clicked" handler="next_button_clicked_cb" object="bowl" swapped="no"/>
+                <signal name="clicked" handler="fishbowl_next_button_clicked_cb" object="bowl" swapped="no"/>
               </object>
             </child>
           </object>
@@ -29,7 +29,7 @@
         <child type="end">
           <object class="GtkLabel">
             <binding name="label">
-              <closure type="gchararray" function="format_header_cb">
+              <closure type="gchararray" function="fishbowl_format_header_cb">
                 <lookup name="count">bowl</lookup>
                 <lookup name="framerate">bowl</lookup>
               </closure>
@@ -40,7 +40,7 @@
           <object class="GtkToggleButton" id="changes_allow">
             <property name="icon-name">changes-allow</property>
             <property name="relief">none</property>
-            <signal name="notify::active" handler="changes_toggled_cb"/>
+            <signal name="notify::active" handler="fishbowl_changes_toggled_cb"/>
           </object>
         </child>
       </object>
