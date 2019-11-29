@@ -445,8 +445,6 @@ gtk_property_expression_watch_create_closure (GtkPropertyExpressionWatch *pwatch
   GtkPropertyExpression *self = (GtkPropertyExpression *) watch->expression;
   GObject *object;
 
-  if (pwatch->this == NULL)
-    return;
   object = gtk_property_expression_get_object (self, pwatch->this);
   if (object == NULL)
     return;
