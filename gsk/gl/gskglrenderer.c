@@ -1024,6 +1024,8 @@ render_transform_node (GskGLRenderer   *self,
     case GSK_TRANSFORM_CATEGORY_2D:
     default:
       {
+        TextureRegion region;
+        gboolean is_offscreen;
 
         if (node_supports_transform (child))
           {
@@ -1031,59 +1033,54 @@ render_transform_node (GskGLRenderer   *self,
             gsk_gl_renderer_add_render_ops (self, child, builder);
             ops_pop_modelview (builder);
           }
-        else
+        else if (add_offscreen_ops (self, builder,
+                                   &child->bounds,
+                                   child,
+                                   &region, &is_offscreen,
+                                   RESET_CLIP | RESET_OPACITY))
           {
-            TextureRegion region;
-            gboolean is_offscreen;
+            const float min_x = child->bounds.origin.x;
+            const float min_y = child->bounds.origin.y;
+            const float max_x = min_x + child->bounds.size.width;
+            const float max_y = min_y + child->bounds.size.height;
+
             /* For non-trivial transforms, we draw everything on a texture and then
              * draw the texture transformed. */
             /* TODO: We should compute a modelview containing only the "non-trivial"
              *       part (e.g. the rotation) and use that. We want to keep the scale
              *       for the texture.
              */
-            if (add_offscreen_ops (self, builder,
-                                   &child->bounds,
-                                   child,
-                                   &region, &is_offscreen,
-                                   RESET_CLIP | RESET_OPACITY))
+            ops_push_modelview (builder, node_transform);
+            ops_set_texture (builder, region.texture_id);
+            ops_set_program (builder, &self->blit_program);
+
+            if (is_offscreen)
               {
-                const float min_x = child->bounds.origin.x;
-                const float min_y = child->bounds.origin.y;
-                const float max_x = min_x + child->bounds.size.width;
-                const float max_y = min_y + child->bounds.size.height;
+                const GskQuadVertex offscreen_vertex_data[GL_N_VERTICES] = {
+                  { { min_x, min_y }, { region.x,  region.y2 }, },
+                  { { min_x, max_y }, { region.x,  region.y  }, },
+                  { { max_x, min_y }, { region.x2, region.y2 }, },
 
-                ops_push_modelview (builder, node_transform);
-                ops_set_texture (builder, region.texture_id);
-                ops_set_program (builder, &self->blit_program);
+                  { { max_x, max_y }, { region.x2, region.y  }, },
+                  { { min_x, max_y }, { region.x,  region.y  }, },
+                  { { max_x, min_y }, { region.x2, region.y2 }, },
+                };
 
-                if (is_offscreen)
-                  {
-                    const GskQuadVertex offscreen_vertex_data[GL_N_VERTICES] = {
-                      { { min_x, min_y }, { region.x,  region.y2 }, },
-                      { { min_x, max_y }, { region.x,  region.y  }, },
-                      { { max_x, min_y }, { region.x2, region.y2 }, },
+                ops_draw (builder, offscreen_vertex_data);
+              }
+            else
+              {
+                const GskQuadVertex onscreen_vertex_data[GL_N_VERTICES] = {
+                  { { min_x, min_y }, { region.x,  region.y  }, },
+                  { { min_x, max_y }, { region.x,  region.y2 }, },
+                  { { max_x, min_y }, { region.x2, region.y  }, },
 
-                      { { max_x, max_y }, { region.x2, region.y  }, },
-                      { { min_x, max_y }, { region.x,  region.y  }, },
-                      { { max_x, min_y }, { region.x2, region.y2 }, },
-                    };
+                  { { max_x, max_y }, { region.x2, region.y2 }, },
+                  { { min_x, max_y }, { region.x,  region.y2 }, },
+                  { { max_x, min_y }, { region.x2, region.y  }, },
+                };
 
-                    ops_draw (builder, offscreen_vertex_data);
-                  }
-                else
-                  {
-                    const GskQuadVertex onscreen_vertex_data[GL_N_VERTICES] = {
-                      { { min_x, min_y }, { region.x,  region.y  }, },
-                      { { min_x, max_y }, { region.x,  region.y2 }, },
-                      { { max_x, min_y }, { region.x2, region.y  }, },
-
-                      { { max_x, max_y }, { region.x2, region.y2 }, },
-                      { { min_x, max_y }, { region.x,  region.y2 }, },
-                      { { max_x, min_y }, { region.x2, region.y  }, },
-                    };
-
-                    ops_draw (builder, onscreen_vertex_data);
-                  }
+                ops_draw (builder, onscreen_vertex_data);
               }
 
             ops_pop_modelview (builder);
