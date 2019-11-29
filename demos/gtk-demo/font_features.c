@@ -1109,23 +1109,23 @@ done:
   g_free (design_coords);
 }
 
-static void
-font_changed (void)
+void
+font_features_font_changed (void)
 {
   update_script_combo ();
   update_features ();
   update_font_variations ();
 }
 
-static void
-script_changed (void)
+void
+font_features_script_changed (void)
 {
   update_features ();
   update_display ();
 }
 
-static void
-reset_features (void)
+void
+font_features_reset_features (void)
 {
   GList *l;
 
@@ -1170,8 +1170,8 @@ switch_to_label (void)
   update_display ();
 }
 
-static void
-toggle_edit (void)
+void
+font_features_toggle_edit (void)
 {
   if (strcmp (gtk_stack_get_visible_child_name (GTK_STACK (stack)), "label") == 0)
     switch_to_entry ();
@@ -1179,8 +1179,8 @@ toggle_edit (void)
     switch_to_label ();
 }
 
-static void
-stop_edit (void)
+void
+font_features_stop_edit (void)
 {
   g_signal_emit_by_name (edit_toggle, "clicked");
 }
@@ -1195,7 +1195,7 @@ entry_key_press (GtkEventController *controller,
   if (keyval == GDK_KEY_Escape)
     {
       gtk_editable_set_text (GTK_EDITABLE (entry), text);
-      stop_edit ();
+      font_features_stop_edit ();
       return GDK_EVENT_STOP;
     }
 
@@ -1213,14 +1213,7 @@ do_font_features (GtkWidget *do_widget)
       GtkWidget *feature_list;
       GtkEventController *controller;
 
-      builder = gtk_builder_new ();
-      gtk_builder_add_callback_symbol (builder, "update_display", update_display);
-      gtk_builder_add_callback_symbol (builder, "font_changed", font_changed);
-      gtk_builder_add_callback_symbol (builder, "script_changed", script_changed);
-      gtk_builder_add_callback_symbol (builder, "reset", reset_features);
-      gtk_builder_add_callback_symbol (builder, "stop_edit", G_CALLBACK (stop_edit));
-      gtk_builder_add_callback_symbol (builder, "toggle_edit", G_CALLBACK (toggle_edit));
-      gtk_builder_add_from_resource (builder, "/font_features/font-features.ui", NULL);
+      builder = gtk_builder_new_from_resource ("/font_features/font-features.ui");
 
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       feature_list = GTK_WIDGET (gtk_builder_get_object (builder, "feature_list"));
@@ -1338,7 +1331,7 @@ do_font_features (GtkWidget *do_widget)
       else
         g_hash_table_remove_all (axes);
 
-      font_changed ();
+      font_features_font_changed ();
 
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);

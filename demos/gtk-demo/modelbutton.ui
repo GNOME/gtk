@@ -101,21 +101,21 @@
           <object class="GtkModelButton">
             <property name="text">Hammer</property>
             <property name="role">check</property>
-            <signal name="clicked" handler="tool_clicked"/>
+            <signal name="clicked" handler="modelbutton_tool_clicked"/>
           </object>
         </child>
         <child>
           <object class="GtkModelButton">
             <property name="text">Screwdriver</property>
             <property name="role">check</property>
-            <signal name="clicked" handler="tool_clicked"/>
+            <signal name="clicked" handler="modelbutton_tool_clicked"/>
           </object>
         </child>
         <child>
           <object class="GtkModelButton">
             <property name="text">Drill</property>
             <property name="role">check</property>
-            <signal name="clicked" handler="tool_clicked"/>
+            <signal name="clicked" handler="modelbutton_tool_clicked"/>
           </object>
         </child>
       </object>
