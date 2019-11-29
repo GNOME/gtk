@@ -5392,9 +5392,13 @@ update_csd_shape (GtkWindow *window)
   rect.y = window_border.top;
   rect.width = gtk_widget_get_allocated_width (widget) - window_border.left - window_border.right;
   rect.height = gtk_widget_get_allocated_height (widget) - window_border.top - window_border.bottom;
-  region = cairo_region_create_rectangle (&rect);
-  gtk_widget_set_csd_input_shape (widget, region);
-  cairo_region_destroy (region);
+
+  if (rect.width > 0 && rect.height > 0)
+    {
+      region = cairo_region_create_rectangle (&rect);
+      gtk_widget_set_csd_input_shape (widget, region);
+      cairo_region_destroy (region);
+    }
 }
 
 static void
