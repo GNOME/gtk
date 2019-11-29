@@ -25,44 +25,44 @@ show_shortcuts (GtkWidget   *window,
   g_object_unref (builder);
 }
 
-static void
-builder_shortcuts (GtkWidget *window)
+void
+shortcuts_builder_shortcuts (GtkWidget *window)
 {
   show_shortcuts (window, "shortcuts-builder", NULL);
 }
 
-static void
-gedit_shortcuts (GtkWidget *window)
+void
+shortcuts_gedit_shortcuts (GtkWidget *window)
 {
   show_shortcuts (window, "shortcuts-gedit", NULL);
 }
 
-static void
-clocks_shortcuts (GtkWidget *window)
+void
+shortcuts_clocks_shortcuts (GtkWidget *window)
 {
   show_shortcuts (window, "shortcuts-clocks", NULL);
 }
 
-static void
-clocks_shortcuts_stopwatch (GtkWidget *window)
+void
+shortcuts_clocks_shortcuts_stopwatch (GtkWidget *window)
 {
   show_shortcuts (window, "shortcuts-clocks", "stopwatch");
 }
 
-static void
-boxes_shortcuts (GtkWidget *window)
+void
+shortcuts_boxes_shortcuts (GtkWidget *window)
 {
   show_shortcuts (window, "shortcuts-boxes", NULL);
 }
 
-static void
-boxes_shortcuts_wizard (GtkWidget *window)
+void
+shortcuts_boxes_shortcuts_wizard (GtkWidget *window)
 {
   show_shortcuts (window, "shortcuts-boxes", "wizard");
 }
 
-static void
-boxes_shortcuts_display (GtkWidget *window)
+void
+shortcuts_boxes_shortcuts_display (GtkWidget *window)
 {
   show_shortcuts (window, "shortcuts-boxes", "display");
 }
@@ -85,17 +85,7 @@ do_shortcuts (GtkWidget *do_widget)
     {
       GtkBuilder *builder;
 
-      builder = gtk_builder_new ();
-      gtk_builder_add_callback_symbols (builder,
-                                        "builder_shortcuts", G_CALLBACK (builder_shortcuts),
-                                        "gedit_shortcuts", G_CALLBACK (gedit_shortcuts),
-                                        "clocks_shortcuts", G_CALLBACK (clocks_shortcuts),
-                                        "clocks_shortcuts_stopwatch", G_CALLBACK (clocks_shortcuts_stopwatch),
-                                        "boxes_shortcuts", G_CALLBACK (boxes_shortcuts),
-                                        "boxes_shortcuts_wizard", G_CALLBACK (boxes_shortcuts_wizard),
-                                        "boxes_shortcuts_display", G_CALLBACK (boxes_shortcuts_display),
-                                        NULL);
-      gtk_builder_add_from_resource (builder, "/shortcuts/shortcuts.ui", NULL);
+      builder = gtk_builder_new_from_resource ("/shortcuts/shortcuts.ui");
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
