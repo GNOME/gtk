@@ -181,8 +181,8 @@ needs_explicit_setting (GParamSpec *pspec,
     { "GtkRadioButton", "draw-indicator", PROP_KIND_OBJECT },
     { "GtkWidget", "hexpand", PROP_KIND_OBJECT },
     { "GtkWidget", "vexpand", PROP_KIND_OBJECT },
-    { "GtkGrid", "top-attach", PROP_KIND_LAYOUT },
-    { "GtkGrid", "left-attach", PROP_KIND_LAYOUT },
+    { "GtkGridLayoutChild", "top-attach", PROP_KIND_LAYOUT },
+    { "GtkGridLayoutChild", "left-attach", PROP_KIND_LAYOUT },
   };
   gboolean found;
   gint k;
