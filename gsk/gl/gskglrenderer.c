@@ -1368,12 +1368,12 @@ render_color_matrix_node (GskGLRenderer       *self,
 }
 
 static inline int
-blur_texture (GskGLRenderer   *self,
-              RenderOpBuilder *builder,
-              int              texture_to_blur,
-              const int        texture_to_blur_width,
-              const int        texture_to_blur_height,
-              float            blur_radius)
+blur_texture (GskGLRenderer       *self,
+              RenderOpBuilder     *builder,
+              const TextureRegion *region,
+              const int            texture_to_blur_width,
+              const int            texture_to_blur_height,
+              float                blur_radius)
 {
   int pass1_texture_id, pass1_render_target;
   int pass2_texture_id, pass2_render_target;
@@ -1413,18 +1413,27 @@ blur_texture (GskGLRenderer   *self,
   op->radius = blur_radius;
   op->dir[0] = 1;
   op->dir[1] = 0;
-  ops_set_texture (builder, texture_to_blur);
+  ops_set_texture (builder, region->texture_id);
 
   ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-    { { 0,                                            }, { 0, 1 }, },
-    { { 0,                     texture_to_blur_height }, { 0, 0 }, },
-    { { texture_to_blur_width,                        }, { 1, 1 }, },
+    { { 0,                                            }, { region->x,  region->y2 }, },
+    { { 0,                     texture_to_blur_height }, { region->x,  region->y }, },
+    { { texture_to_blur_width,                        }, { region->x2, region->y2 }, },
 
-    { { texture_to_blur_width, texture_to_blur_height }, { 1, 0 }, },
-    { { 0,                     texture_to_blur_height }, { 0, 0 }, },
-    { { texture_to_blur_width,                        }, { 1, 1 }, },
+    { { texture_to_blur_width, texture_to_blur_height }, { region->x2, region->y }, },
+    { { 0,                     texture_to_blur_height }, { region->x,  region->y }, },
+    { { texture_to_blur_width,                        }, { region->x2, region->y2 }, },
   });
 
+#if 0
+  {
+    static int k;
+    ops_dump_framebuffer (builder,
+                          g_strdup_printf ("pass1_%d.png", k++),
+                          texture_to_blur_width,
+                          texture_to_blur_height);
+  }
+#endif
   op = ops_begin (builder, OP_CHANGE_BLUR);
   op->size.width = texture_to_blur_width;
   op->size.height = texture_to_blur_height;
@@ -1500,7 +1509,7 @@ render_blur_node (GskGLRenderer   *self,
       g_assert (is_offscreen);
 
       blurred_texture_id = blur_texture (self, builder,
-                                         region.texture_id,
+                                         &region,
                                          node->bounds.size.width * scale,
                                          node->bounds.size.height * scale,
                                          blur_radius * scale);
@@ -1685,7 +1694,7 @@ render_outset_shadow_node (GskGLRenderer   *self,
 
       /* Now blur the outline */
       blurred_texture_id = blur_texture (self, builder,
-                                         texture_id,
+                                         &(TextureRegion) { texture_id, 0, 0, 1, 1 },
                                          texture_width,
                                          texture_height,
                                          blur_radius * scale);
