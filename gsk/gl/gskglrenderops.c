@@ -30,6 +30,8 @@ ops_finish (RenderOpBuilder *builder)
 
   builder->dx = 0;
   builder->dy = 0;
+  builder->scale_x = 1;
+  builder->scale_y = 1;
   builder->current_modelview = NULL;
   builder->current_clip = NULL;
   builder->current_render_target = 0;
@@ -84,16 +86,11 @@ ops_pop_debug_group (RenderOpBuilder *builder)
 float
 ops_get_scale (const RenderOpBuilder *builder)
 {
-  const MatrixStackEntry *head;
-
   g_assert (builder->mv_stack != NULL);
   g_assert (builder->mv_stack->len >= 1);
 
-  head = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 1);
-
   /* TODO: Use two separate values */
-  return MAX (head->metadata.scale_x,
-              head->metadata.scale_y);
+  return MAX (builder->scale_x, builder->scale_y);
 }
 
 static void
@@ -400,6 +397,8 @@ ops_set_modelview (RenderOpBuilder *builder,
   builder->dx = 0;
   builder->dy = 0;
   builder->current_modelview = entry->transform;
+  builder->scale_x = entry->metadata.scale_x;
+  builder->scale_y = entry->metadata.scale_y;
   ops_set_modelview_internal (builder, entry->transform);
 }
 
@@ -443,6 +442,8 @@ ops_push_modelview (RenderOpBuilder *builder,
 
   builder->dx = 0;
   builder->dy = 0;
+  builder->scale_x = entry->metadata.scale_x;
+  builder->scale_y = entry->metadata.scale_y;
   builder->current_modelview = entry->transform;
   ops_set_modelview_internal (builder, entry->transform);
 }
@@ -465,6 +466,8 @@ ops_pop_modelview (RenderOpBuilder *builder)
 
   if (builder->mv_stack->len >= 1)
     {
+      builder->scale_x = head->metadata.scale_x;
+      builder->scale_y = head->metadata.scale_y;
       builder->current_modelview = head->transform;
       ops_set_modelview_internal (builder, head->transform);
     }
