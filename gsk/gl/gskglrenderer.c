@@ -64,7 +64,9 @@ typedef enum
   FORCE_OFFSCREEN  = 1 << 0,
   RESET_CLIP       = 1 << 1,
   RESET_OPACITY    = 1 << 2,
-  DUMP_FRAMEBUFFER = 1 << 3
+  DUMP_FRAMEBUFFER = 1 << 3,
+  CENTER_CHILD     = 1 << 4,
+  NO_CACHE_PLZ     = 1 << 5,
 } OffscreenFlags;
 
 typedef struct
@@ -1966,30 +1968,15 @@ render_outset_shadow_node (GskGLRenderer   *self,
 }
 
 static inline void
-render_shadow_node (GskGLRenderer       *self,
-                    GskRenderNode       *node,
-                    RenderOpBuilder     *builder)
+render_shadow_node (GskGLRenderer   *self,
+                    GskRenderNode   *node,
+                    RenderOpBuilder *builder)
 {
-  float min_x;
-  float min_y;
-  float max_x;
-  float max_y;
+  const float scale = ops_get_scale (builder);
+  const gsize n_shadows = gsk_shadow_node_get_n_shadows (node);
   GskRenderNode *original_child = gsk_shadow_node_get_child (node);
   GskRenderNode *shadow_child = original_child;
-  gsize n_shadows = gsk_shadow_node_get_n_shadows (node);
   guint i;
-
-  /* TODO: Implement blurred shadow nodes */;
-  for (i = 0; i < n_shadows; i ++)
-    {
-      const GskShadow *shadow = gsk_shadow_node_peek_shadow (node, i);
-
-      if (shadow->radius > 0)
-        {
-          render_fallback_node (self, node, builder);
-          return;
-        }
-    }
 
   /* Shadow nodes recolor every pixel of the source texture, but leave the alpha in tact.
    * If the child is a color matrix node that doesn't touch the alpha, we can throw that away. */
@@ -1999,11 +1986,6 @@ render_shadow_node (GskGLRenderer       *self,
       shadow_child = gsk_color_matrix_node_get_child (shadow_child);
     }
 
-  min_x = builder->dx + shadow_child->bounds.origin.x;
-  min_y = builder->dy + shadow_child->bounds.origin.y;
-  max_x = min_x + shadow_child->bounds.size.width;
-  max_y = min_y + shadow_child->bounds.size.height;
-
   for (i = 0; i < n_shadows; i ++)
     {
       const GskShadow *shadow = gsk_shadow_node_peek_shadow (node, i);
@@ -2011,10 +1993,13 @@ render_shadow_node (GskGLRenderer       *self,
       const float dy = shadow->dy;
       TextureRegion region;
       gboolean is_offscreen;
+      float min_x;
+      float min_y;
+      float max_x;
+      float max_y;
 
-      g_assert (shadow->radius <= 0);
-
-      if (gsk_render_node_get_node_type (shadow_child) == GSK_TEXT_NODE)
+      if (shadow->radius == 0 &&
+          gsk_render_node_get_node_type (shadow_child) == GSK_TEXT_NODE)
         {
           ops_offset (builder, dx, dy);
           render_text_node (self, shadow_child, builder, &shadow->color, TRUE);
@@ -2028,12 +2013,57 @@ render_shadow_node (GskGLRenderer       *self,
       if (node_is_invisible (shadow_child))
         continue;
 
-      /* Draw the child offscreen, without the offset. */
-      if (!add_offscreen_ops (self, builder,
-                              &shadow_child->bounds,
-                              shadow_child, &region, &is_offscreen,
-                              RESET_CLIP | RESET_OPACITY))
-        g_assert_not_reached ();
+      if (shadow->radius > 0)
+        {
+          const float blur_extra = shadow->radius * 3.0 / 2.0;
+
+          /* TODO: - same problem as in render_blur_node: we're forcing the
+           *         child node on a texture, even though it might already be a texture. */
+          if (!add_offscreen_ops (self, builder,
+                                  &GRAPHENE_RECT_INIT (
+                                    0, 0,
+                                    shadow_child->bounds.size.width + (blur_extra * 2),
+                                    shadow_child->bounds.size.height + (blur_extra * 2)
+                                  ),
+                                  shadow_child, &region, &is_offscreen,
+                                  RESET_CLIP | RESET_OPACITY | CENTER_CHILD |
+                                  NO_CACHE_PLZ | FORCE_OFFSCREEN))
+            g_assert_not_reached ();
+
+          region.texture_id = blur_texture (self, builder,
+                                            &region,
+                                            (shadow_child->bounds.size.width + blur_extra * 2) * scale,
+                                            (shadow_child->bounds.size.height + blur_extra * 2) * scale,
+                                            shadow->radius * scale);
+          init_full_texture_region (&region, region.texture_id);
+
+          is_offscreen = TRUE;
+
+          min_x = builder->dx + shadow_child->bounds.origin.x - blur_extra;
+          min_y = builder->dy + shadow_child->bounds.origin.y - blur_extra;
+          max_x = min_x + shadow_child->bounds.size.width + blur_extra * 2;
+          max_y = min_y + shadow_child->bounds.size.height + blur_extra * 2;
+        }
+      else if (dx == 0 && dy == 0)
+        {
+          continue; /* Invisible anyway */
+        }
+      else
+        {
+          if (dx == 0 && dy == 0)
+            continue;
+
+          if (!add_offscreen_ops (self, builder,
+                                  &shadow_child->bounds,
+                                  shadow_child, &region, &is_offscreen,
+                                  RESET_CLIP | RESET_OPACITY | NO_CACHE_PLZ))
+            g_assert_not_reached ();
+
+          min_x = builder->dx + shadow_child->bounds.origin.x;
+          min_y = builder->dy + shadow_child->bounds.origin.y;
+          max_x = min_x + shadow_child->bounds.size.width;
+          max_y = min_y + shadow_child->bounds.size.height;
+        }
 
       ops_set_program (builder, &self->coloring_program);
       ops_set_color (builder, &shadow->color);
@@ -3131,8 +3161,20 @@ add_offscreen_ops (GskGLRenderer         *self,
                                            bounds->origin.y * scale,
                                            width, height));
 
-  builder->dx = 0;
-  builder->dy = 0;
+  if (flags & CENTER_CHILD)
+    {
+      ops_offset (builder,
+                    (bounds->size.width - child_node->bounds.size.width) / 2.0 -
+                    child_node->bounds.origin.x,
+                    (bounds->size.height - child_node->bounds.size.height) / 2.0 -
+                    child_node->bounds.origin.y);
+    }
+  else
+    {
+      builder->dx = 0;
+      builder->dy = 0;
+    }
+
   if (flags & RESET_OPACITY)
     prev_opacity = ops_set_opacity (builder, 1.0);
 
@@ -3167,7 +3209,8 @@ add_offscreen_ops (GskGLRenderer         *self,
   *is_offscreen = TRUE;
   init_full_texture_region (texture_region_out, texture_id);
 
-  gsk_gl_driver_set_texture_for_pointer (self->gl_driver, child_node, texture_id);
+  if ((flags & NO_CACHE_PLZ) == 0)
+    gsk_gl_driver_set_texture_for_pointer (self->gl_driver, child_node, texture_id);
 
   return TRUE;
 }
