@@ -433,7 +433,6 @@ merge_color_matrix_nodes (const graphene_matrix_t *matrix2,
                           const graphene_vec4_t   *offset2,
                           GskRenderNode           *child)
 {
-  GskRenderNode *grandchild = gsk_render_node_ref (gsk_color_matrix_node_get_child (child));
   const graphene_matrix_t *mat1 = gsk_color_matrix_node_peek_color_matrix (child);
   const graphene_vec4_t *offset1 = gsk_color_matrix_node_peek_color_offset (child);
   graphene_matrix_t mat2 = *matrix2;
@@ -454,11 +453,9 @@ merge_color_matrix_nodes (const graphene_matrix_t *matrix2,
   graphene_vec4_add (&off2, offset1, &off2);
 
   graphene_matrix_multiply (mat1, &mat2, &mat2);
-  gsk_render_node_unref (child);
-  child = NULL;
 
-  result = gsk_color_matrix_node_new (grandchild, &mat2, &off2);
-  gsk_render_node_unref (grandchild);
+  result = gsk_color_matrix_node_new (gsk_color_matrix_node_get_child (child),
+                                      &mat2, &off2);
 
   return result;
 }
@@ -480,6 +477,30 @@ gtk_snapshot_collect_color_matrix (GtkSnapshot      *snapshot,
       result = merge_color_matrix_nodes (&state->data.color_matrix.matrix,
                                          &state->data.color_matrix.offset,
                                          node);
+      gsk_render_node_unref (node);
+    }
+  else if (gsk_render_node_get_node_type (node) == GSK_TRANSFORM_NODE)
+    {
+      GskRenderNode *transform_child = gsk_transform_node_get_child (node);
+      GskRenderNode *color_matrix;
+
+      if (gsk_render_node_get_node_type (transform_child) == GSK_COLOR_MATRIX_NODE)
+        {
+          color_matrix = merge_color_matrix_nodes (&state->data.color_matrix.matrix,
+                                                   &state->data.color_matrix.offset,
+                                                   transform_child);
+        }
+      else
+        {
+          color_matrix = gsk_color_matrix_node_new (transform_child,
+                                                    &state->data.color_matrix.matrix,
+                                                    &state->data.color_matrix.offset);
+        }
+      result = gsk_transform_node_new (color_matrix,
+                                       gsk_transform_node_get_transform (node));
+      gsk_render_node_unref (color_matrix);
+      gsk_render_node_unref (node);
+      node = NULL;
     }
   else
     {
