@@ -226,8 +226,8 @@ set_widget_type (GtkFishbowl *fishbowl,
 }
 
 void
-next_button_clicked_cb (GtkButton *source,
-                        gpointer   user_data)
+fishbowl_next_button_clicked_cb (GtkButton *source,
+                                 gpointer   user_data)
 {
   GtkFishbowl *fishbowl = user_data;
   int new_index;
@@ -241,8 +241,8 @@ next_button_clicked_cb (GtkButton *source,
 }
 
 void
-prev_button_clicked_cb (GtkButton *source,
-                        gpointer   user_data)
+fishbowl_prev_button_clicked_cb (GtkButton *source,
+                                 gpointer   user_data)
 {
   GtkFishbowl *fishbowl = user_data;
   int new_index;
@@ -256,8 +256,8 @@ prev_button_clicked_cb (GtkButton *source,
 }
 
 void
-changes_toggled_cb (GtkToggleButton *button,
-                    gpointer         user_data)
+fishbowl_changes_toggled_cb (GtkToggleButton *button,
+                             gpointer         user_data)
 {
   if (gtk_toggle_button_get_active (button))
     gtk_button_set_icon_name (GTK_BUTTON (button), "changes-prevent");
@@ -287,13 +287,7 @@ do_fishbowl (GtkWidget *do_widget)
 
       g_type_ensure (GTK_TYPE_FISHBOWL);
 
-      builder = gtk_builder_new ();
-      gtk_builder_add_callback_symbols (builder,
-                                        "next_button_clicked_cb", G_CALLBACK (next_button_clicked_cb),
-                                        "prev_button_clicked_cb", G_CALLBACK (prev_button_clicked_cb),
-                                        "changes_toggled_cb", G_CALLBACK (changes_toggled_cb),
-                                        NULL);
-      gtk_builder_add_from_resource (builder, "/fishbowl/fishbowl.ui", NULL);
+      builder = gtk_builder_new_from_resource ("/fishbowl/fishbowl.ui");
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);

@@ -14,8 +14,8 @@
 
 #include <gtk/gtk.h>
 
-static void
-tool_clicked (GtkButton *button)
+void
+modelbutton_tool_clicked (GtkButton *button)
 {
   gboolean active;
 
@@ -39,9 +39,7 @@ do_modelbutton (GtkWidget *do_widget)
       GtkBuilder *builder;
       GActionGroup *actions;
 
-      builder = gtk_builder_new ();
-      gtk_builder_add_callback_symbol (builder, "tool_clicked", G_CALLBACK (tool_clicked));
-      gtk_builder_add_from_resource (builder, "/modelbutton/modelbutton.ui", NULL);
+      builder = gtk_builder_new_from_resource ("/modelbutton/modelbutton.ui");
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));

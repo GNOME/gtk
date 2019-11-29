@@ -4,14 +4,14 @@
 static GtkWidget *header_stack;
 static GtkWidget *page_stack;
 
-static void
+void
 back_to_main (GtkButton *button)
 {
   gtk_stack_set_visible_child_name (GTK_STACK (header_stack), "main");
   gtk_stack_set_visible_child_name (GTK_STACK (page_stack), "page1");
 }
 
-static void
+void
 go_to_secondary (GtkButton *button)
 {
   gtk_stack_set_visible_child_name (GTK_STACK (header_stack), "secondary");
@@ -31,8 +31,6 @@ main (int argc, char *argv[])
   gtk_init ();
 
   builder = gtk_builder_new ();
-  gtk_builder_add_callback_symbol (builder, "back_to_main", G_CALLBACK (back_to_main));
-  gtk_builder_add_callback_symbol (builder, "go_to_secondary", G_CALLBACK (go_to_secondary));
   gtk_builder_add_from_file (builder, "teststackedheaders.ui", NULL);
 
   win = (GtkWidget *)gtk_builder_get_object (builder, "window");

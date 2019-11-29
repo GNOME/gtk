@@ -83,8 +83,8 @@
             <property name="halign">start</property>
             <property name="width-chars">4</property>
             <property name="adjustment">hex_adjustment</property>
-            <signal name="input" handler="hex_spin_input"/>
-            <signal name="output" handler="hex_spin_output"/>
+            <signal name="input" handler="spinbutton_hex_spin_input"/>
+            <signal name="output" handler="spinbutton_hex_spin_output"/>
             <property name="wrap">1</property>
             <layout>
               <property name="left-attach">1</property>
@@ -119,8 +119,8 @@
             <property name="halign">start</property>
             <property name="width-chars">5</property>
             <property name="adjustment">time_adjustment</property>
-            <signal name="input" handler="time_spin_input"/>
-            <signal name="output" handler="time_spin_output"/>
+            <signal name="input" handler="spinbutton_time_spin_input"/>
+            <signal name="output" handler="spinbutton_time_spin_output"/>
             <property name="wrap">1</property>
             <layout>
               <property name="left-attach">1</property>
@@ -154,8 +154,8 @@
           <object class="GtkSpinButton" id="month_spin">
             <property name="halign">start</property>
             <property name="width-chars">9</property>
-            <signal name="input" handler="month_spin_input"/>
-            <signal name="output" handler="month_spin_output"/>
+            <signal name="input" handler="spinbutton_month_spin_input"/>
+            <signal name="output" handler="spinbutton_month_spin_output"/>
             <property name="adjustment">month_adjustment</property>
             <property name="wrap">1</property>
             <property name="update-policy">if-valid</property>

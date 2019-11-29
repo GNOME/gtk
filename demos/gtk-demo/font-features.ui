@@ -13,7 +13,7 @@
             <property name="can-focus">1</property>
             <property name="receives-default">1</property>
             <property name="tooltip-text">Reset</property>
-            <signal name="clicked" handler="reset" swapped="no"/>
+            <signal name="clicked" handler="font_features_reset_features" swapped="no"/>
             <child>
               <object class="GtkImage">
                 <property name="icon-name">view-refresh-symbolic</property>
@@ -42,7 +42,7 @@
                         <property name="receives-default">1</property>
                         <property name="font">Sans 12</property>
                         <property name="level">family|style|size|variations|features</property>
-                        <signal name="font-set" handler="font_changed" swapped="no"/>
+                        <signal name="font-set" handler="font_features_font_changed" swapped="no"/>
                       </object>
                     </child>
                     <child>
@@ -63,7 +63,7 @@
                               <object class="GtkComboBox" id="script_lang">
                                 <property name="can-focus">1</property>
                                 <property name="margin-top">10</property>
-                                <signal name="changed" handler="script_changed" swapped="no"/>
+                                <signal name="changed" handler="font_features_script_changed" swapped="no"/>
                                 <child>
                                   <object class="GtkCellRendererText"/>
                                   <attributes>
@@ -137,7 +137,7 @@
 Разъяренный чтец эгоистично бьёт пятью жердями шустрого фехтовальщика. Наш банк вчера же выплатил Ф.Я. Эйхгольду комиссию за ценные вещи. Эх, чужак, общий съём цен шляп (юфть) – вдрызг! В чащах юга жил бы цитрус? Да, но фальшивый экземпляр!
 
 Τάχιστη αλώπηξ βαφής ψημένη γη, δρασκελίζει υπέρ νωθρού κυνός</property>
-                        <signal name="activate" handler="stop_edit"/>
+                        <signal name="activate" handler="font_features_stop_edit"/>
                         <property name="valign">start</property>
                         <property name="width-chars">50</property>
                       </object>
@@ -181,7 +181,7 @@
                     <property name="icon-name">document-edit-symbolic</property>
                     <property name="halign">end</property>
                     <property name="valign">end</property>
-                    <signal name="toggled" handler="toggle_edit"/>
+                    <signal name="toggled" handler="font_features_toggle_edit"/>
                   </object>
                 </child>
               </object>

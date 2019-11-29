@@ -1037,7 +1037,6 @@ activate (GApplication *app)
   GtkWidget *widget;
   GtkTreeModel *model;
   GtkTreeIter iter;
-  GError *error = NULL;
   GtkWidget *sw;
   GtkWidget *scrollbar;
   GtkWidget *menu;
@@ -1047,13 +1046,7 @@ activate (GApplication *app)
     { "run", activate_run, NULL, NULL, NULL }
   };
 
-  builder = gtk_builder_new ();
-  gtk_builder_add_from_resource (builder, "/ui/main.ui", &error);
-  if (error != NULL)
-    {
-      g_critical ("%s", error->message);
-      exit (1);
-    }
+  builder = gtk_builder_new_from_resource ("/ui/main.ui");
 
   window = (GtkWindow *)gtk_builder_get_object (builder, "window");
   gtk_application_add_window (GTK_APPLICATION (app), window);
