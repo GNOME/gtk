@@ -23,6 +23,29 @@
 
 #include <gobject/gvaluecollector.h>
 
+/**
+ * SECTION:gtkexpression
+ * @Short_description: Expressions for referring to objects, properties and values
+ * @Title: GtkExpression
+ *
+ * GtkExpression provides a way to refer to objects, properties and values in nested
+ * object trees.
+ *
+ * An expression needs to be `evaluated` to obtain the value that it currently refers
+ * to. An evaluation always happens in the context of a `this` object, which may or
+ * may not influence the result of the evaluation. Use gtk_expression_evaluate() for
+ * evaluating an expression.
+ *
+ * By default, expressions are not paying attention to changes in the object tree,
+ * and evaluation is just a snapshot of the current state at a given time. To get
+ * informed about changes, you need to `watch` the expression, which will cause a
+ * callback to be called whenever the value of the expression may have changed.
+ * Use gtk_expression_watch() to start watching an expression, and
+ * gtk_expression_watch_unwatch() to stop.
+ *
+ * Expressions can be used to automatically update the propery of an object, similar
+ * to GObject's #GBinding mechanism. Use gtk_expression_bind() for this.
+ */
 typedef struct _GtkExpressionClass GtkExpressionClass;
 
 struct _GtkExpression
@@ -161,6 +184,16 @@ static const GtkExpressionClass GTK_CONSTANT_EXPRESSION_CLASS =
   gtk_expression_unwatch_static
 };
 
+/**
+ * gtk_constant_expression_new:
+ * @value_type: The type of the object
+ * @...: arguments to create the object from
+ *
+ * Creates a GtkExpression that evaluates to the
+ * object given by the arguments.
+ *
+ * Returns: a new #GtkExpression
+ */
 GtkExpression *
 gtk_constant_expression_new (GType value_type,
                              ...)
@@ -712,6 +745,19 @@ static const GtkExpressionClass GTK_CLOSURE_EXPRESSION_CLASS =
   gtk_closure_expression_unwatch
 };
 
+/**
+ * gtk_closure_expression_new:
+ * @type: the type of the value that this expression evaluates to
+ * @closure: closure to call when evaluating this expression. If closure is floating, it is adopted
+ * @n_params: the number of params needed for evaluating @closure
+ * @params: (array length=n_params) (transfer full): expressions for each parameter
+ *
+ * Creates a GtkExpression that calls @closure when it is evaluated.
+ * @closure is called with the @this object and the results of evaluating
+ * the @params expressions.
+ *
+ * Returns: a new #GtkExpression
+ */
 GtkExpression *
 gtk_closure_expression_new (GType                value_type,
                             GClosure            *closure,
@@ -739,6 +785,22 @@ gtk_closure_expression_new (GType                value_type,
   return (GtkExpression *) result;
 }
 
+/**
+ * gtk_cclosure_expression_new:
+ * @type: the type of the value that this expression evaluates to
+ * @marshal: marshaller used for creating a closure
+ * @n_params: the number of params needed for evaluating @closure
+ * @params: (array length=n_params) (transfer full): expressions for each parameter
+ * @callback_func: callback used for creating a closure
+ * @user_data: user data used for creating a closure
+ * @user_destroy: destroy notify for @user_data
+ *
+ * This function is a variant of gtk_closure_expression_new() that
+ * creates a #GClosure by calling gtk_cclosure_new() with the given
+ * @callback_func, @user_data and @user_destroy.
+ *
+ * Returns: a new #GtkExpression
+ */
 GtkExpression *
 gtk_cclosure_expression_new (GType                value_type,
                              GClosureMarshal      marshal,
