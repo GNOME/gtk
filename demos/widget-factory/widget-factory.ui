@@ -605,6 +605,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="label" translatable="yes">checkbutton</property>
                                     <property name="can-focus">1</property>
                                     <layout>
+                                      <property name="left-attach">0</property>
                                       <property name="top-attach">1</property>
                                     </layout>
                                   </object>
@@ -615,6 +616,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="inconsistent">1</property>
                                     <property name="can-focus">1</property>
                                     <layout>
+                                      <property name="left-attach">0</property>
                                       <property name="top-attach">2</property>
                                     </layout>
                                   </object>
@@ -626,6 +628,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="can-focus">1</property>
                                     <property name="active">1</property>
                                     <layout>
+                                      <property name="left-attach">0</property>
                                       <property name="top-attach">3</property>
                                     </layout>
                                   </object>
@@ -636,6 +639,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="sensitive">0</property>
                                     <property name="can-focus">1</property>
                                     <layout>
+                                      <property name="left-attach">0</property>
                                       <property name="top-attach">4</property>
                                     </layout>
                                   </object>
@@ -647,6 +651,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="inconsistent">1</property>
                                     <property name="can-focus">1</property>
                                     <layout>
+                                      <property name="left-attach">0</property>
                                       <property name="top-attach">5</property>
                                     </layout>
                                   </object>
@@ -657,6 +662,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="can-focus">1</property>
                                     <property name="active">1</property>
                                     <layout>
+                                      <property name="left-attach">0</property>
                                       <property name="left-attach">1</property>
                                     </layout>
                                   </object>
