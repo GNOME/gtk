@@ -139,6 +139,9 @@ test_constant (void)
   gtk_expression_unref (expr);
 }
 
+/* Test that object expressions fail to evaluate when
+ * the object is gone.
+ */
 static void
 test_object (void)
 {
@@ -165,6 +168,18 @@ test_object (void)
   gtk_expression_unref (expr);
 }
 
+/* Some basic tests that nested expressions work; in particular test
+ * that watching works when things change deeper in the expression tree
+ *
+ * The setup we use is GtkFilterListModel -> GtkFilter -> "search" property,
+ * which gives us an expression tree like
+ *
+ * GtkPropertyExpression "search"
+ *    -> GtkPropertyExpression "filter"
+ *         -> GtkObjectExpression listmodel
+ *
+ * We test setting both the search property and the filter property.
+ */
 static void
 test_nested (void)
 {
@@ -239,6 +254,9 @@ test_nested (void)
   gtk_expression_watch_unwatch (watch);
 }
 
+/* Test that property expressions fail to evaluate if the
+ * expression evaluates to an object of the wrong type
+ */
 static void
 test_type_mismatch (void)
 {
@@ -255,6 +273,7 @@ test_type_mismatch (void)
   g_assert_false (res);
 }
 
+/* Some basic tests around 'this' */
 static void
 test_this (void)
 {
