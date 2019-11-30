@@ -185,10 +185,10 @@ test_nested (void)
 {
   GtkExpression *list_expr = NULL;
   GtkExpression *filter_expr = NULL;
-  g_autoptr(GtkExpression) expr = NULL;
-  g_autoptr(GtkFilter) filter = NULL;
-  g_autoptr(GListModel) list = NULL;
-  g_autoptr(GtkFilterListModel) filtered = NULL;
+  GtkExpression *expr = NULL;
+  GtkFilter *filter = NULL;
+  GListModel *list = NULL;
+  GtkFilterListModel *filtered = NULL;
   GValue value = G_VALUE_INIT;
   gboolean res;
   GtkExpressionWatch *watch;
@@ -252,6 +252,10 @@ test_nested (void)
   g_assert_false (res);
 
   gtk_expression_watch_unwatch (watch);
+  gtk_expression_unref (expr);
+  g_object_unref (filter);
+  g_object_unref (list);
+  g_object_unref (filtered);
 }
 
 /* Test that property expressions fail to evaluate if the
@@ -260,8 +264,8 @@ test_nested (void)
 static void
 test_type_mismatch (void)
 {
-  g_autoptr(GtkFilter) filter = NULL;
-  g_autoptr(GtkExpression) expr = NULL;
+  GtkFilter *filter = NULL;
+  GtkExpression *expr = NULL;
   GValue value = G_VALUE_INIT;
   gboolean res;
 
@@ -271,15 +275,18 @@ test_type_mismatch (void)
 
   res = gtk_expression_evaluate (expr, NULL, &value);
   g_assert_false (res);
+
+  g_object_unref (filter);
+  gtk_expression_unref (expr);
 }
 
 /* Some basic tests around 'this' */
 static void
 test_this (void)
 {
-  g_autoptr(GtkFilter) filter = NULL;
-  g_autoptr(GtkFilter) filter2 = NULL;
-  g_autoptr(GtkExpression) expr = NULL;
+  GtkFilter *filter = NULL;
+  GtkFilter *filter2 = NULL;
+  GtkExpression *expr = NULL;
   GValue value = G_VALUE_INIT;
   gboolean res;
 
@@ -300,6 +307,10 @@ test_this (void)
   g_assert_true (res);
   g_assert_cmpstr (g_value_get_string (&value), ==, "sausage");
   g_value_unset (&value);
+
+  gtk_expression_unref (expr);
+  g_object_unref (filter2);
+  g_object_unref (filter);
 }
 
 int
