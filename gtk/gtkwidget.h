@@ -850,7 +850,9 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
  * Binds a callback function defined in a template to the @widget_class.
  *
  * This macro is a convenience wrapper around the
- * gtk_widget_class_bind_template_callback_full() function.
+ * gtk_widget_class_bind_template_callback_full() function. It is not
+ * supported after gtk_widget_class_set_template_scope() has been used
+ * on @widget_class.
  */
 #define gtk_widget_class_bind_template_callback(widget_class, callback) \
   gtk_widget_class_bind_template_callback_full (GTK_WIDGET_CLASS (widget_class), \
@@ -959,10 +961,8 @@ void    gtk_widget_class_bind_template_callback_full    (GtkWidgetClass        *
                                                          const gchar           *callback_name,
                                                          GCallback              callback_symbol);
 GDK_AVAILABLE_IN_ALL
-void    gtk_widget_class_set_closure_func               (GtkWidgetClass        *widget_class,
-	                              			 GtkBuilderClosureFunc  closure_func,
-                                                         gpointer               closure_data,
-                                                         GDestroyNotify         closure_destroy);
+void    gtk_widget_class_set_template_scope             (GtkWidgetClass        *widget_class,
+                                                         GtkBuilderScope       *scope);
 GDK_AVAILABLE_IN_ALL
 void    gtk_widget_class_bind_template_child_full       (GtkWidgetClass        *widget_class,
                                                          const gchar           *name,

@@ -489,10 +489,7 @@ typedef struct {
 typedef struct {
   GBytes               *data;
   GSList               *children;
-  GSList               *callbacks;
-  GtkBuilderClosureFunc closure_func;
-  gpointer              closure_data;
-  GDestroyNotify        closure_destroy;
+  GtkBuilderScope      *scope;
 } GtkWidgetTemplate;
 
 struct _GtkWidgetClassPrivate
@@ -11999,28 +11996,6 @@ template_child_class_free (AutomaticChildClass *child_class)
     }
 }
 
-static CallbackSymbol *
-callback_symbol_new (const gchar *name,
-		     GCallback    callback)
-{
-  CallbackSymbol *cb = g_slice_new0 (CallbackSymbol);
-
-  cb->callback_name = g_strdup (name);
-  cb->callback_symbol = callback;
-
-  return cb;
-}
-
-static void
-callback_symbol_free (CallbackSymbol *callback)
-{
-  if (callback)
-    {
-      g_free (callback->callback_name);
-      g_slice_free (CallbackSymbol, callback);
-    }
-}
-
 static void
 template_data_free (GtkWidgetTemplate *template_data)
 {
@@ -12028,11 +12003,8 @@ template_data_free (GtkWidgetTemplate *template_data)
     {
       g_bytes_unref (template_data->data);
       g_slist_free_full (template_data->children, (GDestroyNotify)template_child_class_free);
-      g_slist_free_full (template_data->callbacks, (GDestroyNotify)callback_symbol_free);
 
-      if (template_data->closure_data &&
-	  template_data->closure_destroy)
-	template_data->closure_destroy (template_data->closure_data);
+      g_object_unref (template_data->scope);
 
       g_slice_free (GtkWidgetTemplate, template_data);
     }
@@ -12157,24 +12129,10 @@ gtk_widget_init_template (GtkWidget *widget)
 
   builder = gtk_builder_new ();
 
+  if (template->scope)
+    gtk_builder_set_scope (builder, template->scope);
+
   gtk_builder_set_current_object (builder, G_OBJECT (widget));
-
-  /* Setup closure handling. All signal data from a template receive the 
-   * template instance as user data automatically.
-   *
-   * A GtkBuilderClosureFunc can be provided to gtk_widget_class_set_signal_closure_func()
-   * in order for templates to be usable by bindings.
-   */
-  if (template->closure_func)
-    gtk_builder_set_closure_func (builder, template->closure_func, template->closure_data, NULL);
-
-  /* Add any callback symbols declared for this GType to the GtkBuilder namespace */
-  for (l = template->callbacks; l; l = l->next)
-    {
-      CallbackSymbol *callback = l->data;
-
-      gtk_builder_add_callback_symbol (builder, callback->callback_name, callback->callback_symbol);
-    }
 
   /* This will build the template XML as children to the widget instance, also it
    * will validate that the template is created for the correct GType and assert that
@@ -12313,7 +12271,9 @@ gtk_widget_class_set_template_from_resource (GtkWidgetClass    *widget_class,
  * @callback_symbol: (scope async): The callback symbol
  *
  * Declares a @callback_symbol to handle @callback_name from the template XML
- * defined for @widget_type. See gtk_builder_add_callback_symbol().
+ * defined for @widget_type. This function is not supported after
+ * gtk_widget_class_set_template_scope() has been used on @widget_class.
+ * See gtk_builder_cscope_add_callback_symbol().
  *
  * Note that this must be called from a composite widget classes class
  * initializer after calling gtk_widget_class_set_template().
@@ -12323,48 +12283,50 @@ gtk_widget_class_bind_template_callback_full (GtkWidgetClass *widget_class,
                                               const gchar    *callback_name,
                                               GCallback       callback_symbol)
 {
-  CallbackSymbol *cb;
+  GtkWidgetTemplate *template;
 
   g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
   g_return_if_fail (widget_class->priv->template != NULL);
   g_return_if_fail (callback_name && callback_name[0]);
   g_return_if_fail (callback_symbol != NULL);
 
-  cb = callback_symbol_new (callback_name, callback_symbol);
-  widget_class->priv->template->callbacks = g_slist_prepend (widget_class->priv->template->callbacks, cb);
+  template = widget_class->priv->template;
+  if (template->scope == NULL)
+    template->scope = gtk_builder_cscope_new ();
+
+  if (GTK_IS_BUILDER_CSCOPE (template->scope))
+    {
+      gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (template->scope),
+                                              callback_name,
+                                              callback_symbol);
+    }
+  else
+    {
+      g_critical ("Adding a callback to %s, but scope is not a GtkBuilderCScope.", G_OBJECT_CLASS_NAME (widget_class));
+    }
 }
 
 /**
- * gtk_widget_class_set_closure_func:
+ * gtk_widget_class_set_template_scope:
  * @widget_class: A #GtkWidgetClass
- * @closure_func: The #GtkBuilderClosureFunc to use when creating closure in the class template
- * @closure_data: The data to pass to @closure_func
- * @closure_data_destroy: The #GDestroyNotify to free @closure_data, this will only be used at
- *                        class finalization time, when no classes of type @widget_type are in use anymore.
+ * @scope: (transfer none): The #GtkBuilderScope to use when loading the class template
  *
- * For use in language bindings, this will override the default #GtkBuilderClosureFunc to be
+ * For use in language bindings, this will override the default #GtkBuilderScope to be
  * used when parsing GtkBuilder XML from this class’s template data.
  *
  * Note that this must be called from a composite widget classes class
  * initializer after calling gtk_widget_class_set_template().
  */
 void
-gtk_widget_class_set_closure_func (GtkWidgetClass        *widget_class,
-				   GtkBuilderClosureFunc  closure_func,
-				   gpointer               closure_data,
-				   GDestroyNotify         closure_data_destroy)
+gtk_widget_class_set_template_scope (GtkWidgetClass  *widget_class,
+				     GtkBuilderScope *scope)
 {
   g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
   g_return_if_fail (widget_class->priv->template != NULL);
+  g_return_if_fail (GTK_IS_BUILDER_SCOPE (scope));
 
   /* Defensive, destroy any previously set data */
-  if (widget_class->priv->template->closure_data &&
-      widget_class->priv->template->closure_destroy)
-    widget_class->priv->template->closure_destroy (widget_class->priv->template->closure_data);
-
-  widget_class->priv->template->closure_func    = closure_func;
-  widget_class->priv->template->closure_data    = closure_data;
-  widget_class->priv->template->closure_destroy = closure_data_destroy;
+  g_set_object (&widget_class->priv->template->scope, scope);
 }
 
 /**

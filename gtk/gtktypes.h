@@ -35,6 +35,7 @@ G_BEGIN_DECLS
 
 typedef struct _GtkAdjustment          GtkAdjustment;
 typedef struct _GtkBuilder             GtkBuilder;
+typedef struct _GtkBuilderScope        GtkBuilderScope;
 typedef struct _GtkClipboard	       GtkClipboard;
 typedef struct _GtkEventController     GtkEventController;
 typedef struct _GtkGesture             GtkGesture;
@@ -52,13 +53,6 @@ typedef struct _GtkTooltip             GtkTooltip;
 typedef struct _GtkWidget              GtkWidget;
 typedef struct _GtkWidgetPath          GtkWidgetPath;
 typedef struct _GtkWindow              GtkWindow;
-
-typedef GClosure*       (* GtkBuilderClosureFunc)               (GtkBuilder             *builder,
-                                                                 const char             *function_name,
-                                                                 gboolean                swapped,
-                                                                 GObject                *object,
-                                                                 gpointer                user_data,
-                                                                 GError                **error);
 
 G_END_DECLS
 
