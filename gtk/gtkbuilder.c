@@ -162,23 +162,6 @@
  * “last_modification_time” attribute is also allowed, but it does not
  * have a meaning to the builder.
  *
- * By default, GTK+ tries  to find functions (like the handlers for
- * signals) by using g_module_symbol(), but this can be changed by
- * passing a custom #GtkBuilderClosureFunc to gtk_builder_set_closure_func().
- * Bindings in particular will want to make use of this functionality to
- * allow language-specific name mangling and namespacing.
- *
- * The default closure function uses symbols explicitly added to @builder
- * with prior calls to gtk_builder_add_callback_symbol(). In the case that
- * symbols are not explicitly added; it uses #GModule’s introspective
- * features (by opening the module %NULL) to look at the application’s symbol
- * table. From here it tries to match the signal function names given in the
- * interface description with symbols in the application.
- *
- * Note that unless gtk_builder_add_callback_symbol() is called for
- * all signal callbacks which are referenced by the loaded XML, this
- * functionality will require that #GModule be supported on the platform.
- *
  * If you rely on #GModule support to lookup callbacks in the symbol table,
  * the following details should be noted:
  *
@@ -230,16 +213,16 @@
 #include <stdlib.h>
 #include <string.h> /* strlen */
 
-#include "gtkbuilder.h"
-#include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
+
+#include "gtkbuildable.h"
+#include "gtkbuilderscopeprivate.h"
 #include "gtkdebug.h"
 #include "gtkmain.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkicontheme.h"
-#include "gtktestutils.h"
 
 static void gtk_builder_finalize       (GObject         *object);
 static void gtk_builder_set_property   (GObject         *object,
@@ -254,6 +237,7 @@ static void gtk_builder_get_property   (GObject         *object,
 enum {
   PROP_0,
   PROP_CURRENT_OBJECT,
+  PROP_SCOPE,
   PROP_TRANSLATION_DOMAIN,
   LAST_PROP
 };
@@ -274,19 +258,14 @@ typedef struct
 {
   gchar *domain;
   GHashTable *objects;
-  GHashTable *callbacks;
   GSList *delayed_properties;
   GSList *signals;
   GSList *bindings;
-  GModule *module;
   gchar *filename;
   gchar *resource_prefix;
   GType template_type;
   GObject *current_object;
-
-  GtkBuilderClosureFunc closure_func;
-  gpointer closure_data;
-  GDestroyNotify closure_destroy;
+  GtkBuilderScope *scope;
 } GtkBuilderPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkBuilder, gtk_builder, G_TYPE_OBJECT)
@@ -297,6 +276,7 @@ gtk_builder_dispose (GObject *object)
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (GTK_BUILDER (object));
 
   g_clear_object (&priv->current_object);
+  g_clear_object (&priv->scope);
 
   G_OBJECT_CLASS (gtk_builder_parent_class)->dispose (object);
 }
@@ -338,6 +318,18 @@ gtk_builder_class_init (GtkBuilderClass *klass)
                            G_TYPE_OBJECT,
                            GTK_PARAM_READWRITE);
 
+ /**
+  * GtkBuilder:scope:
+  *
+  * The scope the builder is operating in
+  */
+  builder_props[PROP_SCOPE] =
+      g_param_spec_object ("scope",
+                           P_("Scope"),
+                           P_("The scope the builder is operating in"),
+                           GTK_TYPE_BUILDER_SCOPE,
+                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+
   g_object_class_install_properties (gobject_class, LAST_PROP, builder_props);
 }
 
@@ -361,18 +353,11 @@ gtk_builder_finalize (GObject *object)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (GTK_BUILDER (object));
 
-  if (priv->closure_destroy)
-    priv->closure_destroy (priv->closure_data);
-
-  g_clear_pointer (&priv->module, g_module_close);
-
   g_free (priv->domain);
   g_free (priv->filename);
   g_free (priv->resource_prefix);
 
   g_hash_table_destroy (priv->objects);
-  if (priv->callbacks)
-    g_hash_table_destroy (priv->callbacks);
 
   g_slist_free_full (priv->signals, (GDestroyNotify)_free_signal_info);
 
@@ -391,6 +376,10 @@ gtk_builder_set_property (GObject      *object,
     {
     case PROP_CURRENT_OBJECT:
       gtk_builder_set_current_object (builder, g_value_get_object (value));
+      break;
+
+    case PROP_SCOPE:
+      gtk_builder_set_scope (builder, g_value_get_object (value));
       break;
 
     case PROP_TRANSLATION_DOMAIN:
@@ -418,6 +407,10 @@ gtk_builder_get_property (GObject    *object,
       g_value_set_object (value, priv->current_object);
       break;
 
+    case PROP_SCOPE:
+      g_value_set_object (value, priv->scope);
+      break;
+
     case PROP_TRANSLATION_DOMAIN:
       g_value_set_string (value, priv->domain);
       break;
@@ -426,79 +419,6 @@ gtk_builder_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-
-/*
- * Try to map a type name to a _get_type function
- * and call it, eg:
- *
- * GtkWindow -> gtk_window_get_type
- * GtkHBox -> gtk_hbox_get_type
- * GtkUIManager -> gtk_ui_manager_get_type
- * GWeatherLocation -> gweather_location_get_type
- *
- * Keep in sync with testsuite/gtk/typename.c !
- */
-static gchar *
-type_name_mangle (const gchar *name)
-{
-  GString *symbol_name = g_string_new ("");
-  gint i;
-
-  for (i = 0; name[i] != '\0'; i++)
-    {
-      /* skip if uppercase, first or previous is uppercase */
-      if ((name[i] == g_ascii_toupper (name[i]) &&
-           i > 0 && name[i-1] != g_ascii_toupper (name[i-1])) ||
-           (i > 2 && name[i]   == g_ascii_toupper (name[i]) &&
-           name[i-1] == g_ascii_toupper (name[i-1]) &&
-           name[i-2] == g_ascii_toupper (name[i-2])))
-        g_string_append_c (symbol_name, '_');
-      g_string_append_c (symbol_name, g_ascii_tolower (name[i]));
-    }
-  g_string_append (symbol_name, "_get_type");
-
-  return g_string_free (symbol_name, FALSE);
-}
-
-GModule *
-gtk_builder_get_module (GtkBuilder *builder)
-{
-  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
-
-  if (priv->module == NULL)
-    {
-      if (!g_module_supported ())
-        return NULL;
-
-      priv->module = g_module_open (NULL, G_MODULE_BIND_LAZY);
-    }
-
-  return priv->module;
-}
-
-static GType
-gtk_builder_resolve_type_lazily (GtkBuilder  *builder,
-                                 const gchar *name)
-{
-  GModule *module;
-  GTypeGetFunc func;
-  gchar *symbol;
-  GType gtype = G_TYPE_INVALID;
-
-  module = gtk_builder_get_module (builder);
-  if (!module)
-    return G_TYPE_INVALID;
-
-  symbol = type_name_mangle (name);
-
-  if (g_module_symbol (module, symbol, (gpointer)&func))
-    gtype = func ();
-
-  g_free (symbol);
-
-  return gtype;
 }
 
 /*
@@ -1761,30 +1681,58 @@ gtk_builder_set_current_object (GtkBuilder *self,
 }
 
 /**
- * GtkBuilderClosureFunc:
- * @builder: a #GtkBuilder
- * @function_name: name of the function to create a closure for
- * @swapped: if the closure should swap user data and instance
- * @object: (nullable): object to use as user data for the closure
- * @user_data: user data passed when setting the function
- * @error: location for error when creating the closure fails
+ * gtk_builder_get_scope:
+ * @self: a #GtkBuilder
  *
- * Prototype of function used to create closures by @builder. It is meant
- * for influencing how @function_name is resolved.
+ * Gets the scope in use that was set via gtk_builder_set_scope().
  *
- * This function is most useful for bindings and can be used with
- * gtk_builder_set_closure_func() or gtk_widget_class_set_closure_func()
- * to allow creating closures for functions defined in the binding's
- * language.
+ * See the #GtkBuilderScope documentation for details.
  *
- * If the given @function_name does not match a function name or when the
- * arguments cannot be supported by the bindings, bindings should return
- * %NULL and set @error. Usually %GTK_BUILDER_ERROR_INVALID_FUNCTION will
- * be the right error code to use.
+ * Returns: (transfer none): the current scope 
+ **/
+GtkBuilderScope *
+gtk_builder_get_scope (GtkBuilder *self)
+{
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (self);
+
+  g_return_val_if_fail (GTK_IS_BUILDER (self), NULL);
+
+  return priv->scope;
+}
+
+/**
+ * gtk_builder_set_current_object:
+ * @self: a #GtkBuilder
+ * @scope: (nullable) (transfer none): the scope to use or
+ *     %NULL for the default
  *
- * Returns: (nullable): a new #GClosure or %NULL when no closure could
- *   be created and @error was set.
- */
+ * Sets the scope the builder should operate in.
+ *
+ * If @scope is %NULL a new #GtkBuilderCScope will be created.
+ *
+ * See the #GtkBuilderScope documentation for details.
+ **/
+void
+gtk_builder_set_scope (GtkBuilder      *self,
+                       GtkBuilderScope *scope)
+{
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (self);
+
+  g_return_if_fail (GTK_IS_BUILDER (self));
+  g_return_if_fail (scope == NULL || GTK_IS_BUILDER_SCOPE (scope));
+
+  if (scope && priv->scope == scope)
+    return;
+
+  g_clear_object (&priv->scope);
+
+  if (scope)
+    priv->scope = g_object_ref (scope);
+  else
+    priv->scope = gtk_builder_cscope_new ();
+
+  g_object_notify_by_pspec (G_OBJECT (self), builder_props[PROP_SCOPE]);
+}
 
 static gboolean
 gtk_builder_connect_signals (GtkBuilder  *builder,
@@ -2561,21 +2509,15 @@ GType
 gtk_builder_get_type_from_name (GtkBuilder  *builder,
                                 const gchar *type_name)
 {
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GType type;
 
   g_return_val_if_fail (GTK_IS_BUILDER (builder), G_TYPE_INVALID);
   g_return_val_if_fail (type_name != NULL, G_TYPE_INVALID);
 
-  type = g_type_from_name (type_name);
+  type = gtk_builder_scope_get_type_from_name (priv->scope, builder, type_name);
   if (type == G_TYPE_INVALID)
-    {
-      type = gtk_builder_resolve_type_lazily (builder, type_name);
-      if (type == G_TYPE_INVALID)
-        {
-          gtk_test_register_all_types ();
-          type = g_type_from_name (type_name);
-        }
-    }
+    return G_TYPE_INVALID;
 
   if (G_TYPE_IS_CLASSED (type))
     g_type_class_unref (g_type_class_ref (type));
@@ -2644,175 +2586,10 @@ _gtk_builder_get_template_type (GtkBuilder *builder)
 }
 
 /**
- * gtk_builder_add_callback_symbol:
- * @builder: a #GtkBuilder
- * @callback_name: The name of the callback, as expected in the XML
- * @callback_symbol: (scope async): The callback pointer
- *
- * Adds the @callback_symbol to the scope of @builder under the given @callback_name.
- *
- * Using this function overrides the behavior of gtk_builder_create_closure()
- * for any callback symbols that are added. Using this method allows for better
- * encapsulation as it does not require that callback symbols be declared in
- * the global namespace.
- */
-void
-gtk_builder_add_callback_symbol (GtkBuilder  *builder,
-                                 const gchar *callback_name,
-                                 GCallback    callback_symbol)
-{
-  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
-
-  g_return_if_fail (GTK_IS_BUILDER (builder));
-  g_return_if_fail (callback_name && callback_name[0]);
-  g_return_if_fail (callback_symbol != NULL);
-
-  if (!priv->callbacks)
-    priv->callbacks = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                             g_free, NULL);
-
-  g_hash_table_insert (priv->callbacks, g_strdup (callback_name), callback_symbol);
-}
-
-/**
- * gtk_builder_add_callback_symbols:
- * @builder: a #GtkBuilder
- * @first_callback_name: The name of the callback, as expected in the XML
- * @first_callback_symbol: (scope async): The callback pointer
- * @...: A list of callback name and callback symbol pairs terminated with %NULL
- *
- * A convenience function to add many callbacks instead of calling
- * gtk_builder_add_callback_symbol() for each symbol.
- */
-void
-gtk_builder_add_callback_symbols (GtkBuilder  *builder,
-                                  const gchar *first_callback_name,
-                                  GCallback    first_callback_symbol,
-                                  ...)
-{
-  va_list var_args;
-  const gchar *callback_name;
-  GCallback callback_symbol;
-
-  g_return_if_fail (GTK_IS_BUILDER (builder));
-  g_return_if_fail (first_callback_name && first_callback_name[0]);
-  g_return_if_fail (first_callback_symbol != NULL);
-
-  callback_name = first_callback_name;
-  callback_symbol = first_callback_symbol;
-
-  va_start (var_args, first_callback_symbol);
-
-  do {
-
-    gtk_builder_add_callback_symbol (builder, callback_name, callback_symbol);
-
-    callback_name = va_arg (var_args, const gchar*);
-
-    if (callback_name)
-      callback_symbol = va_arg (var_args, GCallback);
-
-  } while (callback_name != NULL);
-
-  va_end (var_args);
-}
-
-/**
- * gtk_builder_lookup_callback_symbol: (skip)
- * @builder: a #GtkBuilder
- * @callback_name: The name of the callback
- *
- * Fetches a symbol previously added to @builder
- * with gtk_builder_add_callback_symbols()
- *
- * This function is intended for possible use in language bindings
- * or for any case that one might be customizing signal connections
- * using gtk_builder_set_closure_func().
- *
- * Returns: (nullable): The callback symbol in @builder for @callback_name, or %NULL
- */
-GCallback
-gtk_builder_lookup_callback_symbol (GtkBuilder  *builder,
-                                    const gchar *callback_name)
-{
-  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
-
-  g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
-  g_return_val_if_fail (callback_name && callback_name[0], NULL);
-
-  if (!priv->callbacks)
-    return NULL;
-
-  return g_hash_table_lookup (priv->callbacks, callback_name);
-}
-
-/**
- * gtk_builder_set_closure_func: (skip)
- * @builder: a #GtkBuilder
- * @closure_func: (allow-none) function to call when creating
- *     closures or %NULL to use the default
- * @user_data: (nullable): user data to pass to @closure_func
- * @user_destroy: destroy function for user data
- *
- * Sets the function to call for creating closures.
- * gtk_builder_create_closure() will use this function instead
- * of gtk_builder_create_cclosure().
- *
- * This is useful for bindings.
- **/
-void
-gtk_builder_set_closure_func (GtkBuilder            *builder,
-                              GtkBuilderClosureFunc  closure_func,
-                              gpointer               user_data,
-                              GDestroyNotify         user_destroy)
-{
-  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
-
-  g_return_if_fail (GTK_IS_BUILDER (builder));
-
-  if (priv->closure_destroy)
-    priv->closure_destroy (priv->closure_data);
-
-  priv->closure_func = closure_func;
-  priv->closure_data = user_data;
-  priv->closure_destroy = user_destroy;
-}
-
-static GClosure *
-gtk_builder_create_closure_for_funcptr (GtkBuilder *builder,
-                                        GCallback   callback,
-                                        gboolean    swapped,
-                                        GObject    *object)
-{
-  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
-  GClosure *closure;
-
-  if (object == NULL)
-    object = priv->current_object;
-
-  if (object)
-    {
-      if (swapped)
-        closure = g_cclosure_new_object_swap (callback, object);
-      else
-        closure = g_cclosure_new_object (callback, object);
-    }
-  else
-    {
-      if (swapped)
-        closure = g_cclosure_new_swap (callback, NULL, NULL);
-      else
-        closure = g_cclosure_new (callback, NULL, NULL);
-    }
-
-  return closure;
-}
-
-/**
  * gtk_builder_create_closure:
  * @builder: a #GtkBuilder
  * @function_name: name of the function to look up
- * @swapped: %TRUE to create a swapped closure
+ * @flags: closure creation flags
  * @object: (nullable): Object to create the closure with
  * @error: (allow-none): return location for an error, or %NULL
  *
@@ -2828,11 +2605,11 @@ gtk_builder_create_closure_for_funcptr (GtkBuilder *builder,
  * Returns: (nullable): A new closure for invoking @function_name
  **/
 GClosure *
-gtk_builder_create_closure (GtkBuilder *builder,
-                            const char *function_name,
-                            gboolean    swapped,
-                            GObject    *object,
-                            GError    **error)
+gtk_builder_create_closure (GtkBuilder             *builder,
+                            const char             *function_name,
+                            GtkBuilderClosureFlags  flags,
+                            GObject                *object,
+                            GError                **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
 
@@ -2841,66 +2618,7 @@ gtk_builder_create_closure (GtkBuilder *builder,
   g_return_val_if_fail (object == NULL || G_IS_OBJECT (object), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  if (priv->closure_func)
-    return priv->closure_func (builder, function_name, swapped, object, priv->closure_data, error);
-  else
-    return gtk_builder_create_cclosure (builder, function_name, swapped, object, error);
-}
-
-/**
- * gtk_builder_create_cclosure: (skip)
- * @builder: a #GtkBuilder
- * @function_name: name of the function to look up
- * @swapped: %TRUE to create a swapped closure
- * @object: (nullable): Object to create the closure with
- * @error: (allow-none): return location for an error, or %NULL
- *
- * This is the default function used by gtk_builder_set_closure_func(). Some bindings
- * with C support may want to call this function as a fallback from their closure
- * function.
- *
- * This function has no purpose otherwise.
- *
- * This function will prefer callbacks added via gtk_builder_add_callback_symbol()
- * to looking up public symbols.
- *
- * Returns: (nullable): A new closure for invoking @function_name
- **/
-GClosure *
-gtk_builder_create_cclosure (GtkBuilder *builder,
-                             const char *function_name,
-                             gboolean    swapped,
-                             GObject    *object,
-                             GError    **error)
-{
-  GModule *module = gtk_builder_get_module (builder);
-  GCallback func;
-
-  func = gtk_builder_lookup_callback_symbol (builder, function_name);
-  if (func)
-    return gtk_builder_create_closure_for_funcptr (builder, func, swapped, object);
-
-  if (module == NULL)
-    {
-      g_set_error (error,
-                   GTK_BUILDER_ERROR,
-                   GTK_BUILDER_ERROR_INVALID_FUNCTION,
-                   "Could not look up function `%s`: GModule is not supported.",
-                   function_name);
-      return NULL;
-    }
-
-  if (!g_module_symbol (module, function_name, (gpointer)&func))
-    {
-      g_set_error (error,
-                   GTK_BUILDER_ERROR,
-                   GTK_BUILDER_ERROR_INVALID_FUNCTION,
-                   "No function named `%s`.",
-                   function_name);
-      return NULL;
-    }
-
-  return gtk_builder_create_closure_for_funcptr (builder, func, swapped, object);
+  return gtk_builder_scope_create_closure (priv->scope, builder, function_name, flags, object, error);
 }
 
 /**

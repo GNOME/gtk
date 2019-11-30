@@ -140,6 +140,11 @@ test_type (gconstpointer data)
       if ((pspec->flags & G_PARAM_READABLE) == 0)
 	continue;
 
+      /* This is set via construct property */
+      if (g_type_is_a (type, GTK_TYPE_BUILDER) &&
+          strcmp (pspec->name, "scope") == 0)
+        continue;
+
       if (g_type_is_a (type, GDK_TYPE_CLIPBOARD) &&
 	  strcmp (pspec->name, "display") == 0)
 	continue;
