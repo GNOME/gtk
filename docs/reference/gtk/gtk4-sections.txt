@@ -643,20 +643,40 @@ GTK_BUILDABLE_GET_IFACE
 </SECTION>
 
 <SECTION>
+<FILE>gtkbuilderscope</FILE>
+<TITLE>GtkBuilderScope</TITLE>
+gtk_builder_cscope_new
+gtk_builder_cscope_add_callback_symbol
+gtk_builder_cscope_add_callback_symbols
+gtk_builder_cscope_lookup_callback_symbol
+<SUBSECTION Standard>
+GTK_BUILDER_SCOPE
+GTK_IS_BUILDER_SCOPE
+GTK_TYPE_BUILDER_SCOPE
+GTK_BUILDER_SCOPE_INTERFACE
+GTK_IS_BUILDER_SCOPE_INTERFACE
+GTK_BUILDER_SCOPE_GET_INTERFACE
+GTK_BUILDER_CSCOPE
+GTK_IS_BUILDER_CSCOPE
+GTK_TYPE_BUILDER_CSCOPE
+GTK_BUILDER_CSCOPE_CLASS
+GTK_IS_BUILDER_CSCOPE_CLASS
+GTK_BUILDER_CSCOPE_GET_CLASS
+<SUBSECTION Private>
+gtk_builder_scope_get_type
+gtk_builder_cscope_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkbuilder</FILE>
 <TITLE>GtkBuilder</TITLE>
 GtkBuilder
-GtkBuilderClosureFunc
 GtkBuilderError
 gtk_builder_new
 gtk_builder_new_from_file
 gtk_builder_new_from_resource
 gtk_builder_new_from_string
-gtk_builder_add_callback_symbol
-gtk_builder_add_callback_symbols
-gtk_builder_lookup_callback_symbol
 gtk_builder_create_closure
-gtk_builder_create_cclosure
 gtk_builder_add_from_file
 gtk_builder_add_from_resource
 gtk_builder_add_from_string
@@ -669,10 +689,11 @@ gtk_builder_get_objects
 gtk_builder_expose_object
 gtk_builder_set_current_object
 gtk_builder_get_current_object
+gtk_builder_set_scope
+gtk_builder_get_scope
 gtk_builder_set_translation_domain
 gtk_builder_get_translation_domain
 gtk_builder_get_type_from_name
-gtk_builder_set_closure_func
 gtk_builder_value_from_string
 gtk_builder_value_from_string_type
 GTK_BUILDER_WARN_INVALID_CHILD_TYPE
@@ -688,7 +709,6 @@ GTK_BUILDER_GET_CLASS
 <SUBSECTION Private>
 gtk_builder_get_type
 gtk_builder_error_quark
-GtkBuilderPrivate
 </SECTION>
 
 <SECTION>
@@ -4880,7 +4900,7 @@ gtk_widget_class_bind_template_child_internal_private
 gtk_widget_class_bind_template_child_full
 gtk_widget_class_bind_template_callback
 gtk_widget_class_bind_template_callback_full
-gtk_widget_class_set_closure_func
+gtk_widget_class_set_template_scope
 
 <SUBSECTION>
 gtk_widget_observe_children

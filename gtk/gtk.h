@@ -56,6 +56,7 @@
 #include <gtk/gtkbuildable.h>
 #include <gtk/gtkbuilder.h>
 #include <gtk/gtkbuilderlistitemfactory.h>
+#include <gtk/gtkbuilderscope.h>
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkcalendar.h>
 #include <gtk/gtkcellarea.h>
