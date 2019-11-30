@@ -1527,23 +1527,21 @@ render_blur_node (GskGLRenderer   *self,
 }
 
 static inline void
-render_inset_shadow_node (GskGLRenderer   *self,
-                          GskRenderNode   *node,
-                          RenderOpBuilder *builder)
+render_unblurred_inset_shadow_node (GskGLRenderer   *self,
+                                    GskRenderNode   *node,
+                                    RenderOpBuilder *builder)
 {
   GskQuadVertex vertex_data[GL_N_VERTICES];
   const float scale = ops_get_scale (builder);
+  const float blur_radius = gsk_inset_shadow_node_get_blur_radius (node);
+  const float dx = gsk_inset_shadow_node_get_dx (node);
+  const float dy = gsk_inset_shadow_node_get_dy (node);
+  const float spread = gsk_inset_shadow_node_get_spread (node);
   OpShadow *op;
 
-  /* TODO: Implement blurred inset shadows as well */
-  if (gsk_inset_shadow_node_get_blur_radius (node) > 0)
-    {
-      render_fallback_node (self, node, builder);
-      return;
-    }
+  g_assert (blur_radius == 0);
 
   ops_set_program (builder, &self->inset_shadow_program);
-
   op = ops_begin (builder, OP_CHANGE_INSET_SHADOW);
   rgba_to_float (gsk_inset_shadow_node_peek_color (node), op->color);
   rounded_rect_to_floats (self, builder,
@@ -1551,14 +1549,173 @@ render_inset_shadow_node (GskGLRenderer   *self,
                           op->outline,
                           op->corner_widths,
                           op->corner_heights);
-  op->radius = gsk_inset_shadow_node_get_blur_radius (node) * scale;
-  op->spread = gsk_inset_shadow_node_get_spread (node) * scale;
-  op->offset[0] = gsk_inset_shadow_node_get_dx (node) * scale;
-  op->offset[1] = -gsk_inset_shadow_node_get_dy (node) * scale;
+  op->spread = spread * scale;
+  op->offset[0] = dx * scale;
+  op->offset[1] = -dy * scale;
 
   load_vertex_data (vertex_data, node, builder);
 
   ops_draw (builder, vertex_data);
+}
+
+static inline void
+render_inset_shadow_node (GskGLRenderer   *self,
+                          GskRenderNode   *node,
+                          RenderOpBuilder *builder)
+{
+  const float scale = ops_get_scale (builder);
+  const float blur_radius = gsk_inset_shadow_node_get_blur_radius (node);
+  const float blur_extra = blur_radius * 3;
+  const float dx = gsk_inset_shadow_node_get_dx (node);
+  const float dy = gsk_inset_shadow_node_get_dy (node);
+  const GskRoundedRect *node_outline = gsk_inset_shadow_node_peek_outline (node);
+  float texture_width;
+  float texture_height;
+  OpShadow *op;
+  int blurred_texture_id;
+
+  g_assert (blur_radius > 0);
+
+  texture_width = ceilf ((node_outline->bounds.size.width + blur_extra) * scale);
+  texture_height = ceilf ((node_outline->bounds.size.height + blur_extra) * scale);
+
+  blurred_texture_id = gsk_gl_driver_get_texture_for_pointer (self->gl_driver, node);
+  if (blurred_texture_id == 0)
+    {
+      const float spread = gsk_inset_shadow_node_get_spread (node) + (blur_extra / 2.0);
+      GskRoundedRect outline_to_blur;
+      int render_target, texture_id;
+      int prev_render_target;
+      graphene_matrix_t prev_projection;
+      graphene_rect_t prev_viewport;
+      graphene_matrix_t item_proj;
+      int i;
+
+      /* TODO: In the following code, we have to be careful about where we apply the scale.
+       * We're manually scaling stuff (e.g. the outline) so we can later use texture_width
+       * and texture_height (which are already scaled) as the geometry and keep the modelview
+       * at a scale of 1. That's kinda complicated though... */
+
+      /* Outline of what we actually want to blur later.
+       * Spread grows inside, so we don't need to account for that. But the blur will need
+       * to read outside of the inset shadow, so we need to draw some color in there. */
+      outline_to_blur = *node_outline;
+      gsk_rounded_rect_shrink (&outline_to_blur,
+                               - blur_extra / 2.0, - blur_extra / 2.0,
+                               - blur_extra / 2.0, - blur_extra / 2.0);
+
+      /* Fit to our texture */
+      outline_to_blur.bounds.origin.x = 0;
+      outline_to_blur.bounds.origin.y = 0;
+      outline_to_blur.bounds.size.width *= scale;
+      outline_to_blur.bounds.size.height *= scale;
+
+      for (i = 0; i < 4; i ++)
+        {
+          outline_to_blur.corner[i].width *= scale;
+          outline_to_blur.corner[i].height *= scale;
+        }
+
+      gsk_gl_driver_create_render_target (self->gl_driver,
+                                          texture_width, texture_height,
+                                          &texture_id, &render_target);
+
+      graphene_matrix_init_ortho (&item_proj,
+                                  0, texture_width, 0, texture_height,
+                                  ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
+      graphene_matrix_scale (&item_proj, 1, -1, 1);
+
+      prev_projection = ops_set_projection (builder, &item_proj);
+      ops_set_modelview (builder, NULL);
+      prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (0, 0, texture_width, texture_height));
+      ops_push_clip (builder, &GSK_ROUNDED_RECT_INIT (0, 0, texture_width, texture_height));
+
+      prev_render_target = ops_set_render_target (builder, render_target);
+      ops_begin (builder, OP_CLEAR);
+
+      /* Actual inset shadow outline drawing */
+      ops_set_program (builder, &self->inset_shadow_program);
+      op = ops_begin (builder, OP_CHANGE_INSET_SHADOW);
+      rgba_to_float (gsk_inset_shadow_node_peek_color (node), op->color);
+      rounded_rect_to_floats (self, builder,
+                              &outline_to_blur,
+                              op->outline,
+                              op->corner_widths,
+                              op->corner_heights);
+      op->spread = spread * scale;
+      op->offset[0] = dx * scale;
+      op->offset[1] = -dy * scale;
+
+      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+        { { 0,             0              }, { 0, 1 }, },
+        { { 0,             texture_height }, { 0, 0 }, },
+        { { texture_width, 0              }, { 1, 1 }, },
+
+        { { texture_width, texture_height }, { 1, 0 }, },
+        { { 0,             texture_height }, { 0, 0 }, },
+        { { texture_width, 0              }, { 1, 1 }, },
+      });
+
+      ops_set_render_target (builder, prev_render_target);
+      ops_set_viewport (builder, &prev_viewport);
+      ops_set_projection (builder, &prev_projection);
+      ops_pop_modelview (builder);
+      ops_pop_clip (builder);
+
+      blurred_texture_id = blur_texture (self, builder,
+                                         &(TextureRegion) { texture_id, 0, 0, 1, 1 },
+                                         texture_width,
+                                         texture_height,
+                                         blur_radius * scale);
+    }
+
+  g_assert (blurred_texture_id != 0);
+
+  /* Blur the rendered unblurred inset shadow */
+  /* Use a clip to cut away the unwanted parts outside of the original outline */
+  {
+    const gboolean needs_clip = !gsk_rounded_rect_is_rectilinear (node_outline);
+    const float min_x = builder->dx + node->bounds.origin.x;
+    const float min_y = builder->dy + node->bounds.origin.y;
+    const float max_x = min_x + node->bounds.size.width;
+    const float max_y = min_y + node->bounds.size.height;
+    float tx1 = blur_extra / 2.0 * scale / texture_width;
+    float tx2 = 1.0 - tx1;
+    float ty1 = blur_extra / 2.0 * scale / texture_height;
+    float ty2 = 1.0 - ty1;
+    GskRoundedRect node_clip;
+    int i;
+
+    gsk_gl_driver_set_texture_for_pointer (self->gl_driver, node, blurred_texture_id);
+
+    if (needs_clip)
+      {
+        ops_transform_bounds_modelview (builder, &node_outline->bounds, &node_clip.bounds);
+
+        for (i = 0; i < 4; i ++)
+          {
+            node_clip.corner[i].width = node_outline->corner[i].width * scale;
+            node_clip.corner[i].height = node_outline->corner[i].height * scale;
+          }
+        ops_push_clip (builder, &node_clip);
+      }
+
+    ops_set_program (builder, &self->blit_program);
+    ops_set_texture (builder, blurred_texture_id);
+    ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+      { { min_x, min_y }, { tx1, ty2 }, },
+      { { min_x, max_y }, { tx1, ty1 }, },
+      { { max_x, min_y }, { tx2, ty2 }, },
+
+      { { max_x, max_y }, { tx2, ty1 }, },
+      { { min_x, max_y }, { tx1, ty1 }, },
+      { { max_x, min_y }, { tx2, ty2 }, },
+    });
+
+    if (needs_clip)
+      ops_pop_clip (builder);
+  }
+
 }
 
 static inline void
@@ -3035,7 +3192,10 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     break;
 
     case GSK_INSET_SHADOW_NODE:
-      render_inset_shadow_node (self, node, builder);
+      if (gsk_inset_shadow_node_get_blur_radius (node) > 0)
+        render_inset_shadow_node (self, node, builder);
+      else
+        render_unblurred_inset_shadow_node (self, node, builder);
     break;
 
     case GSK_OUTSET_SHADOW_NODE:
