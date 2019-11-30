@@ -1,5 +1,4 @@
 uniform float u_spread;
-uniform float u_blur_radius;
 uniform vec4 u_color;
 uniform vec2 u_offset;
 uniform vec4 u_outline;
