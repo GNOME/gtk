@@ -31,6 +31,142 @@
 
 #include <string.h>
 
+#define REFTEST_TYPE_SCOPE               (reftest_scope_get_type ())
+
+G_DECLARE_FINAL_TYPE (ReftestScope, reftest_scope, REFTEST, SCOPE, GtkBuilderCScope)
+
+static GtkBuilderScopeInterface *parent_scope_iface;
+
+struct _ReftestScope
+{
+  GtkBuilderCScope parent_instance;
+
+  char *directory;
+};
+
+static GClosure *
+reftest_scope_create_closure (GtkBuilderScope        *scope,
+                              GtkBuilder             *builder,
+                              const char             *function_name,
+                              GtkBuilderClosureFlags  flags,
+                              GObject                *object,
+                              GError                **error)
+{
+  ReftestScope *self = REFTEST_SCOPE (scope);
+  ReftestModule *module;
+  GCallback func;
+  GClosure *closure;
+  char **split;
+
+  split = g_strsplit (function_name, ":", -1);
+
+  switch (g_strv_length (split))
+    {
+    case 1:
+      closure = parent_scope_iface->create_closure (scope, builder, split[0], flags, object, error);
+      break;
+
+    case 2:
+      module = reftest_module_new (self->directory, split[0]);
+      if (module == NULL)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_FUNCTION,
+                       "Could not load module '%s' from '%s' when looking up '%s': %s", split[0], self->directory, function_name, g_module_error ());
+          return NULL;
+        }
+      func = reftest_module_lookup (module, split[1]);
+      if (!func)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_FUNCTION,
+                       "failed to lookup function for name '%s' in module '%s'", split[1], split[0]);
+          return NULL;
+        }
+
+      if (object)
+        {
+          if (flags & GTK_BUILDER_CLOSURE_SWAPPED)
+            closure = g_cclosure_new_object_swap (func, object);
+          else
+            closure = g_cclosure_new_object (func, object);
+        }
+      else
+        {
+          if (flags & GTK_BUILDER_CLOSURE_SWAPPED)
+            closure = g_cclosure_new_swap (func, NULL, NULL);
+          else
+            closure = g_cclosure_new (func, NULL, NULL);
+        }
+      
+      if (module)
+        g_closure_add_finalize_notifier (closure, module, (GClosureNotify) reftest_module_unref);
+      break;
+
+    default:
+      g_set_error (error,
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_INVALID_FUNCTION,
+                   "Could not find function named '%s'", function_name);
+      return NULL;
+    }
+
+  g_strfreev (split);
+
+  return closure;
+}
+
+static void
+reftest_scope_scope_init (GtkBuilderScopeInterface *iface)
+{
+  iface->create_closure = reftest_scope_create_closure;
+
+  parent_scope_iface = g_type_interface_peek_parent (iface);
+}
+
+G_DEFINE_TYPE_WITH_CODE (ReftestScope, reftest_scope, GTK_TYPE_BUILDER_CSCOPE,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDER_SCOPE,
+                                                reftest_scope_scope_init))
+
+static void
+reftest_scope_finalize (GObject *object)
+{
+  ReftestScope *self = REFTEST_SCOPE (object);
+
+  g_free (self->directory);
+
+  G_OBJECT_CLASS (reftest_scope_parent_class)->finalize (object);
+}
+
+static void
+reftest_scope_class_init (ReftestScopeClass *scope_class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (scope_class);
+
+  object_class->finalize = reftest_scope_finalize;
+}
+
+static void
+reftest_scope_init (ReftestScope *self)
+{
+}
+
+static GtkBuilderScope *
+reftest_scope_new (const char *directory)
+{
+  ReftestScope *result;
+
+  g_return_val_if_fail (directory != NULL, NULL);
+
+  result = g_object_new (REFTEST_TYPE_SCOPE, NULL);
+
+  result->directory = g_strdup (directory);
+
+  return GTK_BUILDER_SCOPE (result);
+}
+
 static GtkWidget *
 builder_get_toplevel (GtkBuilder *builder)
 {
@@ -145,119 +281,26 @@ snapshot_widget (GtkWidget *widget)
   return surface;
 }
 
-static GClosure *
-create_closure (GtkBuilder    *builder,
-                const char    *function_name,
-                gboolean       swapped,
-                GObject       *object,
-                gpointer       user_data,
-                GError        **error)
-{
-  ReftestModule *module;
-  const char *directory;
-  GCallback func;
-  GClosure *closure;
-  char **split;
-
-  directory = user_data;
-  split = g_strsplit (function_name, ":", -1);
-
-  switch (g_strv_length (split))
-    {
-    case 1:
-      func = gtk_builder_lookup_callback_symbol (builder, split[0]);
-
-      if (func)
-        {
-          module = NULL;
-        }
-      else
-        {
-          module = reftest_module_new_self ();
-          if (module == NULL)
-            {
-              g_set_error (error,
-                           GTK_BUILDER_ERROR,
-                           GTK_BUILDER_ERROR_INVALID_FUNCTION,
-                           "glib compiled without module support.");
-              return NULL;
-            }
-          func = reftest_module_lookup (module, split[0]);
-          if (!func)
-            {
-              g_set_error (error,
-                           GTK_BUILDER_ERROR,
-                           GTK_BUILDER_ERROR_INVALID_FUNCTION,
-                           "failed to lookup function for name '%s'", split[0]);
-              return NULL;
-            }
-        }
-      break;
-    case 2:
-      if (g_getenv ("REFTEST_MODULE_DIR"))
-        directory = g_getenv ("REFTEST_MODULE_DIR");
-      module = reftest_module_new (directory, split[0]);
-      if (module == NULL)
-        {
-          g_set_error (error,
-                       GTK_BUILDER_ERROR,
-                       GTK_BUILDER_ERROR_INVALID_FUNCTION,
-                       "Could not load module '%s' from '%s' when looking up '%s': %s", split[0], directory, function_name, g_module_error ());
-          return NULL;
-        }
-      func = reftest_module_lookup (module, split[1]);
-      if (!func)
-        {
-          g_set_error (error,
-                       GTK_BUILDER_ERROR,
-                       GTK_BUILDER_ERROR_INVALID_FUNCTION,
-                       "failed to lookup function for name '%s' in module '%s'", split[1], split[0]);
-          return NULL;
-        }
-      break;
-    default:
-      g_set_error (error,
-                   GTK_BUILDER_ERROR,
-                   GTK_BUILDER_ERROR_INVALID_FUNCTION,
-                   "Could not find function named '%s'", function_name);
-      return NULL;
-    }
-
-  g_strfreev (split);
-
-  if (object)
-    {
-      if (swapped)
-        closure = g_cclosure_new_object_swap (func, object);
-      else
-        closure = g_cclosure_new_object (func, object);
-    }
-  else
-    {
-      if (swapped)
-        closure = g_cclosure_new_swap (func, NULL, NULL);
-      else
-        closure = g_cclosure_new (func, NULL, NULL);
-    }
-  
-  if (module)
-    g_closure_add_finalize_notifier (closure, module, (GClosureNotify) reftest_module_unref);
-
-  return closure;
-}
-
 cairo_surface_t *
 reftest_snapshot_ui_file (const char *ui_file)
 {
   GtkWidget *window;
   GtkBuilder *builder;
+  GtkBuilderScope *scope;
   GError *error = NULL;
   char *directory;
 
-  directory = g_path_get_dirname (ui_file);
+  if (g_getenv ("REFTEST_MODULE_DIR"))
+    directory = g_strdup (g_getenv ("REFTEST_MODULE_DIR"));
+  else
+    directory = g_path_get_dirname (ui_file);
+  scope = reftest_scope_new (directory);
+  g_free (directory);
 
   builder = gtk_builder_new ();
-  gtk_builder_set_closure_func (builder, create_closure, directory, g_free);
+  gtk_builder_set_scope (builder, scope);
+  g_object_unref (scope);
+
   gtk_builder_add_from_file (builder, ui_file, &error);
   g_assert_no_error (error);
   window = builder_get_toplevel (builder);
