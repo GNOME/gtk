@@ -23,7 +23,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkapplication.h>
+#include <gtk/gtkbuilderscope.h>
 #include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
@@ -99,11 +99,6 @@ GDK_AVAILABLE_IN_ALL
 GtkBuilder*  gtk_builder_new                     (void);
 
 GDK_AVAILABLE_IN_ALL
-void         gtk_builder_set_closure_func        (GtkBuilder    *builder,
-                                                  GtkBuilderClosureFunc closure_func,
-                                                  gpointer       user_data,
-                                                  GDestroyNotify user_destroy);
-GDK_AVAILABLE_IN_ALL
 gboolean     gtk_builder_add_from_file           (GtkBuilder    *builder,
                                                   const gchar   *filename,
                                                   GError       **error);
@@ -152,6 +147,11 @@ void         gtk_builder_set_translation_domain  (GtkBuilder   	*builder,
 GDK_AVAILABLE_IN_ALL
 const gchar* gtk_builder_get_translation_domain  (GtkBuilder   	*builder);
 GDK_AVAILABLE_IN_ALL
+GtkBuilderScope *gtk_builder_get_scope           (GtkBuilder    *builder);
+GDK_AVAILABLE_IN_ALL
+void         gtk_builder_set_scope               (GtkBuilder    *builder,
+                                                  GtkBuilderScope *scope);
+GDK_AVAILABLE_IN_ALL
 GType        gtk_builder_get_type_from_name      (GtkBuilder   	*builder,
                                                   const char   	*type_name);
 
@@ -176,27 +176,9 @@ GtkBuilder * gtk_builder_new_from_string         (const gchar   *string,
                                                   gssize         length);
 
 GDK_AVAILABLE_IN_ALL
-void         gtk_builder_add_callback_symbol     (GtkBuilder    *builder,
-						  const gchar   *callback_name,
-						  GCallback      callback_symbol);
-GDK_AVAILABLE_IN_ALL
-void         gtk_builder_add_callback_symbols    (GtkBuilder    *builder,
-						  const gchar   *first_callback_name,
-						  GCallback      first_callback_symbol,
-						  ...) G_GNUC_NULL_TERMINATED;
-GDK_AVAILABLE_IN_ALL
-GCallback    gtk_builder_lookup_callback_symbol  (GtkBuilder    *builder,
-						  const gchar   *callback_name);
-GDK_AVAILABLE_IN_ALL
 GClosure *   gtk_builder_create_closure          (GtkBuilder    *builder,
                                                   const char    *function_name,
-                                                  gboolean       swapped,
-                                                  GObject       *object,
-                                                  GError       **error);
-GDK_AVAILABLE_IN_ALL
-GClosure *   gtk_builder_create_cclosure         (GtkBuilder    *builder,
-                                                  const char    *function_name,
-                                                  gboolean       swapped,
+                                                  GtkBuilderClosureFlags flags,
                                                   GObject       *object,
                                                   GError       **error);
 
