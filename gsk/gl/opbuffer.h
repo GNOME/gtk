@@ -133,7 +133,6 @@ typedef struct
   float outline[4];
   float corner_widths[4];
   float corner_heights[4];
-  float radius;
   float spread;
   float offset[2];
   float color[4];
