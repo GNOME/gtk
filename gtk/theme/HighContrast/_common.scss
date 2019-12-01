@@ -105,6 +105,7 @@ flowboxchild:focus {
     color: $insensitive_fg_color;
     background-color: $insensitive_bg_color;
   }
+  @at-root %view_selected,
   &:selected,
   &:selected:focus,
   &:selected:hover { @extend %selected_items; }
@@ -410,6 +411,7 @@ button {
       }
     }
 
+    @at-root %button_basic_flat,
     &.flat {
       @include button(undecorated);
 
@@ -467,6 +469,7 @@ button {
       }
     }
 
+    @at-root %button_basic_drop_active,
     &:drop(active) {
       color: $fg_color;
       border-color: $fg_color;
@@ -477,12 +480,16 @@ button {
   @at-root %button_selected, & {
     row:selected & {
       @if $variant == 'light' { border-color: $selected_borders_color; }
+    }
 
-      &.flat:not(:active):not(:checked):not(:hover):not(disabled) {
-        color: $selected_fg_color;
-        border-color: transparent;
+    @at-root %button_selected_flat, &.flat {
+      row:selected & {
+        &:not(:active):not(:checked):not(:hover):not(disabled) {
+          color: $selected_fg_color;
+          border-color: transparent;
 
-        &:backdrop { color: if($variant=='light', $backdrop_base_color, $backdrop_fg_color); }
+          &:backdrop { color: if($variant=='light', $backdrop_base_color, $backdrop_fg_color); }
+        }
       }
     }
   }
@@ -738,8 +745,15 @@ button {
 
 // More inline toolbar buttons
 toolbar.inline-toolbar toolbutton {
-  &:not(:first-child) > button.flat { @extend %linked:not(:first-child); }
-  &:not(:last-child) > button.flat { @extend %linked:not(:last-child); }
+  &:dir(ltr) {
+    &:not(:first-child) > button.flat { @extend %linked_not_left; }
+    &:not(:last-child) > button.flat { @extend %linked_not_right; }
+  }
+
+  &:dir(rtl) {
+    &:not(:first-child) > button.flat { @extend %linked_not_right; }
+    &:not(:last-child) > button.flat { @extend %linked_not_left; }
+  }
 }
 
 %linked_not_left {
@@ -766,17 +780,21 @@ toolbar.inline-toolbar toolbutton {
   }
 }
 
-%linked_vertical{
-  &:not(:first-child) {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-  }
+%linked_not_top {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
 
-  &:not(:last-child) {
-    border-bottom-style: none;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
+%linked_not_bottom {
+  border-bottom-style: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+%linked_vertical{
+  &:not(:first-child) { @extend %linked_not_top; }
+
+  &:not(:last-child) { @extend %linked_not_bottom; }
 }
 
 %undecorated_button {
@@ -790,6 +808,7 @@ toolbar.inline-toolbar toolbutton {
 }
 
 /* menu buttons */
+%modelbutton_flat,
 modelbutton.flat,
 .menuitem.button.flat {
   min-height: 26px;
@@ -1089,13 +1108,16 @@ combobox {
   }
 
   &.linked {
-    button:nth-child(2) { @extend %linked:not(:first-child); }
+    button:nth-child(2) {
+      &:dir(ltr) { @extend %linked_not_left; }
+      &:dir(rtl) { @extend %linked_not_right; }
+    }
   }
 
   &:drop(active) { // FIXME: untested
     box-shadow: none;
 
-    button.combo { @extend %button_basic:drop(active); }
+    button.combo { @extend %button_basic_drop_active; }
   }
 }
 
@@ -1104,13 +1126,20 @@ combobox {
 // https://bugzilla.gnome.org/show_bug.cgi?id=733979
 
 .linked:not(.vertical) > combobox {
-  &:not(:first-child) > box > button.combo { @extend %linked:not(:first-child); }
-  &:not(:last-child) > box > button.combo { @extend %linked:not(:last-child); }
+  &:dir(ltr) {
+    &:not(:first-child) > box > button.combo { @extend %linked_not_left; }
+    &:not(:last-child) > box > button.combo { @extend %linked_not_right; }
+  }
+
+  &:dir(rtl) {
+    &:not(:first-child) > box > button.combo { @extend %linked_not_right; }
+    &:not(:last-child) > box > button.combo { @extend %linked_not_left; }
+  }
 }
 
 .linked.vertical > combobox {
-  &:not(:first-child) > box > button.combo { @extend %linked_vertical:not(:first-child); }
-  &:not(:last-child) > box > button.combo { @extend %linked_vertical:not(:last-child); }
+  &:not(:first-child) > box > button.combo { @extend %linked_not_top; }
+  &:not(:last-child) > box > button.combo { @extend %linked_not_bottom; }
 }
 
 
@@ -1568,7 +1597,7 @@ popover.background {
   list separator { margin: 0px; }
 
   checkbutton,
-  radiobutton { @extend modelbutton.flat; }
+  radiobutton { @extend %modelbutton_flat; }
 }
 
 /*****************
@@ -2783,7 +2812,7 @@ expander-widget title:hover > expander {
 calendar {
   border: 1px solid $borders_color;
   &:selected {
-    @extend .view:selected;
+    @extend %view_selected;
   }
   &.button {
     @extend %undecorated_button;
@@ -3007,9 +3036,9 @@ placessidebar {
     }
 
     @at-root button.sidebar-button {
-      @extend %button_basic.flat;
+      @extend %button_basic_flat;
 
-      @extend %button_selected.flat;
+      @extend %button_selected_flat;
 
       min-height: 26px;
       min-width: 26px;
@@ -3339,7 +3368,7 @@ decoration {
 button.titlebutton {
   @extend %button_basic;
 
-  @extend %button_basic.flat;
+  @extend %button_basic_flat;
 }
 
 /**********************
