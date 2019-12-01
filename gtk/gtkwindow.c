@@ -7236,12 +7236,19 @@ corner_rect (cairo_rectangle_int_t *rect,
 }
 
 static void
-subtract_corners_from_region (cairo_region_t        *region,
-                              cairo_rectangle_int_t *extents,
-                              GtkStyleContext       *context,
-                              GtkWindow             *window)
+subtract_decoration_corners_from_region (cairo_region_t        *region,
+                                         cairo_rectangle_int_t *extents,
+                                         GtkStyleContext       *context,
+                                         GtkWindow             *window)
 {
+  GtkWindowPrivate *priv = window->priv;
   cairo_rectangle_int_t rect;
+
+  if (!priv->client_decorated ||
+      !priv->decorated ||
+      priv->fullscreen ||
+      priv->maximized)
+    return;
 
   gtk_style_context_save_to_node (context, window->priv->decoration_node);
 
@@ -7304,7 +7311,7 @@ update_opaque_region (GtkWindow           *window,
 
       opaque_region = cairo_region_create_rectangle (&rect);
 
-      subtract_corners_from_region (opaque_region, &rect, context, window);
+      subtract_decoration_corners_from_region (opaque_region, &rect, context, window);
     }
   else
     {
