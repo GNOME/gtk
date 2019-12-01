@@ -590,6 +590,7 @@ button {
       }
     }
 
+    @at-root %button_basic_flat,
     &.flat { &:backdrop, &:disabled, &:backdrop:disabled { @include button(undecorated); }}
 
     &:disabled {
