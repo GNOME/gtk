@@ -213,7 +213,7 @@ test_nested (void)
 
   watch = gtk_expression_watch (expr, filter, inc_counter, &counter, NULL);
   gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "salad");
-  g_assert_cmpint (counter, >, 0);
+  g_assert_cmpint (counter, ==, 1);
   counter = 0;
 
   res = gtk_expression_evaluate (expr, NULL, &value);
@@ -228,7 +228,7 @@ test_nested (void)
   filter = gtk_string_filter_new ();
   gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "salad");
   gtk_filter_list_model_set_filter (filtered, filter);
-  g_assert_cmpint (counter, >, 0);
+  g_assert_cmpint (counter, ==, 1);
   counter = 0;
 
   res = gtk_expression_evaluate (expr, NULL, &value);
@@ -237,7 +237,7 @@ test_nested (void)
   g_value_unset (&value);
 
   gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "bar");
-  g_assert_cmpint (counter, >, 0);
+  g_assert_cmpint (counter, ==, 1);
   counter = 0;
 
   res = gtk_expression_evaluate (expr, NULL, &value);
@@ -246,7 +246,7 @@ test_nested (void)
   g_value_unset (&value);
 
   gtk_filter_list_model_set_filter (filtered, NULL);
-  g_assert_cmpint (counter, >, 0);
+  g_assert_cmpint (counter, ==, 1);
 
   res = gtk_expression_evaluate (expr, NULL, &value);
   g_assert_false (res);
@@ -256,7 +256,7 @@ test_nested (void)
   g_object_unref (filtered);
   g_object_unref (list);
   g_object_unref (filter);
-  gtk_expression_unre (expr);
+  gtk_expression_unref (expr);
 }
 
 /* Test that property expressions fail to evaluate if the
@@ -315,6 +315,25 @@ test_this (void)
   g_object_unref (filter);
 }
 
+static void
+test_this_watch (void)
+{
+  GtkExpressionWatch *watch;
+  GtkExpression *expr;
+  GObject *this;
+  guint counter = 0;
+
+  this = g_object_new (G_TYPE_OBJECT, NULL);
+  expr = gtk_constant_expression_new (G_TYPE_INT, 42);
+  watch = gtk_expression_watch (expr, this, inc_counter, &counter, NULL);
+  g_assert_cmpint (counter, ==, 0);
+
+  g_clear_object (&this);
+  g_assert_cmpint (counter, ==, 1);
+
+  gtk_expression_watch_unwatch (watch);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -328,6 +347,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/expression/nested", test_nested);
   g_test_add_func ("/expression/type-mismatch", test_type_mismatch);
   g_test_add_func ("/expression/this", test_this);
+  g_test_add_func ("/expression/this-watch", test_this_watch);
 
   return g_test_run ();
 }
