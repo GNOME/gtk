@@ -723,7 +723,7 @@ parse_template (GtkBuildableParseContext  *context,
       g_set_error (error,
                    GTK_BUILDER_ERROR,
                    GTK_BUILDER_ERROR_UNHANDLED_TAG,
-                   "Not expecting to handle a template (class '%s', parent '%s')",
+                   "Template declaration (class '%s', parent '%s') where templates aren't supported",
                    object_class, parent_class ? parent_class : "GtkWidget");
       _gtk_builder_prefix_error (data->builder, context, error);
       return;
