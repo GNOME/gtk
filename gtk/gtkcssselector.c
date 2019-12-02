@@ -1396,6 +1396,7 @@ gtk_css_selector_parse_selector_pseudo_class (GtkCssParser   *parser,
               else
                 {
                   gtk_css_parser_error_syntax (parser, "Invalid contents of :not() selector");
+                  gtk_css_parser_end_block (parser);
                   if (selector)
                     _gtk_css_selector_free (selector);
                   selector = NULL;
@@ -1406,6 +1407,7 @@ gtk_css_selector_parse_selector_pseudo_class (GtkCssParser   *parser,
               if (!gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
                 {
                   gtk_css_parser_error_syntax (parser, "Invalid contents of :not() selector");
+                  gtk_css_parser_end_block (parser);
                   if (selector)
                     _gtk_css_selector_free (selector);
                   selector = NULL;
