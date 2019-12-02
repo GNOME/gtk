@@ -1031,6 +1031,12 @@ modelbutton.flat,
 
   &:hover { background-color: $popover_hover_color; }
 
+  &:disabled {
+    color: $insensitive_fg_color;
+
+    &:backdrop { color: $backdrop_insensitive_color; }
+  }
+
   &:selected { @extend %selected_items; }
 
   &:backdrop,
@@ -1074,6 +1080,7 @@ button.color {
 
 /* list buttons */
 /* tone down as per new designs, see issue #1473 */
+%list_button,
 list row button.image-button:not(.flat) {
   @extend %undecorated_button;
   border: 1px solid transparentize($borders_color, .5);
@@ -2860,19 +2867,6 @@ radio {
 
   &:only-child { margin: 0; }
 
-  popover & { // when in a popover add more space between the label and the check, reset the other side margin.
-              // See https://bugzilla.gnome.org/show_bug.cgi?id=779570 for details.
-    &.left:dir(rtl) {
-      margin-left: 0;
-      margin-right: 12px;
-    }
-
-    &.right:dir(ltr) {
-      margin-left: 12px;
-      margin-right: 0;
-    }
-  }
-
   min-height: 14px;
   min-width: 14px;
   border: 1px solid;
@@ -2929,6 +2923,7 @@ radio {
     &:disabled { @include button(osd-insensitive); }
   }
 
+  @at-root %menu_check_radio,
   menu menuitem & {
     margin: 0; // this is a workaround for a menu check/radio size allocation issue
 
@@ -2989,6 +2984,7 @@ check {
 }
 
 menu menuitem {
+  @at-root %menu_check_radio,
   radio,
   check {
      &:checked:not(:backdrop), &:indeterminate:not(:backdrop) { transition: none; }
@@ -4865,28 +4861,31 @@ menubar {
 popover.menu {
   padding: 0px;
 
-  & button.image-button.model {
-    padding: 0;
-    border: none;
-    background: none;
-    box-shadow: none;
-  }
-  & button.image-button.model:selected {
-    border: none;
-    color: $selected_fg_color;
-    background: $selected_bg_color;
-  }
-
   & box.inline-buttons {
-    border-radius: 5px;
-    border-style: none;
-    border-width: 0;
-    border-image-source: none;
-    border-image-width: 1px;
+    padding: 0 20px;
+
+    button.image-button.model {
+      @include button(undecorated);
+
+      min-height: 30px;
+      min-width: 30px;
+      padding: 0;
+      border: none;
+      outline: none;
+      transition: none;
+
+      &:selected { @extend %selected_items; }
+    }
   }
 
   & box.circular-buttons {
-    padding-bottom: 5px;
+    padding: 6px 0;
+
+    button.circular.image-button.model {
+      @extend %list_button;
+
+      padding: 11px;
+    }
   }
 
   & > arrow,
@@ -4894,38 +4893,47 @@ popover.menu {
     background-color: $menu_color;
   }
 
+  &.background > contents {
+    padding: 8px 0;
+  }
+
   &.background separator {
-    margin: 5px 0px;
+    margin: 6px 0;
   }
 
   & accelerator {
-    margin-left: 20px;
-    color: gray;
+    color: gtkalpha(currentColor,0.55);
+
+    &:dir(ltr) { margin-left: 20px; }
+    &:dir(rtl) { margin-right: 20px; }
   }
 
-  & box.inline-buttons {
-    padding: 0 5px;
+  & check,
+  & radio {
+    @extend %menu_check_radio;
   }
 
+  & arrow.left,
   & radio.left,
   & check.left {
     margin-left: 0;
-    margin-right: 12px;
+    margin-right: 8px;
   }
 
+  & arrow.right,
   & radio.right,
   & check.right {
-    margin-left: 12px;
+    margin-left: 8px;
     margin-right: 0;
   }
 
-  & modelbutton:selected {
-    color: $selected_fg_color;
-    background-color: $selected_bg_color;
-  }
+  & modelbutton {
+    min-height: 30px;
+    min-width: 40px;
+    padding: 0 20px;
+    border-radius: 0;
 
-  & modelbutton:selected accelerator {
-    color: mix($selected_fg_color, gray, 50%);
+    &:selected { @extend %selected_items; }
   }
 }
 
