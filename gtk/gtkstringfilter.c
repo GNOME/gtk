@@ -29,7 +29,7 @@ struct _GtkStringFilter
   GtkFilter parent_instance;
 
   char *search;
-  char *search_collated;
+  char *search_prepared;
 
   gboolean ignore_case;
   gboolean match_substring;
@@ -51,19 +51,21 @@ G_DEFINE_TYPE (GtkStringFilter, gtk_string_filter, GTK_TYPE_FILTER)
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
 static char *
-gtk_string_filter_collate (GtkStringFilter *self,
+gtk_string_filter_prepare (GtkStringFilter *self,
                            const char      *s)
 {
-  char *result, *tmp;
+  char *tmp;
+  char *result;
 
   if (s == NULL || s[0] == '\0')
     return NULL;
 
-  if (!self->ignore_case)
-    return g_utf8_collate_key (s, -1);
+  tmp = g_utf8_normalize (s, -1, G_NORMALIZE_ALL);
 
-  tmp = g_utf8_casefold (s, -1);
-  result = g_utf8_collate_key (tmp, -1);
+  if (!self->ignore_case)
+    return tmp;
+
+  result = g_utf8_casefold (tmp, -1);
   g_free (tmp);
 
   return result;
@@ -75,11 +77,11 @@ gtk_string_filter_filter (GtkFilter *filter,
 {
   GtkStringFilter *self = GTK_STRING_FILTER (filter);
   GValue value = G_VALUE_INIT;
-  char *collated;
+  char *prepared;
   const char *s;
   gboolean result;
 
-  if (self->search_collated == NULL)
+  if (self->search_prepared == NULL)
     return TRUE;
 
   if (self->expression == NULL ||
@@ -88,18 +90,18 @@ gtk_string_filter_filter (GtkFilter *filter,
   s = g_value_get_string (&value);
   if (s == NULL)
     return FALSE;
-  collated = gtk_string_filter_collate (self, s);
+  prepared = gtk_string_filter_prepare (self, s);
 
   if (self->match_substring)
-    result = strstr (collated, self->search_collated) != NULL;
+    result = strstr (prepared, self->search_prepared) != NULL;
   else
-    result = strcmp (collated, self->search_collated) == 0;
+    result = strcmp (prepared, self->search_prepared) == 0;
 
-#if 0
-  g_print ("%s (%s) %s %s (%s)\n", s, collated, result ? "==" : "!=", self->search, self->search_collated);
+#if 1
+  g_print ("%s (%s) %s %s (%s)\n", s, prepared, result ? "==" : "!=", self->search, self->search_prepared);
 #endif
 
-  g_free (collated);
+  g_free (prepared);
   g_value_unset (&value);
 
   return result;
@@ -175,7 +177,7 @@ gtk_string_filter_dispose (GObject *object)
   GtkStringFilter *self = GTK_STRING_FILTER (object);
 
   g_clear_pointer (&self->search, g_free);
-  g_clear_pointer (&self->search_collated, g_free);
+  g_clear_pointer (&self->search_prepared, g_free);
   g_clear_pointer (&self->expression, gtk_expression_unref);
 
   G_OBJECT_CLASS (gtk_string_filter_parent_class)->dispose (object);
@@ -317,10 +319,10 @@ gtk_string_filter_set_search (GtkStringFilter *self,
     change = GTK_FILTER_CHANGE_DIFFERENT;
 
   g_free (self->search);
-  g_free (self->search_collated);
+  g_free (self->search_prepared);
 
   self->search = g_strdup (search);
-  self->search_collated = gtk_string_filter_collate (self, search);
+  self->search_prepared = gtk_string_filter_prepare (self, search);
 
   gtk_filter_changed (GTK_FILTER (self), change);
 
@@ -378,8 +380,8 @@ gtk_string_filter_set_ignore_case (GtkStringFilter *self,
 
   if (self->search)
     {
-      g_free (self->search_collated);
-      self->search_collated = gtk_string_filter_collate (self, self->search);
+      g_free (self->search_prepared);
+      self->search_prepared = gtk_string_filter_prepare (self, self->search);
       gtk_filter_changed (GTK_FILTER (self), ignore_case ? GTK_FILTER_CHANGE_LESS_STRICT : GTK_FILTER_CHANGE_MORE_STRICT);
     }
 
