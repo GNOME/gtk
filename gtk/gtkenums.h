@@ -608,6 +608,26 @@ typedef enum
 } GtkNumberUpLayout;
 
 /**
+ * GtkOrdering:
+ * @GTK_ORDERING_INVALID: the two values cannot be ordered
+ * @GTK_ORDERING_SMALLER: the first value is smaller than the second. This
+ *     is equivalent to a #GCompareFunc returning -1.
+ * @GTK_ORDERING_EQUAL: the two values are equal. This
+ *     is equivalent to a #GCompareFunc returning 0.
+ * @GTK_ORDERING_LARGER: the first value is larger than the second. This
+ *     is equivalent to a #GCompareFunc returning 1.
+ *
+ * Describes the way two values can be compared. See gtk_sorter_compare()
+ * for an example.
+ */
+typedef enum {
+  GTK_ORDERING_INVALID = 0,
+  GTK_ORDERING_SMALLER,
+  GTK_ORDERING_EQUAL,
+  GTK_ORDERING_LARGER
+} GtkOrdering;
+
+/**
  * GtkPageOrientation:
  * @GTK_PAGE_ORIENTATION_PORTRAIT: Portrait mode.
  * @GTK_PAGE_ORIENTATION_LANDSCAPE: Landscape mode.
