@@ -74,6 +74,14 @@ gtk_builder_scope_default_get_type_from_name (GtkBuilderScope *self,
   return g_type_from_name (type_name);
 }
 
+static GType
+gtk_builder_scope_default_get_type_from_function (GtkBuilderScope *self,
+                                                  GtkBuilder      *builder,
+                                                  const char      *type_name)
+{
+  return G_TYPE_INVALID;
+}
+
 static GClosure *
 gtk_builder_scope_default_create_closure (GtkBuilderScope        *self,
                                           GtkBuilder             *builder,
@@ -94,6 +102,7 @@ static void
 gtk_builder_scope_default_init (GtkBuilderScopeInterface *iface)
 {
   iface->get_type_from_name = gtk_builder_scope_default_get_type_from_name;
+  iface->get_type_from_function = gtk_builder_scope_default_get_type_from_function;
   iface->create_closure = gtk_builder_scope_default_create_closure;
 }
 
@@ -107,6 +116,18 @@ gtk_builder_scope_get_type_from_name (GtkBuilderScope *self,
   g_return_val_if_fail (type_name != NULL, G_TYPE_INVALID);
 
   return GTK_BUILDER_SCOPE_GET_IFACE (self)->get_type_from_name (self, builder, type_name);
+}
+
+GType
+gtk_builder_scope_get_type_from_function (GtkBuilderScope *self,
+                                          GtkBuilder      *builder,
+                                          const char      *function_name)
+{
+  g_return_val_if_fail (GTK_IS_BUILDER_SCOPE (self), G_TYPE_INVALID);
+  g_return_val_if_fail (GTK_IS_BUILDER (builder), G_TYPE_INVALID);
+  g_return_val_if_fail (function_name != NULL, G_TYPE_INVALID);
+
+  return GTK_BUILDER_SCOPE_GET_IFACE (self)->get_type_from_function (self, builder, function_name);
 }
 
 GClosure *
@@ -237,6 +258,57 @@ gtk_builder_cscope_get_type_from_name (GtkBuilderScope *scope,
   return type;
 }
 
+static GCallback
+gtk_builder_cscope_get_callback (GtkBuilderCScope  *self,
+                                 const char        *function_name,
+                                 GError           **error)
+{
+  GModule *module;
+  GCallback func;
+
+  func = gtk_builder_cscope_lookup_callback_symbol (self, function_name);
+  if (func)
+    return func;
+
+  module = gtk_builder_cscope_get_module (self);
+  if (module == NULL)
+    {
+      g_set_error (error,
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_INVALID_FUNCTION,
+                   "Could not look up function `%s`: GModule is not supported.",
+                   function_name);
+      return NULL;
+    }
+
+  if (!g_module_symbol (module, function_name, (gpointer)&func))
+    {
+      g_set_error (error,
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_INVALID_FUNCTION,
+                   "No function named `%s`.",
+                   function_name);
+      return NULL;
+    }
+
+  return func;
+}
+
+static GType
+gtk_builder_cscope_get_type_from_function (GtkBuilderScope *scope,
+                                           GtkBuilder      *builder,
+                                           const char      *function_name)
+{
+  GtkBuilderCScope *self = GTK_BUILDER_CSCOPE (scope);
+  GType (* type_func) (void); 
+  
+  type_func = (GType (*) (void)) gtk_builder_cscope_get_callback (self, function_name, NULL);
+  if (!type_func)
+    return G_TYPE_INVALID;
+
+  return type_func();
+}
+
 static GClosure *
 gtk_builder_cscope_create_closure_for_funcptr (GtkBuilderCScope *self,
                                                GtkBuilder       *builder,
@@ -276,35 +348,14 @@ gtk_builder_cscope_create_closure (GtkBuilderScope        *scope,
                                    GError                **error)
 {
   GtkBuilderCScope *self = GTK_BUILDER_CSCOPE (scope);
-  GModule *module = gtk_builder_cscope_get_module (self);
   GCallback func;
   gboolean swapped;
 
   swapped = flags & GTK_BUILDER_CLOSURE_SWAPPED;
 
-  func = gtk_builder_cscope_lookup_callback_symbol (self, function_name);
-  if (func)
-    return gtk_builder_cscope_create_closure_for_funcptr (self, builder, func, swapped, object);
-
-  if (module == NULL)
-    {
-      g_set_error (error,
-                   GTK_BUILDER_ERROR,
-                   GTK_BUILDER_ERROR_INVALID_FUNCTION,
-                   "Could not look up function `%s`: GModule is not supported.",
-                   function_name);
+  func = gtk_builder_cscope_get_callback (self, function_name, error);
+  if (!func)
       return NULL;
-    }
-
-  if (!g_module_symbol (module, function_name, (gpointer)&func))
-    {
-      g_set_error (error,
-                   GTK_BUILDER_ERROR,
-                   GTK_BUILDER_ERROR_INVALID_FUNCTION,
-                   "No function named `%s`.",
-                   function_name);
-      return NULL;
-    }
 
   return gtk_builder_cscope_create_closure_for_funcptr (self, builder, func, swapped, object);
 }
@@ -313,6 +364,7 @@ static void
 gtk_builder_cscope_scope_init (GtkBuilderScopeInterface *iface)
 {
   iface->get_type_from_name = gtk_builder_cscope_get_type_from_name;
+  iface->get_type_from_function = gtk_builder_cscope_get_type_from_function;
   iface->create_closure = gtk_builder_cscope_create_closure;
 }
 
