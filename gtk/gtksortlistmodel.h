@@ -27,6 +27,7 @@
 
 #include <gio/gio.h>
 #include <gtk/gtkwidget.h>
+#include <gtk/gtksorter.h>
 
 
 G_BEGIN_DECLS
@@ -37,28 +38,22 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkSortListModel, gtk_sort_list_model, GTK, SORT_LIST_MODEL, GObject)
 
 GDK_AVAILABLE_IN_ALL
-GtkSortListModel *      gtk_sort_list_model_new                 (GListModel             *model,
-                                                                 GCompareDataFunc        sort_func,
-                                                                 gpointer                user_data,
-                                                                 GDestroyNotify          user_destroy);
+GtkSortListModel *      gtk_sort_list_model_new                 (GListModel            *model,
+                                                                 GtkSorter             *sorter);
 GDK_AVAILABLE_IN_ALL
-GtkSortListModel *      gtk_sort_list_model_new_for_type        (GType                   item_type);
+GtkSortListModel *      gtk_sort_list_model_new_for_type        (GType                  item_type);
 
 GDK_AVAILABLE_IN_ALL
-void                    gtk_sort_list_model_set_sort_func       (GtkSortListModel       *self,
-                                                                 GCompareDataFunc        sort_func,
-                                                                 gpointer                user_data,
-                                                                 GDestroyNotify          user_destroy);
+void                    gtk_sort_list_model_set_sorter          (GtkSortListModel       *self,
+                                                                 GtkSorter              *sorter);
 GDK_AVAILABLE_IN_ALL
-gboolean                gtk_sort_list_model_has_sort            (GtkSortListModel       *self);
+GtkSorter *             gtk_sort_list_model_get_sorter          (GtkSortListModel       *self);
+
 GDK_AVAILABLE_IN_ALL
 void                    gtk_sort_list_model_set_model           (GtkSortListModel       *self,
                                                                  GListModel             *model);
 GDK_AVAILABLE_IN_ALL
 GListModel *            gtk_sort_list_model_get_model           (GtkSortListModel       *self);
-
-GDK_AVAILABLE_IN_ALL
-void                    gtk_sort_list_model_resort              (GtkSortListModel       *self);
 
 G_END_DECLS
 
