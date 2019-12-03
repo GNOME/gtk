@@ -79,13 +79,6 @@ int  gtk_sorter_compare (GtkSorter *self,
                          gpointer   item2);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_sorter_set_sort_direction (GtkSorter   *self,
-                                    GtkSortType  direction);
-
-GDK_AVAILABLE_IN_ALL
-GtkSortType gtk_sorter_get_sort_direction (GtkSorter *self);
-
-GDK_AVAILABLE_IN_ALL
 void gtk_sorter_changed (GtkSorter       *self,
                          GtkSorterChange  change);
 

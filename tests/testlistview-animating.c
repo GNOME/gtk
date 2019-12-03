@@ -112,7 +112,7 @@ revert_sort (gpointer sorter)
 {
   reverse_sort = !reverse_sort;
 
-  gtk_sorter_set_sort_direction (GTK_SORTER (sorter), reverse_sort ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING);
+  gtk_invertible_sorter_set_direction (GTK_INVERTIBLE_SORTER (sorter), reverse_sort ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING);
 
   return G_SOURCE_CONTINUE;
 }
@@ -126,6 +126,7 @@ main (int   argc,
   GtkSortListModel *sort;
   guint i;
   GtkSorter *sorter;
+  GtkSorter *sorter2;
 
   gtk_init ();
 
@@ -133,7 +134,8 @@ main (int   argc,
   for (i = 0; i < AVERAGE; i++)
     add (store);
   sorter = gtk_custom_sorter_new (compare, NULL, NULL);
-  sort = gtk_sort_list_model_new (G_LIST_MODEL (store), sorter);
+  sorter2 = gtk_invertible_sorter_new (sorter);
+  sort = gtk_sort_list_model_new (G_LIST_MODEL (store), sorter2);
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (win), 400, 600);
@@ -180,7 +182,7 @@ main (int   argc,
                            NULL, NULL);
 
   g_timeout_add (100, do_stuff, store);
-  g_timeout_add_seconds (3, revert_sort, sorter);
+  g_timeout_add_seconds (3, revert_sort, sorter2);
 
   gtk_widget_show (win);
 
@@ -188,6 +190,7 @@ main (int   argc,
 
   g_object_unref (store);
   g_object_unref (sorter);
+  g_object_unref (sorter2);
 
   return 0;
 }
