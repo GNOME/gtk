@@ -441,11 +441,14 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+  GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
   VkPresentRegionsKHR *regionsptr = VK_NULL_HANDLE;
   VkPresentRegionsKHR regions;
   cairo_rectangle_int_t extents;
+  int scale;
 
   cairo_region_get_extents (painted, &extents);
+  scale = gdk_surface_get_scale_factor (surface);
 
   regions = (VkPresentRegionsKHR) {
       .sType = VK_STRUCTURE_TYPE_PRESENT_REGIONS_KHR,
@@ -454,10 +457,10 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
           .rectangleCount = 1,
           .pRectangles = &(VkRectLayerKHR) {
               .layer = 0,
-              .offset.x = extents.x,
-              .offset.y = extents.y,
-              .extent.width = extents.width,
-              .extent.height = extents.height,
+              .offset.x = extents.x * scale,
+              .offset.y = extents.y * scale,
+              .extent.width = extents.width * scale,
+              .extent.height = extents.height * scale,
           }
       },
   };
