@@ -42,14 +42,18 @@ GDK_AVAILABLE_IN_ALL
 GType                   gtk_builder_list_item_factory_get_type          (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkListItemFactory *    gtk_builder_list_item_factory_new_from_bytes    (GBytes                         *bytes);
+GtkListItemFactory *    gtk_builder_list_item_factory_new_from_bytes    (GtkBuilderScope                *scope,
+                                                                         GBytes                         *bytes);
 GDK_AVAILABLE_IN_ALL
-GtkListItemFactory *    gtk_builder_list_item_factory_new_from_resource (const char                     *resource_path);
+GtkListItemFactory *    gtk_builder_list_item_factory_new_from_resource (GtkBuilderScope                *scope,
+                                                                         const char                     *resource_path);
 
 GDK_AVAILABLE_IN_ALL
 GBytes *                gtk_builder_list_item_factory_get_bytes         (GtkBuilderListItemFactory      *self) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const char *            gtk_builder_list_item_factory_get_resource      (GtkBuilderListItemFactory      *self) G_GNUC_PURE;
+GDK_AVAILABLE_IN_ALL
+GtkBuilderScope *       gtk_builder_list_item_factory_get_scope         (GtkBuilderListItemFactory      *self) G_GNUC_PURE;
 
 G_END_DECLS
 
