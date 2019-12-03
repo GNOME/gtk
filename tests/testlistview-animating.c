@@ -107,16 +107,6 @@ do_stuff (gpointer store)
   return G_SOURCE_CONTINUE;
 }
 
-static gboolean
-revert_sort (gpointer sort)
-{
-  reverse_sort = !reverse_sort;
-
-  gtk_sort_list_model_resort (sort);
-
-  return G_SOURCE_CONTINUE;
-}
-
 int
 main (int   argc,
       char *argv[])
@@ -125,15 +115,15 @@ main (int   argc,
   GListStore *store;
   GtkSortListModel *sort;
   guint i;
+  GtkSorter *sorter;
 
   gtk_init ();
 
   store = g_list_store_new (G_TYPE_OBJECT);
   for (i = 0; i < AVERAGE; i++)
     add (store);
-  sort = gtk_sort_list_model_new (G_LIST_MODEL (store),
-                                  compare,
-                                  NULL, NULL);
+  sorter = gtk_custom_sorter_new (compare, NULL, NULL);
+  sort = gtk_sort_list_model_new (G_LIST_MODEL (store), sorter);
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (win), 400, 600);
@@ -180,13 +170,13 @@ main (int   argc,
                            NULL, NULL);
 
   g_timeout_add (100, do_stuff, store);
-  g_timeout_add_seconds (3, revert_sort, sort);
 
   gtk_widget_show (win);
 
   gtk_main ();
 
   g_object_unref (store);
+  g_object_unref (sorter);
 
   return 0;
 }
