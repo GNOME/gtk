@@ -21,7 +21,9 @@
 
 #include "gtkcolumnviewtitleprivate.h"
 
+#include "gtkcolumnviewprivate.h"
 #include "gtkcolumnviewcolumnprivate.h"
+#include "gtkcolumnviewsorterprivate.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkwidgetprivate.h"
@@ -117,26 +119,18 @@ click_pressed_cb (GtkGestureClick *gesture,
                   GtkWidget       *widget)
 {
   GtkColumnViewTitle *self = GTK_COLUMN_VIEW_TITLE (widget);
-  GtkInvertibleSorter *sorter;
-  GtkSorter *active_sorter;
+  GtkSorter *sorter;
+  GtkColumnView *view;
+  GtkColumnViewSorter *view_sorter;
 
-  sorter = gtk_column_view_column_get_invertible_sorter (self->column);
-  active_sorter = gtk_column_view_get_sorter (gtk_column_view_column_get_column_view (self->column));
+  sorter = gtk_column_view_column_get_sorter (self->column);
+  if (sorter == NULL)
+    return;
 
-  if (sorter)
-    {
-      if (GTK_SORTER (sorter) == active_sorter)
-        {
-          gtk_invertible_sorter_set_direction (sorter, 1 - gtk_invertible_sorter_get_direction (sorter));
-        }
-      else
-        {
-          gtk_invertible_sorter_set_direction (sorter, GTK_SORT_ASCENDING);
-          gtk_column_view_set_sorter (gtk_column_view_column_get_column_view (self->column), GTK_SORTER (sorter));
-        }
-    }
-
-  gtk_column_view_title_update (self);
+  view = gtk_column_view_column_get_column_view (self->column);
+  view_sorter = GTK_COLUMN_VIEW_SORTER (gtk_column_view_get_sorter (view));
+  gtk_column_view_sorter_add_column (view_sorter, self->column);
+  gtk_column_view_active_sorter_changed (view);
 }
 
 static void
@@ -177,20 +171,26 @@ gtk_column_view_title_new (GtkColumnViewColumn *column)
 void
 gtk_column_view_title_update (GtkColumnViewTitle *self)
 {
-  GtkInvertibleSorter *sorter;
-  GtkSorter *active_sorter;
+  GtkSorter *sorter;
+  GtkColumnView *view;
+  GtkColumnViewSorter *view_sorter;
+  gboolean inverted;
+  GtkColumnViewColumn *active;
 
   gtk_label_set_label (GTK_LABEL (self->title), gtk_column_view_column_get_title (self->column));
 
-  sorter = gtk_column_view_column_get_invertible_sorter (self->column);
-  active_sorter = gtk_column_view_get_sorter (gtk_column_view_column_get_column_view (self->column));
+  sorter = gtk_column_view_column_get_sorter (self->column);
 
   if (sorter)
     {
+      view = gtk_column_view_column_get_column_view (self->column);
+      view_sorter = GTK_COLUMN_VIEW_SORTER (gtk_column_view_get_sorter (view));
+      active = gtk_column_view_sorter_get_active (view_sorter, &inverted);
+
       gtk_widget_show (self->sort);
-      if (GTK_SORTER (sorter) == active_sorter)
+      if (self->column == active)
         {
-          if (gtk_invertible_sorter_get_direction (sorter) == GTK_SORT_ASCENDING)
+          if (inverted)
             gtk_image_set_from_icon_name (GTK_IMAGE (self->sort), "pan-down-symbolic");
           else
             gtk_image_set_from_icon_name (GTK_IMAGE (self->sort), "pan-up-symbolic");
