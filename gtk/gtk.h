@@ -84,6 +84,7 @@
 #include <gtk/gtkconstraint.h>
 #include <gtk/gtkcssprovider.h>
 #include <gtk/gtkcustomlayout.h>
+#include <gtk/gtkcustomsorter.h>
 #include <gtk/gtkdebug.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkdirectorylist.h>
