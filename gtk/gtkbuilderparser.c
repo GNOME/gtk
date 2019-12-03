@@ -18,17 +18,17 @@
 
 #include "config.h"
 
-#include <string.h>
-#include <gmodule.h>
+#include "gtkbuilderprivate.h"
+
+#include "gtkbuildable.h"
+#include "gtkbuilderscopeprivate.h"
+#include "gtkdebug.h"
+#include "gtkintl.h"
+#include "gtktypebuiltins.h"
+#include "gtkversion.h"
 
 #include <gio/gio.h>
-#include "gtkbuilderprivate.h"
-#include "gtkbuilder.h"
-#include "gtkbuildable.h"
-#include "gtkdebug.h"
-#include "gtkversion.h"
-#include "gtktypebuiltins.h"
-#include "gtkintl.h"
+#include <string.h>
 
 
 typedef struct {
@@ -485,21 +485,6 @@ builder_construct (ParserData  *data,
   return object;
 }
 
-static GType
-_get_type_by_symbol (const gchar *symbol)
-{
-  static GModule *module = NULL;
-  GTypeGetFunc func;
-
-  if (!module)
-    module = g_module_open (NULL, 0);
-
-  if (!g_module_symbol (module, symbol, (gpointer)&func))
-    return G_TYPE_INVALID;
-
-  return func ();
-}
-
 static void
 parse_requires (ParserData   *data,
                 const gchar  *element_name,
@@ -612,7 +597,7 @@ parse_object (GtkBuildableParseContext  *context,
       /* Call the GType function, and return the GType, it's guaranteed afterwards
        * that g_type_from_name on the name will return our GType
        */
-      object_type = _get_type_by_symbol (type_func);
+      object_type = gtk_builder_scope_get_type_from_function (gtk_builder_get_scope (data->builder), data->builder, type_func);
       if (object_type == G_TYPE_INVALID)
         {
           g_set_error (error,

@@ -55,6 +55,11 @@ typedef enum {
  *     The C implementation will use g_type_from_name() and if that fails try to guess the
  *     correct function name for registering the type and then use dlsym() to load it.  
  *     The default implementation just tries g_type_from_name() and otherwise fails.
+ * @get_type_from_function: Try to lookup a #GType via the given function name, specified
+ *     explicitly in a GtkBuilder file, like via the "type-func" attribute in the "<object>" tag.
+ *     This function is very rarely used.  
+ *     The C implementation will use dlsym() and call the resulting function as a #GTypeFunc.
+ *     The default implementation will fail and just return %G_TYPE_INVALID.
  * @create_closure: Create a closure with the given arguments. See gtk_builder_create_closure()
  *     for more details on those.  
  *     The C implementation will try to use dlsym() to locate the function name and then 
@@ -74,6 +79,9 @@ struct _GtkBuilderScopeInterface
   GType                 (* get_type_from_name)                  (GtkBuilderScope        *self,
                                                                  GtkBuilder             *builder,
                                                                  const char             *type_name);
+  GType                 (* get_type_from_function)              (GtkBuilderScope        *self,
+                                                                 GtkBuilder             *builder,
+                                                                 const char             *function_name);
 
   GClosure *            (* create_closure)                      (GtkBuilderScope        *self,
                                                                  GtkBuilder             *builder,
