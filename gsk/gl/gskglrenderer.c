@@ -2204,9 +2204,6 @@ render_shadow_node (GskGLRenderer   *self,
         }
       else
         {
-          if (dx == 0 && dy == 0)
-            continue;
-
           if (!add_offscreen_ops (self, builder,
                                   &shadow_child->bounds,
                                   shadow_child, &region, &is_offscreen,
