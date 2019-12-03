@@ -36,6 +36,7 @@
 #include "gtkstack.h"
 #include "gtkstylecontext.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcustomsorter.h"
 
 struct _GtkInspectorControllers
 {
@@ -220,6 +221,7 @@ gtk_inspector_controllers_set_object (GtkInspectorControllers *self,
   GtkMapListModel *map_model;
   GtkFlattenListModel *flatten_model;
   GtkSortListModel *sort_model;
+  GtkSorter *sorter;
 
   stack = gtk_widget_get_parent (GTK_WIDGET (self));
   page = gtk_stack_get_page (GTK_STACK (stack), GTK_WIDGET (self));
@@ -240,9 +242,9 @@ gtk_inspector_controllers_set_object (GtkInspectorControllers *self,
 
   flatten_model = gtk_flatten_list_model_new (GTK_TYPE_EVENT_CONTROLLER, G_LIST_MODEL (map_model));
 
-  sort_model = gtk_sort_list_model_new (G_LIST_MODEL (flatten_model),
-                                        compare_controllers,
-                                        NULL, NULL);
+  sorter = gtk_custom_sorter_new (compare_controllers, NULL, NULL);
+  sort_model = gtk_sort_list_model_new (G_LIST_MODEL (flatten_model), sorter);
+  g_object_unref (sorter);
 
   gtk_list_box_bind_model (GTK_LIST_BOX (self->listbox),
                            G_LIST_MODEL (sort_model),
