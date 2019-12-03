@@ -59,6 +59,7 @@
       <section>
         <xi:include href="xml/gtksorter.xml" />
         <xi:include href="xml/gtkcustomsorter.xml" />
+        <xi:include href="xml/gtkstringsorter.xml" />
       </section>
       <xi:include href="xml/gtkselectionmodel.xml" />
       <xi:include href="xml/gtknoselection.xml" />
