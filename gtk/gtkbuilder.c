@@ -216,6 +216,7 @@
 #include "gtkbuilderprivate.h"
 
 #include "gtkbuildable.h"
+#include "gtkbuilderlistitemfactory.h"
 #include "gtkbuilderscopeprivate.h"
 #include "gtkdebug.h"
 #include "gtkexpression.h"
@@ -700,6 +701,22 @@ gtk_builder_take_bindings (GtkBuilder *builder,
   priv->bindings = g_slist_concat (priv->bindings, bindings);
 }
 
+static void
+ensure_special_construct_parameters (GtkBuilder       *builder,
+                                     GType             object_type,
+                                     ObjectProperties *construct_parameters)
+{
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+  GValue value = G_VALUE_INIT;
+
+  if (g_type_is_a (object_type, GTK_TYPE_BUILDER_LIST_ITEM_FACTORY))
+    {
+      g_value_init (&value, GTK_TYPE_BUILDER_SCOPE);
+      g_value_set_object (&value, priv->scope);
+      object_properties_add (construct_parameters, "scope", &value);
+    }
+}
+
 GObject *
 _gtk_builder_construct (GtkBuilder  *builder,
                         ObjectInfo  *info,
@@ -797,6 +814,8 @@ _gtk_builder_construct (GtkBuilder  *builder,
     }
   else
     {
+      ensure_special_construct_parameters (builder, info->type, construct_parameters);
+
       obj = g_object_new_with_properties (info->type,
                                           construct_parameters->len,
                                           (const char **) construct_parameters->names->pdata,
