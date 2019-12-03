@@ -30,6 +30,7 @@ struct _GtkBuilderListItemFactory
 {
   GtkListItemFactory parent_instance;
 
+  GtkBuilderScope *scope;
   GBytes *bytes;
   char *resource;
 };
@@ -43,6 +44,7 @@ enum {
   PROP_0,
   PROP_BYTES,
   PROP_RESOURCE,
+  PROP_SCOPE,
 
   N_PROPS
 };
@@ -64,6 +66,8 @@ gtk_builder_list_item_factory_setup (GtkListItemFactory *factory,
   builder = gtk_builder_new ();
 
   gtk_builder_set_current_object (builder, G_OBJECT (list_item));
+  if (self->scope)
+    gtk_builder_set_scope (builder, self->scope);
 
   if (!gtk_builder_extend_with_template  (builder, GTK_WIDGET (list_item), G_OBJECT_TYPE (list_item),
 					  (const gchar *)g_bytes_get_data (self->bytes, NULL),
@@ -99,6 +103,10 @@ gtk_builder_list_item_factory_get_property (GObject    *object,
 
     case PROP_RESOURCE:
       g_value_set_string (value, self->resource);
+      break;
+
+    case PROP_SCOPE:
+      g_value_set_object (value, self->scope);
       break;
 
     default:
@@ -163,6 +171,10 @@ gtk_builder_list_item_factory_set_property (GObject      *object,
       }
       break;
 
+    case PROP_SCOPE:
+      self->scope = g_value_dup_object (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -174,6 +186,7 @@ gtk_builder_list_item_factory_finalize (GObject *object)
 {
   GtkBuilderListItemFactory *self = GTK_BUILDER_LIST_ITEM_FACTORY (object);
 
+  g_clear_object (&self->scope);
   g_bytes_unref (self->bytes);
   g_free (self->resource);
 
@@ -216,8 +229,19 @@ gtk_builder_list_item_factory_class_init (GtkBuilderListItemFactoryClass *klass)
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (gobject_class, N_PROPS, properties);
+  /**
+   * GtkBuilderListItemFactory:scope:
+   *
+   * scope to use when instantiating listitems
+   */
+  properties[PROP_SCOPE] =
+    g_param_spec_object ("scope",
+                         P_("Scope"),
+                         P_("scope to use when instantiating listitems"),
+                         GTK_TYPE_BUILDER_SCOPE,
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
+  g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
 
 static void
@@ -226,22 +250,27 @@ gtk_builder_list_item_factory_init (GtkBuilderListItemFactory *self)
 }
 
 GtkListItemFactory *
-gtk_builder_list_item_factory_new_from_bytes (GBytes *bytes)
+gtk_builder_list_item_factory_new_from_bytes (GtkBuilderScope *scope,
+                                              GBytes          *bytes)
 {
   g_return_val_if_fail (bytes != NULL, NULL);
 
   return g_object_new (GTK_TYPE_BUILDER_LIST_ITEM_FACTORY,
                        "bytes", bytes,
+                       "scope", scope,
                        NULL);
 }
 
 GtkListItemFactory *
-gtk_builder_list_item_factory_new_from_resource (const char *resource_path)
+gtk_builder_list_item_factory_new_from_resource (GtkBuilderScope *scope,
+                                                 const char      *resource_path)
 {
+  g_return_val_if_fail (scope == NULL || GTK_IS_BUILDER_SCOPE (scope), NULL);
   g_return_val_if_fail (resource_path != NULL, NULL);
 
   return g_object_new (GTK_TYPE_BUILDER_LIST_ITEM_FACTORY,
                        "resource", resource_path,
+                       "scope", scope,
                        NULL);
 }
 
@@ -278,5 +307,21 @@ gtk_builder_list_item_factory_get_resource (GtkBuilderListItemFactory *self)
   g_return_val_if_fail (GTK_IS_BUILDER_LIST_ITEM_FACTORY (self), NULL);
 
   return self->resource;
+}
+
+/**
+ * gtk_builder_list_item_factory_get_scope:
+ * @self: a #GtkBuilderListItemFactory
+ *
+ * Gets the scope used when constructing listitems.
+ *
+ * Returns: (transfer none) (nullable): The scope used when constructing listitems
+ **/
+GtkBuilderScope *
+gtk_builder_list_item_factory_get_scope (GtkBuilderListItemFactory *self)
+{
+  g_return_val_if_fail (GTK_IS_BUILDER_LIST_ITEM_FACTORY (self), NULL);
+
+  return self->scope;
 }
 
