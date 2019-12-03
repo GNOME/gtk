@@ -302,13 +302,13 @@ test_string_properties (void)
   gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "Thirteen");
   assert_model (model, "13");
 
-  gtk_string_filter_set_match_substring (GTK_STRING_FILTER (filter), FALSE);
+  gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), GTK_STRING_FILTER_MATCH_EXACT);
   assert_model (model, "13");
 
   gtk_string_filter_set_ignore_case (GTK_STRING_FILTER (filter), TRUE);
   assert_model (model, "13");
 
-  gtk_string_filter_set_match_substring (GTK_STRING_FILTER (filter), TRUE);
+  gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), GTK_STRING_FILTER_MATCH_SUBSTRING);
   assert_model (model, "13 113 213 313 413 513 613 713 813 913");
 
   g_object_unref (model);
