@@ -596,6 +596,7 @@ gtk_column_view_new
 gtk_column_view_get_columns
 gtk_column_view_get_model
 gtk_column_view_set_model
+gtk_column_view_get_sorter
 gtk_column_view_get_show_separators
 gtk_column_view_set_show_separators
 <SUBSECTION Standard>
