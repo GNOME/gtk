@@ -15,7 +15,7 @@
             <child>
               <object class="GtkColumnView" id="list2">
                 <child>
-                  <object class="GtkColumnViewColumn">
+                  <object class="GtkColumnViewColumn" id="name">
                     <property name="title">Name</property>
                     <property name="factory">
                       <object class="GtkSignalListItemFactory">
@@ -26,7 +26,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkColumnViewColumn">
+                  <object class="GtkColumnViewColumn" id="type">
                     <property name="title">Type</property>
                     <property name="factory">
                       <object class="GtkSignalListItemFactory">
@@ -37,7 +37,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkColumnViewColumn">
+                  <object class="GtkColumnViewColumn" id="origin">
                     <property name="title">Defined At</property>
                     <property name="factory">
                       <object class="GtkSignalListItemFactory">
