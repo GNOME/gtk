@@ -93,6 +93,7 @@
 #include <gtk/gtkcoverflow.h>
 #include <gtk/gtkcssprovider.h>
 #include <gtk/gtkcustomlayout.h>
+#include <gtk/gtkcustomsorter.h>
 #include <gtk/gtkdebug.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkdirectorylist.h>
@@ -154,6 +155,7 @@
 #include <gtk/gtkimcontextsimple.h>
 #include <gtk/gtkimmulticontext.h>
 #include <gtk/gtkinfobar.h>
+#include <gtk/gtkinvertiblesorter.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtklayoutmanager.h>
 #include <gtk/gtklayoutchild.h>
@@ -230,6 +232,7 @@
 #include <gtk/gtksingleselection.h>
 #include <gtk/gtkslicelistmodel.h>
 #include <gtk/gtksnapshot.h>
+#include <gtk/gtksorter.h>
 #include <gtk/gtksortlistmodel.h>
 #include <gtk/gtkstacksidebar.h>
 #include <gtk/gtksizegroup.h>
@@ -240,6 +243,7 @@
 #include <gtk/gtkstackswitcher.h>
 #include <gtk/gtkstatusbar.h>
 #include <gtk/gtkstringfilter.h>
+#include <gtk/gtkstringsorter.h>
 #include <gtk/gtkstylecontext.h>
 #include <gtk/gtkstyleprovider.h>
 #include <gtk/gtkswitch.h>
