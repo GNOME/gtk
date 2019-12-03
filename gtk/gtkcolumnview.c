@@ -54,6 +54,9 @@ struct _GtkColumnView
 
   GtkListView *listview;
   GtkColumnListItemFactory *factory;
+
+  GtkSortListModel *sort_model;
+  GtkSorter *sorter;
 };
 
 struct _GtkColumnViewClass
@@ -71,6 +74,8 @@ enum
   PROP_SHOW_SEPARATORS,
   PROP_VADJUSTMENT,
   PROP_VSCROLL_POLICY,
+  PROP_SORT_MODEL,
+  PROP_SORTER,
 
   N_PROPS
 };
@@ -250,6 +255,9 @@ gtk_column_view_dispose (GObject *object)
   g_clear_pointer ((GtkWidget **) &self->listview, gtk_widget_unparent);
   g_clear_object (&self->factory);
 
+  g_clear_object (&self->sort_model);
+  g_clear_object (&self->sorter);
+
   G_OBJECT_CLASS (gtk_column_view_parent_class)->dispose (object);
 }
 
@@ -299,6 +307,14 @@ gtk_column_view_get_property (GObject    *object,
 
     case PROP_VSCROLL_POLICY:
       g_value_set_enum (value, gtk_scrollable_get_vscroll_policy (GTK_SCROLLABLE (self->listview)));
+      break;
+
+    case PROP_SORT_MODEL:
+      g_value_set_object (value, self->sort_model);
+      break;
+
+    case PROP_SORTER:
+      g_value_set_object (value, self->sorter);
       break;
 
     default:
@@ -355,6 +371,14 @@ gtk_column_view_set_property (GObject      *object,
           gtk_scrollable_set_vscroll_policy (GTK_SCROLLABLE (self->listview), g_value_get_enum (value));
           g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_VSCROLL_POLICY]);
         }
+      break;
+
+    case PROP_SORT_MODEL:
+      gtk_column_view_set_sort_model (self, g_value_get_object (value));
+      break;
+
+    case PROP_SORTER:
+      gtk_column_view_set_sorter (self, g_value_get_object (value));
       break;
 
     default:
@@ -428,6 +452,20 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                           P_("Show separators between rows"),
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_SORT_MODEL] =
+    g_param_spec_object ("sort-model",
+                         P_("Sort Model"),
+                         P_("Sort Model for the items displayed"),
+                         GTK_TYPE_SORT_LIST_MODEL,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_SORTER] =
+    g_param_spec_object ("sorter",
+                         P_("Sorter"),
+                         P_("Sorter"),
+                         GTK_TYPE_SORTER,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
@@ -681,3 +719,42 @@ gtk_column_view_get_header_widget (GtkColumnView *self)
   return GTK_LIST_ITEM_WIDGET (self->header);
 }
 
+void
+gtk_column_view_set_sort_model (GtkColumnView *self,
+                                GtkSortListModel *sort_model)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+  g_return_if_fail (sort_model == NULL || GTK_IS_SORT_LIST_MODEL (sort_model));
+
+  if (!g_set_object (&self->sort_model, sort_model))
+    return;
+
+  if (self->sort_model)
+    gtk_sort_list_model_set_sorter (self->sort_model, self->sorter);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SORT_MODEL]);
+}
+
+void
+gtk_column_view_set_sorter (GtkColumnView *self,
+                            GtkSorter     *sorter)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+  g_return_if_fail (sorter == NULL || GTK_IS_SORTER (sorter));
+
+  if (!g_set_object (&self->sorter, sorter))
+    return;
+
+  if (self->sort_model)
+    gtk_sort_list_model_set_sorter (self->sort_model, self->sorter);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SORTER]);
+}
+
+GtkSorter *
+gtk_column_view_get_sorter (GtkColumnView *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), NULL);
+
+  return self->sorter;
+}
