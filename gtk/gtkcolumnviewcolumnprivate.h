@@ -24,6 +24,7 @@
 
 #include "gtk/gtkcolumnviewcellprivate.h"
 
+
 void                    gtk_column_view_column_set_column_view          (GtkColumnViewColumn    *self,
                                                                          GtkColumnView          *view);
 
