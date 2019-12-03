@@ -212,6 +212,7 @@
 #include <gtk/gtksingleselection.h>
 #include <gtk/gtkslicelistmodel.h>
 #include <gtk/gtksnapshot.h>
+#include <gtk/gtksorter.h>
 #include <gtk/gtksortlistmodel.h>
 #include <gtk/gtkstacksidebar.h>
 #include <gtk/gtksizegroup.h>
