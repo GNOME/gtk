@@ -340,7 +340,7 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
                             P_("Sorter"),
                             P_("The sorter for this model"),
                             GTK_TYPE_SORTER,
-                            GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSortListModel:item-type:
