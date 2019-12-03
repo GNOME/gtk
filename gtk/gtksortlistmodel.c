@@ -23,6 +23,7 @@
 
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtkcustomsorter.h"
 
 /**
  * SECTION:gtksortlistmodel
@@ -54,9 +55,7 @@ struct _GtkSortListModel
 
   GType item_type;
   GListModel *model;
-  GCompareDataFunc sort_func;
-  gpointer user_data;
-  GDestroyNotify user_destroy;
+  GtkSorter *sorter;
 
   GSequence *sorted; /* NULL if sort_func == NULL */
   GSequence *unsorted; /* NULL if sort_func == NULL */
@@ -157,6 +156,14 @@ gtk_sort_list_model_remove_items (GtkSortListModel *self,
   *unmodified_end = end;
 }
 
+static int
+_sort_func (gconstpointer item1,
+            gconstpointer item2,
+            gpointer      data)
+{
+  return gtk_sorter_compare (GTK_SORTER (data), (gpointer)item1, (gpointer)item2);
+}
+
 static void
 gtk_sort_list_model_add_items (GtkSortListModel *self,
                                guint             position,
@@ -173,7 +180,7 @@ gtk_sort_list_model_add_items (GtkSortListModel *self,
   for (i = 0; i < n_items; i++)
     {
       gpointer item = g_list_model_get_item (self->model, position + i);
-      sorted_iter = g_sequence_insert_sorted (self->sorted, item, self->sort_func, self->user_data);
+      sorted_iter = g_sequence_insert_sorted (self->sorted, item, _sort_func, self->sorter);
       g_sequence_insert_before (unsorted_iter, sorted_iter);
       if (unmodified_start != NULL || unmodified_end != NULL)
         {
@@ -251,7 +258,7 @@ gtk_sort_list_model_get_property (GObject     *object,
   switch (prop_id)
     {
     case PROP_HAS_SORT:
-      g_value_set_boolean (value, self->sort_func != NULL);
+      g_value_set_boolean (value, self->sorter != NULL);
       break;
 
     case PROP_ITEM_TYPE:
@@ -286,11 +293,7 @@ gtk_sort_list_model_dispose (GObject *object)
   GtkSortListModel *self = GTK_SORT_LIST_MODEL (object);
 
   gtk_sort_list_model_clear_model (self);
-  if (self->user_destroy)
-    self->user_destroy (self->user_data);
-  self->sort_func = NULL;
-  self->user_data = NULL;
-  self->user_destroy = NULL;
+  g_clear_object (&self->sorter);
 
   G_OBJECT_CLASS (gtk_sort_list_model_parent_class)->dispose (object);
 };
@@ -404,7 +407,7 @@ gtk_sort_list_model_new_for_type (GType item_type)
 static void
 gtk_sort_list_model_create_sequences (GtkSortListModel *self)
 {
-  if (!self->sort_func || self->model == NULL)
+  if (self->sorter == NULL || self->model == NULL)
     return;
 
   self->sorted = g_sequence_new (g_object_unref);
@@ -431,24 +434,23 @@ gtk_sort_list_model_set_sort_func (GtkSortListModel *self,
                                    gpointer          user_data,
                                    GDestroyNotify    user_destroy)
 {
+  GtkSorter *sorter = NULL;
   guint n_items;
 
   g_return_if_fail (GTK_IS_SORT_LIST_MODEL (self));
   g_return_if_fail (sort_func != NULL || (user_data == NULL && !user_destroy));
 
-  if (!sort_func && !self->sort_func)
+  if (!sort_func && !self->sorter)
     return;
 
-  if (self->user_destroy)
-    self->user_destroy (self->user_data);
+  if (sort_func)
+    sorter = gtk_custom_sorter_new (sort_func, user_data, user_destroy);
+  g_set_object (&self->sorter, sorter);
 
   g_clear_pointer (&self->unsorted, g_sequence_free);
   g_clear_pointer (&self->sorted, g_sequence_free);
-  self->sort_func = sort_func;
-  self->user_data = user_data;
-  self->user_destroy = user_destroy;
   
-    gtk_sort_list_model_create_sequences (self);
+  gtk_sort_list_model_create_sequences (self);
     
   n_items = g_list_model_get_n_items (G_LIST_MODEL (self));
   if (n_items > 1)
@@ -530,7 +532,7 @@ gtk_sort_list_model_has_sort (GtkSortListModel *self)
 {
   g_return_val_if_fail (GTK_IS_SORT_LIST_MODEL (self), FALSE);
 
-  return self->sort_func != NULL;
+  return self->sorter != NULL;
 }
 
 /**
@@ -556,7 +558,7 @@ gtk_sort_list_model_resort (GtkSortListModel *self)
   if (n_items <= 1)
     return;
 
-  g_sequence_sort (self->sorted, self->sort_func, self->user_data);
+  g_sequence_sort (self->sorted, _sort_func, self->sorter);
 
   g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items, n_items);
 }
