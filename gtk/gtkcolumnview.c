@@ -739,6 +739,8 @@ void
 gtk_column_view_set_sorter (GtkColumnView *self,
                             GtkSorter     *sorter)
 {
+  int i;
+
   g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
   g_return_if_fail (sorter == NULL || GTK_IS_SORTER (sorter));
 
@@ -747,6 +749,12 @@ gtk_column_view_set_sorter (GtkColumnView *self,
 
   if (self->sort_model)
     gtk_sort_list_model_set_sorter (self->sort_model, self->sorter);
+
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->columns)); i++)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+      gtk_column_view_column_active_sorter_changed (column);
+    }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SORTER]);
 }

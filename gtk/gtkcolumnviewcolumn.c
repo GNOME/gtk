@@ -593,3 +593,10 @@ gtk_column_view_column_get_sorter (GtkColumnViewColumn *self)
 
   return self->sorter;
 }
+
+void
+gtk_column_view_column_active_sorter_changed (GtkColumnViewColumn *self)
+{
+  if (self->header)
+    gtk_column_view_title_update (GTK_COLUMN_VIEW_TITLE (self->header));
+}
