@@ -25,6 +25,9 @@
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkwidgetprivate.h"
+#include "gtkbox.h"
+#include "gtkimage.h"
+#include "gtkgestureclick.h"
 
 struct _GtkColumnViewTitle
 {
@@ -32,7 +35,9 @@ struct _GtkColumnViewTitle
 
   GtkColumnViewColumn *column;
 
+  GtkWidget *box;
   GtkWidget *title;
+  GtkWidget *sort;
 };
 
 struct _GtkColumnViewTitleClass
@@ -74,7 +79,7 @@ gtk_column_view_title_dispose (GObject *object)
 {
   GtkColumnViewTitle *self = GTK_COLUMN_VIEW_TITLE (object);
 
-  g_clear_pointer(&self->title, gtk_widget_unparent);
+  g_clear_pointer (&self->box, gtk_widget_unparent);
 
   g_clear_object (&self->column);
 
@@ -105,14 +110,55 @@ gtk_column_view_title_resize_func (GtkWidget *widget)
 }
 
 static void
+click_pressed_cb (GtkGestureClick *gesture,
+                  guint            n_press,
+                  gdouble          x,
+                  gdouble          y,
+                  GtkWidget       *widget)
+{
+  GtkColumnViewTitle *self = GTK_COLUMN_VIEW_TITLE (widget);
+  GtkSorter *sorter;
+  GtkSorter *active_sorter;
+
+  sorter = gtk_column_view_column_get_sorter (self->column);
+  active_sorter = gtk_column_view_get_sorter (gtk_column_view_column_get_column_view (self->column));
+
+  if (sorter)
+    {
+      if (sorter == active_sorter)
+        {
+          gtk_sorter_set_sort_direction (sorter, 1 - gtk_sorter_get_sort_direction (sorter));
+        }
+      else
+        {
+          gtk_sorter_set_sort_direction (sorter, GTK_SORT_ASCENDING);
+          gtk_column_view_set_sorter (gtk_column_view_column_get_column_view (self->column), sorter);
+        }
+    }
+
+  gtk_column_view_title_update (self);
+}
+
+static void
 gtk_column_view_title_init (GtkColumnViewTitle *self)
 {
   GtkWidget *widget = GTK_WIDGET (self);
+  GtkGesture *gesture;
 
   widget->priv->resize_func = gtk_column_view_title_resize_func;
 
+  self->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_parent (self->box, widget);
+
   self->title = gtk_label_new (NULL);
-  gtk_widget_set_parent (self->title, widget);
+  gtk_container_add (GTK_CONTAINER (self->box), self->title);
+
+  self->sort = gtk_image_new ();
+  gtk_container_add (GTK_CONTAINER (self->box), self->sort);
+
+  gesture = gtk_gesture_click_new ();
+  g_signal_connect (gesture, "pressed", G_CALLBACK (click_pressed_cb), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
 }
 
 GtkWidget *
@@ -120,8 +166,7 @@ gtk_column_view_title_new (GtkColumnViewColumn *column)
 {
   GtkColumnViewTitle *title;
 
-  title = g_object_new (GTK_TYPE_COLUMN_VIEW_TITLE,
-                        NULL);
+  title = g_object_new (GTK_TYPE_COLUMN_VIEW_TITLE, NULL);
 
   title->column = g_object_ref (column);
   gtk_column_view_title_update (title);
@@ -132,7 +177,29 @@ gtk_column_view_title_new (GtkColumnViewColumn *column)
 void
 gtk_column_view_title_update (GtkColumnViewTitle *self)
 {
+  GtkSorter *sorter;
+  GtkSorter *active_sorter;
+
   gtk_label_set_label (GTK_LABEL (self->title), gtk_column_view_column_get_title (self->column));
+
+  sorter = gtk_column_view_column_get_sorter (self->column);
+  active_sorter = gtk_column_view_get_sorter (gtk_column_view_column_get_column_view (self->column));
+
+  if (sorter)
+    {
+      gtk_widget_show (self->sort);
+      if (sorter == active_sorter)
+        {
+          if (gtk_sorter_get_sort_direction (sorter) == GTK_SORT_ASCENDING)
+            gtk_image_set_from_icon_name (GTK_IMAGE (self->sort), "pan-down-symbolic");
+          else
+            gtk_image_set_from_icon_name (GTK_IMAGE (self->sort), "pan-up-symbolic");
+        }
+      else
+        gtk_image_clear (GTK_IMAGE (self->sort));
+    }
+  else
+    gtk_widget_hide (self->sort);
 }
 
 GtkColumnViewColumn *
