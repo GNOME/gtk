@@ -78,9 +78,6 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_column_view_set_sort_model                  (GtkColumnView          *self,
                                                                  GtkSortListModel       *model);
 GDK_AVAILABLE_IN_ALL
-void            gtk_column_view_set_sorter                      (GtkColumnView          *self,
-                                                                 GtkSorter              *sorter);
-GDK_AVAILABLE_IN_ALL
 GtkSorter *     gtk_column_view_get_sorter                      (GtkColumnView          *self);
 
 G_END_DECLS

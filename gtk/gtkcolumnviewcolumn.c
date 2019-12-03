@@ -32,7 +32,7 @@
 #include "gtksizegroup.h"
 #include "gtkstylecontext.h"
 #include "gtkwidgetprivate.h"
-#include "gtkinvertiblesorter.h"
+#include "gtksorter.h"
 
 /**
  * SECTION:gtkcolumnviewcolumn
@@ -49,7 +49,7 @@ struct _GtkColumnViewColumn
 
   GtkListItemFactory *factory;
   char *title;
-  GtkInvertibleSorter *sorter;
+  GtkSorter *sorter;
 
   /* data for the view */
   GtkColumnView *view;
@@ -122,7 +122,7 @@ gtk_column_view_column_get_property (GObject    *object,
       break;
 
     case PROP_SORTER:
-      g_value_set_object (value, gtk_invertible_sorter_get_sorter (self->sorter));
+      g_value_set_object (value, self->sorter);
       break;
 
     default:
@@ -219,8 +219,6 @@ gtk_column_view_column_init (GtkColumnViewColumn *self)
 {
   self->minimum_size_request = -1;
   self->natural_size_request = -1;
-
-  self->sorter = GTK_INVERTIBLE_SORTER (gtk_invertible_sorter_new (NULL));
 }
 
 /**
@@ -580,10 +578,8 @@ gtk_column_view_column_set_sorter (GtkColumnViewColumn *self,
   g_return_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self));
   g_return_if_fail (sorter == NULL || GTK_IS_SORTER (sorter));
 
-  if (gtk_invertible_sorter_get_sorter (self->sorter) == sorter)
+  if (!g_set_object (&self->sorter, sorter))
     return;
-
-  gtk_invertible_sorter_set_sorter (self->sorter, sorter);
 
   if (self->header)
     gtk_column_view_title_update (GTK_COLUMN_VIEW_TITLE (self->header));
@@ -596,7 +592,7 @@ gtk_column_view_column_get_sorter (GtkColumnViewColumn *self)
 {
   g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self), NULL);
 
-  return gtk_invertible_sorter_get_sorter (self->sorter);
+  return self->sorter;
 }
 
 void
@@ -604,10 +600,4 @@ gtk_column_view_column_active_sorter_changed (GtkColumnViewColumn *self)
 {
   if (self->header)
     gtk_column_view_title_update (GTK_COLUMN_VIEW_TITLE (self->header));
-}
-
-GtkInvertibleSorter *
-gtk_column_view_column_get_invertible_sorter (GtkColumnViewColumn *self)
-{
-  return self->sorter;
 }
