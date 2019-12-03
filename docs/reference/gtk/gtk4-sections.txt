@@ -2856,6 +2856,58 @@ gtk_slice_list_model_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtksorter</FILE>
+<TITLE>GtkSorter</TITLE>
+GtkSorter
+GtkSorterChange
+gtk_sorter_compare
+gtk_sorter_changed
+<SUBSECTION Standard>
+GTK_SORTER
+GTK_IS_SORTER
+GTK_TYPE_SORTER
+GTK_SORTER_CLASS
+GTK_IS_SORTER_CLASS
+GTK_SORTER_GET_CLASS
+<SUBSECTION Private>
+gtk_sorter_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkstringsorter</FILE>
+<TITLE>GtkStringSorter</TITLE>
+GtkStringSorter
+gtk_string_sorter_new
+gtk_string_sorter_get_expression
+gtk_string_sorter_set_expression
+gtk_string_sorter_get_ignore_case
+gtk_string_sorter_set_ignore_case
+<SUBSECTION Standard>
+GTK_STRING_SORTER
+GTK_IS_STRING_SORTER
+GTK_TYPE_STRING_SORTER
+GTK_IS_STRING_SORTER_CLASS
+GTK_STRING_SORTER_GET_CLASS
+<SUBSECTION Private>
+gtk_string_sorter_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkcustomsorter</FILE>
+<TITLE>GtkCustomSorter</TITLE>
+GtkCustomSorter
+gtk_custom_sorter_new
+<SUBSECTION Standard>
+GTK_CUSTOM_SORTER
+GTK_IS_CUSTOM_SORTER
+GTK_TYPE_CUSTOM_SORTER
+GTK_IS_CUSTOM_SORTER_CLASS
+GTK_CUSTOM_SORTER_GET_CLASS
+<SUBSECTION Private>
+gtk_custom_sorter_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtksortlistmodel</FILE>
 <TITLE>GtkSortListModel</TITLE>
 GtkSortListModel
