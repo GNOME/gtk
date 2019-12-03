@@ -32,6 +32,7 @@
 #include "gtksizegroup.h"
 #include "gtkstylecontext.h"
 #include "gtkwidgetprivate.h"
+#include "gtksorter.h"
 
 /**
  * SECTION:gtkcolumnviewcolumn
@@ -48,6 +49,7 @@ struct _GtkColumnViewColumn
 
   GtkListItemFactory *factory;
   char *title;
+  GtkSorter *sorter;
 
   /* data for the view */
   GtkColumnView *view;
@@ -73,6 +75,7 @@ enum
   PROP_COLUMN_VIEW,
   PROP_FACTORY,
   PROP_TITLE,
+  PROP_SORTER,
 
   N_PROPS
 };
@@ -117,6 +120,10 @@ gtk_column_view_column_get_property (GObject    *object,
       g_value_set_string (value, self->title);
       break;
 
+    case PROP_SORTER:
+      g_value_set_object (value, self->sorter);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -139,6 +146,10 @@ gtk_column_view_column_set_property (GObject      *object,
 
     case PROP_TITLE:
       gtk_column_view_column_set_title (self, g_value_get_string (value));
+      break;
+
+    case PROP_SORTER:
+      gtk_column_view_column_set_sorter (self, g_value_get_object (value));
       break;
 
     default:
@@ -191,6 +202,13 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                           P_("Title displayed in the header"),
                           NULL,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_SORTER] =
+    g_param_spec_object ("sorter",
+                         P_("Sorter"),
+                         P_("Sorter for sorting list items"),
+                         GTK_TYPE_SORTER,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
@@ -552,3 +570,26 @@ gtk_column_view_column_get_title (GtkColumnViewColumn *self)
   return self->title;
 }
 
+void
+gtk_column_view_column_set_sorter (GtkColumnViewColumn *self,
+                                   GtkSorter           *sorter)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self));
+  g_return_if_fail (sorter == NULL || GTK_IS_SORTER (sorter));
+
+  if (!g_set_object (&self->sorter, sorter))
+    return;
+
+  if (self->header)
+    gtk_column_view_title_update (GTK_COLUMN_VIEW_TITLE (self->header));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SORTER]);
+}
+
+GtkSorter *
+gtk_column_view_column_get_sorter (GtkColumnViewColumn *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self), NULL);
+
+  return self->sorter;
+}
