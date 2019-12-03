@@ -69,7 +69,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean        gtk_column_view_get_show_separators             (GtkColumnView          *self);
 GDK_AVAILABLE_IN_ALL
 void            gtk_column_view_set_show_separators             (GtkColumnView          *self,
-                                                                 gboolean                show_Separators);
+                                                                 gboolean                show_separators);
 
 G_END_DECLS
 
