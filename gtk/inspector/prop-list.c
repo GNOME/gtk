@@ -67,6 +67,9 @@ struct _GtkInspectorPropListPrivate
   GtkWidget *search_stack;
   GtkWidget *list2;
   GtkFilter *filter;
+  GtkColumnViewColumn *name;
+  GtkColumnViewColumn *type;
+  GtkColumnViewColumn *origin;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorPropList, gtk_inspector_prop_list, GTK_TYPE_BOX)
@@ -87,7 +90,7 @@ show_search_entry (GtkInspectorPropList *pl)
 }
 
 static char *
-holder_prop (gpointer object)
+holder_prop (gpointer item)
 {
   GParamSpec *prop = prop_holder_get_pspec (PROP_HOLDER (item));
 
@@ -114,6 +117,7 @@ static void
 gtk_inspector_prop_list_init (GtkInspectorPropList *pl)
 {
   GtkExpression *expression;
+  GtkSorter *sorter;
 
   pl->priv = gtk_inspector_prop_list_get_instance_private (pl);
   gtk_widget_init_template (GTK_WIDGET (pl));
@@ -126,6 +130,36 @@ gtk_inspector_prop_list_init (GtkInspectorPropList *pl)
                                             NULL, NULL);
  
   gtk_string_filter_set_expression (GTK_STRING_FILTER (pl->priv->filter), expression);
+
+  sorter = gtk_string_sorter_new ();
+  gtk_string_sorter_set_expression (GTK_STRING_SORTER (sorter), expression);
+  gtk_column_view_column_set_sorter (pl->priv->name, sorter);
+  g_object_unref (sorter);
+
+  gtk_expression_unref (expression);
+
+  expression = gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
+                                            0, NULL,
+                                            (GCallback)holder_type,
+                                            NULL, NULL);
+ 
+  sorter = gtk_string_sorter_new ();
+  gtk_string_sorter_set_expression (GTK_STRING_SORTER (sorter), expression);
+  gtk_column_view_column_set_sorter (pl->priv->type, sorter);
+  g_object_unref (sorter);
+
+  gtk_expression_unref (expression);
+
+  expression = gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
+                                            0, NULL,
+                                            (GCallback)holder_origin,
+                                            NULL, NULL);
+ 
+  sorter = gtk_string_sorter_new ();
+  gtk_string_sorter_set_expression (GTK_STRING_SORTER (sorter), expression);
+  gtk_column_view_column_set_sorter (pl->priv->origin, sorter);
+  g_object_unref (sorter);
+
   gtk_expression_unref (expression);
 }
 
@@ -423,6 +457,9 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/prop-list.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, list2);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, name);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, type);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, origin);
   gtk_widget_class_bind_template_callback (widget_class, setup_name_cb);
   gtk_widget_class_bind_template_callback (widget_class, bind_name_cb);
   gtk_widget_class_bind_template_callback (widget_class, setup_type_cb);
@@ -556,6 +593,7 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
   GListStore *store;
   GListModel *list;
   GListModel *filtered;
+  GtkSortListModel *sorted;
 
   if (!object)
     return FALSE;
@@ -593,13 +631,16 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
     g_signal_connect_object (object, "destroy", G_CALLBACK (cleanup_object), pl, G_CONNECT_SWAPPED);
 
   filtered = G_LIST_MODEL (gtk_filter_list_model_new (G_LIST_MODEL (store), pl->priv->filter));
-  list = G_LIST_MODEL (gtk_no_selection_new (filtered));
+  sorted = gtk_sort_list_model_new (filtered, NULL);
+  list = G_LIST_MODEL (gtk_no_selection_new (G_LIST_MODEL (sorted)));
 
   gtk_column_view_set_model (GTK_COLUMN_VIEW (pl->priv->list2), list);
+  gtk_column_view_set_sort_model (GTK_COLUMN_VIEW (pl->priv->list2), sorted);
 
   gtk_widget_show (GTK_WIDGET (pl));
 
   g_object_unref (list);
+  g_object_unref (sorted);
   g_object_unref (filtered);
   g_object_unref (store);
 
