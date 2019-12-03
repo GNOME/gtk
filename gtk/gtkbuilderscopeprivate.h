@@ -27,6 +27,9 @@ G_BEGIN_DECLS
 GType                   gtk_builder_scope_get_type_from_name    (GtkBuilderScope        *self,
                                                                  GtkBuilder             *builder,
                                                                  const char             *type_name);
+GType                   gtk_builder_scope_get_type_from_function(GtkBuilderScope        *self,
+                                                                 GtkBuilder             *builder,
+                                                                 const char             *function_name);
 GClosure *              gtk_builder_scope_create_closure        (GtkBuilderScope        *self,
                                                                  GtkBuilder             *builder,
                                                                  const char             *function_name,
