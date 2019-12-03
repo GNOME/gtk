@@ -44,6 +44,7 @@
 #include "gtkroot.h"
 #include "gtkgestureclick.h"
 #include "gtkstylecontext.h"
+#include "prop-holder.h"
 
 enum
 {
@@ -65,16 +66,10 @@ struct _GtkInspectorPropListPrivate
   GtkWidget *search_entry;
   GtkWidget *search_stack;
   GtkWidget *list2;
-  GtkWidget *name_sort_indicator;
-  GtkWidget *origin_sort_indicator;
-  GtkWidget *name_heading;
-  GtkWidget *origin_heading;
-  SortColumn sort_column;
-  GtkSortType sort_direction;
-  GtkSizeGroup *names;
-  GtkSizeGroup *types;
-  GtkSizeGroup *values;
-  GtkSizeGroup *origins;
+  GtkFilter *filter;
+  GtkColumnViewColumn *name;
+  GtkColumnViewColumn *type;
+  GtkColumnViewColumn *origin;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorPropList, gtk_inspector_prop_list, GTK_TYPE_BOX)
@@ -94,103 +89,78 @@ show_search_entry (GtkInspectorPropList *pl)
                                pl->priv->search_entry);
 }
 
-static void
-apply_sort (GtkInspectorPropList *pl,
-            SortColumn            column,
-            GtkSortType           direction)
+static char *
+holder_prop (gpointer item)
 {
-  const char *icon_name;
+  GParamSpec *prop = prop_holder_get_pspec (PROP_HOLDER (item));
 
-  icon_name = direction == GTK_SORT_ASCENDING ? "pan-down-symbolic"
-                                              : "pan-up-symbolic";
-
-  if (column == COLUMN_NAME)
-    {
-      gtk_image_clear (GTK_IMAGE (pl->priv->origin_sort_indicator));
-      gtk_image_set_from_icon_name (GTK_IMAGE (pl->priv->name_sort_indicator),
-                                    icon_name);
-    }
-  else
-    {
-      gtk_image_clear (GTK_IMAGE (pl->priv->name_sort_indicator));
-      gtk_image_set_from_icon_name (GTK_IMAGE (pl->priv->origin_sort_indicator),
-                                    icon_name);
-    }
-
-  pl->priv->sort_column = column;
-  pl->priv->sort_direction = direction;
-
-  gtk_list_box_invalidate_sort (GTK_LIST_BOX (pl->priv->list2));
+  return g_strdup (prop->name);
 }
 
-static void
-sort_changed (GtkGestureClick      *gesture,
-              int                   n_press,
-              double                x,
-              double                y,
-              GtkInspectorPropList *pl)
+static char *
+holder_type (gpointer item)
 {
-  SortColumn column;
-  GtkSortType direction;
-  GtkWidget *widget;
+  GParamSpec *prop = prop_holder_get_pspec (PROP_HOLDER (item));
 
-  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-  if (widget == pl->priv->name_heading)
-    column = COLUMN_NAME;
-  else
-    column = COLUMN_ORIGIN;
-
-  if (pl->priv->sort_column == column &&
-      pl->priv->sort_direction == GTK_SORT_ASCENDING)
-    direction = GTK_SORT_DESCENDING;
-  else
-    direction = GTK_SORT_ASCENDING;
-
-  apply_sort (pl, column, direction);
+  return g_strdup (g_type_name (prop->value_type));
 }
 
-static const char *
-row_get_column (GtkListBoxRow *row,
-                SortColumn     column)
+static char *
+holder_origin (gpointer item)
 {
-  GParamSpec *prop = g_object_get_data (G_OBJECT (row), "pspec");
+  GParamSpec *prop = prop_holder_get_pspec (PROP_HOLDER (item));
 
-  if (column == COLUMN_NAME)
-    return prop->name;
-  else
-    return g_type_name (prop->owner_type);
-}
-
-static int
-sort_func (GtkListBoxRow *row1,
-           GtkListBoxRow *row2,
-           gpointer       user_data)
-{
-  GtkInspectorPropList *pl = user_data;
-  const char *s1 = row_get_column (row1, pl->priv->sort_column);
-  const char *s2 = row_get_column (row2, pl->priv->sort_column);
-  int ret = strcmp (s1, s2);
-
-  return pl->priv->sort_direction == GTK_SORT_ASCENDING ? ret : -ret;
-}
-
-static gboolean
-filter_func (GtkListBoxRow *row,
-             gpointer       data)
-{
-  GtkInspectorPropList *pl = data;
-  GParamSpec *pspec = (GParamSpec *)g_object_get_data (G_OBJECT (row), "pspec");
-  const char *text = gtk_editable_get_text (GTK_EDITABLE (pl->priv->search_entry));
-  
-  return g_str_has_prefix (pspec->name, text);
+  return g_strdup (g_type_name (prop->owner_type));
 }
 
 static void
 gtk_inspector_prop_list_init (GtkInspectorPropList *pl)
 {
+  GtkExpression *expression;
+  GtkSorter *sorter;
+
   pl->priv = gtk_inspector_prop_list_get_instance_private (pl);
   gtk_widget_init_template (GTK_WIDGET (pl));
-  apply_sort (pl, COLUMN_NAME, GTK_SORT_ASCENDING);
+  pl->priv->filter = gtk_string_filter_new ();
+  gtk_string_filter_set_match_mode (GTK_STRING_FILTER (pl->priv->filter), GTK_STRING_FILTER_MATCH_PREFIX);
+
+  expression = gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
+                                            0, NULL,
+                                            (GCallback)holder_prop,
+                                            NULL, NULL);
+ 
+  gtk_string_filter_set_expression (GTK_STRING_FILTER (pl->priv->filter), expression);
+
+  sorter = gtk_string_sorter_new ();
+  gtk_string_sorter_set_expression (GTK_STRING_SORTER (sorter), expression);
+  gtk_column_view_column_set_sorter (pl->priv->name, sorter);
+  g_object_unref (sorter);
+
+  gtk_expression_unref (expression);
+
+  expression = gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
+                                            0, NULL,
+                                            (GCallback)holder_type,
+                                            NULL, NULL);
+
+  sorter = gtk_string_sorter_new ();
+  gtk_string_sorter_set_expression (GTK_STRING_SORTER (sorter), expression);
+  gtk_column_view_column_set_sorter (pl->priv->type, sorter);
+  g_object_unref (sorter);
+
+  gtk_expression_unref (expression);
+
+  expression = gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
+                                            0, NULL,
+                                            (GCallback)holder_origin,
+                                            NULL, NULL);
+
+  sorter = gtk_string_sorter_new ();
+  gtk_string_sorter_set_expression (GTK_STRING_SORTER (sorter), expression);
+  gtk_column_view_column_set_sorter (pl->priv->origin, sorter);
+  g_object_unref (sorter);
+
+  gtk_expression_unref (expression);
 }
 
 static void
@@ -253,6 +223,7 @@ show_object (GtkInspectorPropEditor *editor,
   gtk_inspector_object_tree_activate_object (pl->priv->object_tree, object);
 }
 
+
 static void cleanup_object (GtkInspectorPropList *pl);
 
 static void
@@ -262,12 +233,17 @@ finalize (GObject *object)
 
   cleanup_object (pl);
 
-  g_object_unref (pl->priv->names);
-  g_object_unref (pl->priv->types);
-  g_object_unref (pl->priv->values);
-  g_object_unref (pl->priv->origins);
-
   G_OBJECT_CLASS (gtk_inspector_prop_list_parent_class)->finalize (object);
+}
+
+static void
+update_filter (GtkInspectorPropList *pl,
+               GtkSearchEntry *entry)
+{
+  const char *text;
+
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
+  gtk_string_filter_set_search (GTK_STRING_FILTER (pl->priv->filter), text);
 }
 
 static void
@@ -283,10 +259,7 @@ constructed (GObject *object)
   g_signal_connect_swapped (pl->priv->search_entry, "search-started",
                             G_CALLBACK (show_search_entry), pl);
   g_signal_connect_swapped (pl->priv->search_entry, "search-changed",
-                            G_CALLBACK (gtk_list_box_invalidate_filter), pl->priv->list2);
-
-  gtk_list_box_set_filter_func (GTK_LIST_BOX (pl->priv->list2), filter_func, pl, NULL);
-  gtk_list_box_set_sort_func (GTK_LIST_BOX (pl->priv->list2), sort_func, pl, NULL);
+                            G_CALLBACK (update_filter), pl);
 }
 
 static void
@@ -350,6 +323,115 @@ unroot (GtkWidget *widget)
 }
 
 static void
+setup_name_cb (GtkSignalListItemFactory *factory,
+               GtkListItem              *list_item)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new (NULL);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_list_item_set_child (list_item, label);
+}
+
+static void
+bind_name_cb (GtkSignalListItemFactory *factory,
+              GtkListItem              *list_item)
+{
+  GObject *item;
+  GtkWidget *label;
+
+  item = gtk_list_item_get_item (list_item);
+  label = gtk_list_item_get_child (list_item);
+
+  gtk_label_set_label (GTK_LABEL (label), prop_holder_get_name (PROP_HOLDER (item)));
+}
+
+static void
+setup_type_cb (GtkSignalListItemFactory *factory,
+               GtkListItem              *list_item)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new (NULL);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_list_item_set_child (list_item, label);
+}
+
+static void
+bind_type_cb (GtkSignalListItemFactory *factory,
+              GtkListItem              *list_item)
+{
+  GObject *item;
+  GtkWidget *label;
+  GParamSpec *prop;
+  const char *type;
+
+  item = gtk_list_item_get_item (list_item);
+  label = gtk_list_item_get_child (list_item);
+
+  prop = prop_holder_get_pspec (PROP_HOLDER (item));
+  type = g_type_name (G_PARAM_SPEC_VALUE_TYPE (prop));
+
+  gtk_label_set_label (GTK_LABEL (label), type);
+}
+
+static void
+setup_origin_cb (GtkSignalListItemFactory *factory,
+                 GtkListItem              *list_item)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new (NULL);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_list_item_set_child (list_item, label);
+}
+
+static void
+bind_origin_cb (GtkSignalListItemFactory *factory,
+                GtkListItem              *list_item)
+{
+  GObject *item;
+  GtkWidget *label;
+  GParamSpec *prop;
+  const char *origin;
+
+  item = gtk_list_item_get_item (list_item);
+  label = gtk_list_item_get_child (list_item);
+
+  prop = prop_holder_get_pspec (PROP_HOLDER (item));
+  origin = g_type_name (prop->owner_type);
+
+  gtk_label_set_label (GTK_LABEL (label), origin);
+}
+
+static void
+setup_value_cb (GtkSignalListItemFactory *factory,
+                GtkListItem              *list_item)
+{
+}
+
+static void
+bind_value_cb (GtkSignalListItemFactory *factory,
+               GtkListItem              *list_item,
+               gpointer                  data)
+{
+  GObject *item;
+  GtkWidget *widget;
+  GObject *object;
+  const char *name;
+
+  item = gtk_list_item_get_item (list_item);
+
+  object = prop_holder_get_object (PROP_HOLDER (item));
+  name = prop_holder_get_name (PROP_HOLDER (item));
+
+  widget = gtk_inspector_prop_editor_new (object, name, NULL);
+  g_signal_connect (widget, "show-object", G_CALLBACK (show_object), data);
+  gtk_list_item_set_child (list_item, widget);
+}
+
+
+static void
 gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -375,15 +457,17 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/prop-list.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, list2);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, names);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, types);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, values);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, origins);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, name_heading);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, name_sort_indicator);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, origin_heading);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, origin_sort_indicator);
-  gtk_widget_class_bind_template_callback (widget_class, sort_changed);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, name);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, type);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, origin);
+  gtk_widget_class_bind_template_callback (widget_class, setup_name_cb);
+  gtk_widget_class_bind_template_callback (widget_class, bind_name_cb);
+  gtk_widget_class_bind_template_callback (widget_class, setup_type_cb);
+  gtk_widget_class_bind_template_callback (widget_class, bind_type_cb);
+  gtk_widget_class_bind_template_callback (widget_class, setup_origin_cb);
+  gtk_widget_class_bind_template_callback (widget_class, bind_origin_cb);
+  gtk_widget_class_bind_template_callback (widget_class, setup_value_cb);
+  gtk_widget_class_bind_template_callback (widget_class, bind_value_cb);
 }
 
 /* Like g_strdup_value_contents, but keeps the type name separate */
@@ -488,88 +572,6 @@ strdup_value_contents (const GValue  *value,
     }
 }
 
-static GtkWidget *
-gtk_inspector_prop_list_create_row (GtkInspectorPropList *pl,
-                                    GParamSpec           *prop)
-{
-  GValue gvalue = {0};
-  gchar *value;
-  gchar *type;
-  gchar *attribute = NULL;
-  gboolean writable;
-  GtkWidget *row;
-  GtkWidget *box;
-  GtkWidget *label;
-  GtkWidget *widget;
-
-  g_value_init (&gvalue, prop->value_type);
-  g_object_get_property (pl->priv->object, prop->name, &gvalue);
-
-  strdup_value_contents (&gvalue, &value, &type);
-
-  if (GTK_IS_CELL_RENDERER (pl->priv->object))
-    {
-      gpointer *layout;
-      GtkCellArea *area;
-      gint column = -1;
-
-      area = NULL;
-      layout = g_object_get_data (pl->priv->object, "gtk-inspector-cell-layout");
-      if (layout)
-        area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (layout));
-      if (area)
-        column = gtk_cell_area_attribute_get_column (area,
-                                                     GTK_CELL_RENDERER (pl->priv->object),
-                                                     prop->name);
-
-       if (column != -1)
-         attribute = g_strdup_printf ("%d", column);
-    }
-
-  writable = ((prop->flags & G_PARAM_WRITABLE) != 0) &&
-             ((prop->flags & G_PARAM_CONSTRUCT_ONLY) == 0);
-
-  row = gtk_list_box_row_new ();
-  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
-  g_object_set_data (G_OBJECT (row), "pspec", prop);
-
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (row), box);
-
-  label = gtk_label_new (prop->name);
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "cell");
-  gtk_widget_set_sensitive (label, writable);
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_size_group_add_widget (pl->priv->names, label);
-  gtk_container_add (GTK_CONTAINER (box), label);
-
-  label = gtk_label_new (type ? type : "");
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "cell");
-  gtk_widget_set_sensitive (label, writable);
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_size_group_add_widget (pl->priv->types, label);
-  gtk_container_add (GTK_CONTAINER (box), label);
-
-  label = gtk_label_new (g_type_name (prop->owner_type));
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "cell");
-  gtk_widget_set_sensitive (label, writable);
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_size_group_add_widget (pl->priv->origins, label);
-  gtk_container_add (GTK_CONTAINER (box), label);
-
-  widget = gtk_inspector_prop_editor_new (pl->priv->object, prop->name, pl->priv->values);
-  gtk_style_context_add_class (gtk_widget_get_style_context (widget), "cell");
-  gtk_container_add (GTK_CONTAINER (box), widget);
-  g_signal_connect (widget, "show-object", G_CALLBACK (show_object), pl);
-
-  g_free (value);
-  g_free (type);
-  g_free (attribute);
-  g_value_unset (&gvalue);
-
-  return row;
-}
-
 static void
 cleanup_object (GtkInspectorPropList *pl)
 {
@@ -588,7 +590,10 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
   GParamSpec **props;
   guint num_properties;
   guint i;
-  GtkWidget *w;
+  GListStore *store;
+  GListModel *list;
+  GListModel *filtered;
+  GtkSortListModel *sorted;
 
   if (!object)
     return FALSE;
@@ -605,19 +610,19 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
 
   pl->priv->object = object;
 
-  while ((w = gtk_widget_get_first_child (pl->priv->list2)) != NULL)
-    gtk_widget_destroy (w);
+  store = g_list_store_new (PROP_TYPE_HOLDER);
 
   for (i = 0; i < num_properties; i++)
     {
       GParamSpec *prop = props[i];
-      GtkWidget *row;
+      PropHolder *holder;
 
       if (! (prop->flags & G_PARAM_READABLE))
         continue;
 
-      row = gtk_inspector_prop_list_create_row (pl, prop);
-      gtk_container_add (GTK_CONTAINER (pl->priv->list2), row);
+      holder = prop_holder_new (object, prop);
+      g_list_store_append (store, holder);
+      g_object_unref (holder);
     }
 
   g_free (props);
@@ -625,7 +630,19 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
   if (GTK_IS_WIDGET (object))
     g_signal_connect_object (object, "destroy", G_CALLBACK (cleanup_object), pl, G_CONNECT_SWAPPED);
 
+  filtered = G_LIST_MODEL (gtk_filter_list_model_new (G_LIST_MODEL (store), pl->priv->filter));
+  sorted = gtk_sort_list_model_new (filtered, NULL);
+  list = G_LIST_MODEL (gtk_no_selection_new (G_LIST_MODEL (sorted)));
+
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (pl->priv->list2), list);
+  gtk_column_view_set_sort_model (GTK_COLUMN_VIEW (pl->priv->list2), sorted);
+
   gtk_widget_show (GTK_WIDGET (pl));
+
+  g_object_unref (list);
+  g_object_unref (sorted);
+  g_object_unref (filtered);
+  g_object_unref (store);
 
   return TRUE;
 }
