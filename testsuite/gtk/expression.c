@@ -65,11 +65,11 @@ static char *
 print_filter_info (GtkStringFilter *filter,
                    const char      *search,
                    gboolean         ignore_case,
-                   gboolean         match_substring)
+                   GtkStringFilterMatchMode match_mode)
 {
   g_assert_cmpstr (search, ==, gtk_string_filter_get_search (filter));
   g_assert_cmpint (ignore_case, ==, gtk_string_filter_get_ignore_case (filter));
-  g_assert_cmpint (match_substring, ==, gtk_string_filter_get_match_substring (filter));
+  g_assert_cmpint (match_mode, ==, gtk_string_filter_get_match_mode (filter));
 
   return g_strdup ("OK");
 }
@@ -86,7 +86,7 @@ test_closure (void)
   filter = GTK_STRING_FILTER (gtk_string_filter_new ());
   pexpr[0] = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, NULL, "search");
   pexpr[1] = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, NULL, "ignore-case");
-  pexpr[2] = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, NULL, "match-substring");
+  pexpr[2] = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, NULL, "match-mode");
   expr = gtk_cclosure_expression_new (G_TYPE_STRING,
                                       NULL,
                                       3,
@@ -114,7 +114,7 @@ test_closure (void)
 
   gtk_string_filter_set_search (filter, "Hello");
   gtk_string_filter_set_ignore_case (filter, TRUE);
-  gtk_string_filter_set_match_substring (filter, FALSE);
+  gtk_string_filter_set_match_mode (filter, GTK_STRING_FILTER_MATCH_EXACT);
   g_assert_cmpint (counter, ==, 5);
   g_assert (gtk_expression_evaluate (expr, filter , &value));
   g_assert_cmpstr (g_value_get_string (&value), ==, "OK");

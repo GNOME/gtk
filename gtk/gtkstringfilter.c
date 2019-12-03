@@ -32,7 +32,7 @@ struct _GtkStringFilter
   char *search_prepared;
 
   gboolean ignore_case;
-  gboolean match_substring;
+  GtkStringFilterMatchMode match_mode;
 
   GtkExpression *expression;
 };
@@ -41,7 +41,7 @@ enum {
   PROP_0,
   PROP_EXPRESSION,
   PROP_IGNORE_CASE,
-  PROP_MATCH_SUBSTRING,
+  PROP_MATCH_MODE,
   PROP_SEARCH,
   NUM_PROPERTIES
 };
@@ -92,12 +92,25 @@ gtk_string_filter_filter (GtkFilter *filter,
     return FALSE;
   prepared = gtk_string_filter_prepare (self, s);
 
-  if (self->match_substring)
-    result = strstr (prepared, self->search_prepared) != NULL;
-  else
-    result = strcmp (prepared, self->search_prepared) == 0;
+  switch (self->match_mode)
+    {
+    case GTK_STRING_FILTER_MATCH_EXACT:
+      result = strcmp (prepared, self->search_prepared) == 0;
+      break;
+    case GTK_STRING_FILTER_MATCH_SUBSTRING:
+      result = strstr (prepared, self->search_prepared) != NULL;
+      break;
+    case GTK_STRING_FILTER_MATCH_PREFIX:
+      result = g_str_has_prefix (prepared, self->search_prepared);
+      break;
+    case GTK_STRING_FILTER_MATCH_SUFFIX:
+      result = g_str_has_suffix (prepared, self->search_prepared);
+      break;
+    default:
+      g_assert_not_reached ();
+    }
 
-#if 1
+#if 0
   g_print ("%s (%s) %s %s (%s)\n", s, prepared, result ? "==" : "!=", self->search, self->search_prepared);
 #endif
 
@@ -125,8 +138,8 @@ gtk_string_filter_set_property (GObject      *object,
       gtk_string_filter_set_ignore_case (self, g_value_get_boolean (value));
       break;
 
-    case PROP_MATCH_SUBSTRING:
-      gtk_string_filter_set_match_substring (self, g_value_get_boolean (value));
+    case PROP_MATCH_MODE:
+      gtk_string_filter_set_match_mode (self, g_value_get_enum (value));
       break;
 
     case PROP_SEARCH:
@@ -157,8 +170,8 @@ gtk_string_filter_get_property (GObject     *object,
       g_value_set_boolean (value, self->ignore_case);
       break;
 
-    case PROP_MATCH_SUBSTRING:
-      g_value_set_boolean (value, self->match_substring);
+    case PROP_MATCH_MODE:
+      g_value_set_enum (value, self->match_mode);
       break;
 
     case PROP_SEARCH:
@@ -220,16 +233,17 @@ gtk_string_filter_class_init (GtkStringFilterClass *class)
                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStringFilter:match-substring:
+   * GtkStringFilter:match-mode:
    *
    * If exact matches are necessary or if substrings are allowed
    */
-  properties[PROP_MATCH_SUBSTRING] =
-      g_param_spec_boolean ("match-substring",
-                            P_("Match substring"),
-                            P_("If exact matches are necessary or if substrings are allowed"),
-                            TRUE,
-                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+  properties[PROP_MATCH_MODE] =
+      g_param_spec_enum ("match-mode",
+                         P_("Match mode"),
+                         P_("If exact matches are necessary or if substrings are allowed"),
+                         GTK_TYPE_STRING_FILTER_MATCH_MODE,
+                         GTK_STRING_FILTER_MATCH_EXACT,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkStringFilter:search:
@@ -251,7 +265,7 @@ static void
 gtk_string_filter_init (GtkStringFilter *self)
 {
   self->ignore_case = TRUE;
-  self->match_substring = TRUE;
+  self->match_mode = GTK_STRING_FILTER_MATCH_EXACT;
 
   gtk_filter_changed (GTK_FILTER (self), GTK_FILTER_CHANGE_MATCH_ALL);
 }
@@ -388,30 +402,30 @@ gtk_string_filter_set_ignore_case (GtkStringFilter *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_IGNORE_CASE]);
 }
 
-gboolean
-gtk_string_filter_get_match_substring (GtkStringFilter *self)
+GtkStringFilterMatchMode
+gtk_string_filter_get_match_mode (GtkStringFilter *self)
 {
-  g_return_val_if_fail (GTK_IS_STRING_FILTER (self), TRUE);
+  g_return_val_if_fail (GTK_IS_STRING_FILTER (self), GTK_STRING_FILTER_MATCH_EXACT);
 
-  return self->match_substring;
+  return self->match_mode;
 }
 
 
 void
-gtk_string_filter_set_match_substring (GtkStringFilter *self,
-                                       gboolean         match_substring)
+gtk_string_filter_set_match_mode (GtkStringFilter *self,
+                                  GtkStringFilterMatchMode mode)
 {
   g_return_if_fail (GTK_IS_STRING_FILTER (self));
 
-  if (self->match_substring == match_substring)
+  if (self->match_mode == mode)
     return;
 
-  self->match_substring = match_substring;
+  self->match_mode = mode;
 
   if (self->search)
-    gtk_filter_changed (GTK_FILTER (self), match_substring ? GTK_FILTER_CHANGE_LESS_STRICT : GTK_FILTER_CHANGE_MORE_STRICT);
+    gtk_filter_changed (GTK_FILTER (self), mode == GTK_STRING_FILTER_MATCH_EXACT ? GTK_FILTER_CHANGE_MORE_STRICT : GTK_FILTER_CHANGE_LESS_STRICT);
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MATCH_SUBSTRING]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MATCH_MODE]);
 }
 
                                                                  

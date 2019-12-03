@@ -51,11 +51,19 @@ gboolean                gtk_string_filter_get_ignore_case       (GtkStringFilter
 GDK_AVAILABLE_IN_ALL
 void                    gtk_string_filter_set_ignore_case       (GtkStringFilter        *self,
                                                                  gboolean                ignore_case);
+
+typedef enum {
+  GTK_STRING_FILTER_MATCH_EXACT,
+  GTK_STRING_FILTER_MATCH_SUBSTRING,
+  GTK_STRING_FILTER_MATCH_PREFIX,
+  GTK_STRING_FILTER_MATCH_SUFFIX
+} GtkStringFilterMatchMode;
+
 GDK_AVAILABLE_IN_ALL
-gboolean                gtk_string_filter_get_match_substring   (GtkStringFilter        *self);
+GtkStringFilterMatchMode gtk_string_filter_get_match_mode   (GtkStringFilter          *self);
 GDK_AVAILABLE_IN_ALL
-void                    gtk_string_filter_set_match_substring   (GtkStringFilter        *self,
-                                                                 gboolean                match_substring);
+void                     gtk_string_filter_set_match_mode   (GtkStringFilter          *self,
+                                                             GtkStringFilterMatchMode  mode);
 
 
 
