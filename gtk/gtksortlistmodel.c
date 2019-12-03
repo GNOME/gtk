@@ -43,7 +43,7 @@
 
 enum {
   PROP_0,
-  PROP_HAS_SORT,
+  PROP_SORTER,
   PROP_ITEM_TYPE,
   PROP_MODEL,
   NUM_PROPERTIES
@@ -241,6 +241,10 @@ gtk_sort_list_model_set_property (GObject      *object,
       gtk_sort_list_model_set_model (self, g_value_get_object (value));
       break;
 
+    case PROP_SORTER:
+      gtk_sort_list_model_set_sorter (self, g_value_get_object (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -257,10 +261,6 @@ gtk_sort_list_model_get_property (GObject     *object,
 
   switch (prop_id)
     {
-    case PROP_HAS_SORT:
-      g_value_set_boolean (value, self->sorter != NULL);
-      break;
-
     case PROP_ITEM_TYPE:
       g_value_set_gtype (value, self->item_type);
       break;
@@ -269,10 +269,23 @@ gtk_sort_list_model_get_property (GObject     *object,
       g_value_set_object (value, self->model);
       break;
 
+    case PROP_SORTER:
+      g_value_set_object (value, self->sorter);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static void gtk_sort_list_model_resort (GtkSortListModel *self);
+
+static void
+gtk_sort_list_model_sorter_changed_cb (GtkSorter        *sorter,
+                                       GtkSortListModel *self)
+{
+  gtk_sort_list_model_resort (self);
 }
 
 static void
@@ -288,12 +301,22 @@ gtk_sort_list_model_clear_model (GtkSortListModel *self)
 }
 
 static void
+gtk_sort_list_model_clear_sorter (GtkSortListModel *self)
+{
+  if (self->sorter == NULL)
+    return;
+
+  g_signal_handlers_disconnect_by_func (self->sorter, gtk_sort_list_model_sorter_changed_cb, self);
+  g_clear_object (&self->sorter);
+}
+
+static void
 gtk_sort_list_model_dispose (GObject *object)
 {
   GtkSortListModel *self = GTK_SORT_LIST_MODEL (object);
 
   gtk_sort_list_model_clear_model (self);
-  g_clear_object (&self->sorter);
+  gtk_sort_list_model_clear_sorter (self);
 
   G_OBJECT_CLASS (gtk_sort_list_model_parent_class)->dispose (object);
 };
@@ -308,15 +331,15 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
   gobject_class->dispose = gtk_sort_list_model_dispose;
 
   /**
-   * GtkSortListModel:has-sort:
+   * GtkSortListModel:sorter:
    *
-   * If a sort function is set for this model
+   * The sorter for this model
    */
-  properties[PROP_HAS_SORT] =
-      g_param_spec_boolean ("has-sort",
-                            P_("has sort"),
-                            P_("If a sort function is set for this model"),
-                            FALSE,
+  properties[PROP_SORTER] =
+      g_param_spec_object ("sorter",
+                            P_("Sorter"),
+                            P_("The sorter for this model"),
+                            GTK_TYPE_SORTER,
                             GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -351,39 +374,6 @@ gtk_sort_list_model_init (GtkSortListModel *self)
 {
 }
 
-
-/**
- * gtk_sort_list_model_new:
- * @model: the model to sort
- * @sort_func: (allow-none): sort function or %NULL to not sort items
- * @user_data: user data passed to @sort_func
- * @user_destroy: destroy notifier for @user_data
- *
- * Creates a new sort list model that uses the @sort_func to sort @model.
- *
- * Returns: a new #GtkSortListModel
- **/
-GtkSortListModel *
-gtk_sort_list_model_new (GListModel       *model,
-                         GCompareDataFunc  sort_func,
-                         gpointer          user_data,
-                         GDestroyNotify    user_destroy)
-{
-  GtkSortListModel *result;
-
-  g_return_val_if_fail (G_IS_LIST_MODEL (model), NULL);
-
-  result = g_object_new (GTK_TYPE_SORT_LIST_MODEL,
-                         "item-type", g_list_model_get_item_type (model),
-                         "model", model,
-                         NULL);
-
-  if (sort_func)
-    gtk_sort_list_model_set_sort_func (result, sort_func, user_data, user_destroy);
-
-  return result;
-}
-
 /**
  * gtk_sort_list_model_new_for_type:
  * @item_type: the type of the items that will be returned
@@ -414,49 +404,6 @@ gtk_sort_list_model_create_sequences (GtkSortListModel *self)
   self->unsorted = g_sequence_new (NULL);
 
   gtk_sort_list_model_add_items (self, 0, g_list_model_get_n_items (self->model), NULL, NULL);
-}
-
-/**
- * gtk_sort_list_model_set_sort_func:
- * @self: a #GtkSortListModel
- * @sort_func: (allow-none): sort function or %NULL to not sort items
- * @user_data: user data passed to @sort_func
- * @user_destroy: destroy notifier for @user_data
- *
- * Sets the function used to sort items. The function will be called for every
- * item and must return an integer less than, equal to, or greater than zero if
- * for two items from the model if the first item is considered to be respectively
- * less than, equal to, or greater than the second.
- **/
-void
-gtk_sort_list_model_set_sort_func (GtkSortListModel *self,
-                                   GCompareDataFunc  sort_func,
-                                   gpointer          user_data,
-                                   GDestroyNotify    user_destroy)
-{
-  GtkSorter *sorter = NULL;
-  guint n_items;
-
-  g_return_if_fail (GTK_IS_SORT_LIST_MODEL (self));
-  g_return_if_fail (sort_func != NULL || (user_data == NULL && !user_destroy));
-
-  if (!sort_func && !self->sorter)
-    return;
-
-  if (sort_func)
-    sorter = gtk_custom_sorter_new (sort_func, user_data, user_destroy);
-  g_set_object (&self->sorter, sorter);
-
-  g_clear_pointer (&self->unsorted, g_sequence_free);
-  g_clear_pointer (&self->sorted, g_sequence_free);
-  
-  gtk_sort_list_model_create_sequences (self);
-    
-  n_items = g_list_model_get_n_items (G_LIST_MODEL (self));
-  if (n_items > 1)
-    g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items, n_items);
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HAS_SORT]);
 }
 
 /**
@@ -519,32 +466,7 @@ gtk_sort_list_model_get_model (GtkSortListModel *self)
   return self->model;
 }
 
-/**
- * gtk_sort_list_model_has_sort:
- * @self: a #GtkSortListModel
- *
- * Checks if a sort function is currently set on @self
- *
- * Returns: %TRUE if a sort function is set
- **/
-gboolean
-gtk_sort_list_model_has_sort (GtkSortListModel *self)
-{
-  g_return_val_if_fail (GTK_IS_SORT_LIST_MODEL (self), FALSE);
-
-  return self->sorter != NULL;
-}
-
-/**
- * gtk_sort_list_model_resort:
- * @self: a #GtkSortListModel
- *
- * Causes @self to resort all items in the model.
- *
- * Calling this function is necessary when data used by the sort
- * function has changed.
- **/
-void
+static void
 gtk_sort_list_model_resort (GtkSortListModel *self)
 {
   guint n_items;
@@ -563,3 +485,57 @@ gtk_sort_list_model_resort (GtkSortListModel *self)
   g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items, n_items);
 }
 
+GtkSortListModel *
+gtk_sort_list_model_new (GListModel *model,
+                         GtkSorter  *sorter)
+{
+  GtkSortListModel *result;
+
+  g_return_val_if_fail (G_IS_LIST_MODEL (model), NULL);
+
+  result = g_object_new (GTK_TYPE_SORT_LIST_MODEL,
+                         "item-type", g_list_model_get_item_type (model),
+                         "model", model,
+                         "sorter", sorter,
+                         NULL);
+
+  return result;
+}
+
+void
+gtk_sort_list_model_set_sorter (GtkSortListModel *self,
+                                GtkSorter        *sorter)
+{
+  guint n_items;
+
+  g_return_if_fail (GTK_IS_SORT_LIST_MODEL (self));
+  if (sorter)
+    g_return_if_fail (GTK_IS_SORTER (sorter));
+
+  gtk_sort_list_model_clear_sorter (self);
+
+  if (sorter)
+    {
+      self->sorter = g_object_ref (sorter);
+      g_signal_connect (sorter, "changed", G_CALLBACK (gtk_sort_list_model_sorter_changed_cb), self);
+    }
+
+  g_clear_pointer (&self->unsorted, g_sequence_free);
+  g_clear_pointer (&self->sorted, g_sequence_free);
+  
+  gtk_sort_list_model_create_sequences (self);
+    
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (self));
+  if (n_items > 1)
+    g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items, n_items);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SORTER]);
+}
+
+GtkSorter *
+gtk_sort_list_model_get_sorter (GtkSortListModel *self)
+{
+  g_return_val_if_fail (GTK_IS_SORT_LIST_MODEL (self), NULL);
+
+  return self->sorter;
+}

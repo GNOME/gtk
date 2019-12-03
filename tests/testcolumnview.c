@@ -92,14 +92,16 @@ create_list_model_for_directory (gpointer file)
 {
   GtkSortListModel *sort;
   GtkDirectoryList *dir;
+  GtkSorter *sorter;
 
   if (g_file_query_file_type (file, G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL) != G_FILE_TYPE_DIRECTORY)
     return NULL;
 
   dir = create_directory_list(file);
-  sort = gtk_sort_list_model_new (G_LIST_MODEL (dir),
-                                  compare_files,
-                                  NULL, NULL);
+  sorter = gtk_custom_sorter_new (compare_files, NULL, NULL);
+  sort = gtk_sort_list_model_new (G_LIST_MODEL (dir), sorter);
+  g_object_unref (sorter);
+
   g_object_unref (dir);
   return G_LIST_MODEL (sort);
 }
