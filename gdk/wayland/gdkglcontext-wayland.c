@@ -244,14 +244,15 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
       EGLint *rects = g_new (EGLint, n_rects * 4);
       cairo_rectangle_int_t rect;
       int surface_height = gdk_surface_get_height (surface);
+      int scale = gdk_surface_get_scale_factor (surface);
 
       for (i = 0, j = 0; i < n_rects; i++)
         {
           cairo_region_get_rectangle (painted, i, &rect);
-          rects[j++] = rect.x;
-          rects[j++] = surface_height - rect.height - rect.y;
-          rects[j++] = rect.width;
-          rects[j++] = rect.height;
+          rects[j++] = rect.x * scale;
+          rects[j++] = (surface_height - rect.height - rect.y) * scale;
+          rects[j++] = rect.width * scale;
+          rects[j++] = rect.height * scale;
         }
       eglSwapBuffersWithDamageEXT (display_wayland->egl_display, egl_surface, rects, n_rects);
       g_free (rects);
