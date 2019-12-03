@@ -57,6 +57,9 @@ struct _GtkBuilderScopeInterface
   GType                 (* get_type_from_name)                  (GtkBuilderScope        *self,
                                                                  GtkBuilder             *builder,
                                                                  const char             *type_name);
+  GType                 (* get_type_from_function)              (GtkBuilderScope        *self,
+                                                                 GtkBuilder             *builder,
+                                                                 const char             *function_name);
 
   GClosure *            (* create_closure)                      (GtkBuilderScope        *self,
                                                                  GtkBuilder             *builder,
