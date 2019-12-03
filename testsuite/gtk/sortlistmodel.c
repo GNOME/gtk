@@ -195,7 +195,13 @@ new_model (gpointer model)
   g_assert (model == NULL || G_IS_LIST_MODEL (model));
 
   if (model)
-    result = gtk_sort_list_model_new (model, compare, NULL, NULL);
+    {
+      GtkSorter *sorter;
+
+      sorter = gtk_custom_sorter_new (compare, NULL, NULL);
+      result = gtk_sort_list_model_new (model, sorter);
+      g_object_unref (sorter);
+    }
   else
     result = gtk_sort_list_model_new_for_type (G_TYPE_OBJECT);
 
@@ -275,9 +281,10 @@ test_set_model (void)
 }
 
 static void
-test_set_sort_func (void)
+test_set_sorter (void)
 {
   GtkSortListModel *sort;
+  GtkSorter *sorter;
   GListStore *store;
   
   store = new_store ((guint[]) { 4, 8, 2, 6, 10, 0 });
@@ -285,15 +292,19 @@ test_set_sort_func (void)
   assert_model (sort, "2 4 6 8 10");
   assert_changes (sort, "");
 
-  gtk_sort_list_model_set_sort_func (sort, compare_modulo, GUINT_TO_POINTER (5), NULL);
+  sorter = gtk_custom_sorter_new (compare_modulo, GUINT_TO_POINTER (5), NULL);
+  gtk_sort_list_model_set_sorter (sort, sorter);
+  g_object_unref (sorter);
   assert_model (sort, "10 6 2 8 4");
   assert_changes (sort, "0-5+5");
 
-  gtk_sort_list_model_set_sort_func (sort, NULL, NULL, NULL);
+  gtk_sort_list_model_set_sorter (sort, NULL);
   assert_model (sort, "4 8 2 6 10");
   assert_changes (sort, "0-5+5");
 
-  gtk_sort_list_model_set_sort_func (sort, compare, NULL, NULL);
+  sorter = gtk_custom_sorter_new (compare, NULL, NULL);
+  gtk_sort_list_model_set_sorter (sort, sorter);
+  g_object_unref (sorter);
   assert_model (sort, "2 4 6 8 10");
   /* Technically, this is correct, but we shortcut setting the sort func:
    * assert_changes (sort, "0-4+4"); */
@@ -395,7 +406,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/sortlistmodel/create_empty", test_create_empty);
   g_test_add_func ("/sortlistmodel/create", test_create);
   g_test_add_func ("/sortlistmodel/set-model", test_set_model);
-  g_test_add_func ("/sortlistmodel/set-sort-func", test_set_sort_func);
+  g_test_add_func ("/sortlistmodel/set-sorter", test_set_sorter);
 #if GLIB_CHECK_VERSION (2, 58, 0) /* g_list_store_splice() is broken before 2.58 */
   g_test_add_func ("/sortlistmodel/add_items", test_add_items);
   g_test_add_func ("/sortlistmodel/remove_items", test_remove_items);
