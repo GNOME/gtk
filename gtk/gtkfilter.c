@@ -26,8 +26,8 @@
 
 /**
  * SECTION:gtkfilter
- * @Short_description: Filtering items in GTK
  * @Title: GtkFilter
+ * @Short_description: Filtering items in GTK
  * @See_also: #GtkFilerListModel
  *
  * #GtkFilter is the way to describe filters to be used in #GtkFilterListModel.
@@ -37,7 +37,7 @@
  * visible that the function returns %TRUE for.
  *
  * Filters may change what items they match through their lifetime. In that
- * case they can call gtk_filter_changed() which will emit the GtkFilter:changed
+ * case, they can call gtk_filter_changed() which will emit the #GtkFilter:changed
  * signal to notify that previous filter results are no longer valid and that
  * items should be checked via gtk_filter_filter() again.
  *
@@ -82,8 +82,10 @@ gtk_filter_class_init (GtkFilterClass *class)
    * This signal is emitted whenever the filter changed. Users of the filter
    * should then check items again via gtk_filter_filter().
    *
-   * Depending on the @change variable, not all items need to be changed, but
-   * only some. Refer to the #GtkFilterChange documentation for details on that.
+   * #GtkFilterListModel handles this signal automatically.
+   *
+   * Depending on the @change parameter, not all items need to be changed, but
+   * only some. Refer to the #GtkFilterChange documentation for details.
    */
   signals[CHANGED] =
     g_signal_new (I_("changed"),
@@ -129,12 +131,12 @@ gtk_filter_filter (GtkFilter *self,
  * @self: a #GtkFilter
  * @change: How the filter changed
  *
- * Emits the GtkFilter:changed signal to notify all users of the filter that
+ * Emits the #GtkFilter:changed signal to notify all users of the filter that
  * the filter changed. Users of the filter should then check items again via
  * gtk_filter_filter().
  *
- * Depending on the @change variable, not all items need to be changed, but
- * only some. Refer to the #GtkFilterChange documentation for details on that.
+ * Depending on the @change parameter, not all items need to be changed, but
+ * only some. Refer to the #GtkFilterChange documentation for details.
  *
  * This function is intended for implementors of #GtkFilter subclasses and
  * should not be called from other functions.
