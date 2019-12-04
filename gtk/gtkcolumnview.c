@@ -754,3 +754,20 @@ gtk_column_view_active_sorter_changed (GtkColumnView *self)
       g_object_unref (column);
     }
 }
+
+void
+gtk_column_view_sort_by_column (GtkColumnView       *self,
+                                GtkColumnViewColumn *column,
+                                GtkSortType          direction)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+  g_return_if_fail (column == NULL || GTK_IS_COLUMN_VIEW_COLUMN (column));
+  g_return_if_fail (column == NULL || gtk_column_view_column_get_column_view (column) == self);
+
+  if (column == NULL)
+    gtk_column_view_sorter_reset (GTK_COLUMN_VIEW_SORTER (self->sorter));
+  else
+    gtk_column_view_sorter_set_column (GTK_COLUMN_VIEW_SORTER (self->sorter),
+                                       column,
+                                       direction == GTK_SORT_DESCENDING);
+}
