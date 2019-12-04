@@ -28,8 +28,11 @@ get (GListModel *model,
      guint       position)
 {
   GObject *object = g_list_model_get_item (model, position);
+  guint number;
   g_assert (object != NULL);
-  return GPOINTER_TO_UINT (g_object_get_qdata (object, number_quark));
+  number = GPOINTER_TO_UINT (g_object_get_qdata (object, number_quark));
+  g_object_unref (object);
+  return number;
 }
 
 static char *
