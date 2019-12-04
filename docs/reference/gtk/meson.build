@@ -27,6 +27,7 @@ private_headers = [
   'gtkcolumnviewcolumnprivate.h',
   'gtkcolumnviewlayoutprivate.h',
   'gtkcolumnviewprivate.h',
+  'gtkcolumnviewsorterprivate.h',
   'gtkcolumnviewtitleprivate.h',
   'gtkcomboboxprivate.h',
   'gtkcontainerprivate.h',
