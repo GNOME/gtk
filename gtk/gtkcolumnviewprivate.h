@@ -29,5 +29,6 @@ GtkListItemWidget *     gtk_column_view_get_header_widget       (GtkColumnView  
 void                    gtk_column_view_measure_across          (GtkColumnView          *self,
                                                                  int                    *minimum,
                                                                  int                    *natural);
+void                    gtk_column_view_active_sorter_changed   (GtkColumnView          *self);
 
 #endif  /* __GTK_COLUMN_VIEW_PRIVATE_H__ */
