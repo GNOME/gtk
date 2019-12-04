@@ -566,6 +566,7 @@ gtk_column_view_set_sort_model
 gtk_column_view_get_sorter
 gtk_column_view_get_show_separators
 gtk_column_view_set_show_separators
+gtk_column_view_sort_by_column
 <SUBSECTION Standard>
 GTK_COLUMN_VIEW
 GTK_COLUMN_VIEW_CLASS
