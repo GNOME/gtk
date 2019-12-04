@@ -239,6 +239,43 @@ gtk_column_view_sorter_remove_column (GtkColumnViewSorter *self,
   return FALSE;
 }
 
+gboolean
+gtk_column_view_sorter_set_column (GtkColumnViewSorter *self,
+                                   GtkColumnViewColumn *column,
+                                   gboolean             inverted)
+{
+  GtkSorter *sorter;
+  Sorter *s;
+
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_SORTER (self), FALSE);
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (column), FALSE);
+  
+  sorter = gtk_column_view_column_get_sorter (column);
+  if (sorter == NULL)
+    return FALSE;
+
+  g_object_ref (column);
+
+  g_sequence_remove_range (g_sequence_get_begin_iter (self->sorters),
+                           g_sequence_get_end_iter (self->sorters));
+
+  s = g_new (Sorter, 1);
+  s->column = g_object_ref (column);
+  s->sorter = g_object_ref (sorter);
+  s->changed_id = g_signal_connect (sorter, "changed", G_CALLBACK (gtk_column_view_sorter_changed_cb), self);
+  s->inverted = inverted;
+ 
+  g_sequence_prepend (self->sorters, s);
+
+  gtk_sorter_changed (GTK_SORTER (self), GTK_SORTER_CHANGE_DIFFERENT);
+
+  gtk_column_view_column_notify_sort (column);
+
+  g_object_unref (column);
+
+  return TRUE;
+}
+
 void
 gtk_column_view_sorter_clear (GtkColumnViewSorter *self)
 {
@@ -253,12 +290,16 @@ gtk_column_view_sorter_clear (GtkColumnViewSorter *self)
 
   iter = g_sequence_get_begin_iter (self->sorters);
   s = g_sequence_get (iter);
-  column = s->column;
+
+  column = g_object_ref (s->column);
+
   g_sequence_remove_range (iter, g_sequence_get_end_iter (self->sorters));
 
   gtk_sorter_changed (GTK_SORTER (self), GTK_SORTER_CHANGE_DIFFERENT);
 
   gtk_column_view_column_notify_sort (column);
+
+  g_object_unref (column);
 }
 
 GtkColumnViewColumn *
