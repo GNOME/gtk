@@ -26,6 +26,7 @@
 #include "gtkcolumnlistitemfactoryprivate.h"
 #include "gtkcolumnviewcolumnprivate.h"
 #include "gtkcolumnviewlayoutprivate.h"
+#include "gtkcolumnviewsorterprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkintl.h"
 #include "gtklistview.h"
@@ -54,6 +55,8 @@ struct _GtkColumnView
 
   GtkListView *listview;
   GtkColumnListItemFactory *factory;
+
+  GtkSorter *sorter;
 };
 
 struct _GtkColumnViewClass
@@ -69,6 +72,7 @@ enum
   PROP_HSCROLL_POLICY,
   PROP_MODEL,
   PROP_SHOW_SEPARATORS,
+  PROP_SORTER,
   PROP_VADJUSTMENT,
   PROP_VSCROLL_POLICY,
 
@@ -250,6 +254,8 @@ gtk_column_view_dispose (GObject *object)
   g_clear_pointer ((GtkWidget **) &self->listview, gtk_widget_unparent);
   g_clear_object (&self->factory);
 
+  g_clear_object (&self->sorter);
+
   G_OBJECT_CLASS (gtk_column_view_parent_class)->dispose (object);
 }
 
@@ -299,6 +305,10 @@ gtk_column_view_get_property (GObject    *object,
 
     case PROP_VSCROLL_POLICY:
       g_value_set_enum (value, gtk_scrollable_get_vscroll_policy (GTK_SCROLLABLE (self->listview)));
+      break;
+
+    case PROP_SORTER:
+      g_value_set_object (value, self->sorter);
       break;
 
     default:
@@ -429,6 +439,18 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkColumnView:sorter:
+   *
+   * Sorter with the sorting choices of the user
+   */
+  properties[PROP_SORTER] =
+    g_param_spec_object ("sorter",
+                         P_("Sorter"),
+                         P_("Sorter with sorting choices of the user"),
+                         GTK_TYPE_SORTER,
+                         G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
   /**
@@ -468,6 +490,7 @@ gtk_column_view_init (GtkColumnView *self)
   gtk_widget_set_layout_manager (self->header, gtk_column_view_layout_new (self));
   gtk_widget_set_parent (self->header, GTK_WIDGET (self));
 
+  self->sorter = gtk_column_view_sorter_new ();
   self->factory = gtk_column_list_item_factory_new (self);
   self->listview = GTK_LIST_VIEW (gtk_list_view_new_with_factory (
         GTK_LIST_ITEM_FACTORY (g_object_ref (self->factory))));
@@ -643,6 +666,7 @@ gtk_column_view_remove_column (GtkColumnView       *self,
         break;
     }
 
+  gtk_column_view_sorter_remove_column (GTK_COLUMN_VIEW_SORTER (self->sorter), column);
   gtk_column_view_column_set_column_view (column, NULL);
   g_list_store_remove (self->columns, i);
 }
@@ -679,5 +703,30 @@ GtkListItemWidget *
 gtk_column_view_get_header_widget (GtkColumnView *self)
 {
   return GTK_LIST_ITEM_WIDGET (self->header);
+}
+
+/**
+ * gtk_column_view_get_sorter:
+ * @self: a #GtkColumnView
+ *
+ * Returns the sorter associated with users sorting choices in
+ * the column view.
+ *
+ * To allow users to customizable sorting by clicking on column
+ * headers, this sorter needs to be set on the sort
+ * model(s) underneath the model that is displayed
+ * by the view.
+ *
+ * See gtk_column_view_column_get_sorter() for setting up
+ * per-column sorting.
+ *
+ * Returns: (transfer none): the #GtkSorter of @self
+ */
+GtkSorter *
+gtk_column_view_get_sorter (GtkColumnView *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), NULL);
+
+  return self->sorter;
 }
 

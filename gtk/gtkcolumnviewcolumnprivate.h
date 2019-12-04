@@ -24,6 +24,7 @@
 
 #include "gtk/gtkcolumnviewcellprivate.h"
 
+
 void                    gtk_column_view_column_set_column_view          (GtkColumnViewColumn    *self,
                                                                          GtkColumnView          *view);
 
@@ -43,5 +44,7 @@ void                    gtk_column_view_column_allocate                 (GtkColu
 void                    gtk_column_view_column_get_allocation           (GtkColumnViewColumn    *self,
                                                                          int                    *offset,
                                                                          int                    *size);
+
+void                    gtk_column_view_column_notify_sort              (GtkColumnViewColumn    *self);
 
 #endif  /* __GTK_COLUMN_VIEW_COLUMN_PRIVATE_H__ */
