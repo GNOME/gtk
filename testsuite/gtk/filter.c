@@ -260,6 +260,7 @@ test_string_simple (void)
                                       NULL, NULL);
 
   filter = gtk_string_filter_new ();
+  gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), GTK_STRING_FILTER_MATCH_SUBSTRING);
   gtk_string_filter_set_expression (GTK_STRING_FILTER (filter), expr);
 
   model = new_model (20, filter);
@@ -287,6 +288,7 @@ test_string_properties (void)
                                       NULL, NULL);
 
   filter = gtk_string_filter_new ();
+  gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter), GTK_STRING_FILTER_MATCH_SUBSTRING);
   gtk_string_filter_set_expression (GTK_STRING_FILTER (filter), expr);
 
   model = new_model (1000, filter);
