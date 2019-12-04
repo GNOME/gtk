@@ -22,6 +22,7 @@
 
 #include "gtk/gtkcolumnview.h"
 
+#include "gtk/gtkcolumnviewsorterprivate.h"
 #include "gtk/gtklistitemwidgetprivate.h"
 
 GtkListItemWidget *     gtk_column_view_get_header_widget       (GtkColumnView          *self);
