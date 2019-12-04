@@ -736,3 +736,49 @@ gtk_column_view_get_sorter (GtkColumnView *self)
   return self->sorter;
 }
 
+void
+gtk_column_view_active_sorter_changed (GtkColumnView *self)
+{
+  guint i;
+
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->columns)); i++)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+      gtk_column_view_column_active_sorter_changed (column);
+      g_object_unref (column);
+    }
+}
+
+/**
+ * gtk_column_view_sort_by_column:
+ * @self: a #GtkColumnView
+ * @column: (allow-none): the #GtkColumnViewColumn to sort by, or %NULL
+ * @direction: the direction to sort in
+ *
+ * Sets the sorting of the view.
+ *
+ * This function should be used to set up the initial sorting. At runtime,
+ * users can change the sorting of a column view by clicking on the list headers.
+ *
+ * This call only has an effect if the sorter returned by gtk_column_view_get_sorter()
+ * is set on a sort model, and gtk_column_view_column_set_sorter() has been called
+ * on @column to associate a sorter with the column.
+ *
+ * If @column is %NULL, the view will be unsorted.
+ */
+void
+gtk_column_view_sort_by_column (GtkColumnView       *self,
+                                GtkColumnViewColumn *column,
+                                GtkSortType          direction)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+  g_return_if_fail (column == NULL || GTK_IS_COLUMN_VIEW_COLUMN (column));
+  g_return_if_fail (column == NULL || gtk_column_view_column_get_column_view (column) == self);
+
+  if (column == NULL)
+    gtk_column_view_sorter_reset (GTK_COLUMN_VIEW_SORTER (self->sorter));
+  else
+    gtk_column_view_sorter_set_column (GTK_COLUMN_VIEW_SORTER (self->sorter),
+                                       column,
+                                       direction == GTK_SORT_DESCENDING);
+}
