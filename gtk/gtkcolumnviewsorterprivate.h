@@ -47,6 +47,10 @@ GtkColumnViewColumn *
            gtk_column_view_sorter_get_active    (GtkColumnViewSorter *self,
                                                  gboolean            *inverted);
 
+gboolean   gtk_column_view_sorter_set_column    (GtkColumnViewSorter *self,
+                                                 GtkColumnViewColumn *column,
+                                                 gboolean             inverted);
+
 
 G_END_DECLS
 
