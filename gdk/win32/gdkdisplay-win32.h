@@ -29,8 +29,23 @@
 typedef enum _GdkWin32ProcessDpiAwareness {
   PROCESS_DPI_UNAWARE = 0,
   PROCESS_SYSTEM_DPI_AWARE = 1,
-  PROCESS_PER_MONITOR_DPI_AWARE = 2
+  PROCESS_PER_MONITOR_DPI_AWARE = 2,
+  PROCESS_PER_MONITOR_DPI_AWARE_V2 = 3, /* Newer HiDPI type for Windows 10 1607+ */
 } GdkWin32ProcessDpiAwareness;
+
+/* From https://docs.microsoft.com/en-US/windows/win32/hidpi/dpi-awareness-context */
+/* DPI_AWARENESS_CONTEXT is declared by DEFINE_HANDLE */
+#ifndef DPI_AWARENESS_CONTEXT_UNAWARE
+#define DPI_AWARENESS_CONTEXT_UNAWARE (HANDLE)-1
+#endif
+
+#ifndef DPI_AWARENESS_CONTEXT_SYSTEM_AWARE
+#define DPI_AWARENESS_CONTEXT_SYSTEM_AWARE (HANDLE)-2
+#endif
+
+#ifndef DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
+#define DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 (HANDLE)-4
+#endif
 
 typedef enum _GdkWin32MonitorDpiType { 
   MDT_EFFECTIVE_DPI  = 0,
@@ -59,10 +74,25 @@ typedef struct _GdkWin32ShcoreFuncs
 typedef BOOL (WINAPI *funcSetProcessDPIAware) (void);
 typedef BOOL (WINAPI *funcIsProcessDPIAware)  (void);
 
+/*
+ * funcSPDAC is SetProcessDpiAwarenessContext() and
+ * funcGTDAC is GetThreadDpiAwarenessContext() and
+ * funcADACE is AreDpiAwarenessContextsEqual() provided by user32.dll, on
+ * Windows 10 Creator Edition and later.
+ * Treat HANDLE as void*, for convenience, since DPI_AWARENESS_CONTEXT is
+ * declared using DEFINE_HANDLE.
+ */
+typedef BOOL (WINAPI *funcSPDAC)  (void *);
+typedef HANDLE (WINAPI *funcGTDAC)  (void);
+typedef BOOL (WINAPI *funcADACE) (void *, void *);
+
 typedef struct _GdkWin32User32DPIFuncs
 {
   funcSetProcessDPIAware setDpiAwareFunc;
   funcIsProcessDPIAware isDpiAwareFunc;
+  funcSPDAC setPDAC;
+  funcGTDAC getTDAC;
+  funcADACE areDACEqual;
 } GdkWin32User32DPIFuncs;
 
 struct _GdkWin32Display
