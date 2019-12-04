@@ -25,6 +25,8 @@
 #endif
 
 #include <gtk/gtktypes.h>
+#include <gtk/gtksortlistmodel.h>
+#include <gtk/gtksorter.h>
 
 G_BEGIN_DECLS
 
@@ -65,11 +67,15 @@ GListModel *    gtk_column_view_get_model                       (GtkColumnView  
 GDK_AVAILABLE_IN_ALL
 void            gtk_column_view_set_model                       (GtkColumnView          *self,
                                                                  GListModel             *model);
+
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_column_view_get_show_separators             (GtkColumnView          *self);
 GDK_AVAILABLE_IN_ALL
 void            gtk_column_view_set_show_separators             (GtkColumnView          *self,
                                                                  gboolean                show_separators);
+
+GDK_AVAILABLE_IN_ALL
+GtkSorter *     gtk_column_view_get_sorter                      (GtkColumnView          *self);
 
 G_END_DECLS
 
