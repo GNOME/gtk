@@ -25,6 +25,7 @@
 #endif
 
 #include <gtk/gtkcolumnview.h>
+#include <gtk/gtksorter.h>
 
 G_BEGIN_DECLS
 
@@ -64,6 +65,12 @@ void                    gtk_column_view_column_set_title                (GtkColu
                                                                          const char             *title);
 GDK_AVAILABLE_IN_ALL
 const char *            gtk_column_view_column_get_title                (GtkColumnViewColumn    *self);
+
+GDK_AVAILABLE_IN_ALL
+void                    gtk_column_view_column_set_sorter               (GtkColumnViewColumn    *self,
+                                                                         GtkSorter              *sorter);
+GDK_AVAILABLE_IN_ALL
+GtkSorter *             gtk_column_view_column_get_sorter               (GtkColumnViewColumn    *self);
 
 G_END_DECLS
 
