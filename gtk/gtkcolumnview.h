@@ -80,6 +80,11 @@ void            gtk_column_view_set_sort_model                  (GtkColumnView  
 GDK_AVAILABLE_IN_ALL
 GtkSorter *     gtk_column_view_get_sorter                      (GtkColumnView          *self);
 
+GDK_AVAILABLE_IN_ALL
+void            gtk_column_view_sort_by_column                  (GtkColumnView          *self,
+                                                                 GtkColumnViewColumn    *column,
+                                                                 GtkSortType             direction);
+
 G_END_DECLS
 
 #endif  /* __GTK_COLUMN_VIEW_H__ */
