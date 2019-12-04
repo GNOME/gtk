@@ -681,3 +681,15 @@ gtk_column_view_get_header_widget (GtkColumnView *self)
   return GTK_LIST_ITEM_WIDGET (self->header);
 }
 
+void
+gtk_column_view_active_sorter_changed (GtkColumnView *self)
+{
+  guint i;
+
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->columns)); i++)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+      gtk_column_view_column_active_sorter_changed (column);
+      g_object_unref (column);
+    }
+}
