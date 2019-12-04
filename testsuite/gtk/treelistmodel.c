@@ -158,7 +158,7 @@ create_sub_model_cb (gpointer item,
                      gpointer unused)
 {
   if (G_IS_LIST_MODEL (item))
-    return item;
+    return g_object_ref (item);
 
   return NULL;
 }
