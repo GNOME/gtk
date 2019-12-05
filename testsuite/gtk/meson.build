@@ -54,6 +54,7 @@ tests = [
   ['shortcuts'],
   ['singleselection'],
   ['slicelistmodel'],
+  ['sorter'],
   ['sortlistmodel'],
   ['spinbutton'],
   ['templates'],
