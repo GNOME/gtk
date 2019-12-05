@@ -54,6 +54,7 @@ tests = [
   ['searchbar'],
   ['singleselection'],
   ['slicelistmodel'],
+  ['sorter'],
   ['sortlistmodel'],
   ['spinbutton'],
   ['templates'],
