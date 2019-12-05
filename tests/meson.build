@@ -1,5 +1,6 @@
 gtk_tests = [
   # testname, optional extra sources
+  ['fontlist'],
   ['rendernode'],
   ['rendernode-create-tests'],
   ['overlayscroll'],
