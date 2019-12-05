@@ -2438,10 +2438,10 @@ gdk_surface_get_root_coords (GdkSurface *surface,
  * @offset_x: X position of @shape_region in @surface coordinates
  * @offset_y: Y position of @shape_region in @surface coordinates
  *
- * Like gdk_surface_shape_combine_region(), but the shape applies
- * only to event handling. Mouse events which happen while
- * the pointer position corresponds to an unset bit in the
- * mask will be passed on the surface below @surface.
+ * Apply the region to the surface for the purpose of event
+ * handling. Mouse events which happen while the pointer position
+ * corresponds to an unset bit in the mask will be passed on the
+ * surface below @surface.
  *
  * An input shape is typically used with RGBA surfaces.
  * The alpha channel of the surface defines which pixels are
