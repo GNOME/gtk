@@ -5,10 +5,6 @@
     <signal name="items-changed" handler="rows_changed_cb" object="GtkFontChooserWidget" swapped="1" />
     <property name="model">
       <object class="GtkFilterListModel" id="filter_model">
-        <property name="model">
-          <object class="GtkFontList" id="fontlist">
-          </object>
-        </property>
         <property name="filter">
           <object class="GtkStringFilter">
             <binding name="search">

@@ -36,7 +36,6 @@
 #include "gtkgrid.h"
 #include "gtkfontchooser.h"
 #include "gtkfontchooserutils.h"
-#include "gtkfontlist.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtksingleselection.h"
@@ -58,6 +57,9 @@
 #include "gtkgestureclick.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkroot.h"
+#include "gtkfilterlistmodel.h"
+#include "gtkflattenlistmodel.h"
+#include "gtkmaplistmodel.h"
 
 #include <hb-ot.h>
 
@@ -110,9 +112,10 @@ struct _GtkFontChooserWidgetPrivate
   GtkWidget    *search_entry;
   GtkWidget    *family_face_list;
   GtkWidget    *list_stack;
-  GtkFontList  *fontlist;
   GtkSingleSelection *selection;
   GtkFilter    *custom_filter;
+  GtkFilterListModel   *filter_model;
+  GListModel   *fontlist;
 
   GtkWidget       *preview;
   GtkWidget       *preview2;
@@ -575,7 +578,6 @@ gtk_font_chooser_widget_map (GtkWidget *widget)
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (widget);
   GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
 
-  gtk_font_list_set_display (priv->fontlist, gtk_widget_get_display (widget));
   gtk_editable_set_text (GTK_EDITABLE (priv->search_entry), "");
   gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "list");
   g_simple_action_set_state (G_SIMPLE_ACTION (priv->tweak_action), g_variant_new_boolean (FALSE));
@@ -629,7 +631,6 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GParamSpec *pspec;
 
-  g_type_ensure (GTK_TYPE_FONT_LIST);
   g_type_ensure (G_TYPE_THEMED_ICON);
 
   widget_class->root = gtk_font_chooser_widget_root;
@@ -668,7 +669,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, search_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, family_face_list);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, list_stack);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, fontlist);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, filter_model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, selection);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, custom_filter);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, preview);
@@ -1961,6 +1962,41 @@ gtk_font_chooser_widget_set_show_preview_entry (GtkFontChooserWidget *fontchoose
     }
 }
 
+static gpointer
+pick_one_face (gpointer item, gpointer user_data)
+{
+  PangoFontFamily *family = PANGO_FONT_FAMILY (item);
+  PangoFontFace *face;
+
+  face = pango_font_family_get_face (family, "Regular");
+  
+  g_object_unref (family);
+
+  return g_object_ref (face);
+}
+
+static void
+update_fontlist (GtkFontChooserWidget *fontchooser)
+{
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
+  PangoFontMap *fontmap;
+  GListModel *model;
+
+  fontmap = priv->font_map;
+  if (!fontmap)
+    fontmap = pango_cairo_font_map_get_default ();
+
+  if ((priv->level & GTK_FONT_CHOOSER_LEVEL_STYLE) == 0)
+    model = G_LIST_MODEL (gtk_map_list_model_new (PANGO_TYPE_FONT_FACE,
+                                                  G_LIST_MODEL (fontmap),
+                                                  pick_one_face,
+                                                  NULL, NULL));
+  else
+    model = G_LIST_MODEL (gtk_flatten_list_model_new (PANGO_TYPE_FONT_FACE, G_LIST_MODEL (fontmap)));
+  gtk_filter_list_model_set_model (priv->filter_model,  model);
+  g_object_unref (model);
+}
+
 static void
 gtk_font_chooser_widget_set_font_map (GtkFontChooser *chooser,
                                       PangoFontMap   *fontmap)
@@ -1981,7 +2017,7 @@ gtk_font_chooser_widget_set_font_map (GtkFontChooser *chooser,
       context = gtk_widget_get_pango_context (priv->preview);
       pango_context_set_font_map (context, fontmap);
 
-      gtk_font_list_set_font_map (priv->fontlist, priv->font_map);
+      update_fontlist (fontchooser);
     }
 }
 
@@ -2037,7 +2073,7 @@ gtk_font_chooser_widget_set_level (GtkFontChooserWidget *fontchooser,
       gtk_widget_hide (priv->size_spin);
    }
 
-  gtk_font_list_set_families_only (priv->fontlist, (priv->level & GTK_FONT_CHOOSER_LEVEL_STYLE) == 0);
+  update_fontlist (fontchooser);
 
   g_object_notify (G_OBJECT (fontchooser), "level");
 }
