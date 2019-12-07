@@ -504,7 +504,7 @@
                         <property name="name">logs</property>
                         <property name="title" translatable="yes">Logging</property>
                         <property name="child">
-                          <object class="GtkInspectorLogs"/>
+                          <object class="GtkInspectorLogs" id="logs"/>
                         </property>
                       </object>
                     </child>
