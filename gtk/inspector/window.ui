@@ -519,7 +519,7 @@
             <property name="name">css</property>
             <property name="title" translatable="yes">CSS</property>
             <property name="child">
-              <object class="GtkInspectorCssEditor"/>
+              <object class="GtkInspectorCssEditor" id="css_editor"/>
             </property>
           </object>
         </child>

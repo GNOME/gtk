@@ -71,6 +71,7 @@ typedef struct
   GtkWidget *controllers;
   GtkWidget *magnifier;
   GtkWidget *sidebar_revealer;
+  GtkWidget *css_editor;
 
   GtkWidget *selected_widget;
 

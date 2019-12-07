@@ -267,6 +267,7 @@ gtk_inspector_window_constructed (GObject *object)
   g_object_set_data (G_OBJECT (iw->inspected_display), "-gtk-inspector", iw);
 
   gtk_inspector_object_tree_set_display (GTK_INSPECTOR_OBJECT_TREE (iw->object_tree), iw->inspected_display);
+  gtk_inspector_css_editor_set_display (GTK_INSPECTOR_CSS_EDITOR (iw->css_editor), iw->inspected_display);
 }
 
 static void
@@ -416,6 +417,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, controllers);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, magnifier);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, sidebar_revealer);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, css_editor);
 
   gtk_widget_class_bind_template_callback (widget_class, gtk_inspector_on_inspect);
   gtk_widget_class_bind_template_callback (widget_class, on_object_activated);
