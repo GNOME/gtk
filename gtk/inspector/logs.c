@@ -24,6 +24,7 @@
 #include <glib/gi18n-lib.h>
 
 #include "logs.h"
+#include "window.h"
 
 #include "gtktextview.h"
 #include "gtkmessagedialog.h"
@@ -33,6 +34,7 @@
 #include "gtktooltip.h"
 #include "gtktextiter.h"
 #include "gtkprivate.h"
+#include "gtkroot.h"
 #include "gtkdebug.h"
 #include "gdkinternals.h"
 #include "gtknative.h"
@@ -72,6 +74,8 @@ struct _GtkInspectorLogsPrivate
   GtkWidget *printing;
   GtkWidget *tree;
   GtkWidget *text;
+
+  GdkDisplay *display;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorLogs, gtk_inspector_logs, GTK_TYPE_BOX)
@@ -107,12 +111,9 @@ flag_toggled (GtkWidget        *button,
               GtkInspectorLogs *logs)
 {
   guint flags;
-  GdkDisplay *display;
   GList *toplevels, *l;
 
-  display = gdk_display_get_default ();
-
-  flags = gdk_display_get_debug_flags (display);
+  flags = gdk_display_get_debug_flags (logs->priv->display);
   update_flag (logs->priv->events, &flags, GDK_DEBUG_EVENTS);
   update_flag (logs->priv->misc, &flags, GDK_DEBUG_MISC);
   update_flag (logs->priv->dnd, &flags, GDK_DEBUG_DND);
@@ -124,7 +125,7 @@ flag_toggled (GtkWidget        *button,
   update_flag (logs->priv->vulkan, &flags, GDK_DEBUG_VULKAN);
   update_flag (logs->priv->selection, &flags, GDK_DEBUG_SELECTION);
   update_flag (logs->priv->clipboard, &flags, GDK_DEBUG_CLIPBOARD);
-  gdk_display_set_debug_flags (display, flags);
+  gdk_display_set_debug_flags (logs->priv->display, flags);
 
   flags = gsk_get_debug_flags ();
   update_flag (logs->priv->renderer, &flags, GSK_DEBUG_RENDERER);
@@ -141,20 +142,17 @@ flag_toggled (GtkWidget        *button,
   for (l = toplevels; l; l = l->next)
     {
       GtkWidget *toplevel = l->data;
-      GskRenderer *renderer;
 
-      if ((GtkRoot *)toplevel == gtk_widget_get_root (button)) /* skip the inspector */
-        continue;
-
-      renderer = gtk_native_get_renderer (GTK_NATIVE (toplevel));
-      if (!renderer)
-        continue;
-
-      gsk_renderer_set_debug_flags (renderer, flags);
+      if (gtk_root_get_display (GTK_ROOT (toplevel)) == logs->priv->display)
+        {
+          GskRenderer *renderer = gtk_native_get_renderer (GTK_NATIVE (toplevel));
+          if (renderer)
+            gsk_renderer_set_debug_flags (renderer, flags);
+        }
     }
   g_list_free (toplevels);
 
-  flags = gtk_get_display_debug_flags (display);
+  flags = gtk_get_display_debug_flags (logs->priv->display);
   update_flag (logs->priv->actions, &flags, GTK_DEBUG_ACTIONS);
   update_flag (logs->priv->builder, &flags, GTK_DEBUG_BUILDER);
   update_flag (logs->priv->sizes, &flags, GTK_DEBUG_SIZE_REQUEST);
@@ -164,7 +162,19 @@ flag_toggled (GtkWidget        *button,
   update_flag (logs->priv->printing, &flags, GTK_DEBUG_PRINTING);
   update_flag (logs->priv->tree, &flags, GTK_DEBUG_TREE);
   update_flag (logs->priv->text, &flags, GTK_DEBUG_TEXT);
-  gtk_set_display_debug_flags (display, flags);
+  gtk_set_display_debug_flags (logs->priv->display, flags);
+}
+
+static void
+map (GtkWidget *widget)
+{
+  GtkInspectorLogs *logs = GTK_INSPECTOR_LOGS (widget);
+  GtkWidget *toplevel;
+
+  GTK_WIDGET_CLASS (gtk_inspector_logs_parent_class)->map (widget);
+
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
+  logs->priv->display = gtk_inspector_window_get_inspected_display (GTK_INSPECTOR_WINDOW (toplevel));
 }
 
 static void
@@ -174,6 +184,7 @@ gtk_inspector_logs_class_init (GtkInspectorLogsClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->finalize = finalize;
+  widget_class->map = map;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/logs.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorLogs, events);
