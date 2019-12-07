@@ -473,7 +473,7 @@
                         <property name="name">visual</property>
                         <property name="title" translatable="yes">Settings</property>
                         <property name="child">
-                          <object class="GtkInspectorVisual"/>
+                          <object class="GtkInspectorVisual" id="visual"/>
                         </property>
                       </object>
                     </child>
