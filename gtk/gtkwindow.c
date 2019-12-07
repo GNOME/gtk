@@ -75,7 +75,6 @@
 
 #include "a11y/gtkwindowaccessibleprivate.h"
 #include "a11y/gtkcontaineraccessibleprivate.h"
-#include "inspector/init.h"
 #include "inspector/window.h"
 
 #include "gdk/gdktextureprivate.h"
@@ -9039,7 +9038,6 @@ gtk_window_set_debugging (gboolean enable,
 
   if (inspector_window == NULL)
     {
-      gtk_inspector_init ();
       inspector_window = gtk_inspector_window_new ();
       gtk_window_set_hide_on_close (GTK_WINDOW (inspector_window), TRUE);
 

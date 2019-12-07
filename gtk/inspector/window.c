@@ -27,6 +27,7 @@
 
 #include <stdlib.h>
 
+#include "init.h"
 #include "window.h"
 #include "prop-list.h"
 #include "controllers.h"
@@ -418,6 +419,8 @@ get_inspector_display (void)
 GtkWidget *
 gtk_inspector_window_new (void)
 {
+  gtk_inspector_init ();
+
   return GTK_WIDGET (g_object_new (GTK_TYPE_INSPECTOR_WINDOW,
                                    "display", get_inspector_display (),
                                    NULL));
