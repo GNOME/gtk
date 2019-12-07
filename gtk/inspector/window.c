@@ -43,6 +43,7 @@
 #include "recorder.h"
 #include "visual.h"
 #include "general.h"
+#include "logs.h"
 
 #include "gdk-private.h"
 #include "gskrendererprivate.h"
@@ -272,6 +273,7 @@ gtk_inspector_window_constructed (GObject *object)
   gtk_inspector_css_editor_set_display (GTK_INSPECTOR_CSS_EDITOR (iw->css_editor), iw->inspected_display);
   gtk_inspector_visual_set_display (GTK_INSPECTOR_VISUAL (iw->visual), iw->inspected_display);
   gtk_inspector_general_set_display (GTK_INSPECTOR_GENERAL (iw->general), iw->inspected_display);
+  gtk_inspector_logs_set_display (GTK_INSPECTOR_LOGS (iw->logs), iw->inspected_display);
 }
 
 static void
@@ -424,6 +426,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, css_editor);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, visual);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, general);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, logs);
 
   gtk_widget_class_bind_template_callback (widget_class, gtk_inspector_on_inspect);
   gtk_widget_class_bind_template_callback (widget_class, on_object_activated);

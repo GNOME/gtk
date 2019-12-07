@@ -74,6 +74,7 @@ typedef struct
   GtkWidget *css_editor;
   GtkWidget *visual;
   GtkWidget *general;
+  GtkWidget *logs;
 
   GtkWidget *selected_widget;
 
