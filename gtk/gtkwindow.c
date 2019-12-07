@@ -9055,7 +9055,7 @@ gtk_window_set_debugging (GdkDisplay *display,
     {
       inspector_window = gtk_inspector_window_get (display);
 
-      gtk_widget_destroy (inspector_window);
+      gtk_widget_hide (inspector_window);
     }
 }
 
