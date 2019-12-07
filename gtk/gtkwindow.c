@@ -8999,18 +8999,29 @@ warn_response (GtkDialog *dialog,
 }
 
 static void
-gtk_window_set_debugging (gboolean enable,
-                          gboolean select,
-                          gboolean warn)
+gtk_window_set_debugging (GdkDisplay *display,
+                          gboolean    enable,
+                          gboolean    toggle,
+                          gboolean    select,
+                          gboolean    warn)
 {
   GtkWidget *dialog = NULL;
   GtkWidget *area;
   GtkWidget *check;
 
-  if (inspector_window == NULL)
+  if (toggle)
+    {
+      gboolean was_debugging;
+
+      was_debugging = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (display), "-gtk-debugging-enabled"));
+      enable = !was_debugging;
+    }
+
+  g_object_set_data (G_OBJECT (display), "-gtk-debugging-enabled", GINT_TO_POINTER (enable));
+
+  if (enable && inspector_window == NULL)
     {
       inspector_window = gtk_inspector_window_new ();
-      gtk_window_set_hide_on_close (GTK_WINDOW (inspector_window), TRUE);
 
       if (warn)
         {
@@ -9052,7 +9063,8 @@ gtk_window_set_debugging (gboolean enable,
     {
       if (dialog)
         gtk_widget_hide (dialog);
-      gtk_widget_hide (inspector_window);
+      if (inspector_window)
+        gtk_widget_hide (inspector_window);
     }
 }
 
@@ -9067,7 +9079,9 @@ gtk_window_set_debugging (gboolean enable,
 void
 gtk_window_set_interactive_debugging (gboolean enable)
 {
-  gtk_window_set_debugging (enable, FALSE, FALSE);
+  GdkDisplay *display = gdk_display_get_default ();
+
+  gtk_window_set_debugging (display, enable, FALSE, FALSE, FALSE);
 }
 
 static gboolean
@@ -9119,21 +9133,13 @@ static gboolean
 gtk_window_enable_debugging (GtkWindow *window,
                              gboolean   toggle)
 {
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   gboolean warn;
 
   if (!inspector_keybinding_enabled (&warn))
     return FALSE;
 
-  if (toggle)
-    {
-      if (GTK_IS_WIDGET (inspector_window) &&
-          gtk_widget_is_visible (inspector_window))
-        gtk_window_set_debugging (FALSE, FALSE, FALSE);
-      else
-        gtk_window_set_debugging (TRUE, FALSE, warn);
-    }
-  else
-    gtk_window_set_debugging (TRUE, TRUE, warn);
+  gtk_window_set_debugging (priv->display, TRUE, toggle, !toggle, warn);
 
   return TRUE;
 }
