@@ -1472,15 +1472,61 @@ blur_texture (GskGLRenderer       *self,
 }
 
 static inline void
+blur_node (GskGLRenderer   *self,
+           GskRenderNode   *node,
+           RenderOpBuilder *builder,
+           float            blur_radius,
+           guint            extra_flags,
+           TextureRegion   *out_region,
+           float           *out_vertex_data[4]) /* min, min, max, max */
+{
+  const float scale = ops_get_scale (builder);
+  const float blur_extra = blur_radius * 3.0 / 2.0;
+  float texture_width, texture_height;
+  gboolean is_offscreen;
+  TextureRegion region;
+  int blurred_texture_id;
+
+  g_assert (blur_radius > 0);
+
+  /* Increase texture size for the given blur radius and scale it */
+  texture_width  = ceilf ((node->bounds.size.width  + blur_extra * 2));
+  texture_height = ceilf ((node->bounds.size.height + blur_extra * 2));
+
+  if (!add_offscreen_ops (self, builder,
+                          &GRAPHENE_RECT_INIT (node->bounds.origin.x - blur_extra,
+                                               node->bounds.origin.y - blur_extra,
+                                               texture_width, texture_height),
+                          node,
+                          &region, &is_offscreen,
+                          RESET_CLIP | RESET_OPACITY | FORCE_OFFSCREEN | extra_flags))
+    g_assert_not_reached ();
+
+  blurred_texture_id = blur_texture (self, builder,
+                                     &region,
+                                     texture_width * scale, texture_height * scale,
+                                     blur_radius * scale);
+
+  init_full_texture_region (out_region, blurred_texture_id);
+
+  if (out_vertex_data)
+    {
+      *out_vertex_data[0] = builder->dx + node->bounds.origin.x - blur_extra;
+      *out_vertex_data[1] = builder->dx + node->bounds.origin.x + node->bounds.size.width + blur_extra;
+      *out_vertex_data[2] = builder->dy + node->bounds.origin.y - blur_extra;
+      *out_vertex_data[3] = builder->dy + node->bounds.origin.y + node->bounds.size.height + blur_extra;
+    }
+}
+
+static inline void
 render_blur_node (GskGLRenderer   *self,
                   GskRenderNode   *node,
                   RenderOpBuilder *builder)
 {
-  const float scale = ops_get_scale (builder);
-  const float blur_radius = gsk_blur_node_get_radius (node) * scale;
+  const float blur_radius = gsk_blur_node_get_radius (node);
   GskRenderNode *child = gsk_blur_node_get_child (node);
   GskQuadVertex vertex_data[GL_N_VERTICES];
-  int blurred_texture_id;
+  TextureRegion blurred_region;
 
   if (blur_radius <= 0)
     {
@@ -1488,42 +1534,20 @@ render_blur_node (GskGLRenderer   *self,
       return;
     }
 
-  blurred_texture_id = gsk_gl_driver_get_texture_for_pointer (self->gl_driver, node);
-  if (blurred_texture_id == 0)
-    {
-      TextureRegion region;
-      gboolean is_offscreen;
+  blurred_region.texture_id = gsk_gl_driver_get_texture_for_pointer (self->gl_driver, node);
+  if (blurred_region.texture_id == 0)
+    blur_node (self, child, builder, blur_radius, 0, &blurred_region, NULL);
 
-      /* TODO(perf): We're forcing the child offscreen even if it's a texture
-       * so the resulting offscreen texture is bigger by the gaussian blur factor
-       * (see gsk_blur_node_new), but we didn't have to do that if the blur
-       * shader could handle that situation. */
-      if (!add_offscreen_ops (self, builder,
-                              &node->bounds,
-                              child,
-                              &region, &is_offscreen,
-                              RESET_CLIP | FORCE_OFFSCREEN | RESET_OPACITY))
-        g_assert_not_reached ();
-
-      g_assert (is_offscreen);
-
-      blurred_texture_id = blur_texture (self, builder,
-                                         &region,
-                                         node->bounds.size.width * scale,
-                                         node->bounds.size.height * scale,
-                                         blur_radius * scale);
-    }
-
-  g_assert (blurred_texture_id != 0);
+  g_assert (blurred_region.texture_id != 0);
 
   /* Draw the result */
   load_offscreen_vertex_data (vertex_data, node, builder);
   ops_set_program (builder, &self->blit_program);
-  ops_set_texture (builder, blurred_texture_id);
+  ops_set_texture (builder, blurred_region.texture_id);
   ops_draw (builder, vertex_data); /* Render result to screen */
 
   /* Add to cache for the blur node */
-  gsk_gl_driver_set_texture_for_pointer (self->gl_driver, node, blurred_texture_id);
+  gsk_gl_driver_set_texture_for_pointer (self->gl_driver, node, blurred_region.texture_id);
 }
 
 static inline void
@@ -2126,7 +2150,6 @@ render_shadow_node (GskGLRenderer   *self,
                     GskRenderNode   *node,
                     RenderOpBuilder *builder)
 {
-  const float scale = ops_get_scale (builder);
   const gsize n_shadows = gsk_shadow_node_get_n_shadows (node);
   GskRenderNode *original_child = gsk_shadow_node_get_child (node);
   GskRenderNode *shadow_child = original_child;
@@ -2169,34 +2192,9 @@ render_shadow_node (GskGLRenderer   *self,
 
       if (shadow->radius > 0)
         {
-          const float blur_extra = shadow->radius * 3.0 / 2.0;
-
-          /* TODO: - same problem as in render_blur_node: we're forcing the
-           *         child node on a texture, even though it might already be a texture. */
-          if (!add_offscreen_ops (self, builder,
-                                  &GRAPHENE_RECT_INIT (
-                                    0, 0,
-                                    shadow_child->bounds.size.width + (blur_extra * 2),
-                                    shadow_child->bounds.size.height + (blur_extra * 2)
-                                  ),
-                                  shadow_child, &region, &is_offscreen,
-                                  RESET_CLIP | RESET_OPACITY | CENTER_CHILD |
-                                  NO_CACHE_PLZ | FORCE_OFFSCREEN))
-            g_assert_not_reached ();
-
-          region.texture_id = blur_texture (self, builder,
-                                            &region,
-                                            (shadow_child->bounds.size.width + blur_extra * 2) * scale,
-                                            (shadow_child->bounds.size.height + blur_extra * 2) * scale,
-                                            shadow->radius * scale);
-          init_full_texture_region (&region, region.texture_id);
-
+          blur_node (self, shadow_child, builder, shadow->radius, NO_CACHE_PLZ, &region,
+                     (float*[4]){&min_x, &max_x, &min_y, &max_y});
           is_offscreen = TRUE;
-
-          min_x = builder->dx + shadow_child->bounds.origin.x - blur_extra;
-          min_y = builder->dy + shadow_child->bounds.origin.y - blur_extra;
-          max_x = min_x + shadow_child->bounds.size.width + blur_extra * 2;
-          max_y = min_y + shadow_child->bounds.size.height + blur_extra * 2;
         }
       else if (dx == 0 && dy == 0)
         {
