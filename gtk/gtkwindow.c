@@ -573,7 +573,6 @@ static GtkWindowRegion get_active_region_type (GtkWindow   *window,
                                                gint         x,
                                                gint         y);
 
-static void gtk_window_update_debugging (void);
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkWindow)
@@ -1827,7 +1826,6 @@ gtk_window_init (GtkWindow *window)
 
   g_object_ref_sink (window);
   priv->has_user_ref_count = TRUE;
-  gtk_window_update_debugging ();
 
 #ifdef GDK_WINDOWING_X11
   g_signal_connect (gtk_settings_get_for_display (priv->display),
@@ -4650,7 +4648,6 @@ gtk_window_destroy (GtkWidget *widget)
       else
         g_object_unref (item);
     }
-  gtk_window_update_debugging ();
 
   if (priv->transient_parent)
     gtk_window_set_transient_for (window, NULL);
@@ -8970,8 +8967,6 @@ _gtk_window_raise_popover (GtkWindow *window,
 
 static GtkWidget *inspector_window = NULL;
 
-static guint gtk_window_update_debugging_id;
-
 static void set_warn_again (gboolean warn);
 
 static void
@@ -8990,12 +8985,6 @@ warn_response (GtkDialog *dialog,
     {
       GtkWidget *window;
 
-      if (gtk_window_update_debugging_id)
-        {
-          g_source_remove (gtk_window_update_debugging_id);
-          gtk_window_update_debugging_id = 0;
-        }
-
       /* Steal reference into temp variable, so not to mess up with
        * inspector_window during gtk_widget_destroy().
        */
@@ -9006,24 +8995,6 @@ warn_response (GtkDialog *dialog,
   else
     {
       set_warn_again (!remember);
-    }
-}
-
-static gboolean
-update_debugging (gpointer data)
-{
-  gtk_window_update_debugging_id = 0;
-  return G_SOURCE_REMOVE;
-}
-
-static void
-gtk_window_update_debugging (void)
-{
-  if (inspector_window &&
-      gtk_window_update_debugging_id == 0)
-    {
-      gtk_window_update_debugging_id = g_idle_add (update_debugging, NULL);
-      g_source_set_name_by_id (gtk_window_update_debugging_id, "[gtk] gtk_window_update_debugging");
     }
 }
 
