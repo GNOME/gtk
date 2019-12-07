@@ -274,6 +274,7 @@ gtk_inspector_window_constructed (GObject *object)
   gtk_inspector_visual_set_display (GTK_INSPECTOR_VISUAL (iw->visual), iw->inspected_display);
   gtk_inspector_general_set_display (GTK_INSPECTOR_GENERAL (iw->general), iw->inspected_display);
   gtk_inspector_logs_set_display (GTK_INSPECTOR_LOGS (iw->logs), iw->inspected_display);
+  gtk_inspector_css_node_tree_set_display (GTK_INSPECTOR_CSS_NODE_TREE (iw->widget_css_node_tree), iw->inspected_display);
 }
 
 static void
