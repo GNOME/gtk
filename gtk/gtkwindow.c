@@ -9021,7 +9021,7 @@ gtk_window_set_debugging (GdkDisplay *display,
 
   if (enable && inspector_window == NULL)
     {
-      inspector_window = gtk_inspector_window_new ();
+      inspector_window = gtk_inspector_window_get (display);
 
       if (warn)
         {

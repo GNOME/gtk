@@ -59,6 +59,13 @@
 #include "gtkstylecontext.h"
 
 
+enum {
+  PROP_INSPECTED_DISPLAY = 1,
+  NUM_PROPERTIES
+};
+
+static GParamSpec *properties[NUM_PROPERTIES];
+
 G_DEFINE_TYPE (GtkInspectorWindow, gtk_inspector_window, GTK_TYPE_WINDOW)
 
 static gboolean
@@ -198,6 +205,8 @@ gtk_inspector_window_init (GtkInspectorWindow *iw)
                                iw,
                                NULL);
 
+  gtk_window_set_hide_on_close (GTK_WINDOW (iw), TRUE);
+
   gtk_window_group_add_window (gtk_window_group_new (), GTK_WINDOW (iw));
 
   extension_point = g_io_extension_point_lookup ("gtk-inspector-page");
@@ -255,13 +264,15 @@ gtk_inspector_window_constructed (GObject *object)
 
   G_OBJECT_CLASS (gtk_inspector_window_parent_class)->constructed (object);
 
-  g_object_set_data (G_OBJECT (gdk_display_get_default ()), "-gtk-inspector", iw);
+  g_object_set_data (G_OBJECT (iw->inspected_display), "-gtk-inspector", iw);
 }
 
 static void
 gtk_inspector_window_dispose (GObject *object)
 {
-  g_object_set_data (G_OBJECT (gdk_display_get_default ()), "-gtk-inspector", NULL);
+  GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (object);
+
+  g_object_set_data (G_OBJECT (iw->inspected_display), "-gtk-inspector", NULL);
 
   G_OBJECT_CLASS (gtk_inspector_window_parent_class)->dispose (object);
 }
@@ -310,6 +321,45 @@ gtk_inspector_window_realize (GtkWidget *widget)
 }
 
 static void
+gtk_inspector_window_set_property (GObject      *object,
+                                   guint         prop_id,
+                                   const GValue *value,
+                                   GParamSpec   *pspec)
+{
+  GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (object);
+
+  switch (prop_id)
+    {
+    case PROP_INSPECTED_DISPLAY:
+      iw->inspected_display = g_value_get_object (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_inspector_window_get_property (GObject    *object,
+                                   guint       prop_id,
+                                   GValue     *value,
+                                   GParamSpec *pspec)
+{
+  GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (object);
+
+  switch (prop_id)
+    {
+    case PROP_INSPECTED_DISPLAY:
+      g_value_set_object (value, iw->inspected_display);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -317,7 +367,15 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
 
   object_class->constructed = gtk_inspector_window_constructed;
   object_class->dispose = gtk_inspector_window_dispose;
+  object_class->set_property = gtk_inspector_window_set_property;
+  object_class->get_property = gtk_inspector_window_get_property;
   widget_class->realize = gtk_inspector_window_realize;
+
+  properties[PROP_INSPECTED_DISPLAY] =
+      g_param_spec_object ("inspected-display", "Inspected display", "Inspected display",
+                           GDK_TYPE_DISPLAY,
+                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
   g_signal_new (g_intern_static_string ("event"),
                 G_OBJECT_CLASS_TYPE (object_class),
@@ -417,13 +475,21 @@ get_inspector_display (void)
 }
 
 GtkWidget *
-gtk_inspector_window_new (void)
+gtk_inspector_window_get (GdkDisplay *display)
 {
+  GtkWidget *iw;
+
   gtk_inspector_init ();
 
-  return GTK_WIDGET (g_object_new (GTK_TYPE_INSPECTOR_WINDOW,
+  iw = GTK_WIDGET (g_object_get_data (G_OBJECT (display), "-gtk-inspector"));
+
+  if (!iw)
+    iw = GTK_WIDGET (g_object_new (GTK_TYPE_INSPECTOR_WINDOW,
                                    "display", get_inspector_display (),
+                                   "inspected-display", display,
                                    NULL));
+
+  return iw;
 }
 
 void
@@ -531,4 +597,11 @@ gtk_inspector_handle_event (GdkEvent *event)
   return handled;
 }
 
+GdkDisplay *
+gtk_inspector_window_get_inspected_display (GtkInspectorWindow *iw)
+{
+  return iw->inspected_display;
+}
+
 // vim: set et sw=2 ts=2:
+
