@@ -511,17 +511,13 @@ static void
 setup_widget (GtkListItem *list_item,
               gpointer     unused)
 {
-  GtkWidget *box, *child;
+  GtkWidget *box;
   RowData *data;
 
   data = g_slice_new0 (RowData);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   gtk_list_item_set_child (list_item, box);
-
-  child = gtk_label_new (NULL);
-  gtk_label_set_width_chars (GTK_LABEL (child), 5);
-  gtk_container_add (GTK_CONTAINER (box), child);
 
   data->expander = gtk_tree_expander_new ();
   gtk_container_add (GTK_CONTAINER (box), data->expander);
@@ -538,6 +534,74 @@ setup_widget (GtkListItem *list_item,
   gtk_container_add (GTK_CONTAINER (box), data->name);
 
   g_signal_connect (list_item, "notify::item", G_CALLBACK (row_data_notify_item), data);
+  g_object_set_data_full (G_OBJECT (list_item), "row-data", data, row_data_free);
+}
+
+static void
+row_data_bind_one (RowData        *data,
+                   GtkTreeListRow *item)
+{
+  GFileInfo *info;
+
+  row_data_unbind (data);
+
+  if (item == NULL)
+    return;
+
+  data->current_item = g_object_ref (item);
+
+  info = gtk_tree_list_row_get_item (item);
+
+  if (!g_file_info_has_attribute (info, "filechooser::queried"))
+    {
+      data->cancellable = g_cancellable_new ();
+      g_file_info_set_attribute_boolean (info, "filechooser::queried", TRUE);
+      g_file_query_info_async (G_FILE (g_file_info_get_attribute_object (info, "standard::file")),
+                               G_FILE_ATTRIBUTE_THUMBNAIL_PATH ","
+                               G_FILE_ATTRIBUTE_THUMBNAILING_FAILED ","
+                               G_FILE_ATTRIBUTE_STANDARD_ICON,
+                               G_FILE_QUERY_INFO_NONE,
+                               G_PRIORITY_DEFAULT,
+                               data->cancellable,
+                               row_data_got_thumbnail_info_cb,
+                               data);
+    }
+
+  row_data_update_info (data, info);
+
+  gtk_label_set_label (GTK_LABEL (data->name), g_file_info_get_display_name (info));
+
+  g_object_unref (info);
+}
+
+static void
+row_data_notify_one_item (GtkListItem *item,
+                          GParamSpec  *pspec,
+                          RowData     *data)
+{
+  row_data_bind_one (data, gtk_list_item_get_item (item));
+}
+static void
+setup_one_widget (GtkListItem *list_item,
+                  gpointer unused)
+{
+  GtkWidget *box;
+  RowData *data;
+
+  data = g_slice_new0 (RowData);
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+  gtk_list_item_set_child (list_item, box);
+
+  data->icon = gtk_image_new ();
+  gtk_container_add (GTK_CONTAINER (box), data->icon);
+
+  data->name = gtk_label_new (NULL);
+  gtk_label_set_max_width_chars (GTK_LABEL (data->name), 40);
+  gtk_label_set_ellipsize (GTK_LABEL (data->name), PANGO_ELLIPSIZE_END);
+  gtk_container_add (GTK_CONTAINER (box), data->name);
+
+  g_signal_connect (list_item, "notify::item", G_CALLBACK (row_data_notify_one_item), data);
   g_object_set_data_full (G_OBJECT (list_item), "row-data", data, row_data_free);
 }
 
@@ -612,39 +676,93 @@ search_changed_cb (GtkSearchEntry *entry,
   gtk_filter_changed (custom_filter, GTK_FILTER_CHANGE_DIFFERENT);
 }
 
+static guint
+get_first_selected (GtkSelectionModel *model)
+{
+  guint i;
+
+  if (GTK_IS_SINGLE_SELECTION (model))
+    return gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (model));
+
+  i = 0;
+  while (i < g_list_model_get_n_items (G_LIST_MODEL (model)))
+    {
+      guint start, n_items;
+      gboolean selected;
+
+      gtk_selection_model_query_range (model, i, &start, &n_items, &selected);
+      if (selected)
+        return start;
+
+       i = start + n_items;
+    }
+
+  return GTK_INVALID_LIST_POSITION;
+}
+
+static void
+selection_changed (GtkSelectionModel *model, guint pos, guint n, GListStore *store)
+{
+  guint selected = get_first_selected (model);
+  gboolean was_empty;
+
+  was_empty = g_list_model_get_n_items (G_LIST_MODEL (store)) == 0;
+
+  if (selected == GTK_INVALID_LIST_POSITION)
+    {
+      if (!was_empty)
+        g_list_store_remove (store, 0);
+    }
+  else
+    {
+      gpointer item = g_list_model_get_item (G_LIST_MODEL (model), selected);
+
+      if (was_empty)
+        g_list_store_insert (store, 0, item);
+      else
+        g_list_store_splice (store, 0, 1, &item, 1);
+
+      g_object_unref (item);
+    }
+}
+
+static GListModel *
+get_selection (GtkSelectionModel *model)
+{
+  GListStore *store = g_list_store_new (g_list_model_get_item_type (G_LIST_MODEL (model)));
+  GListModel *selection;
+
+  g_signal_connect (model, "selection-changed", G_CALLBACK (selection_changed), store);
+  selection_changed (model, 0, 0, store);
+  g_object_set_data_full (G_OBJECT (model), "selection", g_object_ref (store), g_object_unref);
+
+  selection = G_LIST_MODEL (gtk_no_selection_new (G_LIST_MODEL (store)));
+  g_object_unref (store);
+
+  return selection;
+}
+
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *win, *vbox, *sw, *listview, *search_entry, *statusbar;
+  GtkWidget *win, *vbox, *sw, *listview, *search_entry, *statusbar, *vbox2;
+  GtkWidget *button, *popover, *box, *toggle;
   GListModel *dirmodel;
   GtkTreeListModel *tree;
   GtkFilterListModel *filter;
   GtkFilter *custom_filter;
   FileInfoSelection *selectionmodel;
+  GListModel *model;
   GFile *root;
 
   gtk_init ();
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_default_size (GTK_WINDOW (win), 800, 600);
+  gtk_window_set_default_size (GTK_WINDOW (win), 300, 600);
   g_signal_connect (win, "destroy", G_CALLBACK (gtk_main_quit), win);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (win), vbox);
-
-  search_entry = gtk_search_entry_new ();
-  gtk_container_add (GTK_CONTAINER (vbox), search_entry);
-
-  sw = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_set_vexpand (sw, TRUE);
-  gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (search_entry), sw);
-  gtk_container_add (GTK_CONTAINER (vbox), sw);
-
-  listview = gtk_grid_view_new_with_factory (
-    gtk_functions_list_item_factory_new (setup_widget,
-                                         NULL,
-                                         NULL, NULL));
-  gtk_container_add (GTK_CONTAINER (sw), listview);
 
   if (argc > 1)
     root = g_file_new_for_commandline_arg (argv[1]);
@@ -659,6 +777,8 @@ main (int argc, char *argv[])
   g_object_unref (dirmodel);
   g_object_unref (root);
 
+  search_entry = gtk_search_entry_new ();
+
   custom_filter = gtk_custom_filter_new (match_file, search_entry, NULL);
   filter = gtk_filter_list_model_new (G_LIST_MODEL (tree), custom_filter);
   g_signal_connect (search_entry, "search-changed", G_CALLBACK (search_changed_cb), custom_filter);
@@ -666,15 +786,53 @@ main (int argc, char *argv[])
 
   selectionmodel = file_info_selection_new (G_LIST_MODEL (filter));
   g_object_unref (filter);
+  listview = gtk_list_view_new_with_factory (
+    gtk_functions_list_item_factory_new (setup_one_widget,
+                                         NULL,
+                                         NULL, NULL));
 
-  gtk_grid_view_set_model (GTK_GRID_VIEW (listview), G_LIST_MODEL (selectionmodel));
+  model = get_selection (GTK_SELECTION_MODEL (selectionmodel));
+  gtk_list_view_set_model (GTK_LIST_VIEW (listview), model);
+  g_object_unref (model);
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("Selected:"));
+  gtk_container_add (GTK_CONTAINER (box), listview);
+
+  button = gtk_menu_button_new ();
+  toggle = gtk_widget_get_first_child (button);
+  gtk_container_remove (GTK_CONTAINER (toggle), gtk_widget_get_first_child (toggle));
+  gtk_container_add (GTK_CONTAINER (toggle), box);
+  popover = gtk_popover_new (button);
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), popover);
+  gtk_container_add (GTK_CONTAINER (vbox), button);
+
+  vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_container_add (GTK_CONTAINER (popover), vbox2);
+
+  gtk_container_add (GTK_CONTAINER (vbox2), search_entry);
+
+  sw = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (sw), 250);
+  gtk_widget_set_vexpand (sw, TRUE);
+  gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (search_entry), sw);
+  gtk_container_add (GTK_CONTAINER (vbox2), sw);
+
+  listview = gtk_list_view_new_with_factory (
+    gtk_functions_list_item_factory_new (setup_widget,
+                                         NULL,
+                                         NULL, NULL));
+  gtk_container_add (GTK_CONTAINER (sw), listview);
+
+
+  gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (selectionmodel));
 
   statusbar = gtk_statusbar_new ();
   gtk_widget_add_tick_callback (statusbar, (GtkTickCallback) update_statusbar, NULL, NULL);
   g_object_set_data (G_OBJECT (statusbar), "model", filter);
   g_signal_connect_swapped (filter, "items-changed", G_CALLBACK (update_statusbar), statusbar);
   update_statusbar (GTK_STATUSBAR (statusbar));
-  gtk_container_add (GTK_CONTAINER (vbox), statusbar);
+  gtk_container_add (GTK_CONTAINER (vbox2), statusbar);
 
   g_object_unref (tree);
   g_object_unref (selectionmodel);
