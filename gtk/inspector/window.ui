@@ -464,7 +464,7 @@
                         <property name="name">general</property>
                         <property name="title" translatable="yes">Information</property>
                         <property name="child">
-                          <object class="GtkInspectorGeneral"/>
+                          <object class="GtkInspectorGeneral" id="general"/>
                         </property>
                       </object>
                     </child>
@@ -473,7 +473,7 @@
                         <property name="name">visual</property>
                         <property name="title" translatable="yes">Settings</property>
                         <property name="child">
-                          <object class="GtkInspectorVisual"/>
+                          <object class="GtkInspectorVisual" id="visual"/>
                         </property>
                       </object>
                     </child>
@@ -504,7 +504,7 @@
                         <property name="name">logs</property>
                         <property name="title" translatable="yes">Logging</property>
                         <property name="child">
-                          <object class="GtkInspectorLogs"/>
+                          <object class="GtkInspectorLogs" id="logs"/>
                         </property>
                       </object>
                     </child>
@@ -519,7 +519,7 @@
             <property name="name">css</property>
             <property name="title" translatable="yes">CSS</property>
             <property name="child">
-              <object class="GtkInspectorCssEditor"/>
+              <object class="GtkInspectorCssEditor" id="css_editor"/>
             </property>
           </object>
         </child>

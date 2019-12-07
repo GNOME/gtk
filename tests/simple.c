@@ -33,6 +33,13 @@ main (int argc, char *argv[])
   gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  if (g_getenv ("CUSTOM_DISPLAY"))
+    {
+      GdkDisplay *display = gdk_display_open (NULL);
+      gtk_window_set_display (GTK_WINDOW (window), display);
+    }
+
   gtk_window_set_title (GTK_WINDOW (window), "hello world");
   gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);

@@ -91,6 +91,8 @@ struct _GtkInspectorVisualPrivate
   GtkInspectorOverlay *fps_overlay;
   GtkInspectorOverlay *updates_overlay;
   GtkInspectorOverlay *layout_overlay;
+
+  GdkDisplay *display;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorVisual, gtk_inspector_visual, GTK_TYPE_WIDGET)
@@ -165,11 +167,11 @@ static double
 get_font_scale (GtkInspectorVisual *vis)
 {
 #ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (gdk_display_get_default ()))
+  if (GDK_IS_X11_DISPLAY (vis->priv->display))
     {
       int dpi_int;
 
-      g_object_get (gtk_settings_get_default (),
+      g_object_get (gtk_settings_get_for_display (vis->priv->display),
                     "gtk-xft-dpi", &dpi_int,
                     NULL);
 
@@ -177,11 +179,11 @@ get_font_scale (GtkInspectorVisual *vis)
     }
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ()))
+  if (GDK_IS_WAYLAND_DISPLAY (vis->priv->display))
     {
       int dpi_int;
 
-      g_object_get (gtk_settings_get_default (),
+      g_object_get (gtk_settings_get_for_display (vis->priv->display),
                     "gtk-xft-dpi", &dpi_int,
                     NULL);
 
@@ -198,7 +200,7 @@ update_font_scale (GtkInspectorVisual *vis,
                    gboolean            update_adjustment,
                    gboolean            update_entry)
 {
-  g_object_set (gtk_settings_get_default (),
+  g_object_set (gtk_settings_get_for_display (vis->priv->display),
                 "gtk-xft-dpi", (gint)(factor * 96 * 1024),
                 NULL);
 
@@ -505,7 +507,8 @@ init_theme (GtkInspectorVisual *vis)
   g_list_free (list);
   g_hash_table_destroy (t);
 
-  g_object_bind_property (gtk_settings_get_default (), "gtk-theme-name",
+  g_object_bind_property (gtk_settings_get_for_display (vis->priv->display),
+                          "gtk-theme-name",
                           vis->priv->theme_combo, "active-id",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 
@@ -523,7 +526,8 @@ init_theme (GtkInspectorVisual *vis)
 static void
 init_dark (GtkInspectorVisual *vis)
 {
-  g_object_bind_property (gtk_settings_get_default (), "gtk-application-prefer-dark-theme",
+  g_object_bind_property (gtk_settings_get_for_display (vis->priv->display),
+                          "gtk-application-prefer-dark-theme",
                           vis->priv->dark_switch, "active",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 
@@ -596,7 +600,8 @@ init_icons (GtkInspectorVisual *vis)
   g_hash_table_destroy (t);
   g_list_free (list);
 
-  g_object_bind_property (gtk_settings_get_default (), "gtk-icon-theme-name",
+  g_object_bind_property (gtk_settings_get_for_display (vis->priv->display),
+                          "gtk-icon-theme-name",
                           vis->priv->icon_combo, "active-id",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 }
@@ -658,7 +663,8 @@ init_cursors (GtkInspectorVisual *vis)
   g_hash_table_destroy (t);
   g_list_free (list);
 
-  g_object_bind_property (gtk_settings_get_default (), "gtk-cursor-theme-name",
+  g_object_bind_property (gtk_settings_get_for_display (vis->priv->display),
+                          "gtk-cursor-theme-name",
                           vis->priv->cursor_combo, "active-id",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 }
@@ -669,7 +675,7 @@ cursor_size_changed (GtkAdjustment *adjustment, GtkInspectorVisual *vis)
   gint size;
 
   size = gtk_adjustment_get_value (adjustment);
-  g_object_set (gtk_settings_get_default (), "gtk-cursor-theme-size", size, NULL);
+  g_object_set (gtk_settings_get_for_display (vis->priv->display), "gtk-cursor-theme-size", size, NULL);
 }
 
 static void
@@ -677,7 +683,7 @@ init_cursor_size (GtkInspectorVisual *vis)
 {
   gint size;
 
-  g_object_get (gtk_settings_get_default (), "gtk-cursor-theme-size", &size, NULL);
+  g_object_get (gtk_settings_get_for_display (vis->priv->display), "gtk-cursor-theme-size", &size, NULL);
   if (size == 0)
     size = 32;
 
@@ -689,7 +695,8 @@ init_cursor_size (GtkInspectorVisual *vis)
 static void
 init_font (GtkInspectorVisual *vis)
 {
-  g_object_bind_property (gtk_settings_get_default (), "gtk-font-name",
+  g_object_bind_property (gtk_settings_get_for_display (vis->priv->display),
+                          "gtk-font-name",
                           vis->priv->font_button, "font",
                           G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
 }
@@ -711,12 +718,10 @@ init_font_scale (GtkInspectorVisual *vis)
 static void
 scale_changed (GtkAdjustment *adjustment, GtkInspectorVisual *vis)
 {
-  GdkDisplay *display;
   gint scale;
 
   scale = gtk_adjustment_get_value (adjustment);
-  display = gdk_display_get_default ();
-  gdk_x11_display_set_surface_scale (display, scale);
+  gdk_x11_display_set_surface_scale (vis->priv->display, scale);
 }
 #endif
 
@@ -724,14 +729,11 @@ static void
 init_scale (GtkInspectorVisual *vis)
 {
 #if defined (GDK_WINDOWING_X11)
-  GdkDisplay *display;
-
-  display = gdk_display_get_default ();
-  if (GDK_IS_X11_DISPLAY (display))
+  if (GDK_IS_X11_DISPLAY (vis->priv->display))
     {
       gdouble scale;
 
-      scale = gdk_monitor_get_scale_factor (gdk_display_get_primary_monitor (display));
+      scale = gdk_monitor_get_scale_factor (gdk_display_get_primary_monitor (vis->priv->display));
       gtk_adjustment_set_value (vis->priv->scale_adjustment, scale);
       g_signal_connect (vis->priv->scale_adjustment, "value-changed",
                         G_CALLBACK (scale_changed), vis);
@@ -751,7 +753,7 @@ init_scale (GtkInspectorVisual *vis)
 static void
 init_animation (GtkInspectorVisual *vis)
 {
-  g_object_bind_property (gtk_settings_get_default (), "gtk-enable-animations",
+  g_object_bind_property (gtk_settings_get_for_display (vis->priv->display), "gtk-enable-animations",
                           vis->priv->animation_switch, "active",
                           G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
 }
@@ -952,7 +954,7 @@ row_activated (GtkListBox         *box,
 static void
 init_gl (GtkInspectorVisual *vis)
 {
-  GdkDebugFlags flags = gdk_display_get_debug_flags (gdk_display_get_default ());
+  GdkDebugFlags flags = gdk_display_get_debug_flags (vis->priv->display);
 
   gtk_switch_set_active (GTK_SWITCH (vis->priv->software_gl_switch), flags & GDK_DEBUG_GL_SOFTWARE);
 
@@ -968,22 +970,24 @@ init_gl (GtkInspectorVisual *vis)
 
 static void
 update_gl_flag (GtkSwitch     *sw,
-                GdkDebugFlags  flag)
+                GdkDebugFlags  flag,
+                GtkInspectorVisual *vis)
 {
-  GdkDebugFlags flags = gdk_display_get_debug_flags (gdk_display_get_default ());
+  GdkDebugFlags flags = gdk_display_get_debug_flags (vis->priv->display);
 
   if (gtk_switch_get_active (sw))
     flags |= flag;
   else
     flags &= ~flag;
 
-  gdk_display_set_debug_flags (gdk_display_get_default (), flags);
+  gdk_display_set_debug_flags (vis->priv->display, flags);
 }
 
 static void
-software_gl_activate (GtkSwitch *sw)
+software_gl_activate (GtkSwitch *sw,
+                      GtkInspectorVisual *vis)
 {
-  update_gl_flag (sw, GDK_DEBUG_GL_SOFTWARE);
+  update_gl_flag (sw, GDK_DEBUG_GL_SOFTWARE, vis);
 }
 
 static void
@@ -991,19 +995,6 @@ gtk_inspector_visual_init (GtkInspectorVisual *vis)
 {
   vis->priv = gtk_inspector_visual_get_instance_private (vis);
   gtk_widget_init_template (GTK_WIDGET (vis));
-  init_direction (vis);
-  init_theme (vis);
-  init_dark (vis);
-  init_icons (vis);
-  init_cursors (vis);
-  init_cursor_size (vis);
-  init_font (vis);
-  init_font_scale (vis);
-  init_scale (vis);
-  init_animation (vis);
-  init_slowdown (vis);
-  init_touchscreen (vis);
-  init_gl (vis);
 }
 
 static void
@@ -1122,6 +1113,27 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, layout_activate);
   gtk_widget_class_bind_template_callback (widget_class, widget_resize_activate);
   gtk_widget_class_bind_template_callback (widget_class, software_gl_activate);
+}
+
+void
+gtk_inspector_visual_set_display  (GtkInspectorVisual *vis,
+                                   GdkDisplay *display)
+{
+  vis->priv->display = display;
+
+  init_direction (vis);
+  init_theme (vis);
+  init_dark (vis);
+  init_icons (vis);
+  init_cursors (vis);
+  init_cursor_size (vis);
+  init_font (vis);
+  init_font_scale (vis);
+  init_scale (vis);
+  init_animation (vis);
+  init_slowdown (vis);
+  init_touchscreen (vis);
+  init_gl (vis);
 }
 
 // vim: set et sw=2 ts=2:

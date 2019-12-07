@@ -75,7 +75,6 @@
 
 #include "a11y/gtkwindowaccessibleprivate.h"
 #include "a11y/gtkcontaineraccessibleprivate.h"
-#include "inspector/init.h"
 #include "inspector/window.h"
 
 #include "gdk/gdktextureprivate.h"
@@ -574,7 +573,6 @@ static GtkWindowRegion get_active_region_type (GtkWindow   *window,
                                                gint         x,
                                                gint         y);
 
-static void gtk_window_update_debugging (void);
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkWindow)
@@ -1828,7 +1826,6 @@ gtk_window_init (GtkWindow *window)
 
   g_object_ref_sink (window);
   priv->has_user_ref_count = TRUE;
-  gtk_window_update_debugging ();
 
 #ifdef GDK_WINDOWING_X11
   g_signal_connect (gtk_settings_get_for_display (priv->display),
@@ -4651,7 +4648,6 @@ gtk_window_destroy (GtkWidget *widget)
       else
         g_object_unref (item);
     }
-  gtk_window_update_debugging ();
 
   if (priv->transient_parent)
     gtk_window_set_transient_for (window, NULL);
@@ -8969,11 +8965,12 @@ _gtk_window_raise_popover (GtkWindow *window,
     }
 }
 
-static GtkWidget *inspector_window = NULL;
-
-static guint gtk_window_update_debugging_id;
-
 static void set_warn_again (gboolean warn);
+static void gtk_window_set_debugging (GdkDisplay *display,
+                                      gboolean    enable,
+                                      gboolean    toggle,
+                                      gboolean    select,
+                                      gboolean    warn);
 
 static void
 warn_response (GtkDialog *dialog,
@@ -8981,67 +8978,49 @@ warn_response (GtkDialog *dialog,
 {
   GtkWidget *check;
   gboolean remember;
+  GtkWidget *inspector_window;
+  GdkDisplay *display;
+
+  inspector_window = GTK_WIDGET (gtk_window_get_transient_for (GTK_WINDOW (dialog)));
+  display = gtk_inspector_window_get_inspected_display (GTK_INSPECTOR_WINDOW (inspector_window));
 
   check = g_object_get_data (G_OBJECT (dialog), "check");
   remember = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check));
 
   gtk_widget_destroy (GTK_WIDGET (dialog));
   g_object_set_data (G_OBJECT (inspector_window), "warning_dialog", NULL);
+
   if (response == GTK_RESPONSE_NO)
-    {
-      GtkWidget *window;
-
-      if (gtk_window_update_debugging_id)
-        {
-          g_source_remove (gtk_window_update_debugging_id);
-          gtk_window_update_debugging_id = 0;
-        }
-
-      /* Steal reference into temp variable, so not to mess up with
-       * inspector_window during gtk_widget_destroy().
-       */
-      window = inspector_window;
-      inspector_window = NULL;
-      gtk_widget_destroy (window);
-    }
+    gtk_window_set_debugging (display, FALSE, FALSE, FALSE, FALSE);
   else
-    {
-      set_warn_again (!remember);
-    }
-}
-
-static gboolean
-update_debugging (gpointer data)
-{
-  gtk_window_update_debugging_id = 0;
-  return G_SOURCE_REMOVE;
+    set_warn_again (!remember);
 }
 
 static void
-gtk_window_update_debugging (void)
-{
-  if (inspector_window &&
-      gtk_window_update_debugging_id == 0)
-    {
-      gtk_window_update_debugging_id = g_idle_add (update_debugging, NULL);
-      g_source_set_name_by_id (gtk_window_update_debugging_id, "[gtk] gtk_window_update_debugging");
-    }
-}
-
-static void
-gtk_window_set_debugging (gboolean enable,
-                          gboolean select,
-                          gboolean warn)
+gtk_window_set_debugging (GdkDisplay *display,
+                          gboolean    enable,
+                          gboolean    toggle,
+                          gboolean    select,
+                          gboolean    warn)
 {
   GtkWidget *dialog = NULL;
   GtkWidget *area;
   GtkWidget *check;
+  GtkWidget *inspector_window;
+  gboolean was_debugging;
 
-  if (inspector_window == NULL)
+  was_debugging = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (display), "-gtk-debugging-enabled"));
+
+  if (toggle)
+    enable = !was_debugging;
+
+  g_object_set_data (G_OBJECT (display), "-gtk-debugging-enabled", GINT_TO_POINTER (enable));
+
+  if (enable)
     {
-      gtk_inspector_init ();
-      inspector_window = gtk_inspector_window_new ();
-      gtk_window_set_hide_on_close (GTK_WINDOW (inspector_window), TRUE);
+      inspector_window = gtk_inspector_window_get (display);
+
+      gtk_window_present (GTK_WINDOW (inspector_window));
 
       if (warn)
         {
@@ -9063,26 +9042,19 @@ gtk_window_set_debugging (gboolean enable,
           g_object_set_data (G_OBJECT (dialog), "check", check);
           gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_NO);
           gtk_dialog_add_button (GTK_DIALOG (dialog), _("_OK"), GTK_RESPONSE_YES);
-          g_signal_connect (dialog, "response", G_CALLBACK (warn_response), NULL);
+          g_signal_connect (dialog, "response", G_CALLBACK (warn_response), inspector_window);
           g_object_set_data (G_OBJECT (inspector_window), "warning_dialog", dialog);
+
+          gtk_widget_show (dialog);
         }
-    }
-
-  dialog = g_object_get_data (G_OBJECT (inspector_window), "warning_dialog");
-
-  if (enable)
-    {
-      gtk_window_present (GTK_WINDOW (inspector_window));
-      if (dialog)
-        gtk_widget_show (dialog);
 
       if (select)
         gtk_inspector_window_select_widget_under_pointer (GTK_INSPECTOR_WINDOW (inspector_window));
     }
-  else
+  else if (was_debugging)
     {
-      if (dialog)
-        gtk_widget_hide (dialog);
+      inspector_window = gtk_inspector_window_get (display);
+
       gtk_widget_hide (inspector_window);
     }
 }
@@ -9098,7 +9070,9 @@ gtk_window_set_debugging (gboolean enable,
 void
 gtk_window_set_interactive_debugging (gboolean enable)
 {
-  gtk_window_set_debugging (enable, FALSE, FALSE);
+  GdkDisplay *display = gdk_display_get_default ();
+
+  gtk_window_set_debugging (display, enable, FALSE, FALSE, FALSE);
 }
 
 static gboolean
@@ -9150,21 +9124,13 @@ static gboolean
 gtk_window_enable_debugging (GtkWindow *window,
                              gboolean   toggle)
 {
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   gboolean warn;
 
   if (!inspector_keybinding_enabled (&warn))
     return FALSE;
 
-  if (toggle)
-    {
-      if (GTK_IS_WIDGET (inspector_window) &&
-          gtk_widget_is_visible (inspector_window))
-        gtk_window_set_debugging (FALSE, FALSE, FALSE);
-      else
-        gtk_window_set_debugging (TRUE, FALSE, warn);
-    }
-  else
-    gtk_window_set_debugging (TRUE, TRUE, warn);
+  gtk_window_set_debugging (priv->display, TRUE, toggle, !toggle, warn);
 
   return TRUE;
 }
