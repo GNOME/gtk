@@ -19,6 +19,7 @@
 #include <glib/gi18n-lib.h>
 
 #include "general.h"
+#include "window.h"
 
 #include "gtkdebug.h"
 #include "gtklabel.h"
@@ -89,6 +90,8 @@ struct _GtkInspectorGeneralPrivate
   GtkWidget *display_composited;
   GtkSizeGroup *labels;
   GtkAdjustment *focus_adjustment;
+
+  GdkDisplay *display;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorGeneral, gtk_inspector_general, GTK_TYPE_WIDGET)
@@ -97,41 +100,38 @@ static void
 init_version (GtkInspectorGeneral *gen)
 {
   const char *backend;
-  GdkDisplay *display;
   GdkSurface *surface;
   GskRenderer *gsk_renderer;
   const char *renderer;
 
-  display = gdk_display_get_default ();
-
 #ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (display))
+  if (GDK_IS_X11_DISPLAY (gen->priv->display))
     backend = "X11";
   else
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (display))
+  if (GDK_IS_WAYLAND_DISPLAY (gen->priv->display))
     backend = "Wayland";
   else
 #endif
 #ifdef GDK_WINDOWING_BROADWAY
-  if (GDK_IS_BROADWAY_DISPLAY (display))
+  if (GDK_IS_BROADWAY_DISPLAY (gen->priv->display))
     backend = "Broadway";
   else
 #endif
 #ifdef GDK_WINDOWING_WIN32
-  if (GDK_IS_WIN32_DISPLAY (display))
+  if (GDK_IS_WIN32_DISPLAY (gen->priv->display))
     backend = "Windows";
   else
 #endif
 #ifdef GDK_WINDOWING_QUARTZ
-  if (GDK_IS_QUARTZ_DISPLAY (display))
+  if (GDK_IS_QUARTZ_DISPLAY (gen->priv->display))
     backend = "Quartz";
   else
 #endif
     backend = "Unknown";
 
-  surface = gdk_surface_new_toplevel (display, 10, 10);
+  surface = gdk_surface_new_toplevel (gen->priv->display, 10, 10);
   gsk_renderer = gsk_renderer_new_for_surface (surface);
   if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskVulkanRenderer") == 0)
     renderer = "Vulkan";
@@ -289,10 +289,9 @@ static void
 init_gl (GtkInspectorGeneral *gen)
 {
 #ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (gdk_display_get_default ()))
+  if (GDK_IS_X11_DISPLAY (gen->priv->display))
     {
-      GdkDisplay *display = gdk_display_get_default ();
-      Display *dpy = GDK_DISPLAY_XDISPLAY (display);
+      Display *dpy = GDK_DISPLAY_XDISPLAY (gen->priv->display);
       int error_base, event_base;
       gchar *version;
       if (!glXQueryExtension (dpy, &error_base, &event_base))
@@ -315,14 +314,13 @@ init_gl (GtkInspectorGeneral *gen)
   else
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ()))
+  if (GDK_IS_WAYLAND_DISPLAY (gen->priv->display))
     {
-      GdkDisplay *display = gdk_display_get_default ();
       EGLDisplay dpy;
       EGLint major, minor;
       gchar *version;
 
-      dpy = wayland_get_display (gdk_wayland_display_get_wl_display (display));
+      dpy = wayland_get_display (gdk_wayland_display_get_wl_display (gen->priv->display));
 
       if (!eglInitialize (dpy, &major, &minor))
         return;
@@ -389,9 +387,8 @@ init_vulkan (GtkInspectorGeneral *gen)
 #ifdef GDK_RENDERING_VULKAN
   GdkSurface *surface;
   GdkVulkanContext *context;
-  GdkDisplay *display = gdk_display_get_default ();
 
-  surface = gdk_surface_new_toplevel (display, 10, 10);
+  surface = gdk_surface_new_toplevel (gen->priv->display, 10, 10);
   context = gdk_surface_create_vulkan_context (surface, NULL);
   gdk_surface_destroy (surface);
 
@@ -426,11 +423,11 @@ init_vulkan (GtkInspectorGeneral *gen)
 
       add_check_row (gen, GTK_LIST_BOX (gen->priv->vulkan_box), VK_KHR_SURFACE_EXTENSION_NAME, TRUE, 0);
 #ifdef GDK_WINDOWING_X11
-      if (GDK_IS_X11_DISPLAY (gdk_display_get_default ()))
+      if (GDK_IS_X11_DISPLAY (gen->priv->display))
         add_check_row (gen, GTK_LIST_BOX (gen->priv->vulkan_box), "VK_KHR_xlib_surface", TRUE, 0);
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
-      if (GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ()))
+      if (GDK_IS_WAYLAND_DISPLAY (gen->priv->display))
         add_check_row (gen, GTK_LIST_BOX (gen->priv->vulkan_box), "VK_KHR_wayland_surface", TRUE, 0);
 #endif
       add_check_row (gen, GTK_LIST_BOX (gen->priv->vulkan_box), VK_EXT_DEBUG_REPORT_EXTENSION_NAME,
@@ -615,15 +612,11 @@ populate_display_monitor_cb (GdkDisplay          *display,
 static void
 init_display (GtkInspectorGeneral *gen)
 {
-  GdkDisplay *display;
+  g_signal_connect (gen->priv->display, "notify", G_CALLBACK (populate_display_notify_cb), gen);
+  g_signal_connect (gen->priv->display, "monitor-added", G_CALLBACK (populate_display_monitor_cb), gen);
+  g_signal_connect (gen->priv->display, "monitor-removed", G_CALLBACK (populate_display_monitor_cb), gen);
 
-  display = gdk_display_get_default ();
-
-  g_signal_connect (display, "notify", G_CALLBACK (populate_display_notify_cb), gen);
-  g_signal_connect (display, "monitor-added", G_CALLBACK (populate_display_monitor_cb), gen);
-  g_signal_connect (display, "monitor-removed", G_CALLBACK (populate_display_monitor_cb), gen);
-
-  populate_display (display, gen);
+  populate_display (gen->priv->display, gen);
 }
 
 static void
@@ -779,7 +772,6 @@ add_seat (GtkInspectorGeneral *gen,
 static void
 populate_seats (GtkInspectorGeneral *gen)
 {
-  GdkDisplay *display = gdk_display_get_default ();
   GList *list, *l;
   int i;
 
@@ -788,7 +780,7 @@ populate_seats (GtkInspectorGeneral *gen)
     gtk_widget_destroy (GTK_WIDGET (l->data));
   g_list_free (list);
 
-  list = gdk_display_list_seats (display);
+  list = gdk_display_list_seats (gen->priv->display);
 
   for (l = list, i = 0; l; l = l->next, i++)
     add_seat (gen, GDK_SEAT (l->data), i);
@@ -799,10 +791,8 @@ populate_seats (GtkInspectorGeneral *gen)
 static void
 init_device (GtkInspectorGeneral *gen)
 {
-  GdkDisplay *display = gdk_display_get_default ();
-
-  g_signal_connect_swapped (display, "seat-added", G_CALLBACK (populate_seats), gen);
-  g_signal_connect_swapped (display, "seat-removed", G_CALLBACK (populate_seats), gen);
+  g_signal_connect_swapped (gen->priv->display, "seat-added", G_CALLBACK (populate_seats), gen);
+  g_signal_connect_swapped (gen->priv->display, "seat-removed", G_CALLBACK (populate_seats), gen);
 
   populate_seats (gen);
 }
@@ -812,13 +802,6 @@ gtk_inspector_general_init (GtkInspectorGeneral *gen)
 {
   gen->priv = gtk_inspector_general_get_instance_private (gen);
   gtk_widget_init_template (GTK_WIDGET (gen));
-  init_version (gen);
-  init_env (gen);
-  init_display (gen);
-  init_pango (gen);
-  init_gl (gen);
-  init_vulkan (gen);
-  init_device (gen);
 }
 
 static gboolean
@@ -965,6 +948,21 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, display_composited);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, display_rgba);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, device_box);
+}
+
+void
+gtk_inspector_general_set_display (GtkInspectorGeneral *gen,
+                                   GdkDisplay *display)
+{
+  gen->priv->display = display;
+
+  init_version (gen);
+  init_env (gen);
+  init_display (gen);
+  init_pango (gen);
+  init_gl (gen);
+  init_vulkan (gen);
+  init_device (gen);
 }
 
 // vim: set et sw=2 ts=2:
