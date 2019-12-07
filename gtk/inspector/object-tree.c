@@ -29,6 +29,7 @@
 
 #include "object-tree.h"
 #include "prop-list.h"
+#include "window.h"
 
 #include "gtkbuildable.h"
 #include "gtkbutton.h"
@@ -66,11 +67,12 @@ enum
   LAST_SIGNAL
 };
 
-
 struct _GtkInspectorObjectTreePrivate
 {
   GtkListBox *list;
   GtkTreeListModel *tree_model;
+  GListStore *special_model;
+  GtkFilterListModel *root_model;
   GtkWidget *search_bar;
   GtkWidget *search_entry;
   GtkSizeGroup *type_size_group;
@@ -810,12 +812,16 @@ destroy_controller (GtkEventController *controller)
   gtk_widget_remove_controller (gtk_event_controller_get_widget (controller), controller);
 }
 
+static gboolean toplevel_filter_func (gpointer item,
+                                      gpointer data);
+
 static void
 map (GtkWidget *widget)
 {
   GtkInspectorObjectTree *wt = GTK_INSPECTOR_OBJECT_TREE (widget);
   GtkEventController *controller;
   GtkWidget *toplevel;
+  GdkDisplay *display;
 
   GTK_WIDGET_CLASS (gtk_inspector_object_tree_parent_class)->map (widget);
 
@@ -827,6 +833,11 @@ map (GtkWidget *widget)
   gtk_widget_add_controller (toplevel, controller);
 
   gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (wt->priv->search_bar), toplevel);
+
+  display = gtk_inspector_window_get_inspected_display (GTK_INSPECTOR_WINDOW (toplevel));
+  gtk_filter_list_model_set_filter_func (wt->priv->root_model, toplevel_filter_func, display, NULL);
+
+  g_list_store_append (G_LIST_STORE (wt->priv->special_model), gtk_settings_get_for_display (display));
 }
 
 static void
@@ -1116,7 +1127,7 @@ toplevel_filter_func (gpointer item,
 }
 
 static GListModel *
-create_root_model (void)
+create_root_model (GtkInspectorObjectTree *wt)
 {
   GtkFilterListModel *filter;
   GtkFlattenListModel *flatten;
@@ -1125,19 +1136,17 @@ create_root_model (void)
 
   list = g_list_store_new (G_TYPE_LIST_MODEL);
 
-  special = g_list_store_new (G_TYPE_OBJECT);
+  wt->priv->special_model = special = g_list_store_new (G_TYPE_OBJECT);
   item = g_application_get_default ();
   if (item)
     g_list_store_append (special, item);
-  g_list_store_append (special, gtk_settings_get_default ());
   g_list_store_append (list, special);
   g_object_unref (special);
 
-  filter = gtk_filter_list_model_new_for_type (G_TYPE_OBJECT);
+  wt->priv->root_model = filter = gtk_filter_list_model_new_for_type (G_TYPE_OBJECT);
   gtk_filter_list_model_set_filter_func (filter, 
                                          toplevel_filter_func,
-                                         g_object_ref (gdk_display_get_default ()),
-                                         g_object_unref);
+                                         NULL, NULL);
   gtk_filter_list_model_set_model (filter, gtk_window_get_toplevels ());
   g_list_store_append (list, filter);
   g_object_unref (filter);
@@ -1158,7 +1167,7 @@ gtk_inspector_object_tree_init (GtkInspectorObjectTree *wt)
   gtk_search_bar_connect_entry (GTK_SEARCH_BAR (wt->priv->search_bar),
                                 GTK_EDITABLE (wt->priv->search_entry));
 
-  root_model = create_root_model ();
+  root_model = create_root_model (wt);
   wt->priv->tree_model = gtk_tree_list_model_new (FALSE,
                                                   root_model,
                                                   FALSE,
