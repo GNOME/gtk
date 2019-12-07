@@ -23,6 +23,7 @@
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
+#include "window.h"
 #include "css-editor.h"
 
 #include "gtkcssprovider.h"
@@ -42,6 +43,7 @@ struct _GtkInspectorCssEditorPrivate
 {
   GtkWidget *view;
   GtkTextBuffer *text;
+  GdkDisplay *display;
   GtkCssProvider *provider;
   GtkToggleButton *disable_button;
   guint timeout;
@@ -157,11 +159,14 @@ static void
 disable_toggled (GtkToggleButton       *button,
                  GtkInspectorCssEditor *ce)
 {
+  if (!ce->priv->display)
+    return;
+
   if (gtk_toggle_button_get_active (button))
-    gtk_style_context_remove_provider_for_display (gdk_display_get_default (),
+    gtk_style_context_remove_provider_for_display (ce->priv->display,
                                                    GTK_STYLE_PROVIDER (ce->priv->provider));
   else
-    gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+    gtk_style_context_add_provider_for_display (ce->priv->display,
                                                 GTK_STYLE_PROVIDER (ce->priv->provider),
                                                 GTK_STYLE_PROVIDER_PRIORITY_USER);
 }
@@ -326,20 +331,33 @@ static void
 create_provider (GtkInspectorCssEditor *ce)
 {
   ce->priv->provider = gtk_css_provider_new ();
-  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (ce->priv->provider),
-                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
-
   g_signal_connect (ce->priv->provider, "parsing-error",
                     G_CALLBACK (show_parsing_error), ce);
+
 }
 
 static void
 destroy_provider (GtkInspectorCssEditor *ce)
 {
-  gtk_style_context_remove_provider_for_display (gdk_display_get_default (),
-                                                 GTK_STYLE_PROVIDER (ce->priv->provider));
+  g_signal_handlers_disconnect_by_func (ce->priv->provider, show_parsing_error, ce);
   g_clear_object (&ce->priv->provider);
+}
+
+static void
+add_provider (GtkInspectorCssEditor *ce,
+              GdkDisplay *display)
+{
+  gtk_style_context_add_provider_for_display (display,
+                                              GTK_STYLE_PROVIDER (ce->priv->provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
+}
+
+static void
+remove_provider (GtkInspectorCssEditor *ce,
+                 GdkDisplay *display)
+{
+  gtk_style_context_remove_provider_for_display (display,
+                                                 GTK_STYLE_PROVIDER (ce->priv->provider));
 }
 
 static void
@@ -355,7 +373,6 @@ constructed (GObject *object)
   GtkInspectorCssEditor *ce = GTK_INSPECTOR_CSS_EDITOR (object);
 
   create_provider (ce);
-  set_initial_text (ce);
 }
 
 static void
@@ -366,11 +383,28 @@ finalize (GObject *object)
   if (ce->priv->timeout != 0)
     g_source_remove (ce->priv->timeout);
 
+  if (ce->priv->display)
+    remove_provider (ce, ce->priv->display);
   destroy_provider (ce);
 
   g_list_free_full (ce->priv->errors, css_error_free);
 
   G_OBJECT_CLASS (gtk_inspector_css_editor_parent_class)->finalize (object);
+}
+
+static void
+map (GtkWidget *widget)
+{
+  GtkInspectorCssEditor *ce = GTK_INSPECTOR_CSS_EDITOR (widget);
+  GtkWidget *toplevel;
+
+  GTK_WIDGET_CLASS (gtk_inspector_css_editor_parent_class)->map (widget);
+
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
+  ce->priv->display = gtk_inspector_window_get_inspected_display (GTK_INSPECTOR_WINDOW (toplevel));
+
+  add_provider (ce, ce->priv->display);
+  set_initial_text (ce);
 }
 
 static void
@@ -381,6 +415,8 @@ gtk_inspector_css_editor_class_init (GtkInspectorCssEditorClass *klass)
 
   object_class->constructed = constructed;
   object_class->finalize = finalize;
+
+  widget_class->map = map;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/css-editor.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, text);
