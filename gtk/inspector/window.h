@@ -73,6 +73,7 @@ typedef struct
   GtkWidget *sidebar_revealer;
   GtkWidget *css_editor;
   GtkWidget *visual;
+  GtkWidget *general;
 
   GtkWidget *selected_widget;
 

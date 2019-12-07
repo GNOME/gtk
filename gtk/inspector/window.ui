@@ -464,7 +464,7 @@
                         <property name="name">general</property>
                         <property name="title" translatable="yes">Information</property>
                         <property name="child">
-                          <object class="GtkInspectorGeneral"/>
+                          <object class="GtkInspectorGeneral" id="general"/>
                         </property>
                       </object>
                     </child>
