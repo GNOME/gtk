@@ -24,6 +24,7 @@
 
 #include "css-node-tree.h"
 #include "prop-editor.h"
+#include "window.h"
 
 #include "gtktreemodelcssnode.h"
 #include "gtktreeview.h"
@@ -222,26 +223,10 @@ gtk_inspector_css_node_tree_finalize (GObject *object)
 }
 
 static void
-ensure_css_sections (void)
-{
-  GtkSettings *settings;
-  gchar *theme_name;
-
-  gtk_css_provider_set_keep_css_sections ();
-
-  settings = gtk_settings_get_default ();
-  g_object_get (settings, "gtk-theme-name", &theme_name, NULL);
-  g_object_set (settings, "gtk-theme-name", theme_name, NULL);
-  g_free (theme_name);
-}
-
-static void
 gtk_inspector_css_node_tree_class_init (GtkInspectorCssNodeTreeClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-  ensure_css_sections ();
 
   object_class->set_property = gtk_inspector_css_node_tree_set_property;
   object_class->get_property = gtk_inspector_css_node_tree_get_property;
@@ -529,6 +514,19 @@ gtk_inspector_css_node_tree_get_node (GtkInspectorCssNodeTree *cnt)
   GtkInspectorCssNodeTreePrivate *priv = cnt->priv;
 
   return priv->node;
+}
+
+void
+gtk_inspector_css_node_tree_set_display (GtkInspectorCssNodeTree *cnt,
+                                         GdkDisplay *display)
+{
+  GtkSettings *settings;
+  gchar *theme_name;
+
+  settings = gtk_settings_get_for_display (display);
+  g_object_get (settings, "gtk-theme-name", &theme_name, NULL);
+  g_object_set (settings, "gtk-theme-name", theme_name, NULL);
+  g_free (theme_name);
 }
 
 // vim: set et sw=2 ts=2:

@@ -55,6 +55,9 @@ void            gtk_inspector_css_node_tree_set_object          (GtkInspectorCss
                                                                  GObject                        *object);
 
 GtkCssNode *    gtk_inspector_css_node_tree_get_node            (GtkInspectorCssNodeTree        *cnt);
+void            gtk_inspector_css_node_tree_set_display         (GtkInspectorCssNodeTree        *cnt,
+                                                                 GdkDisplay                     *display);
+
 
 G_END_DECLS
 
