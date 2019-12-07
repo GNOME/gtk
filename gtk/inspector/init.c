@@ -46,6 +46,7 @@
 #include "window.h"
 
 #include "gtkmagnifierprivate.h"
+#include "gtkcssproviderprivate.h"
 
 #include "gtkmodulesprivate.h"
 
@@ -96,6 +97,8 @@ gtk_inspector_init (void)
       g_strfreev (paths);
       g_io_module_scope_free (scope);
     }
+
+  gtk_css_provider_set_keep_css_sections ();
 }
 
 // vim: set et sw=2 ts=2:

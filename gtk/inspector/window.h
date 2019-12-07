@@ -71,6 +71,10 @@ typedef struct
   GtkWidget *controllers;
   GtkWidget *magnifier;
   GtkWidget *sidebar_revealer;
+  GtkWidget *css_editor;
+  GtkWidget *visual;
+  GtkWidget *general;
+  GtkWidget *logs;
 
   GtkWidget *selected_widget;
 
@@ -84,6 +88,8 @@ typedef struct
 
   GList *overlays;
 
+  GdkDisplay *inspected_display;
+
 } GtkInspectorWindow;
 
 typedef struct
@@ -95,7 +101,7 @@ typedef struct
 G_BEGIN_DECLS
 
 GType      gtk_inspector_window_get_type    (void);
-GtkWidget *gtk_inspector_window_new         (void);
+GtkWidget *gtk_inspector_window_get         (GdkDisplay *display);
 
 void       gtk_inspector_flash_widget       (GtkInspectorWindow *iw,
                                              GtkWidget          *widget);
@@ -109,6 +115,7 @@ void                    gtk_inspector_window_remove_overlay                     
                                                                                  GtkInspectorOverlay    *overlay);
 
 void                    gtk_inspector_window_select_widget_under_pointer        (GtkInspectorWindow     *iw);
+GdkDisplay *            gtk_inspector_window_get_inspected_display              (GtkInspectorWindow     *iw);
 
 gboolean                gtk_inspector_is_recording                              (GtkWidget              *widget);
 GskRenderNode *         gtk_inspector_prepare_render                            (GtkWidget              *widget,

@@ -67,6 +67,9 @@ void       gtk_inspector_object_tree_activate_object     (GtkInspectorObjectTree
 
 GObject   *gtk_inspector_object_tree_get_selected        (GtkInspectorObjectTree *wt);
 
+void       gtk_inspector_object_tree_set_display         (GtkInspectorObjectTree *wt,
+                                                          GdkDisplay             *display);
+
 G_END_DECLS
 
 

@@ -49,6 +49,9 @@ typedef struct _GtkInspectorLogsClass
 G_BEGIN_DECLS
 
 GType      gtk_inspector_logs_get_type   (void);
+void       gtk_inspector_logs_set_display (GtkInspectorLogs *logs,
+                                           GdkDisplay       *display);
+
 
 G_END_DECLS
 
