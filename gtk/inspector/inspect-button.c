@@ -256,7 +256,7 @@ gtk_inspector_window_select_widget_under_pointer (GtkInspectorWindow *iw)
   GdkDevice *device;
   GtkWidget *widget;
 
-  display = gdk_display_get_default ();
+  display = gtk_inspector_window_get_inspected_display (iw);
   device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
 
   widget = find_widget_at_pointer (device);
