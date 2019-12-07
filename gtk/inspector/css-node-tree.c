@@ -24,6 +24,7 @@
 
 #include "css-node-tree.h"
 #include "prop-editor.h"
+#include "window.h"
 
 #include "gtktreemodelcssnode.h"
 #include "gtktreeview.h"
@@ -222,17 +223,31 @@ gtk_inspector_css_node_tree_finalize (GObject *object)
 }
 
 static void
-ensure_css_sections (void)
+ensure_css_sections (GdkDisplay *display)
 {
   GtkSettings *settings;
   gchar *theme_name;
 
-  gtk_css_provider_set_keep_css_sections ();
-
-  settings = gtk_settings_get_default ();
+  settings = gtk_settings_get_for_display (display);
   g_object_get (settings, "gtk-theme-name", &theme_name, NULL);
   g_object_set (settings, "gtk-theme-name", theme_name, NULL);
   g_free (theme_name);
+}
+
+static void
+map (GtkWidget *widget)
+{
+  GtkWidget *toplevel;
+  GdkDisplay *display;
+
+  GTK_WIDGET_CLASS (gtk_inspector_css_node_tree_parent_class)->map (widget);
+
+  gtk_css_provider_set_keep_css_sections ();
+
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
+  display = gtk_inspector_window_get_inspected_display (GTK_INSPECTOR_WINDOW (toplevel));
+
+  ensure_css_sections (display);
 }
 
 static void
@@ -241,11 +256,11 @@ gtk_inspector_css_node_tree_class_init (GtkInspectorCssNodeTreeClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  ensure_css_sections ();
-
   object_class->set_property = gtk_inspector_css_node_tree_set_property;
   object_class->get_property = gtk_inspector_css_node_tree_get_property;
   object_class->finalize = gtk_inspector_css_node_tree_finalize;
+
+  widget_class->map = map;
 
   properties[PROP_NODE] =
     g_param_spec_object ("node",
