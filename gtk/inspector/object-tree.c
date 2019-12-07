@@ -58,16 +58,6 @@
 #include "gtksearchentry.h"
 #include "gtkeventcontrollerkey.h"
 
-enum
-{
-  OBJECT,
-  OBJECT_TYPE,
-  OBJECT_NAME,
-  OBJECT_LABEL,
-  OBJECT_CLASSES,
-  SENSITIVE
-};
-
 
 enum
 {
