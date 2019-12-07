@@ -265,6 +265,8 @@ gtk_inspector_window_constructed (GObject *object)
   G_OBJECT_CLASS (gtk_inspector_window_parent_class)->constructed (object);
 
   g_object_set_data (G_OBJECT (iw->inspected_display), "-gtk-inspector", iw);
+
+  gtk_inspector_object_tree_set_display (GTK_INSPECTOR_OBJECT_TREE (iw->object_tree), iw->inspected_display);
 }
 
 static void
