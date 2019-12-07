@@ -8965,9 +8965,12 @@ _gtk_window_raise_popover (GtkWindow *window,
     }
 }
 
-static GtkWidget *inspector_window = NULL;
-
 static void set_warn_again (gboolean warn);
+static void gtk_window_set_debugging (GdkDisplay *display,
+                                      gboolean    enable,
+                                      gboolean    toggle,
+                                      gboolean    select,
+                                      gboolean    warn);
 
 static void
 warn_response (GtkDialog *dialog,
@@ -8975,27 +8978,22 @@ warn_response (GtkDialog *dialog,
 {
   GtkWidget *check;
   gboolean remember;
+  GtkWidget *inspector_window;
+  GdkDisplay *display;
+
+  inspector_window = GTK_WIDGET (gtk_window_get_transient_for (GTK_WINDOW (dialog)));
+  display = gtk_inspector_window_get_inspected_display (GTK_INSPECTOR_WINDOW (inspector_window));
 
   check = g_object_get_data (G_OBJECT (dialog), "check");
   remember = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check));
 
   gtk_widget_destroy (GTK_WIDGET (dialog));
   g_object_set_data (G_OBJECT (inspector_window), "warning_dialog", NULL);
-  if (response == GTK_RESPONSE_NO)
-    {
-      GtkWidget *window;
 
-      /* Steal reference into temp variable, so not to mess up with
-       * inspector_window during gtk_widget_destroy().
-       */
-      window = inspector_window;
-      inspector_window = NULL;
-      gtk_widget_destroy (window);
-    }
+  if (response == GTK_RESPONSE_NO)
+    gtk_window_set_debugging (display, FALSE, FALSE, FALSE, FALSE);
   else
-    {
-      set_warn_again (!remember);
-    }
+    set_warn_again (!remember);
 }
 
 static void
@@ -9008,20 +9006,21 @@ gtk_window_set_debugging (GdkDisplay *display,
   GtkWidget *dialog = NULL;
   GtkWidget *area;
   GtkWidget *check;
+  GtkWidget *inspector_window;
+  gboolean was_debugging;
+
+  was_debugging = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (display), "-gtk-debugging-enabled"));
 
   if (toggle)
-    {
-      gboolean was_debugging;
-
-      was_debugging = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (display), "-gtk-debugging-enabled"));
-      enable = !was_debugging;
-    }
+    enable = !was_debugging;
 
   g_object_set_data (G_OBJECT (display), "-gtk-debugging-enabled", GINT_TO_POINTER (enable));
 
-  if (enable && inspector_window == NULL)
+  if (enable)
     {
       inspector_window = gtk_inspector_window_get (display);
+
+      gtk_window_present (GTK_WINDOW (inspector_window));
 
       if (warn)
         {
@@ -9043,28 +9042,20 @@ gtk_window_set_debugging (GdkDisplay *display,
           g_object_set_data (G_OBJECT (dialog), "check", check);
           gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_NO);
           gtk_dialog_add_button (GTK_DIALOG (dialog), _("_OK"), GTK_RESPONSE_YES);
-          g_signal_connect (dialog, "response", G_CALLBACK (warn_response), NULL);
+          g_signal_connect (dialog, "response", G_CALLBACK (warn_response), inspector_window);
           g_object_set_data (G_OBJECT (inspector_window), "warning_dialog", dialog);
+
+          gtk_widget_show (dialog);
         }
-    }
-
-  dialog = g_object_get_data (G_OBJECT (inspector_window), "warning_dialog");
-
-  if (enable)
-    {
-      gtk_window_present (GTK_WINDOW (inspector_window));
-      if (dialog)
-        gtk_widget_show (dialog);
 
       if (select)
         gtk_inspector_window_select_widget_under_pointer (GTK_INSPECTOR_WINDOW (inspector_window));
     }
-  else
+  else if (was_debugging)
     {
-      if (dialog)
-        gtk_widget_hide (dialog);
-      if (inspector_window)
-        gtk_widget_hide (inspector_window);
+      inspector_window = gtk_inspector_window_get (display);
+
+      gtk_widget_hide (inspector_window);
     }
 }
 
