@@ -96,12 +96,14 @@ variant_editor_new (const GVariantType   *type,
   else if (g_variant_type_equal (type, G_VARIANT_TYPE_STRING))
     {
       editor = gtk_entry_new ();
+      gtk_editable_set_width_chars (GTK_EDITABLE (editor), 10);
       g_signal_connect (editor, "notify::text", G_CALLBACK (variant_editor_changed_cb), d);
     }
   else
     {
       editor = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       entry = gtk_entry_new ();
+      gtk_editable_set_width_chars (GTK_EDITABLE (entry), 10);
       gtk_box_append (GTK_BOX (editor), entry);
       label = gtk_label_new (g_variant_type_peek_string (type));
       gtk_box_append (GTK_BOX (editor), label);
@@ -284,7 +286,8 @@ constructed (GObject *object)
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   activate = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_box_append (GTK_BOX (row), activate);
-  gtk_size_group_add_widget (r->priv->sg, activate);
+  if (r->priv->sg)
+    gtk_size_group_add_widget (r->priv->sg, activate);
 
   r->priv->activate_button = gtk_button_new_with_label (_("Activate"));
   g_signal_connect (r->priv->activate_button, "clicked", G_CALLBACK (activate_action), r);
@@ -307,7 +310,8 @@ constructed (GObject *object)
       r->priv->state_type = g_variant_type_copy (g_variant_get_type (state));
       row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       label = gtk_label_new (_("Set State"));
-      gtk_size_group_add_widget (r->priv->sg, label);
+      if (r->priv->sg)
+        gtk_size_group_add_widget (r->priv->sg, label);
       gtk_box_append (GTK_BOX (row), label);
       r->priv->state_entry = variant_editor_new (r->priv->state_type, state_changed, r);
       variant_editor_set_value (r->priv->state_entry, state);
@@ -327,7 +331,7 @@ finalize (GObject *object)
   GtkInspectorActionEditor *r = GTK_INSPECTOR_ACTION_EDITOR (object);
 
   g_free (r->priv->name);
-  g_object_unref (r->priv->sg);
+  g_clear_object (&r->priv->sg);
   if (r->priv->state_type)
     g_variant_type_free (r->priv->state_type);
   g_signal_handlers_disconnect_by_func (r->priv->group, action_enabled_changed_cb, r);
