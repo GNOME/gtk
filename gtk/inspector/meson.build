@@ -38,5 +38,6 @@ inspector_sources = files(
   'updatesoverlay.c',
   'visual.c',
   'window.c',
-  'prop-holder.c'
+  'prop-holder.c',
+  'resource-holder.c'
 )

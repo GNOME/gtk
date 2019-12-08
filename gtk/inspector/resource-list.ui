@@ -30,6 +30,9 @@
                           <object class="GtkSearchEntry" id="search_entry">
                             <property name="max-width-chars">40</property>
                             <signal name="search-changed" handler="on_search_changed"/>
+                            <signal name="next-match" handler="next_match"/>
+                            <signal name="previous-match" handler="previous_match"/>
+                            <signal name="stop-search" handler="stop_search"/>
                           </object>
                         </child>
                         <child>
@@ -54,56 +57,39 @@
                     <property name="vexpand">1</property>
                     <property name="hscrollbar-policy">never</property>
                     <child>
-                      <object class="GtkTreeView" id="tree">
-                        <property name="model">model</property>
-                        <property name="enable-search">0</property>
-                        <property name="enable-grid-lines">vertical</property>
-                        <signal name="row-activated" handler="row_activated"/>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection">
-                            <signal name="changed" handler="on_selection_changed"/>
-                          </object>
-                        </child>
+                      <object class="GtkColumnView" id="list">
+                        <signal name="activate" handler="on_row_activated"/>
                         <child>
-                          <object class="GtkTreeViewColumn" id="path_column">
+                          <object class="GtkColumnViewColumn" id="path">
                             <property name="title" translatable="yes">Path</property>
-                            <property name="resizable">1</property>
-                            <property name="sort-column-id">0</property>
-                            <child>
-                              <object class="GtkCellRendererText">
-                                <property name="scale">0.8</property>
-                                <property name="ellipsize">end</property>
-                                <property name="width-chars">10</property>
-                                <property name="max-width-chars">5</property>
+                            <property name="factory">
+                              <object class="GtkSignalListItemFactory">
+                                <signal name="setup" handler="setup_name_cb"/>
+                                <signal name="bind" handler="bind_name_cb"/>
                               </object>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
+                            </property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn" id="count_column">
+                          <object class="GtkColumnViewColumn" id="count">
                             <property name="title" translatable="yes">Count</property>
-                            <property name="resizable">1</property>
-                            <property name="sort-column-id">1</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="count_renderer">
-                                <property name="scale">0.8</property>
+                            <property name="factory">
+                              <object class="GtkSignalListItemFactory">
+                                <signal name="setup" handler="setup_count_cb"/>
+                                <signal name="bind" handler="bind_count_cb"/>
                               </object>
-                            </child>
+                            </property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn" id="size_column">
+                          <object class="GtkColumnViewColumn" id="size">
                             <property name="title" translatable="yes">Size</property>
-                            <property name="resizable">1</property>
-                            <property name="sort-column-id">2</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="size_renderer">
-                                <property name="scale">0.8</property>
+                            <property name="factory">
+                              <object class="GtkSignalListItemFactory">
+                                <signal name="setup" handler="setup_size_cb"/>
+                                <signal name="bind" handler="bind_size_cb"/>
                               </object>
-                            </child>
+                            </property>
                           </object>
                         </child>
                       </object>
