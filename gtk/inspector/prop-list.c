@@ -53,11 +53,6 @@ enum
   PROP_SEARCH_ENTRY
 };
 
-typedef enum {
-  COLUMN_NAME,
-  COLUMN_ORIGIN
-} SortColumn;
-
 struct _GtkInspectorPropListPrivate
 {
   GObject *object;
