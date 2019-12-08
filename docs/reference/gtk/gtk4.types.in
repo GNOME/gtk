@@ -138,6 +138,7 @@ gtk_native_get_type
 gtk_no_selection_get_type
 gtk_notebook_get_type
 gtk_notebook_page_get_type
+gtk_numeric_sorter_get_type
 gtk_orientable_get_type
 gtk_overlay_get_type
 gtk_pad_controller_get_type
