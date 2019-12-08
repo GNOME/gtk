@@ -33,6 +33,18 @@ isnan (double x)
 }
 #endif
 
+#ifndef HAVE_DECL_ISNANF
+/* it seems of the supported compilers only
+ * MSVC does not have isnanf(), but we can
+ * just use the isnan() instead.
+ */
+static inline gboolean
+isnanf (float x)
+{
+  return isnan (x);
+}
+#endif
+
 #ifndef HAVE_DECL_ISINF
 /* Unfortunately MSVC does not have finite()
  * but it does have _finite() which is the same
