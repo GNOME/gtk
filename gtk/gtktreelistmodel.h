@@ -52,7 +52,7 @@ G_DECLARE_FINAL_TYPE (GtkTreeListRow, gtk_tree_list_row, GTK, TREE_LIST_ROW, GOb
  * If it does not have children but may get children later, it should return
  * an empty model that is filled once children arrive.
  *
- * Returns: (nullable): The model tracking the children of @item or %NULL if
+ * Returns: (nullable) (transfer full): The model tracking the children of @item or %NULL if
  *     @item can never have children
  */
 typedef GListModel * (* GtkTreeListModelCreateModelFunc) (gpointer item, gpointer user_data);
