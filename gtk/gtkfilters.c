@@ -255,6 +255,8 @@ gtk_any_filter_remove (GtkAnyFilter *self,
   GSequenceIter *iter;
   guint length;
 
+  g_return_if_fail (GTK_IS_ANY_FILTER (self));
+
   length = g_sequence_get_length (self->filters);
   if (position >= length)
     return;
