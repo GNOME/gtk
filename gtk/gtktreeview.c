@@ -3760,10 +3760,8 @@ gtk_tree_view_stop_rubber_band (GtkTreeView *tree_view)
           if (tree_view->priv->anchor)
             gtk_tree_row_reference_free (tree_view->priv->anchor);
 
-          tree_view->priv->anchor =
-            gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view),
-                                              tree_view->priv->model,
-                                              tmp_path);
+          tree_view->priv->anchor = gtk_tree_row_reference_new (tree_view->priv->model,
+                                                                tmp_path);
 
           gtk_tree_path_free (tmp_path);
         }
@@ -9341,8 +9339,7 @@ _gtk_tree_view_set_anchor_path (GtkTreeView *tree_view,
 
   if (anchor_path && tree_view->priv->model)
     tree_view->priv->anchor =
-      gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), 
-					tree_view->priv->model, anchor_path);
+      gtk_tree_row_reference_new (tree_view->priv->model, anchor_path);
 }
 
 GtkTreeRBTree *
