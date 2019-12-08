@@ -39,5 +39,6 @@ inspector_sources = files(
   'visual.c',
   'window.c',
   'prop-holder.c',
-  'resource-holder.c'
+  'resource-holder.c',
+  'action-holder.c'
 )

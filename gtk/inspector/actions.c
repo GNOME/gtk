@@ -20,6 +20,7 @@
 
 #include "actions.h"
 #include "action-editor.h"
+#include "action-holder.h"
 
 #include "gtkapplication.h"
 #include "gtkapplicationwindow.h"
@@ -37,13 +38,11 @@
 struct _GtkInspectorActionsPrivate
 {
   GtkWidget *list;
-  GtkSizeGroup *name;
-  GtkSizeGroup *enabled;
-  GtkSizeGroup *parameter;
-  GtkSizeGroup *state;
-  GtkSizeGroup *activate;
-  GActionGroup *group;
   GtkWidget *button;
+
+  GActionGroup *group;
+  GListModel *actions;
+  GtkColumnViewColumn *name;
 };
 
 enum {
@@ -61,105 +60,170 @@ gtk_inspector_actions_init (GtkInspectorActions *sl)
 }
 
 static void
-add_action (GtkInspectorActions *sl,
-            GActionGroup        *group,
-            const gchar         *name)
+action_added_cb (GActionGroup        *group,
+                 const gchar         *action_name,
+                 GtkInspectorActions *sl)
 {
-  gboolean enabled;
-  const gchar *parameter;
-  GVariant *state;
-  gchar *state_string;
-  GtkWidget *row;
-  GtkWidget *label;
-  GtkWidget *box;
-  char *key = g_strdup (name);
-  GtkWidget *editor;
+  ActionHolder *holder = action_holder_new (group, action_name);
+  g_list_store_append (G_LIST_STORE (sl->priv->actions), holder);
+  g_object_unref (holder);
+}
 
+
+static void
+setup_name_cb (GtkSignalListItemFactory *factory,
+               GtkListItem              *list_item)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new (NULL);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_list_item_set_child (list_item, label);
+}
+
+static void
+bind_name_cb (GtkSignalListItemFactory *factory,
+              GtkListItem              *list_item)
+{
+  gpointer item;
+  GtkWidget *label;
+
+  item = gtk_list_item_get_item (list_item);
+  label = gtk_list_item_get_child (list_item);
+
+  gtk_label_set_label (GTK_LABEL (label), action_holder_get_name (ACTION_HOLDER (item)));
+}
+
+static void
+setup_enabled_cb (GtkSignalListItemFactory *factory,
+                  GtkListItem              *list_item)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new (NULL);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.5);
+  gtk_list_item_set_child (list_item, label);
+}
+
+static void
+bind_enabled_cb (GtkSignalListItemFactory *factory,
+                 GtkListItem              *list_item)
+{
+  gpointer item;
+  GtkWidget *label;
+  GActionGroup *group;
+  const char *name;
+  gboolean enabled;
+
+  item = gtk_list_item_get_item (list_item);
+  label = gtk_list_item_get_child (list_item);
+
+  group = action_holder_get_group (ACTION_HOLDER (item));
+  name = action_holder_get_name (ACTION_HOLDER (item));
   enabled = g_action_group_get_action_enabled (group, name);
+
+  gtk_label_set_label (GTK_LABEL (label), enabled ? "+" : "-");
+}
+
+static void
+setup_parameter_cb (GtkSignalListItemFactory *factory,
+                    GtkListItem              *list_item)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new (NULL);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.5);
+  gtk_list_item_set_child (list_item, label);
+  gtk_style_context_add_class (gtk_widget_get_style_context (label), "cell");
+}
+
+static void
+bind_parameter_cb (GtkSignalListItemFactory *factory,
+                   GtkListItem              *list_item)
+{
+  gpointer item;
+  GtkWidget *label;
+  GActionGroup *group;
+  const char *name;
+  const char *parameter;
+
+  item = gtk_list_item_get_item (list_item);
+  label = gtk_list_item_get_child (list_item);
+
+  group = action_holder_get_group (ACTION_HOLDER (item));
+  name = action_holder_get_name (ACTION_HOLDER (item));
   parameter = (const gchar *)g_action_group_get_action_parameter_type (group, name);
+
+  gtk_label_set_label (GTK_LABEL (label), parameter);
+}
+
+static void
+setup_state_cb (GtkSignalListItemFactory *factory,
+                GtkListItem              *list_item)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new (NULL);
+  gtk_widget_set_margin_start (label, 5);
+  gtk_widget_set_margin_end (label, 5);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_list_item_set_child (list_item, label);
+  gtk_style_context_add_class (gtk_widget_get_style_context (label), "cell");
+}
+
+static void
+bind_state_cb (GtkSignalListItemFactory *factory,
+               GtkListItem              *list_item)
+{
+  gpointer item;
+  GtkWidget *label;
+  GActionGroup *group;
+  const char *name;
+  GVariant *state;
+  char *state_string;
+
+  item = gtk_list_item_get_item (list_item);
+  label = gtk_list_item_get_child (list_item);
+
+  group = action_holder_get_group (ACTION_HOLDER (item));
+  name = action_holder_get_name (ACTION_HOLDER (item));
   state = g_action_group_get_action_state (group, name);
   if (state)
     state_string = g_variant_print (state, FALSE);
   else
     state_string = g_strdup ("");
 
-  row = gtk_list_box_row_new ();
-  g_object_set_data_full (G_OBJECT (row), "key", key, g_free);
-
-  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), box);
-
-  label = gtk_label_new (name);
-  gtk_widget_add_css_class (label, "cell");
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_size_group_add_widget (sl->priv->name, label);
-  gtk_box_append (GTK_BOX (box), label);
-
-  label = gtk_label_new (enabled ? "+" : "-");
-  gtk_widget_add_css_class (label, "cell");
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
-  gtk_size_group_add_widget (sl->priv->enabled, label);
-  gtk_box_append (GTK_BOX (box), label);
-
-  g_object_set_data (G_OBJECT (row), "enabled", label);
-
-  label = gtk_label_new (parameter);
-  gtk_widget_add_css_class (label, "cell");
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_size_group_add_widget (sl->priv->parameter, label);
-  gtk_box_append (GTK_BOX (box), label);
-
-  label = gtk_label_new (state_string);
-  gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_widget_add_css_class (label, "cell");
-  gtk_size_group_add_widget (sl->priv->state, label);
-  gtk_box_append (GTK_BOX (box), label);
-  g_object_set_data (G_OBJECT (row), "state", label);
-
-  editor = gtk_inspector_action_editor_new (group, name, sl->priv->activate);
-  gtk_widget_add_css_class (editor, "cell");
-  gtk_box_append (GTK_BOX (box), editor);
-  g_object_set_data (G_OBJECT (row), "editor", editor);
-
-  gtk_list_box_insert (GTK_LIST_BOX (sl->priv->list), row, -1);
+  gtk_label_set_label (GTK_LABEL (label), state_string);
 
   g_free (state_string);
-}
-
-static GtkWidget *
-find_row (GtkInspectorActions *sl,
-          const char          *action_name)
-{
-  GtkWidget *row = NULL;
-  GtkWidget *widget;
-  const char *key;
-
-  for (widget = gtk_widget_get_first_child (sl->priv->list);
-       widget;
-       widget = gtk_widget_get_next_sibling (widget))
-    {
-      if (!GTK_IS_LIST_BOX_ROW (widget))
-        continue;
-
-      key = g_object_get_data (G_OBJECT (widget), "key");
-      if (g_str_equal (key, action_name))
-        {
-          row = widget;
-          break;
-        }
-    }
-
-  return row;
+  if (state)
+    g_variant_unref (state);
 }
 
 static void
-action_added_cb (GActionGroup        *group,
-                 const gchar         *action_name,
-                 GtkInspectorActions *sl)
+bind_changes_cb (GtkSignalListItemFactory *factory,
+                 GtkListItem              *list_item)
 {
-  add_action (sl, group, action_name);
+  gpointer item;
+  GActionGroup *group;
+  const char *name;
+  GtkWidget *editor;
+
+  item = gtk_list_item_get_item (list_item);
+
+  group = action_holder_get_group (ACTION_HOLDER (item));
+  name = action_holder_get_name (ACTION_HOLDER (item));
+
+  editor = gtk_inspector_action_editor_new (group, name, NULL);
+  gtk_style_context_add_class (gtk_widget_get_style_context (editor), "cell");
+  gtk_list_item_set_child (list_item, editor);
+}
+
+static void
+unbind_changes_cb (GtkSignalListItemFactory *factory,
+                   GtkListItem              *list_item)
+{
+  gtk_list_item_set_child (list_item, NULL);
 }
 
 static void
@@ -167,21 +231,37 @@ action_removed_cb (GActionGroup        *group,
                    const gchar         *action_name,
                    GtkInspectorActions *sl)
 {
-  GtkWidget *row;
+  int i;
 
-  row = find_row (sl, action_name);
-  if (row)
-    gtk_list_box_remove (GTK_LIST_BOX (sl->priv->list), row);
+  for (i = 0; i < g_list_model_get_n_items (sl->priv->actions); i++)
+    {
+      ActionHolder *holder = g_list_model_get_item (sl->priv->actions, i);
+
+      if (group == action_holder_get_group (holder) &&
+          strcmp (action_name, action_holder_get_name (holder)) == 0)
+        g_list_store_remove (G_LIST_STORE (sl->priv->actions), i);
+
+      g_object_unref (holder);
+    }
 }
 
 static void
-set_row_enabled (GtkWidget *row,
-                 gboolean   enabled)
+notify_action_changed (GtkInspectorActions *sl,
+                       GActionGroup        *group,
+                       const char          *action_name)
 {
-  GtkWidget *label;
+  int i;
 
-  label = GTK_WIDGET (g_object_get_data (G_OBJECT (row), "enabled"));
-  gtk_label_set_label (GTK_LABEL (label), enabled ? "+" : "-" );
+  for (i = 0; i < g_list_model_get_n_items (sl->priv->actions); i++)
+    {
+      ActionHolder *holder = g_list_model_get_item (sl->priv->actions, i);
+
+      if (group == action_holder_get_group (holder) &&
+          strcmp (action_name, action_holder_get_name (holder)) == 0)
+        g_list_model_items_changed (sl->priv->actions, i, 1, 1);
+
+      g_object_unref (holder);
+    }
 }
 
 static void
@@ -190,26 +270,7 @@ action_enabled_changed_cb (GActionGroup        *group,
                            gboolean             enabled,
                            GtkInspectorActions *sl)
 {
-  GtkWidget *row;
-
-  row = find_row (sl, action_name);
-  set_row_enabled (row, enabled);
-}
-
-static void
-set_row_state (GtkWidget *row,
-               GVariant  *state)
-{
-  gchar *state_string;
-  GtkWidget *label;
-
-  if (state)
-    state_string = g_variant_print (state, FALSE);
-  else
-    state_string = g_strdup ("");
-  label = GTK_WIDGET (g_object_get_data (G_OBJECT (row), "state"));
-  gtk_label_set_label (GTK_LABEL (label), state_string);
-  g_free (state_string);
+  notify_action_changed (sl, group, action_name);
 }
 
 static void
@@ -218,35 +279,14 @@ action_state_changed_cb (GActionGroup        *group,
                          GVariant            *state,
                          GtkInspectorActions *sl)
 {
-  GtkWidget *row;
-
-  row = find_row (sl, action_name);
-  set_row_state (row, state);
+  notify_action_changed (sl, group, action_name);
 }
 
 static void
 refresh_all (GtkInspectorActions *sl)
 {
-  GtkWidget *widget;
-
-  for (widget = gtk_widget_get_first_child (sl->priv->list);
-       widget;
-       widget = gtk_widget_get_next_sibling (widget))
-    {
-      const char *name = g_object_get_data (G_OBJECT (widget), "key");
-      gboolean enabled;
-      GVariant *state;
-      GtkInspectorActionEditor *r;
-
-      enabled = g_action_group_get_action_enabled (sl->priv->group, name);
-      state = g_action_group_get_action_state (sl->priv->group, name);
-
-      set_row_enabled (widget, enabled);
-      set_row_state (widget, state);
-
-      r = (GtkInspectorActionEditor*)g_object_get_data (G_OBJECT (widget), "editor");
-      gtk_inspector_action_editor_update (r, enabled, state);
-    }
+  guint n = g_list_model_get_n_items (sl->priv->actions);
+  g_list_model_items_changed (sl->priv->actions, 0, n, n);
 }
 
 static void
@@ -283,7 +323,7 @@ add_group (GtkInspectorActions *sl,
 
   names = g_action_group_list_actions (group);
   for (i = 0; names[i]; i++)
-    add_action (sl, group, names[i]);
+    action_added_cb (group, names[i], sl);
   g_strfreev (names);
 
   g_set_object (&sl->priv->group, group);
@@ -305,7 +345,6 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
 {
   GtkWidget *stack;
   GtkStackPage *page;
-  GtkWidget *child;
 
   stack = gtk_widget_get_parent (GTK_WIDGET (sl));
   page = gtk_stack_get_page (GTK_STACK (stack), GTK_WIDGET (sl));
@@ -315,8 +354,7 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
   if (sl->priv->group)
     remove_group (sl, page, sl->priv->group);
 
-  while ((child = gtk_widget_get_first_child (sl->priv->list)))
-    gtk_list_box_remove (GTK_LIST_BOX (sl->priv->list), child);
+  g_list_store_remove_all (G_LIST_STORE (sl->priv->actions));
 
   if (GTK_IS_APPLICATION (object))
     add_group (sl, page, G_ACTION_GROUP (object));
@@ -328,6 +366,8 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
       if (muxer)
         add_group (sl, page, G_ACTION_GROUP (muxer));
     }
+
+  gtk_column_view_sort_by_column (GTK_COLUMN_VIEW (sl->priv->list), sl->priv->name, GTK_SORT_ASCENDING);
 }
 
 static void
@@ -370,13 +410,48 @@ set_property (GObject      *object,
     }
 }
 
+static char *
+holder_name (gpointer item)
+{
+  return g_strdup (action_holder_get_name (ACTION_HOLDER (item)));
+}
+
 static void
 constructed (GObject *object)
 {
   GtkInspectorActions *sl = GTK_INSPECTOR_ACTIONS (object);
+  GtkSorter *sorter;
+  GListModel *sorted;
+  GListModel *model;
 
   g_signal_connect_swapped (sl->priv->button, "clicked",
                             G_CALLBACK (refresh_all), sl);
+
+  sorter = gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING,
+                                                               NULL,
+                                                               0, NULL,
+                                                               (GCallback)holder_name,
+                                                               NULL, NULL));
+  gtk_column_view_column_set_sorter (sl->priv->name, sorter);
+  g_object_unref (sorter);
+  
+  sl->priv->actions = G_LIST_MODEL (g_list_store_new (ACTION_TYPE_HOLDER));
+  sorted = G_LIST_MODEL (gtk_sort_list_model_new (sl->priv->actions,
+                                                  gtk_column_view_get_sorter (GTK_COLUMN_VIEW (sl->priv->list))));
+  model = G_LIST_MODEL (gtk_no_selection_new (sorted));
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (sl->priv->list), model);
+  g_object_unref (sorted);
+  g_object_unref (model);
+}
+
+static void
+finalize (GObject *object)
+{
+  GtkInspectorActions *sl = GTK_INSPECTOR_ACTIONS (object);
+
+  g_object_unref (sl->priv->actions);
+
+  G_OBJECT_CLASS (gtk_inspector_actions_parent_class)->finalize (object);
 }
 
 static void
@@ -385,6 +460,7 @@ gtk_inspector_actions_class_init (GtkInspectorActionsClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   
+  object_class->finalize = finalize;
   object_class->get_property = get_property;
   object_class->set_property = set_property;
   object_class->constructed = constructed;
@@ -396,10 +472,16 @@ gtk_inspector_actions_class_init (GtkInspectorActionsClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/actions.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorActions, list);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorActions, name);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorActions, enabled);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorActions, parameter);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorActions, state);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorActions, activate);
+  gtk_widget_class_bind_template_callback (widget_class, setup_name_cb);
+  gtk_widget_class_bind_template_callback (widget_class, bind_name_cb);
+  gtk_widget_class_bind_template_callback (widget_class, setup_enabled_cb);
+  gtk_widget_class_bind_template_callback (widget_class, bind_enabled_cb);
+  gtk_widget_class_bind_template_callback (widget_class, setup_parameter_cb);
+  gtk_widget_class_bind_template_callback (widget_class, bind_parameter_cb);
+  gtk_widget_class_bind_template_callback (widget_class, setup_state_cb);
+  gtk_widget_class_bind_template_callback (widget_class, bind_state_cb);
+  gtk_widget_class_bind_template_callback (widget_class, bind_changes_cb);
+  gtk_widget_class_bind_template_callback (widget_class, unbind_changes_cb);
 }
 
 // vim: set et sw=2 ts=2:
