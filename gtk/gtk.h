@@ -260,6 +260,7 @@
 #include <gtk/gtktreednd.h>
 #include <gtk/gtktreeexpander.h>
 #include <gtk/gtktreelistmodel.h>
+#include <gtk/gtktreelistrowsorter.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreemodelfilter.h>
 #include <gtk/gtktreemodelsort.h>
