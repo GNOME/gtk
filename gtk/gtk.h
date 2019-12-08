@@ -173,6 +173,7 @@
 #include <gtk/gtknativedialog.h>
 #include <gtk/gtknoselection.h>
 #include <gtk/gtknotebook.h>
+#include <gtk/gtknumericsorter.h>
 #include <gtk/gtkorientable.h>
 #include <gtk/gtkoverlay.h>
 #include <gtk/gtkpadcontroller.h>

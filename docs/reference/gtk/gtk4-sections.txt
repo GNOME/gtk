@@ -2558,6 +2558,25 @@ gtk_string_sorter_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtknumericsorter</FILE>
+<TITLE>GtkNumericSorter</TITLE>
+GtkNumericSorter
+gtk_numeric_sorter_new
+gtk_numeric_sorter_get_expression
+gtk_numeric_sorter_set_expression
+gtk_numeric_sorter_get_sort_order
+gtk_numeric_sorter_set_sort_order
+<SUBSECTION Standard>
+GTK_NUMERIC_SORTER
+GTK_IS_NUMERIC_SORTER
+GTK_TYPE_NUMERIC_SORTER
+GTK_IS_NUMERIC_SORTER_CLASS
+GTK_NUMERIC_SORTER_GET_CLASS
+<SUBSECTION Private>
+gtk_numeric_sorter_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkcustomsorter</FILE>
 <TITLE>GtkCustomSorter</TITLE>
 GtkCustomSorter
