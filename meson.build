@@ -213,6 +213,7 @@ endforeach
 
 cdata.set('HAVE_DECL_ISINF', cc.has_header_symbol('math.h', 'isinf'))
 cdata.set('HAVE_DECL_ISNAN', cc.has_header_symbol('math.h', 'isnan'))
+cdata.set('HAVE_DECL_ISNANF', cc.has_header_symbol('math.h', 'isnanf'))
 
 # Disable deprecation checks for all libraries we depend on on stable branches.
 # This is so newer versions of those libraries don't cause more warnings with

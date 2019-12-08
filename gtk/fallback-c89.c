@@ -80,6 +80,30 @@ isinf (double x)
 }
 #endif
 
+#ifndef HAVE_DECL_ISNAN
+/* it seems of the supported compilers only
+ * MSVC does not have isnan(), but it does
+ * have _isnan() which does the same as isnan()
+ */
+static inline gboolean
+isnan (double x)
+{
+  return _isnan (x);
+}
+#endif
+
+#ifndef HAVE_DECL_ISNANF
+/* it seems of the supported compilers only
+ * MSVC does not have isnanf(), but it does
+ * have _isnanf() which does the same as isnanf()
+ */
+static inline gboolean
+isnanf (float x)
+{
+  return _isnanf (x);
+}
+#endif
+
 #ifndef INFINITY
 /* define INFINITY for compilers that lack support for it */
 # ifdef HUGE_VALF

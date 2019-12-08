@@ -35,6 +35,10 @@
    */
 #mesondefine HAVE_DECL_ISNAN
 
+/* Define to 1 if you have the declaration of `isnanf', and to 0 if you don't.
+   */
+#mesondefine HAVE_DECL_ISNANF
+
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #mesondefine HAVE_DLFCN_H
 
