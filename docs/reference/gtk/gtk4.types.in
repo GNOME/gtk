@@ -219,6 +219,7 @@ gtk_tree_drag_dest_get_type
 gtk_tree_drag_source_get_type
 gtk_tree_list_model_get_type
 gtk_tree_list_row_get_type
+gtk_tree_list_row_sorter_get_type
 gtk_tree_model_filter_get_type
 gtk_tree_model_get_type
 gtk_tree_model_sort_get_type

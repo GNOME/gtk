@@ -659,6 +659,8 @@ main (int argc, char *argv[])
   GtkTreeListModel *tree;
   GtkFilterListModel *filter;
   GtkFilter *custom_filter;
+  GtkSortListModel *sort;
+  GtkSorter *sorter;
   GFile *root;
   GtkBuilder *builder;
 
@@ -701,8 +703,11 @@ main (int argc, char *argv[])
   g_object_unref (dirmodel);
   g_object_unref (root);
 
+  sorter = gtk_tree_list_row_sorter_new (g_object_ref (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (view))));
+  sort = gtk_sort_list_model_new (G_LIST_MODEL (tree), sorter);
+
   custom_filter = gtk_custom_filter_new (match_file, g_object_ref (search_entry), g_object_unref);
-  filter = gtk_filter_list_model_new (G_LIST_MODEL (tree), custom_filter);
+  filter = gtk_filter_list_model_new (G_LIST_MODEL (sort), custom_filter);
   g_signal_connect (search_entry, "search-changed", G_CALLBACK (search_changed_cb), custom_filter);
   g_object_unref (custom_filter);
 
@@ -716,6 +721,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (vbox), statusbar);
 
   g_object_unref (filter);
+  g_object_unref (sort);
   g_object_unref (tree);
 
   list = gtk_list_view_new_with_factory (
