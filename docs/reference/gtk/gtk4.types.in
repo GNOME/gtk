@@ -72,8 +72,10 @@ gtk_file_chooser_dialog_get_type
 gtk_file_chooser_get_type
 gtk_file_chooser_widget_get_type
 gtk_file_filter_get_type
+gtk_filter_list_model_get_type
 gtk_fixed_get_type
 gtk_fixed_layout_get_type
+gtk_flatten_list_model_get_type
 gtk_flow_box_get_type
 gtk_flow_box_child_get_type
 gtk_font_button_get_type
@@ -111,6 +113,7 @@ gtk_list_store_get_type
 gtk_list_box_get_type
 gtk_list_box_row_get_type
 gtk_lock_button_get_type
+gtk_map_list_model_get_type
 gtk_media_controls_get_type
 gtk_media_file_get_type
 gtk_media_stream_get_type
@@ -123,6 +126,7 @@ gtk_menu_tool_button_get_type
 gtk_message_dialog_get_type
 gtk_mount_operation_get_type
 gtk_native_get_type
+gtk_no_selection_get_type
 gtk_notebook_get_type
 gtk_notebook_page_get_type
 gtk_orientable_get_type
@@ -171,7 +175,9 @@ gtk_shortcuts_group_get_type
 gtk_shortcuts_shortcut_get_type
 gtk_single_selection_get_type
 gtk_size_group_get_type
+gtk_slice_list_model_get_type
 gtk_snapshot_get_type
+gtk_sort_list_model_get_type
 gtk_spin_button_get_type
 gtk_spinner_get_type
 gtk_stack_get_type
@@ -198,6 +204,7 @@ gtk_tool_button_get_type
 gtk_tool_item_get_type
 gtk_tree_drag_dest_get_type
 gtk_tree_drag_source_get_type
+gtk_tree_list_model_get_type
 gtk_tree_model_filter_get_type
 gtk_tree_model_get_type
 gtk_tree_model_sort_get_type
