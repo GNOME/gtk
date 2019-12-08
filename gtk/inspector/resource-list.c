@@ -615,9 +615,29 @@ stop_search (GtkWidget                *entry,
   gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (rl->priv->search_bar), FALSE);
 }
 
+static char *
+holder_name (gpointer item)
+{
+  return g_strdup (resource_holder_get_name (RESOURCE_HOLDER (item)));
+}
+
+static int
+holder_count (gpointer item)
+{
+  return resource_holder_get_count (RESOURCE_HOLDER (item));
+}
+
+static gsize
+holder_size (gpointer item)
+{
+  return resource_holder_get_size (RESOURCE_HOLDER (item));
+}
+
 static void
 gtk_inspector_resource_list_init (GtkInspectorResourceList *rl)
 {
+  GtkSorter *sorter;
+
   rl->priv = gtk_inspector_resource_list_get_instance_private (rl);
 
   gtk_widget_init_template (GTK_WIDGET (rl));
@@ -626,6 +646,30 @@ gtk_inspector_resource_list_init (GtkInspectorResourceList *rl)
 
   gtk_search_bar_connect_entry (GTK_SEARCH_BAR (rl->priv->search_bar),
                                 GTK_EDITABLE (rl->priv->search_entry));
+
+  sorter = gtk_string_sorter_new (gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
+                                                               0, NULL,
+                                                               (GCallback)holder_name,
+                                                               NULL, NULL));
+
+  gtk_column_view_column_set_sorter (rl->priv->path, sorter);
+  g_object_unref (sorter);
+
+  sorter = gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_INT, NULL,
+                                                                0, NULL,
+                                                                (GCallback)holder_count,
+                                                                NULL, NULL));
+
+  gtk_column_view_column_set_sorter (rl->priv->count, sorter);
+  g_object_unref (sorter);
+
+  sorter = gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_UINT64, NULL,
+                                                                0, NULL,
+                                                                (GCallback)holder_size,
+                                                                NULL, NULL));
+
+  gtk_column_view_column_set_sorter (rl->priv->size, sorter);
+  g_object_unref (sorter);
 }
 
 static GListModel *
@@ -644,6 +688,8 @@ constructed (GObject *object)
 {
   GtkInspectorResourceList *rl = GTK_INSPECTOR_RESOURCE_LIST (object);
   GListModel *root_model;
+  GListModel *sort_model;
+  GtkSorter *sorter;
  
   g_signal_connect (rl->priv->open_details_button, "clicked",
                     G_CALLBACK (open_details), rl);
@@ -657,8 +703,13 @@ constructed (GObject *object)
                                                   create_model_for_object,
                                                   NULL,
                                                   NULL);
-  rl->priv->selection = gtk_single_selection_new (G_LIST_MODEL (rl->priv->tree_model));
+
+  sorter = gtk_tree_list_row_sorter_new (gtk_column_view_get_sorter (GTK_COLUMN_VIEW (rl->priv->list)));
+  sort_model = G_LIST_MODEL (gtk_sort_list_model_new (G_LIST_MODEL (rl->priv->tree_model), sorter));
+  rl->priv->selection = gtk_single_selection_new (sort_model);
   g_object_unref (root_model);
+  g_object_unref (sort_model);
+  g_object_unref (sorter);
 
   gtk_column_view_set_model (GTK_COLUMN_VIEW (rl->priv->list), G_LIST_MODEL (rl->priv->selection));
 
