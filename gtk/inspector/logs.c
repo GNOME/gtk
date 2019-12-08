@@ -62,7 +62,6 @@ struct _GtkInspectorLogsPrivate
   GtkWidget *vulkan_gsk;
   GtkWidget *shaders;
   GtkWidget *surface;
-  GtkWidget *fallback;
   GtkWidget *glyphcache;
 
   GtkWidget *actions;
@@ -134,7 +133,6 @@ flag_toggled (GtkWidget        *button,
   update_flag (logs->priv->vulkan_gsk, &flags, GSK_DEBUG_VULKAN);
   update_flag (logs->priv->shaders, &flags, GSK_DEBUG_SHADERS);
   update_flag (logs->priv->surface, &flags, GSK_DEBUG_SURFACE);
-  update_flag (logs->priv->fallback, &flags, GSK_DEBUG_FALLBACK);
   update_flag (logs->priv->glyphcache, &flags, GSK_DEBUG_GLYPH_CACHE);
   gsk_set_debug_flags (flags);
 
