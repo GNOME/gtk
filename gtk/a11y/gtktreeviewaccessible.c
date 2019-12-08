@@ -1730,7 +1730,9 @@ _gtk_tree_view_accessible_changed (GtkTreeView   *treeview,
   GtkTreeViewAccessible *accessible;
   guint i;
 
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (treeview)));
+  accessible = GTK_TREE_VIEW_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (treeview)));
+  if (accessible == NULL)
+    return;
 
   for (i = 0; i < gtk_tree_view_get_n_columns (treeview); i++)
     {
