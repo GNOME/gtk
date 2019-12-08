@@ -2573,6 +2573,23 @@ gtk_custom_sorter_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkmultisorter</FILE>
+<TITLE>GtkMultiSorter</TITLE>
+GtkMultiSorter
+gtk_multi_sorter_new
+gtk_multi_sorter_append
+gtk_multi_sorter_remove
+<SUBSECTION Standard>
+GTK_MULTI_SORTER
+GTK_IS_MULTI_SORTER
+GTK_TYPE_MULTI_SORTER
+GTK_IS_MULTI_SORTER_CLASS
+GTK_MULTI_SORTER_GET_CLASS
+<SUBSECTION Private>
+gtk_multi_sorter_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtksortlistmodel</FILE>
 <TITLE>GtkSortListModel</TITLE>
 GtkSortListModel

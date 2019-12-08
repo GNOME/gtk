@@ -133,6 +133,7 @@ gtk_menu_button_get_type
 gtk_message_dialog_get_type
 gtk_mount_operation_get_type
 gtk_multi_filter_get_type
+gtk_multi_sorter_get_type
 gtk_native_get_type
 gtk_no_selection_get_type
 gtk_notebook_get_type
