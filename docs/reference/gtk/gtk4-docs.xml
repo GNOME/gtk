@@ -52,6 +52,7 @@
       <xi:include href="xml/gtksorter.xml" />
       <xi:include href="xml/gtkstringsorter.xml" />
       <xi:include href="xml/gtkcustomsorter.xml" />
+      <xi:include href="xml/gtkmultisorter.xml" />
       <xi:include href="xml/gtksortlistmodel.xml" />
       <xi:include href="xml/gtktreelistmodel.xml" />
       <xi:include href="xml/gtkselectionmodel.xml" />
