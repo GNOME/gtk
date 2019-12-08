@@ -179,6 +179,7 @@
 #include <gtk/gtkmenutoolbutton.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkmountoperation.h>
+#include <gtk/gtkmultisorter.h>
 #include <gtk/gtknative.h>
 #include <gtk/gtknativedialog.h>
 #include <gtk/gtknoselection.h>
