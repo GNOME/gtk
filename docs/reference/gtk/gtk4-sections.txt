@@ -2777,6 +2777,23 @@ gtk_multi_sorter_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtktreelistrowsorter</FILE>
+<TITLE>GtkTreeListRowSorter</TITLE>
+GtkTreeListRowSorter
+gtk_tree_list_row_sorter_new
+gtk_tree_list_row_sorter_get_sorter
+gtk_tree_list_row_sorter_set_sorter
+<SUBSECTION Standard>
+GTK_TREE_LIST_ROW_SORTER
+GTK_IS_TREE_LIST_ROW_SORTER
+GTK_TYPE_TREE_LIST_ROW_SORTER
+GTK_IS_TREE_LIST_ROW_SORTER_CLASS
+GTK_TREE_LIST_ROW_SORTER_GET_CLASS
+<SUBSECTION Private>
+gtk_tree_list_row_sorter_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtksortlistmodel</FILE>
 <TITLE>GtkSortListModel</TITLE>
 GtkSortListModel
