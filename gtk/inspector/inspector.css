@@ -1,21 +1,29 @@
 /* some style for the inspector */
 
-.header {
-  background: lightgray;
-  border: 1px solid gray;
+.list header {
+  background: white;
+  border: 1px solid lightgray;
 }
 
-.header>* {
+.list header button {
+  background: none;
+}
+
+.list header button.dnd {
+  background: gray;
+}
+
+.list header>* {
   padding: 2px;
   font-weight: bold;
 }
 
-.header sort_indicator {
+.list header sort_indicator {
   min-width: 16px;
 }
 
-.header>*:not(:last-child) {
-  border-right: 1px solid gray;
+.list header>*:not(:last-child) {
+  border-right: 1px solid lightgray;
 }
 
 .list .cell {
