@@ -98,6 +98,7 @@
 #include <gtk/gtkdropcontrollermotion.h>
 #include <gtk/gtkdroptarget.h>
 #include <gtk/gtkdroptargetasync.h>
+#include <gtk/gtkdropdown.h>
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkemojichooser.h>
 #include <gtk/gtkentry.h>
