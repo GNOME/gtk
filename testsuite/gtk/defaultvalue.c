@@ -411,6 +411,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           strcmp (pspec->name, "adjustment") == 0)
         continue;
 
+      if (g_type_is_a (type, GTK_TYPE_DROP_DOWN) &&
+          strcmp (pspec->name, "factory") == 0)
+        continue;
+
       /* All the icontheme properties depend on the environment */
       if (g_type_is_a (type, GTK_TYPE_ICON_THEME))
         continue;
