@@ -42,6 +42,7 @@ tests = [
   ['maplistmodel'],
   ['notify'],
   ['no-gtk-init'],
+  ['noselection'],
   ['object'],
   ['objects-finalize'],
   ['papersize'],
