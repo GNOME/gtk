@@ -101,6 +101,7 @@
 #include <gtk/gtkdragdest.h>
 #include <gtk/gtkdragsource.h>
 #include <gtk/gtkdrawingarea.h>
+#include <gtk/gtkdropdown.h>
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkentrybuffer.h>

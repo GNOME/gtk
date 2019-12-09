@@ -64,6 +64,7 @@ gtk_custom_filter_get_type
 gtk_dialog_get_type
 gtk_directory_list_get_type
 gtk_drawing_area_get_type
+gtk_drop_down_get_type
 gtk_editable_get_type
 gtk_entry_buffer_get_type
 gtk_entry_completion_get_type
