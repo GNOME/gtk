@@ -447,17 +447,6 @@ allocate_trough (GtkGizmo *gizmo,
 }
 
 static void
-snapshot_trough (GtkGizmo    *gizmo,
-                 GtkSnapshot *snapshot)
-
-{
-  GtkProgressBar *pbar = GTK_PROGRESS_BAR (gtk_widget_get_parent (GTK_WIDGET (gizmo)));
-  GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
-
-  gtk_widget_snapshot_child (GTK_WIDGET (gizmo), priv->progress_widget, snapshot);
-}
-
-static void
 gtk_progress_bar_init (GtkProgressBar *pbar)
 {
   GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
@@ -476,7 +465,7 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
   priv->trough_widget = gtk_gizmo_new ("trough",
                                        NULL,
                                        allocate_trough,
-                                       snapshot_trough,
+                                       NULL,
                                        NULL);
   gtk_widget_set_parent (priv->trough_widget, GTK_WIDGET (pbar));
 
