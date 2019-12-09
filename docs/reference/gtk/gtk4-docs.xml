@@ -70,6 +70,7 @@
       <xi:include href="xml/gtkselectionmodel.xml" />
       <xi:include href="xml/gtknoselection.xml" />
       <xi:include href="xml/gtksingleselection.xml" />
+      <xi:include href="xml/gtkmultiselection.xml" />
       <xi:include href="xml/gtkdirectorylist.xml" />
     </chapter>
 

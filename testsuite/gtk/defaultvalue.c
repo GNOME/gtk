@@ -114,7 +114,8 @@ test_type (gconstpointer data)
     }
   else if (g_type_is_a (type, GTK_TYPE_FILTER_LIST_MODEL) ||
            g_type_is_a (type, GTK_TYPE_NO_SELECTION) ||
-           g_type_is_a (type, GTK_TYPE_SINGLE_SELECTION))
+           g_type_is_a (type, GTK_TYPE_SINGLE_SELECTION) ||
+           g_type_is_a (type, GTK_TYPE_MULTI_SELECTION))
     {
       GListStore *list_store = g_list_store_new (G_TYPE_OBJECT);
       instance = g_object_new (type,
@@ -277,7 +278,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
       if ((g_type_is_a (type, GTK_TYPE_FILTER_LIST_MODEL) ||
            g_type_is_a (type, GTK_TYPE_NO_SELECTION) ||
-           g_type_is_a (type, GTK_TYPE_SINGLE_SELECTION)) &&
+           g_type_is_a (type, GTK_TYPE_SINGLE_SELECTION) ||
+           g_type_is_a (type, GTK_TYPE_MULTI_SELECTION)) &&
           strcmp (pspec->name, "model") == 0)
         continue;
 
