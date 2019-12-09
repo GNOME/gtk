@@ -81,18 +81,18 @@ struct _GtkSignalListItemFactoryClass
 {
   GtkListItemFactoryClass parent_class;
 
-  void                  (* setup)                               (GtkListItemFactory     *self,
-                                                                 GtkListItem            *list_item);
-  void                  (* teardown)                            (GtkListItemFactory     *self,
-                                                                 GtkListItem            *list_item);
+  void                  (* setup)                               (GtkSignalListItemFactory *self,
+                                                                 GtkListItem              *list_item);
+  void                  (* teardown)                            (GtkSignalListItemFactory *self,
+                                                                 GtkListItem              *list_item);
 
-  void                  (* bind)                                (GtkListItemFactory     *self,
-                                                                 GtkListItem            *list_item,
-                                                                 guint                   position,
-                                                                 gpointer                item,
-                                                                 gboolean                selected);
-  void                  (* unbind)                              (GtkListItemFactory     *self,
-                                                                 GtkListItem            *list_item);
+  void                  (* bind)                                (GtkSignalListItemFactory *self,
+                                                                 GtkListItem              *list_item,
+                                                                 guint                     position,
+                                                                 gpointer                  item,
+                                                                 gboolean                  selected);
+  void                  (* unbind)                              (GtkSignalListItemFactory *self,
+                                                                 GtkListItem              *list_item);
 };
 
 enum {
