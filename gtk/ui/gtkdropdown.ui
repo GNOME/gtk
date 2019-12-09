@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gtk40">
+  <template class="GtkDropDown" parent="GtkWidget">
+    <child>
+      <object class="GtkToggleButton" id="button">
+        <signal name="toggled" handler="button_toggled"/>
+        <child>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkListItemWidget" id="button_item"/>
+            </child>
+            <child>
+              <object class="GtkIcon">
+                <property name="css-name">arrow</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkPopover" id="popup">
+    <property name="relative-to">GtkDropDown</property>
+    <property name="has-arrow">0</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="hscrollbar-policy">never</property>
+            <property name="vscrollbar-policy">never</property>
+            <child>
+              <object class="GtkListView" id="popup_list">
+                <signal name="activate" handler="row_activated"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
