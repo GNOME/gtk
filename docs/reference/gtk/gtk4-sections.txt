@@ -393,6 +393,16 @@ gtk_single_selection_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkmultiselection</FILE>
+<TITLE>GtkMultiSeledction</TITLE>
+GtkMultiSelection
+gtk_multi_selection_new
+gtk_multi_selection_copy
+<SUBSECTION Private>
+gtk_multi_selection_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtklistitem</FILE>
 <TITLE>GtkListItem</TITLE>
 GtkListItem
