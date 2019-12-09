@@ -642,6 +642,32 @@ test_query_range (void)
   g_object_unref (selection);
 }
 
+static void
+test_monitor (void)
+{
+  GtkSelectionModel *selection;
+  GtkSelectionMonitor *monitor;
+  GListStore *store;
+
+  store = new_store (1, 20, 1);
+  selection = new_model (store, TRUE, TRUE);
+  monitor = gtk_selection_monitor_new (selection);
+
+  assert_selection (selection, "1");
+  assert_model (monitor, "1");
+
+  gtk_selection_model_select_item (selection, 2, TRUE);  
+
+  assert_selection (selection, "3");
+  assert_model (monitor, "3");
+
+  ignore_selection_changes (selection);
+
+  g_object_unref (store);
+  g_object_unref (selection);
+  g_object_unref (monitor);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -660,6 +686,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/singleselection/persistence", test_persistence);
   g_test_add_func ("/singleselection/query-range", test_query_range);
   g_test_add_func ("/singleselection/changes", test_changes);
+  g_test_add_func ("/singleselection/monitor", test_monitor);
 
   return g_test_run ();
 }
