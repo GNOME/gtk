@@ -41,6 +41,7 @@ tests = [
   ['listbox'],
   ['main'],
   ['maplistmodel'],
+  ['multiselection'],
   ['notify'],
   ['no-gtk-init'],
   ['object'],
