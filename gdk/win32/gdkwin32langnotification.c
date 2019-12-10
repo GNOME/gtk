@@ -90,7 +90,10 @@ alpn_sink_on_activated (ITfActiveLanguageProfileNotifySink *This,
                         REFGUID                             guidProfile,
                         BOOL                                fActivated)
 {
-  _gdk_input_locale_is_ime = fActivated;
+  /* clsid and guidProfile are both NULL during WM_INPUTLANGCHANGE */
+  if (clsid == NULL && guidProfile == NULL)
+    _gdk_input_locale_is_ime = fActivated;
+
   return S_OK;
 }
 
