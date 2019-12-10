@@ -57,13 +57,19 @@ typedef enum {
  * @GTK_SORTER_CHANGE_INVERTED: The sort order was inverted. Comparisons
  *     that returned %GTK_ORDERING_SMALLER now return %GTK_ORDERING_LARGER
  *     and vice versa. Other comparisons return the same values as before.
+ * @GTK_SORTER_CHANGE_LESS_STRICT: The sorter is less strict: Comparisons
+ *     may now return %GTK_ORDERING_EQUAL that did not do so before.
+ * @GTK_SORTER_CHANGE_MORE_STRICT: The sorter is more strict: Comparisons
+ *     that did return %GTK_ORDERING_EQUAL may not do so anymore.
  *
  * Describes changes in a sorter in more detail and allows users
  * to optimize resorting.
  */
 typedef enum {
   GTK_SORTER_CHANGE_DIFFERENT,
-  GTK_SORTER_CHANGE_INVERTED
+  GTK_SORTER_CHANGE_INVERTED,
+  GTK_SORTER_CHANGE_LESS_STRICT,
+  GTK_SORTER_CHANGE_MORE_STRICT
 } GtkSorterChange;
 
 #define GTK_TYPE_SORTER             (gtk_sorter_get_type ())
