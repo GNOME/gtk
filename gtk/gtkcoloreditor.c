@@ -555,7 +555,7 @@ gtk_color_editor_get_rgba (GtkColorChooser *chooser,
                            GdkRGBA         *color)
 {
   GtkColorEditor *editor = GTK_COLOR_EDITOR (chooser);
-  gdouble h, s, v;
+  float h, s, v;
 
   h = gtk_adjustment_get_value (editor->priv->h_adj);
   s = gtk_adjustment_get_value (editor->priv->s_adj);
@@ -569,7 +569,7 @@ gtk_color_editor_set_rgba (GtkColorChooser *chooser,
                            const GdkRGBA   *color)
 {
   GtkColorEditor *editor = GTK_COLOR_EDITOR (chooser);
-  gdouble h, s, v;
+  float h, s, v;
 
   gtk_rgb_to_hsv (color->red, color->green, color->blue, &h, &s, &v);
 

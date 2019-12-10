@@ -118,8 +118,8 @@ create_texture (GtkColorPlane *plane)
   gint width, height, stride;
   guint red, green, blue;
   guint32 *data, *p;
-  gdouble h, s, v;
-  gdouble r, g, b;
+  float h, s, v;
+  float r, g, b;
   gdouble sf, vf;
   gint x, y;
 

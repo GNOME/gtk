@@ -149,11 +149,11 @@ portal_response_received (GDBusConnection *connection,
 
   if (response == 0)
     {
-      GdkRGBA c;
+      double d1, d2, d3;
 
-      c.alpha = 1.0;
-      if (g_variant_lookup (ret, "color", "(ddd)", &c.red, &c.green, &c.blue))
-        g_task_return_pointer (picker->task, gdk_rgba_copy (&c), (GDestroyNotify)gdk_rgba_free);
+      if (g_variant_lookup (ret, "color", "(ddd)", &d1, &d2, &d3))
+        g_task_return_pointer (picker->task,
+                               gdk_rgba_copy (&(GdkRGBA){d1, d2, d3, 1.0f}), (GDestroyNotify)gdk_rgba_free);
       else
         g_task_return_new_error (picker->task,
                                  G_IO_ERROR,

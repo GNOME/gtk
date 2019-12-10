@@ -36,10 +36,10 @@ G_BEGIN_DECLS
 
 struct _GdkRGBA
 {
-  gdouble red;
-  gdouble green;
-  gdouble blue;
-  gdouble alpha;
+  float red;
+  float green;
+  float blue;
+  float alpha;
 };
 
 #define GDK_TYPE_RGBA (gdk_rgba_get_type ())

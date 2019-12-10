@@ -129,15 +129,15 @@ color_picked (GObject      *source,
     }
   else
     {
-      GdkRGBA c;
+      double d1, d2, d3;
 
       g_variant_get (ret, "(@a{sv})", &dict);
 
-      c.alpha = 1;
-      if (!g_variant_lookup (dict, "color", "(ddd)", &c.red, &c.green, &c.blue))
+      if (!g_variant_lookup (dict, "color", "(ddd)", &d1, &d2, &d3))
         g_task_return_new_error (picker->task, G_IO_ERROR, G_IO_ERROR_FAILED, "No color received");
       else
-        g_task_return_pointer (picker->task, gdk_rgba_copy (&c), (GDestroyNotify)gdk_rgba_free);
+        g_task_return_pointer (picker->task,
+                               gdk_rgba_copy (&(GdkRGBA){d1, d2, d3, 1.0f}), (GDestroyNotify)gdk_rgba_free);
 
       g_variant_unref (dict);
       g_variant_unref (ret);
