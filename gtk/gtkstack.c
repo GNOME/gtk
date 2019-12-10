@@ -974,13 +974,33 @@ get_bin_window_y (GtkStack *stack)
   return y;
 }
 
+static gboolean
+can_queue_resize (GtkStack *stack)
+{
+  GtkNative *native;
+  GdkSurface *surface;
+
+  native = gtk_widget_get_native (GTK_WIDGET (stack));
+  if (!native)
+    return TRUE;
+
+  surface = gtk_native_get_surface (native);
+  if (!surface)
+   return TRUE;
+
+  return gdk_surface_can_resize_now (surface);
+}
+
 static void
 gtk_stack_progress_updated (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
 
   if (!priv->vhomogeneous || !priv->hhomogeneous)
-    gtk_widget_queue_resize (GTK_WIDGET (stack));
+    {
+      if (can_queue_resize (stack))
+        gtk_widget_queue_resize (GTK_WIDGET (stack));
+    }
   else if (is_window_moving_transition (priv->active_transition_type))
     gtk_widget_queue_allocate (GTK_WIDGET (stack));
   else
