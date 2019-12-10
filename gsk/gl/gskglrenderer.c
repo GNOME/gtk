@@ -466,15 +466,15 @@ add_rect_ops (RenderOpBuilder       *builder,
   });
 }
 
+static GdkRGBA BLACK = {0, 0, 0, 1};
+
 static void G_GNUC_UNUSED
 add_rect_outline_ops (GskGLRenderer         *self,
                       RenderOpBuilder       *builder,
                       const graphene_rect_t *rect)
 {
-  GdkRGBA *color = gdk_rgba_copy (&GDK_RGBA ("000")); /* Leaked */
-
   ops_set_program (builder, &self->color_program);
-  ops_set_color (builder, color);
+  ops_set_color (builder, &BLACK);
 
   add_rect_ops (builder,
                 &GRAPHENE_RECT_INIT (rect->origin.x, rect->origin.y,
