@@ -85,6 +85,7 @@ struct _GdkWaylandSurface
   unsigned int mapped : 1;
   unsigned int pending_commit : 1;
   unsigned int awaiting_frame : 1;
+  unsigned int awaiting_frame_frozen : 1;
   GdkSurfaceTypeHint hint;
   GdkSurface *transient_for;
   GdkSurface *popup_parent;
@@ -362,7 +363,11 @@ frame_callback (void               *data,
     return;
 
   impl->awaiting_frame = FALSE;
-  gdk_surface_thaw_updates (surface);
+  if (impl->awaiting_frame_frozen)
+    {
+      impl->awaiting_frame_frozen = FALSE;
+      gdk_surface_thaw_updates (surface);
+    }
 
   timings = gdk_frame_clock_get_timings (clock, impl->pending_frame_counter);
   impl->pending_frame_counter = 0;
@@ -481,7 +486,10 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
 
   if (impl->awaiting_frame &&
       impl->pending_frame_counter == gdk_frame_clock_get_frame_counter (clock))
-    gdk_surface_freeze_updates (surface);
+    {
+      impl->awaiting_frame_frozen = TRUE;
+      gdk_surface_freeze_updates (surface);
+    }
 }
 
 void
@@ -2570,9 +2578,10 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
             impl->initial_configure_received = FALSE;
         }
 
-      if (impl->awaiting_frame)
+      impl->awaiting_frame = FALSE;
+      if (impl->awaiting_frame_frozen)
         {
-          impl->awaiting_frame = FALSE;
+          impl->awaiting_frame_frozen = FALSE;
           gdk_surface_thaw_updates (surface);
         }
 
