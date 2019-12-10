@@ -530,7 +530,8 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   GtkWidget *button;
   GtkWidget *label;
   gint i;
-  GdkRGBA color;
+  double color[4];
+  GdkRGBA rgba;
   GVariant *variant;
   GVariantIter iter;
   gboolean selected;
@@ -568,14 +569,20 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   g_variant_iter_init (&iter, variant);
   i = 0;
   p = NULL;
-  while (g_variant_iter_loop (&iter, "(dddd)", &color.red, &color.green, &color.blue, &color.alpha))
+  while (g_variant_iter_loop (&iter, "(dddd)", &color[0], &color[1], &color[2], &color[3]))
     {
       i++;
       p = gtk_color_swatch_new ();
-      gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (p), &color);
+
+      rgba.red = color[0];
+      rgba.green = color[1];
+      rgba.blue = color[2];
+      rgba.alpha = color[3];
+
+      gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (p), &rgba);
       gtk_color_swatch_set_can_drop (GTK_COLOR_SWATCH (p), TRUE);
       atk_obj = gtk_widget_get_accessible (p);
-      name = accessible_color_name (&color);
+      name = accessible_color_name (&rgba);
       text = g_strdup_printf (_("Custom color %d: %s"), i, name);
       atk_object_set_name (atk_obj, text);
       g_free (text);
@@ -598,9 +605,15 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
 
   g_settings_get (priv->settings, I_("selected-color"), "(bdddd)",
                   &selected,
-                  &color.red, &color.green, &color.blue, &color.alpha);
+                  &color[0], &color[1], &color[2], &color[3]);
   if (selected)
-    gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (cc), &color);
+    {
+      rgba.red = color[0];
+      rgba.green = color[1];
+      rgba.blue = color[2];
+      rgba.alpha = color[3];
+      gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (cc), &rgba);
+    }
 
   gtk_widget_hide (GTK_WIDGET (priv->editor));
 }
