@@ -79,15 +79,6 @@ GtkTreeModel         *_gtk_tree_menu_get_model                      (GtkTreeMenu
 void                  _gtk_tree_menu_set_root                       (GtkTreeMenu         *menu,
                                                                      GtkTreePath         *path);
 GtkTreePath          *_gtk_tree_menu_get_root                       (GtkTreeMenu         *menu);
-gint                  _gtk_tree_menu_get_wrap_width                 (GtkTreeMenu         *menu);
-void                  _gtk_tree_menu_set_wrap_width                 (GtkTreeMenu         *menu,
-                                                                     gint                 width);
-gint                  _gtk_tree_menu_get_row_span_column            (GtkTreeMenu         *menu);
-void                  _gtk_tree_menu_set_row_span_column            (GtkTreeMenu         *menu,
-                                                                     gint                 row_span);
-gint                  _gtk_tree_menu_get_column_span_column         (GtkTreeMenu         *menu);
-void                  _gtk_tree_menu_set_column_span_column         (GtkTreeMenu         *menu,
-                                                                     gint                 column_span);
 
 GtkTreeViewRowSeparatorFunc _gtk_tree_menu_get_row_separator_func   (GtkTreeMenu          *menu);
 void                        _gtk_tree_menu_set_row_separator_func   (GtkTreeMenu          *menu,
