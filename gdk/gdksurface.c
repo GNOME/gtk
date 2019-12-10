@@ -108,6 +108,8 @@ static void update_cursor               (GdkDisplay *display,
 static void gdk_surface_set_frame_clock (GdkSurface      *surface,
                                          GdkFrameClock  *clock);
 
+static gboolean gdk_surface_real_can_resize_now (GdkSurface *surface);
+
 
 static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *properties[LAST_PROP] = { NULL, };
@@ -470,6 +472,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   object_class->get_property = gdk_surface_get_property;
 
   klass->beep = gdk_surface_real_beep;
+  klass->can_resize_now = gdk_surface_real_can_resize_now;
 
   /**
    * GdkSurface:cursor:
@@ -1661,6 +1664,31 @@ gdk_surface_freeze_updates (GdkSurface *surface)
   surface->update_freeze_count++;
   if (surface->update_freeze_count == 1)
     _gdk_frame_clock_uninhibit_freeze (surface->frame_clock);
+}
+
+static gboolean
+gdk_surface_real_can_resize_now (GdkSurface *surface)
+{
+  return surface->queue_relayout_idle_id == 0;
+}
+
+/**
+ * gdk_surface_can_resize_now:
+ * @surface: a #GdkSurface
+ *
+ * Returns %TRUE if surface is in a state where it can be resized, otherwise
+ * %FALSE. This happen for example hile an asynchronous relayout has yet to
+ * finish.
+ *
+ * A caller should not cause relayouts causing the surface size to change if
+ * %TRUE is returned.
+ **/
+gboolean
+gdk_surface_can_resize_now (GdkSurface *surface)
+{
+  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
+
+  return GDK_SURFACE_GET_CLASS (surface)->can_resize_now (surface);
 }
 
 /**
