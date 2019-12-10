@@ -77,7 +77,7 @@ typedef struct
 
 typedef struct
 {
-  GdkRGBA rgba;
+  const GdkRGBA *rgba;
 } OpColor;
 
 typedef struct
@@ -135,13 +135,13 @@ typedef struct
   float corner_heights[4];
   float spread;
   float offset[2];
-  float color[4];
+  const GdkRGBA *color;
 } OpShadow;
 
 typedef struct
 {
   float widths[4];
-  float color[4];
+  const GdkRGBA *color;
   GskRoundedRect outline;
 } OpBorder;
 

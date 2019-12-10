@@ -41,16 +41,6 @@ ops_finish (RenderOpBuilder *builder)
   builder->current_viewport = GRAPHENE_RECT_INIT (0, 0, 0, 0);
 }
 
-static inline void
-rgba_to_float (const GdkRGBA *c,
-               float         *f)
-{
-  f[0] = c->red;
-  f[1] = c->green;
-  f[2] = c->blue;
-  f[3] = c->alpha;
-}
-
 /* Debugging only! */
 void
 ops_dump_framebuffer (RenderOpBuilder *builder,
@@ -594,10 +584,10 @@ ops_set_color (RenderOpBuilder *builder,
   if (gdk_rgba_equal (color, &current_program_state->color))
     return;
 
-  current_program_state->color = *color;
+  current_program_state->color = color;
 
   op = ops_begin (builder, OP_CHANGE_COLOR);
-  op->rgba = *color;
+  op->rgba = color;
 }
 
 void
@@ -668,16 +658,15 @@ ops_set_border_color (RenderOpBuilder *builder,
 {
   ProgramState *current_program_state = get_current_program_state (builder);
   OpBorder *op;
-  float fcolor[4];
 
-  rgba_to_float (color, fcolor);
-
-  if (memcmp (fcolor, &current_program_state->border.color, sizeof fcolor) == 0)
+  if (current_program_state->border.color &&
+      gdk_rgba_equal (color, current_program_state->border.color))
     return;
 
   op = op_buffer_add (&builder->render_ops, OP_CHANGE_BORDER_COLOR);
-  memcpy (op->color, fcolor, sizeof (float[4]));
-  memcpy (current_program_state->border.color, fcolor, sizeof (float[4]));
+  op->color = color;
+
+  current_program_state->border.color = color;
 }
 
 void
