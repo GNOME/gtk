@@ -78,7 +78,7 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
           GBytes *bytes;
           guchar *data, *p;
           gdouble h;
-          gdouble r, g, b;
+          float r, g, b;
           gdouble f;
           int hue_x, hue_y;
 

@@ -398,23 +398,25 @@ gdk_rgba_to_string (const GdkRGBA *rgba)
 
 static gboolean
 parse_color_channel_value (GtkCssParser *parser,
-                           double       *value,
+                           float        *value,
                            gboolean      is_percentage)
 {
+  double dvalue;
+
   if (is_percentage)
     {
-      if (!gtk_css_parser_consume_percentage (parser, value))
+      if (!gtk_css_parser_consume_percentage (parser, &dvalue))
         return FALSE;
 
-      *value = CLAMP (*value, 0.0, 100.0) / 100.0;
+      *value = CLAMP (dvalue, 0.0, 100.0) / 100.0;
       return TRUE;
     }
   else
     {
-      if (!gtk_css_parser_consume_number (parser, value))
+      if (!gtk_css_parser_consume_number (parser, &dvalue))
         return FALSE;
 
-      *value = CLAMP (*value, 0.0, 255.0) / 255.0;
+      *value = CLAMP (dvalue, 0.0, 255.0) / 255.0;
       return TRUE;
     }
 }
@@ -425,6 +427,7 @@ parse_color_channel (GtkCssParser *parser,
                      gpointer      data)
 {
   GdkRGBA *rgba = data;
+  double dvalue;
 
   switch (arg)
   {
@@ -450,10 +453,10 @@ parse_color_channel (GtkCssParser *parser,
       return 1;
 
     case 3:
-      if (!gtk_css_parser_consume_number (parser, &rgba->alpha))
+      if (!gtk_css_parser_consume_number (parser, &dvalue))
         return 0;
 
-      rgba->alpha = CLAMP (rgba->alpha, 0.0, 1.0);
+      rgba->alpha = CLAMP (dvalue, 0.0, 1.0);
       return 1;
 
     default:

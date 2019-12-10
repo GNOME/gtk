@@ -39,12 +39,12 @@
 
 /* Converts from HSV to RGB */
 static void
-hsv_to_rgb (gdouble *h,
-            gdouble *s,
-            gdouble *v)
+hsv_to_rgb (float *h,
+            float *s,
+            float *v)
 {
-  gdouble hue, saturation, value;
-  gdouble f, p, q, t;
+  float hue, saturation, value;
+  float f, p, q, t;
 
   if (*s == 0.0)
     {
@@ -112,14 +112,14 @@ hsv_to_rgb (gdouble *h,
 
 /* Converts from RGB to HSV */
 static void
-rgb_to_hsv (gdouble *r,
-            gdouble *g,
-            gdouble *b)
+rgb_to_hsv (float *r,
+            float *g,
+            float *b)
 {
-  gdouble red, green, blue;
-  gdouble h, s, v;
-  gdouble min, max;
-  gdouble delta;
+  float red, green, blue;
+  float h, s, v;
+  float min, max;
+  float delta;
 
   red = *r;
   green = *g;
@@ -200,8 +200,8 @@ rgb_to_hsv (gdouble *r,
  * output values will be in the same range.
  */
 void
-gtk_hsv_to_rgb (gdouble  h, gdouble  s, gdouble  v,
-                gdouble *r, gdouble *g, gdouble *b)
+gtk_hsv_to_rgb (float  h, float  s, float  v,
+                float *r, float *g, float *b)
 {
   g_return_if_fail (h >= 0.0 && h <= 1.0);
   g_return_if_fail (s >= 0.0 && s <= 1.0);
@@ -234,8 +234,8 @@ gtk_hsv_to_rgb (gdouble  h, gdouble  s, gdouble  v,
  * output values will be in the same range.
  */
 void
-gtk_rgb_to_hsv (gdouble  r, gdouble  g, gdouble  b,
-                gdouble *h, gdouble *s, gdouble *v)
+gtk_rgb_to_hsv (float  r, float  g, float  b,
+                float *h, float *s, float *v)
 {
   g_return_if_fail (r >= 0.0 && r <= 1.0);
   g_return_if_fail (g >= 0.0 && g <= 1.0);
