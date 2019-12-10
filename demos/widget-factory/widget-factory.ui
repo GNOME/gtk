@@ -3198,6 +3198,10 @@ bad things might happen.</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
+                <layout>
+                  <property name="left-attach">0</property>
+                  <property name="top-attach">0</property>
+                </layout>
               </object>
             </child>
             <child>
@@ -3205,6 +3209,7 @@ bad things might happen.</property>
                 <property name="valign">baseline</property>
                 <layout>
                   <property name="left-attach">1</property>
+                  <property name="top-attach">0</property>
                 </layout>
               </object>
             </child>
@@ -3219,6 +3224,7 @@ bad things might happen.</property>
                   <class name="dim-label"/>
                 </style>
                 <layout>
+                  <property name="left-attach">0</property>
                   <property name="top-attach">1</property>
                 </layout>
               </object>
@@ -3243,6 +3249,7 @@ bad things might happen.</property>
                   <class name="dim-label"/>
                 </style>
                 <layout>
+                  <property name="left-attach">0</property>
                   <property name="top-attach">2</property>
                 </layout>
               </object>
@@ -3269,6 +3276,7 @@ bad things might happen.</property>
                   <class name="dim-label"/>
                 </style>
                 <layout>
+                  <property name="left-attach">0</property>
                   <property name="top-attach">3</property>
                 </layout>
               </object>
