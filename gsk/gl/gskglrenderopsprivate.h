@@ -99,8 +99,7 @@ struct _Program
       int color_location;
       int widths_location;
       int outline_location;
-      int corner_widths_location;
-      int corner_heights_location;
+      int corner_sizes_location;
     } border;
     struct {
       int source2_location;

@@ -2635,26 +2635,10 @@ apply_border_op (const Program  *program,
                  const OpBorder *op)
 {
   const GskRoundedRect *o = &op->outline;
-  float outline[4];
-  float widths[4];
-  float heights[4];
-  int i;
   OP_PRINT (" -> Border Outline");
 
-  outline[0] = o->bounds.origin.x;
-  outline[1] = o->bounds.origin.y;
-  outline[2] = o->bounds.size.width;
-  outline[3] = o->bounds.size.height;
-
-  for (i = 0; i < 4; i ++)
-    {
-      widths[i] = o->corner[i].width;
-      heights[i] = o->corner[i].height;
-    }
-
-  glUniform4fv (program->border.outline_location, 1, outline);
-  glUniform4fv (program->border.corner_widths_location, 1, widths);
-  glUniform4fv (program->border.corner_heights_location, 1, heights);
+  glUniform4fv (program->border.outline_location, 1, (float *)&o->bounds);
+  glUniform2fv (program->border.corner_sizes_location, 4, (float *)&o->corner);
 }
 
 static inline void
@@ -2877,8 +2861,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   INIT_PROGRAM_UNIFORM_LOCATION (border, color);
   INIT_PROGRAM_UNIFORM_LOCATION (border, widths);
   INIT_PROGRAM_UNIFORM_LOCATION (border, outline);
-  INIT_PROGRAM_UNIFORM_LOCATION (border, corner_widths);
-  INIT_PROGRAM_UNIFORM_LOCATION (border, corner_heights);
+  INIT_PROGRAM_UNIFORM_LOCATION (border, corner_sizes);
 
   /* cross fade */
   INIT_PROGRAM_UNIFORM_LOCATION (cross_fade, progress);
