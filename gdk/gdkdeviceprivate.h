@@ -25,11 +25,6 @@
 
 G_BEGIN_DECLS
 
-#define GDK_DEVICE_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), GDK_TYPE_DEVICE, GdkDeviceClass))
-#define GDK_IS_DEVICE_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), GDK_TYPE_DEVICE))
-#define GDK_DEVICE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_DEVICE, GdkDeviceClass))
-
-typedef struct _GdkDeviceClass GdkDeviceClass;
 typedef struct _GdkDeviceKey GdkDeviceKey;
 
 struct _GdkDeviceKey

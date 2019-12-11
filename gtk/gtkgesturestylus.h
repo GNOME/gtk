@@ -28,17 +28,8 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_GESTURE_STYLUS         (gtk_gesture_stylus_get_type ())
-#define GTK_GESTURE_STYLUS(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_GESTURE_STYLUS, GtkGestureStylus))
-#define GTK_GESTURE_STYLUS_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GTK_TYPE_GESTURE_STYLUS, GtkGestureStylusClass))
-#define GTK_IS_GESTURE_STYLUS(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_GESTURE_STYLUS))
-#define GTK_IS_GESTURE_STYLUS_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_GESTURE_STYLUS))
-#define GTK_GESTURE_STYLUS_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_GESTURE_STYLUS, GtkGestureStylusClass))
-
-typedef struct _GtkGestureStylus GtkGestureStylus;
-typedef struct _GtkGestureStylusClass GtkGestureStylusClass;
-
 GDK_AVAILABLE_IN_ALL
-GType             gtk_gesture_stylus_get_type (void) G_GNUC_CONST;
+GDK_DECLARE_EXPORTED_TYPE (GtkGestureStylus, gtk_gesture_stylus, GTK, GESTURE_STYLUS)
 
 GDK_AVAILABLE_IN_ALL
 GtkGesture *      gtk_gesture_stylus_new      (void);

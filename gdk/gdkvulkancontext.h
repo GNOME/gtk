@@ -35,16 +35,13 @@
 G_BEGIN_DECLS
 
 #define GDK_TYPE_VULKAN_CONTEXT             (gdk_vulkan_context_get_type ())
-#define GDK_VULKAN_CONTEXT(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_VULKAN_CONTEXT, GdkVulkanContext))
-#define GDK_IS_VULKAN_CONTEXT(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_VULKAN_CONTEXT))
+GDK_AVAILABLE_IN_ALL
+GDK_DECLARE_EXPORTED_TYPE (GdkVulkanContext, gdk_vulkan_context, GDK, VULKAN_CONTEXT)
 
 #define GDK_VULKAN_ERROR                    (gdk_vulkan_error_quark ())
 
 GDK_AVAILABLE_IN_ALL
 GQuark gdk_vulkan_error_quark (void);
-
-GDK_AVAILABLE_IN_ALL
-GType gdk_vulkan_context_get_type (void) G_GNUC_CONST;
 
 #ifndef __GI_SCANNER__
 #ifdef GDK_RENDERING_VULKAN

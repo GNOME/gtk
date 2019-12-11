@@ -29,17 +29,8 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_GESTURE_CLICK         (gtk_gesture_click_get_type ())
-#define GTK_GESTURE_CLICK(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_GESTURE_CLICK, GtkGestureClick))
-#define GTK_GESTURE_CLICK_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GTK_TYPE_GESTURE_CLICK, GtkGestureClickClass))
-#define GTK_IS_GESTURE_CLICK(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_GESTURE_CLICK))
-#define GTK_IS_GESTURE_CLICK_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_GESTURE_CLICK))
-#define GTK_GESTURE_CLICK_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_GESTURE_CLICK, GtkGestureClickClass))
-
-typedef struct _GtkGestureClick GtkGestureClick;
-typedef struct _GtkGestureClickClass GtkGestureClickClass;
-
 GDK_AVAILABLE_IN_ALL
-GType        gtk_gesture_click_get_type (void) G_GNUC_CONST;
+GDK_DECLARE_EXPORTED_TYPE (GtkGestureClick, gtk_gesture_click, GTK, GESTURE_CLICK)
 
 GDK_AVAILABLE_IN_ALL
 GtkGesture * gtk_gesture_click_new      (void);
