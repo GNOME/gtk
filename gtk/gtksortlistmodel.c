@@ -186,7 +186,7 @@ _sort_func (gconstpointer item1,
   {
     case GTK_ORDERING_EQUAL:
     case GTK_ORDERING_INVALID:
-      return 0;
+      return g_sequence_iter_compare (entry1->unsorted_iter, entry2->unsorted_iter);
     case GTK_ORDERING_SMALLER:
       return -1;
     case GTK_ORDERING_LARGER:
