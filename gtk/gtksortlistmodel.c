@@ -181,8 +181,14 @@ _sort_func (gconstpointer item1,
 {
   GtkSortListEntry *entry1 = (GtkSortListEntry *) item1;
   GtkSortListEntry *entry2 = (GtkSortListEntry *) item2;
+  GtkOrdering result;
 
-  return gtk_sorter_compare (GTK_SORTER (data), entry1->item, entry2->item);
+  result = gtk_sorter_compare (GTK_SORTER (data), entry1->item, entry2->item);
+
+  if (result == GTK_ORDERING_EQUAL)
+    result = g_sequence_iter_compare (entry1->unsorted_iter, entry2->unsorted_iter);
+
+  return result;
 }
 
 static void
