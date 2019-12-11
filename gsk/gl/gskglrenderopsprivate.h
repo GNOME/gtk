@@ -44,7 +44,6 @@ struct _Program
   int position_location;
   int uv_location;
   int alpha_location;
-  int blend_mode_location;
   int viewport_location;
   int projection_location;
   int modelview_location;
