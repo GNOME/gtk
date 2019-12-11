@@ -50,6 +50,7 @@
         <xi:include href="xml/gtkfilter.xml" />
         <xi:include href="xml/gtkcustomfilter.xml" />
         <xi:include href="xml/gtkstringfilter.xml" />
+        <xi:include href="xml/gtkmultifilter.xml" />
       </section>
       <xi:include href="xml/gtkflattenlistmodel.xml" />
       <xi:include href="xml/gtkmaplistmodel.xml" />
