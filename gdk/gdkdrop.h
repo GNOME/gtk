@@ -30,14 +30,9 @@
 
 G_BEGIN_DECLS
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkDrop, g_object_unref)
-
 #define GDK_TYPE_DROP              (gdk_drop_get_type ())
-#define GDK_DROP(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DROP, GdkDrop))
-#define GDK_IS_DROP(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DROP))
-
 GDK_AVAILABLE_IN_ALL
-GType                   gdk_drop_get_type               (void) G_GNUC_CONST;
+GDK_DECLARE_EXPORTED_TYPE (GdkDrop, gdk_drop, GDK, DROP)
 
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *            gdk_drop_get_display            (GdkDrop                *self);

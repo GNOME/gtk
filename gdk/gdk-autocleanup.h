@@ -22,21 +22,13 @@
 #ifndef __GI_SCANNER__
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkAppLaunchContext, g_object_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkClipboard, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkContentProvider, g_object_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkCursor, g_object_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkDevice, g_object_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkDisplay, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkDisplayManager, g_object_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkDrag, g_object_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkDrawContext, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkFrameClock, g_object_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkGLContext, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkKeymap, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkMonitor, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkSeat, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkPopupLayout, gdk_popup_layout_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkVulkanContext, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkSurface, g_object_unref)
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkContentFormats, gdk_content_formats_unref)

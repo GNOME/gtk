@@ -30,8 +30,8 @@
 G_BEGIN_DECLS
 
 #define GDK_TYPE_DEVICE         (gdk_device_get_type ())
-#define GDK_DEVICE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_DEVICE, GdkDevice))
-#define GDK_IS_DEVICE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_DEVICE))
+GDK_AVAILABLE_IN_ALL
+GDK_DECLARE_EXPORTED_TYPE (GdkDevice, gdk_device, GDK, DEVICE)
 
 typedef struct _GdkTimeCoord GdkTimeCoord;
 
@@ -102,9 +102,6 @@ struct _GdkTimeCoord
   guint32 time;
   gdouble axes[GDK_MAX_TIMECOORD_AXES];
 };
-
-GDK_AVAILABLE_IN_ALL
-GType                 gdk_device_get_type       (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 const gchar *         gdk_device_get_name       (GdkDevice *device);

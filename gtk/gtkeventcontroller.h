@@ -24,8 +24,6 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-typedef struct _GtkEventControllerClass GtkEventControllerClass;
-
 #include <gdk/gdk.h>
 #include <gtk/gtktypes.h>
 #include <gtk/gtkenums.h>
@@ -33,19 +31,12 @@ typedef struct _GtkEventControllerClass GtkEventControllerClass;
 G_BEGIN_DECLS
 
 #define GTK_TYPE_EVENT_CONTROLLER         (gtk_event_controller_get_type ())
-#define GTK_EVENT_CONTROLLER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_EVENT_CONTROLLER, GtkEventController))
-#define GTK_EVENT_CONTROLLER_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GTK_TYPE_EVENT_CONTROLLER, GtkEventControllerClass))
-#define GTK_IS_EVENT_CONTROLLER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_EVENT_CONTROLLER))
-#define GTK_IS_EVENT_CONTROLLER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_EVENT_CONTROLLER))
-#define GTK_EVENT_CONTROLLER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_EVENT_CONTROLLER, GtkEventControllerClass))
-
-
 GDK_AVAILABLE_IN_ALL
 GType               gtk_crossing_data_get_type (void) G_GNUC_CONST;
 
 
 GDK_AVAILABLE_IN_ALL
-GType        gtk_event_controller_get_type       (void) G_GNUC_CONST;
+GDK_DECLARE_EXPORTED_TYPE (GtkEventController, gtk_event_controller, GTK, EVENT_CONTROLLER)
 
 GDK_AVAILABLE_IN_ALL
 GtkWidget  * gtk_event_controller_get_widget     (GtkEventController *controller);

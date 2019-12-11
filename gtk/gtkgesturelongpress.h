@@ -29,17 +29,8 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_GESTURE_LONG_PRESS         (gtk_gesture_long_press_get_type ())
-#define GTK_GESTURE_LONG_PRESS(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_GESTURE_LONG_PRESS, GtkGestureLongPress))
-#define GTK_GESTURE_LONG_PRESS_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GTK_TYPE_GESTURE_LONG_PRESS, GtkGestureLongPressClass))
-#define GTK_IS_GESTURE_LONG_PRESS(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_GESTURE_LONG_PRESS))
-#define GTK_IS_GESTURE_LONG_PRESS_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_GESTURE_LONG_PRESS))
-#define GTK_GESTURE_LONG_PRESS_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_GESTURE_LONG_PRESS, GtkGestureLongPressClass))
-
-typedef struct _GtkGestureLongPress GtkGestureLongPress;
-typedef struct _GtkGestureLongPressClass GtkGestureLongPressClass;
-
 GDK_AVAILABLE_IN_ALL
-GType        gtk_gesture_long_press_get_type   (void) G_GNUC_CONST;
+GDK_DECLARE_EXPORTED_TYPE (GtkGestureLongPress, gtk_gesture_long_press, GTK, GESTURE_LONG_PRESS)
 
 GDK_AVAILABLE_IN_ALL
 GtkGesture * gtk_gesture_long_press_new        (void);
