@@ -1,11 +1,9 @@
 precision mediump float;
 
 uniform sampler2D u_source;
-uniform sampler2D u_mask;
 uniform mat4 u_projection;
 uniform mat4 u_modelview;
 uniform float u_alpha;
-uniform int uBlendMode;
 uniform vec4 u_viewport;
 
 // In GtkSnapshot coordinates
