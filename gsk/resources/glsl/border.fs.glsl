@@ -2,8 +2,7 @@ uniform vec4 u_color;
 uniform vec4 u_widths;
 
 uniform vec4 u_outline;
-uniform vec4 u_corner_widths;
-uniform vec4 u_corner_heights;
+uniform vec2 u_corner_sizes[4];
 
 void main() {
   vec4 bounds = u_outline;
@@ -15,7 +14,9 @@ void main() {
   f.x += u_viewport.x;
   f.y = (u_viewport.y + u_viewport.w) - f.y;
 
-  RoundedRect routside = RoundedRect (bounds, u_corner_widths, u_corner_heights);
+  vec4 corner_widths = vec4(u_corner_sizes[0].x, u_corner_sizes[1].x, u_corner_sizes[2].x, u_corner_sizes[3].x);
+  vec4 corner_heights = vec4(u_corner_sizes[0].y, u_corner_sizes[1].y, u_corner_sizes[2].y, u_corner_sizes[3].y);
+  RoundedRect routside = RoundedRect (bounds, corner_widths, corner_heights);
   RoundedRect rinside = rounded_rect_shrink (routside, u_widths);
 
   float alpha = clamp (rounded_rect_coverage (routside, f.xy) -
