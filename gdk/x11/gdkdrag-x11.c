@@ -1842,8 +1842,10 @@ gdk_drag_anim_timeout (gpointer data)
 
   gdk_surface_show (drag->drag_surface);
   gdk_x11_surface_move (drag->drag_surface,
-                        drag->last_x + (drag->start_x - drag->last_x) * t,
-                        drag->last_y + (drag->start_y - drag->last_y) * t);
+                        (drag->last_x - drag->hot_x) +
+                        (drag->start_x - drag->last_x) * t,
+                        (drag->last_y - drag->hot_y) +
+                        (drag->start_y - drag->last_y) * t);
   gdk_surface_set_opacity (drag->drag_surface, 1.0 - f);
 
   return G_SOURCE_CONTINUE;
