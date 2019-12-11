@@ -48,6 +48,8 @@ enum {
   NUM_PROPERTIES
 };
 
+typedef struct _GtkSortListEntry GtkSortListEntry;
+
 struct _GtkSortListModel
 {
   GObject parent_instance;
@@ -56,8 +58,8 @@ struct _GtkSortListModel
   GListModel *model;
   GtkSorter *sorter;
 
-  GSequence *sorted; /* NULL if sort_func == NULL */
-  GSequence *unsorted; /* NULL if sort_func == NULL */
+  GSequence *sorted; /* NULL if known unsorted */
+  GSequence *unsorted; /* NULL if known unsorted */
 };
 
 struct _GtkSortListModelClass
@@ -65,7 +67,24 @@ struct _GtkSortListModelClass
   GObjectClass parent_class;
 };
 
+struct _GtkSortListEntry
+{
+  GSequenceIter *sorted_iter;
+  GSequenceIter *unsorted_iter;
+  gpointer item; /* holds ref */
+};
+
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
+
+static void
+gtk_sort_list_entry_free (gpointer data)
+{
+  GtkSortListEntry *entry = data;
+
+  g_object_unref (entry->item);
+
+  g_slice_free (GtkSortListEntry, entry);
+}
 
 static GType
 gtk_sort_list_model_get_item_type (GListModel *list)
@@ -83,9 +102,6 @@ gtk_sort_list_model_get_n_items (GListModel *list)
   if (self->model == NULL)
     return 0;
 
-  if (self->sorted)
-    return g_sequence_get_length (self->sorted);
-
   return g_list_model_get_n_items (self->model);
 }
 
@@ -95,6 +111,7 @@ gtk_sort_list_model_get_item (GListModel *list,
 {
   GtkSortListModel *self = GTK_SORT_LIST_MODEL (list);
   GSequenceIter *iter;
+  GtkSortListEntry *entry;
 
   if (self->model == NULL)
     return NULL;
@@ -104,9 +121,11 @@ gtk_sort_list_model_get_item (GListModel *list,
 
   iter = g_sequence_get_iter_at_pos (self->sorted, position);
   if (g_sequence_iter_is_end (iter))
-      return NULL;
+    return NULL;
 
-  return g_object_ref (g_sequence_get (iter));
+  entry = g_sequence_get (iter);
+
+  return g_object_ref (entry->item);
 }
 
 static void
@@ -135,18 +154,18 @@ gtk_sort_list_model_remove_items (GtkSortListModel *self,
 
   for (i = 0; i < n_items ; i++)
     {
-      GSequenceIter *sorted_iter;
+      GtkSortListEntry *entry;
       GSequenceIter *next;
 
       next = g_sequence_iter_next (unsorted_iter);
 
-      sorted_iter = g_sequence_get (unsorted_iter);
-      pos = g_sequence_iter_get_position (sorted_iter);
+      entry = g_sequence_get (unsorted_iter);
+      pos = g_sequence_iter_get_position (entry->sorted_iter);
       start = MIN (start, pos);
       end = MIN (end, length_before - i - 1 - pos);
 
-      g_sequence_remove (sorted_iter);
-      g_sequence_remove (unsorted_iter);
+      g_sequence_remove (entry->unsorted_iter);
+      g_sequence_remove (entry->sorted_iter);
 
       unsorted_iter = next;
     }
@@ -160,7 +179,10 @@ _sort_func (gconstpointer item1,
             gconstpointer item2,
             gpointer      data)
 {
-  return gtk_sorter_compare (GTK_SORTER (data), (gpointer)item1, (gpointer)item2);
+  GtkSortListEntry *entry1 = (GtkSortListEntry *) item1;
+  GtkSortListEntry *entry2 = (GtkSortListEntry *) item2;
+
+  return gtk_sorter_compare (GTK_SORTER (data), entry1->item, entry2->item);
 }
 
 static void
@@ -170,20 +192,22 @@ gtk_sort_list_model_add_items (GtkSortListModel *self,
                                guint            *unmodified_start,
                                guint            *unmodified_end)
 {
-  GSequenceIter *unsorted_iter, *sorted_iter;
+  GSequenceIter *unsorted_end;
   guint i, pos, start, end, length_before;
 
-  unsorted_iter = g_sequence_get_iter_at_pos (self->unsorted, position);
+  unsorted_end = g_sequence_get_iter_at_pos (self->unsorted, position);
   start = end = length_before = g_sequence_get_length (self->sorted);
 
   for (i = 0; i < n_items; i++)
     {
-      gpointer item = g_list_model_get_item (self->model, position + i);
-      sorted_iter = g_sequence_insert_sorted (self->sorted, item, _sort_func, self->sorter);
-      g_sequence_insert_before (unsorted_iter, sorted_iter);
+      GtkSortListEntry *entry = g_slice_new0 (GtkSortListEntry);
+
+      entry->item = g_list_model_get_item (self->model, position + i);
+      entry->unsorted_iter = g_sequence_insert_before (unsorted_end, entry);
+      entry->sorted_iter = g_sequence_insert_sorted (self->sorted, entry, _sort_func, self->sorter);
       if (unmodified_start != NULL || unmodified_end != NULL)
         {
-          pos = g_sequence_iter_get_position (sorted_iter);
+          pos = g_sequence_iter_get_position (entry->sorted_iter);
           start = MIN (start, pos);
           end = MIN (end, length_before + i - pos);
         }
@@ -427,7 +451,7 @@ gtk_sort_list_model_create_sequences (GtkSortListModel *self)
   if (self->sorter == NULL || self->model == NULL)
     return;
 
-  self->sorted = g_sequence_new (g_object_unref);
+  self->sorted = g_sequence_new (gtk_sort_list_entry_free);
   self->unsorted = g_sequence_new (NULL);
 
   gtk_sort_list_model_add_items (self, 0, g_list_model_get_n_items (self->model), NULL, NULL);
