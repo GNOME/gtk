@@ -9,6 +9,7 @@ gtk_accessible_get_type
 gtk_actionable_get_type
 gtk_action_bar_get_type
 gtk_adjustment_get_type
+gtk_any_filter_get_type
 gtk_app_chooser_get_type
 gtk_app_chooser_button_get_type
 gtk_app_chooser_dialog_get_type
@@ -74,6 +75,7 @@ gtk_event_controller_focus_get_type
 gtk_event_controller_legacy_get_type
 gtk_event_controller_motion_get_type
 gtk_event_controller_scroll_get_type
+gtk_every_filter_get_type
 gtk_expander_get_type
 gtk_file_chooser_button_get_type
 gtk_file_chooser_dialog_get_type
@@ -129,6 +131,7 @@ gtk_media_stream_get_type
 gtk_menu_button_get_type
 gtk_message_dialog_get_type
 gtk_mount_operation_get_type
+gtk_multi_filter_get_type
 gtk_native_get_type
 gtk_no_selection_get_type
 gtk_notebook_get_type

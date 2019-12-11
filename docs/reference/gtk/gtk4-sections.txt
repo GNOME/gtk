@@ -1336,6 +1336,29 @@ gtk_custom_filter_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkmultifilter</FILE>
+<TITLE>GtkMultiFilter</TITLE>
+GtkMultiFilter
+gtk_multi_filter_append
+gtk_multi_filter_remove
+<SUBSECTION>
+GtkAnyFilter
+gtk_any_filter_new
+<SUBSECTION>
+GtkEveryFilter
+gtk_every_filter_new
+<SUBSECTION Standard>
+GTK_CUSTOM_FILTER
+GTK_IS_CUSTOM_FILTER
+GTK_TYPE_CUSTOM_FILTER
+GTK_CUSTOM_FILTER_CLASS
+GTK_IS_CUSTOM_FILTER_CLASS
+GTK_CUSTOM_FILTER_GET_CLASS
+<SUBSECTION Private>
+gtk_custom_filter_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkfilterlistmodel</FILE>
 <TITLE>GtkFilterListModel</TITLE>
 GtkFilterListModel
