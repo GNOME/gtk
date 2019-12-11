@@ -30,17 +30,8 @@
 G_BEGIN_DECLS
 
 #define GDK_TYPE_TEXTURE (gdk_texture_get_type ())
-
-#define GDK_TEXTURE(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_TEXTURE, GdkTexture))
-#define GDK_IS_TEXTURE(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_TEXTURE))
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkTexture, g_object_unref)
-
-typedef struct _GdkTextureClass        GdkTextureClass;
-
-
 GDK_AVAILABLE_IN_ALL
-GType                   gdk_texture_get_type                   (void) G_GNUC_CONST;
+GDK_DECLARE_EXPORTED_TYPE (GdkTexture, gdk_texture, GDK, TEXTURE)
 
 GDK_AVAILABLE_IN_ALL
 GdkTexture *            gdk_texture_new_for_pixbuf             (GdkPixbuf       *pixbuf);
