@@ -30,14 +30,8 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_EVENT_CONTROLLER_SCROLL         (gtk_event_controller_scroll_get_type ())
-#define GTK_EVENT_CONTROLLER_SCROLL(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_EVENT_CONTROLLER_SCROLL, GtkEventControllerScroll))
-#define GTK_EVENT_CONTROLLER_SCROLL_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GTK_TYPE_EVENT_CONTROLLER_SCROLL, GtkEventControllerScrollClass))
-#define GTK_IS_EVENT_CONTROLLER_SCROLL(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_EVENT_CONTROLLER_SCROLL))
-#define GTK_IS_EVENT_CONTROLLER_SCROLL_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_EVENT_CONTROLLER_SCROLL))
-#define GTK_EVENT_CONTROLLER_SCROLL_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_EVENT_CONTROLLER_SCROLL, GtkEventControllerScrollClass))
-
-typedef struct _GtkEventControllerScroll GtkEventControllerScroll;
-typedef struct _GtkEventControllerScrollClass GtkEventControllerScrollClass;
+GDK_AVAILABLE_IN_ALL
+GDK_DECLARE_EXPORTED_TYPE (GtkEventControllerScroll, gtk_event_controller_scroll, GTK, EVENT_CONTROLLER_SCROLL)
 
 /**
  * GtkEventControllerScrollFlags:
@@ -59,9 +53,6 @@ typedef enum {
   GTK_EVENT_CONTROLLER_SCROLL_KINETIC    = 1 << 3,
   GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES  = (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL | GTK_EVENT_CONTROLLER_SCROLL_HORIZONTAL),
 } GtkEventControllerScrollFlags;
-
-GDK_AVAILABLE_IN_ALL
-GType               gtk_event_controller_scroll_get_type  (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 GtkEventController *gtk_event_controller_scroll_new       (GtkEventControllerScrollFlags  flags);

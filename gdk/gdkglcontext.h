@@ -30,17 +30,14 @@
 
 G_BEGIN_DECLS
 
-#define GDK_TYPE_GL_CONTEXT             (gdk_gl_context_get_type ())
-#define GDK_GL_CONTEXT(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_GL_CONTEXT, GdkGLContext))
-#define GDK_IS_GL_CONTEXT(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_GL_CONTEXT))
-
 #define GDK_GL_ERROR       (gdk_gl_error_quark ())
+
+#define GDK_TYPE_GL_CONTEXT (gdk_gl_context_get_type ())
+GDK_AVAILABLE_IN_ALL
+GDK_DECLARE_EXPORTED_TYPE (GdkGLContext, gdk_gl_context, GDK, GL_CONTEXT)
 
 GDK_AVAILABLE_IN_ALL
 GQuark gdk_gl_error_quark (void);
-
-GDK_AVAILABLE_IN_ALL
-GType gdk_gl_context_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *            gdk_gl_context_get_display              (GdkGLContext  *context);

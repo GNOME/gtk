@@ -29,12 +29,6 @@
 
 G_BEGIN_DECLS
 
-#define GDK_CAIRO_CONTEXT_CLASS(klass) 	        (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_CAIRO_CONTEXT, GdkCairoContextClass))
-#define GDK_IS_CAIRO_CONTEXT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_CAIRO_CONTEXT))
-#define GDK_CAIRO_CONTEXT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_CAIRO_CONTEXT, GdkCairoContextClass))
-
-typedef struct _GdkCairoContextClass GdkCairoContextClass;
-
 struct _GdkCairoContext
 {
   GdkDrawContext parent_instance;
