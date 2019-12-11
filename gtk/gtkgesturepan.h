@@ -29,17 +29,8 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_GESTURE_PAN         (gtk_gesture_pan_get_type ())
-#define GTK_GESTURE_PAN(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_GESTURE_PAN, GtkGesturePan))
-#define GTK_GESTURE_PAN_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GTK_TYPE_GESTURE_PAN, GtkGesturePanClass))
-#define GTK_IS_GESTURE_PAN(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_GESTURE_PAN))
-#define GTK_IS_GESTURE_PAN_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_GESTURE_PAN))
-#define GTK_GESTURE_PAN_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_GESTURE_PAN, GtkGesturePanClass))
-
-typedef struct _GtkGesturePan GtkGesturePan;
-typedef struct _GtkGesturePanClass GtkGesturePanClass;
-
 GDK_AVAILABLE_IN_ALL
-GType             gtk_gesture_pan_get_type        (void) G_GNUC_CONST;
+GDK_DECLARE_EXPORTED_TYPE (GtkGesturePan, gtk_gesture_pan, GTK, GESTURE_PAN)
 
 GDK_AVAILABLE_IN_ALL
 GtkGesture *      gtk_gesture_pan_new             (GtkOrientation  orientation);

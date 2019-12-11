@@ -22,12 +22,6 @@
 
 G_BEGIN_DECLS
 
-#define GDK_CLIPBOARD_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_CLIPBOARD, GdkClipboardClass))
-#define GDK_IS_CLIPBOARD_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_CLIPBOARD))
-#define GDK_CLIPBOARD_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_CLIPBOARD, GdkClipboardClass))
-
-typedef struct _GdkClipboardClass GdkClipboardClass;
-
 struct _GdkClipboard
 {
   GObject parent;

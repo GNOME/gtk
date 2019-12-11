@@ -31,17 +31,8 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_EVENT_CONTROLLER_KEY         (gtk_event_controller_key_get_type ())
-#define GTK_EVENT_CONTROLLER_KEY(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_EVENT_CONTROLLER_KEY, GtkEventControllerKey))
-#define GTK_EVENT_CONTROLLER_KEY_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GTK_TYPE_EVENT_CONTROLLER_KEY, GtkEventControllerKeyClass))
-#define GTK_IS_EVENT_CONTROLLER_KEY(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_EVENT_CONTROLLER_KEY))
-#define GTK_IS_EVENT_CONTROLLER_KEY_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_EVENT_CONTROLLER_KEY))
-#define GTK_EVENT_CONTROLLER_KEY_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_EVENT_CONTROLLER_KEY, GtkEventControllerKeyClass))
-
-typedef struct _GtkEventControllerKey GtkEventControllerKey;
-typedef struct _GtkEventControllerKeyClass GtkEventControllerKeyClass;
-
 GDK_AVAILABLE_IN_ALL
-GType               gtk_event_controller_key_get_type  (void) G_GNUC_CONST;
+GDK_DECLARE_EXPORTED_TYPE (GtkEventControllerKey, gtk_event_controller_key, GTK, EVENT_CONTROLLER_KEY)
 
 GDK_AVAILABLE_IN_ALL
 GtkEventController *gtk_event_controller_key_new (void);
