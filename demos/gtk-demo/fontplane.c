@@ -19,8 +19,6 @@
 
 #include "fontplane.h"
 
-#include "gtk.h"
-
 enum {
   PROP_0,
   PROP_WEIGHT_ADJUSTMENT,
