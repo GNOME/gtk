@@ -1423,11 +1423,11 @@ infobar { border-width: 0; border-style: none; }
 /************ Tooltips * */
 tooltip { padding: 4px; /* not working */ border-radius: 5px; box-shadow: none; }
 
-tooltip.background { background-color: rgba(0, 0, 0, 0.9); background-clip: padding-box; border: 1px solid gray; }
+tooltip.background { background-color: #fff; background-clip: padding-box; border: 2px solid #000; }
 
 tooltip decoration { background-color: transparent; }
 
-tooltip * { padding: 4px; background-color: transparent; color: white; }
+tooltip * { padding: 4px; background-color: transparent; color: #000; }
 
 /***************** Color Chooser * */
 colorswatch { box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px #fff; }
