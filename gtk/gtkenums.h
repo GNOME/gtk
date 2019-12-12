@@ -985,6 +985,7 @@ G_END_DECLS
  * @GTK_INPUT_PURPOSE_NAME: Edited field expects the name of a person
  * @GTK_INPUT_PURPOSE_PASSWORD: Like @GTK_INPUT_PURPOSE_FREE_FORM, but characters are hidden
  * @GTK_INPUT_PURPOSE_PIN: Like @GTK_INPUT_PURPOSE_DIGITS, but characters are hidden
+ * @GTK_INPUT_PURPOSE_TERMINAL: Allow any character, in addition to control codes
  *
  * Describes primary purpose of the input widget. This information is
  * useful for on-screen keyboards and similar input methods to decide
@@ -1018,7 +1019,8 @@ typedef enum
   GTK_INPUT_PURPOSE_EMAIL,
   GTK_INPUT_PURPOSE_NAME,
   GTK_INPUT_PURPOSE_PASSWORD,
-  GTK_INPUT_PURPOSE_PIN
+  GTK_INPUT_PURPOSE_PIN,
+  GTK_INPUT_PURPOSE_TERMINAL,
 } GtkInputPurpose;
 
 /**
