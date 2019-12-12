@@ -137,9 +137,9 @@ void         gtk_builder_expose_object           (GtkBuilder    *builder,
                                                   const gchar   *name,
                                                   GObject       *object);
 GDK_AVAILABLE_IN_ALL
-GObject *    gtk_builder_get_current_object      (GtkBuilder    *self);
+GObject *    gtk_builder_get_current_object      (GtkBuilder    *builder);
 GDK_AVAILABLE_IN_ALL
-void         gtk_builder_set_current_object      (GtkBuilder    *self,
+void         gtk_builder_set_current_object      (GtkBuilder    *builder,
                                                   GObject       *current_object);
 GDK_AVAILABLE_IN_ALL
 void         gtk_builder_set_translation_domain  (GtkBuilder   	*builder,

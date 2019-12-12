@@ -1634,29 +1634,29 @@ gtk_builder_expose_object (GtkBuilder    *builder,
 
 /**
  * gtk_builder_get_current_object:
- * @self: a #GtkBuilder
+ * @builder: a #GtkBuilder
  *
  * Gets the current object set via gtk_builder_set_current_object().
  *
  * Returns: (nullable) (transfer none): the current object
  **/
 GObject *
-gtk_builder_get_current_object (GtkBuilder *self)
+gtk_builder_get_current_object (GtkBuilder *builder)
 {
-  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (self);
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
 
-  g_return_val_if_fail (GTK_IS_BUILDER (self), NULL);
+  g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
 
   return priv->current_object;
 }
 
 /**
  * gtk_builder_set_current_object:
- * @self: a #GtkBuilder
+ * @builder: a #GtkBuilder
  * @current_object: (nullable) (transfer none): the new current object or
  *     %NULL for none
  *
- * Sets the current object for the @self. The current object can be
+ * Sets the current object for the @builder. The current object can be
  * tought of as the `this` object that the builder is working for and
  * will often be used as the default object when an object is optional.
  *
@@ -1666,23 +1666,23 @@ gtk_builder_get_current_object (GtkBuilder *self)
  * will be %NULL.
  **/
 void
-gtk_builder_set_current_object (GtkBuilder *self,
+gtk_builder_set_current_object (GtkBuilder *builder,
                                 GObject    *current_object)
 {
-  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (self);
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
 
-  g_return_if_fail (GTK_IS_BUILDER (self));
+  g_return_if_fail (GTK_IS_BUILDER (builder));
   g_return_if_fail (current_object || G_IS_OBJECT (current_object));
 
   if (!g_set_object (&priv->current_object, current_object))
     return;
 
-  g_object_notify_by_pspec (G_OBJECT (self), builder_props[PROP_CURRENT_OBJECT]);
+  g_object_notify_by_pspec (G_OBJECT (builder), builder_props[PROP_CURRENT_OBJECT]);
 }
 
 /**
  * gtk_builder_get_scope:
- * @self: a #GtkBuilder
+ * @builder: a #GtkBuilder
  *
  * Gets the scope in use that was set via gtk_builder_set_scope().
  *
@@ -1691,18 +1691,18 @@ gtk_builder_set_current_object (GtkBuilder *self,
  * Returns: (transfer none): the current scope 
  **/
 GtkBuilderScope *
-gtk_builder_get_scope (GtkBuilder *self)
+gtk_builder_get_scope (GtkBuilder *builder)
 {
-  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (self);
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
 
-  g_return_val_if_fail (GTK_IS_BUILDER (self), NULL);
+  g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
 
   return priv->scope;
 }
 
 /**
  * gtk_builder_set_current_object:
- * @self: a #GtkBuilder
+ * @builder: a #GtkBuilder
  * @scope: (nullable) (transfer none): the scope to use or
  *     %NULL for the default
  *
@@ -1713,12 +1713,12 @@ gtk_builder_get_scope (GtkBuilder *self)
  * See the #GtkBuilderScope documentation for details.
  **/
 void
-gtk_builder_set_scope (GtkBuilder      *self,
+gtk_builder_set_scope (GtkBuilder      *builder,
                        GtkBuilderScope *scope)
 {
-  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (self);
+  GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
 
-  g_return_if_fail (GTK_IS_BUILDER (self));
+  g_return_if_fail (GTK_IS_BUILDER (builder));
   g_return_if_fail (scope == NULL || GTK_IS_BUILDER_SCOPE (scope));
 
   if (scope && priv->scope == scope)
@@ -1731,7 +1731,7 @@ gtk_builder_set_scope (GtkBuilder      *self,
   else
     priv->scope = gtk_builder_cscope_new ();
 
-  g_object_notify_by_pspec (G_OBJECT (self), builder_props[PROP_SCOPE]);
+  g_object_notify_by_pspec (G_OBJECT (builder), builder_props[PROP_SCOPE]);
 }
 
 static gboolean
