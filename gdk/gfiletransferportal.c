@@ -49,7 +49,7 @@ ensure_file_transfer_portal (void)
 
       if (error)
         {
-          g_warning ("Failed to get proxy: %s", error->message);
+          g_debug ("Failed to get proxy: %s", error->message);
           g_error_free (error);
         }
     }
