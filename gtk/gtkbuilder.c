@@ -1701,7 +1701,7 @@ gtk_builder_get_scope (GtkBuilder *builder)
 }
 
 /**
- * gtk_builder_set_current_object:
+ * gtk_builder_set_scope:
  * @builder: a #GtkBuilder
  * @scope: (nullable) (transfer none): the scope to use or
  *     %NULL for the default
