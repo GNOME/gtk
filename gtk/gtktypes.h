@@ -58,6 +58,18 @@ typedef GClosure*       (* GtkBuilderClosureFunc)               (GtkBuilder     
                                                                  gpointer                user_data,
                                                                  GError                **error);
 
+/**
+ * GTK_INVALID_LIST_POSITION:
+ *
+ * The value used to refer to a guaranteed invalid position in a #GListModel. This
+ * value may be returned from some functions, others may accept it as input.
+ * Its interpretion may differ for different functions.
+ *
+ * Refer to each function's documentation for if this value is allowed and what it
+ * does.
+ */
+#define GTK_INVALID_LIST_POSITION (G_MAXUINT)
+
 G_END_DECLS
 
 #endif /* __GTK_TYPES_H__ */
