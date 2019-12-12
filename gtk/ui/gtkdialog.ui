@@ -5,7 +5,7 @@
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar">
         <property name="show-title-buttons">1</property>
-        <property name="has-subtitle">false</property>
+        <property name="has-subtitle">0</property>
       </object>
     </child>
     <child>
