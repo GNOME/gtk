@@ -75,11 +75,11 @@
             <property name="adjustment">adjustment2</property>
             <property name="hexpand">1</property>
             <marks>
-              <mark value="0" position="bottom"/>
-              <mark value="1" position="bottom"/>
-              <mark value="2" position="bottom"/>
-              <mark value="3" position="bottom"/>
-              <mark value="4" position="bottom"/>
+              <mark value="0" position="bottom"></mark>
+              <mark value="1" position="bottom"></mark>
+              <mark value="2" position="bottom"></mark>
+              <mark value="3" position="bottom"></mark>
+              <mark value="4" position="bottom"></mark>
             </marks>
             <accessibility>
               <relation type="labelled-by" target="label_marks"/>
@@ -115,11 +115,11 @@
               <relation type="labelled-by" target="label_discrete"/>
             </accessibility>
             <marks>
-              <mark value="0" position="bottom"/>
-              <mark value="1" position="bottom"/>
-              <mark value="2" position="bottom"/>
-              <mark value="3" position="bottom"/>
-              <mark value="4" position="bottom"/>
+              <mark value="0" position="bottom"></mark>
+              <mark value="1" position="bottom"></mark>
+              <mark value="2" position="bottom"></mark>
+              <mark value="3" position="bottom"></mark>
+              <mark value="4" position="bottom"></mark>
             </marks>
             <layout>
               <property name="left-attach">1</property>

@@ -3692,50 +3692,50 @@ bad things might happen.</property>
         </child>
         <child>
           <object class="GtkStackPage">
-          <property name="name">basement</property>
-          <property name="child">
-            <object class="GtkBox">
-              <property name="orientation">vertical</property>
-              <child>
-                <object class="GtkModelButton">
-                  <property name="text">Basement</property>
-                  <property name="role">title</property>
-                  <property name="menu-name">main</property>
-                </object>
-              </child>
-              <child>
-                <object class="GtkSeparator"/>
-              </child>
-              <child>
-                <object class="GtkModelButton">
-                  <property name="text">Berk</property>
-                  <property name="action-name">app.berk</property>
-                  <property name="indicator-size-group">basement-indicators</property>
-                </object>
-              </child>
-              <child>
-                <object class="GtkModelButton">
-                  <property name="text">Broni</property>
-                  <property name="action-name">app.broni</property>
-                  <property name="indicator-size-group">basement-indicators</property>
-                </object>
-              </child>
-              <child>
-                <object class="GtkModelButton">
-                  <property name="text">Drutt</property>
-                  <property name="action-name">app.drutt</property>
-                  <property name="indicator-size-group">basement-indicators</property>
-                </object>
-              </child>
-              <child>
-                <object class="GtkModelButton">
-                  <property name="text">The Thing Upstairs</property>
-                  <property name="action-name">app.upstairs</property>
-                  <property name="indicator-size-group">basement-indicators</property>
-                </object>
-              </child>
-            </object>
-          </property>
+            <property name="name">basement</property>
+            <property name="child">
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="text">Basement</property>
+                    <property name="role">title</property>
+                    <property name="menu-name">main</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparator"/>
+                </child>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="text">Berk</property>
+                    <property name="action-name">app.berk</property>
+                    <property name="indicator-size-group">basement-indicators</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="text">Broni</property>
+                    <property name="action-name">app.broni</property>
+                    <property name="indicator-size-group">basement-indicators</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="text">Drutt</property>
+                    <property name="action-name">app.drutt</property>
+                    <property name="indicator-size-group">basement-indicators</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="text">The Thing Upstairs</property>
+                    <property name="action-name">app.upstairs</property>
+                    <property name="indicator-size-group">basement-indicators</property>
+                  </object>
+                </child>
+              </object>
+            </property>
           </object>
         </child>
       </object>

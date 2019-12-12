@@ -165,10 +165,11 @@
         </child>
         <child>
           <object class="GtkBox">
-            <property name="orientation">horizontal</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <style><class name="linked"/></style>
+            <style>
+              <class name="linked"/>
+            </style>
             <child>
               <object class="GtkRadioButton" id="text_radio">
                 <property name="draw-indicator">0</property>
@@ -183,7 +184,7 @@
               </object>
             </child>
             <layout>
-             <property name="left-attach">0</property>
+              <property name="left-attach">0</property>
               <property name="top-attach">3</property>
               <property name="column-span">7</property>
             </layout>
