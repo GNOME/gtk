@@ -5059,7 +5059,7 @@ gtk_text_buffer_set_enable_undo (GtkTextBuffer *buffer,
 
 /**
  * gtk_text_buffer_begin_irreversible_action:
- * @self: a #Gtktextbuffer
+ * @buffer: a #Gtktextbuffer
  *
  * Denotes the beginning of an action that may not be undone. This will cause
  * any previous operations in the undo/redo queue to be cleared.
@@ -5081,7 +5081,7 @@ gtk_text_buffer_begin_irreversible_action (GtkTextBuffer *buffer)
 
 /**
  * gtk_text_buffer_end_irreversible_action:
- * @self: a #Gtktextbuffer
+ * @buffer: a #Gtktextbuffer
  *
  * Denotes the end of an action that may not be undone. This will cause
  * any previous operations in the undo/redo queue to be cleared.
