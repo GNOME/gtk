@@ -66,6 +66,7 @@
       <title>Interface builder</title>
       <xi:include href="xml/gtkbuilder.xml" />
       <xi:include href="xml/gtkbuildable.xml" />
+      <xi:include href="xml/gtkbuilderscope.xml" />
     </chapter>
 
     <chapter id="WindowWidgets">

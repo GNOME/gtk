@@ -44,7 +44,7 @@
  * language which can be created via gtk_builder_cscope_new().
  *
  * #GtkBuilderCScope instances use symbols explicitly added to @builder
- * with prior calls to gtk_builder_scope_add_callback_symbol(). If developers want
+ * with prior calls to gtk_builder_cscope_add_callback_symbol(). If developers want
  * to do that, they are encouraged to create their own scopes for that purpose.
  *
  * In the case that symbols are not explicitly added; GTK will uses #GModule’s
@@ -52,7 +52,7 @@
  * symbol table. From here it tries to match the signal function names given in the
  * interface description with symbols in the application.
  *
- * Note that unless gtk_builder_scope_add_callback_symbol() is called for
+ * Note that unless gtk_builder_cscope_add_callback_symbol() is called for
  * all signal callbacks which are referenced by the loaded XML, this
  * functionality will require that #GModule be supported on the platform.
  */
@@ -449,7 +449,7 @@ gtk_builder_cscope_add_callback_symbol (GtkBuilderCScope *self,
  * @...: A list of callback name and callback symbol pairs terminated with %NULL
  *
  * A convenience function to add many callbacks instead of calling
- * gtk_builder_add_callback_symbol() for each symbol.
+ * gtk_builder_cscope_add_callback_symbol() for each symbol.
  */
 void
 gtk_builder_cscope_add_callback_symbols (GtkBuilderCScope *self,
@@ -490,7 +490,7 @@ gtk_builder_cscope_add_callback_symbols (GtkBuilderCScope *self,
  * @callback_name: The name of the callback
  *
  * Fetches a symbol previously added to @self
- * with gtk_builder_add_callback_symbols().
+ * with gtk_builder_cscope_add_callback_symbol().
  *
  * Returns: (nullable): The callback symbol in @builder for @callback_name, or %NULL
  */
