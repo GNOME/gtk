@@ -81,7 +81,7 @@ main (int argc, char *argv[])
   g_signal_connect (fontchooser, "font-activated",
                     G_CALLBACK (font_activated_cb), NULL);
 
-  gtk_font_chooser_set_font (GTK_FONT_CHOOSER (fontchooser), "Bitstream Vera Sans 45");
+  gtk_font_chooser_set_font (GTK_FONT_CHOOSER (fontchooser), "Sans 45");
   gtk_font_chooser_set_preview_text (GTK_FONT_CHOOSER (fontchooser), "[user@host ~]$ &>>");
   gtk_font_chooser_set_show_preview_entry (GTK_FONT_CHOOSER (fontchooser), FALSE);
 
