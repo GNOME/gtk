@@ -3175,9 +3175,9 @@ tooltip {
   &.background {
     // background-color needs to be set this way otherwise it gets drawn twice
     // see https://bugzilla.gnome.org/show_bug.cgi?id=736155 for details.
-    background-color: transparentize(black, 0.1);
+    background-color: $bg_color;
     background-clip: padding-box;
-    border: 1px solid $borders_color;
+    border: 2px solid $fg_color;
   }
 
   padding: 4px; /* not working */
@@ -3190,7 +3190,7 @@ tooltip {
   * { // Yeah this is ugly
     padding: 4px;
     background-color: transparent;
-    color: white;
+    color: $fg_color;
   }
 }
 
