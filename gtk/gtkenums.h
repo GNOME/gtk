@@ -586,6 +586,39 @@ typedef enum
 } GtkNumberUpLayout;
 
 /**
+ * GtkOrdering:
+ * @GTK_ORDERING_SMALLER: the first value is smaller than the second
+ * @GTK_ORDERING_EQUAL: the two values are equal
+ * @GTK_ORDERING_LARGER: the first value is larger than the second
+ *
+ * Describes the way two values can be compared.
+ *
+ * These values can be used with a #GCompareFunc. However, a
+ * #GCompareFunc is allowed to return any integer values.  
+ * For converting such a value to a #GtkOrdering, use
+ * gtk_ordering_from_cmpfunc().
+ */
+typedef enum {
+  GTK_ORDERING_SMALLER = -1,
+  GTK_ORDERING_EQUAL = 0,
+  GTK_ORDERING_LARGER = 1
+} GtkOrdering;
+
+/**
+ * gtk_ordering_from_cmpfunc:
+ * @cmpfunc_result: Result of a comparison function
+ *
+ * Converts the result of a #GCompareFunc like strcmp() to a #GtkOrdering.
+ *
+ * Returns: the corresponding #GtkOrdering
+ **/
+static inline GtkOrdering
+gtk_ordering_from_cmpfunc (int cmpfunc_result)
+{
+  return (GtkOrdering) ((cmpfunc_result > 0) - (cmpfunc_result < 0));
+}
+
+/**
  * GtkPageOrientation:
  * @GTK_PAGE_ORIENTATION_PORTRAIT: Portrait mode.
  * @GTK_PAGE_ORIENTATION_LANDSCAPE: Landscape mode.

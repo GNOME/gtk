@@ -4748,6 +4748,8 @@ GtkDeleteType
 GtkDirectionType
 GtkJustification
 GtkMovementStep
+GtkOrdering
+gtk_ordering_from_cmpfunc
 GtkOrientation
 GtkPackType
 GtkPositionType
