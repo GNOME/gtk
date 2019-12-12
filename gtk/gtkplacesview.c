@@ -1787,6 +1787,25 @@ on_key_press_event (GtkEventController *controller,
 }
 
 static void
+on_middle_click_row_event (GtkGestureClick *gesture,
+                           guint            n_press,
+                           double           x,
+                           double           y,
+                           GtkPlacesView   *self)
+{
+  GtkPlacesViewPrivate *priv = gtk_places_view_get_instance_private (self);
+  GtkListBoxRow *row;
+
+  if (n_press != 1)
+    return;
+
+  row = gtk_list_box_get_row_at_y (GTK_LIST_BOX (priv->listbox), y);
+  if (row != NULL && gtk_widget_is_sensitive (GTK_WIDGET (row)))
+    activate_row (self, GTK_PLACES_VIEW_ROW (row), GTK_PLACES_OPEN_NEW_TAB);
+}
+
+
+static void
 on_eject_button_clicked (GtkWidget        *widget,
                          GtkPlacesViewRow *row)
 {
@@ -1909,22 +1928,9 @@ on_listbox_row_activated (GtkPlacesView    *view,
                           GtkPlacesViewRow *row,
                           GtkWidget        *listbox)
 {
-  GtkPlacesViewPrivate *priv;
-  GdkEvent *event;
-  guint button;
-  GtkPlacesOpenFlags open_flags;
+  GtkPlacesViewPrivate *priv = gtk_places_view_get_instance_private (view);
 
-  priv = gtk_places_view_get_instance_private (view);
-
-  event = gtk_get_current_event ();
-  gdk_event_get_button (event, &button);
-
-  if (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE && button == GDK_BUTTON_MIDDLE)
-    open_flags = GTK_PLACES_OPEN_NEW_TAB;
-  else
-    open_flags = priv->current_open_flags;
-
-  activate_row (view, row, open_flags);
+  activate_row (view, row, priv->current_open_flags);
 }
 
 static gboolean
@@ -2340,11 +2346,21 @@ gtk_places_view_init (GtkPlacesView *self)
   priv->path_size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
   priv->space_size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
+  gtk_widget_init_template (GTK_WIDGET (self));
+
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed", G_CALLBACK (on_key_press_event), self);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
-  gtk_widget_init_template (GTK_WIDGET (self));
+  /* We need an additional controller because GtkListBox only
+   * activates rows for GDK_BUTTON_PRIMARY clicks
+   */
+  controller = (GtkEventController *) gtk_gesture_click_new ();
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_BUBBLE);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (controller), GDK_BUTTON_MIDDLE);
+  g_signal_connect (controller, "released",
+                    G_CALLBACK (on_middle_click_row_event), self);
+  gtk_widget_add_controller (priv->listbox, controller);
 
   populate_available_protocols_grid (GTK_GRID (priv->available_protocols_grid));
 }
