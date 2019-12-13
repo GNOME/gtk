@@ -187,12 +187,14 @@ gtk_builder_cscope_get_module (GtkBuilderCScope *self)
  * GtkWindow -> gtk_window_get_type
  * GtkHBox -> gtk_hbox_get_type
  * GtkUIManager -> gtk_ui_manager_get_type
- * GWeatherLocation -> gweather_location_get_type
+ * GWeatherLocation -> gweather_location_get_type (split_first_cap == FALSE)
+ * GThemedIcon -> g_themed_icon_get_type (slit_first_cap == TRUE)
  *
  * Keep in sync with testsuite/gtk/typename.c !
  */
 static gchar *
-type_name_mangle (const gchar *name)
+type_name_mangle (const gchar *name,
+                  gboolean     split_first_cap)
 {
   GString *symbol_name = g_string_new ("");
   gint i;
@@ -201,8 +203,9 @@ type_name_mangle (const gchar *name)
     {
       /* skip if uppercase, first or previous is uppercase */
       if ((name[i] == g_ascii_toupper (name[i]) &&
-           i > 0 && name[i-1] != g_ascii_toupper (name[i-1])) ||
-           (i > 2 && name[i]   == g_ascii_toupper (name[i]) &&
+             ((i > 0 && name[i-1] != g_ascii_toupper (name[i-1])) ||
+              (i == 1 && name[0] == g_ascii_toupper (name[0]) && split_first_cap))) ||
+           (i > 2 && name[i]  == g_ascii_toupper (name[i]) &&
            name[i-1] == g_ascii_toupper (name[i-1]) &&
            name[i-2] == g_ascii_toupper (name[i-2])))
         g_string_append_c (symbol_name, '_');
@@ -219,14 +222,21 @@ gtk_builder_cscope_resolve_type_lazily (GtkBuilderCScope *self,
 {
   GModule *module;
   GType (*func) (void);
-  gchar *symbol;
+  char *symbol;
   GType gtype = G_TYPE_INVALID;
 
   module = gtk_builder_cscope_get_module (self);
   if (!module)
     return G_TYPE_INVALID;
 
-  symbol = type_name_mangle (name);
+  symbol = type_name_mangle (name, TRUE);
+
+  if (g_module_symbol (module, symbol, (gpointer)&func))
+    gtype = func ();
+
+  g_free (symbol);
+
+  symbol = type_name_mangle (name, FALSE);
 
   if (g_module_symbol (module, symbol, (gpointer)&func))
     gtype = func ();
