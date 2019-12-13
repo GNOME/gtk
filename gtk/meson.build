@@ -256,6 +256,7 @@ gtk_public_sources = files([
   'gtkgesturesingle.c',
   'gtkgesturestylus.c',
   'gtkgestureswipe.c',
+  'gtkgesturetranslate.c',
   'gtkgesturezoom.c',
   'gtkglarea.c',
   'gtkgrid.c',
