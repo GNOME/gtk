@@ -834,3 +834,123 @@ gtk_drop_down_get_expression (GtkDropDown *self)
 
   return self->expression;
 }
+
+
+#define GTK_TYPE_DROP_DOWN_STRING_HOLDER (gtk_drop_down_string_holder_get_type ())
+G_DECLARE_FINAL_TYPE (GtkDropDownStringHolder, gtk_drop_down_string_holder, GTK, DROP_DOWN_STRING_HOLDER, GObject)
+
+struct _GtkDropDownStringHolder {
+  GObject parent_instance;
+  char *text;
+};
+
+G_DEFINE_TYPE (GtkDropDownStringHolder, gtk_drop_down_string_holder, G_TYPE_OBJECT);
+
+static void
+gtk_drop_down_string_holder_init (GtkDropDownStringHolder *holder)
+{
+}
+
+static void
+gtk_drop_down_string_holder_finalize (GObject *object)
+{
+  GtkDropDownStringHolder *holder = GTK_DROP_DOWN_STRING_HOLDER (object);
+
+  g_free (holder->text);
+
+  G_OBJECT_CLASS (gtk_drop_down_string_holder_parent_class)->finalize (object);
+}
+
+static void
+gtk_drop_down_string_holder_class_init (GtkDropDownStringHolderClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->finalize = gtk_drop_down_string_holder_finalize;
+}
+
+static GtkDropDownStringHolder *
+gtk_drop_down_string_holder_new (const char *text)
+{
+  GtkDropDownStringHolder *holder = g_object_new (GTK_TYPE_DROP_DOWN_STRING_HOLDER, NULL);
+  holder->text = g_strdup (text);
+  return holder;
+}
+
+static void
+gtk_drop_down_strings_setup_item (GtkSignalListItemFactory *factory,
+                                  GtkListItem              *item)
+{
+  GtkWidget *text;
+
+  text = gtk_label_new ("");
+  gtk_label_set_xalign (GTK_LABEL (text), 0.0);
+
+  gtk_list_item_set_child (item, text);
+}
+
+static void
+gtk_drop_down_strings_bind_item (GtkSignalListItemFactory *factory,
+                                 GtkListItem              *item)
+{
+  GtkWidget *text;
+  GtkDropDownStringHolder *holder;
+
+  holder = gtk_list_item_get_item (item);
+  text = gtk_list_item_get_child (item);
+
+  gtk_label_set_label (GTK_LABEL (text), holder->text);
+}
+
+static GtkListItemFactory *
+gtk_drop_down_strings_factory_new (void)
+{
+  GtkListItemFactory *factory;
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (gtk_drop_down_strings_setup_item), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (gtk_drop_down_strings_bind_item), NULL);
+
+  return factory;
+}
+
+static GListModel *
+gtk_drop_down_strings_model_new (const char *const *text)
+{
+  GListStore *store;
+  int i;
+
+  store = g_list_store_new (GTK_TYPE_DROP_DOWN_STRING_HOLDER);
+  for (i = 0; text[i]; i++)
+    {
+      GtkDropDownStringHolder *holder = gtk_drop_down_string_holder_new (text[i]);
+      g_list_store_append (store, holder);
+      g_object_unref (holder);
+    }
+
+  return G_LIST_MODEL (store);
+}
+
+GtkWidget *
+gtk_drop_down_new_from_strings (const char *const *text)
+{
+  GtkWidget *widget;
+  GListModel *model;
+  GtkListItemFactory *factory;
+
+  g_return_val_if_fail (text != NULL, NULL);
+
+  model = gtk_drop_down_strings_model_new (text);
+  factory = gtk_drop_down_strings_factory_new ();
+
+  widget = g_object_new (GTK_TYPE_DROP_DOWN,
+                         "model", model,
+                         "factory", factory,
+                         NULL);
+
+  g_object_unref (model);
+  g_object_unref (factory);
+
+  return widget;
+}
+
