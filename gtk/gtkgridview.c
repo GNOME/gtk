@@ -44,7 +44,7 @@
 /**
  * SECTION:gtkgridview
  * @title: GtkGridView
- * @short_description: A widget for displaying lists
+ * @short_description: A widget for displaying lists in a grid
  * @see_also: #GListModel
  *
  * GtkGridView is a widget to present a view into a large dynamic grid of items.
