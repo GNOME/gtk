@@ -30,8 +30,8 @@
  * @Short_description: Sorting items
  * @See_also: #GtkSortListModel
  *
- * #GtkSorter is the way to describe sorting criteria.  
- * It primary user is #GtkSortListModel.
+ * #GtkSorter is the way to describe sorting criteria.
+ * Its primary user is #GtkSortListModel.
  *
  * The model will use a sorter to determine the order in which its items should appear
  * by calling gtk_sorter_compare() for pairs of items.
@@ -45,7 +45,7 @@
  * #GtkColumnView has built-in support for sorting lists via GtkColumnViewColumn::sorter
  * where the user can change the sorting by clicking on list headers.
  *
- * Of coure, in particular for large lists, it is also possible to subclass #GtkSorter
+ * Of course, in particular for large lists, it is also possible to subclass #GtkSorter
  * and provide one's own sorter.
  */
 
@@ -81,7 +81,7 @@ gtk_sorter_class_init (GtkSorterClass *class)
   class->get_order = gtk_sorter_default_get_order;
 
   /**
-   * GtkSearch:changed:
+   * GtkSorter::changed:
    * @self: The #GtkSorter
    * @change: how the sorter changed
    *
@@ -122,11 +122,11 @@ gtk_sorter_init (GtkSorter *self)
  * Compares two given items according to the sort order implemented
  * by the sorter.
  *
- * Sorters implement a partial order:  
+ * Sorters implement a partial order:
  * * It is reflexive, ie `a == a`
  * * It is antisymmetric, ie if `a < b` then `b > a`.
  * * It is transitive, ie given any 3 items with `a <= b && b<= c`,
- *   then `a <= c`.  
+ *   then `a <= c`.
  * 
  * The sorter  may signal it conforms to additional constraints
  * via the return value of gtk_sorter_get_order().
