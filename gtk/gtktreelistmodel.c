@@ -930,7 +930,24 @@ gtk_tree_list_model_get_child_row (GtkTreeListModel *self,
   return tree_node_get_row (child);
 }
 
-/***   ROW   ***/
+/**
+ * SECTION:gtktreelistrow
+ * @Short_description: rows in a tree
+ * @Title: GtkTreeListRow
+ * @See_also: #GtkTreeListModel
+ *
+ * #GtkTreeListRow is the object used by #GtkTreeListModel to
+ * represent items. It allows navigating the model as a tree and
+ * modify the state of rows.
+ *
+ * #GtkTreeListRow instances are created by a #GtkTreeListModel only
+ * when the GtkTreeListModel:passthrough property is not set.
+ *
+ * There are various support objects that can make use of #GtkTreeListRow
+ * objects, such as the #GtkTreeExpander widget that allows displaying
+ * an icon to expand or collapse a row or #GtkTreeListRowSorter that makes
+ * it possible to sort trees properly.
+ */
 
 enum {
   ROW_PROP_0,
