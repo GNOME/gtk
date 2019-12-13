@@ -34,6 +34,9 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_drop_down_new                               (void);
 
 GDK_AVAILABLE_IN_ALL
+GtkWidget *     gtk_drop_down_new_from_strings                  (const char *const *texts);
+
+GDK_AVAILABLE_IN_ALL
 void            gtk_drop_down_set_model                         (GtkDropDown            *self,
                                                                  GListModel             *model);
 GDK_AVAILABLE_IN_ALL
