@@ -26,6 +26,15 @@
 #include "gtklistitemfactoryprivate.h"
 #include "gtklistitemprivate.h"
 
+/**
+ * SECTION:gtkbuilderlistitemfactory
+ * @Tiitle: GtkBuilderListItemFactory
+ * @Short_description: A listitem factory using ui files
+ *
+ * #GtkBuilderListItemFactory is a #GtkListItemFactory that creates
+ * widgets by instantiating #GtkBuilder UI templates.
+ */
+
 struct _GtkBuilderListItemFactory
 {
   GtkListItemFactory parent_instance;
