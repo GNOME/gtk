@@ -68,8 +68,10 @@
  *
  * # CSS nodes
  *
- * GtkScaleButton has a single CSS node with name button. To differentiate
- * it from a plain #GtkButton, it gets the .scale style class.
+ * GtkScaleButton has a single CSS node with name `button`. To differentiate
+ * it from a plain #GtkButton, it gets the `.scale` style class.
+ *
+ * The popup widget that contains the scale has a `.scale-popup` style class.
  */
 
 
