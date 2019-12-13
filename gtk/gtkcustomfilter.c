@@ -24,6 +24,14 @@
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 
+/**
+ * SECTION:gtkcustomfilter
+ * @Title: GtkCustomFilter
+ * @Short_description: Filtering with callbacks
+ *
+ * #GtkCustomFilter is a #GtkFilter that uses a callback to determine whether
+ * to include an item or not.
+ */
 struct _GtkCustomFilter
 {
   GtkFilter parent_instance;
