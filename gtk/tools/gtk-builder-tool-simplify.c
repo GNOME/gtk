@@ -264,6 +264,36 @@ keep_for_rewrite (const char *class_name,
 }
 
 static gboolean
+has_attribute (Element    *elt,
+               const char *name,
+               const char *value)
+{
+  int i;
+
+  for (i = 0; elt->attribute_names[i]; i++)
+    {
+      if (strcmp (elt->attribute_names[i], name) == 0 &&
+          (value == NULL || strcmp (elt->attribute_values[i], value) == 0))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+is_cdata_property (Element *element)
+{
+  if (g_str_equal (element->element_name, "property") &&
+      has_attribute (element, "name", "bytes") &&
+      element->parent != NULL &&
+      g_str_equal (element->parent->element_name, "object") &&
+      has_attribute (element->parent, "class", "GtkBuilderListItemFactory"))
+    return TRUE;
+
+  return FALSE;
+}
+
+static gboolean
 is_pcdata_element (Element *element)
 {
   /* elements that can contain text */
@@ -483,23 +513,6 @@ value_is_default (Element      *element,
   g_value_reset (&value);
 
   return ret;
-}
-
-static gboolean
-has_attribute (Element    *elt,
-               const char *name,
-               const char *value)
-{
-  int i;
-
-  for (i = 0; elt->attribute_names[i]; i++)
-    {
-      if (strcmp (elt->attribute_names[i], name) == 0 &&
-          (value == NULL || strcmp (elt->attribute_values[i], value) == 0))
-        return TRUE;
-    }
-
-  return FALSE;
 }
 
 static const char *
@@ -1720,9 +1733,18 @@ dump_element (Element *element,
         }
       else
         {
-          char *escaped = g_markup_escape_text (element->data, -1);
-          g_fprintf (output, "%s", escaped);
-          g_free (escaped);
+          if (is_cdata_property (element))
+            {
+              g_fprintf (output, "<![CDATA[");
+              g_fprintf (output, "%s", element->data);
+              g_fprintf (output, "]]>");
+            }
+          else
+            {          
+              char *escaped = g_markup_escape_text (element->data, -1);
+              g_fprintf (output, "%s", escaped);
+              g_free (escaped);
+            }
         }
       g_fprintf (output, "</%s>\n", element->element_name);
     }
