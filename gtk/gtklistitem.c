@@ -30,22 +30,21 @@
  * @short_description: Widget used to represent items of a ListModel
  * @see_also: #GtkListView, #GListModel
  *
- * #GtkListItem is the widget that GTK list-handling containers such
- * as #GtkListView create to represent items in a #GListModel.  
- * They are managed by the container and cannot be created by application
- * code.
+ * #GtkListItem is the widget that list-handling containers such
+ * as #GtkListView use to represent items in a #GListModel. They are
+ * managed by the container and cannot be created by application code.
  *
- * #GtkListIems need to be populated by application code. This is done by
+ * #GtkListItems need to be populated by application code. This is done by
  * calling gtk_list_item_set_child().
  *
  * #GtkListItems exist in 2 stages:
  *
  * 1. The unbound stage where the listitem is not currently connected to
- *    an item in the list. In that case, the GtkListItem:item property is
+ *    an item in the list. In that case, the #GtkListItem:item property is
  *    set to %NULL.
  *
  * 2. The bound stage where the listitem references an item from the list.
- *    The GtkListItem:item property is not %NULL.
+ *    The #GtkListItem:item property is not %NULL.
  */
 
 struct _GtkListItemClass
