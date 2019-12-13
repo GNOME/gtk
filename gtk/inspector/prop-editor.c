@@ -46,7 +46,6 @@
 #include "gtkwidgetprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtklistbox.h"
-#include "gtkcomboboxtext.h"
 #include "gtkmenubutton.h"
 
 struct _GtkInspectorPropEditor
@@ -451,13 +450,11 @@ bool_changed (GObject *object, GParamSpec *pspec, gpointer data)
 }
 
 static void
-enum_modified (GtkComboBox *combo, ObjectProperty *p)
+enum_modified (GtkDropDown *dropdown, GParamSpec *pspec, ObjectProperty *p)
 {
-  gint i;
+  int i = gtk_drop_down_get_selected (dropdown);
   GEnumClass *eclass;
   GValue val = G_VALUE_INIT;
-
-  i = gtk_combo_box_get_active (combo);
 
   eclass = G_ENUM_CLASS (g_type_class_peek (p->spec->value_type));
 
@@ -470,7 +467,6 @@ enum_modified (GtkComboBox *combo, ObjectProperty *p)
 static void
 enum_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
-  GtkComboBox *combo = GTK_COMBO_BOX (data);
   GValue val = G_VALUE_INIT;
   GEnumClass *eclass;
   gint i;
@@ -489,9 +485,9 @@ enum_changed (GObject *object, GParamSpec *pspec, gpointer data)
     }
   g_value_unset (&val);
 
-  block_controller (G_OBJECT (combo));
-  gtk_combo_box_set_active (combo, i);
-  unblock_controller (G_OBJECT (combo));
+  block_controller (G_OBJECT (data));
+  gtk_drop_down_set_selected (GTK_DROP_DOWN (data), i);
+  unblock_controller (G_OBJECT (data));
 }
 
 static void
@@ -913,23 +909,23 @@ property_editor (GObject                *object,
     {
       {
         GEnumClass *eclass;
+        char **names;
         gint j;
-
-        prop_edit = gtk_combo_box_text_new ();
 
         eclass = G_ENUM_CLASS (g_type_class_ref (spec->value_type));
 
-        j = 0;
-        while (j < eclass->n_values)
-          {
-            gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (prop_edit),
-                                       eclass->values[j].value_name,
-                                       eclass->values[j].value_nick);
-            ++j;
-          }
+        names = g_new (char *, eclass->n_values + 1);
+        for (j = 0; j < eclass->n_values; j++)
+          names[j] = (char *)eclass->values[j].value_name;
+        names[eclass->n_values] = NULL;
 
-            connect_controller (G_OBJECT (prop_edit), "changed",
-                                object, spec, G_CALLBACK (enum_modified));
+        prop_edit = gtk_drop_down_new ();
+        gtk_drop_down_set_from_strings (GTK_DROP_DOWN (prop_edit), (const char **)names);
+
+        g_free (names);
+
+        connect_controller (G_OBJECT (prop_edit), "notify::selected",
+                            object, spec, G_CALLBACK (enum_modified));
 
         g_type_class_unref (eclass);
 
