@@ -28,7 +28,7 @@
 /*** MULTI FILTER ***/
 
 /**
- * SECTION:multifilter
+ * SECTION:gtkmultifilter
  * @Title: GtkMultiFilter
  * @Short_description: Combining multiple filter 
  *
