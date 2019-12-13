@@ -24,6 +24,19 @@
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 
+/**
+ * SECTION:gtkstringfilter
+ * @Title: GtkStringFilter
+ * @Short_description: Filtering by string
+ *
+ * GtkStringFilter determines whether to include items by looking
+ * at strings and comparing them to a fixed search term. The strings
+ * are obtained from the items by evaluating a #GtkExpression.
+ *
+ * GtkStringFilter has several different modes of comparison - it
+ * can match the whole string, just a prefix, or any substring.
+ */
+
 struct _GtkStringFilter
 {
   GtkFilter parent_instance;

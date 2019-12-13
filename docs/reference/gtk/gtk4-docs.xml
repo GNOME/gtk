@@ -48,6 +48,7 @@
       <section>
         <xi:include href="xml/gtkfilter.xml" />
         <xi:include href="xml/gtkcustomfilter.xml" />
+        <xi:include href="xml/gtkstringfilter.xml" />
         <xi:include href="xml/gtkmultifilter.xml" />
         <xi:include href="xml/gtkexpression.xml" />
       </section>
