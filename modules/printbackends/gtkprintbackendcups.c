@@ -2413,6 +2413,11 @@ cups_create_printer (GtkPrintBackendCups *cups_backend,
       cups_printer->device_uri = g_strdup_printf ("/%s",
                                                   info->avahi_resource_path);
     }
+  else
+    {
+      cups_printer->device_uri = g_strdup_printf ("/printers/%s",
+                                                  info->printer_name);
+    }
 
   /* Check to see if we are looking at a class */
   if (info->member_uris)
