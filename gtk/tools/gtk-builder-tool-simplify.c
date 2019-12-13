@@ -34,6 +34,7 @@ struct Element {
   char **attribute_names;
   char **attribute_values;
   char *data;
+  char *escaped_data;
   GList *children;
 
   int line_number;
@@ -49,6 +50,7 @@ free_element (gpointer data)
   g_strfreev (element->attribute_names);
   g_strfreev (element->attribute_values);
   g_free (element->data);
+  g_free (element->escaped_data);
   g_free (element);
 }
 
@@ -56,6 +58,7 @@ typedef struct {
   Element *root;
   Element *current;
   GString *value;
+  GString *escaped_value;
   GtkBuilder *builder;
   const char *input_filename;
   char *output_filename;
@@ -90,6 +93,7 @@ start_element (GMarkupParseContext  *context,
     data->root = elt;
 
   g_string_truncate (data->value, 0);
+  g_string_truncate (data->escaped_value, 0);
 }
 
 static void
@@ -101,6 +105,7 @@ end_element (GMarkupParseContext  *context,
   MyParserData *data = user_data;
 
   data->current->data = g_strdup (data->value->str);
+  data->current->escaped_data = g_strdup (data->escaped_value->str);
 
   data->current = data->current->parent;
 }
@@ -116,8 +121,32 @@ text (GMarkupParseContext  *context,
 
   if (data->value)
     {
+      char *escaped = g_markup_escape_text (text, text_len);
       g_string_append_len (data->value, text, text_len);
-      return;
+      g_string_append_len (data->escaped_value, escaped, -1);
+      g_free (escaped);
+    }
+}
+
+static void
+passthrough (GMarkupParseContext  *context,
+             const char           *text,
+             gsize                 text_len,
+             gpointer              user_data,
+             GError              **error)
+{
+  MyParserData *data = user_data;
+
+  if (text_len >= strlen ("<![CDATA[") &&
+      g_str_has_prefix (text, "<![CDATA[") &&
+      g_str_has_suffix (text, "]]>"))
+    {
+      /* A CDATA marked section. Pass it through */
+      if (data->value)
+        {
+          g_string_append_len (data->value, text, text_len);
+          g_string_append_len (data->escaped_value, text, text_len);
+        }
     }
 }
 
@@ -125,7 +154,7 @@ static GMarkupParser parser = {
   start_element,
   end_element,
   text,
-  NULL,
+  passthrough,
   NULL
 };
 
@@ -1697,9 +1726,7 @@ dump_element (Element *element,
         }
       else
         {
-          char *escaped = g_markup_escape_text (element->data, -1);
-          g_fprintf (output, "%s", escaped);
-          g_free (escaped);
+          g_fprintf (output, "%s", element->escaped_data);
         }
       g_fprintf (output, "</%s>\n", element->element_name);
     }
@@ -1754,8 +1781,9 @@ simplify_file (const char *filename,
   data.root = NULL;
   data.current = NULL;
   data.value = g_string_new ("");
+  data.escaped_value = g_string_new ("");
 
-  context = g_markup_parse_context_new (&parser, G_MARKUP_TREAT_CDATA_AS_TEXT, &data, NULL);
+  context = g_markup_parse_context_new (&parser, 0, &data, NULL);
   if (!g_markup_parse_context_parse (context, buffer, -1, &error))
     {
       g_printerr (_("Can’t parse “%s”: %s\n"), filename, error->message);
