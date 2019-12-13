@@ -26,7 +26,7 @@
 #include "gtktypebuiltins.h"
 
 /**
- * SECTION:multisorter
+ * SECTION:gtkmultisorter
  * @Title: GtkMultiSorter
  * @Short_description: Combining multiple sorters
  *
