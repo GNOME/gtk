@@ -23,6 +23,16 @@
 
 #include "gtklistitemprivate.h"
 
+/**
+ * SECTION:gtklistitemfactory
+ * @Title: GtkListItemFactory
+ * @Short_description: Generating widgets from objects
+ *
+ * GtkListItemFactory is the base class for a number of factories
+ * that can create widgets from objects, typically when populating
+ * a list widget from a #GListModel.
+ */
+
 G_DEFINE_TYPE (GtkListItemFactory, gtk_list_item_factory, G_TYPE_OBJECT)
 
 static void
