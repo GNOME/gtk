@@ -305,6 +305,9 @@ gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
   if (size > 0)
     XcursorSetDefaultSize (xdisplay, size);
 
+  if (GDK_X11_DISPLAY (display)->cursors == NULL)
+    return;
+
   g_hash_table_iter_init (&iter, GDK_X11_DISPLAY (display)->cursors);
   while (g_hash_table_iter_next (&iter, &cursor, &xcursor))
     {
