@@ -35,6 +35,9 @@ struct Element {
   char **attribute_values;
   char *data;
   GList *children;
+
+  int line_number;
+  int char_number;
 };
 
 static void
@@ -76,6 +79,8 @@ start_element (GMarkupParseContext  *context,
   elt->element_name = g_strdup (element_name);
   elt->attribute_names = g_strdupv ((char **)attribute_names);
   elt->attribute_values = g_strdupv ((char **)attribute_values);
+
+  g_markup_parse_context_get_position (context, &elt->line_number, &elt->char_number);
 
   if (data->current)
     data->current->children = g_list_append (data->current->children, elt);
@@ -446,7 +451,7 @@ value_is_default (Element      *element,
 
   if (!gtk_builder_value_from_string (data->builder, pspec, value_string, &value, &error))
     {
-      g_printerr (_("%s: Couldn’t parse value for %s: %s\n"), data->input_filename, pspec->name, error->message);
+      g_printerr (_("%s:%d: Couldn’t parse value for property '%s': %s\n"), data->input_filename, element->line_number, pspec->name, error->message);
       g_error_free (error);
       ret = FALSE;
     }
@@ -639,8 +644,8 @@ property_can_be_omitted (Element      *element,
         "Layout "
       };
 
-      g_printerr (_("%s: %sproperty %s::%s not found\n"),
-                  data->input_filename, kind_str[kind], class_name, property_name);
+      g_printerr (_("%s:%d: %sproperty %s::%s not found\n"),
+                  data->input_filename, element->line_number, kind_str[kind], class_name, property_name);
       return FALSE;
     }
 
