@@ -2,11 +2,12 @@
  *
  * This demo displays the time in different timezones.
  *
- * The goal is to show how to set up expressions that track changes
- * in objects and make them update widgets.
+ * It is using a GtkGridView.
  *
- * For that, we create a GtkClock object that updates its time every
- * second and then use various ways to display that time.
+ * The goal is to show how to set up expressions that track changes
+ * in objects and make them update widgets. For that, we create a
+ * GtkClock object that updates its time every second and then use
+ * various ways to display that time.
  *
  * Typically, this will be done using GtkBuilder .ui files with the
  * help of the <binding> tag, but this demo shows the code that runs
@@ -450,6 +451,8 @@ do_listview_clocks (GtkWidget *do_widget)
 
       /* This is the normal window setup code every demo does */
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_title (GTK_WINDOW (window), "Clocks");
+      gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       g_signal_connect (window, "destroy",
