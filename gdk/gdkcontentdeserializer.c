@@ -691,6 +691,7 @@ string_deserializer (GdkContentDeserializer *deserializer)
   g_object_unref (filter);
 }
 
+#ifdef G_OS_UNIX
 static void
 portal_finish (GObject *object,
                GAsyncResult *result,
@@ -777,6 +778,7 @@ portal_file_deserializer (GdkContentDeserializer *deserializer)
                                 deserializer);
   g_object_unref (output);
 }
+#endif /* G_OS_UNIX */
 
 static void
 file_uri_deserializer_finish (GObject      *source,
@@ -852,7 +854,6 @@ init (void)
   static gboolean initialized = FALSE;
   GSList *formats, *f;
   const char *charset;
-  gboolean has_portal;
 
   if (initialized)
     return;
@@ -905,24 +906,31 @@ init (void)
 
   g_slist_free (formats);
 
-  has_portal = file_transfer_portal_available ();
+#ifdef G_OS_UNIX
+  gboolean has_portal = file_transfer_portal_available ();
   if (has_portal)
     gdk_content_register_deserializer ("application/vnd.portal.files",
                                        GDK_TYPE_FILE_LIST,
                                        portal_file_deserializer,
                                        NULL,
                                        NULL);
+#endif
+
   gdk_content_register_deserializer ("text/uri-list",
                                      GDK_TYPE_FILE_LIST,
                                      file_uri_deserializer,
                                      NULL,
                                      NULL);
+
+#ifdef G_OS_UNIX
   if (has_portal)
     gdk_content_register_deserializer ("application/vnd.portal.files",
                                        G_TYPE_FILE,
                                        portal_file_deserializer,
                                        NULL,
                                        NULL);
+#endif
+
   gdk_content_register_deserializer ("text/uri-list",
                                      G_TYPE_FILE,
                                      file_uri_deserializer,
