@@ -222,6 +222,8 @@ gsk_shader_builder_compile_shader (GskShaderBuilder *builder,
       buffer = g_malloc0 (log_len + 1);
       glGetShaderInfoLog (shader_id, log_len, NULL, buffer);
 
+      g_message ("\n%s\n", source);
+
       g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_COMPILATION_FAILED,
                    "Compilation failure in %s shader:\n%s",
                    shader_type == GL_VERTEX_SHADER ? "vertex" : "fragment",
