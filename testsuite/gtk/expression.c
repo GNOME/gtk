@@ -414,6 +414,68 @@ test_constant_watch_this_destroyed (void)
   g_assert_cmpint (counter, ==, 1);
 }
 
+static void
+test_bind (void)
+{
+  GtkFilter *filter;
+  GtkFilter *filter2;
+  GtkExpression *expr;
+  GtkExpressionWatch *watch;
+  GValue value = G_VALUE_INIT;
+  gboolean res;
+
+  expr = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, NULL, "search");
+
+  filter = gtk_string_filter_new ();
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "word");
+  g_assert_cmpstr (gtk_string_filter_get_search (GTK_STRING_FILTER (filter)), ==, "word");
+
+  filter2 = gtk_string_filter_new ();
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter2), "sausage");
+
+  watch = gtk_expression_bind (expr, filter, filter2, "search");
+  gtk_expression_watch_ref (watch);
+
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter2), "sausage");
+  /* this isn't watched */
+  g_assert_cmpstr (gtk_string_filter_get_search (GTK_STRING_FILTER (filter)), ==, "word");
+  /* even though it is taken into account for evaluation */
+  res = gtk_expression_watch_evaluate (watch, &value);
+  g_assert_true (res);
+  g_assert_cmpstr (g_value_get_string (&value), ==, "sausage"); 
+
+  g_object_unref (filter);
+  g_object_unref (filter2);
+  gtk_expression_watch_unref (watch);
+}
+
+static void
+test_nested_bind (void)
+{
+  GtkFilter *filter;
+  GtkFilter *filter2;
+  GtkExpression *expr;
+
+  filter2 = gtk_string_filter_new ();
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter2), "sausage");
+
+  expr = gtk_property_expression_new (GTK_TYPE_STRING_FILTER,
+                                      gtk_constant_expression_new (GTK_TYPE_STRING_FILTER, filter2),
+                                      "search");
+
+  filter = gtk_string_filter_new ();
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter), "word");
+  g_assert_cmpstr (gtk_string_filter_get_search (GTK_STRING_FILTER (filter)), ==, "word");
+
+  gtk_expression_bind (expr, filter, filter, "search");
+
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter2), "sausage");
+  g_assert_cmpstr (gtk_string_filter_get_search (GTK_STRING_FILTER (filter)), ==, "sausage");
+
+  g_object_unref (filter);
+  g_object_unref (filter2);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -429,6 +491,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/expression/nested-this-destroyed", test_nested_this_destroyed);
   g_test_add_func ("/expression/type-mismatch", test_type_mismatch);
   g_test_add_func ("/expression/this", test_this);
+  g_test_add_func ("/expression/bind", test_bind);
+  g_test_add_func ("/expression/nested-bind", test_nested_bind);
 
   return g_test_run ();
 }
