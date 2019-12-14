@@ -2,7 +2,9 @@
  *
  * This demo shows a settings viewer for GSettings.
  *
- * It demonstrates how to implement support for trees with listview.
+ * It demonstrates how to implement support for trees with GtkListView.
+ *
+ * It also shows how to set up sorting for columns in a GtkColumnView.
  */
 
 #include <gtk/gtk.h>
@@ -131,12 +133,13 @@ static gboolean
 transform_settings_to_keys (GBinding     *binding,
                             const GValue *from_value,
                             GValue       *to_value,
-                            gpointer      unused)
+                            gpointer      data)
 {
   GtkTreeListRow *treelistrow;
   GSettings *settings;
   GSettingsSchema *schema;
   GListStore *store;
+  GtkSortListModel *sort_model;
   char **keys;
   guint i;
 
@@ -149,7 +152,6 @@ transform_settings_to_keys (GBinding     *binding,
   store = g_list_store_new (SETTINGS_TYPE_KEY);
 
   keys = g_settings_schema_list_keys (schema);
-  qsort (keys, g_strv_length (keys), sizeof (char *), strvcmp);
 
   for (i = 0; keys[i] != NULL; i++)
     {
@@ -164,7 +166,11 @@ transform_settings_to_keys (GBinding     *binding,
   g_settings_schema_unref (schema);
   g_object_unref (settings);
 
-  g_value_take_object (to_value, store);
+  sort_model = gtk_sort_list_model_new (G_LIST_MODEL (store),
+                                        gtk_column_view_get_sorter (GTK_COLUMN_VIEW (data)));
+  g_object_unref (store);
+
+  g_value_take_object (to_value, sort_model);
 
   return TRUE;
 }
@@ -229,6 +235,8 @@ do_listview_settings (GtkWidget *do_widget)
       GtkTreeListModel *treemodel;
       GtkSingleSelection *selection;
       GtkBuilder *builder;
+      GtkColumnViewColumn *name_column;
+      GtkSorter *sorter;
 
       g_type_ensure (SETTINGS_TYPE_KEY);
 
@@ -253,11 +261,16 @@ do_listview_settings (GtkWidget *do_widget)
                                    G_BINDING_SYNC_CREATE,
                                    transform_settings_to_keys,
                                    NULL,
-                                   NULL, NULL);
+                                   columnview, NULL);
       gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (selection));
       g_object_unref (selection);
       g_object_unref (treemodel);
       g_object_unref (model);
+
+      name_column = GTK_COLUMN_VIEW_COLUMN (gtk_builder_get_object (builder, "name_column"));
+      sorter = gtk_string_sorter_new (gtk_property_expression_new (SETTINGS_TYPE_KEY, NULL, "name"));
+      gtk_column_view_column_set_sorter (name_column, sorter);
+      g_object_unref (sorter);
     }
 
   if (!gtk_widget_get_visible (window))
