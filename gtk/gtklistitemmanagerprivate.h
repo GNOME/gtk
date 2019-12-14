@@ -87,6 +87,11 @@ void                    gtk_list_item_manager_set_model         (GtkListItemMana
 GtkSelectionModel *     gtk_list_item_manager_get_model         (GtkListItemManager     *self);
 
 guint                   gtk_list_item_manager_get_size          (GtkListItemManager     *self);
+void                    gtk_list_item_manager_set_single_click_activate
+                                                                (GtkListItemManager   *self,
+                                                                 gboolean              single_click_activate);
+gboolean                gtk_list_item_manager_get_single_click_activate
+                                                                (GtkListItemManager   *self);
 
 GtkListItemTracker *    gtk_list_item_tracker_new               (GtkListItemManager     *self);
 void                    gtk_list_item_tracker_free              (GtkListItemManager     *self,

@@ -25,6 +25,7 @@
 #include "gtkbinlayout.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkeventcontrollerfocus.h"
+#include "gtkeventcontrollermotion.h"
 #include "gtkgestureclick.h"
 #include "gtkintl.h"
 #include "gtklistitemfactoryprivate.h"
@@ -43,11 +44,13 @@ struct _GtkListItemWidgetPrivate
   GObject *item;
   guint position;
   gboolean selected;
+  gboolean single_click_activate;
 };
 
 enum {
   PROP_0,
   PROP_FACTORY,
+  PROP_SINGLE_CLICK_ACTIVATE,
 
   N_PROPS
 };
@@ -162,6 +165,10 @@ gtk_list_item_widget_set_property (GObject      *object,
       gtk_list_item_widget_set_factory (self, g_value_get_object (value));
       break;
 
+    case PROP_SINGLE_CLICK_ACTIVATE:
+      gtk_list_item_widget_set_single_click_activate (self, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -225,6 +232,13 @@ gtk_list_item_widget_class_init (GtkListItemWidgetClass *klass)
                          "Factory managing this list item",
                          GTK_TYPE_LIST_ITEM_FACTORY,
                          G_PARAM_WRITABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_SINGLE_CLICK_ACTIVATE] =
+    g_param_spec_boolean ("single-click-activate",
+                          "Single click activate",
+                          "Activate on single click",
+                          FALSE,
+                          G_PARAM_WRITABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
@@ -330,7 +344,7 @@ gtk_list_item_widget_click_gesture_pressed (GtkGestureClick   *gesture,
 
   if (!priv->list_item || priv->list_item->activatable)
     {
-      if (n_press == 2)
+      if (n_press == 2 || priv->single_click_activate)
         {
           gtk_widget_activate_action (GTK_WIDGET (self),
                                       "list.activate-item",
@@ -356,6 +370,26 @@ gtk_list_item_widget_enter_cb (GtkEventControllerFocus *controller,
                               "list.scroll-to-item",
                               "u",
                               priv->position);
+}
+
+static void
+gtk_list_item_widget_hover_cb (GtkEventControllerMotion *controller,
+                               double                    x,
+                               double                    y,
+                               GtkListItemWidget        *self)
+{
+  GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
+
+  if (!priv->single_click_activate)
+    return;
+
+  if (!priv->list_item || priv->list_item->selectable)
+    {
+      gtk_widget_activate_action (GTK_WIDGET (self),
+                                  "list.select-item",
+                                  "(ubb)",
+                                  priv->position, FALSE, FALSE);
+    }
 }
 
 static void
@@ -401,6 +435,10 @@ gtk_list_item_widget_init (GtkListItemWidget *self)
 
   controller = gtk_event_controller_focus_new ();
   g_signal_connect (controller, "enter", G_CALLBACK (gtk_list_item_widget_enter_cb), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
+
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "enter", G_CALLBACK (gtk_list_item_widget_hover_cb), self);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 }
 
@@ -534,6 +572,20 @@ gtk_list_item_widget_set_factory (GtkListItemWidget  *self,
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
+}
+
+void
+gtk_list_item_widget_set_single_click_activate (GtkListItemWidget *self,
+                                                gboolean           single_click_activate)
+{
+  GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
+
+  if (priv->single_click_activate == single_click_activate)
+    return;
+
+  priv->single_click_activate = single_click_activate;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SINGLE_CLICK_ACTIVATE]);
 }
 
 void
