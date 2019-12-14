@@ -9,6 +9,7 @@
 
 static GtkGesture *rotate = NULL;
 static GtkGesture *zoom = NULL;
+static GtkGesture *translate = NULL;
 static gdouble swipe_x = 0;
 static gdouble swipe_y = 0;
 static gboolean long_pressed = FALSE;
@@ -71,6 +72,15 @@ zoom_scale_changed (GtkGestureZoom *gesture,
   gtk_widget_queue_draw (widget);
 }
 
+void
+offset_changed (GtkGestureTranslate *gesture,
+                gdouble              offset_x,
+                gdouble              offset_y,
+                GtkWidget           *widget)
+{
+  gtk_widget_queue_draw (widget);
+}
+
 static void
 drawing_area_draw (GtkDrawingArea *area,
                    cairo_t        *cr,
@@ -89,16 +99,29 @@ drawing_area_draw (GtkDrawingArea *area,
       cairo_restore (cr);
     }
 
-  if (gtk_gesture_is_recognized (rotate) || gtk_gesture_is_recognized (zoom))
+  if (gtk_gesture_is_recognized (rotate) || gtk_gesture_is_recognized (zoom) || gtk_gesture_is_recognized (translate))
     {
       cairo_pattern_t *pat;
       cairo_matrix_t matrix;
       gdouble angle, scale;
+      gdouble x_offset, y_offset;
+      gdouble x_start, y_start;
+
+      gtk_gesture_translate_get_start (GTK_GESTURE_TRANSLATE (translate),
+                                       &x_start,
+                                       &y_start);
 
       cairo_get_matrix (cr, &matrix);
-      cairo_matrix_translate (&matrix, width / 2, height / 2);
+      cairo_matrix_translate (&matrix,
+                              x_start,
+                              y_start);
 
       cairo_save (cr);
+
+      gtk_gesture_translate_get_offset (GTK_GESTURE_TRANSLATE (translate), &x_offset, &y_offset);
+      cairo_matrix_translate (&matrix,
+                              x_offset,
+                              y_offset);
 
       angle = gtk_gesture_rotate_get_angle_delta (GTK_GESTURE_ROTATE (rotate));
       cairo_matrix_rotate (&matrix, angle);
@@ -199,6 +222,14 @@ do_gestures (GtkWidget *do_widget)
       zoom = gesture = gtk_gesture_zoom_new ();
       g_signal_connect (gesture, "scale-changed",
                         G_CALLBACK (zoom_scale_changed), drawing_area);
+      gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
+                                                  GTK_PHASE_BUBBLE);
+      gtk_widget_add_controller (drawing_area, GTK_EVENT_CONTROLLER (gesture));
+
+      /* Translate */
+      translate = gesture = gtk_gesture_translate_new ();
+      g_signal_connect (gesture, "offset-changed",
+                        G_CALLBACK (offset_changed), drawing_area);
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                                   GTK_PHASE_BUBBLE);
       gtk_widget_add_controller (drawing_area, GTK_EVENT_CONTROLLER (gesture));
