@@ -9,6 +9,29 @@ rect_equal (const graphene_rect_t *a,
 }
 
 static inline gboolean
+rounded_rect_equal (const GskRoundedRect *r1,
+                    const GskRoundedRect *r2)
+{
+  int i;
+
+  if (!r1)
+    return FALSE;
+
+  if (r1->bounds.origin.x != r2->bounds.origin.x ||
+      r1->bounds.origin.y != r2->bounds.origin.y ||
+      r1->bounds.size.width != r2->bounds.size.width ||
+      r1->bounds.size.height != r2->bounds.size.height)
+    return FALSE;
+
+  for (i = 0; i < 4; i ++)
+    if (r1->corner[i].width != r2->corner[i].width ||
+        r1->corner[i].height != r2->corner[i].height)
+      return FALSE;
+
+  return TRUE;
+}
+
+static inline gboolean
 rounded_rect_corners_equal (const GskRoundedRect *r1,
                             const GskRoundedRect *r2)
 {
@@ -212,11 +235,6 @@ void
 ops_set_program (RenderOpBuilder *builder,
                  const Program   *program)
 {
-  /* The tricky part about this is that we want to initialize all uniforms of a program
-   * to the current value from the builder, but only once. */
-  static const GskRoundedRect empty_clip;
-  static const graphene_matrix_t empty_matrix;
-  static const graphene_rect_t empty_rect;
   OpProgram *op;
   ProgramState *program_state;
 
@@ -230,9 +248,7 @@ ops_set_program (RenderOpBuilder *builder,
 
   program_state = &builder->program_state[program->index];
 
-  /* If the projection is not yet set for this program, we use the current one. */
-  if (memcmp (&empty_matrix, &program_state->projection, sizeof (graphene_matrix_t)) == 0 ||
-      memcmp (&builder->current_projection, &program_state->projection, sizeof (graphene_matrix_t)) != 0)
+  if (memcmp (&builder->current_projection, &program_state->projection, sizeof (graphene_matrix_t)) != 0)
     {
       OpMatrix *opm;
 
@@ -252,8 +268,7 @@ ops_set_program (RenderOpBuilder *builder,
       program_state->modelview = gsk_transform_ref (builder->current_modelview);
     }
 
-  if (rect_equal (&empty_rect, &program_state->viewport) ||
-      !rect_equal (&builder->current_viewport, &program_state->viewport))
+  if (!rect_equal (&builder->current_viewport, &program_state->viewport))
     {
       OpViewport *opv;
 
@@ -262,8 +277,7 @@ ops_set_program (RenderOpBuilder *builder,
       program_state->viewport = builder->current_viewport;
     }
 
-  if (memcmp (&empty_clip, &program_state->clip, sizeof (GskRoundedRect)) == 0 ||
-      memcmp (&builder->current_clip, &program_state->clip, sizeof (GskRoundedRect)) != 0)
+  if (!rounded_rect_equal (builder->current_clip, &program_state->clip))
     {
       OpClip *opc;
 
