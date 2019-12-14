@@ -2521,17 +2521,7 @@ static inline void
 apply_clip_op (const Program *program,
                const OpClip  *op)
 {
-  OP_PRINT (" -> Clip (%f, %f, %f, %f) (%f, %f, %f, %f), (%f, %f, %f, %f)",
-            op->clip.bounds.origin.x, op->clip.bounds.origin.y,
-            op->clip.bounds.size.width, op->clip.bounds.size.height,
-            op->clip.corner[0].width,
-            op->clip.corner[1].width,
-            op->clip.corner[2].width,
-            op->clip.corner[3].width,
-            op->clip.corner[0].height,
-            op->clip.corner[1].height,
-            op->clip.corner[2].height,
-            op->clip.corner[3].height);
+  OP_PRINT (" -> Clip: %s", gsk_rounded_rect_to_string (&op->clip));
   glUniform4fv (program->clip_rect_bounds_location, 1, (float *)&op->clip.bounds);
   glUniform2fv (program->clip_rect_corners_location, 4, (float *)&op->clip.corner);
 }
