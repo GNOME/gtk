@@ -581,7 +581,8 @@ ops_set_color (RenderOpBuilder *builder,
   ProgramState *current_program_state = get_current_program_state (builder);
   OpColor *op;
 
-  if (gdk_rgba_equal (color, &current_program_state->color))
+  if (current_program_state->color &&
+      gdk_rgba_equal (color, current_program_state->color))
     return;
 
   current_program_state->color = color;
