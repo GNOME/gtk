@@ -44,6 +44,7 @@ demos = files([
   'list_store.c',
   'listview_applauncher.c',
   'listview_clocks.c',
+  'listview_colors.c',
   'listview_filebrowser.c',
   'listview_minesweeper.c',
   'listview_settings.c',
