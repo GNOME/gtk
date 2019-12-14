@@ -88,6 +88,7 @@ typedef struct
 typedef struct
 {
   GskRoundedRect clip;
+  guint send_corners: 1;
 } OpClip;
 
 typedef struct
