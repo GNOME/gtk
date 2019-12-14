@@ -33,6 +33,7 @@ struct _GtkListItemManager
   GtkWidget *widget;
   GtkSelectionModel *model;
   GtkListItemFactory *factory;
+  gboolean single_click_activate;
   const char *item_css_name;
 
   GtkRbTree *items;
@@ -932,6 +933,8 @@ gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
   result = gtk_list_item_widget_new (self->factory,
                                      self->item_css_name);
 
+  gtk_list_item_widget_set_single_click_activate (GTK_LIST_ITEM_WIDGET (result), self->single_click_activate);
+
   item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
   selected = gtk_selection_model_is_selected (self->model, position);
   gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (result), position, item, selected);
@@ -1077,6 +1080,33 @@ gtk_list_item_manager_release_list_item (GtkListItemManager *self,
     }
 
   gtk_widget_unparent (item);
+}
+
+void
+gtk_list_item_manager_set_single_click_activate (GtkListItemManager *self,
+                                                 gboolean            single_click_activate)
+{
+  GtkListItemManagerItem *item;
+
+  g_return_if_fail (GTK_IS_LIST_ITEM_MANAGER (self));
+
+  self->single_click_activate = single_click_activate;
+
+  for (item = gtk_rb_tree_get_first (self->items);
+       item != NULL;
+       item = gtk_rb_tree_node_get_next (item))
+    {
+      if (item->widget)
+        gtk_list_item_widget_set_single_click_activate (GTK_LIST_ITEM_WIDGET (item->widget), single_click_activate);
+    }
+}
+
+gboolean
+gtk_list_item_manager_get_single_click_activate (GtkListItemManager   *self)
+{
+  g_return_val_if_fail (GTK_IS_LIST_ITEM_MANAGER (self), FALSE);
+
+  return self->single_click_activate;
 }
 
 GtkListItemTracker *
