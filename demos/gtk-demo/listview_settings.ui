@@ -2,10 +2,11 @@
 <interface>
   <object class="GtkWindow" id="window">
     <property name="title" translatable="yes">Settings</property>
-    <property name="default-width">600</property>
-    <property name="default-height">400</property>
+    <property name="default-width">640</property>
+    <property name="default-height">480</property>
     <child>
       <object class="GtkPaned">
+        <property name="position">300</property>
         <child>
           <object class="GtkScrolledWindow">
             <child>
@@ -47,7 +48,7 @@
             <child>
               <object class="GtkColumnView" id="columnview">
                 <child>
-                  <object class="GtkColumnViewColumn">
+                  <object class="GtkColumnViewColumn" id="name_column">
                     <property name="title">Name</property>
                     <property name="factory">
                       <object class="GtkBuilderListItemFactory">
