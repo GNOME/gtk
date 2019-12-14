@@ -130,9 +130,7 @@ typedef struct
 
 typedef struct
 {
-  float outline[4];
-  float corner_widths[4];
-  float corner_heights[4];
+  GskRoundedRect outline;
   float spread;
   float offset[2];
   const GdkRGBA *color;
