@@ -94,9 +94,12 @@ drawing_area_draw (GtkDrawingArea *area,
       cairo_pattern_t *pat;
       cairo_matrix_t matrix;
       gdouble angle, scale;
+      gdouble x_center, y_center;
+
+      gtk_gesture_get_bounding_box_center (GTK_GESTURE (zoom), &x_center, &y_center);
 
       cairo_get_matrix (cr, &matrix);
-      cairo_matrix_translate (&matrix, width / 2, height / 2);
+      cairo_matrix_translate (&matrix, x_center, y_center);
 
       cairo_save (cr);
 
