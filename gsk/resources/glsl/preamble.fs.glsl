@@ -1,8 +1,11 @@
+
+#if GDK_GL3
 precision highp float;
+#endif
 
 uniform sampler2D u_source;
-uniform mat4 u_projection = mat4(1.0);
-uniform mat4 u_modelview = mat4(1.0);
+uniform mat4 u_projection;
+uniform mat4 u_modelview;
 uniform float u_alpha = 1.0;
 uniform vec4 u_viewport;
 
@@ -14,8 +17,15 @@ struct RoundedRect
 
 uniform RoundedRect u_clip_rect;
 
+#if GSK_GLES
+varying vec2 vUv;
+#elif GSK_LEGACY
+varying vec2 vUv;
+varying vec4 outputColor;
+#else
 in vec2 vUv;
 out vec4 outputColor;
+#endif
 
 float
 ellipsis_dist (vec2 p, vec2 radius)
@@ -103,7 +113,11 @@ rounded_rect_shrink (RoundedRect r, vec4 amount)
 }
 
 vec4 Texture(sampler2D sampler, vec2 texCoords) {
+#if GSK_GLES
+  return texture2D(sampler, texCoords);
+#else
   return texture(sampler, texCoords);
+#endif
 }
 
 void setOutputColor(vec4 color) {
@@ -112,6 +126,10 @@ void setOutputColor(vec4 color) {
   f.x += u_viewport.x;
   f.y = (u_viewport.y + u_viewport.w) - f.y;
 
+#if GSK_GLES
+  gl_FragColor = color * rounded_rect_coverage(u_clip_rect, f.xy);
+#else
   outputColor = color * rounded_rect_coverage(u_clip_rect, f.xy);
+#endif
   /*outputColor = color;*/
 }
