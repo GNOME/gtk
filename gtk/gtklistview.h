@@ -69,6 +69,12 @@ void            gtk_list_view_set_show_separators               (GtkListView    
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_list_view_get_show_separators               (GtkListView            *self);
 
+GDK_AVAILABLE_IN_ALL
+void            gtk_list_view_set_single_click_activate         (GtkListView            *self,
+                                                                 gboolean                single_click_activate);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_list_view_get_single_click_activate         (GtkListView            *self);
+
 G_END_DECLS
 
 #endif  /* __GTK_LIST_VIEW_H__ */
