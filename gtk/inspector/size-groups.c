@@ -23,7 +23,7 @@
 #include "highlightoverlay.h"
 #include "window.h"
 
-#include "gtkcomboboxtext.h"
+#include "gtkdropdown.h"
 #include "gtkframe.h"
 #include "gtklabel.h"
 #include "gtklistbox.h"
@@ -220,9 +220,16 @@ add_size_group (GtkInspectorSizeGroups *sl,
                 GtkSizeGroup           *group)
 {
   GtkWidget *frame, *box, *box2;
-  GtkWidget *label, *combo;
+  GtkWidget *label, *dropdown;
   GSList *widgets, *l;
   GtkWidget *listbox;
+  const char *modes[5];
+
+  modes[0] = C_("sizegroup mode", "None");
+  modes[1] = C_("sizegroup mode", "Horizontal");
+  modes[2] = C_("sizegroup mode", "Vertical");
+  modes[3] = C_("sizegroup mode", "Both");
+  modes[4] = NULL;
 
   frame = gtk_frame_new (NULL);
   gtk_container_add (GTK_CONTAINER (sl), frame);
@@ -239,18 +246,14 @@ add_size_group (GtkInspectorSizeGroups *sl,
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_container_add (GTK_CONTAINER (box2), label);
 
-  combo = gtk_combo_box_text_new ();
-  g_object_set (combo, "margin", 10, NULL);
-  gtk_widget_set_halign (combo, GTK_ALIGN_END);
-  gtk_widget_set_valign (combo, GTK_ALIGN_BASELINE);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "None"));
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "Horizontal"));
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "Vertical"));
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "Both"));
+  dropdown = gtk_drop_down_new_from_strings (modes);
+  g_object_set (dropdown, "margin", 10, NULL);
+  gtk_widget_set_halign (dropdown, GTK_ALIGN_END);
+  gtk_widget_set_valign (dropdown, GTK_ALIGN_BASELINE);
   g_object_bind_property (group, "mode",
-                          combo, "active",
+                          dropdown, "selected",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-  gtk_container_add (GTK_CONTAINER (box2), combo);
+  gtk_container_add (GTK_CONTAINER (box2), dropdown);
 
   listbox = gtk_list_box_new ();
   gtk_container_add (GTK_CONTAINER (box), listbox);
