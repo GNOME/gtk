@@ -2479,7 +2479,7 @@ apply_color_op (const Program *program,
                 const OpColor *op)
 {
   OP_PRINT (" -> Color: (%f, %f, %f, %f)",
-            op->rgba.red, op->rgba.green, op->rgba.blue, op->rgba.alpha);
+            op->rgba->red, op->rgba->green, op->rgba->blue, op->rgba->alpha);
   glUniform4fv (program->color.color_location, 1, (float *)op->rgba);
 }
 
@@ -2540,11 +2540,8 @@ static inline void
 apply_inset_shadow_op (const Program  *program,
                        const OpShadow *op)
 {
-  OP_PRINT (" -> inset shadow. Color: (%f, %f, %f, %f), Offset: (%f, %f), Spread: %f, Outline: %s",
-            op->color[0],
-            op->color[1],
-            op->color[2],
-            op->color[3],
+  OP_PRINT (" -> inset shadow. Color: %s, Offset: (%f, %f), Spread: %f, Outline: %s",
+            gdk_rgba_to_string (op->color),
             op->offset[0],
             op->offset[1],
             op->spread,
@@ -2620,8 +2617,7 @@ static inline void
 apply_border_color_op (const Program  *program,
                        const OpBorder *op)
 {
-  OP_PRINT (" -> Border color (%f, %f, %f, %f)",
-            op->color[0], op->color[1], op->color[2], op->color[3]);
+  OP_PRINT (" -> Border color: %s", gdk_rgba_to_string (op->color));
   glUniform4fv (program->border.color_location, 1, (float *)op->color);
 }
 
