@@ -8,6 +8,23 @@ rect_equal (const graphene_rect_t *a,
   return memcmp (a, b, sizeof (graphene_rect_t)) == 0;
 }
 
+static inline gboolean
+rounded_rect_corners_equal (const GskRoundedRect *r1,
+                            const GskRoundedRect *r2)
+{
+  int i;
+
+  if (!r1)
+    return FALSE;
+
+  for (i = 0; i < 4; i ++)
+    if (r1->corner[i].width != r2->corner[i].width ||
+        r1->corner[i].height != r2->corner[i].height)
+      return FALSE;
+
+  return TRUE;
+}
+
 static inline ProgramState *
 get_current_program_state (RenderOpBuilder *builder)
 {
@@ -252,6 +269,7 @@ ops_set_program (RenderOpBuilder *builder,
 
       opc = ops_begin (builder, OP_CHANGE_CLIP);
       opc->clip = *builder->current_clip;
+      opc->send_corners = !rounded_rect_corners_equal (builder->current_clip, &program_state->clip);
       program_state->clip = *builder->current_clip;
     }
 
@@ -273,15 +291,25 @@ ops_set_clip (RenderOpBuilder      *builder,
   OpClip *op;
 
   if (current_program_state &&
-      memcmp (&current_program_state->clip, clip,sizeof (GskRoundedRect)) == 0)
+      rounded_rect_equal (&current_program_state->clip, clip))
     return;
 
   if (!(op = op_buffer_peek_tail_checked (&builder->render_ops, OP_CHANGE_CLIP)))
-    op = op_buffer_add (&builder->render_ops, OP_CHANGE_CLIP);
+    {
+      op = op_buffer_add (&builder->render_ops, OP_CHANGE_CLIP);
+      op->send_corners = !current_program_state ||
+                         !rounded_rect_corners_equal (&current_program_state->clip, clip);
+    }
+  else
+    {
+      /* If the op before sent the corners, this one needs, too */
+      op->send_corners |= !current_program_state ||
+                          !rounded_rect_corners_equal (&current_program_state->clip, clip);
+    }
 
   op->clip = *clip;
 
-  if (builder->current_program != NULL)
+  if (current_program_state)
     current_program_state->clip = *clip;
 }
 
