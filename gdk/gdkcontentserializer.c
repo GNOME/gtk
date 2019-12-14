@@ -702,6 +702,7 @@ file_serializer_finish (GObject      *source,
     gdk_content_serializer_return_success (serializer);
 }
 
+#ifdef G_OS_UNIX
 static void
 portal_ready (GObject *object,
               GAsyncResult *result,
@@ -758,6 +759,7 @@ portal_file_serializer (GdkContentSerializer *serializer)
   file_transfer_portal_register_files ((const char **)files->pdata, TRUE, portal_ready, serializer);
   gdk_content_serializer_set_task_data (serializer, files, (GDestroyNotify)g_ptr_array_unref);
 }
+#endif /* G_OS_UNIX */
 
 static void
 file_uri_serializer (GdkContentSerializer *serializer)
@@ -866,7 +868,7 @@ init (void)
   static gboolean initialized = FALSE;
   GSList *formats, *f;
   const char *charset;
-  gboolean has_portal;
+  gboolean has_portal = FALSE;
 
   if (initialized)
     return;
@@ -922,6 +924,7 @@ init (void)
 
   g_slist_free (formats);
 
+#ifdef G_OS_UNIX
   has_portal = file_transfer_portal_available ();
 
   if (has_portal)
@@ -930,6 +933,8 @@ init (void)
                                      portal_file_serializer,
                                      NULL,
                                      NULL);
+#endif
+
   gdk_content_register_serializer (G_TYPE_FILE,
                                    "text/uri-list",
                                    file_uri_serializer,
@@ -940,12 +945,16 @@ init (void)
                                    file_text_serializer,
                                    NULL,
                                    NULL);
+
+#ifdef G_OS_UNIX
   if (has_portal)
     gdk_content_register_serializer (GDK_TYPE_FILE_LIST,
                                      "application/vnd.portal.files",
                                      portal_file_serializer,
                                      NULL,
                                      NULL);
+#endif
+
   gdk_content_register_serializer (GDK_TYPE_FILE_LIST,
                                    "text/uri-list",
                                    file_uri_serializer,

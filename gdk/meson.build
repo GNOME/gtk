@@ -19,7 +19,6 @@ gdk_public_sources = files([
   'gdkdrawcontext.c',
   'gdkdrop.c',
   'gdkevents.c',
-  'filetransferportal.c',
   'gdkframeclock.c',
   'gdkframeclockidle.c',
   'gdkframetimings.c',
@@ -47,6 +46,12 @@ gdk_public_sources = files([
   'gdksurface.c',
   'gdkprofiler.c'
 ])
+
+if os_unix
+  gdk_public_sources += [
+    'filetransferportal.c',
+  ]
+endif
 
 gdk_public_headers = files([
   'gdk-autocleanup.h',
