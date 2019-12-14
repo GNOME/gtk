@@ -29,7 +29,7 @@
 
 #include "gtkadjustment.h"
 #include "gtkbox.h"
-#include "gtkcomboboxtext.h"
+#include "gtkdropdown.h"
 #include "gtkcssproviderprivate.h"
 #include "gtkdebug.h"
 #include "gtkprivate.h"
@@ -42,6 +42,8 @@
 #include "gskrendererprivate.h"
 #include "gtknative.h"
 #include "gtkbinlayout.h"
+#include "gtkeditable.h"
+#include "gtkentry.h"
 
 #include "fallback-c89.c"
 
@@ -129,17 +131,18 @@ fix_direction (GtkWidget *iw)
 }
 
 static void
-direction_changed (GtkComboBox *combo)
+direction_changed (GtkDropDown *combo)
 {
   GtkWidget *iw;
-  const gchar *direction;
+  guint selected;
 
   iw = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (combo)));
   if (iw)
     fix_direction (iw);
 
-  direction = gtk_combo_box_get_active_id (combo);
-  if (g_strcmp0 (direction, "ltr") == 0)
+  selected = gtk_drop_down_get_selected (combo);
+
+  if (selected == 0)
     gtk_widget_set_default_direction (GTK_TEXT_DIR_LTR);
   else
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
@@ -148,14 +151,11 @@ direction_changed (GtkComboBox *combo)
 static void
 init_direction (GtkInspectorVisual *vis)
 {
-  const gchar *direction;
-
   initial_direction = gtk_widget_get_default_direction ();
   if (initial_direction == GTK_TEXT_DIR_LTR)
-    direction = "ltr";
+    gtk_drop_down_set_selected (GTK_DROP_DOWN (vis->priv->direction_combo), 0);
   else
-    direction = "rtl";
-  gtk_combo_box_set_active_id (GTK_COMBO_BOX (vis->priv->direction_combo), direction);
+    gtk_drop_down_set_selected (GTK_DROP_DOWN (vis->priv->direction_combo), 1);
 }
 
 static void
@@ -510,6 +510,39 @@ get_data_path (const gchar *subdir)
   return full_datadir;
 }
 
+static gboolean
+theme_to_pos (GBinding *binding,
+              const GValue *from,
+              GValue *to,
+              gpointer user_data)
+{
+  char **names = user_data;
+  const char *theme = g_value_get_string (from);
+  int i;
+
+  for (i = 0; names[i]; i++)
+    {
+      if (strcmp (names[i], theme) == 0)
+        {
+          g_value_set_uint (to, i);
+          return TRUE;
+        }
+    }
+  return FALSE;
+}
+
+static gboolean
+pos_to_theme (GBinding *binding,
+              const GValue *from,
+              GValue *to,
+              gpointer user_data)
+{
+  char **names = user_data;
+  int pos = g_value_get_uint (from);
+  g_value_set_string (to, names[pos]);
+  return TRUE;
+}
+
 static void
 init_theme (GtkInspectorVisual *vis)
 {
@@ -520,6 +553,7 @@ init_theme (GtkInspectorVisual *vis)
   GList *list, *l;
   guint i;
   const gchar * const *dirs;
+  char **names;
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   /* Builtin themes */
@@ -556,19 +590,20 @@ init_theme (GtkInspectorVisual *vis)
   while (g_hash_table_iter_next (&iter, (gpointer *)&theme, NULL))
     list = g_list_insert_sorted (list, theme, (GCompareFunc)strcmp);
 
-  for (l = list; l; l = l->next)
-    {
-      theme = l->data;
-      gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (vis->priv->theme_combo), theme, theme);
-    }
+  names = g_new (char *, g_list_length (list) + 1);
+  for (l = list, i = 0; l; l = l->next, i++)
+    names[i] = g_strdup (l->data);
+  names[i] = NULL;
 
   g_list_free (list);
   g_hash_table_destroy (t);
 
-  g_object_bind_property (gtk_settings_get_for_display (vis->priv->display),
-                          "gtk-theme-name",
-                          vis->priv->theme_combo, "active-id",
-                          G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+  gtk_drop_down_set_from_strings (GTK_DROP_DOWN (vis->priv->theme_combo), (const char **)names);
+
+  g_object_bind_property_full (gtk_settings_get_for_display (vis->priv->display), "gtk-theme-name",
+                               vis->priv->theme_combo, "selected",
+                               G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE,
+                               theme_to_pos, pos_to_theme, names, (GDestroyNotify)g_strfreev);
 
   if (g_getenv ("GTK_THEME") != NULL)
     {
@@ -633,6 +668,8 @@ init_icons (GtkInspectorVisual *vis)
   GHashTableIter iter;
   gchar *theme, *path;
   GList *list, *l;
+  char **names;
+  int i;
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
@@ -649,19 +686,20 @@ init_icons (GtkInspectorVisual *vis)
   while (g_hash_table_iter_next (&iter, (gpointer *)&theme, NULL))
     list = g_list_insert_sorted (list, theme, (GCompareFunc)strcmp);
 
-  for (l = list; l; l = l->next)
-    {
-      theme = l->data;
-      gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (vis->priv->icon_combo), theme, theme);
-    }
+  names = g_new (char *, g_list_length (list) + 1);
+  for (l = list, i = 0; l; l = l->next, i++)
+    names[i] = g_strdup (l->data);
+  names[i] = NULL;
 
   g_hash_table_destroy (t);
   g_list_free (list);
 
-  g_object_bind_property (gtk_settings_get_for_display (vis->priv->display),
-                          "gtk-icon-theme-name",
-                          vis->priv->icon_combo, "active-id",
-                          G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+  gtk_drop_down_set_from_strings (GTK_DROP_DOWN (vis->priv->icon_combo), (const char **)names);
+
+  g_object_bind_property_full (gtk_settings_get_for_display (vis->priv->display), "gtk-icon-theme-name",
+                               vis->priv->icon_combo, "selected",
+                               G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE,
+                               theme_to_pos, pos_to_theme, names, (GDestroyNotify)g_strfreev);
 }
 
 static void
@@ -696,6 +734,8 @@ init_cursors (GtkInspectorVisual *vis)
   GHashTableIter iter;
   gchar *theme, *path;
   GList *list, *l;
+  char **names;
+  int i;
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
@@ -712,19 +752,20 @@ init_cursors (GtkInspectorVisual *vis)
   while (g_hash_table_iter_next (&iter, (gpointer *)&theme, NULL))
     list = g_list_insert_sorted (list, theme, (GCompareFunc)strcmp);
 
-  for (l = list; l; l = l->next)
-    {
-      theme = l->data;
-      gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (vis->priv->cursor_combo), theme, theme);
-    }
+  names = g_new (char *, g_list_length (list) + 1);
+  for (l = list, i = 0; l; l = l->next, i++)
+    names[i] = g_strdup (l->data);
+  names[i] = NULL;
 
   g_hash_table_destroy (t);
   g_list_free (list);
 
-  g_object_bind_property (gtk_settings_get_for_display (vis->priv->display),
-                          "gtk-cursor-theme-name",
-                          vis->priv->cursor_combo, "active-id",
-                          G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+  gtk_drop_down_set_from_strings (GTK_DROP_DOWN (vis->priv->cursor_combo), (const char **)names);
+
+  g_object_bind_property_full (gtk_settings_get_for_display (vis->priv->display), "gtk-cursor-theme-name",
+                               vis->priv->cursor_combo, "selected",
+                               G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE,
+                               theme_to_pos, pos_to_theme, names, (GDestroyNotify)g_strfreev);
 }
 
 static void
