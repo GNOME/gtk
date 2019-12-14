@@ -23,7 +23,7 @@
 #include "highlightoverlay.h"
 #include "window.h"
 
-#include "gtkcomboboxtext.h"
+#include "gtkdropdown.h"
 #include "gtkframe.h"
 #include "gtklabel.h"
 #include "gtklistbox.h"
@@ -217,9 +217,16 @@ add_size_group (GtkInspectorSizeGroups *sl,
                 GtkSizeGroup           *group)
 {
   GtkWidget *frame, *box, *box2;
-  GtkWidget *label, *combo;
+  GtkWidget *label, *dropdown;
   GSList *widgets, *l;
   GtkWidget *listbox;
+  const char *modes[5];
+
+  modes[0] = C_("sizegroup mode", "None");
+  modes[1] = C_("sizegroup mode", "Horizontal");
+  modes[2] = C_("sizegroup mode", "Vertical");
+  modes[3] = C_("sizegroup mode", "Both");
+  modes[4] = NULL;
 
   frame = gtk_frame_new (NULL);
   gtk_box_append (GTK_BOX (sl), frame);
@@ -239,21 +246,15 @@ add_size_group (GtkInspectorSizeGroups *sl,
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_box_append (GTK_BOX (box2), label);
 
-  combo = gtk_combo_box_text_new ();
-  gtk_widget_set_margin_start (combo, 10);
-  gtk_widget_set_margin_end (combo, 10);
-  gtk_widget_set_margin_top (combo, 10);
-  gtk_widget_set_margin_bottom (combo, 10);
-  gtk_widget_set_halign (combo, GTK_ALIGN_END);
-  gtk_widget_set_valign (combo, GTK_ALIGN_BASELINE);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "None"));
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "Horizontal"));
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "Vertical"));
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "Both"));
+  dropdown = gtk_drop_down_new ();
+  gtk_drop_down_set_from_strings (GTK_DROP_DOWN (dropdown), modes);
+  g_object_set (dropdown, "margin", 10, NULL);
+  gtk_widget_set_halign (dropdown, GTK_ALIGN_END);
+  gtk_widget_set_valign (dropdown, GTK_ALIGN_BASELINE);
   g_object_bind_property (group, "mode",
-                          combo, "active",
+                          dropdown, "selected",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-  gtk_box_append (GTK_BOX (box2), combo);
+  gtk_box_append (GTK_BOX (box2), dropdown);
 
   listbox = gtk_list_box_new ();
   gtk_box_append (GTK_BOX (box), listbox);
