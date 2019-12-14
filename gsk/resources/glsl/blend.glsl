@@ -1,3 +1,11 @@
+// VERTEX_SHADER:
+void main() {
+  gl_Position = u_projection * u_modelview * vec4(aPosition, 0.0, 1.0);
+
+  vUv = vec2(aUv.x, aUv.y);
+}
+
+// FRAGMENT_SHADER:
 uniform int u_mode;
 uniform sampler2D u_source2;
 
@@ -264,73 +272,39 @@ void main() {
 
   vec4 result;
   if (u_mode == 0)
-    {
-      result = normal(top_color, bottom_color);
-    }
+    result = normal(top_color, bottom_color);
   else if (u_mode == 1)
-    {
-      result = multiply(top_color, bottom_color);
-    }
+    result = multiply(top_color, bottom_color);
   else if (u_mode == 2)
-    {
-      result = screen(top_color, bottom_color);
-    }
+    result = screen(top_color, bottom_color);
   else if (u_mode == 3)
-    {
-      result = overlay(top_color, bottom_color);
-    }
+    result = overlay(top_color, bottom_color);
   else if (u_mode == 4)
-    {
-      result = darken(top_color, bottom_color);
-    }
+    result = darken(top_color, bottom_color);
   else if (u_mode == 5)
-    {
-      result = lighten(top_color, bottom_color);
-    }
+    result = lighten(top_color, bottom_color);
   else if (u_mode == 6)
-    {
-      result = color_dodge(top_color, bottom_color);
-    }
+    result = color_dodge(top_color, bottom_color);
   else if (u_mode == 7)
-    {
-      result = color_burn(top_color, bottom_color);
-    }
+    result = color_burn(top_color, bottom_color);
   else if (u_mode == 8)
-    {
-      result = hard_light(top_color, bottom_color);
-    }
+    result = hard_light(top_color, bottom_color);
   else if (u_mode == 9)
-    {
-      result = soft_light(top_color, bottom_color);
-    }
+    result = soft_light(top_color, bottom_color);
   else if (u_mode == 10)
-    {
-      result = difference(top_color, bottom_color);
-    }
+    result = difference(top_color, bottom_color);
   else if (u_mode == 11)
-    {
-      result = exclusion(top_color, bottom_color);
-    }
+    result = exclusion(top_color, bottom_color);
   else if (u_mode == 12)
-    {
-      result = color(top_color, bottom_color);
-    }
+    result = color(top_color, bottom_color);
   else if (u_mode == 13)
-    {
-      result = hue(top_color, bottom_color);
-    }
+    result = hue(top_color, bottom_color);
   else if (u_mode == 14)
-    {
-      result = saturation(top_color, bottom_color);
-    }
+    result = saturation(top_color, bottom_color);
   else if (u_mode == 15)
-    {
-      result = luminosity(top_color, bottom_color);
-    }
+    result = luminosity(top_color, bottom_color);
   else
-    {
-      discard;
-    }
+    discard;
 
   setOutputColor(result * u_alpha);
 }

@@ -10,7 +10,7 @@
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gsktransformprivate.h"
-#include "gskshaderbuilderprivate.h"
+#include "gskglshaderbuilderprivate.h"
 #include "gskglglyphcacheprivate.h"
 #include "gskgliconcacheprivate.h"
 #include "gskglrenderopsprivate.h"
@@ -411,19 +411,19 @@ struct _GskGLRenderer
   union {
     Program programs[GL_N_PROGRAMS];
     struct {
+      Program blend_program;
       Program blit_program;
+      Program blur_program;
+      Program border_program;
+      Program color_matrix_program;
       Program color_program;
       Program coloring_program;
-      Program color_matrix_program;
-      Program linear_gradient_program;
-      Program blur_program;
-      Program inset_shadow_program;
-      Program outset_shadow_program;
-      Program unblurred_outset_shadow_program;
-      Program border_program;
       Program cross_fade_program;
-      Program blend_program;
+      Program inset_shadow_program;
+      Program linear_gradient_program;
+      Program outset_shadow_program;
       Program repeat_program;
+      Program unblurred_outset_shadow_program;
     };
   };
 
@@ -2677,92 +2677,76 @@ static gboolean
 gsk_gl_renderer_create_programs (GskGLRenderer  *self,
                                  GError        **error)
 {
-  GskShaderBuilder *builder;
-  GError *shader_error = NULL;
+  GskGLShaderBuilder shader_builder;
   int i;
   static const struct {
+    const char *resource_path;
     const char *name;
-    const char *fs;
-    const char *vs;
   } program_definitions[] = {
-    { "blit",                      "blit.fs.glsl" },
-    { "color",                     "color.fs.glsl" },
-    { "coloring",                  "coloring.fs.glsl" },
-    { "color matrix",              "color_matrix.fs.glsl" },
-    { "linear gradient",           "linear_gradient.fs.glsl" },
-    { "blur",                      "blur.fs.glsl" },
-    { "inset shadow",              "inset_shadow.fs.glsl" },
-    { "outset shadow",             "outset_shadow.fs.glsl" },
-    { "unblurred outset shadow",   "unblurred_outset_shadow.fs.glsl" },
-    { "border",                    "border.fs.glsl" },
-    { "cross fade",                "cross_fade.fs.glsl" },
-    { "blend",                     "blend.fs.glsl" },
-    { "repeat",                    "repeat.fs.glsl" },
+    { "/org/gtk/libgsk/glsl/blend.glsl",                     "blend" },
+    { "/org/gtk/libgsk/glsl/blit.glsl",                      "blit" },
+    { "/org/gtk/libgsk/glsl/blur.glsl",                      "blur" },
+    { "/org/gtk/libgsk/glsl/border.glsl",                    "border" },
+    { "/org/gtk/libgsk/glsl/color_matrix.glsl",              "color matrix" },
+    { "/org/gtk/libgsk/glsl/color.glsl",                     "color" },
+    { "/org/gtk/libgsk/glsl/coloring.glsl",                  "coloring" },
+    { "/org/gtk/libgsk/glsl/cross_fade.glsl",                "cross fade" },
+    { "/org/gtk/libgsk/glsl/inset_shadow.glsl",              "inset shadow" },
+    { "/org/gtk/libgsk/glsl/linear_gradient.glsl",           "linear gradient" },
+    { "/org/gtk/libgsk/glsl/outset_shadow.glsl",             "outset shadow" },
+    { "/org/gtk/libgsk/glsl/repeat.glsl",                    "repeat" },
+    { "/org/gtk/libgsk/glsl/unblurred_outset_shadow.glsl",   "unblurred_outset shadow" },
   };
+  gboolean success = TRUE;
 
-  builder = gsk_shader_builder_new ();
+  gsk_gl_shader_builder_init (&shader_builder,
+                              "/org/gtk/libgsk/glsl/preamble.vs.glsl",
+                              "/org/gtk/libgsk/glsl/preamble.fs.glsl");
 
-  gsk_shader_builder_set_resource_base_path (builder, "/org/gtk/libgsk/glsl");
+  g_assert (G_N_ELEMENTS (program_definitions) == GL_N_PROGRAMS);
+
+#ifdef G_ENABLE_DEBUG
+  if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), SHADERS))
+    shader_builder.debugging = TRUE;
+#endif
 
   if (gdk_gl_context_get_use_es (self->gl_context))
     {
-      gsk_shader_builder_set_version (builder, SHADER_VERSION_GLES);
-      gsk_shader_builder_set_vertex_preamble (builder, "es2_common.vs.glsl");
-      gsk_shader_builder_set_fragment_preamble (builder, "es2_common.fs.glsl");
-      gsk_shader_builder_add_define (builder, "GSK_GLES", "1");
+
+      gsk_gl_shader_builder_set_glsl_version (&shader_builder, SHADER_VERSION_GLES);
+      shader_builder.gles = TRUE;
     }
   else if (gdk_gl_context_is_legacy (self->gl_context))
     {
       int maj, min;
+
       gdk_gl_context_get_version (self->gl_context, &maj, &min);
 
       if (maj == 3)
-        gsk_shader_builder_set_version (builder, SHADER_VERSION_GL3_LEGACY);
+        gsk_gl_shader_builder_set_glsl_version (&shader_builder, SHADER_VERSION_GL3_LEGACY);
       else
-        gsk_shader_builder_set_version (builder, SHADER_VERSION_GL2_LEGACY);
+        gsk_gl_shader_builder_set_glsl_version (&shader_builder, SHADER_VERSION_GL2_LEGACY);
 
-      gsk_shader_builder_set_vertex_preamble (builder, "gl_common.vs.glsl");
-      gsk_shader_builder_set_fragment_preamble (builder, "gl_common.fs.glsl");
-      gsk_shader_builder_add_define (builder, "GSK_LEGACY", "1");
+      shader_builder.legacy = TRUE;
     }
   else
     {
-      gsk_shader_builder_set_version (builder, SHADER_VERSION_GL3);
-      gsk_shader_builder_set_vertex_preamble (builder, "gl3_common.vs.glsl");
-      gsk_shader_builder_set_fragment_preamble (builder, "gl3_common.fs.glsl");
-      gsk_shader_builder_add_define (builder, "GSK_GL3", "1");
+      gsk_gl_shader_builder_set_glsl_version (&shader_builder, SHADER_VERSION_GL3);
+      shader_builder.gl3 = TRUE;
     }
-
-#ifdef G_ENABLE_DEBUG
-  if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), SHADERS))
-    gsk_shader_builder_add_define (builder, "GSK_DEBUG", "1");
-#endif
-
-  gsk_shader_builder_set_common_vertex_shader (builder, "blit.vs.glsl",
-                                               &shader_error);
-
-  g_assert_no_error (shader_error);
 
   for (i = 0; i < GL_N_PROGRAMS; i ++)
     {
       Program *prog = &self->programs[i];
 
       prog->index = i;
-      prog->id = gsk_shader_builder_create_program (builder,
-                                                    program_definitions[i].fs,
-                                                    program_definitions[i].vs,
-                                                    &shader_error);
-
-      if (shader_error != NULL)
+      prog->id = gsk_gl_shader_builder_create_program (&shader_builder,
+                                                       program_definitions[i].resource_path,
+                                                       error);
+      if (prog->id < 0)
         {
-          g_propagate_prefixed_error (error, shader_error,
-                                      "Unable to create '%s' program (from %s and %s):\n",
-                                      program_definitions[i].name,
-                                      program_definitions[i].fs,
-                                      program_definitions[i].vs);
-
-          g_object_unref (builder);
-          return FALSE;
+          success = FALSE;
+          goto out;
         }
 
       INIT_COMMON_UNIFORM_LOCATION (prog, alpha);
@@ -2772,7 +2756,6 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
       INIT_COMMON_UNIFORM_LOCATION (prog, projection);
       INIT_COMMON_UNIFORM_LOCATION (prog, modelview);
     }
-
   /* color */
   INIT_PROGRAM_UNIFORM_LOCATION (color, color);
 
@@ -2827,8 +2810,10 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   INIT_PROGRAM_UNIFORM_LOCATION (repeat, child_bounds);
   INIT_PROGRAM_UNIFORM_LOCATION (repeat, texture_rect);
 
-  g_object_unref (builder);
-  return TRUE;
+out:
+  gsk_gl_shader_builder_finish (&shader_builder);
+
+  return success;
 }
 
 static GskGLTextureAtlases *

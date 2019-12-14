@@ -1,3 +1,11 @@
+// VERTEX_SHADER:
+void main() {
+  gl_Position = u_projection * u_modelview * vec4(aPosition, 0.0, 1.0);
+
+  vUv = vec2(aUv.x, aUv.y);
+}
+
+// FRAGMENT_SHADER:
 uniform float u_spread;
 uniform vec4 u_color;
 uniform vec2 u_offset;
