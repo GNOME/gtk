@@ -5,12 +5,13 @@
  *
  * The hourly weather info uses a horizontal listview. This is easy
  * to achieve because GtkListView implements the GtkOrientable interface.
- *
  * To make the items in the list stand out more, the listview uses
  * separators.
  *
  * A GtkNoSelectionModel is used to make sure no item in the list can be
  * selected. All other interactions with the items is still possible.
+ *
+ * The dataset used here has 70000 items.
  */
 
 #include <gtk/gtk.h>
@@ -283,6 +284,8 @@ do_listview_weather (GtkWidget *do_widget)
       GListModel *model, *selection;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
+      gtk_window_set_title (GTK_WINDOW (window), "Weather");
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Weather");
