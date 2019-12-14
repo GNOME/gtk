@@ -24,6 +24,9 @@
 #include <fcntl.h>
 
 #include <gio/gio.h>
+
+#ifdef G_OS_UNIX
+
 #include <gio/gunixfdlist.h>
 
 #include "filetransferportalprivate.h"
@@ -339,3 +342,5 @@ file_transfer_portal_retrieve_files_finish (GAsyncResult   *result,
 
   return FALSE;
 }
+
+#endif /* G_OS_UNIX */
