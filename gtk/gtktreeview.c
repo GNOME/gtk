@@ -5583,20 +5583,13 @@ gtk_tree_view_motion_controller_leave (GtkEventControllerMotion *controller,
                                        GdkNotifyType             detail,
                                        GtkTreeView              *tree_view)
 {
-  gboolean is_focus, contains_focus;
-
   if (tree_view->priv->prelight_node)
     gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 
   tree_view->priv->event_last_x = -10000;
   tree_view->priv->event_last_y = -10000;
 
-  g_object_get (controller,
-                "is-pointer-focus", &is_focus,
-                "contains-pointer-focus", &contains_focus,
-                NULL);
-
-  if (!is_focus && !contains_focus)
+  if (!gtk_event_controller_motion_contains_pointer (GTK_EVENT_CONTROLLER_MOTION (controller)))
     prelight_or_select (tree_view, NULL, NULL, -1000, -1000); /* not possibly over an arrow */
 }
 

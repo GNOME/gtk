@@ -50,6 +50,11 @@ GtkWidget *         gtk_event_controller_motion_get_pointer_origin (GtkEventCont
 GDK_AVAILABLE_IN_ALL
 GtkWidget *         gtk_event_controller_motion_get_pointer_target (GtkEventControllerMotion *controller);
 
+GDK_AVAILABLE_IN_ALL
+gboolean            gtk_event_controller_motion_contains_pointer   (GtkEventControllerMotion *self);
+GDK_AVAILABLE_IN_ALL
+gboolean            gtk_event_controller_motion_is_pointer         (GtkEventControllerMotion *self);
+
 G_END_DECLS
 
 #endif /* __GTK_EVENT_CONTROLLER_MOTION_H__ */

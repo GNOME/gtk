@@ -1325,18 +1325,11 @@ enter_cb (GtkEventController *controller,
 {
   GtkWidget *target;
   GtkWidget *popover;
-  gboolean is;
-  gboolean contains;
 
   target = gtk_event_controller_get_widget (controller);
   popover = gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_MENU);
 
-  g_object_get (controller,
-                "is-pointer-focus", &is,
-                "contains-pointer-focus", &contains,
-                NULL);
-
-  if (popover && (is || contains))
+  if (popover && gtk_event_controller_motion_contains_pointer (GTK_EVENT_CONTROLLER_MOTION (controller)))
     {
       if (gtk_popover_menu_get_open_submenu (GTK_POPOVER_MENU (popover)) != NULL)
         start_open (GTK_MODEL_BUTTON (target));

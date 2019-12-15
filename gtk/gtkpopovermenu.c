@@ -237,17 +237,10 @@ leave_cb (GtkEventController *controller,
           gpointer            data)
 {
   GtkWidget *target;
-  gboolean is;
-  gboolean contains;
 
   target = gtk_event_controller_get_widget (controller);
 
-  g_object_get (controller,
-                "is-pointer-focus", &is,
-                "contains-pointer-focus", &contains,
-                NULL);
-
-  if (!(is || contains))
+  if (!gtk_event_controller_motion_contains_pointer (GTK_EVENT_CONTROLLER_MOTION (controller)))
     gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (target), NULL);
 }
 
