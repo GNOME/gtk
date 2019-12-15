@@ -353,15 +353,55 @@ setup_listitem_cb (GtkListItemFactory *factory,
 
 static GtkWidget *window = NULL;
 
+static void
+set_sorter_title (GtkSorter  *sorter,
+                  const char *title)
+{
+  g_object_set_data (G_OBJECT (sorter), "title", (gpointer)title);
+}
+
+static char *
+get_sorter_title (gpointer item)
+{
+  return g_strdup ((char *)g_object_get_data (G_OBJECT (item), "title"));
+}
+
+static gboolean
+set_sorter (GBinding *binding,
+            const GValue *from,
+            GValue *to,
+            gpointer data)
+{
+  GObject *source = g_binding_get_source (binding);
+  GListModel *model;
+  guint selected;
+  GtkSorter *sorter;
+
+  selected = g_value_get_uint (from);
+
+  model = gtk_drop_down_get_model (GTK_DROP_DOWN (source));
+  sorter = g_list_model_get_item (model, selected);
+
+  g_value_set_object (to, sorter);
+
+  g_clear_object (&sorter);
+
+  return TRUE;
+}
+
 GtkWidget *
 do_listview_colors (GtkWidget *do_widget)
 {
   if (window == NULL)
     {
-      GtkWidget *header, *gridview, *sw;
+      GtkWidget *header, *gridview, *sw, *box, *dropdown;
       GtkListItemFactory *factory;
       GListModel *model;
       GtkNoSelection *selection;
+      GtkSorter *sorter;
+      GtkSorter *multi_sorter;
+      GListStore *sorters;
+      GtkExpression *expression;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Colors");
@@ -392,6 +432,84 @@ do_listview_colors (GtkWidget *do_widget)
       gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), G_LIST_MODEL (selection));
       gtk_container_add (GTK_CONTAINER (sw), gridview);
       g_object_unref (selection);
+
+      sorters = g_list_store_new (GTK_TYPE_SORTER);
+
+      sorter = gtk_string_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "name"));
+      set_sorter_title (sorter, "Name");
+      g_list_store_append (sorters, sorter);
+      g_object_unref (sorter);
+
+      multi_sorter = gtk_multi_sorter_new ();
+
+      sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "red"));
+      gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
+      set_sorter_title (sorter, "Red");
+      g_list_store_append (sorters, sorter);
+      gtk_multi_sorter_append (GTK_MULTI_SORTER (multi_sorter), sorter);
+
+      sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "green"));
+      gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
+      set_sorter_title (sorter, "Green");
+      g_list_store_append (sorters, sorter);
+      gtk_multi_sorter_append (GTK_MULTI_SORTER (multi_sorter), sorter);
+
+      sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "blue"));
+      gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
+      set_sorter_title (sorter, "Blue");
+      g_list_store_append (sorters, sorter);
+      gtk_multi_sorter_append (GTK_MULTI_SORTER (multi_sorter), sorter);
+
+      set_sorter_title (multi_sorter, "RGB");
+      g_list_store_append (sorters, multi_sorter);
+      g_object_unref (multi_sorter);
+
+      multi_sorter = gtk_multi_sorter_new ();
+
+      sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "hue"));
+      gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
+      set_sorter_title (sorter, "Hue");
+      g_list_store_append (sorters, sorter);
+      gtk_multi_sorter_append (GTK_MULTI_SORTER (multi_sorter), sorter);
+
+      sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "saturation"));
+      gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
+      set_sorter_title (sorter, "Saturation");
+      g_list_store_append (sorters, sorter);
+      gtk_multi_sorter_append (GTK_MULTI_SORTER (multi_sorter), sorter);
+
+      sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "value"));
+      gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
+      set_sorter_title (sorter, "Value");
+      g_list_store_append (sorters, sorter);
+      gtk_multi_sorter_append (GTK_MULTI_SORTER (multi_sorter), sorter);
+
+      set_sorter_title (multi_sorter, "HSV");
+      g_list_store_append (sorters, multi_sorter);
+      g_object_unref (multi_sorter);
+
+      dropdown = gtk_drop_down_new ();
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+      gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("Sort by:"));
+      gtk_container_add (GTK_CONTAINER (box), dropdown);
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), box);
+
+      expression = gtk_cclosure_expression_new (G_TYPE_STRING,
+                                                NULL,
+                                                0, NULL,
+                                                (GCallback)get_sorter_title,
+                                                NULL, NULL);
+      gtk_drop_down_set_expression (GTK_DROP_DOWN (dropdown), expression);
+      gtk_expression_unref (expression);
+
+      gtk_drop_down_set_model (GTK_DROP_DOWN (dropdown), G_LIST_MODEL (sorters));
+      g_object_unref (sorters);
+
+      g_object_bind_property_full (dropdown, "selected",
+                                   model, "sorter",
+                                   G_BINDING_SYNC_CREATE,
+                                   set_sorter, NULL,
+                                   NULL, NULL);
 
       g_object_unref (model);
     }
