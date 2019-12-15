@@ -542,6 +542,58 @@ test_nested_bind (void)
   gtk_expression_unref (filter_expr);
 }
 
+static char *
+some_cb (gpointer    this,
+         const char *search,
+         gboolean    ignore_case,
+         gpointer    data)
+{
+  if (!search)
+    return NULL; 
+
+  if (ignore_case)
+    return g_utf8_strdown (search, -1);
+  else 
+    return g_strdup (search);
+}
+
+static void
+test_double_bind (void)
+{
+  GtkStringFilter *filter1;
+  GtkStringFilter *filter2;
+  GtkExpression *expr;
+  GtkExpression *filter_expr;
+  GtkExpression *params[2];
+
+  filter1 = GTK_STRING_FILTER (gtk_string_filter_new ());
+  filter2 = GTK_STRING_FILTER (gtk_string_filter_new ());
+
+  filter_expr = gtk_object_expression_new (G_OBJECT (filter1));
+
+  params[0] = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, gtk_expression_ref (filter_expr), "search");
+  params[1] = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, gtk_expression_ref (filter_expr), "ignore-case");
+  expr = gtk_cclosure_expression_new (G_TYPE_STRING,
+                                      NULL,
+                                      2, params,
+                                      (GCallback)some_cb,
+                                      NULL, NULL);
+
+  gtk_expression_bind (gtk_expression_ref (expr), filter2, NULL, "search");
+
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter1), "Banana");
+  g_assert_cmpstr (gtk_string_filter_get_search (GTK_STRING_FILTER (filter2)), ==, "banana");
+
+  gtk_string_filter_set_ignore_case (GTK_STRING_FILTER (filter1), FALSE);
+  g_assert_cmpstr (gtk_string_filter_get_search (GTK_STRING_FILTER (filter2)), ==, "Banana");
+
+  gtk_expression_unref (expr);
+  gtk_expression_unref (filter_expr);
+
+  g_object_unref (filter1);
+  g_object_unref (filter2);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -560,6 +612,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/expression/bind", test_bind);
   g_test_add_func ("/expression/bind-more", test_bind_more);
   g_test_add_func ("/expression/nested-bind", test_nested_bind);
+  g_test_add_func ("/expression/double-bind", test_double_bind);
 
   return g_test_run ();
 }
