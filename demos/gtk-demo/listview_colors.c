@@ -299,6 +299,22 @@ get_hsv_markup (gpointer this,
 }
 
 static void
+setup_simple_listitem_cb (GtkListItemFactory *factory,
+                          GtkListItem        *list_item)
+{
+  GtkWidget *picture;
+  GtkExpression *color_expression, *expression;
+
+  expression = gtk_constant_expression_new (GTK_TYPE_LIST_ITEM, list_item);
+  color_expression = gtk_property_expression_new (GTK_TYPE_LIST_ITEM, expression, "item");
+
+  picture = gtk_picture_new ();
+  gtk_expression_bind (color_expression, picture, "paintable", NULL);
+
+  gtk_list_item_set_child (list_item, picture);
+}
+
+static void
 setup_listitem_cb (GtkListItemFactory *factory,
                    GtkListItem        *list_item)
 {
@@ -351,43 +367,43 @@ setup_listitem_cb (GtkListItemFactory *factory,
   gtk_expression_unref (color_expression);
 }
 
-static GtkWidget *window = NULL;
-
 static void
-set_sorter_title (GtkSorter  *sorter,
-                  const char *title)
+set_title (gpointer    item,
+           const char *title)
 {
-  g_object_set_data (G_OBJECT (sorter), "title", (gpointer)title);
+  g_object_set_data (G_OBJECT (item), "title", (gpointer)title);
 }
 
 static char *
-get_sorter_title (gpointer item)
+get_title (gpointer item)
 {
   return g_strdup ((char *)g_object_get_data (G_OBJECT (item), "title"));
 }
 
 static gboolean
-set_sorter (GBinding *binding,
-            const GValue *from,
-            GValue *to,
-            gpointer data)
+set_item (GBinding *binding,
+          const GValue *from,
+          GValue *to,
+          gpointer data)
 {
   GObject *source = g_binding_get_source (binding);
   GListModel *model;
   guint selected;
-  GtkSorter *sorter;
+  gpointer item;
 
   selected = g_value_get_uint (from);
 
   model = gtk_drop_down_get_model (GTK_DROP_DOWN (source));
-  sorter = g_list_model_get_item (model, selected);
+  item = g_list_model_get_item (model, selected);
 
-  g_value_set_object (to, sorter);
+  g_value_set_object (to, item);
 
-  g_clear_object (&sorter);
+  g_clear_object (&item);
 
   return TRUE;
 }
+
+static GtkWidget *window = NULL;
 
 GtkWidget *
 do_listview_colors (GtkWidget *do_widget)
@@ -396,6 +412,7 @@ do_listview_colors (GtkWidget *do_widget)
     {
       GtkWidget *header, *gridview, *sw, *box, *dropdown;
       GtkListItemFactory *factory;
+      GListStore *factories;
       GListModel *model;
       GtkNoSelection *selection;
       GtkSorter *sorter;
@@ -418,10 +435,7 @@ do_listview_colors (GtkWidget *do_widget)
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_container_add (GTK_CONTAINER (window), sw);
 
-      factory = gtk_signal_list_item_factory_new ();
-      g_signal_connect (factory, "setup", G_CALLBACK (setup_listitem_cb), NULL);
-
-      gridview = gtk_grid_view_new_with_factory (factory);
+      gridview = gtk_grid_view_new ();
       gtk_scrollable_set_hscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
       gtk_scrollable_set_vscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
 
@@ -436,7 +450,7 @@ do_listview_colors (GtkWidget *do_widget)
       sorters = g_list_store_new (GTK_TYPE_SORTER);
 
       sorter = gtk_string_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "name"));
-      set_sorter_title (sorter, "Name");
+      set_title (sorter, "Name");
       g_list_store_append (sorters, sorter);
       g_object_unref (sorter);
 
@@ -444,23 +458,23 @@ do_listview_colors (GtkWidget *do_widget)
 
       sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "red"));
       gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
-      set_sorter_title (sorter, "Red");
+      set_title (sorter, "Red");
       g_list_store_append (sorters, sorter);
       gtk_multi_sorter_append (GTK_MULTI_SORTER (multi_sorter), sorter);
 
       sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "green"));
       gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
-      set_sorter_title (sorter, "Green");
+      set_title (sorter, "Green");
       g_list_store_append (sorters, sorter);
       gtk_multi_sorter_append (GTK_MULTI_SORTER (multi_sorter), sorter);
 
       sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "blue"));
       gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
-      set_sorter_title (sorter, "Blue");
+      set_title (sorter, "Blue");
       g_list_store_append (sorters, sorter);
       gtk_multi_sorter_append (GTK_MULTI_SORTER (multi_sorter), sorter);
 
-      set_sorter_title (multi_sorter, "RGB");
+      set_title (multi_sorter, "RGB");
       g_list_store_append (sorters, multi_sorter);
       g_object_unref (multi_sorter);
 
@@ -468,23 +482,23 @@ do_listview_colors (GtkWidget *do_widget)
 
       sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "hue"));
       gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
-      set_sorter_title (sorter, "Hue");
+      set_title (sorter, "Hue");
       g_list_store_append (sorters, sorter);
       gtk_multi_sorter_append (GTK_MULTI_SORTER (multi_sorter), sorter);
 
       sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "saturation"));
       gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
-      set_sorter_title (sorter, "Saturation");
+      set_title (sorter, "Saturation");
       g_list_store_append (sorters, sorter);
       gtk_multi_sorter_append (GTK_MULTI_SORTER (multi_sorter), sorter);
 
       sorter = gtk_numeric_sorter_new (gtk_property_expression_new (GTK_TYPE_COLOR, NULL, "value"));
       gtk_numeric_sorter_set_sort_order (GTK_NUMERIC_SORTER (sorter), GTK_SORT_DESCENDING);
-      set_sorter_title (sorter, "Value");
+      set_title (sorter, "Value");
       g_list_store_append (sorters, sorter);
       gtk_multi_sorter_append (GTK_MULTI_SORTER (multi_sorter), sorter);
 
-      set_sorter_title (multi_sorter, "HSV");
+      set_title (multi_sorter, "HSV");
       g_list_store_append (sorters, multi_sorter);
       g_object_unref (multi_sorter);
 
@@ -497,7 +511,7 @@ do_listview_colors (GtkWidget *do_widget)
       expression = gtk_cclosure_expression_new (G_TYPE_STRING,
                                                 NULL,
                                                 0, NULL,
-                                                (GCallback)get_sorter_title,
+                                                (GCallback)get_title,
                                                 NULL, NULL);
       gtk_drop_down_set_expression (GTK_DROP_DOWN (dropdown), expression);
       gtk_expression_unref (expression);
@@ -508,7 +522,42 @@ do_listview_colors (GtkWidget *do_widget)
       g_object_bind_property_full (dropdown, "selected",
                                    model, "sorter",
                                    G_BINDING_SYNC_CREATE,
-                                   set_sorter, NULL,
+                                   set_item, NULL,
+                                   NULL, NULL);
+
+      factories = g_list_store_new (GTK_TYPE_LIST_ITEM_FACTORY);
+
+      factory = gtk_signal_list_item_factory_new ();
+      g_signal_connect (factory, "setup", G_CALLBACK (setup_simple_listitem_cb), NULL);
+      set_title (factory, "Colors");
+      g_list_store_append (factories, factory);
+
+      factory = gtk_signal_list_item_factory_new ();
+      g_signal_connect (factory, "setup", G_CALLBACK (setup_listitem_cb), NULL);
+      set_title (factory, "Everything");
+      g_list_store_append (factories, factory);
+
+      dropdown = gtk_drop_down_new ();
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+      gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("Show:"));
+      gtk_container_add (GTK_CONTAINER (box), dropdown);
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), box);
+
+      expression = gtk_cclosure_expression_new (G_TYPE_STRING,
+                                                NULL,
+                                                0, NULL,
+                                                (GCallback)get_title,
+                                                NULL, NULL);
+      gtk_drop_down_set_expression (GTK_DROP_DOWN (dropdown), expression);
+      gtk_expression_unref (expression);
+
+      gtk_drop_down_set_model (GTK_DROP_DOWN (dropdown), G_LIST_MODEL (factories));
+      g_object_unref (factories);
+
+      g_object_bind_property_full (dropdown, "selected",
+                                   gridview, "factory",
+                                   G_BINDING_SYNC_CREATE,
+                                   set_item, NULL,
                                    NULL, NULL);
 
       g_object_unref (model);
