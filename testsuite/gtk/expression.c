@@ -412,6 +412,8 @@ test_constant_watch_this_destroyed (void)
 
   g_clear_object (&this);
   g_assert_cmpint (counter, ==, 1);
+
+  gtk_expression_unref (expr);
 }
 
 /* Basic test of gtk_expression_bind */
@@ -444,6 +446,7 @@ test_bind (void)
   res = gtk_expression_watch_evaluate (watch, &value);
   g_assert_true (res);
   g_assert_cmpstr (g_value_get_string (&value), ==, "sausage"); 
+  g_value_unset (&value);
 
   g_object_unref (filter);
   g_object_unref (filter2);
@@ -651,6 +654,7 @@ test_binds (void)
   gtk_expression_unref (filter2_expr);
 
   g_object_unref (filter2);
+  g_object_unref (filter3);
 }
 
 int
