@@ -412,6 +412,8 @@ test_constant_watch_this_destroyed (void)
 
   g_clear_object (&this);
   g_assert_cmpint (counter, ==, 1);
+
+  gtk_expression_unref (expr);
 }
 
 /* Basic test of gtk_expression_bind */
