@@ -439,7 +439,7 @@ do_listview_colors (GtkWidget *do_widget)
       gtk_scrollable_set_hscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
       gtk_scrollable_set_vscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
 
-      gtk_grid_view_set_max_columns (GTK_GRID_VIEW (gridview), 12);
+      gtk_grid_view_set_max_columns (GTK_GRID_VIEW (gridview), 24);
 
       model = G_LIST_MODEL (gtk_sort_list_model_new (create_colors_model (), NULL));
       selection = gtk_no_selection_new (model);
