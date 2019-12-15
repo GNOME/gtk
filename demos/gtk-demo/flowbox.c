@@ -4,6 +4,8 @@
  * as needed and support sorting and filtering.
  *
  * The children of a GtkFlowBox are regular widgets
+ *
+ * The dataset used here has 665 colors.
  */
 
 #include <gtk/gtk.h>
