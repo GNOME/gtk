@@ -657,6 +657,34 @@ test_binds (void)
   g_object_unref (filter3);
 }
 
+/* test that binds work ok with object expressions */
+static void
+test_bind_object (void)
+{
+  GtkFilter *filter;
+  GListStore *store;
+  GtkFilterListModel *model;
+  GtkExpression *expr;
+
+  filter = gtk_string_filter_new ();
+  store = g_list_store_new (G_TYPE_OBJECT);
+  model = gtk_filter_list_model_new (G_LIST_MODEL (store), NULL);
+
+  expr = gtk_object_expression_new (G_OBJECT (filter));
+
+  gtk_expression_bind (gtk_expression_ref (expr), model, NULL, "filter");
+
+  g_assert_true (gtk_filter_list_model_get_filter (model) == filter);
+
+  g_object_unref (filter);
+
+  g_assert_true (gtk_filter_list_model_get_filter (model) == filter);
+
+  gtk_expression_unref (expr);
+  g_object_unref (model);
+  g_object_unref (store);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -677,6 +705,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/expression/nested-bind", test_nested_bind);
   g_test_add_func ("/expression/double-bind", test_double_bind);
   g_test_add_func ("/expression/binds", test_binds);
+  g_test_add_func ("/expression/bind-object", test_bind_object);
 
   return g_test_run ();
 }
