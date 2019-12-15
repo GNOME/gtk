@@ -572,6 +572,146 @@ test_nested_bind (void)
   gtk_expression_unref (filter_expr);
 }
 
+static char *
+some_cb (gpointer    this,
+         const char *search,
+         gboolean    ignore_case,
+         gpointer    data)
+{
+  if (!search)
+    return NULL;
+
+  if (ignore_case)
+    return g_utf8_strdown (search, -1);
+  else
+    return g_strdup (search);
+}
+
+/* Test that things work as expected when the same object is used multiple times in an
+ * expression or its subexpressions.
+ */
+static void
+test_double_bind (void)
+{
+  GtkStringFilter *filter1;
+  GtkStringFilter *filter2;
+  GtkExpression *expr;
+  GtkExpression *filter_expr;
+  GtkExpression *params[2];
+
+  filter1 = GTK_STRING_FILTER (gtk_string_filter_new ());
+  filter2 = GTK_STRING_FILTER (gtk_string_filter_new ());
+
+  filter_expr = gtk_object_expression_new (G_OBJECT (filter1));
+
+  params[0] = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, gtk_expression_ref (filter_expr), "search");
+  params[1] = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, gtk_expression_ref (filter_expr), "ignore-case");
+  expr = gtk_cclosure_expression_new (G_TYPE_STRING,
+                                      NULL,
+                                      2, params,
+                                      (GCallback)some_cb,
+                                      NULL, NULL);
+
+  gtk_expression_bind (gtk_expression_ref (expr), filter2, "search", NULL);
+
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter1), "Banana");
+  g_assert_cmpstr (gtk_string_filter_get_search (GTK_STRING_FILTER (filter2)), ==, "banana");
+
+  gtk_string_filter_set_ignore_case (GTK_STRING_FILTER (filter1), FALSE);
+  g_assert_cmpstr (gtk_string_filter_get_search (GTK_STRING_FILTER (filter2)), ==, "Banana");
+
+  gtk_expression_unref (expr);
+  gtk_expression_unref (filter_expr);
+
+  g_object_unref (filter1);
+  g_object_unref (filter2);
+}
+
+/* Test that having multiple binds on the same object works. */
+static void
+test_binds (void)
+{
+  GtkStringFilter *filter1;
+  GtkStringFilter *filter2;
+  GtkStringFilter *filter3;
+  GtkExpression *expr;
+  GtkExpression *expr2;
+  GtkExpression *filter1_expr;
+  GtkExpression *filter2_expr;
+  GtkExpression *params[2];
+
+  filter1 = GTK_STRING_FILTER (gtk_string_filter_new ());
+  filter2 = GTK_STRING_FILTER (gtk_string_filter_new ());
+  filter3 = GTK_STRING_FILTER (gtk_string_filter_new ());
+
+  filter1_expr = gtk_object_expression_new (G_OBJECT (filter1));
+  filter2_expr = gtk_object_expression_new (G_OBJECT (filter2));
+
+  params[0] = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, gtk_expression_ref (filter1_expr), "search");
+  params[1] = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, gtk_expression_ref (filter2_expr), "ignore-case");
+  expr = gtk_cclosure_expression_new (G_TYPE_STRING,
+                                      NULL,
+                                      2, params,
+                                      (GCallback)some_cb,
+                                      NULL, NULL);
+
+  expr2 = gtk_property_expression_new (GTK_TYPE_STRING_FILTER, gtk_expression_ref (filter2_expr), "ignore-case");
+
+  gtk_expression_bind (gtk_expression_ref (expr), filter3, "search", NULL);
+  gtk_expression_bind (gtk_expression_ref (expr2), filter3, "ignore-case", NULL);
+
+  gtk_string_filter_set_search (GTK_STRING_FILTER (filter1), "Banana");
+  g_assert_cmpstr (gtk_string_filter_get_search (GTK_STRING_FILTER (filter3)), ==, "banana");
+  g_assert_true (gtk_string_filter_get_ignore_case (GTK_STRING_FILTER (filter3)));
+
+  gtk_string_filter_set_ignore_case (GTK_STRING_FILTER (filter2), FALSE);
+  g_assert_cmpstr (gtk_string_filter_get_search (GTK_STRING_FILTER (filter3)), ==, "Banana");
+  g_assert_false (gtk_string_filter_get_ignore_case (GTK_STRING_FILTER (filter3)));
+
+  /* invalidate the first bind */
+  g_object_unref (filter1);
+
+  gtk_string_filter_set_ignore_case (GTK_STRING_FILTER (filter2), TRUE);
+  g_assert_cmpstr (gtk_string_filter_get_search (GTK_STRING_FILTER (filter3)), ==, "Banana");
+  g_assert_true (gtk_string_filter_get_ignore_case (GTK_STRING_FILTER (filter3)));
+
+  gtk_expression_unref (expr);
+  gtk_expression_unref (expr2);
+  gtk_expression_unref (filter1_expr);
+  gtk_expression_unref (filter2_expr);
+
+  g_object_unref (filter2);
+  g_object_unref (filter3);
+}
+
+/* test that binds work ok with object expressions */
+static void
+test_bind_object (void)
+{
+  GtkFilter *filter;
+  GListStore *store;
+  GtkFilterListModel *model;
+  GtkExpression *expr;
+
+  filter = gtk_string_filter_new ();
+  store = g_list_store_new (G_TYPE_OBJECT);
+  model = gtk_filter_list_model_new (G_LIST_MODEL (store), NULL);
+
+  expr = gtk_object_expression_new (G_OBJECT (filter));
+
+  gtk_expression_bind (gtk_expression_ref (expr), model, "filter", NULL);
+
+  g_assert_true (gtk_filter_list_model_get_filter (model) == filter);
+
+  g_object_unref (filter);
+
+  g_assert_true (gtk_filter_list_model_get_filter (model) == filter);
+
+  gtk_expression_unref (expr);
+  g_object_unref (model);
+  g_object_unref (store);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -591,6 +731,9 @@ main (int argc, char *argv[])
   g_test_add_func ("/expression/bind-self", test_bind_self);
   g_test_add_func ("/expression/bind-child", test_bind_child);
   g_test_add_func ("/expression/nested-bind", test_nested_bind);
+  g_test_add_func ("/expression/double-bind", test_double_bind);
+  g_test_add_func ("/expression/binds", test_binds);
+  g_test_add_func ("/expression/bind-object", test_bind_object);
 
   return g_test_run ();
 }
