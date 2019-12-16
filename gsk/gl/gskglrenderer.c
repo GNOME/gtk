@@ -53,28 +53,10 @@
                 g_assert_cmpint (self->program_name ## _program.program_name.uniform_basename ## _location, >, -1); \
               }G_STMT_END
 
-#define INIT_PROGRAM_UNIFORM_RECT_LOCATION(program_name, uniform_basename) \
-              G_STMT_START{\
-                self->program_name ## _program.program_name.uniform_basename ## _bounds_location = \
-                              glGetUniformLocation(self->program_name ## _program.id, "u_" #uniform_basename ".bounds");\
-                g_assert_cmpint (self->program_name ## _program.program_name.uniform_basename ## _bounds_location, >, -1); \
-                self->program_name ## _program.program_name.uniform_basename ## _corners_location = \
-                              glGetUniformLocation(self->program_name ## _program.id, "u_" #uniform_basename ".corners");\
-                g_assert_cmpint (self->program_name ## _program.program_name.uniform_basename ## _corners_location, >, -1); \
-              }G_STMT_END
-
 #define INIT_COMMON_UNIFORM_LOCATION(program_ptr, uniform_basename) \
               G_STMT_START{\
                 program_ptr->uniform_basename ## _location =  \
                               glGetUniformLocation(program_ptr->id, "u_" #uniform_basename);\
-              }G_STMT_END
-
-#define INIT_COMMON_UNIFORM_RECT_LOCATION(program_ptr, uniform_basename) \
-              G_STMT_START{\
-                program_ptr->uniform_basename ## _bounds_location =  \
-                              glGetUniformLocation(program_ptr->id, "u_" #uniform_basename ".bounds");\
-                program_ptr->uniform_basename ## _corners_location =  \
-                              glGetUniformLocation(program_ptr->id, "u_" #uniform_basename ".corners");\
               }G_STMT_END
 
 typedef enum
@@ -2521,19 +2503,22 @@ static inline void
 apply_clip_op (const Program *program,
                const OpClip  *op)
 {
-  glUniform4fv (program->clip_rect_bounds_location, 1, (float *)&op->clip.bounds);
+  int count;
 
   if (op->send_corners)
     {
       OP_PRINT (" -> Clip: %s", gsk_rounded_rect_to_string (&op->clip));
-      glUniform2fv (program->clip_rect_corners_location, 4, (float *)&op->clip.corner);
+      count = 3;
     }
   else
     {
       OP_PRINT (" -> clip: %f, %f, %f, %f",
                 op->clip.bounds.origin.x, op->clip.bounds.origin.y,
                 op->clip.bounds.size.width, op->clip.bounds.size.height);
+      count = 1;
     }
+
+  glUniform4fv (program->clip_rect_location, count, (float *)&op->clip.bounds);
 }
 
 static inline void
@@ -2549,8 +2534,7 @@ apply_inset_shadow_op (const Program  *program,
   glUniform4fv (program->inset_shadow.color_location, 1, (float *)op->color);
   glUniform2fv (program->inset_shadow.offset_location, 1, op->offset);
   glUniform1f (program->inset_shadow.spread_location, op->spread);
-  glUniform4fv (program->inset_shadow.outline_rect_bounds_location, 1, (float *)&op->outline.bounds);
-  glUniform2fv (program->inset_shadow.outline_rect_corners_location, 4, (float *)&op->outline.corner);
+  glUniform4fv (program->inset_shadow.outline_rect_location, 3, (float *)&op->outline.bounds);
 }
 
 static inline void
@@ -2561,8 +2545,7 @@ apply_unblurred_outset_shadow_op (const Program  *program,
   glUniform4fv (program->unblurred_outset_shadow.color_location, 1, (float *)op->color);
   glUniform2fv (program->unblurred_outset_shadow.offset_location, 1, op->offset);
   glUniform1f (program->unblurred_outset_shadow.spread_location, op->spread);
-  glUniform4fv (program->unblurred_outset_shadow.outline_rect_bounds_location, 1, (float *)&op->outline.bounds);
-  glUniform2fv (program->unblurred_outset_shadow.outline_rect_corners_location, 4, (float *)&op->outline.corner);
+  glUniform4fv (program->unblurred_outset_shadow.outline_rect_location, 3, (float *)&op->outline.bounds);
 }
 
 static inline void
@@ -2570,8 +2553,7 @@ apply_outset_shadow_op (const Program  *program,
                         const OpShadow *op)
 {
   OP_PRINT (" -> outset shadow");
-  glUniform4fv (program->outset_shadow.outline_rect_bounds_location, 1, (float *)&op->outline.bounds);
-  glUniform2fv (program->outset_shadow.outline_rect_corners_location, 4, (float *)&op->outline.corner);
+  glUniform4fv (program->outset_shadow.outline_rect_location, 3, (float *)&op->outline.bounds);
 }
 
 static inline void
@@ -2599,8 +2581,7 @@ apply_border_op (const Program  *program,
 {
   OP_PRINT (" -> Border Outline");
 
-  glUniform4fv (program->border.outline_rect_bounds_location, 1, (float *)&op->outline.bounds);
-  glUniform2fv (program->border.outline_rect_corners_location, 4, (float *)&op->outline.corner);
+  glUniform4fv (program->border.outline_rect_location, 3, (float *)&op->outline.bounds);
 }
 
 static inline void
@@ -2751,7 +2732,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
 
       INIT_COMMON_UNIFORM_LOCATION (prog, alpha);
       INIT_COMMON_UNIFORM_LOCATION (prog, source);
-      INIT_COMMON_UNIFORM_RECT_LOCATION (prog, clip_rect);
+      INIT_COMMON_UNIFORM_LOCATION (prog, clip_rect);
       INIT_COMMON_UNIFORM_LOCATION (prog, viewport);
       INIT_COMMON_UNIFORM_LOCATION (prog, projection);
       INIT_COMMON_UNIFORM_LOCATION (prog, modelview);
@@ -2782,21 +2763,21 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow, color);
   INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow, spread);
   INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow, offset);
-  INIT_PROGRAM_UNIFORM_RECT_LOCATION (inset_shadow, outline_rect);
+  INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow, outline_rect);
 
   /* outset shadow */
-  INIT_PROGRAM_UNIFORM_RECT_LOCATION (outset_shadow, outline_rect);
+  INIT_PROGRAM_UNIFORM_LOCATION (outset_shadow, outline_rect);
 
   /* unblurred outset shadow */
   INIT_PROGRAM_UNIFORM_LOCATION (unblurred_outset_shadow, color);
   INIT_PROGRAM_UNIFORM_LOCATION (unblurred_outset_shadow, spread);
   INIT_PROGRAM_UNIFORM_LOCATION (unblurred_outset_shadow, offset);
-  INIT_PROGRAM_UNIFORM_RECT_LOCATION (unblurred_outset_shadow, outline_rect);
+  INIT_PROGRAM_UNIFORM_LOCATION (unblurred_outset_shadow, outline_rect);
 
   /* border */
   INIT_PROGRAM_UNIFORM_LOCATION (border, color);
   INIT_PROGRAM_UNIFORM_LOCATION (border, widths);
-  INIT_PROGRAM_UNIFORM_RECT_LOCATION (border, outline_rect);
+  INIT_PROGRAM_UNIFORM_LOCATION (border, outline_rect);
 
   /* cross fade */
   INIT_PROGRAM_UNIFORM_LOCATION (cross_fade, progress);
