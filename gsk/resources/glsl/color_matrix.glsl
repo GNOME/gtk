@@ -20,7 +20,7 @@ void main() {
     color.rgb /= color.a;
 
   color = u_color_matrix * color + u_color_offset;
-  color = clamp(color, 0.0f, 1.0f);
+  color = clamp(color, 0.0, 1.0);
 
   color.rgb *= color.a;
 
