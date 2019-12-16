@@ -26,14 +26,14 @@ void main() {
 
   vec2 pixel_step = vec2(1.0) / u_blur_size;
 
-  float coefficientSum = 0;
+  float coefficientSum = 0.0;
   vec4 sum = Texture(u_source, vUv) * incrementalGaussian.x;
   coefficientSum += incrementalGaussian.x;
   incrementalGaussian.xy *= incrementalGaussian.yz;
 
   int pixels_per_side = int(floor(blur_radius / 2.0));
   for (int i = 1; i <= pixels_per_side; i++) {
-    vec2 p = i * pixel_step * u_blur_dir;
+    vec2 p = float(i) * pixel_step * u_blur_dir;
 
     sum += Texture(u_source, vUv - p) * incrementalGaussian.x;
     sum += Texture(u_source, vUv + p) * incrementalGaussian.x;

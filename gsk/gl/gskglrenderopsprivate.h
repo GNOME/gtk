@@ -47,8 +47,7 @@ struct _Program
   int viewport_location;
   int projection_location;
   int modelview_location;
-  int clip_rect_bounds_location;
-  int clip_rect_corners_location;
+  int clip_rect_location;
   union {
     struct {
       int color_location;
@@ -76,16 +75,13 @@ struct _Program
       int color_location;
       int spread_location;
       int offset_location;
-      int outline_rect_bounds_location;
-      int outline_rect_corners_location;
+      int outline_rect_location;
     } inset_shadow;
     struct {
-      int outline_rect_bounds_location;
-      int outline_rect_corners_location;
+      int outline_rect_location;
     } outset_shadow;
     struct {
-      int outline_rect_bounds_location;
-      int outline_rect_corners_location;
+      int outline_rect_location;
       int color_location;
       int spread_location;
       int offset_location;
@@ -93,8 +89,7 @@ struct _Program
     struct {
       int color_location;
       int widths_location;
-      int outline_rect_bounds_location;
-      int outline_rect_corners_location;
+      int outline_rect_location;
     } border;
     struct {
       int source2_location;
