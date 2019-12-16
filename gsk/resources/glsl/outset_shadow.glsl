@@ -6,7 +6,7 @@ void main() {
 }
 
 // FRAGMENT_SHADER:
-uniform RoundedRect u_outline_rect;
+uniform vec4[3] u_outline_rect;
 
 void main() {
   vec4 f = gl_FragCoord;
@@ -14,7 +14,8 @@ void main() {
   f.x += u_viewport.x;
   f.y = (u_viewport.y + u_viewport.w) - f.y;
 
+  RoundedRect outline = create_rect(u_outline_rect);
   vec4 color = Texture(u_source, vUv);
-  color = color * (1.0 -  clamp(rounded_rect_coverage (u_outline_rect, f.xy), 0.0, 1.0));
+  color = color * (1.0 -  clamp(rounded_rect_coverage(outline, f.xy), 0.0, 1.0));
   setOutputColor(color * u_alpha);
 }
