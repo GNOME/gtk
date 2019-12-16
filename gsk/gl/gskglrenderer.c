@@ -3271,26 +3271,21 @@ static void
 gsk_gl_renderer_render_ops (GskGLRenderer *self)
 {
   const Program *program = NULL;
-  gsize vertex_data_size = self->op_builder.vertices->len * sizeof (GskQuadVertex);
-  float *vertex_data = (float*)self->op_builder.vertices->data;
+  const gsize vertex_data_size = self->op_builder.vertices->len * sizeof (GskQuadVertex);
+  const float *vertex_data = (float *)self->op_builder.vertices->data;
   OpBufferIter iter;
   OpKind kind;
   gpointer ptr;
-
-  /*g_message ("%s: Buffer size: %ld", __FUNCTION__, vertex_data_size);*/
-
-
   GLuint buffer_id, vao_id;
+
+
   glGenVertexArrays (1, &vao_id);
   glBindVertexArray (vao_id);
 
   glGenBuffers (1, &buffer_id);
   glBindBuffer (GL_ARRAY_BUFFER, buffer_id);
 
-  // Set buffer data
   glBufferData (GL_ARRAY_BUFFER, vertex_data_size, vertex_data, GL_STATIC_DRAW);
-
-  // Describe buffer contents
 
   /* 0 = position location */
   glEnableVertexAttribArray (0);
