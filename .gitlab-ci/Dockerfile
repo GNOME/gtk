@@ -53,6 +53,7 @@ RUN dnf -y install \
     libxkbcommon-devel \
     libXrandr-devel \
     libXrender-devel \
+    libXtst-devel \
     libxslt \
     mesa-dri-drivers \
     mesa-libEGL-devel \
