@@ -43,6 +43,12 @@
  *
  * GtkColumnView is a widget to present a view into a large dynamic list of items
  * using multiple columns.
+ *
+ * It supports sorting that can be customized by the user by clicking on column
+ * view headers. To set this up, the #GtkSorter returned by gtk_column_view_get_sorter()
+ * must be attached to a sort model for the data that the view is showing, and the
+ * columns must have sorters attached to them by calling gtk_column_view_column_set_sorter().
+ * The initial sort order can be set with gtk_column_view_sort_by_column().
  */
 
 struct _GtkColumnView
