@@ -117,6 +117,8 @@ strvcmp (gconstpointer p1,
   return strcmp (*s1, *s2);
 }
 
+static GtkFilter *current_filter;
+
 static gboolean
 transform_settings_to_keys (GBinding     *binding,
                             const GValue *from_value,
@@ -128,6 +130,9 @@ transform_settings_to_keys (GBinding     *binding,
   GSettingsSchema *schema;
   GListStore *store;
   GtkSortListModel *sort_model;
+  GtkFilterListModel *filter_model;
+  GtkFilter *filter;
+  GtkExpression *expression;
   char **keys;
   guint i;
 
@@ -156,8 +161,18 @@ transform_settings_to_keys (GBinding     *binding,
 
   sort_model = gtk_sort_list_model_new (G_LIST_MODEL (store),
                                         gtk_column_view_get_sorter (GTK_COLUMN_VIEW (data)));
+  expression = gtk_property_expression_new (SETTINGS_TYPE_KEY, NULL, "name");
+  filter = gtk_string_filter_new ();
+  gtk_string_filter_set_expression (GTK_STRING_FILTER (filter), expression);
+  filter_model = gtk_filter_list_model_new (G_LIST_MODEL (sort_model), filter);
+  gtk_expression_unref (expression);
+  g_object_unref (sort_model);
 
-  g_value_take_object (to_value, sort_model);
+  g_set_object (&current_filter, filter);
+
+  g_object_unref (filter);
+
+  g_value_take_object (to_value, filter_model);
 
   return TRUE;
 }
@@ -208,6 +223,32 @@ create_settings_model (gpointer item,
   return G_LIST_MODEL (result);
 }
 
+static void
+search_enabled (GtkSearchEntry *entry)
+{
+  gtk_editable_set_text (GTK_EDITABLE (entry), "");
+}
+
+static void
+search_changed (GtkSearchEntry *entry,
+                gpointer data)
+{
+  const char *text = gtk_editable_get_text (GTK_EDITABLE (entry));
+
+  if (current_filter)
+    gtk_string_filter_set_search (GTK_STRING_FILTER (current_filter), text);
+}
+
+static void
+stop_search (GtkSearchEntry *entry,
+             gpointer data)
+{
+  gtk_editable_set_text (GTK_EDITABLE (entry), "");
+
+  if (current_filter)
+    gtk_string_filter_set_search (GTK_STRING_FILTER (current_filter), "");
+}
+
 static GtkWidget *window = NULL;
 
 GtkWidget *
@@ -219,13 +260,22 @@ do_listview_settings (GtkWidget *do_widget)
       GListModel *model;
       GtkTreeListModel *treemodel;
       GtkSingleSelection *selection;
+      GtkBuilderScope *scope;
       GtkBuilder *builder;
       GtkColumnViewColumn *name_column;
       GtkSorter *sorter;
 
       g_type_ensure (SETTINGS_TYPE_KEY);
 
-      builder = gtk_builder_new_from_resource ("/listview_settings/listview_settings.ui");
+      scope = gtk_builder_cscope_new ();
+      gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "search_enabled", (GCallback)search_enabled);
+      gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "search_changed", (GCallback)search_changed);
+      gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "stop_search", (GCallback)stop_search);
+
+      builder = gtk_builder_new ();
+      gtk_builder_set_scope (builder, scope);
+      gtk_builder_add_from_resource (builder, "/listview_settings/listview_settings.ui", NULL);
+
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
