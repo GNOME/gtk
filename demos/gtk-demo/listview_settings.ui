@@ -4,6 +4,16 @@
     <property name="title" translatable="yes">Settings</property>
     <property name="default-width">640</property>
     <property name="default-height">480</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="show-title-buttons">1</property>
+        <child type="end">
+          <object class="GtkToggleButton" id="search_button">
+            <property name="icon-name">system-search-symbolic</property>
+          </object>
+        </child>
+      </object>
+    </child>
     <child>
       <object class="GtkPaned">
         <property name="position">300</property>
@@ -44,15 +54,32 @@
           </object>
         </child>
         <child>
-          <object class="GtkScrolledWindow">
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
             <child>
-              <object class="GtkColumnView" id="columnview">
+              <object class="GtkSearchBar">
+                <property name="search-mode-enabled" bind-source="search_button" bind-property="active" bind-flags="bidirectional"/>
+                <signal name="notify::search-mode-enabled" handler="search_enabled" object="entry"/>
                 <child>
-                  <object class="GtkColumnViewColumn" id="name_column">
-                    <property name="title">Name</property>
-                    <property name="factory">
-                      <object class="GtkBuilderListItemFactory">
-                        <property name="bytes"><![CDATA[
+                  <object class="GtkSearchEntry" id="entry">
+                    <signal name="search-changed" handler="search_changed"/>
+                    <signal name="stop-search" handler="stop_search"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="hexpand">1</property>
+                <property name="vexpand">1</property>
+                <child>
+                  <object class="GtkColumnView" id="columnview">
+                    <child>
+                      <object class="GtkColumnViewColumn" id="name_column">
+                        <property name="title">Name</property>
+                        <property name="factory">
+                          <object class="GtkBuilderListItemFactory">
+                            <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="GtkListItem">
@@ -69,16 +96,16 @@
   </template>
 </interface>
                         ]]></property>
+                          </object>
+                        </property>
                       </object>
-                    </property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkColumnViewColumn">
-                    <property name="title">Value</property>
-                    <property name="factory">
-                      <object class="GtkBuilderListItemFactory">
-                        <property name="bytes"><![CDATA[
+                    </child>
+                    <child>
+                      <object class="GtkColumnViewColumn">
+                        <property name="title">Value</property>
+                        <property name="factory">
+                          <object class="GtkBuilderListItemFactory">
+                            <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="GtkListItem">
@@ -95,8 +122,10 @@
   </template>
 </interface>
                         ]]></property>
+                          </object>
+                        </property>
                       </object>
-                    </property>
+                    </child>
                   </object>
                 </child>
               </object>
