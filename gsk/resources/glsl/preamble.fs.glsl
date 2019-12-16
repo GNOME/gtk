@@ -1,21 +1,26 @@
-
-#if GDK_GL3
+#ifdef GSK_GL3
 precision highp float;
 #endif
+
+#ifdef GSK_GLES
+precision highp float;
+#endif
+
 
 uniform sampler2D u_source;
 uniform mat4 u_projection;
 uniform mat4 u_modelview;
-uniform float u_alpha = 1.0;
+uniform float u_alpha;// = 1.0;
 uniform vec4 u_viewport;
 
 struct RoundedRect
 {
   vec4 bounds;
-  vec2 corners[4];
+  vec4 corner_widths;
+  vec4 corner_heights;
 };
 
-uniform RoundedRect u_clip_rect;
+uniform vec4[3] u_clip_rect;
 
 #if GSK_GLES
 varying vec2 vUv;
@@ -26,6 +31,16 @@ varying vec4 outputColor;
 in vec2 vUv;
 out vec4 outputColor;
 #endif
+
+// Transform from a GskRoundedRect to a RoundedRect as we need it.
+RoundedRect
+create_rect(vec4 data[3])
+{
+  vec4 bounds = vec4(data[0].xy, data[0].xy + data[0].zw);
+  vec4 widths = vec4(data[1].x, data[1].z, data[2].x, data[2].z);
+  vec4 heights = vec4(data[1].y, data[1].w, data[2].y, data[2].w);
+  return RoundedRect(bounds, widths, heights);
+}
 
 float
 ellipsis_dist (vec2 p, vec2 radius)
@@ -50,18 +65,18 @@ float
 rounded_rect_coverage (RoundedRect r, vec2 p)
 {
   if (p.x < r.bounds.x || p.y < r.bounds.y ||
-      p.x >= (r.bounds.x + r.bounds.z) || p.y >= (r.bounds.y + r.bounds.w))
+      p.x >= r.bounds.z || p.y >= r.bounds.w)
     return 0.0;
 
-  vec2 rad_tl = r.corners[0];
-  vec2 rad_tr = r.corners[1];
-  vec2 rad_br = r.corners[2];
-  vec2 rad_bl = r.corners[3];
+  vec2 rad_tl = vec2(r.corner_widths.x, r.corner_heights.x);
+  vec2 rad_tr = vec2(r.corner_widths.y, r.corner_heights.y);
+  vec2 rad_br = vec2(r.corner_widths.z, r.corner_heights.z);
+  vec2 rad_bl = vec2(r.corner_widths.w, r.corner_heights.w);
 
-  vec2 ref_tl = r.bounds.xy + r.corners[0];
-  vec2 ref_tr = vec2(r.bounds.x + r.bounds.z, r.bounds.y) + (r.corners[1] * vec2(-1, 1));
-  vec2 ref_br = vec2(r.bounds.x + r.bounds.z, r.bounds.y + r.bounds.w) - r.corners[2];
-  vec2 ref_bl = vec2(r.bounds.x, r.bounds.y + r.bounds.w) + (r.corners[3] * vec2(1, -1));
+  vec2 ref_tl = r.bounds.xy + vec2( r.corner_widths.x,  r.corner_heights.x);
+  vec2 ref_tr = r.bounds.zy + vec2(-r.corner_widths.y,  r.corner_heights.y);
+  vec2 ref_br = r.bounds.zw + vec2(-r.corner_widths.z, -r.corner_heights.z);
+  vec2 ref_bl = r.bounds.xw + vec2( r.corner_widths.w, -r.corner_heights.w);
 
   float d_tl = ellipsis_coverage(p, ref_tl, rad_tl);
   float d_tr = ellipsis_coverage(p, ref_tr, rad_tr);
@@ -82,38 +97,33 @@ rounded_rect_coverage (RoundedRect r, vec2 p)
 RoundedRect
 rounded_rect_shrink (RoundedRect r, vec4 amount)
 {
-  vec4 new_bounds = r.bounds;
-  vec2 new_corners[4];
-
-  new_bounds.xy += amount.wx;
-  new_bounds.zw -= amount.wx + amount.yz;
-
-  new_corners[0] = vec2(0);
-  new_corners[1] = vec2(0);
-  new_corners[2] = vec2(0);
-  new_corners[3] = vec2(0);
+  vec4 new_bounds = r.bounds + vec4(1.0,1.0,-1.0,-1.0) * amount.wxyz;
+  vec4 new_widths = vec4(0);
+  vec4 new_heights = vec4(0);
 
   // Left top
-  if (r.corners[0].x > 0 || r.corners[0].y > 0)
-    new_corners[0] = r.corners[0] - amount.wx;
+  if (r.corner_widths.x  > 0.0) new_widths.x = r.corner_widths.x - amount.w;
+  if (r.corner_heights.x > 0.0) new_heights.x = r.corner_heights.x - amount.x;
 
-  // top right
-  if (r.corners[1].x > 0 || r.corners[1].y > 0)
-    new_corners[1] = r.corners[1] - amount.yx;
+  // Top right
+  if (r.corner_widths.y  > 0.0) new_widths.y = r.corner_widths.y - amount.y;
+  if (r.corner_heights.y > 0.0) new_heights.y = r.corner_heights.y - amount.x;
 
   // Bottom right
-  if (r.corners[2].x > 0 || r.corners[2].y > 0)
-    new_corners[2] = r.corners[2] - amount.yz;
+  if (r.corner_widths.z  > 0.0) new_widths.z = r.corner_widths.z - amount.y;
+  if (r.corner_heights.z > 0.0) new_heights.z = r.corner_heights.z - amount.z;
 
   // Bottom left
-  if (r.corners[3].x > 0 || r.corners[3].y > 0)
-    new_corners[3] = r.corners[3] - amount.wz;
+  if (r.corner_widths.w  > 0.0) new_widths.w = r.corner_widths.w - amount.w;
+  if (r.corner_heights.w > 0.0) new_heights.w = r.corner_heights.w - amount.z;
 
-  return RoundedRect (new_bounds, new_corners);
+  return RoundedRect (new_bounds, new_widths, new_heights);
 }
 
 vec4 Texture(sampler2D sampler, vec2 texCoords) {
 #if GSK_GLES
+  return texture2D(sampler, texCoords);
+#elif GSK_LEGACY
   return texture2D(sampler, texCoords);
 #else
   return texture(sampler, texCoords);
@@ -127,9 +137,11 @@ void setOutputColor(vec4 color) {
   f.y = (u_viewport.y + u_viewport.w) - f.y;
 
 #if GSK_GLES
-  gl_FragColor = color * rounded_rect_coverage(u_clip_rect, f.xy);
+  gl_FragColor = color * rounded_rect_coverage(create_rect(u_clip_rect), f.xy);
+#elif GSK_LEGACY
+  gl_FragColor = color * rounded_rect_coverage(create_rect(u_clip_rect), f.xy);
 #else
-  outputColor = color * rounded_rect_coverage(u_clip_rect, f.xy);
+  outputColor = color * rounded_rect_coverage(create_rect(u_clip_rect), f.xy);
 #endif
   /*outputColor = color;*/
 }
