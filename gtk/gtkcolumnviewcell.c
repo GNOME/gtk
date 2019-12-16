@@ -156,6 +156,7 @@ gtk_column_view_cell_new (GtkColumnViewColumn *column)
 
   cell = g_object_new (GTK_TYPE_COLUMN_VIEW_CELL,
                        "factory", gtk_column_view_column_get_factory (column),
+                       "visible", gtk_column_view_column_get_visible (column),
                        NULL);
 
   cell->column = g_object_ref (column);
