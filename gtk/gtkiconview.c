@@ -1127,6 +1127,11 @@ gtk_icon_view_set_property (GObject      *object,
       if (icon_view->priv->hscroll_policy != g_value_get_enum (value))
         {
           icon_view->priv->hscroll_policy = g_value_get_enum (value);
+          if (icon_view->priv->hscroll_policy == GTK_SCROLL_FIT)
+            {
+              g_warning ("GTK_SCROLL_FIT not implemented for %s", G_OBJECT_TYPE_NAME (object));
+              icon_view->priv->hscroll_policy = GTK_SCROLL_NATURAL;
+            }
           gtk_widget_queue_resize (GTK_WIDGET (icon_view));
           g_object_notify_by_pspec (object, pspec);
         }
@@ -1135,6 +1140,11 @@ gtk_icon_view_set_property (GObject      *object,
       if (icon_view->priv->vscroll_policy != g_value_get_enum (value))
         {
           icon_view->priv->vscroll_policy = g_value_get_enum (value);
+          if (icon_view->priv->vscroll_policy == GTK_SCROLL_FIT)
+            {
+              g_warning ("GTK_SCROLL_FIT not implemented for %s", G_OBJECT_TYPE_NAME (object));
+              icon_view->priv->vscroll_policy = GTK_SCROLL_NATURAL;
+            }
           gtk_widget_queue_resize (GTK_WIDGET (icon_view));
           g_object_notify_by_pspec (object, pspec);
         }
