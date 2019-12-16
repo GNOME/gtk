@@ -2791,6 +2791,16 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   INIT_PROGRAM_UNIFORM_LOCATION (repeat, child_bounds);
   INIT_PROGRAM_UNIFORM_LOCATION (repeat, texture_rect);
 
+
+  /* We initialize the alpha uniform here, since the default value is important.
+   * We can't do it in the shader like a resonable person would because that doesn't
+   * work in gles. */
+  for (i = 0; i < GL_N_PROGRAMS; i++)
+    {
+      glUseProgram(self->programs[i].id);
+      glUniform1f (self->programs[i].alpha_location, 1.0);
+    }
+
 out:
   gsk_gl_shader_builder_finish (&shader_builder);
 
