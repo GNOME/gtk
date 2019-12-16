@@ -3278,6 +3278,9 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self)
   gpointer ptr;
   GLuint buffer_id, vao_id;
 
+#if DEBUG_OPS
+  g_print ("============================================\n");
+#endif
 
   glGenVertexArrays (1, &vao_id);
   glBindVertexArray (vao_id);
