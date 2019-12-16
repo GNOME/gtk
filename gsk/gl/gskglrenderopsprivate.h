@@ -118,8 +118,8 @@ typedef struct
   union {
     const GdkRGBA *color;
     struct {
-      graphene_matrix_t matrix;
-      graphene_vec4_t offset;
+      const graphene_matrix_t *matrix;
+      const graphene_vec4_t *offset;
     } color_matrix;
     struct {
       float widths[4];
