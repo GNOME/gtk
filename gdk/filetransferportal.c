@@ -26,6 +26,16 @@
 #include <gio/gio.h>
 #include <gio/gunixfdlist.h>
 
+#ifndef O_PATH
+#define O_PATH 0
+#endif
+
+#ifndef O_CLOEXEC
+#define O_CLOEXEC 0
+#else
+#define HAVE_O_CLOEXEC 1
+#endif
+
 #include "filetransferportalprivate.h"
 
 static GDBusProxy *file_transfer_proxy = NULL;
@@ -158,6 +168,10 @@ add_files (GDBusProxy  *proxy,
           g_object_unref (fd_list);
           return;
          }
+
+#ifndef HAVE_O_CLOEXEC
+      fcntl (fd, F_SETFD, FD_CLOEXEC);
+#endif
       fd_in = g_unix_fd_list_append (fd_list, fd, &error);
       close (fd);
 
