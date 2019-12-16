@@ -628,10 +628,10 @@ render_text_node (GskGLRenderer   *self,
   const PangoFont *font = gsk_text_node_peek_font (node);
   const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node);
   const float text_scale = ops_get_scale (builder);
-  guint num_glyphs = gsk_text_node_get_num_glyphs (node);
+  const graphene_point_t *offset = gsk_text_node_get_offset (node);
+  const guint num_glyphs = gsk_text_node_get_num_glyphs (node);
   int i;
   int x_position = 0;
-  const graphene_point_t *offset = gsk_text_node_get_offset (node);
   float x = offset->x + builder->dx;
   float y = offset->y + builder->dy;
   GlyphCacheKey lookup;
