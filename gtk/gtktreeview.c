@@ -558,8 +558,8 @@ struct _GtkTreeViewPrivate
 
   /* GtkScrollablePolicy needs to be checked when
    * driving the scrollable adjustment values */
-  guint hscroll_policy : 1;
-  guint vscroll_policy : 1;
+  guint hscroll_policy : 2;
+  guint vscroll_policy : 2;
 
   /* GtkTreeView flags */
   guint is_list : 1;
@@ -1886,6 +1886,11 @@ gtk_tree_view_set_property (GObject         *object,
       if (tree_view->priv->hscroll_policy != g_value_get_enum (value))
         {
           tree_view->priv->hscroll_policy = g_value_get_enum (value);
+          if (tree_view->priv->hscroll_policy == GTK_SCROLL_FIT)
+            {
+              g_warning ("GTK_SCROLL_FIT not implemented for %s", G_OBJECT_TYPE_NAME (object));
+              tree_view->priv->hscroll_policy = GTK_SCROLL_NATURAL;
+            }
           gtk_widget_queue_resize (GTK_WIDGET (tree_view));
           g_object_notify_by_pspec (object, pspec);
         }
@@ -1894,6 +1899,11 @@ gtk_tree_view_set_property (GObject         *object,
       if (tree_view->priv->vscroll_policy != g_value_get_enum (value))
         {
           tree_view->priv->vscroll_policy = g_value_get_enum (value);
+          if (tree_view->priv->vscroll_policy == GTK_SCROLL_FIT)
+            {
+              g_warning ("GTK_SCROLL_FIT not implemented for %s", G_OBJECT_TYPE_NAME (object));
+              tree_view->priv->vscroll_policy = GTK_SCROLL_NATURAL;
+            }
           gtk_widget_queue_resize (GTK_WIDGET (tree_view));
           g_object_notify_by_pspec (object, pspec);
         }
