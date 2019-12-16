@@ -61,6 +61,8 @@ struct _GtkColumnViewColumn
   int allocation_offset;
   int allocation_size;
 
+  gboolean visible;
+
   /* This list isn't sorted - this is just caching for performance */
   GtkColumnViewCell *first_cell; /* no reference, just caching */
 };
@@ -77,6 +79,7 @@ enum
   PROP_FACTORY,
   PROP_TITLE,
   PROP_SORTER,
+  PROP_VISIBLE,
 
   N_PROPS
 };
@@ -126,6 +129,10 @@ gtk_column_view_column_get_property (GObject    *object,
       g_value_set_object (value, self->sorter);
       break;
 
+    case PROP_VISIBLE:
+      g_value_set_boolean (value, self->visible);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -152,6 +159,10 @@ gtk_column_view_column_set_property (GObject      *object,
 
     case PROP_SORTER:
       gtk_column_view_column_set_sorter (self, g_value_get_object (value));
+      break;
+
+    case PROP_VISIBLE:
+      gtk_column_view_column_set_visible (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -217,6 +228,18 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                          GTK_TYPE_SORTER,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
+  /**
+   * GtkColumnViewColumn:visible:
+   *
+   * Whether this column is visible
+   */
+  properties[PROP_VISIBLE] =
+    g_param_spec_boolean ("visible",
+                          P_("Visible"),
+                          P_("Whether this column is visible"),
+                          TRUE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
 
@@ -225,6 +248,7 @@ gtk_column_view_column_init (GtkColumnViewColumn *self)
 {
   self->minimum_size_request = -1;
   self->natural_size_request = -1;
+  self->visible = TRUE;
 }
 
 /**
@@ -646,4 +670,54 @@ gtk_column_view_column_notify_sort (GtkColumnViewColumn *self)
 {
   if (self->header)
     gtk_column_view_title_update (GTK_COLUMN_VIEW_TITLE (self->header));
+}
+
+/**
+ * gtk_column_view_column_set_visible:
+ * @self: a #GtkColumnViewColumn
+ * @visible: whether this column should be visible
+ *
+ * Sets whether this column should be visible in views.
+ */
+void
+gtk_column_view_column_set_visible (GtkColumnViewColumn *self,
+                                    gboolean             visible)
+{
+  GtkColumnViewCell *cell;
+
+  g_return_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self));
+
+  if (self->visible == visible)
+    return;
+
+  self->visible = visible;
+
+  self->minimum_size_request = -1;
+  self->natural_size_request = -1;
+
+  if (self->header)
+    gtk_widget_set_visible (GTK_WIDGET (self->header), visible);
+
+  for (cell = self->first_cell; cell; cell = gtk_column_view_cell_get_next (cell))
+    {
+      gtk_widget_set_visible (GTK_WIDGET (cell), visible);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_VISIBLE]);
+}
+
+/**
+ * gtk_column_view_get_visible:
+ * @self: a #GtkColumnViewColumn
+ *
+ * Returns whether this column is visible.
+ *
+ * Returns: %TRUE if this column is visible
+ */
+gboolean
+gtk_column_view_column_get_visible (GtkColumnViewColumn *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self), TRUE);
+
+  return self->visible;
 }
