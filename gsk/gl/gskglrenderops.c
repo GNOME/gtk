@@ -633,20 +633,22 @@ ops_set_color_matrix (RenderOpBuilder         *builder,
   ProgramState *current_program_state = get_current_program_state (builder);
   OpColorMatrix *op;
 
-  if (memcmp (matrix,
-              &current_program_state->color_matrix.matrix,
+  if (current_program_state->color_matrix.matrix &&
+      current_program_state->color_matrix.offset &&
+      memcmp (matrix,
+              current_program_state->color_matrix.matrix,
               sizeof (graphene_matrix_t)) == 0 &&
       memcmp (offset,
-              &current_program_state->color_matrix.offset,
+              current_program_state->color_matrix.offset,
               sizeof (graphene_vec4_t)) == 0)
     return;
 
-  current_program_state->color_matrix.matrix = *matrix;
-  current_program_state->color_matrix.offset = *offset;
+  current_program_state->color_matrix.matrix = matrix;
+  current_program_state->color_matrix.offset = offset;
 
   op = ops_begin (builder, OP_CHANGE_COLOR_MATRIX);
-  op->matrix = *matrix;
-  op->offset = *offset;
+  op->matrix = matrix;
+  op->offset = offset;
 }
 
 void
