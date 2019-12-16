@@ -41,6 +41,7 @@ RUN dnf -y install \
     libxkbcommon-devel \
     libXrandr-devel \
     libXrender-devel \
+    libXtst-devel \
     make \
     mesa-libEGL-devel \
     mesa-libwayland-egl-devel \
