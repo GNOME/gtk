@@ -653,8 +653,8 @@ ops_set_color_matrix (RenderOpBuilder         *builder,
   current_program_state->color_matrix.offset = *offset;
 
   op = ops_begin (builder, OP_CHANGE_COLOR_MATRIX);
-  op->matrix = *matrix;
-  op->offset = *offset;
+  op->matrix = matrix;
+  op->offset = offset;
 }
 
 void
