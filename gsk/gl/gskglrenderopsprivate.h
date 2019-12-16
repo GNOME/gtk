@@ -15,12 +15,8 @@
 #define GL_N_VERTICES 6
 #define GL_N_PROGRAMS 13
 
-
-
 typedef struct
 {
-  float translate_x;
-  float translate_y;
   float scale_x;
   float scale_y;
 

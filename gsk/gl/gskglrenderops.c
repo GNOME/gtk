@@ -127,15 +127,12 @@ static void
 extract_matrix_metadata (GskTransform      *transform,
                          OpsMatrixMetadata *md)
 {
+  float dummy;
+
   switch (gsk_transform_get_category (transform))
     {
     case GSK_TRANSFORM_CATEGORY_IDENTITY:
-      md->scale_x = 1;
-      md->scale_y = 1;
-    break;
-
     case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
-      gsk_transform_to_translate (transform, &md->translate_x, &md->translate_y);
       md->scale_x = 1;
       md->scale_y = 1;
     break;
@@ -143,7 +140,7 @@ extract_matrix_metadata (GskTransform      *transform,
     case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
       gsk_transform_to_affine (transform,
                                &md->scale_x, &md->scale_y,
-                               &md->translate_x, &md->translate_y);
+                               &dummy, &dummy);
     break;
 
     case GSK_TRANSFORM_CATEGORY_UNKNOWN:
@@ -159,9 +156,6 @@ extract_matrix_metadata (GskTransform      *transform,
 
         /* TODO: 90% sure this is incorrect. But we should never hit this code
          * path anyway. */
-        md->translate_x = graphene_matrix_get_value (&m, 3, 0);
-        md->translate_y = graphene_matrix_get_value (&m, 3, 1);
-
         graphene_vec3_init (&col1,
                             graphene_matrix_get_value (&m, 0, 0),
                             graphene_matrix_get_value (&m, 1, 0),
