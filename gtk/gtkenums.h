@@ -788,6 +788,8 @@ typedef enum
  * GtkScrollablePolicy:
  * @GTK_SCROLL_MINIMUM: Scrollable adjustments are based on the minimum size
  * @GTK_SCROLL_NATURAL: Scrollable adjustments are based on the natural size
+ * @GTK_SCROLL_FIT: Scrollable adjustments try to fit without scrollbars if the
+ *     required size is between minimum and natural
  *
  * Defines the policy to be used in a scrollable widget when updating
  * the scrolled window adjustments in a given orientation.
@@ -795,7 +797,8 @@ typedef enum
 typedef enum
 {
   GTK_SCROLL_MINIMUM = 0,
-  GTK_SCROLL_NATURAL
+  GTK_SCROLL_NATURAL,
+  GTK_SCROLL_FIT
 } GtkScrollablePolicy;
 
 /**
