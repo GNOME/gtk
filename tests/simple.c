@@ -19,6 +19,7 @@
 #include <gtk/gtk.h>
 
 
+#ifdef G_OS_UNIX
 void
 copy (void)
 {
@@ -68,10 +69,21 @@ clipboard_changed (GdkClipboard *clipboard)
   g_print ("clipboard contents now: %s, local: %d\n", s, gdk_clipboard_is_local (clipboard));
 }
 
+#else /* G_OS_UNIX */
+
+void
+hello (void)
+{
+  g_print ("hello world\n");
+}
+
+#endif /* !G_OS_UNIX */
+
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *window, *button, *box;
+  GtkWidget *window, *box;
+  GtkWidget *button = NULL;
   GdkClipboard *clipboard;
 
   gtk_init ();
@@ -88,9 +100,10 @@ main (int argc, char *argv[])
   gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-
   button = gtk_button_new ();
+
+#ifdef G_OS_UNIX /* portal usage is supported on *nix only */
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_button_set_label (GTK_BUTTON (button), "copy");
   g_signal_connect (button, "clicked", G_CALLBACK (copy), NULL);
   gtk_container_add (GTK_CONTAINER (box), button);
@@ -104,6 +117,14 @@ main (int argc, char *argv[])
 
   clipboard = gdk_display_get_clipboard (gdk_display_get_default ());
   g_signal_connect (clipboard, "changed", G_CALLBACK (clipboard_changed), NULL);
+
+#else /* G_OS_UNIX -- original non-portal-enabled code */
+
+  gtk_button_set_label (GTK_BUTTON (button), "hello world");
+  g_signal_connect (button, "clicked", G_CALLBACK (hello), NULL);
+  gtk_container_add (GTK_CONTAINER (window), button);
+
+#endif /* !G_OS_UNIX */
 
   gtk_widget_show (window);
 
