@@ -274,8 +274,8 @@ struct _GtkTextViewPrivate
 
   /* GtkScrollablePolicy needs to be checked when
    * driving the scrollable adjustment values */
-  guint hscroll_policy : 1;
-  guint vscroll_policy : 1;
+  guint hscroll_policy : 2;
+  guint vscroll_policy : 2;
   guint cursor_handle_dragged : 1;
   guint selection_handle_dragged : 1;
 };
@@ -3734,6 +3734,11 @@ gtk_text_view_set_property (GObject         *object,
       if (priv->hscroll_policy != g_value_get_enum (value))
         {
           priv->hscroll_policy = g_value_get_enum (value);
+          if (priv->hscroll_policy == GTK_SCROLL_FIT)
+            {
+              g_warning ("GTK_SCROLL_FIT not implemented for %s", G_OBJECT_TYPE_NAME (object));
+              priv->hscroll_policy = GTK_SCROLL_NATURAL;
+            }
           gtk_widget_queue_resize (GTK_WIDGET (text_view));
           g_object_notify_by_pspec (object, pspec);
         }
@@ -3743,6 +3748,11 @@ gtk_text_view_set_property (GObject         *object,
       if (priv->vscroll_policy != g_value_get_enum (value))
         {
           priv->vscroll_policy = g_value_get_enum (value);
+          if (priv->vscroll_policy == GTK_SCROLL_FIT)
+            {
+              g_warning ("GTK_SCROLL_FIT not implemented for %s", G_OBJECT_TYPE_NAME (object));
+              priv->vscroll_policy = GTK_SCROLL_NATURAL;
+            }
           gtk_widget_queue_resize (GTK_WIDGET (text_view));
           g_object_notify_by_pspec (object, pspec);
         }
