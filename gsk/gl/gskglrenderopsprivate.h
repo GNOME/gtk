@@ -112,14 +112,14 @@ typedef struct
   float opacity;
   /* Per-program state */
   union {
-    const GdkRGBA *color;
+    GdkRGBA color;
     struct {
       graphene_matrix_t matrix;
       graphene_vec4_t offset;
     } color_matrix;
     struct {
       float widths[4];
-      const GdkRGBA *color;
+      GdkRGBA color;
       GskRoundedRect outline;
     } border;
   };
