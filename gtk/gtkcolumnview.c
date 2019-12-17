@@ -34,6 +34,7 @@
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
 #include "gtkwidgetprivate.h"
+#include "gtksizerequest.h"
 
 /**
  * SECTION:gtkcolumnview
@@ -171,46 +172,53 @@ gtk_column_view_allocate_columns (GtkColumnView *self,
   GtkScrollablePolicy scroll_policy;
   int col_min, col_nat, widget_min, widget_nat, extra, col_size, x;
   guint i;
+  int n;
+  GtkRequestedSize *sizes;
 
-  gtk_column_view_measure_across (self, &col_min, &col_nat);
-  gtk_widget_measure (GTK_WIDGET (self),
-                      GTK_ORIENTATION_HORIZONTAL, -1,
-                      &widget_min, &widget_nat,
-                      NULL, NULL);
-
-  scroll_policy = gtk_scrollable_get_hscroll_policy (GTK_SCROLLABLE (self->listview));
-  if (scroll_policy == GTK_SCROLL_MINIMUM)
-    {
-      extra = widget_min - col_min;
-      col_size = col_min;
-    }
-  else
-    {
-      extra = widget_nat - col_nat;
-      col_size = col_nat;
-    }
-  width -= extra;
-  width = MAX (width, col_size);
-
-  x = 0;
-  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->columns)); i++)
+  n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
+  sizes = g_newa (GtkRequestedSize, n);
+  for (i = 0; i < n; i++)
     {
       GtkColumnViewColumn *column;
 
       column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
-      gtk_column_view_column_measure (column, &col_min, &col_nat);
-      if (scroll_policy == GTK_SCROLL_MINIMUM)
-        col_size = col_min;
+      if (gtk_column_view_column_get_visible (column))
+        gtk_column_view_column_measure (column, &sizes[i].minimum_size, &sizes[i].natural_size);
       else
-        col_size = col_nat;
+        sizes[i].minimum_size = sizes[i].natural_size = 0;
+      g_object_unref (column);
+    }
 
-      gtk_column_view_column_allocate (column, x, col_size);
-      x += col_size;
+  gtk_column_view_measure_across (self, &col_min, &col_nat);
+
+  scroll_policy = gtk_scrollable_get_hscroll_policy (GTK_SCROLLABLE (self->listview));
+  if (scroll_policy == GTK_SCROLL_MINIMUM)
+    {
+      extra = MAX (width - col_min, 0);
+      gtk_distribute_natural_allocation (extra, n, sizes);
+    }
+
+  x = 0;
+  for (i = 0; i < n; i++)
+    {
+      GtkColumnViewColumn *column;
+
+      column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+      if (gtk_column_view_column_get_visible (column))
+        {
+          if (scroll_policy == GTK_SCROLL_MINIMUM)
+            col_size = sizes[i].minimum_size;
+          else
+            col_size = sizes[i].natural_size;
+
+          gtk_column_view_column_allocate (column, x, col_size);
+          x += col_size;
+        }
 
       g_object_unref (column);
     }
 
-  return width + extra;
+  return x;
 }
 
 static void
