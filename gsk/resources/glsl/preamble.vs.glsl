@@ -1,5 +1,6 @@
 uniform mat4 u_projection;
 uniform mat4 u_modelview;
+uniform float u_alpha;
 
 #if GSK_GLES
 #define _OUT_ varying
