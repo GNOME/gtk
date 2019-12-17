@@ -41,7 +41,7 @@ typedef struct _GskShadow               GskShadow;
 
 struct _GskColorStop
 {
-  double offset;
+  float offset;
   GdkRGBA color;
 };
 
