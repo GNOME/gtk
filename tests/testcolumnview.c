@@ -313,6 +313,54 @@ match_file (gpointer item, gpointer data)
   return result;
 }
 
+static int
+compare_file_attribute (gconstpointer info1_,
+                        gconstpointer info2_,
+                        gpointer      data)
+{
+  GFileInfo *info1 = (gpointer) info1_;
+  GFileInfo *info2 = (gpointer) info2_;
+  const char *attribute = data;
+  GFileAttributeType type1, type2;
+
+  type1 = g_file_info_get_attribute_type (info1, attribute);
+  type2 = g_file_info_get_attribute_type (info2, attribute);
+  if (type1 != type2)
+    return (int) type2 - (int) type1;
+
+  switch (type1)
+    {
+    case G_FILE_ATTRIBUTE_TYPE_INVALID:
+    case G_FILE_ATTRIBUTE_TYPE_OBJECT:
+    case G_FILE_ATTRIBUTE_TYPE_STRINGV:
+      return 0;
+    case G_FILE_ATTRIBUTE_TYPE_STRING:
+      return g_utf8_collate (g_file_info_get_attribute_string (info1, attribute),
+                             g_file_info_get_attribute_string (info2, attribute));
+    case G_FILE_ATTRIBUTE_TYPE_BYTE_STRING:
+      return strcmp (g_file_info_get_attribute_byte_string (info1, attribute),
+                     g_file_info_get_attribute_byte_string (info2, attribute));
+    case G_FILE_ATTRIBUTE_TYPE_BOOLEAN:
+      return g_file_info_get_attribute_boolean (info1, attribute)
+          -  g_file_info_get_attribute_boolean (info2, attribute);
+    case G_FILE_ATTRIBUTE_TYPE_UINT32:
+      return g_file_info_get_attribute_uint32 (info1, attribute)
+          -  g_file_info_get_attribute_uint32 (info2, attribute);
+    case G_FILE_ATTRIBUTE_TYPE_INT32:
+      return g_file_info_get_attribute_int32 (info1, attribute)
+          -  g_file_info_get_attribute_int32 (info2, attribute);
+    case G_FILE_ATTRIBUTE_TYPE_UINT64:
+      return g_file_info_get_attribute_uint64 (info1, attribute)
+          -  g_file_info_get_attribute_uint64 (info2, attribute);
+    case G_FILE_ATTRIBUTE_TYPE_INT64:
+      return g_file_info_get_attribute_int64 (info1, attribute)
+          -  g_file_info_get_attribute_int64 (info2, attribute);
+    default:
+      g_assert_not_reached ();
+      return 0;
+    }
+}
+
 GObject *
 get_object (GObject    *unused,
             GFileInfo  *info,
@@ -403,6 +451,15 @@ const char *ui_file =
 "            ]]></property>\n"
 "          </object>\n"
 "        </property>\n"
+"        <property name='sorter'>\n"
+"          <object class='GtkStringSorter'>\n"
+"            <property name='expression'>\n"
+"              <closure type='gchararray' function='g_file_info_get_attribute_as_string'>\n"
+"                <constant type='gchararray'>standard::display-name</constant>"
+"              </closure>\n"
+"            </property>\n"
+"          </object>\n"
+"        </property>\n"
 "      </object>\n"
 "    </child>\n"
 "  </object>\n"
@@ -462,43 +519,44 @@ const char *ui_file =
 
 struct {
   const char *title;
+  const char *attribute;
   const char *factory_xml;
 } extra_columns[] = {
-  { "Type", SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_TYPE, "uint32") },
-  { "Hidden", BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN) },
-  { "Backup", BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_STANDARD_IS_BACKUP) },
-  { "Symlink", BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK) },
-  { "Virtual", BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_STANDARD_IS_VIRTUAL) },
-  { "Volatile", BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_STANDARD_IS_VOLATILE) },
-  { "Edit name", SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_EDIT_NAME, "string") },
-  { "Copy name", SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_COPY_NAME, "string") },
-  { "Description", SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_DESCRIPTION, "string") },
-  { "Icon", ICON_FACTORY (G_FILE_ATTRIBUTE_STANDARD_ICON) },
-  { "Symbolic icon", ICON_FACTORY (G_FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON) },
-  { "Content type", SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE, "string") },
-  { "Fast content type", SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_FAST_CONTENT_TYPE, "string") },
-  { "Size", SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_SIZE, "uint64") },
-  { "Allocated size", SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_ALLOCATED_SIZE, "uint64") },
-  { "Target URI", SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_TARGET_URI, "string") },
-  { "Sort order", SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_SORT_ORDER, "int32") },
-  { "ETAG value", SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_ETAG_VALUE, "string") },
-  { "File ID", SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_ID_FILE, "string") },
-  { "Filesystem ID", SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_ID_FILESYSTEM, "string") },
-  { "Read", BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_ACCESS_CAN_READ) },
-  { "Write", BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE) },
-  { "Execute", BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_ACCESS_CAN_EXECUTE) },
-  { "Delete", BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_ACCESS_CAN_DELETE) },
-  { "Trash", BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_ACCESS_CAN_TRASH) },
-  { "Rename", BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_ACCESS_CAN_RENAME) },
-  { "Can mount", BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_MOUNTABLE_CAN_MOUNT) },
-  { "Can unmount", BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_MOUNTABLE_CAN_UNMOUNT) },
-  { "Can eject", BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_MOUNTABLE_CAN_EJECT) },
-  { "UNIX device", SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_MOUNTABLE_UNIX_DEVICE, "uint32") },
-  { "UNIX device file", SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_MOUNTABLE_UNIX_DEVICE_FILE, "string") },
-  { "owner", SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_OWNER_USER, "string") },
-  { "owner (real)", SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_OWNER_USER_REAL, "string") },
-  { "group", SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_OWNER_GROUP, "string") },
-  { "Preview icon", ICON_FACTORY (G_FILE_ATTRIBUTE_PREVIEW_ICON) },
+  { "Type",              G_FILE_ATTRIBUTE_STANDARD_TYPE, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_TYPE, "uint32") },
+  { "Hidden",            G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN, BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN) },
+  { "Backup",            G_FILE_ATTRIBUTE_STANDARD_IS_BACKUP, BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_STANDARD_IS_BACKUP) },
+  { "Symlink",           G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK, BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK) },
+  { "Virtual",           G_FILE_ATTRIBUTE_STANDARD_IS_VIRTUAL, BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_STANDARD_IS_VIRTUAL) },
+  { "Volatile",          G_FILE_ATTRIBUTE_STANDARD_IS_VOLATILE, BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_STANDARD_IS_VOLATILE) },
+  { "Edit name",         G_FILE_ATTRIBUTE_STANDARD_EDIT_NAME, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_EDIT_NAME, "string") },
+  { "Copy name",         G_FILE_ATTRIBUTE_STANDARD_COPY_NAME, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_COPY_NAME, "string") },
+  { "Description",       G_FILE_ATTRIBUTE_STANDARD_DESCRIPTION, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_DESCRIPTION, "string") },
+  { "Icon",              G_FILE_ATTRIBUTE_STANDARD_ICON, ICON_FACTORY (G_FILE_ATTRIBUTE_STANDARD_ICON) },
+  { "Symbolic icon",     G_FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON, ICON_FACTORY (G_FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON) },
+  { "Content type",      G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE, "string") },
+  { "Fast content type", G_FILE_ATTRIBUTE_STANDARD_FAST_CONTENT_TYPE, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_FAST_CONTENT_TYPE, "string") },
+  { "Size",              G_FILE_ATTRIBUTE_STANDARD_SIZE, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_SIZE, "uint64") },
+  { "Allocated size",    G_FILE_ATTRIBUTE_STANDARD_ALLOCATED_SIZE, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_ALLOCATED_SIZE, "uint64") },
+  { "Target URI",        G_FILE_ATTRIBUTE_STANDARD_TARGET_URI, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_TARGET_URI, "string") },
+  { "Sort order",        G_FILE_ATTRIBUTE_STANDARD_SORT_ORDER, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_STANDARD_SORT_ORDER, "int32") },
+  { "ETAG value",        G_FILE_ATTRIBUTE_ETAG_VALUE, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_ETAG_VALUE, "string") },
+  { "File ID",           G_FILE_ATTRIBUTE_ID_FILE, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_ID_FILE, "string") },
+  { "Filesystem ID",     G_FILE_ATTRIBUTE_ID_FILESYSTEM, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_ID_FILESYSTEM, "string") },
+  { "Read",              G_FILE_ATTRIBUTE_ACCESS_CAN_READ, BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_ACCESS_CAN_READ) },
+  { "Write",             G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE, BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE) },
+  { "Execute",           G_FILE_ATTRIBUTE_ACCESS_CAN_EXECUTE, BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_ACCESS_CAN_EXECUTE) },
+  { "Delete",            G_FILE_ATTRIBUTE_ACCESS_CAN_DELETE, BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_ACCESS_CAN_DELETE) },
+  { "Trash",             G_FILE_ATTRIBUTE_ACCESS_CAN_TRASH, BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_ACCESS_CAN_TRASH) },
+  { "Rename",            G_FILE_ATTRIBUTE_ACCESS_CAN_RENAME, BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_ACCESS_CAN_RENAME) },
+  { "Can mount",         G_FILE_ATTRIBUTE_MOUNTABLE_CAN_MOUNT, BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_MOUNTABLE_CAN_MOUNT) },
+  { "Can unmount",       G_FILE_ATTRIBUTE_MOUNTABLE_CAN_UNMOUNT, BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_MOUNTABLE_CAN_UNMOUNT) },
+  { "Can eject",         G_FILE_ATTRIBUTE_MOUNTABLE_CAN_EJECT, BOOLEAN_FACTORY (G_FILE_ATTRIBUTE_MOUNTABLE_CAN_EJECT) },
+  { "UNIX device",       G_FILE_ATTRIBUTE_MOUNTABLE_UNIX_DEVICE, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_MOUNTABLE_UNIX_DEVICE, "uint32") },
+  { "UNIX device file",  G_FILE_ATTRIBUTE_MOUNTABLE_UNIX_DEVICE_FILE, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_MOUNTABLE_UNIX_DEVICE_FILE, "string") },
+  { "owner",             G_FILE_ATTRIBUTE_OWNER_USER, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_OWNER_USER, "string") },
+  { "owner (real)",      G_FILE_ATTRIBUTE_OWNER_USER_REAL, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_OWNER_USER_REAL, "string") },
+  { "group",             G_FILE_ATTRIBUTE_OWNER_GROUP, SIMPLE_STRING_FACTORY (G_FILE_ATTRIBUTE_OWNER_GROUP, "string") },
+  { "Preview icon",      G_FILE_ATTRIBUTE_PREVIEW_ICON, ICON_FACTORY (G_FILE_ATTRIBUTE_PREVIEW_ICON) },
 };
 
 #if 0
@@ -568,6 +626,7 @@ static void
 add_extra_columns (GtkColumnView *view)
 {
   GtkColumnViewColumn *column;
+  GtkSorter *sorter;
   GBytes *bytes;
   guint i;
 
@@ -577,6 +636,9 @@ add_extra_columns (GtkColumnView *view)
       column = gtk_column_view_column_new_with_factory (extra_columns[i].title,
           gtk_builder_list_item_factory_new_from_bytes (NULL, bytes));
       g_bytes_unref (bytes);
+      sorter = gtk_custom_sorter_new (compare_file_attribute, (gpointer) extra_columns[i].attribute, NULL);
+      gtk_column_view_column_set_sorter (column, sorter);
+      g_object_unref (sorter);
       gtk_column_view_append_column (view, column);
     }
 }
