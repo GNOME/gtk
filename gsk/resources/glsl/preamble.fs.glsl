@@ -12,14 +12,6 @@ uniform mat4 u_projection;
 uniform mat4 u_modelview;
 uniform float u_alpha;// = 1.0;
 uniform vec4 u_viewport;
-
-struct RoundedRect
-{
-  vec4 bounds;
-  vec4 corner_widths;
-  vec4 corner_heights;
-};
-
 uniform vec4[3] u_clip_rect;
 
 #if GSK_GLES
@@ -35,6 +27,15 @@ _OUT_ vec4 outputColor;
 _OUT_ vec4 outputColor;
 #endif
 _IN_ vec2 vUv;
+
+
+
+struct RoundedRect
+{
+  vec4 bounds;
+  vec4 corner_widths;
+  vec4 corner_heights;
+};
 
 // Transform from a GskRoundedRect to a RoundedRect as we need it.
 RoundedRect
