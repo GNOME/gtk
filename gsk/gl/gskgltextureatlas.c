@@ -304,5 +304,5 @@ gsk_gl_texture_atlas_realize (GskGLTextureAtlas *atlas)
   atlas->texture_id = create_shared_texture (atlas->width, atlas->height);
   gdk_gl_context_label_object_printf (gdk_gl_context_get_current (),
                                       GL_TEXTURE, atlas->texture_id,
-                                      "Glyph atlas %d", atlas->texture_id);
+                                      "Texture atlas %d", atlas->texture_id);
 }
