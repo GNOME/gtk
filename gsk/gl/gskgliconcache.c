@@ -83,7 +83,7 @@ gsk_gl_icon_cache_begin_frame (GskGLIconCache *self,
     }
 
   if (self->timestamp % MAX_FRAME_AGE == 0)
-    {  
+    {
       g_hash_table_iter_init (&iter, self->icons);
       while (g_hash_table_iter_next (&iter, (gpointer *)&texture, (gpointer *)&icon_data))
         {
@@ -134,6 +134,7 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     int packed_y = 0;
     cairo_surface_t *surface;
     unsigned char *surface_data;
+    guint gl_format;
 
     gsk_gl_texture_atlases_pack (self->atlases, width + 2, height + 2, &atlas, &packed_x, &packed_y);
 
@@ -155,30 +156,37 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     surface_data = cairo_image_surface_get_data (surface);
     gdk_gl_context_push_debug_group_printf (gdk_gl_context_get_current (),
                                             "Uploading texture");
+
+    if (gdk_gl_context_get_use_es (gdk_gl_context_get_current ()))
+      gl_format = GL_RGBA;
+    else
+      gl_format = GL_BGRA;
+
     glBindTexture (GL_TEXTURE_2D, atlas->texture_id);
 
     glTexSubImage2D (GL_TEXTURE_2D, 0,
                      packed_x + 1, packed_y + 1,
                      width, height,
-                     GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                     gl_format,
+                     GL_UNSIGNED_BYTE,
                      surface_data);
     /* Padding top */
     glTexSubImage2D (GL_TEXTURE_2D, 0,
                      packed_x + 1, packed_y,
                      width, 1,
-                     GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                     gl_format, GL_UNSIGNED_BYTE,
                      surface_data);
     /* Padding left */
     glTexSubImage2D (GL_TEXTURE_2D, 0,
                      packed_x, packed_y + 1,
                      1, height,
-                     GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                     gl_format, GL_UNSIGNED_BYTE,
                      surface_data);
     /* Padding top left */
     glTexSubImage2D (GL_TEXTURE_2D, 0,
                      packed_x, packed_y,
                      1, 1,
-                     GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                     gl_format, GL_UNSIGNED_BYTE,
                      surface_data);
 
     /* Padding right */
@@ -187,13 +195,13 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     glTexSubImage2D (GL_TEXTURE_2D, 0,
                      packed_x + width + 1, packed_y + 1,
                      1, height,
-                     GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                     gl_format, GL_UNSIGNED_BYTE,
                      surface_data);
     /* Padding top right */
     glTexSubImage2D (GL_TEXTURE_2D, 0,
                      packed_x + width + 1, packed_y,
                      1, 1,
-                     GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                     gl_format, GL_UNSIGNED_BYTE,
                      surface_data);
     /* Padding bottom */
     glPixelStorei (GL_UNPACK_SKIP_PIXELS, 0);
@@ -202,13 +210,13 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     glTexSubImage2D (GL_TEXTURE_2D, 0,
                      packed_x + 1, packed_y + 1 + height,
                      width, 1,
-                     GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                     gl_format, GL_UNSIGNED_BYTE,
                      surface_data);
     /* Padding bottom left */
     glTexSubImage2D (GL_TEXTURE_2D, 0,
                      packed_x, packed_y + 1 + height,
                      1, 1,
-                     GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                     gl_format, GL_UNSIGNED_BYTE,
                      surface_data);
     /* Padding bottom right */
     glPixelStorei (GL_UNPACK_ROW_LENGTH, width);
@@ -216,9 +224,8 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     glTexSubImage2D (GL_TEXTURE_2D, 0,
                      packed_x + 1 + width, packed_y + 1 + height,
                      1, 1,
-                     GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                     gl_format, GL_UNSIGNED_BYTE,
                      surface_data);
-
     /* Reset this */
     glPixelStorei (GL_UNPACK_SKIP_PIXELS, 0);
     glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
@@ -239,7 +246,7 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
       char *filename = g_strdup_printf ("atlas_%u_%d.png", atlas->texture_id, k++);
 
       glBindTexture (GL_TEXTURE_2D, atlas->texture_id);
-      glGetTexImage (GL_TEXTURE_2D, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, data);
+      glGetTexImage (GL_TEXTURE_2D, 0, GL_BGRA, GL_UNSIGNED_BYTE, data);
       s = cairo_image_surface_create_for_data (data, CAIRO_FORMAT_ARGB32, atlas->width, atlas->height, stride);
       cairo_surface_write_to_png (s, filename);
 
