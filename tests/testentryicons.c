@@ -159,8 +159,9 @@ main (int argc, char **argv)
   g_themed_icon_append_name (G_THEMED_ICON (icon), "folder-symbolic");
 
   gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),
-				 GTK_ENTRY_ICON_PRIMARY,
-				 icon);
+                                 GTK_ENTRY_ICON_PRIMARY,
+                                 icon);
+  g_object_unref (icon);
   gtk_entry_set_icon_sensitive (GTK_ENTRY (entry),
 			        GTK_ENTRY_ICON_PRIMARY,
 				FALSE);
