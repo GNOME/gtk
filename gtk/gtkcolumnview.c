@@ -35,6 +35,7 @@
 #include "gtkscrollable.h"
 #include "gtkwidgetprivate.h"
 #include "gtksizerequest.h"
+#include "gtkadjustment.h"
 
 /**
  * SECTION:gtkcolumnview
@@ -64,6 +65,8 @@ struct _GtkColumnView
   GtkColumnListItemFactory *factory;
 
   GtkSorter *sorter;
+
+  GtkAdjustment *hadjustment;
 };
 
 struct _GtkColumnViewClass
@@ -170,7 +173,7 @@ gtk_column_view_allocate_columns (GtkColumnView *self,
                                   int            width)
 {
   GtkScrollablePolicy scroll_policy;
-  int col_min, col_nat, widget_min, widget_nat, extra, col_size, x;
+  int col_min, col_nat, extra, col_size, x;
   guint i;
   int n;
   GtkRequestedSize *sizes;
@@ -228,8 +231,9 @@ gtk_column_view_allocate (GtkWidget *widget,
                           int        baseline)
 {
   GtkColumnView *self = GTK_COLUMN_VIEW (widget);
-  int full_width, header_height, min, nat;
+  int full_width, header_height, min, nat, x;
 
+  x = gtk_adjustment_get_value (self->hadjustment);
   full_width = gtk_column_view_allocate_columns (self, width);
 
   gtk_widget_measure (self->header, GTK_ORIENTATION_VERTICAL, full_width, &min, &nat, NULL, NULL);
@@ -237,11 +241,14 @@ gtk_column_view_allocate (GtkWidget *widget,
     header_height = min;
   else
     header_height = nat;
-  gtk_widget_allocate (self->header, full_width, header_height, -1, NULL);
+  gtk_widget_allocate (self->header, full_width, header_height, -1,
+                       gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (-x, 0)));
 
   gtk_widget_allocate (GTK_WIDGET (self->listview),
                        full_width, height - header_height, -1,
-                       gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (0, header_height)));
+                       gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (-x, header_height)));
+
+  gtk_adjustment_configure (self->hadjustment,  x, 0, full_width, width * 0.1, width * 0.9, width);
 }
 
 static void
@@ -250,6 +257,23 @@ gtk_column_view_activate_cb (GtkListView   *listview,
                              GtkColumnView *self)
 {
   g_signal_emit (self, signals[ACTIVATE], 0, pos);
+}
+
+static void
+adjustment_value_changed_cb (GtkAdjustment *adjustment,
+                             GtkColumnView *self)
+{
+  gtk_widget_queue_allocate (GTK_WIDGET (self));
+}
+
+static void
+clear_adjustment (GtkColumnView *self)
+{
+  if (self->hadjustment == NULL)
+    return;
+
+  g_signal_handlers_disconnect_by_func (self->hadjustment, adjustment_value_changed_cb, self);
+  g_clear_object (&self->hadjustment);
 }
 
 static void
@@ -270,6 +294,7 @@ gtk_column_view_dispose (GObject *object)
   g_clear_object (&self->factory);
 
   g_clear_object (&self->sorter);
+  clear_adjustment (self);
 
   G_OBJECT_CLASS (gtk_column_view_parent_class)->dispose (object);
 }
@@ -299,7 +324,7 @@ gtk_column_view_get_property (GObject    *object,
       break;
 
     case PROP_HADJUSTMENT:
-      g_value_set_object (value, gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (self->listview)));
+      g_value_set_object (value, self->hadjustment);
       break;
 
     case PROP_HSCROLL_POLICY:
@@ -343,13 +368,24 @@ gtk_column_view_set_property (GObject      *object,
                               GParamSpec   *pspec)
 {
   GtkColumnView *self = GTK_COLUMN_VIEW (object);
+  GtkAdjustment *adjustment;
 
   switch (property_id)
     {
     case PROP_HADJUSTMENT:
-      if (gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (self->listview)) != g_value_get_object (value))
+      adjustment = g_value_get_object (value);
+      if (adjustment == NULL)
+        adjustment = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+      g_object_ref_sink (adjustment);
+
+      if (self->hadjustment != adjustment)
         {
-          gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (self->listview), g_value_get_object (value));
+          clear_adjustment (self);
+
+          self->hadjustment = adjustment;
+
+          g_signal_connect (adjustment, "value-changed", G_CALLBACK (adjustment_value_changed_cb), self);
+
           g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HADJUSTMENT]);
         }
       break;

@@ -72,6 +72,13 @@ void                    gtk_column_view_column_set_sorter               (GtkColu
 GDK_AVAILABLE_IN_ALL
 GtkSorter *             gtk_column_view_column_get_sorter               (GtkColumnViewColumn    *self);
 
+
+GDK_AVAILABLE_IN_ALL
+void                    gtk_column_view_column_set_fixed_width          (GtkColumnViewColumn    *self,
+                                                                         int                     fixed_width);
+GDK_AVAILABLE_IN_ALL
+int                     gtk_column_view_column_get_fixed_width          (GtkColumnViewColumn    *self);
+
 G_END_DECLS
 
 #endif  /* __GTK_COLUMN_VIEW_COLUMN_H__ */
