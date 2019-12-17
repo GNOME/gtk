@@ -1,4 +1,4 @@
-FROM fedora:29
+FROM fedora:31
 
 RUN dnf -y install \
     adwaita-icon-theme \
@@ -41,6 +41,7 @@ RUN dnf -y install \
     libxkbcommon-devel \
     libXrandr-devel \
     libXrender-devel \
+    libXtst-devel \
     make \
     mesa-libEGL-devel \
     mesa-libwayland-egl-devel \
