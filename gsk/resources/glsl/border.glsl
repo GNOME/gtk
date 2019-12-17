@@ -1,13 +1,21 @@
 // VERTEX_SHADER:
+uniform vec4 u_color;
+
+_OUT_ vec4 final_color;
 
 void main() {
   gl_Position = u_projection * u_modelview * vec4(aPosition, 0.0, 1.0);
+
+  final_color = u_color;
+  final_color.rgb *= final_color.a; // pre-multiply
+  final_color *= u_alpha;
 }
 
 // FRAGMENT_SHADER:
-uniform vec4 u_color;
 uniform vec4 u_widths;
 uniform vec4[3] u_outline_rect;
+
+_IN_ vec4 final_color;
 
 void main() {
   vec4 f = gl_FragCoord;
@@ -21,9 +29,5 @@ void main() {
                        rounded_rect_coverage (inside, f.xy),
                        0.0, 1.0);
 
-  /* Pre-multiply */
-  vec4 color = u_color;
-  color.rgb *= color.a;
-
-  setOutputColor (color * alpha * u_alpha);
+  setOutputColor(final_color * alpha);
 }
