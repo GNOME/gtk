@@ -13085,12 +13085,19 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
   if (GTK_IS_NATIVE (child))
     return;
 
-  gtk_snapshot_save (snapshot);
-  gtk_snapshot_transform (snapshot, priv->transform);
+  if (priv->transform)
+    {
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_transform (snapshot, priv->transform);
 
-  gtk_widget_snapshot (child, snapshot);
+      gtk_widget_snapshot (child, snapshot);
 
-  gtk_snapshot_restore (snapshot);
+      gtk_snapshot_restore (snapshot);
+    }
+  else
+    {
+      gtk_widget_snapshot (child, snapshot);
+    }
 }
 
 /**
