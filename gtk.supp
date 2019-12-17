@@ -27,6 +27,15 @@
    fun:gtk_media_file_extension_init
 }
 
+# AMD driver
+{
+  radeonsi_dri general
+  Memcheck:Leak
+  fun:calloc
+  ...
+  obj:/usr/lib/dri/radeonsi_dri.so
+}
+
 # mesa driver stuff
 {
    i965 addr4
