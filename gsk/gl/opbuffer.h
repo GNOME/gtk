@@ -109,8 +109,7 @@ typedef struct
 
 typedef struct
 {
-  float color_offsets[8];
-  float color_stops[4 * 8];
+  const GskColorStop *color_stops;
   graphene_point_t start_point;
   graphene_point_t end_point;
   int n_color_stops;
