@@ -433,8 +433,12 @@ parse_stops (GtkCssParser *parser,
 
   for (;;)
     {
-      if (!gtk_css_parser_consume_number (parser, &stop.offset))
+     double dval;
+
+      if (!gtk_css_parser_consume_number (parser, &dval))
         goto error;
+
+      stop.offset = dval;
 
       if (!gdk_rgba_parser_parse (parser, &stop.color))
         goto error;
