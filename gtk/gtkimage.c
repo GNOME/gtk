@@ -1136,10 +1136,17 @@ gtk_image_snapshot (GtkWidget   *widget,
       else
         y = CLAMP (baseline - h * gtk_image_get_baseline_align (image), 0, height - ceil (h));
 
-      gtk_snapshot_save (snapshot);
-      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
-      gdk_paintable_snapshot (GDK_PAINTABLE (priv->icon_helper), snapshot, w, h);
-      gtk_snapshot_restore (snapshot);
+      if (x != 0 || y != 0)
+        {
+          gtk_snapshot_save (snapshot);
+          gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
+          gdk_paintable_snapshot (GDK_PAINTABLE (priv->icon_helper), snapshot, w, h);
+          gtk_snapshot_restore (snapshot);
+        }
+      else
+        {
+          gdk_paintable_snapshot (GDK_PAINTABLE (priv->icon_helper), snapshot, w, h);
+        }
     }
 }
 
