@@ -2,6 +2,10 @@ uniform mat4 u_projection;
 uniform mat4 u_modelview;
 uniform float u_alpha;
 
+#ifdef GSK_GLES
+precision highp float;
+#endif
+
 #if GSK_GLES
 #define _OUT_ varying
 #define _IN_ varying
