@@ -82,9 +82,8 @@ hello (void)
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *window, *box;
+  GtkWidget *window;
   GtkWidget *button = NULL;
-  GdkClipboard *clipboard;
 
   gtk_init ();
 
@@ -103,21 +102,25 @@ main (int argc, char *argv[])
   button = gtk_button_new ();
 
 #ifdef G_OS_UNIX /* portal usage is supported on *nix only */
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_button_set_label (GTK_BUTTON (button), "copy");
-  g_signal_connect (button, "clicked", G_CALLBACK (copy), NULL);
-  gtk_container_add (GTK_CONTAINER (box), button);
+  {
+    GtkWidget *box;
+    GdkClipboard *clipboard;
 
-  button = gtk_button_new ();
-  gtk_button_set_label (GTK_BUTTON (button), "paste");
-  g_signal_connect (button, "clicked", G_CALLBACK (paste), NULL);
-  gtk_container_add (GTK_CONTAINER (box), button);
+    box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_button_set_label (GTK_BUTTON (button), "copy");
+    g_signal_connect (button, "clicked", G_CALLBACK (copy), NULL);
+    gtk_container_add (GTK_CONTAINER (box), button);
 
-  gtk_container_add (GTK_CONTAINER (window), box);
+    button = gtk_button_new ();
+    gtk_button_set_label (GTK_BUTTON (button), "paste");
+    g_signal_connect (button, "clicked", G_CALLBACK (paste), NULL);
+    gtk_container_add (GTK_CONTAINER (box), button);
 
-  clipboard = gdk_display_get_clipboard (gdk_display_get_default ());
-  g_signal_connect (clipboard, "changed", G_CALLBACK (clipboard_changed), NULL);
+    gtk_container_add (GTK_CONTAINER (window), box);
 
+    clipboard = gdk_display_get_clipboard (gdk_display_get_default ());
+    g_signal_connect (clipboard, "changed", G_CALLBACK (clipboard_changed), NULL);
+  }
 #else /* G_OS_UNIX -- original non-portal-enabled code */
 
   gtk_button_set_label (GTK_BUTTON (button), "hello world");
