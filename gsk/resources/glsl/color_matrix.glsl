@@ -10,10 +10,7 @@ uniform mat4 u_color_matrix;
 uniform vec4 u_color_offset;
 
 void main() {
-  vec4 diffuse = Texture(u_source, vUv);
-  vec4 color;
-
-  color = diffuse;
+  vec4 color = Texture(u_source, vUv);
 
   // Un-premultilpy
   if (color.a != 0.0)
