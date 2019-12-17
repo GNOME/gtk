@@ -1455,12 +1455,19 @@ gtk_gesture_get_bounding_box_center (GtkGesture *gesture,
                                      gdouble    *x,
                                      gdouble    *y)
 {
+  const GdkEvent *last_event;
   GdkRectangle rect;
+  GdkEventSequence *sequence;
 
   g_return_val_if_fail (GTK_IS_GESTURE (gesture), FALSE);
   g_return_val_if_fail (x != NULL && y != NULL, FALSE);
 
-  if (!gtk_gesture_get_bounding_box (gesture, &rect))
+  sequence = gtk_gesture_get_last_updated_sequence (gesture);
+  last_event = gtk_gesture_get_last_event (gesture, sequence);
+
+  if (EVENT_IS_TOUCHPAD_GESTURE (last_event))
+    return gtk_gesture_get_point (gesture, sequence, x, y);
+  else if (!gtk_gesture_get_bounding_box (gesture, &rect))
     return FALSE;
 
   *x = rect.x + rect.width / 2;
