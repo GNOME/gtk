@@ -617,11 +617,10 @@ ops_set_color (RenderOpBuilder *builder,
   ProgramState *current_program_state = get_current_program_state (builder);
   OpColor *op;
 
-  if (current_program_state->color &&
-      gdk_rgba_equal (color, current_program_state->color))
+  if (gdk_rgba_equal (color, &current_program_state->color))
     return;
 
-  current_program_state->color = color;
+  current_program_state->color = *color;
 
   op = ops_begin (builder, OP_CHANGE_COLOR);
   op->rgba = color;
@@ -696,14 +695,13 @@ ops_set_border_color (RenderOpBuilder *builder,
   ProgramState *current_program_state = get_current_program_state (builder);
   OpBorder *op;
 
-  if (current_program_state->border.color &&
-      gdk_rgba_equal (color, current_program_state->border.color))
+  if (gdk_rgba_equal (color, &current_program_state->border.color))
     return;
 
   op = op_buffer_add (&builder->render_ops, OP_CHANGE_BORDER_COLOR);
   op->color = color;
 
-  current_program_state->border.color = color;
+  current_program_state->border.color = *color;
 }
 
 void
