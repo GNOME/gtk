@@ -17,10 +17,9 @@ void main() {
 
   RoundedRect outside = create_rect(u_outline_rect);
   RoundedRect inside = rounded_rect_shrink(outside, vec4(u_spread));
-  vec2 offset = vec2(u_offset.x, - u_offset.y);
   vec4 color = vec4(u_color.rgb * u_color.a, u_color.a);
   color = color * clamp (rounded_rect_coverage (outside, f.xy) -
-                         rounded_rect_coverage (inside, f.xy - offset),
+                         rounded_rect_coverage (inside, f.xy - u_offset),
                          0.0, 1.0);
   setOutputColor(color * u_alpha);
 }

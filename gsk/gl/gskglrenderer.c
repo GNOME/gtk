@@ -1555,7 +1555,7 @@ render_unblurred_inset_shadow_node (GskGLRenderer   *self,
   op->outline = transform_rect (self, builder, gsk_inset_shadow_node_peek_outline (node));
   op->spread = spread * scale;
   op->offset[0] = dx * scale;
-  op->offset[1] = -dy * scale;
+  op->offset[1] = dy * scale;
 
   load_vertex_data (vertex_data, node, builder);
 
@@ -1737,7 +1737,7 @@ render_unblurred_outset_shadow_node (GskGLRenderer   *self,
   op->outline = transform_rect (self, builder, outline);
   op->spread = spread * scale;
   op->offset[0] = dx * scale;
-  op->offset[1] = - dy * scale;
+  op->offset[1] = dy * scale;
 
   load_vertex_data (vertex_data, node, builder);
   ops_draw (builder, vertex_data);
