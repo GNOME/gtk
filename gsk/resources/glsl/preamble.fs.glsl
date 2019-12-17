@@ -23,14 +23,18 @@ struct RoundedRect
 uniform vec4[3] u_clip_rect;
 
 #if GSK_GLES
-varying vec2 vUv;
+#define _OUT_ varying
+#define _IN_ varying
 #elif GSK_LEGACY
-varying vec2 vUv;
-varying vec4 outputColor;
+#define _OUT_ varying
+#define _IN_ varying
+_OUT_ vec4 outputColor;
 #else
-in vec2 vUv;
-out vec4 outputColor;
+#define _OUT_ out
+#define _IN_ in
+_OUT_ vec4 outputColor;
 #endif
+_IN_ vec2 vUv;
 
 // Transform from a GskRoundedRect to a RoundedRect as we need it.
 RoundedRect
