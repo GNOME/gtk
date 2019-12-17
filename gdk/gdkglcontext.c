@@ -955,7 +955,8 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
   if (priv->use_es < 0)
     priv->use_es = !epoxy_is_desktop_gl ();
 
-  priv->has_debug_output = epoxy_has_gl_extension ("GL_ARB_debug_output");
+  priv->has_debug_output = epoxy_has_gl_extension ("GL_ARB_debug_output") ||
+                           epoxy_has_gl_extension ("GL_KHR_debug");
 
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
   if (priv->has_debug_output)
