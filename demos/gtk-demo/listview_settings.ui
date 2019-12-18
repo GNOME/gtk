@@ -8,6 +8,11 @@
       <object class="GtkHeaderBar">
         <property name="show-title-buttons">1</property>
         <child type="end">
+          <object class="GtkMenuButton" id="menubutton">
+            <property name="icon-name">open-menu-symbolic</property>
+          </object>
+        </child>
+        <child type="end">
           <object class="GtkToggleButton" id="search_button">
             <property name="icon-name">system-search-symbolic</property>
           </object>
@@ -100,7 +105,7 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkColumnViewColumn">
+                      <object class="GtkColumnViewColumn" id="value_column">
                         <property name="title">Value</property>
                         <property name="factory">
                           <object class="GtkBuilderListItemFactory">
@@ -125,8 +130,133 @@
                         </property>
                       </object>
                     </child>
+                    <child>
+                      <object class="GtkColumnViewColumn" id="summary_column">
+                        <property name="title">Summary</property>
+                        <property name="factory">
+                          <object class="GtkBuilderListItemFactory">
+                            <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkLabel">
+        <property name="xalign">0</property>
+        <binding name="label">
+          <lookup name="summary" type="SettingsKey">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                        ]]></property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkColumnViewColumn" id="description_column">
+                        <property name="title">Description</property>
+                        <property name="factory">
+                          <object class="GtkBuilderListItemFactory">
+                            <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkLabel">
+        <property name="xalign">0</property>
+        <binding name="label">
+          <lookup name="description" type="SettingsKey">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                        ]]></property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
                   </object>
                 </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkPopover" id="column_popover">
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkColumnView" id="columns_list">
+            <child>
+              <object class="GtkColumnViewColumn">
+                <property name="title">Column</property>
+                <property name="factory">
+                  <object class="GtkBuilderListItemFactory">
+                    <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkBox">
+        <property name="spacing">10</property>
+        <child>
+          <object class="GtkCheckButton">
+            <signal name="toggled" handler="column_visible_toggled" object="GtkListItem"/>
+            <binding name="active">
+              <lookup name="visible" type="GtkColumnViewColumn">
+                <lookup name="item">GtkListItem</lookup>
+              </lookup>
+            </binding>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="xalign">0</property>
+            <property name="label">label</property>
+            <binding name="label">
+              <lookup name="title" type="GtkColumnViewColumn">
+                <lookup name="item">GtkListItem</lookup>
+              </lookup>
+            </binding>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>
+                ]]></property>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="halign">center</property>
+            <style>
+              <class name="linked"/>
+            </style>
+            <child>
+              <object class="GtkButton">
+                <property name="icon-name">go-down-symbolic</property>
+                <signal name="clicked" handler="move_column_down" object="columns_list"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="icon-name">go-up-symbolic</property>
+                <signal name="clicked" handler="move_column_up" object="columns_list"/>
               </object>
             </child>
           </object>
