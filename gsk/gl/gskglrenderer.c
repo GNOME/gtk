@@ -502,14 +502,10 @@ transform_rect (GskGLRenderer        *self,
 }
 
 static inline void
-render_fallback_node (GskGLRenderer       *self,
-                      GskRenderNode       *node,
-                      RenderOpBuilder     *builder)
+render_fallback_node (GskGLRenderer   *self,
+                      GskRenderNode   *node,
+                      RenderOpBuilder *builder)
 {
-  const float min_x = builder->dx + node->bounds.origin.x;
-  const float min_y = builder->dy + node->bounds.origin.y;
-  const float max_x = min_x + node->bounds.size.width;
-  const float max_y = min_y + node->bounds.size.height;
   const float scale = ops_get_scale (builder);
   const int surface_width = ceilf (node->bounds.size.width) * scale;
   const int surface_height = ceilf (node->bounds.size.height) * scale;
@@ -518,16 +514,6 @@ render_fallback_node (GskGLRenderer       *self,
   cairo_t *cr;
   int cached_id;
   int texture_id;
-  const GskQuadVertex offscreen_vertex_data[GL_N_VERTICES] = {
-    { { min_x, min_y }, { 0, 1 }, },
-    { { min_x, max_y }, { 0, 0 }, },
-    { { max_x, min_y }, { 1, 1 }, },
-
-    { { max_x, max_y }, { 1, 0 }, },
-    { { min_x, max_y }, { 0, 0 }, },
-    { { max_x, min_y }, { 1, 1 }, },
-  };
-
 
   if (surface_width <= 0 ||
       surface_height <= 0)
@@ -539,7 +525,7 @@ render_fallback_node (GskGLRenderer       *self,
     {
       ops_set_program (builder, &self->blit_program);
       ops_set_texture (builder, cached_id);
-      ops_draw (builder, offscreen_vertex_data);
+      load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
       return;
     }
 
@@ -615,7 +601,7 @@ render_fallback_node (GskGLRenderer       *self,
 
   ops_set_program (builder, &self->blit_program);
   ops_set_texture (builder, texture_id);
-  ops_draw (builder, offscreen_vertex_data);
+  load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
 }
 
 static inline void
@@ -856,13 +842,9 @@ render_color_node (GskGLRenderer   *self,
                    GskRenderNode   *node,
                    RenderOpBuilder *builder)
 {
-  GskQuadVertex vertex_data[GL_N_VERTICES];
-
-  load_vertex_data (vertex_data, node, builder);
-
   ops_set_program (builder, &self->color_program);
   ops_set_color (builder, gsk_color_node_peek_color (node));
-  ops_draw (builder, vertex_data);
+  load_vertex_data (ops_draw (builder, NULL), node, builder);
 }
 
 static inline void
@@ -1131,7 +1113,6 @@ render_linear_gradient_node (GskGLRenderer   *self,
                              GskRenderNode   *node,
                              RenderOpBuilder *builder)
 {
-  GskQuadVertex vertex_data[GL_N_VERTICES];
   OpLinearGradient *op;
   int n_color_stops = MIN (8, gsk_linear_gradient_node_get_n_color_stops (node));
   const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node);
@@ -1147,9 +1128,7 @@ render_linear_gradient_node (GskGLRenderer   *self,
   op->end_point.x = end->x + builder->dx;
   op->end_point.y = end->y + builder->dy;
 
-  load_vertex_data (vertex_data, node, builder);
-
-  ops_draw (builder, vertex_data);
+  load_vertex_data (ops_draw (builder, NULL), node, builder);
 }
 
 static inline void
@@ -1496,7 +1475,6 @@ render_blur_node (GskGLRenderer   *self,
 {
   const float blur_radius = gsk_blur_node_get_radius (node);
   GskRenderNode *child = gsk_blur_node_get_child (node);
-  GskQuadVertex vertex_data[GL_N_VERTICES];
   TextureRegion blurred_region;
 
   if (blur_radius <= 0)
@@ -1512,10 +1490,9 @@ render_blur_node (GskGLRenderer   *self,
   g_assert (blurred_region.texture_id != 0);
 
   /* Draw the result */
-  load_offscreen_vertex_data (vertex_data, node, builder);
   ops_set_program (builder, &self->blit_program);
   ops_set_texture (builder, blurred_region.texture_id);
-  ops_draw (builder, vertex_data); /* Render result to screen */
+  load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder); /* Render result to screen */
 
   /* Add to cache for the blur node */
   gsk_gl_driver_set_texture_for_pointer (self->gl_driver, node, blurred_region.texture_id);
@@ -1526,7 +1503,6 @@ render_unblurred_inset_shadow_node (GskGLRenderer   *self,
                                     GskRenderNode   *node,
                                     RenderOpBuilder *builder)
 {
-  GskQuadVertex vertex_data[GL_N_VERTICES];
   const float scale = ops_get_scale (builder);
   const float blur_radius = gsk_inset_shadow_node_get_blur_radius (node);
   const float dx = gsk_inset_shadow_node_get_dx (node);
@@ -1544,9 +1520,7 @@ render_unblurred_inset_shadow_node (GskGLRenderer   *self,
   op->offset[0] = dx * scale;
   op->offset[1] = dy * scale;
 
-  load_vertex_data (vertex_data, node, builder);
-
-  ops_draw (builder, vertex_data);
+  load_vertex_data (ops_draw (builder, NULL), node, builder);
 }
 
 static inline void
@@ -1715,7 +1689,6 @@ render_unblurred_outset_shadow_node (GskGLRenderer   *self,
   const float spread = gsk_outset_shadow_node_get_spread (node);
   const float dx = gsk_outset_shadow_node_get_dx (node);
   const float dy = gsk_outset_shadow_node_get_dy (node);
-  GskQuadVertex vertex_data[GL_N_VERTICES];
   OpShadow *op;
 
   ops_set_program (builder, &self->unblurred_outset_shadow_program);
@@ -1726,8 +1699,7 @@ render_unblurred_outset_shadow_node (GskGLRenderer   *self,
   op->offset[0] = dx * scale;
   op->offset[1] = dy * scale;
 
-  load_vertex_data (vertex_data, node, builder);
-  ops_draw (builder, vertex_data);
+  load_vertex_data (ops_draw (builder, NULL), node, builder);
 }
 
 static inline void
@@ -2209,7 +2181,6 @@ render_cross_fade_node (GskGLRenderer   *self,
                         GskRenderNode   *node,
                         RenderOpBuilder *builder)
 {
-  GskQuadVertex vertex_data[GL_N_VERTICES];
   GskRenderNode *start_node = gsk_cross_fade_node_get_start_child (node);
   GskRenderNode *end_node = gsk_cross_fade_node_get_end_child (node);
   float progress = gsk_cross_fade_node_get_progress (node);
@@ -2217,8 +2188,6 @@ render_cross_fade_node (GskGLRenderer   *self,
   TextureRegion end_region;
   gboolean is_offscreen1, is_offscreen2;
   OpCrossFade *op;
-
-  load_offscreen_vertex_data (vertex_data, node, builder);
 
   /* TODO: We create 2 textures here as big as the cross-fade node, but both the
    * start and the end node might be a lot smaller than that. */
@@ -2245,7 +2214,7 @@ render_cross_fade_node (GskGLRenderer   *self,
 
   ops_set_texture (builder, start_region.texture_id);
 
-  ops_draw (builder, vertex_data);
+  load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
 }
 
 static inline void
@@ -2253,15 +2222,12 @@ render_blend_node (GskGLRenderer   *self,
                    GskRenderNode   *node,
                    RenderOpBuilder *builder)
 {
-  GskQuadVertex vertex_data[GL_N_VERTICES];
   GskRenderNode *top_child = gsk_blend_node_get_top_child (node);
   GskRenderNode *bottom_child = gsk_blend_node_get_bottom_child (node);
   TextureRegion top_region;
   TextureRegion bottom_region;
   gboolean is_offscreen1, is_offscreen2;
   OpBlend *op;
-
-  load_offscreen_vertex_data (vertex_data, node, builder);
 
   /* TODO: We create 2 textures here as big as the blend node, but both the
    * start and the end node might be a lot smaller than that. */
@@ -2286,7 +2252,7 @@ render_blend_node (GskGLRenderer   *self,
   op->source2 = top_region.texture_id;
   op->mode = gsk_blend_node_get_blend_mode (node);
 
-  ops_draw (builder, vertex_data);
+  load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
 }
 
 static inline void

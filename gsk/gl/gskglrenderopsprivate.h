@@ -213,7 +213,7 @@ void              ops_set_border_width   (RenderOpBuilder         *builder,
 void              ops_set_border_color   (RenderOpBuilder         *builder,
                                           const GdkRGBA           *color);
 
-void              ops_draw               (RenderOpBuilder        *builder,
+GskQuadVertex *   ops_draw               (RenderOpBuilder        *builder,
                                           const GskQuadVertex     vertex_data[GL_N_VERTICES]);
 
 void              ops_offset             (RenderOpBuilder        *builder,
