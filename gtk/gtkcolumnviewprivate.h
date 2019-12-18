@@ -21,11 +21,13 @@
 #define __GTK_COLUMN_VIEW_PRIVATE_H__
 
 #include "gtk/gtkcolumnview.h"
+#include "gtk/gtklistview.h"
 
 #include "gtk/gtkcolumnviewsorterprivate.h"
 #include "gtk/gtklistitemwidgetprivate.h"
 
 GtkListItemWidget *     gtk_column_view_get_header_widget       (GtkColumnView          *self);
+GtkListView *           gtk_column_view_get_list_view           (GtkColumnView          *self);
 
 void                    gtk_column_view_measure_across          (GtkColumnView          *self,
                                                                  int                    *minimum,
