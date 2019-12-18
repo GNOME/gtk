@@ -522,7 +522,14 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
       const char *property_name = g_intern_string (prop->pspec->name);
       GValue property_value = G_VALUE_INIT;
 
-      if (G_IS_PARAM_SPEC_OBJECT (prop->pspec) &&
+      if (prop->bound && (!prop->text || prop->text->len == 0))
+        {
+          /* Ignore properties with a binding and no value since they are
+           * only there for to express the binding.
+           */
+          continue;
+        }
+      else if (G_IS_PARAM_SPEC_OBJECT (prop->pspec) &&
           (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_PIXBUF) &&
           (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_TEXTURE) &&
           (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_PAINTABLE) &&
@@ -556,13 +563,6 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
                                                           property);
               continue;
             }
-        }
-      else if (prop->bound && (!prop->text || prop->text->len == 0))
-        {
-          /* Ignore properties with a binding and no value since they are
-           * only there for to express the binding.
-           */
-          continue;
         }
       else if (!gtk_builder_value_from_string (builder, prop->pspec,
                                                prop->text->str,
