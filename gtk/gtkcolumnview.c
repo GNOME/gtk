@@ -724,11 +724,73 @@ gtk_column_view_remove_column (GtkColumnView       *self,
       g_object_unref (item);
       if (item == column)
         break;
+
     }
 
   gtk_column_view_sorter_remove_column (GTK_COLUMN_VIEW_SORTER (self->sorter), column);
   gtk_column_view_column_set_column_view (column, NULL);
   g_list_store_remove (self->columns, i);
+}
+
+static void
+gtk_column_view_insert_column (GtkColumnView       *self,
+                               GtkColumnViewColumn *column,
+                               GtkColumnViewColumn *sibling,
+                               gboolean             after)
+{
+  int i, c, s;
+
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+  g_return_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (column));
+  g_return_if_fail (gtk_column_view_column_get_column_view (column) == self ||
+                    gtk_column_view_column_get_column_view (column) == NULL);
+  g_return_if_fail (gtk_column_view_column_get_column_view (sibling) == self);
+
+  s = c = -1;
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->columns)); i++)
+    {
+      GtkColumnViewColumn *item = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+
+      if (item == sibling)
+        s = i;
+      if (item == column)
+        c = i;
+
+      g_object_unref (item);
+    }
+
+  if (after)
+    s++;
+
+  gtk_column_view_column_set_column_view (column, self);
+
+  g_object_ref (column);
+  if (c != -1)
+    {
+      g_list_store_remove (self->columns, c);
+      if (s > c)
+        s--;
+    }
+  g_list_store_insert (self->columns, s, column);
+  g_object_unref (column);
+
+  gtk_column_view_column_queue_resize (column);
+}
+
+void
+gtk_column_view_insert_column_before (GtkColumnView       *self,
+                                      GtkColumnViewColumn *column,
+                                      GtkColumnViewColumn *sibling)
+{
+  gtk_column_view_insert_column (self, column, sibling, FALSE);
+}
+
+void
+gtk_column_view_insert_column_after (GtkColumnView       *self,
+                                     GtkColumnViewColumn *column,
+                                     GtkColumnViewColumn *sibling)
+{
+  gtk_column_view_insert_column (self, column, sibling, TRUE);
 }
 
 void

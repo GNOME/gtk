@@ -61,6 +61,14 @@ void            gtk_column_view_append_column                   (GtkColumnView  
 GDK_AVAILABLE_IN_ALL
 void            gtk_column_view_remove_column                   (GtkColumnView          *self,
                                                                  GtkColumnViewColumn    *column);
+GDK_AVAILABLE_IN_ALL
+void            gtk_column_view_insert_column_before            (GtkColumnView          *self,
+                                                                 GtkColumnViewColumn    *column,
+                                                                 GtkColumnViewColumn    *sibling);
+GDK_AVAILABLE_IN_ALL
+void            gtk_column_view_insert_column_after             (GtkColumnView          *self,
+                                                                 GtkColumnViewColumn    *column,
+                                                                 GtkColumnViewColumn    *sibling);
 
 GDK_AVAILABLE_IN_ALL
 GListModel *    gtk_column_view_get_model                       (GtkColumnView          *self);
