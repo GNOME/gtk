@@ -7788,6 +7788,7 @@ gtk_expression_bind
 gtk_expression_watch_ref
 gtk_expression_watch_unref
 gtk_expression_watch_evaluate
+gtk_expression_watch_unwatch
 gtk_expression_unwatch
 
 <SUBSECTION>
