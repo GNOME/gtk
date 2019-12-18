@@ -150,12 +150,17 @@ gtk_theming_background_snapshot_layer (GtkCssBoxes *bg,
   if (hrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT && vrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
     {
       /* shortcut for normal case */
-      gtk_snapshot_save (snapshot);
-      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
-
-      gtk_css_image_snapshot (image, snapshot, image_width, image_height);
-
-      gtk_snapshot_restore (snapshot);
+      if (x != 0 || y != 0)
+        {
+          gtk_snapshot_save (snapshot);
+          gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
+          gtk_css_image_snapshot (image, snapshot, image_width, image_height);
+          gtk_snapshot_restore (snapshot);
+        }
+      else
+        {
+          gtk_css_image_snapshot (image, snapshot, image_width, image_height);
+        }
     }
   else
     {
