@@ -82,20 +82,20 @@ _gtk_gesture_rotate_get_angle (GtkGestureRotate *rotate,
   gdouble x1, y1, x2, y2;
   GtkGesture *gesture;
   gdouble dx, dy;
-  GList *sequences;
+  GList *sequences = NULL;
+  gboolean retval = FALSE;
 
   gesture = GTK_GESTURE (rotate);
   priv = gtk_gesture_rotate_get_instance_private (rotate);
 
   if (!gtk_gesture_is_recognized (gesture))
-    return FALSE;
+    goto out;
 
   sequences = gtk_gesture_get_sequences (gesture);
   if (!sequences)
-    return FALSE;
+    goto out;
 
   last_event = gtk_gesture_get_last_event (gesture, sequences->data);
-
   if (last_event->type == GDK_TOUCHPAD_PINCH &&
       (last_event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN ||
        last_event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE ||
@@ -106,11 +106,10 @@ _gtk_gesture_rotate_get_angle (GtkGestureRotate *rotate,
   else
     {
       if (!sequences->next)
-        return FALSE;
+        goto out;
 
       gtk_gesture_get_point (gesture, sequences->data, &x1, &y1);
       gtk_gesture_get_point (gesture, sequences->next->data, &x2, &y2);
-      g_list_free (sequences);
 
       dx = x1 - x2;
       dy = y1 - y2;
@@ -124,7 +123,11 @@ _gtk_gesture_rotate_get_angle (GtkGestureRotate *rotate,
       *angle = fmod (*angle, 2 * G_PI);
     }
 
-  return TRUE;
+  retval = TRUE;
+
+ out:
+  g_list_free (sequences);
+  return retval;
 }
 
 static gboolean
