@@ -249,6 +249,53 @@ stop_search (GtkSearchEntry *entry,
     gtk_string_filter_set_search (GTK_STRING_FILTER (current_filter), "");
 }
 
+static void
+move_column (GtkColumnView *columns_list, gboolean down)
+{
+  GListModel *columns;
+  guint position, new_position;
+  GtkColumnViewColumn *selected;
+  GtkColumnView *view;
+
+  columns = gtk_column_view_get_model (columns_list);
+  position = gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (columns));
+  selected = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (columns));
+  view = gtk_column_view_column_get_column_view (selected);
+ 
+  if (down && position + 1 < g_list_model_get_n_items (columns))
+    new_position = position + 1;
+  else if (!down && position > 0)
+    new_position = position - 1;
+  if (new_position != position)
+    {
+      g_object_ref (selected);
+      gtk_column_view_remove_column (view, selected);
+      gtk_column_view_insert_column (view, position, selected);
+      gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (columns), position);
+      g_object_unref (selected);
+    }
+}
+
+static void
+move_column_down (GtkColumnView *columns_list)
+{
+  move_column (columns_list, TRUE);
+}
+
+static void
+move_column_up (GtkColumnView *columns_list)
+{
+  move_column (columns_list, FALSE);
+}
+
+static void
+column_visible_toggled (GtkListItem *item, GtkToggleButton *button)
+{
+  GtkColumnViewColumn *column = gtk_list_item_get_item (item);
+
+  gtk_column_view_column_set_visible (column, gtk_toggle_button_get_active (button));
+}
+
 static GtkWidget *window = NULL;
 
 GtkWidget *
@@ -264,6 +311,8 @@ do_listview_settings (GtkWidget *do_widget)
       GtkBuilder *builder;
       GtkColumnViewColumn *name_column;
       GtkSorter *sorter;
+      GtkWidget *menubutton, *popover;
+      GtkWidget *columns_list;
 
       g_type_ensure (SETTINGS_TYPE_KEY);
 
@@ -271,10 +320,18 @@ do_listview_settings (GtkWidget *do_widget)
       gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "search_enabled", (GCallback)search_enabled);
       gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "search_changed", (GCallback)search_changed);
       gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "stop_search", (GCallback)stop_search);
+      gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "move_column_down", (GCallback)move_column_down);
+      gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "move_column_up", (GCallback)move_column_up);
+      gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "column_visible_toggled", (GCallback)column_visible_toggled);
 
       builder = gtk_builder_new ();
       gtk_builder_set_scope (builder, scope);
-      gtk_builder_add_from_resource (builder, "/listview_settings/listview_settings.ui", NULL);
+      {
+        g_autoptr(GError) error = NULL;
+      gtk_builder_add_from_resource (builder, "/listview_settings/listview_settings.ui", &error);
+      if (error)
+        g_warning ("%s", error->message);
+      }
 
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       gtk_window_set_display (GTK_WINDOW (window),
@@ -307,6 +364,17 @@ do_listview_settings (GtkWidget *do_widget)
       sorter = gtk_string_sorter_new (gtk_property_expression_new (SETTINGS_TYPE_KEY, NULL, "name"));
       gtk_column_view_column_set_sorter (name_column, sorter);
       g_object_unref (sorter);
+
+      menubutton = GTK_WIDGET (gtk_builder_get_object (builder, "menubutton"));
+      popover = GTK_WIDGET (gtk_builder_get_object (builder, "column_popover"));
+      gtk_menu_button_set_popover (GTK_MENU_BUTTON (menubutton), popover);
+
+      columns_list = GTK_WIDGET (gtk_builder_get_object (builder, "columns_list"));
+      model = G_LIST_MODEL (gtk_single_selection_new (gtk_column_view_get_columns (GTK_COLUMN_VIEW (columnview))));
+      gtk_column_view_set_model (GTK_COLUMN_VIEW (columns_list), model);
+      g_object_unref (model);
+
+      g_object_unref (builder);
     }
 
   if (!gtk_widget_get_visible (window))
