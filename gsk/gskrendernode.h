@@ -210,11 +210,11 @@ GskTransform *          gsk_transform_node_get_transform        (GskRenderNode  
 
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_opacity_node_new                    (GskRenderNode            *child,
-                                                                 double                    opacity);
+                                                                 float                     opacity);
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_opacity_node_get_child              (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-double                  gsk_opacity_node_get_opacity            (GskRenderNode            *node);
+float                   gsk_opacity_node_get_opacity            (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_color_matrix_node_new               (GskRenderNode            *child,
@@ -280,13 +280,13 @@ GskBlendMode            gsk_blend_node_get_blend_mode           (GskRenderNode  
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_cross_fade_node_new                 (GskRenderNode            *start,
                                                                  GskRenderNode            *end,
-                                                                 double                    progress);
+                                                                 float                     progress);
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_cross_fade_node_get_start_child     (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_cross_fade_node_get_end_child       (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-double                  gsk_cross_fade_node_get_progress        (GskRenderNode            *node);
+float                   gsk_cross_fade_node_get_progress        (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_text_node_new                       (PangoFont                *font,
@@ -307,11 +307,11 @@ const graphene_point_t *gsk_text_node_get_offset                (GskRenderNode  
 
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_blur_node_new                       (GskRenderNode            *child,
-                                                                 double                    radius);
+                                                                 float                     radius);
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_blur_node_get_child                 (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-double                  gsk_blur_node_get_radius                (GskRenderNode            *node);
+float                   gsk_blur_node_get_radius                (GskRenderNode            *node);
 
 G_END_DECLS
 
