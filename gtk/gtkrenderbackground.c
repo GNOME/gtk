@@ -92,6 +92,7 @@ gtk_theming_background_snapshot_layer (GtkCssBoxes *bg,
   const GskRoundedRect *origin, *clip;
   double image_width, image_height;
   double width, height;
+  double x, y;
 
   image = _gtk_css_image_value_get_image (
               _gtk_css_array_value_get_nth (
@@ -144,16 +145,11 @@ gtk_theming_background_snapshot_layer (GtkCssBoxes *bg,
   gtk_snapshot_push_debug (snapshot, "Layer %u", idx);
   gtk_snapshot_push_rounded_clip (snapshot, clip);
 
-  gtk_snapshot_translate (snapshot, &origin->bounds.origin);
-
+  x = _gtk_css_position_value_get_x (pos, width - image_width) + origin->bounds.origin.x;
+  y = _gtk_css_position_value_get_y (pos, height - image_height) + origin->bounds.origin.y;
   if (hrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT && vrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
     {
       /* shortcut for normal case */
-      double x, y;
-
-      x = _gtk_css_position_value_get_x (pos, width - image_width);
-      y = _gtk_css_position_value_get_y (pos, height - image_height);
-
       gtk_snapshot_save (snapshot);
       gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
 
@@ -164,7 +160,6 @@ gtk_theming_background_snapshot_layer (GtkCssBoxes *bg,
   else
     {
       float repeat_width, repeat_height;
-      float position_x, position_y;
       graphene_rect_t fill_rect;
 
       /* If ‘background-repeat’ is ‘round’ for one (or both) dimensions,
@@ -246,19 +241,16 @@ gtk_theming_background_snapshot_layer (GtkCssBoxes *bg,
           fill_rect.size.height = height;
         }
 
-      position_x = _gtk_css_position_value_get_x (pos, width - image_width);
-      position_y = _gtk_css_position_value_get_y (pos, height - image_height);
-
       gtk_snapshot_push_repeat (snapshot,
                                 &fill_rect,
                                 &GRAPHENE_RECT_INIT (
-                                    position_x, position_y,
+                                    x, y,
                                     repeat_width, repeat_height
                                 ));
-                                
+
       gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (
-                              position_x + 0.5 * (repeat_width - image_width),
-                              position_y + 0.5 * (repeat_height - image_height)));
+                              x + 0.5 * (repeat_width - image_width),
+                              y + 0.5 * (repeat_height - image_height)));
       gtk_css_image_snapshot (image, snapshot, image_width, image_height);
 
       gtk_snapshot_pop (snapshot);
