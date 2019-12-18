@@ -575,7 +575,10 @@ get_class_name (Element *element)
     }
   else if (g_str_equal (parent->element_name, "template"))
     {
-      return get_attribute_value (parent, "parent");
+      if (get_attribute_value (parent, "parent"))
+        return get_attribute_value (parent, "parent");
+      else
+        return get_attribute_value (parent, "class");
     }
 
   return NULL;
@@ -608,6 +611,19 @@ property_is_boolean (Element      *element,
   return FALSE;
 }
 
+static void
+warn_missing_property (Element      *element,
+                       MyParserData *data,
+                       const char   *class_name,
+                       const char   *property_name,
+                       PropKind      kind)
+{
+  const char *kind_str[] = { "", "Packing ", "Cell ", "Layout " };
+
+  g_printerr (_("%s:%d: %sproperty %s::%s not found\n"),
+              data->input_filename, element->line_number, kind_str[kind], class_name, property_name);
+}
+                       
 static gboolean
 property_can_be_omitted (Element      *element,
                          MyParserData *data)
@@ -650,18 +666,9 @@ property_can_be_omitted (Element      *element,
     return FALSE;
 
   pspec = get_property_pspec (data, class_name, property_name, kind);
-
   if (pspec == NULL)
     {
-      const char *kind_str[] = {
-        "",
-        "Packing ",
-        "Cell ",
-        "Layout "
-      };
-
-      g_printerr (_("%s:%d: %sproperty %s::%s not found\n"),
-                  data->input_filename, element->line_number, kind_str[kind], class_name, property_name);
+      warn_missing_property (element, data, class_name, property_name, kind);
       return FALSE;
     }
 
@@ -1534,6 +1541,14 @@ simplify_element (Element      *element,
   if (g_str_equal (element->element_name, "property") &&
       property_can_be_omitted (element, data))
     return TRUE;
+
+  if (g_str_equal (element->element_name, "binding"))
+    {
+      const char *property_name = get_attribute_value (element, "name");
+      const char *class_name = get_class_name (element);
+      if (!get_property_pspec (data, class_name, property_name, PROP_KIND_OBJECT))
+        warn_missing_property (element, data, class_name, property_name, PROP_KIND_OBJECT);
+    }
 
   return FALSE;
 }
