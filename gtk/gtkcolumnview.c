@@ -816,6 +816,12 @@ gtk_column_view_get_header_widget (GtkColumnView *self)
   return GTK_LIST_ITEM_WIDGET (self->header);
 }
 
+GtkListView *
+gtk_column_view_get_list_view (GtkColumnView *self)
+{
+  return GTK_LIST_VIEW (self->listview);
+}
+
 /**
  * gtk_column_view_get_sorter:
  * @self: a #GtkColumnView
