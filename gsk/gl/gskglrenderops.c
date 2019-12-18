@@ -704,7 +704,7 @@ ops_set_border_color (RenderOpBuilder *builder,
   current_program_state->border.color = *color;
 }
 
-void
+GskQuadVertex *
 ops_draw (RenderOpBuilder     *builder,
           const GskQuadVertex  vertex_data[GL_N_VERTICES])
 {
@@ -721,7 +721,14 @@ ops_draw (RenderOpBuilder     *builder,
       op->vao_size = GL_N_VERTICES;
     }
 
-  g_array_append_vals (builder->vertices, vertex_data, GL_N_VERTICES);
+  if (vertex_data)
+    {
+      g_array_append_vals (builder->vertices, vertex_data, GL_N_VERTICES);
+      return NULL; /* Better not use this on the caller side */
+    }
+
+  g_array_set_size (builder->vertices, builder->vertices->len + GL_N_VERTICES);
+  return &g_array_index (builder->vertices, GskQuadVertex, builder->vertices->len - GL_N_VERTICES);
 }
 
 /* The offset is only valid for the current modelview.
