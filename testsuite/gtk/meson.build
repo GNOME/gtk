@@ -67,6 +67,7 @@ tests = [
   ['treemodel', ['treemodel.c', 'liststore.c', 'treestore.c', 'filtermodel.c',
                  'modelrefcount.c', 'sortmodel.c', 'gtktreemodelrefcount.c']],
   ['treepath'],
+  ['treesorter'],
   ['treeview'],
   ['typename'],
   ['window'],
