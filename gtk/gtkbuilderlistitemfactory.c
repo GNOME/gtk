@@ -261,7 +261,7 @@ gtk_builder_list_item_factory_init (GtkBuilderListItemFactory *self)
 
 /**
  * gtk_builder_list_item_factory_new_from_bytes:
- * @scope: (nullable) (tranfer none): A scope to use when instantiating
+ * @scope: (nullable) (transfer none): A scope to use when instantiating
  * @bytes: the bytes containing the ui file to instantiate
  *
  * Creates s new #GtkBuilderListItemFactory that instantiates widgets
@@ -283,7 +283,7 @@ gtk_builder_list_item_factory_new_from_bytes (GtkBuilderScope *scope,
 
 /**
  * gtk_builder_list_item_factory_new_from_resource:
- * @scope: (nullable) (tranfer none): A scope to use when instantiating
+ * @scope: (nullable) (transfer none): A scope to use when instantiating
  * @resource_path: valid path to a resource that contains the data
  *
  * Creates s new #GtkBuilderListItemFactory that instantiates widgets
