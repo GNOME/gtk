@@ -178,7 +178,7 @@ gtk_multi_filter_init (GtkMultiFilter *self)
 /**
  * gtk_multi_filter_append:
  * @self: a #GtkMultiFilter
- * @filter: (tranfer none): A new filter to use
+ * @filter: (transfer none): A new filter to use
  *
  * Adds a @filter to @self to use for matching.
  **/
