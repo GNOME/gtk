@@ -126,7 +126,7 @@ gtk_css_image_linear_compute_start_point (double angle_in_degrees,
   *x = c / (slope - perpendicular);
   *y = perpendicular * *x + c;
 }
-                                         
+
 static void
 gtk_css_image_linear_snapshot (GtkCssImage        *image,
                                GtkSnapshot        *snapshot,
