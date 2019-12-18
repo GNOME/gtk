@@ -387,11 +387,14 @@ static void
 gtk_column_view_column_create_cells (GtkColumnViewColumn *self)
 {
   GtkWidget *row;
+  GtkWidget *list;
 
   if (self->first_cell)
     return;
 
-  for (row = gtk_widget_get_first_child (GTK_WIDGET (self->view));
+  list = GTK_WIDGET (gtk_column_view_get_list_view (self->view));
+
+  for (row = gtk_widget_get_first_child (list);
        row != NULL;
        row = gtk_widget_get_next_sibling (row))
     {
