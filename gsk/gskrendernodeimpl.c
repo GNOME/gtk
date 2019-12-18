@@ -2197,7 +2197,7 @@ struct _GskOpacityNode
   GskRenderNode render_node;
 
   GskRenderNode *child;
-  double opacity;
+  float opacity;
 };
 
 static void
@@ -2267,7 +2267,7 @@ static const GskRenderNodeClass GSK_OPACITY_NODE_CLASS = {
  */
 GskRenderNode *
 gsk_opacity_node_new (GskRenderNode *child,
-                      double         opacity)
+                      float          opacity)
 {
   GskOpacityNode *self;
 
@@ -2301,7 +2301,7 @@ gsk_opacity_node_get_child (GskRenderNode *node)
   return self->child;
 }
 
-double
+float
 gsk_opacity_node_get_opacity (GskRenderNode *node)
 {
   GskOpacityNode *self = (GskOpacityNode *) node;
@@ -3278,7 +3278,7 @@ struct _GskCrossFadeNode
 
   GskRenderNode *start;
   GskRenderNode *end;
-  double         progress;
+  float          progress;
 };
 
 static void
@@ -3352,7 +3352,7 @@ static const GskRenderNodeClass GSK_CROSS_FADE_NODE_CLASS = {
 GskRenderNode *
 gsk_cross_fade_node_new (GskRenderNode *start,
                          GskRenderNode *end,
-                         double         progress)
+                         float          progress)
 {
   GskCrossFadeNode *self;
 
@@ -3390,7 +3390,7 @@ gsk_cross_fade_node_get_end_child (GskRenderNode *node)
   return self->end;
 }
 
-double
+float
 gsk_cross_fade_node_get_progress (GskRenderNode *node)
 {
   GskCrossFadeNode *self = (GskCrossFadeNode *) node;
@@ -3634,7 +3634,7 @@ struct _GskBlurNode
   GskRenderNode render_node;
 
   GskRenderNode *child;
-  double radius;
+  float radius;
 };
 
 static void
@@ -3882,7 +3882,7 @@ static const GskRenderNodeClass GSK_BLUR_NODE_CLASS = {
  */
 GskRenderNode *
 gsk_blur_node_new (GskRenderNode *child,
-                   double         radius)
+                   float          radius)
 {
   GskBlurNode *self;
   float clip_radius = gsk_cairo_blur_compute_pixels (radius);
@@ -3911,7 +3911,7 @@ gsk_blur_node_get_child (GskRenderNode *node)
   return self->child;
 }
 
-double
+float
 gsk_blur_node_get_radius (GskRenderNode *node)
 {
   GskBlurNode *self = (GskBlurNode *) node;
