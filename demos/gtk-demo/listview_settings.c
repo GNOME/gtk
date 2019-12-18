@@ -249,6 +249,104 @@ stop_search (GtkSearchEntry *entry,
     gtk_string_filter_set_search (GTK_STRING_FILTER (current_filter), "");
 }
 
+static void
+move_column (GtkListBox *box, gboolean down)
+{
+  GtkListBoxRow *row;
+  GtkColumnViewColumn *column, *col;
+  GtkColumnView *view;
+  GListModel *columns;
+  GtkWidget *child;
+  guint i;
+
+  row = gtk_list_box_get_selected_row (box);
+  column = (GtkColumnViewColumn*)g_object_get_data (G_OBJECT (row), "column");
+  g_assert (GTK_IS_COLUMN_VIEW_COLUMN (column));
+
+  view = gtk_column_view_column_get_column_view (column);
+  g_assert (GTK_IS_COLUMN_VIEW (view));
+
+  columns = gtk_column_view_get_columns (view);
+  for (i = 0; i < g_list_model_get_n_items (columns); i++)
+    {
+      col = g_list_model_get_item (columns, i);
+      g_object_unref (col);
+      if (col == column)
+        {
+           if (down && i + 1 < g_list_model_get_n_items (columns))
+             {
+               col = g_list_model_get_item (columns, i + 1);
+               gtk_column_view_insert_column_after (view, column, col);
+               g_object_unref (col);
+               break;
+             }
+           else if (!down && i > 0)
+             {
+               col = g_list_model_get_item (columns, i - 1);
+               gtk_column_view_insert_column_before (view, column, col);
+               g_object_unref (col);
+               break;
+             }
+           else
+             return;
+        }
+    }
+
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (box));
+       child;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      col = g_object_get_data (G_OBJECT (child), "column");
+      if (col == column)
+        {
+          gtk_list_box_select_row (box, GTK_LIST_BOX_ROW (child));
+          break;
+        }
+    }
+
+}
+
+static void
+move_column_down (GtkListBox *box)
+{
+  move_column (box, TRUE);
+}
+
+static void
+move_column_up (GtkListBox *box)
+{
+  move_column (box, FALSE);
+}
+
+static GtkWidget *
+create_widget_func (gpointer item, gpointer user_data)
+{
+  GtkColumnViewColumn *column = item;
+  const char *title;
+  GtkWidget *check;
+  GtkWidget *label;
+  GtkWidget *box;
+  GtkWidget *row;
+
+  title = gtk_column_view_column_get_title (column);
+  check = gtk_check_button_new ();
+  label = gtk_label_new (title);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+  gtk_container_add (GTK_CONTAINER (box), check);
+  gtk_container_add (GTK_CONTAINER (box), label);
+
+  g_object_bind_property (column, "visible",
+                          check, "active",
+                          G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
+
+  row = gtk_list_box_row_new ();
+  gtk_container_add (GTK_CONTAINER (row), box);
+
+  g_object_set_data_full (G_OBJECT (row), "column", g_object_ref (column), g_object_unref);
+
+  return row;
+}
+
 static GtkWidget *window = NULL;
 
 GtkWidget *
@@ -264,6 +362,8 @@ do_listview_settings (GtkWidget *do_widget)
       GtkBuilder *builder;
       GtkColumnViewColumn *name_column;
       GtkSorter *sorter;
+      GtkWidget *menubutton, *popover;
+      GtkWidget *columns_list;
 
       g_type_ensure (SETTINGS_TYPE_KEY);
 
@@ -271,6 +371,8 @@ do_listview_settings (GtkWidget *do_widget)
       gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "search_enabled", (GCallback)search_enabled);
       gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "search_changed", (GCallback)search_changed);
       gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "stop_search", (GCallback)stop_search);
+      gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "move_column_down", (GCallback)move_column_down);
+      gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "move_column_up", (GCallback)move_column_up);
 
       builder = gtk_builder_new ();
       gtk_builder_set_scope (builder, scope);
@@ -307,6 +409,16 @@ do_listview_settings (GtkWidget *do_widget)
       sorter = gtk_string_sorter_new (gtk_property_expression_new (SETTINGS_TYPE_KEY, NULL, "name"));
       gtk_column_view_column_set_sorter (name_column, sorter);
       g_object_unref (sorter);
+
+      menubutton = GTK_WIDGET (gtk_builder_get_object (builder, "menubutton"));
+      popover = GTK_WIDGET (gtk_builder_get_object (builder, "column_popover"));
+      gtk_menu_button_set_popover (GTK_MENU_BUTTON (menubutton), popover);
+
+      columns_list = GTK_WIDGET (gtk_builder_get_object (builder, "columns_list"));
+      gtk_list_box_bind_model (GTK_LIST_BOX (columns_list),
+                               gtk_column_view_get_columns (GTK_COLUMN_VIEW (columnview)),
+                               create_widget_func,
+                               NULL, NULL);
     }
 
   if (!gtk_widget_get_visible (window))
