@@ -32,7 +32,7 @@
  * @Short_description: Sort trees by levels
  * @See_also: #GtkTreeListModel
  *
- * #GtkTreeListSorter is a special-purpose sorter that will apply a given sorter
+ * #GtkTreeListRowSorter is a special-purpose sorter that will apply a given sorter
  * to the levels in a tree, while respecting the tree structure.
  */
 
