@@ -85,7 +85,7 @@
  * |[
  *   <closure type='gchararray' function='combine_args_somehow'>
  *     <constant type='gchararray'>File size:</constant>
- *     <lookup type='gint64' name='size'>myfile</lookup>
+ *     <lookup type='GFile' name='size'>myfile</lookup>
  *   </closure>
  * ]|
  */
