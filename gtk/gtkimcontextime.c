@@ -682,7 +682,7 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
   toplevel = context_ime->client_surface;
   if (GDK_IS_SURFACE (toplevel))
     {
-      gdk_win32_display_add_filter (gdk_surface_get_display (toplevel),
+      gdk_win32_display_add_filter (GDK_WIN32_DISPLAY (gdk_surface_get_display (toplevel)),
                                     gtk_im_context_ime_message_filter, context_ime);
     }
   else
@@ -780,7 +780,7 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
   toplevel = context_ime->client_surface;
   if (GDK_IS_SURFACE (toplevel))
     {
-      gdk_win32_display_remove_filter (gdk_surface_get_display (toplevel),
+      gdk_win32_display_remove_filter (GDK_WIN32_DISPLAY (gdk_surface_get_display (toplevel)),
                                        gtk_im_context_ime_message_filter,
                                        context_ime);
     }
