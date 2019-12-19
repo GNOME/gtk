@@ -51,7 +51,7 @@
  * Watches can be created for automatically updating the propery of an object,
  * similar to GObject's #GBinding mechanism, by using gtk_expression_bind().
  *
- * #GtkExpression in ui files
+ * GtkExpression in ui files
  *
  * GtkBuilder has support for creating expressions. The syntax here can be used where
  * a #GtkExpression object is needed like in a <property> tag for an expression
