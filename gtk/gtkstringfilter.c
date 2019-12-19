@@ -375,6 +375,15 @@ gtk_string_filter_set_search (GtkStringFilter *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SEARCH]);
 }
 
+/**
+ * gtk_string_filter_get_expression:
+ * @self: a #GtkStringFilter
+ *
+ * Gets the expression that the string filter uses to
+ * obtain strings from items.
+ *
+ * Returns: a #GtkExpression
+ */
 GtkExpression *
 gtk_string_filter_get_expression (GtkStringFilter *self)
 {
@@ -383,6 +392,15 @@ gtk_string_filter_get_expression (GtkStringFilter *self)
   return self->expression;
 }
 
+/**
+ * gtk_string_filter_set_expression:
+ * @self: a #GtkStringFilter
+ * @expression: a #GtkExpression
+ *
+ * Sets the expression that the string filter uses to
+ * obtain strings from items. The expression must have
+ * a value type of #G_TYPE_STRING.
+ */
 void
 gtk_string_filter_set_expression (GtkStringFilter *self,
                                   GtkExpression   *expression)
@@ -402,6 +420,14 @@ gtk_string_filter_set_expression (GtkStringFilter *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_EXPRESSION]);
 }
 
+/**
+ * gtk_string_filter_get_ignore_case:
+ * @self: a #GtkStringFilter
+ *
+ * Returns whether the filter ignores case differences.
+ *
+ * Returns: %TRUE if the filter ignores case
+ */
 gboolean
 gtk_string_filter_get_ignore_case (GtkStringFilter *self)
 {
@@ -410,6 +436,13 @@ gtk_string_filter_get_ignore_case (GtkStringFilter *self)
   return self->ignore_case;
 }
 
+/**
+ * gtk_string_filter_set_ignore_case:
+ * @self: a #GtkStringFilter
+ * @ignore_case: %TRUE to ignore case
+ *
+ * Sets whether the filter ignores case differences.
+ */
 void
 gtk_string_filter_set_ignore_case (GtkStringFilter *self,
                                    gboolean         ignore_case)
@@ -431,6 +464,14 @@ gtk_string_filter_set_ignore_case (GtkStringFilter *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_IGNORE_CASE]);
 }
 
+/**
+ * gtk_string_filter_get_match_mode:
+ * @self: a #GtkStringFilter
+ *
+ * Returns the match mode that the filter is using.
+ *
+ * Returns: the match mode of the filter
+ */
 GtkStringFilterMatchMode
 gtk_string_filter_get_match_mode (GtkStringFilter *self)
 {
@@ -439,7 +480,13 @@ gtk_string_filter_get_match_mode (GtkStringFilter *self)
   return self->match_mode;
 }
 
-
+/**
+ * gtk_string_filter_set_match_mode:
+ * @self: a #GtkStringFilter
+ * @mode: the new match mode
+ *
+ * Sets the match mode fot the filter.
+ */
 void
 gtk_string_filter_set_match_mode (GtkStringFilter *self,
                                   GtkStringFilterMatchMode mode)
