@@ -29,12 +29,12 @@
  * SECTION:gtkfilterlistmodel
  * @title: GtkFilterListModel
  * @short_description: A list model that filters its items
- * @see_also: #GListModel
+ * @see_also: #GListModel, #GtkFilter
  *
  * #GtkFilterListModel is a list model that filters a given other
  * listmodel.
  * It hides some elements from the other model according to
- * criteria given by a #GtkFilterListModelFilterFunc.
+ * criteria given by a #GtkFilter.
  */
 
 enum {
@@ -726,7 +726,7 @@ gtk_filter_list_model_new (GListModel *model,
  * @item_type: the type of the items that will be returned
  *
  * Creates a new empty filter list model set up to return items of type @item_type.
- * It is up to the application to set a proper filter function and model to ensure
+ * It is up to the application to set a proper filter and model to ensure
  * the item type is matched.
  *
  * Returns: a new #GtkFilterListModel
