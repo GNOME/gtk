@@ -1539,6 +1539,7 @@ GtkFilter
 gtk_filter_match
 gtk_filter_get_strictness
 <SUBSECTION>
+GtkFilterChange
 gtk_filter_changed
 <SUBSECTION>
 gtk_custom_filter_new
