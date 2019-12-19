@@ -30,16 +30,16 @@
 /**
  * SECTION:gtkmultifilter
  * @Title: GtkMultiFilter
- * @Short_description: Combining multiple filter 
+ * @Short_description: Combining multiple filters
  *
  * GtkMultiFilter is the base type that implements support for handling
- * multiple filter.
+ * multiple filters.
  *
  * GtkAnyFilter is an implementation of GtkMultiFilter that matches an item
- * when at least one of its filter matches.
+ * when at least one of its filters matches.
  *
  * GtkEveryFilter is an implementation of GtkMultiFilter that matches an item
- * when each of its child filter matches.
+ * when each of its filters matches.
  */
 struct _GtkMultiFilter
 {
@@ -415,7 +415,7 @@ gtk_every_filter_init (GtkEveryFilter *self)
  * Creates a new empty "every" filter.  
  * Use gtk_multi_filter_append() to add filters to it.
  *
- * This filter matches an item if every of the filters added to it
+ * This filter matches an item if each of the filters added to it
  * matches the item.
  * In particular, this means that if no filter has been added to
  * it, the filter matches every item.
