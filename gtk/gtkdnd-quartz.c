@@ -444,7 +444,7 @@ gtk_drag_dest_set (GtkWidget            *widget,
 
   old_site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
 
-  site = g_new (GtkDragDestSite, 1);
+  site = g_new0 (GtkDragDestSite, 1);
   site->flags = flags;
   site->have_drag = FALSE;
   if (targets)
