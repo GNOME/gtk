@@ -34,10 +34,30 @@
  * #GtkMapListModel is a list model that takes a list model and maps the items
  * in that model to different items according to a #GtkMapListModelMapFunc.
  *
- * FIXME: Add useful examples here, like turning #GFile into #GFileInfo or #GdkPixmap.
+ * Example: Create a list of #GtkEventControllers
+ * |[
+ *   static gpointer
+ *   map_to_controllers (gpointer widget,
+ *                       gpointer data)
+ *  {
+ *     gpointer result = gtk_widget_observe_controllers (widget);
+ *     g_object_unref (widget);
+ *     return result;
+ *  }
  *
- * #GtkMapListModel will attempt to discard the mapped objects as soon as they are no
- * longer needed and recreate them if necessary.
+ *   widgets = gtk_widget_observe_children (widget);
+ *
+ *   controllers = gtk_map_list_model_new (G_TYPE_LIST_MODEL,
+ *                                         widgets,
+ *                                         map_to_controllers,
+ *                                         NULL, NULL);
+ *
+ *   model = gtk_flatten_list_model_new (GTK_TYPE_EVENT_CONTROLLER,
+ *                                       controllers);
+ * ]|
+ *
+ * #GtkMapListModel will attempt to discard the mapped objects as soon as
+ * they are no longer needed and recreate them if necessary.
  */
 
 enum {
