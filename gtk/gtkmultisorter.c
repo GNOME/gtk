@@ -31,7 +31,7 @@
  * @Short_description: Combining multiple sorters
  *
  * GtkMultiSorter combines multiple sorters by trying them
- * in turn. If the first sorter compares to items as equal,
+ * in turn. If the first sorter compares two items as equal,
  * the second is tried next, and so on.
  */
 struct _GtkMultiSorter
