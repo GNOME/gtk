@@ -932,7 +932,7 @@ gtk_tree_list_model_get_child_row (GtkTreeListModel *self,
 
 /**
  * SECTION:gtktreelistrow
- * @Short_description: rows in a tree
+ * @Short_description: A  row in a GtkTreeListModel
  * @Title: GtkTreeListRow
  * @See_also: #GtkTreeListModel
  *
@@ -941,7 +941,7 @@ gtk_tree_list_model_get_child_row (GtkTreeListModel *self,
  * modify the state of rows.
  *
  * #GtkTreeListRow instances are created by a #GtkTreeListModel only
- * when the GtkTreeListModel:passthrough property is not set.
+ * when the #GtkTreeListModel:passthrough property is not set.
  *
  * There are various support objects that can make use of #GtkTreeListRow
  * objects, such as the #GtkTreeExpander widget that allows displaying
