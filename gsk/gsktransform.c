@@ -785,6 +785,22 @@ static const GskTransformClass GSK_ROTATE_TRANSFORM_CLASS =
   gsk_rotate_transform_equal,
 };
 
+static inline float
+normalize_angle (float angle)
+{
+  float f;
+
+  if (angle >= 0 && angle < 360)
+    return angle;
+
+  f = angle - (360 * ((int)(angle / 360.0)));
+
+  if (f < 0)
+    f = 360 + f;
+
+  return f;
+}
+
 /**
  * gsk_transform_rotate:
  * @next: (allow-none) (transfer full): the next transform
@@ -815,7 +831,7 @@ gsk_transform_rotate (GskTransform *next,
                                 GSK_TRANSFORM_CATEGORY_2D,
                                 next);
 
-  result->angle = angle;
+  result->angle = normalize_angle (angle);
 
   return &result->parent;
 }
@@ -938,7 +954,7 @@ gsk_transform_rotate_3d (GskTransform          *next,
                                 GSK_TRANSFORM_CATEGORY_3D,
                                 next);
 
-  result->angle = angle;
+  result->angle = normalize_angle (angle);
   graphene_vec3_init_from_vec3 (&result->axis, axis);
 
   return &result->parent;
