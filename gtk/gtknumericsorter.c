@@ -276,7 +276,7 @@ gtk_numeric_sorter_class_init (GtkNumericSorterClass *class)
   /**
    * GtkNumericSorter:expression:
    *
-   * The expression to evalute on item to get a numeric to compare with
+   * The expression to evalute on items to get a number to compare with
    */
   properties[PROP_EXPRESSION] =
       g_param_spec_boxed ("expression",
@@ -310,7 +310,7 @@ gtk_numeric_sorter_init (GtkNumericSorter *self)
 
 /**
  * gtk_numeric_sorter_new:
- * @expression: (transfer full) (nullable): The expression to evaulate
+ * @expression: (transfer full) (nullable): The expression to evaluate
  *
  * Creates a new numeric sorter using the given @expression.
  *
@@ -359,7 +359,8 @@ gtk_numeric_sorter_get_expression (GtkNumericSorter *self)
  * Unless an expression is set on @self, the sorter will always
  * compare items as invalid.
  *
- * The expression must have a return type that can be compared numerically.
+ * The expression must have a return type that can be compared
+ * numerically, such as #G_TYPE_INT or #G_TYPE_DOUBLE.
  */
 void
 gtk_numeric_sorter_set_expression (GtkNumericSorter *self,
