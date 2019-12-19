@@ -590,29 +590,27 @@ gsk_gl_driver_create_texture (GskGLDriver *self,
   return t->texture_id;
 }
 
-static int
-create_render_target (GskGLDriver *self,
-                      int          texture_id,
-                      gboolean     add_depth_buffer,
-                      gboolean     add_stencil_buffer)
+void
+gsk_gl_driver_create_render_target (GskGLDriver *self,
+                                    int          width,
+                                    int          height,
+                                    int         *out_texture_id,
+                                    int         *out_render_target_id)
 {
-  GLuint fbo_id, depth_stencil_buffer_id;
-  Texture *t;
+  GLuint fbo_id;
+  Texture *texture;
 
-  g_return_val_if_fail (GSK_IS_GL_DRIVER (self), -1);
-  g_return_val_if_fail (self->in_frame, -1);
+  g_return_if_fail (self->in_frame);
 
-  t = gsk_gl_driver_get_texture (self, texture_id);
-  if (t == NULL)
-    return -1;
-
-  if (t->fbo.fbo_id != 0)
-    fbo_clear (&t->fbo);
+  texture = create_texture (self, width, height);
+  gsk_gl_driver_bind_source_texture (self, texture->texture_id);
+  gsk_gl_driver_init_texture_empty (self, texture->texture_id, GL_NEAREST, GL_NEAREST);
 
   glGenFramebuffers (1, &fbo_id);
   glBindFramebuffer (GL_FRAMEBUFFER, fbo_id);
-  glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, t->texture_id, 0);
+  glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture->texture_id, 0);
 
+#if 0
   if (add_depth_buffer || add_stencil_buffer)
     {
       glGenRenderbuffersEXT (1, &depth_stencil_buffer_id);
@@ -638,34 +636,18 @@ create_render_target (GskGLDriver *self,
       if (add_stencil_buffer)
         glFramebufferRenderbufferEXT (GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
                                       GL_RENDERBUFFER, depth_stencil_buffer_id);
+  texture->fbo.depth_stencil_id = depth_stencil_buffer_id;
     }
+#endif
 
-  t->fbo.fbo_id = fbo_id;
-  t->fbo.depth_stencil_id = depth_stencil_buffer_id;
+  texture->fbo.fbo_id = fbo_id;
 
   g_assert_cmphex (glCheckFramebufferStatus (GL_FRAMEBUFFER), ==, GL_FRAMEBUFFER_COMPLETE);
+
   glBindFramebuffer (GL_FRAMEBUFFER, self->default_fbo.fbo_id);
 
-  return fbo_id;
-}
-
-void
-gsk_gl_driver_create_render_target (GskGLDriver *self,
-                                    int          width,
-                                    int          height,
-                                    int         *out_texture_id,
-                                    int         *out_render_target_id)
-{
-  int texture_id, render_target;
-
-  texture_id = gsk_gl_driver_create_texture (self, width, height);
-  gsk_gl_driver_bind_source_texture (self, texture_id);
-  gsk_gl_driver_init_texture_empty (self, texture_id, GL_NEAREST, GL_NEAREST);
-
-  render_target = create_render_target (self, texture_id, FALSE, FALSE);
-
-  *out_texture_id = texture_id;
-  *out_render_target_id = render_target;
+  *out_texture_id = texture->texture_id;
+  *out_render_target_id = fbo_id;
 }
 
 /* Mark the texture permanent, meaning it won'e be reused by the GLDriver.
