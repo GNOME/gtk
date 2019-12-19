@@ -690,11 +690,35 @@ gsk_rotate_transform_to_matrix (GskTransform      *transform,
                                 graphene_matrix_t *out_matrix)
 {
   GskRotateTransform *self = (GskRotateTransform *) transform;
-  float rad, c, s;
+  float c, s;
 
-  rad = self->angle * M_PI / 180.f;
-  c = cosf (rad);
-  s = sinf (rad);
+  if (self->angle == 90.0)
+    {
+      c = 0.0;
+      s = 1.0;
+    }
+  else if (self->angle == 180.0)
+    {
+      c = -1.0;
+      s = 0.0;
+    }
+  else if (self->angle == 270.0)
+    {
+      c = 0.0;
+      s = -1.0;
+    }
+  else if (self->angle == 0.0)
+    {
+      c = 1.0;
+      s = 0.0;
+    }
+  else
+    {
+      const float rad = self->angle * M_PI / 180.f;
+      c = cosf (rad);
+      s = sinf (rad);
+    }
+
   graphene_matrix_init_from_2d (out_matrix,
                                 c, s,
                                 -s, c,
