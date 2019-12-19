@@ -369,7 +369,6 @@ ops_set_modelview_internal (RenderOpBuilder *builder,
                             GskTransform    *transform)
 {
   ProgramState *current_program_state = get_current_program_state (builder);
-  graphene_matrix_t matrix;
   OpMatrix *op;
 
 #if 0
@@ -379,12 +378,10 @@ ops_set_modelview_internal (RenderOpBuilder *builder,
     return;
 #endif
 
-  gsk_transform_to_matrix (transform, &matrix);
-
   if (!(op = op_buffer_peek_tail_checked (&builder->render_ops, OP_CHANGE_MODELVIEW)))
     op = op_buffer_add (&builder->render_ops, OP_CHANGE_MODELVIEW);
 
-  op->matrix = matrix;
+  gsk_transform_to_matrix (transform, &op->matrix);
 
   if (builder->current_program != NULL)
     {
