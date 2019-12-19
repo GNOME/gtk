@@ -519,6 +519,7 @@ gtk_drag_dest_unset (GtkWidget *widget)
 /**
  * gtk_drag_dest_get_target_list: (method)
  * @widget: a #GtkWidget
+ * Returns: (nullable) (transfer none): the #GtkTargetList, or %NULL if none
  */
 GtkTargetList*
 gtk_drag_dest_get_target_list (GtkWidget *widget)
