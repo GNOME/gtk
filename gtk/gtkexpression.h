@@ -28,6 +28,13 @@ G_BEGIN_DECLS
 typedef struct _GtkExpression GtkExpression;
 typedef struct _GtkExpressionWatch GtkExpressionWatch;
 
+/**
+ * GtkExpressionNotify:
+ * @user_data: data passed to gtk_expression_watch()
+ *
+ * Callback called by gtk_expression_watch() when the
+ * expression value changes.
+ */
 typedef void            (* GtkExpressionNotify)                 (gpointer                        user_data);
 
 #define GTK_IS_EXPRESSION(expr) ((expr) != NULL)
