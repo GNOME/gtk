@@ -105,14 +105,14 @@ struct _GtkFilterClass
 };
 
 GDK_AVAILABLE_IN_ALL
-gboolean                gtk_filter_match                        (GtkFilter              *filter,
+gboolean                gtk_filter_match                        (GtkFilter              *self,
                                                                  gpointer                item);
 GDK_AVAILABLE_IN_ALL
-GtkFilterMatch          gtk_filter_get_strictness               (GtkFilter              *filter);
+GtkFilterMatch          gtk_filter_get_strictness               (GtkFilter              *self);
 
 /* for filter implementations */
 GDK_AVAILABLE_IN_ALL
-void                    gtk_filter_changed                      (GtkFilter              *filter,
+void                    gtk_filter_changed                      (GtkFilter              *self,
                                                                  GtkFilterChange         change);
 
 
