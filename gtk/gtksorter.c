@@ -42,8 +42,8 @@
  * gtk_sorter_compare() again.
  *
  * GTK provides various pre-made sorter implementations for common sorting operations.
- * #GtkColumnView has built-in support for sorting lists via GtkColumnViewColumn::sorter
- * where the user can change the sorting by clicking on list headers.
+ * #GtkColumnView has built-in support for sorting lists via the #GtkColumnViewColumn:sorter
+ * property, where the user can change the sorting by clicking on list headers.
  *
  * Of course, in particular for large lists, it is also possible to subclass #GtkSorter
  * and provide one's own sorter.
@@ -123,10 +123,10 @@ gtk_sorter_init (GtkSorter *self)
  * by the sorter.
  *
  * Sorters implement a partial order:
- * * It is reflexive, ie `a == a`
- * * It is antisymmetric, ie if `a < b` then `b > a`.
- * * It is transitive, ie given any 3 items with `a <= b && b<= c`,
- *   then `a <= c`.
+ * * It is reflexive, ie a = a
+ * * It is antisymmetric, ie if a < b and b < a, then a = b
+ * * It is transitive, ie given any 3 items with a ≤ b and b ≤ c,
+ *   then a ≤ c
  * 
  * The sorter  may signal it conforms to additional constraints
  * via the return value of gtk_sorter_get_order().
