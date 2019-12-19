@@ -51,7 +51,7 @@
  * Watches can be created for automatically updating the propery of an object,
  * similar to GObject's #GBinding mechanism, by using gtk_expression_bind().
  *
- * #GtkExpression in ui files
+ * GtkExpression in ui files
  *
  * GtkBuilder has support for creating expressions. The syntax here can be used where
  * a #GtkExpression object is needed like in a <property> tag for an expression
@@ -914,7 +914,7 @@ static const GtkExpressionClass GTK_CLOSURE_EXPRESSION_CLASS =
 
 /**
  * gtk_closure_expression_new:
- * @type: the type of the value that this expression evaluates to
+ * @value_type: the type of the value that this expression evaluates to
  * @closure: closure to call when evaluating this expression. If closure is floating, it is adopted
  * @n_params: the number of params needed for evaluating @closure
  * @params: (array length=n_params) (transfer full): expressions for each parameter
@@ -954,7 +954,7 @@ gtk_closure_expression_new (GType                value_type,
 
 /**
  * gtk_cclosure_expression_new:
- * @type: the type of the value that this expression evaluates to
+ * @value_type: the type of the value that this expression evaluates to
  * @marshal: marshaller used for creating a closure
  * @n_params: the number of params needed for evaluating @closure
  * @params: (array length=n_params) (transfer full): expressions for each parameter
@@ -1175,16 +1175,16 @@ gtk_expression_watch (GtkExpression       *self,
 
 /**
  * gtk_expression_watch_ref:
- * @self: (allow-none): a #GtkExpressionWatch
+ * @watch: (allow-none): a #GtkExpressionWatch
  *
  * Acquires a reference on the given #GtkExpressionWatch.
  *
  * Returns: (transfer none): the #GtkExpression with an additional reference
  */
 GtkExpressionWatch *
-gtk_expression_watch_ref (GtkExpressionWatch *self)
+gtk_expression_watch_ref (GtkExpressionWatch *watch)
 {
-  return g_atomic_rc_box_acquire (self);
+  return g_atomic_rc_box_acquire (watch);
 }
 
 static void
@@ -1197,7 +1197,7 @@ gtk_expression_watch_finalize (gpointer data)
 
 /**
  * gtk_expression_watch_unref:
- * @self: (allow-none): a #GtkExpressionWatch
+ * @watch: (allow-none): a #GtkExpressionWatch
  *
  * Releases a reference on the given #GtkExpressionWatch.
  *
@@ -1205,9 +1205,9 @@ gtk_expression_watch_finalize (gpointer data)
  * freed.
  */
 void
-gtk_expression_watch_unref (GtkExpressionWatch *self)
+gtk_expression_watch_unref (GtkExpressionWatch *watch)
 {
-  g_atomic_rc_box_release_full (self, gtk_expression_watch_finalize);
+  g_atomic_rc_box_release_full (watch, gtk_expression_watch_finalize);
 }
 
 /**
