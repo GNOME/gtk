@@ -685,16 +685,46 @@ gsk_rotate_transform_finalize (GskTransform *self)
 {
 }
 
+static inline void
+_sincos (float  deg,
+         float *out_s,
+         float *out_c)
+{
+  if (deg == 90.0)
+    {
+      *out_c = 0.0;
+      *out_s = 1.0;
+    }
+  else if (deg == 180.0)
+    {
+      *out_c = -1.0;
+      *out_s = 0.0;
+    }
+  else if (deg == 270.0)
+    {
+      *out_c = 0.0;
+      *out_s = -1.0;
+    }
+  else if (deg == 0.0)
+    {
+      *out_c = 1.0;
+      *out_s = 0.0;
+    }
+  else
+    {
+      sincosf (deg * M_PI / 180.0, out_s, out_c);
+    }
+}
+
 static void
 gsk_rotate_transform_to_matrix (GskTransform      *transform,
                                 graphene_matrix_t *out_matrix)
 {
   GskRotateTransform *self = (GskRotateTransform *) transform;
-  float rad, c, s;
+  float c, s;
 
-  rad = self->angle * M_PI / 180.f;
-  c = cosf (rad);
-  s = sinf (rad);
+  _sincos (self->angle, &s, &c);
+
   graphene_matrix_init_from_2d (out_matrix,
                                 c, s,
                                 -s, c,
@@ -711,14 +741,12 @@ gsk_rotate_transform_apply_2d (GskTransform *transform,
                                float        *out_dy)
 {
   GskRotateTransform *self = (GskRotateTransform *) transform;
-  float s, c, rad, xx, xy, yx, yy;
+  float s, c, xx, xy, yx, yy;
 
   if (fmodf (self->angle, 360.0f) == 0.0)
     return;
 
-  rad = self->angle * G_PI / 180.0f;
-  s = sinf (rad);
-  c = cosf (rad);
+  _sincos (self->angle, &s, &c);
 
   xx =  c * *out_xx + s * *out_xy;
   yx =  c * *out_yx + s * *out_yy;
