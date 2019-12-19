@@ -46,7 +46,7 @@ GDK_AVAILABLE_IN_ALL
 GtkSortType             gtk_numeric_sorter_get_sort_order        (GtkNumericSorter       *self);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_numeric_sorter_set_sort_order        (GtkNumericSorter       *self,
-                                                                  GtkSortType             order);
+                                                                  GtkSortType             sort_order);
 
 G_END_DECLS
 
