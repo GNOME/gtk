@@ -3384,6 +3384,7 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self)
           {
             const OpDebugGroup *op = ptr;
             gdk_gl_context_push_debug_group (self->gl_context, op->text);
+            OP_PRINT (" Debug: %s", op->text);
             break;
           }
 
