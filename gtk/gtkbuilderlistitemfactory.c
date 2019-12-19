@@ -32,7 +32,27 @@
  * @Short_description: A listitem factory using ui files
  *
  * #GtkBuilderListItemFactory is a #GtkListItemFactory that creates
- * widgets by instantiating #GtkBuilder UI templates.
+ * widgets by instantiating #GtkBuilder UI templates. The templates
+ * must be extending #GtkListItem, and typically use #GtkExpressions
+ * to obtain data from the items in the model.
+ *
+ * Example:
+ * |[
+ *   <interface>
+ *     <template class="GtkListItem">
+ *       <property name="child">
+ *         <object class="GtkLabel">
+ *           <property name="xalign">0</property>
+ *           <binding name="label">
+ *             <lookup name="name" type="SettingsKey">
+ *               <lookup name="item">GtkListItem</lookup>
+ *             </lookup>
+ *           </binding>
+ *         </object>
+ *       </property>
+ *     </template>
+ *   </interface>
+ * ]|
  */
 
 struct _GtkBuilderListItemFactory
