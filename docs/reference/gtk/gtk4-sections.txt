@@ -2266,8 +2266,6 @@ gtk_recent_manager_move_item
 gtk_recent_manager_get_items
 gtk_recent_manager_purge_items
 <SUBSECTION>
-gtk_recent_info_ref
-gtk_recent_info_unref
 gtk_recent_info_get_uri
 gtk_recent_info_get_display_name
 gtk_recent_info_get_description

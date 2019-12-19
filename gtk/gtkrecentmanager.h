@@ -32,6 +32,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_RECENT_INFO			(gtk_recent_info_get_type ())
 
+GDK_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (GtkRecentInfo, gtk_recent_info, GTK, RECENT_INFO, GObject)
+
 #define GTK_TYPE_RECENT_MANAGER			(gtk_recent_manager_get_type ())
 #define GTK_RECENT_MANAGER(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_RECENT_MANAGER, GtkRecentManager))
 #define GTK_IS_RECENT_MANAGER(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_RECENT_MANAGER))
@@ -39,7 +42,6 @@ G_BEGIN_DECLS
 #define GTK_IS_RECENT_MANAGER_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RECENT_MANAGER))
 #define GTK_RECENT_MANAGER_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_RECENT_MANAGER, GtkRecentManagerClass))
 
-typedef struct _GtkRecentInfo		GtkRecentInfo;
 typedef struct _GtkRecentData		GtkRecentData;
 typedef struct _GtkRecentManager	GtkRecentManager;
 typedef struct _GtkRecentManagerClass	GtkRecentManagerClass;
@@ -188,15 +190,6 @@ GList *           gtk_recent_manager_get_items      (GtkRecentManager     *manag
 GDK_AVAILABLE_IN_ALL
 gint              gtk_recent_manager_purge_items    (GtkRecentManager     *manager,
 						     GError              **error);
-
-
-GDK_AVAILABLE_IN_ALL
-GType	              gtk_recent_info_get_type             (void) G_GNUC_CONST;
-
-GDK_AVAILABLE_IN_ALL
-GtkRecentInfo *       gtk_recent_info_ref                  (GtkRecentInfo  *info);
-GDK_AVAILABLE_IN_ALL
-void                  gtk_recent_info_unref                (GtkRecentInfo  *info);
 
 GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_recent_info_get_uri              (GtkRecentInfo  *info);

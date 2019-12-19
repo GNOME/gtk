@@ -139,6 +139,8 @@ typedef struct
  */
 struct _GtkRecentInfo
 {
+  GObject parent_instance;
+
   gchar *uri;
 
   gchar *display_name;
@@ -158,8 +160,11 @@ struct _GtkRecentInfo
   int n_groups;
 
   gboolean is_private;
+};
 
-  gint ref_count;
+struct _GtkRecentInfoClass
+{
+  GObjectClass parent_class;
 };
 
 struct _GtkRecentManagerPrivate
@@ -222,7 +227,6 @@ static void     purge_recent_items_list                (GtkRecentManager  *manag
                                                         GError           **error);
 
 static GtkRecentInfo *gtk_recent_info_new  (const gchar   *uri);
-static void           gtk_recent_info_free (GtkRecentInfo *recent_info);
 
 static guint signal_changed = 0;
 
@@ -1473,9 +1477,12 @@ gtk_recent_manager_clamp_to_size (GtkRecentManager *manager,
  * GtkRecentInfo *
  *****************/
 
-G_DEFINE_BOXED_TYPE (GtkRecentInfo, gtk_recent_info,
-                     gtk_recent_info_ref,
-                     gtk_recent_info_unref)
+G_DEFINE_TYPE (GtkRecentInfo, gtk_recent_info, G_TYPE_OBJECT)
+
+static void
+gtk_recent_info_init (GtkRecentInfo *info)
+{
+}
 
 static GtkRecentInfo *
 gtk_recent_info_new (const gchar *uri)
@@ -1484,7 +1491,8 @@ gtk_recent_info_new (const gchar *uri)
 
   g_assert (uri != NULL);
 
-  info = g_new0 (GtkRecentInfo, 1);
+  info = g_object_new (GTK_TYPE_RECENT_INFO, NULL);
+
   info->uri = g_strdup (uri);
 
   info->applications = NULL;
@@ -1492,18 +1500,14 @@ gtk_recent_info_new (const gchar *uri)
 
   info->groups = NULL;
 
-  info->ref_count = 1;
-
   return info;
 }
 
 static void
-gtk_recent_info_free (GtkRecentInfo *recent_info)
+gtk_recent_info_finalize (GObject *object)
 {
+  GtkRecentInfo *recent_info = GTK_RECENT_INFO (object);
   int i;
-
-  if (!recent_info)
-    return;
 
   g_free (recent_info->uri);
   g_free (recent_info->display_name);
@@ -1527,46 +1531,15 @@ gtk_recent_info_free (GtkRecentInfo *recent_info)
 
   g_free (recent_info->groups);
 
-  g_free (recent_info);
+  G_OBJECT_CLASS (gtk_recent_info_parent_class)->finalize (object);
 }
 
-/**
- * gtk_recent_info_ref:
- * @info: a #GtkRecentInfo
- *
- * Increases the reference count of @recent_info by one.
- *
- * Returns: the recent info object with its reference count
- *     increased by one
- */
-GtkRecentInfo *
-gtk_recent_info_ref (GtkRecentInfo *info)
+static void
+gtk_recent_info_class_init (GtkRecentInfoClass *class)
 {
-  g_return_val_if_fail (info != NULL, NULL);
-  g_return_val_if_fail (info->ref_count > 0, NULL);
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
 
-  info->ref_count += 1;
-
-  return info;
-}
-
-/**
- * gtk_recent_info_unref:
- * @info: a #GtkRecentInfo
- *
- * Decreases the reference count of @info by one. If the reference
- * count reaches zero, @info is deallocated, and the memory freed.
- */
-void
-gtk_recent_info_unref (GtkRecentInfo *info)
-{
-  g_return_if_fail (info != NULL);
-  g_return_if_fail (info->ref_count > 0);
-
-  info->ref_count -= 1;
-
-  if (info->ref_count == 0)
-    gtk_recent_info_free (info);
+  object_class->finalize = gtk_recent_info_finalize;
 }
 
 /**

@@ -247,7 +247,7 @@ recent_manager_lookup_item (void)
 
   g_assert (gtk_recent_info_has_application (info, "testrecentchooser"));
 
-  gtk_recent_info_unref (info);
+  g_object_unref (info);
 }
 
 static void

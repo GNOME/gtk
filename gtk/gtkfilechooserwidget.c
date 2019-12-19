@@ -6862,7 +6862,7 @@ recent_start_loading (GtkFileChooserWidget *impl)
       g_list_free_full (folders, g_object_unref);
     }
 
-  g_list_free_full (items, (GDestroyNotify) gtk_recent_info_unref);
+  g_list_free_full (items, (GDestroyNotify) g_object_unref);
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
                            GTK_TREE_MODEL (impl->recent_model));
