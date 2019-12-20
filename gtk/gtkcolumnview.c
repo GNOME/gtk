@@ -36,6 +36,8 @@
 #include "gtkwidgetprivate.h"
 #include "gtksizerequest.h"
 #include "gtkadjustment.h"
+#include "gtkgesturedrag.h"
+#include "gtkeventcontrollermotion.h"
 
 /**
  * SECTION:gtkcolumnview
@@ -67,6 +69,10 @@ struct _GtkColumnView
   GtkSorter *sorter;
 
   GtkAdjustment *hadjustment;
+
+  gboolean in_column_resize;
+  int drag_pos;
+  int drag_start_width;
 };
 
 struct _GtkColumnViewClass
@@ -532,14 +538,114 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
 }
 
 static void
+header_drag_begin (GtkGestureDrag *gesture,
+                   double          start_x,
+                   double          start_y,
+                   GtkColumnView  *self)
+{
+  int i;
+
+  for (i = 0; !self->in_column_resize && i < g_list_model_get_n_items (G_LIST_MODEL (self->columns)); i++)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+
+      if (gtk_column_view_column_get_resizable (column) &&
+          gtk_column_view_column_get_visible (column) &&
+          gtk_column_view_column_in_resize_rect (column, start_x, start_y))
+        {
+          int size;
+
+          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
+          gtk_column_view_column_get_allocation (column, NULL, &size);
+          gtk_column_view_column_set_fixed_width (column, size);
+          self->drag_pos = i;
+          self->drag_start_width = size;
+          self->in_column_resize = TRUE;
+        }
+
+      g_clear_object (&column);
+    }
+}
+
+static void
+header_drag_end (GtkGestureDrag *gesture,
+                 double          offset_x,
+                 double          offset_y,
+                 GtkColumnView  *self)
+{
+  self->in_column_resize = FALSE;
+}
+
+static void
+header_drag_update (GtkGestureDrag *gesture,
+                    double          offset_x,
+                    double          offset_y,
+                    GtkColumnView  *self)
+{
+  if (self->in_column_resize)
+    {
+      GtkColumnViewColumn *column;
+      int new_width;
+
+      new_width = MAX (self->drag_start_width + offset_x, 0);
+
+      column = g_list_model_get_item (G_LIST_MODEL (self->columns), self->drag_pos);
+      gtk_column_view_column_set_fixed_width (column, new_width);
+      g_object_unref (column);
+    }
+}
+
+static void
+header_motion (GtkEventControllerMotion *controller,
+               double                    x,
+               double                    y,
+               GtkColumnView            *self)
+{
+  gboolean cursor_set = FALSE;
+  int i;
+
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->columns)); i++)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
+
+      if (gtk_column_view_column_get_resizable (column) &&
+          gtk_column_view_column_get_visible (column) &&
+          gtk_column_view_column_in_resize_rect (column, x, y))
+        {
+          gtk_widget_set_cursor_from_name (self->header, "col-resize");
+          cursor_set = TRUE;
+        }
+
+      g_object_unref (column);
+    }
+
+  if (!cursor_set)
+    gtk_widget_set_cursor (self->header, NULL);
+}
+
+static void
 gtk_column_view_init (GtkColumnView *self)
 {
+  GtkEventController *controller;
+
   self->columns = g_list_store_new (GTK_TYPE_COLUMN_VIEW_COLUMN);
 
   self->header = gtk_list_item_widget_new (NULL, "header");
   gtk_widget_set_can_focus (self->header, FALSE);
   gtk_widget_set_layout_manager (self->header, gtk_column_view_layout_new (self));
   gtk_widget_set_parent (self->header, GTK_WIDGET (self));
+
+  controller = GTK_EVENT_CONTROLLER (gtk_gesture_drag_new ());
+  g_signal_connect (controller, "drag-begin", G_CALLBACK (header_drag_begin), self);
+  g_signal_connect (controller, "drag-update", G_CALLBACK (header_drag_update), self);
+  g_signal_connect (controller, "drag-end", G_CALLBACK (header_drag_end), self);
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  gtk_widget_add_controller (self->header, controller);
+
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "motion", G_CALLBACK (header_motion), self);
+  gtk_widget_add_controller (self->header, controller);
 
   self->sorter = gtk_column_view_sorter_new ();
   self->factory = gtk_column_list_item_factory_new (self);
