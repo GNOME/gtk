@@ -744,7 +744,6 @@ gtk_column_view_column_set_fixed_width (GtkColumnViewColumn *self,
                                         int                  fixed_width)
 {
   GtkOverflow overflow;
-  GtkColumnViewCell *cell;
 
   g_return_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self));
   g_return_if_fail (fixed_width >= -1);
@@ -759,15 +758,21 @@ gtk_column_view_column_set_fixed_width (GtkColumnViewColumn *self,
   else
     overflow = GTK_OVERFLOW_VISIBLE;
 
-  if (self->header)
-    gtk_widget_set_overflow (GTK_WIDGET (self->header), overflow);
-
-  for (cell = self->first_cell; cell; cell = gtk_column_view_cell_get_next (cell))
+  if (overflow != gtk_widget_get_overflow (GTK_WIDGET (self->header)))
     {
-      gtk_widget_set_overflow (GTK_WIDGET (cell), overflow);
+      GtkColumnViewCell *cell;
+
+      if (self->header)
+        gtk_widget_set_overflow (GTK_WIDGET (self->header), overflow);
+
+      for (cell = self->first_cell; cell; cell = gtk_column_view_cell_get_next (cell))
+        gtk_widget_set_overflow (GTK_WIDGET (cell), overflow);
     }
 
   gtk_column_view_column_queue_resize (self);
+
+  self->minimum_size_request = self->fixed_width;
+  self->natural_size_request = self->fixed_width;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FIXED_WIDTH]);
 }
@@ -778,4 +783,22 @@ gtk_column_view_column_get_fixed_width (GtkColumnViewColumn *self)
   g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self), -1);
 
   return self->fixed_width;
+}
+
+#define DRAG_WIDTH 6
+
+gboolean
+gtk_column_view_column_in_resize_rect (GtkColumnViewColumn *self,
+                                       double               x,
+                                       double               y)
+{
+  graphene_rect_t rect;
+
+  if (!gtk_widget_compute_bounds (self->header, GTK_WIDGET (self->view), &rect))
+    return FALSE;
+
+  rect.origin.x += rect.size.width - DRAG_WIDTH / 2;
+  rect.size.width = DRAG_WIDTH;
+
+  return graphene_rect_contains_point (&rect, &(graphene_point_t) { x, y});
 }
