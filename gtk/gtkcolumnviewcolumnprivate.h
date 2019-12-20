@@ -47,4 +47,8 @@ void                    gtk_column_view_column_get_allocation           (GtkColu
 
 void                    gtk_column_view_column_notify_sort              (GtkColumnViewColumn    *self);
 
+gboolean                gtk_column_view_column_in_resize_rect           (GtkColumnViewColumn    *self,
+                                                                         double                  x,
+                                                                         double                  y);
+
 #endif  /* __GTK_COLUMN_VIEW_COLUMN_PRIVATE_H__ */
