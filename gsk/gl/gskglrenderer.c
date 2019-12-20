@@ -1106,11 +1106,11 @@ render_linear_gradient_node (GskGLRenderer   *self,
                              GskRenderNode   *node,
                              RenderOpBuilder *builder)
 {
-  OpLinearGradient *op;
-  int n_color_stops = MIN (8, gsk_linear_gradient_node_get_n_color_stops (node));
+  const int n_color_stops = MIN (8, gsk_linear_gradient_node_get_n_color_stops (node));
   const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node);
   const graphene_point_t *start = gsk_linear_gradient_node_peek_start (node);
   const graphene_point_t *end = gsk_linear_gradient_node_peek_end (node);
+  OpLinearGradient *op;
 
   ops_set_program (builder, &self->linear_gradient_program);
   op = ops_begin (builder, OP_CHANGE_LINEAR_GRADIENT);
