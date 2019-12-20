@@ -813,14 +813,7 @@ render_border_node (GskGLRenderer   *self,
     sort_border_sides (colors, indices);
 
     /* Prepare outline */
-    outline = *rounded_outline;
-    ops_transform_bounds_modelview (builder, &outline.bounds, &outline.bounds);
-
-    for (i = 0; i < 4; i ++)
-      {
-        outline.corner[i].width *= scale;
-        outline.corner[i].height *= scale;
-      }
+    outline = transform_rect (self, builder, rounded_outline);
 
     ops_set_program (builder, &self->border_program);
     ops_set_border_width (builder, widths);
