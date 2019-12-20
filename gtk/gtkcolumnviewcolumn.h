@@ -84,6 +84,12 @@ void                    gtk_column_view_column_set_fixed_width          (GtkColu
 GDK_AVAILABLE_IN_ALL
 int                     gtk_column_view_column_get_fixed_width          (GtkColumnViewColumn    *self);
 
+GDK_AVAILABLE_IN_ALL
+void                    gtk_column_view_column_set_resizable            (GtkColumnViewColumn    *self,
+                                                                         gboolean                resizable);
+GDK_AVAILABLE_IN_ALL
+gboolean                gtk_column_view_column_get_resizable            (GtkColumnViewColumn    *self);
+
 G_END_DECLS
 
 #endif  /* __GTK_COLUMN_VIEW_COLUMN_H__ */
