@@ -60,6 +60,7 @@ struct _GtkColumnViewColumn
   int natural_size_request;
   int allocation_offset;
   int allocation_size;
+  int header_position;
 
   int fixed_width;
 
@@ -478,6 +479,7 @@ gtk_column_view_column_allocate (GtkColumnViewColumn *self,
 {
   self->allocation_offset = offset;
   self->allocation_size = size;
+  self->header_position = offset;
 }
 
 void
@@ -946,4 +948,23 @@ GtkWidget *
 gtk_column_view_column_get_header (GtkColumnViewColumn *self)
 {
   return self->header;
+}
+
+void
+gtk_column_view_column_set_header_position (GtkColumnViewColumn *self,
+                                            int                  offset)
+{
+  self->header_position = offset;
+}
+
+void
+gtk_column_view_column_get_header_allocation (GtkColumnViewColumn *self,
+                                              int                 *offset,
+                                              int                 *size)
+{
+  if (offset)
+    *offset = self->header_position;
+
+  if (size)
+    *size = self->allocation_size;
 }
