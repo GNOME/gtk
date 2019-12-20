@@ -1,8 +1,26 @@
 // VERTEX_SHADER:
+uniform float u_blur_radius;
+uniform vec2 u_blur_size;
+
+_OUT_ vec2 pixel_step;
+_OUT_ float pixels_per_side;
+_OUT_ vec3 initial_gaussian;
+
+const float PI = 3.14159265;
+const float RADIUS_MULTIPLIER = 3.0;
+
 void main() {
   gl_Position = u_projection * u_modelview * vec4(aPosition, 0.0, 1.0);
 
   vUv = vec2(aUv.x, aUv.y);
+
+  pixel_step = vec2(1.0) / u_blur_size;
+  pixels_per_side = floor(u_blur_radius * RADIUS_MULTIPLIER / 2.0);
+
+  float sigma = u_blur_radius; // *shrug*
+  initial_gaussian.x = 1.0 / (sqrt(2.0 * PI) * sigma);
+  initial_gaussian.y = exp(-0.5 / (sigma * sigma));
+  initial_gaussian.z = initial_gaussian.y * initial_gaussian.y;
 }
 
 // FRAGMENT_SHADER:
@@ -10,29 +28,22 @@ uniform float u_blur_radius;
 uniform vec2 u_blur_size;
 uniform vec2 u_blur_dir;
 
-const float PI = 3.14159265;
-const float RADIUS_MULTIPLIER = 3.0;
+_IN_ vec2 pixel_step;
+_IN_ float pixels_per_side;
+_IN_ vec3 initial_gaussian;
 
 // blur_radius 0 is NOT supported and MUST be caught before.
 
 // Partially from http://callumhay.blogspot.com/2010/09/gaussian-blur-shader-glsl.html
 void main() {
-  float sigma = u_blur_radius; // *shrug*
-  float blur_radius = u_blur_radius * RADIUS_MULTIPLIER;
-  vec3 incrementalGaussian;
-  incrementalGaussian.x = 1.0 / (sqrt(2.0 * PI) * sigma);
-  incrementalGaussian.y = exp(-0.5 / (sigma * sigma));
-  incrementalGaussian.z = incrementalGaussian.y * incrementalGaussian.y;
-
-  vec2 pixel_step = vec2(1.0) / u_blur_size;
+  vec3 incrementalGaussian = initial_gaussian;
 
   float coefficientSum = 0.0;
   vec4 sum = Texture(u_source, vUv) * incrementalGaussian.x;
   coefficientSum += incrementalGaussian.x;
   incrementalGaussian.xy *= incrementalGaussian.yz;
 
-  int pixels_per_side = int(floor(blur_radius / 2.0));
-  for (int i = 1; i <= pixels_per_side; i++) {
+  for (int i = 1; i <= int(pixels_per_side); i++) {
     vec2 p = float(i) * pixel_step * u_blur_dir;
 
     sum += Texture(u_source, vUv - p) * incrementalGaussian.x;
