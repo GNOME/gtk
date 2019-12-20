@@ -50,5 +50,14 @@ void                    gtk_column_view_column_notify_sort              (GtkColu
 gboolean                gtk_column_view_column_in_resize_rect           (GtkColumnViewColumn    *self,
                                                                          double                  x,
                                                                          double                  y);
+gboolean                gtk_column_view_column_in_header                (GtkColumnViewColumn    *self,
+                                                                         double                  x,
+                                                                         double                  y);
+void                    gtk_column_view_column_set_header_position      (GtkColumnViewColumn    *self,
+                                                                         int                     offset);
+void                    gtk_column_view_column_get_header_allocation    (GtkColumnViewColumn    *self,
+                                                                         int                    *offset,
+                                                                         int                    *size);
+GtkWidget *             gtk_column_view_column_get_header               (GtkColumnViewColumn    *self);
 
 #endif  /* __GTK_COLUMN_VIEW_COLUMN_PRIVATE_H__ */

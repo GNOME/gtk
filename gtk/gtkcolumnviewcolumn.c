@@ -60,6 +60,7 @@ struct _GtkColumnViewColumn
   int natural_size_request;
   int allocation_offset;
   int allocation_size;
+  int header_position;
 
   int fixed_width;
 
@@ -442,6 +443,7 @@ gtk_column_view_column_allocate (GtkColumnViewColumn *self,
 {
   self->allocation_offset = offset;
   self->allocation_size = size;
+  self->header_position = offset;
 }
 
 void
@@ -864,4 +866,42 @@ gtk_column_view_column_in_resize_rect (GtkColumnViewColumn *self,
   rect.size.width = DRAG_WIDTH;
 
   return graphene_rect_contains_point (&rect, &(graphene_point_t) { x, y});
+}
+
+gboolean
+gtk_column_view_column_in_header (GtkColumnViewColumn *self,
+                                  double               x,
+                                  double               y)
+{
+  graphene_rect_t rect;
+
+  if (!gtk_widget_compute_bounds (self->header, GTK_WIDGET (self->view), &rect))
+    return FALSE;
+
+  return graphene_rect_contains_point (&rect, &(graphene_point_t) { x, y});
+}
+
+void
+gtk_column_view_column_set_header_position (GtkColumnViewColumn *self,
+                                            int                  offset)
+{
+  self->header_position = offset;
+}
+
+void
+gtk_column_view_column_get_header_allocation (GtkColumnViewColumn *self,
+                                              int                 *offset,
+                                              int                 *size)
+{
+  if (offset)
+    *offset = self->header_position;
+
+  if (size)
+    *size = self->allocation_size;
+}
+
+GtkWidget *
+gtk_column_view_column_get_header (GtkColumnViewColumn *self)
+{
+  return self->header;
 }
