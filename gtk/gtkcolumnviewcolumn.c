@@ -178,7 +178,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
     g_param_spec_object ("column-view",
                          P_("Column view"),
                          P_("Column view this column is a part of"),
-                         G_TYPE_LIST_MODEL,
+                         GTK_TYPE_COLUMN_VIEW,
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
@@ -481,6 +481,9 @@ void
 gtk_column_view_column_set_column_view (GtkColumnViewColumn *self,
                                         GtkColumnView       *view)
 {
+  g_return_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self));
+  g_return_if_fail (view == NULL || GTK_IS_COLUMN_VIEW (view));
+
   if (self->view == view)
     return;
 
