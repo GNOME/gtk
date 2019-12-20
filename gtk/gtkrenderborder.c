@@ -654,15 +654,15 @@ gtk_css_style_snapshot_border (GtkCssBoxes *boxes,
   GtkBorderImage border_image;
   float border_width[4];
 
-  border_width[0] = _gtk_css_number_value_get (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
-  border_width[1] = _gtk_css_number_value_get (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
-  border_width[2] = _gtk_css_number_value_get (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
-  border_width[3] = _gtk_css_number_value_get (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
-
   if (gtk_border_image_init (&border_image, boxes->style))
     {
       cairo_t *cr;
       const graphene_rect_t *bounds;
+
+      border_width[0] = _gtk_css_number_value_get (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
+      border_width[1] = _gtk_css_number_value_get (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
+      border_width[2] = _gtk_css_number_value_get (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
+      border_width[3] = _gtk_css_number_value_get (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
 
       bounds = gtk_css_boxes_get_border_rect (boxes);
 
@@ -696,6 +696,11 @@ gtk_css_style_snapshot_border (GtkCssBoxes *boxes,
       border_style[1] = _gtk_css_border_style_value_get (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE));
       border_style[2] = _gtk_css_border_style_value_get (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE));
       border_style[3] = _gtk_css_border_style_value_get (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_LEFT_STYLE));
+
+      border_width[0] = _gtk_css_number_value_get (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
+      border_width[1] = _gtk_css_number_value_get (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
+      border_width[2] = _gtk_css_number_value_get (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
+      border_width[3] = _gtk_css_number_value_get (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
 
       gtk_snapshot_push_debug (snapshot, "CSS border");
       snapshot_border (snapshot,
