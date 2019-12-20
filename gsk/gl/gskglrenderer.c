@@ -125,6 +125,10 @@ print_render_node_tree (GskRenderNode *root, int level)
         g_print ("%*s Text\n", level * INDENT, " ");
         break;
 
+      case GSK_COLOR_NODE:
+        g_print ("%*s Color %s\n", level * INDENT, " ", gdk_rgba_to_string (gsk_color_node_peek_color (root)));
+        break;
+
       case GSK_SHADOW_NODE:
         g_print ("%*s Shadow\n", level * INDENT, " ");
         print_render_node_tree (gsk_shadow_node_get_child (root), level + 1);
