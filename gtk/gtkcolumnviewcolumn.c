@@ -61,9 +61,10 @@ struct _GtkColumnViewColumn
   int allocation_offset;
   int allocation_size;
 
-  gboolean visible;
-
   int fixed_width;
+
+  guint visible   : 1;
+  guint resizable : 1;
 
   /* This list isn't sorted - this is just caching for performance */
   GtkColumnViewCell *first_cell; /* no reference, just caching */
@@ -82,6 +83,7 @@ enum
   PROP_TITLE,
   PROP_SORTER,
   PROP_VISIBLE,
+  PROP_RESIZABLE,
   PROP_FIXED_WIDTH,
 
   N_PROPS
@@ -136,6 +138,10 @@ gtk_column_view_column_get_property (GObject    *object,
       g_value_set_boolean (value, self->visible);
       break;
 
+    case PROP_RESIZABLE:
+      g_value_set_boolean (value, self->resizable);
+      break;
+
     case PROP_FIXED_WIDTH:
       g_value_set_int (value, self->fixed_width);
       break;
@@ -170,6 +176,10 @@ gtk_column_view_column_set_property (GObject      *object,
 
     case PROP_VISIBLE:
       gtk_column_view_column_set_visible (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_RESIZABLE:
+      gtk_column_view_column_set_resizable (self, g_value_get_boolean (value));
       break;
 
     case PROP_FIXED_WIDTH:
@@ -252,6 +262,18 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
+   * GtkColumnViewColumn:resizable:
+   *
+   * Whether this column is resizable
+   */
+  properties[PROP_RESIZABLE] =
+    g_param_spec_boolean ("resizable",
+                          P_("Resizable"),
+                          P_("Whether this column is resizable"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkColumnViewColumn:fixed-width:
    *
    * If not -1, this is the width that the column is allocated,
@@ -273,6 +295,7 @@ gtk_column_view_column_init (GtkColumnViewColumn *self)
   self->minimum_size_request = -1;
   self->natural_size_request = -1;
   self->visible = TRUE;
+  self->resizable = FALSE;
   self->fixed_width = -1;
 }
 
@@ -751,6 +774,43 @@ gtk_column_view_column_get_visible (GtkColumnViewColumn *self)
   g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self), TRUE);
 
   return self->visible;
+}
+
+/**
+ * gtk_column_view_column_set_resizable:
+ * @self: a #GtkColumnViewColumn
+ * @resizable: whether this column should be resizable 
+ *
+ * Sets whether this column should be resizable by dragging.
+ */
+void
+gtk_column_view_column_set_resizable (GtkColumnViewColumn *self,
+                                      gboolean             resizable)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self));
+
+  if (self->resizable == resizable)
+    return;
+
+  self->resizable = resizable;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_RESIZABLE]);
+}
+
+/**
+ * gtk_column_view_get_resizable:
+ * @self: a #GtkColumnView
+ *
+ * Returns whether this column is resizable.
+ *
+ * Returns: %TRUE if this column is resizable
+ */
+gboolean
+gtk_column_view_column_get_resizable (GtkColumnViewColumn *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self), TRUE);
+
+  return self->resizable;
 }
 
 /**
