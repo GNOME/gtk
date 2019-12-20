@@ -1425,7 +1425,7 @@ blur_node (GskGLRenderer   *self,
            float            blur_radius,
            guint            extra_flags,
            TextureRegion   *out_region,
-           float           *out_vertex_data[4]) /* min, min, max, max */
+           float           *out_vertex_data[4]) /* min, max, min, max */
 {
   const float scale = ops_get_scale (builder);
   const float blur_extra = blur_radius * 3.0 / 2.0;
