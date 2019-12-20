@@ -180,17 +180,13 @@ ops_transform_bounds_modelview (const RenderOpBuilder *builder,
                                 const graphene_rect_t *src,
                                 graphene_rect_t       *dst)
 {
-  const MatrixStackEntry *head;
-
   g_assert (builder->mv_stack != NULL);
   g_assert (builder->mv_stack->len >= 1);
 
-  head = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 1);
-
   gsk_transform_transform_bounds (builder->current_modelview, src, dst);
 
-  dst->origin.x += builder->dx * head->metadata.scale_x;
-  dst->origin.y += builder->dy * head->metadata.scale_y;
+  dst->origin.x += builder->dx * builder->scale_x;
+  dst->origin.y += builder->dy * builder->scale_y;
 }
 
 void
