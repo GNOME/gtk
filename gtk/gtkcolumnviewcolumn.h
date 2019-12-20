@@ -90,6 +90,12 @@ void                    gtk_column_view_column_set_resizable            (GtkColu
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_column_view_column_get_resizable            (GtkColumnViewColumn    *self);
 
+GDK_AVAILABLE_IN_ALL
+void                    gtk_column_view_column_set_reorderable          (GtkColumnViewColumn    *self,
+                                                                         gboolean                reorderable);
+GDK_AVAILABLE_IN_ALL
+gboolean                gtk_column_view_column_get_reorderable          (GtkColumnViewColumn    *self);
+
 G_END_DECLS
 
 #endif  /* __GTK_COLUMN_VIEW_COLUMN_H__ */
