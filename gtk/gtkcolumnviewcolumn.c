@@ -64,8 +64,9 @@ struct _GtkColumnViewColumn
 
   int fixed_width;
 
-  guint visible   : 1;
-  guint resizable : 1;
+  guint visible     : 1;
+  guint resizable   : 1;
+  guint reorderable : 1;
 
   /* This list isn't sorted - this is just caching for performance */
   GtkColumnViewCell *first_cell; /* no reference, just caching */
@@ -85,6 +86,7 @@ enum
   PROP_SORTER,
   PROP_VISIBLE,
   PROP_RESIZABLE,
+  PROP_REORDERABLE,
   PROP_FIXED_WIDTH,
 
   N_PROPS
@@ -143,6 +145,10 @@ gtk_column_view_column_get_property (GObject    *object,
       g_value_set_boolean (value, self->resizable);
       break;
 
+    case PROP_REORDERABLE:
+      g_value_set_boolean (value, self->reorderable);
+      break;
+
     case PROP_FIXED_WIDTH:
       g_value_set_int (value, self->fixed_width);
       break;
@@ -181,6 +187,10 @@ gtk_column_view_column_set_property (GObject      *object,
 
     case PROP_RESIZABLE:
       gtk_column_view_column_set_resizable (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_REORDERABLE:
+      gtk_column_view_column_set_reorderable (self, g_value_get_boolean (value));
       break;
 
     case PROP_FIXED_WIDTH:
@@ -275,6 +285,18 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
+   * GtkColumnViewColumn:reorderable:
+   *
+   * Whether this column is reorderable 
+   */
+  properties[PROP_REORDERABLE] =
+    g_param_spec_boolean ("reorderable",
+                          P_("Reorderable"),
+                          P_("Whether this column is reorderable"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkColumnViewColumn:fixed-width:
    *
    * If not -1, this is the width that the column is allocated,
@@ -297,6 +319,7 @@ gtk_column_view_column_init (GtkColumnViewColumn *self)
   self->natural_size_request = -1;
   self->visible = TRUE;
   self->resizable = FALSE;
+  self->reorderable = FALSE;
   self->fixed_width = -1;
 }
 
@@ -813,6 +836,43 @@ gtk_column_view_column_get_resizable (GtkColumnViewColumn *self)
   g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self), TRUE);
 
   return self->resizable;
+}
+
+/**
+ * gtk_column_view_column_set_reorderable:
+ * @self: a #GtkColumnViewColumn
+ * @reorderable: whether this column should be reorderable
+ *
+ * Sets whether this column should be reorderable by dragging.
+ */
+void
+gtk_column_view_column_set_reorderable (GtkColumnViewColumn *self,
+                                        gboolean             reorderable)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self));
+
+  if (self->reorderable == reorderable)
+    return;
+
+  self->reorderable = reorderable;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_REORDERABLE]);
+}
+
+/**
+ * gtk_column_view_get_reorderable:
+ * @self: a #GtkColumnView
+ *
+ * Returns whether this column is reorderable.
+ *
+ * Returns: %TRUE if this column is reorderable
+ */
+gboolean
+gtk_column_view_column_get_reorderable (GtkColumnViewColumn *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self), TRUE);
+
+  return self->reorderable;
 }
 
 /**
