@@ -80,6 +80,10 @@ struct _GtkColumnView
   int drag_column_x;
 
   GtkGesture *drag_gesture;
+
+  guint autoscroll_id;
+  double autoscroll_x;
+  double autoscroll_delta;
 };
 
 struct _GtkColumnViewClass
@@ -567,6 +571,53 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
   gtk_widget_class_set_css_name (widget_class, I_("treeview"));
 }
 
+static void update_column_resize  (GtkColumnView *self,
+                                   double         x);
+static void update_column_reorder (GtkColumnView *self,
+                                   double         x);
+
+static gboolean
+autoscroll_cb (GtkWidget     *widget,
+               GdkFrameClock *frame_clock,
+               gpointer       data)
+{
+  GtkColumnView *self = data;
+
+  gtk_adjustment_set_value (self->hadjustment,
+                            gtk_adjustment_get_value (self->hadjustment) + self->autoscroll_delta);
+
+  self->autoscroll_x += self->autoscroll_delta;
+
+  if (self->in_column_resize)
+    update_column_resize (self, self->autoscroll_x);
+  else if (self->in_column_reorder)
+    update_column_reorder (self, self->autoscroll_x);
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+add_autoscroll (GtkColumnView *self,
+                double         x,
+                double         delta)
+{
+  self->autoscroll_x = x;
+  self->autoscroll_delta = delta;
+
+  if (self->autoscroll_id == 0)
+    self->autoscroll_id = gtk_widget_add_tick_callback (GTK_WIDGET (self), autoscroll_cb, self, NULL);
+}
+
+static void
+remove_autoscroll (GtkColumnView *self)
+{
+  if (self->autoscroll_id != 0)
+    {
+      gtk_widget_remove_tick_callback (GTK_WIDGET (self), self->autoscroll_id);
+      self->autoscroll_id = 0;
+    }
+}
+
 #define DRAG_WIDTH 6
 
 static gboolean
@@ -677,6 +728,8 @@ header_drag_end (GtkGestureDrag *gesture,
   gtk_gesture_drag_get_start_point (gesture, &start_x, NULL);
   x = start_x + offset_x;
 
+  remove_autoscroll (self);
+
   if (self->in_column_resize)
     {
       self->in_column_resize = FALSE;
@@ -755,6 +808,8 @@ update_column_reorder (GtkColumnView *self,
   g_object_unref (column);
 }
 
+#define SCROLL_EDGE_SIZE 15
+
 static void
 header_drag_update (GtkGestureDrag *gesture,
                     double          offset_x,
@@ -801,6 +856,22 @@ header_drag_update (GtkGestureDrag *gesture,
     update_column_resize (self, x);
   else if (self->in_column_reorder)
     update_column_reorder (self, x);
+
+  if (self->in_column_resize || self->in_column_reorder)
+    {
+      double value, page_size, upper;
+
+      value = gtk_adjustment_get_value (self->hadjustment);
+      page_size = gtk_adjustment_get_page_size (self->hadjustment);
+      upper = gtk_adjustment_get_upper (self->hadjustment);
+
+      if (x - value < SCROLL_EDGE_SIZE && value > 0)
+        add_autoscroll (self, x, - (SCROLL_EDGE_SIZE - (x - value))/3.0);
+      else if (value + page_size - x < SCROLL_EDGE_SIZE && value + page_size < upper)
+        add_autoscroll (self, x, (SCROLL_EDGE_SIZE - (value + page_size - x))/3.0);
+      else
+        remove_autoscroll (self);
+    }
 }
 
 static void
