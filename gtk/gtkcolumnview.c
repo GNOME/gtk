@@ -39,6 +39,7 @@
 #include "gtkgesturedrag.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkdragsource.h"
+#include "gtkeventcontrollerkey.h"
 
 /**
  * SECTION:gtkcolumnview
@@ -77,6 +78,8 @@ struct _GtkColumnView
   int drag_x;
   int drag_offset;
   int drag_column_x;
+
+  GtkGesture *drag_gesture;
 };
 
 struct _GtkColumnViewClass
@@ -631,6 +634,8 @@ header_drag_begin (GtkGestureDrag *gesture,
           int size;
 
           gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+          if (!gtk_widget_has_focus (GTK_WIDGET (self)))
+            gtk_widget_grab_focus (GTK_WIDGET (self));
 
           gtk_column_view_column_get_allocation (column, NULL, &size);
           gtk_column_view_column_set_fixed_width (column, size);
@@ -678,13 +683,23 @@ header_drag_end (GtkGestureDrag *gesture,
     }
   else if (self->in_column_reorder)
     {
+      GdkEventSequence *sequence;
       GtkColumnViewColumn *column;
       GtkWidget *header;
       int i;
 
+      self->in_column_reorder = FALSE;
+
+      if (self->drag_pos == -1)
+        return;
+
       column = g_list_model_get_item (G_LIST_MODEL (self->columns), self->drag_pos);
       header = gtk_column_view_column_get_header (column);
       gtk_style_context_remove_class (gtk_widget_get_style_context (header), "dnd");
+
+      sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+      if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
+        return;
 
       for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->columns)); i++)
         {
@@ -707,8 +722,6 @@ header_drag_end (GtkGestureDrag *gesture,
         }
 
       g_object_unref (column);
-
-      self->in_column_reorder = FALSE;
     }
 }
 
@@ -748,11 +761,15 @@ header_drag_update (GtkGestureDrag *gesture,
                     double          offset_y,
                     GtkColumnView  *self)
 {
+  GdkEventSequence *sequence;
   double start_x, x;
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
+    return;
 
   if (self->drag_pos == -1)
     return;
-
 
   if (!self->in_column_resize && !self->in_column_reorder)
     {
@@ -768,6 +785,9 @@ header_drag_update (GtkGestureDrag *gesture,
           gtk_style_context_add_class (gtk_widget_get_style_context (header), "dnd");
 
           gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+          if (!gtk_widget_has_focus (GTK_WIDGET (self)))
+            gtk_widget_grab_focus (GTK_WIDGET (self));
+
           self->in_column_reorder = TRUE;
 
           g_object_unref (column);
@@ -818,6 +838,23 @@ header_motion (GtkEventControllerMotion *controller,
     gtk_widget_set_cursor (self->header, NULL);
 }
 
+static gboolean
+header_key_pressed (GtkEventControllerKey *controller,
+                    guint                  keyval,
+                    guint                  keycode,
+                    GdkModifierType        modifiers,
+                    GtkColumnView         *self)
+{
+  if (self->in_column_reorder)
+    {
+      if (keyval == GDK_KEY_Escape)
+        gtk_gesture_set_state (self->drag_gesture, GTK_EVENT_SEQUENCE_DENIED);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 gtk_column_view_init (GtkColumnView *self)
 {
@@ -836,10 +873,15 @@ gtk_column_view_init (GtkColumnView *self)
   g_signal_connect (controller, "drag-end", G_CALLBACK (header_drag_end), self);
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
   gtk_widget_add_controller (self->header, controller);
+  self->drag_gesture = GTK_GESTURE (controller);
 
   controller = gtk_event_controller_motion_new ();
   g_signal_connect (controller, "motion", G_CALLBACK (header_motion), self);
   gtk_widget_add_controller (self->header, controller);
+
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (header_key_pressed), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   self->sorter = gtk_column_view_sorter_new ();
   self->factory = gtk_column_list_item_factory_new (self);
@@ -854,6 +896,7 @@ gtk_column_view_init (GtkColumnView *self)
                           g_quark_from_static_string (I_("view")));
 
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
+  gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 }
 
 /**
