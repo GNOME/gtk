@@ -2292,7 +2292,7 @@ render_repeat_node (GskGLRenderer   *self,
                           &child->bounds,
                           child,
                           &region, &is_offscreen,
-                          RESET_CLIP | RESET_OPACITY | FORCE_OFFSCREEN))
+                          RESET_CLIP | RESET_OPACITY))
     g_assert_not_reached ();
 
   ops_set_program (builder, &self->repeat_program);
