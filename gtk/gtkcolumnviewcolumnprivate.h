@@ -33,6 +33,7 @@ void                    gtk_column_view_column_add_cell                 (GtkColu
 void                    gtk_column_view_column_remove_cell              (GtkColumnViewColumn    *self,
                                                                          GtkColumnViewCell      *cell);
 GtkColumnViewCell *     gtk_column_view_column_get_first_cell           (GtkColumnViewColumn    *self);
+GtkWidget *             gtk_column_view_column_get_header               (GtkColumnViewColumn    *self);
 
 void                    gtk_column_view_column_queue_resize             (GtkColumnViewColumn    *self);
 void                    gtk_column_view_column_measure                  (GtkColumnViewColumn    *self,
