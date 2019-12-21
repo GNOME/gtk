@@ -488,8 +488,9 @@ const char *ui_file =
 "<interface>\n" \
 "  <template class='GtkListItem'>\n" \
 "    <property name='child'>\n" \
-"      <object class='GtkCheckButton'>\n" \
-"        <binding name='active'>\n" \
+"      <object class='GtkImage'>\n" \
+"        <property name='icon-name'>object-select-symbolic</property>\n" \
+"        <binding name='visible'>\n" \
 "          <closure type='gboolean' function='get_boolean'>\n" \
 "            <lookup name='item' type='GtkTreeListRow'><lookup name='item'>GtkListItem</lookup></lookup>\n" \
 "            <constant type='gchararray'>" attr "</constant>" \
@@ -606,12 +607,13 @@ struct {
 #define G_FILE_ATTRIBUTE_RECENT_MODIFIED "recent::modified"          /* int64 (time_t) */
 #endif
 
-const char *factory_ui =
+const char *factory_ui_name =
 "<?xml version='1.0' encoding='UTF-8'?>\n"
 "<interface>\n"
 "  <template class='GtkListItem'>\n"
 "    <property name='child'>\n"
 "      <object class='GtkLabel'>\n"
+"        <property name='xalign'>0</property>\n"
 "        <binding name='label'>\n"
 "          <lookup name='title' type='GtkColumnViewColumn'>\n"
 "            <lookup name='item'>GtkListItem</lookup>\n"
@@ -621,6 +623,124 @@ const char *factory_ui =
 "    </property>\n"
 "  </template>\n"
 "</interface>\n";
+
+const char *factory_ui_visible =
+"<?xml version='1.0' encoding='UTF-8'?>\n"
+"<interface>\n"
+"  <template class='GtkListItem'>\n"
+"    <property name='child'>\n"
+"      <object class='GtkCheckButton'>\n"
+"        <signal name='toggled' handler='column_visible_toggled' object='GtkListItem'/>\n"
+"        <binding name='active'>\n"
+"          <lookup name='visible' type='GtkColumnViewColumn'>\n"
+"            <lookup name='item'>GtkListItem</lookup>\n"
+"          </lookup>\n"
+"        </binding>\n"
+"      </object>\n"
+"    </property>\n"
+"  </template>\n"
+"</interface>\n";
+
+const char *factory_ui_resizable =
+"<?xml version='1.0' encoding='UTF-8'?>\n"
+"<interface>\n"
+"  <template class='GtkListItem'>\n"
+"    <property name='child'>\n"
+"      <object class='GtkCheckButton'>\n"
+"        <signal name='toggled' handler='column_resizable_toggled' object='GtkListItem'/>\n"
+"        <binding name='active'>\n"
+"          <lookup name='resizable' type='GtkColumnViewColumn'>\n"
+"            <lookup name='item'>GtkListItem</lookup>\n"
+"          </lookup>\n"
+"        </binding>\n"
+"      </object>\n"
+"    </property>\n"
+"  </template>\n"
+"</interface>\n";
+
+const char *factory_ui_reorderable =
+"<?xml version='1.0' encoding='UTF-8'?>\n"
+"<interface>\n"
+"  <template class='GtkListItem'>\n"
+"    <property name='child'>\n"
+"      <object class='GtkCheckButton'>\n"
+"        <signal name='toggled' handler='column_reorderable_toggled' object='GtkListItem'/>\n"
+"        <binding name='active'>\n"
+"          <lookup name='reorderable' type='GtkColumnViewColumn'>\n"
+"            <lookup name='item'>GtkListItem</lookup>\n"
+"          </lookup>\n"
+"        </binding>\n"
+"      </object>\n"
+"    </property>\n"
+"  </template>\n"
+"</interface>\n";
+
+const char *factory_ui_width =
+"<?xml version='1.0' encoding='UTF-8'?>\n"
+"<interface>\n"
+"  <template class='GtkListItem'>\n"
+"    <property name='child'>\n"
+"      <object class='GtkSpinButton'>\n"
+"        <property name='digits'>0</property>\n"
+"        <property name='numeric'>1</property>\n"
+"        <property name='adjustment'>\n"
+"          <object class='GtkAdjustment'>\n"
+"            <property name='lower'>-1</property>\n"
+"            <property name='upper'>10000</property>\n"
+"            <property name='step-increment'>1</property>\n"
+"            <property name='page-increment'>10</property>\n"
+"          </object>\n"
+"        </property>\n"
+"        <signal name='value-changed' handler='column_width_changed' object='GtkListItem'/>\n"
+"        <binding name='value'>\n"
+"          <closure type='gdouble' function='cast_to_double'>\n"
+"            <lookup name='fixed-width' type='GtkColumnViewColumn'>\n"
+"              <lookup name='item'>GtkListItem</lookup>\n"
+"            </lookup>\n"
+"          </closure>\n"
+"        </binding>\n"
+"      </object>\n"
+"    </property>\n"
+"  </template>\n"
+"</interface>\n";
+
+static void
+column_visible_toggled (GtkListItem *item, GtkToggleButton *button)
+{
+  GtkColumnViewColumn *column = gtk_list_item_get_item (item);
+
+  gtk_column_view_column_set_visible (column, gtk_toggle_button_get_active (button));
+}
+
+static void
+column_resizable_toggled (GtkListItem *item, GtkToggleButton *button)
+{
+  GtkColumnViewColumn *column = gtk_list_item_get_item (item);
+
+  gtk_column_view_column_set_resizable (column, gtk_toggle_button_get_active (button));
+}
+
+static void
+column_reorderable_toggled (GtkListItem *item, GtkToggleButton *button)
+{
+  GtkColumnViewColumn *column = gtk_list_item_get_item (item);
+
+  gtk_column_view_column_set_reorderable (column, gtk_toggle_button_get_active (button));
+}
+
+static void
+column_width_changed (GtkListItem *item, GtkSpinButton *button)
+{
+  GtkColumnViewColumn *column = gtk_list_item_get_item (item);
+
+  gtk_column_view_column_set_fixed_width (column, gtk_spin_button_get_value_as_int (button));
+}
+
+static double
+cast_to_double (gpointer _this, int value)
+{
+  return (double)value;
+}
 
 static GtkBuilderScope *
 create_scope (void)
@@ -634,6 +754,11 @@ create_scope (void)
   ADD_SYMBOL (get_object);
   ADD_SYMBOL (get_string);
   ADD_SYMBOL (get_boolean);
+  ADD_SYMBOL (column_visible_toggled);
+  ADD_SYMBOL (column_resizable_toggled);
+  ADD_SYMBOL (column_reorderable_toggled);
+  ADD_SYMBOL (column_width_changed);
+  ADD_SYMBOL (cast_to_double);
 
   return scope;
 #undef ADD_SYMBOL
@@ -672,7 +797,7 @@ int
 main (int argc, char *argv[])
 {
   GListModel *toplevels;
-  GtkWidget *win, *hbox, *vbox, *sw, *view, *list, *search_entry, *statusbar;
+  GtkWidget *win, *paned, *vbox, *sw, *view, *list, *search_entry, *statusbar;
   GListModel *dirmodel;
   GtkTreeListModel *tree;
   GtkFilterListModel *filter;
@@ -683,17 +808,19 @@ main (int argc, char *argv[])
   GtkBuilderScope *scope;
   GtkBuilder *builder;
   GError *error = NULL;
+  GtkColumnViewColumn *column;
 
   gtk_init ();
 
   win = gtk_window_new ();
   gtk_window_set_default_size (GTK_WINDOW (win), 800, 600);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_window_set_child (GTK_WINDOW (win), hbox);
+  paned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_paned_set_wide_handle (GTK_PANED (paned), TRUE);
+  gtk_window_set_child (GTK_WINDOW (win), paned);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_box_append (GTK_BOX (hbox), vbox);
+  gtk_paned_set_start_child (GTK_PANED (paned), vbox);
 
   search_entry = gtk_search_entry_new ();
   gtk_box_append (GTK_BOX (vbox), search_entry);
@@ -750,10 +877,47 @@ main (int argc, char *argv[])
   g_object_unref (sort);
   g_object_unref (tree);
 
-  list = gtk_list_view_new_with_factory (
-             gtk_builder_list_item_factory_new_from_bytes (scope, g_bytes_new_static (factory_ui, strlen (factory_ui))));
-  gtk_list_view_set_model (GTK_LIST_VIEW (list), gtk_column_view_get_columns (GTK_COLUMN_VIEW (view)));
-  gtk_box_append (GTK_BOX (hbox), list);
+  list = gtk_column_view_new ();
+
+  column = gtk_column_view_column_new_with_factory ("Name",
+                                                    gtk_builder_list_item_factory_new_from_bytes (scope, g_bytes_new_static (factory_ui_name, strlen (factory_ui_name))));
+  gtk_column_view_column_set_resizable (column, FALSE);
+  gtk_column_view_column_set_reorderable (column, FALSE);
+  gtk_column_view_append_column (GTK_COLUMN_VIEW (list), column);
+  g_object_unref (column);
+
+  column = gtk_column_view_column_new_with_factory ("Visible",
+                                                    gtk_builder_list_item_factory_new_from_bytes (scope, g_bytes_new_static (factory_ui_visible, strlen (factory_ui_visible))));
+  gtk_column_view_column_set_resizable (column, FALSE);
+  gtk_column_view_column_set_reorderable (column, FALSE);
+  gtk_column_view_append_column (GTK_COLUMN_VIEW (list), column);
+  g_object_unref (column);
+
+  column = gtk_column_view_column_new_with_factory ("Resizable",
+                                                    gtk_builder_list_item_factory_new_from_bytes (scope, g_bytes_new_static (factory_ui_resizable, strlen (factory_ui_resizable))));
+  gtk_column_view_column_set_resizable (column, FALSE);
+  gtk_column_view_column_set_reorderable (column, FALSE);
+  gtk_column_view_append_column (GTK_COLUMN_VIEW (list), column);
+  g_object_unref (column);
+
+  column = gtk_column_view_column_new_with_factory ("Reorderable",
+                                                    gtk_builder_list_item_factory_new_from_bytes (scope, g_bytes_new_static (factory_ui_reorderable, strlen (factory_ui_reorderable))));
+  gtk_column_view_column_set_resizable (column, FALSE);
+  gtk_column_view_column_set_reorderable (column, FALSE);
+  gtk_column_view_append_column (GTK_COLUMN_VIEW (list), column);
+  g_object_unref (column);
+
+  column = gtk_column_view_column_new_with_factory ("Width",
+                                                    gtk_builder_list_item_factory_new_from_bytes (scope, g_bytes_new_static (factory_ui_width, strlen (factory_ui_width))));
+  gtk_column_view_column_set_resizable (column, FALSE);
+  gtk_column_view_column_set_reorderable (column, FALSE);
+  gtk_column_view_append_column (GTK_COLUMN_VIEW (list), column);
+  g_object_unref (column);
+
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (list), gtk_column_view_get_columns (GTK_COLUMN_VIEW (view)));
+  sw = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
+  gtk_paned_set_end_child (GTK_PANED (paned), sw);
 
   g_object_unref (scope);
 
