@@ -874,3 +874,9 @@ gtk_column_view_column_get_fixed_width (GtkColumnViewColumn *self)
 
   return self->fixed_width;
 }
+
+GtkWidget *
+gtk_column_view_column_get_header (GtkColumnViewColumn *self)
+{
+  return self->header;
+}
