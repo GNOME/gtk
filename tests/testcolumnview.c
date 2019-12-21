@@ -793,6 +793,55 @@ search_changed_cb (GtkSearchEntry *entry,
   gtk_filter_changed (custom_filter, GTK_FILTER_CHANGE_DIFFERENT);
 }
 
+static void
+move_column (GtkColumnView *list, gboolean down)
+{
+  GListModel *columns;
+  guint position;
+  GtkColumnViewColumn *selected;
+  GtkColumnView *view;
+
+  columns = gtk_column_view_get_model (list);
+  position = gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (columns));
+  selected = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (columns));
+  view = gtk_column_view_column_get_column_view (selected);
+
+  if (down && position + 1 < g_list_model_get_n_items (columns))
+    position++;
+  else if (!down && position > 0)
+    position--;
+  else
+    return;
+
+  gtk_column_view_insert_column (view, position, selected);
+  gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (columns), position);
+  gtk_widget_grab_focus (GTK_WIDGET (list));
+}
+
+static gboolean
+key_pressed_cb (GtkEventControllerKey *controller,
+                guint                  keyval,
+                guint                  keycode,
+                GdkModifierType        modifiers,
+                GtkColumnView         *list)
+{
+  gboolean down;
+
+  if ((modifiers & GDK_CONTROL_MASK) == 0)
+    return FALSE;
+
+  if (keyval == GDK_KEY_Down)
+    down = TRUE;
+  else if (keyval == GDK_KEY_Up)
+    down = FALSE;
+  else
+    return FALSE;
+
+  move_column (list, down);
+  
+  return TRUE;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -809,6 +858,8 @@ main (int argc, char *argv[])
   GtkBuilder *builder;
   GError *error = NULL;
   GtkColumnViewColumn *column;
+  GListModel *model;
+  GtkEventController *controller;
 
   gtk_init ();
 
@@ -914,12 +965,20 @@ main (int argc, char *argv[])
   gtk_column_view_append_column (GTK_COLUMN_VIEW (list), column);
   g_object_unref (column);
 
-  gtk_column_view_set_model (GTK_COLUMN_VIEW (list), gtk_column_view_get_columns (GTK_COLUMN_VIEW (view)));
+  model = G_LIST_MODEL (gtk_single_selection_new (gtk_column_view_get_columns (GTK_COLUMN_VIEW (view))));
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (list), model);
+  g_object_unref (model);
+
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
   gtk_paned_set_end_child (GTK_PANED (paned), sw);
 
   g_object_unref (scope);
+
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed_cb), list);
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  gtk_widget_add_controller (list, controller);
 
   gtk_widget_show (win);
 
