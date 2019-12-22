@@ -471,6 +471,19 @@ gtk_print_backend_get_printer_list (GtkPrintBackend *backend)
   return result;
 }
 
+GListModel *
+gtk_print_backend_get_printers (GtkPrintBackend *backend)
+{
+  if (!backend->priv->printer_list_requested)
+    {
+      if (GTK_PRINT_BACKEND_GET_CLASS (backend)->request_printer_list)
+	GTK_PRINT_BACKEND_GET_CLASS (backend)->request_printer_list (backend);
+      backend->priv->printer_list_requested = TRUE;
+    }
+
+  return G_LIST_MODEL (backend->priv->printers);
+}
+
 gboolean
 gtk_print_backend_printer_list_is_done (GtkPrintBackend *backend)
 {
