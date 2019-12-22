@@ -17,19 +17,6 @@
       <column type="gboolean"/>
     </columns>
   </object>
-  <object class="GtkListStore" id="printer_list">
-    <columns>
-      <column type="GIcon"/>
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-      <column type="gint"/>
-      <column type="gchararray"/>
-      <column type="GObject"/>
-    </columns>
-  </object>
-  <object class="GtkTreeModelFilter" id="printer_list_filter">
-    <property name="child-model">printer_list</property>
-  </object>
   <object class="GtkAdjustment" id="scale_spin_adjustment">
     <property name="lower">1</property>
     <property name="upper">1000</property>
@@ -72,58 +59,131 @@
                                 <property name="has-frame">1</property>
                                 <property name="vexpand">1</property>
                                 <child>
-                                  <object class="GtkTreeView" id="printer_treeview">
-                                    <property name="model">printer_list_filter</property>
-                                    <signal name="row-activated" handler="emit_ok_response" swapped="no"/>
-                                    <child internal-child="selection">
-                                      <object class="GtkTreeSelection" id="treeview-selection1">
-                                        <property name="mode">browse</property>
-                                        <signal name="changed" handler="selected_printer_changed" swapped="no"/>
-                                      </object>
-                                    </child>
+                                  <object class="GtkColumnView" id="printer_list">
+                                    <property name="can-focus">1</property>
+                                    <property name="halign">fill</property>
                                     <child>
-                                      <object class="GtkTreeViewColumn" id="printer_icon_column">
-                                        <child>
-                                          <object class="GtkCellRendererPixbuf" id="printer_icon_renderer"/>
-                                          <attributes>
-                                            <attribute name="gicon">0</attribute>
-                                          </attributes>
-                                        </child>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkTreeViewColumn" id="printer_name_column">
-                                        <property name="title" translatable="yes">Printer</property>
-                                        <child>
-                                          <object class="GtkCellRendererText" id="printer_name_renderer"/>
-                                          <attributes>
-                                            <attribute name="text">1</attribute>
-                                          </attributes>
-                                        </child>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkTreeViewColumn" id="printer_location_column">
-                                        <property name="title" translatable="yes" comments="this is the header for the location column in the print dialog">Location</property>
-                                        <child>
-                                          <object class="GtkCellRendererText" id="printer_location_renderer"/>
-                                          <attributes>
-                                            <attribute name="text">4</attribute>
-                                          </attributes>
-                                        </child>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkTreeViewColumn" id="printer_status_column">
-                                        <property name="title" translatable="yes" comments="this is the header for the printer status column in the print dialog">Status</property>
-                                        <child>
-                                          <object class="GtkCellRendererText" id="printer_status_renderer">
-                                            <property name="ellipsize">end</property>
+                                      <object class="GtkColumnViewColumn">
+                                        <property name="factory">
+                                          <object class="GtkBuilderListItemFactory">
+                                            <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkImage">
+        <binding name="icon-name">
+          <lookup name="icon-name" type="GtkPrinter">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+        <binding name="sensitive">
+          <lookup name="accepting-jobs" type="GtkPrinter">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                                            ]]></property>
                                           </object>
-                                          <attributes>
-                                            <attribute name="text">2</attribute>
-                                          </attributes>
-                                        </child>
+                                        </property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkColumnViewColumn">
+                                        <property name="title" translatable="yes">Name</property>
+                                        <property name="factory">
+                                          <object class="GtkBuilderListItemFactory">
+                                            <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkLabel">
+        <property name="xalign">0</property>
+        <binding name="label">
+          <lookup name="name" type="GtkPrinter">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+        <binding name="sensitive">
+          <lookup name="accepting-jobs" type="GtkPrinter">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                                            ]]></property>
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkColumnViewColumn">
+                                        <property name="title" translatable="yes" comments="this is the header for the location column in the print dialog">Location</property>
+                                        <property name="factory">
+                                          <object class="GtkBuilderListItemFactory">
+                                            <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkLabel">
+        <property name="xalign">0</property>
+        <binding name="label">
+          <lookup name="location" type="GtkPrinter">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+        <binding name="sensitive">
+          <lookup name="accepting-jobs" type="GtkPrinter">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                                            ]]></property>
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkColumnViewColumn">
+                                        <property name="title" translatable="yes" comments="this is the header for the printer status column in the print dialog">Status</property>
+                                        <property name="expand">1</property>
+                                        <property name="factory">
+                                          <object class="GtkBuilderListItemFactory">
+                                            <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkLabel">
+        <property name="xalign">0</property>
+        <property name="ellipsize">end</property>
+        <binding name="label">
+          <lookup name="state-message" type="GtkPrinter">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+        <binding name="sensitive">
+          <lookup name="accepting-jobs" type="GtkPrinter">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                                            ]]></property>
+                                          </object>
+                                        </property>
                                       </object>
                                     </child>
                                   </object>
