@@ -442,7 +442,7 @@ gtk_list_item_widget_init (GtkListItemWidget *self)
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   controller = gtk_event_controller_motion_new ();
-  g_signal_connect (controller, "notify::contains-pointer-focus", G_CALLBACK (gtk_list_item_widget_hover_changed_cb), self);
+  g_signal_connect (controller, "notify::contains-pointer", G_CALLBACK (gtk_list_item_widget_hover_changed_cb), self);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 }
 
