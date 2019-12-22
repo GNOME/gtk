@@ -211,6 +211,7 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
               self->selected = 0;
               g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
               g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
+              gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), 0, 1);
             }
         }
     }

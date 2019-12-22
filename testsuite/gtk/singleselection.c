@@ -425,7 +425,7 @@ test_autoselect (void)
   assert_model (selection, "1");
   assert_changes (selection, "+0");
   assert_selection (selection, "1");
-  assert_selection_changes (selection, "");
+  assert_selection_changes (selection, "0:1");
 
   splice (store, 0, 1, (guint[]) { 7, 8, 9 }, 3);
   assert_model (selection, "7 8 9");
@@ -642,6 +642,49 @@ test_query_range (void)
   g_object_unref (selection);
 }
 
+static void
+selection_changed_cb (GtkSelectionModel *model,
+                      guint position,
+                      guint n_items,
+                      gpointer data)
+{
+  int *counter = data;
+
+  (*counter)++;
+}
+
+/* Test that the selection emits selection-changed when an item
+ * is autoselected due to the underlying store going from empty
+ * to non-empty.
+ */
+static void
+test_empty (void)
+{
+  GListStore *store;
+  GtkSingleSelection *selection;
+  int counter;
+  GtkFilter *filter;
+
+  store = g_list_store_new (GTK_TYPE_FILTER);
+  
+  counter = 0;
+  selection = gtk_single_selection_new (G_LIST_MODEL (store));
+  g_signal_connect (selection, "selection-changed", G_CALLBACK (selection_changed_cb), &counter);
+
+  g_assert_cmpint (gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (selection)), ==, GTK_INVALID_LIST_POSITION);
+
+  filter = gtk_string_filter_new ();
+  g_list_store_append (store, filter);
+  g_object_unref (filter);
+
+  g_assert_cmpint (gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (selection)), ==, 0);
+
+  g_assert_cmpint (counter, ==, 1);
+
+  g_object_unref (selection);
+  g_object_unref (store);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -660,6 +703,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/singleselection/persistence", test_persistence);
   g_test_add_func ("/singleselection/query-range", test_query_range);
   g_test_add_func ("/singleselection/changes", test_changes);
+  g_test_add_func ("/singleselection/empty", test_empty);
 
   return g_test_run ();
 }
