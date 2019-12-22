@@ -61,6 +61,8 @@ struct _GtkColumnViewColumn
   int allocation_offset;
   int allocation_size;
 
+  GMenuModel *menu;
+
   /* This list isn't sorted - this is just caching for performance */
   GtkColumnViewCell *first_cell; /* no reference, just caching */
 };
@@ -77,6 +79,7 @@ enum
   PROP_FACTORY,
   PROP_TITLE,
   PROP_SORTER,
+  PROP_HEADER_MENU,
 
   N_PROPS
 };
@@ -96,6 +99,7 @@ gtk_column_view_column_dispose (GObject *object)
   g_clear_object (&self->factory);
   g_clear_object (&self->sorter);
   g_clear_pointer (&self->title, g_free);
+  g_clear_object (&self->menu);
 
   G_OBJECT_CLASS (gtk_column_view_column_parent_class)->dispose (object);
 }
@@ -126,6 +130,10 @@ gtk_column_view_column_get_property (GObject    *object,
       g_value_set_object (value, self->sorter);
       break;
 
+    case PROP_HEADER_MENU:
+      g_value_set_object (value, self->menu);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -152,6 +160,10 @@ gtk_column_view_column_set_property (GObject      *object,
 
     case PROP_SORTER:
       gtk_column_view_column_set_sorter (self, g_value_get_object (value));
+      break;
+
+    case PROP_HEADER_MENU:
+      gtk_column_view_column_set_header_menu (self, g_value_get_object (value));
       break;
 
     default:
@@ -215,6 +227,18 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                          P_("Sorter"),
                          P_("Sorter for sorting items according to this column"),
                          GTK_TYPE_SORTER,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkColumnViewColumn:header-menu:
+   *
+   * Menu model used to create the context menu for the column header.
+   */
+  properties[PROP_HEADER_MENU] =
+    g_param_spec_object ("header-menu",
+                         P_("Header menu"),
+                         P_("Menu to use on the title of this column"),
+                         G_TYPE_MENU_MODEL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
@@ -646,4 +670,45 @@ gtk_column_view_column_notify_sort (GtkColumnViewColumn *self)
 {
   if (self->header)
     gtk_column_view_title_update (GTK_COLUMN_VIEW_TITLE (self->header));
+}
+
+/**
+ * gtk_column_view_column_set_header_menu:
+ * @self: a #GtkColumnViewColumn
+ * @menu: (allow-none): a #GMenuModel, or %NULL
+ *
+ * Sets the menu model that is used to create the context menu
+ * for the column header.
+ */
+void
+gtk_column_view_column_set_header_menu (GtkColumnViewColumn *self,
+                                        GMenuModel          *menu)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self));
+  g_return_if_fail (menu == NULL || G_IS_MENU_MODEL (menu));
+
+  if (!g_set_object (&self->menu, menu))
+    return;
+
+  if (self->header)
+    gtk_column_view_title_update (GTK_COLUMN_VIEW_TITLE (self->header));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HEADER_MENU]);
+}
+
+/**
+ * gtk_column_view_column_get_header_menu:
+ * @self: a #GtkColumnViewColumn
+ *
+ * Gets the menu model that is used to create the context menu
+ * for the column header.
+ *
+ * Returns: the #GMenuModel, or %NULL
+ */
+GMenuModel *
+gtk_column_view_column_get_header_menu (GtkColumnViewColumn *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self), NULL);
+
+  return self->menu;
 }
