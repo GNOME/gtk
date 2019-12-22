@@ -35,7 +35,6 @@
 
 #include "gtkspinbutton.h"
 #include "gtkimage.h"
-#include "gtktreeselection.h"
 #include "gtknotebook.h"
 #include "gtkscrolledwindow.h"
 #include "gtkcombobox.h"
@@ -136,14 +135,12 @@ static void     gtk_print_unix_dialog_get_property (GObject            *object,
                                                     GValue             *value,
                                                     GParamSpec         *pspec);
 static void     unschedule_idle_mark_conflicts     (GtkPrintUnixDialog *dialog);
-static void     selected_printer_changed           (GtkTreeSelection   *selection,
-                                                    GtkPrintUnixDialog *dialog);
+static void     selected_printer_changed           (GtkPrintUnixDialog *dialog);
 static void     clear_per_printer_ui               (GtkPrintUnixDialog *dialog);
-static void     printer_added_cb                   (GtkPrintBackend    *backend,
-                                                    GtkPrinter         *printer,
-                                                    GtkPrintUnixDialog *dialog);
-static void     printer_removed_cb                 (GtkPrintBackend    *backend,
-                                                    GtkPrinter         *printer,
+static void     printer_added_cb                   (GListModel         *model,
+                                                    guint               position,
+                                                    guint               removed,
+                                                    guint               added,
                                                     GtkPrintUnixDialog *dialog);
 static void     printer_status_cb                  (GtkPrintBackend    *backend,
                                                     GtkPrinter         *printer,
@@ -171,12 +168,10 @@ static void     draw_collate                       (GtkDrawingArea     *da,
                                                     int                 width,
                                                     int                 height,
                                                     gpointer            data);
-static gboolean is_printer_active                  (GtkTreeModel        *model,
-						    GtkTreeIter         *iter,
-						    GtkPrintUnixDialog  *dialog);
-static gint     default_printer_list_sort_func     (GtkTreeModel        *model,
-						    GtkTreeIter         *a,
-						    GtkTreeIter         *b,
+static gboolean is_printer_active                  (gpointer            item,
+                                                    gpointer            data);
+static  int     default_printer_list_sort_func     (gconstpointer        a,
+                                                    gconstpointer        b,
 						    gpointer             user_data);
 static gboolean paper_size_row_is_separator        (GtkTreeModel        *model,
 						    GtkTreeIter         *iter,
@@ -198,20 +193,10 @@ static gboolean dialog_get_collate                 (GtkPrintUnixDialog *dialog);
 static gboolean dialog_get_reverse                 (GtkPrintUnixDialog *dialog);
 static gint     dialog_get_n_copies                (GtkPrintUnixDialog *dialog);
 
-static void     set_cell_sensitivity_func          (GtkTreeViewColumn *tree_column,
-                                                    GtkCellRenderer   *cell,
-                                                    GtkTreeModel      *model,
-                                                    GtkTreeIter       *iter,
-                                                    gpointer           data);
 static gboolean set_active_printer                 (GtkPrintUnixDialog *dialog,
                                                     const gchar        *printer_name);
 static void redraw_page_layout_preview             (GtkPrintUnixDialog *dialog);
-static void load_print_backends                    (GtkPrintUnixDialog *dialog);
-static gboolean printer_compare                    (GtkTreeModel       *model,
-                                                    gint                column,
-                                                    const gchar        *key,
-                                                    GtkTreeIter        *iter,
-                                                    gpointer            search_data);
+static GListModel *load_print_backends             (GtkPrintUnixDialog *dialog);
 
 /* GtkBuildable */
 static void gtk_print_unix_dialog_buildable_init                    (GtkBuildableIface *iface);
@@ -272,21 +257,10 @@ struct _GtkPrintUnixDialog
 
   GtkWidget *notebook;
 
-  GtkWidget *printer_treeview;
-  GtkTreeViewColumn *printer_icon_column;
-  GtkTreeViewColumn *printer_name_column;
-  GtkTreeViewColumn *printer_location_column;
-  GtkTreeViewColumn *printer_status_column;
-  GtkCellRenderer *printer_icon_renderer;
-  GtkCellRenderer *printer_name_renderer;
-  GtkCellRenderer *printer_location_renderer;
-  GtkCellRenderer *printer_status_renderer;
+  GtkWidget *printer_list;
 
   GtkPrintCapabilities manual_capabilities;
   GtkPrintCapabilities printer_capabilities;
-
-  GtkTreeModel *printer_list;
-  GtkTreeModelFilter *printer_list_filter;
 
   GtkPageSetup *page_setup;
   gboolean page_setup_set;
@@ -491,19 +465,9 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
 					       "/org/gtk/libgtk/ui/gtkprintunixdialog.ui");
 
   /* GtkTreeView / GtkTreeModel */
-  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_treeview);
   gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_list);
-  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_list_filter);
-  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, page_setup_list);
+  gtk_widget_class_bind_template_child(widget_class, GtkPrintUnixDialog, page_setup_list);
   gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, custom_paper_list);
-  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_icon_column);
-  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_name_column);
-  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_location_column);
-  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_status_column);
-  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_icon_renderer);
-  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_name_renderer);
-  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_location_renderer);
-  gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, printer_status_renderer);
 
   /* General Widgetry */
   gtk_widget_class_bind_template_child (widget_class, GtkPrintUnixDialog, notebook);
@@ -558,7 +522,6 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   gtk_widget_class_bind_template_callback (widget_class, redraw_page_layout_preview);
   gtk_widget_class_bind_template_callback (widget_class, error_dialogs);
   gtk_widget_class_bind_template_callback (widget_class, emit_ok_response);
-  gtk_widget_class_bind_template_callback (widget_class, selected_printer_changed);
   gtk_widget_class_bind_template_callback (widget_class, page_range_entry_focus_changed);
   gtk_widget_class_bind_template_callback (widget_class, update_page_range_entry_sensitivity);
   gtk_widget_class_bind_template_callback (widget_class, update_print_at_entry_sensitivity);
@@ -729,11 +692,24 @@ error_dialogs (GtkPrintUnixDialog *dialog,
     }
 }
 
+static char *
+get_printer_key (GtkPrinter *printer)
+{
+  return g_strconcat ("", gtk_printer_get_name (printer), " ", gtk_printer_get_location (printer), NULL);
+}
+
 static void
 gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 {
-  GtkTreeSortable *sort;
   GtkWidget *widget;
+  GListModel *model;
+  GListModel *sorted;
+  GListModel *filtered;
+  GListModel *selection;
+  GtkSorter *sorter;
+  GtkFilter *filter;
+  GtkFilter *filter1;
+  GtkExpression *expression;
 
   dialog->print_backends = NULL;
   dialog->current_page = -1;
@@ -767,43 +743,7 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   gtk_widget_set_visible (dialog->selection_radio, FALSE);
   gtk_widget_set_visible (dialog->conflicts_widget, FALSE);
 
-  /* Treeview auxiliary functions need to be setup here */
-  gtk_tree_model_filter_set_visible_func (dialog->printer_list_filter,
-                                          (GtkTreeModelFilterVisibleFunc) is_printer_active,
-                                          dialog,
-                                          NULL);
-
-  sort = GTK_TREE_SORTABLE (dialog->printer_list);
-  gtk_tree_sortable_set_default_sort_func (sort,
-                                           default_printer_list_sort_func,
-                                           NULL,
-                                           NULL);
-
-  gtk_tree_sortable_set_sort_column_id (sort,
-                                        GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
-                                        GTK_SORT_ASCENDING);
-
-  gtk_tree_view_set_search_equal_func (GTK_TREE_VIEW (dialog->printer_treeview),
-                                       printer_compare, NULL, NULL);
-
-  gtk_tree_view_column_set_cell_data_func (dialog->printer_icon_column,
-					   dialog->printer_icon_renderer,
-					   set_cell_sensitivity_func, NULL, NULL);
-
-  gtk_tree_view_column_set_cell_data_func (dialog->printer_name_column,
-					   dialog->printer_name_renderer,
-					   set_cell_sensitivity_func, NULL, NULL);
-
-  gtk_tree_view_column_set_cell_data_func (dialog->printer_location_column,
-					   dialog->printer_location_renderer,
-					   set_cell_sensitivity_func, NULL, NULL);
-
-  gtk_tree_view_column_set_cell_data_func (dialog->printer_status_column,
-					   dialog->printer_status_renderer,
-					   set_cell_sensitivity_func, NULL, NULL);
-
-
-  /* Paper size combo auxiliary funcs */
+  /* Paper size combo auxilary funcs */
   gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (dialog->paper_size_combo),
                                         paper_size_row_is_separator, NULL, NULL);
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (dialog->paper_size_combo),
@@ -811,7 +751,39 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
                                       page_name_func, NULL, NULL);
 
   /* Load backends */
-  load_print_backends (dialog);
+  model = load_print_backends (dialog);
+  sorter = gtk_custom_sorter_new (default_printer_list_sort_func, NULL, NULL);
+  sorted = G_LIST_MODEL (gtk_sort_list_model_new (model, sorter));
+  g_object_unref (sorter);
+
+  filter = gtk_every_filter_new ();
+
+  filter1 = gtk_string_filter_new ();
+  gtk_string_filter_set_match_mode (GTK_STRING_FILTER (filter1), GTK_STRING_FILTER_MATCH_MODE_SUBSTRING);
+  gtk_string_filter_set_ignore_case (GTK_STRING_FILTER (filter1), TRUE);
+  expression = gtk_cclosure_expression_new (G_TYPE_STRING,
+                                            NULL, 0, NULL,
+                                            G_CALLBACK (get_printer_key),
+                                            NULL, NULL);
+  gtk_string_filter_set_expression (GTK_STRING_FILTER (filter1), expression);
+  gtk_expression_unref (expression);
+  gtk_multi_filter_append (GTK_MULTI_FILTER (filter), filter1);
+
+  filter1 = gtk_custom_filter_new (is_printer_active, dialog, NULL);
+  gtk_multi_filter_append (GTK_MULTI_FILTER (filter), filter1);
+
+  filtered = G_LIST_MODEL (gtk_filter_list_model_new (sorted, filter));
+  g_object_unref (filter);
+
+  selection = G_LIST_MODEL (gtk_single_selection_new (filtered));
+  gtk_single_selection_set_autoselect (GTK_SINGLE_SELECTION (selection), FALSE);
+  gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (selection), GTK_INVALID_LIST_POSITION);
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (dialog->printer_list), selection);
+  g_signal_connect (selection, "items-changed", G_CALLBACK (printer_added_cb), dialog);
+  g_signal_connect_swapped (selection, "notify::selected", G_CALLBACK (selected_printer_changed), dialog);
+  g_object_unref (selection);
+  g_object_unref (filtered);
+  g_object_unref (model);
 
   /* Load custom papers */
   _gtk_print_load_custom_papers (dialog->custom_paper_list);
@@ -884,21 +856,8 @@ disconnect_printer_details_request (GtkPrintUnixDialog *dialog,
       dialog->request_details_tag = 0;
       set_busy_cursor (dialog, FALSE);
       if (details_failed)
-        gtk_list_store_set (GTK_LIST_STORE (dialog->printer_list),
-                            g_object_get_data (G_OBJECT (dialog->request_details_printer),
-                                               "gtk-print-tree-iter"),
-                            PRINTER_LIST_COL_STATE,
-                             _("Getting printer information failed"),
-                            -1);
-      else
-        gtk_list_store_set (GTK_LIST_STORE (dialog->printer_list),
-                            g_object_get_data (G_OBJECT (dialog->request_details_printer),
-                                               "gtk-print-tree-iter"),
-                            PRINTER_LIST_COL_STATE,
-                            gtk_printer_get_state_message (dialog->request_details_printer),
-                            -1);
-      g_object_unref (dialog->request_details_printer);
-      dialog->request_details_printer = NULL;
+        gtk_printer_set_state_message (dialog->request_details_printer, _("Getting printer information failed"));
+      g_clear_object (&dialog->request_details_printer);
     }
 }
 
@@ -906,8 +865,6 @@ static void
 gtk_print_unix_dialog_finalize (GObject *object)
 {
   GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (object);
-  GtkPrintBackend *backend;
-  GList *node;
 
   unschedule_idle_mark_conflicts (dialog);
   disconnect_printer_details_request (dialog, FALSE);
@@ -933,35 +890,12 @@ gtk_print_unix_dialog_finalize (GObject *object)
   g_clear_pointer (&dialog->waiting_for_printer, (GDestroyNotify)g_free);
   g_clear_pointer (&dialog->format_for_printer, (GDestroyNotify)g_free);
 
-  for (node = dialog->print_backends; node != NULL; node = node->next)
-    {
-      backend = GTK_PRINT_BACKEND (node->data);
-
-      g_signal_handlers_disconnect_by_func (backend, printer_added_cb, dialog);
-      g_signal_handlers_disconnect_by_func (backend, printer_removed_cb, dialog);
-      g_signal_handlers_disconnect_by_func (backend, printer_status_cb, dialog);
-
-      gtk_print_backend_destroy (backend);
-      g_object_unref (backend);
-    }
-
   g_list_free (dialog->print_backends);
   dialog->print_backends = NULL;
 
   g_clear_object (&dialog->page_setup_list);
 
   G_OBJECT_CLASS (gtk_print_unix_dialog_parent_class)->finalize (object);
-}
-
-static void
-printer_removed_cb (GtkPrintBackend    *backend,
-                    GtkPrinter         *printer,
-                    GtkPrintUnixDialog *dialog)
-{
-  GtkTreeIter *iter;
-
-  iter = g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter");
-  gtk_list_store_remove (GTK_LIST_STORE (dialog->printer_list), iter);
 }
 
 static void
@@ -985,157 +919,68 @@ gtk_print_unix_dialog_buildable_get_internal_child (GtkBuildable *buildable,
   return parent_buildable_iface->get_internal_child (buildable, builder, childname);
 }
 
-/* This function controls "sensitive" property of GtkCellRenderer
- * based on pause state of printers.
- */
-void set_cell_sensitivity_func (GtkTreeViewColumn *tree_column,
-                                GtkCellRenderer   *cell,
-                                GtkTreeModel      *tree_model,
-                                GtkTreeIter       *iter,
-                                gpointer           data)
-{
-  GtkPrinter *printer;
-
-  gtk_tree_model_get (tree_model, iter,
-                      PRINTER_LIST_COL_PRINTER_OBJ, &printer,
-                      -1);
-
-  if (printer != NULL && !gtk_printer_is_accepting_jobs (printer))
-    g_object_set (cell, "sensitive", FALSE, NULL);
-  else
-    g_object_set (cell, "sensitive", TRUE, NULL);
-
-  g_clear_object (&printer);
-}
-
 static void
 printer_status_cb (GtkPrintBackend    *backend,
                    GtkPrinter         *printer,
                    GtkPrintUnixDialog *dialog)
 {
-  GtkTreeIter *iter;
-  GtkTreeSelection *selection;
-  GIcon *icon;
-
-  iter = g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter");
-
-  icon = g_themed_icon_new ("printer");
-  g_themed_icon_prepend_name (G_THEMED_ICON (icon), gtk_printer_get_icon_name (printer));
-  gtk_list_store_set (GTK_LIST_STORE (dialog->printer_list), iter,
-                      PRINTER_LIST_COL_ICON, icon,
-                      PRINTER_LIST_COL_STATE, gtk_printer_get_state_message (printer),
-                      PRINTER_LIST_COL_JOBS, gtk_printer_get_job_count (printer),
-                      PRINTER_LIST_COL_LOCATION, gtk_printer_get_location (printer),
-                      -1);
-  g_object_unref (icon);
+  GListModel *model;
 
   /* When the pause state change then we need to update sensitive property
    * of GTK_RESPONSE_OK button inside of selected_printer_changed function.
    */
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->printer_treeview));
-  dialog->internal_printer_change = TRUE;
-  selected_printer_changed (selection, dialog);
-  dialog->internal_printer_change = FALSE;
+  selected_printer_changed (dialog);
+
+  model = gtk_column_view_get_model (GTK_COLUMN_VIEW (dialog->printer_list));
 
   if (gtk_print_backend_printer_list_is_done (backend) &&
       gtk_printer_is_default (printer) &&
-      (gtk_tree_selection_count_selected_rows (selection) == 0))
+      gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (model)) == GTK_INVALID_LIST_POSITION)
     set_active_printer (dialog, gtk_printer_get_name (printer));
 }
 
 static void
-printer_added_cb (GtkPrintBackend    *backend,
-                  GtkPrinter         *printer,
+printer_added_cb (GListModel         *model,
+                  guint               position,
+                  guint               removed,
+                  guint               added,
                   GtkPrintUnixDialog *dialog)
 {
-  GtkTreeIter iter, filter_iter;
-  GtkTreeSelection *selection;
-  GtkTreePath *path;
-  GIcon *icon;
+  guint i;
 
-  gtk_list_store_append (GTK_LIST_STORE (dialog->printer_list), &iter);
-
-  g_object_set_data_full (G_OBJECT (printer),
-                         "gtk-print-tree-iter",
-                          gtk_tree_iter_copy (&iter),
-                          (GDestroyNotify) gtk_tree_iter_free);
-
-  icon = g_themed_icon_new ("printer");
-  g_themed_icon_prepend_name (G_THEMED_ICON (icon), gtk_printer_get_icon_name (printer));
-  gtk_list_store_set (GTK_LIST_STORE (dialog->printer_list), &iter,
-                      PRINTER_LIST_COL_ICON, icon,
-                      PRINTER_LIST_COL_NAME, gtk_printer_get_name (printer),
-                      PRINTER_LIST_COL_STATE, gtk_printer_get_state_message (printer),
-                      PRINTER_LIST_COL_JOBS, gtk_printer_get_job_count (printer),
-                      PRINTER_LIST_COL_LOCATION, gtk_printer_get_location (printer),
-                      PRINTER_LIST_COL_PRINTER_OBJ, printer,
-                      -1);
-  g_object_unref (icon);
-
-  gtk_tree_model_filter_convert_child_iter_to_iter (dialog->printer_list_filter,
-                                                    &filter_iter, &iter);
-  path = gtk_tree_model_get_path (GTK_TREE_MODEL (dialog->printer_list_filter), &filter_iter);
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->printer_treeview));
-
-  if (dialog->waiting_for_printer != NULL &&
-      strcmp (gtk_printer_get_name (printer), dialog->waiting_for_printer) == 0)
+  for (i = position; i < position + added; i++)
     {
-      dialog->internal_printer_change = TRUE;
-      gtk_tree_selection_select_iter (selection, &filter_iter);
-      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (dialog->printer_treeview),
-                                    path, NULL, TRUE, 0.5, 0.0);
-      dialog->internal_printer_change = FALSE;
-      g_free (dialog->waiting_for_printer);
-      dialog->waiting_for_printer = NULL;
-    }
-  else if (is_default_printer (dialog, printer) &&
-           gtk_tree_selection_count_selected_rows (selection) == 0)
-    {
-      dialog->internal_printer_change = TRUE;
-      gtk_tree_selection_select_iter (selection, &filter_iter);
-      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (dialog->printer_treeview),
-                                    path, NULL, TRUE, 0.5, 0.0);
-      dialog->internal_printer_change = FALSE;
-    }
+      GtkPrinter *printer = g_list_model_get_item (model, i);
 
-  gtk_tree_path_free (path);
+      if (dialog->waiting_for_printer != NULL &&
+          strcmp (gtk_printer_get_name (printer), dialog->waiting_for_printer) == 0)
+        {
+          gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (model), i);
+          g_free (dialog->waiting_for_printer);
+          dialog->waiting_for_printer = NULL;
+          g_object_unref (printer);
+          return;
+        }
+      else if (is_default_printer (dialog, printer) &&
+               gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (model)) == GTK_INVALID_LIST_POSITION)
+        {
+          gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (model), i);
+          g_object_unref (printer);
+          return;
+        }
+
+      g_object_unref (printer);
+    }
 }
 
-static void
-printer_list_initialize (GtkPrintUnixDialog *dialog,
-                         GtkPrintBackend    *print_backend)
-{
-  GList *list;
-  GList *node;
-
-  g_return_if_fail (print_backend != NULL);
-
-  g_signal_connect_object (print_backend, "printer-added",
-                           (GCallback) printer_added_cb, G_OBJECT (dialog), 0);
-
-  g_signal_connect_object (print_backend, "printer-removed",
-                           (GCallback) printer_removed_cb, G_OBJECT (dialog), 0);
-
-  g_signal_connect_object (print_backend, "printer-status-changed",
-                           (GCallback) printer_status_cb, G_OBJECT (dialog), 0);
-
-  list = gtk_print_backend_get_printer_list (print_backend);
-
-  node = list;
-  while (node != NULL)
-    {
-      printer_added_cb (print_backend, node->data, dialog);
-      node = node->next;
-    }
-
-  g_list_free (list);
-}
-
-static void
+static GListModel *
 load_print_backends (GtkPrintUnixDialog *dialog)
 {
   GList *node;
+  GListStore *lists;
+  GListModel *model;
+
+  lists = g_list_store_new (G_TYPE_LIST_MODEL);
 
   if (g_module_supported ())
     dialog->print_backends = gtk_print_backend_load_modules ();
@@ -1143,8 +988,17 @@ load_print_backends (GtkPrintUnixDialog *dialog)
   for (node = dialog->print_backends; node != NULL; node = node->next)
     {
       GtkPrintBackend *backend = node->data;
-      printer_list_initialize (dialog, backend);
+
+      g_signal_connect_object (backend, "printer-status-changed",
+                               G_CALLBACK (printer_status_cb), G_OBJECT (dialog), 0);
+      g_list_store_append (lists, gtk_print_backend_get_printers (backend));
     }
+
+  model = G_LIST_MODEL (gtk_flatten_list_model_new (GTK_TYPE_PRINTER, G_LIST_MODEL (lists)));
+
+  g_object_unref (lists);
+
+  return model;
 }
 
 static void
@@ -1226,19 +1080,11 @@ gtk_print_unix_dialog_get_property (GObject    *object,
 }
 
 static gboolean
-is_printer_active (GtkTreeModel       *model,
-                   GtkTreeIter        *iter,
-                   GtkPrintUnixDialog *dialog)
+is_printer_active (gpointer item, gpointer data)
 {
+  GtkPrinter *printer = item;
+  GtkPrintUnixDialog *dialog = data;
   gboolean result;
-  GtkPrinter *printer;
-
-  gtk_tree_model_get (model, iter,
-                      PRINTER_LIST_COL_PRINTER_OBJ, &printer,
-                      -1);
-
-  if (printer == NULL)
-    return FALSE;
 
   result = gtk_printer_is_active (printer);
 
@@ -1255,61 +1101,44 @@ is_printer_active (GtkTreeModel       *model,
                  gtk_printer_accepts_ps (printer));
     }
 
-  g_object_unref (printer);
-
   return result;
 }
 
-static gint
-default_printer_list_sort_func (GtkTreeModel *model,
-                                GtkTreeIter  *a,
-                                GtkTreeIter  *b,
+static int
+default_printer_list_sort_func (gconstpointer a,
+                                gconstpointer b,
                                 gpointer      user_data)
 {
-  gchar *a_name;
-  gchar *b_name;
-  GtkPrinter *a_printer;
-  GtkPrinter *b_printer;
-  gint result;
-
-  gtk_tree_model_get (model, a,
-                      PRINTER_LIST_COL_NAME, &a_name,
-                      PRINTER_LIST_COL_PRINTER_OBJ, &a_printer,
-                      -1);
-  gtk_tree_model_get (model, b,
-                      PRINTER_LIST_COL_NAME, &b_name,
-                      PRINTER_LIST_COL_PRINTER_OBJ, &b_printer,
-                      -1);
+  GtkPrinter *a_printer = (gpointer)a;
+  GtkPrinter *b_printer = (gpointer)b;
+  const char *a_name;
+  const char *b_name;
 
   if (a_printer == NULL && b_printer == NULL)
-    result = 0;
+    return 0;
   else if (a_printer == NULL)
-   result = G_MAXINT;
+   return 1;
   else if (b_printer == NULL)
-   result = G_MININT;
-  else if (gtk_printer_is_virtual (a_printer) && gtk_printer_is_virtual (b_printer))
-    result = 0;
+   return -1;
+
+  if (gtk_printer_is_virtual (a_printer) && gtk_printer_is_virtual (b_printer))
+    return 0;
   else if (gtk_printer_is_virtual (a_printer) && !gtk_printer_is_virtual (b_printer))
-    result = G_MININT;
+    return -1;
   else if (!gtk_printer_is_virtual (a_printer) && gtk_printer_is_virtual (b_printer))
-    result = G_MAXINT;
-  else if (a_name == NULL && b_name == NULL)
-    result = 0;
+    return 1;
+
+  a_name = gtk_printer_get_name (a_printer);
+  b_name = gtk_printer_get_name (b_printer);
+
+  if (a_name == NULL && b_name == NULL)
+    return  0;
   else if (a_name == NULL && b_name != NULL)
-    result = 1;
+    return  1;
   else if (a_name != NULL && b_name == NULL)
-    result = -1;
-  else
-    result = g_ascii_strcasecmp (a_name, b_name);
+    return -1;
 
-  g_free (a_name);
-  g_free (b_name);
-  if (a_printer)
-    g_object_unref (a_printer);
-  if (b_printer)
-    g_object_unref (b_printer);
-
-  return result;
+  return g_ascii_strcasecmp (a_name, b_name);
 }
 
 static GtkWidget *
@@ -1697,8 +1526,6 @@ update_dialog_from_capabilities (GtkPrintUnixDialog *dialog)
   gtk_widget_set_visible (button, (caps & GTK_PRINT_CAPABILITY_PREVIEW) != 0);
 
   update_collate_icon (NULL, dialog);
-
-  gtk_tree_model_filter_refilter (dialog->printer_list_filter);
 }
 
 static gboolean
@@ -1901,17 +1728,12 @@ mark_conflicts (GtkPrintUnixDialog *dialog)
 
   if (printer)
     {
-
-      g_signal_handler_block (dialog->options,
-                              dialog->options_changed_handler);
+      g_signal_handler_block (dialog->options, dialog->options_changed_handler);
 
       gtk_printer_option_set_clear_conflicts (dialog->options);
+      have_conflict = _gtk_printer_mark_conflicts (printer, dialog->options);
 
-      have_conflict = _gtk_printer_mark_conflicts (printer,
-                                                   dialog->options);
-
-      g_signal_handler_unblock (dialog->options,
-                                dialog->options_changed_handler);
+      g_signal_handler_unblock (dialog->options, dialog->options_changed_handler);
     }
 
   if (have_conflict)
@@ -1989,20 +1811,14 @@ printer_details_acquired (GtkPrinter         *printer,
   disconnect_printer_details_request (dialog, !success);
 
   if (success)
-    {
-      GtkTreeSelection *selection;
-      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->printer_treeview));
-
-      selected_printer_changed (selection, dialog);
-    }
+    selected_printer_changed (dialog);
 }
 
 static void
-selected_printer_changed (GtkTreeSelection   *selection,
-                          GtkPrintUnixDialog *dialog)
+selected_printer_changed (GtkPrintUnixDialog *dialog)
 {
+  GListModel *model = gtk_column_view_get_model (GTK_COLUMN_VIEW (dialog->printer_list));
   GtkPrinter *printer;
-  GtkTreeIter iter, filter_iter;
 
   /* Whenever the user selects a printer we stop looking for
    * the printer specified in the initial settings
@@ -2016,17 +1832,7 @@ selected_printer_changed (GtkTreeSelection   *selection,
 
   disconnect_printer_details_request (dialog, FALSE);
 
-  printer = NULL;
-  if (gtk_tree_selection_get_selected (selection, NULL, &filter_iter))
-    {
-      gtk_tree_model_filter_convert_iter_to_child_iter (dialog->printer_list_filter,
-                                                        &iter,
-                                                        &filter_iter);
-
-      gtk_tree_model_get (dialog->printer_list, &iter,
-                          PRINTER_LIST_COL_PRINTER_OBJ, &printer,
-                          -1);
-    }
+  printer = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (model));
 
   /* sets GTK_RESPONSE_OK button sensitivity depending on whether the printer
    * accepts/rejects jobs
@@ -2036,33 +1842,24 @@ selected_printer_changed (GtkTreeSelection   *selection,
       if (!gtk_printer_is_accepting_jobs (printer))
         gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, FALSE);
       else if (dialog->current_printer == printer && gtk_printer_has_details (printer))
-
         gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, TRUE);
     }
 
   if (printer != NULL && !gtk_printer_has_details (printer))
     {
       gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, FALSE);
-      dialog->request_details_tag =
-        g_signal_connect (printer, "details-acquired",
-                          G_CALLBACK (printer_details_acquired), dialog);
-      /* take the reference */
-      dialog->request_details_printer = printer;
+      dialog->request_details_tag = g_signal_connect (printer, "details-acquired",
+                                                      G_CALLBACK (printer_details_acquired), dialog);
+
+      dialog->request_details_printer = g_object_ref (printer);
       set_busy_cursor (dialog, TRUE);
-      gtk_list_store_set (GTK_LIST_STORE (dialog->printer_list),
-                          g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter"),
-                          PRINTER_LIST_COL_STATE, _("Getting printer information…"),
-                          -1);
+      gtk_printer_set_state_message (printer, _("Getting printer information…"));
       gtk_printer_request_details (printer);
       return;
     }
 
   if (printer == dialog->current_printer)
-    {
-      if (printer)
-        g_object_unref (printer);
-      return;
-    }
+    return;
 
   if (dialog->options)
     {
@@ -2075,7 +1872,7 @@ selected_printer_changed (GtkTreeSelection   *selection,
 
   if (printer != NULL && gtk_printer_is_accepting_jobs (printer))
     gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, TRUE);
-  dialog->current_printer = printer;
+  dialog->current_printer = g_object_ref (printer);
 
   if (printer != NULL)
     {
@@ -2114,86 +1911,7 @@ selected_printer_changed (GtkTreeSelection   *selection,
   update_paper_sizes (dialog);
   dialog->internal_page_setup_change = FALSE;
 
-  g_object_notify ( G_OBJECT(dialog), "selected-printer");
-}
-
-static gboolean
-printer_compare (GtkTreeModel *model,
-                 gint          column,
-                 const gchar  *key,
-                 GtkTreeIter  *iter,
-                 gpointer      search_data)
-{
-  gboolean matches = FALSE;
-
-  if (key != NULL)
-    {
-      gchar  *name = NULL;
-      gchar  *location = NULL;
-      gchar  *casefold_key = NULL;
-      gchar  *casefold_name = NULL;
-      gchar  *casefold_location = NULL;
-      gchar **keys;
-      gchar  *tmp1, *tmp2;
-      gint    i;
-
-      gtk_tree_model_get (model, iter,
-                          PRINTER_LIST_COL_NAME, &name,
-                          PRINTER_LIST_COL_LOCATION, &location,
-                          -1);
-
-      casefold_key = g_utf8_casefold (key, -1);
-
-      if (name != NULL)
-        {
-          casefold_name = g_utf8_casefold (name, -1);
-          g_free (name);
-        }
-
-      if (location != NULL)
-        {
-          casefold_location = g_utf8_casefold (location, -1);
-          g_free (location);
-        }
-
-      if (casefold_name != NULL ||
-          casefold_location != NULL)
-        {
-          keys = g_strsplit_set (casefold_key, " \t", 0);
-          if (keys != NULL)
-            {
-              matches = TRUE;
-
-              for (i = 0; keys[i] != NULL; i++)
-                {
-                  if (keys[i][0] != '\0')
-                    {
-                      tmp1 = tmp2 = NULL;
-
-                      if (casefold_name != NULL)
-                        tmp1 = g_strstr_len (casefold_name, -1, keys[i]);
-
-                      if (casefold_location != NULL)
-                        tmp2 = g_strstr_len (casefold_location, -1, keys[i]);
-
-                      if (tmp1 == NULL && tmp2 == NULL)
-                        {
-                          matches = FALSE;
-                          break;
-                        }
-                    }
-                }
-
-              g_strfreev (keys);
-            }
-        }
-
-      g_free (casefold_location);
-      g_free (casefold_name);
-      g_free (casefold_key);
-    }
-
-  return !matches;
+  g_object_notify (G_OBJECT (dialog), "selected-printer");
 }
 
 static void
@@ -3488,42 +3206,28 @@ static gboolean
 set_active_printer (GtkPrintUnixDialog *dialog,
                     const gchar        *printer_name)
 {
-  GtkTreeModel *model;
-  GtkTreeIter iter, filter_iter;
-  GtkTreeSelection *selection;
+  GListModel *model;
   GtkPrinter *printer;
+  guint i;
 
-  model = GTK_TREE_MODEL (dialog->printer_list);
+  model = gtk_column_view_get_model (GTK_COLUMN_VIEW (dialog->printer_list));
 
-  if (gtk_tree_model_get_iter_first (model, &iter))
+  for (i = 0; i < g_list_model_get_n_items (model); i++)
     {
-      do
+      printer = g_list_model_get_item (model, i);
+
+      if (strcmp (gtk_printer_get_name (printer), printer_name) == 0)
         {
-          gtk_tree_model_get (GTK_TREE_MODEL (dialog->printer_list), &iter,
-                              PRINTER_LIST_COL_PRINTER_OBJ, &printer,
-                              -1);
-          if (printer == NULL)
-            continue;
+          gtk_single_selection_set_selected (GTK_SINGLE_SELECTION (model), i);
 
-          if (strcmp (gtk_printer_get_name (printer), printer_name) == 0)
-            {
-              gtk_tree_model_filter_convert_child_iter_to_iter (dialog->printer_list_filter,
-                                                                &filter_iter, &iter);
-
-              selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->printer_treeview));
-              dialog->internal_printer_change = TRUE;
-              gtk_tree_selection_select_iter (selection, &filter_iter);
-              dialog->internal_printer_change = FALSE;
-              g_free (dialog->waiting_for_printer);
-              dialog->waiting_for_printer = NULL;
-
-              g_object_unref (printer);
-              return TRUE;
-            }
+          g_free (dialog->waiting_for_printer);
+          dialog->waiting_for_printer = NULL;
 
           g_object_unref (printer);
+          return TRUE;
+        }
 
-        } while (gtk_tree_model_iter_next (model, &iter));
+      g_object_unref (printer);
     }
 
   return FALSE;
@@ -3697,13 +3401,8 @@ gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog   *dialog,
 
       if (dialog->current_printer)
         {
-          GtkTreeSelection *selection;
-
-          selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->printer_treeview));
           g_clear_object (&dialog->current_printer);
-          dialog->internal_printer_change = TRUE;
-          selected_printer_changed (selection, dialog);
-          dialog->internal_printer_change = FALSE;
+          selected_printer_changed (dialog);
        }
 
       g_object_notify (G_OBJECT (dialog), "manual-capabilities");
