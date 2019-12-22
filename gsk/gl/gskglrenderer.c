@@ -1637,24 +1637,17 @@ render_inset_shadow_node (GskGLRenderer   *self,
     const float min_y = builder->dy + node->bounds.origin.y;
     const float max_x = min_x + node->bounds.size.width;
     const float max_y = min_y + node->bounds.size.height;
-    float tx1 = blur_extra / 2.0 * scale / texture_width;
-    float tx2 = 1.0 - tx1;
-    float ty1 = blur_extra / 2.0 * scale / texture_height;
-    float ty2 = 1.0 - ty1;
-    GskRoundedRect node_clip;
-    int i;
+    const float tx1 = blur_extra / 2.0 * scale / texture_width;
+    const float tx2 = 1.0 - tx1;
+    const float ty1 = blur_extra / 2.0 * scale / texture_height;
+    const float ty2 = 1.0 - ty1;
 
     gsk_gl_driver_set_texture_for_pointer (self->gl_driver, node, blurred_texture_id);
 
     if (needs_clip)
       {
-        ops_transform_bounds_modelview (builder, &node_outline->bounds, &node_clip.bounds);
+        const GskRoundedRect node_clip = transform_rect (self, builder, node_outline);
 
-        for (i = 0; i < 4; i ++)
-          {
-            node_clip.corner[i].width = node_outline->corner[i].width * scale;
-            node_clip.corner[i].height = node_outline->corner[i].height * scale;
-          }
         ops_push_clip (builder, &node_clip);
       }
 
