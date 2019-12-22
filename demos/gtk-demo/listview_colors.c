@@ -414,7 +414,7 @@ do_listview_colors (GtkWidget *do_widget)
       GtkListItemFactory *factory;
       GListStore *factories;
       GListModel *model;
-      GtkNoSelection *selection;
+      GListModel *selection;
       GtkSorter *sorter;
       GtkSorter *multi_sorter;
       GListStore *sorters;
@@ -440,10 +440,11 @@ do_listview_colors (GtkWidget *do_widget)
       gtk_scrollable_set_vscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
 
       gtk_grid_view_set_max_columns (GTK_GRID_VIEW (gridview), 24);
+      g_object_set (gridview, "enable-rubber-band", TRUE, NULL);
 
       model = G_LIST_MODEL (gtk_sort_list_model_new (create_colors_model (), NULL));
-      selection = gtk_no_selection_new (model);
-      gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), G_LIST_MODEL (selection));
+      selection = G_LIST_MODEL (gtk_multi_selection_new (model));
+      gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), selection);
       gtk_container_add (GTK_CONTAINER (sw), gridview);
       g_object_unref (selection);
 
