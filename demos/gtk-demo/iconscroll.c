@@ -12,7 +12,7 @@ static GtkWidget *window = NULL;
 static GtkWidget *scrolledwindow;
 static int selected;
 
-#define N_WIDGET_TYPES 4
+#define N_WIDGET_TYPES 6
 
 
 static int hincrement = 5;
@@ -64,6 +64,7 @@ populate_icons (void)
       gtk_grid_attach (GTK_GRID (grid), create_icon (), left, top, 1, 1);
 
   hincrement = 0;
+  vincrement = 5;
 
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow),
                                   GTK_POLICY_NEVER,
@@ -100,6 +101,7 @@ populate_text (gboolean hilight)
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (textview), buffer);
 
   hincrement = 0;
+  vincrement = 5;
 
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow),
                                   GTK_POLICY_NEVER,
@@ -124,11 +126,48 @@ populate_image (void)
   gtk_picture_set_can_shrink (GTK_PICTURE (image), FALSE);
 
   hincrement = 5;
+  vincrement = 5;
 
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow),
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolledwindow), image);
+}
+
+extern GtkWidget *create_weather_view (void);
+
+static void
+populate_list (void)
+{
+  GtkWidget *list;
+
+  list = create_weather_view ();
+
+  hincrement = 5;
+  vincrement = 0;
+
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow),
+                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolledwindow), list);
+}
+
+extern GtkWidget *create_color_grid (void);
+
+static void
+populate_grid (void)
+{
+  GtkWidget *list;
+
+  list = create_color_grid ();
+
+  hincrement = 0;
+  vincrement = 5;
+
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow),
+                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolledwindow), list);
 }
 
 static void
@@ -162,6 +201,16 @@ set_widget_type (int type)
     case 3:
       gtk_window_set_title (GTK_WINDOW (window), "Scrolling a big image");
       populate_image ();
+      break;
+
+    case 4:
+      gtk_window_set_title (GTK_WINDOW (window), "Scrolling a list");
+      populate_list ();
+      break;
+
+    case 5:
+      gtk_window_set_title (GTK_WINDOW (window), "Scrolling a grid");
+      populate_grid ();
       break;
 
     default:
