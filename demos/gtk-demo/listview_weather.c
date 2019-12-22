@@ -276,12 +276,32 @@ bind_widget (GtkListItem *list_item,
 static GtkWidget *window = NULL;
 
 GtkWidget *
+create_weather_view (void)
+{
+  GtkWidget *listview;
+  GListModel *model, *selection;
+
+  listview = gtk_list_view_new_with_factory (
+  gtk_functions_list_item_factory_new (setup_widget,
+                                       bind_widget,
+                                       NULL, NULL));
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (listview), GTK_ORIENTATION_HORIZONTAL);
+  gtk_list_view_set_show_separators (GTK_LIST_VIEW (listview), TRUE);
+  model = create_weather_model ();
+  selection = G_LIST_MODEL (gtk_no_selection_new (model));
+  gtk_list_view_set_model (GTK_LIST_VIEW (listview), selection);
+  g_object_unref (selection);
+  g_object_unref (model);
+
+  return listview;
+}
+
+GtkWidget *
 do_listview_weather (GtkWidget *do_widget)
 {
   if (window == NULL)
     {
       GtkWidget *listview, *sw;;
-      GListModel *model, *selection;
 
       window = gtk_window_new ();
       gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
@@ -293,19 +313,7 @@ do_listview_weather (GtkWidget *do_widget)
 
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_window_set_child (GTK_WINDOW (window), sw);
-
-      listview = gtk_list_view_new_with_factory (
-        gtk_functions_list_item_factory_new (setup_widget,
-                                             bind_widget,
-                                             NULL, NULL));
-      gtk_orientable_set_orientation (GTK_ORIENTABLE (listview), GTK_ORIENTATION_HORIZONTAL);
-      gtk_list_view_set_show_separators (GTK_LIST_VIEW (listview), TRUE);
-      model = create_weather_model ();
-      selection = G_LIST_MODEL (gtk_no_selection_new (model));
-      gtk_list_view_set_model (GTK_LIST_VIEW (listview), selection);
-      g_object_unref (selection);
-      g_object_unref (model);
-
+      listview = create_weather_view ();
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), listview);
     }
 
