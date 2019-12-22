@@ -169,7 +169,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
                                    g_param_spec_string ("icon-name",
 						        P_("Icon Name"),
 						        P_("The icon name to use for the printer"),
-						        "",
+						        "printer",
 							GTK_PARAM_READABLE));
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_JOB_COUNT,
@@ -340,7 +340,7 @@ gtk_printer_get_property (GObject    *object,
       if (priv->icon_name)
 	g_value_set_string (value, priv->icon_name);
       else
-	g_value_set_static_string (value, "");
+	g_value_set_static_string (value, "printer");
       break;
     case PROP_JOB_COUNT:
       g_value_set_int (value, priv->job_count);
