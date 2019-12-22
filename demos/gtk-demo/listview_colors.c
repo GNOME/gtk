@@ -309,6 +309,7 @@ setup_simple_listitem_cb (GtkListItemFactory *factory,
   color_expression = gtk_property_expression_new (GTK_TYPE_LIST_ITEM, expression, "item");
 
   picture = gtk_picture_new ();
+  gtk_widget_set_size_request (picture, 32, 32);
   gtk_expression_bind (color_expression, picture, "paintable", NULL);
 
   gtk_list_item_set_child (list_item, picture);
@@ -403,6 +404,34 @@ set_item (GBinding *binding,
   return TRUE;
 }
 
+GtkWidget *
+create_color_grid (void)
+{
+  GtkWidget *gridview;
+  GtkListItemFactory *factory;
+  GListModel *model, *selection;
+
+  gridview = gtk_grid_view_new ();
+  gtk_scrollable_set_hscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
+  gtk_scrollable_set_vscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
+
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_simple_listitem_cb), NULL);
+  gtk_grid_view_set_factory (GTK_GRID_VIEW (gridview), factory);
+  g_object_unref (factory);
+ 
+  gtk_grid_view_set_max_columns (GTK_GRID_VIEW (gridview), 24);
+  g_object_set (gridview, "enable-rubber-band", TRUE, NULL);
+
+  model = G_LIST_MODEL (gtk_sort_list_model_new (create_colors_model (), NULL));
+  selection = G_LIST_MODEL (gtk_multi_selection_new (model));
+  gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), selection);
+  g_object_unref (selection);
+  g_object_unref (model);
+
+  return gridview;
+}
+
 static GtkWidget *window = NULL;
 
 GtkWidget *
@@ -414,7 +443,6 @@ do_listview_colors (GtkWidget *do_widget)
       GtkListItemFactory *factory;
       GListStore *factories;
       GListModel *model;
-      GListModel *selection;
       GtkSorter *sorter;
       GtkSorter *multi_sorter;
       GListStore *sorters;
@@ -435,18 +463,9 @@ do_listview_colors (GtkWidget *do_widget)
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_container_add (GTK_CONTAINER (window), sw);
 
-      gridview = gtk_grid_view_new ();
-      gtk_scrollable_set_hscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
-      gtk_scrollable_set_vscroll_policy (GTK_SCROLLABLE (gridview), GTK_SCROLL_NATURAL);
-
-      gtk_grid_view_set_max_columns (GTK_GRID_VIEW (gridview), 24);
-      g_object_set (gridview, "enable-rubber-band", TRUE, NULL);
-
-      model = G_LIST_MODEL (gtk_sort_list_model_new (create_colors_model (), NULL));
-      selection = G_LIST_MODEL (gtk_multi_selection_new (model));
-      gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), selection);
+      gridview = create_color_grid ();
       gtk_container_add (GTK_CONTAINER (sw), gridview);
-      g_object_unref (selection);
+      model = gtk_grid_view_get_model (GTK_GRID_VIEW (gridview));
 
       sorters = g_list_store_new (GTK_TYPE_SORTER);
 
@@ -560,8 +579,6 @@ do_listview_colors (GtkWidget *do_widget)
                                    G_BINDING_SYNC_CREATE,
                                    set_item, NULL,
                                    NULL, NULL);
-
-      g_object_unref (model);
     }
 
   if (!gtk_widget_get_visible (window))
