@@ -1728,35 +1728,50 @@ gtk_scrolled_window_measure (GtkWidget      *widget,
    */
   if (policy_may_be_visible (priv->hscrollbar_policy))
     {
-      GtkRequisition hscrollbar_requisition;
-      gtk_widget_get_preferred_size (priv->hscrollbar, &hscrollbar_requisition, NULL);
-
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          minimum_req = MAX (minimum_req, hscrollbar_requisition.width + sborder.left + sborder.right);
-          natural_req = MAX (natural_req, hscrollbar_requisition.width + sborder.left + sborder.right);
+          int min_scrollbar_width, nat_scrollbar_width;
+
+          gtk_widget_measure (priv->hscrollbar, GTK_ORIENTATION_HORIZONTAL, -1,
+                              &min_scrollbar_width, &nat_scrollbar_width,
+                              NULL, NULL);
+          minimum_req = MAX (minimum_req, min_scrollbar_width + sborder.left + sborder.right);
+          natural_req = MAX (natural_req, nat_scrollbar_width + sborder.left + sborder.right);
         }
       else if (!priv->use_indicators && priv->hscrollbar_policy == GTK_POLICY_ALWAYS)
         {
-          minimum_req += hscrollbar_requisition.height;
-          natural_req += hscrollbar_requisition.height;
+          int min_scrollbar_height, nat_scrollbar_height;
+
+          gtk_widget_measure (priv->hscrollbar, GTK_ORIENTATION_VERTICAL, -1,
+                              &min_scrollbar_height, &nat_scrollbar_height,
+                              NULL, NULL);
+
+          minimum_req += min_scrollbar_height;
+          natural_req += nat_scrollbar_height;
         }
     }
 
   if (policy_may_be_visible (priv->vscrollbar_policy))
     {
-      GtkRequisition vscrollbar_requisition;
-      gtk_widget_get_preferred_size (priv->vscrollbar, &vscrollbar_requisition, NULL);
-
       if (orientation == GTK_ORIENTATION_VERTICAL)
         {
-          minimum_req = MAX (minimum_req, vscrollbar_requisition.height + sborder.top + sborder.bottom);
-          natural_req = MAX (natural_req, vscrollbar_requisition.height + sborder.top + sborder.bottom);
+          int min_scrollbar_height, nat_scrollbar_height;
+
+          gtk_widget_measure (priv->vscrollbar, GTK_ORIENTATION_VERTICAL, -1,
+                              &min_scrollbar_height, &nat_scrollbar_height,
+                              NULL, NULL);
+          minimum_req = MAX (minimum_req, min_scrollbar_height + sborder.top + sborder.bottom);
+          natural_req = MAX (natural_req, nat_scrollbar_height + sborder.top + sborder.bottom);
         }
       else if (!priv->use_indicators && priv->vscrollbar_policy == GTK_POLICY_ALWAYS)
         {
-          minimum_req += vscrollbar_requisition.width;
-          natural_req += vscrollbar_requisition.width;
+          int min_scrollbar_width, nat_scrollbar_width;
+
+          gtk_widget_measure (priv->vscrollbar, GTK_ORIENTATION_HORIZONTAL, -1,
+                              &min_scrollbar_width, &nat_scrollbar_width,
+                              NULL, NULL);
+          minimum_req += min_scrollbar_width;
+          natural_req += nat_scrollbar_width;
         }
     }
 
