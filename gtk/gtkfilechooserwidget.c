@@ -27,6 +27,7 @@
 #include "gtkcelllayout.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcellrenderertext.h"
+#include "gtkdropdown.h"
 #include "gtkcomboboxtext.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkdragsource.h"
@@ -311,7 +312,7 @@ struct _GtkFileChooserWidget
   GSList *pending_select_files;
 
   GtkFileFilter *current_filter;
-  GSList *filters;
+  GListStore *filters;
 
   GtkBookmarksManager *bookmarks_manager;
 
@@ -536,7 +537,8 @@ static void location_mode_set  (GtkFileChooserWidget *impl, LocationMode new_mod
 static void set_current_filter   (GtkFileChooserWidget *impl,
                                   GtkFileFilter         *filter);
 
-static void filter_combo_changed       (GtkComboBox           *combo_box,
+static void filter_combo_changed       (GtkDropDown          *dropdown,
+                                        GParamSpec           *pspec,
                                         GtkFileChooserWidget *impl);
 
 static gboolean list_select_func   (GtkTreeSelection      *selection,
@@ -666,7 +668,7 @@ gtk_file_chooser_widget_finalize (GObject *object)
 
   g_free (impl->browse_files_last_selected_name);
 
-  g_slist_free_full (impl->filters, g_object_unref);
+  g_clear_object (&impl->filters);
   g_clear_object (&impl->current_filter);
   g_clear_object (&impl->current_folder);
   g_clear_object (&impl->browse_path_bar_size_group);
@@ -5547,24 +5549,19 @@ gtk_file_chooser_widget_add_filter (GtkFileChooser *chooser,
                                     GtkFileFilter  *filter)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
-  const gchar *name;
 
-  if (g_slist_find (impl->filters, filter))
+  if (g_list_store_find (impl->filters, filter, NULL))
     {
       g_warning ("gtk_file_chooser_add_filter() called on filter already in list");
       return;
     }
 
   g_object_ref_sink (filter);
-  impl->filters = g_slist_append (impl->filters, filter);
 
-  name = gtk_file_filter_get_name (filter);
-  if (!name)
-    name = "Untitled filter";   /* Place-holder, doesn't need to be marked for translation */
+  g_list_store_append (impl->filters, filter);
+  g_object_unref (filter);
 
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (impl->filter_combo), name);
-
-  if (!g_slist_find (impl->filters, impl->current_filter))
+  if (!impl->current_filter)
     set_current_filter (impl, filter);
 
   show_filters (impl, TRUE);
@@ -5575,34 +5572,27 @@ gtk_file_chooser_widget_remove_filter (GtkFileChooser *chooser,
                                        GtkFileFilter  *filter)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  gint filter_index;
+  guint filter_index;
 
-  filter_index = g_slist_index (impl->filters, filter);
-
-  if (filter_index < 0)
+  if (!g_list_store_find (impl->filters, filter, &filter_index))
     {
       g_warning ("gtk_file_chooser_remove_filter() called on filter not in list");
       return;
     }
 
-  impl->filters = g_slist_remove (impl->filters, filter);
+  g_list_store_remove (impl->filters, filter_index);
 
   if (filter == impl->current_filter)
     {
       if (impl->filters)
-        set_current_filter (impl, impl->filters->data);
+        {
+          GtkFileFilter *f = g_list_model_get_item (G_LIST_MODEL (impl->filters), 0);
+          set_current_filter (impl, f);
+          g_object_unref (f);
+        }
       else
         set_current_filter (impl, NULL);
     }
-
-  /* Remove row from the combo box */
-  model = gtk_combo_box_get_model (GTK_COMBO_BOX (impl->filter_combo));
-  if (!gtk_tree_model_iter_nth_child  (model, &iter, NULL, filter_index))
-    g_assert_not_reached ();
-
-  gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
 
   g_object_unref (filter);
 
@@ -5614,8 +5604,19 @@ static GSList *
 gtk_file_chooser_widget_list_filters (GtkFileChooser *chooser)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
+  GSList *filters;
+  guint i;
 
-  return g_slist_copy (impl->filters);
+  filters = NULL;
+
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (impl->filters)); i++)
+    {
+      GtkFileFilter *filter = g_list_model_get_item (G_LIST_MODEL (impl->filters), i);
+      filters = g_slist_append (filters, filter);
+      g_object_unref (filter);
+    }
+
+  return filters;
 }
 
 static gboolean
@@ -6897,11 +6898,10 @@ set_current_filter (GtkFileChooserWidget *impl,
 {
   if (impl->current_filter != filter)
     {
-      int filter_index;
+      guint filter_index;
 
       /* NULL filters are allowed to reset to non-filtered status */
-      filter_index = g_slist_index (impl->filters, filter);
-      if (impl->filters && filter && filter_index < 0)
+      if (filter && !g_list_store_find (impl->filters, filter, &filter_index))
         return;
 
       if (impl->current_filter)
@@ -6910,9 +6910,9 @@ set_current_filter (GtkFileChooserWidget *impl,
       if (impl->current_filter)
         g_object_ref_sink (impl->current_filter);
 
-      if (impl->filters)
-        gtk_combo_box_set_active (GTK_COMBO_BOX (impl->filter_combo), filter_index);
+      gtk_drop_down_set_selected (GTK_DROP_DOWN (impl->filter_combo), filter_index);
 
+g_print ("set current filter %u\n", filter_index);
       clear_model_cache (impl, MODEL_COL_IS_SENSITIVE);
       set_model_filter (impl, impl->current_filter);
       g_object_notify (G_OBJECT (impl), "filter");
@@ -6920,19 +6920,21 @@ set_current_filter (GtkFileChooserWidget *impl,
 }
 
 static void
-filter_combo_changed (GtkComboBox          *combo_box,
+filter_combo_changed (GtkDropDown          *dropdown,
+                      GParamSpec           *pspec,
                       GtkFileChooserWidget *impl)
 {
   gint new_index;
   GtkFileFilter *new_filter;
 
-  new_index = gtk_combo_box_get_active (combo_box);
-  new_filter = g_slist_nth_data (impl->filters, new_index);
+  new_index = gtk_drop_down_get_selected (dropdown);
+  new_filter = g_list_model_get_item (G_LIST_MODEL (impl->filters), new_index);
   set_current_filter (impl, new_filter);
 
   if (impl->location_entry != NULL)
     _gtk_file_chooser_entry_set_file_filter (GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
                                              new_filter);
+  g_object_unref (new_filter);
 }
 
 static gboolean
@@ -7751,8 +7753,6 @@ post_process_ui (GtkFileChooserWidget *impl)
 {
   GdkContentFormats *drag_formats;
   GtkTreeSelection *selection;
-  GtkCellRenderer  *cell;
-  GList            *cells;
   GFile            *file;
   GtkDropTarget *target;
   GtkGesture *gesture;
@@ -7784,20 +7784,6 @@ post_process_ui (GtkFileChooserWidget *impl)
    */
   file_list_set_sort_column_ids (impl);
   update_cell_renderer_attributes (impl);
-
-  /* Get the combo's text renderer and set ellipsize parameters,
-   * perhaps GtkComboBoxText should declare the cell renderer
-   * as an 'internal-child', then we could configure it in GtkBuilder
-   * instead of hard coding it here.
-   */
-  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (impl->filter_combo));
-  g_assert (cells);
-  cell = cells->data;
-  g_object_set (G_OBJECT (cell),
-                "ellipsize", PANGO_ELLIPSIZE_END,
-                NULL);
-
-  g_list_free (cells);
 
   /* Set the GtkPathBar file system backend */
   _gtk_path_bar_set_file_system (GTK_PATH_BAR (impl->browse_path_bar), impl->file_system);
@@ -7884,9 +7870,17 @@ display_changed_cb (GtkWidget            *wiget,
   check_icon_theme (impl);
 }
 
+static char *
+filter_name (GtkFileFilter *filter)
+{
+  return g_strdup (gtk_file_filter_get_name (filter));
+}
+
 static void
 gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
 {
+  GtkExpression *expression;
+
   profile_start ("start", NULL);
 #ifdef PROFILE_FILE_CHOOSER
   access ("MARK: *** CREATE FILE CHOOSER", F_OK);
@@ -7924,6 +7918,16 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
 
   impl->file_system = _gtk_file_system_new ();
   impl->bookmarks_manager = _gtk_bookmarks_manager_new (NULL, NULL);
+
+  impl->filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
+  gtk_drop_down_set_model (GTK_DROP_DOWN (impl->filter_combo), G_LIST_MODEL (impl->filters));
+
+  expression = gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
+                                            0, NULL,
+                                            G_CALLBACK (filter_name),
+                                            NULL, NULL);
+  gtk_drop_down_set_expression (GTK_DROP_DOWN (impl->filter_combo), expression);
+  gtk_expression_unref (expression);
 
   /* Setup various attributes and callbacks in the UI
    * which cannot be done with GtkBuilder
