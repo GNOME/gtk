@@ -41,7 +41,7 @@ static void gtk_print_backend_get_property (GObject      *object,
 
 struct _GtkPrintBackendPrivate
 {
-  GHashTable *printers;
+  GListStore *printers;
   guint printer_list_requested : 1;
   guint printer_list_done : 1;
   GtkPrintBackendStatus status;
@@ -331,9 +331,7 @@ gtk_print_backend_init (GtkPrintBackend *backend)
 
   priv = backend->priv = gtk_print_backend_get_instance_private (backend);
 
-  priv->printers = g_hash_table_new_full (g_str_hash, g_str_equal, 
-					  (GDestroyNotify) g_free,
-					  (GDestroyNotify) g_object_unref);
+  priv->printers = g_list_store_new (GTK_TYPE_PRINTER);
   priv->auth_info_required = NULL;
   priv->auth_info = NULL;
 }
@@ -350,11 +348,7 @@ gtk_print_backend_dispose (GObject *object)
   /* We unref the printers in dispose, not in finalize so that
    * we can break refcount cycles with gtk_print_backend_destroy 
    */
-  if (priv->printers)
-    {
-      g_hash_table_destroy (priv->printers);
-      priv->printers = NULL;
-    }
+  g_clear_object (&priv->printers);
 
   backend_parent_class->dispose (object);
 }
@@ -411,58 +405,25 @@ fallback_printer_get_capabilities (GtkPrinter *printer)
   return 0;
 }
 
-
-static void
-printer_hash_to_sorted_active_list (const gchar  *key,
-                                    gpointer      value,
-                                    GList       **out_list)
-{
-  GtkPrinter *printer;
-
-  printer = GTK_PRINTER (value);
-
-  if (gtk_printer_get_name (printer) == NULL)
-    return;
-
-  if (!gtk_printer_is_active (printer))
-    return;
-
-  *out_list = g_list_insert_sorted (*out_list, value, (GCompareFunc) gtk_printer_compare);
-}
-
-
 void
 gtk_print_backend_add_printer (GtkPrintBackend *backend,
 			       GtkPrinter      *printer)
 {
-  GtkPrintBackendPrivate *priv;
-  
   g_return_if_fail (GTK_IS_PRINT_BACKEND (backend));
 
-  priv = backend->priv;
-
-  if (!priv->printers)
-    return;
-  
-  g_hash_table_insert (priv->printers,
-		       g_strdup (gtk_printer_get_name (printer)), 
-		       g_object_ref (printer));
+  g_list_store_append (backend->priv->printers, printer);
 }
 
 void
 gtk_print_backend_remove_printer (GtkPrintBackend *backend,
 				  GtkPrinter      *printer)
 {
-  GtkPrintBackendPrivate *priv;
+  guint position;
   
   g_return_if_fail (GTK_IS_PRINT_BACKEND (backend));
-  priv = backend->priv;
 
-  if (!priv->printers)
-    return;
-  
-  g_hash_table_remove (priv->printers,
-		       gtk_printer_get_name (printer));
+  if (g_list_store_find (backend->priv->printers, printer, &position))
+    g_list_store_remove (backend->priv->printers, position);
 }
 
 void
@@ -488,54 +449,54 @@ gtk_print_backend_set_list_done (GtkPrintBackend *backend)
 GList *
 gtk_print_backend_get_printer_list (GtkPrintBackend *backend)
 {
-  GtkPrintBackendPrivate *priv;
-  GList *result;
+  GList *result = NULL;
+  guint i;
   
   g_return_val_if_fail (GTK_IS_PRINT_BACKEND (backend), NULL);
 
-  priv = backend->priv;
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (backend->priv->printers)); i++)
+    {
+      GtkPrinter *printer = g_list_model_get_item (G_LIST_MODEL (backend->priv->printers), i);
+      result = g_list_prepend (result, printer);
+      g_object_unref (printer);
+    }
 
-  result = NULL;
-  if (priv->printers != NULL)
-    g_hash_table_foreach (priv->printers,
-                          (GHFunc) printer_hash_to_sorted_active_list,
-                          &result);
-
-  if (!priv->printer_list_requested && priv->printers != NULL)
+  if (!backend->priv->printer_list_requested)
     {
       if (GTK_PRINT_BACKEND_GET_CLASS (backend)->request_printer_list)
 	GTK_PRINT_BACKEND_GET_CLASS (backend)->request_printer_list (backend);
-      priv->printer_list_requested = TRUE;
+      backend->priv->printer_list_requested = TRUE;
     }
 
   return result;
 }
 
 gboolean
-gtk_print_backend_printer_list_is_done (GtkPrintBackend *print_backend)
+gtk_print_backend_printer_list_is_done (GtkPrintBackend *backend)
 {
-  g_return_val_if_fail (GTK_IS_PRINT_BACKEND (print_backend), TRUE);
+  g_return_val_if_fail (GTK_IS_PRINT_BACKEND (backend), TRUE);
 
-  return print_backend->priv->printer_list_done;
+  return backend->priv->printer_list_done;
 }
 
 GtkPrinter *
 gtk_print_backend_find_printer (GtkPrintBackend *backend,
                                 const gchar     *printer_name)
 {
-  GtkPrintBackendPrivate *priv;
-  GtkPrinter *printer;
+  GtkPrinter *result = NULL;
+  guint i;
   
   g_return_val_if_fail (GTK_IS_PRINT_BACKEND (backend), NULL);
 
-  priv = backend->priv;
+  for (i = 0; !result && i < g_list_model_get_n_items (G_LIST_MODEL (backend->priv->printers)); i++)
+    {
+      GtkPrinter *printer = g_list_model_get_item (G_LIST_MODEL (backend->priv->printers), i);
+      if (strcmp (gtk_printer_get_name (printer), printer_name) == 0)
+        result = printer;
+      g_object_unref (printer);
+    }
 
-  if (priv->printers)
-    printer = g_hash_table_lookup (priv->printers, printer_name);
-  else
-    printer = NULL;
-
-  return printer;  
+  return result;  
 }
 
 void
@@ -754,7 +715,7 @@ request_password (GtkPrintBackend  *backend,
 }
 
 void
-gtk_print_backend_destroy (GtkPrintBackend *print_backend)
+gtk_print_backend_destroy (GtkPrintBackend *backend)
 {
   /* The lifecycle of print backends and printers are tied, such that
    * the backend owns the printers, but the printers also ref the backend.
@@ -762,5 +723,5 @@ gtk_print_backend_destroy (GtkPrintBackend *print_backend)
    * will be around. However, this results in a cycle, which we break
    * with this call, which causes the print backend to release its printers.
    */
-  g_object_run_dispose (G_OBJECT (print_backend));
+  g_object_run_dispose (G_OBJECT (backend));
 }
