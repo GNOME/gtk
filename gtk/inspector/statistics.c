@@ -396,7 +396,7 @@ constructed (GObject *object)
   else
     {
       if (instance_counts_enabled ())
-        gtk_label_set_text (GTK_LABEL (sl->priv->excuse), _("GLib must be configured with --enable-debug"));
+        gtk_label_set_text (GTK_LABEL (sl->priv->excuse), _("GLib must be configured with -Dbuildtype=debug"));
       gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "excuse");
       gtk_widget_set_sensitive (sl->priv->button, FALSE);
     }
