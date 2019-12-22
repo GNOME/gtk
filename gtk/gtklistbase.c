@@ -28,6 +28,12 @@
 #include "gtkscrollable.h"
 #include "gtksingleselection.h"
 #include "gtktypebuiltins.h"
+#include "gtkgesturedrag.h"
+#include "gtkwidgetprivate.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkstylecontextprivate.h"
+#include "gtksnapshot.h"
+#include "gtkmultiselection.h"
 
 typedef struct _GtkListBasePrivate GtkListBasePrivate;
 
@@ -50,6 +56,22 @@ struct _GtkListBasePrivate
   GtkListItemTracker *selected;
   /* the item that has input focus */
   GtkListItemTracker *focus;
+
+  gboolean enable_rubberband;
+  gboolean doing_rubberband;
+  double rb_x1;
+  double rb_y1;
+  double rb_x2;
+  double rb_y2;
+  GtkGesture *drag_gesture;
+  GtkCssNode *rubberband_node;
+  GtkSelectionModel *old_selection;
+  gboolean modify;
+  gboolean extend;
+
+  guint autoscroll_id;
+  double autoscroll_delta_x;
+  double autoscroll_delta_y;
 };
 
 enum
@@ -1061,6 +1083,20 @@ gtk_list_base_add_custom_move_binding (GtkWidgetClass  *widget_class,
                                 "(bbb)", TRUE, TRUE, TRUE);
 }
 
+static void gtk_list_base_snapshot_rubberband (GtkListBase *self,
+                                               GtkSnapshot *snapshot);
+
+static void
+gtk_list_base_snapshot (GtkWidget   *widget,
+                        GtkSnapshot *snapshot)
+{
+  GtkListBase *self = GTK_LIST_BASE (widget);
+
+  GTK_WIDGET_CLASS (gtk_list_base_parent_class)->snapshot (widget, snapshot);
+
+  gtk_list_base_snapshot_rubberband (self, snapshot);
+}
+
 static void
 gtk_list_base_class_init (GtkListBaseClass *klass)
 {
@@ -1069,6 +1105,7 @@ gtk_list_base_class_init (GtkListBaseClass *klass)
   gpointer iface;
 
   widget_class->focus = gtk_list_base_focus;
+  widget_class->snapshot = gtk_list_base_snapshot;
 
   gobject_class->dispose = gtk_list_base_dispose;
   gobject_class->get_property = gtk_list_base_get_property;
@@ -1184,6 +1221,338 @@ gtk_list_base_class_init (GtkListBaseClass *klass)
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_slash, GDK_CONTROL_MASK, "list.select-all", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_A, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "list.unselect-all", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_backslash, GDK_CONTROL_MASK, "list.unselect-all", NULL);
+}
+
+static void gtk_list_base_update_rubberband_selection (GtkListBase *self);
+
+static gboolean
+autoscroll_cb (GtkWidget     *widget,
+               GdkFrameClock *frame_clock,
+               gpointer       data)
+{
+  GtkListBase *self = data;
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  double value;
+
+  value = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+  gtk_adjustment_set_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL], value + priv->autoscroll_delta_x);
+  value = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
+  gtk_adjustment_set_value (priv->adjustment[GTK_ORIENTATION_VERTICAL], value + priv->autoscroll_delta_y);
+
+  if (priv->doing_rubberband)
+    {
+      priv->rb_x2 += priv->autoscroll_delta_x;
+      priv->rb_y2 += priv->autoscroll_delta_y;
+      gtk_list_base_update_rubberband_selection (self);
+    }
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+add_autoscroll (GtkListBase *self,
+                double       delta_x,
+                double       delta_y)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  priv->autoscroll_delta_x = delta_x;
+  priv->autoscroll_delta_y = delta_y;
+
+  if (priv->autoscroll_id == 0)
+    priv->autoscroll_id = gtk_widget_add_tick_callback (GTK_WIDGET (self), autoscroll_cb, self, NULL);
+}
+
+static void
+remove_autoscroll (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  if (priv->autoscroll_id != 0)
+    {
+      gtk_widget_remove_tick_callback (GTK_WIDGET (self), priv->autoscroll_id);
+      priv->autoscroll_id = 0;
+    }
+}
+
+static void
+gtk_list_base_start_rubberband (GtkListBase *self,
+                                double       x,
+                                double       y,
+                                gboolean     modify,
+                                gboolean     extend)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkCssNode *widget_node;
+  double value_x, value_y;
+  GtkSelectionModel *selection;
+
+  if (priv->doing_rubberband)
+    return;
+
+  value_x = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+  value_y = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
+
+  priv->rb_x1 = priv->rb_x2 = x + value_x;
+  priv->rb_y1 = priv->rb_y2 = y + value_y;
+
+  priv->modify = modify;
+  priv->extend = extend;
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (self));
+  priv->rubberband_node = gtk_css_node_new ();
+  gtk_css_node_set_name (priv->rubberband_node,
+                         g_quark_from_static_string ("rubberband"));
+  gtk_css_node_set_parent (priv->rubberband_node, widget_node);
+  gtk_css_node_set_state (priv->rubberband_node, gtk_css_node_get_state (widget_node));
+  g_object_unref (priv->rubberband_node);
+
+  selection = gtk_list_item_manager_get_model (priv->item_manager);
+
+  if (modify)
+    priv->old_selection = GTK_SELECTION_MODEL (gtk_multi_selection_copy (selection));
+
+  priv->doing_rubberband = TRUE;
+}
+
+static void
+gtk_list_base_stop_rubberband (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  if (!priv->doing_rubberband)
+    return;
+
+  priv->doing_rubberband = FALSE;
+  gtk_css_node_set_parent (priv->rubberband_node, NULL);
+  priv->rubberband_node = NULL;
+
+  g_clear_object (&priv->old_selection);
+
+  remove_autoscroll (self);
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+#define SCROLL_EDGE_SIZE 15
+
+static void
+gtk_list_base_update_rubberband (GtkListBase *self,
+                                 double       x,
+                                 double       y)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  double value_x, value_y, page_size, upper;
+  double delta_x, delta_y;
+
+  if (!priv->doing_rubberband)
+    return;
+
+  value_x = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+  value_y = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
+
+  priv->rb_x2 = x + value_x;
+  priv->rb_y2 = y + value_y;
+
+  gtk_list_base_update_rubberband_selection (self);
+
+  page_size = gtk_adjustment_get_page_size (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+  upper = gtk_adjustment_get_upper (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+
+  if (x < SCROLL_EDGE_SIZE && value_x > 0)
+    delta_x = - (SCROLL_EDGE_SIZE - x)/3.0;
+  else if (page_size - x < SCROLL_EDGE_SIZE && value_x + page_size < upper)
+    delta_x = (SCROLL_EDGE_SIZE - (page_size - x))/3.0;
+  else
+    delta_x = 0;
+
+  page_size = gtk_adjustment_get_page_size (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
+  upper = gtk_adjustment_get_upper (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
+
+  if (y < SCROLL_EDGE_SIZE && value_y > 0)
+    delta_y = - (SCROLL_EDGE_SIZE - y)/3.0;
+  else if (page_size - y < SCROLL_EDGE_SIZE && value_y + page_size < upper)
+    delta_y = (SCROLL_EDGE_SIZE - (page_size - y))/3.0;
+  else
+    delta_y = 0;
+
+  if (delta_x != 0 || delta_y != 0)
+    add_autoscroll (self, delta_x, delta_y);
+  else
+    remove_autoscroll (self);
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
+gtk_list_base_update_rubberband_selection (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GdkRectangle rect;
+  GdkRectangle alloc;
+  double value_x, value_y;
+  GtkSelectionModel *model;
+  GtkListItemManagerItem *item;
+
+  value_x = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+  value_y = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
+
+  rect.x = MIN (priv->rb_x1, priv->rb_x2) - value_x;
+  rect.y = MIN (priv->rb_y1, priv->rb_y2) - value_y;
+  rect.width = ABS (priv->rb_x1 - priv->rb_x2) + 1;
+  rect.height = ABS (priv->rb_y1 - priv->rb_y2) + 1;
+
+  model = gtk_list_item_manager_get_model (priv->item_manager);
+
+  for (item = gtk_list_item_manager_get_first (priv->item_manager);
+       item != NULL;
+       item = gtk_rb_tree_node_get_next (item))
+    {
+      guint pos;
+      gboolean was_selected, selected;
+
+      if (!item->widget)
+        continue;
+
+      pos = gtk_list_item_manager_get_item_position (priv->item_manager, item);
+
+      gtk_widget_get_allocation (item->widget, &alloc);
+
+      selected = gdk_rectangle_intersect (&rect, &alloc, &alloc);
+
+      if (priv->modify)
+        {
+          was_selected = gtk_selection_model_is_selected (priv->old_selection, pos);
+          selected = selected ^ was_selected;
+        }
+
+      if (selected)
+        gtk_selection_model_select_item (model, pos, FALSE);
+      else if (!priv->extend)
+        gtk_selection_model_unselect_item (model, pos);
+    }
+}
+
+static void
+gtk_list_base_snapshot_rubberband (GtkListBase *self,
+                                   GtkSnapshot *snapshot)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkStyleContext *context;
+  GdkRectangle rect;
+  double value_x, value_y;
+
+  if (!priv->doing_rubberband)
+    return;
+
+  value_x = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+  value_y = gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
+
+  rect.x = MIN (priv->rb_x1, priv->rb_x2) - value_x;
+  rect.y = MIN (priv->rb_y1, priv->rb_y2) - value_y;
+  rect.width = ABS (priv->rb_x1 - priv->rb_x2) + 1;
+  rect.height = ABS (priv->rb_y1 - priv->rb_y2) + 1;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (self));
+
+  gtk_style_context_save_to_node (context, priv->rubberband_node);
+
+  gtk_snapshot_render_background (snapshot, context, rect.x, rect.y, rect.width, rect.height);
+  gtk_snapshot_render_frame (snapshot, context, rect.x, rect.y, rect.width, rect.height);
+
+  gtk_style_context_restore (context);
+
+}
+
+static void
+get_selection_modifiers (GtkGesture *gesture,
+                         gboolean   *modify,
+                         gboolean   *extend)
+{
+  GdkEventSequence *sequence;
+  GdkEvent *event;
+  GdkModifierType state;
+
+  *modify = FALSE;
+  *extend = FALSE;
+
+  sequence = gtk_gesture_get_last_updated_sequence (gesture);
+  event = gtk_gesture_get_last_event (gesture, sequence);
+  state = gdk_event_get_modifier_state (event);
+  if ((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
+    *modify = TRUE;
+  if ((state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK)
+    *extend = TRUE;
+}
+
+static void
+gtk_list_base_drag_begin (GtkGestureDrag *gesture,
+                          double          start_x,
+                          double          start_y,
+                          GtkListBase    *self)
+{
+  gboolean modify;
+  gboolean extend;
+
+  get_selection_modifiers (GTK_GESTURE (gesture), &modify, &extend);
+  gtk_list_base_start_rubberband (self, start_x, start_y, modify, extend);
+}
+
+static void
+gtk_list_base_drag_update (GtkGestureDrag *gesture,
+                           double          offset_x,
+                           double          offset_y,
+                           GtkListBase    *self)
+{
+  double start_x, start_y;
+  gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
+  gtk_list_base_update_rubberband (self, start_x + offset_x, start_y + offset_y);
+}
+
+static void
+gtk_list_base_drag_end (GtkGestureDrag *gesture,
+                        double          offset_x,
+                        double          offset_y,
+                        GtkListBase    *self)
+{
+  gtk_list_base_drag_update (gesture, offset_x, offset_y, self);
+  gtk_list_base_stop_rubberband (self);
+}
+
+void
+gtk_list_base_set_enable_rubberband (GtkListBase *self,
+                                     gboolean     enable)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  if (priv->enable_rubberband == enable)
+    return;
+
+  priv->enable_rubberband = enable;
+
+  if (enable)
+    {
+      priv->drag_gesture = gtk_gesture_drag_new ();
+      g_signal_connect (priv->drag_gesture, "drag-begin", G_CALLBACK (gtk_list_base_drag_begin), self);
+      g_signal_connect (priv->drag_gesture, "drag-update", G_CALLBACK (gtk_list_base_drag_update), self);
+      g_signal_connect (priv->drag_gesture, "drag-end", G_CALLBACK (gtk_list_base_drag_end), self);
+      gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (priv->drag_gesture));
+    }
+  else
+    {
+      gtk_widget_remove_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (priv->drag_gesture));
+      priv->drag_gesture = NULL;
+    }
+}
+
+gboolean
+gtk_list_base_get_enable_rubberband (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  return priv->enable_rubberband;
 }
 
 static void
@@ -1537,4 +1906,3 @@ gtk_list_base_set_model (GtkListBase *self,
 
   return TRUE;
 }
-
