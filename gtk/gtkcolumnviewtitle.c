@@ -30,6 +30,8 @@
 #include "gtkbox.h"
 #include "gtkimage.h"
 #include "gtkgestureclick.h"
+#include "gtkpopovermenu.h"
+#include "gtknative.h"
 
 struct _GtkColumnViewTitle
 {
@@ -40,6 +42,7 @@ struct _GtkColumnViewTitle
   GtkWidget *box;
   GtkWidget *title;
   GtkWidget *sort;
+  GtkWidget *popup_menu;
 };
 
 struct _GtkColumnViewTitleClass
@@ -78,10 +81,14 @@ gtk_column_view_title_size_allocate (GtkWidget *widget,
                                      int        height,
                                      int        baseline)
 {
+  GtkColumnViewTitle *self = GTK_COLUMN_VIEW_TITLE (widget);
   GtkWidget *child = gtk_widget_get_first_child (widget);
 
   if (child)
     gtk_widget_allocate (child, width, height, baseline, NULL);
+
+  if (self->popup_menu)
+    gtk_native_check_resize (GTK_NATIVE (self->popup_menu));
 }
 
 static void
@@ -90,6 +97,7 @@ gtk_column_view_title_dispose (GObject *object)
   GtkColumnViewTitle *self = GTK_COLUMN_VIEW_TITLE (object);
 
   g_clear_pointer (&self->box, gtk_widget_unparent);
+  g_clear_pointer (&self->popup_menu, gtk_widget_unparent);
 
   g_clear_object (&self->column);
 
@@ -120,13 +128,8 @@ gtk_column_view_title_resize_func (GtkWidget *widget)
 }
 
 static void
-click_released_cb (GtkGestureClick *gesture,
-                   guint            n_press,
-                   gdouble          x,
-                   gdouble          y,
-                   GtkWidget       *widget)
+activate_sort (GtkColumnViewTitle *self)
 {
-  GtkColumnViewTitle *self = GTK_COLUMN_VIEW_TITLE (widget);
   GtkSorter *sorter;
   GtkColumnView *view;
   GtkColumnViewSorter *view_sorter;
@@ -138,6 +141,56 @@ click_released_cb (GtkGestureClick *gesture,
   view = gtk_column_view_column_get_column_view (self->column);
   view_sorter = GTK_COLUMN_VIEW_SORTER (gtk_column_view_get_sorter (view));
   gtk_column_view_sorter_add_column (view_sorter, self->column);
+}
+
+static void
+show_menu (GtkColumnViewTitle *self,
+           double              x,
+           double              y)
+{
+  if (!self->popup_menu)
+    {
+      GMenuModel *model;
+
+      model = gtk_column_view_column_get_header_menu (self->column);
+      if (!model)
+        return;
+
+      self->popup_menu = gtk_popover_menu_new_from_model (model);
+      gtk_widget_set_parent (self->popup_menu, GTK_WIDGET (self));
+      gtk_popover_set_position (GTK_POPOVER (self->popup_menu), GTK_POS_BOTTOM);
+
+      gtk_popover_set_has_arrow (GTK_POPOVER (self->popup_menu), FALSE);
+      gtk_widget_set_halign (self->popup_menu, GTK_ALIGN_START);
+    }
+
+  if (x != -1 && y != -1)
+    {
+      GdkRectangle rect = { x, y, 1, 1 };
+      gtk_popover_set_pointing_to (GTK_POPOVER (self->popup_menu), &rect);
+    }
+  else
+    gtk_popover_set_pointing_to (GTK_POPOVER (self->popup_menu), NULL);
+
+  gtk_popover_popup (GTK_POPOVER (self->popup_menu));
+}
+
+static void
+click_released_cb (GtkGestureClick *gesture,
+                   guint            n_press,
+                   double           x,
+                   double           y,
+                   GtkWidget       *widget)
+{
+  GtkColumnViewTitle *self = GTK_COLUMN_VIEW_TITLE (widget);
+  guint button;
+
+  button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+
+  if (button == GDK_BUTTON_PRIMARY)
+    activate_sort (self);
+  else if (button == GDK_BUTTON_SECONDARY)
+    show_menu (self, x, y);
 }
 
 static void
@@ -158,6 +211,7 @@ gtk_column_view_title_init (GtkColumnViewTitle *self)
   gtk_box_append (GTK_BOX (self->box), self->sort);
 
   gesture = gtk_gesture_click_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   g_signal_connect (gesture, "released", G_CALLBACK (click_released_cb), self);
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
 }
@@ -207,6 +261,8 @@ gtk_column_view_title_update (GtkColumnViewTitle *self)
     }
   else
     gtk_widget_hide (self->sort);
+
+  g_clear_pointer (&self->popup_menu, gtk_widget_unparent);
 }
 
 GtkColumnViewColumn *
