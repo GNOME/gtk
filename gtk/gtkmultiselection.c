@@ -331,3 +331,41 @@ gtk_multi_selection_new (GListModel *model)
                        NULL);
 }
 
+GtkMultiSelection *
+gtk_multi_selection_copy (GtkSelectionModel *selection)
+{
+  GtkMultiSelection *copy;
+  GListModel *model;
+
+  g_object_get (selection, "model", &model, NULL);
+
+  copy = GTK_MULTI_SELECTION (gtk_multi_selection_new (model));
+
+  if (GTK_IS_MULTI_SELECTION (selection))
+    {
+      GtkMultiSelection *multi = GTK_MULTI_SELECTION (selection);
+
+      gtk_set_free (copy->selected);
+      copy->selected = gtk_set_copy (multi->selected);
+      copy->last_selected = multi->last_selected;
+    }
+  else
+    {
+      guint pos, n;
+      guint start, n_items;
+      gboolean selected;
+
+      n = g_list_model_get_n_items (model);
+      n_items = 0;
+      for (pos = 0; pos < n; pos += n_items)
+        {
+          gtk_selection_model_query_range (selection, pos, &start, &n_items, &selected);
+          if (selected)
+            gtk_selection_model_select_range (GTK_SELECTION_MODEL (copy), start, n_items, FALSE);
+        }
+    }
+
+  g_object_unref (model);
+
+  return copy;
+}

@@ -35,6 +35,7 @@ struct _GtkSetIter
 
 GtkSet   *gtk_set_new          (void);
 void      gtk_set_free         (GtkSet   *set);
+GtkSet   *gtk_set_copy         (GtkSet   *set);
 
 gboolean  gtk_set_contains     (GtkSet   *set,
                                 guint     item);
