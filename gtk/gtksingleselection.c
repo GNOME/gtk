@@ -193,6 +193,21 @@ G_DEFINE_TYPE_EXTENDED (GtkSingleSelection, gtk_single_selection, G_TYPE_OBJECT,
                                                gtk_single_selection_selection_model_init))
 
 static void
+emit_selection_changed (GtkSelectionModel *self,
+                        int                old_position,
+                        int                position)
+{
+  if (old_position == GTK_INVALID_LIST_POSITION)
+    gtk_selection_model_selection_changed (self, position, 1);
+  else if (position == GTK_INVALID_LIST_POSITION)
+    gtk_selection_model_selection_changed (self, old_position, 1);
+  else if (position < old_position)
+    gtk_selection_model_selection_changed (self, position, old_position - position + 1);
+  else
+    gtk_selection_model_selection_changed (self, old_position, position - old_position + 1);
+}
+
+static void
 gtk_single_selection_items_changed_cb (GListModel         *model,
                                        guint               position,
                                        guint               removed,
@@ -200,6 +215,9 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
                                        GtkSingleSelection *self)
 {
   g_object_freeze_notify (G_OBJECT (self));
+  int selected_before;
+
+  selected_before = self->selected;
 
   if (self->selected_item == NULL)
     {
@@ -294,6 +312,9 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
     }
 
   g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
+
+  if (self->selected != selected_before)
+    emit_selection_changed (GTK_SELECTION_MODEL (self), selected_before, self->selected);
 
   g_object_thaw_notify (G_OBJECT (self));
 }
@@ -563,14 +584,7 @@ gtk_single_selection_set_selected (GtkSingleSelection *self,
   g_clear_object (&self->selected_item);
   self->selected_item = new_selected;
 
-  if (old_position == GTK_INVALID_LIST_POSITION)
-    gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), position, 1);
-  else if (position == GTK_INVALID_LIST_POSITION)
-    gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), old_position, 1);
-  else if (position < old_position)
-    gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), position, old_position - position + 1);
-  else
-    gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), old_position, position - old_position + 1);
+  emit_selection_changed (GTK_SELECTION_MODEL (self), old_position, position);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
