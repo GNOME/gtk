@@ -3760,17 +3760,30 @@ scrolledwindow {
 
 
   junction { // the small square between two scrollbars
-    border-color: transparent;
-    // the border image is used to add the missing dot between the borders, details, details, details...
-    border-image: linear-gradient(to bottom, $borders_color 1px, transparent 1px) 0 0 0 1 / 0 1px stretch;
-    background-color: $scrollbar_bg_color;
+    // Only color the top-left (or top right in RTL) pixel, to visually connect
+    // the borders of the two scrollbars.
 
-    &:dir(rtl) { border-image-slice: 0 1 0 0; }
+    background: $borders_color,
+                linear-gradient(to bottom, transparent 1px, $scrollbar_bg_color 1px),
+                linear-gradient(to right, transparent 1px, $scrollbar_bg_color 1px);
+
+    &:dir(rtl) {
+      background: $borders_color,
+                  linear-gradient(to bottom, transparent 1px, $scrollbar_bg_color 1px),
+                  linear-gradient(to left, transparent 1px, $scrollbar_bg_color 1px);
+    }
 
     &:backdrop {
-      border-image-source: linear-gradient(to bottom, $backdrop_borders_color 1px, transparent 1px);
-      background-color: $backdrop_scrollbar_bg_color;
       transition: $backdrop_transition;
+      background: $backdrop_borders_color,
+                  linear-gradient(to bottom, transparent 1px, $backdrop_scrollbar_bg_color 1px),
+                  linear-gradient(to right, transparent 1px, $backdrop_scrollbar_bg_color 1px);
+
+      &:dir(rtl) {
+        background: $backdrop_borders_color,
+                    linear-gradient(to bottom, transparent 1px, $backdrop_scrollbar_bg_color 1px),
+                    linear-gradient(to left, transparent 1px, $backdrop_scrollbar_bg_color 1px);
+      }
     }
   }
 }
