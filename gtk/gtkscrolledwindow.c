@@ -1660,12 +1660,11 @@ gtk_scrolled_window_measure (GtkWidget      *widget,
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-  GtkBin *bin = GTK_BIN (scrolled_window);
   int minimum_req = 0, natural_req = 0;
   GtkWidget *child;
   GtkBorder sborder = { 0 };
 
-  child = gtk_bin_get_child (bin);
+  child = gtk_bin_get_child (GTK_BIN (scrolled_window));
 
   if (child)
     gtk_scrollable_get_border (GTK_SCROLLABLE (child), &sborder);
