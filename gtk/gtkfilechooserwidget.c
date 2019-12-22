@@ -28,7 +28,6 @@
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcellrenderertext.h"
 #include "gtkdropdown.h"
-#include "gtkcomboboxtext.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkdragsource.h"
 #include "gtkdroptarget.h"
@@ -7981,18 +7980,16 @@ gtk_file_chooser_widget_add_choice (GtkFileChooser  *chooser,
     {
       GtkWidget *box;
       GtkWidget *combo;
-      int i;
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
       gtk_box_append (GTK_BOX (box), gtk_label_new (label));
 
-      combo = gtk_combo_box_text_new ();
+      combo = gtk_drop_down_new ();
       g_hash_table_insert (impl->choices, g_strdup (id), combo);
       gtk_box_append (GTK_BOX (box), combo);
 
-      for (i = 0; options[i]; i++)
-        gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo),
-                                   options[i], option_labels[i]);
+      gtk_drop_down_set_from_strings (GTK_DROP_DOWN (combo), option_labels);
+      g_object_set_data_full (G_OBJECT (combo), "options", g_strdupv ((char **)options), (GDestroyNotify)g_strfreev);
 
       widget = box;
     }
@@ -8045,8 +8042,19 @@ gtk_file_chooser_widget_set_choice (GtkFileChooser  *chooser,
 
   widget = (GtkWidget *)g_hash_table_lookup (impl->choices, id);
 
-  if (GTK_IS_COMBO_BOX (widget))
-    gtk_combo_box_set_active_id (GTK_COMBO_BOX (widget), option);
+  if (GTK_IS_DROP_DOWN (widget))
+    {
+      guint i;
+      const char **options = (const char **)g_object_get_data (G_OBJECT (widget), "options");
+      for (i = 0; options[i]; i++)
+        {
+          if (strcmp (options[i], option) == 0)
+            {
+              gtk_drop_down_set_selected (GTK_DROP_DOWN (widget), i);
+              break;
+            }
+        }
+    }
   else if (GTK_IS_TOGGLE_BUTTON (widget))
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), g_str_equal (option, "true"));
 }
@@ -8062,8 +8070,15 @@ gtk_file_chooser_widget_get_choice (GtkFileChooser  *chooser,
     return NULL;
 
   widget = (GtkWidget *)g_hash_table_lookup (impl->choices, id);
-  if (GTK_IS_COMBO_BOX (widget))
-    return gtk_combo_box_get_active_id (GTK_COMBO_BOX (widget));
+  if (GTK_IS_DROP_DOWN (widget))
+    {
+      const char **options = (const char **)g_object_get_data (G_OBJECT (widget), "options");
+      guint selected = gtk_drop_down_get_selected (GTK_DROP_DOWN (widget));
+      if (selected == GTK_INVALID_LIST_POSITION)
+        return NULL;
+      return options[selected];
+    }
+
   else if (GTK_IS_TOGGLE_BUTTON (widget))
     return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)) ? "true" : "false";
 
