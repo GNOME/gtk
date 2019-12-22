@@ -52,6 +52,17 @@ gtk_set_new (void)
   return set;
 }
 
+GtkSet *
+gtk_set_copy (GtkSet *set)
+{
+  GtkSet *copy;
+
+  copy = g_new (GtkSet, 1);
+  copy->ranges = g_array_copy (set->ranges);
+
+  return copy;
+}
+
 void
 gtk_set_free (GtkSet *set)
 {
