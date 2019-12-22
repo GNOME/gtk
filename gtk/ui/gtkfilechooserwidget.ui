@@ -346,13 +346,11 @@
             <child type="end">
               <object class="GtkBox" id="filter_combo_hbox">
                 <child>
-                  <object class="GtkComboBoxText" id="filter_combo">
+                  <object class="GtkDropDown" id="filter_combo">
                     <property name="tooltip-text" translatable="yes">Select which types of files are shown</property>
                     <property name="focus-on-click">0</property>
-                    <property name="entry-text-column">0</property>
-                    <property name="id-column">1</property>
                     <property name="valign">start</property>
-                    <signal name="changed" handler="filter_combo_changed" swapped="no"/>
+                    <signal name="notify::selected" handler="filter_combo_changed" swapped="no"/>
                   </object>
                 </child>
               </object>
