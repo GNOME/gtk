@@ -96,6 +96,11 @@ void                    gtk_column_view_column_set_reorderable          (GtkColu
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_column_view_column_get_reorderable          (GtkColumnViewColumn    *self);
 
+GDK_AVAILABLE_IN_ALL
+void                    gtk_column_view_column_set_header_menu          (GtkColumnViewColumn    *self,
+                                                                         GMenuModel             *menu);
+GDK_AVAILABLE_IN_ALL
+GMenuModel *            gtk_column_view_column_get_header_menu          (GtkColumnViewColumn    *self);
 G_END_DECLS
 
 #endif  /* __GTK_COLUMN_VIEW_COLUMN_H__ */
