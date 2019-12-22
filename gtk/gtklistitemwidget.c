@@ -313,6 +313,7 @@ gtk_list_item_widget_click_gesture_pressed (GtkGestureClick   *gesture,
 {
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
   GtkWidget *widget = GTK_WIDGET (self);
+  gboolean enable_rubber_band;
 
   if (priv->list_item && !priv->list_item->selectable && !priv->list_item->activatable)
     {
@@ -320,12 +321,16 @@ gtk_list_item_widget_click_gesture_pressed (GtkGestureClick   *gesture,
       return;
     }
 
-  if (!priv->list_item || priv->list_item->selectable)
+  g_object_get (gtk_widget_get_parent (widget),
+                "enable-rubber-band", &enable_rubber_band,
+                NULL);
+
+  if (!enable_rubber_band && (!priv->list_item || priv->list_item->selectable))
     {
       GdkModifierType state;
       GdkModifierType mask;
       gboolean extend = FALSE, modify = FALSE;
-
+        
       if (gtk_get_current_event_state (&state))
         {
           mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
