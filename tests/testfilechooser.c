@@ -522,7 +522,6 @@ main (int argc, char **argv)
   GtkWidget *vbbox;
   GtkWidget *button;
   GtkWidget *dialog;
-  GtkWidget *extra;
   GtkFileFilter *filter;
   gboolean force_rtl = FALSE;
   gboolean multiple = FALSE;
@@ -677,9 +676,11 @@ main (int argc, char **argv)
 
   /* Extra widget */
 
-  extra = gtk_check_button_new_with_mnemonic ("Lar_t whoever asks about this button");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (extra), TRUE);
-  gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog), extra);
+  gtk_file_chooser_add_choice (GTK_FILE_CHOOSER (dialog), "choice1",
+                               "Choose one:",
+                               (const char *[]){"one", "two", "three", NULL},
+                               (const char *[]){"One", "Two", "Three", NULL});
+  gtk_file_chooser_set_choice (GTK_FILE_CHOOSER (dialog), "choice1", "two");
 
   /* Shortcuts */
 
