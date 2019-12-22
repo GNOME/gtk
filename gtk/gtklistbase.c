@@ -29,6 +29,12 @@
 #include "gtkscrollable.h"
 #include "gtksingleselection.h"
 #include "gtktypebuiltins.h"
+#include "gtkgestureclick.h"
+#include "gtkeventcontrollermotion.h"
+#include "gtkwidgetprivate.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkstylecontextprivate.h"
+#include "gtksnapshot.h"
 
 typedef struct _GtkListBasePrivate GtkListBasePrivate;
 
@@ -51,6 +57,10 @@ struct _GtkListBasePrivate
   GtkListItemTracker *selected;
   /* the item that has input focus */
   GtkListItemTracker *focus;
+
+  gboolean rb_ongoing;
+  double rb_x1, rb_y1, rb_x2, rb_y2;
+  GtkCssNode *rb_node;
 };
 
 enum
@@ -1059,6 +1069,20 @@ gtk_list_base_add_custom_move_binding (GtkBindingSet      *binding_set,
                                   NULL, NULL);
 }
 
+static void gtk_list_base_snapshot_rubberband (GtkListBase *self,
+                                               GtkSnapshot *snapshot);
+
+static void
+gtk_list_base_snapshot (GtkWidget   *widget,
+                        GtkSnapshot *snapshot)
+{
+  GtkListBase *self = GTK_LIST_BASE (widget);
+
+  GTK_WIDGET_CLASS (gtk_list_base_parent_class)->snapshot (widget, snapshot);
+
+  gtk_list_base_snapshot_rubberband (self, snapshot);
+}
+
 static void
 gtk_list_base_class_init (GtkListBaseClass *klass)
 {
@@ -1068,6 +1092,7 @@ gtk_list_base_class_init (GtkListBaseClass *klass)
   gpointer iface;
 
   widget_class->focus = gtk_list_base_focus;
+  widget_class->snapshot = gtk_list_base_snapshot;
 
   gobject_class->dispose = gtk_list_base_dispose;
   gobject_class->get_property = gtk_list_base_get_property;
@@ -1188,10 +1213,127 @@ gtk_list_base_class_init (GtkListBaseClass *klass)
 }
 
 static void
+gtk_list_base_start_rubberbanding (GtkListBase *self,
+                                   double       x,
+                                   double       y)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkCssNode *widget_node;
+
+  if (priv->rb_ongoing)
+    return;
+
+  priv->rb_x1 = priv->rb_x2 = x + gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+  priv->rb_y1 = priv->rb_y2 = y + gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
+
+  priv->rb_ongoing = TRUE;
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (self));
+  priv->rb_node = gtk_css_node_new ();
+  gtk_css_node_set_name (priv->rb_node, I_("rubberband"));
+  gtk_css_node_set_parent (priv->rb_node, widget_node);
+  gtk_css_node_set_state (priv->rb_node, gtk_css_node_get_state (widget_node));
+  g_object_unref (priv->rb_node);
+}
+
+static void
+gtk_list_base_stop_rubberbanding (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  if (!priv->rb_ongoing)
+    return;
+
+  priv->rb_ongoing = FALSE;
+  gtk_css_node_set_parent (priv->rb_node, NULL);
+  priv->rb_node = NULL;
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
+gtk_list_base_update_rubberband (GtkListBase *self,
+                                 double       x,
+                                 double       y)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  if (!priv->rb_ongoing)
+    return;
+
+  priv->rb_x2 = x + gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+  priv->rb_y2 = y + gtk_adjustment_get_value (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
+gtk_list_base_snapshot_rubberband (GtkListBase *self,
+                                   GtkSnapshot *snapshot)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkStyleContext *context;
+  GdkRectangle rect;
+
+  if (!priv->rb_ongoing)
+    return;
+
+  rect.x = MIN (priv->rb_x1, priv->rb_x2);
+  rect.y = MIN (priv->rb_y1, priv->rb_y2);
+  rect.width = ABS (priv->rb_x1 - priv->rb_x2) + 1;
+  rect.height = ABS (priv->rb_y1 - priv->rb_y2) + 1;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (self));
+
+  gtk_style_context_save_to_node (context, priv->rb_node);
+
+  gtk_snapshot_render_background (snapshot, context,
+                                  rect.x, rect.y,
+                                  rect.width, rect.height);
+  gtk_snapshot_render_frame (snapshot, context,
+                             rect.x, rect.y,
+                             rect.width, rect.height);
+
+  gtk_style_context_restore (context);
+
+}
+
+static void
+gtk_list_base_button_press (GtkGestureClick *gesture,
+                            int              n_press,
+                            double           x,
+                            double           y,
+                            GtkListBase     *self)
+{
+  gtk_list_base_start_rubberbanding (self, x, y);
+}
+
+static void
+gtk_list_base_button_release (GtkGestureClick *gesture,
+                              int              n_press,
+                              double           x,
+                              double           y,
+                              GtkListBase     *self)
+{
+  gtk_list_base_stop_rubberbanding (self);
+}
+
+static void
+gtk_list_base_motion (GtkEventController *controller,
+                      double              x,
+                      double              y,
+                      GtkListBase        *self)
+{
+  gtk_list_base_update_rubberband (self, x, y);
+}
+
+static void
 gtk_list_base_init_real (GtkListBase      *self,
                          GtkListBaseClass *g_class)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkGesture *gesture;
+  GtkEventController *controller;
 
   priv->item_manager = gtk_list_item_manager_new_for_size (GTK_WIDGET (self),
                                                            g_class->list_item_name,
@@ -1210,6 +1352,15 @@ gtk_list_base_init_real (GtkListBase      *self,
   priv->orientation = GTK_ORIENTATION_VERTICAL;
 
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
+
+  gesture = gtk_gesture_click_new ();
+  g_signal_connect (gesture, "pressed", G_CALLBACK (gtk_list_base_button_press), self);
+  g_signal_connect (gesture, "released", G_CALLBACK (gtk_list_base_button_release), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
+
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "motion", G_CALLBACK (gtk_list_base_motion), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 }
 
 static int
