@@ -99,5 +99,8 @@ gboolean               gtk_list_base_grab_focus_on_item         (GtkListBase    
                                                                  gboolean                select,
                                                                  gboolean                modify,
                                                                  gboolean                extend);
+void                   gtk_list_base_set_enable_rubberband      (GtkListBase            *self,
+                                                                 gboolean                enable);
+gboolean               gtk_list_base_get_enable_rubberband      (GtkListBase            *self);
 
 #endif /* __GTK_LIST_BASE_PRIVATE_H__ */
