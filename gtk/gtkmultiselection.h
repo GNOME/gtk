@@ -21,6 +21,7 @@
 #define __GTK_MULTI_SELECTION_H__
 
 #include <gtk/gtktypes.h>
+#include <gtk/gtkselectionmodel.h>
 
 G_BEGIN_DECLS
 
@@ -31,6 +32,9 @@ G_DECLARE_FINAL_TYPE (GtkMultiSelection, gtk_multi_selection, GTK, MULTI_SELECTI
 
 GDK_AVAILABLE_IN_ALL
 GListModel *    gtk_multi_selection_new                (GListModel           *model);
+
+GDK_AVAILABLE_IN_ALL
+GtkMultiSelection * gtk_multi_selection_copy           (GtkSelectionModel    *model);
 
 G_END_DECLS
 
