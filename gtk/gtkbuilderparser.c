@@ -1042,7 +1042,7 @@ free_expression_info (ExpressionInfo *info)
   switch (info->expression_type)
     {
     case EXPRESSION_EXPRESSION:
-      gtk_expression_unref (info->expression);
+      g_clear_pointer (&info->expression, gtk_expression_unref);
       break;
 
     case EXPRESSION_CONSTANT:
