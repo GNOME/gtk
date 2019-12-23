@@ -22,6 +22,7 @@
 #include "gtkbuilderlistitemfactory.h"
 
 #include "gtkbuilder.h"
+#include "gtkbuilderprivate.h"
 #include "gtkintl.h"
 #include "gtklistitemfactoryprivate.h"
 #include "gtklistitemprivate.h"
@@ -61,6 +62,7 @@ struct _GtkBuilderListItemFactory
 
   GtkBuilderScope *scope;
   GBytes *bytes;
+  GBytes *data;
   char *resource;
 };
 
@@ -99,10 +101,10 @@ gtk_builder_list_item_factory_setup (GtkListItemFactory *factory,
   if (self->scope)
     gtk_builder_set_scope (builder, self->scope);
 
-  if (!gtk_builder_extend_with_template  (builder, G_OBJECT (list_item), G_OBJECT_TYPE (list_item),
-					  (const gchar *)g_bytes_get_data (self->bytes, NULL),
-					  g_bytes_get_size (self->bytes),
-					  &error))
+  if (!gtk_builder_extend_with_template (builder, G_OBJECT (list_item), G_OBJECT_TYPE (list_item),
+                                         (const char *)g_bytes_get_data (self->data, NULL),
+                                         g_bytes_get_size (self->data),
+                                         &error))
     {
       g_critical ("Error building template for list item: %s", error->message);
       g_error_free (error);
@@ -159,6 +161,27 @@ gtk_builder_list_item_factory_set_bytes (GtkBuilderListItemFactory *self,
     }
 
   self->bytes = g_bytes_ref (bytes);
+
+  if (!_gtk_buildable_parser_is_precompiled (g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes)))
+    {
+      GError *error = NULL;
+      GBytes *data;
+
+      data = _gtk_buildable_parser_precompile (g_bytes_get_data (bytes, NULL),
+                                               g_bytes_get_size (bytes),
+                                               &error);
+      if (data == NULL)
+        {
+          g_warning ("Failed to precompile template for GtkBuilderListItemFactory: %s", error->message);
+          g_error_free (error);
+          self->data = g_bytes_ref (bytes);
+        }
+      else
+        {
+          self->data = data;
+        }
+    }
+
   return TRUE;
 }
 
@@ -218,6 +241,7 @@ gtk_builder_list_item_factory_finalize (GObject *object)
 
   g_clear_object (&self->scope);
   g_bytes_unref (self->bytes);
+  g_bytes_unref (self->data);
   g_free (self->resource);
 
   G_OBJECT_CLASS (gtk_builder_list_item_factory_parent_class)->finalize (object);
