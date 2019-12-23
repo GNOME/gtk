@@ -84,6 +84,9 @@ GtkExpression *         gtk_property_expression_new             (GType          
                                                                  GtkExpression                  *expression,
                                                                  const char                     *property_name);
 GDK_AVAILABLE_IN_ALL
+GtkExpression *         gtk_property_expression_new_for_pspec   (GtkExpression                  *expression,
+                                                                 GParamSpec                     *pspec);
+GDK_AVAILABLE_IN_ALL
 GtkExpression *         gtk_constant_expression_new             (GType                           value_type,
                                                                  ...);
 GDK_AVAILABLE_IN_ALL
