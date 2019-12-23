@@ -694,7 +694,6 @@ gtk_property_expression_new (GType          this_type,
                              GtkExpression *expression,
                              const char    *property_name)
 {
-  GtkPropertyExpression *result;
   GParamSpec *pspec;
 
   if (g_type_is_a (this_type, G_TYPE_OBJECT))
@@ -720,6 +719,15 @@ gtk_property_expression_new (GType          this_type,
       g_critical ("Type `%s` does not have a property named `%s`", g_type_name (this_type), property_name);
       return NULL;
     }
+
+  return gtk_property_expression_new_for_pspec (expression, pspec);
+}
+
+GtkExpression *
+gtk_property_expression_new_for_pspec (GtkExpression *expression,
+                                       GParamSpec    *pspec)
+{
+  GtkPropertyExpression *result;
 
   result = gtk_expression_alloc (&GTK_PROPERTY_EXPRESSION_CLASS, pspec->value_type);
 
