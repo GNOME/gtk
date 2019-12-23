@@ -316,6 +316,25 @@ test_string_properties (void)
   gtk_expression_unref (expr);
 }
 
+static void
+test_every_dispose (void)
+{
+  GtkFilter *filter, *filter1, *filter2;
+
+  filter = gtk_every_filter_new ();
+
+  filter1 = gtk_custom_filter_new (divisible_by, GUINT_TO_POINTER (3), NULL);
+  filter2 = gtk_custom_filter_new (divisible_by, GUINT_TO_POINTER (5), NULL);
+
+  gtk_multi_filter_append (GTK_MULTI_FILTER (filter), filter1);
+  gtk_multi_filter_append (GTK_MULTI_FILTER (filter), filter2);
+
+  g_object_unref (filter1);
+  g_object_unref (filter2);
+
+  g_object_unref (filter);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -328,6 +347,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/filter/any/simple", test_any_simple);
   g_test_add_func ("/filter/string/simple", test_string_simple);
   g_test_add_func ("/filter/string/properties", test_string_properties);
+  g_test_add_func ("/filter/every/dispose", test_every_dispose);
 
   return g_test_run ();
 }
