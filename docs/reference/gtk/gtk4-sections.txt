@@ -593,6 +593,8 @@ gtk_list_view_get_type
 <TITLE>GtkColumnView</TITLE>
 GtkColumnView
 gtk_column_view_new
+gtk_column_view_append_column
+gtk_column_view_remove_column
 gtk_column_view_get_columns
 gtk_column_view_get_model
 gtk_column_view_set_model
@@ -2927,7 +2929,7 @@ gtk_slice_list_model_get_type
 <FILE>gtksorter</FILE>
 <TITLE>GtkSorter</TITLE>
 GtkSorter
-GtkSorderOrder
+GtkSorterOrder
 GtkSorterChange
 gtk_sorter_compare
 gtk_sorter_get_order
@@ -7795,7 +7797,7 @@ gtk_expression_watch_unwatch
 gtk_property_expression_new
 gtk_constant_expression_new
 gtk_constant_expression_new_for_value
-gtk_object_expression
+gtk_object_expression_new
 gtk_closure_expression_new
 gtk_cclosure_expression_new
 
