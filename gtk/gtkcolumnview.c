@@ -81,6 +81,7 @@ enum
   PROP_SORTER,
   PROP_VADJUSTMENT,
   PROP_VSCROLL_POLICY,
+  PROP_SINGLE_CLICK_ACTIVATE,
 
   N_PROPS
 };
@@ -317,6 +318,10 @@ gtk_column_view_get_property (GObject    *object,
       g_value_set_object (value, self->sorter);
       break;
 
+    case PROP_SINGLE_CLICK_ACTIVATE:
+      g_value_set_boolean (value, gtk_column_view_get_single_click_activate (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -371,6 +376,10 @@ gtk_column_view_set_property (GObject      *object,
           gtk_scrollable_set_vscroll_policy (GTK_SCROLLABLE (self->listview), g_value_get_enum (value));
           g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_VSCROLL_POLICY]);
         }
+      break;
+
+    case PROP_SINGLE_CLICK_ACTIVATE:
+      gtk_column_view_set_single_click_activate (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -456,6 +465,18 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                          P_("Sorter with sorting choices of the user"),
                          GTK_TYPE_SORTER,
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkColumnView:single-click-activate:
+   *
+   * Activate rows on single click and select them on hover
+   */
+  properties[PROP_SINGLE_CLICK_ACTIVATE] =
+    g_param_spec_boolean ("single-click-activate",
+                          P_("Single click activate"),
+                          P_("Activate rows on single click"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
@@ -736,3 +757,41 @@ gtk_column_view_get_sorter (GtkColumnView *self)
   return self->sorter;
 }
 
+/**
+ * gtk_column_view_set_single_click_activate:
+ * @self: a #GtkColumnView
+ * @single_click_activate: %TRUE to activate items on single click
+ *
+ * Sets whether rows should be activated on single click and
+ * selected on hover.
+ */
+void
+gtk_column_view_set_single_click_activate (GtkColumnView *self,
+                                           gboolean       single_click_activate)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+
+  if (single_click_activate == gtk_list_view_get_single_click_activate (self->listview))
+    return;
+
+  gtk_list_view_set_single_click_activate (self->listview, single_click_activate);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SINGLE_CLICK_ACTIVATE]);
+}
+
+/**
+ * gtk_column_view_get_single_click_activate:
+ * @self: a #GtkColumnView
+ *
+ * Returns whether rows will be activated on single click and
+ * selected on hover.
+ *
+ * Returns: %TRUE if rows are activated on single click
+ */
+gboolean
+gtk_column_view_get_single_click_activate (GtkColumnView *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), FALSE);
+
+  return gtk_list_view_get_single_click_activate (self->listview);
+}

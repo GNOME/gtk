@@ -503,6 +503,8 @@ gtk_column_view_set_model
 gtk_column_view_get_sorter
 gtk_column_view_get_show_separators
 gtk_column_view_set_show_separators
+gtk_column_view_set_single_click_activate
+gtk_column_view_get_single_click_activate
 <SUBSECTION Standard>
 GTK_COLUMN_VIEW
 GTK_COLUMN_VIEW_CLASS
@@ -549,6 +551,8 @@ gtk_grid_view_set_max_columns
 gtk_grid_view_get_max_columns
 gtk_grid_view_set_min_columns
 gtk_grid_view_get_min_columns
+gtk_grid_view_set_single_click_activate
+gtk_grid_view_get_single_click_activate
 <SUBSECTION Standard>
 GTK_GRID_VIEW
 GTK_GRID_VIEW_CLASS
