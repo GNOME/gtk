@@ -27,6 +27,7 @@ tests = [
   ['defaultvalue'],
   ['entry'],
   ['expression'],
+  ['filter'],
   ['filterlistmodel'],
   ['flattenlistmodel'],
   ['firefox-stylecontext'],
