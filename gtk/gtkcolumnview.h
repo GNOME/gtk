@@ -87,6 +87,12 @@ void            gtk_column_view_sort_by_column                  (GtkColumnView  
                                                                  GtkSortType             direction);
 
 GDK_AVAILABLE_IN_ALL
+void            gtk_column_view_set_single_click_activate       (GtkColumnView          *self,
+                                                                 gboolean                single_click_activate);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_column_view_get_single_click_activate       (GtkColumnView          *self);
+
+GDK_AVAILABLE_IN_ALL
 void            gtk_column_view_set_enable_rubberband           (GtkColumnView          *self,
                                                                  gboolean                enable_rubberband);
 GDK_AVAILABLE_IN_ALL

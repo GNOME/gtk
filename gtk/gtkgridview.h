@@ -73,6 +73,13 @@ guint           gtk_grid_view_get_max_columns                   (GtkGridView    
 GDK_AVAILABLE_IN_ALL
 void            gtk_grid_view_set_max_columns                   (GtkGridView            *self,
                                                                  guint                   max_columns);
+
+GDK_AVAILABLE_IN_ALL
+void            gtk_grid_view_set_single_click_activate         (GtkGridView            *self,
+                                                                 gboolean                single_click_activate);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_grid_view_get_single_click_activate         (GtkGridView            *self);
+
 GDK_AVAILABLE_IN_ALL
 void            gtk_grid_view_set_enable_rubberband             (GtkGridView            *self,
                                                                  gboolean                enable_rubberband);
