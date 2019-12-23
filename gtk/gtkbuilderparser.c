@@ -1379,6 +1379,7 @@ expression_info_construct (GtkBuilder      *builder,
             if (expression == NULL)
               return NULL;
             free_expression_info (info->property.expression);
+            info->property.expression = NULL;
           }
         else
           expression = NULL;
