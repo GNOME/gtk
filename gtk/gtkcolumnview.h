@@ -86,6 +86,13 @@ void            gtk_column_view_sort_by_column                  (GtkColumnView  
                                                                  GtkColumnViewColumn    *column,
                                                                  GtkSortType             direction);
 
+GDK_AVAILABLE_IN_ALL
+void            gtk_column_view_set_enable_rubberband           (GtkColumnView          *self,
+                                                                 gboolean                enable_rubberband);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_column_view_get_enable_rubberband           (GtkColumnView          *self);
+
+
 G_END_DECLS
 
 #endif  /* __GTK_COLUMN_VIEW_H__ */
