@@ -708,8 +708,28 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
   gtk_widget_class_set_css_name (widget_class, I_("colorchooser"));
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
 
+  /**
+   * GtkColorChooserWidget|color.select:
+   * @red: the red value, between 0 and 1
+   * @green: the green value, between 0 and 1
+   * @blue: the blue value, between 0 and 1
+   * @alpha: the alpha value, between 0 and 1
+   *
+   * Emits the #GtkColorChooser::color-activated signal for
+   * the given color.
+   */
   gtk_widget_class_install_action (widget_class, "color.select", "(dddd)",
                                    gtk_color_chooser_widget_activate_color_select);
+
+  /**
+   * GtkColorChooserWidget|color.customize:
+   * @red: the red value, between 0 and 1
+   * @green: the green value, between 0 and 1
+   * @blue: the blue value, between 0 and 1
+   * @alpha: the alpha value, between 0 and 1
+   *
+   * Activates the color editor for the given color.
+   */
   gtk_widget_class_install_action (widget_class, "color.customize", "(dddd)",
                                    gtk_color_chooser_widget_activate_color_customize);
 }
