@@ -91,6 +91,12 @@ GDK_AVAILABLE_IN_ALL
 gboolean                gtk_column_view_column_get_resizable            (GtkColumnViewColumn    *self);
 
 GDK_AVAILABLE_IN_ALL
+void                    gtk_column_view_column_set_expand               (GtkColumnViewColumn    *self,
+                                                                         gboolean                expand);
+GDK_AVAILABLE_IN_ALL
+gboolean                gtk_column_view_column_get_expand            (GtkColumnViewColumn    *self);
+
+GDK_AVAILABLE_IN_ALL
 void                    gtk_column_view_column_set_reorderable          (GtkColumnViewColumn    *self,
                                                                          gboolean                reorderable);
 GDK_AVAILABLE_IN_ALL

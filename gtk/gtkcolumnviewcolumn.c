@@ -66,6 +66,7 @@ struct _GtkColumnViewColumn
 
   guint visible     : 1;
   guint resizable   : 1;
+  guint expand      : 1;
   guint reorderable : 1;
 
   GMenuModel *menu;
@@ -88,6 +89,7 @@ enum
   PROP_SORTER,
   PROP_VISIBLE,
   PROP_RESIZABLE,
+  PROP_EXPAND,
   PROP_REORDERABLE,
   PROP_FIXED_WIDTH,
   PROP_HEADER_MENU,
@@ -149,6 +151,10 @@ gtk_column_view_column_get_property (GObject    *object,
       g_value_set_boolean (value, self->resizable);
       break;
 
+    case PROP_EXPAND:
+      g_value_set_boolean (value, self->expand);
+      break;
+
     case PROP_REORDERABLE:
       g_value_set_boolean (value, self->reorderable);
       break;
@@ -195,6 +201,10 @@ gtk_column_view_column_set_property (GObject      *object,
 
     case PROP_RESIZABLE:
       gtk_column_view_column_set_resizable (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_EXPAND:
+      gtk_column_view_column_set_expand (self, g_value_get_boolean (value));
       break;
 
     case PROP_REORDERABLE:
@@ -297,6 +307,18 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
+   * GtkColumnViewColumn:expand:
+   *
+   * Column gets share of extra width allocated to the view
+   */
+  properties[PROP_EXPAND] =
+    g_param_spec_boolean ("expand",
+                          P_("Expand"),
+                          P_("column gets share of extra width"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkColumnViewColumn:reorderable:
    *
    * Whether this column is reorderable 
@@ -343,6 +365,7 @@ gtk_column_view_column_init (GtkColumnViewColumn *self)
   self->natural_size_request = -1;
   self->visible = TRUE;
   self->resizable = FALSE;
+  self->expand = FALSE;
   self->reorderable = FALSE;
   self->fixed_width = -1;
 }
@@ -860,6 +883,49 @@ gtk_column_view_column_get_resizable (GtkColumnViewColumn *self)
   g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self), TRUE);
 
   return self->resizable;
+}
+
+/**
+ * gtk_column_view_column_set_expand:
+ * @self: a #GtkColumnViewColumn
+ * @expand: %TRUE if this column should expand to fill available sace
+ *
+ * Sets the column to take available extra space.
+ *
+ * The extra space is shared equally amongst all columns that
+ * have the expand set to %TRUE.
+ */
+void
+gtk_column_view_column_set_expand (GtkColumnViewColumn *self,
+                                   gboolean             expand)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self));
+
+  if (self->expand == expand)
+    return;
+
+  self->expand = expand;
+
+  if (self->visible && self->view)
+    gtk_widget_queue_resize (GTK_WIDGET (self->view));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_EXPAND]);
+}
+
+/**
+ * gtk_column_view_get_expand:
+ * @self: a #GtkColumnViewColumn
+ *
+ * Returns whether this column should expand.
+ *
+ * Returns: %TRUE if this column expands
+ */
+gboolean
+gtk_column_view_column_get_expand (GtkColumnViewColumn *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self), TRUE);
+
+  return self->expand;
 }
 
 /**
