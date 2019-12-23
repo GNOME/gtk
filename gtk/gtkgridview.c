@@ -90,6 +90,7 @@ enum
   PROP_MAX_COLUMNS,
   PROP_MIN_COLUMNS,
   PROP_MODEL,
+  PROP_ENABLE_RUBBERBAND,
 
   N_PROPS
 };
@@ -909,6 +910,10 @@ gtk_grid_view_get_property (GObject    *object,
       g_value_set_object (value, gtk_list_base_get_model (GTK_LIST_BASE (self)));
       break;
 
+    case PROP_ENABLE_RUBBERBAND:
+      g_value_set_boolean (value, gtk_list_base_get_enable_rubberband (GTK_LIST_BASE (self)));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -939,6 +944,10 @@ gtk_grid_view_set_property (GObject      *object,
  
     case PROP_MODEL:
       gtk_grid_view_set_model (self, g_value_get_object (value));
+      break;
+
+    case PROP_ENABLE_RUBBERBAND:
+      gtk_grid_view_set_enable_rubberband (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -1040,6 +1049,18 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
                          P_("Model for the items displayed"),
                          G_TYPE_LIST_MODEL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkGridView:enable-rubberband:
+   *
+   * Allow rubberband selection
+   */
+  properties[PROP_ENABLE_RUBBERBAND] =
+    g_param_spec_boolean ("enable-rubberband",
+                          P_("Enable rubberband selection"),
+                          P_("Allow selecting items by dragging with the mouse"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
@@ -1311,3 +1332,39 @@ gtk_grid_view_set_min_columns (GtkGridView *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MIN_COLUMNS]);
 }
 
+/**
+ * gtk_grid_view_set_enable_rubberband:
+ * @self: a #GtkGridView
+ * @enable_rubberband: %TRUE to enable rubberband selection
+ *
+ * Sets whether selections can be changed by dragging with the mouse.
+ */
+void
+gtk_grid_view_set_enable_rubberband (GtkGridView *self,
+                                     gboolean     enable_rubberband)
+{
+  g_return_if_fail (GTK_IS_GRID_VIEW (self));
+
+  if (enable_rubberband == gtk_list_base_get_enable_rubberband (GTK_LIST_BASE (self)))
+    return;
+
+  gtk_list_base_set_enable_rubberband (GTK_LIST_BASE (self), enable_rubberband);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ENABLE_RUBBERBAND]);
+}
+
+/**
+ * gtk_grid_view_get_enable_rubberband:
+ * @self: a #GtkGridView
+ *
+ * Returns whether rows can be selected by dragging with the mouse.
+ *
+ * Returns: %TRUE if rubberband selection is enabled
+ */
+gboolean
+gtk_grid_view_get_enable_rubberband (GtkGridView *self)
+{
+  g_return_val_if_fail (GTK_IS_GRID_VIEW (self), FALSE);
+
+  return gtk_list_base_get_enable_rubberband (GTK_LIST_BASE (self));
+}
