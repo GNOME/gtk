@@ -135,7 +135,6 @@ gtk_multi_filter_remove_iter (GtkMultiFilter *self,
 
   filter = g_sequence_get (iter);
   g_signal_handlers_disconnect_by_func (filter, gtk_multi_filter_changed_cb, self);
-  g_object_unref (filter);
   g_sequence_remove (iter);
 }
 
