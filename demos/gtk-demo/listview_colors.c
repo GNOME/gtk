@@ -422,9 +422,10 @@ create_color_grid (void)
   g_object_unref (factory);
 
   gtk_grid_view_set_max_columns (GTK_GRID_VIEW (gridview), 24);
+  gtk_grid_view_sert_enable_rubberband (GTK_GRID_VIEW (gridview), TRUE);
 
   model = G_LIST_MODEL (gtk_sort_list_model_new (create_colors_model (), NULL));
-  selection = G_LIST_MODEL (gtk_no_selection_new (model));
+  selection = G_LIST_MODEL (gtk_multi_selection_new (model));
   gtk_grid_view_set_model (GTK_GRID_VIEW (gridview), selection);
   g_object_unref (selection);
   g_object_unref (model);
