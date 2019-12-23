@@ -96,9 +96,6 @@ parse_template_error (const gchar  *message,
 {
   gchar *p;
 
-  if (!strstr (message, "Not expecting to handle a template"))
-    return FALSE;
-
   p = strstr (message, "(class '");
   if (p)
     {
