@@ -75,6 +75,12 @@ void            gtk_list_view_set_single_click_activate         (GtkListView    
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_list_view_get_single_click_activate         (GtkListView            *self);
 
+GDK_AVAILABLE_IN_ALL
+void            gtk_list_view_set_enable_rubberband             (GtkListView            *self,
+                                                                 gboolean                enable_rubberband);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_list_view_get_enable_rubberband             (GtkListView            *self);
+
 G_END_DECLS
 
 #endif  /* __GTK_LIST_VIEW_H__ */
