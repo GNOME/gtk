@@ -1371,6 +1371,7 @@ expression_info_construct (GtkBuilder      *builder,
       {
         GtkExpression *expression;
         GType type;
+        GParamSpec *pspec;
 
         if (info->property.expression)
           {
@@ -1391,13 +1392,44 @@ expression_info_construct (GtkBuilder      *builder,
             g_set_error (error,
                          GTK_BUILDER_ERROR,
                          GTK_BUILDER_ERROR_MISSING_ATTRIBUTE,
-                         "%s:%d:%d Lookups require a type attribute if they don't have an expression.",
-                         "???", 0, 0);
+                         "Lookups require a type attribute if they don't have an expression.");
             return NULL;
           }
-        expression = gtk_property_expression_new (type,
-                                                  expression,
-                                                  info->property.property_name);
+
+        if (g_type_is_a (type, G_TYPE_OBJECT))
+          {
+            GObjectClass *class = g_type_class_ref (type);
+            pspec = g_object_class_find_property (class, info->property.property_name);
+            g_type_class_unref (class);
+          }
+        else if (g_type_is_a (type, G_TYPE_INTERFACE))
+          {
+            GTypeInterface *iface = g_type_default_interface_ref (type);
+            pspec = g_object_interface_find_property (iface, info->property.property_name);
+            g_type_default_interface_unref (iface);
+          }
+        else
+          {
+            g_set_error (error,
+                         GTK_BUILDER_ERROR,
+                         GTK_BUILDER_ERROR_MISSING_ATTRIBUTE,
+                         "Type `%s` does not support properties",
+                         g_type_name (type));
+            return NULL;
+          }
+
+        if (pspec == NULL)
+          {
+            g_set_error (error,
+                         GTK_BUILDER_ERROR,
+                         GTK_BUILDER_ERROR_MISSING_ATTRIBUTE,
+                         "Type `%s` does not have a property name `%s`",
+                         g_type_name (type), info->property.property_name);
+            return NULL;
+          }
+
+        expression = gtk_property_expression_new_for_pspec  (expression, pspec);
+
         g_free (info->property.property_name);
         info->expression_type = EXPRESSION_EXPRESSION;
         info->expression = expression;
