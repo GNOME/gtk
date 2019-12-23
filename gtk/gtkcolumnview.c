@@ -192,11 +192,12 @@ gtk_column_view_allocate_columns (GtkColumnView *self,
 {
   GtkScrollablePolicy scroll_policy;
   int col_min, col_nat, extra, col_size, x;
+  int n, n_expand, expand_size, n_extra;
   guint i;
-  int n;
   GtkRequestedSize *sizes;
 
   n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
+  n_expand = 0;
   sizes = g_newa (GtkRequestedSize, n);
   for (i = 0; i < n; i++)
     {
@@ -204,7 +205,11 @@ gtk_column_view_allocate_columns (GtkColumnView *self,
 
       column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
       if (gtk_column_view_column_get_visible (column))
-        gtk_column_view_column_measure (column, &sizes[i].minimum_size, &sizes[i].natural_size);
+        {
+          gtk_column_view_column_measure (column, &sizes[i].minimum_size, &sizes[i].natural_size);
+          if (gtk_column_view_column_get_expand (column))
+            n_expand++;
+        }
       else
         sizes[i].minimum_size = sizes[i].natural_size = 0;
       g_object_unref (column);
@@ -214,10 +219,18 @@ gtk_column_view_allocate_columns (GtkColumnView *self,
 
   scroll_policy = gtk_scrollable_get_hscroll_policy (GTK_SCROLLABLE (self->listview));
   if (scroll_policy == GTK_SCROLL_MINIMUM)
+    extra = MAX (width - col_min, 0);
+  else
+    extra = MAX (width - col_min, col_nat - col_min);
+
+  extra = gtk_distribute_natural_allocation (extra, n, sizes);
+  if (n_expand > 0)
     {
-      extra = MAX (width - col_min, 0);
-      gtk_distribute_natural_allocation (extra, n, sizes);
+      expand_size = extra / n_expand;
+      n_extra = extra % n_expand;
     }
+  else
+    expand_size = n_extra = 0;
 
   x = 0;
   for (i = 0; i < n; i++)
@@ -227,10 +240,16 @@ gtk_column_view_allocate_columns (GtkColumnView *self,
       column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
       if (gtk_column_view_column_get_visible (column))
         {
-          if (scroll_policy == GTK_SCROLL_MINIMUM)
-            col_size = sizes[i].minimum_size;
-          else
-            col_size = sizes[i].natural_size;
+          col_size = sizes[i].minimum_size;
+          if (gtk_column_view_column_get_expand (column))
+            {
+              col_size += expand_size;
+              if (n_extra > 0)
+                {
+                  col_size++;
+                  n_extra--;
+                }
+            }
 
           gtk_column_view_column_allocate (column, x, col_size);
           if (self->in_column_reorder && i == self->drag_pos)
