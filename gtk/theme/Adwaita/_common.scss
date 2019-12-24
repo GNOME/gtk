@@ -3677,7 +3677,7 @@ levelbar {
 printdialog {
   drawing {
     color: $fg_color;
-    background: white;
+    background: none;
     border: none;
     padding: 0;
 
@@ -3687,6 +3687,8 @@ printdialog {
     }
 
     paper {
+      background: white;
+      color: #2e3436;
       border: 1px solid $borders_color;
     }
 
