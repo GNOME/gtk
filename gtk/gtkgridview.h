@@ -25,6 +25,7 @@
 #endif
 
 #include <gtk/gtklistbase.h>
+#include <gtk/gtkfilter.h>
 
 G_BEGIN_DECLS
 
@@ -84,6 +85,16 @@ void            gtk_grid_view_set_single_click_activate         (GtkGridView    
                                                                  gboolean                single_click_activate);
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_grid_view_get_single_click_activate         (GtkGridView            *self);
+
+GDK_AVAILABLE_IN_ALL
+void            gtk_grid_view_set_search_filter                 (GtkGridView            *self,
+                                                                 GtkFilter              *filter);
+GDK_AVAILABLE_IN_ALL
+GtkFilter *     gtk_grid_view_get_search_filter                 (GtkGridView            *self);
+
+GDK_AVAILABLE_IN_ALL
+void            gtk_grid_view_select_next_match                 (GtkGridView            *self,
+                                                                 gboolean                forward);
 
 
 G_END_DECLS

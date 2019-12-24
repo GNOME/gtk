@@ -27,6 +27,7 @@
 #include <gtk/gtktypes.h>
 #include <gtk/gtksortlistmodel.h>
 #include <gtk/gtksorter.h>
+#include <gtk/gtkfilter.h>
 
 G_BEGIN_DECLS
 
@@ -98,6 +99,15 @@ void            gtk_column_view_set_enable_rubberband           (GtkColumnView  
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_column_view_get_enable_rubberband           (GtkColumnView          *self);
 
+GDK_AVAILABLE_IN_ALL
+void            gtk_column_view_set_search_filter               (GtkColumnView          *self,
+                                                                 GtkFilter              *filter);
+GDK_AVAILABLE_IN_ALL
+GtkFilter *     gtk_column_view_get_search_filter               (GtkColumnView          *self);
+
+GDK_AVAILABLE_IN_ALL
+void            gtk_column_view_select_next_match               (GtkColumnView          *self,
+                                                                 gboolean                forward);
 
 G_END_DECLS
 
