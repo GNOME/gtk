@@ -45,6 +45,7 @@
             <child>
               <object class="GtkColumnViewColumn">
                 <property name="title">Type</property>
+                <property name="expand">1</property>
                 <property name="factory">
                   <object class="GtkSignalListItemFactory">
                     <signal name="setup" handler="setup_type_cb"/>
@@ -57,6 +58,7 @@
             <child>
               <object class="GtkColumnViewColumn">
                 <property name="title">Name</property>
+                <property name="expand">1</property>
                 <property name="factory">
                   <object class="GtkSignalListItemFactory">
                     <signal name="setup" handler="setup_name_cb"/>
@@ -68,6 +70,7 @@
             <child>
               <object class="GtkColumnViewColumn">
                 <property name="title">Label</property>
+                <property name="expand">1</property>
                 <property name="factory">
                   <object class="GtkSignalListItemFactory">
                     <signal name="setup" handler="setup_label_cb"/>
