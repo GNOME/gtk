@@ -72,6 +72,8 @@ struct _GtkListBasePrivate
   guint autoscroll_id;
   double autoscroll_delta_x;
   double autoscroll_delta_y;
+
+  GtkFilter *search_filter;
 };
 
 enum
@@ -545,6 +547,8 @@ gtk_list_base_focus (GtkWidget        *widget,
     }
 }
 
+static void gtk_list_base_clear_search_filter (GtkListBase *self);
+
 static void
 gtk_list_base_dispose (GObject *object)
 {
@@ -572,6 +576,8 @@ gtk_list_base_dispose (GObject *object)
   g_clear_object (&priv->item_manager);
 
   g_clear_object (&priv->model);
+
+  gtk_list_base_clear_search_filter (self);
 
   G_OBJECT_CLASS (gtk_list_base_parent_class)->dispose (object);
 }
@@ -786,26 +792,18 @@ gtk_list_base_update_focus_tracker (GtkListBase *self)
     }
 }
 
-static void
-gtk_list_base_scroll_to_item (GtkWidget  *widget,
-                              const char *action_name,
-                              GVariant   *parameter)
+static gboolean
+gtk_list_base_scroll_to_position (GtkListBase *self,
+                                  guint        pos)
 {
-  GtkListBase *self = GTK_LIST_BASE (widget);
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   int start, end;
   double align_along, align_across;
   GtkPackType side_along, side_across;
-  guint pos;
-
-  if (!g_variant_check_format_string (parameter, "u", FALSE))
-    return;
-
-  g_variant_get (parameter, "u", &pos);
 
   /* figure out primary orientation and if position is valid */
   if (!gtk_list_base_get_allocation_along (GTK_LIST_BASE (self), pos, &start, &end))
-    return;
+    return FALSE;
 
   end += start;
   gtk_list_base_compute_scroll_align (self,
@@ -816,7 +814,7 @@ gtk_list_base_scroll_to_item (GtkWidget  *widget,
 
   /* now do the same thing with the other orientation */
   if (!gtk_list_base_get_allocation_across (GTK_LIST_BASE (self), pos, &start, &end))
-    return;
+    return FALSE;
 
   end += start;
   gtk_list_base_compute_scroll_align (self,
@@ -830,13 +828,32 @@ gtk_list_base_scroll_to_item (GtkWidget  *widget,
                             align_across, side_across,
                             align_along, side_along);
 
-  /* HACK HACK HACK
-   *
-   * GTK has no way to track the focused child. But we now that when a listitem
-   * gets focus, it calls this action. So we update our focus tracker from here
-   * because it's the closest we can get to accurate tracking.
-   */
-  gtk_list_base_update_focus_tracker (self);
+  return TRUE;
+}
+
+static void
+gtk_list_base_scroll_to_item (GtkWidget  *widget,
+                              const char *action_name,
+                              GVariant   *parameter)
+{
+  GtkListBase *self = GTK_LIST_BASE (widget);
+  guint pos;
+
+  if (!g_variant_check_format_string (parameter, "u", FALSE))
+    return;
+
+  g_variant_get (parameter, "u", &pos);
+
+  if (gtk_list_base_scroll_to_position (self, pos))
+    {
+      /* HACK HACK HACK
+       *
+       * GTK has no way to track the focused child. But we know that when a listitem
+       * gets focus, it calls this action. So we update our focus tracker from here
+       * because it's the closest we can get to accurate tracking.
+       */
+      gtk_list_base_update_focus_tracker (self);
+    }
 }
 
 static void
@@ -883,6 +900,17 @@ gtk_list_base_unselect_all (GtkWidget  *widget,
     return;
 
   gtk_selection_model_unselect_all (selection_model);
+}
+
+static void
+gtk_list_base_next_match_action (GtkWidget  *widget,
+                                 const char *action_name,
+                                 GVariant   *parameter)
+{
+  gboolean forward;
+
+  g_variant_get (parameter, "(b)", &forward);
+  gtk_list_base_select_next_match (GTK_LIST_BASE (widget), forward);
 }
 
 static gboolean
@@ -1199,6 +1227,11 @@ gtk_list_base_class_init (GtkListBaseClass *klass)
                                    NULL,
                                    gtk_list_base_unselect_all);
 
+  gtk_widget_class_install_action (widget_class,
+                                   "list.next-match",
+                                   "(b)",
+                                   gtk_list_base_next_match_action);
+
   gtk_list_base_add_move_binding (widget_class, GDK_KEY_Up, GTK_ORIENTATION_VERTICAL, -1);
   gtk_list_base_add_move_binding (widget_class, GDK_KEY_KP_Up, GTK_ORIENTATION_VERTICAL, -1);
   gtk_list_base_add_move_binding (widget_class, GDK_KEY_Down, GTK_ORIENTATION_VERTICAL, 1);
@@ -1221,6 +1254,9 @@ gtk_list_base_class_init (GtkListBaseClass *klass)
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_slash, GDK_CONTROL_MASK, "list.select-all", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_A, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "list.unselect-all", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_backslash, GDK_CONTROL_MASK, "list.unselect-all", NULL);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_g, GDK_CONTROL_MASK, "list.next-match", "(b)", TRUE);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_g, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "list.next-match", "(b)", FALSE);
 }
 
 static void gtk_list_base_update_rubberband_selection (GtkListBase *self);
@@ -1904,5 +1940,186 @@ gtk_list_base_set_model (GtkListBase *self,
       gtk_list_item_manager_set_model (priv->item_manager, NULL);
     }
 
+  return TRUE;
+}
+
+static guint
+find_first_selected (GtkSelectionModel *model)
+{
+  guint i, start, n_items;
+  gboolean selected;
+
+  n_items = 0;
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (model)); i += n_items)
+    {
+      gtk_selection_model_query_range (model, i, &start, &n_items, &selected);
+      if (selected)
+        return i;
+    }
+
+  return GTK_INVALID_LIST_POSITION;
+}
+
+static gboolean
+match_item (GListModel *model,
+            GtkFilter  *filter,
+            guint       position)
+{
+  gpointer item;
+  gboolean result;
+
+  item = g_list_model_get_item (model, position);
+  result = gtk_filter_match (filter, item);
+  g_object_unref (item);
+
+  return result;
+}
+
+static guint
+find_next_match (GListModel *model,
+                 GtkFilter   *filter,
+                 guint        start,
+                 gboolean     forward)
+{
+  guint i;
+
+  if (start == GTK_INVALID_LIST_POSITION)
+    start = 0;
+
+  if (forward)
+    for (i = start; i < g_list_model_get_n_items (model); i++)
+      {
+        if (match_item (model, filter, i))
+          return i;
+      }
+  else
+    for (i = start; ; i--)
+      {
+        if (match_item (model, filter, i))
+          return i;
+        if (i == 0)
+          break;
+      }
+
+  return GTK_INVALID_LIST_POSITION;
+}
+
+static void
+gtk_list_base_search_filter_changed_cb (GtkFilter       *filter,
+                                           GtkFilterChange  change,
+                                           GtkListBase     *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkSelectionModel *model = gtk_list_item_manager_get_model (priv->item_manager);
+
+  if (model == NULL)
+    return;
+
+  if (gtk_filter_get_strictness (priv->search_filter) == GTK_FILTER_MATCH_NONE)
+    gtk_selection_model_unselect_all (model);
+  else
+    {
+      guint position;
+
+      switch (change)
+        {
+        case GTK_FILTER_CHANGE_DIFFERENT:
+        case GTK_FILTER_CHANGE_LESS_STRICT:
+          position = find_next_match (G_LIST_MODEL (model), priv->search_filter, 0, TRUE);
+          break;
+
+        case GTK_FILTER_CHANGE_MORE_STRICT:
+          position = find_first_selected (model);
+          if (position == GTK_INVALID_LIST_POSITION)
+            position = 0;
+          position = find_next_match (G_LIST_MODEL (model), priv->search_filter, position, TRUE);
+          break;
+
+        default:
+          g_assert_not_reached ();
+        }
+
+      if (position == GTK_INVALID_LIST_POSITION)
+        gtk_selection_model_unselect_all (model);
+      else
+        gtk_list_base_grab_focus_on_item (self, position, TRUE, FALSE, FALSE);
+    }
+}
+
+static void
+gtk_list_base_clear_search_filter (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  if (priv->search_filter == NULL)
+    return;
+
+  g_signal_handlers_disconnect_by_func (priv->search_filter,
+                                        gtk_list_base_search_filter_changed_cb,
+                                        self);
+
+  g_clear_object (&priv->search_filter);
+}
+
+void
+gtk_list_base_set_search_filter (GtkListBase *self,
+                                    GtkFilter   *filter)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  if (priv->search_filter == filter)
+    return;
+
+  gtk_list_base_clear_search_filter (self);
+
+  if (filter)
+    {
+      priv->search_filter = g_object_ref (filter);
+      g_signal_connect (priv->search_filter, "changed",
+                        G_CALLBACK (gtk_list_base_search_filter_changed_cb), self);
+      gtk_list_base_search_filter_changed_cb (priv->search_filter, GTK_FILTER_CHANGE_DIFFERENT, self);
+    }
+
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "list.next-match", filter != NULL);
+}
+
+GtkFilter *
+gtk_list_base_get_search_filter (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  return priv->search_filter;
+}
+
+gboolean
+gtk_list_base_select_next_match (GtkListBase *self,
+                                 gboolean     forward)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkSelectionModel *model = gtk_list_item_manager_get_model (priv->item_manager);
+  guint position;
+
+  if (!priv->search_filter)
+    return FALSE;
+
+  position = find_first_selected (model);
+  if (position == GTK_INVALID_LIST_POSITION)
+    return FALSE;
+
+  if (forward)
+    position = position + 1;
+  else if (position > 0)
+    position = position - 1;
+  else
+    return FALSE;
+
+  position = find_next_match (G_LIST_MODEL (model), priv->search_filter, position, forward);
+  if (position == GTK_INVALID_LIST_POSITION)
+    {
+      gtk_widget_error_bell (GTK_WIDGET (self));
+      return FALSE;
+    }
+
+  gtk_list_base_grab_focus_on_item (self, position, TRUE, FALSE, FALSE);
   return TRUE;
 }

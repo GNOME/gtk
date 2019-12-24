@@ -481,6 +481,9 @@ gtk_list_view_set_single_click_activate
 gtk_list_view_get_single_click_activate
 gtk_list_view_set_enable_rubberband
 gtk_list_view_get_enable_rubberband
+gtk_list_view_set_search_filter
+gtk_list_view_get_search_filter
+gtk_list_view_next_match
 <SUBSECTION Standard>
 GTK_LIST_VIEW
 GTK_LIST_VIEW_CLASS
@@ -511,6 +514,9 @@ gtk_column_view_set_single_click_activate
 gtk_column_view_get_single_click_activate
 gtk_column_view_set_enable_rubberband
 gtk_column_view_get_enable_rubberband
+gtk_column_view_set_search_filter
+gtk_column_view_get_search_filter
+gtk_column_view_next_match
 <SUBSECTION Standard>
 GTK_COLUMN_VIEW
 GTK_COLUMN_VIEW_CLASS
@@ -565,6 +571,9 @@ gtk_grid_view_set_single_click_activate
 gtk_grid_view_get_single_click_activate
 gtk_grid_view_set_enable_rubberband
 gtk_grid_view_get_enable_rubberband
+gtk_grid_view_set_search_filter
+gtk_grid_view_get_search_filter
+gtk_grid_view_next_match
 <SUBSECTION Standard>
 GTK_GRID_VIEW
 GTK_GRID_VIEW_CLASS
