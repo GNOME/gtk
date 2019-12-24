@@ -1337,6 +1337,8 @@ do_font_features (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       g_object_unref (builder);
+
+      update_display ();
     }
 
   if (!gtk_widget_get_visible (window))
