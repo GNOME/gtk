@@ -230,6 +230,18 @@ update_filter (GtkInspectorPropList *pl,
 }
 
 static void
+next_match (GtkInspectorPropList *pl)
+{
+  gtk_column_view_select_next_match (GTK_COLUMN_VIEW (pl->priv->list));
+}
+
+static void
+previous_match (GtkInspectorPropList *pl)
+{
+  gtk_column_view_select_previous_match (GTK_COLUMN_VIEW (pl->priv->list));
+}
+
+static void
 constructed (GObject *object)
 {
   GtkInspectorPropList *pl = GTK_INSPECTOR_PROP_LIST (object);
@@ -243,6 +255,10 @@ constructed (GObject *object)
                             G_CALLBACK (show_search_entry), pl);
   g_signal_connect_swapped (pl->priv->search_entry, "search-changed",
                             G_CALLBACK (update_filter), pl);
+  g_signal_connect_swapped (pl->priv->search_entry, "next-match",
+                            G_CALLBACK (next_match), pl);
+  g_signal_connect_swapped (pl->priv->search_entry, "previous-match",
+                            G_CALLBACK (previous_match), pl);
 }
 
 static void
@@ -579,8 +595,6 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
   guint num_properties;
   guint i;
   GListStore *store;
-  GListModel *list;
-  GListModel *filtered;
   GtkSortListModel *sorted;
 
   if (!object)
@@ -618,19 +632,15 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
   if (GTK_IS_WIDGET (object))
     g_signal_connect_object (object, "destroy", G_CALLBACK (cleanup_object), pl, G_CONNECT_SWAPPED);
 
-  filtered = G_LIST_MODEL (gtk_filter_list_model_new (G_LIST_MODEL (store), pl->priv->filter));
-  sorted = gtk_sort_list_model_new (filtered, NULL);
-  list = G_LIST_MODEL (gtk_no_selection_new (G_LIST_MODEL (sorted)));
+  sorted = gtk_sort_list_model_new (G_LIST_MODEL (store), gtk_column_view_get_sorter (GTK_COLUMN_VIEW (pl->priv->list)));
 
-  gtk_column_view_set_model (GTK_COLUMN_VIEW (pl->priv->list), list);
-  gtk_sort_list_model_set_sorter (sorted, gtk_column_view_get_sorter (GTK_COLUMN_VIEW (pl->priv->list)));
+  gtk_column_view_set_selection_filter (GTK_COLUMN_VIEW (pl->priv->list), pl->priv->filter);
+  gtk_column_view_set_model (GTK_COLUMN_VIEW (pl->priv->list), G_LIST_MODEL (sorted));
   gtk_column_view_sort_by_column (GTK_COLUMN_VIEW (pl->priv->list), pl->priv->name, GTK_SORT_ASCENDING);
 
   gtk_widget_show (GTK_WIDGET (pl));
 
-  g_object_unref (list);
   g_object_unref (sorted);
-  g_object_unref (filtered);
   g_object_unref (store);
 
   return TRUE;
