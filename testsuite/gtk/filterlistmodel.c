@@ -150,9 +150,9 @@ free_changes (gpointer data)
 }
 
 static GtkFilterListModel *
-new_model (guint                        size,
-           GtkFilterListModelFilterFunc filter_func,
-           gpointer                     data)
+new_model (guint               size,
+           GtkCustomFilterFunc filter_func,
+           gpointer            data)
 {
   GtkFilterListModel *result;
   GtkFilter *filter;
