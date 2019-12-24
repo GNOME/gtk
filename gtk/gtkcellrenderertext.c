@@ -21,6 +21,7 @@
 
 #include "gtkeditable.h"
 #include "gtkentry.h"
+#include "gtkentryprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
@@ -1782,7 +1783,6 @@ gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
 
   path = g_object_get_data (G_OBJECT (entry), GTK_CELL_RENDERER_TEXT_PATH);
   new_text = gtk_editable_get_text (GTK_EDITABLE (entry));
-
   g_signal_emit (data, text_cell_renderer_signals[EDITED], 0, path, new_text);
 }
 
@@ -1791,7 +1791,8 @@ gtk_cell_renderer_text_focus_changed (GtkWidget  *entry,
                                       GParamSpec *pspec,
                                       gpointer    data)
 {
-  if (gtk_widget_has_focus (entry))
+  if (gtk_widget_has_focus (entry) ||
+      gtk_widget_has_focus (GTK_WIDGET (gtk_entry_get_text_widget (GTK_ENTRY (entry)))))
     return;
 
   g_object_set (entry,
@@ -1815,7 +1816,7 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
   gfloat xalign, yalign;
 
   /* If the cell isn't editable we return NULL. */
-  if (priv->editable == FALSE)
+  if (!priv->editable)
     return NULL;
 
   gtk_cell_renderer_get_alignment (cell, &xalign, &yalign);
@@ -1840,14 +1841,11 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
       priv->entry_menu_popdown_timeout = 0;
     }
 
-  g_signal_connect (priv->entry,
-		    "editing-done",
-		    G_CALLBACK (gtk_cell_renderer_text_editing_done),
-		    celltext);
+  g_signal_connect (priv->entry, "editing-done",
+		    G_CALLBACK (gtk_cell_renderer_text_editing_done), celltext);
   priv->focus_out_id = g_signal_connect_after (priv->entry, "notify::has-focus",
 					       G_CALLBACK (gtk_cell_renderer_text_focus_changed),
 					       celltext);
-  gtk_widget_show (priv->entry);
 
   return GTK_CELL_EDITABLE (priv->entry);
 }
