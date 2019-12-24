@@ -92,6 +92,7 @@ enum
   PROP_MODEL,
   PROP_SINGLE_CLICK_ACTIVATE,
   PROP_ENABLE_RUBBERBAND,
+  PROP_SEARCH_FILTER,
 
   N_PROPS
 };
@@ -919,6 +920,10 @@ gtk_grid_view_get_property (GObject    *object,
       g_value_set_boolean (value, gtk_list_base_get_enable_rubberband (GTK_LIST_BASE (self)));
       break;
 
+    case PROP_SEARCH_FILTER:
+      g_value_set_object (value, gtk_grid_view_get_search_filter (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -957,6 +962,10 @@ gtk_grid_view_set_property (GObject      *object,
 
     case PROP_ENABLE_RUBBERBAND:
       gtk_grid_view_set_enable_rubberband (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_SEARCH_FILTER:
+      gtk_grid_view_set_search_filter (self, g_value_get_object (value));
       break;
 
     default:
@@ -1082,6 +1091,18 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
                           P_("Allow selecting items by dragging with the mouse"),
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkGridView:search-filter:
+   *
+   * Filter used for search
+   */
+  properties[PROP_SEARCH_FILTER] =
+    g_param_spec_object ("search-filter",
+                         P_("Search filter"),
+                         P_("Filter used for searching"),
+                         GTK_TYPE_FILTER,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
@@ -1427,4 +1448,36 @@ gtk_grid_view_get_enable_rubberband (GtkGridView *self)
   g_return_val_if_fail (GTK_IS_GRID_VIEW (self), FALSE);
 
   return gtk_list_base_get_enable_rubberband (GTK_LIST_BASE (self));
+}
+
+void
+gtk_grid_view_set_search_filter (GtkGridView *self,
+                                 GtkFilter   *filter)
+{
+  g_return_if_fail (GTK_IS_GRID_VIEW (self));
+  g_return_if_fail (filter == NULL || GTK_IS_FILTER (filter));
+
+  if (filter == gtk_list_base_get_search_filter (GTK_LIST_BASE (self)))
+    return;
+
+  gtk_list_base_set_search_filter (GTK_LIST_BASE (self), filter);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SEARCH_FILTER]);
+}
+
+GtkFilter *
+gtk_grid_view_get_search_filter (GtkGridView *self)
+{
+  g_return_val_if_fail (GTK_IS_GRID_VIEW (self), NULL);
+
+  return gtk_list_base_get_search_filter (GTK_LIST_BASE (self));
+}
+
+void
+gtk_grid_view_select_next_match (GtkGridView *self,
+                                 gboolean     forward)
+{
+  g_return_if_fail (GTK_IS_GRID_VIEW (self));
+
+  gtk_list_base_select_next_match (GTK_LIST_BASE (self), forward);
 }

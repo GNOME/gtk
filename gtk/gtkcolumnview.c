@@ -39,6 +39,7 @@
 #include "gtkgesturedrag.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtklistbaseprivate.h"
 #include "gtkdnd.h"
 
 /**
@@ -104,6 +105,7 @@ enum
   PROP_VSCROLL_POLICY,
   PROP_SINGLE_CLICK_ACTIVATE,
   PROP_ENABLE_RUBBERBAND,
+  PROP_SEARCH_FILTER,
 
   N_PROPS
 };
@@ -399,6 +401,10 @@ gtk_column_view_get_property (GObject    *object,
       g_value_set_boolean (value, gtk_column_view_get_enable_rubberband (self));
       break;
 
+    case PROP_SEARCH_FILTER:
+      g_value_set_object (value, gtk_column_view_get_search_filter (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -472,6 +478,10 @@ gtk_column_view_set_property (GObject      *object,
 
     case PROP_ENABLE_RUBBERBAND:
       gtk_column_view_set_enable_rubberband (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_SEARCH_FILTER:
+      gtk_column_view_set_search_filter (self, g_value_get_object (value));
       break;
 
     default:
@@ -581,6 +591,18 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                           P_("Allow selecting items by dragging with the mouse"),
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkColumnView:search-filter:
+   *
+   * Filter used for search
+   */
+  properties[PROP_SEARCH_FILTER] =
+    g_param_spec_object ("search-filter",
+                         P_("Search filter"),
+                         P_("Filter used for searching"),
+                         GTK_TYPE_FILTER,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
@@ -1390,3 +1412,34 @@ gtk_column_view_get_enable_rubberband (GtkColumnView *self)
   return gtk_list_view_get_enable_rubberband (self->listview);
 }
 
+void
+gtk_column_view_set_search_filter (GtkColumnView *self,
+                                   GtkFilter     *filter)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+  g_return_if_fail (filter == NULL || GTK_IS_FILTER (filter));
+
+  if (filter == gtk_list_view_get_search_filter (GTK_LIST_VIEW (self->listview)))
+    return;
+
+  gtk_list_view_set_search_filter (GTK_LIST_VIEW (self->listview), filter); 
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SEARCH_FILTER]);
+}
+
+GtkFilter *
+gtk_column_view_get_search_filter (GtkColumnView *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW (self), NULL);
+
+  return gtk_list_view_get_search_filter (GTK_LIST_VIEW (self->listview));
+}
+
+void
+gtk_column_view_select_next_match (GtkColumnView *self,
+                                   gboolean       forward)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+
+  gtk_list_view_select_next_match (GTK_LIST_VIEW (self->listview), forward);
+}

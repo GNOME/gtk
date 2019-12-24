@@ -23,6 +23,7 @@
 #include "gtklistbase.h"
 
 #include "gtklistitemmanagerprivate.h"
+#include "gtkfilter.h"
 #include "gtkprivate.h"
 
 struct _GtkListBase
@@ -102,5 +103,10 @@ gboolean               gtk_list_base_grab_focus_on_item         (GtkListBase    
 void                   gtk_list_base_set_enable_rubberband      (GtkListBase            *self,
                                                                  gboolean                enable);
 gboolean               gtk_list_base_get_enable_rubberband      (GtkListBase            *self);
+void                   gtk_list_base_set_search_filter          (GtkListBase            *self,
+                                                                 GtkFilter              *filter);
+GtkFilter *            gtk_list_base_get_search_filter          (GtkListBase            *self);
+gboolean               gtk_list_base_select_next_match          (GtkListBase            *self,
+                                                                 gboolean                forward);
 
 #endif /* __GTK_LIST_BASE_PRIVATE_H__ */

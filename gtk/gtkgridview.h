@@ -25,6 +25,7 @@
 #endif
 
 #include <gtk/gtklistbase.h>
+#include <gtk/gtkfilter.h>
 
 G_BEGIN_DECLS
 
@@ -85,6 +86,16 @@ void            gtk_grid_view_set_enable_rubberband             (GtkGridView    
                                                                  gboolean                enable_rubberband);
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_grid_view_get_enable_rubberband             (GtkGridView            *self);
+
+GDK_AVAILABLE_IN_ALL
+void            gtk_grid_view_set_search_filter                 (GtkGridView            *self,
+                                                                 GtkFilter              *filter);
+GDK_AVAILABLE_IN_ALL
+GtkFilter *     gtk_grid_view_get_search_filter                 (GtkGridView            *self);
+
+GDK_AVAILABLE_IN_ALL
+void            gtk_grid_view_select_next_match                 (GtkGridView            *self,
+                                                                 gboolean                forward);
 
 
 G_END_DECLS
