@@ -62,6 +62,7 @@
             <child>
               <object class="GtkColumnViewColumn" id="changes">
                 <property name="title"></property>
+                <property name="expand">1</property>
                 <property name="factory">
                   <object class="GtkSignalListItemFactory">
                     <signal name="bind" handler="bind_changes_cb"/>
