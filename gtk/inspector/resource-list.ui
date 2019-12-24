@@ -62,6 +62,7 @@
                         <child>
                           <object class="GtkColumnViewColumn" id="path">
                             <property name="title" translatable="yes">Path</property>
+                            <property name="expand">1</property>
                             <property name="factory">
                               <object class="GtkSignalListItemFactory">
                                 <signal name="setup" handler="setup_name_cb"/>
@@ -90,6 +91,11 @@
                                 <signal name="bind" handler="bind_size_cb"/>
                               </object>
                             </property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkColumnViewColumn" id="filler">
+                            <property name="expand">1</property>
                           </object>
                         </child>
                       </object>
