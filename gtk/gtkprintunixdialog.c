@@ -2237,6 +2237,7 @@ paint_page (GtkWidget  *widget,
   GtkStyleContext *context;
   gint width, height;
   gint text_y;
+  GdkRGBA color;
 
   width = 20;
   height = 26;
@@ -2247,6 +2248,9 @@ paint_page (GtkWidget  *widget,
 
   gtk_render_background (context, cr, x, y, width, height);
   gtk_render_frame (context, cr, x, y, width, height);
+
+  gtk_style_context_get_color (context, &color);
+  cairo_set_source_rgba (cr, color.red, color.green, color.blue, color.alpha);
 
   cairo_select_font_face (cr, "Sans",
                           CAIRO_FONT_SLANT_NORMAL,
@@ -2703,7 +2707,7 @@ draw_page (GtkDrawingArea *da,
   GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
   GtkStyleContext *context;
   gdouble ratio;
-  gint w, h, tmp, shadow_offset;
+  gint w, h, tmp;
   gint pages_x, pages_y, i, x, y, layout_w, layout_h;
   gdouble page_width, page_height;
   GtkPageOrientation orientation;
@@ -2815,18 +2819,10 @@ draw_page (GtkDrawingArea *da,
   pos_y = (height - h) / 2 - 10;
   cairo_translate (cr, pos_x, pos_y);
 
-  shadow_offset = 3;
-
-  cairo_set_source_rgba (cr, color.red, color.green, color.blue, 0.5);
-  cairo_rectangle (cr, shadow_offset + 1, shadow_offset + 1, w, h);
-  cairo_fill (cr);
-
   gtk_render_background (context, cr, 1, 1, w, h);
+  gtk_render_frame (context, cr, 1, 1, w, h);
 
   cairo_set_line_width (cr, 1.0);
-  cairo_rectangle (cr, 0.5, 0.5, w + 1, h + 1);
-  gdk_cairo_set_source_rgba (cr, &color);
-  cairo_stroke (cr);
 
   i = 1;
 
@@ -2965,6 +2961,10 @@ draw_page (GtkDrawingArea *da,
 
   g_object_unref (layout);
 
+  gtk_style_context_restore (context);
+
+  gtk_style_context_get_color (context, &color);
+
   if (page_setup != NULL)
     {
       PangoContext *pango_c = NULL;
@@ -3023,7 +3023,7 @@ draw_page (GtkDrawingArea *da,
         cairo_translate (cr, pos_x - layout_w / PANGO_SCALE - 2 * RULER_DISTANCE,
                              (height - layout_h / PANGO_SCALE) / 2);
       else
-        cairo_translate (cr, pos_x + w + shadow_offset + 2 * RULER_DISTANCE,
+        cairo_translate (cr, pos_x + w + 2 * RULER_DISTANCE,
                              (height - layout_h / PANGO_SCALE) / 2);
 
       gdk_cairo_set_source_rgba (cr, &color);
@@ -3042,7 +3042,7 @@ draw_page (GtkDrawingArea *da,
       pango_layout_get_size (layout, &layout_w, &layout_h);
 
       cairo_translate (cr, (width - layout_w / PANGO_SCALE) / 2,
-                           pos_y + h + shadow_offset + 2 * RULER_DISTANCE);
+                           pos_y + h + 2 * RULER_DISTANCE);
 
       gdk_cairo_set_source_rgba (cr, &color);
       pango_cairo_show_layout (cr, layout);
@@ -3071,33 +3071,31 @@ draw_page (GtkDrawingArea *da,
         }
       else
         {
-          cairo_move_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE, pos_y);
-          cairo_line_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE, pos_y + h);
+          cairo_move_to (cr, pos_x + w + RULER_DISTANCE, pos_y);
+          cairo_line_to (cr, pos_x + w + RULER_DISTANCE, pos_y + h);
           cairo_stroke (cr);
 
-          cairo_move_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE - RULER_RADIUS, pos_y - 0.5);
-          cairo_line_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE + RULER_RADIUS, pos_y - 0.5);
+          cairo_move_to (cr, pos_x + w + RULER_DISTANCE - RULER_RADIUS, pos_y - 0.5);
+          cairo_line_to (cr, pos_x + w + RULER_DISTANCE + RULER_RADIUS, pos_y - 0.5);
           cairo_stroke (cr);
 
-          cairo_move_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE - RULER_RADIUS, pos_y + h + 0.5);
-          cairo_line_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE + RULER_RADIUS, pos_y + h + 0.5);
+          cairo_move_to (cr, pos_x + w + RULER_DISTANCE - RULER_RADIUS, pos_y + h + 0.5);
+          cairo_line_to (cr, pos_x + w + RULER_DISTANCE + RULER_RADIUS, pos_y + h + 0.5);
           cairo_stroke (cr);
         }
 
-      cairo_move_to (cr, pos_x, pos_y + h + shadow_offset + RULER_DISTANCE);
-      cairo_line_to (cr, pos_x + w, pos_y + h + shadow_offset + RULER_DISTANCE);
+      cairo_move_to (cr, pos_x, pos_y + h + RULER_DISTANCE);
+      cairo_line_to (cr, pos_x + w, pos_y + h + RULER_DISTANCE);
       cairo_stroke (cr);
 
-      cairo_move_to (cr, pos_x - 0.5, pos_y + h + shadow_offset + RULER_DISTANCE - RULER_RADIUS);
-      cairo_line_to (cr, pos_x - 0.5, pos_y + h + shadow_offset + RULER_DISTANCE + RULER_RADIUS);
+      cairo_move_to (cr, pos_x - 0.5, pos_y + h + RULER_DISTANCE - RULER_RADIUS);
+      cairo_line_to (cr, pos_x - 0.5, pos_y + h + RULER_DISTANCE + RULER_RADIUS);
       cairo_stroke (cr);
 
-      cairo_move_to (cr, pos_x + w + 0.5, pos_y + h + shadow_offset + RULER_DISTANCE - RULER_RADIUS);
-      cairo_line_to (cr, pos_x + w + 0.5, pos_y + h + shadow_offset + RULER_DISTANCE + RULER_RADIUS);
+      cairo_move_to (cr, pos_x + w + 0.5, pos_y + h + RULER_DISTANCE - RULER_RADIUS);
+      cairo_line_to (cr, pos_x + w + 0.5, pos_y + h + RULER_DISTANCE + RULER_RADIUS);
       cairo_stroke (cr);
     }
-
-  gtk_style_context_restore (context);
 }
 
 static void

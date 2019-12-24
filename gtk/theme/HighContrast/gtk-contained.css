@@ -1627,3 +1627,12 @@ button.emoji-section:checked label, button.emoji-section:backdrop:checked label 
 .emoji { font-size: x-large; padding: 6px; border-radius: 6px; }
 
 .emoji :hover { background: #000; color: #fff; }
+
+/**************** Print dialog * */
+printdialog drawing { color: #000; background: none; border: none; padding: 0; }
+
+printdialog drawing:backdrop { color: #000; border-color: #8d8d8d; }
+
+printdialog drawing paper { background: white; color: black; border: 1px solid gray; }
+
+printdialog .dialog-action-box { margin: 12px; }

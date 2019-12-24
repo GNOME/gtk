@@ -3549,3 +3549,30 @@ button.emoji-section:backdrop { /* Dodge stuff inherited from backdrop button */
     color: $selected_fg_color;
   }
 }
+
+/****************
+ * Print dialog *
+*****************/
+printdialog {
+  drawing {
+    color: $fg_color;
+    background: none;
+    border: none;
+    padding: 0;
+
+    &:backdrop {
+      color: $backdrop_fg_color;
+      border-color: $backdrop_borders_color;
+    }
+
+    paper {
+      background: white;
+      color: black;
+      border: 1px solid $borders_color;
+    }
+
+  }
+
+  .dialog-action-box { margin: 12px; }
+}
+
