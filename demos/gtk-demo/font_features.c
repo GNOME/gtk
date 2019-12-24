@@ -1228,7 +1228,7 @@ do_font_features (GtkWidget *do_widget)
       edit_toggle = GTK_WIDGET (gtk_builder_get_object (builder, "edit_toggle"));
 
       controller = gtk_event_controller_key_new ();
-      g_object_set_data_full (G_OBJECT (entry), "controller", controller, g_object_unref);
+      g_object_set_data_full (G_OBJECT (entry), "controller", g_object_ref (controller), g_object_unref);
       g_signal_connect (controller, "key-pressed", G_CALLBACK (entry_key_press), entry);
       gtk_widget_add_controller (entry, controller);
 
@@ -1337,6 +1337,8 @@ do_font_features (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       g_object_unref (builder);
+
+      update_display ();
     }
 
   if (!gtk_widget_get_visible (window))

@@ -43,25 +43,17 @@
           <object class="GtkInfoBar" id="infobar">
             <property name="visible">0</property>
             <property name="hexpand">1</property>
-            <child internal-child="content_area">
-              <object class="GtkBox" id="content_area">
-                <child>
-                  <object class="GtkLabel" id="message">
-                    <property name="hexpand">1</property>
-                  </object>
-                </child>
+            <child>
+              <object class="GtkLabel" id="message">
+                <property name="hexpand">1</property>
               </object>
             </child>
-            <child internal-child="action_area">
-              <object class="GtkBox">
-                <child>
-                  <object class="GtkButton">
-                    <property name="valign">center</property>
-                    <property name="label" translatable="yes">_OK</property>
-                    <property name="use-underline">1</property>
-                    <signal name="clicked" handler="clicked_cb"/>
-                  </object>
-                </child>
+            <child type="action">
+              <object class="GtkButton">
+                <property name="valign">center</property>
+                <property name="label" translatable="yes">_OK</property>
+                <property name="use-underline">1</property>
+                <signal name="clicked" handler="clicked_cb"/>
               </object>
             </child>
             <layout>
