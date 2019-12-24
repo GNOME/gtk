@@ -66,6 +66,7 @@ struct _GtkCellRendererSpinClass
 
 struct _GtkCellRendererSpinPrivate
 {
+  GtkWidget *spin;
   GtkAdjustment *adjustment;
   gdouble climb_rate;
   guint   digits;
@@ -175,8 +176,8 @@ gtk_cell_renderer_spin_finalize (GObject *object)
 {
   GtkCellRendererSpinPrivate *priv = gtk_cell_renderer_spin_get_instance_private (GTK_CELL_RENDERER_SPIN (object));
 
-  if (priv && priv->adjustment)
-    g_object_unref (priv->adjustment);
+  g_clear_object (&priv->adjustment);
+  g_clear_object (&priv->spin);
 
   G_OBJECT_CLASS (gtk_cell_renderer_spin_parent_class)->finalize (object);
 }
@@ -258,9 +259,7 @@ gtk_cell_renderer_spin_focus_changed (GtkWidget  *widget,
   if (gtk_widget_has_focus (widget))
     return;
 
-  g_object_get (widget,
-                "editing-canceled", &canceled,
-                NULL);
+  g_object_get (widget, "editing-canceled", &canceled, NULL);
 
   g_signal_handlers_disconnect_by_func (widget,
 					gtk_cell_renderer_spin_focus_changed,
@@ -268,13 +267,12 @@ gtk_cell_renderer_spin_focus_changed (GtkWidget  *widget,
 
   gtk_cell_renderer_stop_editing (GTK_CELL_RENDERER (data), canceled);
 
-  if (!canceled)
-    {
-      path = g_object_get_data (G_OBJECT (widget), GTK_CELL_RENDERER_SPIN_PATH);
+  if (canceled)
+    return;
 
-      new_text = gtk_editable_get_text (GTK_EDITABLE (widget));
-      g_signal_emit_by_name (data, "edited", path, new_text);
-    }
+  path = g_object_get_data (G_OBJECT (widget), GTK_CELL_RENDERER_SPIN_PATH);
+  new_text = gtk_editable_get_text (GTK_EDITABLE (widget));
+  g_signal_emit_by_name (data, "edited", path, new_text);
 }
 
 static gboolean
@@ -301,6 +299,28 @@ gtk_cell_renderer_spin_key_pressed (GtkEventControllerKey *controller,
   return FALSE;
 }
 
+static void
+gtk_cell_renderer_spin_editing_done (GtkSpinButton       *spin,
+                                     GtkCellRendererSpin *cell)
+{
+  GtkCellRendererSpinPrivate *priv = gtk_cell_renderer_spin_get_instance_private (GTK_CELL_RENDERER_SPIN (cell));
+  gboolean canceled;
+  const char *path;
+  const char *new_text;
+
+  g_clear_object (&priv->spin);
+
+  g_object_get (spin, "editing-canceled", &canceled, NULL);
+  gtk_cell_renderer_stop_editing (GTK_CELL_RENDERER (cell), canceled);
+
+  if (canceled)
+    return;
+
+  path = g_object_get_data (G_OBJECT (spin), GTK_CELL_RENDERER_SPIN_PATH);
+  new_text = gtk_editable_get_text (GTK_EDITABLE (spin));
+  g_signal_emit_by_name (cell, "edited", path, new_text);
+}
+
 static GtkCellEditable *
 gtk_cell_renderer_spin_start_editing (GtkCellRenderer      *cell,
 				      GdkEvent             *event,
@@ -313,7 +333,6 @@ gtk_cell_renderer_spin_start_editing (GtkCellRenderer      *cell,
   GtkCellRendererSpinPrivate *priv = gtk_cell_renderer_spin_get_instance_private (GTK_CELL_RENDERER_SPIN (cell));
   GtkCellRendererText *cell_text = GTK_CELL_RENDERER_TEXT (cell);
   GtkEventController *key_controller;
-  GtkWidget *spin;
   gboolean editable;
   gchar *text;
 
@@ -324,33 +343,31 @@ gtk_cell_renderer_spin_start_editing (GtkCellRenderer      *cell,
   if (!priv->adjustment)
     return NULL;
 
-  spin = gtk_spin_button_new (priv->adjustment,
-			      priv->climb_rate, priv->digits);
+  priv->spin = gtk_spin_button_new (priv->adjustment, priv->climb_rate, priv->digits);
+  g_object_ref_sink (priv->spin);
 
   g_object_get (cell_text, "text", &text, NULL);
   if (text)
     {
-      gtk_spin_button_set_value (GTK_SPIN_BUTTON (spin),
-                                 g_strtod (text, NULL));
+      gtk_spin_button_set_value (GTK_SPIN_BUTTON (priv->spin), g_strtod (text, NULL));
       g_free (text);
     }
 
   key_controller = gtk_event_controller_key_new ();
   g_signal_connect (key_controller, "key-pressed",
-                    G_CALLBACK (gtk_cell_renderer_spin_key_pressed),
-                    spin);
-  gtk_widget_add_controller (spin, key_controller);
+                    G_CALLBACK (gtk_cell_renderer_spin_key_pressed), priv->spin);
+  gtk_widget_add_controller (priv->spin, key_controller);
 
-  g_object_set_data_full (G_OBJECT (spin), GTK_CELL_RENDERER_SPIN_PATH,
+  g_object_set_data_full (G_OBJECT (priv->spin), GTK_CELL_RENDERER_SPIN_PATH,
 			  g_strdup (path), g_free);
 
-  g_signal_connect (G_OBJECT (spin), "notify::has-focus",
-		    G_CALLBACK (gtk_cell_renderer_spin_focus_changed),
-		    cell);
+  g_signal_connect (priv->spin, "editing-done",
+                    G_CALLBACK (gtk_cell_renderer_spin_editing_done), cell);
 
-  gtk_widget_show (spin);
+  g_signal_connect (priv->spin, "notify::has-focus",
+		    G_CALLBACK (gtk_cell_renderer_spin_focus_changed), cell);
 
-  return GTK_CELL_EDITABLE (spin);
+  return GTK_CELL_EDITABLE (priv->spin);
 }
 
 /**

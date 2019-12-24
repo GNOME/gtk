@@ -1,6 +1,8 @@
 /* Drag-and-Drop
  *
  * I can't believe its not glade!
+ *
+ * Try right-clicking in the window.
  */
 
 #include <glib/gi18n.h>
@@ -219,6 +221,7 @@ edit_cb (GtkWidget *child)
       g_object_set_data (G_OBJECT (entry), "label", child);
 
       gtk_editable_set_text (GTK_EDITABLE (entry), gtk_label_get_text (GTK_LABEL (child)));
+      gtk_editable_set_width_chars (GTK_EDITABLE (entry), 12);
       g_signal_connect (entry, "activate", G_CALLBACK (edit_label_done), NULL);
       gtk_fixed_put (GTK_FIXED (fixed), entry, x, y);
       gtk_widget_grab_focus (entry);

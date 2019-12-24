@@ -35,6 +35,7 @@
 #include "gtkbutton.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkeditable.h"
+#include "gtkcelleditable.h"
 #include "gtkimage.h"
 #include "gtktext.h"
 #include "gtkeventcontrollerkey.h"
@@ -54,6 +55,7 @@
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 #include "gtkboxlayout.h"
+#include "gtktextprivate.h"
 
 #include "a11y/gtkspinbuttonaccessible.h"
 
@@ -232,6 +234,7 @@ struct _GtkSpinButtonPrivate
   guint          snap_to_ticks : 1;
   guint          timer_calls   : 3;
   guint          wrap          : 1;
+  guint          editing_canceled : 1;
 };
 typedef struct _GtkSpinButtonPrivate GtkSpinButtonPrivate;
 
@@ -246,7 +249,8 @@ enum {
   PROP_UPDATE_POLICY,
   PROP_VALUE,
   NUM_SPINBUTTON_PROPS,
-  PROP_ORIENTATION = NUM_SPINBUTTON_PROPS
+  PROP_ORIENTATION = NUM_SPINBUTTON_PROPS,
+  PROP_EDITING_CANCELED
 };
 
 /* Signals */
@@ -261,6 +265,7 @@ enum
 };
 
 static void gtk_spin_button_editable_init  (GtkEditableInterface *iface);
+static void gtk_spin_button_cell_editable_init  (GtkCellEditableIface *iface);
 static void gtk_spin_button_finalize       (GObject            *object);
 static void gtk_spin_button_set_property   (GObject         *object,
                                             guint            prop_id,
@@ -309,7 +314,9 @@ G_DEFINE_TYPE_WITH_CODE (GtkSpinButton, gtk_spin_button, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkSpinButton)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
-                                                gtk_spin_button_editable_init))
+                                                gtk_spin_button_editable_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE,
+                                                gtk_spin_button_cell_editable_init))
 
 #define add_spin_binding(binding_set, keyval, mask, scroll)            \
   gtk_binding_entry_add_signal (binding_set, keyval, mask,             \
@@ -417,7 +424,8 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 
   g_object_class_install_properties (gobject_class, NUM_SPINBUTTON_PROPS, spinbutton_props);
   g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
-  gtk_editable_install_properties (gobject_class, PROP_ORIENTATION + 1);
+  g_object_class_override_property (gobject_class, PROP_EDITING_CANCELED, "editing-canceled");
+  gtk_editable_install_properties (gobject_class, PROP_EDITING_CANCELED + 1);
 
   /**
    * GtkSpinButton::input:
@@ -573,6 +581,69 @@ gtk_spin_button_editable_init (GtkEditableInterface *iface)
 }
 
 static void
+gtk_cell_editable_spin_button_activated (GtkText *text, GtkSpinButton *spin)
+{
+  g_object_ref (spin);
+  gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (spin));
+  gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (spin));
+  g_object_unref (spin);
+}
+
+static gboolean
+gtk_cell_editable_spin_button_key_pressed (GtkEventControllerKey *key,
+                                           guint                  keyval,
+                                           guint                  keycode,
+                                           GdkModifierType        modifiers,
+                                           GtkSpinButton         *spin)
+{
+  GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin);
+
+  if (keyval == GDK_KEY_Escape)
+    {
+      priv->editing_canceled = TRUE;
+
+      g_object_ref (spin);
+      gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (spin));
+      gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (spin));
+      g_object_unref (spin);
+
+      return GDK_EVENT_STOP;
+    }
+
+  /* override focus */
+  if (keyval == GDK_KEY_Up || keyval == GDK_KEY_Down)
+    {
+      g_object_ref (spin);
+      gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (spin));
+      gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (spin));
+      g_object_unref (spin);
+
+      return GDK_EVENT_STOP;
+    }
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static void
+gtk_spin_button_start_editing (GtkCellEditable *cell_editable,
+                               GdkEvent        *event)
+{
+  GtkSpinButton *spin = GTK_SPIN_BUTTON (cell_editable);
+  GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin);
+
+  g_signal_connect (priv->entry, "activate",
+                    G_CALLBACK (gtk_cell_editable_spin_button_activated), cell_editable);
+  g_signal_connect (gtk_text_get_key_controller (GTK_TEXT (priv->entry)), "key-pressed",
+                    G_CALLBACK (gtk_cell_editable_spin_button_key_pressed), cell_editable);
+}
+
+static void
+gtk_spin_button_cell_editable_init (GtkCellEditableIface *iface)
+{
+  iface->start_editing = gtk_spin_button_start_editing;
+}
+
+static void
 gtk_spin_button_set_property (GObject      *object,
                               guint         prop_id,
                               const GValue *value,
@@ -622,6 +693,13 @@ gtk_spin_button_set_property (GObject      *object,
     case PROP_ORIENTATION:
       gtk_spin_button_set_orientation (spin_button, g_value_get_enum (value));
       break;
+    case PROP_EDITING_CANCELED:
+      if (priv->editing_canceled != g_value_get_boolean (value))
+        {
+          priv->editing_canceled = g_value_get_boolean (value);
+          g_object_notify (object, "editing-canceled");
+        }
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -668,6 +746,9 @@ gtk_spin_button_get_property (GObject      *object,
       break;
     case PROP_ORIENTATION:
       g_value_set_enum (value, priv->orientation);
+      break;
+    case PROP_EDITING_CANCELED:
+      g_value_set_boolean (value, priv->editing_canceled);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
