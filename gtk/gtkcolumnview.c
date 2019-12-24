@@ -39,6 +39,7 @@
 #include "gtkgesturedrag.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtklistbaseprivate.h"
 #include "gtkdnd.h"
 
 /**
@@ -1390,3 +1391,21 @@ gtk_column_view_get_enable_rubberband (GtkColumnView *self)
   return gtk_list_view_get_enable_rubberband (self->listview);
 }
 
+void
+gtk_column_view_set_selection_filter (GtkColumnView *self,
+                                      GtkFilter     *filter)
+{
+  gtk_list_base_set_selection_filter (GTK_LIST_BASE (self->listview), filter); 
+}
+
+void
+gtk_column_view_select_next_match (GtkColumnView *self)
+{
+  gtk_list_base_select_next_match (GTK_LIST_BASE (self->listview));
+}
+
+void
+gtk_column_view_select_previous_match (GtkColumnView *self)
+{
+  gtk_list_base_select_previous_match (GTK_LIST_BASE (self->listview));
+}

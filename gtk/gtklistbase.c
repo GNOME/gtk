@@ -73,6 +73,8 @@ struct _GtkListBasePrivate
   guint autoscroll_id;
   double autoscroll_delta_x;
   double autoscroll_delta_y;
+
+  GtkFilter *selection_filter;
 };
 
 enum
@@ -546,6 +548,8 @@ gtk_list_base_focus (GtkWidget        *widget,
     }
 }
 
+static void gtk_list_base_clear_selection_filter (GtkListBase *self);
+
 static void
 gtk_list_base_dispose (GObject *object)
 {
@@ -573,6 +577,8 @@ gtk_list_base_dispose (GObject *object)
   g_clear_object (&priv->item_manager);
 
   g_clear_object (&priv->model);
+
+  gtk_list_base_clear_selection_filter (self);
 
   G_OBJECT_CLASS (gtk_list_base_parent_class)->dispose (object);
 }
@@ -787,26 +793,18 @@ gtk_list_base_update_focus_tracker (GtkListBase *self)
     }
 }
 
-static void
-gtk_list_base_scroll_to_item (GtkWidget  *widget,
-                              const char *action_name,
-                              GVariant   *parameter)
+static gboolean
+gtk_list_base_scroll_to_position (GtkListBase *self,
+                                  guint        pos)
 {
-  GtkListBase *self = GTK_LIST_BASE (widget);
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   int start, end;
   double align_along, align_across;
   GtkPackType side_along, side_across;
-  guint pos;
-
-  if (!g_variant_check_format_string (parameter, "u", FALSE))
-    return;
-
-  g_variant_get (parameter, "u", &pos);
 
   /* figure out primary orientation and if position is valid */
   if (!gtk_list_base_get_allocation_along (GTK_LIST_BASE (self), pos, &start, &end))
-    return;
+    return FALSE;
 
   end += start;
   gtk_list_base_compute_scroll_align (self,
@@ -817,7 +815,7 @@ gtk_list_base_scroll_to_item (GtkWidget  *widget,
 
   /* now do the same thing with the other orientation */
   if (!gtk_list_base_get_allocation_across (GTK_LIST_BASE (self), pos, &start, &end))
-    return;
+    return FALSE;
 
   end += start;
   gtk_list_base_compute_scroll_align (self,
@@ -831,13 +829,32 @@ gtk_list_base_scroll_to_item (GtkWidget  *widget,
                             align_across, side_across,
                             align_along, side_along);
 
-  /* HACK HACK HACK
-   *
-   * GTK has no way to track the focused child. But we now that when a listitem
-   * gets focus, it calls this action. So we update our focus tracker from here
-   * because it's the closest we can get to accurate tracking.
-   */
-  gtk_list_base_update_focus_tracker (self);
+  return TRUE;
+}
+
+static void
+gtk_list_base_scroll_to_item (GtkWidget  *widget,
+                              const char *action_name,
+                              GVariant   *parameter)
+{
+  GtkListBase *self = GTK_LIST_BASE (widget);
+  guint pos;
+
+  if (!g_variant_check_format_string (parameter, "u", FALSE))
+    return;
+
+  g_variant_get (parameter, "u", &pos);
+
+  if (gtk_list_base_scroll_to_position (self, pos))
+    {
+      /* HACK HACK HACK
+       *
+       * GTK has no way to track the focused child. But we know that when a listitem
+       * gets focus, it calls this action. So we update our focus tracker from here
+       * because it's the closest we can get to accurate tracking.
+       */
+      gtk_list_base_update_focus_tracker (self);
+    }
 }
 
 static void
@@ -1910,6 +1927,196 @@ gtk_list_base_set_model (GtkListBase *self,
     {
       gtk_list_item_manager_set_model (priv->item_manager, NULL);
     }
+
+  return TRUE;
+}
+
+static guint
+find_first_selected (GtkSelectionModel *model)
+{
+  guint i, start, n_items;
+  gboolean selected;
+
+  n_items = 0;
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (model)); i += n_items)
+    {
+      gtk_selection_model_query_range (model, i, &start, &n_items, &selected);
+      if (selected)
+        return i;
+    }
+
+  return GTK_INVALID_LIST_POSITION;
+}
+
+static gboolean
+match_item (GListModel *model,
+            GtkFilter  *filter,
+            guint       position)
+{
+  gpointer item;
+  gboolean result;
+
+  item = g_list_model_get_item (model, position);
+  result = gtk_filter_match (filter, item);
+  g_object_unref (item);
+
+  return result;
+}
+
+static guint
+find_next_match (GListModel *model,
+                 GtkFilter   *filter,
+                 guint        start,
+                 gboolean     forward)
+{
+  guint i;
+
+  if (start == GTK_INVALID_LIST_POSITION)
+    start = 0;
+
+  if (forward)
+    for (i = start; i < g_list_model_get_n_items (model); i++)
+      {
+        if (match_item (model, filter, i))
+          return i;
+      }
+  else
+    for (i = start; ; i--)
+      {
+        if (match_item (model, filter, i))
+          return i;
+        if (i == 0)
+          break;
+      }
+
+  return GTK_INVALID_LIST_POSITION;
+}
+
+static void
+gtk_list_base_selection_filter_changed_cb (GtkFilter       *filter,
+                                           GtkFilterChange  change,
+                                           GtkListBase     *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkSelectionModel *model = gtk_list_item_manager_get_model (priv->item_manager);
+
+  if (gtk_filter_get_strictness (priv->selection_filter) == GTK_FILTER_MATCH_NONE)
+    gtk_selection_model_unselect_all (model);
+  else
+    {
+      guint position;
+
+      switch (change)
+        {
+        case GTK_FILTER_CHANGE_DIFFERENT:
+        case GTK_FILTER_CHANGE_LESS_STRICT:
+          position = find_next_match (G_LIST_MODEL (model), priv->selection_filter, 0, TRUE);
+          break;
+
+        case GTK_FILTER_CHANGE_MORE_STRICT:
+          position = find_first_selected (model);
+          if (position == GTK_INVALID_LIST_POSITION)
+            position = 0;
+          position = find_next_match (G_LIST_MODEL (model), priv->selection_filter, position, TRUE);
+          break;
+
+        default:
+          g_assert_not_reached ();
+        }
+
+      gtk_list_base_select_item (self, position, FALSE, FALSE);
+      gtk_list_base_scroll_to_position (self, position);
+    }
+}
+
+static void
+gtk_list_base_clear_selection_filter (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  if (priv->selection_filter == NULL)
+    return;
+
+  g_signal_handlers_disconnect_by_func (priv->selection_filter,
+                                        gtk_list_base_selection_filter_changed_cb,
+                                        self);
+
+  g_clear_object (&priv->selection_filter);
+}
+
+void
+gtk_list_base_set_selection_filter (GtkListBase *self,
+                                    GtkFilter   *filter)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  if (priv->selection_filter == filter)
+    return;
+
+  gtk_list_base_clear_selection_filter (self);
+
+  if (filter)
+    {
+      priv->selection_filter = g_object_ref (filter);
+      g_signal_connect (priv->selection_filter, "changed",
+                        G_CALLBACK (gtk_list_base_selection_filter_changed_cb), self);
+      gtk_list_base_selection_filter_changed_cb (priv->selection_filter, GTK_FILTER_CHANGE_DIFFERENT, self);
+    }
+}
+
+GtkFilter *
+gtk_list_base_get_selection_filter (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  return priv->selection_filter;
+}
+
+gboolean
+gtk_list_base_select_next_match (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkSelectionModel *model = gtk_list_item_manager_get_model (priv->item_manager);
+  guint position;
+
+  if (!priv->selection_filter)
+    return FALSE;
+
+  position = find_first_selected (model);
+  if (position == GTK_INVALID_LIST_POSITION)
+    return FALSE;
+
+  position = find_next_match (G_LIST_MODEL (model), priv->selection_filter, position + 1, TRUE);
+  if (position == GTK_INVALID_LIST_POSITION)
+    return FALSE;
+
+  gtk_list_base_select_item (self, position, FALSE, FALSE);
+  gtk_list_base_scroll_to_position (self, position);
+
+  return TRUE;
+}
+
+gboolean
+gtk_list_base_select_previous_match (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkSelectionModel *model = gtk_list_item_manager_get_model (priv->item_manager);
+  guint position;
+
+  if (!priv->selection_filter)
+    return FALSE;
+
+  position = find_first_selected (model);
+  if (position == GTK_INVALID_LIST_POSITION ||
+      position == 0)
+    return FALSE;
+
+  position = find_next_match (G_LIST_MODEL (model), priv->selection_filter, position - 1, FALSE);
+  if (position == GTK_INVALID_LIST_POSITION)
+    return FALSE;
+
+  gtk_list_base_select_item (self, position, FALSE, FALSE);
+  gtk_list_base_scroll_to_position (self, position);
 
   return TRUE;
 }
