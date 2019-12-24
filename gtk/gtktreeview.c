@@ -8177,7 +8177,7 @@ gtk_tree_view_put (GtkTreeView       *tree_view,
 
   gtk_css_node_insert_after (gtk_widget_get_css_node (GTK_WIDGET (tree_view)),
                              gtk_widget_get_css_node (child_widget),
-                             tree_view->priv->header_node);
+                             tree_view->header_node);
   gtk_widget_set_parent (child_widget, GTK_WIDGET (tree_view));
 }
 
