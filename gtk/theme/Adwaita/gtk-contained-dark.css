@@ -1504,11 +1504,11 @@ levelbar block.empty { background-color: #282828; border-color: #1b1b1b; }
 levelbar block.empty:backdrop { border-color: #1b1b1b; }
 
 /**************** Print dialog * */
-printdialog drawing { color: #eeeeec; background: white; border: none; padding: 0; }
+printdialog drawing { color: #eeeeec; background: none; border: none; padding: 0; }
 
 printdialog drawing:backdrop { color: #919190; border-color: #202020; }
 
-printdialog drawing paper { border: 1px solid #1b1b1b; }
+printdialog drawing paper { background: white; color: #2e3436; border: 1px solid #1b1b1b; }
 
 printdialog .dialog-action-box { margin: 12px; }
 
