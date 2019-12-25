@@ -72,10 +72,22 @@ settings_key_get_property (GObject    *object,
 }
 
 static void
+settings_key_finalize (GObject *object)
+{
+  SettingsKey *self = SETTINGS_KEY (object);
+
+  g_object_unref (self->settings);
+  g_settings_schema_key_unref (self->key);
+
+  G_OBJECT_CLASS (settings_key_parent_class)->finalize (object);
+}
+
+static void
 settings_key_class_init (SettingsKeyClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+  gobject_class->finalize = settings_key_finalize;
   gobject_class->get_property = settings_key_get_property;
 
   properties[PROP_DESCRIPTION] =
@@ -161,6 +173,7 @@ transform_settings_to_keys (GBinding     *binding,
 
   sort_model = gtk_sort_list_model_new (G_LIST_MODEL (store),
                                         gtk_column_view_get_sorter (GTK_COLUMN_VIEW (data)));
+  g_object_unref (store);
   expression = gtk_property_expression_new (SETTINGS_TYPE_KEY, NULL, "name");
   filter = gtk_string_filter_new ();
   gtk_string_filter_set_expression (GTK_STRING_FILTER (filter), expression);
@@ -219,6 +232,8 @@ create_settings_model (gpointer item,
       g_list_store_append (result, child);
       g_object_unref (child);
     }
+
+  g_strfreev (schemas);
 
   return G_LIST_MODEL (result);
 }
