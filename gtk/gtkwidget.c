@@ -9819,6 +9819,7 @@ layout_property_info_free (gpointer data)
   g_free (pinfo->name);
   g_free (pinfo->context);
   g_string_free (pinfo->value, TRUE);
+  g_free (pinfo);
 }
 
 static void
