@@ -2068,16 +2068,19 @@ menu_grab_transfer_surface_get (GtkMenu *menu)
 static void
 menu_grab_transfer_surface_destroy (GtkMenu *menu)
 {
+  GtkMenuPrivate *priv = menu->priv;
   GdkSurface *surface = g_object_get_data (G_OBJECT (menu), "gtk-menu-transfer-surface");
   if (surface)
     {
-      GdkSurface *widget_surface;
+      GdkSurface *toplevel_surface;
 
       gdk_surface_destroy (surface);
       g_object_set_data (G_OBJECT (menu), I_("gtk-menu-transfer-surface"), NULL);
 
-      widget_surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (menu)));
-      g_object_set_data (G_OBJECT (widget_surface), I_("gdk-attached-grab-surface"), surface);
+      toplevel_surface = gtk_native_get_surface (GTK_NATIVE (priv->toplevel));
+
+      if (toplevel_surface != NULL)
+        g_object_set_data (G_OBJECT (toplevel_surface), I_("gdk-attached-grab-surface"), NULL);
     }
 }
 
