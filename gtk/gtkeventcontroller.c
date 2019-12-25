@@ -443,5 +443,5 @@ gtk_event_controller_set_name (GtkEventController *controller,
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
 
   g_free (priv->name);
-  priv->name = g_strdup (priv->name);
+  priv->name = g_strdup (name);
 }
