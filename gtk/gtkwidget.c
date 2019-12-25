@@ -5207,14 +5207,22 @@ gtk_widget_run_controllers (GtkWidget           *widget,
           controller_phase = gtk_event_controller_get_propagation_phase (controller);
 
           if (controller_phase == phase)
-            handled |= gtk_event_controller_handle_event (controller, event);
+            {
+              gboolean this_handled;
+              gboolean is_gesture;
 
-          /* Non-gesture controllers are basically unique entities not meant
-           * to collaborate with anything else. Break early if any such event
-           * controller handled the event.
-           */
-          if (handled && !GTK_IS_GESTURE (controller))
-            break;
+              is_gesture = GTK_IS_GESTURE (controller);
+              this_handled = gtk_event_controller_handle_event (controller, event);
+
+              handled |= this_handled;
+
+              /* Non-gesture controllers are basically unique entities not meant
+               * to collaborate with anything else. Break early if any such event
+               * controller handled the event.
+               */
+              if (this_handled && !is_gesture)
+                break;
+            }
         }
 
       l = next;
