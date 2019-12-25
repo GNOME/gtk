@@ -626,6 +626,7 @@ unichar_changed (GObject *object, GParamSpec *pspec, gpointer data)
   g_value_init (&val, pspec->value_type);
   get_property_value (object, pspec, &val);
   new_val = (gunichar)g_value_get_uint (&val);
+  g_value_unset (&val);
 
   if (new_val != old_val)
     {
@@ -1527,6 +1528,7 @@ readonly_changed (GObject    *object,
 
   gtk_label_set_label (GTK_LABEL (data), value);
 
+  g_value_unset (&gvalue);
   g_free (value);
   g_free (type);
 }
