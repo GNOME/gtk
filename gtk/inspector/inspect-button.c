@@ -168,7 +168,6 @@ handle_event (GtkInspectorWindow *iw, GdkEvent *event)
             break;
           }
 
-        clear_flash (iw);
         start_flash (iw, widget);
       }
       break;
