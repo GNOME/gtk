@@ -4317,7 +4317,10 @@ gtk_widget_allocate (GtkWidget    *widget,
   gtk_widget_push_verify_invariants (widget);
 
   if (!priv->visible && !GTK_IS_ROOT (widget))
-    goto out;
+    {
+      gsk_transform_unref (transform);
+      goto out;
+    }
 
 #ifdef G_ENABLE_DEBUG
   if (GTK_DISPLAY_DEBUG_CHECK (_gtk_widget_get_display (widget), RESIZE))
