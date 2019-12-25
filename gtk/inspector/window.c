@@ -284,6 +284,8 @@ gtk_inspector_window_dispose (GObject *object)
 
   g_object_set_data (G_OBJECT (iw->inspected_display), "-gtk-inspector", NULL);
 
+  g_clear_object (&iw->flash_overlay);
+
   G_OBJECT_CLASS (gtk_inspector_window_parent_class)->dispose (object);
 }
 
@@ -539,6 +541,7 @@ gtk_inspector_window_remove_overlay (GtkInspectorWindow  *iw,
   gtk_inspector_overlay_queue_draw (overlay);
 
   iw->overlays = g_list_delete_link (iw->overlays, item);
+  g_object_unref (overlay);
 }
 
 static GtkInspectorWindow *
