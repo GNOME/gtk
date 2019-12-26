@@ -54,6 +54,8 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkdialogprivate.h"
 #include "gtkgestureclick.h"
+#include "gtkmodelbuttonprivate.h"
+#include "gtkpopover.h"
 
 #include <glib/gprintf.h>
 
@@ -1296,7 +1298,7 @@ update_process_list_store (GtkMountOperation *mount_operation,
 }
 
 static void
-on_end_process_activated (GtkMenuItem *item,
+on_end_process_activated (GtkModelButton *button,
                           gpointer user_data)
 {
   GtkMountOperation *op = GTK_MOUNT_OPERATION (user_data);
@@ -1371,18 +1373,18 @@ do_popup_menu_for_process_tree_view (GtkWidget         *widget,
 {
   GtkWidget *menu;
   GtkWidget *item;
-  gdouble x, y;
+  double x, y;
 
-  menu = gtk_menu_new ();
+  menu = gtk_popover_new (widget);
   gtk_style_context_add_class (gtk_widget_get_style_context (menu),
                                GTK_STYLE_CLASS_CONTEXT_MENU);
 
-  item = gtk_menu_item_new_with_mnemonic (_("_End Process"));
-  g_signal_connect (item, "activate",
+  item = gtk_model_button_new ();
+  g_object_set (item, "text", _("_End Process"), NULL);
+  g_signal_connect (item, "clicked",
                     G_CALLBACK (on_end_process_activated),
                     op);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  gtk_widget_show (menu);
+  gtk_container_add (GTK_CONTAINER (menu), item);
 
   if (event && gdk_event_triggers_context_menu (event) &&
       gdk_event_get_coords (event, &x, &y))
@@ -1407,9 +1409,11 @@ do_popup_menu_for_process_tree_view (GtkWidget         *widget,
           /* don't popup a menu if the user right-clicked in an area with no rows */
           return FALSE;
         }
+
+      gtk_popover_set_pointing_to (GTK_POPOVER (menu), &(GdkRectangle){ x, y, 1, 1});
     }
 
-  gtk_menu_popup_at_pointer (GTK_MENU (menu), event);
+  gtk_popover_popup (GTK_POPOVER (menu));
   return TRUE;
 }
 
