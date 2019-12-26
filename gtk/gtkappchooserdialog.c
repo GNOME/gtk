@@ -52,7 +52,6 @@
 #include "gtkentry.h"
 #include "gtktogglebutton.h"
 #include "gtkstylecontext.h"
-#include "gtkmenuitem.h"
 #include "gtkheaderbar.h"
 #include "gtkdialogprivate.h"
 #include "gtksearchbar.h"
@@ -297,55 +296,6 @@ widget_notify_for_button_cb (GObject    *source,
 }
 
 static void
-forget_menu_item_activate_cb (GtkMenuItem *item,
-                              gpointer     user_data)
-{
-  GtkAppChooserDialog *self = user_data;
-  GtkAppChooserDialogPrivate *priv = gtk_app_chooser_dialog_get_instance_private (self);
-  GAppInfo *info;
-
-  info = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (self));
-
-  if (info != NULL)
-    {
-      g_app_info_remove_supports_type (info, priv->content_type, NULL);
-
-      gtk_app_chooser_refresh (GTK_APP_CHOOSER (self));
-
-      g_object_unref (info);
-    }
-}
-
-static GtkWidget *
-build_forget_menu_item (GtkAppChooserDialog *self)
-{
-  GtkWidget *retval;
-
-  retval = gtk_menu_item_new_with_label (_("Forget association"));
-
-  g_signal_connect (retval, "activate",
-                    G_CALLBACK (forget_menu_item_activate_cb), self);
-
-  return retval;
-}
-
-static void
-widget_populate_popup_cb (GtkAppChooserWidget *widget,
-                          GtkMenu             *menu,
-                          GAppInfo            *info,
-                          gpointer             user_data)
-{
-  GtkAppChooserDialog *self = user_data;
-  GtkWidget *menu_item;
-
-  if (g_app_info_can_remove_supports_type (info))
-    {
-      menu_item = build_forget_menu_item (self);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-    }
-}
-
-static void
 construct_appchooser_widget (GtkAppChooserDialog *self)
 {
   GtkAppChooserDialogPrivate *priv = gtk_app_chooser_dialog_get_instance_private (self);
@@ -362,8 +312,6 @@ construct_appchooser_widget (GtkAppChooserDialog *self)
                     G_CALLBACK (widget_application_activated_cb), self);
   g_signal_connect (priv->app_chooser_widget, "notify::show-other",
                     G_CALLBACK (widget_notify_for_button_cb), self);
-  g_signal_connect (priv->app_chooser_widget, "populate-popup",
-                    G_CALLBACK (widget_populate_popup_cb), self);
 
   /* Add the custom button to the new appchooser */
   gtk_container_add (GTK_CONTAINER (priv->inner_box),
