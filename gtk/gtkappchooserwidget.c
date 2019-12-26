@@ -86,10 +86,6 @@ struct _GtkAppChooserWidgetClass {
 
   void (* application_activated) (GtkAppChooserWidget *self,
                                   GAppInfo            *app_info);
-
-  void (* populate_popup)        (GtkAppChooserWidget *self,
-                                  GtkMenu             *menu,
-                                  GAppInfo            *app_info);
 };
 
 struct _GtkAppChooserWidgetPrivate {
@@ -150,7 +146,6 @@ enum {
 enum {
   SIGNAL_APPLICATION_SELECTED,
   SIGNAL_APPLICATION_ACTIVATED,
-  SIGNAL_POPULATE_POPUP,
   N_SIGNALS
 };
 
@@ -198,93 +193,6 @@ refresh_and_emit_app_selected (GtkAppChooserWidget *self,
   if (should_emit)
     g_signal_emit (self, signals[SIGNAL_APPLICATION_SELECTED], 0,
                    priv->selected_app_info);
-}
-
-static GAppInfo *
-get_app_info_for_coords (GtkAppChooserWidget *self,
-                         double               x,
-                         double               y)
-{
-  GtkAppChooserWidgetPrivate *priv = gtk_app_chooser_widget_get_instance_private (self);
-  GtkTreePath *path = NULL;
-  GtkTreeIter iter;
-  GtkTreeModel *model;
-  GAppInfo *info;
-  gboolean recommended;
-
-  if (!gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (priv->program_list),
-                                      x, y,
-                                      &path,
-                                      NULL, NULL, NULL))
-    return NULL;
-
-  model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->program_list));
-
-  if (!gtk_tree_model_get_iter (model, &iter, path))
-    {
-      gtk_tree_path_free (path);
-      return NULL;
-    }
-
-  /* we only allow interaction with recommended applications */
-  gtk_tree_model_get (model, &iter,
-                      COLUMN_APP_INFO, &info,
-                      COLUMN_RECOMMENDED, &recommended,
-                      -1);
-
-  if (!recommended)
-    g_clear_object (&info);
-
-  return info;
-}
-
-static void
-popup_menu_detach (GtkWidget *attach_widget,
-                   GtkMenu   *menu)
-{
-  GtkAppChooserWidget *self = GTK_APP_CHOOSER_WIDGET (attach_widget);
-  GtkAppChooserWidgetPrivate *priv = gtk_app_chooser_widget_get_instance_private (self);
-
-  priv->popup_menu = NULL;
-}
-
-static void
-gtk_app_chooser_row_pressed_cb (GtkGesture *gesture,
-                                int         n_press,
-                                double      x,
-                                double      y,
-                                gpointer    user_data)
-{
-  GtkAppChooserWidget *self = user_data;
-  GtkAppChooserWidgetPrivate *priv = gtk_app_chooser_widget_get_instance_private (self);
-  GAppInfo *info;
-  GtkWidget *menu;
-  GList *children;
-  gint n_children;
-
-  info = get_app_info_for_coords (self, x, y);
-
-  if (info == NULL)
-    return;
-
-  if (priv->popup_menu)
-    gtk_widget_destroy (priv->popup_menu);
-
-  priv->popup_menu = menu = gtk_menu_new ();
-  gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (self), popup_menu_detach);
-
-  g_signal_emit (self, signals[SIGNAL_POPULATE_POPUP], 0, menu, info);
-
-  g_object_unref (info);
-
-  /* see if clients added menu items to this container */
-  children = gtk_container_get_children (GTK_CONTAINER (menu));
-  n_children = g_list_length (children);
-
-  if (n_children > 0) /* actually popup the menu */
-    gtk_menu_popup_at_pointer (GTK_MENU (menu), NULL);
-
-  g_list_free (children);
 }
 
 static gboolean
@@ -1134,27 +1042,6 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
                   G_TYPE_NONE,
                   1, G_TYPE_APP_INFO);
 
-  /**
-   * GtkAppChooserWidget::populate-popup:
-   * @self: the object which received the signal
-   * @menu: the #GtkMenu to populate
-   * @application: the current #GAppInfo
-   *
-   * Emitted when a context menu is about to popup over an application item.
-   * Clients can insert menu items into the provided #GtkMenu object in the
-   * callback of this signal; the context menu will be shown over the item
-   * if at least one item has been added to the menu.
-   */
-  signals[SIGNAL_POPULATE_POPUP] =
-    g_signal_new (I_("populate-popup"),
-                  GTK_TYPE_APP_CHOOSER_WIDGET,
-                  G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (GtkAppChooserWidgetClass, populate_popup),
-                  NULL, NULL,
-                  _gtk_marshal_VOID__OBJECT_OBJECT,
-                  G_TYPE_NONE,
-                  2, GTK_TYPE_MENU, G_TYPE_APP_INFO);
-
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class,
@@ -1179,7 +1066,6 @@ gtk_app_chooser_widget_init (GtkAppChooserWidget *self)
   GtkAppChooserWidgetPrivate *priv = gtk_app_chooser_widget_get_instance_private (self);
   GtkTreeSelection *selection;
   GtkTreeModel *sort;
-  GtkGesture *gesture;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -1212,12 +1098,6 @@ gtk_app_chooser_widget_init (GtkAppChooserWidget *self)
   priv->monitor = g_app_info_monitor_get ();
   g_signal_connect (priv->monitor, "changed",
 		    G_CALLBACK (app_info_changed), self);
-
-  gesture = gtk_gesture_click_new ();
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
-  g_signal_connect (gesture, "pressed",
-                    G_CALLBACK (gtk_app_chooser_row_pressed_cb), self);
-  gtk_widget_add_controller (priv->program_list, GTK_EVENT_CONTROLLER (gesture));
 }
 
 static GAppInfo *
