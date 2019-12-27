@@ -854,7 +854,7 @@ msgstr "A_juda"
 #: gtk/a11y/gtkimageaccessible.c:85 gtk/deprecated/gtkstock.c:386
 msgctxt "Stock label"
 msgid "_Home"
-msgstr "_Carpeta de l’usuari"
+msgstr "_Carpeta de l'usuari"
 
 #: gtk/a11y/gtkimageaccessible.c:86 gtk/deprecated/gtkstock.c:387
 msgctxt "Stock label"
@@ -1299,7 +1299,7 @@ msgstr "Selecció de color"
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/deprecated/gtkfontsel.c:121
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr "abcçdefghijk ABCÇDEFGHIJK"
+msgstr "Jove xef, porti whisky amb quinze glaçons d'hidrogen, coi!"
 
 #: gtk/deprecated/gtkfontsel.c:386
 msgid "_Family:"
@@ -2585,7 +2585,7 @@ msgstr "Desconegut"
 
 #: gtk/gtkfilechooserwidget.c:5088 gtk/gtkplacessidebar.c:1094
 msgid "Home"
-msgstr "Carpeta de l’usuari"
+msgstr "Carpeta de l'usuari"
 
 #: gtk/gtkfilechooserwidget.c:5584
 msgid "Cannot change to folder because it is not local"

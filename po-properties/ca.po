@@ -660,7 +660,7 @@ msgstr "Aspecte de l'ombra que envolta el contenidor"
 
 #: gtk/deprecated/gtkhandlebox.c:232
 msgid "Handle position"
-msgstr "Gestiona posició"
+msgstr "Posició de la nansa"
 
 #: gtk/deprecated/gtkhandlebox.c:233
 msgid "Position of the handle relative to the child widget"
@@ -2945,7 +2945,7 @@ msgstr "Dibuixa com a element de menú de ràdio"
 
 #: gtk/gtkcheckmenuitem.c:226
 msgid "Whether the menu item looks like a radio menu item"
-msgstr "Si l'element del menú és seleccionat"
+msgstr "Si l'element del menú sembla un element de menú de ràdio"
 
 #: gtk/gtkcolorbutton.c:168 gtk/gtkcolorchooser.c:87
 msgid "Use alpha"
@@ -4033,7 +4033,7 @@ msgstr ""
 
 #: gtk/gtkfilechoosernative.c:826
 msgid "Accept label"
-msgstr "Accepta etiqueta"
+msgstr "Etiqueta d'accepta"
 
 #: gtk/gtkfilechoosernative.c:827
 msgid "The label on the accept button"
@@ -4041,7 +4041,7 @@ msgstr "L'etiqueta del botó accepta"
 
 #: gtk/gtkfilechoosernative.c:839
 msgid "Cancel label"
-msgstr "Cancel·la l'etiqueta"
+msgstr "Etiqueta de cancel·la"
 
 #: gtk/gtkfilechoosernative.c:840
 msgid "The label on the cancel button"
