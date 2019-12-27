@@ -6,6 +6,7 @@ inspector_sources = files(
   'css-editor.c',
   'css-node-tree.c',
   'data-list.c',
+  'focusoverlay.c',
   'fpsoverlay.c',
   'general.c',
   'graphdata.c',

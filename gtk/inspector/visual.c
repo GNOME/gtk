@@ -23,6 +23,7 @@
 #include "fpsoverlay.h"
 #include "updatesoverlay.h"
 #include "layoutoverlay.h"
+#include "focusoverlay.h"
 #include "window.h"
 
 #include "gtkadjustment.h"
@@ -81,6 +82,7 @@ struct _GtkInspectorVisualPrivate
   GtkWidget *baselines_switch;
   GtkWidget *layout_switch;
   GtkWidget *resize_switch;
+  GtkWidget *focus_switch;
 
   GtkWidget *misc_box;
   GtkWidget *touchscreen_switch;
@@ -91,6 +93,7 @@ struct _GtkInspectorVisualPrivate
   GtkInspectorOverlay *fps_overlay;
   GtkInspectorOverlay *updates_overlay;
   GtkInspectorOverlay *layout_overlay;
+  GtkInspectorOverlay *focus_overlay;
 
   GdkDisplay *display;
 };
@@ -412,6 +415,41 @@ widget_resize_activate (GtkSwitch *sw)
     flags &= ~GTK_DEBUG_RESIZE;
 
   gtk_set_debug_flags (flags);
+}
+
+static void
+focus_activate (GtkSwitch          *sw,
+                GParamSpec         *pspec,
+                GtkInspectorVisual *vis)
+{
+  GtkInspectorVisualPrivate *priv = vis->priv;
+  GtkInspectorWindow *iw;
+  gboolean focus;
+
+  focus = gtk_switch_get_active (sw);
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_root (GTK_WIDGET (vis)));
+  if (iw == NULL)
+    return;
+
+  if (focus)
+    {
+      if (priv->focus_overlay == NULL)
+        {
+          priv->focus_overlay = gtk_focus_overlay_new ();
+          gtk_inspector_window_add_overlay (iw, priv->focus_overlay);
+          g_object_unref (priv->focus_overlay);
+        }
+    }
+  else
+    {
+      if (priv->focus_overlay != NULL)
+        {
+          gtk_inspector_window_remove_overlay (iw, priv->focus_overlay);
+          priv->focus_overlay = NULL;
+        }
+    }
+
+  redraw_everything ();
 }
 
 static void
@@ -939,6 +977,11 @@ row_activated (GtkListBox         *box,
       GtkSwitch *sw = GTK_SWITCH (vis->priv->resize_switch);
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
+  else if (gtk_widget_is_ancestor (vis->priv->focus_switch, GTK_WIDGET (row)))
+    {
+      GtkSwitch *sw = GTK_SWITCH (vis->priv->focus_switch);
+      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
+    }
   else if (gtk_widget_is_ancestor (vis->priv->touchscreen_switch, GTK_WIDGET (row)))
     {
       GtkSwitch *sw = GTK_SWITCH (vis->priv->touchscreen_switch);
@@ -1028,6 +1071,8 @@ gtk_inspector_visual_finalize (GObject *object)
     gtk_inspector_window_remove_overlay (iw, vis->priv->updates_overlay);
   if (vis->priv->fps_overlay)
     gtk_inspector_window_remove_overlay (iw, vis->priv->fps_overlay);
+  if (vis->priv->focus_overlay)
+    gtk_inspector_window_remove_overlay (iw, vis->priv->focus_overlay);
 
   G_OBJECT_CLASS (gtk_inspector_visual_parent_class)->finalize (object);
 }
@@ -1104,6 +1149,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, baselines_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, layout_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, resize_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, focus_switch);
 
   gtk_widget_class_bind_template_callback (widget_class, fps_activate);
   gtk_widget_class_bind_template_callback (widget_class, updates_activate);
@@ -1112,6 +1158,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, baselines_activate);
   gtk_widget_class_bind_template_callback (widget_class, layout_activate);
   gtk_widget_class_bind_template_callback (widget_class, widget_resize_activate);
+  gtk_widget_class_bind_template_callback (widget_class, focus_activate);
   gtk_widget_class_bind_template_callback (widget_class, software_gl_activate);
 }
 
