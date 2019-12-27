@@ -44,7 +44,6 @@ gtk_cell_renderer_text_get_type
 gtk_cell_renderer_toggle_get_type
 gtk_cell_view_get_type
 gtk_check_button_get_type
-gtk_check_menu_item_get_type
 gtk_color_button_get_type
 gtk_color_chooser_get_type
 gtk_color_chooser_dialog_get_type
@@ -119,11 +118,7 @@ gtk_map_list_model_get_type
 gtk_media_controls_get_type
 gtk_media_file_get_type
 gtk_media_stream_get_type
-gtk_menu_bar_get_type
 gtk_menu_button_get_type
-gtk_menu_get_type
-gtk_menu_item_get_type
-gtk_menu_shell_get_type
 gtk_menu_tool_button_get_type
 gtk_message_dialog_get_type
 gtk_mount_operation_get_type
@@ -152,7 +147,6 @@ gtk_print_settings_get_type
 @DISABLE_ON_W32@gtk_print_unix_dialog_get_type
 gtk_progress_bar_get_type
 gtk_radio_button_get_type
-gtk_radio_menu_item_get_type
 gtk_radio_tool_button_get_type
 gtk_range_get_type
 gtk_recent_manager_get_type
@@ -167,7 +161,6 @@ gtk_search_bar_get_type
 gtk_search_entry_get_type
 gtk_selection_model_get_type
 gtk_separator_get_type
-gtk_separator_menu_item_get_type
 gtk_separator_tool_item_get_type
 gtk_settings_get_type
 gtk_shortcut_label_get_type

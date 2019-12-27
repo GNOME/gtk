@@ -76,7 +76,6 @@
 #include <gtk/gtkcenterbox.h>
 #include <gtk/gtkcenterlayout.h>
 #include <gtk/gtkcheckbutton.h>
-#include <gtk/gtkcheckmenuitem.h>
 #include <gtk/gtkcolorbutton.h>
 #include <gtk/gtkcolorchooser.h>
 #include <gtk/gtkcolorchooserdialog.h>
@@ -156,11 +155,7 @@
 #include <gtk/gtkmediacontrols.h>
 #include <gtk/gtkmediafile.h>
 #include <gtk/gtkmediastream.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkmenubar.h>
 #include <gtk/gtkmenubutton.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkmenushell.h>
 #include <gtk/gtkmenutoolbutton.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkmountoperation.h>
@@ -185,7 +180,6 @@
 #include <gtk/gtkprintsettings.h>
 #include <gtk/gtkprogressbar.h>
 #include <gtk/gtkradiobutton.h>
-#include <gtk/gtkradiomenuitem.h>
 #include <gtk/gtkradiotoolbutton.h>
 #include <gtk/gtkrange.h>
 #include <gtk/gtkrecentmanager.h>
@@ -202,7 +196,6 @@
 #include <gtk/gtkselection.h>
 #include <gtk/gtkselectionmodel.h>
 #include <gtk/gtkseparator.h>
-#include <gtk/gtkseparatormenuitem.h>
 #include <gtk/gtkseparatortoolitem.h>
 #include <gtk/gtksettings.h>
 #include <gtk/gtkshortcutlabel.h>

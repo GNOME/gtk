@@ -25,7 +25,6 @@
 #include "gtkmenubutton.h"
 #include "gtkmenubuttonprivate.h"
 #include "gtkbox.h"
-#include "gtkmenu.h"
 #include "gtkpopover.h"
 #include "gtkmain.h"
 #include "gtksizerequest.h"

@@ -119,7 +119,6 @@
 #include "gtkdndprivate.h"
 #include "gtkmain.h"
 #include "gtkmediafileprivate.h"
-#include "gtkmenu.h"
 #include "gtkmodulesprivate.h"
 #include "gtkprivate.h"
 #include "gtkrecentmanager.h"

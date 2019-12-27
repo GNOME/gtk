@@ -48,7 +48,6 @@
 #include "gtkcellrendererpixbuf.h"
 #include "gtkscrolledwindow.h"
 #include "gtkicontheme.h"
-#include "gtkmenuitem.h"
 #include "gtkmain.h"
 #include "gtksettings.h"
 #include "gtkstylecontextprivate.h"
