@@ -152,8 +152,8 @@ create_menu_button (void)
   image = gtk_image_new ();
   gtk_image_set_from_icon_name (GTK_IMAGE (image), "emblem-system-symbolic");
   gtk_container_add (GTK_CONTAINER (widget), image);
-  menu = gtk_menu_new ();
-  gtk_menu_button_set_popup (GTK_MENU_BUTTON (widget), menu);
+  menu = gtk_popover_new (NULL);
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (widget), menu);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   gtk_container_add (GTK_CONTAINER (vbox), widget);
