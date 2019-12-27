@@ -717,7 +717,6 @@ static void
 activate (GApplication *app)
 {
   GtkWidget *box;
-  GtkWidget *bar;
   GtkWidget *sw;
   GtkWidget *contents;
 
@@ -728,10 +727,6 @@ activate (GApplication *app)
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (main_window), box);
-
-  bar = gtk_menu_bar_new ();
-  gtk_widget_show (bar);
-  gtk_container_add (GTK_CONTAINER (box), bar);
 
   /* Create document  */
   sw = gtk_scrolled_window_new (NULL, NULL);
