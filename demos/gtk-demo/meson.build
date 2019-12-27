@@ -44,7 +44,6 @@ demos = files([
   'flowbox.c',
   'list_store.c',
   'markup.c',
-  'menus.c',
   'modelbutton.c',
   'overlay.c',
   'overlay2.c',
