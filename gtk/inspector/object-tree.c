@@ -41,7 +41,6 @@
 #include "gtkiconview.h"
 #include "gtklabel.h"
 #include "gtklistbox.h"
-#include "gtkmenuitem.h"
 #include "gtkpopover.h"
 #include "gtksettings.h"
 #include "gtksizegroup.h"

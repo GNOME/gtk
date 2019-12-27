@@ -40,10 +40,8 @@
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtkmenuitem.h"
 #include "gtkmountoperation.h"
 #include "gtkscrolledwindow.h"
-#include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
 #include "gtktrashmonitor.h"
 #include "gtktypebuiltins.h"
@@ -195,10 +193,6 @@ struct _GtkPlacesSidebarClass {
   void    (* open_location)          (GtkPlacesSidebar   *sidebar,
                                       GFile              *location,
                                       GtkPlacesOpenFlags  open_flags);
-  void    (* populate_popup)         (GtkPlacesSidebar   *sidebar,
-                                      GtkMenu            *menu,
-                                      GFile              *selected_item,
-                                      GVolume            *selected_volume);
   void    (* show_error_message)     (GtkPlacesSidebar   *sidebar,
                                       const gchar        *primary,
                                       const gchar        *secondary);
