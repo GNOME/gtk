@@ -22,8 +22,6 @@
 
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtkframe.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkmenuitem.h>
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkwindow.h>
 
@@ -89,25 +87,6 @@ static const char *
 gtk_toplevel_accessible_get_name (AtkObject *obj)
 {
   return g_get_prgname ();
-}
-
-static gboolean
-is_attached_menu_window (GtkWidget *widget)
-{
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  if (GTK_IS_MENU (child))
-    {
-      GtkWidget *attach;
-
-      attach = gtk_menu_get_attach_widget (GTK_MENU (child));
-      /* Allow for menu belonging to the Panel Menu, which is a GtkButton */
-      if (GTK_IS_MENU_ITEM (attach) || GTK_IS_BUTTON (attach))
-        return TRUE;
-    }
-
-  return FALSE;
 }
 
 static void
@@ -177,8 +156,7 @@ show_event_watcher (GSignalInvocationHint *ihint,
     return TRUE;
 
   widget = GTK_WIDGET (object);
-  if (gtk_widget_get_parent (widget) ||
-      is_attached_menu_window (widget))
+  if (gtk_widget_get_parent (widget))
     return TRUE;
 
   child = gtk_widget_get_accessible (widget);
@@ -236,7 +214,6 @@ gtk_toplevel_accessible_init (GtkToplevelAccessible *toplevel)
       widget = GTK_WIDGET (window);
       if (!window ||
           !gtk_widget_get_visible (widget) ||
-          is_attached_menu_window (widget) ||
           gtk_widget_get_parent (GTK_WIDGET (window)))
         {
           GList *temp_l  = l->next;

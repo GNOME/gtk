@@ -51,7 +51,6 @@
 #include "gtklayoutmanagerprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtkmenu.h"
 #include "gtkpopover.h"
 #include "gtkprivate.h"
 #include "gtkrenderbackgroundprivate.h"
