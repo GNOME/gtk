@@ -334,25 +334,24 @@ do_popup_menu (GtkWidget   *icon_list,
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (icon_list);
   GtkWidget *menu;
-  GtkWidget *menuitem;
+  GtkWidget *item;
   ItemData *data;
 
   if (!path)
     return;
 
-  menu = gtk_menu_new ();
+  menu = gtk_popover_new (icon_list);
 
   data = g_new0 (ItemData, 1);
   data->icon_list = icon_view;
   data->path = path;
   g_object_set_data_full (G_OBJECT (menu), "item-path", data, (GDestroyNotify)free_item_data);
 
-  menuitem = gtk_menu_item_new_with_label ("Activate");
-  gtk_widget_show (menuitem);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-  g_signal_connect (menuitem, "activate", G_CALLBACK (item_cb), data);
+  item = gtk_button_new_with_label ("Activate");
+  gtk_container_add (GTK_CONTAINER (menu), item);
+  g_signal_connect (item, "clicked", G_CALLBACK (item_cb), data);
 
-  gtk_menu_popup_at_pointer (GTK_MENU (menu), NULL);
+  gtk_popover_popup (GTK_POPOVER (menu));
 }
 
 static void

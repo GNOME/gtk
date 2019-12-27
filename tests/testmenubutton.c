@@ -12,7 +12,7 @@ horizontal_alignment_changed (GtkComboBox *box)
 	GList *l;
 
 	for (l = menubuttons; l != NULL; l = l->next) {
-		GtkMenu *popup = gtk_menu_button_get_popup (GTK_MENU_BUTTON (l->data));
+		GtkPopover *popup = gtk_menu_button_get_popover (GTK_MENU_BUTTON (l->data));
 		if (popup != NULL)
 			gtk_widget_set_halign (GTK_WIDGET (popup), alignment);
 	}
@@ -25,7 +25,7 @@ vertical_alignment_changed (GtkComboBox *box)
 	GList *l;
 
 	for (l = menubuttons; l != NULL; l = l->next) {
-		GtkMenu *popup = gtk_menu_button_get_popup (GTK_MENU_BUTTON (l->data));
+		GtkPopover *popup = gtk_menu_button_get_popover (GTK_MENU_BUTTON (l->data));
 		if (popup != NULL)
 			gtk_widget_set_valign (GTK_WIDGET (popup), alignment);
 	}
@@ -40,7 +40,6 @@ int main (int argc, char **argv)
 	GtkWidget *label;
 	GtkWidget *check;
 	GtkWidget *combo;
-	GtkWidget *menu_widget;
 	GtkAccelGroup *accel_group;
 	guint i;
 	guint row = 0;
@@ -101,32 +100,6 @@ int main (int argc, char **argv)
 
 	gtk_grid_attach_next_to (GTK_GRID (grid), button, entry, GTK_POS_RIGHT, 1, 1);
 	menubuttons = g_list_prepend (menubuttons, button);
-
-	/* Button with GtkMenu */
-	menu_widget = gtk_menu_new ();
-	for (i = 0; i < 5; ++i) {
-		GtkWidget *item;
-
-		if (i == 2) {
-			item = gtk_menu_item_new_with_mnemonic ("_Copy");
-		} else {
-			char *label;
-
-			label = g_strdup_printf ("Item _%d", i + 1);
-			item = gtk_menu_item_new_with_mnemonic (label);
-			g_free (label);
-		}
-
-		gtk_menu_item_set_use_underline (GTK_MENU_ITEM (item), TRUE);
-		gtk_container_add (GTK_CONTAINER (menu_widget), item);
-	}
-	gtk_widget_show (menu_widget);
-
-	button = gtk_menu_button_new ();
-	gtk_widget_set_halign (button, GTK_ALIGN_START);
-	menubuttons = g_list_prepend (menubuttons, button);
-	gtk_menu_button_set_popup (GTK_MENU_BUTTON (button), menu_widget);
-	gtk_grid_attach (GTK_GRID (grid), button, 1, row++, 1, 1);
 
         check = gtk_check_button_new_with_label ("Popover");
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
