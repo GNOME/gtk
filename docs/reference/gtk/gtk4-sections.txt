@@ -3353,8 +3353,8 @@ GtkToolButtonPrivate
 <TITLE>GtkMenuToolButton</TITLE>
 GtkMenuToolButton
 gtk_menu_tool_button_new
-gtk_menu_tool_button_set_menu
-gtk_menu_tool_button_get_menu
+gtk_menu_tool_button_set_popover
+gtk_menu_tool_button_get_popover
 gtk_menu_tool_button_set_arrow_tooltip_text
 gtk_menu_tool_button_set_arrow_tooltip_markup
 
