@@ -51,16 +51,8 @@
  * # GtkMenuToolButton as GtkBuildable
  *
  * The GtkMenuToolButton implementation of the GtkBuildable interface
- * supports adding a menu by specifying “menu” as the “type” attribute
+ * supports adding a popover by specifying “popover” as the “type” attribute
  * of a <child> element.
- *
- * An example for a UI definition fragment with menus:
- * |[
- * <object class="GtkMenuToolButton">
- *   <child type="menu">
- *     <object class="GtkMenu"/>
- *   </child>
- * </object>
  * ]|
  */
 
@@ -104,7 +96,6 @@ enum
 enum
 {
   PROP_0,
-  PROP_MENU,
   PROP_POPOVER
 };
 
@@ -208,10 +199,6 @@ gtk_menu_tool_button_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_MENU:
-      gtk_menu_tool_button_set_menu (button, g_value_get_object (value));
-      break;
-
     case PROP_POPOVER:
       gtk_menu_tool_button_set_popover (button, g_value_get_object (value));
       break;
@@ -232,10 +219,6 @@ gtk_menu_tool_button_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_MENU:
-      g_value_set_object (value, gtk_menu_button_get_popup (GTK_MENU_BUTTON (button->priv->arrow_button)));
-      break;
-
     case PROP_POPOVER:
       g_value_set_object (value, gtk_menu_button_get_popover (GTK_MENU_BUTTON (button->priv->arrow_button)));
       break;
@@ -283,13 +266,6 @@ gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
                   G_TYPE_NONE, 0);
 
   g_object_class_install_property (object_class,
-                                   PROP_MENU,
-                                   g_param_spec_object ("menu",
-                                                        P_("Menu"),
-                                                        P_("The dropdown menu"),
-                                                        GTK_TYPE_MENU,
-                                                        GTK_PARAM_READWRITE));
-  g_object_class_install_property (object_class,
                                    PROP_POPOVER,
                                    g_param_spec_object ("popover",
                                                         P_("Popover"),
@@ -335,10 +311,7 @@ gtk_menu_tool_button_buildable_add_child (GtkBuildable *buildable,
 					  GObject      *child,
 					  const gchar  *type)
 {
-  if (type && strcmp (type, "menu") == 0)
-    gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (buildable),
-                                   GTK_WIDGET (child));
-  else if (type && strcmp (type, "popover") == 0)
+  if (type && strcmp (type, "popover") == 0)
     gtk_menu_tool_button_set_popover (GTK_MENU_TOOL_BUTTON (buildable),
                                       GTK_WIDGET (child));
   else
@@ -385,55 +358,6 @@ _show_menu_emit (GtkMenuButton *menu_button,
 {
   GtkMenuToolButton *button = (GtkMenuToolButton *) user_data;
   g_signal_emit (button, signals[SHOW_MENU], 0);
-}
-
-/**
- * gtk_menu_tool_button_set_menu:
- * @button: a #GtkMenuToolButton
- * @menu: the #GtkMenu associated with #GtkMenuToolButton
- *
- * Sets the #GtkMenu that is popped up when the user clicks on the arrow.
- * If @menu is NULL, the arrow button becomes insensitive.
- **/
-void
-gtk_menu_tool_button_set_menu (GtkMenuToolButton *button,
-                               GtkWidget         *menu)
-{
-  GtkMenuToolButtonPrivate *priv;
-
-  g_return_if_fail (GTK_IS_MENU_TOOL_BUTTON (button));
-  g_return_if_fail (GTK_IS_MENU (menu) || menu == NULL);
-
-  priv = button->priv;
-
-  gtk_menu_button_set_popup (GTK_MENU_BUTTON (priv->arrow_button), menu);
-  gtk_menu_button_set_create_popup_func (GTK_MENU_BUTTON (priv->arrow_button),
-                                         _show_menu_emit, NULL, NULL);
-
-  g_object_notify (G_OBJECT (button), "menu");
-}
-
-/**
- * gtk_menu_tool_button_get_menu:
- * @button: a #GtkMenuToolButton
- *
- * Gets the #GtkMenu associated with #GtkMenuToolButton.
- *
- * Returns: (transfer none): the #GtkMenu associated
- *     with #GtkMenuToolButton
- **/
-GtkWidget *
-gtk_menu_tool_button_get_menu (GtkMenuToolButton *button)
-{
-  GtkMenu *ret;
-
-  g_return_val_if_fail (GTK_IS_MENU_TOOL_BUTTON (button), NULL);
-
-  ret = gtk_menu_button_get_popup (GTK_MENU_BUTTON (button->priv->arrow_button));
-  if (!ret)
-    return NULL;
-
-  return GTK_WIDGET (ret);
 }
 
 void
