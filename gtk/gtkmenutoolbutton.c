@@ -320,9 +320,6 @@ gtk_menu_tool_button_init (GtkMenuToolButton *button)
   arrow_button = gtk_menu_button_new ();
   gtk_container_add (GTK_CONTAINER (box), arrow_button);
 
-  /* the arrow button is insentive until we set a menu */
-  gtk_widget_set_sensitive (arrow_button, FALSE);
-
   gtk_container_add (GTK_CONTAINER (button), box);
   gtk_menu_button_set_align_widget (GTK_MENU_BUTTON (arrow_button),
                                     GTK_WIDGET (button));
