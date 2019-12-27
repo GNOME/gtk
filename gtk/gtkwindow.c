@@ -67,6 +67,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowgroup.h"
+#include "gtkpopovermenubarprivate.h"
 
 #include "a11y/gtkwindowaccessibleprivate.h"
 #include "a11y/gtkcontaineraccessibleprivate.h"
@@ -8271,7 +8272,6 @@ gtk_window_activate_menubar (GtkWindow   *window,
     {
       GList *tmp_menubars, *l;
       GPtrArray *menubars;
-      GtkMenuShell *menu_shell;
       GtkWidget *focus;
       GtkWidget *first;
 
@@ -8282,7 +8282,7 @@ gtk_window_activate_menubar (GtkWindow   *window,
           gtk_widget_child_focus (priv->title_box, GTK_DIR_TAB_FORWARD))
         return TRUE;
 
-      tmp_menubars = _gtk_menu_bar_get_viewable_menu_bars (window);
+      tmp_menubars = gtk_popover_menu_bar_get_viewable_menu_bars (window);
       if (tmp_menubars == NULL)
         return FALSE;
 
@@ -8295,10 +8295,7 @@ gtk_window_activate_menubar (GtkWindow   *window,
       gtk_widget_focus_sort (GTK_WIDGET (window), GTK_DIR_TAB_FORWARD, menubars);
 
       first = g_ptr_array_index (menubars, 0);
-      menu_shell = GTK_MENU_SHELL (first);
-
-      _gtk_menu_shell_set_keyboard_mode (menu_shell, TRUE);
-      gtk_menu_shell_select_first (menu_shell, FALSE);
+      gtk_popover_menu_bar_select_first (GTK_POPOVER_MENU_BAR (first));
 
       g_ptr_array_free (menubars, TRUE);
 
