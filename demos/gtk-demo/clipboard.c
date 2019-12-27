@@ -164,17 +164,19 @@ drag_data_received (GtkWidget        *widget,
 }
 
 static void
-copy_image (GtkMenuItem *item,
-            gpointer     data)
+copy_image (GSimpleAction *action,
+            GVariant      *value,
+            gpointer       data)
 {
-  GdkClipboard *clipboard;
-  GdkPaintable *paintable;
+  GdkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (data));
+  GdkPaintable *paintable = get_image_paintable (GTK_IMAGE (data));
 
-  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (data));
-  paintable = get_image_paintable (GTK_IMAGE (data));
-
+  g_print ("copy image\n");
   if (GDK_IS_TEXTURE (paintable))
-    gdk_clipboard_set_texture (clipboard, GDK_TEXTURE (paintable));
+    {
+g_print ("set clipboard\n");
+      gdk_clipboard_set_texture (clipboard, GDK_TEXTURE (paintable));
+    }
 
   if (paintable)
     g_object_unref (paintable);
@@ -196,16 +198,12 @@ paste_image_received (GObject      *source,
 }
 
 static void
-paste_image (GtkMenuItem *item,
-             gpointer     data)
+paste_image (GSimpleAction *action,
+             GVariant      *value,
+             gpointer       data)
 {
-  GdkClipboard *clipboard;
-
-  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (data));
-  gdk_clipboard_read_texture_async (clipboard,
-                                    NULL,
-                                    paste_image_received,
-                                    data);
+  GdkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (data));
+  gdk_clipboard_read_texture_async (clipboard, NULL, paste_image_received, data);
 }
 
 static void
@@ -215,22 +213,23 @@ pressed_cb (GtkGesture *gesture,
             double      y,
             GtkWidget  *image)
 {
-  GtkWidget *menu;
-  GtkWidget *item;
+  GtkWidget *popover;
+  GMenu *menu;
+  GMenuItem *item;
 
-  menu = gtk_menu_new ();
+  menu = g_menu_new (); 
+  item = g_menu_item_new (_("_Copy"), "clipboard.copy");
+  g_menu_append_item (menu, item);
 
-  item = gtk_menu_item_new_with_mnemonic (_("_Copy"));
-  g_signal_connect (item, "activate", G_CALLBACK (copy_image), image);
-  gtk_widget_show (item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+  item = g_menu_item_new (_("_Paste"), "clipboard.paste");
+  g_menu_append_item (menu, item);
 
-  item = gtk_menu_item_new_with_mnemonic (_("_Paste"));
-  g_signal_connect (item, "activate", G_CALLBACK (paste_image), image);
-  gtk_widget_show (item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+  popover = gtk_popover_menu_new_from_model (image, G_MENU_MODEL (menu));
 
-  gtk_menu_popup_at_pointer (GTK_MENU (menu), NULL);
+  gtk_popover_set_pointing_to (GTK_POPOVER (popover), &(GdkRectangle) { x, y, 1, 1});
+  gtk_popover_popup (GTK_POPOVER (popover));
+
+  g_object_unref (menu);
 }
 
 GtkWidget *
@@ -243,6 +242,11 @@ do_clipboard (GtkWidget *do_widget)
       GtkWidget *entry, *button;
       GtkWidget *image;
       GtkGesture *gesture;
+      GActionEntry entries[] = {
+        { "copy", copy_image, NULL, NULL, NULL },
+        { "paste", paste_image, NULL, NULL, NULL },
+      };
+      GActionGroup *actions;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_display (GTK_WINDOW (window),
@@ -324,6 +328,13 @@ do_clipboard (GtkWidget *do_widget)
       g_signal_connect (gesture, "pressed", G_CALLBACK (pressed_cb), image);
       gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (gesture));
 
+      actions = G_ACTION_GROUP (g_simple_action_group_new ());
+      g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS (entries), image);
+
+      gtk_widget_insert_action_group (image, "clipboard", actions);
+
+      g_object_unref (actions);
+
       /* Create the second image */
       image = gtk_image_new_from_icon_name ("process-stop");
       gtk_container_add (GTK_CONTAINER (hbox), image);
@@ -348,6 +359,13 @@ do_clipboard (GtkWidget *do_widget)
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
       g_signal_connect (gesture, "pressed", G_CALLBACK (pressed_cb), image);
       gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (gesture));
+
+      actions = G_ACTION_GROUP (g_simple_action_group_new ());
+      g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS (entries), image);
+
+      gtk_widget_insert_action_group (image, "clipboard", actions);
+
+      g_object_unref (actions);
     }
 
   if (!gtk_widget_get_visible (window))
