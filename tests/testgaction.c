@@ -125,10 +125,10 @@ int main (int argc, char **argv)
     GtkBuilder *builder = gtk_builder_new_from_string (menu_data, -1);
     menu_model = G_MENU_MODEL (gtk_builder_get_object (builder, "menu_model"));
 
-    menu = gtk_menu_new_from_model (menu_model);
+    menu = gtk_popover_menu_new_from_model (NULL, menu_model);
 
   }
-  gtk_menu_button_set_popup (GTK_MENU_BUTTON (menubutton), menu);
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (menubutton), menu);
   gtk_container_add (GTK_CONTAINER (box), menubutton);
   gtk_widget_set_halign (button1, GTK_ALIGN_CENTER);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (button1), "win.change-label-button");
