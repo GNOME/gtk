@@ -41,11 +41,6 @@ GtkToolItem  *gtk_menu_tool_button_new            (GtkWidget   *icon_widget,
                                                    const gchar *label);
 
 GDK_AVAILABLE_IN_ALL
-void          gtk_menu_tool_button_set_menu       (GtkMenuToolButton *button,
-                                                   GtkWidget         *menu);
-GDK_AVAILABLE_IN_ALL
-GtkWidget    *gtk_menu_tool_button_get_menu       (GtkMenuToolButton *button);
-GDK_AVAILABLE_IN_ALL
 void          gtk_menu_tool_button_set_popover    (GtkMenuToolButton *button,
                                                    GtkWidget         *popover);
 GDK_AVAILABLE_IN_ALL
