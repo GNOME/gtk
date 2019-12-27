@@ -94,7 +94,7 @@ deserialize_widget (GtkDemoWidget *demo)
 static double pos_x, pos_y;
 
 static void
-new_label_cb (GtkMenuItem *item,
+new_label_cb (GtkWidget *button,
               gpointer     data)
 {
   GtkFixed *fixed = data;
@@ -102,10 +102,12 @@ new_label_cb (GtkMenuItem *item,
 
   widget = gtk_label_new ("Label");
   gtk_fixed_put (fixed, widget, pos_x, pos_y);
+
+  gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
 }
 
 static void
-new_spinner_cb (GtkMenuItem *item,
+new_spinner_cb (GtkWidget *button,
                 gpointer     data)
 {
   GtkFixed *fixed = data;
@@ -115,33 +117,39 @@ new_spinner_cb (GtkMenuItem *item,
   gtk_style_context_add_class (gtk_widget_get_style_context (widget), "demo");
   gtk_spinner_start (GTK_SPINNER (widget));
   gtk_fixed_put (fixed, widget, pos_x, pos_y);
+
+  gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
 }
 
 static void
-copy_cb (GtkWidget *child)
+copy_cb (GtkWidget *button, GtkWidget *child)
 {
   GdkClipboard *clipboard;
   GtkDemoWidget *demo;
-
-  g_print ("Copy %s\n", G_OBJECT_TYPE_NAME (child));
 
   demo = serialize_widget (child);
 
   clipboard = gdk_display_get_clipboard (gdk_display_get_default ());
   gdk_clipboard_set (clipboard, GTK_TYPE_DEMO_WIDGET, demo);
+
+  gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
 }
 
 static void
-delete_cb (GtkWidget *child)
+delete_cb (GtkWidget *button, GtkWidget *child)
 {
   gtk_widget_destroy (child);
+
+  gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
 }
 
 static void
-cut_cb (GtkWidget *child)
+cut_cb (GtkWidget *button, GtkWidget *child)
 {
-  copy_cb (child);
-  delete_cb (child);
+  copy_cb (button, child);
+  delete_cb (button, child);
+
+  gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
 }
 
 static void
@@ -177,7 +185,7 @@ value_read (GObject      *source,
 }
 
 static void
-paste_cb (GtkWidget *fixed)
+paste_cb (GtkWidget *button, GtkWidget *fixed)
 {
   GdkClipboard *clipboard;
 
@@ -189,6 +197,8 @@ paste_cb (GtkWidget *fixed)
     }
   else
     g_print ("Don't know how to handle clipboard contents\n");
+
+  gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
 }
 
 static void
@@ -207,7 +217,7 @@ edit_label_done (GtkWidget *entry, gpointer data)
 }
 
 static void
-edit_cb (GtkWidget *child)
+edit_cb (GtkWidget *button, GtkWidget *child)
 {
   GtkWidget *fixed = gtk_widget_get_parent (child);
   int x, y;
@@ -233,6 +243,9 @@ edit_cb (GtkWidget *child)
       g_object_get (child, "active", &active, NULL);
       g_object_set (child, "active", !active, NULL);
     }
+
+  if (button)
+    gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
 }
 
 static void
@@ -250,65 +263,65 @@ pressed_cb (GtkGesture *gesture,
 
   if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) == GDK_BUTTON_SECONDARY)
     {
-      GdkRectangle rect;
       GtkWidget *menu;
+      GtkWidget *box;
       GtkWidget *item;
       GdkClipboard *clipboard;
 
       pos_x = x;
       pos_y = y;
 
-      menu = gtk_menu_new ();
-      item = gtk_menu_item_new_with_label ("New Label");
-      g_signal_connect (item, "activate", G_CALLBACK (new_label_cb), widget);
-      gtk_container_add (GTK_CONTAINER (menu), item);
-      item = gtk_menu_item_new_with_label ("New Spinner");
-      g_signal_connect (item, "activate", G_CALLBACK (new_spinner_cb), widget);
-      gtk_container_add (GTK_CONTAINER (menu), item);
+      menu = gtk_popover_new (widget);
+      gtk_popover_set_has_arrow (GTK_POPOVER (menu), FALSE);
+      gtk_popover_set_pointing_to (GTK_POPOVER (menu), &(GdkRectangle){ x, y, 1, 1});
+      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_container_add (GTK_CONTAINER (menu), box);
 
-      item = gtk_separator_menu_item_new ();
-      gtk_container_add (GTK_CONTAINER (menu), item);
+      item = gtk_button_new_with_label ("New Label");
+      gtk_button_set_relief (GTK_BUTTON (item), GTK_RELIEF_NONE);
+      g_signal_connect (item, "clicked", G_CALLBACK (new_label_cb), widget);
+      gtk_container_add (GTK_CONTAINER (box), item);
+      item = gtk_button_new_with_label ("New Spinner");
+      gtk_button_set_relief (GTK_BUTTON (item), GTK_RELIEF_NONE);
+      g_signal_connect (item, "clicked", G_CALLBACK (new_spinner_cb), widget);
+      gtk_container_add (GTK_CONTAINER (box), item);
 
-      item = gtk_menu_item_new_with_label ("Edit");
+      item = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+      gtk_container_add (GTK_CONTAINER (box), item);
+
+      item = gtk_button_new_with_label ("Edit");
+      gtk_button_set_relief (GTK_BUTTON (item), GTK_RELIEF_NONE);
       gtk_widget_set_sensitive (item, child != NULL && child != widget);
-      g_signal_connect_swapped (item, "activate", G_CALLBACK (edit_cb), child);
-      gtk_container_add (GTK_CONTAINER (menu), item);
+      g_signal_connect (item, "clicked", G_CALLBACK (edit_cb), child);
+      gtk_container_add (GTK_CONTAINER (box), item);
 
-      item = gtk_separator_menu_item_new ();
-      gtk_container_add (GTK_CONTAINER (menu), item);
+      item = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+      gtk_container_add (GTK_CONTAINER (box), item);
 
-      item = gtk_menu_item_new_with_label ("Cut");
+      item = gtk_button_new_with_label ("Cut");
+      gtk_button_set_relief (GTK_BUTTON (item), GTK_RELIEF_NONE);
       gtk_widget_set_sensitive (item, child != NULL && child != widget);
-      g_signal_connect_swapped (item, "activate", G_CALLBACK (cut_cb), child);
-      gtk_container_add (GTK_CONTAINER (menu), item);
-      item = gtk_menu_item_new_with_label ("Copy");
+      g_signal_connect (item, "clicked", G_CALLBACK (cut_cb), child);
+      gtk_container_add (GTK_CONTAINER (box), item);
+      item = gtk_button_new_with_label ("Copy");
+      gtk_button_set_relief (GTK_BUTTON (item), GTK_RELIEF_NONE);
       gtk_widget_set_sensitive (item, child != NULL && child != widget);
-      g_signal_connect_swapped (item, "activate", G_CALLBACK (copy_cb), child);
-      gtk_container_add (GTK_CONTAINER (menu), item);
-      item = gtk_menu_item_new_with_label ("Paste");
+      g_signal_connect (item, "clicked", G_CALLBACK (copy_cb), child);
+      gtk_container_add (GTK_CONTAINER (box), item);
+      item = gtk_button_new_with_label ("Paste");
+      gtk_button_set_relief (GTK_BUTTON (item), GTK_RELIEF_NONE);
       clipboard = gdk_display_get_clipboard (gdk_display_get_default ());
       gtk_widget_set_sensitive (item,
                                 gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), GTK_TYPE_DEMO_WIDGET));
-      g_signal_connect_swapped (item, "activate", G_CALLBACK (paste_cb), widget);
-      gtk_container_add (GTK_CONTAINER (menu), item);
-      item = gtk_menu_item_new_with_label ("Delete");
+      g_signal_connect (item, "clicked", G_CALLBACK (paste_cb), widget);
+      gtk_container_add (GTK_CONTAINER (box), item);
+      item = gtk_button_new_with_label ("Delete");
+      gtk_button_set_relief (GTK_BUTTON (item), GTK_RELIEF_NONE);
       gtk_widget_set_sensitive (item, child != NULL && child != widget);
-      g_signal_connect_swapped (item, "activate", G_CALLBACK (delete_cb), child);
-      gtk_container_add (GTK_CONTAINER (menu), item);
+      g_signal_connect (item, "clicked", G_CALLBACK (delete_cb), child);
+      gtk_container_add (GTK_CONTAINER (box), item);
 
-      rect.x = x;
-      rect.y = y;
-      rect.width = 0;
-      rect.height = 0;
-
-      gtk_menu_popup_at_rect (GTK_MENU (menu),
-                              gtk_native_get_surface (gtk_widget_get_native (widget)),
-                              &rect,
-                              GDK_GRAVITY_NORTH_WEST,
-                              GDK_GRAVITY_NORTH_WEST,
-                              NULL);
-
-      return;
+      gtk_popover_popup (GTK_POPOVER (menu));
     }
 }
 
@@ -328,7 +341,7 @@ released_cb (GtkGesture *gesture,
   if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) == GDK_BUTTON_PRIMARY)
     {
       if (child != NULL && child != widget)
-        edit_cb (child);
+        edit_cb (NULL, child);
     }
 }
 
