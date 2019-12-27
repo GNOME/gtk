@@ -53,9 +53,6 @@ struct _GtkToolItem
 /**
  * GtkToolItemClass:
  * @parent_class: The parent class.
- * @create_menu_proxy: Signal emitted when the toolbar needs
- *    information from tool_item about whether the item should appear in
- *    the toolbar overflow menu.
  * @toolbar_reconfigured: Signal emitted when some property of the
  *    toolbar that the item is a child of changes.
  */
@@ -64,7 +61,6 @@ struct _GtkToolItemClass
   GtkBinClass parent_class;
 
   /* signals */
-  gboolean   (* create_menu_proxy)    (GtkToolItem *tool_item);
   void       (* toolbar_reconfigured) (GtkToolItem *tool_item);
 
   /*< private >*/
@@ -127,14 +123,10 @@ GDK_AVAILABLE_IN_ALL
 GtkSizeGroup *  gtk_tool_item_get_text_size_group      (GtkToolItem *tool_item);
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_tool_item_retrieve_proxy_menu_item (GtkToolItem *tool_item);
+const char *    gtk_tool_item_get_overflow_text        (GtkToolItem *tool_item);
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_tool_item_get_proxy_menu_item      (GtkToolItem *tool_item,
-							const gchar *menu_item_id);
-GDK_AVAILABLE_IN_ALL
-void            gtk_tool_item_set_proxy_menu_item      (GtkToolItem *tool_item,
-							const gchar *menu_item_id,
-							GtkWidget   *menu_item);
+void            gtk_tool_item_set_overflow_text        (GtkToolItem *tool_item,
+                                                        const char  *overflow_text);
 GDK_AVAILABLE_IN_ALL
 void		gtk_tool_item_rebuild_menu	       (GtkToolItem *tool_item);
 
