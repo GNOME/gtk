@@ -184,13 +184,18 @@ gtk_popover_menu_set_active_item (GtkPopoverMenu *menu,
   if (menu->active_item != item)
     {
       if (menu->active_item)
-        gtk_widget_unset_state_flags (menu->active_item, GTK_STATE_FLAG_SELECTED);
+        {
+          gtk_widget_unset_state_flags (menu->active_item, GTK_STATE_FLAG_SELECTED);
+          g_object_remove_weak_pointer (G_OBJECT (menu->active_item), (gpointer *)&menu->active_item);
+        }
 
       menu->active_item = item;
 
       if (menu->active_item)
         {
           GtkWidget *popover;
+
+          g_object_add_weak_pointer (G_OBJECT (menu->active_item), (gpointer *)&menu->active_item);
 
           gtk_widget_set_state_flags (menu->active_item, GTK_STATE_FLAG_SELECTED, FALSE);
           if (GTK_IS_MODEL_BUTTON (item))
@@ -276,6 +281,12 @@ static void
 gtk_popover_menu_dispose (GObject *object)
 {
   GtkPopoverMenu *popover = GTK_POPOVER_MENU (object);
+
+  if (popover->active_item)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (popover->active_item), (gpointer *)&popover->active_item);
+      popover->active_item = NULL;
+    }
 
   g_clear_object (&popover->model);
 
