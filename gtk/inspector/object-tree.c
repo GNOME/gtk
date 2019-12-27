@@ -111,14 +111,6 @@ object_tree_widget_get_parent (GObject *object)
   return G_OBJECT (gtk_widget_get_parent (GTK_WIDGET (object)));
 }
 
-static GObject *
-object_tree_menu_get_parent (GObject *object)
-{
-  GtkWidget *w = gtk_menu_get_attach_widget (GTK_MENU (object));
-
-  return w ? G_OBJECT (w) : NULL;
-}
-
 static GListModel *
 object_tree_widget_get_children (GObject *object)
 {
@@ -235,12 +227,6 @@ list_model_for_properties (GObject     *object,
   result = G_LIST_MODEL (gtk_flatten_list_model_new (G_TYPE_OBJECT, G_LIST_MODEL (concat)));
   g_object_unref (concat);
   return result;
-}
-
-static GListModel *
-object_tree_menu_item_get_children (GObject *object)
-{
-  return list_model_for_properties (object, (const char *[2]) { "submenu", NULL });
 }
 
 static GListModel *
@@ -516,16 +502,6 @@ static const ObjectTreeClassFuncs object_tree_class_funcs[] = {
     gtk_combo_box_get_type,
     object_tree_widget_get_parent,
     object_tree_combo_box_get_children
-  },
-  {
-    gtk_menu_item_get_type,
-    object_tree_widget_get_parent,
-    object_tree_menu_item_get_children
-  },
-  {
-    gtk_menu_get_type,
-    object_tree_menu_get_parent,
-    object_tree_widget_get_children
   },
   {
     gtk_widget_get_type,
