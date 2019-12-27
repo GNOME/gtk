@@ -32,7 +32,6 @@
 #include <gtk/a11y/gtkbuttonaccessible.h>
 #include <gtk/a11y/gtkcellaccessible.h>
 #include <gtk/a11y/gtkcellaccessibleparent.h>
-#include <gtk/a11y/gtkcheckmenuitemaccessible.h>
 #include <gtk/a11y/gtkcomboboxaccessible.h>
 #include <gtk/a11y/gtkcontaineraccessible.h>
 #include <gtk/a11y/gtkcontainercellaccessible.h>
@@ -50,17 +49,13 @@
 #include <gtk/a11y/gtklistboxaccessible.h>
 #include <gtk/a11y/gtklistboxrowaccessible.h>
 #include <gtk/a11y/gtklockbuttonaccessible.h>
-#include <gtk/a11y/gtkmenuaccessible.h>
 #include <gtk/a11y/gtkmenubuttonaccessible.h>
-#include <gtk/a11y/gtkmenuitemaccessible.h>
-#include <gtk/a11y/gtkmenushellaccessible.h>
 #include <gtk/a11y/gtknotebookaccessible.h>
 #include <gtk/a11y/gtknotebookpageaccessible.h>
 #include <gtk/a11y/gtkpanedaccessible.h>
 #include <gtk/a11y/gtkpopoveraccessible.h>
 #include <gtk/a11y/gtkprogressbaraccessible.h>
 #include <gtk/a11y/gtkradiobuttonaccessible.h>
-#include <gtk/a11y/gtkradiomenuitemaccessible.h>
 #include <gtk/a11y/gtkrangeaccessible.h>
 #include <gtk/a11y/gtkrenderercellaccessible.h>
 #include <gtk/a11y/gtkscaleaccessible.h>

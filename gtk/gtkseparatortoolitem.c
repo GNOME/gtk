@@ -23,7 +23,6 @@
 
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkseparatormenuitem.h"
 #include "gtkstylecontext.h"
 #include "gtktoolbarprivate.h"
 #include "gtkwidgetprivate.h"

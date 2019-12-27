@@ -26,7 +26,6 @@
 #endif
 
 #include <gtk/gtkbin.h>
-#include <gtk/gtkmenuitem.h>
 #include <gtk/gtksizegroup.h>
 
 G_BEGIN_DECLS
