@@ -19,7 +19,6 @@
 
 #include "config.h"
 #include "gtktoggletoolbutton.h"
-#include "gtkcheckmenuitem.h"
 #include "gtklabel.h"
 #include "gtktogglebutton.h"
 #include "gtkintl.h"

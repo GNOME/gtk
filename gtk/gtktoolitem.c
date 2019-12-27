@@ -26,7 +26,6 @@
 
 #include "gtkmarshalers.h"
 #include "gtktoolshell.h"
-#include "gtkseparatormenuitem.h"
 #include "gtksizerequest.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"

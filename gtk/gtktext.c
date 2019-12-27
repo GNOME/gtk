@@ -52,7 +52,6 @@
 #include "gtkpango.h"
 #include "gtkpopovermenu.h"
 #include "gtkprivate.h"
-#include "gtkseparatormenuitem.h"
 #include "gtkselection.h"
 #include "gtksettings.h"
 #include "gtksnapshot.h"
