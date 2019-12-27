@@ -1811,8 +1811,7 @@ gtk_label_mnemonic_activate (GtkWidget *widget,
     {
       if (gtk_widget_get_can_focus (parent) ||
 	  (!group_cycling && GTK_WIDGET_GET_CLASS (parent)->activate_signal) ||
-          GTK_IS_NOTEBOOK (gtk_widget_get_parent (parent)) ||
-	  GTK_IS_MENU_ITEM (parent))
+          GTK_IS_NOTEBOOK (gtk_widget_get_parent (parent)))
 	return gtk_widget_mnemonic_activate (parent, group_cycling);
       parent = gtk_widget_get_parent (parent);
     }
@@ -1831,9 +1830,6 @@ gtk_label_setup_mnemonic (GtkLabel  *label,
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
   GtkWidget *widget = GTK_WIDGET (label);
-  GtkWidget *mnemonic_menu;
-  
-  mnemonic_menu = g_object_get_qdata (G_OBJECT (label), quark_mnemonic_menu);
   
   if (last_key != GDK_KEY_VoidSymbol)
     {
@@ -1844,13 +1840,6 @@ gtk_label_setup_mnemonic (GtkLabel  *label,
 				       widget);
 	  priv->mnemonic_window = NULL;
 	}
-      if (mnemonic_menu)
-	{
-	  _gtk_menu_shell_remove_mnemonic (GTK_MENU_SHELL (mnemonic_menu),
-					   last_key,
-					   widget);
-	  mnemonic_menu = NULL;
-	}
     }
 
   if (priv->mnemonic_keyval == GDK_KEY_VoidSymbol)
@@ -1858,32 +1847,7 @@ gtk_label_setup_mnemonic (GtkLabel  *label,
 
   connect_mnemonics_visible_notify (GTK_LABEL (widget));
 
-  if (GTK_IS_WINDOW (toplevel))
-    {
-      GtkWidget *menu_shell;
-
-      menu_shell = gtk_widget_get_ancestor (widget,
-					    GTK_TYPE_MENU_SHELL);
-
-      if (menu_shell)
-	{
-	  _gtk_menu_shell_add_mnemonic (GTK_MENU_SHELL (menu_shell),
-					priv->mnemonic_keyval,
-					widget);
-	  mnemonic_menu = menu_shell;
-	}
-
-      if (!GTK_IS_MENU (menu_shell))
-	{
-	  gtk_window_add_mnemonic (GTK_WINDOW (toplevel),
-				   priv->mnemonic_keyval,
-				   widget);
-	  priv->mnemonic_window = GTK_WINDOW (toplevel);
-	}
-    }
-
- done:
-  g_object_set_qdata (G_OBJECT (label), quark_mnemonic_menu, mnemonic_menu);
+ done:;
 }
 
 static void
