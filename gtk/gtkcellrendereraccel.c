@@ -29,6 +29,7 @@
 #include "gtkprivate.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtknative.h"
+#include "gtkbinlayout.h"
 
 
 /**
@@ -465,7 +466,6 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (cell);
   GtkCellRendererAccel *accel = GTK_CELL_RENDERER_ACCEL (cell);
   GtkCellRendererAccelPrivate *priv = gtk_cell_renderer_accel_get_instance_private (accel);
-  GtkWidget *label;
   GtkWidget *editable;
   gboolean is_editable;
   GdkSeat *seat = NULL;
@@ -501,21 +501,6 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
 
   editable = gtk_cell_editable_widget_new (cell, priv->accel_mode, path);
 
-  label = gtk_label_new (NULL);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-
-  gtk_widget_set_state_flags (label, GTK_STATE_FLAG_SELECTED, TRUE);
-
-  /* This label is displayed in a treeview cell displaying an accelerator
-   * when the cell is clicked to change the acelerator.
-   */
-  gtk_label_set_text (GTK_LABEL (label), _("New accelerator…"));
-
-  gtk_container_add (GTK_CONTAINER (editable), label);
-
-  gtk_grab_add (editable);
-
   return GTK_CELL_EDITABLE (editable);
 }
 
@@ -544,6 +529,7 @@ struct _GtkCellEditableWidget
   GtkCellRendererAccelMode accel_mode;
   gchar *path;
   GtkCellRenderer *cell;
+  GtkWidget *label;
 };
 
 enum {
@@ -737,6 +723,16 @@ gtk_cell_editable_widget_get_property (GObject    *object,
 }
 
 static void
+gtk_cell_editable_widget_dispose (GObject *object)
+{
+  GtkCellEditableWidget *box = (GtkCellEditableWidget*)object;
+
+  g_clear_pointer (&box->label, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (gtk_cell_editable_widget_parent_class)->dispose (object);
+}
+
+static void
 gtk_cell_editable_widget_finalize (GObject *object)
 {
   GtkCellEditableWidget *box = (GtkCellEditableWidget*)object;
@@ -753,6 +749,7 @@ gtk_cell_editable_widget_class_init (GtkCellEditableWidgetClass *class)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
   object_class->finalize = gtk_cell_editable_widget_finalize;
+  object_class->dispose = gtk_cell_editable_widget_dispose;
   object_class->set_property = gtk_cell_editable_widget_set_property;
   object_class->get_property = gtk_cell_editable_widget_get_property;
 
@@ -772,6 +769,7 @@ gtk_cell_editable_widget_class_init (GtkCellEditableWidgetClass *class)
       g_param_spec_string ("path", NULL, NULL,
                            NULL, GTK_PARAM_READWRITE));
 
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("acceleditor"));
 }
 
@@ -803,6 +801,21 @@ gtk_cell_editable_widget_new (GtkCellRenderer          *cell,
                       "path", path,
                       NULL);
   box->cell = cell;
+
+  box->label = gtk_label_new (NULL);
+  gtk_widget_set_halign (box->label, GTK_ALIGN_START);
+  gtk_widget_set_valign (box->label, GTK_ALIGN_CENTER);
+
+  gtk_widget_set_state_flags (box->label, GTK_STATE_FLAG_SELECTED, TRUE);
+
+  /* This label is displayed in a treeview cell displaying an accelerator
+   * when the cell is clicked to change the acelerator.
+   */
+  gtk_label_set_text (GTK_LABEL (box->label), _("New accelerator…"));
+
+  gtk_widget_set_parent (box->label, GTK_WIDGET (box));
+
+  gtk_grab_add (GTK_WIDGET (box));
 
   return GTK_WIDGET (box);
 }
