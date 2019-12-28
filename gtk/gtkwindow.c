@@ -34,7 +34,6 @@
 #include "gtkbuilderprivate.h"
 #include "gtkbutton.h"
 #include "gtkcheckbutton.h"
-#include "gtkcheckmenuitem.h"
 #include "gtkcontainerprivate.h"
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcssiconthemevalueprivate.h"
@@ -55,9 +54,6 @@
 #include "gtkmarshalers.h"
 #include "gtkmessagedialog.h"
 #include "gtkmnemonichash.h"
-#include "gtkmenu.h"
-#include "gtkmenubarprivate.h"
-#include "gtkmenushellprivate.h"
 #include "gtkpointerfocusprivate.h"
 #include "gtkpopovermenuprivate.h"
 #include "gtkmodelbuttonprivate.h"
@@ -65,7 +61,6 @@
 #include "gtkprivate.h"
 #include "gtkroot.h"
 #include "gtknative.h"
-#include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
@@ -6597,8 +6592,8 @@ gtk_window_get_state (GtkWindow *window)
 }
 
 static void
-restore_window_clicked (GtkMenuItem *menuitem,
-                        gpointer     user_data)
+restore_window_clicked (GtkModelButton *button,
+                        gpointer        user_data)
 {
   GtkWindow *window = GTK_WINDOW (user_data);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
@@ -6618,8 +6613,8 @@ restore_window_clicked (GtkMenuItem *menuitem,
 }
 
 static void
-move_window_clicked (GtkMenuItem *menuitem,
-                     gpointer     user_data)
+move_window_clicked (GtkModelButton *button,
+                     gpointer        user_data)
 {
   GtkWindow *window = GTK_WINDOW (user_data);
 
@@ -6630,8 +6625,8 @@ move_window_clicked (GtkMenuItem *menuitem,
 }
 
 static void
-resize_window_clicked (GtkMenuItem *menuitem,
-                       gpointer     user_data)
+resize_window_clicked (GtkModelButton *button,
+                       gpointer        user_data)
 {
   GtkWindow *window = GTK_WINDOW (user_data);
 
@@ -6643,8 +6638,8 @@ resize_window_clicked (GtkMenuItem *menuitem,
 }
 
 static void
-minimize_window_clicked (GtkMenuItem *menuitem,
-                         gpointer     user_data)
+minimize_window_clicked (GtkModelButton *button,
+                         gpointer        user_data)
 {
   GtkWindow *window = GTK_WINDOW (user_data);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
@@ -6657,8 +6652,8 @@ minimize_window_clicked (GtkMenuItem *menuitem,
 }
 
 static void
-maximize_window_clicked (GtkMenuItem *menuitem,
-                         gpointer     user_data)
+maximize_window_clicked (GtkModelButton *button,
+                         gpointer        user_data)
 {
   GtkWindow *window = GTK_WINDOW (user_data);
   GdkSurfaceState state;
@@ -6672,8 +6667,8 @@ maximize_window_clicked (GtkMenuItem *menuitem,
 }
 
 static void
-ontop_window_clicked (GtkMenuItem *menuitem,
-                      gpointer     user_data)
+ontop_window_clicked (GtkModelButton *button,
+                      gpointer        user_data)
 {
   GtkWindow *window = (GtkWindow *)user_data;
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
@@ -6683,8 +6678,8 @@ ontop_window_clicked (GtkMenuItem *menuitem,
 }
 
 static void
-close_window_clicked (GtkMenuItem *menuitem,
-                      gpointer     user_data)
+close_window_clicked (GtkModelButton *button,
+                      gpointer        user_data)
 {
   GtkWindow *window = (GtkWindow *)user_data;
 
