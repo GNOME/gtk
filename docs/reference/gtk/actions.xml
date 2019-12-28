@@ -314,8 +314,8 @@
       be connected to an action just by setting the ::action-name
       property. If the action has a parameter, you will also need
       to set the ::action-target property.
-      Widgets that implement GtkAction include GtkSwitch, GtkButton,
-      GtkMenuItem and their respective subclasses.
+      Widgets that implement GtkActionable include GtkSwitch, GtkButton,
+      and their respective subclasses.
     </para>
 
     <para>
