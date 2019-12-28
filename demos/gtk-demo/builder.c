@@ -38,7 +38,22 @@ help_activate (GSimpleAction *action,
   g_print ("Help not available\n");
 }
 
+static void
+not_implemented (GSimpleAction *action,
+                 GVariant      *parameter,
+                 gpointer       user_data)
+{
+  g_print ("Action “%s” not implemented\n", g_action_get_name (G_ACTION (action)));
+}
+
 static GActionEntry win_entries[] = {
+  { "new", not_implemented, NULL, NULL, NULL },
+  { "open", not_implemented, NULL, NULL, NULL },
+  { "save", not_implemented, NULL, NULL, NULL },
+  { "save-as", not_implemented, NULL, NULL, NULL },
+  { "copy", not_implemented, NULL, NULL, NULL },
+  { "cut", not_implemented, NULL, NULL, NULL },
+  { "paste", not_implemented, NULL, NULL, NULL },
   { "quit", quit_activate, NULL, NULL, NULL },
   { "about", about_activate, NULL, NULL, NULL },
   { "help", help_activate, NULL, NULL, NULL }
@@ -50,8 +65,6 @@ do_builder (GtkWidget *do_widget)
   static GtkWidget *window = NULL;
   GtkWidget *toolbar;
   GActionGroup *actions;
-  GtkAccelGroup *accel_group;
-  GtkWidget *item;
 
   if (!window)
     {
@@ -72,44 +85,6 @@ do_builder (GtkWidget *do_widget)
                                        win_entries, G_N_ELEMENTS (win_entries),
                                        window);
       gtk_widget_insert_action_group (window, "win", actions);
-      accel_group = gtk_accel_group_new ();
-      gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
-
-      item = (GtkWidget*)gtk_builder_get_object (builder, "new_item");
-      gtk_widget_add_accelerator (item, "activate", accel_group,
-                                  GDK_KEY_n, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-
-      item = (GtkWidget*)gtk_builder_get_object (builder, "open_item");
-      gtk_widget_add_accelerator (item, "activate", accel_group,
-                                  GDK_KEY_o, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-
-      item = (GtkWidget*)gtk_builder_get_object (builder, "save_item");
-      gtk_widget_add_accelerator (item, "activate", accel_group,
-                                  GDK_KEY_s, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-
-      item = (GtkWidget*)gtk_builder_get_object (builder, "quit_item");
-      gtk_widget_add_accelerator (item, "activate", accel_group,
-                                  GDK_KEY_q, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-
-      item = (GtkWidget*)gtk_builder_get_object (builder, "copy_item");
-      gtk_widget_add_accelerator (item, "activate", accel_group,
-                                  GDK_KEY_c, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-
-      item = (GtkWidget*)gtk_builder_get_object (builder, "cut_item");
-      gtk_widget_add_accelerator (item, "activate", accel_group,
-                                  GDK_KEY_x, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-
-      item = (GtkWidget*)gtk_builder_get_object (builder, "paste_item");
-      gtk_widget_add_accelerator (item, "activate", accel_group,
-                                  GDK_KEY_v, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-
-      item = (GtkWidget*)gtk_builder_get_object (builder, "help_item");
-      gtk_widget_add_accelerator (item, "activate", accel_group,
-                                  GDK_KEY_F1, 0, GTK_ACCEL_VISIBLE);
-
-      item = (GtkWidget*)gtk_builder_get_object (builder, "about_item");
-      gtk_widget_add_accelerator (item, "activate", accel_group,
-                                  GDK_KEY_F7, 0, GTK_ACCEL_VISIBLE);
 
       g_object_set_data_full (G_OBJECT(window), "builder", builder, g_object_unref);
     }
