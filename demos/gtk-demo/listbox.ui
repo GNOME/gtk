@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <object class="GtkMenu" id="menu1">
-    <child>
-      <object class="GtkMenuItem" id="menuitem1">
-        <property name="label" translatable="yes">Email message</property>
-        <property name="use-underline">1</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="menuitem2">
-        <property name="label" translatable="yes">Embed message</property>
-        <property name="use-underline">1</property>
-      </object>
-    </child>
-  </object>
+  <menu id="menu1">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Email message</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Embed message</attribute>
+      </item>
+    </section>
+  </menu>
   <template class="GtkMessageRow" parent="GtkListBoxRow">
     <child>
       <object class="GtkGrid" id="grid1">
@@ -171,7 +167,7 @@
                   <object class="GtkMenuButton" id="more-button">
                     <property name="can-focus">1</property>
                     <property name="receives-default">1</property>
-                    <property name="popup">menu1</property>
+                    <property name="menu-model">menu1</property>
                     <property name="relief">none</property>
                     <property name="label" translatable="yes">More...</property>
                   </object>
