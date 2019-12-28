@@ -63,6 +63,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtknative.h"
+#include "gtkpopover.h"
 
 #include "a11y/gtktreeviewaccessibleprivate.h"
 
@@ -474,13 +475,12 @@ struct _GtkTreeView
   /* Interactive search */
   gint selected_iter;
   gint search_column;
-  GtkTreeViewSearchPositionFunc search_position_func;
   GtkTreeViewSearchEqualFunc search_equal_func;
   gpointer search_user_data;
   GDestroyNotify search_destroy;
   gpointer search_position_user_data;
   GDestroyNotify search_position_destroy;
-  GtkWidget *search_window;
+  GtkWidget *search_popover;
   GtkWidget *search_entry;
   gulong search_entry_changed_id;
   guint typeselect_flush_timeout;
@@ -835,12 +835,9 @@ static inline gint gtk_tree_view_get_row_height              (GtkTreeView       
 
 /* interactive search */
 static void     gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view);
-static void     gtk_tree_view_search_window_hide        (GtkWidget        *search_window,
+static void     gtk_tree_view_search_popover_hide       (GtkWidget        *search_popover,
                                                          GtkTreeView      *tree_view,
                                                          GdkDevice        *device);
-static void     gtk_tree_view_search_position_func      (GtkTreeView      *tree_view,
-							 GtkWidget        *search_window,
-							 gpointer          user_data);
 static void     gtk_tree_view_search_preedit_changed    (GtkText          *text,
                                                          const char       *preedit,
 							 GtkTreeView      *tree_view);
@@ -1757,7 +1754,6 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->selection = _gtk_tree_selection_new_with_tree_view (tree_view);
   tree_view->enable_search = TRUE;
   tree_view->search_column = -1;
-  tree_view->search_position_func = gtk_tree_view_search_position_func;
   tree_view->search_equal_func = gtk_tree_view_search_equal_func;
   tree_view->search_custom_entry_set = FALSE;
   tree_view->typeselect_flush_timeout = 0;
@@ -2097,11 +2093,11 @@ gtk_tree_view_free_rbtree (GtkTreeView *tree_view)
 }
 
 static void
-gtk_tree_view_destroy_search_window (GtkTreeView *tree_view)
+gtk_tree_view_destroy_search_popover (GtkTreeView *tree_view)
 {
-  gtk_widget_destroy (tree_view->search_window);
+  gtk_widget_destroy (tree_view->search_popover);
 
-  tree_view->search_window = NULL;
+  tree_view->search_popover = NULL;
   tree_view->search_entry = NULL;
   tree_view->search_entry_changed_id = 0;
 }
@@ -2157,9 +2153,9 @@ gtk_tree_view_destroy (GtkWidget *widget)
   tree_view->anchor = NULL;
 
   /* destroy interactive search dialog */
-  if (tree_view->search_window)
+  if (tree_view->search_popover)
     {
-      gtk_tree_view_destroy_search_window (tree_view);
+      gtk_tree_view_destroy_search_popover (tree_view);
       if (tree_view->typeselect_flush_timeout)
 	{
 	  g_source_remove (tree_view->typeselect_flush_timeout);
@@ -2706,6 +2702,9 @@ gtk_tree_view_size_allocate (GtkWidget *widget,
       gtk_tree_path_free (path);
       gtk_widget_size_allocate (child->widget, &child_rect, -1);
     }
+
+  if (tree_view->search_popover)
+    gtk_native_check_resize (GTK_NATIVE (tree_view->search_popover));
 }
 
 /* Grabs the focus and unsets the GTK_TREE_VIEW_DRAW_KEYFOCUS flag */
@@ -5301,12 +5300,6 @@ gtk_tree_view_search_key_cancels_search (guint keyval)
 }
 
 static gboolean
-no_popup (void)
-{
-  return TRUE;
-}
-
-static gboolean
 gtk_tree_view_key_controller_key_pressed (GtkEventControllerKey *key,
                                           guint                  keyval,
                                           guint                  keycode,
@@ -5462,14 +5455,12 @@ gtk_tree_view_key_controller_key_pressed (GtkEventControllerKey *key,
       && !tree_view->search_custom_entry_set
       && !gtk_tree_view_search_key_cancels_search (keyval))
     {
-      GtkWidget *search_window;
-
       gtk_tree_view_ensure_interactive_directory (tree_view);
 
-      search_window = tree_view->search_window;
-      if (!gtk_widget_is_visible (search_window))
+      if (!gtk_widget_is_visible (tree_view->search_popover))
         {
           tree_view->imcontext_changed = FALSE;
+          
           gtk_event_controller_key_forward (key, tree_view->search_entry);
 
           if (tree_view->imcontext_changed)
@@ -5477,34 +5468,8 @@ gtk_tree_view_key_controller_key_pressed (GtkEventControllerKey *key,
               GdkDevice *device;
 
               device = gtk_get_current_event_device ();
-              if (gtk_tree_view_real_start_interactive_search (tree_view,
-                                                               device,
-                                                               FALSE))
-                {
-                  gtk_widget_grab_focus (GTK_WIDGET (tree_view));
-                  return TRUE;
-                }
-              else
-                {
-                  gtk_editable_set_text (GTK_EDITABLE (tree_view->search_entry), "");
-                  return FALSE;
-                }
+              return gtk_tree_view_real_start_interactive_search (tree_view, device, FALSE);
             }
-        }
-      else
-        {
-          gulong popup_menu_id;
-
-          popup_menu_id = g_signal_connect (tree_view->search_entry,
-                                            "popup-menu", G_CALLBACK (no_popup),
-                                            NULL);
-
-          /* Because we keep the focus on the treeview, we need to forward the
-           * key events to the entry, when it is visible. */
-          gtk_event_controller_key_forward (key, search_window);
-
-          g_signal_handler_disconnect (tree_view->search_entry,
-                                       popup_menu_id);
         }
     }
 
@@ -5589,11 +5554,9 @@ gtk_tree_view_key_controller_focus_out (GtkEventControllerKey *key,
                 "contains-focus", &contains_focus,
                 NULL);
 
-  /* destroy interactive search dialog */
-  if (tree_view->search_window &&
-      !gtk_event_controller_key_contains_focus (key))
-    gtk_tree_view_search_window_hide (tree_view->search_window, tree_view,
-                                      gtk_get_current_event_device ());
+  if (tree_view->search_popover && !gtk_event_controller_key_contains_focus (key))
+    gtk_tree_view_search_popover_hide (tree_view->search_popover, tree_view,
+                                       gtk_get_current_event_device ());
 }
 
 /* Incremental Reflow
@@ -10164,117 +10127,49 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
 static gboolean
 gtk_tree_view_search_entry_flush_timeout (GtkTreeView *tree_view)
 {
-  gtk_tree_view_search_window_hide (tree_view->search_window, tree_view, NULL);
+  gtk_tree_view_search_popover_hide (tree_view->search_popover, tree_view, NULL);
   tree_view->typeselect_flush_timeout = 0;
 
   return FALSE;
 }
 
-/* Cut and paste from gtkwindow.c */
-static void
-send_focus_change (GtkWidget *widget,
-                   GdkDevice *device,
-		   gboolean   in)
-{
-  GdkSeat *seat;
-  GList *devices, *d;
-
-  seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
-  devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_KEYBOARD);
-  devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
-
-  for (d = devices; d; d = d->next)
-    {
-      GdkEvent *fevent;
-      GdkSurface *surface;
-
-      surface = gtk_native_get_surface (gtk_widget_get_native (widget));
-
-      fevent = gdk_event_new (GDK_FOCUS_CHANGE);
-
-      fevent->any.type = GDK_FOCUS_CHANGE;
-      fevent->any.surface = g_object_ref (surface);
-      fevent->focus_change.in = in;
-      gdk_event_set_device (fevent, device);
-
-      gtk_widget_set_has_focus (widget, in);
-      gtk_widget_event (widget, fevent);
-
-      g_object_unref (fevent);
-    }
-
-  g_list_free (devices);
-}
-
 static void
 gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
 {
-  GtkWidget *frame, *vbox, *toplevel;
-  GdkDisplay *display;
   GtkEventController *controller;
   GtkGesture *gesture;
 
   if (tree_view->search_custom_entry_set)
     return;
 
-  toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (tree_view)));
-  display = gtk_widget_get_display (GTK_WIDGET (tree_view));
+  if (tree_view->search_popover)
+    return;
 
-   if (tree_view->search_window != NULL)
-     {
-       if (gtk_window_has_group (GTK_WINDOW (toplevel)))
-         gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)),
-                                      GTK_WINDOW (tree_view->search_window));
-       else if (gtk_window_has_group (GTK_WINDOW (tree_view->search_window)))
-         gtk_window_group_remove_window (gtk_window_get_group (GTK_WINDOW (tree_view->search_window)),
-                                         GTK_WINDOW (tree_view->search_window));
-
-       gtk_window_set_display (GTK_WINDOW (tree_view->search_window), display);
-
-       return;
-     }
-   
-  tree_view->search_window = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_window_set_display (GTK_WINDOW (tree_view->search_window), display);
-
-  if (gtk_window_has_group (GTK_WINDOW (toplevel)))
-    gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)),
-				 GTK_WINDOW (tree_view->search_window));
-
-  gtk_window_set_type_hint (GTK_WINDOW (tree_view->search_window),
-                            GDK_SURFACE_TYPE_HINT_UTILITY);
-  gtk_window_set_modal (GTK_WINDOW (tree_view->search_window), TRUE);
-  gtk_window_set_transient_for (GTK_WINDOW (tree_view->search_window),
-                                GTK_WINDOW (toplevel));
+  tree_view->search_popover = gtk_popover_new (GTK_WIDGET (tree_view));
+  gtk_popover_set_autohide (GTK_POPOVER (tree_view->search_popover), FALSE);
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed",
 		    G_CALLBACK (gtk_tree_view_search_key_pressed),
 		    tree_view);
-  gtk_widget_add_controller (tree_view->search_window, controller);
+  gtk_widget_add_controller (tree_view->search_popover, controller);
 
   gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_tree_view_search_pressed_cb), tree_view);
-  gtk_widget_add_controller (tree_view->search_window, GTK_EVENT_CONTROLLER (gesture));
+  gtk_widget_add_controller (tree_view->search_popover, GTK_EVENT_CONTROLLER (gesture));
 
   controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
   g_signal_connect (controller, "scroll",
 		    G_CALLBACK (gtk_tree_view_search_scroll_event),
 		    tree_view);
-  gtk_widget_add_controller (tree_view->search_window, controller);
+  gtk_widget_add_controller (tree_view->search_popover, controller);
 
-  frame = gtk_frame_new (NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_ETCHED_IN);
-  gtk_widget_show (frame);
-  gtk_container_add (GTK_CONTAINER (tree_view->search_window), frame);
-
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_widget_show (vbox);
-  gtk_container_add (GTK_CONTAINER (frame), vbox);
-
-  /* add entry */
   tree_view->search_entry = gtk_text_new ();
+
+  controller = gtk_text_get_key_controller (GTK_TEXT (tree_view->search_entry));
+  gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
+
   g_signal_connect (tree_view->search_entry, "activate",
                     G_CALLBACK (gtk_tree_view_search_activate), tree_view);
   g_signal_connect (tree_view->search_entry, "preedit-changed",
@@ -10282,8 +10177,7 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   g_signal_connect (tree_view->search_entry, "changed",
 		    G_CALLBACK (gtk_tree_view_search_changed), tree_view);
 
-  gtk_container_add (GTK_CONTAINER (vbox),
-		     tree_view->search_entry);
+  gtk_container_add (GTK_CONTAINER (tree_view->search_popover), tree_view->search_entry);
 
   gtk_widget_realize (tree_view->search_entry);
 }
@@ -10309,8 +10203,8 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
   if (tree_view->search_custom_entry_set)
     return FALSE;
 
-  if (tree_view->search_window != NULL &&
-      gtk_widget_get_visible (tree_view->search_window))
+  if (tree_view->search_popover &&
+      gtk_widget_get_visible (tree_view->search_popover))
     return TRUE;
 
   for (list = tree_view->columns; list; list = list->next)
@@ -10344,16 +10238,13 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
   if (keybinding)
     gtk_editable_set_text (GTK_EDITABLE (tree_view->search_entry), "");
 
-  /* done, show it */
-  tree_view->search_position_func (tree_view, tree_view->search_window, tree_view->search_position_user_data);
-
   /* Grab focus without selecting all the text. */
   if (GTK_IS_ENTRY (tree_view->search_entry))
     gtk_entry_grab_focus_without_selecting (GTK_ENTRY (tree_view->search_entry));
   else
     gtk_widget_grab_focus (tree_view->search_entry);
 
-  gtk_widget_show (tree_view->search_window);
+  gtk_popover_popup (GTK_POPOVER (tree_view->search_popover));
   if (tree_view->search_entry_changed_id == 0)
     {
       tree_view->search_entry_changed_id =
@@ -10367,9 +10258,6 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
                    (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
                    tree_view);
   g_source_set_name_by_id (tree_view->typeselect_flush_timeout, "[gtk] gtk_tree_view_search_entry_flush_timeout");
-
-  /* send focus-in event */
-  send_focus_change (tree_view->search_entry, device, TRUE);
 
   /* search first matching iter */
   gtk_tree_view_search_init (tree_view->search_entry, tree_view);
@@ -13709,9 +13597,9 @@ gtk_tree_view_set_search_entry (GtkTreeView *tree_view,
 
       g_object_unref (tree_view->search_entry);
     }
-  else if (tree_view->search_window)
+  else if (tree_view->search_popover)
     {
-      gtk_tree_view_destroy_search_window (tree_view);
+      gtk_tree_view_destroy_search_popover (tree_view);
     }
 
   if (entry)
@@ -13745,55 +13633,10 @@ gtk_tree_view_set_search_entry (GtkTreeView *tree_view,
     }
 }
 
-/**
- * gtk_tree_view_set_search_position_func:
- * @tree_view: A #GtkTreeView
- * @func: (allow-none): the function to use to position the search dialog, or %NULL
- *    to use the default search position function
- * @data: (allow-none): user data to pass to @func, or %NULL
- * @destroy: (allow-none): Destroy notifier for @data, or %NULL
- *
- * Sets the function to use when positioning the search dialog.
- **/
-void
-gtk_tree_view_set_search_position_func (GtkTreeView                   *tree_view,
-				        GtkTreeViewSearchPositionFunc  func,
-				        gpointer                       user_data,
-				        GDestroyNotify                 destroy)
-{
-  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-
-  if (tree_view->search_position_destroy)
-    tree_view->search_position_destroy (tree_view->search_position_user_data);
-
-  tree_view->search_position_func = func;
-  tree_view->search_position_user_data = user_data;
-  tree_view->search_position_destroy = destroy;
-  if (tree_view->search_position_func == NULL)
-    tree_view->search_position_func = gtk_tree_view_search_position_func;
-}
-
-/**
- * gtk_tree_view_get_search_position_func: (skip)
- * @tree_view: A #GtkTreeView
- *
- * Returns the positioning function currently in use.
- *
- * Returns: the currently used function for positioning the search dialog.
- */
-GtkTreeViewSearchPositionFunc
-gtk_tree_view_get_search_position_func (GtkTreeView *tree_view)
-{
-  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
-
-  return tree_view->search_position_func;
-}
-
-
 static void
-gtk_tree_view_search_window_hide (GtkWidget   *search_window,
-                                  GtkTreeView *tree_view,
-                                  GdkDevice   *device)
+gtk_tree_view_search_popover_hide (GtkWidget   *search_popover,
+                                   GtkTreeView *tree_view,
+                                   GdkDevice   *device)
 {
   if (tree_view->disable_popdown)
     return;
@@ -13810,21 +13653,12 @@ gtk_tree_view_search_window_hide (GtkWidget   *search_window,
       tree_view->typeselect_flush_timeout = 0;
     }
 	
-  if (gtk_widget_get_visible (search_window))
+  if (gtk_widget_get_visible (search_popover))
     {
-      /* send focus-in event */
-      send_focus_change (GTK_WIDGET (tree_view->search_entry), device, FALSE);
-      gtk_widget_hide (search_window);
-      gtk_editable_set_text (GTK_EDITABLE(tree_view->search_entry), "");
-      send_focus_change (GTK_WIDGET (tree_view), device, TRUE);
+      gtk_popover_popdown (GTK_POPOVER (search_popover));
+      gtk_editable_set_text (GTK_EDITABLE (tree_view->search_entry), "");
+      gtk_widget_grab_focus (GTK_WIDGET (tree_view));
     }
-}
-
-static void
-gtk_tree_view_search_position_func (GtkTreeView *tree_view,
-				    GtkWidget   *search_window,
-				    gpointer     user_data)
-{
 }
 
 /* Because we're visible but offscreen, we just set a flag in the preedit
@@ -13861,9 +13695,9 @@ gtk_tree_view_search_activate (GtkEntry    *entry,
 {
   GtkTreePath *path;
 
-  gtk_tree_view_search_window_hide (tree_view->search_window,
-                                    tree_view,
-                                    gtk_get_current_event_device ());
+  gtk_tree_view_search_popover_hide (tree_view->search_popover,
+                                     tree_view,
+                                     gtk_get_current_event_device ());
 
   /* If we have a row selected and it's the cursor row, we activate
    * the row XXX */
@@ -13889,13 +13723,11 @@ gtk_tree_view_search_pressed_cb (GtkGesture  *gesture,
   GdkDevice *keyb_device;
   GdkEventSequence *sequence;
   const GdkEvent *event;
-  GtkWidget *widget;
 
   sequence = gtk_gesture_get_last_updated_sequence (gesture);
   event = gtk_gesture_get_last_event (gesture, sequence);
   keyb_device = gdk_device_get_associated_device (gdk_event_get_device (event));
-  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-  gtk_tree_view_search_window_hide (widget, tree_view, keyb_device);
+  gtk_tree_view_search_popover_hide (tree_view->search_popover, tree_view, keyb_device);
 }
 
 static gboolean
@@ -13946,8 +13778,8 @@ gtk_tree_view_search_key_pressed (GtkEventControllerKey *key,
   if (!tree_view->search_custom_entry_set
       && gtk_tree_view_search_key_cancels_search (keyval))
     {
-      gtk_tree_view_search_window_hide (widget, tree_view,
-                                        gtk_get_current_event_device ());
+      gtk_tree_view_search_popover_hide (tree_view->search_popover, tree_view,
+                                         gtk_get_current_event_device ());
       return TRUE;
     }
 
@@ -14012,7 +13844,7 @@ gtk_tree_view_search_key_pressed (GtkEventControllerKey *key,
  *  nothing was found, and TRUE otherwise.
  */
 static gboolean
-gtk_tree_view_search_move (GtkWidget   *window,
+gtk_tree_view_search_move (GtkWidget   *popover,
 			   GtkTreeView *tree_view,
 			   gboolean     up)
 {
