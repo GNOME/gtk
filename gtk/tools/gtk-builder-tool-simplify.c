@@ -676,10 +676,6 @@ property_has_been_removed (Element      *element,
     { "GtkBox", "pack-type", PROP_KIND_PACKING },
     { "GtkHeaderBar", "position", PROP_KIND_PACKING },
     { "GtkPopoverMenu", "position",PROP_KIND_PACKING },
-    { "GtkMenu", "left-attach", PROP_KIND_PACKING },
-    { "GtkMenu", "right-attach", PROP_KIND_PACKING },
-    { "GtkMenu", "top-attach", PROP_KIND_PACKING },
-    { "GtkMenu", "bottom-attach", PROP_KIND_PACKING }
   };
   gchar *canonical_name;
   gboolean found;
