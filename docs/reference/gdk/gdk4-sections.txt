@@ -544,8 +544,6 @@ GdkSeatCapabilities
 GdkGrabStatus
 GdkSeatGrabPrepareFunc
 gdk_seat_get_display
-gdk_seat_grab
-gdk_seat_ungrab
 gdk_seat_get_capabilities
 gdk_seat_get_pointer
 gdk_seat_get_keyboard
