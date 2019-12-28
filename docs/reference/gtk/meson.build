@@ -1,4 +1,6 @@
 private_headers = [
+  'imm-extra.h',
+  'gtkbitmaskprivateimpl.h',
   'gdkpixbufutilsprivate.h',
   'gtkaccelgroupprivate.h',
   'gtkaccelmapprivate.h',
@@ -35,6 +37,7 @@ private_headers = [
   'gtkcssarrayvalueprivate.h',
   'gtkcssbgsizevalueprivate.h',
   'gtkcssbordervalueprivate.h',
+  'gtkcssboxesprivate.h',
   'gtkcsscalcvalueprivate.h',
   'gtkcsscolorvalueprivate.h',
   'gtkcsscornervalueprivate.h',
