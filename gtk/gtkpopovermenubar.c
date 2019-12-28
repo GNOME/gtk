@@ -38,9 +38,8 @@
  *     ╰── popover
  * ]|
  *
- * GtkMenuBar has a single CSS node with name menubar, below which
- * each item has its CSS node, and below that the corresponding
- * popover.
+ * GtkPopoverMenuBar has a single CSS node with name menubar, below which
+ * each item has its CSS node, and below that the corresponding popover.
  *
  * The item whose popover is currently open gets the .active
  * style class.
