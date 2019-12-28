@@ -57,16 +57,14 @@
  * the accelerators which have been added to a particular widget. This widget is
  * set by calling gtk_accel_label_set_accel_widget().
  *
- * For example, a #GtkMenuItem widget may have an accelerator added to emit
+ * For example, a menu item may have an accelerator added to emit
  * the “activate” signal when the “Ctrl+S” key combination is pressed.
- * A #GtkAccelLabel is created and added to the #GtkMenuItem, and
- * gtk_accel_label_set_accel_widget() is called with the #GtkMenuItem as the
+ * A #GtkAccelLabel is created and added to the menu item widget, and
+ * gtk_accel_label_set_accel_widget() is called with the item as the
  * second argument. The #GtkAccelLabel will now display “Ctrl+S” after its label.
  *
- * Note that creating a #GtkMenuItem with gtk_menu_item_new_with_label() (or
- * one of the similar functions for #GtkCheckMenuItem and #GtkRadioMenuItem)
- * automatically adds a #GtkAccelLabel to the #GtkMenuItem and calls
- * gtk_accel_label_set_accel_widget() to set it up for you.
+ * Note that accel labels are typically set up automatically when menus
+ * are created.
  *
  * A #GtkAccelLabel will only display accelerators which have %GTK_ACCEL_VISIBLE
  * set (see #GtkAccelFlags).
@@ -367,8 +365,8 @@ gtk_accel_label_get_accel_widget (GtkAccelLabel *accel_label)
  * @accel_label: a #GtkAccelLabel.
  *
  * Returns the width needed to display the accelerator key(s).
- * This is used by menus to align all of the #GtkMenuItem widgets, and shouldn't
- * be needed by applications.
+ * This is used by menus to align all of the menu item widgets,
+ * and shouldn't be needed by applications.
  *
  * Returns: the width needed to display the accelerator key(s).
  */
