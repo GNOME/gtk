@@ -360,6 +360,7 @@ gtk_popover_menu_focus (GtkWidget        *widget,
     {
       if (GTK_POPOVER_MENU (widget)->open_submenu)
         {
+  g_print ("open submenu\n");
           if (gtk_widget_child_focus (GTK_POPOVER_MENU (widget)->open_submenu, direction))
             return TRUE;
           if (direction == GTK_DIR_LEFT)
@@ -441,6 +442,14 @@ add_arrow_bindings (GtkBindingSet    *binding_set,
 }
 
 static void
+gtk_popover_menu_show (GtkWidget *widget)
+{
+  gtk_popover_menu_set_open_submenu (GTK_POPOVER_MENU (widget), NULL);
+
+  GTK_WIDGET_CLASS (gtk_popover_menu_parent_class)->show (widget);
+}
+
+static void
 gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -454,6 +463,7 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
   widget_class->map = gtk_popover_menu_map;
   widget_class->unmap = gtk_popover_menu_unmap;
   widget_class->focus = gtk_popover_menu_focus;
+  widget_class->show = gtk_popover_menu_show;
 
   g_object_class_install_property (object_class,
                                    PROP_VISIBLE_SUBMENU,
