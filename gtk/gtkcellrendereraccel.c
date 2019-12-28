@@ -126,8 +126,6 @@ struct _GtkCellRendererAccelPrivate
   GdkModifierType accel_mods;
   guint accel_key;
   guint keycode;
-
-  GdkSeat *grab_seat;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkCellRendererAccel, gtk_cell_renderer_accel, GTK_TYPE_CELL_RENDERER_TEXT)
@@ -468,52 +466,15 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   GtkCellRendererAccelPrivate *priv = gtk_cell_renderer_accel_get_instance_private (accel);
   GtkWidget *editable;
   gboolean is_editable;
-  GdkSeat *seat = NULL;
-  GdkSurface *surface;
 
   /* If the cell isn't editable we return NULL. */
   g_object_get (celltext, "editable", &is_editable, NULL);
   if (!is_editable)
     return NULL;
 
-  surface = gtk_native_get_surface (gtk_widget_get_native (widget));
-
-  if (event)
-    seat = gdk_event_get_seat (event);
-  else
-    {
-      GdkDevice *device;
-
-      device = gtk_get_current_event_device ();
-      if (device)
-        seat = gdk_device_get_seat (device);
-    }
-
-  if (!seat || !surface)
-    return NULL;
-
-  if (gdk_seat_grab (seat, surface,
-                     GDK_SEAT_CAPABILITY_ALL, FALSE,
-                     NULL, event, NULL, NULL) != GDK_GRAB_SUCCESS)
-    return NULL;
-
-  priv->grab_seat = seat;
-
   editable = gtk_cell_editable_widget_new (cell, priv->accel_mode, path);
 
   return GTK_CELL_EDITABLE (editable);
-}
-
-static void
-gtk_cell_renderer_accel_ungrab (GtkCellRendererAccel *accel)
-{
-  GtkCellRendererAccelPrivate *priv = gtk_cell_renderer_accel_get_instance_private (accel);
-
-  if (priv->grab_seat)
-    {
-      gdk_seat_ungrab (priv->grab_seat);
-      priv->grab_seat = NULL;
-    }
 }
 
 /* --------------------------------- */
@@ -648,7 +609,6 @@ key_controller_key_pressed (GtkEventControllerKey *key,
 
  out:
   gtk_grab_remove (widget);
-  gtk_cell_renderer_accel_ungrab (GTK_CELL_RENDERER_ACCEL (box->cell));
   gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (widget));
   gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (widget));
 
@@ -664,10 +624,7 @@ key_controller_key_pressed (GtkEventControllerKey *key,
 static void
 gtk_cell_editable_widget_unrealize (GtkWidget *widget)
 {
-  GtkCellEditableWidget *box = (GtkCellEditableWidget*)widget;
-
   gtk_grab_remove (widget);
-  gtk_cell_renderer_accel_ungrab (GTK_CELL_RENDERER_ACCEL (box->cell));
   
   GTK_WIDGET_CLASS (gtk_cell_editable_widget_parent_class)->unrealize (widget); 
 }
