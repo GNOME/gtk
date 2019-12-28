@@ -74,8 +74,7 @@
  * @Title: GtkLabel
  *
  * The #GtkLabel widget displays a small amount of text. As the name
- * implies, most labels are used to label another widget such as a
- * #GtkButton, a #GtkMenuItem, or a #GtkComboBox.
+ * implies, most labels are used to label another widget such as a #GtkButton.
  *
  * # CSS nodes
  *
