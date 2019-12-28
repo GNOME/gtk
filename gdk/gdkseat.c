@@ -25,6 +25,7 @@
 #include "gdkseatprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkintl.h"
+#include "gdkinternals.h"
 
 /**
  * SECTION:gdkseat

@@ -83,18 +83,6 @@ GDK_AVAILABLE_IN_ALL
 GType          gdk_seat_get_type         (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GdkGrabStatus  gdk_seat_grab             (GdkSeat                *seat,
-                                          GdkSurface              *surface,
-                                          GdkSeatCapabilities     capabilities,
-                                          gboolean                owner_events,
-                                          GdkCursor              *cursor,
-                                          const GdkEvent         *event,
-                                          GdkSeatGrabPrepareFunc  prepare_func,
-                                          gpointer                prepare_func_data);
-GDK_AVAILABLE_IN_ALL
-void           gdk_seat_ungrab           (GdkSeat                *seat);
-
-GDK_AVAILABLE_IN_ALL
 GdkDisplay *   gdk_seat_get_display      (GdkSeat             *seat);
 
 GDK_AVAILABLE_IN_ALL

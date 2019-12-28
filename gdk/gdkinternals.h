@@ -266,6 +266,16 @@ void gdk_surface_get_geometry (GdkSurface *surface,
 
 GdkGLContext *gdk_surface_get_shared_data_gl_context (GdkSurface *surface);
 
+GdkGrabStatus  gdk_seat_grab             (GdkSeat                *seat,
+                                          GdkSurface              *surface,
+                                          GdkSeatCapabilities     capabilities,
+                                          gboolean                owner_events,
+                                          GdkCursor              *cursor,
+                                          const GdkEvent         *event,
+                                          GdkSeatGrabPrepareFunc  prepare_func,
+                                          gpointer                prepare_func_data);
+void           gdk_seat_ungrab           (GdkSeat                *seat);
+
 G_END_DECLS
 
 #endif /* __GDK_INTERNALS_H__ */
