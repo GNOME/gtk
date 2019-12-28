@@ -162,9 +162,6 @@
     <link linkend="GtkPaned">
       <inlinegraphic fileref="panes.png" format="PNG"></inlinegraphic>
     </link>
-    <link linkend="GtkMenuBar">
-      <inlinegraphic fileref="menubar.png" format="PNG"></inlinegraphic>
-    </link>
     <link linkend="GtkToolbar">
       <inlinegraphic fileref="toolbar.png" format="PNG"></inlinegraphic>
     </link>
