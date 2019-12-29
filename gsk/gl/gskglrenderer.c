@@ -1602,7 +1602,7 @@ render_inset_shadow_node (GskGLRenderer   *self,
       op->outline = transform_rect (self, builder, &outline_to_blur);
       op->spread = spread * scale;
       op->offset[0] = dx * scale;
-      op->offset[1] = -dy * scale;
+      op->offset[1] = dy * scale;
 
       ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
         { { 0,             0              }, { 0, 1 }, },
