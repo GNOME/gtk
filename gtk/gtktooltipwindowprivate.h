@@ -49,6 +49,15 @@ void            gtk_tooltip_window_set_image_icon_from_gicon    (GtkTooltipWindo
                                                                  GIcon            *gicon);
 void            gtk_tooltip_window_set_custom_widget            (GtkTooltipWindow *window,
                                                                  GtkWidget        *custom_widget);
+void            gtk_tooltip_window_set_relative_to              (GtkTooltipWindow *window,
+                                                                 GtkWidget        *relative_to);
+void            gtk_tooltip_window_position                     (GtkTooltipWindow *window,
+                                                                 GdkRectangle     *rect,
+                                                                 GdkGravity        rect_anchor,
+                                                                 GdkGravity        surface_anchor,
+                                                                 GdkAnchorHints    anchor_hints,
+                                                                 int               dx,
+                                                                 int               dy);
 
 G_END_DECLS
 
