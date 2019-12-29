@@ -727,7 +727,6 @@ static GQuark		quark_input_shape_info = 0;
 static GQuark		quark_pango_context = 0;
 static GQuark		quark_mnemonic_labels = 0;
 static GQuark		quark_tooltip_markup = 0;
-static GQuark		quark_tooltip_window = 0;
 static GQuark           quark_size_groups = 0;
 static GQuark           quark_auto_children = 0;
 static GQuark           quark_widget_path = 0;
@@ -886,7 +885,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_pango_context = g_quark_from_static_string ("gtk-pango-context");
   quark_mnemonic_labels = g_quark_from_static_string ("gtk-mnemonic-labels");
   quark_tooltip_markup = g_quark_from_static_string ("gtk-tooltip-markup");
-  quark_tooltip_window = g_quark_from_static_string ("gtk-tooltip-window");
   quark_size_groups = g_quark_from_static_string ("gtk-widget-size-groups");
   quark_auto_children = g_quark_from_static_string ("gtk-widget-auto-children");
   quark_widget_path = g_quark_from_static_string ("gtk-widget-path");
@@ -2158,10 +2156,8 @@ gtk_widget_set_property (GObject         *object,
 
   switch (prop_id)
     {
-      gboolean tmp;
       gchar *tooltip_markup;
       const gchar *tooltip_text;
-      GtkWindow *tooltip_window;
 
     case PROP_NAME:
       gtk_widget_set_name (widget, g_value_get_string (value));
@@ -2205,7 +2201,6 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_has_tooltip (widget, g_value_get_boolean (value));
       break;
     case PROP_TOOLTIP_MARKUP:
-      tooltip_window = g_object_get_qdata (object, quark_tooltip_window);
       tooltip_markup = g_value_dup_string (value);
 
       /* Treat an empty string as a NULL string,
@@ -2220,14 +2215,11 @@ gtk_widget_set_property (GObject         *object,
       g_object_set_qdata_full (object, quark_tooltip_markup,
 			       tooltip_markup, g_free);
 
-      tmp = (tooltip_window != NULL || tooltip_markup != NULL);
-      gtk_widget_set_has_tooltip (widget, tmp);
+      gtk_widget_set_has_tooltip (widget, tooltip_markup != NULL);
       if (_gtk_widget_get_visible (widget))
         gtk_widget_trigger_tooltip_query (widget);
       break;
     case PROP_TOOLTIP_TEXT:
-      tooltip_window = g_object_get_qdata (object, quark_tooltip_window);
-
       tooltip_text = g_value_get_string (value);
 
       /* Treat an empty string as a NULL string,
@@ -2241,8 +2233,7 @@ gtk_widget_set_property (GObject         *object,
       g_object_set_qdata_full (object, quark_tooltip_markup,
                                tooltip_markup, g_free);
 
-      tmp = (tooltip_window != NULL || tooltip_markup != NULL);
-      gtk_widget_set_has_tooltip (widget, tmp);
+      gtk_widget_set_has_tooltip (widget, tooltip_markup != NULL);
       if (_gtk_widget_get_visible (widget))
         gtk_widget_trigger_tooltip_query (widget);
       break;
@@ -10648,60 +10639,6 @@ gtk_widget_remove_mnemonic_label (GtkWidget *widget,
   if (new_list)
     g_object_set_qdata_full (G_OBJECT (widget), quark_mnemonic_labels,
 			     new_list, (GDestroyNotify) g_slist_free);
-}
-
-/**
- * gtk_widget_set_tooltip_window:
- * @widget: a #GtkWidget
- * @custom_window: (allow-none): a #GtkWindow, or %NULL
- *
- * Replaces the default window used for displaying
- * tooltips with @custom_window. GTK+ will take care of showing and
- * hiding @custom_window at the right moment, to behave likewise as
- * the default tooltip window. If @custom_window is %NULL, the default
- * tooltip window will be used.
- */
-void
-gtk_widget_set_tooltip_window (GtkWidget *widget,
-			       GtkWindow *custom_window)
-{
-  gboolean has_tooltip;
-  gchar *tooltip_markup;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (custom_window == NULL || GTK_IS_WINDOW (custom_window));
-
-  tooltip_markup = g_object_get_qdata (G_OBJECT (widget), quark_tooltip_markup);
-
-  if (custom_window)
-    g_object_ref (custom_window);
-
-  g_object_set_qdata_full (G_OBJECT (widget), quark_tooltip_window,
-			   custom_window, g_object_unref);
-
-  has_tooltip = (custom_window != NULL || tooltip_markup != NULL);
-  gtk_widget_set_has_tooltip (widget, has_tooltip);
-
-  if (has_tooltip && _gtk_widget_get_visible (widget))
-    gtk_widget_trigger_tooltip_query (widget);
-}
-
-/**
- * gtk_widget_get_tooltip_window:
- * @widget: a #GtkWidget
- *
- * Returns the #GtkWindow of the current tooltip. This can be the
- * GtkWindow created by default, or the custom tooltip window set
- * using gtk_widget_set_tooltip_window().
- *
- * Returns: (transfer none): The #GtkWindow of the current tooltip.
- */
-GtkWindow *
-gtk_widget_get_tooltip_window (GtkWidget *widget)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  return g_object_get_qdata (G_OBJECT (widget), quark_tooltip_window);
 }
 
 /**
