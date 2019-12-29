@@ -779,11 +779,6 @@ void   gtk_widget_remove_mnemonic_label (GtkWidget *widget,
                                          GtkWidget *label);
 
 GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_set_tooltip_window    (GtkWidget   *widget,
-                                                        GtkWindow   *custom_window);
-GDK_AVAILABLE_IN_ALL
-GtkWindow *gtk_widget_get_tooltip_window    (GtkWidget   *widget);
-GDK_AVAILABLE_IN_ALL
 void       gtk_widget_trigger_tooltip_query (GtkWidget   *widget);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_set_tooltip_text      (GtkWidget   *widget,
