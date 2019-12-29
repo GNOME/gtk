@@ -605,11 +605,8 @@ gtk_popover_realize (GtkWidget *widget)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GdkRectangle parent_rect;
   GdkDisplay *display;
   GdkSurface *parent;
-
-  gtk_widget_get_surface_allocation (priv->relative_to, &parent_rect);
 
   display = gtk_widget_get_display (priv->relative_to);
 
@@ -706,10 +703,8 @@ gtk_popover_map (GtkWidget *widget)
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *child;
-  GdkRectangle parent_rect;
 
   gdk_surface_show (priv->surface);
-  gtk_widget_get_surface_allocation (priv->relative_to, &parent_rect);
   move_to_rect (popover);
 
   priv->surface_transform_changed_cb =
