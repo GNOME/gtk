@@ -37,14 +37,6 @@
 #include "gtkaccessible.h"
 #include "gtknative.h"
 
-#ifdef GDK_WINDOWING_WAYLAND
-#include "wayland/gdkwayland.h"
-#endif
-#ifdef GDK_WINDOWING_MIR
-#include "mir/gdkmir.h"
-#endif
-
-
 /**
  * SECTION:gtktooltip
  * @Short_description: Add tips to your widgets
