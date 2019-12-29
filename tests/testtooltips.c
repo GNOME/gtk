@@ -280,9 +280,8 @@ main (int argc, char *argv[])
   GtkWidget *button;
   GtkWidget *label;
   GtkWidget *tooltip;
-
-  GtkWidget *tooltip_window;
-  GtkWidget *tooltip_button;
+  GtkWidget *popover;
+  GtkWidget *box2;
 
   GtkWidget *tree_view;
   GtkTreeViewColumn *column;
@@ -356,17 +355,6 @@ main (int argc, char *argv[])
   button = gtk_check_button_new_with_label ("This one has a custom tooltip window!");
   gtk_container_add (GTK_CONTAINER (box), button);
 
-  tooltip_window = gtk_window_new (GTK_WINDOW_POPUP);
-  tooltip_button = gtk_label_new ("blaat!");
-  gtk_container_add (GTK_CONTAINER (tooltip_window), tooltip_button);
-  gtk_widget_show (tooltip_button);
-
-  gtk_widget_set_tooltip_window (button, GTK_WINDOW (tooltip_window));
-  gtk_window_set_type_hint (GTK_WINDOW (tooltip_window),
-                            GDK_SURFACE_TYPE_HINT_TOOLTIP);
-  gtk_window_set_transient_for (GTK_WINDOW (tooltip_window),
-                                GTK_WINDOW (window));
-
   g_signal_connect (button, "query-tooltip",
 		    G_CALLBACK (query_tooltip_custom_cb), NULL);
   g_object_set (button, "has-tooltip", TRUE, NULL);
@@ -435,6 +423,24 @@ main (int argc, char *argv[])
 		    G_CALLBACK (query_tooltip_drawing_area_cb), NULL);
   gtk_container_add (GTK_CONTAINER (box), drawing_area);
 
+  button = gtk_menu_button_new ();
+  gtk_widget_set_halign (button, GTK_ALIGN_END);
+  gtk_container_add (GTK_CONTAINER (box), button);
+  popover = gtk_popover_new (NULL);
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), popover);
+  box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_container_add (GTK_CONTAINER (popover), box2);
+
+  button = gtk_label_new ("Custom tooltip II");
+  label = gtk_label_new ("See, custom, too");
+  g_object_ref_sink (label);
+  g_object_set (button, "has-tooltip", TRUE, NULL);
+  gtk_container_add (GTK_CONTAINER (box2), button);
+  g_signal_connect (button, "query-tooltip",
+		    G_CALLBACK (query_tooltip_label_cb), label);
+
+  gtk_container_add (GTK_CONTAINER (box2), gtk_label_new ("Some\nother\nstuff"));
+
   button = gtk_label_new ("Custom tooltip I");
   label = gtk_label_new ("See, custom");
   g_object_ref_sink (label);
@@ -442,14 +448,6 @@ main (int argc, char *argv[])
   g_signal_connect (button, "query-tooltip",
 		    G_CALLBACK (query_tooltip_label_cb), label);
   gtk_container_add (GTK_CONTAINER (box), button);
-
-  button = gtk_label_new ("Custom tooltip II");
-  label = gtk_label_new ("See, custom, too");
-  g_object_ref_sink (label);
-  g_object_set (button, "has-tooltip", TRUE, NULL);
-  gtk_container_add (GTK_CONTAINER (box), button);
-  g_signal_connect (button, "query-tooltip",
-		    G_CALLBACK (query_tooltip_label_cb), label);
 
   /* Done! */
   gtk_widget_show (window);
