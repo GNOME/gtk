@@ -95,8 +95,6 @@ struct _GtkTooltip
 
   GtkWidget *window;
 
-  GtkWindow *current_window;
-
   GtkWidget *tooltip_widget;
 
   GdkSurface *last_surface;
@@ -116,7 +114,7 @@ struct _GtkTooltipClass
   GObjectClass parent_class;
 };
 
-#define GTK_TOOLTIP_VISIBLE(tooltip) ((tooltip)->current_window && gtk_widget_get_visible (GTK_WIDGET((tooltip)->current_window)))
+#define GTK_TOOLTIP_VISIBLE(tooltip) ((tooltip)->window && gtk_widget_get_visible (GTK_WIDGET((tooltip)->window)))
 
 static void       gtk_tooltip_dispose              (GObject         *object);
 
@@ -134,16 +132,7 @@ static void       gtk_tooltip_handle_event_internal (GdkEventType   event_type,
                                                      gdouble       dx,
                                                      gdouble       dy);
 
-static inline GQuark tooltip_quark (void)
-{
-  static GQuark quark;
-
-  if G_UNLIKELY (quark == 0)
-    quark = g_quark_from_static_string ("gdk-display-current-tooltip");
-  return quark;
-}
-
-#define quark_current_tooltip tooltip_quark()
+static GQuark quark_current_tooltip;
 
 G_DEFINE_TYPE (GtkTooltip, gtk_tooltip, G_TYPE_OBJECT);
 
@@ -151,6 +140,8 @@ static void
 gtk_tooltip_class_init (GtkTooltipClass *klass)
 {
   GObjectClass *object_class;
+
+  quark_current_tooltip = g_quark_from_static_string ("gdk-display-current-tooltip");
 
   object_class = G_OBJECT_CLASS (klass);
 
@@ -164,8 +155,6 @@ gtk_tooltip_init (GtkTooltip *tooltip)
   tooltip->browse_mode_timeout_id = 0;
 
   tooltip->browse_mode_enabled = FALSE;
-
-  tooltip->current_window = NULL;
 
   tooltip->tooltip_widget = NULL;
 
@@ -205,7 +194,7 @@ gtk_tooltip_dispose (GObject *object)
       g_signal_handlers_disconnect_by_func (display,
 					    gtk_tooltip_display_closed,
 					    tooltip);
-      gtk_widget_destroy (tooltip->window);
+      gtk_tooltip_window_set_relative_to (GTK_TOOLTIP_WINDOW (tooltip->window), NULL);
       tooltip->window = NULL;
     }
 
@@ -479,34 +468,27 @@ static void
 gtk_tooltip_set_last_surface (GtkTooltip *tooltip,
                               GdkSurface  *surface)
 {
-  GtkWidget *window_widget = NULL;
-
   if (tooltip->last_surface == surface)
     return;
 
   if (tooltip->last_surface)
     g_object_remove_weak_pointer (G_OBJECT (tooltip->last_surface),
-				  (gpointer *) &tooltip->last_surface);
+                                  (gpointer *) &tooltip->last_surface);
 
   tooltip->last_surface = surface;
 
   if (tooltip->last_surface)
     g_object_add_weak_pointer (G_OBJECT (tooltip->last_surface),
-			       (gpointer *) &tooltip->last_surface);
+                               (gpointer *) &tooltip->last_surface);
 
   if (surface)
-    window_widget = gtk_native_get_for_surface (surface);
-
-  if (window_widget)
-    window_widget = GTK_WIDGET (gtk_widget_get_root (window_widget));
-
-  if (window_widget &&
-      window_widget != tooltip->window &&
-      GTK_IS_WINDOW (window_widget))
-    gtk_window_set_transient_for (GTK_WINDOW (tooltip->window),
-                                  GTK_WINDOW (window_widget));
+    gtk_tooltip_window_set_relative_to (GTK_TOOLTIP_WINDOW (tooltip->window),
+                                        gtk_native_get_for_surface (surface));
   else
-    gtk_window_set_transient_for (GTK_WINDOW (tooltip->window), NULL);
+    {
+      gtk_tooltip_window_set_relative_to (GTK_TOOLTIP_WINDOW (tooltip->window), NULL);
+      tooltip->window = NULL;
+    }
 }
 
 static gboolean
@@ -567,19 +549,17 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   GtkSettings *settings;
   graphene_rect_t anchor_bounds;
   GdkRectangle anchor_rect;
-  GdkSurface *surface;
   GdkSurface *effective_toplevel;
   GtkWidget *toplevel;
   int rect_anchor_dx = 0;
   int cursor_size;
   int anchor_rect_padding;
 
-  gtk_widget_realize (GTK_WIDGET (tooltip->current_window));
-  surface = gtk_native_get_surface (GTK_NATIVE (tooltip->current_window));
+  gtk_widget_realize (GTK_WIDGET (tooltip->window));
 
   tooltip->tooltip_widget = new_tooltip_widget;
 
-  toplevel = GTK_WIDGET (gtk_widget_get_root (new_tooltip_widget));
+  toplevel = GTK_WIDGET (gtk_widget_get_native (new_tooltip_widget));
   if (gtk_widget_compute_bounds (new_tooltip_widget, toplevel, &anchor_bounds))
     {
       anchor_rect = (GdkRectangle) {
@@ -657,16 +637,12 @@ gtk_tooltip_position (GtkTooltip *tooltip,
         }
     }
 
-  gtk_window_set_transient_for (GTK_WINDOW (tooltip->current_window),
-                                GTK_WINDOW (toplevel));
-
-  gdk_surface_move_to_rect (surface,
-                            &anchor_rect,
-                            GDK_GRAVITY_SOUTH,
-                            GDK_GRAVITY_NORTH,
-                            GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X,
-                            rect_anchor_dx, 0);
-  gtk_widget_show (GTK_WIDGET (tooltip->current_window));
+  gtk_tooltip_window_position (GTK_TOOLTIP_WINDOW (tooltip->window),
+                               &anchor_rect,
+                               GDK_GRAVITY_SOUTH,
+                               GDK_GRAVITY_NORTH,
+                               GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X,
+                               rect_anchor_dx, 0);
 }
 
 static void
@@ -704,10 +680,7 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
   if (!return_value)
     return;
 
-  if (!tooltip->current_window)
-    tooltip->current_window = GTK_WINDOW (GTK_TOOLTIP (tooltip)->window);
-
-  /* FIXME: should use tooltip->current_window iso tooltip->window */
+  /* FIXME: should use tooltip->window iso tooltip->window */
   if (display != gtk_widget_get_display (tooltip->window))
     {
       g_signal_handlers_disconnect_by_func (display,
@@ -721,6 +694,8 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
     }
 
   gtk_tooltip_position (tooltip, display, tooltip_widget, device);
+
+  gtk_widget_show (GTK_WIDGET (tooltip->window));
 
   /* Now a tooltip is visible again on the display, make sure browse
    * mode is enabled.
@@ -765,11 +740,8 @@ gtk_tooltip_hide_tooltip (GtkTooltip *tooltip)
       g_source_set_name_by_id (tooltip->browse_mode_timeout_id, "[gtk] tooltip_browse_mode_expired");
     }
 
-  if (tooltip->current_window)
-    {
-      gtk_widget_hide (GTK_WIDGET (tooltip->current_window));
-      tooltip->current_window = NULL;
-    }
+  if (tooltip->window)
+    gtk_widget_hide (tooltip->window);
 }
 
 static gint
@@ -829,7 +801,7 @@ _gtk_tooltip_hide (GtkWidget *widget)
   display = gtk_widget_get_display (widget);
   tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
 
-  if (!tooltip || !GTK_TOOLTIP_VISIBLE (tooltip) || !tooltip->tooltip_widget)
+  if (!tooltip || !tooltip->window || !tooltip->tooltip_widget)
     return;
 
   if (widget == tooltip->tooltip_widget)
