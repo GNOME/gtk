@@ -3614,7 +3614,6 @@ gdk_surface_flush_events (GdkFrameClock *clock,
   _gdk_display_pause_events (surface->display);
 
   gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS);
-
   surface->frame_clock_events_paused = TRUE;
 }
 
@@ -3624,9 +3623,11 @@ gdk_surface_resume_events (GdkFrameClock *clock,
 {
   GdkSurface *surface = GDK_SURFACE (data);
 
-  _gdk_display_unpause_events (surface->display);
-
-  surface->frame_clock_events_paused = FALSE;
+  if (surface->frame_clock_events_paused)
+    {
+      _gdk_display_unpause_events (surface->display);
+      surface->frame_clock_events_paused = FALSE;
+    }
 }
 
 static void
