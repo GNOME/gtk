@@ -103,10 +103,6 @@
 #include "broadway/gdkbroadway.h"
 #endif
 
-#ifdef GDK_WINDOWING_MIR
-#include "mir/gdkmir.h"
-#endif
-
 /**
  * SECTION:gtkwindow
  * @title: GtkWindow
@@ -4849,11 +4845,6 @@ gtk_window_should_use_csd (GtkWindow *window)
       GdkDisplay *gdk_display = gtk_widget_get_display (GTK_WIDGET (window));
       return !gdk_wayland_display_prefers_ssd (gdk_display);
     }
-#endif
-
-#ifdef GDK_WINDOWING_MIR
-  if (GDK_IS_MIR_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
-    return TRUE;
 #endif
 
 #ifdef GDK_WINDOWING_WIN32
