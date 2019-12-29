@@ -705,12 +705,7 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
     return;
 
   if (!tooltip->current_window)
-    {
-      if (gtk_widget_get_tooltip_window (tooltip_widget))
-        tooltip->current_window = gtk_widget_get_tooltip_window (tooltip_widget);
-      else
-        tooltip->current_window = GTK_WINDOW (GTK_TOOLTIP (tooltip)->window);
-    }
+    tooltip->current_window = GTK_WINDOW (GTK_TOOLTIP (tooltip)->window);
 
   /* FIXME: should use tooltip->current_window iso tooltip->window */
   if (display != gtk_widget_get_display (tooltip->window))
