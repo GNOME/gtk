@@ -290,6 +290,51 @@ node_supports_transform (GskRenderNode *node)
   return FALSE;
 }
 
+static inline void
+load_vertex_data_with_region (GskQuadVertex        vertex_data[GL_N_VERTICES],
+                              GskRenderNode       *node,
+                              RenderOpBuilder     *builder,
+                              const TextureRegion *r,
+                              gboolean             flip_y)
+{
+  const float min_x = builder->dx + node->bounds.origin.x;
+  const float min_y = builder->dy + node->bounds.origin.y;
+  const float max_x = min_x + node->bounds.size.width;
+  const float max_y = min_y + node->bounds.size.height;
+  const float y1 = flip_y ? r->y2 : r->y;
+  const float y2 = flip_y ? r->y  : r->y2;
+
+  vertex_data[0].position[0] = min_x;
+  vertex_data[0].position[1] = min_y;
+  vertex_data[0].uv[0] = r->x;
+  vertex_data[0].uv[1] = y1;
+
+  vertex_data[1].position[0] = min_x;
+  vertex_data[1].position[1] = max_y;
+  vertex_data[1].uv[0] = r->x;
+  vertex_data[1].uv[1] = y2;
+
+  vertex_data[2].position[0] = max_x;
+  vertex_data[2].position[1] = min_y;
+  vertex_data[2].uv[0] = r->x2;
+  vertex_data[2].uv[1] = y1;
+
+  vertex_data[3].position[0] = max_x;
+  vertex_data[3].position[1] = max_y;
+  vertex_data[3].uv[0] = r->x2;
+  vertex_data[3].uv[1] = y2;
+
+  vertex_data[4].position[0] = min_x;
+  vertex_data[4].position[1] = max_y;
+  vertex_data[4].uv[0] = r->x;
+  vertex_data[4].uv[1] = y2;
+
+  vertex_data[5].position[0] = max_x;
+  vertex_data[5].position[1] = min_y;
+  vertex_data[5].uv[0] = r->x2;
+  vertex_data[5].uv[1] = y1;
+}
+
 static void
 load_vertex_data (GskQuadVertex    vertex_data[GL_N_VERTICES],
                   GskRenderNode   *node,
@@ -887,13 +932,13 @@ render_texture_node (GskGLRenderer       *self,
 {
   GdkTexture *texture = gsk_texture_node_get_texture (node);
   const int max_texture_size = gsk_gl_driver_get_max_texture_size (self->gl_driver);
-  const float min_x = builder->dx + node->bounds.origin.x;
-  const float min_y = builder->dy + node->bounds.origin.y;
-  const float max_x = min_x + node->bounds.size.width;
-  const float max_y = min_y + node->bounds.size.height;
 
   if (texture->width > max_texture_size || texture->height > max_texture_size)
     {
+      const float min_x = builder->dx + node->bounds.origin.x;
+      const float min_y = builder->dy + node->bounds.origin.y;
+      const float max_x = min_x + node->bounds.size.width;
+      const float max_y = min_y + node->bounds.size.height;
       const float scale_x = (max_x - min_x) / texture->width;
       const float scale_y = (max_y - min_y) / texture->height;
       TextureSlice *slices;
@@ -934,15 +979,10 @@ render_texture_node (GskGLRenderer       *self,
       ops_set_program (builder, &self->blit_program);
       ops_set_texture (builder, r.texture_id);
 
-      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-        { { min_x, min_y }, { r.x,  r.y  }, },
-        { { min_x, max_y }, { r.x,  r.y2 }, },
-        { { max_x, min_y }, { r.x2, r.y  }, },
-
-        { { max_x, max_y }, { r.x2, r.y2 }, },
-        { { min_x, max_y }, { r.x,  r.y2 }, },
-        { { max_x, min_y }, { r.x2, r.y  }, },
-      });
+      load_vertex_data_with_region (ops_draw (builder, NULL),
+                                    node, builder,
+                                    &r,
+                                    FALSE);
     }
 }
 
@@ -1002,11 +1042,6 @@ render_transform_node (GskGLRenderer   *self,
                                    &region, &is_offscreen,
                                    RESET_CLIP | RESET_OPACITY))
           {
-            const float min_x = child->bounds.origin.x;
-            const float min_y = child->bounds.origin.y;
-            const float max_x = min_x + child->bounds.size.width;
-            const float max_y = min_y + child->bounds.size.height;
-
             /* For non-trivial transforms, we draw everything on a texture and then
              * draw the texture transformed. */
             /* TODO: We should compute a modelview containing only the "non-trivial"
@@ -1017,35 +1052,10 @@ render_transform_node (GskGLRenderer   *self,
             ops_set_texture (builder, region.texture_id);
             ops_set_program (builder, &self->blit_program);
 
-            if (is_offscreen)
-              {
-                const GskQuadVertex offscreen_vertex_data[GL_N_VERTICES] = {
-                  { { min_x, min_y }, { region.x,  region.y2 }, },
-                  { { min_x, max_y }, { region.x,  region.y  }, },
-                  { { max_x, min_y }, { region.x2, region.y2 }, },
-
-                  { { max_x, max_y }, { region.x2, region.y  }, },
-                  { { min_x, max_y }, { region.x,  region.y  }, },
-                  { { max_x, min_y }, { region.x2, region.y2 }, },
-                };
-
-                ops_draw (builder, offscreen_vertex_data);
-              }
-            else
-              {
-                const GskQuadVertex onscreen_vertex_data[GL_N_VERTICES] = {
-                  { { min_x, min_y }, { region.x,  region.y  }, },
-                  { { min_x, max_y }, { region.x,  region.y2 }, },
-                  { { max_x, min_y }, { region.x2, region.y  }, },
-
-                  { { max_x, max_y }, { region.x2, region.y2 }, },
-                  { { min_x, max_y }, { region.x,  region.y2 }, },
-                  { { max_x, min_y }, { region.x2, region.y  }, },
-                };
-
-                ops_draw (builder, onscreen_vertex_data);
-              }
-
+            load_vertex_data_with_region (ops_draw (builder, NULL),
+                                          child, builder,
+                                          &region,
+                                          is_offscreen);
             ops_pop_modelview (builder);
           }
       }
@@ -1063,10 +1073,6 @@ render_opacity_node (GskGLRenderer   *self,
 
   if (gsk_render_node_get_node_type (child) == GSK_CONTAINER_NODE)
     {
-      const float min_x = builder->dx + node->bounds.origin.x;
-      const float min_y = builder->dy + node->bounds.origin.y;
-      const float max_x = min_x + node->bounds.size.width;
-      const float max_y = min_y + node->bounds.size.height;
       gboolean is_offscreen;
       TextureRegion region;
 
@@ -1084,15 +1090,10 @@ render_opacity_node (GskGLRenderer   *self,
       ops_set_program (builder, &self->blit_program);
       ops_set_texture (builder, region.texture_id);
 
-      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-        { { min_x, min_y }, { region.x,  region.y2 }, },
-        { { min_x, max_y }, { region.x,  region.y  }, },
-        { { max_x, min_y }, { region.x2, region.y2 }, },
-
-        { { max_x, max_y }, { region.x2, region.y  }, },
-        { { min_x, max_y }, { region.x,  region.y  }, },
-        { { max_x, min_y }, { region.x2, region.y2 }, },
-      });
+      load_vertex_data_with_region (ops_draw (builder, NULL),
+                                    node, builder,
+                                    &region,
+                                    is_offscreen);
     }
   else
     {
@@ -1204,10 +1205,6 @@ render_rounded_clip_node (GskGLRenderer       *self,
     }
   else
     {
-      const float min_x = builder->dx + node->bounds.origin.x;
-      const float min_y = builder->dy + node->bounds.origin.y;
-      const float max_x = min_x + node->bounds.size.width;
-      const float max_y = min_y + node->bounds.size.height;
       graphene_matrix_t scale_matrix;
       gboolean is_offscreen;
       TextureRegion region;
@@ -1240,15 +1237,7 @@ render_rounded_clip_node (GskGLRenderer       *self,
       ops_set_program (builder, &self->blit_program);
       ops_set_texture (builder, region.texture_id);
 
-      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-        { { min_x, min_y }, { 0, 1 }, },
-        { { min_x, max_y }, { 0, 0 }, },
-        { { max_x, min_y }, { 1, 1 }, },
-
-        { { max_x, max_y }, { 1, 0 }, },
-        { { min_x, max_y }, { 0, 0 }, },
-        { { max_x, min_y }, { 1, 1 }, },
-      });
+      load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
     }
   /* Else this node is entirely out of the current clip node and we don't draw it anyway. */
 }
@@ -1258,10 +1247,6 @@ render_color_matrix_node (GskGLRenderer       *self,
                           GskRenderNode       *node,
                           RenderOpBuilder     *builder)
 {
-  const float min_x = builder->dx + node->bounds.origin.x;
-  const float min_y = builder->dy + node->bounds.origin.y;
-  const float max_x = min_x + node->bounds.size.width;
-  const float max_y = min_y + node->bounds.size.height;
   GskRenderNode *child = gsk_color_matrix_node_get_child (node);
   TextureRegion region;
   gboolean is_offscreen;
@@ -1283,34 +1268,10 @@ render_color_matrix_node (GskGLRenderer       *self,
 
   ops_set_texture (builder, region.texture_id);
 
-  if (is_offscreen)
-    {
-      GskQuadVertex offscreen_vertex_data[GL_N_VERTICES] = {
-        { { min_x, min_y }, { region.x,  region.y2 }, },
-        { { min_x, max_y }, { region.x,  region.y  }, },
-        { { max_x, min_y }, { region.x2, region.y2 }, },
-
-        { { max_x, max_y }, { region.x2, region.y  }, },
-        { { min_x, max_y }, { region.x,  region.y  }, },
-        { { max_x, min_y }, { region.x2, region.y2 }, },
-      };
-
-      ops_draw (builder, offscreen_vertex_data);
-    }
-  else
-    {
-      const GskQuadVertex onscreen_vertex_data[GL_N_VERTICES] = {
-        { { min_x, min_y }, { region.x,  region.y }, },
-        { { min_x, max_y }, { region.x,  region.y2 }, },
-        { { max_x, min_y }, { region.x2, region.y }, },
-
-        { { max_x, max_y }, { region.x2, region.y2 }, },
-        { { min_x, max_y }, { region.x,  region.y2 }, },
-        { { max_x, min_y }, { region.x2, region.y }, },
-      };
-
-      ops_draw (builder, onscreen_vertex_data);
-    }
+  load_vertex_data_with_region (ops_draw (builder, NULL),
+                                node, builder,
+                                &region,
+                                is_offscreen);
 }
 
 static inline int
@@ -1633,10 +1594,6 @@ render_inset_shadow_node (GskGLRenderer   *self,
   /* Use a clip to cut away the unwanted parts outside of the original outline */
   {
     const gboolean needs_clip = !gsk_rounded_rect_is_rectilinear (node_outline);
-    const float min_x = builder->dx + node->bounds.origin.x;
-    const float min_y = builder->dy + node->bounds.origin.y;
-    const float max_x = min_x + node->bounds.size.width;
-    const float max_y = min_y + node->bounds.size.height;
     const float tx1 = blur_extra / 2.0 * scale / texture_width;
     const float tx2 = 1.0 - tx1;
     const float ty1 = blur_extra / 2.0 * scale / texture_height;
@@ -1653,15 +1610,11 @@ render_inset_shadow_node (GskGLRenderer   *self,
 
     ops_set_program (builder, &self->blit_program);
     ops_set_texture (builder, blurred_texture_id);
-    ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-      { { min_x, min_y }, { tx1, ty2 }, },
-      { { min_x, max_y }, { tx1, ty1 }, },
-      { { max_x, min_y }, { tx2, ty2 }, },
 
-      { { max_x, max_y }, { tx2, ty1 }, },
-      { { min_x, max_y }, { tx1, ty1 }, },
-      { { max_x, min_y }, { tx2, ty2 }, },
-    });
+    load_vertex_data_with_region (ops_draw (builder, NULL),
+                                  node, builder,
+                                  &(TextureRegion) { 0, tx1, ty1, tx2, ty2 },
+                                  TRUE);
 
     if (needs_clip)
       ops_pop_clip (builder);
@@ -2250,10 +2203,6 @@ render_repeat_node (GskGLRenderer   *self,
                     GskRenderNode   *node,
                     RenderOpBuilder *builder)
 {
-  const float min_x = builder->dx + node->bounds.origin.x;
-  const float min_y = builder->dy + node->bounds.origin.y;
-  const float max_x = min_x + node->bounds.size.width;
-  const float max_y = min_y + node->bounds.size.height;
   GskRenderNode *child = gsk_repeat_node_get_child (node);
   const graphene_rect_t *child_bounds = gsk_repeat_node_peek_child_bounds (node);
   TextureRegion region;
@@ -2311,34 +2260,10 @@ render_repeat_node (GskGLRenderer   *self,
       op->texture_rect[3] = region.y2;
     }
 
-  if (is_offscreen)
-    {
-      const GskQuadVertex offscreen_vertex_data[GL_N_VERTICES] = {
-        { { min_x, min_y }, { region.x,  region.y2 }, },
-        { { min_x, max_y }, { region.x,  region.y  }, },
-        { { max_x, min_y }, { region.x2, region.y2 }, },
-
-        { { max_x, max_y }, { region.x2, region.y  }, },
-        { { min_x, max_y }, { region.x,  region.y  }, },
-        { { max_x, min_y }, { region.x2, region.y2 }, },
-      };
-
-      ops_draw (builder, offscreen_vertex_data);
-    }
-  else
-    {
-      const GskQuadVertex onscreen_vertex_data[GL_N_VERTICES] = {
-        { { min_x, min_y }, { region.x,  region.y  }, },
-        { { min_x, max_y }, { region.x,  region.y2 }, },
-        { { max_x, min_y }, { region.x2, region.y  }, },
-
-        { { max_x, max_y }, { region.x2, region.y2 }, },
-        { { min_x, max_y }, { region.x,  region.y2 }, },
-        { { max_x, min_y }, { region.x2, region.y  }, },
-      };
-
-      ops_draw (builder, onscreen_vertex_data);
-    }
+  load_vertex_data_with_region (ops_draw (builder, NULL),
+                                node, builder,
+                                &region,
+                                is_offscreen);
 }
 
 static inline void
