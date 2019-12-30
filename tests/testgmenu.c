@@ -641,7 +641,7 @@ main (int argc, char *argv[])
        exit (1);
     }
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_container_add (GTK_CONTAINER (window), box);

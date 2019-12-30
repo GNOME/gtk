@@ -72,7 +72,7 @@ do_css_basics (GtkWidget *do_widget)
       GtkTextBuffer *text;
       GBytes *bytes;
 
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "CSS Basics");
       gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (do_widget));
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);

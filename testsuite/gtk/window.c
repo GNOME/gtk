@@ -67,7 +67,7 @@ test_default_size (void)
   gint w, h;
   gboolean done;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   if (interactive)
     {
       GtkEventController *controller = gtk_event_controller_key_new ();
@@ -155,7 +155,7 @@ test_resize (void)
   gint w, h;
   gboolean done;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   if (interactive)
     {
       GtkEventController *controller = gtk_event_controller_key_new ();
@@ -211,36 +211,6 @@ test_resize (void)
 }
 
 static void
-test_resize_popup (void)
-{
-  GtkWidget *window;
-  gint w, h;
-  gboolean done;
-
-  /* testcase for the dnd window */
-  window = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_window_set_display (GTK_WINDOW (window), gdk_display_get_default ());
-  gtk_window_resize (GTK_WINDOW (window), 1, 1);
-  gtk_window_get_size (GTK_WINDOW (window), &w, &h);
-  g_assert_cmpint (w, ==, 1);
-  g_assert_cmpint (h, ==, 1);
-
-  gtk_widget_show (window);
-
-  done = FALSE;
-  if (!interactive)
-    g_timeout_add (200, stop_main, &done);
-  while (!done)
-    g_main_context_iteration (NULL, TRUE);
-
-  gtk_window_get_size (GTK_WINDOW (window), &w, &h);
-  g_assert_cmpint (w, ==, 1);
-  g_assert_cmpint (h, ==, 1);
-
-  gtk_widget_destroy (window);
-}
-
-static void
 test_show_hide (void)
 {
   GtkWidget *window;
@@ -251,7 +221,7 @@ test_show_hide (void)
 
   /* test that hide/show does not affect the size */
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
 
   gtk_widget_show (window);
 
@@ -305,7 +275,6 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/window/default-size", test_default_size);
   g_test_add_func ("/window/resize", test_resize);
-  g_test_add_func ("/window/resize-popup", test_resize_popup);
   g_test_add_func ("/window/show-hide", test_show_hide);
 
   return g_test_run ();

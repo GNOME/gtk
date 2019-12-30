@@ -248,7 +248,7 @@ main (int argc, char *argv[])
   add_child_tests (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0));
   add_child_tests (gtk_paned_new (GTK_ORIENTATION_HORIZONTAL));
   add_child_tests (gtk_grid_new ());
-  add_child_tests (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+  add_child_tests (gtk_window_new ());
   add_child_tests (gtk_assistant_new ());
   add_child_tests (gtk_frame_new ("frame"));
   add_child_tests (gtk_expander_new ("expander"));

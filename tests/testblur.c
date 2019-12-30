@@ -94,7 +94,7 @@ main (int argc, char **argv)
 
   gtk_init ();
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   blur_box = g_object_new (gtk_blur_box_get_type (),

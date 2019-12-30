@@ -68,7 +68,7 @@ window_creation_function (GtkNotebook *source_notebook,
 {
   GtkWidget *window, *notebook;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   notebook = gtk_notebook_new ();
   g_signal_connect (notebook, "create-window",
                     G_CALLBACK (window_creation_function), NULL);
@@ -327,7 +327,7 @@ main (gint argc, gchar *argv[])
 
   gtk_init ();
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   grid = gtk_grid_new ();
 
   gtk_grid_attach (GTK_GRID (grid),

@@ -112,7 +112,7 @@ test_simple_row (void)
   GtkLayoutChild *lc;
   int minimum, natural;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   parent = g_object_new (GTK_TYPE_GIZMO, NULL);
   gtk_container_add (GTK_CONTAINER (window), parent);
 
@@ -205,7 +205,7 @@ test_simple_column (void)
   GtkLayoutChild *lc;
   int minimum, natural;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   parent = g_object_new (GTK_TYPE_GIZMO, NULL);
   gtk_container_add (GTK_CONTAINER (window), parent);
 
@@ -309,7 +309,7 @@ test_spans (void)
   GtkLayoutChild *lc;
   int minimum, natural;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   parent = g_object_new (GTK_TYPE_GIZMO, NULL);
   gtk_container_add (GTK_CONTAINER (window), parent);
 
@@ -425,7 +425,7 @@ test_homogeneous (void)
   GtkLayoutChild *lc;
   int minimum, natural;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   parent = g_object_new (GTK_TYPE_GIZMO, NULL);
   gtk_container_add (GTK_CONTAINER (window), parent);
 
@@ -550,7 +550,7 @@ test_simple_layout (void)
   GtkGizmo *child3;
   int minimum, natural;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   parent = g_object_new (GTK_TYPE_GIZMO, NULL);
   gtk_container_add (GTK_CONTAINER (window), parent);
 

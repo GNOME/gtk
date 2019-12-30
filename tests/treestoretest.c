@@ -303,7 +303,7 @@ make_window (gint view_type)
   GObject *selection;
 
   /* Make the Widgets/Objects */
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   switch (view_type)
     {
     case 0:

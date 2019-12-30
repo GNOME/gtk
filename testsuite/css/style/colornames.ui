@@ -3,8 +3,8 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkWindow" id="window1">
+    <property name="decorated">0</property>
     <property name="can_focus">False</property>
-    <property name="type">popup</property>
     <child>
       <object class="GtkBox">
         <property name="visible">1</property>

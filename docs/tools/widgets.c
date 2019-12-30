@@ -41,7 +41,7 @@ new_widget_info (const char *name,
     }
   else
     {
-      info->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      info->window = gtk_window_new ();
       info->include_decorations = FALSE;
       gtk_widget_show (widget);
       gtk_container_add (GTK_CONTAINER (info->window), widget);
@@ -711,7 +711,7 @@ create_window (void)
   WidgetInfo *info;
   GtkWidget *widget;
 
-  widget = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  widget = gtk_window_new ();
   info = new_widget_info ("window", widget, MEDIUM);
   info->include_decorations = TRUE;
   gtk_window_set_title (GTK_WINDOW (info->window), "Window");
@@ -1016,7 +1016,7 @@ create_volume_button (void)
   GtkWidget *widget;
   GtkWidget *popup;
 
-  widget = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  widget = gtk_window_new ();
   gtk_widget_set_size_request (widget, 100, 250);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
@@ -1129,7 +1129,7 @@ create_headerbar (void)
   GtkWidget *view;
   GtkWidget *button;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   view = gtk_text_view_new ();
   gtk_widget_show (view);
   gtk_widget_set_size_request (window, 220, 150);

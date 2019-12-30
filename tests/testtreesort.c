@@ -130,7 +130,7 @@ main (int argc, char *argv[])
    * First window - Just a GtkTreeStore
    */
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Words, words, words - Window 1");
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
@@ -257,7 +257,7 @@ main (int argc, char *argv[])
 
   if (smodel)
     {
-      window2 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window2 = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window2), 
 			    "Words, words, words - window 2");
       g_signal_connect (window2, "destroy", G_CALLBACK (quit_cb), &done);
@@ -326,7 +326,7 @@ main (int argc, char *argv[])
   
   if (ssmodel)
     {
-      window3 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window3 = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window3), 
 			    "Words, words, words - Window 3");
       g_signal_connect (window3, "destroy", G_CALLBACK (quit_cb), &done);

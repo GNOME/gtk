@@ -449,7 +449,7 @@ main (int argc, char **argv)
   if (alt_display == NULL)
     alt_display = gdk_display_get_default ();
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   gtk_container_add (GTK_CONTAINER (window),
                      get_window_contents (gtk_widget_get_display (window),

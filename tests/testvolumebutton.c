@@ -84,7 +84,7 @@ main (int    argc,
 
   gtk_init ();
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);
   button = gtk_volume_button_new ();
   button2 = gtk_volume_button_new ();

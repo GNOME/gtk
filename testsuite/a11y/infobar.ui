@@ -3,7 +3,7 @@
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
-    <property name="type">popup</property>
+    <property name="decorated">0</property>
     <child>
       <object class="GtkInfoBar" id="bar1">
         <property name="visible">True</property>

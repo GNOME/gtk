@@ -104,7 +104,7 @@ main (int argc, char *argv[])
           return 1;
         }
 
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       image = gtk_image_new ();
       gtk_image_set_from_paintable (GTK_IMAGE (image), GDK_PAINTABLE (icon));
       g_object_unref (icon);
