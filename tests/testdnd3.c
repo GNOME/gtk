@@ -341,7 +341,7 @@ int main (int argc, char *argv[])
   widget = gtk_color_button_new ();
   gtk_widget_destroy (widget);
   
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_default_size (GTK_WINDOW (window), 640, 480);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);

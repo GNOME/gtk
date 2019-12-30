@@ -85,7 +85,7 @@ on_activate (GApplication *application,
   g_signal_connect (info_bar, "response",
                     G_CALLBACK (on_info_bar_response), widget);
 
-  widget = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  widget = gtk_window_new ();
   gtk_container_add (GTK_CONTAINER (widget), box);
   gtk_widget_show (widget);
   gtk_application_add_window (GTK_APPLICATION (application),

@@ -292,7 +292,7 @@ main()
                                               GTK_STYLE_PROVIDER (provider),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   widget = g_object_new (GTK_TYPE_FOCUS_WIDGET, NULL);
 
   gtk_window_set_decorated (GTK_WINDOW (window), FALSE);

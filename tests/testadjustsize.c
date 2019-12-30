@@ -75,7 +75,7 @@ open_test_window (void)
   GtkWidget *grid;
   int i;
 
-  test_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  test_window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (test_window), "Tests");
 
   g_signal_connect (test_window, "destroy", G_CALLBACK (quit_cb), &done);
@@ -140,7 +140,7 @@ open_control_window (void)
   GtkWidget *box;
   GtkWidget *toggle;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Controls");
 
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
@@ -239,7 +239,7 @@ open_alignment_window (void)
   int i;
   GEnumClass *align_class;
 
-  test_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  test_window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (test_window), "Alignment");
 
   g_signal_connect (test_window, "destroy", G_CALLBACK (quit_cb), &done);
@@ -300,7 +300,7 @@ open_margin_window (void)
     "margin"
   };
 
-  test_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  test_window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (test_window), "Margin");
 
   g_signal_connect (test_window, "destroy", G_CALLBACK (quit_cb), &done);
@@ -327,7 +327,7 @@ open_valigned_label_window (void)
 {
   GtkWidget *window, *box, *label, *frame;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
 
   g_signal_connect (test_window, "destroy", G_CALLBACK (quit_cb), &done);
 

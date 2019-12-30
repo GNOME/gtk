@@ -29,7 +29,6 @@ gtk_tests = [
   ['testcombochange'],
   ['testcellrenderertext'],
   ['testdialog'],
-  ['testdnd'],
   ['testdnd2'],
   ['testdnd3'],
   ['testellipsise'],

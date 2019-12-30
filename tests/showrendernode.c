@@ -162,7 +162,7 @@ main (int argc, char **argv)
 
   gtk_init ();
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   nodeview = g_object_new (GTK_TYPE_NODE_VIEW, NULL);
 
   gtk_window_set_decorated (GTK_WINDOW (window), FALSE);

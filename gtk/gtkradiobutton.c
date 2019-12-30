@@ -97,7 +97,7 @@
  * void create_radio_buttons (void) {
  *
  *    GtkWidget *window, *radio1, *radio2, *box, *entry;
- *    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+ *    window = gtk_window_new ();
  *    box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
  *    gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
  *

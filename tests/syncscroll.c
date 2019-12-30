@@ -22,7 +22,7 @@ main (int argc, char *argv[])
 
   gtk_init ();
 
-  win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  win = gtk_window_new ();
   gtk_window_set_default_size (GTK_WINDOW (win), 640, 480);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);

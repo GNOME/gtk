@@ -175,7 +175,7 @@ main (int argc, char **argv)
 
   gtk_init ();
 
-  window   = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window   = gtk_window_new ();
   sw       = gtk_scrolled_window_new (NULL, NULL);
   textview = g_object_new (my_text_view_get_type (), NULL);
   buffer   = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));

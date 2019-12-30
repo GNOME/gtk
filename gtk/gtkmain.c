@@ -68,7 +68,7 @@
  *   gtk_init ();
  *
  *   // Create the main window
- *   mainwin = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+ *   mainwin = gtk_window_new ();
  *
  *   // Set up our GUI elements
  *
