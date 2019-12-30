@@ -39,6 +39,7 @@
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
 #include "gtknative.h"
+#include "gtkdragiconprivate.h"
 
 #include "gdk/gdkcontentformatsprivate.h"
 #include "gdk/gdktextureprivate.h"
@@ -1045,24 +1046,15 @@ gtk_drag_set_icon_widget_internal (GdkDrag        *drag,
 
   if (!info->icon_window)
     {
-      GdkDisplay *display;
-
-      display = gdk_drag_get_display (drag);
-
-      info->icon_window = gtk_window_new (GTK_WINDOW_POPUP);
-      gtk_window_set_type_hint (GTK_WINDOW (info->icon_window), GDK_SURFACE_TYPE_HINT_DND);
-      gtk_window_set_display (GTK_WINDOW (info->icon_window), display);
+      info->icon_window = gtk_drag_icon_new ();
+      g_object_ref_sink (info->icon_window);
       gtk_widget_set_size_request (info->icon_window, 24, 24);
-      gtk_style_context_remove_class (gtk_widget_get_style_context (info->icon_window), "background");
-
-      gtk_window_set_hardcoded_surface (GTK_WINDOW (info->icon_window),
-                                        gdk_drag_get_drag_surface (drag));
+      gtk_drag_icon_set_surface (GTK_DRAG_ICON (info->icon_window), 
+                                 gdk_drag_get_drag_surface (drag));
       gtk_widget_show (info->icon_window);
     }
 
-  if (gtk_bin_get_child (GTK_BIN (info->icon_window)))
-    gtk_container_remove (GTK_CONTAINER (info->icon_window), gtk_bin_get_child (GTK_BIN (info->icon_window)));
-  gtk_container_add (GTK_CONTAINER (info->icon_window), widget);
+  gtk_drag_icon_set_widget (GTK_DRAG_ICON (info->icon_window), widget);
 }
 
 /**
@@ -1268,7 +1260,7 @@ gtk_drag_remove_icon (GtkDragSourceInfo *info)
       if (info->destroy_icon)
         gtk_widget_destroy (widget);
       else
-        gtk_container_remove (GTK_CONTAINER (info->icon_window), widget);
+        gtk_drag_icon_set_widget (GTK_DRAG_ICON (info->icon_window), NULL);
 
       g_object_unref (widget);
     }
@@ -1278,7 +1270,7 @@ static void
 gtk_drag_source_info_free (GtkDragSourceInfo *info)
 {
   gtk_drag_remove_icon (info);
-  gtk_widget_destroy (info->icon_window);
+  g_object_unref (info->icon_window);
   g_free (info);
 }
 
