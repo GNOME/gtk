@@ -400,7 +400,7 @@ edit_constraint (ConstraintEditorWindow *win,
   ConstraintEditor *editor;
   GListModel *model;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (win));
   gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
   if (constraint)
@@ -440,7 +440,7 @@ edit_guide (ConstraintEditorWindow *win,
   GtkWidget *window;
   GuideEditor *editor;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
   gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (win));
   gtk_window_set_title (GTK_WINDOW (window), "Edit Guide");

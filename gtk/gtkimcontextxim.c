@@ -1632,7 +1632,7 @@ status_window_make_window (StatusWindow *status_window)
   GtkWidget *window;
   GtkWidget *status_label;
 
-  status_window->window = gtk_window_new (GTK_WINDOW_POPUP);
+  status_window->window = gtk_window_new ();
   window = status_window->window;
 
   gtk_window_set_resizable (GTK_WINDOW (window), FALSE);

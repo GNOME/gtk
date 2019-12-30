@@ -98,7 +98,7 @@ main (int argc, char *argv[])
 
   gtk_init ();
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_titlebar (GTK_WINDOW (window), gtk_header_bar_new ());
 
   grid = gtk_grid_new ();

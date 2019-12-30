@@ -41,7 +41,7 @@ test_nonzerox (void)
   GtkWidget *text;
   GtkWidget *child;
 
-  win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  win = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (win), "Non-zero X");
 
   grid = gtk_grid_new ();
@@ -120,7 +120,7 @@ test_relative (void)
   GtkWidget *text;
   GtkWidget *child;
 
-  win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  win = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (win), "Custom positioning");
 
   overlay = gtk_overlay_new ();
@@ -166,7 +166,7 @@ test_fullwidth (void)
   GtkWidget *text;
   GtkWidget *child;
 
-  win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  win = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (win), "Full-width");
 
   overlay = gtk_overlay_new ();
@@ -200,7 +200,7 @@ test_scrolling (void)
   gchar *contents;
   gsize len;
 
-  win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  win = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (win), "Scrolling");
 
   overlay = gtk_overlay_new ();
@@ -343,7 +343,7 @@ test_chase (void)
   gsize len;
   GtkEventController *controller;
 
-  win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  win = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (win), "Chase");
 
   overlay = gtk_overlay_new ();
@@ -394,7 +394,7 @@ test_stacking (void)
   GtkWidget *check1;
   GtkWidget *check2;
 
-  win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  win = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (win), "Stacking");
 
   grid = gtk_grid_new ();
@@ -439,7 +439,7 @@ test_input_stacking (void)
   GtkWidget *vbox;
   int i,j;
 
-  win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  win = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (win), "Input Stacking");
 
   overlay = gtk_overlay_new ();

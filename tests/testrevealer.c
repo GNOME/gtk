@@ -8,7 +8,7 @@ main (gint argc,
 
   gtk_init ();
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_widget_set_size_request (window, 300, 300);
 
   box = gtk_grid_new ();

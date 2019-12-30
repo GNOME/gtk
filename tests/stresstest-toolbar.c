@@ -138,7 +138,7 @@ main (gint argc, gchar **argv)
 
   info.toolbar = NULL;
   info.counter = 0;
-  info.window = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+  info.window = GTK_WINDOW (gtk_window_new ());
 
   gtk_widget_show (GTK_WIDGET (info.window));
   

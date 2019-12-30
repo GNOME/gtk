@@ -135,7 +135,7 @@ int main (int argc, char **argv)
 
   gtk_init ();
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
 
   g_signal_connect (window, "destroy", gtk_main_quit, NULL);

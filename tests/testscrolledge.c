@@ -98,7 +98,7 @@ main (int argc, char *argv[])
 
   gtk_init ();
 
-  win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  win = gtk_window_new ();
   gtk_window_set_default_size (GTK_WINDOW (win), 600, 400);
 
   overlay = gtk_overlay_new ();

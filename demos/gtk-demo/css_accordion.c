@@ -24,7 +24,7 @@ do_css_accordion (GtkWidget *do_widget)
       GtkWidget *container, *child;
       GtkStyleProvider *provider;
 
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "CSS Accordion");
       gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (do_widget));
       gtk_window_set_default_size (GTK_WINDOW (window), 600, 300);

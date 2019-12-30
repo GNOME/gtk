@@ -93,7 +93,7 @@ main (int argc, char **argv)
   if (argc > 2)
     anim_filename = argv[2];
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
 
   grid = gtk_grid_new ();
   gtk_grid_set_row_spacing (GTK_GRID (grid), 10);

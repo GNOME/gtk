@@ -255,7 +255,7 @@ do_constraints (GtkWidget *do_widget)
    {
      GtkWidget *header, *box, *grid, *button;
 
-     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+     window = gtk_window_new ();
      gtk_window_set_display (GTK_WINDOW (window), gtk_widget_get_display (do_widget));
 
      header = gtk_header_bar_new ();

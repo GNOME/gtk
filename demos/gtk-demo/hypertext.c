@@ -232,7 +232,7 @@ do_hypertext (GtkWidget *do_widget)
       GtkTextBuffer *buffer;
       GtkEventController *controller;
 
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Hypertext");
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
