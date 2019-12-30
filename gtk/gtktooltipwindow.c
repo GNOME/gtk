@@ -558,6 +558,8 @@ void
 gtk_tooltip_window_set_relative_to (GtkTooltipWindow *window,
                                     GtkWidget        *relative_to)
 {
+  g_return_if_fail (GTK_WIDGET (window) != relative_to);
+
   if (window->relative_to == relative_to)
     return;
 

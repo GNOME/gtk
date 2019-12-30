@@ -495,6 +495,9 @@ gtk_tooltip_set_surface (GtkTooltip *tooltip,
   if (tooltip->native == native)
     return;
 
+  if (GTK_IS_TOOLTIP_WINDOW (native))
+    return;
+
   if (tooltip->native)
     g_object_weak_unref (G_OBJECT (tooltip->native), native_weak_notify, tooltip);
 
