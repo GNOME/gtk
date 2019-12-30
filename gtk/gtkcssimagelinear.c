@@ -76,37 +76,43 @@ static void
 gtk_css_image_linear_compute_start_point (double angle_in_degrees,
                                           double width,
                                           double height,
-                                          double *x,
-                                          double *y)
+                                          double *out_x,
+                                          double *out_y,
+                                          double *out_length)
 {
   double angle, c, slope, perpendicular;
-  
+  double x, y, length;
+
   angle = fmod (angle_in_degrees, 360);
   if (angle < 0)
     angle += 360;
 
   if (angle == 0)
     {
-      *x = 0;
-      *y = -height;
+      *out_x = 0;
+      *out_y = -height;
+      *out_length = height;
       return;
     }
   else if (angle == 90)
     {
-      *x = width;
-      *y = 0;
+      *out_x = width;
+      *out_y = 0;
+      *out_length = width;
       return;
     }
   else if (angle == 180)
     {
-      *x = 0;
-      *y = height;
+      *out_x = 0;
+      *out_y = height;
+      *out_length = height;
       return;
     }
   else if (angle == 270)
     {
-      *x = -width;
-      *y = 0;
+      *out_x = -width;
+      *out_y = 0;
+      *out_length = width;
       return;
     }
 
@@ -119,12 +125,18 @@ gtk_css_image_linear_compute_start_point (double angle_in_degrees,
     width = - width;
   if (angle < 90 || angle > 270)
     height = - height;
-  
+
   /* Compute c (of y = mx + c) of perpendicular */
   c = height - perpendicular * width;
 
-  *x = c / (slope - perpendicular);
-  *y = perpendicular * *x + c;
+  x = c / (slope - perpendicular);
+  y = perpendicular * x + c;
+
+  length = sqrt (x * x + y * y);
+
+  *out_x = x;
+  *out_y = y;
+  *out_length = length;
 }
 
 static void
@@ -173,9 +185,9 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
 
   gtk_css_image_linear_compute_start_point (angle,
                                             width, height,
-                                            &x, &y);
+                                            &x, &y,
+                                            &length);
 
-  length = sqrt (x * x + y * y);
   gtk_css_image_linear_get_start_end (linear, length, &start, &end);
 
   if (start == end)
