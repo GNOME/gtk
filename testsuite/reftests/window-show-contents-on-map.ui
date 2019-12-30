@@ -2,7 +2,6 @@
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkWindow" id="window1">
-    <property name="type">popup</property>
     <signal name="map" handler="gtk_widget_show" object="label1" after="yes" swapped="yes"/>
     <child>
       <object class="GtkLabel" id="label1">

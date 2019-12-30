@@ -12,7 +12,6 @@
     </data>
   </object>
   <object class="GtkWindow" id="window1">
-    <property name="type">popup</property>
     <child>
       <object class="GtkGrid" id="grid1">
         <child>
