@@ -69,6 +69,68 @@ void gtk_drag_source_set_icon_paintable (GtkWidget       *widget,
 				         GdkPaintable    *paintable);
 
 
+#define GTK_TYPE_DRAG_SOURCE         (gtk_drag_source_get_type ())
+#define GTK_DRAG_SOURCE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_DRAG_SOURCE, GtkDragSource))
+#define GTK_DRAG_SOURCE_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GTK_TYPE_DRAG_SOURCE, GtkDragSourceClass))
+#define GTK_IS_DRAG_SOURCE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_DRAG_SOURCE))
+#define GTK_IS_DRAG_SOURCE_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_DRAG_SOURCE))
+#define GTK_DRAG_SOURCE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_DRAG_SOURCE, GtkDragSourceClass))
+
+typedef struct _GtkDragSource GtkDragSource;
+typedef struct _GtkDragSourceClass GtkDragSourceClass;
+
+GDK_AVAILABLE_IN_ALL
+GType              gtk_drag_source_get_type  (void) G_GNUC_CONST;
+
+GDK_AVAILABLE_IN_ALL
+GtkDragSource      *gtk_drag_source_new        (GdkContentProvider *content,
+                                                GdkDragAction       actions);
+
+GDK_AVAILABLE_IN_ALL
+void                gtk_drag_source_set_content (GtkDragSource     *source,
+                                                 GdkContentProvider *content);
+GDK_AVAILABLE_IN_ALL
+GdkContentProvider *gtk_drag_source_get_content (GtkDragSource     *source);
+
+GDK_AVAILABLE_IN_ALL
+void               gtk_drag_source_set_actions (GtkDragSource     *source,
+                                                GdkDragAction      actions);
+GDK_AVAILABLE_IN_ALL
+GdkDragAction      gtk_drag_source_get_actions (GtkDragSource     *source);
+
+GDK_AVAILABLE_IN_ALL
+void               gtk_drag_source_set_icon    (GtkDragSource     *source,
+                                                GdkPaintable      *paintable,
+                                                int                hot_x,
+                                                int                hot_y);
+GDK_AVAILABLE_IN_ALL
+void               gtk_drag_source_drag_begin  (GtkDragSource     *source,
+                                                GtkWidget         *widget,
+                                                GdkDevice         *device,
+                                                int                x,
+                                                int                y);
+
+GDK_AVAILABLE_IN_ALL
+void               gtk_drag_source_drag_cancel (GtkDragSource     *sourcei);
+
+GDK_AVAILABLE_IN_ALL
+GtkDragSource *    gtk_drag_get_source         (GdkDrag           *drag);
+
+GDK_AVAILABLE_IN_ALL
+GtkWidget *        gtk_drag_source_get_origin  (GtkDragSource     *source);
+
+GDK_AVAILABLE_IN_ALL
+GdkDrag *          gtk_drag_source_get_drag    (GtkDragSource     *source);
+
+GDK_AVAILABLE_IN_ALL
+void               gtk_drag_source_attach      (GtkDragSource     *source,
+                                                GtkWidget         *widget,
+                                                GdkModifierType    start_button_mask);
+
+GDK_AVAILABLE_IN_ALL
+void               gtk_drag_source_detach      (GtkDragSource     *source);
+
+
 G_END_DECLS
 
 #endif /* __GTK_DRAG_SOURCE_H__ */
