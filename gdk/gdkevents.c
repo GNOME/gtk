@@ -947,6 +947,13 @@ gdk_event_get_coords (const GdkEvent *event,
       x = event->touchpad_pinch.x;
       y = event->touchpad_pinch.y;
       break;
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DROP_START:
+      x = event->dnd.x;
+      y = event->dnd.y;
+      break;
     default:
       fetched = FALSE;
       break;
