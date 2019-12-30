@@ -31,45 +31,39 @@
 G_DEFINE_TYPE (GtkCssImageLinear, _gtk_css_image_linear, GTK_TYPE_CSS_IMAGE)
 
 static void
-gtk_css_image_linear_get_start_end (GtkCssImageLinear *linear,
-                                    double             length,
-                                    double            *start,
-                                    double            *end)
+gtk_css_image_linear_get_repeating_start_end (GtkCssImageLinear *linear,
+                                              double             length,
+                                              double            *start,
+                                              double            *end)
 {
   GtkCssImageLinearColorStop *stop;
   double pos;
   guint i;
-      
-  if (linear->repeating)
-    {
-      stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, 0);
-      if (stop->offset == NULL)
-        *start = 0;
-      else
-        *start = _gtk_css_number_value_get (stop->offset, length) / length;
 
-      *end = *start;
+  g_assert (linear->repeating);
 
-      for (i = 0; i < linear->stops->len; i++)
-        {
-          stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, i);
-          
-          if (stop->offset == NULL)
-            continue;
-
-          pos = _gtk_css_number_value_get (stop->offset, length) / length;
-
-          *end = MAX (pos, *end);
-        }
-      
-      if (stop->offset == NULL)
-        *end = MAX (*end, 1.0);
-    }
+  stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, 0);
+  if (stop->offset == NULL)
+    *start = 0;
   else
+    *start = _gtk_css_number_value_get (stop->offset, length) / length;
+
+  *end = *start;
+
+  for (i = 0; i < linear->stops->len; i++)
     {
-      *start = 0;
-      *end = 1;
+      stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, i);
+
+      if (stop->offset == NULL)
+        continue;
+
+      pos = _gtk_css_number_value_get (stop->offset, length) / length;
+
+      *end = MAX (pos, *end);
     }
+
+  if (stop->offset == NULL)
+    *end = MAX (*end, 1.0);
 }
 
 static void
@@ -188,18 +182,27 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
                                             &x, &y,
                                             &length);
 
-  gtk_css_image_linear_get_start_end (linear, length, &start, &end);
-
-  if (start == end)
+  if (linear->repeating)
     {
-      /* repeating gradients with all color stops sharing the same offset
-       * get the color of the last color stop */
-      GtkCssImageLinearColorStop *stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, linear->stops->len - 1);
+      gtk_css_image_linear_get_repeating_start_end (linear, length, &start, &end);
 
-      gtk_snapshot_append_color (snapshot,
-                                 _gtk_css_rgba_value_get_rgba (stop->color),
-                                 &GRAPHENE_RECT_INIT (0, 0, width, height));
-      return;
+      if (start == end)
+        {
+          /* repeating gradients with all color stops sharing the same offset
+           * get the color of the last color stop */
+          GtkCssImageLinearColorStop *stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop,
+                                                             linear->stops->len - 1);
+
+          gtk_snapshot_append_color (snapshot,
+                                     _gtk_css_rgba_value_get_rgba (stop->color),
+                                     &GRAPHENE_RECT_INIT (0, 0, width, height));
+          return;
+        }
+    }
+  else
+    {
+      start = 0;
+      end = 1;
     }
 
   offset = start;
