@@ -24,9 +24,11 @@
  * @Short_description: A menu bar with popovers
  * @See_also: #GtkPopover, #GtkPopoverMenu, #GMenuModel
  *
- * The #GtkPopoverBar presents a horizontal bar of items that pop
- * up popover menus when clicked. The only way to create instances
- * of GtkPopoverBar is from a #GMenuModel.
+ * GtkPopoverMenuBar presents a horizontal bar of items that pop
+ * up popover menus when clicked.
+ *
+ * The only way to create instances of GtkPopoverMenuBar is
+ * from a #GMenuModel.
  *
  * # CSS nodes
  *
@@ -589,8 +591,7 @@ gtk_popover_menu_bar_class_init (GtkPopoverMenuBarClass *klass)
    *
    * The #GMenuModel from which the menu bar is created.
    *
-   * The model should only contain submenus as toplevel
-   * items.
+   * The model should only contain submenus as toplevel elements.
    */
   bar_props[PROP_MENU_MODEL] =
       g_param_spec_object ("menu-model",
