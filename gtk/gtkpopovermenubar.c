@@ -24,9 +24,11 @@
  * @Short_description: A menu bar with popovers
  * @See_also: #GtkPopover, #GtkPopoverMenu, #GMenuModel
  *
- * The #GtkPopoverBar presents a horizontal bar of items that pop
- * up popover menus when clicked. The only way to create instances
- * of GtkPopoverBar is from a #GMenuModel.
+ * GtkPopoverMenuBar presents a horizontal bar of items that pop
+ * up popover menus when clicked.
+ *
+ * The only way to create instances of GtkPopoverMenuBar is
+ * from a #GMenuModel.
  *
  * # CSS nodes
  *
@@ -38,9 +40,8 @@
  *     ╰── popover
  * ]|
  *
- * GtkMenuBar has a single CSS node with name menubar, below which
- * each item has its CSS node, and below that the corresponding
- * popover.
+ * GtkPopoverMenuBar has a single CSS node with name menubar, below which
+ * each item has its CSS node, and below that the corresponding popover.
  *
  * The item whose popover is currently open gets the .active
  * style class.
@@ -50,6 +51,7 @@
 #include "config.h"
 
 #include "gtkpopovermenubar.h"
+#include "gtkpopovermenubarprivate.h"
 #include "gtkpopovermenu.h"
 
 #include "gtkboxlayout.h"
@@ -471,7 +473,6 @@ gtk_popover_menu_bar_get_property (GObject    *object,
     }
 }
 
-
 static void
 gtk_popover_menu_bar_dispose (GObject *object)
 {
@@ -487,6 +488,90 @@ gtk_popover_menu_bar_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_popover_menu_bar_parent_class)->dispose (object);
 }
 
+static GList *
+get_menu_bars (GtkWindow *window)
+{
+  return g_object_get_data (G_OBJECT (window), "gtk-menu-bar-list");
+}
+
+GList *
+gtk_popover_menu_bar_get_viewable_menu_bars (GtkWindow *window)
+{
+  GList *menu_bars;
+  GList *viewable_menu_bars = NULL;
+
+  for (menu_bars = get_menu_bars (window);
+       menu_bars;
+       menu_bars = menu_bars->next)
+    {
+      GtkWidget *widget = menu_bars->data;
+      gboolean viewable = TRUE;
+
+      while (widget)
+        {
+          if (!gtk_widget_get_mapped (widget))
+            viewable = FALSE;
+
+          widget = gtk_widget_get_parent (widget);
+        }
+
+      if (viewable)
+        viewable_menu_bars = g_list_prepend (viewable_menu_bars, menu_bars->data);
+    }
+
+  return g_list_reverse (viewable_menu_bars);
+}
+
+static void
+set_menu_bars (GtkWindow *window,
+               GList     *menubars)
+{
+  g_object_set_data (G_OBJECT (window), I_("gtk-menu-bar-list"), menubars);
+}
+
+static void
+add_to_window (GtkWindow         *window,
+               GtkPopoverMenuBar *bar)
+{
+  GList *menubars = get_menu_bars (window);
+
+  set_menu_bars (window, g_list_prepend (menubars, bar));
+}
+
+static void
+remove_from_window (GtkWindow         *window,
+                    GtkPopoverMenuBar *bar)
+{
+  GList *menubars = get_menu_bars (window);
+
+  menubars = g_list_remove (menubars, bar);
+  set_menu_bars (window, menubars);
+}
+
+static void
+gtk_popover_menu_bar_root (GtkWidget *widget)
+{
+  GtkPopoverMenuBar *bar = GTK_POPOVER_MENU_BAR (widget);
+  GtkWidget *toplevel;
+
+  GTK_WIDGET_CLASS (gtk_popover_menu_bar_parent_class)->root (widget);
+
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
+  add_to_window (GTK_WINDOW (toplevel), bar);
+}
+
+static void
+gtk_popover_menu_bar_unroot (GtkWidget *widget)
+{
+  GtkPopoverMenuBar *bar = GTK_POPOVER_MENU_BAR (widget);
+  GtkWidget *toplevel;
+
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
+  remove_from_window (GTK_WINDOW (toplevel), bar);
+
+  GTK_WIDGET_CLASS (gtk_popover_menu_bar_parent_class)->unroot (widget);
+}
+
 static void
 gtk_popover_menu_bar_class_init (GtkPopoverMenuBarClass *klass)
 {
@@ -497,6 +582,8 @@ gtk_popover_menu_bar_class_init (GtkPopoverMenuBarClass *klass)
   object_class->set_property = gtk_popover_menu_bar_set_property;
   object_class->get_property = gtk_popover_menu_bar_get_property;
 
+  widget_class->root = gtk_popover_menu_bar_root;
+  widget_class->unroot = gtk_popover_menu_bar_unroot;
   widget_class->focus = gtk_popover_menu_bar_focus;
 
   /**
@@ -504,8 +591,7 @@ gtk_popover_menu_bar_class_init (GtkPopoverMenuBarClass *klass)
    *
    * The #GMenuModel from which the menu bar is created.
    *
-   * The model should only contain submenus as toplevel
-   * items.
+   * The model should only contain submenus as toplevel elements.
    */
   bar_props[PROP_MENU_MODEL] =
       g_param_spec_object ("menu-model",
@@ -604,4 +690,13 @@ gtk_popover_menu_bar_get_menu_model (GtkPopoverMenuBar *bar)
   g_return_val_if_fail (GTK_IS_POPOVER_MENU_BAR (bar), NULL);
 
   return bar->model;
+}
+
+void
+gtk_popover_menu_bar_select_first (GtkPopoverMenuBar *bar)
+{
+  GtkPopoverMenuBarItem *item;
+
+  item = GTK_POPOVER_MENU_BAR_ITEM (gtk_widget_get_first_child (GTK_WIDGET (bar)));
+  set_active_item (bar, item, TRUE);
 }

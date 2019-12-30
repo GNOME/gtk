@@ -133,9 +133,6 @@ typedef gboolean (*GtkTreeViewSearchEqualFunc) (GtkTreeModel            *model,
 typedef gboolean (*GtkTreeViewRowSeparatorFunc) (GtkTreeModel      *model,
 						 GtkTreeIter       *iter,
 						 gpointer           data);
-typedef void     (*GtkTreeViewSearchPositionFunc) (GtkTreeView  *tree_view,
-						   GtkWidget    *search_dialog,
-						   gpointer      user_data);
 
 
 /* Creators */
@@ -374,13 +371,6 @@ GtkEditable                  *gtk_tree_view_get_search_entry         (GtkTreeVie
 GDK_AVAILABLE_IN_ALL
 void                          gtk_tree_view_set_search_entry         (GtkTreeView                   *tree_view,
 								      GtkEditable                   *entry);
-GDK_AVAILABLE_IN_ALL
-GtkTreeViewSearchPositionFunc gtk_tree_view_get_search_position_func (GtkTreeView                   *tree_view);
-GDK_AVAILABLE_IN_ALL
-void                          gtk_tree_view_set_search_position_func (GtkTreeView                   *tree_view,
-								      GtkTreeViewSearchPositionFunc  func,
-								      gpointer                       data,
-								      GDestroyNotify                 destroy);
 
 /* Convert between the different coordinate systems */
 GDK_AVAILABLE_IN_ALL

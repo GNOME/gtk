@@ -51,11 +51,8 @@
 #include "gtkpopovermenuprivate.h"
 #include "gtkmodelbuttonprivate.h"
 #include "gtkseparator.h"
-#include "gtkradiomenuitem.h"
-#include "gtkcheckmenuitem.h"
 #include "gtkradiobutton.h"
 #include "gtkradiotoolbutton.h"
-#include "gtkseparatormenuitem.h"
 #include "gtkseparatortoolitem.h"
 #include "gtktoolshell.h"
 #include "gtktypebuiltins.h"
@@ -64,6 +61,7 @@
 #include "gtkwindowprivate.h"
 #include "gtkgestureclick.h"
 #include "gtkbuttonprivate.h"
+#include "gtkmenubutton.h"
 
 
 /**
@@ -143,7 +141,6 @@ struct _GtkToolbarPrivate
   GtkToolbarStyle  style;
 
   GtkToolItem     *highlight_tool_item;
-  GtkWidget       *arrow;
   GtkWidget       *arrow_button;
 
   GtkAllocation    prev_allocation;
@@ -233,13 +230,6 @@ static void       gtk_toolbar_real_style_changed   (GtkToolbar          *toolbar
 						    GtkToolbarStyle      style);
 static gboolean   gtk_toolbar_focus_home_or_end    (GtkToolbar          *toolbar,
 						    gboolean             focus_home);
-static void       gtk_toolbar_arrow_button_press   (GtkGesture          *gesture,
-                                                    int                  n_press,
-                                                    double               x,
-                                                    double               y,
-						    GtkToolbar          *toolbar);
-static void       gtk_toolbar_arrow_button_clicked (GtkWidget           *button,
-						    GtkToolbar          *toolbar);
 static gboolean   gtk_toolbar_popup_menu           (GtkWidget           *toolbar);
 static void       gtk_toolbar_reconfigured         (GtkToolbar          *toolbar);
 
@@ -306,7 +296,9 @@ static void            toolbar_content_set_size_request     (ToolbarContent     
 							     gint                 height);
 static void            toolbar_content_toolbar_reconfigured (ToolbarContent      *content,
 							     GtkToolbar          *toolbar);
-static GtkWidget *     toolbar_content_retrieve_menu_item   (ToolbarContent      *content);
+static const char *    toolbar_content_get_overflow_text    (ToolbarContent      *content);
+static GtkButtonRole   toolbar_content_get_button_role      (ToolbarContent      *content);
+static gboolean        toolbar_content_get_active           (ToolbarContent      *content);
 static gboolean        toolbar_content_has_proxy_menu_item  (ToolbarContent	 *content);
 static gboolean        toolbar_content_is_separator         (ToolbarContent      *content);
 static void	       toolbar_content_set_expand	    (ToolbarContent      *content,
@@ -316,6 +308,8 @@ static void            toolbar_tool_shell_iface_init        (GtkToolShellIface  
 static GtkOrientation  toolbar_get_orientation              (GtkToolShell        *shell);
 static GtkToolbarStyle toolbar_get_style                    (GtkToolShell        *shell);
 static void            toolbar_rebuild_menu                 (GtkToolShell        *shell);
+static void            create_popup_func                    (GtkMenuButton       *button,
+                                                             gpointer             data);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkToolbar, gtk_toolbar, GTK_TYPE_CONTAINER,
@@ -558,18 +552,11 @@ gtk_toolbar_init (GtkToolbar *toolbar)
 
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (toolbar));
 
-  priv->arrow_button = gtk_toggle_button_new ();
-  g_signal_connect (gtk_button_get_gesture (GTK_BUTTON (priv->arrow_button)), "pressed",
-		    G_CALLBACK (gtk_toolbar_arrow_button_press), toolbar);
-  g_signal_connect (priv->arrow_button, "clicked",
-		    G_CALLBACK (gtk_toolbar_arrow_button_clicked), toolbar);
+  priv->arrow_button = gtk_menu_button_new ();
+  gtk_menu_button_set_create_popup_func (GTK_MENU_BUTTON (priv->arrow_button), create_popup_func, toolbar, NULL);
 
   gtk_widget_set_focus_on_click (priv->arrow_button, FALSE);
 
-  priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic");
-  gtk_widget_set_name (priv->arrow, "gtk-toolbar-arrow");
-  gtk_container_add (GTK_CONTAINER (priv->arrow_button), priv->arrow);
-  
   gtk_widget_set_parent (priv->arrow_button, widget);
   
   /* which child position a drop will occur at */
@@ -656,9 +643,7 @@ gtk_toolbar_snapshot (GtkWidget   *widget,
       toolbar_content_snapshot (content, GTK_CONTAINER (widget), snapshot);
     }
 
-  gtk_widget_snapshot_child (widget,
-                             priv->arrow_button,
-                             snapshot);
+  gtk_widget_snapshot_child (widget, priv->arrow_button, snapshot);
 }
 
 static void
@@ -742,8 +727,7 @@ gtk_toolbar_measure (GtkWidget      *widget,
   arrow_requisition.width = 0;
   
   if (priv->show_arrow)
-    gtk_widget_get_preferred_size (priv->arrow_button,
-                                     &arrow_requisition, NULL);
+    gtk_widget_get_preferred_size (priv->arrow_button, &arrow_requisition, NULL);
   
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -1105,15 +1089,6 @@ remove_item (GtkWidget *menu_item,
 }
 
 static void
-menu_deactivated (GtkWidget  *menu,
-		  GtkToolbar *toolbar)
-{
-  GtkToolbarPrivate *priv = toolbar->priv;
-
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->arrow_button), FALSE);
-}
-
-static void
 button_clicked (GtkWidget *button,
                 GtkWidget *item)
 {
@@ -1123,19 +1098,19 @@ button_clicked (GtkWidget *button,
 }
 
 static void
-rebuild_menu (GtkToolbar *toolbar)
+create_popup_func (GtkMenuButton *menu_button,
+                   gpointer       data)
 {
+  GtkToolbar *toolbar = data;
   GtkToolbarPrivate *priv = toolbar->priv;
   GList *list;
 
   if (!priv->menu)
     {
       priv->menu = gtk_popover_menu_new (priv->arrow_button);
+      gtk_menu_button_set_popover (GTK_MENU_BUTTON (priv->arrow_button), priv->menu);
       priv->menu_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_popover_menu_add_submenu (GTK_POPOVER_MENU (priv->menu), priv->menu_box, "main");
-
-      g_signal_connect (priv->menu, "closed",
-                        G_CALLBACK (menu_deactivated), toolbar);
     }
 
   gtk_container_foreach (GTK_CONTAINER (priv->menu_box), remove_item, NULL);
@@ -1147,49 +1122,15 @@ rebuild_menu (GtkToolbar *toolbar)
       if (toolbar_content_get_state (content) == OVERFLOWN &&
 	  !toolbar_content_is_placeholder (content))
 	{
-	  GtkWidget *menu_item = toolbar_content_retrieve_menu_item (content);
-
-	  if (menu_item)
+          if (toolbar_content_is_separator (content))
+            gtk_container_add (GTK_CONTAINER (priv->menu_box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+          else if (toolbar_content_has_proxy_menu_item (content))
 	    {
+              const char *text = toolbar_content_get_overflow_text (content);
+              GtkButtonRole role = toolbar_content_get_button_role (content);
+              gboolean active = toolbar_content_get_active (content);
+
               GtkWidget *button, *widget;
-              const char *text;
-              GtkButtonRole role;
-              gboolean active;
-
-	      g_assert (GTK_IS_MENU_ITEM (menu_item));
-              text = gtk_menu_item_get_label (GTK_MENU_ITEM (menu_item));
-              if (text == NULL)
-                {
-                  GtkWidget *box, *child;
-                  box = gtk_bin_get_child (GTK_BIN (menu_item));
-                  for (child = gtk_widget_get_first_child (box);
-                       child;
-                       child = gtk_widget_get_next_sibling (child))
-                    {
-                      if (GTK_IS_LABEL (child))
-                        {
-                          text = gtk_label_get_label (GTK_LABEL (child));
-                          break;
-                        }
-                    }
-                }
-
-              if (GTK_IS_SEPARATOR_MENU_ITEM (menu_item))
-                {
-                  gtk_container_add (GTK_CONTAINER (priv->menu_box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
-                  continue;
-                }
-              else if (GTK_IS_RADIO_MENU_ITEM (menu_item))
-                role = GTK_BUTTON_ROLE_RADIO;
-              else if (GTK_IS_CHECK_MENU_ITEM (menu_item))
-                role = GTK_BUTTON_ROLE_CHECK;
-              else
-                role = GTK_BUTTON_ROLE_NORMAL;
-
-              if (GTK_IS_CHECK_MENU_ITEM (menu_item))
-                active = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menu_item));
-              else
-                active = FALSE;
 
               button = gtk_model_button_new ();
               g_object_set (button,
@@ -1198,8 +1139,7 @@ rebuild_menu (GtkToolbar *toolbar)
                             "active", active,
                             NULL);
               widget = toolbar_content_get_widget (content);
-              g_signal_connect (button, "clicked",
-                                G_CALLBACK (button_clicked), widget);
+              g_signal_connect (button, "clicked", G_CALLBACK (button_clicked), widget);
               gtk_container_add (GTK_CONTAINER (priv->menu_box), button);
 	    }
 	}
@@ -1484,7 +1424,7 @@ gtk_toolbar_size_allocate (GtkWidget *widget,
     }
 
   if (priv->menu && priv->need_rebuild)
-    rebuild_menu (toolbar);
+    create_popup_func (GTK_MENU_BUTTON (priv->arrow_button), toolbar);
 
   if (need_arrow)
     {
@@ -1494,9 +1434,6 @@ gtk_toolbar_size_allocate (GtkWidget *widget,
   else
     {
       gtk_widget_hide (GTK_WIDGET (priv->arrow_button));
-
-      if (priv->menu && gtk_widget_get_visible (GTK_WIDGET (priv->menu)))
-        gtk_menu_shell_deactivate (GTK_MENU_SHELL (priv->menu));
     }
 
   g_free (allocations);
@@ -2116,9 +2053,9 @@ gtk_toolbar_orientation_changed (GtkToolbar    *toolbar,
       priv->orientation = orientation;
       
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        gtk_image_set_from_icon_name (GTK_IMAGE (priv->arrow), "pan-down-symbolic");
+        gtk_menu_button_set_direction (GTK_MENU_BUTTON (priv->arrow_button), GTK_ARROW_DOWN);
       else
-        gtk_image_set_from_icon_name (GTK_IMAGE (priv->arrow), "pan-end-symbolic");
+        gtk_menu_button_set_direction (GTK_MENU_BUTTON (priv->arrow_button), GTK_ARROW_RIGHT);
       
       gtk_toolbar_reconfigured (toolbar);
       
@@ -2144,50 +2081,6 @@ gtk_toolbar_real_style_changed (GtkToolbar     *toolbar,
       g_object_notify (G_OBJECT (toolbar), "toolbar-style");
     }
 }
-
-static void
-show_menu (GtkToolbar     *toolbar,
-	   GdkEventButton *event)
-{
-  GtkToolbarPrivate *priv = toolbar->priv;
-
-  rebuild_menu (toolbar);
-
-  gtk_popover_popup (GTK_POPOVER (priv->menu));
-}
-
-static void
-gtk_toolbar_arrow_button_clicked (GtkWidget  *button,
-				  GtkToolbar *toolbar)
-{
-  GtkToolbarPrivate *priv = toolbar->priv;
-
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->arrow_button)) &&
-      (!priv->menu || !gtk_widget_get_visible (GTK_WIDGET (priv->menu))))
-    {
-      /* We only get here when the button is clicked with the keyboard,
-       * because mouse button presses result in the menu being shown so
-       * that priv->menu would be non-NULL and visible.
-       */
-      show_menu (toolbar, NULL);
-      gtk_menu_shell_select_first (GTK_MENU_SHELL (priv->menu), FALSE);
-    }
-}
-
-static void
-gtk_toolbar_arrow_button_press (GtkGesture     *gesture,
-                                int             n_press,
-                                double          x,
-                                double          y,
-				GtkToolbar     *toolbar)
-{
-  GtkWidget *button;
-
-  button = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-  show_menu (toolbar, NULL);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-}
-
 
 static void
 gtk_toolbar_pressed_cb (GtkGestureClick *gesture,
@@ -2519,14 +2412,6 @@ gtk_toolbar_dispose (GObject *object)
   GtkToolbarPrivate *priv = toolbar->priv;
 
   g_clear_pointer (&priv->arrow_button, gtk_widget_unparent);
-
-  if (priv->menu)
-    {
-      g_signal_handlers_disconnect_by_func (priv->menu,
-                                            menu_deactivated, toolbar);
-      gtk_widget_destroy (GTK_WIDGET (priv->menu));
-      priv->menu = NULL;
-    }
 
   if (priv->settings_connection > 0)
     {
@@ -2867,33 +2752,53 @@ toolbar_content_toolbar_reconfigured (ToolbarContent *content,
   gtk_tool_item_toolbar_reconfigured (content->item);
 }
 
-static GtkWidget *
-toolbar_content_retrieve_menu_item (ToolbarContent *content)
+static const char *
+toolbar_content_get_overflow_text (ToolbarContent *content)
 {
-  return gtk_tool_item_retrieve_proxy_menu_item (content->item);
+  return gtk_tool_item_get_overflow_text (content->item);
 }
 
 static gboolean
 toolbar_content_has_proxy_menu_item (ToolbarContent *content)
 {
-  GtkWidget *menu_item;
+  const char *text;
 
   if (content->has_menu == YES)
     return TRUE;
   else if (content->has_menu == NO)
     return FALSE;
 
-  menu_item = toolbar_content_retrieve_menu_item (content);
+  text = toolbar_content_get_overflow_text (content);
 
-  content->has_menu = menu_item? YES : NO;
+  content->has_menu = text ? YES : NO;
 
-  return menu_item != NULL;
+  return text != NULL;
 }
 
 static void
 toolbar_content_set_unknown_menu_status (ToolbarContent *content)
 {
   content->has_menu = UNKNOWN;
+}
+
+static GtkButtonRole
+toolbar_content_get_button_role (ToolbarContent *content)
+{
+  if (GTK_IS_RADIO_TOOL_BUTTON (content->item))
+    return GTK_BUTTON_ROLE_RADIO;
+  else if (GTK_IS_TOGGLE_TOOL_BUTTON (content->item))
+    return GTK_BUTTON_ROLE_CHECK;
+  else
+    return GTK_BUTTON_ROLE_NORMAL;
+}
+
+static gboolean
+toolbar_content_get_active (ToolbarContent *content)
+{
+  if (GTK_IS_TOGGLE_TOOL_BUTTON (content->item))
+    return gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (content->item));
+  else
+    return FALSE;
 }
 
 static gboolean

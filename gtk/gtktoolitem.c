@@ -26,7 +26,6 @@
 
 #include "gtkmarshalers.h"
 #include "gtktoolshell.h"
-#include "gtkseparatormenuitem.h"
 #include "gtksizerequest.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
@@ -70,6 +69,7 @@ enum {
   PROP_IS_IMPORTANT,
   PROP_HOMOGENEOUS,
   PROP_EXPAND_ITEM,
+  PROP_OVERFLOW_TEXT
 };
 
 
@@ -84,8 +84,7 @@ struct _GtkToolItemPrivate
   guint expand                : 1;
   guint is_important          : 1;
 
-  gchar *menu_item_id;
-  GtkWidget *menu_item;
+  char *overflow_text;
 };
 
 static void gtk_tool_item_finalize     (GObject         *object);
@@ -100,8 +99,6 @@ static void gtk_tool_item_get_property (GObject         *object,
 					guint            prop_id,
 					GValue          *value,
 					GParamSpec      *pspec);
-static void gtk_tool_item_property_notify (GObject      *object,
-					   GParamSpec   *pspec);
 
 static guint toolitem_signals[LAST_SIGNAL] = { 0 };
 
@@ -120,10 +117,7 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
   object_class->set_property = gtk_tool_item_set_property;
   object_class->get_property = gtk_tool_item_get_property;
   object_class->finalize     = gtk_tool_item_finalize;
-  object_class->notify       = gtk_tool_item_property_notify;
 
-  klass->create_menu_proxy = _gtk_tool_item_create_menu_proxy;
-  
   g_object_class_install_property (object_class,
 				   PROP_VISIBLE_HORIZONTAL,
 				   g_param_spec_boolean ("visible-horizontal",
@@ -162,40 +156,21 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
-/**
- * GtkToolItem::create-menu-proxy:
- * @tool_item: the object the signal was emitted on
- *
- * This signal is emitted when the toolbar needs information from @tool_item
- * about whether the item should appear in the toolbar overflow menu. In
- * response the tool item should either
- * 
- * - call gtk_tool_item_set_proxy_menu_item() with a %NULL
- *   pointer and return %TRUE to indicate that the item should not appear
- *   in the overflow menu
- * 
- * - call gtk_tool_item_set_proxy_menu_item() with a new menu
- *   item and return %TRUE, or 
- *
- * - return %FALSE to indicate that the signal was not handled by the item.
- *   This means that the item will not appear in the overflow menu unless
- *   a later handler installs a menu item.
- *
- * The toolbar may cache the result of this signal. When the tool item changes
- * how it will respond to this signal it must call gtk_tool_item_rebuild_menu()
- * to invalidate the cache and ensure that the toolbar rebuilds its overflow
- * menu.
- *
- * Returns: %TRUE if the signal was handled, %FALSE if not
- **/
-  toolitem_signals[CREATE_MENU_PROXY] =
-    g_signal_new (I_("create-menu-proxy"),
-		  G_OBJECT_CLASS_TYPE (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkToolItemClass, create_menu_proxy),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__VOID,
-		  G_TYPE_BOOLEAN, 0);
+  /**
+   * GtkToolItem:overflow-text:
+   *
+   * The text to use as label in the overflow menu item for this
+   * toolitem.
+   *
+   * If unset, #GtkToolButton:label is used for #GtkToolButtons.
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_OVERFLOW_TEXT,
+                                   g_param_spec_string ("overflow-text",
+                                                         P_("Overflow text"),
+                                                         P_("Label to use in the overflow menu"),
+                                                         NULL,
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 /**
  * GtkToolItem::toolbar-reconfigured:
@@ -239,13 +214,6 @@ gtk_tool_item_init (GtkToolItem *toolitem)
 static void
 gtk_tool_item_finalize (GObject *object)
 {
-  GtkToolItem *item = GTK_TOOL_ITEM (object);
-
-  g_free (item->priv->menu_item_id);
-
-  if (item->priv->menu_item)
-    g_object_unref (item->priv->menu_item);
-
   G_OBJECT_CLASS (gtk_tool_item_parent_class)->finalize (object);
 }
 
@@ -285,6 +253,9 @@ gtk_tool_item_set_property (GObject      *object,
     case PROP_HOMOGENEOUS:
       gtk_tool_item_set_homogeneous (toolitem, g_value_get_boolean (value));
       break;
+    case PROP_OVERFLOW_TEXT:
+      gtk_tool_item_set_overflow_text (toolitem, g_value_get_string (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -316,30 +287,13 @@ gtk_tool_item_get_property (GObject    *object,
     case PROP_HOMOGENEOUS:
       g_value_set_boolean (value, toolitem->priv->homogeneous);
       break;
+    case PROP_OVERFLOW_TEXT:
+      g_value_set_string (value, toolitem->priv->overflow_text);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-static void
-gtk_tool_item_property_notify (GObject    *object,
-			       GParamSpec *pspec)
-{
-  GtkToolItem *tool_item = GTK_TOOL_ITEM (object);
-
-  if (tool_item->priv->menu_item && strcmp (pspec->name, "sensitive") == 0)
-    gtk_widget_set_sensitive (tool_item->priv->menu_item,
-			      gtk_widget_get_sensitive (GTK_WIDGET (tool_item)));
-
-  if (G_OBJECT_CLASS (gtk_tool_item_parent_class)->notify)
-    G_OBJECT_CLASS (gtk_tool_item_parent_class)->notify (object, pspec);
-}
-
-gboolean
-_gtk_tool_item_create_menu_proxy (GtkToolItem *item)
-{
-  return FALSE;
 }
 
 /**
@@ -780,60 +734,6 @@ gtk_tool_item_get_visible_vertical (GtkToolItem *toolitem)
 }
 
 /**
- * gtk_tool_item_retrieve_proxy_menu_item:
- * @tool_item: a #GtkToolItem 
- * 
- * Returns the #GtkMenuItem that was last set by
- * gtk_tool_item_set_proxy_menu_item(), ie. the #GtkMenuItem
- * that is going to appear in the overflow menu.
- *
- * Returns: (transfer none): The #GtkMenuItem that is going to appear in the
- * overflow menu for @tool_item.
- **/
-GtkWidget *
-gtk_tool_item_retrieve_proxy_menu_item (GtkToolItem *tool_item)
-{
-  gboolean retval;
-  
-  g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), NULL);
-
-  g_signal_emit (tool_item, toolitem_signals[CREATE_MENU_PROXY], 0,
-		 &retval);
-  
-  return tool_item->priv->menu_item;
-}
-
-/**
- * gtk_tool_item_get_proxy_menu_item:
- * @tool_item: a #GtkToolItem
- * @menu_item_id: a string used to identify the menu item
- *
- * If @menu_item_id matches the string passed to
- * gtk_tool_item_set_proxy_menu_item() return the corresponding #GtkMenuItem.
- *
- * Custom subclasses of #GtkToolItem should use this function to
- * update their menu item when the #GtkToolItem changes. That the
- * @menu_item_ids must match ensures that a #GtkToolItem
- * will not inadvertently change a menu item that they did not create.
- *
- * Returns: (transfer none) (nullable): The #GtkMenuItem passed to
- *     gtk_tool_item_set_proxy_menu_item(), if the @menu_item_ids
- *     match.
- **/
-GtkWidget *
-gtk_tool_item_get_proxy_menu_item (GtkToolItem *tool_item,
-				   const gchar *menu_item_id)
-{
-  g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), NULL);
-  g_return_val_if_fail (menu_item_id != NULL, NULL);
-
-  if (tool_item->priv->menu_item_id && strcmp (tool_item->priv->menu_item_id, menu_item_id) == 0)
-    return tool_item->priv->menu_item;
-
-  return NULL;
-}
-
-/**
  * gtk_tool_item_rebuild_menu:
  * @tool_item: a #GtkToolItem
  *
@@ -861,48 +761,6 @@ gtk_tool_item_rebuild_menu (GtkToolItem *tool_item)
 }
 
 /**
- * gtk_tool_item_set_proxy_menu_item:
- * @tool_item: a #GtkToolItem
- * @menu_item_id: a string used to identify @menu_item
- * @menu_item: (nullable): a #GtkMenuItem to use in the overflow menu, or %NULL
- * 
- * Sets the #GtkMenuItem used in the toolbar overflow menu. The
- * @menu_item_id is used to identify the caller of this function and
- * should also be used with gtk_tool_item_get_proxy_menu_item().
- *
- * See also #GtkToolItem::create-menu-proxy.
- **/
-void
-gtk_tool_item_set_proxy_menu_item (GtkToolItem *tool_item,
-				   const gchar *menu_item_id,
-				   GtkWidget   *menu_item)
-{
-  g_return_if_fail (GTK_IS_TOOL_ITEM (tool_item));
-  g_return_if_fail (menu_item == NULL || GTK_IS_MENU_ITEM (menu_item));
-  g_return_if_fail (menu_item_id != NULL);
-
-  g_free (tool_item->priv->menu_item_id);
-      
-  tool_item->priv->menu_item_id = g_strdup (menu_item_id);
-
-  if (tool_item->priv->menu_item != menu_item)
-    {
-      if (tool_item->priv->menu_item)
-	g_object_unref (tool_item->priv->menu_item);
-      
-      if (menu_item)
-	{
-	  g_object_ref_sink (menu_item);
-
-	  gtk_widget_set_sensitive (menu_item,
-				    gtk_widget_get_sensitive (GTK_WIDGET (tool_item)));
-	}
-      
-      tool_item->priv->menu_item = menu_item;
-    }
-}
-
-/**
  * gtk_tool_item_toolbar_reconfigured:
  * @tool_item: a #GtkToolItem
  *
@@ -925,4 +783,39 @@ gtk_tool_item_toolbar_reconfigured (GtkToolItem *tool_item)
   g_signal_emit (tool_item, toolitem_signals[TOOLBAR_RECONFIGURED], 0);
 
   gtk_widget_queue_resize (GTK_WIDGET (tool_item));
+}
+
+/**
+ * gtk_tool_item_set_overflow_text:
+ * @tool_item: a #GtkToolItem
+ * @overflow_text: (nullable): Label to use in the overflow menu
+ *
+ * Sets the label to use for @tool_item in the overflow menu.
+ */
+void
+gtk_tool_item_set_overflow_text (GtkToolItem *tool_item,
+                                 const char  *overflow_text)
+{
+  g_return_if_fail (GTK_IS_TOOL_ITEM (tool_item));
+
+  g_free (tool_item->priv->overflow_text);
+  tool_item->priv->overflow_text = g_strdup (overflow_text);
+
+  g_object_notify (G_OBJECT (tool_item), "overflow-text");
+}
+
+/**
+ * gtk_tool_item_get_overflow_text:
+ * @tool_item: a #GtkToolItem
+ *
+ * Gets the label that is used for @tool_item in the overflow menu.
+ *
+ * Return: the overflow menu label for @tool_item
+ */
+const char *
+gtk_tool_item_get_overflow_text (GtkToolItem *tool_item)
+{
+  g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), NULL);
+
+  return tool_item->priv->overflow_text;
 }

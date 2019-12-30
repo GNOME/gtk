@@ -152,8 +152,8 @@ create_menu_button (void)
   image = gtk_image_new ();
   gtk_image_set_from_icon_name (GTK_IMAGE (image), "emblem-system-symbolic");
   gtk_container_add (GTK_CONTAINER (widget), image);
-  menu = gtk_menu_new ();
-  gtk_menu_button_set_popup (GTK_MENU_BUTTON (widget), menu);
+  menu = gtk_popover_new (NULL);
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (widget), menu);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   gtk_container_add (GTK_CONTAINER (vbox), widget);
@@ -801,32 +801,6 @@ create_toolbar (void)
 }
 
 static WidgetInfo *
-create_menubar (void)
-{
-  GtkWidget *widget, *vbox, *item;
-
-  widget = gtk_menu_bar_new ();
-
-  item = gtk_menu_item_new_with_mnemonic ("_File");
-  gtk_menu_shell_append (GTK_MENU_SHELL (widget), item);
-
-  item = gtk_menu_item_new_with_mnemonic ("_Edit");
-  gtk_menu_shell_append (GTK_MENU_SHELL (widget), item);
-
-  item = gtk_menu_item_new_with_mnemonic ("_Help");
-  gtk_menu_shell_append (GTK_MENU_SHELL (widget), item);
-
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
-  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
-  gtk_container_add (GTK_CONTAINER (vbox),
-		      gtk_label_new ("Menu Bar"));
-
-  return new_widget_info ("menubar", vbox, SMALL);
-}
-
-static WidgetInfo *
 create_message_dialog (void)
 {
   GtkWidget *widget;
@@ -1438,7 +1412,6 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_image ());
   retval = g_list_prepend (retval, create_label ());
   retval = g_list_prepend (retval, create_link_button ());
-  retval = g_list_prepend (retval, create_menubar ());
   retval = g_list_prepend (retval, create_message_dialog ());
   retval = g_list_prepend (retval, create_notebook ());
   retval = g_list_prepend (retval, create_panes ());

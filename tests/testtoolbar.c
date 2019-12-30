@@ -320,44 +320,6 @@ rtl_toggled (GtkCheckButton *check)
     gtk_widget_set_default_direction (GTK_TEXT_DIR_LTR);
 }
 
-static gboolean
-popup_context_menu (GtkToolbar *toolbar, gint x, gint y, gint button_number)
-{
-  GtkMenu *menu = GTK_MENU (gtk_menu_new ());
-  int i;
-
-  for (i = 0; i < 5; i++)
-    {
-      GtkWidget *item;
-      gchar *label = g_strdup_printf ("Item _%d", i);
-      item = gtk_menu_item_new_with_mnemonic (label);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-    }
-
-  if (button_number != -1)
-    {
-      gtk_menu_popup_at_pointer (menu, NULL);
-    }
-  else
-    {
-      GtkWindow *window;
-      GtkWidget *widget;
-
-      window = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (toolbar)));
-      widget = gtk_root_get_focus (GTK_ROOT (window));
-      if (!widget)
-        widget = GTK_WIDGET (toolbar);
-
-      gtk_menu_popup_at_widget (menu,
-                                widget,
-                                GDK_GRAVITY_SOUTH_EAST,
-                                GDK_GRAVITY_NORTH_WEST,
-                                NULL);
-    }
-
-  return TRUE;
-}
-
 static GtkToolItem *drag_item = NULL;
 
 static gboolean
@@ -433,6 +395,7 @@ main (gint argc, gchar **argv)
   GtkListStore *store;
   GtkWidget *image;
   GtkWidget *menuitem;
+  GtkWidget *box;
   GtkWidget *button;
   GtkWidget *label;
   GIcon *gicon;
@@ -501,40 +464,42 @@ main (gint argc, gchar **argv)
   g_timeout_add (3000, (GSourceFunc) timeout_cb, item);
   gtk_tool_item_set_expand (item, TRUE);
 
-  menu = gtk_menu_new ();
+  menu = gtk_popover_new (NULL);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_container_add (GTK_CONTAINER (menu), box);
   for (i = 0; i < 20; i++)
     {
       char *text;
       text = g_strdup_printf ("Menuitem %d", i);
-      menuitem = gtk_menu_item_new_with_label (text);
+      menuitem = gtk_button_new_with_label (text);
       g_free (text);
-      gtk_widget_show (menuitem);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+      gtk_container_add (GTK_CONTAINER (box), menuitem);
     }
 
   item = gtk_menu_tool_button_new (NULL, NULL);
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "document-open");
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), "Open");
-  gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (item), menu);
+  gtk_menu_tool_button_set_popover (GTK_MENU_TOOL_BUTTON (item), menu);
   add_item_to_list (store, item, "Open");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
   g_timeout_add (3000, (GSourceFunc) timeout_cb1, item);
  
-  menu = gtk_menu_new ();
+  menu = gtk_popover_new (NULL);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_container_add (GTK_CONTAINER (menu), box);
   for (i = 0; i < 20; i++)
     {
       char *text;
       text = g_strdup_printf ("A%d", i);
-      menuitem = gtk_menu_item_new_with_label (text);
+      menuitem = gtk_button_new_with_label (text);
       g_free (text);
-      gtk_widget_show (menuitem);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+      gtk_container_add (GTK_CONTAINER (box), menuitem);
     }
 
   item = gtk_menu_tool_button_new (NULL, NULL);
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "go-previous");
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), "Back");
-  gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (item), menu);
+  gtk_menu_tool_button_set_popover (GTK_MENU_TOOL_BUTTON (item), menu);
   add_item_to_list (store, item, "BackWithHistory");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
  
@@ -668,8 +633,6 @@ main (gint argc, gchar **argv)
   gtk_widget_show (window);
 
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
-  
-  g_signal_connect (toolbar, "popup_context_menu", G_CALLBACK (popup_context_menu), NULL);
   
   gtk_main ();
   

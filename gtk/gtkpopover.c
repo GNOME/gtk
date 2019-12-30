@@ -33,25 +33,17 @@
  * The position of a popover relative to the widget it is attached to
  * can also be changed through gtk_popover_set_position().
  *
- * By default, #GtkPopover performs a GTK+ grab, in order to ensure
- * input events get redirected to it while it is shown, and also so
- * the popover is dismissed in the expected situations (clicks outside
- * the popover, or the Esc key being pressed). If no such modal behavior
- * is desired on a popover, gtk_popover_set_autohide() may be called
- * on it to tweak its behavior.
+ * By default, #GtkPopover performs a grab, in order to ensure input events
+ * get redirected to it while it is shown, and also so the popover is dismissed
+ * in the expected situations (clicks outside the popover, or the Escape key
+ * being pressed). If no such modal behavior is desired on a popover,
+ * gtk_popover_set_autohide() may be called on it to tweak its behavior.
  *
  * ## GtkPopover as menu replacement
  *
- * GtkPopover is often used to replace menus. To facilitate this, it
- * supports being populated from a #GMenuModel, using
- * gtk_popover_menu_new_from_model(). In addition to all the regular
- * menu model features, this function supports rendering sections in
- * the model in a more compact form, as a row of icon buttons instead
- * of menu items.
- *
- * To use this rendering, set the ”display-hint” attribute of the
- * section to ”horizontal-buttons” and set the icons of your items
- * with the ”verb-icon” attribute.
+ * GtkPopover is often used to replace menus. The best was to do this
+ * is to use the #GtkPopoverMenu subclass which supports being populated
+ * from a #GMenuModel with gtk_popover_menu_new_from_model().
  *
  * |[
  * <section>
@@ -85,23 +77,23 @@
  *
  * The contents child node always gets the .background style class and
  * the popover itself gets the .menu style class if the popover is
- * menu-like (ie #GtkPopoverMenu).
+ * menu-like (i.e. #GtkPopoverMenu).
  *
- * Particular uses of GtkPopover, such as touch selection popups
- * or magnifiers in #GtkEntry or #GtkTextView get style classes
- * like .touch-selection or .magnifier to differentiate from
- * plain popovers.
+ * Particular uses of GtkPopover, such as touch selection popups or magnifiers
+ * in #GtkEntry or #GtkTextView get style classes like .touch-selection or .magnifier
+ * to differentiate from plain popovers.
  *
  * When styling a popover directly, the popover node should usually
  * not have any background.
  *
  * Note that, in order to accomplish appropriate arrow visuals, #GtkPopover uses
- * custom drawing for the arrow node. This makes it possible for the arrow to change
- * its shape dynamically, but it also limits the possibilities of styling it using CSS.
- * In particular, the arrow gets drawn over the content node's border so they look
- * like one shape, which means that the border-width of the content node and the arrow
- * node should be the same. The arrow also does not support any border shape other than
- * solid, no border-radius, only one border width (border-bottom-width is used) and no box-shadow.
+ * custom drawing for the arrow node. This makes it possible for the arrow to
+ * change its shape dynamically, but it also limits the possibilities of styling
+ * it using CSS. In particular, the arrow gets drawn over the content node's
+ * border so they look like one shape, which means that the border-width of
+ * the content node and the arrow node should be the same. The arrow also does
+ * not support any border shape other than solid, no border-radius, only one
+ * border width (border-bottom-width is used) and no box-shadow.
  */
 
 #include "config.h"

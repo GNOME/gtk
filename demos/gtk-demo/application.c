@@ -419,7 +419,7 @@ demo_application_window_load_state (DemoApplicationWindow *win)
 static void
 demo_application_window_init (DemoApplicationWindow *window)
 {
-  GtkWidget *menu;
+  GtkWidget *popover;
 
   window->width = -1;
   window->height = -1;
@@ -428,8 +428,8 @@ demo_application_window_init (DemoApplicationWindow *window)
 
   gtk_widget_init_template (GTK_WIDGET (window));
 
-  menu = gtk_menu_new_from_model (window->toolmenu);
-  gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (window->menutool), menu);
+  popover = gtk_popover_menu_new_from_model (window->menutool, window->toolmenu);
+  gtk_menu_tool_button_set_popover (GTK_MENU_TOOL_BUTTON (window->menutool), popover);
 
   g_action_map_add_action_entries (G_ACTION_MAP (window),
                                    win_entries, G_N_ELEMENTS (win_entries),

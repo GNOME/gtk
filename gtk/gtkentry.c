@@ -55,7 +55,6 @@
 #include "gtkpopover.h"
 #include "gtkprivate.h"
 #include "gtkprogressbar.h"
-#include "gtkseparatormenuitem.h"
 #include "gtkselection.h"
 #include "gtksettings.h"
 #include "gtksnapshot.h"

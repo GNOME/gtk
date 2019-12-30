@@ -26,7 +26,6 @@
 #endif
 
 #include <gtk/gtktogglebutton.h>
-#include <gtk/gtkmenu.h>
 #include <gtk/gtkpopover.h>
 
 G_BEGIN_DECLS
@@ -55,12 +54,6 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget   *gtk_menu_button_new            (void);
 
 GDK_AVAILABLE_IN_ALL
-void         gtk_menu_button_set_popup      (GtkMenuButton *menu_button,
-                                             GtkWidget     *menu);
-GDK_AVAILABLE_IN_ALL
-GtkMenu     *gtk_menu_button_get_popup      (GtkMenuButton *menu_button);
-
-GDK_AVAILABLE_IN_ALL
 void         gtk_menu_button_set_popover    (GtkMenuButton *menu_button,
                                              GtkWidget     *popover);
 GDK_AVAILABLE_IN_ALL
@@ -83,13 +76,6 @@ void         gtk_menu_button_set_align_widget (GtkMenuButton *menu_button,
                                                GtkWidget     *align_widget);
 GDK_AVAILABLE_IN_ALL
 GtkWidget   *gtk_menu_button_get_align_widget (GtkMenuButton *menu_button);
-
-GDK_AVAILABLE_IN_ALL
-void         gtk_menu_button_set_use_popover (GtkMenuButton *menu_button,
-                                              gboolean       use_popover);
-
-GDK_AVAILABLE_IN_ALL
-gboolean     gtk_menu_button_get_use_popover (GtkMenuButton *menu_button);
 
 GDK_AVAILABLE_IN_ALL
 void         gtk_menu_button_set_icon_name (GtkMenuButton *menu_button,

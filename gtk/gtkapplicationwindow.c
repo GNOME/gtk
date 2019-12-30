@@ -25,7 +25,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtkheaderbar.h"
-#include "gtkmenubar.h"
+#include "gtkpopovermenubar.h"
 #include "gtkintl.h"
 #include "gtksettings.h"
 #include "gtkshortcutswindowprivate.h"
@@ -70,7 +70,7 @@
  * will display the application menu, but not the menubar.
  *
  * If the desktop environment does not display the menubar, then
- * #GtkApplicationWindow will automatically show a #GtkMenuBar for it.
+ * #GtkApplicationWindow will automatically show a menubar for it.
  * This behaviour can be overridden with the #GtkApplicationWindow:show-menubar
  * property. If the desktop environment does not display the application
  * menu, then it will automatically be included in the menubar or in the
@@ -273,7 +273,7 @@ gtk_application_window_update_menubar (GtkApplicationWindow *window)
       g_menu_append_section (combined, NULL, G_MENU_MODEL (priv->app_menu_section));
       g_menu_append_section (combined, NULL, G_MENU_MODEL (priv->menubar_section));
 
-      priv->menubar = gtk_menu_bar_new_from_model (G_MENU_MODEL (combined));
+      priv->menubar = gtk_popover_menu_bar_new_from_model (G_MENU_MODEL (combined));
       gtk_widget_set_parent (priv->menubar, GTK_WIDGET (window));
       g_object_unref (combined);
     }

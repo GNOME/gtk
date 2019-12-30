@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright © 2019 Carlos Garnacho <carlosg@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,17 +15,17 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_CHECK_MENU_ITEM_PRIVATE_H__
-#define __GTK_CHECK_MENU_ITEM_PRIVATE_H__
+#ifndef __GTK_POPOVER_MENU_BAR_PRIVATE_H__
+#define __GTK_POPOVER_MENU_BAR_PRIVATE_H__
 
-#include <gtk/gtkcheckmenuitem.h>
+#include "gtkpopovermenubar.h"
 
 G_BEGIN_DECLS
 
-void       _gtk_check_menu_item_set_active       (GtkCheckMenuItem *check_menu_item,
-                                                  gboolean          is_active);
-GtkWidget * _gtk_check_menu_item_get_indicator_widget (GtkCheckMenuItem *check_menu_item);
+void   gtk_popover_menu_bar_select_first           (GtkPopoverMenuBar *bar);
+GList* gtk_popover_menu_bar_get_viewable_menu_bars (GtkWindow         *window);
+
 
 G_END_DECLS
 
-#endif /* __GTK_CHECK_MENU_ITEM_PRIVATE_H__ */
+#endif /* __GTK_POPOVER_PRIVATE_H__ */

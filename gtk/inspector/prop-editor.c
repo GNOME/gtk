@@ -1251,15 +1251,6 @@ attribute_editor (GObject                *object,
   return box;
 }
 
-static GtkWidget *
-action_ancestor (GtkWidget *widget)
-{
-  if (GTK_IS_MENU (widget))
-    return gtk_menu_get_attach_widget (GTK_MENU (widget));
-  else
-    return gtk_widget_get_parent (widget);
-}
-
 static GObject *
 find_action_owner (GtkActionable *actionable)
 {
@@ -1291,7 +1282,7 @@ find_action_owner (GtkActionable *actionable)
       if (muxer && gtk_action_muxer_find (muxer, full_name, NULL))
         return (GObject *)widget;
 
-      widget = action_ancestor (widget);
+      widget = gtk_widget_get_parent (widget);
     }
 
   return NULL;
