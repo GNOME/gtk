@@ -2801,7 +2801,8 @@ gtk_scrolled_window_snapshot (GtkWidget   *widget,
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
 
   if (priv->hscrollbar_visible &&
-      priv->vscrollbar_visible)
+      priv->vscrollbar_visible &&
+      !priv->use_indicators)
     gtk_scrolled_window_snapshot_scrollbars_junction (scrolled_window, snapshot);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->snapshot (widget, snapshot);
