@@ -44,7 +44,7 @@
 
 struct _GtkTooltipWindow
 {
-  GtkWindow parent_type;
+  GtkWindow parent_instance;
 
   GdkSurface *surface;
   GskRenderer *renderer;
