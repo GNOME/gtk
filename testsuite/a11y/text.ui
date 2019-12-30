@@ -7,7 +7,7 @@ Did gyre and gimple in the wabe</property>
   </object>
   <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
-    <property name="type">popup</property>
+    <property name="decorated">0</property>
     <child>
       <object class="GtkTextView" id="text1">
         <property name="visible">True</property>

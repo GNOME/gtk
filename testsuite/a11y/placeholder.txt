@@ -1,0 +1,1 @@
+Bail out! ERROR:../testsuite/a11y/accessibility-dump.c:778:dump_ui_file: assertion failed (error == NULL): Failed to open file “/var/home/mclasen/Sources/gtk+/testsuite/a11y/placeholder.ui”: No such file or directory (g-file-error-quark, 4)

@@ -1,5 +1,5 @@
 window1
-  "window"
+  "frame"
   index: 0
   state: enabled resizable sensitive showing visible
   toolkit: gtk

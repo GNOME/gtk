@@ -1,5 +1,5 @@
 window1
-  "window"
+  "frame"
   index: 0
   state: enabled resizable sensitive showing visible
   toolkit: gtk
@@ -55,7 +55,7 @@ window1
       name: Hello World!
       member-of: button4
                  button3
-      state: enabled focusable sensitive showing visible
+      state: checked enabled focusable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget

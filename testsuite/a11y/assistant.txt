@@ -1,5 +1,5 @@
 window1
-  "window"
+  "frame"
   index: 0
   name: Page 1
   state: enabled resizable sensitive showing visible
@@ -53,7 +53,7 @@ window1
     "panel"
     parent: window1
     index: 1
-    state: enabled sensitive showing visible
+    state: enabled sensitive visible
     toolkit: gtk
     <AtkComponent>
     layer: widget
@@ -63,7 +63,7 @@ window1
       parent: unnamed-GtkContainerAccessible-0
       index: 0
       name: Cancel
-      state: enabled focusable sensitive showing visible
+      state: enabled focusable sensitive visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
@@ -114,7 +114,7 @@ window1
       parent: unnamed-GtkContainerAccessible-1
       index: 1
       name: Next
-      state: focusable showing visible
+      state: focusable visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
