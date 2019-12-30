@@ -202,6 +202,9 @@ gtk_mount_operation_init (GtkMountOperation *operation)
                                                          "org.gtk.MountOperationHandler",
                                                          "/org/gtk/MountOperationHandler",
                                                          NULL, NULL);
+  if (!operation->priv->handler)
+    return;
+
   name_owner = g_dbus_proxy_get_name_owner (G_DBUS_PROXY (operation->priv->handler));
   if (!name_owner)
     g_clear_object (&operation->priv->handler);
