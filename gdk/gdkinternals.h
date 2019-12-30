@@ -276,6 +276,8 @@ GdkGrabStatus  gdk_seat_grab             (GdkSeat                *seat,
                                           GdkSeatGrabPrepareFunc  prepare_func,
                                           gpointer                prepare_func_data);
 void           gdk_seat_ungrab           (GdkSeat                *seat);
+GdkSurface *   gdk_surface_new_temp             (GdkDisplay    *display,
+                                                 const GdkRectangle *position);
 
 G_END_DECLS
 
