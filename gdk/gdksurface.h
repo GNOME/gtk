@@ -420,9 +420,6 @@ GdkSurface *   gdk_surface_new_toplevel         (GdkDisplay    *display,
                                                  int            width,
                                                  int            height);
 GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_surface_new_temp             (GdkDisplay    *display,
-                                                 const GdkRectangle *position);
-GDK_AVAILABLE_IN_ALL
 GdkSurface *   gdk_surface_new_popup            (GdkDisplay    *display,
                                                  GdkSurface    *parent,
                                                  gboolean       autohide);
