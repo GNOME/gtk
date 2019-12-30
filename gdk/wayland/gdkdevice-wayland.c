@@ -1296,6 +1296,7 @@ data_device_motion (void                  *data,
                     wl_fixed_t             y)
 {
   GdkWaylandSeat *seat = data;
+  int origin_x, origin_y;
 
   GDK_DISPLAY_NOTE (seat->display, EVENTS,
             g_message ("data device motion, data_device = %p, time = %d, x = %f, y = %f",
@@ -1308,10 +1309,12 @@ data_device_motion (void                  *data,
   seat->pointer_info.surface_x = wl_fixed_to_double (x);
   seat->pointer_info.surface_y = wl_fixed_to_double (y);
 
+  gdk_surface_get_origin (gdk_drop_get_surface (seat->drop), &origin_x, &origin_y);
+
   gdk_drop_emit_motion_event (seat->drop,
                               FALSE,
-                              seat->pointer_info.surface_x,
-                              seat->pointer_info.surface_y,
+                              origin_x + seat->pointer_info.surface_x,
+                              origin_y + seat->pointer_info.surface_y,
                               time);
 }
 
@@ -1320,14 +1323,17 @@ data_device_drop (void                  *data,
                   struct wl_data_device *data_device)
 {
   GdkWaylandSeat *seat = data;
+  int origin_x, origin_y;
 
   GDK_DISPLAY_NOTE (seat->display, EVENTS,
             g_message ("data device drop, data device %p", data_device));
 
+  gdk_surface_get_origin (gdk_drop_get_surface (seat->drop), &origin_x, &origin_y);
+
   gdk_drop_emit_drop_event (seat->drop,
                             FALSE,
-                            seat->pointer_info.surface_x,
-                            seat->pointer_info.surface_y,
+                            origin_x + seat->pointer_info.surface_x,
+                            origin_y + seat->pointer_info.surface_y,
                             GDK_CURRENT_TIME);
 }
 
