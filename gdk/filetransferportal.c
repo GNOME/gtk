@@ -86,6 +86,9 @@ file_transfer_portal_available (void)
 {
   gboolean available;
 
+  if (g_getenv ("NO_FILE_TRANSFER_PORTAL"))
+    return FALSE;
+
   ensure_file_transfer_portal ();
 
   available = file_transfer_proxy != NULL;

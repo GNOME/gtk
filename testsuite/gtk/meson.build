@@ -99,6 +99,7 @@ foreach t : tests
               'GTK_CSD=1',
               'G_ENABLE_DIAGNOSTIC=0',
               'GSK_RENDERER=cairo',
+              'NO_FILE_TRANSFER_PORTAL=1',
               'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
               'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
               'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
