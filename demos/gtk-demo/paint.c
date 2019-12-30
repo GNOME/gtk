@@ -384,7 +384,7 @@ do_paint (GtkWidget *toplevel)
     {
       GtkWidget *draw_area, *headerbar, *colorbutton;
 
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
 
       draw_area = drawing_area_new ();
       gtk_container_add (GTK_CONTAINER (window), draw_area);

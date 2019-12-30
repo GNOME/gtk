@@ -75,7 +75,7 @@
  *   GtkWidget *box;
  *   const char *text;
  *
- *   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+ *   window = gtk_window_new ();
  *   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
  *
  *   text = "Hi, I’m a toggle button.";

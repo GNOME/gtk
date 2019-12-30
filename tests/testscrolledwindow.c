@@ -83,7 +83,7 @@ scrollable_policy (void)
   GtkWidget *window, *swindow, *hbox, *vbox, *frame, *cntl, *listbox;
   GtkWidget *viewport, *label, *expander, *widget, *popover;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   hbox   = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
   vbox   = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
 

@@ -808,7 +808,7 @@ create_window (void)
   GtkWidget *window, *vbox, *button;
   gint i;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   vbox   = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
 
   g_object_set (vbox, "margin", 8, NULL);

@@ -59,7 +59,7 @@ do_textmask (GtkWidget *do_widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
       gtk_widget_set_size_request (window, 400, 200);
       gtk_window_set_title (GTK_WINDOW (window), "Text Mask");

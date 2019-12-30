@@ -50,7 +50,7 @@ simple_grid (void)
   GtkWidget *test1, *test2, *test3, *test4, *test5, *test6;
   GtkGesture *gesture;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Orientation");
   grid = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (window), grid);
@@ -95,7 +95,7 @@ text_grid (void)
   GtkWidget *box;
   GtkWidget *label;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Height-for-Width");
   paned1 = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_container_add (GTK_CONTAINER (window), paned1);
@@ -137,7 +137,7 @@ box_comparison (void)
   GtkWidget *label;
   GtkWidget *grid;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Grid vs. Box");
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   gtk_container_add (GTK_CONTAINER (window), vbox);
@@ -200,7 +200,7 @@ empty_line (void)
   GtkWidget *grid;
   GtkWidget *child;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Empty row");
   grid = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (window), grid);
@@ -228,7 +228,7 @@ empty_grid (void)
   GtkWidget *grid;
   GtkWidget *child;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Empty grid");
   grid = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (window), grid);
@@ -256,7 +256,7 @@ scrolling (void)
   GtkWidget *child;
   gint i;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Scrolling");
   sw = gtk_scrolled_window_new (NULL, NULL);
   viewport = gtk_viewport_new (NULL, NULL);
@@ -352,7 +352,7 @@ insert (void)
   GtkWidget *child;
   GtkWidget *button;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Insertion / Removal");
 
   g = gtk_grid_new ();
@@ -417,7 +417,7 @@ spanning_grid (void)
    * child need to stay collapsed
    */
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Spanning");
 
   g = gtk_grid_new ();

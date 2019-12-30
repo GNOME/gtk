@@ -189,7 +189,7 @@ main (int argc, char *argv[])
       g_object_unref (obj);
     }
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   grid = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (window), grid);
   sw = gtk_scrolled_window_new (NULL, NULL);

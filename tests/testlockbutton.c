@@ -222,7 +222,7 @@ main (int argc, char *argv[])
 
   permission = g_object_new (G_TYPE_TEST_PERMISSION, NULL);
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);

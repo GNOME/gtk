@@ -266,7 +266,7 @@ create_buttons (GtkWidget *widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
 			      gtk_widget_get_display (widget));
 
@@ -341,7 +341,7 @@ create_toggle_buttons (GtkWidget *widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
 			      gtk_widget_get_display (widget));
 
@@ -715,7 +715,7 @@ create_statusbar (GtkWidget *widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
 			      gtk_widget_get_display (widget));
 
@@ -928,7 +928,7 @@ void create_labels (GtkWidget *widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
 
       gtk_window_set_display (GTK_WINDOW (window),
 			      gtk_widget_get_display (widget));
@@ -1224,7 +1224,7 @@ create_pixbuf (GtkWidget *widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
 
       gtk_window_set_display (GTK_WINDOW (window),
 			      gtk_widget_get_display (widget));
@@ -1304,7 +1304,6 @@ create_tooltips (GtkWidget *widget)
     {
       window =
 	g_object_new (gtk_window_get_type (),
-			"GtkWindow::type", GTK_WINDOW_TOPLEVEL,
 			"GtkWindow::title", "Tooltips",
 			"GtkWindow::resizable", FALSE,
 			NULL);
@@ -1405,7 +1404,7 @@ create_image (GtkWidget *widget)
       GtkWidget *vbox;
       GdkPixbuf *pixbuf;
         
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       
       gtk_window_set_display (GTK_WINDOW (window),
 			      gtk_widget_get_display (widget));
@@ -1535,7 +1534,7 @@ create_listbox (GtkWidget *widget)
       GdkDisplay *display = gtk_widget_get_display (widget);
       int i;
 
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_hide_on_close (GTK_WINDOW (window), TRUE);
       gtk_window_set_display (GTK_WINDOW (window), display);
 
@@ -1764,7 +1763,7 @@ create_modal_window (GtkWidget *widget)
   GtkWidget *btnColor,*btnFile,*btnClose;
 
   /* Create modal window (Here you can use any window descendent )*/
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_display (GTK_WINDOW (window),
 			  gtk_widget_get_display (widget));
 
@@ -1925,7 +1924,7 @@ scrolled_windows_remove (GtkWidget *dialog, gint response, GtkWidget *scrollwin)
   else
     {
       sw_parent = gtk_widget_get_parent (scrollwin);
-      sw_float_parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      sw_float_parent = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (sw_float_parent),
 			      gtk_widget_get_display (dialog));
       
@@ -2117,7 +2116,7 @@ create_entry (GtkWidget *widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
 			      gtk_widget_get_display (widget));
 
@@ -2214,7 +2213,7 @@ create_expander (GtkWidget *widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
 			      gtk_widget_get_display (widget));
 
@@ -2609,7 +2608,7 @@ create_spins (GtkWidget *widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
 			      gtk_widget_get_display (widget));
 
@@ -3051,7 +3050,7 @@ create_cursors (GtkWidget *widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
 			      gtk_widget_get_display (widget));
 
@@ -3178,7 +3177,7 @@ create_color_selection (GtkWidget *widget)
       GtkWidget *hbox;
       GtkWidget *label;
       
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window), 
 			      gtk_widget_get_display (widget));
 			     
@@ -3355,7 +3354,7 @@ create_font_selection (GtkWidget *widget)
       GtkWidget *hbox;
       GtkWidget *label;
       
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
 			      gtk_widget_get_display (widget));
 
@@ -3543,7 +3542,6 @@ create_display_screen (GtkWidget *widget)
 
   window = g_object_new (gtk_window_get_type (),
 			 "display", display,
-			 "type", GTK_WINDOW_TOPLEVEL,
 			 "title", "Screen or Display selection",
                          10, NULL);
   g_signal_connect (window, "destroy", 
@@ -3621,7 +3619,7 @@ create_range_controls (GtkWidget *widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
 
       gtk_window_set_display (GTK_WINDOW (window),
 			      gtk_widget_get_display (widget));
@@ -4001,7 +3999,7 @@ create_notebook (GtkWidget *widget)
   
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
 			      gtk_widget_get_display (widget));
 
@@ -4199,7 +4197,7 @@ create_panes (GtkWidget *widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
 
       gtk_window_set_display (GTK_WINDOW (window),
 			      gtk_widget_get_display (widget));
@@ -4288,7 +4286,7 @@ paned_keyboard_window1 (GtkWidget *widget)
   GtkWidget *button3;
   GtkWidget *button4;
 
-  window1 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window1 = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window1), "Basic paned navigation");
   gtk_window_set_display (GTK_WINDOW (window1), 
 			  gtk_widget_get_display (widget));
@@ -4371,7 +4369,7 @@ paned_keyboard_window2 (GtkWidget *widget)
   GtkWidget *button11;
   GtkWidget *button10;
 
-  window2 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window2 = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window2), "\"button 10\" is not inside the horisontal pane");
 
   gtk_window_set_display (GTK_WINDOW (window2), 
@@ -4431,7 +4429,7 @@ paned_keyboard_window3 (GtkWidget *widget)
   GtkWidget *frame12;
   GtkWidget *button17;
 
-  window3 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window3 = gtk_window_new ();
   g_object_set_data (G_OBJECT (window3), "window3", window3);
   gtk_window_set_title (GTK_WINDOW (window3), "Nested panes");
 
@@ -4506,7 +4504,7 @@ paned_keyboard_window4 (GtkWidget *widget)
   GtkWidget *button25;
   GtkWidget *button24;
 
-  window4 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window4 = gtk_window_new ();
   g_object_set_data (G_OBJECT (window4), "window4", window4);
   gtk_window_set_title (GTK_WINDOW (window4), "window4");
 
@@ -4655,7 +4653,7 @@ create_wmhints (GtkWidget *widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
 
       gtk_window_set_display (GTK_WINDOW (window),
 			      gtk_widget_get_display (widget));
@@ -4966,7 +4964,7 @@ create_surface_states (GtkWidget *widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
 			      gtk_widget_get_display (widget));
 
@@ -4979,7 +4977,7 @@ create_surface_states (GtkWidget *widget)
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
 
-      iconified = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      iconified = gtk_window_new ();
 
       gtk_window_set_display (GTK_WINDOW (iconified),
 			      gtk_widget_get_display (widget));
@@ -4993,7 +4991,7 @@ create_surface_states (GtkWidget *widget)
       controls = get_state_controls (iconified);
       gtk_container_add (GTK_CONTAINER (iconified), controls);
       
-      normal = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      normal = gtk_window_new ();
 
       gtk_window_set_display (GTK_WINDOW (normal),
 			      gtk_widget_get_display (widget));
@@ -5133,7 +5131,7 @@ window_controls (GtkWidget *window)
   GtkWidget *spin;
   GtkAdjustment *adjustment;
   
-  control_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  control_window = gtk_window_new ();
 
   gtk_window_set_display (GTK_WINDOW (control_window),
 			  gtk_widget_get_display (window));
@@ -5255,7 +5253,7 @@ create_window_sizing (GtkWidget *widget)
     {
       GtkWidget *label;
       
-      target_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      target_window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (target_window),
 			      gtk_widget_get_display (widget));
       label = gtk_label_new (NULL);
@@ -6021,7 +6019,7 @@ create_native_dialogs (GtkWidget *widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (widget));
 
@@ -6190,7 +6188,7 @@ create_main_window (void)
   GtkWidget *separator;
   int i;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_widget_set_name (window, "main_window");
   gtk_window_set_default_size (GTK_WINDOW (window), -1, 400);
 
@@ -6331,7 +6329,7 @@ do_bench (char* what, int num)
   GtkWidget *widget;
   void (* fn) (GtkWidget *widget);
   fn = NULL;
-  widget = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  widget = gtk_window_new ();
 
   if (g_ascii_strcasecmp (what, "ALL") == 0)
     {

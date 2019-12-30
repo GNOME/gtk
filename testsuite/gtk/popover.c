@@ -36,7 +36,7 @@ test_show_popover (void)
   GtkWidget *button;
   GtkWidget *popover;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   button = gtk_menu_button_new ();
   popover = gtk_popover_new (NULL);
   gtk_container_add (GTK_CONTAINER (popover), gtk_label_new ("Nu?"));
