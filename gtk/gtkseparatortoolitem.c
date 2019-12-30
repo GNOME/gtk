@@ -23,7 +23,6 @@
 
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkseparatormenuitem.h"
 #include "gtkstylecontext.h"
 #include "gtktoolbarprivate.h"
 #include "gtkwidgetprivate.h"
@@ -69,7 +68,6 @@ enum {
   PROP_DRAW
 };
 
-static gboolean gtk_separator_tool_item_create_menu_proxy (GtkToolItem               *item);
 static void     gtk_separator_tool_item_set_property      (GObject                   *object,
                                                            guint                      prop_id,
                                                            const GValue              *value,
@@ -88,19 +86,15 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
 {
   GObjectClass *object_class;
   GtkContainerClass *container_class;
-  GtkToolItemClass *toolitem_class;
   GtkWidgetClass *widget_class;
   
   object_class = (GObjectClass *)class;
   container_class = (GtkContainerClass *)class;
-  toolitem_class = (GtkToolItemClass *)class;
   widget_class = (GtkWidgetClass *)class;
 
   object_class->set_property = gtk_separator_tool_item_set_property;
   object_class->get_property = gtk_separator_tool_item_get_property;
 
-  toolitem_class->create_menu_proxy = gtk_separator_tool_item_create_menu_proxy;
-  
   container_class->add = gtk_separator_tool_item_add;
   
   g_object_class_install_property (object_class,
@@ -124,18 +118,6 @@ gtk_separator_tool_item_add (GtkContainer *container,
                              GtkWidget    *child)
 {
   g_warning ("attempt to add a child to a GtkSeparatorToolItem");
-}
-
-static gboolean
-gtk_separator_tool_item_create_menu_proxy (GtkToolItem *item)
-{
-  GtkWidget *menu_item = NULL;
-  
-  menu_item = gtk_separator_menu_item_new ();
-  
-  gtk_tool_item_set_proxy_menu_item (item, MENU_ID, menu_item);
-  
-  return TRUE;
 }
 
 static void

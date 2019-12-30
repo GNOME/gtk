@@ -149,7 +149,6 @@
     <file>application_demo.c</file>
     <file>assistant.c</file>
     <file>builder.c</file>
-    <file>changedisplay.c</file>
     <file>clipboard.c</file>
     <file>colorsel.c</file>
     <file>combobox.c</file>
@@ -191,7 +190,6 @@
     <file>listbox.c</file>
     <file>list_store.c</file>
     <file>markup.c</file>
-    <file>menus.c</file>
     <file>modelbutton.c</file>
     <file>overlay.c</file>
     <file>overlay2.c</file>

@@ -95,7 +95,6 @@ static void gtk_tool_button_property_notify (GObject          *object,
 static void gtk_tool_button_finalize      (GObject            *object);
 
 static void gtk_tool_button_toolbar_reconfigured (GtkToolItem *tool_item);
-static gboolean   gtk_tool_button_create_menu_proxy (GtkToolItem     *item);
 static void       button_clicked                    (GtkWidget       *widget,
 						     GtkToolButton   *button);
 
@@ -168,7 +167,6 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
   object_class->notify = gtk_tool_button_property_notify;
   object_class->finalize = gtk_tool_button_finalize;
 
-  tool_item_class->create_menu_proxy = gtk_tool_button_create_menu_proxy;
   tool_item_class->toolbar_reconfigured = gtk_tool_button_toolbar_reconfigured;
   
   klass->button_type = GTK_TYPE_BUTTON;
@@ -706,92 +704,6 @@ gtk_tool_button_finalize (GObject *object)
   parent_class->finalize (object);
 }
 
-static GtkWidget *
-clone_image_menu_size (GtkImage *image)
-{
-  GtkImageType storage_type = gtk_image_get_storage_type (image);
-
-  if (storage_type == GTK_IMAGE_ICON_NAME)
-    {
-      const gchar *icon_name = gtk_image_get_icon_name (image);
-
-      return gtk_image_new_from_icon_name (icon_name);
-    }
-  else if (storage_type == GTK_IMAGE_GICON)
-    {
-      GIcon *icon = gtk_image_get_gicon (image);
-
-      return gtk_image_new_from_gicon (icon);
-    }
-
-  return NULL;
-}
-
-static void
-click_button (GtkButton *button)
-{
-  g_signal_emit_by_name (button, "clicked");
-}
-
-static gboolean
-gtk_tool_button_create_menu_proxy (GtkToolItem *item)
-{
-  GtkToolButton *button = GTK_TOOL_BUTTON (item);
-  GtkWidget *menu_item;
-  GtkWidget *menu_image = NULL;
-  gboolean use_mnemonic = TRUE;
-  const char *label_text;
-  GtkWidget *box;
-  GtkWidget *label;
-
-  if (_gtk_tool_item_create_menu_proxy (item))
-    return TRUE;
-
-  if (GTK_IS_LABEL (button->priv->label_widget))
-    {
-      label_text = gtk_label_get_label (GTK_LABEL (button->priv->label_widget));
-      use_mnemonic = gtk_label_get_use_underline (GTK_LABEL (button->priv->label_widget));
-    }
-  else if (button->priv->label_text)
-    {
-      label_text = button->priv->label_text;
-      use_mnemonic = button->priv->use_underline;
-    }
-  else
-    {
-      label_text = "";
-    }
-
-  if (GTK_IS_IMAGE (button->priv->icon_widget))
-    {
-      menu_image = clone_image_menu_size (GTK_IMAGE (button->priv->icon_widget));
-    }
-
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  if (use_mnemonic)
-     label = gtk_label_new_with_mnemonic (label_text);
-  else
-     label = gtk_label_new (label_text);
-
-  if (menu_image)
-      gtk_container_add (GTK_CONTAINER (box), menu_image);
-
-  gtk_container_add (GTK_CONTAINER (box), label);
-
-  menu_item = gtk_menu_item_new ();
-  gtk_container_add (GTK_CONTAINER (menu_item), box);
-
-  g_signal_connect_closure_by_id (menu_item,
-				  g_signal_lookup ("activate", G_OBJECT_TYPE (menu_item)), 0,
-				  g_cclosure_new_object_swap (G_CALLBACK (click_button),
-							      G_OBJECT (GTK_TOOL_BUTTON (button)->priv->button)),
-				  FALSE);
-
-  gtk_tool_item_set_proxy_menu_item (GTK_TOOL_ITEM (button), MENU_ID, menu_item);
-  
-  return TRUE;
-}
-
 static void
 button_clicked (GtkWidget     *widget,
 		GtkToolButton *button)
@@ -848,6 +760,7 @@ gtk_tool_button_set_label (GtkToolButton *button,
   gchar *old_label;
   gchar *elided_label;
   AtkObject *accessible;
+  const char *old_overflow_text;
   
   g_return_if_fail (GTK_IS_TOOL_BUTTON (button));
 
@@ -863,6 +776,11 @@ gtk_tool_button_set_label (GtkToolButton *button,
       atk_object_set_name (accessible, elided_label);
       g_free (elided_label);
     }
+
+  old_overflow_text = gtk_tool_item_get_overflow_text (GTK_TOOL_ITEM (button));
+  if (old_overflow_text == NULL ||
+      (old_label && strcmp (old_overflow_text, old_label) == 0))
+    gtk_tool_item_set_overflow_text (GTK_TOOL_ITEM (button), label);
 
   g_free (old_label);
  

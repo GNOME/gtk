@@ -29,7 +29,6 @@
 #include "gtkgestureclick.h"
 #include "gtkbox.h"
 #include "gtkimage.h"
-#include "gtkcheckmenuitem.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"

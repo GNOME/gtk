@@ -37,7 +37,6 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkrenderbackgroundprivate.h"
-#include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
 #include "gtktextiterprivate.h"
 #include "gtkimmulticontext.h"

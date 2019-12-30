@@ -51,7 +51,6 @@
 #include "gtklayoutmanagerprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtkmenu.h"
 #include "gtkpopover.h"
 #include "gtkprivate.h"
 #include "gtkrenderbackgroundprivate.h"
@@ -11891,10 +11890,7 @@ gtk_widget_get_parent_muxer (GtkWidget *widget,
   if (GTK_IS_WINDOW (widget))
     return gtk_application_get_parent_muxer_for_window (GTK_WINDOW (widget));
 
-  if (GTK_IS_MENU (widget))
-    parent = gtk_menu_get_attach_widget (GTK_MENU (widget));
-  else
-    parent = _gtk_widget_get_parent (widget);
+  parent = _gtk_widget_get_parent (widget);
 
   if (parent)
     return _gtk_widget_get_action_muxer (parent, create);

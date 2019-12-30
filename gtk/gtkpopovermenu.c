@@ -43,74 +43,22 @@
  * @Title: GtkPopoverMenu
  *
  * GtkPopoverMenu is a subclass of #GtkPopover that treats its
- * children like menus and allows switching between them. It is
- * meant to be used primarily together with #GtkModelButton, but
- * any widget can be used, such as #GtkSpinButton or #GtkScale.
- * In this respect, GtkPopoverMenu is more flexible than popovers
- * that are created from a #GMenuModel with gtk_popover_new_from_model().
+ * children like menus and allows switching between them. It
+ * can open submenus as traditional, nested submenus, or in a
+ * more touch-friendly sliding fashion.
  *
- * To add a child as a submenu, use gtk_popover_menu_add_submenu().
- * To let the user open this submenu, add a #GtkModelButton whose
- * #GtkModelButton:menu-name property is set to the name you've given
- * to the submenu.
+ * GtkPopoverMenu is meant to be used primarily with menu models,
+ * using gtk_popover_menu_new_from_model(). If you need to put other
+ * widgets such as #GtkSpinButton or #GtkSwitch into a popover,
+ * use a #GtkPopover.
  *
- * To add a named submenu in a ui file, set the #GtkWidget:name property
- * of the widget that you are adding as a child of the popover menu.
+ * In addition to all the regular menu model features, this function
+ * supports rendering sections in the model in a more compact form,
+ * as a row of image buttons instead of menu items.
  *
- * By convention, the first child of a submenu should be a #GtkModelButton
- * to switch back to the parent menu. Such a button should use the
- * #GtkModelButton:inverted and #GtkModelButton:centered properties
- * to achieve a title-like appearance and place the submenu indicator
- * at the opposite side. To switch back to the main menu, use "main"
- * as the menu name.
- *
- * # Example
- *
- * |[
- * <object class="GtkPopoverMenu">
- *   <child>
- *     <object class="GtkBox">
- *       <property name="visible">True</property>
- *       <property name="margin">10</property>
- *       <child>
- *         <object class="GtkModelButton">
- *           <property name="visible">True</property>
- *           <property name="action-name">win.frob</property>
- *           <property name="text" translatable="yes">Frob</property>
- *         </object>
- *       </child>
- *       <child>
- *         <object class="GtkModelButton">
- *           <property name="visible">True</property>
- *           <property name="menu-name">more</property>
- *           <property name="text" translatable="yes">More</property>
- *         </object>
- *       </child>
- *     </object>
- *   </child>
- *   <child>
- *     <object class="GtkBox">
- *       <property name="visible">True</property>
- *       <property name="margin">10</property>
- *       <property name="name">more</property>
- *       <child>
- *         <object class="GtkModelButton">
- *           <property name="visible">True</property>
- *           <property name="action-name">win.foo</property>
- *           <property name="text" translatable="yes">Foo</property>
- *         </object>
- *       </child>
- *       <child>
- *         <object class="GtkModelButton">
- *           <property name="visible">True</property>
- *           <property name="action-name">win.bar</property>
- *           <property name="text" translatable="yes">Bar</property>
- *         </object>
- *       </child>
- *     </object>
- *   </child>
- * </object>
- * ]|
+ * To use this rendering, set the ”display-hint” attribute of the
+ * section to ”horizontal-buttons” and set the icons of your items
+ * with the ”verb-icon” attribute.
  *
  * # CSS Nodes
  *
@@ -184,13 +132,18 @@ gtk_popover_menu_set_active_item (GtkPopoverMenu *menu,
   if (menu->active_item != item)
     {
       if (menu->active_item)
-        gtk_widget_unset_state_flags (menu->active_item, GTK_STATE_FLAG_SELECTED);
+        {
+          gtk_widget_unset_state_flags (menu->active_item, GTK_STATE_FLAG_SELECTED);
+          g_object_remove_weak_pointer (G_OBJECT (menu->active_item), (gpointer *)&menu->active_item);
+        }
 
       menu->active_item = item;
 
       if (menu->active_item)
         {
           GtkWidget *popover;
+
+          g_object_add_weak_pointer (G_OBJECT (menu->active_item), (gpointer *)&menu->active_item);
 
           gtk_widget_set_state_flags (menu->active_item, GTK_STATE_FLAG_SELECTED, FALSE);
           if (GTK_IS_MODEL_BUTTON (item))
@@ -276,6 +229,12 @@ static void
 gtk_popover_menu_dispose (GObject *object)
 {
   GtkPopoverMenu *popover = GTK_POPOVER_MENU (object);
+
+  if (popover->active_item)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (popover->active_item), (gpointer *)&popover->active_item);
+      popover->active_item = NULL;
+    }
 
   g_clear_object (&popover->model);
 
@@ -528,7 +487,7 @@ gtk_popover_menu_new (GtkWidget *relative_to)
   return popover;
 }
 
-/**
+/*<private>
  * gtk_popover_menu_open_submenu:
  * @popover: a #GtkPopoverMenu
  * @name: the name of the menu to switch to
@@ -606,12 +565,10 @@ gtk_popover_menu_new_from_model (GtkWidget  *relative_to,
  * @model. The popover is pointed to the @relative_to widget.
  *
  * The created buttons are connected to actions found in the
- * #GtkApplicationWindow to which the popover belongs - typically
- * by means of being attached to a widget that is contained within
- * the #GtkApplicationWindows widget hierarchy.
- *
- * Actions can also be added using gtk_widget_insert_action_group()
- * on the menus attach widget or on any of its parent widgets.
+ * action groups that are accessible from the @relative-to widget.
+ * This includes the #GtkApplicationWindow to which the popover
+ * belongs. Actions can also be added using gtk_widget_insert_action_group()
+ * on the @relative-to widget or on any of its parent widgets.
  *
  * The only flag that is supported currently is
  * #GTK_POPOVER_MENU_NESTED, which makes GTK create traditional,
@@ -636,6 +593,17 @@ gtk_popover_menu_new_from_model_full (GtkWidget           *relative_to,
   return popover;
 }
 
+/**
+ * gtk_popover_menu_set_model:
+ * @popover: a #GtkPopoverMenu
+ * @model: (nullable): a #GtkMenuModel, or %NULL
+ *
+ * Sets a new menu model on @popover.
+ *
+ * The existing contents of @popover are removed, and
+ * the @popover is populated with new contents according
+ * to @model.
+ */
 void
 gtk_popover_menu_set_menu_model (GtkPopoverMenu *popover,
                                  GMenuModel     *model)
@@ -659,6 +627,14 @@ gtk_popover_menu_set_menu_model (GtkPopoverMenu *popover,
     }
 }
 
+/**
+ * gtk_popover_menu_get_menu_model:
+ * @popover: a #GtkPopoverMenu
+ *
+ * Returns the menu model used to populate the popover.
+ *
+ * Returns: the menu model of @popover
+ */
 GMenuModel *
 gtk_popover_menu_get_menu_model (GtkPopoverMenu *popover)
 {

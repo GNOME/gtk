@@ -1053,27 +1053,6 @@ row_activated (GtkListBox *box, GtkListBoxRow *row)
     }
 }
 
-static void
-set_accel (GtkApplication *app, GtkWidget *widget)
-{
-  GtkWidget *accel_label;
-  const gchar *action;
-  gchar **accels;
-  guint key;
-  GdkModifierType mods;
-
-  accel_label = gtk_bin_get_child (GTK_BIN (widget));
-  g_assert (GTK_IS_ACCEL_LABEL (accel_label));
-
-  action = gtk_actionable_get_action_name (GTK_ACTIONABLE (widget));
-  accels = gtk_application_get_accels_for_action (app, action);
-
-  gtk_accelerator_parse (accels[0], &key, &mods);
-  gtk_accel_label_set_accel (GTK_ACCEL_LABEL (accel_label), key, mods);
-
-  g_strfreev (accels);
-}
-
 typedef struct
 {
   GtkTextView tv;
@@ -1862,13 +1841,6 @@ activate (GApplication *app)
   g_object_set_data (G_OBJECT (widget), "range_to_spin", widget3);
   g_object_set_data (G_OBJECT (widget2), "range_to_spin", widget3);
   g_object_set_data (G_OBJECT (widget), "print_button", widget4);
-
-  set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "quitmenuitem")));
-  set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "deletemenuitem")));
-  set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "searchmenuitem")));
-  set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "darkmenuitem")));
-  set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "aboutmenuitem")));
-  set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "bgmenuitem")));
 
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "tooltextview");
 

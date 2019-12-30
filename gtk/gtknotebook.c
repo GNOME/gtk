@@ -2555,46 +2555,10 @@ gtk_notebook_popup_menu (GtkWidget *widget)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
-  GtkNotebookPage *page;
-  GtkWidget *tab_label = NULL;
 
   if (priv->menu)
     {
-      if (priv->focus_tab)
-        {
-          page = priv->focus_tab->data;
-          tab_label = page->tab_label;
-        }
-
-      if (tab_label)
-        {
-          g_object_set (priv->menu,
-                        "anchor-hints", (GDK_ANCHOR_FLIP_Y |
-                                         GDK_ANCHOR_SLIDE |
-                                         GDK_ANCHOR_RESIZE),
-                        NULL);
-
-          gtk_menu_popup_at_widget (GTK_MENU (priv->menu),
-                                    tab_label,
-                                    GDK_GRAVITY_SOUTH_WEST,
-                                    GDK_GRAVITY_NORTH_WEST,
-                                    NULL);
-        }
-      else
-        {
-          g_object_set (priv->menu,
-                        "anchor-hints", (GDK_ANCHOR_SLIDE |
-                                         GDK_ANCHOR_RESIZE),
-                        NULL);
-
-          gtk_menu_popup_at_widget (GTK_MENU (priv->menu),
-                                    widget,
-                                    GDK_GRAVITY_NORTH_WEST,
-                                    GDK_GRAVITY_NORTH_WEST,
-                                    NULL);
-        }
-
-      gtk_menu_shell_select_first (GTK_MENU_SHELL (priv->menu), FALSE);
+      gtk_popover_popup (GTK_POPOVER (priv->menu));
       return TRUE;
     }
 

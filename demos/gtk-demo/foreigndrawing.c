@@ -414,7 +414,7 @@ draw_menubar (GtkWidget     *widget,
   frame_context = get_style (NULL, "frame");
   border_context = get_style (frame_context, "border");
 
-  /* This information is taken from the GtkMenuBar docs, see "CSS nodes" */
+  /* This information is taken from the GtkPopoverMenuBar docs, see "CSS nodes" */
   menubar_context = get_style (NULL, "menubar");
   hovered_menuitem_context = get_style (menubar_context, "menuitem:hover");
   menuitem_context = get_style (menubar_context, "menuitem");
