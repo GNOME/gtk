@@ -266,8 +266,6 @@ typedef struct
   GtkGesture *bubble_drag_gesture;
   GtkEventController *key_controller;
 
-  GdkSurface *hardcoded_surface;
-
   GtkCssNode *decoration_node;
 
   GdkSurface  *surface;
@@ -5536,27 +5534,19 @@ gtk_window_realize (GtkWidget *widget)
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  if (priv->hardcoded_surface)
+  switch (priv->type)
     {
-      surface = priv->hardcoded_surface;
-      gdk_surface_resize (surface, allocation.width, allocation.height);
-    }
-  else
-    {
-      switch (priv->type)
-        {
-        case GTK_WINDOW_TOPLEVEL:
-          surface = gdk_surface_new_toplevel (gtk_widget_get_display (widget),
-					      allocation.width,
-					      allocation.height);
-          break;
-        case GTK_WINDOW_POPUP:
-          surface = gdk_surface_new_temp (gtk_widget_get_display (widget), &allocation);
-          break;
-        default:
-          g_error (G_STRLOC": Unknown window type %d!", priv->type);
-          break;
-        }
+    case GTK_WINDOW_TOPLEVEL:
+      surface = gdk_surface_new_toplevel (gtk_widget_get_display (widget),
+                                          allocation.width,
+                                          allocation.height);
+      break;
+    case GTK_WINDOW_POPUP:
+      surface = gdk_surface_new_temp (gtk_widget_get_display (widget), &allocation);
+      break;
+    default:
+      g_error (G_STRLOC": Unknown window type %d!", priv->type);
+      break;
     }
 
   priv->surface = surface;
@@ -5707,8 +5697,6 @@ gtk_window_unrealize (GtkWidget *widget)
   gdk_surface_set_widget (surface, NULL);
   gdk_surface_destroy (surface);
   g_clear_object (&priv->surface);
-
-  priv->hardcoded_surface = NULL;
 }
 
 static void
@@ -9116,18 +9104,6 @@ gtk_window_enable_debugging (GtkWindow *window,
   gtk_window_set_debugging (priv->display, TRUE, toggle, !toggle, warn);
 
   return TRUE;
-}
-
-void
-gtk_window_set_hardcoded_surface (GtkWindow *window,
-				  GdkSurface *surface)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (!_gtk_widget_get_realized (GTK_WIDGET (window)));
-
-  g_set_object (&priv->hardcoded_surface, surface);
 }
 
 #ifdef GDK_WINDOWING_WAYLAND
