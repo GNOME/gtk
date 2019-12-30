@@ -36,7 +36,8 @@
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-//#include "gtkwindowprivate.h"
+#include "gtknative.h"
+#include "gtkroot.h"
 
 #include "a11y/gtkcontaineraccessibleprivate.h"
 
@@ -376,8 +377,10 @@ gtk_container_idle_sizer (GdkFrameClock *clock,
     {
       if (GTK_IS_WINDOW (container))
         gtk_window_check_resize (GTK_WINDOW (container));
+      else if (GTK_IS_ROOT (container))
+        gtk_native_check_resize (GTK_NATIVE (container));
       else
-        g_warning ("gtk_container_idle_sizer() called on a non-window");
+        g_warning ("gtk_container_idle_sizer() called on a non-native non-window");
     }
 
   if (!gtk_container_needs_idle_sizer (container))

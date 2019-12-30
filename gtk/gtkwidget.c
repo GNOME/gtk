@@ -3298,9 +3298,8 @@ update_cursor_on_state_change (GtkWidget *widget)
   GtkRoot *root;
 
   root = _gtk_widget_get_root (widget);
-  if (root)
-    gtk_window_update_pointer_focus_on_state_change (GTK_WINDOW (root),
-                                                     widget);
+  if (GTK_IS_WINDOW (root))
+    gtk_window_update_pointer_focus_on_state_change (GTK_WINDOW (root), widget);
 }
 
 /**
