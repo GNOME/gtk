@@ -2062,6 +2062,8 @@ gtk_text_unmap (GtkWidget *widget)
     _gtk_text_handle_set_mode (priv->text_handle,
                                GTK_TEXT_HANDLE_MODE_NONE);
 
+  priv->cursor_alpha = 1.0;
+
   GTK_WIDGET_CLASS (gtk_text_parent_class)->unmap (widget);
 }
 
