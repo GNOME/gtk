@@ -418,7 +418,9 @@ struct _GdkEventDND {
   GdkDrop *drop;
 
   guint32 time;
-  gshort x_root, y_root;
+  double x_root, y_root;
+  double x;
+  double y;
 };
 
 /*
