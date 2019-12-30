@@ -36,7 +36,7 @@ dark_button_toggled_cb (GtkToggleButton *button,
 static void
 create_dark_popup (GtkWidget *parent)
 {
-  GtkWidget *popup = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  GtkWidget *popup = gtk_window_new ();
   GtkWidget *button = gtk_toggle_button_new_with_label ("Dark");
 
   gtk_window_set_decorated (GTK_WINDOW (popup), FALSE);

@@ -86,10 +86,7 @@ gtk_window_accessible_initialize (AtkObject *obj,
 
   _gtk_widget_accessible_set_layer (GTK_WIDGET_ACCESSIBLE (obj), ATK_LAYER_WINDOW);
 
-  if (gtk_window_get_window_type (GTK_WINDOW (widget)) == GTK_WINDOW_POPUP)
-    obj->role = ATK_ROLE_WINDOW;
-  else
-    obj->role = ATK_ROLE_FRAME;
+  obj->role = ATK_ROLE_FRAME;
 }
 
 static GtkWidget *

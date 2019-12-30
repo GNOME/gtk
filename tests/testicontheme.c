@@ -115,7 +115,7 @@ main (int argc, char *argv[])
           return 1;
         }
 
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       image = gtk_image_new ();
       gtk_image_set_from_paintable (GTK_IMAGE (image), paintable);
       g_object_unref (paintable);
@@ -143,7 +143,7 @@ main (int argc, char *argv[])
       if (argc >= 6)
 	scale = atoi (argv[5]);
 
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       image = gtk_image_new ();
       gtk_container_add (GTK_CONTAINER (window), image);
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);

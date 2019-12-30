@@ -23,7 +23,7 @@ main (int argc, char **argv)
 
   gdk_display_manager_set_default_display (gdk_display_manager_get (), display);
 
-  win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  win = gtk_window_new ();
   g_signal_connect (win, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   but = gtk_button_new_with_label ("Try to Exit");

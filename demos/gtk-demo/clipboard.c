@@ -248,7 +248,7 @@ do_clipboard (GtkWidget *do_widget)
       };
       GActionGroup *actions;
 
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Clipboard");

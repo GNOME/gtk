@@ -46,7 +46,7 @@ create_box_window (void)
   GtkWidget *toggle;
   GtkWidget *colorbox;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Boxes");
 
   box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
@@ -107,7 +107,7 @@ create_grid_window (void)
   GtkWidget *toggle;
   GtkWidget *colorbox;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Grid");
 
   grid = gtk_grid_new ();

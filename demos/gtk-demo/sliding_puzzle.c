@@ -462,7 +462,7 @@ do_sliding_puzzle (GtkWidget *do_widget)
       gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), restart);
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), tweak);
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Sliding Puzzle");

@@ -75,7 +75,7 @@ on_application_activate (GApplication *gapplication,
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   gtk_container_add (GTK_CONTAINER (box), widget);
 
-  widget = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  widget = gtk_window_new ();
   gtk_container_add (GTK_CONTAINER (widget), box);
   gtk_widget_show (widget);
   gtk_application_add_window (GTK_APPLICATION (application), GTK_WINDOW (widget));

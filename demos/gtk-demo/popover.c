@@ -130,7 +130,7 @@ do_popover (GtkWidget *do_widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Popovers");
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 24);
       g_object_set (box, "margin", 24, NULL);

@@ -94,7 +94,7 @@ test_window_focus (void)
    *      [entry1]  label2  [entry2]
    */
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_widget_set_name (window, "window");
   add_controller (window, s);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);

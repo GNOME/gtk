@@ -444,7 +444,7 @@ create_calendar(void)
   for (i = 0; i < G_N_ELEMENTS (calendar_data.settings); i++)
     calendar_data.settings[i] = 0;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_hide_on_close (GTK_WINDOW (window), TRUE);
   gtk_window_set_title (GTK_WINDOW (window), "GtkCalendar Example");
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);

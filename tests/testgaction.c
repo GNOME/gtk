@@ -98,7 +98,7 @@ static const char *menu_data =
 int main (int argc, char **argv)
 {
   gtk_init ();
-  GtkWidget *window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  GtkWidget *window = gtk_window_new ();
   GtkWidget *box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
   GtkWidget *menubutton = gtk_menu_button_new ();
   GtkWidget *button1 = gtk_button_new_with_label ("Change Label Text");

@@ -110,7 +110,7 @@ tests_button_clicked_cb (GtkButton *real_button,
     {
       GtkWidget *box, *button;
 
-      tests = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      tests = gtk_window_new ();
       gtk_window_set_hide_on_close (GTK_WINDOW (tests), TRUE);
       gtk_window_set_title (GTK_WINDOW (tests),
 			    "Tests - TestFileChooserButton");

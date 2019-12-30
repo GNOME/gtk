@@ -108,7 +108,7 @@ create_widget_tree (void)
 {
   GtkWidget *window, *box, *grid, *label;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   widgets = g_slist_prepend (widgets, window);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);

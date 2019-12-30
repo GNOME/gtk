@@ -180,7 +180,7 @@ simple_cell_area (void)
   GtkWidget *window, *widget;
   GtkWidget *iconview, *frame, *vbox, *hbox;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
 
   gtk_window_set_title (GTK_WINDOW (window), "CellArea expand and alignments");
 
@@ -423,7 +423,7 @@ focus_cell_area (void)
   GtkWidget *window, *widget;
   GtkWidget *iconview, *frame, *vbox, *hbox;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   hbox  = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   gtk_widget_show (hbox);
 
@@ -512,7 +512,7 @@ background_area (void)
   GtkWidget *window, *widget, *label, *main_vbox;
   GtkWidget *iconview, *frame, *vbox, *hbox;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   hbox  = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   main_vbox  = gtk_box_new (GTK_ORIENTATION_VERTICAL, 4);
   gtk_widget_show (hbox);

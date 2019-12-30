@@ -54,7 +54,7 @@ test_action (void)
     { "action", box_activate, NULL, NULL, NULL },
   };
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   button = gtk_button_new ();
 
@@ -207,7 +207,7 @@ test_overlap (void)
   GSimpleActionGroup *win_actions;
   GSimpleActionGroup *box_actions;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   gtk_container_add (GTK_CONTAINER (window), box);

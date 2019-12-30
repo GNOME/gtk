@@ -403,7 +403,7 @@ test_phases (void)
   GString *str;
   GtkAllocation allocation;
 
-  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  A = gtk_window_new ();
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -455,7 +455,7 @@ test_mixed (void)
   GString *str;
   GtkAllocation allocation;
 
-  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  A = gtk_window_new ();
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -514,7 +514,7 @@ test_early_exit (void)
   GString *str;
   GtkAllocation allocation;
 
-  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  A = gtk_window_new ();
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -569,7 +569,7 @@ test_claim_capture (void)
   GString *str;
   GtkAllocation allocation;
 
-  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  A = gtk_window_new ();
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -616,7 +616,7 @@ test_claim_target (void)
   GString *str;
   GtkAllocation allocation;
 
-  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  A = gtk_window_new ();
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -663,7 +663,7 @@ test_claim_bubble (void)
   GString *str;
   GtkAllocation allocation;
 
-  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  A = gtk_window_new ();
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -717,7 +717,7 @@ test_early_claim_capture (void)
   GString *str;
   GtkAllocation allocation;
 
-  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  A = gtk_window_new ();
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -774,7 +774,7 @@ test_late_claim_capture (void)
   GString *str;
   GtkAllocation allocation;
 
-  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  A = gtk_window_new ();
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -833,7 +833,7 @@ test_group (void)
   GtkGesture *g1, *g2;
   GtkAllocation allocation;
 
-  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  A = gtk_window_new ();
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -886,7 +886,7 @@ test_gestures_outside_grab (void)
   GString *str;
   GtkAllocation allocation;
 
-  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  A = gtk_window_new ();
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -900,7 +900,7 @@ test_gestures_outside_grab (void)
 
   gtk_widget_show (A);
 
-  D = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  D = gtk_window_new ();
   gtk_widget_show (D);
 
   str = g_string_new ("");
@@ -946,7 +946,7 @@ test_gestures_inside_grab (void)
   GString *str;
   GtkAllocation allocation;
 
-  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  A = gtk_window_new ();
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -1007,7 +1007,7 @@ test_multitouch_on_single (void)
   GString *str;
   GtkAllocation allocation;
 
-  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  A = gtk_window_new ();
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -1059,7 +1059,7 @@ test_multitouch_activation (void)
   GString *str;
   GtkAllocation allocation;
 
-  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  A = gtk_window_new ();
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
@@ -1137,7 +1137,7 @@ test_multitouch_interaction (void)
   GString *str;
   GtkAllocation allocation;
 
-  A = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  A = gtk_window_new ();
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
