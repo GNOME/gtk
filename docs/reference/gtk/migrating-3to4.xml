@@ -893,6 +893,16 @@
         radioitem as proxy.
       </para>
     </section>
+
+    <section>
+      <title>Stop using custom tooltip windows</title>
+      <para>
+        Tooltips no longer use GtkWindows in GTK 4, and it is no longer
+        possible to provide a custom window for tooltips. Replacing the content
+        of the tooltip with a custom widget is still possible, with
+        gtk_tooltip_set_custom().
+      </para>
+    </section>
   </section>
 
 </chapter>
