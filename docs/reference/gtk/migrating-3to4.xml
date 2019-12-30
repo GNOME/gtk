@@ -306,6 +306,18 @@
     </section>
 
     <section>
+      <title>Stop using grabs</title>
+      <para>
+        GTK 4 no longer provides the gdk_device_grab() or gdk_seat_grab() apis.
+      </para>
+      <para>
+        If you need to dismiss a popup when the user clicks outside (a common
+        use for grabs), you can use the GdkSurface #GdkSurface:autohide property instead.
+        GtkPopover also has a #GtkPopover:autohide property.
+      </para>
+    </section>
+
+    <section>
       <title>Adapt to coordinate API changes</title>
       <para>
         A number of coordinate APIs in GTK 3 had _double variants: 
@@ -673,7 +685,7 @@
     <section>
       <title>Adapt to changes in the API of GtkEntry, GtkSearchEntry and GtkSpinButton</title>
       <para>
-        The GtkEditable has been made more useful, and the core functionality of
+        The GtkEditable interface has been made more useful, and the core functionality of
         GtkEntry has been broken out as a GtkText widget. GtkEntry, GtkSearchEntry,
         GtkSpinButton and the new GtkPasswordEntry now use a GtkText widget internally
         and implement GtkEditable. In particular, this means that it is no longer
@@ -851,6 +863,36 @@
       </para>
     </section>
 
+    <section>
+      <title>GtkMenu, GtkMenuBar and GtkMenuItem are gone</title>
+      <para>
+        These widgets were heavily relying on X11-centric concepts such as
+        override-redirect windows and grabs, and were hard to adjust to other
+        windowing systems.
+      </para>
+      <para>
+        Menus can already be replaced using GtkPopoverMenu in GTK 3. Additionally,
+        GTK 4 introduces GtkPopoverMenuBar to replace menubars. These new widgets
+        can only be constructed from menu models, so the porting effort involves
+        switching to menu models and actions.
+      </para>
+      <para>
+        Since menus are gone, GtkMenuButton and GtkMenuToolButton also lost their
+        ability to show menus, and need to be used with popovers in GTK 4.
+      </para>
+    </section>
+
+    <section>
+      <title>GtkToolbar overflow handling has changed</title>
+      <para>
+        The handling of overflow in toolbars has been simplified.
+        Instead of creating a proxy menuitem and setting it with
+        gtk_tool_item_set_proxy_menu_item(), you simply provide
+        a label for the overflow menu with gtk_tool_item_set_overflow_text().
+        GTK will figure out itself whether to create a check- or
+        radioitem as proxy.
+      </para>
+    </section>
   </section>
 
 </chapter>
