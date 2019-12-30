@@ -11093,6 +11093,9 @@ gtk_entry_insert_emoji (GtkEntry *entry)
   GtkWidget *chooser;
   GdkRectangle rect;
 
+  if (gtk_entry_get_input_hints (entry) & GTK_INPUT_HINT_NO_EMOJI)
+    return;
+
   if (gtk_widget_get_ancestor (GTK_WIDGET (entry), GTK_TYPE_EMOJI_CHOOSER) != NULL)
     return;
 

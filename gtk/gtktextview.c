@@ -11462,6 +11462,9 @@ gtk_text_view_insert_emoji (GtkTextView *text_view)
   GdkRectangle rect;
   GtkTextBuffer *buffer;
 
+  if (gtk_text_view_get_input_hints (text_view) & GTK_INPUT_HINT_NO_EMOJI)
+    return;
+
   if (gtk_widget_get_ancestor (GTK_WIDGET (text_view), GTK_TYPE_EMOJI_CHOOSER) != NULL)
     return;
 
