@@ -75,9 +75,6 @@ enum {
 
 struct _GtkToolItemPrivate
 {
-  gchar *tip_text;
-  gchar *tip_private;
-
   guint visible_horizontal    : 1;
   guint visible_vertical      : 1;
   guint homogeneous           : 1;
