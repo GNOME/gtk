@@ -24,8 +24,8 @@
  * @title: GtkMenuButton
  *
  * The #GtkMenuButton widget is used to display a popup when clicked on.
- * This popup can be provided either as a #GtkMenu, a #GtkPopover or an
- * abstract #GMenuModel.
+ * This popup can be provided either as a #GtkPopover or as an abstract
+ * #GMenuModel.
  *
  * The #GtkMenuButton widget can show either an icon (set with the
  * #GtkMenuButton:icon-name property) or a label (set with the
@@ -352,8 +352,6 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    * GtkMenuButton:menu-model:
    *
    * The #GMenuModel from which the popup will be created.
-   * Depending on the #GtkMenuButton:use-popover property, that may
-   * be a menu or a popover.
    *
    * See gtk_menu_button_set_menu_model() for the interaction with the
    * #GtkMenuButton:popup property.
@@ -532,7 +530,7 @@ menu_deactivate_cb (GtkMenuButton *menu_button)
  * Sets the #GMenuModel from which the popup will be constructed,
  * or %NULL to dissociate any existing menu model and disable the button.
  *
- * A #GtkPopover will be created from the menu model with gtk_popover_new_from_model().
+ * A #GtkPopover will be created from the menu model with gtk_popover_menu_new_from_model().
  * Actions will be connected as documented for this function.
  *
  * If #GtkMenuButton:popover is already set, it will be dissociated from the @menu_button,
@@ -779,8 +777,8 @@ gtk_menu_button_dispose (GObject *object)
  * Sets the #GtkPopover that will be popped up when the @menu_button is clicked,
  * or %NULL to dissociate any existing popover and disable the button.
  *
- * If #GtkMenuButton:menu-model or #GtkMenuButton:popup are set, those objects
- * are dissociated from the @menu_button, and those properties are set to %NULL.
+ * If #GtkMenuButton:menu-model is set, the menu model is dissociated from the
+ * @menu_button, and the property is set to %NULL.
  */
 void
 gtk_menu_button_set_popover (GtkMenuButton *menu_button,
@@ -1049,7 +1047,7 @@ gtk_menu_button_add_child (GtkMenuButton *menu_button,
  * to set a popup for @menu_button.
  * If @func is non-%NULL, @menu_button will always be sensitive.
  *
- * Using this function will NOT reset the menu widget attached to @menu_button.
+ * Using this function will not reset the menu widget attached to @menu_button.
  * Instead, this can be done manually in @func.
  */
 void
