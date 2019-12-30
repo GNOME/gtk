@@ -8,7 +8,6 @@
     <property name="page-increment">5.0</property>
   </object>
   <object class="GtkWindow" id="window1">
-    <property name="type">popup</property>
     <child>
       <object class="GtkBox" id="box1">
         <child>
