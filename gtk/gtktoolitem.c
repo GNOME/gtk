@@ -214,6 +214,10 @@ gtk_tool_item_init (GtkToolItem *toolitem)
 static void
 gtk_tool_item_finalize (GObject *object)
 {
+  GtkToolItemPrivate *priv = gtk_tool_item_get_instance_private (GTK_TOOL_ITEM (object));
+
+  g_clear_pointer (&priv->overflow_text, g_free);
+
   G_OBJECT_CLASS (gtk_tool_item_parent_class)->finalize (object);
 }
 
