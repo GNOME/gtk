@@ -665,10 +665,10 @@ render_text_node (GskGLRenderer   *self,
   const float text_scale = ops_get_scale (builder);
   const graphene_point_t *offset = gsk_text_node_get_offset (node);
   const guint num_glyphs = gsk_text_node_get_num_glyphs (node);
+  const float x = offset->x + builder->dx;
+  const float y = offset->y + builder->dy;
   int i;
   int x_position = 0;
-  float x = offset->x + builder->dx;
-  float y = offset->y + builder->dy;
   GlyphCacheKey lookup;
 
   /* If the font has color glyphs, we don't need to recolor anything */
