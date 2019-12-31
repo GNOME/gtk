@@ -340,6 +340,7 @@ gdk_wayland_drag_create_data_source (GdkDrag *drag)
   GdkDisplay *display = gdk_drag_get_display (drag);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   const char *const *mimetypes;
+  GdkContentFormats *formats;
   gsize i, n_mimetypes;
 
   drag_wayland->data_source = wl_data_device_manager_create_data_source (display_wayland->data_device_manager);
@@ -347,11 +348,20 @@ gdk_wayland_drag_create_data_source (GdkDrag *drag)
                                &data_source_listener,
                                drag);
 
-  mimetypes = gdk_content_formats_get_mime_types (gdk_drag_get_formats (drag), &n_mimetypes);
+  formats = gdk_content_formats_ref (gdk_drag_get_formats (drag));
+  formats = gdk_content_formats_union_serialize_mime_types (formats);
+
+  mimetypes = gdk_content_formats_get_mime_types (formats, &n_mimetypes);
+
+  GDK_DISPLAY_NOTE (gdk_drag_get_display (drag), EVENTS,
+            {char *s = g_strjoinv (" ", (char **)mimetypes);
+            g_message ("create data source, mime types=%s", s);
+            g_free (s);});
+
   for (i = 0; i < n_mimetypes; i++)
-    {
-      wl_data_source_offer (drag_wayland->data_source, mimetypes[i]);
-    }
+    wl_data_source_offer (drag_wayland->data_source, mimetypes[i]);
+
+  gdk_content_formats_unref (formats);
 }
 
 GdkDrag *
