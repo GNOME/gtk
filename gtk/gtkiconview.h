@@ -28,6 +28,7 @@
 #include <gtk/gtkcellarea.h>
 #include <gtk/gtkselection.h>
 #include <gtk/gtktooltip.h>
+#include <gtk/gtkdragsource.h>
 
 G_BEGIN_DECLS
 
@@ -213,7 +214,7 @@ void             gtk_icon_view_scroll_to_path     (GtkIconView            *icon_
 
 /* Drag-and-Drop support */
 GDK_AVAILABLE_IN_ALL
-void                   gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,
+GtkDragSource *        gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,
 							       GdkModifierType           start_button_mask,
 							       GdkContentFormats        *formats,
 							       GdkDragAction             actions);
