@@ -70,6 +70,8 @@
 #include "gtkwindow.h"
 #include "gtknative.h"
 #include "gtkgestureclick.h"
+#include "gtkdragsource.h"
+#include "gtkwidgetpaintable.h"
 
 #include "a11y/gtkentryaccessible.h"
 
@@ -172,7 +174,7 @@ struct _EntryIconInfo
   guint in_drag        : 1;
 
   GdkDragAction actions;
-  GdkContentFormats *target_list;
+  GdkContentProvider *content;
 };
 
 enum {
@@ -1320,8 +1322,7 @@ gtk_entry_finalize (GObject *object)
       if (icon_info == NULL)
         continue;
 
-      if (icon_info->target_list != NULL)
-        gdk_content_formats_unref (icon_info->target_list);
+      g_clear_object (&icon_info->content);
 
       gtk_widget_unparent (icon_info->widget);
 
@@ -1462,17 +1463,21 @@ icon_drag_update_cb (GtkGestureDrag *gesture,
   pos = get_icon_position_from_controller (entry, GTK_EVENT_CONTROLLER (gesture));
   icon_info = priv->icons[pos];
 
-  if (icon_info->target_list != NULL &&
-      gtk_drag_check_threshold (icon_info->widget,
-                                start_x, start_y,
-                                x, y))
+  if (icon_info->content != NULL &&
+      gtk_drag_check_threshold (icon_info->widget, start_x, start_y, x, y))
     {
+      GtkDragSource *source;
+      GdkPaintable *paintable;
+      GdkDevice *device;
+
       icon_info->in_drag = TRUE;
-      gtk_drag_begin (GTK_WIDGET (entry),
-                      gtk_gesture_get_device (GTK_GESTURE (gesture)),
-                      icon_info->target_list,
-                      icon_info->actions,
-                      start_x, start_y);
+      source = gtk_drag_source_new (icon_info->content, icon_info->actions);
+      paintable = gtk_widget_paintable_new (icon_info->widget);
+      gtk_drag_source_set_icon (source, paintable, -2, -2);
+      g_object_unref (paintable);
+      device = gtk_gesture_get_device (GTK_GESTURE (gesture));
+      gtk_drag_source_drag_begin (source, GTK_WIDGET (entry), device, start_x, start_y);
+      g_object_unref (source);
     }
 }
 
@@ -2742,7 +2747,7 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
 void
 gtk_entry_set_icon_drag_source (GtkEntry             *entry,
                                 GtkEntryIconPosition  icon_pos,
-                                GdkContentFormats    *formats,
+                                GdkContentProvider   *provider,
                                 GdkDragAction         actions)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
@@ -2754,12 +2759,7 @@ gtk_entry_set_icon_drag_source (GtkEntry             *entry,
   if ((icon_info = priv->icons[icon_pos]) == NULL)
     icon_info = construct_icon_info (GTK_WIDGET (entry), icon_pos);
 
-  if (icon_info->target_list)
-    gdk_content_formats_unref (icon_info->target_list);
-  icon_info->target_list = formats;
-  if (icon_info->target_list)
-    gdk_content_formats_ref (icon_info->target_list);
-
+  g_set_object (&icon_info->content, provider);
   icon_info->actions = actions;
 }
 
