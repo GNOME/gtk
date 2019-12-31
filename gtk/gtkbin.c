@@ -45,23 +45,6 @@ typedef struct
   GtkWidget *child;
 } GtkBinPrivate;
 
-static void gtk_bin_add         (GtkContainer   *container,
-			         GtkWidget      *widget);
-static void gtk_bin_remove      (GtkContainer   *container,
-			         GtkWidget      *widget);
-static void gtk_bin_forall      (GtkContainer   *container,
-				 GtkCallback     callback,
-				 gpointer        callback_data);
-static GType gtk_bin_child_type (GtkContainer   *container);
-
-static void               gtk_bin_measure                         (GtkWidget      *widget,
-                                                                   GtkOrientation  orientation,
-                                                                   int             for_size,
-                                                                   int            *minimum,
-                                                                   int            *natural,
-                                                                   int            *minimum_baseline,
-                                                                   int            *natural_baseline);
-
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkBin, gtk_bin, GTK_TYPE_CONTAINER)
 
 static void
@@ -79,26 +62,6 @@ gtk_bin_size_allocate (GtkWidget *widget,
                                 0, 0,
                                 width, height
                               }, baseline);
-}
-
-static void
-gtk_bin_class_init (GtkBinClass *class)
-{
-  GtkWidgetClass *widget_class = (GtkWidgetClass*) class;
-  GtkContainerClass *container_class = (GtkContainerClass*) class;
-
-  widget_class->measure = gtk_bin_measure;
-  widget_class->size_allocate = gtk_bin_size_allocate;
-
-  container_class->add = gtk_bin_add;
-  container_class->remove = gtk_bin_remove;
-  container_class->forall = gtk_bin_forall;
-  container_class->child_type = gtk_bin_child_type;
-}
-
-static void
-gtk_bin_init (GtkBin *bin)
-{
 }
 
 static GType
@@ -193,6 +156,26 @@ gtk_bin_measure (GtkWidget *widget,
       *minimum = 0;
       *natural = 0;
     }
+}
+
+static void
+gtk_bin_class_init (GtkBinClass *class)
+{
+  GtkWidgetClass *widget_class = (GtkWidgetClass*) class;
+  GtkContainerClass *container_class = (GtkContainerClass*) class;
+
+  widget_class->measure = gtk_bin_measure;
+  widget_class->size_allocate = gtk_bin_size_allocate;
+
+  container_class->add = gtk_bin_add;
+  container_class->remove = gtk_bin_remove;
+  container_class->forall = gtk_bin_forall;
+  container_class->child_type = gtk_bin_child_type;
+}
+
+static void
+gtk_bin_init (GtkBin *bin)
+{
 }
 
 /**
