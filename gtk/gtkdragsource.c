@@ -397,8 +397,35 @@ gtk_drag_source_set_icon_paintable (GtkWidget    *widget,
 }
 
 
-/* new stuff */
-
+/**
+ * SECTION:gtkdragsource
+ * @Short_description: An object to initiate DND operations
+ * @Title: GtkDragSource
+ *
+ * GtkDragSource is an auxiliary object that is used to initiate
+ * Drag-And-Drop operations. It can be set up with the necessary
+ * ingredients for a DND operation ahead of time. This includes
+ * the source for the data that is being transferred, in the form
+ * of a #GdkContentProvider, the desired action, and the icon to
+ * use during the drag operation.
+ *
+ * GtkDragSource can be used in two ways:
+ * - for static drag-source configuration
+ * - for one-off drag operations
+ *
+ * To configure a widget as a permanent source for DND operations,
+ * set up the GtkDragSource, then call gtk_drag_source_attach().
+ * This sets up a drag gesture on the widget that will trigger
+ * DND actions.
+ *
+ * To initiate a on-off drag operation, set up the GtkDragSource,
+ * then call gtk_drag_source_drag_begin(). GTK keeps a reference
+ * on the drag source until the DND operation is done, so you
+ * can unref the source after calling drag_being().
+ *
+ * During the DND operation, GtkDragSource emits signals that
+ * can be used to obtain updates about the status of the operation.
+ */
 
 struct _GtkDragSource
 {
@@ -618,6 +645,22 @@ gtk_drag_source_drop_performed_cb (GdkDrag       *drag,
     gtk_widget_hide (source->icon_window);
 }
 
+/**
+ * gtk_drag_source_drag_begin:
+ * @source: a #GtkDragSource
+ * @widget: the widget where the drag operation originates
+ * @device: the device that is driving the drag operation
+ * @x: start point X coordinate
+ * @y: start point Y xoordinate
+ *
+ * Starts a DND operation with @source.
+ *
+ * The start point coordinates are relative to @widget.
+ *
+ * GTK keeps a reference on @source for the duration of
+ * the DND operation, so it is safe to unref @source
+ * after this call.
+ */
 void
 gtk_drag_source_drag_begin (GtkDragSource *source,
                             GtkWidget     *widget,
@@ -688,12 +731,27 @@ gtk_drag_source_drag_begin (GtkDragSource *source,
                     G_CALLBACK (gtk_drag_source_cancel_cb), source);
 }
 
+/**
+ * gtk_drag_source_new:
+ *
+ * Creates a new #GtkDragSource object.
+ *
+ * Returns: the new #GtkDragSource
+ */
 GtkDragSource *
 gtk_drag_source_new (void)
 {
   return g_object_new (GTK_TYPE_DRAG_SOURCE, NULL);
 }
 
+/**
+ * gtk_drag_source_get_content:
+ * @source: a #GtkDragSource
+ *
+ * Gets the current content provider of a #GtkDragSource.
+ *
+ * Returns: the #GtkContentProvider of @source
+ */
 GdkContentProvider *
 gtk_drag_source_get_content (GtkDragSource *source)
 {
@@ -702,6 +760,17 @@ gtk_drag_source_get_content (GtkDragSource *source)
   return source->content;  
 }
 
+/**
+ * gtk_drag_source_set_content:
+ * @source: a #GtkDragSource
+ * @content: (nullable): a #GtkContntProvider, or %NULL
+ *
+ * Sets a content provider on a #GtkDragSource.
+ *
+ * When the data is requested in the cause of a
+ * DND operation, it will be obtained from the
+ * content provider.
+ */
 void
 gtk_drag_source_set_content (GtkDragSource      *source,
                              GdkContentProvider *content)
@@ -714,6 +783,14 @@ gtk_drag_source_set_content (GtkDragSource      *source,
   g_object_notify_by_pspec (G_OBJECT (source), properties[PROP_CONTENT]);
 }
 
+/**
+ * gtk_drag_source_get_actions:
+ * @source: a #GtkDragSource
+ *
+ * Gets the actions that are currently set on the #GtkDragSource.
+ *
+ * Returns: the actions set on @source
+ */
 GdkDragAction
 gtk_drag_source_get_actions (GtkDragSource *source)
 {
@@ -722,6 +799,16 @@ gtk_drag_source_get_actions (GtkDragSource *source)
   return source->actions;
 }
 
+/**
+ * gtk_drag_source_set_actions:
+ * @source: a #GtkDragSource
+ * @actions: the actions to offer
+ *
+ * Sets the actions on the #GtkDragSource.
+ *
+ * During a DND operation, the actions are offered
+ * to potential drop targets.
+ */
 void
 gtk_drag_source_set_actions (GtkDragSource *source,
                              GdkDragAction  actions)
@@ -736,6 +823,20 @@ gtk_drag_source_set_actions (GtkDragSource *source,
   g_object_notify_by_pspec (G_OBJECT (source), properties[PROP_ACTIONS]);
 }
 
+/**
+ * gtk_drag_source_set_icon:
+ * @source: a #GtkDragSource
+ * @paintable: (nullable): the #GtkPaintable to use as icon, or %NULL
+ * @hot_x: the hotspot X coordinate on the icon
+ * @hot_y: the hotspot Y coordinate on the icon
+ *
+ * Sets a paintable to use as icon during DND operations.
+ *
+ * The hotspot coordinates determine the point on the icon
+ * that gets aligned with the hotspot of the cursor.
+ *
+ * If @paintable is %NULL, a default icon is used.
+ */
 void
 gtk_drag_source_set_icon (GtkDragSource *source,
                           GdkPaintable  *paintable,
@@ -795,6 +896,20 @@ source_gesture_update (GtkGesture       *gesture,
    }
 }
 
+/**
+ * gtk_drag_source_attach:
+ * @source: a #GtkDragSource
+ * @widget: the widget to attach @source to
+ * @start_button_mask: mask determining which mouse buttons trigger
+ *
+ * Attaches the @source to a @widget by creating a drag gesture
+ * on @widget that will trigger DND operations with @source.
+ *
+ * The @start_button_mask determines which mouse buttons trigger
+ * a DND operation.
+ *
+ * To undo the effect of this call, use gtk_drag_source_detach().
+ */
 void
 gtk_drag_source_attach (GtkDragSource   *source,
                         GtkWidget       *widget,
@@ -803,6 +918,11 @@ gtk_drag_source_attach (GtkDragSource   *source,
   g_return_if_fail (GTK_IS_DRAG_SOURCE (source));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (source->gesture == NULL);
+  g_return_if_fail (start_button_mask & ~(GDK_BUTTON1_MASK |
+                                          GDK_BUTTON2_MASK |
+                                          GDK_BUTTON3_MASK |
+                                          GDK_BUTTON4_MASK |
+                                          GDK_BUTTON5_MASK) == 0)
 
   source->gesture = gtk_gesture_drag_new ();
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (source->gesture),
@@ -817,6 +937,12 @@ gtk_drag_source_attach (GtkDragSource   *source,
   source->start_button_mask = start_button_mask;
 }
 
+/**
+ * gtk_drag_source_detach:
+ * @source: a #GtkDragSource
+ *
+ * Undos the effect of a prior gtk_drag_source_attach() call.
+ */
 void
 gtk_drag_source_detach (GtkDragSource *source)
 {
