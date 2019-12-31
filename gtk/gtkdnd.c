@@ -26,7 +26,7 @@
 
 #include "gtkdndprivate.h"
 
-#include "gtkdragdest.h"
+#include "gtkdragdestprivate.h"
 #include "gtkimageprivate.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
@@ -111,6 +111,7 @@ static GtkDragDestInfo *  gtk_drag_get_dest_info     (GdkDrop        *drop,
  * Destination side *
  ********************/
 
+
 typedef struct {
   GdkDrop *drop;
   GtkWidget *widget;
@@ -124,6 +125,9 @@ gtk_drag_get_data_finish (GtkDragGetData *data,
 {
   GtkDragDestSite *site;
   GtkSelectionData sdata;
+  GdkContentFormats *target_list = NULL;
+  GdkDragAction actions = 0;
+  GtkDestDefaults flags = 0;
 
   site = g_object_get_data (G_OBJECT (data->widget), "gtk-drag-dest");
 
@@ -133,30 +137,30 @@ gtk_drag_get_data_finish (GtkDragGetData *data,
   sdata.length = size;
   sdata.data = bytes ? bytes : (guchar *)g_strdup ("");
   sdata.display = gtk_widget_get_display (data->widget);
-  
-  if (site && site->target_list)
+
+  if (site)
     {
-      if (gdk_content_formats_contain_mime_type (site->target_list, data->mime_type))
+      target_list = gtk_drop_target_get_formats (site->dest);
+      actions = gtk_drop_target_get_actions (site->dest);
+      flags = gtk_drop_target_get_defaults (site->dest);
+    }
+
+  if (target_list)
+    {
+      if (gdk_content_formats_contain_mime_type (target_list, data->mime_type))
         {
-          if (!(site->flags & GTK_DEST_DEFAULT_DROP) ||
-              size >= 0)
-            g_signal_emit_by_name (data->widget,
-                                   "drag-data-received",
-                                   data->drop,
-                                   &sdata);
+          if (!(flags & GTK_DEST_DEFAULT_DROP) || size >= 0)
+            gtk_drop_target_emit_drag_data_received (site->dest, data->drop, &sdata);
         }
     }
   else
     {
-      g_signal_emit_by_name (data->widget,
-                             "drag-data-received",
-                             data->drop,
-                             &sdata);
+      gtk_drop_target_emit_drag_data_received (site->dest, data->drop, &sdata);
     }
   
-  if (site && site->flags & GTK_DEST_DEFAULT_DROP)
+  if (flags & GTK_DEST_DEFAULT_DROP)
     {
-      GdkDragAction action = site->actions & gdk_drop_get_actions (data->drop);
+      GdkDragAction action = actions & gdk_drop_get_actions (data->drop);
 
       if (size == 0)
         action = 0;
@@ -535,16 +539,20 @@ gtk_drag_dest_leave (GtkWidget      *widget,
                      guint           time)
 {
   GtkDragDestSite *site;
+  GtkDestDefaults flags;
+  gboolean track_motion;
 
   site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
   g_return_if_fail (site != NULL);
 
-  if ((site->flags & GTK_DEST_DEFAULT_HIGHLIGHT) && site->have_drag)
+  flags = gtk_drop_target_get_defaults (site->dest);
+  track_motion = gtk_drop_target_get_track_motion (site->dest);
+
+  if ((flags & GTK_DEST_DEFAULT_HIGHLIGHT) && site->have_drag)
     gtk_drag_unhighlight (widget);
 
-  if (!(site->flags & GTK_DEST_DEFAULT_MOTION) || site->have_drag ||
-      site->track_motion)
-    g_signal_emit_by_name (widget, "drag-leave", drop, time);
+  if (!(flags & GTK_DEST_DEFAULT_MOTION) || site->have_drag || track_motion)
+    gtk_drop_target_emit_drag_leave (site->dest, drop, time);
   
   site->have_drag = FALSE;
 }
@@ -557,43 +565,52 @@ gtk_drag_dest_motion (GtkWidget *widget,
                       guint      time)
 {
   GtkDragDestSite *site;
+  GdkDragAction dest_actions;
+  GtkDestDefaults flags;
+  gboolean track_motion;
   gboolean retval;
 
   site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
   g_return_val_if_fail (site != NULL, FALSE);
 
-  if (site->track_motion || site->flags & GTK_DEST_DEFAULT_MOTION)
+  dest_actions = gtk_drop_target_get_actions (site->dest);
+  flags = gtk_drop_target_get_defaults (site->dest);
+  track_motion = gtk_drop_target_get_track_motion (site->dest);
+
+  if (track_motion || flags & GTK_DEST_DEFAULT_MOTION)
     {
       GdkDragAction actions;
+      GdkAtom target;
       
       actions = gdk_drop_get_actions (drop);
 
-      if ((actions & site->actions) == 0)
+      if ((dest_actions & actions) == 0)
         actions = 0;
 
-      if (actions && gtk_drag_dest_find_target (widget, drop, NULL))
+      target = gtk_drop_target_match (site->dest, drop);
+
+      if (actions && target)
         {
           if (!site->have_drag)
             {
               site->have_drag = TRUE;
-              if (site->flags & GTK_DEST_DEFAULT_HIGHLIGHT)
+              if (flags & GTK_DEST_DEFAULT_HIGHLIGHT)
                 gtk_drag_highlight (widget);
             }
 
-          gdk_drop_status (drop, site->actions);
+          gdk_drop_status (drop, dest_actions);
         }
       else
         {
           gdk_drop_status (drop, 0);
-          if (!site->track_motion)
+          if (!track_motion)
             return TRUE;
         }
     }
 
-  g_signal_emit_by_name (widget, "drag-motion",
-                         drop, x, y, &retval);
+  retval = gtk_drop_target_emit_drag_motion (site->dest, drop, x, y);
 
-  return (site->flags & GTK_DEST_DEFAULT_MOTION) ? TRUE : retval;
+  return (flags & GTK_DEST_DEFAULT_MOTION) ? TRUE : retval;
 }
 
 static gboolean
@@ -605,17 +622,22 @@ gtk_drag_dest_drop (GtkWidget *widget,
 {
   GtkDragDestSite *site;
   GtkDragDestInfo *info;
+  GtkDestDefaults flags;
   gboolean retval;
 
   site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
   g_return_val_if_fail (site != NULL, FALSE);
 
+  flags = gtk_drop_target_get_defaults (site->dest);
+
   info = gtk_drag_get_dest_info (drop, FALSE);
   g_return_val_if_fail (info != NULL, FALSE);
 
-  if (site->flags & GTK_DEST_DEFAULT_DROP)
+  if (flags & GTK_DEST_DEFAULT_DROP)
     {
-      GdkAtom target = gtk_drag_dest_find_target (widget, drop, NULL);
+      GdkAtom target;
+
+      target = gtk_drop_target_match (site->dest, drop);
 
       if (target == NULL)
         {
@@ -626,8 +648,7 @@ gtk_drag_dest_drop (GtkWidget *widget,
         gtk_drag_get_data (widget, drop, target);
     }
 
-  g_signal_emit_by_name (widget, "drag-drop",
-                         drop, x, y, &retval);
+  retval = gtk_drop_target_emit_drag_drop (site->dest, drop, x, y);
 
-  return (site->flags & GTK_DEST_DEFAULT_DROP) ? TRUE : retval;
+  return (flags & GTK_DEST_DEFAULT_DROP) ? TRUE : retval;
 }
