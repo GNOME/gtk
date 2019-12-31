@@ -87,6 +87,7 @@
 #include "gtkgesturedrag.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkdragsource.h"
 
 #define TIMEOUT_INITIAL  500
 #define TIMEOUT_REPEAT    50
@@ -329,9 +330,6 @@ static gboolean gtk_calendar_query_tooltip  (GtkWidget        *widget,
                                              gboolean          keyboard_mode,
                                              GtkTooltip       *tooltip);
 
-static void     gtk_calendar_drag_data_get      (GtkWidget        *widget,
-                                                 GdkDrag          *drag, 
-                                                 GtkSelectionData *selection_data);
 static void     gtk_calendar_drag_data_received (GtkWidget        *widget,
                                                  GdkDrop          *drop,
                                                  GtkSelectionData *selection_data);
@@ -392,7 +390,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   widget_class->grab_notify = gtk_calendar_grab_notify;
   widget_class->query_tooltip = gtk_calendar_query_tooltip;
 
-  widget_class->drag_data_get = gtk_calendar_drag_data_get;
   widget_class->drag_motion = gtk_calendar_drag_motion;
   widget_class->drag_leave = gtk_calendar_drag_leave;
   widget_class->drag_drop = gtk_calendar_drag_drop;
@@ -2670,6 +2667,27 @@ gtk_calendar_drag_begin (GtkGestureDrag *gesture,
   priv->in_drag = TRUE;
 }
 
+static GdkContentProvider *
+get_calendar_content (GtkCalendar *calendar)
+{
+  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
+  GDate *date;
+  gchar str[128];
+  GValue value = G_VALUE_INIT;
+  GdkContentProvider *content;
+
+  date = g_date_new_dmy (priv->selected_day, priv->month + 1, priv->year);
+  g_date_strftime (str, 127, "%x", date);
+  g_free (date);
+
+  g_value_init (&value, G_TYPE_STRING);
+  g_value_set_string (&value, str);
+  content = gdk_content_provider_new_for_value (&value);
+  g_value_unset (&value);
+
+  return content;
+}
+
 static void
 gtk_calendar_drag_update (GtkGestureDrag *gesture,
                           double          x,
@@ -2680,8 +2698,9 @@ gtk_calendar_drag_update (GtkGestureDrag *gesture,
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
   gdouble start_x, start_y;
-  GdkDrag *drag;
-  GdkContentFormats *targets;
+  GtkDragSource *source;
+  GdkContentProvider *content;
+  GdkDevice *device;
 
   if (!priv->in_drag)
     return;
@@ -2691,19 +2710,14 @@ gtk_calendar_drag_update (GtkGestureDrag *gesture,
 
   gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
 
-  gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
-
-  targets = gdk_content_formats_new (NULL, 0);
-  targets = gtk_content_formats_add_text_targets (targets);
-  drag = gtk_drag_begin (widget,
-                         gtk_gesture_get_device (GTK_GESTURE (gesture)),
-                         targets, GDK_ACTION_COPY,
-                         start_x, start_y);
+  content = get_calendar_content (calendar);
+  source = gtk_drag_source_new (content, GDK_ACTION_COPY);
+  g_object_unref (content);
+  device = gtk_gesture_get_device (GTK_GESTURE (gesture));
+  gtk_drag_source_drag_begin (source, widget, device, start_x, start_y);
+  g_object_unref (source);
 
   priv->in_drag = 0;
-  gdk_content_formats_unref (targets);
-
-  gtk_drag_set_icon_default (drag);
 }
 
 static gboolean
@@ -2922,24 +2936,6 @@ gtk_calendar_grab_notify (GtkWidget *widget,
 /****************************************
  *          Drag and Drop               *
  ****************************************/
-
-static void
-gtk_calendar_drag_data_get (GtkWidget        *widget,
-                            GdkDrag          *drag,
-                            GtkSelectionData *selection_data)
-{
-  GtkCalendar *calendar = GTK_CALENDAR (widget);
-  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
-  GDate *date;
-  gchar str[128];
-  gsize len;
-
-  date = g_date_new_dmy (priv->selected_day, priv->month + 1, priv->year);
-  len = g_date_strftime (str, 127, "%x", date);
-  gtk_selection_data_set_text (selection_data, str, len);
-
-  g_free (date);
-}
 
 /* Get/set whether drag_motion requested the drag data and
  * drag_data_received should thus not actually insert the data,
