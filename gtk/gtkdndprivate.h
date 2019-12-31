@@ -29,13 +29,11 @@
 typedef struct _GtkDragDestSite GtkDragDestSite;
 struct _GtkDragDestSite
 {
+  GtkDropTarget     *dest;
   GtkDestDefaults    flags;
-  GdkContentFormats *target_list;
-  GdkDragAction      actions;
   guint              do_proxy     : 1;
   guint              proxy_coords : 1;
   guint              have_drag    : 1;
-  guint              track_motion : 1;
 };
 
 G_BEGIN_DECLS
