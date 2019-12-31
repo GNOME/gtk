@@ -310,13 +310,16 @@ static void gtk_drag_source_cancel_cb         (GdkDrag             *drag,
                                                GtkDragSource       *source);
 
 static void
-drag_end (GtkDragSource *source)
+drag_end (GtkDragSource *source,
+          gboolean       success)
 {
   g_signal_handlers_disconnect_by_func (source->drag, gtk_drag_source_drop_performed_cb, source);
   g_signal_handlers_disconnect_by_func (source->drag, gtk_drag_source_dnd_finished_cb, source);
   g_signal_handlers_disconnect_by_func (source->drag, gtk_drag_source_cancel_cb, source);
 
   g_signal_emit (source, signals[DRAG_END], 0);
+
+  gdk_drag_drop_done (source->drag, success);
 
   g_object_set_data (G_OBJECT (source->drag), I_("gtk-drag-source"), NULL);
   g_clear_object (&source->drag);
@@ -330,8 +333,7 @@ gtk_drag_source_dnd_finished_cb (GdkDrag       *drag,
 {
   if (gdk_drag_get_selected_action (drag) == GDK_ACTION_MOVE)
     g_signal_emit (source, signals[DRAG_DATA_DELETE], 0);
-
-  drag_end (source);
+  drag_end (source, TRUE);
 }
 
 static void
@@ -342,7 +344,7 @@ gtk_drag_source_cancel_cb (GdkDrag             *drag,
   gboolean success = FALSE;
 
   g_signal_emit (source, signals[DRAG_FAILED], 0, reason, &success);
-  drag_end (source);
+  drag_end (source, FALSE);
 }
 
 static void
