@@ -35,7 +35,13 @@ GDK_AVAILABLE_IN_ALL
 GdkContentProvider *    gdk_content_provider_new_for_bytes              (const char             *mime_type,
                                                                          GBytes                 *bytes);
 
+typedef void (*GdkContentProviderGetValueFunc) (GValue   *value,
+                                                gpointer  data);
 
+GDK_AVAILABLE_IN_ALL
+GdkContentProvider *    gdk_content_provider_new_with_callback          (GType                          type,
+                                                                         GdkContentProviderGetValueFunc func,
+                                                                         gpointer                       data);                                                                          
 G_END_DECLS
 
 #endif /* __GDK_CONTENT_PROVIDER_IMPL_H__ */
