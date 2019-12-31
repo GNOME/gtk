@@ -36,6 +36,7 @@
  */
 
 #include "config.h"
+#include "gtkwidgetprivate.h"
 #include "gtkbin.h"
 
 
@@ -72,7 +73,7 @@ gtk_bin_size_allocate (GtkWidget *widget,
   GtkBin *bin = GTK_BIN (widget);
   GtkBinPrivate *priv = gtk_bin_get_instance_private (bin);
 
-  if (priv->child && gtk_widget_get_visible (priv->child))
+  if (priv->child && _gtk_widget_get_visible (priv->child))
     gtk_widget_size_allocate (priv->child,
                               &(GtkAllocation) {
                                 0, 0,
@@ -179,7 +180,7 @@ gtk_bin_measure (GtkWidget *widget,
 {
   GtkBinPrivate *priv = gtk_bin_get_instance_private (GTK_BIN (widget));
 
-  if (priv->child != NULL && gtk_widget_get_visible (priv->child))
+  if (priv->child != NULL && _gtk_widget_get_visible (priv->child))
     {
       gtk_widget_measure (priv->child,
                           orientation,
