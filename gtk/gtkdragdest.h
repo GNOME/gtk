@@ -37,6 +37,8 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GtkDropTarget GtkDropTarget;
+
 /**
  * GtkDestDefaults:
  * @GTK_DEST_DEFAULT_MOTION: If set for a widget, GTK+, during a drag over this
@@ -46,7 +48,7 @@ G_BEGIN_DECLS
  * @GTK_DEST_DEFAULT_HIGHLIGHT: If set for a widget, GTK+ will draw a highlight on
  *   this widget as long as a drag is over this widget and the widget drag format
  *   and action are acceptable.
- * @GTK_DEST_DEFAULT_DROP: If set for a widget, when a drop occurs, GTK+ will
+ * @GTK_DEST_DEFAULT_OP: If set for a widget, when a drop occurs, GTK+ will
  *   will check if the drag matches this widget’s list of possible formats and
  *   actions. If so, GTK+ will call gtk_drag_get_data() on behalf of the widget.
  *   Whether or not the drop is successful, GTK+ will call gdk_drag_finish(). If
@@ -67,10 +69,10 @@ typedef enum {
 } GtkDestDefaults;
 
 GDK_AVAILABLE_IN_ALL
-void gtk_drag_dest_set   (GtkWidget            *widget,
-                          GtkDestDefaults       flags,
-                          GdkContentFormats    *targets,
-                          GdkDragAction         actions);
+GtkDropTarget *gtk_drag_dest_set   (GtkWidget            *widget,
+                                    GtkDestDefaults       flags,
+                                    GdkContentFormats    *targets,
+                                    GdkDragAction         actions);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_drag_dest_unset (GtkWidget          *widget);
@@ -96,6 +98,63 @@ void           gtk_drag_dest_set_track_motion  (GtkWidget *widget,
                                                 gboolean   track_motion);
 GDK_AVAILABLE_IN_ALL
 gboolean       gtk_drag_dest_get_track_motion  (GtkWidget *widget);
+
+
+#define GTK_TYPE_DROP_TARGET         (gtk_drop_target_get_type ())
+#define GTK_DROP_TARGET(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_DROP_TARGET, GtkDropTarget))
+#define GTK_DROP_TARGET_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GTK_TYPE_DROP_TARGET, GtkDropTargetClass))
+#define GTK_IS_DROP_TARGET(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_DROP_TARGET))
+#define GTK_IS_DROP_TARGET_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_DROP_TARGET))
+#define GTK_DROP_TARGET_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_DROP_TARGET, GtkDropTargetClass))
+
+typedef struct _GtkDropTargetClass GtkDropTargetClass;
+
+GDK_AVAILABLE_IN_ALL
+GType              gtk_drop_target_get_type         (void) G_GNUC_CONST;
+
+GDK_AVAILABLE_IN_ALL
+GtkDropTarget       *gtk_drop_target_new            (GtkDestDefaults    defaults,
+                                                     GdkContentFormats *formats,
+                                                     GdkDragAction      actions);
+
+GDK_AVAILABLE_IN_ALL
+void               gtk_drop_target_set_formats      (GtkDropTarget     *dest,
+                                                     GdkContentFormats *formats);
+GDK_AVAILABLE_IN_ALL
+GdkContentFormats *gtk_drop_target_get_formats      (GtkDropTarget     *dest);
+
+GDK_AVAILABLE_IN_ALL
+void               gtk_drop_target_set_actions      (GtkDropTarget     *dest,
+                                                     GdkDragAction      actions);
+GDK_AVAILABLE_IN_ALL
+GdkDragAction      gtk_drop_target_get_actions      (GtkDropTarget     *dest);
+
+GDK_AVAILABLE_IN_ALL
+void               gtk_drop_target_set_defaults     (GtkDropTarget     *dest,
+                                                     GtkDestDefaults    defaults);
+GDK_AVAILABLE_IN_ALL
+GtkDestDefaults    gtk_drop_target_get_defaults     (GtkDropTarget     *dest);
+
+GDK_AVAILABLE_IN_ALL
+void               gtk_drop_target_set_track_motion (GtkDropTarget     *dest,
+                                                     gboolean           track_motion);
+GDK_AVAILABLE_IN_ALL
+gboolean           gtk_drop_target_get_track_motion (GtkDropTarget     *dest);
+
+GDK_AVAILABLE_IN_ALL
+void               gtk_drop_target_attach           (GtkDropTarget     *dest,
+                                                     GtkWidget         *widget);
+GDK_AVAILABLE_IN_ALL
+void               gtk_drop_target_detach           (GtkDropTarget     *dest);
+
+GDK_AVAILABLE_IN_ALL
+GdkDrop           *gtk_drop_target_get_drop         (GtkDropTarget     *dest);
+
+GDK_AVAILABLE_IN_ALL
+GtkWidget         *gtk_drop_target_get_target       (GtkDropTarget     *dest);
+
+GDK_AVAILABLE_IN_ALL
+const char        *gtk_drop_target_find_mimetype    (GtkDropTarget     *dest);
 
 
 G_END_DECLS
