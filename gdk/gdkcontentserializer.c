@@ -25,6 +25,7 @@
 #include "gdkpixbuf.h"
 #include "filetransferportalprivate.h"
 #include "gdktextureprivate.h"
+#include "gdkrgba.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <string.h>
@@ -863,6 +864,44 @@ file_text_serializer (GdkContentSerializer *serializer)
 }
 
 static void
+color_serializer_finish (GObject      *source,
+                         GAsyncResult *result,
+                         gpointer      serializer)
+{
+  GOutputStream *stream = G_OUTPUT_STREAM (source);
+  GError *error = NULL;
+
+  if (!g_output_stream_write_all_finish (stream, result, NULL, &error))
+    gdk_content_serializer_return_error (serializer, error);
+  else
+    gdk_content_serializer_return_success (serializer);
+}
+
+static void
+color_serializer (GdkContentSerializer *serializer)
+{
+  GdkRGBA *rgba;
+  guint16 data[4] = { 0, };
+
+  rgba = g_value_get_boxed (gdk_content_serializer_get_value (serializer));
+  if (rgba)
+    {
+      data[0] = (guint16) (rgba->red * 65535);
+      data[1] = (guint16) (rgba->green * 65535);
+      data[2] = (guint16) (rgba->blue * 65535);
+      data[3] = (guint16) (rgba->alpha * 65535);
+    }
+
+  g_output_stream_write_all_async (gdk_content_serializer_get_output_stream (serializer),
+                                   data,
+                                   sizeof (data),
+                                   gdk_content_serializer_get_priority (serializer),
+                                   gdk_content_serializer_get_cancellable (serializer),
+                                   color_serializer_finish,
+                                   serializer);
+}
+
+static void
 init (void)
 {
   static gboolean initialized = FALSE;
@@ -983,6 +1022,12 @@ init (void)
                                    "text/plain",
                                    string_serializer,
                                    (gpointer) "ASCII",
+                                   NULL);
+
+  gdk_content_register_serializer (GDK_TYPE_RGBA,
+                                   "application/x-color",
+                                   color_serializer,
+                                   NULL,
                                    NULL);
 }
 
