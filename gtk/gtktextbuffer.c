@@ -4078,6 +4078,13 @@ cut_or_copy (GtkTextBuffer *buffer,
     }
 }
 
+GdkContentProvider *
+gtk_text_buffer_get_selection_content (GtkTextBuffer *buffer)
+{
+  return gtk_text_buffer_content_new (buffer);
+}
+
+
 /**
  * gtk_text_buffer_cut_clipboard:
  * @buffer: a #GtkTextBuffer
