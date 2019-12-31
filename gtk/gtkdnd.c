@@ -319,14 +319,19 @@ GtkWidget *
 gtk_drag_get_source_widget (GdkDrag *drag)
 {
   GtkDragSourceInfo *info;
+  GtkDragSource *source;
 
   g_return_val_if_fail (GDK_IS_DRAG (drag), NULL);
   
   info = gtk_drag_get_source_info (drag, FALSE);
-  if (info == NULL)
-    return NULL;
+  if (info)
+    return info->widget;
 
-  return info->widget;
+  source = gtk_drag_get_source (drag);
+  if (source)
+    return gtk_drag_source_get_origin (source);
+
+  return NULL;
 }
 
 /**
