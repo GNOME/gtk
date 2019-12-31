@@ -1664,10 +1664,10 @@ gsk_transform_equal (GskTransform *first,
   if (first == NULL || second == NULL)
     return FALSE;
 
-  if (!gsk_transform_equal (first->next, second->next))
+  if (first->transform_class != second->transform_class)
     return FALSE;
 
-  if (first->transform_class != second->transform_class)
+  if (!gsk_transform_equal (first->next, second->next))
     return FALSE;
 
   return first->transform_class->equal (first, second);
