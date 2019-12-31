@@ -587,8 +587,9 @@ gtk_graphene_rect_scale_affine (const graphene_rect_t *rect,
   res->origin.y = scale_y * rect->origin.y + dy;
   res->size.width = scale_x * rect->size.width;
   res->size.height = scale_y * rect->size.height;
-  /* necessary when scale_x or scale_y are < 0 */
-  graphene_rect_normalize (res);
+
+  if (scale_x < 0 || scale_y < 0)
+    graphene_rect_normalize (res);
 }
 
 static void
