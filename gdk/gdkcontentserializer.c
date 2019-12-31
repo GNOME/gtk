@@ -432,7 +432,7 @@ lookup_serializer (const char *mime_type,
 
 /**
  * gdk_content_formats_union_serialize_gtypes:
- * @formats: a #GdkContentFormats
+ * @formats: (transfer full): a #GdkContentFormats
  *
  * Add GTypes for the mime types in @formats for which serializers are
  * registered.
@@ -467,7 +467,7 @@ gdk_content_formats_union_serialize_gtypes (GdkContentFormats *formats)
 
 /**
  * gdk_content_formats_union_serialize_mime_types:
- * @formats: a #GdkContentFormats
+ * @formats: (transfer full):  a #GdkContentFormats
  *
  * Add mime types for GTypes in @formats for which serializers are
  * registered.
