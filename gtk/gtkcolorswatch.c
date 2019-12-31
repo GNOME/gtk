@@ -40,6 +40,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtknative.h"
+#include "gtkdragsource.h"
 
 #include "a11y/gtkcolorswatchaccessibleprivate.h"
 
@@ -113,54 +114,21 @@ swatch_snapshot (GtkWidget   *widget,
   gtk_widget_snapshot_child (widget, priv->overlay_widget, snapshot);
 }
 
-
 static void
-drag_set_color_icon (GdkDrag        *drag,
-                     const GdkRGBA  *color)
+gtk_color_swatch_drag_begin (GtkDragSource  *source,
+                             GtkColorSwatch *swatch)
 {
+  GtkColorSwatchPrivate *priv = gtk_color_swatch_get_instance_private (swatch);
   GtkSnapshot *snapshot;
   GdkPaintable *paintable;
 
   snapshot = gtk_snapshot_new ();
-  gtk_snapshot_append_color (snapshot,
-                             color,
-                             &GRAPHENE_RECT_INIT(0, 0, 48, 32));
+  gtk_snapshot_append_color (snapshot, &priv->color, &GRAPHENE_RECT_INIT(0, 0, 48, 32));
   paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
 
-  gtk_drag_set_icon_paintable (drag, paintable, 4, 4);
+  gtk_drag_source_set_icon (source, paintable, 0, 0);
+
   g_object_unref (paintable);
-}
-
-static void
-swatch_drag_begin (GtkWidget      *widget,
-                   GdkDrag        *drag)
-{
-  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
-  GdkRGBA color;
-
-  gtk_color_swatch_get_rgba (swatch, &color);
-  drag_set_color_icon (drag, &color);
-}
-
-static void
-swatch_drag_data_get (GtkWidget        *widget,
-                      GdkDrag          *drag,
-                      GtkSelectionData *selection_data)
-{
-  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
-  guint16 vals[4];
-  GdkRGBA color;
-
-  gtk_color_swatch_get_rgba (swatch, &color);
-
-  vals[0] = color.red * 0xffff;
-  vals[1] = color.green * 0xffff;
-  vals[2] = color.blue * 0xffff;
-  vals[3] = color.alpha * 0xffff;
-
-  gtk_selection_data_set (selection_data,
-                          g_intern_static_string ("application/x-color"),
-                          16, (guchar *)vals, 8);
 }
 
 static void
@@ -523,8 +491,6 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
 
   widget_class->measure = gtk_color_swatch_measure;
   widget_class->snapshot = swatch_snapshot;
-  widget_class->drag_begin = swatch_drag_begin;
-  widget_class->drag_data_get = swatch_drag_data_get;
   widget_class->drag_data_received = swatch_drag_data_received;
   widget_class->popup_menu = swatch_popup_menu;
   widget_class->size_allocate = swatch_size_allocate;
@@ -601,6 +567,14 @@ static const char *dnd_targets[] = {
   "application/x-color"
 };
 
+static void
+get_rgba_value (GValue   *value,
+                gpointer  data)
+{
+  GtkColorSwatchPrivate *priv = gtk_color_swatch_get_instance_private (GTK_COLOR_SWATCH (data));
+  g_value_set_boxed (value, &priv->color);
+}
+
 void
 gtk_color_swatch_set_rgba (GtkColorSwatch *swatch,
                            const GdkRGBA  *color)
@@ -612,12 +586,15 @@ gtk_color_swatch_set_rgba (GtkColorSwatch *swatch,
 
   if (!priv->has_color)
     {
-      GdkContentFormats *targets = gdk_content_formats_new (dnd_targets, G_N_ELEMENTS (dnd_targets));
-      gtk_drag_source_set (GTK_WIDGET (swatch),
-                           GDK_BUTTON1_MASK | GDK_BUTTON3_MASK,
-                           targets,
-                           GDK_ACTION_COPY | GDK_ACTION_MOVE);
-      gdk_content_formats_unref (targets);
+      GdkContentProvider *content;
+      GtkDragSource *source;
+
+      content = gdk_content_provider_new_with_callback (GDK_TYPE_RGBA, get_rgba_value, swatch);
+      source = gtk_drag_source_new (content, GDK_ACTION_COPY);
+      g_object_unref (content);
+      g_signal_connect (source, "drag-begin", G_CALLBACK (gtk_color_swatch_drag_begin), swatch);
+
+      gtk_drag_source_attach (source, GTK_WIDGET (swatch), GDK_BUTTON1_MASK | GDK_BUTTON3_MASK);
     }
 
   priv->has_color = TRUE;
