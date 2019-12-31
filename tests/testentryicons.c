@@ -21,33 +21,6 @@ drag_begin_cb (GtkWidget      *widget,
 }
 
 static void
-drag_data_get_cb (GtkWidget        *widget,
-                  GdkDrag          *drag,
-                  GtkSelectionData *data,
-                  gpointer          user_data)
-{
-  gint pos;
-
-  pos = gtk_entry_get_current_icon_drag_source (GTK_ENTRY (widget));
-
-  if (pos == GTK_ENTRY_ICON_PRIMARY)
-    {
-      gint start, end;
-
-      if (gtk_editable_get_selection_bounds (GTK_EDITABLE (widget), &start, &end))
-        {
-          gchar *str;
-
-          str = gtk_editable_get_chars (GTK_EDITABLE (widget), start, end);
-          gtk_selection_data_set_text (data, str, -1);
-          g_free (str);
-        }
-      else
-        gtk_selection_data_set_text (data, "XXX", -1);
-    }
-}
-
-static void
 set_blank (GtkWidget *button,
            GtkEntry  *entry)
 {
@@ -127,7 +100,8 @@ main (int argc, char **argv)
   GtkWidget *button3;
   GtkWidget *button4;
   GIcon *icon;
-  GdkContentFormats *tlist;
+  GdkContentProvider *content;
+  GValue value = G_VALUE_INIT;
 
   gtk_init ();
 
@@ -189,16 +163,17 @@ main (int argc, char **argv)
   gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
 				   GTK_ENTRY_ICON_PRIMARY,
 				   "Save a file");
-  tlist = gdk_content_formats_new (NULL, 0);
-  tlist = gtk_content_formats_add_text_targets (tlist);
+ 
+  g_value_init (&value, G_TYPE_STRING);
+  g_value_set_string (&value, "Amazing");
+  content = gdk_content_provider_new_for_value (&value);
+  g_value_unset (&value);
   gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
                                   GTK_ENTRY_ICON_PRIMARY,
-                                  tlist, GDK_ACTION_COPY); 
+                                  content, GDK_ACTION_COPY); 
   g_signal_connect_after (entry, "drag-begin", 
                           G_CALLBACK (drag_begin_cb), NULL);
-  g_signal_connect (entry, "drag-data-get", 
-                    G_CALLBACK (drag_data_get_cb), NULL);
-  gdk_content_formats_unref (tlist);
+  g_object_unref (content);
 
   /*
    * Search - Uses a helper function

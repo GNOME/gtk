@@ -266,7 +266,7 @@ gchar *      gtk_entry_get_icon_tooltip_markup           (GtkEntry             *
 GDK_AVAILABLE_IN_ALL
 void         gtk_entry_set_icon_drag_source              (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos,
-							  GdkContentFormats    *formats,
+							  GdkContentProvider   *content,
 							  GdkDragAction         actions);
 GDK_AVAILABLE_IN_ALL
 gint         gtk_entry_get_current_icon_drag_source      (GtkEntry             *entry);
