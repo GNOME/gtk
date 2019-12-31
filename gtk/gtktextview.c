@@ -418,17 +418,6 @@ static gboolean get_middle_click_paste         (GtkTextView      *text_view);
 
 static GtkTextBuffer* gtk_text_view_create_buffer (GtkTextView   *text_view);
 
-/* Source side drag signals */
-static void gtk_text_view_drag_begin       (GtkWidget        *widget,
-                                            GdkDrag          *drag);
-static void gtk_text_view_drag_end         (GtkWidget        *widget,
-                                            GdkDrag          *drag);
-static void gtk_text_view_drag_data_get    (GtkWidget        *widget,
-                                            GdkDrag          *drag,
-                                            GtkSelectionData *selection_data);
-static void gtk_text_view_drag_data_delete (GtkWidget        *widget,
-                                            GdkDrag          *drag);
-
 /* Target side drag signals */
 static void     gtk_text_view_drag_leave         (GtkWidget        *widget,
                                                   GdkDrop          *drop);
@@ -712,10 +701,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->size_allocate = gtk_text_view_size_allocate;
   widget_class->snapshot = gtk_text_view_snapshot;
   widget_class->focus = gtk_text_view_focus;
-  widget_class->drag_begin = gtk_text_view_drag_begin;
-  widget_class->drag_end = gtk_text_view_drag_end;
-  widget_class->drag_data_get = gtk_text_view_drag_data_get;
-  widget_class->drag_data_delete = gtk_text_view_drag_data_delete;
 
   widget_class->drag_leave = gtk_text_view_drag_leave;
   widget_class->drag_motion = gtk_text_view_drag_motion;
@@ -6698,8 +6683,7 @@ gtk_text_view_copy_clipboard (GtkTextView *text_view)
 {
   GdkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (text_view));
   
-  gtk_text_buffer_copy_clipboard (get_buffer (text_view),
-				  clipboard);
+  gtk_text_buffer_copy_clipboard (get_buffer (text_view), clipboard);
 
   /* on copy do not scroll, we are already onscreen */
 }
@@ -7691,30 +7675,15 @@ gtk_text_view_im_context_filter_keypress (GtkTextView  *text_view,
  */
 
 static void
-drag_begin_cb (GtkWidget      *widget,
-               GdkDrag        *drag,
-               gpointer        data)
+gtk_text_view_drag_data_delete (GtkTextView *text_view)
 {
-  GtkTextView     *text_view = GTK_TEXT_VIEW (widget);
-  GtkTextBuffer   *buffer = gtk_text_view_get_buffer (text_view);
-  GtkTextIter      start;
-  GtkTextIter      end;
-  GdkPaintable    *paintable = NULL;
+  gtk_text_buffer_delete_selection (text_view->priv->buffer, TRUE, text_view->priv->editable);
+}
 
-  g_signal_handlers_disconnect_by_func (widget, drag_begin_cb, NULL);
-
-  if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
-    paintable = gtk_text_util_create_rich_drag_icon (widget, buffer, &start, &end);
-
-  if (paintable)
-    {
-      gtk_drag_set_icon_paintable (drag, paintable, 0, 0);
-      g_object_unref (paintable);
-    }
-  else
-    {
-      gtk_drag_set_icon_default (drag);
-    }
+static void
+drag_end (GtkTextView *self)
+{
+  g_object_set_data (G_OBJECT (self), "drag-source", NULL);
 }
 
 static void
@@ -7724,78 +7693,36 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
                                    gint               x,
                                    gint               y)
 {
-  GdkContentFormats *formats;
-
-  formats = gdk_content_formats_new_for_gtype (GTK_TYPE_TEXT_BUFFER);
-
-  g_signal_connect (text_view, "drag-begin",
-                    G_CALLBACK (drag_begin_cb), NULL);
-  gtk_drag_begin (GTK_WIDGET (text_view),
-                  gdk_event_get_device (event),
-                  formats,
-                  GDK_ACTION_COPY | GDK_ACTION_MOVE,
-                  x, y);
-}
-
-static void
-gtk_text_view_drag_begin (GtkWidget        *widget,
-                          GdkDrag          *drag)
-{
-  /* do nothing */
-}
-
-static void
-gtk_text_view_drag_end (GtkWidget        *widget,
-                        GdkDrag          *drag)
-{
-  GtkTextView *text_view;
-
-  text_view = GTK_TEXT_VIEW (widget);
-  text_view->priv->dnd_x = text_view->priv->dnd_y = -1;
-}
-
-static void
-gtk_text_view_drag_data_get (GtkWidget        *widget,
-                             GdkDrag          *drag,
-                             GtkSelectionData *selection_data)
-{
-  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+  GtkWidget *widget = GTK_WIDGET (text_view);
   GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
+  GtkDragSource *source;
+  GdkContentProvider *content;
+  GtkTextIter start, end;
+  GdkDragAction actions;
+  GdkDevice *device;
 
-  if (gtk_selection_data_get_target (selection_data) == g_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
-    {
-      gtk_selection_data_set (selection_data,
-                              g_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"),
-                              8, /* bytes */
-                              (void*)&buffer,
-                              sizeof (buffer));
-    }
+  if (text_view->priv->editable)
+    actions = GDK_ACTION_COPY | GDK_ACTION_MOVE;
   else
+    actions = GDK_ACTION_COPY;
+  content = gtk_text_buffer_get_selection_content (buffer);
+  source = gtk_drag_source_new (content, actions);
+  g_object_unref (content);
+  if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
     {
-      GtkTextIter start;
-      GtkTextIter end;
-      gchar *str = NULL;
-
-      if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
-        {
-          /* Extract the selected text */
-          str = gtk_text_iter_get_visible_text (&start, &end);
-        }
-
-      if (str)
-        {
-          gtk_selection_data_set_text (selection_data, str, -1);
-          g_free (str);
-        }
+      GdkPaintable *paintable;
+      paintable = gtk_text_util_create_rich_drag_icon (widget, buffer, &start, &end);
+      gtk_drag_source_set_icon (source, paintable, 0, 0);
+      g_object_unref (paintable);
     }
-}
 
-static void
-gtk_text_view_drag_data_delete (GtkWidget        *widget,
-                                GdkDrag          *drag)
-{
-  gtk_text_buffer_delete_selection (GTK_TEXT_VIEW (widget)->priv->buffer,
-                                    TRUE, GTK_TEXT_VIEW (widget)->priv->editable);
+  g_signal_connect_swapped (source, "drag-data-delete",
+                            G_CALLBACK (gtk_text_view_drag_data_delete), text_view);
+  g_signal_connect_swapped (source, "drag-end",
+                            G_CALLBACK (drag_end), text_view);
+
+  device = gdk_event_get_device (event);
+  gtk_drag_source_drag_begin (source, widget, device, x, y);
 }
 
 static void
@@ -7969,12 +7896,16 @@ gtk_text_view_get_action (GtkWidget *textview,
                           GdkDrop   *drop)
 {
   GdkDrag *drag = gdk_drop_get_drag (drop);
-  GtkWidget *source_widget = gtk_drag_get_source_widget (drag);
+  GtkDragSource *source;
+  GtkDragSource *source1;
   GdkDragAction actions;
 
   actions = gdk_drop_get_actions (drop);
 
-  if (source_widget == textview &&
+  source = drag ? gtk_drag_get_source (drag) : NULL;
+  source1 = (GtkDragSource*)g_object_get_data (G_OBJECT (textview), "drag-source");
+
+  if (source && source == source1 &&
       actions & GDK_ACTION_MOVE)
     return GDK_ACTION_MOVE;
 
