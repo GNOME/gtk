@@ -24,6 +24,7 @@
 #include "gdkcontentformats.h"
 #include "filetransferportalprivate.h"
 #include "gdktexture.h"
+#include "gdkrgbaprivate.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
@@ -849,6 +850,63 @@ file_uri_deserializer (GdkContentDeserializer *deserializer)
 }
 
 static void
+color_deserializer_finish (GObject      *source,
+                           GAsyncResult *result,
+                           gpointer      deserializer)
+{
+  GOutputStream *stream = G_OUTPUT_STREAM (source);
+  GError *error = NULL;
+  gssize written;
+
+  written = g_output_stream_splice_finish (stream, result, &error);
+  if (written < 0)
+    {
+      gdk_content_deserializer_return_error (deserializer, error);
+      return;
+    }
+  else if (written == 0)
+    {
+      GdkRGBA black = GDK_RGBA ("000");
+
+      /* Never return NULL, we only return that on error */
+      g_value_set_boxed (gdk_content_deserializer_get_value (deserializer), &black);
+    }
+  else
+    {
+      guint16 *data;
+      GdkRGBA rgba;
+
+      data = (guint16 *)g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (stream));
+      rgba.red = data[0] / 65535.0;
+      rgba.green = data[1] / 65535.0;
+      rgba.blue = data[2] / 65535.0;
+      rgba.alpha = data[3] / 65535.0;
+
+      g_value_set_boxed (gdk_content_deserializer_get_value (deserializer), &rgba);
+    }
+  gdk_content_deserializer_return_success (deserializer);
+}
+
+static void
+color_deserializer (GdkContentDeserializer *deserializer)
+{
+  GOutputStream *output;
+  guint16 *data;
+
+  data = g_new0 (guint16, 4);
+  output = g_memory_output_stream_new (data, 4 * sizeof (guint16), NULL, g_free);
+
+  g_output_stream_splice_async (output,
+                                gdk_content_deserializer_get_input_stream (deserializer),
+                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
+                                gdk_content_deserializer_get_priority (deserializer),
+                                gdk_content_deserializer_get_cancellable (deserializer),
+                                color_deserializer_finish,
+                                deserializer);
+  g_object_unref (output);
+}
+
+static void
 init (void)
 {
   static gboolean initialized = FALSE;
@@ -955,6 +1013,12 @@ init (void)
                                      G_TYPE_STRING,
                                      string_deserializer,
                                      (gpointer) "ASCII",
+                                     NULL);
+
+  gdk_content_register_deserializer ("application/x-color",
+                                     GDK_TYPE_RGBA,
+                                     color_deserializer,
+                                     NULL,
                                      NULL);
 }
 
