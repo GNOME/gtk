@@ -4026,8 +4026,8 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info)
   else
     {
       icon_info->pixbuf = gdk_pixbuf_scale_simple (source_pixbuf,
-                                                   0.5 + image_width * icon_info->scale,
-                                                   0.5 + image_height * icon_info->scale,
+                                                   MAX (1, 0.5 + image_width * icon_info->scale),
+                                                   MAX (1, 0.5 + image_height * icon_info->scale),
                                                    GDK_INTERP_BILINEAR);
       g_object_unref (source_pixbuf);
     }
