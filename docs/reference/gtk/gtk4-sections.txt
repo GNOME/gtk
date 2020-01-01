@@ -451,6 +451,7 @@ gtk_selection_model_unselect_all
 gtk_selection_model_query_range
 <SUBSECTION>
 gtk_selection_model_selection_changed
+
 <SUBSECTION Standard>
 GTK_SELECTION_MODEL
 GTK_SELECTION_MODEL_CLASS
@@ -4995,6 +4996,10 @@ gtk_targets_include_text
 gtk_targets_include_uri
 gtk_selection_data_copy
 gtk_selection_data_free
+<SUBSECTION>
+gtk_content_formats_add_text_targets
+gtk_content_formats_add_image_targets
+gtk_content_formats_add_uri_targets
 <SUBSECTION Standard>
 GTK_TYPE_SELECTION_DATA
 <SUBSECTION Private>
