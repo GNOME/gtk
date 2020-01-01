@@ -518,13 +518,9 @@ enum {
   MNEMONIC_ACTIVATE,
   MOVE_FOCUS,
   KEYNAV_FAILED,
-  DRAG_BEGIN,
-  DRAG_END,
-  DRAG_DATA_DELETE,
   DRAG_LEAVE,
   DRAG_MOTION,
   DRAG_DROP,
-  DRAG_DATA_GET,
   DRAG_DATA_RECEIVED,
   POPUP_MENU,
   ACCEL_CLOSURES_CHANGED,
@@ -920,13 +916,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->focus = gtk_widget_real_focus;
   klass->move_focus = gtk_widget_real_move_focus;
   klass->keynav_failed = gtk_widget_real_keynav_failed;
-  klass->drag_begin = NULL;
-  klass->drag_end = NULL;
-  klass->drag_data_delete = NULL;
-  klass->drag_leave = NULL;
-  klass->drag_motion = NULL;
-  klass->drag_drop = NULL;
-  klass->drag_data_received = NULL;
   klass->can_activate_accel = gtk_widget_real_can_activate_accel;
   klass->query_tooltip = gtk_widget_real_query_tooltip;
   klass->style_updated = gtk_widget_real_style_updated;
@@ -1685,96 +1674,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  GDK_TYPE_DROP);
 
   /**
-   * GtkWidget::drag-begin:
-   * @widget: the object which received the signal
-   * @context: the drag context 
-   *
-   * The ::drag-begin signal is emitted on the drag source when a drag is
-   * started. A typical reason to connect to this signal is to set up a
-   * custom drag icon with e.g. gtk_drag_source_set_icon_paintable().
-   *
-   * Note that some widgets set up a drag icon in the default handler of
-   * this signal, so you may have to use g_signal_connect_after() to
-   * override what the default handler did.
-   */
-  widget_signals[DRAG_BEGIN] =
-    g_signal_new (I_("drag-begin"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, drag_begin),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 1,
-		  GDK_TYPE_DRAG);
-
-  /**
-   * GtkWidget::drag-end:
-   * @widget: the object which received the signal
-   * @context: the drag context
-   *
-   * The ::drag-end signal is emitted on the drag source when a drag is
-   * finished.  A typical reason to connect to this signal is to undo
-   * things done in #GtkWidget::drag-begin.
-   */
-  widget_signals[DRAG_END] =
-    g_signal_new (I_("drag-end"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, drag_end),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 1,
-		  GDK_TYPE_DRAG);
-
-  /**
-   * GtkWidget::drag-data-delete:
-   * @widget: the object which received the signal
-   * @context: the drag context
-   *
-   * The ::drag-data-delete signal is emitted on the drag source when a drag
-   * with the action %GDK_ACTION_MOVE is successfully completed. The signal
-   * handler is responsible for deleting the data that has been dropped. What
-   * "delete" means depends on the context of the drag operation.
-   */
-  widget_signals[DRAG_DATA_DELETE] =
-    g_signal_new (I_("drag-data-delete"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, drag_data_delete),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 1,
-		  GDK_TYPE_DRAG);
-
-  /**
-   * GtkWidget::drag-failed:
-   * @widget: the object which received the signal
-   * @context: the drag context
-   * @result: the result of the drag operation
-   *
-   * The ::drag-failed signal is emitted on the drag source when a drag has
-   * failed. The signal handler may hook custom code to handle a failed DnD
-   * operation based on the type of error, it returns %TRUE is the failure has
-   * been already handled (not showing the default "drag operation failed"
-   * animation), otherwise it returns %FALSE.
-   *
-   * Returns: %TRUE if the failed drag operation has been already handled.
-   */
-  widget_signals[DRAG_FAILED] =
-    g_signal_new (I_("drag-failed"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, drag_failed),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__OBJECT_ENUM,
-		  G_TYPE_BOOLEAN, 2,
-		  GDK_TYPE_DRAG,
-		  GTK_TYPE_DRAG_RESULT);
-  g_signal_set_va_marshaller (widget_signals[DRAG_FAILED],
-                              G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__OBJECT_ENUMv);
-
-  /**
    * GtkWidget::drag-motion:
    * @widget: the object which received the signal
    * @drop: the #GdkDrop
@@ -1912,34 +1811,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   g_signal_set_va_marshaller (widget_signals[DRAG_DROP],
                               G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__OBJECT_INT_INTv);
-
-  /**
-   * GtkWidget::drag-data-get:
-   * @widget: the object which received the signal
-   * @context: the drag context
-   * @data: the #GtkSelectionData to be filled with the dragged data
-   * @info: the info that has been registered with the target in the
-   *        #GtkTargetList
-   *
-   * The ::drag-data-get signal is emitted on the drag source when the drop
-   * site requests the data which is dragged. It is the responsibility of
-   * the signal handler to fill @data with the data in the format which
-   * is indicated by @info. See gtk_selection_data_set() and
-   * gtk_selection_data_set_text().
-   */
-  widget_signals[DRAG_DATA_GET] =
-    g_signal_new (I_("drag-data-get"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, drag_data_get),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT_BOXED,
-		  G_TYPE_NONE, 2,
-		  GDK_TYPE_DRAG,
-		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE);
-  g_signal_set_va_marshaller (widget_signals[DRAG_DATA_GET],
-                              G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_VOID__OBJECT_BOXEDv);
 
   /**
    * GtkWidget::drag-data-received:
