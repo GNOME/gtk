@@ -45,49 +45,11 @@ void gtk_drag_get_data (GtkWidget      *widget,
 			GdkAtom         target);
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *gtk_drag_get_source_widget (GdkDrag *drag);
-
-GDK_AVAILABLE_IN_ALL
 void gtk_drag_highlight   (GtkWidget  *widget);
 GDK_AVAILABLE_IN_ALL
 void gtk_drag_unhighlight (GtkWidget  *widget);
 
 /* Source side */
-
-GDK_AVAILABLE_IN_ALL
-GdkDrag *gtk_drag_begin (GtkWidget         *widget,
-                         GdkDevice         *device,
-                         GdkContentFormats *targets,
-                         GdkDragAction      actions,
-                         gint               x,
-                         gint               y);
-
-GDK_AVAILABLE_IN_ALL
-void gtk_drag_cancel           (GdkDrag *drag);
-
-GDK_AVAILABLE_IN_ALL
-void gtk_drag_set_icon_widget (GdkDrag        *drag,
-			       GtkWidget      *widget,
-			       gint            hot_x,
-			       gint            hot_y);
-GDK_AVAILABLE_IN_ALL
-void gtk_drag_set_icon_paintable (GdkDrag     *drag,
-			       GdkPaintable   *paintable,
-                               int             hot_x,
-                               int             hot_y);
-GDK_AVAILABLE_IN_ALL
-void gtk_drag_set_icon_name   (GdkDrag        *drag,
-			       const gchar    *icon_name,
-			       gint            hot_x,
-			       gint            hot_y);
-GDK_AVAILABLE_IN_ALL
-void gtk_drag_set_icon_gicon  (GdkDrag        *drag,
-			       GIcon          *icon,
-			       gint            hot_x,
-			       gint            hot_y);
-
-GDK_AVAILABLE_IN_ALL
-void gtk_drag_set_icon_default (GdkDrag       *drag);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_drag_check_threshold (GtkWidget *widget,
