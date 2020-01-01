@@ -37,38 +37,6 @@
 
 G_BEGIN_DECLS
 
-GDK_AVAILABLE_IN_ALL
-void gtk_drag_source_set  (GtkWidget            *widget,
-			   GdkModifierType       start_button_mask,
-			   GdkContentFormats    *targets,
-			   GdkDragAction         actions);
-
-GDK_AVAILABLE_IN_ALL
-void gtk_drag_source_unset (GtkWidget        *widget);
-
-GDK_AVAILABLE_IN_ALL
-GdkContentFormats *     gtk_drag_source_get_target_list (GtkWidget         *widget);
-GDK_AVAILABLE_IN_ALL
-void                    gtk_drag_source_set_target_list (GtkWidget         *widget,
-                                                         GdkContentFormats *target_list);
-GDK_AVAILABLE_IN_ALL
-void           gtk_drag_source_add_text_targets  (GtkWidget     *widget);
-GDK_AVAILABLE_IN_ALL
-void           gtk_drag_source_add_image_targets (GtkWidget    *widget);
-GDK_AVAILABLE_IN_ALL
-void           gtk_drag_source_add_uri_targets   (GtkWidget    *widget);
-
-GDK_AVAILABLE_IN_ALL
-void gtk_drag_source_set_icon_name    (GtkWidget       *widget,
-				       const gchar     *icon_name);
-GDK_AVAILABLE_IN_ALL
-void gtk_drag_source_set_icon_gicon   (GtkWidget       *widget,
-				       GIcon           *icon);
-GDK_AVAILABLE_IN_ALL
-void gtk_drag_source_set_icon_paintable (GtkWidget       *widget,
-				         GdkPaintable    *paintable);
-
-
 #define GTK_TYPE_DRAG_SOURCE         (gtk_drag_source_get_type ())
 #define GTK_DRAG_SOURCE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_DRAG_SOURCE, GtkDragSource))
 #define GTK_DRAG_SOURCE_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GTK_TYPE_DRAG_SOURCE, GtkDragSourceClass))
