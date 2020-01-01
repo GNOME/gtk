@@ -7191,3 +7191,31 @@ gtk_constraint_guide_get_max_size
 GTK_TYPE_CONSTRAINT_GUIDE
 gtk_constraint_guide_get_tyoe
 </SECTION>
+
+<SECTION>
+<FILE>gtkdragsource</FILE>
+GtkDragSource
+gtk_drag_source_new
+gtk_drag_source_set_content
+gtk_drag_source_get_content
+gtk_drag_source_set_actions
+gtk_drag_source_get_actions
+gtk_drag_source_set_icon
+gtk_drag_source_drag_begin
+gtk_drag_source_drag_cancel
+gtk_drag_get_source
+gtk_drag_source_get_origin
+gtk_drag_source_get_drag
+gtk_drag_source_attach
+gtk_drag_source_detach
+gtk_drag_check_threshold
+<SUBSECTION Standard>
+GTK_TYPE_DRAG_SOURCE
+GTK_DRAG_SOURCE
+GTK_DRAG_SOURCE_CLASS
+GTK_IS_DRAG_SOURCE
+GTK_IS_DRAG_SOURCE_CLASS
+GTK_DRAG_SOURCE_GET_CLASS
+<SUBSECTION Private>
+gtk_drag_source_get_type
+</SECTION>
