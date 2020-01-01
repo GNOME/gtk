@@ -39,6 +39,7 @@
 #include "gtkdragiconprivate.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
+#include "gtksettingsprivate.h"
 
 /**
  * SECTION:gtkdragsource
@@ -780,4 +781,35 @@ gtk_drag_source_drag_cancel (GtkDragSource *source)
 
       gdk_drag_drop_done (source->drag, success);
     }
+}
+
+/**
+ * gtk_drag_check_threshold: (method)
+ * @widget: a #GtkWidget
+ * @start_x: X coordinate of start of drag
+ * @start_y: Y coordinate of start of drag
+ * @current_x: current X coordinate
+ * @current_y: current Y coordinate
+ * 
+ * Checks to see if a mouse drag starting at (@start_x, @start_y) and ending
+ * at (@current_x, @current_y) has passed the GTK drag threshold, and thus
+ * should trigger the beginning of a drag-and-drop operation.
+ *
+ * Returns: %TRUE if the drag threshold has been passed.
+ */
+gboolean
+gtk_drag_check_threshold (GtkWidget *widget,
+                          int        start_x,
+                          int        start_y,
+                          int        current_x,
+                          int        current_y)
+{
+  gint drag_threshold;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  drag_threshold = gtk_settings_get_dnd_drag_threshold (gtk_widget_get_settings (widget));
+
+  return (ABS (current_x - start_x) > drag_threshold ||
+          ABS (current_y - start_y) > drag_threshold);
 }
