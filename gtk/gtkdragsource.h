@@ -98,6 +98,13 @@ void               gtk_drag_source_attach      (GtkDragSource     *source,
 GDK_AVAILABLE_IN_ALL
 void               gtk_drag_source_detach      (GtkDragSource     *source);
 
+GDK_AVAILABLE_IN_ALL
+gboolean           gtk_drag_check_threshold    (GtkWidget         *widget,
+                                                int                start_x,
+                                                int                start_y,
+                                                int                current_x,
+                                                int                current_y);
+
 
 G_END_DECLS
 
