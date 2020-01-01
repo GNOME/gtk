@@ -187,14 +187,6 @@ struct _GtkWidget
  * @focus:
  * @move_focus: Signal emitted when a change of focus is requested
  * @keynav_failed: Signal emitted if keyboard navigation fails.
- * @drag_begin: Signal emitted on the drag source when a drag is
- *   started.
- * @drag_end: Signal emitted on the drag source when a drag is
- *   finished.
- * @drag_data_get: Signal emitted on the drag source when the drop
- *   site requests the data which is dragged.
- * @drag_data_delete: Signal emitted on the drag source when a drag
- *   with the action %GDK_ACTION_MOVE is successfully completed.
  * @drag_leave: Signal emitted on the drop site when the cursor leaves
  *   the widget.
  * @drag_motion: signal emitted on the drop site when the user moves
@@ -203,8 +195,6 @@ struct _GtkWidget
  *   data onto the widget.
  * @drag_data_received: Signal emitted on the drop site when the
  *   dragged data has been received.
- * @drag_failed: Signal emitted on the drag source when a drag has
- *   failed.
  * @popup_menu: Signal emitted whenever a widget should pop up a
  *   context menu.
  * @get_accessible: Returns the accessible object that describes the
@@ -276,17 +266,6 @@ struct _GtkWidgetClass
   gboolean (* keynav_failed)            (GtkWidget           *widget,
                                          GtkDirectionType     direction);
 
-  /* Source side drag signals */
-  void     (* drag_begin)          (GtkWidget          *widget,
-                                    GdkDrag            *drag);
-  void     (* drag_end)            (GtkWidget          *widget,
-                                    GdkDrag            *drag);
-  void     (* drag_data_get)       (GtkWidget          *widget,
-                                    GdkDrag            *drag,
-                                    GtkSelectionData   *selection_data);
-  void     (* drag_data_delete)    (GtkWidget          *widget,
-                                    GdkDrag            *drag);
-
   /* Target side drag signals */
   void     (* drag_leave)          (GtkWidget          *widget,
                                     GdkDrop            *drop);
@@ -301,9 +280,6 @@ struct _GtkWidgetClass
   void     (* drag_data_received)  (GtkWidget          *widget,
                                     GdkDrop            *drop,
                                     GtkSelectionData   *selection_data);
-  gboolean (* drag_failed)         (GtkWidget          *widget,
-                                    GdkDrag            *drag,
-                                    GtkDragResult       result);
 
   /* Signals used only for keybindings */
   gboolean (* popup_menu)          (GtkWidget          *widget);
