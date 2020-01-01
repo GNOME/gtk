@@ -1995,7 +1995,7 @@ file_list_drag_data_received_cb (GtkWidget        *widget,
 
   /* Allow only drags from other widgets; see bug #533891. */
   if (gdk_drop_get_drag (drop) &&
-      gtk_drag_get_source_widget (gdk_drop_get_drag (drop)) == widget)
+      gtk_drag_source_get_origin (gtk_drag_get_source (gdk_drop_get_drag (drop))) == widget)
     {
       g_signal_stop_emission_by_name (widget, "drag-data-received");
       return;
@@ -2042,15 +2042,13 @@ file_list_drag_drop_cb (GtkWidget             *widget,
 }
 
 static void
-file_list_drag_begin_cb (GtkWidget            *widget,
-                         GdkDrag              *drag,
+file_list_drag_begin_cb (GtkDragSource        *source,
                          GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
+  GdkDrag *drag = gtk_drag_source_get_drag (source);
 
-  gtk_places_sidebar_set_drop_targets_visible (GTK_PLACES_SIDEBAR (priv->places_sidebar),
-                                               TRUE,
-                                               drag);
+  gtk_places_sidebar_set_drop_targets_visible (GTK_PLACES_SIDEBAR (priv->places_sidebar), TRUE, drag);
 }
 
 /* Disable the normal tree drag motion handler, it makes it look like you're
@@ -2067,16 +2065,13 @@ file_list_drag_motion_cb (GtkWidget             *widget,
 }
 
 static void
-file_list_drag_end_cb (GtkWidget      *widget,
-                       GdkDrag        *drag,
-                       gpointer        user_data)
+file_list_drag_end_cb (GtkDragSource        *source,
+                       GtkFileChooserWidget *impl)
 {
-  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (user_data);
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
+  GdkDrag *drag = gtk_drag_source_get_drag (source);
 
-  gtk_places_sidebar_set_drop_targets_visible (GTK_PLACES_SIDEBAR (priv->places_sidebar),
-                                               FALSE,
-                                               drag);
+  gtk_places_sidebar_set_drop_targets_visible (GTK_PLACES_SIDEBAR (priv->places_sidebar), FALSE, drag);
 }
 
 /* Sensitizes the "Copy file’s location" and other context menu items if there is actually
@@ -8510,17 +8505,23 @@ post_process_ui (GtkFileChooserWidget *impl)
   GtkCellRenderer  *cell;
   GList            *cells;
   GFile            *file;
+  GtkDragSource *source;
+  GdkContentFormats *formats;
 
   /* Setup file list treeview */
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->browse_files_tree_view));
   gtk_tree_selection_set_select_function (selection,
                                           list_select_func,
                                           impl, NULL);
-  gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (priv->browse_files_tree_view),
-                                          GDK_BUTTON1_MASK,
-                                          NULL,
-                                          GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  gtk_drag_source_add_uri_targets (priv->browse_files_tree_view);
+  formats = gdk_content_formats_new (NULL, 0);
+  formats = gtk_content_formats_add_uri_targets (formats);
+  source = gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (priv->browse_files_tree_view),
+                                                   GDK_BUTTON1_MASK,
+                                                   formats,
+                                                   GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  gdk_content_formats_unref (formats);
+  g_signal_connect (source, "drag-begin", G_CALLBACK (file_list_drag_begin_cb), impl);
+  g_signal_connect (source, "drag-end", G_CALLBACK (file_list_drag_end_cb), impl);
 
   gtk_drag_dest_set (priv->browse_files_tree_view,
                      GTK_DEST_DEFAULT_ALL,
