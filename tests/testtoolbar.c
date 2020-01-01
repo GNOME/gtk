@@ -389,6 +389,8 @@ main (gint argc, gchar **argv)
   GtkWidget *hbox, *hbox1, *hbox2, *checkbox, *option_menu, *menu;
   gint i;
   GdkContentFormats *targets;
+  GdkContentProvider *content;
+  GtkDragSource *source;
   static const gchar *toolbar_styles[] = { "icons", "text", "both (vertical)",
 					   "both (horizontal)" };
   GtkToolItem *item;
@@ -616,9 +618,10 @@ main (gint argc, gchar **argv)
   gtk_container_add (GTK_CONTAINER (hbox), checkbox);
 
   targets = gdk_content_formats_new (target_table, G_N_ELEMENTS (target_table));
-  gtk_drag_source_set (button, GDK_BUTTON1_MASK,
-                       targets,
-		       GDK_ACTION_MOVE);
+  content = gdk_content_provider_new_for_bytes (target_table[0], g_bytes_new ("", 1));
+  source = gtk_drag_source_new (content, GDK_ACTION_MOVE);
+  g_object_unref (content);
+  gtk_drag_source_attach (source, button, GDK_BUTTON1_MASK);
   gtk_drag_dest_set (toolbar, GTK_DEST_DEFAULT_DROP,
                      targets,
 		     GDK_ACTION_MOVE);
