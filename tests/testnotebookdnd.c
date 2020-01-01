@@ -90,21 +90,6 @@ on_page_reordered (GtkNotebook *notebook, GtkWidget *child, guint page_num, gpoi
   g_print ("page %d reordered\n", page_num);
 }
 
-static void
-on_notebook_drag_begin (GtkWidget      *widget,
-                        GdkDrag        *drag,
-                        gpointer        data)
-{
-  guint page_num;
-
-  page_num = gtk_notebook_get_current_page (GTK_NOTEBOOK (widget));
-
-  if (page_num > 2)
-    gtk_drag_set_icon_name (drag,
-                            (page_num % 2) ? "help-browser" : "process-stop",
-                            0, 0);
-}
-
 static gboolean
 remove_in_idle (gpointer data)
 {
@@ -186,8 +171,6 @@ create_notebook (gchar           **labels,
 
   g_signal_connect (GTK_NOTEBOOK (notebook), "page-reordered",
                     G_CALLBACK (on_page_reordered), NULL);
-  g_signal_connect_after (G_OBJECT (notebook), "drag-begin",
-                          G_CALLBACK (on_notebook_drag_begin), NULL);
   return notebook;
 }
 
@@ -233,8 +216,6 @@ create_notebook_non_dragable_content (gchar           **labels,
 
   g_signal_connect (GTK_NOTEBOOK (notebook), "page-reordered",
                     G_CALLBACK (on_page_reordered), NULL);
-  g_signal_connect_after (G_OBJECT (notebook), "drag-begin",
-                          G_CALLBACK (on_notebook_drag_begin), NULL);
   return notebook;
 }
 
@@ -271,8 +252,6 @@ create_notebook_with_notebooks (gchar           **labels,
 
   g_signal_connect (GTK_NOTEBOOK (notebook), "page-reordered",
                     G_CALLBACK (on_page_reordered), NULL);
-  g_signal_connect_after (G_OBJECT (notebook), "drag-begin",
-                          G_CALLBACK (on_notebook_drag_begin), NULL);
   return notebook;
 }
 
