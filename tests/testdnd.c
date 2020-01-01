@@ -313,8 +313,6 @@ target_drag_motion	   (GtkWidget	       *widget,
 			    gint                x,
 			    gint                y)
 {
-  GtkWidget *source_widget;
-  GdkDrag *drag;
   char *s;
 
   if (!have_drag)
@@ -322,12 +320,6 @@ target_drag_motion	   (GtkWidget	       *widget,
       have_drag = TRUE;
       gtk_image_set_from_pixbuf (GTK_IMAGE (widget), trashcan_open);
     }
-
-  drag = gdk_drop_get_drag (drop);
-  source_widget = drag ? gtk_drag_get_source_widget (drag) : NULL;
-  g_print ("motion, source %s\n", source_widget ?
-	   G_OBJECT_TYPE_NAME (source_widget) :
-	   "NULL");
 
   s = gdk_content_formats_to_string (gdk_drop_get_formats (drop));
   g_print ("%s\n", s);
@@ -416,20 +408,6 @@ label_drag_data_received  (GtkWidget          *widget,
   gdk_drop_finish (drop, 0);
 }
 
-void  
-source_drag_data_get  (GtkWidget          *widget,
-		       GdkDrag            *drag,
-		       GtkSelectionData   *selection_data,
-		       gpointer            data)
-{
-  if (gtk_selection_data_get_target (selection_data) == g_intern_static_string ("application/x-rootwindow-drop"))
-    g_print ("I was dropped on the rootwin\n");
-  else
-    gtk_selection_data_set (selection_data,
-			    gtk_selection_data_get_target (selection_data),
-			    8, (guchar *) "I'm Data!", 9);
-}
-  
 /* The following is a rather elaborate example demonstrating/testing
  * changing of the window hierarchy during a drag - in this case,
  * via a "spring-loaded" popup window.
@@ -564,7 +542,6 @@ popsite_leave	   (GtkWidget	       *widget,
 
 void  
 source_drag_data_delete  (GtkWidget          *widget,
-			  GdkDrag            *drag,
 			  gpointer            data)
 {
   g_print ("Delete the data!\n");
@@ -587,6 +564,9 @@ main (int argc, char **argv)
   GtkWidget *button;
   GdkPixbuf *drag_icon;
   GdkTexture *texture;
+  GdkContentProvider *content;
+  GValue value = G_VALUE_INIT;
+  GtkDragSource *source;
   GdkContentFormats *targets;
 
   test_init ();
@@ -661,12 +641,13 @@ main (int argc, char **argv)
 
   button = gtk_button_new_with_label ("Drag Here\n");
 
-  targets = gdk_content_formats_new (target_table, n_targets);
-  gtk_drag_source_set (button, GDK_BUTTON1_MASK | GDK_BUTTON3_MASK,
-                       targets,
-		       GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  gtk_drag_source_set_icon_paintable (button, GDK_PAINTABLE (texture));
-  gdk_content_formats_unref (targets);
+  g_value_init (&value, G_TYPE_STRING);
+  g_value_set_string (&value, "I'm data!");
+  content = gdk_content_provider_new_for_value (&value);
+  g_value_unset (&value);
+  source = gtk_drag_source_new (content, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  gtk_drag_source_attach (source, button, GDK_BUTTON1_MASK | GDK_BUTTON3_MASK);
+  gtk_drag_source_set_icon (source, GDK_PAINTABLE (texture), 0, 0);
 
   g_object_unref (texture);
 
@@ -674,9 +655,7 @@ main (int argc, char **argv)
   gtk_widget_set_vexpand (button, TRUE);
   gtk_grid_attach (GTK_GRID (grid), button, 0, 1, 1, 1);
 
-  g_signal_connect (button, "drag-data-get",
-		    G_CALLBACK (source_drag_data_get), NULL);
-  g_signal_connect (button, "drag-data-delete",
+  g_signal_connect (source, "drag-data-delete",
 		    G_CALLBACK (source_drag_data_delete), NULL);
 
   gtk_widget_show (window);
