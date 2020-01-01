@@ -37,7 +37,7 @@
 #include "gtkgesturelongpressprivate.h"
 #include "gtkgestureprivate.h"
 #include "gtkmarshalers.h"
-#include "gtkdnd.h"
+#include "gtkdragsource.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
