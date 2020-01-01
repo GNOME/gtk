@@ -49,15 +49,6 @@ void gtk_drag_highlight   (GtkWidget  *widget);
 GDK_AVAILABLE_IN_ALL
 void gtk_drag_unhighlight (GtkWidget  *widget);
 
-/* Source side */
-
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_drag_check_threshold (GtkWidget *widget,
-				   gint       start_x,
-				   gint       start_y,
-				   gint       current_x,
-				   gint       current_y);
-
 
 G_END_DECLS
 
