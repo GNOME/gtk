@@ -249,7 +249,6 @@ struct _GtkCalendarPrivate
   guint need_timer  : 1;
 
   guint in_drag : 1;
-  guint drag_highlight : 1;
 
   guint32 timer;
   gint click_child;
@@ -330,19 +329,16 @@ static gboolean gtk_calendar_query_tooltip  (GtkWidget        *widget,
                                              gboolean          keyboard_mode,
                                              GtkTooltip       *tooltip);
 
-static void     gtk_calendar_drag_data_received (GtkWidget        *widget,
-                                                 GdkDrop          *drop,
-                                                 GtkSelectionData *selection_data);
-static gboolean gtk_calendar_drag_motion        (GtkWidget        *widget,
-                                                 GdkDrop          *drop,
-                                                 gint              x,
-                                                 gint              y);
-static void     gtk_calendar_drag_leave         (GtkWidget        *widget,
-                                                 GdkDrop          *drop);
-static gboolean gtk_calendar_drag_drop          (GtkWidget        *widget,
-                                                 GdkDrop          *drop,
-                                                 gint              x,
-                                                 gint              y);
+static gboolean gtk_calendar_drag_motion        (GtkDropTarget    *dest,
+                                                 int               x,
+                                                 int               y,
+                                                 GtkCalendar      *calendar);
+static void     gtk_calendar_drag_leave         (GtkDropTarget    *dest,
+                                                 GtkCalendar      *calendar);
+static gboolean gtk_calendar_drag_drop          (GtkDropTarget    *dest,
+                                                 int               x,
+                                                 int               y,
+                                                 GtkCalendar      *calendar);
 
 
 static void calendar_start_spinning (GtkCalendar *calendar,
@@ -389,11 +385,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   widget_class->state_flags_changed = gtk_calendar_state_flags_changed;
   widget_class->grab_notify = gtk_calendar_grab_notify;
   widget_class->query_tooltip = gtk_calendar_query_tooltip;
-
-  widget_class->drag_motion = gtk_calendar_drag_motion;
-  widget_class->drag_leave = gtk_calendar_drag_leave;
-  widget_class->drag_drop = gtk_calendar_drag_drop;
-  widget_class->drag_data_received = gtk_calendar_drag_data_received;
 
   /**
    * GtkCalendar:year:
@@ -672,6 +663,8 @@ gtk_calendar_init (GtkCalendar *calendar)
 #else
   gchar *week_start;
 #endif
+  GdkContentFormats *formats;
+  GtkDropTarget *dest;
 
   gtk_widget_set_can_focus (widget, TRUE);
 
@@ -789,11 +782,18 @@ gtk_calendar_init (GtkCalendar *calendar)
   priv->click_child = -1;
 
   priv->in_drag = 0;
-  priv->drag_highlight = 0;
 
-  gtk_drag_dest_set (widget, 0, NULL, GDK_ACTION_COPY);
-  gtk_drag_dest_add_text_targets (widget);
+  formats = gdk_content_formats_new (NULL, 0);
+  formats = gtk_content_formats_add_text_targets (formats);
+  dest = gtk_drop_target_new (0, formats, GDK_ACTION_COPY);
+  gdk_content_formats_unref (formats);
 
+  g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_calendar_drag_motion), calendar);
+  g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_calendar_drag_leave), calendar);
+  g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_calendar_drag_drop), calendar);
+
+  gtk_drop_target_attach (dest, widget);
+  
   priv->year_before = 0;
 
   /* Translate to calendar:YM if you want years to be displayed
@@ -2958,87 +2958,32 @@ get_status_pending (GdkDrop *drop)
 }
 
 static void
-gtk_calendar_drag_leave (GtkWidget *widget,
-                         GdkDrop   *drop)
+gtk_calendar_drag_leave (GtkDropTarget *dest,
+                         GtkCalendar   *calendar)
 {
-  GtkCalendar *calendar = GTK_CALENDAR (widget);
-  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
-
-  priv->drag_highlight = 0;
-  gtk_drag_unhighlight (widget);
-}
-
-static gboolean
-gtk_calendar_drag_motion (GtkWidget      *widget,
-                          GdkDrop        *drop,
-                          gint            x,
-                          gint            y)
-{
-  GtkCalendar *calendar = GTK_CALENDAR (widget);
-  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
-  GdkAtom target;
-
-  if (!priv->drag_highlight)
-    {
-      priv->drag_highlight = 1;
-      gtk_drag_highlight (widget);
-    }
-
-  target = gtk_drag_dest_find_target (widget, drop, NULL);
-  if (target == NULL || gdk_drop_get_actions (drop) == 0)
-    gdk_drop_status (drop, 0);
-  else if (get_status_pending (drop) == 0)
-    {
-      set_status_pending (drop, gdk_drop_get_actions (drop));
-      gtk_drag_get_data (widget, drop, target);
-    }
-
-  return TRUE;
-}
-
-static gboolean
-gtk_calendar_drag_drop (GtkWidget      *widget,
-                        GdkDrop        *drop,
-                        gint            x,
-                        gint            y)
-{
-  GdkAtom target;
-
-  target = gtk_drag_dest_find_target (widget, drop, NULL);
-  if (target != NULL)
-    {
-      gtk_drag_get_data (widget, drop, target);
-      return TRUE;
-    }
-
-  return FALSE;
+  gtk_drag_unhighlight (GTK_WIDGET (calendar));
 }
 
 static void
-gtk_calendar_drag_data_received (GtkWidget        *widget,
-                                 GdkDrop          *drop,
-                                 GtkSelectionData *selection_data)
+got_text (GObject      *source,
+          GAsyncResult *result,
+          gpointer      data)
 {
-  GtkCalendar *calendar = GTK_CALENDAR (widget);
+  GtkCalendar *calendar = GTK_CALENDAR (data);
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
+  GdkDrop *drop = GDK_DROP (source);
   guint day, month, year;
   gchar *str;
   GDate *date;
   GdkDragAction suggested_action;
 
   suggested_action = get_status_pending (drop);
+  set_status_pending (drop, 0);
+
+  str = gdk_drop_read_text_finish (drop, result, NULL);
 
   if (suggested_action)
     {
-      set_status_pending (drop, 0);
-
-      /* We are getting this data due to a request in drag_motion,
-       * rather than due to a request in drag_drop, so we are just
-       * supposed to call drag_status, not actually paste in the
-       * data.
-       */
-      str = (gchar*) gtk_selection_data_get_text (selection_data);
-
       if (str)
         {
           date = g_date_new ();
@@ -3052,12 +2997,10 @@ gtk_calendar_drag_data_received (GtkWidget        *widget,
         suggested_action = 0;
 
       gdk_drop_status (drop, suggested_action);
-
       return;
     }
 
   date = g_date_new ();
-  str = (gchar*) gtk_selection_data_get_text (selection_data);
   if (str)
     {
       g_date_set_parse (date, str);
@@ -3079,13 +3022,56 @@ gtk_calendar_drag_data_received (GtkWidget        *widget,
 
   gdk_drop_finish (drop, suggested_action);
 
-
   g_object_freeze_notify (G_OBJECT (calendar));
   if (!(priv->display_flags & GTK_CALENDAR_NO_MONTH_CHANGE)
       && (priv->display_flags & GTK_CALENDAR_SHOW_HEADING))
     gtk_calendar_select_month (calendar, month - 1, year);
   gtk_calendar_select_day (calendar, day);
   g_object_thaw_notify (G_OBJECT (calendar));
+}
+
+static gboolean
+gtk_calendar_drag_motion (GtkDropTarget *dest,
+                          int            x,
+                          int            y,
+                          GtkCalendar   *calendar)
+{
+  GtkWidget *widget = GTK_WIDGET (calendar);
+  GdkDrop *drop = gtk_drop_target_get_drop (dest);
+  GdkAtom target;
+
+  gtk_drag_highlight (widget);
+
+  target = gtk_drop_target_find_mimetype (dest);
+  if (!target || gdk_drop_get_actions (drop) == 0)
+    gdk_drop_status (drop, 0);
+  else if (get_status_pending (drop) == 0)
+    {
+      set_status_pending (drop, gdk_drop_get_actions (drop));
+      gdk_drop_read_text_async (drop, NULL, got_text, calendar);
+    }
+
+  return TRUE;
+}
+
+static gboolean
+gtk_calendar_drag_drop (GtkDropTarget  *dest,
+                        int             x,
+                        int             y,
+                        GtkCalendar    *calendar)
+{
+  GdkDrop *drop = gtk_drop_target_get_drop (dest);
+  GdkAtom target;
+
+  target = gtk_drop_target_find_mimetype (dest);
+  if (target != NULL)
+    {
+      set_status_pending (drop, 0);
+      gdk_drop_read_text_async (drop, NULL, got_text, calendar);
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 
