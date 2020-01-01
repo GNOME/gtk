@@ -63,6 +63,8 @@
 #include "gtkgestureclick.h"
 #include "gtkgesturedrag.h"
 #include "gtknative.h"
+#include "gtkdragsource.h"
+#include "gtkwidgetpaintable.h"
 
 /*< private >
  * SECTION:gtkplacessidebar
@@ -1720,13 +1722,13 @@ stop_drop_feedback (GtkPlacesSidebar *sidebar)
 }
 
 static void
-drag_begin_callback (GtkWidget      *widget,
-                     GdkDrag        *drag,
+drag_begin_callback (GtkDragSource *source,
                      gpointer        user_data)
 {
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
   GtkAllocation allocation;
   GtkWidget *drag_widget;
+  GdkPaintable *paintable;
 
   gtk_widget_get_allocation (sidebar->drag_row, &allocation);
   gtk_widget_hide (sidebar->drag_row);
@@ -1737,18 +1739,16 @@ drag_begin_callback (GtkWidget      *widget,
 
   gtk_widget_set_opacity (drag_widget, 0.8);
 
-  gtk_drag_set_icon_widget (drag,
-                            drag_widget,
-                            sidebar->drag_row_x,
-                            sidebar->drag_row_y);
+  paintable = gtk_widget_paintable_new (drag_widget);
+  gtk_drag_source_set_icon (source, paintable, sidebar->drag_row_x, sidebar->drag_row_y);
+  g_object_unref (paintable);
+  g_object_set_data_full (G_OBJECT (source), "row-widget", drag_widget, (GDestroyNotify)gtk_widget_destroy);
 }
 
 static GtkWidget *
 create_placeholder_row (GtkPlacesSidebar *sidebar)
 {
-  return 	g_object_new (GTK_TYPE_SIDEBAR_ROW,
-                        "placeholder", TRUE,
-                        NULL);
+  return g_object_new (GTK_TYPE_SIDEBAR_ROW, "placeholder", TRUE, NULL);
 }
 
 static gboolean
@@ -1950,23 +1950,16 @@ drop_files_as_bookmarks (GtkPlacesSidebar *sidebar,
     }
 }
 
-static void
-drag_data_get_callback (GtkWidget        *widget,
-                        GdkDrag          *drag,
-                        GtkSelectionData *data,
-                        gpointer          user_data)
+static GBytes *
+drag_data_get_callback (const char *mimetype,
+                        gpointer    user_data)
 {
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
-  GdkAtom target = gtk_selection_data_get_target (data);
 
-  if (target == g_intern_static_string ("DND_GTK_SIDEBAR_ROW"))
-    {
-      gtk_selection_data_set (data,
-                              target,
-                              8,
-                              (void*)&sidebar->drag_row,
-                              sizeof (gpointer));
-    }
+  if (mimetype == g_intern_static_string ("DND_GTK_SIDEBAR_ROW"))
+    return g_bytes_new_take ((gpointer)&sidebar->drag_row, sizeof (gpointer));
+
+  return NULL;
 }
 
 static void
@@ -2088,8 +2081,7 @@ out:
 }
 
 static void
-drag_end_callback (GtkWidget      *widget,
-                   GdkDrag        *drag,
+drag_end_callback (GtkDragSource  *source,
                    gpointer        user_data)
 {
   stop_drop_feedback (GTK_PLACES_SIDEBAR (user_data));
@@ -3778,6 +3770,8 @@ on_row_dragged (GtkGestureDrag *gesture,
     {
       gdouble start_x, start_y;
       gint drag_x, drag_y;
+      GdkContentProvider *content;
+      GtkDragSource *source;
 
       gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
       gtk_widget_translate_coordinates (GTK_WIDGET (row),
@@ -3787,10 +3781,19 @@ on_row_dragged (GtkGestureDrag *gesture,
 
       sidebar->dragging_over = TRUE;
 
-      gtk_drag_begin (GTK_WIDGET (sidebar),
-                      gtk_gesture_get_device (GTK_GESTURE (gesture)),
-                      sidebar->source_targets, GDK_ACTION_MOVE,
-                      drag_x, drag_y);
+      content = gdk_content_provider_new_with_formats (sidebar->source_targets,
+                                                       drag_data_get_callback,
+                                                       sidebar);
+      source = gtk_drag_source_new (content, GDK_ACTION_MOVE);
+      g_object_unref (content);
+      g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin_callback), sidebar);
+      g_signal_connect (source, "drag-end", G_CALLBACK (drag_end_callback), sidebar);
+ 
+      gtk_drag_source_drag_begin (source,
+                                  GTK_WIDGET (sidebar),
+                                  gtk_gesture_get_device (GTK_GESTURE (gesture)),
+                                  drag_x, drag_y);
+      g_object_unref (source);
     }
 
   g_object_unref (sidebar);
@@ -4090,18 +4093,12 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   sidebar->source_targets = gdk_content_formats_new (dnd_source_targets, G_N_ELEMENTS (dnd_source_targets));
   sidebar->source_targets = gtk_content_formats_add_text_targets (sidebar->source_targets);
 
-  g_signal_connect (sidebar->list_box, "drag-begin",
-                    G_CALLBACK (drag_begin_callback), sidebar);
   g_signal_connect (sidebar->list_box, "drag-motion",
                     G_CALLBACK (drag_motion_callback), sidebar);
-  g_signal_connect (sidebar->list_box, "drag-data-get",
-                    G_CALLBACK (drag_data_get_callback), sidebar);
   g_signal_connect (sidebar->list_box, "drag-data-received",
                     G_CALLBACK (drag_data_received_callback), sidebar);
   g_signal_connect (sidebar->list_box, "drag-drop",
                     G_CALLBACK (drag_drop_callback), sidebar);
-  g_signal_connect (sidebar->list_box, "drag-end",
-                    G_CALLBACK (drag_end_callback), sidebar);
   g_signal_connect (sidebar->list_box, "drag-leave",
                     G_CALLBACK (drag_leave_callback), sidebar);
   sidebar->drag_row = NULL;
