@@ -9,18 +9,6 @@ clear_pressed (GtkEntry *entry, gint icon, gpointer data)
 }
 
 static void
-drag_begin_cb (GtkWidget      *widget,
-               GdkDrag        *drag,
-               gpointer        user_data)
-{
-  gint pos;
-
-  pos = gtk_entry_get_current_icon_drag_source (GTK_ENTRY (widget));
-  if (pos != -1)
-    gtk_drag_set_icon_name (drag, "dialog-information", 2, 2);
-}
-
-static void
 set_blank (GtkWidget *button,
            GtkEntry  *entry)
 {
@@ -172,8 +160,6 @@ main (int argc, char **argv)
   gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
                                   GTK_ENTRY_ICON_PRIMARY,
                                   content, GDK_ACTION_COPY); 
-  g_signal_connect_after (entry, "drag-begin", 
-                          G_CALLBACK (drag_begin_cb), NULL);
   g_object_unref (content);
 
   /*
