@@ -119,32 +119,27 @@ get_image_paintable (GtkImage *image)
 }
 
 static void
-drag_begin (GtkWidget      *widget,
-            GdkDrag        *drag,
-            gpointer        data)
+drag_begin (GtkDragSource *source,
+            GtkWidget     *widget)
 {
   GdkPaintable *paintable;
 
   paintable = get_image_paintable (GTK_IMAGE (widget));
   if (paintable)
     {
-      gtk_drag_set_icon_paintable (drag, paintable, -2, -2);
+      gtk_drag_source_set_icon (source, paintable, -2, -2);
       g_object_unref (paintable);
     }
 }
 
-void
-drag_data_get (GtkWidget        *widget,
-               GdkDrag          *drag,
-               GtkSelectionData *selection_data,
-               guint             info,
-               gpointer          data)
+static void
+get_texture (GValue   *value,
+             gpointer  data)
 {
-  GdkPaintable *paintable;
+  GdkPaintable *paintable = get_image_paintable (GTK_IMAGE (data));
 
-  paintable = get_image_paintable (GTK_IMAGE (widget));
   if (GDK_IS_TEXTURE (paintable))
-    gtk_selection_data_set_texture (selection_data, GDK_TEXTURE (paintable));
+    g_value_set_object (value, paintable);
 }
 
 static void
@@ -247,6 +242,8 @@ do_clipboard (GtkWidget *do_widget)
         { "paste", paste_image, NULL, NULL, NULL },
       };
       GActionGroup *actions;
+      GdkContentProvider *content = NULL;
+      GtkDragSource *source;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_display (GTK_WINDOW (window),
@@ -305,15 +302,15 @@ do_clipboard (GtkWidget *do_widget)
 
       /* Create the first image */
       image = gtk_image_new_from_icon_name ("dialog-warning");
+      gtk_image_set_pixel_size (GTK_IMAGE (image), 48);
       gtk_container_add (GTK_CONTAINER (hbox), image);
 
       /* make image a drag source */
-      gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, GDK_ACTION_COPY);
-      gtk_drag_source_add_image_targets (image);
-      g_signal_connect (image, "drag-begin",
-                        G_CALLBACK (drag_begin), image);
-      g_signal_connect (image, "drag-data-get",
-                        G_CALLBACK (drag_data_get), image);
+      content = gdk_content_provider_new_with_callback (GDK_TYPE_TEXTURE, get_texture, image);
+      source = gtk_drag_source_new (content, GDK_ACTION_COPY);
+      g_object_unref (content);
+      gtk_drag_source_attach (source, image, GDK_BUTTON1_MASK);
+      g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), image);
 
       /* accept drops on image */
       gtk_drag_dest_set (image, GTK_DEST_DEFAULT_ALL,
@@ -337,15 +334,15 @@ do_clipboard (GtkWidget *do_widget)
 
       /* Create the second image */
       image = gtk_image_new_from_icon_name ("process-stop");
+      gtk_image_set_pixel_size (GTK_IMAGE (image), 48);
       gtk_container_add (GTK_CONTAINER (hbox), image);
 
       /* make image a drag source */
-      gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, GDK_ACTION_COPY);
-      gtk_drag_source_add_image_targets (image);
-      g_signal_connect (image, "drag-begin",
-                        G_CALLBACK (drag_begin), image);
-      g_signal_connect (image, "drag-data-get",
-                        G_CALLBACK (drag_data_get), image);
+      content = gdk_content_provider_new_with_callback (GDK_TYPE_TEXTURE, get_texture, image);
+      source = gtk_drag_source_new (content, GDK_ACTION_COPY);
+      g_object_unref (content);
+      g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), image);
+      gtk_drag_source_attach (source, image, GDK_BUTTON1_MASK);
 
       /* accept drops on image */
       gtk_drag_dest_set (image, GTK_DEST_DEFAULT_ALL,
