@@ -903,6 +903,22 @@
         gtk_tooltip_set_custom().
       </para>
     </section>
+
+    <section>
+      <title>Switch to the new DND api</title>
+      <para>
+        The source-side DND apis in GTK 4 have been changed to use a separate object, #GtkDragSource.
+      </para>
+      <para>
+        Instead of calling gtk_drag_source_set() and connecting to #GtkWidget signals, you create
+        a #GtkDragSource object, attach it to the widget with gtk_drag_source_attach(), and connect
+        to #GtkDragSource signals. The signals themselves are fairly similar.
+      </para>
+      <para>
+        Instead of calling gtk_drag_begin() on a widget, use a #GtkDragSource object and call
+        gtk_drag_source_drag_begin().
+      </para>
+    </section>
   </section>
 
 </chapter>
