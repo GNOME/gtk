@@ -551,7 +551,6 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
   GtkEventController *controller;
   GtkGesture *gesture;
 
-  priv = gtk_color_swatch_get_instance_private (swatch);
   priv->use_alpha = TRUE;
   priv->selectable = TRUE;
   priv->has_menu = TRUE;
