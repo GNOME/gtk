@@ -12698,7 +12698,8 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   if (opacity < 1.0)
     gtk_snapshot_pop (snapshot);
 
-  gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
+  if (filter_value)
+    gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
 
 #ifdef G_ENABLE_DEBUG
   gtk_widget_maybe_add_debug_render_nodes (widget, snapshot);

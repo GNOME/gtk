@@ -63,7 +63,8 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
 
   gtk_snapshot_push_debug (snapshot, "CSS Icon @ %gx%g", width, height);
 
-  gtk_css_filter_value_push_snapshot (filter_value, snapshot);
+  if (filter_value)
+    gtk_css_filter_value_push_snapshot (filter_value, snapshot);
 
   has_shadow = gtk_css_shadows_value_push_snapshot (shadows_value, snapshot);
 
@@ -88,7 +89,8 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
   if (has_shadow)
     gtk_snapshot_pop (snapshot);
 
-  gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
+  if (filter_value)
+    gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
 
   gtk_snapshot_pop (snapshot);
 
@@ -119,7 +121,8 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
 
   transform = gtk_css_transform_value_get_transform (transform_value);
 
-  gtk_css_filter_value_push_snapshot (filter_value, snapshot);
+  if (filter_value)
+    gtk_css_filter_value_push_snapshot (filter_value, snapshot);
 
   has_shadow = gtk_css_shadows_value_push_snapshot (shadows_value, snapshot);
 
@@ -170,7 +173,8 @@ transparent:
   if (has_shadow)
     gtk_snapshot_pop (snapshot);
 
-  gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
+  if (filter_value)
+    gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
 
   gsk_transform_unref (transform);
 }
