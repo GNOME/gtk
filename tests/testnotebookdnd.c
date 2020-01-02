@@ -94,7 +94,7 @@ static gboolean
 remove_in_idle (gpointer data)
 {
   GtkWidget *child = data;
-  GtkWidget *parent = gtk_widget_get_parent (child);
+  GtkWidget *parent = gtk_widget_get_ancestor (child, GTK_TYPE_NOTEBOOK);
   GtkWidget *tab_label;
 
   tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (parent), child);
@@ -105,8 +105,7 @@ remove_in_idle (gpointer data)
 }
 
 static void
-on_button_drag_data_received (GtkWidget        *widget,
-                              GdkDrop          *drop,
+on_button_drag_data_received (GtkDropTarget *dest,
                               GtkSelectionData *data,
                               gpointer          user_data)
 {
@@ -199,10 +198,16 @@ create_notebook_non_dragable_content (gchar           **labels,
   while (*labels)
     {
       GtkWidget *button;
-      button = gtk_button_new_with_label (*labels);
+      button = gtk_button_new_with_label ("example content");
       /* Use GtkListBox since it bubbles up motion notify event, which can
        * experience more issues than GtkBox. */
       page = gtk_list_box_new ();
+      gtk_container_add (GTK_CONTAINER (page), button);
+
+      button = gtk_button_new_with_label ("row 2");
+      gtk_container_add (GTK_CONTAINER (page), button);
+
+      button = gtk_button_new_with_label ("third row");
       gtk_container_add (GTK_CONTAINER (page), button);
 
       title = gtk_label_new (*labels);
@@ -260,18 +265,16 @@ create_trash_button (void)
 {
   GdkContentFormats *targets;
   GtkWidget *button;
+  GtkDropTarget *dest;
 
   button = gtk_button_new_with_mnemonic ("_Delete");
 
   targets = gdk_content_formats_new (button_targets, G_N_ELEMENTS (button_targets));
-  gtk_drag_dest_set (button,
-                     GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
-                     targets,
-                     GDK_ACTION_MOVE);
+  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP, targets, GDK_ACTION_MOVE);
+  g_signal_connect (dest, "drag-data-received", G_CALLBACK (on_button_drag_data_received), NULL);
+  gtk_drop_target_attach (dest, button);
   gdk_content_formats_unref (targets);
 
-  g_signal_connect_after (G_OBJECT (button), "drag-data-received",
-                          G_CALLBACK (on_button_drag_data_received), NULL);
   return button;
 }
 
