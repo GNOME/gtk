@@ -1783,6 +1783,7 @@ gtk_window_init (GtkWindow *window)
   GtkEventController *motion_controller;
 #ifdef GDK_WINDOWING_X11
   GdkContentFormats *targets;
+  GtkDropTarget *dest;
 #endif
 
   widget = GTK_WIDGET (window);
@@ -1837,11 +1838,9 @@ gtk_window_init (GtkWindow *window)
 
 #ifdef GDK_WINDOWING_X11
   targets = gdk_content_formats_new (dnd_dest_targets, G_N_ELEMENTS (dnd_dest_targets));
-  gtk_drag_dest_set (GTK_WIDGET (window),
-                     GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
-                     targets,
-                     GDK_ACTION_MOVE);
+  dest = gtk_drop_target_new ( GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP, targets, GDK_ACTION_MOVE);
   gdk_content_formats_unref (targets);
+  gtk_drop_target_attach (dest, GTK_WIDGET (window));
 #endif
 
   seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
