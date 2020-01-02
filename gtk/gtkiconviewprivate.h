@@ -134,6 +134,7 @@ struct _GtkIconViewPrivate
   gint press_start_y;
 
   GtkDragSource *source;
+  GtkDropTarget *dest;
 
   GdkDragAction source_actions;
   GdkDragAction dest_actions;
