@@ -193,12 +193,12 @@ static void     gtk_expander_size_allocate  (GtkWidget        *widget,
                                              int               baseline);
 static gboolean gtk_expander_focus          (GtkWidget        *widget,
                                              GtkDirectionType  direction);
-static gboolean gtk_expander_drag_motion    (GtkWidget        *widget,
-                                             GdkDrop          *drop,
-                                             gint              x,
-                                             gint              y);
-static void     gtk_expander_drag_leave     (GtkWidget        *widget,
-                                             GdkDrop          *drop);
+static gboolean gtk_expander_drag_motion    (GtkDropTarget    *dest,
+                                             int               x,
+                                             int               y,
+                                             GtkExpander      *expander);
+static void     gtk_expander_drag_leave     (GtkDropTarget    *dest,
+                                             GtkExpander      *expander);
 
 static void gtk_expander_add    (GtkContainer *container,
                                  GtkWidget    *widget);
@@ -268,8 +268,6 @@ gtk_expander_class_init (GtkExpanderClass *klass)
   widget_class->destroy              = gtk_expander_destroy;
   widget_class->size_allocate        = gtk_expander_size_allocate;
   widget_class->focus                = gtk_expander_focus;
-  widget_class->drag_motion          = gtk_expander_drag_motion;
-  widget_class->drag_leave           = gtk_expander_drag_leave;
   widget_class->measure              = gtk_expander_measure;
 
   container_class->add    = gtk_expander_add;
@@ -350,6 +348,8 @@ gtk_expander_init (GtkExpander *expander)
 {
   GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
   GtkGesture *gesture;
+  GtkDropTarget *dest;
+  GdkContentFormats *formats;
 
   gtk_widget_set_can_focus (GTK_WIDGET (expander), TRUE);
 
@@ -375,8 +375,13 @@ gtk_expander_init (GtkExpander *expander)
                                GTK_STYLE_CLASS_HORIZONTAL);
   gtk_container_add (GTK_CONTAINER (priv->title_widget), priv->arrow_widget);
 
-  gtk_drag_dest_set (GTK_WIDGET (expander), 0, NULL, 0);
-  gtk_drag_dest_set_track_motion (GTK_WIDGET (expander), TRUE);
+  formats = gdk_content_formats_new (NULL, 0);
+  dest = gtk_drop_target_new (0, formats, 0);
+  gtk_drop_target_set_track_motion (dest, TRUE);
+  gdk_content_formats_unref (formats);
+  g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_expander_drag_motion), expander);
+  g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_expander_drag_leave), expander);
+  gtk_drop_target_attach (dest, GTK_WIDGET (expander));
 
   gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
@@ -544,12 +549,11 @@ expand_timeout (gpointer data)
 }
 
 static gboolean
-gtk_expander_drag_motion (GtkWidget *widget,
-                          GdkDrop   *drop,
-                          gint       x,
-                          gint       y)
+gtk_expander_drag_motion (GtkDropTarget *dest,
+                          int            x,
+                          int            y,
+                          GtkExpander   *expander)
 {
-  GtkExpander *expander = GTK_EXPANDER (widget);
   GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   if (!priv->expanded && !priv->expand_timer)
@@ -562,10 +566,9 @@ gtk_expander_drag_motion (GtkWidget *widget,
 }
 
 static void
-gtk_expander_drag_leave (GtkWidget *widget,
-                         GdkDrop   *drop)
+gtk_expander_drag_leave (GtkDropTarget *dest,
+                         GtkExpander   *expander)
 {
-  GtkExpander *expander = GTK_EXPANDER (widget);
   GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   if (priv->expand_timer)
