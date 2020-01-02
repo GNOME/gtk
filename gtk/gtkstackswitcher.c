@@ -265,6 +265,8 @@ gtk_stack_switcher_drag_motion (GtkWidget *widget,
   g_hash_table_iter_init (&iter, priv->buttons);
   while (g_hash_table_iter_next (&iter, NULL, &value))
     {
+      int cx, cy;
+      gtk_widget_translate_coordinates (GTK_WIDGET (self), value, x, y, &cx, &cy);
       if (gtk_widget_contains (GTK_WIDGET (value), x, y))
         {
           button = GTK_WIDGET (value);
