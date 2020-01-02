@@ -187,14 +187,6 @@ struct _GtkWidget
  * @focus:
  * @move_focus: Signal emitted when a change of focus is requested
  * @keynav_failed: Signal emitted if keyboard navigation fails.
- * @drag_leave: Signal emitted on the drop site when the cursor leaves
- *   the widget.
- * @drag_motion: signal emitted on the drop site when the user moves
- *   the cursor over the widget during a drag.
- * @drag_drop: Signal emitted on the drop site when the user drops the
- *   data onto the widget.
- * @drag_data_received: Signal emitted on the drop site when the
- *   dragged data has been received.
  * @popup_menu: Signal emitted whenever a widget should pop up a
  *   context menu.
  * @get_accessible: Returns the accessible object that describes the
@@ -265,21 +257,6 @@ struct _GtkWidgetClass
                                          GtkDirectionType     direction);
   gboolean (* keynav_failed)            (GtkWidget           *widget,
                                          GtkDirectionType     direction);
-
-  /* Target side drag signals */
-  void     (* drag_leave)          (GtkWidget          *widget,
-                                    GdkDrop            *drop);
-  gboolean (* drag_motion)         (GtkWidget          *widget,
-                                    GdkDrop            *drop,
-                                    gint                x,
-                                    gint                y);
-  gboolean (* drag_drop)           (GtkWidget          *widget,
-                                    GdkDrop            *drop,
-                                    gint                x,
-                                    gint                y);
-  void     (* drag_data_received)  (GtkWidget          *widget,
-                                    GdkDrop            *drop,
-                                    GtkSelectionData   *selection_data);
 
   /* Signals used only for keybindings */
   gboolean (* popup_menu)          (GtkWidget          *widget);
