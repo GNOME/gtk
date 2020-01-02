@@ -1572,21 +1572,22 @@ device_removed_cb (GdkSeat   *seat,
 {
   GtkWindow *window = user_data;
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GList *l = priv->foci, *cur;
+  GList *l = priv->foci;
 
   while (l)
     {
+      GList *next;
       GtkPointerFocus *focus = l->data;
 
-      cur = l;
-      focus = cur->data;
-      l = cur->next;
+      next = l->next;
 
       if (focus->device == device)
         {
-          priv->foci = g_list_delete_link (priv->foci, cur);
+          priv->foci = g_list_delete_link (priv->foci, l);
           gtk_pointer_focus_unref (focus);
         }
+
+      l = next;
     }
 }
 
@@ -9318,15 +9319,15 @@ gtk_window_update_pointer_focus_on_state_change (GtkWindow *window,
                                                  GtkWidget *widget)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GList *l = priv->foci, *cur;
+  GList *l = priv->foci;
 
   while (l)
     {
+      GList *next;
+
       GtkPointerFocus *focus = l->data;
 
-      cur = l;
-      focus = cur->data;
-      l = cur->next;
+      next = l->next;
 
       gtk_pointer_focus_ref (focus);
 
@@ -9338,9 +9339,9 @@ gtk_window_update_pointer_focus_on_state_change (GtkWindow *window,
       if (GTK_WIDGET (focus->toplevel) == widget)
         {
           /* Unmapping the toplevel, remove pointer focus */
-          priv->foci = g_list_remove_link (priv->foci, cur);
+          priv->foci = g_list_remove_link (priv->foci, l);
           gtk_pointer_focus_unref (focus);
-          g_list_free (cur);
+          g_list_free (l);
         }
       else if (focus->target == widget ||
                gtk_widget_is_ancestor (focus->target, widget))
@@ -9349,6 +9350,8 @@ gtk_window_update_pointer_focus_on_state_change (GtkWindow *window,
         }
 
       gtk_pointer_focus_unref (focus);
+
+      l = next;
     }
 }
 
@@ -9358,15 +9361,13 @@ gtk_window_maybe_revoke_implicit_grab (GtkWindow *window,
                                        GtkWidget *grab_widget)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GList *l = priv->foci, *cur;
+  GList *l = priv->foci;
 
   while (l)
     {
       GtkPointerFocus *focus = l->data;
 
-      cur = l;
-      focus = cur->data;
-      l = cur->next;
+      l = l->next;
 
       if (focus->toplevel != window)
         continue;
