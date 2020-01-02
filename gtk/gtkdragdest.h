@@ -68,37 +68,6 @@ typedef enum {
   GTK_DEST_DEFAULT_ALL        = 0x07
 } GtkDestDefaults;
 
-GDK_AVAILABLE_IN_ALL
-GtkDropTarget *gtk_drag_dest_set   (GtkWidget            *widget,
-                                    GtkDestDefaults       flags,
-                                    GdkContentFormats    *targets,
-                                    GdkDragAction         actions);
-
-GDK_AVAILABLE_IN_ALL
-void gtk_drag_dest_unset (GtkWidget          *widget);
-
-GDK_AVAILABLE_IN_ALL
-const char *            gtk_drag_dest_find_target       (GtkWidget              *widget,
-                                                         GdkDrop                *drop,
-                                                         GdkContentFormats      *target_list);
-GDK_AVAILABLE_IN_ALL
-GdkContentFormats*      gtk_drag_dest_get_target_list   (GtkWidget              *widget);
-GDK_AVAILABLE_IN_ALL
-void           gtk_drag_dest_set_target_list (GtkWidget      *widget,
-                                              GdkContentFormats  *target_list);
-GDK_AVAILABLE_IN_ALL
-void           gtk_drag_dest_add_text_targets  (GtkWidget    *widget);
-GDK_AVAILABLE_IN_ALL
-void           gtk_drag_dest_add_image_targets (GtkWidget    *widget);
-GDK_AVAILABLE_IN_ALL
-void           gtk_drag_dest_add_uri_targets   (GtkWidget    *widget);
-
-GDK_AVAILABLE_IN_ALL
-void           gtk_drag_dest_set_track_motion  (GtkWidget *widget,
-                                                gboolean   track_motion);
-GDK_AVAILABLE_IN_ALL
-gboolean       gtk_drag_dest_get_track_motion  (GtkWidget *widget);
-
 
 #define GTK_TYPE_DROP_TARGET         (gtk_drop_target_get_type ())
 #define GTK_DROP_TARGET(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_DROP_TARGET, GtkDropTarget))
