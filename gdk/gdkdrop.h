@@ -92,6 +92,9 @@ char *                  gdk_drop_read_text_finish       (GdkDrop                
                                                          GAsyncResult           *result,
                                                          GError                **error);
 
+GDK_AVAILABLE_IN_ALL
+gboolean                gdk_drop_has_value              (GdkDrop                *self,
+                                                         GType                   type);
 
 G_END_DECLS
 
