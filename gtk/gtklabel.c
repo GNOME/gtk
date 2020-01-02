@@ -6032,14 +6032,15 @@ gtk_label_update_actions (GtkLabel *label)
   GtkLabelLink *link;
 
   if (priv->select_info)
-    has_selection = priv->select_info->selection_anchor != priv->select_info->selection_end;
+    {
+      has_selection = priv->select_info->selection_anchor != priv->select_info->selection_end;
+      link = priv->select_info->active_link;
+    }
   else
-    has_selection = FALSE;
-
-  if (priv->select_info->link_clicked)
-    link = priv->select_info->active_link;
-  else
-    link = gtk_label_get_focus_link (label);
+    {
+      has_selection = FALSE;
+      link = gtk_label_get_focus_link (label);
+    }
 
   gtk_widget_action_set_enabled (widget, "clipboard.copy", has_selection);
   gtk_widget_action_set_enabled (widget, "selection.select-all",
