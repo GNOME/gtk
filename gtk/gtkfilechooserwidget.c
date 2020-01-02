@@ -1982,25 +1982,26 @@ out:
 }
 
 static void
-file_list_drag_data_received_cb (GtkWidget        *widget,
-                                 GdkDrop          *drop,
-                                 GtkSelectionData *selection_data,
-                                 gpointer          user_data)
+file_list_drag_data_received_cb (GObject      *source,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (user_data);
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
+  GtkDropTarget *dest = GTK_DROP_TARGET (source);
+  GtkWidget *widget = gtk_drop_target_get_target (dest);
+  GdkDrop *drop = gtk_drop_target_get_drop (dest);
+  GdkDrag *drag = gdk_drop_get_drag (drop);
   gchar **uris;
   char *uri;
   GFile *file;
+  GtkSelectionData *selection_data;
+
+  selection_data = gtk_drop_target_read_selection_finish (dest, result, NULL);
 
   /* Allow only drags from other widgets; see bug #533891. */
-  if (gdk_drop_get_drag (drop) &&
-      gtk_drag_source_get_origin (gtk_drag_get_source (gdk_drop_get_drag (drop))) == widget)
-    {
-      g_signal_stop_emission_by_name (widget, "drag-data-received");
-      return;
-    }
-
+  if (drag && gtk_drag_source_get_origin (gtk_drag_get_source (drag)) == widget)
+    return;
 
   /* Parse the text/uri-list string, navigate to the first one */
   uris = gtk_selection_data_get_uris (selection_data);
@@ -2025,19 +2026,19 @@ file_list_drag_data_received_cb (GtkWidget        *widget,
                                    file_list_drag_data_received_get_info_cb,
                                    data);
     }
-
-  g_signal_stop_emission_by_name (widget, "drag-data-received");
 }
 
 /* Don't do anything with the drag_drop signal */
 static gboolean
-file_list_drag_drop_cb (GtkWidget             *widget,
-                        GdkDrop               *drop,
-                        gint                   x,
-                        gint                   y,
+file_list_drag_drop_cb (GtkDropTarget        *dest,
+                        int                   x,
+                        int                   y,
                         GtkFileChooserWidget *impl)
 {
-  g_signal_stop_emission_by_name (widget, "drag-drop");
+  const char *target = g_intern_static_string ("text/uri-list");
+
+  gtk_drop_target_read_selection (dest, target, NULL, file_list_drag_data_received_cb, impl);
+
   return TRUE;
 }
 
@@ -2054,13 +2055,12 @@ file_list_drag_begin_cb (GtkDragSource        *source,
 /* Disable the normal tree drag motion handler, it makes it look like you're
    dropping the dragged item onto a tree item */
 static gboolean
-file_list_drag_motion_cb (GtkWidget             *widget,
-                          GdkDrop               *drop,
-                          gint                   x,
-                          gint                   y,
+file_list_drag_motion_cb (GtkDropTarget        *dest,
+                          int                   x,
+                          int                   y,
                           GtkFileChooserWidget *impl)
 {
-  g_signal_stop_emission_by_name (widget, "drag-motion");
+  g_signal_stop_emission_by_name (dest, "drag-motion");
   return TRUE;
 }
 
@@ -8463,14 +8463,9 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, box);
 
   /* And a *lot* of callbacks to bind ... */
-  gtk_widget_class_bind_template_callback (widget_class, file_list_drag_drop_cb);
-  gtk_widget_class_bind_template_callback (widget_class, file_list_drag_data_received_cb);
   gtk_widget_class_bind_template_callback (widget_class, list_popup_menu_cb);
   gtk_widget_class_bind_template_callback (widget_class, file_list_query_tooltip_cb);
   gtk_widget_class_bind_template_callback (widget_class, list_row_activated);
-  gtk_widget_class_bind_template_callback (widget_class, file_list_drag_begin_cb);
-  gtk_widget_class_bind_template_callback (widget_class, file_list_drag_motion_cb);
-  gtk_widget_class_bind_template_callback (widget_class, file_list_drag_end_cb);
   gtk_widget_class_bind_template_callback (widget_class, list_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, list_cursor_changed);
   gtk_widget_class_bind_template_callback (widget_class, browse_files_tree_view_keynav_failed_cb);
@@ -8506,6 +8501,7 @@ post_process_ui (GtkFileChooserWidget *impl)
   GList            *cells;
   GFile            *file;
   GtkDragSource *source;
+  GtkDropTarget *dest;
   GdkContentFormats *formats;
 
   /* Setup file list treeview */
@@ -8519,15 +8515,15 @@ post_process_ui (GtkFileChooserWidget *impl)
                                                    GDK_BUTTON1_MASK,
                                                    formats,
                                                    GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  gdk_content_formats_unref (formats);
   g_signal_connect (source, "drag-begin", G_CALLBACK (file_list_drag_begin_cb), impl);
   g_signal_connect (source, "drag-end", G_CALLBACK (file_list_drag_end_cb), impl);
 
-  gtk_drag_dest_set (priv->browse_files_tree_view,
-                     GTK_DEST_DEFAULT_ALL,
-                     NULL,
-                     GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  gtk_drag_dest_add_uri_targets (priv->browse_files_tree_view);
+  
+  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_ALL, formats, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  g_signal_connect (dest, "drag-motion", G_CALLBACK (file_list_drag_motion_cb), impl);
+  g_signal_connect (dest, "drag-drop", G_CALLBACK (file_list_drag_drop_cb), impl);
+  gtk_drop_target_attach (dest, priv->browse_files_tree_view);
+  gdk_content_formats_unref (formats);
 
   /* File browser treemodel columns are shared between GtkFileChooser implementations,
    * so we don't set cell renderer attributes in GtkBuilder, but rather keep that
