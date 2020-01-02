@@ -166,7 +166,8 @@ gsk_gl_texture_atlases_pack (GskGLTextureAtlases *self,
       g_ptr_array_add (self->atlases, atlas);
 
       /* Pack it onto that one, which surely has enough space... */
-      gsk_gl_texture_atlas_pack (atlas, width, height, &x, &y);
+      if (!gsk_gl_texture_atlas_pack (atlas, width, height, &x, &y))
+        g_assert_not_reached ();
 
       GSK_NOTE(GLYPH_CACHE, g_message ("adding new atlas"));
     }
