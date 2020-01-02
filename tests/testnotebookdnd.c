@@ -94,7 +94,7 @@ static gboolean
 remove_in_idle (gpointer data)
 {
   GtkWidget *child = data;
-  GtkWidget *parent = gtk_widget_get_parent (child);
+  GtkWidget *parent = gtk_widget_get_ancestor (child, GTK_TYPE_NOTEBOOK);
   GtkWidget *tab_label;
 
   tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (parent), child);
@@ -105,16 +105,46 @@ remove_in_idle (gpointer data)
 }
 
 static void
-on_button_drag_data_received (GtkWidget        *widget,
-                              GdkDrop          *drop,
-                              GtkSelectionData *data,
-                              gpointer          user_data)
+got_page (GObject *source,
+          GAsyncResult *result,
+          gpointer data)
 {
-  GtkWidget **child;
+  GdkDrop *drop = GDK_DROP (source);
+  GInputStream *stream;
+  const char *mime_type;
 
-  child = (void*) gtk_selection_data_get_data (data);
+  stream = gdk_drop_read_finish (drop, result, &mime_type, NULL);
 
-  g_idle_add (remove_in_idle, *child);
+  if (stream)
+    {
+      GBytes *bytes;
+      GtkWidget **child;
+
+      bytes = g_input_stream_read_bytes (stream, sizeof (gpointer), NULL, NULL);
+      child = (gpointer)g_bytes_get_data (bytes, NULL);
+
+      g_idle_add (remove_in_idle, *child);
+
+      gdk_drop_finish (drop, GDK_ACTION_MOVE);
+
+      g_bytes_unref (bytes);
+      g_object_unref (stream);
+    }
+  else
+    gdk_drop_finish (drop, 0);
+}
+
+static gboolean
+on_button_drag_drop (GtkDropTarget *dest,
+                     gpointer       user_data)
+{
+  GdkDrop *drop = gtk_drop_target_get_drop (dest);
+
+  gdk_drop_read_async (drop, (const char *[]) { "GTK_NOTEBOOK_TAB", NULL }, G_PRIORITY_DEFAULT, NULL, got_page, NULL);
+
+  gdk_drop_finish (drop, GDK_ACTION_MOVE);
+
+  return TRUE;
 }
 
 static void
@@ -199,10 +229,16 @@ create_notebook_non_dragable_content (gchar           **labels,
   while (*labels)
     {
       GtkWidget *button;
-      button = gtk_button_new_with_label (*labels);
+      button = gtk_button_new_with_label ("example content");
       /* Use GtkListBox since it bubbles up motion notify event, which can
        * experience more issues than GtkBox. */
       page = gtk_list_box_new ();
+      gtk_container_add (GTK_CONTAINER (page), button);
+
+      button = gtk_button_new_with_label ("row 2");
+      gtk_container_add (GTK_CONTAINER (page), button);
+
+      button = gtk_button_new_with_label ("third row");
       gtk_container_add (GTK_CONTAINER (page), button);
 
       title = gtk_label_new (*labels);
@@ -260,18 +296,16 @@ create_trash_button (void)
 {
   GdkContentFormats *targets;
   GtkWidget *button;
+  GtkDropTarget *dest;
 
   button = gtk_button_new_with_mnemonic ("_Delete");
 
   targets = gdk_content_formats_new (button_targets, G_N_ELEMENTS (button_targets));
-  gtk_drag_dest_set (button,
-                     GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
-                     targets,
-                     GDK_ACTION_MOVE);
+  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_MOTION, targets, GDK_ACTION_MOVE);
+  g_signal_connect (dest, "drag-drop", G_CALLBACK (on_button_drag_drop), NULL);
+  gtk_drop_target_attach (dest, button);
   gdk_content_formats_unref (targets);
 
-  g_signal_connect_after (G_OBJECT (button), "drag-data-received",
-                          G_CALLBACK (on_button_drag_data_received), NULL);
   return button;
 }
 
