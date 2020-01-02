@@ -105,8 +105,7 @@ remove_in_idle (gpointer data)
 }
 
 static void
-on_button_drag_data_received (GtkWidget        *widget,
-                              GdkDrop          *drop,
+on_button_drag_data_received (GtkDropTarget *dest,
                               GtkSelectionData *data,
                               gpointer          user_data)
 {
@@ -260,18 +259,16 @@ create_trash_button (void)
 {
   GdkContentFormats *targets;
   GtkWidget *button;
+  GtkDropTarget *dest;
 
   button = gtk_button_new_with_mnemonic ("_Delete");
 
   targets = gdk_content_formats_new (button_targets, G_N_ELEMENTS (button_targets));
-  gtk_drag_dest_set (button,
-                     GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
-                     targets,
-                     GDK_ACTION_MOVE);
+  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP, targets, GDK_ACTION_MOVE);
+  g_signal_connect (dest, "drag-data-received", G_CALLBACK (on_button_drag_data_received), NULL);
+  gtk_drop_target_attach (dest, button);
   gdk_content_formats_unref (targets);
 
-  g_signal_connect_after (G_OBJECT (button), "drag-data-received",
-                          G_CALLBACK (on_button_drag_data_received), NULL);
   return button;
 }
 
