@@ -156,6 +156,12 @@ GtkWidget         *gtk_drop_target_get_target       (GtkDropTarget     *dest);
 GDK_AVAILABLE_IN_ALL
 const char        *gtk_drop_target_find_mimetype    (GtkDropTarget     *dest);
 
+GDK_AVAILABLE_IN_ALL
+void               gtk_drag_highlight            (GtkWidget  *widget);
+
+GDK_AVAILABLE_IN_ALL
+void               gtk_drag_unhighlight          (GtkWidget  *widget);
+
 
 G_END_DECLS
 

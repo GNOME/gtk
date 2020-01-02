@@ -44,11 +44,6 @@ void gtk_drag_get_data (GtkWidget      *widget,
 			GdkDrop        *drop,
 			GdkAtom         target);
 
-GDK_AVAILABLE_IN_ALL
-void gtk_drag_highlight   (GtkWidget  *widget);
-GDK_AVAILABLE_IN_ALL
-void gtk_drag_unhighlight (GtkWidget  *widget);
-
 
 G_END_DECLS
 
