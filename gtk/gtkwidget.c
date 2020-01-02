@@ -12670,8 +12670,9 @@ gtk_widget_create_render_node (GtkWidget   *widget,
                            "RenderNode for %s %p",
                            G_OBJECT_TYPE_NAME (widget), widget);
 
-  filter_value = _gtk_style_context_peek_property (_gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_FILTER);
-  gtk_css_filter_value_push_snapshot (filter_value, snapshot);
+  filter_value = gtk_css_style_get_value (gtk_css_node_get_style (priv->cssnode), GTK_CSS_PROPERTY_FILTER);
+  if (filter_value)
+    gtk_css_filter_value_push_snapshot (filter_value, snapshot);
 
   if (opacity < 1.0)
     gtk_snapshot_push_opacity (snapshot, opacity);
