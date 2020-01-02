@@ -293,11 +293,11 @@ bold_toggled (GtkToggleToolButton *button)
 }
 
 static gboolean
-toolbar_drag_drop (GtkWidget *widget,
-                   GdkDrop   *drop,
+toolbar_drag_drop (GtkDropTarget *dest,
 		   gint x, gint y,
                    GtkWidget *label)
 {
+  GtkWidget *widget = gtk_drop_target_get_target (dest);
   gchar buf[32];
 
   g_snprintf(buf, sizeof(buf), "%d",
@@ -323,13 +323,12 @@ rtl_toggled (GtkCheckButton *check)
 static GtkToolItem *drag_item = NULL;
 
 static gboolean
-toolbar_drag_motion (GtkToolbar *toolbar,
-		     GdkDrop    *drop,
+toolbar_drag_motion (GtkDropTarget *dest,
 		     gint        x,
 		     gint        y,
-		     guint       time,
-		     gpointer    null)
+		     GtkToolbar *toolbar)
 {
+  GdkDrop *drop = gtk_drop_target_get_drop (dest);
   gint index;
   
   if (!drag_item)
@@ -348,9 +347,8 @@ toolbar_drag_motion (GtkToolbar *toolbar,
 }
 
 static void
-toolbar_drag_leave (GtkToolbar *toolbar,
-		    GdkDrop    *drop,
-		    gpointer    null)
+toolbar_drag_leave (GtkDropTarget *dest,
+                    GtkToolbar *toolbar)
 {
   if (drag_item)
     {
@@ -391,6 +389,7 @@ main (gint argc, gchar **argv)
   GdkContentFormats *targets;
   GdkContentProvider *content;
   GtkDragSource *source;
+  GtkDropTarget *dest;
   static const gchar *toolbar_styles[] = { "icons", "text", "both (vertical)",
 					   "both (horizontal)" };
   GtkToolItem *item;
@@ -622,16 +621,12 @@ main (gint argc, gchar **argv)
   source = gtk_drag_source_new (content, GDK_ACTION_MOVE);
   g_object_unref (content);
   gtk_drag_source_attach (source, button, GDK_BUTTON1_MASK);
-  gtk_drag_dest_set (toolbar, GTK_DEST_DEFAULT_DROP,
-                     targets,
-		     GDK_ACTION_MOVE);
+  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_DROP, targets, GDK_ACTION_MOVE);
+  g_signal_connect (dest, "drag_motion", G_CALLBACK (toolbar_drag_motion), toolbar);
+  g_signal_connect (dest, "drag_leave", G_CALLBACK (toolbar_drag_leave), toolbar);
+  g_signal_connect (dest, "drag_drop", G_CALLBACK (toolbar_drag_drop), label);
+  gtk_drop_target_attach (dest, toolbar);
   gdk_content_formats_unref (targets);
-  g_signal_connect (toolbar, "drag_motion",
-		    G_CALLBACK (toolbar_drag_motion), NULL);
-  g_signal_connect (toolbar, "drag_leave",
-		    G_CALLBACK (toolbar_drag_leave), NULL);
-  g_signal_connect (toolbar, "drag_drop",
-		    G_CALLBACK (toolbar_drag_drop), label);
 
   gtk_widget_show (window);
 
