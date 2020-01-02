@@ -237,7 +237,6 @@ struct _GtkNotebookPrivate
   GtkNotebookPage           *detached_tab;
   GdkContentFormats             *source_targets;
   GtkWidget                 *action_widget[N_ACTION_WIDGETS];
-  GtkWidget                 *dnd_child;
   GtkWidget                 *menu;
   GtkWidget                 *menu_box;
 
@@ -705,21 +704,15 @@ static void gtk_notebook_drag_end            (GtkDragSource    *source,
 static gboolean gtk_notebook_drag_failed     (GtkDragSource    *source,
                                               GdkDragCancelReason reason,
                                               GtkWidget        *widget);
-static gboolean gtk_notebook_drag_motion     (GtkWidget        *widget,
-                                              GdkDrop          *drop,
-                                              gint              x,
-                                              gint              y);
-static void gtk_notebook_drag_leave          (GtkWidget        *widget,
-                                              GdkDrop          *drop);
-static gboolean gtk_notebook_drag_drop       (GtkWidget        *widget,
-                                              GdkDrop          *drop,
-                                              gint              x,
-                                              gint              y);
+static gboolean gtk_notebook_drag_motion     (GtkDropTarget    *dest,
+                                              int               x,
+                                              int               y);
+static void gtk_notebook_drag_leave          (GtkDropTarget    *dest);
+static gboolean gtk_notebook_drag_drop       (GtkDropTarget    *dest,
+                                              int               x,
+                                              int               y);
 static GBytes * gtk_notebook_drag_data_get   (const char       *mime_type,
                                               gpointer          data);
-static void gtk_notebook_drag_data_received  (GtkWidget        *widget,
-                                              GdkDrop          *drop,
-                                              GtkSelectionData *data);
 
 /*** GtkContainer Methods ***/
 static void gtk_notebook_add                 (GtkContainer     *container,
@@ -966,10 +959,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->grab_notify = gtk_notebook_grab_notify;
   widget_class->state_flags_changed = gtk_notebook_state_flags_changed;
   widget_class->focus = gtk_notebook_focus;
-  widget_class->drag_motion = gtk_notebook_drag_motion;
-  widget_class->drag_leave = gtk_notebook_drag_leave;
-  widget_class->drag_drop = gtk_notebook_drag_drop;
-  widget_class->drag_data_received = gtk_notebook_drag_data_received;
   widget_class->compute_expand = gtk_notebook_compute_expand;
 
   container_class->add = gtk_notebook_add;
@@ -1304,6 +1293,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   GtkEventController *controller;
   GtkGesture *gesture;
   GtkLayoutManager *layout;
+  GtkDropTarget *dest;
 
   gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
 
@@ -1336,12 +1326,13 @@ gtk_notebook_init (GtkNotebook *notebook)
   priv->has_scrolled = FALSE;
 
   targets = gdk_content_formats_new (dst_notebook_targets, G_N_ELEMENTS (dst_notebook_targets));
-  gtk_drag_dest_set (GTK_WIDGET (notebook), 0,
-                     targets,
-                     GDK_ACTION_MOVE);
+  dest = gtk_drop_target_new (0, targets, GDK_ACTION_MOVE);
+  g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_notebook_drag_motion), NULL);
+  g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_notebook_drag_leave), NULL);
+  g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_notebook_drag_drop), NULL);
+  gtk_drop_target_set_track_motion (dest, TRUE);
+  gtk_drop_target_attach (dest, GTK_WIDGET (notebook));
   gdk_content_formats_unref (targets);
-
-  gtk_drag_dest_set_track_motion (GTK_WIDGET (notebook), TRUE);
 
   priv->header_widget = g_object_new (GTK_TYPE_BOX,
                                       "css-name", "header",
@@ -1833,7 +1824,6 @@ gtk_notebook_get_property (GObject         *object,
  * gtk_notebook_drag_motion
  * gtk_notebook_drag_drop
  * gtk_notebook_drag_data_get
- * gtk_notebook_drag_data_received
  */
 static void
 remove_switch_tab_timer (GtkNotebook *notebook)
@@ -3102,8 +3092,6 @@ gtk_notebook_drag_begin (GtkDragSource    *source,
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
-  graphene_rect_t bounds;
-  GtkWidget *tab_label;
   GdkPaintable *paintable;
 
   if (priv->dnd_timer)
@@ -3116,25 +3104,10 @@ gtk_notebook_drag_begin (GtkDragSource    *source,
 
   priv->operation = DRAG_OPERATION_DETACH;
 
-  tab_label = priv->detached_tab->tab_label;
-
   tab_drag_end (notebook, priv->cur_page);
-  g_object_ref (tab_label);
-  gtk_widget_unparent (tab_label);
-
-  priv->dnd_child = tab_label;
-  if (gtk_widget_compute_bounds (priv->dnd_child, priv->dnd_child, &bounds))
-    gtk_widget_set_size_request (priv->dnd_child,
-                                 ceilf (bounds.size.width),
-                                 ceilf (bounds.size.height));
-
-  gtk_style_context_add_class (gtk_widget_get_style_context (priv->dnd_child), "background");
-
-  paintable = gtk_widget_paintable_new (tab_label);
+  paintable = gtk_widget_paintable_new (priv->detached_tab->tab_widget);
   gtk_drag_source_set_icon (source, paintable, -2, -2);
-  g_object_set_data (G_OBJECT (priv->dnd_child), "drag-source", source);
   g_object_unref (paintable);
-  g_object_unref (tab_label);
 }
 
 static void
@@ -3160,16 +3133,8 @@ gtk_notebook_drag_end (GtkDragSource  *source,
     }
   else if (priv->detached_tab)
     {
-      gtk_widget_set_size_request (priv->dnd_child, -1, -1);
-      g_object_ref (priv->dnd_child);
-      gtk_widget_unparent (priv->dnd_child);
-      gtk_widget_set_parent (priv->dnd_child, priv->detached_tab->tab_widget);
-      g_object_unref (priv->dnd_child);
       gtk_notebook_switch_page (notebook, priv->detached_tab);
     }
-
-  gtk_style_context_remove_class (gtk_widget_get_style_context (priv->dnd_child), "background");
-  priv->dnd_child = NULL;
 
   priv->operation = DRAG_OPERATION_NONE;
 }
@@ -3232,11 +3197,12 @@ gtk_notebook_switch_tab_timeout (gpointer data)
 }
 
 static gboolean
-gtk_notebook_drag_motion (GtkWidget *widget,
-                          GdkDrop   *drop,
-                          gint       x,
-                          gint       y)
+gtk_notebook_drag_motion (GtkDropTarget *dest,
+                          int            x,
+                          int            y)
 {
+  GtkWidget *widget = gtk_drop_target_get_target (dest);
+  GdkDrop *drop = gtk_drop_target_get_drop (dest);
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
   graphene_rect_t position;
@@ -3257,7 +3223,7 @@ gtk_notebook_drag_motion (GtkWidget *widget,
     }
 
   stop_scrolling (notebook);
-  target = gtk_drag_dest_find_target (widget, drop, NULL);
+  target = gtk_drop_target_find_mimetype (dest);
   tab_target = g_intern_static_string ("GTK_NOTEBOOK_TAB");
 
   if (target == tab_target)
@@ -3329,34 +3295,79 @@ gtk_notebook_drag_motion (GtkWidget *widget,
 }
 
 static void
-gtk_notebook_drag_leave (GtkWidget *widget,
-                         GdkDrop   *drop)
+gtk_notebook_drag_leave (GtkDropTarget *dest)
 {
+  GtkWidget *widget = gtk_drop_target_get_target (dest);
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 
   remove_switch_tab_timer (notebook);
   stop_scrolling (notebook);
 }
 
-static gboolean
-gtk_notebook_drag_drop (GtkWidget *widget,
-                        GdkDrop   *drop,
-                        gint       x,
-                        gint       y)
+static void
+got_page (GObject *source,
+          GAsyncResult *result,
+          gpointer data)
 {
+  GtkNotebook *notebook = GTK_NOTEBOOK (data);
+  GdkDrop *drop = GDK_DROP (source);
+  GdkDrag *drag = gdk_drop_get_drag (drop);
+  GtkWidget *source_widget;
+  GInputStream *stream;
+  const char *mime_type;
+
+  source_widget = drag ? gtk_drag_source_get_origin (gtk_drag_get_source (drag)) : NULL;
+
+  stream = gdk_drop_read_finish (drop, result, &mime_type, NULL);
+
+  if (stream)
+    {
+      GBytes *bytes;
+      GtkWidget **child;
+
+      bytes = g_input_stream_read_bytes (stream, sizeof (gpointer), NULL, NULL);
+      child = (gpointer)g_bytes_get_data (bytes, NULL);
+
+      do_detach_tab (GTK_NOTEBOOK (source_widget), notebook, *child);
+      gdk_drop_finish (drop, GDK_ACTION_MOVE);
+
+      g_bytes_unref (bytes);
+      g_object_unref (stream);
+    }
+  else
+    gdk_drop_finish (drop, 0);
+}
+
+static gboolean
+gtk_notebook_drag_drop (GtkDropTarget *dest,
+                        int            x,
+                        int            y)
+{
+  GtkWidget *widget = gtk_drop_target_get_target (dest);
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+  GdkDrop *drop = gtk_drop_target_get_drop (dest);
+  GdkDrag *drag = gdk_drop_get_drag (drop);
+  GtkWidget *source_widget;
   GdkAtom target, tab_target;
 
-  target = gtk_drag_dest_find_target (widget, drop, NULL);
+  source_widget = drag ? gtk_drag_source_get_origin (gtk_drag_get_source (drag)) : NULL;
+
+  target = gtk_drop_target_find_mimetype (dest);
   tab_target = g_intern_static_string ("GTK_NOTEBOOK_TAB");
 
-  if (target == tab_target)
+  if (GTK_IS_NOTEBOOK (source_widget) &&
+      target == tab_target &&
+      (gdk_drop_get_actions (drop) & GDK_ACTION_MOVE))
     {
       notebook->priv->mouse_x = x;
       notebook->priv->mouse_y = y;
-      gtk_drag_get_data (widget, drop, target);
+
+      gdk_drop_read_async (drop, (const char *[]) { "GTK_NOTEBOOK_TAB", NULL }, G_PRIORITY_DEFAULT, NULL, got_page, notebook);
+
       return TRUE;
     }
+
+  gdk_drop_finish (drop, 0);
 
   return FALSE;
 }
@@ -3466,33 +3477,6 @@ gtk_notebook_drag_data_get (const char *mime_type,
     }
 
   return g_bytes_new_take (sdata.data, sdata.length);
-}
-
-static void
-gtk_notebook_drag_data_received (GtkWidget        *widget,
-                                 GdkDrop          *drop,
-                                 GtkSelectionData *data)
-{
-  GtkNotebook *notebook;
-  GdkDrag *drag;
-  GtkWidget *source_widget;
-  GtkWidget **child;
-
-  notebook = GTK_NOTEBOOK (widget);
-  drag = gdk_drop_get_drag (drop);
-  source_widget = drag ? gtk_drag_source_get_origin (gtk_drag_get_source (drag)) : NULL;
-
-  if (source_widget &&
-      (gdk_drop_get_actions (drop) & GDK_ACTION_MOVE) &&
-      gtk_selection_data_get_target (data) == g_intern_static_string ("GTK_NOTEBOOK_TAB"))
-    {
-      child = (void*) gtk_selection_data_get_data (data);
-
-      do_detach_tab (GTK_NOTEBOOK (source_widget), notebook, *child);
-      gdk_drop_finish (drop, GDK_ACTION_MOVE);
-    }
-  else
-    gdk_drop_finish (drop, 0);
 }
 
 /* Private GtkContainer Methods :
@@ -4272,17 +4256,8 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
     }
 
   if (priv->detached_tab == list->data)
-    {
-      priv->detached_tab = NULL;
+    priv->detached_tab = NULL;
 
-      if (priv->operation == DRAG_OPERATION_DETACH && !priv->remove_in_detach)
-        {
-          GtkDragSource *source;
-
-          source = (GtkDragSource *)g_object_get_data (G_OBJECT (priv->dnd_child), "drag-source");
-          gtk_drag_source_drag_cancel (source);
-        }
-    }
   if (priv->switch_tab == list)
     priv->switch_tab = NULL;
 
