@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <gtk/gtk.h>
 
 static GdkPaintable *
@@ -37,20 +38,6 @@ enum {
   BOTTOM_RIGHT
 };
 
-static void
-update_dest_target_list (GtkWidget *image)
-{
-  GdkContentFormats *target_list;
-
-  target_list = gdk_content_formats_new (NULL, 0);
-  target_list = gtk_content_formats_add_image_targets (target_list, FALSE);
-  target_list = gtk_content_formats_add_text_targets (target_list);
-
-  gtk_drag_dest_set_target_list (image, target_list);
-
-  gdk_content_formats_unref (target_list);
-}
-
 void
 image_drag_data_get (GtkWidget        *widget,
                      GdkDrag          *drag,
@@ -84,31 +71,45 @@ image_drag_data_get (GtkWidget        *widget,
 }
 
 static void
-image_drag_data_received (GtkWidget        *widget,
-                          GdkDrop          *drop,
-                          GtkSelectionData *selection_data,
-                          gpointer          data)
+got_texture (GObject *source,
+             GAsyncResult *result,
+             gpointer data)
 {
-  GdkTexture *texture;
-  gchar *text;
+  GdkDrop *drop = GDK_DROP (source);
+  GtkWidget *image = data;
+  const GValue *value;
+  GError *error = NULL;
 
-  if (gtk_selection_data_get_length (selection_data) == 0)
-    return;
-
-  texture = gtk_selection_data_get_texture (selection_data);
-  if (texture)
+  value = gdk_drop_read_value_finish (drop, result, &error);
+  if (value)
     {
-      gtk_image_set_from_paintable (GTK_IMAGE (widget), GDK_PAINTABLE (texture));
-      g_object_unref (texture);
-      return;
+      GdkTexture *texture = g_value_get_object (value);
+      gtk_image_set_from_paintable (GTK_IMAGE (image), GDK_PAINTABLE (texture));
+      gdk_drop_finish (drop, GDK_ACTION_COPY);
+    }
+  else
+    {
+      g_print ("Failed to get data: %s\n", error->message);
+      g_error_free (error);
+      gdk_drop_finish (drop, 0);
+    }
+}
+
+static gboolean
+image_drag_drop (GtkDropTarget    *dest,
+                 int               x,
+                 int               y,
+                 gpointer          data)
+{
+  GdkDrop *drop = gtk_drop_target_get_drop (dest);
+
+  if (gdk_drop_has_value (drop, GDK_TYPE_TEXTURE))
+    {
+      gdk_drop_read_value_async (drop, GDK_TYPE_TEXTURE, G_PRIORITY_DEFAULT, NULL, got_texture, data);
+      return TRUE;
     }
 
-  text = (gchar *)gtk_selection_data_get_text (selection_data);
-  if (text)
-    {
-      gtk_image_set_from_icon_name (GTK_IMAGE (widget), text);
-      g_free (text);
-    }
+  return FALSE;
 }
 
 static void
@@ -215,6 +216,7 @@ make_image (const gchar *icon_name, int hotspot)
 {
   GtkWidget *image;
   GtkDragSource *source;
+  GtkDropTarget *dest;
   GdkContentFormats *formats;
   GdkContentProvider *content;
 
@@ -228,7 +230,6 @@ make_image (const gchar *icon_name, int hotspot)
   content = gdk_content_provider_new_with_formats (formats, get_data, image);
   source = gtk_drag_source_new (content, GDK_ACTION_COPY);
   g_object_unref (content);
-  gdk_content_formats_unref (formats);
   update_source_icon (source, icon_name, hotspot);
 
   g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), NULL);
@@ -236,9 +237,11 @@ make_image (const gchar *icon_name, int hotspot)
   g_signal_connect (source, "drag-failed", G_CALLBACK (drag_failed), NULL);
   gtk_drag_source_attach (source, image, GDK_BUTTON1_MASK);
 
-  gtk_drag_dest_set (image, GTK_DEST_DEFAULT_ALL, NULL, GDK_ACTION_COPY);
-  g_signal_connect (image, "drag-data-received", G_CALLBACK (image_drag_data_received), NULL);
-  update_dest_target_list (image);
+  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_HIGHLIGHT, formats, GDK_ACTION_COPY);
+  g_signal_connect (dest, "drag-drop", G_CALLBACK (image_drag_drop), image);
+  gtk_drop_target_attach (dest, image);
+
+  gdk_content_formats_unref (formats);
 
   return image;
 }
