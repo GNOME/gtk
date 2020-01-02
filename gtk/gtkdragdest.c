@@ -1057,3 +1057,34 @@ gtk_drop_target_emit_drag_data_received (GtkDropTarget    *dest,
   set_drop (dest, drop);
   g_signal_emit (dest, signals[DRAG_DATA_RECEIVED], 0, sdata);
 }
+
+/**
+ * gtk_drag_highlight: (method)
+ * @widget: a widget to highlight
+ *
+ * Highlights a widget as a currently hovered drop target.
+ * To end the highlight, call gtk_drag_unhighlight().
+ *
+ * GTK calls this automatically if %GTK_DEST_DEFAULT_HIGHLIGHT is set.
+ */
+void
+gtk_drag_highlight (GtkWidget *widget)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_DROP_ACTIVE, FALSE);
+}
+
+/**
+ * gtk_drag_unhighlight: (method)
+ * @widget: a widget to remove the highlight from
+ *
+ * Removes a highlight set by gtk_drag_highlight() from a widget.
+ */
+void
+gtk_drag_unhighlight (GtkWidget *widget)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_DROP_ACTIVE);
+}
