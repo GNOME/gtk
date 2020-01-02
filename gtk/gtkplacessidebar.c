@@ -65,6 +65,7 @@
 #include "gtknative.h"
 #include "gtkdragsource.h"
 #include "gtkwidgetpaintable.h"
+#include "gtkselectionprivate.h"
 
 /*< private >
  * SECTION:gtkplacessidebar
@@ -1643,21 +1644,25 @@ update_possible_drop_targets (GtkPlacesSidebar *sidebar,
   g_list_free (rows);
 }
 
+static void drag_data_received_callback (GObject      *source,
+                                         GAsyncResult *result,
+                                         gpointer      user_data);
+
 static gboolean
 get_drag_data (GtkWidget      *list_box,
-               GdkDrop        *drop,
+               GtkDropTarget  *dest,
                GtkListBoxRow  *row)
 {
   GdkAtom target;
 
-  target = gtk_drag_dest_find_target (list_box, drop, NULL);
+  target = gtk_drop_target_find_mimetype (dest);
 
   if (target == NULL)
     return FALSE;
 
   if (row)
-    g_object_set_data_full (G_OBJECT (drop), "places-sidebar-row", g_object_ref (row), g_object_unref);
-  gtk_drag_get_data (list_box, drop, target);
+    g_object_set_data_full (G_OBJECT (dest), "places-sidebar-row", g_object_ref (row), g_object_unref);
+  gtk_drop_target_read_selection (dest, target, NULL, drag_data_received_callback, list_box);
 
   return TRUE;
 }
@@ -1680,7 +1685,8 @@ start_drop_feedback (GtkPlacesSidebar *sidebar,
                      GtkSidebarRow    *row,
                      GdkDrag          *drag)
 {
-  if (sidebar->drag_data_info != DND_GTK_SIDEBAR_ROW)
+  if (sidebar->drag_data_received &&
+      sidebar->drag_data_info != DND_GTK_SIDEBAR_ROW)
     {
       gtk_sidebar_row_reveal (GTK_SIDEBAR_ROW (sidebar->new_bookmark_row));
       /* If the state is permanent, don't change it. The application controls it. */
@@ -1752,15 +1758,15 @@ create_placeholder_row (GtkPlacesSidebar *sidebar)
 }
 
 static gboolean
-drag_motion_callback (GtkWidget *widget,
-                      GdkDrop   *drop,
+drag_motion_callback (GtkDropTarget *dest,
                       gint       x,
                       gint       y,
                       gpointer   user_data)
 {
+  GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
+  GdkDrop *drop = gtk_drop_target_get_drop (dest);
   gint action;
   GtkListBoxRow *row;
-  GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
   GtkPlacesSidebarPlaceType place_type;
   gchar *drop_target_uri = NULL;
   gint row_index;
@@ -1776,7 +1782,7 @@ drag_motion_callback (GtkWidget *widget,
 
   /* Nothing to do if no drag data */
   if (!sidebar->drag_data_received &&
-      !get_drag_data (sidebar->list_box, drop, row))
+      !get_drag_data (sidebar->list_box, dest, row))
     goto out;
 
   /* Nothing to do if the target is not valid drop destination */
@@ -1791,7 +1797,6 @@ drag_motion_callback (GtkWidget *widget,
       if (sidebar->row_placeholder == NULL)
         {
           sidebar->row_placeholder = create_placeholder_row (sidebar);
-          gtk_widget_show (sidebar->row_placeholder);
           g_object_ref_sink (sidebar->row_placeholder);
         }
       else if (GTK_WIDGET (row) == sidebar->row_placeholder)
@@ -1822,7 +1827,7 @@ drag_motion_callback (GtkWidget *widget,
            * of the row, we need to increase the order-index.
            */
           row_placeholder_index = row_index;
-          gtk_widget_translate_coordinates (widget, GTK_WIDGET (row),
+          gtk_widget_translate_coordinates (GTK_WIDGET (sidebar), GTK_WIDGET (row),
 		                            x, y,
 		                            &dest_x, &dest_y);
 
@@ -1879,8 +1884,6 @@ drag_motion_callback (GtkWidget *widget,
 
  out:
   start_drop_feedback (sidebar, GTK_SIDEBAR_ROW (row), drag);
-
-  g_signal_stop_emission_by_name (sidebar->list_box, "drag-motion");
 
   gdk_drop_status (drop, action);
 
@@ -1957,28 +1960,34 @@ drag_data_get_callback (const char *mimetype,
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
 
   if (mimetype == g_intern_static_string ("DND_GTK_SIDEBAR_ROW"))
-    return g_bytes_new_take ((gpointer)&sidebar->drag_row, sizeof (gpointer));
+    return g_bytes_new ((gpointer)&sidebar->drag_row, sizeof (gpointer));
 
   return NULL;
 }
 
 static void
-drag_data_received_callback (GtkWidget        *list_box,
-                             GdkDrop          *drop,
-                             GtkSelectionData *selection_data,
-                             gpointer          user_data)
+drag_data_received_callback (GObject      *source,
+                             GAsyncResult *result,
+                             gpointer      user_data)
 {
+  GtkDropTarget *dest = GTK_DROP_TARGET (source);
+  GtkWidget *list_box = user_data;
+  GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (gtk_widget_get_ancestor (list_box, GTK_TYPE_PLACES_SIDEBAR));
+  GdkDrop *drop = gtk_drop_target_get_drop (dest);
+  GdkDrag *drag = gdk_drop_get_drag (drop);
   gint target_order_index;
   GtkPlacesSidebarPlaceType target_place_type;
   GtkPlacesSidebarSectionType target_section_type;
   gchar *target_uri;
-  GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
   GtkListBoxRow *target_row;
   GdkDragAction real_action;
+  GtkSelectionData *selection_data;
+
+  selection_data = gtk_drop_target_read_selection_finish (dest, result, NULL);
 
   if (!sidebar->drag_data_received)
     {
-      if (gtk_selection_data_targets_include_uri (selection_data))
+      if (gtk_selection_data_get_target (selection_data) == g_intern_static_string ("text/uri-list"))
         {
           gchar **uris;
 
@@ -1994,19 +2003,22 @@ drag_data_received_callback (GtkWidget        *list_box,
         {
           sidebar->drag_list = NULL;
           if (gtk_selection_data_get_target (selection_data) == g_intern_static_string ("DND_GTK_SIDEBAR_ROW"))
-            sidebar->drag_data_info = DND_GTK_SIDEBAR_ROW;
+             {
+              sidebar->drag_data_info = DND_GTK_SIDEBAR_ROW;
+             }
         }
       sidebar->drag_data_received = TRUE;
     }
 
-  g_signal_stop_emission_by_name (list_box, "drag-data-received");
-
   if (!sidebar->drop_occurred)
-    return;
+    goto out_free;
 
-  target_row = g_object_get_data (G_OBJECT (drop), "places-sidebar-row");
+  target_row = g_object_get_data (G_OBJECT (dest), "places-sidebar-row");
   if (target_row == NULL)
-    return;
+    goto out_free;
+
+  if (!check_valid_drop_target (sidebar, GTK_SIDEBAR_ROW (target_row), drag))
+    goto out_free;
 
   g_object_get (target_row,
                 "place-type", &target_place_type,
@@ -2014,11 +2026,7 @@ drag_data_received_callback (GtkWidget        *list_box,
                 "order-index", &target_order_index,
                 "uri", &target_uri,
                 NULL);
-
   real_action = 0;
-
-  if (!check_valid_drop_target (sidebar, GTK_SIDEBAR_ROW (target_row), gdk_drop_get_drag (drop)))
-    goto out;
 
   if (sidebar->drag_data_info == DND_GTK_SIDEBAR_ROW)
     {
@@ -2074,10 +2082,13 @@ drag_data_received_callback (GtkWidget        *list_box,
 
 out:
   sidebar->drop_occurred = FALSE;
-  g_object_set_data (G_OBJECT (drop), "places-sidebar-row", NULL);
+  g_object_set_data (G_OBJECT (dest), "places-sidebar-row", NULL);
   gdk_drop_finish (drop, real_action);
   stop_drop_feedback (sidebar);
   g_free (target_uri);
+
+out_free:
+  gtk_selection_data_free (selection_data);
 }
 
 static void
@@ -2106,11 +2117,11 @@ drag_end_callback (GtkDragSource  *source,
  * we build new drag data in drag_data_received.
  */
 static void
-drag_leave_callback (GtkWidget *widget,
-                     GdkDrop   *drop,
-                     gpointer   user_data)
+drag_leave_callback (GtkDropTarget *dest,
+                     gpointer       user_data)
 {
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
+  GdkDrop *drop = gtk_drop_target_get_drop (dest);
 
   if (sidebar->drop_state != DROP_STATE_NEW_BOOKMARK_ARMED_PERMANENT)
     {
@@ -2125,20 +2136,19 @@ drag_leave_callback (GtkWidget *widget,
 }
 
 static gboolean
-drag_drop_callback (GtkWidget *list_box,
-                    GdkDrop   *drop,
-                    gint       x,
-                    gint       y,
-                    gpointer   user_data)
+drag_drop_callback (GtkDropTarget *dest,
+                    int            x,
+                    int            y,
+                    gpointer       user_data)
 {
-  gboolean retval = FALSE;
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
+  gboolean retval = FALSE;
   GtkListBoxRow *row;
 
   row = gtk_list_box_get_row_at_y (GTK_LIST_BOX (sidebar->list_box), y);
   sidebar->drop_occurred = TRUE;
-  retval = get_drag_data (sidebar->list_box, drop, row);
-  g_signal_stop_emission_by_name (sidebar->list_box, "drag-drop");
+ 
+  retval = get_drag_data (sidebar->list_box, dest, row);
 
   return retval;
 }
@@ -4025,7 +4035,8 @@ shell_shows_desktop_changed (GtkSettings *settings,
 static void
 gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 {
-  GdkContentFormats *target_list;
+  GdkContentFormats *formats;
+  GtkDropTarget *dest;
   gboolean show_desktop;
   GtkStyleContext *context;
   GtkEventController *controller;
@@ -4082,25 +4093,17 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   gtk_widget_add_controller (GTK_WIDGET (sidebar), GTK_EVENT_CONTROLLER (gesture));
 
   /* DND support */
-  gtk_drag_dest_set (sidebar->list_box,
-                     0,
-                     NULL,
-                     GDK_ACTION_MOVE | GDK_ACTION_COPY | GDK_ACTION_LINK);
-  target_list = gdk_content_formats_new  (dnd_drop_targets, G_N_ELEMENTS (dnd_drop_targets));
-  target_list = gtk_content_formats_add_uri_targets (target_list);
-  gtk_drag_dest_set_target_list (sidebar->list_box, target_list);
-  gdk_content_formats_unref (target_list);
+  formats = gdk_content_formats_new (dnd_drop_targets, G_N_ELEMENTS (dnd_drop_targets));
+  formats = gtk_content_formats_add_uri_targets (formats);
+  dest = gtk_drop_target_new (0, formats, GDK_ACTION_MOVE | GDK_ACTION_COPY | GDK_ACTION_LINK);
+  gdk_content_formats_unref (formats);
+  g_signal_connect (dest, "drag-motion", G_CALLBACK (drag_motion_callback), sidebar);
+  g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop_callback), sidebar);
+  g_signal_connect (dest, "drag-leave", G_CALLBACK (drag_leave_callback), sidebar);
+  gtk_drop_target_attach (dest, sidebar->list_box);
   sidebar->source_targets = gdk_content_formats_new (dnd_source_targets, G_N_ELEMENTS (dnd_source_targets));
   sidebar->source_targets = gtk_content_formats_add_text_targets (sidebar->source_targets);
 
-  g_signal_connect (sidebar->list_box, "drag-motion",
-                    G_CALLBACK (drag_motion_callback), sidebar);
-  g_signal_connect (sidebar->list_box, "drag-data-received",
-                    G_CALLBACK (drag_data_received_callback), sidebar);
-  g_signal_connect (sidebar->list_box, "drag-drop",
-                    G_CALLBACK (drag_drop_callback), sidebar);
-  g_signal_connect (sidebar->list_box, "drag-leave",
-                    G_CALLBACK (drag_leave_callback), sidebar);
   sidebar->drag_row = NULL;
   sidebar->row_placeholder = NULL;
   sidebar->dragging_over = FALSE;
