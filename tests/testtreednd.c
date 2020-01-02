@@ -89,11 +89,11 @@ get_dragsource (void)
 }
 
 static void
-drag_data_received (GtkWidget *widget,
-                    GdkDrop *drop,
+drag_data_received (GtkDropTarget *dest,
                     GtkSelectionData *selda,
                     gpointer dada)
 {
+  GtkWidget *widget = gtk_drop_target_get_target (dest);
   gchar *text;
 
   text = (gchar*) gtk_selection_data_get_text (selda);
@@ -106,11 +106,13 @@ get_droptarget (void)
 {
   GtkWidget *label;
   GdkContentFormats *targets;
+  GtkDropTarget *dest;
 
   label = gtk_label_new ("Drop here");
   targets = gdk_content_formats_new (entries, G_N_ELEMENTS (entries));
-  gtk_drag_dest_set (label, GTK_DEST_DEFAULT_ALL, targets, GDK_ACTION_COPY);
-  g_signal_connect (label, "drag-data-received", G_CALLBACK (drag_data_received), NULL);
+  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_ALL, targets, GDK_ACTION_COPY);
+  g_signal_connect (dest, "drag-data-received", G_CALLBACK (drag_data_received), NULL);
+  gtk_drop_target_attach (dest, label);
   gdk_content_formats_unref (targets);
 
   return label;
