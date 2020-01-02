@@ -1730,7 +1730,10 @@ gsk_transform_transform_bounds (GskTransform          *self,
         float dx, dy;
 
         gsk_transform_to_translate (self, &dx, &dy);
-        graphene_rect_offset_r (rect, dx, dy, out_rect);
+        out_rect->origin.x = rect->origin.x + dx;
+        out_rect->origin.y = rect->origin.y + dy;
+        out_rect->size.width = rect->size.width;
+        out_rect->size.height = rect->size.height;
       }
     break;
 
@@ -1740,13 +1743,10 @@ gsk_transform_transform_bounds (GskTransform          *self,
 
         gsk_transform_to_affine (self, &scale_x, &scale_y, &dx, &dy);
 
-        *out_rect = *rect;
-        out_rect->origin.x *= scale_x;
-        out_rect->origin.y *= scale_y;
-        out_rect->size.width *= scale_x;
-        out_rect->size.height *= scale_y;
-        out_rect->origin.x += dx;
-        out_rect->origin.y += dy;
+        out_rect->origin.x = (rect->origin.x * scale_x) + dx;
+        out_rect->origin.y = (rect->origin.y * scale_y) + dy;
+        out_rect->size.width = rect->size.width * scale_x;
+        out_rect->size.height = rect->size.height * scale_y;
       }
     break;
 
