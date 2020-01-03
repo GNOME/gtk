@@ -1077,9 +1077,9 @@ gsk_scale_transform_equal (GskTransform *first_transform,
   GskScaleTransform *first = (GskScaleTransform *) first_transform;
   GskScaleTransform *second = (GskScaleTransform *) second_transform;
 
-  return G_APPROX_VALUE (first->factor_x, second->factor_x, 0.01f) &&
-         G_APPROX_VALUE (first->factor_y, second->factor_y, 0.01f) &&
-         G_APPROX_VALUE (first->factor_z, second->factor_z, 0.01f);
+  return first->factor_x == second->factor_x &&
+         first->factor_y == second->factor_y &&
+         first->factor_z == second->factor_z;
 }
 
 static void
