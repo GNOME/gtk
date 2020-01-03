@@ -454,6 +454,10 @@ gboolean        gtk_text_buffer_delete_selection        (GtkTextBuffer *buffer,
                                                          gboolean       default_editable);
 
 GDK_AVAILABLE_IN_ALL
+GdkContentProvider *
+                gtk_text_buffer_get_selection_content    (GtkTextBuffer *buffer);
+
+GDK_AVAILABLE_IN_ALL
 gboolean        gtk_text_buffer_get_can_undo              (GtkTextBuffer *buffer);
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_text_buffer_get_can_redo              (GtkTextBuffer *buffer);

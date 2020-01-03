@@ -27,6 +27,7 @@
 #include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtkdnd.h>
 #include <gtk/gtkentry.h>
+#include <gtk/gtkdragsource.h>
 
 G_BEGIN_DECLS
 
@@ -314,7 +315,7 @@ gboolean               gtk_tree_view_is_blank_at_pos               (GtkTreeView 
 
 /* Drag-and-Drop support */
 GDK_AVAILABLE_IN_ALL
-void                   gtk_tree_view_enable_model_drag_source      (GtkTreeView               *tree_view,
+GtkDragSource *        gtk_tree_view_enable_model_drag_source      (GtkTreeView               *tree_view,
 								    GdkModifierType            start_button_mask,
 								    GdkContentFormats         *formats,
 								    GdkDragAction              actions);
