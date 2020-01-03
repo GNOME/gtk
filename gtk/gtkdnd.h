@@ -39,11 +39,6 @@ G_BEGIN_DECLS
 
 /* Destination side */
 
-GDK_AVAILABLE_IN_ALL
-void gtk_drag_get_data (GtkWidget      *widget,
-			GdkDrop        *drop,
-			GdkAtom         target);
-
 
 G_END_DECLS
 
