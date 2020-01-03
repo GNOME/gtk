@@ -73,8 +73,7 @@ gdk_x11_monitor_get_workarea (GdkMonitor   *monitor,
    * but the primary monitor. Since that is where the 'desktop
    * chrome' usually lives, this works ok in practice.
    */
-  if (gdk_monitor_is_primary (monitor) &&
-      !gdk_monitor_has_fullscreen_window (monitor))
+  if (!gdk_monitor_has_fullscreen_window (monitor))
     {
       gdk_x11_screen_get_work_area (screen, &workarea);
       if (gdk_rectangle_intersect (dest, &workarea, &workarea))

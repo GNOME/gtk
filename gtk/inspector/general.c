@@ -577,8 +577,6 @@ populate_display (GdkDisplay *display, GtkInspectorGeneral *gen)
       add_label_row (gen, list, "Size", value, 10);
       g_free (value);
 
-      add_check_row (gen, list, "Primary", gdk_monitor_is_primary (monitor), 10);
-
       if (gdk_monitor_get_refresh_rate (monitor) != 0)
         value = g_strdup_printf ("%.2f Hz",
                                  0.001 * gdk_monitor_get_refresh_rate (monitor));
