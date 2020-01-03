@@ -33,7 +33,6 @@
 #include "gtkbuildable.h"
 #include "gtkbutton.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkdnd.h"
 #include "gtkdragdest.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkgestureclick.h"
