@@ -317,12 +317,9 @@ init_randr15 (GdkX11Screen *x11_screen, gboolean *changed)
   GdkDisplay *display = GDK_SCREEN_DISPLAY (x11_screen);
   GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
   XRRScreenResources *resources;
-  RROutput primary_output = None;
-  RROutput first_output = None;
   int i;
   XRRMonitorInfo *rr_monitors;
   int num_rr_monitors;
-  int old_primary;
 
   if (!x11_display->have_randr15)
     return FALSE;
@@ -370,9 +367,6 @@ init_randr15 (GdkX11Screen *x11_screen, gboolean *changed)
           XRRFreeOutputInfo (output_info);
           continue;
         }
-
-      if (first_output == None)
-        first_output = output;
 
       if (output_info->crtc)
         {
@@ -482,9 +476,6 @@ init_randr15 (GdkX11Screen *x11_screen, gboolean *changed)
       g_free (manufacturer);
       g_free (name);
 
-      if (rr_monitors[i].primary)
-        primary_output = monitor->output;
-
       XRRFreeOutputInfo (output_info);
     }
 
@@ -509,33 +500,6 @@ init_randr15 (GdkX11Screen *x11_screen, gboolean *changed)
         }
     }
 
-  old_primary = x11_display->primary_monitor;
-  x11_display->primary_monitor = 0;
-  for (i = 0; i < x11_display->monitors->len; ++i)
-    {
-      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
-      if (monitor->output == primary_output)
-        {
-          x11_display->primary_monitor = i;
-          break;
-        }
-
-      /* No RandR1.3+ available or no primary set, fall back to prefer LVDS as primary if present */
-      if (primary_output == None &&
-          g_ascii_strncasecmp (gdk_monitor_get_model (GDK_MONITOR (monitor)), "LVDS", 4) == 0)
-        {
-          x11_display->primary_monitor = i;
-          break;
-        }
-
-      /* No primary specified and no LVDS found */
-      if (monitor->output == first_output)
-        x11_display->primary_monitor = i;
-    }
-
-  if (x11_display->primary_monitor != old_primary)
-    *changed = TRUE;
-
   return x11_display->monitors->len > 0;
 #endif
 
@@ -549,10 +513,7 @@ init_randr13 (GdkX11Screen *x11_screen, gboolean *changed)
   GdkDisplay *display = GDK_SCREEN_DISPLAY (x11_screen);
   GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
   XRRScreenResources *resources;
-  RROutput primary_output = None;
-  RROutput first_output = None;
   int i;
-  int old_primary;
 
   if (!x11_display->have_randr13)
       return FALSE;
@@ -651,9 +612,6 @@ init_randr13 (GdkX11Screen *x11_screen, gboolean *changed)
       XRRFreeOutputInfo (output_info);
     }
 
-  if (resources->noutput > 0)
-    first_output = resources->outputs[0];
-
   XRRFreeScreenResources (resources);
 
   /* Which usable multihead data is not returned in non RandR 1.2+ X driver? */
@@ -675,36 +633,6 @@ init_randr13 (GdkX11Screen *x11_screen, gboolean *changed)
           *changed = TRUE;
         }
     }
-
-  old_primary = x11_display->primary_monitor;
-  x11_display->primary_monitor = 0;
-  primary_output = XRRGetOutputPrimary (x11_screen->xdisplay,
-                                        x11_screen->xroot_window);
-
-  for (i = 0; i < x11_display->monitors->len; ++i)
-    {
-      GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
-      if (monitor->output == primary_output)
-        {
-          x11_display->primary_monitor = i;
-          break;
-        }
-
-      /* No RandR1.3+ available or no primary set, fall back to prefer LVDS as primary if present */
-      if (primary_output == None &&
-          g_ascii_strncasecmp (gdk_monitor_get_model (GDK_MONITOR (monitor)), "LVDS", 4) == 0)
-        {
-          x11_display->primary_monitor = i;
-          break;
-        }
-
-      /* No primary specified and no LVDS found */
-      if (monitor->output == first_output)
-        x11_display->primary_monitor = i;
-    }
-
-  if (x11_display->primary_monitor != old_primary)
-    *changed = TRUE;
 
   return x11_display->monitors->len > 0;
 #endif
@@ -761,10 +689,6 @@ init_no_multihead (GdkX11Screen *x11_screen, gboolean *changed)
   g_object_notify (G_OBJECT (monitor), "workarea");
   gdk_monitor_set_physical_size (GDK_MONITOR (monitor), width_mm, height_mm);
   gdk_monitor_set_scale_factor (GDK_MONITOR (monitor), x11_screen->surface_scale);
-
-  if (x11_display->primary_monitor != 0)
-    *changed = TRUE;
-  x11_display->primary_monitor = 0;
 
   for (i = x11_display->monitors->len - 1; i >= 0; i--)
     {

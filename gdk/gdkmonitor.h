@@ -88,8 +88,6 @@ int               gdk_monitor_get_refresh_rate    (GdkMonitor   *monitor);
 GDK_AVAILABLE_IN_ALL
 GdkSubpixelLayout gdk_monitor_get_subpixel_layout (GdkMonitor   *monitor);
 GDK_AVAILABLE_IN_ALL
-gboolean          gdk_monitor_is_primary          (GdkMonitor   *monitor);
-GDK_AVAILABLE_IN_ALL
 gboolean          gdk_monitor_is_valid            (GdkMonitor   *monitor);
 
 G_END_DECLS

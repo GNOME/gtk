@@ -329,14 +329,6 @@ gdk_broadway_display_get_monitor (GdkDisplay *display,
   return NULL;
 }
 
-static GdkMonitor *
-gdk_broadway_display_get_primary_monitor (GdkDisplay *display)
-{
-  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
-
-  return broadway_display->monitor;
-}
-
 static gboolean
 gdk_broadway_display_get_setting (GdkDisplay *display,
                                   const char *name,
@@ -443,7 +435,6 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
 
   display_class->get_n_monitors = gdk_broadway_display_get_n_monitors;
   display_class->get_monitor = gdk_broadway_display_get_monitor;
-  display_class->get_primary_monitor = gdk_broadway_display_get_primary_monitor;
   display_class->get_setting = gdk_broadway_display_get_setting;
   display_class->get_last_seen_time = gdk_broadway_display_get_last_seen_time;
 }
