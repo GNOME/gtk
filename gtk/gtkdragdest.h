@@ -48,12 +48,7 @@ typedef struct _GtkDropTarget GtkDropTarget;
  * @GTK_DEST_DEFAULT_HIGHLIGHT: If set for a widget, GTK+ will draw a highlight on
  *   this widget as long as a drag is over this widget and the widget drag format
  *   and action are acceptable.
- * @GTK_DEST_DEFAULT_OP: If set for a widget, when a drop occurs, GTK+ will
- *   will check if the drag matches this widget’s list of possible formats and
- *   actions. If so, GTK+ will call gtk_drag_get_data() on behalf of the widget.
- *   Whether or not the drop is successful, GTK+ will call gdk_drag_finish(). If
- *   the action was a move, then if the drag was successful, then %TRUE will be
- *   passed for the @delete parameter to gdk_drag_finish().
+ * @GTK_DEST_DEFAULT_DROP: Does not do anything now.
  * @GTK_DEST_DEFAULT_ALL: If set, specifies that all default actions should
  *   be taken.
  *
@@ -65,7 +60,7 @@ typedef enum {
   GTK_DEST_DEFAULT_MOTION     = 1 << 0,
   GTK_DEST_DEFAULT_HIGHLIGHT  = 1 << 1,
   GTK_DEST_DEFAULT_DROP       = 1 << 2,
-  GTK_DEST_DEFAULT_ALL        = 0x07
+  GTK_DEST_DEFAULT_ALL        = 0x7
 } GtkDestDefaults;
 
 
