@@ -381,19 +381,6 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                     NULL,
                     G_TYPE_BOOLEAN, 2,
                     G_TYPE_INT, G_TYPE_INT);
-
-  signals[DRAG_DATA_RECEIVED] =
-      g_signal_new (I_("drag-data-received"),
-                    G_TYPE_FROM_CLASS (class),
-                    G_SIGNAL_RUN_LAST,
-                    0,
-                    NULL, NULL,
-                    _gtk_marshal_VOID__BOXED,
-                    G_TYPE_NONE, 1,
-                    GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE);
-  g_signal_set_va_marshaller (signals[DRAG_DATA_RECEIVED],
-                              G_TYPE_FROM_CLASS (class),
-                              _gtk_marshal_VOID__BOXEDv);
 }
 
 /**
@@ -744,15 +731,6 @@ gtk_drop_target_emit_drag_drop (GtkDropTarget    *dest,
   g_signal_emit (dest, signals[DRAG_DROP], 0, x, y, &result);
 
   return result;
-}
-
-void
-gtk_drop_target_emit_drag_data_received (GtkDropTarget    *dest,
-                                         GdkDrop          *drop,
-                                         GtkSelectionData *sdata)
-{
-  set_drop (dest, drop);
-  g_signal_emit (dest, signals[DRAG_DATA_RECEIVED], 0, sdata);
 }
 
 /**
