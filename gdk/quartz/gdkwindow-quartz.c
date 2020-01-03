@@ -2860,7 +2860,7 @@ _gdk_quartz_window_update_fullscreen_state (GdkWindow *window)
   if (gdk_quartz_osx_version() >= GDK_OSX_LION)
     {
       gboolean is_fullscreen = window_is_fullscreen (window);
-      gboolean was_fullscreen = (gdk_window_get_state (window) &&
+      gboolean was_fullscreen = (gdk_window_get_state (window) &
                                  GDK_WINDOW_STATE_FULLSCREEN != 0);
 
       if (is_fullscreen != was_fullscreen)
