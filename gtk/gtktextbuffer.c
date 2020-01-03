@@ -27,7 +27,6 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include "gtkdnd.h"
 #include "gtkmarshalers.h"
 #include "gtktextbuffer.h"
 #include "gtktexthistoryprivate.h"

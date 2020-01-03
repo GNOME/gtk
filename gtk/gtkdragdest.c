@@ -27,7 +27,6 @@
 #include "gtkdragdest.h"
 #include "gtkdragdestprivate.h"
 
-#include "gtkdnd.h"
 #include "gtkdndprivate.h"
 #include "gtkintl.h"
 #include "gtknative.h"
