@@ -1854,18 +1854,22 @@ add_cursor (GtkTextLayout      *layout,
             GtkTextLineSegment *seg,
             gint                start)
 {
+  CursorPosition cursor;
+
+  cursor.pos = start;
+  cursor.is_insert = _gtk_text_btree_mark_is_insert (_gtk_text_buffer_get_btree (layout->buffer),
+                                                     seg->body.mark.obj);
+  cursor.is_selection_bound = _gtk_text_btree_mark_is_selection_bound (_gtk_text_buffer_get_btree (layout->buffer),
+                                                                       seg->body.mark.obj);
+
   /* Hide insertion cursor when we have a selection or the layout
    * user has hidden the cursor.
    */
-  if (_gtk_text_btree_mark_is_insert (_gtk_text_buffer_get_btree (layout->buffer),
-                                     seg->body.mark.obj) &&
-      (!layout->cursor_visible ||
-       gtk_text_buffer_get_selection_bounds (layout->buffer, NULL, NULL)))
+  if (cursor.is_insert &&
+      (!layout->cursor_visible || gtk_text_buffer_get_selection_bounds (layout->buffer, NULL, NULL)))
     return;
 
-  if (layout->overwrite_mode &&
-      _gtk_text_btree_mark_is_insert (_gtk_text_buffer_get_btree (layout->buffer),
-				      seg->body.mark.obj))
+  if (layout->overwrite_mode && cursor.is_insert)
     {
       GtkTextIter iter;
       gboolean cursor_at_line_end;
@@ -1884,9 +1888,9 @@ add_cursor (GtkTextLayout      *layout,
     }
 
   if (!display->cursors)
-    display->cursors = g_array_new (FALSE, FALSE, sizeof(int));
+    display->cursors = g_array_new (FALSE, FALSE, sizeof(CursorPosition));
 
-  display->cursors = g_array_append_val (display->cursors, start);
+  display->cursors = g_array_append_val (display->cursors, cursor);
 }
 
 static gboolean
@@ -4181,21 +4185,24 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
             {
               int i;
 
-              gtk_snapshot_push_opacity (crenderer->snapshot, cursor_alpha);
               for (i = 0; i < line_display->cursors->len; i++)
                 {
-                  int index;
                   PangoDirection dir;
+                  CursorPosition cursor;
 
-                  index = g_array_index(line_display->cursors, int, i);
+                  cursor = g_array_index (line_display->cursors, CursorPosition, i);
                   dir = (line_display->direction == GTK_TEXT_DIR_RTL) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR;
+
+                  if (cursor.is_insert || cursor.is_selection_bound)
+                    gtk_snapshot_push_opacity (crenderer->snapshot, cursor_alpha);
 
                   gtk_snapshot_render_insertion_cursor (crenderer->snapshot, context,
                                                         line_display->x_offset, offset_y + line_display->top_margin,
-                                                        line_display->layout, index, dir);
-                }
+                                                        line_display->layout, cursor.pos, dir);
 
-              gtk_snapshot_pop (crenderer->snapshot);
+                  if (cursor.is_insert || cursor.is_selection_bound)
+                    gtk_snapshot_pop (crenderer->snapshot);
+                }
             }
         } /* line_display->height > 0 */
 
