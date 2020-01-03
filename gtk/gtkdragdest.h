@@ -126,6 +126,18 @@ GDK_AVAILABLE_IN_ALL
 const char        *gtk_drop_target_find_mimetype    (GtkDropTarget     *dest);
 
 GDK_AVAILABLE_IN_ALL
+void               gtk_drop_target_read_selection  (GtkDropTarget       *dest,
+                                                    GdkAtom              target,
+                                                    GCancellable        *cancellable,
+                                                    GAsyncReadyCallback  callback,
+                                                    gpointer             data);
+GDK_AVAILABLE_IN_ALL
+GtkSelectionData *gtk_drop_target_read_selection_finish
+                                                   (GtkDropTarget       *dest,
+                                                    GAsyncResult        *result,
+                                                    GError             **error);
+
+GDK_AVAILABLE_IN_ALL
 void               gtk_drag_highlight            (GtkWidget  *widget);
 
 GDK_AVAILABLE_IN_ALL
