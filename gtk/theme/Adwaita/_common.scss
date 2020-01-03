@@ -134,6 +134,10 @@ textview {
 
     selection { &:focus, & { @extend %selected_items; }}
   }
+
+  &:drop(active) {
+    caret-color: $drop_target_color;
+  }
 }
 
 textview border { background-color: mix($bg_color, $base_color, 50%); }
