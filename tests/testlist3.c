@@ -24,18 +24,24 @@ drag_begin (GtkDragSource *source,
 }
 
 static void
-drag_data_received (GtkDropTarget    *dest,
-                    GtkSelectionData *selection_data,
-                    gpointer          data)
+got_row (GObject      *src,
+         GAsyncResult *result,
+         gpointer      data)
 {
+  GtkDropTarget *dest = GTK_DROP_TARGET (src);
   GtkWidget *target = data;
   GtkWidget *row;
   GtkWidget *source;
   int pos;
+  GtkSelectionData *selection_data;
+
+  selection_data = gtk_drop_target_read_selection_finish (dest, result, NULL);
 
   pos = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (target));
   row = (gpointer)* (gpointer*)gtk_selection_data_get_data (selection_data);
   source = gtk_widget_get_ancestor (row, GTK_TYPE_LIST_BOX_ROW);
+
+  gtk_selection_data_free (selection_data);
 
   if (source == target)
     return;
@@ -44,6 +50,15 @@ drag_data_received (GtkDropTarget    *dest,
   gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (source)), source);
   gtk_list_box_insert (GTK_LIST_BOX (gtk_widget_get_parent (target)), source, pos);
   g_object_unref (source);
+}
+
+static void
+drag_drop (GtkDropTarget    *dest,
+           int               x,
+           int               y,
+           gpointer          data)
+{
+  gtk_drop_target_read_selection (dest, "GTK_LIST_BOX_ROW", NULL, got_row, data);
 }
 
 static GtkWidget *
@@ -73,8 +88,8 @@ create_row (const gchar *text)
   gtk_drag_source_attach (source, image, GDK_BUTTON1_MASK);
 
   targets = gdk_content_formats_new (entries, 1);
-  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_ALL, targets, GDK_ACTION_MOVE);
-  g_signal_connect (dest, "drag-data-received", G_CALLBACK (drag_data_received), row);
+  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_HIGHLIGHT, targets, GDK_ACTION_MOVE);
+  g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), row);
   gtk_drop_target_attach (dest, row);
 
   gdk_content_formats_unref (targets);
