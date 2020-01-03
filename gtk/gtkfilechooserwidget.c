@@ -1982,26 +1982,26 @@ out:
 }
 
 static void
-file_list_drag_data_received_cb (GtkDropTarget    *dest,
-                                 GtkSelectionData *selection_data,
-                                 gpointer          user_data)
+file_list_drag_data_received_cb (GObject      *source,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (user_data);
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
+  GtkDropTarget *dest = GTK_DROP_TARGET (source);
   GtkWidget *widget = gtk_drop_target_get_target (dest);
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
+  GdkDrop *drop = GDK_DROP (g_object_get_data (G_OBJECT (dest), "current-drop"));
+  GdkDrag *drag = gdk_drop_get_drag (drop);
   gchar **uris;
   char *uri;
   GFile *file;
+  GtkSelectionData *selection_data;
+
+  selection_data = gtk_drop_target_read_selection_finish (dest, result, NULL);
 
   /* Allow only drags from other widgets; see bug #533891. */
-  if (gdk_drop_get_drag (drop) &&
-      gtk_drag_source_get_origin (gtk_drag_get_source (gdk_drop_get_drag (drop))) == widget)
-    {
-      g_signal_stop_emission_by_name (widget, "drag-data-received");
-      return;
-    }
-
+  if (drag && gtk_drag_source_get_origin (gtk_drag_get_source (drag)) == widget)
+    goto out;
 
   /* Parse the text/uri-list string, navigate to the first one */
   uris = gtk_selection_data_get_uris (selection_data);
@@ -2027,7 +2027,8 @@ file_list_drag_data_received_cb (GtkDropTarget    *dest,
                                    data);
     }
 
-  g_signal_stop_emission_by_name (dest, "drag-data-received");
+out:
+  g_object_set_data (G_OBJECT (dest), "current-drop", NULL);
 }
 
 /* Don't do anything with the drag_drop signal */
@@ -2037,7 +2038,12 @@ file_list_drag_drop_cb (GtkDropTarget        *dest,
                         int                   y,
                         GtkFileChooserWidget *impl)
 {
-  g_signal_stop_emission_by_name (dest, "drag-drop");
+  const char *target = g_intern_static_string ("text/uri-list");
+  GdkDrop *drop = gtk_drop_target_get_drop (dest);
+
+  g_object_set_data_full (G_OBJECT (dest), "current-drop", g_object_ref (drop), g_object_unref);
+  gtk_drop_target_read_selection (dest, target, NULL, file_list_drag_data_received_cb, impl);
+
   return TRUE;
 }
 
@@ -8521,7 +8527,6 @@ post_process_ui (GtkFileChooserWidget *impl)
   dest = gtk_drop_target_new (GTK_DEST_DEFAULT_ALL, formats, GDK_ACTION_COPY | GDK_ACTION_MOVE);
   g_signal_connect (dest, "drag-motion", G_CALLBACK (file_list_drag_motion_cb), impl);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (file_list_drag_drop_cb), impl);
-  g_signal_connect (dest, "drag-data-received", G_CALLBACK (file_list_drag_data_received_cb), impl);
   gtk_drop_target_attach (dest, priv->browse_files_tree_view);
   gdk_content_formats_unref (formats);
 
