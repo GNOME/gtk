@@ -22,7 +22,6 @@
 #include "gtkstackswitcher.h"
 
 #include "gtkboxlayout.h"
-#include "gtkdnd.h"
 #include "gtkdragdest.h"
 #include "gtkimage.h"
 #include "gtkintl.h"

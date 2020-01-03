@@ -473,7 +473,6 @@ gtk_public_headers = files([
   'gtkcustomlayout.h',
   'gtkdebug.h',
   'gtkdialog.h',
-  'gtkdnd.h',
   'gtkdragdest.h',
   'gtkdragsource.h',
   'gtkdrawingarea.h',
