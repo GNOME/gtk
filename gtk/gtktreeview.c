@@ -696,9 +696,9 @@ static gboolean gtk_tree_view_drag_drop          (GtkDropTarget    *dest,
                                                   int               x,
                                                   int               y,
                                                   GtkTreeView      *tree_view);
-static void     gtk_tree_view_drag_data_received (GtkDropTarget    *dest,
-                                                  GtkSelectionData *selection_data,
-                                                  GtkTreeView      *tree_view);
+static void     gtk_tree_view_drag_data_received (GObject      *source,
+                                                  GAsyncResult *result,
+                                                  gpointer      data);
 
 /* tree_model signals */
 static gboolean gtk_tree_view_real_move_cursor            (GtkTreeView     *tree_view,
@@ -7329,7 +7329,7 @@ gtk_tree_view_drag_motion (GtkDropTarget *dest,
            * determining whether to accept the drop
            */
           set_status_pending (drop, suggested_action);
-          gtk_drag_get_data (GTK_WIDGET (tree_view), drop, target);
+          gtk_drop_target_read_selection (dest, target, NULL, gtk_tree_view_drag_data_received, tree_view);
         }
       else
         {
@@ -7399,7 +7399,7 @@ gtk_tree_view_drag_drop (GtkDropTarget *dest,
 
   if (target != NULL)
     {
-      gtk_drag_get_data (GTK_WIDGET (tree_view), drop, target);
+      gtk_drop_target_read_selection (dest, target, NULL, gtk_tree_view_drag_data_received, tree_view);
       return TRUE;
     }
   else
@@ -7434,10 +7434,12 @@ gtk_tree_view_get_action (GtkWidget *widget,
 }
 
 static void
-gtk_tree_view_drag_data_received (GtkDropTarget    *dest,
-                                  GtkSelectionData *selection_data,
-                                  GtkTreeView      *tree_view)
+gtk_tree_view_drag_data_received (GObject      *source,
+                                  GAsyncResult *result,
+                                  gpointer      data)
 {
+  GtkDropTarget *dest = GTK_DROP_TARGET (source);
+  GtkTreeView *tree_view = GTK_TREE_VIEW (data);
   GdkDrop *drop = gtk_drop_target_get_drop (dest);
   GtkTreePath *path;
   TreeViewDragInfo *di;
@@ -7446,6 +7448,9 @@ gtk_tree_view_drag_data_received (GtkDropTarget    *dest,
   GdkDragAction suggested_action;
   gboolean path_down_mode;
   gboolean drop_append_mode;
+  GtkSelectionData *selection_data;
+
+  selection_data = gtk_drop_target_read_selection_finish (dest, result, NULL);
 
   model = gtk_tree_view_get_model (tree_view);
 
@@ -12963,7 +12968,6 @@ gtk_tree_view_enable_model_drag_dest (GtkTreeView       *tree_view,
   g_signal_connect (di->dest, "drag-leave", G_CALLBACK (gtk_tree_view_drag_leave), tree_view);
   g_signal_connect (di->dest, "drag-motion", G_CALLBACK (gtk_tree_view_drag_motion), tree_view);
   g_signal_connect (di->dest, "drag-drop", G_CALLBACK (gtk_tree_view_drag_drop), tree_view);
-  g_signal_connect (di->dest, "drag-data-received", G_CALLBACK (gtk_tree_view_drag_data_received), tree_view);
   gtk_drop_target_attach (di->dest, GTK_WIDGET (tree_view));
   g_object_ref (di->dest);
 
