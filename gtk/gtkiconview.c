@@ -30,7 +30,6 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcombobox.h"
 #include "gtkcssnodeprivate.h"
-#include "gtkdnd.h"
 #include "gtkdragdest.h"
 #include "gtkdragsource.h"
 #include "gtkentry.h"

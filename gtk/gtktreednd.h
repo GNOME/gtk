@@ -22,8 +22,8 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
+#include <gtk/gtkselection.h>
 #include <gtk/gtktreemodel.h>
-#include <gtk/gtkdnd.h>
 
 G_BEGIN_DECLS
 
