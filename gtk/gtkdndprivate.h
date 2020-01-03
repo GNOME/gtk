@@ -19,8 +19,6 @@
 #ifndef __GTK_DND_PRIVATE_H__
 #define __GTK_DND_PRIVATE_H__
 
-#include "gtkdnd.h"
-
 #include "gtkdragdest.h"
 #include "gtkimagedefinitionprivate.h"
 #include "gtkselection.h"
@@ -31,24 +29,11 @@ struct _GtkDragDestSite
 {
   GtkDropTarget     *dest;
   GtkDestDefaults    flags;
-  guint              do_proxy     : 1;
-  guint              proxy_coords : 1;
   guint              have_drag    : 1;
 };
 
 G_BEGIN_DECLS
 
-GdkDrag *               gtk_drag_begin_internal         (GtkWidget              *widget,
-                                                         GdkDevice              *device,
-                                                         GtkImageDefinition     *icon,
-                                                         GdkContentFormats      *target_list,
-                                                         GdkDragAction           actions,
-                                                         int                     x,
-                                                         int                     y);
-void                    gtk_drag_set_icon_definition    (GdkDrag                *drag,
-                                                         GtkImageDefinition     *def,
-                                                         gint                    hot_x,
-                                                         gint                    hot_y);
 void                    _gtk_drag_dest_handle_event     (GtkWidget              *toplevel,
 				                         GdkEvent               *event);
 
