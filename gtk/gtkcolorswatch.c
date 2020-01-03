@@ -22,7 +22,6 @@
 #include "gtkbox.h"
 #include "gtkcolorchooserprivate.h"
 #include "gtkcssnodeprivate.h"
-#include "gtkdnd.h"
 #include "gtkdragdest.h"
 #include "gtkdragsource.h"
 #include "gtkgesturelongpress.h"
