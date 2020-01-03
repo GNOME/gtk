@@ -300,9 +300,9 @@ static gboolean gtk_icon_view_drag_drop          (GtkDropTarget    *dest,
                                                   int               x,
                                                   int               y,
                                                   GtkIconView      *icon_view);
-static void     gtk_icon_view_drag_data_received (GtkDropTarget    *dest,
-                                                  GtkSelectionData *selection_data,
-                                                  GtkIconView      *icon_view);
+static void     gtk_icon_view_drag_data_received (GObject          *source,
+                                                  GAsyncResult     *result,
+                                                  gpointer          data);
 static gboolean gtk_icon_view_maybe_begin_drag   (GtkIconView      *icon_view,
                                                   double            x,
                                                   double            y,
@@ -6248,7 +6248,7 @@ gtk_icon_view_drag_motion (GtkDropTarget *dest,
            * determining whether to accept the drop
            */
           set_status_pending (drop, suggested_action);
-          gtk_drag_get_data (GTK_WIDGET (icon_view), drop, target);
+          gtk_drop_target_read_selection (dest, target, NULL, gtk_icon_view_drag_data_received, icon_view);
         }
       else
         {
@@ -6309,7 +6309,7 @@ gtk_icon_view_drag_drop (GtkDropTarget *dest,
 
   if (target != NULL)
     {
-      gtk_drag_get_data (GTK_WIDGET (icon_view), drop, target);
+      gtk_drop_target_read_selection (dest, target, NULL, gtk_icon_view_drag_data_received, icon_view);
       return TRUE;
     }
   else
@@ -6344,24 +6344,31 @@ gtk_icon_view_get_action (GtkWidget *widget,
 }
 
 static void
-gtk_icon_view_drag_data_received (GtkDropTarget    *dest,
-				  GtkSelectionData *selection_data,
-                                  GtkIconView      *icon_view)
+gtk_icon_view_drag_data_received (GObject *source,
+                                  GAsyncResult *result,
+                                  gpointer data)
 {
+  GtkDropTarget *dest = GTK_DROP_TARGET (source);
+  GtkIconView *icon_view = data;
   GdkDrop *drop = gtk_drop_target_get_drop (dest);
   GtkTreePath *path;
   GtkTreeModel *model;
   GtkTreePath *dest_row;
   GdkDragAction suggested_action;
   gboolean drop_append_mode;
-  
+  GtkSelectionData *selection_data;
+
+  selection_data = gtk_drop_target_read_selection_finish (dest, result, NULL);
+  if (!selection_data)
+    return;
+
   model = gtk_icon_view_get_model (icon_view);
 
   if (!check_model_dnd (model, GTK_TYPE_TREE_DRAG_DEST, "drag-data-received"))
-    return;
+    goto out;
 
   if (!icon_view->priv->dest_set)
-    return;
+    goto out;
 
   suggested_action = get_status_pending (drop);
 
@@ -6395,14 +6402,14 @@ gtk_icon_view_drag_data_received (GtkDropTarget    *dest,
         gtk_icon_view_set_drag_dest_item (icon_view,
 					  NULL,
 					  GTK_ICON_VIEW_DROP_LEFT);
-      return;
+      goto out;
     }
   
 
   dest_row = get_dest_row (drop);
 
   if (dest_row == NULL)
-    return;
+    goto out;
 
   if (gtk_selection_data_get_length (selection_data) >= 0)
     {
@@ -6421,6 +6428,9 @@ gtk_icon_view_drag_data_received (GtkDropTarget    *dest,
 
   /* drop dest_row */
   set_dest_row (drop, NULL, NULL, FALSE, FALSE);
+
+out:
+  gtk_selection_data_free (selection_data);
 }
 
 /* Drag-and-Drop support */
@@ -6490,7 +6500,6 @@ gtk_icon_view_enable_model_drag_dest (GtkIconView       *icon_view,
   g_signal_connect (icon_view->priv->dest, "drag-leave", G_CALLBACK (gtk_icon_view_drag_leave), icon_view);
   g_signal_connect (icon_view->priv->dest, "drag-motion", G_CALLBACK (gtk_icon_view_drag_motion), icon_view);
   g_signal_connect (icon_view->priv->dest, "drag-drop", G_CALLBACK (gtk_icon_view_drag_drop), icon_view);
-  g_signal_connect (icon_view->priv->dest, "drag-data-received", G_CALLBACK (gtk_icon_view_drag_data_received), icon_view);
   gtk_drop_target_attach (icon_view->priv->dest, GTK_WIDGET (icon_view));
 
   icon_view->priv->dest_actions = actions;
