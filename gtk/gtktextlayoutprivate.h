@@ -213,13 +213,20 @@ struct _GtkTextAttrAppearance
   GtkTextAppearance appearance;
 };
 
+typedef struct _CursorPosition CursorPosition;
+struct _CursorPosition {
+  int pos;
+  guint is_insert          : 1;
+  guint is_selection_bound : 1;
+};
+
 struct _GtkTextLineDisplay
 {
   PangoLayout *layout;
 
   GskRenderNode *node;
 
-  GArray *cursors;      /* indexes of cursors in the PangoLayout */
+  GArray *cursors;      /* indexes of cursors in the PangoLayout, and mark names */
 
   /* GSequenceIter backpointer for use within cache */
   GSequenceIter *cache_iter;
