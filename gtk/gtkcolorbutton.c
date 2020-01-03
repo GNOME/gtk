@@ -36,7 +36,6 @@
 #include "gtkcolorchooserprivate.h"
 #include "gtkcolorchooserdialog.h"
 #include "gtkcolorswatchprivate.h"
-#include "gtkdnd.h"
 #include "gtkdragdest.h"
 #include "gtkdragsource.h"
 #include "gtkintl.h"

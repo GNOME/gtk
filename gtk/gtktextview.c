@@ -31,7 +31,6 @@
 
 #include "gtkadjustmentprivate.h"
 #include "gtkbindings.h"
-#include "gtkdnd.h"
 #include "gtkdebug.h"
 #include "gtkintl.h"
 #include "gtkmain.h"

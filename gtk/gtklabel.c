@@ -32,7 +32,6 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkdnd.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkgesturedrag.h"
 #include "gtkgestureclick.h"

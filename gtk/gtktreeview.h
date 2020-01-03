@@ -25,7 +25,6 @@
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreeviewcolumn.h>
-#include <gtk/gtkdnd.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkdragsource.h>
 #include <gtk/gtkdragdest.h>
