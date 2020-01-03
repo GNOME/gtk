@@ -76,7 +76,7 @@ gtk_render_node_paintable_paintable_get_intrinsic_width (GdkPaintable *paintable
 {
   GtkRenderNodePaintable *self = GTK_RENDER_NODE_PAINTABLE (paintable);
 
-  return self->bounds.size.width;
+  return ceilf (self->bounds.size.width);
 }
 
 static int
@@ -84,7 +84,7 @@ gtk_render_node_paintable_paintable_get_intrinsic_height (GdkPaintable *paintabl
 {
   GtkRenderNodePaintable *self = GTK_RENDER_NODE_PAINTABLE (paintable);
 
-  return self->bounds.size.height;
+  return ceilf (self->bounds.size.height);
 }
 
 static void
