@@ -795,7 +795,8 @@ _gdk_quartz_display_create_surface_impl (GdkDisplay    *display,
 
         if (window->surface_type == GDK_SURFACE_TEMP)
           {
-            style_mask = NSBorderlessWindowMask;
+            /* without NSMiniaturizableWindowMask window will not minimize */
+            style_mask = NSBorderlessWindowMask | NSMiniaturizableWindowMask;
           }
         else
           {
