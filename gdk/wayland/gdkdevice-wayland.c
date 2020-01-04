@@ -1258,6 +1258,8 @@ data_device_enter (void                  *data,
   seat->pending_offer = NULL;
 
   seat->drop = gdk_wayland_drop_new (device, seat->drag, formats, dest_surface, offer, serial);
+  gdk_wayland_drop_set_source_actions (seat->drop, seat->pending_source_actions);
+  gdk_wayland_drop_set_action (seat->drop, seat->pending_action);
 
   gdk_wayland_seat_discard_pending_offer (seat);
 
