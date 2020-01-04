@@ -288,7 +288,8 @@ gdk_wayland_drop_update_actions (GdkWaylandDrop *drop)
   GdkDragAction gdk_actions = 0;
   uint32_t wl_actions;
 
-  if (drop->action & WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK)
+  if (drop->action == 0 ||
+      drop->action & WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK)
     wl_actions = drop->source_actions;
   else
     wl_actions = drop->action;
