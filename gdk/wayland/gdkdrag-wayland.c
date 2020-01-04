@@ -173,7 +173,7 @@ gdk_wayland_drag_drop_done (GdkDrag  *drag,
   GdkWaylandDrag *drag_wayland = GDK_WAYLAND_DRAG (drag);
   GdkDevice *device = gdk_drag_get_device (drag);
 
-  gdk_wayland_seat_set_drag (gdk_device_get_seat (device), drag);
+  gdk_wayland_seat_set_drag (gdk_device_get_seat (device), NULL);
 
   if (success)
     {
@@ -402,6 +402,7 @@ _gdk_wayland_surface_drag_begin (GdkSurface         *surface,
                                   gdk_to_wl_actions (actions));
     }
 
+g_print ("drag begin\n");
   gdk_wayland_seat_set_drag (seat, drag);
 
   wl_data_device_start_drag (gdk_wayland_device_get_data_device (device),
