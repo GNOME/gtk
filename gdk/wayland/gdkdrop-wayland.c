@@ -51,7 +51,6 @@ struct _GdkWaylandDrop
   struct wl_data_offer *offer;
   uint32_t source_actions;
   uint32_t action;
-  GdkDragAction selected_action;
   uint32_t serial;
 };
 
@@ -116,19 +115,20 @@ gdk_wayland_drop_drop_set_status (GdkWaylandDrop *drop_wayland,
 }
 
 static void
-gdk_wayland_drop_commit_status (GdkWaylandDrop *wayland_drop)
+gdk_wayland_drop_commit_status (GdkWaylandDrop *wayland_drop,
+                                GdkDragAction   actions)
 {
   GdkDisplay *display;
   uint32_t dnd_actions;
 
   display = gdk_drop_get_display (GDK_DROP (wayland_drop));
 
-  dnd_actions = gdk_to_wl_actions (wayland_drop->selected_action);
+  dnd_actions = gdk_to_wl_actions (actions);
 
   if (GDK_WAYLAND_DISPLAY (display)->data_device_manager_version >=
       WL_DATA_OFFER_SET_ACTIONS_SINCE_VERSION)
     {
-      if (gdk_drag_action_is_unique (wayland_drop->selected_action))
+      if (gdk_drag_action_is_unique (actions))
         {
           wl_data_offer_set_actions (wayland_drop->offer, dnd_actions, dnd_actions);
         }
@@ -140,19 +140,16 @@ gdk_wayland_drop_commit_status (GdkWaylandDrop *wayland_drop)
         }
     }
 
-  gdk_wayland_drop_drop_set_status (wayland_drop, wayland_drop->selected_action != 0);
+  gdk_wayland_drop_drop_set_status (wayland_drop, actions != 0);
 }
 
 static void
 gdk_wayland_drop_status (GdkDrop       *drop,
-                         GdkDragAction  action)
+                         GdkDragAction  actions)
 {
-  GdkWaylandDrop *wayland_drop;
+  GdkWaylandDrop *wayland_drop = GDK_WAYLAND_DROP (drop);
 
-  wayland_drop = GDK_WAYLAND_DROP (drop);
-  wayland_drop->selected_action = action;
-
-  gdk_wayland_drop_commit_status (wayland_drop);
+  gdk_wayland_drop_commit_status (wayland_drop, actions);
 }
 
 static void
@@ -163,11 +160,9 @@ gdk_wayland_drop_finish (GdkDrop       *drop,
   GdkDisplay *display = gdk_drop_get_display (drop);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
-  wayland_drop->selected_action = action;
-
   if (action)
     {
-      gdk_wayland_drop_commit_status (wayland_drop);
+      gdk_wayland_drop_commit_status (wayland_drop, action);
 
       if (display_wayland->data_device_manager_version >=
           WL_DATA_OFFER_FINISH_SINCE_VERSION)
