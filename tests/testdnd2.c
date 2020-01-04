@@ -95,21 +95,63 @@ got_texture (GObject *source,
     }
 }
 
+static void
+perform_drop (GdkDrop   *drop,
+              GtkWidget *image)
+{
+  g_print ("perform drop\n");
+  if (gdk_drop_has_value (drop, GDK_TYPE_TEXTURE))
+    gdk_drop_read_value_async (drop, GDK_TYPE_TEXTURE, G_PRIORITY_DEFAULT, NULL, got_texture, image);
+  else
+    gdk_drop_finish (drop, 0);
+}
+
+static void
+do_copy (GtkWidget *button,
+         GdkDrop   *drop)
+{
+  GtkWidget *popover = gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER);
+  GtkWidget *image = gtk_popover_get_relative_to (GTK_POPOVER (popover));
+
+  gtk_widget_destroy (popover);
+  perform_drop (drop, image);
+}
+
+static void
+ask_actions (GdkDrop *drop,
+             GtkWidget *image)
+{
+  GtkWidget *popover, *box, *button;
+
+  popover = gtk_popover_new (image);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_container_add (GTK_CONTAINER (popover), box);
+  button = gtk_button_new_with_label ("Copy");
+  g_signal_connect (button, "clicked", G_CALLBACK (do_copy), drop);
+  gtk_container_add (GTK_CONTAINER (box), button);
+  button = gtk_button_new_with_label ("Move");
+  g_signal_connect (button, "clicked", G_CALLBACK (do_copy), drop);
+  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_popover_popup (GTK_POPOVER (popover));
+}
+
 static gboolean
 image_drag_drop (GtkDropTarget    *dest,
                  int               x,
                  int               y,
                  gpointer          data)
 {
+  GtkWidget *image = data;
   GdkDrop *drop = gtk_drop_target_get_drop (dest);
+  GdkDragAction action = gdk_drop_get_actions (drop);
 
-  if (gdk_drop_has_value (drop, GDK_TYPE_TEXTURE))
-    {
-      gdk_drop_read_value_async (drop, GDK_TYPE_TEXTURE, G_PRIORITY_DEFAULT, NULL, got_texture, data);
-      return TRUE;
-    }
+  g_print ("drop, actions %d\n", action);
+  if (!gdk_drag_action_is_unique (action))
+    ask_actions (drop, image);
+  else
+    perform_drop (drop, image);
 
-  return FALSE;
+  return TRUE;
 }
 
 static void
@@ -228,16 +270,16 @@ make_image (const gchar *icon_name, int hotspot)
   formats = gtk_content_formats_add_text_targets (formats);
 
   content = gdk_content_provider_new_with_formats (formats, get_data, image);
-  source = gtk_drag_source_new (content, GDK_ACTION_COPY);
+  source = gtk_drag_source_new (content, GDK_ACTION_COPY|GDK_ACTION_MOVE|GDK_ACTION_ASK);
   g_object_unref (content);
   update_source_icon (source, icon_name, hotspot);
 
   g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), NULL);
   g_signal_connect (source, "drag-end", G_CALLBACK (drag_end), NULL);
   g_signal_connect (source, "drag-failed", G_CALLBACK (drag_failed), NULL);
-  gtk_drag_source_attach (source, image, GDK_BUTTON1_MASK);
+  gtk_drag_source_attach (source, image, GDK_BUTTON1_MASK|GDK_BUTTON2_MASK|GDK_BUTTON3_MASK);
 
-  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_HIGHLIGHT, formats, GDK_ACTION_COPY);
+  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_HIGHLIGHT, formats, GDK_ACTION_COPY|GDK_ACTION_MOVE|GDK_ACTION_ASK);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (image_drag_drop), image);
   gtk_drop_target_attach (dest, image);
 
@@ -307,7 +349,7 @@ main (int argc, char *Argv[])
   entry = gtk_entry_new ();
   gtk_grid_attach (GTK_GRID (grid), entry, 0, 1, 2, 1);
 
-  gtk_grid_attach (GTK_GRID (grid), make_spinner (), 0, 2, 1, 1);
+//  gtk_grid_attach (GTK_GRID (grid), make_spinner (), 0, 2, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), make_image ("weather-clear", CENTER), 1, 2, 1, 1);
 
   gtk_grid_attach (GTK_GRID (grid), make_image ("dialog-question", TOP_LEFT), 0, 3, 1, 1);
