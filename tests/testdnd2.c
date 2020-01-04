@@ -89,10 +89,75 @@ got_texture (GObject *source,
     }
   else
     {
-      g_print ("Failed to get data: %s\n", error->message);
       g_error_free (error);
       gdk_drop_finish (drop, 0);
     }
+
+  g_object_set_data (G_OBJECT (image), "drop", NULL);
+}
+
+static void
+perform_drop (GdkDrop   *drop,
+              GtkWidget *image)
+{
+  if (gdk_drop_has_value (drop, GDK_TYPE_TEXTURE))
+    gdk_drop_read_value_async (drop, GDK_TYPE_TEXTURE, G_PRIORITY_DEFAULT, NULL, got_texture, image);
+  else
+    {
+      gdk_drop_finish (drop, 0);
+      g_object_set_data (G_OBJECT (image), "drop", NULL);
+    }
+}
+
+static void
+do_copy (GtkWidget *button)
+{
+  GtkWidget *popover = gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER);
+  GtkWidget *image = gtk_popover_get_relative_to (GTK_POPOVER (popover));
+  GdkDrop *drop = GDK_DROP (g_object_get_data (G_OBJECT (image), "drop"));
+
+  gtk_popover_popdown (GTK_POPOVER (popover));
+  perform_drop (drop, image);
+}
+
+static void
+do_cancel (GtkWidget *button)
+{
+  GtkWidget *popover = gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER);
+  GtkWidget *image = gtk_popover_get_relative_to (GTK_POPOVER (popover));
+  GdkDrop *drop = GDK_DROP (g_object_get_data (G_OBJECT (image), "drop"));
+
+  gtk_popover_popdown (GTK_POPOVER (popover));
+  gdk_drop_finish (drop, 0);
+
+  g_object_set_data (G_OBJECT (image), "drop", NULL);
+}
+
+static void
+ask_actions (GdkDrop *drop,
+             GtkWidget *image)
+{
+  GtkWidget *popover, *box, *button;
+
+  popover = g_object_get_data (G_OBJECT (image), "popover");
+  if (!popover)
+    {
+      popover = gtk_popover_new (image);
+      g_object_set_data (G_OBJECT (image), "popover", popover);
+
+      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_container_add (GTK_CONTAINER (popover), box);
+      button = gtk_button_new_with_label ("Copy");
+      g_signal_connect (button, "clicked", G_CALLBACK (do_copy), NULL);
+      gtk_container_add (GTK_CONTAINER (box), button);
+      button = gtk_button_new_with_label ("Move");
+      g_signal_connect (button, "clicked", G_CALLBACK (do_copy), NULL);
+      gtk_container_add (GTK_CONTAINER (box), button);
+      button = gtk_button_new_with_label ("Cancel");
+      g_signal_connect (button, "clicked", G_CALLBACK (do_cancel), NULL);
+      gtk_container_add (GTK_CONTAINER (box), button);
+    }
+  gtk_popover_popup (GTK_POPOVER (popover));
 }
 
 static gboolean
@@ -101,15 +166,19 @@ image_drag_drop (GtkDropTarget    *dest,
                  int               y,
                  gpointer          data)
 {
+  GtkWidget *image = data;
   GdkDrop *drop = gtk_drop_target_get_drop (dest);
+  GdkDragAction action = gdk_drop_get_actions (drop);
 
-  if (gdk_drop_has_value (drop, GDK_TYPE_TEXTURE))
-    {
-      gdk_drop_read_value_async (drop, GDK_TYPE_TEXTURE, G_PRIORITY_DEFAULT, NULL, got_texture, data);
-      return TRUE;
-    }
+  g_object_set_data_full (G_OBJECT (image), "drop", g_object_ref (drop), g_object_unref);
 
-  return FALSE;
+  g_print ("drop, actions %d\n", action);
+  if (!gdk_drag_action_is_unique (action))
+    ask_actions (drop, image);
+  else
+    perform_drop (drop, image);
+
+  return TRUE;
 }
 
 static void
@@ -156,7 +225,6 @@ get_data (const char *mimetype,
   want_text = gdk_content_formats_contain_mime_type (formats, mimetype);
   gdk_content_formats_unref (formats);
 
-  g_print ("get data called for %s\n", mimetype);
   if (want_text)
     {
       const char *text = gtk_image_get_icon_name (GTK_IMAGE (image));
@@ -228,16 +296,16 @@ make_image (const gchar *icon_name, int hotspot)
   formats = gtk_content_formats_add_text_targets (formats);
 
   content = gdk_content_provider_new_with_formats (formats, get_data, image);
-  source = gtk_drag_source_new (content, GDK_ACTION_COPY);
+  source = gtk_drag_source_new (content, GDK_ACTION_COPY|GDK_ACTION_MOVE|GDK_ACTION_ASK);
   g_object_unref (content);
   update_source_icon (source, icon_name, hotspot);
 
   g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), NULL);
   g_signal_connect (source, "drag-end", G_CALLBACK (drag_end), NULL);
   g_signal_connect (source, "drag-failed", G_CALLBACK (drag_failed), NULL);
-  gtk_drag_source_attach (source, image, GDK_BUTTON1_MASK);
+  gtk_drag_source_attach (source, image, GDK_BUTTON1_MASK|GDK_BUTTON2_MASK|GDK_BUTTON3_MASK);
 
-  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_HIGHLIGHT, formats, GDK_ACTION_COPY);
+  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_HIGHLIGHT, formats, GDK_ACTION_COPY|GDK_ACTION_MOVE|GDK_ACTION_ASK);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (image_drag_drop), image);
   gtk_drop_target_attach (dest, image);
 
