@@ -2408,7 +2408,8 @@ gdk_quartz_window_set_decorations (GdkWindow       *window,
   if (decorations == 0 || GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP ||
       impl->type_hint == GDK_WINDOW_TYPE_HINT_SPLASHSCREEN )
     {
-      new_mask = GDK_QUARTZ_BORDERLESS_WINDOW;
+      /* without GDK_QUARTZ_MINIATURIZABLE_WINDOW it is not possible to minimize window */
+      new_mask = GDK_QUARTZ_BORDERLESS_WINDOW | GDK_QUARTZ_MINIATURIZABLE_WINDOW;
     }
   else
     {
