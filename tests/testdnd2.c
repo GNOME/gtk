@@ -124,6 +124,10 @@ ask_actions (GdkDrop *drop,
   GtkWidget *popover, *box, *button;
 
   popover = gtk_popover_new (image);
+  g_object_set_data_full (G_OBJECT (popover), "drop-data",
+			  g_object_ref (drop),
+			  (GDestroyNotify) g_object_unref);
+
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (popover), box);
   button = gtk_button_new_with_label ("Copy");
