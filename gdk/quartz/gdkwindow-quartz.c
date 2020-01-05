@@ -2861,7 +2861,7 @@ _gdk_quartz_window_update_fullscreen_state (GdkWindow *window)
     {
       gboolean is_fullscreen = window_is_fullscreen (window);
       gboolean was_fullscreen = (gdk_window_get_state (window) &
-                                 GDK_WINDOW_STATE_FULLSCREEN != 0);
+                                 GDK_WINDOW_STATE_FULLSCREEN) != 0;
 
       if (is_fullscreen != was_fullscreen)
         {
