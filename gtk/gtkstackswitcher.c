@@ -116,7 +116,7 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LINKED);
 
   formats = gdk_content_formats_new (NULL, 0);
-  dest = gtk_drop_target_new (0, formats, 0);
+  dest = gtk_drop_target_new (formats, 0);
   gdk_content_formats_unref (formats);
   gtk_drop_target_set_track_motion (dest, TRUE);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_stack_switcher_drag_leave), switcher);
