@@ -58,7 +58,6 @@ struct _GtkDropTarget
 
   GtkWidget *widget;
   GdkDrop *drop;
-  gboolean track_motion;
   gboolean armed;
   gboolean armed_pending;
 };
@@ -75,7 +74,6 @@ struct _GtkDropTargetClass
 enum {
   PROP_FORMATS = 1,
   PROP_ACTIONS,
-  PROP_TRACK_MOTION,
   PROP_ARMED,
   NUM_PROPERTIES
 };
@@ -131,10 +129,6 @@ gtk_drop_target_set_property (GObject      *object,
       gtk_drop_target_set_actions (dest, g_value_get_flags (value));
       break;
 
-    case PROP_TRACK_MOTION:
-      gtk_drop_target_set_track_motion (dest, g_value_get_boolean (value));
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -156,10 +150,6 @@ gtk_drop_target_get_property (GObject    *object,
 
     case PROP_ACTIONS:
       g_value_set_flags (value, gtk_drop_target_get_actions (dest));
-      break;
-
-    case PROP_TRACK_MOTION:
-      g_value_set_boolean (value, gtk_drop_target_get_track_motion (dest));
       break;
 
     case PROP_ARMED:
@@ -201,17 +191,6 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
        g_param_spec_flags ("actions", P_("Actions"), P_("Actions"),
                            GDK_TYPE_DRAG_ACTION, 0,
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GtkDropTarget:track-motion:
-   *
-   * Whether the drop target should emit #GtkDropTarget::drag-motion signals
-   * unconditionally
-   */
-  properties[PROP_TRACK_MOTION] =
-       g_param_spec_boolean ("track-motion", P_("Track motion"), P_("Track motion"),
-                             FALSE,
-                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkDropTarget:armmed:
@@ -425,48 +404,6 @@ gtk_drop_target_get_actions (GtkDropTarget *dest)
   g_return_val_if_fail (GTK_IS_DROP_TARGET (dest), 0);
 
   return dest->actions;
-}
-
-/**
- * gtk_drop_target_set_track_motion:
- * @dest: a #GtkDropTarget
- * @track_motion: whether to accept all targets
- *
- * Tells the drop target to emit #GtkDropTarget::drag-motion and
- * #GtkDropTarget::drag-leave events regardless of the targets and
- * the %GTK_DEST_DEFAULT_MOTION flag.
- *
- * This may be used when a drop target wants to do generic
- * actions regardless of the targets that the source offers.
- */
-void
-gtk_drop_target_set_track_motion (GtkDropTarget *dest,
-                                  gboolean       track_motion)
-{
-  g_return_if_fail (GTK_IS_DROP_TARGET (dest));
-
-  if (dest->track_motion == track_motion)
-    return;
-
-  dest->track_motion = track_motion;
-
-  g_object_notify_by_pspec (G_OBJECT (dest), properties[PROP_TRACK_MOTION]);
-}
-
-/**
- * gtk_drop_target_get_track_motion:
- * @dest: a #GtkDropTarget
- *
- * Gets the value of the #GtkDropTarget::track-motion property.
- *
- * Returns: whether to accept all targets
- */
-gboolean
-gtk_drop_target_get_track_motion (GtkDropTarget *dest)
-{
-  g_return_val_if_fail (GTK_IS_DROP_TARGET (dest), FALSE);
-
-  return dest->track_motion;
 }
 
 static void
