@@ -341,26 +341,16 @@ gtk_drag_get_dest_info (GdkDrop  *drop,
  * Default drag handlers
  */
 static void  
-gtk_drag_dest_leave (GtkWidget      *widget,
-                     GdkDrop        *drop,
-                     guint           time)
+gtk_drag_dest_leave (GtkWidget *widget,
+                     GdkDrop   *drop,
+                     guint      time)
 {
   GtkDropTarget *dest;
-  GtkDestDefaults flags;
-  gboolean track_motion;
-  gboolean armed;
 
   dest = gtk_drop_target_get (widget);
   g_return_if_fail (dest != NULL);
 
-  flags = gtk_drop_target_get_defaults (dest);
-  track_motion = gtk_drop_target_get_track_motion (dest);
-  armed = gtk_drop_target_get_armed (dest);
-
-  if (!(flags & GTK_DEST_DEFAULT_MOTION) || armed || track_motion)
-    gtk_drop_target_emit_drag_leave (dest, drop, time);
-  
-  gtk_drop_target_set_armed (dest, FALSE);
+  gtk_drop_target_emit_drag_leave (dest, drop, time);
 }
 
 static gboolean
@@ -371,46 +361,11 @@ gtk_drag_dest_motion (GtkWidget *widget,
                       guint      time)
 {
   GtkDropTarget *dest;
-  GdkDragAction dest_actions;
-  GtkDestDefaults flags;
-  gboolean track_motion;
-  gboolean retval;
 
   dest = gtk_drop_target_get (widget);
   g_return_val_if_fail (dest != NULL, FALSE);
 
-  dest_actions = gtk_drop_target_get_actions (dest);
-  flags = gtk_drop_target_get_defaults (dest);
-  track_motion = gtk_drop_target_get_track_motion (dest);
-
-  if (track_motion || flags & GTK_DEST_DEFAULT_MOTION)
-    {
-      GdkDragAction actions;
-      GdkAtom target;
-      
-      actions = gdk_drop_get_actions (drop);
-
-      if ((dest_actions & actions) == 0)
-        actions = 0;
-
-      target = gtk_drop_target_match (dest, drop);
-
-      if (actions && target)
-        {
-          gtk_drop_target_set_armed (dest, TRUE);
-          gdk_drop_status (drop, dest_actions);
-        }
-      else
-        {
-          gdk_drop_status (drop, 0);
-          if (!track_motion)
-            return TRUE;
-        }
-    }
-
-  retval = gtk_drop_target_emit_drag_motion (dest, drop, x, y);
-
-  return (flags & GTK_DEST_DEFAULT_MOTION) ? TRUE : retval;
+  return gtk_drop_target_emit_drag_motion (dest, drop, x, y);
 }
 
 static gboolean
@@ -421,13 +376,9 @@ gtk_drag_dest_drop (GtkWidget *widget,
                     guint      time)
 {
   GtkDropTarget *dest;
-  GtkDragDestInfo *info;
 
   dest = gtk_drop_target_get (widget);
   g_return_val_if_fail (dest != NULL, FALSE);
-
-  info = gtk_drag_get_dest_info (drop, FALSE);
-  g_return_val_if_fail (info != NULL, FALSE);
 
   return gtk_drop_target_emit_drag_drop (dest, drop, x, y);
 }
