@@ -88,7 +88,7 @@ create_row (const gchar *text)
   gtk_drag_source_attach (source, image, GDK_BUTTON1_MASK);
 
   targets = gdk_content_formats_new (entries, 1);
-  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_HIGHLIGHT, targets, GDK_ACTION_MOVE);
+  dest = gtk_drop_target_new (targets, GDK_ACTION_MOVE);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), row);
   gtk_drop_target_attach (dest, row);
 
