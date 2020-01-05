@@ -1482,7 +1482,8 @@ gtk_popover_set_relative_to (GtkPopover *popover,
 
   if (priv->relative_to)
     {
-      g_signal_connect (priv->relative_to, "size-allocate", G_CALLBACK (size_changed), popover);
+      g_signal_connect_object (priv->relative_to, "size-allocate",
+                               G_CALLBACK (size_changed), popover, 0);
       gtk_css_node_set_parent (gtk_widget_get_css_node (GTK_WIDGET (popover)),
                                gtk_widget_get_css_node (relative_to));
       gtk_widget_set_parent (GTK_WIDGET (popover), relative_to);
