@@ -376,7 +376,6 @@ gtk_expander_init (GtkExpander *expander)
 
   formats = gdk_content_formats_new (NULL, 0);
   dest = gtk_drop_target_new (formats, 0);
-  gtk_drop_target_set_track_motion (dest, TRUE);
   gdk_content_formats_unref (formats);
   g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_expander_drag_motion), expander);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_expander_drag_leave), expander);

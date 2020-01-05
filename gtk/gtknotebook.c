@@ -1329,7 +1329,6 @@ gtk_notebook_init (GtkNotebook *notebook)
   g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_notebook_drag_motion), NULL);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_notebook_drag_leave), NULL);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_notebook_drag_drop), NULL);
-  gtk_drop_target_set_track_motion (dest, TRUE);
   gtk_drop_target_attach (dest, GTK_WIDGET (notebook));
   gdk_content_formats_unref (targets);
 
