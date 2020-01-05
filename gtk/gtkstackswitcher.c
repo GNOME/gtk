@@ -98,7 +98,7 @@ static gboolean gtk_stack_switcher_drag_motion (GtkDropTarget    *dest,
                                                 int               x,
                                                 int               y,
                                                 GtkStackSwitcher *self);
-
+static void gtk_stack_switcher_armed (GtkStackSwitcher *self);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkStackSwitcher, gtk_stack_switcher, GTK_TYPE_WIDGET)
 
@@ -121,6 +121,7 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
   gtk_drop_target_set_track_motion (dest, TRUE);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_stack_switcher_drag_leave), switcher);
   g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_stack_switcher_drag_motion), switcher);
+  g_signal_connect_swapped (dest, "notify::armed", G_CALLBACK (gtk_stack_switcher_armed), switcher);
   gtk_drop_target_attach (dest, GTK_WIDGET (switcher));
 }
 
@@ -309,6 +310,12 @@ gtk_stack_switcher_drag_leave (GtkDropTarget    *dest,
                                GtkStackSwitcher *self)
 {
   remove_switch_timer (self);
+}
+
+static void
+gtk_stack_switcher_armed (GtkStackSwitcher *self)
+{
+  gtk_drag_unhighlight (GTK_WIDGET (self));
 }
 
 static void
