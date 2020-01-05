@@ -402,7 +402,6 @@ _gdk_wayland_surface_drag_begin (GdkSurface         *surface,
                                   gdk_to_wl_actions (actions));
     }
 
-g_print ("drag begin\n");
   gdk_wayland_seat_set_drag (seat, drag);
 
   wl_data_device_start_drag (gdk_wayland_device_get_data_device (device),
