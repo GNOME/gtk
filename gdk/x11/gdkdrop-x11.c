@@ -747,13 +747,24 @@ gdk_x11_drop_status (GdkDrop       *drop,
                      GdkDragAction  actions)
 {
   GdkX11Drop *drop_x11 = GDK_X11_DROP (drop);
-  GdkDragAction possible_actions;
+  GdkDragAction possible_actions, suggested_action;
   XEvent xev;
   GdkDisplay *display;
 
   display = gdk_drop_get_display (drop);
 
   possible_actions = actions & gdk_drop_get_actions (drop);
+
+  if (drop_x11->suggested_action != 0)
+    suggested_action = drop_x11->suggested_action;
+  else if (possible_actions & GDK_ACTION_COPY)
+    suggested_action = GDK_ACTION_COPY;
+  else if (possible_actions & GDK_ACTION_MOVE)
+    suggested_action = GDK_ACTION_MOVE;
+  else if (possible_actions & GDK_ACTION_ASK)
+    suggested_action = GDK_ACTION_ASK;
+  else
+    suggested_action = 0;
 
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "XdndStatus");
@@ -764,7 +775,7 @@ gdk_x11_drop_status (GdkDrop       *drop,
   xev.xclient.data.l[1] = (possible_actions != 0) ? (2 | 1) : 0;
   xev.xclient.data.l[2] = 0;
   xev.xclient.data.l[3] = 0;
-  xev.xclient.data.l[4] = xdnd_action_to_atom (display, possible_actions);
+  xev.xclient.data.l[4] = xdnd_action_to_atom (display, suggested_action);
 
   if (gdk_drop_get_drag (drop))
     {
