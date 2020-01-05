@@ -56,16 +56,21 @@ struct _GtkDropTarget
   GdkContentFormats *formats;
   GdkDragAction actions;
   GtkDestDefaults defaults;
-  gboolean track_motion;
 
   GtkWidget *widget;
   GdkDrop *drop;
+  gboolean track_motion;
   gboolean armed;
+  gboolean armed_pending;
 };
 
 struct _GtkDropTargetClass
 {
   GObjectClass parent_class;
+
+  gboolean (*drag_motion) (GtkDropTarget *dest,
+                           int            x,
+                           int            y);
 };
 
 enum {
@@ -88,6 +93,10 @@ enum {
 };
 
 static guint signals[NUM_SIGNALS];
+
+static gboolean gtk_drop_target_drag_motion (GtkDropTarget *dest,
+                                             int            x,
+                                             int            y);
 
 G_DEFINE_TYPE (GtkDropTarget, gtk_drop_target, G_TYPE_OBJECT);
 
@@ -182,6 +191,8 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   object_class->set_property = gtk_drop_target_set_property;
   object_class->get_property = gtk_drop_target_get_property;
 
+  class->drag_motion = gtk_drop_target_drag_motion;
+
   /**
    * GtkDropTarget:formats:
    *
@@ -271,14 +282,14 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    * handler is responsible for providing the necessary information for
    * displaying feedback to the user, by calling gdk_drag_status().
    *
+   * The default handler for this signal decides whether to accept the drop
+   * based on the type of the data.
+   *
    * If the decision whether the drop will be accepted or rejected can't be
    * made based solely on the cursor position and the type of the data, the
    * handler may inspect the dragged data by calling one of the #GdkDrop
    * read functions, and defer the gdk_drag_status() call to when it has
    * received the data.
-   *
-   * Note that you must pass #GTK_DEST_DEFAULT_MOTION to gtk_drop_target_attach()
-   * when using the ::drag-motion signal that way.
    *
    * Also note that there is no drag-enter signal. The drag receiver has to
    * keep track of whether he has received any drag-motion signals since the
@@ -292,8 +303,8 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
       g_signal_new (I_("drag-motion"),
                     G_TYPE_FROM_CLASS (class),
                     G_SIGNAL_RUN_LAST,
-                    0,
-                    NULL, NULL,
+                    G_STRUCT_OFFSET (GtkDropTargetClass, drag_motion),
+                    g_signal_accumulator_first_wins, NULL,
                     NULL,
                     G_TYPE_BOOLEAN, 2,
                     G_TYPE_INT, G_TYPE_INT);
@@ -671,6 +682,35 @@ gtk_drop_target_find_mimetype (GtkDropTarget *dest)
   return gtk_drop_target_match (dest, dest->drop);
 }
 
+static gboolean
+gtk_drop_target_drag_motion (GtkDropTarget *dest,
+                             int            x,
+                             int            y)
+{
+  GdkDrop *drop = dest->drop;
+  GdkDragAction dest_actions;
+  GdkDragAction actions;
+  GdkAtom target;
+
+  dest_actions = gtk_drop_target_get_actions (dest);
+
+  actions = dest_actions & gdk_drop_get_actions (drop);
+  target = gtk_drop_target_match (dest, drop);
+
+  if (actions && target)
+    {
+      gdk_drop_status (drop, dest_actions);
+      gtk_drop_target_set_armed (dest, TRUE);
+    }
+  else
+    {
+      gdk_drop_status (drop, 0);
+      gtk_drop_target_set_armed (dest, FALSE);
+    }
+
+  return TRUE;
+}
+
 static void
 set_drop (GtkDropTarget *dest,
           GdkDrop       *drop)
@@ -695,6 +735,7 @@ gtk_drop_target_emit_drag_leave (GtkDropTarget    *dest,
   set_drop (dest, drop);
   g_signal_emit (dest, signals[DRAG_LEAVE], 0, time);
   set_drop (dest, NULL);
+  gtk_drop_target_set_armed (dest, FALSE);
 }
 
 gboolean
@@ -705,8 +746,13 @@ gtk_drop_target_emit_drag_motion (GtkDropTarget    *dest,
 {
   gboolean result = FALSE;
 
+  dest->armed_pending = TRUE;
+
   set_drop (dest, drop);
   g_signal_emit (dest, signals[DRAG_MOTION], 0, x, y, &result);
+
+  if (dest->armed_pending)
+    gtk_drop_target_set_armed (dest, result);
 
   return result;
 }
@@ -726,29 +772,31 @@ gtk_drop_target_emit_drag_drop (GtkDropTarget    *dest,
 }
 
 void
-gtk_drop_target_set_armed (GtkDropTarget *target,
+gtk_drop_target_set_armed (GtkDropTarget *dest,
                            gboolean       armed)
 {
-  if (target->armed == armed)
+  dest->armed_pending = FALSE;
+
+  if (dest->armed == armed)
     return;
 
-  target->armed = armed;
+  dest->armed = armed;
 
-  if (target->widget)
+  if (dest->widget)
     {
       if (armed)
-        gtk_drag_highlight (target->widget);
+        gtk_drag_highlight (dest->widget);
       else
-        gtk_drag_unhighlight (target->widget);
+        gtk_drag_unhighlight (dest->widget);
     }
 
-  g_object_notify_by_pspec (G_OBJECT (target), properties[PROP_ARMED]);
+  g_object_notify_by_pspec (G_OBJECT (dest), properties[PROP_ARMED]);
 }
 
 gboolean
-gtk_drop_target_get_armed (GtkDropTarget *target)
+gtk_drop_target_get_armed (GtkDropTarget *dest)
 {
-  return target->armed;
+  return dest->armed;
 }
 
 /**
