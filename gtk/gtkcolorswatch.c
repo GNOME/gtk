@@ -676,7 +676,7 @@ gtk_color_swatch_set_can_drop (GtkColorSwatch *swatch,
       GdkContentFormats *targets;
 
       targets = gdk_content_formats_new (dnd_targets, G_N_ELEMENTS (dnd_targets));
-      priv->dest = gtk_drop_target_new (GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_HIGHLIGHT, targets, GDK_ACTION_COPY);
+      priv->dest = gtk_drop_target_new (targets, GDK_ACTION_COPY);
       g_signal_connect (priv->dest, "drag-drop", G_CALLBACK (swatch_drag_drop), swatch);
       gtk_drop_target_attach (priv->dest, GTK_WIDGET (swatch)); 
       gdk_content_formats_unref (targets);

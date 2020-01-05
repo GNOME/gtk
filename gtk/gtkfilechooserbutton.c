@@ -498,7 +498,7 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   target_list = gdk_content_formats_new (NULL, 0);
   target_list = gtk_content_formats_add_uri_targets (target_list);
   target_list = gtk_content_formats_add_text_targets (target_list);
-  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_HIGHLIGHT, target_list, GDK_ACTION_COPY);
+  dest = gtk_drop_target_new (target_list, GDK_ACTION_COPY);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_file_chooser_button_drag_drop), button);
   gtk_drop_target_attach (dest, GTK_WIDGET (button));
   gdk_content_formats_unref (target_list);

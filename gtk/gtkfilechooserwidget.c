@@ -8519,7 +8519,7 @@ post_process_ui (GtkFileChooserWidget *impl)
   g_signal_connect (source, "drag-end", G_CALLBACK (file_list_drag_end_cb), impl);
 
   
-  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_ALL, formats, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  dest = gtk_drop_target_new (formats, GDK_ACTION_COPY | GDK_ACTION_MOVE);
   g_signal_connect (dest, "drag-motion", G_CALLBACK (file_list_drag_motion_cb), impl);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (file_list_drag_drop_cb), impl);
   gtk_drop_target_attach (dest, priv->browse_files_tree_view);
