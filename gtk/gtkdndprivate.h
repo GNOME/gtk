@@ -19,18 +19,8 @@
 #ifndef __GTK_DND_PRIVATE_H__
 #define __GTK_DND_PRIVATE_H__
 
-#include "gtkdragdest.h"
-#include "gtkimagedefinitionprivate.h"
-#include "gtkselection.h"
 #include "gtkwidget.h"
 
-typedef struct _GtkDragDestSite GtkDragDestSite;
-struct _GtkDragDestSite
-{
-  GtkDropTarget     *dest;
-  GtkDestDefaults    flags;
-  guint              have_drag    : 1;
-};
 
 G_BEGIN_DECLS
 
