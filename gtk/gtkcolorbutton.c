@@ -326,7 +326,7 @@ gtk_color_button_init (GtkColorButton *button)
   priv->use_alpha = FALSE;
 
   targets = gdk_content_formats_new (drop_types, G_N_ELEMENTS (drop_types));
-  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_HIGHLIGHT, targets, GDK_ACTION_COPY);
+  dest = gtk_drop_target_new (targets, GDK_ACTION_COPY);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_color_button_drag_drop), button);
   gtk_drop_target_attach (dest, GTK_WIDGET (button));
   gdk_content_formats_unref (targets);

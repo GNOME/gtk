@@ -339,7 +339,7 @@ do_clipboard (GtkWidget *do_widget)
       /* accept drops on image */
       formats = gdk_content_formats_new (NULL, 0);
       formats = gtk_content_formats_add_image_targets (formats, FALSE);
-      dest = gtk_drop_target_new (GTK_DEST_DEFAULT_MOTION|GTK_DEST_DEFAULT_HIGHLIGHT, formats, GDK_ACTION_COPY);
+      dest = gtk_drop_target_new (formats, GDK_ACTION_COPY);
       gdk_content_formats_unref (formats);
       g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), image);
       gtk_drop_target_attach (dest, image);
@@ -372,7 +372,7 @@ do_clipboard (GtkWidget *do_widget)
       /* accept drops on image */
       formats = gdk_content_formats_new (NULL, 0);
       formats = gtk_content_formats_add_image_targets (formats, FALSE);
-      dest = gtk_drop_target_new (GTK_DEST_DEFAULT_MOTION|GTK_DEST_DEFAULT_HIGHLIGHT, formats, GDK_ACTION_COPY);
+      dest = gtk_drop_target_new (formats, GDK_ACTION_COPY);
       gdk_content_formats_unref (formats);
       g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), image);
       gtk_drop_target_attach (dest, image);

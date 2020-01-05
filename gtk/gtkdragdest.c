@@ -55,7 +55,6 @@ struct _GtkDropTarget
 
   GdkContentFormats *formats;
   GdkDragAction actions;
-  GtkDestDefaults defaults;
 
   GtkWidget *widget;
   GdkDrop *drop;
@@ -76,7 +75,6 @@ struct _GtkDropTargetClass
 enum {
   PROP_FORMATS = 1,
   PROP_ACTIONS,
-  PROP_DEFAULTS,
   PROP_TRACK_MOTION,
   PROP_ARMED,
   NUM_PROPERTIES
@@ -103,7 +101,6 @@ G_DEFINE_TYPE (GtkDropTarget, gtk_drop_target, G_TYPE_OBJECT);
 static void
 gtk_drop_target_init (GtkDropTarget *dest)
 {
-  dest->defaults = GTK_DEST_DEFAULT_ALL;
 }
 
 static void
@@ -134,10 +131,6 @@ gtk_drop_target_set_property (GObject      *object,
       gtk_drop_target_set_actions (dest, g_value_get_flags (value));
       break;
 
-    case PROP_DEFAULTS:
-      gtk_drop_target_set_defaults (dest, g_value_get_flags (value));
-      break;
-
     case PROP_TRACK_MOTION:
       gtk_drop_target_set_track_motion (dest, g_value_get_boolean (value));
       break;
@@ -163,10 +156,6 @@ gtk_drop_target_get_property (GObject    *object,
 
     case PROP_ACTIONS:
       g_value_set_flags (value, gtk_drop_target_get_actions (dest));
-      break;
-
-    case PROP_DEFAULTS:
-      g_value_set_flags (value, gtk_drop_target_get_defaults (dest));
       break;
 
     case PROP_TRACK_MOTION:
@@ -211,16 +200,6 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   properties[PROP_ACTIONS] =
        g_param_spec_flags ("actions", P_("Actions"), P_("Actions"),
                            GDK_TYPE_DRAG_ACTION, 0,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GtkDropTargets:defaults:
-   *
-   * Flags that determine the default behavior 
-   */
-  properties[PROP_DEFAULTS] =
-       g_param_spec_flags ("defaults", P_("Defaults"), P_("Defaults"),
-                           GTK_TYPE_DEST_DEFAULTS, GTK_DEST_DEFAULT_ALL,
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -351,7 +330,6 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
 
 /**
  * gtk_drop_target_new:
- * @defaults: flags determining the default behaviour
  * @formats: (nullable): the supported data formats
  * @actions: the supported actions
  *
@@ -360,12 +338,10 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
  * Returns: the new #GtkDropTarget
  */
 GtkDropTarget *
-gtk_drop_target_new (GtkDestDefaults    defaults,
-                     GdkContentFormats *formats,
+gtk_drop_target_new (GdkContentFormats *formats,
                      GdkDragAction      actions)
 {
   return g_object_new (GTK_TYPE_DROP_TARGET,
-                       "defaults", defaults,
                        "formats", formats,
                        "actions", actions,
                        NULL);
@@ -449,43 +425,6 @@ gtk_drop_target_get_actions (GtkDropTarget *dest)
   g_return_val_if_fail (GTK_IS_DROP_TARGET (dest), 0);
 
   return dest->actions;
-}
-
-/**
- * gtk_drop_target_set_defaults:
- * @dest: a #GtkDropTarget
- * @defaults: flags determining the default behaviour
- *
- * Sets the flags determining the behavior of the drop target.
- */
-void
-gtk_drop_target_set_defaults (GtkDropTarget   *dest,
-                              GtkDestDefaults  defaults)
-{
-  g_return_if_fail (GTK_IS_DROP_TARGET (dest));
-  
-  if (dest->defaults == defaults)
-    return;
-
-  dest->defaults = defaults;
-
-  g_object_notify_by_pspec (G_OBJECT (dest), properties[PROP_DEFAULTS]);
-}
-
-/**
- * gtk_drop_target_get_defaults:
- * @dest: a #GtkDropTarget
- *
- * Gets the flags determining the behavior of the drop target.
- *
- * Returns: flags determining the behaviour of the drop target
- */
-GtkDestDefaults
-gtk_drop_target_get_defaults (GtkDropTarget *dest)
-{
-  g_return_val_if_fail (GTK_IS_DROP_TARGET (dest), GTK_DEST_DEFAULT_ALL);
-
-  return dest->defaults;
 }
 
 /**

@@ -784,7 +784,7 @@ gtk_calendar_init (GtkCalendar *calendar)
 
   formats = gdk_content_formats_new (NULL, 0);
   formats = gtk_content_formats_add_text_targets (formats);
-  dest = gtk_drop_target_new (0, formats, GDK_ACTION_COPY);
+  dest = gtk_drop_target_new (formats, GDK_ACTION_COPY);
   gdk_content_formats_unref (formats);
 
   g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_calendar_drag_motion), calendar);

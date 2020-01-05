@@ -39,29 +39,6 @@ G_BEGIN_DECLS
 
 typedef struct _GtkDropTarget GtkDropTarget;
 
-/**
- * GtkDestDefaults:
- * @GTK_DEST_DEFAULT_MOTION: If set for a widget, GTK+, during a drag over this
- *   widget will check if the drag matches this widget’s list of possible formats
- *   and actions.
- *   GTK+ will then call gdk_drag_status() as appropriate.
- * @GTK_DEST_DEFAULT_HIGHLIGHT: Does not do anything now. GTK always adds
- *   the dnd style class to armed drop sites.
- * @GTK_DEST_DEFAULT_DROP: Does not do anything now.
- * @GTK_DEST_DEFAULT_ALL: If set, specifies that all default actions should
- *   be taken.
- *
- * The #GtkDestDefaults enumeration specifies the various
- * types of action that will be taken on behalf
- * of the user for a drag destination site.
- */
-typedef enum {
-  GTK_DEST_DEFAULT_MOTION     = 1 << 0,
-  GTK_DEST_DEFAULT_HIGHLIGHT  = 1 << 1,
-  GTK_DEST_DEFAULT_DROP       = 1 << 2,
-  GTK_DEST_DEFAULT_ALL        = 0x7
-} GtkDestDefaults;
-
 
 #define GTK_TYPE_DROP_TARGET         (gtk_drop_target_get_type ())
 #define GTK_DROP_TARGET(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_DROP_TARGET, GtkDropTarget))
@@ -76,8 +53,7 @@ GDK_AVAILABLE_IN_ALL
 GType              gtk_drop_target_get_type         (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkDropTarget       *gtk_drop_target_new            (GtkDestDefaults    defaults,
-                                                     GdkContentFormats *formats,
+GtkDropTarget       *gtk_drop_target_new            (GdkContentFormats *formats,
                                                      GdkDragAction      actions);
 
 GDK_AVAILABLE_IN_ALL
@@ -91,12 +67,6 @@ void               gtk_drop_target_set_actions      (GtkDropTarget     *dest,
                                                      GdkDragAction      actions);
 GDK_AVAILABLE_IN_ALL
 GdkDragAction      gtk_drop_target_get_actions      (GtkDropTarget     *dest);
-
-GDK_AVAILABLE_IN_ALL
-void               gtk_drop_target_set_defaults     (GtkDropTarget     *dest,
-                                                     GtkDestDefaults    defaults);
-GDK_AVAILABLE_IN_ALL
-GtkDestDefaults    gtk_drop_target_get_defaults     (GtkDropTarget     *dest);
 
 GDK_AVAILABLE_IN_ALL
 void               gtk_drop_target_set_track_motion (GtkDropTarget     *dest,

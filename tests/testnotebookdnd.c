@@ -301,7 +301,7 @@ create_trash_button (void)
   button = gtk_button_new_with_mnemonic ("_Delete");
 
   targets = gdk_content_formats_new (button_targets, G_N_ELEMENTS (button_targets));
-  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_MOTION, targets, GDK_ACTION_MOVE);
+  dest = gtk_drop_target_new (targets, GDK_ACTION_MOVE);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (on_button_drag_drop), NULL);
   gtk_drop_target_attach (dest, button);
   gdk_content_formats_unref (targets);
