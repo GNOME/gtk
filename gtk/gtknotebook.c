@@ -712,6 +712,7 @@ static gboolean gtk_notebook_drag_drop       (GtkDropTarget    *dest,
                                               int               y);
 static GBytes * gtk_notebook_drag_data_get   (const char       *mime_type,
                                               gpointer          data);
+static void gtk_notebook_armed               (GtkDropTarget    *dest);
 
 /*** GtkContainer Methods ***/
 static void gtk_notebook_add                 (GtkContainer     *container,
@@ -1329,6 +1330,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_notebook_drag_motion), NULL);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_notebook_drag_leave), NULL);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_notebook_drag_drop), NULL);
+  g_signal_connect (dest, "notify::armed", G_CALLBACK (gtk_notebook_armed), NULL);
   gtk_drop_target_set_track_motion (dest, TRUE);
   gtk_drop_target_attach (dest, GTK_WIDGET (notebook));
   gdk_content_formats_unref (targets);
@@ -3335,6 +3337,20 @@ got_page (GObject *source,
     }
   else
     gdk_drop_finish (drop, 0);
+}
+
+static void
+gtk_notebook_armed (GtkDropTarget  *dest)
+{
+  GtkWidget *notebook;
+  GdkAtom target, tab_target;
+
+  notebook = gtk_drop_target_get_target (dest);
+  target = gtk_drop_target_find_mimetype (dest);
+  tab_target = g_intern_static_string ("GTK_NOTEBOOK_TAB");
+
+  if (target != tab_target)
+    gtk_drag_unhighlight (notebook);
 }
 
 static gboolean
