@@ -119,25 +119,27 @@ gdk_wayland_drop_commit_status (GdkWaylandDrop *wayland_drop,
                                 GdkDragAction   actions)
 {
   GdkDisplay *display;
-  uint32_t dnd_actions;
 
   display = gdk_drop_get_display (GDK_DROP (wayland_drop));
-
-  dnd_actions = gdk_to_wl_actions (actions);
 
   if (GDK_WAYLAND_DISPLAY (display)->data_device_manager_version >=
       WL_DATA_OFFER_SET_ACTIONS_SINCE_VERSION)
     {
-      if (gdk_drag_action_is_unique (actions))
-        {
-          wl_data_offer_set_actions (wayland_drop->offer, dnd_actions, dnd_actions);
-        }
+      uint32_t dnd_actions;
+      uint32_t preferred_action;
+
+      dnd_actions = gdk_to_wl_actions (actions);
+
+      if (dnd_actions & WL_DATA_DEVICE_MANAGER_DND_ACTION_COPY)
+        preferred_action = WL_DATA_DEVICE_MANAGER_DND_ACTION_COPY;
+      else if (dnd_actions & WL_DATA_DEVICE_MANAGER_DND_ACTION_MOVE)
+        preferred_action = WL_DATA_DEVICE_MANAGER_DND_ACTION_MOVE;
+      else if (dnd_actions & WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK)
+        preferred_action = WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK;
       else
-        {
-          wl_data_offer_set_actions (wayland_drop->offer,
-                                     dnd_actions | WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK,
-                                     WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK);
-        }
+        preferred_action = 0;
+
+      wl_data_offer_set_actions (wayland_drop->offer, dnd_actions, preferred_action);
     }
 
   gdk_wayland_drop_drop_set_status (wayland_drop, actions != 0);
