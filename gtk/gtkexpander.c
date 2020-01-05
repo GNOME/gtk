@@ -198,6 +198,8 @@ static gboolean gtk_expander_drag_motion    (GtkDropTarget    *dest,
                                              GtkExpander      *expander);
 static void     gtk_expander_drag_leave     (GtkDropTarget    *dest,
                                              GtkExpander      *expander);
+static void     gtk_expander_armed          (GtkExpander      *expander);
+
 
 static void gtk_expander_add    (GtkContainer *container,
                                  GtkWidget    *widget);
@@ -380,6 +382,8 @@ gtk_expander_init (GtkExpander *expander)
   gdk_content_formats_unref (formats);
   g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_expander_drag_motion), expander);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_expander_drag_leave), expander);
+  g_signal_connect_swapped (dest, "notify::armed", G_CALLBACK (gtk_expander_armed), expander);
+
   gtk_drop_target_attach (dest, GTK_WIDGET (expander));
 
   gesture = gtk_gesture_click_new ();
@@ -575,6 +579,12 @@ gtk_expander_drag_leave (GtkDropTarget *dest,
       g_source_remove (priv->expand_timer);
       priv->expand_timer = 0;
     }
+}
+
+static void
+gtk_expander_armed (GtkExpander *expander)
+{
+  gtk_drag_unhighlight (GTK_WIDGET (expander));
 }
 
 typedef enum
