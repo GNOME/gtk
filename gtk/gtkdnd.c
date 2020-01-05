@@ -357,9 +357,6 @@ gtk_drag_dest_leave (GtkWidget      *widget,
   track_motion = gtk_drop_target_get_track_motion (dest);
   armed = gtk_drop_target_get_armed (dest);
 
-  if ((flags & GTK_DEST_DEFAULT_HIGHLIGHT) && armed)
-    gtk_drag_unhighlight (widget);
-
   if (!(flags & GTK_DEST_DEFAULT_MOTION) || armed || track_motion)
     gtk_drop_target_emit_drag_leave (dest, drop, time);
   
@@ -400,13 +397,7 @@ gtk_drag_dest_motion (GtkWidget *widget,
 
       if (actions && target)
         {
-          if (!gtk_drop_target_get_armed (dest))
-            {
-              gtk_drop_target_set_armed (dest, TRUE);
-              if (flags & GTK_DEST_DEFAULT_HIGHLIGHT)
-                gtk_drag_highlight (widget);
-            }
-
+          gtk_drop_target_set_armed (dest, TRUE);
           gdk_drop_status (drop, dest_actions);
         }
       else

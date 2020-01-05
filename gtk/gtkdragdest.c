@@ -73,6 +73,7 @@ enum {
   PROP_ACTIONS,
   PROP_DEFAULTS,
   PROP_TRACK_MOTION,
+  PROP_ARMED,
   NUM_PROPERTIES
 };
 
@@ -163,6 +164,10 @@ gtk_drop_target_get_property (GObject    *object,
       g_value_set_boolean (value, gtk_drop_target_get_track_motion (dest));
       break;
 
+    case PROP_ARMED:
+      g_value_set_boolean (value, gtk_drop_target_get_armed (dest));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -217,6 +222,17 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
        g_param_spec_boolean ("track-motion", P_("Track motion"), P_("Track motion"),
                              FALSE,
                              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkDropTarget:armmed:
+   *
+   * Whether the drop target is currently the targed of an ongoing drag operation,
+   * and highlighted.
+   */
+  properties[PROP_ARMED] =
+       g_param_spec_boolean ("armed", P_("Armed"), P_("Armed"),
+                             FALSE,
+                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
@@ -713,7 +729,20 @@ void
 gtk_drop_target_set_armed (GtkDropTarget *target,
                            gboolean       armed)
 {
+  if (target->armed == armed)
+    return;
+
   target->armed = armed;
+
+  if (target->widget)
+    {
+      if (armed)
+        gtk_drag_highlight (target->widget);
+      else
+        gtk_drag_unhighlight (target->widget);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (target), properties[PROP_ARMED]);
 }
 
 gboolean
