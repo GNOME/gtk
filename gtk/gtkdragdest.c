@@ -36,77 +36,6 @@
 #include "gtkselectionprivate.h"
 
 
-static void
-gtk_drag_dest_realized (GtkWidget *widget)
-{
-  GtkNative *native = gtk_widget_get_native (widget);
-
-  gdk_surface_register_dnd (gtk_native_get_surface (native));
-}
-
-static void
-gtk_drag_dest_hierarchy_changed (GtkWidget  *widget,
-                                 GParamSpec *pspec,
-                                 gpointer    data)
-{
-  GtkNative *native = gtk_widget_get_native (widget);
-
-  if (native && gtk_widget_get_realized (GTK_WIDGET (native)))
-    gdk_surface_register_dnd (gtk_native_get_surface (native));
-}
-
-static void
-gtk_drag_dest_site_destroy (gpointer data)
-{
-  GtkDragDestSite *site = data;
-
-  g_clear_object (&site->dest);
-
-  g_slice_free (GtkDragDestSite, site);
-}
-
-static void
-gtk_drag_dest_set_internal (GtkWidget       *widget,
-                            GtkDragDestSite *site)
-{
-  GtkDragDestSite *old_site;
-
-  old_site = g_object_get_data (G_OBJECT (widget), I_("gtk-drag-dest"));
-  if (old_site)
-    {
-      g_signal_handlers_disconnect_by_func (widget, gtk_drag_dest_realized, old_site);
-      g_signal_handlers_disconnect_by_func (widget, gtk_drag_dest_hierarchy_changed, old_site);
-      gtk_drop_target_set_track_motion (site->dest, gtk_drop_target_get_track_motion (old_site->dest));
-    }
-
-  if (gtk_widget_get_realized (widget))
-    gtk_drag_dest_realized (widget);
-
-  g_signal_connect (widget, "realize", G_CALLBACK (gtk_drag_dest_realized), site);
-  g_signal_connect (widget, "notify::root", G_CALLBACK (gtk_drag_dest_hierarchy_changed), site);
-
-  g_object_set_data_full (G_OBJECT (widget), I_("gtk-drag-dest"),
-                          site, gtk_drag_dest_site_destroy);
-}
-
-static void
-gtk_drag_dest_unset (GtkWidget *widget)
-{
-  GtkDragDestSite *old_site;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  old_site = g_object_get_data (G_OBJECT (widget), I_("gtk-drag-dest"));
-  if (old_site)
-    {
-      g_signal_handlers_disconnect_by_func (widget, gtk_drag_dest_realized, old_site);
-      g_signal_handlers_disconnect_by_func (widget, gtk_drag_dest_hierarchy_changed, old_site);
-    }
-
-  g_object_set_data (G_OBJECT (widget), I_("gtk-drag-dest"), NULL);
-}
-
-
 /**
  * SECTION:gtkdroptarget
  * @Short_description: An object to receive DND drops
@@ -131,6 +60,7 @@ struct _GtkDropTarget
 
   GtkWidget *widget;
   GdkDrop *drop;
+  gboolean armed;
 };
 
 struct _GtkDropTargetClass
@@ -573,6 +503,31 @@ gtk_drop_target_get_track_motion (GtkDropTarget *dest)
   return dest->track_motion;
 }
 
+static void
+gtk_drag_dest_realized (GtkWidget *widget)
+{
+  GtkNative *native = gtk_widget_get_native (widget);
+
+  gdk_surface_register_dnd (gtk_native_get_surface (native));
+}
+
+static void
+gtk_drag_dest_hierarchy_changed (GtkWidget  *widget,
+                                 GParamSpec *pspec,
+                                 gpointer    data)
+{
+  GtkNative *native = gtk_widget_get_native (widget);
+
+  if (native && gtk_widget_get_realized (GTK_WIDGET (native)))
+    gdk_surface_register_dnd (gtk_native_get_surface (native));
+}
+
+GtkDropTarget *
+gtk_drop_target_get (GtkWidget *widget)
+{
+  return g_object_get_data (G_OBJECT (widget), I_("gtk-drag-dest"));
+}
+
 /**
  * gtk_drop_target_attach:
  * @dest: (transfer full): a #GtkDropTarget
@@ -587,20 +542,28 @@ void
 gtk_drop_target_attach (GtkDropTarget *dest,
                         GtkWidget     *widget)
 {
-  GtkDragDestSite *site;
+  GtkDropTarget *old_dest;
 
   g_return_if_fail (GTK_IS_DROP_TARGET (dest));
   g_return_if_fail (dest->widget == NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  old_dest = g_object_get_data (G_OBJECT (widget), I_("gtk-drag-dest"));
+  if (old_dest)
+    {
+      g_signal_handlers_disconnect_by_func (widget, gtk_drag_dest_realized, old_dest);
+      g_signal_handlers_disconnect_by_func (widget, gtk_drag_dest_hierarchy_changed, old_dest);
+    }
+
+  if (gtk_widget_get_realized (widget))
+    gtk_drag_dest_realized (widget);
+
   dest->widget = widget;
 
-  site = g_slice_new0 (GtkDragDestSite);
+  g_signal_connect (widget, "realize", G_CALLBACK (gtk_drag_dest_realized), dest);
+  g_signal_connect (widget, "notify::root", G_CALLBACK (gtk_drag_dest_hierarchy_changed), dest);
 
-  site->dest = dest;
-  site->have_drag = FALSE;
-
-  gtk_drag_dest_set_internal (widget, site);
+  g_object_set_data_full (G_OBJECT (widget), I_("gtk-drag-dest"), dest, g_object_unref);
 }
 
 /**
@@ -616,7 +579,11 @@ gtk_drop_target_detach (GtkDropTarget *dest)
 
   if (dest->widget)
     {
-      gtk_drag_dest_unset (dest->widget);
+      g_signal_handlers_disconnect_by_func (dest->widget, gtk_drag_dest_realized, dest);
+      g_signal_handlers_disconnect_by_func (dest->widget, gtk_drag_dest_hierarchy_changed, dest);
+
+      g_object_set_data (G_OBJECT (dest->widget), I_("gtk-drag-dest"), NULL);
+
       dest->widget = NULL;
     }
 }
@@ -740,6 +707,19 @@ gtk_drop_target_emit_drag_drop (GtkDropTarget    *dest,
   g_signal_emit (dest, signals[DRAG_DROP], 0, x, y, &result);
 
   return result;
+}
+
+void
+gtk_drop_target_set_armed (GtkDropTarget *target,
+                           gboolean       armed)
+{
+  target->armed = armed;
+}
+
+gboolean
+gtk_drop_target_get_armed (GtkDropTarget *target)
+{
+  return target->armed;
 }
 
 /**
