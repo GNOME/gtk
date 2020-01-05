@@ -402,7 +402,7 @@ gtk_drag_dest_find_target (GtkWidget         *widget,
 
 
 /**
- * SECTION:gtkdragdest
+ * SECTION:gtkdroptarget
  * @Short_description: An object to receive DND drops
  * @Title: GtkDropTarget
  *
@@ -411,7 +411,7 @@ gtk_drag_dest_find_target (GtkWidget         *widget,
  *
  * To use a GtkDropTarget to receive drops on a widget, you create
  * a GtkDropTarget object, connect to its signals, and then attach
- * it to the widgtet with gtk_drop_target_attach().
+ * it to the widget with gtk_drop_target_attach().
  */
 
 struct _GtkDropTarget
@@ -554,7 +554,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   /**
    * GtkDropTarget:actions:
    *
-   * The #GdkDragActions that this drop are supported
+   * The #GdkDragActions that this drop target supports
    */ 
   properties[PROP_ACTIONS] =
        g_param_spec_flags ("actions", P_("Actions"), P_("Actions"),
@@ -623,10 +623,9 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    * made based solely on the cursor position and the type of the data, the
    * handler may inspect the dragged data by calling one of the #GdkDrop
    * read functions, and defer the gdk_drag_status() call to when it has
-   * received th data.
+   * received the data.
    *
-   * Note that you must pass #GTK_DEST_DEFAULT_DROP,
-   * #GTK_DEST_DEFAULT_MOTION or #GTK_DEST_DEFAULT_ALL to gtk_drag_dest_set()
+   * Note that you must pass #GTK_DEST_DEFAULT_MOTION to gtk_drop_target_attach()
    * when using the ::drag-motion signal that way.
    *
    * Also note that there is no drag-enter signal. The drag receiver has to
@@ -662,6 +661,17 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    * ensure that gdk_drop_finish() is called to let the source know that
    * the drop is done. The call to gtk_drag_finish() can be done either
    * directly or after receiving the data.
+   *
+   * To receive the data, use one of the read functions provides by #GtkDrop
+   * and #GtkDragDest: gdk_drop_read_async(), gdk_drop_read_value_async(),
+   * gdk_drop_read_text_async(), gtk_drop_target_read_selection().
+   *
+   * You can use gtk_drop_target_get_drop() to obtain the #GtkDrop object
+   * for the ongoing operation in your signal handler. If you call one of the
+   * read functions in your handler, GTK will ensure that the #GtkDrop object
+   * stays alive until the read is completed. If you delay obtaining the data
+   * (e.g. to handle #GDK_ACTION_ASK by showing a #GtkPopover), you need to
+   * hold a reference on the #GtkDrop.
    *
    * Returns: whether the cursor position is in a drop zone
    */
@@ -922,7 +932,7 @@ gtk_drop_target_detach (GtkDropTarget *dest)
  * gtk_drop_target_get_target:
  * @dest: a #GtkDropTarget
  *
- * Gts the widget that the drop target is attached to.
+ * Gets the widget that the drop target is attached to.
  *
  * Returns: (nullable): get the widget that @dest is attached to
  */
