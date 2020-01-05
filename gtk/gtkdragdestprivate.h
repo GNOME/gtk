@@ -40,6 +40,11 @@ gboolean gtk_drop_target_emit_drag_drop      (GtkDropTarget    *dest,
 
 const char * gtk_drop_target_match           (GtkDropTarget *dest,
                                               GdkDrop       *drop);
+void         gtk_drop_target_set_armed       (GtkDropTarget *dest,
+                                              gboolean       armed);
+gboolean     gtk_drop_target_get_armed       (GtkDropTarget *dest);
+
+GtkDropTarget *gtk_drop_target_get           (GtkWidget *widget);
 
 G_END_DECLS
 
