@@ -125,7 +125,7 @@ get_droptarget (void)
 
   label = gtk_label_new ("Drop here");
   targets = gdk_content_formats_new (entries, G_N_ELEMENTS (entries));
-  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_HIGHLIGHT, targets, GDK_ACTION_COPY);
+  dest = gtk_drop_target_new (targets, GDK_ACTION_COPY);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), NULL);
   gtk_drop_target_attach (dest, label);
   gdk_content_formats_unref (targets);

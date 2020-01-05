@@ -4094,7 +4094,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   /* DND support */
   formats = gdk_content_formats_new (dnd_drop_targets, G_N_ELEMENTS (dnd_drop_targets));
   formats = gtk_content_formats_add_uri_targets (formats);
-  dest = gtk_drop_target_new (0, formats, GDK_ACTION_MOVE | GDK_ACTION_COPY | GDK_ACTION_LINK);
+  dest = gtk_drop_target_new (formats, GDK_ACTION_MOVE | GDK_ACTION_COPY | GDK_ACTION_LINK);
   gdk_content_formats_unref (formats);
   g_signal_connect (dest, "drag-motion", G_CALLBACK (drag_motion_callback), sidebar);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop_callback), sidebar);

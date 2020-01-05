@@ -621,7 +621,7 @@ main (gint argc, gchar **argv)
   source = gtk_drag_source_new (content, GDK_ACTION_MOVE);
   g_object_unref (content);
   gtk_drag_source_attach (source, button, GDK_BUTTON1_MASK);
-  dest = gtk_drop_target_new (GTK_DEST_DEFAULT_DROP, targets, GDK_ACTION_MOVE);
+  dest = gtk_drop_target_new (targets, GDK_ACTION_MOVE);
   g_signal_connect (dest, "drag_motion", G_CALLBACK (toolbar_drag_motion), toolbar);
   g_signal_connect (dest, "drag_leave", G_CALLBACK (toolbar_drag_leave), toolbar);
   g_signal_connect (dest, "drag_drop", G_CALLBACK (toolbar_drag_drop), label);
