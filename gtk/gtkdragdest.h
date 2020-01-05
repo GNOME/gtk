@@ -45,9 +45,8 @@ typedef struct _GtkDropTarget GtkDropTarget;
  *   widget will check if the drag matches this widget’s list of possible formats
  *   and actions.
  *   GTK+ will then call gdk_drag_status() as appropriate.
- * @GTK_DEST_DEFAULT_HIGHLIGHT: If set for a widget, GTK+ will draw a highlight on
- *   this widget as long as a drag is over this widget and the widget drag format
- *   and action are acceptable.
+ * @GTK_DEST_DEFAULT_HIGHLIGHT: Does not do anything now. GTK always adds
+ *   the dnd style class to armed drop sites.
  * @GTK_DEST_DEFAULT_DROP: Does not do anything now.
  * @GTK_DEST_DEFAULT_ALL: If set, specifies that all default actions should
  *   be taken.
