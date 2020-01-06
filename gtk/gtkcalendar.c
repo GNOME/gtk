@@ -87,6 +87,9 @@
 #include "gtkeventcontrollerscroll.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkdragsource.h"
+#include "gtknative.h"
+#include "gtkicontheme.h"
+#include "gtkdragicon.h"
 
 #define TIMEOUT_INITIAL  500
 #define TIMEOUT_REPEAT    50
@@ -2697,9 +2700,12 @@ gtk_calendar_drag_update (GtkGestureDrag *gesture,
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
   gdouble start_x, start_y;
-  GtkDragSource *source;
   GdkContentProvider *content;
   GdkDevice *device;
+  GdkDrag *drag;
+  GtkIconTheme *theme;
+  GdkPaintable *paintable;
+  GdkSurface *surface;
 
   if (!priv->in_drag)
     return;
@@ -2709,13 +2715,20 @@ gtk_calendar_drag_update (GtkGestureDrag *gesture,
 
   gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
 
-  source = gtk_drag_source_new ();
-  content = get_calendar_content (calendar);
-  gtk_drag_source_set_content (source, content);
-  g_object_unref (content);
+  surface = gtk_native_get_surface (gtk_widget_get_native (widget));
   device = gtk_gesture_get_device (GTK_GESTURE (gesture));
-  gtk_drag_source_drag_begin (source, widget, device, start_x, start_y);
-  g_object_unref (source);
+
+  content = get_calendar_content (calendar);
+
+  drag = gdk_drag_begin (surface, device, content, GDK_ACTION_COPY, start_x, start_y);
+
+  theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (widget));
+  paintable = gtk_icon_theme_load_icon (theme, "text-x-generic", 32, 0, NULL);
+  gtk_drag_icon_set_from_paintable (drag, paintable, 0, 0);
+  g_clear_object (&paintable);
+
+  g_object_unref (content);
+  g_object_unref (drag);
 
   priv->in_drag = 0;
 }
