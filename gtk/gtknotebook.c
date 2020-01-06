@@ -3200,7 +3200,7 @@ gtk_notebook_drag_motion (GtkDropTarget *dest,
                           int            x,
                           int            y)
 {
-  GtkWidget *widget = gtk_drop_target_get_target (dest);
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
   GdkDrop *drop = gtk_drop_target_get_drop (dest);
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
@@ -3296,7 +3296,7 @@ gtk_notebook_drag_motion (GtkDropTarget *dest,
 static void
 gtk_notebook_drag_leave (GtkDropTarget *dest)
 {
-  GtkWidget *widget = gtk_drop_target_get_target (dest);
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 
   remove_switch_tab_timer (notebook);
@@ -3342,7 +3342,7 @@ gtk_notebook_drag_drop (GtkDropTarget *dest,
                         int            x,
                         int            y)
 {
-  GtkWidget *widget = gtk_drop_target_get_target (dest);
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GdkDrop *drop = gtk_drop_target_get_drop (dest);
   GdkDrag *drag = gdk_drop_get_drag (drop);
