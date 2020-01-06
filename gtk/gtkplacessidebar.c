@@ -63,6 +63,7 @@
 #include "gtkgesturedrag.h"
 #include "gtknative.h"
 #include "gtkdragsource.h"
+#include "gtkdragicon.h"
 #include "gtkwidgetpaintable.h"
 #include "gtkselectionprivate.h"
 
@@ -1726,31 +1727,6 @@ stop_drop_feedback (GtkPlacesSidebar *sidebar)
   sidebar->drag_data_info = DND_UNKNOWN;
 }
 
-static void
-drag_begin_callback (GtkDragSource *source,
-                     GdkDrag       *drag,
-                     gpointer       user_data)
-{
-  GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
-  GtkAllocation allocation;
-  GtkWidget *drag_widget;
-  GdkPaintable *paintable;
-
-  gtk_widget_get_allocation (sidebar->drag_row, &allocation);
-  gtk_widget_hide (sidebar->drag_row);
-
-  drag_widget = GTK_WIDGET (gtk_sidebar_row_clone (GTK_SIDEBAR_ROW (sidebar->drag_row)));
-  sidebar->drag_row_height = allocation.height;
-  gtk_widget_set_size_request (drag_widget, allocation.width, allocation.height);
-
-  gtk_widget_set_opacity (drag_widget, 0.8);
-
-  paintable = gtk_widget_paintable_new (drag_widget);
-  gtk_drag_source_set_icon (source, paintable, sidebar->drag_row_x, sidebar->drag_row_y);
-  g_object_unref (paintable);
-  g_object_set_data_full (G_OBJECT (source), "row-widget", drag_widget, (GDestroyNotify)gtk_widget_destroy);
-}
-
 static GtkWidget *
 create_placeholder_row (GtkPlacesSidebar *sidebar)
 {
@@ -2092,12 +2068,10 @@ out_free:
 }
 
 static void
-drag_end_callback (GtkDragSource  *source,
-                   GdkDrag        *drag,
-                   gboolean        delete_data,
-                   gpointer        user_data)
+dnd_finished_cb (GdkDrag          *drag,
+                 GtkPlacesSidebar *sidebar)
 {
-  stop_drop_feedback (GTK_PLACES_SIDEBAR (user_data));
+  stop_drop_feedback (sidebar);
 }
 
 /* This functions is called every time the drag source leaves
@@ -3783,7 +3757,12 @@ on_row_dragged (GtkGestureDrag *gesture,
       gdouble start_x, start_y;
       gint drag_x, drag_y;
       GdkContentProvider *content;
-      GtkDragSource *source;
+      GdkSurface *surface;
+      GdkDevice *device;
+      GtkAllocation allocation;
+      GtkWidget *drag_widget;
+      GdkPaintable *paintable;
+      GdkDrag *drag;
 
       gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
       gtk_widget_translate_coordinates (GTK_WIDGET (row),
@@ -3793,21 +3772,35 @@ on_row_dragged (GtkGestureDrag *gesture,
 
       sidebar->dragging_over = TRUE;
 
-      source = gtk_drag_source_new ();
       content = gdk_content_provider_new_with_formats (sidebar->source_targets,
                                                        drag_data_get_callback,
                                                        sidebar);
-      gtk_drag_source_set_content (source, content);
-      g_object_unref (content);
-      gtk_drag_source_set_actions (source, GDK_ACTION_MOVE);
-      g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin_callback), sidebar);
-      g_signal_connect (source, "drag-end", G_CALLBACK (drag_end_callback), sidebar);
  
-      gtk_drag_source_drag_begin (source,
-                                  GTK_WIDGET (sidebar),
-                                  gtk_gesture_get_device (GTK_GESTURE (gesture)),
-                                  drag_x, drag_y);
-      g_object_unref (source);
+      surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (sidebar)));
+      device = gtk_gesture_get_device (GTK_GESTURE (gesture));
+
+      drag = gdk_drag_begin (surface, device, content, GDK_ACTION_MOVE, drag_x, drag_y);
+
+      g_object_unref (content);
+
+      g_signal_connect (drag, "dnd-finished", G_CALLBACK (dnd_finished_cb), sidebar);
+
+      gtk_widget_get_allocation (sidebar->drag_row, &allocation);
+      gtk_widget_hide (sidebar->drag_row);
+
+      drag_widget = GTK_WIDGET (gtk_sidebar_row_clone (GTK_SIDEBAR_ROW (sidebar->drag_row)));
+      sidebar->drag_row_height = allocation.height;
+      gtk_widget_set_size_request (drag_widget, allocation.width, allocation.height);
+
+      gtk_widget_set_opacity (drag_widget, 0.8);
+
+      paintable = gtk_widget_paintable_new (drag_widget);
+      gtk_drag_icon_set_from_paintable (drag, paintable, sidebar->drag_row_x, sidebar->drag_row_y);
+      g_object_unref (paintable);
+
+      g_object_set_data_full (G_OBJECT (drag), "row-widget", drag_widget, (GDestroyNotify)gtk_widget_destroy);
+
+      g_object_unref (drag);
     }
 
   g_object_unref (sidebar);
