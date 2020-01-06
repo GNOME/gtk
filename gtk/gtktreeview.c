@@ -677,13 +677,14 @@ static void     gtk_tree_view_forall               (GtkContainer     *container,
 
 /* Source side drag signals */
 static void gtk_tree_view_drag_begin       (GtkDragSource    *source,
+                                            GdkDrag          *drag,
                                             GtkWidget        *widget);
 static void gtk_tree_view_drag_end         (GtkDragSource    *source,
+                                            GdkDrag          *drag,
+                                            gboolean          delete_data,
                                             GtkWidget        *widget);
 static GBytes *gtk_tree_view_drag_data_get (const char *mimetype,
                                             gpointer    data);
-static void gtk_tree_view_drag_data_delete (GtkDragSource    *source,
-                                            GtkWidget        *widget);
 
 /* Target side drag signals */
 static void     gtk_tree_view_drag_leave         (GtkDropTarget    *dest,
@@ -7129,6 +7130,7 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView *tree_view)
 
 static void
 gtk_tree_view_drag_begin (GtkDragSource  *source,
+                          GdkDrag        *drag,
                           GtkWidget      *widget)
 {
   GtkTreeView *tree_view;
@@ -7171,13 +7173,43 @@ gtk_tree_view_drag_begin (GtkDragSource  *source,
 }
 
 static void
-gtk_tree_view_drag_end (GtkDragSource  *sourc,
+gtk_tree_view_drag_end (GtkDragSource  *source,
+                        GdkDrag        *drag,
+                        gboolean        delete_data,
                         GtkWidget      *widget)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+  TreeViewDragInfo *di;
+  GtkTreeModel *model;
+  GtkTreePath *source_row;
 
   tree_view->event_last_x = -10000;
   tree_view->event_last_y = -10000;
+
+  if (!delete_data)
+    return;
+
+  tree_view = GTK_TREE_VIEW (widget);
+  model = gtk_tree_view_get_model (tree_view);
+
+  if (!check_model_dnd (model, GTK_TYPE_TREE_DRAG_SOURCE, "drag_data_delete"))
+    return;
+
+  di = get_info (tree_view);
+
+  if (di == NULL)
+    return;
+
+  source_row = get_source_row (source);
+
+  if (source_row == NULL)
+    return;
+
+  gtk_tree_drag_source_drag_data_delete (GTK_TREE_DRAG_SOURCE (model), source_row);
+
+  gtk_tree_path_free (source_row);
+
+  set_source_row (source, NULL, NULL);
 }
 
 /* Default signal implementations for the drag signals */
@@ -7230,39 +7262,6 @@ gtk_tree_view_drag_data_get (const char *mime_type,
 
   return g_bytes_new_take ((gpointer)gtk_selection_data_get_data (&sdata),
                             gtk_selection_data_get_length (&sdata));
-}
-
-
-static void
-gtk_tree_view_drag_data_delete (GtkDragSource *source,
-                                GtkWidget      *widget)
-{
-  TreeViewDragInfo *di;
-  GtkTreeModel *model;
-  GtkTreeView *tree_view;
-  GtkTreePath *source_row;
-
-  tree_view = GTK_TREE_VIEW (widget);
-  model = gtk_tree_view_get_model (tree_view);
-
-  if (!check_model_dnd (model, GTK_TYPE_TREE_DRAG_SOURCE, "drag_data_delete"))
-    return;
-
-  di = get_info (tree_view);
-
-  if (di == NULL)
-    return;
-
-  source_row = get_source_row (source);
-
-  if (source_row == NULL)
-    return;
-
-  gtk_tree_drag_source_drag_data_delete (GTK_TREE_DRAG_SOURCE (model), source_row);
-
-  gtk_tree_path_free (source_row);
-
-  set_source_row (source, NULL, NULL);
 }
 
 static void
@@ -12934,7 +12933,6 @@ gtk_tree_view_enable_model_drag_source (GtkTreeView       *tree_view,
   g_object_unref (content);
   g_signal_connect (di->source, "drag-begin", G_CALLBACK (gtk_tree_view_drag_begin), tree_view);
   g_signal_connect (di->source, "drag-end", G_CALLBACK (gtk_tree_view_drag_end), tree_view);
-  g_signal_connect (di->source, "drag-data-delete", G_CALLBACK (gtk_tree_view_drag_data_delete), tree_view);
   di->start_button_mask = start_button_mask;
   di->source_set = TRUE;
 

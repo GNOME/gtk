@@ -269,6 +269,7 @@ gtk_color_button_drag_drop (GtkDropTarget  *dest,
 
 static void
 gtk_color_button_drag_begin (GtkDragSource  *source,
+                             GdkDrag        *drag,
                              GtkColorButton *button)
 {
   GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
