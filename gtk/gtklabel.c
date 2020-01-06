@@ -54,6 +54,7 @@
 #include "gtkpopovermenu.h"
 #include "gtknative.h"
 #include "gtkdragsource.h"
+#include "gtkdragicon.h"
 
 #include "a11y/gtklabelaccessibleprivate.h"
 
@@ -4716,19 +4717,24 @@ gtk_label_drag_gesture_update (GtkGestureDrag *gesture,
     {
       if (gtk_drag_check_threshold (widget, info->drag_start_x, info->drag_start_y, x, y))
 	{
-          GtkDragSource *source;
-          GdkPaintable *paintable;
+          GdkDrag *drag;
+          GdkSurface *surface;
           GdkDevice *device;
 
-          source = gtk_drag_source_new ();
-          gtk_drag_source_set_content (source, info->provider);
-          paintable = get_selection_paintable (label);
-          gtk_drag_source_set_icon (source, paintable, 9, 0);
-          g_clear_object (&paintable); 
+          surface = gtk_native_get_surface (gtk_widget_get_native (widget));
           device = gtk_gesture_get_device (GTK_GESTURE (gesture));
-          gtk_drag_source_drag_begin (source, widget, device, info->drag_start_x, info->drag_start_y);
-          g_object_unref (source);
 
+          drag = gdk_drag_begin (surface,
+                                 device,
+                                 info->provider,
+                                 GDK_ACTION_COPY,
+                                 info->drag_start_x,
+                                 info->drag_start_y);
+
+          gtk_drag_icon_set_from_paintable (drag, get_selection_paintable (label), 0, 0);
+
+          g_object_unref (drag);
+          
 	  info->in_drag = FALSE;
 	}
     }
