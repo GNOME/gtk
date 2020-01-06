@@ -37,6 +37,8 @@
 #include "gtkdragiconprivate.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
+#include "gtkicontheme.h"
+#include "gtkpicture.h"
 #include "gtksettingsprivate.h"
 
 /**
@@ -437,14 +439,12 @@ gtk_drag_source_drag_begin (GtkDragSource *source,
     }
 
   gdk_drag_set_hotspot (source->drag, source->hot_x, source->hot_y);
-  source->icon_window = gtk_drag_icon_new ();
+  source->icon_window = gtk_drag_icon_new_for_drag (source->drag);
   g_object_ref_sink (source->icon_window);
-  gtk_drag_icon_set_surface (GTK_DRAG_ICON (source->icon_window),
-                             gdk_drag_get_drag_surface (source->drag));
 
   icon = gtk_picture_new_for_paintable (source->paintable);
   gtk_picture_set_can_shrink (GTK_PICTURE (icon), FALSE);
-  gtk_drag_icon_set_widget (GTK_DRAG_ICON (source->icon_window), icon);
+  gtk_container_add (GTK_CONTAINER (source->icon_window), icon);
 
   gtk_widget_show (source->icon_window);
 
