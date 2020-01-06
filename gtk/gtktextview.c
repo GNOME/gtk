@@ -7697,7 +7697,9 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
   else
     actions = GDK_ACTION_COPY;
   content = gtk_text_buffer_get_selection_content (buffer);
-  source = gtk_drag_source_new (content, actions);
+  source = gtk_drag_source_new ();
+  gtk_drag_source_set_content (source, content);
+  gtk_drag_source_set_actions (source, actions);
   g_object_unref (content);
   if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
     {

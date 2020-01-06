@@ -144,6 +144,19 @@ get_texture (GValue   *value,
 }
 
 static void
+prepare_drag (GtkDragSource *source,
+              double         x,
+              double         y,
+              GtkWidget     *image)
+{
+  GdkContentProvider *content;
+
+  content = gdk_content_provider_new_with_callback (GDK_TYPE_TEXTURE, get_texture, image);
+  gtk_drag_source_set_content (source, content);
+  g_object_unref (content);
+}
+
+static void
 got_texture (GObject *source,
              GAsyncResult *result,
              gpointer data)
@@ -265,7 +278,6 @@ do_clipboard (GtkWidget *do_widget)
         { "paste", paste_image, NULL, NULL, NULL },
       };
       GActionGroup *actions;
-      GdkContentProvider *content = NULL;
       GtkDragSource *source;
       GtkDropTarget *dest;
       GdkContentFormats *formats;
@@ -331,10 +343,9 @@ do_clipboard (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (hbox), image);
 
       /* make image a drag source */
-      content = gdk_content_provider_new_with_callback (GDK_TYPE_TEXTURE, get_texture, image);
-      source = gtk_drag_source_new (content, GDK_ACTION_COPY);
-      g_object_unref (content);
+      source = gtk_drag_source_new ();
       gtk_drag_source_attach (source, image, GDK_BUTTON1_MASK);
+      g_signal_connect (source, "prepare", G_CALLBACK (prepare_drag), NULL);
       g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), image);
 
       /* accept drops on image */
@@ -364,9 +375,8 @@ do_clipboard (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (hbox), image);
 
       /* make image a drag source */
-      content = gdk_content_provider_new_with_callback (GDK_TYPE_TEXTURE, get_texture, image);
-      source = gtk_drag_source_new (content, GDK_ACTION_COPY);
-      g_object_unref (content);
+      source = gtk_drag_source_new ();
+      g_signal_connect (source, "prepare", G_CALLBACK (prepare_drag), NULL);
       g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), image);
       gtk_drag_source_attach (source, image, GDK_BUTTON1_MASK);
 
