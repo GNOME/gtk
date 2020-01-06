@@ -116,7 +116,7 @@
 #include "gtkaccelmapprivate.h"
 #include "gtkbox.h"
 #include "gtkdebug.h"
-#include "gtkdndprivate.h"
+#include "gtkdragdestprivate.h"
 #include "gtkmain.h"
 #include "gtkmediafileprivate.h"
 #include "gtkmodulesprivate.h"
