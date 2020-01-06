@@ -80,7 +80,7 @@ void
 _gtk_drag_dest_handle_event (GtkWidget *toplevel,
                              GdkEvent  *event)
 {
-  GtkDragDestInfo *info;
+  GtkDropTarget *dest;
   GdkDrop *drop;
   GdkEventType event_type;
 
@@ -90,8 +90,6 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
   event_type = gdk_event_get_event_type (event);
   drop = gdk_event_get_drop (event);
 
-  info = gtk_drag_get_dest_info (drop, TRUE);
-
   /* Find the widget for the event */
   switch ((guint) event_type)
     {
@@ -99,13 +97,14 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
       break;
       
     case GDK_DRAG_LEAVE:
-      if (info->dest)
+      dest = gtk_drop_get_current_dest (drop);
+      if (dest)
         {
-          gtk_drop_target_emit_drag_leave (info->dest, drop);
-          gtk_drag_dest_set_target (info, NULL);
+          gtk_drop_target_emit_drag_leave (dest, drop);
+          gtk_drop_set_current_dest (drop, NULL);
         }
       break;
-      
+
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
       {
@@ -202,46 +201,31 @@ gtk_drop_find_widget (GtkWidget *event_widget,
   return FALSE;
 }
 
-void
-gtk_drag_dest_set_target (GtkDragDestInfo *info,
-                          GtkDropTarget   *dest)
-{
-  if (info->dest)
-    g_object_remove_weak_pointer (G_OBJECT (info->dest), (gpointer *) &info->dest);
-
-  info->dest = dest;
-
-  if (info->dest)
-    g_object_add_weak_pointer (G_OBJECT (info->dest), (gpointer *) &info->dest);
-}
-
 static void
-gtk_drag_dest_info_destroy (gpointer data)
+clear_current_dest (gpointer data, GObject *former_object)
 {
-  GtkDragDestInfo *info = (GtkDragDestInfo *)data;
-
-  gtk_drag_dest_set_target (info, NULL);
-
-  g_slice_free (GtkDragDestInfo, data);
+  g_object_set_data (G_OBJECT (data), "current-dest", NULL);
 }
 
-GtkDragDestInfo *
-gtk_drag_get_dest_info (GdkDrop  *drop,
-                        gboolean  create)
+void
+gtk_drop_set_current_dest (GdkDrop       *drop,
+                           GtkDropTarget *dest)
 {
-  GtkDragDestInfo *info;
-  static GQuark info_quark = 0;
-  if (!info_quark)
-    info_quark = g_quark_from_static_string ("gtk-dest-info");
-  
-  info = g_object_get_qdata (G_OBJECT (drop), info_quark);
-  if (!info && create)
-    {
-      info = g_slice_new0 (GtkDragDestInfo);
-      info->drop = drop;
-      g_object_set_qdata_full (G_OBJECT (drop), info_quark,
-                               info, gtk_drag_dest_info_destroy);
-    }
+  GtkDropTarget *old_dest;
 
-  return info;
+  old_dest = g_object_get_data (G_OBJECT (drop), "current-dest");
+
+  if (old_dest)
+    g_object_weak_unref (G_OBJECT (old_dest), clear_current_dest, drop);
+
+  g_object_set_data (G_OBJECT (drop), "current-dest", dest);
+
+  if (dest)
+    g_object_weak_ref (G_OBJECT (dest), clear_current_dest, drop);
+}
+
+GtkDropTarget *
+gtk_drop_get_current_dest (GdkDrop *drop)
+{
+  return g_object_get_data (G_OBJECT (drop), "current-dest");
 }

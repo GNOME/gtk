@@ -691,14 +691,14 @@ gtk_drop_target_handle_event (GtkEventController *controller,
 {
   GtkDropTarget *dest = GTK_DROP_TARGET (controller);
   GdkDrop *drop;
-  GtkDragDestInfo *info;
+  GtkDropTarget *old_dest;
   double x, y;
   gboolean found = FALSE;
 
   gdk_event_get_coords (event, &x, &y);
 
   drop = gdk_event_get_drop (event);
-  info = gtk_drag_get_dest_info (drop, TRUE);
+  old_dest = gtk_drop_get_current_dest (drop);
 
   switch ((int)gdk_event_get_event_type (event))
     {
@@ -710,10 +710,10 @@ gtk_drop_target_handle_event (GtkEventController *controller,
       /* We send a leave before the drop so that the widget unhighlights
        * properly.
        */
-      if (info->dest)
+      if (old_dest)
         {
-          gtk_drop_target_emit_drag_leave (info->dest, drop);
-          gtk_drag_dest_set_target (info, NULL);
+          gtk_drop_target_emit_drag_leave (old_dest, drop);
+          gtk_drop_set_current_dest (drop, NULL);
         }
 
       found = gtk_drop_target_emit_drag_drop (dest, drop, x, y);
@@ -725,13 +725,13 @@ gtk_drop_target_handle_event (GtkEventController *controller,
 
   if (found)
     {
-      if (info->dest && info->dest != dest)
+      if (old_dest && old_dest != dest)
         {
-          gtk_drop_target_emit_drag_leave (info->dest, drop);
-          gtk_drag_dest_set_target (info, NULL);
+          gtk_drop_target_emit_drag_leave (old_dest, drop);
+          gtk_drop_set_current_dest (drop, NULL);
         }
 
-      gtk_drag_dest_set_target (info, dest);
+      gtk_drop_set_current_dest (drop, dest);
     }
 
   return found;
