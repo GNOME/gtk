@@ -62,23 +62,19 @@
  * Drop API makes use of signals in the #GtkWidget class.
  */
 
-
-/* Forward declarations */
-static gboolean gtk_drop_find_widget            (GtkWidget        *widget,
-                                                 GdkEvent         *event);
-
-
 /*
- * _gtk_drag_dest_handle_event:
+ * gtk_drag_dest_handle_event:
  * @toplevel: Toplevel widget that received the event
  * @event: the event to handle
  *
  * Called from widget event handling code on Drag events
- * for destinations.
+ * for destinations. For drag-motion and drop-start events,
+ * this function is only called if no event handler has
+ * handled the event.
  */
 void
-_gtk_drag_dest_handle_event (GtkWidget *toplevel,
-                             GdkEvent  *event)
+gtk_drag_dest_handle_event (GtkWidget *toplevel,
+                            GdkEvent  *event)
 {
   GtkDropTarget *dest;
   GdkDrop *drop;
@@ -107,98 +103,12 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
 
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
-      {
-        if (!gtk_drop_find_widget (toplevel, event))
-          gdk_drop_status (drop, 0);
-      }
+      gdk_drop_status (drop, 0);
       break;
 
     default:
       g_assert_not_reached ();
     }
-}
-
-static gboolean
-gtk_drop_find_widget (GtkWidget *event_widget,
-                      GdkEvent  *event)
-{
-  GtkWidget *widget;
-  double x, y;
-  int wx, wy;
-
-  if (!gtk_widget_get_mapped (event_widget) ||
-      !gtk_widget_get_sensitive (event_widget))
-    return FALSE;
-
-  gdk_event_get_coords (event, &x, &y);
-
-  widget = gtk_widget_pick (event_widget, x, y, GTK_PICK_DEFAULT);
-
-  if (!widget)
-    return FALSE;
-
-  gtk_widget_translate_coordinates (event_widget, widget, x, y, &wx, &wy);
-
-  while (widget)
-    {
-      GtkWidget *parent;
-      GList *hierarchy = NULL;
-      gboolean found = FALSE;
-
-      if (!gtk_widget_get_mapped (widget))
-        return FALSE;
-
-      if (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_INSENSITIVE)
-        {
-          widget = gtk_widget_get_parent (widget);
-          continue;
-        }
-
-      /* need to reference the entire hierarchy temporarily in case the
-       * ::drag-motion/::drag-drop callbacks change the widget hierarchy.
-       */
-      for (parent = widget;
-           parent;
-           parent = gtk_widget_get_parent (parent))
-        {
-          hierarchy = g_list_prepend (hierarchy, g_object_ref (parent));
-        }
-
-      gdk_event_set_coords (event, wx, wy);
-      found = gtk_widget_run_controllers (widget, event, GTK_PHASE_BUBBLE);
-      gdk_event_set_coords (event, x, y);
-
-      if (!found)
-        {
-          /* Get the parent before unreffing the hierarchy because
-           * invoking the callback might have destroyed the widget
-           */
-          parent = gtk_widget_get_parent (widget);
-
-          /* The parent might be going away when unreffing the
-           * hierarchy, so also protect againt that
-           */
-          if (parent)
-            g_object_add_weak_pointer (G_OBJECT (parent), (gpointer *) &parent);
-        }
-
-      g_list_free_full (hierarchy, g_object_unref);
-
-      if (found)
-        return TRUE;
-
-      if (parent)
-        g_object_remove_weak_pointer (G_OBJECT (parent), (gpointer *) &parent);
-      else
-        return FALSE;
-
-      if (!gtk_widget_translate_coordinates (widget, parent, wx, wy, &wx, &wy))
-        return FALSE;
-
-      widget = parent;
-    }
-
-  return FALSE;
 }
 
 static void
