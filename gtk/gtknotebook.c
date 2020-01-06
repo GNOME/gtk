@@ -1329,7 +1329,8 @@ gtk_notebook_init (GtkNotebook *notebook)
   g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_notebook_drag_motion), NULL);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_notebook_drag_leave), NULL);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_notebook_drag_drop), NULL);
-  gtk_drop_target_attach (dest, GTK_WIDGET (notebook));
+  gtk_widget_add_controller (GTK_WIDGET (notebook), GTK_EVENT_CONTROLLER (dest));
+
   gdk_content_formats_unref (targets);
 
   priv->header_widget = g_object_new (GTK_TYPE_BOX,

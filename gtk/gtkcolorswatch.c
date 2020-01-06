@@ -473,7 +473,6 @@ swatch_finalize (GObject *object)
 
   g_free (priv->icon);
   gtk_widget_unparent (priv->overlay_widget);
-  g_clear_pointer (&priv->dest, gtk_drop_target_detach);
  
   G_OBJECT_CLASS (gtk_color_swatch_parent_class)->finalize (object);
 }
@@ -678,12 +677,13 @@ gtk_color_swatch_set_can_drop (GtkColorSwatch *swatch,
       targets = gdk_content_formats_new (dnd_targets, G_N_ELEMENTS (dnd_targets));
       priv->dest = gtk_drop_target_new (targets, GDK_ACTION_COPY);
       g_signal_connect (priv->dest, "drag-drop", G_CALLBACK (swatch_drag_drop), swatch);
-      gtk_drop_target_attach (priv->dest, GTK_WIDGET (swatch)); 
+      gtk_widget_add_controller (GTK_WIDGET (swatch), GTK_EVENT_CONTROLLER (priv->dest));
       gdk_content_formats_unref (targets);
     }
   if (!can_drop && priv->dest)
     {
-      g_clear_pointer (&priv->dest, gtk_drop_target_detach);
+      gtk_widget_remove_controller (GTK_WIDGET (swatch), GTK_EVENT_CONTROLLER (priv->dest));
+      priv->dest = NULL;
     }
 
   g_object_notify (G_OBJECT (swatch), "can-drop");
