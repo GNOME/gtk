@@ -332,9 +332,10 @@ gtk_link_button_init (GtkLinkButton *link_button)
   g_signal_connect (link_button, "query-tooltip",
                     G_CALLBACK (gtk_link_button_query_tooltip_cb), NULL);
 
+  source = gtk_drag_source_new ();
   content = g_object_new (GTK_TYPE_LINK_CONTENT, NULL);
   GTK_LINK_CONTENT (content)->link = link_button;
-  source = gtk_drag_source_new (content, GDK_ACTION_COPY);
+  gtk_drag_source_set_content (source, content);
   g_object_unref (content);
   gtk_drag_source_attach (source, GTK_WIDGET (link_button), GDK_BUTTON1_MASK);
 

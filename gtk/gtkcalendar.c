@@ -2709,8 +2709,9 @@ gtk_calendar_drag_update (GtkGestureDrag *gesture,
 
   gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
 
+  source = gtk_drag_source_new ();
   content = get_calendar_content (calendar);
-  source = gtk_drag_source_new (content, GDK_ACTION_COPY);
+  gtk_drag_source_set_content (source, content);
   g_object_unref (content);
   device = gtk_gesture_get_device (GTK_GESTURE (gesture));
   gtk_drag_source_drag_begin (source, widget, device, start_x, start_y);

@@ -298,7 +298,9 @@ make_image (const gchar *icon_name, int hotspot)
   formats = gtk_content_formats_add_text_targets (formats);
 
   content = gdk_content_provider_new_with_formats (formats, get_data, image);
-  source = gtk_drag_source_new (content, GDK_ACTION_COPY|GDK_ACTION_MOVE|GDK_ACTION_ASK);
+  source = gtk_drag_source_new ();
+  gtk_drag_source_set_content (source, content);
+  gtk_drag_source_set_actions (source, GDK_ACTION_COPY|GDK_ACTION_MOVE|GDK_ACTION_ASK);
   g_object_unref (content);
   update_source_icon (source, icon_name, hotspot);
 
@@ -342,7 +344,8 @@ make_spinner (void)
   g_value_init (&value, G_TYPE_STRING);
   g_value_set_string (&value, "ACTIVE");
   content = gdk_content_provider_new_for_value (&value);
-  source = gtk_drag_source_new (content, GDK_ACTION_COPY);
+  source = gtk_drag_source_new ();
+  gtk_drag_source_set_content (source, content);
   g_signal_connect (source, "drag-begin", G_CALLBACK (spinner_drag_begin), spinner);
   gtk_drag_source_attach (source, spinner, GDK_BUTTON1_MASK);
 

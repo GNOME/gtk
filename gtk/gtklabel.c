@@ -4720,7 +4720,8 @@ gtk_label_drag_gesture_update (GtkGestureDrag *gesture,
           GdkPaintable *paintable;
           GdkDevice *device;
 
-          source = gtk_drag_source_new (info->provider, GDK_ACTION_COPY);
+          source = gtk_drag_source_new ();
+          gtk_drag_source_set_content (source, info->provider);
           paintable = get_selection_paintable (label);
           gtk_drag_source_set_icon (source, paintable, 9, 0);
           g_clear_object (&paintable); 

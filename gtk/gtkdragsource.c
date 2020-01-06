@@ -107,6 +107,7 @@ enum {
 static GParamSpec *properties[NUM_PROPERTIES];
 
 enum {
+  PREPARE,
   DRAG_BEGIN,
   DRAG_END,
   DRAG_FAILED,
@@ -115,11 +116,21 @@ enum {
 
 static guint signals[NUM_SIGNALS];
 
+static void gtk_drag_source_dnd_finished_cb   (GdkDrag             *drag,
+                                               GtkDragSource       *source);
+static void gtk_drag_source_drop_performed_cb (GdkDrag             *drag,
+                                               GtkDragSource       *source);
+static void gtk_drag_source_cancel_cb         (GdkDrag             *drag,
+                                               GdkDragCancelReason  reason,
+                                               GtkDragSource       *source);
+
+
 G_DEFINE_TYPE (GtkDragSource, gtk_drag_source, G_TYPE_OBJECT);
 
 static void
 gtk_drag_source_init (GtkDragSource *source)
 {
+  source->actions = GDK_ACTION_COPY;
 }
 
 static void
@@ -216,10 +227,20 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
        g_param_spec_flags ("actions",
                            P_("Actions"),
                            P_("Supported actions"),
-                           GDK_TYPE_DRAG_ACTION, 0,
+                           GDK_TYPE_DRAG_ACTION, GDK_ACTION_COPY,
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
+
+  signals[PREPARE] =
+      g_signal_new (I_("prepare"),
+                    G_TYPE_FROM_CLASS (class),
+                    G_SIGNAL_RUN_LAST,
+                    0,
+                    NULL, NULL,
+                    NULL,
+                    G_TYPE_NONE, 2,
+                    G_TYPE_DOUBLE, G_TYPE_DOUBLE);
 
   /**
    * GtkDragSource::drag-begin:
@@ -286,14 +307,6 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
                     GDK_TYPE_DRAG,
                     GDK_TYPE_DRAG_CANCEL_REASON);
 }
-
-static void gtk_drag_source_dnd_finished_cb   (GdkDrag             *drag,
-                                               GtkDragSource       *source);
-static void gtk_drag_source_drop_performed_cb (GdkDrag             *drag,
-                                               GtkDragSource       *source);
-static void gtk_drag_source_cancel_cb         (GdkDrag             *drag,
-                                               GdkDragCancelReason  reason,
-                                               GtkDragSource       *source);
 
 static void
 drag_end (GtkDragSource *source,
@@ -390,7 +403,13 @@ gtk_drag_source_drag_begin (GtkDragSource *source,
   dx = round (px) - x;
   dy = round (py) - y;
 
+  g_signal_emit (source, signals[PREPARE], 0, x, y);
+
+  if (source->content == NULL || source->actions == 0)
+    return;
+
   source->drag = gdk_drag_begin (surface, device, source->content, source->actions, dx, dy);
+
   if (source->drag == NULL)
     {
       g_print ("no drag :(\n");
@@ -439,21 +458,15 @@ gtk_drag_source_drag_begin (GtkDragSource *source,
 
 /**
  * gtk_drag_source_new:
- * @content: (nullable): the #GdkContentProvider to use, or %NULL
- * @actions: the actions to offer
  *
  * Creates a new #GtkDragSource object.
  *
  * Returns: the new #GtkDragSource
  */
 GtkDragSource *
-gtk_drag_source_new (GdkContentProvider *content,
-                     GdkDragAction       actions)
+gtk_drag_source_new (void)
 {
-  return g_object_new (GTK_TYPE_DRAG_SOURCE,
-                       "content", content,
-                       "actions", actions,
-                       NULL);
+  return g_object_new (GTK_TYPE_DRAG_SOURCE, NULL);
 }
 
 /**

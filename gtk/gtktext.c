@@ -2846,9 +2846,10 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
 
           paintable = gtk_text_util_create_drag_icon (widget, text, -1);
 
-          source = gtk_drag_source_new (priv->selection_content,
-                                        priv->editable ? GDK_ACTION_COPY | GDK_ACTION_MOVE
-                                                       : GDK_ACTION_COPY);
+          source = gtk_drag_source_new ();
+          gtk_drag_source_set_content (source, priv->selection_content);
+          if (priv->editable)
+            gtk_drag_source_set_actions (source, GDK_ACTION_COPY|GDK_ACTION_MOVE);
           gtk_drag_source_set_icon (source,
                                     paintable,
                                     priv->drag_start_x - ranges[0],
