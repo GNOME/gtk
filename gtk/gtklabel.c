@@ -54,6 +54,8 @@
 #include "gtkpopovermenu.h"
 #include "gtknative.h"
 #include "gtkdragsource.h"
+#include "gtkdragicon.h"
+#include "gtkpicture.h"
 
 #include "a11y/gtklabelaccessibleprivate.h"
 
@@ -4716,19 +4718,35 @@ gtk_label_drag_gesture_update (GtkGestureDrag *gesture,
     {
       if (gtk_drag_check_threshold (widget, info->drag_start_x, info->drag_start_y, x, y))
 	{
-          GtkDragSource *source;
+          GdkDrag *drag;
           GdkPaintable *paintable;
+          GdkSurface *surface;
           GdkDevice *device;
+          GtkWidget *drag_icon;
+          GtkWidget *picture;
 
-          source = gtk_drag_source_new ();
-          gtk_drag_source_set_content (source, info->provider);
-          paintable = get_selection_paintable (label);
-          gtk_drag_source_set_icon (source, paintable, 9, 0);
-          g_clear_object (&paintable); 
+          surface = gtk_native_get_surface (gtk_widget_get_native (widget));
           device = gtk_gesture_get_device (GTK_GESTURE (gesture));
-          gtk_drag_source_drag_begin (source, widget, device, info->drag_start_x, info->drag_start_y);
-          g_object_unref (source);
 
+          drag = gdk_drag_begin (surface,
+                                 device,
+                                 info->provider,
+                                 GDK_ACTION_COPY,
+                                 info->drag_start_x,
+                                 info->drag_start_y);
+
+          drag_icon = gtk_drag_icon_new_for_drag (drag);
+          gtk_widget_show (drag_icon);
+          paintable = get_selection_paintable (label);
+          picture = gtk_picture_new_for_paintable (paintable);
+          gtk_picture_set_can_shrink (GTK_PICTURE (picture), FALSE);
+          g_clear_object (&paintable); 
+          gtk_container_add (GTK_CONTAINER (drag_icon), picture);
+          g_object_ref_sink (drag_icon);
+          g_object_set_data_full (G_OBJECT (drag), "icon", drag_icon, (GDestroyNotify)gtk_widget_destroy);
+
+          g_object_unref (drag);
+          
 	  info->in_drag = FALSE;
 	}
     }
