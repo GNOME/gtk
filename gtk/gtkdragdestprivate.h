@@ -27,8 +27,7 @@ void gtk_drop_target_emit_drag_data_received (GtkDropTarget    *dest,
                                               GdkDrop          *drop,
                                               GtkSelectionData *sdata);
 void gtk_drop_target_emit_drag_leave         (GtkDropTarget    *dest,
-                                              GdkDrop          *drop,
-                                              guint             time);
+                                              GdkDrop          *drop);
 gboolean gtk_drop_target_emit_drag_motion    (GtkDropTarget    *dest,
                                               GdkDrop          *drop,
                                               int               x,

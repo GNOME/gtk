@@ -605,8 +605,7 @@ set_drop (GtkDropTarget *dest,
 
 void
 gtk_drop_target_emit_drag_leave (GtkDropTarget    *dest,
-                                 GdkDrop          *drop,
-                                 guint             time)
+                                 GdkDrop          *drop)
 {
   set_drop (dest, drop);
   g_signal_emit (dest, signals[DRAG_LEAVE], 0, time);
