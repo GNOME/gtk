@@ -25,8 +25,8 @@
 
 G_BEGIN_DECLS
 
-void           _gtk_drag_dest_handle_event (GtkWidget     *toplevel,
-				            GdkEvent      *event);
+void           gtk_drag_dest_handle_event (GtkWidget     *toplevel,
+                                           GdkEvent      *event);
 
 void           gtk_drop_set_current_dest (GdkDrop       *drop,
                                           GtkDropTarget *dest);

@@ -90,7 +90,7 @@ gboolean _gtk_translate_keyboard_accel_state   (GdkKeymap       *keymap,
                                                 gint            *level,
                                                 GdkModifierType *consumed_modifiers);
 
-void             gtk_propagate_event_internal  (GtkWidget       *widget,
+gboolean         gtk_propagate_event_internal  (GtkWidget       *widget,
                                                 GdkEvent        *event,
                                                 GtkWidget       *topmost);
 
