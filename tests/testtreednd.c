@@ -94,7 +94,7 @@ got_text (GObject      *source,
           gpointer      data)
 {
   GtkDropTarget *dest = GTK_DROP_TARGET (source);
-  GtkWidget *widget = gtk_drop_target_get_target (dest);
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
   gchar *text;
   GtkSelectionData *selda;
 
