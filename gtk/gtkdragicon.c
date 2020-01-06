@@ -23,6 +23,8 @@
 #include "gtkintl.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcssnodeprivate.h"
+#include "gtknativeprivate.h"
+#include "gtkpicture.h"
 
 
 struct _GtkDragIcon
@@ -372,6 +374,44 @@ GtkWidget *
 gtk_drag_icon_new (void)
 {
   return g_object_new (GTK_TYPE_DRAG_ICON, NULL);
+}
+
+GtkWidget *
+gtk_drag_icon_new_for_drag (GdkDrag *drag)
+{
+  GtkWidget *icon;
+
+  g_return_val_if_fail (GDK_IS_DRAG (drag), NULL);
+
+  icon = g_object_new (GTK_TYPE_DRAG_ICON, NULL);
+
+  gtk_drag_icon_set_surface (GTK_DRAG_ICON (icon), gdk_drag_get_drag_surface (drag));
+
+  return icon;
+}
+
+void
+gtk_drag_icon_set_from_paintable (GdkDrag      *drag,
+                                  GdkPaintable *paintable,
+                                  int           hot_x,
+                                  int           hot_y)
+{
+  GtkWidget *icon;
+  GtkWidget *picture;
+
+  gdk_drag_set_hotspot (drag, hot_x, hot_y);
+
+  icon = gtk_drag_icon_new_for_drag (drag);
+
+  picture = gtk_picture_new_for_paintable (paintable);
+  gtk_picture_set_can_shrink (GTK_PICTURE (picture), FALSE);
+  gtk_container_add (GTK_CONTAINER (icon), picture);
+
+  g_object_set_data_full (G_OBJECT (drag),
+                          "icon",
+                          g_object_ref_sink (icon),
+                          (GDestroyNotify)gtk_widget_destroy);
+  gtk_widget_show (icon);
 }
 
 void
