@@ -127,7 +127,7 @@ get_droptarget (void)
   targets = gdk_content_formats_new (entries, G_N_ELEMENTS (entries));
   dest = gtk_drop_target_new (targets, GDK_ACTION_COPY);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), NULL);
-  gtk_drop_target_attach (dest, label);
+  gtk_widget_add_controller (label, GTK_EVENT_CONTROLLER (dest));
   gdk_content_formats_unref (targets);
 
   return label;

@@ -46,6 +46,7 @@
 #include "gtkstylecontext.h"
 #include "gtkdragsource.h"
 #include "gtkdragdest.h"
+#include "gtkeventcontroller.h"
 
 
 /**
@@ -328,7 +329,7 @@ gtk_color_button_init (GtkColorButton *button)
   targets = gdk_content_formats_new (drop_types, G_N_ELEMENTS (drop_types));
   dest = gtk_drop_target_new (targets, GDK_ACTION_COPY);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_color_button_drag_drop), button);
-  gtk_drop_target_attach (dest, GTK_WIDGET (button));
+  gtk_widget_add_controller (GTK_WIDGET (button), GTK_EVENT_CONTROLLER (dest));
   gdk_content_formats_unref (targets);
 
   content = gdk_content_provider_new_with_callback (GDK_TYPE_RGBA, get_rgba_value, button);

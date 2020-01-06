@@ -504,7 +504,7 @@ popup_cb (gpointer data)
                 dest = gtk_drop_target_new (targets, GDK_ACTION_COPY | GDK_ACTION_MOVE);
 		g_signal_connect (dest, "drag-motion", G_CALLBACK (popup_motion), NULL);
 		g_signal_connect (dest, "drag-leave", G_CALLBACK (popup_leave), NULL);
-                gtk_drop_target_attach (dest, button);
+                gtk_widget_add_controller (button, GTK_EVENT_CONTROLLER (dest));
 	      }
 	  gtk_container_add (GTK_CONTAINER (popup_window), grid);
           gdk_content_formats_unref (targets);
@@ -597,7 +597,7 @@ main (int argc, char **argv)
   targets = gdk_content_formats_new (target_table, n_targets - 1); /* no rootwin */
   dest = gtk_drop_target_new (targets, GDK_ACTION_COPY | GDK_ACTION_MOVE);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (label_drag_drop), NULL);
-  gtk_drop_target_attach (dest, label);
+  gtk_widget_add_controller (label, GTK_EVENT_CONTROLLER (dest));
 
   gtk_widget_set_hexpand (label, TRUE);
   gtk_widget_set_vexpand (label, TRUE);
@@ -608,7 +608,7 @@ main (int argc, char **argv)
   dest = gtk_drop_target_new (targets, GDK_ACTION_COPY | GDK_ACTION_MOVE);
   g_signal_connect (dest, "drag-motion", G_CALLBACK (popsite_motion), NULL);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (popsite_leave), NULL);
-  gtk_drop_target_attach (dest, label);
+  gtk_widget_add_controller (label, GTK_EVENT_CONTROLLER (dest));
 
   gtk_widget_set_hexpand (label, TRUE);
   gtk_widget_set_vexpand (label, TRUE);
@@ -622,7 +622,7 @@ main (int argc, char **argv)
   g_signal_connect (dest, "drag-leave", G_CALLBACK (target_drag_leave), pixmap);
   g_signal_connect (dest, "drag-motion", G_CALLBACK (target_drag_motion), pixmap);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (target_drag_drop), pixmap);
-  gtk_drop_target_attach (dest, pixmap);
+  gtk_widget_add_controller (pixmap, GTK_EVENT_CONTROLLER (dest));
   gdk_content_formats_unref (targets);
 
   gtk_widget_set_hexpand (pixmap, TRUE);

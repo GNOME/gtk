@@ -625,7 +625,7 @@ main (gint argc, gchar **argv)
   g_signal_connect (dest, "drag_motion", G_CALLBACK (toolbar_drag_motion), toolbar);
   g_signal_connect (dest, "drag_leave", G_CALLBACK (toolbar_drag_leave), toolbar);
   g_signal_connect (dest, "drag_drop", G_CALLBACK (toolbar_drag_drop), label);
-  gtk_drop_target_attach (dest, toolbar);
+  gtk_widget_add_controller (toolbar, GTK_EVENT_CONTROLLER (dest));
   gdk_content_formats_unref (targets);
 
   gtk_widget_show (window);
