@@ -71,8 +71,6 @@ struct _GtkDragDestInfo
   GdkDrop           *drop;                /* drop */
 };
 
-#define DROP_ABORT_TIME 300000
-
 typedef gboolean (* GtkDragDestCallback) (GtkWidget      *widget,
                                           GdkDrop        *drop,
                                           gint            x,
