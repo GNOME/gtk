@@ -37,6 +37,8 @@
 #include "gtkdragiconprivate.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
+#include "gtkicontheme.h"
+#include "gtkpicture.h"
 #include "gtksettingsprivate.h"
 
 /**
@@ -81,7 +83,6 @@ struct _GtkDragSource
   GdkContentProvider *content;
   GdkDragAction actions;
 
-  GtkWidget *icon_window;
   GdkPaintable *paintable;
   int hot_x;
   int hot_y;
@@ -118,8 +119,6 @@ static guint signals[NUM_SIGNALS];
 
 static void gtk_drag_source_dnd_finished_cb   (GdkDrag             *drag,
                                                GtkDragSource       *source);
-static void gtk_drag_source_drop_performed_cb (GdkDrag             *drag,
-                                               GtkDragSource       *source);
 static void gtk_drag_source_cancel_cb         (GdkDrag             *drag,
                                                GdkDragCancelReason  reason,
                                                GtkDragSource       *source);
@@ -142,7 +141,6 @@ gtk_drag_source_finalize (GObject *object)
 
   g_clear_object (&source->content);
   g_clear_object (&source->paintable);
-  g_clear_object (&source->icon_window);
 
   G_OBJECT_CLASS (gtk_drag_source_parent_class)->finalize (object);
 }
@@ -314,7 +312,6 @@ drag_end (GtkDragSource *source,
 {
   gboolean delete_data;
 
-  g_signal_handlers_disconnect_by_func (source->drag, gtk_drag_source_drop_performed_cb, source);
   g_signal_handlers_disconnect_by_func (source->drag, gtk_drag_source_dnd_finished_cb, source);
   g_signal_handlers_disconnect_by_func (source->drag, gtk_drag_source_cancel_cb, source);
 
@@ -348,14 +345,6 @@ gtk_drag_source_cancel_cb (GdkDrag             *drag,
   drag_end (source, FALSE);
 }
 
-static void
-gtk_drag_source_drop_performed_cb (GdkDrag       *drag,
-                                   GtkDragSource *source)
-{
-  if (source->icon_window)
-    gtk_widget_hide (source->icon_window);
-}
-
 /**
  * gtk_drag_source_drag_begin:
  * @source: a #GtkDragSource
@@ -383,7 +372,6 @@ gtk_drag_source_drag_begin (GtkDragSource *source,
   GdkSurface *surface;
   double px, py;
   int dx, dy;
-  GtkWidget *icon;
 
   g_return_if_fail (GTK_IS_DRAG_SOURCE (source));
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -437,19 +425,8 @@ gtk_drag_source_drag_begin (GtkDragSource *source,
     }
 
   gdk_drag_set_hotspot (source->drag, source->hot_x, source->hot_y);
-  source->icon_window = gtk_drag_icon_new ();
-  g_object_ref_sink (source->icon_window);
-  gtk_drag_icon_set_surface (GTK_DRAG_ICON (source->icon_window),
-                             gdk_drag_get_drag_surface (source->drag));
+  gtk_drag_icon_set_from_paintable (source->drag, source->paintable, source->hot_x, source->hot_y);
 
-  icon = gtk_picture_new_for_paintable (source->paintable);
-  gtk_picture_set_can_shrink (GTK_PICTURE (icon), FALSE);
-  gtk_drag_icon_set_widget (GTK_DRAG_ICON (source->icon_window), icon);
-
-  gtk_widget_show (source->icon_window);
-
-  g_signal_connect (source->drag, "drop-performed",
-                    G_CALLBACK (gtk_drag_source_drop_performed_cb), source);
   g_signal_connect (source->drag, "dnd-finished",
                     G_CALLBACK (gtk_drag_source_dnd_finished_cb), source);
   g_signal_connect (source->drag, "cancel",
