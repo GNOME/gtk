@@ -23,27 +23,9 @@
 
 G_BEGIN_DECLS
 
-void gtk_drop_target_emit_drag_data_received (GtkDropTarget    *dest,
-                                              GdkDrop          *drop,
-                                              GtkSelectionData *sdata);
-void gtk_drop_target_emit_drag_leave         (GtkDropTarget    *dest,
-                                              GdkDrop          *drop);
-gboolean gtk_drop_target_emit_drag_motion    (GtkDropTarget    *dest,
-                                              GdkDrop          *drop,
-                                              int               x,
-                                              int               y);
-gboolean gtk_drop_target_emit_drag_drop      (GtkDropTarget    *dest,
-                                              GdkDrop          *drop,
-                                              int               x,
-                                              int               y);
 
-const char * gtk_drop_target_match           (GtkDropTarget *dest,
-                                              GdkDrop       *drop);
-void         gtk_drop_target_set_armed       (GtkDropTarget *dest,
-                                              gboolean       armed);
-gboolean     gtk_drop_target_get_armed       (GtkDropTarget *dest);
-
-GtkDropTarget *gtk_drop_target_get           (GtkWidget *widget);
+void           gtk_drag_dest_handle_event (GtkWidget     *toplevel,
+                                           GdkEvent      *event);
 
 G_END_DECLS
 

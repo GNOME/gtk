@@ -30,7 +30,6 @@
 #include "gtkbutton.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkdebug.h"
-#include "gtkdndprivate.h"
 #include "gtkeditable.h"
 #include "gtkemojichooser.h"
 #include "gtkemojicompletion.h"
