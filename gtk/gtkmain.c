@@ -1676,6 +1676,20 @@ is_focus_event (GdkEvent *event)
     }
 }
 
+static gboolean
+is_dnd_event (GdkEvent *event)
+{
+  switch ((guint) event->any.type)
+    {
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DROP_START:
+      return TRUE;
+    default:
+      return FALSE;
+    }
+}
 
 static inline void
 set_widget_active_state (GtkWidget       *target,
@@ -1818,6 +1832,25 @@ handle_key_event (GdkEvent *event)
   return focus_widget ? focus_widget : event_widget;
 }
 
+static GtkWidget *
+handle_dnd_event (GdkEvent *event)
+{
+  GtkWidget *event_widget;
+  GtkWidget *target;
+  gdouble x, y;
+  GtkWidget *native;
+
+  event_widget = gtk_get_event_widget (event);
+
+  if (!gdk_event_get_coords (event, &x, &y))
+    return event_widget;
+
+  native = GTK_WIDGET (gtk_widget_get_native (event_widget));
+  target = gtk_widget_pick (native, x, y, GTK_PICK_DEFAULT);
+
+  return target;
+}
+
 /**
  * gtk_main_do_event:
  * @event: An event to process (normally passed by GDK)
@@ -1914,6 +1947,8 @@ gtk_main_do_event (GdkEvent *event)
           goto cleanup;
         }
     }
+  else if (is_dnd_event (event))
+    target_widget = handle_dnd_event (event);
 
   if (!target_widget)
     goto cleanup;
@@ -2028,12 +2063,17 @@ gtk_main_do_event (GdkEvent *event)
       /* Crossing event propagation happens during picking */
       break;
 
-    case GDK_DRAG_ENTER:
-    case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
-      _gtk_drag_dest_handle_event (target_widget, event);
+      if (gtk_propagate_event (target_widget, event))
+        break;
+      G_GNUC_FALLTHROUGH;
+
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+      gtk_drag_dest_handle_event (target_widget, event);
       break;
+
     case GDK_EVENT_LAST:
     default:
       g_assert_not_reached ();
@@ -2623,14 +2663,19 @@ propagate_event_down (GtkWidget *widget,
   return handled_event;
 }
 
-void
+gboolean
 gtk_propagate_event_internal (GtkWidget *widget,
                               GdkEvent  *event,
                               GtkWidget *topmost)
 {
   /* Propagate the event down and up */
-  if (!propagate_event_down (widget, event, topmost))
-    propagate_event_up (widget, event, topmost);
+  if (propagate_event_down (widget, event, topmost))
+    return TRUE;
+
+  if (propagate_event_up (widget, event, topmost))
+    return TRUE;
+
+  return FALSE;
 }
 
 /**
@@ -2657,8 +2702,10 @@ gtk_propagate_event_internal (GtkWidget *widget,
  * certainly better ways to achieve your goals. For example, use
  * gtk_widget_queue_draw() instead
  * of making up expose events.
+ *
+ * Returns: %TRUE if the event was handled
  */
-void
+gboolean
 gtk_propagate_event (GtkWidget *widget,
                      GdkEvent  *event)
 {
@@ -2666,8 +2713,8 @@ gtk_propagate_event (GtkWidget *widget,
   GtkWidget *event_widget, *topmost = NULL;
   GdkDevice *device;
 
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (event != NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
 
   event_widget = gtk_get_event_widget (event);
   window_group = gtk_main_get_window_group (event_widget);
@@ -2679,5 +2726,5 @@ gtk_propagate_event (GtkWidget *widget,
   if (!topmost)
     topmost = gtk_window_group_get_current_grab (window_group);
 
-  gtk_propagate_event_internal (widget, event, topmost);
+  return gtk_propagate_event_internal (widget, event, topmost);
 }
