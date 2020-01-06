@@ -373,6 +373,7 @@ get_image_paintable (GtkImage *image)
 
 static void
 drag_begin (GtkDragSource *source,
+            GdkDrag       *drag,
             GtkWidget     *widget)
 {
   GdkPaintable *paintable;
