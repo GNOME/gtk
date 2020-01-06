@@ -78,9 +78,7 @@ typedef gboolean (* GtkDragDestCallback) (GtkWidget      *widget,
 
 /* Forward declarations */
 static GtkWidget *gtk_drop_find_widget          (GtkWidget        *widget,
-                                                 GdkDrop          *drop,
-                                                 gint              x,
-                                                 gint              y,
+                                                 GdkEvent         *event,
                                                  GtkDragDestCallback callback);
 static void     gtk_drag_dest_leave             (GtkWidget        *widget,
                                                  GdkDrop          *drop);
@@ -140,7 +138,6 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
       {
-        double x, y;
         GtkWidget *widget;
 
         if (event_type == GDK_DROP_START)
@@ -155,12 +152,8 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
               }
           }
 
-        gdk_event_get_coords (event, &x, &y);
-
         widget = gtk_drop_find_widget (toplevel,
-                                       drop,
-                                       x,
-                                       y,
+                                       event,
                                        (event_type == GDK_DRAG_MOTION) ?
                                        gtk_drag_dest_motion :
                                        gtk_drag_dest_drop);
@@ -185,22 +178,28 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
 
 static GtkWidget *
 gtk_drop_find_widget (GtkWidget           *event_widget,
-                      GdkDrop             *drop,
-                      gint                 x,
-                      gint                 y,
+                      GdkEvent            *event,
                       GtkDragDestCallback  callback)
 {
   GtkWidget *widget;
+  double ex, ey;
+  int x, y;
+  GdkDrop *drop;
 
   if (!gtk_widget_get_mapped (event_widget) ||
       !gtk_widget_get_sensitive (event_widget))
     return NULL;
 
-  widget = gtk_widget_pick (event_widget, x, y, GTK_PICK_DEFAULT);
+  gdk_event_get_coords (event, &ex, &ey);
+  drop = gdk_event_get_drop (event);
+
+  widget = gtk_widget_pick (event_widget, ex, ey, GTK_PICK_DEFAULT);
 
   if (!widget)
     return NULL;
 
+  x = ex;
+  y = ey;
   gtk_widget_translate_coordinates (event_widget, widget, x, y, &x, &y);
 
   while (widget)
