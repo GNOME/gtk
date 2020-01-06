@@ -72,9 +72,7 @@ struct _GtkDragDestInfo
 };
 
 typedef gboolean (* GtkDragDestCallback) (GtkWidget      *widget,
-                                          GdkDrop        *drop,
-                                          gint            x,
-                                          gint            y);
+                                          GdkEvent       *event);
 
 /* Forward declarations */
 static GtkWidget *gtk_drop_find_widget          (GtkWidget        *widget,
@@ -83,13 +81,9 @@ static GtkWidget *gtk_drop_find_widget          (GtkWidget        *widget,
 static void     gtk_drag_dest_leave             (GtkWidget        *widget,
                                                  GdkDrop          *drop);
 static gboolean gtk_drag_dest_motion            (GtkWidget        *widget,
-                                                 GdkDrop          *drop,
-                                                 gint              x,
-                                                 gint              y);
+                                                 GdkEvent         *event);
 static gboolean gtk_drag_dest_drop              (GtkWidget        *widget,
-                                                 GdkDrop          *drop,
-                                                 gint              x,
-                                                 gint              y);
+                                                 GdkEvent         *event);
 static void     gtk_drag_dest_set_widget        (GtkDragDestInfo  *info,
                                                  GtkWidget        *widget);
 
@@ -182,25 +176,21 @@ gtk_drop_find_widget (GtkWidget           *event_widget,
                       GtkDragDestCallback  callback)
 {
   GtkWidget *widget;
-  double ex, ey;
-  int x, y;
-  GdkDrop *drop;
+  double x, y;
+  int wx, wy;
 
   if (!gtk_widget_get_mapped (event_widget) ||
       !gtk_widget_get_sensitive (event_widget))
     return NULL;
 
-  gdk_event_get_coords (event, &ex, &ey);
-  drop = gdk_event_get_drop (event);
+  gdk_event_get_coords (event, &x, &y);
 
-  widget = gtk_widget_pick (event_widget, ex, ey, GTK_PICK_DEFAULT);
+  widget = gtk_widget_pick (event_widget, x, y, GTK_PICK_DEFAULT);
 
   if (!widget)
     return NULL;
 
-  x = ex;
-  y = ey;
-  gtk_widget_translate_coordinates (event_widget, widget, x, y, &x, &y);
+  gtk_widget_translate_coordinates (event_widget, widget, x, y, &wx, &wy);
 
   while (widget)
     {
@@ -233,7 +223,9 @@ gtk_drop_find_widget (GtkWidget           *event_widget,
        */
       if (g_object_get_data (G_OBJECT (widget), "gtk-drag-dest"))
         {
-          found = callback (widget, drop, x, y);
+          gdk_event_set_coords (event, wx, wy);
+          found = callback (widget, event);
+          gdk_event_set_coords (event, x, y);
         }
 
       if (!found)
@@ -260,7 +252,7 @@ gtk_drop_find_widget (GtkWidget           *event_widget,
       else
         return NULL;
 
-      if (!gtk_widget_translate_coordinates (widget, parent, x, y, &x, &y))
+      if (!gtk_widget_translate_coordinates (widget, parent, wx, wy, &wx, &wy))
         return NULL;
 
       widget = parent;
@@ -330,28 +322,30 @@ gtk_drag_dest_leave (GtkWidget *widget,
 
 static gboolean
 gtk_drag_dest_motion (GtkWidget *widget,
-                      GdkDrop   *drop,
-                      gint       x,
-                      gint       y)
+                      GdkEvent  *event)
 {
   GtkDropTarget *dest;
+  GdkDrop *drop;
+  double x, y;
 
   dest = gtk_drop_target_get (widget);
-  g_return_val_if_fail (dest != NULL, FALSE);
+  drop = gdk_event_get_drop (event);
+  gdk_event_get_coords (event, &x, &y);
 
   return gtk_drop_target_emit_drag_motion (dest, drop, x, y);
 }
 
 static gboolean
 gtk_drag_dest_drop (GtkWidget *widget,
-                    GdkDrop   *drop,
-                    gint       x,
-                    gint       y)
+                    GdkEvent  *event)
 {
   GtkDropTarget *dest;
+  GdkDrop *drop;
+  double x, y;
 
   dest = gtk_drop_target_get (widget);
-  g_return_val_if_fail (dest != NULL, FALSE);
+  drop = gdk_event_get_drop (event);
+  gdk_event_get_coords (event, &x, &y);
 
   return gtk_drop_target_emit_drag_drop (dest, drop, x, y);
 }
