@@ -40,6 +40,7 @@
 #include "gtkicontheme.h"
 #include "gtkpicture.h"
 #include "gtksettingsprivate.h"
+#include "gtkgesturesingle.h"
 
 /**
  * SECTION:gtkdragsource
@@ -78,7 +79,7 @@
 
 struct _GtkDragSource
 {
-  GObject parent_instance;
+  GtkGestureSingle parent_instance;
 
   GdkContentProvider *content;
   GdkDragAction actions;
@@ -87,16 +88,17 @@ struct _GtkDragSource
   int hot_x;
   int hot_y;
 
-  GtkGesture *gesture;
-  int start_button_mask;
+  gdouble start_x;
+  gdouble start_y;
+  gdouble last_x;
+  gdouble last_y;
 
   GdkDrag *drag;
-  GtkWidget *widget;
 };
 
 struct _GtkDragSourceClass
 {
-  GObjectClass parent_class;
+  GtkGestureSingleClass parent_class;
 };
 
 enum {
@@ -124,7 +126,7 @@ static void gtk_drag_source_cancel_cb         (GdkDrag             *drag,
                                                GtkDragSource       *source);
 
 
-G_DEFINE_TYPE (GtkDragSource, gtk_drag_source, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GtkDragSource, gtk_drag_source, GTK_TYPE_GESTURE_SINGLE);
 
 static void
 gtk_drag_source_init (GtkDragSource *source)
@@ -191,14 +193,81 @@ gtk_drag_source_get_property (GObject    *object,
     }
 }
 
+static gboolean
+gtk_drag_source_filter_event (GtkEventController *controller,
+                              const GdkEvent     *event)
+{
+  /* Let touchpad swipe events go through, only if they match n-points  */
+  if (gdk_event_get_event_type (event) == GDK_TOUCHPAD_SWIPE)
+    {
+      guint n_points;
+      guint n_fingers;
+
+      g_object_get (G_OBJECT (controller), "n-points", &n_points, NULL);
+      gdk_event_get_touchpad_gesture_n_fingers (event, &n_fingers);
+
+      if (n_fingers == n_points)
+        return FALSE;
+      else
+        return TRUE;
+    }
+
+  return GTK_EVENT_CONTROLLER_CLASS (gtk_drag_source_parent_class)->filter_event (controller, event);
+}
+
+static void
+gtk_drag_source_begin (GtkGesture       *gesture,
+                       GdkEventSequence *sequence)
+{
+  GtkDragSource *source = GTK_DRAG_SOURCE (gesture);
+  GdkEventSequence *current;
+
+  current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+
+  gtk_gesture_get_point (gesture, current, &source->start_x, &source->start_y);
+  source->last_x = source->start_x;
+  source->last_y = source->start_y;
+}
+
+static void
+gtk_drag_source_update (GtkGesture       *gesture,
+                        GdkEventSequence *sequence)
+{
+  GtkDragSource *source = GTK_DRAG_SOURCE (gesture);
+  GtkWidget *widget;
+  GdkDevice *device;
+
+  gtk_gesture_get_point (gesture, sequence, &source->last_x, &source->last_y);
+  if (!gtk_gesture_is_recognized (gesture))
+    return;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  device = gtk_gesture_get_device (gesture);
+
+  if (gtk_drag_check_threshold (widget,
+                                source->start_x, source->start_y,
+                                source->last_x, source->last_y))
+    {
+      gtk_drag_source_drag_begin (source, widget, device, source->start_x, source->start_y);
+   }
+}
+
 static void
 gtk_drag_source_class_init (GtkDragSourceClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
+  GtkEventControllerClass *controller_class = GTK_EVENT_CONTROLLER_CLASS (class);
+  GtkGestureClass *gesture_class = GTK_GESTURE_CLASS (class);
 
   object_class->finalize = gtk_drag_source_finalize;
   object_class->set_property = gtk_drag_source_set_property;
   object_class->get_property = gtk_drag_source_get_property;
+
+  controller_class->filter_event = gtk_drag_source_filter_event;
+
+  gesture_class->begin = gtk_drag_source_begin;
+  gesture_class->update = gtk_drag_source_update;
+  gesture_class->end = NULL;
 
   /**
    * GtkDragSource:content:
@@ -323,7 +392,6 @@ drag_end (GtkDragSource *source,
 
   g_object_set_data (G_OBJECT (source->drag), I_("gtk-drag-source"), NULL);
   g_clear_object (&source->drag);
-  source->widget = NULL;
   g_object_unref (source);
 }
 
@@ -405,7 +473,6 @@ gtk_drag_source_drag_begin (GtkDragSource *source,
     }
 
   g_object_set_data (G_OBJECT (source->drag), I_("gtk-drag-source"), source);
-  source->widget = widget;
 
   gtk_widget_reset_controllers (widget);
 
@@ -553,66 +620,6 @@ gtk_drag_source_set_icon (GtkDragSource *source,
   source->hot_y = hot_y;
 }
 
-static void
-source_gesture_begin (GtkGesture       *gesture,
-                      GdkEventSequence *sequence,
-                      GtkDragSource    *source)
-{
-  guint button;
-
-  if (gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture)))
-    button = 1;
-  else
-    button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
-
-  g_assert (button >= 1);
-
-  if ((source->start_button_mask & (GDK_BUTTON1_MASK << (button - 1))) == 0)
-    gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_DENIED);
-}
-
-static void
-source_gesture_update (GtkGesture       *gesture,
-                       GdkEventSequence *sequence,
-                       GtkDragSource    *source)
-                       
-{
-  gdouble start_x, start_y, offset_x, offset_y;
-  GtkWidget *widget;
-
-  if (!gtk_gesture_is_recognized (gesture))
-    return;
-
-  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-
-  gtk_gesture_drag_get_start_point (GTK_GESTURE_DRAG (gesture), &start_x, &start_y);
-  gtk_gesture_drag_get_offset (GTK_GESTURE_DRAG (gesture), &offset_x, &offset_y);
-
-  if (gtk_drag_check_threshold (widget,
-                                start_x, start_y,
-                                start_x + offset_x, start_y + offset_y))
-    {
-      GdkDevice *device = gtk_gesture_get_device (gesture);
-
-      gtk_drag_source_drag_begin (source, widget, device, start_x, start_y);
-   }
-}
-
-static void
-gesture_removed (gpointer data)
-{
-  GtkDragSource *source = data;
-
-  /* if we get here, the widget we are attached to was destroyed,
-   * and removed our gesture.
-   *
-   * Clean up, and drop the ref we held for being attached.
-   */
-
-  source->gesture = NULL;
-  g_object_unref (source);
-}
-
 /**
  * gtk_drag_source_attach:
  * @source: (transfer full): a #GtkDragSource
@@ -634,7 +641,6 @@ gtk_drag_source_attach (GtkDragSource   *source,
 {
   g_return_if_fail (GTK_IS_DRAG_SOURCE (source));
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (source->gesture == NULL);
   g_return_if_fail (start_button_mask != 0);
   g_return_if_fail ((start_button_mask & ~(GDK_BUTTON1_MASK |
                                            GDK_BUTTON2_MASK |
@@ -642,20 +648,7 @@ gtk_drag_source_attach (GtkDragSource   *source,
                                            GDK_BUTTON4_MASK |
                                            GDK_BUTTON5_MASK)) == 0);
 
-  source->gesture = gtk_gesture_drag_new ();
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (source->gesture),
-                                              GTK_PHASE_CAPTURE);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (source->gesture), 0);
-  g_signal_connect (source->gesture, "begin",
-                    G_CALLBACK (source_gesture_begin), source);
-  g_signal_connect (source->gesture, "update",
-                    G_CALLBACK (source_gesture_update), source);
-  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (source->gesture));
-
-  source->start_button_mask = start_button_mask;
-
-  g_object_set_data_full (G_OBJECT (source->gesture), "gtk-drag-source",
-                          source, gesture_removed);
+  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (source));
 }
 
 /**
@@ -667,20 +660,13 @@ gtk_drag_source_attach (GtkDragSource   *source,
 void
 gtk_drag_source_detach (GtkDragSource *source)
 {
+  GtkWidget *widget;
+
   g_return_if_fail (GTK_IS_DRAG_SOURCE (source));
 
-  if (source->gesture)
-    {
-      GtkWidget *widget;
-
-      g_object_ref (source);
-
-      g_object_set_data (G_OBJECT (source->gesture), "gtk-drag-source", NULL);
-      widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source->gesture));
-      gtk_widget_remove_controller (widget, GTK_EVENT_CONTROLLER (source->gesture));
-
-      g_object_unref (source);
-    }
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
+  if (widget)
+    gtk_widget_remove_controller (widget, GTK_EVENT_CONTROLLER (source));
 }
 
 /**
@@ -723,7 +709,7 @@ gtk_drag_source_get_origin (GtkDragSource *source)
 {
   g_return_val_if_fail (GTK_IS_DRAG_SOURCE (source), NULL);
 
-  return source->widget;
+  return gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
 }
 
 /**
