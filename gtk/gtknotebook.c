@@ -697,10 +697,14 @@ static gboolean gtk_notebook_focus           (GtkWidget        *widget,
 
 /*** Drag and drop Methods ***/
 static void gtk_notebook_drag_begin          (GtkDragSource    *source,
+                                              GdkDrag          *drag,
                                               GtkWidget        *widget);
 static void gtk_notebook_drag_end            (GtkDragSource    *source,
+                                              GdkDrag          *drag,
+                                              gboolean          delete_data,
                                               GtkWidget        *widget);
 static gboolean gtk_notebook_drag_failed     (GtkDragSource    *source,
+                                              GdkDrag          *drag,
                                               GdkDragCancelReason reason,
                                               GtkWidget        *widget);
 static gboolean gtk_notebook_drag_motion     (GtkDropTarget    *dest,
@@ -3089,6 +3093,7 @@ update_arrow_nodes (GtkNotebook *notebook)
 
 static void
 gtk_notebook_drag_begin (GtkDragSource    *source,
+                         GdkDrag          *drag,
                          GtkWidget        *widget)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
@@ -3113,6 +3118,8 @@ gtk_notebook_drag_begin (GtkDragSource    *source,
 
 static void
 gtk_notebook_drag_end (GtkDragSource  *source,
+                       GdkDrag        *drag,
+                       gboolean        delete_data,
                        GtkWidget      *widget)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
@@ -3148,9 +3155,10 @@ gtk_notebook_create_window (GtkNotebook *notebook,
 }
 
 static gboolean
-gtk_notebook_drag_failed (GtkDragSource  *source,
-                          GdkDragCancelReason reason,
-                          GtkWidget      *widget)
+gtk_notebook_drag_failed (GtkDragSource       *source,
+                          GdkDrag             *drag,
+                          GdkDragCancelReason  reason,
+                          GtkWidget           *widget)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;

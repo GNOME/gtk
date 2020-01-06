@@ -2789,9 +2789,14 @@ gtk_text_motion_controller_motion (GtkEventControllerMotion *controller,
 }
 
 static void
-drag_end (GtkText *self)
+drag_end (GtkDragSource *source,
+          GdkDrag       *drag,
+          gboolean       delete_data,
+          GtkText       *self)
 {
   g_object_set_data (G_OBJECT (self), "drag-source", NULL);
+  if (delete_data)
+    gtk_text_delete_selection (self);
 }
 
 static void
@@ -2846,10 +2851,7 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
                                     paintable,
                                     priv->drag_start_x - ranges[0],
                                     priv->drag_start_y);
-          g_signal_connect_swapped (source, "drag-data-delete",
-                                    G_CALLBACK (gtk_text_delete_selection), self);
-          g_signal_connect_swapped (source, "drag-end",
-                                    G_CALLBACK (drag_end), self);
+          g_signal_connect_swapped (source, "drag-end", G_CALLBACK (drag_end), self);
           g_object_set_data_full (G_OBJECT (self), "drag-source", source, g_object_unref);
 
           gtk_drag_source_drag_begin (source,

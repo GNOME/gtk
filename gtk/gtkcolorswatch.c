@@ -117,6 +117,7 @@ swatch_snapshot (GtkWidget   *widget,
 
 static void
 gtk_color_swatch_drag_begin (GtkDragSource  *source,
+                             GdkDrag        *drag,
                              GtkColorSwatch *swatch)
 {
   GtkColorSwatchPrivate *priv = gtk_color_swatch_get_instance_private (swatch);
