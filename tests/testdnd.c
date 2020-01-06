@@ -634,11 +634,14 @@ main (int argc, char **argv)
 
   button = gtk_button_new_with_label ("Drag Here\n");
 
+  source = gtk_drag_source_new ();
   g_value_init (&value, G_TYPE_STRING);
   g_value_set_string (&value, "I'm data!");
   content = gdk_content_provider_new_for_value (&value);
   g_value_unset (&value);
-  source = gtk_drag_source_new (content, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  gtk_drag_source_set_content (source, content);
+  g_object_unref (content);
+  gtk_drag_source_set_actions (source, GDK_ACTION_COPY|GDK_ACTION_MOVE);
   gtk_drag_source_attach (source, button, GDK_BUTTON1_MASK | GDK_BUTTON3_MASK);
   gtk_drag_source_set_icon (source, GDK_PAINTABLE (texture), 0, 0);
 
