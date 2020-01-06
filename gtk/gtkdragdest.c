@@ -37,7 +37,7 @@
 
 /**
  * SECTION:gtkdroptarget
- * @Short_description: An object to receive DND drops
+ * @Short_description: Event controller to receive DND drops
  * @Title: GtkDropTarget
  *
  * GtkDropTarget is an auxiliary object that is used to receive
@@ -308,7 +308,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    * for the ongoing operation in your signal handler. If you call one of the
    * read functions in your handler, GTK will ensure that the #GtkDrop object
    * stays alive until the read is completed. If you delay obtaining the data
-   * (e.g. to handle #GDK_ACTION_ASK by showing a #GtkPopover), you need to
+   * (e.g. to handle %GDK_ACTION_ASK by showing a #GtkPopover), you need to
    * hold a reference on the #GtkDrop.
    *
    * Returns: whether the cursor position is in a drop zone
@@ -329,7 +329,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
  * @formats: (nullable): the supported data formats
  * @actions: the supported actions
  *
- * Creates a new #GtkDropTarget object
+ * Creates a new #GtkDropTarget object.
  *
  * Returns: the new #GtkDropTarget
  */
@@ -348,7 +348,7 @@ gtk_drop_target_new (GdkContentFormats *formats,
  * @dest: a #GtkDropTarget
  * @formats: (nullable): the supported data formats
  *
- * Sets th data formats that this drop target will accept.
+ * Sets the data formats that this drop target will accept.
  */
 void
 gtk_drop_target_set_formats (GtkDropTarget     *dest,
