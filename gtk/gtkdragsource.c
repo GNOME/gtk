@@ -26,7 +26,6 @@
 
 #include "gtkdragsource.h"
 
-#include "gtkdndprivate.h"
 #include "gtkgesturedrag.h"
 #include "gtkgesturesingleprivate.h"
 #include "gtkimagedefinitionprivate.h"

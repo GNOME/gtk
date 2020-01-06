@@ -27,7 +27,6 @@
 #include "gtkdragdest.h"
 #include "gtkdragdestprivate.h"
 
-#include "gtkdndprivate.h"
 #include "gtkintl.h"
 #include "gtknative.h"
 #include "gtktypebuiltins.h"
@@ -101,6 +100,10 @@ static gboolean gtk_drop_target_filter_event (GtkEventController *controller,
 static void     gtk_drop_target_set_widget   (GtkEventController *controller,
                                               GtkWidget          *widget);
 static void     gtk_drop_target_unset_widget (GtkEventController *controller);
+
+static gboolean gtk_drop_target_get_armed    (GtkDropTarget *dest);
+static void     gtk_drop_target_set_armed    (GtkDropTarget *dest,
+                                              gboolean       armed);
 
 G_DEFINE_TYPE (GtkDropTarget, gtk_drop_target, GTK_TYPE_EVENT_CONTROLLER);
 
@@ -439,12 +442,6 @@ gtk_drag_dest_hierarchy_changed (GtkWidget  *widget,
     gdk_surface_register_dnd (gtk_native_get_surface (native));
 }
 
-GtkDropTarget *
-gtk_drop_target_get (GtkWidget *widget)
-{
-  return g_object_get_data (G_OBJECT (widget), I_("gtk-drag-dest"));
-}
-
 /**
  * gtk_drop_target_get_target:
  * @dest: a #GtkDropTarget
@@ -477,7 +474,7 @@ gtk_drop_target_get_drop (GtkDropTarget *dest)
   return dest->drop;
 }
 
-const char *
+static const char *
 gtk_drop_target_match (GtkDropTarget *dest,
                        GdkDrop       *drop)
 {
@@ -557,7 +554,7 @@ set_drop (GtkDropTarget *dest,
     g_object_add_weak_pointer (G_OBJECT (dest->drop), (gpointer *)&dest->drop);
 }
 
-void
+static void
 gtk_drop_target_emit_drag_leave (GtkDropTarget    *dest,
                                  GdkDrop          *drop)
 {
@@ -567,7 +564,7 @@ gtk_drop_target_emit_drag_leave (GtkDropTarget    *dest,
   gtk_drop_target_set_armed (dest, FALSE);
 }
 
-gboolean
+static gboolean
 gtk_drop_target_emit_drag_motion (GtkDropTarget    *dest,
                                   GdkDrop          *drop,
                                   int               x,
@@ -586,7 +583,7 @@ gtk_drop_target_emit_drag_motion (GtkDropTarget    *dest,
   return result;
 }
 
-gboolean
+static gboolean
 gtk_drop_target_emit_drag_drop (GtkDropTarget    *dest,
                                 GdkDrop          *drop,
                                 int               x,
@@ -600,7 +597,7 @@ gtk_drop_target_emit_drag_drop (GtkDropTarget    *dest,
   return result;
 }
 
-void
+static void
 gtk_drop_target_set_armed (GtkDropTarget *dest,
                            gboolean       armed)
 {
@@ -623,7 +620,7 @@ gtk_drop_target_set_armed (GtkDropTarget *dest,
   g_object_notify_by_pspec (G_OBJECT (dest), properties[PROP_ARMED]);
 }
 
-gboolean
+static gboolean
 gtk_drop_target_get_armed (GtkDropTarget *dest)
 {
   return dest->armed;
@@ -645,6 +642,35 @@ gtk_drop_target_filter_event (GtkEventController *controller,
     }
 
   return TRUE;
+}
+
+static void
+clear_current_dest (gpointer data, GObject *former_object)
+{
+  g_object_set_data (G_OBJECT (data), "current-dest", NULL);
+}
+
+static void
+gtk_drop_set_current_dest (GdkDrop       *drop,
+                           GtkDropTarget *dest)
+{
+  GtkDropTarget *old_dest;
+
+  old_dest = g_object_get_data (G_OBJECT (drop), "current-dest");
+
+  if (old_dest)
+    g_object_weak_unref (G_OBJECT (old_dest), clear_current_dest, drop);
+
+  g_object_set_data (G_OBJECT (drop), "current-dest", dest);
+
+  if (dest)
+    g_object_weak_ref (G_OBJECT (dest), clear_current_dest, drop);
+}
+
+static GtkDropTarget *
+gtk_drop_get_current_dest (GdkDrop *drop)
+{
+  return g_object_get_data (G_OBJECT (drop), "current-dest");
 }
 
 static gboolean
@@ -697,6 +723,48 @@ gtk_drop_target_handle_event (GtkEventController *controller,
     }
 
   return found;
+}
+
+/*
+ * This function is called if none of the event
+ * controllers has handled a drag event.
+ */
+void
+gtk_drag_dest_handle_event (GtkWidget *toplevel,
+                            GdkEvent  *event)
+{
+  GtkDropTarget *dest;
+  GdkDrop *drop;
+  GdkEventType event_type;
+
+  g_return_if_fail (toplevel != NULL);
+  g_return_if_fail (event != NULL);
+
+  event_type = gdk_event_get_event_type (event);
+  drop = gdk_event_get_drop (event);
+
+  switch ((guint) event_type)
+    {
+    case GDK_DRAG_ENTER:
+      break;
+
+    case GDK_DRAG_LEAVE:
+      dest = gtk_drop_get_current_dest (drop);
+      if (dest)
+        {
+          gtk_drop_target_emit_drag_leave (dest, drop);
+          gtk_drop_set_current_dest (drop, NULL);
+        }
+      break;
+
+    case GDK_DRAG_MOTION:
+    case GDK_DROP_START:
+      gdk_drop_status (drop, 0);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
 }
 
 static void
