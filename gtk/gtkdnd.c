@@ -71,18 +71,12 @@ struct _GtkDragDestInfo
   GdkDrop           *drop;                /* drop */
 };
 
-typedef gboolean (* GtkDragDestCallback) (GtkWidget      *widget,
-                                          GdkEvent       *event);
-
 /* Forward declarations */
 static GtkWidget *gtk_drop_find_widget          (GtkWidget        *widget,
-                                                 GdkEvent         *event,
-                                                 GtkDragDestCallback callback);
+                                                 GdkEvent         *event);
 static void     gtk_drag_dest_leave             (GtkWidget        *widget,
                                                  GdkDrop          *drop);
-static gboolean gtk_drag_dest_motion            (GtkWidget        *widget,
-                                                 GdkEvent         *event);
-static gboolean gtk_drag_dest_drop              (GtkWidget        *widget,
+static gboolean gtk_drop_target_handle_event    (GtkDropTarget    *dest,
                                                  GdkEvent         *event);
 static void     gtk_drag_dest_set_widget        (GtkDragDestInfo  *info,
                                                  GtkWidget        *widget);
@@ -146,11 +140,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
               }
           }
 
-        widget = gtk_drop_find_widget (toplevel,
-                                       event,
-                                       (event_type == GDK_DRAG_MOTION) ?
-                                       gtk_drag_dest_motion :
-                                       gtk_drag_dest_drop);
+        widget = gtk_drop_find_widget (toplevel, event);
 
         if (info->widget && info->widget != widget)
           {
@@ -171,9 +161,8 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
 }
 
 static GtkWidget *
-gtk_drop_find_widget (GtkWidget           *event_widget,
-                      GdkEvent            *event,
-                      GtkDragDestCallback  callback)
+gtk_drop_find_widget (GtkWidget *event_widget,
+                      GdkEvent  *event)
 {
   GtkWidget *widget;
   double x, y;
@@ -194,6 +183,7 @@ gtk_drop_find_widget (GtkWidget           *event_widget,
 
   while (widget)
     {
+      GtkDropTarget *dest;
       GtkWidget *parent;
       GList *hierarchy = NULL;
       gboolean found = FALSE;
@@ -221,10 +211,11 @@ gtk_drop_find_widget (GtkWidget           *event_widget,
        * emit "drag-motion" to check if we are actually in a drop
        * site.
        */
-      if (g_object_get_data (G_OBJECT (widget), "gtk-drag-dest"))
+      dest = gtk_drop_target_get (widget);
+      if (dest)
         {
           gdk_event_set_coords (event, wx, wy);
-          found = callback (widget, event);
+          found = gtk_drop_target_handle_event (dest, event);
           gdk_event_set_coords (event, x, y);
         }
 
@@ -321,31 +312,24 @@ gtk_drag_dest_leave (GtkWidget *widget,
 }
 
 static gboolean
-gtk_drag_dest_motion (GtkWidget *widget,
-                      GdkEvent  *event)
+gtk_drop_target_handle_event (GtkDropTarget *dest,
+                              GdkEvent      *event)
 {
-  GtkDropTarget *dest;
   GdkDrop *drop;
   double x, y;
 
-  dest = gtk_drop_target_get (widget);
   drop = gdk_event_get_drop (event);
   gdk_event_get_coords (event, &x, &y);
 
-  return gtk_drop_target_emit_drag_motion (dest, drop, x, y);
-}
+  switch ((int)gdk_event_get_event_type (event))
+    {
+    case GDK_DRAG_MOTION:
+      return gtk_drop_target_emit_drag_motion (dest, drop, x, y);
+    case GDK_DROP_START:
+      return gtk_drop_target_emit_drag_drop (dest, drop, x, y);
+    default:
+      break;
+    }
 
-static gboolean
-gtk_drag_dest_drop (GtkWidget *widget,
-                    GdkEvent  *event)
-{
-  GtkDropTarget *dest;
-  GdkDrop *drop;
-  double x, y;
-
-  dest = gtk_drop_target_get (widget);
-  drop = gdk_event_get_drop (event);
-  gdk_event_get_coords (event, &x, &y);
-
-  return gtk_drop_target_emit_drag_drop (dest, drop, x, y);
+  return FALSE;
 }
