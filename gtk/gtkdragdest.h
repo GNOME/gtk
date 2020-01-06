@@ -72,9 +72,6 @@ GDK_AVAILABLE_IN_ALL
 GdkDrop           *gtk_drop_target_get_drop         (GtkDropTarget     *dest);
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget         *gtk_drop_target_get_target       (GtkDropTarget     *dest);
-
-GDK_AVAILABLE_IN_ALL
 const char        *gtk_drop_target_find_mimetype    (GtkDropTarget     *dest);
 
 GDK_AVAILABLE_IN_ALL

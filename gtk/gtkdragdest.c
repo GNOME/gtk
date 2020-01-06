@@ -442,22 +442,6 @@ gtk_drag_dest_hierarchy_changed (GtkWidget  *widget,
 }
 
 /**
- * gtk_drop_target_get_target:
- * @dest: a #GtkDropTarget
- *
- * Gets the widget that the drop target is attached to.
- *
- * Returns: (nullable): get the widget that @dest is attached to
- */
-GtkWidget *
-gtk_drop_target_get_target (GtkDropTarget *dest)
-{
-  g_return_val_if_fail (GTK_IS_DROP_TARGET (dest), NULL);
-
-  return gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
-}
-
-/**
  * gtk_drop_target_get_drop:
  * @dest: a #GtkDropTarget
  *

@@ -1989,7 +1989,7 @@ file_list_drag_data_received_cb (GObject      *source,
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (user_data);
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
   GtkDropTarget *dest = GTK_DROP_TARGET (source);
-  GtkWidget *widget = gtk_drop_target_get_target (dest);
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
   GdkDrop *drop = gtk_drop_target_get_drop (dest);
   GdkDrag *drag = gdk_drop_get_drag (drop);
   gchar **uris;
