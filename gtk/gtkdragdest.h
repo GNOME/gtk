@@ -69,12 +69,6 @@ GDK_AVAILABLE_IN_ALL
 GdkDragAction      gtk_drop_target_get_actions      (GtkDropTarget     *dest);
 
 GDK_AVAILABLE_IN_ALL
-void               gtk_drop_target_attach           (GtkDropTarget     *dest,
-                                                     GtkWidget         *widget);
-GDK_AVAILABLE_IN_ALL
-void               gtk_drop_target_detach           (GtkDropTarget     *dest);
-
-GDK_AVAILABLE_IN_ALL
 GdkDrop           *gtk_drop_target_get_drop         (GtkDropTarget     *dest);
 
 GDK_AVAILABLE_IN_ALL

@@ -90,7 +90,7 @@ create_row (const gchar *text)
   targets = gdk_content_formats_new (entries, 1);
   dest = gtk_drop_target_new (targets, GDK_ACTION_MOVE);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), row);
-  gtk_drop_target_attach (dest, row);
+  gtk_widget_add_controller (GTK_WIDGET (row), GTK_EVENT_CONTROLLER (dest));
 
   gdk_content_formats_unref (targets);
 

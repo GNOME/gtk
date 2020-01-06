@@ -60,6 +60,7 @@
 #include "gtksettings.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkbitmaskprivate.h"
+#include "gtkeventcontroller.h"
 
 /**
  * SECTION:gtkfilechooserbutton
@@ -500,7 +501,7 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   target_list = gtk_content_formats_add_text_targets (target_list);
   dest = gtk_drop_target_new (target_list, GDK_ACTION_COPY);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_file_chooser_button_drag_drop), button);
-  gtk_drop_target_attach (dest, GTK_WIDGET (button));
+  gtk_widget_add_controller (GTK_WIDGET (button), GTK_EVENT_CONTROLLER (dest));
   gdk_content_formats_unref (target_list);
 }
 

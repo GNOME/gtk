@@ -379,7 +379,7 @@ gtk_expander_init (GtkExpander *expander)
   gdk_content_formats_unref (formats);
   g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_expander_drag_motion), expander);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_expander_drag_leave), expander);
-  gtk_drop_target_attach (dest, GTK_WIDGET (expander));
+  gtk_widget_add_controller (GTK_WIDGET (expander), GTK_EVENT_CONTROLLER (dest));
 
   gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
