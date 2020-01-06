@@ -26,13 +26,9 @@
 #define __GTK_DRAG_ICON_PRIVATE_H__
 
 #include <gio/gio.h>
-#include <gtk/gtk.h>
+#include <gtk/gtkdragicon.h>
 
 G_BEGIN_DECLS
-
-#define GTK_TYPE_DRAG_ICON (gtk_drag_icon_get_type ())
-
-G_DECLARE_FINAL_TYPE (GtkDragIcon, gtk_drag_icon, GTK, DRAG_ICON, GtkContainer)
 
 GtkWidget *     gtk_drag_icon_new                          (void);
 

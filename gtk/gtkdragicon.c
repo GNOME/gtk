@@ -23,6 +23,7 @@
 #include "gtkintl.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcssnodeprivate.h"
+#include "gtknativeprivate.h"
 
 
 struct _GtkDragIcon
@@ -372,6 +373,20 @@ GtkWidget *
 gtk_drag_icon_new (void)
 {
   return g_object_new (GTK_TYPE_DRAG_ICON, NULL);
+}
+
+GtkWidget *
+gtk_drag_icon_new_for_drag (GdkDrag *drag)
+{
+  GtkWidget *icon;
+
+  g_return_val_if_fail (GDK_IS_DRAG (drag), NULL);
+
+  icon = g_object_new (GTK_TYPE_DRAG_ICON, NULL);
+
+  gtk_drag_icon_set_surface (GTK_DRAG_ICON (icon), gdk_drag_get_drag_surface (drag));
+
+  return icon;
 }
 
 void
