@@ -77,9 +77,8 @@ typedef gboolean (* GtkDragDestCallback) (GtkWidget      *widget,
                                           gint            y);
 
 /* Forward declarations */
-static gboolean gtk_drop_find_widget            (GtkWidget        *widget,
+static GtkWidget *gtk_drop_find_widget          (GtkWidget        *widget,
                                                  GdkDrop          *drop,
-                                                 GtkDragDestInfo  *info,
                                                  gint              x,
                                                  gint              y,
                                                  GtkDragDestCallback callback);
@@ -142,7 +141,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
     case GDK_DROP_START:
       {
         double x, y;
-        gboolean found;
+        GtkWidget *widget;
 
         if (event_type == GDK_DROP_START)
           {
@@ -158,24 +157,23 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
 
         gdk_event_get_coords (event, &x, &y);
 
-        found = gtk_drop_find_widget (toplevel,
-                                      drop,
-                                      info,
-                                      x,
-                                      y,
-                                      (event_type == GDK_DRAG_MOTION) ?
-                                      gtk_drag_dest_motion :
-                                      gtk_drag_dest_drop);
+        widget = gtk_drop_find_widget (toplevel,
+                                       drop,
+                                       x,
+                                       y,
+                                       (event_type == GDK_DRAG_MOTION) ?
+                                       gtk_drag_dest_motion :
+                                       gtk_drag_dest_drop);
 
-        if (info->widget && !found)
+        if (info->widget && info->widget != widget)
           {
             gtk_drag_dest_leave (info->widget, drop);
             gtk_drag_dest_set_widget (info, NULL);
           }
-        
-        /* Send a reply.
-         */
-        if (!found)
+
+        if (widget)
+          gtk_drag_dest_set_widget (info, widget);
+        else
           gdk_drop_status (drop, 0);
       }
       break;
@@ -185,10 +183,9 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
     }
 }
 
-static gboolean
+static GtkWidget *
 gtk_drop_find_widget (GtkWidget           *event_widget,
                       GdkDrop             *drop,
-                      GtkDragDestInfo     *info,
                       gint                 x,
                       gint                 y,
                       GtkDragDestCallback  callback)
@@ -197,12 +194,12 @@ gtk_drop_find_widget (GtkWidget           *event_widget,
 
   if (!gtk_widget_get_mapped (event_widget) ||
       !gtk_widget_get_sensitive (event_widget))
-    return FALSE;
+    return NULL;
 
   widget = gtk_widget_pick (event_widget, x, y, GTK_PICK_DEFAULT);
 
   if (!widget)
-    return FALSE;
+    return NULL;
 
   gtk_widget_translate_coordinates (event_widget, widget, x, y, &x, &y);
 
@@ -213,7 +210,7 @@ gtk_drop_find_widget (GtkWidget           *event_widget,
       gboolean found = FALSE;
 
       if (!gtk_widget_get_mapped (widget))
-        return FALSE;
+        return NULL;
 
       if (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_INSENSITIVE)
         {
@@ -238,15 +235,6 @@ gtk_drop_find_widget (GtkWidget           *event_widget,
       if (g_object_get_data (G_OBJECT (widget), "gtk-drag-dest"))
         {
           found = callback (widget, drop, x, y);
-
-          /* If so, send a "drag-leave" to the last widget */
-          if (found && info->widget != widget)
-            {
-              if (info->widget)
-                gtk_drag_dest_leave (info->widget, drop);
-
-              gtk_drag_dest_set_widget (info, widget);
-            }
         }
 
       if (!found)
@@ -266,20 +254,20 @@ gtk_drop_find_widget (GtkWidget           *event_widget,
       g_list_free_full (hierarchy, g_object_unref);
 
       if (found)
-        return TRUE;
+        return widget;
 
       if (parent)
         g_object_remove_weak_pointer (G_OBJECT (parent), (gpointer *) &parent);
       else
-        return FALSE;
+        return NULL;
 
       if (!gtk_widget_translate_coordinates (widget, parent, x, y, &x, &y))
-        return FALSE;
+        return NULL;
 
       widget = parent;
     }
 
-  return FALSE;
+  return NULL;
 }
 
 static void
