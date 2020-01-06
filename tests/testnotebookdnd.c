@@ -303,7 +303,7 @@ create_trash_button (void)
   targets = gdk_content_formats_new (button_targets, G_N_ELEMENTS (button_targets));
   dest = gtk_drop_target_new (targets, GDK_ACTION_MOVE);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (on_button_drag_drop), NULL);
-  gtk_drop_target_attach (dest, button);
+  gtk_widget_add_controller (button, GTK_EVENT_CONTROLLER (dest));
   gdk_content_formats_unref (targets);
 
   return button;

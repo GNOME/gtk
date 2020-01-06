@@ -1635,7 +1635,7 @@ gtk_text_view_init (GtkTextView *text_view)
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_text_view_drag_leave), text_view);
   g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_text_view_drag_motion), text_view);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_text_view_drag_drop), text_view);
-  gtk_drop_target_attach (dest, GTK_WIDGET (text_view));
+  gtk_widget_add_controller (GTK_WIDGET (text_view), GTK_EVENT_CONTROLLER (dest));
 
   priv->virtual_cursor_x = -1;
   priv->virtual_cursor_y = -1;

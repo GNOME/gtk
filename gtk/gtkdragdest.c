@@ -46,7 +46,7 @@
  *
  * To use a GtkDropTarget to receive drops on a widget, you create
  * a GtkDropTarget object, connect to its signals, and then attach
- * it to the widget with gtk_drop_target_attach().
+ * it to the widget with gtk_widget_add_controller().
  */
 
 struct _GtkDropTarget
@@ -443,44 +443,6 @@ GtkDropTarget *
 gtk_drop_target_get (GtkWidget *widget)
 {
   return g_object_get_data (G_OBJECT (widget), I_("gtk-drag-dest"));
-}
-
-/**
- * gtk_drop_target_attach:
- * @dest: (transfer full): a #GtkDropTarget
- * @widget the widget to attach @dest to
- *
- * Attaches the @dest to widget and makes it accept drops
- * on the widgets.
- *
- * To undo the effect of this call, use gtk_drop_target_detach().
- */
-void
-gtk_drop_target_attach (GtkDropTarget *dest,
-                        GtkWidget     *widget)
-{
-  g_return_if_fail (GTK_IS_DROP_TARGET (dest));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (dest), GTK_PHASE_BUBBLE);
-  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (dest));
-}
-
-/**
- * gtk_drop_target_detach:
- * @dest: a #GtkDropTarget
- *
- * Undoes the effect of a prior gtk_drop_target_attach() call.
- */
-void
-gtk_drop_target_detach (GtkDropTarget *dest)
-{
-  GtkWidget *widget;
-
-  g_return_if_fail (GTK_IS_DROP_TARGET (dest));
-
-  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
-  gtk_widget_remove_controller (widget, GTK_EVENT_CONTROLLER (dest));
 }
 
 /**
