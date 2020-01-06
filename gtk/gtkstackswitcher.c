@@ -121,7 +121,7 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_stack_switcher_drag_leave), switcher);
   g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_stack_switcher_drag_motion), switcher);
   g_signal_connect_swapped (dest, "notify::armed", G_CALLBACK (gtk_stack_switcher_armed), switcher);
-  gtk_drop_target_attach (dest, GTK_WIDGET (switcher));
+  gtk_widget_add_controller (GTK_WIDGET (switcher), GTK_EVENT_CONTROLLER (dest));
 }
 
 static void

@@ -342,7 +342,7 @@ do_clipboard (GtkWidget *do_widget)
       dest = gtk_drop_target_new (formats, GDK_ACTION_COPY);
       gdk_content_formats_unref (formats);
       g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), image);
-      gtk_drop_target_attach (dest, image);
+      gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (dest));
 
       /* context menu on image */
       gesture = gtk_gesture_click_new ();
@@ -375,7 +375,7 @@ do_clipboard (GtkWidget *do_widget)
       dest = gtk_drop_target_new (formats, GDK_ACTION_COPY);
       gdk_content_formats_unref (formats);
       g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), image);
-      gtk_drop_target_attach (dest, image);
+      gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (dest));
 
       /* context menu on image */
       gesture = gtk_gesture_click_new ();

@@ -6743,8 +6743,6 @@ static void
 destroy_info (TreeViewDragInfo *di)
 {
   g_clear_object (&di->source);
-  if (di->dest)
-    gtk_drop_target_detach (di->dest);
   g_clear_object (&di->dest);
 
   g_slice_free (TreeViewDragInfo, di);
@@ -6773,6 +6771,11 @@ ensure_info (GtkTreeView *tree_view)
 static void
 remove_info (GtkTreeView *tree_view)
 {
+  TreeViewDragInfo *di;
+
+  di = get_info (tree_view);
+  if (di && di->dest)
+    gtk_widget_remove_controller (GTK_WIDGET (tree_view), GTK_EVENT_CONTROLLER (di->dest));
   g_object_set_data (G_OBJECT (tree_view), I_("gtk-tree-view-drag-info"), NULL);
 }
 
@@ -12968,7 +12971,7 @@ gtk_tree_view_enable_model_drag_dest (GtkTreeView       *tree_view,
   g_signal_connect (di->dest, "drag-leave", G_CALLBACK (gtk_tree_view_drag_leave), tree_view);
   g_signal_connect (di->dest, "drag-motion", G_CALLBACK (gtk_tree_view_drag_motion), tree_view);
   g_signal_connect (di->dest, "drag-drop", G_CALLBACK (gtk_tree_view_drag_drop), tree_view);
-  gtk_drop_target_attach (di->dest, GTK_WIDGET (tree_view));
+  gtk_widget_add_controller (GTK_WIDGET (tree_view), GTK_EVENT_CONTROLLER (di->dest));
   g_object_ref (di->dest);
 
   unset_reorderable (tree_view);
@@ -13029,7 +13032,7 @@ gtk_tree_view_unset_rows_drag_dest (GtkTreeView *tree_view)
     {
       if (di->dest_set)
         {
-          gtk_drop_target_detach (di->dest);
+          gtk_widget_remove_controller (GTK_WIDGET (tree_view), GTK_EVENT_CONTROLLER (di->dest));
           di->dest = NULL;
           di->dest_set = FALSE;
         }
