@@ -6,6 +6,7 @@ static const char *entries[] = {
 
 static void
 drag_begin (GtkDragSource *source,
+            GdkDrag       *drag,
             GtkWidget      *widget)
 {
   GtkWidget *row;

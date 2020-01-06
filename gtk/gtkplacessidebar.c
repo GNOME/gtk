@@ -1728,7 +1728,8 @@ stop_drop_feedback (GtkPlacesSidebar *sidebar)
 
 static void
 drag_begin_callback (GtkDragSource *source,
-                     gpointer        user_data)
+                     GdkDrag       *drag,
+                     gpointer       user_data)
 {
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
   GtkAllocation allocation;
@@ -2092,6 +2093,8 @@ out_free:
 
 static void
 drag_end_callback (GtkDragSource  *source,
+                   GdkDrag        *drag,
+                   gboolean        delete_data,
                    gpointer        user_data)
 {
   stop_drop_feedback (GTK_PLACES_SIDEBAR (user_data));

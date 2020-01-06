@@ -281,12 +281,15 @@ static void                 update_text_cell                             (GtkIco
 static void                 update_pixbuf_cell                           (GtkIconView            *icon_view);
 
 /* Source side drag signals */
-static void gtk_icon_view_drag_begin       (GtkDragSource    *source,
-                                            GtkWidget        *widget);
-static GBytes * gtk_icon_view_drag_data_get (const char *mime_type,
-                                             gpointer    data);
-static void gtk_icon_view_drag_data_delete (GtkDragSource *source,
-                                            GtkWidget        *widget);
+static void gtk_icon_view_drag_begin        (GtkDragSource   *source,
+                                             GdkDrag         *drag,
+                                             GtkWidget       *widget);
+static void gtk_icon_view_drag_end          (GtkDragSource   *source,
+                                             GdkDrag         *drag,
+                                             gboolean         delete_data,
+                                             GtkWidget       *widget);
+static GBytes * gtk_icon_view_drag_data_get (const char      *mime_type,
+                                             gpointer         data);
 
 /* Target side drag signals */
 static void     gtk_icon_view_drag_leave         (GtkDropTarget    *dest,
@@ -6083,7 +6086,8 @@ gtk_icon_view_maybe_begin_drag (GtkIconView *icon_view,
 /* Source side drag signals */
 static void
 gtk_icon_view_drag_begin (GtkDragSource *source,
-                          GtkWidget      *widget)
+                          GdkDrag       *drag,
+                          GtkWidget     *widget)
 {
   GtkIconView *icon_view;
   GtkIconViewItem *item;
@@ -6162,12 +6166,17 @@ gtk_icon_view_drag_data_get (const char *mime_type,
 }
 
 static void 
-gtk_icon_view_drag_data_delete (GtkDragSource *source,
-                                GtkWidget      *widget)
+gtk_icon_view_drag_end (GtkDragSource *source,
+                        GdkDrag       *drag,
+                        gboolean       delete_data,
+                        GtkWidget     *widget)
 {
   GtkTreeModel *model;
   GtkIconView *icon_view;
   GtkTreePath *source_row;
+
+  if (!delete_data)
+    return;
 
   icon_view = GTK_ICON_VIEW (widget);
   model = gtk_icon_view_get_model (icon_view);
@@ -6462,8 +6471,8 @@ gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,
 
   g_signal_connect (icon_view->priv->source, "drag-begin",
                     G_CALLBACK (gtk_icon_view_drag_begin), icon_view);
-  g_signal_connect (icon_view->priv->source, "drag-data-delete",
-                    G_CALLBACK (gtk_icon_view_drag_data_delete), icon_view);
+  g_signal_connect (icon_view->priv->source, "drag-end",
+                    G_CALLBACK (gtk_icon_view_drag_end), icon_view);
 
   icon_view->priv->start_button_mask = start_button_mask;
   icon_view->priv->source_actions = actions;

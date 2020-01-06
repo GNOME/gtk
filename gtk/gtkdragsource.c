@@ -110,7 +110,6 @@ enum {
   DRAG_BEGIN,
   DRAG_END,
   DRAG_FAILED,
-  DRAG_DATA_DELETE,
   NUM_SIGNALS
 };
 
@@ -225,12 +224,11 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
   /**
    * GtkDragSource::drag-begin:
    * @source: the #GtkDragSource
+   * @drag: the #GtkDrag object
    *
    * The ::drag-begin signal is emitted on the drag source when a drag
    * is started. It can be used to e.g. set a custom drag icon with
-   * gtk_drag_source_set_icon(). But all of the setup can also be
-   * done before calling gtk_drag_source_drag_begin(), so this is not
-   * really necessary.
+   * gtk_drag_source_set_icon().
    */
   signals[DRAG_BEGIN] =
       g_signal_new (I_("drag-begin"),
@@ -239,11 +237,15 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
                     0,
                     NULL, NULL,
                     NULL,
-                    G_TYPE_NONE, 0);
+                    G_TYPE_NONE, 1,
+                    GDK_TYPE_DRAG);
 
   /**
    * GtkDragSource::drag-end:
    * @source: the #GtkDragSource
+   * @drag: the #GtkDrag object
+   * @delete_data: %TRUE if the drag was performing %GDK_ACTION_MOVE,
+   *    and the data should be deleted
    *
    * The ::drag-end signal is emitted on the drag source when a drag is
    * finished. A typical reason to connect to this signal is to undo
@@ -256,11 +258,14 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
                     0,
                     NULL, NULL,
                     NULL,
-                    G_TYPE_NONE, 0);
+                    G_TYPE_NONE, 2,
+                    GDK_TYPE_DRAG,
+                    G_TYPE_BOOLEAN);
 
   /**
    * GtkDragSource::drag-failed:
    * @source: the #GtkDragSource
+   * @drag: the #GtkDrag object
    * @reason: information on why the drag failed
    *
    * The ::drag-failed signal is emitted on the drag source when a drag has
@@ -276,27 +281,10 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
                     G_SIGNAL_RUN_LAST,
                     0,
                     _gtk_boolean_handled_accumulator, NULL,
-                    _gtk_marshal_BOOLEAN__ENUM,
-                    G_TYPE_BOOLEAN, 1,
+                    _gtk_marshal_BOOLEAN__OBJECT_ENUM,
+                    G_TYPE_BOOLEAN, 2,
+                    GDK_TYPE_DRAG,
                     GDK_TYPE_DRAG_CANCEL_REASON);
-
-  /**
-   * GtkDragSource::drag-data-delete:
-   * @source: the #GtkDragSource
-   *
-   * The ::drag-data-delete signal is emitted on the drag source when a drag
-   * with the action %GDK_ACTION_MOVE is successfully completed. The signal
-   * handler is responsible for deleting the data that has been dropped. What
-   * "delete" means depends on the context of the drag operation.
-   */
-  signals[DRAG_DATA_DELETE] =
-      g_signal_new (I_("drag-data-delete"),
-                    G_TYPE_FROM_CLASS (class),
-                    G_SIGNAL_RUN_LAST,
-                    0,
-                    NULL, NULL,
-                    NULL,
-                    G_TYPE_NONE, 0);
 }
 
 static void gtk_drag_source_dnd_finished_cb   (GdkDrag             *drag,
@@ -311,11 +299,15 @@ static void
 drag_end (GtkDragSource *source,
           gboolean       success)
 {
+  gboolean delete_data;
+
   g_signal_handlers_disconnect_by_func (source->drag, gtk_drag_source_drop_performed_cb, source);
   g_signal_handlers_disconnect_by_func (source->drag, gtk_drag_source_dnd_finished_cb, source);
   g_signal_handlers_disconnect_by_func (source->drag, gtk_drag_source_cancel_cb, source);
 
-  g_signal_emit (source, signals[DRAG_END], 0);
+  delete_data = success && gdk_drag_get_selected_action (source->drag) == GDK_ACTION_MOVE;
+
+  g_signal_emit (source, signals[DRAG_END], 0, source->drag, delete_data);
 
   gdk_drag_drop_done (source->drag, success);
 
@@ -329,8 +321,6 @@ static void
 gtk_drag_source_dnd_finished_cb (GdkDrag       *drag,
                                  GtkDragSource *source)
 {
-  if (gdk_drag_get_selected_action (drag) == GDK_ACTION_MOVE)
-    g_signal_emit (source, signals[DRAG_DATA_DELETE], 0);
   drag_end (source, TRUE);
 }
 
@@ -341,7 +331,7 @@ gtk_drag_source_cancel_cb (GdkDrag             *drag,
 {
   gboolean success = FALSE;
 
-  g_signal_emit (source, signals[DRAG_FAILED], 0, reason, &success);
+  g_signal_emit (source, signals[DRAG_FAILED], 0, source->drag, reason, &success);
   drag_end (source, FALSE);
 }
 
@@ -415,7 +405,7 @@ gtk_drag_source_drag_begin (GtkDragSource *source,
   /* We hold a ref until ::drag-end is emitted */
   g_object_ref (source);
 
-  g_signal_emit (source, signals[DRAG_BEGIN], 0);
+  g_signal_emit (source, signals[DRAG_BEGIN], 0, source->drag);
 
   if (!source->paintable)
     {
@@ -777,7 +767,7 @@ gtk_drag_source_drag_cancel (GtkDragSource *source)
     {
       gboolean success = FALSE;
 
-      g_signal_emit (source, signals[DRAG_FAILED], 0, GDK_DRAG_CANCEL_ERROR, &success);
+      g_signal_emit (source, signals[DRAG_FAILED], 0, source->drag, GDK_DRAG_CANCEL_ERROR, &success);
 
       gdk_drag_drop_done (source->drag, success);
     }

@@ -273,7 +273,9 @@ drag_end (GtkDragSource *source)
 }
 
 static gboolean
-drag_failed (GtkDragSource *source, GdkDragCancelReason reason)
+drag_failed (GtkDragSource       *source,
+             GdkDrag             *drag,
+             GdkDragCancelReason  reason)
 {
   g_print ("drag failed: %d\n", reason);
   return FALSE;
@@ -316,7 +318,8 @@ make_image (const gchar *icon_name, int hotspot)
 
 static void
 spinner_drag_begin (GtkDragSource *source,
-                    GtkWidget      *widget)
+                    GdkDrag       *drag,
+                    GtkWidget     *widget)
 {
   GdkPaintable *paintable;
 
