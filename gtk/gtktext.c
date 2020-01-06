@@ -1732,7 +1732,7 @@ gtk_text_init (GtkText *self)
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_text_drag_leave), self);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_text_drag_drop), self);
   gdk_content_formats_unref (formats);
-  gtk_drop_target_attach (dest, GTK_WIDGET (self));
+  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (dest));
 
   /* This object is completely private. No external entity can gain a reference
    * to it; so we create it here and destroy it in finalize().

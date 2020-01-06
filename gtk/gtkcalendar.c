@@ -791,7 +791,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_calendar_drag_leave), calendar);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_calendar_drag_drop), calendar);
 
-  gtk_drop_target_attach (dest, widget);
+  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (dest));
   
   priv->year_before = 0;
 

@@ -1025,7 +1025,6 @@ gtk_icon_view_dispose (GObject *object)
   g_clear_object (&priv->key_controller);
 
   g_clear_object (&priv->source);
-  g_clear_pointer (&priv->dest, gtk_drop_target_detach);
 
   G_OBJECT_CLASS (gtk_icon_view_parent_class)->dispose (object);
 }
@@ -6499,7 +6498,7 @@ gtk_icon_view_enable_model_drag_dest (GtkIconView       *icon_view,
   g_signal_connect (icon_view->priv->dest, "drag-leave", G_CALLBACK (gtk_icon_view_drag_leave), icon_view);
   g_signal_connect (icon_view->priv->dest, "drag-motion", G_CALLBACK (gtk_icon_view_drag_motion), icon_view);
   g_signal_connect (icon_view->priv->dest, "drag-drop", G_CALLBACK (gtk_icon_view_drag_drop), icon_view);
-  gtk_drop_target_attach (icon_view->priv->dest, GTK_WIDGET (icon_view));
+  gtk_widget_add_controller (GTK_WIDGET (icon_view), GTK_EVENT_CONTROLLER (icon_view->priv->dest));
 
   icon_view->priv->dest_actions = actions;
 
@@ -6545,7 +6544,7 @@ gtk_icon_view_unset_model_drag_dest (GtkIconView *icon_view)
 
   if (icon_view->priv->dest_set)
     {
-      gtk_drop_target_detach (icon_view->priv->dest);
+      gtk_widget_remove_controller (GTK_WIDGET (icon_view), GTK_EVENT_CONTROLLER (icon_view->priv->dest));
       icon_view->priv->dest = NULL;
       icon_view->priv->dest_set = FALSE;
     }
