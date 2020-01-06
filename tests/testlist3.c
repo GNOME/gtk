@@ -84,7 +84,9 @@ create_row (const gchar *text)
 
   bytes = g_bytes_new (&row, sizeof (gpointer));
   content = gdk_content_provider_new_for_bytes ("GTK_LIST_BOX_ROW", bytes);
-  source = gtk_drag_source_new (content, GDK_ACTION_MOVE);
+  source = gtk_drag_source_new ();
+  gtk_drag_source_set_content (source, content);
+  gtk_drag_source_set_actions (source, GDK_ACTION_MOVE);
   g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), image);
   gtk_drag_source_attach (source, image, GDK_BUTTON1_MASK);
 

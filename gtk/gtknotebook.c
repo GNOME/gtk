@@ -2879,9 +2879,11 @@ gtk_notebook_motion (GtkEventController *controller,
 
       priv->detached_tab = priv->cur_page;
 
+      source = gtk_drag_source_new ();
       content = gdk_content_provider_new_with_formats (priv->source_targets, gtk_notebook_drag_data_get, widget);
-      source = gtk_drag_source_new (content, GDK_ACTION_MOVE);
+      gtk_drag_source_set_content (source, content);
       g_object_unref (content);
+      gtk_drag_source_set_actions (source, GDK_ACTION_MOVE);
 
       g_signal_connect (source, "drag-begin", G_CALLBACK (gtk_notebook_drag_begin), notebook);
       g_signal_connect (source, "drag-end", G_CALLBACK (gtk_notebook_drag_end), notebook);

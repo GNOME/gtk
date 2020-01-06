@@ -1469,7 +1469,9 @@ icon_drag_update_cb (GtkGestureDrag *gesture,
       GdkDevice *device;
 
       icon_info->in_drag = TRUE;
-      source = gtk_drag_source_new (icon_info->content, icon_info->actions);
+      source = gtk_drag_source_new ();
+      gtk_drag_source_set_content (source, icon_info->content);
+      gtk_drag_source_set_actions (source, icon_info->actions);
       paintable = gtk_widget_paintable_new (icon_info->widget);
       gtk_drag_source_set_icon (source, paintable, -2, -2);
       g_object_unref (paintable);

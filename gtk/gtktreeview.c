@@ -12929,7 +12929,9 @@ gtk_tree_view_enable_model_drag_source (GtkTreeView       *tree_view,
   di = ensure_info (tree_view);
 
   content = gdk_content_provider_new_with_formats (formats, gtk_tree_view_drag_data_get, tree_view);
-  di->source = gtk_drag_source_new (content, actions);
+  di->source = gtk_drag_source_new ();
+  gtk_drag_source_set_content (di->source, content);
+  gtk_drag_source_set_actions (di->source, actions);
   g_object_unref (content);
   g_signal_connect (di->source, "drag-begin", G_CALLBACK (gtk_tree_view_drag_begin), tree_view);
   g_signal_connect (di->source, "drag-end", G_CALLBACK (gtk_tree_view_drag_end), tree_view);

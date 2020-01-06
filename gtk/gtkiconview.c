@@ -6465,8 +6465,10 @@ gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,
 
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), NULL);
 
+  icon_view->priv->source = gtk_drag_source_new ();
   content = gdk_content_provider_new_with_formats (formats, gtk_icon_view_drag_data_get, icon_view);
-  icon_view->priv->source = gtk_drag_source_new (content, actions);
+  gtk_drag_source_set_content (icon_view->priv->source, content);
+  gtk_drag_source_set_actions (icon_view->priv->source, actions);
   g_object_unref (content);
 
   g_signal_connect (icon_view->priv->source, "drag-begin",
