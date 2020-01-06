@@ -17,7 +17,7 @@
    height="14"
    id="svg7384"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.4 5da689c313, 2019-01-14"
    width="14">
   <metadata
      id="metadata90">
@@ -37,8 +37,8 @@
      bordercolor="#666666"
      borderopacity="1"
      inkscape:current-layer="layer9"
-     inkscape:cx="9.6493349"
-     inkscape:cy="5.5864571"
+     inkscape:cx="6.1684486"
+     inkscape:cy="5.9327595"
      gridtolerance="10"
      inkscape:guide-bbox="true"
      guidetolerance="10"
@@ -47,10 +47,10 @@
      inkscape:object-paths="false"
      objecttolerance="10"
      pagecolor="#3a3b39"
-     inkscape:pageopacity="1"
+     inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      showborder="true"
-     showgrid="false"
+     showgrid="true"
      showguides="true"
      inkscape:snap-bbox="true"
      inkscape:snap-bbox-midpoints="false"
@@ -59,12 +59,12 @@
      inkscape:snap-nodes="false"
      inkscape:snap-others="false"
      inkscape:snap-to-guides="true"
-     inkscape:window-height="1016"
+     inkscape:window-height="1376"
      inkscape:window-maximized="1"
-     inkscape:window-width="1920"
+     inkscape:window-width="3440"
      inkscape:window-x="0"
-     inkscape:window-y="27"
-     inkscape:zoom="22.005438"
+     inkscape:window-y="639"
+     inkscape:zoom="62.240778"
      inkscape:showpageshadow="false">
     <inkscape:grid
        dotted="false"
@@ -74,8 +74,8 @@
        originx="-139.99995"
        originy="120"
        snapvisiblegridlinesonly="true"
-       spacingx="1px"
-       spacingy="1px"
+       spacingx="1"
+       spacingy="1"
        type="xygrid"
        visible="true" />
   </sodipodi:namedview>
@@ -101,10 +101,10 @@
      transform="translate(-381.00015,-339)">
     <path
        inkscape:connector-curvature="0"
-       d="m 388.00015,343.01754 c -1.64587,0 -2.98246,1.33658 -2.98246,2.98246 0,1.64587 1.33659,2.98246 2.98246,2.98246 1.64587,0 2.98246,-1.33659 2.98246,-2.98246 0,-1.64588 -1.33659,-2.98246 -2.98246,-2.98246 z"
+       d="m 388.00015,341.99995 c -2.20743,0 -4.00005,1.79261 -4.00005,4.00005 0,2.20743 1.79262,4.00005 4.00005,4.00005 2.20743,0 4.00005,-1.79262 4.00005,-4.00005 0,-2.20744 -1.79262,-4.00005 -4.00005,-4.00005 z"
        id="path9555"
        sodipodi:nodetypes="csssc"
-       style="color:#bebebe;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:'Andale Mono';text-indent:0pt;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#bebebe;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.78125;marker:none" />
+       style="color:#bebebe;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:'Andale Mono';text-indent:0pt;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#bebebe;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.38899732;marker:none" />
   </g>
   <g
      inkscape:groupmode="layer"
