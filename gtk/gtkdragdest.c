@@ -31,7 +31,7 @@
 #include "gtkintl.h"
 #include "gtknative.h"
 #include "gtktypebuiltins.h"
-#include "gtkeventcontroller.h"
+#include "gtkeventcontrollerprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkselectionprivate.h"
 
@@ -51,7 +51,7 @@
 
 struct _GtkDropTarget
 {
-  GObject parent_instance;
+  GtkEventController parent_object;
 
   GdkContentFormats *formats;
   GdkDragAction actions;
@@ -64,7 +64,7 @@ struct _GtkDropTarget
 
 struct _GtkDropTargetClass
 {
-  GObjectClass parent_class;
+  GtkEventControllerClass parent_class;
 
   gboolean (*drag_motion) (GtkDropTarget *dest,
                            int            x,
@@ -94,7 +94,15 @@ static gboolean gtk_drop_target_drag_motion (GtkDropTarget *dest,
                                              int            x,
                                              int            y);
 
-G_DEFINE_TYPE (GtkDropTarget, gtk_drop_target, G_TYPE_OBJECT);
+static gboolean gtk_drop_target_handle_event (GtkEventController *controller,
+                                              const GdkEvent     *event);
+static gboolean gtk_drop_target_filter_event (GtkEventController *controller,
+                                              const GdkEvent     *event);
+static void     gtk_drop_target_set_widget   (GtkEventController *controller,
+                                              GtkWidget          *widget);
+static void     gtk_drop_target_unset_widget (GtkEventController *controller);
+
+G_DEFINE_TYPE (GtkDropTarget, gtk_drop_target, GTK_TYPE_EVENT_CONTROLLER);
 
 static void
 gtk_drop_target_init (GtkDropTarget *dest)
@@ -165,10 +173,16 @@ static void
 gtk_drop_target_class_init (GtkDropTargetClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
+  GtkEventControllerClass *controller_class = GTK_EVENT_CONTROLLER_CLASS (class);
 
   object_class->finalize = gtk_drop_target_finalize;
   object_class->set_property = gtk_drop_target_set_property;
   object_class->get_property = gtk_drop_target_get_property;
+
+  controller_class->handle_event = gtk_drop_target_handle_event;
+  controller_class->filter_event = gtk_drop_target_filter_event;
+  controller_class->set_widget = gtk_drop_target_set_widget;
+  controller_class->unset_widget = gtk_drop_target_unset_widget;
 
   class->drag_motion = gtk_drop_target_drag_motion;
 
@@ -445,28 +459,11 @@ void
 gtk_drop_target_attach (GtkDropTarget *dest,
                         GtkWidget     *widget)
 {
-  GtkDropTarget *old_dest;
-
   g_return_if_fail (GTK_IS_DROP_TARGET (dest));
-  g_return_if_fail (dest->widget == NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  old_dest = g_object_get_data (G_OBJECT (widget), I_("gtk-drag-dest"));
-  if (old_dest)
-    {
-      g_signal_handlers_disconnect_by_func (widget, gtk_drag_dest_realized, old_dest);
-      g_signal_handlers_disconnect_by_func (widget, gtk_drag_dest_hierarchy_changed, old_dest);
-    }
-
-  if (gtk_widget_get_realized (widget))
-    gtk_drag_dest_realized (widget);
-
-  dest->widget = widget;
-
-  g_signal_connect (widget, "realize", G_CALLBACK (gtk_drag_dest_realized), dest);
-  g_signal_connect (widget, "notify::root", G_CALLBACK (gtk_drag_dest_hierarchy_changed), dest);
-
-  g_object_set_data_full (G_OBJECT (widget), I_("gtk-drag-dest"), dest, g_object_unref);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (dest), GTK_PHASE_BUBBLE);
+  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (dest));
 }
 
 /**
@@ -478,17 +475,12 @@ gtk_drop_target_attach (GtkDropTarget *dest,
 void
 gtk_drop_target_detach (GtkDropTarget *dest)
 {
+  GtkWidget *widget;
+
   g_return_if_fail (GTK_IS_DROP_TARGET (dest));
 
-  if (dest->widget)
-    {
-      g_signal_handlers_disconnect_by_func (dest->widget, gtk_drag_dest_realized, dest);
-      g_signal_handlers_disconnect_by_func (dest->widget, gtk_drag_dest_hierarchy_changed, dest);
-
-      g_object_set_data (G_OBJECT (dest->widget), I_("gtk-drag-dest"), NULL);
-
-      dest->widget = NULL;
-    }
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
+  gtk_widget_remove_controller (widget, GTK_EVENT_CONTROLLER (dest));
 }
 
 /**
@@ -504,7 +496,7 @@ gtk_drop_target_get_target (GtkDropTarget *dest)
 {
   g_return_val_if_fail (GTK_IS_DROP_TARGET (dest), NULL);
 
-  return dest->widget;
+  return gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
 }
 
 /**
@@ -650,6 +642,10 @@ void
 gtk_drop_target_set_armed (GtkDropTarget *dest,
                            gboolean       armed)
 {
+  GtkWidget *widget;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
+
   dest->armed_pending = FALSE;
 
   if (dest->armed == armed)
@@ -657,13 +653,10 @@ gtk_drop_target_set_armed (GtkDropTarget *dest,
 
   dest->armed = armed;
 
-  if (dest->widget)
-    {
-      if (armed)
-        gtk_drag_highlight (dest->widget);
-      else
-        gtk_drag_unhighlight (dest->widget);
-    }
+  if (armed)
+    gtk_drag_highlight (widget);
+  else
+    gtk_drag_unhighlight (widget);
 
   g_object_notify_by_pspec (G_OBJECT (dest), properties[PROP_ARMED]);
 }
@@ -672,6 +665,104 @@ gboolean
 gtk_drop_target_get_armed (GtkDropTarget *dest)
 {
   return dest->armed;
+}
+
+static gboolean
+gtk_drop_target_filter_event (GtkEventController *controller,
+                              const GdkEvent     *event)
+{
+  switch ((int)gdk_event_get_event_type (event))
+    {
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DROP_START:
+      return GTK_EVENT_CONTROLLER_CLASS (gtk_drop_target_parent_class)->filter_event (controller, event);
+
+    default:;
+    }
+
+  return TRUE;
+}
+
+static gboolean
+gtk_drop_target_handle_event (GtkEventController *controller,
+                              const GdkEvent     *event)
+{
+  GtkDropTarget *dest = GTK_DROP_TARGET (controller);
+  GdkDrop *drop;
+  GtkDragDestInfo *info;
+  double x, y;
+  gboolean found = FALSE;
+
+  gdk_event_get_coords (event, &x, &y);
+
+  drop = gdk_event_get_drop (event);
+  info = gtk_drag_get_dest_info (drop, TRUE);
+
+  switch ((int)gdk_event_get_event_type (event))
+    {
+    case GDK_DRAG_MOTION:
+      found = gtk_drop_target_emit_drag_motion (dest, drop, x, y);
+      break;
+
+    case GDK_DROP_START:
+      /* We send a leave before the drop so that the widget unhighlights
+       * properly.
+       */
+      if (info->dest)
+        {
+          gtk_drop_target_emit_drag_leave (info->dest, drop);
+          gtk_drag_dest_set_target (info, NULL);
+        }
+
+      found = gtk_drop_target_emit_drag_drop (dest, drop, x, y);
+      break;
+
+    default:
+      break;
+    }
+
+  if (found)
+    {
+      if (info->dest && info->dest != dest)
+        {
+          gtk_drop_target_emit_drag_leave (info->dest, drop);
+          gtk_drag_dest_set_target (info, NULL);
+        }
+
+      gtk_drag_dest_set_target (info, dest);
+    }
+
+  return found;
+}
+
+static void
+gtk_drop_target_set_widget (GtkEventController *controller,
+                            GtkWidget          *widget)
+{
+  GtkDropTarget *dest = GTK_DROP_TARGET (controller);
+
+  GTK_EVENT_CONTROLLER_CLASS (gtk_drop_target_parent_class)->set_widget (controller, widget);
+
+  if (gtk_widget_get_realized (widget))
+    gtk_drag_dest_realized (widget);
+
+  g_signal_connect (widget, "realize", G_CALLBACK (gtk_drag_dest_realized), dest);
+  g_signal_connect (widget, "notify::root", G_CALLBACK (gtk_drag_dest_hierarchy_changed), dest);
+}
+
+static void
+gtk_drop_target_unset_widget (GtkEventController *controller)
+{
+  GtkWidget *widget;
+
+  widget = gtk_event_controller_get_widget (controller);
+
+  g_signal_handlers_disconnect_by_func (widget, gtk_drag_dest_realized, controller);
+  g_signal_handlers_disconnect_by_func (widget, gtk_drag_dest_hierarchy_changed, controller);
+
+  GTK_EVENT_CONTROLLER_CLASS (gtk_drop_target_parent_class)->unset_widget (controller);
 }
 
 /**
@@ -810,13 +901,16 @@ gtk_drop_target_read_selection (GtkDropTarget       *dest,
                                 gpointer             user_data)
 {
   GTask *task;
+  GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_DROP_TARGET (dest));
 
   task = g_task_new (dest, NULL, callback, user_data);
   g_object_set_data_full (G_OBJECT (task), "drop", g_object_ref (dest->drop), g_object_unref);
-  if (dest->widget)
-    g_object_set_data (G_OBJECT (task), "display", gtk_widget_get_display (dest->widget));
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
+  if (widget)
+    g_object_set_data (G_OBJECT (task), "display", gtk_widget_get_display (widget));
 
   gdk_drop_read_async (dest->drop,
                        (const char *[2]) { target, NULL },
