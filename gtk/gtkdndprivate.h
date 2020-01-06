@@ -25,21 +25,12 @@
 
 G_BEGIN_DECLS
 
-void                    _gtk_drag_dest_handle_event     (GtkWidget              *toplevel,
-				                         GdkEvent               *event);
+void           _gtk_drag_dest_handle_event (GtkWidget     *toplevel,
+				            GdkEvent      *event);
 
-typedef struct _GtkDragDestInfo GtkDragDestInfo;
-
-struct _GtkDragDestInfo
-{
-  GtkDropTarget     *dest;
-  GdkDrop           *drop;                /* drop */
-};
-
-GtkDragDestInfo * gtk_drag_get_dest_info   (GdkDrop          *drop,
-                                            gboolean          create);
-void              gtk_drag_dest_set_target (GtkDragDestInfo  *info,
-                                            GtkDropTarget    *dest);
+void           gtk_drop_set_current_dest (GdkDrop       *drop,
+                                          GtkDropTarget *dest);
+GtkDropTarget *gtk_drop_get_current_dest (GdkDrop       *drop);
 
 G_END_DECLS
 
