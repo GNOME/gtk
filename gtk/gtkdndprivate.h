@@ -20,12 +20,26 @@
 #define __GTK_DND_PRIVATE_H__
 
 #include "gtkwidget.h"
+#include "gtkdragdest.h"
 
 
 G_BEGIN_DECLS
 
 void                    _gtk_drag_dest_handle_event     (GtkWidget              *toplevel,
 				                         GdkEvent               *event);
+
+typedef struct _GtkDragDestInfo GtkDragDestInfo;
+
+struct _GtkDragDestInfo
+{
+  GtkDropTarget     *dest;
+  GdkDrop           *drop;                /* drop */
+};
+
+GtkDragDestInfo * gtk_drag_get_dest_info   (GdkDrop          *drop,
+                                            gboolean          create);
+void              gtk_drag_dest_set_target (GtkDragDestInfo  *info,
+                                            GtkDropTarget    *dest);
 
 G_END_DECLS
 
