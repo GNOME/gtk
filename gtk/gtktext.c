@@ -67,6 +67,7 @@
 #include "gtkactionmuxerprivate.h"
 #include "gtkdragsource.h"
 #include "gtkdragdest.h"
+#include "gtkdragicon.h"
 
 #include "a11y/gtktextaccessible.h"
 
@@ -178,6 +179,8 @@ struct _GtkTextPrivate
   GMenuModel    *extra_menu;
 
   GtkTextHistory *history;
+
+  GdkDrag       *drag;
 
   float         xalign;
 
@@ -2791,14 +2794,15 @@ gtk_text_motion_controller_motion (GtkEventControllerMotion *controller,
 }
 
 static void
-drag_end (GtkDragSource *source,
-          GdkDrag       *drag,
-          gboolean       delete_data,
-          GtkText       *self)
+dnd_finished_cb (GdkDrag *drag,
+                 GtkText *self)
 {
-  g_object_set_data (G_OBJECT (self), "drag-source", NULL);
-  if (delete_data)
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  if (gdk_drag_get_selected_action (drag) == GDK_ACTION_MOVE)
     gtk_text_delete_selection (self);
+
+  priv->drag = NULL;
 }
 
 static void
@@ -2838,31 +2842,35 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
           int *ranges;
           int n_ranges;
           char *text;
+          GdkDragAction actions;
+          GdkDrag *drag;
           GdkPaintable *paintable;
-          GtkDragSource *source;
 
           text = _gtk_text_get_selected_text (self);
           gtk_text_get_pixel_ranges (self, &ranges, &n_ranges);
 
-          paintable = gtk_text_util_create_drag_icon (widget, text, -1);
-
-          source = gtk_drag_source_new ();
-          gtk_drag_source_set_content (source, priv->selection_content);
           if (priv->editable)
-            gtk_drag_source_set_actions (source, GDK_ACTION_COPY|GDK_ACTION_MOVE);
-          gtk_drag_source_set_icon (source,
-                                    paintable,
-                                    priv->drag_start_x - ranges[0],
-                                    priv->drag_start_y);
-          g_signal_connect_swapped (source, "drag-end", G_CALLBACK (drag_end), self);
-          g_object_set_data_full (G_OBJECT (self), "drag-source", source, g_object_unref);
+            actions = GDK_ACTION_COPY|GDK_ACTION_MOVE;
+          else
+            actions = GDK_ACTION_COPY;
 
-          gtk_drag_source_drag_begin (source,
-                                      widget,
-                                      gdk_event_get_device ((GdkEvent*) event),
-                                      priv->drag_start_x + ranges[0],
-                                      priv->drag_start_y);
-          g_object_unref (paintable);
+          drag = gdk_drag_begin (gdk_event_get_surface ((GdkEvent*) event),
+                                 gdk_event_get_device ((GdkEvent*) event),
+                                 priv->selection_content,
+                                 actions,
+                                 priv->drag_start_x,
+                                 priv->drag_start_y);
+
+          g_signal_connect (drag, "dnd-finished", G_CALLBACK (dnd_finished_cb), self);
+
+          paintable = gtk_text_util_create_drag_icon (widget, text, -1);
+          gtk_drag_icon_set_from_paintable (drag, paintable, ranges[0], 0);
+          g_clear_object (&paintable);
+
+          priv->drag = drag;
+
+          g_object_unref (drag);
+          
           g_free (ranges);
           g_free (text);
 
@@ -6123,17 +6131,13 @@ static GdkDragAction
 gtk_text_get_action (GtkText *self,
                      GdkDrop *drop)
 {
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GdkDrag *drag = gdk_drop_get_drag (drop);
-  GtkDragSource *source;
-  GtkDragSource *source1;
   GdkDragAction actions;
 
   actions = gdk_drop_get_actions (drop);
 
-  source = drag ? gtk_drag_get_source (drag) : NULL;
-  source1 = (GtkDragSource*)g_object_get_data (G_OBJECT (self), "drag-source");
-
-  if (source && source == source1 &&
+  if (drag == priv->drag &&
       actions & GDK_ACTION_MOVE)
     return GDK_ACTION_MOVE;
 
