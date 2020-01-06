@@ -297,7 +297,7 @@ toolbar_drag_drop (GtkDropTarget *dest,
 		   gint x, gint y,
                    GtkWidget *label)
 {
-  GtkWidget *widget = gtk_drop_target_get_target (dest);
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
   gchar buf[32];
 
   g_snprintf(buf, sizeof(buf), "%d",
