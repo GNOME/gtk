@@ -3793,11 +3793,13 @@ on_row_dragged (GtkGestureDrag *gesture,
 
       sidebar->dragging_over = TRUE;
 
+      source = gtk_drag_source_new ();
       content = gdk_content_provider_new_with_formats (sidebar->source_targets,
                                                        drag_data_get_callback,
                                                        sidebar);
-      source = gtk_drag_source_new (content, GDK_ACTION_MOVE);
+      gtk_drag_source_set_content (source, content);
       g_object_unref (content);
+      gtk_drag_source_set_actions (source, GDK_ACTION_MOVE);
       g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin_callback), sidebar);
       g_signal_connect (source, "drag-end", G_CALLBACK (drag_end_callback), sidebar);
  

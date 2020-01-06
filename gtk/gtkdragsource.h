@@ -51,8 +51,7 @@ GDK_AVAILABLE_IN_ALL
 GType              gtk_drag_source_get_type  (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkDragSource      *gtk_drag_source_new        (GdkContentProvider *content,
-                                                GdkDragAction       actions);
+GtkDragSource      *gtk_drag_source_new        (void);
 
 GDK_AVAILABLE_IN_ALL
 void                gtk_drag_source_set_content (GtkDragSource     *source,

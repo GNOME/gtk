@@ -618,7 +618,9 @@ main (gint argc, gchar **argv)
 
   targets = gdk_content_formats_new (target_table, G_N_ELEMENTS (target_table));
   content = gdk_content_provider_new_for_bytes (target_table[0], g_bytes_new ("", 1));
-  source = gtk_drag_source_new (content, GDK_ACTION_MOVE);
+  source = gtk_drag_source_new ();
+  gtk_drag_source_set_content (source, content);
+  gtk_drag_source_set_actions (source, GDK_ACTION_MOVE);
   g_object_unref (content);
   gtk_drag_source_attach (source, button, GDK_BUTTON1_MASK);
   dest = gtk_drop_target_new (targets, GDK_ACTION_MOVE);
