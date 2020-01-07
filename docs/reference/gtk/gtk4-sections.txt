@@ -7171,3 +7171,29 @@ GTK_DRAG_SOURCE_GET_CLASS
 <SUBSECTION Private>
 gtk_drag_source_get_type
 </SECTION>
+
+<SECTION>
+<FILE>gtkdroptarget</FILE>
+GtkDropTarget
+gtk_drop_target_new
+gtk_drop_target_set_formats
+gtk_drop_target_get_formats
+gtk_drop_target_set_actions
+gtk_drop_target_get_actions
+gtk_drop_target_get_drop
+gtk_drop_target_find_mimetype
+gtk_drop_target_read_selection
+gtk_drop_target_read_selection_finish
+gtk_drag_highlight
+gtk_drag_unhighlight
+
+<SUBSECTION Standard>
+GTK_TYPE_DROP_TARGET
+GTK_DROP_TARGET
+GTK_DROP_TARGET_CLASS
+GTK_IS_DROP_TARGET
+GTK_IS_DROP_TARGET_CLASS
+GTK_DROP_TARGET_GET_CLASS
+<SUBSECTION Private>
+gtk_drop_target_get_type
+</SECTION>
