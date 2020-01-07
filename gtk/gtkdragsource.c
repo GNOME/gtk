@@ -306,6 +306,18 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
+  /**
+   * GtkDragSource::prepare:
+   * @source: the #GtkDragSource
+   * @x: the X coordinate of the drag starting point
+   * @y: the Y coordinate fo the drag starting point
+   *
+   * The ::prepare signal is emitted when a drag is about to be initiated. It can
+   * be used to set up #GtkDragSource:content and #GtkDragSource:actions just in time,
+   * or to start the drag conditionally.
+   *
+   * Returns: %TRUE to start the drag
+   */
   signals[PREPARE] =
       g_signal_new (I_("prepare"),
                     G_TYPE_FROM_CLASS (class),
