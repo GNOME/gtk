@@ -2903,6 +2903,8 @@ gtk_notebook_motion (GtkEventController *controller,
       priv->operation = DRAG_OPERATION_DETACH;
       tab_drag_end (notebook, priv->cur_page);
 
+      g_object_set_data (G_OBJECT (drag), "gtk-notebook-drag-origin", notebook);
+
       g_object_unref (drag);
 
       return;
@@ -3231,8 +3233,7 @@ gtk_notebook_drag_motion (GtkDropTarget *dest,
         }
       else
         {
-          GtkDragSource *drag_source = gtk_drag_get_source (drag);
-          GtkNotebook *source = GTK_NOTEBOOK (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (drag_source)));
+          GtkNotebook *source = GTK_NOTEBOOK (g_object_get_data (G_OBJECT (drag), "gtk-notebook-drag-origin"));
 
           g_assert (source->priv->cur_page != NULL);
           source_child = source->priv->cur_page->child;
@@ -7108,13 +7109,11 @@ gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
  *                         gpointer          user_data)
  *  {
  *    GtkDrag *drag;
- *    GtkDragSource *source;
  *    GtkWidget *notebook;
  *    GtkWidget **child;
  *
  *    drag = gtk_drop_get_drag (drop);
- *    source = gtk_drag_get_source (drag);
- *    notebook = gtk_event_controller_get_widge (GTK_EVENT_CONTROLLER (source));
+ *    notebook = g_object_get_data (drag, "gtk-notebook-drag-origin");
  *    child = (void*) gtk_selection_data_get_data (data);
  *
  *    // process_widget (*child);
