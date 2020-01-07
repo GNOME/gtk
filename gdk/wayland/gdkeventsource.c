@@ -37,6 +37,7 @@ gdk_event_source_prepare (GSource *base,
 {
   GdkWaylandEventSource *source = (GdkWaylandEventSource *) base;
   GdkWaylandDisplay *display = (GdkWaylandDisplay *) source->display;
+  GList *l;
 
   *timeout = -1;
 
@@ -60,6 +61,24 @@ gdk_event_source_prepare (GSource *base,
   /* if prepare_read() returns non-zero, there are events to be dispatched */
   if (wl_display_prepare_read (display->wl_display) != 0)
     return TRUE;
+
+  /* We need to check whether there are pending events on the surface queues as well,
+   * but we also need to make sure to only have one active "read" in the end,
+   * or none if we immediately return TRUE, as multiple reads expect reads from
+   * as many threads.
+   */
+  for (l = display->event_queues; l; l = l->next)
+    {
+      struct wl_event_queue *queue = l->data;
+
+      if (wl_display_prepare_read_queue (display->wl_display, queue) != 0)
+        {
+          wl_display_cancel_read (display->wl_display);
+          return TRUE;
+        }
+      wl_display_cancel_read (display->wl_display);
+    }
+
   source->reading = TRUE;
 
   if (wl_display_flush (display->wl_display) < 0)
@@ -193,6 +212,7 @@ _gdk_wayland_display_queue_events (GdkDisplay *display)
 {
   GdkWaylandDisplay *display_wayland;
   GdkWaylandEventSource *source;
+  GList *l;
 
   display_wayland = GDK_WAYLAND_DISPLAY (display);
   source = (GdkWaylandEventSource *) display_wayland->event_source;
@@ -202,6 +222,18 @@ _gdk_wayland_display_queue_events (GdkDisplay *display)
       g_message ("Error %d (%s) dispatching to Wayland display.",
                  errno, g_strerror (errno));
       _exit (1);
+    }
+
+  for (l = display_wayland->event_queues; l; l = l->next)
+    {
+      struct wl_event_queue *queue = l->data;
+
+      if (wl_display_dispatch_queue_pending (display_wayland->wl_display, queue) < 0)
+        {
+          g_message ("Error %d (%s) dispatching to Wayland display.",
+                     errno, g_strerror (errno));
+          _exit (1);
+        }
     }
 
   if (source->pfd.revents & (G_IO_ERR | G_IO_HUP))
