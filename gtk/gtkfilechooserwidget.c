@@ -2044,10 +2044,10 @@ file_list_drag_drop_cb (GtkDropTarget        *dest,
 
 static void
 file_list_drag_begin_cb (GtkDragSource        *source,
+                         GdkDrag              *drag,
                          GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-  GdkDrag *drag = gtk_drag_source_get_drag (source);
 
   gtk_places_sidebar_set_drop_targets_visible (GTK_PLACES_SIDEBAR (priv->places_sidebar), TRUE, drag);
 }
@@ -2066,10 +2066,11 @@ file_list_drag_motion_cb (GtkDropTarget        *dest,
 
 static void
 file_list_drag_end_cb (GtkDragSource        *source,
+                       GdkDrag              *drag,
+                       gboolean              delete_data,
                        GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-  GdkDrag *drag = gtk_drag_source_get_drag (source);
 
   gtk_places_sidebar_set_drop_targets_visible (GTK_PLACES_SIDEBAR (priv->places_sidebar), FALSE, drag);
 }
