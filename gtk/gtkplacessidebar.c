@@ -2111,6 +2111,16 @@ drag_leave_callback (GtkDropTarget *dest,
   sidebar->drag_data_info = DND_UNKNOWN;
 }
 
+static void
+drag_armed_callback (GtkDropTarget *dest,
+                     GParamSpec    *pspec,
+                     gpointer       user_data)
+{
+  GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
+
+  gtk_drag_unhighlight (GTK_WIDGET (sidebar->list_box));
+}
+
 static gboolean
 drag_drop_callback (GtkDropTarget *dest,
                     int            x,
@@ -4097,6 +4107,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   g_signal_connect (dest, "drag-motion", G_CALLBACK (drag_motion_callback), sidebar);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop_callback), sidebar);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (drag_leave_callback), sidebar);
+  g_signal_connect (dest, "notify::armed", G_CALLBACK (drag_armed_callback), sidebar);
   gtk_widget_add_controller (sidebar->list_box, GTK_EVENT_CONTROLLER (dest));
   sidebar->source_targets = gdk_content_formats_new (dnd_source_targets, G_N_ELEMENTS (dnd_source_targets));
   sidebar->source_targets = gtk_content_formats_add_text_targets (sidebar->source_targets);
