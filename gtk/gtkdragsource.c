@@ -292,7 +292,7 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
    *
    * The actions that are supported by drag operations from the source.
    *
-   * Note that you must handle the #GtkDragSource::drag-data-deleted signal
+   * Note that you must handle the #GtkDragSource::drag-end signal
    * if the actions include %GDK_ACTION_MOVE.
    */ 
   properties[PROP_ACTIONS] =
