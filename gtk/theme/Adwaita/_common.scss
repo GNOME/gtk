@@ -146,6 +146,10 @@ iconview {
   @extend .view;
 
   &:drop(active) {
+    box-shadow: none;
+  }
+
+  dndtarget:drop(active) {
     border-style: solid;
     border-width: 1px;
     border-color: $selected_borders_color;
