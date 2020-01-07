@@ -99,6 +99,10 @@ struct _GtkDragSource
 struct _GtkDragSourceClass
 {
   GtkGestureSingleClass parent_class;
+
+  gboolean (* prepare) (GtkDragSource *source,
+                        double         x,
+                        double         y);
 };
 
 enum {
@@ -125,6 +129,9 @@ static void gtk_drag_source_cancel_cb         (GdkDrag             *drag,
                                                GdkDragCancelReason  reason,
                                                GtkDragSource       *source);
 
+static gboolean gtk_drag_source_prepare (GtkDragSource *source,
+                                         double         x,
+                                         double         y);
 
 G_DEFINE_TYPE (GtkDragSource, gtk_drag_source, GTK_TYPE_GESTURE_SINGLE);
 
@@ -267,6 +274,8 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
   gesture_class->update = gtk_drag_source_update;
   gesture_class->end = NULL;
 
+  class->prepare = gtk_drag_source_prepare;
+
   /**
    * GtkDragSource:content:
    *
@@ -301,10 +310,10 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
       g_signal_new (I_("prepare"),
                     G_TYPE_FROM_CLASS (class),
                     G_SIGNAL_RUN_LAST,
-                    0,
-                    NULL, NULL,
+                    G_STRUCT_OFFSET (GtkDragSourceClass, prepare),
+                    g_signal_accumulator_first_wins, NULL,
                     NULL,
-                    G_TYPE_NONE, 2,
+                    G_TYPE_BOOLEAN, 2,
                     G_TYPE_DOUBLE, G_TYPE_DOUBLE);
 
   /**
@@ -373,6 +382,14 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
                     GDK_TYPE_DRAG_CANCEL_REASON);
 }
 
+static gboolean
+gtk_drag_source_prepare (GtkDragSource *source,
+                         double         x,
+                         double         y)
+{
+  return source->content != NULL && source->actions != 0;
+}
+
 static void
 drag_end (GtkDragSource *source,
           gboolean       success)
@@ -438,6 +455,7 @@ gtk_drag_source_drag_begin (GtkDragSource *source,
   GdkSurface *surface;
   double px, py;
   int dx, dy;
+  gboolean start_drag = FALSE;
 
   g_return_if_fail (GTK_IS_DRAG_SOURCE (source));
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -457,9 +475,9 @@ gtk_drag_source_drag_begin (GtkDragSource *source,
   dx = round (px) - x;
   dy = round (py) - y;
 
-  g_signal_emit (source, signals[PREPARE], 0, x, y);
+  g_signal_emit (source, signals[PREPARE], 0, x, y, &start_drag);
 
-  if (source->content == NULL || source->actions == 0)
+  if (!start_drag)
     return;
 
   source->drag = gdk_drag_begin (surface, device, source->content, source->actions, dx, dy);
