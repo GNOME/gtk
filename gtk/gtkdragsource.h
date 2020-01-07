@@ -81,9 +81,6 @@ GDK_AVAILABLE_IN_ALL
 void               gtk_drag_source_drag_cancel (GtkDragSource     *sourcei);
 
 GDK_AVAILABLE_IN_ALL
-GtkDragSource *    gtk_drag_get_source         (GdkDrag           *drag);
-
-GDK_AVAILABLE_IN_ALL
 GdkDrag *          gtk_drag_source_get_drag    (GtkDragSource     *source);
 
 GDK_AVAILABLE_IN_ALL
