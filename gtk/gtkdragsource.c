@@ -679,7 +679,7 @@ gtk_drag_source_drag_cancel (GtkDragSource *source)
 
       g_signal_emit (source, signals[DRAG_CANCEL], 0, source->drag, GDK_DRAG_CANCEL_ERROR, &success);
 
-      gdk_drag_drop_done (source->drag, success);
+      gtk_drag_end (source->drag, FALSE);
     }
 }
 
