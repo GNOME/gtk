@@ -8509,8 +8509,7 @@ post_process_ui (GtkFileChooserWidget *impl)
   gtk_tree_selection_set_select_function (selection,
                                           list_select_func,
                                           impl, NULL);
-  formats = gdk_content_formats_new (NULL, 0);
-  formats = gtk_content_formats_add_uri_targets (formats);
+  formats = gdk_content_formats_new_for_gtype (GDK_TYPE_FILE_LIST);
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (priv->browse_files_tree_view),
                                           GDK_BUTTON1_MASK,
                                           formats,
