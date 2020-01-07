@@ -337,7 +337,7 @@ gtk_link_button_init (GtkLinkButton *link_button)
   GTK_LINK_CONTENT (content)->link = link_button;
   gtk_drag_source_set_content (source, content);
   g_object_unref (content);
-  gtk_drag_source_attach (source, GTK_WIDGET (link_button), GDK_BUTTON1_MASK);
+  gtk_widget_add_controller (GTK_WIDGET (link_button), GTK_EVENT_CONTROLLER (source));
 
   gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
