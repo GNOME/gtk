@@ -1757,9 +1757,15 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
 	  break;
         }
 
-      gtk_snapshot_render_focus (snapshot, context,
+     
+      gtk_style_context_save (context);
+      gtk_style_context_set_state (context, gtk_style_context_get_state (context) | GTK_STATE_FLAG_DROP_ACTIVE);
+
+      gtk_snapshot_render_frame (snapshot, context,
                                  rect.x, rect.y,
                                  rect.width, rect.height);
+
+      gtk_style_context_restore (context);
     }
 
   if (icon_view->priv->doing_rubberband)
