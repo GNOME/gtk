@@ -273,7 +273,7 @@ drag_end (GtkDragSource *source)
 }
 
 static gboolean
-drag_failed (GtkDragSource       *source,
+drag_cancel (GtkDragSource       *source,
              GdkDrag             *drag,
              GdkDragCancelReason  reason)
 {
@@ -306,7 +306,7 @@ make_image (const gchar *icon_name, int hotspot)
 
   g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), NULL);
   g_signal_connect (source, "drag-end", G_CALLBACK (drag_end), NULL);
-  g_signal_connect (source, "drag-failed", G_CALLBACK (drag_failed), NULL);
+  g_signal_connect (source, "drag-cancel", G_CALLBACK (drag_cancel), NULL);
   gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
 
   dest = gtk_drop_target_new (formats, GDK_ACTION_COPY|GDK_ACTION_MOVE|GDK_ACTION_ASK);
