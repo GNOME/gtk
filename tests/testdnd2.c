@@ -307,7 +307,7 @@ make_image (const gchar *icon_name, int hotspot)
   g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), NULL);
   g_signal_connect (source, "drag-end", G_CALLBACK (drag_end), NULL);
   g_signal_connect (source, "drag-failed", G_CALLBACK (drag_failed), NULL);
-  gtk_drag_source_attach (source, image, GDK_BUTTON1_MASK|GDK_BUTTON2_MASK|GDK_BUTTON3_MASK);
+  gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
 
   dest = gtk_drop_target_new (formats, GDK_ACTION_COPY|GDK_ACTION_MOVE|GDK_ACTION_ASK);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (image_drag_drop), image);
@@ -347,7 +347,7 @@ make_spinner (void)
   source = gtk_drag_source_new ();
   gtk_drag_source_set_content (source, content);
   g_signal_connect (source, "drag-begin", G_CALLBACK (spinner_drag_begin), spinner);
-  gtk_drag_source_attach (source, spinner, GDK_BUTTON1_MASK);
+  gtk_widget_add_controller (spinner, GTK_EVENT_CONTROLLER (source));
 
   g_object_unref (content);
   g_value_unset (&value);
