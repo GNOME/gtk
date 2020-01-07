@@ -44,7 +44,7 @@
 
 /**
  * SECTION:gtkdragsource
- * @Short_description: An object to initiate DND operations
+ * @Short_description: Event controller to initiate DND operations
  * @Title: GtkDragSource
  *
  * GtkDragSource is an auxiliary object that is used to initiate
@@ -52,29 +52,27 @@
  * ingredients for a DND operation ahead of time. This includes
  * the source for the data that is being transferred, in the form
  * of a #GdkContentProvider, the desired action, and the icon to
- * use during the drag operation.
+ * use during the drag operation. After setting it up, the drag
+ * source must be added to a widget as an event controller, using
+ * gtk_widget_add_controller().
  *
- * GtkDragSource can be used in two ways:
- * - for static drag-source configuration
- * - for one-off drag operations
- *
- * To configure a widget as a permanent source for DND operations,
- * set up the GtkDragSource, then call gtk_drag_source_attach().
- * This sets up a drag gesture on the widget that will trigger
- * DND actions.
- *
- * To initiate a on-off drag operation, set up the GtkDragSource,
- * then call gtk_drag_source_drag_begin(). GTK keeps a reference
- * on the drag source until the DND operation is done, so you
- * can unref the source after calling drag_being().
+ * Setting up the content provider and icon ahead of time only
+ * makes sense when the data does not change. More commonly, you
+ * will want to set them up just in time. To do so, #GtkDragSource
+ * has #GtkDragSource::prepare and #GtkDragSource::drag-begin signals.
+ * The ::prepare signal is emitted before a drag is started, and
+ * can be used to set the content provider and actions that the
+ * drag should be started with. The ::drag-begin signal is emitted
+ * after the #GdkDrag object has been created, and can be used
+ * to set up the drag icon.
  *
  * During the DND operation, GtkDragSource emits signals that
  * can be used to obtain updates about the status of the operation,
  * but it is not normally necessary to connect to any signals,
  * except for one case: when the supported actions include
  * %GDK_DRAG_MOVE, you need to listen for the
- * #GtkDragSource::drag-data-deleted signal and delete the
- * drag data after it has been transferred.
+ * #GtkDragSource::drag-end signal and delete the
+ * data after it has been transferred.
  */
 
 struct _GtkDragSource
@@ -356,7 +354,7 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
    *
    * The ::drag-end signal is emitted on the drag source when a drag is
    * finished. A typical reason to connect to this signal is to undo
-   * things done in #GtkDragSource::drag-begin.
+   * things done in #GtkDragSource::prepare or #GtkDragSource::drag-begin.
    */ 
   signals[DRAG_END] =
       g_signal_new (I_("drag-end"),
@@ -560,13 +558,19 @@ gtk_drag_source_get_content (GtkDragSource *source)
 /**
  * gtk_drag_source_set_content:
  * @source: a #GtkDragSource
- * @content: (nullable): a #GtkContntProvider, or %NULL
+ * @content: (nullable): a #GtkContentProvider, or %NULL
  *
  * Sets a content provider on a #GtkDragSource.
  *
  * When the data is requested in the cause of a
  * DND operation, it will be obtained from the
  * content provider.
+ *
+ * This function can be called before a drag is started,
+ * or in a handler for the #GtkDragSource::prepare signal.
+ *
+ * You may consider setting the content provider back to
+ * %NULL in a #GTkDragSource::drag-end signal handler.
  */
 void
 gtk_drag_source_set_content (GtkDragSource      *source,
@@ -604,7 +608,13 @@ gtk_drag_source_get_actions (GtkDragSource *source)
  * Sets the actions on the #GtkDragSource.
  *
  * During a DND operation, the actions are offered
- * to potential drop targets.
+ * to potential drop targets. If @actions include
+ * %GDK_ACTION_MOVE, you need to listen to the
+ * #GtkDraGSource::drag-end signal and handle
+ * @delete_data being %TRUE.
+ *
+ * This function can be called before a drag is started,
+ * or in a handler for the #GtkDragSource::prepare signal.
  */
 void
 gtk_drag_source_set_actions (GtkDragSource *source,
@@ -633,6 +643,9 @@ gtk_drag_source_set_actions (GtkDragSource *source,
  * that gets aligned with the hotspot of the cursor.
  *
  * If @paintable is %NULL, a default icon is used.
+ *
+ * This function can be called before a drag is started, or in
+ * a #GtkDragSource::prepare or #GtkDragSource::drag-begin signal handler.
  */
 void
 gtk_drag_source_set_icon (GtkDragSource *source,
