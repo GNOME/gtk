@@ -57,8 +57,8 @@ struct _GtkDropTarget
 
   GtkWidget *widget;
   GdkDrop *drop;
-  gboolean armed;
-  gboolean armed_pending;
+  gboolean contains;
+  gboolean contains_pending;
 };
 
 struct _GtkDropTargetClass
@@ -73,7 +73,7 @@ struct _GtkDropTargetClass
 enum {
   PROP_FORMATS = 1,
   PROP_ACTIONS,
-  PROP_ARMED,
+  PROP_CONTAINS,
   NUM_PROPERTIES
 };
 
@@ -100,9 +100,9 @@ static void     gtk_drop_target_set_widget   (GtkEventController *controller,
                                               GtkWidget          *widget);
 static void     gtk_drop_target_unset_widget (GtkEventController *controller);
 
-static gboolean gtk_drop_target_get_armed    (GtkDropTarget *dest);
-static void     gtk_drop_target_set_armed    (GtkDropTarget *dest,
-                                              gboolean       armed);
+static gboolean gtk_drop_target_get_contains (GtkDropTarget *dest);
+static void     gtk_drop_target_set_contains (GtkDropTarget *dest,
+                                              gboolean       contains);
 
 G_DEFINE_TYPE (GtkDropTarget, gtk_drop_target, GTK_TYPE_EVENT_CONTROLLER);
 
@@ -162,8 +162,8 @@ gtk_drop_target_get_property (GObject    *object,
       g_value_set_flags (value, gtk_drop_target_get_actions (dest));
       break;
 
-    case PROP_ARMED:
-      g_value_set_boolean (value, gtk_drop_target_get_armed (dest));
+    case PROP_CONTAINS:
+      g_value_set_boolean (value, gtk_drop_target_get_contains (dest));
       break;
 
     default:
@@ -209,13 +209,13 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkDropTarget:armmed:
+   * GtkDropTarget:contains:
    *
    * Whether the drop target is currently the targed of an ongoing drag operation,
    * and highlighted.
    */
-  properties[PROP_ARMED] =
-       g_param_spec_boolean ("armed", P_("Armed"), P_("Armed"),
+  properties[PROP_CONTAINS] =
+       g_param_spec_boolean ("contains", P_("Contains an ongoing drag"), P_("Contains the current drag"),
                              FALSE,
                              G_PARAM_READABLE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -510,12 +510,12 @@ gtk_drop_target_drag_motion (GtkDropTarget *dest,
   if (actions && target)
     {
       gdk_drop_status (drop, dest_actions);
-      gtk_drop_target_set_armed (dest, TRUE);
+      gtk_drop_target_set_contains (dest, TRUE);
     }
   else
     {
       gdk_drop_status (drop, 0);
-      gtk_drop_target_set_armed (dest, FALSE);
+      gtk_drop_target_set_contains (dest, FALSE);
     }
 
   return TRUE;
@@ -544,7 +544,7 @@ gtk_drop_target_emit_drag_leave (GtkDropTarget    *dest,
   set_drop (dest, drop);
   g_signal_emit (dest, signals[DRAG_LEAVE], 0, time);
   set_drop (dest, NULL);
-  gtk_drop_target_set_armed (dest, FALSE);
+  gtk_drop_target_set_contains (dest, FALSE);
 }
 
 static gboolean
@@ -555,13 +555,13 @@ gtk_drop_target_emit_drag_motion (GtkDropTarget    *dest,
 {
   gboolean result = FALSE;
 
-  dest->armed_pending = TRUE;
+  dest->contains_pending = TRUE;
 
   set_drop (dest, drop);
   g_signal_emit (dest, signals[DRAG_MOTION], 0, x, y, &result);
 
-  if (dest->armed_pending)
-    gtk_drop_target_set_armed (dest, result);
+  if (dest->contains_pending)
+    gtk_drop_target_set_contains (dest, result);
 
   return result;
 }
@@ -581,32 +581,32 @@ gtk_drop_target_emit_drag_drop (GtkDropTarget    *dest,
 }
 
 static void
-gtk_drop_target_set_armed (GtkDropTarget *dest,
-                           gboolean       armed)
+gtk_drop_target_set_contains (GtkDropTarget *dest,
+                              gboolean       contains)
 {
   GtkWidget *widget;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
 
-  dest->armed_pending = FALSE;
+  dest->contains_pending = FALSE;
 
-  if (dest->armed == armed)
+  if (dest->contains == contains)
     return;
 
-  dest->armed = armed;
+  dest->contains = contains;
 
-  if (armed)
+  if (contains)
     gtk_drag_highlight (widget);
   else
     gtk_drag_unhighlight (widget);
 
-  g_object_notify_by_pspec (G_OBJECT (dest), properties[PROP_ARMED]);
+  g_object_notify_by_pspec (G_OBJECT (dest), properties[PROP_CONTAINS]);
 }
 
 static gboolean
-gtk_drop_target_get_armed (GtkDropTarget *dest)
+gtk_drop_target_get_contains (GtkDropTarget *dest)
 {
-  return dest->armed;
+  return dest->contains;
 }
 
 static gboolean
