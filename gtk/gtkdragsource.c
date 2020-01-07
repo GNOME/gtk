@@ -44,7 +44,7 @@
 
 /**
  * SECTION:gtkdragsource
- * @Short_description: An object to initiate DND operations
+ * @Short_description: Event controller to initiate DND operations
  * @Title: GtkDragSource
  *
  * GtkDragSource is an auxiliary object that is used to initiate
@@ -52,29 +52,27 @@
  * ingredients for a DND operation ahead of time. This includes
  * the source for the data that is being transferred, in the form
  * of a #GdkContentProvider, the desired action, and the icon to
- * use during the drag operation.
+ * use during the drag operation. After setting it up, the drag
+ * source must be added to a widget as an event controller, using
+ * gtk_widget_add_controller().
  *
- * GtkDragSource can be used in two ways:
- * - for static drag-source configuration
- * - for one-off drag operations
- *
- * To configure a widget as a permanent source for DND operations,
- * set up the GtkDragSource, then call gtk_drag_source_attach().
- * This sets up a drag gesture on the widget that will trigger
- * DND actions.
- *
- * To initiate a on-off drag operation, set up the GtkDragSource,
- * then call gtk_drag_source_drag_begin(). GTK keeps a reference
- * on the drag source until the DND operation is done, so you
- * can unref the source after calling drag_being().
+ * Setting up the content provider and icon ahead of time only
+ * makes sense when the data does not change. More commonly, you
+ * will want to set them up just in time. To do so, #GtkDragSource
+ * has #GtkDragSource::prepare and #GtkDragSource::drag-begin signals.
+ * The ::prepare signal is emitted before a drag is started, and
+ * can be used to set the content provider and actions that the
+ * drag should be started with. The ::drag-begin signal is emitted
+ * after the #GdkDrag object has been created, and can be used
+ * to set up the drag icon.
  *
  * During the DND operation, GtkDragSource emits signals that
  * can be used to obtain updates about the status of the operation,
  * but it is not normally necessary to connect to any signals,
  * except for one case: when the supported actions include
  * %GDK_DRAG_MOVE, you need to listen for the
- * #GtkDragSource::drag-data-deleted signal and delete the
- * drag data after it has been transferred.
+ * #GtkDragSource::drag-end signal and delete the
+ * data after it has been transferred.
  */
 
 struct _GtkDragSource
