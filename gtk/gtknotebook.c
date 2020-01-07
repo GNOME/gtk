@@ -3230,7 +3230,7 @@ gtk_notebook_drag_motion (GtkDropTarget *dest,
       else
         {
           GtkDragSource *drag_source = gtk_drag_get_source (drag);
-          GtkNotebook *source = GTK_NOTEBOOK (gtk_drag_source_get_origin (drag_source));
+          GtkNotebook *source = GTK_NOTEBOOK (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (drag_source)));
 
           g_assert (source->priv->cur_page != NULL);
           source_child = source->priv->cur_page->child;
@@ -3305,7 +3305,7 @@ got_page (GObject *source,
   GInputStream *stream;
   const char *mime_type;
 
-  source_widget = drag ? gtk_drag_source_get_origin (gtk_drag_get_source (drag)) : NULL;
+  source_widget = drag ? gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (drag)) : NULL;
 
   stream = gdk_drop_read_finish (drop, result, &mime_type, NULL);
 
@@ -3339,7 +3339,7 @@ gtk_notebook_drag_drop (GtkDropTarget *dest,
   GtkWidget *source_widget;
   GdkAtom target, tab_target;
 
-  source_widget = drag ? gtk_drag_source_get_origin (gtk_drag_get_source (drag)) : NULL;
+  source_widget = drag ? gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (drag)) : NULL;
 
   target = gtk_drop_target_find_mimetype (dest);
   tab_target = g_intern_static_string ("GTK_NOTEBOOK_TAB");
@@ -7098,7 +7098,7 @@ gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
  *
  *    drag = gtk_drop_get_drag (drop);
  *    source = gtk_drag_get_source (drag);
- *    notebook = gtk_drag_source_get_origin (source);
+ *    notebook = gtk_event_controller_get_widge (GTK_EVENT_CONTROLLER (source));
  *    child = (void*) gtk_selection_data_get_data (data);
  *
  *    // process_widget (*child);
