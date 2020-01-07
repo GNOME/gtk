@@ -2725,7 +2725,7 @@ gtk_list_box_drag_unhighlight_row (GtkListBox *box)
   if (priv->drag_highlighted_row == NULL)
     return;
 
-  gtk_drag_unhighlight (GTK_WIDGET (priv->drag_highlighted_row));
+  gtk_widget_unset_state_flags (GTK_WIDGET (priv->drag_highlighted_row), GTK_STATE_FLAG_DROP_ACTIVE);
   g_clear_object (&priv->drag_highlighted_row);
 }
 
@@ -2754,7 +2754,7 @@ gtk_list_box_drag_highlight_row (GtkListBox    *box,
     return;
 
   gtk_list_box_drag_unhighlight_row (box);
-  gtk_drag_highlight (GTK_WIDGET (row));
+  gtk_widget_set_state_flags (GTK_WIDGET (row), GTK_STATE_FLAG_DROP_ACTIVE, FALSE);
   priv->drag_highlighted_row = g_object_ref (row);
 }
 
