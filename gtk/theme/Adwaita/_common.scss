@@ -3901,6 +3901,7 @@ expander-widget title:hover > expander {
   color: lighten($fg_color,30%); //only lightens the icon 
 }
 
+stackswitcher,
 expander-widget {
   &:not(decoration):not(window):drop(active):focus,
   &:not(decoration):not(window):drop(active) {
