@@ -2179,14 +2179,24 @@ render_blend_node (GskGLRenderer   *self,
                           bottom_child,
                           &bottom_region, &is_offscreen1,
                           FORCE_OFFSCREEN | RESET_CLIP))
-    g_assert_not_reached ();
+    {
+      gsk_gl_renderer_add_render_ops (self, top_child, builder);
+      return;
+    }
 
   if (!add_offscreen_ops (self, builder,
                           &node->bounds,
                           top_child,
                           &top_region, &is_offscreen2,
                           FORCE_OFFSCREEN | RESET_CLIP))
-    g_assert_not_reached ();
+    {
+      load_vertex_data_with_region (ops_draw (builder, NULL),
+                                    node,
+                                    builder,
+                                    &bottom_region,
+                                    TRUE);
+      return;
+    }
 
   ops_set_program (builder, &self->blend_program);
   ops_set_texture (builder, bottom_region.texture_id);
