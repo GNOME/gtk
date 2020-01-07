@@ -344,9 +344,9 @@ do_clipboard (GtkWidget *do_widget)
 
       /* make image a drag source */
       source = gtk_drag_source_new ();
-      gtk_drag_source_attach (source, image, GDK_BUTTON1_MASK);
       g_signal_connect (source, "prepare", G_CALLBACK (prepare_drag), NULL);
       g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), image);
+      gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
 
       /* accept drops on image */
       formats = gdk_content_formats_new (NULL, 0);
@@ -378,7 +378,7 @@ do_clipboard (GtkWidget *do_widget)
       source = gtk_drag_source_new ();
       g_signal_connect (source, "prepare", G_CALLBACK (prepare_drag), NULL);
       g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), image);
-      gtk_drag_source_attach (source, image, GDK_BUTTON1_MASK);
+      gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
 
       /* accept drops on image */
       formats = gdk_content_formats_new (NULL, 0);
