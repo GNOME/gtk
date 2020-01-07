@@ -34,6 +34,7 @@
 #include "gtkbutton.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkdragdest.h"
+#include "gtkdragicon.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkgestureclick.h"
 #include "gtkgizmoprivate.h"
