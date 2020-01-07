@@ -354,7 +354,7 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
    *
    * The ::drag-end signal is emitted on the drag source when a drag is
    * finished. A typical reason to connect to this signal is to undo
-   * things done in #GtkDragSource::drag-begin.
+   * things done in #GtkDragSource::prepare or #GtkDragSource::drag-begin.
    */ 
   signals[DRAG_END] =
       g_signal_new (I_("drag-end"),
