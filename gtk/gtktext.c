@@ -6129,7 +6129,6 @@ gtk_text_drag_leave (GtkDropTarget *dest,
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GtkWidget *widget = GTK_WIDGET (self);
 
-  gtk_drag_unhighlight (widget);
   priv->dnd_position = -1;
   gtk_widget_queue_draw (widget);
 }
@@ -6265,10 +6264,6 @@ gtk_text_drag_motion (GtkDropTarget *dest,
     }
 
   gdk_drop_status (drop, suggested_action);
-  if (suggested_action == 0)
-    gtk_drag_unhighlight (widget);
-  else
-    gtk_drag_highlight (widget);
 
   if (priv->dnd_position != old_position)
     gtk_widget_queue_draw (widget);
