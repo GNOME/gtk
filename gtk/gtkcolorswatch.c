@@ -607,7 +607,7 @@ gtk_color_swatch_set_rgba (GtkColorSwatch *swatch,
       g_object_unref (content);
       g_signal_connect (source, "drag-begin", G_CALLBACK (gtk_color_swatch_drag_begin), swatch);
 
-      gtk_drag_source_attach (source, GTK_WIDGET (swatch), GDK_BUTTON1_MASK | GDK_BUTTON3_MASK);
+      gtk_widget_add_controller (GTK_WIDGET (swatch), GTK_EVENT_CONTROLLER (source));
     }
 
   priv->has_color = TRUE;
