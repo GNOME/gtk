@@ -697,6 +697,9 @@ static gboolean gtk_tree_view_drag_drop          (GtkDropTarget    *dest,
                                                   int               x,
                                                   int               y,
                                                   GtkTreeView      *tree_view);
+static void     gtk_tree_view_armed              (GtkDropTarget    *dest,
+                                                  GParamSpec       *pspec,
+                                                  GtkTreeView      *tree_view);
 static void     gtk_tree_view_drag_data_received (GObject      *source,
                                                   GAsyncResult *result,
                                                   gpointer      data);
@@ -7355,6 +7358,14 @@ gtk_tree_view_drag_drop (GtkDropTarget *dest,
     return FALSE;
 }
 
+static void
+gtk_tree_view_armed (GtkDropTarget    *dest,
+                     GParamSpec       *pspec,
+                     GtkTreeView      *tree_view)
+{
+  gtk_drag_unhighlight (GTK_WIDGET (tree_view));
+}
+
 static GdkDragAction
 gtk_tree_view_get_action (GtkWidget *widget,
                           GdkDrop   *drop)
@@ -12909,6 +12920,7 @@ gtk_tree_view_enable_model_drag_dest (GtkTreeView       *tree_view,
   g_signal_connect (di->dest, "drag-leave", G_CALLBACK (gtk_tree_view_drag_leave), tree_view);
   g_signal_connect (di->dest, "drag-motion", G_CALLBACK (gtk_tree_view_drag_motion), tree_view);
   g_signal_connect (di->dest, "drag-drop", G_CALLBACK (gtk_tree_view_drag_drop), tree_view);
+  g_signal_connect (di->dest, "notify::armed", G_CALLBACK (gtk_tree_view_armed), tree_view);
   gtk_widget_add_controller (GTK_WIDGET (tree_view), GTK_EVENT_CONTROLLER (di->dest));
   g_object_ref (di->dest);
 
