@@ -142,7 +142,15 @@ textview {
 
 textview border { background-color: mix($bg_color, $base_color, 50%); }
 
-iconview { @extend .view; }
+iconview { 
+  @extend .view;
+
+  &:drop(active) {
+    border-style: solid;
+    border-width: 1px;
+    border-color: $selected_borders_color;
+  }
+}
 
 .rubberband,
 rubberband {
