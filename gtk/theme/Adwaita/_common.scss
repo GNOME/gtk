@@ -3908,6 +3908,7 @@ expander-widget title:hover > expander {
   color: lighten($fg_color,30%); //only lightens the icon 
 }
 
+placessidebar,
 stackswitcher,
 expander-widget {
   &:not(decoration):not(window):drop(active):focus,
