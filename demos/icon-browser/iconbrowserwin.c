@@ -428,7 +428,7 @@ setup_image_dnd (GtkWidget *image)
   gtk_drag_source_set_content (source, content);
   g_object_unref (content);
   g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), image);
-  gtk_drag_source_attach (source, image, GDK_BUTTON1_MASK);
+  gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
 }
 
 static void
@@ -443,7 +443,7 @@ setup_scalable_image_dnd (GtkWidget *image)
   g_object_unref (content);
 
   g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), image);
-  gtk_drag_source_attach (source, image, GDK_BUTTON1_MASK);
+  gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
 }
 
 static void
