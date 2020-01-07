@@ -2084,8 +2084,8 @@ dnd_finished_cb (GdkDrag          *drag,
  * but that's not true, because this function is called also before drag_drop,
  * which needs the data from the drag so we cannot free the drag data here.
  * So now one could think we could just do nothing here, and wait for
- * drag-end or drag-failed signals and just stop_drop_feedback there. But that
- * is also not true, since when the drag comes from a diferent widget than the
+ * drag-end or drag-cancel signals and just stop_drop_feedback there. But that
+ * is also not true, since when the drag comes from a different widget than the
  * sidebar, when the drag stops the last drag signal we receive is drag-leave.
  * So here what we will do is restore the state of the sidebar as if no drag
  * is being done (and if the application didnt request for permanent hints with
