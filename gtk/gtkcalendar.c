@@ -2973,7 +2973,6 @@ static void
 gtk_calendar_drag_leave (GtkDropTarget *dest,
                          GtkCalendar   *calendar)
 {
-  gtk_drag_unhighlight (GTK_WIDGET (calendar));
 }
 
 static void
@@ -3048,11 +3047,8 @@ gtk_calendar_drag_motion (GtkDropTarget *dest,
                           int            y,
                           GtkCalendar   *calendar)
 {
-  GtkWidget *widget = GTK_WIDGET (calendar);
   GdkDrop *drop = gtk_drop_target_get_drop (dest);
   GdkAtom target;
-
-  gtk_drag_highlight (widget);
 
   target = gtk_drop_target_find_mimetype (dest);
   if (!target || gdk_drop_get_actions (drop) == 0)
