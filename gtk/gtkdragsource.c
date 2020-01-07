@@ -96,9 +96,9 @@ struct _GtkDragSourceClass
 {
   GtkGestureSingleClass parent_class;
 
-  gboolean (* prepare) (GtkDragSource *source,
-                        double         x,
-                        double         y);
+  GdkContentProvider *(* prepare) (GtkDragSource *source,
+                                  double         x,
+                                  double         y);
 };
 
 enum {
@@ -125,9 +125,9 @@ static void gtk_drag_source_cancel_cb         (GdkDrag             *drag,
                                                GdkDragCancelReason  reason,
                                                GtkDragSource       *source);
 
-static gboolean gtk_drag_source_prepare (GtkDragSource *source,
-                                         double         x,
-                                         double         y);
+static GdkContentProvider *gtk_drag_source_prepare (GtkDragSource *source,
+                                                    double         x,
+                                                    double         y);
 
 static void gtk_drag_source_drag_begin (GtkDragSource *source);
 
@@ -306,11 +306,13 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
    * @x: the X coordinate of the drag starting point
    * @y: the Y coordinate fo the drag starting point
    *
-   * The ::prepare signal is emitted when a drag is about to be initiated. It can
-   * be used to set up #GtkDragSource:content and #GtkDragSource:actions just in time,
-   * or to start the drag conditionally.
+   * The ::prepare signal is emitted when a drag is about to be initiated.
+   * It returns the * #GdkContentProvider to use for the drag that is about
+   * to start. The default handler for this signal returns the value of
+   * the #GtkDragSource::content property, so if you set up that property
+   * ahead of time, you don't need to connect to this signal.
    *
-   * Returns: %TRUE to start the drag
+   * Returns: (transfer full) (nullable): a #GdkContentProvider, or %NULL
    */
   signals[PREPARE] =
       g_signal_new (I_("prepare"),
@@ -319,7 +321,7 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
                     G_STRUCT_OFFSET (GtkDragSourceClass, prepare),
                     g_signal_accumulator_first_wins, NULL,
                     NULL,
-                    G_TYPE_BOOLEAN, 2,
+                    GDK_TYPE_CONTENT_PROVIDER, 2,
                     G_TYPE_DOUBLE, G_TYPE_DOUBLE);
 
   /**
@@ -388,12 +390,18 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
                     GDK_TYPE_DRAG_CANCEL_REASON);
 }
 
-static gboolean
+static GdkContentProvider *
 gtk_drag_source_prepare (GtkDragSource *source,
                          double         x,
                          double         y)
 {
-  return source->content != NULL && source->actions != 0;
+  if (source->actions == 0)
+    return NULL;
+
+  if (source->content == NULL)
+    return NULL;
+
+  return g_object_ref (source->content);
 }
 
 static void
@@ -441,7 +449,7 @@ gtk_drag_source_drag_begin (GtkDragSource *source)
   GdkSurface *surface;
   double px, py;
   int dx, dy;
-  gboolean start_drag = FALSE;
+  GdkContentProvider *content = NULL;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
   device = gtk_gesture_get_device (GTK_GESTURE (source));
@@ -458,12 +466,13 @@ gtk_drag_source_drag_begin (GtkDragSource *source)
   dx = round (px) - x;
   dy = round (py) - y;
 
-  g_signal_emit (source, signals[PREPARE], 0, source->start_x, source->start_y, &start_drag);
-
-  if (!start_drag)
+  g_signal_emit (source, signals[PREPARE], 0, source->start_x, source->start_y, &content);
+  if (!content)
     return;
 
-  source->drag = gdk_drag_begin (surface, device, source->content, source->actions, dx, dy);
+  source->drag = gdk_drag_begin (surface, device, content, source->actions, dx, dy);
+
+  g_object_unref (content);
 
   if (source->drag == NULL)
     return;
