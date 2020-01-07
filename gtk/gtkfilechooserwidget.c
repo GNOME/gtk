@@ -2044,7 +2044,7 @@ file_list_drag_drop_cb (GtkDropTarget        *dest,
 
 static void
 file_list_drag_begin_cb (GtkDragSource        *source,
-                         GdkDrag              *drag.
+                         GdkDrag              *drag,
                          GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
