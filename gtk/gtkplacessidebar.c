@@ -312,16 +312,6 @@ enum {
   DND_TEXT_URI_LIST
 };
 
-/* Target types for dragging from the shortcuts list */
-static const char *dnd_source_targets[] = {
-  "DND_GTK_SIDEBAR_ROW"
-};
-
-/* Target types for dropping into the shortcuts list */
-static const char *dnd_drop_targets [] = {
-  "DND_GTK_SIDEBAR_ROW"
-};
-
 G_DEFINE_TYPE (GtkPlacesSidebar, gtk_places_sidebar, GTK_TYPE_WIDGET);
 
 static void
@@ -4038,6 +4028,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   GtkStyleContext *context;
   GtkEventController *controller;
   GtkGesture *gesture;
+  GdkContentFormatsBuilder *builder;
 
   sidebar->cancellable = g_cancellable_new ();
 
@@ -4090,16 +4081,21 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   gtk_widget_add_controller (GTK_WIDGET (sidebar), GTK_EVENT_CONTROLLER (gesture));
 
   /* DND support */
-  formats = gdk_content_formats_new (dnd_drop_targets, G_N_ELEMENTS (dnd_drop_targets));
-  formats = gtk_content_formats_add_uri_targets (formats);
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_mime_type (builder, "DND_GTK_SIDEBAR_ROW");
+  gdk_content_formats_builder_add_gtype (builder, GDK_TYPE_FILE_LIST);
+  formats = gdk_content_formats_builder_free_to_formats (builder);
   dest = gtk_drop_target_new (formats, GDK_ACTION_MOVE | GDK_ACTION_COPY | GDK_ACTION_LINK);
   gdk_content_formats_unref (formats);
   g_signal_connect (dest, "drag-motion", G_CALLBACK (drag_motion_callback), sidebar);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop_callback), sidebar);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (drag_leave_callback), sidebar);
   gtk_widget_add_controller (sidebar->list_box, GTK_EVENT_CONTROLLER (dest));
-  sidebar->source_targets = gdk_content_formats_new (dnd_source_targets, G_N_ELEMENTS (dnd_source_targets));
-  sidebar->source_targets = gtk_content_formats_add_text_targets (sidebar->source_targets);
+
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_mime_type (builder, "DND_GTK_SIDEBAR_ROW");
+  gdk_content_formats_builder_add_gtype (builder, G_TYPE_STRING);
+  sidebar->source_targets = gdk_content_formats_builder_free_to_formats (builder);
 
   sidebar->drag_row = NULL;
   sidebar->row_placeholder = NULL;
