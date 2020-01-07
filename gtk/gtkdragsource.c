@@ -88,8 +88,6 @@ struct _GtkDragSource
 
   gdouble start_x;
   gdouble start_y;
-  gdouble last_x;
-  gdouble last_y;
 
   GdkDrag *drag;
 };
@@ -130,6 +128,8 @@ static void gtk_drag_source_cancel_cb         (GdkDrag             *drag,
 static gboolean gtk_drag_source_prepare (GtkDragSource *source,
                                          double         x,
                                          double         y);
+
+static void gtk_drag_source_drag_begin (GtkDragSource *source);
 
 G_DEFINE_TYPE (GtkDragSource, gtk_drag_source, GTK_TYPE_GESTURE_SINGLE);
 
@@ -228,8 +228,6 @@ gtk_drag_source_begin (GtkGesture       *gesture,
   current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
   gtk_gesture_get_point (gesture, current, &source->start_x, &source->start_y);
-  source->last_x = source->start_x;
-  source->last_y = source->start_y;
 }
 
 static void
@@ -238,21 +236,19 @@ gtk_drag_source_update (GtkGesture       *gesture,
 {
   GtkDragSource *source = GTK_DRAG_SOURCE (gesture);
   GtkWidget *widget;
-  GdkDevice *device;
+  double x, y;
 
-  gtk_gesture_get_point (gesture, sequence, &source->last_x, &source->last_y);
   if (!gtk_gesture_is_recognized (gesture))
     return;
 
-  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-  device = gtk_gesture_get_device (gesture);
+  gtk_gesture_get_point (gesture, sequence, &x, &y);
 
-  if (gtk_drag_check_threshold (widget,
-                                source->start_x, source->start_y,
-                                source->last_x, source->last_y))
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+
+  if (gtk_drag_check_threshold (widget, source->start_x, source->start_y, x, y))
     {
-      gtk_drag_source_drag_begin (source, widget, device, source->start_x, source->start_y);
-   }
+      gtk_drag_source_drag_begin (source);
+    }
 }
 
 static void
@@ -414,10 +410,7 @@ drag_end (GtkDragSource *source,
   g_signal_emit (source, signals[DRAG_END], 0, source->drag, delete_data);
 
   gdk_drag_drop_done (source->drag, success);
-
-  g_object_set_data (G_OBJECT (source->drag), I_("gtk-drag-source"), NULL);
   g_clear_object (&source->drag);
-  g_object_unref (source);
 }
 
 static void
@@ -438,40 +431,20 @@ gtk_drag_source_cancel_cb (GdkDrag             *drag,
   drag_end (source, FALSE);
 }
 
-/**
- * gtk_drag_source_drag_begin:
- * @source: a #GtkDragSource
- * @widget: the widget where the drag operation originates
- * @device: the device that is driving the drag operation
- * @x: start point X coordinate
- * @y: start point Y xoordinate
- *
- * Starts a DND operation with @source.
- *
- * The start point coordinates are relative to @widget.
- *
- * GTK keeps a reference on @source for the duration of
- * the DND operation, so it is safe to unref @source
- * after this call.
- */
-void
-gtk_drag_source_drag_begin (GtkDragSource *source,
-                            GtkWidget     *widget,
-                            GdkDevice     *device,
-                            int            x,
-                            int            y)
+static void
+gtk_drag_source_drag_begin (GtkDragSource *source)
 {
+  GtkWidget *widget;
+  GdkDevice *device;
+  int x, y;
   GtkNative *native;
   GdkSurface *surface;
   double px, py;
   int dx, dy;
   gboolean start_drag = FALSE;
 
-  g_return_if_fail (GTK_IS_DRAG_SOURCE (source));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (source->content != NULL);
-  g_return_if_fail (source->actions != 0);
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
+  device = gtk_gesture_get_device (GTK_GESTURE (source));
 
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     device = gdk_device_get_associated_device (device);
@@ -479,13 +452,13 @@ gtk_drag_source_drag_begin (GtkDragSource *source,
   native = gtk_widget_get_native (widget);
   surface = gtk_native_get_surface (native);
 
-  gtk_widget_translate_coordinates (widget, GTK_WIDGET (native), x, y, &x, &y);
+  gtk_widget_translate_coordinates (widget, GTK_WIDGET (native), source->start_x, source->start_y, &x, &y);
   gdk_surface_get_device_position (surface, device, &px, &py, NULL);
 
   dx = round (px) - x;
   dy = round (py) - y;
 
-  g_signal_emit (source, signals[PREPARE], 0, x, y, &start_drag);
+  g_signal_emit (source, signals[PREPARE], 0, source->start_x, source->start_y, &start_drag);
 
   if (!start_drag)
     return;
@@ -493,17 +466,9 @@ gtk_drag_source_drag_begin (GtkDragSource *source,
   source->drag = gdk_drag_begin (surface, device, source->content, source->actions, dx, dy);
 
   if (source->drag == NULL)
-    {
-      g_print ("no drag :(\n");
-      return;
-    }
-
-  g_object_set_data (G_OBJECT (source->drag), I_("gtk-drag-source"), source);
+    return;
 
   gtk_widget_reset_controllers (widget);
-
-  /* We hold a ref until ::drag-end is emitted */
-  g_object_ref (source);
 
   g_signal_emit (source, signals[DRAG_BEGIN], 0, source->drag);
 
@@ -517,7 +482,6 @@ gtk_drag_source_drag_begin (GtkDragSource *source,
       source->hot_y = 0;
     }
 
-  gdk_drag_set_hotspot (source->drag, source->hot_x, source->hot_y);
   gtk_drag_icon_set_from_paintable (source->drag, source->paintable, source->hot_x, source->hot_y);
 
   g_signal_connect (source->drag, "dnd-finished",
@@ -693,7 +657,7 @@ gtk_drag_source_drag_cancel (GtkDragSource *source)
       gboolean success = FALSE;
 
       g_signal_emit (source, signals[DRAG_CANCEL], 0, source->drag, GDK_DRAG_CANCEL_ERROR, &success);
-      drag_end (source->drag, FALSE);
+      drag_end (source, FALSE);
     }
 }
 
