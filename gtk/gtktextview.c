@@ -7735,8 +7735,6 @@ gtk_text_view_drag_leave (GtkDropTarget *dest,
     g_source_remove (priv->scroll_timeout);
 
   priv->scroll_timeout = 0;
-
-  gtk_drag_unhighlight (widget);
 }
 
 static gboolean
@@ -7747,7 +7745,6 @@ gtk_text_view_drag_motion (GtkDropTarget *dest,
 {
   GtkTextViewPrivate *priv = text_view->priv;
   GdkDrop *drop = gtk_drop_target_get_drop (dest);
-  GtkWidget *widget = GTK_WIDGET (text_view);
   GtkTextIter newplace;
   GtkTextIter start;
   GtkTextIter end;
@@ -7813,8 +7810,6 @@ gtk_text_view_drag_motion (GtkDropTarget *dest,
     priv->scroll_timeout = g_timeout_add (100, drag_scan_timeout, text_view);
     g_source_set_name_by_id (text_view->priv->scroll_timeout, "[gtk] drag_scan_timeout");
   }
-
-  gtk_drag_highlight (widget);
 
   /* TRUE return means don't propagate the drag motion to parent
    * widgets that may also be drop sites.
