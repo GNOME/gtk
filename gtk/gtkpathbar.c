@@ -1370,7 +1370,7 @@ make_directory_button (GtkPathBar  *path_bar,
   content = gdk_content_provider_new_for_value (&value);
   gtk_drag_source_set_content (source, content);
   g_object_unref (content);
-  gtk_drag_source_attach (source, button_data->button, GDK_BUTTON1_MASK);
+  gtk_widget_add_controller (button_data->button, GTK_EVENT_CONTROLLER (source));
   g_value_unset (&value);
 
   return button_data;

@@ -622,7 +622,7 @@ main (gint argc, gchar **argv)
   gtk_drag_source_set_content (source, content);
   gtk_drag_source_set_actions (source, GDK_ACTION_MOVE);
   g_object_unref (content);
-  gtk_drag_source_attach (source, button, GDK_BUTTON1_MASK);
+  gtk_widget_add_controller (button, GTK_EVENT_CONTROLLER (source));
   dest = gtk_drop_target_new (targets, GDK_ACTION_MOVE);
   g_signal_connect (dest, "drag_motion", G_CALLBACK (toolbar_drag_motion), toolbar);
   g_signal_connect (dest, "drag_leave", G_CALLBACK (toolbar_drag_leave), toolbar);

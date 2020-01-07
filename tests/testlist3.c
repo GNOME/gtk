@@ -88,7 +88,7 @@ create_row (const gchar *text)
   gtk_drag_source_set_content (source, content);
   gtk_drag_source_set_actions (source, GDK_ACTION_MOVE);
   g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), image);
-  gtk_drag_source_attach (source, image, GDK_BUTTON1_MASK);
+  gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
 
   targets = gdk_content_formats_new (entries, 1);
   dest = gtk_drop_target_new (targets, GDK_ACTION_MOVE);
