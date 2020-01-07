@@ -299,6 +299,9 @@ static gboolean gtk_icon_view_drag_drop          (GtkDropTarget    *dest,
                                                   int               x,
                                                   int               y,
                                                   GtkIconView      *icon_view);
+static void     gtk_icon_view_armed              (GtkDropTarget    *dest,
+                                                  GParamSpec       *pspec,
+                                                  GtkIconView      *icon_view);
 static void     gtk_icon_view_drag_data_received (GObject          *source,
                                                   GAsyncResult     *result,
                                                   gpointer          data);
@@ -6281,6 +6284,14 @@ gtk_icon_view_drag_drop (GtkDropTarget *dest,
     return FALSE;
 }
 
+static void
+gtk_icon_view_armed (GtkDropTarget    *dest,
+                     GParamSpec       *pspec,
+                     GtkIconView      *icon_view)
+{
+  gtk_drag_unhighlight (GTK_WIDGET (icon_view));
+}
+
 static GdkDragAction
 gtk_icon_view_get_action (GtkWidget *widget,
                           GdkDrop   *drop)
@@ -6449,6 +6460,7 @@ gtk_icon_view_enable_model_drag_dest (GtkIconView       *icon_view,
   g_signal_connect (icon_view->priv->dest, "drag-leave", G_CALLBACK (gtk_icon_view_drag_leave), icon_view);
   g_signal_connect (icon_view->priv->dest, "drag-motion", G_CALLBACK (gtk_icon_view_drag_motion), icon_view);
   g_signal_connect (icon_view->priv->dest, "drag-drop", G_CALLBACK (gtk_icon_view_drag_drop), icon_view);
+  g_signal_connect (icon_view->priv->dest, "notify::armed", G_CALLBACK (gtk_icon_view_armed), icon_view);
   gtk_widget_add_controller (GTK_WIDGET (icon_view), GTK_EVENT_CONTROLLER (icon_view->priv->dest));
 
   icon_view->priv->dest_actions = actions;
