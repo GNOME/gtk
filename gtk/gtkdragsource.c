@@ -115,7 +115,7 @@ enum {
   PREPARE,
   DRAG_BEGIN,
   DRAG_END,
-  DRAG_FAILED,
+  DRAG_CANCEL,
   NUM_SIGNALS
 };
 
@@ -368,20 +368,20 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
                     G_TYPE_BOOLEAN);
 
   /**
-   * GtkDragSource::drag-failed:
+   * GtkDragSource::drag-cancel:
    * @source: the #GtkDragSource
    * @drag: the #GtkDrag object
    * @reason: information on why the drag failed
    *
-   * The ::drag-failed signal is emitted on the drag source when a drag has
+   * The ::drag-cancel signal is emitted on the drag source when a drag has
    * failed. The signal handler may handle a failed drag operation based on
    * the type of error. It should return %TRUE if the failure has been handled
-   * and the default "drag operation failed" should not be shown.
+   * and the default "drag operation failed" animation should not be shown.
    *
    * Returns: %TRUE if the failed drag operation has been already handled
    */
-  signals[DRAG_FAILED] =
-      g_signal_new (I_("drag-failed"),
+  signals[DRAG_CANCEL] =
+      g_signal_new (I_("drag-cancel"),
                     G_TYPE_FROM_CLASS (class),
                     G_SIGNAL_RUN_LAST,
                     0,
@@ -434,7 +434,7 @@ gtk_drag_source_cancel_cb (GdkDrag             *drag,
 {
   gboolean success = FALSE;
 
-  g_signal_emit (source, signals[DRAG_FAILED], 0, source->drag, reason, &success);
+  g_signal_emit (source, signals[DRAG_CANCEL], 0, source->drag, reason, &success);
   drag_end (source, FALSE);
 }
 
@@ -692,7 +692,7 @@ gtk_drag_source_drag_cancel (GtkDragSource *source)
     {
       gboolean success = FALSE;
 
-      g_signal_emit (source, signals[DRAG_FAILED], 0, source->drag, GDK_DRAG_CANCEL_ERROR, &success);
+      g_signal_emit (source, signals[DRAG_CANCEL], 0, source->drag, GDK_DRAG_CANCEL_ERROR, &success);
 
       gdk_drag_drop_done (source->drag, success);
     }
