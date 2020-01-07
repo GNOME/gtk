@@ -619,33 +619,6 @@ gtk_drag_source_set_icon (GtkDragSource *source,
 }
 
 /**
- * gtk_drag_get_source:
- * @drag: a #GdkDrag
- *
- * Obtains the #GtkDragSource from which a #GdkDrag originates.
- *
- * This function should rarely be needed. Once case where it can
- * be used is together with gtk_drop_get_drag(), to determine
- * whether a 'local' drag is coming from the same widget.
- *
- * Returns: (transfer none) (nullable): a #GtkDragSource, or %NULL
- */
-GtkDragSource *
-gtk_drag_get_source (GdkDrag *drag)
-{
-  gpointer data;
-
-  g_return_val_if_fail (GDK_IS_DRAG (drag), NULL);
-
-  data = g_object_get_data (G_OBJECT (drag), I_("gtk-drag-source"));
-
-  if (data)
-    return GTK_DRAG_SOURCE (data);
-
-  return NULL;
-}
-
-/**
  * gtk_drag_source_get_drag:
  * @source: a #GtkDragSource
  *
