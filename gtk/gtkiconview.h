@@ -215,7 +215,7 @@ void             gtk_icon_view_scroll_to_path     (GtkIconView            *icon_
 
 /* Drag-and-Drop support */
 GDK_AVAILABLE_IN_ALL
-GtkDragSource *        gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,
+void                   gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,
 							       GdkModifierType           start_button_mask,
 							       GdkContentFormats        *formats,
 							       GdkDragAction             actions);
