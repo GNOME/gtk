@@ -151,13 +151,17 @@
  * ┊   ┊
  * │   ╰── <column header>
  * │
- * ╰── [rubberband]
+ * ├── [rubberband]
+ * ╰── [dndtarget]
  * ]|
  *
  * GtkTreeView has a main CSS node with name treeview and style class .view.
  * It has a subnode with name header, which is the parent for all the column
  * header widgets' CSS nodes.
+ *
  * For rubberband selection, a subnode with name rubberband is used.
+ *
+ * For the drop target location during DND, a subnode with name dndtarget is used.
  */
 
 enum
@@ -307,6 +311,7 @@ struct _TreeViewDragInfo
   GdkDrag *drag;
   GtkTreeRowReference *source_item;
 
+  GtkCssNode *cssnode;
   GtkDropTarget *dest;
   GdkModifierType start_button_mask;
 
@@ -834,6 +839,7 @@ static inline gint gtk_tree_view_get_row_y_offset            (GtkTreeView       
                                                               GtkTreeRBNode      *node);
 static inline gint gtk_tree_view_get_row_height              (GtkTreeView        *tree_view,
                                                               GtkTreeRBNode      *node);
+static TreeViewDragInfo* get_info (GtkTreeView *tree_view);
 
 /* interactive search */
 static void     gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view);
@@ -4857,41 +4863,47 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
 
       if (node == drag_highlight)
         {
-          /* Draw indicator for the drop
-           */
 	  GtkTreeRBTree *drag_tree = NULL;
 	  GtkTreeRBNode *drag_node = NULL;
 
-          gtk_style_context_save (context);
-          gtk_style_context_set_state (context, gtk_style_context_get_state (context) | GTK_STATE_FLAG_DROP_ACTIVE);
-
-          switch (tree_view->drag_dest_pos)
-            {
-            case GTK_TREE_VIEW_DROP_BEFORE:
-              gtk_style_context_add_class (context, "before");
-              break;
-
-            case GTK_TREE_VIEW_DROP_AFTER:
-              gtk_style_context_add_class (context, "after");
-              break;
-
-            case GTK_TREE_VIEW_DROP_INTO_OR_BEFORE:
-            case GTK_TREE_VIEW_DROP_INTO_OR_AFTER:
-              gtk_style_context_add_class (context, "into");
-              break;
-
-            default:
-              break;
-            }
-
           _gtk_tree_view_find_node (tree_view, drag_dest_path, &drag_tree, &drag_node);
           if (drag_tree != NULL)
+            {
+              TreeViewDragInfo *di;
+
+              di = get_info (tree_view);
+              /* Draw indicator for the drop
+               */
+
+              switch (tree_view->drag_dest_pos)
+                {
+                case GTK_TREE_VIEW_DROP_BEFORE:
+                  gtk_css_node_set_classes (di->cssnode, (const char *[]){"before", NULL});
+                  break;
+
+                case GTK_TREE_VIEW_DROP_AFTER:
+                  gtk_css_node_set_classes (di->cssnode, (const char *[]){"after", NULL});
+                  break;
+
+                case GTK_TREE_VIEW_DROP_INTO_OR_BEFORE:
+                case GTK_TREE_VIEW_DROP_INTO_OR_AFTER:
+                  gtk_css_node_set_classes (di->cssnode, (const char *[]){"into", NULL});
+                  break;
+
+                default:
+                 break;
+                }
+
+             gtk_style_context_save_to_node (context, di->cssnode);
+             gtk_style_context_set_state (context, gtk_style_context_get_state (context) | GTK_STATE_FLAG_DROP_ACTIVE);
+
              gtk_snapshot_render_frame (snapshot, context,
                                         0, gtk_tree_view_get_row_y_offset (tree_view, drag_tree, drag_node),
                                         bin_window_width,
                                         gtk_tree_view_get_row_height (tree_view, drag_node));
 
-          gtk_style_context_restore (context);
+             gtk_style_context_restore (context);
+          }
         }
 
       /* draw the big row-spanning focus rectangle, if needed */
@@ -12899,6 +12911,7 @@ gtk_tree_view_enable_model_drag_dest (GtkTreeView       *tree_view,
 				      GdkDragAction      actions)
 {
   TreeViewDragInfo *di;
+  GtkCssNode *widget_node;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
 
@@ -12911,6 +12924,13 @@ gtk_tree_view_enable_model_drag_dest (GtkTreeView       *tree_view,
   g_signal_connect (di->dest, "drag-drop", G_CALLBACK (gtk_tree_view_drag_drop), tree_view);
   gtk_widget_add_controller (GTK_WIDGET (tree_view), GTK_EVENT_CONTROLLER (di->dest));
   g_object_ref (di->dest);
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (tree_view));
+  di->cssnode = gtk_css_node_new ();
+  gtk_css_node_set_name (di->cssnode, I_("dndtarget"));
+  gtk_css_node_set_parent (di->cssnode, widget_node);
+  gtk_css_node_set_state (di->cssnode, gtk_css_node_get_state (widget_node));
+  g_object_unref (di->cssnode);
 
   unset_reorderable (tree_view);
 
@@ -12973,6 +12993,9 @@ gtk_tree_view_unset_rows_drag_dest (GtkTreeView *tree_view)
           gtk_widget_remove_controller (GTK_WIDGET (tree_view), GTK_EVENT_CONTROLLER (di->dest));
           di->dest = NULL;
           di->dest_set = FALSE;
+
+          gtk_css_node_set_parent (di->cssnode, NULL);
+          di->cssnode = NULL;
         }
 
       if (!di->dest_set && !di->source_set)
