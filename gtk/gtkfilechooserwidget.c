@@ -8500,7 +8500,6 @@ post_process_ui (GtkFileChooserWidget *impl)
   GtkCellRenderer  *cell;
   GList            *cells;
   GFile            *file;
-  GtkDragSource *source;
   GtkDropTarget *dest;
   GdkContentFormats *formats;
 
@@ -8511,12 +8510,14 @@ post_process_ui (GtkFileChooserWidget *impl)
                                           impl, NULL);
   formats = gdk_content_formats_new (NULL, 0);
   formats = gtk_content_formats_add_uri_targets (formats);
-  source = gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (priv->browse_files_tree_view),
-                                                   GDK_BUTTON1_MASK,
-                                                   formats,
-                                                   GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (priv->browse_files_tree_view),
+                                          GDK_BUTTON1_MASK,
+                                          formats,
+                                          GDK_ACTION_COPY | GDK_ACTION_MOVE);
+#if 0
   g_signal_connect (source, "drag-begin", G_CALLBACK (file_list_drag_begin_cb), impl);
   g_signal_connect (source, "drag-end", G_CALLBACK (file_list_drag_end_cb), impl);
+#endif
 
   
   dest = gtk_drop_target_new (formats, GDK_ACTION_COPY | GDK_ACTION_MOVE);
