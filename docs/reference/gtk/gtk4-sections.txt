@@ -5002,49 +5002,6 @@ gtk_selection_data_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkdnd</FILE>
-<TITLE>Drag and Drop</TITLE>
-GtkDestDefaults
-GtkDragResult
-
-<SUBSECTION Destination Side>
-gtk_drag_dest_set
-gtk_drag_dest_unset
-gtk_drag_dest_find_target
-gtk_drag_dest_get_target_list
-gtk_drag_dest_set_target_list
-gtk_drag_dest_add_text_targets
-gtk_drag_dest_add_image_targets
-gtk_drag_dest_add_uri_targets
-gtk_drag_dest_set_track_motion
-gtk_drag_dest_get_track_motion
-gtk_drag_get_data
-gtk_drag_get_source_widget
-gtk_drag_highlight
-gtk_drag_unhighlight
-
-<SUBSECTION Source Side>
-gtk_drag_begin
-gtk_drag_cancel
-gtk_drag_set_icon_widget
-gtk_drag_set_icon_paintable
-gtk_drag_set_icon_name
-gtk_drag_set_icon_gicon
-gtk_drag_set_icon_default
-gtk_drag_check_threshold
-gtk_drag_source_set
-gtk_drag_source_set_icon_name
-gtk_drag_source_set_icon_gicon
-gtk_drag_source_set_icon_paintable
-gtk_drag_source_unset
-gtk_drag_source_set_target_list
-gtk_drag_source_get_target_list
-gtk_drag_source_add_text_targets
-gtk_drag_source_add_image_targets
-gtk_drag_source_add_uri_targets
-</SECTION>
-
-<SECTION>
 <FILE>gtkbindings</FILE>
 <TITLE>Bindings</TITLE>
 GtkBindingSet
