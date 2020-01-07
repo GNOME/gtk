@@ -2845,6 +2845,8 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
           GdkDragAction actions;
           GdkDrag *drag;
           GdkPaintable *paintable;
+          GdkContentProvider *content;
+          GValue value = G_VALUE_INIT;
 
           text = _gtk_text_get_selected_text (self);
           gtk_text_get_pixel_ranges (self, &ranges, &n_ranges);
@@ -2854,12 +2856,18 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
           else
             actions = GDK_ACTION_COPY;
 
+          g_value_init (&value, G_TYPE_STRING);
+          g_value_set_string (&value, text);
+          content = gdk_content_provider_new_for_value (&value);
+          g_value_unset (&value);
+
           drag = gdk_drag_begin (gdk_event_get_surface ((GdkEvent*) event),
                                  gdk_event_get_device ((GdkEvent*) event),
-                                 priv->selection_content,
+                                 content,
                                  actions,
                                  priv->drag_start_x,
                                  priv->drag_start_y);
+          g_object_unref (content);
 
           g_signal_connect (drag, "dnd-finished", G_CALLBACK (dnd_finished_cb), self);
 
