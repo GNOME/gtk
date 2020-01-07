@@ -36,13 +36,6 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_SELECTION_DATA (gtk_selection_data_get_type ())
 
-GDK_AVAILABLE_IN_ALL
-GdkContentFormats *     gtk_content_formats_add_text_targets      (GdkContentFormats *list) G_GNUC_WARN_UNUSED_RESULT;
-GDK_AVAILABLE_IN_ALL
-GdkContentFormats *     gtk_content_formats_add_image_targets     (GdkContentFormats *list,
-                                                                   gboolean           writable) G_GNUC_WARN_UNUSED_RESULT;
-GDK_AVAILABLE_IN_ALL
-GdkContentFormats *     gtk_content_formats_add_uri_targets       (GdkContentFormats *list) G_GNUC_WARN_UNUSED_RESULT;
 
 GDK_AVAILABLE_IN_ALL
 GdkAtom       gtk_selection_data_get_target    (const GtkSelectionData *selection_data);

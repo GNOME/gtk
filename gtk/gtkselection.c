@@ -144,130 +144,6 @@ init_atoms (void)
 }
 
 /**
- * gtk_content_formats_add_text_targets:
- * @list: a #GdkContentFormats
- * 
- * Appends the text targets supported by #GtkSelectionData to
- * the target list. All targets are added with the same @info.
- **/
-GdkContentFormats *
-gtk_content_formats_add_text_targets (GdkContentFormats *list)
-{
-  GdkContentFormatsBuilder *builder;
-
-  g_return_val_if_fail (list != NULL, NULL);
-  
-  init_atoms ();
-
-  builder = gdk_content_formats_builder_new ();
-  gdk_content_formats_builder_add_formats (builder, list);
-  gdk_content_formats_unref (list);
-
-  /* Keep in sync with gtk_selection_data_targets_include_text()
-   */
-  gdk_content_formats_builder_add_mime_type (builder, utf8_atom);  
-  gdk_content_formats_builder_add_mime_type (builder, ctext_atom);  
-  gdk_content_formats_builder_add_mime_type (builder, text_atom);  
-  gdk_content_formats_builder_add_mime_type (builder, g_intern_static_string ("STRING"));  
-  gdk_content_formats_builder_add_mime_type (builder, text_plain_utf8_atom);  
-  if (!g_get_charset (NULL))
-    gdk_content_formats_builder_add_mime_type (builder, text_plain_locale_atom);  
-  gdk_content_formats_builder_add_mime_type (builder, text_plain_atom);  
-
-  return gdk_content_formats_builder_free_to_formats (builder);
-}
-
-/**
- * gtk_content_formats_add_image_targets:
- * @list: a #GdkContentFormats
- * @writable: whether to add only targets for which GTK+ knows
- *   how to convert a pixbuf into the format
- * 
- * Appends the image targets supported by #GtkSelectionData to
- * the target list. All targets are added with the same @info.
- **/
-GdkContentFormats *
-gtk_content_formats_add_image_targets (GdkContentFormats *list,
-		                       gboolean           writable)
-{
-  GdkContentFormatsBuilder *builder;
-  GSList *formats, *f;
-  gchar **mimes, **m;
-
-  g_return_val_if_fail (list != NULL, NULL);
-
-  builder = gdk_content_formats_builder_new ();
-  gdk_content_formats_builder_add_formats (builder, list);
-  gdk_content_formats_unref (list);
-
-  formats = gdk_pixbuf_get_formats ();
-
-  /* Make sure png comes first */
-  for (f = formats; f; f = f->next)
-    {
-      GdkPixbufFormat *fmt = f->data;
-      gchar *name; 
- 
-      name = gdk_pixbuf_format_get_name (fmt);
-      if (strcmp (name, "png") == 0)
-	{
-	  formats = g_slist_delete_link (formats, f);
-	  formats = g_slist_prepend (formats, fmt);
-
-	  g_free (name);
-
-	  break;
-	}
-
-      g_free (name);
-    }  
-
-  for (f = formats; f; f = f->next)
-    {
-      GdkPixbufFormat *fmt = f->data;
-
-      if (writable && !gdk_pixbuf_format_is_writable (fmt))
-	continue;
-      
-      mimes = gdk_pixbuf_format_get_mime_types (fmt);
-      for (m = mimes; *m; m++)
-	{
-	  gdk_content_formats_builder_add_mime_type (builder, *m);  
-	}
-      g_strfreev (mimes);
-    }
-
-  g_slist_free (formats);
-
-  return gdk_content_formats_builder_free_to_formats (builder);
-}
-
-/**
- * gtk_content_formats_add_uri_targets:
- * @list: a #GdkContentFormats
- * 
- * Appends the URI targets supported by #GtkSelectionData to
- * the target list. All targets are added with the same @info.
- **/
-GdkContentFormats *
-gtk_content_formats_add_uri_targets (GdkContentFormats *list)
-{
-  GdkContentFormatsBuilder *builder;
-
-  g_return_val_if_fail (list != NULL, NULL);
-  
-  init_atoms ();
-
-  builder = gdk_content_formats_builder_new ();
-  gdk_content_formats_builder_add_formats (builder, list);
-  gdk_content_formats_unref (list);
-
-  gdk_content_formats_builder_add_mime_type (builder, text_uri_list_atom);  
-
-  return gdk_content_formats_builder_free_to_formats (builder);
-}
-
-/**
  * gtk_selection_data_get_target:
  * @selection_data: a pointer to a #GtkSelectionData-struct.
  *
@@ -1158,8 +1034,11 @@ gtk_targets_include_image (GdkAtom *targets,
 
   g_return_val_if_fail (targets != NULL || n_targets == 0, FALSE);
 
-  list = gdk_content_formats_new (NULL, 0);
-  list = gtk_content_formats_add_image_targets (list, writable);
+  list = gdk_content_formats_new_for_gtype (GDK_TYPE_TEXTURE);
+  if (writable)
+    list = gdk_content_formats_union_serialize_mime_types (list);
+  else
+    list = gdk_content_formats_union_deserialize_mime_types (list);
   for (i = 0; i < n_targets && !result; i++)
     {
       if (gdk_content_formats_contain_mime_type (list, targets[i]))
