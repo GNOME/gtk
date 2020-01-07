@@ -220,8 +220,7 @@ get_data (const char *mimetype,
   GdkContentFormats *formats;
   gboolean want_text;
 
-  formats = gdk_content_formats_new (NULL, 0);
-  formats = gtk_content_formats_add_text_targets (formats);
+  formats = gdk_content_formats_new_for_gtype (G_TYPE_STRING);
   want_text = gdk_content_formats_contain_mime_type (formats, mimetype);
   gdk_content_formats_unref (formats);
 
@@ -288,14 +287,16 @@ make_image (const gchar *icon_name, int hotspot)
   GtkDragSource *source;
   GtkDropTarget *dest;
   GdkContentFormats *formats;
+  GdkContentFormatsBuilder *builder;
   GdkContentProvider *content;
 
   image = gtk_image_new_from_icon_name (icon_name);
   gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
 
-  formats = gdk_content_formats_new (NULL, 0);
-  formats = gtk_content_formats_add_image_targets (formats, FALSE);
-  formats = gtk_content_formats_add_text_targets (formats);
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_gtype (builder, GDK_TYPE_TEXTURE);
+  gdk_content_formats_builder_add_gtype (builder, G_TYPE_STRING);
+  formats = gdk_content_formats_builder_free_to_formats (builder);
 
   content = gdk_content_provider_new_with_formats (formats, get_data, image);
   source = gtk_drag_source_new ();
