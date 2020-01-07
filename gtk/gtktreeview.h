@@ -315,7 +315,7 @@ gboolean               gtk_tree_view_is_blank_at_pos               (GtkTreeView 
 
 /* Drag-and-Drop support */
 GDK_AVAILABLE_IN_ALL
-GtkDragSource *        gtk_tree_view_enable_model_drag_source      (GtkTreeView               *tree_view,
+void                   gtk_tree_view_enable_model_drag_source      (GtkTreeView               *tree_view,
 								    GdkModifierType            start_button_mask,
 								    GdkContentFormats         *formats,
 								    GdkDragAction              actions);
