@@ -84,18 +84,7 @@ GDK_AVAILABLE_IN_ALL
 GtkDragSource *    gtk_drag_get_source         (GdkDrag           *drag);
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *        gtk_drag_source_get_origin  (GtkDragSource     *source);
-
-GDK_AVAILABLE_IN_ALL
 GdkDrag *          gtk_drag_source_get_drag    (GtkDragSource     *source);
-
-GDK_AVAILABLE_IN_ALL
-void               gtk_drag_source_attach      (GtkDragSource     *source,
-                                                GtkWidget         *widget,
-                                                GdkModifierType    start_button_mask);
-
-GDK_AVAILABLE_IN_ALL
-void               gtk_drag_source_detach      (GtkDragSource     *source);
 
 GDK_AVAILABLE_IN_ALL
 gboolean           gtk_drag_check_threshold    (GtkWidget         *widget,
