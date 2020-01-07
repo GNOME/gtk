@@ -139,8 +139,6 @@ gtk_drag_source_finalize (GObject *object)
 {
   GtkDragSource *source = GTK_DRAG_SOURCE (object);
 
-  gtk_drag_source_detach (source);
-
   g_clear_object (&source->content);
   g_clear_object (&source->paintable);
 
@@ -621,55 +619,6 @@ gtk_drag_source_set_icon (GtkDragSource *source,
 }
 
 /**
- * gtk_drag_source_attach:
- * @source: (transfer full): a #GtkDragSource
- * @widget: the widget to attach @source to
- * @start_button_mask: mask determining which mouse buttons trigger
- *
- * Attaches the @source to a @widget by creating a drag gesture
- * on @widget that will trigger DND operations with @source.
- *
- * The @start_button_mask determines which mouse buttons trigger
- * a DND operation.
- *
- * To undo the effect of this call, use gtk_drag_source_detach().
- */
-void
-gtk_drag_source_attach (GtkDragSource   *source,
-                        GtkWidget       *widget,
-                        GdkModifierType  start_button_mask)
-{
-  g_return_if_fail (GTK_IS_DRAG_SOURCE (source));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (start_button_mask != 0);
-  g_return_if_fail ((start_button_mask & ~(GDK_BUTTON1_MASK |
-                                           GDK_BUTTON2_MASK |
-                                           GDK_BUTTON3_MASK |
-                                           GDK_BUTTON4_MASK |
-                                           GDK_BUTTON5_MASK)) == 0);
-
-  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (source));
-}
-
-/**
- * gtk_drag_source_detach:
- * @source: a #GtkDragSource
- *
- * Undoes the effect of a prior gtk_drag_source_attach() call.
- */
-void
-gtk_drag_source_detach (GtkDragSource *source)
-{
-  GtkWidget *widget;
-
-  g_return_if_fail (GTK_IS_DRAG_SOURCE (source));
-
-  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
-  if (widget)
-    gtk_widget_remove_controller (widget, GTK_EVENT_CONTROLLER (source));
-}
-
-/**
  * gtk_drag_get_source:
  * @drag: a #GdkDrag
  *
@@ -694,22 +643,6 @@ gtk_drag_get_source (GdkDrag *drag)
     return GTK_DRAG_SOURCE (data);
 
   return NULL;
-}
-
-/**
- * gtk_drag_source_get_origin:
- * @source: a #GtkDragSource
- *
- * Returns the widget that an ongoing drag is started from.
- *
- * Returns: (nullable): the origin of the current drag operation, or %NULL
- */
-GtkWidget *
-gtk_drag_source_get_origin (GtkDragSource *source)
-{
-  g_return_val_if_fail (GTK_IS_DRAG_SOURCE (source), NULL);
-
-  return gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
 }
 
 /**
