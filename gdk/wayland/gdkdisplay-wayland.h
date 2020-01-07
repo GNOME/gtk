@@ -121,6 +121,8 @@ struct _GdkWaylandDisplay
   GHashTable *known_globals;
   GList *on_has_globals_closures;
 
+  GList *event_queues;
+
   /* Keep a list of orphaned dialogs (i.e. without parent) */
   GList *orphan_dialogs;
 
