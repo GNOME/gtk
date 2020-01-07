@@ -453,8 +453,7 @@ icon_browser_window_init (IconBrowserWindow *win)
 
   gtk_widget_init_template (GTK_WIDGET (win));
 
-  list = gdk_content_formats_new (NULL, 0);
-  list = gtk_content_formats_add_text_targets (list);
+  list = gdk_content_formats_new_for_gtype (G_TYPE_STRING);
   gtk_icon_view_enable_model_drag_source (GTK_ICON_VIEW (win->list),
                                           GDK_BUTTON1_MASK,
                                           list,
