@@ -7197,3 +7197,20 @@ GTK_DROP_TARGET_GET_CLASS
 <SUBSECTION Private>
 gtk_drop_target_get_type
 </SECTION>
+
+<SECTION>
+<FILE>gtkdragicon</FILE>
+GtkDragIcon
+gtk_drag_icon_new_for_drag
+gtk_drag_icon_set_from_paintable
+
+<SUBSECTION Standard>
+GTK_TYPE_DRAG_ICON
+GTK_DRAG_ICON
+GTK_DRAG_ICON_CLASS
+GTK_IS_DRAG_ICON
+GTK_IS_DRAG_ICON_CLASS
+GTK_DRAG_ICON_GET_CLASS
+<SUBSECTION Private>
+gtk_drag_icon_get_type
+</SECTION>

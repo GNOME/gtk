@@ -347,6 +347,7 @@
     <chapter>
       <title>Data exchange, clipboards and Drag-and-Drop</title>
       <xi:include href="xml/gtkdragsource.xml"/>
+      <xi:include href="xml/gtkdragicon.xml"/>
       <xi:include href="xml/gtkdroptarget.xml"/>
     </chapter>
 
