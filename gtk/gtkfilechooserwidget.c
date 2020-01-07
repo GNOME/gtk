@@ -2000,7 +2000,7 @@ file_list_drag_data_received_cb (GObject      *source,
   selection_data = gtk_drop_target_read_selection_finish (dest, result, NULL);
 
   /* Allow only drags from other widgets; see bug #533891. */
-  if (drag && gtk_drag_source_get_origin (gtk_drag_get_source (drag)) == widget)
+  if (drag && gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (drag)) == widget)
     return;
 
   /* Parse the text/uri-list string, navigate to the first one */
