@@ -78,6 +78,8 @@ struct _GdkWaylandSurface
     struct org_kde_kwin_server_decoration *server_decoration;
   } display_server;
 
+  struct wl_event_queue *event_queue;
+
   EGLSurface egl_surface;
   EGLSurface dummy_egl_surface;
 
@@ -450,6 +452,7 @@ gdk_wayland_surface_request_frame (GdkSurface *surface)
   clock = gdk_surface_get_frame_clock (surface);
 
   callback = wl_surface_frame (impl->display_server.wl_surface);
+  wl_proxy_set_queue ((struct wl_proxy *) callback, NULL);
   wl_callback_add_listener (callback, &frame_listener, surface);
   impl->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
   impl->awaiting_frame = TRUE;
@@ -641,6 +644,44 @@ gdk_wayland_surface_beep (GdkSurface *surface)
                                    surface);
 
   return TRUE;
+}
+
+static void
+gdk_wayland_surface_constructed (GObject *object)
+{
+  GdkSurface *surface = GDK_SURFACE (object);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandDisplay *display_wayland =
+    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+
+  G_OBJECT_CLASS (gdk_wayland_surface_parent_class)->constructed (object);
+
+  impl->event_queue = wl_display_create_queue (display_wayland->wl_display);
+  display_wayland->event_queues = g_list_prepend (display_wayland->event_queues,
+                                                  impl->event_queue);
+}
+
+static void
+gdk_wayland_surface_dispose (GObject *object)
+{
+  GdkSurface *surface = GDK_SURFACE (object);
+  GdkWaylandSurface *impl;
+
+  g_return_if_fail (GDK_IS_WAYLAND_SURFACE (surface));
+
+  impl = GDK_WAYLAND_SURFACE (surface);
+
+  if (impl->event_queue)
+    {
+      GdkWaylandDisplay *display_wayland =
+        GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+
+      display_wayland->event_queues =
+        g_list_remove (display_wayland->event_queues, surface);
+      g_clear_pointer (&impl->event_queue, wl_event_queue_destroy);
+    }
+
+  G_OBJECT_CLASS (gdk_wayland_surface_parent_class)->dispose (object);
 }
 
 static void
@@ -1057,9 +1098,13 @@ gdk_wayland_surface_create_surface (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+  struct wl_surface *wl_surface;
 
-  impl->display_server.wl_surface = wl_compositor_create_surface (display_wayland->compositor);
-  wl_surface_add_listener (impl->display_server.wl_surface, &surface_listener, surface);
+  wl_surface = wl_compositor_create_surface (display_wayland->compositor);
+  wl_proxy_set_queue ((struct wl_proxy *) wl_surface, impl->event_queue);
+  wl_surface_add_listener (wl_surface, &surface_listener, surface);
+
+  impl->display_server.wl_surface = wl_surface;
 }
 
 static void
@@ -1334,6 +1379,8 @@ create_xdg_toplevel_resources (GdkSurface *surface)
   impl->display_server.xdg_surface =
     xdg_wm_base_get_xdg_surface (display_wayland->xdg_wm_base,
                                  impl->display_server.wl_surface);
+  wl_proxy_set_queue ((struct wl_proxy *) impl->display_server.xdg_surface,
+                      impl->event_queue);
   xdg_surface_add_listener (impl->display_server.xdg_surface,
                             &xdg_surface_listener,
                             surface);
@@ -2183,6 +2230,9 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
       impl->display_server.xdg_surface =
         xdg_wm_base_get_xdg_surface (display->xdg_wm_base,
                                      impl->display_server.wl_surface);
+
+      wl_proxy_set_queue ((struct wl_proxy *) impl->display_server.xdg_surface,
+                          impl->event_queue);
       xdg_surface_add_listener (impl->display_server.xdg_surface,
                                 &xdg_surface_listener,
                                 surface);
@@ -2987,6 +3037,8 @@ gdk_wayland_surface_init_gtk_surface (GdkSurface *surface)
   impl->display_server.gtk_surface =
     gtk_shell1_get_gtk_surface (display->gtk_shell,
                                 impl->display_server.wl_surface);
+  wl_proxy_set_queue ((struct wl_proxy *) impl->display_server.gtk_surface,
+                      impl->event_queue);
   gdk_surface_set_geometry_hints (surface,
                                  &impl->geometry_hints,
                                  impl->geometry_mask);
@@ -3752,6 +3804,8 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkSurfaceClass *impl_class = GDK_SURFACE_CLASS (klass);
 
+  object_class->constructed = gdk_wayland_surface_constructed;
+  object_class->dispose = gdk_wayland_surface_dispose;
   object_class->finalize = gdk_wayland_surface_finalize;
 
   impl_class->show = gdk_wayland_surface_show;
