@@ -642,7 +642,7 @@ main (int argc, char **argv)
   gtk_drag_source_set_content (source, content);
   g_object_unref (content);
   gtk_drag_source_set_actions (source, GDK_ACTION_COPY|GDK_ACTION_MOVE);
-  gtk_drag_source_attach (source, button, GDK_BUTTON1_MASK | GDK_BUTTON3_MASK);
+  gtk_widget_add_controller (button, GTK_EVENT_CONTROLLER (source));
   gtk_drag_source_set_icon (source, GDK_PAINTABLE (texture), 0, 0);
 
   g_object_unref (texture);
