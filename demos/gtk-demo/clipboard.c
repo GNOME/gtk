@@ -143,17 +143,13 @@ get_texture (GValue   *value,
     g_value_set_object (value, paintable);
 }
 
-static void
+static GdkContentProvider *
 prepare_drag (GtkDragSource *source,
               double         x,
               double         y,
               GtkWidget     *image)
 {
-  GdkContentProvider *content;
-
-  content = gdk_content_provider_new_with_callback (GDK_TYPE_TEXTURE, get_texture, image);
-  gtk_drag_source_set_content (source, content);
-  g_object_unref (content);
+  return gdk_content_provider_new_with_callback (GDK_TYPE_TEXTURE, get_texture, image);
 }
 
 static void
