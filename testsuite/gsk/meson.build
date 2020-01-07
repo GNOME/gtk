@@ -63,6 +63,7 @@ compare_render_tests = [
   'repeat-negative-coords',
   'inset-shadow-multiple',
   'borders-rotated',
+  'blend-invisible-child',
 ]
 
 # these are too sensitive to differences in the renderers
