@@ -443,6 +443,7 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
   GtkWidget *box;
   GtkWidget *icon;
+  GdkContentFormatsBuilder *builder;
   GdkContentFormats *target_list;
   GtkDropTarget *dest;
 
@@ -496,9 +497,10 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
 				      NULL, NULL);
 
   /* DnD */
-  target_list = gdk_content_formats_new (NULL, 0);
-  target_list = gtk_content_formats_add_uri_targets (target_list);
-  target_list = gtk_content_formats_add_text_targets (target_list);
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_gtype (builder, G_TYPE_STRING);
+  gdk_content_formats_builder_add_gtype (builder, GDK_TYPE_FILE_LIST);
+  target_list = gdk_content_formats_builder_free_to_formats (builder);
   dest = gtk_drop_target_new (target_list, GDK_ACTION_COPY);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_file_chooser_button_drag_drop), button);
   gtk_widget_add_controller (GTK_WIDGET (button), GTK_EVENT_CONTROLLER (dest));
