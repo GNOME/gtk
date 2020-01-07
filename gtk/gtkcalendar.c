@@ -785,8 +785,7 @@ gtk_calendar_init (GtkCalendar *calendar)
 
   priv->in_drag = 0;
 
-  formats = gdk_content_formats_new (NULL, 0);
-  formats = gtk_content_formats_add_text_targets (formats);
+  formats = gdk_content_formats_new_for_gtype (G_TYPE_STRING);
   dest = gtk_drop_target_new (formats, GDK_ACTION_COPY);
   gdk_content_formats_unref (formats);
 
