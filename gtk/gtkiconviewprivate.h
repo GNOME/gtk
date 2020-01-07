@@ -133,12 +133,15 @@ struct _GtkIconViewPrivate
   gint press_start_x;
   gint press_start_y;
 
-  GtkDragSource *source;
+  GdkContentFormats *source_formats;
   GtkDropTarget *dest;
+
+  GdkDrag *drag;
 
   GdkDragAction source_actions;
   GdkDragAction dest_actions;
 
+  GtkTreeRowReference *source_item;
   GtkTreeRowReference *dest_item;
   GtkIconViewDropPosition dest_pos;
 
