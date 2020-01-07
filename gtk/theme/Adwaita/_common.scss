@@ -1914,6 +1914,9 @@ treeview.view {
     border-top: $backdrop_bg_color;
   }
   &:drop(active) {
+    box-shadow: none;
+  }
+  dndtarget:drop(active) {
     border-style: solid none;
     border-width: 1px;
     border-color: $selected_borders_color;
