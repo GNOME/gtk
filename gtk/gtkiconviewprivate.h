@@ -135,6 +135,7 @@ struct _GtkIconViewPrivate
 
   GdkContentFormats *source_formats;
   GtkDropTarget *dest;
+  GtkCssNode *dndnode;
 
   GdkDrag *drag;
 

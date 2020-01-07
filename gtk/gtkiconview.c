@@ -1754,8 +1754,7 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
 	  break;
         }
 
-     
-      gtk_style_context_save (context);
+      gtk_style_context_save_to_node (context, icon_view->priv->dndnode);
       gtk_style_context_set_state (context, gtk_style_context_get_state (context) | GTK_STATE_FLAG_DROP_ACTIVE);
 
       gtk_snapshot_render_frame (snapshot, context,
@@ -6450,6 +6449,7 @@ gtk_icon_view_enable_model_drag_dest (GtkIconView       *icon_view,
 				      GdkDragAction      actions)
 {
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), NULL);
+  GtkCssNode *widget_node;
 
   icon_view->priv->dest = gtk_drop_target_new (formats, actions);
   g_signal_connect (icon_view->priv->dest, "drag-leave", G_CALLBACK (gtk_icon_view_drag_leave), icon_view);
@@ -6462,6 +6462,13 @@ gtk_icon_view_enable_model_drag_dest (GtkIconView       *icon_view,
   icon_view->priv->dest_set = TRUE;
 
   unset_reorderable (icon_view);  
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (icon_view));
+  icon_view->priv->dndnode = gtk_css_node_new ();
+  gtk_css_node_set_name (icon_view->priv->dndnode, I_("dndtarget"));
+  gtk_css_node_set_parent (icon_view->priv->dndnode, widget_node);
+  gtk_css_node_set_state (icon_view->priv->dndnode, gtk_css_node_get_state (widget_node));
+  g_object_unref (icon_view->priv->dndnode);
 
   return icon_view->priv->dest;
 }
@@ -6504,6 +6511,9 @@ gtk_icon_view_unset_model_drag_dest (GtkIconView *icon_view)
       gtk_widget_remove_controller (GTK_WIDGET (icon_view), GTK_EVENT_CONTROLLER (icon_view->priv->dest));
       icon_view->priv->dest = NULL;
       icon_view->priv->dest_set = FALSE;
+
+      gtk_css_node_set_parent (icon_view->priv->dndnode, NULL);
+      icon_view->priv->dndnode = NULL;
     }
 
   unset_reorderable (icon_view);
