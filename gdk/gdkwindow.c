@@ -9567,14 +9567,17 @@ gdk_window_stop_interpolation_callback (GdkWindow *window)
 
 static gboolean is_gesture_start (GdkEvent *event)
 {
-  /* No gesture with a 'start' event is supported as yet */
-  return FALSE;
+  return ((gdk_event_get_event_type (event) == GDK_TOUCHPAD_PINCH) &&
+          (event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN));
 }
 
 static gboolean is_gesture_end (GdkEvent *event)
 {
-  return ((gdk_event_get_event_type (event) == GDK_SCROLL) &&
-          gdk_event_is_scroll_stop_event (event));
+  return (((gdk_event_get_event_type (event) == GDK_SCROLL) &&
+           gdk_event_is_scroll_stop_event (event)) ||
+          ((gdk_event_get_event_type (event) == GDK_TOUCHPAD_PINCH) &&
+           ((event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_END) ||
+            (event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_CANCEL))));
 }
 
 static int
@@ -10410,6 +10413,11 @@ proxy_gesture_event (GdkEvent *source_event,
       event->touchpad_pinch.angle_delta = source_event->touchpad_pinch.angle_delta;
       event->touchpad_pinch.n_fingers = source_event->touchpad_pinch.n_fingers;
       event->touchpad_pinch.phase = source_event->touchpad_pinch.phase;
+
+      if (event_win->interpolate_events)
+        events_to_unlink = gdk_window_interpolation_add_event (event_win,
+                                                               event);
+
       break;
 
     default:
