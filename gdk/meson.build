@@ -13,6 +13,7 @@ gdk_sources = files(
   'gdkdisplaymanager.c',
   'gdkdnd.c',
   'gdkevents.c',
+  'gdkeventhistory.c',
   'gdkframetimings.c',
   'gdkgl.c',
   'gdkglcontext.c',
