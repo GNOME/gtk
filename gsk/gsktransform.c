@@ -712,7 +712,15 @@ _sincos (float  deg,
     }
   else
     {
-      sincosf (deg * M_PI / 180.0, out_s, out_c);
+      float angle = deg * M_PI;
+
+#ifdef HAVE_SINCOSF
+      sincosf (angle / 180.0, out_s, out_c);
+#else
+      *out_s = sinf (angle);
+      *out_c = cosf (angle);
+#endif
+
     }
 }
 
