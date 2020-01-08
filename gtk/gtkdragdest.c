@@ -719,10 +719,7 @@ gtk_drop_target_handle_event (GtkEventController *controller,
     }
 
   if (found)
-    {
-      g_print ("setting dest from event controller handle_event\n");
-      gtk_drop_set_current_dest (drop, dest);
-    }
+    gtk_drop_set_current_dest (drop, dest);
 
   return found;
 }
@@ -750,13 +747,11 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
       break;
 
     case GDK_DRAG_LEAVE:
-      g_print ("setting dest from fallback handle_event for LEAVE\n");
       gtk_drop_set_current_dest (drop, NULL);
       break;
 
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
-      g_print ("setting dest from fallback handle_event for MOTION or START\n");
       gtk_drop_set_current_dest (drop, NULL);
       gdk_drop_status (drop, 0);
       break;
