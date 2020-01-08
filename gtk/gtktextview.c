@@ -7725,7 +7725,6 @@ gtk_text_view_drag_leave (GtkDropTarget *dest,
                           GtkTextView   *text_view)
 {
   GtkTextViewPrivate *priv = text_view->priv;
-  GtkWidget *widget = GTK_WIDGET (text_view);
 
   gtk_text_mark_set_visible (priv->dnd_mark, FALSE);
 
