@@ -221,6 +221,7 @@ get_data (const char *mimetype,
   gboolean want_text;
 
   formats = gdk_content_formats_new_for_gtype (G_TYPE_STRING);
+  formats = gdk_content_formats_union_serialize_mime_types (formats);
   want_text = gdk_content_formats_contain_mime_type (formats, mimetype);
   gdk_content_formats_unref (formats);
 
