@@ -647,19 +647,19 @@ gtk_drop_set_current_dest (GdkDrop       *drop,
 
   old_dest = g_object_get_data (G_OBJECT (drop), "current-dest");
 
+  if (old_dest == dest)
+    return;
+
   if (old_dest)
-    g_object_weak_unref (G_OBJECT (old_dest), clear_current_dest, drop);
+    {
+      gtk_drop_target_emit_drag_leave (old_dest, drop);
+      g_object_weak_unref (G_OBJECT (old_dest), clear_current_dest, drop);
+    }
 
   g_object_set_data (G_OBJECT (drop), "current-dest", dest);
 
   if (dest)
     g_object_weak_ref (G_OBJECT (dest), clear_current_dest, drop);
-}
-
-static GtkDropTarget *
-gtk_drop_get_current_dest (GdkDrop *drop)
-{
-  return g_object_get_data (G_OBJECT (drop), "current-dest");
 }
 
 static gboolean
@@ -668,14 +668,12 @@ gtk_drop_target_handle_event (GtkEventController *controller,
 {
   GtkDropTarget *dest = GTK_DROP_TARGET (controller);
   GdkDrop *drop;
-  GtkDropTarget *old_dest;
   double x, y;
   gboolean found = FALSE;
 
   gdk_event_get_coords (event, &x, &y);
 
   drop = gdk_event_get_drop (event);
-  old_dest = gtk_drop_get_current_dest (drop);
 
   switch ((int)gdk_event_get_event_type (event))
     {
@@ -686,11 +684,7 @@ gtk_drop_target_handle_event (GtkEventController *controller,
     case GDK_DROP_START:
       /* We send a leave before the drop so that the widget unhighlights properly.
        */
-      if (old_dest)
-        {
-          gtk_drop_target_emit_drag_leave (old_dest, drop);
-          gtk_drop_set_current_dest (drop, NULL);
-        }
+      gtk_drop_set_current_dest (drop, NULL);
 
       found = gtk_drop_target_emit_drag_drop (dest, drop, x, y);
       break;
@@ -700,15 +694,7 @@ gtk_drop_target_handle_event (GtkEventController *controller,
     }
 
   if (found)
-    {
-      if (old_dest && old_dest != dest)
-        {
-          gtk_drop_target_emit_drag_leave (old_dest, drop);
-          gtk_drop_set_current_dest (drop, NULL);
-        }
-
-      gtk_drop_set_current_dest (drop, dest);
-    }
+    gtk_drop_set_current_dest (drop, dest);
 
   return found;
 }
@@ -721,7 +707,6 @@ void
 gtk_drag_dest_handle_event (GtkWidget *toplevel,
                             GdkEvent  *event)
 {
-  GtkDropTarget *dest;
   GdkDrop *drop;
   GdkEventType event_type;
 
@@ -737,12 +722,7 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
       break;
 
     case GDK_DRAG_LEAVE:
-      dest = gtk_drop_get_current_dest (drop);
-      if (dest)
-        {
-          gtk_drop_target_emit_drag_leave (dest, drop);
-          gtk_drop_set_current_dest (drop, NULL);
-        }
+      gtk_drop_set_current_dest (drop, NULL);
       break;
 
     case GDK_DRAG_MOTION:
