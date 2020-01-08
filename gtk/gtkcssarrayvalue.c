@@ -411,25 +411,28 @@ _gtk_css_array_value_parse (GtkCssParser *parser,
                             GtkCssValue  *(* parse_func) (GtkCssParser *parser))
 {
   GtkCssValue *value, *result;
-  GPtrArray *values;
-
-  values = g_ptr_array_new ();
+  GtkCssValue *values[128];
+  guint n_values = 0;
+  guint i;
 
   do {
     value = parse_func (parser);
 
     if (value == NULL)
       {
-        g_ptr_array_set_free_func (values, (GDestroyNotify) _gtk_css_value_unref);
-        g_ptr_array_free (values, TRUE);
+        for (i = 0; i < n_values; i ++)
+          _gtk_css_value_unref (values[i]);
+
         return NULL;
       }
 
-    g_ptr_array_add (values, value);
+    values[n_values] = value;
+    n_values ++;
+    if (G_UNLIKELY (n_values > G_N_ELEMENTS (values)))
+      g_error ("Only %d elements in a css array are allowed", (int)G_N_ELEMENTS (values));
   } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
-  result = _gtk_css_array_value_new_from_array ((GtkCssValue **) values->pdata, values->len);
-  g_ptr_array_free (values, TRUE);
+  result = _gtk_css_array_value_new_from_array (values, n_values);
   return result;
 }
 
