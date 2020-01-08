@@ -182,7 +182,8 @@ gtk_fixed_layout_child_set_transform (GtkFixedLayoutChild *child,
 
   g_return_if_fail (GTK_IS_FIXED_LAYOUT_CHILD (child));
 
-  child->transform = gsk_transform_transform (child->transform, transform);
+  gsk_transform_unref (child->transform);
+  child->transform = gsk_transform_ref (transform);
 
   layout = gtk_layout_child_get_layout_manager (GTK_LAYOUT_CHILD (child));
   gtk_layout_manager_layout_changed (layout);
