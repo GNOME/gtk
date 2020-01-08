@@ -413,7 +413,7 @@ _gtk_css_array_value_parse (GtkCssParser *parser,
   GtkCssValue *value, *result;
   GPtrArray *values;
 
-  values = g_ptr_array_new ();
+  values = g_ptr_array_sized_new (2);
 
   do {
     value = parse_func (parser);
