@@ -106,6 +106,8 @@ static void     gtk_drop_target_unset_widget (GtkEventController *controller);
 static gboolean gtk_drop_target_get_contains (GtkDropTarget *dest);
 static void     gtk_drop_target_set_contains (GtkDropTarget *dest,
                                               gboolean       contains);
+static gboolean gtk_drop_target_drop_is_denied (GtkDropTarget *dest,
+                                                GdkDrop       *drop);
 
 G_DEFINE_TYPE (GtkDropTarget, gtk_drop_target, GTK_TYPE_EVENT_CONTROLLER);
 
@@ -282,14 +284,9 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    * If the decision whether the drop will be accepted or rejected can't be
    * made based solely on the cursor position and the type of the data, the
    * handler may inspect the dragged data by calling one of the #GdkDrop
-   * read functions, and defer the gdk_drag_status() call to when it has
-   * received the data.
-   *
-   * Also note that there is no drag-enter signal. The drag receiver has to
-   * keep track of whether he has received any drag-motion signals since the
-   * last #GtkWidget::drag-leave and if not, treat the drag-motion signal as
-   * an "enter" signal. Upon an "enter", the handler will typically highlight
-   * the drop site with gtk_drag_highlight().
+   * read functions and return %TRUE to tentatively accept the drop. When
+   * the data arrives and will nto be accepted, a call to
+   * gtk_drop_target_deny_drop() should be made to reject the drop.
    *
    * Returns: whether the cursor position is in a drop zone
    */
@@ -650,6 +647,12 @@ unset_current_dest (gpointer data)
     gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_DROP_ACTIVE);
 }
 
+static GtkDropTarget *
+gtk_drop_get_current_dest (GdkDrop *drop)
+{
+  return GTK_DROP_TARGET (g_object_get_data (G_OBJECT (drop), "current-dest"));
+}
+
 static void
 gtk_drop_set_current_dest (GdkDrop       *drop,
                            GtkDropTarget *dest)
@@ -700,9 +703,12 @@ gtk_drop_target_handle_event (GtkEventController *controller,
   double x, y;
   gboolean found = FALSE;
 
-  gdk_event_get_coords (event, &x, &y);
-
   drop = gdk_event_get_drop (event);
+
+  if (gtk_drop_target_drop_is_denied (dest, drop))
+    return FALSE;
+
+  gdk_event_get_coords (event, &x, &y);
 
   switch ((int)gdk_event_get_event_type (event))
     {
@@ -931,3 +937,53 @@ gtk_drop_target_read_selection_finish (GtkDropTarget  *dest,
 
   return g_task_propagate_pointer (G_TASK (result), error);
 }
+
+static gboolean
+gtk_drop_target_drop_is_denied (GtkDropTarget *dest,
+                                GdkDrop       *drop)
+{
+  GHashTable *denied;
+
+  denied = (GHashTable *)g_object_get_data (G_OBJECT (drop), "denied-drags");
+  if (denied)
+    return GPOINTER_TO_INT (g_hash_table_lookup (denied, dest));
+
+  return FALSE;
+}
+
+/**
+ * gtk_drop_target_deny_drop:
+ * @dest: a #GtkDropTarget
+ * @drop: the #GdkDrop of an ongoing drag operation
+ *
+ * Sets the @drop as not accepted on this drag site.
+ *
+ * This function should be used when delaying the decision
+ * on whether to accept a drag or not until after reading
+ * the data.
+ */
+void
+gtk_drop_target_deny_drop (GtkDropTarget *dest,
+                           GdkDrop       *drop)
+{
+  GHashTable *drags;
+
+  g_return_if_fail (GTK_IS_DROP_TARGET (dest));
+  g_return_if_fail (GDK_IS_DROP (drop));
+
+  drags = (GHashTable *)g_object_get_data (G_OBJECT (drop), "denied-drags");
+  if (!drags)
+    {
+      drags = g_hash_table_new (NULL, NULL);
+      g_object_set_data_full (G_OBJECT (drop), "denied-drags", drags, (GDestroyNotify)g_hash_table_unref);
+    }
+
+  g_hash_table_insert (drags, dest, GINT_TO_POINTER (TRUE));
+
+  if (dest == gtk_drop_get_current_dest (drop))
+    {
+      gdk_drop_status (drop, 0);
+      gtk_drop_set_current_dest (drop, NULL);
+    }
+}
+

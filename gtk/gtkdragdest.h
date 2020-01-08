@@ -86,6 +86,10 @@ GtkSelectionData *gtk_drop_target_read_selection_finish
                                                     GAsyncResult        *result,
                                                     GError             **error);
 
+GDK_AVAILABLE_IN_ALL
+void                gtk_drop_target_deny_drop      (GtkDropTarget       *dest,
+                                                    GdkDrop             *drop);
+
 
 G_END_DECLS
 
