@@ -88,9 +88,6 @@ _gdk_quartz_display_open (const gchar *display_name)
   if (_gdk_display != NULL)
     return NULL;
 
-  /* Initialize application */
-  [NSApplication sharedApplication];
-
   _gdk_display = g_object_new (gdk_quartz_display_get_type (), NULL);
   _gdk_display->device_manager = _gdk_device_manager_new (_gdk_display);
 
@@ -101,6 +98,8 @@ _gdk_quartz_display_open (const gchar *display_name)
 
   _gdk_quartz_events_init ();
 
+  /* Initialize application */
+  [NSApplication sharedApplication];
 #if 0
   /* FIXME: Remove the #if 0 when we have these functions */
   _gdk_quartz_dnd_init ();
