@@ -9636,7 +9636,7 @@ proxy_button_event (GdkEvent *source_event,
             ((evmask & GDK_SMOOTH_SCROLL_MASK) != 0 &&
              source_event->scroll.direction != GDK_SCROLL_SMOOTH &&
              gdk_event_get_pointer_emulated (source_event))))
-    return 0;
+    return (event_win->interpolate_events ? 1 : 0);
 
   event = _gdk_make_event (event_win, type, source_event, FALSE);
 
