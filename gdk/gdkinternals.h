@@ -181,6 +181,12 @@ typedef enum
   GDK_EVENT_FLUSHED = 1 << 2
 } GdkEventFlags;
 
+typedef enum
+{
+  GDK_INTERP_ABSOLUTE,
+  GDK_INTERP_RELATIVE
+} GdkInterpolationCategory;
+
 struct _GdkEventPrivate
 {
   GdkEvent   event;
@@ -412,6 +418,33 @@ void     gdk_event_set_scancode        (GdkEvent *event,
 
 void     gdk_event_set_seat              (GdkEvent *event,
                                           GdkSeat  *seat);
+
+void     gdk_event_set_time              (GdkEvent *event, guint32 time);
+
+void     gdk_event_set_state             (GdkEvent        *event,
+                                          GdkModifierType  state);
+
+gboolean gdk_event_get_absolute_interpolation_prop_names (const GdkEvent *event,
+                                                          GArray         *names);
+gboolean gdk_event_get_absolute_values_for_interpolation (const GdkEvent *event,
+                                                          GArray         *values);
+void     gdk_event_set_interpolated_absolute_values      (GdkEvent       *event,
+                                                          GArray         *values);
+gboolean gdk_event_get_relative_interpolation_prop_names (const GdkEvent *event,
+                                                          GArray         *names);
+gboolean gdk_event_get_relative_values_for_interpolation (const GdkEvent *event,
+                                                          GArray         *values);
+void     gdk_event_set_interpolated_relative_values      (GdkEvent       *event,
+                                                          GArray         *values);
+gboolean gdk_event_get_interpolation_prop_names          (const GdkEvent           *event,
+                                                          GArray                   *names,
+                                                          GdkInterpolationCategory  category);
+gboolean gdk_event_get_values_for_interpolation          (const GdkEvent           *event,
+                                                          GArray                   *values,
+                                                          GdkInterpolationCategory  category);
+void     gdk_event_set_interpolated_values               (GdkEvent                 *event,
+                                                          GArray                   *values,
+                                                          GdkInterpolationCategory  category);
 
 void   _gdk_event_emit               (GdkEvent   *event);
 GList* _gdk_event_queue_find_first   (GdkDisplay *display);

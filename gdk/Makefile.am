@@ -159,6 +159,7 @@ gdk_c_sources = 				\
 	gdkdnd.c				\
 	gdkdrawingcontext.c			\
 	gdkevents.c     			\
+	gdkeventinterpolation.c			\
 	gdkframetimings.c			\
 	gdkgl.c					\
 	gdkglcontext.c				\
