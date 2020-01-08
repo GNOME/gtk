@@ -65,10 +65,10 @@ struct _GtkDropTargetClass
 {
   GtkEventControllerClass parent_class;
 
-  gboolean (*drag_motion) (GtkDropTarget *dest,
-                           GdkDrop       *drop,
-                           int            x,
-                           int            y);
+  gboolean (*accept ) (GtkDropTarget *dest,
+                       GdkDrop       *drop,
+                       int            x,
+                       int            y);
 };
 
 enum {
@@ -81,19 +81,19 @@ enum {
 static GParamSpec *properties[NUM_PROPERTIES];
 
 enum {
+  ACCEPT,
   DRAG_ENTER,
   DRAG_LEAVE,
-  DRAG_MOTION,
   DRAG_DROP,
   NUM_SIGNALS
 };
 
 static guint signals[NUM_SIGNALS];
 
-static gboolean gtk_drop_target_drag_motion (GtkDropTarget *dest,
-                                             GdkDrop       *drop,
-                                             int            x,
-                                             int            y);
+static gboolean gtk_drop_target_accept (GtkDropTarget *dest,
+                                        GdkDrop       *drop,
+                                        int            x,
+                                        int            y);
 
 static gboolean gtk_drop_target_handle_event (GtkEventController *controller,
                                               const GdkEvent     *event);
@@ -191,7 +191,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   controller_class->set_widget = gtk_drop_target_set_widget;
   controller_class->unset_widget = gtk_drop_target_unset_widget;
 
-  class->drag_motion = gtk_drop_target_drag_motion;
+  class->accept = gtk_drop_target_accept;
 
   /**
    * GtkDropTarget:formats:
@@ -250,8 +250,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    * @drop: the #GdkDrop
    *
    * The ::drag-leave signal is emitted on the drop site when the cursor
-   * leaves the widget. A typical reason to connect to this signal is to
-   * undo things done in #GtkDropTarget::drag-motion, e.g. undo highlighting.
+   * leaves the widget.
    */
   signals[DRAG_LEAVE] =
       g_signal_new (I_("drag-leave"),
@@ -264,13 +263,13 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                     GDK_TYPE_DROP);
 
  /**
-   * GtkWidget::drag-motion:
+   * GtkWidget::accept:
    * @dest: the #GtkDropTarget
    * @drop: the #GdkDrop
    * @x: the x coordinate of the current cursor position
    * @y: the y coordinate of the current cursor position
    *
-   * The ::drag-motion signal is emitted on the drop site when the user
+   * The ::accept signal is emitted on the drop site when the user
    * moves the cursor over the widget during a drag. The signal handler
    * must determine whether the cursor position is in a drop zone or not.
    * If it is not in a drop zone, it returns %FALSE and no further processing
@@ -290,11 +289,11 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    *
    * Returns: whether the cursor position is in a drop zone
    */
-  signals[DRAG_MOTION] =
-      g_signal_new (I_("drag-motion"),
+  signals[ACCEPT] =
+      g_signal_new (I_("accept"),
                     G_TYPE_FROM_CLASS (class),
                     G_SIGNAL_RUN_LAST,
-                    G_STRUCT_OFFSET (GtkDropTargetClass, drag_motion),
+                    G_STRUCT_OFFSET (GtkDropTargetClass, accept),
                     g_signal_accumulator_first_wins, NULL,
                     NULL,
                     G_TYPE_BOOLEAN, 3,
@@ -511,10 +510,10 @@ gtk_drop_target_find_mimetype (GtkDropTarget *dest)
 }
 
 static gboolean
-gtk_drop_target_drag_motion (GtkDropTarget *dest,
-                             GdkDrop       *drop,
-                             int            x,
-                             int            y)
+gtk_drop_target_accept (GtkDropTarget *dest,
+                        GdkDrop       *drop,
+                        int            x,
+                        int            y)
 {
   GdkDragAction dest_actions;
   GdkDragAction actions;
@@ -567,15 +566,15 @@ gtk_drop_target_emit_drag_leave (GtkDropTarget    *dest,
 }
 
 static gboolean
-gtk_drop_target_emit_drag_motion (GtkDropTarget    *dest,
-                                  GdkDrop          *drop,
-                                  int               x,
-                                  int               y)
+gtk_drop_target_emit_accept (GtkDropTarget    *dest,
+                             GdkDrop          *drop,
+                             int               x,
+                             int               y)
 {
   gboolean result = FALSE;
 
   set_drop (dest, drop);
-  g_signal_emit (dest, signals[DRAG_MOTION], 0, drop, x, y, &result);
+  g_signal_emit (dest, signals[ACCEPT], 0, drop, x, y, &result);
 
   return result;
 }
@@ -713,7 +712,7 @@ gtk_drop_target_handle_event (GtkEventController *controller,
   switch ((int)gdk_event_get_event_type (event))
     {
     case GDK_DRAG_MOTION:
-      found = gtk_drop_target_emit_drag_motion (dest, drop, x, y);
+      found = gtk_drop_target_emit_accept (dest, drop, x, y);
       break;
 
     case GDK_DROP_START:
