@@ -66,6 +66,7 @@ struct _GtkDropTargetClass
   GtkEventControllerClass parent_class;
 
   gboolean (*drag_motion) (GtkDropTarget *dest,
+                           GdkDrop       *drop,
                            int            x,
                            int            y);
 };
@@ -89,6 +90,7 @@ enum {
 static guint signals[NUM_SIGNALS];
 
 static gboolean gtk_drop_target_drag_motion (GtkDropTarget *dest,
+                                             GdkDrop       *drop,
                                              int            x,
                                              int            y);
 
@@ -224,6 +226,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   /**
    * GtkDropTarget::drag-leave:
    * @dest: the #GtkDropTarget
+   * @drop: the #GdkDrop
    *
    * The ::drag-leave signal is emitted on the drop site when the cursor
    * leaves the widget. A typical reason to connect to this signal is to
@@ -240,11 +243,13 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                     0,
                     NULL, NULL,
                     NULL,
-                    G_TYPE_NONE, 0);
+                    G_TYPE_NONE, 1,
+                    GDK_TYPE_DROP);
 
  /**
    * GtkWidget::drag-motion:
    * @dest: the #GtkDropTarget
+   * @drop: the #GdkDrop
    * @x: the x coordinate of the current cursor position
    * @y: the y coordinate of the current cursor position
    *
@@ -280,12 +285,13 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                     G_STRUCT_OFFSET (GtkDropTargetClass, drag_motion),
                     g_signal_accumulator_first_wins, NULL,
                     NULL,
-                    G_TYPE_BOOLEAN, 2,
-                    G_TYPE_INT, G_TYPE_INT);
+                    G_TYPE_BOOLEAN, 3,
+                    GDK_TYPE_DROP, G_TYPE_INT, G_TYPE_INT);
 
   /**
    * GtkDropTarget::drag-drop:
    * @dest: the #GtkDropTarget
+   * @drop: the #GdkDrop
    * @x: the x coordinate of the current cursor position
    * @y: the y coordinate of the current cursor position
    *
@@ -319,8 +325,8 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                     0,
                     NULL, NULL,
                     NULL,
-                    G_TYPE_BOOLEAN, 2,
-                    G_TYPE_INT, G_TYPE_INT);
+                    G_TYPE_BOOLEAN, 3,
+                    GDK_TYPE_DROP, G_TYPE_INT, G_TYPE_INT);
 }
 
 /**
@@ -494,10 +500,10 @@ gtk_drop_target_find_mimetype (GtkDropTarget *dest)
 
 static gboolean
 gtk_drop_target_drag_motion (GtkDropTarget *dest,
+                             GdkDrop       *drop,
                              int            x,
                              int            y)
 {
-  GdkDrop *drop = dest->drop;
   GdkDragAction dest_actions;
   GdkDragAction actions;
   GdkAtom target;
@@ -542,7 +548,7 @@ gtk_drop_target_emit_drag_leave (GtkDropTarget    *dest,
                                  GdkDrop          *drop)
 {
   set_drop (dest, drop);
-  g_signal_emit (dest, signals[DRAG_LEAVE], 0, time);
+  g_signal_emit (dest, signals[DRAG_LEAVE], 0, drop, time);
   set_drop (dest, NULL);
   gtk_drop_target_set_contains (dest, FALSE);
 }
@@ -558,7 +564,7 @@ gtk_drop_target_emit_drag_motion (GtkDropTarget    *dest,
   dest->contains_pending = TRUE;
 
   set_drop (dest, drop);
-  g_signal_emit (dest, signals[DRAG_MOTION], 0, x, y, &result);
+  g_signal_emit (dest, signals[DRAG_MOTION], 0, drop, x, y, &result);
 
   if (dest->contains_pending)
     gtk_drop_target_set_contains (dest, result);
@@ -575,7 +581,7 @@ gtk_drop_target_emit_drag_drop (GtkDropTarget    *dest,
   gboolean result = FALSE;
 
   set_drop (dest, drop);
-  g_signal_emit (dest, signals[DRAG_DROP], 0, x, y, &result);
+  g_signal_emit (dest, signals[DRAG_DROP], 0, drop, x, y, &result);
 
   return result;
 }
@@ -678,8 +684,7 @@ gtk_drop_target_handle_event (GtkEventController *controller,
       break;
 
     case GDK_DROP_START:
-      /* We send a leave before the drop so that the widget unhighlights
-       * properly.
+      /* We send a leave before the drop so that the widget unhighlights properly.
        */
       if (old_dest)
         {
