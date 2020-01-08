@@ -1963,7 +1963,6 @@ drag_data_get_callback (GtkWidget        *widget,
     {
       gtk_selection_data_set (data,
                               target,
-                              8,
                               (void*)&sidebar->drag_row,
                               sizeof (gpointer));
     }

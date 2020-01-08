@@ -300,22 +300,6 @@ gtk_selection_data_get_data_type (const GtkSelectionData *selection_data)
 }
 
 /**
- * gtk_selection_data_get_format:
- * @selection_data: a pointer to a #GtkSelectionData-struct.
- *
- * Retrieves the format of the selection.
- *
- * Returns: the format of the selection.
- **/
-gint
-gtk_selection_data_get_format (const GtkSelectionData *selection_data)
-{
-  g_return_val_if_fail (selection_data != NULL, 0);
-
-  return selection_data->format;
-}
-
-/**
  * gtk_selection_data_get_data: (skip)
  * @selection_data: a pointer to a
  *   #GtkSelectionData-struct.
@@ -388,7 +372,6 @@ gtk_selection_data_get_display (const GtkSelectionData *selection_data)
  * gtk_selection_data_set:
  * @selection_data: a pointer to a #GtkSelectionData-struct.
  * @type: the type of selection data
- * @format: format (number of bits in a unit)
  * @data: (array length=length): pointer to the data (will be copied)
  * @length: length of the data
  * 
@@ -399,7 +382,6 @@ gtk_selection_data_get_display (const GtkSelectionData *selection_data)
 void 
 gtk_selection_data_set (GtkSelectionData *selection_data,
 			GdkAtom		  type,
-			gint		  format,
 			const guchar	 *data,
 			gint		  length)
 {
@@ -408,7 +390,6 @@ gtk_selection_data_set (GtkSelectionData *selection_data,
   g_free (selection_data->data);
   
   selection_data->type = type;
-  selection_data->format = format;
   
   if (data)
     {
@@ -442,7 +423,7 @@ selection_set_string (GtkSelectionData *selection_data,
     {
       gtk_selection_data_set (selection_data,
 			      g_intern_static_string ("STRING"),
-			      8, (guchar *) latin1, strlen (latin1));
+			      (guchar *) latin1, strlen (latin1));
       g_free (latin1);
       
       return TRUE;
@@ -462,16 +443,15 @@ selection_set_compound_text (GtkSelectionData *selection_data,
   gchar *tmp;
   guchar *text;
   GdkAtom encoding;
-  gint format;
   gint new_length;
 
   if (GDK_IS_X11_DISPLAY (selection_data->display))
     {
       tmp = g_strndup (str, len);
       if (gdk_x11_display_utf8_to_compound_text (selection_data->display, tmp,
-                                                 &encoding, &format, &text, &new_length))
+                                                 &encoding, NULL, &text, &new_length))
         {
-          gtk_selection_data_set (selection_data, encoding, format, text, new_length);
+          gtk_selection_data_set (selection_data, encoding, text, new_length);
           gdk_x11_free_compound_text (text);
 
           result = TRUE;
@@ -578,7 +558,7 @@ selection_set_text_plain (GtkSelectionData *selection_data,
   
   gtk_selection_data_set (selection_data,
 			  selection_data->target, 
-			  8, (guchar *) result, strlen (result));
+			  (guchar *) result, strlen (result));
   g_free (result);
   
   return TRUE;
@@ -661,7 +641,7 @@ gtk_selection_data_set_text (GtkSelectionData     *selection_data,
     {
       gtk_selection_data_set (selection_data,
 			      utf8_atom,
-			      8, (guchar *)str, len);
+			      (guchar *)str, len);
       return TRUE;
     }
   else if (selection_data->target == g_intern_static_string ("STRING"))
@@ -715,7 +695,7 @@ gtk_selection_data_get_text (const GtkSelectionData *selection_data)
       gint i;
       gint count = gdk_text_property_to_utf8_list_for_display (selection_data->display,
       							       selection_data->type,
-						   	       selection_data->format, 
+						               8,
 						               selection_data->data,
 						               selection_data->length,
 						               &list);
@@ -784,7 +764,7 @@ gtk_selection_data_set_pixbuf (GtkSelectionData *selection_data,
                                                   NULL);
 	      if (result)
 		gtk_selection_data_set (selection_data,
-					atom, 8, (guchar *)str, len);
+					atom, (guchar *)str, len);
 	      g_free (type);
 	      g_free (str);
 	      g_strfreev (mimes);
@@ -963,7 +943,7 @@ gtk_selection_data_set_uris (GtkSelectionData  *selection_data,
 	{
 	  gtk_selection_data_set (selection_data,
 				  text_uri_list_atom,
-				  8, (guchar *)result, length);
+				  (guchar *)result, length);
 	  
 	  g_free (result);
 
@@ -1001,7 +981,7 @@ gtk_selection_data_get_uris (const GtkSelectionData *selection_data)
       gchar **list;
       gint count = gdk_text_property_to_utf8_list_for_display (selection_data->display,
       							       utf8_atom,
-						   	       selection_data->format, 
+						               8,
 						               selection_data->data,
 						               selection_data->length,
 						               &list);
@@ -1012,52 +992,6 @@ gtk_selection_data_get_uris (const GtkSelectionData *selection_data)
     }
 
   return result;
-}
-
-
-/**
- * gtk_selection_data_get_targets:
- * @selection_data: a #GtkSelectionData object
- * @targets: (out) (array length=n_atoms) (transfer container):
- *           location to store an array of targets. The result stored
- *           here must be freed with g_free().
- * @n_atoms: location to store number of items in @targets.
- * 
- * Gets the contents of @selection_data as an array of targets.
- * This can be used to interpret the results of getting
- * the standard TARGETS target that is always supplied for
- * any selection.
- * 
- * Returns: %TRUE if @selection_data contains a valid
- *    array of targets, otherwise %FALSE.
- **/
-gboolean
-gtk_selection_data_get_targets (const GtkSelectionData  *selection_data,
-				GdkAtom                **targets,
-				gint                    *n_atoms)
-{
-  g_return_val_if_fail (selection_data != NULL, FALSE);
-
-  if (selection_data->length >= 0 &&
-      selection_data->format == 32 &&
-      selection_data->type == g_intern_static_string ("ATOM"))
-    {
-      if (targets)
-	*targets = g_memdup (selection_data->data, selection_data->length);
-      if (n_atoms)
-	*n_atoms = selection_data->length / sizeof (GdkAtom);
-
-      return TRUE;
-    }
-  else
-    {
-      if (targets)
-	*targets = NULL;
-      if (n_atoms)
-	*n_atoms = -1;
-
-      return FALSE;
-    }
 }
 
 /**
@@ -1117,21 +1051,15 @@ gtk_targets_include_text (GdkAtom *targets,
 gboolean
 gtk_selection_data_targets_include_text (const GtkSelectionData *selection_data)
 {
-  GdkAtom *targets;
-  gint n_targets;
-  gboolean result = FALSE;
+  GdkAtom target;
 
   g_return_val_if_fail (selection_data != NULL, FALSE);
 
   init_atoms ();
 
-  if (gtk_selection_data_get_targets (selection_data, &targets, &n_targets))
-    {
-      result = gtk_targets_include_text (targets, n_targets);
-      g_free (targets);
-    }
+  target = gtk_selection_data_get_target (selection_data);
 
-  return result;
+  return gtk_targets_include_text (&target, 1);
 }
 
 /**
@@ -1190,21 +1118,15 @@ gboolean
 gtk_selection_data_targets_include_image (const GtkSelectionData *selection_data,
 					  gboolean                writable)
 {
-  GdkAtom *targets;
-  gint n_targets;
-  gboolean result = FALSE;
+  GdkAtom target;
 
   g_return_val_if_fail (selection_data != NULL, FALSE);
 
   init_atoms ();
 
-  if (gtk_selection_data_get_targets (selection_data, &targets, &n_targets))
-    {
-      result = gtk_targets_include_image (targets, n_targets, writable);
-      g_free (targets);
-    }
+  target = gtk_selection_data_get_target (selection_data);
 
-  return result;
+  return gtk_targets_include_image (&target, 1, writable);
 }
 
 /**
@@ -1258,21 +1180,15 @@ gtk_targets_include_uri (GdkAtom *targets,
 gboolean
 gtk_selection_data_targets_include_uri (const GtkSelectionData *selection_data)
 {
-  GdkAtom *targets;
-  gint n_targets;
-  gboolean result = FALSE;
+  GdkAtom target;
 
   g_return_val_if_fail (selection_data != NULL, FALSE);
 
   init_atoms ();
 
-  if (gtk_selection_data_get_targets (selection_data, &targets, &n_targets))
-    {
-      result = gtk_targets_include_uri (targets, n_targets);
-      g_free (targets);
-    }
+  target = gtk_selection_data_get_target (selection_data);
 
-  return result;
+  return gtk_targets_include_uri (&target, 1);
 }
 
 /**

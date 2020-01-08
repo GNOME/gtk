@@ -169,7 +169,6 @@ gtk_drag_get_data_finish (GtkDragGetData *data,
 
   sdata.target = data->mime_type;
   sdata.type = data->mime_type;
-  sdata.format = 8;
   sdata.length = size;
   sdata.data = bytes ? bytes : (guchar *)g_strdup ("");
   sdata.display = gtk_widget_get_display (data->widget);

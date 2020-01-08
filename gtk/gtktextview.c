@@ -7766,7 +7766,6 @@ gtk_text_view_drag_data_get (GtkWidget        *widget,
     {
       gtk_selection_data_set (selection_data,
                               g_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"),
-                              8, /* bytes */
                               (void*)&buffer,
                               sizeof (buffer));
     }

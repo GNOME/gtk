@@ -3433,14 +3433,13 @@ gtk_notebook_drag_data_get (GtkWidget        *widget,
     {
       gtk_selection_data_set (data,
                               target,
-                              8,
                               (void*) &priv->detached_tab->child,
                               sizeof (gpointer));
       priv->rootwindow_drop = FALSE;
     }
   else if (target == g_intern_static_string ("application/x-rootwindow-drop"))
     {
-      gtk_selection_data_set (data, target, 8, NULL, 0);
+      gtk_selection_data_set (data, target, NULL, 0);
       priv->rootwindow_drop = TRUE;
     }
 }

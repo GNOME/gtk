@@ -193,7 +193,7 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
           const char *utf8_string = [s UTF8String];
 
           gtk_selection_data_set (selection_data,
-                                  target, 8,
+                                  target,
                                   (guchar *)utf8_string, strlen (utf8_string));
 	}
     }
@@ -211,7 +211,7 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
       color[2] = 0xffff * [nscolor blueComponent];
       color[3] = 0xffff * [nscolor alphaComponent];
 
-      gtk_selection_data_set (selection_data, target, 16, (guchar *)color, 8);
+      gtk_selection_data_set (selection_data, target, (guchar *)color, 8);
     }
   else if (target == g_intern_static_string ("text/uri-list"))
     {
@@ -265,7 +265,7 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
       if (data)
 	{
 	  gtk_selection_data_set (selection_data,
-                                  target, 8,
+                                  target,
                                   [data bytes], [data length]);
 	}
     }
@@ -279,12 +279,10 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard     *pasteboard,
 {
   NSString *type;
   GdkDisplay *display;
-  gint format;
   const guchar *data;
   NSUInteger length;
 
   display = gtk_selection_data_get_display (selection_data);
-  format = gtk_selection_data_get_format (selection_data);
   data = gtk_selection_data_get_data (selection_data);
   length = gtk_selection_data_get_length (selection_data);
 

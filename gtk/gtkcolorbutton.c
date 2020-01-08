@@ -329,7 +329,7 @@ gtk_color_button_drag_data_get (GtkWidget        *widget,
 
   gtk_selection_data_set (selection_data,
                           gtk_selection_data_get_target (selection_data),
-                          16, (guchar *)dropped, 8);
+                          (guchar *)dropped, 8);
 }
 
 static void

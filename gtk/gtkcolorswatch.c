@@ -160,7 +160,7 @@ swatch_drag_data_get (GtkWidget        *widget,
 
   gtk_selection_data_set (selection_data,
                           g_intern_static_string ("application/x-color"),
-                          16, (guchar *)vals, 8);
+                          (guchar *)vals, 8);
 }
 
 static void

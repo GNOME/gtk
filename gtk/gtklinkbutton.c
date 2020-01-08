@@ -462,7 +462,6 @@ gtk_link_button_drag_data_get_cb (GtkWidget        *widget,
   uri = g_strdup_printf ("%s\r\n", priv->uri);
   gtk_selection_data_set (selection,
                           gtk_selection_data_get_target (selection),
-  			  8,
   			  (guchar *) uri,
 			  strlen (uri));
   

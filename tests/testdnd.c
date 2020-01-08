@@ -295,8 +295,6 @@ static const char *target_table[] = {
   "application/x-rootwindow-drop"
 };
 
-static guint n_targets = sizeof(target_table) / sizeof(target_table[0]);
-
 void  
 target_drag_leave	   (GtkWidget	       *widget,
 			    GdkDrop            *drop,
@@ -386,8 +384,7 @@ target_drag_data_received  (GtkWidget          *widget,
 			    GdkDrop            *drop,
 			    GtkSelectionData   *selection_data)
 {
-  if (gtk_selection_data_get_length (selection_data) >= 0 &&
-      gtk_selection_data_get_format (selection_data) == 8)
+  if (gtk_selection_data_get_length (selection_data) >= 0)
     {
       GdkDragAction action = gdk_drop_get_actions (drop);
       g_print ("Received \"%s\" in trashcan\n", (gchar *) gtk_selection_data_get_data (selection_data));
@@ -404,8 +401,7 @@ label_drag_data_received  (GtkWidget          *widget,
 			   GdkDrop            *drop,
 			   GtkSelectionData   *selection_data)
 {
-  if (gtk_selection_data_get_length (selection_data) >= 0 &&
-      gtk_selection_data_get_format (selection_data) == 8)
+  if (gtk_selection_data_get_length (selection_data) >= 0)
     {
       GdkDragAction action = action_make_unique (gdk_drop_get_actions (drop));
       g_print ("Received \"%s\" in label\n", (gchar *) gtk_selection_data_get_data (selection_data));
@@ -426,8 +422,8 @@ source_drag_data_get  (GtkWidget          *widget,
     g_print ("I was dropped on the rootwin\n");
   else
     gtk_selection_data_set (selection_data,
-			    gtk_selection_data_get_target (selection_data),
-			    8, (guchar *) "I'm Data!", 9);
+                            gtk_selection_data_get_target (selection_data),
+                            (guchar *) "I'm Data!", 9);
 }
   
 /* The following is a rather elaborate example demonstrating/testing
@@ -502,7 +498,8 @@ popup_cb (gpointer data)
 	  popup_window = gtk_window_new (GTK_WINDOW_POPUP);
 
 	  grid = gtk_grid_new ();
-          targets = gdk_content_formats_new (target_table, n_targets - 1); /* no rootwin */
+          /* no rootwin */
+          targets = gdk_content_formats_new (target_table, G_N_ELEMENTS (target_table) - 1);
 
 	  for (i=0; i<3; i++)
 	    for (j=0; j<3; j++)
@@ -609,7 +606,8 @@ main (int argc, char **argv)
   
   label = gtk_label_new ("Drop Here\n");
 
-  targets = gdk_content_formats_new (target_table, n_targets - 1); /* no rootwin */
+  /* no rootwin */
+  targets = gdk_content_formats_new (target_table, G_N_ELEMENTS (target_table) - 1);
   gtk_drag_dest_set (label,
 		     GTK_DEST_DEFAULT_ALL,
                      targets,
@@ -661,7 +659,7 @@ main (int argc, char **argv)
 
   button = gtk_button_new_with_label ("Drag Here\n");
 
-  targets = gdk_content_formats_new (target_table, n_targets);
+  targets = gdk_content_formats_new (target_table, G_N_ELEMENTS (target_table));
   gtk_drag_source_set (button, GDK_BUTTON1_MASK | GDK_BUTTON3_MASK,
                        targets,
 		       GDK_ACTION_COPY | GDK_ACTION_MOVE);

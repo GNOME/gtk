@@ -49,8 +49,6 @@ GdkAtom       gtk_selection_data_get_target    (const GtkSelectionData *selectio
 GDK_AVAILABLE_IN_ALL
 GdkAtom       gtk_selection_data_get_data_type (const GtkSelectionData *selection_data);
 GDK_AVAILABLE_IN_ALL
-gint          gtk_selection_data_get_format    (const GtkSelectionData *selection_data);
-GDK_AVAILABLE_IN_ALL
 const guchar *gtk_selection_data_get_data      (const GtkSelectionData *selection_data);
 GDK_AVAILABLE_IN_ALL
 gint          gtk_selection_data_get_length    (const GtkSelectionData *selection_data);
@@ -65,7 +63,6 @@ GdkDisplay   *gtk_selection_data_get_display   (const GtkSelectionData *selectio
 GDK_AVAILABLE_IN_ALL
 void     gtk_selection_data_set      (GtkSelectionData     *selection_data,
                                       GdkAtom               type,
-                                      gint                  format,
                                       const guchar         *data,
                                       gint                  length);
 GDK_AVAILABLE_IN_ALL
@@ -90,10 +87,6 @@ gboolean gtk_selection_data_set_uris (GtkSelectionData     *selection_data,
 GDK_AVAILABLE_IN_ALL
 gchar  **gtk_selection_data_get_uris (const GtkSelectionData     *selection_data);
 
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_selection_data_get_targets          (const GtkSelectionData  *selection_data,
-                                                  GdkAtom          **targets,
-                                                  gint              *n_atoms);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_selection_data_targets_include_text (const GtkSelectionData  *selection_data);
 GDK_AVAILABLE_IN_ALL
