@@ -86,12 +86,6 @@ GtkSelectionData *gtk_drop_target_read_selection_finish
                                                     GAsyncResult        *result,
                                                     GError             **error);
 
-GDK_AVAILABLE_IN_ALL
-void               gtk_drag_highlight            (GtkWidget  *widget);
-
-GDK_AVAILABLE_IN_ALL
-void               gtk_drag_unhighlight          (GtkWidget  *widget);
-
 
 G_END_DECLS
 
