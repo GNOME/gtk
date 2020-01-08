@@ -105,7 +105,7 @@ gtk_css_style_property_register (const char *                   name,
 
 static void
 query_length_as_int (GtkCssStyleProperty *property,
-                     const GtkCssValue   *css_value,
+                     GtkCssValue         *css_value,
                      GValue              *value)
 {
   g_value_init (value, G_TYPE_INT);
@@ -114,7 +114,7 @@ query_length_as_int (GtkCssStyleProperty *property,
 
 static void
 query_font_size (GtkCssStyleProperty *property,
-                 const GtkCssValue   *css_value,
+                 GtkCssValue         *css_value,
                  GValue              *value)
 {
   g_value_init (value, G_TYPE_DOUBLE);
@@ -123,7 +123,7 @@ query_font_size (GtkCssStyleProperty *property,
 
 static void
 query_border (GtkCssStyleProperty *property,
-              const GtkCssValue   *css_value,
+              GtkCssValue         *css_value,
               GValue              *value)
 {
   GtkBorder border;
@@ -147,7 +147,7 @@ color_parse (GtkCssStyleProperty *property,
 
 static void
 color_query (GtkCssStyleProperty *property,
-             const GtkCssValue   *css_value,
+             GtkCssValue         *css_value,
              GValue              *value)
 {
   g_value_init (value, GDK_TYPE_RGBA);
@@ -200,7 +200,7 @@ font_family_parse (GtkCssStyleProperty *property,
 
 static void
 font_family_query (GtkCssStyleProperty *property,
-                   const GtkCssValue   *css_value,
+                   GtkCssValue         *css_value,
                    GValue              *value)
 {
   GPtrArray *array;
@@ -234,7 +234,7 @@ font_style_parse (GtkCssStyleProperty *property,
 
 static void
 font_style_query (GtkCssStyleProperty *property,
-                  const GtkCssValue   *css_value,
+                  GtkCssValue         *css_value,
                   GValue              *value)
 {
   g_value_init (value, PANGO_TYPE_STYLE);
@@ -267,7 +267,7 @@ font_weight_parse (GtkCssStyleProperty *property,
 
 static void
 font_weight_query (GtkCssStyleProperty *property,
-                   const GtkCssValue   *css_value,
+                   GtkCssValue         *css_value,
                    GValue              *value)
 {
   g_value_init (value, PANGO_TYPE_WEIGHT);
@@ -288,7 +288,7 @@ font_stretch_parse (GtkCssStyleProperty *property,
 
 static void
 font_stretch_query (GtkCssStyleProperty *property,
-                    const GtkCssValue   *css_value,
+                    GtkCssValue         *css_value,
                     GValue              *value)
 {
   g_value_init (value, PANGO_TYPE_STRETCH);
@@ -309,7 +309,7 @@ parse_border_style (GtkCssStyleProperty *property,
 
 static void
 query_border_style (GtkCssStyleProperty *property,
-                    const GtkCssValue   *css_value,
+                    GtkCssValue         *css_value,
                     GValue              *value)
 {
   g_value_init (value, GTK_TYPE_BORDER_STYLE);
@@ -361,7 +361,7 @@ opacity_parse (GtkCssStyleProperty *property,
 
 static void
 opacity_query (GtkCssStyleProperty *property,
-               const GtkCssValue   *css_value,
+               GtkCssValue         *css_value,
                GValue              *value)
 {
   g_value_init (value, G_TYPE_DOUBLE);
