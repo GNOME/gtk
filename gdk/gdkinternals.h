@@ -202,6 +202,11 @@ struct _GdkEventPrivate
 
 typedef struct _GdkWindowPaint GdkWindowPaint;
 
+/* The following is instantiated once per (slave) input device */
+typedef struct _GdkDeviceEventInterpolator {
+  GPtrArray *event_interpolators;
+} GdkDeviceEventInterpolator;
+
 struct _GdkWindow
 {
   GObject parent_instance;
@@ -354,6 +359,7 @@ struct _GdkWindow
   guint geometry_dirty : 1;
   guint event_compression : 1;
   guint frame_clock_events_paused : 1;
+  guint interpolate_events : 1;
 
   /* The GdkWindow that has the impl, ref:ed if another window.
    * This ref is required to keep the wrapper of the impl window alive
@@ -395,6 +401,36 @@ struct _GdkWindow
   GdkDrawingContext *drawing_context;
 
   cairo_region_t *opaque_region;
+
+  /*
+   * Event interpolation
+   *
+   * At any given time, more than a single interpolator might exist. Each
+   * interpolator represent a single ongoing gesture, in order of occurance.
+   * We add a new interpolator if a new gesture was started while interpolated
+   * events for a previous gesture were still being emitted. This can happen,
+   * for example, if the latency offset is relatively large.
+   *
+   * Interpolated events are extracted from the first interpolator in the
+   * array, which represents the oldest ongoing gesture. Newly received events
+   * are pushed to the last interpolator in the array. Usually there will only
+   * be a single ongoing gesture so events will be pushed to and extracted from
+   * the same interpolator.
+   *
+   * Once all events of a specific interpolator are exhausted, the interpolator
+   * is discarded and we start emitting events from the next one until no more
+   * interpolators exist.
+   */
+
+  /* The following are shared across all ongoing gestures from all input devices */
+  guint32 interpolation_time_offset;
+  guint32 interpolation_time_offset_target;
+  guint interpolation_tick_id;
+  gint64 interpolation_last_frame_time;
+  gint64 interpolation_last_time_event_received;
+
+  /* The values are of type GdkDeviceEventInterpolator */
+  GHashTable *device_interpolators;
 };
 
 #define GDK_WINDOW_TYPE(d) ((((GdkWindow *)(d)))->window_type)

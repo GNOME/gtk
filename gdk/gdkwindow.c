@@ -143,6 +143,38 @@
 /* This adds a local value to the GdkVisibilityState enum */
 #define GDK_VISIBILITY_NOT_VIEWABLE 3
 
+/*
+ * Maximum allowed time interval, in milliseconds, between the upcoming display
+ * frame and the input event interpolation point. This limitation is necessary
+ * in order to not get stuck with high latency due to transient hiccups in
+ * the stream of received input events.
+ *
+ * Assuming a 60Hz display, frame time would be about 16.6ms. Since the most
+ * recent input events in the interpolation history are from the previous frame
+ * at the latest, there will be at least 16.6ms gap between the upcoming frame
+ * and the most recent event. If due to some reason (display manager delay etc)
+ * input events arrived a frame late, we already have at least 33ms gap.
+ * Experimentally 40ms seems like a good hard limit for 60Hz displays, so about
+ * 2.5 display frames.
+ *
+ * While the semi-arbitrary 40ms threshold works fine for screens having 60Hz
+ * or higher refresh, it doesn't fit well screens with lower refresh rate. For
+ * example, for laptops the screen refresh is often 50Hz, which means
+ * 20ms/frame. So 40ms is only 2 frames which would not be enough. Then there
+ * are 30Hz screens to consider, such as a 4K display over an HDMI v1.x
+ * connection. So we set some relatively high hard latency limit, and
+ * dynamically calculate a 'soft' limit based on the display refresh rate.
+ */
+#define MAX_INTERPOLATION_OFFSET_MS 100
+#define INTERPOLATION_OFFSET_FRAMES_SOFT_LIMIT 3
+
+/*
+ * Grace period multipliers - when to stop the interpolation callback if no
+ * input events were received for a while.
+ */
+#define INTERPOLATION_DISPLAY_GRACE 5
+#define INTERPOLATION_EVENT_GRACE 10
+
 enum {
   PICK_EMBEDDED_CHILD, /* only called if children are embedded */
   TO_EMBEDDER,
@@ -192,10 +224,11 @@ static cairo_surface_t *gdk_window_ref_impl_surface (GdkWindow *window);
 static void gdk_window_set_frame_clock (GdkWindow      *window,
                                         GdkFrameClock  *clock);
 
+static void gdk_window_stop_interpolation_callback(GdkWindow *window);
+
 static void draw_ugly_color (GdkWindow       *window,
                              const cairo_region_t *region,
                              int color);
-
 
 static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *properties[LAST_PROP] = { NULL, };
@@ -297,6 +330,15 @@ gdk_window_init (GdkWindow *window)
 
   window->device_cursor = g_hash_table_new_full (NULL, NULL,
                                                  NULL, g_object_unref);
+
+  /* Event interpolation related */
+  window->interpolation_tick_id = 0;
+  window->interpolation_last_time_event_received = 0;
+
+  window->device_interpolators = g_hash_table_new (NULL, NULL);
+
+  /* TODO make that configurable in GTK4 */
+  window->interpolate_events = TRUE;
 }
 
 /* Stop and return on the first non-NULL parent */
@@ -549,9 +591,32 @@ seat_removed_cb (GdkDisplay *display,
 }
 
 static void
+gdk_window_free_device_interpolators (GdkWindow *window)
+{
+  GHashTableIter iter;
+  gpointer key, value;
+
+  g_hash_table_iter_init (&iter, window->device_interpolators);
+
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      GdkDeviceEventInterpolator *device_interpolator = value;
+
+      if (device_interpolator->event_interpolators)
+        g_ptr_array_unref (device_interpolator->event_interpolators);
+
+      g_slice_free (GdkDeviceEventInterpolator, device_interpolator);
+    }
+
+  g_hash_table_destroy (window->device_interpolators);
+}
+
+static void
 gdk_window_finalize (GObject *object)
 {
   GdkWindow *window = GDK_WINDOW (object);
+
+  gdk_window_stop_interpolation_callback (window);
 
   g_signal_handlers_disconnect_by_func (gdk_window_get_display (window),
                                         seat_removed_cb, window);
@@ -587,6 +652,9 @@ gdk_window_finalize (GObject *object)
       g_object_unref (window->impl_window);
       window->impl_window = NULL;
     }
+
+  if (window->device_interpolators)
+    gdk_window_free_device_interpolators (window);
 
   if (window->shape)
     cairo_region_destroy (window->shape);
@@ -9054,6 +9122,588 @@ _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
     }
 }
 
+/*
+ * Smooth movement is achieved when the interpolation point lies somewhere
+ * between the oldest and newest events in the event history. While we could
+ * 'interpolate' events outside this boundary (in this case that would be
+ * called 'extrapolation'), the accuracy would be reduced, since this would
+ * effectively be predicing the future or guessing the past. Furthermore, the
+ * interpolation point must move in lockstep to the frame time. That's because
+ * we want to calculate where the input device is located at the time the frame
+ * is displayed, as opposed to when the event was generated.
+ *
+ * There is no point in trying to interpolate an event at the upcoming frame
+ * time, since the upcoming frame time will always be later then the latest
+ * event in the event history. In order to compensate for that, we maintain a
+ * 'constant' offset from the frame time. This offset is the effective latency.
+ * The offset should be constant since, as explained above, the interpolation
+ * point should move in lockstep with the frame time.
+ *
+ * It should be noted that some latency always exists. Even if no interpolation
+ * takes place, the frame displayed will be affected only by events that were
+ * received before the frame was sent to the screen. When interpolation is
+ * enabled the latency is made explicit, and will be somewhat larger than the
+ * usual latency due to the constraints mentioned above. In the current
+ * implementation the value of window->interpolation_time_offset is the
+ * effective latency in milliseconds.
+ *
+ * The higher the offset the bigger the latency, so we would like the get the
+ * minimal fixed offset that still guarantees we'll always get an adjusted
+ * interpolation point within the event history. That optimum offset depends on
+ * a variety of factors: input event frequency, input event jitter, display
+ * frame duration etc. Instead of trying to use a complicated formula to
+ * calculate the offset, we simply increase it dynamically until it no longer
+ * changes.
+ *
+ * How do we know by how much to increase the offset, and when to stop doing
+ * that? On every animation callback we adjust the target offset if it's not
+ * large enough to make the interpolation point smaller than, or equal to, the
+ * timestamp of the newest event. We update it to the minimal value that
+ * satisfies this condition. Eventually the offset will no longer change.
+ *
+ * The offset is reset whenever a new gesture starts, so that mechanism should
+ * work even when the conditions change - for example if the new gesture
+ * originated from another input device, or is associated with a window which
+ * is displayed on a different monitor screen.
+ */
+static void
+gdk_window_update_interpolation_offset (GdkWindow *window,
+                                        gint64     frame_time)
+{
+  GHashTableIter iter;
+  gpointer key, value;
+
+  /* Go over all input devices, calculate the offset from the newest event of each gesture */
+  g_hash_table_iter_init (&iter, window->device_interpolators);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      GdkDeviceEventInterpolator *device_interpolator = value;
+      guint newest_gesture_index = device_interpolator->event_interpolators->len - 1;
+      guint32 timestamp_offset_from_newest_event = 0;
+
+      /* We always add events to the newest (last) interpolator */
+      GdkEventInterpolation * accumulating_interpolator =
+        g_ptr_array_index (device_interpolator->event_interpolators, newest_gesture_index);
+
+      /*
+       * Calculate the time delta between the upcoming frame and the newest event
+       * in the event history. The interpolation point offset from the frame time
+       * would have to be at least as big.
+       *
+       * If there are no events in the history then we (implicitly) don't change
+       * the current offset target.
+       *
+       * frame_time is in us while event time is in ms.
+       */
+      if (gdk_event_interpolation_history_length (accumulating_interpolator) > 0)
+        {
+          timestamp_offset_from_newest_event = (frame_time / 1000) -
+            gdk_event_interpolation_newest_event_time (accumulating_interpolator);
+        }
+
+      /* Adjust the target offset if it's too small. This single statement is the
+         core of this function. */
+      if (window->interpolation_time_offset_target < timestamp_offset_from_newest_event)
+        window->interpolation_time_offset_target = timestamp_offset_from_newest_event;
+    }
+
+  /* Apply the hard latency limit */
+  if (window->interpolation_time_offset_target > MAX_INTERPOLATION_OFFSET_MS)
+    window->interpolation_time_offset_target = MAX_INTERPOLATION_OFFSET_MS;
+
+  /* In order to get smooth animation, window->interpolation_time_offset should
+     stay relatively constant. This is one reason to "ease" updating it. */
+  if (window->interpolation_time_offset < window->interpolation_time_offset_target)
+    {
+      if (window->interpolation_last_frame_time == 0)
+        {
+          /* First callback for this gesture, no need to "ease" updating the offset */
+          window->interpolation_time_offset = window->interpolation_time_offset_target;
+        }
+      else
+        {
+          /* window->interpolation_last_frame_time is not 0 so we can calculate the frame duration */
+          gint64 frame_duration_ms = MAX ((frame_time - window->interpolation_last_frame_time) / 1000, 1);
+
+          /* Gesture animation is in progress, "ease" updating the offset to prevent back-jumps.
+             This can happen if the offset is suddenly larger than a frame duration, which can
+             cause us to ask for a value in time earlier than the one of the last callback. So
+             allow at most half a frame duration for each update of the offset. */
+          guint32 offset_soft_limit = INTERPOLATION_OFFSET_FRAMES_SOFT_LIMIT * frame_duration_ms;
+
+          /* Apply the soft latency limit */
+          if (window->interpolation_time_offset_target > offset_soft_limit)
+            window->interpolation_time_offset_target = offset_soft_limit;
+
+          /* Finally, update the actual offset */
+          guint32 delta_to_target = window->interpolation_time_offset_target - window->interpolation_time_offset;
+          window->interpolation_time_offset += MIN (delta_to_target, (frame_duration_ms + 1) / 2);
+        }
+    }
+}
+
+/*
+ * Return true if at least one gesture has uninterpolated events.
+ */
+static gboolean
+gdk_window_interpolation_got_work (GdkWindow *window)
+{
+  gint64 previous_interpolation_point;
+  GHashTableIter iter;
+  gpointer key, value;
+
+  /* Estimate the interpolation point of the previous frame. It's ok to err as
+     long as we get an earlier rather than a later point, since we shouldn't
+     stop the callback until all events were interpolated.
+
+     TODO just keep the last interpolation point as a member, then there would
+     be no need to guess. This is required since window->interpolation_time_offset
+     is not really constant. */
+  previous_interpolation_point = window->interpolation_last_frame_time -
+    (window->interpolation_time_offset * 1000);
+
+  /* Go over all input devices */
+  g_hash_table_iter_init (&iter, window->device_interpolators);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      GdkDeviceEventInterpolator *device_interpolator = value;
+
+      /* If there are pending gestures then we still got work to do */
+      if (device_interpolator->event_interpolators->len > 1)
+        return TRUE;
+
+      /* We always emit events from the oldest (first) interpolator */
+      GdkEventInterpolation * const animating_interpolator =
+        g_ptr_array_index (device_interpolator->event_interpolators, 0);
+
+      /* If there are some uninterpolated events then we still got work to do */
+      if (gdk_event_interpolation_history_length (animating_interpolator) > 0 &&
+          !gdk_event_interpolation_all_existing_events_emitted (animating_interpolator,
+                                                                previous_interpolation_point))
+        {
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+/*
+ * Use a heuristic to detect if we should stop the interpolation callback
+ * because no input event was received lately. This can happen due to various
+ * reasons, so without this heuristic the callback will continue firing
+ * indefinitely.
+ *
+ * For example, some versions of XWayland don't emit a 'scroll stop' event.
+ * Some event types don't have a stop event. It's also possible that the user
+ * simply stopped moving his fingers on the touchpad, without lifting them up.
+ * Once the fingers start moving again, or a new gesture began, the callback
+ * will be started again.
+ *
+ * Assume that if at least INTERPOLATION_DISPLAY_GRACE display frames or
+ * INTERPOLATION_EVENT_GRACE input frames, whichever is higher time-wise, has
+ * passed without receiving an input event then it means that the gesture has
+ * stopped.
+ *
+ * In any case, as long as there are uninterpolated events in the history
+ * buffer we don't stop the callback.
+ */
+static gboolean
+gdk_window_interpolation_time_out (GdkWindow *window,
+                                   gint64     frame_time)
+{
+  gint64 timestamp_offset_from_newest_event;
+  gint64 event_frame_duration;
+  GHashTableIter iter;
+  gpointer key, value;
+  gint64 grace_period;
+  gint64 display_frame_duration;
+
+  /* No need to stop the callback if this is the first callback for this gesture */
+  if (window->interpolation_last_frame_time == 0)
+    {
+      return FALSE;
+    }
+
+  display_frame_duration = frame_time - window->interpolation_last_frame_time;
+  grace_period = display_frame_duration * INTERPOLATION_DISPLAY_GRACE;
+
+  /* Go over all input devices, adjust the grace period if necessary */
+  g_hash_table_iter_init (&iter, window->device_interpolators);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      GdkDeviceEventInterpolator *device_interpolator = value;
+
+      /* We always emit events from the oldest (first) interpolator */
+      GdkEventInterpolation * const animating_interpolator =
+        g_ptr_array_index (device_interpolator->event_interpolators, 0);
+
+      /* frame_time is in us while event time is in ms. If the event history is too
+         short then event_frame_duration will be set to 0. In that case only the
+         display frames will affect the grace period. */
+      event_frame_duration = gdk_event_interpolation_average_event_interval (animating_interpolator) * 1000;
+
+      /* The grace period takes into account the frame duration of both the display and the events */
+      grace_period = MAX (grace_period, event_frame_duration * INTERPOLATION_EVENT_GRACE);
+    }
+
+  /* Calculate how much time passed since an input event was received. */
+  timestamp_offset_from_newest_event = g_get_monotonic_time () -
+    window->interpolation_last_time_event_received;
+
+  return (timestamp_offset_from_newest_event > grace_period);
+}
+
+static void
+gdk_window_emit_interpolated_event (GdkEvent              *start_event,
+                                    GdkEvent              *interpolated_event,
+                                    GdkEventInterpolation *animating_interpolator)
+{
+  /* Send a start event if one wasn't sent yet. We only send a start event once
+     we receive either an 'update' or a 'stop' event. */
+  if (start_event)
+    {
+      /* Set the start event time to be the same as the interpolated event */
+      gdk_event_set_time (start_event, gdk_event_get_time (interpolated_event));
+
+      /* Emit the start event */
+      _gdk_event_emit (start_event);
+      gdk_event_free (start_event);
+
+      gdk_event_interpolation_set_start_event (animating_interpolator, NULL);
+    }
+
+  /* Emit the interpolated event */
+  _gdk_event_emit (interpolated_event);
+  gdk_event_free (interpolated_event);
+}
+
+/*
+ * Once a stop event has been received, we keep emitting interpolated events
+ * until the history buffer is drained. Only then we emit a stop event.
+ */
+static void
+gdk_window_interpolation_handle_stop_event (GdkDeviceEventInterpolator *device_interpolator,
+                                            GdkEvent                   *start_event,
+                                            GdkEvent                   *stop_event,
+                                            gint64                      adjusted_interpolation_point)
+{
+  /* We always emit events from the oldest (first) interpolator */
+  GdkEventInterpolation * animating_interpolator =
+    g_ptr_array_index (device_interpolator->event_interpolators, 0);
+
+  /* Emit a stop event once all events have been interpolated. An empty
+     history buffer is considered to have been interpolated. */
+  gboolean send_stop =
+    gdk_event_interpolation_history_length (animating_interpolator) ?
+      gdk_event_interpolation_all_existing_events_emitted (animating_interpolator,
+                                                           adjusted_interpolation_point) :
+      TRUE;
+
+  if (send_stop)
+    {
+      /* Set the stop event time to be 1ms after the previous event, just in case. */
+      gdk_event_set_time (stop_event, (adjusted_interpolation_point / 1000) + 1);
+
+      /* We are done with the current interpolator */
+      g_ptr_array_remove_index (device_interpolator->event_interpolators, 0);
+
+      /* Emit the stop event */
+      gdk_window_emit_interpolated_event (start_event,
+                                          stop_event,
+                                          animating_interpolator);
+    }
+}
+
+static gboolean
+gdk_window_interpolate_device_events (GdkWindow                  *window,
+                                      GdkDeviceEventInterpolator *device_interpolator,
+                                      gint64                      adjusted_interpolation_point,
+                                      gboolean                    stop_callback)
+{
+  gboolean got_work = TRUE;
+  while (got_work)
+    {
+      guint num_queued_gestures = device_interpolator->event_interpolators->len;
+
+      /* We always emit events from the oldest (first) interpolator */
+      GdkEventInterpolation * animating_interpolator =
+        g_ptr_array_index (device_interpolator->event_interpolators, 0);
+
+      /* Get the start and stop events (any of them might be null if not received yet) */
+      GdkEvent *start_event = gdk_event_interpolation_get_start_event (animating_interpolator);
+      GdkEvent *stop_event = gdk_event_interpolation_get_stop_event (animating_interpolator);
+
+      /* Guard against a missing stop event */
+      if (stop_callback && !stop_event)
+        {
+          /* Reset the history in order to prevent 'jumps' when we start
+             receiving events again. */
+          gdk_event_interpolation_history_reset (animating_interpolator);
+          return FALSE;
+        }
+
+      /* It's possible for the event history to be empty, but only if a stop
+         (or a start) event was received. That can happen, for example, if the
+         user didn't move his fingers for a while, triggering the
+         gdk_window_interpolation_time_out() check , then later lifted his
+         fingers without moving them. */
+      /* TODO don't emit an event if all events were already emitted.
+         Use gdk_event_interpolation_all_existing_events_emitted() for that,
+         with the *previous* adjusted interpolation point. */
+      if (gdk_event_interpolation_history_length (animating_interpolator) > 0)
+        {
+          /* Synthesize an interpolated event */
+          GdkEvent *interpolated_event =
+            gdk_event_interpolation_interpolate_event (animating_interpolator,
+                                                       adjusted_interpolation_point);
+
+          /* We might not get an event, for example when the adjusted interpolation
+             point is earlier than the timestamp of the oldest event. */
+          if (interpolated_event)
+            gdk_window_emit_interpolated_event (start_event,
+                                                interpolated_event,
+                                                animating_interpolator);
+        }
+      else if(!start_event && !stop_event)
+        {
+          /* This shouldn't happen */
+          g_warning ("Can't interpolate event, history is empty even though no start nor stop events were received");
+        }
+
+      /* Handle stop events */
+      if (stop_event)
+        {
+          gdk_window_interpolation_handle_stop_event (device_interpolator,
+                                                      start_event,
+                                                      stop_event,
+                                                      adjusted_interpolation_point);
+
+          /* If no gestures remain for the device, remove it */
+          if (!device_interpolator->event_interpolators->len)
+            {
+              g_ptr_array_unref (device_interpolator->event_interpolators);
+              g_slice_free (GdkDeviceEventInterpolator, device_interpolator);
+
+              return TRUE;
+            }
+        }
+
+      /* If no interpolator has been deleted then we have no more gestures to
+         interpolate in this display frame */
+      if (num_queued_gestures == device_interpolator->event_interpolators->len)
+        got_work = FALSE;
+
+      num_queued_gestures = device_interpolator->event_interpolators->len;
+    }
+
+  return FALSE;
+}
+
+/*
+ * gdk_window_interpolation_tick_callback() is responsible for emitting the
+ * interpolated events, one event per display frame.
+ *
+ * There are several reasons to use an animation callback as opposed to, say,
+ * directly replacing received events with interpolated ones.
+ *
+ * One reason is that when the screen refresh rate is higher than the input
+ * event rate, there would be display frames in which no input event is
+ * received. By using the animation callback we ensure that every display frame
+ * receives an input event.
+ *
+ * Another reason is to prevent 'jumps' when receiving a stop event. Without
+ * the animation callback, the history would have to be flushed when receiving
+ * a stop event. With the animation we can drain the event history at the frame
+ * rate, and only emit the stop event after all of the events in the history
+ * were interpolated.
+ */
+static void
+gdk_window_interpolation_tick_callback (GdkFrameClock *frame_clock,
+                                        GdkWindow     *window)
+{
+  gint64 frame_time = gdk_frame_clock_get_frame_time (frame_clock);
+  gint64 adjusted_interpolation_point;
+  GHashTableIter iter;
+  gpointer key, value;
+  gboolean interpolation_time_out;
+  gboolean got_work;
+  gboolean stop_callback;
+
+  /* Calculate the interpolation point in time, adjusted for latency */
+  gdk_window_update_interpolation_offset (window, frame_time);
+  adjusted_interpolation_point = frame_time - (window->interpolation_time_offset * 1000);
+
+  /* Check if no input event was received lately */
+  interpolation_time_out = gdk_window_interpolation_time_out (window, frame_time);
+
+  /* Check if some gesture still has uninterpolated events */
+  got_work = gdk_window_interpolation_got_work (window);
+
+  /* By default stop the callback if no input event was received lately and no
+     uninterpolated events remained. */
+  stop_callback = interpolation_time_out && !got_work;
+
+  /* Go over all input devices, emit interpolated events when applicable */
+  g_hash_table_iter_init (&iter, window->device_interpolators);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      GdkDeviceEventInterpolator *device_interpolator = value;
+
+      gboolean device_done =
+        gdk_window_interpolate_device_events (window,
+                                              device_interpolator,
+                                              adjusted_interpolation_point,
+                                              stop_callback);
+
+      /* Remove the device from the hash table if its gestures completed */
+      if (device_done)
+        g_hash_table_iter_remove (&iter);
+    }
+
+  /* Stop the callback if we got a timeout or there are no active gestures */
+  if (stop_callback || !g_hash_table_size (window->device_interpolators))
+    gdk_window_stop_interpolation_callback (window);
+
+  window->interpolation_last_frame_time = frame_time;
+}
+
+static void
+gdk_window_start_interpolation_callback (GdkWindow *window)
+{
+  GdkFrameClock *frame_clock = gdk_window_get_frame_clock (window);
+
+  if (frame_clock && !window->interpolation_tick_id)
+    {
+      /* A gesture was continued after not moving the fingers for a while, or a
+         new gesture was started after all previous gestures finished being
+         interpolated. Either way we can reset the latency counters. */
+      window->interpolation_time_offset = 0;
+      window->interpolation_time_offset_target = 0;
+      window->interpolation_last_frame_time = 0;
+
+      /* start the interpolation animation callback */
+      window->interpolation_tick_id = g_signal_connect (frame_clock, "update",
+                                                        G_CALLBACK (gdk_window_interpolation_tick_callback),
+                                                        window);
+      gdk_frame_clock_begin_updating (frame_clock);
+    }
+}
+
+static void
+gdk_window_stop_interpolation_callback (GdkWindow *window)
+{
+  GdkFrameClock *frame_clock = gdk_window_get_frame_clock (window);
+
+  /* Stop animation */
+  if (frame_clock && window->interpolation_tick_id)
+    {
+      gdk_frame_clock_end_updating (frame_clock);
+      g_signal_handler_disconnect (frame_clock, window->interpolation_tick_id);
+      window->interpolation_tick_id = 0;
+    }
+}
+
+static gboolean is_gesture_start (GdkEvent *event)
+{
+  /* No gesture with a 'start' event is supported as yet */
+  return FALSE;
+}
+
+static gboolean is_gesture_end (GdkEvent *event)
+{
+  return ((gdk_event_get_event_type (event) == GDK_SCROLL) &&
+          gdk_event_is_scroll_stop_event (event));
+}
+
+/*
+ * gdk_window_interpolation_add_event:
+ * @window: a #GdkWindow
+ * @event: a #GdkEvent
+ *
+ * Adds the event to the event history of the corresponding device. Starts the
+ * interpolation animation callback if necessary.
+ *
+ * Returns: The number of events to remove from the original event queue.
+ */
+static int
+gdk_window_interpolation_add_event (GdkWindow *window,
+                                    GdkEvent  *event)
+{
+  GdkEventInterpolation *accumulating_interpolator;
+  GdkDeviceEventInterpolator *device_interpolator;
+  GdkDevice *device;
+  gboolean new_gesture_started = FALSE;
+
+  window->interpolation_last_time_event_received = g_get_monotonic_time ();
+
+  /* Start the animation if it is not already in progress */
+  gdk_window_start_interpolation_callback (window);
+
+  /* Look for the device-specific interpolation data */
+  device = gdk_event_get_source_device (event);
+  device_interpolator = g_hash_table_lookup (window->device_interpolators, device);
+
+  if (G_UNLIKELY (!device_interpolator))
+    {
+      device_interpolator = g_slice_new (GdkDeviceEventInterpolator);
+
+      device_interpolator->event_interpolators =
+        g_ptr_array_new_with_free_func ((GDestroyNotify) gdk_event_interpolation_free);
+
+      g_hash_table_insert (window->device_interpolators,
+                           device, device_interpolator);
+    }
+
+  /* Check if some gesture is already in progress */
+  if (device_interpolator->event_interpolators->len == 0)
+    {
+      /* No gesture was in progress */
+      new_gesture_started = TRUE;
+    }
+  else
+    {
+      /* A gesture is already in progress. We always push events to the
+         last interpolator in the gesture queue */
+      accumulating_interpolator =
+        g_ptr_array_index (device_interpolator->event_interpolators,
+                           device_interpolator->event_interpolators->len - 1);
+
+      if (gdk_event_interpolation_get_stop_event (accumulating_interpolator))
+        {
+          /* Previous gesture received a stop event, start a new gesture */
+          new_gesture_started = TRUE;
+        }
+    }
+
+  if (new_gesture_started)
+    {
+      accumulating_interpolator = gdk_event_interpolation_new ();
+      g_ptr_array_add (device_interpolator->event_interpolators,
+                       accumulating_interpolator);
+
+    }
+
+  if (is_gesture_start (event))
+    {
+      gdk_event_interpolation_set_start_event (accumulating_interpolator,
+                                               event);
+    }
+  else if (is_gesture_end (event))
+    {
+      gdk_event_interpolation_set_stop_event (accumulating_interpolator,
+                                              event);
+    }
+  else /* Gesture update */
+    {
+      gdk_event_interpolation_history_push (accumulating_interpolator,
+                                            event);
+    }
+
+  /* All interpolated events will be emitted from the callback */
+  return 2;
+}
+
 /* Don't use for crossing events */
 static GdkWindow *
 get_event_window (GdkDisplay                 *display,
@@ -9162,7 +9812,7 @@ get_event_window (GdkDisplay                 *display,
   return NULL;
 }
 
-static gboolean
+static gint
 proxy_pointer_event (GdkDisplay                 *display,
 		     GdkEvent                   *source_event,
 		     gulong                      serial)
@@ -9250,7 +9900,7 @@ proxy_pointer_event (GdkDisplay                 *display,
 			   serial);
 
       _gdk_display_set_window_under_pointer (display, device, NULL);
-      return TRUE;
+      return 1;
     }
 
   pointer_window = get_pointer_window (display, toplevel_window, device,
@@ -9290,7 +9940,7 @@ proxy_pointer_event (GdkDisplay                 *display,
 				       source_event,
 				       serial, non_linear);
       _gdk_display_set_window_under_pointer (display, device, pointer_window);
-      return TRUE;
+      return 1;
     }
 
   if ((source_event->type != GDK_TOUCH_UPDATE ||
@@ -9350,7 +10000,7 @@ proxy_pointer_event (GdkDisplay                 *display,
                 event_type = GDK_MOTION_NOTIFY;
             }
           else if ((evmask & GDK_TOUCH_MASK) == 0)
-            return TRUE;
+            return 1;
         }
 
       if (is_touch_type (source_event->type) && !is_touch_type (event_type))
@@ -9359,7 +10009,7 @@ proxy_pointer_event (GdkDisplay                 *display,
       if (event_win &&
           gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER &&
           gdk_window_get_device_events (event_win, device) == 0)
-        return TRUE;
+        return 1;
 
       /* The last device to interact with the window was a touch device,
        * which synthesized a leave notify event, so synthesize another enter
@@ -9396,7 +10046,7 @@ proxy_pointer_event (GdkDisplay                 *display,
 	}
 
       if (!event_win)
-        return TRUE;
+        return 1;
 
       event = gdk_event_new (event_type);
       event->any.window = g_object_ref (event_win);
@@ -9451,7 +10101,7 @@ proxy_pointer_event (GdkDisplay                 *display,
 
   /* unlink all move events from queue.
      We handle our own, including our emulated masks. */
-  return TRUE;
+  return 1;
 }
 
 #define GDK_ANY_BUTTON_MASK (GDK_BUTTON1_MASK | \
@@ -9460,7 +10110,7 @@ proxy_pointer_event (GdkDisplay                 *display,
 			     GDK_BUTTON4_MASK | \
 			     GDK_BUTTON5_MASK)
 
-static gboolean
+static gint
 proxy_button_event (GdkEvent *source_event,
 		    gulong serial)
 {
@@ -9585,18 +10235,18 @@ proxy_button_event (GdkEvent *source_event,
             }
         }
       else if ((evmask & GDK_TOUCH_MASK) == 0)
-        return TRUE;
+        return 1;
     }
 
   if (source_event->type == GDK_TOUCH_END && !is_touch_type (type))
     state |= GDK_BUTTON1_MASK;
 
   if (event_win == NULL)
-    return TRUE;
+    return 1;
 
   if (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER &&
       gdk_window_get_device_events (event_win, device) == 0)
-    return TRUE;
+    return 1;
 
   if ((type == GDK_BUTTON_PRESS ||
        (type == GDK_TOUCH_BEGIN &&
@@ -9629,7 +10279,7 @@ proxy_button_event (GdkEvent *source_event,
             ((evmask & GDK_SMOOTH_SCROLL_MASK) != 0 &&
              source_event->scroll.direction != GDK_SCROLL_SMOOTH &&
              gdk_event_get_pointer_emulated (source_event))))
-    return FALSE;
+    return 0;
 
   event = _gdk_make_event (event_win, type, source_event, FALSE);
 
@@ -9684,7 +10334,7 @@ proxy_button_event (GdkEvent *source_event,
                                            state, time_, NULL,
                                            serial, FALSE);
         }
-      return TRUE;
+      return 1;
 
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_END:
@@ -9721,7 +10371,7 @@ proxy_button_event (GdkEvent *source_event,
                                            state, time_, NULL,
                                            serial, FALSE);
         }
-      return TRUE;
+      return 1;
 
     case GDK_SCROLL:
       event->scroll.direction = source_event->scroll.direction;
@@ -9736,16 +10386,26 @@ proxy_button_event (GdkEvent *source_event,
       event->scroll.delta_y = source_event->scroll.delta_y;
       event->scroll.is_stop = source_event->scroll.is_stop;
       gdk_event_set_source_device (event, source_device);
-      return TRUE;
+
+      gint events_to_unlink = 1;
+
+      if (event_win->interpolate_events &&
+          source_event->scroll.direction == GDK_SCROLL_SMOOTH)
+        {
+          events_to_unlink = gdk_window_interpolation_add_event (event_win,
+                                                                 event);
+        }
+
+      return events_to_unlink;
 
     default:
-      return FALSE;
+      return 0;
     }
 
-  return TRUE; /* Always unlink original, we want to obey the emulated event mask */
+  return 1; /* Always unlink original, we want to obey the emulated event mask */
 }
 
-static gboolean
+static gint
 proxy_gesture_event (GdkEvent *source_event,
                      gulong    serial)
 {
@@ -9757,6 +10417,7 @@ proxy_gesture_event (GdkEvent *source_event,
   GdkEventType evtype;
   GdkEvent *event;
   guint state;
+  gint events_to_unlink = 1;
 
   evtype = source_event->any.type;
   gdk_event_get_coords (source_event, &toplevel_x, &toplevel_y);
@@ -9776,10 +10437,10 @@ proxy_gesture_event (GdkEvent *source_event,
                                 pointer_window, evtype, state,
                                 &evmask, FALSE, serial);
   if (!event_win)
-    return TRUE;
+    return 1;
 
   if ((evmask & GDK_TOUCHPAD_GESTURE_MASK) == 0)
-    return TRUE;
+    return 1;
 
   event = _gdk_make_event (event_win, evtype, source_event, FALSE);
   gdk_event_set_device (event, device);
@@ -9822,7 +10483,7 @@ proxy_gesture_event (GdkEvent *source_event,
       break;
     }
 
-  return TRUE;
+  return events_to_unlink;
 }
 
 #ifdef DEBUG_WINDOW_PRINTING
@@ -9911,7 +10572,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
 {
   GdkWindow *event_window;
   gdouble x, y;
-  gboolean unlink_event = FALSE;
+  gint unlink_event_count = 0;
   GdkDeviceGrabInfo *button_release_grab;
   GdkPointerWindowInfo *pointer_info = NULL;
   GdkDevice *device, *source_device;
@@ -9944,7 +10605,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
           /* Device events are blocked by another
            * device grab, or the device is disabled
            */
-          unlink_event = TRUE;
+          unlink_event_count = 1;
           goto out;
         }
     }
@@ -10014,7 +10675,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
           pointer_info->toplevel_under_pointer = g_object_ref (event_window);
         }
 
-      unlink_event = TRUE;
+      unlink_event_count = 1;
       goto out;
     }
 
@@ -10068,11 +10729,11 @@ _gdk_windowing_got_event (GdkDisplay *display,
     }
 
   if (is_motion_type (event->type))
-    unlink_event = proxy_pointer_event (display, event, serial);
+    unlink_event_count = proxy_pointer_event (display, event, serial);
   else if (is_button_type (event->type))
-    unlink_event = proxy_button_event (event, serial);
+    unlink_event_count = proxy_button_event (event, serial);
   else if (is_gesture_type (event->type))
-    unlink_event = proxy_gesture_event (event, serial);
+    unlink_event_count = proxy_gesture_event (event, serial);
 
   if ((event->type == GDK_BUTTON_RELEASE ||
        event->type == GDK_TOUCH_CANCEL ||
@@ -10105,8 +10766,21 @@ _gdk_windowing_got_event (GdkDisplay *display,
     }
 
  out:
-  if (unlink_event)
+  if (unlink_event_count)
     {
+      if (unlink_event_count > 1)
+        {
+          GList *next_event_link = event_link->next;
+          if (next_event_link)
+            {
+              GdkEvent *next_event = (GdkEvent *)next_event_link->data;
+
+              _gdk_event_queue_remove_link (display, next_event_link);
+              g_list_free_1 (next_event_link);
+              gdk_event_free (next_event);
+            }
+        }
+
       _gdk_event_queue_remove_link (display, event_link);
       g_list_free_1 (event_link);
       gdk_event_free (event);
