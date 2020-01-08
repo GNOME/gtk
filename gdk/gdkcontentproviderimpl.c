@@ -21,6 +21,7 @@
 #include "gdkcontentprovider.h"
 
 #include "gdkcontentformats.h"
+#include "gdkcontentserializer.h"
 #include "gdkintl.h"
 #include "gdkcontentproviderimpl.h"
 
@@ -502,9 +503,8 @@ gdk_content_provider_new_with_formats (GdkContentFormats              *formats,
                                        gpointer                        data)
 {
   GdkContentProviderCallback2 *content;
-
   content = g_object_new (GDK_TYPE_CONTENT_PROVIDER_CALLBACK2, NULL);
-  content->formats = gdk_content_formats_ref (formats);
+  content->formats = gdk_content_formats_union_serialize_mime_types (gdk_content_formats_ref (formats));
   content->func = func;
   content->data = data;
   
