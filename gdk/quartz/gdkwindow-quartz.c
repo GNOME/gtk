@@ -3080,7 +3080,6 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->set_decorations = gdk_quartz_window_set_decorations;
   impl_class->get_decorations = gdk_quartz_window_get_decorations;
   impl_class->set_functions = gdk_quartz_window_set_functions;
-  impl_class->set_functions = gdk_quartz_window_set_functions;
   impl_class->begin_resize_drag = gdk_quartz_window_begin_resize_drag;
   impl_class->begin_move_drag = gdk_quartz_window_begin_move_drag;
   impl_class->set_opacity = gdk_quartz_window_set_opacity;
