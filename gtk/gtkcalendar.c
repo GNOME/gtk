@@ -3047,7 +3047,6 @@ gtk_calendar_drag_motion (GtkDropTarget *dest,
                           int            y,
                           GtkCalendar   *calendar)
 {
-  GtkWidget *widget = GTK_WIDGET (calendar);
   GdkDrop *drop = gtk_drop_target_get_drop (dest);
   GdkAtom target;
 
