@@ -200,6 +200,8 @@ struct _GdkEventPrivate
   guint16    key_scancode;
 };
 
+typedef struct _GdkEventInterpolationControl GdkEventInterpolationControl;
+
 typedef struct _GdkWindowPaint GdkWindowPaint;
 
 struct _GdkWindow
@@ -354,6 +356,7 @@ struct _GdkWindow
   guint geometry_dirty : 1;
   guint event_compression : 1;
   guint frame_clock_events_paused : 1;
+  guint interpolate_events : 1;
 
   /* The GdkWindow that has the impl, ref:ed if another window.
    * This ref is required to keep the wrapper of the impl window alive
@@ -395,6 +398,8 @@ struct _GdkWindow
   GdkDrawingContext *drawing_context;
 
   cairo_region_t *opaque_region;
+
+  GdkEventInterpolationControl *event_interpolation;
 };
 
 #define GDK_WINDOW_TYPE(d) ((((GdkWindow *)(d)))->window_type)
@@ -580,6 +585,15 @@ void _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_win
 
 gboolean    _gdk_window_has_impl (GdkWindow *window);
 GdkWindow * _gdk_window_get_impl_window (GdkWindow *window);
+
+/*******************************
+ * Event interpolation related *
+ *******************************/
+
+GdkEventInterpolationControl * gdk_event_interpolation_control_new (GdkWindow *window);
+void gdk_event_interpolation_control_free (GdkEventInterpolationControl *control);
+int gdk_event_interpolation_control_add (GdkEventInterpolationControl *control,
+                                         GdkEvent                     *event);
 
 /*****************************
  * offscreen window routines *
