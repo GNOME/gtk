@@ -395,6 +395,9 @@ _gtk_css_array_value_new_from_array (GtkCssValue **values,
            
   g_return_val_if_fail (values != NULL, NULL);
   g_return_val_if_fail (n_values > 0, NULL);
+
+  if (n_values == 1)
+    return values[0];
          
   result = _gtk_css_value_alloc (&GTK_CSS_VALUE_ARRAY, sizeof (GtkCssValue) + sizeof (GtkCssValue *) * (n_values - 1));
   result->n_values = n_values;
@@ -431,9 +434,12 @@ _gtk_css_array_value_parse (GtkCssParser *parser,
 }
 
 GtkCssValue *
-_gtk_css_array_value_get_nth (const GtkCssValue *value,
-                              guint              i)
+_gtk_css_array_value_get_nth (GtkCssValue *value,
+                              guint        i)
 {
+  if (value->class != &GTK_CSS_VALUE_ARRAY)
+      return value;
+
   g_return_val_if_fail (value != NULL, NULL);
   g_return_val_if_fail (value->class == &GTK_CSS_VALUE_ARRAY, NULL);
   g_return_val_if_fail (value->n_values > 0, NULL);
@@ -444,6 +450,9 @@ _gtk_css_array_value_get_nth (const GtkCssValue *value,
 guint
 _gtk_css_array_value_get_n_values (const GtkCssValue *value)
 {
+  if (value->class != &GTK_CSS_VALUE_ARRAY)
+    return 1;
+
   g_return_val_if_fail (value != NULL, 0);
   g_return_val_if_fail (value->class == &GTK_CSS_VALUE_ARRAY, 0);
 
