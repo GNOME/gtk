@@ -268,6 +268,7 @@ static void     gtk_file_chooser_button_finalize           (GObject          *ob
 /* GtkWidget Functions */
 static void     gtk_file_chooser_button_destroy            (GtkWidget        *widget);
 static gboolean gtk_file_chooser_button_drag_drop          (GtkDropTarget    *dest,
+                                                            GdkDrop          *drop,
                                                             int               x,
                                                             int               y,
 							    GtkWidget        *widget);
@@ -1215,12 +1216,11 @@ got_text (GObject      *source,
 
 static gboolean
 gtk_file_chooser_button_drag_drop (GtkDropTarget *dest,
+                                   GdkDrop       *drop,
                                    int            x,
                                    int            y,
                                    GtkWidget     *button)
 {
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
-
   if (gdk_drop_has_value (drop, G_TYPE_FILE))
     {
       gdk_drop_read_value_async (drop, G_TYPE_FILE, G_PRIORITY_DEFAULT, NULL, got_file, button);

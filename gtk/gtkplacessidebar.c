@@ -1725,12 +1725,12 @@ create_placeholder_row (GtkPlacesSidebar *sidebar)
 
 static gboolean
 drag_motion_callback (GtkDropTarget *dest,
+                      GdkDrop       *drop,
                       gint       x,
                       gint       y,
                       gpointer   user_data)
 {
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
   gint action;
   GtkListBoxRow *row;
   GtkPlacesSidebarPlaceType place_type;
@@ -2084,10 +2084,10 @@ dnd_finished_cb (GdkDrag          *drag,
  */
 static void
 drag_leave_callback (GtkDropTarget *dest,
+                     GdkDrop       *drop,
                      gpointer       user_data)
 {
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
 
   if (sidebar->drop_state != DROP_STATE_NEW_BOOKMARK_ARMED_PERMANENT)
     {
@@ -2103,6 +2103,7 @@ drag_leave_callback (GtkDropTarget *dest,
 
 static gboolean
 drag_drop_callback (GtkDropTarget *dest,
+                    GdkDrop       *drop,
                     int            x,
                     int            y,
                     gpointer       user_data)

@@ -177,14 +177,11 @@ got_texture (GObject *source,
 
 static gboolean
 drag_drop (GtkDropTarget *dest,
+           GdkDrop       *drop,
            int            x,
            int            y,
            GtkWidget     *widget)
 {
-  GdkDrop *drop;
-
-  drop = gtk_drop_target_get_drop (dest);
-
   if (gdk_drop_has_value (drop, GDK_TYPE_TEXTURE))
     {
       gdk_drop_read_value_async (drop, GDK_TYPE_TEXTURE, G_PRIORITY_DEFAULT, NULL, got_texture, widget);

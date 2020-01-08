@@ -136,10 +136,9 @@ got_page (GObject *source,
 
 static gboolean
 on_button_drag_drop (GtkDropTarget *dest,
+                     GdkDrop       *drop,
                      gpointer       user_data)
 {
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
-
   gdk_drop_read_async (drop, (const char *[]) { "GTK_NOTEBOOK_TAB", NULL }, G_PRIORITY_DEFAULT, NULL, got_page, NULL);
 
   gdk_drop_finish (drop, GDK_ACTION_MOVE);

@@ -162,12 +162,12 @@ ask_actions (GdkDrop *drop,
 
 static gboolean
 image_drag_drop (GtkDropTarget    *dest,
+                 GdkDrop          *drop,
                  int               x,
                  int               y,
                  gpointer          data)
 {
   GtkWidget *image = data;
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
   GdkDragAction action = gdk_drop_get_actions (drop);
 
   g_object_set_data_full (G_OBJECT (image), "drop", g_object_ref (drop), g_object_unref);

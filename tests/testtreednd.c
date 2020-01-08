@@ -109,6 +109,7 @@ got_text (GObject      *source,
 
 static void
 drag_drop (GtkDropTarget *dest,
+           GdkDrop       *drop,
            int            x,
            int            y,
            gpointer       dada)

@@ -154,12 +154,11 @@ got_color (GObject      *source,
 
 static gboolean
 swatch_drag_drop (GtkDropTarget  *dest,
+                  GdkDrop        *drop,
                   int             x,
                   int             y,
                   GtkColorSwatch *swatch)
 {
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
-
   if (gdk_drop_has_value (drop, GDK_TYPE_RGBA))
     {
       gdk_drop_read_value_async (drop, GDK_TYPE_RGBA, G_PRIORITY_DEFAULT, NULL, got_color, swatch);
