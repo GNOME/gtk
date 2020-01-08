@@ -1349,7 +1349,7 @@ gtk_notebook_init (GtkNotebook *notebook)
 
   targets = gdk_content_formats_new (dst_notebook_targets, G_N_ELEMENTS (dst_notebook_targets));
   dest = gtk_drop_target_new (targets, GDK_ACTION_MOVE);
-  g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_notebook_drag_motion), NULL);
+  g_signal_connect (dest, "accept", G_CALLBACK (gtk_notebook_drag_motion), NULL);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_notebook_drag_leave), NULL);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_notebook_drag_drop), NULL);
   gtk_widget_add_controller (GTK_WIDGET (priv->tabs_widget), GTK_EVENT_CONTROLLER (dest));

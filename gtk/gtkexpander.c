@@ -379,7 +379,7 @@ gtk_expander_init (GtkExpander *expander)
   formats = gdk_content_formats_new (NULL, 0);
   dest = gtk_drop_target_new (formats, 0);
   gdk_content_formats_unref (formats);
-  g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_expander_drag_motion), expander);
+  g_signal_connect (dest, "accept", G_CALLBACK (gtk_expander_drag_motion), expander);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_expander_drag_leave), expander);
   gtk_widget_add_controller (GTK_WIDGET (expander), GTK_EVENT_CONTROLLER (dest));
 
