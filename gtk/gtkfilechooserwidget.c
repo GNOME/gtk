@@ -2042,16 +2042,6 @@ file_list_drag_drop_cb (GtkDropTarget        *dest,
   return TRUE;
 }
 
-static void
-file_list_drag_begin_cb (GtkDragSource        *source,
-                         GdkDrag              *drag,
-                         GtkFileChooserWidget *impl)
-{
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-
-  gtk_places_sidebar_set_drop_targets_visible (GTK_PLACES_SIDEBAR (priv->places_sidebar), TRUE, drag);
-}
-
 /* Disable the normal tree drag motion handler, it makes it look like you're
    dropping the dragged item onto a tree item */
 static gboolean
@@ -2062,17 +2052,6 @@ file_list_drag_motion_cb (GtkDropTarget        *dest,
 {
   g_signal_stop_emission_by_name (dest, "drag-motion");
   return TRUE;
-}
-
-static void
-file_list_drag_end_cb (GtkDragSource        *source,
-                       GdkDrag              *drag,
-                       gboolean              delete_data,
-                       GtkFileChooserWidget *impl)
-{
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-
-  gtk_places_sidebar_set_drop_targets_visible (GTK_PLACES_SIDEBAR (priv->places_sidebar), FALSE, drag);
 }
 
 /* Sensitizes the "Copy file’s location" and other context menu items if there is actually
@@ -8514,11 +8493,6 @@ post_process_ui (GtkFileChooserWidget *impl)
                                           GDK_BUTTON1_MASK,
                                           formats,
                                           GDK_ACTION_COPY | GDK_ACTION_MOVE);
-#if 0
-  g_signal_connect (source, "drag-begin", G_CALLBACK (file_list_drag_begin_cb), impl);
-  g_signal_connect (source, "drag-end", G_CALLBACK (file_list_drag_end_cb), impl);
-#endif
-
   
   dest = gtk_drop_target_new (formats, GDK_ACTION_COPY | GDK_ACTION_MOVE);
   g_signal_connect (dest, "drag-motion", G_CALLBACK (file_list_drag_motion_cb), impl);
