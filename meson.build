@@ -198,6 +198,7 @@ check_functions = [
   'log2',
   'exp2',
   'sincos',
+  'sincosf',
 ]
 
 foreach func : check_functions
