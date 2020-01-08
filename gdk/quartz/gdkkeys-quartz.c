@@ -650,7 +650,6 @@ gdk_quartz_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 {
   guint tmp_keyval;
   GdkModifierType bit;
-  guint tmp_modifiers = 0;
 
   if (keyval)
     *keyval = 0;
@@ -664,24 +663,23 @@ gdk_quartz_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   if (hardware_keycode < 0 || hardware_keycode >= NUM_KEYCODES)
     return FALSE;
 
-  /* Check if modifiers modify the keyval */
-  for (bit = GDK_SHIFT_MASK; bit < GDK_BUTTON1_MASK; bit <<= 1)
-    {
-      if (translate_keysym (hardware_keycode,
-                            (bit == GDK_MOD1_MASK) ? 0 : group,
-                            state & ~bit,
-                            NULL, NULL) !=
-	  translate_keysym (hardware_keycode,
-                            (bit == GDK_MOD1_MASK) ? 1 : group,
-                            state | bit,
-                            NULL, NULL))
-	tmp_modifiers |= bit;
-    }
-
   tmp_keyval = translate_keysym (hardware_keycode, group, state, level, effective_group);
 
+  /* Check if modifiers modify the keyval */
   if (consumed_modifiers)
-    *consumed_modifiers = tmp_modifiers;
+    {
+      guint tmp_modifiers = (state & GDK_MODIFIER_MASK);
+
+      for (bit = 1; bit <= tmp_modifiers; bit <<= 1)
+        {
+          if ((bit & tmp_modifiers) &&
+              translate_keysym (hardware_keycode, group, state & ~bit,
+                                NULL, NULL) == tmp_keyval)
+            tmp_modifiers &= ~bit;
+        }
+
+      *consumed_modifiers = tmp_modifiers;
+    }
 
   if (keyval)
     *keyval = tmp_keyval; 
