@@ -332,12 +332,15 @@ static gboolean gtk_calendar_query_tooltip  (GtkWidget        *widget,
                                              GtkTooltip       *tooltip);
 
 static gboolean gtk_calendar_drag_motion        (GtkDropTarget    *dest,
+                                                 GdkDrop          *drop,
                                                  int               x,
                                                  int               y,
                                                  GtkCalendar      *calendar);
 static void     gtk_calendar_drag_leave         (GtkDropTarget    *dest,
+                                                 GdkDrop          *drop,
                                                  GtkCalendar      *calendar);
 static gboolean gtk_calendar_drag_drop          (GtkDropTarget    *dest,
+                                                 GdkDrop          *drop,
                                                  int               x,
                                                  int               y,
                                                  GtkCalendar      *calendar);
@@ -2971,6 +2974,7 @@ get_status_pending (GdkDrop *drop)
 
 static void
 gtk_calendar_drag_leave (GtkDropTarget *dest,
+                         GdkDrop       *drop,
                          GtkCalendar   *calendar)
 {
 }
@@ -3043,11 +3047,11 @@ got_text (GObject      *source,
 
 static gboolean
 gtk_calendar_drag_motion (GtkDropTarget *dest,
+                          GdkDrop       *drop,
                           int            x,
                           int            y,
                           GtkCalendar   *calendar)
 {
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
   GdkAtom target;
 
   target = gtk_drop_target_find_mimetype (dest);
@@ -3064,11 +3068,11 @@ gtk_calendar_drag_motion (GtkDropTarget *dest,
 
 static gboolean
 gtk_calendar_drag_drop (GtkDropTarget  *dest,
+                        GdkDrop        *drop,
                         int             x,
                         int             y,
                         GtkCalendar    *calendar)
 {
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
   GdkAtom target;
 
   target = gtk_drop_target_find_mimetype (dest);

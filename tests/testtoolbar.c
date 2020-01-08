@@ -294,6 +294,7 @@ bold_toggled (GtkToggleToolButton *button)
 
 static gboolean
 toolbar_drag_drop (GtkDropTarget *dest,
+                   GdkDrop *drop,
 		   gint x, gint y,
                    GtkWidget *label)
 {
@@ -324,11 +325,11 @@ static GtkToolItem *drag_item = NULL;
 
 static gboolean
 toolbar_drag_motion (GtkDropTarget *dest,
+                     GdkDrop *drop,
 		     gint        x,
 		     gint        y,
 		     GtkToolbar *toolbar)
 {
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
   gint index;
   
   if (!drag_item)
@@ -348,6 +349,7 @@ toolbar_drag_motion (GtkDropTarget *dest,
 
 static void
 toolbar_drag_leave (GtkDropTarget *dest,
+                    GdkDrop *drop,
                     GtkToolbar *toolbar)
 {
   if (drag_item)

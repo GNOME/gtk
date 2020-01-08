@@ -693,12 +693,15 @@ static GBytes *gtk_tree_view_drag_data_get (const char *mimetype,
 
 /* Target side drag signals */
 static void     gtk_tree_view_drag_leave         (GtkDropTarget    *dest,
+                                                  GdkDrop          *drop,
                                                   GtkTreeView      *tree_view);
 static gboolean gtk_tree_view_drag_motion        (GtkDropTarget    *dest,
+                                                  GdkDrop          *drop,
                                                   int               x,
                                                   int               y,
                                                   GtkTreeView      *tree_view);
 static gboolean gtk_tree_view_drag_drop          (GtkDropTarget    *dest,
+                                                  GdkDrop          *drop,
                                                   int               x,
                                                   int               y,
                                                   GtkTreeView      *tree_view);
@@ -7225,6 +7228,7 @@ gtk_tree_view_drag_data_get (const char *mime_type,
 
 static void
 gtk_tree_view_drag_leave (GtkDropTarget *dest,
+                          GdkDrop       *drop,
                           GtkTreeView   *tree_view)
 {
   /* unset any highlight row */
@@ -7242,11 +7246,11 @@ gtk_tree_view_drag_leave (GtkDropTarget *dest,
 
 static gboolean
 gtk_tree_view_drag_motion (GtkDropTarget *dest,
+                           GdkDrop       *drop,
                            int            x,
                            int            y,
                            GtkTreeView   *tree_view)
 {
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
   gboolean empty;
   GtkTreePath *path = NULL;
   GtkTreeViewDropPosition pos;
@@ -7308,11 +7312,11 @@ gtk_tree_view_drag_motion (GtkDropTarget *dest,
 
 static gboolean
 gtk_tree_view_drag_drop (GtkDropTarget *dest,
+                         GdkDrop       *drop,
                          int            x,
                          int            y,
                          GtkTreeView   *tree_view)
 {
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
   GtkTreePath *path;
   GdkDragAction suggested_action = 0;
   GdkAtom target = NULL;

@@ -93,8 +93,10 @@ enum {
 };
 
 static void     gtk_stack_switcher_drag_leave  (GtkDropTarget    *dest,
+                                                GdkDrop          *drop,
                                                 GtkStackSwitcher *self);
 static gboolean gtk_stack_switcher_drag_motion (GtkDropTarget    *dest,
+                                                GdkDrop          *drop,
                                                 int               x,
                                                 int               y,
                                                 GtkStackSwitcher *self);
@@ -263,6 +265,7 @@ gtk_stack_switcher_switch_timeout (gpointer data)
 
 static gboolean
 gtk_stack_switcher_drag_motion (GtkDropTarget    *dest,
+                                GdkDrop          *drop,
                                 int               x,
                                 int               y,
                                 GtkStackSwitcher *self)
@@ -305,6 +308,7 @@ gtk_stack_switcher_drag_motion (GtkDropTarget    *dest,
 
 static void
 gtk_stack_switcher_drag_leave (GtkDropTarget    *dest,
+                               GdkDrop          *drop,
                                GtkStackSwitcher *self)
 {
   remove_switch_timer (self);
