@@ -421,12 +421,15 @@ static GtkTextBuffer* gtk_text_view_create_buffer (GtkTextView   *text_view);
 
 /* Target side drag signals */
 static void     gtk_text_view_drag_leave         (GtkDropTarget    *dest,
+                                                  GdkDrop          *drop,
                                                   GtkTextView      *text_view);
 static gboolean gtk_text_view_drag_motion        (GtkDropTarget    *dest,
+                                                  GdkDrop          *drop,
                                                   int               x,
                                                   int               y,
                                                   GtkTextView      *text_view);
 static gboolean gtk_text_view_drag_drop          (GtkDropTarget    *dest,
+                                                  GdkDrop          *drop,
                                                   int               x,
                                                   int               y,
                                                   GtkTextView      *text_view);
@@ -7722,6 +7725,7 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
 
 static void
 gtk_text_view_drag_leave (GtkDropTarget *dest,
+                          GdkDrop       *drop,
                           GtkTextView   *text_view)
 {
   GtkTextViewPrivate *priv = text_view->priv;
@@ -7738,12 +7742,12 @@ gtk_text_view_drag_leave (GtkDropTarget *dest,
 
 static gboolean
 gtk_text_view_drag_motion (GtkDropTarget *dest,
+                           GdkDrop       *drop,
                            int            x,
                            int            y,
                            GtkTextView   *text_view)
 {
   GtkTextViewPrivate *priv = text_view->priv;
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
   GtkTextIter newplace;
   GtkTextIter start;
   GtkTextIter end;
@@ -7882,12 +7886,12 @@ got_text (GObject *source,
 
 static gboolean
 gtk_text_view_drag_drop (GtkDropTarget *dest,
+                         GdkDrop       *drop,
                          int            x,
                          int            y,
                          GtkTextView *text_view)
 {
   GtkTextViewPrivate *priv = text_view->priv;
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
   GtkTextIter drop_point;
   GtkTextBuffer *buffer = NULL;
 

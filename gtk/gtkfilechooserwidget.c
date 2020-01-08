@@ -2031,6 +2031,7 @@ file_list_drag_data_received_cb (GObject      *source,
 /* Don't do anything with the drag_drop signal */
 static gboolean
 file_list_drag_drop_cb (GtkDropTarget        *dest,
+                        GdkDrop              *drop,
                         int                   x,
                         int                   y,
                         GtkFileChooserWidget *impl)
@@ -2046,6 +2047,7 @@ file_list_drag_drop_cb (GtkDropTarget        *dest,
    dropping the dragged item onto a tree item */
 static gboolean
 file_list_drag_motion_cb (GtkDropTarget        *dest,
+                          GdkDrop              *drop,
                           int                   x,
                           int                   y,
                           GtkFileChooserWidget *impl)

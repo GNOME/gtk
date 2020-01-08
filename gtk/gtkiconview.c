@@ -290,12 +290,15 @@ static GBytes * gtk_icon_view_drag_data_get     (const char      *mime_type,
 
 /* Target side drag signals */
 static void     gtk_icon_view_drag_leave         (GtkDropTarget    *dest,
+                                                  GdkDrop          *drop,
                                                   GtkIconView      *icon_view);
 static gboolean gtk_icon_view_drag_motion        (GtkDropTarget    *dest,
+                                                  GdkDrop          *drop,
                                                   int               x,
                                                   int               y,
                                                   GtkIconView      *icon_view);
 static gboolean gtk_icon_view_drag_drop          (GtkDropTarget    *dest,
+                                                  GdkDrop          *drop,
                                                   int               x,
                                                   int               y,
                                                   GtkIconView      *icon_view);
@@ -6165,6 +6168,7 @@ gtk_icon_view_dnd_finished_cb (GdkDrag   *drag,
 /* Target side drag signals */
 static void
 gtk_icon_view_drag_leave (GtkDropTarget *dest,
+                          GdkDrop       *drop,
                           GtkIconView   *icon_view)
 {
   /* unset any highlight row */
@@ -6177,11 +6181,11 @@ gtk_icon_view_drag_leave (GtkDropTarget *dest,
 
 static gboolean 
 gtk_icon_view_drag_motion (GtkDropTarget *dest,
+                           GdkDrop       *drop,
 			   int            x,
 			   int            y,
                            GtkIconView   *icon_view)
 {
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
   GtkTreePath *path = NULL;
   GtkIconViewDropPosition pos;
   GdkDragAction suggested_action = 0;
@@ -6235,11 +6239,11 @@ gtk_icon_view_drag_motion (GtkDropTarget *dest,
 
 static gboolean 
 gtk_icon_view_drag_drop (GtkDropTarget *dest,
+                         GdkDrop       *drop,
 			 int            x,
 			 int            y,
                          GtkIconView   *icon_view)
 {
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
   GtkTreePath *path;
   GdkDragAction suggested_action = 0;
   GdkAtom target = NULL;

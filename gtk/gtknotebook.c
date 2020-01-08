@@ -704,10 +704,12 @@ static void gtk_notebook_drag_cancel_cb      (GdkDrag          *drag,
                                               GdkDragCancelReason reason,
                                               GtkWidget        *widget);
 static gboolean gtk_notebook_drag_motion     (GtkDropTarget    *dest,
+                                              GdkDrop          *drop,
                                               int               x,
                                               int               y);
 static void gtk_notebook_drag_leave          (GtkDropTarget    *dest);
 static gboolean gtk_notebook_drag_drop       (GtkDropTarget    *dest,
+                                              GdkDrop          *drop,
                                               int               x,
                                               int               y);
 static GBytes * gtk_notebook_drag_data_get   (const char       *mime_type,
@@ -3188,12 +3190,12 @@ gtk_notebook_switch_tab_timeout (gpointer data)
 
 static gboolean
 gtk_notebook_drag_motion (GtkDropTarget *dest,
+                          GdkDrop       *drop,
                           int            x,
                           int            y)
 {
   GtkWidget *tabs = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
   GtkWidget *widget = gtk_widget_get_ancestor (tabs, GTK_TYPE_NOTEBOOK);
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
   graphene_rect_t position;
@@ -3331,13 +3333,13 @@ got_page (GObject *source,
 
 static gboolean
 gtk_notebook_drag_drop (GtkDropTarget *dest,
+                        GdkDrop       *drop,
                         int            x,
                         int            y)
 {
   GtkWidget *tabs = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
   GtkWidget *widget = gtk_widget_get_ancestor (tabs, GTK_TYPE_NOTEBOOK);
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
   GdkDrag *drag = gdk_drop_get_drag (drop);
   GtkWidget *source_widget;
   GdkAtom target, tab_target;

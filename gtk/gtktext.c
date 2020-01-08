@@ -335,14 +335,17 @@ static void   gtk_text_state_flags_changed  (GtkWidget        *widget,
 static void   gtk_text_root                 (GtkWidget        *widget);
 
 static gboolean gtk_text_drag_drop          (GtkDropTarget    *dest,
+                                             GdkDrop          *drop,
                                              int               x,
                                              int               y,
                                              GtkText          *text);
 static gboolean gtk_text_drag_motion        (GtkDropTarget    *dest,
+                                             GdkDrop          *drop,
                                              int               x,
                                              int               y,
                                              GtkText          *text);
-static void     gtk_text_drag_leave         (GtkDropTarget   *dest,
+static void     gtk_text_drag_leave         (GtkDropTarget    *dest,
+                                             GdkDrop          *drop,
                                              GtkText          *text);
 
 
@@ -6124,6 +6127,7 @@ gtk_text_selection_bubble_popup_set (GtkText *self)
 
 static void
 gtk_text_drag_leave (GtkDropTarget *dest,
+                     GdkDrop       *drop,
                      GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
@@ -6207,12 +6211,12 @@ got_text (GObject      *source,
 
 static gboolean
 gtk_text_drag_drop (GtkDropTarget *dest,
+                    GdkDrop       *drop,
                     int            x,
                     int            y,
                     GtkText       *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
 
   if (priv->editable && gdk_drop_has_value (drop, G_TYPE_STRING))
     {
@@ -6227,12 +6231,12 @@ gtk_text_drag_drop (GtkDropTarget *dest,
 
 static gboolean
 gtk_text_drag_motion (GtkDropTarget *dest,
+                      GdkDrop       *drop,
                       int            x,
                       int            y,
                       GtkText        *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GdkDrop *drop = gtk_drop_target_get_drop (dest);
   GtkWidget *widget = GTK_WIDGET (self);
   GdkDragAction suggested_action;
   int new_position, old_position;

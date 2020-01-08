@@ -55,6 +55,7 @@ got_row (GObject      *src,
 
 static void
 drag_drop (GtkDropTarget    *dest,
+           GdkDrop          *drop,
            int               x,
            int               y,
            gpointer          data)
