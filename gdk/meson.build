@@ -302,6 +302,9 @@ libgdk = library('gdk-3',
                  darwin_versions : gtk_osxversions,
                  install: true)
 
+# unit tests
+subdir('unit-tests')
+
 gdk_dep_sources = [gdkconfig, gdkenum_h]
 # Introspection
 if build_gir
