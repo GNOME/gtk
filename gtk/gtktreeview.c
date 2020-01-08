@@ -12924,7 +12924,7 @@ gtk_tree_view_enable_model_drag_dest (GtkTreeView       *tree_view,
 
   di->dest = gtk_drop_target_new (formats, actions);
   g_signal_connect (di->dest, "drag-leave", G_CALLBACK (gtk_tree_view_drag_leave), tree_view);
-  g_signal_connect (di->dest, "drag-motion", G_CALLBACK (gtk_tree_view_drag_motion), tree_view);
+  g_signal_connect (di->dest, "accept", G_CALLBACK (gtk_tree_view_drag_motion), tree_view);
   g_signal_connect (di->dest, "drag-drop", G_CALLBACK (gtk_tree_view_drag_drop), tree_view);
   gtk_widget_add_controller (GTK_WIDGET (tree_view), GTK_EVENT_CONTROLLER (di->dest));
   g_object_ref (di->dest);

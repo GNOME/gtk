@@ -2052,7 +2052,7 @@ file_list_drag_motion_cb (GtkDropTarget        *dest,
                           int                   y,
                           GtkFileChooserWidget *impl)
 {
-  g_signal_stop_emission_by_name (dest, "drag-motion");
+  g_signal_stop_emission_by_name (dest, "accept");
   return TRUE;
 }
 
@@ -8497,7 +8497,7 @@ post_process_ui (GtkFileChooserWidget *impl)
                                           GDK_ACTION_COPY | GDK_ACTION_MOVE);
   
   dest = gtk_drop_target_new (formats, GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  g_signal_connect (dest, "drag-motion", G_CALLBACK (file_list_drag_motion_cb), impl);
+  g_signal_connect (dest, "accept", G_CALLBACK (file_list_drag_motion_cb), impl);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (file_list_drag_drop_cb), impl);
   gtk_widget_add_controller (priv->browse_files_tree_view, GTK_EVENT_CONTROLLER (dest));
   gdk_content_formats_unref (formats);

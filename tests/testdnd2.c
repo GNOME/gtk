@@ -161,6 +161,39 @@ ask_actions (GdkDrop *drop,
 }
 
 static gboolean
+delayed_deny (gpointer data)
+{
+  GtkDropTarget *dest = data;
+  GtkWidget *image = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
+  GdkDrop *drop = GDK_DROP (g_object_get_data (G_OBJECT (image), "drop"));
+
+  if (drop)
+    {
+      g_print ("denying drop, late\n");
+      gtk_drop_target_deny_drop (dest, drop);
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
+static gboolean
+image_drag_motion (GtkDropTarget    *dest,
+                   GdkDrop          *drop,
+                   int               x,
+                   int               y,
+                   gpointer          data)
+{
+  GtkWidget *image = data;
+  g_object_set_data_full (G_OBJECT (image), "drop", g_object_ref (drop), g_object_unref);
+
+  g_timeout_add (1000, delayed_deny, dest);
+
+  gdk_drop_status (drop, gtk_drop_target_get_actions (dest));
+
+  return TRUE;
+}
+
+static gboolean
 image_drag_drop (GtkDropTarget    *dest,
                  GdkDrop          *drop,
                  int               x,
@@ -312,6 +345,7 @@ make_image (const gchar *icon_name, int hotspot)
   gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
 
   dest = gtk_drop_target_new (formats, GDK_ACTION_COPY|GDK_ACTION_MOVE|GDK_ACTION_ASK);
+  g_signal_connect (dest, "accept", G_CALLBACK (image_drag_motion), image);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (image_drag_drop), image);
   gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (dest));
 

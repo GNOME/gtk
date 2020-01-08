@@ -306,7 +306,7 @@ canvas_item_new (int i,
   formats = gdk_content_formats_new_for_gtype (GDK_TYPE_RGBA);
   dest = gtk_drop_target_new (formats, GDK_ACTION_COPY);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (item_drag_drop), NULL);
-  g_signal_connect (dest, "drag-motion", G_CALLBACK (item_drag_motion), NULL);
+  g_signal_connect (dest, "accept", G_CALLBACK (item_drag_motion), NULL);
   gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (dest));
   gdk_content_formats_unref (formats);
 

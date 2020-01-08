@@ -1732,7 +1732,7 @@ gtk_text_init (GtkText *self)
 
   formats = gdk_content_formats_new_for_gtype (G_TYPE_STRING);
   dest = gtk_drop_target_new (formats, GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_text_drag_motion), self);
+  g_signal_connect (dest, "accept", G_CALLBACK (gtk_text_drag_motion), self);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_text_drag_leave), self);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_text_drag_drop), self);
   gdk_content_formats_unref (formats);

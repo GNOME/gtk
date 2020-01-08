@@ -4088,7 +4088,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   formats = gdk_content_formats_builder_free_to_formats (builder);
   dest = gtk_drop_target_new (formats, GDK_ACTION_MOVE | GDK_ACTION_COPY | GDK_ACTION_LINK);
   gdk_content_formats_unref (formats);
-  g_signal_connect (dest, "drag-motion", G_CALLBACK (drag_motion_callback), sidebar);
+  g_signal_connect (dest, "accept", G_CALLBACK (drag_motion_callback), sidebar);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop_callback), sidebar);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (drag_leave_callback), sidebar);
   gtk_widget_add_controller (sidebar->list_box, GTK_EVENT_CONTROLLER (dest));
