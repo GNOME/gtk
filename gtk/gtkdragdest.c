@@ -81,6 +81,7 @@ enum {
 static GParamSpec *properties[NUM_PROPERTIES];
 
 enum {
+  DRAG_ENTER,
   DRAG_LEAVE,
   DRAG_MOTION,
   DRAG_DROP,
@@ -224,6 +225,24 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
   /**
+   * GtkDropTarget::drag-enter:
+   * @dest: the #GtkDropTarget
+   * @drop: the #GdkDrop
+   *
+   * The ::drag-enter signal is emitted on the drop site when the cursor
+   * enters the widget.
+   */
+  signals[DRAG_ENTER] =
+      g_signal_new (I_("drag-enter"),
+                    G_TYPE_FROM_CLASS (class),
+                    G_SIGNAL_RUN_LAST,
+                    0,
+                    NULL, NULL,
+                    NULL,
+                    G_TYPE_NONE, 1,
+                    GDK_TYPE_DROP);
+
+  /**
    * GtkDropTarget::drag-leave:
    * @dest: the #GtkDropTarget
    * @drop: the #GdkDrop
@@ -231,10 +250,6 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    * The ::drag-leave signal is emitted on the drop site when the cursor
    * leaves the widget. A typical reason to connect to this signal is to
    * undo things done in #GtkDropTarget::drag-motion, e.g. undo highlighting.
-   *
-   * Likewise, the #GtkWidget::drag-leave signal is also emitted before the 
-   * #GtkDropTarget::drag-drop signal, for instance to allow cleaning up of
-   * a preview item created in the #GtkDropTarget::drag-motion signal handler.
    */
   signals[DRAG_LEAVE] =
       g_signal_new (I_("drag-leave"),
@@ -538,11 +553,19 @@ set_drop (GtkDropTarget *dest,
 }
 
 static void
+gtk_drop_target_emit_drag_enter (GtkDropTarget    *dest,
+                                 GdkDrop          *drop)
+{
+  set_drop (dest, drop);
+  g_signal_emit (dest, signals[DRAG_ENTER], 0, drop);
+}
+
+static void
 gtk_drop_target_emit_drag_leave (GtkDropTarget    *dest,
                                  GdkDrop          *drop)
 {
   set_drop (dest, drop);
-  g_signal_emit (dest, signals[DRAG_LEAVE], 0, drop, time);
+  g_signal_emit (dest, signals[DRAG_LEAVE], 0, drop);
   set_drop (dest, NULL);
 }
 
@@ -639,7 +662,6 @@ gtk_drop_set_current_dest (GdkDrop       *drop,
   if (old_dest == dest)
     return;
 
-g_print ("set current dest %p\n", dest);
   if (old_dest)
     {
       gtk_drop_target_set_contains (old_dest, FALSE);
@@ -658,6 +680,8 @@ g_print ("set current dest %p\n", dest);
   if (dest)
     {
       g_object_weak_ref (G_OBJECT (dest), clear_current_dest, drop);
+
+      gtk_drop_target_emit_drag_enter (dest, drop);
 
       widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
       if (widget)
