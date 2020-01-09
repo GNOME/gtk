@@ -117,6 +117,7 @@ out:
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_STRING = {
+  "GtkCssStringValue",
   gtk_css_value_string_free,
   gtk_css_value_string_compute,
   gtk_css_value_string_equal,
@@ -127,6 +128,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_STRING = {
 };
 
 static const GtkCssValueClass GTK_CSS_VALUE_IDENT = {
+  "GtkCssIdentValue",
   gtk_css_value_string_free,
   gtk_css_value_string_compute,
   gtk_css_value_string_equal,

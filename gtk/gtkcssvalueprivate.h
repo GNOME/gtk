@@ -40,6 +40,7 @@ typedef struct _GtkCssValueClass      GtkCssValueClass;
   gint ref_count;
 
 struct _GtkCssValueClass {
+  const char *type_name;
   void          (* free)                              (GtkCssValue                *value);
 
   GtkCssValue * (* compute)                           (GtkCssValue                *value,
