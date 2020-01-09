@@ -109,11 +109,11 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkDrag, gdk_drag, G_TYPE_OBJECT)
  *
  * The actual data transfer is initiated from the target side via an async
  * read, using one of the GdkDrop functions for this purpose: gdk_drop_read_async(),
- * gdk_drop_read_value_async() or gdk_read_text_async().
+ * gdk_drop_read_value_async() or gdk_drop_read_text_async().
  * 
  * GTK provides a higher level abstraction based on top of these functions,
  * and so they are not normally needed in GTK applications. See the
- * [Drag and Drop][gtk4-Drag-and-Drop] section of the GTK+ documentation
+ * [Drag and Drop][gtk4-Drag-and-Drop] section of the GTK documentation
  * for more information.
  */
 
