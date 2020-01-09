@@ -123,6 +123,7 @@ gtk_css_value_image_print (const GtkCssValue *value,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_IMAGE = {
+  "GtkCssImageValue",
   gtk_css_value_image_free,
   gtk_css_value_image_compute,
   gtk_css_value_image_equal,

@@ -82,6 +82,7 @@ gtk_css_value_unset_print (const GtkCssValue *value,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_UNSET = {
+  "GtkCssUnsetValue",
   gtk_css_value_unset_free,
   gtk_css_value_unset_compute,
   gtk_css_value_unset_equal,
