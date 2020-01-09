@@ -111,15 +111,17 @@ gtk_tooltip_window_native_get_surface_transform (GtkNative *native,
 }
 
 static void
-move_to_rect (GtkTooltipWindow *window)
+relayout_popup (GtkTooltipWindow *window)
 {
-  gdk_surface_move_to_rect (window->surface,
-                            &window->rect,
-                            window->rect_anchor,
-                            window->surface_anchor,
-                            window->anchor_hints,
-                            window->dx,
-                            window->dy);
+  gdk_surface_queue_relayout (window->surface,
+                              gdk_surface_get_width (window->surface),
+                              gdk_surface_get_height (window->surface),
+                              &window->rect,
+                              window->rect_anchor,
+                              window->surface_anchor,
+                              window->anchor_hints,
+                              window->dx,
+                              window->dy);
 }
 
 static void
@@ -131,7 +133,7 @@ gtk_tooltip_window_move_resize (GtkTooltipWindow *window)
     {
       gtk_widget_get_preferred_size (GTK_WIDGET (window), NULL, &req);
       gdk_surface_resize (window->surface, req.width, req.height);
-      move_to_rect (window);
+      relayout_popup (window);
     }
 }
 
@@ -207,12 +209,12 @@ surface_event (GdkSurface *surface,
 }
 
 static void
-surface_moved_to_rect (GdkSurface   *surface,
-                       GdkRectangle *flipped_rect,
-                       GdkRectangle *final_rect,
-                       gboolean      flipped_x,
-                       gboolean      flipped_y,
-                       GtkWidget    *widget)
+surface_relayout_finished (GdkSurface   *surface,
+                           GdkRectangle *flipped_rect,
+                           GdkRectangle *final_rect,
+                           gboolean      flipped_x,
+                           gboolean      flipped_y,
+                           GtkWidget    *widget)
 {
 }
 
@@ -234,7 +236,8 @@ gtk_tooltip_window_realize (GtkWidget *widget)
   g_signal_connect_swapped (window->surface, "size-changed", G_CALLBACK (surface_size_changed), widget);
   g_signal_connect (window->surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (window->surface, "event", G_CALLBACK (surface_event), widget);
-  g_signal_connect (window->surface, "moved-to-rect", G_CALLBACK (surface_moved_to_rect), widget);
+  g_signal_connect (window->surface, "relayout-finished",
+                    G_CALLBACK (surface_relayout_finished), widget);
 
   GTK_WIDGET_CLASS (gtk_tooltip_window_parent_class)->realize (widget);
 
@@ -255,7 +258,7 @@ gtk_tooltip_window_unrealize (GtkWidget *widget)
   g_signal_handlers_disconnect_by_func (window->surface, surface_size_changed, widget);
   g_signal_handlers_disconnect_by_func (window->surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (window->surface, surface_event, widget);
-  g_signal_handlers_disconnect_by_func (window->surface, surface_moved_to_rect, widget);
+  g_signal_handlers_disconnect_by_func (window->surface, surface_relayout_finished, widget);
   gdk_surface_set_widget (window->surface, NULL);
   gdk_surface_destroy (window->surface);
   g_clear_object (&window->surface);
@@ -277,7 +280,7 @@ surface_transform_changed_cb (GtkWidget               *widget,
 {
   GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (widget);
 
-  move_to_rect (window);
+  relayout_popup (window);
 
   return G_SOURCE_CONTINUE;
 }
@@ -290,7 +293,7 @@ gtk_tooltip_window_map (GtkWidget *widget)
   GtkWidget *child;
 
   gdk_surface_show (window->surface);
-  move_to_rect (window);
+  relayout_popup (window);
 
   window->surface_transform_changed_cb =
     gtk_widget_add_surface_transform_changed_callback (window->relative_to,
@@ -600,6 +603,6 @@ gtk_tooltip_window_position (GtkTooltipWindow *window,
   window->dx = dx;
   window->dy = dy;
 
-  move_to_rect (window);
+  relayout_popup (window);
 }
 
