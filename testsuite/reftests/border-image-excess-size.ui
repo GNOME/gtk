@@ -3,7 +3,7 @@
   <object class="GtkWindow" id="window1">
     <child>
       <object class="GtkToolbar" id="toolbar1">
-        <property name="width_request">10</property>
+        <property name="width_request">200</property>
         <property name="height_request">10</property>
         <property name="can_focus">1</property>
         <property name="show_arrow">0</property>

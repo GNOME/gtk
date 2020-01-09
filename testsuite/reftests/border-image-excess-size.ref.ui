@@ -4,7 +4,7 @@
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="row_spacing">8</property>
-        <property name="column_spacing">8</property>
+        <property name="column_spacing">198</property>
         <child>
           <object class="GtkToolbar" id="toolbar1">
             <property name="width_request">1</property>
