@@ -1,5 +1,6 @@
 @import "reset-to-defaults.css";
 
+window .titlebar,
 window { background-color: lime; }
 
 #reference * { background-color: lime; }
