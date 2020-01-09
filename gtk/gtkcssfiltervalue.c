@@ -693,6 +693,7 @@ gtk_css_value_filter_print (const GtkCssValue *value,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_FILTER = {
+  "GtkCssFilterValue",
   gtk_css_value_filter_free,
   gtk_css_value_filter_compute,
   gtk_css_value_filter_equal,

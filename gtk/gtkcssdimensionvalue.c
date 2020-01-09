@@ -279,6 +279,7 @@ gtk_css_value_dimension_get_calc_term_order (const GtkCssValue *value)
 
 static const GtkCssNumberValueClass GTK_CSS_VALUE_DIMENSION = {
   {
+    "GtkCssDimensionValue",
     gtk_css_value_dimension_free,
     gtk_css_value_dimension_compute,
     gtk_css_value_dimension_equal,

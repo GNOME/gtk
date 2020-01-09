@@ -200,6 +200,7 @@ gtk_css_value_shadows_print (const GtkCssValue *value,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_SHADOWS = {
+  "GtkCssShadowsValue",
   gtk_css_value_shadows_free,
   gtk_css_value_shadows_compute,
   gtk_css_value_shadows_equal,

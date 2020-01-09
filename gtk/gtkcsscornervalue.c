@@ -99,6 +99,7 @@ gtk_css_value_corner_print (const GtkCssValue *corner,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_CORNER = {
+  "GtkCssCornerValue",
   gtk_css_value_corner_free,
   gtk_css_value_corner_compute,
   gtk_css_value_corner_equal,

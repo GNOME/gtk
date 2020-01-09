@@ -78,6 +78,7 @@ gtk_css_value_inherit_print (const GtkCssValue *value,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_INHERIT = {
+  "GtkCssInheritValue",
   gtk_css_value_inherit_free,
   gtk_css_value_inherit_compute,
   gtk_css_value_inherit_equal,

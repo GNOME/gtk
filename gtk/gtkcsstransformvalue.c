@@ -790,6 +790,7 @@ gtk_css_value_transform_print (const GtkCssValue *value,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_TRANSFORM = {
+  "GtkCssTransformValue",
   gtk_css_value_transform_free,
   gtk_css_value_transform_compute,
   gtk_css_value_transform_equal,

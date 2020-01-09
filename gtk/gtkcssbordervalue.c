@@ -140,6 +140,7 @@ gtk_css_value_border_print (const GtkCssValue *value,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_BORDER = {
+  "GtkCssBorderValue",
   gtk_css_value_border_free,
   gtk_css_value_border_compute,
   gtk_css_value_border_equal,

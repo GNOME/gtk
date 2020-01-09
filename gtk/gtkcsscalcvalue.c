@@ -245,6 +245,7 @@ gtk_css_value_calc_get_calc_term_order (const GtkCssValue *value)
 
 static const GtkCssNumberValueClass GTK_CSS_VALUE_CALC = {
   {
+    "GtkCssCalcValue",
     gtk_css_value_calc_free,
     gtk_css_value_calc_compute,
     gtk_css_value_calc_equal,
