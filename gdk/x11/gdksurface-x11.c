@@ -1409,8 +1409,8 @@ gdk_x11_surface_move (GdkSurface *surface,
 }
 
 static void
-gdk_x11_surface_moved_to_rect (GdkSurface   *surface,
-                               GdkRectangle  final_rect)
+gdk_x11_surface_relayout_finished (GdkSurface   *surface,
+                                   GdkRectangle  final_rect)
 {
   GdkSurface *toplevel;
   int x, y;
@@ -1439,22 +1439,40 @@ gdk_x11_surface_moved_to_rect (GdkSurface   *surface,
 }
 
 static void
-gdk_x11_surface_move_to_rect (GdkSurface         *surface,
-                              const GdkRectangle *rect,
-                              GdkGravity          rect_anchor,
-                              GdkGravity          surface_anchor,
-                              GdkAnchorHints      anchor_hints,
-                              gint                rect_anchor_dx,
-                              gint                rect_anchor_dy)
+gdk_x11_surface_queue_relayout (GdkSurface         *surface,
+                                gint                width,
+                                gint                height,
+                                const GdkRectangle *anchor_rect,
+                                GdkGravity          rect_anchor,
+                                GdkGravity          surface_anchor,
+                                GdkAnchorHints      anchor_hints,
+                                gint                rect_anchor_dx,
+                                gint                rect_anchor_dy)
 {
-  gdk_surface_move_to_rect_helper (surface,
-                                   rect,
-                                   rect_anchor,
-                                   surface_anchor,
-                                   anchor_hints,
-                                   rect_anchor_dx,
-                                   rect_anchor_dy,
-                                   gdk_x11_surface_moved_to_rect);
+  gdk_surface_queue_relayout_helper (surface,
+                                     width,
+                                     height,
+                                     anchor_rect,
+                                     rect_anchor,
+                                     surface_anchor,
+                                     anchor_hints,
+                                     rect_anchor_dx,
+                                     rect_anchor_dy,
+                                     gdk_x11_surface_relayout_finished);
+}
+
+static gboolean
+gdk_x11_surface_finish_relayout (GdkSurface   *surface,
+                                 GdkRectangle *flipped_rect,
+                                 GdkRectangle *final_rect,
+                                 int          *flipped_x,
+                                 int          *flipped_y)
+{
+  return gdk_surface_finish_relayout_helper (surface,
+                                             flipped_rect,
+                                             final_rect,
+                                             flipped_x,
+                                             flipped_y);
 }
 
 static void gdk_x11_surface_restack_toplevel (GdkSurface *surface,
@@ -4652,7 +4670,8 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->lower = gdk_x11_surface_lower;
   impl_class->restack_toplevel = gdk_x11_surface_restack_toplevel;
   impl_class->toplevel_resize = gdk_x11_surface_toplevel_resize;
-  impl_class->move_to_rect = gdk_x11_surface_move_to_rect;
+  impl_class->queue_relayout = gdk_x11_surface_queue_relayout;
+  impl_class->finish_relayout = gdk_x11_surface_finish_relayout;
   impl_class->get_geometry = gdk_x11_surface_get_geometry;
   impl_class->get_root_coords = gdk_x11_surface_get_root_coords;
   impl_class->get_device_state = gdk_x11_surface_get_device_state;

@@ -137,13 +137,13 @@ struct _GdkWaylandSurface
   gulong parent_surface_committed_handler;
 
   struct {
-    GdkRectangle rect;
+    GdkRectangle anchor_rect;
     GdkGravity rect_anchor;
     GdkGravity surface_anchor;
     GdkAnchorHints anchor_hints;
     gint rect_anchor_dx;
     gint rect_anchor_dy;
-  } pending_move_to_rect;
+  } pending_relayout;
 
   struct {
     struct {
@@ -666,6 +666,8 @@ gdk_wayland_surface_dispose (GObject *object)
   GdkWaylandSurface *impl;
 
   g_return_if_fail (GDK_IS_WAYLAND_SURFACE (surface));
+
+  impl = GDK_WAYLAND_SURFACE (object);
 
   if (impl->event_queue)
     {
@@ -1826,12 +1828,12 @@ calculate_popup_rect (GdkSurface   *surface,
   gdk_wayland_surface_get_window_geometry (surface, &geometry);
 
   anchor_rect = (GdkRectangle) {
-    .x = (impl->pending_move_to_rect.rect.x +
-          impl->pending_move_to_rect.rect_anchor_dx),
-    .y = (impl->pending_move_to_rect.rect.y +
-          impl->pending_move_to_rect.rect_anchor_dy),
-    .width = impl->pending_move_to_rect.rect.width,
-    .height = impl->pending_move_to_rect.rect.height
+    .x = (impl->pending_relayout.anchor_rect.x +
+          impl->pending_relayout.rect_anchor_dx),
+    .y = (impl->pending_relayout.anchor_rect.y +
+          impl->pending_relayout.rect_anchor_dy),
+    .width = impl->pending_relayout.anchor_rect.width,
+    .height = impl->pending_relayout.anchor_rect.height
   };
 
   switch (rect_anchor)
@@ -2015,23 +2017,23 @@ calculate_moved_to_rect_result (GdkSurface   *surface,
                                    surface_width, surface_height);
 
   calculate_popup_rect (surface,
-                        impl->pending_move_to_rect.rect_anchor,
-                        impl->pending_move_to_rect.surface_anchor,
+                        impl->pending_relayout.rect_anchor,
+                        impl->pending_relayout.surface_anchor,
                         &best_rect);
 
   *flipped_rect = best_rect;
 
   if (x != best_rect.x &&
-      impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_FLIP_X)
+      impl->pending_relayout.anchor_hints & GDK_ANCHOR_FLIP_X)
     {
       GdkRectangle flipped_x_rect;
       GdkGravity flipped_rect_anchor;
       GdkGravity flipped_surface_anchor;
 
       flipped_rect_anchor =
-        flip_anchor_horizontally (impl->pending_move_to_rect.rect_anchor);
+        flip_anchor_horizontally (impl->pending_relayout.rect_anchor);
       flipped_surface_anchor =
-        flip_anchor_horizontally (impl->pending_move_to_rect.surface_anchor),
+        flip_anchor_horizontally (impl->pending_relayout.surface_anchor),
       calculate_popup_rect (surface,
                             flipped_rect_anchor,
                             flipped_surface_anchor,
@@ -2041,16 +2043,16 @@ calculate_moved_to_rect_result (GdkSurface   *surface,
         flipped_rect->x = x;
     }
   if (y != best_rect.y &&
-      impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_FLIP_Y)
+      impl->pending_relayout.anchor_hints & GDK_ANCHOR_FLIP_Y)
     {
       GdkRectangle flipped_y_rect;
       GdkGravity flipped_rect_anchor;
       GdkGravity flipped_surface_anchor;
 
       flipped_rect_anchor =
-        flip_anchor_vertically (impl->pending_move_to_rect.rect_anchor);
+        flip_anchor_vertically (impl->pending_relayout.rect_anchor);
       flipped_surface_anchor =
-        flip_anchor_vertically (impl->pending_move_to_rect.surface_anchor),
+        flip_anchor_vertically (impl->pending_relayout.surface_anchor),
       calculate_popup_rect (surface,
                             flipped_rect_anchor,
                             flipped_surface_anchor,
@@ -2079,14 +2081,14 @@ create_dynamic_positioner (GdkSurface *surface)
 
   gdk_wayland_surface_get_window_geometry (surface, &geometry);
 
-  real_anchor_rect_x = impl->pending_move_to_rect.rect.x;
-  real_anchor_rect_y = impl->pending_move_to_rect.rect.y;
+  real_anchor_rect_x = impl->pending_relayout.anchor_rect.x;
+  real_anchor_rect_y = impl->pending_relayout.anchor_rect.y;
   translate_to_real_parent_surface_geometry (surface,
                                              &real_anchor_rect_x,
                                              &real_anchor_rect_y);
 
-  anchor_rect_width = impl->pending_move_to_rect.rect.width;
-  anchor_rect_height = impl->pending_move_to_rect.rect.height;
+  anchor_rect_width = impl->pending_relayout.anchor_rect.width;
+  anchor_rect_height = impl->pending_relayout.anchor_rect.height;
 
   switch (display->shell_variant)
     {
@@ -2105,26 +2107,26 @@ create_dynamic_positioner (GdkSurface *surface)
                                         anchor_rect_width,
                                         anchor_rect_height);
         xdg_positioner_set_offset (positioner,
-                                   impl->pending_move_to_rect.rect_anchor_dx,
-                                   impl->pending_move_to_rect.rect_anchor_dy);
+                                   impl->pending_relayout.rect_anchor_dx,
+                                   impl->pending_relayout.rect_anchor_dy);
 
-        anchor = rect_anchor_to_anchor (impl->pending_move_to_rect.rect_anchor);
+        anchor = rect_anchor_to_anchor (impl->pending_relayout.rect_anchor);
         xdg_positioner_set_anchor (positioner, anchor);
 
-        gravity = surface_anchor_to_gravity (impl->pending_move_to_rect.surface_anchor);
+        gravity = surface_anchor_to_gravity (impl->pending_relayout.surface_anchor);
         xdg_positioner_set_gravity (positioner, gravity);
 
-        if (impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_FLIP_X)
+        if (impl->pending_relayout.anchor_hints & GDK_ANCHOR_FLIP_X)
           constraint_adjustment |= XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_FLIP_X;
-        if (impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_FLIP_Y)
+        if (impl->pending_relayout.anchor_hints & GDK_ANCHOR_FLIP_Y)
           constraint_adjustment |= XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_FLIP_Y;
-        if (impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_SLIDE_X)
+        if (impl->pending_relayout.anchor_hints & GDK_ANCHOR_SLIDE_X)
           constraint_adjustment |= XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_SLIDE_X;
-        if (impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_SLIDE_Y)
+        if (impl->pending_relayout.anchor_hints & GDK_ANCHOR_SLIDE_Y)
           constraint_adjustment |= XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_SLIDE_Y;
-        if (impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_RESIZE_X)
+        if (impl->pending_relayout.anchor_hints & GDK_ANCHOR_RESIZE_X)
           constraint_adjustment |= XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_RESIZE_X;
-        if (impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_RESIZE_Y)
+        if (impl->pending_relayout.anchor_hints & GDK_ANCHOR_RESIZE_Y)
           constraint_adjustment |= XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_RESIZE_Y;
         xdg_positioner_set_constraint_adjustment (positioner,
                                                   constraint_adjustment);
@@ -2146,26 +2148,26 @@ create_dynamic_positioner (GdkSurface *surface)
                                             anchor_rect_width,
                                             anchor_rect_height);
         zxdg_positioner_v6_set_offset (positioner,
-                                       impl->pending_move_to_rect.rect_anchor_dx,
-                                       impl->pending_move_to_rect.rect_anchor_dy);
+                                       impl->pending_relayout.rect_anchor_dx,
+                                       impl->pending_relayout.rect_anchor_dy);
 
-        anchor = rect_anchor_to_anchor_legacy (impl->pending_move_to_rect.rect_anchor);
+        anchor = rect_anchor_to_anchor_legacy (impl->pending_relayout.rect_anchor);
         zxdg_positioner_v6_set_anchor (positioner, anchor);
 
-        gravity = surface_anchor_to_gravity_legacy (impl->pending_move_to_rect.surface_anchor);
+        gravity = surface_anchor_to_gravity_legacy (impl->pending_relayout.surface_anchor);
         zxdg_positioner_v6_set_gravity (positioner, gravity);
 
-        if (impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_FLIP_X)
+        if (impl->pending_relayout.anchor_hints & GDK_ANCHOR_FLIP_X)
           constraint_adjustment |= ZXDG_POSITIONER_V6_CONSTRAINT_ADJUSTMENT_FLIP_X;
-        if (impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_FLIP_Y)
+        if (impl->pending_relayout.anchor_hints & GDK_ANCHOR_FLIP_Y)
           constraint_adjustment |= ZXDG_POSITIONER_V6_CONSTRAINT_ADJUSTMENT_FLIP_Y;
-        if (impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_SLIDE_X)
+        if (impl->pending_relayout.anchor_hints & GDK_ANCHOR_SLIDE_X)
           constraint_adjustment |= ZXDG_POSITIONER_V6_CONSTRAINT_ADJUSTMENT_SLIDE_X;
-        if (impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_SLIDE_Y)
+        if (impl->pending_relayout.anchor_hints & GDK_ANCHOR_SLIDE_Y)
           constraint_adjustment |= ZXDG_POSITIONER_V6_CONSTRAINT_ADJUSTMENT_SLIDE_Y;
-        if (impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_RESIZE_X)
+        if (impl->pending_relayout.anchor_hints & GDK_ANCHOR_RESIZE_X)
           constraint_adjustment |= ZXDG_POSITIONER_V6_CONSTRAINT_ADJUSTMENT_RESIZE_X;
-        if (impl->pending_move_to_rect.anchor_hints & GDK_ANCHOR_RESIZE_Y)
+        if (impl->pending_relayout.anchor_hints & GDK_ANCHOR_RESIZE_Y)
           constraint_adjustment |= ZXDG_POSITIONER_V6_CONSTRAINT_ADJUSTMENT_RESIZE_Y;
         zxdg_positioner_v6_set_constraint_adjustment (positioner,
                                                       constraint_adjustment);
@@ -2733,26 +2735,61 @@ sanitize_anchor_rect (GdkSurface   *surface,
 }
 
 static void
-gdk_wayland_surface_move_to_rect (GdkSurface         *surface,
-                                  const GdkRectangle *rect,
-                                  GdkGravity          rect_anchor,
-                                  GdkGravity          surface_anchor,
-                                  GdkAnchorHints      anchor_hints,
-                                  gint                rect_anchor_dx,
-                                  gint                rect_anchor_dy)
+gdk_wayland_surface_queue_relayout (GdkSurface         *surface,
+                                    gint                width,
+                                    gint                height,
+                                    const GdkRectangle *anchor_rect,
+                                    GdkGravity          rect_anchor,
+                                    GdkGravity          surface_anchor,
+                                    GdkAnchorHints      anchor_hints,
+                                    gint                rect_anchor_dx,
+                                    gint                rect_anchor_dy)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  impl->pending_move_to_rect.rect = *rect;
-  sanitize_anchor_rect (surface, &impl->pending_move_to_rect.rect);
+  switch (surface->surface_type)
+    {
+    case GDK_SURFACE_TOPLEVEL:
+      g_warning ("Tried to queue relayout for toplevel");
+      return;
+    case GDK_SURFACE_TEMP:
+      if (is_realized_popup (surface))
+        {
+          g_warning ("Cannot queue relayout for mapped temporary surface");
+          return;
+        }
+      break;
+    case GDK_SURFACE_POPUP:
+      g_return_if_fail (surface->parent);
+      break;
+    default:
+      g_assert_not_reached ();
+    }
 
-  impl->pending_move_to_rect.rect_anchor = rect_anchor;
-  impl->pending_move_to_rect.surface_anchor = surface_anchor;
-  impl->pending_move_to_rect.anchor_hints = anchor_hints;
-  impl->pending_move_to_rect.rect_anchor_dx = rect_anchor_dx;
-  impl->pending_move_to_rect.rect_anchor_dy = rect_anchor_dy;
+  impl->pending_relayout.anchor_rect = *anchor_rect;
+  sanitize_anchor_rect (surface, &impl->pending_relayout.anchor_rect);
+
+  impl->pending_relayout.rect_anchor = rect_anchor;
+  impl->pending_relayout.surface_anchor = surface_anchor;
+  impl->pending_relayout.anchor_hints = anchor_hints;
+  impl->pending_relayout.rect_anchor_dx = rect_anchor_dx;
+  impl->pending_relayout.rect_anchor_dy = rect_anchor_dy;
 
   impl->has_layout_data = TRUE;
+
+  gdk_wayland_surface_hide (surface);
+  gdk_wayland_surface_show (surface, FALSE);
+  gdk_surface_invalidate_rect (surface, NULL);
+}
+
+static gboolean
+gdk_wayland_surface_finish_relayout (GdkSurface   *surface,
+                                     GdkRectangle *flipped_rect,
+                                     GdkRectangle *final_rect,
+                                     gboolean     *flipped_x,
+                                     gboolean     *flipped_y)
+{
+  return FALSE;
 }
 
 static void
@@ -3809,7 +3846,8 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   impl_class->lower = gdk_wayland_surface_lower;
   impl_class->restack_toplevel = gdk_wayland_surface_restack_toplevel;
   impl_class->toplevel_resize = gdk_wayland_surface_toplevel_resize;
-  impl_class->move_to_rect = gdk_wayland_surface_move_to_rect;
+  impl_class->queue_relayout = gdk_wayland_surface_queue_relayout;
+  impl_class->finish_relayout = gdk_wayland_surface_finish_relayout;
   impl_class->get_geometry = gdk_wayland_surface_get_geometry;
   impl_class->get_root_coords = gdk_wayland_surface_get_root_coords;
   impl_class->get_device_state = gdk_wayland_surface_get_device_state;
