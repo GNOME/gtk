@@ -369,6 +369,7 @@ gtk_css_value_array_print (const GtkCssValue *value,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_ARRAY = {
+  "GtkCssArrayValue",
   gtk_css_value_array_free,
   gtk_css_value_array_compute,
   gtk_css_value_array_equal,

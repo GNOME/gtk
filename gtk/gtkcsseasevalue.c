@@ -135,6 +135,7 @@ gtk_css_value_ease_print (const GtkCssValue *ease,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_EASE = {
+  "GtkCssEaseValue",
   gtk_css_value_ease_free,
   gtk_css_value_ease_compute,
   gtk_css_value_ease_equal,

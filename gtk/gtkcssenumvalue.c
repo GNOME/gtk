@@ -78,6 +78,7 @@ gtk_css_value_enum_print (const GtkCssValue *value,
 /* GtkBorderStyle */
 
 static const GtkCssValueClass GTK_CSS_VALUE_BORDER_STYLE = {
+  "GtkCssBorderStyleValue",
   gtk_css_value_enum_free,
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
@@ -135,6 +136,7 @@ _gtk_css_border_style_value_get (const GtkCssValue *value)
 /* GtkCssBlendMode */
 
 static const GtkCssValueClass GTK_CSS_VALUE_BLEND_MODE = {
+  "GtkCssBlendModeValue",
   gtk_css_value_enum_free,
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
@@ -285,6 +287,7 @@ gtk_css_value_font_size_compute (GtkCssValue      *value,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_SIZE = {
+  "GtkCssFontSizeValue",
   gtk_css_value_enum_free,
   gtk_css_value_font_size_compute,
   gtk_css_value_enum_equal,
@@ -341,6 +344,7 @@ _gtk_css_font_size_value_get (const GtkCssValue *value)
 /* PangoStyle */
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_STYLE = {
+  "GtkCssFontStyleValue",
   gtk_css_value_enum_free,
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
@@ -439,6 +443,7 @@ gtk_css_value_font_weight_compute (GtkCssValue      *value,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_WEIGHT = {
+  "GtkCssFontWeightValue",
   gtk_css_value_enum_free,
   gtk_css_value_font_weight_compute,
   gtk_css_value_enum_equal,
@@ -488,6 +493,7 @@ gtk_css_font_weight_value_get (const GtkCssValue *value)
 /* PangoStretch */
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_STRETCH = {
+  "GtkCssFontStretchValue",
   gtk_css_value_enum_free,
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
@@ -544,6 +550,7 @@ _gtk_css_font_stretch_value_get (const GtkCssValue *value)
 /* GtkTextDecorationLine */
 
 static const GtkCssValueClass GTK_CSS_VALUE_TEXT_DECORATION_LINE = {
+  "GtkCssTextDecorationLineValue",
   gtk_css_value_enum_free,
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
@@ -594,6 +601,7 @@ _gtk_css_text_decoration_line_value_get (const GtkCssValue *value)
 /* GtkTextDecorationStyle */
 
 static const GtkCssValueClass GTK_CSS_VALUE_TEXT_DECORATION_STYLE = {
+  "GtkCssTextDecorationStyleValue",
   gtk_css_value_enum_free,
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
@@ -644,6 +652,7 @@ _gtk_css_text_decoration_style_value_get (const GtkCssValue *value)
 /* GtkCssArea */
 
 static const GtkCssValueClass GTK_CSS_VALUE_AREA = {
+  "GtkCssAreaValue",
   gtk_css_value_enum_free,
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
@@ -700,6 +709,7 @@ _gtk_css_area_value_get (const GtkCssValue *value)
 /* GtkCssDirection */
 
 static const GtkCssValueClass GTK_CSS_VALUE_DIRECTION = {
+  "GtkCssDirectionValue",
   gtk_css_value_enum_free,
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
@@ -760,6 +770,7 @@ _gtk_css_direction_value_get (const GtkCssValue *value)
 /* GtkCssPlayState */
 
 static const GtkCssValueClass GTK_CSS_VALUE_PLAY_STATE = {
+  "GtkCssPlayStateValue",
   gtk_css_value_enum_free,
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
@@ -815,6 +826,7 @@ _gtk_css_play_state_value_get (const GtkCssValue *value)
 /* GtkCssFillMode */
 
 static const GtkCssValueClass GTK_CSS_VALUE_FILL_MODE = {
+  "GtkCssFillModeValue",
   gtk_css_value_enum_free,
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
@@ -872,6 +884,7 @@ _gtk_css_fill_mode_value_get (const GtkCssValue *value)
 /* GtkCssIconStyle */
 
 static const GtkCssValueClass GTK_CSS_VALUE_ICON_STYLE = {
+  "GtkCssIconStyleValue",
   gtk_css_value_enum_free,
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
@@ -928,6 +941,7 @@ _gtk_css_icon_style_value_get (const GtkCssValue *value)
 /* GtkCssFontKerning */
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_KERNING = {
+  "GtkCssFontKerningValue",
   gtk_css_value_enum_free,
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
@@ -984,6 +998,7 @@ _gtk_css_font_kerning_value_get (const GtkCssValue *value)
 /* GtkCssFontVariantPos */
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_POSITION = {
+  "GtkCssFontVariationPositionValue",
   gtk_css_value_enum_free,
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
@@ -1040,6 +1055,7 @@ _gtk_css_font_variant_position_value_get (const GtkCssValue *value)
 /* GtkCssFontVariantCaps */
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_CAPS = {
+  "GtkCssFontVariantCapsValue",
   gtk_css_value_enum_free,
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
@@ -1100,6 +1116,7 @@ _gtk_css_font_variant_caps_value_get (const GtkCssValue *value)
 /* GtkCssFontVariantAlternate */
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_ALTERNATE = {
+  "GtkCssFontVariantAlternateValue",
   gtk_css_value_enum_free,
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
@@ -1213,6 +1230,7 @@ gtk_css_font_variant_ligature_value_print (const GtkCssValue *value,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_LIGATURE = {
+  "GtkCssFontVariantLigatureValue",
   gtk_css_value_enum_free,
   gtk_css_value_enum_compute,
   gtk_css_value_flags_equal,
@@ -1319,6 +1337,7 @@ gtk_css_font_variant_numeric_value_print (const GtkCssValue *value,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_NUMERIC = {
+  "GtkCssFontVariantNumbericValue",
   gtk_css_value_enum_free,
   gtk_css_value_enum_compute,
   gtk_css_value_flags_equal,
@@ -1422,6 +1441,7 @@ gtk_css_font_variant_east_asian_value_print (const GtkCssValue *value,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_EAST_ASIAN = {
+  "GtkCssFontVariantEastAsianValue",
   gtk_css_value_enum_free,
   gtk_css_value_enum_compute,
   gtk_css_value_flags_equal,
