@@ -153,6 +153,7 @@ gtk_css_value_bg_size_print (const GtkCssValue *value,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_BG_SIZE = {
+  "GtkCssBgSizeValue",
   gtk_css_value_bg_size_free,
   gtk_css_value_bg_size_compute,
   gtk_css_value_bg_size_equal,

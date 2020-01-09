@@ -98,6 +98,7 @@ gtk_css_value_rgba_print (const GtkCssValue *rgba,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_RGBA = {
+  "GtkCssRgbaValue",
   gtk_css_value_rgba_free,
   gtk_css_value_rgba_compute,
   gtk_css_value_rgba_equal,

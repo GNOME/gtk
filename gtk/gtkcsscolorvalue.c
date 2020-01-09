@@ -280,6 +280,7 @@ gtk_css_value_color_print (const GtkCssValue *value,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_COLOR = {
+  "GtkCssColorValue",
   gtk_css_value_color_free,
   gtk_css_value_color_compute,
   gtk_css_value_color_equal,
