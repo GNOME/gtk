@@ -113,6 +113,7 @@ gtk_css_value_border_repeat_print (const GtkCssValue *repeat,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_BACKGROUND_REPEAT = {
+  "GtkCssBackgroundRepeatValue",
   gtk_css_value_repeat_free,
   gtk_css_value_repeat_compute,
   gtk_css_value_repeat_equal,
@@ -123,6 +124,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_BACKGROUND_REPEAT = {
 };
 
 static const GtkCssValueClass GTK_CSS_VALUE_BORDER_REPEAT = {
+  "GtkCssBorderRepeatValue",
   gtk_css_value_repeat_free,
   gtk_css_value_repeat_compute,
   gtk_css_value_repeat_equal,

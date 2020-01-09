@@ -111,6 +111,7 @@ gtk_css_value_icon_theme_print (const GtkCssValue *icon_theme,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_ICON_THEME = {
+  "GtkCssIconThemeValue",
   gtk_css_value_icon_theme_free,
   gtk_css_value_icon_theme_compute,
   gtk_css_value_icon_theme_equal,
