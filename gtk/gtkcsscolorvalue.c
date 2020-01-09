@@ -289,6 +289,41 @@ static const GtkCssValueClass GTK_CSS_VALUE_COLOR = {
   gtk_css_value_color_print
 };
 
+static void
+apply_alpha (const GdkRGBA *in,
+             GdkRGBA       *out,
+             double         factor)
+{
+  *out = *in;
+
+  out->alpha = CLAMP (in->alpha * factor, 0, 1);
+}
+
+static void
+apply_shade (const GdkRGBA *in,
+             GdkRGBA       *out,
+             double         factor)
+{
+  GtkHSLA hsla;
+
+  _gtk_hsla_init_from_rgba (&hsla, in);
+  _gtk_hsla_shade (&hsla, &hsla, factor);
+
+  _gdk_rgba_init_from_hsla (out, &hsla);
+}
+
+static void
+apply_mix (const GdkRGBA *in1,
+           const GdkRGBA *in2,
+           GdkRGBA       *out,
+           double         factor)
+{
+  out->red   = CLAMP (in1->red   + ((in2->red   - in1->red)   * factor), 0, 1);
+  out->green = CLAMP (in1->green + ((in2->green - in1->green) * factor), 0, 1);
+  out->blue  = CLAMP (in1->blue  + ((in2->blue  - in1->blue)  * factor), 0, 1);
+  out->alpha = CLAMP (in1->alpha + ((in2->alpha - in1->alpha) * factor), 0, 1);
+}
+
 GtkCssValue *
 _gtk_css_color_value_resolve (GtkCssValue      *color,
                               GtkStyleProvider *provider,
@@ -326,17 +361,13 @@ _gtk_css_color_value_resolve (GtkCssValue      *color,
     case COLOR_TYPE_SHADE:
       {
 	GtkCssValue *val;
-        GtkHSLA hsla;
 	GdkRGBA shade;
 
 	val = _gtk_css_color_value_resolve (color->sym_col.shade.color, provider, current, cycle_list);
 	if (val == NULL)
 	  return NULL;
 
-        _gtk_hsla_init_from_rgba (&hsla, _gtk_css_rgba_value_get_rgba (val));
-        _gtk_hsla_shade (&hsla, &hsla, color->sym_col.shade.factor);
-
-        _gdk_rgba_init_from_hsla (&shade, &hsla);
+        apply_shade (_gtk_css_rgba_value_get_rgba (val), &shade, color->sym_col.shade.factor);
 
 	_gtk_css_value_unref (val);
 
@@ -354,7 +385,7 @@ _gtk_css_color_value_resolve (GtkCssValue      *color,
 	  return NULL;
 
 	alpha = *_gtk_css_rgba_value_get_rgba (val);
-	alpha.alpha = CLAMP (alpha.alpha * color->sym_col.alpha.factor, 0, 1);
+        apply_alpha (&alpha, &alpha, color->sym_col.alpha.factor);
 
 	_gtk_css_value_unref (val);
 
@@ -379,10 +410,7 @@ _gtk_css_color_value_resolve (GtkCssValue      *color,
 	color2 = *_gtk_css_rgba_value_get_rgba (val);
 	_gtk_css_value_unref (val);
 
-	res.red = CLAMP (color1.red + ((color2.red - color1.red) * color->sym_col.mix.factor), 0, 1);
-	res.green = CLAMP (color1.green + ((color2.green - color1.green) * color->sym_col.mix.factor), 0, 1);
-	res.blue = CLAMP (color1.blue + ((color2.blue - color1.blue) * color->sym_col.mix.factor), 0, 1);
-	res.alpha = CLAMP (color1.alpha + ((color2.alpha - color1.alpha) * color->sym_col.mix.factor), 0, 1);
+        apply_mix (&color1, &color2, &res, color->sym_col.mix.factor);
 
 	value =_gtk_css_rgba_value_new_from_rgba (&res);
       }
@@ -467,6 +495,15 @@ _gtk_css_color_value_new_shade (GtkCssValue *color,
 
   gtk_internal_return_val_if_fail (color->class == &GTK_CSS_VALUE_COLOR, NULL);
 
+  if (color->type == COLOR_TYPE_LITERAL)
+    {
+      GdkRGBA c = *_gtk_css_rgba_value_get_rgba (color->last_value);
+
+      apply_shade (&c, &c, factor);
+
+      return _gtk_css_color_value_new_literal (&c);
+    }
+
   value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_SHADE;
   value->sym_col.shade.color = _gtk_css_value_ref (color);
@@ -482,6 +519,15 @@ _gtk_css_color_value_new_alpha (GtkCssValue *color,
   GtkCssValue *value;
 
   gtk_internal_return_val_if_fail (color->class == &GTK_CSS_VALUE_COLOR, NULL);
+
+  if (color->type == COLOR_TYPE_LITERAL)
+    {
+      GdkRGBA c = *_gtk_css_rgba_value_get_rgba (color->last_value);
+
+      apply_alpha (&c, &c, factor);
+
+      return _gtk_css_color_value_new_literal (&c);
+    }
 
   value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_ALPHA;
@@ -500,6 +546,19 @@ _gtk_css_color_value_new_mix (GtkCssValue *color1,
 
   gtk_internal_return_val_if_fail (color1->class == &GTK_CSS_VALUE_COLOR, NULL);
   gtk_internal_return_val_if_fail (color2->class == &GTK_CSS_VALUE_COLOR, NULL);
+
+  if (color1->type == COLOR_TYPE_LITERAL &&
+      color2->type == COLOR_TYPE_LITERAL)
+    {
+      GdkRGBA c1 = *_gtk_css_rgba_value_get_rgba (color1->last_value);
+      GdkRGBA c2 = *_gtk_css_rgba_value_get_rgba (color2->last_value);
+      GdkRGBA result;
+
+      apply_mix (&c1, &c2, &result, factor);
+
+      return _gtk_css_color_value_new_literal (&result);
+
+    }
 
   value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_MIX;
