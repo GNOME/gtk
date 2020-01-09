@@ -244,6 +244,7 @@ gtk_css_value_palette_print (const GtkCssValue *value,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_PALETTE = {
+  "GtkCssPaletteValue",
   gtk_css_value_palette_free,
   gtk_css_value_palette_compute,
   gtk_css_value_palette_equal,

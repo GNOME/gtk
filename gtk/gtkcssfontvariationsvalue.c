@@ -176,6 +176,7 @@ gtk_css_value_font_variations_print (const GtkCssValue *value,
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIATIONS = {
+  "GtkCssFontVariationsValue",
   gtk_css_value_font_variations_free,
   gtk_css_value_font_variations_compute,
   gtk_css_value_font_variations_equal,

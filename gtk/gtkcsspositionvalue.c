@@ -150,6 +150,7 @@ done:
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_POSITION = {
+  "GtkCssPositionValue",
   gtk_css_value_position_free,
   gtk_css_value_position_compute,
   gtk_css_value_position_equal,
