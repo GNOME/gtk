@@ -3,6 +3,7 @@
   <object class="GtkWindow" id="window1">
     <child>
       <object class="GtkBox" id="box1">
+        <property name="halign">center</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="label1">
