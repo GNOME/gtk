@@ -3,6 +3,8 @@
   <object class="GtkWindow" id="window1">
     <child>
       <object class="GtkGrid" id="grid1">
+        <property name="halign">center</property>
+        <property name="valign">center</property>
         <child>
           <object class="GtkLabel" id="label1">
             <property name="label" translatable="yes">Quit</property>
