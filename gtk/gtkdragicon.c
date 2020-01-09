@@ -27,6 +27,21 @@
 #include "gtkpicture.h"
 
 
+/**
+ * SECTION:gtkdragicon
+ * @Short_description: A toplevel to use as drag icon
+ * @Title: GtkDragIcon
+ *
+ * GtkDragIcon is a #GtkNative implementation with the sole purpose
+ * to serve as a drag icon during DND operations. A drag icon moves
+ * with the pointer during a drag operation and is destroyed when
+ * the drag ends.
+ *
+ * To set up a drag icon and associate it with an ongoing drag operation,
+ * use gtk_drag_icon_set_from_paintable(). It is also possible to create
+ * a GtkDragIcon with gtk_drag_icon_new_for_drag(() and populate it
+ * with widgets yourself.
+ */
 struct _GtkDragIcon
 {
   GtkWidget parent_instance;
@@ -376,6 +391,14 @@ gtk_drag_icon_new (void)
   return g_object_new (GTK_TYPE_DRAG_ICON, NULL);
 }
 
+/**
+ * gtk_drag_icon_new_for_drag:
+ * @drag: a #GtkDrag
+ *
+ * Creates a #GtkDragIcon and associates it with the drag operation.
+ *
+ * Returns: the new #GtkDragIcon
+ */
 GtkWidget *
 gtk_drag_icon_new_for_drag (GdkDrag *drag)
 {
@@ -390,6 +413,17 @@ gtk_drag_icon_new_for_drag (GdkDrag *drag)
   return icon;
 }
 
+/**
+ * gtk_drag_icon_set_from_paintable:
+ * @drag: a #GdkDrag
+ * @paintable: a #GdkPaintable to display
+ * @hot_x: X coordinate of the hotspot
+ * @hot_y: Y coordinate of the hotspot
+ *
+ * Creates a #GtkDragIcon that shows @paintable, and associates
+ * it with the drag operation. The hotspot position on the paintable
+ * is aligned with the hotspot of the cursor.
+ */
 void
 gtk_drag_icon_set_from_paintable (GdkDrag      *drag,
                                   GdkPaintable *paintable,
