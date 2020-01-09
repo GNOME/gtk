@@ -223,14 +223,17 @@ gtk_css_shadows_value_new (GtkCssValue **values,
                            guint         len)
 {
   GtkCssValue *result;
-           
+
   g_return_val_if_fail (values != NULL, NULL);
   g_return_val_if_fail (len > 0, NULL);
-         
+
+  if (len == 1)
+    return values[0];
+
   result = _gtk_css_value_alloc (&GTK_CSS_VALUE_SHADOWS, sizeof (GtkCssValue) + sizeof (GtkCssValue *) * (len - 1));
   result->len = len;
   memcpy (&result->values[0], values, sizeof (GtkCssValue *) * len);
-            
+
   return result;
 }
 
@@ -267,6 +270,9 @@ _gtk_css_shadows_value_parse (GtkCssParser *parser,
 gboolean
 _gtk_css_shadows_value_is_none (const GtkCssValue *shadows)
 {
+  if (gtk_css_shadow_value_is_shadow (shadows))
+    return FALSE;
+
   g_return_val_if_fail (shadows->class == &GTK_CSS_VALUE_SHADOWS, TRUE);
 
   return shadows->len == 0;
@@ -275,6 +281,9 @@ _gtk_css_shadows_value_is_none (const GtkCssValue *shadows)
 gsize
 gtk_css_shadows_value_get_n_shadows (const GtkCssValue *shadows)
 {
+  if (gtk_css_shadow_value_is_shadow (shadows))
+    return 1;
+
   return shadows->len;
 }
 
@@ -283,6 +292,12 @@ gtk_css_shadows_value_get_shadows (const GtkCssValue  *shadows,
                                    GskShadow          *out_shadows)
 {
   guint i;
+
+  if (gtk_css_shadow_value_is_shadow (shadows))
+    {
+      gtk_css_shadow_value_get_shadow (shadows, &out_shadows[0]);
+      return;
+    }
 
   for (i = 0; i < shadows->len; i++)
     gtk_css_shadow_value_get_shadow (shadows->values[i], &out_shadows[i]);
@@ -294,6 +309,14 @@ gtk_css_shadows_value_snapshot_outset (const GtkCssValue   *shadows,
                                        const GskRoundedRect*border_box)
 {
   guint i;
+
+  if (gtk_css_shadow_value_is_shadow (shadows))
+    {
+      if (!_gtk_css_shadow_value_get_inset (shadows))
+        gtk_css_shadow_value_snapshot_outset (shadows, snapshot, border_box);
+
+      return;
+    }
 
   g_return_if_fail (shadows->class == &GTK_CSS_VALUE_SHADOWS);
 
@@ -313,6 +336,14 @@ gtk_css_shadows_value_snapshot_inset (const GtkCssValue   *shadows,
 {
   guint i;
 
+  if (gtk_css_shadow_value_is_shadow (shadows))
+    {
+      if (_gtk_css_shadow_value_get_inset (shadows))
+        gtk_css_shadow_value_snapshot_outset (shadows, snapshot, padding_box);
+
+      return;
+    }
+
   g_return_if_fail (shadows->class == &GTK_CSS_VALUE_SHADOWS);
 
   for (i = 0; i < shadows->len; i++)
@@ -331,6 +362,15 @@ _gtk_css_shadows_value_get_extents (const GtkCssValue *shadows,
   guint i;
   GtkBorder b = { 0 }, sb;
   const GtkCssValue *shadow;
+
+  if (gtk_css_shadow_value_is_shadow (shadows))
+    {
+      if (!_gtk_css_shadow_value_get_inset (shadows))
+        gtk_css_shadow_value_get_extents (shadows, &b);
+
+      *border = b;
+      return;
+    }
 
   g_return_if_fail (shadows->class == &GTK_CSS_VALUE_SHADOWS);
 
@@ -356,9 +396,22 @@ gboolean
 gtk_css_shadows_value_push_snapshot (const GtkCssValue *value,
                                      GtkSnapshot       *snapshot)
 {
-  gboolean need_shadow = FALSE;
+  gboolean need_shadow;
   int i;
 
+  if (gtk_css_shadow_value_is_shadow (value))
+    {
+      GskShadow shadow;
+
+      if (!gtk_css_shadow_value_is_clear (value))
+        return FALSE;
+
+      gtk_css_shadow_value_get_shadow (value, &shadow);
+      gtk_snapshot_push_shadow (snapshot, &shadow, 1);
+      return TRUE;
+    }
+
+  need_shadow = FALSE;
   for (i = 0; i < value->len; i++)
     {
       if (!gtk_css_shadow_value_is_clear (value->values[i]))

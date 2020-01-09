@@ -473,3 +473,8 @@ gtk_css_shadow_value_is_clear (const GtkCssValue *shadow)
   return gdk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color));
 }
 
+gboolean
+gtk_css_shadow_value_is_shadow (const GtkCssValue *maybe_shadow)
+{
+  return maybe_shadow->class == &GTK_CSS_VALUE_SHADOW;
+}

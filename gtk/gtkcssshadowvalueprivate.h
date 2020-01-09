@@ -52,6 +52,8 @@ void            gtk_css_shadow_value_snapshot_inset   (const GtkCssValue        
 
 gboolean        gtk_css_shadow_value_is_clear         (const GtkCssValue        *shadow);
 
+gboolean        gtk_css_shadow_value_is_shadow        (const GtkCssValue        *maybe_shadow);
+
 G_END_DECLS
 
 #endif /* __GTK_SHADOW_H__ */
