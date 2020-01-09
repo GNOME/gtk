@@ -136,7 +136,7 @@ gtk_css_value_color_compute (GtkCssValue      *value,
                              GtkCssStyle      *style,
                              GtkCssStyle      *parent_style)
 {
-  GtkCssValue *resolved, *current;
+  GtkCssValue *resolved;
 
   /* The computed value of the ‘currentColor’ keyword is the computed
    * value of the ‘color’ property. If the ‘currentColor’ keyword is
@@ -144,20 +144,31 @@ gtk_css_value_color_compute (GtkCssValue      *value,
    */
   if (property_id == GTK_CSS_PROPERTY_COLOR)
     {
+      GtkCssValue *current;
+
       if (parent_style)
         current = gtk_css_style_get_value (parent_style, GTK_CSS_PROPERTY_COLOR);
       else
         current = NULL;
+
+      resolved = _gtk_css_color_value_resolve (value,
+                                               provider,
+                                               current,
+                                               NULL);
+    }
+  else if (value->type == COLOR_TYPE_LITERAL)
+    {
+      resolved = _gtk_css_value_ref (value->last_value);
     }
   else
     {
-      current = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR);
+      GtkCssValue *current = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR);
+
+      resolved = _gtk_css_color_value_resolve (value,
+                                               provider,
+                                               current,
+                                               NULL);
     }
-  
-  resolved = _gtk_css_color_value_resolve (value,
-                                           provider,
-                                           current,
-                                           NULL);
 
   if (resolved == NULL)
     return gtk_css_value_color_get_fallback (property_id, provider, style, parent_style);
