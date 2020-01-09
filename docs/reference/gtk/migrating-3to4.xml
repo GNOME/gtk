@@ -907,16 +907,31 @@
     <section>
       <title>Switch to the new DND api</title>
       <para>
-        The source-side DND apis in GTK 4 have been changed to use a separate object, #GtkDragSource.
+        The source-side DND apis in GTK 4 have been changed to use an event controller, #GtkDragSource.
       </para>
       <para>
         Instead of calling gtk_drag_source_set() and connecting to #GtkWidget signals, you create
-        a #GtkDragSource object, attach it to the widget with gtk_drag_source_attach(), and connect
-        to #GtkDragSource signals. The signals themselves are fairly similar.
+        a #GtkDragSource object, attach it to the widget with gtk_widget_add_controller(), and connect
+        to #GtkDragSource signals. Instead of calling gtk_drag_begin() on a widget to start a drag
+        manually, call gdk_drag_begin().
       </para>
       <para>
-        Instead of calling gtk_drag_begin() on a widget, use a #GtkDragSource object and call
-        gtk_drag_source_drag_begin().
+        The ::drag-data-get signal has been replaced by the #GtkDragSource::prepare signal, which
+        returns a #GdkContentProvider for the drag operation.
+      </para>
+      <para>
+        The destination-side DND apis in GTK 4 have also been changed to use and event controller,
+        #GTkDropTarget.
+      </para>
+      <para>
+        Instead of calling gtk_drag_dest_set() and connecting to #GtkWidget signals, you create
+        a #GtkDropTarget object, attach it to the widget with gtk_widget_add_controller(), and
+        connect to #GtkDropTarget signals.
+      </para>
+      <para>
+        The ::drag-motion signal has been renamed to #GtkDragSource::accept, and instead of
+        ::drag-data-received, you need to use async read methods on the #GdkDrop object, such
+        as gdk_drop_read_value_async() or gdk_drop_read_text_async().
       </para>
     </section>
   </section>
