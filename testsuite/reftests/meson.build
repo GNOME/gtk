@@ -425,16 +425,13 @@ xfails = [
   'background-image-multiple.ui',
   'background-origin.ui',
   'border-half-pixel.ui',
-  'border-image-url.ui',
   'sizegroups-evolution-identity-page.ui',
   'textview-border-windows.ui',
   'window-show-contents-on-map.ui',
-  'toplevel-vs-popup.ui',
   # these depend on details of text layout
   'label-background.ui',
   'label-wrap-justify.ui',
   'label-sizing.ui',
-  'quit-mnemonic.ui',
 ]
 
 foreach testname : testdata
