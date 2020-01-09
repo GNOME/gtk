@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkWindow" id="window1">
+    <property name="default-width">200</property>
+    <property name="default-height">200</property>
+    <property name="resizable">0</property>
     <child>
       <object class="GtkPicture">
+        <property name="keep-aspect-ratio">0</property>
         <property name="paintable">green-20x20.png</property>
       </object>
     </child>
