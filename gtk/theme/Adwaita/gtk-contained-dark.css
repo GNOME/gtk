@@ -41,6 +41,8 @@ image.drag-icon { -gtk-icon-size: 32px; }
 
 textview { outline: none; }
 
+textview:drop(active) { caret-color: #4e9a06; }
+
 textview border { background-color: #313131; }
 
 .rubberband, rubberband, flowbox rubberband, treeview.view rubberband, .content-view rubberband, .content-view .rubberband { border: 1px solid #0f3b71; background-color: rgba(15, 59, 113, 0.2); }
@@ -1541,11 +1543,13 @@ scrolledwindow overshoot.right { background-image: radial-gradient(farthest-side
 
 scrolledwindow overshoot.right:backdrop { background-image: radial-gradient(farthest-side at right, #202020 85%, rgba(32, 32, 32, 0)); background-size: 3% 100%; background-repeat: no-repeat; background-position: right; background-color: transparent; border: none; box-shadow: none; }
 
-scrolledwindow junction { border-color: transparent; border-image: linear-gradient(to bottom, #1b1b1b 1px, transparent 1px) 0 0 0 1/0 1px stretch; background-color: #313131; }
+scrolledwindow junction { background: #1b1b1b, linear-gradient(to bottom, transparent 1px, #313131 1px), linear-gradient(to right, transparent 1px, #313131 1px); }
 
-scrolledwindow junction:dir(rtl) { border-image-slice: 0 1 0 0; }
+scrolledwindow junction:dir(rtl) { background: #1b1b1b, linear-gradient(to bottom, transparent 1px, #313131 1px), linear-gradient(to left, transparent 1px, #313131 1px); }
 
-scrolledwindow junction:backdrop { border-image-source: linear-gradient(to bottom, #202020 1px, transparent 1px); background-color: #2d2d2d; transition: 200ms ease-out; }
+scrolledwindow junction:backdrop { transition: 200ms ease-out; background: #202020, linear-gradient(to bottom, transparent 1px, #2d2d2d 1px), linear-gradient(to right, transparent 1px, #2d2d2d 1px); }
+
+scrolledwindow junction:backdrop:dir(rtl) { background: #202020, linear-gradient(to bottom, transparent 1px, #2d2d2d 1px), linear-gradient(to left, transparent 1px, #2d2d2d 1px); }
 
 separator { background: #282828; min-width: 1px; min-height: 1px; }
 
@@ -1754,6 +1758,8 @@ video image.osd { min-width: 64px; min-height: 64px; border-radius: 32px; }
 
 /************** GtkInfoBar * */
 infobar { border-style: none; }
+
+infobar.action:hover { background-color: #3e3b37; border-color: #353535; }
 
 infobar.info, infobar.question, infobar.warning, infobar.error { text-shadow: none; }
 
