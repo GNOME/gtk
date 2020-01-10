@@ -46,7 +46,6 @@
 #include "gtkcssfontfeaturesvalueprivate.h"
 #include "gtkcssiconthemevalueprivate.h"
 #include "gtkcssimageprivate.h"
-#include "gtkcssimagebuiltinprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssinitialvalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
@@ -675,16 +674,6 @@ css_image_value_parse (GtkCssStyleProperty *property,
     }
 
   return _gtk_css_image_value_new (image);
-}
-
-static GtkCssValue *
-css_image_value_parse_with_builtin (GtkCssStyleProperty *property,
-                                    GtkCssParser        *parser)
-{
-  if (gtk_css_parser_try_ident (parser, "builtin"))
-    return _gtk_css_image_value_new (gtk_css_image_builtin_new ());
-
-  return css_image_value_parse (property, parser);
 }
 
 static GtkCssValue *
@@ -1512,9 +1501,9 @@ _gtk_css_style_property_init_properties (void)
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_ICON | GTK_CSS_AFFECTS_SYMBOLIC_ICON,
-                                          css_image_value_parse_with_builtin,
+                                          css_image_value_parse,
                                           NULL,
-                                          _gtk_css_image_value_new (gtk_css_image_builtin_new ()));
+                                          _gtk_css_image_value_new (NULL));
   gtk_css_style_property_register        ("-gtk-icon-size",
                                           GTK_CSS_PROPERTY_ICON_SIZE,
                                           G_TYPE_NONE,
