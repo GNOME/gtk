@@ -56,29 +56,7 @@ gtk_css_value_font_variations_compute (GtkCssValue      *specified,
                                        GtkCssStyle      *style,
                                        GtkCssStyle      *parent_style)
 {
-  GHashTableIter iter;
-  gpointer name, coord;
-  GtkCssValue *computed_coord;
-  GtkCssValue *result;
-  gboolean changes = FALSE;
-
-  result = gtk_css_font_variations_value_new_empty ();
-
-  g_hash_table_iter_init (&iter, specified->axes);
-  while (g_hash_table_iter_next (&iter, &name, &coord))
-    {
-      computed_coord = _gtk_css_value_compute (coord, property_id, provider, style, parent_style);
-      changes |= computed_coord != coord;
-      gtk_css_font_variations_value_add_axis (result, name, computed_coord);
-    }
-
-  if (!changes)
-    {
-      _gtk_css_value_unref (result);
-      result = _gtk_css_value_ref (specified);
-    }
-
-  return result;
+  return _gtk_css_value_ref (specified);
 }
 
 static gboolean
