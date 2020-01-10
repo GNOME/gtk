@@ -80,6 +80,7 @@ _gtk_css_value_alloc (const GtkCssValueClass *klass,
 
   value->class = klass;
   value->ref_count = 1;
+  value->is_static = FALSE;
 
   count_value (klass->type_name, 1);
 
@@ -133,7 +134,10 @@ _gtk_css_value_compute (GtkCssValue      *value,
                         GtkCssStyle      *style,
                         GtkCssStyle      *parent_style)
 {
-  return value->class->compute (value, property_id, provider, style, parent_style);
+  if (value->is_static)
+    return _gtk_css_value_ref (value);
+  else
+    return value->class->compute (value, property_id, provider, style, parent_style);
 }
 
 gboolean
