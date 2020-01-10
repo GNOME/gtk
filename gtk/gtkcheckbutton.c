@@ -98,7 +98,6 @@ static void
 gtk_check_button_update_node_state (GtkWidget *widget)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
-  GtkCssImageBuiltinType image_type;
   GtkStateFlags state;
 
   if (!priv->indicator_widget)
@@ -106,17 +105,6 @@ gtk_check_button_update_node_state (GtkWidget *widget)
 
   state = gtk_widget_get_state_flags (widget);
 
-  /* XXX: This is somewhat awkward here, but there's no better
-   * way to update the icon
-   */
-  if (state & GTK_STATE_FLAG_CHECKED)
-    image_type = GTK_IS_RADIO_BUTTON (widget) ? GTK_CSS_IMAGE_BUILTIN_OPTION : GTK_CSS_IMAGE_BUILTIN_CHECK;
-  else if (state & GTK_STATE_FLAG_INCONSISTENT)
-    image_type = GTK_IS_RADIO_BUTTON (widget) ? GTK_CSS_IMAGE_BUILTIN_OPTION_INCONSISTENT : GTK_CSS_IMAGE_BUILTIN_CHECK_INCONSISTENT;
-  else
-    image_type = GTK_CSS_IMAGE_BUILTIN_NONE;
-
-  gtk_icon_set_image (GTK_ICON (priv->indicator_widget), image_type);
   gtk_widget_set_state_flags (priv->indicator_widget, state, TRUE);
 }
 

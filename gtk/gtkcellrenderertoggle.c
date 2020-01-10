@@ -406,7 +406,6 @@ gtk_cell_renderer_toggle_snapshot (GtkCellRenderer      *cell,
   gint xpad, ypad;
   GtkStateFlags state;
   GtkBorder padding, border;
-  GtkCssImageBuiltinType image_type;
 
   gtk_cell_renderer_toggle_get_size (cell, widget, cell_area,
 				     &x_offset, &y_offset,
@@ -452,32 +451,12 @@ gtk_cell_renderer_toggle_snapshot (GtkCellRenderer      *cell,
   gtk_style_context_get_padding (context, &padding);
   gtk_style_context_get_border (context, &border);
 
-  if (priv->radio)
-    {
-      if (state & GTK_STATE_FLAG_INCONSISTENT)
-        image_type = GTK_CSS_IMAGE_BUILTIN_OPTION_INCONSISTENT;
-      else if (state & GTK_STATE_FLAG_CHECKED)
-        image_type = GTK_CSS_IMAGE_BUILTIN_OPTION;
-      else
-        image_type = GTK_CSS_IMAGE_BUILTIN_NONE;
-    }
-  else
-    {
-      if (state & GTK_STATE_FLAG_INCONSISTENT)
-        image_type = GTK_CSS_IMAGE_BUILTIN_CHECK_INCONSISTENT;
-      else if (state & GTK_STATE_FLAG_CHECKED)
-        image_type = GTK_CSS_IMAGE_BUILTIN_CHECK;
-      else
-        image_type = GTK_CSS_IMAGE_BUILTIN_NONE;
-    }
-
   gtk_snapshot_translate (snapshot,
                           &GRAPHENE_POINT_INIT (cell_area->x + x_offset + xpad + padding.left + border.left,
                                                 cell_area->y + y_offset + ypad + padding.top + border.top));
   gtk_css_style_snapshot_icon (gtk_style_context_lookup_style (context), snapshot,
                                width - padding.left - padding.right - border.left - border.right,
-                               height - padding.top - padding.bottom - border.top - border.bottom,
-                               image_type);
+                               height - padding.top - padding.bottom - border.top - border.bottom);
 
   gtk_style_context_restore (context);
   gtk_snapshot_pop (snapshot);
