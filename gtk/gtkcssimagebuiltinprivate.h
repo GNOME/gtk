@@ -38,9 +38,6 @@ typedef struct _GtkCssImageBuiltinClass      GtkCssImageBuiltinClass;
 struct _GtkCssImageBuiltin
 {
   GtkCssImage   parent;
-
-  GdkRGBA       fg_color;
-  GdkRGBA       bg_color;
 };
 
 struct _GtkCssImageBuiltinClass
@@ -52,12 +49,8 @@ GType          gtk_css_image_builtin_get_type              (void) G_GNUC_CONST;
 
 GtkCssImage *  gtk_css_image_builtin_new                   (void);
 
-void           gtk_css_image_builtin_draw                  (GtkCssImage                 *image,
-                                                            cairo_t                     *cr,
-                                                            double                       width,
-                                                            double                       height,
-                                                            GtkCssImageBuiltinType       image_type);
 void           gtk_css_image_builtin_snapshot              (GtkCssImage                 *image,
+                                                            GtkCssStyle                 *style,
                                                             GtkSnapshot                 *snapshot,
                                                             double                       width,
                                                             double                       height,

@@ -69,7 +69,7 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
 
   if (transform == NULL)
     {
-      gtk_css_image_builtin_snapshot (image, snapshot, width, height, builtin_type);
+      gtk_css_image_builtin_snapshot (image, style, snapshot, width, height, builtin_type);
     }
   else
     {
@@ -80,7 +80,7 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
       gtk_snapshot_transform (snapshot, transform);
       gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- width / 2.0, - height / 2.0));
 
-      gtk_css_image_builtin_snapshot (image, snapshot, width, height, builtin_type);
+      gtk_css_image_builtin_snapshot (image, style, snapshot, width, height, builtin_type);
 
       gtk_snapshot_restore (snapshot);
     }
