@@ -33,7 +33,7 @@
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkcssrepeatvalueprivate.h"
-#include "gtkcssrgbavalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkcsstypesprivate.h"
 
@@ -278,7 +278,7 @@ gtk_css_style_snapshot_background (GtkCssBoxes *boxes,
   GskBlendMode *blend_mode_values;
 
   background_image = gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
-  bg_color = _gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+  bg_color = gtk_css_color_value_get_rgba (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
   box_shadow = gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BOX_SHADOW);
 
   /* This is the common default case of no background */

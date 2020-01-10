@@ -24,6 +24,8 @@
 G_BEGIN_DECLS
 
 
+GtkCssValue *   gtk_css_color_value_new_transparent     (void);
+GtkCssValue *   gtk_css_color_value_new_white           (void);
 GtkCssValue *   _gtk_css_color_value_new_literal        (const GdkRGBA  *color);
 GtkCssValue *   _gtk_css_color_value_new_name           (const gchar    *name);
 GtkCssValue *   _gtk_css_color_value_new_shade          (GtkCssValue    *color,
@@ -42,6 +44,7 @@ GtkCssValue *   _gtk_css_color_value_resolve            (GtkCssValue      *color
                                                          GtkStyleProvider *provider,
                                                          GtkCssValue      *current,
                                                          GSList           *cycle_list);
+const GdkRGBA * gtk_css_color_value_get_rgba            (const GtkCssValue *color);
 
 
 G_END_DECLS

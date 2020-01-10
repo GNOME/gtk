@@ -31,7 +31,7 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsspathnodeprivate.h"
-#include "gtkcssrgbavalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstransientnodeprivate.h"
@@ -1346,7 +1346,7 @@ gtk_style_context_resolve_color (GtkStyleContext    *context,
   if (val == NULL)
     return FALSE;
 
-  *result = *_gtk_css_rgba_value_get_rgba (val);
+  *result = *gtk_css_color_value_get_rgba (val);
   _gtk_css_value_unref (val);
   return TRUE;
 }
