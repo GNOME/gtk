@@ -392,14 +392,27 @@ _gtk_css_array_value_new_from_array (GtkCssValue **values,
                                      guint         n_values)
 {
   GtkCssValue *result;
+  gboolean is_static;
+  int i;
            
   g_return_val_if_fail (values != NULL, NULL);
   g_return_val_if_fail (n_values > 0, NULL);
 
   if (n_values == 1)
     return values[0];
-         
+
+  is_static = TRUE;
+  for (i = 0; i < n_values; i++)
+    {
+      if (!values[i]->is_static)
+        {
+          is_static = FALSE;
+          break;
+        }
+   }
+
   result = _gtk_css_value_alloc (&GTK_CSS_VALUE_ARRAY, sizeof (GtkCssValue) + sizeof (GtkCssValue *) * (n_values - 1));
+  result->is_static = is_static;
   result->n_values = n_values;
   memcpy (&result->values[0], values, sizeof (GtkCssValue *) * n_values);
             
