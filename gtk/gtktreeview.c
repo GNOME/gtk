@@ -9338,12 +9338,9 @@ gtk_tree_view_snapshot_arrow (GtkTreeView   *tree_view,
   gint x_offset = 0;
   gint x2;
   GtkCellRendererState flags = 0;
-  GtkCssImageBuiltinType image_type;
-  gboolean rtl;
 
   widget = GTK_WIDGET (tree_view);
   context = gtk_widget_get_style_context (widget);
-  rtl = (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
 
   if (! GTK_TREE_RBNODE_FLAG_SET (node, GTK_TREE_RBNODE_IS_PARENT))
     return;
@@ -9365,17 +9362,9 @@ gtk_tree_view_snapshot_arrow (GtkTreeView   *tree_view,
   state = gtk_cell_renderer_get_state (NULL, widget, flags);
 
   if (node->children != NULL)
-    {
-      state |= GTK_STATE_FLAG_CHECKED;
-      image_type = rtl ? GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL_RIGHT_EXPANDED 
-                       : GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL_LEFT_EXPANDED;
-    }
+    state |= GTK_STATE_FLAG_CHECKED;
   else
-    {
-      state &= ~(GTK_STATE_FLAG_CHECKED);
-      image_type = rtl ? GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL_RIGHT
-                       : GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL_LEFT;
-    }
+    state &= ~(GTK_STATE_FLAG_CHECKED);
 
   gtk_style_context_save (context);
 
@@ -9385,7 +9374,7 @@ gtk_tree_view_snapshot_arrow (GtkTreeView   *tree_view,
   gtk_snapshot_save (snapshot);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (area.x, area.y));
   gtk_css_style_snapshot_icon (gtk_style_context_lookup_style (context), snapshot,
-                               area.width, area.height, image_type);
+                               area.width, area.height);
   gtk_snapshot_restore (snapshot);
 
   gtk_style_context_restore (context);

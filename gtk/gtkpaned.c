@@ -1326,10 +1326,7 @@ gtk_paned_render_handle (GtkGizmo    *gizmo,
   height = gtk_widget_get_height (widget);
 
   if (width > 0 && height > 0)
-    gtk_css_style_snapshot_icon (style,
-                                 snapshot,
-                                 width, height,
-                                 GTK_CSS_IMAGE_BUILTIN_PANE_SEPARATOR);
+    gtk_css_style_snapshot_icon (style, snapshot, width, height);
 }
 
 static void

@@ -583,7 +583,6 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
       gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (box->item_box)), "inline-buttons");
 
       spacer = gtk_icon_new ("none");
-      gtk_icon_set_image (GTK_ICON (spacer), GTK_CSS_IMAGE_BUILTIN_NONE);
       gtk_container_add (GTK_CONTAINER (box->item_box), spacer);
       gtk_size_group_add_widget (box->indicators, spacer);
 

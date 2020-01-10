@@ -36,8 +36,6 @@
 struct _GtkIcon
 {
   GtkWidget parent;
-
-  GtkCssImageBuiltinType image;
 };
 
 G_DEFINE_TYPE (GtkIcon, gtk_icon, GTK_TYPE_WIDGET)
@@ -46,7 +44,6 @@ static void
 gtk_icon_snapshot (GtkWidget   *widget,
                    GtkSnapshot *snapshot)
 {
-  GtkIcon *self = GTK_ICON (widget);
   GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
   int width, height;
 
@@ -54,10 +51,7 @@ gtk_icon_snapshot (GtkWidget   *widget,
   height = gtk_widget_get_height (widget);
 
   if (width > 0 && height > 0)
-    gtk_css_style_snapshot_icon (style,
-                                 snapshot,
-                                 width, height,
-                                 self->image);
+    gtk_css_style_snapshot_icon (style, snapshot, width, height);
 }
 
 static void
@@ -87,7 +81,6 @@ gtk_icon_class_init (GtkIconClass *klass)
 static void
 gtk_icon_init (GtkIcon *self)
 {
-  self->image = GTK_CSS_IMAGE_BUILTIN_NONE;
 }
 
 GtkWidget *
@@ -96,13 +89,6 @@ gtk_icon_new (const char *css_name)
   return g_object_new (GTK_TYPE_ICON,
                        "css-name", css_name,
                        NULL);
-}
-
-void
-gtk_icon_set_image (GtkIcon                *self,
-                    GtkCssImageBuiltinType  image)
-{
-  self->image = image;
 }
 
 void

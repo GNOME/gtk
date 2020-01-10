@@ -48,7 +48,6 @@ private_headers = [
   'gtkcssfontfeaturesvalueprivate.h',
   'gtkcssfontvariationsvalueprivate.h',
   'gtkcssiconthemevalueprivate.h',
-  'gtkcssimagebuiltinprivate.h',
   'gtkcssimagecrossfadeprivate.h',
   'gtkcssimagefallbackprivate.h',
   'gtkcssimageiconthemeprivate.h',
