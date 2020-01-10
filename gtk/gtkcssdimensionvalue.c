@@ -301,44 +301,45 @@ gtk_css_dimension_value_new (double     value,
                              GtkCssUnit unit)
 {
   static GtkCssValue number_singletons[] = {
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_NUMBER, 0 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_NUMBER, 1 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_NUMBER, 96 }, /* DPI default */
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_NUMBER, 0 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_NUMBER, 1 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_NUMBER, 96 }, /* DPI default */
   };
   static GtkCssValue px_singletons[] = {
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 0 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 1 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 2 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 3 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 4 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 5 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 6 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 7 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 8 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 16 }, /* Icon size default */
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 32 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 10 * 96.0 / 72.0 }, /* font size 10 */
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 11 * 96.0 / 72.0 }, /* font size 11 */
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_PX, 0 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_PX, 1 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_PX, 2 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_PX, 3 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_PX, 4 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_PX, 5 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_PX, 6 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_PX, 7 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_PX, 8 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_PX, 16 }, /* Icon size default */
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_PX, 32 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_PX, 10 * 96.0 / 72.0 }, /* font size 10 */
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_PX, 11 * 96.0 / 72.0 }, /* font size 11 */
   };
   static GtkCssValue percent_singletons[] = {
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PERCENT, 0 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PERCENT, 50 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PERCENT, 100 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 0, GTK_CSS_PERCENT, 0 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 0, GTK_CSS_PERCENT, 50 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 0, GTK_CSS_PERCENT, 100 },
   };
   static GtkCssValue second_singletons[] = {
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_S, 0 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_S, 0.15 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_S, 0.2 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_S, 0.3 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_S, 1 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_S, 0 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_S, 0.15 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_S, 0.2 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_S, 0.3 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_S, 1 },
   };
   static GtkCssValue deg_singletons[] = {
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_DEG, 0   },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_DEG, 90  },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_DEG, 180 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_DEG, 270 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_DEG, 0   },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_DEG, 90  },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_DEG, 180 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, 1, GTK_CSS_DEG, 270 },
   };
   GtkCssValue *result;
+  gboolean is_static = FALSE;
 
   switch ((guint)unit)
     {
@@ -349,6 +350,7 @@ gtk_css_dimension_value_new (double     value,
       if (value == 96)
         return _gtk_css_value_ref (&number_singletons[2]);
 
+      is_static = TRUE;
       break;
 
     case GTK_CSS_PX:
@@ -371,6 +373,7 @@ gtk_css_dimension_value_new (double     value,
       if (value == 11 * 96.0 / 72.0)
         return _gtk_css_value_ref (&px_singletons[12]);
 
+      is_static = TRUE;
       break;
 
     case GTK_CSS_PERCENT:
@@ -394,6 +397,8 @@ gtk_css_dimension_value_new (double     value,
         return _gtk_css_value_ref (&second_singletons[3]);
       if (value == 1)
         return _gtk_css_value_ref (&second_singletons[4]);
+
+      is_static = TRUE;
       break;
 
     case GTK_CSS_DEG:
@@ -405,7 +410,32 @@ gtk_css_dimension_value_new (double     value,
         return _gtk_css_value_ref (&deg_singletons[2]);
       if (value == 270)
         return _gtk_css_value_ref (&deg_singletons[3]);
+   
+      is_static = TRUE;
+      break;
 
+    case GTK_CSS_RAD:
+      value = value * 360.0 / (2 * G_PI);
+      unit = GTK_CSS_DEG;
+      is_static = TRUE;
+      break;
+
+    case GTK_CSS_GRAD:
+      value = value * 360.0 / 400.0;
+      unit = GTK_CSS_DEG;
+      is_static = TRUE;
+      break;
+
+    case GTK_CSS_TURN:
+      value = value * 360.0;
+      unit = GTK_CSS_DEG;
+      is_static = TRUE;
+      break;
+
+    case GTK_CSS_MS:
+      value = value * 1000.0;
+      unit = GTK_CSS_S;
+      is_static = TRUE;
       break;
 
     default:
@@ -413,6 +443,7 @@ gtk_css_dimension_value_new (double     value,
     }
 
   result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_DIMENSION.value_class);
+  result->is_static = is_static;
   result->unit = unit;
   result->value = value;
 
@@ -527,6 +558,9 @@ gtk_css_dimension_value_parse (GtkCssParser           *parser,
     }
 
   result = gtk_css_dimension_value_new (number, unit);
+  if (flags & GTK_CSS_PARSE_NON_STATIC)
+    result->is_static = FALSE;
+
   gtk_css_parser_consume_token (parser);
 
   return result;

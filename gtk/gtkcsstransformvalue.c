@@ -590,6 +590,7 @@ gtk_css_value_transform_transition (GtkCssValue *start,
     }
 
   result = gtk_css_transform_value_alloc (MAX (start->n_transforms, end->n_transforms));
+  result->is_static = start->is_static && end->is_static;
 
   for (i = 0; i < n; i++)
     {
@@ -800,7 +801,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_TRANSFORM = {
   gtk_css_value_transform_print
 };
 
-static GtkCssValue none_singleton = { &GTK_CSS_VALUE_TRANSFORM, 1, 0, {  { GTK_CSS_TRANSFORM_NONE } } };
+static GtkCssValue none_singleton = { &GTK_CSS_VALUE_TRANSFORM, 1, 1, 0, {  { GTK_CSS_TRANSFORM_NONE } } };
 
 static GtkCssValue *
 gtk_css_transform_value_alloc (guint n_transforms)
@@ -931,6 +932,7 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
   GtkCssValue *value;
   GArray *array;
   guint i;
+  gboolean is_static = TRUE;
 
   if (gtk_css_parser_try_ident (parser, "none"))
     return _gtk_css_transform_value_new_none ();
@@ -967,6 +969,7 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
             goto fail;
 
           transform.type = GTK_CSS_TRANSFORM_PERSPECTIVE;
+          is_static = is_static && transform.perspective.depth->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "rotate") ||
                gtk_css_parser_has_function (parser, "rotateZ"))
@@ -978,6 +981,7 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
           transform.rotate.x = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
           transform.rotate.y = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
           transform.rotate.z = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
+          is_static = is_static && transform.rotate.angle->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "rotate3d"))
         {
@@ -991,6 +995,10 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
             }
 
           transform.type = GTK_CSS_TRANSFORM_ROTATE;
+          is_static = is_static && transform.rotate.angle->is_static &&
+                                   transform.rotate.x->is_static &&
+                                   transform.rotate.y->is_static &&
+                                   transform.rotate.z->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "rotateX"))
         {
@@ -1001,6 +1009,7 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
           transform.rotate.x = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
           transform.rotate.y = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
           transform.rotate.z = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
+          is_static = is_static && transform.rotate.angle->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "rotateY"))
         {
@@ -1011,6 +1020,7 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
           transform.rotate.x = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
           transform.rotate.y = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
           transform.rotate.z = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
+          is_static = is_static && transform.rotate.angle->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "scale"))
         {
@@ -1030,6 +1040,8 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
           else
             transform.scale.y = gtk_css_value_ref (values[0]);
           transform.scale.z = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
+          is_static = is_static && transform.scale.x->is_static &&
+                                   transform.scale.y->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "scale3d"))
         {
@@ -1047,6 +1059,9 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
           transform.scale.x = values[0];
           transform.scale.y = values[1];
           transform.scale.z = values[2];
+          is_static = is_static && transform.scale.x->is_static &&
+                                   transform.scale.y->is_static &&
+                                   transform.scale.z->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "scaleX"))
         {
@@ -1056,6 +1071,7 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
           transform.type = GTK_CSS_TRANSFORM_SCALE;
           transform.scale.y = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
           transform.scale.z = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
+          is_static = is_static && transform.scale.x->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "scaleY"))
         {
@@ -1065,6 +1081,7 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
           transform.type = GTK_CSS_TRANSFORM_SCALE;
           transform.scale.x = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
           transform.scale.z = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
+          is_static = is_static && transform.scale.y->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "scaleZ"))
         {
@@ -1074,6 +1091,7 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
           transform.type = GTK_CSS_TRANSFORM_SCALE;
           transform.scale.x = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
           transform.scale.y = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
+          is_static = is_static && transform.scale.z->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "skew"))
         {
@@ -1089,6 +1107,8 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
           transform.type = GTK_CSS_TRANSFORM_SKEW;
           transform.skew.x = values[0];
           transform.skew.y = values[1];
+          is_static = is_static && transform.skew.x->is_static &&
+                                   transform.skew.y->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "skewX"))
         {
@@ -1096,6 +1116,7 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
             goto fail;
 
           transform.type = GTK_CSS_TRANSFORM_SKEW_X;
+          is_static = is_static && transform.skew_x.skew->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "skewY"))
         {
@@ -1103,6 +1124,7 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
             goto fail;
 
           transform.type = GTK_CSS_TRANSFORM_SKEW_Y;
+          is_static = is_static && transform.skew_y.skew->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "translate"))
         {
@@ -1122,6 +1144,8 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
           else
             transform.translate.y = _gtk_css_number_value_new (0, GTK_CSS_PX);
           transform.translate.z = _gtk_css_number_value_new (0, GTK_CSS_PX);
+          is_static = is_static && transform.translate.x->is_static &&
+                                   transform.translate.y->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "translate3d"))
         {
@@ -1139,6 +1163,9 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
           transform.translate.x = values[0];
           transform.translate.y = values[1];
           transform.translate.z = values[2];
+          is_static = is_static && transform.translate.x->is_static &&
+                                   transform.translate.y->is_static &&
+                                   transform.translate.z->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "translateX"))
         {
@@ -1148,6 +1175,7 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
           transform.type = GTK_CSS_TRANSFORM_TRANSLATE;
           transform.translate.y = _gtk_css_number_value_new (0, GTK_CSS_PX);
           transform.translate.z = _gtk_css_number_value_new (0, GTK_CSS_PX);
+          is_static = is_static && transform.translate.x->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "translateY"))
         {
@@ -1157,6 +1185,7 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
           transform.type = GTK_CSS_TRANSFORM_TRANSLATE;
           transform.translate.x = _gtk_css_number_value_new (0, GTK_CSS_PX);
           transform.translate.z = _gtk_css_number_value_new (0, GTK_CSS_PX);
+          is_static = is_static && transform.translate.y->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "translateZ"))
         {
@@ -1166,6 +1195,7 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
           transform.type = GTK_CSS_TRANSFORM_TRANSLATE;
           transform.translate.x = _gtk_css_number_value_new (0, GTK_CSS_PX);
           transform.translate.y = _gtk_css_number_value_new (0, GTK_CSS_PX);
+          is_static = is_static && transform.translate.z->is_static;
         }
       else
         {
@@ -1182,6 +1212,7 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
     }
 
   value = gtk_css_transform_value_alloc (array->len);
+  value->is_static = is_static;
   memcpy (value->transforms, array->data, sizeof (GtkCssTransform) * array->len);
 
   g_array_free (array, TRUE);

@@ -868,7 +868,8 @@ parse_border_width (GtkCssStyleProperty *property,
 {
   return _gtk_css_number_value_parse (parser,
                                       GTK_CSS_POSITIVE_ONLY
-                                      | GTK_CSS_PARSE_LENGTH);
+                                      | GTK_CSS_PARSE_LENGTH
+                                      | GTK_CSS_PARSE_NON_STATIC);
 }
 
 static GtkCssValue *

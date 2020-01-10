@@ -167,6 +167,7 @@ _gtk_css_position_value_new (GtkCssValue *x,
   GtkCssValue *result;
 
   result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_POSITION);
+  result->is_static = x->is_static && y->is_static;
   result->x = x;
   result->y = y;
 
