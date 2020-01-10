@@ -408,6 +408,26 @@ gtk_css_dimension_value_new (double     value,
 
       break;
 
+    case GTK_CSS_RAD:
+      value = value * 360.0 / (2 * G_PI);
+      unit = GTK_CSS_DEG;
+      break;
+
+    case GTK_CSS_GRAD:
+      value = value * 360.0 / 400.0;
+      unit = GTK_CSS_DEG;
+      break;
+
+    case GTK_CSS_TURN:
+      value = value * 360.0;
+      unit = GTK_CSS_DEG;
+      break;
+
+    case GTK_CSS_MS:
+      value = value / 1000.0;
+      unit = GTK_CSS_S;
+      break;
+
     default:
       ;
     }
