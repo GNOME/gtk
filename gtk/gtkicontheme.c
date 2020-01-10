@@ -40,7 +40,7 @@
 
 #include "gtkiconthemeprivate.h"
 #include "gtkcsspalettevalueprivate.h"
-#include "gtkcssrgbavalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkdebug.h"
 #include "gtkiconcacheprivate.h"
 #include "gtkintl.h"
@@ -3870,7 +3870,7 @@ gtk_icon_theme_lookup_symbolic_colors (GtkCssStyle *style,
 
   color = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR);
   palette = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_PALETTE);
-  *color_out = *_gtk_css_rgba_value_get_rgba (color);
+  *color_out = *gtk_css_color_value_get_rgba (color);
 
   lookup = gtk_css_palette_value_get_color (palette, "success");
   if (lookup)

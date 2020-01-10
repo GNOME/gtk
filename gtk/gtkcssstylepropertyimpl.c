@@ -54,7 +54,6 @@
 #include "gtkcsspalettevalueprivate.h"
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkcssrepeatvalueprivate.h"
-#include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
@@ -151,7 +150,7 @@ color_query (GtkCssStyleProperty *property,
              GValue              *value)
 {
   g_value_init (value, GDK_TYPE_RGBA);
-  g_value_set_boxed (value, _gtk_css_rgba_value_get_rgba (css_value));
+  g_value_set_boxed (value, gtk_css_color_value_get_rgba (css_value));
 }
 
 static GtkCssValue *
@@ -947,7 +946,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_CONTENT | GTK_CSS_AFFECTS_SYMBOLIC_ICON,
                                           color_parse,
                                           color_query,
-                                          _gtk_css_rgba_value_new_white ());
+                                          gtk_css_color_value_new_white ());
   gtk_css_style_property_register        ("-gtk-dpi",
                                           GTK_CSS_PROPERTY_DPI,
                                           G_TYPE_NONE,
@@ -991,7 +990,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_BACKGROUND,
                                           color_parse,
                                           color_query,
-                                          _gtk_css_rgba_value_new_transparent ());
+                                          gtk_css_color_value_new_transparent ());
 
   gtk_css_style_property_register        ("font-family",
                                           GTK_CSS_PROPERTY_FONT_FAMILY,
