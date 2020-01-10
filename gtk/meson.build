@@ -57,7 +57,6 @@ gtk_private_sources = files([
   'gtkcssfontvariationsvalue.c',
   'gtkcssiconthemevalue.c',
   'gtkcssimage.c',
-  'gtkcssimagebuiltin.c',
   'gtkcssimagecrossfade.c',
   'gtkcssimagefallback.c',
   'gtkcssimageicontheme.c',

@@ -352,12 +352,6 @@ update_end_indicator (GtkModelButton *self)
   if (!self->end_indicator)
     return;
 
-  if (self->role == GTK_BUTTON_ROLE_NORMAL &&
-      (self->menu_name != NULL || self->popover != NULL))
-    {
-      gtk_icon_set_image (GTK_ICON (self->end_indicator), GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT);
-    }
-
   context = gtk_widget_get_style_context (self->end_indicator);
 
   if (is_ltr)
@@ -397,15 +391,6 @@ update_start_indicator (GtkModelButton *self)
 
   if (!self->start_indicator)
     return;
-
-  if (self->role == GTK_BUTTON_ROLE_CHECK)
-    gtk_icon_set_image (GTK_ICON (self->start_indicator), GTK_CSS_IMAGE_BUILTIN_CHECK);
-  else if (self->role == GTK_BUTTON_ROLE_RADIO)
-    gtk_icon_set_image (GTK_ICON (self->start_indicator), GTK_CSS_IMAGE_BUILTIN_OPTION);
-  else if (self->role == GTK_BUTTON_ROLE_TITLE)
-    gtk_icon_set_image (GTK_ICON (self->start_indicator), GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT);
-  else
-    gtk_icon_set_image (GTK_ICON (self->start_indicator), GTK_CSS_IMAGE_BUILTIN_NONE);
 
   gtk_widget_set_state_flags (self->start_indicator, get_start_indicator_state (self), TRUE);
 
