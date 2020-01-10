@@ -97,6 +97,7 @@ do_infobar (GtkWidget *do_widget)
       gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
       gtk_label_set_xalign (GTK_LABEL (label), 0);
       gtk_box_pack_start (GTK_BOX (gtk_info_bar_get_content_area (GTK_INFO_BAR (bar))), label, FALSE, FALSE, 0);
+      gtk_info_bar_set_default_response (GTK_INFO_BAR (bar), GTK_RESPONSE_OK);
 
       button = gtk_toggle_button_new_with_label ("Question");
       g_object_bind_property (button, "active", bar, "visible", G_BINDING_BIDIRECTIONAL);
