@@ -29,7 +29,7 @@
 #include "gtkcellrenderer.h"
 #include "gtkcontainer.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkcssrgbavalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkdragdest.h"
 #include "gtkdragsource.h"
@@ -4216,7 +4216,7 @@ gtk_tree_view_snapshot_grid_line (GtkTreeView            *tree_view,
   const GdkRGBA *grid_line_color;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
-  grid_line_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context,
+  grid_line_color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context,
                                                                                     GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
 
   if (!gdk_rgba_equal (grid_line_color, &tree_view->grid_line_color) ||
@@ -4290,7 +4290,7 @@ gtk_tree_view_snapshot_tree_line (GtkTreeView            *tree_view,
   const GdkRGBA *tree_line_color;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
-  tree_line_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context,
+  tree_line_color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context,
                                                                                     GTK_CSS_PROPERTY_BORDER_LEFT_COLOR));
 
   if (!gdk_rgba_equal (tree_line_color, &tree_view->tree_line_color) ||

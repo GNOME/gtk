@@ -24,7 +24,6 @@
 #include <math.h>
 
 #include "gtkcssiconthemevalueprivate.h"
-#include "gtkcssrgbavalueprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtksnapshot.h"
 #include "gtkstyleproviderprivate.h"
