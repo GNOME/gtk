@@ -703,7 +703,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_FILTER = {
   gtk_css_value_filter_print
 };
 
-static GtkCssValue none_singleton = { &GTK_CSS_VALUE_FILTER, 1, 0, {  { GTK_CSS_FILTER_NONE } } };
+static GtkCssValue none_singleton = { &GTK_CSS_VALUE_FILTER, 1, 1, 0, {  { GTK_CSS_FILTER_NONE } } };
 
 static GtkCssValue *
 gtk_css_filter_value_alloc (guint n_filters)
@@ -778,6 +778,7 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
   GtkCssValue *value;
   GArray *array;
   guint i;
+  gboolean is_static = TRUE;
 
   if (gtk_css_parser_try_ident (parser, "none"))
     return gtk_css_filter_value_new_none ();
@@ -794,6 +795,7 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
             goto fail;
 
           filter.type = GTK_CSS_FILTER_BLUR;
+          is_static = is_static && filter.blur.value->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "brightness"))
         {
@@ -801,6 +803,7 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
             goto fail;
 
           filter.type = GTK_CSS_FILTER_BRIGHTNESS;
+          is_static = is_static && filter.brightness.value->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "contrast"))
         {
@@ -808,6 +811,7 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
             goto fail;
 
           filter.type = GTK_CSS_FILTER_CONTRAST;
+          is_static = is_static && filter.contrast.value->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "grayscale"))
         {
@@ -815,13 +819,15 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
             goto fail;
 
           filter.type = GTK_CSS_FILTER_GRAYSCALE;
+          is_static = is_static && filter.grayscale.value->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "hue-rotate"))
         {
-          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_filter_parse_angle, &filter.blur.value))
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_filter_parse_angle, &filter.hue_rotate.value))
             goto fail;
 
           filter.type = GTK_CSS_FILTER_HUE_ROTATE;
+          is_static = is_static && filter.hue_rotate.value->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "invert"))
         {
@@ -829,6 +835,7 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
             goto fail;
 
           filter.type = GTK_CSS_FILTER_INVERT;
+          is_static = is_static && filter.invert.value->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "opacity"))
         {
@@ -836,6 +843,7 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
             goto fail;
 
           filter.type = GTK_CSS_FILTER_OPACITY;
+          is_static = is_static && filter.opacity.value->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "saturate"))
         {
@@ -843,6 +851,7 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
             goto fail;
 
           filter.type = GTK_CSS_FILTER_SATURATE;
+          is_static = is_static && filter.saturate.value->is_static;
         }
       else if (gtk_css_parser_has_function (parser, "sepia"))
         {
@@ -850,6 +859,7 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
             goto fail;
 
           filter.type = GTK_CSS_FILTER_SEPIA;
+          is_static = is_static && filter.sepia.value->is_static;
         }
       else
         {
@@ -866,6 +876,7 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
     }
 
   value = gtk_css_filter_value_alloc (array->len);
+  value->is_static = is_static;
   memcpy (value->filters, array->data, sizeof (GtkCssFilter) * array->len);
 
   g_array_free (array, TRUE);
