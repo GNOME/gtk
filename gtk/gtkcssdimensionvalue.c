@@ -317,6 +317,8 @@ gtk_css_dimension_value_new (double     value,
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 8 },
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 16 }, /* Icon size default */
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 32 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 10 * 96.0 / 72.0 }, /* font size 10 */
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PX, 11 * 96.0 / 72.0 }, /* font size 11 */
   };
   static GtkCssValue percent_singletons[] = {
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, GTK_CSS_PERCENT, 0 },
@@ -364,6 +366,10 @@ gtk_css_dimension_value_new (double     value,
         return _gtk_css_value_ref (&px_singletons[9]);
       if (value == 32)
         return _gtk_css_value_ref (&px_singletons[10]);
+      if (value == 10 * 96.0 / 72.0)
+        return _gtk_css_value_ref (&px_singletons[11]);
+      if (value == 11 * 96.0 / 72.0)
+        return _gtk_css_value_ref (&px_singletons[12]);
 
       break;
 
