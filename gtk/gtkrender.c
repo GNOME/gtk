@@ -24,7 +24,7 @@
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkcssrgbavalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
 #include "gtkhslaprivate.h"
@@ -414,7 +414,7 @@ gtk_do_render_line (GtkStyleContext *context,
 
   cairo_save (cr);
 
-  color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
+  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
 
   cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
   cairo_set_line_width (cr, 1);
