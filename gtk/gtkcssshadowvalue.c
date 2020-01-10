@@ -177,6 +177,12 @@ gtk_css_shadow_value_new (GtkCssValue *hoffset,
 
   retval = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_SHADOW);
 
+  retval->is_static = 
+     hoffset->is_static &&
+     voffset->is_static &&
+     radius->is_static &&
+     color->is_static;
+
   retval->hoffset = hoffset;
   retval->voffset = voffset;
   retval->radius = radius;
