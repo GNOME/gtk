@@ -32,8 +32,7 @@ G_BEGIN_DECLS
 void    gtk_css_style_snapshot_icon             (GtkCssStyle            *style,
                                                  GtkSnapshot            *snapshot,
                                                  double                  width,
-                                                 double                  height,
-                                                 GtkCssImageBuiltinType  builtin_type);
+                                                 double                  height);
 
 void    gtk_css_style_snapshot_icon_paintable   (GtkCssStyle            *style,
                                                  GtkSnapshot            *snapshot,

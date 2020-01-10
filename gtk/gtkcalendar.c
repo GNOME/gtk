@@ -2395,7 +2395,6 @@ calendar_snapshot_arrow (GtkCalendar *calendar,
 {
   GtkWidget *widget = GTK_WIDGET (calendar);
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
-  GtkCssImageBuiltinType image_type;
   GtkStyleContext *context;
   GtkStateFlags state;
   GdkRectangle rect;
@@ -2418,19 +2417,11 @@ calendar_snapshot_arrow (GtkCalendar *calendar,
                                   rect.x, rect.y,
                                   rect.width, rect.height);
 
-  if (arrow == ARROW_MONTH_LEFT || arrow == ARROW_YEAR_LEFT)
-    image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT;
-  else
-    image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT;
-
   gtk_snapshot_save (snapshot);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT(
                           rect.x + (rect.width - 8) / 2,
                           rect.y + (rect.height - 8) / 2));
-  gtk_css_style_snapshot_icon (gtk_style_context_lookup_style (context),
-                               snapshot,
-                               8, 8,
-                               image_type);
+  gtk_css_style_snapshot_icon (gtk_style_context_lookup_style (context), snapshot, 8, 8);
   gtk_snapshot_restore (snapshot);
 
   gtk_style_context_restore (context);

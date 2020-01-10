@@ -120,8 +120,7 @@ gtk_spinner_snapshot (GtkWidget   *widget,
   gtk_css_style_snapshot_icon (style,
                                snapshot,
                                gtk_widget_get_width (widget),
-                               gtk_widget_get_height (widget),
-                               GTK_CSS_IMAGE_BUILTIN_SPINNER);
+                               gtk_widget_get_height (widget));
 }
 
 static gboolean
