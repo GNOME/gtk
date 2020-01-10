@@ -1081,6 +1081,9 @@ gtk_main_sync (void)
   
   /* Try storing all clipboard data we have */
   displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
+  if (displays == NULL)
+    return;
+
   cancel = g_cancellable_new ();
 
   for (l = displays; l; l = l->next)
