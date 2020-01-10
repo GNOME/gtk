@@ -23,7 +23,7 @@
 
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkcssrgbavalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtksnapshotprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkpango.h"
@@ -197,7 +197,7 @@ _gtk_css_shadow_value_new_for_transition (GtkCssValue *target)
                                    _gtk_css_number_value_new (0, GTK_CSS_PX),
                                    _gtk_css_number_value_new (0, GTK_CSS_PX),
                                    target->inset,
-                                   _gtk_css_rgba_value_new_transparent ());
+                                   gtk_css_color_value_new_transparent ());
 }
 
 enum {
@@ -360,7 +360,7 @@ void
 gtk_css_shadow_value_get_shadow (const GtkCssValue *value,
                                  GskShadow         *shadow)
 {
-  shadow->color = *_gtk_css_rgba_value_get_rgba (value->color);
+  shadow->color = *gtk_css_color_value_get_rgba (value->color);
   shadow->dx = _gtk_css_number_value_get (value->hoffset, 0);
   shadow->dy = _gtk_css_number_value_get (value->voffset, 0);
   shadow->radius = _gtk_css_number_value_get (value->radius, 0);
@@ -374,12 +374,12 @@ gtk_css_shadow_value_snapshot_outset (const GtkCssValue    *shadow,
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 
   /* We don't need to draw invisible shadows */
-  if (gdk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color)))
+  if (gdk_rgba_is_clear (gtk_css_color_value_get_rgba (shadow->color)))
     return;
 
   gtk_snapshot_append_outset_shadow (snapshot,
                                      border_box,
-                                     _gtk_css_rgba_value_get_rgba (shadow->color),
+                                     gtk_css_color_value_get_rgba (shadow->color),
                                      _gtk_css_number_value_get (shadow->hoffset, 0),
                                      _gtk_css_number_value_get (shadow->voffset, 0),
                                      _gtk_css_number_value_get (shadow->spread, 0),
@@ -397,14 +397,14 @@ gtk_css_shadow_value_snapshot_inset (const GtkCssValue    *shadow,
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 
   /* We don't need to draw invisible shadows */
-  if (gdk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color)))
+  if (gdk_rgba_is_clear (gtk_css_color_value_get_rgba (shadow->color)))
     return;
 
   dx = _gtk_css_number_value_get (shadow->hoffset, 0);
   dy = _gtk_css_number_value_get (shadow->voffset, 0);
   spread = _gtk_css_number_value_get (shadow->spread, 0);
   radius = _gtk_css_number_value_get (shadow->radius, 0);
-  color = _gtk_css_rgba_value_get_rgba (shadow->color);
+  color = gtk_css_color_value_get_rgba (shadow->color);
 
   /* These are trivial to do with a color node */
   if (spread == 0 && radius == 0 &&
@@ -470,6 +470,6 @@ gtk_css_shadow_value_snapshot_inset (const GtkCssValue    *shadow,
 gboolean
 gtk_css_shadow_value_is_clear (const GtkCssValue *shadow)
 {
-  return gdk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color));
+  return gdk_rgba_is_clear (gtk_css_color_value_get_rgba (shadow->color));
 }
 
