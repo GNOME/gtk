@@ -185,8 +185,7 @@ snapshot_func (GtkGizmo    *gizmo,
   gtk_css_style_snapshot_icon (style,
                                snapshot,
                                gtk_widget_get_width (GTK_WIDGET (gizmo)),
-                               gtk_widget_get_height (GTK_WIDGET (gizmo)),
-                               GTK_CSS_IMAGE_BUILTIN_HANDLE);
+                               gtk_widget_get_height (GTK_WIDGET (gizmo)));
 }
 
 static GtkWidget *

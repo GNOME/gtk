@@ -687,7 +687,6 @@ gtk_tree_popover_create_item (GtkTreePopover *popover,
       if (header_item)
         {
           indicator = gtk_icon_new ("arrow");
-          gtk_icon_set_image (GTK_ICON (indicator), GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT);
           gtk_style_context_add_class (gtk_widget_get_style_context (indicator), "left");
           gtk_widget_set_parent (indicator, item);
         }
@@ -695,8 +694,6 @@ gtk_tree_popover_create_item (GtkTreePopover *popover,
       gtk_widget_set_parent (view, item);
 
       indicator = gtk_icon_new (has_submenu ? "arrow" : "none");
-      gtk_icon_set_image (GTK_ICON (indicator), has_submenu ? GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT
-                                                            : GTK_CSS_IMAGE_BUILTIN_NONE); 
       gtk_style_context_add_class (gtk_widget_get_style_context (indicator), "right");
       gtk_widget_set_parent (indicator, item);
 
