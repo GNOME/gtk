@@ -20,6 +20,7 @@
 #include "gtkcssimagevalueprivate.h"
 
 #include "gtkcssimagecrossfadeprivate.h"
+#include "gtkcssimagebuiltinprivate.h"
 
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
@@ -136,10 +137,19 @@ GtkCssValue *
 _gtk_css_image_value_new (GtkCssImage *image)
 {
   static GtkCssValue none_singleton = { &GTK_CSS_VALUE_IMAGE, 1, NULL };
+  static GtkCssValue builtin_singleton = { &GTK_CSS_VALUE_IMAGE, 1, NULL };
   GtkCssValue *value;
 
   if (image == NULL)
     return _gtk_css_value_ref (&none_singleton);
+
+  if (GTK_IS_CSS_IMAGE_BUILTIN (image))
+    {
+      if (builtin_singleton.image == NULL)
+        builtin_singleton.image = image;
+
+       return _gtk_css_value_ref (&builtin_singleton);
+    }
 
   value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_IMAGE);
   value->image = image;
