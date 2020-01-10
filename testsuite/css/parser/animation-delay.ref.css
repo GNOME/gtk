@@ -15,9 +15,9 @@ d {
 }
 
 e {
-  animation-delay: 5ms;
+  animation-delay: 0.0050000000000000001s;
 }
 
 f {
-  animation-delay: 5ms, 6s;
+  animation-delay: 0.0050000000000000001s, 6s;
 }
