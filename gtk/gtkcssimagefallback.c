@@ -21,7 +21,7 @@
 
 #include "gtkcssimagefallbackprivate.h"
 #include "gtkcsscolorvalueprivate.h"
-#include "gtkcssrgbavalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 
 #include "gtkstyleproviderprivate.h"
 
@@ -74,7 +74,7 @@ gtk_css_image_fallback_snapshot (GtkCssImage *image,
       const GdkRGBA *color;
 
       if (fallback->color)
-        color = _gtk_css_rgba_value_get_rgba (fallback->color);
+        color = gtk_css_color_value_get_rgba (fallback->color);
       else
         color = &red;
 
