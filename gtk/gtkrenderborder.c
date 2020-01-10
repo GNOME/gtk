@@ -31,7 +31,7 @@
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrepeatvalueprivate.h"
-#include "gtkcssrgbavalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkhslaprivate.h"
 #include "gtkroundedboxprivate.h"
@@ -683,10 +683,10 @@ gtk_css_style_snapshot_border (GtkCssBoxes *boxes,
                                gtk_css_boxes_get_padding_rect (boxes)))
         return;
 
-      colors[0] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
-      colors[1] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR));
-      colors[2] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR));
-      colors[3] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_LEFT_COLOR));
+      colors[0] = *gtk_css_color_value_get_rgba (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
+      colors[1] = *gtk_css_color_value_get_rgba (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR));
+      colors[2] = *gtk_css_color_value_get_rgba (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR));
+      colors[3] = *gtk_css_color_value_get_rgba (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BORDER_LEFT_COLOR));
 
       alpha_test_vector = graphene_simd4f_init (colors[0].alpha, colors[1].alpha, colors[2].alpha, colors[3].alpha);
       if (graphene_simd4f_is_zero4 (alpha_test_vector))
@@ -726,7 +726,7 @@ gtk_css_style_snapshot_outline (GtkCssBoxes *boxes,
       border_style[1] = border_style[2] = border_style[3] = border_style[0];
       border_width[0] = _gtk_css_number_value_get (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_OUTLINE_WIDTH), 100);
       border_width[3] = border_width[2] = border_width[1] = border_width[0];
-      colors[0] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_OUTLINE_COLOR));
+      colors[0] = *gtk_css_color_value_get_rgba (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_OUTLINE_COLOR));
       colors[3] = colors[2] = colors[1] = colors[0];
 
       snapshot_border (snapshot,
