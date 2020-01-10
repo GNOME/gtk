@@ -35,10 +35,10 @@ static GtkCssValue *gtk_css_font_features_value_new_empty (void);
 
 static void
 gtk_css_font_features_value_add_feature (GtkCssValue *value,
-                                      const char  *name,
-                                      GtkCssValue *val)
+                                         const char  *name,
+                                         int          num)
 {
-  g_hash_table_insert (value->features, g_strdup (name), val);
+  g_hash_table_insert (value->features, g_strdup (name), GINT_TO_POINTER (num));
 }
 
 
@@ -57,29 +57,7 @@ gtk_css_value_font_features_compute (GtkCssValue      *specified,
                                      GtkCssStyle      *style,
                                      GtkCssStyle      *parent_style)
 {
-  GHashTableIter iter;
-  gpointer name, val;
-  GtkCssValue *computed_val;
-  GtkCssValue *result;
-  gboolean changes = FALSE;
-
-  result = gtk_css_font_features_value_new_empty ();
-
-  g_hash_table_iter_init (&iter, specified->features);
-  while (g_hash_table_iter_next (&iter, &name, &val))
-    {
-      computed_val = _gtk_css_value_compute (val, property_id, provider, style, parent_style);
-      changes |= computed_val != val;
-      gtk_css_font_features_value_add_feature (result, name, computed_val);
-    }
-
-  if (!changes)
-    {
-      _gtk_css_value_unref (result);
-      result = _gtk_css_value_ref (specified);
-    }
-
-  return result;
+  return _gtk_css_value_ref (specified);
 }
 
 static gboolean
@@ -96,10 +74,8 @@ gtk_css_value_font_features_equal (const GtkCssValue *value1,
   while (g_hash_table_iter_next (&iter, &name, &val1))
     {
       val2 = g_hash_table_lookup (value2->features, name);
-      if (val2 == NULL)
-        return FALSE;
 
-      if (!_gtk_css_value_equal (val1, val2))
+      if (val1 != val2)
         return FALSE;
     }
 
@@ -113,9 +89,10 @@ gtk_css_value_font_features_transition (GtkCssValue *start,
                                         double       progress)
 {
   const char *name;
-  GtkCssValue *start_val, *end_val;
+  gpointer start_val, end_val;
   GHashTableIter iter;
-  GtkCssValue *result, *transition;
+  gpointer transition;
+  GtkCssValue *result;
 
   /* XXX: For value that are only in start or end but not both,
    * we don't transition but just keep the value.
@@ -129,11 +106,11 @@ gtk_css_value_font_features_transition (GtkCssValue *start,
     {
       end_val = g_hash_table_lookup (end->features, name);
       if (end_val == NULL)
-        transition = _gtk_css_value_ref (start_val);
+        transition = start_val;
       else
-        transition = _gtk_css_value_transition (start_val, end_val, property_id, progress);
+        transition = progress > 0.5 ? start_val : end_val;
 
-      gtk_css_font_features_value_add_feature (result, name, transition);
+      gtk_css_font_features_value_add_feature (result, name, GPOINTER_TO_INT (transition));
     }
 
   g_hash_table_iter_init (&iter, end->features);
@@ -143,7 +120,7 @@ gtk_css_value_font_features_transition (GtkCssValue *start,
       if (start_val != NULL)
         continue;
 
-      gtk_css_font_features_value_add_feature (result, name, _gtk_css_value_ref (end_val));
+      gtk_css_font_features_value_add_feature (result, name, GPOINTER_TO_INT (end_val));
     }
 
   return result;
@@ -155,7 +132,7 @@ gtk_css_value_font_features_print (const GtkCssValue *value,
 {
   GHashTableIter iter;
   const char *name;
-  GtkCssValue *val;
+  gpointer val;
   gboolean first = TRUE;
 
   if (value == default_font_features)
@@ -172,7 +149,7 @@ gtk_css_value_font_features_print (const GtkCssValue *value,
       else
         g_string_append (string, ", ");
       g_string_append_printf (string, "\"%s\" ", name);
-      _gtk_css_value_print (val, string);
+      g_string_append_printf (string, "%d", GPOINTER_TO_INT (val));
     }
 }
 
@@ -226,7 +203,7 @@ is_valid_opentype_tag (const char *s)
 GtkCssValue *
 gtk_css_font_features_value_parse (GtkCssParser *parser)
 {
-  GtkCssValue *result, *val;
+  GtkCssValue *result;
   char *name;
   int num;
 
@@ -252,16 +229,12 @@ gtk_css_font_features_value_parse (GtkCssParser *parser)
       }
 
     if (gtk_css_parser_try_ident (parser, "on"))
-      val = _gtk_css_number_value_new (1.0, GTK_CSS_NUMBER);
+      num = 1;
     else if (gtk_css_parser_try_ident (parser, "off"))
-      val = _gtk_css_number_value_new (0.0, GTK_CSS_NUMBER);
+      num = 0;
     else if (gtk_css_parser_has_integer (parser))
       {
-        if (gtk_css_parser_consume_integer (parser, &num))
-          {
-            val = _gtk_css_number_value_new ((double)num, GTK_CSS_NUMBER);
-          }
-        else
+        if (!gtk_css_parser_consume_integer (parser, &num))
           {
             g_free (name);
             _gtk_css_value_unref (result);
@@ -269,9 +242,9 @@ gtk_css_font_features_value_parse (GtkCssParser *parser)
           }
       }
     else
-      val = _gtk_css_number_value_new (1.0, GTK_CSS_NUMBER);
+      num = 1;
 
-    gtk_css_font_features_value_add_feature (result, name, val);
+    gtk_css_font_features_value_add_feature (result, name, num);
     g_free (name);
   } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
@@ -301,7 +274,7 @@ gtk_css_font_features_value_get_features (GtkCssValue *value)
         first = FALSE;
       else
         g_string_append (string, ", ");
-      g_string_append_printf (string, "%s %d", name, (int)_gtk_css_number_value_get (val, 100));
+      g_string_append_printf (string, "%s %d", name, GPOINTER_TO_INT (val));
     }
 
   return g_string_free (string, FALSE);
