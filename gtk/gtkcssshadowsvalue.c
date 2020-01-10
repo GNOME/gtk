@@ -210,7 +210,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_SHADOWS = {
   gtk_css_value_shadows_print
 };
 
-static GtkCssValue none_singleton = { &GTK_CSS_VALUE_SHADOWS, 1, 0, { NULL } };
+static GtkCssValue none_singleton = { &GTK_CSS_VALUE_SHADOWS, 1, 1, 0, { NULL } };
 
 GtkCssValue *
 _gtk_css_shadows_value_new_none (void)
@@ -223,6 +223,8 @@ gtk_css_shadows_value_new (GtkCssValue **values,
                            guint         len)
 {
   GtkCssValue *result;
+  gboolean is_static;
+  int i;
 
   g_return_val_if_fail (values != NULL, NULL);
   g_return_val_if_fail (len > 0, NULL);
@@ -230,7 +232,18 @@ gtk_css_shadows_value_new (GtkCssValue **values,
   if (len == 1)
     return values[0];
 
+  is_static = TRUE;
+  for (i = 0; i < len; i++)
+    {
+      if (!values[i]->is_static)
+        {
+          is_static = FALSE;
+          break;
+        }
+    }
+
   result = _gtk_css_value_alloc (&GTK_CSS_VALUE_SHADOWS, sizeof (GtkCssValue) + sizeof (GtkCssValue *) * (len - 1));
+  result->is_static = is_static;
   result->len = len;
   memcpy (&result->values[0], values, sizeof (GtkCssValue *) * len);
 
