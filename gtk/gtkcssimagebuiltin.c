@@ -23,7 +23,7 @@
 
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkcssrgbavalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkhslaprivate.h"
 
@@ -484,8 +484,8 @@ gtk_css_image_builtin_compute (GtkCssImage      *image,
 
   result = g_object_new (GTK_TYPE_CSS_IMAGE_BUILTIN, NULL);
 
-  result->fg_color = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR));
-  result->bg_color = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+  result->fg_color = *gtk_css_color_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR));
+  result->bg_color = *gtk_css_color_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
 
   return GTK_CSS_IMAGE (result);
 }

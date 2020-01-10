@@ -25,7 +25,7 @@
 
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkcssrgbavalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcssprovider.h"
 
 G_DEFINE_TYPE (GtkCssImageLinear, _gtk_css_image_linear, GTK_TYPE_CSS_IMAGE)
@@ -194,7 +194,7 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
                                                              linear->stops->len - 1);
 
           gtk_snapshot_append_color (snapshot,
-                                     _gtk_css_rgba_value_get_rgba (stop->color),
+                                     gtk_css_color_value_get_rgba (stop->color),
                                      &GRAPHENE_RECT_INIT (0, 0, width, height));
           return;
         }
@@ -240,7 +240,7 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
           offset += step;
 
           stops[last].offset = (offset - start) / (end - start);
-          stops[last].color = *_gtk_css_rgba_value_get_rgba (stop->color);
+          stops[last].color = *gtk_css_color_value_get_rgba (stop->color);
         }
 
       offset = pos;
