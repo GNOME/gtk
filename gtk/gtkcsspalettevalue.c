@@ -21,7 +21,7 @@
 
 #include "gtkcssiconthemevalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
-#include "gtkcssrgbavalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkprivate.h"
 
 struct _GtkCssValue {
@@ -349,7 +349,7 @@ gtk_css_palette_value_get_color (GtkCssValue *value,
   for (i = 0; i < value->n_colors; i ++)
     {
       if (strcmp (value->color_names[i], name) == 0)
-        return _gtk_css_rgba_value_get_rgba (value->color_values[i]);
+        return gtk_css_color_value_get_rgba (value->color_values[i]);
     }
 
   return NULL;

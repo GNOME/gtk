@@ -26,7 +26,7 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsspositionvalueprivate.h"
-#include "gtkcssrgbavalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcssprovider.h"
 
 G_DEFINE_TYPE (GtkCssImageRadial, _gtk_css_image_radial, GTK_TYPE_CSS_IMAGE)
@@ -208,7 +208,7 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
 
           stop = &g_array_index (radial->stops, GtkCssImageRadialColorStop, last);
 
-          rgba = _gtk_css_rgba_value_get_rgba (stop->color);
+          rgba = gtk_css_color_value_get_rgba (stop->color);
           offset += step;
 
           cairo_pattern_add_color_stop_rgba (pattern,
