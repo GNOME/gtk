@@ -1,5 +1,5 @@
 a {
-  transition-delay: 3s, 3s, 3s, 0, 0, 3s, 0.125s, 50000ms, 3s, 0, 50000ms;
+  transition-delay: 3s, 3s, 3s, 0, 0, 3s, 0.125s, 50s, 3s, 0, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, -dash-, all, all, all, all, none, ident, ident, all, -dash-;
   transition-timing-function: ease, ease-out, cubic-bezier(1,-2,0,4), steps(10,start), ease, step-start, ease-out, ease-in, steps(10,start), step-end, ease-in-out;
@@ -34,14 +34,14 @@ e {
 }
 
 f {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: all;
   transition-timing-function: ease;
 }
 
 g {
-  transition-delay: 3s, 3s, 0, 0, 50000ms, 0, 0.125s;
+  transition-delay: 3s, 3s, 0, 0, 50s, 0, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, none, all, none, all, ident, all;
   transition-timing-function: ease-out, ease, ease-out, step-start, cubic-bezier(1,-2,0,4), cubic-bezier(1,-2,0,4), ease-in-out;
@@ -55,14 +55,14 @@ h {
 }
 
 i {
-  transition-delay: 50000ms, 0, 0.125s, 50000ms;
+  transition-delay: 50s, 0, 0.125s, 50s;
   transition-duration: 0, 0, 0, 0;
   transition-property: -dash-, all, all, ident;
   transition-timing-function: step-end, cubic-bezier(1,-2,0,4), step-end, ease-in-out;
 }
 
 j {
-  transition-delay: 0.125s, 0.125s, 0, 50000ms, 0;
+  transition-delay: 0.125s, 0.125s, 0, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: none, all, all, ident, all;
   transition-timing-function: ease, ease, ease, ease-in, ease;
@@ -76,7 +76,7 @@ k {
 }
 
 l {
-  transition-delay: 0.125s, 3s, 0, 50000ms;
+  transition-delay: 0.125s, 3s, 0, 50s;
   transition-duration: 0, 0, 0, 0;
   transition-property: -dash-, -dash-, -dash-, all;
   transition-timing-function: cubic-bezier(1,-2,0,4), ease, steps(10,start), ease-out;
@@ -104,7 +104,7 @@ o {
 }
 
 p {
-  transition-delay: 3s, 0, 0.125s, 50000ms;
+  transition-delay: 3s, 0, 0.125s, 50s;
   transition-duration: 0, 0, 0, 0;
   transition-property: -dash-, none, none, -dash-;
   transition-timing-function: ease-out, steps(4), ease, step-end;
@@ -118,14 +118,14 @@ q {
 }
 
 r {
-  transition-delay: 50000ms, 0.125s, 0, 0, 0, 50000ms, 0, 0, 0, 50000ms, 0.125s, 0;
+  transition-delay: 50s, 0.125s, 0, 0, 0, 50s, 0, 0, 0, 50s, 0.125s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, none, all, all, all, ident, all, none, all, all, none, ident;
   transition-timing-function: ease, ease, ease-out, ease-in, ease, ease-out, ease-in-out, steps(10,start), cubic-bezier(1,-2,0,4), ease-out, steps(10,start), steps(4);
 }
 
 s {
-  transition-delay: 0, 0, 0, 0, 50000ms, 3s, 3s;
+  transition-delay: 0, 0, 0, 0, 50s, 3s, 3s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, none, all, none, ident, none, none;
   transition-timing-function: cubic-bezier(1,-2,0,4), ease-in-out, cubic-bezier(1,-2,0,4), ease-in-out, ease, ease-in, step-start;
@@ -139,7 +139,7 @@ t {
 }
 
 u {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: none;
   transition-timing-function: cubic-bezier(1,-2,0,4);
@@ -153,7 +153,7 @@ v {
 }
 
 w {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: all;
   transition-timing-function: ease-out;
@@ -202,14 +202,14 @@ cb {
 }
 
 db {
-  transition-delay: 0, 0, 0, 50000ms, 0;
+  transition-delay: 0, 0, 0, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: none, -dash-, -dash-, -dash-, all;
   transition-timing-function: steps(10,start), step-end, cubic-bezier(1,-2,0,4), steps(10,start), ease;
 }
 
 eb {
-  transition-delay: 3s, 50000ms, 0, 0, 0, 0.125s;
+  transition-delay: 3s, 50s, 0, 0, 0, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: all, all, ident, all, ident, none;
   transition-timing-function: ease-in-out, ease, ease, steps(4), ease, ease;
@@ -230,7 +230,7 @@ gb {
 }
 
 hb {
-  transition-delay: 50000ms, 0, 0, 0, 0, 3s, 0.125s, 0, 0, 3s, 0.125s;
+  transition-delay: 50s, 0, 0, 0, 0, 3s, 0.125s, 0, 0, 3s, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: ident, all, -dash-, -dash-, none, all, ident, all, all, all, none;
   transition-timing-function: steps(10,start), ease-in, steps(10,start), steps(4), step-start, ease, linear, step-start, ease-out, steps(4), step-end;
@@ -244,35 +244,35 @@ ib {
 }
 
 jb {
-  transition-delay: 0, 50000ms;
+  transition-delay: 0, 50s;
   transition-duration: 0, 0;
   transition-property: ident, all;
   transition-timing-function: steps(10,start), cubic-bezier(1,-2,0,4);
 }
 
 kb {
-  transition-delay: 50000ms, 0.125s, 3s, 0.125s, 3s, 3s, 50000ms, 0, 3s, 0, 50000ms, 0, 0.125s, 0, 0.125s, 3s, 50000ms, 0, 0, 0;
+  transition-delay: 50s, 0.125s, 3s, 0.125s, 3s, 3s, 50s, 0, 3s, 0, 50s, 0, 0.125s, 0, 0.125s, 3s, 50s, 0, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, none, all, -dash-, none, all, none, -dash-, all, none, all, all, all, -dash-, all, -dash-, ident, ident, ident, all;
   transition-timing-function: steps(10,start), ease-in-out, ease-in-out, linear, step-start, cubic-bezier(1,-2,0,4), linear, steps(10,start), ease, ease, step-start, steps(4), ease-in, ease, ease-in, ease-in-out, cubic-bezier(1,-2,0,4), ease, ease-out, step-start;
 }
 
 lb {
-  transition-delay: 0, 50000ms, 0, 0.125s, 50000ms, 3s, 0, 0, 0;
+  transition-delay: 0, 50s, 0, 0.125s, 50s, 3s, 0, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, ident, all, -dash-, none, none, all, ident, -dash-;
   transition-timing-function: ease, linear, step-end, ease-out, ease, cubic-bezier(1,-2,0,4), steps(4), step-end, ease;
 }
 
 mb {
-  transition-delay: 3s, 0, 50000ms, 3s, 3s, 0, 3s, 3s, 50000ms;
+  transition-delay: 3s, 0, 50s, 3s, 3s, 0, 3s, 3s, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, -dash-, all, all, none, none, all, all;
   transition-timing-function: ease, step-start, linear, steps(10,start), steps(4), linear, ease, step-end, step-end;
 }
 
 nb {
-  transition-delay: 0, 0, 50000ms, 3s;
+  transition-delay: 0, 0, 50s, 3s;
   transition-duration: 0, 0, 0, 0;
   transition-property: ident, all, -dash-, all;
   transition-timing-function: linear, step-end, step-end, ease;
@@ -286,21 +286,21 @@ ob {
 }
 
 pb {
-  transition-delay: 0, 0.125s, 50000ms, 0, 0.125s;
+  transition-delay: 0, 0.125s, 50s, 0, 0.125s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, ident, none, none, all;
   transition-timing-function: ease, ease, ease-in-out, ease, linear;
 }
 
 qb {
-  transition-delay: 0, 0, 0, 0, 50000ms, 50000ms, 0, 50000ms, 0, 0.125s, 0;
+  transition-delay: 0, 0, 0, 0, 50s, 50s, 0, 50s, 0, 0.125s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, ident, all, all, -dash-, ident, ident, all, all, all;
   transition-timing-function: ease, ease, ease-in, linear, step-end, steps(4), ease, ease, steps(4), step-end, ease-in;
 }
 
 rb {
-  transition-delay: 50000ms, 50000ms, 3s, 3s;
+  transition-delay: 50s, 50s, 3s, 3s;
   transition-duration: 0, 0, 0, 0;
   transition-property: all, all, ident, ident;
   transition-timing-function: ease-in-out, ease, ease, steps(10,start);
@@ -328,14 +328,14 @@ ub {
 }
 
 vb {
-  transition-delay: 0.125s, 0.125s, 3s, 0, 50000ms, 0, 0;
+  transition-delay: 0.125s, 0.125s, 3s, 0, 50s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, all, none, none, all, none, ident;
   transition-timing-function: steps(10,start), ease, linear, ease, ease, ease, cubic-bezier(1,-2,0,4);
 }
 
 wb {
-  transition-delay: 50000ms, 0;
+  transition-delay: 50s, 0;
   transition-duration: 0, 0;
   transition-property: -dash-, none;
   transition-timing-function: ease-in-out, ease;
@@ -363,7 +363,7 @@ zb {
 }
 
 ac {
-  transition-delay: 50000ms, 3s, 0;
+  transition-delay: 50s, 3s, 0;
   transition-duration: 0, 0, 0;
   transition-property: none, ident, ident;
   transition-timing-function: cubic-bezier(1,-2,0,4), ease, ease-in;
@@ -377,7 +377,7 @@ bc {
 }
 
 cc {
-  transition-delay: 3s, 0, 50000ms;
+  transition-delay: 3s, 0, 50s;
   transition-duration: 0, 0, 0;
   transition-property: -dash-, all, ident;
   transition-timing-function: ease-in-out, step-end, ease-out;
@@ -391,7 +391,7 @@ dc {
 }
 
 ec {
-  transition-delay: 0.125s, 50000ms, 0;
+  transition-delay: 0.125s, 50s, 0;
   transition-duration: 0, 0, 0;
   transition-property: none, all, all;
   transition-timing-function: ease, ease, step-start;
@@ -412,7 +412,7 @@ gc {
 }
 
 hc {
-  transition-delay: 0.125s, 0.125s, 50000ms;
+  transition-delay: 0.125s, 0.125s, 50s;
   transition-duration: 0, 0, 0;
   transition-property: all, all, all;
   transition-timing-function: ease-out, ease, linear;
@@ -440,7 +440,7 @@ kc {
 }
 
 lc {
-  transition-delay: 0, 0, 50000ms;
+  transition-delay: 0, 0, 50s;
   transition-duration: 0, 0, 0;
   transition-property: ident, -dash-, ident;
   transition-timing-function: steps(4), ease-out, ease-in;
@@ -461,28 +461,28 @@ nc {
 }
 
 oc {
-  transition-delay: 0, 50000ms;
+  transition-delay: 0, 50s;
   transition-duration: 0, 0;
   transition-property: ident, all;
   transition-timing-function: ease, steps(10,start);
 }
 
 pc {
-  transition-delay: 50000ms, 0, 0;
+  transition-delay: 50s, 0, 0;
   transition-duration: 0, 0, 0;
   transition-property: all, all, ident;
   transition-timing-function: step-start, ease, ease;
 }
 
 qc {
-  transition-delay: 0, 50000ms, 0.125s, 0.125s, 0, 50000ms, 50000ms;
+  transition-delay: 0, 50s, 0.125s, 0.125s, 0, 50s, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, all, all, all, none, all, all;
   transition-timing-function: ease-out, ease, ease, ease-in-out, linear, steps(4), ease;
 }
 
 rc {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: -dash-;
   transition-timing-function: ease-in;
@@ -496,7 +496,7 @@ sc {
 }
 
 tc {
-  transition-delay: 50000ms, 0.125s;
+  transition-delay: 50s, 0.125s;
   transition-duration: 0, 0;
   transition-property: all, all;
   transition-timing-function: ease-out, cubic-bezier(1,-2,0,4);
@@ -510,14 +510,14 @@ uc {
 }
 
 vc {
-  transition-delay: 0, 0.125s, 3s, 0, 3s, 0.125s, 50000ms, 0.125s, 0, 0;
+  transition-delay: 0, 0.125s, 3s, 0, 3s, 0.125s, 50s, 0.125s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, all, all, ident, -dash-, all, none, ident, all;
   transition-timing-function: ease, ease-out, ease, cubic-bezier(1,-2,0,4), ease-in-out, ease-in, step-end, ease-out, ease-out, ease-out;
 }
 
 wc {
-  transition-delay: 0, 3s, 0, 50000ms;
+  transition-delay: 0, 3s, 0, 50s;
   transition-duration: 0, 0, 0, 0;
   transition-property: all, all, none, none;
   transition-timing-function: steps(4), ease, step-end, step-start;
@@ -531,7 +531,7 @@ xc {
 }
 
 yc {
-  transition-delay: 0.125s, 0, 0, 0, 0, 50000ms, 0, 0.125s, 0, 3s, 3s, 3s;
+  transition-delay: 0.125s, 0, 0, 0, 0, 50s, 0, 0.125s, 0, 3s, 3s, 3s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, all, all, all, all, none, -dash-, none, none, all, -dash-, none;
   transition-timing-function: linear, ease-in, ease-in, steps(4), step-start, ease-out, linear, ease, ease, cubic-bezier(1,-2,0,4), ease-in-out, ease;
@@ -559,14 +559,14 @@ bd {
 }
 
 cd {
-  transition-delay: 50000ms, 0;
+  transition-delay: 50s, 0;
   transition-duration: 0, 0;
   transition-property: -dash-, -dash-;
   transition-timing-function: step-end, ease;
 }
 
 dd {
-  transition-delay: 0, 3s, 0.125s, 0, 50000ms;
+  transition-delay: 0, 3s, 0.125s, 0, 50s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: none, none, all, none, none;
   transition-timing-function: ease, steps(10,start), step-end, linear, ease;
@@ -587,7 +587,7 @@ fd {
 }
 
 gd {
-  transition-delay: 0.125s, 50000ms, 3s, 0.125s, 0, 3s, 0.125s;
+  transition-delay: 0.125s, 50s, 3s, 0.125s, 0, 3s, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, none, none, none, all, -dash-;
   transition-timing-function: ease, linear, step-start, linear, linear, step-start, step-start;
@@ -636,14 +636,14 @@ md {
 }
 
 nd {
-  transition-delay: 3s, 3s, 0, 50000ms, 50000ms, 0, 0;
+  transition-delay: 3s, 3s, 0, 50s, 50s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, -dash-, all, all, all, ident, all;
   transition-timing-function: cubic-bezier(1,-2,0,4), ease-in-out, ease, ease-in-out, step-end, ease-out, ease-in;
 }
 
 od {
-  transition-delay: 50000ms, 0.125s, 3s, 50000ms, 0;
+  transition-delay: 50s, 0.125s, 3s, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: -dash-, all, -dash-, ident, ident;
   transition-timing-function: ease-out, ease, ease-out, ease-in-out, ease;
@@ -657,7 +657,7 @@ pd {
 }
 
 qd {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: ident;
   transition-timing-function: ease;
@@ -692,35 +692,35 @@ ud {
 }
 
 vd {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: none;
   transition-timing-function: ease-in;
 }
 
 wd {
-  transition-delay: 0, 50000ms;
+  transition-delay: 0, 50s;
   transition-duration: 0, 0;
   transition-property: ident, all;
   transition-timing-function: ease-out, ease;
 }
 
 xd {
-  transition-delay: 50000ms, 50000ms, 50000ms, 0, 0;
+  transition-delay: 50s, 50s, 50s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, none, all, none, ident;
   transition-timing-function: ease, steps(10,start), steps(10,start), step-start, ease;
 }
 
 yd {
-  transition-delay: 50000ms, 0, 50000ms, 0, 50000ms, 0, 0, 3s, 50000ms;
+  transition-delay: 50s, 0, 50s, 0, 50s, 0, 0, 3s, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, none, ident, none, all, ident, -dash-, none, -dash-;
   transition-timing-function: step-end, steps(10,start), ease, ease, steps(10,start), step-start, ease, cubic-bezier(1,-2,0,4), step-end;
 }
 
 zd {
-  transition-delay: 0, 0.125s, 3s, 50000ms, 0;
+  transition-delay: 0, 0.125s, 3s, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: ident, all, -dash-, all, all;
   transition-timing-function: linear, cubic-bezier(1,-2,0,4), ease, ease, step-start;
@@ -734,7 +734,7 @@ ae {
 }
 
 be {
-  transition-delay: 3s, 0.125s, 50000ms, 50000ms;
+  transition-delay: 3s, 0.125s, 50s, 50s;
   transition-duration: 0, 0, 0, 0;
   transition-property: none, all, all, -dash-;
   transition-timing-function: cubic-bezier(1,-2,0,4), linear, ease-in, ease-in;
@@ -769,7 +769,7 @@ fe {
 }
 
 ge {
-  transition-delay: 0, 0.125s, 0.125s, 0, 0, 0.125s, 0, 3s, 50000ms, 0, 0.125s, 0, 0, 3s, 0, 3s, 3s, 3s, 0, 0;
+  transition-delay: 0, 0.125s, 0.125s, 0, 0, 0.125s, 0, 3s, 50s, 0, 0.125s, 0, 0, 3s, 0, 3s, 3s, 3s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, all, -dash-, all, ident, all, all, ident, all, none, -dash-, all, all, all, none, none, ident, none, all, all;
   transition-timing-function: cubic-bezier(1,-2,0,4), ease, ease, step-start, ease, step-start, ease-out, step-start, linear, step-end, linear, step-end, ease, ease, linear, ease, ease, ease-in-out, cubic-bezier(1,-2,0,4), ease;
@@ -790,7 +790,7 @@ ie {
 }
 
 je {
-  transition-delay: 0, 50000ms, 3s, 0, 0, 3s, 50000ms;
+  transition-delay: 0, 50s, 3s, 0, 0, 3s, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, -dash-, all, all, none, ident, all;
   transition-timing-function: linear, steps(10,start), steps(4), ease, steps(4), ease, cubic-bezier(1,-2,0,4);
@@ -804,49 +804,49 @@ ke {
 }
 
 le {
-  transition-delay: 0, 0.125s, 3s, 0, 0, 3s, 0, 0, 3s, 0, 0, 50000ms;
+  transition-delay: 0, 0.125s, 3s, 0, 0, 3s, 0, 0, 3s, 0, 0, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, -dash-, ident, all, none, all, -dash-, none, all, -dash-, all, all;
   transition-timing-function: ease, ease-out, linear, steps(10,start), cubic-bezier(1,-2,0,4), linear, step-start, ease-in-out, steps(10,start), steps(4), ease, ease;
 }
 
 me {
-  transition-delay: 3s, 0, 3s, 0, 3s, 0.125s, 3s, 50000ms, 0, 0;
+  transition-delay: 3s, 0, 3s, 0, 3s, 0.125s, 3s, 50s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, ident, none, none, all, none, none, -dash-, -dash-, all;
   transition-timing-function: steps(4), cubic-bezier(1,-2,0,4), steps(4), ease, ease-in, ease-in-out, ease, steps(4), cubic-bezier(1,-2,0,4), ease;
 }
 
 ne {
-  transition-delay: 3s, 3s, 0.125s, 0, 50000ms;
+  transition-delay: 3s, 3s, 0.125s, 0, 50s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, all, -dash-, all, -dash-;
   transition-timing-function: ease, steps(4), ease, ease-in, ease;
 }
 
 oe {
-  transition-delay: 50000ms, 0.125s;
+  transition-delay: 50s, 0.125s;
   transition-duration: 0, 0;
   transition-property: all, none;
   transition-timing-function: ease-in, ease-in-out;
 }
 
 pe {
-  transition-delay: 0, 0.125s, 0.125s, 50000ms, 3s;
+  transition-delay: 0, 0.125s, 0.125s, 50s, 3s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, all, all, all, ident;
   transition-timing-function: ease-in, cubic-bezier(1,-2,0,4), steps(4), cubic-bezier(1,-2,0,4), ease-out;
 }
 
 qe {
-  transition-delay: 3s, 50000ms, 0, 0, 0, 0.125s;
+  transition-delay: 3s, 50s, 0, 0, 0, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: none, ident, all, -dash-, all, all;
   transition-timing-function: ease, ease-in, step-end, step-start, ease-in, ease;
 }
 
 re {
-  transition-delay: 0, 50000ms, 0.125s, 3s, 0;
+  transition-delay: 0, 50s, 0.125s, 3s, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, all, none, all, none;
   transition-timing-function: ease, step-start, ease, ease-in-out, ease-in;
@@ -860,14 +860,14 @@ se {
 }
 
 te {
-  transition-delay: 0, 3s, 3s, 50000ms, 50000ms, 0, 3s, 0, 0, 0, 0, 0, 3s;
+  transition-delay: 0, 3s, 3s, 50s, 50s, 0, 3s, 0, 0, 0, 0, 0, 3s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, all, all, -dash-, none, all, all, all, all, none, all, -dash-, ident;
   transition-timing-function: steps(10,start), ease-out, steps(4), cubic-bezier(1,-2,0,4), ease, ease, ease-in-out, ease-out, step-end, cubic-bezier(1,-2,0,4), ease, ease-out, linear;
 }
 
 ue {
-  transition-delay: 50000ms, 0, 0, 50000ms, 0, 3s, 0, 0.125s, 0.125s, 0.125s, 50000ms, 3s, 3s, 0.125s, 50000ms, 3s, 3s;
+  transition-delay: 50s, 0, 0, 50s, 0, 3s, 0, 0.125s, 0.125s, 0.125s, 50s, 3s, 3s, 0.125s, 50s, 3s, 3s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, all, none, all, none, all, ident, all, ident, ident, ident, ident, all, none, all, all, all;
   transition-timing-function: ease-in, ease, step-end, ease, ease-in, ease, step-start, ease, step-start, ease, ease, ease-out, cubic-bezier(1,-2,0,4), linear, ease, steps(10,start), ease;
@@ -881,14 +881,14 @@ ve {
 }
 
 we {
-  transition-delay: 50000ms, 3s, 0, 0.125s, 0.125s, 50000ms, 0;
+  transition-delay: 50s, 3s, 0, 0.125s, 0.125s, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, all, -dash-, -dash-, ident, -dash-, all;
   transition-timing-function: linear, ease-in-out, ease-in, ease-in-out, ease, ease-in-out, ease-out;
 }
 
 xe {
-  transition-delay: 50000ms, 3s, 0.125s, 0, 0.125s, 0, 0;
+  transition-delay: 50s, 3s, 0.125s, 0, 0.125s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: ident, all, ident, none, all, none, all;
   transition-timing-function: ease-in, ease, ease-out, linear, steps(4), ease, ease;
@@ -902,14 +902,14 @@ ye {
 }
 
 ze {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: all;
   transition-timing-function: ease-in-out;
 }
 
 af {
-  transition-delay: 0, 0, 50000ms, 0, 0, 50000ms, 50000ms, 50000ms;
+  transition-delay: 0, 0, 50s, 0, 0, 50s, 50s, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, all, -dash-, all, none, all, none, all;
   transition-timing-function: ease, ease, ease-out, step-start, ease-in-out, ease-in, ease, ease-in;
@@ -958,14 +958,14 @@ gf {
 }
 
 hf {
-  transition-delay: 0, 0, 0, 0, 50000ms, 0, 0.125s, 0;
+  transition-delay: 0, 0, 0, 0, 50s, 0, 0.125s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, all, all, ident, none, all, all, -dash-;
   transition-timing-function: cubic-bezier(1,-2,0,4), ease, steps(4), ease, ease-out, ease, step-start, ease;
 }
 
 if {
-  transition-delay: 0, 50000ms, 0.125s, 3s;
+  transition-delay: 0, 50s, 0.125s, 3s;
   transition-duration: 0, 0, 0, 0;
   transition-property: all, -dash-, all, all;
   transition-timing-function: linear, ease, steps(10,start), steps(4);
@@ -979,7 +979,7 @@ jf {
 }
 
 kf {
-  transition-delay: 50000ms, 3s, 0.125s, 0, 3s, 0, 50000ms, 0.125s, 50000ms, 0.125s, 3s, 0, 0, 50000ms, 0, 3s, 0, 0;
+  transition-delay: 50s, 3s, 0.125s, 0, 3s, 0, 50s, 0.125s, 50s, 0.125s, 3s, 0, 0, 50s, 0, 3s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, ident, all, ident, all, all, all, none, all, ident, none, ident, all, none, none, all, -dash-, all;
   transition-timing-function: ease, step-start, steps(10,start), ease-in-out, ease-out, steps(4), step-end, step-end, step-start, ease-out, ease-out, step-end, ease, ease, step-start, ease-out, ease-in, ease-in-out;
@@ -993,7 +993,7 @@ lf {
 }
 
 mf {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: ident;
   transition-timing-function: step-end;
@@ -1028,7 +1028,7 @@ qf {
 }
 
 rf {
-  transition-delay: 0.125s, 0, 50000ms, 0.125s, 0, 0, 0;
+  transition-delay: 0.125s, 0, 50s, 0.125s, 0, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, -dash-, none, -dash-, all, -dash-, all;
   transition-timing-function: ease-out, ease-in-out, steps(10,start), step-end, cubic-bezier(1,-2,0,4), ease-in, ease;
@@ -1056,7 +1056,7 @@ uf {
 }
 
 vf {
-  transition-delay: 0, 50000ms;
+  transition-delay: 0, 50s;
   transition-duration: 0, 0;
   transition-property: ident, -dash-;
   transition-timing-function: ease-in-out, steps(10,start);
@@ -1077,7 +1077,7 @@ xf {
 }
 
 yf {
-  transition-delay: 50000ms, 0.125s, 3s, 3s, 0.125s, 0, 0, 0.125s;
+  transition-delay: 50s, 0.125s, 3s, 3s, 0.125s, 0, 0, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, ident, all, all, all, all, all;
   transition-timing-function: ease, ease, ease-out, ease, ease-in, ease, step-end, ease;
@@ -1098,14 +1098,14 @@ ag {
 }
 
 bg {
-  transition-delay: 50000ms, 3s, 0, 3s, 0, 0.125s, 0, 50000ms, 3s, 0;
+  transition-delay: 50s, 3s, 0, 3s, 0, 0.125s, 0, 50s, 3s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: ident, all, -dash-, all, ident, -dash-, -dash-, all, ident, -dash-;
   transition-timing-function: ease-out, ease-in, step-end, steps(4), step-start, linear, steps(10,start), ease, step-end, step-end;
 }
 
 cg {
-  transition-delay: 0.125s, 0, 0, 50000ms, 0;
+  transition-delay: 0.125s, 0, 0, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, all, -dash-, all, -dash-;
   transition-timing-function: cubic-bezier(1,-2,0,4), ease-out, cubic-bezier(1,-2,0,4), linear, ease;
@@ -1119,7 +1119,7 @@ dg {
 }
 
 eg {
-  transition-delay: 50000ms, 0, 0, 0, 0, 0, 0, 0, 3s, 0, 50000ms, 0;
+  transition-delay: 50s, 0, 0, 0, 0, 0, 0, 0, 3s, 0, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, all, ident, -dash-, none, all, all, ident, all, all, -dash-;
   transition-timing-function: step-end, ease, ease, steps(10,start), ease-in-out, step-start, ease, ease, linear, step-start, cubic-bezier(1,-2,0,4), ease-in-out;
@@ -1140,14 +1140,14 @@ gg {
 }
 
 hg {
-  transition-delay: 50000ms, 0, 0, 50000ms, 0, 3s, 0;
+  transition-delay: 50s, 0, 0, 50s, 0, 3s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: ident, none, ident, none, ident, ident, none;
   transition-timing-function: ease-in, step-end, cubic-bezier(1,-2,0,4), cubic-bezier(1,-2,0,4), step-end, step-end, ease-in;
 }
 
 ig {
-  transition-delay: 50000ms, 50000ms, 0;
+  transition-delay: 50s, 50s, 0;
   transition-duration: 0, 0, 0;
   transition-property: all, none, -dash-;
   transition-timing-function: ease-in-out, ease, steps(10,start);
@@ -1161,21 +1161,21 @@ jg {
 }
 
 kg {
-  transition-delay: 0, 50000ms, 0, 0.125s, 0, 3s, 0, 0, 0, 0, 3s, 0, 0;
+  transition-delay: 0, 50s, 0, 0.125s, 0, 3s, 0, 0, 0, 0, 3s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, ident, ident, all, ident, all, none, none, ident, none, all, all, -dash-;
   transition-timing-function: ease-in-out, ease, ease, steps(4), step-end, ease, ease-in, steps(4), ease, step-start, ease, cubic-bezier(1,-2,0,4), ease-in-out;
 }
 
 lg {
-  transition-delay: 50000ms, 0, 0, 0, 3s, 0;
+  transition-delay: 50s, 0, 0, 0, 3s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, none, all, none, all, -dash-;
   transition-timing-function: ease, linear, linear, ease-out, step-end, linear;
 }
 
 mg {
-  transition-delay: 50000ms, 0, 0, 0;
+  transition-delay: 50s, 0, 0, 0;
   transition-duration: 0, 0, 0, 0;
   transition-property: all, ident, all, all;
   transition-timing-function: cubic-bezier(1,-2,0,4), linear, ease, linear;
@@ -1189,7 +1189,7 @@ ng {
 }
 
 og {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: ident;
   transition-timing-function: ease;
@@ -1203,42 +1203,42 @@ pg {
 }
 
 qg {
-  transition-delay: 0, 50000ms;
+  transition-delay: 0, 50s;
   transition-duration: 0, 0;
   transition-property: -dash-, none;
   transition-timing-function: ease-in, linear;
 }
 
 rg {
-  transition-delay: 0, 0, 0, 50000ms;
+  transition-delay: 0, 0, 0, 50s;
   transition-duration: 0, 0, 0, 0;
   transition-property: ident, all, all, all;
   transition-timing-function: steps(10,start), ease, step-start, ease;
 }
 
 sg {
-  transition-delay: 0.125s, 50000ms, 3s;
+  transition-delay: 0.125s, 50s, 3s;
   transition-duration: 0, 0, 0;
   transition-property: all, all, -dash-;
   transition-timing-function: ease, ease, step-start;
 }
 
 tg {
-  transition-delay: 0, 0, 0.125s, 0, 3s, 50000ms;
+  transition-delay: 0, 0, 0.125s, 0, 3s, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: none, ident, none, -dash-, ident, all;
   transition-timing-function: ease, linear, ease, steps(10,start), ease-out, ease;
 }
 
 ug {
-  transition-delay: 3s, 0, 0, 50000ms, 3s;
+  transition-delay: 3s, 0, 0, 50s, 3s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: ident, -dash-, ident, all, -dash-;
   transition-timing-function: ease-out, step-start, step-start, step-start, ease;
 }
 
 vg {
-  transition-delay: 3s, 50000ms, 0, 0, 3s, 0, 3s, 50000ms, 0, 0;
+  transition-delay: 3s, 50s, 0, 0, 3s, 0, 3s, 50s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, all, all, -dash-, none, all, ident, ident, all, all;
   transition-timing-function: ease-in-out, ease, ease, steps(4), steps(10,start), ease-in, ease, ease, linear, ease-in-out;
@@ -1252,7 +1252,7 @@ wg {
 }
 
 xg {
-  transition-delay: 0, 3s, 0, 0, 3s, 50000ms, 50000ms;
+  transition-delay: 0, 3s, 0, 0, 3s, 50s, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, none, all, none, ident, -dash-, all;
   transition-timing-function: steps(4), ease-in, ease, ease-out, ease-in, linear, linear;
@@ -1266,14 +1266,14 @@ yg {
 }
 
 zg {
-  transition-delay: 0.125s, 50000ms;
+  transition-delay: 0.125s, 50s;
   transition-duration: 0, 0;
   transition-property: ident, all;
   transition-timing-function: ease-in-out, ease;
 }
 
 ah {
-  transition-delay: 0, 3s, 0, 0.125s, 50000ms, 3s, 0, 0;
+  transition-delay: 0, 3s, 0, 0.125s, 50s, 3s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, -dash-, all, ident, none, none, all, all;
   transition-timing-function: ease, ease-in, step-end, step-end, ease, steps(4), ease, ease;
@@ -1287,7 +1287,7 @@ bh {
 }
 
 ch {
-  transition-delay: 50000ms, 0, 0, 0, 0, 3s;
+  transition-delay: 50s, 0, 0, 0, 0, 3s;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: all, none, none, all, ident, all;
   transition-timing-function: step-end, linear, ease-in, linear, steps(10,start), ease;
@@ -1301,7 +1301,7 @@ dh {
 }
 
 eh {
-  transition-delay: 50000ms, 0, 0, 0.125s, 0, 0, 0.125s, 50000ms, 0.125s, 0, 0, 0, 50000ms, 0, 0;
+  transition-delay: 50s, 0, 0, 0.125s, 0, 0, 0.125s, 50s, 0.125s, 0, 0, 0, 50s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, ident, ident, all, -dash-, ident, -dash-, -dash-, ident, -dash-, all, all, none, -dash-;
   transition-timing-function: cubic-bezier(1,-2,0,4), steps(10,start), ease, ease, cubic-bezier(1,-2,0,4), steps(4), cubic-bezier(1,-2,0,4), ease-in, ease, ease, ease-in, ease-out, ease, ease, steps(4);
@@ -1336,7 +1336,7 @@ ih {
 }
 
 jh {
-  transition-delay: 3s, 0, 3s, 0, 50000ms;
+  transition-delay: 3s, 0, 3s, 0, 50s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, none, all, all, all;
   transition-timing-function: steps(10,start), ease, ease, step-start, ease;
@@ -1350,7 +1350,7 @@ kh {
 }
 
 lh {
-  transition-delay: 3s, 50000ms, 3s, 0.125s, 3s, 0;
+  transition-delay: 3s, 50s, 3s, 0.125s, 3s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, ident, all, ident, ident, all;
   transition-timing-function: steps(10,start), linear, steps(10,start), ease-out, cubic-bezier(1,-2,0,4), cubic-bezier(1,-2,0,4);
@@ -1371,14 +1371,14 @@ nh {
 }
 
 oh {
-  transition-delay: 50000ms, 3s;
+  transition-delay: 50s, 3s;
   transition-duration: 0, 0;
   transition-property: all, none;
   transition-timing-function: steps(4), ease;
 }
 
 ph {
-  transition-delay: 0, 50000ms;
+  transition-delay: 0, 50s;
   transition-duration: 0, 0;
   transition-property: all, -dash-;
   transition-timing-function: ease, linear;
@@ -1392,7 +1392,7 @@ qh {
 }
 
 rh {
-  transition-delay: 0.125s, 50000ms, 0, 0, 0, 0, 0.125s, 0;
+  transition-delay: 0.125s, 50s, 0, 0, 0, 0, 0.125s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, ident, all, none, none, all, ident, all;
   transition-timing-function: steps(4), ease-in, ease-in, cubic-bezier(1,-2,0,4), step-start, ease-in, step-end, ease-in-out;
@@ -1441,7 +1441,7 @@ xh {
 }
 
 yh {
-  transition-delay: 3s, 0, 0, 3s, 50000ms;
+  transition-delay: 3s, 0, 0, 3s, 50s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: ident, ident, -dash-, -dash-, -dash-;
   transition-timing-function: ease-in, ease-out, step-start, ease, ease-in-out;
@@ -1469,7 +1469,7 @@ bi {
 }
 
 ci {
-  transition-delay: 50000ms, 3s, 0;
+  transition-delay: 50s, 3s, 0;
   transition-duration: 0, 0, 0;
   transition-property: -dash-, ident, -dash-;
   transition-timing-function: ease, ease, step-end;
@@ -1483,49 +1483,49 @@ di {
 }
 
 ei {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: all;
   transition-timing-function: ease-in;
 }
 
 fi {
-  transition-delay: 50000ms, 0;
+  transition-delay: 50s, 0;
   transition-duration: 0, 0;
   transition-property: ident, -dash-;
   transition-timing-function: ease-in, ease-in;
 }
 
 gi {
-  transition-delay: 0.125s, 0.125s, 3s, 0, 50000ms, 0.125s, 3s;
+  transition-delay: 0.125s, 0.125s, 3s, 0, 50s, 0.125s, 3s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: ident, -dash-, all, all, all, -dash-, none;
   transition-timing-function: linear, ease-out, step-end, ease-in-out, linear, steps(4), linear;
 }
 
 hi {
-  transition-delay: 50000ms, 0, 0, 0.125s, 0, 0, 3s, 50000ms, 0, 0.125s;
+  transition-delay: 50s, 0, 0, 0.125s, 0, 0, 3s, 50s, 0, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, all, -dash-, -dash-, ident, all, all, all, none, none;
   transition-timing-function: ease, ease, steps(4), step-end, steps(10,start), step-start, ease-in-out, ease, linear, linear;
 }
 
 ii {
-  transition-delay: 50000ms, 3s, 50000ms;
+  transition-delay: 50s, 3s, 50s;
   transition-duration: 0, 0, 0;
   transition-property: all, all, all;
   transition-timing-function: ease, linear, ease;
 }
 
 ji {
-  transition-delay: 50000ms, 3s;
+  transition-delay: 50s, 3s;
   transition-duration: 0, 0;
   transition-property: none, ident;
   transition-timing-function: linear, ease;
 }
 
 ki {
-  transition-delay: 0, 50000ms, 0, 0, 0;
+  transition-delay: 0, 50s, 0, 0, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, none, all, all, all;
   transition-timing-function: ease, steps(4), steps(4), step-start, steps(4);
@@ -1539,14 +1539,14 @@ li {
 }
 
 mi {
-  transition-delay: 50000ms, 0, 0, 0, 0.125s;
+  transition-delay: 50s, 0, 0, 0, 0.125s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: none, all, -dash-, all, none;
   transition-timing-function: ease, cubic-bezier(1,-2,0,4), ease, ease-out, step-start;
 }
 
 ni {
-  transition-delay: 50000ms, 0.125s, 50000ms, 0, 0.125s, 3s;
+  transition-delay: 50s, 0.125s, 50s, 0, 0.125s, 3s;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: all, all, -dash-, all, none, none;
   transition-timing-function: ease-out, ease, ease, steps(4), ease, cubic-bezier(1,-2,0,4);
@@ -1588,21 +1588,21 @@ si {
 }
 
 ti {
-  transition-delay: 50000ms, 50000ms, 50000ms, 50000ms, 0.125s, 0, 50000ms;
+  transition-delay: 50s, 50s, 50s, 50s, 0.125s, 0, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, ident, all, all, -dash-, all, ident;
   transition-timing-function: ease, steps(4), ease, step-start, ease-in-out, ease, ease;
 }
 
 ui {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: none;
   transition-timing-function: ease-in-out;
 }
 
 vi {
-  transition-delay: 3s, 0, 50000ms, 0, 0, 0, 50000ms, 50000ms, 0, 0, 0, 50000ms;
+  transition-delay: 3s, 0, 50s, 0, 0, 0, 50s, 50s, 0, 0, 0, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, none, all, all, all, -dash-, -dash-, all, none, all, ident;
   transition-timing-function: linear, steps(10,start), steps(4), linear, step-start, ease, steps(4), step-start, ease, ease, ease, ease-in-out;
@@ -1658,7 +1658,7 @@ cj {
 }
 
 dj {
-  transition-delay: 0, 0.125s, 3s, 50000ms, 0, 0, 0;
+  transition-delay: 0, 0.125s, 3s, 50s, 0, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, ident, all, ident, ident, all, none;
   transition-timing-function: ease-out, ease, ease, ease, linear, ease, cubic-bezier(1,-2,0,4);
@@ -1672,21 +1672,21 @@ ej {
 }
 
 fj {
-  transition-delay: 0.125s, 50000ms, 0;
+  transition-delay: 0.125s, 50s, 0;
   transition-duration: 0, 0, 0;
   transition-property: -dash-, none, all;
   transition-timing-function: ease, step-start, linear;
 }
 
 gj {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: none;
   transition-timing-function: step-end;
 }
 
 hj {
-  transition-delay: 0, 3s, 0.125s, 50000ms, 0;
+  transition-delay: 0, 3s, 0.125s, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: none, ident, -dash-, all, none;
   transition-timing-function: step-end, steps(4), cubic-bezier(1,-2,0,4), ease, cubic-bezier(1,-2,0,4);
@@ -1700,7 +1700,7 @@ ij {
 }
 
 jj {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: -dash-;
   transition-timing-function: steps(4);
@@ -1721,14 +1721,14 @@ lj {
 }
 
 mj {
-  transition-delay: 0.125s, 0, 50000ms;
+  transition-delay: 0.125s, 0, 50s;
   transition-duration: 0, 0, 0;
   transition-property: ident, all, ident;
   transition-timing-function: ease, ease, ease-out;
 }
 
 nj {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: all;
   transition-timing-function: ease;
@@ -1742,14 +1742,14 @@ oj {
 }
 
 pj {
-  transition-delay: 0, 3s, 0, 0, 0, 0.125s, 0, 0, 3s, 0, 3s, 0, 0, 0, 50000ms, 0, 0, 0.125s, 0, 0, 0, 0.125s, 50000ms, 0.125s, 3s;
+  transition-delay: 0, 3s, 0, 0, 0, 0.125s, 0, 0, 3s, 0, 3s, 0, 0, 0, 50s, 0, 0, 0.125s, 0, 0, 0, 0.125s, 50s, 0.125s, 3s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, all, -dash-, none, all, none, -dash-, -dash-, ident, -dash-, -dash-, none, all, all, all, all, none, -dash-, none, ident, all, all, all, -dash-, ident;
   transition-timing-function: ease, ease, ease, cubic-bezier(1,-2,0,4), steps(10,start), ease-in-out, cubic-bezier(1,-2,0,4), ease-in, ease-out, step-start, cubic-bezier(1,-2,0,4), ease-out, cubic-bezier(1,-2,0,4), steps(10,start), ease-out, steps(10,start), steps(10,start), steps(4), linear, ease, steps(10,start), linear, ease, ease, ease;
 }
 
 qj {
-  transition-delay: 0, 0, 0, 0.125s, 0, 0.125s, 3s, 0, 50000ms, 3s, 3s, 0;
+  transition-delay: 0, 0, 0, 0.125s, 0, 0.125s, 3s, 0, 50s, 3s, 3s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, -dash-, ident, all, -dash-, ident, all, all, -dash-, -dash-, all, -dash-;
   transition-timing-function: cubic-bezier(1,-2,0,4), steps(4), ease, ease, cubic-bezier(1,-2,0,4), steps(4), ease, step-end, ease, ease, linear, ease-in;
@@ -1763,14 +1763,14 @@ rj {
 }
 
 sj {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: all;
   transition-timing-function: ease-in;
 }
 
 tj {
-  transition-delay: 0, 50000ms;
+  transition-delay: 0, 50s;
   transition-duration: 0, 0;
   transition-property: all, all;
   transition-timing-function: ease, ease-in;
@@ -1784,7 +1784,7 @@ uj {
 }
 
 vj {
-  transition-delay: 50000ms, 3s, 0, 0.125s, 0.125s, 0;
+  transition-delay: 50s, 3s, 0, 0.125s, 0.125s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: ident, all, all, all, all, all;
   transition-timing-function: ease, ease-in-out, cubic-bezier(1,-2,0,4), ease, ease, linear;
@@ -1840,7 +1840,7 @@ ck {
 }
 
 dk {
-  transition-delay: 0, 0.125s, 50000ms, 3s, 0;
+  transition-delay: 0, 0.125s, 50s, 3s, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: ident, all, ident, all, all;
   transition-timing-function: steps(10,start), ease-out, ease-out, step-end, steps(4);
@@ -1854,7 +1854,7 @@ ek {
 }
 
 fk {
-  transition-delay: 0, 0.125s, 0, 0.125s, 3s, 0.125s, 0, 3s, 50000ms, 0;
+  transition-delay: 0, 0.125s, 0, 0.125s, 3s, 0.125s, 0, 3s, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: ident, all, all, -dash-, none, all, none, all, all, ident;
   transition-timing-function: linear, ease-out, step-start, linear, steps(10,start), linear, ease, ease-in-out, ease-in, steps(10,start);
@@ -1868,14 +1868,14 @@ gk {
 }
 
 hk {
-  transition-delay: 3s, 0, 50000ms, 50000ms, 0.125s, 3s, 0.125s, 0;
+  transition-delay: 3s, 0, 50s, 50s, 0.125s, 3s, 0.125s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, -dash-, ident, all, none, -dash-, ident, none;
   transition-timing-function: steps(10,start), ease, ease, steps(10,start), cubic-bezier(1,-2,0,4), ease-in-out, linear, ease;
 }
 
 ik {
-  transition-delay: 0.125s, 0, 50000ms, 0.125s, 0;
+  transition-delay: 0.125s, 0, 50s, 0.125s, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, all, all, ident, all;
   transition-timing-function: ease-in, steps(4), linear, steps(4), ease;
@@ -1910,7 +1910,7 @@ mk {
 }
 
 nk {
-  transition-delay: 3s, 0, 0.125s, 50000ms, 3s;
+  transition-delay: 3s, 0, 0.125s, 50s, 3s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, -dash-, none, ident, ident;
   transition-timing-function: step-start, steps(10,start), step-start, ease-in-out, linear;
@@ -1924,14 +1924,14 @@ ok {
 }
 
 pk {
-  transition-delay: 0.125s, 0, 0.125s, 0.125s, 50000ms;
+  transition-delay: 0.125s, 0, 0.125s, 0.125s, 50s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, none, all, -dash-, all;
   transition-timing-function: ease, ease, ease-out, ease-in, ease;
 }
 
 qk {
-  transition-delay: 0, 0.125s, 0, 3s, 0, 0, 0, 3s, 3s, 50000ms, 0;
+  transition-delay: 0, 0.125s, 0, 3s, 0, 0, 0, 3s, 3s, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, none, all, none, all, none, -dash-, -dash-, all, all, all;
   transition-timing-function: ease-in-out, steps(10,start), step-end, step-end, linear, ease, steps(10,start), ease-in-out, cubic-bezier(1,-2,0,4), ease-out, ease;
@@ -1952,28 +1952,28 @@ sk {
 }
 
 tk {
-  transition-delay: 0, 0, 0, 3s, 50000ms;
+  transition-delay: 0, 0, 0, 3s, 50s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, -dash-, none, -dash-, all;
   transition-timing-function: ease-in-out, steps(10,start), ease-in, step-end, cubic-bezier(1,-2,0,4);
 }
 
 uk {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: all;
   transition-timing-function: step-start;
 }
 
 vk {
-  transition-delay: 0, 0, 0, 50000ms, 0, 0.125s;
+  transition-delay: 0, 0, 0, 50s, 0, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: ident, none, all, all, all, -dash-;
   transition-timing-function: ease-out, ease-in, ease-out, ease-in-out, linear, step-end;
 }
 
 wk {
-  transition-delay: 3s, 3s, 0.125s, 0, 50000ms, 3s, 3s;
+  transition-delay: 3s, 3s, 0.125s, 0, 50s, 3s, 3s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, ident, none, all, all, all, none;
   transition-timing-function: ease-in, steps(4), steps(4), step-end, ease-in, step-end, ease;
@@ -1987,7 +1987,7 @@ xk {
 }
 
 yk {
-  transition-delay: 0.125s, 3s, 50000ms, 0.125s;
+  transition-delay: 0.125s, 3s, 50s, 0.125s;
   transition-duration: 0, 0, 0, 0;
   transition-property: -dash-, all, all, all;
   transition-timing-function: steps(4), ease, ease, ease;
@@ -2001,14 +2001,14 @@ zk {
 }
 
 al {
-  transition-delay: 50000ms, 0, 3s, 0.125s;
+  transition-delay: 50s, 0, 3s, 0.125s;
   transition-duration: 0, 0, 0, 0;
   transition-property: all, ident, none, -dash-;
   transition-timing-function: ease-in-out, linear, steps(4), ease-out;
 }
 
 bl {
-  transition-delay: 0.125s, 0.125s, 3s, 0, 50000ms, 3s, 0, 0.125s, 0.125s;
+  transition-delay: 0.125s, 0.125s, 3s, 0, 50s, 3s, 0, 0.125s, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: ident, all, -dash-, -dash-, all, all, -dash-, -dash-, ident;
   transition-timing-function: ease-in, cubic-bezier(1,-2,0,4), ease-in, ease-in, ease, cubic-bezier(1,-2,0,4), ease-in, steps(10,start), step-start;
@@ -2029,7 +2029,7 @@ dl {
 }
 
 el {
-  transition-delay: 0, 50000ms;
+  transition-delay: 0, 50s;
   transition-duration: 0, 0;
   transition-property: all, all;
   transition-timing-function: ease-in-out, ease;
@@ -2043,7 +2043,7 @@ fl {
 }
 
 gl {
-  transition-delay: 50000ms, 0.125s, 50000ms, 0.125s, 0, 3s, 0, 0, 0, 0;
+  transition-delay: 50s, 0.125s, 50s, 0.125s, 0, 3s, 0, 0, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, -dash-, -dash-, none, all, all, none, all, -dash-, none;
   transition-timing-function: ease, step-end, ease-in, step-start, step-end, step-end, step-end, cubic-bezier(1,-2,0,4), ease, ease-out;
@@ -2071,7 +2071,7 @@ jl {
 }
 
 kl {
-  transition-delay: 3s, 50000ms, 50000ms;
+  transition-delay: 3s, 50s, 50s;
   transition-duration: 0, 0, 0;
   transition-property: ident, none, all;
   transition-timing-function: ease, linear, cubic-bezier(1,-2,0,4);
@@ -2113,21 +2113,21 @@ pl {
 }
 
 ql {
-  transition-delay: 50000ms, 3s, 0, 0, 0, 0, 0, 0, 0;
+  transition-delay: 50s, 3s, 0, 0, 0, 0, 0, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, all, all, none, all, all, ident, all;
   transition-timing-function: cubic-bezier(1,-2,0,4), step-start, step-start, step-end, ease-out, cubic-bezier(1,-2,0,4), ease, ease-in-out, ease-in-out;
 }
 
 rl {
-  transition-delay: 50000ms, 3s;
+  transition-delay: 50s, 3s;
   transition-duration: 0, 0;
   transition-property: none, all;
   transition-timing-function: ease, ease-out;
 }
 
 sl {
-  transition-delay: 0.125s, 50000ms, 0, 0.125s, 0.125s, 50000ms;
+  transition-delay: 0.125s, 50s, 0, 0.125s, 0.125s, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: all, all, -dash-, all, ident, all;
   transition-timing-function: steps(4), ease, steps(10,start), ease, ease-in-out, cubic-bezier(1,-2,0,4);
@@ -2141,7 +2141,7 @@ tl {
 }
 
 ul {
-  transition-delay: 50000ms, 0.125s, 0;
+  transition-delay: 50s, 0.125s, 0;
   transition-duration: 0, 0, 0;
   transition-property: all, ident, all;
   transition-timing-function: steps(10,start), ease-out, ease;
@@ -2162,28 +2162,28 @@ wl {
 }
 
 xl {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: all;
   transition-timing-function: ease;
 }
 
 yl {
-  transition-delay: 50000ms, 0, 0;
+  transition-delay: 50s, 0, 0;
   transition-duration: 0, 0, 0;
   transition-property: all, none, -dash-;
   transition-timing-function: cubic-bezier(1,-2,0,4), ease-out, ease;
 }
 
 zl {
-  transition-delay: 0, 0, 50000ms, 0, 50000ms, 3s;
+  transition-delay: 0, 0, 50s, 0, 50s, 3s;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: all, all, none, all, none, all;
   transition-timing-function: ease-in, ease, ease-in, cubic-bezier(1,-2,0,4), ease-out, ease;
 }
 
 am {
-  transition-delay: 50000ms, 0, 0;
+  transition-delay: 50s, 0, 0;
   transition-duration: 0, 0, 0;
   transition-property: all, ident, ident;
   transition-timing-function: ease-in, ease, ease-out;
@@ -2204,28 +2204,28 @@ cm {
 }
 
 dm {
-  transition-delay: 0, 50000ms, 3s, 0.125s, 0;
+  transition-delay: 0, 50s, 3s, 0.125s, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: none, ident, all, none, none;
   transition-timing-function: ease, step-start, ease, step-start, step-start;
 }
 
 em {
-  transition-delay: 3s, 50000ms, 0, 0.125s, 0, 0;
+  transition-delay: 3s, 50s, 0, 0.125s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, -dash-, all, all, ident, -dash-;
   transition-timing-function: ease-out, ease, ease-in, ease, ease, cubic-bezier(1,-2,0,4);
 }
 
 fm {
-  transition-delay: 50000ms, 0, 0, 0, 0;
+  transition-delay: 50s, 0, 0, 0, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: ident, ident, none, all, -dash-;
   transition-timing-function: ease, ease, steps(10,start), steps(4), ease;
 }
 
 gm {
-  transition-delay: 50000ms, 0, 0, 0, 3s, 3s, 0.125s;
+  transition-delay: 50s, 0, 0, 0, 3s, 3s, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, ident, -dash-, ident, all, all, none;
   transition-timing-function: step-end, step-end, linear, cubic-bezier(1,-2,0,4), steps(4), cubic-bezier(1,-2,0,4), ease;
@@ -2246,7 +2246,7 @@ im {
 }
 
 jm {
-  transition-delay: 0.125s, 0, 50000ms, 0;
+  transition-delay: 0.125s, 0, 50s, 0;
   transition-duration: 0, 0, 0, 0;
   transition-property: ident, none, all, -dash-;
   transition-timing-function: steps(4), cubic-bezier(1,-2,0,4), linear, ease-in;
@@ -2267,7 +2267,7 @@ lm {
 }
 
 mm {
-  transition-delay: 0.125s, 50000ms;
+  transition-delay: 0.125s, 50s;
   transition-duration: 0, 0;
   transition-property: all, ident;
   transition-timing-function: ease, ease;
@@ -2288,14 +2288,14 @@ om {
 }
 
 pm {
-  transition-delay: 50000ms, 3s, 50000ms;
+  transition-delay: 50s, 3s, 50s;
   transition-duration: 0, 0, 0;
   transition-property: all, all, all;
   transition-timing-function: ease, ease, cubic-bezier(1,-2,0,4);
 }
 
 qm {
-  transition-delay: 0, 0.125s, 50000ms, 0, 0, 50000ms, 0.125s, 50000ms, 0;
+  transition-delay: 0, 0.125s, 50s, 0, 0, 50s, 0.125s, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, all, none, all, none, ident, all, all, none;
   transition-timing-function: ease-in, ease, ease, ease-out, ease, cubic-bezier(1,-2,0,4), ease-in-out, steps(4), ease-in-out;
@@ -2323,14 +2323,14 @@ tm {
 }
 
 um {
-  transition-delay: 50000ms, 0, 0, 0, 0, 3s, 0;
+  transition-delay: 50s, 0, 0, 0, 0, 3s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, -dash-, none, all, all, all, all;
   transition-timing-function: cubic-bezier(1,-2,0,4), ease, cubic-bezier(1,-2,0,4), step-start, cubic-bezier(1,-2,0,4), linear, linear;
 }
 
 vm {
-  transition-delay: 50000ms, 0.125s, 0, 50000ms;
+  transition-delay: 50s, 0.125s, 0, 50s;
   transition-duration: 0, 0, 0, 0;
   transition-property: -dash-, none, all, none;
   transition-timing-function: step-end, ease-in, ease, ease;
@@ -2372,7 +2372,7 @@ an {
 }
 
 bn {
-  transition-delay: 50000ms, 0.125s, 50000ms, 0;
+  transition-delay: 50s, 0.125s, 50s, 0;
   transition-duration: 0, 0, 0, 0;
   transition-property: ident, all, all, none;
   transition-timing-function: step-start, ease, ease-out, linear;
@@ -2386,14 +2386,14 @@ cn {
 }
 
 dn {
-  transition-delay: 0, 0, 0.125s, 50000ms, 0.125s, 0, 0, 0.125s, 50000ms, 50000ms, 3s, 0, 0;
+  transition-delay: 0, 0, 0.125s, 50s, 0.125s, 0, 0, 0.125s, 50s, 50s, 3s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: ident, -dash-, all, all, -dash-, ident, -dash-, -dash-, all, -dash-, -dash-, -dash-, none;
   transition-timing-function: step-start, steps(10,start), ease, steps(4), ease, ease, ease-out, ease, ease-in-out, step-start, step-end, cubic-bezier(1,-2,0,4), cubic-bezier(1,-2,0,4);
 }
 
 en {
-  transition-delay: 0.125s, 3s, 0, 0, 50000ms, 0, 0, 3s;
+  transition-delay: 0.125s, 3s, 0, 0, 50s, 0, 0, 3s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: ident, all, none, all, none, all, all, none;
   transition-timing-function: steps(4), step-start, ease, ease, ease-in-out, ease-out, ease-out, ease;
@@ -2407,21 +2407,21 @@ fn {
 }
 
 gn {
-  transition-delay: 50000ms, 3s, 0, 0, 0, 0;
+  transition-delay: 50s, 3s, 0, 0, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, all, all, -dash-, all, all;
   transition-timing-function: cubic-bezier(1,-2,0,4), ease, ease, step-end, ease-in, ease;
 }
 
 hn {
-  transition-delay: 0, 50000ms, 0, 0;
+  transition-delay: 0, 50s, 0, 0;
   transition-duration: 0, 0, 0, 0;
   transition-property: ident, -dash-, none, all;
   transition-timing-function: ease-in, ease-in, ease, ease;
 }
 
 in {
-  transition-delay: 50000ms, 0, 0, 0, 0, 0;
+  transition-delay: 50s, 0, 0, 0, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: none, all, ident, all, -dash-, all;
   transition-timing-function: step-end, ease-in-out, ease-out, ease-in-out, ease-in-out, ease;
@@ -2442,14 +2442,14 @@ kn {
 }
 
 ln {
-  transition-delay: 0, 0, 0, 0.125s, 50000ms, 0, 50000ms, 50000ms, 3s, 0, 3s, 0, 0, 0, 0.125s, 3s, 0;
+  transition-delay: 0, 0, 0, 0.125s, 50s, 0, 50s, 50s, 3s, 0, 3s, 0, 0, 0, 0.125s, 3s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, ident, all, -dash-, ident, -dash-, all, all, -dash-, all, all, none, ident, -dash-, none, all, all;
   transition-timing-function: ease, ease, ease-in, ease, steps(4), ease-in-out, ease, step-end, linear, ease, steps(10,start), ease-in, ease, step-end, ease, step-end, step-end;
 }
 
 mn {
-  transition-delay: 0, 0, 50000ms;
+  transition-delay: 0, 0, 50s;
   transition-duration: 0, 0, 0;
   transition-property: all, all, -dash-;
   transition-timing-function: ease, step-end, ease;
@@ -2463,7 +2463,7 @@ nn {
 }
 
 on {
-  transition-delay: 50000ms, 3s, 50000ms, 0, 0, 50000ms, 50000ms, 50000ms;
+  transition-delay: 50s, 3s, 50s, 0, 0, 50s, 50s, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, none, ident, ident, none, all, -dash-, none;
   transition-timing-function: cubic-bezier(1,-2,0,4), step-start, ease-out, ease-in, ease, cubic-bezier(1,-2,0,4), steps(10,start), ease;
@@ -2477,7 +2477,7 @@ pn {
 }
 
 qn {
-  transition-delay: 0, 50000ms, 0, 0.125s, 0;
+  transition-delay: 0, 50s, 0, 0.125s, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, ident, -dash-, ident, none;
   transition-timing-function: ease, ease, ease, ease, step-end;
@@ -2512,14 +2512,14 @@ un {
 }
 
 vn {
-  transition-delay: 50000ms, 0, 3s, 0, 0, 0;
+  transition-delay: 50s, 0, 3s, 0, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: all, -dash-, none, none, none, all;
   transition-timing-function: ease, step-end, ease, linear, steps(4), cubic-bezier(1,-2,0,4);
 }
 
 wn {
-  transition-delay: 0, 50000ms, 0;
+  transition-delay: 0, 50s, 0;
   transition-duration: 0, 0, 0;
   transition-property: all, -dash-, all;
   transition-timing-function: ease, step-end, ease-in-out;
@@ -2533,14 +2533,14 @@ xn {
 }
 
 yn {
-  transition-delay: 0, 50000ms;
+  transition-delay: 0, 50s;
   transition-duration: 0, 0;
   transition-property: none, ident;
   transition-timing-function: linear, cubic-bezier(1,-2,0,4);
 }
 
 zn {
-  transition-delay: 50000ms, 0, 0.125s, 0, 0.125s, 0, 0.125s, 0.125s;
+  transition-delay: 50s, 0, 0.125s, 0, 0.125s, 0, 0.125s, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, all, none, -dash-, ident, all, ident, ident;
   transition-timing-function: ease-out, step-end, ease-out, ease, ease, ease-in, ease, ease;
@@ -2561,14 +2561,14 @@ bo {
 }
 
 co {
-  transition-delay: 0, 3s, 50000ms;
+  transition-delay: 0, 3s, 50s;
   transition-duration: 0, 0, 0;
   transition-property: -dash-, ident, all;
   transition-timing-function: ease, ease, ease;
 }
 
 do {
-  transition-delay: 50000ms, 50000ms, 0, 0;
+  transition-delay: 50s, 50s, 0, 0;
   transition-duration: 0, 0, 0, 0;
   transition-property: -dash-, ident, -dash-, all;
   transition-timing-function: ease-in, ease-in, ease, cubic-bezier(1,-2,0,4);
@@ -2582,35 +2582,35 @@ eo {
 }
 
 fo {
-  transition-delay: 0, 0, 0, 0, 0, 50000ms, 0, 0.125s, 0.125s, 0, 0.125s, 3s, 3s, 0, 50000ms, 0;
+  transition-delay: 0, 0, 0, 0, 0, 50s, 0, 0.125s, 0.125s, 0, 0.125s, 3s, 3s, 0, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: ident, ident, none, all, all, all, -dash-, -dash-, -dash-, -dash-, all, all, ident, all, -dash-, -dash-;
   transition-timing-function: ease, ease-in, ease-in-out, ease-in, steps(10,start), ease, ease-out, step-start, ease-out, steps(10,start), ease, step-end, cubic-bezier(1,-2,0,4), steps(10,start), ease, steps(10,start);
 }
 
 go {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: -dash-;
   transition-timing-function: cubic-bezier(1,-2,0,4);
 }
 
 ho {
-  transition-delay: 0, 50000ms, 0;
+  transition-delay: 0, 50s, 0;
   transition-duration: 0, 0, 0;
   transition-property: all, all, all;
   transition-timing-function: ease-out, steps(4), ease;
 }
 
 io {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: ident;
   transition-timing-function: ease-in-out;
 }
 
 jo {
-  transition-delay: 50000ms, 3s, 50000ms, 50000ms, 0, 50000ms;
+  transition-delay: 50s, 3s, 50s, 50s, 0, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: all, ident, all, -dash-, all, -dash-;
   transition-timing-function: step-end, ease-in-out, steps(4), ease, steps(4), step-start;
@@ -2638,7 +2638,7 @@ mo {
 }
 
 no {
-  transition-delay: 0.125s, 0, 50000ms;
+  transition-delay: 0.125s, 0, 50s;
   transition-duration: 0, 0, 0;
   transition-property: all, all, none;
   transition-timing-function: ease, linear, ease;
@@ -2652,28 +2652,28 @@ oo {
 }
 
 po {
-  transition-delay: 50000ms, 3s, 0, 0;
+  transition-delay: 50s, 3s, 0, 0;
   transition-duration: 0, 0, 0, 0;
   transition-property: all, -dash-, all, none;
   transition-timing-function: ease-in-out, ease-in, ease, ease;
 }
 
 qo {
-  transition-delay: 0.125s, 50000ms, 0, 3s, 50000ms, 3s, 50000ms;
+  transition-delay: 0.125s, 50s, 0, 3s, 50s, 3s, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, all, all, -dash-, all, ident, all;
   transition-timing-function: step-start, ease, steps(10,start), ease-in, ease, ease, linear;
 }
 
 ro {
-  transition-delay: 3s, 0, 0.125s, 0, 50000ms;
+  transition-delay: 3s, 0, 0.125s, 0, 50s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, ident, -dash-, all, all;
   transition-timing-function: linear, ease-out, ease-in, step-end, ease-out;
 }
 
 so {
-  transition-delay: 0, 50000ms, 0.125s;
+  transition-delay: 0, 50s, 0.125s;
   transition-duration: 0, 0, 0;
   transition-property: all, none, all;
   transition-timing-function: ease-in, ease-out, steps(10,start);
@@ -2687,7 +2687,7 @@ to {
 }
 
 uo {
-  transition-delay: 0.125s, 0, 0, 0, 50000ms;
+  transition-delay: 0.125s, 0, 0, 0, 50s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: none, none, -dash-, all, all;
   transition-timing-function: ease, linear, ease-in, ease-out, steps(10,start);
@@ -2715,14 +2715,14 @@ xo {
 }
 
 yo {
-  transition-delay: 0.125s, 0, 0.125s, 0, 50000ms, 0, 0.125s, 0, 50000ms, 0, 0.125s;
+  transition-delay: 0.125s, 0, 0.125s, 0, 50s, 0, 0.125s, 0, 50s, 0, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, all, -dash-, -dash-, -dash-, -dash-, none, all, all, -dash-;
   transition-timing-function: steps(4), steps(4), linear, ease-in, linear, ease, cubic-bezier(1,-2,0,4), steps(10,start), ease, steps(4), ease;
 }
 
 zo {
-  transition-delay: 0.125s, 50000ms, 3s, 50000ms, 0, 0, 0, 0, 0.125s, 0, 3s;
+  transition-delay: 0.125s, 50s, 3s, 50s, 0, 0, 0, 0, 0.125s, 0, 3s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, none, none, all, all, all, -dash-, ident, -dash-, none, -dash-;
   transition-timing-function: steps(4), ease-out, steps(10,start), ease, ease-in, ease-in, step-end, step-end, ease, ease-in, ease-in-out;
@@ -2743,21 +2743,21 @@ bp {
 }
 
 cp {
-  transition-delay: 50000ms, 0, 0, 50000ms;
+  transition-delay: 50s, 0, 0, 50s;
   transition-duration: 0, 0, 0, 0;
   transition-property: ident, ident, all, none;
   transition-timing-function: steps(4), steps(10,start), ease-out, ease-in-out;
 }
 
 dp {
-  transition-delay: 3s, 0.125s, 0, 0, 3s, 50000ms, 3s;
+  transition-delay: 3s, 0.125s, 0, 0, 3s, 50s, 3s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, ident, all, none, -dash-, ident, -dash-;
   transition-timing-function: steps(4), ease-in, step-end, steps(10,start), ease-out, step-end, ease-in;
 }
 
 ep {
-  transition-delay: 50000ms, 0, 0, 0, 0, 0.125s, 0, 0.125s;
+  transition-delay: 50s, 0, 0, 0, 0, 0.125s, 0, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: ident, none, all, ident, all, all, all, all;
   transition-timing-function: steps(4), ease-in, steps(4), ease, step-end, ease, ease, steps(10,start);
@@ -2785,14 +2785,14 @@ hp {
 }
 
 ip {
-  transition-delay: 50000ms, 0, 3s;
+  transition-delay: 50s, 0, 3s;
   transition-duration: 0, 0, 0;
   transition-property: -dash-, ident, -dash-;
   transition-timing-function: ease, steps(4), steps(4);
 }
 
 jp {
-  transition-delay: 0, 0, 3s, 0, 50000ms, 0, 50000ms;
+  transition-delay: 0, 0, 3s, 0, 50s, 0, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: ident, all, -dash-, all, all, all, ident;
   transition-timing-function: ease, ease-in-out, ease, ease, ease, step-start, ease-out;
@@ -2827,7 +2827,7 @@ np {
 }
 
 op {
-  transition-delay: 50000ms, 0, 0, 0, 50000ms;
+  transition-delay: 50s, 0, 0, 0, 50s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, all, all, all, ident;
   transition-timing-function: ease-in, linear, ease, linear, step-end;
@@ -2855,7 +2855,7 @@ rp {
 }
 
 sp {
-  transition-delay: 0, 0, 0, 0, 50000ms, 0, 0, 0, 0.125s;
+  transition-delay: 0, 0, 0, 0, 50s, 0, 0, 0, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, none, all, all, ident, all, all, none, -dash-;
   transition-timing-function: cubic-bezier(1,-2,0,4), step-end, cubic-bezier(1,-2,0,4), cubic-bezier(1,-2,0,4), ease, ease, ease, ease, ease-out;
@@ -2869,21 +2869,21 @@ tp {
 }
 
 up {
-  transition-delay: 0, 50000ms, 0, 0, 0, 50000ms, 0;
+  transition-delay: 0, 50s, 0, 0, 0, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, -dash-, all, none, all, none;
   transition-timing-function: step-start, step-end, linear, steps(4), ease-in, linear, ease;
 }
 
 vp {
-  transition-delay: 0, 0, 50000ms, 50000ms;
+  transition-delay: 0, 0, 50s, 50s;
   transition-duration: 0, 0, 0, 0;
   transition-property: none, none, none, ident;
   transition-timing-function: ease, step-start, cubic-bezier(1,-2,0,4), ease;
 }
 
 wp {
-  transition-delay: 0.125s, 0.125s, 0, 50000ms, 0.125s, 0, 3s;
+  transition-delay: 0.125s, 0.125s, 0, 50s, 0.125s, 0, 3s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, ident, ident, all, all, ident, all;
   transition-timing-function: linear, cubic-bezier(1,-2,0,4), step-start, ease, ease, steps(10,start), ease;
@@ -2897,7 +2897,7 @@ xp {
 }
 
 yp {
-  transition-delay: 0, 0, 0, 3s, 50000ms;
+  transition-delay: 0, 0, 0, 3s, 50s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: none, all, ident, all, none;
   transition-timing-function: steps(4), ease, ease-in, ease-out, ease;
@@ -2939,14 +2939,14 @@ dq {
 }
 
 eq {
-  transition-delay: 50000ms, 0.125s, 50000ms, 3s, 0.125s, 0;
+  transition-delay: 50s, 0.125s, 50s, 3s, 0.125s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, -dash-, ident, all, all, ident;
   transition-timing-function: ease-in-out, cubic-bezier(1,-2,0,4), ease, step-end, ease, ease-in;
 }
 
 fq {
-  transition-delay: 50000ms, 0;
+  transition-delay: 50s, 0;
   transition-duration: 0, 0;
   transition-property: -dash-, -dash-;
   transition-timing-function: ease, ease;
@@ -2981,7 +2981,7 @@ jq {
 }
 
 kq {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: ident;
   transition-timing-function: linear;
@@ -3002,21 +3002,21 @@ mq {
 }
 
 nq {
-  transition-delay: 50000ms, 3s, 0, 0, 3s, 0;
+  transition-delay: 50s, 3s, 0, 0, 3s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, all, none, all, -dash-, all;
   transition-timing-function: ease-out, steps(4), ease-in, ease-in, ease, ease-in;
 }
 
 oq {
-  transition-delay: 0, 0, 0.125s, 50000ms;
+  transition-delay: 0, 0, 0.125s, 50s;
   transition-duration: 0, 0, 0, 0;
   transition-property: none, none, ident, none;
   transition-timing-function: ease, ease-out, step-start, ease;
 }
 
 pq {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: ident;
   transition-timing-function: step-end;
@@ -3030,14 +3030,14 @@ qq {
 }
 
 rq {
-  transition-delay: 0.125s, 50000ms, 0, 3s;
+  transition-delay: 0.125s, 50s, 0, 3s;
   transition-duration: 0, 0, 0, 0;
   transition-property: -dash-, -dash-, none, ident;
   transition-timing-function: linear, ease, step-start, ease-in;
 }
 
 sq {
-  transition-delay: 0, 0.125s, 0, 50000ms, 0, 50000ms, 50000ms, 0;
+  transition-delay: 0, 0.125s, 0, 50s, 0, 50s, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, all, none, all, ident, all, none;
   transition-timing-function: ease-in, ease, ease-out, ease-in, ease, ease-in, ease-in, ease-in-out;
@@ -3072,21 +3072,21 @@ wq {
 }
 
 xq {
-  transition-delay: 50000ms, 0, 50000ms, 0, 0.125s, 0, 0;
+  transition-delay: 50s, 0, 50s, 0, 0.125s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, all, all, -dash-, ident, all;
   transition-timing-function: cubic-bezier(1,-2,0,4), ease-in-out, steps(4), ease, cubic-bezier(1,-2,0,4), step-end, steps(10,start);
 }
 
 yq {
-  transition-delay: 0, 50000ms, 0, 3s, 0, 0.125s, 3s, 50000ms, 0;
+  transition-delay: 0, 50s, 0, 3s, 0, 0.125s, 3s, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, all, ident, -dash-, all, ident, all, all, all;
   transition-timing-function: steps(4), ease, ease, cubic-bezier(1,-2,0,4), ease, steps(4), steps(4), ease-out, ease;
 }
 
 zq {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: none;
   transition-timing-function: linear;
@@ -3128,7 +3128,7 @@ er {
 }
 
 fr {
-  transition-delay: 50000ms, 0, 0;
+  transition-delay: 50s, 0, 0;
   transition-duration: 0, 0, 0;
   transition-property: none, ident, all;
   transition-timing-function: ease, ease, ease;
@@ -3149,14 +3149,14 @@ hr {
 }
 
 ir {
-  transition-delay: 0, 0.125s, 0, 50000ms;
+  transition-delay: 0, 0.125s, 0, 50s;
   transition-duration: 0, 0, 0, 0;
   transition-property: -dash-, all, all, all;
   transition-timing-function: step-start, ease, steps(10,start), ease;
 }
 
 jr {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: none;
   transition-timing-function: cubic-bezier(1,-2,0,4);
@@ -3184,14 +3184,14 @@ mr {
 }
 
 nr {
-  transition-delay: 50000ms, 0, 0, 0, 3s;
+  transition-delay: 50s, 0, 0, 0, 3s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: ident, none, all, all, all;
   transition-timing-function: ease-in-out, linear, ease, ease-out, cubic-bezier(1,-2,0,4);
 }
 
 or {
-  transition-delay: 50000ms, 0, 0;
+  transition-delay: 50s, 0, 0;
   transition-duration: 0, 0, 0;
   transition-property: -dash-, all, all;
   transition-timing-function: ease, ease, ease;
@@ -3205,7 +3205,7 @@ pr {
 }
 
 qr {
-  transition-delay: 0, 0, 0, 3s, 0, 50000ms, 0, 0, 0, 0;
+  transition-delay: 0, 0, 0, 3s, 0, 50s, 0, 0, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, all, all, all, ident, -dash-, -dash-, -dash-, all, all;
   transition-timing-function: steps(4), steps(4), ease, ease, ease, ease-in-out, steps(4), ease, ease-in, linear;
@@ -3219,7 +3219,7 @@ rr {
 }
 
 sr {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: all;
   transition-timing-function: ease-in-out;
@@ -3240,21 +3240,21 @@ ur {
 }
 
 vr {
-  transition-delay: 50000ms, 0.125s;
+  transition-delay: 50s, 0.125s;
   transition-duration: 0, 0;
   transition-property: all, -dash-;
   transition-timing-function: ease, ease;
 }
 
 wr {
-  transition-delay: 50000ms, 0.125s, 0, 0.125s, 50000ms, 0, 0.125s;
+  transition-delay: 50s, 0.125s, 0, 0.125s, 50s, 0, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, none, none, all, none, -dash-;
   transition-timing-function: step-start, ease-out, linear, step-end, ease-in-out, steps(10,start), cubic-bezier(1,-2,0,4);
 }
 
 xr {
-  transition-delay: 0, 50000ms;
+  transition-delay: 0, 50s;
   transition-duration: 0, 0;
   transition-property: ident, ident;
   transition-timing-function: step-end, ease;
@@ -3268,7 +3268,7 @@ yr {
 }
 
 zr {
-  transition-delay: 3s, 3s, 50000ms, 3s;
+  transition-delay: 3s, 3s, 50s, 3s;
   transition-duration: 0, 0, 0, 0;
   transition-property: ident, -dash-, ident, ident;
   transition-timing-function: ease, ease, steps(10,start), steps(10,start);
@@ -3289,14 +3289,14 @@ bs {
 }
 
 cs {
-  transition-delay: 0, 0, 3s, 50000ms, 0, 0;
+  transition-delay: 0, 0, 3s, 50s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: all, all, none, -dash-, ident, all;
   transition-timing-function: ease, step-end, cubic-bezier(1,-2,0,4), ease-out, cubic-bezier(1,-2,0,4), ease-in;
 }
 
 ds {
-  transition-delay: 0.125s, 0, 50000ms, 0, 50000ms, 0, 0, 0.125s;
+  transition-delay: 0.125s, 0, 50s, 0, 50s, 0, 0, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, none, none, -dash-, none, none, all, -dash-;
   transition-timing-function: ease, steps(10,start), ease, ease-in, steps(4), ease, step-start, ease;
@@ -3324,7 +3324,7 @@ gs {
 }
 
 hs {
-  transition-delay: 0.125s, 0, 3s, 50000ms, 50000ms, 0, 0.125s, 0, 0, 0.125s, 0.125s, 50000ms;
+  transition-delay: 0.125s, 0, 3s, 50s, 50s, 0, 0.125s, 0, 0, 0.125s, 0.125s, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, ident, none, none, ident, none, ident, -dash-, none, -dash-, ident, ident;
   transition-timing-function: ease-in, ease, ease-in, ease-out, ease-in, ease, ease, steps(10,start), linear, ease-out, ease, ease;
@@ -3338,7 +3338,7 @@ is {
 }
 
 js {
-  transition-delay: 0, 50000ms;
+  transition-delay: 0, 50s;
   transition-duration: 0, 0;
   transition-property: all, none;
   transition-timing-function: ease, ease;
@@ -3366,7 +3366,7 @@ ms {
 }
 
 ns {
-  transition-delay: 3s, 50000ms, 0, 50000ms, 3s, 0.125s, 0, 50000ms, 0, 0, 0.125s, 0.125s, 0.125s, 3s;
+  transition-delay: 3s, 50s, 0, 50s, 3s, 0.125s, 0, 50s, 0, 0, 0.125s, 0.125s, 0.125s, 3s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, all, all, all, all, all, none, all, -dash-, none, all, -dash-, -dash-;
   transition-timing-function: step-end, linear, linear, ease, ease-in-out, ease-in-out, step-start, ease, ease, steps(4), cubic-bezier(1,-2,0,4), ease, ease, step-start;
@@ -3401,7 +3401,7 @@ rs {
 }
 
 ss {
-  transition-delay: 0, 3s, 50000ms;
+  transition-delay: 0, 3s, 50s;
   transition-duration: 0, 0, 0;
   transition-property: all, ident, all;
   transition-timing-function: cubic-bezier(1,-2,0,4), ease, ease;
@@ -3422,7 +3422,7 @@ us {
 }
 
 vs {
-  transition-delay: 0, 0.125s, 0.125s, 50000ms, 3s, 50000ms, 50000ms;
+  transition-delay: 0, 0.125s, 0.125s, 50s, 3s, 50s, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: ident, ident, all, ident, all, all, all;
   transition-timing-function: ease, ease, ease-in, ease, ease-out, ease, ease;
@@ -3436,7 +3436,7 @@ ws {
 }
 
 xs {
-  transition-delay: 0, 3s, 50000ms, 50000ms, 0;
+  transition-delay: 0, 3s, 50s, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, all, -dash-, all, all;
   transition-timing-function: ease, linear, steps(10,start), ease, linear;
@@ -3450,7 +3450,7 @@ ys {
 }
 
 zs {
-  transition-delay: 0, 50000ms, 0.125s;
+  transition-delay: 0, 50s, 0.125s;
   transition-duration: 0, 0, 0;
   transition-property: ident, -dash-, -dash-;
   transition-timing-function: step-start, linear, step-start;
@@ -3464,14 +3464,14 @@ at {
 }
 
 bt {
-  transition-delay: 50000ms, 3s, 0, 3s, 3s;
+  transition-delay: 50s, 3s, 0, 3s, 3s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: -dash-, ident, none, all, ident;
   transition-timing-function: linear, ease, steps(4), cubic-bezier(1,-2,0,4), ease;
 }
 
 ct {
-  transition-delay: 0.125s, 3s, 50000ms, 0, 0.125s, 0;
+  transition-delay: 0.125s, 3s, 50s, 0, 0.125s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, ident, -dash-, all, -dash-, ident;
   transition-timing-function: ease, step-end, ease, ease-in-out, ease-in-out, steps(10,start);
@@ -3485,7 +3485,7 @@ dt {
 }
 
 et {
-  transition-delay: 50000ms, 50000ms, 0, 3s, 3s, 3s, 0.125s;
+  transition-delay: 50s, 50s, 0, 3s, 3s, 3s, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, -dash-, ident, -dash-, all, ident, -dash-;
   transition-timing-function: steps(10,start), ease, ease, step-start, ease-out, cubic-bezier(1,-2,0,4), ease-out;
@@ -3513,7 +3513,7 @@ ht {
 }
 
 it {
-  transition-delay: 0, 0, 50000ms, 0;
+  transition-delay: 0, 0, 50s, 0;
   transition-duration: 0, 0, 0, 0;
   transition-property: ident, -dash-, all, all;
   transition-timing-function: ease-in-out, steps(4), steps(4), step-end;
@@ -3527,21 +3527,21 @@ jt {
 }
 
 kt {
-  transition-delay: 3s, 0, 50000ms, 3s, 0, 0, 50000ms, 0, 0, 0.125s, 0, 0, 3s, 0;
+  transition-delay: 3s, 0, 50s, 3s, 0, 0, 50s, 0, 0, 0.125s, 0, 0, 3s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, all, ident, all, -dash-, all, all, none, none, ident, all, all, ident;
   transition-timing-function: step-end, ease-in, ease, ease-in, ease, ease-out, ease, step-start, steps(10,start), ease-in-out, cubic-bezier(1,-2,0,4), ease, ease-out, steps(4);
 }
 
 lt {
-  transition-delay: 0.125s, 50000ms, 0, 0, 0;
+  transition-delay: 0.125s, 50s, 0, 0, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, all, ident, -dash-, none;
   transition-timing-function: step-end, ease, step-end, step-end, step-start;
 }
 
 mt {
-  transition-delay: 50000ms, 0;
+  transition-delay: 50s, 0;
   transition-duration: 0, 0;
   transition-property: all, all;
   transition-timing-function: ease-in, ease;
@@ -3597,7 +3597,7 @@ tt {
 }
 
 ut {
-  transition-delay: 0, 0, 50000ms, 50000ms, 0.125s;
+  transition-delay: 0, 0, 50s, 50s, 0.125s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, all, -dash-, none, ident;
   transition-timing-function: ease, ease, ease, ease, steps(10,start);
@@ -3625,7 +3625,7 @@ xt {
 }
 
 yt {
-  transition-delay: 3s, 50000ms, 3s, 0, 0.125s;
+  transition-delay: 3s, 50s, 3s, 0, 0.125s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, none, all, all, all;
   transition-timing-function: ease-in, ease, cubic-bezier(1,-2,0,4), ease, ease;
@@ -3639,21 +3639,21 @@ zt {
 }
 
 au {
-  transition-delay: 0, 50000ms, 0, 0.125s, 3s;
+  transition-delay: 0, 50s, 0, 0.125s, 3s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, -dash-, all, all, ident;
   transition-timing-function: ease-out, steps(4), step-end, step-start, steps(10,start);
 }
 
 bu {
-  transition-delay: 0, 0, 50000ms;
+  transition-delay: 0, 0, 50s;
   transition-duration: 0, 0, 0;
   transition-property: -dash-, all, all;
   transition-timing-function: ease, ease, linear;
 }
 
 cu {
-  transition-delay: 0, 0, 0, 0.125s, 50000ms, 0.125s, 50000ms;
+  transition-delay: 0, 0, 0, 0.125s, 50s, 0.125s, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, -dash-, all, ident, ident, none, -dash-;
   transition-timing-function: steps(4), ease, ease-out, steps(4), ease-in, ease-in, cubic-bezier(1,-2,0,4);
@@ -3681,21 +3681,21 @@ fu {
 }
 
 gu {
-  transition-delay: 0, 50000ms, 3s, 3s;
+  transition-delay: 0, 50s, 3s, 3s;
   transition-duration: 0, 0, 0, 0;
   transition-property: all, none, none, all;
   transition-timing-function: ease, ease, ease, linear;
 }
 
 hu {
-  transition-delay: 0, 50000ms;
+  transition-delay: 0, 50s;
   transition-duration: 0, 0;
   transition-property: none, all;
   transition-timing-function: ease, steps(10,start);
 }
 
 iu {
-  transition-delay: 50000ms, 0.125s, 3s;
+  transition-delay: 50s, 0.125s, 3s;
   transition-duration: 0, 0, 0;
   transition-property: -dash-, all, none;
   transition-timing-function: ease, steps(10,start), ease;
@@ -3723,7 +3723,7 @@ lu {
 }
 
 mu {
-  transition-delay: 3s, 3s, 3s, 50000ms, 3s, 3s, 0.125s, 0, 0, 0, 0, 50000ms, 50000ms, 0.125s, 50000ms;
+  transition-delay: 3s, 3s, 3s, 50s, 3s, 3s, 0.125s, 0, 0, 0, 0, 50s, 50s, 0.125s, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, ident, -dash-, ident, -dash-, all, ident, all, none, all, ident, none, -dash-, all, ident;
   transition-timing-function: ease-in, ease, linear, ease, ease-in-out, ease-in, ease-in, linear, ease, step-start, ease, ease, ease-out, step-start, step-start;
@@ -3744,7 +3744,7 @@ ou {
 }
 
 pu {
-  transition-delay: 0.125s, 0, 50000ms;
+  transition-delay: 0.125s, 0, 50s;
   transition-duration: 0, 0, 0;
   transition-property: all, all, all;
   transition-timing-function: steps(10,start), ease, ease;
@@ -3765,7 +3765,7 @@ ru {
 }
 
 su {
-  transition-delay: 0, 50000ms, 0.125s, 3s;
+  transition-delay: 0, 50s, 0.125s, 3s;
   transition-duration: 0, 0, 0, 0;
   transition-property: -dash-, -dash-, all, -dash-;
   transition-timing-function: step-start, steps(4), ease, ease;
@@ -3786,7 +3786,7 @@ uu {
 }
 
 vu {
-  transition-delay: 0, 3s, 50000ms, 0, 50000ms, 0;
+  transition-delay: 0, 3s, 50s, 0, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: all, none, all, all, all, all;
   transition-timing-function: step-end, ease-out, linear, step-end, step-end, ease;
@@ -3828,7 +3828,7 @@ av {
 }
 
 bv {
-  transition-delay: 50000ms, 0.125s;
+  transition-delay: 50s, 0.125s;
   transition-duration: 0, 0;
   transition-property: none, all;
   transition-timing-function: cubic-bezier(1,-2,0,4), steps(4);
@@ -3842,14 +3842,14 @@ cv {
 }
 
 dv {
-  transition-delay: 50000ms, 0;
+  transition-delay: 50s, 0;
   transition-duration: 0, 0;
   transition-property: none, ident;
   transition-timing-function: ease-out, ease-in-out;
 }
 
 ev {
-  transition-delay: 0, 50000ms, 50000ms;
+  transition-delay: 0, 50s, 50s;
   transition-duration: 0, 0, 0;
   transition-property: ident, all, all;
   transition-timing-function: linear, ease, ease;
@@ -3863,7 +3863,7 @@ fv {
 }
 
 gv {
-  transition-delay: 0, 0.125s, 50000ms, 50000ms, 0, 0;
+  transition-delay: 0, 0.125s, 50s, 50s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: none, all, all, -dash-, none, all;
   transition-timing-function: ease, step-start, ease, ease-in-out, ease-in-out, ease;
@@ -3884,7 +3884,7 @@ iv {
 }
 
 jv {
-  transition-delay: 3s, 0, 0, 3s, 50000ms, 0, 0, 0, 0;
+  transition-delay: 3s, 0, 0, 3s, 50s, 0, 0, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, all, ident, all, none, all, ident, all, all;
   transition-timing-function: ease, steps(4), ease-in-out, steps(10,start), ease, steps(4), cubic-bezier(1,-2,0,4), ease-in-out, steps(10,start);
@@ -3933,7 +3933,7 @@ pv {
 }
 
 qv {
-  transition-delay: 50000ms, 0.125s;
+  transition-delay: 50s, 0.125s;
   transition-duration: 0, 0;
   transition-property: all, all;
   transition-timing-function: linear, steps(10,start);
@@ -3947,21 +3947,21 @@ rv {
 }
 
 sv {
-  transition-delay: 3s, 50000ms;
+  transition-delay: 3s, 50s;
   transition-duration: 0, 0;
   transition-property: ident, ident;
   transition-timing-function: ease, ease;
 }
 
 tv {
-  transition-delay: 0, 3s, 50000ms, 0, 0;
+  transition-delay: 0, 3s, 50s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: ident, all, ident, none, ident;
   transition-timing-function: step-end, ease, ease, ease, ease-in;
 }
 
 uv {
-  transition-delay: 50000ms, 0;
+  transition-delay: 50s, 0;
   transition-duration: 0, 0;
   transition-property: all, ident;
   transition-timing-function: ease, ease;
@@ -3982,35 +3982,35 @@ wv {
 }
 
 xv {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: -dash-;
   transition-timing-function: step-start;
 }
 
 yv {
-  transition-delay: 0, 0, 0, 0, 0.125s, 50000ms, 3s, 50000ms, 0;
+  transition-delay: 0, 0, 0, 0, 0.125s, 50s, 3s, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, all, all, -dash-, all, none, all, -dash-, all;
   transition-timing-function: ease, ease, ease-out, step-end, linear, ease-in, ease-out, ease, steps(4);
 }
 
 zv {
-  transition-delay: 3s, 0.125s, 0, 50000ms, 0;
+  transition-delay: 3s, 0.125s, 0, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: none, none, -dash-, -dash-, all;
   transition-timing-function: ease, linear, cubic-bezier(1,-2,0,4), steps(4), ease;
 }
 
 aw {
-  transition-delay: 3s, 50000ms, 0, 0, 3s, 0, 0.125s, 0, 3s, 0;
+  transition-delay: 3s, 50s, 0, 0, 3s, 0, 0.125s, 0, 3s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: none, none, ident, ident, all, all, all, all, all, ident;
   transition-timing-function: cubic-bezier(1,-2,0,4), ease, step-start, cubic-bezier(1,-2,0,4), step-start, step-start, ease-in-out, ease-out, ease, ease-in-out;
 }
 
 bw {
-  transition-delay: 0, 0, 50000ms, 0, 0, 0.125s, 3s;
+  transition-delay: 0, 0, 50s, 0, 0, 0.125s, 3s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, all, ident, -dash-, all, none, all;
   transition-timing-function: step-end, steps(4), step-start, ease-in, linear, step-start, ease;
@@ -4024,14 +4024,14 @@ cw {
 }
 
 dw {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: all;
   transition-timing-function: step-end;
 }
 
 ew {
-  transition-delay: 0, 50000ms, 50000ms;
+  transition-delay: 0, 50s, 50s;
   transition-duration: 0, 0, 0;
   transition-property: all, none, ident;
   transition-timing-function: ease-in-out, ease, steps(10,start);
@@ -4045,21 +4045,21 @@ fw {
 }
 
 gw {
-  transition-delay: 3s, 3s, 50000ms;
+  transition-delay: 3s, 3s, 50s;
   transition-duration: 0, 0, 0;
   transition-property: ident, -dash-, all;
   transition-timing-function: ease, step-start, ease;
 }
 
 hw {
-  transition-delay: 50000ms, 50000ms, 0, 3s, 0;
+  transition-delay: 50s, 50s, 0, 3s, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: none, all, all, all, none;
   transition-timing-function: ease, cubic-bezier(1,-2,0,4), steps(4), cubic-bezier(1,-2,0,4), ease-out;
 }
 
 iw {
-  transition-delay: 0.125s, 0, 0, 0, 50000ms, 0, 0.125s, 0, 0;
+  transition-delay: 0.125s, 0, 0, 0, 50s, 0, 0.125s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, -dash-, ident, all, ident, ident, none, all, ident;
   transition-timing-function: ease-out, steps(4), ease, step-end, ease, ease-in-out, step-end, steps(4), steps(4);
@@ -4073,7 +4073,7 @@ jw {
 }
 
 kw {
-  transition-delay: 0, 0, 0, 0, 50000ms, 0;
+  transition-delay: 0, 0, 0, 0, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: all, ident, none, -dash-, none, all;
   transition-timing-function: ease, ease-in-out, steps(4), ease-out, cubic-bezier(1,-2,0,4), cubic-bezier(1,-2,0,4);
@@ -4087,7 +4087,7 @@ lw {
 }
 
 mw {
-  transition-delay: 50000ms, 0.125s, 0, 0.125s;
+  transition-delay: 50s, 0.125s, 0, 0.125s;
   transition-duration: 0, 0, 0, 0;
   transition-property: all, -dash-, ident, ident;
   transition-timing-function: steps(10,start), steps(10,start), ease-out, ease;
@@ -4101,7 +4101,7 @@ nw {
 }
 
 ow {
-  transition-delay: 50000ms, 0, 0, 0, 50000ms, 3s, 0, 3s, 0, 3s, 3s, 0, 3s, 0, 0;
+  transition-delay: 50s, 0, 0, 0, 50s, 3s, 0, 3s, 0, 3s, 3s, 0, 3s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, all, none, all, all, all, none, all, all, none, -dash-, all, all, none;
   transition-timing-function: ease, ease-in, ease-out, ease, ease, step-start, step-end, ease-in, step-start, ease-out, ease-out, step-start, ease, steps(10,start), steps(4);
@@ -4136,7 +4136,7 @@ sw {
 }
 
 tw {
-  transition-delay: 0.125s, 0, 50000ms;
+  transition-delay: 0.125s, 0, 50s;
   transition-duration: 0, 0, 0;
   transition-property: none, all, all;
   transition-timing-function: steps(4), ease, step-start;
@@ -4178,7 +4178,7 @@ yw {
 }
 
 zw {
-  transition-delay: 0, 0, 3s, 0, 0, 0, 3s, 50000ms, 3s, 0;
+  transition-delay: 0, 0, 3s, 0, 0, 0, 3s, 50s, 3s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, ident, ident, none, none, all, ident, ident, ident, all;
   transition-timing-function: ease-out, linear, ease, ease, steps(10,start), step-start, ease, steps(4), ease, ease-in-out;
@@ -4192,7 +4192,7 @@ ax {
 }
 
 bx {
-  transition-delay: 0, 50000ms, 0;
+  transition-delay: 0, 50s, 0;
   transition-duration: 0, 0, 0;
   transition-property: all, all, -dash-;
   transition-timing-function: step-start, linear, ease-in;
@@ -4206,7 +4206,7 @@ cx {
 }
 
 dx {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: -dash-;
   transition-timing-function: ease-out;
@@ -4234,7 +4234,7 @@ gx {
 }
 
 hx {
-  transition-delay: 0, 0.125s, 50000ms, 0.125s, 0, 0.125s, 50000ms, 0, 0.125s;
+  transition-delay: 0, 0.125s, 50s, 0.125s, 0, 0.125s, 50s, 0, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: ident, all, none, all, all, ident, all, -dash-, ident;
   transition-timing-function: step-end, ease, ease-in, cubic-bezier(1,-2,0,4), ease-in, ease-in-out, steps(4), ease-in-out, ease;
@@ -4255,14 +4255,14 @@ jx {
 }
 
 kx {
-  transition-delay: 3s, 50000ms, 3s, 0, 50000ms, 0, 0;
+  transition-delay: 3s, 50s, 3s, 0, 50s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, none, all, all, none, none, all;
   transition-timing-function: cubic-bezier(1,-2,0,4), linear, step-end, ease-in-out, ease-in-out, steps(4), ease-out;
 }
 
 lx {
-  transition-delay: 0, 0, 50000ms, 0, 0;
+  transition-delay: 0, 0, 50s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: ident, all, all, all, none;
   transition-timing-function: ease-in-out, ease-in-out, ease, cubic-bezier(1,-2,0,4), ease;
@@ -4283,14 +4283,14 @@ nx {
 }
 
 ox {
-  transition-delay: 0, 0, 50000ms, 0.125s, 50000ms, 0.125s;
+  transition-delay: 0, 0, 50s, 0.125s, 50s, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: all, ident, -dash-, none, -dash-, all;
   transition-timing-function: linear, ease, ease, step-end, step-end, ease;
 }
 
 px {
-  transition-delay: 0.125s, 0.125s, 50000ms, 3s, 0.125s, 50000ms, 0, 3s;
+  transition-delay: 0.125s, 0.125s, 50s, 3s, 0.125s, 50s, 0, 3s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, -dash-, -dash-, all, -dash-, ident, all, all;
   transition-timing-function: ease, ease, step-end, ease-in-out, ease-in, ease, ease, ease;
@@ -4304,7 +4304,7 @@ qx {
 }
 
 rx {
-  transition-delay: 50000ms, 50000ms, 0, 50000ms;
+  transition-delay: 50s, 50s, 0, 50s;
   transition-duration: 0, 0, 0, 0;
   transition-property: all, all, all, ident;
   transition-timing-function: ease, ease-in, linear, ease;
@@ -4318,14 +4318,14 @@ sx {
 }
 
 tx {
-  transition-delay: 0, 3s, 0, 50000ms, 0, 0, 50000ms, 0;
+  transition-delay: 0, 3s, 0, 50s, 0, 0, 50s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, none, all, ident, ident, all, -dash-, all;
   transition-timing-function: ease, ease-out, steps(4), linear, ease-in, steps(4), linear, ease;
 }
 
 ux {
-  transition-delay: 50000ms, 3s, 0, 0, 50000ms, 0, 50000ms;
+  transition-delay: 50s, 3s, 0, 0, 50s, 0, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, all, -dash-, none, ident, -dash-, none;
   transition-timing-function: steps(10,start), ease-in, ease, step-end, ease, ease-in, linear;
@@ -4339,21 +4339,21 @@ vx {
 }
 
 wx {
-  transition-delay: 0.125s, 3s, 0, 50000ms, 0, 0;
+  transition-delay: 0.125s, 3s, 0, 50s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: ident, ident, all, all, ident, all;
   transition-timing-function: step-end, ease, steps(10,start), ease, ease, step-end;
 }
 
 xx {
-  transition-delay: 50000ms, 3s, 0, 50000ms, 0, 0;
+  transition-delay: 50s, 3s, 0, 50s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, all, none, all, none, ident;
   transition-timing-function: ease, ease-out, steps(4), steps(4), ease, ease;
 }
 
 yx {
-  transition-delay: 0, 0, 3s, 0, 0, 0.125s, 3s, 3s, 0, 0.125s, 3s, 0.125s, 0, 3s, 0, 50000ms, 0, 3s, 3s, 0;
+  transition-delay: 0, 0, 3s, 0, 0, 0.125s, 3s, 3s, 0, 0.125s, 3s, 0.125s, 0, 3s, 0, 50s, 0, 3s, 3s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, -dash-, all, none, none, all, -dash-, ident, none, -dash-, -dash-, -dash-, all, all, -dash-, all, -dash-, ident, ident, -dash-;
   transition-timing-function: step-start, ease-out, ease, cubic-bezier(1,-2,0,4), steps(4), ease, cubic-bezier(1,-2,0,4), step-start, ease-out, ease-out, ease-out, ease, linear, ease-in-out, steps(4), steps(10,start), step-end, ease-in, ease, steps(4);
@@ -4367,14 +4367,14 @@ zx {
 }
 
 ay {
-  transition-delay: 0, 50000ms, 0, 0.125s, 0.125s;
+  transition-delay: 0, 50s, 0, 0.125s, 0.125s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, none, ident, all, none;
   transition-timing-function: ease, ease, ease, step-end, ease;
 }
 
 by {
-  transition-delay: 3s, 50000ms, 0, 0, 0, 0, 3s, 0, 0.125s, 0, 50000ms, 0.125s;
+  transition-delay: 3s, 50s, 0, 0, 0, 0, 3s, 0, 0.125s, 0, 50s, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, -dash-, none, all, none, all, all, all, ident, none, all, all;
   transition-timing-function: step-start, ease, cubic-bezier(1,-2,0,4), ease-in, ease, steps(4), ease, steps(10,start), ease-in-out, ease, step-end, ease;
@@ -4416,21 +4416,21 @@ gy {
 }
 
 hy {
-  transition-delay: 0, 0, 50000ms, 0, 0, 0, 0, 0, 50000ms;
+  transition-delay: 0, 0, 50s, 0, 0, 0, 0, 0, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, none, all, all, none, all, all, none, none;
   transition-timing-function: ease, ease, linear, ease-in, cubic-bezier(1,-2,0,4), ease, step-start, steps(10,start), ease;
 }
 
 iy {
-  transition-delay: 0, 0, 3s, 50000ms, 3s;
+  transition-delay: 0, 0, 3s, 50s, 3s;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: all, -dash-, ident, ident, all;
   transition-timing-function: steps(4), steps(4), steps(4), ease-in-out, steps(4);
 }
 
 jy {
-  transition-delay: 0, 0.125s, 50000ms;
+  transition-delay: 0, 0.125s, 50s;
   transition-duration: 0, 0, 0;
   transition-property: all, all, -dash-;
   transition-timing-function: steps(10,start), step-end, linear;
@@ -4451,7 +4451,7 @@ ly {
 }
 
 my {
-  transition-delay: 0, 0, 50000ms, 0.125s, 50000ms, 0, 0, 50000ms, 0, 50000ms, 0.125s, 0, 3s, 0, 0, 50000ms, 3s, 0.125s;
+  transition-delay: 0, 0, 50s, 0.125s, 50s, 0, 0, 50s, 0, 50s, 0.125s, 0, 3s, 0, 0, 50s, 3s, 0.125s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, all, none, all, all, ident, all, all, all, all, -dash-, all, -dash-, ident, none, all, all;
   transition-timing-function: ease-out, steps(10,start), steps(10,start), linear, steps(10,start), ease, step-start, ease-in-out, ease, ease-in, cubic-bezier(1,-2,0,4), ease, ease, ease-in, ease-in, steps(4), ease, step-end;
@@ -4472,7 +4472,7 @@ oy {
 }
 
 py {
-  transition-delay: 50000ms, 0, 3s, 0.125s;
+  transition-delay: 50s, 0, 3s, 0.125s;
   transition-duration: 0, 0, 0, 0;
   transition-property: all, -dash-, all, all;
   transition-timing-function: ease, step-end, step-start, ease-out;
@@ -4514,7 +4514,7 @@ uy {
 }
 
 vy {
-  transition-delay: 50000ms, 3s, 3s;
+  transition-delay: 50s, 3s, 3s;
   transition-duration: 0, 0, 0;
   transition-property: -dash-, all, -dash-;
   transition-timing-function: ease, cubic-bezier(1,-2,0,4), step-start;
@@ -4528,7 +4528,7 @@ wy {
 }
 
 xy {
-  transition-delay: 0, 50000ms, 0, 0, 0;
+  transition-delay: 0, 50s, 0, 0, 0;
   transition-duration: 0, 0, 0, 0, 0;
   transition-property: none, -dash-, all, none, all;
   transition-timing-function: step-start, step-end, ease, linear, ease;
@@ -4542,7 +4542,7 @@ yy {
 }
 
 zy {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: -dash-;
   transition-timing-function: ease-in;
@@ -4577,7 +4577,7 @@ dz {
 }
 
 ez {
-  transition-delay: 3s, 50000ms, 50000ms, 0, 0.125s, 0;
+  transition-delay: 3s, 50s, 50s, 0, 0.125s, 0;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: none, -dash-, -dash-, all, ident, all;
   transition-timing-function: ease-out, ease, steps(10,start), ease-in, linear, ease;
@@ -4605,14 +4605,14 @@ hz {
 }
 
 iz {
-  transition-delay: 0, 3s, 0, 0, 3s, 3s, 3s, 50000ms;
+  transition-delay: 0, 3s, 0, 0, 3s, 3s, 3s, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, ident, all, -dash-, none, ident, -dash-, -dash-;
   transition-timing-function: ease, steps(4), step-end, step-end, ease, ease-in-out, steps(10,start), ease;
 }
 
 jz {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: all;
   transition-timing-function: ease-in-out;
@@ -4626,7 +4626,7 @@ kz {
 }
 
 lz {
-  transition-delay: 50000ms, 0, 0, 3s;
+  transition-delay: 50s, 0, 0, 3s;
   transition-duration: 0, 0, 0, 0;
   transition-property: all, -dash-, ident, all;
   transition-timing-function: cubic-bezier(1,-2,0,4), ease-in-out, steps(4), linear;
@@ -4654,28 +4654,28 @@ oz {
 }
 
 pz {
-  transition-delay: 3s, 0, 50000ms, 0;
+  transition-delay: 3s, 0, 50s, 0;
   transition-duration: 0, 0, 0, 0;
   transition-property: none, ident, none, all;
   transition-timing-function: ease, linear, steps(10,start), ease;
 }
 
 qz {
-  transition-delay: 3s, 50000ms, 0, 0, 0, 50000ms;
+  transition-delay: 3s, 50s, 0, 0, 0, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: ident, -dash-, ident, all, -dash-, none;
   transition-timing-function: step-start, ease, ease, ease, ease-in, linear;
 }
 
 rz {
-  transition-delay: 3s, 0, 50000ms;
+  transition-delay: 3s, 0, 50s;
   transition-duration: 0, 0, 0;
   transition-property: ident, all, -dash-;
   transition-timing-function: linear, steps(4), steps(10,start);
 }
 
 sz {
-  transition-delay: 50000ms;
+  transition-delay: 50s;
   transition-duration: 0;
   transition-property: ident;
   transition-timing-function: linear;
@@ -4689,21 +4689,21 @@ tz {
 }
 
 uz {
-  transition-delay: 3s, 50000ms, 0.125s, 50000ms, 0, 0, 50000ms;
+  transition-delay: 3s, 50s, 0.125s, 50s, 0, 0, 50s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, none, none, none, none, all;
   transition-timing-function: cubic-bezier(1,-2,0,4), cubic-bezier(1,-2,0,4), ease, ease-in, ease, ease, ease-out;
 }
 
 vz {
-  transition-delay: 3s, 0, 0, 50000ms, 0, 0;
+  transition-delay: 3s, 0, 0, 50s, 0, 0;
   transition-duration: 0, 0, 0, 0, 0, 0;
   transition-property: -dash-, -dash-, all, -dash-, -dash-, all;
   transition-timing-function: steps(10,start), step-end, ease, steps(4), step-end, linear;
 }
 
 wz {
-  transition-delay: 0, 50000ms, 0;
+  transition-delay: 0, 50s, 0;
   transition-duration: 0, 0, 0;
   transition-property: none, ident, ident;
   transition-timing-function: ease, step-end, steps(10,start);
@@ -4717,7 +4717,7 @@ xz {
 }
 
 yz {
-  transition-delay: 0, 3s, 0, 0, 3s, 50000ms, 3s;
+  transition-delay: 0, 3s, 0, 0, 3s, 50s, 3s;
   transition-duration: 0, 0, 0, 0, 0, 0, 0;
   transition-property: all, all, -dash-, -dash-, -dash-, -dash-, none;
   transition-timing-function: steps(10,start), ease-out, ease, ease-in-out, ease-in-out, cubic-bezier(1,-2,0,4), ease-out;

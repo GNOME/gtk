@@ -15,9 +15,9 @@ d {
 }
 
 e {
-  animation-duration: 5ms;
+  animation-duration: 0.0050000000000000001s;
 }
 
 f {
-  animation-duration: 5ms, 6s;
+  animation-duration: 0.0050000000000000001s, 6s;
 }
