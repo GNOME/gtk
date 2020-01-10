@@ -19,9 +19,9 @@ e {
 }
 
 f {
-  transition-duration: 5ms;
+  transition-duration: 0.0050000000000000001s;
 }
 
 g {
-  transition-duration: 5ms, 5s;
+  transition-duration: 0.0050000000000000001s, 5s;
 }
