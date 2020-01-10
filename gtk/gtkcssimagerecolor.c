@@ -22,7 +22,7 @@
 #include "gtkcssimagerecolorprivate.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcsspalettevalueprivate.h"
-#include "gtkcssrgbavalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkiconthemeprivate.h"
 #include "gdkpixbufutilsprivate.h"
 
@@ -74,7 +74,7 @@ lookup_symbolic_colors (GtkCssStyle *style,
   const GdkRGBA *lookup;
 
   color = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR);
-  *color_out = *_gtk_css_rgba_value_get_rgba (color);
+  *color_out = *gtk_css_color_value_get_rgba (color);
 
   lookup = gtk_css_palette_value_get_color (palette, "success");
   if (lookup)
