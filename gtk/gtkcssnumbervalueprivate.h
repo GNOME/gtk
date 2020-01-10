@@ -32,7 +32,8 @@ typedef enum /*< skip >*/ {
   GTK_CSS_PARSE_NUMBER = (1 << 2),
   GTK_CSS_PARSE_LENGTH = (1 << 3),
   GTK_CSS_PARSE_ANGLE = (1 << 4),
-  GTK_CSS_PARSE_TIME = (1 << 5)
+  GTK_CSS_PARSE_TIME = (1 << 5),
+  GTK_CSS_PARSE_NON_STATIC = (1 << 6)
 } GtkCssNumberParseFlags;
 
 typedef struct _GtkCssNumberValueClass GtkCssNumberValueClass;

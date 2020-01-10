@@ -136,7 +136,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_IMAGE = {
 GtkCssValue *
 _gtk_css_image_value_new (GtkCssImage *image)
 {
-  static GtkCssValue none_singleton = { &GTK_CSS_VALUE_IMAGE, 1, NULL };
+  static GtkCssValue none_singleton = { &GTK_CSS_VALUE_IMAGE, 1, 1, NULL };
   GtkCssValue *value;
 
   if (image == NULL)

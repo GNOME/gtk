@@ -150,6 +150,7 @@ _gtk_css_string_value_new_take (char *string)
   GtkCssValue *result;
 
   result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_STRING);
+  result->is_static = TRUE;
   result->string = string;
 
   return result;
@@ -190,6 +191,7 @@ _gtk_css_ident_value_new_take (char *ident)
   GtkCssValue *result;
 
   result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_IDENT);
+  result->is_static = TRUE;
   result->string = ident;
 
   return result;
