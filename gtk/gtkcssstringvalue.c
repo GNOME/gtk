@@ -151,6 +151,7 @@ _gtk_css_string_value_new_take (char *string)
 
   result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_STRING);
   result->string = string;
+  result->is_computed = TRUE;
 
   return result;
 }
@@ -191,6 +192,7 @@ _gtk_css_ident_value_new_take (char *ident)
 
   result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_IDENT);
   result->string = ident;
+  result->is_computed = TRUE;
 
   return result;
 }
