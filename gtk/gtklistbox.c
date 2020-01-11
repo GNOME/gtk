@@ -25,7 +25,7 @@
 #include "gtkbuildable.h"
 #include "gtkcontainerprivate.h"
 #include "gtkcssnodeprivate.h"
-#include "gtkdnd.h"
+#include "gtkdragdest.h"
 #include "gtkgestureclick.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
@@ -264,8 +264,6 @@ static void                 gtk_list_box_size_allocate                (GtkWidget
                                                                        int                  width,
                                                                        int                  height,
                                                                        int                  baseline);
-static void                 gtk_list_box_drag_leave                   (GtkWidget           *widget,
-                                                                       GdkDrop             *drop);
 static void                 gtk_list_box_activate_cursor_row          (GtkListBox          *box);
 static void                 gtk_list_box_toggle_cursor_row            (GtkListBox          *box);
 static void                 gtk_list_box_move_cursor                  (GtkListBox          *box,
@@ -452,7 +450,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   widget_class->get_request_mode = gtk_list_box_get_request_mode;
   widget_class->measure = gtk_list_box_measure;
   widget_class->size_allocate = gtk_list_box_size_allocate;
-  widget_class->drag_leave = gtk_list_box_drag_leave;
   container_class->add = gtk_list_box_add;
   container_class->remove = gtk_list_box_remove;
   container_class->forall = gtk_list_box_forall;
@@ -2728,7 +2725,7 @@ gtk_list_box_drag_unhighlight_row (GtkListBox *box)
   if (priv->drag_highlighted_row == NULL)
     return;
 
-  gtk_drag_unhighlight (GTK_WIDGET (priv->drag_highlighted_row));
+  gtk_widget_unset_state_flags (GTK_WIDGET (priv->drag_highlighted_row), GTK_STATE_FLAG_DROP_ACTIVE);
   g_clear_object (&priv->drag_highlighted_row);
 }
 
@@ -2757,15 +2754,8 @@ gtk_list_box_drag_highlight_row (GtkListBox    *box,
     return;
 
   gtk_list_box_drag_unhighlight_row (box);
-  gtk_drag_highlight (GTK_WIDGET (row));
+  gtk_widget_set_state_flags (GTK_WIDGET (row), GTK_STATE_FLAG_DROP_ACTIVE, FALSE);
   priv->drag_highlighted_row = g_object_ref (row);
-}
-
-static void
-gtk_list_box_drag_leave (GtkWidget *widget,
-                         GdkDrop   *drop)
-{
-  gtk_list_box_drag_unhighlight_row (GTK_LIST_BOX (widget));
 }
 
 static void

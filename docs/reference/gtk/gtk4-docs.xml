@@ -344,6 +344,13 @@
       <xi:include href="xml/gtkpadcontroller.xml" />
     </chapter>
 
+    <chapter>
+      <title>Data exchange, clipboards and Drag-and-Drop</title>
+      <xi:include href="xml/gtkdragsource.xml"/>
+      <xi:include href="xml/gtkdragicon.xml"/>
+      <xi:include href="xml/gtkdroptarget.xml"/>
+    </chapter>
+
   </part>
 
   <part  id="gtkbase">
@@ -352,7 +359,6 @@
     <xi:include href="xml/gtkfeatures.xml" />
     <xi:include href="xml/gtkaccelgroup.xml" />
     <xi:include href="xml/gtkaccelmap.xml" />
-    <xi:include href="xml/gtkdnd.xml" />
     <xi:include href="xml/gtksettings.xml" />
     <xi:include href="xml/gtkbindings.xml" />
     <xi:include href="xml/gtkenums.xml" />

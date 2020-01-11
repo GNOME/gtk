@@ -32,7 +32,6 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkdnd.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkgesturedrag.h"
 #include "gtkgestureclick.h"
@@ -54,6 +53,8 @@
 #include "gtkwindow.h"
 #include "gtkpopovermenu.h"
 #include "gtknative.h"
+#include "gtkdragsource.h"
+#include "gtkdragicon.h"
 
 #include "a11y/gtklabelaccessibleprivate.h"
 
@@ -501,9 +502,6 @@ static gboolean gtk_label_mnemonic_activate (GtkWidget         *widget,
 static void     gtk_label_setup_mnemonic    (GtkLabel          *label,
                                              GtkWidget         *toplevel,
 					     guint              last_key);
-static void     gtk_label_drag_data_get     (GtkWidget         *widget,
-					     GdkDrag           *drag,
-					     GtkSelectionData  *selection_data);
 
 static void     gtk_label_buildable_interface_init   (GtkBuildableIface  *iface);
 static gboolean gtk_label_buildable_custom_tag_start (GtkBuildable       *buildable,
@@ -652,7 +650,6 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->unroot = gtk_label_unroot;
   widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
   widget_class->popup_menu = gtk_label_popup_menu;
-  widget_class->drag_data_get = gtk_label_drag_data_get;
   widget_class->grab_focus = gtk_label_grab_focus;
   widget_class->focus = gtk_label_focus;
   widget_class->get_request_mode = gtk_label_get_request_mode;
@@ -4597,16 +4594,10 @@ connect_mnemonics_visible_notify (GtkLabel *label)
     }
 }
 
-static void
-drag_begin_cb (GtkWidget *widget,
-               GdkDrag   *drag,
-               gpointer   data)
+static GdkPaintable *
+get_selection_paintable (GtkLabel *label)
 {
-  GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GdkPaintable *paintable = NULL;
-
-  g_signal_handlers_disconnect_by_func (widget, drag_begin_cb, NULL);
 
   if ((priv->select_info->selection_anchor !=
        priv->select_info->selection_end) &&
@@ -4628,20 +4619,10 @@ drag_begin_cb (GtkWidget *widget,
       if (start > len)
         start = len;
 
-      paintable = gtk_text_util_create_drag_icon (widget,
-                                                  priv->text + start,
-                                                  end - start);
+      return gtk_text_util_create_drag_icon (GTK_WIDGET (label), priv->text + start, end - start);
     }
 
-  if (paintable)
-    {
-      gtk_drag_set_icon_paintable (drag, paintable, 0, 0);
-      g_object_unref (paintable);
-    }
-  else
-    {
-      gtk_drag_set_icon_default (drag);
-    }
+  return NULL;
 }
 
 static void
@@ -4734,27 +4715,27 @@ gtk_label_drag_gesture_update (GtkGestureDrag *gesture,
 
   if (info->in_drag)
     {
-      if (gtk_drag_check_threshold (widget,
-				    info->drag_start_x,
-				    info->drag_start_y,
-				    x, y))
+      if (gtk_drag_check_threshold (widget, info->drag_start_x, info->drag_start_y, x, y))
 	{
-	  GdkContentFormats *target_list = gdk_content_formats_new (NULL, 0);
+          GdkDrag *drag;
+          GdkSurface *surface;
+          GdkDevice *device;
 
-	  target_list = gtk_content_formats_add_text_targets (target_list);
+          surface = gtk_native_get_surface (gtk_widget_get_native (widget));
+          device = gtk_gesture_get_device (GTK_GESTURE (gesture));
 
-          g_signal_connect (widget, "drag-begin",
-                            G_CALLBACK (drag_begin_cb), NULL);
-	  gtk_drag_begin (widget,
-                          gtk_gesture_get_device (GTK_GESTURE (gesture)),
-                          target_list,
-                          GDK_ACTION_COPY,
-                          info->drag_start_x,
-                          info->drag_start_y);
+          drag = gdk_drag_begin (surface,
+                                 device,
+                                 info->provider,
+                                 GDK_ACTION_COPY,
+                                 info->drag_start_x,
+                                 info->drag_start_y);
 
+          gtk_drag_icon_set_from_paintable (drag, get_selection_paintable (label), 0, 0);
+
+          g_object_unref (drag);
+          
 	  info->in_drag = FALSE;
-
-	  gdk_content_formats_unref (target_list);
 	}
     }
   else
@@ -5138,47 +5119,6 @@ gtk_label_get_selectable (GtkLabel *label)
   g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
 
   return priv->select_info && priv->select_info->selectable;
-}
-
-static void
-gtk_label_set_selection_text (GtkLabel         *label,
-			      GtkSelectionData *selection_data)
-{
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-
-  if (priv->select_info &&
-      (priv->select_info->selection_anchor !=
-       priv->select_info->selection_end) &&
-      priv->text)
-    {
-      gint start, end;
-      gint len;
-
-      start = MIN (priv->select_info->selection_anchor,
-                   priv->select_info->selection_end);
-      end = MAX (priv->select_info->selection_anchor,
-                 priv->select_info->selection_end);
-
-      len = strlen (priv->text);
-
-      if (end > len)
-        end = len;
-
-      if (start > len)
-        start = len;
-
-      gtk_selection_data_set_text (selection_data,
-				   priv->text + start,
-				   end - start);
-    }
-}
-
-static void
-gtk_label_drag_data_get (GtkWidget        *widget,
-			 GdkDrag          *drag,
-			 GtkSelectionData *selection_data)
-{
-  gtk_label_set_selection_text (GTK_LABEL (widget), selection_data);
 }
 
 static void

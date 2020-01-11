@@ -694,31 +694,6 @@ typedef enum
 } GtkTreeViewGridLines;
 
 /**
- * GtkDragResult:
- * @GTK_DRAG_RESULT_SUCCESS: The drag operation was successful.
- * @GTK_DRAG_RESULT_NO_TARGET: No suitable drag target.
- * @GTK_DRAG_RESULT_USER_CANCELLED: The user cancelled the drag operation.
- * @GTK_DRAG_RESULT_TIMEOUT_EXPIRED: The drag operation timed out.
- * @GTK_DRAG_RESULT_GRAB_BROKEN: The pointer or keyboard grab used
- *  for the drag operation was broken.
- * @GTK_DRAG_RESULT_ERROR: The drag operation failed due to some
- *  unspecified error.
- *
- * Gives an indication why a drag operation failed.
- * The value can by obtained by connecting to the
- * #GtkWidget::drag-failed signal.
- */
-typedef enum
-{
-  GTK_DRAG_RESULT_SUCCESS,
-  GTK_DRAG_RESULT_NO_TARGET,
-  GTK_DRAG_RESULT_USER_CANCELLED,
-  GTK_DRAG_RESULT_TIMEOUT_EXPIRED,
-  GTK_DRAG_RESULT_GRAB_BROKEN,
-  GTK_DRAG_RESULT_ERROR
-} GtkDragResult;
-
-/**
  * GtkSizeGroupMode:
  * @GTK_SIZE_GROUP_NONE: group has no effect
  * @GTK_SIZE_GROUP_HORIZONTAL: group affects horizontal requisition

@@ -24,7 +24,6 @@
 
 #include "gtkbox.h"
 #include "gtkcssnodeprivate.h"
-#include "gtkdnd.h"
 #include "gtkdragsource.h"
 #include "gtkicontheme.h"
 #include "gtkimage.h"
@@ -37,6 +36,7 @@
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerscroll.h"
+#include "gtkdragsource.h"
 
 typedef struct
 {
@@ -1240,15 +1240,8 @@ set_button_image (GtkPathBar *path_bar,
 static void
 button_data_free (ButtonData *button_data)
 {
-  if (button_data->file)
-    g_object_unref (button_data->file);
-  button_data->file = NULL;
-
+  g_clear_object (&button_data->file);
   g_free (button_data->dir_name);
-  button_data->dir_name = NULL;
-
-  button_data->button = NULL;
-
   g_free (button_data);
 }
 
@@ -1312,25 +1305,6 @@ find_button_type (GtkPathBar  *path_bar,
  return NORMAL_BUTTON;
 }
 
-static void
-button_drag_data_get_cb (GtkWidget        *widget,
-                         GdkDrag          *drag,
-                         GtkSelectionData *selection_data,
-                         gpointer          data)
-{
-  ButtonData *button_data;
-  char *uris[2];
-
-  button_data = data;
-
-  uris[0] = g_file_get_uri (button_data->file);
-  uris[1] = NULL;
-
-  gtk_selection_data_set_uris (selection_data, uris);
-
-  g_free (uris[0]);
-}
-
 static ButtonData *
 make_directory_button (GtkPathBar  *path_bar,
 		       const char  *dir_name,
@@ -1341,6 +1315,9 @@ make_directory_button (GtkPathBar  *path_bar,
   AtkObject *atk_obj;
   GtkWidget *child = NULL;
   ButtonData *button_data;
+  GValue value = G_VALUE_INIT;
+  GdkContentProvider *content;
+  GtkDragSource *source;
 
   file_is_hidden = !! file_is_hidden;
   /* Is it a special button? */
@@ -1387,13 +1364,14 @@ make_directory_button (GtkPathBar  *path_bar,
   g_object_weak_ref (G_OBJECT (button_data->button),
 		     (GWeakNotify) button_data_free, button_data);
 
-  gtk_drag_source_set (button_data->button,
-		       GDK_BUTTON1_MASK,
-		       NULL,
-		       GDK_ACTION_COPY);
-  gtk_drag_source_add_uri_targets (button_data->button);
-  g_signal_connect (button_data->button, "drag-data-get",
-		    G_CALLBACK (button_drag_data_get_cb), button_data);
+  g_value_init (&value, G_TYPE_FILE);
+  g_value_set_object (&value, button_data->file);
+  source = gtk_drag_source_new ();
+  content = gdk_content_provider_new_for_value (&value);
+  gtk_drag_source_set_content (source, content);
+  g_object_unref (content);
+  gtk_widget_add_controller (button_data->button, GTK_EVENT_CONTROLLER (source));
+  g_value_unset (&value);
 
   return button_data;
 }

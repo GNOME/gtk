@@ -5002,49 +5002,6 @@ gtk_selection_data_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkdnd</FILE>
-<TITLE>Drag and Drop</TITLE>
-GtkDestDefaults
-GtkDragResult
-
-<SUBSECTION Destination Side>
-gtk_drag_dest_set
-gtk_drag_dest_unset
-gtk_drag_dest_find_target
-gtk_drag_dest_get_target_list
-gtk_drag_dest_set_target_list
-gtk_drag_dest_add_text_targets
-gtk_drag_dest_add_image_targets
-gtk_drag_dest_add_uri_targets
-gtk_drag_dest_set_track_motion
-gtk_drag_dest_get_track_motion
-gtk_drag_get_data
-gtk_drag_get_source_widget
-gtk_drag_highlight
-gtk_drag_unhighlight
-
-<SUBSECTION Source Side>
-gtk_drag_begin
-gtk_drag_cancel
-gtk_drag_set_icon_widget
-gtk_drag_set_icon_paintable
-gtk_drag_set_icon_name
-gtk_drag_set_icon_gicon
-gtk_drag_set_icon_default
-gtk_drag_check_threshold
-gtk_drag_source_set
-gtk_drag_source_set_icon_name
-gtk_drag_source_set_icon_gicon
-gtk_drag_source_set_icon_paintable
-gtk_drag_source_unset
-gtk_drag_source_set_target_list
-gtk_drag_source_get_target_list
-gtk_drag_source_add_text_targets
-gtk_drag_source_add_image_targets
-gtk_drag_source_add_uri_targets
-</SECTION>
-
-<SECTION>
 <FILE>gtkbindings</FILE>
 <TITLE>Bindings</TITLE>
 GtkBindingSet
@@ -7190,4 +7147,70 @@ gtk_constraint_guide_get_max_size
 <SUBSECTION Standard>
 GTK_TYPE_CONSTRAINT_GUIDE
 gtk_constraint_guide_get_tyoe
+</SECTION>
+
+<SECTION>
+<FILE>gtkdragsource</FILE>
+GtkDragSource
+gtk_drag_source_new
+gtk_drag_source_set_content
+gtk_drag_source_get_content
+gtk_drag_source_set_actions
+gtk_drag_source_get_actions
+gtk_drag_source_set_icon
+gtk_drag_source_drag_cancel
+gtk_drag_source_get_drag
+gtk_drag_check_threshold
+<SUBSECTION Standard>
+GTK_TYPE_DRAG_SOURCE
+GTK_DRAG_SOURCE
+GTK_DRAG_SOURCE_CLASS
+GTK_IS_DRAG_SOURCE
+GTK_IS_DRAG_SOURCE_CLASS
+GTK_DRAG_SOURCE_GET_CLASS
+<SUBSECTION Private>
+gtk_drag_source_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkdroptarget</FILE>
+GtkDropTarget
+gtk_drop_target_new
+gtk_drop_target_set_formats
+gtk_drop_target_get_formats
+gtk_drop_target_set_actions
+gtk_drop_target_get_actions
+gtk_drop_target_get_drop
+gtk_drop_target_find_mimetype
+gtk_drop_target_read_selection
+gtk_drop_target_read_selection_finish
+gtk_drag_highlight
+gtk_drag_unhighlight
+
+<SUBSECTION Standard>
+GTK_TYPE_DROP_TARGET
+GTK_DROP_TARGET
+GTK_DROP_TARGET_CLASS
+GTK_IS_DROP_TARGET
+GTK_IS_DROP_TARGET_CLASS
+GTK_DROP_TARGET_GET_CLASS
+<SUBSECTION Private>
+gtk_drop_target_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkdragicon</FILE>
+GtkDragIcon
+gtk_drag_icon_new_for_drag
+gtk_drag_icon_set_from_paintable
+
+<SUBSECTION Standard>
+GTK_TYPE_DRAG_ICON
+GTK_DRAG_ICON
+GTK_DRAG_ICON_CLASS
+GTK_IS_DRAG_ICON
+GTK_IS_DRAG_ICON_CLASS
+GTK_DRAG_ICON_GET_CLASS
+<SUBSECTION Private>
+gtk_drag_icon_get_type
 </SECTION>

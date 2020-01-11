@@ -96,7 +96,6 @@ private_headers = [
   'gtkcsswidgetnodeprivate.h',
   'gtkcsswin32sizevalueprivate.h',
   'gtkdialogprivate.h',
-  'gtkdndprivate.h',
   'gtkentryprivate.h',
   'gtkeventcontrollerlegacyprivate.h',
   'gtkeventcontrollerprivate.h',

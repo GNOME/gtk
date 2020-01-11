@@ -3583,7 +3583,13 @@ gdk_surface_register_dnd (GdkSurface *surface)
  *
  * Starts a drag and creates a new drag context for it.
  *
- * This function is called by the drag source.
+ * This function is called by the drag source. After this call, you
+ * probably want to set up the drag icon using the surface returned
+ * by gdk_drag_get_drag_surface().
+ *
+ * Note: if @actions include %GDK_ACTION_MOVE, you need to listen for
+ * the #GdkDrag::dnd-finished signal and delete the data at the source
+ * if gdk_drag_get_selected_action() returns %GDK_ACTION_MOVE.
  *
  * Returns: (transfer full) (nullable): a newly created #GdkDrag or
  *     %NULL on error.

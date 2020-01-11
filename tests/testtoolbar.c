@@ -293,11 +293,12 @@ bold_toggled (GtkToggleToolButton *button)
 }
 
 static gboolean
-toolbar_drag_drop (GtkWidget *widget,
-                   GdkDrop   *drop,
+toolbar_drag_drop (GtkDropTarget *dest,
+                   GdkDrop *drop,
 		   gint x, gint y,
                    GtkWidget *label)
 {
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
   gchar buf[32];
 
   g_snprintf(buf, sizeof(buf), "%d",
@@ -323,12 +324,11 @@ rtl_toggled (GtkCheckButton *check)
 static GtkToolItem *drag_item = NULL;
 
 static gboolean
-toolbar_drag_motion (GtkToolbar *toolbar,
-		     GdkDrop    *drop,
+toolbar_drag_motion (GtkDropTarget *dest,
+                     GdkDrop *drop,
 		     gint        x,
 		     gint        y,
-		     guint       time,
-		     gpointer    null)
+		     GtkToolbar *toolbar)
 {
   gint index;
   
@@ -348,9 +348,9 @@ toolbar_drag_motion (GtkToolbar *toolbar,
 }
 
 static void
-toolbar_drag_leave (GtkToolbar *toolbar,
-		    GdkDrop    *drop,
-		    gpointer    null)
+toolbar_drag_leave (GtkDropTarget *dest,
+                    GdkDrop *drop,
+                    GtkToolbar *toolbar)
 {
   if (drag_item)
     {
@@ -389,6 +389,9 @@ main (gint argc, gchar **argv)
   GtkWidget *hbox, *hbox1, *hbox2, *checkbox, *option_menu, *menu;
   gint i;
   GdkContentFormats *targets;
+  GdkContentProvider *content;
+  GtkDragSource *source;
+  GtkDropTarget *dest;
   static const gchar *toolbar_styles[] = { "icons", "text", "both (vertical)",
 					   "both (horizontal)" };
   GtkToolItem *item;
@@ -616,19 +619,18 @@ main (gint argc, gchar **argv)
   gtk_container_add (GTK_CONTAINER (hbox), checkbox);
 
   targets = gdk_content_formats_new (target_table, G_N_ELEMENTS (target_table));
-  gtk_drag_source_set (button, GDK_BUTTON1_MASK,
-                       targets,
-		       GDK_ACTION_MOVE);
-  gtk_drag_dest_set (toolbar, GTK_DEST_DEFAULT_DROP,
-                     targets,
-		     GDK_ACTION_MOVE);
+  content = gdk_content_provider_new_for_bytes (target_table[0], g_bytes_new ("", 1));
+  source = gtk_drag_source_new ();
+  gtk_drag_source_set_content (source, content);
+  gtk_drag_source_set_actions (source, GDK_ACTION_MOVE);
+  g_object_unref (content);
+  gtk_widget_add_controller (button, GTK_EVENT_CONTROLLER (source));
+  dest = gtk_drop_target_new (targets, GDK_ACTION_MOVE);
+  g_signal_connect (dest, "drag_motion", G_CALLBACK (toolbar_drag_motion), toolbar);
+  g_signal_connect (dest, "drag_leave", G_CALLBACK (toolbar_drag_leave), toolbar);
+  g_signal_connect (dest, "drag_drop", G_CALLBACK (toolbar_drag_drop), label);
+  gtk_widget_add_controller (toolbar, GTK_EVENT_CONTROLLER (dest));
   gdk_content_formats_unref (targets);
-  g_signal_connect (toolbar, "drag_motion",
-		    G_CALLBACK (toolbar_drag_motion), NULL);
-  g_signal_connect (toolbar, "drag_leave",
-		    G_CALLBACK (toolbar_drag_leave), NULL);
-  g_signal_connect (toolbar, "drag_drop",
-		    G_CALLBACK (toolbar_drag_drop), label);
 
   gtk_widget_show (window);
 

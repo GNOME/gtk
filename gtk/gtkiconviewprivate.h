@@ -19,6 +19,7 @@
 #include "gtk/gtkcssnodeprivate.h"
 #include "gtk/gtkgestureclick.h"
 #include "gtk/gtkeventcontrollermotion.h"
+#include "gtk/gtkdragsource.h"
 
 #ifndef __GTK_ICON_VIEW_PRIVATE_H__
 #define __GTK_ICON_VIEW_PRIVATE_H__
@@ -132,9 +133,16 @@ struct _GtkIconViewPrivate
   gint press_start_x;
   gint press_start_y;
 
+  GdkContentFormats *source_formats;
+  GtkDropTarget *dest;
+  GtkCssNode *dndnode;
+
+  GdkDrag *drag;
+
   GdkDragAction source_actions;
   GdkDragAction dest_actions;
 
+  GtkTreeRowReference *source_item;
   GtkTreeRowReference *dest_item;
   GtkIconViewDropPosition dest_pos;
 

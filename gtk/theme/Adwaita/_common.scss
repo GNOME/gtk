@@ -142,7 +142,19 @@ textview {
 
 textview border { background-color: mix($bg_color, $base_color, 50%); }
 
-iconview { @extend .view; }
+iconview { 
+  @extend .view;
+
+  &:drop(active) {
+    box-shadow: none;
+  }
+
+  dndtarget:drop(active) {
+    border-style: solid;
+    border-width: 1px;
+    border-color: $selected_borders_color;
+  }
+}
 
 .rubberband,
 rubberband {
@@ -1906,6 +1918,9 @@ treeview.view {
     border-top: $backdrop_bg_color;
   }
   &:drop(active) {
+    box-shadow: none;
+  }
+  dndtarget:drop(active) {
     border-style: solid none;
     border-width: 1px;
     border-color: $selected_borders_color;
@@ -3891,6 +3906,15 @@ expander {
 
 expander-widget title:hover > expander {
   color: lighten($fg_color,30%); //only lightens the icon 
+}
+
+placessidebar,
+stackswitcher,
+expander-widget {
+  &:not(decoration):not(window):drop(active):focus,
+  &:not(decoration):not(window):drop(active) {
+    box-shadow: none;
+  }
 }
 
 

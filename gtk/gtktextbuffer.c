@@ -27,7 +27,6 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include "gtkdnd.h"
 #include "gtkmarshalers.h"
 #include "gtktextbuffer.h"
 #include "gtktexthistoryprivate.h"
@@ -4077,6 +4076,13 @@ cut_or_copy (GtkTextBuffer *buffer,
         }
     }
 }
+
+GdkContentProvider *
+gtk_text_buffer_get_selection_content (GtkTextBuffer *buffer)
+{
+  return gtk_text_buffer_content_new (buffer);
+}
+
 
 /**
  * gtk_text_buffer_cut_clipboard:
