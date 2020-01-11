@@ -44,8 +44,32 @@
  * Drag-and-Drop operations.
  *
  * To use a GtkDropTarget to receive drops on a widget, you create
- * a GtkDropTarget object, connect to its signals, and then attach
+ * a GtkDropTarget object, configure which data formats and actions
+ * you support, connect to its signals, and then attach
  * it to the widget with gtk_widget_add_controller().
+ *
+ * During a drag operation, the first signal that a GtkDropTarget
+ * emits is #GtkDropTarget::accept, which is meant to determine
+ * whether the target is a possible drop site for the ongoing drag.
+ * The default handler for the ::accept signal accepts the drag
+ * if it finds a compatible data format an an action that is supported
+ * on both sides.
+ *
+ * If it is, and the widget becomes the current target, you will
+ * receive a #GtkDropTarget::drag-enter signal, followed by
+ * #GtkDropTarget::drag-motion signals as the pointer moves, and
+ * finally either a #GtkDropTarget::drag-leave signal when the pointer
+ * move off the widget, or a #GtkDropTarget::drag-drop signal when
+ * a drop happens.
+ *
+ * The ::drag-enter and ::drag-motion handler can call gdk_drop_status()
+ * to update the status of the ongoing operation. The ::drag-drop handler
+ * should initiate the data transfer and finish the operation by calling
+ * gdk_drop_finish().
+ *
+ * Between the ::drag-enter and ::drag-leave signals the widget is the
+ * current drop target, and will receive the %GTK_STATE_FLAG_DROP_ACTIVE
+ * state, which can be used to style the widget as a drop targett.
  */
 
 struct _GtkDropTarget
@@ -239,7 +263,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    * @drop: the #GdkDrop
    *
    * The ::drag-enter signal is emitted on the drop site when the cursor
-   * enters the widget.
+   * enters the widget. It can be used to set up custom highlighting.
    */
   signals[DRAG_ENTER] =
       g_signal_new (I_("drag-enter"),
@@ -257,7 +281,8 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    * @drop: the #GdkDrop
    *
    * The ::drag-leave signal is emitted on the drop site when the cursor
-   * leaves the widget.
+   * leaves the widget. Its main purpose it to undo things done in
+   * #GtkDropTarget::drag-enter.
    */
   signals[DRAG_LEAVE] =
       g_signal_new (I_("drag-leave"),
@@ -306,11 +331,11 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    * based on the type of the data.
    *
    * If the decision whether the drop will be accepted or rejected can't be
-   * made based solely on the cursor position and the type of the data, the
-   * handler may inspect the dragged data by calling one of the #GdkDrop
-   * read functions and return %TRUE to tentatively accept the drop. When
-   * the data arrives and will nto be accepted, a call to
-   * gtk_drop_target_deny_drop() should be made to reject the drop.
+   * made based solely the data format, handler may inspect the dragged data
+   * by calling one of the #GdkDrop read functions and return %TRUE to
+   * tentatively accept the drop. When the data arrives and is found to not be
+   * acceptable, a call to gtk_drop_target_deny_drop() should be made to reject
+   * the drop.
    *
    * Returns: whether the cursor position is in a drop zone
    */
@@ -521,7 +546,8 @@ gtk_drop_target_match (GtkDropTarget *dest,
  * @dest: a #GtkDropTarget
  *
  * Returns a mimetype that is supported both by @dest and the ongoing
- * drag.
+ * drag. For more detailed control, you can use gdk_drop_get_formats()
+ * to obtain the content formats that are supported by the source.
  *
  * Returns: (nullable): a matching mimetype for the ongoing drag, or %NULL
  */
