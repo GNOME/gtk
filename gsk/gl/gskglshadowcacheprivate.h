@@ -21,9 +21,11 @@ void gsk_gl_shadow_cache_begin_frame    (GskGLShadowCache     *self,
 int  gsk_gl_shadow_cache_get_texture_id (GskGLShadowCache     *self,
                                          GskGLDriver          *gl_driver,
                                          const GskRoundedRect *shadow_rect,
+                                         const GdkRGBA        *color,
                                          float                 blur_radius);
 void gsk_gl_shadow_cache_commit         (GskGLShadowCache     *self,
                                          const GskRoundedRect *shadow_rect,
+                                         const GdkRGBA        *color,
                                          float                 blur_radius,
                                          int                   texture_id);
 
