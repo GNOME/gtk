@@ -169,6 +169,8 @@ _gtk_css_position_value_new (GtkCssValue *x,
   result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_POSITION);
   result->x = x;
   result->y = y;
+  result->is_computed = gtk_css_value_is_computed (x) &&
+                        gtk_css_value_is_computed (y);
 
   return result;
 }
