@@ -66,9 +66,7 @@ struct _GtkDropTargetClass
   GtkEventControllerClass parent_class;
 
   gboolean (*accept ) (GtkDropTarget *dest,
-                       GdkDrop       *drop,
-                       int            x,
-                       int            y);
+                       GdkDrop       *drop);
 };
 
 enum {
@@ -83,6 +81,7 @@ static GParamSpec *properties[NUM_PROPERTIES];
 enum {
   ACCEPT,
   DRAG_ENTER,
+  DRAG_MOTION,
   DRAG_LEAVE,
   DRAG_DROP,
   NUM_SIGNALS
@@ -91,9 +90,7 @@ enum {
 static guint signals[NUM_SIGNALS];
 
 static gboolean gtk_drop_target_accept (GtkDropTarget *dest,
-                                        GdkDrop       *drop,
-                                        int            x,
-                                        int            y);
+                                        GdkDrop       *drop);
 
 static gboolean gtk_drop_target_handle_event (GtkEventController *controller,
                                               const GdkEvent     *event);
@@ -106,8 +103,18 @@ static void     gtk_drop_target_unset_widget (GtkEventController *controller);
 static gboolean gtk_drop_target_get_contains (GtkDropTarget *dest);
 static void     gtk_drop_target_set_contains (GtkDropTarget *dest,
                                               gboolean       contains);
-static gboolean gtk_drop_target_drop_is_denied (GtkDropTarget *dest,
-                                                GdkDrop       *drop);
+
+typedef enum {
+  GTK_DROP_STATUS_NONE,
+  GTK_DROP_STATUS_ACCEPTED,
+  GTK_DROP_STATUS_DENIED
+} GtkDropStatus;
+
+static GtkDropStatus gtk_drop_target_get_drop_status (GtkDropTarget *dest,
+                                                      GdkDrop       *drop);
+static void          gtk_drop_target_set_drop_status (GtkDropTarget *dest,
+                                                      GdkDrop       *drop,
+                                                      GtkDropStatus  status);
 
 G_DEFINE_TYPE (GtkDropTarget, gtk_drop_target, GTK_TYPE_EVENT_CONTROLLER);
 
@@ -262,12 +269,30 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                     G_TYPE_NONE, 1,
                     GDK_TYPE_DROP);
 
- /**
-   * GtkWidget::accept:
+  /**
+   * GtkDropTarget::drag-motion:
    * @dest: the #GtkDropTarget
    * @drop: the #GdkDrop
    * @x: the x coordinate of the current cursor position
    * @y: the y coordinate of the current cursor position
+   *
+   * The ::drag motion signal is emitted while the pointer is moving
+   * over the drop target.
+   */
+  signals[DRAG_MOTION] =
+      g_signal_new (I_("drag-motion"),
+                    G_TYPE_FROM_CLASS (class),
+                    G_SIGNAL_RUN_LAST,
+                    0,
+                    NULL, NULL,
+                    NULL,
+                    G_TYPE_NONE, 3,
+                    GDK_TYPE_DROP, G_TYPE_INT, G_TYPE_INT);
+
+ /**
+   * GtkWidget::accept:
+   * @dest: the #GtkDropTarget
+   * @drop: the #GdkDrop
    *
    * The ::accept signal is emitted on the drop site when the user
    * moves the cursor over the widget during a drag. The signal handler
@@ -296,8 +321,8 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                     G_STRUCT_OFFSET (GtkDropTargetClass, accept),
                     g_signal_accumulator_first_wins, NULL,
                     NULL,
-                    G_TYPE_BOOLEAN, 3,
-                    GDK_TYPE_DROP, G_TYPE_INT, G_TYPE_INT);
+                    G_TYPE_BOOLEAN, 1,
+                    GDK_TYPE_DROP);
 
   /**
    * GtkDropTarget::drag-drop:
@@ -511,9 +536,7 @@ gtk_drop_target_find_mimetype (GtkDropTarget *dest)
 
 static gboolean
 gtk_drop_target_accept (GtkDropTarget *dest,
-                        GdkDrop       *drop,
-                        int            x,
-                        int            y)
+                        GdkDrop       *drop)
 {
   GdkDragAction dest_actions;
   GdkDragAction actions;
@@ -524,12 +547,7 @@ gtk_drop_target_accept (GtkDropTarget *dest,
   actions = dest_actions & gdk_drop_get_actions (drop);
   target = gtk_drop_target_match (dest, drop);
 
-  if (actions && target)
-    gdk_drop_status (drop, dest_actions);
-  else
-    gdk_drop_status (drop, 0);
-
-  return TRUE;
+  return actions && target;
 }
 
 static void
@@ -566,17 +584,25 @@ gtk_drop_target_emit_drag_leave (GtkDropTarget    *dest,
 }
 
 static gboolean
-gtk_drop_target_emit_accept (GtkDropTarget    *dest,
-                             GdkDrop          *drop,
-                             int               x,
-                             int               y)
+gtk_drop_target_emit_accept (GtkDropTarget *dest,
+                             GdkDrop       *drop)
 {
   gboolean result = FALSE;
 
   set_drop (dest, drop);
-  g_signal_emit (dest, signals[ACCEPT], 0, drop, x, y, &result);
+  g_signal_emit (dest, signals[ACCEPT], 0, drop, &result);
 
   return result;
+}
+
+static void
+gtk_drop_target_emit_drag_motion (GtkDropTarget *dest,
+                                  GdkDrop       *drop,
+                                  int            x,
+                                  int            y)
+{
+  set_drop (dest, drop);
+  g_signal_emit (dest, signals[DRAG_MOTION], 0, drop, x, y);
 }
 
 static gboolean
@@ -700,11 +726,13 @@ gtk_drop_target_handle_event (GtkEventController *controller,
   GtkDropTarget *dest = GTK_DROP_TARGET (controller);
   GdkDrop *drop;
   double x, y;
+  GtkDropStatus status;
   gboolean found = FALSE;
 
   drop = gdk_event_get_drop (event);
 
-  if (gtk_drop_target_drop_is_denied (dest, drop))
+  status = gtk_drop_target_get_drop_status (dest, drop);
+  if (status == GTK_DROP_STATUS_DENIED)
     return FALSE;
 
   gdk_event_get_coords (event, &x, &y);
@@ -712,7 +740,21 @@ gtk_drop_target_handle_event (GtkEventController *controller,
   switch ((int)gdk_event_get_event_type (event))
     {
     case GDK_DRAG_MOTION:
-      found = gtk_drop_target_emit_accept (dest, drop, x, y);
+      if (status != GTK_DROP_STATUS_ACCEPTED)
+        {
+          found = gtk_drop_target_emit_accept (dest, drop);
+          if (found)
+            gtk_drop_target_set_drop_status (dest, drop, GTK_DROP_STATUS_ACCEPTED);
+        }
+      else
+        found = TRUE;
+
+      if (found)
+        {
+          gdk_drop_status (drop, gtk_drop_target_get_actions (dest));
+          gtk_drop_set_current_dest (drop, dest);
+          gtk_drop_target_emit_drag_motion (dest, drop, x, y);
+        }
       break;
 
     case GDK_DROP_START:
@@ -722,9 +764,6 @@ gtk_drop_target_handle_event (GtkEventController *controller,
     default:
       break;
     }
-
-  if (found)
-    gtk_drop_set_current_dest (drop, dest);
 
   return found;
 }
@@ -937,9 +976,9 @@ gtk_drop_target_read_selection_finish (GtkDropTarget  *dest,
   return g_task_propagate_pointer (G_TASK (result), error);
 }
 
-static gboolean
-gtk_drop_target_drop_is_denied (GtkDropTarget *dest,
-                                GdkDrop       *drop)
+static GtkDropStatus
+gtk_drop_target_get_drop_status (GtkDropTarget *dest,
+                                 GdkDrop       *drop)
 {
   GHashTable *denied;
 
@@ -947,7 +986,30 @@ gtk_drop_target_drop_is_denied (GtkDropTarget *dest,
   if (denied)
     return GPOINTER_TO_INT (g_hash_table_lookup (denied, dest));
 
-  return FALSE;
+  return GTK_DROP_STATUS_NONE;
+}
+
+static void
+gtk_drop_target_set_drop_status (GtkDropTarget *dest,
+                                 GdkDrop       *drop,
+                                 GtkDropStatus  status)
+{
+  GHashTable *drags;
+
+  drags = (GHashTable *)g_object_get_data (G_OBJECT (drop), "denied-drags");
+  if (!drags)
+    {
+      drags = g_hash_table_new (NULL, NULL);
+      g_object_set_data_full (G_OBJECT (drop), "denied-drags", drags, (GDestroyNotify)g_hash_table_unref);
+    }
+
+  g_hash_table_insert (drags, dest, GINT_TO_POINTER (status));
+
+  if (dest == gtk_drop_get_current_dest (drop))
+    {
+      gdk_drop_status (drop, 0);
+      gtk_drop_set_current_dest (drop, NULL);
+    }
 }
 
 /**
@@ -965,24 +1027,8 @@ void
 gtk_drop_target_deny_drop (GtkDropTarget *dest,
                            GdkDrop       *drop)
 {
-  GHashTable *drags;
-
   g_return_if_fail (GTK_IS_DROP_TARGET (dest));
   g_return_if_fail (GDK_IS_DROP (drop));
 
-  drags = (GHashTable *)g_object_get_data (G_OBJECT (drop), "denied-drags");
-  if (!drags)
-    {
-      drags = g_hash_table_new (NULL, NULL);
-      g_object_set_data_full (G_OBJECT (drop), "denied-drags", drags, (GDestroyNotify)g_hash_table_unref);
-    }
-
-  g_hash_table_insert (drags, dest, GINT_TO_POINTER (TRUE));
-
-  if (dest == gtk_drop_get_current_dest (drop))
-    {
-      gdk_drop_status (drop, 0);
-      gtk_drop_set_current_dest (drop, NULL);
-    }
+  gtk_drop_target_set_drop_status (dest, drop, GTK_DROP_STATUS_DENIED);
 }
-
