@@ -445,9 +445,7 @@ popdown_cb (gpointer data)
 
 gboolean
 popup_motion (GtkDropTarget *dest,
-              GdkDrop       *drop,
-              int            x,
-              int            y)
+              GdkDrop       *drop)
 {
   gdk_drop_status (drop, GDK_ACTION_COPY);
   return TRUE;

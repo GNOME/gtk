@@ -331,10 +331,8 @@ static gboolean gtk_calendar_query_tooltip  (GtkWidget        *widget,
                                              gboolean          keyboard_mode,
                                              GtkTooltip       *tooltip);
 
-static gboolean gtk_calendar_drag_motion        (GtkDropTarget    *dest,
+static gboolean gtk_calendar_drag_accept        (GtkDropTarget    *dest,
                                                  GdkDrop          *drop,
-                                                 int               x,
-                                                 int               y,
                                                  GtkCalendar      *calendar);
 static void     gtk_calendar_drag_leave         (GtkDropTarget    *dest,
                                                  GdkDrop          *drop,
@@ -792,7 +790,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   dest = gtk_drop_target_new (formats, GDK_ACTION_COPY);
   gdk_content_formats_unref (formats);
 
-  g_signal_connect (dest, "accept", G_CALLBACK (gtk_calendar_drag_motion), calendar);
+  g_signal_connect (dest, "accept", G_CALLBACK (gtk_calendar_drag_accept), calendar);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_calendar_drag_leave), calendar);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_calendar_drag_drop), calendar);
 
@@ -2984,7 +2982,8 @@ got_text (GObject      *source,
           GAsyncResult *result,
           gpointer      data)
 {
-  GtkCalendar *calendar = GTK_CALENDAR (data);
+  GtkDropTarget *dest = GTK_DROP_TARGET (data);
+  GtkCalendar *calendar = GTK_CALENDAR (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest)));
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
   GdkDrop *drop = GDK_DROP (source);
   guint day, month, year;
@@ -3010,8 +3009,9 @@ got_text (GObject      *source,
         }
       else
         suggested_action = 0;
-
       gdk_drop_status (drop, suggested_action);
+      if (suggested_action == 0)
+        gtk_drop_target_deny_drop (dest, drop);
       return;
     }
 
@@ -3027,6 +3027,7 @@ got_text (GObject      *source,
       g_warning ("Received invalid date data");
       g_date_free (date);
       gdk_drop_finish (drop, 0);
+      gtk_drop_target_deny_drop (dest, drop);
       return;
     }
 
@@ -3046,23 +3047,23 @@ got_text (GObject      *source,
 }
 
 static gboolean
-gtk_calendar_drag_motion (GtkDropTarget *dest,
+gtk_calendar_drag_accept (GtkDropTarget *dest,
                           GdkDrop       *drop,
-                          int            x,
-                          int            y,
                           GtkCalendar   *calendar)
 {
   GdkAtom target;
 
   target = gtk_drop_target_find_mimetype (dest);
   if (!target || gdk_drop_get_actions (drop) == 0)
-    gdk_drop_status (drop, 0);
+    {
+      gdk_drop_status (drop, 0);
+      return FALSE;
+    }
   else if (get_status_pending (drop) == 0)
     {
       set_status_pending (drop, gdk_drop_get_actions (drop));
-      gdk_drop_read_text_async (drop, NULL, got_text, calendar);
+      gdk_drop_read_text_async (drop, NULL, got_text, dest);
     }
-
   return TRUE;
 }
 
@@ -3079,7 +3080,7 @@ gtk_calendar_drag_drop (GtkDropTarget  *dest,
   if (target != NULL)
     {
       set_status_pending (drop, 0);
-      gdk_drop_read_text_async (drop, NULL, got_text, calendar);
+      gdk_drop_read_text_async (drop, NULL, got_text, dest);
       return TRUE;
     }
 
