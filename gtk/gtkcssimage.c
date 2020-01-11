@@ -115,6 +115,12 @@ gtk_css_image_real_get_dynamic_image (GtkCssImage *image,
   return g_object_ref (image);
 }
 
+static gboolean
+gtk_css_image_real_is_computed (GtkCssImage *image)
+{
+  return FALSE;
+}
+
 static void
 _gtk_css_image_class_init (GtkCssImageClass *klass)
 {
@@ -127,6 +133,7 @@ _gtk_css_image_class_init (GtkCssImageClass *klass)
   klass->is_invalid = gtk_css_image_real_is_invalid;
   klass->is_dynamic = gtk_css_image_real_is_dynamic;
   klass->get_dynamic_image = gtk_css_image_real_get_dynamic_image;
+  klass->is_computed = gtk_css_image_real_is_computed;
 }
 
 static void
@@ -565,3 +572,10 @@ _gtk_css_image_new_parse (GtkCssParser *parser)
   return image;
 }
 
+gboolean
+gtk_css_image_is_computed (GtkCssImage *image)
+{
+  GtkCssImageClass *klass = GTK_CSS_IMAGE_GET_CLASS (image);
+
+  return klass->is_computed (image);
+}

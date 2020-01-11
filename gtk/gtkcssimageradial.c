@@ -710,6 +710,37 @@ gtk_css_image_radial_dispose (GObject *object)
   G_OBJECT_CLASS (_gtk_css_image_radial_parent_class)->dispose (object);
 }
 
+static gboolean
+gtk_css_image_radial_is_computed (GtkCssImage *image)
+{
+  GtkCssImageRadial *radial = GTK_CSS_IMAGE_RADIAL (image);
+  guint i;
+  gboolean computed = TRUE;
+
+  computed = computed && (!radial->position || gtk_css_value_is_computed (radial->position));
+  computed = computed && (!radial->sizes[0] || gtk_css_value_is_computed (radial->sizes[0]));
+  computed = computed && (!radial->sizes[1] || gtk_css_value_is_computed (radial->sizes[1]));
+
+  if (computed)
+    for (i = 0; i < radial->n_stops; i ++)
+      {
+        const GtkCssImageRadialColorStop *stop = &radial->color_stops[i];
+
+        if (stop->offset && !gtk_css_value_is_computed (stop->offset))
+          {
+            computed = FALSE;
+            break;
+          }
+
+        if (!gtk_css_value_is_computed (stop->color))
+          {
+            computed = FALSE;
+            break;
+          }
+      }
+
+  return computed;
+}
 static void
 _gtk_css_image_radial_class_init (GtkCssImageRadialClass *klass)
 {
@@ -722,6 +753,7 @@ _gtk_css_image_radial_class_init (GtkCssImageRadialClass *klass)
   image_class->compute = gtk_css_image_radial_compute;
   image_class->transition = gtk_css_image_radial_transition;
   image_class->equal = gtk_css_image_radial_equal;
+  image_class->is_computed = gtk_css_image_radial_is_computed;
 
   object_class->dispose = gtk_css_image_radial_dispose;
 }
