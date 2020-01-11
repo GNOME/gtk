@@ -511,40 +511,74 @@ gtk_css_image_radial_compute (GtkCssImage      *image,
                               GtkCssStyle      *parent_style)
 {
   GtkCssImageRadial *radial = GTK_CSS_IMAGE_RADIAL (image);
+  GtkCssValue *computed_position, *computed_size1 = NULL, *computed_size2 = NULL;
+  gboolean changed = FALSE;
+  GtkCssImageRadialColorStop *stops;
   GtkCssImageRadial *copy;
   guint i;
 
-  copy = g_object_new (GTK_TYPE_CSS_IMAGE_RADIAL, NULL);
-  copy->repeating = radial->repeating;
-  copy->circle = radial->circle;
-  copy->size = radial->size;
-
-  copy->position = _gtk_css_value_compute (radial->position, property_id, provider, style, parent_style);
+  computed_position = _gtk_css_value_compute (radial->position, property_id, provider, style, parent_style);
+  changed |= (computed_position != radial->position);
 
   if (radial->sizes[0])
-    copy->sizes[0] = _gtk_css_value_compute (radial->sizes[0], property_id, provider, style, parent_style);
+    {
+      computed_size1 = _gtk_css_value_compute (radial->sizes[0], property_id, provider, style, parent_style);
+      changed |= (computed_size1 != radial->sizes[0]);
+    }
 
   if (radial->sizes[1])
-    copy->sizes[1] = _gtk_css_value_compute (radial->sizes[1], property_id, provider, style, parent_style);
+    {
+      computed_size2 = _gtk_css_value_compute (radial->sizes[1], property_id, provider, style, parent_style);
+      changed |= (computed_size2 != radial->sizes[1]);
+    }
 
-  copy->n_stops = radial->n_stops;
-  copy->color_stops = g_malloc (sizeof (GtkCssImageRadialColorStop) * copy->n_stops);
+
+  stops = g_alloca (sizeof (GtkCssImageRadialColorStop) * radial->n_stops);
   for (i = 0; i < radial->n_stops; i++)
     {
       const GtkCssImageRadialColorStop *stop = &radial->color_stops[i];
-      GtkCssImageRadialColorStop *scopy = &copy->color_stops[i];
+      GtkCssImageRadialColorStop *scopy = &stops[i];
 
       scopy->color = _gtk_css_value_compute (stop->color, property_id, provider, style, parent_style);
+      changed |= (scopy->color != stop->color);
 
       if (stop->offset)
         {
           scopy->offset = _gtk_css_value_compute (stop->offset, property_id, provider, style, parent_style);
+          changed |= (scopy->offset != stop->offset);
         }
       else
         {
           scopy->offset = NULL;
         }
     }
+
+  if (!changed)
+    {
+      _gtk_css_value_unref (computed_position);
+      if (computed_size1)
+        _gtk_css_value_unref (computed_size1);
+      if (computed_size2)
+        _gtk_css_value_unref (computed_size2);
+
+      for (i = 0; i < radial->n_stops; i ++)
+        {
+          _gtk_css_value_unref (stops[i].color);
+          if (stops[i].offset)
+            _gtk_css_value_unref (stops[i].offset);
+        }
+
+      return g_object_ref (image);
+    }
+
+  copy = g_object_new (GTK_TYPE_CSS_IMAGE_RADIAL, NULL);
+  copy->repeating = radial->repeating;
+  copy->circle = radial->circle;
+  copy->size = radial->size;
+  copy->n_stops = radial->n_stops;
+  copy->color_stops = g_malloc (sizeof (GtkCssImageRadialColorStop) * copy->n_stops);
+
+  memcpy (copy->color_stops, stops, sizeof (GtkCssImageRadialColorStop ) * radial->n_stops);
 
   return GTK_CSS_IMAGE (copy);
 }
