@@ -234,12 +234,12 @@ get_current_desktop (GdkScreen *screen)
   return workspace;
 }
 
-void
-gdk_x11_screen_get_work_area (GdkScreen    *screen,
-                              GdkRectangle *area)
+static gboolean
+get_work_area (GdkScreen    *screen,
+               Atom          workarea,
+               GdkRectangle *area)
 {
   GdkX11Screen   *x11_screen = GDK_X11_SCREEN (screen);
-  Atom            workarea;
   Atom            type;
   Window          win;
   int             format;
@@ -255,20 +255,6 @@ gdk_x11_screen_get_work_area (GdkScreen    *screen,
 
   display = GDK_DISPLAY_XDISPLAY (gdk_screen_get_display (screen));
   disp_screen = GDK_SCREEN_XNUMBER (screen);
-  workarea = XInternAtom (display, "_NET_WORKAREA", True);
-
-  /* Defaults in case of error */
-  area->x = 0;
-  area->y = 0;
-  area->width = gdk_x11_screen_get_width (screen);
-  area->height = gdk_x11_screen_get_height (screen);
-
-  if (!gdk_x11_screen_supports_net_wm_hint (screen,
-                                            gdk_atom_intern_static_string ("_NET_WORKAREA")))
-    return;
-
-  if (workarea == None)
-    return;
 
   win = XRootWindow (display, disp_screen);
   result = XGetWindowProperty (display,
@@ -305,9 +291,115 @@ gdk_x11_screen_get_work_area (GdkScreen    *screen,
   area->width /= x11_screen->window_scale;
   area->height /= x11_screen->window_scale;
 
+  return TRUE;
+
 out:
   if (ret_workarea)
     XFree (ret_workarea);
+
+  return FALSE;
+}
+
+static int
+get_monitor_num (GdkScreen  *screen,
+                 GdkMonitor *monitor)
+{
+#ifdef HAVE_XFREE_XINERAMA
+  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
+  XineramaScreenInfo *x_monitors;
+  int x_n_monitors;
+  GdkRectangle geometry;
+  int monitor_num;
+  int i;
+
+  if (!XineramaIsActive (x11_screen->xdisplay))
+    return -1;
+
+  x_monitors = XineramaQueryScreens (x11_screen->xdisplay, &x_n_monitors);
+  if (x_n_monitors <= 0 || x_monitors == NULL)
+    {
+      if (x_monitors)
+        XFree (x_monitors);
+
+      return -1;
+    }
+
+  gdk_monitor_get_geometry (monitor, &geometry);
+  monitor_num = -1;
+
+  for (i = 0; i < x_n_monitors; i++)
+    {
+      if (x_monitors[i].x_org != geometry.x ||
+          x_monitors[i].y_org != geometry.y ||
+          x_monitors[i].width != geometry.width ||
+          x_monitors[i].height != geometry.height)
+        continue;
+
+      monitor_num = i;
+      break;
+    }
+
+  XFree (x_monitors);
+  return monitor_num;
+#else
+  return -1;
+#endif
+}
+
+gboolean
+_gdk_x11_screen_get_monitor_work_area (GdkScreen    *screen,
+                                       GdkMonitor   *monitor,
+                                       GdkRectangle *area)
+{
+  Display *display;
+  int monitor_num;
+  gchar *workarea_name;
+  Atom workarea;
+
+  display = GDK_DISPLAY_XDISPLAY (gdk_screen_get_display (screen));
+
+  if (!gdk_x11_screen_supports_net_wm_hint (screen,
+                                            gdk_atom_intern_static_string ("_NET_WORKAREA_Mn")))
+    return FALSE;
+
+  monitor_num = get_monitor_num (screen, monitor);
+  if (monitor_num < 0)
+    return FALSE;
+
+  workarea_name = g_strdup_printf ("_NET_WORKAREA_M%d", monitor_num);
+  workarea = XInternAtom (display, workarea_name, True);
+  g_free (workarea_name);
+
+  if (workarea == None)
+    return FALSE;
+
+  return get_work_area (screen, workarea, area);
+}
+
+void
+gdk_x11_screen_get_work_area (GdkScreen    *screen,
+                              GdkRectangle *area)
+{
+  Display *display;
+  Atom workarea;
+
+  display = GDK_DISPLAY_XDISPLAY (gdk_screen_get_display (screen));
+  workarea = XInternAtom (display, "_NET_WORKAREA", True);
+
+  /* Defaults in case of error */
+  area->x = 0;
+  area->y = 0;
+  area->width = gdk_x11_screen_get_width (screen);
+  area->height = gdk_x11_screen_get_height (screen);
+
+  if (!gdk_x11_screen_supports_net_wm_hint (screen,
+                                            gdk_atom_intern_static_string ("_NET_WORKAREA")))
+    return;
+
+  if (workarea == None)
+    return;
+
+  get_work_area (screen, workarea, area);
 }
 
 static GdkVisual *
