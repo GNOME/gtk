@@ -414,6 +414,22 @@ gtk_css_image_cross_fade_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_css_image_cross_fade_parent_class)->dispose (object);
 }
 
+static gboolean
+gtk_css_image_cross_fade_is_computed (GtkCssImage *image)
+{
+  GtkCssImageCrossFade *cross_fade = GTK_CSS_IMAGE_CROSS_FADE (image);
+  guint i;
+
+  for (i = 0; i < cross_fade->images->len; i++)
+    {
+      const CrossFadeEntry *entry = &g_array_index (cross_fade->images, CrossFadeEntry, i);
+      if (!gtk_css_image_is_computed (entry->image))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
 static void
 gtk_css_image_cross_fade_class_init (GtkCssImageCrossFadeClass *klass)
 {
@@ -429,6 +445,7 @@ gtk_css_image_cross_fade_class_init (GtkCssImageCrossFadeClass *klass)
   image_class->get_dynamic_image = gtk_css_image_cross_fade_get_dynamic_image;
   image_class->parse = gtk_css_image_cross_fade_parse;
   image_class->print = gtk_css_image_cross_fade_print;
+  image_class->is_computed = gtk_css_image_cross_fade_is_computed;
 
   object_class->dispose = gtk_css_image_cross_fade_dispose;
 }
