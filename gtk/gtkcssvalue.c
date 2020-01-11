@@ -140,6 +140,9 @@ _gtk_css_value_compute (GtkCssValue      *value,
                         GtkCssStyle      *style,
                         GtkCssStyle      *parent_style)
 {
+  if (gtk_css_value_is_computed (value))
+    return _gtk_css_value_ref (value);
+
   return value->class->compute (value, property_id, provider, style, parent_style);
 }
 
