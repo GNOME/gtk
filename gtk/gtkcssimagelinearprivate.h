@@ -45,10 +45,12 @@ struct _GtkCssImageLinear
 {
   GtkCssImage parent;
 
-  guint        side;  /* side the gradient should go to or 0 for angle */
-  GtkCssValue *angle;
-  GArray *stops;
+  guint side;  /* side the gradient should go to or 0 for angle */
   guint repeating :1;
+  GtkCssValue *angle;
+
+  guint n_stops;
+  GtkCssImageLinearColorStop *color_stops;
 };
 
 struct _GtkCssImageLinearClass
