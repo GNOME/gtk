@@ -223,14 +223,25 @@ gtk_css_shadows_value_new (GtkCssValue **values,
                            guint         len)
 {
   GtkCssValue *result;
-           
+  guint i;
+
   g_return_val_if_fail (values != NULL, NULL);
   g_return_val_if_fail (len > 0, NULL);
-         
+
   result = _gtk_css_value_alloc (&GTK_CSS_VALUE_SHADOWS, sizeof (GtkCssValue) + sizeof (GtkCssValue *) * (len - 1));
   result->len = len;
   memcpy (&result->values[0], values, sizeof (GtkCssValue *) * len);
-            
+
+  result->is_computed = TRUE;
+  for (i = 0; i < len; i++)
+    {
+      if (!gtk_css_value_is_computed (values[i]))
+        {
+          result->is_computed = FALSE;
+          break;
+        }
+    }
+
   return result;
 }
 
