@@ -183,6 +183,11 @@ gtk_css_shadow_value_new (GtkCssValue *hoffset,
   retval->spread = spread;
   retval->inset = inset;
   retval->color = color;
+  retval->is_computed = gtk_css_value_is_computed (hoffset) &&
+                        gtk_css_value_is_computed (voffset) &&
+                        gtk_css_value_is_computed (radius) &&
+                        gtk_css_value_is_computed (spread) &&
+                        gtk_css_value_is_computed (color);
 
   return retval;
 }

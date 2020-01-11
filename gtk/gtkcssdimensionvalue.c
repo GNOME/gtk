@@ -283,7 +283,7 @@ gtk_css_dimension_value_new (double     value,
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, TRUE, GTK_CSS_PX, 64 },
   };
   static GtkCssValue percent_singletons[] = {
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, FALSE, GTK_CSS_PERCENT, 0 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, TRUE, GTK_CSS_PERCENT, 0 },
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, FALSE, GTK_CSS_PERCENT, 50 },
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, FALSE, GTK_CSS_PERCENT, 100 },
   };
@@ -363,6 +363,11 @@ gtk_css_dimension_value_new (double     value,
   result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_DIMENSION.value_class);
   result->unit = unit;
   result->value = value;
+  result->is_computed = value == 0 ||
+                        unit == GTK_CSS_NUMBER ||
+                        unit == GTK_CSS_PX ||
+                        unit == GTK_CSS_DEG ||
+                        unit == GTK_CSS_S;
 
   return result;
 }

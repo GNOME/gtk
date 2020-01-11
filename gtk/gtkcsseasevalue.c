@@ -159,12 +159,13 @@ _gtk_css_ease_value_new_cubic_bezier (double x1,
   g_return_val_if_fail (x2 <= 1.0, NULL);
 
   value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_EASE);
-  
+
   value->type = GTK_CSS_EASE_CUBIC_BEZIER;
   value->u.cubic.x1 = x1;
   value->u.cubic.y1 = y1;
   value->u.cubic.x2 = x2;
   value->u.cubic.y2 = y2;
+  value->is_computed = TRUE;
 
   return value;
 }
@@ -178,10 +179,11 @@ _gtk_css_ease_value_new_steps (guint n_steps,
   g_return_val_if_fail (n_steps > 0, NULL);
 
   value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_EASE);
-  
+
   value->type = GTK_CSS_EASE_STEPS;
   value->u.steps.steps = n_steps;
   value->u.steps.start = start;
+  value->is_computed = TRUE;
 
   return value;
 }
