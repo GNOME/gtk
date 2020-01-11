@@ -142,6 +142,20 @@ gtk_css_image_fallback_compute (GtkCssImage      *image,
 
   if (fallback->used < 0)
     {
+      GtkCssValue *computed_color = NULL;
+
+      if (fallback->color)
+          computed_color= _gtk_css_value_compute (fallback->color,
+                                                           property_id,
+                                                           provider,
+                                                           style,
+                                                           parent_style);
+
+      /* image($color) that didn't change */
+      if (computed_color && !fallback->images &&
+          computed_color == fallback->color)
+        return g_object_ref (image);
+
       copy = g_object_new (_gtk_css_image_fallback_get_type (), NULL);
       copy->n_images = fallback->n_images;
       copy->images = g_new (GtkCssImage *, fallback->n_images);
@@ -160,14 +174,7 @@ gtk_css_image_fallback_compute (GtkCssImage      *image,
             copy->used = i;
         }
 
-      if (fallback->color)
-        copy->color = _gtk_css_value_compute (fallback->color,
-                                              property_id,
-                                              provider,
-                                              style,
-                                              parent_style);
-      else
-        copy->color = NULL;
+      copy->color = computed_color;
 
       return GTK_CSS_IMAGE (copy);
     }
