@@ -688,6 +688,35 @@ gtk_css_image_linear_dispose (GObject *object)
   G_OBJECT_CLASS (_gtk_css_image_linear_parent_class)->dispose (object);
 }
 
+static gboolean
+gtk_css_image_linear_is_computed (GtkCssImage *image)
+{
+  GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
+  guint i;
+  gboolean computed = TRUE;
+
+  computed = !linear->angle || gtk_css_value_is_computed (linear->angle);
+
+  for (i = 0; i < linear->n_stops; i ++)
+    {
+      const GtkCssImageLinearColorStop *stop = &linear->color_stops[i];
+
+      if (stop->offset && !gtk_css_value_is_computed (stop->offset))
+        {
+          computed = FALSE;
+          break;
+        }
+
+      if (!gtk_css_value_is_computed (stop->color))
+        {
+          computed = FALSE;
+          break;
+        }
+    }
+
+  return computed;
+}
+
 static void
 _gtk_css_image_linear_class_init (GtkCssImageLinearClass *klass)
 {
@@ -700,6 +729,7 @@ _gtk_css_image_linear_class_init (GtkCssImageLinearClass *klass)
   image_class->compute = gtk_css_image_linear_compute;
   image_class->equal = gtk_css_image_linear_equal;
   image_class->transition = gtk_css_image_linear_transition;
+  image_class->is_computed = gtk_css_image_linear_is_computed;
 
   object_class->dispose = gtk_css_image_linear_dispose;
 }
