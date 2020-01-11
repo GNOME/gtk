@@ -1652,6 +1652,7 @@ render_outset_shadow_node (GskGLRenderer   *self,
 {
   const float scale = ops_get_scale (builder);
   const GskRoundedRect *outline = gsk_outset_shadow_node_peek_outline (node);
+  const GdkRGBA *color = gsk_outset_shadow_node_peek_color (node);
   const float blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
   const float blur_extra = blur_radius * 3; /* 3 Because we use that in the shader as well */
   const float spread = gsk_outset_shadow_node_get_spread (node);
@@ -1696,6 +1697,7 @@ render_outset_shadow_node (GskGLRenderer   *self,
   cached_tid = gsk_gl_shadow_cache_get_texture_id (&self->shadow_cache,
                                                    self->gl_driver,
                                                    &scaled_outline,
+                                                   color,
                                                    blur_radius);
 
   if (cached_tid == 0)
@@ -1727,7 +1729,7 @@ render_outset_shadow_node (GskGLRenderer   *self,
       /* Draw outline */
       ops_set_program (builder, &self->color_program);
       ops_push_clip (builder, &scaled_outline);
-      ops_set_color (builder, gsk_outset_shadow_node_peek_color (node));
+      ops_set_color (builder, color);
       ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
         { { 0,                            }, { 0, 1 }, },
         { { 0,             texture_height }, { 0, 0 }, },
@@ -1754,6 +1756,7 @@ render_outset_shadow_node (GskGLRenderer   *self,
       gsk_gl_driver_mark_texture_permanent (self->gl_driver, blurred_texture_id);
       gsk_gl_shadow_cache_commit (&self->shadow_cache,
                                   &scaled_outline,
+                                  color,
                                   blur_radius,
                                   blurred_texture_id);
     }
