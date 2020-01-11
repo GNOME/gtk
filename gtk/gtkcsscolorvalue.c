@@ -482,9 +482,9 @@ _gtk_css_color_value_resolve (GtkCssValue      *color,
   return value;
 }
 
-static GtkCssValue transparent_black_singleton = { &GTK_CSS_VALUE_COLOR, 1, COLOR_TYPE_LITERAL, NULL,
+static GtkCssValue transparent_black_singleton = { &GTK_CSS_VALUE_COLOR, 1, TRUE, COLOR_TYPE_LITERAL, NULL,
                                                    .sym_col.rgba = {0, 0, 0, 0} };
-static GtkCssValue white_singleton             = { &GTK_CSS_VALUE_COLOR, 1, COLOR_TYPE_LITERAL, NULL,
+static GtkCssValue white_singleton             = { &GTK_CSS_VALUE_COLOR, 1, TRUE, COLOR_TYPE_LITERAL, NULL,
                                                    .sym_col.rgba = {1, 1, 1, 1} };
 
 
@@ -509,6 +509,7 @@ _gtk_css_color_value_new_literal (const GdkRGBA *color)
 
   value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_LITERAL;
+  value->is_computed = TRUE;
   value->sym_col.rgba = *color;
 
   return value;
@@ -611,7 +612,7 @@ _gtk_css_color_value_new_mix (GtkCssValue *color1,
 GtkCssValue *
 _gtk_css_color_value_new_current_color (void)
 {
-  static GtkCssValue current_color = { &GTK_CSS_VALUE_COLOR, 1, COLOR_TYPE_CURRENT_COLOR, NULL, };
+  static GtkCssValue current_color = { &GTK_CSS_VALUE_COLOR, 1, FALSE, COLOR_TYPE_CURRENT_COLOR, NULL, };
 
   return _gtk_css_value_ref (&current_color);
 }

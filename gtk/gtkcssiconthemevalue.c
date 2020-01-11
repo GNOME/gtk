@@ -121,7 +121,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_ICON_THEME = {
   gtk_css_value_icon_theme_print
 };
 
-static GtkCssValue default_icon_theme_value = { &GTK_CSS_VALUE_ICON_THEME, 1, NULL, 0 };
+static GtkCssValue default_icon_theme_value = { &GTK_CSS_VALUE_ICON_THEME, 1, FALSE, NULL, 0 };
 
 GtkCssValue *
 gtk_css_icon_theme_value_new (GtkIconTheme *icontheme)
