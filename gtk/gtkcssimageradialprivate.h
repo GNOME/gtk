@@ -55,7 +55,8 @@ struct _GtkCssImageRadial
 
   GtkCssValue *position;
   GtkCssValue *sizes[2];
-  GArray *stops;
+  guint n_stops;
+  GtkCssImageRadialColorStop *color_stops;
   GtkCssRadialSize size;
   guint circle : 1;
   guint repeating :1;
