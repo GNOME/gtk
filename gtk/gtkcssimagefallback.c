@@ -270,6 +270,30 @@ gtk_css_image_fallback_equal (GtkCssImage *image1,
                                fallback2->images[fallback2->used]);
 }
 
+static gboolean
+gtk_css_image_fallback_is_computed (GtkCssImage *image)
+{
+  GtkCssImageFallback *fallback = GTK_CSS_IMAGE_FALLBACK (image);
+
+  if (fallback->used < 0)
+    {
+      guint i;
+
+      if (fallback->color && !fallback->images)
+        return gtk_css_value_is_computed (fallback->color);
+
+      for (i = 0; i < fallback->n_images; i++)
+        {
+          if (!gtk_css_image_is_computed (fallback->images[i]))
+            {
+              return FALSE;
+            }
+        }
+    }
+
+  return TRUE;
+}
+
 static void
 _gtk_css_image_fallback_class_init (GtkCssImageFallbackClass *klass)
 {
@@ -284,6 +308,7 @@ _gtk_css_image_fallback_class_init (GtkCssImageFallbackClass *klass)
   image_class->compute = gtk_css_image_fallback_compute;
   image_class->print = gtk_css_image_fallback_print;
   image_class->equal = gtk_css_image_fallback_equal;
+  image_class->is_computed = gtk_css_image_fallback_is_computed;
 
   object_class->dispose = gtk_css_image_fallback_dispose;
 }

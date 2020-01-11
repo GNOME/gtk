@@ -144,6 +144,7 @@ _gtk_css_image_value_new (GtkCssImage *image)
 
   value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_IMAGE);
   value->image = image;
+  value->is_computed = gtk_css_image_is_computed (image);
 
   return value;
 }

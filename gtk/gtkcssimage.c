@@ -565,3 +565,16 @@ _gtk_css_image_new_parse (GtkCssParser *parser)
   return image;
 }
 
+gboolean
+gtk_css_image_is_computed (GtkCssImage *image)
+{
+  GtkCssImageClass *klass = GTK_CSS_IMAGE_GET_CLASS (image);
+
+  if (!klass->is_computed)
+    return FALSE;
+
+  if (gtk_css_image_is_dynamic (image))
+    return FALSE;
+
+  return klass->is_computed (image);
+}
