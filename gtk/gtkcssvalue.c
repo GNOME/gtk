@@ -269,3 +269,9 @@ gtk_css_value_get_dynamic_value (GtkCssValue *value,
 
   return value->class->get_dynamic_value (value, monotonic_time);
 }
+
+gboolean
+gtk_css_value_is_computed (const GtkCssValue *value)
+{
+  return value->is_computed;
+}
