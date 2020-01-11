@@ -5,9 +5,9 @@ static const char *entries[] = {
 };
 
 static void
-drag_begin (GtkWidget      *widget,
-            GdkDrag        *drag,
-            gpointer        data)
+drag_begin (GtkDragSource *source,
+            GdkDrag       *drag,
+            GtkWidget      *widget)
 {
   GtkWidget *row;
   GtkAllocation alloc;
@@ -19,42 +19,30 @@ drag_begin (GtkWidget      *widget,
 
   paintable = gtk_widget_paintable_new (row);
   gtk_widget_translate_coordinates (widget, row, 0, 0, &x, &y);
-  gtk_drag_set_icon_paintable (drag, paintable, -x, -y);
+  gtk_drag_source_set_icon (source, paintable, -x, -y);
 
   g_object_unref (paintable);
 }
 
-
-void
-drag_data_get (GtkWidget        *widget,
-               GdkDrag          *drag,
-               GtkSelectionData *selection_data,
-               gpointer          data)
-{
-  gtk_selection_data_set (selection_data,
-                          g_intern_static_string ("GTK_LIST_BOX_ROW"),
-                          32,
-                          (const guchar *)&widget,
-                          sizeof (gpointer));
-}
-
-
 static void
-drag_data_received (GtkWidget        *widget,
-                    GdkDrop          *drop,
-                    GtkSelectionData *selection_data,
-                    gpointer          data)
+got_row (GObject      *src,
+         GAsyncResult *result,
+         gpointer      data)
 {
-  GtkWidget *target;
+  GtkDropTarget *dest = GTK_DROP_TARGET (src);
+  GtkWidget *target = data;
   GtkWidget *row;
   GtkWidget *source;
   int pos;
+  GtkSelectionData *selection_data;
 
-  target = widget;
+  selection_data = gtk_drop_target_read_selection_finish (dest, result, NULL);
 
   pos = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (target));
   row = (gpointer)* (gpointer*)gtk_selection_data_get_data (selection_data);
   source = gtk_widget_get_ancestor (row, GTK_TYPE_LIST_BOX_ROW);
+
+  gtk_selection_data_free (selection_data);
 
   if (source == target)
     return;
@@ -65,11 +53,25 @@ drag_data_received (GtkWidget        *widget,
   g_object_unref (source);
 }
 
+static void
+drag_drop (GtkDropTarget    *dest,
+           GdkDrop          *drop,
+           int               x,
+           int               y,
+           gpointer          data)
+{
+  gtk_drop_target_read_selection (dest, "GTK_LIST_BOX_ROW", NULL, got_row, data);
+}
+
 static GtkWidget *
 create_row (const gchar *text)
 {
   GtkWidget *row, *box, *label, *image;
+  GBytes *bytes;
+  GdkContentProvider *content;
   GdkContentFormats *targets;
+  GtkDragSource *source;
+  GtkDropTarget *dest;
 
   row = gtk_list_box_row_new (); 
   image = gtk_image_new_from_icon_name ("open-menu-symbolic");
@@ -81,14 +83,18 @@ create_row (const gchar *text)
   gtk_container_add (GTK_CONTAINER (box), label);
   gtk_container_add (GTK_CONTAINER (box), image);
 
+  bytes = g_bytes_new (&row, sizeof (gpointer));
+  content = gdk_content_provider_new_for_bytes ("GTK_LIST_BOX_ROW", bytes);
+  source = gtk_drag_source_new ();
+  gtk_drag_source_set_content (source, content);
+  gtk_drag_source_set_actions (source, GDK_ACTION_MOVE);
+  g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), image);
+  gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
+
   targets = gdk_content_formats_new (entries, 1);
-
-  gtk_drag_source_set (image, GDK_BUTTON1_MASK, targets, GDK_ACTION_MOVE);
-  g_signal_connect (image, "drag-begin", G_CALLBACK (drag_begin), NULL);
-  g_signal_connect (image, "drag-data-get", G_CALLBACK (drag_data_get), NULL);
-
-  gtk_drag_dest_set (row, GTK_DEST_DEFAULT_ALL, targets, GDK_ACTION_MOVE);
-  g_signal_connect (row, "drag-data-received", G_CALLBACK (drag_data_received), NULL);
+  dest = gtk_drop_target_new (targets, GDK_ACTION_MOVE);
+  g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), row);
+  gtk_widget_add_controller (GTK_WIDGET (row), GTK_EVENT_CONTROLLER (dest));
 
   gdk_content_formats_unref (targets);
 

@@ -36,7 +36,6 @@
 #include "gtkcolorchooserprivate.h"
 #include "gtkcolorchooserdialog.h"
 #include "gtkcolorswatchprivate.h"
-#include "gtkdnd.h"
 #include "gtkdragdest.h"
 #include "gtkdragsource.h"
 #include "gtkintl.h"
@@ -45,6 +44,9 @@
 #include "gtkprivate.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontext.h"
+#include "gtkdragsource.h"
+#include "gtkdragdest.h"
+#include "gtkeventcontroller.h"
 
 
 /**
@@ -120,21 +122,6 @@ static void gtk_color_button_get_property  (GObject          *object,
 /* gtkbutton signals */
 static void gtk_color_button_clicked       (GtkButton        *button,
                                             gpointer          user_data);
-
-/* source side drag signals */
-static void gtk_color_button_drag_begin    (GtkWidget        *widget,
-                                            GdkDrag          *drag,
-                                            gpointer          data);
-static void gtk_color_button_drag_data_get (GtkWidget        *widget,
-                                            GdkDrag          *drag,
-                                            GtkSelectionData *selection_data,
-                                            GtkColorButton   *button);
-
-/* target side drag signals */
-static void gtk_color_button_drag_data_received (GtkWidget        *widget,
-                                                 GdkDrop          *drop,
-                                                 GtkSelectionData *selection_data,
-                                                 GtkColorButton   *button);
 
 
 static guint color_button_signals[LAST_SIGNAL] = { 0 };
@@ -245,91 +232,64 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
 }
 
 static void
-gtk_color_button_drag_data_received (GtkWidget        *widget,
-                                     GdkDrop          *drop,
-                                     GtkSelectionData *selection_data,
-                                     GtkColorButton   *button)
+got_color (GObject      *source,
+           GAsyncResult *result,
+           gpointer      data)
 {
-  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
-  gint length;
-  guint16 *dropped;
+  GdkDrop *drop = GDK_DROP (source);
+  const GValue *value;
 
-  length = gtk_selection_data_get_length (selection_data);
-
-  if (length < 0)
-    return;
-
-  /* We accept drops with the wrong format, since the KDE color
-   * chooser incorrectly drops application/x-color with format 8.
-   */
-  if (length != 8)
+  value = gdk_drop_read_value_finish (drop, result, NULL);
+  if (value)
     {
-      g_warning ("%s: Received invalid color data", G_STRFUNC);
-      return;
+      GdkRGBA *color = g_value_get_boxed (value);
+      gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (data), color);
+      gdk_drop_finish (drop, GDK_ACTION_COPY);
+    }
+  else
+    gdk_drop_finish (drop, 0);
+}
+
+static gboolean
+gtk_color_button_drag_drop (GtkDropTarget  *dest,
+                            GdkDrop        *drop,
+                            int             x,
+                            int             y,
+                            GtkColorButton *button)
+{
+  if (gdk_drop_has_value (drop, GDK_TYPE_RGBA))
+    {
+      gdk_drop_read_value_async (drop, GDK_TYPE_RGBA, G_PRIORITY_DEFAULT, NULL, got_color, button);
+      return TRUE;
     }
 
-
-  dropped = (guint16 *) gtk_selection_data_get_data (selection_data);
-
-  priv->rgba.red = dropped[0] / 65535.;
-  priv->rgba.green = dropped[1] / 65535.;
-  priv->rgba.blue = dropped[2] / 65535.;
-  priv->rgba.alpha = dropped[3] / 65535.;
-
-  gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (priv->swatch), &priv->rgba);
-
-  g_signal_emit (button, color_button_signals[COLOR_SET], 0);
-
-  g_object_freeze_notify (G_OBJECT (button));
-  g_object_notify (G_OBJECT (button), "rgba");
-  g_object_thaw_notify (G_OBJECT (button));
+  return FALSE;
 }
 
 static void
-set_color_icon (GdkDrag        *drag,
-                const GdkRGBA  *rgba)
+gtk_color_button_drag_begin (GtkDragSource  *source,
+                             GdkDrag        *drag,
+                             GtkColorButton *button)
 {
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
   GtkSnapshot *snapshot;
   GdkPaintable *paintable;
 
   snapshot = gtk_snapshot_new ();
-  gtk_snapshot_append_color (snapshot,
-                             rgba,
-                             &GRAPHENE_RECT_INIT(0, 0, 48, 32));
+  gtk_snapshot_append_color (snapshot, &priv->rgba, &GRAPHENE_RECT_INIT(0, 0, 48, 32));
   paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
 
-  gtk_drag_set_icon_paintable (drag, paintable, 0, 0);
+  gtk_drag_source_set_icon (source, paintable, 0, 0);
+
   g_object_unref (paintable);
 }
 
 static void
-gtk_color_button_drag_begin (GtkWidget      *widget,
-                             GdkDrag        *drag,
-                             gpointer        data)
+get_rgba_value (GValue   *value,
+                gpointer  data)
 {
-  GtkColorButton *button = data;
-  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
-
-  set_color_icon (drag, &priv->rgba);
-}
-
-static void
-gtk_color_button_drag_data_get (GtkWidget        *widget,
-                                GdkDrag          *drag,
-                                GtkSelectionData *selection_data,
-                                GtkColorButton   *button)
-{
-  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
-  guint16 dropped[4];
-
-  dropped[0] = (guint16) (priv->rgba.red * 65535);
-  dropped[1] = (guint16) (priv->rgba.green * 65535);
-  dropped[2] = (guint16) (priv->rgba.blue * 65535);
-  dropped[3] = (guint16) (priv->rgba.alpha * 65535);
-
-  gtk_selection_data_set (selection_data,
-                          gtk_selection_data_get_target (selection_data),
-                          16, (guchar *)dropped, 8);
+  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (GTK_COLOR_BUTTON (data));
+  g_value_set_boxed (value, &priv->rgba);
 }
 
 static void
@@ -340,6 +300,9 @@ gtk_color_button_init (GtkColorButton *button)
   PangoRectangle rect;
   GtkStyleContext *context;
   GdkContentFormats *targets;
+  GdkContentProvider *content;
+  GtkDragSource *source;
+  GtkDropTarget *dest;
 
   priv->button = gtk_button_new ();
   g_signal_connect (priv->button, "clicked", G_CALLBACK (gtk_color_button_clicked), button);
@@ -364,23 +327,17 @@ gtk_color_button_init (GtkColorButton *button)
   priv->use_alpha = FALSE;
 
   targets = gdk_content_formats_new (drop_types, G_N_ELEMENTS (drop_types));
-  gtk_drag_dest_set (priv->button,
-                     GTK_DEST_DEFAULT_MOTION |
-                     GTK_DEST_DEFAULT_HIGHLIGHT |
-                     GTK_DEST_DEFAULT_DROP,
-                     targets,
-                     GDK_ACTION_COPY);
-  gtk_drag_source_set (priv->button,
-                       GDK_BUTTON1_MASK|GDK_BUTTON3_MASK,
-                       targets,
-                       GDK_ACTION_COPY);
+  dest = gtk_drop_target_new (targets, GDK_ACTION_COPY);
+  g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_color_button_drag_drop), button);
+  gtk_widget_add_controller (GTK_WIDGET (button), GTK_EVENT_CONTROLLER (dest));
   gdk_content_formats_unref (targets);
-  g_signal_connect (priv->button, "drag-begin",
-                    G_CALLBACK (gtk_color_button_drag_begin), button);
-  g_signal_connect (priv->button, "drag-data-received",
-                    G_CALLBACK (gtk_color_button_drag_data_received), button);
-  g_signal_connect (priv->button, "drag-data-get",
-                    G_CALLBACK (gtk_color_button_drag_data_get), button);
+
+  source = gtk_drag_source_new ();
+  content = gdk_content_provider_new_with_callback (GDK_TYPE_RGBA, get_rgba_value, button);
+  gtk_drag_source_set_content (source, content);
+  g_object_unref (content);
+  g_signal_connect (source, "drag-begin", G_CALLBACK (gtk_color_button_drag_begin), button);
+  gtk_widget_add_controller (priv->button, GTK_EVENT_CONTROLLER (source));
 
   context = gtk_widget_get_style_context (GTK_WIDGET (priv->button));
   gtk_style_context_add_class (context, "color");

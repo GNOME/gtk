@@ -90,20 +90,30 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkDrag, gdk_drag, G_TYPE_OBJECT)
 
 /**
  * SECTION:dnd
- * @title: Drag And Drop
- * @short_description: Functions for controlling drag and drop handling
+ * @Title: Drag And Drop
+ * @Short_description: Functions for controlling drag and drop handling
  *
- * These functions provide a low level interface for drag and drop.
+ * These functions provide a low-level interface for drag and drop.
  *
  * The GdkDrag object represents the source side of an ongoing DND operation.
  * It is created when a drag is started, and stays alive for duration of
- * the DND operation.
+ * the DND operation. After a drag has been started with gdk_drag_begin(),
+ * the caller gets informed about the status of the ongoing drag operation
+ * with signals on the #GtkDrag object.
  *
  * The GdkDrop object represents the target side of an ongoing DND operation.
+ * Possible drop sites get informed about the status of the ongoing drag operation
+ * with events of type %GDK_DRAG_ENTER, %GDK_DRAG_LEAVE, %GDK_DRAG_MOTION and
+ * %GDK_DROP_START. The #GdkDrop object can be obtained from these #GdkEvents
+ * using gdk_event_get_drop().
+ *
+ * The actual data transfer is initiated from the target side via an async
+ * read, using one of the GdkDrop functions for this purpose: gdk_drop_read_async(),
+ * gdk_drop_read_value_async() or gdk_drop_read_text_async().
  * 
- * GTK+ provides a higher level abstraction based on top of these functions,
- * and so they are not normally needed in GTK+ applications. See the
- * [Drag and Drop][gtk4-Drag-and-Drop] section of the GTK+ documentation
+ * GTK provides a higher level abstraction based on top of these functions,
+ * and so they are not normally needed in GTK applications. See the
+ * [Drag and Drop][gtk4-Drag-and-Drop] section of the GTK documentation
  * for more information.
  */
 

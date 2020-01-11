@@ -90,8 +90,8 @@
 #include <gtk/gtkcustomlayout.h>
 #include <gtk/gtkdebug.h>
 #include <gtk/gtkdialog.h>
-#include <gtk/gtkdnd.h>
 #include <gtk/gtkdragdest.h>
+#include <gtk/gtkdragicon.h>
 #include <gtk/gtkdragsource.h>
 #include <gtk/gtkdrawingarea.h>
 #include <gtk/gtkeditable.h>

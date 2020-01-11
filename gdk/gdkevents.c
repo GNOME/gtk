@@ -1013,6 +1013,13 @@ gdk_event_set_coords (GdkEvent *event,
       event->touchpad_pinch.x = x;
       event->touchpad_pinch.y = y;
       break;
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DROP_START:
+      event->dnd.x = x;
+      event->dnd.y = y;
+      break;
     default:
       break;
     }

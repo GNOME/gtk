@@ -22,7 +22,6 @@
 #include "gtkstackswitcher.h"
 
 #include "gtkboxlayout.h"
-#include "gtkdnd.h"
 #include "gtkdragdest.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
@@ -93,6 +92,19 @@ enum {
   PROP_STACK
 };
 
+static void     gtk_stack_switcher_drag_leave  (GtkDropTarget    *dest,
+                                                GdkDrop          *drop,
+                                                GtkStackSwitcher *self);
+static gboolean gtk_stack_switcher_drag_accept (GtkDropTarget    *dest,
+                                                GdkDrop          *drop,
+                                                GtkStackSwitcher *self);
+static void     gtk_stack_switcher_drag_motion (GtkDropTarget    *dest,
+                                                GdkDrop          *drop,
+                                                int               x,
+                                                int               y,
+                                                GtkStackSwitcher *self);
+
+
 G_DEFINE_TYPE_WITH_PRIVATE (GtkStackSwitcher, gtk_stack_switcher, GTK_TYPE_WIDGET)
 
 static void
@@ -100,14 +112,21 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
 {
   GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (switcher);
   GtkStyleContext *context;
+  GdkContentFormats *formats;
+  GtkDropTarget *dest;
 
   priv->buttons = g_hash_table_new_full (g_direct_hash, g_direct_equal, g_object_unref, NULL);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (switcher));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LINKED);
 
-  gtk_drag_dest_set (GTK_WIDGET (switcher), 0, NULL, 0);
-  gtk_drag_dest_set_track_motion (GTK_WIDGET (switcher), TRUE);
+  formats = gdk_content_formats_new (NULL, 0);
+  dest = gtk_drop_target_new (formats, 0);
+  gdk_content_formats_unref (formats);
+  g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_stack_switcher_drag_leave), switcher);
+  g_signal_connect (dest, "accept", G_CALLBACK (gtk_stack_switcher_drag_accept), switcher);
+  g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_stack_switcher_drag_motion), switcher);
+  gtk_widget_add_controller (GTK_WIDGET (switcher), GTK_EVENT_CONTROLLER (dest));
 }
 
 static void
@@ -249,17 +268,24 @@ gtk_stack_switcher_switch_timeout (gpointer data)
 }
 
 static gboolean
-gtk_stack_switcher_drag_motion (GtkWidget *widget,
-                                GdkDrop   *drop,
-                                gint       x,
-                                gint       y)
+gtk_stack_switcher_drag_accept (GtkDropTarget    *dest,
+                                GdkDrop          *drop,
+                                GtkStackSwitcher *self)
 {
-  GtkStackSwitcher *self = GTK_STACK_SWITCHER (widget);
+  return TRUE;
+}
+
+static void 
+gtk_stack_switcher_drag_motion (GtkDropTarget    *dest,
+                                GdkDrop          *drop,
+                                int               x,
+                                int               y,
+                                GtkStackSwitcher *self)
+{
   GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (self);
   GtkWidget *button;
   GHashTableIter iter;
   gpointer value;
-  gboolean retval = FALSE;
 
   button = NULL;
   g_hash_table_iter_init (&iter, priv->buttons);
@@ -270,7 +296,6 @@ gtk_stack_switcher_drag_motion (GtkWidget *widget,
       if (gtk_widget_contains (GTK_WIDGET (value), cx, cy))
         {
           button = GTK_WIDGET (value);
-          retval = TRUE;
           break;
         }
     }
@@ -287,16 +312,13 @@ gtk_stack_switcher_drag_motion (GtkWidget *widget,
                                           self);
       g_source_set_name_by_id (priv->switch_timer, "[gtk] gtk_stack_switcher_switch_timeout");
     }
-
-  return retval;
 }
 
 static void
-gtk_stack_switcher_drag_leave (GtkWidget *widget,
-                               GdkDrop   *drop)
+gtk_stack_switcher_drag_leave (GtkDropTarget    *dest,
+                               GdkDrop          *drop,
+                               GtkStackSwitcher *self)
 {
-  GtkStackSwitcher *self = GTK_STACK_SWITCHER (widget);
-
   remove_switch_timer (self);
 }
 
@@ -561,9 +583,6 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
   object_class->set_property = gtk_stack_switcher_set_property;
   object_class->dispose = gtk_stack_switcher_dispose;
   object_class->finalize = gtk_stack_switcher_finalize;
-
-  widget_class->drag_motion = gtk_stack_switcher_drag_motion;
-  widget_class->drag_leave = gtk_stack_switcher_drag_leave;
 
   g_object_class_install_property (object_class,
                                    PROP_STACK,

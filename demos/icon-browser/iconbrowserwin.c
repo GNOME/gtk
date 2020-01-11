@@ -5,9 +5,6 @@
 #include <gtk/gtk.h>
 
 /* Drag 'n Drop */
-static const char *target_table[] = {
-  "text/uri-list"
-};
 
 typedef struct
 {
@@ -76,30 +73,11 @@ search_text_changed (GtkEntry *entry, IconBrowserWindow *win)
   gtk_tree_model_filter_refilter (win->filter_model);
 }
 
-static GdkPixbuf *
-get_icon (GtkWidget *image, const gchar *name, gint size)
-{
-  GtkIconInfo *info;
-  GtkStyleContext *context;
-  GdkTexture *texture;
-  GdkPixbuf *pixbuf;
-
-  context = gtk_widget_get_style_context (image);
-  info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), name, size, 0);
-  texture = GDK_TEXTURE (gtk_icon_info_load_symbolic_for_context (info, context, NULL, NULL));
-  pixbuf = gdk_pixbuf_get_from_texture (texture);
-  g_object_unref (texture);
-  g_object_unref (info);
-
-  return pixbuf;
-}
-
 static void
 set_image (GtkWidget *image, const gchar *name, gint size)
 {
   gtk_image_set_from_icon_name (GTK_IMAGE (image), name);
   gtk_image_set_pixel_size (GTK_IMAGE (image), size);
-  gtk_drag_source_set_icon_name (image, name);
 }
 
 static void
@@ -365,78 +343,107 @@ search_mode_toggled (GObject *searchbar, GParamSpec *pspec, IconBrowserWindow *w
     gtk_list_box_unselect_all (GTK_LIST_BOX (win->context_list));
 }
 
-static void
-get_image_data (GtkWidget        *widget,
-                GdkDrag          *drag,
-                GtkSelectionData *selection,
-                guint             target_info,
-                gpointer          data)
+static GdkPaintable *
+get_image_paintable (GtkImage *image)
 {
-  GtkWidget *image;
-  const gchar *name;
-  gint size;
-  GdkPixbuf *pixbuf;
+  const gchar *icon_name;
+  GtkIconTheme *icon_theme;
+  GtkIconInfo *icon_info;
+  int size;
 
-  image = gtk_bin_get_child (GTK_BIN (widget));
-
-  name = gtk_image_get_icon_name (GTK_IMAGE (image));
-  size = gtk_image_get_pixel_size (GTK_IMAGE (image));
-
-  pixbuf = get_icon (image, name, size);
-  gtk_selection_data_set_pixbuf (selection, pixbuf);
-  g_object_unref (pixbuf);
+  switch (gtk_image_get_storage_type (image))
+    {
+    case GTK_IMAGE_PAINTABLE:
+      return g_object_ref (gtk_image_get_paintable (image));
+    case GTK_IMAGE_ICON_NAME:
+      icon_name = gtk_image_get_icon_name (image);
+      size = gtk_image_get_pixel_size (image);
+      icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (image)));
+      icon_info = gtk_icon_theme_lookup_icon (icon_theme, icon_name, size,
+                                              GTK_ICON_LOOKUP_FORCE_SIZE | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+      if (icon_info == NULL)
+        return NULL;
+      return gtk_icon_info_load_icon (icon_info, NULL);
+    default:
+      g_warning ("Image storage type %d not handled",
+                 gtk_image_get_storage_type (image));
+      return NULL;
+    }
 }
 
 static void
-get_scalable_image_data (GtkWidget        *widget,
-                         GdkDrag          *drag,
-                         GtkSelectionData *selection,
-                         guint             target_info,
-                         gpointer          data)
+drag_begin (GtkDragSource *source,
+            GdkDrag       *drag,
+            GtkWidget     *widget)
 {
-  gchar *uris[2];
-  GtkIconInfo *info;
-  GtkWidget *image;
-  GFile *file;
-  const gchar *name;
+  GdkPaintable *paintable;
 
-  image = gtk_bin_get_child (GTK_BIN (widget));
-  name = gtk_image_get_icon_name (GTK_IMAGE (image));
+  paintable = get_image_paintable (GTK_IMAGE (widget));
+  if (paintable)
+    {
+      int w, h;
+
+      w = gdk_paintable_get_intrinsic_width (paintable);
+      h = gdk_paintable_get_intrinsic_height (paintable);
+      gtk_drag_source_set_icon (source, paintable, w, h);
+      g_object_unref (paintable);
+    }
+}
+
+static void
+get_texture (GValue   *value,
+             gpointer  data)
+{
+  GdkPaintable *paintable = get_image_paintable (GTK_IMAGE (data));
+
+  if (GDK_IS_TEXTURE (paintable))
+    g_value_set_object (value, paintable);
+}
+
+static void
+get_file (GValue   *value,
+          gpointer  data)
+{
+  const char *name;
+  GtkIconInfo *info;
+  GFile *file;
+
+  name = gtk_image_get_icon_name (GTK_IMAGE (data));
 
   info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), name, -1, 0);
   file = g_file_new_for_path (gtk_icon_info_get_filename (info));
-  uris[0] = g_file_get_uri (file);
-  uris[1] = NULL;
-
-  gtk_selection_data_set_uris (selection, uris);
-
-  g_free (uris[0]);
-  g_object_unref (info);
+  g_value_set_object (value, file);
   g_object_unref (file);
+  g_object_unref (info);
 }
 
 static void
 setup_image_dnd (GtkWidget *image)
 {
-  gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, GDK_ACTION_COPY);
-  gtk_drag_source_add_image_targets (image);
-  g_signal_connect (image, "drag-data-get", G_CALLBACK (get_image_data), NULL);
+  GdkContentProvider *content;
+  GtkDragSource *source;
+
+  source = gtk_drag_source_new ();
+  content = gdk_content_provider_new_with_callback (GDK_TYPE_TEXTURE, get_texture, image);
+  gtk_drag_source_set_content (source, content);
+  g_object_unref (content);
+  g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), image);
+  gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
 }
 
 static void
 setup_scalable_image_dnd (GtkWidget *image)
 {
-  GtkWidget *parent;
-  GdkContentFormats *targets;
+  GdkContentProvider *content;
+  GtkDragSource *source;
 
-  parent = gtk_widget_get_parent (image);
-  targets = gdk_content_formats_new (target_table, G_N_ELEMENTS (target_table));
-  gtk_drag_source_set (parent, GDK_BUTTON1_MASK,
-                       targets,
-                       GDK_ACTION_COPY);
-  gdk_content_formats_unref (targets);
+  source = gtk_drag_source_new ();
+  content = gdk_content_provider_new_with_callback (G_TYPE_FILE, get_file, image);
+  gtk_drag_source_set_content (source, content);
+  g_object_unref (content);
 
-  g_signal_connect (parent, "drag-data-get", G_CALLBACK (get_scalable_image_data), NULL);
+  g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), image);
+  gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
 }
 
 static void
@@ -446,8 +453,7 @@ icon_browser_window_init (IconBrowserWindow *win)
 
   gtk_widget_init_template (GTK_WIDGET (win));
 
-  list = gdk_content_formats_new (NULL, 0);
-  list = gtk_content_formats_add_text_targets (list);
+  list = gdk_content_formats_new_for_gtype (G_TYPE_STRING);
   gtk_icon_view_enable_model_drag_source (GTK_ICON_VIEW (win->list),
                                           GDK_BUTTON1_MASK,
                                           list,
@@ -459,7 +465,6 @@ icon_browser_window_init (IconBrowserWindow *win)
   setup_image_dnd (win->image3);
   setup_image_dnd (win->image4);
   setup_image_dnd (win->image5);
-  setup_image_dnd (win->image6);
   setup_scalable_image_dnd (win->image6);
 
   win->contexts = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, context_free);

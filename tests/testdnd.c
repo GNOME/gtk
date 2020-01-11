@@ -298,9 +298,9 @@ static const char *target_table[] = {
 static guint n_targets = sizeof(target_table) / sizeof(target_table[0]);
 
 void  
-target_drag_leave	   (GtkWidget	       *widget,
-			    GdkDrop            *drop,
-			    guint               time)
+target_drag_leave (GtkDropTarget *dest,
+                   GdkDrop       *drop,
+                   GtkWidget     *widget)
 {
   g_print("leave\n");
   have_drag = FALSE;
@@ -308,13 +308,12 @@ target_drag_leave	   (GtkWidget	       *widget,
 }
 
 gboolean
-target_drag_motion	   (GtkWidget	       *widget,
-			    GdkDrop            *drop,
-			    gint                x,
-			    gint                y)
+target_drag_motion (GtkDropTarget *dest,
+                    GdkDrop       *drop,
+                    int            x,
+                    int            y,
+                    GtkWidget     *widget) 
 {
-  GtkWidget *source_widget;
-  GdkDrag *drag;
   char *s;
 
   if (!have_drag)
@@ -322,12 +321,6 @@ target_drag_motion	   (GtkWidget	       *widget,
       have_drag = TRUE;
       gtk_image_set_from_pixbuf (GTK_IMAGE (widget), trashcan_open);
     }
-
-  drag = gdk_drop_get_drag (drop);
-  source_widget = drag ? gtk_drag_get_source_widget (drag) : NULL;
-  g_print ("motion, source %s\n", source_widget ?
-	   G_OBJECT_TYPE_NAME (source_widget) :
-	   "NULL");
 
   s = gdk_content_formats_to_string (gdk_drop_get_formats (drop));
   g_print ("%s\n", s);
@@ -337,11 +330,29 @@ target_drag_motion	   (GtkWidget	       *widget,
   return TRUE;
 }
 
+static void
+got_text_in_target (GObject *object,
+                    GAsyncResult *result,
+                    gpointer data)
+{
+  char *str;
+
+  str = gdk_drop_read_text_finish (GDK_DROP (object), result, NULL);
+  if (str)
+    {
+      g_print ("Received \"%s\" in target\n", str);
+      g_free (str);
+    }
+
+  gdk_drop_finish (GDK_DROP (object), GDK_ACTION_MOVE);
+}
+ 
 gboolean
-target_drag_drop	   (GtkWidget	       *widget,
-			    GdkDrop            *drop,
-			    gint                x,
-			    gint                y)
+target_drag_drop (GtkDropTarget *dest,
+                  GdkDrop       *drop,
+                  int            x,
+                  int            y,
+                  GtkWidget     *widget)
 {
   GdkContentFormats *formats;
   const char *format;
@@ -355,10 +366,12 @@ target_drag_drop	   (GtkWidget	       *widget,
   format = gdk_content_formats_match_mime_type (formats, formats);
   if (format)
     {
-      gtk_drag_get_data (widget, drop, format);
+      gdk_drop_read_text_async (drop, NULL, got_text_in_target, widget);
       return TRUE;
     }
   
+  gdk_drop_status (drop, 0);
+
   return FALSE;
 }
 
@@ -381,55 +394,33 @@ action_make_unique (GdkDragAction action)
   return 0;
 }
 
-void  
-target_drag_data_received  (GtkWidget          *widget,
-			    GdkDrop            *drop,
-			    GtkSelectionData   *selection_data)
+static void
+got_text (GObject *object,
+          GAsyncResult *result,
+          gpointer data)
 {
-  if (gtk_selection_data_get_length (selection_data) >= 0 &&
-      gtk_selection_data_get_format (selection_data) == 8)
+  char *str;
+
+  str = gdk_drop_read_text_finish (GDK_DROP (object), result, NULL);
+  if (str)
     {
-      GdkDragAction action = gdk_drop_get_actions (drop);
-      g_print ("Received \"%s\" in trashcan\n", (gchar *) gtk_selection_data_get_data (selection_data));
-      action = action_make_unique (action);
-      gdk_drop_finish (drop, action);
-      return;
+      g_print ("Received \"%s\" in label\n", str);
+      g_free (str);
     }
-  
-  gdk_drop_finish (drop, 0);
 }
-  
+ 
 void  
-label_drag_data_received  (GtkWidget          *widget,
-			   GdkDrop            *drop,
-			   GtkSelectionData   *selection_data)
+label_drag_drop (GtkDropTarget *dest,
+                 GdkDrop       *drop,
+                 int            x,
+                 int            y,
+                 GtkWidget     *widget)
 {
-  if (gtk_selection_data_get_length (selection_data) >= 0 &&
-      gtk_selection_data_get_format (selection_data) == 8)
-    {
-      GdkDragAction action = action_make_unique (gdk_drop_get_actions (drop));
-      g_print ("Received \"%s\" in label\n", (gchar *) gtk_selection_data_get_data (selection_data));
-      gdk_drop_finish (drop, action);
-      return;
-    }
-  
-  gdk_drop_finish (drop, 0);
+  gdk_drop_read_text_async (drop, NULL, got_text, widget);
+  GdkDragAction action = action_make_unique (gdk_drop_get_actions (drop));
+  gdk_drop_finish (drop, action);
 }
 
-void  
-source_drag_data_get  (GtkWidget          *widget,
-		       GdkDrag            *drag,
-		       GtkSelectionData   *selection_data,
-		       gpointer            data)
-{
-  if (gtk_selection_data_get_target (selection_data) == g_intern_static_string ("application/x-rootwindow-drop"))
-    g_print ("I was dropped on the rootwin\n");
-  else
-    gtk_selection_data_set (selection_data,
-			    gtk_selection_data_get_target (selection_data),
-			    8, (guchar *) "I'm Data!", 9);
-}
-  
 /* The following is a rather elaborate example demonstrating/testing
  * changing of the window hierarchy during a drag - in this case,
  * via a "spring-loaded" popup window.
@@ -453,11 +444,17 @@ popdown_cb (gpointer data)
 }
 
 gboolean
-popup_motion	   (GtkWidget	       *widget,
-		    GdkDrop            *drop,
-		    gint                x,
-		    gint                y)
+popup_motion (GtkDropTarget *dest,
+              GdkDrop       *drop)
 {
+  gdk_drop_status (drop, GDK_ACTION_COPY);
+  return TRUE;
+}
+
+void  
+popup_enter (GtkDropTarget *dest)
+{
+g_print ("popup enter\n");
   if (!in_popup)
     {
       in_popup = TRUE;
@@ -468,14 +465,12 @@ popup_motion	   (GtkWidget	       *widget,
 	  popdown_timer = 0;
 	}
     }
-
-  return TRUE;
 }
 
 void  
-popup_leave	   (GtkWidget	       *widget,
-		    GdkDrop            *drop)
+popup_leave (GtkDropTarget *dest)
 {
+g_print ("popup leave\n");
   if (in_popup)
     {
       in_popup = FALSE;
@@ -485,6 +480,15 @@ popup_leave	   (GtkWidget	       *widget,
 	  popdown_timer = g_timeout_add (500, popdown_cb, NULL);
 	}
     }
+}
+
+static gboolean
+popup_drop (GtkDropTarget *dest,
+            GdkDrop       *drop)
+{
+  gdk_drop_finish (drop, GDK_ACTION_COPY);
+  popdown_cb (NULL);
+  return TRUE;
 }
 
 gboolean
@@ -502,26 +506,26 @@ popup_cb (gpointer data)
 	  popup_window = gtk_window_new (GTK_WINDOW_POPUP);
 
 	  grid = gtk_grid_new ();
-          targets = gdk_content_formats_new (target_table, n_targets - 1); /* no rootwin */
+          targets = gdk_content_formats_new_for_gtype (G_TYPE_STRING);
 
 	  for (i=0; i<3; i++)
 	    for (j=0; j<3; j++)
 	      {
 		char buffer[128];
+                GtkDropTarget *dest;
+
 		g_snprintf(buffer, sizeof(buffer), "%d,%d", i, j);
 		button = gtk_button_new_with_label (buffer);
                 gtk_widget_set_hexpand (button, TRUE);
                 gtk_widget_set_vexpand (button, TRUE);
 		gtk_grid_attach (GTK_GRID (grid), button, i, j, 1, 1);
 
-		gtk_drag_dest_set (button,
-				   GTK_DEST_DEFAULT_ALL,
-                                   targets,
-				   GDK_ACTION_COPY | GDK_ACTION_MOVE);
-		g_signal_connect (button, "drag-motion",
-				  G_CALLBACK (popup_motion), NULL);
-		g_signal_connect (button, "drag-leave",
-				  G_CALLBACK (popup_leave), NULL);
+                dest = gtk_drop_target_new (targets, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+		g_signal_connect (dest, "accept", G_CALLBACK (popup_motion), NULL);
+		g_signal_connect (dest, "drag-enter", G_CALLBACK (popup_enter), NULL);
+		g_signal_connect (dest, "drag-leave", G_CALLBACK (popup_leave), NULL);
+		g_signal_connect (dest, "drag-drop", G_CALLBACK (popup_drop), NULL);
+                gtk_widget_add_controller (button, GTK_EVENT_CONTROLLER (dest));
 	      }
 	  gtk_container_add (GTK_CONTAINER (popup_window), grid);
           gdk_content_formats_unref (targets);
@@ -531,30 +535,33 @@ popup_cb (gpointer data)
       popped_up = TRUE;
     }
 
-  popdown_timer = g_timeout_add (500, popdown_cb, NULL);
-  g_print ("added popdown\n");
-
   popup_timer = FALSE;
 
   return FALSE;
 }
 
 gboolean
-popsite_motion	   (GtkWidget	       *widget,
-		    GdkDrop            *drop,
-		    gint                x,
-		    gint                y)
+popsite_motion (GtkDropTarget *dest,
+                int            x,
+                int            y,
+                GtkWidget     *widget)
 {
-  if (!popup_timer)
-    popup_timer = g_timeout_add (500, popup_cb, NULL);
-
   return TRUE;
 }
 
 void  
-popsite_leave	   (GtkWidget	       *widget,
-		    GdkDrop            *drop)
+popsite_enter (GtkDropTarget *dest)
 {
+g_print ("popsite enter\n");
+  if (!popup_timer)
+    popup_timer = g_timeout_add (500, popup_cb, NULL);
+
+}
+
+void  
+popsite_leave (GtkDropTarget *dest)
+{
+g_print ("popsite leave\n");
   if (popup_timer)
     {
       g_source_remove (popup_timer);
@@ -562,10 +569,9 @@ popsite_leave	   (GtkWidget	       *widget,
     }
 }
 
-void  
-source_drag_data_delete  (GtkWidget          *widget,
-			  GdkDrag            *drag,
-			  gpointer            data)
+void
+source_drag_data_delete (GtkWidget *widget,
+                         gpointer  data)
 {
   g_print ("Delete the data!\n");
 }
@@ -587,7 +593,11 @@ main (int argc, char **argv)
   GtkWidget *button;
   GdkPixbuf *drag_icon;
   GdkTexture *texture;
+  GdkContentProvider *content;
+  GValue value = G_VALUE_INIT;
+  GtkDragSource *source;
   GdkContentFormats *targets;
+  GtkDropTarget *dest;
 
   test_init ();
   
@@ -610,13 +620,9 @@ main (int argc, char **argv)
   label = gtk_label_new ("Drop Here\n");
 
   targets = gdk_content_formats_new (target_table, n_targets - 1); /* no rootwin */
-  gtk_drag_dest_set (label,
-		     GTK_DEST_DEFAULT_ALL,
-                     targets,
-		     GDK_ACTION_COPY | GDK_ACTION_MOVE);
-
-  g_signal_connect (label, "drag_data_received",
-		    G_CALLBACK( label_drag_data_received), NULL);
+  dest = gtk_drop_target_new (targets, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  g_signal_connect (dest, "drag-drop", G_CALLBACK (label_drag_drop), NULL);
+  gtk_widget_add_controller (label, GTK_EVENT_CONTROLLER (dest));
 
   gtk_widget_set_hexpand (label, TRUE);
   gtk_widget_set_vexpand (label, TRUE);
@@ -624,60 +630,52 @@ main (int argc, char **argv)
 
   label = gtk_label_new ("Popup\n");
 
-  gtk_drag_dest_set (label,
-		     GTK_DEST_DEFAULT_ALL,
-                     targets,
-		     GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  dest = gtk_drop_target_new (targets, GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  g_signal_connect (dest, "accept", G_CALLBACK (popsite_motion), NULL);
+  g_signal_connect (dest, "drag-enter", G_CALLBACK (popsite_enter), NULL);
+  g_signal_connect (dest, "drag-leave", G_CALLBACK (popsite_leave), NULL);
+  gtk_widget_add_controller (label, GTK_EVENT_CONTROLLER (dest));
 
   gtk_widget_set_hexpand (label, TRUE);
   gtk_widget_set_vexpand (label, TRUE);
   gtk_grid_attach (GTK_GRID (grid), label, 1, 1, 1, 1);
 
-  g_signal_connect (label, "drag-motion",
-		    G_CALLBACK (popsite_motion), NULL);
-  g_signal_connect (label, "drag-leave",
-		    G_CALLBACK (popsite_leave), NULL);
   gdk_content_formats_unref (targets);
   
   pixmap = gtk_image_new_from_pixbuf (trashcan_closed);
-  gtk_drag_dest_set (pixmap, 0, NULL, 0);
+  targets = gdk_content_formats_new (NULL, 0);
+  dest = gtk_drop_target_new (targets, 0);
+  g_signal_connect (dest, "drag-leave", G_CALLBACK (target_drag_leave), pixmap);
+  g_signal_connect (dest, "accept", G_CALLBACK (target_drag_motion), pixmap);
+  g_signal_connect (dest, "drag-drop", G_CALLBACK (target_drag_drop), pixmap);
+  gtk_widget_add_controller (pixmap, GTK_EVENT_CONTROLLER (dest));
+  gdk_content_formats_unref (targets);
+
   gtk_widget_set_hexpand (pixmap, TRUE);
   gtk_widget_set_vexpand (pixmap, TRUE);
   gtk_grid_attach (GTK_GRID (grid), pixmap, 1, 0, 1, 1);
 
-  g_signal_connect (pixmap, "drag-leave",
-		    G_CALLBACK (target_drag_leave), NULL);
-
-  g_signal_connect (pixmap, "drag-motion",
-		    G_CALLBACK (target_drag_motion), NULL);
-
-  g_signal_connect (pixmap, "drag-drop",
-		    G_CALLBACK (target_drag_drop), NULL);
-
-  g_signal_connect (pixmap, "drag-data-received",
-		    G_CALLBACK (target_drag_data_received), NULL);
 
   /* Drag site */
 
-  button = gtk_button_new_with_label ("Drag Here\n");
+  button = gtk_label_new ("Drag Here\n");
 
-  targets = gdk_content_formats_new (target_table, n_targets);
-  gtk_drag_source_set (button, GDK_BUTTON1_MASK | GDK_BUTTON3_MASK,
-                       targets,
-		       GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  gtk_drag_source_set_icon_paintable (button, GDK_PAINTABLE (texture));
-  gdk_content_formats_unref (targets);
+  source = gtk_drag_source_new ();
+  g_value_init (&value, G_TYPE_STRING);
+  g_value_set_string (&value, "I'm data!");
+  content = gdk_content_provider_new_for_value (&value);
+  g_value_unset (&value);
+  gtk_drag_source_set_content (source, content);
+  g_object_unref (content);
+  gtk_drag_source_set_actions (source, GDK_ACTION_COPY|GDK_ACTION_MOVE);
+  gtk_widget_add_controller (button, GTK_EVENT_CONTROLLER (source));
+  gtk_drag_source_set_icon (source, GDK_PAINTABLE (texture), 0, 0);
 
   g_object_unref (texture);
 
   gtk_widget_set_hexpand (button, TRUE);
   gtk_widget_set_vexpand (button, TRUE);
   gtk_grid_attach (GTK_GRID (grid), button, 0, 1, 1, 1);
-
-  g_signal_connect (button, "drag-data-get",
-		    G_CALLBACK (source_drag_data_get), NULL);
-  g_signal_connect (button, "drag-data-delete",
-		    G_CALLBACK (source_drag_data_delete), NULL);
 
   gtk_widget_show (window);
 

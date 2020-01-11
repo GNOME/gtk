@@ -21,6 +21,7 @@
 #include "gdkcontentprovider.h"
 
 #include "gdkcontentformats.h"
+#include "gdkcontentserializer.h"
 #include "gdkintl.h"
 #include "gdkcontentproviderimpl.h"
 
@@ -277,6 +278,235 @@ gdk_content_provider_new_for_bytes (const char *mime_type,
   content = g_object_new (GDK_TYPE_CONTENT_PROVIDER_BYTES, NULL);
   content->mime_type = g_intern_string (mime_type);
   content->bytes = g_bytes_ref (bytes);
+  
+  return GDK_CONTENT_PROVIDER (content);
+}
+
+#define GDK_TYPE_CONTENT_PROVIDER_CALLBACK            (gdk_content_provider_callback_get_type ())
+#define GDK_CONTENT_PROVIDER_CALLBACK(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_CONTENT_PROVIDER_CALLBACK, GdkContentProviderCallback))
+
+typedef struct _GdkContentProviderCallback GdkContentProviderCallback;
+typedef struct _GdkContentProviderCallbackClass GdkContentProviderCallbackClass;
+
+struct _GdkContentProviderCallback
+{
+  GdkContentProvider parent;
+
+  GType type;
+  GdkContentProviderGetValueFunc func;
+  gpointer data;
+};
+
+struct _GdkContentProviderCallbackClass
+{
+  GdkContentProviderClass parent_class;
+};
+
+GType gdk_content_provider_callback_get_type (void) G_GNUC_CONST;
+
+G_DEFINE_TYPE (GdkContentProviderCallback, gdk_content_provider_callback, GDK_TYPE_CONTENT_PROVIDER)
+
+static GdkContentFormats *
+gdk_content_provider_callback_ref_formats (GdkContentProvider *provider)
+{
+  GdkContentProviderCallback *callback = GDK_CONTENT_PROVIDER_CALLBACK (provider);
+
+  return gdk_content_formats_new_for_gtype (callback->type);
+}
+
+static gboolean
+gdk_content_provider_callback_get_value (GdkContentProvider  *provider,
+                                         GValue              *value,
+                                         GError             **error)
+{
+  GdkContentProviderCallback *callback = GDK_CONTENT_PROVIDER_CALLBACK (provider);
+
+  if (G_VALUE_HOLDS (value, callback->type) && callback->func != NULL)
+    {
+      callback->func (value, callback->data);
+      return TRUE;
+    }
+
+  return GDK_CONTENT_PROVIDER_CLASS (gdk_content_provider_callback_parent_class)->get_value (provider, value, error);
+}
+
+static void
+gdk_content_provider_callback_class_init (GdkContentProviderCallbackClass *class)
+{
+  GdkContentProviderClass *provider_class = GDK_CONTENT_PROVIDER_CLASS (class);
+
+  provider_class->ref_formats = gdk_content_provider_callback_ref_formats;
+  provider_class->get_value = gdk_content_provider_callback_get_value;
+}
+
+static void
+gdk_content_provider_callback_init (GdkContentProviderCallback *content)
+{
+}
+
+/**
+ * gdk_content_provider_new_for_callback:
+ * @type: the type that the callback provides
+ * @func: callback to populate a #GValue
+ * @data: data that gets passed to @func
+ *
+ * Create a content provider that provides data that is provided via a callback.
+ *
+ * Returns: a new #GdkContentProvider
+ **/
+GdkContentProvider *
+gdk_content_provider_new_with_callback (GType                          type,
+                                        GdkContentProviderGetValueFunc func,
+                                        gpointer                       data)
+{
+  GdkContentProviderCallback *content;
+
+  content = g_object_new (GDK_TYPE_CONTENT_PROVIDER_CALLBACK, NULL);
+  content->type = type;
+  content->func = func;
+  content->data = data;
+  
+  return GDK_CONTENT_PROVIDER (content);
+}
+
+#define GDK_TYPE_CONTENT_PROVIDER_CALLBACK2            (gdk_content_provider_callback2_get_type ())
+#define GDK_CONTENT_PROVIDER_CALLBACK2(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_CONTENT_PROVIDER_CALLBACK2, GdkContentProviderCallback2))
+
+typedef struct _GdkContentProviderCallback2 GdkContentProviderCallback2;
+typedef struct _GdkContentProviderCallback2Class GdkContentProviderCallback2Class;
+
+struct _GdkContentProviderCallback2
+{
+  GdkContentProvider parent;
+
+  GdkContentFormats *formats;
+  GdkContentProviderGetBytesFunc func;
+  gpointer data;
+};
+
+struct _GdkContentProviderCallback2Class
+{
+  GdkContentProviderClass parent_class;
+};
+
+GType gdk_content_provider_callback2_get_type (void) G_GNUC_CONST;
+
+G_DEFINE_TYPE (GdkContentProviderCallback2, gdk_content_provider_callback2, GDK_TYPE_CONTENT_PROVIDER)
+
+static GdkContentFormats *
+gdk_content_provider_callback2_ref_formats (GdkContentProvider *provider)
+{
+  GdkContentProviderCallback2 *callback = GDK_CONTENT_PROVIDER_CALLBACK2 (provider);
+
+  return gdk_content_formats_ref (callback->formats);
+}
+
+static void
+gdk_content_provider_callback2_write_mime_type_done (GObject      *stream,
+                                                     GAsyncResult *result,
+                                                     gpointer      task)
+{
+  GError *error = NULL;
+
+  if (!g_output_stream_write_all_finish (G_OUTPUT_STREAM (stream), result, NULL, &error))
+    g_task_return_error (task, error);
+  else
+    g_task_return_boolean (task, TRUE);
+
+  g_object_unref (task);
+}
+
+static void
+gdk_content_provider_callback2_write_mime_type_async (GdkContentProvider     *provider,
+                                                      const char             *mime_type,
+                                                      GOutputStream          *stream,
+                                                      int                     io_priority,
+                                                      GCancellable           *cancellable,
+                                                      GAsyncReadyCallback     callback,
+                                                      gpointer                user_data)
+{
+  GdkContentProviderCallback2 *content = GDK_CONTENT_PROVIDER_CALLBACK2 (provider);
+  GTask *task;
+  GBytes *bytes;
+
+  task = g_task_new (content, cancellable, callback, user_data);
+  g_task_set_priority (task, io_priority);
+  g_task_set_source_tag (task, gdk_content_provider_callback2_write_mime_type_async);
+
+  if (!gdk_content_formats_contain_mime_type (content->formats, mime_type))
+    {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                               _("Cannot provide contents as “%s”"), mime_type);
+      g_object_unref (task);
+      return;
+    }
+
+  bytes = content->func (mime_type, content->data);
+  if (!bytes)
+    {
+      g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                               _("Failed to get contents as “%s”"), mime_type);
+      g_object_unref (task);
+      return;
+    }
+
+  g_object_set_data_full (G_OBJECT (task), "bytes", bytes, (GDestroyNotify)g_bytes_unref);
+
+  g_output_stream_write_all_async (stream,
+                                   g_bytes_get_data (bytes, NULL),
+                                   g_bytes_get_size (bytes),
+                                   io_priority,
+                                   cancellable,
+                                   gdk_content_provider_callback2_write_mime_type_done,
+                                   task);
+}
+
+static gboolean
+gdk_content_provider_callback2_write_mime_type_finish (GdkContentProvider *provider,
+                                                       GAsyncResult       *result,
+                                                       GError            **error)
+{
+  g_return_val_if_fail (g_task_is_valid (result, provider), FALSE);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gdk_content_provider_callback2_write_mime_type_async, FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+static void
+gdk_content_provider_callback2_class_init (GdkContentProviderCallback2Class *class)
+{
+  GdkContentProviderClass *provider_class = GDK_CONTENT_PROVIDER_CLASS (class);
+
+  provider_class->ref_formats = gdk_content_provider_callback2_ref_formats;
+  provider_class->write_mime_type_async = gdk_content_provider_callback2_write_mime_type_async;
+  provider_class->write_mime_type_finish = gdk_content_provider_callback2_write_mime_type_finish;
+}
+
+static void
+gdk_content_provider_callback2_init (GdkContentProviderCallback2 *content)
+{
+}
+
+/**
+ * gdk_content_provider_new_with_formats:
+ * @formats: formats to advertise
+ * @func: callback to populate a #GValue
+ * @data: data that gets passed to @func
+ *
+ * Create a content provider that provides data that is provided via a callback.
+ *
+ * Returns: a new #GdkContentProvider
+ **/
+GdkContentProvider *
+gdk_content_provider_new_with_formats (GdkContentFormats              *formats,
+                                       GdkContentProviderGetBytesFunc  func,
+                                       gpointer                        data)
+{
+  GdkContentProviderCallback2 *content;
+  content = g_object_new (GDK_TYPE_CONTENT_PROVIDER_CALLBACK2, NULL);
+  content->formats = gdk_content_formats_union_serialize_mime_types (gdk_content_formats_ref (formats));
+  content->func = func;
+  content->data = data;
   
   return GDK_CONTENT_PROVIDER (content);
 }

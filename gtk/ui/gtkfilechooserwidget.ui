@@ -156,11 +156,6 @@
                                                 <signal name="key-pressed" handler="treeview_key_press_cb" swapped="no"/>
                                               </object>
                                             </child>
-                                            <signal name="drag-data-received" handler="file_list_drag_data_received_cb" swapped="no"/>
-                                            <signal name="drag-drop" handler="file_list_drag_drop_cb" swapped="no"/>
-                                            <signal name="drag-begin" handler="file_list_drag_begin_cb" swapped="no"/>
-                                            <signal name="drag-motion" handler="file_list_drag_motion_cb" swapped="no"/>
-                                            <signal name="drag-end" handler="file_list_drag_end_cb" swapped="no"/>
                                             <signal name="popup-menu" handler="list_popup_menu_cb" swapped="no"/>
                                             <signal name="query-tooltip" handler="file_list_query_tooltip_cb" swapped="no"/>
                                             <signal name="row-activated" handler="list_row_activated" swapped="no"/>

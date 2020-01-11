@@ -29,7 +29,6 @@
 #include "gtkadjustment.h"
 #include "gtkadjustmentprivate.h"
 #include "gtkbindings.h"
-#include "gtkdnd.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkgesturedrag.h"
