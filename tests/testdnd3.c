@@ -221,9 +221,7 @@ item_drag_drop (GtkDropTarget *dest,
 
 static gboolean
 item_drag_motion (GtkDropTarget *dest,
-                  GdkDrop       *drop,
-                  int            x,
-                  int            y)
+                  GdkDrop       *drop)
 {
   if (gtk_drop_target_find_mimetype (dest) != NULL)
     {

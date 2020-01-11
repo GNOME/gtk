@@ -703,7 +703,7 @@ static void gtk_notebook_dnd_finished_cb     (GdkDrag          *drag,
 static void gtk_notebook_drag_cancel_cb      (GdkDrag          *drag,
                                               GdkDragCancelReason reason,
                                               GtkWidget        *widget);
-static gboolean gtk_notebook_drag_motion     (GtkDropTarget    *dest,
+static void     gtk_notebook_drag_motion     (GtkDropTarget    *dest,
                                               GdkDrop          *drop,
                                               int               x,
                                               int               y);
@@ -1349,7 +1349,7 @@ gtk_notebook_init (GtkNotebook *notebook)
 
   targets = gdk_content_formats_new (dst_notebook_targets, G_N_ELEMENTS (dst_notebook_targets));
   dest = gtk_drop_target_new (targets, GDK_ACTION_MOVE);
-  g_signal_connect (dest, "accept", G_CALLBACK (gtk_notebook_drag_motion), NULL);
+  g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_notebook_drag_motion), NULL);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_notebook_drag_leave), NULL);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_notebook_drag_drop), NULL);
   gtk_widget_add_controller (GTK_WIDGET (priv->tabs_widget), GTK_EVENT_CONTROLLER (dest));
@@ -3188,7 +3188,7 @@ gtk_notebook_switch_tab_timeout (gpointer data)
   return FALSE;
 }
 
-static gboolean
+static void
 gtk_notebook_drag_motion (GtkDropTarget *dest,
                           GdkDrop       *drop,
                           int            x,
@@ -3202,7 +3202,6 @@ gtk_notebook_drag_motion (GtkDropTarget *dest,
   GtkNotebookArrow arrow;
   GdkAtom target, tab_target;
   GList *tab;
-  gboolean retval = FALSE;
 
   arrow = gtk_notebook_get_arrow (notebook, x, y);
   if (arrow != ARROW_NONE)
@@ -3211,7 +3210,6 @@ gtk_notebook_drag_motion (GtkDropTarget *dest,
       gtk_notebook_set_scroll_timer (notebook);
       gdk_drop_status (drop, 0);
 
-      retval = TRUE;
       goto out;
     }
 
@@ -3224,8 +3222,6 @@ gtk_notebook_drag_motion (GtkDropTarget *dest,
       GQuark group, source_group;
       GtkWidget *source_child;
       GdkDrag *drag = gdk_drop_get_drag (drop);
-
-      retval = TRUE;
 
       if (!drag)
         {
@@ -3264,8 +3260,6 @@ gtk_notebook_drag_motion (GtkDropTarget *dest,
       priv->mouse_x = x;
       priv->mouse_y = y;
 
-      retval = TRUE;
-
       if (tab != priv->switch_tab)
         remove_switch_tab_timer (notebook);
 
@@ -3282,8 +3276,7 @@ gtk_notebook_drag_motion (GtkDropTarget *dest,
       remove_switch_tab_timer (notebook);
     }
 
- out:
-  return retval;
+ out:;
 }
 
 static void

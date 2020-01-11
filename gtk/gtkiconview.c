@@ -292,7 +292,7 @@ static GBytes * gtk_icon_view_drag_data_get     (const char      *mime_type,
 static void     gtk_icon_view_drag_leave         (GtkDropTarget    *dest,
                                                   GdkDrop          *drop,
                                                   GtkIconView      *icon_view);
-static gboolean gtk_icon_view_drag_motion        (GtkDropTarget    *dest,
+static void     gtk_icon_view_drag_motion        (GtkDropTarget    *dest,
                                                   GdkDrop          *drop,
                                                   int               x,
                                                   int               y,
@@ -6179,7 +6179,7 @@ gtk_icon_view_drag_leave (GtkDropTarget *dest,
   remove_scroll_timeout (icon_view);
 }
 
-static gboolean 
+static void
 gtk_icon_view_drag_motion (GtkDropTarget *dest,
                            GdkDrop       *drop,
 			   int            x,
@@ -6193,10 +6193,10 @@ gtk_icon_view_drag_motion (GtkDropTarget *dest,
   gboolean empty;
 
   if (!set_destination (icon_view, dest, x, y, &suggested_action, &target))
-    return FALSE;
-
-  icon_view->priv->event_last_x = x;
-  icon_view->priv->event_last_y = y;
+    {
+      gdk_drop_status (drop, 0);
+      return;
+    }
 
   gtk_icon_view_get_drag_dest_item (icon_view, &path, &pos);
 
@@ -6233,8 +6233,6 @@ gtk_icon_view_drag_motion (GtkDropTarget *dest,
 
   if (path)
     gtk_tree_path_free (path);
-
-  return TRUE;
 }
 
 static gboolean 
@@ -6457,7 +6455,7 @@ gtk_icon_view_enable_model_drag_dest (GtkIconView       *icon_view,
 
   icon_view->priv->dest = gtk_drop_target_new (formats, actions);
   g_signal_connect (icon_view->priv->dest, "drag-leave", G_CALLBACK (gtk_icon_view_drag_leave), icon_view);
-  g_signal_connect (icon_view->priv->dest, "accept", G_CALLBACK (gtk_icon_view_drag_motion), icon_view);
+  g_signal_connect (icon_view->priv->dest, "drag-motion", G_CALLBACK (gtk_icon_view_drag_motion), icon_view);
   g_signal_connect (icon_view->priv->dest, "drag-drop", G_CALLBACK (gtk_icon_view_drag_drop), icon_view);
   gtk_widget_add_controller (GTK_WIDGET (icon_view), GTK_EVENT_CONTROLLER (icon_view->priv->dest));
 

@@ -95,7 +95,10 @@ enum {
 static void     gtk_stack_switcher_drag_leave  (GtkDropTarget    *dest,
                                                 GdkDrop          *drop,
                                                 GtkStackSwitcher *self);
-static gboolean gtk_stack_switcher_drag_motion (GtkDropTarget    *dest,
+static gboolean gtk_stack_switcher_drag_accept (GtkDropTarget    *dest,
+                                                GdkDrop          *drop,
+                                                GtkStackSwitcher *self);
+static void     gtk_stack_switcher_drag_motion (GtkDropTarget    *dest,
                                                 GdkDrop          *drop,
                                                 int               x,
                                                 int               y,
@@ -121,7 +124,8 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
   dest = gtk_drop_target_new (formats, 0);
   gdk_content_formats_unref (formats);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_stack_switcher_drag_leave), switcher);
-  g_signal_connect (dest, "accept", G_CALLBACK (gtk_stack_switcher_drag_motion), switcher);
+  g_signal_connect (dest, "accept", G_CALLBACK (gtk_stack_switcher_drag_accept), switcher);
+  g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_stack_switcher_drag_motion), switcher);
   gtk_widget_add_controller (GTK_WIDGET (switcher), GTK_EVENT_CONTROLLER (dest));
 }
 
@@ -264,6 +268,14 @@ gtk_stack_switcher_switch_timeout (gpointer data)
 }
 
 static gboolean
+gtk_stack_switcher_drag_accept (GtkDropTarget    *dest,
+                                GdkDrop          *drop,
+                                GtkStackSwitcher *self)
+{
+  return TRUE;
+}
+
+static void 
 gtk_stack_switcher_drag_motion (GtkDropTarget    *dest,
                                 GdkDrop          *drop,
                                 int               x,
@@ -274,7 +286,6 @@ gtk_stack_switcher_drag_motion (GtkDropTarget    *dest,
   GtkWidget *button;
   GHashTableIter iter;
   gpointer value;
-  gboolean retval = FALSE;
 
   button = NULL;
   g_hash_table_iter_init (&iter, priv->buttons);
@@ -285,7 +296,6 @@ gtk_stack_switcher_drag_motion (GtkDropTarget    *dest,
       if (gtk_widget_contains (GTK_WIDGET (value), cx, cy))
         {
           button = GTK_WIDGET (value);
-          retval = TRUE;
           break;
         }
     }
@@ -302,8 +312,6 @@ gtk_stack_switcher_drag_motion (GtkDropTarget    *dest,
                                           self);
       g_source_set_name_by_id (priv->switch_timer, "[gtk] gtk_stack_switcher_switch_timeout");
     }
-
-  return retval;
 }
 
 static void

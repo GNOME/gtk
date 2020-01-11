@@ -179,8 +179,6 @@ delayed_deny (gpointer data)
 static gboolean
 image_drag_motion (GtkDropTarget    *dest,
                    GdkDrop          *drop,
-                   int               x,
-                   int               y,
                    gpointer          data)
 {
   GtkWidget *image = data;

@@ -695,7 +695,7 @@ static GBytes *gtk_tree_view_drag_data_get (const char *mimetype,
 static void     gtk_tree_view_drag_leave         (GtkDropTarget    *dest,
                                                   GdkDrop          *drop,
                                                   GtkTreeView      *tree_view);
-static gboolean gtk_tree_view_drag_motion        (GtkDropTarget    *dest,
+static void     gtk_tree_view_drag_motion        (GtkDropTarget    *dest,
                                                   GdkDrop          *drop,
                                                   int               x,
                                                   int               y,
@@ -7244,7 +7244,7 @@ gtk_tree_view_drag_leave (GtkDropTarget *dest,
 }
 
 
-static gboolean
+static void
 gtk_tree_view_drag_motion (GtkDropTarget *dest,
                            GdkDrop       *drop,
                            int            x,
@@ -7258,7 +7258,10 @@ gtk_tree_view_drag_motion (GtkDropTarget *dest,
   GdkAtom target;
 
   if (!set_destination_row (tree_view, dest, x, y, &suggested_action, &target))
-    return FALSE;
+    {
+      gdk_drop_status (drop, 0);
+      return;
+    }
 
   tree_view->event_last_x = x;
   tree_view->event_last_y = y;
@@ -7305,8 +7308,6 @@ gtk_tree_view_drag_motion (GtkDropTarget *dest,
 
   if (path)
     gtk_tree_path_free (path);
-
-  return TRUE;
 }
 
 
@@ -12924,7 +12925,7 @@ gtk_tree_view_enable_model_drag_dest (GtkTreeView       *tree_view,
 
   di->dest = gtk_drop_target_new (formats, actions);
   g_signal_connect (di->dest, "drag-leave", G_CALLBACK (gtk_tree_view_drag_leave), tree_view);
-  g_signal_connect (di->dest, "accept", G_CALLBACK (gtk_tree_view_drag_motion), tree_view);
+  g_signal_connect (di->dest, "drag-motion", G_CALLBACK (gtk_tree_view_drag_motion), tree_view);
   g_signal_connect (di->dest, "drag-drop", G_CALLBACK (gtk_tree_view_drag_drop), tree_view);
   gtk_widget_add_controller (GTK_WIDGET (tree_view), GTK_EVENT_CONTROLLER (di->dest));
   g_object_ref (di->dest);
