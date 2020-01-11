@@ -89,6 +89,7 @@ struct _GtkCssImageClass
   /* print to CSS */
   void         (* print)                           (GtkCssImage                *image,
                                                     GString                    *string);
+  gboolean     (* is_computed)                     (GtkCssImage                *image);
 };
 
 GType          _gtk_css_image_get_type             (void) G_GNUC_CONST;
@@ -139,6 +140,8 @@ cairo_surface_t *
                                                     cairo_surface_t            *target,
                                                     int                         surface_width,
                                                     int                         surface_height);
+gboolean       gtk_css_image_is_computed           (GtkCssImage                *image);
+
 
 G_END_DECLS
 
