@@ -163,6 +163,10 @@ _gtk_css_border_value_new (GtkCssValue *top,
   result->values[GTK_CSS_RIGHT] = right;
   result->values[GTK_CSS_BOTTOM] = bottom;
   result->values[GTK_CSS_LEFT] = left;
+  result->is_computed = (top && gtk_css_value_is_computed (top)) &&
+                        (right && gtk_css_value_is_computed (right)) &&
+                        (bottom && gtk_css_value_is_computed (bottom)) &&
+                        (left && gtk_css_value_is_computed (left));
 
   return result;
 }
@@ -212,6 +216,14 @@ _gtk_css_border_value_parse (GtkCssParser           *parser,
       if (result->values[(i - 1) >> 1])
         result->values[i] = _gtk_css_value_ref (result->values[(i - 1) >> 1]);
     }
+
+  result->is_computed = TRUE;
+  for (; i < 4; i++)
+    if (result->values[i] && !gtk_css_value_is_computed (result->values[i]))
+      {
+        result->is_computed = FALSE;
+        break;
+      }
 
   return result;
 }

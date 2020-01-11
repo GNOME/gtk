@@ -326,6 +326,8 @@ gtk_css_palette_value_parse (GtkCssParser *parser)
         return NULL;
       }
 
+    result->is_computed = result->is_computed && gtk_css_value_is_computed (color);
+
     g_ptr_array_add (names, ident);
     g_ptr_array_add (colors, color);
   } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
