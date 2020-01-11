@@ -381,59 +381,61 @@ _gtk_css_color_value_resolve (GtkCssValue      *color,
       break;
     case COLOR_TYPE_SHADE:
       {
-	GtkCssValue *val;
-	GdkRGBA shade;
+        const GdkRGBA *c;
+        GtkCssValue *val;
+        GdkRGBA shade;
 
-	val = _gtk_css_color_value_resolve (color->sym_col.shade.color, provider, current, cycle_list);
-	if (val == NULL)
-	  return NULL;
+        val = _gtk_css_color_value_resolve (color->sym_col.shade.color, provider, current, cycle_list);
+        if (val == NULL)
+          return NULL;
+        c = gtk_css_color_value_get_rgba (val);
 
-        apply_shade (gtk_css_color_value_get_rgba (val), &shade, color->sym_col.shade.factor);
-
-	_gtk_css_value_unref (val);
+        apply_shade (c, &shade, color->sym_col.shade.factor);
 
         value = _gtk_css_color_value_new_literal (&shade);
+        _gtk_css_value_unref (val);
       }
 
       break;
     case COLOR_TYPE_ALPHA:
       {
-	GtkCssValue *val;
-	GdkRGBA alpha;
+        const GdkRGBA *c;
+        GtkCssValue *val;
+        GdkRGBA alpha;
 
-	val = _gtk_css_color_value_resolve (color->sym_col.alpha.color, provider, current, cycle_list);
-	if (val == NULL)
-	  return NULL;
+        val = _gtk_css_color_value_resolve (color->sym_col.alpha.color, provider, current, cycle_list);
+        if (val == NULL)
+          return NULL;
+        c = gtk_css_color_value_get_rgba (val);
 
-	alpha = *gtk_css_color_value_get_rgba (val);
-        apply_alpha (&alpha, &alpha, color->sym_col.alpha.factor);
-
-	_gtk_css_value_unref (val);
+        apply_alpha (c, &alpha, color->sym_col.alpha.factor);
 
         value = _gtk_css_color_value_new_literal (&alpha);
+        _gtk_css_value_unref (val);
       }
       break;
 
     case COLOR_TYPE_MIX:
       {
-	GtkCssValue *val;
-	GdkRGBA color1, color2, res;
+        const GdkRGBA *color1, *color2;
+        GtkCssValue *val1, *val2;
+        GdkRGBA res;
 
-	val = _gtk_css_color_value_resolve (color->sym_col.mix.color1, provider, current, cycle_list);
-	if (val == NULL)
-	  return NULL;
-	color1 = *gtk_css_color_value_get_rgba (val);
-	_gtk_css_value_unref (val);
+        val1 = _gtk_css_color_value_resolve (color->sym_col.mix.color1, provider, current, cycle_list);
+        if (val1 == NULL)
+          return NULL;
+        color1 = gtk_css_color_value_get_rgba (val1);
 
-	val = _gtk_css_color_value_resolve (color->sym_col.mix.color2, provider, current, cycle_list);
-	if (val == NULL)
-	  return NULL;
-	color2 = *gtk_css_color_value_get_rgba (val);
-	_gtk_css_value_unref (val);
+        val2 = _gtk_css_color_value_resolve (color->sym_col.mix.color2, provider, current, cycle_list);
+        if (val2 == NULL)
+          return NULL;
+        color2 = gtk_css_color_value_get_rgba (val2);
 
-        apply_mix (&color1, &color2, &res, color->sym_col.mix.factor);
+        apply_mix (color1, color2, &res, color->sym_col.mix.factor);
 
         value = _gtk_css_color_value_new_literal (&res);
+        _gtk_css_value_unref (val1);
+        _gtk_css_value_unref (val2);
       }
 
       break;
