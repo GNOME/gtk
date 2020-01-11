@@ -495,24 +495,26 @@ gtk_css_image_linear_compute (GtkCssImage      *image,
                               GtkCssStyle      *parent_style)
 {
   GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
+  gboolean changed = FALSE;
+  GtkCssImageLinearColorStop *stops;
+  GtkCssValue *computed_angle = NULL;
   GtkCssImageLinear *copy;
   guint i;
 
-  copy = g_object_new (GTK_TYPE_CSS_IMAGE_LINEAR, NULL);
-  copy->repeating = linear->repeating;
-  copy->side = linear->side;
-
   if (linear->angle)
-    copy->angle = _gtk_css_value_compute (linear->angle, property_id, provider, style, parent_style);
+    {
+      computed_angle = _gtk_css_value_compute (linear->angle, property_id, provider, style, parent_style);
+      changed |= (computed_angle != linear->angle);
+    }
 
-  copy->n_stops = linear->n_stops;
-  copy->color_stops = g_malloc (sizeof (GtkCssImageLinearColorStop) * copy->n_stops);
+  stops = g_alloca (sizeof (GtkCssImageLinearColorStop) * linear->n_stops);
   for (i = 0; i < linear->n_stops; i++)
     {
       const GtkCssImageLinearColorStop *stop = &linear->color_stops[i];
-      GtkCssImageLinearColorStop *scopy = &copy->color_stops[i];
+      GtkCssImageLinearColorStop *scopy = &stops[i];
 
       scopy->color = _gtk_css_value_compute (stop->color, property_id, provider, style, parent_style);
+      changed |= (scopy->color != stop->color);
 
       if (stop->offset)
         {
@@ -523,6 +525,30 @@ gtk_css_image_linear_compute (GtkCssImage      *image,
           scopy->offset = NULL;
         }
     }
+
+  if (!changed)
+    {
+      if (computed_angle)
+        _gtk_css_value_unref (computed_angle);
+
+      for (i = 0; i < linear->n_stops; i ++)
+        {
+          _gtk_css_value_unref (stops[i].color);
+          if (stops[i].offset)
+            _gtk_css_value_unref (stops[i].offset);
+        }
+
+      return g_object_ref (image);
+    }
+
+  copy = g_object_new (GTK_TYPE_CSS_IMAGE_LINEAR, NULL);
+  copy->repeating = linear->repeating;
+  copy->side = linear->side;
+  copy->angle = computed_angle;
+  copy->n_stops = linear->n_stops;
+  copy->color_stops = g_malloc (sizeof (GtkCssImageLinearColorStop) * copy->n_stops);
+
+  memcpy (copy->color_stops, stops, sizeof (GtkCssImageLinearColorStop ) * linear->n_stops);
 
   return GTK_CSS_IMAGE (copy);
 }
