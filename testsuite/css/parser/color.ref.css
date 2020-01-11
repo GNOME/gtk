@@ -49,23 +49,23 @@ l {
 }
 
 m {
-  color: shade(rgb(255,0,0), 1.3);
+  color: rgb(255,77,77);
 }
 
 n {
-  color: shade(rgb(255,0,0), 0.69999999999999996);
+  color: rgb(152,27,27);
 }
 
 o {
-  color: shade(rgb(0,128,0), 0.5);
+  color: rgb(16,48,16);
 }
 
 p {
-  color: alpha(rgb(0,128,0), 0.5);
+  color: rgba(0,128,0,0.5);
 }
 
 q {
-  color: mix(rgb(255,0,0), rgb(0,0,255), 0.25);
+  color: rgb(191,0,64);
 }
 
 r {
