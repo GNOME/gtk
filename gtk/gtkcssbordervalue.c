@@ -163,6 +163,10 @@ _gtk_css_border_value_new (GtkCssValue *top,
   result->values[GTK_CSS_RIGHT] = right;
   result->values[GTK_CSS_BOTTOM] = bottom;
   result->values[GTK_CSS_LEFT] = left;
+  result->is_computed = gtk_css_value_is_computed (top) &&
+                        gtk_css_value_is_computed (right) &&
+                        gtk_css_value_is_computed (bottom) &&
+                        gtk_css_value_is_computed (left);
 
   return result;
 }
