@@ -841,7 +841,7 @@ button {
     }
   }
 
-  .stack-switcher > & {
+  stackswitcher > & {
     // to position the needs attention dot, padding is added to the button
     // child, a label needs just lateral padding while an icon needs vertical
     // padding added too.
