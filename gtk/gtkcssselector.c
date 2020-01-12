@@ -1726,9 +1726,6 @@ _gtk_css_selector_compare (const GtkCssSelector *a,
 GtkCssChange
 _gtk_css_selector_get_change (const GtkCssSelector *selector)
 {
-  if (selector == NULL)
-    return 0;
-
   return selector->class->get_change (selector, _gtk_css_selector_get_change (gtk_css_selector_previous (selector)));
 }
 
