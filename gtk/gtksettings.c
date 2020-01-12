@@ -30,6 +30,8 @@
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
 #include "gtkwidget.h"
+#include "gtkcssnumbervalueprivate.h"
+#include "gtkcssstringvalueprivate.h"
 
 #include "gdk/gdk-private.h"
 
@@ -129,6 +131,8 @@ struct _GtkSettingsPrivate
   gboolean font_size_absolute;
   gchar *font_family;
   cairo_font_options_t *font_options;
+  GtkCssValue *css_dpi_value;
+  GtkCssValue *css_font_family_value;
 };
 
 struct _GtkSettingsValuePrivate
@@ -1002,6 +1006,9 @@ gtk_settings_finalize (GObject *object)
 
   g_free (priv->font_family);
 
+  g_clear_pointer (&priv->css_dpi_value, gtk_css_value_unref);
+  g_clear_pointer (&priv->css_font_family_value, gtk_css_value_unref);
+
   G_OBJECT_CLASS (gtk_settings_parent_class)->finalize (object);
 }
 
@@ -1234,6 +1241,8 @@ settings_update_font_values (GtkSettings *settings)
 
   if (desc)
     pango_font_description_free (desc);
+
+  g_clear_pointer (&priv->css_font_family_value, gtk_css_value_unref);
 }
 
 static void
@@ -1267,6 +1276,7 @@ gtk_settings_notify (GObject    *object,
        * widgets with gtk_widget_style_set(), and also causes more
        * recomputation than necessary.
        */
+      g_clear_pointer (&priv->css_dpi_value, gtk_css_value_unref);
       gtk_style_context_reset_widgets (priv->display);
       break;
     case PROP_XFT_ANTIALIAS:
@@ -2078,4 +2088,31 @@ gtk_settings_get_font_size_is_absolute (GtkSettings *settings)
   settings_update_font_name (settings);
 
   return priv->font_size_absolute;
+}
+
+GtkCssValue *
+gtk_settings_get_dpi_css_value (GtkSettings *settings)
+{
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
+
+  if (!priv->css_dpi_value)
+    {
+      int dpi;
+
+      g_object_get (settings, "gtk-xft-dpi", &dpi, NULL);
+      priv->css_dpi_value = _gtk_css_number_value_new (dpi / 1024., GTK_CSS_NUMBER);
+    }
+
+  return priv->css_dpi_value;
+}
+
+GtkCssValue *
+gtk_settings_get_font_family_css_value (GtkSettings *settings)
+{
+  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
+
+  if (!priv->css_font_family_value)
+    priv->css_font_family_value = _gtk_css_string_value_new (priv->font_family);
+
+  return priv->css_font_family_value;
 }
