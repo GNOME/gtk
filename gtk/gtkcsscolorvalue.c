@@ -507,6 +507,12 @@ _gtk_css_color_value_new_literal (const GdkRGBA *color)
 
   g_return_val_if_fail (color != NULL, NULL);
 
+  if (gdk_rgba_equal (color, &white_singleton.sym_col.rgba))
+    return _gtk_css_value_ref (&white_singleton);
+
+  if (gdk_rgba_equal (color, &transparent_black_singleton.sym_col.rgba))
+    return _gtk_css_value_ref (&transparent_black_singleton);
+
   value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_LITERAL;
   value->is_computed = TRUE;
