@@ -51,20 +51,13 @@ gtk_css_value_initial_compute (GtkCssValue      *value,
     case GTK_CSS_PROPERTY_DPI:
       settings = gtk_style_provider_get_settings (provider);
       if (settings)
-        {
-          int dpi_int;
-
-          g_object_get (settings, "gtk-xft-dpi", &dpi_int, NULL);
-
-          if (dpi_int > 0.0)
-            return _gtk_css_number_value_new (dpi_int / 1024., GTK_CSS_NUMBER);
-        }
+        return gtk_css_value_ref (gtk_settings_get_dpi_css_value (settings));
       break;
 
     case GTK_CSS_PROPERTY_FONT_FAMILY:
       settings = gtk_style_provider_get_settings (provider);
-      if (settings && gtk_settings_get_font_family (settings) != NULL)
-        return _gtk_css_string_value_new (gtk_settings_get_font_family (settings));
+      if (settings)
+        return gtk_css_value_ref (gtk_settings_get_font_family_css_value (settings));
       break;
 
     default:
