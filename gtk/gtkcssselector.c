@@ -104,6 +104,7 @@ union _GtkCssSelector
 struct _GtkCssSelectorTree
 {
   GtkCssSelector selector;
+  GtkCssChange change;
   gint32 parent_offset;
   gint32 previous_offset;
   gint32 sibling_offset;
@@ -1853,7 +1854,7 @@ gtk_css_selector_tree_collect_change (const GtkCssSelectorTree *tree)
   for (prev = gtk_css_selector_tree_get_previous (tree);
        prev != NULL;
        prev = gtk_css_selector_tree_get_sibling (prev))
-    change |= gtk_css_selector_tree_collect_change (prev);
+    change |= prev->change;
 
   change = tree->selector.class->get_change (&tree->selector, change);
 
@@ -1871,7 +1872,7 @@ gtk_css_selector_tree_get_change (const GtkCssSelectorTree *tree,
     return 0;
 
   if (!tree->selector.class->is_simple)
-    return gtk_css_selector_tree_collect_change (tree) | GTK_CSS_CHANGE_GOT_MATCH;
+    return tree->change | GTK_CSS_CHANGE_GOT_MATCH;
 
   for (prev = gtk_css_selector_tree_get_previous (tree);
        prev != NULL;
@@ -2081,6 +2082,7 @@ subdivide_infos (GByteArray *array, GList *infos, gint32 parent_offset)
   remaining = NULL;
 
   tree = alloc_tree (array, &tree_offset);
+  tree->change = 0;
   tree->parent_offset = parent_offset;
   tree->selector = max_selector;
 
@@ -2190,6 +2192,20 @@ fixup_offsets (GtkCssSelectorTree *tree, guint8 *data)
     }
 }
 
+static void
+compute_change (GtkCssSelectorTree *tree)
+{
+  for (; tree != NULL;
+       tree = (GtkCssSelectorTree *)gtk_css_selector_tree_get_sibling (tree))
+    {
+      GtkCssSelectorTree *prev = (GtkCssSelectorTree *)gtk_css_selector_tree_get_previous (tree);
+
+      tree->change = gtk_css_selector_tree_collect_change (tree);
+
+      compute_change (prev);
+    }
+}
+
 GtkCssSelectorTree *
 _gtk_css_selector_tree_builder_build (GtkCssSelectorTreeBuilder *builder)
 {
@@ -2212,6 +2228,8 @@ _gtk_css_selector_tree_builder_build (GtkCssSelectorTreeBuilder *builder)
   tree = (GtkCssSelectorTree *)data;
 
   fixup_offsets (tree, data);
+
+  compute_change (tree);
 
   /* Convert offsets to final pointers */
   for (l = builder->infos; l != NULL; l = l->next)
