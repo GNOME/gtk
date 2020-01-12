@@ -88,6 +88,7 @@ void              _gtk_css_matcher_node_init      (GtkCssMatcher          *match
 void              _gtk_css_matcher_any_init       (GtkCssMatcher          *matcher);
 void              _gtk_css_matcher_superset_init  (GtkCssMatcher          *matcher,
                                                    const GtkCssMatcher    *subset,
+                                                   GtkCssMatcherClass     *klass,
                                                    GtkCssChange            relevant);
 
 
