@@ -64,7 +64,7 @@ gtk_css_value_initial_compute (GtkCssValue      *value,
     case GTK_CSS_PROPERTY_FONT_FAMILY:
       settings = gtk_style_provider_get_settings (provider);
       if (settings && gtk_settings_get_font_family (settings) != NULL)
-        return _gtk_css_array_value_new (_gtk_css_string_value_new (gtk_settings_get_font_family (settings)));
+        return _gtk_css_string_value_new (gtk_settings_get_font_family (settings));
       break;
 
     default:
