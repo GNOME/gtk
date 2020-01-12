@@ -4077,6 +4077,13 @@ cut_or_copy (GtkTextBuffer *buffer,
     }
 }
 
+/**
+ * gtk_text_buffer_get_selection_content:
+ *
+ * Get a content provider for this buffer.
+ *
+ * Returns: (transfer full): a new #GdkContentProvider.
+ **/
 GdkContentProvider *
 gtk_text_buffer_get_selection_content (GtkTextBuffer *buffer)
 {
