@@ -377,6 +377,16 @@ gtk_menu_tool_button_set_popover (GtkMenuToolButton *button,
   g_object_notify (G_OBJECT (button), "popover");
 }
 
+/**
+ * gtk_menu_tool_button_get_popover:
+ * @menu_button: a #GtkMenuToolButton
+ *
+ * Returns the #GtkPopover that pops out of the button.
+ * If the button is not using a #GtkPopover, this function
+ * returns %NULL.
+ *
+ * Returns: (nullable) (transfer none): a #GtkPopover or %NULL
+ **/
 GtkWidget *
 gtk_menu_tool_button_get_popover (GtkMenuToolButton *button)
 {
