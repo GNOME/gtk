@@ -11145,7 +11145,7 @@ gtk_tree_view_get_expander_column (GtkTreeView *tree_view)
  * gtk_tree_view_set_column_drag_function:
  * @tree_view: A #GtkTreeView.
  * @func: (allow-none): A function to determine which columns are reorderable, or %NULL.
- * @user_data: (allow-none): User data to be passed to @func, or %NULL
+ * @user_data: (closure): User data to be passed to @func, or %NULL
  * @destroy: (allow-none): Destroy notifier for @user_data, or %NULL
  *
  * Sets a user function for determining where a column may be dropped when

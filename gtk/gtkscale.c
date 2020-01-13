@@ -2047,7 +2047,7 @@ gtk_scale_buildable_custom_finished (GtkBuildable *buildable,
  * gtk_scale_set_format_value_func:
  * @scale: a #GtkScale
  * @func: (nullable): function that formats the value
- * @user_data: (nullable): user data to pass to @func
+ * @user_data: (closure): user data to pass to @func
  * @destroy_notify: (nullable): destroy function for @user_data
  *
  * @func allows you to change how the scale value is displayed. The given

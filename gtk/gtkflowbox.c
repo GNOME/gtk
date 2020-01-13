@@ -4045,7 +4045,7 @@ gtk_flow_box_check_model_compat (GtkFlowBox *box)
  * @box: a #GtkFlowBox
  * @model: (allow-none): the #GListModel to be bound to @box
  * @create_widget_func: a function that creates widgets for items
- * @user_data: user data passed to @create_widget_func
+ * @user_data: (closure): user data passed to @create_widget_func
  * @user_data_free_func: function for freeing @user_data
  *
  * Binds @model to @box.

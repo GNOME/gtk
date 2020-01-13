@@ -942,7 +942,7 @@ cleanup_task_data (gpointer data)
  * @source_object: Source object for this task
  * @cancellable: Cancellable to cancel this task
  * @callback: Callback to call once the query is finished
- * @user_data: The user_data passed to the callback
+ * @user_data: (closure): The user_data passed to the callback
  * @printer_uri: URI of the printer
  * @auth_info_required: Info required for authentication
  *

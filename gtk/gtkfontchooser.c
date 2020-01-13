@@ -407,7 +407,7 @@ gtk_font_chooser_set_show_preview_entry (GtkFontChooser *fontchooser,
  * gtk_font_chooser_set_filter_func:
  * @fontchooser: a #GtkFontChooser
  * @filter: (allow-none): a #GtkFontFilterFunc, or %NULL
- * @user_data: data to pass to @filter
+ * @user_data: (closure): data to pass to @filter
  * @destroy: function to call to free @data when it is no longer needed
  *
  * Adds a filter function that decides which fonts to display

@@ -460,7 +460,7 @@ gtk_print_settings_set_int (GtkPrintSettings *settings,
  * gtk_print_settings_foreach:
  * @settings: a #GtkPrintSettings
  * @func: (scope call): the function to call
- * @user_data: user data for @func
+ * @user_data: (closure): user data for @func
  *
  * Calls @func for each key-value pair of @settings.
  */

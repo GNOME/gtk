@@ -458,7 +458,7 @@ gtk_filter_list_model_augment (GtkRbTree *filter,
  * gtk_filter_list_model_new:
  * @model: the model to sort
  * @filter_func: (allow-none): filter function or %NULL to not filter items
- * @user_data: user data passed to @filter_func
+ * @user_data: (closure): user data passed to @filter_func
  * @user_destroy: destroy notifier for @user_data
  *
  * Creates a new #GtkFilterListModel that will filter @model using the given
@@ -511,7 +511,7 @@ gtk_filter_list_model_new_for_type (GType item_type)
  * gtk_filter_list_model_set_filter_func:
  * @self: a #GtkFilterListModel
  * @filter_func: (allow-none): filter function or %NULL to not filter items
- * @user_data: user data passed to @filter_func
+ * @user_data: (closure): user data passed to @filter_func
  * @user_destroy: destroy notifier for @user_data
  *
  * Sets the function used to filter items. The function will be called for every
