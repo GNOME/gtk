@@ -480,8 +480,8 @@ gtk_container_get_request_mode (GtkWidget *widget)
 /**
  * gtk_container_forall: (virtual forall)
  * @container: a #GtkContainer
- * @callback: (scope call) (closure callback_data): a callback
- * @callback_data: callback user data
+ * @callback: (scope call): a callback
+ * @callback_data: (closure): callback user data
  *
  * Invokes @callback on each direct child of @container, including
  * children that are considered “internal” (implementation details

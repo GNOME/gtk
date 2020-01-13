@@ -4583,9 +4583,9 @@ gtk_flow_box_get_selection_mode (GtkFlowBox *box)
 /**
  * gtk_flow_box_set_filter_func:
  * @box: a #GtkFlowBox
- * @filter_func: (closure user_data) (allow-none): callback that
+ * @filter_func: (allow-none): callback that
  *     lets you filter which children to show
- * @user_data: user data passed to @filter_func
+ * @user_data: (closure): user data passed to @filter_func
  * @destroy: destroy notifier for @user_data
  *
  * By setting a filter function on the @box one can decide dynamically
@@ -4663,8 +4663,8 @@ gtk_flow_box_invalidate_filter (GtkFlowBox *box)
 /**
  * gtk_flow_box_set_sort_func:
  * @box: a #GtkFlowBox
- * @sort_func: (closure user_data) (allow-none): the sort function
- * @user_data: user data passed to @sort_func
+ * @sort_func: (allow-none): the sort function
+ * @user_data: (closure): user data passed to @sort_func
  * @destroy: destroy notifier for @user_data
  *
  * By setting a sort function on the @box, one can dynamically

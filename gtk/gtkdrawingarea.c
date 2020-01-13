@@ -411,9 +411,9 @@ gtk_drawing_area_get_content_height (GtkDrawingArea *self)
 /**
  * gtk_drawing_area_set_draw_func:
  * @self: a #GtkDrawingArea
- * @draw_func: (closure user_data) (allow-none): callback that lets you draw
+ * @draw_func: (allow-none): callback that lets you draw
  *     the drawing area's contents
- * @user_data: user data passed to @draw_func
+ * @user_data: (closure): user data passed to @draw_func
  * @destroy: destroy notifier for @user_data
  *
  * Setting a draw function is the main thing you want to do when using a drawing
