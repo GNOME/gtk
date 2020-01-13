@@ -2315,8 +2315,7 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
 static GdkDisplay *
 gtk_window_root_get_display (GtkRoot *root)
 {
-  GtkWindow *window = GTK_WINDOW (root);
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private ((GtkWindow *)root);
 
   return priv->display;
 }
@@ -2324,8 +2323,7 @@ gtk_window_root_get_display (GtkRoot *root)
 static GdkSurface *
 gtk_window_native_get_surface (GtkNative *native)
 {
-  GtkWindow *self = GTK_WINDOW (native);
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (self);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private ((GtkWindow *)native);
 
   return priv->surface;
 }
@@ -2333,8 +2331,7 @@ gtk_window_native_get_surface (GtkNative *native)
 static GskRenderer *
 gtk_window_native_get_renderer (GtkNative *native)
 {
-  GtkWindow *self = GTK_WINDOW (native);
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (self);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private ((GtkWindow *)native);
 
   return priv->renderer;
 }
@@ -2342,8 +2339,7 @@ gtk_window_native_get_renderer (GtkNative *native)
 static GtkConstraintSolver *
 gtk_window_root_get_constraint_solver (GtkRoot *root)
 {
-  GtkWindow *self = GTK_WINDOW (root);
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (self);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private ((GtkWindow *)root);
 
   return priv->constraint_solver;
 }
@@ -2353,11 +2349,10 @@ gtk_window_native_get_surface_transform (GtkNative *native,
                                          int       *x,
                                          int       *y)
 {
-  GtkWindow *self = GTK_WINDOW (native);
   GtkStyleContext *context;
   GtkBorder margin, border, padding;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  context = gtk_widget_get_style_context ((GtkWidget *)native);
   gtk_style_context_get_margin (context, &margin);
   gtk_style_context_get_border (context, &border);
   gtk_style_context_get_padding (context, &padding);
@@ -2369,7 +2364,7 @@ gtk_window_native_get_surface_transform (GtkNative *native,
 static void
 gtk_window_native_check_resize (GtkNative *native)
 {
-  gtk_window_check_resize (GTK_WINDOW (native));
+  gtk_window_check_resize ((GtkWindow *)native);
 }
 
 static void
