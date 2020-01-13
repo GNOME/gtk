@@ -192,17 +192,29 @@ gtk_css_shadow_value_new (GtkCssValue *hoffset,
   return retval;
 }
 
+
+static GtkCssValue transition_inset_singleton  = { &GTK_CSS_VALUE_SHADOW, 1, TRUE, .inset = TRUE };
+static GtkCssValue transition_outset_singleton = { &GTK_CSS_VALUE_SHADOW, 1, TRUE, .inset = FALSE };
+
 GtkCssValue *
 _gtk_css_shadow_value_new_for_transition (GtkCssValue *target)
 {
+  GtkCssValue *result;
+
   g_return_val_if_fail (target->class == &GTK_CSS_VALUE_SHADOW, NULL);
 
-  return gtk_css_shadow_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
-                                   _gtk_css_number_value_new (0, GTK_CSS_PX),
-                                   _gtk_css_number_value_new (0, GTK_CSS_PX),
-                                   _gtk_css_number_value_new (0, GTK_CSS_PX),
-                                   target->inset,
-                                   gtk_css_color_value_new_transparent ());
+  if (target->inset)
+    result = &transition_inset_singleton;
+  else
+    result = &transition_outset_singleton;
+
+  if (G_UNLIKELY (!result->hoffset))
+    {
+      result->hoffset = result->voffset = result->spread = result->radius = _gtk_css_number_value_new (0, GTK_CSS_PX);
+      result->color = gtk_css_color_value_new_transparent ();
+    }
+
+  return _gtk_css_value_ref (result);
 }
 
 enum {
