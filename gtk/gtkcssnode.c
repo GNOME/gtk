@@ -407,14 +407,7 @@ gtk_css_node_real_update_style (GtkCssNode   *cssnode,
 {
   GtkCssStyle *static_style, *new_static_style, *new_style;
 
-  if (GTK_IS_CSS_ANIMATED_STYLE (style))
-    {
-      static_style = GTK_CSS_ANIMATED_STYLE (style)->style;
-    }
-  else
-    {
-      static_style = style;
-    }
+  static_style = gtk_css_style_get_static_style (style);
 
   if (gtk_css_style_needs_recreation (static_style, change))
     new_static_style = gtk_css_node_create_style (cssnode);
@@ -436,7 +429,7 @@ gtk_css_node_real_update_style (GtkCssNode   *cssnode,
     }
   else if (static_style != style && (change & GTK_CSS_CHANGE_TIMESTAMP))
     {
-      new_style = gtk_css_animated_style_new_advance (GTK_CSS_ANIMATED_STYLE (style),
+      new_style = gtk_css_animated_style_new_advance ((GtkCssAnimatedStyle *)style,
                                                       static_style,
                                                       timestamp);
     }
