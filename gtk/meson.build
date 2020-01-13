@@ -82,7 +82,7 @@ gtk_private_sources = files([
   'gtkcsspathnode.c',
   'gtkcsspositionvalue.c',
   'gtkcssrepeatvalue.c',
-  'gtkcssselectorsimple.c',
+  'gtkcssselector.c',
   'gtkcssshadowvalue.c',
   'gtkcssshorthandproperty.c',
   'gtkcssshorthandpropertyimpl.c',
