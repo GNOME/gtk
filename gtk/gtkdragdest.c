@@ -514,7 +514,7 @@ gtk_drag_dest_hierarchy_changed (GtkWidget  *widget,
  *
  * Returns the underlying #GtkDrop object for an ongoing drag.
  *
- * Returns: (nullable): the #GtkDrop of the current drag operation, or %NULL
+ * Returns: (nullable) (transfer none): the #GtkDrop of the current drag operation, or %NULL
  */
 GdkDrop *
 gtk_drop_target_get_drop (GtkDropTarget *dest)

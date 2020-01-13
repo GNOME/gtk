@@ -518,7 +518,7 @@ gtk_drag_source_new (void)
  *
  * Gets the current content provider of a #GtkDragSource.
  *
- * Returns: the #GtkContentProvider of @source
+ * Returns: (transfer none): the #GtkContentProvider of @source
  */
 GdkContentProvider *
 gtk_drag_source_get_content (GtkDragSource *source)
@@ -640,7 +640,7 @@ gtk_drag_source_set_icon (GtkDragSource *source,
  *
  * Returns the underlying #GtkDrag object for an ongoing drag.
  *
- * Returns: (nullable): the #GdkDrag of the current drag operation, or %NULL
+ * Returns: (nullable) (transfer none): the #GdkDrag of the current drag operation, or %NULL
  */
 GdkDrag *
 gtk_drag_source_get_drag (GtkDragSource *source)
