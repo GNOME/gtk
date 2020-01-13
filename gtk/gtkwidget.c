@@ -10476,6 +10476,25 @@ gtk_widget_contains (GtkWidget  *widget,
   return GTK_WIDGET_GET_CLASS (widget)->contains (widget, x, y);
 }
 
+/* do the checks for gtk_widget_pick that do not depend on position */
+static gboolean
+gtk_widget_can_be_picked (GtkWidget    *widget,
+                          GtkPickFlags  flags)
+{
+  if (!_gtk_widget_is_drawable (widget))
+    return FALSE;
+
+  if (!(flags & GTK_PICK_NON_TARGETABLE) &&
+      !gtk_widget_get_can_target (widget))
+    return FALSE;
+
+  if (!(flags & GTK_PICK_INSENSITIVE) &&
+      !_gtk_widget_is_sensitive (widget))
+    return FALSE;
+
+  return TRUE;
+}
+
 /**
  * gtk_widget_pick:
  * @widget: the widget to query
@@ -10507,37 +10526,18 @@ gtk_widget_pick (GtkWidget    *widget,
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkWidget *child;
+  GtkCssBoxes boxes;
 
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  if (!_gtk_widget_is_drawable (widget))
+  if (!gtk_widget_can_be_picked (widget, flags))
     return NULL;
 
-  if (!(flags & GTK_PICK_NON_TARGETABLE) &&
-      !gtk_widget_get_can_target (widget))
-    return NULL;
-
-  if (!(flags & GTK_PICK_INSENSITIVE) &&
-      !_gtk_widget_is_sensitive (widget))
-    return NULL;
-
-  switch (priv->overflow)
+  if (priv->overflow == GTK_OVERFLOW_HIDDEN)
     {
-    default:
-    case GTK_OVERFLOW_VISIBLE:
-      break;
+      gtk_css_boxes_init (&boxes, widget);
 
-    case GTK_OVERFLOW_HIDDEN:
-      {
-        GtkCssBoxes boxes;
-
-        gtk_css_boxes_init (&boxes, widget);
-
-        if (!gsk_rounded_rect_contains_point (gtk_css_boxes_get_padding_box (&boxes),
-                                              &GRAPHENE_POINT_INIT (x, y)))
-          return NULL;
-      }
-      break;
+      if (!gsk_rounded_rect_contains_point (gtk_css_boxes_get_padding_box (&boxes),
+                                            &GRAPHENE_POINT_INIT (x, y)))
+        return NULL;
     }
 
   if (GTK_IS_WINDOW (widget))
@@ -10558,6 +10558,9 @@ gtk_widget_pick (GtkWidget    *widget,
       graphene_matrix_t inv;
       GtkWidget *picked;
       graphene_point3d_t p0, p1, res;
+
+      if (!gtk_widget_can_be_picked (child, flags))
+        continue;
 
       if (GTK_IS_NATIVE (child))
         continue;
