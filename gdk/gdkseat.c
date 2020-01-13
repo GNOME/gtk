@@ -248,10 +248,10 @@ gdk_seat_get_capabilities (GdkSeat *seat)
  *          elsewhere.
  * @event: (nullable): the event that is triggering the grab, or %NULL if none
  *         is available.
- * @prepare_func: (nullable) (scope call) (closure prepare_func_data): function to
+ * @prepare_func: (nullable) (scope call): function to
  *                prepare the surface to be grabbed, it can be %NULL if @surface is
  *                visible before this call.
- * @prepare_func_data: user data to pass to @prepare_func
+ * @prepare_func_data: (closure): user data to pass to @prepare_func
  *
  * Grabs the seat so that all events corresponding to the given @capabilities
  * are passed to this application until the seat is ungrabbed with gdk_seat_ungrab(),

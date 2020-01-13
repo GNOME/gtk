@@ -4109,7 +4109,7 @@ gdk_wayland_surface_is_exported (GdkSurface *surface)
  * gdk_wayland_surface_export_handle:
  * @surface: the #GdkSurface to obtain a handle for
  * @callback: callback to call with the handle
- * @user_data: user data for @callback
+ * @user_data: (closure): user data for @callback
  * @destroy_func: destroy notify for @user_data
  *
  * Asynchronously obtains a handle for a surface that can be passed

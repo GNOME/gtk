@@ -4326,7 +4326,7 @@ matches_pred (GtkTextIter *iter,
  * gtk_text_iter_forward_find_char:
  * @iter: a #GtkTextIter
  * @pred: (scope call): a function to be called on each character
- * @user_data: user data for @pred
+ * @user_data: (closure): user data for @pred
  * @limit: (allow-none): search limit, or %NULL for none 
  * 
  * Advances @iter, calling @pred on each character. If
@@ -4364,7 +4364,7 @@ gtk_text_iter_forward_find_char (GtkTextIter         *iter,
  * gtk_text_iter_backward_find_char:
  * @iter: a #GtkTextIter
  * @pred: (scope call): function to be called on each character
- * @user_data: user data for @pred
+ * @user_data: (closure): user data for @pred
  * @limit: (allow-none): search limit, or %NULL for none
  * 
  * Same as gtk_text_iter_forward_find_char(), but goes backward from @iter.

@@ -348,7 +348,7 @@ gdk_content_provider_callback_init (GdkContentProviderCallback *content)
  * gdk_content_provider_new_for_callback:
  * @type: the type that the callback provides
  * @func: callback to populate a #GValue
- * @data: data that gets passed to @func
+ * @data: (closure): data that gets passed to @func
  *
  * Create a content provider that provides data that is provided via a callback.
  *

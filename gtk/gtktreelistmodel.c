@@ -749,7 +749,7 @@ gtk_tree_list_model_init (GtkTreeListModel *self)
  * @autoexpand: %TRUE to set the autoexpand property and expand the @root model
  * @create_func: Function to call to create the #GListModel for the children
  *     of an item
- * @user_data: Data to pass to @create_func
+ * @user_data: (closure): Data to pass to @create_func
  * @user_destroy: Function to call to free @user_data
  *
  * Creates a new empty #GtkTreeListModel displaying @root with all rows collapsed.
