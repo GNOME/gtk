@@ -53,11 +53,18 @@ gtk_css_style_real_is_static (GtkCssStyle *style)
   return TRUE;
 }
 
+static GtkCssStyle *
+gtk_css_style_real_get_static_style (GtkCssStyle *style)
+{
+  return style;
+}
+
 static void
 gtk_css_style_class_init (GtkCssStyleClass *klass)
 {
   klass->get_section = gtk_css_style_real_get_section;
   klass->is_static = gtk_css_style_real_is_static;
+  klass->get_static_style = gtk_css_style_real_get_static_style;
 }
 
 static void
@@ -87,6 +94,14 @@ gtk_css_style_is_static (GtkCssStyle *style)
   gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (style), TRUE);
 
   return GTK_CSS_STYLE_GET_CLASS (style)->is_static (style);
+}
+
+GtkCssStyle *
+gtk_css_style_get_static_style (GtkCssStyle *style)
+{
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (style), NULL);
+
+  return GTK_CSS_STYLE_GET_CLASS (style)->get_static_style (style);
 }
 
 /*
