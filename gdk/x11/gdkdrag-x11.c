@@ -1061,6 +1061,7 @@ xdnd_send_enter (GdkX11Drag *drag_x11)
 {
   GdkDrag *drag = GDK_DRAG (drag_x11);
   GdkDisplay *display = gdk_drag_get_display (drag);
+  GdkContentFormats *formats;
   const char * const *atoms;
   gsize i, n_atoms;
   XEvent xev;
@@ -1080,7 +1081,10 @@ xdnd_send_enter (GdkX11Drag *drag_x11)
   GDK_DISPLAY_NOTE (display, DND,
            g_message ("Sending enter source window %#lx XDND protocol version %d\n",
                       GDK_SURFACE_XID (drag_x11->ipc_surface), drag_x11->version));
-  atoms = gdk_content_formats_get_mime_types (gdk_drag_get_formats (drag), &n_atoms);
+  formats = gdk_content_formats_ref (gdk_drag_get_formats (drag));
+  formats = gdk_content_formats_union_serialize_mime_types (formats);
+
+  atoms = gdk_content_formats_get_mime_types (formats, &n_atoms);
 
   if (n_atoms > 3)
     {
