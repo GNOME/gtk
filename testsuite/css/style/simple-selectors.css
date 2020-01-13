@@ -1,0 +1,23 @@
+label {
+  color: red;
+}
+
+*:not(label) {
+  background-color: red;
+}
+
+.normal-icons {
+  color: green;
+}
+
+*:not(.normal-icons) {
+  background-color: green;
+}
+
+*:disabled {
+  color: blue;
+}
+
+*:not(:disabled) {
+  background-color: blue;
+}
