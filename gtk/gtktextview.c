@@ -8575,6 +8575,18 @@ gtk_text_view_get_menu_model (GtkTextView *text_view)
   g_object_unref (section);
 
   section = g_menu_new ();
+  item = g_menu_item_new (_("_Undo"), "text.undo");
+  g_menu_item_set_attribute (item, "touch-icon", "s", "edit-undo-symbolic");
+  g_menu_append_item (section, item);
+  g_object_unref (item);
+  item = g_menu_item_new (_("_Redo"), "text.redo");
+  g_menu_item_set_attribute (item, "touch-icon", "s", "edit-redo-symbolic");
+  g_menu_append_item (section, item);
+  g_object_unref (item);
+  g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
+  g_object_unref (section);
+
+  section = g_menu_new ();
 
   item = g_menu_item_new (_("Select _All"), "selection.select-all");
   g_menu_item_set_attribute (item, "touch-icon", "s", "edit-select-all-symbolic");
