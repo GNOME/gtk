@@ -5,6 +5,7 @@
       <column type="gchararray"/>
       <column type="gchararray"/>
       <column type="gint"/>
+      <column type="gchararray"/>
     </columns>
   </object>
   <template class="GtkInspectorCssNodeTree" parent="GtkBox">
@@ -75,6 +76,19 @@
                       <object class="GtkCellRendererText"/>
                       <attributes>
                         <attribute name="text">4</attribute>
+                        <attribute name="sensitive">1</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="node_change_column">
+                    <property name="resizable">1</property>
+                    <property name="title" translatable="yes">Change</property>
+                    <child>
+                      <object class="GtkCellRendererText"/>
+                      <attributes>
+                        <attribute name="text">5</attribute>
                         <attribute name="sensitive">1</attribute>
                       </attributes>
                     </child>
