@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gtkstyleanimationprivate.h"
+#include "gtkprivate.h"
 
 G_DEFINE_ABSTRACT_TYPE (GtkStyleAnimation, _gtk_style_animation, G_TYPE_OBJECT)
 
@@ -68,7 +69,7 @@ _gtk_style_animation_advance (GtkStyleAnimation    *animation,
 {
   GtkStyleAnimationClass *klass;
 
-  g_return_val_if_fail (GTK_IS_STYLE_ANIMATION (animation), NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_STYLE_ANIMATION (animation), NULL);
 
   klass = GTK_STYLE_ANIMATION_GET_CLASS (animation);
 
@@ -81,8 +82,8 @@ _gtk_style_animation_apply_values (GtkStyleAnimation    *animation,
 {
   GtkStyleAnimationClass *klass;
 
-  g_return_if_fail (GTK_IS_STYLE_ANIMATION (animation));
-  g_return_if_fail (GTK_IS_CSS_ANIMATED_STYLE (style));
+  gtk_internal_return_if_fail (GTK_IS_STYLE_ANIMATION (animation));
+  gtk_internal_return_if_fail (GTK_IS_CSS_ANIMATED_STYLE (style));
 
   klass = GTK_STYLE_ANIMATION_GET_CLASS (animation);
 
@@ -94,7 +95,7 @@ _gtk_style_animation_is_finished (GtkStyleAnimation *animation)
 {
   GtkStyleAnimationClass *klass;
 
-  g_return_val_if_fail (GTK_IS_STYLE_ANIMATION (animation), TRUE);
+  gtk_internal_return_val_if_fail (GTK_IS_STYLE_ANIMATION (animation), TRUE);
 
   klass = GTK_STYLE_ANIMATION_GET_CLASS (animation);
 
@@ -117,7 +118,7 @@ _gtk_style_animation_is_static (GtkStyleAnimation *animation)
 {
   GtkStyleAnimationClass *klass;
 
-  g_return_val_if_fail (GTK_IS_STYLE_ANIMATION (animation), TRUE);
+  gtk_internal_return_val_if_fail (GTK_IS_STYLE_ANIMATION (animation), TRUE);
 
   klass = GTK_STYLE_ANIMATION_GET_CLASS (animation);
 
