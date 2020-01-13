@@ -79,6 +79,15 @@ gtk_css_animated_style_is_static (GtkCssStyle *style)
   return TRUE;
 }
 
+static GtkCssStyle *
+gtk_css_animated_style_get_static_style (GtkCssStyle *style)
+{
+  /* This is called a lot, so we avoid a dynamic type check here */
+  GtkCssAnimatedStyle *animated = (GtkCssAnimatedStyle *) style;
+
+  return animated->style;
+}
+
 static void
 gtk_css_animated_style_dispose (GObject *object)
 {
@@ -123,6 +132,7 @@ gtk_css_animated_style_class_init (GtkCssAnimatedStyleClass *klass)
   style_class->get_value = gtk_css_animated_style_get_value;
   style_class->get_section = gtk_css_animated_style_get_section;
   style_class->is_static = gtk_css_animated_style_is_static;
+  style_class->get_static_style = gtk_css_animated_style_get_static_style;
 }
 
 static void
