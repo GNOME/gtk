@@ -10507,8 +10507,7 @@ gtk_widget_pick (GtkWidget    *widget,
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkWidget *child;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  GtkCssBoxes boxes;
 
   if (!_gtk_widget_is_drawable (widget))
     return NULL;
@@ -10521,30 +10520,26 @@ gtk_widget_pick (GtkWidget    *widget,
       !_gtk_widget_is_sensitive (widget))
     return NULL;
 
-  switch (priv->overflow)
+  gtk_css_boxes_init (&boxes, widget);
+
+  if (priv->overflow == GTK_OVERFLOW_HIDDEN)
     {
-    default:
-    case GTK_OVERFLOW_VISIBLE:
-      break;
-
-    case GTK_OVERFLOW_HIDDEN:
-      {
-        GtkCssBoxes boxes;
-
-        gtk_css_boxes_init (&boxes, widget);
-
-        if (!gsk_rounded_rect_contains_point (gtk_css_boxes_get_padding_box (&boxes),
-                                              &GRAPHENE_POINT_INIT (x, y)))
-          return NULL;
-      }
-      break;
+      if (!gsk_rounded_rect_contains_point (gtk_css_boxes_get_padding_box (&boxes),
+                                            &GRAPHENE_POINT_INIT (x, y)))
+        return NULL;
+    }
+  else
+    {
+      if (!gsk_rounded_rect_contains_point (gtk_css_boxes_get_border_box (&boxes),
+                                            &GRAPHENE_POINT_INIT (x, y)))
+        return NULL;
     }
 
   if (GTK_IS_WINDOW (widget))
     {
       GtkWidget *picked;
 
-      picked = gtk_window_pick_popover (GTK_WINDOW (widget), x, y, flags);
+      picked = gtk_window_pick_popover ((GtkWindow *)widget, x, y, flags);
       if (picked)
         return picked;
     }
@@ -10558,6 +10553,17 @@ gtk_widget_pick (GtkWidget    *widget,
       graphene_matrix_t inv;
       GtkWidget *picked;
       graphene_point3d_t p0, p1, res;
+
+      if (!_gtk_widget_is_drawable (child))
+        continue;
+
+      if (!(flags & GTK_PICK_NON_TARGETABLE) &&
+          !gtk_widget_get_can_target (child))
+        continue;
+
+      if (!(flags & GTK_PICK_INSENSITIVE) &&
+          !_gtk_widget_is_sensitive (child))
+        continue;
 
       if (GTK_IS_NATIVE (child))
         continue;
@@ -10587,9 +10593,6 @@ gtk_widget_pick (GtkWidget    *widget,
       if (picked)
         return picked;
     }
-
-  if (!gtk_widget_contains (widget, x, y))
-    return NULL;
 
   return widget;
 }
