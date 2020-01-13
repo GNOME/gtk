@@ -71,7 +71,7 @@ void               gtk_drag_source_set_icon    (GtkDragSource     *source,
                                                 int                hot_x,
                                                 int                hot_y);
 GDK_AVAILABLE_IN_ALL
-void               gtk_drag_source_drag_cancel (GtkDragSource     *sourcei);
+void               gtk_drag_source_drag_cancel (GtkDragSource     *source);
 
 GDK_AVAILABLE_IN_ALL
 GdkDrag *          gtk_drag_source_get_drag    (GtkDragSource     *source);

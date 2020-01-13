@@ -2730,7 +2730,7 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
  * gtk_entry_set_icon_drag_source:
  * @entry: a #GtkEntry
  * @icon_pos: icon position
- * @formats: the targets (data formats) in which the data can be provided
+ * @provider: a #GdkContentProvider
  * @actions: a bitmask of the allowed drag actions
  *
  * Sets up the icon at the given position so that GTK+ will start a drag

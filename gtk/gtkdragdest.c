@@ -475,7 +475,7 @@ gtk_drop_target_set_actions (GtkDropTarget *dest,
 
 /**
  * gtk_drop_target_get_actions:
- * @dst: a #GtkDropTarget
+ * @dest: a #GtkDropTarget
  *
  * Gets the actions that this drop target supports.
  *

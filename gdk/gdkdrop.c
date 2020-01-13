@@ -1003,7 +1003,7 @@ gdk_drop_emit_drop_event (GdkDrop  *self,
 
 /**
  * gdk_drop_has_value:
- * @drop: a #GdkDrop
+ * @self: a #GdkDrop
  * @type: the type to check
  *
  * Returns whether calling gdk_drop_read_value_async() for @type
@@ -1012,13 +1012,13 @@ gdk_drop_emit_drop_event (GdkDrop  *self,
  * Returns: %TRUE if the data can be deserialized to the given type
  */ 
 gboolean
-gdk_drop_has_value (GdkDrop *drop,
+gdk_drop_has_value (GdkDrop *self,
                     GType    type)
 {
   GdkContentFormats *formats;
   gboolean ret;
 
-  formats = gdk_content_formats_ref (gdk_drop_get_formats (drop));
+  formats = gdk_content_formats_ref (gdk_drop_get_formats (self));
   formats = gdk_content_formats_union_deserialize_gtypes (formats);
 
   ret = gdk_content_formats_contain_gtype (formats, type);
