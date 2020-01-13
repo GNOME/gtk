@@ -223,43 +223,23 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
   switch (id)
     {
       /* We have them ordered in gtkcssstylepropertyimpl.c accordingly, so the
-       * border styles are already computed when we compute the border widths */
+       * border styles are already computed when we compute the border widths.
+       *
+       * Note that we rely on ..._STYLE == ..._WIDTH - 1 here.
+       */
       case GTK_CSS_PROPERTY_BORDER_TOP_WIDTH:
-        border_style = _gtk_css_border_style_value_get (gtk_css_style_get_value ((GtkCssStyle *)style,
-                                                                                 GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
-        if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
-          {
-            gtk_css_static_style_set_value (style, id, gtk_css_dimension_value_new (0, GTK_CSS_NUMBER), section);
-            return;
-          }
-        break;
       case GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH:
-        border_style = _gtk_css_border_style_value_get (gtk_css_style_get_value ((GtkCssStyle *)style,
-                                                                                 GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE));
-        if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
-          {
-            gtk_css_static_style_set_value (style, id, gtk_css_dimension_value_new (0, GTK_CSS_NUMBER), section);
-            return;
-          }
-        break;
       case GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH:
-        border_style = _gtk_css_border_style_value_get (gtk_css_style_get_value ((GtkCssStyle *)style,
-                                                                                 GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE));
-        if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
-          {
-            gtk_css_static_style_set_value (style, id, gtk_css_dimension_value_new (0, GTK_CSS_NUMBER), section);
-            return;
-          }
-        break;
       case GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH:
-        border_style = _gtk_css_border_style_value_get (gtk_css_style_get_value ((GtkCssStyle *)style,
-                                                                                 GTK_CSS_PROPERTY_BORDER_LEFT_STYLE));
+      case GTK_CSS_PROPERTY_OUTLINE_WIDTH:
+        border_style = _gtk_css_border_style_value_get (gtk_css_style_get_value ((GtkCssStyle *)style, id - 1));
         if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
           {
             gtk_css_static_style_set_value (style, id, gtk_css_dimension_value_new (0, GTK_CSS_NUMBER), section);
             return;
           }
         break;
+
       default:
         /* Go ahead */
         break;
@@ -271,23 +251,18 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
    * by following this pseudo-algorithm:
    * 1) Identify all declarations that apply to the element
    */
-  if (specified == NULL)
+  if (specified)
     {
-      GtkCssStyleProperty *prop = _gtk_css_style_property_lookup_by_id (id);
-
-      if (parent_style && _gtk_css_style_property_is_inherit (prop))
-        {
-          /* Just take the style from the parent */
-          value = _gtk_css_value_ref (gtk_css_style_get_value (parent_style, id));
-        }
-      else
-        {
-          value = _gtk_css_initial_value_new_compute (id, provider, (GtkCssStyle *)style, parent_style);
-        }
+      value = _gtk_css_value_compute (specified, id, provider, (GtkCssStyle *)style, parent_style);
+    }
+  else if (parent_style && _gtk_css_style_property_is_inherit (_gtk_css_style_property_lookup_by_id (id)))
+    {
+      /* Just take the style from the parent */
+      value = _gtk_css_value_ref (gtk_css_style_get_value (parent_style, id));
     }
   else
     {
-      value = _gtk_css_value_compute (specified, id, provider, (GtkCssStyle *)style, parent_style);
+      value = _gtk_css_initial_value_new_compute (id, provider, (GtkCssStyle *)style, parent_style);
     }
 
   gtk_css_static_style_set_value (style, id, value, section);
