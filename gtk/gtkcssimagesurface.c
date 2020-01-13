@@ -140,6 +140,8 @@ gtk_css_image_surface_dispose (GObject *object)
       surface->surface = NULL;
     }
 
+  g_clear_pointer (&surface->cache, cairo_surface_destroy);
+
   G_OBJECT_CLASS (_gtk_css_image_surface_parent_class)->dispose (object);
 }
 
