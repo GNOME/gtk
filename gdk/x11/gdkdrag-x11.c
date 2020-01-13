@@ -1506,23 +1506,6 @@ gdk_x11_drag_drag_motion (GdkDrag *drag,
         }
     }
 
-  /* When we have a Xdnd target, make sure our XdndActionList
-   * matches the current actions;
-   */
-  if (protocol == GDK_DRAG_PROTO_XDND && drag_x11->xdnd_actions != gdk_drag_get_actions (drag))
-    {
-      if (proxy_xid)
-        {
-          GdkDisplay *display = gdk_drag_get_display (drag);
-          GdkDrop *drop = GDK_X11_DISPLAY (display)->current_drop;
-
-          if (drop && GDK_SURFACE_XID (gdk_drop_get_surface (drop)) == proxy_xid)
-            gdk_x11_drop_read_actions (drop);
-          else
-            xdnd_set_actions (drag_x11);
-        }
-    }
-
   if (drag_x11->proxy_xid != proxy_xid)
     {
       /* Send a leave to the last destination */
@@ -1560,6 +1543,23 @@ gdk_x11_drag_drag_motion (GdkDrag *drag,
        * the drag changed
        */
       drag_x11->current_action = gdk_drag_get_selected_action (drag);
+    }
+
+  /* When we have a Xdnd target, make sure our XdndActionList
+   * matches the current actions;
+   */
+  if (protocol == GDK_DRAG_PROTO_XDND && drag_x11->xdnd_actions != gdk_drag_get_actions (drag))
+    {
+      if (proxy_xid)
+        {
+          GdkDisplay *display = gdk_drag_get_display (drag);
+          GdkDrop *drop = GDK_X11_DISPLAY (display)->current_drop;
+
+          if (drop && GDK_SURFACE_XID (gdk_drop_get_surface (drop)) == proxy_xid)
+            gdk_x11_drop_read_actions (drop);
+          else
+            xdnd_set_actions (drag_x11);
+        }
     }
 
   /* Send a drag-motion event */
