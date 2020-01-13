@@ -29,35 +29,94 @@ struct _GtkCssValue {
 
 G_DEFINE_BOXED_TYPE (GtkCssValue, _gtk_css_value, _gtk_css_value_ref, _gtk_css_value_unref)
 
+#define CSS_VALUE_ACCOUNTING 0
 static GHashTable *counters;
+
+typedef struct
+{
+  guint all;
+  guint alive;
+  guint computed;
+  guint transitioned;
+} ValueAccounting;
 
 static void
 dump_value_counts (void)
 {
+  int col_widths[5] = { 0, strlen ("all"), strlen ("alive"), strlen ("computed"), strlen("transitioned") };
   GHashTableIter iter;
   gpointer key;
   gpointer value;
+  int sum_all = 0, sum_alive = 0, sum_computed = 0, sum_transitioned = 0;
 
-  int sum1 = 0, sum2 = 0;
   g_hash_table_iter_init (&iter, counters);
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
        const char *class = key;
-       int *c = value;
-       if (c[0] != 1)
-         g_print ("%d %d %s\n", c[0], c[0] - c[1], class);
+       const ValueAccounting *c = value;
+       char *str;
 
-       sum1 += c[0];
-       sum2 += c[0] - c[1];
+       sum_all += c->all;
+       sum_alive += c->alive;
+       sum_computed += c->computed;
+       sum_transitioned += c->transitioned;
+
+       col_widths[0] = MAX (col_widths[0], strlen (class));
+
+       str = g_strdup_printf ("%'d", sum_all);
+       col_widths[1] = MAX (col_widths[1], strlen (str));
+       g_free (str);
+
+       str = g_strdup_printf ("%'d", sum_alive);
+       col_widths[2] = MAX (col_widths[2], strlen (str));
+       g_free (str);
+
+       str = g_strdup_printf ("%'d", sum_computed);
+       col_widths[3] = MAX (col_widths[3], strlen (str));
+       g_free (str);
+
+       str = g_strdup_printf ("%'d", sum_transitioned);
+       col_widths[4] = MAX (col_widths[4], strlen (str));
+       g_free (str);
+    }
+  /* Some spacing */
+  col_widths[0] += 4;
+  col_widths[1] += 4;
+  col_widths[2] += 4;
+  col_widths[3] += 4;
+  col_widths[4] += 4;
+
+  g_print("%*s%*s%*s%*s%*s\n", col_widths[0] + 1, " ",
+          col_widths[1] + 1, "All",
+          col_widths[2] + 1, "Alive",
+          col_widths[3] + 1, "Computed",
+          col_widths[4] + 1, "Transitioned");
+
+  g_hash_table_iter_init (&iter, counters);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+       const char *class = key;
+       const ValueAccounting *c = value;
+
+       g_print ("%*s:", col_widths[0], class);
+       g_print (" %'*d", col_widths[1], c->all);
+       g_print (" %'*d", col_widths[2], c->alive);
+       g_print (" %'*d", col_widths[3], c->computed);
+       g_print (" %'*d", col_widths[4], c->transitioned);
+       g_print("\n");
     }
 
-  g_print ("SUM: %d, %d\n", sum1, sum2);
+  g_print("%*s%'*d%'*d%'*d%'*d\n", col_widths[0] + 1, " ",
+          col_widths[1] + 1, sum_all,
+          col_widths[2] + 1, sum_alive,
+          col_widths[3] + 1, sum_computed,
+          col_widths[4] + 1, sum_transitioned);
 }
 
-static void
-count_value (const char *class, int delta)
+static ValueAccounting *
+get_accounting_data (const char *class)
 {
-  int *c;
+  ValueAccounting *c;
 
   if (!counters)
     {
@@ -67,14 +126,11 @@ count_value (const char *class, int delta)
   c = g_hash_table_lookup (counters, class);
   if (!c)
     {
-       c = g_new0 (int, 2);
+       c = g_malloc0 (sizeof (ValueAccounting));
        g_hash_table_insert (counters, (gpointer)class, c);
     }
 
-  if (delta == 1)
-    c[0]++;
-  else
-    c[1]++;
+  return c;
 }
 
 GtkCssValue *
@@ -82,13 +138,18 @@ _gtk_css_value_alloc (const GtkCssValueClass *klass,
                       gsize                   size)
 {
   GtkCssValue *value;
+  ValueAccounting *c;
 
   value = g_slice_alloc0 (size);
 
   value->class = klass;
   value->ref_count = 1;
 
-  count_value (klass->type_name, 1);
+#ifdef CSS_VALUE_ACCOUNTING
+  c = get_accounting_data (klass->type_name);
+  c->all++;
+  c->alive++;
+#endif
 
   return value;
 }
@@ -106,6 +167,8 @@ gtk_css_value_ref (GtkCssValue *value)
 void
 gtk_css_value_unref (GtkCssValue *value)
 {
+  ValueAccounting *c;
+
   if (value == NULL)
     return;
 
@@ -113,7 +176,10 @@ gtk_css_value_unref (GtkCssValue *value)
   if (value->ref_count > 0)
     return;
 
-  count_value (value->class->type_name, -1);
+#ifdef CSS_VALUE_ACCOUNTING
+  c = get_accounting_data (value->class->type_name);
+  c->alive--;
+#endif
 
   value->class->free (value);
 }
@@ -142,6 +208,10 @@ _gtk_css_value_compute (GtkCssValue      *value,
 {
   if (gtk_css_value_is_computed (value))
     return _gtk_css_value_ref (value);
+
+#ifdef CSS_VALUE_ACCOUNTING
+  get_accounting_data (value->class->type_name)->computed++;
+#endif
 
   return value->class->compute (value, property_id, provider, style, parent_style);
 }
@@ -189,6 +259,16 @@ _gtk_css_value_transition (GtkCssValue *start,
    * values can all transition to each other */
   if (start->class->transition != end->class->transition)
     return NULL;
+
+  if (progress == 0)
+    return _gtk_css_value_ref (start);
+
+  if (progress == 1)
+    return _gtk_css_value_ref (end);
+
+#ifdef CSS_VALUE_ACCOUNTING
+  get_accounting_data (start->class->type_name)->transitioned++;
+#endif
 
   return start->class->transition (start, end, property_id, progress);
 }
