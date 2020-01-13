@@ -1,0 +1,17 @@
+[window.background:dir(ltr)]
+  background-color: rgb(0,0,255); /* simple-selectors.css:22:3-26 */
+
+  decoration:dir(ltr)
+    background-color: rgb(0,0,255); /* simple-selectors.css:22:3-26 */
+  box.horizontal:dir(ltr)
+    background-color: rgb(0,0,255); /* simple-selectors.css:22:3-26 */
+
+    label:dir(ltr)
+      color: rgb(255,0,0); /* simple-selectors.css:2:3-14 */
+      background-color: rgb(0,0,255); /* simple-selectors.css:22:3-26 */
+    image.normal-icons:dir(ltr)
+      color: rgb(0,128,0); /* simple-selectors.css:10:3-16 */
+      background-color: rgb(0,0,255); /* simple-selectors.css:22:3-26 */
+    spinner:disabled:dir(ltr)
+      color: rgb(0,0,255); /* simple-selectors.css:18:3-15 */
+      background-color: rgb(0,128,0); /* simple-selectors.css:14:3-27 */
