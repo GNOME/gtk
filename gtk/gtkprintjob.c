@@ -693,7 +693,7 @@ gtk_print_job_get_property (GObject    *object,
  * gtk_print_job_send:
  * @job: a GtkPrintJob
  * @callback: function to call when the job completes or an error occurs
- * @user_data: user data that gets passed to @callback
+ * @user_data: (closure): user data that gets passed to @callback
  * @dnotify: destroy notify for @user_data
  * 
  * Sends the print job off to the printer.  

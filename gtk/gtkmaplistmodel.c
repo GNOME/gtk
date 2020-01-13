@@ -424,7 +424,7 @@ gtk_map_list_model_augment (GtkRbTree *map,
  * @item_type: the #GType to use as the model's item type
  * @model: (allow-none): The model to map or %NULL for none
  * @map_func: (allow-none): map function or %NULL to not map items
- * @user_data: user data passed to @map_func
+ * @user_data: (closure): user data passed to @map_func
  * @user_destroy: destroy notifier for @user_data
  *
  * Creates a new #GtkMapListModel for the given arguments.
@@ -501,7 +501,7 @@ gtk_map_list_model_init_items (GtkMapListModel *self)
  * gtk_map_list_model_set_map_func:
  * @self: a #GtkMapListModel
  * @map_func: (allow-none): map function or %NULL to not map items
- * @user_data: user data passed to @map_func
+ * @user_data: (closure): user data passed to @map_func
  * @user_destroy: destroy notifier for @user_data
  *
  * Sets the function used to map items. The function will be called whenever

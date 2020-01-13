@@ -353,7 +353,7 @@ gtk_sort_list_model_init (GtkSortListModel *self)
  * gtk_sort_list_model_new:
  * @model: the model to sort
  * @sort_func: (allow-none): sort function or %NULL to not sort items
- * @user_data: user data passed to @sort_func
+ * @user_data: (closure): user data passed to @sort_func
  * @user_destroy: destroy notifier for @user_data
  *
  * Creates a new sort list model that uses the @sort_func to sort @model.
@@ -417,7 +417,7 @@ gtk_sort_list_model_create_sequences (GtkSortListModel *self)
  * gtk_sort_list_model_set_sort_func:
  * @self: a #GtkSortListModel
  * @sort_func: (allow-none): sort function or %NULL to not sort items
- * @user_data: user data passed to @sort_func
+ * @user_data: (closure): user data passed to @sort_func
  * @user_destroy: destroy notifier for @user_data
  *
  * Sets the function used to sort items. The function will be called for every

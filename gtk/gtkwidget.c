@@ -3094,7 +3094,7 @@ static guint tick_callback_id;
  * gtk_widget_add_tick_callback:
  * @widget: a #GtkWidget
  * @callback: function to call for updating animations
- * @user_data: data to pass to @callback
+ * @user_data: (closure): data to pass to @callback
  * @notify: function to call to free @user_data when the callback is removed.
  *
  * Queues an animation frame update and adds a callback to be called
@@ -3419,7 +3419,7 @@ ensure_surface_transform_data (GtkWidget *widget)
  * gtk_widget_add_surface_transform_changed_callback:
  * @widget: a #GtkWidget
  * @callback: a function to call when the surface transform changes
- * @user_data: data to pass to @callback
+ * @user_data: (closure): data to pass to @callback
  * @notify: function to call to free @user_data when the callback is removed
  *
  * Invokes the callback whenever the surface relative transform of the widget

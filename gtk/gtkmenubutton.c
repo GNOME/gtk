@@ -1035,7 +1035,7 @@ gtk_menu_button_add_child (GtkMenuButton *menu_button,
  * @func: (nullable): function to call when a popuop is about to
  *   be shown, but none has been provided via other means, or %NULL
  *   to reset to default behavior.
- * @user_data: (nullable): user data to pass to @callback
+ * @user_data: (closure): user data to pass to @func.
  * @destroy_notify: (nullable): destroy notify for @user_data
  *
  * Sets @func to be called when a popup is about to be shown.
