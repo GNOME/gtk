@@ -1818,6 +1818,7 @@ struct _GdkDragAnim {
 static void
 gdk_drag_anim_destroy (GdkDragAnim *anim)
 {
+  gdk_surface_hide (anim->drag->drag_surface);
   g_object_unref (anim->drag);
   g_slice_free (GdkDragAnim, anim);
 }
