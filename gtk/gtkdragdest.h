@@ -79,7 +79,7 @@ void               gtk_drop_target_read_selection  (GtkDropTarget       *dest,
                                                     GdkAtom              target,
                                                     GCancellable        *cancellable,
                                                     GAsyncReadyCallback  callback,
-                                                    gpointer             data);
+                                                    gpointer             user_data);
 GDK_AVAILABLE_IN_ALL
 GtkSelectionData *gtk_drop_target_read_selection_finish
                                                    (GtkDropTarget       *dest,
