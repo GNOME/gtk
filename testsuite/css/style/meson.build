@@ -52,6 +52,9 @@ test_data = [
   'nth-child.css',
   'nth-child.nodes',
   'nth-child.ui',
+  'simple-selectors.css',
+  'simple-selectors.nodes',
+  'simple-selectors.ui'
 ]
 
 if get_option('install-tests')
