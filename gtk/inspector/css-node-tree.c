@@ -52,6 +52,7 @@ enum {
   COLUMN_NODE_CLASSES,
   COLUMN_NODE_ID,
   COLUMN_NODE_STATE,
+  COLUMN_NODE_CHANGE,
   /* add more */
   N_NODE_COLUMNS
 };
@@ -337,6 +338,15 @@ gtk_inspector_css_node_tree_get_node_value (GtkTreeModelCssNode *model,
       g_value_take_string (value, format_state_flags (gtk_css_node_get_state (node)));
       break;
 
+    case COLUMN_NODE_CHANGE:
+      {
+        GtkCssStyle *style = gtk_css_node_get_style (node);
+        GtkCssStaticStyle *static_style = GTK_CSS_STATIC_STYLE (gtk_css_style_get_static_style (style));
+        GtkCssChange change = gtk_css_static_style_get_change (static_style);
+        g_value_take_string (value, gtk_css_change_to_string (change));
+      } 
+      break;
+
     default:
       g_assert_not_reached ();
       break;
@@ -357,6 +367,7 @@ gtk_inspector_css_node_tree_init (GtkInspectorCssNodeTree *cnt)
                                                   N_NODE_COLUMNS,
                                                   G_TYPE_STRING,
                                                   G_TYPE_BOOLEAN,
+                                                  G_TYPE_STRING,
                                                   G_TYPE_STRING,
                                                   G_TYPE_STRING,
                                                   G_TYPE_STRING);
