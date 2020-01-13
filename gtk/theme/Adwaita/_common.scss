@@ -1823,11 +1823,11 @@ headerbar { // headerbar border rounding
 window.devel {
   headerbar.titlebar:not(.selection-mode) {
     $c: darken($bg_color, 10%);
-    $gradient: cross-fade(10% -gtk-icontheme("system-run-symbolic")) 90% 0/256px 256px no-repeat,
+    $gradient: cross-fade(10% -gtk-icontheme("system-run-symbolic"), image(transparent)) 90% 0/256px 256px no-repeat,
                linear-gradient(to right, transparent 65%, transparentize($selected_bg_color, 0.8)),
                linear-gradient(to top, darken($c, 3%), $c 3px, lighten($c, 6%));
     @if $variant == 'dark' {
-      $gradient: cross-fade(10% -gtk-icontheme("system-run-symbolic")) 90% 0/256px 256px no-repeat,
+      $gradient: cross-fade(10% -gtk-icontheme("system-run-symbolic"), image(transparent)) 90% 0/256px 256px no-repeat,
                  linear-gradient(to right, transparent 65%, transparentize($selected_bg_color, 0.9)),
                  linear-gradient(to top, lighten($c, 3%) 3px, lighten($c, 5%));
     }
@@ -1835,7 +1835,7 @@ window.devel {
     background: $bg_color $gradient;
 
     &:backdrop {
-      background: $bg_color cross-fade(10% -gtk-icontheme("system-run-symbolic")) 90% 0/256px 256px no-repeat,
+      background: $bg_color cross-fade(10% -gtk-icontheme("system-run-symbolic"), image(transparent)) 90% 0/256px 256px no-repeat,
                   image($bg_color); /* background-color would flash */
     }
   }

@@ -668,9 +668,9 @@ window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparen
 
 .titlebar:not(headerbar) separator { background-color: #1b1b1b; }
 
-window.devel headerbar.titlebar:not(.selection-mode) { background: #353535 cross-fade(10% -gtk-icontheme("system-run-symbolic")) 90% 0/256px 256px no-repeat, linear-gradient(to right, transparent 65%, rgba(21, 83, 158, 0.1)), linear-gradient(to top, #232323 3px, #282828); }
+window.devel headerbar.titlebar:not(.selection-mode) { background: #353535 cross-fade(10% -gtk-icontheme("system-run-symbolic"), image(transparent)) 90% 0/256px 256px no-repeat, linear-gradient(to right, transparent 65%, rgba(21, 83, 158, 0.1)), linear-gradient(to top, #232323 3px, #282828); }
 
-window.devel headerbar.titlebar:not(.selection-mode):backdrop { background: #353535 cross-fade(10% -gtk-icontheme("system-run-symbolic")) 90% 0/256px 256px no-repeat, image(#353535); /* background-color would flash */ }
+window.devel headerbar.titlebar:not(.selection-mode):backdrop { background: #353535 cross-fade(10% -gtk-icontheme("system-run-symbolic"), image(transparent)) 90% 0/256px 256px no-repeat, image(#353535); /* background-color would flash */ }
 
 /************ Pathbars * */
 .path-bar button.text-button, .path-bar button.image-button, .path-bar button { padding-left: 4px; padding-right: 4px; }
