@@ -29,54 +29,6 @@ struct _GtkCssValue {
 
 G_DEFINE_BOXED_TYPE (GtkCssValue, _gtk_css_value, _gtk_css_value_ref, _gtk_css_value_unref)
 
-static GHashTable *counters;
-
-static void
-dump_value_counts (void)
-{
-  GHashTableIter iter;
-  gpointer key;
-  gpointer value;
-
-  int sum1 = 0, sum2 = 0;
-  g_hash_table_iter_init (&iter, counters);
-  while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-       const char *class = key;
-       int *c = value;
-       if (c[0] != 1)
-         g_print ("%d %d %s\n", c[0], c[0] - c[1], class);
-
-       sum1 += c[0];
-       sum2 += c[0] - c[1];
-    }
-
-  g_print ("SUM: %d, %d\n", sum1, sum2);
-}
-
-static void
-count_value (const char *class, int delta)
-{
-  int *c;
-
-  if (!counters)
-    {
-      counters = g_hash_table_new (g_str_hash, g_str_equal);
-      atexit (dump_value_counts);
-    }
-  c = g_hash_table_lookup (counters, class);
-  if (!c)
-    {
-       c = g_new0 (int, 2);
-       g_hash_table_insert (counters, (gpointer)class, c);
-    }
-
-  if (delta == 1)
-    c[0]++;
-  else
-    c[1]++;
-}
-
 GtkCssValue *
 _gtk_css_value_alloc (const GtkCssValueClass *klass,
                       gsize                   size)
@@ -87,8 +39,6 @@ _gtk_css_value_alloc (const GtkCssValueClass *klass,
 
   value->class = klass;
   value->ref_count = 1;
-
-  count_value (klass->type_name, 1);
 
   return value;
 }
@@ -112,8 +62,6 @@ gtk_css_value_unref (GtkCssValue *value)
   value->ref_count -= 1;
   if (value->ref_count > 0)
     return;
-
-  count_value (value->class->type_name, -1);
 
   value->class->free (value);
 }
