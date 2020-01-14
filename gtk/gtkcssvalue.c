@@ -266,6 +266,9 @@ _gtk_css_value_transition (GtkCssValue *start,
   if (progress == 1)
     return _gtk_css_value_ref (end);
 
+  if (start == end)
+    return _gtk_css_value_ref (start);
+
 #ifdef CSS_VALUE_ACCOUNTING
   get_accounting_data (start->class->type_name)->transitioned++;
 #endif
