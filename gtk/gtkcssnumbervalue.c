@@ -44,10 +44,13 @@ gtk_css_number_value_has_percent (const GtkCssValue *value)
 }
 
 GtkCssValue *
-gtk_css_number_value_multiply (const GtkCssValue *value,
-                               double             factor)
+gtk_css_number_value_multiply (GtkCssValue *value,
+                               double       factor)
 {
   GtkCssNumberValueClass *number_value_class = (GtkCssNumberValueClass *) value->class;
+
+  if (factor == 1)
+    return _gtk_css_value_ref (value);
 
   return number_value_class->multiply (value, factor);
 }

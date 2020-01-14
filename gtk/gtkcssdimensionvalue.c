@@ -194,8 +194,8 @@ gtk_css_value_dimension_has_percent (const GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_dimension_multiply (const GtkCssValue *value,
-                                  double             factor)
+gtk_css_value_dimension_multiply (GtkCssValue *value,
+                                  double       factor)
 {
   return gtk_css_dimension_value_new (value->value * factor, value->unit);
 }
