@@ -512,6 +512,12 @@ static void gtk_text_view_paste_done_handler     (GtkTextBuffer     *buffer,
                                                   gpointer           data);
 static void gtk_text_view_buffer_changed_handler (GtkTextBuffer     *buffer,
                                                   gpointer           data);
+static void gtk_text_view_buffer_notify_redo     (GtkTextBuffer     *buffer,
+                                                  GParamSpec        *pspec,
+                                                  GtkTextView       *view);
+static void gtk_text_view_buffer_notify_undo     (GtkTextBuffer     *buffer,
+                                                  GParamSpec        *pspec,
+                                                  GtkTextView       *view);
 static void gtk_text_view_get_virtual_cursor_pos (GtkTextView       *text_view,
                                                   GtkTextIter       *cursor,
                                                   gint              *x,
@@ -1709,6 +1715,9 @@ gtk_text_view_init (GtkTextView *text_view)
                           gtk_css_node_get_state (priv->text_window->css_node) & ~GTK_STATE_FLAG_DROP_ACTIVE);
   gtk_css_node_set_visible (priv->selection_node, FALSE);
   g_object_unref (priv->selection_node);
+
+  gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "text.can-redo", FALSE);
+  gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "text.can-undo", FALSE);
 }
 
 GtkCssNode *
@@ -1817,6 +1826,8 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 {
   GtkTextViewPrivate *priv;
   GtkTextBuffer *old_buffer;
+  gboolean can_undo = FALSE;
+  gboolean can_redo = FALSE;
 
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (buffer == NULL || GTK_IS_TEXT_BUFFER (buffer));
@@ -1845,6 +1856,12 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
                                             text_view);
       g_signal_handlers_disconnect_by_func (priv->buffer,
                                             gtk_text_view_buffer_changed_handler,
+                                            text_view);
+      g_signal_handlers_disconnect_by_func (priv->buffer,
+                                            gtk_text_view_buffer_notify_redo,
+                                            text_view);
+      g_signal_handlers_disconnect_by_func (priv->buffer,
+                                            gtk_text_view_buffer_notify_undo,
                                             text_view);
 
       if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
@@ -1894,6 +1911,15 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       g_signal_connect (priv->buffer, "changed",
 			G_CALLBACK (gtk_text_view_buffer_changed_handler),
                         text_view);
+      g_signal_connect (priv->buffer, "notify",
+                        G_CALLBACK (gtk_text_view_buffer_notify_undo),
+                        text_view);
+      g_signal_connect (priv->buffer, "notify",
+                        G_CALLBACK (gtk_text_view_buffer_notify_redo),
+                        text_view);
+
+      can_undo = gtk_text_buffer_get_can_undo (buffer);
+      can_redo = gtk_text_buffer_get_can_redo (buffer);
 
       if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
 	{
@@ -1904,6 +1930,9 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       if (priv->text_handle)
         gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_NONE);
     }
+
+  gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "text.undo", can_undo);
+  gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "text.redo", can_redo);
 
   _gtk_text_view_accessible_set_buffer (text_view, old_buffer);
   if (old_buffer)
@@ -9727,4 +9756,26 @@ gtk_text_view_real_redo (GtkWidget   *widget,
 
   if (gtk_text_view_get_editable (text_view))
     gtk_text_buffer_redo (text_view->priv->buffer);
+}
+
+static void
+gtk_text_view_buffer_notify_redo (GtkTextBuffer *buffer,
+                                  GParamSpec    *pspec,
+                                  GtkTextView   *view)
+{
+  gtk_widget_action_set_enabled (GTK_WIDGET (view),
+                                 "text.redo",
+                                 (gtk_text_view_get_editable (view) &&
+                                  gtk_text_buffer_get_can_redo (buffer)));
+}
+
+static void
+gtk_text_view_buffer_notify_undo (GtkTextBuffer *buffer,
+                                  GParamSpec    *pspec,
+                                  GtkTextView   *view)
+{
+  gtk_widget_action_set_enabled (GTK_WIDGET (view),
+                                 "text.undo",
+                                 (gtk_text_view_get_editable (view) &&
+                                  gtk_text_buffer_get_can_undo (buffer)));
 }
