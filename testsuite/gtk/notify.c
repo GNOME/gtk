@@ -415,6 +415,10 @@ test_type (gconstpointer data)
   if (g_type_is_a (type, GTK_TYPE_MOUNT_OPERATION))
     return;
 
+  /* Needs a special surface */
+  if (g_type_is_a (type, GTK_TYPE_DRAG_ICON))
+    return;
+
   klass = g_type_class_ref (type);
 
   if (g_type_is_a (type, GTK_TYPE_SETTINGS))
