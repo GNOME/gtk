@@ -59,7 +59,7 @@
 #include "deprecated/gtkrc.h"
 
 #ifdef GDK_WINDOWING_QUARTZ
-#define PRINT_PREVIEW_COMMAND "open -a /Applications/Preview.app %f"
+#define PRINT_PREVIEW_COMMAND "open -b com.apple.Preview %f"
 #else
 #define PRINT_PREVIEW_COMMAND "evince --unlink-tempfile --preview --print-settings %s %f"
 #endif
