@@ -53,7 +53,7 @@
 #include "gtkcsspalettevalueprivate.h"
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkcssrepeatvalueprivate.h"
-#include "gtkcssshadowsvalueprivate.h"
+#include "gtkcssshadowvalueprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
 #include "gtkcssfontvariationsvalueprivate.h"
@@ -619,14 +619,14 @@ static GtkCssValue *
 box_shadow_value_parse (GtkCssStyleProperty *property,
                         GtkCssParser        *parser)
 {
-  return _gtk_css_shadows_value_parse (parser, TRUE);
+  return _gtk_css_shadow_value_parse (parser, TRUE);
 }
 
 static GtkCssValue *
 shadow_value_parse (GtkCssStyleProperty *property,
                     GtkCssParser        *parser)
 {
-  return _gtk_css_shadows_value_parse (parser, FALSE);
+  return _gtk_css_shadow_value_parse (parser, FALSE);
 }
 
 static GtkCssValue *
@@ -1110,7 +1110,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_TEXT_CONTENT,
                                           shadow_value_parse,
                                           NULL,
-                                          _gtk_css_shadows_value_new_none ());
+                                          gtk_css_shadow_value_new_none ());
 
   gtk_css_style_property_register        ("box-shadow",
                                           GTK_CSS_PROPERTY_BOX_SHADOW,
@@ -1119,7 +1119,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_BACKGROUND,
                                           box_shadow_value_parse,
                                           NULL,
-                                          _gtk_css_shadows_value_new_none ());
+                                          gtk_css_shadow_value_new_none ());
 
   gtk_css_style_property_register        ("margin-top",
                                           GTK_CSS_PROPERTY_MARGIN_TOP,
@@ -1518,7 +1518,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_ICON | GTK_CSS_AFFECTS_SYMBOLIC_ICON,
                                           shadow_value_parse,
                                           NULL,
-                                          _gtk_css_shadows_value_new_none ());
+                                          gtk_css_shadow_value_new_none ());
   gtk_css_style_property_register        ("-gtk-icon-style",
                                           GTK_CSS_PROPERTY_ICON_STYLE,
                                           G_TYPE_NONE,

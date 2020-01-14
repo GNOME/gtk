@@ -23,7 +23,7 @@
 
 #include "gtkcssfiltervalueprivate.h"
 #include "gtkcssimagevalueprivate.h"
-#include "gtkcssshadowsvalueprivate.h"
+#include "gtkcssshadowvalueprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkcsstransformvalueprivate.h"
 #include "gtkiconthemeprivate.h"
@@ -63,7 +63,7 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
 
   gtk_css_filter_value_push_snapshot (filter_value, snapshot);
 
-  has_shadow = gtk_css_shadows_value_push_snapshot (shadows_value, snapshot);
+  has_shadow = gtk_css_shadow_value_push_snapshot (shadows_value, snapshot);
 
   if (transform == NULL)
     {
@@ -119,7 +119,7 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
 
   gtk_css_filter_value_push_snapshot (filter_value, snapshot);
 
-  has_shadow = gtk_css_shadows_value_push_snapshot (shadows_value, snapshot);
+  has_shadow = gtk_css_shadow_value_push_snapshot (shadows_value, snapshot);
 
   if (recolor)
     {
