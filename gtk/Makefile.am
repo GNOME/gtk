@@ -11,7 +11,7 @@ INTROSPECTION_COMPILER_ARGS = \
     --includedir=../gdk
 
 if USE_QUARTZ
-GTK_PRINT_PREVIEW_COMMAND="open -a /Applications/Preview.app %f"
+GTK_PRINT_PREVIEW_COMMAND="open -b com.apple.Preview %f"
 else
 GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
 endif
