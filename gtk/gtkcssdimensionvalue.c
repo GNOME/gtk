@@ -243,13 +243,34 @@ gtk_css_value_dimension_get_calc_term_order (const GtkCssValue *value)
   return 1000 + order_per_unit[value->unit];
 }
 
+static GtkCssValue *
+gtk_css_value_dimension_transition (GtkCssValue *start,
+                                    GtkCssValue *end,
+                                    guint        property_id,
+                                    double       progress)
+{
+  if (progress == 0)
+    return _gtk_css_value_ref (start);
+
+  if (progress == 1)
+    return _gtk_css_value_ref (end);
+
+  if (start == end)
+    return _gtk_css_value_ref (start);
+
+  if (start->unit != end->unit)
+    return NULL;
+
+  return gtk_css_dimension_value_new (start->value + (end->value - start->value) * progress, start->unit);
+}
+
 static const GtkCssNumberValueClass GTK_CSS_VALUE_DIMENSION = {
   {
     "GtkCssDimensionValue",
     gtk_css_value_dimension_free,
     gtk_css_value_dimension_compute,
     gtk_css_value_dimension_equal,
-    gtk_css_number_value_transition,
+    gtk_css_value_dimension_transition,
     NULL,
     NULL,
     gtk_css_value_dimension_print
