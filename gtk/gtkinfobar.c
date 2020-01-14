@@ -49,6 +49,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkbinlayout.h"
+#include "gtkgestureclick.h"
 
 /**
  * SECTION:gtkinfobar
@@ -162,6 +163,8 @@ typedef struct
 
   gboolean show_close_button;
   GtkMessageType message_type;
+  int default_response;
+  gboolean default_response_sensitive;
 } GtkInfoBarPrivate;
 
 typedef struct _ResponseData ResponseData;
@@ -469,11 +472,25 @@ close_button_clicked_cb (GtkWidget  *button,
 }
 
 static void
+click_released_cb (GtkGestureClick *gesture,
+                   guint            n_press,
+                   gdouble          x,
+                   gdouble          y,
+                   GtkInfoBar      *info_bar)
+{
+  GtkInfoBarPrivate *priv = gtk_info_bar_get_instance_private (info_bar);
+
+  if (priv->default_response && priv->default_response_sensitive)
+    gtk_info_bar_response (info_bar, priv->default_response);
+}
+
+static void
 gtk_info_bar_init (GtkInfoBar *info_bar)
 {
   GtkInfoBarPrivate *priv = gtk_info_bar_get_instance_private (info_bar);
   GtkWidget *widget = GTK_WIDGET (info_bar);
   GtkWidget *main_box;
+  GtkGesture *gesture;
 
   /* message-type is a CONSTRUCT property, so we init to a value
    * different from its default to trigger its property setter
@@ -503,6 +520,11 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
   gtk_container_add (GTK_CONTAINER (main_box), priv->close_button);
   g_signal_connect (priv->close_button, "clicked",
                     G_CALLBACK (close_button_clicked_cb), info_bar);
+
+  gesture = gtk_gesture_click_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_PRIMARY);
+  g_signal_connect (gesture, "released", G_CALLBACK (click_released_cb), widget);
+  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
 }
 
 static GtkBuildableIface *parent_buildable_iface;
@@ -754,6 +776,22 @@ gtk_info_bar_new_with_buttons (const gchar *first_button_text,
   return GTK_WIDGET (info_bar);
 }
 
+static void
+update_default_response (GtkInfoBar *info_bar,
+                         int         response_id,
+                         gboolean    sensitive)
+{
+  GtkInfoBarPrivate *priv = gtk_info_bar_get_instance_private (info_bar);
+
+  priv->default_response = response_id;
+  priv->default_response_sensitive = sensitive;
+
+  if (response_id && sensitive)
+    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (info_bar)), "action");
+  else
+    gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (info_bar)), "action");
+}
+
 /**
  * gtk_info_bar_set_response_sensitive:
  * @info_bar: a #GtkInfoBar
@@ -786,6 +824,9 @@ gtk_info_bar_set_response_sensitive (GtkInfoBar *info_bar,
     }
 
   g_list_free (children);
+
+  if (response_id == priv->default_response)
+    update_default_response (info_bar, response_id, setting);
 }
 
 /**
@@ -806,6 +847,7 @@ gtk_info_bar_set_default_response (GtkInfoBar *info_bar,
 {
   GtkInfoBarPrivate *priv = gtk_info_bar_get_instance_private (info_bar);
   GList *children, *list;
+  gboolean sensitive = TRUE;
 
   g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
 
@@ -822,10 +864,13 @@ gtk_info_bar_set_default_response (GtkInfoBar *info_bar,
 
           window = gtk_widget_get_ancestor (GTK_WIDGET (info_bar), GTK_TYPE_WINDOW);
           gtk_window_set_default_widget (GTK_WINDOW (window), widget);
+          sensitive = gtk_widget_get_sensitive (widget);
         }
     }
 
   g_list_free (children);
+
+  update_default_response (info_bar, response_id, sensitive);
 }
 
 /**

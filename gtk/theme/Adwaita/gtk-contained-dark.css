@@ -1767,6 +1767,8 @@ video image.osd { min-width: 64px; min-height: 64px; border-radius: 32px; }
 /************** GtkInfoBar * */
 infobar { border-style: none; }
 
+infobar.action:hover { background-color: #3e3b37; border-color: #353535; }
+
 infobar.info, infobar.question, infobar.warning, infobar.error { text-shadow: none; }
 
 infobar.info:backdrop, infobar.info, infobar.question:backdrop, infobar.question, infobar.warning:backdrop, infobar.warning, infobar.error:backdrop, infobar.error { background-color: #44403b; border-color: #353535; }
