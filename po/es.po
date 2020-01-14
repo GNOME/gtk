@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-11 15:08+0000\n"
-"PO-Revision-Date: 2020-01-13 09:35+0100\n"
+"POT-Creation-Date: 2020-01-14 06:07+0000\n"
+"PO-Revision-Date: 2020-01-14 09:16+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -58,7 +58,6 @@ msgstr "No se pudo proporcionar el contenido como %s"
 
 #: gdk/gdkcontentproviderimpl.c:448
 #, c-format
-#| msgid "Failed to write %s: “%s”\n"
 msgid "Failed to get contents as “%s”"
 msgstr "Falló al obtener el contenido como «%s»"
 
@@ -2168,7 +2167,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Si elimina un elemento, se perderña definitivamente."
 
 #: gtk/gtkfilechooserwidget.c:1509 gtk/gtkfilechooserwidget.c:2226
-#: gtk/gtklabel.c:6005 gtk/gtktext.c:5897 gtk/gtktextview.c:8570
+#: gtk/gtklabel.c:6005 gtk/gtktext.c:5897 gtk/gtktextview.c:8599
 msgid "_Delete"
 msgstr "_Eliminar"
 
@@ -2477,35 +2476,35 @@ msgstr "El icono «%s» no está presente en el tema %s"
 msgid "Failed to load icon"
 msgstr "No se pudo cargar el icono"
 
-#: gtk/gtkinfobar.c:1124 gtk/gtkmessagedialog.c:297 gtk/inspector/window.ui:465
+#: gtk/gtkinfobar.c:1169 gtk/gtkmessagedialog.c:297 gtk/inspector/window.ui:465
 msgid "Information"
 msgstr "Información"
 
-#: gtk/gtkinfobar.c:1128 gtk/gtkmessagedialog.c:301
+#: gtk/gtkinfobar.c:1173 gtk/gtkmessagedialog.c:301
 msgid "Question"
 msgstr "Pregunta"
 
-#: gtk/gtkinfobar.c:1132 gtk/gtkmessagedialog.c:305
+#: gtk/gtkinfobar.c:1177 gtk/gtkmessagedialog.c:305
 msgid "Warning"
 msgstr "Advertencia"
 
-#: gtk/gtkinfobar.c:1136 gtk/gtkmessagedialog.c:309
+#: gtk/gtkinfobar.c:1181 gtk/gtkmessagedialog.c:309
 msgid "Error"
 msgstr "Error"
 
-#: gtk/gtklabel.c:6002 gtk/gtktext.c:5885 gtk/gtktextview.c:8558
+#: gtk/gtklabel.c:6002 gtk/gtktext.c:5885 gtk/gtktextview.c:8587
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: gtk/gtklabel.c:6003 gtk/gtktext.c:5889 gtk/gtktextview.c:8562
+#: gtk/gtklabel.c:6003 gtk/gtktext.c:5889 gtk/gtktextview.c:8591
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtklabel.c:6004 gtk/gtktext.c:5893 gtk/gtktextview.c:8566
+#: gtk/gtklabel.c:6004 gtk/gtktext.c:5893 gtk/gtktextview.c:8595
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: gtk/gtklabel.c:6010 gtk/gtktext.c:5906 gtk/gtktextview.c:8579
+#: gtk/gtklabel.c:6010 gtk/gtktext.c:5906 gtk/gtktextview.c:8620
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
@@ -3476,9 +3475,21 @@ msgstr "No se han encontrado resultados"
 msgid "Try a different search"
 msgstr "Pruebe una búsqueda diferente"
 
-#: gtk/gtktext.c:5911 gtk/gtktextview.c:8584
+#: gtk/gtktext.c:5911 gtk/gtktextview.c:8625
 msgid "Insert _Emoji"
 msgstr "Insertar _emoticono"
+
+#: gtk/gtktextview.c:8607
+#| msgctxt "Stock label"
+#| msgid "_Undo"
+msgid "_Undo"
+msgstr "_Deshacer"
+
+#: gtk/gtktextview.c:8611
+#| msgctxt "Stock label"
+#| msgid "_Redo"
+msgid "_Redo"
+msgstr "_Rehacer"
 
 #: gtk/gtkvolumebutton.c:195
 msgid "Adjusts the volume"
