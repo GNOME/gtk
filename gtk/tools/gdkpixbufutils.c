@@ -422,8 +422,8 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
                                     GError     **error)
 
 {
-  const char *r_string = "rgb(1,0,0)";
-  const char *g_string = "rgb(1,1,0)";
+  const char *r_string = "rgb(255,0,0)";
+  const char *g_string = "rgb(0,255,0)";
   GdkPixbuf *loaded;
   GdkPixbuf *pixbuf = NULL;
   int plane;
