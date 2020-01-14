@@ -244,7 +244,10 @@ main (int argc, char **argv)
 {
   g_setenv ("GTK_CSS_DEBUG", "1", TRUE);
 
-  gtk_test_init (&argc, &argv);
+  if (argc >= 2 && strcmp (argv[1], "--generate") == 0)
+    gtk_init ();
+  else
+    gtk_test_init (&argc, &argv);
 
   g_object_set (gtk_settings_get_default (),
                 "gtk-font-name", "Sans",
