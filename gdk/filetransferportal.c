@@ -42,6 +42,40 @@
 #include "filetransferportalprivate.h"
 
 static GDBusProxy *file_transfer_proxy = NULL;
+static gboolean done;
+static guint timeout_id;
+
+static void
+got_proxy (GObject *source,
+           GAsyncResult *result,
+           gpointer data)
+{
+  GError *error = NULL;
+
+  file_transfer_proxy = g_dbus_proxy_new_for_bus_finish (result, &error);
+  if (!file_transfer_proxy)
+    {
+      g_message ("failed to get file transfer portal proxy: %s", error->message);
+      g_error_free (error);
+    }
+
+  done = TRUE;
+}
+
+static gboolean
+give_up_on_proxy (gpointer data)
+{
+  GCancellable *cancellable = data;
+
+  g_cancellable_cancel (cancellable);
+
+  timeout_id = 0;
+  done = TRUE;
+
+  g_main_context_wakeup (NULL);
+
+  return G_SOURCE_REMOVE;
+}
 
 static GDBusProxy *
 ensure_file_transfer_portal (void)
@@ -49,16 +83,29 @@ ensure_file_transfer_portal (void)
   if (file_transfer_proxy == NULL)
     {
       GError *error = NULL;
+      GCancellable *cancellable;
 
-      file_transfer_proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
-                                                           G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES
-                                                           | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS
-                                                           | G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
-                                                           NULL,
-                                                           "org.freedesktop.portal.Documents",
-                                                           "/org/freedesktop/portal/documents",
-                                                           "org.freedesktop.portal.FileTransfer",
-                                                           NULL, &error);
+      cancellable = g_cancellable_new ();
+
+      g_dbus_proxy_new_for_bus (G_BUS_TYPE_SESSION,
+                                G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES
+                                | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS
+                                | G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
+                                NULL,
+                                "org.freedesktop.portal.Documents",
+                                "/org/freedesktop/portal/documents",
+                                "org.freedesktop.portal.FileTransfer",
+                                cancellable,
+                                got_proxy,
+                                NULL);
+
+      timeout_id = g_timeout_add_full (1000, 0, give_up_on_proxy, cancellable, g_object_unref);
+
+      while (!done)
+        g_main_context_iteration (NULL, TRUE);
+
+      if (timeout_id)
+        g_source_remove (timeout_id);
 
       if (error)
         {
