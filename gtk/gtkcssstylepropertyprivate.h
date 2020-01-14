@@ -80,9 +80,6 @@ void                    _gtk_css_style_property_print_value     (GtkCssStyleProp
                                                                  GtkCssValue            *value,
                                                                  GString                *string);
 
-GtkBitmask *            _gtk_css_style_property_get_mask_affecting
-                                                                (GtkCssAffects           affects);
-
 /* XXX - find a better place for these */
 GtkCssValue * gtk_css_font_family_value_parse (GtkCssParser *parser);
 GtkCssValue * gtk_css_font_size_value_parse   (GtkCssParser *parser);
