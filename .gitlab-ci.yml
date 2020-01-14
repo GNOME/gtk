@@ -12,11 +12,7 @@ stages:
     - subprojects/libepoxy/
     - subprojects/pango/
 
-fedora-x86_64: &fedora-x86_64-defaults
-  image: registry.gitlab.gnome.org/gnome/gtk/master:v8
-  stage: build
-  script:
-    - bash -x ./.gitlab-ci/test-docker.sh
+.build-artifacts:
   artifacts:
     when: always
     reports:
@@ -29,14 +25,35 @@ fedora-x86_64: &fedora-x86_64-defaults
       - "${CI_PROJECT_DIR}/_build/report.html"
       - "${CI_PROJECT_DIR}/_build/testsuite/reftests/output/*.png"
       - "${CI_PROJECT_DIR}/_build/testsuite/gsk/compare/*/*.png"
+
+.fedora-build-defaults: &fedora-build-defaults
+  image: registry.gitlab.gnome.org/gnome/gtk/master:v8
+  stage: build
+  script:
+    - bash -x ./.gitlab-ci/test-docker.sh
+  extends: .build-artifacts
+
+fedora-x86_64:
+  <<: *fedora-build-defaults
+  extends: .build-artifacts
   cache:
     key: "$CI_JOB_NAME"
     <<: *cache-paths
 
 fedora-x86_64-staticlibs:
+  <<: *fedora-build-defaults
   variables:
     EXTRA_MESON_FLAGS: "-Ddefault_library=both"
-  <<: *fedora-x86_64-defaults
+  cache:
+    key: "$CI_JOB_NAME"
+    <<: *cache-paths
+
+# Uncached release build
+fedora-x86_64-release:
+  <<: *fedora-build-defaults
+  allow_failure: true
+  variables:
+    EXTRA_MESON_FLAGS: "-Dbuildtype=release"
 
 .mingw-defaults: &mingw-defaults
   stage: build
