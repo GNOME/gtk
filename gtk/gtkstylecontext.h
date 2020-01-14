@@ -1053,7 +1053,8 @@ void        gtk_render_insertion_cursor
 typedef enum {
   GTK_STYLE_CONTEXT_PRINT_NONE         = 0,
   GTK_STYLE_CONTEXT_PRINT_RECURSE      = 1 << 0,
-  GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE   = 1 << 1
+  GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE   = 1 << 1,
+  GTK_STYLE_CONTEXT_PRINT_SHOW_CHANGE  = 1 << 2
 } GtkStyleContextPrintFlags;
 
 GDK_AVAILABLE_IN_ALL
