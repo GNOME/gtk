@@ -211,8 +211,8 @@ gtk_css_value_calc_has_percent (const GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_calc_multiply (const GtkCssValue *value,
-                             double             factor)
+gtk_css_value_calc_multiply (GtkCssValue *value,
+                             double       factor)
 {
   GtkCssValue *result;
   gsize i;
