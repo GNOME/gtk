@@ -99,7 +99,6 @@ struct GtkCssRuleset
   GtkCssSelector *selector;
   GtkCssSelectorTree *selector_match;
   PropertyValue *styles;
-  GtkBitmask *set_styles;
   guint n_styles;
   guint owns_styles : 1;
 };
@@ -236,8 +235,6 @@ gtk_css_ruleset_init_copy (GtkCssRuleset       *new,
   /* First copy takes over ownership */
   if (ruleset->owns_styles)
     ruleset->owns_styles = FALSE;
-  if (new->set_styles)
-    new->set_styles = _gtk_bitmask_copy (new->set_styles);
 }
 
 static void
@@ -256,8 +253,6 @@ gtk_css_ruleset_clear (GtkCssRuleset *ruleset)
         }
       g_free (ruleset->styles);
     }
-  if (ruleset->set_styles)
-    _gtk_bitmask_free (ruleset->set_styles);
   if (ruleset->selector)
     _gtk_css_selector_free (ruleset->selector);
 
@@ -273,13 +268,6 @@ gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
   guint i;
 
   g_return_if_fail (ruleset->owns_styles || ruleset->n_styles == 0);
-
-  if (ruleset->set_styles == NULL)
-    ruleset->set_styles = _gtk_bitmask_new ();
-
-  ruleset->set_styles = _gtk_bitmask_set (ruleset->set_styles,
-                                          _gtk_css_style_property_get_id (property),
-                                          TRUE);
 
   ruleset->owns_styles = TRUE;
 
