@@ -91,7 +91,20 @@ static gboolean
 gtk_css_value_icon_theme_equal (const GtkCssValue *value1,
                                 const GtkCssValue *value2)
 {
-  return FALSE;
+  GtkIconTheme *theme1 = value1->icontheme;
+  GtkIconTheme *theme2 = value2->icontheme;
+  GtkIconTheme *default_theme;
+
+  if (theme1 == theme2)
+    return TRUE;
+
+  if (theme1 && theme2)
+    return FALSE;
+
+  default_theme = gtk_icon_theme_get_default ();
+
+  return theme1 == default_theme ||
+         theme2 == default_theme;
 }
 
 static GtkCssValue *
