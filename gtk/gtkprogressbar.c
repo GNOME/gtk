@@ -28,7 +28,6 @@
 
 #include "gtkcssnodeprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkgizmoprivate.h"
 #include "gtkintl.h"
