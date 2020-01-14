@@ -39,7 +39,6 @@
 #include "gtkcsstransformvalueprivate.h"
 #include "gtkcssfontvariationsvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsswidgetnodeprivate.h"
 #include "gtkdebug.h"

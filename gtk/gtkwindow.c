@@ -38,7 +38,7 @@
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcssiconthemevalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
-#include "gtkcssshadowsvalueprivate.h"
+#include "gtkcssshadowvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkdragdest.h"
 #include "gtkeventcontrollerkey.h"
@@ -5322,7 +5322,7 @@ get_shadow_width (GtkWindow *window,
 
   /* Calculate the size of the drop shadows ... */
   shadows = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BOX_SHADOW);
-  _gtk_css_shadows_value_get_extents (shadows, &border);
+  gtk_css_shadow_value_get_extents (shadows, &border);
 
   if (priv->type != GTK_WINDOW_POPUP)
     {
