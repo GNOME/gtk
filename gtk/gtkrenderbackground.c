@@ -30,7 +30,7 @@
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkcssshadowsvalueprivate.h"
+#include "gtkcssshadowvalueprivate.h"
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkcssrepeatvalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
@@ -285,14 +285,14 @@ gtk_css_style_snapshot_background (GtkCssBoxes *boxes,
   if (gdk_rgba_is_clear (bg_color) &&
       _gtk_css_array_value_get_n_values (background_image) == 1 &&
       _gtk_css_image_value_get_image (_gtk_css_array_value_get_nth (background_image, 0)) == NULL &&
-      _gtk_css_shadows_value_is_none (box_shadow))
+      gtk_css_shadow_value_is_none (box_shadow))
     return;
 
   gtk_snapshot_push_debug (snapshot, "CSS background");
 
-  gtk_css_shadows_value_snapshot_outset (box_shadow,
-                                         snapshot,
-                                         gtk_css_boxes_get_border_box (boxes));
+  gtk_css_shadow_value_snapshot_outset (box_shadow,
+                                        snapshot,
+                                        gtk_css_boxes_get_border_box (boxes));
 
   blend_modes = gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE);
   number_of_layers = _gtk_css_array_value_get_n_values (background_image);
@@ -323,9 +323,9 @@ gtk_css_style_snapshot_background (GtkCssBoxes *boxes,
         }
     }
 
-  gtk_css_shadows_value_snapshot_inset (box_shadow,
-                                        snapshot,
-                                        gtk_css_boxes_get_padding_box (boxes));
+  gtk_css_shadow_value_snapshot_inset (box_shadow,
+                                       snapshot,
+                                       gtk_css_boxes_get_padding_box (boxes));
 
   gtk_snapshot_pop (snapshot);
 }

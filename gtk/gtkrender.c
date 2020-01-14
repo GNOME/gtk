@@ -25,7 +25,7 @@
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
-#include "gtkcssshadowsvalueprivate.h"
+#include "gtkcssshadowvalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
 #include "gtkhslaprivate.h"
 #include "gtkrendericonprivate.h"
@@ -232,7 +232,7 @@ gtk_render_background_get_clip (GtkStyleContext *context,
 {
   GtkBorder shadow;
 
-  _gtk_css_shadows_value_get_extents (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BOX_SHADOW), &shadow);
+  gtk_css_shadow_value_get_extents (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BOX_SHADOW), &shadow);
 
   out_clip->x = floor (x) - shadow.left;
   out_clip->y = floor (y) - shadow.top;

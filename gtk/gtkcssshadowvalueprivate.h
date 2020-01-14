@@ -28,21 +28,17 @@
 #include "gtkcssparserprivate.h"
 #include "gtkcssvalueprivate.h"
 #include "gtkroundedboxprivate.h"
+#include "gtksnapshot.h"
 
 G_BEGIN_DECLS
 
-GtkCssValue *   _gtk_css_shadow_value_new_for_transition (GtkCssValue           *target);
+GtkCssValue *   gtk_css_shadow_value_new_none            (void);
 
 GtkCssValue *   _gtk_css_shadow_value_parse           (GtkCssParser             *parser,
                                                        gboolean                  box_shadow_mode);
 
-gboolean        _gtk_css_shadow_value_get_inset       (const GtkCssValue        *shadow);
-
 void            gtk_css_shadow_value_get_extents      (const GtkCssValue        *shadow,
                                                        GtkBorder                *border);
-void            gtk_css_shadow_value_get_shadow       (const GtkCssValue        *value,
-                                                       GskShadow                *shadow);
-
 void            gtk_css_shadow_value_snapshot_outset  (const GtkCssValue        *shadow,
                                                        GtkSnapshot              *snapshot,
                                                        const GskRoundedRect     *border_box);
@@ -51,6 +47,10 @@ void            gtk_css_shadow_value_snapshot_inset   (const GtkCssValue        
                                                        const GskRoundedRect     *padding_box);
 
 gboolean        gtk_css_shadow_value_is_clear         (const GtkCssValue        *shadow);
+gboolean        gtk_css_shadow_value_is_none          (const GtkCssValue        *shadow);
+
+gboolean        gtk_css_shadow_value_push_snapshot    (const GtkCssValue        *value,
+                                                       GtkSnapshot              *snapshot);
 
 G_END_DECLS
 
