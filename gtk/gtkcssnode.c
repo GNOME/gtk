@@ -19,6 +19,7 @@
 
 #include "gtkcssnodeprivate.h"
 
+#include "gtkcssstaticstyleprivate.h"
 #include "gtkcssanimatedstyleprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkintl.h"
@@ -1430,6 +1431,19 @@ gtk_css_node_print (GtkCssNode                *cssnode,
 
   if (!cssnode->visible)
     g_string_append_c (string, ']');
+
+  if (flags & GTK_STYLE_CONTEXT_PRINT_SHOW_CHANGE)
+    {
+      GtkCssStyle *style = gtk_css_node_get_style (cssnode);
+      GtkCssChange change;
+
+      if (!GTK_IS_CSS_STATIC_STYLE (style))
+        style = GTK_CSS_ANIMATED_STYLE (style)->style;
+
+      change = gtk_css_static_style_get_change (GTK_CSS_STATIC_STYLE (style));
+      g_string_append (string, "    ");
+      gtk_css_change_print (change, string); 
+    }
 
   g_string_append_c (string, '\n');
 
