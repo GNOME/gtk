@@ -128,6 +128,7 @@ load_ui_file (GFile *file, gboolean generate)
   context = gtk_widget_get_style_context (window);
 
   output = gtk_style_context_to_string (context, GTK_STYLE_CONTEXT_PRINT_RECURSE |
+                                                 GTK_STYLE_CONTEXT_PRINT_SHOW_CHANGE |
                                                  GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE);
 
   if (generate)
@@ -270,6 +271,7 @@ main (int argc, char **argv)
           load_ui_file (file, TRUE);
 
           g_object_unref (file);
+          return 0;
         }
     }
   else
