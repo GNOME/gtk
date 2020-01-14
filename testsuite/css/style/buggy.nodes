@@ -1,0 +1,172 @@
+color {
+  bounds: 0 60 171 22;
+  color: rgb(0,255,0);
+}
+transform {
+  child: container {
+    blend {
+      bottom: blend {
+        bottom: color {
+          bounds: 0 0 149 0;
+          color: rgb(255,0,0);
+        }
+        mode: multiply;
+        top: color {
+          bounds: 0 0 149 0;
+          color: rgba(0,0,0,0);
+        }
+      }
+      mode: multiply;
+      top: color {
+        bounds: -10 -10 84.5 20;
+        color: rgb(255,255,0);
+      }
+    }
+    border {
+      colors: rgb(0,0,255);
+      outline: -11 -11 171 22;
+    }
+  }
+  transform: translate(11, 71);
+}
+container {
+  transform {
+    child: container {
+      blend {
+        bottom: blend {
+          bottom: color {
+            bounds: 0 0 0 38;
+            color: rgb(255,0,0);
+          }
+          mode: multiply;
+          top: color {
+            bounds: 0 0 0 38;
+            color: rgba(0,0,0,0);
+          }
+        }
+        mode: multiply;
+        top: color {
+          bounds: -10 -10 10 58;
+          color: rgb(255,255,0);
+        }
+      }
+      border {
+        colors: rgb(0,0,255);
+        outline: -11 -11 22 60;
+      }
+    }
+    transform: translate(11, 11);
+  }
+  transform {
+    child: container {
+      blend {
+        bottom: blend {
+          bottom: color {
+            bounds: 0 0 67 18;
+            color: rgb(255,0,0);
+          }
+          mode: multiply;
+          top: clip {
+            child: color {
+              bounds: -10 -10 87 19;
+              color: rgb(255,255,255);
+            }
+            clip: 0 0 67 18;
+          }
+        }
+        mode: multiply;
+        top: color {
+          bounds: -10 -10 43.5 38;
+          color: rgb(255,255,0);
+        }
+      }
+      border {
+        colors: rgb(0,0,255);
+        outline: -11 -11 89 40;
+      }
+      container {
+        text {
+          color: rgb(255,255,255);
+          font: "Cantarell 11";
+          glyphs: 312 8, 430 5, 345 7, 828 7, 272 8, 438 8, 324 4, 349 4;
+          offset: 3 14.418;
+        }
+        text {
+          color: rgb(255,255,255);
+          font: "Cantarell 11";
+          glyphs: 809 10;
+          offset: 54 14.418;
+        }
+      }
+    }
+    transform: translate(33, 21);
+  }
+  transform {
+    child: container {
+      blend {
+        bottom: blend {
+          bottom: color {
+            bounds: 0 0 38 38;
+            color: rgb(255,0,0);
+          }
+          mode: multiply;
+          top: clip {
+            child: color {
+              bounds: -10 -10 58 29;
+              color: rgb(255,255,255);
+            }
+            clip: 0 0 38 38;
+          }
+        }
+        mode: multiply;
+        top: color {
+          bounds: -10 -10 29 58;
+          color: rgb(255,255,0);
+        }
+      }
+      border {
+        colors: rgb(0,0,255);
+        outline: -11 -11 60 60;
+      }
+      transform {
+        child: container {
+          blend {
+            bottom: blend {
+              bottom: color {
+                bounds: 0 0 16 16;
+                color: rgb(255,0,0);
+              }
+              mode: multiply;
+              top: clip {
+                child: color {
+                  bounds: -10 -10 36 18;
+                  color: rgb(255,255,255);
+                }
+                clip: 0 0 16 16;
+              }
+            }
+            mode: multiply;
+            top: color {
+              bounds: -10 -10 18 36;
+              color: rgb(255,255,0);
+            }
+          }
+          border {
+            colors: rgb(0,0,255);
+            outline: -11 -11 38 38;
+          }
+          color-matrix {
+            child: texture {
+              bounds: 0 0 16 16;
+              texture: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAAfUlEQVQ4je3RMQoCMRBG4Q+voEIKC/H+d7Cwd1GULSzEUyg2azOyQ1gxB9gHgcnknxdCmJliwAHr1FtiH2d/uUTwHJIVuuj1LYINbklyivqObYuglgx4YDcVXPwQvPFM+1esJgquxjf3qS4tgmM1UJKkaxF8g/m2YvyJmYoPk2IlW2Wofj0AAAAASUVORK5CYII=");
+            }
+            matrix: matrix3d(-0.8, -0.180392, -0.521569, 0, -0.0392157, -0.52549, -1, 0, -0.2, -1, -1, 0, 0, 0, 0, 1);
+            offset: 1 1 1 0;
+          }
+        }
+        transform: translate(11, 11);
+      }
+    }
+    transform: translate(122, 11);
+  }
+}

@@ -1,6 +1,6 @@
-[window.background:dir(ltr)]
-  decoration:dir(ltr)
-  box.horizontal:dir(ltr)
+[window.background:dir(ltr)]    class|name|id|first-child|last-child|nth-child|nth-last-child|state|sibling-class|sibling-name|sibling-id|sibling-first-child|sibling-last-child|sibling-nth-child|sibling-nth-last-child|sibling-state|parent-class|parent-name|parent-id|parent-first-child|parent-last-child|parent-nth-child|parent-nth-last-child|parent-state|parent-sibling-|parent-sibling-name|parent-sibling-id|parent-sibling-first-child|parent-sibling-last-child|parent-sibling-nth-child|parent-sibling-nth-last-child|parent-sibling-state
+  decoration:dir(ltr)    class|name|id|first-child|last-child|nth-child|nth-last-child|state|sibling-class|sibling-name|sibling-id|sibling-first-child|sibling-last-child|sibling-nth-child|sibling-nth-last-child|sibling-state|parent-class|parent-name|parent-id|parent-first-child|parent-last-child|parent-nth-child|parent-nth-last-child|parent-state|parent-sibling-|parent-sibling-name|parent-sibling-id|parent-sibling-first-child|parent-sibling-last-child|parent-sibling-nth-child|parent-sibling-nth-last-child|parent-sibling-state
+  box.horizontal:dir(ltr)    name
     font-size: 10px; /* font.css:2:3-27 */
     font-family: "Comic Sans"; /* font.css:2:3-27 */
     font-style: normal; /* font.css:2:3-27 */
@@ -8,30 +8,30 @@
     font-stretch: normal; /* font.css:2:3-27 */
     font-variant-caps: normal; /* font.css:2:3-27 */
 
-    label#label1:dir(ltr)
+    label#label1:dir(ltr)    id
       font-size: 8.3333333333333339px; /* font.css:6:3-22 */
-    label#label2:dir(ltr)
+    label#label2:dir(ltr)    id
       font-size: 13.333333333333334px; /* font.css:10:3-36 */
       font-family: "Cantarell", "sans-serif"; /* font.css:10:3-36 */
       font-style: normal; /* font.css:10:3-36 */
       font-weight: 400; /* font.css:10:3-36 */
       font-stretch: normal; /* font.css:10:3-36 */
       font-variant-caps: normal; /* font.css:10:3-36 */
-    label#label3:dir(ltr)
+    label#label3:dir(ltr)    id
       font-size: 8px; /* font.css:14:3-35 */
       font-family: "monospace"; /* font.css:14:3-35 */
       font-style: italic; /* font.css:14:3-35 */
       font-weight: 700; /* font.css:14:3-35 */
       font-stretch: normal; /* font.css:14:3-35 */
       font-variant-caps: normal; /* font.css:14:3-35 */
-    label#label4:dir(ltr)
+    label#label4:dir(ltr)    id
       font-size: 8px; /* font.css:18:3-41 */
       font-family: "serif"; /* font.css:18:3-41 */
       font-style: oblique; /* font.css:18:3-41 */
       font-weight: 400; /* font.css:18:3-41 */
       font-stretch: expanded; /* font.css:18:3-41 */
       font-variant-caps: normal; /* font.css:18:3-41 */
-    label#label5:dir(ltr)
+    label#label5:dir(ltr)    id
       font-size: 75.590551181102356px; /* font.css:22:3-29 */
       font-family: "21st Century"; /* font.css:22:3-29 */
       font-style: normal; /* font.css:22:3-29 */

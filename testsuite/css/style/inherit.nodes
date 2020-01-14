@@ -1,10 +1,10 @@
-[window.background:dir(ltr)]
-  decoration:dir(ltr)
-  box.horizontal:dir(ltr)
+[window.background:dir(ltr)]    class|name|id|first-child|last-child|nth-child|nth-last-child|state|sibling-class|sibling-name|sibling-id|sibling-first-child|sibling-last-child|sibling-nth-child|sibling-nth-last-child|sibling-state|parent-class|parent-name|parent-id|parent-first-child|parent-last-child|parent-nth-child|parent-nth-last-child|parent-state|parent-sibling-|parent-sibling-name|parent-sibling-id|parent-sibling-first-child|parent-sibling-last-child|parent-sibling-nth-child|parent-sibling-nth-last-child|parent-sibling-state
+  decoration:dir(ltr)    class|name|id|first-child|last-child|nth-child|nth-last-child|state|sibling-class|sibling-name|sibling-id|sibling-first-child|sibling-last-child|sibling-nth-child|sibling-nth-last-child|sibling-state|parent-class|parent-name|parent-id|parent-first-child|parent-last-child|parent-nth-child|parent-nth-last-child|parent-state|parent-sibling-|parent-sibling-name|parent-sibling-id|parent-sibling-first-child|parent-sibling-last-child|parent-sibling-nth-child|parent-sibling-nth-last-child|parent-sibling-state
+  box.horizontal:dir(ltr)    name
     color: rgb(255,0,0); /* inherit.css:2:3-14 */
     opacity: 0.5; /* inherit.css:3:3-16 */
 
-    label#label1:dir(ltr)
+    label#label1:dir(ltr)    name|id
       color: rgb(255,255,255); /* inherit.css:7:3-18 */
       opacity: 0.5; /* inherit.css:8:3-20 */
-    label#label2:dir(ltr)
+    label#label2:dir(ltr)    
