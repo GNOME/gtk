@@ -21,7 +21,7 @@
 #include "gtksnapshotprivate.h"
 
 #include "gtkcsscolorvalueprivate.h"
-#include "gtkcssshadowsvalueprivate.h"
+#include "gtkcssshadowvalueprivate.h"
 #include "gtkdebug.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
@@ -1735,7 +1735,7 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
   fg_color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
 
   shadows_value = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_TEXT_SHADOW);
-  has_shadow = gtk_css_shadows_value_push_snapshot (shadows_value, snapshot);
+  has_shadow = gtk_css_shadow_value_push_snapshot (shadows_value, snapshot);
 
   gtk_snapshot_append_layout (snapshot, layout, fg_color);
 
