@@ -761,6 +761,26 @@ render_border_node (GskGLRenderer   *self,
     float h;
   } sizes[4];
 
+  if (og_widths[0] == og_widths[1] &&
+      og_widths[0] == og_widths[2] &&
+      og_widths[0] == og_widths[3] &&
+      gdk_rgba_equal (&colors[0], &colors[1]) &&
+      gdk_rgba_equal (&colors[0], &colors[2]) &&
+      gdk_rgba_equal (&colors[0], &colors[3]))
+    {
+      OpShadow *op;
+
+      ops_set_program (builder, &self->inset_shadow_program);
+      op = ops_begin (builder, OP_CHANGE_INSET_SHADOW);
+      op->color = &colors[0];
+      op->outline = transform_rect (self, builder, rounded_outline);
+      op->spread = og_widths[0] * scale;
+      op->offset[0] = 0;
+      op->offset[1] = 0;
+
+      load_vertex_data (ops_draw (builder, NULL), node, builder);
+      return;
+    }
 
   for (i = 0; i < 4; i ++)
     widths[i] = og_widths[i];
