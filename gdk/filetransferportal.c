@@ -59,7 +59,39 @@ got_proxy (GObject *source,
       g_error_free (error);
     }
 
+  if (timeout_id)
+    {
+      g_source_remove (timeout_id);
+      timeout_id = 0;
+    }
+
   done = TRUE;
+  g_main_context_wakeup (NULL);
+}
+
+static void
+got_bus (GObject *source,
+         GAsyncResult *result,
+         gpointer data)
+{
+  GDBusConnection **bus = data;
+  GError *error = NULL;
+
+  *bus = g_bus_get_finish (result, &error);
+  if (!*bus)
+    {
+      g_message ("failed to get session bus connection: %s", error->message);
+      g_error_free (error);
+    }
+
+  if (timeout_id)
+    {
+      g_source_remove (timeout_id);
+      timeout_id = 0;
+    }
+
+  done = TRUE;
+  g_main_context_wakeup (NULL);
 }
 
 static gboolean
@@ -70,8 +102,8 @@ give_up_on_proxy (gpointer data)
   g_cancellable_cancel (cancellable);
 
   timeout_id = 0;
-  done = TRUE;
 
+  done = TRUE;
   g_main_context_wakeup (NULL);
 
   return G_SOURCE_REMOVE;
@@ -82,35 +114,40 @@ ensure_file_transfer_portal (void)
 {
   if (file_transfer_proxy == NULL)
     {
-      GError *error = NULL;
       GCancellable *cancellable;
+      GDBusConnection *bus = NULL;
 
       cancellable = g_cancellable_new ();
-
-      g_dbus_proxy_new_for_bus (G_BUS_TYPE_SESSION,
-                                G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES
-                                | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS
-                                | G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
-                                NULL,
-                                "org.freedesktop.portal.Documents",
-                                "/org/freedesktop/portal/documents",
-                                "org.freedesktop.portal.FileTransfer",
-                                cancellable,
-                                got_proxy,
-                                NULL);
-
-      timeout_id = g_timeout_add_full (1000, 0, give_up_on_proxy, cancellable, g_object_unref);
+ 
+      done = FALSE;
+      timeout_id = g_timeout_add_full (500, 0, give_up_on_proxy, cancellable, g_object_unref);
+      g_bus_get (G_BUS_TYPE_SESSION,
+                 cancellable,
+                 got_bus,
+                 &bus);
 
       while (!done)
         g_main_context_iteration (NULL, TRUE);
 
-      if (timeout_id)
-        g_source_remove (timeout_id);
-
-      if (error)
+      if (bus)
         {
-          g_debug ("Failed to get proxy: %s", error->message);
-          g_error_free (error);
+          timeout_id = g_timeout_add_full (500, 0, give_up_on_proxy, cancellable, g_object_unref);
+          g_dbus_proxy_new (bus,
+                            G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES
+                            | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS
+                            | G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
+                            NULL,
+                            "org.freedesktop.portal.Documents",
+                            "/org/freedesktop/portal/documents",
+                            "org.freedesktop.portal.FileTransfer",
+                            cancellable,
+                            got_proxy,
+                            NULL);
+
+          while (!done)
+            g_main_context_iteration (NULL, TRUE);
+
+          g_clear_object (&bus);
         }
     }
 
