@@ -115,12 +115,6 @@ gtk_css_number_value_transition (GtkCssValue *start,
 {
   GtkCssValue *result, *mul_start, *mul_end;
 
-  if (progress == 0)
-    return _gtk_css_value_ref (start);
-
-  if (progress == 1)
-    return _gtk_css_value_ref (end);
-
   if (start == end)
     return _gtk_css_value_ref (start);
 
