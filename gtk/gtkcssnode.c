@@ -111,6 +111,40 @@ enum {
 static guint cssnode_signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *cssnode_properties[NUM_PROPERTIES];
 
+static int recreated_styles;
+static int recomputed_change;
+static int self_change;
+static int parent_style_change;
+static int other_radical_change;
+static int changes[64];
+
+void print_recreated_styles (void);
+void print_recreated_styles (void)
+{
+  int i;
+  g_print ("recreated styles: %d, recomputed change: %d, self: %d parent: %d, other %d\n",
+           recreated_styles,
+           recomputed_change,
+           self_change,
+           parent_style_change,
+           other_radical_change);
+  for (i = 0; i < 64; i++)
+    {
+      if (changes[i])
+        {
+           char *s = gtk_css_change_to_string (1 << i);
+           g_print ("  %s %d\n", s, changes[i]);
+           g_free (s);
+           changes[i] = 0;
+        }
+    }
+  recreated_styles = 0;
+  recomputed_change = 0;
+  self_change = 0;
+  parent_style_change = 0;
+  other_radical_change = 0;
+}
+
 static GtkStyleProvider *
 gtk_css_node_get_style_provider_or_null (GtkCssNode *cssnode)
 {
@@ -379,6 +413,20 @@ gtk_css_node_create_style (GtkCssNode   *cssnode,
                                               parent,
                                               compute_change);
 
+  recreated_styles++;
+  if (compute_change)
+    recomputed_change++;
+
+#if 0
+  {
+    char *s = gtk_css_node_declaration_to_string (cssnode->decl);
+    char *c = gtk_css_change_to_string (((GtkCssStaticStyle *)style)->change);
+    g_print ("create style for %s: change %s (%s)\n", s, c, compute_change ? "recomputed" : "cached");
+    g_free (c);
+    g_free (s);
+  }
+#endif
+
   if (!compute_change)
     {
       GtkCssStyle *old_style = gtk_css_style_get_static_style (cssnode->style);
@@ -404,12 +452,30 @@ gtk_css_style_needs_recreation (GtkCssStyle  *style,
 
   /* Try to avoid invalidating if we can */
   if (change & GTK_CSS_RADICAL_CHANGE)
-    return TRUE;
+    {
+      if (change & GTK_CSS_CHANGE_PARENT_STYLE)
+        parent_style_change++;
+      else
+        other_radical_change++;
+
+      return TRUE;
+    }
 
   if (gtk_css_static_style_get_change (GTK_CSS_STATIC_STYLE (style)) & change)
-    return TRUE;
-  else
-    return FALSE;
+    {
+      int i;
+      GtkCssChange e = gtk_css_static_style_get_change (GTK_CSS_STATIC_STYLE (style)) & change;
+      self_change++;
+      for (i = 0; i < 64; i++)
+        {
+          if (e & (1 << i))
+            changes[i]++;
+        }
+
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static GtkCssStyle *
