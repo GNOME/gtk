@@ -383,10 +383,20 @@ gtk_css_matcher_any_get_state (const GtkCssMatcher *matcher)
 {
   /* XXX: This gets tricky when we implement :not() */
 
-  return GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_SELECTED
-    | GTK_STATE_FLAG_INSENSITIVE | GTK_STATE_FLAG_INCONSISTENT
-    | GTK_STATE_FLAG_FOCUSED | GTK_STATE_FLAG_BACKDROP | GTK_STATE_FLAG_LINK
-    | GTK_STATE_FLAG_VISITED;
+  return GTK_STATE_FLAG_ACTIVE |
+         GTK_STATE_FLAG_PRELIGHT |
+         GTK_STATE_FLAG_SELECTED |
+         GTK_STATE_FLAG_INSENSITIVE |
+         GTK_STATE_FLAG_INCONSISTENT |
+         GTK_STATE_FLAG_FOCUSED |
+         GTK_STATE_FLAG_BACKDROP |
+         GTK_STATE_FLAG_DIR_LTR |
+         GTK_STATE_FLAG_DIR_RTL |
+         GTK_STATE_FLAG_LINK |
+         GTK_STATE_FLAG_VISITED |
+         GTK_STATE_FLAG_CHECKED |
+         GTK_STATE_FLAG_DROP_ACTIVE |
+         GTK_STATE_FLAG_FOCUS_VISIBLE;
 }
 
 static gboolean
@@ -464,10 +474,20 @@ gtk_css_matcher_superset_get_state (const GtkCssMatcher *matcher)
   if (matcher->superset.relevant & GTK_CSS_CHANGE_STATE)
     return _gtk_css_matcher_get_state (matcher->superset.subset);
   else
-    return GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_SELECTED
-      | GTK_STATE_FLAG_INSENSITIVE | GTK_STATE_FLAG_INCONSISTENT
-      | GTK_STATE_FLAG_FOCUSED | GTK_STATE_FLAG_BACKDROP | GTK_STATE_FLAG_LINK
-      | GTK_STATE_FLAG_VISITED;
+    return GTK_STATE_FLAG_ACTIVE |
+           GTK_STATE_FLAG_PRELIGHT |
+           GTK_STATE_FLAG_SELECTED |
+           GTK_STATE_FLAG_INSENSITIVE |
+           GTK_STATE_FLAG_INCONSISTENT |
+           GTK_STATE_FLAG_FOCUSED |
+           GTK_STATE_FLAG_BACKDROP |
+           GTK_STATE_FLAG_DIR_LTR |
+           GTK_STATE_FLAG_DIR_RTL |
+           GTK_STATE_FLAG_LINK |
+           GTK_STATE_FLAG_VISITED |
+           GTK_STATE_FLAG_CHECKED |
+           GTK_STATE_FLAG_DROP_ACTIVE |
+           GTK_STATE_FLAG_FOCUS_VISIBLE;
 }
 
 static gboolean
