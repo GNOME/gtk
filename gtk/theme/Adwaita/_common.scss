@@ -63,7 +63,7 @@ image.drag-icon {
    Everytime a wildcard is used a kitten dies, painfully.
 */
 
-*:disabled { -gtk-icon-filter: opacity(0.5); }
+//*:disabled { -gtk-icon-filter: opacity(0.5); }
 
 .gtkstyle-fallback {
   color: $fg_color;
@@ -971,7 +971,8 @@ list row button.image-button:not(.flat) {
  *********/
 
 %link,
-*:link {
+//*:link
+{
   color: $link_color;
 
   &:visited {
