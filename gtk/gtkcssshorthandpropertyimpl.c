@@ -1143,18 +1143,26 @@ pack_font_description (GtkCssShorthandProperty *shorthand,
   v = (* query_func) (GTK_CSS_PROPERTY_FONT_FAMILY, query_data);
   if (v)
     {
-      int i;
-      GString *s = g_string_new ("");
-
-      for (i = 0; i < _gtk_css_array_value_get_n_values (v); i++)
+      if (_gtk_css_array_value_get_n_values (v) > 1)
         {
-          if (i > 0)
-            g_string_append (s, ",");
-          g_string_append (s, _gtk_css_string_value_get (_gtk_css_array_value_get_nth (v, i)));
-        }
+          int i;
+          GString *s = g_string_new ("");
 
-      pango_font_description_set_family (description, s->str);
-      g_string_free (s, TRUE);
+          for (i = 0; i < _gtk_css_array_value_get_n_values (v); i++)
+            {
+              if (i > 0)
+                g_string_append (s, ",");
+              g_string_append (s, _gtk_css_string_value_get (_gtk_css_array_value_get_nth (v, i)));
+            }
+
+          pango_font_description_set_family (description, s->str);
+          g_string_free (s, TRUE);
+        }
+      else
+        {
+          pango_font_description_set_family (description,
+                                             _gtk_css_string_value_get (_gtk_css_array_value_get_nth (v, 0)));
+        }
     }
 
   v = (* query_func) (GTK_CSS_PROPERTY_FONT_SIZE, query_data);
