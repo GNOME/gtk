@@ -72,12 +72,6 @@ gtk_css_value_dimension_compute (GtkCssValue      *number,
       g_assert_not_reached();
       G_GNUC_FALLTHROUGH;
     case GTK_CSS_PERCENT:
-      /* percentages for font sizes are computed, other percentages aren't */
-      if (property_id == GTK_CSS_PROPERTY_FONT_SIZE)
-        return gtk_css_dimension_value_new (number->value / 100.0 * 
-                                            get_base_font_size_px (property_id, provider, style, parent_style),
-                                            GTK_CSS_PX);
-      G_GNUC_FALLTHROUGH;
     case GTK_CSS_NUMBER:
     case GTK_CSS_PX:
     case GTK_CSS_DEG:
@@ -296,8 +290,8 @@ gtk_css_dimension_value_new (double     value,
   };
   static GtkCssValue percent_singletons[] = {
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, TRUE, GTK_CSS_PERCENT, 0 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, FALSE, GTK_CSS_PERCENT, 50 },
-    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, FALSE, GTK_CSS_PERCENT, 100 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, TRUE, GTK_CSS_PERCENT, 50 },
+    { &GTK_CSS_VALUE_DIMENSION.value_class, 1, TRUE, GTK_CSS_PERCENT, 100 },
   };
   static GtkCssValue second_singletons[] = {
     { &GTK_CSS_VALUE_DIMENSION.value_class, 1, TRUE, GTK_CSS_S, 0 },
@@ -379,6 +373,7 @@ gtk_css_dimension_value_new (double     value,
                         unit == GTK_CSS_NUMBER ||
                         unit == GTK_CSS_PX ||
                         unit == GTK_CSS_DEG ||
+                        unit == GTK_CSS_PERCENT ||
                         unit == GTK_CSS_S;
 
   return result;
