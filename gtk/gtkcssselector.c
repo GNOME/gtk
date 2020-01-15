@@ -728,6 +728,12 @@ comp_pseudoclass_state (const GtkCssSelector *a,
   return a->state.state - b->state.state;
 }
 
+#define GTK_CSS_CHANGE_PSEUDOCLASS_HOVER GTK_CSS_CHANGE_HOVER
+DEFINE_SIMPLE_SELECTOR(pseudoclass_hover, PSEUDOCLASS_HOVER, print_pseudoclass_state,
+                       match_pseudoclass_state, hash_pseudoclass_state, comp_pseudoclass_state,
+                       FALSE, TRUE, FALSE)
+#undef GTK_CSS_CHANGE_PSEUDOCLASS_HOVER
+
 #define GTK_CSS_CHANGE_PSEUDOCLASS_STATE GTK_CSS_CHANGE_STATE
 DEFINE_SIMPLE_SELECTOR(pseudoclass_state, PSEUDOCLASS_STATE, print_pseudoclass_state,
                        match_pseudoclass_state, hash_pseudoclass_state, comp_pseudoclass_state,
@@ -1288,9 +1294,14 @@ gtk_css_selector_parse_selector_pseudo_class (GtkCssParser   *parser,
             {
               if (pseudo_classes[i].state_flag)
                 {
-                  selector = gtk_css_selector_new (negate ? &GTK_CSS_SELECTOR_NOT_PSEUDOCLASS_STATE
-                                                          : &GTK_CSS_SELECTOR_PSEUDOCLASS_STATE,
-                                                   selector);
+                  if (pseudo_classes[i].state_flag == GTK_STATE_FLAG_PRELIGHT)
+                    selector = gtk_css_selector_new (negate ? &GTK_CSS_SELECTOR_NOT_PSEUDOCLASS_HOVER
+                                                            : &GTK_CSS_SELECTOR_PSEUDOCLASS_HOVER,
+                                                     selector);
+                  else
+                    selector = gtk_css_selector_new (negate ? &GTK_CSS_SELECTOR_NOT_PSEUDOCLASS_STATE
+                                                            : &GTK_CSS_SELECTOR_PSEUDOCLASS_STATE,
+                                                     selector);
                   selector->state.state = pseudo_classes[i].state_flag;
                 }
               else

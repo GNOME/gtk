@@ -74,19 +74,17 @@ _gtk_css_change_for_sibling (GtkCssChange match)
                     | GTK_CSS_CHANGE_LAST_CHILD \
                     | GTK_CSS_CHANGE_NTH_CHILD \
                     | GTK_CSS_CHANGE_NTH_LAST_CHILD \
-                    | GTK_CSS_CHANGE_STATE )
+                    | GTK_CSS_CHANGE_STATE \
+                    | GTK_CSS_CHANGE_HOVER)
 
 #define KEEP_STATES ( ~(BASE_STATES|GTK_CSS_CHANGE_SOURCE|GTK_CSS_CHANGE_PARENT_STYLE) \
                     | GTK_CSS_CHANGE_NTH_CHILD \
                     | GTK_CSS_CHANGE_NTH_LAST_CHILD)
 
-#define SIBLING_SHIFT 8
-
-  return (match & KEEP_STATES) | ((match & BASE_STATES) << SIBLING_SHIFT);
+  return (match & KEEP_STATES) | ((match & BASE_STATES) << GTK_CSS_CHANGE_SIBLING_SHIFT);
 
 #undef BASE_STATES
 #undef KEEP_STATES
-#undef SIBLING_SHIFT
 }
 
 GtkCssChange
@@ -100,6 +98,7 @@ _gtk_css_change_for_child (GtkCssChange match)
                     | GTK_CSS_CHANGE_NTH_CHILD \
                     | GTK_CSS_CHANGE_NTH_LAST_CHILD \
                     | GTK_CSS_CHANGE_STATE \
+                    | GTK_CSS_CHANGE_HOVER \
                     | GTK_CSS_CHANGE_SIBLING_CLASS \
                     | GTK_CSS_CHANGE_SIBLING_NAME \
                     | GTK_CSS_CHANGE_SIBLING_ID \
@@ -107,14 +106,15 @@ _gtk_css_change_for_child (GtkCssChange match)
                     | GTK_CSS_CHANGE_SIBLING_LAST_CHILD \
                     | GTK_CSS_CHANGE_SIBLING_NTH_CHILD \
                     | GTK_CSS_CHANGE_SIBLING_NTH_LAST_CHILD \
-                    | GTK_CSS_CHANGE_SIBLING_STATE )
+                    | GTK_CSS_CHANGE_SIBLING_STATE \
+                    | GTK_CSS_CHANGE_SIBLING_HOVER)
 
-#define PARENT_SHIFT 16
+#define KEEP_STATES (~(BASE_STATES|GTK_CSS_CHANGE_SOURCE|GTK_CSS_CHANGE_PARENT_STYLE))
 
-  return (match & ~(BASE_STATES|GTK_CSS_CHANGE_SOURCE|GTK_CSS_CHANGE_PARENT_STYLE)) | ((match & BASE_STATES) << PARENT_SHIFT);
+  return (match & KEEP_STATES) | ((match & BASE_STATES) << GTK_CSS_CHANGE_PARENT_SHIFT);
 
 #undef BASE_STATES
-#undef PARENT_SHIFT
+#undef KEEP_STATES
 }
 
 void
@@ -133,6 +133,8 @@ gtk_css_change_print (GtkCssChange  change,
     { GTK_CSS_CHANGE_NTH_CHILD, "nth-child" },
     { GTK_CSS_CHANGE_NTH_LAST_CHILD, "nth-last-child" },
     { GTK_CSS_CHANGE_STATE, "state" },
+    { GTK_CSS_CHANGE_HOVER, "hover" },
+
     { GTK_CSS_CHANGE_SIBLING_CLASS, "sibling-class" },
     { GTK_CSS_CHANGE_SIBLING_NAME, "sibling-name" },
     { GTK_CSS_CHANGE_SIBLING_ID, "sibling-id" },
@@ -141,6 +143,8 @@ gtk_css_change_print (GtkCssChange  change,
     { GTK_CSS_CHANGE_SIBLING_NTH_CHILD, "sibling-nth-child" },
     { GTK_CSS_CHANGE_SIBLING_NTH_LAST_CHILD, "sibling-nth-last-child" },
     { GTK_CSS_CHANGE_SIBLING_STATE, "sibling-state" },
+    { GTK_CSS_CHANGE_SIBLING_HOVER, "sibling-hover" },
+
     { GTK_CSS_CHANGE_PARENT_CLASS, "parent-class" },
     { GTK_CSS_CHANGE_PARENT_NAME, "parent-name" },
     { GTK_CSS_CHANGE_PARENT_ID, "parent-id" },
@@ -149,6 +153,8 @@ gtk_css_change_print (GtkCssChange  change,
     { GTK_CSS_CHANGE_PARENT_NTH_CHILD, "parent-nth-child" },
     { GTK_CSS_CHANGE_PARENT_NTH_LAST_CHILD, "parent-nth-last-child" },
     { GTK_CSS_CHANGE_PARENT_STATE, "parent-state" },
+    { GTK_CSS_CHANGE_PARENT_HOVER, "parent-hover" },
+
     { GTK_CSS_CHANGE_PARENT_SIBLING_CLASS, "parent-sibling-" },
     { GTK_CSS_CHANGE_PARENT_SIBLING_NAME, "parent-sibling-name" },
     { GTK_CSS_CHANGE_PARENT_SIBLING_ID, "parent-sibling-id" },
@@ -157,6 +163,8 @@ gtk_css_change_print (GtkCssChange  change,
     { GTK_CSS_CHANGE_PARENT_SIBLING_NTH_CHILD, "parent-sibling-nth-child" },
     { GTK_CSS_CHANGE_PARENT_SIBLING_NTH_LAST_CHILD, "parent-sibling-nth-last-child" },
     { GTK_CSS_CHANGE_PARENT_SIBLING_STATE, "parent-sibling-state" },
+    { GTK_CSS_CHANGE_PARENT_SIBLING_HOVER, "parent-sibling-hover" },
+
     { GTK_CSS_CHANGE_SOURCE, "source" },
     { GTK_CSS_CHANGE_PARENT_STYLE, "parent-style" },
     { GTK_CSS_CHANGE_TIMESTAMP, "timestamp" },
