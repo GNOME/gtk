@@ -99,11 +99,22 @@ done:
 }
 
 static void
+style_context_changed (GtkWidget *window, const char **output)
+{
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (window);
+
+  *output = gtk_style_context_to_string (context, GTK_STYLE_CONTEXT_PRINT_RECURSE |
+                                                  GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE);
+  g_main_context_wakeup (NULL);
+}
+
+static void
 load_ui_file (GFile *file, gboolean generate)
 {
   GtkBuilder *builder;
   GtkWidget *window;
-  GtkStyleContext *context;
   char *output, *diff;
   char *ui_file, *css_file, *reference_file;
   GtkCssProvider *provider;
@@ -125,10 +136,13 @@ load_ui_file (GFile *file, gboolean generate)
 
   g_assert (window != NULL);
 
-  context = gtk_widget_get_style_context (window);
+  output = NULL;
+  g_signal_connect (window, "map", G_CALLBACK (style_context_changed), &output);
 
-  output = gtk_style_context_to_string (context, GTK_STYLE_CONTEXT_PRINT_RECURSE |
-                                                 GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE);
+  gtk_widget_show (window);
+
+  while (!output)
+    g_main_context_iteration (NULL, FALSE);
 
   if (generate)
     {
