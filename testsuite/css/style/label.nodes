@@ -5,3 +5,5 @@
     font-family: "Comic Sans"; /* label.css:2:3-29 */
 
     label:dir(ltr)
+      font-size: 10px;
+      font-family: "Comic Sans";
