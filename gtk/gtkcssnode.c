@@ -1143,9 +1143,21 @@ void
 gtk_css_node_set_state (GtkCssNode    *cssnode,
                         GtkStateFlags  state_flags)
 {
+  GtkStateFlags old_state;
+
+  old_state = gtk_css_node_declaration_get_state (cssnode->decl);
+
   if (gtk_css_node_declaration_set_state (&cssnode->decl, state_flags))
     {
-      gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_STATE);
+      GtkStateFlags states = old_state ^ state_flags;
+      GtkCssChange change = 0;
+
+      if (states & GTK_STATE_FLAG_PRELIGHT)
+        change |= GTK_CSS_CHANGE_HOVER;
+      if (states & ~GTK_STATE_FLAG_PRELIGHT)
+        change |= GTK_CSS_CHANGE_STATE;
+
+      gtk_css_node_invalidate (cssnode, change);
       g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_STATE]);
     }
 }
