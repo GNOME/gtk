@@ -425,61 +425,40 @@ verify_tree_match_results (GtkCssProvider *provider,
 #endif
 }
 
-static void
-verify_tree_get_change_results (GtkCssProvider *provider,
-				const GtkCssMatcher *matcher,
-				GtkCssChange change)
+/* Compute the change flags for a given matcher.
+ * We assume that name, id and classes stay unchanged, and look for all rules
+ * that can be matched if anything else changes. We collect the change masks
+ * from the selectors of these rules.
+ */
+static GtkCssChange
+compute_change (GtkCssProvider      *provider,
+                const GtkCssMatcher *matcher)
 {
-#ifdef VERIFY_TREE
-  {
-    GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
-    GtkCssChange verify_change = 0;
-    GPtrArray *tree_rules;
-    int i;
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
+  GtkCssChange change = 0;
+  GPtrArray *tree_rules;
+  int i;
+  GtkCssMatcher change_matcher;
 
-    tree_rules = _gtk_css_selector_tree_match_all (priv->tree, matcher);
-    if (tree_rules)
-      {
-        verify_tree_match_results (provider, matcher, tree_rules);
+  _gtk_css_matcher_superset_init (&change_matcher, matcher, GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS);
 
-        for (i = tree_rules->len - 1; i >= 0; i--)
-          {
-	    GtkCssRuleset *ruleset;
+  tree_rules = _gtk_css_selector_tree_match_all (priv->tree, &change_matcher);
+  if (tree_rules)
+    {
+      for (i = tree_rules->len - 1; i >= 0; i--)
+        {
+	  GtkCssRuleset *ruleset;
 
-            ruleset = tree_rules->pdata[i];
+          ruleset = tree_rules->pdata[i];
 
-            verify_change |= _gtk_css_selector_get_change (ruleset->selector);
-          }
+          change |= _gtk_css_selector_get_change (ruleset->selector);
+        }
 
-        g_ptr_array_free (tree_rules, TRUE);
-      }
+      g_ptr_array_free (tree_rules, TRUE);
+   }
 
-    if (change != verify_change)
-      {
-	GString *s;
-
-	s = g_string_new ("");
-	g_string_append (s, "expected change ");
-        gtk_css_change_print (verify_change, s);
-        g_string_append (s, ", but it was ");
-        gtk_css_change_print (change, s);
-	if ((change & ~verify_change) != 0)
-          {
-	    g_string_append (s, ", unexpectedly set: ");
-            gtk_css_change_print (change & ~verify_change, s);
-          }
-	if ((~change & verify_change) != 0)
-          {
-	    g_string_append_printf (s, ", unexpectedly not set: ");
-            gtk_css_change_print (~change & verify_change, s);
-          }
-	g_warning (s->str);
-	g_string_free (s, TRUE);
-      }
-  }
-#endif
+  return change;
 }
-
 
 static GtkCssValue *
 gtk_css_style_provider_get_color (GtkStyleProvider *provider,
@@ -551,14 +530,7 @@ gtk_css_style_provider_lookup (GtkStyleProvider    *provider,
     }
 
   if (change)
-    {
-      GtkCssMatcher change_matcher;
-
-      _gtk_css_matcher_superset_init (&change_matcher, matcher, GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS);
-
-      *change = _gtk_css_selector_tree_get_change_all (priv->tree, &change_matcher);
-      verify_tree_get_change_results (css_provider, &change_matcher, *change);
-    }
+    *change = compute_change (css_provider, matcher);
 }
 
 static void
