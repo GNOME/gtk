@@ -57,6 +57,7 @@
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
 #include "gtkcssfontvariationsvalueprivate.h"
+#include "gtkcssfontsizevalueprivate.h"
 #include "gtktypebuiltins.h"
 
 /*** REGISTRATION ***/
@@ -695,21 +696,6 @@ dpi_parse (GtkCssStyleProperty *property,
   return _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
 }
 
-GtkCssValue *
-gtk_css_font_size_value_parse (GtkCssParser *parser)
-{
-  GtkCssValue *value;
-
-  value = _gtk_css_font_size_value_try_parse (parser);
-  if (value)
-    return value;
-
-  return _gtk_css_number_value_parse (parser,
-                                      GTK_CSS_PARSE_LENGTH
-                                      | GTK_CSS_PARSE_PERCENT
-                                      | GTK_CSS_POSITIVE_ONLY);
-}
-
 static GtkCssValue *
 font_size_parse (GtkCssStyleProperty *property,
                  GtkCssParser        *parser)
@@ -951,7 +937,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_TEXT_SIZE,
                                           font_size_parse,
                                           query_font_size,
-                                          _gtk_css_font_size_value_new (GTK_CSS_FONT_SIZE_MEDIUM));
+                                          gtk_css_font_size_value_new_enum (GTK_CSS_FONT_SIZE_MEDIUM));
   gtk_css_style_property_register        ("-gtk-icon-theme",
                                           GTK_CSS_PROPERTY_ICON_THEME,
                                           G_TYPE_NONE,

@@ -38,6 +38,7 @@
 #include "gtkcssrepeatvalueprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssvalueprivate.h"
+#include "gtkcssfontsizevalueprivate.h"
 #include "gtktypebuiltins.h"
 
 /* this is in case round() is not provided by the compiler, 
@@ -1159,7 +1160,7 @@ pack_font_description (GtkCssShorthandProperty *shorthand,
 
   v = (* query_func) (GTK_CSS_PROPERTY_FONT_SIZE, query_data);
   if (v)
-    pango_font_description_set_absolute_size (description, round (_gtk_css_number_value_get (v, 100) * PANGO_SCALE));
+    pango_font_description_set_absolute_size (description, round (gtk_css_font_size_value_get_value (v) * PANGO_SCALE));
 
   v = (* query_func) (GTK_CSS_PROPERTY_FONT_STYLE, query_data);
   if (v)
