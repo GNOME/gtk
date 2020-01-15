@@ -731,6 +731,18 @@ comp_pseudoclass_state (const GtkCssSelector *a,
   return a->state.state - b->state.state;
 }
 
+#define GTK_CSS_CHANGE_PSEUDOCLASS_HOVER GTK_CSS_CHANGE_HOVER
+DEFINE_SIMPLE_SELECTOR(pseudoclass_hover, PSEUDOCLASS_HOVER, print_pseudoclass_state,
+                       match_pseudoclass_state, hash_pseudoclass_state, comp_pseudoclass_state,
+                       FALSE, TRUE, FALSE)
+#undef GTK_CSS_CHANGE_PSEUDOCLASS_HOVER
+
+#define GTK_CSS_CHANGE_PSEUDOCLASS_ACTIVE GTK_CSS_CHANGE_ACTIVE
+DEFINE_SIMPLE_SELECTOR(pseudoclass_active, PSEUDOCLASS_ACTIVE, print_pseudoclass_state,
+                       match_pseudoclass_state, hash_pseudoclass_state, comp_pseudoclass_state,
+                       FALSE, TRUE, FALSE)
+#undef GTK_CSS_CHANGE_PSEUDOCLASS_ACTIVE
+
 #define GTK_CSS_CHANGE_PSEUDOCLASS_STATE GTK_CSS_CHANGE_STATE
 DEFINE_SIMPLE_SELECTOR(pseudoclass_state, PSEUDOCLASS_STATE, print_pseudoclass_state,
                        match_pseudoclass_state, hash_pseudoclass_state, comp_pseudoclass_state,
@@ -1272,8 +1284,6 @@ gtk_css_selector_parse_selector_pseudo_class (GtkCssParser   *parser,
         { "first-child",    0,                           POSITION_FORWARD,  0, 1 },
         { "last-child",     0,                           POSITION_BACKWARD, 0, 1 },
         { "only-child",     0,                           POSITION_ONLY,     0, 0 },
-        { "active",         GTK_STATE_FLAG_ACTIVE, },
-        { "hover",          GTK_STATE_FLAG_PRELIGHT, },
         { "selected",       GTK_STATE_FLAG_SELECTED, },
         { "disabled",       GTK_STATE_FLAG_INSENSITIVE, },
         { "indeterminate",  GTK_STATE_FLAG_INCONSISTENT, },
@@ -1308,6 +1318,26 @@ gtk_css_selector_parse_selector_pseudo_class (GtkCssParser   *parser,
               gtk_css_parser_consume_token (parser);
               return selector;
             }
+        }
+
+      if (g_ascii_strcasecmp ("hover", token->string.string) == 0)
+        {
+          selector = gtk_css_selector_new (negate ? &GTK_CSS_SELECTOR_NOT_PSEUDOCLASS_HOVER
+                                                  : &GTK_CSS_SELECTOR_PSEUDOCLASS_HOVER,
+                                           selector);
+          selector->state.state = GTK_STATE_FLAG_PRELIGHT;
+          gtk_css_parser_consume_token (parser);
+          return selector;
+        }
+          
+      if (g_ascii_strcasecmp ("active", token->string.string) == 0)
+        {
+          selector = gtk_css_selector_new (negate ? &GTK_CSS_SELECTOR_NOT_PSEUDOCLASS_ACTIVE
+                                                  : &GTK_CSS_SELECTOR_PSEUDOCLASS_ACTIVE,
+                                           selector);
+          selector->state.state = GTK_STATE_FLAG_ACTIVE;
+          gtk_css_parser_consume_token (parser);
+          return selector;
         }
           
       gtk_css_parser_error (parser,
