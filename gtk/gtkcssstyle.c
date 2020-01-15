@@ -126,10 +126,16 @@ gtk_css_style_print (GtkCssStyle *style,
                      gboolean     skip_initial)
 {
   guint i;
+  GtkCssStyle *default_style;
   gboolean retval = FALSE;
 
   g_return_val_if_fail (GTK_IS_CSS_STYLE (style), FALSE);
   g_return_val_if_fail (string != NULL, FALSE);
+
+  default_style = gtk_css_static_style_get_default ();
+
+  if (style == default_style)
+    g_string_append_printf (string, "%*sDEFAULT STYLE\n", indent, "");
 
   for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
     {
@@ -143,7 +149,6 @@ gtk_css_style_print (GtkCssStyle *style,
       if (skip_initial)
         { 
           GtkCssValue *initial = _gtk_css_style_property_get_initial_value (prop);
-          GtkCssStyle *default_style = gtk_css_static_style_get_default ();
           GtkCssValue *computed = _gtk_css_value_compute (initial, i,
                                                           GTK_STYLE_PROVIDER (gtk_settings_get_default ()),
                                                           default_style,
