@@ -159,6 +159,15 @@ gtk_css_matcher_widget_path_has_position (const GtkCssMatcher *matcher,
   return x / a >= 0;
 }
 
+static void
+gtk_css_matcher_widget_path_print (const GtkCssMatcher *matcher,
+                                   GString             *string)
+{
+  char *s = gtk_widget_path_to_string (matcher->path.path);
+  g_string_append (string, s);
+  g_free (s);
+}
+
 static const GtkCssMatcherClass GTK_CSS_MATCHER_WIDGET_PATH = {
   GTK_CSS_MATCHER_TYPE_WIDGET_PATH,
   gtk_css_matcher_widget_path_get_parent,
@@ -167,7 +176,8 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_WIDGET_PATH = {
   gtk_css_matcher_widget_path_has_name,
   gtk_css_matcher_widget_path_has_class,
   gtk_css_matcher_widget_path_has_id,
-  gtk_css_matcher_widget_path_has_position
+  gtk_css_matcher_widget_path_has_position,
+  gtk_css_matcher_widget_path_print
 };
 
 gboolean
@@ -335,6 +345,13 @@ gtk_css_matcher_node_has_position (const GtkCssMatcher *matcher,
                                          a, b);
 }
 
+static void
+gtk_css_matcher_node_print (const GtkCssMatcher *matcher,
+                            GString             *string)
+{
+  gtk_css_node_print (matcher->node.node, 0, string, 0);
+}
+
 static const GtkCssMatcherClass GTK_CSS_MATCHER_NODE = {
   GTK_CSS_MATCHER_TYPE_NODE,
   gtk_css_matcher_node_get_parent,
@@ -343,7 +360,8 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_NODE = {
   gtk_css_matcher_node_has_name,
   gtk_css_matcher_node_has_class,
   gtk_css_matcher_node_has_id,
-  gtk_css_matcher_node_has_position
+  gtk_css_matcher_node_has_position,
+  gtk_css_matcher_node_print
 };
 
 void
@@ -420,6 +438,13 @@ gtk_css_matcher_any_has_position (const GtkCssMatcher *matcher,
   return TRUE;
 }
 
+static void
+gtk_css_matcher_any_print (const GtkCssMatcher *matcher,
+                           GString             *string)
+{
+  g_string_append (string, "ANY");
+}
+
 static const GtkCssMatcherClass GTK_CSS_MATCHER_ANY = {
   GTK_CSS_MATCHER_TYPE_ANY,
   gtk_css_matcher_any_get_parent,
@@ -428,7 +453,8 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_ANY = {
   gtk_css_matcher_any_has_name,
   gtk_css_matcher_any_has_class,
   gtk_css_matcher_any_has_id,
-  gtk_css_matcher_any_has_position
+  gtk_css_matcher_any_has_position,
+  gtk_css_matcher_any_print
 };
 
 void
@@ -496,6 +522,18 @@ gtk_css_matcher_superset_has_position (const GtkCssMatcher *matcher,
   return TRUE;
 }
 
+static void
+gtk_css_matcher_superset_print (const GtkCssMatcher *matcher,
+                                GString             *string)
+{
+  g_string_append (string, "SUPERSET(");
+  if (matcher->klass->type == GTK_CSS_MATCHER_TYPE_NODE)
+    gtk_css_node_print (matcher->node.node, 0, string, 0);
+  else
+    g_string_append (string, "...");
+  g_string_append (string, ")");
+}
+
 static const GtkCssMatcherClass GTK_CSS_MATCHER_SUPERSET = {
   0,
   gtk_css_matcher_superset_get_parent,
@@ -504,7 +542,8 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_SUPERSET = {
   gtk_css_matcher_superset_has_name,
   gtk_css_matcher_superset_has_class,
   gtk_css_matcher_superset_has_id,
-  gtk_css_matcher_superset_has_position
+  gtk_css_matcher_superset_has_position,
+  gtk_css_matcher_superset_print
 };
 
 void
@@ -545,4 +584,19 @@ _gtk_css_matcher_superset_init (GtkCssMatcher       *matcher,
     klass->get_state = subset->klass->get_state;
 
   matcher->klass = klass;
+}
+
+void
+gtk_css_matcher_print (const GtkCssMatcher *matcher,
+                       GString             *string)
+{
+  matcher->klass->print (matcher, string);
+}
+
+char *
+gtk_css_matcher_to_string (const GtkCssMatcher *matcher)
+{
+  GString *string = g_string_new ("");
+  gtk_css_matcher_print (matcher, string);
+  return g_string_free (string, FALSE);
 }
