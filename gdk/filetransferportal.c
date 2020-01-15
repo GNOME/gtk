@@ -120,7 +120,7 @@ ensure_file_transfer_portal (void)
       cancellable = g_cancellable_new ();
  
       done = FALSE;
-      timeout_id = g_timeout_add_full (500, 0, give_up_on_proxy, cancellable, g_object_unref);
+      timeout_id = g_timeout_add (500, give_up_on_proxy, cancellable);
       g_bus_get (G_BUS_TYPE_SESSION,
                  cancellable,
                  got_bus,
@@ -131,7 +131,8 @@ ensure_file_transfer_portal (void)
 
       if (bus)
         {
-          timeout_id = g_timeout_add_full (500, 0, give_up_on_proxy, cancellable, g_object_unref);
+          done = FALSE;
+          timeout_id = g_timeout_add (500, give_up_on_proxy, cancellable);
           g_dbus_proxy_new (bus,
                             G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES
                             | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS
@@ -149,6 +150,8 @@ ensure_file_transfer_portal (void)
 
           g_clear_object (&bus);
         }
+
+      g_clear_object (&cancellable);
     }
 
   if (file_transfer_proxy)
