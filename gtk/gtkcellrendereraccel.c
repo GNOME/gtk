@@ -491,6 +491,7 @@ struct _GtkCellEditableWidget
   gchar *path;
   GtkCellRenderer *cell;
   GtkWidget *label;
+  gboolean is_modifier;
 };
 
 enum {
@@ -523,8 +524,9 @@ key_controller_modifiers (GtkEventControllerKey *key,
                           GdkModifierType        state,
                           GtkWidget             *widget)
 {
-  /* Ignore modifiers */
-  return TRUE;
+  GtkCellEditableWidget *box = (GtkCellEditableWidget*)widget;
+  box->is_modifier = TRUE;
+  return FALSE;
 }
 
 static gboolean
@@ -542,7 +544,9 @@ key_controller_key_pressed (GtkEventControllerKey *key,
   GdkModifierType consumed_modifiers;
   GdkDisplay *display;
   guint group = 0;
+  gboolean is_modifier = box->is_modifier;
 
+  box->is_modifier = FALSE;
   display = gtk_widget_get_display (widget);
   group = gtk_event_controller_key_get_group (key);
 
@@ -583,6 +587,24 @@ key_controller_key_pressed (GtkEventControllerKey *key,
   /* Put shift back if it changed the case of the key, not otherwise. */
   if (accel_key != keyval)
     accel_mods |= GDK_SHIFT_MASK;
+
+  switch (box->accel_mode)
+    {
+    case GTK_CELL_RENDERER_ACCEL_MODE_GTK:
+    case GTK_CELL_RENDERER_ACCEL_MODE_OTHER:
+      if (is_modifier)
+        return TRUE;
+      break;
+    case GTK_CELL_RENDERER_ACCEL_MODE_DOUBLE_MODIFIER:
+      if ((!is_modifier && accel_mods != 0) || (is_modifier && accel_mods == 0))
+        return TRUE;
+      break;
+    case GTK_CELL_RENDERER_ACCEL_MODE_SINGLE_MODIFIER:
+      if ((!is_modifier && accel_mods != 0) || (is_modifier && accel_mods != 0))
+        return TRUE;
+      break;
+    default:;
+    }
 
   if (accel_mods == 0)
     {
@@ -737,6 +759,7 @@ gtk_cell_editable_widget_init (GtkCellEditableWidget *box)
   GtkEventController *controller;
 
   gtk_widget_set_can_focus (widget, TRUE);
+  box->is_modifier = FALSE;
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed",
