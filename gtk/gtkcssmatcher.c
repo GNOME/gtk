@@ -561,7 +561,7 @@ _gtk_css_matcher_superset_init (GtkCssMatcher       *matcher,
                                 GtkCssChange         relevant)
 {
   g_return_if_fail (subset != NULL);
-  g_return_if_fail ((relevant & ~(GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_STATE)) == 0);
+  g_return_if_fail ((relevant & ~(GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_STATE | GTK_CSS_CHANGE_HOVER)) == 0);
 
   switch (subset->klass->type)
     {
@@ -589,7 +589,7 @@ _gtk_css_matcher_superset_init (GtkCssMatcher       *matcher,
     klass->has_id = subset->klass->has_id;
   if (relevant & GTK_CSS_CHANGE_POSITION)
     klass->has_position = subset->klass->has_position;
-  if (relevant & GTK_CSS_CHANGE_STATE)
+  if (relevant & (GTK_CSS_CHANGE_STATE|GTK_CSS_CHANGE_HOVER))
     klass->get_state = subset->klass->get_state;
 
   matcher->klass = klass;
