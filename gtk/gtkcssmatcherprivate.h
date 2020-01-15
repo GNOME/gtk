@@ -29,7 +29,14 @@ typedef struct _GtkCssMatcherSuperset GtkCssMatcherSuperset;
 typedef struct _GtkCssMatcherWidgetPath GtkCssMatcherWidgetPath;
 typedef struct _GtkCssMatcherClass GtkCssMatcherClass;
 
+typedef enum {
+  GTK_CSS_MATCHER_TYPE_NODE,
+  GTK_CSS_MATCHER_TYPE_WIDGET_PATH,
+ GTK_CSS_MATCHER_TYPE_ANY
+} GtkCssMatcherType;
+
 struct _GtkCssMatcherClass {
+  GtkCssMatcherType type;
   gboolean        (* get_parent)                  (GtkCssMatcher          *matcher,
                                                    const GtkCssMatcher    *child);
   gboolean        (* get_previous)                (GtkCssMatcher          *matcher,
@@ -46,7 +53,6 @@ struct _GtkCssMatcherClass {
                                                    gboolean               forward,
                                                    int                    a,
                                                    int                    b);
-  gboolean is_any;
 };
 
 struct _GtkCssMatcherWidgetPath {
@@ -67,17 +73,10 @@ struct _GtkCssMatcherNode {
   guint                     n_classes;
 };
 
-struct _GtkCssMatcherSuperset {
-  const GtkCssMatcherClass *klass;
-  const GtkCssMatcher      *subset;
-  GtkCssChange              relevant;
-};
-
 union _GtkCssMatcher {
   const GtkCssMatcherClass *klass;
   GtkCssMatcherWidgetPath   path;
   GtkCssMatcherNode         node;
-  GtkCssMatcherSuperset     superset;
 };
 
 gboolean          _gtk_css_matcher_init           (GtkCssMatcher          *matcher,
@@ -145,7 +144,7 @@ _gtk_css_matcher_has_position (const GtkCssMatcher *matcher,
 static inline gboolean
 _gtk_css_matcher_matches_any (const GtkCssMatcher *matcher)
 {
-  return matcher->klass->is_any;
+  return matcher->klass->type == GTK_CSS_MATCHER_TYPE_ANY;
 }
 
 
