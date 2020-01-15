@@ -160,14 +160,14 @@ gtk_css_matcher_widget_path_has_position (const GtkCssMatcher *matcher,
 }
 
 static const GtkCssMatcherClass GTK_CSS_MATCHER_WIDGET_PATH = {
+  GTK_CSS_MATCHER_TYPE_WIDGET_PATH,
   gtk_css_matcher_widget_path_get_parent,
   gtk_css_matcher_widget_path_get_previous,
   gtk_css_matcher_widget_path_get_state,
   gtk_css_matcher_widget_path_has_name,
   gtk_css_matcher_widget_path_has_class,
   gtk_css_matcher_widget_path_has_id,
-  gtk_css_matcher_widget_path_has_position,
-  FALSE
+  gtk_css_matcher_widget_path_has_position
 };
 
 gboolean
@@ -336,14 +336,14 @@ gtk_css_matcher_node_has_position (const GtkCssMatcher *matcher,
 }
 
 static const GtkCssMatcherClass GTK_CSS_MATCHER_NODE = {
+  GTK_CSS_MATCHER_TYPE_NODE,
   gtk_css_matcher_node_get_parent,
   gtk_css_matcher_node_get_previous,
   gtk_css_matcher_node_get_state,
   gtk_css_matcher_node_has_name,
   gtk_css_matcher_node_has_class,
   gtk_css_matcher_node_has_id,
-  gtk_css_matcher_node_has_position,
-  FALSE
+  gtk_css_matcher_node_has_position
 };
 
 void
@@ -421,14 +421,14 @@ gtk_css_matcher_any_has_position (const GtkCssMatcher *matcher,
 }
 
 static const GtkCssMatcherClass GTK_CSS_MATCHER_ANY = {
+  GTK_CSS_MATCHER_TYPE_ANY,
   gtk_css_matcher_any_get_parent,
   gtk_css_matcher_any_get_previous,
   gtk_css_matcher_any_get_state,
   gtk_css_matcher_any_has_name,
   gtk_css_matcher_any_has_class,
   gtk_css_matcher_any_has_id,
-  gtk_css_matcher_any_has_position,
-  TRUE
+  gtk_css_matcher_any_has_position
 };
 
 void
@@ -496,15 +496,15 @@ gtk_css_matcher_superset_has_position (const GtkCssMatcher *matcher,
   return TRUE;
 }
 
-static const GtkCssMatcherClass GTK_CSS_MATCHER_SUPERSET2 = {
+static const GtkCssMatcherClass GTK_CSS_MATCHER_SUPERSET = {
+  0,
   gtk_css_matcher_superset_get_parent,
   gtk_css_matcher_superset_get_previous,
   gtk_css_matcher_superset_get_state,
   gtk_css_matcher_superset_has_name,
   gtk_css_matcher_superset_has_class,
   gtk_css_matcher_superset_has_id,
-  gtk_css_matcher_superset_has_position,
-  FALSE
+  gtk_css_matcher_superset_has_position
 };
 
 void
@@ -516,7 +516,22 @@ _gtk_css_matcher_superset_init (GtkCssMatcher       *matcher,
   g_return_if_fail (subset != NULL);
   g_return_if_fail ((relevant & ~(GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_STATE)) == 0);
 
-  *klass = GTK_CSS_MATCHER_SUPERSET2;
+  switch (subset->klass->type)
+    {
+    case GTK_CSS_MATCHER_TYPE_NODE:
+      matcher->node = subset->node;
+      break;
+    case GTK_CSS_MATCHER_TYPE_WIDGET_PATH:
+      matcher->path = subset->path;
+      break;
+    case GTK_CSS_MATCHER_TYPE_ANY:
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
+  *klass = GTK_CSS_MATCHER_SUPERSET;
 
   if (relevant & GTK_CSS_CHANGE_CLASS)
     klass->has_class = subset->klass->has_class;
@@ -529,6 +544,5 @@ _gtk_css_matcher_superset_init (GtkCssMatcher       *matcher,
   if (relevant & GTK_CSS_CHANGE_STATE)
     klass->get_state = subset->klass->get_state;
 
-  *matcher = *subset;
   matcher->klass = klass;
 }
