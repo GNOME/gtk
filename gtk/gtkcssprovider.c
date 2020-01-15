@@ -537,7 +537,7 @@ gtk_css_style_provider_lookup (GtkStyleProvider    *provider,
       GtkCssMatcher change_matcher;
       GtkCssMatcherClass matcher_class;
 
-      _gtk_css_matcher_superset_init (&change_matcher, matcher, &matcher_class, GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_NAME);
+      _gtk_css_matcher_superset_init (&change_matcher, matcher, &matcher_class, GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_ID);
 
       *change = get_change (css_provider, &change_matcher);
     }
