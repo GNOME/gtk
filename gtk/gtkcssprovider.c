@@ -425,6 +425,33 @@ verify_tree_match_results (GtkCssProvider *provider,
 #endif
 }
 
+static GtkCssChange
+get_change (GtkCssProvider      *provider,
+            const GtkCssMatcher *matcher)
+{
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
+  GtkCssChange change = 0;
+  GPtrArray *tree_rules;
+  int i;
+
+  tree_rules = _gtk_css_selector_tree_match_all (priv->tree, matcher);
+  if (tree_rules)
+    {
+      for (i = tree_rules->len - 1; i >= 0; i--)
+        {
+	  GtkCssRuleset *ruleset;
+
+          ruleset = tree_rules->pdata[i];
+
+          change |= _gtk_css_selector_get_change (ruleset->selector);
+        }
+
+      g_ptr_array_free (tree_rules, TRUE);
+   }
+
+  return change;
+}
+
 static void
 verify_tree_get_change_results (GtkCssProvider *provider,
 				const GtkCssMatcher *matcher,
@@ -557,8 +584,7 @@ gtk_css_style_provider_lookup (GtkStyleProvider    *provider,
 
       _gtk_css_matcher_superset_init (&change_matcher, matcher, &matcher_class, GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_NAME);
 
-      *change = _gtk_css_selector_tree_get_change_all (priv->tree, &change_matcher);
-      verify_tree_get_change_results (css_provider, &change_matcher, *change);
+      *change = get_change (css_provider, &change_matcher);
     }
 }
 
@@ -745,7 +771,6 @@ parse_color_definition (GtkCssScanner *scanner)
   GtkCssValue *color;
   char *name;
 
-  if (!gtk_css_parser_try_at_keyword (scanner->parser, "define-color"))
     return FALSE;
 
   name = gtk_css_parser_consume_ident (scanner->parser);
