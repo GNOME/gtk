@@ -54,6 +54,8 @@ struct _GtkCssMatcherClass {
                                                    gboolean               forward,
                                                    int                    a,
                                                    int                    b);
+  void            (* print)                       (const GtkCssMatcher   *matcher,
+                                                   GString               *string);
 };
 
 struct _GtkCssMatcherWidgetPath {
@@ -94,6 +96,10 @@ void              _gtk_css_matcher_node_init      (GtkCssMatcher          *match
 void              _gtk_css_matcher_any_init       (GtkCssMatcher          *matcher);
 void              _gtk_css_matcher_superset_init  (GtkCssMatcher          *matcher,
                                                    const GtkCssMatcher    *subset);
+
+void              gtk_css_matcher_print           (const GtkCssMatcher    *matcher,
+                                                   GString                *string);
+char *            gtk_css_matcher_to_string       (const GtkCssMatcher    *matcher);
 
 
 static inline gboolean
@@ -151,7 +157,6 @@ _gtk_css_matcher_matches_any (const GtkCssMatcher *matcher)
 {
   return matcher->klass->type == GTK_CSS_MATCHER_TYPE_ANY;
 }
-
 
 G_END_DECLS
 
