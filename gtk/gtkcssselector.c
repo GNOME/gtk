@@ -30,13 +30,15 @@
 # include <intrin.h>
 #endif
 
+#undef PRINT_TREE
+
 typedef struct _GtkCssSelectorClass GtkCssSelectorClass;
 typedef gboolean (* GtkCssSelectorForeachFunc) (const GtkCssSelector *selector,
                                                 const GtkCssMatcher  *matcher,
                                                 gpointer              data);
 
 struct _GtkCssSelectorClass {
-  const char        *name;
+  const char         *name;
 
   void              (* print)       (const GtkCssSelector       *selector,
                                      GString                    *string);
@@ -1912,11 +1914,16 @@ _gtk_css_selector_tree_get_change_all (const GtkCssSelectorTree *tree,
 }
 
 #ifdef PRINT_TREE
+
 static void
-_gtk_css_selector_tree_print (const GtkCssSelectorTree *tree, GString *str, char *prefix)
+_gtk_css_selector_tree_print_recurse (const GtkCssSelectorTree *tree,
+                                      GString                  *str,
+                                      const char               *prefix,
+                                      GHashTable               *counts)
 {
   gboolean first = TRUE;
   int len, i;
+  int count;
 
   for (; tree != NULL; tree = gtk_css_selector_tree_get_sibling (tree), first = FALSE)
     {
@@ -1942,6 +1949,10 @@ _gtk_css_selector_tree_print (const GtkCssSelectorTree *tree, GString *str, char
       tree->selector.class->print (&tree->selector, str);
       len = str->len - len;
 
+      count = GPOINTER_TO_INT (g_hash_table_lookup (counts, (gpointer)tree->selector.class->name));
+      count++;
+      g_hash_table_insert (counts, (gpointer)tree->selector.class->name, GINT_TO_POINTER (count));
+
       if (gtk_css_selector_tree_get_previous (tree))
 	{
 	  GString *prefix2 = g_string_new (prefix);
@@ -1953,12 +1964,34 @@ _gtk_css_selector_tree_print (const GtkCssSelectorTree *tree, GString *str, char
 	  for (i = 0; i < len; i++)
 	    g_string_append_c (prefix2, ' ');
 
-	  _gtk_css_selector_tree_print (gtk_css_selector_tree_get_previous (tree), str, prefix2->str);
+	  _gtk_css_selector_tree_print_recurse (gtk_css_selector_tree_get_previous (tree), str, prefix2->str, counts);
 	  g_string_free (prefix2, TRUE);
 	}
       else
 	g_string_append (str, "\n");
     }
+}
+
+static void
+_gtk_css_selector_tree_print (const GtkCssSelectorTree *tree, GString *str, const char *prefix)
+{
+  GHashTable *counts;
+  GHashTableIter iter;
+  const char *key;
+  gpointer value;
+
+  counts = g_hash_table_new (g_str_hash, g_str_equal);
+
+  _gtk_css_selector_tree_print_recurse (tree, str, prefix, counts);
+
+  g_string_append (str, "\n\nSelector counts:\n");
+  g_hash_table_iter_init (&iter, counts);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&key, &value))
+    g_string_append_printf (str, "%-*s    %4d\n", (int)strlen ("not_pseudoclass_position"), key, GPOINTER_TO_INT (value));
+
+  g_string_append (str, "\n");
+
+  g_hash_table_unref (counts);
 }
 #endif
 
