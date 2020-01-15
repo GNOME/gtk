@@ -1877,78 +1877,10 @@ _gtk_css_selector_tree_match_all (const GtkCssSelectorTree *tree,
   return array;
 }
 
-/* When checking for changes via the tree we need to know if a rule further
-   down the tree matched, because if so we need to add "our bit" to the
-   Change. For instance in a match like *.class:active we'll
-   get a tree that first checks :active, if that matches we continue down
-   to the tree, and if we get a match we add CHANGE_CLASS. However, the
-   end of the tree where we have a match is an ANY which doesn't actually
-   modify the change, so we don't know if we have a match or not. We fix
-   this by setting GTK_CSS_CHANGE_GOT_MATCH which lets us guarantee
-   that change != 0 on any match. */
-#define GTK_CSS_CHANGE_GOT_MATCH GTK_CSS_CHANGE_RESERVED_BIT
-
-static GtkCssChange
-gtk_css_selector_tree_collect_change (const GtkCssSelectorTree *tree)
-{
-  GtkCssChange change = 0;
-  const GtkCssSelectorTree *prev;
-
-  for (prev = gtk_css_selector_tree_get_previous (tree);
-       prev != NULL;
-       prev = gtk_css_selector_tree_get_sibling (prev))
-    change |= gtk_css_selector_tree_collect_change (prev);
-
-  change = tree->selector.class->get_change (&tree->selector, change);
-
-  return change;
-}
-
-static GtkCssChange
-gtk_css_selector_tree_get_change (const GtkCssSelectorTree *tree,
-				  const GtkCssMatcher      *matcher)
-{
-  GtkCssChange change = 0;
-  const GtkCssSelectorTree *prev;
-
-  if (!gtk_css_selector_match (&tree->selector, matcher))
-    return 0;
-
-  if (!tree->selector.class->is_simple)
-    return gtk_css_selector_tree_collect_change (tree) | GTK_CSS_CHANGE_GOT_MATCH;
-
-  for (prev = gtk_css_selector_tree_get_previous (tree);
-       prev != NULL;
-       prev = gtk_css_selector_tree_get_sibling (prev))
-    change |= gtk_css_selector_tree_get_change (prev, matcher);
-
-  if (change || gtk_css_selector_tree_get_matches (tree))
-    change = tree->selector.class->get_change (&tree->selector, change & ~GTK_CSS_CHANGE_GOT_MATCH) | GTK_CSS_CHANGE_GOT_MATCH;
-
-  return change;
-}
-
 gboolean
 _gtk_css_selector_tree_is_empty (const GtkCssSelectorTree *tree)
 {
   return tree == NULL;
-}
-
-GtkCssChange
-_gtk_css_selector_tree_get_change_all (const GtkCssSelectorTree *tree,
-				       const GtkCssMatcher *matcher)
-{
-  GtkCssChange change;
-
-  change = 0;
-
-  /* no need to foreach here because we abort for non-simple selectors */
-  for (; tree != NULL;
-       tree = gtk_css_selector_tree_get_sibling (tree))
-    change |= gtk_css_selector_tree_get_change (tree, matcher);
-
-  /* Never return reserved bit set */
-  return change & ~GTK_CSS_CHANGE_RESERVED_BIT;
 }
 
 #ifdef PRINT_TREE
