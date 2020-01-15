@@ -469,9 +469,17 @@ static gboolean
 gtk_css_matcher_superset_get_parent (GtkCssMatcher       *matcher,
                                      const GtkCssMatcher *child)
 {
-  _gtk_css_matcher_any_init (matcher);
+  gboolean ret = TRUE;
 
-  return TRUE;
+  if (child->klass->type == GTK_CSS_MATCHER_TYPE_NODE)
+    {
+      ret = gtk_css_matcher_node_get_parent (matcher, child);
+      matcher->klass = child->klass;
+     }
+  else
+    _gtk_css_matcher_any_init (matcher);
+
+  return ret;
 }
 
 static gboolean
@@ -571,6 +579,7 @@ _gtk_css_matcher_superset_init (GtkCssMatcher       *matcher,
     }
 
   *klass = GTK_CSS_MATCHER_SUPERSET;
+  klass->type = subset->klass->type;
 
   if (relevant & GTK_CSS_CHANGE_CLASS)
     klass->has_class = subset->klass->has_class;
