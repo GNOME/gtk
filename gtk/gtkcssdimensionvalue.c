@@ -19,7 +19,7 @@
 
 #include "gtkcssdimensionvalueprivate.h"
 
-#include "gtkcssenumvalueprivate.h"
+#include "gtkcssfontsizevalueprivate.h"
 #include "gtkstylepropertyprivate.h"
 
 #include "fallback-c89.c"
