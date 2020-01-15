@@ -348,12 +348,14 @@ store_in_global_parent_cache (GtkCssNode                  *node,
 }
 
 static GtkCssStyle *
-gtk_css_node_create_style (GtkCssNode *cssnode)
+gtk_css_node_create_style (GtkCssNode   *cssnode,
+                           GtkCssChange  change)
 {
   const GtkCssNodeDeclaration *decl;
   GtkCssMatcher matcher;
   GtkCssStyle *parent;
   GtkCssStyle *style;
+  GtkCssChange change_flags;
 
   decl = gtk_css_node_get_declaration (cssnode);
 
@@ -363,14 +365,27 @@ gtk_css_node_create_style (GtkCssNode *cssnode)
 
   parent = cssnode->parent ? cssnode->parent->style : NULL;
 
+  if (change & (GTK_CSS_CHANGE_ID | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_SOURCE))
+    {
+      /* Need to recompute the change flags */
+      change_flags = 0;
+    }
+  else
+    {
+      style = gtk_css_style_get_static_style (cssnode->style);
+      change_flags = gtk_css_static_style_get_change (GTK_CSS_STATIC_STYLE (style));
+    }
+
   if (gtk_css_node_init_matcher (cssnode, &matcher))
     style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
                                               &matcher,
-                                              parent);
+                                              parent,
+                                              change_flags);
   else
     style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
                                               NULL,
-                                              parent);
+                                              parent,
+                                              change_flags);
 
   store_in_global_parent_cache (cssnode, decl, style);
 
@@ -410,7 +425,7 @@ gtk_css_node_real_update_style (GtkCssNode   *cssnode,
   static_style = gtk_css_style_get_static_style (style);
 
   if (gtk_css_style_needs_recreation (static_style, change))
-    new_static_style = gtk_css_node_create_style (cssnode);
+    new_static_style = gtk_css_node_create_style (cssnode, change);
   else
     new_static_style = g_object_ref (static_style);
 
