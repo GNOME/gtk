@@ -249,15 +249,6 @@ gtk_css_value_dimension_transition (GtkCssValue *start,
                                     guint        property_id,
                                     double       progress)
 {
-  if (progress == 0)
-    return _gtk_css_value_ref (start);
-
-  if (progress == 1)
-    return _gtk_css_value_ref (end);
-
-  if (start == end)
-    return _gtk_css_value_ref (start);
-
   if (start->unit != end->unit)
     return NULL;
 
