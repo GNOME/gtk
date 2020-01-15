@@ -1742,6 +1742,7 @@ handle_pointing_event (GdkEvent *event)
   switch ((guint) event->any.type)
     {
     case GDK_LEAVE_NOTIFY:
+      g_print ("LEAVE\n");
       if (event->crossing.mode == GDK_CROSSING_GRAB ||
           event->crossing.mode == GDK_CROSSING_UNGRAB)
         break;
@@ -1755,6 +1756,7 @@ handle_pointing_event (GdkEvent *event)
                                         event, event->crossing.mode);
       break;
     case GDK_ENTER_NOTIFY:
+      g_print ("ENTER\n");
       if (event->crossing.mode == GDK_CROSSING_GRAB ||
           event->crossing.mode == GDK_CROSSING_UNGRAB)
         break;
