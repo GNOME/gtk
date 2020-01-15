@@ -19,7 +19,7 @@
 
 #include "gtkcssdimensionvalueprivate.h"
 
-#include "gtkcssenumvalueprivate.h"
+#include "gtkcssfontsizevalueprivate.h"
 #include "gtkstylepropertyprivate.h"
 
 #include "fallback-c89.c"
@@ -45,12 +45,12 @@ get_base_font_size_px (guint             property_id,
   if (property_id == GTK_CSS_PROPERTY_FONT_SIZE)
     {
       if (parent_style)
-        return _gtk_css_number_value_get (gtk_css_style_get_value (parent_style, GTK_CSS_PROPERTY_FONT_SIZE), 100);
+        return gtk_css_font_size_value_get_value (gtk_css_style_get_value (parent_style, GTK_CSS_PROPERTY_FONT_SIZE));
       else
         return gtk_css_font_size_get_default_px (provider, style);
     }
 
-  return _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_SIZE), 100);
+  return gtk_css_font_size_value_get_value (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_SIZE));
 }
 
 static double
