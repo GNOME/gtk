@@ -53,10 +53,10 @@ gtk_css_style_real_is_static (GtkCssStyle *style)
   return TRUE;
 }
 
-static GtkCssStyle *
+static GtkCssStaticStyle *
 gtk_css_style_real_get_static_style (GtkCssStyle *style)
 {
-  return style;
+  return (GtkCssStaticStyle *)style;
 }
 
 static void
@@ -96,7 +96,7 @@ gtk_css_style_is_static (GtkCssStyle *style)
   return GTK_CSS_STYLE_GET_CLASS (style)->is_static (style);
 }
 
-GtkCssStyle *
+GtkCssStaticStyle *
 gtk_css_style_get_static_style (GtkCssStyle *style)
 {
   gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (style), NULL);
