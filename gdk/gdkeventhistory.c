@@ -605,6 +605,10 @@ gdk_event_history_supported (GdkEvent *event)
       return (event->scroll.direction == GDK_SCROLL_SMOOTH);
     case GDK_TOUCHPAD_SWIPE:
     case GDK_TOUCHPAD_PINCH:
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
       return TRUE;
     default:
       /* The event is unsupported */
