@@ -87,6 +87,11 @@
  * if we need to change things. */
 #define GTK_CSS_RADICAL_CHANGE (GTK_CSS_CHANGE_ID | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_SOURCE | GTK_CSS_CHANGE_PARENT_STYLE)
 
+/* When these change, we need to recompute the change flags for the new style
+ * since they may have changed.
+ */
+#define GTK_CSS_CHANGE_CHANGE (GTK_CSS_CHANGE_ID | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_SOURCE)
+
 G_DEFINE_TYPE (GtkCssNode, gtk_css_node, G_TYPE_OBJECT)
 
 enum {
@@ -365,7 +370,7 @@ gtk_css_node_create_style (GtkCssNode   *cssnode,
 
   parent = cssnode->parent ? cssnode->parent->style : NULL;
 
-  if (change & (GTK_CSS_CHANGE_ID | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_SOURCE))
+  if (change & GTK_CSS_CHANGE_CHANGE)
     {
       /* Need to recompute the change flags */
       change_flags = 0;
