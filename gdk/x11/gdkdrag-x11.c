@@ -1061,6 +1061,7 @@ xdnd_send_enter (GdkX11Drag *drag_x11)
 {
   GdkDrag *drag = GDK_DRAG (drag_x11);
   GdkDisplay *display = gdk_drag_get_display (drag);
+  GdkContentFormats *formats;
   const char * const *atoms;
   gsize i, n_atoms;
   XEvent xev;
@@ -1080,7 +1081,10 @@ xdnd_send_enter (GdkX11Drag *drag_x11)
   GDK_DISPLAY_NOTE (display, DND,
            g_message ("Sending enter source window %#lx XDND protocol version %d\n",
                       GDK_SURFACE_XID (drag_x11->ipc_surface), drag_x11->version));
-  atoms = gdk_content_formats_get_mime_types (gdk_drag_get_formats (drag), &n_atoms);
+  formats = gdk_content_formats_ref (gdk_drag_get_formats (drag));
+  formats = gdk_content_formats_union_serialize_mime_types (formats);
+
+  atoms = gdk_content_formats_get_mime_types (formats, &n_atoms);
 
   if (n_atoms > 3)
     {
@@ -1300,8 +1304,7 @@ xdnd_precache_atoms (GdkDisplay *display)
 /* Source side */
 
 static void
-gdk_drag_do_leave (GdkX11Drag *drag_x11,
-                   guint32            time)
+gdk_drag_do_leave (GdkX11Drag *drag_x11)
 {
   if (drag_x11->proxy_xid)
     {
@@ -1502,27 +1505,10 @@ gdk_x11_drag_drag_motion (GdkDrag *drag,
         }
     }
 
-  /* When we have a Xdnd target, make sure our XdndActionList
-   * matches the current actions;
-   */
-  if (protocol == GDK_DRAG_PROTO_XDND && drag_x11->xdnd_actions != gdk_drag_get_actions (drag))
-    {
-      if (proxy_xid)
-        {
-          GdkDisplay *display = gdk_drag_get_display (drag);
-          GdkDrop *drop = GDK_X11_DISPLAY (display)->current_drop;
-
-          if (drop && GDK_SURFACE_XID (gdk_drop_get_surface (drop)) == proxy_xid)
-            gdk_x11_drop_read_actions (drop);
-          else
-            xdnd_set_actions (drag_x11);
-        }
-    }
-
   if (drag_x11->proxy_xid != proxy_xid)
     {
       /* Send a leave to the last destination */
-      gdk_drag_do_leave (drag_x11, time);
+      gdk_drag_do_leave (drag_x11);
       drag_x11->drag_status = GDK_DRAG_STATUS_DRAG;
 
       /* Check if new destination accepts drags, and which protocol */
@@ -1556,6 +1542,23 @@ gdk_x11_drag_drag_motion (GdkDrag *drag,
        * the drag changed
        */
       drag_x11->current_action = gdk_drag_get_selected_action (drag);
+    }
+
+  /* When we have a Xdnd target, make sure our XdndActionList
+   * matches the current actions;
+   */
+  if (protocol == GDK_DRAG_PROTO_XDND && drag_x11->xdnd_actions != gdk_drag_get_actions (drag))
+    {
+      if (proxy_xid)
+        {
+          GdkDisplay *display = gdk_drag_get_display (drag);
+          GdkDrop *drop = GDK_X11_DISPLAY (display)->current_drop;
+
+          if (drop && GDK_SURFACE_XID (gdk_drop_get_surface (drop)) == proxy_xid)
+            gdk_x11_drop_read_actions (drop);
+          else
+            xdnd_set_actions (drag_x11);
+        }
     }
 
   /* Send a drag-motion event */
@@ -1814,6 +1817,7 @@ struct _GdkDragAnim {
 static void
 gdk_drag_anim_destroy (GdkDragAnim *anim)
 {
+  gdk_surface_hide (anim->drag->drag_surface);
   g_object_unref (anim->drag);
   g_slice_free (GdkDragAnim, anim);
 }
@@ -2137,6 +2141,7 @@ static void
 gdk_x11_drag_cancel (GdkDrag             *drag,
                      GdkDragCancelReason  reason)
 {
+  gdk_drag_do_leave (GDK_X11_DRAG (drag));
   drag_ungrab (drag);
   gdk_drag_drop_done (drag, FALSE);
 }
