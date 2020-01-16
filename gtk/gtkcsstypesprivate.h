@@ -93,7 +93,6 @@ typedef struct _GtkCssStaticStyle GtkCssStaticStyle;
 #define GTK_CSS_CHANGE_TIMESTAMP                      (1ULL << 50)
 #define GTK_CSS_CHANGE_ANIMATIONS                     (1ULL << 51)
 
-#define GTK_CSS_CHANGE_RESERVED_BIT                   (1ULL << 62) /* Used internally in gtkcssselector.c */
 
 typedef guint64 GtkCssChange;
 
