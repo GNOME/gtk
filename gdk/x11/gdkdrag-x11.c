@@ -1304,8 +1304,7 @@ xdnd_precache_atoms (GdkDisplay *display)
 /* Source side */
 
 static void
-gdk_drag_do_leave (GdkX11Drag *drag_x11,
-                   guint32            time)
+gdk_drag_do_leave (GdkX11Drag *drag_x11)
 {
   if (drag_x11->proxy_xid)
     {
@@ -1509,7 +1508,7 @@ gdk_x11_drag_drag_motion (GdkDrag *drag,
   if (drag_x11->proxy_xid != proxy_xid)
     {
       /* Send a leave to the last destination */
-      gdk_drag_do_leave (drag_x11, time);
+      gdk_drag_do_leave (drag_x11);
       drag_x11->drag_status = GDK_DRAG_STATUS_DRAG;
 
       /* Check if new destination accepts drags, and which protocol */
