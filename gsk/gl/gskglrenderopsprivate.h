@@ -73,6 +73,7 @@ struct _Program
       int outline_rect_location;
     } inset_shadow;
     struct {
+      int color_location;
       int outline_rect_location;
     } outset_shadow;
     struct {
