@@ -32,6 +32,7 @@
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssfontsizevalueprivate.h"
+#include "gtkcssfontvariationsvalueprivate.h"
 #include "gtkcssfontfeaturesvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstransitionprivate.h"
@@ -421,6 +422,7 @@ gtk_css_style_get_pango_font (GtkCssStyle *style)
 {
   PangoFontDescription *description;
   GtkCssValue *v;
+  char *str;
 
   description = pango_font_description_new ();
 
@@ -457,6 +459,11 @@ gtk_css_style_get_pango_font (GtkCssStyle *style)
 
   v = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_STRETCH);
   pango_font_description_set_stretch (description, _gtk_css_font_stretch_value_get (v));
+
+  v = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_VARIATION_SETTINGS);
+  str = gtk_css_font_variations_value_get_variations (v);
+  pango_font_description_set_variations (description, str);
+  g_free (str);
 
   return description;
 }
