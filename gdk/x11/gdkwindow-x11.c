@@ -1104,9 +1104,9 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
     {
       class = InputOutput;
 
-      xattributes.background_pixel = BlackPixel (xdisplay, x11_screen->screen_num);
+      xattributes.background_pixel = WhitePixel (xdisplay, x11_screen->screen_num);
 
-      xattributes.border_pixel = BlackPixel (xdisplay, x11_screen->screen_num);
+      xattributes.border_pixel = WhitePixel (xdisplay, x11_screen->screen_num);
       xattributes_mask |= CWBorderPixel | CWBackPixel;
 
       xattributes.bit_gravity = NorthWestGravity;
@@ -1176,7 +1176,8 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
   if (attributes_mask & GDK_WA_TYPE_HINT)
     gdk_window_set_type_hint (window, attributes->type_hint);
 
-  if (!window->input_only)
+  /* ask for a transparent background if alpha is actually supported on this window */
+  if (!window->input_only && window->visual == gdk_screen_get_rgba_visual(screen))
     gdk_window_x11_set_background (window, NULL);
 
   gdk_x11_event_source_select_events ((GdkEventSource *) display_x11->event_source,
