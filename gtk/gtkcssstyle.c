@@ -31,6 +31,7 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstringvalueprivate.h"
+#include "gtkcssfontsizevalueprivate.h"
 #include "gtkcssfontfeaturesvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstransitionprivate.h"
@@ -415,21 +416,47 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   return attrs;
 }
 
-static GtkCssValue *
-query_func (guint    id,
-            gpointer values)
-{
-  return gtk_css_style_get_value (values, id);
-}
-
 PangoFontDescription *
 gtk_css_style_get_pango_font (GtkCssStyle *style)
 {
-  GtkStyleProperty *prop;
-  GValue value = { 0, };
+  PangoFontDescription *description;
+  GtkCssValue *v;
 
-  prop = _gtk_style_property_lookup ("font");
-  _gtk_style_property_query (prop, &value, query_func, style);
+  description = pango_font_description_new ();
 
-  return (PangoFontDescription *)g_value_get_boxed (&value);
+  v = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_FAMILY);
+  if (_gtk_css_array_value_get_n_values (v) > 1)
+    {
+      int i;
+      GString *s = g_string_new ("");
+
+      for (i = 0; i < _gtk_css_array_value_get_n_values (v); i++)
+        {
+          if (i > 0)
+            g_string_append (s, ",");
+          g_string_append (s, _gtk_css_string_value_get (_gtk_css_array_value_get_nth (v, i)));
+        }
+
+      pango_font_description_set_family (description, s->str);
+      g_string_free (s, TRUE);
+    }
+  else
+    {
+      pango_font_description_set_family (description,
+                                         _gtk_css_string_value_get (_gtk_css_array_value_get_nth (v, 0)));
+    }
+
+  v = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_SIZE);
+  pango_font_description_set_absolute_size (description, round (gtk_css_font_size_value_get_value (v) * PANGO_SCALE));
+
+  v = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_STYLE);
+  pango_font_description_set_style (description, _gtk_css_font_style_value_get (v));
+
+  v = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_WEIGHT);
+  pango_font_description_set_weight (description, _gtk_css_number_value_get (v, 100));
+
+  v = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_STRETCH);
+  pango_font_description_set_stretch (description, _gtk_css_font_stretch_value_get (v));
+
+  return description;
 }

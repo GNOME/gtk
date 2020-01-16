@@ -6582,6 +6582,7 @@ static void
 update_pango_context (GtkWidget    *widget,
                       PangoContext *context)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   PangoFontDescription *font_desc;
   GtkStyleContext *style_context;
   GtkSettings *settings;
@@ -6590,9 +6591,7 @@ update_pango_context (GtkWidget    *widget,
   char *variations;
 
   style_context = _gtk_widget_get_style_context (widget);
-  gtk_style_context_get (style_context,
-                         "font", &font_desc,
-                         NULL);
+  font_desc = gtk_css_style_get_pango_font (gtk_css_node_get_style (priv->cssnode));
 
   value = _gtk_style_context_peek_property (_gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_FONT_VARIATION_SETTINGS);
   variations = gtk_css_font_variations_value_get_variations (value);
