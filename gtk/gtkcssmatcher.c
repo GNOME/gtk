@@ -23,7 +23,7 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkwidgetpath.h"
 
-/* GTK_CSS_MATCHER_WIDGET_PATH */
+/* GTK_CSS_MATCHER_PATH */
 
 static gboolean
 gtk_css_matcher_widget_path_get_parent (GtkCssMatcher       *matcher,
@@ -358,7 +358,7 @@ _gtk_css_matcher_node_init (GtkCssMatcher *matcher,
                                                                 &matcher->node.n_classes);
 }
 
-/* GTK_CSS_MATCHER_WIDGET_ANY */
+/* GTK_CSS_MATCHER_ANY */
 
 static gboolean
 gtk_css_matcher_any_get_parent (GtkCssMatcher       *matcher,
@@ -446,7 +446,7 @@ _gtk_css_matcher_any_init (GtkCssMatcher *matcher)
   matcher->klass = &GTK_CSS_MATCHER_ANY;
 }
 
-/* GTK_CSS_MATCHER_WIDGET_SUPERSET */
+/* GTK_CSS_MATCHER_SUPERSET */
 
 static gboolean
 gtk_css_matcher_superset_get_parent (GtkCssMatcher       *matcher,
