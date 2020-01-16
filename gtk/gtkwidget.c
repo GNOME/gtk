@@ -6583,15 +6583,14 @@ update_pango_context (GtkWidget    *widget,
                       PangoContext *context)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkCssStyle *style = gtk_css_node_get_style (priv->cssnode);
   PangoFontDescription *font_desc;
-  GtkStyleContext *style_context;
   GtkSettings *settings;
   cairo_font_options_t *font_options;
   GtkCssValue *value;
   char *variations;
 
-  style_context = _gtk_widget_get_style_context (widget);
-  font_desc = gtk_css_style_get_pango_font (gtk_css_node_get_style (priv->cssnode));
+  font_desc = gtk_css_style_get_pango_font (style);
 
   value = _gtk_style_context_peek_property (_gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_FONT_VARIATION_SETTINGS);
   variations = gtk_css_font_variations_value_get_variations (value);
@@ -6609,9 +6608,7 @@ update_pango_context (GtkWidget    *widget,
 
   pango_cairo_context_set_resolution (context,
                                       _gtk_css_number_value_get (
-                                          _gtk_style_context_peek_property (style_context,
-                                                                            GTK_CSS_PROPERTY_DPI),
-                                          100));
+                                          gtk_css_style_get_value (style, GTK_CSS_PROPERTY_DPI), 100));
 
   settings = gtk_widget_get_settings (widget);
   font_options = (cairo_font_options_t*)g_object_get_qdata (G_OBJECT (widget), quark_font_options);
