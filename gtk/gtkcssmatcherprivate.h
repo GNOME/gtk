@@ -70,7 +70,6 @@ struct _GtkCssMatcherNode {
 struct _GtkCssMatcherSuperset {
   const GtkCssMatcherClass *klass;
   const GtkCssMatcher      *subset;
-  GtkCssChange              relevant;
 };
 
 union _GtkCssMatcher {
@@ -87,8 +86,7 @@ void              _gtk_css_matcher_node_init      (GtkCssMatcher          *match
                                                    GtkCssNode             *node);
 void              _gtk_css_matcher_any_init       (GtkCssMatcher          *matcher);
 void              _gtk_css_matcher_superset_init  (GtkCssMatcher          *matcher,
-                                                   const GtkCssMatcher    *subset,
-                                                   GtkCssChange            relevant);
+                                                   const GtkCssMatcher    *subset);
 
 
 static inline gboolean
