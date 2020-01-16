@@ -7,14 +7,12 @@ typedef struct
 {
   GskRoundedRect outline;
   float blur_radius;
-  GdkRGBA color;
 } CacheKey;
 
 typedef struct
 {
   GskRoundedRect outline;
   float blur_radius;
-  GdkRGBA color;
 
   int texture_id;
   int unused_frames;
@@ -32,8 +30,7 @@ key_equal (const void *x,
          graphene_size_equal (&a->outline.corner[1], &b->outline.corner[1]) &&
          graphene_size_equal (&a->outline.corner[2], &b->outline.corner[2]) &&
          graphene_size_equal (&a->outline.corner[3], &b->outline.corner[3]) &&
-         graphene_rect_equal (&a->outline.bounds, &b->outline.bounds) &&
-         gdk_rgba_equal (&a->color, &b->color);
+         graphene_rect_equal (&a->outline.bounds, &b->outline.bounds);
 }
 
 void
@@ -91,7 +88,6 @@ int
 gsk_gl_shadow_cache_get_texture_id (GskGLShadowCache     *self,
                                     GskGLDriver          *gl_driver,
                                     const GskRoundedRect *shadow_rect,
-                                    const GdkRGBA        *color,
                                     float                 blur_radius)
 {
   CacheItem *item= NULL;
@@ -105,8 +101,8 @@ gsk_gl_shadow_cache_get_texture_id (GskGLShadowCache     *self,
     {
       CacheItem *k = &g_array_index (self->textures, CacheItem, i);
 
-      if (key_equal (&(CacheKey){*shadow_rect, blur_radius, *color},
-                     &(CacheKey){k->outline, k->blur_radius, k->color}))
+      if (key_equal (&(CacheKey){*shadow_rect, blur_radius},
+                     &(CacheKey){k->outline, k->blur_radius}))
         {
           item = k;
           break;
@@ -126,7 +122,6 @@ gsk_gl_shadow_cache_get_texture_id (GskGLShadowCache     *self,
 void
 gsk_gl_shadow_cache_commit (GskGLShadowCache     *self,
                             const GskRoundedRect *shadow_rect,
-                            const GdkRGBA        *color,
                             float                 blur_radius,
                             int                   texture_id)
 {
@@ -140,7 +135,6 @@ gsk_gl_shadow_cache_commit (GskGLShadowCache     *self,
   item = &g_array_index (self->textures, CacheItem, self->textures->len - 1);
 
   item->outline = *shadow_rect;
-  item->color = *color;
   item->blur_radius = blur_radius;
   item->unused_frames = 0;
   item->texture_id = texture_id;
