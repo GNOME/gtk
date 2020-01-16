@@ -1047,18 +1047,6 @@ gtk_css_provider_postprocess (GtkCssProvider *css_provider)
 
   priv->tree = _gtk_css_selector_tree_builder_build (builder);
   _gtk_css_selector_tree_builder_free (builder);
-
-#ifndef VERIFY_TREE
-  for (i = 0; i < priv->rulesets->len; i++)
-    {
-      GtkCssRuleset *ruleset;
-
-      ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
-
-      _gtk_css_selector_free (ruleset->selector);
-      ruleset->selector = NULL;
-    }
-#endif
 }
 
 static void
