@@ -70,15 +70,18 @@ gtk_css_image_fallback_snapshot (GtkCssImage *image,
 
   if (fallback->used < 0)
     {
-      GdkRGBA red = { 1, 0, 0, 1 };
-      const GdkRGBA *color;
-
       if (fallback->color)
-        color = gtk_css_color_value_get_rgba (fallback->color);
+        {
+          const GdkRGBA *color = gtk_css_color_value_get_rgba (fallback->color);
+          if (!gdk_rgba_is_clear (color))
+            gtk_snapshot_append_color (snapshot, color,
+                                       &GRAPHENE_RECT_INIT (0, 0, width, height));
+        }
       else
-        color = &red;
-
-      gtk_snapshot_append_color (snapshot, color, &GRAPHENE_RECT_INIT (0, 0, width, height));
+        {
+          gtk_snapshot_append_color (snapshot, &(GdkRGBA) {1, 0, 0, 1},
+                                     &GRAPHENE_RECT_INIT (0, 0, width, height));
+        }
     }
   else
     gtk_css_image_snapshot (fallback->images[fallback->used], snapshot, width, height);
