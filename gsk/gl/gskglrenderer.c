@@ -1665,6 +1665,7 @@ render_unblurred_outset_shadow_node (GskGLRenderer   *self,
   load_vertex_data (ops_draw (builder, NULL), node, builder);
 }
 
+static GdkRGBA COLOR_WHITE = { 1, 1, 1, 1 };
 static inline void
 render_outset_shadow_node (GskGLRenderer   *self,
                            GskRenderNode   *node,
@@ -1717,7 +1718,6 @@ render_outset_shadow_node (GskGLRenderer   *self,
   cached_tid = gsk_gl_shadow_cache_get_texture_id (&self->shadow_cache,
                                                    self->gl_driver,
                                                    &scaled_outline,
-                                                   color,
                                                    blur_radius);
 
   if (cached_tid == 0)
@@ -1749,7 +1749,7 @@ render_outset_shadow_node (GskGLRenderer   *self,
       /* Draw outline */
       ops_set_program (builder, &self->color_program);
       ops_push_clip (builder, &scaled_outline);
-      ops_set_color (builder, color);
+      ops_set_color (builder, &COLOR_WHITE);
       ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
         { { 0,                            }, { 0, 1 }, },
         { { 0,             texture_height }, { 0, 0 }, },
@@ -1776,7 +1776,6 @@ render_outset_shadow_node (GskGLRenderer   *self,
       gsk_gl_driver_mark_texture_permanent (self->gl_driver, blurred_texture_id);
       gsk_gl_shadow_cache_commit (&self->shadow_cache,
                                   &scaled_outline,
-                                  color,
                                   blur_radius,
                                   blurred_texture_id);
     }
@@ -1786,6 +1785,7 @@ render_outset_shadow_node (GskGLRenderer   *self,
     }
 
   ops_set_program (builder, &self->outset_shadow_program);
+  ops_set_color (builder, color);
   ops_set_texture (builder, blurred_texture_id);
 
   shadow = ops_begin (builder, OP_CHANGE_OUTSET_SHADOW);
@@ -2660,6 +2660,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   INIT_PROGRAM_UNIFORM_LOCATION (inset_shadow, outline_rect);
 
   /* outset shadow */
+  INIT_PROGRAM_UNIFORM_LOCATION (outset_shadow, color);
   INIT_PROGRAM_UNIFORM_LOCATION (outset_shadow, outline_rect);
 
   /* unblurred outset shadow */
