@@ -12235,6 +12235,7 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget   *widget,
                                          GtkSnapshot *snapshot)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+#ifdef G_ENABLE_DEBUG
   GdkDisplay *display = _gtk_widget_get_display (widget);
 
   if (GTK_DISPLAY_DEBUG_CHECK (display, BASELINES))
@@ -12255,7 +12256,6 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget   *widget,
         }
     }
 
-#ifdef G_ENABLE_DEBUG
   if (GTK_DISPLAY_DEBUG_CHECK (display, RESIZE) && priv->highlight_resize)
     {
       GdkRGBA blue = {0, 0, 1, 0.2};
