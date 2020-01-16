@@ -471,53 +471,41 @@ gtk_css_matcher_superset_get_state (const GtkCssMatcher *matcher)
 {
   /* XXX: This gets tricky when we implement :not() */
 
-  if (matcher->superset.relevant & GTK_CSS_CHANGE_STATE)
-    return _gtk_css_matcher_get_state (matcher->superset.subset);
-  else
-    return GTK_STATE_FLAG_ACTIVE |
-           GTK_STATE_FLAG_PRELIGHT |
-           GTK_STATE_FLAG_SELECTED |
-           GTK_STATE_FLAG_INSENSITIVE |
-           GTK_STATE_FLAG_INCONSISTENT |
-           GTK_STATE_FLAG_FOCUSED |
-           GTK_STATE_FLAG_BACKDROP |
-           GTK_STATE_FLAG_DIR_LTR |
-           GTK_STATE_FLAG_DIR_RTL |
-           GTK_STATE_FLAG_LINK |
-           GTK_STATE_FLAG_VISITED |
-           GTK_STATE_FLAG_CHECKED |
-           GTK_STATE_FLAG_DROP_ACTIVE |
-           GTK_STATE_FLAG_FOCUS_VISIBLE;
+  return GTK_STATE_FLAG_ACTIVE |
+         GTK_STATE_FLAG_PRELIGHT |
+         GTK_STATE_FLAG_SELECTED |
+         GTK_STATE_FLAG_INSENSITIVE |
+         GTK_STATE_FLAG_INCONSISTENT |
+         GTK_STATE_FLAG_FOCUSED |
+         GTK_STATE_FLAG_BACKDROP |
+         GTK_STATE_FLAG_DIR_LTR |
+         GTK_STATE_FLAG_DIR_RTL |
+         GTK_STATE_FLAG_LINK |
+         GTK_STATE_FLAG_VISITED |
+         GTK_STATE_FLAG_CHECKED |
+         GTK_STATE_FLAG_DROP_ACTIVE |
+         GTK_STATE_FLAG_FOCUS_VISIBLE;
 }
 
 static gboolean
 gtk_css_matcher_superset_has_name (const GtkCssMatcher     *matcher,
                                    /*interned*/ const char *name)
 {
-  if (matcher->superset.relevant & GTK_CSS_CHANGE_NAME)
-    return _gtk_css_matcher_has_name (matcher->superset.subset, name);
-  else
-    return TRUE;
+  return _gtk_css_matcher_has_name (matcher->superset.subset, name);
 }
 
 static gboolean
 gtk_css_matcher_superset_has_class (const GtkCssMatcher *matcher,
                                     GQuark               class_name)
 {
-  if (matcher->superset.relevant & GTK_CSS_CHANGE_CLASS)
-    return _gtk_css_matcher_has_class (matcher->superset.subset, class_name);
-  else
-    return TRUE;
+  return _gtk_css_matcher_has_class (matcher->superset.subset, class_name);
 }
 
 static gboolean
 gtk_css_matcher_superset_has_id (const GtkCssMatcher *matcher,
                                  const char          *id)
 {
-  if (matcher->superset.relevant & GTK_CSS_CHANGE_NAME)
-    return _gtk_css_matcher_has_id (matcher->superset.subset, id);
-  else
-    return TRUE;
+  return _gtk_css_matcher_has_id (matcher->superset.subset, id);
 }
 
 static gboolean
@@ -526,10 +514,7 @@ gtk_css_matcher_superset_has_position (const GtkCssMatcher *matcher,
                                        int                  a,
                                        int                  b)
 {
-  if (matcher->superset.relevant & GTK_CSS_CHANGE_POSITION)
-    return _gtk_css_matcher_has_position (matcher->superset.subset, forward, a, b);
-  else
-    return TRUE;
+  return TRUE;
 }
 
 static const GtkCssMatcherClass GTK_CSS_MATCHER_SUPERSET = {
@@ -545,14 +530,10 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_SUPERSET = {
 
 void
 _gtk_css_matcher_superset_init (GtkCssMatcher       *matcher,
-                                const GtkCssMatcher *subset,
-                                GtkCssChange         relevant)
+                                const GtkCssMatcher *subset)
 {
   g_return_if_fail (subset != NULL);
-  g_return_if_fail ((relevant & ~(GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_STATE | GTK_CSS_CHANGE_HOVER | GTK_CSS_CHANGE_DISABLED | GTK_CSS_CHANGE_BACKDROP | GTK_CSS_CHANGE_SELECTED)) == 0);
 
   matcher->superset.klass = &GTK_CSS_MATCHER_SUPERSET;
   matcher->superset.subset = subset;
-  matcher->superset.relevant = relevant;
 }
-
