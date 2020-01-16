@@ -2141,6 +2141,7 @@ static void
 gdk_x11_drag_cancel (GdkDrag             *drag,
                      GdkDragCancelReason  reason)
 {
+  gdk_drag_do_leave (GDK_X11_DRAG (drag));
   drag_ungrab (drag);
   gdk_drag_drop_done (drag, FALSE);
 }
