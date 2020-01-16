@@ -1151,8 +1151,11 @@ gtk_css_node_set_state (GtkCssNode    *cssnode,
         change |= GTK_CSS_CHANGE_HOVER;
       if (states & GTK_STATE_FLAG_INSENSITIVE)
         change |= GTK_CSS_CHANGE_DISABLED;
+      if (states & GTK_STATE_FLAG_BACKDROP)
+        change |= GTK_CSS_CHANGE_BACKDROP;
       if (states & ~(GTK_STATE_FLAG_PRELIGHT |
-                     GTK_STATE_FLAG_INSENSITIVE))
+                     GTK_STATE_FLAG_INSENSITIVE |
+                     GTK_STATE_FLAG_BACKDROP))
         change |= GTK_CSS_CHANGE_STATE;
 
       gtk_css_node_invalidate (cssnode, change);
