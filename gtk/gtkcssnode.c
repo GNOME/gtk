@@ -1158,6 +1158,8 @@ gtk_css_node_set_state (GtkCssNode    *cssnode,
         change |= GTK_CSS_CHANGE_DISABLED;
       if (states & ~GTK_STATE_FLAG_PRELIGHT)
         change |= GTK_CSS_CHANGE_STATE;
+      if (states & ~GTK_STATE_FLAG_BACKDROP)
+        change |= GTK_CSS_CHANGE_BACKDROP;
 
       gtk_css_node_invalidate (cssnode, change);
       g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_STATE]);
