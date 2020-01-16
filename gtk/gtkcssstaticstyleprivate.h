@@ -32,7 +32,6 @@ G_BEGIN_DECLS
 #define GTK_IS_CSS_STATIC_STYLE_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE (obj, GTK_TYPE_CSS_STATIC_STYLE))
 #define GTK_CSS_STATIC_STYLE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CSS_STATIC_STYLE, GtkCssStaticStyleClass))
 
-typedef struct _GtkCssStaticStyle           GtkCssStaticStyle;
 typedef struct _GtkCssStaticStyleClass      GtkCssStaticStyleClass;
 
 struct _GtkCssStaticStyle

@@ -407,7 +407,7 @@ gtk_css_node_real_update_style (GtkCssNode   *cssnode,
 {
   GtkCssStyle *static_style, *new_static_style, *new_style;
 
-  static_style = gtk_css_style_get_static_style (style);
+  static_style = GTK_CSS_STYLE (gtk_css_style_get_static_style (style));
 
   if (gtk_css_style_needs_recreation (static_style, change))
     new_static_style = gtk_css_node_create_style (cssnode);

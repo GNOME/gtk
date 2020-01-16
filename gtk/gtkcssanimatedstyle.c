@@ -79,13 +79,13 @@ gtk_css_animated_style_is_static (GtkCssStyle *style)
   return TRUE;
 }
 
-static GtkCssStyle *
+static GtkCssStaticStyle *
 gtk_css_animated_style_get_static_style (GtkCssStyle *style)
 {
   /* This is called a lot, so we avoid a dynamic type check here */
   GtkCssAnimatedStyle *animated = (GtkCssAnimatedStyle *) style;
 
-  return animated->style;
+  return (GtkCssStaticStyle *)animated->style;
 }
 
 static void

@@ -57,7 +57,7 @@ struct _GtkCssStyleClass
   /* TRUE if this style will require changes based on timestamp */
   gboolean              (* is_static)                           (GtkCssStyle            *style);
 
-  GtkCssStyle *         (* get_static_style)                    (GtkCssStyle            *style);
+  GtkCssStaticStyle *   (* get_static_style)                    (GtkCssStyle            *style);
 };
 
 GType                   gtk_css_style_get_type                  (void) G_GNUC_CONST;
@@ -76,7 +76,7 @@ gboolean                gtk_css_style_print                     (GtkCssStyle    
 PangoAttrList *         gtk_css_style_get_pango_attributes      (GtkCssStyle            *style);
 
 PangoFontDescription *  gtk_css_style_get_pango_font            (GtkCssStyle            *style);
-GtkCssStyle *           gtk_css_style_get_static_style          (GtkCssStyle            *style);
+GtkCssStaticStyle *     gtk_css_style_get_static_style          (GtkCssStyle            *style);
 
 G_END_DECLS
 
