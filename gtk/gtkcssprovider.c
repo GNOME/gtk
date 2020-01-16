@@ -435,30 +435,43 @@ get_change (GtkCssProvider      *provider,
   int i;
 
   tree_rules = _gtk_css_selector_tree_match_all (priv->tree, matcher);
+
+  {
+    char *s = gtk_css_matcher_to_string (matcher);
+    int  n = tree_rules ? tree_rules->len : 0;
+    g_print ("change for %s from %d rules:\n", s, n);
+    g_free (s);
+  }
+
   if (tree_rules)
     {
       for (i = tree_rules->len - 1; i >= 0; i--)
         {
 	  GtkCssRuleset *ruleset;
+          GtkCssChange new_change;
 
           ruleset = tree_rules->pdata[i];
 
-          change |= _gtk_css_selector_get_change (ruleset->selector);
+          new_change = _gtk_css_selector_get_change (ruleset->selector);
+
+          {
+            char *s = _gtk_css_selector_to_string (ruleset->selector);
+            char *d = gtk_css_change_to_string (new_change);
+            g_print ("  %s adds %s\n", s, d);
+            g_free (s);
+            g_free (d);
+          }
+          change |= new_change;
         }
 
       g_ptr_array_free (tree_rules, TRUE);
    }
 
-#if 0
   {
-    char *s = gtk_css_matcher_to_string (matcher);
     char *d = gtk_css_change_to_string (change);
-    int n = tree_rules ? tree_rules->len : 0;
-    g_print ("change for %s from %d rules: %s\n", s, n, d);
-    g_free (s);
+    g_print ("total: %s\n", d);
     g_free (d);
   }
-#endif
 
   return change;
 }
