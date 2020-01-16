@@ -339,8 +339,9 @@ _gdk_input_grab_pointer (GdkWindow      *window,
   GList *tmp_list;
   XEventClass event_classes[GDK_MAX_DEVICE_CLASSES];
   gint num_classes;
-  gint result;
+  gint result = Success;
   GdkDisplayX11 *display_impl  = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
+  int (*old_handler) (Display *, XErrorEvent *);
 
   tmp_list = display_impl->input_windows;
   need_ungrab = FALSE;
@@ -379,38 +380,50 @@ _gdk_input_grab_pointer (GdkWindow      *window,
 		result = GrabSuccess;
 	      else
 #endif
+		old_handler = XSetErrorHandler (ignore_errors);
 		result = XGrabDevice (display_impl->xdisplay, gdkdev->xdevice,
 				      GDK_WINDOW_XWINDOW (native_window),
 				      owner_events, num_classes, event_classes,
 				      GrabModeAsync, GrabModeAsync, time);
+		XSetErrorHandler (old_handler);
 
-	      /* FIXME: if failure occurs on something other than the first
-		 device, things will be badly inconsistent */
+	      /* if failure occurs on something other than the first
+	      * device, things will be badly inconsistent.
+	      * Break the loop and ungrab all previously grabbed devices.
+	      */
 	      if (result != Success)
-		return result;
+	        break;
 	    }
 	  tmp_list = tmp_list->next;
 	}
     }
-  else
+  if (! priv->extension_events || result != Success)
     {
-      tmp_list = display_impl->input_devices;
+      if (! priv->extension_events)
+        tmp_list = display_impl->input_devices;
+      else
+        tmp_list = tmp_list->prev;
       while (tmp_list)
 	{
 	  gdkdev = (GdkDevicePrivate *)tmp_list->data;
 	  if (!GDK_IS_CORE (gdkdev) && gdkdev->xdevice &&
 	      ((gdkdev->button_count != 0) || need_ungrab))
 	    {
+	      old_handler = XSetErrorHandler (ignore_errors);
 	      XUngrabDevice (display_impl->xdisplay, gdkdev->xdevice, time);
+	      XSetErrorHandler (old_handler);
 	      memset (gdkdev->button_state, 0, sizeof (gdkdev->button_state));
 	      gdkdev->button_count = 0;
 	    }
 
-	  tmp_list = tmp_list->next;
+	  if (! priv->extension_events)
+	    tmp_list = tmp_list->next;
+	  else
+	    tmp_list = tmp_list->prev;
 	}
     }
 
-  return Success;
+  return result;
 }
 
 void
@@ -433,6 +446,9 @@ _gdk_input_ungrab_pointer (GdkDisplay *display,
 
   if (tmp_list)			/* we found a grabbed window */
     {
+      int (*old_handler) (Display *, XErrorEvent *);
+
+      old_handler = XSetErrorHandler (ignore_errors);
       input_window->grabbed = FALSE;
 
       tmp_list = display_impl->input_devices;
@@ -444,6 +460,7 @@ _gdk_input_ungrab_pointer (GdkDisplay *display,
 
 	  tmp_list = tmp_list->next;
 	}
+      XSetErrorHandler (old_handler);
     }
 }
 

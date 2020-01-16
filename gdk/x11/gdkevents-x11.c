@@ -137,6 +137,12 @@ static GSourceFuncs event_funcs = {
   NULL
 };
 
+static int
+ignore_errors (Display *display, XErrorEvent *event)
+{
+  return True;
+}
+
 static GSource *
 gdk_display_source_new (GdkDisplay *display)
 {
@@ -156,7 +162,14 @@ gdk_display_source_new (GdkDisplay *display)
 static gboolean
 gdk_check_xpending (GdkDisplay *display)
 {
-  return XPending (GDK_DISPLAY_XDISPLAY (display));
+  gboolean pending;
+  int (*old_handler) (Display *, XErrorEvent *);
+
+  old_handler = XSetErrorHandler (ignore_errors);
+  pending = XPending (GDK_DISPLAY_XDISPLAY (display));
+  XSetErrorHandler (old_handler);
+
+  return pending;
 }
 
 /*********************************************
