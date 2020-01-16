@@ -1319,6 +1319,16 @@ gdk_event_get_absolute_interpolation_prop_names (const GdkEvent *event,
                                                  GArray         *names)
 {
   gboolean fetched = TRUE;
+  gint num_axes;
+  gint i;
+
+  /* We'll just return NULL for names after the 10th axis */
+  static char* axis_names[] = {
+    "axis_0", "axis_1", "axis_2", "axis_3", "axis_4",
+    "axis_5", "axis_6", "axis_7", "axis_8", "axis_9"
+  };
+
+  const gint axis_names_len = sizeof (axis_names) / sizeof (axis_names[0]);
 
   g_return_val_if_fail (event != NULL, FALSE);
   g_return_val_if_fail (names != NULL, FALSE);
@@ -1334,6 +1344,22 @@ gdk_event_get_absolute_interpolation_prop_names (const GdkEvent *event,
       // Doesn't have absolute properties for interpolation.
       g_array_set_size (names, 0);
       break;
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+      num_axes = gdk_device_get_n_axes (event->touch.device);
+      g_array_set_size (names, event->touch.axes ?  4 +  num_axes : 4);
+      g_array_index (names, char *, 0) = "x";
+      g_array_index (names, char *, 1) = "y";
+      g_array_index (names, char *, 2) = "x_root";
+      g_array_index (names, char *, 3) = "y_root";
+      if (event->touch.axes)
+        for (i = 0; i < num_axes; ++i)
+          g_array_index (names, char *, 4 + i) = i < axis_names_len ?
+                                                 axis_names[i] :
+                                                 NULL;
+      break;
     case GDK_CONFIGURE:
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
@@ -1341,10 +1367,6 @@ gdk_event_get_absolute_interpolation_prop_names (const GdkEvent *event,
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
-    case GDK_TOUCH_BEGIN:
-    case GDK_TOUCH_UPDATE:
-    case GDK_TOUCH_END:
-    case GDK_TOUCH_CANCEL:
     case GDK_MOTION_NOTIFY:
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
@@ -1376,6 +1398,8 @@ gdk_event_get_absolute_values_for_interpolation (const GdkEvent *event,
                                                  GArray         *values)
 {
   gboolean fetched = TRUE;
+  gint num_axes;
+  gint i;
 
   g_return_val_if_fail (event != NULL, FALSE);
   g_return_val_if_fail (values != NULL, FALSE);
@@ -1391,6 +1415,20 @@ gdk_event_get_absolute_values_for_interpolation (const GdkEvent *event,
       // Doesn't have absolute properties for interpolation.
       g_array_set_size (values, 0);
       break;
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+      num_axes = gdk_device_get_n_axes (event->touch.device);
+      g_array_set_size (values, event->touch.axes ?  4 +  num_axes : 4);
+      g_array_index (values, gdouble, 0) = event->touch.x;
+      g_array_index (values, gdouble, 1) = event->touch.y;
+      g_array_index (values, gdouble, 2) = event->touch.x_root;
+      g_array_index (values, gdouble, 3) = event->touch.y_root;
+      if (event->touch.axes)
+        for (i = 0; i < num_axes; ++i)
+          g_array_index (values, gdouble, 4 + i) = event->touch.axes[i];
+      break;
     case GDK_CONFIGURE:
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
@@ -1398,10 +1436,6 @@ gdk_event_get_absolute_values_for_interpolation (const GdkEvent *event,
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
-    case GDK_TOUCH_BEGIN:
-    case GDK_TOUCH_UPDATE:
-    case GDK_TOUCH_END:
-    case GDK_TOUCH_CANCEL:
     case GDK_MOTION_NOTIFY:
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
@@ -1431,6 +1465,8 @@ void
 gdk_event_set_interpolated_absolute_values (GdkEvent *event,
                                             GArray   *values)
 {
+  gint i;
+
   g_return_if_fail (event != NULL);
   g_return_if_fail (values != NULL);
 
@@ -1440,6 +1476,25 @@ gdk_event_set_interpolated_absolute_values (GdkEvent *event,
       g_return_if_fail (values->len == 1);
       event->touchpad_pinch.scale = g_array_index (values, gdouble, 0);
       break;
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+      g_return_if_fail (values->len >= 4);
+      event->touch.x = g_array_index (values, gdouble, 0);
+      event->touch.y = g_array_index (values, gdouble, 1);
+      event->touch.x_root = g_array_index (values, gdouble, 2);
+      event->touch.y_root = g_array_index (values, gdouble, 3);
+      if (values->len > 4)
+        {
+          guint num_axes = values->len - 4;
+          event->touch.axes = g_realloc (event->touch.axes,
+                                         sizeof (gdouble) * num_axes);
+
+          for (i = 0; i < num_axes; ++i)
+            event->touch.axes[i] = g_array_index (values, gdouble, 4 + i);
+        }
+      break;
     case GDK_SCROLL:
     case GDK_CONFIGURE:
     case GDK_ENTER_NOTIFY:
@@ -1448,10 +1503,6 @@ gdk_event_set_interpolated_absolute_values (GdkEvent *event,
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
-    case GDK_TOUCH_BEGIN:
-    case GDK_TOUCH_UPDATE:
-    case GDK_TOUCH_END:
-    case GDK_TOUCH_CANCEL:
     case GDK_MOTION_NOTIFY:
     case GDK_TOUCHPAD_SWIPE:
     case GDK_DRAG_ENTER:
