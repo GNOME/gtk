@@ -10830,15 +10830,14 @@ static void
 gtk_widget_update_alpha (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkStyleContext *context;
   gdouble opacity;
   guint8 alpha;
 
-  context = _gtk_widget_get_style_context (widget);
-  opacity =
-    _gtk_css_number_value_get (_gtk_style_context_peek_property (context,
-                                                                 GTK_CSS_PROPERTY_OPACITY),
-                               100);
+  opacity = _gtk_css_number_value_get (gtk_css_style_get_value (gtk_css_node_get_style (priv->cssnode),
+                                                                GTK_CSS_PROPERTY_OPACITY),
+                                       100);
+
+
   opacity = CLAMP (opacity, 0.0, 1.0);
   alpha = round (priv->user_alpha * opacity);
 
