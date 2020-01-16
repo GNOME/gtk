@@ -83,6 +83,12 @@ gtk_css_static_style_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_css_static_style_parent_class)->dispose (object);
 }
 
+static GtkCssStaticStyle *
+gtk_css_static_style_get_static_style (GtkCssStyle *style)
+{
+  return (GtkCssStaticStyle *)style;
+}
+
 static void
 gtk_css_static_style_class_init (GtkCssStaticStyleClass *klass)
 {
@@ -93,6 +99,7 @@ gtk_css_static_style_class_init (GtkCssStaticStyleClass *klass)
 
   style_class->get_value = gtk_css_static_style_get_value;
   style_class->get_section = gtk_css_static_style_get_section;
+  style_class->get_static_style = gtk_css_static_style_get_static_style;
 }
 
 static void
