@@ -1463,3 +1463,54 @@ gtk_css_node_print (GtkCssNode                *cssnode,
         gtk_css_node_print (node, flags, string, indent + 2);
     }
 }
+
+void print_css_node_stats (GtkCssNode *root);
+
+static int node_count;
+static int change_count[64];
+
+static void
+collect_css_node_stats (GtkCssNode *node)
+{
+  GtkCssStyle *style;
+  GtkCssChange change;
+  int i;
+
+  node_count++;
+
+  style = gtk_css_node_get_style (node);
+  style = gtk_css_style_get_static_style (style);
+  change = gtk_css_static_style_get_change (GTK_CSS_STATIC_STYLE (style));
+  for (i = 0; i < 64; i++)
+    {
+      if (change & (1ULL << i))
+        change_count[i]++;
+    }
+ 
+  for (node = gtk_css_node_get_first_child (node);
+       node != NULL;
+       node = gtk_css_node_get_next_sibling (node))
+    collect_css_node_stats (node);
+}
+
+void
+print_css_node_stats (GtkCssNode *root)
+{
+  int i;
+
+  collect_css_node_stats (root);
+  
+  g_print ("%d nodes\n", node_count);
+  node_count = 0;
+
+  for (i = 0; i < 64; i++)
+    {
+      if (change_count[i])
+        {
+          char *s = gtk_css_change_to_string (1ULL << i);
+          g_print ("%s %d\n", s, change_count[i]);
+          g_free (s);
+          change_count[i] = 0;
+        }
+    }
+}
