@@ -6008,11 +6008,14 @@ surface_size_changed (GtkWidget *widget,
   gtk_window_configure (GTK_WINDOW (widget), width, height);
 }
 
+extern void print_css_node_stats (GtkCssNode *root);
+
 static gboolean
 surface_render (GdkSurface     *surface,
                 cairo_region_t *region,
                 GtkWidget      *widget)
 {
+  print_css_node_stats (gtk_widget_get_css_node (widget));
   gtk_widget_render (widget, surface, region);
   return TRUE;
 }
