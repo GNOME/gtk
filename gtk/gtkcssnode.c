@@ -348,12 +348,14 @@ store_in_global_parent_cache (GtkCssNode                  *node,
 }
 
 static GtkCssStyle *
-gtk_css_node_create_style (GtkCssNode *cssnode)
+gtk_css_node_create_style (GtkCssNode   *cssnode,
+                           GtkCssChange  change)
 {
   const GtkCssNodeDeclaration *decl;
   GtkCssMatcher matcher;
   GtkCssStyle *parent;
   GtkCssStyle *style;
+  gboolean compute_change;
 
   decl = gtk_css_node_get_declaration (cssnode);
 
@@ -363,14 +365,24 @@ gtk_css_node_create_style (GtkCssNode *cssnode)
 
   parent = cssnode->parent ? cssnode->parent->style : NULL;
 
+  compute_change = change & (GTK_CSS_CHANGE_ID | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_SOURCE);
+
   if (gtk_css_node_init_matcher (cssnode, &matcher))
     style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
                                               &matcher,
-                                              parent);
+                                              parent,
+                                              compute_change);
   else
     style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
                                               NULL,
-                                              parent);
+                                              parent,
+                                              compute_change);
+
+  if (!compute_change)
+    {
+      GtkCssStyle *old_style = gtk_css_style_get_static_style (cssnode->style);
+      ((GtkCssStaticStyle *)style)->change = ((GtkCssStaticStyle *)old_style)->change;
+    }
 
   store_in_global_parent_cache (cssnode, decl, style);
 
@@ -407,17 +419,10 @@ gtk_css_node_real_update_style (GtkCssNode   *cssnode,
 {
   GtkCssStyle *static_style, *new_static_style, *new_style;
 
-  if (GTK_IS_CSS_ANIMATED_STYLE (style))
-    {
-      static_style = GTK_CSS_ANIMATED_STYLE (style)->style;
-    }
-  else
-    {
-      static_style = style;
-    }
+  static_style = gtk_css_style_get_static_style (style);
 
   if (gtk_css_style_needs_recreation (static_style, change))
-    new_static_style = gtk_css_node_create_style (cssnode);
+    new_static_style = gtk_css_node_create_style (cssnode, change);
   else
     new_static_style = g_object_ref (static_style);
 
@@ -436,7 +441,7 @@ gtk_css_node_real_update_style (GtkCssNode   *cssnode,
     }
   else if (static_style != style && (change & GTK_CSS_CHANGE_TIMESTAMP))
     {
-      new_style = gtk_css_animated_style_new_advance (GTK_CSS_ANIMATED_STYLE (style),
+      new_style = gtk_css_animated_style_new_advance ((GtkCssAnimatedStyle *)style,
                                                       static_style,
                                                       timestamp);
     }
@@ -1138,9 +1143,27 @@ void
 gtk_css_node_set_state (GtkCssNode    *cssnode,
                         GtkStateFlags  state_flags)
 {
+  GtkStateFlags old_state;
+
+  old_state = gtk_css_node_declaration_get_state (cssnode->decl);
+
   if (gtk_css_node_declaration_set_state (&cssnode->decl, state_flags))
     {
-      gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_STATE);
+      GtkStateFlags states = old_state ^ state_flags;
+      GtkCssChange change = 0;
+
+      if (states & GTK_STATE_FLAG_PRELIGHT)
+        change |= GTK_CSS_CHANGE_HOVER;
+      if (states & GTK_STATE_FLAG_INSENSITIVE)
+        change |= GTK_CSS_CHANGE_DISABLED;
+      if (states & ~GTK_STATE_FLAG_PRELIGHT)
+        change |= GTK_CSS_CHANGE_STATE;
+      if (states & ~GTK_STATE_FLAG_BACKDROP)
+        change |= GTK_CSS_CHANGE_BACKDROP;
+      if (states & ~GTK_STATE_FLAG_SELECTED)
+        change |= GTK_CSS_CHANGE_SELECTED;
+
+      gtk_css_node_invalidate (cssnode, change);
       g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_STATE]);
     }
 }

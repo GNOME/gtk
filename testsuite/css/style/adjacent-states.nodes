@@ -6,8 +6,20 @@
         check:dir(ltr):checked
       label#label1:dir(ltr)
         color: rgb(255,0,0); /* adjacent-states.css:2:3-14 */
+        text-decoration-color: rgb(255,0,0);
+        border-top-color: rgb(255,0,0);
+        border-right-color: rgb(255,0,0);
+        border-bottom-color: rgb(255,0,0);
+        border-left-color: rgb(255,0,0);
+        outline-color: rgb(255,0,0);
     box.horizontal:dir(ltr)
       checkbutton:dir(ltr)
         check:dir(ltr)
       label#label2:dir(ltr)
         color: rgb(0,0,255); /* adjacent-states.css:6:3-15 */
+        text-decoration-color: rgb(0,0,255);
+        border-top-color: rgb(0,0,255);
+        border-right-color: rgb(0,0,255);
+        border-bottom-color: rgb(0,0,255);
+        border-left-color: rgb(0,0,255);
+        outline-color: rgb(0,0,255);

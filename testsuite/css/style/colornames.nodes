@@ -3,296 +3,1178 @@
   box.horizontal:dir(ltr)
     label#aliceblue:dir(ltr)
       color: rgb(240,248,255); /* colornames.css:1:19-36 */
+      text-decoration-color: rgb(240,248,255);
+      border-top-color: rgb(240,248,255);
+      border-right-color: rgb(240,248,255);
+      border-bottom-color: rgb(240,248,255);
+      border-left-color: rgb(240,248,255);
+      outline-color: rgb(240,248,255);
     label#antiquewhite:dir(ltr)
       color: rgb(250,235,215); /* colornames.css:2:22-42 */
+      text-decoration-color: rgb(250,235,215);
+      border-top-color: rgb(250,235,215);
+      border-right-color: rgb(250,235,215);
+      border-bottom-color: rgb(250,235,215);
+      border-left-color: rgb(250,235,215);
+      outline-color: rgb(250,235,215);
     label#aqua:dir(ltr)
       color: rgb(0,255,255); /* colornames.css:3:14-26 */
+      text-decoration-color: rgb(0,255,255);
+      border-top-color: rgb(0,255,255);
+      border-right-color: rgb(0,255,255);
+      border-bottom-color: rgb(0,255,255);
+      border-left-color: rgb(0,255,255);
+      outline-color: rgb(0,255,255);
     label#aquamarine:dir(ltr)
       color: rgb(127,255,212); /* colornames.css:4:20-38 */
+      text-decoration-color: rgb(127,255,212);
+      border-top-color: rgb(127,255,212);
+      border-right-color: rgb(127,255,212);
+      border-bottom-color: rgb(127,255,212);
+      border-left-color: rgb(127,255,212);
+      outline-color: rgb(127,255,212);
     label#azure:dir(ltr)
       color: rgb(240,255,255); /* colornames.css:5:15-28 */
+      text-decoration-color: rgb(240,255,255);
+      border-top-color: rgb(240,255,255);
+      border-right-color: rgb(240,255,255);
+      border-bottom-color: rgb(240,255,255);
+      border-left-color: rgb(240,255,255);
+      outline-color: rgb(240,255,255);
     label#beige:dir(ltr)
       color: rgb(245,245,220); /* colornames.css:6:15-28 */
+      text-decoration-color: rgb(245,245,220);
+      border-top-color: rgb(245,245,220);
+      border-right-color: rgb(245,245,220);
+      border-bottom-color: rgb(245,245,220);
+      border-left-color: rgb(245,245,220);
+      outline-color: rgb(245,245,220);
     label#bisque:dir(ltr)
       color: rgb(255,228,196); /* colornames.css:7:16-30 */
+      text-decoration-color: rgb(255,228,196);
+      border-top-color: rgb(255,228,196);
+      border-right-color: rgb(255,228,196);
+      border-bottom-color: rgb(255,228,196);
+      border-left-color: rgb(255,228,196);
+      outline-color: rgb(255,228,196);
     label#black:dir(ltr)
       color: rgb(0,0,0); /* colornames.css:8:15-28 */
+      text-decoration-color: rgb(0,0,0);
+      border-top-color: rgb(0,0,0);
+      border-right-color: rgb(0,0,0);
+      border-bottom-color: rgb(0,0,0);
+      border-left-color: rgb(0,0,0);
+      outline-color: rgb(0,0,0);
     label#blanchedalmond:dir(ltr)
       color: rgb(255,235,205); /* colornames.css:9:24-46 */
+      text-decoration-color: rgb(255,235,205);
+      border-top-color: rgb(255,235,205);
+      border-right-color: rgb(255,235,205);
+      border-bottom-color: rgb(255,235,205);
+      border-left-color: rgb(255,235,205);
+      outline-color: rgb(255,235,205);
     label#blue:dir(ltr)
       color: rgb(0,0,255); /* colornames.css:10:14-26 */
+      text-decoration-color: rgb(0,0,255);
+      border-top-color: rgb(0,0,255);
+      border-right-color: rgb(0,0,255);
+      border-bottom-color: rgb(0,0,255);
+      border-left-color: rgb(0,0,255);
+      outline-color: rgb(0,0,255);
     label#blueviolet:dir(ltr)
       color: rgb(138,43,226); /* colornames.css:11:20-38 */
+      text-decoration-color: rgb(138,43,226);
+      border-top-color: rgb(138,43,226);
+      border-right-color: rgb(138,43,226);
+      border-bottom-color: rgb(138,43,226);
+      border-left-color: rgb(138,43,226);
+      outline-color: rgb(138,43,226);
     label#brown:dir(ltr)
       color: rgb(165,42,42); /* colornames.css:12:15-28 */
+      text-decoration-color: rgb(165,42,42);
+      border-top-color: rgb(165,42,42);
+      border-right-color: rgb(165,42,42);
+      border-bottom-color: rgb(165,42,42);
+      border-left-color: rgb(165,42,42);
+      outline-color: rgb(165,42,42);
     label#burlywood:dir(ltr)
       color: rgb(222,184,135); /* colornames.css:13:19-36 */
+      text-decoration-color: rgb(222,184,135);
+      border-top-color: rgb(222,184,135);
+      border-right-color: rgb(222,184,135);
+      border-bottom-color: rgb(222,184,135);
+      border-left-color: rgb(222,184,135);
+      outline-color: rgb(222,184,135);
     label#cadetblue:dir(ltr)
       color: rgb(95,158,160); /* colornames.css:14:19-36 */
+      text-decoration-color: rgb(95,158,160);
+      border-top-color: rgb(95,158,160);
+      border-right-color: rgb(95,158,160);
+      border-bottom-color: rgb(95,158,160);
+      border-left-color: rgb(95,158,160);
+      outline-color: rgb(95,158,160);
     label#chartreuse:dir(ltr)
       color: rgb(127,255,0); /* colornames.css:15:20-38 */
+      text-decoration-color: rgb(127,255,0);
+      border-top-color: rgb(127,255,0);
+      border-right-color: rgb(127,255,0);
+      border-bottom-color: rgb(127,255,0);
+      border-left-color: rgb(127,255,0);
+      outline-color: rgb(127,255,0);
     label#chocolate:dir(ltr)
       color: rgb(210,105,30); /* colornames.css:16:19-36 */
+      text-decoration-color: rgb(210,105,30);
+      border-top-color: rgb(210,105,30);
+      border-right-color: rgb(210,105,30);
+      border-bottom-color: rgb(210,105,30);
+      border-left-color: rgb(210,105,30);
+      outline-color: rgb(210,105,30);
     label#coral:dir(ltr)
       color: rgb(255,127,80); /* colornames.css:17:15-28 */
+      text-decoration-color: rgb(255,127,80);
+      border-top-color: rgb(255,127,80);
+      border-right-color: rgb(255,127,80);
+      border-bottom-color: rgb(255,127,80);
+      border-left-color: rgb(255,127,80);
+      outline-color: rgb(255,127,80);
     label#cornflowerblue:dir(ltr)
       color: rgb(100,149,237); /* colornames.css:18:24-46 */
+      text-decoration-color: rgb(100,149,237);
+      border-top-color: rgb(100,149,237);
+      border-right-color: rgb(100,149,237);
+      border-bottom-color: rgb(100,149,237);
+      border-left-color: rgb(100,149,237);
+      outline-color: rgb(100,149,237);
     label#cornsilk:dir(ltr)
       color: rgb(255,248,220); /* colornames.css:19:18-34 */
+      text-decoration-color: rgb(255,248,220);
+      border-top-color: rgb(255,248,220);
+      border-right-color: rgb(255,248,220);
+      border-bottom-color: rgb(255,248,220);
+      border-left-color: rgb(255,248,220);
+      outline-color: rgb(255,248,220);
     label#crimson:dir(ltr)
       color: rgb(220,20,60); /* colornames.css:20:17-32 */
+      text-decoration-color: rgb(220,20,60);
+      border-top-color: rgb(220,20,60);
+      border-right-color: rgb(220,20,60);
+      border-bottom-color: rgb(220,20,60);
+      border-left-color: rgb(220,20,60);
+      outline-color: rgb(220,20,60);
     label#cyan:dir(ltr)
       color: rgb(0,255,255); /* colornames.css:21:14-26 */
+      text-decoration-color: rgb(0,255,255);
+      border-top-color: rgb(0,255,255);
+      border-right-color: rgb(0,255,255);
+      border-bottom-color: rgb(0,255,255);
+      border-left-color: rgb(0,255,255);
+      outline-color: rgb(0,255,255);
     label#darkblue:dir(ltr)
       color: rgb(0,0,139); /* colornames.css:22:18-34 */
+      text-decoration-color: rgb(0,0,139);
+      border-top-color: rgb(0,0,139);
+      border-right-color: rgb(0,0,139);
+      border-bottom-color: rgb(0,0,139);
+      border-left-color: rgb(0,0,139);
+      outline-color: rgb(0,0,139);
     label#darkcyan:dir(ltr)
       color: rgb(0,139,139); /* colornames.css:23:18-34 */
+      text-decoration-color: rgb(0,139,139);
+      border-top-color: rgb(0,139,139);
+      border-right-color: rgb(0,139,139);
+      border-bottom-color: rgb(0,139,139);
+      border-left-color: rgb(0,139,139);
+      outline-color: rgb(0,139,139);
     label#darkgoldenrod:dir(ltr)
       color: rgb(184,134,11); /* colornames.css:24:23-44 */
+      text-decoration-color: rgb(184,134,11);
+      border-top-color: rgb(184,134,11);
+      border-right-color: rgb(184,134,11);
+      border-bottom-color: rgb(184,134,11);
+      border-left-color: rgb(184,134,11);
+      outline-color: rgb(184,134,11);
     label#darkgray:dir(ltr)
       color: rgb(169,169,169); /* colornames.css:25:18-34 */
+      text-decoration-color: rgb(169,169,169);
+      border-top-color: rgb(169,169,169);
+      border-right-color: rgb(169,169,169);
+      border-bottom-color: rgb(169,169,169);
+      border-left-color: rgb(169,169,169);
+      outline-color: rgb(169,169,169);
     label#darkgreen:dir(ltr)
       color: rgb(0,100,0); /* colornames.css:26:19-36 */
+      text-decoration-color: rgb(0,100,0);
+      border-top-color: rgb(0,100,0);
+      border-right-color: rgb(0,100,0);
+      border-bottom-color: rgb(0,100,0);
+      border-left-color: rgb(0,100,0);
+      outline-color: rgb(0,100,0);
     label#darkgrey:dir(ltr)
       color: rgb(169,169,169); /* colornames.css:27:18-34 */
+      text-decoration-color: rgb(169,169,169);
+      border-top-color: rgb(169,169,169);
+      border-right-color: rgb(169,169,169);
+      border-bottom-color: rgb(169,169,169);
+      border-left-color: rgb(169,169,169);
+      outline-color: rgb(169,169,169);
     label#darkkhaki:dir(ltr)
       color: rgb(189,183,107); /* colornames.css:28:19-36 */
+      text-decoration-color: rgb(189,183,107);
+      border-top-color: rgb(189,183,107);
+      border-right-color: rgb(189,183,107);
+      border-bottom-color: rgb(189,183,107);
+      border-left-color: rgb(189,183,107);
+      outline-color: rgb(189,183,107);
     label#darkmagenta:dir(ltr)
       color: rgb(139,0,139); /* colornames.css:29:21-40 */
+      text-decoration-color: rgb(139,0,139);
+      border-top-color: rgb(139,0,139);
+      border-right-color: rgb(139,0,139);
+      border-bottom-color: rgb(139,0,139);
+      border-left-color: rgb(139,0,139);
+      outline-color: rgb(139,0,139);
     label#darkolivegreen:dir(ltr)
       color: rgb(85,107,47); /* colornames.css:30:24-46 */
+      text-decoration-color: rgb(85,107,47);
+      border-top-color: rgb(85,107,47);
+      border-right-color: rgb(85,107,47);
+      border-bottom-color: rgb(85,107,47);
+      border-left-color: rgb(85,107,47);
+      outline-color: rgb(85,107,47);
     label#darkorange:dir(ltr)
       color: rgb(255,140,0); /* colornames.css:31:20-38 */
+      text-decoration-color: rgb(255,140,0);
+      border-top-color: rgb(255,140,0);
+      border-right-color: rgb(255,140,0);
+      border-bottom-color: rgb(255,140,0);
+      border-left-color: rgb(255,140,0);
+      outline-color: rgb(255,140,0);
     label#darkorchid:dir(ltr)
       color: rgb(153,50,204); /* colornames.css:32:20-38 */
+      text-decoration-color: rgb(153,50,204);
+      border-top-color: rgb(153,50,204);
+      border-right-color: rgb(153,50,204);
+      border-bottom-color: rgb(153,50,204);
+      border-left-color: rgb(153,50,204);
+      outline-color: rgb(153,50,204);
     label#darkred:dir(ltr)
       color: rgb(139,0,0); /* colornames.css:33:17-32 */
+      text-decoration-color: rgb(139,0,0);
+      border-top-color: rgb(139,0,0);
+      border-right-color: rgb(139,0,0);
+      border-bottom-color: rgb(139,0,0);
+      border-left-color: rgb(139,0,0);
+      outline-color: rgb(139,0,0);
     label#darksalmon:dir(ltr)
       color: rgb(233,150,122); /* colornames.css:34:20-38 */
+      text-decoration-color: rgb(233,150,122);
+      border-top-color: rgb(233,150,122);
+      border-right-color: rgb(233,150,122);
+      border-bottom-color: rgb(233,150,122);
+      border-left-color: rgb(233,150,122);
+      outline-color: rgb(233,150,122);
     label#darkseagreen:dir(ltr)
       color: rgb(143,188,143); /* colornames.css:35:22-42 */
+      text-decoration-color: rgb(143,188,143);
+      border-top-color: rgb(143,188,143);
+      border-right-color: rgb(143,188,143);
+      border-bottom-color: rgb(143,188,143);
+      border-left-color: rgb(143,188,143);
+      outline-color: rgb(143,188,143);
     label#darkslateblue:dir(ltr)
       color: rgb(72,61,139); /* colornames.css:36:23-44 */
+      text-decoration-color: rgb(72,61,139);
+      border-top-color: rgb(72,61,139);
+      border-right-color: rgb(72,61,139);
+      border-bottom-color: rgb(72,61,139);
+      border-left-color: rgb(72,61,139);
+      outline-color: rgb(72,61,139);
     label#darkslategray:dir(ltr)
       color: rgb(47,79,79); /* colornames.css:37:23-44 */
+      text-decoration-color: rgb(47,79,79);
+      border-top-color: rgb(47,79,79);
+      border-right-color: rgb(47,79,79);
+      border-bottom-color: rgb(47,79,79);
+      border-left-color: rgb(47,79,79);
+      outline-color: rgb(47,79,79);
     label#darkslategrey:dir(ltr)
       color: rgb(47,79,79); /* colornames.css:38:23-44 */
+      text-decoration-color: rgb(47,79,79);
+      border-top-color: rgb(47,79,79);
+      border-right-color: rgb(47,79,79);
+      border-bottom-color: rgb(47,79,79);
+      border-left-color: rgb(47,79,79);
+      outline-color: rgb(47,79,79);
     label#darkturquoise:dir(ltr)
       color: rgb(0,206,209); /* colornames.css:39:23-44 */
+      text-decoration-color: rgb(0,206,209);
+      border-top-color: rgb(0,206,209);
+      border-right-color: rgb(0,206,209);
+      border-bottom-color: rgb(0,206,209);
+      border-left-color: rgb(0,206,209);
+      outline-color: rgb(0,206,209);
     label#darkviolet:dir(ltr)
       color: rgb(148,0,211); /* colornames.css:40:20-38 */
+      text-decoration-color: rgb(148,0,211);
+      border-top-color: rgb(148,0,211);
+      border-right-color: rgb(148,0,211);
+      border-bottom-color: rgb(148,0,211);
+      border-left-color: rgb(148,0,211);
+      outline-color: rgb(148,0,211);
     label#deeppink:dir(ltr)
       color: rgb(255,20,147); /* colornames.css:41:18-34 */
+      text-decoration-color: rgb(255,20,147);
+      border-top-color: rgb(255,20,147);
+      border-right-color: rgb(255,20,147);
+      border-bottom-color: rgb(255,20,147);
+      border-left-color: rgb(255,20,147);
+      outline-color: rgb(255,20,147);
     label#deepskyblue:dir(ltr)
       color: rgb(0,191,255); /* colornames.css:42:21-40 */
+      text-decoration-color: rgb(0,191,255);
+      border-top-color: rgb(0,191,255);
+      border-right-color: rgb(0,191,255);
+      border-bottom-color: rgb(0,191,255);
+      border-left-color: rgb(0,191,255);
+      outline-color: rgb(0,191,255);
     label#dimgray:dir(ltr)
       color: rgb(105,105,105); /* colornames.css:43:17-32 */
+      text-decoration-color: rgb(105,105,105);
+      border-top-color: rgb(105,105,105);
+      border-right-color: rgb(105,105,105);
+      border-bottom-color: rgb(105,105,105);
+      border-left-color: rgb(105,105,105);
+      outline-color: rgb(105,105,105);
     label#dimgrey:dir(ltr)
       color: rgb(105,105,105); /* colornames.css:44:17-32 */
+      text-decoration-color: rgb(105,105,105);
+      border-top-color: rgb(105,105,105);
+      border-right-color: rgb(105,105,105);
+      border-bottom-color: rgb(105,105,105);
+      border-left-color: rgb(105,105,105);
+      outline-color: rgb(105,105,105);
     label#dodgerblue:dir(ltr)
       color: rgb(30,144,255); /* colornames.css:45:20-38 */
+      text-decoration-color: rgb(30,144,255);
+      border-top-color: rgb(30,144,255);
+      border-right-color: rgb(30,144,255);
+      border-bottom-color: rgb(30,144,255);
+      border-left-color: rgb(30,144,255);
+      outline-color: rgb(30,144,255);
     label#firebrick:dir(ltr)
       color: rgb(178,34,34); /* colornames.css:46:19-36 */
+      text-decoration-color: rgb(178,34,34);
+      border-top-color: rgb(178,34,34);
+      border-right-color: rgb(178,34,34);
+      border-bottom-color: rgb(178,34,34);
+      border-left-color: rgb(178,34,34);
+      outline-color: rgb(178,34,34);
     label#floralwhite:dir(ltr)
       color: rgb(255,250,240); /* colornames.css:47:21-40 */
+      text-decoration-color: rgb(255,250,240);
+      border-top-color: rgb(255,250,240);
+      border-right-color: rgb(255,250,240);
+      border-bottom-color: rgb(255,250,240);
+      border-left-color: rgb(255,250,240);
+      outline-color: rgb(255,250,240);
     label#forestgreen:dir(ltr)
       color: rgb(34,139,34); /* colornames.css:48:21-40 */
+      text-decoration-color: rgb(34,139,34);
+      border-top-color: rgb(34,139,34);
+      border-right-color: rgb(34,139,34);
+      border-bottom-color: rgb(34,139,34);
+      border-left-color: rgb(34,139,34);
+      outline-color: rgb(34,139,34);
     label#fuchsia:dir(ltr)
       color: rgb(255,0,255); /* colornames.css:49:17-32 */
+      text-decoration-color: rgb(255,0,255);
+      border-top-color: rgb(255,0,255);
+      border-right-color: rgb(255,0,255);
+      border-bottom-color: rgb(255,0,255);
+      border-left-color: rgb(255,0,255);
+      outline-color: rgb(255,0,255);
     label#gainsboro:dir(ltr)
       color: rgb(220,220,220); /* colornames.css:50:19-36 */
+      text-decoration-color: rgb(220,220,220);
+      border-top-color: rgb(220,220,220);
+      border-right-color: rgb(220,220,220);
+      border-bottom-color: rgb(220,220,220);
+      border-left-color: rgb(220,220,220);
+      outline-color: rgb(220,220,220);
     label#ghostwhite:dir(ltr)
       color: rgb(248,248,255); /* colornames.css:51:20-38 */
+      text-decoration-color: rgb(248,248,255);
+      border-top-color: rgb(248,248,255);
+      border-right-color: rgb(248,248,255);
+      border-bottom-color: rgb(248,248,255);
+      border-left-color: rgb(248,248,255);
+      outline-color: rgb(248,248,255);
     label#gold:dir(ltr)
       color: rgb(255,215,0); /* colornames.css:52:14-26 */
+      text-decoration-color: rgb(255,215,0);
+      border-top-color: rgb(255,215,0);
+      border-right-color: rgb(255,215,0);
+      border-bottom-color: rgb(255,215,0);
+      border-left-color: rgb(255,215,0);
+      outline-color: rgb(255,215,0);
     label#goldenrod:dir(ltr)
       color: rgb(218,165,32); /* colornames.css:53:19-36 */
+      text-decoration-color: rgb(218,165,32);
+      border-top-color: rgb(218,165,32);
+      border-right-color: rgb(218,165,32);
+      border-bottom-color: rgb(218,165,32);
+      border-left-color: rgb(218,165,32);
+      outline-color: rgb(218,165,32);
     label#gray:dir(ltr)
       color: rgb(128,128,128); /* colornames.css:54:14-26 */
+      text-decoration-color: rgb(128,128,128);
+      border-top-color: rgb(128,128,128);
+      border-right-color: rgb(128,128,128);
+      border-bottom-color: rgb(128,128,128);
+      border-left-color: rgb(128,128,128);
+      outline-color: rgb(128,128,128);
     label#green:dir(ltr)
       color: rgb(0,128,0); /* colornames.css:55:15-28 */
+      text-decoration-color: rgb(0,128,0);
+      border-top-color: rgb(0,128,0);
+      border-right-color: rgb(0,128,0);
+      border-bottom-color: rgb(0,128,0);
+      border-left-color: rgb(0,128,0);
+      outline-color: rgb(0,128,0);
     label#greenyellow:dir(ltr)
       color: rgb(173,255,47); /* colornames.css:56:21-40 */
+      text-decoration-color: rgb(173,255,47);
+      border-top-color: rgb(173,255,47);
+      border-right-color: rgb(173,255,47);
+      border-bottom-color: rgb(173,255,47);
+      border-left-color: rgb(173,255,47);
+      outline-color: rgb(173,255,47);
     label#grey:dir(ltr)
       color: rgb(128,128,128); /* colornames.css:57:14-26 */
+      text-decoration-color: rgb(128,128,128);
+      border-top-color: rgb(128,128,128);
+      border-right-color: rgb(128,128,128);
+      border-bottom-color: rgb(128,128,128);
+      border-left-color: rgb(128,128,128);
+      outline-color: rgb(128,128,128);
     label#honeydew:dir(ltr)
       color: rgb(240,255,240); /* colornames.css:58:18-34 */
+      text-decoration-color: rgb(240,255,240);
+      border-top-color: rgb(240,255,240);
+      border-right-color: rgb(240,255,240);
+      border-bottom-color: rgb(240,255,240);
+      border-left-color: rgb(240,255,240);
+      outline-color: rgb(240,255,240);
     label#hotpink:dir(ltr)
       color: rgb(255,105,180); /* colornames.css:59:17-32 */
+      text-decoration-color: rgb(255,105,180);
+      border-top-color: rgb(255,105,180);
+      border-right-color: rgb(255,105,180);
+      border-bottom-color: rgb(255,105,180);
+      border-left-color: rgb(255,105,180);
+      outline-color: rgb(255,105,180);
     label#indianred:dir(ltr)
       color: rgb(205,92,92); /* colornames.css:60:19-36 */
+      text-decoration-color: rgb(205,92,92);
+      border-top-color: rgb(205,92,92);
+      border-right-color: rgb(205,92,92);
+      border-bottom-color: rgb(205,92,92);
+      border-left-color: rgb(205,92,92);
+      outline-color: rgb(205,92,92);
     label#indigo:dir(ltr)
       color: rgb(75,0,130); /* colornames.css:61:16-30 */
+      text-decoration-color: rgb(75,0,130);
+      border-top-color: rgb(75,0,130);
+      border-right-color: rgb(75,0,130);
+      border-bottom-color: rgb(75,0,130);
+      border-left-color: rgb(75,0,130);
+      outline-color: rgb(75,0,130);
     label#ivory:dir(ltr)
       color: rgb(255,255,240); /* colornames.css:62:15-28 */
+      text-decoration-color: rgb(255,255,240);
+      border-top-color: rgb(255,255,240);
+      border-right-color: rgb(255,255,240);
+      border-bottom-color: rgb(255,255,240);
+      border-left-color: rgb(255,255,240);
+      outline-color: rgb(255,255,240);
     label#khaki:dir(ltr)
       color: rgb(240,230,140); /* colornames.css:63:15-28 */
+      text-decoration-color: rgb(240,230,140);
+      border-top-color: rgb(240,230,140);
+      border-right-color: rgb(240,230,140);
+      border-bottom-color: rgb(240,230,140);
+      border-left-color: rgb(240,230,140);
+      outline-color: rgb(240,230,140);
     label#lavender:dir(ltr)
       color: rgb(230,230,250); /* colornames.css:64:18-34 */
+      text-decoration-color: rgb(230,230,250);
+      border-top-color: rgb(230,230,250);
+      border-right-color: rgb(230,230,250);
+      border-bottom-color: rgb(230,230,250);
+      border-left-color: rgb(230,230,250);
+      outline-color: rgb(230,230,250);
     label#lavenderblush:dir(ltr)
       color: rgb(255,240,245); /* colornames.css:65:23-44 */
+      text-decoration-color: rgb(255,240,245);
+      border-top-color: rgb(255,240,245);
+      border-right-color: rgb(255,240,245);
+      border-bottom-color: rgb(255,240,245);
+      border-left-color: rgb(255,240,245);
+      outline-color: rgb(255,240,245);
     label#lawngreen:dir(ltr)
       color: rgb(124,252,0); /* colornames.css:66:19-36 */
+      text-decoration-color: rgb(124,252,0);
+      border-top-color: rgb(124,252,0);
+      border-right-color: rgb(124,252,0);
+      border-bottom-color: rgb(124,252,0);
+      border-left-color: rgb(124,252,0);
+      outline-color: rgb(124,252,0);
     label#lemonchiffon:dir(ltr)
       color: rgb(255,250,205); /* colornames.css:67:22-42 */
+      text-decoration-color: rgb(255,250,205);
+      border-top-color: rgb(255,250,205);
+      border-right-color: rgb(255,250,205);
+      border-bottom-color: rgb(255,250,205);
+      border-left-color: rgb(255,250,205);
+      outline-color: rgb(255,250,205);
     label#lightblue:dir(ltr)
       color: rgb(173,216,230); /* colornames.css:68:19-36 */
+      text-decoration-color: rgb(173,216,230);
+      border-top-color: rgb(173,216,230);
+      border-right-color: rgb(173,216,230);
+      border-bottom-color: rgb(173,216,230);
+      border-left-color: rgb(173,216,230);
+      outline-color: rgb(173,216,230);
     label#lightcoral:dir(ltr)
       color: rgb(240,128,128); /* colornames.css:69:20-38 */
+      text-decoration-color: rgb(240,128,128);
+      border-top-color: rgb(240,128,128);
+      border-right-color: rgb(240,128,128);
+      border-bottom-color: rgb(240,128,128);
+      border-left-color: rgb(240,128,128);
+      outline-color: rgb(240,128,128);
     label#lightcyan:dir(ltr)
       color: rgb(224,255,255); /* colornames.css:70:19-36 */
+      text-decoration-color: rgb(224,255,255);
+      border-top-color: rgb(224,255,255);
+      border-right-color: rgb(224,255,255);
+      border-bottom-color: rgb(224,255,255);
+      border-left-color: rgb(224,255,255);
+      outline-color: rgb(224,255,255);
     label#lightgoldenrodyellow:dir(ltr)
       color: rgb(250,250,210); /* colornames.css:71:30-58 */
+      text-decoration-color: rgb(250,250,210);
+      border-top-color: rgb(250,250,210);
+      border-right-color: rgb(250,250,210);
+      border-bottom-color: rgb(250,250,210);
+      border-left-color: rgb(250,250,210);
+      outline-color: rgb(250,250,210);
     label#lightgray:dir(ltr)
       color: rgb(211,211,211); /* colornames.css:72:19-36 */
+      text-decoration-color: rgb(211,211,211);
+      border-top-color: rgb(211,211,211);
+      border-right-color: rgb(211,211,211);
+      border-bottom-color: rgb(211,211,211);
+      border-left-color: rgb(211,211,211);
+      outline-color: rgb(211,211,211);
     label#lightgreen:dir(ltr)
       color: rgb(144,238,144); /* colornames.css:73:20-38 */
+      text-decoration-color: rgb(144,238,144);
+      border-top-color: rgb(144,238,144);
+      border-right-color: rgb(144,238,144);
+      border-bottom-color: rgb(144,238,144);
+      border-left-color: rgb(144,238,144);
+      outline-color: rgb(144,238,144);
     label#lightgrey:dir(ltr)
       color: rgb(211,211,211); /* colornames.css:74:19-36 */
+      text-decoration-color: rgb(211,211,211);
+      border-top-color: rgb(211,211,211);
+      border-right-color: rgb(211,211,211);
+      border-bottom-color: rgb(211,211,211);
+      border-left-color: rgb(211,211,211);
+      outline-color: rgb(211,211,211);
     label#lightpink:dir(ltr)
       color: rgb(255,182,193); /* colornames.css:75:19-36 */
+      text-decoration-color: rgb(255,182,193);
+      border-top-color: rgb(255,182,193);
+      border-right-color: rgb(255,182,193);
+      border-bottom-color: rgb(255,182,193);
+      border-left-color: rgb(255,182,193);
+      outline-color: rgb(255,182,193);
     label#lightsalmon:dir(ltr)
       color: rgb(255,160,122); /* colornames.css:76:21-40 */
+      text-decoration-color: rgb(255,160,122);
+      border-top-color: rgb(255,160,122);
+      border-right-color: rgb(255,160,122);
+      border-bottom-color: rgb(255,160,122);
+      border-left-color: rgb(255,160,122);
+      outline-color: rgb(255,160,122);
     label#lightseagreen:dir(ltr)
       color: rgb(32,178,170); /* colornames.css:77:23-44 */
+      text-decoration-color: rgb(32,178,170);
+      border-top-color: rgb(32,178,170);
+      border-right-color: rgb(32,178,170);
+      border-bottom-color: rgb(32,178,170);
+      border-left-color: rgb(32,178,170);
+      outline-color: rgb(32,178,170);
     label#lightskyblue:dir(ltr)
       color: rgb(135,206,250); /* colornames.css:78:22-42 */
+      text-decoration-color: rgb(135,206,250);
+      border-top-color: rgb(135,206,250);
+      border-right-color: rgb(135,206,250);
+      border-bottom-color: rgb(135,206,250);
+      border-left-color: rgb(135,206,250);
+      outline-color: rgb(135,206,250);
     label#lightslategray:dir(ltr)
       color: rgb(119,136,153); /* colornames.css:79:24-46 */
+      text-decoration-color: rgb(119,136,153);
+      border-top-color: rgb(119,136,153);
+      border-right-color: rgb(119,136,153);
+      border-bottom-color: rgb(119,136,153);
+      border-left-color: rgb(119,136,153);
+      outline-color: rgb(119,136,153);
     label#lightslategrey:dir(ltr)
       color: rgb(119,136,153); /* colornames.css:80:24-46 */
+      text-decoration-color: rgb(119,136,153);
+      border-top-color: rgb(119,136,153);
+      border-right-color: rgb(119,136,153);
+      border-bottom-color: rgb(119,136,153);
+      border-left-color: rgb(119,136,153);
+      outline-color: rgb(119,136,153);
     label#lightsteelblue:dir(ltr)
       color: rgb(176,196,222); /* colornames.css:81:24-46 */
+      text-decoration-color: rgb(176,196,222);
+      border-top-color: rgb(176,196,222);
+      border-right-color: rgb(176,196,222);
+      border-bottom-color: rgb(176,196,222);
+      border-left-color: rgb(176,196,222);
+      outline-color: rgb(176,196,222);
     label#lightyellow:dir(ltr)
       color: rgb(255,255,224); /* colornames.css:82:21-40 */
+      text-decoration-color: rgb(255,255,224);
+      border-top-color: rgb(255,255,224);
+      border-right-color: rgb(255,255,224);
+      border-bottom-color: rgb(255,255,224);
+      border-left-color: rgb(255,255,224);
+      outline-color: rgb(255,255,224);
     label#lime:dir(ltr)
       color: rgb(0,255,0); /* colornames.css:83:14-26 */
+      text-decoration-color: rgb(0,255,0);
+      border-top-color: rgb(0,255,0);
+      border-right-color: rgb(0,255,0);
+      border-bottom-color: rgb(0,255,0);
+      border-left-color: rgb(0,255,0);
+      outline-color: rgb(0,255,0);
     label#limegreen:dir(ltr)
       color: rgb(50,205,50); /* colornames.css:84:19-36 */
+      text-decoration-color: rgb(50,205,50);
+      border-top-color: rgb(50,205,50);
+      border-right-color: rgb(50,205,50);
+      border-bottom-color: rgb(50,205,50);
+      border-left-color: rgb(50,205,50);
+      outline-color: rgb(50,205,50);
     label#linen:dir(ltr)
       color: rgb(250,240,230); /* colornames.css:85:15-28 */
+      text-decoration-color: rgb(250,240,230);
+      border-top-color: rgb(250,240,230);
+      border-right-color: rgb(250,240,230);
+      border-bottom-color: rgb(250,240,230);
+      border-left-color: rgb(250,240,230);
+      outline-color: rgb(250,240,230);
     label#magenta:dir(ltr)
       color: rgb(255,0,255); /* colornames.css:86:17-32 */
+      text-decoration-color: rgb(255,0,255);
+      border-top-color: rgb(255,0,255);
+      border-right-color: rgb(255,0,255);
+      border-bottom-color: rgb(255,0,255);
+      border-left-color: rgb(255,0,255);
+      outline-color: rgb(255,0,255);
     label#maroon:dir(ltr)
       color: rgb(128,0,0); /* colornames.css:87:16-30 */
+      text-decoration-color: rgb(128,0,0);
+      border-top-color: rgb(128,0,0);
+      border-right-color: rgb(128,0,0);
+      border-bottom-color: rgb(128,0,0);
+      border-left-color: rgb(128,0,0);
+      outline-color: rgb(128,0,0);
     label#mediumaquamarine:dir(ltr)
       color: rgb(102,205,170); /* colornames.css:88:26-50 */
+      text-decoration-color: rgb(102,205,170);
+      border-top-color: rgb(102,205,170);
+      border-right-color: rgb(102,205,170);
+      border-bottom-color: rgb(102,205,170);
+      border-left-color: rgb(102,205,170);
+      outline-color: rgb(102,205,170);
     label#mediumblue:dir(ltr)
       color: rgb(0,0,205); /* colornames.css:89:20-38 */
+      text-decoration-color: rgb(0,0,205);
+      border-top-color: rgb(0,0,205);
+      border-right-color: rgb(0,0,205);
+      border-bottom-color: rgb(0,0,205);
+      border-left-color: rgb(0,0,205);
+      outline-color: rgb(0,0,205);
     label#mediumorchid:dir(ltr)
       color: rgb(186,85,211); /* colornames.css:90:22-42 */
+      text-decoration-color: rgb(186,85,211);
+      border-top-color: rgb(186,85,211);
+      border-right-color: rgb(186,85,211);
+      border-bottom-color: rgb(186,85,211);
+      border-left-color: rgb(186,85,211);
+      outline-color: rgb(186,85,211);
     label#mediumpurple:dir(ltr)
       color: rgb(147,112,219); /* colornames.css:91:22-42 */
+      text-decoration-color: rgb(147,112,219);
+      border-top-color: rgb(147,112,219);
+      border-right-color: rgb(147,112,219);
+      border-bottom-color: rgb(147,112,219);
+      border-left-color: rgb(147,112,219);
+      outline-color: rgb(147,112,219);
     label#mediumseagreen:dir(ltr)
       color: rgb(60,179,113); /* colornames.css:92:24-46 */
+      text-decoration-color: rgb(60,179,113);
+      border-top-color: rgb(60,179,113);
+      border-right-color: rgb(60,179,113);
+      border-bottom-color: rgb(60,179,113);
+      border-left-color: rgb(60,179,113);
+      outline-color: rgb(60,179,113);
     label#mediumslateblue:dir(ltr)
       color: rgb(123,104,238); /* colornames.css:93:25-48 */
+      text-decoration-color: rgb(123,104,238);
+      border-top-color: rgb(123,104,238);
+      border-right-color: rgb(123,104,238);
+      border-bottom-color: rgb(123,104,238);
+      border-left-color: rgb(123,104,238);
+      outline-color: rgb(123,104,238);
     label#mediumspringgreen:dir(ltr)
       color: rgb(0,250,154); /* colornames.css:94:27-52 */
+      text-decoration-color: rgb(0,250,154);
+      border-top-color: rgb(0,250,154);
+      border-right-color: rgb(0,250,154);
+      border-bottom-color: rgb(0,250,154);
+      border-left-color: rgb(0,250,154);
+      outline-color: rgb(0,250,154);
     label#mediumturquoise:dir(ltr)
       color: rgb(72,209,204); /* colornames.css:95:25-48 */
+      text-decoration-color: rgb(72,209,204);
+      border-top-color: rgb(72,209,204);
+      border-right-color: rgb(72,209,204);
+      border-bottom-color: rgb(72,209,204);
+      border-left-color: rgb(72,209,204);
+      outline-color: rgb(72,209,204);
     label#mediumvioletred:dir(ltr)
       color: rgb(199,21,133); /* colornames.css:96:25-48 */
+      text-decoration-color: rgb(199,21,133);
+      border-top-color: rgb(199,21,133);
+      border-right-color: rgb(199,21,133);
+      border-bottom-color: rgb(199,21,133);
+      border-left-color: rgb(199,21,133);
+      outline-color: rgb(199,21,133);
     label#midnightblue:dir(ltr)
       color: rgb(25,25,112); /* colornames.css:97:22-42 */
+      text-decoration-color: rgb(25,25,112);
+      border-top-color: rgb(25,25,112);
+      border-right-color: rgb(25,25,112);
+      border-bottom-color: rgb(25,25,112);
+      border-left-color: rgb(25,25,112);
+      outline-color: rgb(25,25,112);
     label#mintcream:dir(ltr)
       color: rgb(245,255,250); /* colornames.css:98:19-36 */
+      text-decoration-color: rgb(245,255,250);
+      border-top-color: rgb(245,255,250);
+      border-right-color: rgb(245,255,250);
+      border-bottom-color: rgb(245,255,250);
+      border-left-color: rgb(245,255,250);
+      outline-color: rgb(245,255,250);
     label#mistyrose:dir(ltr)
       color: rgb(255,228,225); /* colornames.css:99:19-36 */
+      text-decoration-color: rgb(255,228,225);
+      border-top-color: rgb(255,228,225);
+      border-right-color: rgb(255,228,225);
+      border-bottom-color: rgb(255,228,225);
+      border-left-color: rgb(255,228,225);
+      outline-color: rgb(255,228,225);
     label#moccasin:dir(ltr)
       color: rgb(255,228,181); /* colornames.css:100:18-34 */
+      text-decoration-color: rgb(255,228,181);
+      border-top-color: rgb(255,228,181);
+      border-right-color: rgb(255,228,181);
+      border-bottom-color: rgb(255,228,181);
+      border-left-color: rgb(255,228,181);
+      outline-color: rgb(255,228,181);
     label#navajowhite:dir(ltr)
       color: rgb(255,222,173); /* colornames.css:101:21-40 */
+      text-decoration-color: rgb(255,222,173);
+      border-top-color: rgb(255,222,173);
+      border-right-color: rgb(255,222,173);
+      border-bottom-color: rgb(255,222,173);
+      border-left-color: rgb(255,222,173);
+      outline-color: rgb(255,222,173);
     label#navy:dir(ltr)
       color: rgb(0,0,128); /* colornames.css:102:14-26 */
+      text-decoration-color: rgb(0,0,128);
+      border-top-color: rgb(0,0,128);
+      border-right-color: rgb(0,0,128);
+      border-bottom-color: rgb(0,0,128);
+      border-left-color: rgb(0,0,128);
+      outline-color: rgb(0,0,128);
     label#oldlace:dir(ltr)
       color: rgb(253,245,230); /* colornames.css:103:17-32 */
+      text-decoration-color: rgb(253,245,230);
+      border-top-color: rgb(253,245,230);
+      border-right-color: rgb(253,245,230);
+      border-bottom-color: rgb(253,245,230);
+      border-left-color: rgb(253,245,230);
+      outline-color: rgb(253,245,230);
     label#olive:dir(ltr)
       color: rgb(128,128,0); /* colornames.css:104:15-28 */
+      text-decoration-color: rgb(128,128,0);
+      border-top-color: rgb(128,128,0);
+      border-right-color: rgb(128,128,0);
+      border-bottom-color: rgb(128,128,0);
+      border-left-color: rgb(128,128,0);
+      outline-color: rgb(128,128,0);
     label#olivedrab:dir(ltr)
       color: rgb(107,142,35); /* colornames.css:105:19-36 */
+      text-decoration-color: rgb(107,142,35);
+      border-top-color: rgb(107,142,35);
+      border-right-color: rgb(107,142,35);
+      border-bottom-color: rgb(107,142,35);
+      border-left-color: rgb(107,142,35);
+      outline-color: rgb(107,142,35);
     label#orange:dir(ltr)
       color: rgb(255,165,0); /* colornames.css:106:16-30 */
+      text-decoration-color: rgb(255,165,0);
+      border-top-color: rgb(255,165,0);
+      border-right-color: rgb(255,165,0);
+      border-bottom-color: rgb(255,165,0);
+      border-left-color: rgb(255,165,0);
+      outline-color: rgb(255,165,0);
     label#orangered:dir(ltr)
       color: rgb(255,69,0); /* colornames.css:107:19-36 */
+      text-decoration-color: rgb(255,69,0);
+      border-top-color: rgb(255,69,0);
+      border-right-color: rgb(255,69,0);
+      border-bottom-color: rgb(255,69,0);
+      border-left-color: rgb(255,69,0);
+      outline-color: rgb(255,69,0);
     label#orchid:dir(ltr)
       color: rgb(218,112,214); /* colornames.css:108:16-30 */
+      text-decoration-color: rgb(218,112,214);
+      border-top-color: rgb(218,112,214);
+      border-right-color: rgb(218,112,214);
+      border-bottom-color: rgb(218,112,214);
+      border-left-color: rgb(218,112,214);
+      outline-color: rgb(218,112,214);
     label#palegoldenrod:dir(ltr)
       color: rgb(238,232,170); /* colornames.css:109:23-44 */
+      text-decoration-color: rgb(238,232,170);
+      border-top-color: rgb(238,232,170);
+      border-right-color: rgb(238,232,170);
+      border-bottom-color: rgb(238,232,170);
+      border-left-color: rgb(238,232,170);
+      outline-color: rgb(238,232,170);
     label#palegreen:dir(ltr)
       color: rgb(152,251,152); /* colornames.css:110:19-36 */
+      text-decoration-color: rgb(152,251,152);
+      border-top-color: rgb(152,251,152);
+      border-right-color: rgb(152,251,152);
+      border-bottom-color: rgb(152,251,152);
+      border-left-color: rgb(152,251,152);
+      outline-color: rgb(152,251,152);
     label#paleturquoise:dir(ltr)
       color: rgb(175,238,238); /* colornames.css:111:23-44 */
+      text-decoration-color: rgb(175,238,238);
+      border-top-color: rgb(175,238,238);
+      border-right-color: rgb(175,238,238);
+      border-bottom-color: rgb(175,238,238);
+      border-left-color: rgb(175,238,238);
+      outline-color: rgb(175,238,238);
     label#palevioletred:dir(ltr)
       color: rgb(219,112,147); /* colornames.css:112:23-44 */
+      text-decoration-color: rgb(219,112,147);
+      border-top-color: rgb(219,112,147);
+      border-right-color: rgb(219,112,147);
+      border-bottom-color: rgb(219,112,147);
+      border-left-color: rgb(219,112,147);
+      outline-color: rgb(219,112,147);
     label#papayawhip:dir(ltr)
       color: rgb(255,239,213); /* colornames.css:113:20-38 */
+      text-decoration-color: rgb(255,239,213);
+      border-top-color: rgb(255,239,213);
+      border-right-color: rgb(255,239,213);
+      border-bottom-color: rgb(255,239,213);
+      border-left-color: rgb(255,239,213);
+      outline-color: rgb(255,239,213);
     label#peachpuff:dir(ltr)
       color: rgb(255,218,185); /* colornames.css:114:19-36 */
+      text-decoration-color: rgb(255,218,185);
+      border-top-color: rgb(255,218,185);
+      border-right-color: rgb(255,218,185);
+      border-bottom-color: rgb(255,218,185);
+      border-left-color: rgb(255,218,185);
+      outline-color: rgb(255,218,185);
     label#peru:dir(ltr)
       color: rgb(205,133,63); /* colornames.css:115:14-26 */
+      text-decoration-color: rgb(205,133,63);
+      border-top-color: rgb(205,133,63);
+      border-right-color: rgb(205,133,63);
+      border-bottom-color: rgb(205,133,63);
+      border-left-color: rgb(205,133,63);
+      outline-color: rgb(205,133,63);
     label#pink:dir(ltr)
       color: rgb(255,192,203); /* colornames.css:116:14-26 */
+      text-decoration-color: rgb(255,192,203);
+      border-top-color: rgb(255,192,203);
+      border-right-color: rgb(255,192,203);
+      border-bottom-color: rgb(255,192,203);
+      border-left-color: rgb(255,192,203);
+      outline-color: rgb(255,192,203);
     label#plum:dir(ltr)
       color: rgb(221,160,221); /* colornames.css:117:14-26 */
+      text-decoration-color: rgb(221,160,221);
+      border-top-color: rgb(221,160,221);
+      border-right-color: rgb(221,160,221);
+      border-bottom-color: rgb(221,160,221);
+      border-left-color: rgb(221,160,221);
+      outline-color: rgb(221,160,221);
     label#powderblue:dir(ltr)
       color: rgb(176,224,230); /* colornames.css:118:20-38 */
+      text-decoration-color: rgb(176,224,230);
+      border-top-color: rgb(176,224,230);
+      border-right-color: rgb(176,224,230);
+      border-bottom-color: rgb(176,224,230);
+      border-left-color: rgb(176,224,230);
+      outline-color: rgb(176,224,230);
     label#purple:dir(ltr)
       color: rgb(128,0,128); /* colornames.css:119:16-30 */
+      text-decoration-color: rgb(128,0,128);
+      border-top-color: rgb(128,0,128);
+      border-right-color: rgb(128,0,128);
+      border-bottom-color: rgb(128,0,128);
+      border-left-color: rgb(128,0,128);
+      outline-color: rgb(128,0,128);
     label#rebeccapurple:dir(ltr)
       color: rgb(102,51,153); /* colornames.css:120:23-44 */
+      text-decoration-color: rgb(102,51,153);
+      border-top-color: rgb(102,51,153);
+      border-right-color: rgb(102,51,153);
+      border-bottom-color: rgb(102,51,153);
+      border-left-color: rgb(102,51,153);
+      outline-color: rgb(102,51,153);
     label#red:dir(ltr)
       color: rgb(255,0,0); /* colornames.css:121:13-24 */
+      text-decoration-color: rgb(255,0,0);
+      border-top-color: rgb(255,0,0);
+      border-right-color: rgb(255,0,0);
+      border-bottom-color: rgb(255,0,0);
+      border-left-color: rgb(255,0,0);
+      outline-color: rgb(255,0,0);
     label#rosybrown:dir(ltr)
       color: rgb(188,143,143); /* colornames.css:122:19-36 */
+      text-decoration-color: rgb(188,143,143);
+      border-top-color: rgb(188,143,143);
+      border-right-color: rgb(188,143,143);
+      border-bottom-color: rgb(188,143,143);
+      border-left-color: rgb(188,143,143);
+      outline-color: rgb(188,143,143);
     label#royalblue:dir(ltr)
       color: rgb(65,105,225); /* colornames.css:123:19-36 */
+      text-decoration-color: rgb(65,105,225);
+      border-top-color: rgb(65,105,225);
+      border-right-color: rgb(65,105,225);
+      border-bottom-color: rgb(65,105,225);
+      border-left-color: rgb(65,105,225);
+      outline-color: rgb(65,105,225);
     label#saddlebrown:dir(ltr)
       color: rgb(139,69,19); /* colornames.css:124:21-40 */
+      text-decoration-color: rgb(139,69,19);
+      border-top-color: rgb(139,69,19);
+      border-right-color: rgb(139,69,19);
+      border-bottom-color: rgb(139,69,19);
+      border-left-color: rgb(139,69,19);
+      outline-color: rgb(139,69,19);
     label#salmon:dir(ltr)
       color: rgb(250,128,114); /* colornames.css:125:16-30 */
+      text-decoration-color: rgb(250,128,114);
+      border-top-color: rgb(250,128,114);
+      border-right-color: rgb(250,128,114);
+      border-bottom-color: rgb(250,128,114);
+      border-left-color: rgb(250,128,114);
+      outline-color: rgb(250,128,114);
     label#sandybrown:dir(ltr)
       color: rgb(244,164,96); /* colornames.css:126:20-38 */
+      text-decoration-color: rgb(244,164,96);
+      border-top-color: rgb(244,164,96);
+      border-right-color: rgb(244,164,96);
+      border-bottom-color: rgb(244,164,96);
+      border-left-color: rgb(244,164,96);
+      outline-color: rgb(244,164,96);
     label#seagreen:dir(ltr)
       color: rgb(46,139,87); /* colornames.css:127:18-34 */
+      text-decoration-color: rgb(46,139,87);
+      border-top-color: rgb(46,139,87);
+      border-right-color: rgb(46,139,87);
+      border-bottom-color: rgb(46,139,87);
+      border-left-color: rgb(46,139,87);
+      outline-color: rgb(46,139,87);
     label#seashell:dir(ltr)
       color: rgb(255,245,238); /* colornames.css:128:18-34 */
+      text-decoration-color: rgb(255,245,238);
+      border-top-color: rgb(255,245,238);
+      border-right-color: rgb(255,245,238);
+      border-bottom-color: rgb(255,245,238);
+      border-left-color: rgb(255,245,238);
+      outline-color: rgb(255,245,238);
     label#sienna:dir(ltr)
       color: rgb(160,82,45); /* colornames.css:129:16-30 */
+      text-decoration-color: rgb(160,82,45);
+      border-top-color: rgb(160,82,45);
+      border-right-color: rgb(160,82,45);
+      border-bottom-color: rgb(160,82,45);
+      border-left-color: rgb(160,82,45);
+      outline-color: rgb(160,82,45);
     label#silver:dir(ltr)
       color: rgb(192,192,192); /* colornames.css:130:16-30 */
+      text-decoration-color: rgb(192,192,192);
+      border-top-color: rgb(192,192,192);
+      border-right-color: rgb(192,192,192);
+      border-bottom-color: rgb(192,192,192);
+      border-left-color: rgb(192,192,192);
+      outline-color: rgb(192,192,192);
     label#skyblue:dir(ltr)
       color: rgb(135,206,235); /* colornames.css:131:17-32 */
+      text-decoration-color: rgb(135,206,235);
+      border-top-color: rgb(135,206,235);
+      border-right-color: rgb(135,206,235);
+      border-bottom-color: rgb(135,206,235);
+      border-left-color: rgb(135,206,235);
+      outline-color: rgb(135,206,235);
     label#slateblue:dir(ltr)
       color: rgb(106,90,205); /* colornames.css:132:19-36 */
+      text-decoration-color: rgb(106,90,205);
+      border-top-color: rgb(106,90,205);
+      border-right-color: rgb(106,90,205);
+      border-bottom-color: rgb(106,90,205);
+      border-left-color: rgb(106,90,205);
+      outline-color: rgb(106,90,205);
     label#slategray:dir(ltr)
       color: rgb(112,128,144); /* colornames.css:133:19-36 */
+      text-decoration-color: rgb(112,128,144);
+      border-top-color: rgb(112,128,144);
+      border-right-color: rgb(112,128,144);
+      border-bottom-color: rgb(112,128,144);
+      border-left-color: rgb(112,128,144);
+      outline-color: rgb(112,128,144);
     label#slategrey:dir(ltr)
       color: rgb(112,128,144); /* colornames.css:134:19-36 */
+      text-decoration-color: rgb(112,128,144);
+      border-top-color: rgb(112,128,144);
+      border-right-color: rgb(112,128,144);
+      border-bottom-color: rgb(112,128,144);
+      border-left-color: rgb(112,128,144);
+      outline-color: rgb(112,128,144);
     label#snow:dir(ltr)
       color: rgb(255,250,250); /* colornames.css:135:14-26 */
+      text-decoration-color: rgb(255,250,250);
+      border-top-color: rgb(255,250,250);
+      border-right-color: rgb(255,250,250);
+      border-bottom-color: rgb(255,250,250);
+      border-left-color: rgb(255,250,250);
+      outline-color: rgb(255,250,250);
     label#springgreen:dir(ltr)
       color: rgb(0,255,127); /* colornames.css:136:21-40 */
+      text-decoration-color: rgb(0,255,127);
+      border-top-color: rgb(0,255,127);
+      border-right-color: rgb(0,255,127);
+      border-bottom-color: rgb(0,255,127);
+      border-left-color: rgb(0,255,127);
+      outline-color: rgb(0,255,127);
     label#steelblue:dir(ltr)
       color: rgb(70,130,180); /* colornames.css:137:19-36 */
+      text-decoration-color: rgb(70,130,180);
+      border-top-color: rgb(70,130,180);
+      border-right-color: rgb(70,130,180);
+      border-bottom-color: rgb(70,130,180);
+      border-left-color: rgb(70,130,180);
+      outline-color: rgb(70,130,180);
     label#tan:dir(ltr)
       color: rgb(210,180,140); /* colornames.css:138:13-24 */
+      text-decoration-color: rgb(210,180,140);
+      border-top-color: rgb(210,180,140);
+      border-right-color: rgb(210,180,140);
+      border-bottom-color: rgb(210,180,140);
+      border-left-color: rgb(210,180,140);
+      outline-color: rgb(210,180,140);
     label#teal:dir(ltr)
       color: rgb(0,128,128); /* colornames.css:139:14-26 */
+      text-decoration-color: rgb(0,128,128);
+      border-top-color: rgb(0,128,128);
+      border-right-color: rgb(0,128,128);
+      border-bottom-color: rgb(0,128,128);
+      border-left-color: rgb(0,128,128);
+      outline-color: rgb(0,128,128);
     label#thistle:dir(ltr)
       color: rgb(216,191,216); /* colornames.css:140:17-32 */
+      text-decoration-color: rgb(216,191,216);
+      border-top-color: rgb(216,191,216);
+      border-right-color: rgb(216,191,216);
+      border-bottom-color: rgb(216,191,216);
+      border-left-color: rgb(216,191,216);
+      outline-color: rgb(216,191,216);
     label#tomato:dir(ltr)
       color: rgb(255,99,71); /* colornames.css:141:16-30 */
+      text-decoration-color: rgb(255,99,71);
+      border-top-color: rgb(255,99,71);
+      border-right-color: rgb(255,99,71);
+      border-bottom-color: rgb(255,99,71);
+      border-left-color: rgb(255,99,71);
+      outline-color: rgb(255,99,71);
     label#turquoise:dir(ltr)
       color: rgb(64,224,208); /* colornames.css:142:19-36 */
+      text-decoration-color: rgb(64,224,208);
+      border-top-color: rgb(64,224,208);
+      border-right-color: rgb(64,224,208);
+      border-bottom-color: rgb(64,224,208);
+      border-left-color: rgb(64,224,208);
+      outline-color: rgb(64,224,208);
     label#violet:dir(ltr)
       color: rgb(238,130,238); /* colornames.css:143:16-30 */
+      text-decoration-color: rgb(238,130,238);
+      border-top-color: rgb(238,130,238);
+      border-right-color: rgb(238,130,238);
+      border-bottom-color: rgb(238,130,238);
+      border-left-color: rgb(238,130,238);
+      outline-color: rgb(238,130,238);
     label#wheat:dir(ltr)
       color: rgb(245,222,179); /* colornames.css:144:15-28 */
+      text-decoration-color: rgb(245,222,179);
+      border-top-color: rgb(245,222,179);
+      border-right-color: rgb(245,222,179);
+      border-bottom-color: rgb(245,222,179);
+      border-left-color: rgb(245,222,179);
+      outline-color: rgb(245,222,179);
     label#white:dir(ltr)
     label#whitesmoke:dir(ltr)
       color: rgb(245,245,245); /* colornames.css:146:20-38 */
+      text-decoration-color: rgb(245,245,245);
+      border-top-color: rgb(245,245,245);
+      border-right-color: rgb(245,245,245);
+      border-bottom-color: rgb(245,245,245);
+      border-left-color: rgb(245,245,245);
+      outline-color: rgb(245,245,245);
     label#yellow:dir(ltr)
       color: rgb(255,255,0); /* colornames.css:147:16-30 */
+      text-decoration-color: rgb(255,255,0);
+      border-top-color: rgb(255,255,0);
+      border-right-color: rgb(255,255,0);
+      border-bottom-color: rgb(255,255,0);
+      border-left-color: rgb(255,255,0);
+      outline-color: rgb(255,255,0);
     label#yellowgreen:dir(ltr)
       color: rgb(154,205,50); /* colornames.css:148:21-40 */
+      text-decoration-color: rgb(154,205,50);
+      border-top-color: rgb(154,205,50);
+      border-right-color: rgb(154,205,50);
+      border-bottom-color: rgb(154,205,50);
+      border-left-color: rgb(154,205,50);
+      outline-color: rgb(154,205,50);

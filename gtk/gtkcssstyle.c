@@ -37,6 +37,7 @@
 #include "gtkstyleanimationprivate.h"
 #include "gtkstylepropertyprivate.h"
 #include "gtkstyleproviderprivate.h"
+#include "gtksettings.h"
 
 G_DEFINE_ABSTRACT_TYPE (GtkCssStyle, gtk_css_style, G_TYPE_OBJECT)
 
@@ -53,11 +54,18 @@ gtk_css_style_real_is_static (GtkCssStyle *style)
   return TRUE;
 }
 
+static GtkCssStyle *
+gtk_css_style_real_get_static_style (GtkCssStyle *style)
+{
+  return style;
+}
+
 static void
 gtk_css_style_class_init (GtkCssStyleClass *klass)
 {
   klass->get_section = gtk_css_style_real_get_section;
   klass->is_static = gtk_css_style_real_is_static;
+  klass->get_static_style = gtk_css_style_real_get_static_style;
 }
 
 static void
@@ -87,6 +95,14 @@ gtk_css_style_is_static (GtkCssStyle *style)
   gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (style), TRUE);
 
   return GTK_CSS_STYLE_GET_CLASS (style)->is_static (style);
+}
+
+GtkCssStyle *
+gtk_css_style_get_static_style (GtkCssStyle *style)
+{
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (style), NULL);
+
+  return GTK_CSS_STYLE_GET_CLASS (style)->get_static_style (style);
 }
 
 /*
@@ -122,13 +138,24 @@ gtk_css_style_print (GtkCssStyle *style,
       GtkCssValue *value;
       const char *name;
 
-      section = gtk_css_style_get_section (style, i);
-      if (!section && skip_initial)
-        continue;
-
-      prop = _gtk_css_style_property_lookup_by_id (i);
-      name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop));
       value = gtk_css_style_get_value (style, i);
+      prop = _gtk_css_style_property_lookup_by_id (i);
+      if (skip_initial)
+        { 
+          GtkCssValue *initial = _gtk_css_style_property_get_initial_value (prop);
+          GtkCssStyle *default_style = gtk_css_static_style_get_default ();
+          GtkCssValue *computed = _gtk_css_value_compute (initial, i,
+                                                          GTK_STYLE_PROVIDER (gtk_settings_get_default ()),
+                                                          default_style,
+                                                          default_style);
+          gboolean is_initial = _gtk_css_value_equal (value, computed);
+          gtk_css_value_unref (computed);
+          if (is_initial)
+            continue;
+        }
+
+      section = gtk_css_style_get_section (style, i);
+      name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop));
 
       g_string_append_printf (string, "%*s%s: ", indent, "", name);
       _gtk_css_value_print (value, string);

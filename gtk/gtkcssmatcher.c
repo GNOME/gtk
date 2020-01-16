@@ -22,6 +22,7 @@
 #include "gtkcssnodedeclarationprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkwidgetpath.h"
+#include "gtkprivate.h"
 
 /* GTK_CSS_MATCHER_WIDGET_PATH */
 
@@ -158,7 +159,17 @@ gtk_css_matcher_widget_path_has_position (const GtkCssMatcher *matcher,
   return x / a >= 0;
 }
 
+static void
+gtk_css_matcher_widget_path_print (const GtkCssMatcher *matcher,
+                                   GString             *string)
+{
+  char *s = gtk_widget_path_to_string (matcher->path.path);
+  g_string_append (string, s);
+  g_free (s);
+}
+
 static const GtkCssMatcherClass GTK_CSS_MATCHER_WIDGET_PATH = {
+  GTK_CSS_MATCHER_TYPE_WIDGET_PATH,
   gtk_css_matcher_widget_path_get_parent,
   gtk_css_matcher_widget_path_get_previous,
   gtk_css_matcher_widget_path_get_state,
@@ -166,7 +177,7 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_WIDGET_PATH = {
   gtk_css_matcher_widget_path_has_class,
   gtk_css_matcher_widget_path_has_id,
   gtk_css_matcher_widget_path_has_position,
-  FALSE
+  gtk_css_matcher_widget_path_print
 };
 
 gboolean
@@ -334,7 +345,15 @@ gtk_css_matcher_node_has_position (const GtkCssMatcher *matcher,
                                          a, b);
 }
 
+static void
+gtk_css_matcher_node_print (const GtkCssMatcher *matcher,
+                            GString             *string)
+{
+  gtk_css_node_print (matcher->node.node, 0, string, 0);
+}
+
 static const GtkCssMatcherClass GTK_CSS_MATCHER_NODE = {
+  GTK_CSS_MATCHER_TYPE_NODE,
   gtk_css_matcher_node_get_parent,
   gtk_css_matcher_node_get_previous,
   gtk_css_matcher_node_get_state,
@@ -342,7 +361,7 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_NODE = {
   gtk_css_matcher_node_has_class,
   gtk_css_matcher_node_has_id,
   gtk_css_matcher_node_has_position,
-  FALSE
+  gtk_css_matcher_node_print
 };
 
 void
@@ -383,10 +402,20 @@ gtk_css_matcher_any_get_state (const GtkCssMatcher *matcher)
 {
   /* XXX: This gets tricky when we implement :not() */
 
-  return GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_SELECTED
-    | GTK_STATE_FLAG_INSENSITIVE | GTK_STATE_FLAG_INCONSISTENT
-    | GTK_STATE_FLAG_FOCUSED | GTK_STATE_FLAG_BACKDROP | GTK_STATE_FLAG_LINK
-    | GTK_STATE_FLAG_VISITED;
+  return GTK_STATE_FLAG_ACTIVE |
+         GTK_STATE_FLAG_PRELIGHT |
+         GTK_STATE_FLAG_SELECTED |
+         GTK_STATE_FLAG_INSENSITIVE |
+         GTK_STATE_FLAG_INCONSISTENT |
+         GTK_STATE_FLAG_FOCUSED |
+         GTK_STATE_FLAG_BACKDROP |
+         GTK_STATE_FLAG_DIR_LTR |
+         GTK_STATE_FLAG_DIR_RTL |
+         GTK_STATE_FLAG_LINK |
+         GTK_STATE_FLAG_VISITED |
+         GTK_STATE_FLAG_CHECKED |
+         GTK_STATE_FLAG_DROP_ACTIVE |
+         GTK_STATE_FLAG_FOCUS_VISIBLE;
 }
 
 static gboolean
@@ -419,7 +448,15 @@ gtk_css_matcher_any_has_position (const GtkCssMatcher *matcher,
   return TRUE;
 }
 
+static void
+gtk_css_matcher_any_print (const GtkCssMatcher *matcher,
+                           GString             *string)
+{
+  g_string_append (string, "ANY");
+}
+
 static const GtkCssMatcherClass GTK_CSS_MATCHER_ANY = {
+  GTK_CSS_MATCHER_TYPE_ANY,
   gtk_css_matcher_any_get_parent,
   gtk_css_matcher_any_get_previous,
   gtk_css_matcher_any_get_state,
@@ -427,7 +464,7 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_ANY = {
   gtk_css_matcher_any_has_class,
   gtk_css_matcher_any_has_id,
   gtk_css_matcher_any_has_position,
-  TRUE
+  gtk_css_matcher_any_print
 };
 
 void
@@ -442,9 +479,17 @@ static gboolean
 gtk_css_matcher_superset_get_parent (GtkCssMatcher       *matcher,
                                      const GtkCssMatcher *child)
 {
-  _gtk_css_matcher_any_init (matcher);
+  gboolean ret = TRUE;
 
-  return TRUE;
+  if (child->klass->type == GTK_CSS_MATCHER_TYPE_NODE)
+    {
+      ret = gtk_css_matcher_node_get_parent (matcher, child);
+      matcher->klass = child->klass;
+     }
+  else
+    _gtk_css_matcher_any_init (matcher);
+
+  return ret;
 }
 
 static gboolean
@@ -456,83 +501,89 @@ gtk_css_matcher_superset_get_previous (GtkCssMatcher       *matcher,
   return TRUE;
 }
 
-static GtkStateFlags
-gtk_css_matcher_superset_get_state (const GtkCssMatcher *matcher)
+static void
+gtk_css_matcher_superset_print (const GtkCssMatcher *matcher,
+                                GString             *string)
 {
-  /* XXX: This gets tricky when we implement :not() */
-
-  if (matcher->superset.relevant & GTK_CSS_CHANGE_STATE)
-    return _gtk_css_matcher_get_state (matcher->superset.subset);
+  g_string_append (string, "SUPERSET(");
+  if (matcher->klass->type == GTK_CSS_MATCHER_TYPE_NODE)
+    gtk_css_node_print (matcher->node.node, 0, string, 0);
   else
-    return GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_SELECTED
-      | GTK_STATE_FLAG_INSENSITIVE | GTK_STATE_FLAG_INCONSISTENT
-      | GTK_STATE_FLAG_FOCUSED | GTK_STATE_FLAG_BACKDROP | GTK_STATE_FLAG_LINK
-      | GTK_STATE_FLAG_VISITED;
-}
-
-static gboolean
-gtk_css_matcher_superset_has_name (const GtkCssMatcher     *matcher,
-                                   /*interned*/ const char *name)
-{
-  if (matcher->superset.relevant & GTK_CSS_CHANGE_NAME)
-    return _gtk_css_matcher_has_name (matcher->superset.subset, name);
-  else
-    return TRUE;
-}
-
-static gboolean
-gtk_css_matcher_superset_has_class (const GtkCssMatcher *matcher,
-                                    GQuark               class_name)
-{
-  if (matcher->superset.relevant & GTK_CSS_CHANGE_CLASS)
-    return _gtk_css_matcher_has_class (matcher->superset.subset, class_name);
-  else
-    return TRUE;
-}
-
-static gboolean
-gtk_css_matcher_superset_has_id (const GtkCssMatcher *matcher,
-                                 const char          *id)
-{
-  if (matcher->superset.relevant & GTK_CSS_CHANGE_NAME)
-    return _gtk_css_matcher_has_id (matcher->superset.subset, id);
-  else
-    return TRUE;
-}
-
-static gboolean
-gtk_css_matcher_superset_has_position (const GtkCssMatcher *matcher,
-                                       gboolean             forward,
-                                       int                  a,
-                                       int                  b)
-{
-  if (matcher->superset.relevant & GTK_CSS_CHANGE_POSITION)
-    return _gtk_css_matcher_has_position (matcher->superset.subset, forward, a, b);
-  else
-    return TRUE;
+    g_string_append (string, "...");
+  g_string_append (string, ")");
 }
 
 static const GtkCssMatcherClass GTK_CSS_MATCHER_SUPERSET = {
+  0,
   gtk_css_matcher_superset_get_parent,
   gtk_css_matcher_superset_get_previous,
-  gtk_css_matcher_superset_get_state,
-  gtk_css_matcher_superset_has_name,
-  gtk_css_matcher_superset_has_class,
-  gtk_css_matcher_superset_has_id,
-  gtk_css_matcher_superset_has_position,
-  FALSE
+  gtk_css_matcher_any_get_state,
+  gtk_css_matcher_any_has_name,
+  gtk_css_matcher_any_has_class,
+  gtk_css_matcher_any_has_id,
+  gtk_css_matcher_any_has_position,
+  gtk_css_matcher_superset_print
 };
 
 void
 _gtk_css_matcher_superset_init (GtkCssMatcher       *matcher,
                                 const GtkCssMatcher *subset,
+                                GtkCssMatcherClass  *klass,
                                 GtkCssChange         relevant)
 {
   g_return_if_fail (subset != NULL);
-  g_return_if_fail ((relevant & ~(GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_STATE)) == 0);
+  g_return_if_fail ((relevant & ~(GTK_CSS_CHANGE_CLASS |
+                                  GTK_CSS_CHANGE_NAME |
+                                  GTK_CSS_CHANGE_ID |
+                                  GTK_CSS_CHANGE_POSITION |
+                                  GTK_CSS_CHANGE_STATE |
+                                  GTK_CSS_CHANGE_DISABLED |
+                                  GTK_CSS_CHANGE_BACKDROP |
+                                  GTK_CSS_CHANGE_HOVER)) == 0);
 
-  matcher->superset.klass = &GTK_CSS_MATCHER_SUPERSET;
-  matcher->superset.subset = subset;
-  matcher->superset.relevant = relevant;
+  switch (subset->klass->type)
+    {
+    case GTK_CSS_MATCHER_TYPE_NODE:
+      matcher->node = subset->node;
+      break;
+    case GTK_CSS_MATCHER_TYPE_WIDGET_PATH:
+      matcher->path = subset->path;
+      break;
+    case GTK_CSS_MATCHER_TYPE_ANY:
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
+  *klass = GTK_CSS_MATCHER_SUPERSET;
+  klass->type = subset->klass->type;
+
+  if (relevant & GTK_CSS_CHANGE_CLASS)
+    klass->has_class = subset->klass->has_class;
+  if (relevant & GTK_CSS_CHANGE_NAME)
+    klass->has_name = subset->klass->has_name;
+  if (relevant & GTK_CSS_CHANGE_ID)
+    klass->has_id = subset->klass->has_id;
+  if (relevant & GTK_CSS_CHANGE_POSITION)
+    klass->has_position = subset->klass->has_position;
+  if (relevant & (GTK_CSS_CHANGE_STATE|GTK_CSS_CHANGE_HOVER|GTK_CSS_CHANGE_DISABLED|GTK_CSS_CHANGE_BACKDROP))
+    klass->get_state = subset->klass->get_state;
+
+  matcher->klass = klass;
 }
 
+void
+gtk_css_matcher_print (const GtkCssMatcher *matcher,
+                       GString             *string)
+{
+  matcher->klass->print (matcher, string);
+}
+
+char *
+gtk_css_matcher_to_string (const GtkCssMatcher *matcher)
+{
+  GString *string = g_string_new ("");
+  gtk_css_matcher_print (matcher, string);
+  return g_string_free (string, FALSE);
+}

@@ -55,7 +55,8 @@ GType                   gtk_css_static_style_get_type           (void) G_GNUC_CO
 GtkCssStyle *           gtk_css_static_style_get_default        (void);
 GtkCssStyle *           gtk_css_static_style_new_compute        (GtkStyleProvider       *provider,
                                                                  const GtkCssMatcher    *matcher,
-                                                                 GtkCssStyle            *parent);
+                                                                 GtkCssStyle            *parent,
+                                                                 gboolean                compute_change);
 
 void                    gtk_css_static_style_compute_value      (GtkCssStaticStyle      *style,
                                                                  GtkStyleProvider       *provider,
