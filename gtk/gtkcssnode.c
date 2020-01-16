@@ -87,6 +87,11 @@
  * if we need to change things. */
 #define GTK_CSS_RADICAL_CHANGE (GTK_CSS_CHANGE_ID | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_SOURCE | GTK_CSS_CHANGE_PARENT_STYLE)
 
+/* When these change, we need to recompute the change flags for the new style
+ * since they may have changed.
+ */
+#define GTK_CSS_CHANGE_NEEDS_RECOMPUTE (GTK_CSS_RADICAL_CHANGE & ~GTK_CSS_CHANGE_PARENT_STYLE)
+
 G_DEFINE_TYPE (GtkCssNode, gtk_css_node, G_TYPE_OBJECT)
 
 enum {
@@ -348,12 +353,14 @@ store_in_global_parent_cache (GtkCssNode                  *node,
 }
 
 static GtkCssStyle *
-gtk_css_node_create_style (GtkCssNode *cssnode)
+gtk_css_node_create_style (GtkCssNode   *cssnode,
+                           GtkCssChange  change)
 {
   const GtkCssNodeDeclaration *decl;
   GtkCssMatcher matcher;
   GtkCssStyle *parent;
   GtkCssStyle *style;
+  GtkCssChange style_change;
 
   decl = gtk_css_node_get_declaration (cssnode);
 
@@ -363,14 +370,26 @@ gtk_css_node_create_style (GtkCssNode *cssnode)
 
   parent = cssnode->parent ? cssnode->parent->style : NULL;
 
+  if (change & GTK_CSS_CHANGE_NEEDS_RECOMPUTE)
+    {
+      /* Need to recompute the change flags */
+      style_change = 0;
+    }
+  else
+    {
+      style_change = gtk_css_static_style_get_change (gtk_css_style_get_static_style (cssnode->style));
+    }
+
   if (gtk_css_node_init_matcher (cssnode, &matcher))
     style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
                                               &matcher,
-                                              parent);
+                                              parent,
+                                              style_change);
   else
     style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
                                               NULL,
-                                              parent);
+                                              parent,
+                                              style_change);
 
   store_in_global_parent_cache (cssnode, decl, style);
 
@@ -410,7 +429,7 @@ gtk_css_node_real_update_style (GtkCssNode   *cssnode,
   static_style = GTK_CSS_STYLE (gtk_css_style_get_static_style (style));
 
   if (gtk_css_style_needs_recreation (static_style, change))
-    new_static_style = gtk_css_node_create_style (cssnode);
+    new_static_style = gtk_css_node_create_style (cssnode, change);
   else
     new_static_style = g_object_ref (static_style);
 
@@ -429,7 +448,7 @@ gtk_css_node_real_update_style (GtkCssNode   *cssnode,
     }
   else if (static_style != style && (change & GTK_CSS_CHANGE_TIMESTAMP))
     {
-      new_style = gtk_css_animated_style_new_advance ((GtkCssAnimatedStyle *)style,
+      new_style = gtk_css_animated_style_new_advance (GTK_CSS_ANIMATED_STYLE (style),
                                                       static_style,
                                                       timestamp);
     }
