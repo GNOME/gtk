@@ -1,0 +1,40 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
+    <property name="type">popup</property>
+    <child>
+      <object class="GtkGrid">
+        <child>
+          <object class="GtkLabel"/>
+        </child>
+        <child>
+          <object class="GtkBox"/>
+          <object class="GtkButton">
+            <child>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkCheckButton">
+                    <child>
+                      <object class="GtkBox">
+                        <child>
+                          <object class="GtkBox">
+                            <child>
+                              <object class="GtkLabel"/>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
