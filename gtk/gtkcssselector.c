@@ -483,10 +483,16 @@ gtk_css_selector_not_ ## n ## _print (const GtkCssSelector *selector, \
 } \
 \
 static gboolean \
+gtk_css_selector_ ## n ## _match_one (const GtkCssSelector *selector, \
+                                      const GtkCssMatcher  *matcher) \
+{ \
+  return match_func (selector, matcher, TRUE); \
+} \
+static gboolean \
 gtk_css_selector_not_ ## n ## _match_one (const GtkCssSelector *selector, \
                                           const GtkCssMatcher  *matcher) \
 { \
-  return !match_func (selector, matcher); \
+  return match_func (selector, matcher, FALSE); \
 } \
 \
 static GtkCssChange \
@@ -519,7 +525,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ ## c = { \
   G_STRINGIFY(n), \
   gtk_css_selector_ ## n ## _print, \
   gtk_css_selector_default_foreach_matcher, \
-  match_func, \
+  gtk_css_selector_ ## n ## _match_one, \
   gtk_css_selector_ ## n ## _get_change, \
   gtk_css_selector_ ## n ## _add_specificity, \
   hash_func, \
@@ -550,9 +556,10 @@ print_any (const GtkCssSelector *selector,
 
 static gboolean
 match_any (const GtkCssSelector *selector,
-           const GtkCssMatcher  *matcher)
+           const GtkCssMatcher  *matcher,
+           gboolean              match)
 {
-  return TRUE;
+  return match;
 }
 
 #undef GTK_CSS_CHANGE_ANY
@@ -573,9 +580,10 @@ print_name (const GtkCssSelector *selector,
 
 static gboolean
 match_name (const GtkCssSelector *selector,
-            const GtkCssMatcher  *matcher)
+            const GtkCssMatcher  *matcher,
+            gboolean              match)
 {
-  return _gtk_css_matcher_has_name (matcher, selector->name.name);
+  return _gtk_css_matcher_has_name (matcher, selector->name.name, match);
 }
 
 static guint
@@ -606,9 +614,10 @@ print_class (const GtkCssSelector *selector,
 
 static gboolean
 match_class (const GtkCssSelector *selector,
-             const GtkCssMatcher  *matcher)
+             const GtkCssMatcher  *matcher,
+             gboolean              match)
 {
-  return _gtk_css_matcher_has_class (matcher, selector->style_class.style_class);
+  return _gtk_css_matcher_has_class (matcher, selector->style_class.style_class, match);
 }
 
 static guint
@@ -643,9 +652,10 @@ print_id (const GtkCssSelector *selector,
 
 static gboolean
 match_id (const GtkCssSelector *selector,
-          const GtkCssMatcher  *matcher)
+          const GtkCssMatcher  *matcher,
+          gboolean              match)
 {
-  return _gtk_css_matcher_has_id (matcher, selector->id.name);
+  return _gtk_css_matcher_has_id (matcher, selector->id.name, match);
 }
 
 static guint
@@ -709,9 +719,10 @@ print_pseudoclass_state (const GtkCssSelector *selector,
 
 static gboolean
 match_pseudoclass_state (const GtkCssSelector *selector,
-                         const GtkCssMatcher  *matcher)
+                         const GtkCssMatcher  *matcher,
+                         gboolean              match)
 {
-  return _gtk_css_matcher_has_state (matcher, selector->state.state);
+  return _gtk_css_matcher_has_state (matcher, selector->state.state, match);
 }
 
 static guint
@@ -835,21 +846,22 @@ print_pseudoclass_position (const GtkCssSelector *selector,
 
 static gboolean
 match_pseudoclass_position (const GtkCssSelector *selector,
-		            const GtkCssMatcher  *matcher)
+		            const GtkCssMatcher  *matcher,
+                            gboolean              match)
 {
   switch (selector->position.type)
     {
     case POSITION_FORWARD:
-      if (!_gtk_css_matcher_has_position (matcher, TRUE, selector->position.a, selector->position.b))
+      if (!_gtk_css_matcher_has_position (matcher, TRUE, selector->position.a, selector->position.b, match))
         return FALSE;
       break;
     case POSITION_BACKWARD:
-      if (!_gtk_css_matcher_has_position (matcher, FALSE, selector->position.a, selector->position.b))
+      if (!_gtk_css_matcher_has_position (matcher, FALSE, selector->position.a, selector->position.b, match))
         return FALSE;
       break;
     case POSITION_ONLY:
-      if (!_gtk_css_matcher_has_position (matcher, TRUE, 0, 1) ||
-          !_gtk_css_matcher_has_position (matcher, FALSE, 0, 1))
+      if (!_gtk_css_matcher_has_position (matcher, TRUE, 0, 1, match) ||
+          !_gtk_css_matcher_has_position (matcher, FALSE, 0, 1, match))
         return FALSE;
       break;
     default:

@@ -74,7 +74,8 @@ gtk_css_matcher_widget_path_get_previous (GtkCssMatcher       *matcher,
 
 static gboolean
 gtk_css_matcher_widget_path_has_state (const GtkCssMatcher *matcher,
-                                       GtkStateFlags        state)
+                                       GtkStateFlags        state,
+                                       gboolean             match)
 {
   GtkStateFlags path_state;
   
@@ -91,12 +92,13 @@ gtk_css_matcher_widget_path_has_state (const GtkCssMatcher *matcher,
         path_state = gtk_widget_path_iter_get_state (matcher->path.path, matcher->path.index);
     }
 
-  return (path_state & state) == state;
+  return ((path_state & state) == state) == match;
 }
 
 static gboolean
 gtk_css_matcher_widget_path_has_name (const GtkCssMatcher     *matcher,
-                                      /*interned*/ const char *name)
+                                      /*interned*/ const char *name,
+                                      gboolean                 match)
 {
   const GtkWidgetPath *siblings;
 
@@ -108,7 +110,7 @@ gtk_css_matcher_widget_path_has_name (const GtkCssMatcher     *matcher,
       if (path_name == NULL)
         path_name = g_type_name (gtk_widget_path_iter_get_object_type (siblings, matcher->path.sibling_index));
 
-      return path_name == name;
+      return (path_name == name) == match;
     }
   else
     {
@@ -117,52 +119,55 @@ gtk_css_matcher_widget_path_has_name (const GtkCssMatcher     *matcher,
       if (path_name == NULL)
         path_name = g_type_name (gtk_widget_path_iter_get_object_type (matcher->path.path, matcher->path.index));
 
-      return path_name == name;
+      return (path_name == name) == match;
     }
 }
 
 static gboolean
 gtk_css_matcher_widget_path_has_class (const GtkCssMatcher *matcher,
-                                       GQuark               class_name)
+                                       GQuark               class_name,
+                                       gboolean             match)
 {
   const GtkWidgetPath *siblings;
   
   if (matcher->path.decl &&
       gtk_css_node_declaration_has_class (matcher->path.decl, class_name))
-    return TRUE;
+    return match;
 
   siblings = gtk_widget_path_iter_get_siblings (matcher->path.path, matcher->path.index);
   if (siblings && matcher->path.sibling_index != gtk_widget_path_iter_get_sibling_index (matcher->path.path, matcher->path.index))
-    return gtk_widget_path_iter_has_qclass (siblings, matcher->path.sibling_index, class_name);
+    return gtk_widget_path_iter_has_qclass (siblings, matcher->path.sibling_index, class_name) == match;
   else
-    return gtk_widget_path_iter_has_qclass (matcher->path.path, matcher->path.index, class_name);
+    return gtk_widget_path_iter_has_qclass (matcher->path.path, matcher->path.index, class_name) == match;
 }
 
 static gboolean
 gtk_css_matcher_widget_path_has_id (const GtkCssMatcher *matcher,
-                                    const char          *id)
+                                    const char          *id,
+                                    gboolean             match)
 {
   const GtkWidgetPath *siblings;
   
   siblings = gtk_widget_path_iter_get_siblings (matcher->path.path, matcher->path.index);
   if (siblings && matcher->path.sibling_index != gtk_widget_path_iter_get_sibling_index (matcher->path.path, matcher->path.index))
-    return gtk_widget_path_iter_has_name (siblings, matcher->path.sibling_index, id);
+    return gtk_widget_path_iter_has_name (siblings, matcher->path.sibling_index, id) == match;
   else
-    return gtk_widget_path_iter_has_name (matcher->path.path, matcher->path.index, id);
+    return gtk_widget_path_iter_has_name (matcher->path.path, matcher->path.index, id) == match;
 }
 
 static gboolean
 gtk_css_matcher_widget_path_has_position (const GtkCssMatcher *matcher,
                                           gboolean             forward,
                                           int                  a,
-                                          int                  b)
+                                          int                  b,
+                                          gboolean             match)
 {
   const GtkWidgetPath *siblings;
   int x;
 
   siblings = gtk_widget_path_iter_get_siblings (matcher->path.path, matcher->path.index);
   if (!siblings)
-    return FALSE;
+    return !match;
 
   if (forward)
     x = matcher->path.sibling_index + 1;
@@ -172,12 +177,12 @@ gtk_css_matcher_widget_path_has_position (const GtkCssMatcher *matcher,
   x -= b;
 
   if (a == 0)
-    return x == 0;
+    return (x == 0) == match;
 
   if (x % a)
-    return FALSE;
+    return !match;
 
-  return x / a >= 0;
+  return (x / a >= 0) == match;;
 }
 
 static void
@@ -268,21 +273,24 @@ gtk_css_matcher_node_get_previous (GtkCssMatcher       *matcher,
 
 static gboolean
 gtk_css_matcher_node_has_state (const GtkCssMatcher *matcher,
-                                GtkStateFlags        state)
+                                GtkStateFlags        state,
+                                gboolean             match)
 {
-  return (matcher->node.node_state & state) == state;
+  return ((matcher->node.node_state & state) == state) == match;
 }
 
 static gboolean
 gtk_css_matcher_node_has_name (const GtkCssMatcher     *matcher,
-                               /*interned*/ const char *name)
+                               /*interned*/ const char *name,
+                               gboolean                 match)
 {
-  return matcher->node.node_name == name;
+  return (matcher->node.node_name == name) == match;
 }
 
 static gboolean
 gtk_css_matcher_node_has_class (const GtkCssMatcher *matcher,
-                                GQuark               class_name)
+                                GQuark               class_name,
+                                gboolean             match)
 {
   const GQuark *classes = matcher->node.classes;
 
@@ -290,42 +298,44 @@ gtk_css_matcher_node_has_class (const GtkCssMatcher *matcher,
     {
     case 3:
       if (classes[2] == class_name)
-        return TRUE;
+        return match;
       G_GNUC_FALLTHROUGH;
 
     case 2:
       if (classes[1] == class_name)
-        return TRUE;
+        return match;
       G_GNUC_FALLTHROUGH;
 
     case 1:
       if (classes[0] == class_name)
-        return TRUE;
+        return match;
       G_GNUC_FALLTHROUGH;
 
     case 0:
-      return FALSE;
+      return !match;
 
     default:
-      return gtk_css_node_has_class (matcher->node.node, class_name);
+      return gtk_css_node_has_class (matcher->node.node, class_name) == match;
     }
 
-  return FALSE;
+  return !match;
 }
 
 static gboolean
 gtk_css_matcher_node_has_id (const GtkCssMatcher *matcher,
-                             const char          *id)
+                             const char          *id,
+                             gboolean             match)
 {
   /* assume all callers pass an interned string */
-  return matcher->node.node_id == id;
+  return (matcher->node.node_id == id) == match;
 }
 
 static gboolean
 gtk_css_matcher_node_nth_child (GtkCssNode *node,
                                 GtkCssNode *(* prev_node_func) (GtkCssNode *),
                                 int         a,
-                                int         b)
+                                int         b,
+                                gboolean    match)
 {
   int pos, x;
 
@@ -338,7 +348,7 @@ gtk_css_matcher_node_nth_child (GtkCssNode *node,
           node = prev_node_func (node);
         }
 
-      return b == 0 && node == NULL;
+      return (b == 0 && node == NULL) == match;
     }
 
   /* count nodes */
@@ -350,21 +360,22 @@ gtk_css_matcher_node_nth_child (GtkCssNode *node,
   x = pos - b;
 
   if (x % a)
-    return FALSE;
+    return !match;
 
-  return x / a >= 0;
+  return (x / a >= 0) == match;
 }
 
 static gboolean
 gtk_css_matcher_node_has_position (const GtkCssMatcher *matcher,
                                    gboolean             forward,
                                    int                  a,
-                                   int                  b)
+                                   int                  b,
+                                   gboolean             match)
 {
   return gtk_css_matcher_node_nth_child (matcher->node.node,
                                          forward ? get_previous_visible_sibling 
                                                  : get_next_visible_sibling,
-                                         a, b);
+                                         a, b, match);
 }
 
 static void
@@ -421,28 +432,32 @@ gtk_css_matcher_any_get_previous (GtkCssMatcher       *matcher,
 
 static gboolean
 gtk_css_matcher_any_has_state (const GtkCssMatcher *matcher,
-                               GtkStateFlags        state)
+                               GtkStateFlags        state,
+                               gboolean             match)
 {
   return TRUE;
 }
 
 static gboolean
 gtk_css_matcher_any_has_name (const GtkCssMatcher     *matcher,
-                              /*interned*/ const char *name)
+                              /*interned*/ const char *name,
+                              gboolean                 match)
 {
   return TRUE;
 }
 
 static gboolean
 gtk_css_matcher_any_has_class (const GtkCssMatcher *matcher,
-                               GQuark               class_name)
+                               GQuark               class_name,
+                               gboolean             match)
 {
   return TRUE;
 }
 
 static gboolean
 gtk_css_matcher_any_has_id (const GtkCssMatcher *matcher,
-                                    const char          *id)
+                            const char          *id,
+                            gboolean             match)
 {
   return TRUE;
 }
@@ -451,7 +466,8 @@ static gboolean
 gtk_css_matcher_any_has_position (const GtkCssMatcher *matcher,
                                   gboolean             forward,
                                   int                  a,
-                                  int                  b)
+                                  int                  b,
+                                  gboolean             match)
 {
   return TRUE;
 }
@@ -503,37 +519,42 @@ gtk_css_matcher_superset_get_previous (GtkCssMatcher       *matcher,
 
 static gboolean
 gtk_css_matcher_superset_has_state (const GtkCssMatcher *matcher,
-                                    GtkStateFlags        state)
+                                    GtkStateFlags        state,
+                                    gboolean             match)
 {
   return TRUE;
 }
 
 static gboolean
 gtk_css_matcher_superset_has_name (const GtkCssMatcher     *matcher,
-                                   /*interned*/ const char *name)
+                                   /*interned*/ const char *name,
+                                   gboolean                 match)
 {
-  return _gtk_css_matcher_has_name (matcher->superset.subset, name);
+  return _gtk_css_matcher_has_name (matcher->superset.subset, name, match);
 }
 
 static gboolean
 gtk_css_matcher_superset_has_class (const GtkCssMatcher *matcher,
-                                    GQuark               class_name)
+                                    GQuark               class_name,
+                                    gboolean             match)
 {
-  return _gtk_css_matcher_has_class (matcher->superset.subset, class_name);
+  return _gtk_css_matcher_has_class (matcher->superset.subset, class_name, match);
 }
 
 static gboolean
 gtk_css_matcher_superset_has_id (const GtkCssMatcher *matcher,
-                                 const char          *id)
+                                 const char          *id,
+                                 gboolean             match)
 {
-  return _gtk_css_matcher_has_id (matcher->superset.subset, id);
+  return _gtk_css_matcher_has_id (matcher->superset.subset, id, match);
 }
 
 static gboolean
 gtk_css_matcher_superset_has_position (const GtkCssMatcher *matcher,
                                        gboolean             forward,
                                        int                  a,
-                                       int                  b)
+                                       int                  b,
+                                       gboolean             match)
 {
   return TRUE;
 }

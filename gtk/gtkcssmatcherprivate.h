@@ -44,17 +44,22 @@ struct _GtkCssMatcherClass {
                                                    const GtkCssMatcher    *next);
 
   gboolean        (* has_state)                   (const GtkCssMatcher   *matcher,
-                                                   GtkStateFlags          state);
+                                                   GtkStateFlags          state,
+                                                   gboolean               match);
   gboolean        (* has_name)                    (const GtkCssMatcher   *matcher,
-                                                   /*interned*/const char*name);
+                                                   /*interned*/const char*name,
+                                                   gboolean               match);
   gboolean        (* has_class)                   (const GtkCssMatcher   *matcher,
-                                                   GQuark                 class_name);
+                                                   GQuark                 class_name,
+                                                   gboolean               match);
   gboolean        (* has_id)                      (const GtkCssMatcher   *matcher,
-                                                   const char            *id);
+                                                   const char            *id,
+                                                   gboolean               match);
   gboolean        (* has_position)                (const GtkCssMatcher   *matcher,
                                                    gboolean               forward,
                                                    int                    a,
-                                                   int                    b);
+                                                   int                    b,
+                                                   gboolean               match);
   void            (* print)                       (const GtkCssMatcher   *matcher,
                                                    GString               *string);
 };
@@ -119,39 +124,44 @@ _gtk_css_matcher_get_previous (GtkCssMatcher       *matcher,
 
 static inline gboolean
 _gtk_css_matcher_has_state (const GtkCssMatcher *matcher,
-                            GtkStateFlags        state)
+                            GtkStateFlags        state,
+                            gboolean             match)
 {
-  return matcher->klass->has_state (matcher, state);
+  return matcher->klass->has_state (matcher, state, match);
 }
 
 static inline gboolean
 _gtk_css_matcher_has_name (const GtkCssMatcher     *matcher,
-                           /*interned*/ const char *name)
+                           /*interned*/ const char *name,
+                           gboolean                 match)
 {
-  return matcher->klass->has_name (matcher, name);
+  return matcher->klass->has_name (matcher, name, match);
 }
 
 static inline gboolean
 _gtk_css_matcher_has_class (const GtkCssMatcher *matcher,
-                            GQuark               class_name)
+                            GQuark               class_name,
+                            gboolean             match)
 {
-  return matcher->klass->has_class (matcher, class_name);
+  return matcher->klass->has_class (matcher, class_name, match);
 }
 
 static inline gboolean
 _gtk_css_matcher_has_id (const GtkCssMatcher *matcher,
-                         const char          *id)
+                         const char          *id,
+                         gboolean             match)
 {
-  return matcher->klass->has_id (matcher, id);
+  return matcher->klass->has_id (matcher, id, match);
 }
 
 static inline guint
 _gtk_css_matcher_has_position (const GtkCssMatcher *matcher,
                                gboolean             forward,
                                int                  a,
-                               int                  b)
+                               int                  b,
+                               gboolean             match)
 {
-  return matcher->klass->has_position (matcher, forward, a, b);
+  return matcher->klass->has_position (matcher, forward, a, b, match);
 }
 
 static inline gboolean
