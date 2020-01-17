@@ -1,0 +1,11 @@
+[window.background:dir(ltr)]    
+  decoration:dir(ltr)    
+  grid.horizontal:dir(ltr)    
+    label:dir(ltr)    name|sibling-name|parent-name|parent-sibling-name
+    button:dir(ltr)    
+      box.horizontal:dir(ltr)    
+        checkbutton:dir(ltr)    
+          check:dir(ltr)    
+          box.horizontal:dir(ltr)    
+            box.horizontal:dir(ltr)    
+            label:dir(ltr)    name|sibling-name|parent-name|parent-sibling-name
