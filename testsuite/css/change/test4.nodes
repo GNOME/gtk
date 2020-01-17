@@ -1,0 +1,8 @@
+window.background:dir(ltr)    class
+  decoration:dir(ltr)    class
+  box.horizontal:dir(ltr)    name
+    label.a:dir(ltr)    
+    label.b:dir(ltr)    
+    label.c:dir(ltr)    
+    label.d:dir(ltr)    
+    label.e.f:dir(ltr)    
