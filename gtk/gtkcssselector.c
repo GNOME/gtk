@@ -1736,39 +1736,6 @@ gtk_css_selector_match_for_change (const GtkCssSelector *selector,
   return selector->class->match_one (selector, matcher);
 }
 
-static gboolean
-gtk_css_selector_foreach_match_for_change (const GtkCssSelector *selector,
-                                           const GtkCssMatcher  *matcher,
-                                           gpointer              unused)
-{
-  selector = gtk_css_selector_previous (selector);
-
-  if (selector == NULL)
-    return TRUE;
-
-  if (!selector->class->is_simple)
-    return TRUE;
-
-  if (!gtk_css_selector_match_for_change (selector, matcher))
-    return FALSE;
-
-  return gtk_css_selector_foreach (selector, matcher, gtk_css_selector_foreach_match_for_change, NULL);
-}
-
-gboolean
-_gtk_css_selector_matches_for_change (const GtkCssSelector *selector,
-                                      const GtkCssMatcher  *matcher)
-{
-
-  g_return_val_if_fail (selector != NULL, FALSE);
-  g_return_val_if_fail (matcher != NULL, FALSE);
-
-  if (!gtk_css_selector_match_for_change (selector, matcher))
-    return FALSE;
-
-  return gtk_css_selector_foreach (selector, matcher, gtk_css_selector_foreach_match_for_change, NULL);
-}
-
 /* Computes specificity according to CSS 2.1.
  * The arguments must be initialized to 0 */
 static void
@@ -1952,7 +1919,7 @@ gtk_css_selector_tree_get_change (const GtkCssSelectorTree *tree,
   GtkCssChange change = 0;
   const GtkCssSelectorTree *prev;
 
-  if (!gtk_css_selector_match (&tree->selector, matcher))
+  if (!gtk_css_selector_match_for_change (&tree->selector, matcher))
     return 0;
 
   if (!tree->selector.class->is_simple)
