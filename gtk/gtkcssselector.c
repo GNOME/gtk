@@ -316,7 +316,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_DESCENDANT = {
   gtk_css_selector_default_hash_one,
   gtk_css_selector_default_compare_one,
   FALSE,
-  TRUE
+  FALSE
 };
 
 /* CHILD */
@@ -358,7 +358,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_CHILD = {
   gtk_css_selector_default_hash_one,
   gtk_css_selector_default_compare_one,
   FALSE,
-  TRUE
+  FALSE
 };
 
 /* SIBLING */
@@ -405,7 +405,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_SIBLING = {
   gtk_css_selector_default_hash_one,
   gtk_css_selector_default_compare_one,
   FALSE,
-  TRUE
+  FALSE,
 };
 
 /* ADJACENT */
@@ -447,7 +447,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ADJACENT = {
   gtk_css_selector_default_hash_one,
   gtk_css_selector_default_compare_one,
   FALSE,
-  TRUE
+  FALSE,
 };
 
 /* SIMPLE SELECTOR DEFINE */
@@ -1901,67 +1901,104 @@ gtk_css_selector_match_for_change (const GtkCssSelector *selector,
    that change != 0 on any match. */
 #define GTK_CSS_CHANGE_GOT_MATCH GTK_CSS_CHANGE_RESERVED_BIT
 
-static GtkCssChange
-gtk_css_selector_tree_collect_change (const GtkCssSelectorTree *tree)
+static void
+print_sel (const char *format, const GtkCssSelector *selector)
 {
+  GString *s = g_string_new ("");
+  selector->class->print (selector, s);
+  g_print (format, s->str);
+  g_string_free (s, TRUE);
+}
+
+static gboolean gtk_css_selector_tree_change_foreach (const GtkCssSelector *selector,
+                                                      const GtkCssMatcher  *matcher,
+                                                      gpointer              res);
+
+/* Handle the case that a new sibling with just the right properties might appear.
+ * This is done by collecting the sibling selector and all following simple selectors,
+ * before resuming matching.
+ */
+static GtkCssChange
+gtk_css_selector_tree_change_for_sibling (const GtkCssSelector *selector,
+                                          const GtkCssMatcher  *matcher,
+                                          gboolean              skip_first)
+{
+  const GtkCssSelectorTree *tree = (const GtkCssSelectorTree *) selector;
   GtkCssChange change = 0;
-  const GtkCssSelectorTree *prev;
 
-  for (prev = gtk_css_selector_tree_get_previous (tree);
-       prev != NULL;
-       prev = gtk_css_selector_tree_get_sibling (prev))
-    change |= gtk_css_selector_tree_collect_change (prev);
-
-  change = tree->selector.class->get_change (&tree->selector, change);
+  if (skip_first || tree->selector.class->is_simple)
+    {
+      const GtkCssSelectorTree *prev;
+      for (prev = gtk_css_selector_tree_get_previous (tree);
+           prev;
+           prev = gtk_css_selector_tree_get_sibling (prev))
+        change |= gtk_css_selector_tree_change_for_sibling (prev, matcher, FALSE);
+      change = selector->class->get_change (selector, change);
+    }
+  else
+    {
+      gtk_css_selector_tree_change_foreach (selector, matcher, &change);
+    }
 
   return change;
 }
 
-static GtkCssChange
-gtk_css_selector_tree_get_change (const GtkCssSelectorTree *tree,
-				  const GtkCssMatcher      *matcher)
+static gboolean
+gtk_css_selector_tree_change_foreach (const GtkCssSelector *selector,
+				      const GtkCssMatcher  *matcher,
+                                      gpointer              res)
 {
-  GtkCssChange change = 0;
+  const GtkCssSelectorTree *tree = (const GtkCssSelectorTree *) selector;
   const GtkCssSelectorTree *prev;
+  GtkCssChange *ret = res;
+  GtkCssChange change = 0;
 
   if (!gtk_css_selector_match_for_change (&tree->selector, matcher))
-    return 0;
+    return FALSE;
 
-  if (!tree->selector.class->is_simple)
-    return gtk_css_selector_tree_collect_change (tree) | GTK_CSS_CHANGE_GOT_MATCH;
+//  print_sel ("match at %s\n", selector);
 
   for (prev = gtk_css_selector_tree_get_previous (tree);
        prev != NULL;
        prev = gtk_css_selector_tree_get_sibling (prev))
-    change |= gtk_css_selector_tree_get_change (prev, matcher);
+    {
+      GtkCssChange change2 = 0;
+
+      if (prev->selector.class == &GTK_CSS_SELECTOR_SIBLING ||
+          prev->selector.class == &GTK_CSS_SELECTOR_ADJACENT)
+        change2 = gtk_css_selector_tree_change_for_sibling (&prev->selector, matcher, TRUE);
+      else
+        gtk_css_selector_foreach (&prev->selector, matcher, gtk_css_selector_tree_change_foreach, &change2);
+
+      change |= change2;
+    }
 
   if (change || gtk_css_selector_tree_get_matches (tree))
-    change = tree->selector.class->get_change (&tree->selector, change & ~GTK_CSS_CHANGE_GOT_MATCH) | GTK_CSS_CHANGE_GOT_MATCH;
+    {
+      *ret |= tree->selector.class->get_change (&tree->selector, change & ~GTK_CSS_CHANGE_GOT_MATCH) | GTK_CSS_CHANGE_GOT_MATCH;
+    }
 
-  return change;
-}
-
-gboolean
-_gtk_css_selector_tree_is_empty (const GtkCssSelectorTree *tree)
-{
-  return tree == NULL;
+  return FALSE;
 }
 
 GtkCssChange
 _gtk_css_selector_tree_get_change_all (const GtkCssSelectorTree *tree,
 				       const GtkCssMatcher *matcher)
 {
-  GtkCssChange change;
+  GtkCssChange change = 0;
 
-  change = 0;
-
-  /* no need to foreach here because we abort for non-simple selectors */
   for (; tree != NULL;
        tree = gtk_css_selector_tree_get_sibling (tree))
-    change |= gtk_css_selector_tree_get_change (tree, matcher);
+    gtk_css_selector_foreach (&tree->selector, matcher, gtk_css_selector_tree_change_foreach, &change);
 
   /* Never return reserved bit set */
-  return change & ~GTK_CSS_CHANGE_RESERVED_BIT;
+  return change & ~GTK_CSS_CHANGE_GOT_MATCH;
+}
+
+gboolean
+_gtk_css_selector_tree_is_empty (const GtkCssSelectorTree *tree)
+{
+  return tree == NULL;
 }
 
 #ifdef PRINT_TREE
