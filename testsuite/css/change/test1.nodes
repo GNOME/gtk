@@ -1,5 +1,5 @@
-window.background:dir(ltr)    class
-  decoration:dir(ltr)    class
+window.background:dir(ltr)    
+  decoration:dir(ltr)    
   box.horizontal:dir(ltr)    name
     label:dir(ltr)    name
     label.test:dir(ltr)    name

@@ -1,10 +1,10 @@
-window.background:dir(ltr)    class
-  decoration:dir(ltr)    class
-  grid.horizontal:dir(ltr)    class
-    label:dir(ltr)    class
-    button:dir(ltr)    class
-      box.horizontal:dir(ltr)    class
-        checkbutton:dir(ltr)    class
-          check:dir(ltr)    class
-          box.horizontal:dir(ltr)    class
-          label:dir(ltr)    class
+window.background:dir(ltr)    
+  decoration:dir(ltr)    
+  grid.horizontal:dir(ltr)    
+    label:dir(ltr)    name|sibling-name|parent-name|parent-sibling-name
+    button:dir(ltr)    
+      box.horizontal:dir(ltr)    
+        checkbutton:dir(ltr)    
+          check:dir(ltr)    
+          box.horizontal:dir(ltr)    
+          label:dir(ltr)    name|sibling-name|parent-name|parent-sibling-name
