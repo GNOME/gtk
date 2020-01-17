@@ -425,41 +425,6 @@ verify_tree_match_results (GtkCssProvider *provider,
 #endif
 }
 
-/* Compute the change flags for a given matcher.
- * We assume that name, id and classes stay unchanged, and look for all rules
- * that can be matched if anything else changes. We collect the change masks
- * from the selectors of these rules.
- */
-static GtkCssChange
-compute_change (GtkCssProvider      *provider,
-                const GtkCssMatcher *matcher)
-{
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
-  GtkCssChange change = 0;
-  GPtrArray *tree_rules;
-  int i;
-  GtkCssMatcher change_matcher;
-
-  _gtk_css_matcher_superset_init (&change_matcher, matcher);
-
-  tree_rules = _gtk_css_selector_tree_match_all (priv->tree, &change_matcher);
-  if (tree_rules)
-    {
-      for (i = tree_rules->len - 1; i >= 0; i--)
-        {
-	  GtkCssRuleset *ruleset;
-
-          ruleset = tree_rules->pdata[i];
-
-          change |= _gtk_css_selector_get_change (ruleset->selector);
-        }
-
-      g_ptr_array_free (tree_rules, TRUE);
-   }
-
-  return change;
-}
-
 static GtkCssValue *
 gtk_css_style_provider_get_color (GtkStyleProvider *provider,
                                   const char       *name)
@@ -530,7 +495,7 @@ gtk_css_style_provider_lookup (GtkStyleProvider    *provider,
     }
 
   if (change)
-    *change = compute_change (css_provider, matcher);
+    *change = _gtk_css_selector_tree_get_change_all (priv->tree, matcher);
 }
 
 static void
