@@ -231,6 +231,19 @@ main (int argc, char **argv)
 {
   g_setenv ("GTK_CSS_DEBUG", "1", TRUE);
 
+  if (argc >=3 && strcmp (argv[1], "--generate") == 0)
+    {
+      GFile *file = g_file_new_for_commandline_arg (argv[2]);
+
+      gtk_init ();
+
+      load_ui_file (file, TRUE);
+
+      g_object_unref (file);
+
+      return 0;
+    }
+
   gtk_test_init (&argc, &argv);
 
   if (argc < 2)
@@ -243,17 +256,6 @@ main (int argc, char **argv)
       add_tests_for_files_in_directory (dir);
 
       g_object_unref (dir);
-    }
-  else if (strcmp (argv[1], "--generate") == 0)
-    {
-      if (argc >= 3)
-        {
-          GFile *file = g_file_new_for_commandline_arg (argv[2]);
-
-          load_ui_file (file, TRUE);
-
-          g_object_unref (file);
-        }
     }
   else
     {
