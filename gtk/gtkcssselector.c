@@ -1736,16 +1736,6 @@ _gtk_css_selector_matches (const GtkCssSelector *selector,
   return gtk_css_selector_foreach (selector, matcher, gtk_css_selector_foreach_match, NULL);
 }
 
-static gboolean
-gtk_css_selector_match_for_change (const GtkCssSelector *selector,
-                                   const GtkCssMatcher  *matcher)
-{
-  if (selector->class->ignore_for_change)
-    return TRUE;
-
-  return selector->class->match_one (selector, matcher);
-}
-
 /* Computes specificity according to CSS 2.1.
  * The arguments must be initialized to 0 */
 static void
@@ -1893,6 +1883,21 @@ _gtk_css_selector_tree_match_all (const GtkCssSelectorTree *tree,
     gtk_css_selector_foreach (&tree->selector, matcher, gtk_css_selector_tree_match_foreach, &array);
 
   return array;
+}
+
+/* The code for collecting matches assumes that the name, id and classes
+ * of a node remain unchanged, and anything else can change. This needs to
+ * be kept in sync with the definition of 'radical change' in gtkcssnode.c.
+ */
+
+static gboolean
+gtk_css_selector_match_for_change (const GtkCssSelector *selector,
+                                   const GtkCssMatcher  *matcher)
+{
+  if (selector->class->ignore_for_change)
+    return TRUE;
+
+  return selector->class->match_one (selector, matcher);
 }
 
 /* When checking for changes via the tree we need to know if a rule further
