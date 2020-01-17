@@ -1,9 +1,9 @@
-[window.background:dir(ltr)]
+window.background:dir(ltr)
   decoration:dir(ltr)
   notebook.frame:dir(ltr)
-    header.top.horizontal:dir(ltr)
+    header.horizontal.top:dir(ltr)
       tabs:dir(ltr)
-        arrow.image-button.down:disabled:dir(ltr)
+        arrow.down.image-button:disabled:dir(ltr)
           image:disabled:dir(ltr)
         tab:dir(ltr):checked
           label#tab1:dir(ltr)

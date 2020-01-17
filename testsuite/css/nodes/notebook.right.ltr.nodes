@@ -1,4 +1,4 @@
-[window.background:dir(ltr)]
+window.background:dir(ltr)
   decoration:dir(ltr)
   notebook.frame:dir(ltr)
     stack:dir(ltr)
@@ -6,7 +6,7 @@
         label:dir(ltr)
       button#page2.text-button:dir(ltr)
         label:dir(ltr)
-    header.vertical.right:dir(ltr)
+    header.right.vertical:dir(ltr)
       button#start.text-button:dir(ltr)
         label:dir(ltr)
       tabs:dir(ltr)
