@@ -25,7 +25,7 @@
       text:dir(ltr)
         undershoot.left:dir(ltr)
         undershoot.right:dir(ltr)
-      button.image-button.down:dir(ltr)
+      button.down.image-button:dir(ltr)
         image:dir(ltr)
       button.image-button.up:dir(ltr)
         image:dir(ltr)

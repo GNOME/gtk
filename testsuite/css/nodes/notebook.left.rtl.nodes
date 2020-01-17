@@ -6,7 +6,7 @@
         label:dir(rtl)
       button#page2.text-button:dir(rtl)
         label:dir(rtl)
-    header.vertical.right:dir(rtl)
+    header.right.vertical:dir(rtl)
       button#start.text-button:dir(rtl)
         label:dir(rtl)
       tabs:dir(rtl)

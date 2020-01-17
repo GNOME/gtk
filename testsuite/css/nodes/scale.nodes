@@ -31,7 +31,7 @@
       trough:dir(ltr)
         highlight.top:dir(ltr)
         slider:dir(ltr)
-    scale.horizontal.marks-before.marks-after:dir(ltr)
+    scale.horizontal.marks-after.marks-before:dir(ltr)
       marks.top:dir(ltr)
         mark:dir(ltr)
           label:dir(ltr)
