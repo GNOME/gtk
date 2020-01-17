@@ -1,7 +1,7 @@
 window.background:dir(ltr)    
   decoration:dir(ltr)    
   grid.horizontal:dir(ltr)    
-    label:dir(ltr)    name|sibling-name|parent-name|parent-sibling-name
+    label:dir(ltr)    
     button:dir(ltr)    
       box.horizontal:dir(ltr)    
         checkbutton:dir(ltr)    
