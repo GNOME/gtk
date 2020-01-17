@@ -1,0 +1,4 @@
+[window.background:dir(ltr)]    
+  decoration:dir(ltr)    
+  box.horizontal.a:dir(ltr)    name
+    label.b:dir(ltr)    name|parent-class|parent-name|parent-hover|parent-backdrop|parent-selected

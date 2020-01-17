@@ -1,0 +1,17 @@
+/* test negations */
+
+box {
+  color: red;
+}
+
+g:hover label {
+  color: red;
+}
+
+:not(.a):backdrop label {
+  color: red;
+}
+
+:not(box):selected label {
+  color: red;
+}
