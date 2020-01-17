@@ -592,7 +592,8 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
   if (str)
     *str = g_strdup (preedit_str);
   if (cursor_pos)
-    *cursor_pos = context_wayland->current_preedit.cursor_begin;
+    *cursor_pos = g_utf8_strlen(preedit_str,
+                                context_wayland->current_preedit.cursor_begin);
 
   if (attrs)
     {
