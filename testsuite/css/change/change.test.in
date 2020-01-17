@@ -1,0 +1,4 @@
+[Test]
+Exec=@libexecdir@/installed-tests/gtk-4.0/css/change/test-css-change --tap -k
+Type=session
+Output=TAP
