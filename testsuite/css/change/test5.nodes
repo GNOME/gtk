@@ -1,0 +1,10 @@
+window.background:dir(ltr)    class
+  decoration:dir(ltr)    class
+  grid.horizontal:dir(ltr)    class
+    label:dir(ltr)    class
+    button:dir(ltr)    class
+      box.horizontal:dir(ltr)    class
+        checkbutton:dir(ltr)    class
+          check:dir(ltr)    class
+          box.horizontal:dir(ltr)    class
+          label:dir(ltr)    class
