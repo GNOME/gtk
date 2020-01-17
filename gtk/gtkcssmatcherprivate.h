@@ -43,7 +43,8 @@ struct _GtkCssMatcherClass {
   gboolean        (* get_previous)                (GtkCssMatcher          *matcher,
                                                    const GtkCssMatcher    *next);
 
-  GtkStateFlags   (* get_state)                   (const GtkCssMatcher   *matcher);
+  gboolean        (* has_state)                   (const GtkCssMatcher   *matcher,
+                                                   GtkStateFlags          state);
   gboolean        (* has_name)                    (const GtkCssMatcher   *matcher,
                                                    /*interned*/const char*name);
   gboolean        (* has_class)                   (const GtkCssMatcher   *matcher,
@@ -116,10 +117,11 @@ _gtk_css_matcher_get_previous (GtkCssMatcher       *matcher,
   return next->klass->get_previous (matcher, next);
 }
 
-static inline GtkStateFlags
-_gtk_css_matcher_get_state (const GtkCssMatcher *matcher)
+static inline gboolean
+_gtk_css_matcher_has_state (const GtkCssMatcher *matcher,
+                            GtkStateFlags        state)
 {
-  return matcher->klass->get_state (matcher);
+  return matcher->klass->has_state (matcher, state);
 }
 
 static inline gboolean
