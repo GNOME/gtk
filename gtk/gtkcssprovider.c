@@ -436,26 +436,15 @@ compute_change (GtkCssProvider      *provider,
 {
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
   GtkCssChange change = 0;
-  GPtrArray *tree_rules;
   int i;
-  GtkCssMatcher change_matcher;
 
-  _gtk_css_matcher_superset_init (&change_matcher, matcher);
-
-  tree_rules = _gtk_css_selector_tree_match_all (priv->tree, &change_matcher);
-  if (tree_rules)
+  for (i = 0; i < priv->rulesets->len; i++)
     {
-      for (i = tree_rules->len - 1; i >= 0; i--)
-        {
-	  GtkCssRuleset *ruleset;
+      GtkCssRuleset *ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
 
-          ruleset = tree_rules->pdata[i];
-
-          change |= _gtk_css_selector_get_change (ruleset->selector);
-        }
-
-      g_ptr_array_free (tree_rules, TRUE);
-   }
+      if (_gtk_css_selector_matches_for_change (ruleset->selector, matcher))
+        change |= _gtk_css_selector_get_change (ruleset->selector);
+    }
 
   return change;
 }
