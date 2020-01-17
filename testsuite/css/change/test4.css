@@ -12,14 +12,14 @@ label.b:not(:hover):backdrop {
   color: green;
 }
 
-label:not(:hover) label.c {
+box:not(:hover) label.c {
   color: green;
 }
 
-label:not(:hover):backdrop label.d {
+box:not(:hover):backdrop label.d {
   color: green;
 }
 
-label:not(:hover):backdrop label.e:not(.f) {
+box:not(:hover):backdrop label.e:not(.f) {
   color: green;
 }

@@ -1,6 +1,432 @@
+Change for [window.background:dir(ltr)]
+ from 0 rules
+Total: 
+Change for [window.background:dir(ltr)]
+ from 1 rules
+  from *: 
+Total: 
+Change for decoration:dir(ltr)
+ from 0 rules
+Total: 
+Change for decoration:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for box#box.horizontal.test:dir(ltr)
+ from 1 rules
+  from box: name
+Total: name
+Change for box#box.horizontal.test:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label:dir(ltr)
+ from 1 rules
+  from label: name
+Total: name
+Change for label:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.a:dir(ltr)
+ from 2 rules
+  from :disabled.alabel: class|name|disabled
+  from label: name
+Total: class|name|disabled
+Change for label.a:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.b:dir(ltr)
+ from 2 rules
+  from :selected.blabel: class|name|selected
+  from label: name
+Total: class|name|selected
+Change for label.b:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.c:dir(ltr)
+ from 2 rules
+  from :backdrop.clabel: class|name|backdrop
+  from label: name
+Total: class|name|backdrop
+Change for label.c:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.d:dir(ltr)
+ from 2 rules
+  from :focus.dlabel: class|name|state
+  from label: name
+Total: class|name|state
+Change for label.d:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.e:dir(ltr)
+ from 2 rules
+  from :first-child.elabel: class|name|first-child
+  from label: name
+Total: class|name|first-child
+Change for label.e:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.f:dir(ltr)
+ from 2 rules
+  from :last-child.flabel: class|name|last-child
+  from label: name
+Total: class|name|last-child
+Change for label.f:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.g:dir(ltr)
+ from 2 rules
+  from :nth-child(2).glabel: class|name|nth-child
+  from label: name
+Total: class|name|nth-child
+Change for label.g:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.h:dir(ltr)
+ from 2 rules
+  from :nth-last-child(2).hlabel: class|name|nth-last-child
+  from label: name
+Total: class|name|nth-last-child
+Change for label.h:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.i:dir(ltr)
+ from 2 rules
+  from :hover.ilabel: class|name|hover
+  from label: name
+Total: class|name|hover
+Change for label.i:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.j:dir(ltr)
+ from 2 rules
+  from label ~ .jlabel: class|name|sibling-name
+  from label: name
+Total: class|name|sibling-name
+Change for label.j:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.j1:dir(ltr)
+ from 2 rules
+  from #label ~ .j1label: class|name|sibling-id
+  from label: name
+Total: class|name|sibling-id
+Change for label.j1:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.k:dir(ltr)
+ from 2 rules
+  from label.test ~ .klabel: class|name|sibling-class|sibling-name
+  from label: name
+Total: class|name|sibling-class|sibling-name
+Change for label.k:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.l:dir(ltr)
+ from 2 rules
+  from :hoverlabel ~ .llabel: class|name|sibling-name|sibling-hover
+  from label: name
+Total: class|name|sibling-name|sibling-hover
+Change for label.l:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.m:dir(ltr)
+ from 2 rules
+  from :disabledlabel ~ .mlabel: class|name|sibling-name|sibling-disabled
+  from label: name
+Total: class|name|sibling-name|sibling-disabled
+Change for label.m:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.n:dir(ltr)
+ from 2 rules
+  from :backdroplabel ~ .nlabel: class|name|sibling-name|sibling-backdrop
+  from label: name
+Total: class|name|sibling-name|sibling-backdrop
+Change for label.n:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.o:dir(ltr)
+ from 2 rules
+  from :selectedlabel ~ .olabel: class|name|sibling-name|sibling-selected
+  from label: name
+Total: class|name|sibling-name|sibling-selected
+Change for label.o:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.p:dir(ltr)
+ from 2 rules
+  from :focuslabel ~ .plabel: class|name|sibling-name|sibling-state
+  from label: name
+Total: class|name|sibling-name|sibling-state
+Change for label.p:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.q:dir(ltr)
+ from 2 rules
+  from :first-childlabel ~ .qlabel: class|name|sibling-name|sibling-first-child
+  from label: name
+Total: class|name|sibling-name|sibling-first-child
+Change for label.q:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.r:dir(ltr)
+ from 2 rules
+  from :last-childlabel ~ .rlabel: class|name|sibling-name|sibling-last-child
+  from label: name
+Total: class|name|sibling-name|sibling-last-child
+Change for label.r:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.s:dir(ltr)
+ from 2 rules
+  from :nth-child(2n+5)label ~ .slabel: class|name|nth-child|sibling-name|sibling-nth-child
+  from label: name
+Total: class|name|nth-child|sibling-name|sibling-nth-child
+Change for label.s:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.t:dir(ltr)
+ from 2 rules
+  from :nth-last-child(2n+5)label ~ .tlabel: class|name|nth-last-child|sibling-name|sibling-nth-last-child
+  from label: name
+Total: class|name|nth-last-child|sibling-name|sibling-nth-last-child
+Change for label.t:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.u:dir(ltr)
+ from 2 rules
+  from box .ulabel: class|name|parent-name
+  from label: name
+Total: class|name|parent-name
+Change for label.u:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.u1:dir(ltr)
+ from 2 rules
+  from #box .u1label: class|name|parent-id
+  from label: name
+Total: class|name|parent-id
+Change for label.u1:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.v:dir(ltr)
+ from 2 rules
+  from box.test .vlabel: class|name|parent-class|parent-name
+  from label: name
+Total: class|name|parent-class|parent-name
+Change for label.v:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.w:dir(ltr)
+ from 2 rules
+  from :focusbox .wlabel: class|name|parent-name|parent-state
+  from label: name
+Total: class|name|parent-name|parent-state
+Change for label.w:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.x:dir(ltr)
+ from 2 rules
+  from :hoverbox .xlabel: class|name|parent-name|parent-hover
+  from label: name
+Total: class|name|parent-name|parent-hover
+Change for label.x:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.y:dir(ltr)
+ from 2 rules
+  from :disabledbox .ylabel: class|name|parent-name|parent-disabled
+  from label: name
+Total: class|name|parent-name|parent-disabled
+Change for label.y:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.z:dir(ltr)
+ from 2 rules
+  from :backdropbox .zlabel: class|name|parent-name|parent-backdrop
+  from label: name
+Total: class|name|parent-name|parent-backdrop
+Change for label.z:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.aa:dir(ltr)
+ from 2 rules
+  from :selectedbox .aalabel: class|name|parent-name|parent-selected
+  from label: name
+Total: class|name|parent-name|parent-selected
+Change for label.aa:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.bb:dir(ltr)
+ from 2 rules
+  from :first-childbox .bblabel: class|name|parent-name|parent-first-child
+  from label: name
+Total: class|name|parent-name|parent-first-child
+Change for label.bb:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.cc:dir(ltr)
+ from 2 rules
+  from :last-childbox .cclabel: class|name|parent-name|parent-last-child
+  from label: name
+Total: class|name|parent-name|parent-last-child
+Change for label.cc:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.dd:dir(ltr)
+ from 2 rules
+  from :nth-child(3)box .ddlabel: class|name|parent-name|parent-nth-child
+  from label: name
+Total: class|name|parent-name|parent-nth-child
+Change for label.dd:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.ee:dir(ltr)
+ from 2 rules
+  from :nth-last-child(3)box .eelabel: class|name|parent-name|parent-nth-last-child
+  from label: name
+Total: class|name|parent-name|parent-nth-last-child
+Change for label.ee:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.ff:dir(ltr)
+ from 2 rules
+  from box ~ box .fflabel: class|name|parent-name|parent-sibling-name
+  from label: name
+Total: class|name|parent-name|parent-sibling-name
+Change for label.ff:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.gg:dir(ltr)
+ from 2 rules
+  from #box1 ~ box .gglabel: class|name|parent-name|parent-sibling-id
+  from label: name
+Total: class|name|parent-name|parent-sibling-id
+Change for label.gg:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.hh:dir(ltr)
+ from 2 rules
+  from box.test ~ box .hhlabel: class|name|parent-name|parent-sibling-class|parent-sibling-name
+  from label: name
+Total: class|name|parent-name|parent-sibling-class|parent-sibling-name
+Change for label.hh:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.ii:dir(ltr)
+ from 2 rules
+  from :focusbox ~ box .iilabel: class|name|parent-name|parent-sibling-name|parent-sibling-state
+  from label: name
+Total: class|name|parent-name|parent-sibling-name|parent-sibling-state
+Change for label.ii:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.jj:dir(ltr)
+ from 2 rules
+  from :hoverbox ~ box .jjlabel: class|name|parent-name|parent-sibling-name|parent-sibling-hover
+  from label: name
+Total: class|name|parent-name|parent-sibling-name|parent-sibling-hover
+Change for label.jj:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.kk:dir(ltr)
+ from 2 rules
+  from :backdropbox ~ box .kklabel: class|name|parent-name|parent-sibling-name|parent-sibling-backdrop
+  from label: name
+Total: class|name|parent-name|parent-sibling-name|parent-sibling-backdrop
+Change for label.kk:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.ll:dir(ltr)
+ from 2 rules
+  from :selectedbox ~ box .lllabel: class|name|parent-name|parent-sibling-name|parent-sibling-selected
+  from label: name
+Total: class|name|parent-name|parent-sibling-name|parent-sibling-selected
+Change for label.ll:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.mm:dir(ltr)
+ from 2 rules
+  from :first-childbox ~ box .mmlabel: class|name|parent-name|parent-sibling-name|parent-sibling-first-child
+  from label: name
+Total: class|name|parent-name|parent-sibling-name|parent-sibling-first-child
+Change for label.mm:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.nn:dir(ltr)
+ from 2 rules
+  from :last-childbox ~ box .nnlabel: class|name|parent-name|parent-sibling-name|parent-sibling-last-child
+  from label: name
+Total: class|name|parent-name|parent-sibling-name|parent-sibling-last-child
+Change for label.nn:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.oo:dir(ltr)
+ from 2 rules
+  from :nth-child(2)box ~ box .oolabel: class|name|parent-name|parent-nth-child|parent-sibling-name|parent-sibling-nth-child
+  from label: name
+Total: class|name|parent-name|parent-nth-child|parent-sibling-name|parent-sibling-nth-child
+Change for label.oo:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
+Change for label.pp:dir(ltr)
+ from 2 rules
+  from :nth-last-child(2)box ~ box .pplabel: class|name|parent-name|parent-nth-last-child|parent-sibling-name|parent-sibling-nth-last-child
+  from label: name
+Total: class|name|parent-name|parent-nth-last-child|parent-sibling-name|parent-sibling-nth-last-child
+Change for label.pp:dir(ltr)
+ from 1 rules
+  from *: 
+Total: 
 [window.background:dir(ltr)]    
   decoration:dir(ltr)    
-  box.horizontal:dir(ltr)    name
+  box#box.horizontal.test:dir(ltr)    name
     label:dir(ltr)    name
     label.a:dir(ltr)    class|name|disabled
     label.b:dir(ltr)    class|name|selected
