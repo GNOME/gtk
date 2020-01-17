@@ -173,7 +173,7 @@ gtk_css_change_print (GtkCssChange  change,
     { GTK_CSS_CHANGE_PARENT_BACKDROP, "parent-backdrop" },
     { GTK_CSS_CHANGE_PARENT_SELECTED, "parent-selected" },
 
-    { GTK_CSS_CHANGE_PARENT_SIBLING_CLASS, "parent-sibling-" },
+    { GTK_CSS_CHANGE_PARENT_SIBLING_CLASS, "parent-sibling-class" },
     { GTK_CSS_CHANGE_PARENT_SIBLING_NAME, "parent-sibling-name" },
     { GTK_CSS_CHANGE_PARENT_SIBLING_ID, "parent-sibling-id" },
     { GTK_CSS_CHANGE_PARENT_SIBLING_FIRST_CHILD, "parent-sibling-first-child" },
