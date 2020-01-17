@@ -1,6 +1,6 @@
 [window.background:dir(ltr)]    
   decoration:dir(ltr)    
-  box.horizontal:dir(ltr)    name
+  box#box.horizontal.test:dir(ltr)    name
     label:dir(ltr)    name
     label.a:dir(ltr)    class|name|disabled
     label.b:dir(ltr)    class|name|selected

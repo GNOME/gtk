@@ -1,7 +1,7 @@
 /* trigger all change flags at least once */
 
 box {
-  color: red;
+  color: green;
 }
 
 label {
@@ -92,95 +92,95 @@ label:nth-last-child(2n+5) ~ label.t {
   color: blue;
 }
 
-label label.u {
+box label.u {
   color: blue;
 }
 
-#label label.u1 {
+#box label.u1 {
   color: blue;
 }
 
-label.test label.v {
+box.test label.v {
   color: blue;
 }
 
-label:focus label.w {
+box:focus label.w {
   color: blue;
 }
 
-label:hover label.x {
+box:hover label.x {
   color: blue;
 }
 
-label:disabled label.y {
+box:disabled label.y {
   color: blue;
 }
 
-label:backdrop label.z {
+box:backdrop label.z {
   color: blue;
 }
 
-label:selected label.aa {
+box:selected label.aa {
   color: blue;
 }
 
-label:first-child label.bb {
+box:first-child label.bb {
   color: blue;
 }
 
-label:last-child label.cc {
+box:last-child label.cc {
   color: blue;
 }
 
-label:nth-child(3) label.dd {
+box:nth-child(3) label.dd {
   color: blue;
 }
 
-label:nth-last-child(3) label.ee {
+box:nth-last-child(3) label.ee {
   color: blue;
 }
 
-label~label label.ff {
+box~box label.ff {
   color: blue;
 }
 
-#label~label label.gg {
+#box1~box label.gg {
   color: blue;
 }
 
-label.test~label label.hh {
+box.test~box label.hh {
   color: blue;
 }
 
-label:focus~label label.ii {
+box:focus~box label.ii {
   color: blue;
 }
 
-label:hover~label label.jj {
+box:hover~box label.jj {
   color: blue;
 }
 
-label:backdrop~label label.kk {
+box:backdrop~box label.kk {
   color: blue;
 }
 
-label:selected~label label.ll {
+box:selected~box label.ll {
   color: blue;
 }
 
-label:first-child~label label.mm {
+box:first-child~box label.mm {
   color: blue;
 }
 
-label:last-child~label label.nn {
+box:last-child~box label.nn {
   color: blue;
 }
 
-label:nth-child(2)~label label.oo {
+box:nth-child(2)~box label.oo {
   color: blue;
 }
 
-label:nth-last-child(2)~label label.pp {
+box:nth-last-child(2)~box label.pp {
   color: blue;
 }
 

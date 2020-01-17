@@ -5,6 +5,8 @@
     <property name="type">popup</property>
     <child>
       <object class="GtkBox">
+        <property name="name">box</property>
+        <style><class name="test"/></style>
         <child>
           <object class="GtkLabel">
           </object>
