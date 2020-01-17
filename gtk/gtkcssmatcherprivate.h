@@ -84,7 +84,10 @@ struct _GtkCssMatcherNode {
 
 struct _GtkCssMatcherSuperset {
   const GtkCssMatcherClass *klass;
-  const GtkCssMatcher      *subset;
+  union {
+    GtkCssMatcherWidgetPath   path;
+    GtkCssMatcherNode         node;
+  } subset;
 };
 
 union _GtkCssMatcher {

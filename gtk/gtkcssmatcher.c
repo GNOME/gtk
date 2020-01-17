@@ -530,7 +530,7 @@ gtk_css_matcher_superset_has_name (const GtkCssMatcher     *matcher,
                                    /*interned*/ const char *name,
                                    gboolean                 match)
 {
-  return _gtk_css_matcher_has_name (matcher->superset.subset, name, match);
+  return _gtk_css_matcher_has_name ((GtkCssMatcher *)&matcher->superset.subset, name, match);
 }
 
 static gboolean
@@ -538,7 +538,7 @@ gtk_css_matcher_superset_has_class (const GtkCssMatcher *matcher,
                                     GQuark               class_name,
                                     gboolean             match)
 {
-  return _gtk_css_matcher_has_class (matcher->superset.subset, class_name, match);
+  return _gtk_css_matcher_has_class ((GtkCssMatcher *)&matcher->superset.subset, class_name, match);
 }
 
 static gboolean
@@ -546,7 +546,7 @@ gtk_css_matcher_superset_has_id (const GtkCssMatcher *matcher,
                                  const char          *id,
                                  gboolean             match)
 {
-  return _gtk_css_matcher_has_id (matcher->superset.subset, id, match);
+  return _gtk_css_matcher_has_id ((GtkCssMatcher *)&matcher->superset.subset, id, match);
 }
 
 static gboolean
@@ -564,7 +564,7 @@ gtk_css_matcher_superset_print (const GtkCssMatcher *matcher,
                                 GString             *string)
 {
   g_string_append (string, "SUPERSET(");
-  gtk_css_matcher_print (matcher->superset.subset, string);
+  gtk_css_matcher_print ((GtkCssMatcher *)&matcher->superset.subset, string);
   g_string_append (string, ")");
 }
 
@@ -587,5 +587,18 @@ _gtk_css_matcher_superset_init (GtkCssMatcher       *matcher,
   g_return_if_fail (subset != NULL);
 
   matcher->superset.klass = &GTK_CSS_MATCHER_SUPERSET;
-  matcher->superset.subset = subset;
+  switch (subset->klass->type)
+    {
+    case GTK_CSS_MATCHER_TYPE_WIDGET_PATH:
+      matcher->superset.subset.path = subset->path;
+      break;
+    case GTK_CSS_MATCHER_TYPE_NODE:
+      matcher->superset.subset.node = subset->node;
+      break;
+    case GTK_CSS_MATCHER_TYPE_ANY:
+    case GTK_CSS_MATCHER_TYPE_SUPERSET:
+    default:
+      g_assert_not_reached ();
+      break;
+    }
 }
