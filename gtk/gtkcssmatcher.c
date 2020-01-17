@@ -503,7 +503,12 @@ static gboolean
 gtk_css_matcher_superset_get_parent (GtkCssMatcher       *matcher,
                                      const GtkCssMatcher *child)
 {
-  _gtk_css_matcher_any_init (matcher);
+  GtkCssMatcher parent;
+
+  if (!_gtk_css_matcher_get_parent (&parent, (GtkCssMatcher *)&child->superset.subset))
+    return FALSE;
+
+  _gtk_css_matcher_superset_init (matcher, &parent);
 
   return TRUE;
 }
