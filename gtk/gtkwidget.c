@@ -12234,8 +12234,8 @@ static inline void
 gtk_widget_maybe_add_debug_render_nodes (GtkWidget   *widget,
                                          GtkSnapshot *snapshot)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 #ifdef G_ENABLE_DEBUG
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkDisplay *display = _gtk_widget_get_display (widget);
 
   if (GTK_DISPLAY_DEBUG_CHECK (display, BASELINES))
