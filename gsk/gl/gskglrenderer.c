@@ -753,7 +753,6 @@ render_border_node (GskGLRenderer   *self,
   const GdkRGBA *colors = gsk_border_node_peek_colors (node);
   const GskRoundedRect *rounded_outline = gsk_border_node_peek_outline (node);
   const float *og_widths = gsk_border_node_peek_widths (node);
-  GskRoundedRect outline;
   float widths[4];
   int i;
   struct {
@@ -877,6 +876,7 @@ render_border_node (GskGLRenderer   *self,
       }
     };
     int indices[4] = { 0, 1, 2, 3 };
+    GskRoundedRect outline;
 
     /* We sort them by color */
     sort_border_sides (colors, indices);
