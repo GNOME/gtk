@@ -711,7 +711,7 @@ static gboolean
 match_pseudoclass_state (const GtkCssSelector *selector,
                          const GtkCssMatcher  *matcher)
 {
-  return (_gtk_css_matcher_get_state (matcher) & selector->state.state) == selector->state.state;
+  return _gtk_css_matcher_has_state (matcher, selector->state.state);
 }
 
 static guint

@@ -440,7 +440,7 @@ compute_change (GtkCssProvider      *provider,
   int i;
   GtkCssMatcher change_matcher;
 
-  _gtk_css_matcher_superset_init (&change_matcher, matcher, GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS);
+  _gtk_css_matcher_superset_init (&change_matcher, matcher);
 
   tree_rules = _gtk_css_selector_tree_match_all (priv->tree, &change_matcher);
   if (tree_rules)
