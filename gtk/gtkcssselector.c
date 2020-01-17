@@ -305,11 +305,6 @@ gtk_css_selector_descendant_foreach_matcher (const GtkCssSelector      *selector
 
       if (func (selector, &ancestor, data))
         return TRUE;
-
-      /* any matchers are dangerous here, as we may loop forever, but
-	 we can terminate now as all possible matches have already been added */
-      if (_gtk_css_matcher_matches_any (matcher))
-	break;
     }
 
   return FALSE;
@@ -399,11 +394,6 @@ gtk_css_selector_sibling_foreach_matcher (const GtkCssSelector      *selector,
 
       if (func (selector, matcher, data))
         return TRUE;
-
-      /* any matchers are dangerous here, as we may loop forever, but
-	 we can terminate now as all possible matches have already been added */
-      if (_gtk_css_matcher_matches_any (matcher))
-	break;
     }
 
   return FALSE;
