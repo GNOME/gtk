@@ -1,0 +1,186 @@
+/* trigger all change flags at least once */
+
+box {
+  color: red;
+}
+
+label {
+  color: green;
+}
+
+label.a:disabled {
+  color: blue;
+}
+
+label.b:selected {
+  color: blue;
+}
+
+label.c:backdrop {
+  color: blue;
+}
+
+label.d:focus {
+  color: blue;
+}
+
+label.e:first-child {
+  color: blue;
+}
+
+label.f:last-child {
+  color: blue;
+}
+
+label.g:nth-child(2) {
+  color: blue;
+}
+
+label.h:nth-last-child(2) {
+  color: blue;
+}
+
+label.i:hover {
+  color: blue;
+}
+
+label ~ label.j {
+  color: blue;
+}
+
+#label ~ label.j1 {
+  color: blue;
+}
+
+label.test ~ label.k {
+  color: blue;
+}
+
+label:hover ~ label.l {
+  color: blue;
+}
+
+label:disabled ~ label.m {
+  color: blue;
+}
+
+label:backdrop ~ label.n {
+  color: blue;
+}
+
+label:selected ~ label.o {
+  color: blue;
+}
+
+label:focus ~ label.p {
+  color: blue;
+}
+
+label:first-child ~ label.q {
+  color: blue;
+}
+
+label:last-child ~ label.r {
+  color: blue;
+}
+
+label:nth-child(2n+5) ~ label.s {
+  color: blue;
+}
+
+label:nth-last-child(2n+5) ~ label.t {
+  color: blue;
+}
+
+label label.u {
+  color: blue;
+}
+
+#label label.u1 {
+  color: blue;
+}
+
+label.test label.v {
+  color: blue;
+}
+
+label:focus label.w {
+  color: blue;
+}
+
+label:hover label.x {
+  color: blue;
+}
+
+label:disabled label.y {
+  color: blue;
+}
+
+label:backdrop label.z {
+  color: blue;
+}
+
+label:selected label.aa {
+  color: blue;
+}
+
+label:first-child label.bb {
+  color: blue;
+}
+
+label:last-child label.cc {
+  color: blue;
+}
+
+label:nth-child(3) label.dd {
+  color: blue;
+}
+
+label:nth-last-child(3) label.ee {
+  color: blue;
+}
+
+label~label label.ff {
+  color: blue;
+}
+
+#label~label label.gg {
+  color: blue;
+}
+
+label.test~label label.hh {
+  color: blue;
+}
+
+label:focus~label label.ii {
+  color: blue;
+}
+
+label:hover~label label.jj {
+  color: blue;
+}
+
+label:backdrop~label label.kk {
+  color: blue;
+}
+
+label:selected~label label.ll {
+  color: blue;
+}
+
+label:first-child~label label.mm {
+  color: blue;
+}
+
+label:last-child~label label.nn {
+  color: blue;
+}
+
+label:nth-child(2)~label label.oo {
+  color: blue;
+}
+
+label:nth-last-child(2)~label label.pp {
+  color: blue;
+}
+
