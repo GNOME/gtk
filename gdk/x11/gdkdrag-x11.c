@@ -1749,16 +1749,20 @@ gdk_x11_drag_xevent (GdkDisplay   *display,
 
     case SelectionRequest:
       {
+#ifdef G_ENABLE_DEBUG
         const char *target, *property;
+#endif
 
         if (xevent->xselectionrequest.selection != xselection)
           return FALSE;
 
+#ifdef G_ENABLE_DEBUG
         target = gdk_x11_get_xatom_name_for_display (display, xevent->xselectionrequest.target);
         if (xevent->xselectionrequest.property == None)
           property = target;
         else
           property = gdk_x11_get_xatom_name_for_display (display, xevent->xselectionrequest.property);
+#endif
 
         if (xevent->xselectionrequest.requestor == None)
           {
