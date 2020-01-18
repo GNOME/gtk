@@ -1726,6 +1726,16 @@ gdk_surface_constrain_size (GdkGeometry    *geometry,
     {
       gint delta;
 
+      if (flags & GDK_HINT_BASE_SIZE)
+        {
+          width -= base_width;
+          height -= base_height;
+          min_width -= base_width;
+          min_height -= base_height;
+          max_width -= base_width;
+          max_height -= base_height;
+        }
+
       if (geometry->min_aspect * height > width)
         {
           delta = FLOOR (height - width / geometry->min_aspect, yinc);
@@ -1750,6 +1760,12 @@ gdk_surface_constrain_size (GdkGeometry    *geometry,
               if (height + delta <= max_height)
                 height += delta;
             }
+        }
+
+      if (flags & GDK_HINT_BASE_SIZE)
+        {
+          width += base_width;
+          height += base_height;
         }
     }
 
