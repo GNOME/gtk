@@ -511,7 +511,8 @@ add_device (GtkInspectorGeneral *gen,
     "Keyboard",
     "Touchscreen",
     "Touchpad",
-    "Trackpoint"
+    "Trackpoint",
+    "Pad"
   };
 
   name = gdk_device_get_name (device);
