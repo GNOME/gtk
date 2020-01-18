@@ -145,9 +145,9 @@ gdk_x11_drop_read_got_stream (GObject      *source,
     }
   else
     {
-      const char *mime_type = ((GSList *) g_task_get_task_data (task))->data;
 #if 0
       gsize i;
+      const char *mime_type = ((GSList *) g_task_get_task_data (task))->data;
 
       for (i = 0; i < G_N_ELEMENTS (special_targets); i++)
         {
@@ -166,7 +166,7 @@ gdk_x11_drop_read_got_stream (GObject      *source,
 #endif
 
       GDK_NOTE (DND, g_printerr ("reading DND as %s now\n",
-                                mime_type));
+                                 (const char *)((GSList *) g_task_get_task_data (task))->data));
       g_task_return_pointer (task, stream, g_object_unref);
     }
 
@@ -732,14 +732,14 @@ gdk_x11_drop_do_nothing (Window   window,
                          gboolean success,
                          gpointer data)
 {
+#ifdef G_ENABLE_DEBUG
   GdkDisplay *display = data;
 
   if (!success)
     {
-      GDK_DISPLAY_NOTE (display, DND,
-                g_message ("Send event to %lx failed",
-                           window));
+      GDK_DISPLAY_NOTE (display, DND, g_message ("Send event to %lx failed", window));
     }
+#endif
 }
 
 static void
