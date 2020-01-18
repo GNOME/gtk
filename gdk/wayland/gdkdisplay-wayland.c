@@ -2307,10 +2307,11 @@ xdg_output_handle_description (void                  *data,
                                struct zxdg_output_v1 *xdg_output,
                                const char            *description)
 {
-  GdkWaylandMonitor *monitor = (GdkWaylandMonitor *) data;
-
   GDK_NOTE (MISC,
-            g_message ("handle description xdg-output %d", monitor->id));
+            {
+              GdkWaylandMonitor *monitor = (GdkWaylandMonitor *) data;
+              g_message ("handle description xdg-output %d", monitor->id);
+            });
 }
 
 static const struct zxdg_output_v1_listener xdg_output_listener = {
