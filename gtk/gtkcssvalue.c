@@ -29,7 +29,9 @@ struct _GtkCssValue {
 
 G_DEFINE_BOXED_TYPE (GtkCssValue, _gtk_css_value, _gtk_css_value_ref, _gtk_css_value_unref)
 
-#define CSS_VALUE_ACCOUNTING 0
+#undef CSS_VALUE_ACCOUNTING
+
+#ifdef CSS_VALUE_ACCOUNTING
 static GHashTable *counters;
 
 typedef struct
@@ -132,13 +134,13 @@ get_accounting_data (const char *class)
 
   return c;
 }
+#endif
 
 GtkCssValue *
 _gtk_css_value_alloc (const GtkCssValueClass *klass,
                       gsize                   size)
 {
   GtkCssValue *value;
-  ValueAccounting *c;
 
   value = g_slice_alloc0 (size);
 
@@ -146,9 +148,13 @@ _gtk_css_value_alloc (const GtkCssValueClass *klass,
   value->ref_count = 1;
 
 #ifdef CSS_VALUE_ACCOUNTING
-  c = get_accounting_data (klass->type_name);
-  c->all++;
-  c->alive++;
+  {
+    ValueAccounting *c;
+
+    c = get_accounting_data (klass->type_name);
+    c->all++;
+    c->alive++;
+  }
 #endif
 
   return value;
@@ -167,8 +173,6 @@ gtk_css_value_ref (GtkCssValue *value)
 void
 gtk_css_value_unref (GtkCssValue *value)
 {
-  ValueAccounting *c;
-
   if (value == NULL)
     return;
 
@@ -177,8 +181,12 @@ gtk_css_value_unref (GtkCssValue *value)
     return;
 
 #ifdef CSS_VALUE_ACCOUNTING
-  c = get_accounting_data (value->class->type_name);
-  c->alive--;
+  {
+    ValueAccounting *c;
+
+    c = get_accounting_data (value->class->type_name);
+    c->alive--;
+  }
 #endif
 
   value->class->free (value);
