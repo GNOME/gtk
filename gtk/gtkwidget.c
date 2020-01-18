@@ -5645,9 +5645,6 @@ gtk_widget_set_name (GtkWidget	 *widget,
   g_free (priv->name);
   priv->name = g_strdup (name);
 
-  if (priv->context)
-    gtk_style_context_set_id (priv->context, priv->name);
-
   gtk_css_node_set_id (priv->cssnode, priv->name);
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_NAME]);
@@ -8099,7 +8096,7 @@ gtk_widget_propagate_state (GtkWidget          *widget,
       if (!gtk_widget_is_sensitive (widget) && gtk_widget_has_grab (widget))
         gtk_grab_remove (widget);
 
-      gtk_style_context_set_state (_gtk_widget_get_style_context (widget), new_flags);
+      gtk_css_node_set_state (priv->cssnode, new_flags);
 
       g_signal_emit (widget, widget_signals[STATE_FLAGS_CHANGED], 0, old_flags);
 
@@ -11315,8 +11312,6 @@ gtk_widget_get_style_context (GtkWidget *widget)
 
       priv->context = gtk_style_context_new_for_node (priv->cssnode);
 
-      gtk_style_context_set_id (priv->context, priv->name);
-      gtk_style_context_set_state (priv->context, priv->state_flags);
       gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
 
       display = _gtk_widget_get_display (widget);
