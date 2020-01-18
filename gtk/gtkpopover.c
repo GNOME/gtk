@@ -207,16 +207,15 @@ gtk_popover_native_get_surface_transform (GtkNative *native,
                                           int       *x,
                                           int       *y)
 {
-  GtkStyleContext *context;
-  GtkBorder margin, border, padding;
+  GtkCssNode *node;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (native));
-  gtk_style_context_get_margin (context, &margin);
-  gtk_style_context_get_border (context, &border);
-  gtk_style_context_get_padding (context, &padding);
-
-  *x = margin.left + border.left + padding.left;
-  *y = margin.top + border.top + padding.top;
+  node = gtk_widget_get_css_node (GTK_WIDGET (native));
+  *y  = _gtk_css_number_value_get (gtk_css_node_get_value (node, GTK_CSS_PROPERTY_MARGIN_LEFT), 100) +
+        _gtk_css_number_value_get (gtk_css_node_get_value (node, GTK_CSS_PROPERTY_BORDER_LEFT), 100) +
+        _gtk_css_number_value_get (gtk_css_node_get_value (node, GTK_CSS_PROPERTY_PADDING_LEFT), 100);
+  *y  = _gtk_css_number_value_get (gtk_css_node_get_value (node, GTK_CSS_PROPERTY_MARGIN_TOP), 100) +
+        _gtk_css_number_value_get (gtk_css_node_get_value (node, GTK_CSS_PROPERTY_BORDER_TOP), 100) +
+        _gtk_css_number_value_get (gtk_css_node_get_value (node, GTK_CSS_PROPERTY_PADDING_TOP), 100);
 }
 
 static void
@@ -586,8 +585,8 @@ gtk_popover_init (GtkPopover *popover)
   gtk_widget_set_layout_manager (priv->contents_widget, gtk_bin_layout_new ());
   gtk_widget_set_parent (priv->contents_widget, GTK_WIDGET (popover));
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (popover));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
+  gtk_csS_node_add_class (gtk_widget_get_css_node (GTK_WIDGET (poopver)),
+                          g_quark_from_static_String (GTK_STYLE_CLASS_BACKGROUND));
 
   add_actions (popover);
 }
@@ -779,6 +778,7 @@ gtk_popover_get_gap_coords (GtkPopover *popover,
   GtkStyleContext *context;
   GtkBorder border;
   int popover_width, popover_height;
+  GtkCssNode *node;
 
   popover_width = gtk_widget_get_allocated_width (widget);
   popover_height = gtk_widget_get_allocated_height (widget);
@@ -795,14 +795,13 @@ gtk_popover_get_gap_coords (GtkPopover *popover,
   rect.x -= priv->final_rect.x;
   rect.y -= priv->final_rect.y;
 
+  
   context = gtk_widget_get_style_context (priv->contents_widget);
 
   pos = priv->final_position;
 
-  gtk_style_context_get_border (context, &border);
-  gtk_style_context_get (context,
-                         GTK_STYLE_PROPERTY_BORDER_RADIUS, &border_radius,
-                         NULL);
+  node = gtk_widget_get_css_node (widget);
+  border_radius = _gtk_css_number_value_get (gtk_css_node_get_value (node, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS), 100);
 
   if (pos == GTK_POS_BOTTOM || pos == GTK_POS_RIGHT)
     {
