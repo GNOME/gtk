@@ -107,16 +107,15 @@ gtk_drag_icon_native_get_surface_transform (GtkNative *native,
                                             int       *x,
                                             int       *y)
 {
-  GtkStyleContext *context;
-  GtkBorder margin, border, padding;
+  GtkCssNode *node;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (native));
-  gtk_style_context_get_margin (context, &margin);
-  gtk_style_context_get_border (context, &border);
-  gtk_style_context_get_padding (context, &padding);
-
-  *x = margin.left + border.left + padding.left;
-  *y = margin.top + border.top + padding.top;
+  node = gtk_widget_get_css_node (GTK_WIDGET (native));
+  *y  = _gtk_css_number_value_get (gtk_css_node_get_value (node, GTK_CSS_PROPERTY_MARGIN_LEFT), 100) +
+        _gtk_css_number_value_get (gtk_css_node_get_value (node, GTK_CSS_PROPERTY_BORDER_LEFT), 100) +
+        _gtk_css_number_value_get (gtk_css_node_get_value (node, GTK_CSS_PROPERTY_PADDING_LEFT), 100);
+  *y  = _gtk_css_number_value_get (gtk_css_node_get_value (node, GTK_CSS_PROPERTY_MARGIN_TOP), 100) +
+        _gtk_css_number_value_get (gtk_css_node_get_value (node, GTK_CSS_PROPERTY_BORDER_TOP), 100) +
+        _gtk_css_number_value_get (gtk_css_node_get_value (node, GTK_CSS_PROPERTY_PADDING_TOP), 100);
 }
 
 static void
