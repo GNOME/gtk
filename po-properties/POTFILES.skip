@@ -155,6 +155,8 @@ testsuite/a11y/notebook.ui
 testsuite/a11y/paned.ui
 testsuite/a11y/placeholder-text.ui
 testsuite/a11y/stack.ui
+testsuite/css/change/test1.ui
+testsuite/css/change/test3.ui
 testsuite/css/nodes/buttons.ui
 testsuite/css/nodes/entries.ui
 testsuite/css/nodes/notebook-arrows2.ui
