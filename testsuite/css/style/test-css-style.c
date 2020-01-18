@@ -243,16 +243,26 @@ int
 main (int argc, char **argv)
 {
   g_setenv ("GTK_CSS_DEBUG", "1", TRUE);
+  g_setenv ("GTK_THEME", "Empty", TRUE);
 
-  if (argc >= 2 && strcmp (argv[1], "--generate") == 0)
-    gtk_init ();
-  else
-    gtk_test_init (&argc, &argv);
+  if (argc >= 3 && strcmp (argv[1], "--generate") == 0)
+    {
+      GFile *file = g_file_new_for_commandline_arg (argv[2]);
 
-  g_object_set (gtk_settings_get_default (),
-                "gtk-font-name", "Sans",
-                "gtk-theme-name", "Empty",
-                NULL);
+      gtk_init ();
+
+      g_object_set (gtk_settings_get_default (), "gtk-font-name", "Sans", NULL);
+
+      load_ui_file (file, TRUE);
+
+      g_object_unref (file);
+
+      return 0;
+    }
+
+  gtk_test_init (&argc, &argv);
+  g_object_set (gtk_settings_get_default (), "gtk-font-name", "Sans", NULL);
+
   if (argc < 2)
     {
       const char *basedir;
@@ -263,17 +273,6 @@ main (int argc, char **argv)
       add_tests_for_files_in_directory (dir);
 
       g_object_unref (dir);
-    }
-  else if (strcmp (argv[1], "--generate") == 0)
-    {
-      if (argc >= 3)
-        {
-          GFile *file = g_file_new_for_commandline_arg (argv[2]);
-
-          load_ui_file (file, TRUE);
-
-          g_object_unref (file);
-        }
     }
   else
     {
