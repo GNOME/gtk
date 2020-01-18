@@ -65,9 +65,7 @@ print_atoms (GdkX11Clipboard *cb,
              const Atom      *atoms,
              gsize            n_atoms)
 {
-  GdkDisplay *display = gdk_clipboard_get_display (GDK_CLIPBOARD (cb));
-
-  GDK_DISPLAY_NOTE (display, CLIPBOARD,
+  GDK_DISPLAY_NOTE (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)), CLIPBOARD,
       gsize i;
 
       g_printerr ("%s: %s [ ", cb->selection, prefix);
@@ -86,9 +84,7 @@ gdk_x11_clipboard_default_output_done (GObject      *clipboard,
 
   if (!gdk_clipboard_write_finish (GDK_CLIPBOARD (clipboard), result, &error))
     {
-      GdkDisplay *display = gdk_clipboard_get_display (GDK_CLIPBOARD (clipboard));
-
-      GDK_DISPLAY_NOTE (display, CLIPBOARD,
+      GDK_DISPLAY_NOTE (gdk_clipboard_get_display (GDK_CLIPBOARD (clipboard)), CLIPBOARD,
                 g_printerr ("%s: failed to write stream: %s\n",
                             GDK_X11_CLIPBOARD (clipboard)->selection, error->message));
       g_error_free (error);
@@ -440,16 +436,20 @@ gdk_x11_clipboard_xevent (GdkDisplay   *display,
 
     case SelectionRequest:
       {
-        const char *target, *property;
+#ifdef G_ENABLE_DEBUG
+       const char *target, *property;
+#endif
 
         if (xevent->xselectionrequest.selection != cb->xselection)
           return FALSE;
 
+#ifdef G_ENABLE_DEBUG
         target = gdk_x11_get_xatom_name_for_display (display, xevent->xselectionrequest.target);
         if (xevent->xselectionrequest.property == None)
           property = target;
         else
           property = gdk_x11_get_xatom_name_for_display (display, xevent->xselectionrequest.property);
+#endif
 
         if (!gdk_clipboard_is_local (GDK_CLIPBOARD (cb)))
           {
