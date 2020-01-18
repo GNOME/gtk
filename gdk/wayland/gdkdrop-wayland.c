@@ -181,21 +181,25 @@ gdk_wayland_drop_read_async (GdkDrop             *drop,
                              gpointer             user_data)
 {
   GdkWaylandDrop *wayland_drop = GDK_WAYLAND_DROP (drop);
+#ifdef G_ENABLE_DEBUG
   GdkDisplay *display;
+#endif
   GInputStream *stream;
   const char *mime_type;
   int pipe_fd[2];
   GError *error = NULL;
   GTask *task;
 
-  display = gdk_drop_get_display (drop),
   task = g_task_new (drop, cancellable, callback, user_data);
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, gdk_wayland_drop_read_async);
 
+#ifdef G_ENABLE_DEBUG
+  display = gdk_drop_get_display (drop),
   GDK_DISPLAY_NOTE (display, DND, char *s = gdk_content_formats_to_string (formats);
                     g_message ("%p: read for %s", drop, s);
                     g_free (s); );
+#endif
   mime_type = gdk_content_formats_match_mime_type (formats,
                                                    gdk_drop_get_formats (drop));
   if (mime_type == NULL)
