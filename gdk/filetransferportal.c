@@ -518,7 +518,14 @@ file_transfer_portal_register (void)
 
   if (!called)
     {
+      const char *use_portal;
+      
       called = TRUE;
+
+      use_portal = g_getenv ("GTK_USE_PORTAL");
+      if (use_portal && use_portal[0] == '0')
+        return;
+
       g_dbus_proxy_new_for_bus (G_BUS_TYPE_SESSION,
                                 G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES
                                 | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS
