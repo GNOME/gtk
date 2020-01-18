@@ -703,65 +703,6 @@ file_serializer_finish (GObject      *source,
     gdk_content_serializer_return_success (serializer);
 }
 
-#ifdef G_OS_UNIX
-static void
-portal_ready (GObject *object,
-              GAsyncResult *result,
-              gpointer serializer)
-{
-  GError *error = NULL;
-  char *key;
-
-  if (!file_transfer_portal_register_files_finish (result, &key, &error))
-    {
-      gdk_content_serializer_return_error (serializer, error);
-      return;
-    }
-
-  g_output_stream_write_all_async (gdk_content_serializer_get_output_stream (serializer),
-                                   key,
-                                   strlen (key) + 1,
-                                   gdk_content_serializer_get_priority (serializer),
-                                   gdk_content_serializer_get_cancellable (serializer),
-                                   file_serializer_finish,
-                                   serializer);
-  gdk_content_serializer_set_task_data (serializer, key, g_free);
-}
-
-static void
-portal_file_serializer (GdkContentSerializer *serializer)
-{
-  GFile *file;
-  const GValue *value;
-  GPtrArray *files;
-
-  files = g_ptr_array_new_with_free_func (g_free);
-
-  value = gdk_content_serializer_get_value (serializer);
-
-  if (G_VALUE_HOLDS (value, G_TYPE_FILE))
-    {
-      file = g_value_get_object (gdk_content_serializer_get_value (serializer));
-      if (file)
-        g_ptr_array_add (files, g_file_get_path (file));
-      g_ptr_array_add (files, NULL);
-    }
-  else if (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST))
-    {
-      GSList *l;
-
-      for (l = g_value_get_boxed (value); l; l = l->next)
-        g_ptr_array_add (files, g_file_get_path (l->data));
-
-      g_ptr_array_add (files, NULL);
-    }
-
-  /* this call doesn't copy the strings, so keep the array around until the registration is done */
-  file_transfer_portal_register_files ((const char **)files->pdata, TRUE, portal_ready, serializer);
-  gdk_content_serializer_set_task_data (serializer, files, (GDestroyNotify)g_ptr_array_unref);
-}
-#endif /* G_OS_UNIX */
-
 static void
 file_uri_serializer (GdkContentSerializer *serializer)
 {
@@ -967,14 +908,7 @@ init (void)
   g_slist_free (formats);
 
 #ifdef G_OS_UNIX
-  gboolean has_portal = file_transfer_portal_available ();
-
-  if (has_portal)
-    gdk_content_register_serializer (G_TYPE_FILE,
-                                     "application/vnd.portal.files",
-                                     portal_file_serializer,
-                                     NULL,
-                                     NULL);
+  file_transfer_portal_register ();
 #endif
 
   gdk_content_register_serializer (G_TYPE_FILE,
@@ -987,15 +921,6 @@ init (void)
                                    file_text_serializer,
                                    NULL,
                                    NULL);
-
-#ifdef G_OS_UNIX
-  if (has_portal)
-    gdk_content_register_serializer (GDK_TYPE_FILE_LIST,
-                                     "application/vnd.portal.files",
-                                     portal_file_serializer,
-                                     NULL,
-                                     NULL);
-#endif
 
   gdk_content_register_serializer (GDK_TYPE_FILE_LIST,
                                    "text/uri-list",

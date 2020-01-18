@@ -23,6 +23,10 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#include "gdkcontentformats.h"
+#include "gdkcontentserializer.h"
+#include "gdkcontentdeserializer.h"
+
 #include <gio/gio.h>
 
 #ifdef G_OS_UNIX
@@ -42,145 +46,6 @@
 #include "filetransferportalprivate.h"
 
 static GDBusProxy *file_transfer_proxy = NULL;
-static gboolean done;
-static guint timeout_id;
-
-static void
-got_proxy (GObject *source,
-           GAsyncResult *result,
-           gpointer data)
-{
-  GError *error = NULL;
-
-  file_transfer_proxy = g_dbus_proxy_new_for_bus_finish (result, &error);
-  if (!file_transfer_proxy)
-    {
-      g_message ("failed to get file transfer portal proxy: %s", error->message);
-      g_error_free (error);
-    }
-
-  if (timeout_id)
-    {
-      g_source_remove (timeout_id);
-      timeout_id = 0;
-    }
-
-  done = TRUE;
-  g_main_context_wakeup (NULL);
-}
-
-static void
-got_bus (GObject *source,
-         GAsyncResult *result,
-         gpointer data)
-{
-  GDBusConnection **bus = data;
-  GError *error = NULL;
-
-  *bus = g_bus_get_finish (result, &error);
-  if (!*bus)
-    {
-      g_message ("failed to get session bus connection: %s", error->message);
-      g_error_free (error);
-    }
-
-  if (timeout_id)
-    {
-      g_source_remove (timeout_id);
-      timeout_id = 0;
-    }
-
-  done = TRUE;
-  g_main_context_wakeup (NULL);
-}
-
-static gboolean
-give_up_on_proxy (gpointer data)
-{
-  GCancellable *cancellable = data;
-
-  g_cancellable_cancel (cancellable);
-
-  timeout_id = 0;
-
-  done = TRUE;
-  g_main_context_wakeup (NULL);
-
-  return G_SOURCE_REMOVE;
-}
-
-static GDBusProxy *
-ensure_file_transfer_portal (void)
-{
-  if (file_transfer_proxy == NULL)
-    {
-      GCancellable *cancellable;
-      GDBusConnection *bus = NULL;
-
-      cancellable = g_cancellable_new ();
- 
-      done = FALSE;
-      timeout_id = g_timeout_add (500, give_up_on_proxy, cancellable);
-      g_bus_get (G_BUS_TYPE_SESSION,
-                 cancellable,
-                 got_bus,
-                 &bus);
-
-      while (!done)
-        g_main_context_iteration (NULL, TRUE);
-
-      if (bus)
-        {
-          done = FALSE;
-          timeout_id = g_timeout_add (500, give_up_on_proxy, cancellable);
-          g_dbus_proxy_new (bus,
-                            G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES
-                            | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS
-                            | G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
-                            NULL,
-                            "org.freedesktop.portal.Documents",
-                            "/org/freedesktop/portal/documents",
-                            "org.freedesktop.portal.FileTransfer",
-                            cancellable,
-                            got_proxy,
-                            NULL);
-
-          while (!done)
-            g_main_context_iteration (NULL, TRUE);
-
-          g_clear_object (&bus);
-        }
-
-      g_clear_object (&cancellable);
-    }
-
-  if (file_transfer_proxy)
-    {
-      char *owner = g_dbus_proxy_get_name_owner (file_transfer_proxy);
-
-      if (owner)
-        {
-          g_free (owner);
-          return file_transfer_proxy;
-        }
-    }
-
-  return NULL;
-}
-
-gboolean
-file_transfer_portal_available (void)
-{
-  gboolean available;
-
-  ensure_file_transfer_portal ();
-
-  available = file_transfer_proxy != NULL;
-
-  g_clear_object (&file_transfer_proxy);
-
-  return available;
-}
 
 typedef struct {
   GTask *task;
@@ -328,15 +193,12 @@ file_transfer_portal_register_files (const char          **files,
                                      gpointer              data)
 {
   GTask *task;
-  GDBusProxy *proxy;
   AddFileData *afd;
   GVariantBuilder options;
 
   task = g_task_new (NULL, NULL, callback, data);
 
-  proxy = ensure_file_transfer_portal ();
-
-  if (proxy == NULL)
+  if (file_transfer_proxy == NULL)
     {
       g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
                                "No portal found");
@@ -354,7 +216,7 @@ file_transfer_portal_register_files (const char          **files,
   g_variant_builder_add (&options, "{sv}", "writable", g_variant_new_boolean (writable));
   g_variant_builder_add (&options, "{sv}", "autostop", g_variant_new_boolean (TRUE));
 
-  g_dbus_proxy_call (proxy, "StartTransfer",
+  g_dbus_proxy_call (file_transfer_proxy, "StartTransfer",
                      g_variant_new ("(a{sv})", &options),
                      0, -1, NULL, start_session_done, afd);
 }
@@ -406,15 +268,12 @@ file_transfer_portal_retrieve_files (const char          *key,
                                      GAsyncReadyCallback  callback,
                                      gpointer             data)
 {
-  GDBusProxy *proxy;
   GTask *task;
   GVariantBuilder options;
 
   task = g_task_new (NULL, NULL, callback, data);
 
-  proxy = ensure_file_transfer_portal ();
-
-  if (proxy == NULL)
+  if (file_transfer_proxy == NULL)
     {
       g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
                                "No portal found");
@@ -423,7 +282,7 @@ file_transfer_portal_retrieve_files (const char          *key,
     }
 
   g_variant_builder_init (&options, G_VARIANT_TYPE_VARDICT);
-  g_dbus_proxy_call (proxy,
+  g_dbus_proxy_call (file_transfer_proxy,
                      "RetrieveFiles",
                      g_variant_new ("(sa{sv})", key, &options),
                      0, -1, NULL,
@@ -443,5 +302,236 @@ file_transfer_portal_retrieve_files_finish (GAsyncResult   *result,
 
   return FALSE;
 }
+
+
+/* serializer */
+
+static void
+file_serializer_finish (GObject      *source,
+                        GAsyncResult *result,
+                        gpointer      serializer)
+{
+  GOutputStream *stream = G_OUTPUT_STREAM (source);
+  GError *error = NULL;
+
+  if (!g_output_stream_write_all_finish (stream, result, NULL, &error))
+    gdk_content_serializer_return_error (serializer, error);
+  else
+    gdk_content_serializer_return_success (serializer);
+}
+
+static void
+portal_ready (GObject *object,
+              GAsyncResult *result,
+              gpointer serializer)
+{
+  GError *error = NULL;
+  char *key;
+
+  if (!file_transfer_portal_register_files_finish (result, &key, &error))
+    {
+      gdk_content_serializer_return_error (serializer, error);
+      return;
+    }
+
+  g_output_stream_write_all_async (gdk_content_serializer_get_output_stream (serializer),
+                                   key,
+                                   strlen (key) + 1,
+                                   gdk_content_serializer_get_priority (serializer),
+                                   gdk_content_serializer_get_cancellable (serializer),
+                                   file_serializer_finish,
+                                   serializer);
+  gdk_content_serializer_set_task_data (serializer, key, g_free);
+}
+
+static void
+portal_file_serializer (GdkContentSerializer *serializer)
+{
+  GFile *file;
+  const GValue *value;
+  GPtrArray *files;
+
+  files = g_ptr_array_new_with_free_func (g_free);
+
+  value = gdk_content_serializer_get_value (serializer);
+
+  if (G_VALUE_HOLDS (value, G_TYPE_FILE))
+    {
+      file = g_value_get_object (gdk_content_serializer_get_value (serializer));
+      if (file)
+        g_ptr_array_add (files, g_file_get_path (file));
+      g_ptr_array_add (files, NULL);
+    }
+  else if (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST))
+    {
+      GSList *l;
+
+      for (l = g_value_get_boxed (value); l; l = l->next)
+        g_ptr_array_add (files, g_file_get_path (l->data));
+
+      g_ptr_array_add (files, NULL);
+    }
+
+  /* this call doesn't copy the strings, so keep the array around until the registration is done */
+  file_transfer_portal_register_files ((const char **)files->pdata, TRUE, portal_ready, serializer);
+  gdk_content_serializer_set_task_data (serializer, files, (GDestroyNotify)g_ptr_array_unref);
+}
+
+/* deserializer */
+
+static void
+portal_finish (GObject *object,
+               GAsyncResult *result,
+               gpointer deserializer)
+{
+  char **files = NULL;
+  GError *error = NULL;
+  GValue *value;
+
+  if (!file_transfer_portal_retrieve_files_finish (result, &files, &error))
+    {
+      gdk_content_deserializer_return_error (deserializer, error);
+      return;
+    }
+
+  value = gdk_content_deserializer_get_value (deserializer);
+  if (G_VALUE_HOLDS (value, G_TYPE_FILE))
+    {
+      if (files[0] != NULL)
+        g_value_take_object (value, g_file_new_for_path (files[0]));
+    }
+  else
+    {
+      GSList *l = NULL;
+      gsize i;
+
+      for (i = 0; files[i] != NULL; i++)
+        l = g_slist_prepend (l, g_file_new_for_path (files[i]));
+      g_value_take_boxed (value, g_slist_reverse (l));
+    }
+  g_strfreev (files);
+
+  gdk_content_deserializer_return_success (deserializer);
+}
+
+static void
+portal_file_deserializer_finish (GObject      *source,
+                                 GAsyncResult *result,
+                                 gpointer      deserializer)
+{
+  GOutputStream *stream = G_OUTPUT_STREAM (source);
+  GError *error = NULL;
+  gssize written;
+  char *key;
+
+  written = g_output_stream_splice_finish (stream, result, &error);
+  if (written < 0)
+    {
+      gdk_content_deserializer_return_error (deserializer, error);
+      return;
+    }
+
+  /* write terminating NULL */
+  if (!g_output_stream_write (stream, "", 1, NULL, &error))
+    {
+      gdk_content_deserializer_return_error (deserializer, error);
+      return;
+    }
+
+  key = g_memory_output_stream_steal_data (G_MEMORY_OUTPUT_STREAM (stream));
+  if (key == NULL)
+    {
+      GError *gerror = g_error_new (G_IO_ERROR,
+                                    G_IO_ERROR_NOT_FOUND,
+                                    "Could not convert data from %s to %s",
+                                    gdk_content_deserializer_get_mime_type (deserializer),
+                                    g_type_name (gdk_content_deserializer_get_gtype (deserializer)));
+      gdk_content_deserializer_return_error (deserializer, gerror);
+      return;
+    }
+
+  file_transfer_portal_retrieve_files (key, portal_finish, deserializer);
+  gdk_content_deserializer_set_task_data (deserializer, key, g_free);
+}
+
+static void
+portal_file_deserializer (GdkContentDeserializer *deserializer)
+{
+  GOutputStream *output;
+
+  output = g_memory_output_stream_new_resizable ();
+
+  g_output_stream_splice_async (output,
+                                gdk_content_deserializer_get_input_stream (deserializer),
+                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
+                                gdk_content_deserializer_get_priority (deserializer),
+                                gdk_content_deserializer_get_cancellable (deserializer),
+                                portal_file_deserializer_finish,
+                                deserializer);
+  g_object_unref (output);
+}
+
+static void
+got_proxy (GObject *source,
+           GAsyncResult *result,
+           gpointer data)
+{
+  GError *error = NULL;
+
+  file_transfer_proxy = g_dbus_proxy_new_for_bus_finish (result, &error);
+  if (!file_transfer_proxy)
+    {
+      g_message ("Failed to get file transfer portal: %s", error->message);
+      g_clear_error (&error);
+      return;
+    }
+
+  gdk_content_register_serializer (G_TYPE_FILE,
+                                   "application/vnd.portal.files",
+                                   portal_file_serializer,
+                                   NULL,
+                                   NULL);
+
+  gdk_content_register_serializer (GDK_TYPE_FILE_LIST,
+                                   "application/vnd.portal.files",
+                                   portal_file_serializer,
+                                   NULL,
+                                   NULL);
+
+  gdk_content_register_deserializer ("application/vnd.portal.files",
+                                     GDK_TYPE_FILE_LIST,
+                                     portal_file_deserializer,
+                                     NULL,
+                                     NULL);
+
+  gdk_content_register_deserializer ("application/vnd.portal.files",
+                                     G_TYPE_FILE,
+                                     portal_file_deserializer,
+                                     NULL,
+                                     NULL);
+}
+
+void
+file_transfer_portal_register (void)
+{
+  static gboolean called;
+
+  if (!called)
+    {
+      called = TRUE;
+      g_dbus_proxy_new_for_bus (G_BUS_TYPE_SESSION,
+                                G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES
+                                | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS
+                                | G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
+                                NULL,
+                                "org.freedesktop.portal.Documents",
+                                "/org/freedesktop/portal/documents",
+                                "org.freedesktop.portal.FileTransfer",
+                                NULL,
+                                got_proxy,
+                                NULL);
+    }
+}
+
 
 #endif /* G_OS_UNIX */
