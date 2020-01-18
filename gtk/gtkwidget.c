@@ -5650,9 +5650,6 @@ gtk_widget_set_name (GtkWidget	 *widget,
   g_free (priv->name);
   priv->name = g_strdup (name);
 
-  if (priv->context)
-    gtk_style_context_set_id (priv->context, priv->name);
-
   gtk_css_node_set_id (priv->cssnode, priv->name);
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_NAME]);
@@ -6583,26 +6580,24 @@ static void
 update_pango_context (GtkWidget    *widget,
                       PangoContext *context)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   PangoFontDescription *font_desc;
-  GtkStyleContext *style_context;
+  GtkCssStyle *style;
   GtkSettings *settings;
   cairo_font_options_t *font_options;
   GtkCssValue *value;
   char *variations;
 
-  style_context = _gtk_widget_get_style_context (widget);
-  gtk_style_context_get (style_context,
-                         "font", &font_desc,
-                         NULL);
+  style = gtk_css_node_get_style (priv->cssnode);
 
-  value = _gtk_style_context_peek_property (_gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_FONT_VARIATION_SETTINGS);
+  font_desc = gtk_css_style_get_pango_font (style);
+  value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_VARIATION_SETTINGS);
+
   variations = gtk_css_font_variations_value_get_variations (value);
 
   pango_font_description_set_variations (font_desc, variations);
 
   pango_context_set_font_description (context, font_desc);
-
-  pango_font_description_free (font_desc);
   g_free (variations);
 
   pango_context_set_base_dir (context,
@@ -6610,10 +6605,8 @@ update_pango_context (GtkWidget    *widget,
 			      PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);
 
   pango_cairo_context_set_resolution (context,
-                                      _gtk_css_number_value_get (
-                                          _gtk_style_context_peek_property (style_context,
-                                                                            GTK_CSS_PROPERTY_DPI),
-                                          100));
+                                      _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_DPI),
+                                                                 100));
 
   settings = gtk_widget_get_settings (widget);
   font_options = (cairo_font_options_t*)g_object_get_qdata (G_OBJECT (widget), quark_font_options);
@@ -8137,7 +8130,7 @@ gtk_widget_propagate_state (GtkWidget          *widget,
       if (!gtk_widget_is_sensitive (widget) && gtk_widget_has_grab (widget))
         gtk_grab_remove (widget);
 
-      gtk_style_context_set_state (_gtk_widget_get_style_context (widget), new_flags);
+      gtk_css_node_set_state (priv->cssnode, new_flags);
 
       g_signal_emit (widget, widget_signals[STATE_FLAGS_CHANGED], 0, old_flags);
 
@@ -11400,8 +11393,6 @@ gtk_widget_get_style_context (GtkWidget *widget)
 
       priv->context = gtk_style_context_new_for_node (priv->cssnode);
 
-      gtk_style_context_set_id (priv->context, priv->name);
-      gtk_style_context_set_state (priv->context, priv->state_flags);
       gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
 
       display = _gtk_widget_get_display (widget);
