@@ -1970,6 +1970,7 @@ _gtk_css_selector_tree_print (const GtkCssSelectorTree *tree, GString *str, char
 {
   gboolean first = TRUE;
   int len, i;
+  gpointer *matches;
 
   for (; tree != NULL; tree = gtk_css_selector_tree_get_sibling (tree), first = FALSE)
     {
@@ -1993,6 +1994,16 @@ _gtk_css_selector_tree_print (const GtkCssSelectorTree *tree, GString *str, char
 
       len = str->len;
       tree->selector.class->print (&tree->selector, str);
+      matches = gtk_css_selector_tree_get_matches (tree);
+      if (matches)
+        {
+          int n;
+          for (n = 0; matches[n] != NULL; n++) ;
+          if (n == 1)
+            g_string_append (str, " (1 match)");
+          else
+            g_string_append_printf (str, " (%d matches)", n);
+        }
       len = str->len - len;
 
       if (gtk_css_selector_tree_get_previous (tree))
