@@ -42,8 +42,8 @@
 #include "filetransferportalprivate.h"
 
 static GDBusProxy *file_transfer_proxy = NULL;
+static GMainContext *context = NULL;
 static gboolean done;
-static guint timeout_id;
 
 static void
 got_proxy (GObject *source,
@@ -59,14 +59,8 @@ got_proxy (GObject *source,
       g_error_free (error);
     }
 
-  if (timeout_id)
-    {
-      g_source_remove (timeout_id);
-      timeout_id = 0;
-    }
-
   done = TRUE;
-  g_main_context_wakeup (NULL);
+  g_main_context_wakeup (context);
 }
 
 static void
@@ -84,14 +78,8 @@ got_bus (GObject *source,
       g_error_free (error);
     }
 
-  if (timeout_id)
-    {
-      g_source_remove (timeout_id);
-      timeout_id = 0;
-    }
-
   done = TRUE;
-  g_main_context_wakeup (NULL);
+  g_main_context_wakeup (context);
 }
 
 static gboolean
@@ -101,10 +89,8 @@ give_up_on_proxy (gpointer data)
 
   g_cancellable_cancel (cancellable);
 
-  timeout_id = 0;
-
   done = TRUE;
-  g_main_context_wakeup (NULL);
+  g_main_context_wakeup (context);
 
   return G_SOURCE_REMOVE;
 }
@@ -115,24 +101,26 @@ ensure_file_transfer_portal (void)
   if (file_transfer_proxy == NULL)
     {
       GCancellable *cancellable;
+      GSource *timeout;
       GDBusConnection *bus = NULL;
 
       cancellable = g_cancellable_new ();
+
+      context = g_main_context_new ();
+      timeout = g_timeout_source_new (1000);
+      g_source_set_callback (timeout, give_up_on_proxy, cancellable, NULL);
+      g_source_attach (timeout, context);
+      g_source_unref (timeout);
  
       done = FALSE;
-      timeout_id = g_timeout_add (500, give_up_on_proxy, cancellable);
-      g_bus_get (G_BUS_TYPE_SESSION,
-                 cancellable,
-                 got_bus,
-                 &bus);
+      g_bus_get (G_BUS_TYPE_SESSION, cancellable, got_bus, &bus);
 
       while (!done)
-        g_main_context_iteration (NULL, TRUE);
+        g_main_context_iteration (context, TRUE);
 
       if (bus)
         {
           done = FALSE;
-          timeout_id = g_timeout_add (500, give_up_on_proxy, cancellable);
           g_dbus_proxy_new (bus,
                             G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES
                             | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS
@@ -146,10 +134,12 @@ ensure_file_transfer_portal (void)
                             NULL);
 
           while (!done)
-            g_main_context_iteration (NULL, TRUE);
+            g_main_context_iteration (context, TRUE);
 
           g_clear_object (&bus);
         }
+
+      g_main_context_unref (context);
 
       g_clear_object (&cancellable);
     }
