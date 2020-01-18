@@ -307,15 +307,12 @@ static void
 gsk_pango_renderer_prepare_run (PangoRenderer  *renderer,
                                 PangoLayoutRun *run)
 {
-  GtkStyleContext *context;
   GskPangoRenderer *crenderer = GSK_PANGO_RENDERER (renderer);
   GdkRGBA *bg_rgba = NULL;
   GdkRGBA *fg_rgba = NULL;
   GtkTextAppearance *appearance;
 
   PANGO_RENDERER_CLASS (gsk_pango_renderer_parent_class)->prepare_run (renderer, run);
-
-  appearance = get_item_appearance (run->item);
 
   if (appearance == NULL)
     return;
@@ -332,22 +329,21 @@ gsk_pango_renderer_prepare_run (PangoRenderer  *renderer,
   if (crenderer->state == GSK_PANGO_RENDERER_SELECTED &&
       GTK_IS_TEXT_VIEW (crenderer->widget))
     {
-      GtkCssNode *selection_node;
+      GtkCssNode *node;
+      GtkCssValue *value;
 
-      selection_node = gtk_text_view_get_selection_node ((GtkTextView *)crenderer->widget);
-      gtk_style_context_save_to_node (context, selection_node);
-
-      gtk_style_context_get (context,
-                             "color", &fg_rgba,
-                             NULL);
-
-      gtk_style_context_restore (context);
+      node = gtk_text_view_get_selection_node ((GtkTextView *)crenderer->widget);
+      value = gtk_css_node_get_value (selection_node, GTK_CSS_PROPERTY_COLOR);
+      fg_rgba = _gtk_css_rgba_value_get_rgba (value);
     }
   else if (crenderer->state == GSK_PANGO_RENDERER_CURSOR && gtk_widget_has_focus (crenderer->widget))
     {
-      gtk_style_context_get (context,
-                             "background-color", &fg_rgba,
-                             NULL);
+      GtkCssNode *node;
+      GtkCssValue *value;
+
+      node = gtk_widget_get_css_node (widget);
+      value = gtk_css_node_get_value (priv->cssnode, GTK_CSS_PROPERTY_BACKGROUND_COLOR);
+      fg_rgba = _gtk_css_rgba_value_get_rgba (value);
     }
   else
     fg_rgba = appearance->fg_rgba;
