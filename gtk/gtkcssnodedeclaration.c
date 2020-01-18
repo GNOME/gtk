@@ -431,6 +431,17 @@ gtk_css_node_declaration_add_to_widget_path (const GtkCssNodeDeclaration *decl,
   gtk_widget_path_iter_set_state (path, pos, decl->state);
 }
 
+static int
+cmpstr (gconstpointer a,
+        gconstpointer b,
+        gpointer      data)
+{
+  char **ap = (char **) a;
+  char **bp = (char **) b;
+
+  return g_ascii_strcasecmp (*ap, *bp);
+}
+
 /* Append the declaration to the string, in selector format */
 void
 gtk_css_node_declaration_print (const GtkCssNodeDeclaration *decl,
@@ -453,6 +464,7 @@ gtk_css_node_declaration_print (const GtkCssNodeDeclaration *decl,
   };
   const GQuark *classes;
   guint i;
+  char **classnames;
 
   if (decl->name)
     g_string_append (string, decl->name);
@@ -466,11 +478,19 @@ gtk_css_node_declaration_print (const GtkCssNodeDeclaration *decl,
     }
 
   classes = get_classes (decl);
+
+  classnames = g_new (char *, decl->n_classes);
+  for (i = 0; i < decl->n_classes; i++)
+    classnames[i] = (char *)g_quark_to_string (classes[i]);
+
+  g_qsort_with_data (classnames, decl->n_classes, sizeof (char *), cmpstr, NULL);
+
   for (i = 0; i < decl->n_classes; i++)
     {
       g_string_append_c (string, '.');
-      g_string_append (string, g_quark_to_string (classes[i]));
+      g_string_append (string, classnames[i]);
     }
+  g_free (classnames);
 
   for (i = 0; i < G_N_ELEMENTS (state_names); i++)
     {

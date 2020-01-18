@@ -19,7 +19,8 @@
 #define __FILE_TRANSFER_PROTOCOL_H__
 
 
-gboolean file_transfer_portal_available             (void);
+void     file_transfer_portal_register              (void);
+
 void     file_transfer_portal_register_files        (const char           **files,
                                                      gboolean               writable,
                                                      GAsyncReadyCallback    callback,

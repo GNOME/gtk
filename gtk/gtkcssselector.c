@@ -62,7 +62,8 @@ struct _GtkCssSelectorClass {
   int               (* compare_one) (const GtkCssSelector       *a,
 				     const GtkCssSelector       *b);
 
-  guint         is_simple :1;
+  guint         is_simple         : 1;
+  guint         ignore_for_change : 1;
 };
 
 typedef enum {
@@ -294,11 +295,6 @@ gtk_css_selector_descendant_foreach_matcher (const GtkCssSelector      *selector
 
       if (func (selector, &ancestor, data))
         return TRUE;
-
-      /* any matchers are dangerous here, as we may loop forever, but
-	 we can terminate now as all possible matches have already been added */
-      if (_gtk_css_matcher_matches_any (matcher))
-	break;
     }
 
   return FALSE;
@@ -319,7 +315,8 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_DESCENDANT = {
   gtk_css_selector_default_add_specificity,
   gtk_css_selector_default_hash_one,
   gtk_css_selector_default_compare_one,
-  FALSE
+  FALSE,
+  TRUE
 };
 
 /* CHILD */
@@ -360,7 +357,8 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_CHILD = {
   gtk_css_selector_default_add_specificity,
   gtk_css_selector_default_hash_one,
   gtk_css_selector_default_compare_one,
-  FALSE
+  FALSE,
+  TRUE
 };
 
 /* SIBLING */
@@ -386,11 +384,6 @@ gtk_css_selector_sibling_foreach_matcher (const GtkCssSelector      *selector,
 
       if (func (selector, matcher, data))
         return TRUE;
-
-      /* any matchers are dangerous here, as we may loop forever, but
-	 we can terminate now as all possible matches have already been added */
-      if (_gtk_css_matcher_matches_any (matcher))
-	break;
     }
 
   return FALSE;
@@ -411,7 +404,8 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_SIBLING = {
   gtk_css_selector_default_add_specificity,
   gtk_css_selector_default_hash_one,
   gtk_css_selector_default_compare_one,
-  FALSE
+  FALSE,
+  TRUE
 };
 
 /* ADJACENT */
@@ -452,7 +446,8 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ADJACENT = {
   gtk_css_selector_default_add_specificity,
   gtk_css_selector_default_hash_one,
   gtk_css_selector_default_compare_one,
-  FALSE
+  FALSE,
+  TRUE
 };
 
 /* SIMPLE SELECTOR DEFINE */
@@ -465,7 +460,8 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ADJACENT = {
                                comp_func, \
                                increase_id_specificity, \
                                increase_class_specificity, \
-                               increase_element_specificity) \
+                               increase_element_specificity, \
+                               ignore_for_change) \
 static void \
 gtk_css_selector_ ## n ## _print (const GtkCssSelector *selector, \
                                     GString              *string) \
@@ -524,7 +520,8 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ ## c = { \
   gtk_css_selector_ ## n ## _add_specificity, \
   hash_func, \
   comp_func, \
-  TRUE \
+  TRUE, \
+  ignore_for_change \
 };\
 \
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_NOT_ ## c = { \
@@ -536,7 +533,8 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_NOT_ ## c = { \
   gtk_css_selector_ ## n ## _add_specificity, \
   hash_func, \
   comp_func, \
-  TRUE \
+  TRUE, \
+  ignore_for_change \
 };
 
 /* ANY */
@@ -559,7 +557,7 @@ match_any (const GtkCssSelector *selector,
 #define GTK_CSS_CHANGE_ANY 0
 DEFINE_SIMPLE_SELECTOR(any, ANY, print_any, match_any, 
                        gtk_css_selector_default_hash_one, gtk_css_selector_default_compare_one,
-                       FALSE, FALSE, FALSE)
+                       FALSE, FALSE, FALSE, TRUE)
 #undef GTK_CSS_CHANGE_ANY
 
 /* NAME */
@@ -592,7 +590,7 @@ comp_name (const GtkCssSelector *a,
 		 b->name.name);
 }
 
-DEFINE_SIMPLE_SELECTOR(name, NAME, print_name, match_name, hash_name, comp_name, FALSE, FALSE, TRUE)
+DEFINE_SIMPLE_SELECTOR(name, NAME, print_name, match_name, hash_name, comp_name, FALSE, FALSE, TRUE, FALSE)
 
 /* CLASS */
 
@@ -629,7 +627,7 @@ comp_class (const GtkCssSelector *a,
     return 0;
 }
 
-DEFINE_SIMPLE_SELECTOR(class, CLASS, print_class, match_class, hash_class, comp_class, FALSE, TRUE, FALSE)
+DEFINE_SIMPLE_SELECTOR(class, CLASS, print_class, match_class, hash_class, comp_class, FALSE, TRUE, FALSE, FALSE)
 
 /* ID */
 
@@ -666,7 +664,7 @@ comp_id (const GtkCssSelector *a,
     return 0;
 }
 
-DEFINE_SIMPLE_SELECTOR(id, ID, print_id, match_id, hash_id, comp_id, TRUE, FALSE, FALSE)
+DEFINE_SIMPLE_SELECTOR(id, ID, print_id, match_id, hash_id, comp_id, TRUE, FALSE, FALSE, FALSE)
 
 const gchar *
 gtk_css_pseudoclass_name (GtkStateFlags state)
@@ -731,31 +729,31 @@ comp_pseudoclass_state (const GtkCssSelector *a,
 #define GTK_CSS_CHANGE_PSEUDOCLASS_HOVER GTK_CSS_CHANGE_HOVER
 DEFINE_SIMPLE_SELECTOR(pseudoclass_hover, PSEUDOCLASS_HOVER, print_pseudoclass_state,
                        match_pseudoclass_state, hash_pseudoclass_state, comp_pseudoclass_state,
-                       FALSE, TRUE, FALSE)
+                       FALSE, TRUE, FALSE, TRUE)
 #undef GTK_CSS_CHANGE_PSEUDOCLASS_HOVER
 
 #define GTK_CSS_CHANGE_PSEUDOCLASS_DISABLED GTK_CSS_CHANGE_DISABLED
 DEFINE_SIMPLE_SELECTOR(pseudoclass_disabled, PSEUDOCLASS_DISABLED, print_pseudoclass_state,
                        match_pseudoclass_state, hash_pseudoclass_state, comp_pseudoclass_state,
-                       FALSE, TRUE, FALSE)
+                       FALSE, TRUE, FALSE, TRUE)
 #undef GTK_CSS_CHANGE_PSEUDOCLASS_DISABLED
 
 #define GTK_CSS_CHANGE_PSEUDOCLASS_BACKDROP GTK_CSS_CHANGE_BACKDROP
 DEFINE_SIMPLE_SELECTOR(pseudoclass_backdrop, PSEUDOCLASS_BACKDROP, print_pseudoclass_state,
                        match_pseudoclass_state, hash_pseudoclass_state, comp_pseudoclass_state,
-                       FALSE, TRUE, FALSE)
+                       FALSE, TRUE, FALSE, TRUE)
 #undef GTK_CSS_CHANGE_PSEUDOCLASS_BACKDROP
 
 #define GTK_CSS_CHANGE_PSEUDOCLASS_SELECTED GTK_CSS_CHANGE_SELECTED
 DEFINE_SIMPLE_SELECTOR(pseudoclass_selected, PSEUDOCLASS_SELECTED, print_pseudoclass_state,
                        match_pseudoclass_state, hash_pseudoclass_state, comp_pseudoclass_state,
-                       FALSE, TRUE, FALSE)
+                       FALSE, TRUE, FALSE, TRUE)
 #undef GTK_CSS_CHANGE_PSEUDOCLASS_SELECTED
 
 #define GTK_CSS_CHANGE_PSEUDOCLASS_STATE GTK_CSS_CHANGE_STATE
 DEFINE_SIMPLE_SELECTOR(pseudoclass_state, PSEUDOCLASS_STATE, print_pseudoclass_state,
                        match_pseudoclass_state, hash_pseudoclass_state, comp_pseudoclass_state,
-                       FALSE, TRUE, FALSE)
+                       FALSE, TRUE, FALSE, TRUE)
 #undef GTK_CSS_CHANGE_PSEUDOCLASS_STATE
 
 /* PSEUDOCLASS FOR POSITION */
@@ -909,7 +907,7 @@ change_pseudoclass_position (const GtkCssSelector *selector)
 #define GTK_CSS_CHANGE_PSEUDOCLASS_POSITION change_pseudoclass_position(selector)
 DEFINE_SIMPLE_SELECTOR(pseudoclass_position, PSEUDOCLASS_POSITION, print_pseudoclass_position,
                        match_pseudoclass_position, hash_pseudoclass_position, comp_pseudoclass_position,
-                       FALSE, TRUE, FALSE)
+                       FALSE, TRUE, FALSE, TRUE)
 #undef GTK_CSS_CHANGE_PSEUDOCLASS_POSITION
 /* API */
 
@@ -1877,10 +1875,93 @@ _gtk_css_selector_tree_match_all (const GtkCssSelectorTree *tree,
   return array;
 }
 
+/* The code for collecting matches assumes that the name, id and classes
+ * of a node remain unchanged, and anything else can change. This needs to
+ * be kept in sync with the definition of 'radical change' in gtkcssnode.c.
+ */
+
+static gboolean
+gtk_css_selector_match_for_change (const GtkCssSelector *selector,
+                                   const GtkCssMatcher  *matcher)
+{
+  if (selector->class->ignore_for_change)
+    return TRUE;
+
+  return selector->class->match_one (selector, matcher);
+}
+
+/* When checking for changes via the tree we need to know if a rule further
+   down the tree matched, because if so we need to add "our bit" to the
+   Change. For instance in a match like *.class:active we'll
+   get a tree that first checks :active, if that matches we continue down
+   to the tree, and if we get a match we add CHANGE_CLASS. However, the
+   end of the tree where we have a match is an ANY which doesn't actually
+   modify the change, so we don't know if we have a match or not. We fix
+   this by setting GTK_CSS_CHANGE_GOT_MATCH which lets us guarantee
+   that change != 0 on any match. */
+#define GTK_CSS_CHANGE_GOT_MATCH GTK_CSS_CHANGE_RESERVED_BIT
+
+static GtkCssChange
+gtk_css_selector_tree_collect_change (const GtkCssSelectorTree *tree)
+{
+  GtkCssChange change = 0;
+  const GtkCssSelectorTree *prev;
+
+  for (prev = gtk_css_selector_tree_get_previous (tree);
+       prev != NULL;
+       prev = gtk_css_selector_tree_get_sibling (prev))
+    change |= gtk_css_selector_tree_collect_change (prev);
+
+  change = tree->selector.class->get_change (&tree->selector, change);
+
+  return change;
+}
+
+static GtkCssChange
+gtk_css_selector_tree_get_change (const GtkCssSelectorTree *tree,
+				  const GtkCssMatcher      *matcher)
+{
+  GtkCssChange change = 0;
+  const GtkCssSelectorTree *prev;
+
+  if (!gtk_css_selector_match_for_change (&tree->selector, matcher))
+    return 0;
+
+  if (!tree->selector.class->is_simple)
+    return gtk_css_selector_tree_collect_change (tree) | GTK_CSS_CHANGE_GOT_MATCH;
+
+  for (prev = gtk_css_selector_tree_get_previous (tree);
+       prev != NULL;
+       prev = gtk_css_selector_tree_get_sibling (prev))
+    change |= gtk_css_selector_tree_get_change (prev, matcher);
+
+  if (change || gtk_css_selector_tree_get_matches (tree))
+    change = tree->selector.class->get_change (&tree->selector, change & ~GTK_CSS_CHANGE_GOT_MATCH) | GTK_CSS_CHANGE_GOT_MATCH;
+
+  return change;
+}
+
 gboolean
 _gtk_css_selector_tree_is_empty (const GtkCssSelectorTree *tree)
 {
   return tree == NULL;
+}
+
+GtkCssChange
+_gtk_css_selector_tree_get_change_all (const GtkCssSelectorTree *tree,
+				       const GtkCssMatcher *matcher)
+{
+  GtkCssChange change;
+
+  change = 0;
+
+  /* no need to foreach here because we abort for non-simple selectors */
+  for (; tree != NULL;
+       tree = gtk_css_selector_tree_get_sibling (tree))
+    change |= gtk_css_selector_tree_get_change (tree, matcher);
+
+  /* Never return reserved bit set */
+  return change & ~GTK_CSS_CHANGE_RESERVED_BIT;
 }
 
 #ifdef PRINT_TREE

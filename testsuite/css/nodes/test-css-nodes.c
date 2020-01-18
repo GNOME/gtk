@@ -97,11 +97,22 @@ done:
 }
 
 static void
+style_context_changed (GtkWidget *window, const char **output)
+{
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (window);
+
+  *output = gtk_style_context_to_string (context, GTK_STYLE_CONTEXT_PRINT_RECURSE);
+
+  g_main_context_wakeup (NULL);
+}
+
+static void
 load_ui_file (GFile *file, gboolean generate)
 {
   GtkBuilder *builder;
   GtkWidget *window;
-  GtkStyleContext *context;
   char *output, *diff;
   char *ui_file, *reference_file;
   GError *error = NULL;
@@ -118,9 +129,13 @@ load_ui_file (GFile *file, gboolean generate)
 
   g_assert (window != NULL);
 
-  context = gtk_widget_get_style_context (window);
+  output = NULL;
+  g_signal_connect (window, "map", G_CALLBACK (style_context_changed), &output);
 
-  output = gtk_style_context_to_string (context, GTK_STYLE_CONTEXT_PRINT_RECURSE);
+  gtk_widget_show (window);
+
+  while (!output)
+    g_main_context_iteration (NULL, FALSE);
 
   if (generate)
     {
@@ -231,6 +246,19 @@ main (int argc, char **argv)
 {
   g_setenv ("GTK_CSS_DEBUG", "1", TRUE);
 
+  if (argc >=3 && strcmp (argv[1], "--generate") == 0)
+    {
+      GFile *file = g_file_new_for_commandline_arg (argv[2]);
+
+      gtk_init ();
+
+      load_ui_file (file, TRUE);
+
+      g_object_unref (file);
+
+      return 0;
+    }
+
   gtk_test_init (&argc, &argv);
 
   if (argc < 2)
@@ -243,17 +271,6 @@ main (int argc, char **argv)
       add_tests_for_files_in_directory (dir);
 
       g_object_unref (dir);
-    }
-  else if (strcmp (argv[1], "--generate") == 0)
-    {
-      if (argc >= 3)
-        {
-          GFile *file = g_file_new_for_commandline_arg (argv[2]);
-
-          load_ui_file (file, TRUE);
-
-          g_object_unref (file);
-        }
     }
   else
     {
