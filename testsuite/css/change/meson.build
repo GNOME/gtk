@@ -25,7 +25,6 @@ test_data = [
   'test3.css', 'test3.ui', 'test3.nodes',
   'test4.css', 'test4.ui', 'test4.nodes',
   'test5.css', 'test5.ui', 'test5.nodes',
-  'widget-factory.css', 'widget-factory.ui', 'widget-factory.nodes',
 ]
 
 if get_option('install-tests')
