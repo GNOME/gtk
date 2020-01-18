@@ -12,7 +12,11 @@
         </child>
         <child>
           <object class="GtkBox"/>
+        </child>
+        <child>
           <object class="GtkLabel"/>
+        </child>
+        <child>
           <object class="GtkButton">
             <child>
               <object class="GtkBox">
