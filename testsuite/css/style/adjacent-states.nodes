@@ -1,4 +1,4 @@
-[window.background:dir(ltr)]
+window.background:dir(ltr)
   decoration:dir(ltr)
   box.horizontal:dir(ltr)
     box.horizontal:dir(ltr)

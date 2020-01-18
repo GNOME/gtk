@@ -142,7 +142,7 @@ label#tomato { color: tomato; }
 label#turquoise { color: turquoise; }
 label#violet { color: violet; }
 label#wheat { color: wheat; }
-label#white { color: white; }
+label#white { color: white; } /* our change tracking drops this from the output */
 label#whitesmoke { color: whitesmoke; }
 label#yellow { color: yellow; }
 label#yellowgreen { color: yellowgreen; }
