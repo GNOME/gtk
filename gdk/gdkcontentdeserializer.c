@@ -692,95 +692,6 @@ string_deserializer (GdkContentDeserializer *deserializer)
   g_object_unref (filter);
 }
 
-#ifdef G_OS_UNIX
-static void
-portal_finish (GObject *object,
-               GAsyncResult *result,
-               gpointer deserializer)
-{
-  char **files = NULL;
-  GError *error = NULL;
-  GValue *value;
-
-  if (!file_transfer_portal_retrieve_files_finish (result, &files, &error))
-    {
-      gdk_content_deserializer_return_error (deserializer, error);
-      return;
-    }
-
-  value = gdk_content_deserializer_get_value (deserializer);
-  if (G_VALUE_HOLDS (value, G_TYPE_FILE))
-    {
-      if (files[0] != NULL)
-        g_value_take_object (value, g_file_new_for_path (files[0]));
-    }
-  else
-    {
-      GSList *l = NULL;
-      gsize i;
-
-      for (i = 0; files[i] != NULL; i++)
-        l = g_slist_prepend (l, g_file_new_for_path (files[i]));
-      g_value_take_boxed (value, g_slist_reverse (l));
-    }
-  g_strfreev (files);
-
-  gdk_content_deserializer_return_success (deserializer);
-}
-
-static void
-portal_file_deserializer_finish (GObject      *source,
-                                 GAsyncResult *result,
-                                 gpointer      deserializer)
-{
-  GOutputStream *stream = G_OUTPUT_STREAM (source);
-  GError *error = NULL;
-  gssize written;
-  char *key;
-
-  written = g_output_stream_splice_finish (stream, result, &error);
-  if (written < 0)
-    {
-      gdk_content_deserializer_return_error (deserializer, error);
-      return;
-    }
-
-  /* write terminating NULL */
-  if (!g_output_stream_write (stream, "", 1, NULL, &error))
-    {
-      gdk_content_deserializer_return_error (deserializer, error);
-      return;
-    }
-
-  key = g_memory_output_stream_steal_data (G_MEMORY_OUTPUT_STREAM (stream));
-  if (key == NULL)
-    {
-      deserialize_not_found (deserializer);
-      return;
-    }
-
-  file_transfer_portal_retrieve_files (key, portal_finish, deserializer);
-  gdk_content_deserializer_set_task_data (deserializer, key, g_free);
-}
-
-static void
-portal_file_deserializer (GdkContentDeserializer *deserializer)
-{
-  GOutputStream *output;
-
-  output = g_memory_output_stream_new_resizable ();
-
-  g_output_stream_splice_async (output,
-                                gdk_content_deserializer_get_input_stream (deserializer),
-                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
-                                gdk_content_deserializer_get_priority (deserializer),
-                                gdk_content_deserializer_get_cancellable (deserializer),
-                                portal_file_deserializer_finish,
-                                deserializer);
-  g_object_unref (output);
-}
-#endif /* G_OS_UNIX */
-
 static void
 file_uri_deserializer_finish (GObject      *source,
                               GAsyncResult *result,
@@ -965,13 +876,7 @@ init (void)
   g_slist_free (formats);
 
 #ifdef G_OS_UNIX
-  gboolean has_portal = file_transfer_portal_available ();
-  if (has_portal)
-    gdk_content_register_deserializer ("application/vnd.portal.files",
-                                       GDK_TYPE_FILE_LIST,
-                                       portal_file_deserializer,
-                                       NULL,
-                                       NULL);
+  file_transfer_portal_register ();
 #endif
 
   gdk_content_register_deserializer ("text/uri-list",
@@ -979,15 +884,6 @@ init (void)
                                      file_uri_deserializer,
                                      NULL,
                                      NULL);
-
-#ifdef G_OS_UNIX
-  if (has_portal)
-    gdk_content_register_deserializer ("application/vnd.portal.files",
-                                       G_TYPE_FILE,
-                                       portal_file_deserializer,
-                                       NULL,
-                                       NULL);
-#endif
 
   gdk_content_register_deserializer ("text/uri-list",
                                      G_TYPE_FILE,

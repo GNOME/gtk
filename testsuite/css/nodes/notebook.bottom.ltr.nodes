@@ -1,4 +1,4 @@
-[window.background:dir(ltr)]
+window.background:dir(ltr)
   decoration:dir(ltr)
   notebook.frame:dir(ltr)
     stack:dir(ltr)

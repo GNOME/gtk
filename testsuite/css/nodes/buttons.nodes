@@ -1,4 +1,4 @@
-[window.background:dir(ltr)]
+window.background:dir(ltr)
   decoration:dir(ltr)
   grid.horizontal:dir(ltr)
     button.text-button.toggle:dir(ltr):checked

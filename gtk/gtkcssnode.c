@@ -19,6 +19,7 @@
 
 #include "gtkcssnodeprivate.h"
 
+#include "gtkcssstaticstyleprivate.h"
 #include "gtkcssanimatedstyleprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkintl.h"
@@ -930,10 +931,15 @@ gtk_css_node_set_style (GtkCssNode  *cssnode,
     {
       g_signal_emit (cssnode, cssnode_signals[STYLE_CHANGED], 0, &change);
     }
-  else if (cssnode->style != style &&
-           (GTK_IS_CSS_ANIMATED_STYLE (cssnode->style) || GTK_IS_CSS_ANIMATED_STYLE (style)))
+  else if (GTK_IS_CSS_ANIMATED_STYLE (cssnode->style) || GTK_IS_CSS_ANIMATED_STYLE (style))
     {
       /* This is when animations are starting/stopping but they didn't change any CSS this frame */
+      g_set_object (&cssnode->style, style);
+    }
+  else if (gtk_css_static_style_get_change (gtk_css_style_get_static_style (cssnode->style)) !=
+           gtk_css_static_style_get_change (gtk_css_style_get_static_style (style)))
+    {
+      /* This is when we recomputed the change flags but the style didn't change */
       g_set_object (&cssnode->style, style);
     }
 
@@ -1430,6 +1436,16 @@ gtk_css_node_print (GtkCssNode                *cssnode,
 
   if (!cssnode->visible)
     g_string_append_c (string, ']');
+
+  if (flags & GTK_STYLE_CONTEXT_PRINT_SHOW_CHANGE)
+    {
+      GtkCssStyle *style = gtk_css_node_get_style (cssnode);
+      GtkCssChange change;
+
+      change = gtk_css_static_style_get_change (gtk_css_style_get_static_style (style));
+      g_string_append (string, "    ");
+      gtk_css_change_print (change, string); 
+    }
 
   g_string_append_c (string, '\n');
 

@@ -17,6 +17,7 @@ def get_files(subdir,extension):
   return sorted(filter(lambda x: x.endswith((extension)), os.listdir(os.path.join(srcdir,subdir))))
 
 xml += '''
+    <file>theme/Empty/gtk.css</file>
     <file>theme/Adwaita/gtk.css</file>
     <file>theme/Adwaita/gtk-dark.css</file>
     <file>theme/Adwaita/gtk-contained.css</file>

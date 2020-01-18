@@ -1,4 +1,4 @@
-[window.background:dir(ltr)]
+window.background:dir(ltr)
   decoration:dir(ltr)
   box.horizontal:dir(ltr)
     label#aliceblue:dir(ltr)
@@ -290,6 +290,7 @@
     label#wheat:dir(ltr)
       color: rgb(245,222,179); /* colornames.css:144:15-28 */
     label#white:dir(ltr)
+      color: rgb(255,255,255); /* colornames.css:145:15-28 */
     label#whitesmoke:dir(ltr)
       color: rgb(245,245,245); /* colornames.css:146:20-38 */
     label#yellow:dir(ltr)

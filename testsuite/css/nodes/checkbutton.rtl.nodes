@@ -1,4 +1,4 @@
-[window.background:dir(rtl)]
+window.background:dir(rtl)
   decoration:dir(rtl)
   box.vertical:dir(rtl)
     checkbutton:dir(rtl)

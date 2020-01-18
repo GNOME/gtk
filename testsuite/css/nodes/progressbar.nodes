@@ -1,4 +1,4 @@
-[window.background:dir(ltr)]
+window.background:dir(ltr)
   decoration:dir(ltr)
   box#progressbars.vertical:dir(ltr)
     progressbar.horizontal:dir(ltr)
