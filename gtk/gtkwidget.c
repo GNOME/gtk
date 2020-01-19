@@ -10481,58 +10481,24 @@ gtk_widget_can_be_picked (GtkWidget    *widget,
   return TRUE;
 }
 
-/**
- * gtk_widget_pick:
- * @widget: the widget to query
- * @x: X coordinate to test, relative to @widget's origin
- * @y: Y coordinate to test, relative to @widget's origin
- * @flags: Flags to influence what is picked
- *
- * Finds the descendant of @widget (including @widget itself) closest
- * to the screen at the point (@x, @y). The point must be given in
- * widget coordinates, so (0, 0) is assumed to be the top left of
- * @widget's content area.
- *
- * Usually widgets will return %NULL if the given coordinate is not
- * contained in @widget checked via gtk_widget_contains(). Otherwise
- * they will recursively try to find a child that does not return %NULL.
- * Widgets are however free to customize their picking algorithm.
- *
- * This function is used on the toplevel to determine the widget below
- * the mouse cursor for purposes of hover hilighting and delivering events.
- *
- * Returns: (nullable) (transfer none): The widget descendant at the given
- *     coordinate or %NULL if none.
- **/
-GtkWidget *
-gtk_widget_pick (GtkWidget    *widget,
-                 gdouble       x,
-                 gdouble       y,
-                 GtkPickFlags  flags)
+static GtkWidget *
+gtk_widget_do_pick (GtkWidget    *widget,
+                    gdouble       x,
+                    gdouble       y,
+                    GtkPickFlags  flags)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkWidget *child;
-  GtkCssBoxes boxes;
-
-  if (!gtk_widget_can_be_picked (widget, flags))
-    return NULL;
 
   if (priv->overflow == GTK_OVERFLOW_HIDDEN)
     {
+      GtkCssBoxes boxes;
+
       gtk_css_boxes_init (&boxes, widget);
 
       if (!gsk_rounded_rect_contains_point (gtk_css_boxes_get_padding_box (&boxes),
                                             &GRAPHENE_POINT_INIT (x, y)))
         return NULL;
-    }
-
-  if (GTK_IS_WINDOW (widget))
-    {
-      GtkWidget *picked;
-
-      picked = gtk_window_pick_popover (GTK_WINDOW (widget), x, y, flags);
-      if (picked)
-        return picked;
     }
 
   for (child = _gtk_widget_get_last_child (widget);
@@ -10572,15 +10538,61 @@ gtk_widget_pick (GtkWidget    *widget,
 
       graphene_point3d_interpolate (&p0, &p1, p0.z / (p0.z - p1.z), &res);
 
-      picked = gtk_widget_pick (child, res.x, res.y, flags);
+      picked = gtk_widget_do_pick (child, res.x, res.y, flags);
       if (picked)
         return picked;
     }
 
-  if (!gtk_widget_contains (widget, x, y))
+  if (!GTK_WIDGET_GET_CLASS (widget)->contains (widget, x, y))
     return NULL;
 
   return widget;
+}
+
+/**
+ * gtk_widget_pick:
+ * @widget: the widget to query
+ * @x: X coordinate to test, relative to @widget's origin
+ * @y: Y coordinate to test, relative to @widget's origin
+ * @flags: Flags to influence what is picked
+ *
+ * Finds the descendant of @widget (including @widget itself) closest
+ * to the screen at the point (@x, @y). The point must be given in
+ * widget coordinates, so (0, 0) is assumed to be the top left of
+ * @widget's content area.
+ *
+ * Usually widgets will return %NULL if the given coordinate is not
+ * contained in @widget checked via gtk_widget_contains(). Otherwise
+ * they will recursively try to find a child that does not return %NULL.
+ * Widgets are however free to customize their picking algorithm.
+ *
+ * This function is used on the toplevel to determine the widget below
+ * the mouse cursor for purposes of hover hilighting and delivering events.
+ *
+ * Returns: (nullable) (transfer none): The widget descendant at the given
+ *     coordinate or %NULL if none.
+ **/
+GtkWidget *
+gtk_widget_pick (GtkWidget    *widget,
+                 gdouble       x,
+                 gdouble       y,
+                 GtkPickFlags  flags)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  if (!gtk_widget_can_be_picked (widget, flags))
+    return NULL;
+
+  if (GTK_IS_WINDOW (widget))
+    {
+      GtkWidget *picked;
+
+      picked = gtk_window_pick_popover (GTK_WINDOW (widget), x, y, flags);
+      if (picked)
+        return picked;
+    }
+
+  return gtk_widget_do_pick (widget, x, y, flags);
 }
 
 /**
