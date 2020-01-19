@@ -72,6 +72,79 @@ gtk_css_matcher_widget_path_get_previous (GtkCssMatcher       *matcher,
   return TRUE;
 }
 
+static const char *
+gtk_css_matcher_widget_path_get_name (const GtkCssMatcher *matcher)
+{
+  const GtkWidgetPath *siblings;
+
+  siblings = gtk_widget_path_iter_get_siblings (matcher->path.path, matcher->path.index);
+  if (siblings && matcher->path.sibling_index != gtk_widget_path_iter_get_sibling_index (matcher->path.path, matcher->path.index))
+    {
+      const char *path_name = gtk_widget_path_iter_get_object_name (siblings, matcher->path.sibling_index);
+
+      if (path_name == NULL)
+        path_name = g_type_name (gtk_widget_path_iter_get_object_type (siblings, matcher->path.sibling_index));
+
+      return path_name;
+    }
+  else
+    {
+      const char *path_name = gtk_widget_path_iter_get_object_name (matcher->path.path, matcher->path.index);
+
+      if (path_name == NULL)
+        path_name = g_type_name (gtk_widget_path_iter_get_object_type (matcher->path.path, matcher->path.index));
+
+      return path_name;
+    }
+
+  return NULL;
+}
+
+static GQuark *
+gtk_css_matcher_widget_path_get_classes (const GtkCssMatcher *matcher,
+                                         guint               *n_classes,
+                                         gboolean            *allocated)
+{
+  int num;
+  const GtkWidgetPath *siblings;
+  GSList *list, *l;
+  GQuark *classes;
+  const GQuark *decl_classes = NULL;
+  guint n_decl_classes = 0;
+  int i;
+  
+  if (matcher->path.decl)
+    decl_classes = gtk_css_node_declaration_get_classes (matcher->path.decl, &n_decl_classes);
+
+  siblings = gtk_widget_path_iter_get_siblings (matcher->path.path, matcher->path.index);
+  if (siblings && matcher->path.sibling_index != gtk_widget_path_iter_get_sibling_index (matcher->path.path, matcher->path.index))
+    list = gtk_widget_path_iter_list_classes (siblings, matcher->path.sibling_index);
+  else
+    list = gtk_widget_path_iter_list_classes (matcher->path.path, matcher->path.index);
+
+  num = n_decl_classes + g_slist_length (list);
+
+  classes = g_new (GQuark, num);
+
+  if (matcher->path.decl)
+    {
+      for (i = 0; i < n_decl_classes; i++)
+        classes[i] = decl_classes[i];
+    }
+
+  for (l = list; l; l = l->next)
+    {
+      const char *name = l->data;
+
+      classes[i++] = g_quark_from_string (name);
+    }
+
+  *n_classes = num;
+  *allocated = TRUE;
+
+  return classes;
+}
+
 static gboolean
 gtk_css_matcher_widget_path_has_state (const GtkCssMatcher *matcher,
                                        GtkStateFlags        state)
@@ -193,6 +266,8 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_WIDGET_PATH = {
   GTK_CSS_MATCHER_TYPE_WIDGET_PATH,
   gtk_css_matcher_widget_path_get_parent,
   gtk_css_matcher_widget_path_get_previous,
+  gtk_css_matcher_widget_path_get_name,
+  gtk_css_matcher_widget_path_get_classes,
   gtk_css_matcher_widget_path_has_state,
   gtk_css_matcher_widget_path_has_name,
   gtk_css_matcher_widget_path_has_class,
@@ -264,6 +339,22 @@ gtk_css_matcher_node_get_previous (GtkCssMatcher       *matcher,
     return FALSE;
 
   return gtk_css_node_init_matcher (node, matcher);
+}
+
+static const char *
+gtk_css_matcher_node_get_name (const GtkCssMatcher *matcher)
+{
+  return matcher->node.node_name;
+}
+
+static GQuark *
+gtk_css_matcher_node_get_classes (const GtkCssMatcher *matcher,
+                                  guint               *n_classes,
+                                  gboolean            *allocated)
+{
+  *n_classes = matcher->node.n_classes;
+  *allocated = FALSE;
+  return (GQuark *)matcher->node.classes;
 }
 
 static gboolean
@@ -378,6 +469,8 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_NODE = {
   GTK_CSS_MATCHER_TYPE_NODE,
   gtk_css_matcher_node_get_parent,
   gtk_css_matcher_node_get_previous,
+  gtk_css_matcher_node_get_name,
+  gtk_css_matcher_node_get_classes,
   gtk_css_matcher_node_has_state,
   gtk_css_matcher_node_has_name,
   gtk_css_matcher_node_has_class,
