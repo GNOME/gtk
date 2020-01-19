@@ -385,9 +385,6 @@ gtk_info_bar_size_allocate (GtkWidget     *widget,
                             allocation->x, allocation->y,
                             allocation->width, allocation->height);
 
-  allocation->x = 0;
-  allocation->y = 0;
-
   GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->size_allocate (widget, allocation);
 }
 
