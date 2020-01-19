@@ -26,6 +26,7 @@ void main() {
   f.y = (u_viewport.y + u_viewport.w) - f.y;
 
   RoundedRect outline = create_rect(u_outline_rect);
+  rounded_rect_transform(outline, u_modelview);
 
   float alpha = Texture(u_source, vUv).a;
   alpha *= (1.0 -  clamp(rounded_rect_coverage(outline, f.xy), 0.0, 1.0));
