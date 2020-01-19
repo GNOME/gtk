@@ -8,6 +8,7 @@ G_BEGIN_DECLS
 
 typedef struct
 {
+  GBytes *preamble;
   GBytes *vs_preamble;
   GBytes *fs_preamble;
 
@@ -22,6 +23,7 @@ typedef struct
 
 
 void   gsk_gl_shader_builder_init             (GskGLShaderBuilder  *self,
+                                               const char          *common_preamble_resource_path,
                                                const char          *vs_preamble_resource_path,
                                                const char          *fs_preamble_resource_path);
 void   gsk_gl_shader_builder_finish           (GskGLShaderBuilder  *self);
