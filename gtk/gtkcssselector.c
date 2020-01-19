@@ -126,7 +126,7 @@ gtk_css_selector_hash_one (const GtkCssSelector *selector)
   return GPOINTER_TO_UINT (selector->class) ^ selector->class->hash_one (selector);
 }
 
-static gpointer *
+static inline gpointer *
 gtk_css_selector_tree_get_matches (const GtkCssSelectorTree *tree)
 {
   if (tree->matches_offset == GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET)
@@ -171,14 +171,14 @@ gtk_css_selector_tree_found_match (const GtkCssSelectorTree  *tree,
     }
 }
 
-static gboolean
+static inline gboolean
 gtk_css_selector_match (const GtkCssSelector *selector,
                         const GtkCssMatcher  *matcher)
 {
   return selector->class->match_one (selector, matcher);
 }
 
-static gboolean
+static inline gboolean
 gtk_css_selector_foreach (const GtkCssSelector      *selector,
                           const GtkCssMatcher       *matcher,
                           GtkCssSelectorForeachFunc  func,
@@ -204,7 +204,7 @@ gtk_css_selector_previous (const GtkCssSelector *selector)
   return selector->class ? selector : NULL;
 }
 
-static const GtkCssSelectorTree *
+static inline const GtkCssSelectorTree *
 gtk_css_selector_tree_at_offset (const GtkCssSelectorTree *tree,
 				 gint32 offset)
 {
@@ -214,19 +214,19 @@ gtk_css_selector_tree_at_offset (const GtkCssSelectorTree *tree,
   return (GtkCssSelectorTree *) ((guint8 *)tree + offset);
 }
 
-static const GtkCssSelectorTree *
+static inline const GtkCssSelectorTree *
 gtk_css_selector_tree_get_parent (const GtkCssSelectorTree *tree)
 {
   return gtk_css_selector_tree_at_offset (tree, tree->parent_offset);
 }
 
-static const GtkCssSelectorTree *
+static inline const GtkCssSelectorTree *
 gtk_css_selector_tree_get_previous (const GtkCssSelectorTree *tree)
 {
   return gtk_css_selector_tree_at_offset (tree, tree->previous_offset);
 }
 
-static const GtkCssSelectorTree *
+static inline const GtkCssSelectorTree *
 gtk_css_selector_tree_get_sibling (const GtkCssSelectorTree *tree)
 {
   return gtk_css_selector_tree_at_offset (tree, tree->sibling_offset);
