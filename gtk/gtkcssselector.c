@@ -108,6 +108,7 @@ struct _GtkCssSelectorTree
   gint32 parent_offset;
   gint32 previous_offset;
   gint32 sibling_offset;
+  gint32 non_name_sibling_offset;
   gint32 matches_offset; /* pointers that we return as matches if selector matches */
 };
 
@@ -230,6 +231,12 @@ static const GtkCssSelectorTree *
 gtk_css_selector_tree_get_sibling (const GtkCssSelectorTree *tree)
 {
   return gtk_css_selector_tree_at_offset (tree, tree->sibling_offset);
+}
+
+static const GtkCssSelectorTree *
+gtk_css_selector_tree_get_sibling2 (const GtkCssSelectorTree *tree, gboolean skip_names)
+{
+  return gtk_css_selector_tree_at_offset (tree, skip_names ? tree->non_name_sibling_offset: tree->sibling_offset);
 }
 
 /* DEFAULTS */
@@ -1823,23 +1830,38 @@ gtk_css_selectors_skip_initial_selector (GtkCssSelector *selector, const GtkCssS
   return (GtkCssSelector *)gtk_css_selector_previous (selector);
 }
 
+typedef struct {
+  gboolean matched_name;
+  GPtrArray *matches;
+} MatchData;
+
 static gboolean
 gtk_css_selector_tree_match_foreach (const GtkCssSelector *selector,
                                      const GtkCssMatcher  *matcher,
                                      gpointer              res)
 {
   const GtkCssSelectorTree *tree = (const GtkCssSelectorTree *) selector;
+  MatchData *data = res;
+  MatchData level_data;
   const GtkCssSelectorTree *prev;
 
   if (!gtk_css_selector_match (selector, matcher))
     return FALSE;
 
-  gtk_css_selector_tree_found_match (tree, res);
+  if (selector->class == &GTK_CSS_SELECTOR_NAME)
+    data->matched_name = TRUE;
+
+  gtk_css_selector_tree_found_match (tree, &data->matches);
+
+  level_data.matched_name = FALSE;
+  level_data.matches = data->matches;
 
   for (prev = gtk_css_selector_tree_get_previous (tree);
        prev != NULL;
-       prev = gtk_css_selector_tree_get_sibling (prev))
-    gtk_css_selector_foreach (&prev->selector, matcher, gtk_css_selector_tree_match_foreach, res);
+       prev = gtk_css_selector_tree_get_sibling2 (prev, level_data.matched_name))
+    gtk_css_selector_foreach (&prev->selector, matcher, gtk_css_selector_tree_match_foreach, &level_data);
+
+  data->matches = level_data.matches;
 
   return FALSE;
 }
@@ -1848,13 +1870,15 @@ GPtrArray *
 _gtk_css_selector_tree_match_all (const GtkCssSelectorTree *tree,
 				  const GtkCssMatcher *matcher)
 {
-  GPtrArray *array = NULL;
+  MatchData data = { FALSE, NULL };
 
   for (; tree != NULL;
-       tree = gtk_css_selector_tree_get_sibling (tree))
-    gtk_css_selector_foreach (&tree->selector, matcher, gtk_css_selector_tree_match_foreach, &array);
+       tree = gtk_css_selector_tree_get_sibling2 (tree, data.matched_name))
+    {
+      gtk_css_selector_foreach (&tree->selector, matcher, gtk_css_selector_tree_match_foreach, &data);
+    }
 
-  return array;
+  return data.matches;
 }
 
 /* The code for collecting matches assumes that the name, id and classes
@@ -1946,9 +1970,10 @@ _gtk_css_selector_tree_get_change_all (const GtkCssSelectorTree *tree,
   return change & ~GTK_CSS_CHANGE_RESERVED_BIT;
 }
 
+#define PRINT_TREE
 #ifdef PRINT_TREE
 static void
-_gtk_css_selector_tree_print (const GtkCssSelectorTree *tree, GString *str, char *prefix)
+_gtk_css_selector_tree_print (const GtkCssSelectorTree *tree, GString *str, const char *prefix)
 {
   gboolean first = TRUE;
   int len, i;
@@ -2149,7 +2174,7 @@ subdivide_infos (GByteArray *array, GList *infos, gint32 parent_offset)
 		exact_matches = g_ptr_array_new ();
 	      g_ptr_array_add (exact_matches, info->match);
 	      if (info->selector_match != NULL)
-		*info->selector_match = GUINT_TO_POINTER (tree_offset);
+	        *info->selector_match = GUINT_TO_POINTER (tree_offset);
 	    }
 	  else
 	    matched = g_list_prepend (matched, info);
@@ -2240,6 +2265,33 @@ fixup_offsets (GtkCssSelectorTree *tree, guint8 *data)
     }
 }
 
+static void
+compute_non_name_offsets (GtkCssSelectorTree *tree)
+{
+  GtkCssSelectorTree *current = tree;
+
+  for (; tree != NULL;
+       tree = (GtkCssSelectorTree *)gtk_css_selector_tree_get_sibling (tree))
+    {
+      compute_non_name_offsets ((GtkCssSelectorTree *)gtk_css_selector_tree_get_previous (tree));
+
+      if (tree->selector.class != &GTK_CSS_SELECTOR_NAME)
+        {
+          for (; current != tree;
+               current = (GtkCssSelectorTree *)gtk_css_selector_tree_get_sibling (current))
+            {
+	      current->non_name_sibling_offset = ((guint8 *)tree - (guint8 *)current);
+            }
+        }
+    }
+
+  for (; current != NULL;
+       current = (GtkCssSelectorTree *)gtk_css_selector_tree_get_sibling (current))
+    {
+      current->non_name_sibling_offset = GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET;
+    }
+}
+
 GtkCssSelectorTree *
 _gtk_css_selector_tree_builder_build (GtkCssSelectorTreeBuilder *builder)
 {
@@ -2262,6 +2314,7 @@ _gtk_css_selector_tree_builder_build (GtkCssSelectorTreeBuilder *builder)
   tree = (GtkCssSelectorTree *)data;
 
   fixup_offsets (tree, data);
+  compute_non_name_offsets (tree);
 
   /* Convert offsets to final pointers */
   for (l = builder->infos; l != NULL; l = l->next)
