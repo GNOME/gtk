@@ -10507,9 +10507,8 @@ gtk_widget_do_pick (GtkWidget    *widget,
     {
       GtkWidgetPrivate *child_priv = gtk_widget_get_instance_private (child);
       GskTransform *transform;
-      graphene_matrix_t inv;
       GtkWidget *picked;
-      graphene_point3d_t p0, p1, res;
+      graphene_point3d_t res;
 
       if (!gtk_widget_can_be_picked (child, flags))
         continue;
@@ -10527,16 +10526,29 @@ gtk_widget_do_pick (GtkWidget    *widget,
         {
           transform = NULL;
         }
-      gsk_transform_to_matrix (transform, &inv);
-      gsk_transform_unref (transform);
-      graphene_point3d_init (&p0, x, y, 0);
-      graphene_point3d_init (&p1, x, y, 1);
-      graphene_matrix_transform_point3d (&inv, &p0, &p0);
-      graphene_matrix_transform_point3d (&inv, &p1, &p1);
-      if (fabs (p0.z - p1.z) < 1.f / 4096)
-        continue;
+      if (gsk_transform_get_category (transform) >= GSK_TRANSFORM_CATEGORY_2D_TRANSLATE)
+        {
+          float dx, dy;
 
-      graphene_point3d_interpolate (&p0, &p1, p0.z / (p0.z - p1.z), &res);
+          gsk_transform_to_translate (transform, &dx, &dy);
+          graphene_point3d_init (&res, x + dx, y + dy, 0.);
+        }
+      else
+        {
+          graphene_matrix_t inv;
+          graphene_point3d_t p0, p1;
+
+          gsk_transform_to_matrix (transform, &inv);
+          gsk_transform_unref (transform);
+          graphene_point3d_init (&p0, x, y, 0);
+          graphene_point3d_init (&p1, x, y, 1);
+          graphene_matrix_transform_point3d (&inv, &p0, &p0);
+          graphene_matrix_transform_point3d (&inv, &p1, &p1);
+          if (fabs (p0.z - p1.z) < 1.f / 4096)
+            continue;
+
+          graphene_point3d_interpolate (&p0, &p1, p0.z / (p0.z - p1.z), &res);
+        }
 
       picked = gtk_widget_do_pick (child, res.x, res.y, flags);
       if (picked)
