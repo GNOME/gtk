@@ -9,14 +9,17 @@
 
 void
 gsk_gl_shader_builder_init (GskGLShaderBuilder *self,
+                            const char         *common_preamble_resource_path,
                             const char         *vs_preamble_resource_path,
                             const char         *fs_preamble_resource_path)
 {
   memset (self, 0, sizeof (*self));
 
+  self->preamble = g_resources_lookup_data (common_preamble_resource_path, 0, NULL);
   self->vs_preamble = g_resources_lookup_data (vs_preamble_resource_path, 0, NULL);
   self->fs_preamble = g_resources_lookup_data (fs_preamble_resource_path, 0, NULL);
 
+  g_assert (self->preamble);
   g_assert (self->vs_preamble);
   g_assert (self->fs_preamble);
 }
@@ -24,6 +27,7 @@ gsk_gl_shader_builder_init (GskGLShaderBuilder *self,
 void
 gsk_gl_shader_builder_finish (GskGLShaderBuilder *self)
 {
+  g_bytes_unref (self->preamble);
   g_bytes_unref (self->vs_preamble);
   g_bytes_unref (self->fs_preamble);
 }
@@ -102,17 +106,19 @@ gsk_gl_shader_builder_create_program (GskGLShaderBuilder  *self,
               "#version %d\n", self->version);
 
   vertex_id = glCreateShader (GL_VERTEX_SHADER);
-  glShaderSource (vertex_id, 7,
+  glShaderSource (vertex_id, 8,
                   (const char *[]) {
                     version_buffer,
                     self->debugging ? "#define GSK_DEBUG 1\n" : "",
                     self->legacy ? "#define GSK_LEGACY 1\n" : "",
                     self->gl3 ? "#define GSK_GL3 1\n" : "",
                     self->gles ? "#define GSK_GLES 1\n" : "",
+                    g_bytes_get_data (self->preamble, NULL),
                     g_bytes_get_data (self->vs_preamble, NULL),
                     vertex_shader_start
                   },
                   (int[]) {
+                    -1,
                     -1,
                     -1,
                     -1,
@@ -130,17 +136,19 @@ gsk_gl_shader_builder_create_program (GskGLShaderBuilder  *self,
     }
 
   fragment_id = glCreateShader (GL_FRAGMENT_SHADER);
-  glShaderSource (fragment_id, 7,
+  glShaderSource (fragment_id, 8,
                   (const char *[]) {
                     version_buffer,
                     self->debugging ? "#define GSK_DEBUG 1\n" : "",
                     self->legacy ? "#define GSK_LEGACY 1\n" : "",
                     self->gl3 ? "#define GSK_GL3 1\n" : "",
                     self->gles ? "#define GSK_GLES 1\n" : "",
+                    g_bytes_get_data (self->preamble, NULL),
                     g_bytes_get_data (self->fs_preamble, NULL),
                     fragment_shader_start
                   },
                   (int[]) {
+                    -1,
                     -1,
                     -1,
                     -1,
