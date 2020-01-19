@@ -108,10 +108,7 @@ gtk_style_cascade_get_settings (GtkStyleProvider *provider)
        item;
        item = gtk_style_cascade_iter_next (cascade, &iter))
     {
-      if (!GTK_IS_STYLE_PROVIDER (item))
-        continue;
-          
-      settings = gtk_style_provider_get_settings (GTK_STYLE_PROVIDER (item));
+      settings = gtk_style_provider_get_settings (item);
       if (settings)
         {
           gtk_style_cascade_iter_clear (&iter);
@@ -136,18 +133,11 @@ gtk_style_cascade_get_color (GtkStyleProvider *provider,
        item;
        item = gtk_style_cascade_iter_next (cascade, &iter))
     {
-      if (GTK_IS_STYLE_PROVIDER (item))
+      color = gtk_style_provider_get_color (item, name);
+      if (color)
         {
-          color = gtk_style_provider_get_color (GTK_STYLE_PROVIDER (item), name);
-          if (color)
-            {
-              gtk_style_cascade_iter_clear (&iter);
-              return color;
-            }
-        }
-      else
-        {
-          /* If somebody hits this code path, shout at them */
+          gtk_style_cascade_iter_clear (&iter);
+          return color;
         }
     }
 
@@ -176,10 +166,7 @@ gtk_style_cascade_get_keyframes (GtkStyleProvider *provider,
        item;
        item = gtk_style_cascade_iter_next (cascade, &iter))
     {
-      if (!GTK_IS_STYLE_PROVIDER (item))
-        continue;
-          
-      keyframes = gtk_style_provider_get_keyframes (GTK_STYLE_PROVIDER (item), name);
+      keyframes = gtk_style_provider_get_keyframes (item, name);
       if (keyframes)
         {
           gtk_style_cascade_iter_clear (&iter);
@@ -206,19 +193,10 @@ gtk_style_cascade_lookup (GtkStyleProvider    *provider,
        item;
        item = gtk_style_cascade_iter_next (cascade, &iter))
     {
-      GtkStyleProvider *sp = (GtkStyleProvider *) item;
-      if (GTK_IS_STYLE_PROVIDER (sp))
-        {
-          gtk_style_provider_lookup (sp, matcher, lookup,
-                                              change ? &iter_change : NULL);
-          if (change)
-            *change |= iter_change;
-        }
-      else
-        {
-          /* you lose */
-          g_warn_if_reached ();
-        }
+      gtk_style_provider_lookup (item, matcher, lookup,
+                                 change ? &iter_change : NULL);
+      if (change)
+        *change |= iter_change;
     }
   gtk_style_cascade_iter_clear (&iter);
 }
