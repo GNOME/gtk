@@ -535,17 +535,16 @@ transform_rect (GskGLRenderer        *self,
                 RenderOpBuilder      *builder,
                 const GskRoundedRect *rect)
 {
-  const float scale = ops_get_scale (builder);
   GskRoundedRect r;
-  int i;
 
-  ops_transform_bounds_modelview (builder, &rect->bounds, &r.bounds);
+  r.bounds.origin.x = builder->dx + rect->bounds.origin.x;
+  r.bounds.origin.y = builder->dy + rect->bounds.origin.y;
+  r.bounds.size = rect->bounds.size;
 
-  for (i = 0; i < 4; i ++)
-    {
-      r.corner[i].width = rect->corner[i].width * scale;
-      r.corner[i].height = rect->corner[i].height * scale;
-    }
+  r.corner[0] = rect->corner[0];
+  r.corner[1] = rect->corner[1];
+  r.corner[2] = rect->corner[2];
+  r.corner[3] = rect->corner[3];
 
   return r;
 }
@@ -745,24 +744,22 @@ render_border_node (GskGLRenderer   *self,
                     GskRenderNode   *node,
                     RenderOpBuilder *builder)
 {
-  const float scale = ops_get_scale (builder);
   const float min_x = builder->dx + node->bounds.origin.x;
   const float min_y = builder->dy + node->bounds.origin.y;
   const float max_x = min_x + node->bounds.size.width;
   const float max_y = min_y + node->bounds.size.height;
   const GdkRGBA *colors = gsk_border_node_peek_colors (node);
   const GskRoundedRect *rounded_outline = gsk_border_node_peek_outline (node);
-  const float *og_widths = gsk_border_node_peek_widths (node);
-  float widths[4];
+  const float *widths = gsk_border_node_peek_widths (node);
   int i;
   struct {
     float w;
     float h;
   } sizes[4];
 
-  if (og_widths[0] == og_widths[1] &&
-      og_widths[0] == og_widths[2] &&
-      og_widths[0] == og_widths[3] &&
+  if (widths[0] == widths[1] &&
+      widths[0] == widths[2] &&
+      widths[0] == widths[3] &&
       gdk_rgba_equal (&colors[0], &colors[1]) &&
       gdk_rgba_equal (&colors[0], &colors[2]) &&
       gdk_rgba_equal (&colors[0], &colors[3]))
@@ -773,16 +770,13 @@ render_border_node (GskGLRenderer   *self,
       op = ops_begin (builder, OP_CHANGE_INSET_SHADOW);
       op->color = &colors[0];
       op->outline = transform_rect (self, builder, rounded_outline);
-      op->spread = og_widths[0] * scale;
+      op->spread = widths[0];
       op->offset[0] = 0;
       op->offset[1] = 0;
 
       load_vertex_data (ops_draw (builder, NULL), node, builder);
       return;
     }
-
-  for (i = 0; i < 4; i ++)
-    widths[i] = og_widths[i];
 
   /* Top left */
   if (widths[3] > 0)
@@ -828,9 +822,6 @@ render_border_node (GskGLRenderer   *self,
     sizes[3].h = MAX (widths[2], rounded_outline->corner[3].height);
   else
     sizes[3].h = 0;
-
-  for (i = 0; i < 4; i ++)
-    widths[i] *= scale;
 
   {
     const GskQuadVertex side_data[4][6] = {
@@ -1481,7 +1472,6 @@ render_unblurred_inset_shadow_node (GskGLRenderer   *self,
                                     GskRenderNode   *node,
                                     RenderOpBuilder *builder)
 {
-  const float scale = ops_get_scale (builder);
   const float blur_radius = gsk_inset_shadow_node_get_blur_radius (node);
   const float dx = gsk_inset_shadow_node_get_dx (node);
   const float dy = gsk_inset_shadow_node_get_dy (node);
@@ -1494,9 +1484,9 @@ render_unblurred_inset_shadow_node (GskGLRenderer   *self,
   op = ops_begin (builder, OP_CHANGE_INSET_SHADOW);
   op->color = gsk_inset_shadow_node_peek_color (node);
   op->outline = transform_rect (self, builder, gsk_inset_shadow_node_peek_outline (node));
-  op->spread = spread * scale;
-  op->offset[0] = dx * scale;
-  op->offset[1] = dy * scale;
+  op->spread = spread;
+  op->offset[0] = dx;
+  op->offset[1] = dy;
 
   load_vertex_data (ops_draw (builder, NULL), node, builder);
 }
@@ -1647,7 +1637,6 @@ render_unblurred_outset_shadow_node (GskGLRenderer   *self,
                                      GskRenderNode   *node,
                                      RenderOpBuilder *builder)
 {
-  const float scale = ops_get_scale (builder);
   const GskRoundedRect *outline = gsk_outset_shadow_node_peek_outline (node);
   const float spread = gsk_outset_shadow_node_get_spread (node);
   const float dx = gsk_outset_shadow_node_get_dx (node);
@@ -1658,9 +1647,9 @@ render_unblurred_outset_shadow_node (GskGLRenderer   *self,
   op = ops_begin (builder, OP_CHANGE_UNBLURRED_OUTSET_SHADOW);
   op->color = gsk_outset_shadow_node_peek_color (node);
   op->outline = transform_rect (self, builder, outline);
-  op->spread = spread * scale;
-  op->offset[0] = dx * scale;
-  op->offset[1] = dy * scale;
+  op->spread = spread;
+  op->offset[0] = dx;
+  op->offset[1] = dy;
 
   load_vertex_data (ops_draw (builder, NULL), node, builder);
 }
