@@ -25,6 +25,9 @@ void main() {
   RoundedRect outside = create_rect(u_outline_rect);
   RoundedRect inside = rounded_rect_shrink (outside, u_widths);
 
+  rounded_rect_transform(outside, u_modelview);
+  rounded_rect_transform(inside, u_modelview);
+
   float alpha = clamp (rounded_rect_coverage (outside, f.xy) -
                        rounded_rect_coverage (inside, f.xy),
                        0.0, 1.0);

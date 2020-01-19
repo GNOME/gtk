@@ -20,15 +20,21 @@ _IN_ vec4 final_color;
 
 void main() {
   vec4 f = gl_FragCoord;
-  vec4 color;
 
   f.x += u_viewport.x;
   f.y = (u_viewport.y + u_viewport.w) - f.y;
 
   RoundedRect outside = create_rect(u_outline_rect);
   RoundedRect inside = rounded_rect_shrink(outside, vec4(u_spread));
-  color = final_color * clamp (rounded_rect_coverage (outside, f.xy) -
-                               rounded_rect_coverage (inside, f.xy - u_offset),
-                               0.0, 1.0);
-  setOutputColor(color);
+
+  rounded_rect_offset(inside, u_offset);
+
+  rounded_rect_transform(outside, u_modelview);
+  rounded_rect_transform(inside, u_modelview);
+
+  float alpha = clamp (rounded_rect_coverage (outside, f.xy) -
+                       rounded_rect_coverage (inside, f.xy),
+                       0.0, 1.0);
+
+  setOutputColor(final_color * alpha);
 }
