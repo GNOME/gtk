@@ -171,11 +171,29 @@ gtk_css_selector_tree_found_match (const GtkCssSelectorTree  *tree,
     }
 }
 
+static int match_count;
+static int positive_match_count;
+
+void print_match_count (void);
+void print_match_count (void)
+{
+  g_print ("%d selector matches (%d positive)\n", match_count, positive_match_count);
+  match_count = 0;
+  positive_match_count = 0;
+}
+
 static inline gboolean
 gtk_css_selector_match (const GtkCssSelector *selector,
                         const GtkCssMatcher  *matcher)
 {
-  return selector->class->match_one (selector, matcher);
+  gboolean result;
+
+  result = selector->class->match_one (selector, matcher);
+
+  match_count++;
+  positive_match_count += result;
+
+  return result;
 }
 
 static inline gboolean
