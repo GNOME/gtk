@@ -2565,6 +2565,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   gboolean success = TRUE;
 
   gsk_gl_shader_builder_init (&shader_builder,
+                              "/org/gtk/libgsk/glsl/preamble.glsl",
                               "/org/gtk/libgsk/glsl/preamble.vs.glsl",
                               "/org/gtk/libgsk/glsl/preamble.fs.glsl");
 

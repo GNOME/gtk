@@ -1,11 +1,3 @@
-#ifdef GSK_GL3
-precision highp float;
-#endif
-
-#ifdef GSK_GLES
-precision highp float;
-#endif
-
 uniform sampler2D u_source;
 uniform mat4 u_projection;
 uniform mat4 u_modelview;
@@ -14,42 +6,23 @@ uniform vec4 u_viewport;
 uniform vec4[3] u_clip_rect;
 
 #if GSK_GLES
-#define _OUT_ varying
-#define _IN_ varying
 #elif GSK_LEGACY
-#define _OUT_ varying
-#define _IN_ varying
 _OUT_ vec4 outputColor;
 #else
-#define _OUT_ out
-#define _IN_ in
 _OUT_ vec4 outputColor;
 #endif
+
 _IN_ vec2 vUv;
 
 
 
-struct RoundedRect
+RoundedRect decode_rect(_ROUNDED_RECT_UNIFORM_ r)
 {
-  vec4 bounds;
-  // Look, arrays can't be in structs if you want to return the struct
-  // from a function in gles or whatever. Just kill me.
-  vec4 corner_points1; // xy = top left, zw = top right
-  vec4 corner_points2; // xy = bottom right, zw = bottom left
-};
-
-// Transform from a GskRoundedRect to a RoundedRect as we need it.
-RoundedRect
-create_rect(vec4[3] data)
-{
-  vec4 bounds = vec4(data[0].xy, data[0].xy + data[0].zw);
-
-  vec4 corner_points1 = vec4(bounds.xy + data[1].xy,
-                             bounds.zy + vec2(data[1].zw * vec2(-1, 1)));
-  vec4 corner_points2 = vec4(bounds.zw + (data[2].xy * vec2(-1, -1)),
-                             bounds.xw + vec2(data[2].zw * vec2(1, -1)));
-
-  return RoundedRect(bounds, corner_points1, corner_points2);
+#if defined(GSK_GLES) || defined(GSK_LEGACY)
+  return RoundedRect(r[0], r[1], r[2]);
+#else
+  return r;
+#endif
 }
 
 float
@@ -101,45 +74,6 @@ rounded_rect_coverage (RoundedRect r, vec2 p)
                        p.x < ref_bl.x && p.y > ref_bl.y);
 
   return 1.0 - dot(vec4(is_out), corner_coverages);
-}
-
-// amount is: top, right, bottom, left
-RoundedRect
-rounded_rect_shrink (RoundedRect r, vec4 amount)
-{
-  vec4 new_bounds = r.bounds + vec4(1.0,1.0,-1.0,-1.0) * amount.wxyz;
-  vec4 new_corner_points1 = r.corner_points1;
-  vec4 new_corner_points2 = r.corner_points2;
-
-  if (r.corner_points1.xy == r.bounds.xy) new_corner_points1.xy = new_bounds.xy;
-  if (r.corner_points1.zw == r.bounds.zy) new_corner_points1.zw = new_bounds.zy;
-  if (r.corner_points2.xy == r.bounds.zw) new_corner_points2.xy = new_bounds.zw;
-  if (r.corner_points2.zw == r.bounds.xw) new_corner_points2.zw = new_bounds.xw;
-
-  return RoundedRect (new_bounds, new_corner_points1, new_corner_points2);
-}
-
-void
-rounded_rect_offset(inout RoundedRect r, vec2 offset)
-{
-  r.bounds.xy += offset;
-  r.bounds.zw += offset;
-  r.corner_points1.xy += offset;
-  r.corner_points1.zw += offset;
-  r.corner_points2.xy += offset;
-  r.corner_points2.zw += offset;
-}
-
-void rounded_rect_transform(inout RoundedRect r, mat4 mat)
-{
-  r.bounds.xy = (mat * vec4(r.bounds.xy, 0.0, 1.0)).xy;
-  r.bounds.zw = (mat * vec4(r.bounds.zw, 0.0, 1.0)).xy;
-
-  r.corner_points1.xy = (mat * vec4(r.corner_points1.xy, 0.0, 1.0)).xy;
-  r.corner_points1.zw = (mat * vec4(r.corner_points1.zw, 0.0, 1.0)).xy;
-
-  r.corner_points2.xy = (mat * vec4(r.corner_points2.xy, 0.0, 1.0)).xy;
-  r.corner_points2.zw = (mat * vec4(r.corner_points2.zw, 0.0, 1.0)).xy;
 }
 
 vec4 Texture(sampler2D sampler, vec2 texCoords) {
