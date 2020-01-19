@@ -1,4 +1,5 @@
 gsk_private_gl_shaders = [
+  'resources/glsl/preamble.glsl',
   'resources/glsl/preamble.fs.glsl',
   'resources/glsl/preamble.vs.glsl',
   'resources/glsl/border.glsl',
