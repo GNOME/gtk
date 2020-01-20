@@ -77,9 +77,7 @@ rounded_rect_coverage (RoundedRect r, vec2 p)
 }
 
 vec4 Texture(sampler2D sampler, vec2 texCoords) {
-#if GSK_GLES
-  return texture2D(sampler, texCoords);
-#elif GSK_LEGACY
+#if defined(GSK_GLES) || defined(GSK_LEGACY)
   return texture2D(sampler, texCoords);
 #else
   return texture(sampler, texCoords);
@@ -95,9 +93,7 @@ void setOutputColor(vec4 color) {
 
   // We do *NOT* transform the clip rect here since we already
   // need to do that on the CPU.
-#if GSK_GLES
-  gl_FragColor = color * rounded_rect_coverage(create_rect(u_clip_rect), f.xy);
-#elif GSK_LEGACY
+#if defined(GSK_GLES) || defined(GSK_LEGACY)
   gl_FragColor = color * rounded_rect_coverage(create_rect(u_clip_rect), f.xy);
 #else
   outputColor = color * rounded_rect_coverage(create_rect(u_clip_rect), f.xy);

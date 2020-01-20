@@ -2,11 +2,7 @@ uniform mat4 u_projection;
 uniform mat4 u_modelview;
 uniform float u_alpha;
 
-#if GSK_GLES
-attribute vec2 aPosition;
-attribute vec2 aUv;
-_OUT_ vec2 vUv;
-#elif GSK_LEGACY
+#if defined(GSK_GLES) || defined(GSK_LEGACY)
 attribute vec2 aPosition;
 attribute vec2 aUv;
 _OUT_ vec2 vUv;
