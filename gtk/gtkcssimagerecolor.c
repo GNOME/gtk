@@ -308,6 +308,15 @@ gtk_css_image_recolor_get_height (GtkCssImage *image)
   return gdk_texture_get_height (recolor->texture);
 }
 
+static gboolean
+gtk_css_image_recolor_is_computed (GtkCssImage *image)
+{
+  GtkCssImageRecolor *recolor = GTK_CSS_IMAGE_RECOLOR (image);
+
+  return recolor->texture &&
+         (!recolor->palette || gtk_css_value_is_computed (recolor->palette));
+}
+
 static void
 _gtk_css_image_recolor_class_init (GtkCssImageRecolorClass *klass)
 {
@@ -320,6 +329,7 @@ _gtk_css_image_recolor_class_init (GtkCssImageRecolorClass *klass)
   image_class->snapshot = gtk_css_image_recolor_snapshot;
   image_class->parse = gtk_css_image_recolor_parse;
   image_class->print = gtk_css_image_recolor_print;
+  image_class->is_computed = gtk_css_image_recolor_is_computed;
 
   object_class->dispose = gtk_css_image_recolor_dispose;
 }
