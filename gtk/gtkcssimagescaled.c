@@ -203,6 +203,15 @@ gtk_css_image_scaled_parse (GtkCssImage  *image,
   return TRUE;
 }
 
+static gboolean
+gtk_css_image_scaled_is_computed (GtkCssImage *image)
+{
+  GtkCssImageScaled *self = GTK_CSS_IMAGE_SCALED (image);
+
+  return self->n_images == 1 &&
+         gtk_css_image_is_computed (self->images[0]);
+}
+
 static void
 _gtk_css_image_scaled_class_init (GtkCssImageScaledClass *klass)
 {
@@ -216,6 +225,7 @@ _gtk_css_image_scaled_class_init (GtkCssImageScaledClass *klass)
   image_class->parse = gtk_css_image_scaled_parse;
   image_class->compute = gtk_css_image_scaled_compute;
   image_class->print = gtk_css_image_scaled_print;
+  image_class->is_computed = gtk_css_image_scaled_is_computed;
 
   object_class->dispose = gtk_css_image_scaled_dispose;
 }
