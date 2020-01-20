@@ -246,35 +246,6 @@ _gtk_css_image_equal (GtkCssImage *image1,
 }
 
 void
-_gtk_css_image_draw (GtkCssImage        *image,
-                     cairo_t            *cr,
-                     double              width,
-                     double              height)
-{
-  GtkSnapshot *snapshot;
-  GskRenderNode *node;
-
-  gtk_internal_return_if_fail (GTK_IS_CSS_IMAGE (image));
-  gtk_internal_return_if_fail (cr != NULL);
-  gtk_internal_return_if_fail (width > 0);
-  gtk_internal_return_if_fail (height > 0);
-
-  cairo_save (cr);
-
-  snapshot = gtk_snapshot_new ();
-  gtk_css_image_snapshot (image, snapshot, width, height);
-  node = gtk_snapshot_free_to_node (snapshot);
-
-  if (node != NULL)
-    {
-      gsk_render_node_draw (node, cr);
-      gsk_render_node_unref (node);
-    }
-
-  cairo_restore (cr);
-}
-
-void
 gtk_css_image_snapshot (GtkCssImage *image,
                         GtkSnapshot *snapshot,
                         double       width,
@@ -475,6 +446,8 @@ _gtk_css_image_get_surface (GtkCssImage     *image,
                             int              surface_height)
 {
   cairo_surface_t *result;
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
   cairo_t *cr;
 
   gtk_internal_return_val_if_fail (GTK_IS_CSS_IMAGE (image), NULL);
@@ -492,7 +465,16 @@ _gtk_css_image_get_surface (GtkCssImage     *image,
                                          surface_height);
 
   cr = cairo_create (result);
-  _gtk_css_image_draw (image, cr, surface_width, surface_height);
+  snapshot = gtk_snapshot_new ();
+  gtk_css_image_snapshot (image, snapshot, surface_width, surface_height);
+  node = gtk_snapshot_free_to_node (snapshot);
+
+  if (node != NULL)
+    {
+      gsk_render_node_draw (node, cr);
+      gsk_render_node_unref (node);
+    }
+
   cairo_destroy (cr);
 
   return result;

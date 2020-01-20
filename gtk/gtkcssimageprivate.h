@@ -113,10 +113,6 @@ GtkCssImage *  _gtk_css_image_transition           (GtkCssImage                *
                                                     guint                       property_id,
                                                     double                      progress);
 
-void           _gtk_css_image_draw                 (GtkCssImage                *image,
-                                                    cairo_t                    *cr,
-                                                    double                      width,
-                                                    double                      height);
 void           gtk_css_image_snapshot              (GtkCssImage                *image,
                                                     GtkSnapshot                *snapshot,
                                                     double                      width,
