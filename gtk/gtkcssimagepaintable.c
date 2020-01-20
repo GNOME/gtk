@@ -150,6 +150,14 @@ gtk_css_image_paintable_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_css_image_paintable_parent_class)->dispose (object);
 }
 
+static gboolean
+gtk_css_image_paintable_is_computed (GtkCssImage *image)
+{
+  GtkCssImagePaintable *self = GTK_CSS_IMAGE_PAINTABLE (image);
+
+  return (gdk_paintable_get_flags (self->paintable) & GDK_PAINTABLE_IMMUTABLE) == GDK_PAINTABLE_IMMUTABLE;
+}
+
 static void
 gtk_css_image_paintable_class_init (GtkCssImagePaintableClass *klass)
 {
@@ -164,6 +172,7 @@ gtk_css_image_paintable_class_init (GtkCssImagePaintableClass *klass)
   image_class->compute = gtk_css_image_paintable_compute;
   image_class->equal = gtk_css_image_paintable_equal;
   image_class->is_dynamic = gtk_css_image_paintable_is_dynamic;
+  image_class->is_computed = gtk_css_image_paintable_is_computed;
   image_class->get_dynamic_image = gtk_css_image_paintable_get_dynamic_image;
 
   object_class->dispose = gtk_css_image_paintable_dispose;
