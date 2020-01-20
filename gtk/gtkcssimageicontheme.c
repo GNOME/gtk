@@ -94,21 +94,22 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
 
   if (symbolic)
     {
+      const GdkRGBA *fg = &icon_theme->color;
+      const GdkRGBA *sc = &icon_theme->success;
+      const GdkRGBA *wc = &icon_theme->warning;
+      const GdkRGBA *ec = &icon_theme->error;
       graphene_matrix_t matrix;
       graphene_vec4_t offset;
-      GdkRGBA fg = icon_theme->color;
-      GdkRGBA sc = icon_theme->success;
-      GdkRGBA wc = icon_theme->warning;
-      GdkRGBA ec = icon_theme->error;
+
 
       graphene_matrix_init_from_float (&matrix,
           (float[16]) {
-                       sc.red - fg.red, sc.green - fg.green, sc.blue - fg.blue, 0,
-                       wc.red - fg.red, wc.green - fg.green, wc.blue - fg.blue, 0,
-                       ec.red - fg.red, ec.green - fg.green, ec.blue - fg.blue, 0,
-                       0, 0, 0, fg.alpha
+                       sc->red - fg->red, sc->green - fg->green, sc->blue - fg->blue, 0,
+                       wc->red - fg->red, wc->green - fg->green, wc->blue - fg->blue, 0,
+                       ec->red - fg->red, ec->green - fg->green, ec->blue - fg->blue, 0,
+                       0, 0, 0, fg->alpha
                       });
-      graphene_vec4_init (&offset, fg.red, fg.green, fg.blue, 0);
+      graphene_vec4_init (&offset, fg->red, fg->green, fg->blue, 0);
 
       gtk_snapshot_push_color_matrix (snapshot, &matrix, &offset);
     }
