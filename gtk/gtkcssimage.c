@@ -184,6 +184,9 @@ _gtk_css_image_compute (GtkCssImage      *image,
   gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (style), NULL);
   gtk_internal_return_val_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style), NULL);
 
+  if (gtk_css_image_is_computed (image))
+    return g_object_ref (image);
+
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
 
   return klass->compute (image, property_id, provider, style, parent_style);
