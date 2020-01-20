@@ -6008,15 +6008,11 @@ surface_size_changed (GtkWidget *widget,
   gtk_window_configure (GTK_WINDOW (widget), width, height);
 }
 
-extern void print_match_count (void);
-
 static gboolean
 surface_render (GdkSurface     *surface,
                 cairo_region_t *region,
                 GtkWidget      *widget)
 {
-  print_match_count ();
-
   gtk_widget_render (widget, surface, region);
   return TRUE;
 }
