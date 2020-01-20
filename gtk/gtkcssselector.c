@@ -2249,9 +2249,18 @@ _gtk_css_selector_tree_builder_build (GtkCssSelectorTreeBuilder *builder)
   guint len;
   GList *l;
   GtkCssSelectorRuleSetInfo *info;
+  gint32 tree_offset;
+  gint32 offset;
 
   array = g_byte_array_new ();
-  subdivide_infos (array, builder->infos, GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET);
+
+  tree = alloc_tree (array, &tree_offset);
+  tree->parent_offset = GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET;
+  tree->sibling_offset = GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET;
+  tree->matches_offset = GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET;
+  tree->selector.class = &GTK_CSS_SELECTOR_ANY;
+  offset = subdivide_infos (array, builder->infos, tree_offset);
+  get_tree (array, tree_offset)->previous_offset = offset;
 
   len = array->len;
   data = g_byte_array_free (array, FALSE);
