@@ -122,6 +122,13 @@ gtk_css_node_get_style_provider_or_null (GtkCssNode *cssnode)
   return GTK_CSS_NODE_GET_CLASS (cssnode)->get_style_provider (cssnode);
 }
 
+#define GTK_CSS_NODE_ACCOUNTING
+#ifdef GTK_CSS_NODE_ACCOUNTING
+static int invalidated_nodes;
+static int created_styles;
+static int cached_styles;
+#endif
+
 static void
 gtk_css_node_set_invalid (GtkCssNode *node,
                           gboolean    invalid)
@@ -130,6 +137,11 @@ gtk_css_node_set_invalid (GtkCssNode *node,
     return;
 
   node->invalid = invalid;
+
+#ifdef GTK_CSS_NODE_ACCOUNTING
+  if (invalid)
+    invalidated_nodes++;
+#endif
 
   if (node->visible)
     {
@@ -367,7 +379,16 @@ gtk_css_node_create_style (GtkCssNode   *cssnode,
 
   style = lookup_in_global_parent_cache (cssnode, decl);
   if (style)
-    return g_object_ref (style);
+    {
+#ifdef GTK_CSS_NODE_ACCOUNTING
+      cached_styles++;
+#endif
+      return g_object_ref (style);
+    }
+
+#ifdef GTK_CSS_NODE_ACCOUNTING
+  created_styles++;
+#endif
 
   parent = cssnode->parent ? cssnode->parent->style : NULL;
 
@@ -1379,10 +1400,27 @@ void
 gtk_css_node_validate (GtkCssNode *cssnode)
 {
   gint64 timestamp;
+#ifdef GTK_CSS_NODE_ACCOUNTING
+  gint64 before = g_get_monotonic_time ();
+#endif
 
   timestamp = gtk_css_node_get_timestamp (cssnode);
 
   gtk_css_node_validate_internal (cssnode, timestamp);
+
+#ifdef GTK_CSS_NODE_ACCOUNTING
+  if (cssnode->parent == NULL)
+    {
+      g_print ("%g ms, nodes invalidated %d, styles created %d, cached %d\n",
+               ((double)(g_get_monotonic_time () - before)) / G_TIME_SPAN_MILLISECOND,
+                invalidated_nodes, created_styles, cached_styles);
+      invalidated_nodes = 0;
+      created_styles = 0;
+      cached_styles = 0;
+      if (g_getenv ("GTK_CSS_DEBUG_EXIT_AFTER_VALIDATE"))
+        exit (0);
+    }
+#endif
 }
 
 gboolean
