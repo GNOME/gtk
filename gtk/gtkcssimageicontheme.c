@@ -172,11 +172,25 @@ gtk_css_image_icon_theme_compute (GtkCssImage      *image,
 {
   GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (image);
   GtkCssImageIconTheme *copy;
+  GtkIconTheme *icontheme;
+  int scale;
+
+  if (icon_theme->is_computed)
+    return g_object_ref (image);
+
+  icontheme = gtk_css_icon_theme_value_get_icon_theme (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_THEME));
+  scale = gtk_style_provider_get_scale (provider);
+
+  if (icon_theme->scale == scale &&
+      icon_theme->icon_theme == icontheme)
+    return g_object_ref (image);
 
   copy = g_object_new (GTK_TYPE_CSS_IMAGE_ICON_THEME, NULL);
   copy->name = g_strdup (icon_theme->name);
-  copy->icon_theme = gtk_css_icon_theme_value_get_icon_theme (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_THEME));
-  copy->scale = gtk_style_provider_get_scale (provider);
+  copy->icon_theme = icontheme;
+  copy->scale = scale;
+  copy->is_computed = TRUE;
+
   gtk_icon_theme_lookup_symbolic_colors (style, &copy->color, &copy->success, &copy->warning, &copy->error);
 
   return GTK_CSS_IMAGE (copy);
@@ -205,6 +219,13 @@ gtk_css_image_icon_theme_dispose (GObject *object)
   G_OBJECT_CLASS (_gtk_css_image_icon_theme_parent_class)->dispose (object);
 }
 
+static gboolean
+gtk_css_image_icon_theme_is_computed (GtkCssImage *image)
+{
+  GtkCssImageIconTheme *icon_theme = (GtkCssImageIconTheme *) image;
+
+  return icon_theme->is_computed;
+}
 static void
 _gtk_css_image_icon_theme_class_init (GtkCssImageIconThemeClass *klass)
 {
@@ -217,6 +238,7 @@ _gtk_css_image_icon_theme_class_init (GtkCssImageIconThemeClass *klass)
   image_class->print = gtk_css_image_icon_theme_print;
   image_class->compute = gtk_css_image_icon_theme_compute;
   image_class->equal = gtk_css_image_icon_theme_equal;
+  image_class->is_computed = gtk_css_image_icon_theme_is_computed;
 
   object_class->dispose = gtk_css_image_icon_theme_dispose;
 }
