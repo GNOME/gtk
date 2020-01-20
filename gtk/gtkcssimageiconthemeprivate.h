@@ -40,7 +40,6 @@ struct _GtkCssImageIconTheme
   GtkCssImage parent;
 
   GtkIconTheme *icon_theme;
-  guint is_computed: 1;
   GdkRGBA color;
   GdkRGBA success;
   GdkRGBA warning;
