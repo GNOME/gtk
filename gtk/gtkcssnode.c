@@ -27,6 +27,7 @@
 #include "gtksettingsprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
+#include "gdkprofilerprivate.h"
 
 /*
  * CSS nodes are the backbone of the GtkStyleContext implementation and
@@ -122,11 +123,11 @@ gtk_css_node_get_style_provider_or_null (GtkCssNode *cssnode)
   return GTK_CSS_NODE_GET_CLASS (cssnode)->get_style_provider (cssnode);
 }
 
-#define GTK_CSS_NODE_ACCOUNTING
-#ifdef GTK_CSS_NODE_ACCOUNTING
+#ifdef G_ENABLE_DEBUG
 static int invalidated_nodes;
 static int created_styles;
-static int cached_styles;
+static guint invalidated_nodes_counter;
+static guint created_styles_counter;
 #endif
 
 static void
@@ -138,7 +139,7 @@ gtk_css_node_set_invalid (GtkCssNode *node,
 
   node->invalid = invalid;
 
-#ifdef GTK_CSS_NODE_ACCOUNTING
+#ifdef G_ENABLE_DEBUG
   if (invalid)
     invalidated_nodes++;
 #endif
@@ -379,14 +380,9 @@ gtk_css_node_create_style (GtkCssNode   *cssnode,
 
   style = lookup_in_global_parent_cache (cssnode, decl);
   if (style)
-    {
-#ifdef GTK_CSS_NODE_ACCOUNTING
-      cached_styles++;
-#endif
-      return g_object_ref (style);
-    }
+    return g_object_ref (style);
 
-#ifdef GTK_CSS_NODE_ACCOUNTING
+#ifdef G_ENABLE_DEBUG
   created_styles++;
 #endif
 
@@ -686,6 +682,14 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
                         | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, cssnode_properties);
+
+#ifdef G_ENABLE_DEBUG
+  if (invalidated_nodes_counter == 0)
+    {
+      invalidated_nodes_counter = gdk_profiler_define_int_counter ("invalidated-nodes", "CSS Node Invalidations");
+      created_styles_counter = gdk_profiler_define_int_counter ("created-styles", "CSS Style Creations");
+    }
+#endif
 }
 
 static void
@@ -1400,7 +1404,7 @@ void
 gtk_css_node_validate (GtkCssNode *cssnode)
 {
   gint64 timestamp;
-#ifdef GTK_CSS_NODE_ACCOUNTING
+#ifdef G_ENABLE_DEBUG
   gint64 before = g_get_monotonic_time ();
 #endif
 
@@ -1408,17 +1412,18 @@ gtk_css_node_validate (GtkCssNode *cssnode)
 
   gtk_css_node_validate_internal (cssnode, timestamp);
 
-#ifdef GTK_CSS_NODE_ACCOUNTING
+#ifdef G_ENABLE_DEBUG
   if (cssnode->parent == NULL)
     {
-      g_print ("%g ms, nodes invalidated %d, styles created %d, cached %d\n",
-               ((double)(g_get_monotonic_time () - before)) / G_TIME_SPAN_MILLISECOND,
-                invalidated_nodes, created_styles, cached_styles);
-      invalidated_nodes = 0;
-      created_styles = 0;
-      cached_styles = 0;
-      if (g_getenv ("GTK_CSS_DEBUG_EXIT_AFTER_VALIDATE"))
-        exit (0);
+      if (gdk_profiler_is_running ())
+        {
+          gint64 after = g_get_monotonic_time ();
+          gdk_profiler_add_mark (before * 1000, (after - before) * 1000, "style", "");
+          gdk_profiler_set_int_counter (invalidated_nodes_counter, after * 1000, invalidated_nodes);
+          gdk_profiler_set_int_counter (created_styles_counter, after * 1000, created_styles);
+          invalidated_nodes = 0;
+          created_styles = 0;
+        }
     }
 #endif
 }
