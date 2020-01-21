@@ -150,4 +150,9 @@ foreach t: gtk_tests
              dependencies: [libgtk_dep, libm])
 endforeach
 
+
+
+executable('testperf', 'testperf.c',
+            dependencies: [profiler_dep, platform_gio_dep, libm])
+
 subdir('visuals')
