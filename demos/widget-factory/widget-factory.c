@@ -2000,6 +2000,13 @@ toggle_action (GSimpleAction *action,
                              g_variant_new_boolean (!g_variant_get_boolean (state)));
 }
 
+static gboolean
+quit_timeout (gpointer data)
+{
+  exit (0);
+  return G_SOURCE_REMOVE;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -2064,6 +2071,9 @@ main (int argc, char *argv[])
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
 
   g_application_add_main_option (G_APPLICATION (app), "version", 0, 0, G_OPTION_ARG_NONE, "Show program version", NULL);
+
+  if (g_getenv ("GTK_DEBUG_AUTO_QUIT"))
+    g_timeout_add (500, quit_timeout, NULL);
 
   g_signal_connect (app, "handle-local-options", G_CALLBACK (local_options), NULL);
   status = g_application_run (G_APPLICATION (app), argc, argv);
