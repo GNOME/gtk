@@ -38,20 +38,6 @@ gtk_css_widget_node_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_css_widget_node_parent_class)->finalize (object);
 }
 
-static void
-gtk_css_widget_node_style_changed (GtkCssNode        *cssnode,
-                                   GtkCssStyleChange *change)
-{
-  GtkCssWidgetNode *node;
-
-  node = GTK_CSS_WIDGET_NODE (cssnode);
-
-  if (node->widget)
-    gtk_widget_clear_path (node->widget);
-
-  GTK_CSS_NODE_CLASS (gtk_css_widget_node_parent_class)->style_changed (cssnode, change);
-}
-
 static gboolean
 gtk_css_widget_node_queue_callback (GtkWidget     *widget,
                                     GdkFrameClock *frame_clock,
@@ -133,40 +119,6 @@ gtk_css_widget_node_init_matcher (GtkCssNode     *node,
   return GTK_CSS_NODE_CLASS (gtk_css_widget_node_parent_class)->init_matcher (node, matcher);
 }
 
-static GtkWidgetPath *
-gtk_css_widget_node_create_widget_path (GtkCssNode *node)
-{
-  GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
-  GtkWidgetPath *path;
-  guint length;
-
-  if (widget_node->widget == NULL)
-    path = gtk_widget_path_new ();
-  else
-    path = _gtk_widget_create_path (widget_node->widget);
-  
-  length = gtk_widget_path_length (path);
-  if (length > 0)
-    {
-      gtk_css_node_declaration_add_to_widget_path (gtk_css_node_get_declaration (node),
-                                                   path,
-                                                   length - 1);
-    }
-
-  return path;
-}
-
-static const GtkWidgetPath *
-gtk_css_widget_node_get_widget_path (GtkCssNode *node)
-{
-  GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
-
-  if (widget_node->widget == NULL)
-    return NULL;
-
-  return gtk_widget_get_path (widget_node->widget);
-}
-
 static GtkStyleProvider *
 gtk_css_widget_node_get_style_provider (GtkCssNode *node)
 {
@@ -211,11 +163,8 @@ gtk_css_widget_node_class_init (GtkCssWidgetNodeClass *klass)
   node_class->queue_validate = gtk_css_widget_node_queue_validate;
   node_class->dequeue_validate = gtk_css_widget_node_dequeue_validate;
   node_class->init_matcher = gtk_css_widget_node_init_matcher;
-  node_class->create_widget_path = gtk_css_widget_node_create_widget_path;
-  node_class->get_widget_path = gtk_css_widget_node_get_widget_path;
   node_class->get_style_provider = gtk_css_widget_node_get_style_provider;
   node_class->get_frame_clock = gtk_css_widget_node_get_frame_clock;
-  node_class->style_changed = gtk_css_widget_node_style_changed;
 }
 
 static void

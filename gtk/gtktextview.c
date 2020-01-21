@@ -1637,6 +1637,7 @@ gtk_text_view_init (GtkTextView *text_view)
   priv->indent = 0;
   priv->tabs = NULL;
   priv->editable = TRUE;
+  priv->cursor_alpha = 1.0;
 
   priv->scroll_after_paste = FALSE;
 

@@ -592,7 +592,6 @@ static void	gtk_widget_get_property		 (GObject           *object,
 						  guint              prop_id,
 						  GValue            *value,
 						  GParamSpec        *pspec);
-static void	gtk_widget_constructed           (GObject	    *object);
 static void	gtk_widget_dispose		 (GObject	    *object);
 static void	gtk_widget_real_destroy		 (GtkWidget	    *object);
 static void	gtk_widget_finalize		 (GObject	    *object);
@@ -718,7 +717,6 @@ static GQuark		quark_mnemonic_labels = 0;
 static GQuark		quark_tooltip_markup = 0;
 static GQuark           quark_size_groups = 0;
 static GQuark           quark_auto_children = 0;
-static GQuark           quark_widget_path = 0;
 static GQuark           quark_action_muxer = 0;
 static GQuark           quark_font_options = 0;
 static GQuark           quark_font_map = 0;
@@ -876,12 +874,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_tooltip_markup = g_quark_from_static_string ("gtk-tooltip-markup");
   quark_size_groups = g_quark_from_static_string ("gtk-widget-size-groups");
   quark_auto_children = g_quark_from_static_string ("gtk-widget-auto-children");
-  quark_widget_path = g_quark_from_static_string ("gtk-widget-path");
   quark_action_muxer = g_quark_from_static_string ("gtk-widget-action-muxer");
   quark_font_options = g_quark_from_static_string ("gtk-widget-font-options");
   quark_font_map = g_quark_from_static_string ("gtk-widget-font-map");
 
-  gobject_class->constructed = gtk_widget_constructed;
   gobject_class->dispose = gtk_widget_dispose;
   gobject_class->finalize = gtk_widget_finalize;
   gobject_class->set_property = gtk_widget_set_property;
@@ -1910,8 +1906,6 @@ gtk_widget_set_property (GObject         *object,
     case PROP_CSS_NAME:
       if (g_value_get_string (value) != NULL)
         gtk_css_node_set_name (priv->cssnode, g_intern_string (g_value_get_string (value)));
-      else
-        gtk_css_node_set_name (priv->cssnode, GTK_WIDGET_GET_CLASS (widget)->priv->css_name);
       break;
     case PROP_LAYOUT_MANAGER:
       gtk_widget_set_layout_manager (widget, g_value_dup_object (value));
@@ -2445,7 +2439,8 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->cssnode = gtk_css_widget_node_new (widget);
   gtk_css_node_set_state (priv->cssnode, priv->state_flags);
   gtk_css_node_set_visible (priv->cssnode, priv->visible);
-  /* need to set correct type here, and only class has the correct type here */
+  /* need to set correct name here, and only class has the correct type here */
+  gtk_css_node_set_name (priv->cssnode, GTK_WIDGET_CLASS (g_class)->priv->css_name);
   gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_FROM_CLASS (g_class));
 
   if (g_type_is_a (G_TYPE_FROM_CLASS (g_class), GTK_TYPE_ROOT))
@@ -6321,7 +6316,7 @@ reset_style_recurse (GtkWidget *widget, gpointer user_data)
  * Updates the style context of @widget and all descendants
  * by updating its widget path. #GtkContainers may want
  * to use this on a child when reordering it in a way that a different
- * style might apply to it. See also gtk_container_get_path_for_child().
+ * style might apply to it.
  */
 void
 gtk_widget_reset_style (GtkWidget *widget)
@@ -7463,24 +7458,6 @@ gtk_widget_get_default_direction (void)
 }
 
 static void
-gtk_widget_constructed (GObject *object)
-{
-  GtkWidget *widget = GTK_WIDGET (object);
-  GtkWidgetPath *path;
-
-  /* As strange as it may seem, this may happen on object construction.
-   * init() implementations of parent types may eventually call this function,
-   * each with its corresponding GType, which could leave a child
-   * implementation with a wrong widget type in the widget path
-   */
-  path = (GtkWidgetPath*)g_object_get_qdata (object, quark_widget_path);
-  if (path && G_OBJECT_TYPE (widget) != gtk_widget_path_get_object_type (path))
-    g_object_set_qdata (object, quark_widget_path, NULL);
-
-  G_OBJECT_CLASS (gtk_widget_parent_class)->constructed (object);
-}
-
-static void
 gtk_widget_dispose (GObject *object)
 {
   GtkWidget *widget = GTK_WIDGET (object);
@@ -7700,8 +7677,6 @@ gtk_widget_finalize (GObject *object)
   g_clear_object (&priv->accessible);
   g_clear_pointer (&priv->transform, gsk_transform_unref);
   g_clear_pointer (&priv->allocated_transform, gsk_transform_unref);
-
-  gtk_widget_clear_path (widget);
 
   gtk_css_widget_node_widget_destroyed (GTK_CSS_WIDGET_NODE (priv->cssnode));
   g_object_unref (priv->cssnode);
@@ -11241,79 +11216,6 @@ gtk_widget_path_append_for_widget (GtkWidgetPath *path,
     gtk_widget_path_iter_add_qclass (path, pos, classes[i]);
 
   return pos;
-}
-
-GtkWidgetPath *
-_gtk_widget_create_path (GtkWidget *widget)
-{
-  GtkWidget *parent = _gtk_widget_get_parent (widget);
-
-  if (parent && GTK_IS_CONTAINER (parent))
-    return gtk_container_get_path_for_child (GTK_CONTAINER (parent), widget);
-  else if (parent)
-    {
-      GtkWidgetPath *path = _gtk_widget_create_path (parent);
-      gtk_widget_path_append_for_widget (path, widget);
-      return path;
-    }
-  else
-    {
-      /* Widget is either toplevel or unparented, treat both
-       * as toplevels style wise, since there are situations
-       * where style properties might be retrieved on that
-       * situation.
-       */
-      GtkWidget *attach_widget = NULL;
-      GtkWidgetPath *result;
-
-      if (GTK_IS_WINDOW (widget))
-        attach_widget = gtk_window_get_attached_to (GTK_WINDOW (widget));
-
-      if (attach_widget != NULL)
-        result = gtk_widget_path_copy (gtk_widget_get_path (attach_widget));
-      else
-        result = gtk_widget_path_new ();
-
-      gtk_widget_path_append_for_widget (result, widget);
-
-      return result;
-    }
-}
-
-/**
- * gtk_widget_get_path:
- * @widget: a #GtkWidget
- *
- * Returns the #GtkWidgetPath representing @widget, if the widget
- * is not connected to a toplevel widget, a partial path will be
- * created.
- *
- * Returns: (transfer none): The #GtkWidgetPath representing @widget
- **/
-GtkWidgetPath *
-gtk_widget_get_path (GtkWidget *widget)
-{
-  GtkWidgetPath *path;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  path = (GtkWidgetPath*)g_object_get_qdata (G_OBJECT (widget), quark_widget_path);
-  if (!path)
-    {
-      path = _gtk_widget_create_path (widget);
-      g_object_set_qdata_full (G_OBJECT (widget),
-                               quark_widget_path,
-                               path,
-                               (GDestroyNotify)gtk_widget_path_free);
-    }
-
-  return path;
-}
-
-void
-gtk_widget_clear_path (GtkWidget *widget)
-{
-  g_object_set_qdata (G_OBJECT (widget), quark_widget_path, NULL);
 }
 
 /**

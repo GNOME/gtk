@@ -775,7 +775,6 @@ gtk_container_add
 gtk_container_remove
 gtk_container_foreach
 gtk_container_get_children
-gtk_container_get_path_for_child
 gtk_container_get_focus_vadjustment
 gtk_container_set_focus_vadjustment
 gtk_container_get_focus_hadjustment
@@ -4412,7 +4411,6 @@ gtk_widget_get_layout_manager
 gtk_widget_should_layout
 
 <SUBSECTION>
-gtk_widget_get_path
 gtk_widget_get_style_context
 gtk_widget_reset_style
 gtk_widget_class_get_css_name
