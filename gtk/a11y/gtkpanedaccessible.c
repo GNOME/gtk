@@ -61,88 +61,6 @@ gtk_paned_accessible_init (GtkPanedAccessible *paned)
 }
 
 static void
-gtk_paned_accessible_get_current_value (AtkValue *obj,
-                                        GValue   *value)
-{
-  GtkWidget* widget;
-  gint current_value;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
-  if (widget == NULL)
-    return;
-
-  current_value = gtk_paned_get_position (GTK_PANED (widget));
-  memset (value,  0, sizeof (GValue));
-  g_value_init (value, G_TYPE_INT);
-  g_value_set_int (value, current_value);
-}
-
-static void
-gtk_paned_accessible_get_maximum_value (AtkValue *obj,
-                                        GValue   *value)
-{
-  GtkWidget* widget;
-  gint maximum_value;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
-  if (widget == NULL)
-    return;
-
-  g_object_get (GTK_PANED (widget),
-                "max-position", &maximum_value,
-                NULL);
-  memset (value,  0, sizeof (GValue));
-  g_value_init (value, G_TYPE_INT);
-  g_value_set_int (value, maximum_value);
-}
-
-static void
-gtk_paned_accessible_get_minimum_value (AtkValue *obj,
-                                        GValue   *value)
-{
-  GtkWidget* widget;
-  gint minimum_value;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
-  if (widget == NULL)
-    return;
-
-  g_object_get (GTK_PANED (widget),
-                "min-position", &minimum_value,
-                NULL);
-  memset (value,  0, sizeof (GValue));
-  g_value_init (value, G_TYPE_INT);
-  g_value_set_int (value, minimum_value);
-}
-
-/* Calling atk_value_set_current_value() is no guarantee that the value
- * is acceptable; it is necessary to listen for accessible-value signals
- * and check whether the current value has been changed or check what the
- * maximum and minimum values are.
- */
-static gboolean
-gtk_paned_accessible_set_current_value (AtkValue     *obj,
-                                        const GValue *value)
-{
-  GtkWidget* widget;
-  gint new_value;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
-  if (widget == NULL)
-    return FALSE;
-
-  if (G_VALUE_HOLDS_INT (value))
-    {
-      new_value = g_value_get_int (value);
-      gtk_paned_set_position (GTK_PANED (widget), new_value);
-
-      return TRUE;
-    }
-  else
-    return FALSE;
-}
-
-static void
 gtk_paned_accessible_get_value_and_text (AtkValue  *obj,
                                          gdouble   *value,
                                          gchar    **text)
@@ -190,11 +108,6 @@ gtk_paned_accessible_set_value (AtkValue      *obj,
 static void
 atk_value_interface_init (AtkValueIface *iface)
 {
-  iface->get_current_value = gtk_paned_accessible_get_current_value;
-  iface->get_maximum_value = gtk_paned_accessible_get_maximum_value;
-  iface->get_minimum_value = gtk_paned_accessible_get_minimum_value;
-  iface->set_current_value = gtk_paned_accessible_set_current_value;
-
   iface->get_value_and_text = gtk_paned_accessible_get_value_and_text;
   iface->get_range = gtk_paned_accessible_get_range;
   iface->set_value = gtk_paned_accessible_set_value;

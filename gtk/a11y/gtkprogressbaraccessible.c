@@ -70,37 +70,6 @@ gtk_progress_bar_accessible_init (GtkProgressBarAccessible *bar)
 }
 
 static void
-gtk_progress_bar_accessible_get_current_value (AtkValue *obj,
-                                               GValue   *value)
-{
-  GtkWidget *widget;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
-
-  memset (value, 0, sizeof (GValue));
-  g_value_init (value, G_TYPE_DOUBLE);
-  g_value_set_double (value, gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR (widget)));
-}
-
-static void
-gtk_progress_bar_accessible_get_maximum_value (AtkValue *obj,
-                                               GValue   *value)
-{
-  memset (value, 0, sizeof (GValue));
-  g_value_init (value, G_TYPE_DOUBLE);
-  g_value_set_double (value, 1.0);
-}
-
-static void
-gtk_progress_bar_accessible_get_minimum_value (AtkValue *obj,
-                                               GValue   *value)
-{
-  memset (value, 0, sizeof (GValue));
-  g_value_init (value, G_TYPE_DOUBLE);
-  g_value_set_double (value, 0.0);
-}
-
-static void
 gtk_progress_bar_accessible_get_value_and_text (AtkValue  *obj,
                                                 gdouble   *value,
                                                 gchar    **text)
@@ -122,10 +91,6 @@ gtk_progress_bar_accessible_get_range (AtkValue *obj)
 static void
 atk_value_interface_init (AtkValueIface *iface)
 {
-  iface->get_current_value = gtk_progress_bar_accessible_get_current_value;
-  iface->get_maximum_value = gtk_progress_bar_accessible_get_maximum_value;
-  iface->get_minimum_value = gtk_progress_bar_accessible_get_minimum_value;
-
   iface->get_value_and_text = gtk_progress_bar_accessible_get_value_and_text;
   iface->get_range = gtk_progress_bar_accessible_get_range;
 }

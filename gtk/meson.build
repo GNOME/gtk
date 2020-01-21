@@ -900,7 +900,6 @@ gtk_deps = [
   cairo_dep,
   fontconfig_dep,
   pixbuf_dep,
-  atk_dep,
   epoxy_dep,
   libm,
   graphene_dep,
@@ -995,9 +994,9 @@ libgtk = library('gtk-4',
                  soversion: gtk_soversion,
                  sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h],
                  c_args: gtk_cargs + common_cflags,
-                 include_directories: [confinc, gdkinc, gskinc, gtkinc],
-                 dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
-                 link_with: [libgtk_css, libgdk, libgsk, ],
+                 include_directories: [confinc, gdkinc, gskinc, gtkinc, atkinc],
+                 dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep, libatk_dep],
+                 link_whole: [libgtk_css, libgdk, libgsk, libatk ],
                  link_args: common_ldflags,
                  install: true)
 
@@ -1083,6 +1082,22 @@ if build_gir
                                    sources: gsk_gir)
   gtk_dep_sources += gsk_gir
 
+  atk_gir = gnome.generate_gir(libgtk,
+    sources: [atk_public_sources, atk_public_headers, atk_enum_h],
+    namespace: 'Atk',
+    nsversion: gtk_api_version,
+    identifier_prefix: 'Atk',
+    symbol_prefix: 'atk',
+    export_packages: 'gtk4',
+    includes: [ 'GObject-2.0' ],
+    header: 'atk/atk.h',
+    install: true,
+    dependencies: [gdk_gir_dep],
+    extra_args: gir_args,
+  )
+  atk_gir_dep = declare_dependency(sources: atk_gir)
+  gtk_dep_sources += atk_gir
+
   gtk_introspection_sources = [
     gtk_public_headers,
     gtk_public_sources,
@@ -1111,10 +1126,10 @@ if build_gir
                                identifier_prefix: 'Gtk',
                                symbol_prefix: 'gtk',
                                export_packages: 'gtk4',
-                               includes: [ gdk_gir[0], gsk_gir[0], 'Atk-1.0', ],
+                               includes: [ gdk_gir[0], gsk_gir[0], atk_gir[0] ],
                                header: 'gtk/gtk.h',
                                install: true,
-                               dependencies: gsk_gir_dep,
+                               dependencies: [gsk_gir_dep, atk_gir_dep],
                                extra_args: gir_args + [
                                  '-DGTK_COMPILATION',
                                  '--c-include=gtk/gtk-a11y.h',
@@ -1124,7 +1139,7 @@ endif
 
 libgtk_dep = declare_dependency(sources: gtk_dep_sources,
                                 include_directories: [confinc, gtkinc],
-                                dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
+                                dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep, libatk_dep],
                                 link_with: libgtk,
                                 link_args: common_ldflags)
 
