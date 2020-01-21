@@ -2,6 +2,7 @@ subdir('parser')
 subdir('nodes')
 subdir('style')
 subdir('change')
+subdir('performance')
 
 testexecdir = join_paths(installed_test_bindir, 'css')
 testdatadir = join_paths(installed_test_datadir, 'css')
