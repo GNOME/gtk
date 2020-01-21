@@ -921,6 +921,9 @@ icon_theme_value_parse (GtkCssStyleProperty *property,
 
 /*** REGISTRATION ***/
 
+G_STATIC_ASSERT (GTK_CSS_PROPERTY_COLOR == 0);
+G_STATIC_ASSERT (GTK_CSS_PROPERTY_DPI < GTK_CSS_PROPERTY_FONT_SIZE);
+
 void
 _gtk_css_style_property_init_properties (void)
 {
