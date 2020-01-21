@@ -4411,7 +4411,6 @@ gtk_widget_get_layout_manager
 gtk_widget_should_layout
 
 <SUBSECTION>
-gtk_widget_get_path
 gtk_widget_get_style_context
 gtk_widget_reset_style
 gtk_widget_class_get_css_name
