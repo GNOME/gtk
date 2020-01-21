@@ -6320,7 +6320,7 @@ reset_style_recurse (GtkWidget *widget, gpointer user_data)
  * Updates the style context of @widget and all descendants
  * by updating its widget path. #GtkContainers may want
  * to use this on a child when reordering it in a way that a different
- * style might apply to it. See also gtk_container_get_path_for_child().
+ * style might apply to it.
  */
 void
 gtk_widget_reset_style (GtkWidget *widget)
@@ -11247,9 +11247,7 @@ _gtk_widget_create_path (GtkWidget *widget)
 {
   GtkWidget *parent = _gtk_widget_get_parent (widget);
 
-  if (parent && GTK_IS_CONTAINER (parent))
-    return gtk_container_get_path_for_child (GTK_CONTAINER (parent), widget);
-  else if (parent)
+  if (parent)
     {
       GtkWidgetPath *path = _gtk_widget_create_path (parent);
       gtk_widget_path_append_for_widget (path, widget);
