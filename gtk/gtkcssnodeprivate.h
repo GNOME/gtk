@@ -78,8 +78,6 @@ struct _GtkCssNodeClass
 
   gboolean              (* init_matcher)                (GtkCssNode            *cssnode,
                                                          GtkCssMatcher         *matcher);
-  GtkWidgetPath *       (* create_widget_path)          (GtkCssNode            *cssnode);
-  const GtkWidgetPath * (* get_widget_path)             (GtkCssNode            *cssnode);
   /* get style provider to use or NULL to use parent's */
   GtkStyleProvider *    (* get_style_provider)          (GtkCssNode            *cssnode);
   /* get frame clock or NULL (only relevant for root node) */
@@ -157,8 +155,6 @@ void                    gtk_css_node_validate           (GtkCssNode            *
 
 gboolean                gtk_css_node_init_matcher       (GtkCssNode            *cssnode,
                                                          GtkCssMatcher         *matcher);
-GtkWidgetPath *         gtk_css_node_create_widget_path (GtkCssNode            *cssnode);
-const GtkWidgetPath *   gtk_css_node_get_widget_path    (GtkCssNode            *cssnode) G_GNUC_PURE;
 GtkStyleProvider *      gtk_css_node_get_style_provider (GtkCssNode            *cssnode) G_GNUC_PURE;
 
 void                    gtk_css_node_print              (GtkCssNode                *cssnode,

@@ -495,18 +495,6 @@ gtk_css_node_real_init_matcher (GtkCssNode     *cssnode,
   return TRUE;
 }
 
-static GtkWidgetPath *
-gtk_css_node_real_create_widget_path (GtkCssNode *cssnode)
-{
-  return gtk_widget_path_new ();
-}
-
-static const GtkWidgetPath *
-gtk_css_node_real_get_widget_path (GtkCssNode *cssnode)
-{
-  return NULL;
-}
-
 static GtkStyleProvider *
 gtk_css_node_real_get_style_provider (GtkCssNode *cssnode)
 {
@@ -587,8 +575,6 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
   klass->queue_validate = gtk_css_node_real_queue_validate;
   klass->dequeue_validate = gtk_css_node_real_dequeue_validate;
   klass->init_matcher = gtk_css_node_real_init_matcher;
-  klass->create_widget_path = gtk_css_node_real_create_widget_path;
-  klass->get_widget_path = gtk_css_node_real_get_widget_path;
   klass->get_style_provider = gtk_css_node_real_get_style_provider;
   klass->get_frame_clock = gtk_css_node_real_get_frame_clock;
 
@@ -1390,18 +1376,6 @@ gtk_css_node_init_matcher (GtkCssNode     *cssnode,
                            GtkCssMatcher  *matcher)
 {
   return GTK_CSS_NODE_GET_CLASS (cssnode)->init_matcher (cssnode, matcher);
-}
-
-GtkWidgetPath *
-gtk_css_node_create_widget_path (GtkCssNode *cssnode)
-{
-  return GTK_CSS_NODE_GET_CLASS (cssnode)->create_widget_path (cssnode);
-}
-
-const GtkWidgetPath *
-gtk_css_node_get_widget_path (GtkCssNode *cssnode)
-{
-  return GTK_CSS_NODE_GET_CLASS (cssnode)->get_widget_path (cssnode);
 }
 
 GtkStyleProvider *
