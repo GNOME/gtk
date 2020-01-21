@@ -121,91 +121,6 @@ gtk_spin_button_accessible_init (GtkSpinButtonAccessible *button)
 }
 
 static void
-gtk_spin_button_accessible_get_current_value (AtkValue *obj,
-                                              GValue   *value)
-{
-  GtkWidget *widget;
-  GtkAdjustment *adjustment;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
-  adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget));
-  if (adjustment == NULL)
-    return;
-
-  memset (value,  0, sizeof (GValue));
-  g_value_init (value, G_TYPE_DOUBLE);
-  g_value_set_double (value, gtk_adjustment_get_value (adjustment));
-}
-
-static void
-gtk_spin_button_accessible_get_maximum_value (AtkValue *obj,
-                                              GValue   *value)
-{
-  GtkWidget *widget;
-  GtkAdjustment *adjustment;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
-  adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget));
-  if (adjustment == NULL)
-    return;
-
-  memset (value,  0, sizeof (GValue));
-  g_value_init (value, G_TYPE_DOUBLE);
-  g_value_set_double (value, gtk_adjustment_get_upper (adjustment));
-}
-
-static void
-gtk_spin_button_accessible_get_minimum_value (AtkValue *obj,
-                                              GValue   *value)
-{
-  GtkWidget *widget;
-  GtkAdjustment *adjustment;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
-  adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget));
-  if (adjustment == NULL)
-    return;
-
-  memset (value,  0, sizeof (GValue));
-  g_value_init (value, G_TYPE_DOUBLE);
-  g_value_set_double (value, gtk_adjustment_get_lower (adjustment));
-}
-
-static void
-gtk_spin_button_accessible_get_minimum_increment (AtkValue *obj,
-                                                  GValue   *value)
-{
-  GtkWidget *widget;
-  GtkAdjustment *adjustment;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
-  adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget));
-  if (adjustment == NULL)
-    return;
-
-  memset (value,  0, sizeof (GValue));
-  g_value_init (value, G_TYPE_DOUBLE);
-  g_value_set_double (value, gtk_adjustment_get_minimum_increment (adjustment));
-}
-
-static gboolean
-gtk_spin_button_accessible_set_current_value (AtkValue     *obj,
-                                              const GValue *value)
-{
-  GtkWidget *widget;
-  GtkAdjustment *adjustment;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
-  adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget));
-  if (adjustment == NULL)
-    return FALSE;
-
-  gtk_adjustment_set_value (adjustment, g_value_get_double (value));
-
-  return TRUE;
-}
-
-static void
 gtk_spin_button_accessible_get_value_and_text (AtkValue  *obj,
                                          gdouble   *value,
                                          gchar    **text)
@@ -270,12 +185,6 @@ gtk_spin_button_accessible_get_increment (AtkValue *obj)
 static void
 atk_value_interface_init (AtkValueIface *iface)
 {
-  iface->get_current_value = gtk_spin_button_accessible_get_current_value;
-  iface->get_maximum_value = gtk_spin_button_accessible_get_maximum_value;
-  iface->get_minimum_value = gtk_spin_button_accessible_get_minimum_value;
-  iface->get_minimum_increment = gtk_spin_button_accessible_get_minimum_increment;
-  iface->set_current_value = gtk_spin_button_accessible_set_current_value;
-
   iface->get_value_and_text = gtk_spin_button_accessible_get_value_and_text;
   iface->get_range = gtk_spin_button_accessible_get_range;
   iface->set_value = gtk_spin_button_accessible_set_value;

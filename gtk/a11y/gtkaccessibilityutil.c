@@ -84,18 +84,6 @@ get_root (void)
   return root;
 }
 
-static const gchar *
-get_toolkit_name (void)
-{
-  return "gtk";
-}
-
-static const gchar *
-get_toolkit_version (void)
-{
-  return GTK_VERSION;
-}
-
 void
 _gtk_accessibility_override_atk_util (void)
 {
@@ -104,8 +92,6 @@ _gtk_accessibility_override_atk_util (void)
   atk_class->add_key_event_listener = add_key_event_listener;
   atk_class->remove_key_event_listener = remove_key_event_listener;
   atk_class->get_root = get_root;
-  atk_class->get_toolkit_name = get_toolkit_name;
-  atk_class->get_toolkit_version = get_toolkit_version;
 }
 
 static void

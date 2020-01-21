@@ -20,10 +20,6 @@
 #include "gtkaccessibility.h"
 #include "gtkaccessibilityutil.h"
 
-#ifdef GDK_WINDOWING_X11
-#include <atk-bridge.h>
-#endif
-
 static int initialized = FALSE;
 
 void
@@ -35,9 +31,4 @@ _gtk_accessibility_init (void)
   initialized = TRUE;
 
   _gtk_accessibility_override_atk_util ();
-
-#ifdef GDK_WINDOWING_X11
-  atk_bridge_adaptor_init (NULL, NULL);
-#endif
-
 }
