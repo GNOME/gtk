@@ -183,6 +183,7 @@ gsk_transform_perspective
 gsk_transform_equal
 <SUBSECTION>
 gsk_transform_transform_bounds
+gsk_transform_transform_point
 <SUBSECTION Private>
 GSK_TYPE_TRANSFORM
 gsk_transform_get_type

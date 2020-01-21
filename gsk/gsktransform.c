@@ -1773,6 +1773,62 @@ gsk_transform_transform_bounds (GskTransform          *self,
     }
 }
 
+/**
+ * gsk_transform_transform_point:
+ * @self: a #GskTransform
+ * @point: a #graphene_point_t
+ * @out_point: (out caller-allocates): return location for
+ *   the transformed point
+ *
+ * Transforms a #graphene_point_t using the given transform @self.
+ */
+void
+gsk_transform_transform_point (GskTransform           *self,
+                               const graphene_point_t *point,
+                               graphene_point_t       *out_point)
+{
+  switch (gsk_transform_get_category (self))
+    {
+    case GSK_TRANSFORM_CATEGORY_IDENTITY:
+      *out_point = *point;
+      break;
+
+    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
+      {
+        float dx, dy;
+
+        gsk_transform_to_translate (self, &dx, &dy);
+        out_point->x = point->x + dx;
+        out_point->y = point->y + dy;
+      }
+    break;
+
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+      {
+        float dx, dy, scale_x, scale_y;
+
+        gsk_transform_to_affine (self, &scale_x, &scale_y, &dx, &dy);
+
+        out_point->x = (point->x * scale_x) + dx;
+        out_point->y = (point->y * scale_y) + dy;
+      }
+    break;
+
+    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_TRANSFORM_CATEGORY_ANY:
+    case GSK_TRANSFORM_CATEGORY_3D:
+    case GSK_TRANSFORM_CATEGORY_2D:
+    default:
+      {
+        graphene_matrix_t mat;
+
+        gsk_transform_to_matrix (self, &mat);
+        graphene_matrix_transform_point (&mat, point, out_point);
+      }
+      break;
+    }
+}
+
 static guint
 gsk_transform_parse_float (GtkCssParser *parser,
                            guint         n,
