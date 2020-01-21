@@ -116,6 +116,11 @@ GDK_AVAILABLE_IN_ALL
 void                    gsk_transform_transform_bounds          (GskTransform                   *self,
                                                                  const graphene_rect_t          *rect,
                                                                  graphene_rect_t                *out_rect);
+GDK_AVAILABLE_IN_ALL
+void                    gsk_transform_transform_point           (GskTransform                   *self,
+                                                                 const graphene_point_t          *point,
+                                                                 graphene_point_t                *out_point);
+
 
 G_END_DECLS
 
