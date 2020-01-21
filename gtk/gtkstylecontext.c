@@ -970,14 +970,26 @@ gtk_style_context_set_path (GtkStyleContext *context,
  * gtk_style_context_get_path:
  * @context: a #GtkStyleContext
  *
- * Returns the widget path used for style matching.
+ * Returns the widget path used for style matching set via
+ * gtk_style_context_set_path().
  *
- * Returns: (transfer none): A #GtkWidgetPath
+ * If no path has been set - in particular if this style context
+ * was returned from a #GtkWidget - this function returns %NULL.
+ *
+ * Returns: (transfer none) (nullable): A #GtkWidgetPath or %NULL
  **/
 const GtkWidgetPath *
 gtk_style_context_get_path (GtkStyleContext *context)
 {
-  return gtk_css_node_get_widget_path (gtk_style_context_get_root (context));
+  GtkCssNode *root;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  root = gtk_style_context_get_root (context);
+  if (!GTK_IS_CSS_PATH_NODE (root))
+    return NULL;
+
+  return gtk_css_path_node_get_widget_path (GTK_CSS_PATH_NODE (root));
 }
 
 /**

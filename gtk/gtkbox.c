@@ -109,9 +109,6 @@ static void gtk_box_forall             (GtkContainer   *container,
                                         GtkCallback     callback,
                                         gpointer        callback_data);
 static GType gtk_box_child_type        (GtkContainer   *container);
-static GtkWidgetPath * gtk_box_get_path_for_child
-                                       (GtkContainer   *container,
-                                        GtkWidget      *child);
 
 G_DEFINE_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkBox)
@@ -131,7 +128,6 @@ gtk_box_class_init (GtkBoxClass *class)
   container_class->remove = gtk_box_remove;
   container_class->forall = gtk_box_forall;
   container_class->child_type = gtk_box_child_type;
-  container_class->get_path_for_child = gtk_box_get_path_for_child;
 
   g_object_class_override_property (object_class,
                                     PROP_ORIENTATION,
@@ -240,105 +236,6 @@ static GType
 gtk_box_child_type (GtkContainer   *container)
 {
   return GTK_TYPE_WIDGET;
-}
-
-typedef struct _CountingData CountingData;
-struct _CountingData {
-  GtkWidget *widget;
-  gboolean found;
-  guint before;
-  guint after;
-};
-
-static void
-count_widget_position (GtkWidget *widget,
-                       gpointer   data)
-{
-  CountingData *count = data;
-
-  if (!_gtk_widget_get_visible (widget))
-    return;
-
-  if (count->widget == widget)
-    count->found = TRUE;
-  else if (count->found)
-    count->after++;
-  else
-    count->before++;
-}
-
-static gint
-gtk_box_get_visible_position (GtkBox    *box,
-                              GtkWidget *child)
-{
-  CountingData count = { child, FALSE, 0, 0 };
-  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
-
-  /* foreach iterates in visible order */
-  gtk_container_foreach (GTK_CONTAINER (box),
-                         count_widget_position,
-                         &count);
-
-  /* the child wasn't found, it's likely an internal child of some
-   * subclass, return -1 to indicate that there is no sibling relation
-   * to the regular box children
-   */
-  if (!count.found)
-    return -1;
-
-  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
-      gtk_widget_get_direction (GTK_WIDGET (box)) == GTK_TEXT_DIR_RTL)
-    return count.after;
-  else
-    return count.before;
-}
-
-static GtkWidgetPath *
-gtk_box_get_path_for_child (GtkContainer *container,
-                            GtkWidget    *child)
-{
-  GtkWidgetPath *path, *sibling_path;
-  GtkBox *box = GTK_BOX (container);
-  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
-  GList *list, *children;
-
-  path = _gtk_widget_create_path (GTK_WIDGET (container));
-
-  if (_gtk_widget_get_visible (child))
-    {
-      gint position;
-
-      sibling_path = gtk_widget_path_new ();
-
-      /* get_children works in visible order */
-      children = gtk_container_get_children (container);
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
-          _gtk_widget_get_direction (GTK_WIDGET (box)) == GTK_TEXT_DIR_RTL)
-        children = g_list_reverse (children);
-
-      for (list = children; list; list = list->next)
-        {
-          if (!_gtk_widget_get_visible (list->data))
-            continue;
-
-          gtk_widget_path_append_for_widget (sibling_path, list->data);
-        }
-
-      g_list_free (children);
-
-      position = gtk_box_get_visible_position (box, child);
-
-      if (position >= 0)
-        gtk_widget_path_append_with_siblings (path, sibling_path, position);
-      else
-        gtk_widget_path_append_for_widget (path, child);
-
-      gtk_widget_path_unref (sibling_path);
-    }
-  else
-    gtk_widget_path_append_for_widget (path, child);
-
-  return path;
 }
 
 static void

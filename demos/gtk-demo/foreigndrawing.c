@@ -262,7 +262,7 @@ draw_menu (GtkWidget *widget,
   gint toggle_x, toggle_y, toggle_width, toggle_height;
 
   /* This information is taken from the GtkMenu docs, see "CSS nodes" */
-  menu_context = get_style (gtk_widget_get_style_context(widget), "menu");
+  menu_context = get_style (NULL, "menu");
   hovermenuitem_context = get_style (menu_context, "menuitem:hover");
   hoveredarrowmenuitem_context = get_style (hovermenuitem_context, "arrow.right:dir(ltr)");
   menuitem_context = get_style (menu_context, "menuitem");
