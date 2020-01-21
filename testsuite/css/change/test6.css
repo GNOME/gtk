@@ -1,0 +1,19 @@
+/* a simplified version of some of the things we do for linked buttons and entries */
+
+box:not(.vertical).linked > button:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+box:not(.vertical).linked > button:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+box:not(.vetical).linked > *:disabled ~ entry:disabled {
+  border-left-color: red;
+}
+
+box:not(.vetical).linked > entry:focus + button {
+  border-left-color: blue;
+}

@@ -1,0 +1,12 @@
+window.background:dir(ltr)    
+  decoration:dir(ltr)    
+  box.horizontal.linked:dir(ltr)    
+    button:dir(ltr)    name|first-child|last-child|parent-class|parent-name
+    button:dir(ltr)    name|first-child|last-child|sibling-name|sibling-state|parent-class|parent-name
+    button:dir(ltr)    name|first-child|last-child|sibling-name|sibling-state|parent-class|parent-name
+  box.horizontal.linked:dir(ltr)    
+    entry:dir(ltr)    
+      text:dir(ltr)    
+        undershoot.left:dir(ltr)    
+        undershoot.right:dir(ltr)    
+    button:dir(ltr)    name|first-child|last-child|sibling-name|sibling-state|parent-class|parent-name
