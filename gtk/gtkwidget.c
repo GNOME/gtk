@@ -1910,8 +1910,6 @@ gtk_widget_set_property (GObject         *object,
     case PROP_CSS_NAME:
       if (g_value_get_string (value) != NULL)
         gtk_css_node_set_name (priv->cssnode, g_intern_string (g_value_get_string (value)));
-      else
-        gtk_css_node_set_name (priv->cssnode, GTK_WIDGET_GET_CLASS (widget)->priv->css_name);
       break;
     case PROP_LAYOUT_MANAGER:
       gtk_widget_set_layout_manager (widget, g_value_dup_object (value));
@@ -2445,7 +2443,8 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->cssnode = gtk_css_widget_node_new (widget);
   gtk_css_node_set_state (priv->cssnode, priv->state_flags);
   gtk_css_node_set_visible (priv->cssnode, priv->visible);
-  /* need to set correct type here, and only class has the correct type here */
+  /* need to set correct name here, and only class has the correct type here */
+  gtk_css_node_set_name (priv->cssnode, GTK_WIDGET_CLASS (g_class)->priv->css_name);
   gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_FROM_CLASS (g_class));
 
   if (g_type_is_a (G_TYPE_FROM_CLASS (g_class), GTK_TYPE_ROOT))

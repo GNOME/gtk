@@ -234,18 +234,21 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 }
 
 static void
-gtk_radio_button_init (GtkRadioButton *radio_button)
+gtk_radio_button_init (GtkRadioButton *self)
 {
-  GtkRadioButtonPrivate *priv = gtk_radio_button_get_instance_private (radio_button);
+  GtkRadioButtonPrivate *priv = gtk_radio_button_get_instance_private (self);
+  GtkWidget *widget = GTK_WIDGET (self);
   GtkCssNode *css_node;
 
-  gtk_widget_set_receives_default (GTK_WIDGET (radio_button), FALSE);
+  gtk_widget_set_receives_default (widget, FALSE);
 
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio_button), TRUE);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self), TRUE);
 
-  priv->group = g_slist_prepend (NULL, radio_button);
+  priv->group = g_slist_prepend (NULL, self);
 
-  css_node = gtk_check_button_get_indicator_node (GTK_CHECK_BUTTON (radio_button));
+  css_node = gtk_widget_get_css_node (widget);
+  gtk_css_node_set_name (css_node, I_("radiobutton"));
+  css_node = gtk_check_button_get_indicator_node (GTK_CHECK_BUTTON (self));
   gtk_css_node_set_name (css_node, I_("radio"));
 }
 
