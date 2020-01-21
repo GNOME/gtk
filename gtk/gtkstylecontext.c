@@ -1035,7 +1035,6 @@ gtk_style_context_set_parent (GtkStyleContext *context,
   priv->parent = parent;
 
   g_object_notify_by_pspec (G_OBJECT (context), properties[PROP_PARENT]);
-  gtk_css_node_invalidate (gtk_style_context_get_root (context), GTK_CSS_CHANGE_ANY_PARENT | GTK_CSS_CHANGE_ANY_SIBLING);
 }
 
 /**
