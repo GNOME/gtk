@@ -123,12 +123,10 @@ gtk_css_node_get_style_provider_or_null (GtkCssNode *cssnode)
   return GTK_CSS_NODE_GET_CLASS (cssnode)->get_style_provider (cssnode);
 }
 
-#ifdef G_ENABLE_DEBUG
 static int invalidated_nodes;
 static int created_styles;
 static guint invalidated_nodes_counter;
 static guint created_styles_counter;
-#endif
 
 static void
 gtk_css_node_set_invalid (GtkCssNode *node,
@@ -139,10 +137,8 @@ gtk_css_node_set_invalid (GtkCssNode *node,
 
   node->invalid = invalid;
 
-#ifdef G_ENABLE_DEBUG
   if (invalid)
     invalidated_nodes++;
-#endif
 
   if (node->visible)
     {
@@ -382,9 +378,7 @@ gtk_css_node_create_style (GtkCssNode   *cssnode,
   if (style)
     return g_object_ref (style);
 
-#ifdef G_ENABLE_DEBUG
   created_styles++;
-#endif
 
   parent = cssnode->parent ? cssnode->parent->style : NULL;
 
@@ -669,13 +663,11 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, cssnode_properties);
 
-#ifdef G_ENABLE_DEBUG
   if (invalidated_nodes_counter == 0)
     {
       invalidated_nodes_counter = gdk_profiler_define_int_counter ("invalidated-nodes", "CSS Node Invalidations");
       created_styles_counter = gdk_profiler_define_int_counter ("created-styles", "CSS Style Creations");
     }
-#endif
 }
 
 static void
@@ -1390,15 +1382,12 @@ void
 gtk_css_node_validate (GtkCssNode *cssnode)
 {
   gint64 timestamp;
-#ifdef G_ENABLE_DEBUG
   gint64 before = g_get_monotonic_time ();
-#endif
 
   timestamp = gtk_css_node_get_timestamp (cssnode);
 
   gtk_css_node_validate_internal (cssnode, timestamp);
 
-#ifdef G_ENABLE_DEBUG
   if (cssnode->parent == NULL)
     {
       if (gdk_profiler_is_running ())
@@ -1411,7 +1400,6 @@ gtk_css_node_validate (GtkCssNode *cssnode)
           created_styles = 0;
         }
     }
-#endif
 }
 
 gboolean
