@@ -64,6 +64,8 @@ compare_render_tests = [
   'inset-shadow-multiple',
   'borders-rotated',
   'blend-invisible-child',
+  'transform-in-transform',
+  'transform-in-transform-in-transform',
 ]
 
 # these are too sensitive to differences in the renderers
