@@ -4005,7 +4005,6 @@ rewrite_event_for_toplevel (GdkEvent *event)
   g_set_object (&event->any.surface, surface);
 }
 
-#ifdef G_ENABLE_DEBUG
 static void
 add_event_mark (GdkEvent *event,
                 gint64    time,
@@ -4116,14 +4115,11 @@ add_event_mark (GdkEvent *event,
 
   g_free (message);
 }
-#endif
 
 gboolean
 gdk_surface_handle_event (GdkEvent *event)
 {
-#ifdef G_ENABLE_DEBUG
   gint64 begin_time = g_get_monotonic_time ();
-#endif
   gboolean handled = FALSE;
 
   if (check_autohide (event))
@@ -4142,10 +4138,8 @@ gdk_surface_handle_event (GdkEvent *event)
       g_signal_emit (gdk_event_get_surface (event), signals[EVENT], 0, event, &handled);
     }
 
-#ifdef G_ENABLE_DEBUG
   if (gdk_profiler_is_running ())
     add_event_mark (event, begin_time, g_get_monotonic_time () - begin_time);
-#endif
 
   return handled;
 }
