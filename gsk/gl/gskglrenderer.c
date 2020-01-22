@@ -1446,6 +1446,9 @@ render_blur_node (GskGLRenderer   *self,
   GskRenderNode *child = gsk_blur_node_get_child (node);
   TextureRegion blurred_region;
 
+  if (node_is_invisible (child))
+    return;
+
   if (blur_radius <= 0)
     {
       gsk_gl_renderer_add_render_ops (self, child, builder);
