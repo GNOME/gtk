@@ -79,7 +79,6 @@ gtk_private_sources = files([
   'gtkcssnumbervalue.c',
   'gtkcsspalettevalue.c',
   'gtkcssparser.c',
-  'gtkcsspathnode.c',
   'gtkcsspositionvalue.c',
   'gtkcssrepeatvalue.c',
   'gtkcssselector.c',
@@ -397,7 +396,6 @@ gtk_public_sources = files([
   'gtkwidget.c',
   'gtkwidgetfocus.c',
   'gtkwidgetpaintable.c',
-  'gtkwidgetpath.c',
   'gtkwindow.c',
   'gtkwindowgroup.c',
 ])
@@ -630,7 +628,6 @@ gtk_public_headers = files([
   'gtkvolumebutton.h',
   'gtkwidget.h',
   'gtkwidgetpaintable.h',
-  'gtkwidgetpath.h',
   'gtkwindow.h',
   'gtkwindowgroup.h',
   'gtk-a11y.h',
