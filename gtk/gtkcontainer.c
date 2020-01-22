@@ -371,9 +371,7 @@ gtk_container_idle_sizer (GdkFrameClock *clock,
    */
   if (gtk_widget_needs_allocate (GTK_WIDGET (container)))
     {
-      if (GTK_IS_WINDOW (container))
-        gtk_window_check_resize (GTK_WINDOW (container));
-      else if (GTK_IS_ROOT (container))
+      if (GTK_IS_ROOT (container))
         gtk_native_check_resize (GTK_NATIVE (container));
       else
         g_warning ("gtk_container_idle_sizer() called on a non-native non-window");
