@@ -16,6 +16,7 @@ meson \
         -Dwayland-backend=true \
         -Dbroadway-backend=true \
         -Dvulkan=yes \
+        -Dprofiler=true \
         --werror \
         ${EXTRA_MESON_FLAGS:-} \
         _build $srcdir
