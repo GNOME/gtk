@@ -2155,14 +2155,24 @@ render_cross_fade_node (GskGLRenderer   *self,
                           start_node,
                           &start_region, &is_offscreen1,
                           FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY))
-    g_assert_not_reached ();
+    {
+      gsk_gl_renderer_add_render_ops (self, end_node, builder);
+      return;
+    }
 
   if (!add_offscreen_ops (self, builder,
                           &node->bounds,
                           end_node,
                           &end_region, &is_offscreen2,
                           FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY))
-    g_assert_not_reached ();
+    {
+      load_vertex_data_with_region (ops_draw (builder, NULL),
+                                    node,
+                                    builder,
+                                    &start_region,
+                                    TRUE);
+      return;
+    }
 
   ops_set_program (builder, &self->cross_fade_program);
 
