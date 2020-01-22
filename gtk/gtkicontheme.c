@@ -50,6 +50,7 @@
 #include "gtkprivate.h"
 #include "gdkpixbufutilsprivate.h"
 #include "gdk/gdktextureprivate.h"
+#include "gdk/gdkprofilerprivate.h"
 
 /* this is in case round() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC
@@ -3242,6 +3243,8 @@ icon_info_ensure_scale_and_texture (GtkIconInfo *icon_info)
       else
         icon_info->scale = (gdouble) scaled_desired_size / (icon_info->dir_size * dir_scale);
     }
+
+  gdk_profiler_add_mark (g_get_monotonic_time () * 1000, 0, "icon load", icon_info->filename);
 
   /* At this point, we need to actually get the icon; either from the
    * builtin image or by loading the file
