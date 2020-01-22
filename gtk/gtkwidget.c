@@ -12310,7 +12310,7 @@ gtk_widget_render (GtkWidget            *widget,
   if (gdk_profiler_is_running ())
     {
       after = g_get_monotonic_time ();
-      gdk_profiler_add_mark (before * 1000, (after - before) * 1000, "snapshot", "");
+      gdk_profiler_add_mark (before * 1000, (after - before) * 1000, "widget snapshot", "");
     }
 
   if (root != NULL)
@@ -12329,7 +12329,7 @@ gtk_widget_render (GtkWidget            *widget,
         {
           before = after;
           after = g_get_monotonic_time ();
-          gdk_profiler_add_mark (before * 1000, (after - before) * 1000, "render", "");
+          gdk_profiler_add_mark (before * 1000, (after - before) * 1000, "widget render", "");
         }
     }
 }
