@@ -52,7 +52,6 @@
 #include "gtksettings.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 #include "gtkboxlayout.h"
 #include "gtktextprivate.h"

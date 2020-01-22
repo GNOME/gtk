@@ -66,7 +66,6 @@
 #include "gtktypebuiltins.h"
 #include "gtksizerequest.h"
 #include "gtkstylecontextprivate.h"
-#include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 #include "a11y/gtkcontaineraccessible.h"
 
