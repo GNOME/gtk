@@ -173,7 +173,6 @@
     <file>fishbowl.c</file>
     <file>fixed.c</file>
     <file>flowbox.c</file>
-    <file>foreigndrawing.c</file>
     <file>font_features.c</file>
     <file>fontplane.c</file>
     <file>fontrendering.c</file>

@@ -18,7 +18,6 @@
 #include "config.h"
 
 #include "gtkcssnodedeclarationprivate.h"
-#include "gtkwidgetpathprivate.h"
 
 #include <string.h>
 
@@ -405,30 +404,6 @@ gtk_css_node_declaration_equal (gconstpointer elem1,
     }
 
   return TRUE;
-}
-
-void
-gtk_css_node_declaration_add_to_widget_path (const GtkCssNodeDeclaration *decl,
-                                             GtkWidgetPath               *path,
-                                             guint                        pos)
-{
-  GQuark *classes;
-  guint i;
-
-  /* Set name and id */
-  gtk_widget_path_iter_set_object_name (path, pos, decl->name);
-  if (decl->id)
-    gtk_widget_path_iter_set_name (path, pos, decl->id);
-
-  /* Set widget classes */
-  classes = get_classes (decl);
-  for (i = 0; i < decl->n_classes; i++)
-    {
-      gtk_widget_path_iter_add_qclass (path, pos, classes[i]);
-    }
-
-  /* Set widget state */
-  gtk_widget_path_iter_set_state (path, pos, decl->state);
 }
 
 static int
