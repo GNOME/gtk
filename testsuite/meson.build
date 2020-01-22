@@ -6,6 +6,7 @@ installed_test_datadir = join_paths(gtk_datadir, 'installed-tests', 'gtk-4.0')
 # otherwise we're going to have failures down the line
 diff = find_program('diff', required: true)
 
+subdir('performance')
 subdir('gdk')
 subdir('gsk')
 subdir('gtk')
