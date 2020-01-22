@@ -31,6 +31,7 @@
 
 #include "gdkinternals.h"
 #include "gdksurfaceprivate.h"
+#include "gdkprofilerprivate.h"
 
 #include "gdkintl.h"
 
@@ -238,6 +239,7 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   gdk_wayland_surface_sync (surface);
   gdk_wayland_surface_request_frame (surface);
 
+  gdk_profiler_add_mark (g_get_monotonic_time () * 1000, 0, "wayland", "swap buffers");
   if (display_wayland->have_egl_swap_buffers_with_damage)
     {
       int i, j, n_rects = cairo_region_num_rectangles (painted);
