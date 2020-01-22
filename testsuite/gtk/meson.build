@@ -28,7 +28,6 @@ tests = [
   ['entry'],
   ['filterlistmodel'],
   ['flattenlistmodel'],
-  ['firefox-stylecontext'],
   ['floating'],
   ['focus'],
   ['gestures'],
