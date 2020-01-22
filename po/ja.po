@@ -13,14 +13,14 @@
 # Jiro Matsuzawa <jmatsuzawa@gnome.org>, 2011, 2012, 2013, 2014, 2015, 2016.
 # Shushi KUROSE <md81bird@hitaki.net>, 2013.
 # Hajime Taira <htaira@redhat.com>, 2015.
-# sicklylife translation@sicklylife.jp>, 2019.
+# sicklylife <translation@sicklylife.jp>, 2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-01-22 13:52+0000\n"
-"PO-Revision-Date: 2019-08-31 20:30+0900\n"
+"PO-Revision-Date: 2020-01-23 01:30+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -2467,10 +2467,8 @@ msgid "Show _Size Column"
 msgstr "サイズを表示する(_S)"
 
 #: gtk/gtkfilechooserwidget.c:2328
-#, fuzzy
-#| msgid "Show _Size Column"
 msgid "Show T_ype Column"
-msgstr "サイズを表示する(_S)"
+msgstr "種類を表示する(_Y)"
 
 #: gtk/gtkfilechooserwidget.c:2329
 msgid "Show _Time"
@@ -2544,14 +2542,11 @@ msgstr "%Y年%-m月%-d日"
 
 #: gtk/gtkfilechooserwidget.c:4991 gtk/gtkfilechooserwidget.c:4999
 msgid "Program"
-msgstr ""
+msgstr "プログラム"
 
 #: gtk/gtkfilechooserwidget.c:4992
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "AudioMute"
 msgid "Audio"
-msgstr "AudioMute"
+msgstr "音声"
 
 #: gtk/gtkfilechooserwidget.c:4993 gtk/inspector/visual.ui:230
 #: gtk/ui/gtkfontbutton.ui:13
@@ -2560,52 +2555,43 @@ msgstr "フォント"
 
 #: gtk/gtkfilechooserwidget.c:4994 gtk/inspector/visual.ui:488
 msgid "Image"
-msgstr ""
+msgstr "画像"
 
 #: gtk/gtkfilechooserwidget.c:4995
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Arch A"
 msgid "Archive"
-msgstr "Arch A"
+msgstr "アーカイブ"
 
 #: gtk/gtkfilechooserwidget.c:4996
 msgid "Markup"
-msgstr ""
+msgstr "マークアップ"
 
 #: gtk/gtkfilechooserwidget.c:4997 gtk/gtkfilechooserwidget.c:4998
 msgid "Text"
-msgstr ""
+msgstr "テキスト"
 
 #: gtk/gtkfilechooserwidget.c:5000
 msgid "Video"
-msgstr ""
+msgstr "動画"
 
 #: gtk/gtkfilechooserwidget.c:5001
 msgid "Contacts"
-msgstr ""
+msgstr "連絡先"
 
 #: gtk/gtkfilechooserwidget.c:5002
-#, fuzzy
-#| msgid "calendar:MY"
 msgid "Calendar"
-msgstr "calendar:YM"
+msgstr "カレンダー"
 
 #: gtk/gtkfilechooserwidget.c:5003
-#, fuzzy
-#| msgid "Documented by"
 msgid "Document"
-msgstr "ドキュメント担当"
+msgstr "ドキュメント"
 
 #: gtk/gtkfilechooserwidget.c:5004
-#, fuzzy
-#| msgid "_Orientation:"
 msgid "Presentation"
-msgstr "用紙の向き(_O):"
+msgstr "プレゼンテーション"
 
 #: gtk/gtkfilechooserwidget.c:5005
 msgid "Spreadsheet"
-msgstr ""
+msgstr "表計算"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
