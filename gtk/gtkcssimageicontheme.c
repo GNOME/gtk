@@ -39,6 +39,24 @@ gtk_css_image_icon_theme_get_aspect_ratio (GtkCssImage *image)
 }
 
 static void
+icon_loaded (GObject      *source,
+             GAsyncResult *result,
+             gpointer      data)
+{
+  GtkIconInfo *icon_info = GTK_ICON_INFO (source);
+  GtkCssImageIconTheme *icon_theme = data;
+
+  g_clear_object (&icon_theme->cached_texture);
+
+  icon_theme->cached_texture = GDK_TEXTURE (gtk_icon_info_load_icon_finish (icon_info, result, NULL));
+  
+  icon_theme->cached_symbolic = gtk_icon_info_is_symbolic (icon_info);
+  icon_theme->cached_size = gdk_texture_get_width (icon_theme->cached_texture);
+
+  g_object_unref (icon_theme);
+}
+
+static void
 gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
                                    GtkSnapshot *snapshot,
                                    double       width,
@@ -54,13 +72,7 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
   if (size <= 0)
     return;
 
-  if (size == icon_theme->cached_size &&
-      icon_theme->cached_texture != NULL)
-    {
-      texture = icon_theme->cached_texture;
-      symbolic = icon_theme->cached_symbolic;
-    }
-  else
+  if (size != icon_theme->cached_size || icon_theme->cached_texture != NULL)
     {
       GtkIconInfo *icon_info;
 
@@ -77,17 +89,13 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
 
       g_assert (icon_info != NULL);
 
-      symbolic = gtk_icon_info_is_symbolic (icon_info);
-      texture = GDK_TEXTURE (gtk_icon_info_load_icon (icon_info, NULL));
+      gtk_icon_info_load_icon_async (icon_info, NULL, icon_loaded, g_object_ref (icon_theme));
 
-      g_clear_object (&icon_theme->cached_texture);
-
-      icon_theme->cached_size = size;
-      icon_theme->cached_texture = texture;
-      icon_theme->cached_symbolic = symbolic;
-
-      g_object_unref (icon_info);
+      return;
     }
+
+  texture = icon_theme->cached_texture;
+  symbolic = icon_theme->cached_symbolic;
 
   texture_width = (double) gdk_texture_get_width (texture) / icon_theme->scale;
   texture_height = (double) gdk_texture_get_height (texture) / icon_theme->scale;
