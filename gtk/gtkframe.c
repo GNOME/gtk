@@ -30,7 +30,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
 #include "gtkbuildable.h"
-#include "gtkwidgetpath.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcontainerprivate.h"

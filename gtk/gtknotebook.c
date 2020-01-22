@@ -50,7 +50,6 @@
 #include "gtkprivate.h"
 #include "gtkstack.h"
 #include "gtktypebuiltins.h"
-#include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 #include "gtkdragsource.h"
 #include "gtkwidgetpaintable.h"
