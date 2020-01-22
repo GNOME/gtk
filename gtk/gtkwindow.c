@@ -75,6 +75,7 @@
 
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdk-private.h"
+#include "gdk/gdkprofilerprivate.h"
 
 #include <cairo-gobject.h>
 #include <errno.h>
@@ -6014,6 +6015,7 @@ surface_render (GdkSurface     *surface,
                 GtkWidget      *widget)
 {
   gtk_widget_render (widget, surface, region);
+
   return TRUE;
 }
 
@@ -6304,11 +6306,18 @@ void
 gtk_window_check_resize (GtkWindow *self)
 {
   GtkWidget *widget = GTK_WIDGET (self);
+  gint64 before = g_get_monotonic_time ();
 
   if (!_gtk_widget_get_alloc_needed (widget))
     gtk_widget_ensure_allocate (widget);
   else if (gtk_widget_get_visible (widget))
     gtk_window_move_resize (self);
+
+  if (gdk_profiler_is_running ())
+    {
+      gint64 after = g_get_monotonic_time ();
+      gdk_profiler_add_mark (before * 1000, (after - before) * 1000, "layout", "");
+    }
 }
 
 static void
