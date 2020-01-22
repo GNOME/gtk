@@ -33,7 +33,6 @@
 #include "gtkmarshalers.h"
 #include "gtksettings.h"
 #include "gtktogglebutton.h"
-#include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkdragsource.h"
