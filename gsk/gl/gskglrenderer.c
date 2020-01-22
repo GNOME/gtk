@@ -1180,17 +1180,16 @@ render_rounded_clip_node (GskGLRenderer       *self,
                           RenderOpBuilder     *builder)
 {
   const float scale = ops_get_scale (builder);
-  GskRoundedRect child_clip = *gsk_rounded_clip_node_peek_clip (node);
-  GskRoundedRect transformed_clip;
+  const GskRoundedRect *clip = gsk_rounded_clip_node_peek_clip (node);
   GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
+  GskRoundedRect transformed_clip;
   gboolean need_offscreen;
   int i;
 
   if (node_is_invisible (child))
     return;
 
-  transformed_clip = child_clip;
-  ops_transform_bounds_modelview (builder, &child_clip.bounds, &transformed_clip.bounds);
+  ops_transform_bounds_modelview (builder, &clip->bounds, &transformed_clip.bounds);
 
   if (!ops_has_clip (builder))
     need_offscreen = FALSE;
@@ -1206,8 +1205,8 @@ render_rounded_clip_node (GskGLRenderer       *self,
        * the new clip and add the render ops */
       for (i = 0; i < 4; i ++)
         {
-          transformed_clip.corner[i].width *= scale;
-          transformed_clip.corner[i].height *= scale;
+          transformed_clip.corner[i].width = clip->corner[i].width * scale;
+          transformed_clip.corner[i].height = clip->corner[i].height * scale;
         }
 
       ops_push_clip (builder, &transformed_clip);
@@ -1216,7 +1215,7 @@ render_rounded_clip_node (GskGLRenderer       *self,
     }
   else
     {
-      graphene_matrix_t scale_matrix;
+      GskRoundedRect scaled_clip;
       gboolean is_offscreen;
       TextureRegion region;
       /* NOTE: We are *not* transforming the clip by the current modelview here.
@@ -1225,18 +1224,19 @@ render_rounded_clip_node (GskGLRenderer       *self,
        *
        *       We do, however, apply the scale factor to the child clip of course.
        */
-
-      graphene_matrix_init_scale (&scale_matrix, scale, scale, 1.0f);
-      graphene_matrix_transform_bounds (&scale_matrix, &child_clip.bounds, &child_clip.bounds);
+      scaled_clip.bounds.origin.x = clip->bounds.origin.x * scale;
+      scaled_clip.bounds.origin.y = clip->bounds.origin.y * scale;
+      scaled_clip.bounds.size.width = clip->bounds.size.width * scale;
+      scaled_clip.bounds.size.height = clip->bounds.size.height * scale;
 
       /* Increase corner radius size by scale factor */
       for (i = 0; i < 4; i ++)
         {
-          child_clip.corner[i].width *= scale;
-          child_clip.corner[i].height *= scale;
+          scaled_clip.corner[i].width = clip->corner[i].width * scale;
+          scaled_clip.corner[i].height = clip->corner[i].height * scale;
         }
 
-      ops_push_clip (builder, &child_clip);
+      ops_push_clip (builder, &scaled_clip);
       if (!add_offscreen_ops (self, builder, &node->bounds,
                               child,
                               &region, &is_offscreen,
