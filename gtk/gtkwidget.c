@@ -77,6 +77,7 @@
 #include "inspector/window.h"
 
 #include "gdk/gdkeventsprivate.h"
+#include "gdk/gdkprofilerprivate.h"
 #include "gsk/gskdebugprivate.h"
 #include "gsk/gskrendererprivate.h"
 
@@ -12290,6 +12291,8 @@ gtk_widget_render (GtkWidget            *widget,
   GskRenderer *renderer;
   GskRenderNode *root;
   int x, y;
+  gint64 before = g_get_monotonic_time ();
+  gint64 after = 0;
 
   if (!GTK_IS_NATIVE (widget))
     return;
@@ -12304,6 +12307,12 @@ gtk_widget_render (GtkWidget            *widget,
   gtk_widget_snapshot (widget, snapshot);
   root = gtk_snapshot_free_to_node (snapshot);
 
+  if (gdk_profiler_is_running ())
+    {
+      after = g_get_monotonic_time ();
+      gdk_profiler_add_mark (before * 1000, (after - before) * 1000, "snapshot", "");
+    }
+
   if (root != NULL)
     {
       root = gtk_inspector_prepare_render (widget,
@@ -12315,6 +12324,13 @@ gtk_widget_render (GtkWidget            *widget,
       gsk_renderer_render (renderer, root, region);
 
       gsk_render_node_unref (root);
+
+      if (gdk_profiler_is_running ())
+        {
+          before = after;
+          after = g_get_monotonic_time ();
+          gdk_profiler_add_mark (before * 1000, (after - before) * 1000, "render", "");
+        }
     }
 }
 
