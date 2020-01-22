@@ -4072,6 +4072,9 @@ add_event_mark (GdkEvent *event,
 
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
+        message = g_strdup ("");
+        break;
+
     case GDK_TOUCHPAD_SWIPE:
     case GDK_TOUCHPAD_PINCH:
     case GDK_SCROLL:
