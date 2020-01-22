@@ -30,8 +30,10 @@ callback (const SysprofCaptureFrame *frame,
 #define MILLISECONDS(v) ((v) / (1000.0 * G_TIME_SPAN_MILLISECOND))
 
 static int opt_rep = 10;
+static char *opt_mark;
 
 static GOptionEntry options[] = {
+  { "mark", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_STRING, &opt_mark, "Name of the mark", "NAME" },
   { "runs", 'r', G_OPTION_FLAG_NONE, G_OPTION_ARG_INT, &opt_rep, "Number of runs", "COUNT" },
   { NULL, }
 };
@@ -101,7 +103,7 @@ main (int argc, char *argv[])
       if (error)
         g_error ("Opening syscap file: %s", error->message);
 
-      data.group = "style";
+      data.group = opt_mark ? opt_mark : "style";
       data.value = 0;
 
       cursor = sysprof_capture_cursor_new (reader);
