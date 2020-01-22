@@ -270,47 +270,21 @@ static gboolean
 gtk_css_matcher_node_has_state (const GtkCssMatcher *matcher,
                                 GtkStateFlags        state)
 {
-  return (matcher->node.node_state & state) == state;
+  return (gtk_css_node_get_state (matcher->node.node) & state) == state;
 }
 
 static gboolean
 gtk_css_matcher_node_has_name (const GtkCssMatcher     *matcher,
                                /*interned*/ const char *name)
 {
-  return matcher->node.node_name == name;
+  return gtk_css_node_get_name (matcher->node.node) == name;
 }
 
 static gboolean
 gtk_css_matcher_node_has_class (const GtkCssMatcher *matcher,
                                 GQuark               class_name)
 {
-  const GQuark *classes = matcher->node.classes;
-
-  switch (matcher->node.n_classes)
-    {
-    case 3:
-      if (classes[2] == class_name)
-        return TRUE;
-      G_GNUC_FALLTHROUGH;
-
-    case 2:
-      if (classes[1] == class_name)
-        return TRUE;
-      G_GNUC_FALLTHROUGH;
-
-    case 1:
-      if (classes[0] == class_name)
-        return TRUE;
-      G_GNUC_FALLTHROUGH;
-
-    case 0:
-      return FALSE;
-
-    default:
-      return gtk_css_node_has_class (matcher->node.node, class_name);
-    }
-
-  return FALSE;
+  return gtk_css_node_has_class (matcher->node.node, class_name);
 }
 
 static gboolean
@@ -318,7 +292,7 @@ gtk_css_matcher_node_has_id (const GtkCssMatcher *matcher,
                              const char          *id)
 {
   /* assume all callers pass an interned string */
-  return matcher->node.node_id == id;
+  return gtk_css_node_get_id (matcher->node.node) == id;
 }
 
 static gboolean
@@ -392,9 +366,4 @@ _gtk_css_matcher_node_init (GtkCssMatcher *matcher,
 {
   matcher->node.klass = &GTK_CSS_MATCHER_NODE;
   matcher->node.node = node;
-  matcher->node.node_state = gtk_css_node_get_state (node);
-  matcher->node.node_name = gtk_css_node_get_name (node);
-  matcher->node.node_id = gtk_css_node_get_id (node);
-  matcher->node.classes = gtk_css_node_declaration_get_classes (gtk_css_node_get_declaration (node),
-                                                                &matcher->node.n_classes);
 }

@@ -68,11 +68,6 @@ struct _GtkCssMatcherWidgetPath {
 struct _GtkCssMatcherNode {
   const GtkCssMatcherClass *klass;
   GtkCssNode               *node;
-  GtkStateFlags             node_state;
-  const char               *node_name;
-  const char               *node_id;
-  const GQuark             *classes;
-  guint                     n_classes;
 };
 
 union _GtkCssMatcher {
