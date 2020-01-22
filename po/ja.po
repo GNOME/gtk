@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-01-19 12:05+0000\n"
-"PO-Revision-Date: 2019-08-31 21:20+0900\n"
+"PO-Revision-Date: 2020-01-23 01:30+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -58,10 +58,9 @@ msgid "Cannot provide contents as %s"
 msgstr ""
 
 #: gdk/gdkcontentproviderimpl.c:448
-#, fuzzy, c-format
-#| msgid "Failed to write %s: “%s”\n"
+#, c-format
 msgid "Failed to get contents as “%s”"
-msgstr "%s の書き込みに失敗しました: “%s”\n"
+msgstr ""
 
 #: gdk/gdkdrop.c:110
 msgid "Drag’n’drop from other applications is not supported."
@@ -614,12 +613,12 @@ msgstr ""
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:86
 msgid "g_try_realloc () failed"
-msgstr ""
+msgstr "g_try_realloc () に失敗しました"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:94
 #: gdk/win32/gdkhdataoutputstream-win32.c:232
 msgid "GlobalReAlloc() failed: "
-msgstr ""
+msgstr "GlobalReAlloc() に失敗しました: "
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:106
 msgid "Ran out of buffer space (buffer size is fixed)"
@@ -636,11 +635,11 @@ msgstr ""
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:251
 msgid "GlobalLock() failed: "
-msgstr ""
+msgstr "GlobalLock() に失敗しました: "
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:365
 msgid "GlobalAlloc() failed: "
-msgstr ""
+msgstr "GlobalAlloc() に失敗しました: "
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:56
@@ -704,7 +703,7 @@ msgstr ""
 #: gdk/x11/gdkselectioninputstream-x11.c:462
 #, c-format
 msgid "Format %s not supported"
-msgstr ""
+msgstr "フォーマット %s はサポートしていません"
 
 #: gdk/x11/gdktextlistconverter-x11.c:65 gdk/x11/gdktextlistconverter-x11.c:105
 msgid "Not enough space in destination"
@@ -726,7 +725,7 @@ msgstr ""
 #: gdk/x11/gdktextlistconverter-x11.c:202
 #, c-format
 msgid "Unsupported encoding “%s”"
-msgstr ""
+msgstr "“%s”はサポートしていないエンコーディングです"
 
 #: gtk/a11y/gtkbooleancellaccessible.c:43
 msgctxt "Action description"
@@ -2533,7 +2532,7 @@ msgstr "default:LTR"
 #, c-format
 msgctxt "long time format"
 msgid "%d:%02d:%02d"
-msgstr ""
+msgstr "%d:%02d:%02d"
 
 #. -hour:minutes:seconds
 #. Translators: This is a time format, like "-9:05:02" for 9
@@ -2545,7 +2544,7 @@ msgstr ""
 #, c-format
 msgctxt "long time format"
 msgid "-%d:%02d:%02d"
-msgstr ""
+msgstr "-%d:%02d:%02d"
 
 #. -minutes:seconds
 #. Translators: This is a time format, like "-5:02" for 5
@@ -2557,7 +2556,7 @@ msgstr ""
 #, c-format
 msgctxt "short time format"
 msgid "-%d:%02d"
-msgstr ""
+msgstr "-%d:%02d"
 
 #. minutes:seconds
 #. Translators: This is a time format, like "5:02" for 5
@@ -2569,7 +2568,7 @@ msgstr ""
 #, c-format
 msgctxt "short time format"
 msgid "%d:%02d"
-msgstr ""
+msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:769 gtk/gtkmessagedialog.c:787
 #: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:9015
@@ -2688,6 +2687,7 @@ msgstr "PID %d のプロセスを終了できません: %s"
 #: gtk/gtknomediafile.c:48
 msgid "GTK could not find a media module. Check your installation."
 msgstr ""
+"GTK がメディアモジュールを見つけられませんでした。インストールを確認してください。"
 
 #: gtk/gtknotebook.c:4326 gtk/gtknotebook.c:6610
 #, c-format
@@ -3436,16 +3436,10 @@ msgid "Insert _Emoji"
 msgstr "絵文字を挿入(_E)"
 
 #: gtk/gtktextview.c:8607
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Undo"
 msgid "_Undo"
 msgstr "元に戻す(_U)"
 
 #: gtk/gtktextview.c:8611
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Redo"
 msgid "_Redo"
 msgstr "やり直す(_R)"
 
@@ -3657,15 +3651,15 @@ msgstr "GL ベンダー"
 
 #: gtk/inspector/general.ui:509
 msgid "Vulkan Device"
-msgstr ""
+msgstr "Vulkan デバイス"
 
 #: gtk/inspector/general.ui:537
 msgid "Vulkan API version"
-msgstr ""
+msgstr "Vulkan API バージョン"
 
 #: gtk/inspector/general.ui:565
 msgid "Vulkan driver version"
-msgstr ""
+msgstr "Vulkan ドライバーバージョン"
 
 #: gtk/inspector/menu.c:95
 msgid "Unnamed section"
@@ -3733,7 +3727,7 @@ msgstr "プロパティ"
 
 #: gtk/inspector/misc-info.ui:303
 msgid "Renderer"
-msgstr ""
+msgstr "レンダラー"
 
 #: gtk/inspector/misc-info.ui:339
 msgid "Frame Clock"
@@ -4110,7 +4104,7 @@ msgstr "アクション"
 
 #: gtk/inspector/window.ui:418
 msgid "Controllers"
-msgstr ""
+msgstr "コントローラー"
 
 #: gtk/inspector/window.ui:429
 msgid "Magnifier"
@@ -4122,7 +4116,7 @@ msgstr ""
 
 #: gtk/inspector/window.ui:474
 msgid "Settings"
-msgstr ""
+msgstr "設定"
 
 #: gtk/inspector/window.ui:483
 msgid "Resources"
@@ -6521,16 +6515,14 @@ msgstr ""
 "GtkBuilder .ui ファイルに関する様々な操作を行います\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:457
-#, fuzzy, c-format
-#| msgid "%s: Couldn’t parse value for %s: %s\n"
+#, c-format
 msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
-msgstr "%s: %s の値を解析できませんでした: %s\n"
+msgstr "%s:%d: プロパティ '%s' の値を解析できませんでした: %s\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:650
-#, fuzzy, c-format
-#| msgid "%s: %sproperty %s::%s not found\n"
+#, c-format
 msgid "%s:%d: %sproperty %s::%s not found\n"
-msgstr "%s: %sプロパティ %s::%s が見つかりません\n"
+msgstr "%s:%d: %sプロパティ %s::%s が見つかりません\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:1746
 #, c-format
@@ -6555,7 +6547,7 @@ msgstr "%s の書き込みに失敗しました: “%s”\n"
 #: gtk/tools/gtk-builder-tool-simplify.c:1827
 #, c-format
 msgid "No .ui file specified\n"
-msgstr ""
+msgstr ".ui ファイルを指定していません\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:1833
 #, c-format
@@ -7233,7 +7225,7 @@ msgstr "音量を下げます"
 #: modules/media/gtkffmediafile.c:216
 #, c-format
 msgid "Unspecified error decoding video"
-msgstr ""
+msgstr "動画デコード中に原因不明のエラー"
 
 #: modules/media/gtkffmediafile.c:318 modules/media/gtkffmediafile.c:492
 msgid "Not enough memory"
