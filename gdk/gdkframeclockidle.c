@@ -408,14 +408,12 @@ gdk_frame_clock_paint_idle (void *data)
           if (priv->freeze_count == 0)
             {
 	      int iter;
-#ifdef G_ENABLE_DEBUG
               if (GDK_DEBUG_CHECK (FRAMES) || gdk_profiler_is_running ())
                 {
                   if (priv->phase != GDK_FRAME_CLOCK_PHASE_LAYOUT &&
                       (priv->requested & GDK_FRAME_CLOCK_PHASE_LAYOUT))
                     timings->layout_start_time = g_get_monotonic_time ();
                 }
-#endif /* G_ENABLE_DEBUG */
 
               priv->phase = GDK_FRAME_CLOCK_PHASE_LAYOUT;
 	      /* We loop in the layout phase, because we don't want to progress
@@ -438,14 +436,12 @@ gdk_frame_clock_paint_idle (void *data)
         case GDK_FRAME_CLOCK_PHASE_PAINT:
           if (priv->freeze_count == 0)
             {
-#ifdef G_ENABLE_DEBUG
               if (GDK_DEBUG_CHECK (FRAMES) || gdk_profiler_is_running ())
                 {
                   if (priv->phase != GDK_FRAME_CLOCK_PHASE_PAINT &&
                       (priv->requested & GDK_FRAME_CLOCK_PHASE_PAINT))
                     timings->paint_start_time = g_get_monotonic_time ();
                 }
-#endif /* G_ENABLE_DEBUG */
 
               priv->phase = GDK_FRAME_CLOCK_PHASE_PAINT;
               if (priv->requested & GDK_FRAME_CLOCK_PHASE_PAINT)
@@ -602,7 +598,7 @@ gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
               gint64 thaw_time = g_get_monotonic_time ();
               gdk_profiler_add_mark (priv->freeze_time * 1000,
                                      (thaw_time - priv->freeze_time) * 1000,
-                                     "freeze", "");
+                                     "frameclock freeze", "");
               priv->freeze_time = 0;
             }
         }
