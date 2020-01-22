@@ -57,14 +57,6 @@ struct _GtkCssMatcherClass {
                                                    GString               *string);
 };
 
-struct _GtkCssMatcherWidgetPath {
-  const GtkCssMatcherClass *klass;
-  const GtkCssNodeDeclaration *decl;
-  const GtkWidgetPath      *path;
-  guint                     index;
-  guint                     sibling_index;
-};
-
 struct _GtkCssMatcherNode {
   const GtkCssMatcherClass *klass;
   GtkCssNode               *node;
@@ -72,13 +64,9 @@ struct _GtkCssMatcherNode {
 
 union _GtkCssMatcher {
   const GtkCssMatcherClass *klass;
-  GtkCssMatcherWidgetPath   path;
   GtkCssMatcherNode         node;
 };
 
-gboolean          _gtk_css_matcher_init           (GtkCssMatcher          *matcher,
-                                                   const GtkWidgetPath    *path,
-                                                   const GtkCssNodeDeclaration *decl) G_GNUC_WARN_UNUSED_RESULT;
 void              _gtk_css_matcher_node_init      (GtkCssMatcher          *matcher,
                                                    GtkCssNode             *node);
 

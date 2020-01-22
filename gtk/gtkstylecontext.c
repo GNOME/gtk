@@ -30,7 +30,6 @@
 #include "gtkcssnodedeclarationprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkcsspathnodeprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
@@ -46,7 +45,6 @@
 #include "gtkstylecascadeprivate.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 
 
@@ -56,7 +54,7 @@
  * @Title: GtkStyleContext
  *
  * #GtkStyleContext is an object that stores styling information affecting
- * a widget defined by #GtkWidgetPath.
+ * a widget.
  *
  * In order to construct the final style information, #GtkStyleContext
  * queries information from all attached #GtkStyleProviders. Style providers
@@ -66,9 +64,9 @@
  * combination of all providers’ information in priority order.
  *
  * For GTK+ widgets, any #GtkStyleContext returned by
- * gtk_widget_get_style_context() will already have a #GtkWidgetPath, a
- * #GdkDisplay and RTL/LTR information set. The style context will also be
- * updated automatically if any of these settings change on the widget.
+ * gtk_widget_get_style_context() will already have a #GdkDisplay and
+ * RTL/LTR information set. The style context will also be updated
+ * automatically if any of these settings change on the widget.
  *
  * If you are using the theming layer standalone, you will need to set a
  * widget path and a display yourself to the created style context through
@@ -308,9 +306,6 @@ gtk_style_context_finalize (GObject *object)
   while (priv->saved_nodes)
     gtk_style_context_pop_style_node (context);
 
-  if (GTK_IS_CSS_PATH_NODE (priv->cssnode))
-    gtk_css_path_node_unset_context (GTK_CSS_PATH_NODE (priv->cssnode));
-
   gtk_style_context_clear_parent (context);
   gtk_style_context_set_cascade (context, NULL);
 
@@ -445,7 +440,7 @@ gtk_style_context_new (void)
 
 
   /* Create default info store */
-  priv->cssnode = gtk_css_path_node_new (context);
+  priv->cssnode = gtk_css_node_new ();
   gtk_css_node_set_state (priv->cssnode, GTK_STATE_FLAG_DIR_LTR);
 
   return context;
@@ -922,74 +917,6 @@ gtk_style_context_get_scale (GtkStyleContext *context)
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
 
   return _gtk_style_cascade_get_scale (priv->cascade);
-}
-
-/**
- * gtk_style_context_set_path:
- * @context: a #GtkStyleContext
- * @path: a #GtkWidgetPath
- *
- * Sets the #GtkWidgetPath used for style matching. As a
- * consequence, the style will be regenerated to match
- * the new given path.
- *
- * If you are using a #GtkStyleContext returned from
- * gtk_widget_get_style_context(), you do not need to call
- * this yourself.
- **/
-void
-gtk_style_context_set_path (GtkStyleContext *context,
-                            GtkWidgetPath   *path)
-{
-  GtkCssNode *root;
-
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (path != NULL);
-
-  root = gtk_style_context_get_root (context);
-  g_return_if_fail (GTK_IS_CSS_PATH_NODE (root));
-
-  if (path && gtk_widget_path_length (path) > 0)
-    {
-      GtkWidgetPath *copy = gtk_widget_path_copy (path);
-      gtk_css_path_node_set_widget_path (GTK_CSS_PATH_NODE (root), copy);
-      gtk_css_node_set_widget_type (root,
-                                    gtk_widget_path_iter_get_object_type (copy, -1));
-      gtk_css_node_set_name (root, gtk_widget_path_iter_get_object_name (copy, -1));
-      gtk_widget_path_unref (copy);
-    }
-  else
-    {
-      gtk_css_path_node_set_widget_path (GTK_CSS_PATH_NODE (root), NULL);
-      gtk_css_node_set_widget_type (root, G_TYPE_NONE);
-      gtk_css_node_set_name (root, NULL);
-    }
-}
-
-/**
- * gtk_style_context_get_path:
- * @context: a #GtkStyleContext
- *
- * Returns the widget path used for style matching set via
- * gtk_style_context_set_path().
- *
- * If no path has been set - in particular if this style context
- * was returned from a #GtkWidget - this function returns %NULL.
- *
- * Returns: (transfer none) (nullable): A #GtkWidgetPath or %NULL
- **/
-const GtkWidgetPath *
-gtk_style_context_get_path (GtkStyleContext *context)
-{
-  GtkCssNode *root;
-
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-
-  root = gtk_style_context_get_root (context);
-  if (!GTK_IS_CSS_PATH_NODE (root))
-    return NULL;
-
-  return gtk_css_path_node_get_widget_path (GTK_CSS_PATH_NODE (root));
 }
 
 /**
