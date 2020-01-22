@@ -1,4 +1,8 @@
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <errno.h>
 #include <sysprof-capture.h>
 #include <gio/gio.h>
 
@@ -31,10 +35,14 @@ callback (const SysprofCaptureFrame *frame,
 
 static int opt_rep = 10;
 static char *opt_mark;
+static char *opt_name;
+static char *opt_output;
 
 static GOptionEntry options[] = {
   { "mark", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_STRING, &opt_mark, "Name of the mark", "NAME" },
-  { "runs", 'r', G_OPTION_FLAG_NONE, G_OPTION_ARG_INT, &opt_rep, "Number of runs", "COUNT" },
+  { "runs", '0', G_OPTION_FLAG_NONE, G_OPTION_ARG_INT, &opt_rep, "Number of runs", "COUNT" },
+  { "name", '0', G_OPTION_FLAG_NONE, G_OPTION_ARG_STRING, &opt_name, "Name of this test", "NAME" },
+  { "output", '0', G_OPTION_FLAG_NONE, G_OPTION_ARG_STRING, &opt_output, "Directory to save syscap files", "DIRECTORY" },
   { NULL, }
 };
 
@@ -48,6 +56,7 @@ main (int argc, char *argv[])
   char fd_str[20];
   gint64 *values;
   gint64 min, max, total;
+  char *output_dir = NULL;
   int i;
 
   context = g_option_context_new ("COMMANDLINE");
@@ -64,6 +73,22 @@ main (int argc, char *argv[])
   if (opt_rep < 1)
     g_error ("COUNT must be a positive number");
 
+  if (opt_output)
+    {
+      GError *err = NULL;
+      GFile *file;
+
+      file = g_file_new_for_commandline_arg (opt_output);
+      if (!g_file_make_directory_with_parents (file, NULL, &err))
+        {
+          if (!g_error_matches (err, G_IO_ERROR, G_IO_ERROR_EXISTS))
+            g_error ("%s", err->message);
+        }
+
+      output_dir = g_file_get_path (file);
+      g_object_unref (file);
+    }
+
   values = g_new (gint64, opt_rep);
 
   for (i = 0; i < opt_rep; i++)
@@ -76,9 +101,9 @@ main (int argc, char *argv[])
       SysprofCaptureCursor *cursor;
       SysprofCaptureCondition *condition;
 
-      fd = g_file_open_tmp ("gtk.XXXXXX.syscap", &name, &error);
-      if (error)
-        g_error ("Create syscap file: %s", error->message);
+       fd = g_file_open_tmp ("gtk.XXXXXX.syscap", &name, &error);
+       if (error)
+         g_error ("Create syscap file: %s", error->message);
 
       launcher = g_subprocess_launcher_new (0);
       g_subprocess_launcher_take_fd (launcher, fd, fd);
@@ -119,7 +144,24 @@ main (int argc, char *argv[])
       sysprof_capture_cursor_unref (cursor);
       sysprof_capture_reader_unref (reader);
 
-      remove (name);
+      if (output_dir)
+        {
+          GFile *src, *dest;
+          char * save_to;
+
+          save_to = g_strdup_printf ("%s/%s.%d.syscap", output_dir, opt_name ? opt_name : "gtk", i);
+
+          src = g_file_new_for_path (name);
+          dest = g_file_new_for_path (save_to);
+          if (!g_file_copy (src, dest, G_FILE_COPY_OVERWRITE, NULL, NULL, NULL, &error))
+            g_error ("%s", error->message);
+
+          g_free (save_to);
+          g_object_unref (src);
+          g_object_unref (dest);
+        }
+      else
+        remove (name);
 
       g_free (name);
     }
