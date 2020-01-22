@@ -91,6 +91,9 @@ main (int argc, char *argv[])
       if (!g_subprocess_wait (subprocess, NULL, &error))
         g_error ("Run child: %s", error->message);
 
+      if (!g_subprocess_get_successful (subprocess))
+        g_error ("Child process failed");
+        
       g_object_unref (subprocess);
       g_object_unref (launcher);
 
