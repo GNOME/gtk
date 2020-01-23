@@ -762,7 +762,6 @@ do_theme_change (GtkIconTheme *self)
   blow_themes (self);
 
   queue_theme_changed (self);
-
 }
 
 static void
@@ -1270,6 +1269,7 @@ load_themes (GtkIconTheme *self)
   IconThemeDirMtime *dir_mtime;
   GStatBuf stat_buf;
   GList *d;
+  gint64 before = g_get_monotonic_time ();
 
   if (self->current_theme)
     insert_theme (self, self->current_theme);
@@ -1356,6 +1356,9 @@ load_themes (GtkIconTheme *self)
     g_message ("%s", s->str);
     g_string_free (s, TRUE);
   });
+
+  self->loading_themes = FALSE;
+    gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "icon theme load", self->current_theme);
 }
 
 static void
@@ -1363,7 +1366,6 @@ ensure_valid_themes (GtkIconTheme *self)
 {
   GTimeVal tv;
   gboolean was_valid = self->themes_valid;
-  gint64 before = g_get_monotonic_time ();
 
   if (self->loading_themes)
     return;
@@ -1389,11 +1391,12 @@ ensure_valid_themes (GtkIconTheme *self)
       if (was_valid)
         queue_theme_changed (self);
     }
+}
 
-  if (gdk_profiler_is_running ())
-    gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "icon theme load", NULL);
-
-  self->loading_themes = FALSE;
+void
+gtk_icon_theme_ensure_loaded (GtkIconTheme *self)
+{
+  ensure_valid_themes (self);
 }
 
 static inline gboolean

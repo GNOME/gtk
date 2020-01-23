@@ -38,7 +38,7 @@
 #include "gtkmain.h"
 #include "gtkrecentmanager.h"
 #include "gtkaccelmapprivate.h"
-#include "gtkicontheme.h"
+#include "gtkiconthemeprivate.h"
 #include "gtkbuilder.h"
 #include "gtkshortcutswindow.h"
 #include "gtkintl.h"
@@ -218,6 +218,7 @@ gtk_application_load_resources (GtkApplication *application)
     iconspath = g_strconcat (base_path, "/icons/", NULL);
     gtk_icon_theme_add_resource_path (default_theme, iconspath);
     g_free (iconspath);
+    gtk_icon_theme_ensure_loaded (default_theme);
   }
 
   /* Load the menus */

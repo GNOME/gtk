@@ -27,4 +27,6 @@ void        gtk_icon_theme_lookup_symbolic_colors       (GtkCssStyle    *style,
                                                          GdkRGBA        *warning_out,
                                                          GdkRGBA        *error_out);
 
+void        gtk_icon_theme_ensure_loaded (GtkIconTheme *self);
+
 #endif /* __GTK_ICON_THEME_PRIVATE_H__ */
