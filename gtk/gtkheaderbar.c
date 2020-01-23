@@ -73,7 +73,7 @@
  * ├── box.start
  * │   ╰── box
  * │       ├── [image.titlebutton.icon]
- * │       ├── [menubutton.titlebutton.appmenu]
+ * │       ├── [menubutton.titlebutton.menu]
  * │       ├── [button.titlebutton.minimize]
  * │       ├── [button.titlebutton.maximize]
  * │       ╰── [button.titlebutton.close]
@@ -406,7 +406,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
                   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button), menu);
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
-                  gtk_style_context_add_class (gtk_widget_get_style_context (button), "appmenu");
+                  gtk_style_context_add_class (gtk_widget_get_style_context (button), "menu");
                   image = gtk_image_new ();
                   gtk_menu_button_add_child (GTK_MENU_BUTTON (button), image);
                   gtk_widget_set_can_focus (button, FALSE);

@@ -4576,7 +4576,7 @@ button.titlebutton {
 
   @include _button_text_shadow;
 
-  &:not(.appmenu) {
+  &:not(.menu) {
     border-radius: 9999px;
     -gtk-outline-radius: 9999px;
     padding: 6px;
