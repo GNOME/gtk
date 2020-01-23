@@ -2400,7 +2400,7 @@ start_element_handler (GMarkupParseContext  *context,
 
       widget_node = gtk_widget_get_css_node (GTK_WIDGET (pdata->label));
       link->cssnode = gtk_css_node_new ();
-      gtk_css_node_set_name (link->cssnode, I_("link"));
+      gtk_css_node_set_name (link->cssnode, g_quark_from_static_string ("link"));
       gtk_css_node_set_parent (link->cssnode, widget_node);
       if (class)
         gtk_css_node_add_class (link->cssnode, g_quark_from_string (class));
@@ -5214,7 +5214,7 @@ gtk_label_select_region_index (GtkLabel *label,
 
               widget_node = gtk_widget_get_css_node (GTK_WIDGET (label));
               priv->select_info->selection_node = gtk_css_node_new ();
-              gtk_css_node_set_name (priv->select_info->selection_node, I_("selection"));
+              gtk_css_node_set_name (priv->select_info->selection_node, g_quark_from_static_string ("selection"));
               gtk_css_node_set_parent (priv->select_info->selection_node, widget_node);
               gtk_css_node_set_state (priv->select_info->selection_node, gtk_css_node_get_state (widget_node));
               g_object_unref (priv->select_info->selection_node);
