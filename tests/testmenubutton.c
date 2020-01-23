@@ -36,7 +36,7 @@ int main (int argc, char **argv)
 	GtkWidget *window;
 	GtkWidget *button;
 	GtkWidget *grid;
-	GtkWidget *entry;
+	GtkEntry *entry;
 	GtkLabel *label;
 	GtkWidget *check;
 	GtkWidget *combo;
@@ -94,11 +94,11 @@ int main (int argc, char **argv)
 
 	/* Button next to entry */
 	entry = gtk_entry_new ();
-	gtk_grid_attach (GTK_GRID (grid), entry, 0, row++, 1, 1);
+	gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (entry), 0, row++, 1, 1);
 	button = gtk_menu_button_new ();
 	gtk_widget_set_halign (button, GTK_ALIGN_START);
 
-	gtk_grid_attach_next_to (GTK_GRID (grid), button, entry, GTK_POS_RIGHT, 1, 1);
+	gtk_grid_attach_next_to (GTK_GRID (grid), button, GTK_WIDGET (entry), GTK_POS_RIGHT, 1, 1);
 	menubuttons = g_list_prepend (menubuttons, button);
 
         check = gtk_check_button_new_with_label ("Popover");

@@ -281,7 +281,8 @@ make_window (gint view_type)
 {
   GtkWidget *window;
   GtkWidget *vbox;
-  GtkWidget *hbox, *entry;
+  GtkWidget *hbox;
+  GtkEntry  *entry;
   GtkWidget *button;
   GtkWidget *scrolled_window;
   GtkWidget *tree_view;
@@ -352,7 +353,7 @@ make_window (gint view_type)
   entry = gtk_entry_new ();
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
   gtk_container_add (GTK_CONTAINER (hbox), button);
-  gtk_container_add (GTK_CONTAINER (hbox), entry);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (entry));
   g_object_set_data (G_OBJECT (button), "user_data", entry);
   g_signal_connect (button, "clicked",
                     G_CALLBACK (iter_insert),
@@ -363,7 +364,7 @@ make_window (gint view_type)
   entry = gtk_entry_new ();
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
   gtk_container_add (GTK_CONTAINER (hbox), button);
-  gtk_container_add (GTK_CONTAINER (hbox), entry);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (entry));
   g_object_set_data (G_OBJECT (button), "user_data", entry);
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (iter_change),
@@ -374,7 +375,7 @@ make_window (gint view_type)
   entry = gtk_entry_new ();
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
   gtk_container_add (GTK_CONTAINER (hbox), button);
-  gtk_container_add (GTK_CONTAINER (hbox), entry);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (entry));
   g_object_set_data (G_OBJECT (button), "user_data", entry);
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (iter_insert_with_values),

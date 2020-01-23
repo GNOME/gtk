@@ -226,15 +226,15 @@ edit_cb (GtkWidget *button, GtkWidget *child)
 
   if (GTK_IS_LABEL (child))
     {
-      GtkWidget *entry = gtk_entry_new ();
+      GtkEntry *entry = gtk_entry_new ();
 
       g_object_set_data (G_OBJECT (entry), "label", child);
 
       gtk_editable_set_text (GTK_EDITABLE (entry), gtk_label_get_text (GTK_LABEL (child)));
       gtk_editable_set_width_chars (GTK_EDITABLE (entry), 12);
       g_signal_connect (entry, "activate", G_CALLBACK (edit_label_done), NULL);
-      gtk_fixed_put (GTK_FIXED (fixed), entry, x, y);
-      gtk_widget_grab_focus (entry);
+      gtk_fixed_put (GTK_FIXED (fixed), GTK_WIDGET (entry), x, y);
+      gtk_widget_grab_focus (GTK_WIDGET (entry));
     }
   else if (GTK_IS_SPINNER (child))
     {

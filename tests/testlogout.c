@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 
 static GtkWidget *win;
-static GtkWidget *inhibit_entry;
+static GtkEntry *inhibit_entry;
 static GtkWidget *inhibit_logout;
 static GtkWidget *inhibit_switch;
 static GtkWidget *inhibit_suspend;
@@ -62,7 +62,7 @@ inhibitor_toggled (GtkToggleButton *button, GtkApplication *app)
       gtk_label_set_label (inhibit_label, "");
     }
 
-  gtk_widget_set_sensitive (inhibit_entry, !active);
+  gtk_widget_set_sensitive (GTK_WIDGET (inhibit_entry), !active);
   gtk_widget_set_sensitive (inhibit_logout, !active);
   gtk_widget_set_sensitive (inhibit_switch, !active);
   gtk_widget_set_sensitive (inhibit_suspend, !active);
@@ -110,7 +110,7 @@ activate (GtkApplication *app,
   gtk_grid_attach (GTK_GRID (grid), inhibit_idle, 1, 5, 1, 1);
 
   inhibit_entry = gtk_entry_new ();
-  gtk_grid_attach (GTK_GRID (grid), inhibit_entry, 1, 6, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (inhibit_entry), 1, 6, 1, 1);
 
   button = gtk_toggle_button_new_with_label ("Inhibit");
   g_signal_connect (button, "toggled",

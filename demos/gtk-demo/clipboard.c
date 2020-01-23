@@ -263,7 +263,8 @@ do_clipboard (GtkWidget *do_widget)
     {
       GtkWidget *vbox, *hbox;
       GtkLabel *label;
-      GtkWidget *entry, *button;
+      GtkEntry *entry;
+      GtkWidget *button;
       GtkWidget *image;
       GtkGesture *gesture;
       GActionEntry entries[] = {
@@ -298,7 +299,7 @@ do_clipboard (GtkWidget *do_widget)
 
       /* Create the first entry */
       entry = gtk_entry_new ();
-      gtk_container_add (GTK_CONTAINER (hbox), entry);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (entry));
 
       /* Create the button */
       button = gtk_button_new_with_mnemonic (_("_Copy"));
@@ -315,7 +316,7 @@ do_clipboard (GtkWidget *do_widget)
 
       /* Create the second entry */
       entry = gtk_entry_new ();
-      gtk_container_add (GTK_CONTAINER (hbox), entry);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (entry));
 
       /* Create the button */
       button = gtk_button_new_with_mnemonic (_("_Paste"));

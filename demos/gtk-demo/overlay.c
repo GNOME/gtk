@@ -27,7 +27,7 @@ do_overlay (GtkWidget *do_widget)
       GtkWidget *button;
       GtkWidget *vbox;
       GtkLabel *label;
-      GtkWidget *entry;
+      GtkEntry *entry;
       int i, j;
       char *text;
 
@@ -71,10 +71,10 @@ do_overlay (GtkWidget *do_widget)
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), vbox);
       gtk_widget_set_halign (vbox, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (vbox, GTK_ALIGN_CENTER);
-      gtk_entry_set_placeholder_text (GTK_ENTRY (entry), "Your Lucky Number");
-      gtk_widget_set_margin_top (entry, 50);
-      gtk_widget_set_margin_bottom (entry, 8);
-      gtk_container_add (GTK_CONTAINER (vbox), entry);
+      gtk_entry_set_placeholder_text (entry, "Your Lucky Number");
+      gtk_widget_set_margin_top (GTK_WIDGET (entry), 50);
+      gtk_widget_set_margin_bottom (GTK_WIDGET (entry), 8);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (entry));
 
       gtk_container_add (GTK_CONTAINER (window), overlay);
 

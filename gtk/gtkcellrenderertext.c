@@ -165,7 +165,7 @@ typedef struct _GtkCellRendererTextPrivate       GtkCellRendererTextPrivate;
 
 struct _GtkCellRendererTextPrivate
 {
-  GtkWidget *entry;
+  GtkEntry *entry;
 
   PangoAttrList        *extra_attrs;
   GdkRGBA               foreground;
@@ -1824,8 +1824,8 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
   priv->entry = gtk_entry_new ();
   g_object_ref_sink (G_OBJECT (priv->entry));
 
-  gtk_entry_set_has_frame (GTK_ENTRY (priv->entry), FALSE);
-  gtk_entry_set_alignment (GTK_ENTRY (priv->entry), xalign);
+  gtk_entry_set_has_frame (priv->entry, FALSE);
+  gtk_entry_set_alignment (priv->entry, xalign);
   gtk_editable_set_width_chars (GTK_EDITABLE (priv->entry), 5);
 
   if (priv->text)

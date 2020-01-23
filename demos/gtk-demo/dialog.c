@@ -7,8 +7,8 @@
 #include <gtk/gtk.h>
 
 static GtkWidget *window = NULL;
-static GtkWidget *entry1 = NULL;
-static GtkWidget *entry2 = NULL;
+static GtkEntry  *entry1 = NULL;
+static GtkEntry  *entry2 = NULL;
 
 static void
 message_dialog_clicked (GtkButton *button,
@@ -39,8 +39,8 @@ interactive_dialog_clicked (GtkButton *button,
   GtkWidget *hbox;
   GtkWidget *image;
   GtkWidget *table;
-  GtkWidget *local_entry1;
-  GtkWidget *local_entry2;
+  GtkEntry  *local_entry1;
+  GtkEntry  *local_entry2;
   GtkLabel *label;
   gint response;
 
@@ -70,16 +70,16 @@ interactive_dialog_clicked (GtkButton *button,
   gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 0, 0, 1, 1);
   local_entry1 = gtk_entry_new ();
   gtk_editable_set_text (GTK_EDITABLE (local_entry1), gtk_editable_get_text (GTK_EDITABLE (entry1)));
-  gtk_grid_attach (GTK_GRID (table), local_entry1, 1, 0, 1, 1);
-  gtk_label_set_mnemonic_widget (label, local_entry1);
+  gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (local_entry1), 1, 0, 1, 1);
+  gtk_label_set_mnemonic_widget (label, GTK_WIDGET (local_entry1));
 
   label = gtk_label_new_with_mnemonic ("E_ntry 2");
   gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 0, 1, 1, 1);
 
   local_entry2 = gtk_entry_new ();
   gtk_editable_set_text (GTK_EDITABLE (local_entry2), gtk_editable_get_text (GTK_EDITABLE (entry2)));
-  gtk_grid_attach (GTK_GRID (table), local_entry2, 1, 1, 1, 1);
-  gtk_label_set_mnemonic_widget (label, local_entry2);
+  gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (local_entry2), 1, 1, 1, 1);
+  gtk_label_set_mnemonic_widget (label, GTK_WIDGET (local_entry2));
 
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
@@ -151,14 +151,14 @@ do_dialog (GtkWidget *do_widget)
       gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 0, 0, 1, 1);
 
       entry1 = gtk_entry_new ();
-      gtk_grid_attach (GTK_GRID (table), entry1, 1, 0, 1, 1);
-      gtk_label_set_mnemonic_widget (label, entry1);
+      gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (entry1), 1, 0, 1, 1);
+      gtk_label_set_mnemonic_widget (label, GTK_WIDGET (entry1));
 
       label = gtk_label_new_with_mnemonic ("E_ntry 2");
       gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 0, 1, 1, 1);
 
       entry2 = gtk_entry_new ();
-      gtk_grid_attach (GTK_GRID (table), entry2, 1, 1, 1, 1);
+      gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (entry2), 1, 1, 1, 1);
     }
 
   if (!gtk_widget_get_visible (window))

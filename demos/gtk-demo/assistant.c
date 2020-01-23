@@ -91,7 +91,8 @@ on_entry_changed (GtkWidget *widget, gpointer data)
 static void
 create_page1 (GtkWidget *assistant)
 {
-  GtkWidget *box, *entry;
+  GtkWidget *box;
+  GtkEntry *entry;
   GtkLabel *label;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
@@ -101,9 +102,9 @@ create_page1 (GtkWidget *assistant)
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   entry = gtk_entry_new ();
-  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-  gtk_widget_set_valign (entry, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (box), entry);
+  gtk_entry_set_activates_default (entry, TRUE);
+  gtk_widget_set_valign (GTK_WIDGET (entry), GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (entry));
   g_signal_connect (G_OBJECT (entry), "changed",
                     G_CALLBACK (on_entry_changed), assistant);
 

@@ -1028,11 +1028,11 @@ gtk_combo_box_create_child (GtkComboBox *combo_box)
 
   if (priv->has_entry)
     {
-      GtkWidget *entry;
+      GtkEntry *entry;
       GtkStyleContext *context;
 
       entry = gtk_entry_new ();
-      gtk_container_add (GTK_CONTAINER (combo_box), entry);
+      gtk_container_add (GTK_CONTAINER (combo_box), GTK_WIDGET (entry));
 
       context = gtk_widget_get_style_context (GTK_WIDGET (entry));
       gtk_style_context_add_class (context, "combo");

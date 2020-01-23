@@ -434,7 +434,7 @@ test_input_stacking (void)
   GtkWidget *win;
   GtkWidget *overlay;
   GtkLabel *label;
-  GtkWidget *entry;
+  GtkEntry *entry;
   GtkWidget *grid;
   GtkWidget *button;
   GtkWidget *vbox;
@@ -472,9 +472,9 @@ test_input_stacking (void)
   gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
   entry = gtk_entry_new ();
-  gtk_widget_set_margin_top (entry, 8);
-  gtk_widget_set_margin_bottom (entry, 8);
-  gtk_container_add (GTK_CONTAINER (vbox), entry);
+  gtk_widget_set_margin_top (GTK_WIDGET (entry), 8);
+  gtk_widget_set_margin_bottom (GTK_WIDGET (entry), 8);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (entry));
 
 
   gtk_container_add (GTK_CONTAINER (win), overlay);

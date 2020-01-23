@@ -121,10 +121,10 @@ struct _GtkMountOperationPrivate {
 
   /* for the ask-password dialog */
   GtkWidget *grid;
-  GtkWidget *username_entry;
-  GtkWidget *domain_entry;
-  GtkWidget *password_entry;
-  GtkWidget *pim_entry;
+  GtkEntry  *username_entry;
+  GtkEntry  *domain_entry;
+  GtkEntry  *password_entry;
+  GtkEntry  *pim_entry;
   GtkWidget *anonymous_toggle;
   GtkWidget *tcrypt_hidden_toggle;
   GtkWidget *tcrypt_system_toggle;
@@ -393,7 +393,7 @@ pw_dialog_got_response (GtkDialog         *dialog,
 }
 
 static gboolean
-entry_has_input (GtkWidget *entry_widget)
+entry_has_input (GtkEntry *entry_widget)
 {
   const char *text;
 
@@ -406,7 +406,7 @@ entry_has_input (GtkWidget *entry_widget)
 }
 
 static gboolean
-pim_entry_is_valid (GtkWidget *entry_widget)
+pim_entry_is_valid (GtkEntry *entry_widget)
 {
   const char *text;
   gchar *end = NULL;
@@ -495,15 +495,15 @@ pw_dialog_cycle_focus (GtkWidget         *widget,
 
   priv = operation->priv;
 
-  if (widget == priv->username_entry)
+  if (widget == GTK_WIDGET (priv->username_entry))
     {
       if (priv->domain_entry != NULL)
-        next_widget = priv->domain_entry;
+        next_widget = GTK_WIDGET (priv->domain_entry);
       else if (priv->password_entry != NULL)
-        next_widget = priv->password_entry;
+        next_widget = GTK_WIDGET (priv->password_entry);
     }
-  else if (widget == priv->domain_entry && priv->password_entry)
-    next_widget = priv->password_entry;
+  else if (widget == GTK_WIDGET (priv->domain_entry) && priv->password_entry)
+    next_widget = GTK_WIDGET (priv->password_entry);
 
   if (next_widget)
     gtk_widget_grab_focus (next_widget);
@@ -511,14 +511,14 @@ pw_dialog_cycle_focus (GtkWidget         *widget,
     gtk_widget_activate_default (widget);
 }
 
-static GtkWidget *
+static GtkEntry *
 table_add_entry (GtkMountOperation *operation,
                  int                row,
                  const char        *label_text,
                  const char        *value,
                  gpointer           user_data)
 {
-  GtkWidget *entry;
+  GtkEntry *entry;
   GtkLabel *label;
 
   label = gtk_label_new_with_mnemonic (label_text);
@@ -528,14 +528,14 @@ table_add_entry (GtkMountOperation *operation,
   operation->priv->user_widgets = g_list_prepend (operation->priv->user_widgets, GTK_WIDGET (label));
 
   entry = gtk_entry_new ();
-  gtk_widget_set_hexpand (entry, TRUE);
+  gtk_widget_set_hexpand (GTK_WIDGET (entry), TRUE);
 
   if (value)
     gtk_editable_set_text (GTK_EDITABLE (entry), value);
 
   gtk_grid_attach (GTK_GRID (operation->priv->grid), GTK_WIDGET (label), 0, row, 1, 1);
-  gtk_grid_attach (GTK_GRID (operation->priv->grid), entry, 1, row, 1, 1);
-  gtk_label_set_mnemonic_widget (label, entry);
+  gtk_grid_attach (GTK_GRID (operation->priv->grid), GTK_WIDGET (entry), 1, row, 1, 1);
+  gtk_label_set_mnemonic_widget (label, GTK_WIDGET (entry));
   operation->priv->user_widgets = g_list_prepend (operation->priv->user_widgets, entry);
 
   g_signal_connect (entry, "changed",
@@ -726,7 +726,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
     {
       priv->password_entry = table_add_entry (operation, rows++, _("_Password"),
                                               NULL, operation);
-      gtk_entry_set_visibility (GTK_ENTRY (priv->password_entry), FALSE);
+      gtk_entry_set_visibility (priv->password_entry, FALSE);
     }
 
    if (priv->ask_flags & G_ASK_PASSWORD_SAVING_SUPPORTED)

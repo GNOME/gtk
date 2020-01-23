@@ -16,7 +16,7 @@ do_entry_undo (GtkWidget *do_widget)
   static GtkWidget *window = NULL;
   GtkWidget *vbox;
   GtkLabel *label;
-  GtkWidget *entry;
+  GtkEntry *entry;
 
   if (!window)
     {
@@ -40,7 +40,7 @@ do_entry_undo (GtkWidget *do_widget)
       /* Create our entry */
       entry = gtk_entry_new ();
       gtk_editable_set_enable_undo (GTK_EDITABLE (entry), TRUE);
-      gtk_container_add (GTK_CONTAINER (vbox), entry);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (entry));
     }
 
   if (!gtk_widget_get_visible (window))

@@ -142,7 +142,7 @@ struct _GtkPlacesSidebar {
   GFile             *current_location;
 
   GtkWidget *rename_popover;
-  GtkWidget *rename_entry;
+  GtkEntry *rename_entry;
   GtkWidget *rename_button;
   GtkLabel *rename_error;
   gchar *rename_uri;
@@ -2615,7 +2615,7 @@ create_rename_popover (GtkPlacesSidebar *sidebar)
   GtkWidget *popover;
   GtkWidget *grid;
   GtkLabel *label;
-  GtkWidget *entry;
+  GtkEntry  *entry;
   GtkWidget *button;
   GtkLabel *error;
   gchar *str;
@@ -2636,13 +2636,13 @@ create_rename_popover (GtkPlacesSidebar *sidebar)
                 "column-spacing", 6,
                 NULL);
   entry = gtk_entry_new ();
-  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
+  gtk_entry_set_activates_default (entry, TRUE);
   g_signal_connect (entry, "changed", G_CALLBACK (rename_entry_changed), sidebar);
   str = g_strdup_printf ("<b>%s</b>", _("Name"));
   label = gtk_label_new (str);
   gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
   gtk_label_set_use_markup (label, TRUE);
-  gtk_label_set_mnemonic_widget (label, entry);
+  gtk_label_set_mnemonic_widget (label, GTK_WIDGET (entry));
   g_free (str);
   button = gtk_button_new_with_mnemonic (_("_Rename"));
   gtk_style_context_add_class (gtk_widget_get_style_context (button), "suggested-action");
@@ -2650,7 +2650,7 @@ create_rename_popover (GtkPlacesSidebar *sidebar)
   error = gtk_label_new ("");
   gtk_widget_set_halign (GTK_WIDGET (error), GTK_ALIGN_START);
   gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 0, 2, 1);
-  gtk_grid_attach (GTK_GRID (grid), entry, 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (entry), 0, 1, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), button,1, 1, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (error), 0, 2, 2, 1);
   gtk_popover_set_default_widget (GTK_POPOVER (popover), button);
@@ -2732,7 +2732,7 @@ show_rename_popover (GtkSidebarRow *row)
   setup_popover_shadowing (sidebar->rename_popover);
 
   gtk_popover_popup (GTK_POPOVER (sidebar->rename_popover));
-  gtk_widget_grab_focus (sidebar->rename_entry);
+  gtk_widget_grab_focus (GTK_WIDGET (sidebar->rename_entry));
 
   g_free (name);
   g_free (uri);

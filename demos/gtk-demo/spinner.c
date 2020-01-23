@@ -59,7 +59,7 @@ do_spinner (GtkWidget *do_widget)
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     spinner = gtk_spinner_new ();
     gtk_container_add (GTK_CONTAINER (hbox), spinner);
-    gtk_container_add (GTK_CONTAINER (hbox), gtk_entry_new ());
+    gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (gtk_entry_new ()));
     gtk_container_add (GTK_CONTAINER (vbox), hbox);
     spinner_sensitive = spinner;
 
@@ -67,7 +67,7 @@ do_spinner (GtkWidget *do_widget)
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     spinner = gtk_spinner_new ();
     gtk_container_add (GTK_CONTAINER (hbox), spinner);
-    gtk_container_add (GTK_CONTAINER (hbox), gtk_entry_new ());
+    gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (gtk_entry_new ()));
     gtk_container_add (GTK_CONTAINER (vbox), hbox);
     spinner_unsensitive = spinner;
     gtk_widget_set_sensitive (hbox, FALSE);

@@ -121,7 +121,7 @@ build_alpha_widgets (void)
   GtkWidget *check_button;
   GtkWidget *hbox;
   GtkLabel *label;
-  GtkWidget *entry;
+  GtkEntry *entry;
 
   grid = gtk_grid_new ();
 
@@ -154,8 +154,8 @@ build_alpha_widgets (void)
   gtk_label_set_markup (label, "<i>Entry: </i>");
   gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
   entry = gtk_entry_new ();
-  gtk_widget_set_hexpand (entry, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), entry);
+  gtk_widget_set_hexpand (GTK_WIDGET (entry), TRUE);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (entry));
   gtk_widget_set_hexpand (hbox, TRUE);
   gtk_grid_attach (GTK_GRID (grid), hbox, 0, 3, 2, 1);
 
@@ -2026,17 +2026,17 @@ create_scrolled_windows (GtkWidget *widget)
 
 static void
 entry_toggle_frame (GtkWidget *checkbutton,
-                    GtkWidget *entry)
+                    GtkEntry  *entry)
 {
-   gtk_entry_set_has_frame (GTK_ENTRY(entry),
+   gtk_entry_set_has_frame (entry,
                             gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
 }
 
 static void
 entry_toggle_sensitive (GtkWidget *checkbutton,
-			GtkWidget *entry)
+			GtkEntry *entry)
 {
-   gtk_widget_set_sensitive (entry,
+   gtk_widget_set_sensitive (GTK_WIDGET (entry),
                              gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(checkbutton)));
 }
 
@@ -2071,7 +2071,7 @@ entry_remove_timeout (gpointer data)
 
 static void
 entry_toggle_progress (GtkWidget *checkbutton,
-                       GtkWidget *entry)
+                       GtkEntry *entry)
 {
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)))
     {
@@ -2085,7 +2085,7 @@ entry_toggle_progress (GtkWidget *checkbutton,
       g_object_set_data (G_OBJECT (entry), "timeout-id",
                          GUINT_TO_POINTER (0));
 
-      gtk_entry_set_progress_fraction (GTK_ENTRY (entry), 0.0);
+      gtk_entry_set_progress_fraction (entry, 0.0);
     }
 }
 
@@ -2107,7 +2107,7 @@ create_entry (GtkWidget *widget)
   GtkWidget *has_frame_check;
   GtkWidget *sensitive_check;
   GtkWidget *progress_check;
-  GtkWidget *entry;
+  GtkEntry *entry;
   GtkComboBoxText *cb;
   GtkWidget *cb_entry;
   GtkWidget *button;
@@ -2139,7 +2139,7 @@ create_entry (GtkWidget *widget)
       entry = gtk_entry_new ();
       gtk_editable_set_text (GTK_EDITABLE (entry), "hello world \330\247\331\204\330\263\331\204\330\247\331\205 \330\271\331\204\331\212\331\203\331\205");
       gtk_editable_select_region (GTK_EDITABLE (entry), 0, 5);
-      gtk_container_add (GTK_CONTAINER (hbox), entry);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (entry));
 
       cb = GTK_COMBO_BOX_TEXT (gtk_combo_box_text_new_with_entry ());
 
@@ -2950,7 +2950,7 @@ cursor_pressed_cb (GtkGesture *gesture,
                    int         n_pressed,
                    double      x,
                    double      y,
-                   GtkWidget  *entry)
+                   GtkEntry   *entry)
 {
   GtkWidget *widget;
   const gchar *name;
@@ -3040,7 +3040,7 @@ create_cursors (GtkWidget *widget)
   GtkWidget *button;
   GtkLabel *label;
   GtkWidget *any;
-  GtkWidget *entry;
+  GtkEntry  *entry;
   GtkWidget *size;
   GtkEntryCompletion *completion;
   GtkTreeModel *model;
@@ -3090,7 +3090,7 @@ create_cursors (GtkWidget *widget)
 
           entry = gtk_entry_new ();
           gtk_editable_set_text (GTK_EDITABLE (entry), "default");
-          gtk_container_add (GTK_CONTAINER (hbox), entry);
+          gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (entry));
 
           size = gtk_spin_button_new_with_range (1.0, 128.0, 1.0);
           gtk_spin_button_set_value (GTK_SPIN_BUTTON (size), 24.0);
@@ -3117,7 +3117,7 @@ create_cursors (GtkWidget *widget)
       gtk_entry_completion_set_text_column (completion, 0);
       gtk_entry_set_completion (GTK_ENTRY (entry), completion);
       g_object_unref (model);
-      gtk_container_add (GTK_CONTAINER (hbox), entry);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (entry));
 
       frame =
 	g_object_new (gtk_frame_get_type (),
@@ -5301,7 +5301,7 @@ typedef struct _ProgressData {
   GtkWidget *omenu1;
   GtkWidget *elmenu;
   GtkWidget *omenu2;
-  GtkWidget *entry;
+  GtkEntry *entry;
   int timer;
   gboolean activity;
 } ProgressData;
@@ -5540,12 +5540,12 @@ create_progress_bar (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
       pdata->entry = gtk_entry_new ();
-      gtk_widget_set_hexpand (pdata->entry, TRUE);
+      gtk_widget_set_hexpand (GTK_WIDGET (pdata->entry), TRUE);
       g_signal_connect (pdata->entry, "changed",
 			G_CALLBACK (entry_changed),
 			pdata);
-      gtk_container_add (GTK_CONTAINER (hbox), pdata->entry);
-      gtk_widget_set_size_request (pdata->entry, 100, -1);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (pdata->entry));
+      gtk_widget_set_size_request (GTK_WIDGET (pdata->entry), 100, -1);
 
       label = gtk_label_new ("Ellipsize text :");
       gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 10, 1, 1);

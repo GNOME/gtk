@@ -32,7 +32,7 @@ static GtkWidget *font;
 static GtkWidget *script_lang;
 static GtkWidget *resetbutton;
 static GtkWidget *stack;
-static GtkWidget *entry;
+static GtkEntry *entry;
 static GtkWidget *variations_heading;
 static GtkWidget *variations_grid;
 static GtkWidget *instance_combo;
@@ -792,7 +792,7 @@ add_axis (hb_face_t             *hb_face,
           int                    i)
 {
   GtkLabel *axis_label;
-  GtkWidget *axis_entry;
+  GtkEntry *axis_entry;
   GtkWidget *axis_scale;
   GtkAdjustment *adjustment;
   Axis *axis;
@@ -815,16 +815,16 @@ add_axis (hb_face_t             *hb_face,
   gtk_scale_set_draw_value (GTK_SCALE (axis_scale), FALSE);
   gtk_grid_attach (GTK_GRID (variations_grid), axis_scale, 1, i, 1, 1);
   axis_entry = gtk_entry_new ();
-  gtk_widget_set_valign (axis_entry, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (GTK_WIDGET (axis_entry), GTK_ALIGN_BASELINE);
   gtk_editable_set_width_chars (GTK_EDITABLE (axis_entry), 4);
-  gtk_grid_attach (GTK_GRID (variations_grid), axis_entry, 2, i, 1, 1);
+  gtk_grid_attach (GTK_GRID (variations_grid), GTK_WIDGET (axis_entry), 2, i, 1, 1);
 
   axis = g_new (Axis, 1);
   axis->tag = ax->tag;
   axis->adjustment = adjustment;
   g_hash_table_add (axes, axis);
 
-  adjustment_changed (adjustment, GTK_ENTRY (axis_entry));
+  adjustment_changed (adjustment, axis_entry);
 
   g_signal_connect (adjustment, "value-changed", G_CALLBACK (adjustment_changed), axis_entry);
   g_signal_connect (adjustment, "value-changed", G_CALLBACK (unset_instance), NULL);
@@ -1158,7 +1158,7 @@ switch_to_entry (void)
 {
   text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry)));
   gtk_stack_set_visible_child_name (GTK_STACK (stack), "entry");
-  gtk_widget_grab_focus (entry);
+  gtk_widget_grab_focus (GTK_WIDGET (entry));
 }
 
 static void
@@ -1224,13 +1224,13 @@ do_font_features (GtkWidget *do_widget)
       font = GTK_WIDGET (gtk_builder_get_object (builder, "font"));
       script_lang = GTK_WIDGET (gtk_builder_get_object (builder, "script_lang"));
       stack = GTK_WIDGET (gtk_builder_get_object (builder, "stack"));
-      entry = GTK_WIDGET (gtk_builder_get_object (builder, "entry"));
+      entry = GTK_ENTRY (gtk_builder_get_object (builder, "entry"));
       edit_toggle = GTK_WIDGET (gtk_builder_get_object (builder, "edit_toggle"));
 
       controller = gtk_event_controller_key_new ();
       g_object_set_data_full (G_OBJECT (entry), "controller", g_object_ref (controller), g_object_unref);
       g_signal_connect (controller, "key-pressed", G_CALLBACK (entry_key_press), entry);
-      gtk_widget_add_controller (entry, controller);
+      gtk_widget_add_controller (GTK_WIDGET (entry), controller);
 
       add_check_group (feature_list, _("Kerning"), (const char *[]){ "kern", NULL });
       add_check_group (feature_list, _("Ligatures"), (const char *[]){ "liga",

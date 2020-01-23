@@ -154,9 +154,9 @@
  *
  * |[<!-- language="C" -->
  *   // Pressing Alt+H will focus the entry
- *   GtkWidget *entry = gtk_entry_new ();
+ *   GtkEntry *entry = gtk_entry_new ();
  *   GtkLabel *label = gtk_label_new_with_mnemonic ("_Hello");
- *   gtk_label_set_mnemonic_widget (label, entry);
+ *   gtk_label_set_mnemonic_widget (label, GTK_WIDGET (entry));
  * ]|
  *
  * # Markup (styled text)

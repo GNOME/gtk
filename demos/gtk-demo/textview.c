@@ -437,7 +437,7 @@ attach_widgets (GtkTextView *text_view)
         }
       else if (i == 3)
         {
-          widget = gtk_entry_new ();
+          widget = GTK_WIDGET (gtk_entry_new ());
         }
       else
         {
