@@ -330,7 +330,7 @@ create_combo_box_entry (void)
 static WidgetInfo *
 create_combo_box (void)
 {
-  GtkWidget *widget;
+  GtkComboBox *widget;
   GtkCellRenderer *cell;
   GtkListStore *store;
 
@@ -342,28 +342,28 @@ create_combo_box (void)
 
   store = gtk_list_store_new (1, G_TYPE_STRING);
   gtk_list_store_insert_with_values (store, NULL, -1, 0, "Combo Box", -1);
-  gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (store));
+  gtk_combo_box_set_model (widget, GTK_TREE_MODEL (store));
 
-  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_combo_box_set_active (GTK_WIDGET (widget), 0);
+  gtk_widget_set_halign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
 
-  return new_widget_info ("combo-box", widget, SMALL);
+  return new_widget_info ("combo-box", GTK_WIDGET (widget), SMALL);
 }
 
 static WidgetInfo *
 create_combo_box_text (void)
 {
-  GtkWidget *widget;
+  GtkComboBoxText *widget;
 
   widget = gtk_combo_box_text_new ();
 
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Combo Box Text");
+  gtk_combo_box_text_append_text (widget, "Combo Box Text");
   gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
 
-  return new_widget_info ("combo-box-text", widget, SMALL);
+  return new_widget_info ("combo-box-text", GTK_WIDGET (widget), SMALL);
 }
 
 static WidgetInfo *

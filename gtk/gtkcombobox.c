@@ -1832,7 +1832,7 @@ gtk_combo_box_cell_layout_get_area (GtkCellLayout *cell_layout)
  *
  * Returns: A new #GtkComboBox.
  */
-GtkWidget *
+GtkComboBox *
 gtk_combo_box_new (void)
 {
   return g_object_new (GTK_TYPE_COMBO_BOX, NULL);
@@ -1845,7 +1845,7 @@ gtk_combo_box_new (void)
  *
  * Returns: A new #GtkComboBox.
  */
-GtkWidget *
+GtkComboBox *
 gtk_combo_box_new_with_entry (void)
 {
   return g_object_new (GTK_TYPE_COMBO_BOX, "has-entry", TRUE, NULL);
@@ -1859,7 +1859,7 @@ gtk_combo_box_new_with_entry (void)
  *
  * Returns: A new #GtkComboBox.
  */
-GtkWidget *
+GtkComboBox *
 gtk_combo_box_new_with_model (GtkTreeModel *model)
 {
   GtkComboBox *combo_box;
@@ -1868,7 +1868,7 @@ gtk_combo_box_new_with_model (GtkTreeModel *model)
 
   combo_box = g_object_new (GTK_TYPE_COMBO_BOX, "model", model, NULL);
 
-  return GTK_WIDGET (combo_box);
+  return combo_box;
 }
 
 /**
@@ -1880,7 +1880,7 @@ gtk_combo_box_new_with_model (GtkTreeModel *model)
  *
  * Returns: A new #GtkComboBox
  */
-GtkWidget *
+GtkComboBox *
 gtk_combo_box_new_with_model_and_entry (GtkTreeModel *model)
 {
   return g_object_new (GTK_TYPE_COMBO_BOX,

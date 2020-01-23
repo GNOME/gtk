@@ -60,7 +60,7 @@ int
 main(int argc, char **argv)
 {
 	GtkWidget *window, *vbox;
-        GtkWidget *combo_box;
+        GtkComboBoxText *combo_box;
 	GtkWidget *hbox,*hscale;
 	GtkLabel *label;
 	GtkAdjustment *adjustment;
@@ -97,10 +97,10 @@ main(int argc, char **argv)
 
         combo_box = gtk_combo_box_text_new ();
 
-        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), "NEAREST");
-        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), "BILINEAR");
-        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), "TILES");
-        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), "HYPER");
+        gtk_combo_box_text_append_text (combo_box, "NEAREST");
+        gtk_combo_box_text_append_text (combo_box, "BILINEAR");
+        gtk_combo_box_text_append_text (combo_box, "TILES");
+        gtk_combo_box_text_append_text (combo_box, "HYPER");
 
         gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 1);
 
@@ -108,8 +108,8 @@ main(int argc, char **argv)
                           G_CALLBACK (set_interp_type),
                           NULL);
 
-        gtk_widget_set_halign (combo_box, GTK_ALIGN_START);
-	gtk_container_add (GTK_CONTAINER (vbox), combo_box);
+        gtk_widget_set_halign (GTK_WIDGET (combo_box), GTK_ALIGN_START);
+	gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (combo_box));
 
 	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
 	gtk_container_add (GTK_CONTAINER (vbox), hbox);

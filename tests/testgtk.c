@@ -95,7 +95,7 @@ build_option_menu (gchar           *items[],
 		   void           (*func)(GtkWidget *widget, gpointer data),
 		   gpointer         data)
 {
-  GtkWidget *omenu;
+  GtkComboBoxText *omenu;
   gint i;
 
   omenu = gtk_combo_box_text_new ();
@@ -103,11 +103,11 @@ build_option_menu (gchar           *items[],
 		    G_CALLBACK (func), data);
       
   for (i = 0; i < num_items; i++)
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (omenu), items[i]);
+      gtk_combo_box_text_append_text (omenu, items[i]);
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (omenu), history);
   
-  return omenu;
+  return GTK_WIDGET (omenu);
 }
 
 /*
@@ -2141,7 +2141,7 @@ create_entry (GtkWidget *widget)
       gtk_editable_select_region (GTK_EDITABLE (entry), 0, 5);
       gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (entry));
 
-      cb = GTK_COMBO_BOX_TEXT (gtk_combo_box_text_new_with_entry ());
+      cb = gtk_combo_box_text_new_with_entry ();
 
       gtk_combo_box_text_append_text (cb, "item0");
       gtk_combo_box_text_append_text (cb, "item0");
@@ -3467,7 +3467,7 @@ create_dialog (GtkWidget *widget)
 
 typedef struct
 {
-  GtkWidget *combo;
+  GtkComboBoxText *combo;
   GtkWidget *entry;
   GtkWidget *toplevel;
   GtkWidget *dialog_window;
@@ -3516,7 +3516,7 @@ screen_display_check (GtkWidget *widget, ScreenDisplaySelection *data)
             break;
         }
       if (!found)
-        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (data->combo), display_name);
+        gtk_combo_box_text_append_text (data->combo, display_name);
       new_display = display;
 
       gtk_window_set_display (GTK_WINDOW (data->toplevel), new_display);
@@ -3533,7 +3533,8 @@ screen_display_destroy_diag (GtkWidget *widget, GtkWidget *data)
 void
 create_display_screen (GtkWidget *widget)
 {
-  GtkWidget *grid, *frame, *window, *combo_dpy, *vbox;
+  GtkWidget *grid, *frame, *window, *vbox;
+  GtkComboBoxText *combo_dpy;
   GtkWidget *applyb, *cancelb;
   GtkLabel *label_dpy;
   GtkWidget *bbox;
@@ -3562,13 +3563,13 @@ create_display_screen (GtkWidget *widget)
 
   label_dpy = gtk_label_new ("move to another X display");
   combo_dpy = gtk_combo_box_text_new_with_entry ();
-  gtk_widget_set_hexpand (combo_dpy, TRUE);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_dpy), "diabolo:0.0");
+  gtk_widget_set_hexpand (GTK_WIDGET (combo_dpy), TRUE);
+  gtk_combo_box_text_append_text (combo_dpy, "diabolo:0.0");
   gtk_editable_set_text (GTK_EDITABLE (gtk_bin_get_child (GTK_BIN (combo_dpy))),
                          "<hostname>:<X Server Num>.<Screen Num>");
 
   gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label_dpy), 0, 0, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), combo_dpy, 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (combo_dpy), 0, 1, 1, 1);
 
   bbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_halign (bbox, GTK_ALIGN_END);
@@ -6017,7 +6018,7 @@ create_native_dialogs (GtkWidget *widget)
   GtkLabel *label;
   GtkWidget *show_button, *hide_button, *check_button;
   GtkFileChooserNative *native;
-  GtkWidget *combo;
+  GtkComboBoxText *combo;
 
   if (!window)
     {
@@ -6047,27 +6048,27 @@ create_native_dialogs (GtkWidget *widget)
 
       combo = gtk_combo_box_text_new ();
 
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Open");
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Save");
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Select Folder");
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Create Folder");
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Save as");
+      gtk_combo_box_text_append_text (combo, "Open");
+      gtk_combo_box_text_append_text (combo, "Save");
+      gtk_combo_box_text_append_text (combo, "Select Folder");
+      gtk_combo_box_text_append_text (combo, "Create Folder");
+      gtk_combo_box_text_append_text (combo, "Save as");
 
       g_signal_connect (combo, "changed",
                         G_CALLBACK (native_action_changed), native);
       gtk_combo_box_set_active (GTK_COMBO_BOX (combo), GTK_FILE_CHOOSER_ACTION_OPEN);
-      gtk_container_add (GTK_CONTAINER (box), combo);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (combo));
 
       combo = gtk_combo_box_text_new ();
 
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "No filters");
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Pattern filter");
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Mimetype filter");
+      gtk_combo_box_text_append_text (combo, "No filters");
+      gtk_combo_box_text_append_text (combo, "Pattern filter");
+      gtk_combo_box_text_append_text (combo, "Mimetype filter");
 
       g_signal_connect (combo, "changed",
                         G_CALLBACK (native_filter_changed), native);
       gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
-      gtk_container_add (GTK_CONTAINER (box), combo);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (combo));
 
       check_button = gtk_check_button_new_with_label ("Modal");
       g_signal_connect (check_button, "toggled",

@@ -297,7 +297,7 @@ struct _GtkFileChooserWidgetPrivate {
 
   GtkWidget *extra_and_filters;
   GtkWidget *filter_combo_hbox;
-  GtkWidget *filter_combo;
+  GtkComboBoxText *filter_combo;
   GtkWidget *preview_box;
   GtkLabel  *preview_label;
   GtkWidget *preview_widget;
@@ -3043,7 +3043,7 @@ operation_mode_set_enter_location (GtkFileChooserWidget *impl)
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "location");
   gtk_revealer_set_reveal_child (GTK_REVEALER (priv->browse_header_revealer), TRUE);
   location_bar_update (impl);
-  gtk_widget_set_sensitive (priv->filter_combo, TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET (priv->filter_combo), TRUE);
   location_mode_set (impl, LOCATION_MODE_FILENAME_ENTRY);
 }
 
@@ -3065,7 +3065,7 @@ operation_mode_set_browse (GtkFileChooserWidget *impl)
   gtk_revealer_set_transition_type (GTK_REVEALER (priv->browse_header_revealer),
                                     old_revealer_transition_type);
 
-  gtk_widget_set_sensitive (priv->filter_combo, TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET (priv->filter_combo), TRUE);
   g_object_notify (G_OBJECT (impl), "subtitle");
 }
 
@@ -3090,7 +3090,7 @@ operation_mode_set_search (GtkFileChooserWidget *impl)
   gtk_revealer_set_reveal_child (GTK_REVEALER (priv->browse_header_revealer), TRUE);
   location_bar_update (impl);
   search_setup_widgets (impl);
-  gtk_widget_set_sensitive (priv->filter_combo, FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (priv->filter_combo), FALSE);
 }
 
 static void
@@ -3120,7 +3120,7 @@ operation_mode_set_recent (GtkFileChooserWidget *impl)
   gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), file);
   g_object_notify (G_OBJECT (impl), "subtitle");
   g_object_unref (file);
-  gtk_widget_set_sensitive (priv->filter_combo, TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET (priv->filter_combo), TRUE);
 }
 
 static void
@@ -3136,7 +3136,7 @@ operation_mode_set_other_locations (GtkFileChooserWidget *impl)
   search_stop_searching (impl, TRUE);
   recent_clear_model (impl, TRUE);
   search_clear_model (impl, TRUE);
-  gtk_widget_set_sensitive (priv->filter_combo, FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (priv->filter_combo), FALSE);
 }
 
 static void
@@ -6081,7 +6081,7 @@ gtk_file_chooser_widget_add_filter (GtkFileChooser *chooser,
   if (!name)
     name = "Untitled filter";   /* Place-holder, doesn't need to be marked for translation */
 
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (priv->filter_combo), name);
+  gtk_combo_box_text_append_text (priv->filter_combo, name);
 
   if (!g_slist_find (priv->filters, priv->current_filter))
     set_current_filter (impl, filter);
@@ -8667,7 +8667,7 @@ gtk_file_chooser_widget_add_choice (GtkFileChooser  *chooser,
   if (options)
     {
       GtkWidget *box;
-      GtkWidget *combo;
+      GtkComboBoxText *combo;
       int i;
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
@@ -8675,10 +8675,10 @@ gtk_file_chooser_widget_add_choice (GtkFileChooser  *chooser,
 
       combo = gtk_combo_box_text_new ();
       g_hash_table_insert (priv->choices, g_strdup (id), combo);
-      gtk_container_add (GTK_CONTAINER (box), combo);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (combo));
 
       for (i = 0; options[i]; i++)
-        gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo),
+        gtk_combo_box_text_append (combo,
                                    options[i], option_labels[i]);
 
       widget = box;

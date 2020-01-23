@@ -72,7 +72,8 @@ main (int    argc,
 {
   GtkWidget *window, *button, *grid, *notebook;
   GtkEntry *entry;
-  GtkWidget *vbox, *hbox, *grid_hbox, *spin, *spin2, *toggle, *combo, *image;
+  GtkWidget *vbox, *hbox, *grid_hbox, *spin, *spin2, *toggle, *image;
+  GtkComboBoxText *combo;
   GtkLabel *label;
   GtkAdjustment *adjustment;
   int i, j;
@@ -145,11 +146,11 @@ main (int    argc,
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
   combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), baseline_pos_str[0]);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), baseline_pos_str[1]);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), baseline_pos_str[2]);
+  gtk_combo_box_text_append_text (combo, baseline_pos_str[0]);
+  gtk_combo_box_text_append_text (combo, baseline_pos_str[1]);
+  gtk_combo_box_text_append_text (combo, baseline_pos_str[2]);
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 1);
-  gtk_container_add (GTK_CONTAINER (hbox), combo);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (combo));
 
   for (j = 0; j < 2; j++)
     {
@@ -306,13 +307,13 @@ main (int    argc,
   gtk_container_add (GTK_CONTAINER (hbox), toggle);
 
   combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), baseline_pos_str[0]);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), baseline_pos_str[1]);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), baseline_pos_str[2]);
+  gtk_combo_box_text_append_text (combo, baseline_pos_str[0]);
+  gtk_combo_box_text_append_text (combo, baseline_pos_str[1]);
+  gtk_combo_box_text_append_text (combo, baseline_pos_str[2]);
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 1);
   g_signal_connect (G_OBJECT (combo), "changed",
 		    G_CALLBACK (baseline_position_changed), grid_hbox);
-  gtk_container_add (GTK_CONTAINER (hbox), combo);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (combo));
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook),

@@ -66,7 +66,7 @@ struct _GtkCellRendererComboPrivate
 {
   GtkTreeModel *model;
 
-  GtkWidget *combo;
+  GtkComboBox *combo;
 
   gboolean has_entry;
 
@@ -446,7 +446,7 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
 {
   GtkCellRendererCombo *cell_combo = GTK_CELL_RENDERER_COMBO (cell);
   GtkCellRendererComboPrivate *priv = gtk_cell_renderer_combo_get_instance_private (cell_combo);
-  GtkWidget *combo;
+  GtkComboBox *combo;
   SearchData search_data;
   gboolean editable;
   gchar *text;
@@ -478,7 +478,7 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
 
       combo = gtk_combo_box_new ();
       if (priv->model)
-        gtk_combo_box_set_model (GTK_COMBO_BOX (combo), priv->model);
+        gtk_combo_box_set_model (combo, priv->model);
 
       gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), cell, TRUE);
       gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), 
@@ -492,7 +492,7 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
           search_data.found = FALSE;
           gtk_tree_model_foreach (priv->model, find_text, &search_data);
           if (search_data.found)
-            gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combo),
+            gtk_combo_box_set_active_iter (combo,
                                            &(search_data.iter));
         }
     }
@@ -502,7 +502,7 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
 			  I_(GTK_CELL_RENDERER_COMBO_PATH),
 			  g_strdup (path), g_free);
 
-  gtk_widget_show (combo);
+  gtk_widget_show (GTK_WIDGET (combo));
 
   g_signal_connect (GTK_CELL_EDITABLE (combo), "editing-done",
 		    G_CALLBACK (gtk_cell_renderer_combo_editing_done),
