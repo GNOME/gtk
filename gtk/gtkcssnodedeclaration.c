@@ -23,7 +23,6 @@
 
 struct _GtkCssNodeDeclaration {
   guint refcount;
-  GType type;
   const /* interned */ char *name;
   const /* interned */ char *id;
   GtkStateFlags state;
@@ -98,7 +97,6 @@ gtk_css_node_declaration_new (void)
 {
   static GtkCssNodeDeclaration empty = {
     1, /* need to own a ref ourselves so the copy-on-write path kicks in when people change things */
-    0,
     NULL,
     NULL,
     0,
@@ -124,25 +122,6 @@ gtk_css_node_declaration_unref (GtkCssNodeDeclaration *decl)
     return;
 
   g_free (decl);
-}
-
-gboolean
-gtk_css_node_declaration_set_type (GtkCssNodeDeclaration **decl,
-                                   GType                   type)
-{
-  if ((*decl)->type == type)
-    return FALSE;
-
-  gtk_css_node_declaration_make_writable (decl);
-  (*decl)->type = type;
-
-  return TRUE;
-}
-
-GType
-gtk_css_node_declaration_get_type (const GtkCssNodeDeclaration *decl)
-{
-  return decl->type;
 }
 
 gboolean
@@ -351,8 +330,7 @@ gtk_css_node_declaration_hash (gconstpointer elem)
   GQuark *classes;
   guint hash, i;
   
-  hash = (guint) decl->type;
-  hash ^= GPOINTER_TO_UINT (decl->name);
+  hash = GPOINTER_TO_UINT (decl->name);
   hash <<= 5;
   hash ^= GPOINTER_TO_UINT (decl->id);
 
@@ -379,9 +357,6 @@ gtk_css_node_declaration_equal (gconstpointer elem1,
 
   if (decl1 == decl2)
     return TRUE;
-
-  if (decl1->type != decl2->type)
-    return FALSE;
 
   if (decl1->name != decl2->name)
     return FALSE;
@@ -429,7 +404,7 @@ gtk_css_node_declaration_print (const GtkCssNodeDeclaration *decl,
   if (decl->name)
     g_string_append (string, decl->name);
   else
-    g_string_append (string, g_type_name (decl->type));
+    g_string_append (string, "*");
 
   if (decl->id)
     {

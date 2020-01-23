@@ -27,9 +27,6 @@ GtkCssNodeDeclaration * gtk_css_node_declaration_new                    (void);
 GtkCssNodeDeclaration * gtk_css_node_declaration_ref                    (GtkCssNodeDeclaration         *decl);
 void                    gtk_css_node_declaration_unref                  (GtkCssNodeDeclaration         *decl);
 
-gboolean                gtk_css_node_declaration_set_type               (GtkCssNodeDeclaration        **decl,
-                                                                         GType                          type);
-GType                   gtk_css_node_declaration_get_type               (const GtkCssNodeDeclaration   *decl);
 gboolean                gtk_css_node_declaration_set_name               (GtkCssNodeDeclaration        **decl,
                                                                          /*interned*/ const char       *name);
 /*interned*/ const char*gtk_css_node_declaration_get_name               (const GtkCssNodeDeclaration   *decl);
