@@ -43,7 +43,7 @@
  * an image from a file, and then display that, there’s a convenience function
  * to do this:
  * |[<!-- language="C" -->
- *   GtkWidget *widget;
+ *   GtkPicture *widget;
  *   widget = gtk_picture_new_for_filename ("myfile.png");
  * ]|
  * If the file isn’t loaded successfully, the picture will contain a
@@ -381,7 +381,7 @@ gtk_picture_init (GtkPicture *self)
  *
  * Returns: a newly created #GtkPicture widget.
  **/
-GtkWidget*
+GtkPicture*
 gtk_picture_new (void)
 {
   return g_object_new (GTK_TYPE_PICTURE, NULL);
@@ -398,7 +398,7 @@ gtk_picture_new (void)
  *
  * Returns: a new #GtkPicture
  **/
-GtkWidget*
+GtkPicture*
 gtk_picture_new_for_paintable (GdkPaintable *paintable)
 {
   g_return_val_if_fail (paintable == NULL || GDK_IS_PAINTABLE (paintable), NULL);
@@ -421,10 +421,10 @@ gtk_picture_new_for_paintable (GdkPaintable *paintable)
  *
  * Returns: a new #GtkPicture
  **/
-GtkWidget*
+GtkPicture*
 gtk_picture_new_for_pixbuf (GdkPixbuf *pixbuf)
 {
-  GtkWidget *result;
+  GtkPicture *result;
   GdkPaintable *paintable;
 
   g_return_val_if_fail (pixbuf == NULL || GDK_IS_PIXBUF (pixbuf), NULL);
@@ -455,7 +455,7 @@ gtk_picture_new_for_pixbuf (GdkPixbuf *pixbuf)
  *
  * Returns: a new #GtkPicture
  **/
-GtkWidget*
+GtkPicture*
 gtk_picture_new_for_file (GFile *file)
 {
   g_return_val_if_fail (file == NULL || G_IS_FILE (file), NULL);
@@ -476,10 +476,10 @@ gtk_picture_new_for_file (GFile *file)
  *
  * Returns: a new #GtkPicture
  **/
-GtkWidget*
+GtkPicture*
 gtk_picture_new_for_filename (const char *filename)
 {
-  GtkWidget *result;
+  GtkPicture *result;
   GFile *file;
 
   if (filename)
@@ -506,10 +506,10 @@ gtk_picture_new_for_filename (const char *filename)
  *
  * Returns: a new #GtkPicture
  **/
-GtkWidget *
+GtkPicture *
 gtk_picture_new_for_resource (const char *resource_path)
 {
-  GtkWidget *result;
+  GtkPicture *result;
   GFile *file;
 
   if (resource_path)

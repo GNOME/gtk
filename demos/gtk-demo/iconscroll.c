@@ -107,7 +107,7 @@ populate_text (gboolean hilight)
 static void
 populate_image (void)
 {
-  GtkWidget *image;
+  GtkPicture *image;
 
   if (!content)
     {
@@ -118,14 +118,14 @@ populate_image (void)
     }
 
   image = gtk_picture_new_for_resource ("/sliding_puzzle/portland-rose.jpg");
-  gtk_picture_set_can_shrink (GTK_PICTURE (image), FALSE);
+  gtk_picture_set_can_shrink (image, FALSE);
 
   hincrement = 5;
 
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow),
 		                  GTK_POLICY_AUTOMATIC,
 		                  GTK_POLICY_AUTOMATIC);
-  gtk_container_add (GTK_CONTAINER (scrolledwindow), image);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow), GTK_WIDGET (image));
 }
 
 static void

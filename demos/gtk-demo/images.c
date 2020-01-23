@@ -24,12 +24,9 @@ static GInputStream * image_stream = NULL;
 
 static void
 progressive_prepared_callback (GdkPixbufLoader *loader,
-                               gpointer         data)
+                               GtkPicture      *picture)
 {
   GdkPixbuf *pixbuf;
-  GtkWidget *picture;
-
-  picture = GTK_WIDGET (data);
 
   pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
 
@@ -38,7 +35,7 @@ progressive_prepared_callback (GdkPixbufLoader *loader,
    */
   gdk_pixbuf_fill (pixbuf, 0xaaaaaaff);
 
-  gtk_picture_set_pixbuf (GTK_PICTURE (picture), pixbuf);
+  gtk_picture_set_pixbuf (picture, pixbuf);
 }
 
 static void
@@ -47,15 +44,12 @@ progressive_updated_callback (GdkPixbufLoader *loader,
                               gint                 y,
                               gint                 width,
                               gint                 height,
-                              gpointer     data)
+                              GtkPicture          *picture)
 {
-  GtkWidget *picture;
   GdkPixbuf *pixbuf;
 
-  picture = GTK_WIDGET (data);
-
   pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
-  gtk_picture_set_pixbuf (GTK_PICTURE (picture), pixbuf);
+  gtk_picture_set_pixbuf (picture, pixbuf);
 }
 
 static gint
@@ -252,7 +246,7 @@ progressive_timeout (gpointer data)
 }
 
 static void
-start_progressive_loading (GtkWidget *picture)
+start_progressive_loading (GtkPicture *picture)
 {
   /* This is obviously totally contrived (we slow down loading
    * on purpose to show how incremental loading works).
@@ -323,7 +317,7 @@ do_images (GtkWidget *do_widget)
   GtkWidget *hbox;
   GtkWidget *base_vbox;
   GtkWidget *image;
-  GtkWidget *picture;
+  GtkPicture *picture;
   GtkLabel *label;
   GtkWidget *button;
   GdkPaintable *paintable;
@@ -383,7 +377,7 @@ do_images (GtkWidget *do_widget)
 
       picture = gtk_picture_new_for_resource ("/images/floppybuddy.gif");
 
-      gtk_container_add (GTK_CONTAINER (frame), picture);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (picture));
 
       /* Symbolic icon */
 
@@ -424,7 +418,7 @@ do_images (GtkWidget *do_widget)
        * will create the pixbuf and fill it in.
        */
       picture = gtk_picture_new ();
-      gtk_container_add (GTK_CONTAINER (frame), picture);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (picture));
 
       start_progressive_loading (picture);
 
@@ -458,9 +452,9 @@ do_images (GtkWidget *do_widget)
 
       paintable = gtk_widget_paintable_new (do_widget);
       picture = gtk_picture_new_for_paintable (paintable);
-      gtk_widget_set_size_request (picture, 100, 100);
-      gtk_widget_set_valign (picture, GTK_ALIGN_START);
-      gtk_container_add (GTK_CONTAINER (vbox), picture);
+      gtk_widget_set_size_request (GTK_WIDGET (picture), 100, 100);
+      gtk_widget_set_valign (GTK_WIDGET (picture), GTK_ALIGN_START);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (picture));
 
       /* Sensitivity control */
       button = gtk_toggle_button_new_with_mnemonic ("_Insensitive");

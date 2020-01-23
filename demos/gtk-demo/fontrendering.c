@@ -8,7 +8,7 @@
 static GtkWidget *window = NULL;
 static GtkWidget *font_button = NULL;
 static GtkWidget *entry = NULL;
-static GtkWidget *image = NULL;
+static GtkPicture *image = NULL;
 static GtkWidget *hinting = NULL;
 static GtkWidget *hint_metrics = NULL;
 static GtkWidget *up_button = NULL;
@@ -46,7 +46,7 @@ update_image (void)
   int i;
 
   if (!context)
-    context = gtk_widget_create_pango_context (image);
+    context = gtk_widget_create_pango_context (GTK_WIDGET (image));
 
   text = gtk_editable_get_text (GTK_EDITABLE (entry));
   desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (font_button));
@@ -210,7 +210,7 @@ update_image (void)
     }
 
 
-  gtk_picture_set_pixbuf (GTK_PICTURE (image), pixbuf2);
+  gtk_picture_set_pixbuf (image, pixbuf2);
 
   g_object_unref (pixbuf2);
 
@@ -258,7 +258,7 @@ do_fontrendering (GtkWidget *do_widget)
       up_button = GTK_WIDGET (gtk_builder_get_object (builder, "up_button"));
       down_button = GTK_WIDGET (gtk_builder_get_object (builder, "down_button"));
       entry = GTK_WIDGET (gtk_builder_get_object (builder, "entry"));
-      image = GTK_WIDGET (gtk_builder_get_object (builder, "image"));
+      image = GTK_PICTURE (gtk_builder_get_object (builder, "image"));
       hinting = GTK_WIDGET (gtk_builder_get_object (builder, "hinting"));
       hint_metrics = GTK_WIDGET (gtk_builder_get_object (builder, "hint_metrics"));
       text_radio = GTK_WIDGET (gtk_builder_get_object (builder, "text_radio"));

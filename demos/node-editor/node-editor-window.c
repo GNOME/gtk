@@ -40,7 +40,7 @@ struct _NodeEditorWindow
 {
   GtkApplicationWindow parent;
 
-  GtkWidget *picture;
+  GtkPicture *picture;
   GtkWidget *text_view;
   GtkTextBuffer *text_buffer;
   GtkTextTagTable *tag_table;
@@ -185,7 +185,7 @@ text_changed (GtkTextBuffer    *buffer,
       gtk_snapshot_append_node (snapshot, node);
       gsk_render_node_unref (node);
       paintable = gtk_snapshot_free_to_paintable (snapshot, &bounds.size);
-      gtk_picture_set_paintable (GTK_PICTURE (self->picture), paintable);
+      gtk_picture_set_paintable (self->picture, paintable);
       for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->renderers)); i++)
         {
           gpointer item = g_list_model_get_item (G_LIST_MODEL (self->renderers), i);
@@ -196,7 +196,7 @@ text_changed (GtkTextBuffer    *buffer,
     }
   else
     {
-      gtk_picture_set_paintable (GTK_PICTURE (self->picture), NULL);
+      gtk_picture_set_paintable (self->picture, NULL);
     }
 
   GtkTextIter iter;
@@ -463,7 +463,7 @@ create_texture (NodeEditorWindow *self)
   GskRenderNode *node;
   GdkTexture *texture;
 
-  paintable = gtk_picture_get_paintable (GTK_PICTURE (self->picture));
+  paintable = gtk_picture_get_paintable (self->picture);
   if (paintable == NULL ||
       gdk_paintable_get_intrinsic_width (paintable) <= 0 ||
       gdk_paintable_get_intrinsic_height (paintable) <= 0)
@@ -491,7 +491,7 @@ create_cairo_texture (NodeEditorWindow *self)
   GdkTexture *texture;
   GdkSurface *surface;
 
-  paintable = gtk_picture_get_paintable (GTK_PICTURE (self->picture));
+  paintable = gtk_picture_get_paintable (self->picture);
   if (paintable == NULL ||
       gdk_paintable_get_intrinsic_width (paintable) <= 0 ||
       gdk_paintable_get_intrinsic_height (paintable) <= 0)
@@ -665,7 +665,7 @@ node_editor_window_add_renderer (NodeEditorWindow *self,
       return;
     }
 
-  paintable = gtk_renderer_paintable_new (renderer, gtk_picture_get_paintable (GTK_PICTURE (self->picture)));
+  paintable = gtk_renderer_paintable_new (renderer, gtk_picture_get_paintable (self->picture));
   g_object_set_data_full (G_OBJECT (paintable), "description", g_strdup (description), g_free);
   g_clear_object (&renderer);
 
@@ -757,7 +757,8 @@ node_editor_window_create_renderer_widget (gpointer item,
                                            gpointer user_data)
 {
   GdkPaintable *paintable = item;
-  GtkWidget *box, *picture;
+  GtkWidget *box;
+  GtkPicture *picture;
   GtkLabel *label;
   GtkWidget *row;
 
@@ -769,9 +770,9 @@ node_editor_window_create_renderer_widget (gpointer item,
 
   picture = gtk_picture_new_for_paintable (paintable);
   /* don't ever scale up, we want to be as accurate as possible */
-  gtk_widget_set_halign (picture, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (picture, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (box), picture);
+  gtk_widget_set_halign (GTK_WIDGET (picture), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (picture), GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (picture));
 
   row = gtk_list_box_row_new ();
   gtk_container_add (GTK_CONTAINER (row), box);
