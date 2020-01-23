@@ -37,7 +37,7 @@ iconview:drop(active) { box-shadow: none; }
 
 iconview dndtarget:drop(active) { border-style: solid; border-width: 1px; border-color: #030c17; }
 
-.rubberband, rubberband, flowbox rubberband, treeview.view rubberband, .content-view rubberband, .content-view .rubberband { border: 1px solid #0f3b71; background-color: rgba(15, 59, 113, 0.2); }
+rubberband, flowbox rubberband, treeview.view rubberband, .content-view rubberband { border: 1px solid #0f3b71; background-color: rgba(15, 59, 113, 0.2); }
 
 flowbox flowboxchild { padding: 3px; }
 
@@ -543,7 +543,7 @@ combobox arrow { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); min-heig
 combobox:drop(active) { box-shadow: none; }
 
 /************ Toolbars * */
-toolbar, .inline-toolbar, .location-bar, searchbar > revealer > box { padding: 4px; background-color: #353535; }
+toolbar, .inline-toolbar, searchbar > revealer > box { padding: 4px; background-color: #353535; }
 
 toolbar { padding: 4px 3px 3px 4px; }
 
@@ -561,15 +561,13 @@ toolbar:not(.inline-toolbar):not(.osd) > *:not(.toggle):not(.popup) > * { margin
 
 .inline-toolbar { padding: 3px; border-width: 0 1px 1px; border-radius: 0  0 5px 5px; }
 
-.location-bar { border-width: 0 0 1px; padding: 0px; }
-
 searchbar { padding: 0px; }
 
 searchbar > revealer > box { padding: 6px; border-width: 0 0 1px; }
 
-.inline-toolbar, .location-bar, searchbar > revealer > box { border-style: solid; border-color: #1b1b1b; background-color: #2d2d2d; }
+.inline-toolbar, searchbar > revealer > box { border-style: solid; border-color: #1b1b1b; background-color: #2d2d2d; }
 
-.inline-toolbar:backdrop, .location-bar:backdrop, searchbar > revealer > box:backdrop { border-color: #202020; background-color: #2e2e2e; box-shadow: none; transition: 200ms ease-out; }
+.inline-toolbar:backdrop, searchbar > revealer > box:backdrop { border-color: #202020; background-color: #2e2e2e; box-shadow: none; transition: 200ms ease-out; }
 
 /*************** Header bars * */
 .titlebar:not(headerbar), headerbar { padding: 0 6px; min-height: 46px; border-width: 0 0 1px; border-style: solid; border-color: #070707; border-radius: 0; background: #1b1b1b linear-gradient(to top, #262626, #2b2b2b); box-shadow: inset 0 1px rgba(238, 238, 236, 0.07); /* Darken switchbuttons for headerbars. issue #1588 */ /* hide the close button separator */ }

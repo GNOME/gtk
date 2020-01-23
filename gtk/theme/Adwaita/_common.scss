@@ -132,7 +132,6 @@ iconview {
   }
 }
 
-.rubberband,
 rubberband {
   border: 1px solid darken($selected_bg_color, 10%);
   background-color: transparentize(darken($selected_bg_color, 10%), 0.8);
@@ -4525,7 +4524,7 @@ colorchooser .popover.osd { border-radius: 5px; }
 
   &:backdrop { background-color: darken($bg_color,7%); }
 
-  rubberband, .rubberband { @extend rubberband; }
+  rubberband { @extend rubberband; }
 }
 
 .scale-popup {
