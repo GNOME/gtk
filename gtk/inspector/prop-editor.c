@@ -351,11 +351,11 @@ intern_string_modified (GtkEntry *entry, ObjectProperty *p)
 {
   const gchar *s;
 
-  s = g_intern_string (gtk_editable_get_text (GTK_EDITABLE (entry)));
+  s = gtk_editable_get_text (GTK_EDITABLE (entry));
   if (g_str_equal (p->spec->name, "id"))
-    gtk_css_node_set_id (GTK_CSS_NODE (p->obj), s);
+    gtk_css_node_set_id (GTK_CSS_NODE (p->obj), g_quark_from_string (s));
   else if (g_str_equal (p->spec->name, "name"))
-    gtk_css_node_set_name (GTK_CSS_NODE (p->obj), s);
+    gtk_css_node_set_name (GTK_CSS_NODE (p->obj), g_quark_from_string (s));
 }
 
 static void

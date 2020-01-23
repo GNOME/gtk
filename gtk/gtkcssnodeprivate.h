@@ -114,11 +114,11 @@ void                    gtk_css_node_set_visible        (GtkCssNode            *
 gboolean                gtk_css_node_get_visible        (GtkCssNode            *cssnode) G_GNUC_PURE;
 
 void                    gtk_css_node_set_name           (GtkCssNode            *cssnode,
-                                                         /*interned*/const char*name);
-/*interned*/const char *gtk_css_node_get_name           (GtkCssNode            *cssnode) G_GNUC_PURE;
+                                                         GQuark                 name);
+GQuark                  gtk_css_node_get_name           (GtkCssNode            *cssnode) G_GNUC_PURE;
 void                    gtk_css_node_set_id             (GtkCssNode            *cssnode,
-                                                         /*interned*/const char*id);
-/*interned*/const char *gtk_css_node_get_id             (GtkCssNode            *cssnode) G_GNUC_PURE;
+                                                         GQuark                 id);
+GQuark                  gtk_css_node_get_id             (GtkCssNode            *cssnode) G_GNUC_PURE;
 void                    gtk_css_node_set_state          (GtkCssNode            *cssnode,
                                                          GtkStateFlags          state_flags);
 GtkStateFlags           gtk_css_node_get_state          (GtkCssNode            *cssnode) G_GNUC_PURE;

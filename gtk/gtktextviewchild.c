@@ -306,27 +306,27 @@ gtk_text_view_child_constructed (GObject *object)
   switch (self->window_type)
     {
     case GTK_TEXT_WINDOW_LEFT:
-      gtk_css_node_set_name (css_node, "border");
+      gtk_css_node_set_name (css_node, g_quark_from_static_string ("border"));
       gtk_css_node_add_class (css_node, g_quark_from_static_string (GTK_STYLE_CLASS_LEFT));
       break;
 
     case GTK_TEXT_WINDOW_RIGHT:
-      gtk_css_node_set_name (css_node, "border");
+      gtk_css_node_set_name (css_node, g_quark_from_static_string ("border"));
       gtk_css_node_add_class (css_node, g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT));
       break;
 
     case GTK_TEXT_WINDOW_TOP:
-      gtk_css_node_set_name (css_node, "border");
+      gtk_css_node_set_name (css_node, g_quark_from_static_string ("border"));
       gtk_css_node_add_class (css_node, g_quark_from_static_string (GTK_STYLE_CLASS_TOP));
       break;
 
     case GTK_TEXT_WINDOW_BOTTOM:
-      gtk_css_node_set_name (css_node, "border");
+      gtk_css_node_set_name (css_node, g_quark_from_static_string ("border"));
       gtk_css_node_add_class (css_node, g_quark_from_static_string (GTK_STYLE_CLASS_BOTTOM));
       break;
 
     case GTK_TEXT_WINDOW_TEXT:
-      gtk_css_node_set_name (css_node, "text");
+      gtk_css_node_set_name (css_node, g_quark_from_static_string ("text"));
       break;
 
     case GTK_TEXT_WINDOW_WIDGET:

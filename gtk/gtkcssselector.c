@@ -94,7 +94,7 @@ union _GtkCssSelector
   const GtkCssSelectorClass     *class;         /* type of check this selector does */
   struct {
     const GtkCssSelectorClass   *class;
-    const char                  *name;          /* interned */
+    GQuark                       name;
   }                              id;
   struct {
     const GtkCssSelectorClass   *class;
@@ -102,7 +102,7 @@ union _GtkCssSelector
   }                              style_class;
   struct {
     const GtkCssSelectorClass   *class;
-    const char                  *name;          /* interned */
+    GQuark                       name;
   }                              name;
   struct {
     const GtkCssSelectorClass   *class;
@@ -597,7 +597,7 @@ static void
 print_name (const GtkCssSelector *selector,
             GString              *string)
 {
-  g_string_append (string, selector->name.name);
+  g_string_append (string, g_quark_to_string (selector->name.name));
 }
 
 static gboolean
@@ -610,15 +610,14 @@ match_name (const GtkCssSelector *selector,
 static guint
 hash_name (const GtkCssSelector *a)
 {
-  return g_str_hash (a->name.name);
+  return a->name.name;
 }
 
 static int
 comp_name (const GtkCssSelector *a,
            const GtkCssSelector *b)
 {
-  return strcmp (a->name.name,
-		 b->name.name);
+  return a->name.name - b->name.name;
 }
 
 DEFINE_SIMPLE_SELECTOR(name, NAME, print_name, match_name, hash_name, comp_name, FALSE, FALSE, TRUE, FALSE)
@@ -667,7 +666,7 @@ print_id (const GtkCssSelector *selector,
           GString              *string)
 {
   g_string_append_c (string, '#');
-  g_string_append (string, selector->id.name);
+  g_string_append (string, g_quark_to_string (selector->id.name));
 }
 
 static gboolean
@@ -680,19 +679,14 @@ match_id (const GtkCssSelector *selector,
 static guint
 hash_id (const GtkCssSelector *a)
 {
-  return GPOINTER_TO_UINT (a->id.name);
+  return a->id.name;
 }
 
 static int
 comp_id (const GtkCssSelector *a,
 	 const GtkCssSelector *b)
 {
-  if (a->id.name < b->id.name)
-    return -1;
-  else if (a->id.name > b->id.name)
-    return 1;
-  else
-    return 0;
+  return a->id.name - b->id.name;
 }
 
 DEFINE_SIMPLE_SELECTOR(id, ID, print_id, match_id, hash_id, comp_id, TRUE, FALSE, FALSE, FALSE)
@@ -1432,13 +1426,13 @@ gtk_css_selector_parse_selector_pseudo_class (GtkCssParser   *parser,
               else if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
                 {
                   selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NOT_NAME, selector);
-                  selector->name.name = g_intern_string (token->string.string);
+                  selector->name.name = g_quark_from_string (token->string.string);
                   gtk_css_parser_consume_token (parser);
                 }
               else if (gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_ID))
                 {
                   selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NOT_ID, selector);
-                  selector->id.name = g_intern_string (token->string.string);
+                  selector->id.name = g_quark_from_string (token->string.string);
                   gtk_css_parser_consume_token (parser);
                 }
               else if (gtk_css_token_is_delim (token, '.'))
@@ -1564,13 +1558,13 @@ gtk_css_selector_parse_simple_selector (GtkCssParser   *parser,
       else if (!parsed_something && gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
         {
           selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NAME, selector);
-          selector->name.name = g_intern_string (token->string.string);
+          selector->name.name = g_quark_from_string (token->string.string);
           gtk_css_parser_consume_token (parser);
         }
       else if (gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_ID))
         {
           selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_ID, selector);
-          selector->id.name = g_intern_string (token->string.string);
+          selector->id.name = g_quark_from_string (token->string.string);
           gtk_css_parser_consume_token (parser);
         }
       else if (gtk_css_token_is_delim (token, '.'))
