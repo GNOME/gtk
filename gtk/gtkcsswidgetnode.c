@@ -107,18 +107,6 @@ gtk_css_widget_node_validate (GtkCssNode *node)
   gtk_css_style_change_finish (&change);
 }
 
-static gboolean
-gtk_css_widget_node_init_matcher (GtkCssNode     *node,
-                                  GtkCssMatcher  *matcher)
-{
-  GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
-
-  if (widget_node->widget == NULL)
-    return FALSE;
-
-  return GTK_CSS_NODE_CLASS (gtk_css_widget_node_parent_class)->init_matcher (node, matcher);
-}
-
 static GtkStyleProvider *
 gtk_css_widget_node_get_style_provider (GtkCssNode *node)
 {
@@ -162,7 +150,6 @@ gtk_css_widget_node_class_init (GtkCssWidgetNodeClass *klass)
   node_class->validate = gtk_css_widget_node_validate;
   node_class->queue_validate = gtk_css_widget_node_queue_validate;
   node_class->dequeue_validate = gtk_css_widget_node_dequeue_validate;
-  node_class->init_matcher = gtk_css_widget_node_init_matcher;
   node_class->get_style_provider = gtk_css_widget_node_get_style_provider;
   node_class->get_frame_clock = gtk_css_widget_node_get_frame_clock;
 }
