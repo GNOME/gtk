@@ -297,17 +297,25 @@ gtk_application_startup (GApplication *g_application)
 {
   GtkApplication *application = GTK_APPLICATION (g_application);
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+  gint64 before = g_get_monotonic_time ();
+  gint64 before2;
 
   G_APPLICATION_CLASS (gtk_application_parent_class)->startup (g_application);
 
   gtk_action_muxer_insert (priv->muxer, "app", G_ACTION_GROUP (application));
 
+  before2 = g_get_monotonic_time ();
   gtk_init ();
+  if (gdk_profiler_is_running ())
+    gdk_profiler_add_mark (before2 * 1000, (g_get_monotonic_time () - before2) * 1000, "gtk init", NULL);
 
   priv->impl = gtk_application_impl_new (application, gdk_display_get_default ());
   gtk_application_impl_startup (priv->impl, priv->register_session);
 
   gtk_application_load_resources (application);
+
+  if (gdk_profiler_is_running ())
+    gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "gtk application startup", NULL);
 }
 
 static void
