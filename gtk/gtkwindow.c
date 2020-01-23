@@ -6681,6 +6681,7 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *menuitem;
+  GtkSeparator *separator;
   GdkSurfaceState state;
   gboolean maximized, minimized;
   GtkWidget *box;
@@ -6756,8 +6757,8 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
                     G_CALLBACK (maximize_window_clicked), window);
   gtk_container_add (GTK_CONTAINER (box), menuitem);
 
-  menuitem = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (separator));
 
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem,
@@ -6772,8 +6773,8 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
                     G_CALLBACK (ontop_window_clicked), window);
   gtk_container_add (GTK_CONTAINER (box), menuitem);
 
-  menuitem = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (separator));
 
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem, "text", _("Close"), NULL);

@@ -127,8 +127,8 @@ struct _GtkHeaderBarPrivate
   GtkWidget *titlebar_start_box;
   GtkWidget *titlebar_end_box;
 
-  GtkWidget *titlebar_start_separator;
-  GtkWidget *titlebar_end_separator;
+  GtkSeparator *titlebar_start_separator;
+  GtkSeparator *titlebar_end_separator;
 
   GtkWidget *titlebar_icon;
 
@@ -289,10 +289,10 @@ _gtk_header_bar_update_separator_visibility (GtkHeaderBar *bar)
   g_list_free (children);
 
   if (priv->titlebar_start_separator != NULL)
-    gtk_widget_set_visible (priv->titlebar_start_separator, have_visible_at_start);
+    gtk_widget_set_visible (GTK_WIDGET (priv->titlebar_start_separator), have_visible_at_start);
 
   if (priv->titlebar_end_separator != NULL)
-    gtk_widget_set_visible (priv->titlebar_end_separator, have_visible_at_end);
+    gtk_widget_set_visible (GTK_WIDGET (priv->titlebar_end_separator), have_visible_at_end);
 }
 
 void
@@ -363,7 +363,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
       for (i = 0; i < 2; i++)
         {
           GtkWidget *box;
-          GtkWidget *separator;
+          GtkSeparator *separator;
           int n_children = 0;
 
           if (tokens[i] == NULL)
@@ -372,7 +372,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
           t = g_strsplit (tokens[i], ",", -1);
 
           separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-          gtk_style_context_add_class (gtk_widget_get_style_context (separator), "titlebutton");
+          gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (separator)), "titlebutton");
 
           box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
@@ -499,9 +499,9 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
               continue;
             }
 
-          gtk_container_add (GTK_CONTAINER (box), separator);
+          gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (separator));
           if (i == 1)
-            gtk_box_reorder_child_after (GTK_BOX (box), separator, NULL);
+            gtk_box_reorder_child_after (GTK_BOX (box), GTK_WIDGET (separator), NULL);
 
           if (i == 0)
             gtk_style_context_add_class (gtk_widget_get_style_context (box), GTK_STYLE_CLASS_LEFT);

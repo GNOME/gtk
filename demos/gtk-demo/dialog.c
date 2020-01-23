@@ -129,7 +129,7 @@ do_dialog (GtkWidget *do_widget)
                         G_CALLBACK (message_dialog_clicked), NULL);
       gtk_container_add (GTK_CONTAINER (hbox), button);
 
-      gtk_container_add (GTK_CONTAINER (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_HORIZONTAL)));
 
       /* Interactive dialog*/
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);

@@ -608,7 +608,7 @@ create_file_button (void)
   gtk_container_add (GTK_CONTAINER (vbox),
 		      vbox2);
   gtk_container_add (GTK_CONTAINER (vbox),
-		      gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+		      GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_HORIZONTAL)));
 
   vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   picker = gtk_file_chooser_button_new ("File Chooser Button",
@@ -638,9 +638,9 @@ create_separator (void)
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_set_homogeneous (GTK_BOX (hbox), TRUE);
   gtk_container_add (GTK_CONTAINER (hbox),
-		      gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+		      GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_HORIZONTAL)));
   gtk_container_add (GTK_CONTAINER (hbox),
-		      gtk_separator_new (GTK_ORIENTATION_VERTICAL));
+		      GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_VERTICAL)));
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
   gtk_container_add (GTK_CONTAINER (vbox),
 		      g_object_new (GTK_TYPE_LABEL,
@@ -1264,7 +1264,7 @@ create_sidebar (void)
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   gtk_container_add (GTK_CONTAINER (hbox), sidebar);
-  gtk_container_add (GTK_CONTAINER (hbox), gtk_separator_new (GTK_ORIENTATION_VERTICAL));
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_VERTICAL)));
   gtk_container_add (GTK_CONTAINER (hbox), stack);
   gtk_container_add (GTK_CONTAINER (frame), hbox);
 

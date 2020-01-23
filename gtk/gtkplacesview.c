@@ -2079,7 +2079,7 @@ listbox_header_func (GtkListBoxRow *row,
     {
       GtkWidget *header;
       GtkLabel *label;
-      GtkWidget *separator;
+      GtkSeparator *separator;
 
       header = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
       gtk_widget_set_margin_top (header, 6);
@@ -2119,7 +2119,7 @@ listbox_header_func (GtkListBoxRow *row,
           gtk_container_add (GTK_CONTAINER (header), GTK_WIDGET (label));
         }
 
-      gtk_container_add (GTK_CONTAINER (header), separator);
+      gtk_container_add (GTK_CONTAINER (header), GTK_WIDGET (separator));
 
       gtk_list_box_row_set_header (row, header);
 
