@@ -20,7 +20,6 @@
 #ifndef __GTK_CSS_STATIC_STYLE_PRIVATE_H__
 #define __GTK_CSS_STATIC_STYLE_PRIVATE_H__
 
-#include "gtk/gtkcssmatcherprivate.h"
 #include "gtk/gtkcssstyleprivate.h"
 
 G_BEGIN_DECLS
@@ -53,8 +52,7 @@ GType                   gtk_css_static_style_get_type           (void) G_GNUC_CO
 
 GtkCssStyle *           gtk_css_static_style_get_default        (void);
 GtkCssStyle *           gtk_css_static_style_new_compute        (GtkStyleProvider       *provider,
-                                                                 const GtkCssMatcher    *matcher,
-                                                                 GtkCssStyle            *parent,
+                                                                 GtkCssNode             *node,
                                                                  GtkCssChange            change);
 
 void                    gtk_css_static_style_compute_value      (GtkCssStaticStyle      *style,

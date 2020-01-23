@@ -447,13 +447,14 @@ gtk_css_style_provider_get_keyframes (GtkStyleProvider *provider,
 
 static void
 gtk_css_style_provider_lookup (GtkStyleProvider    *provider,
-                               const GtkCssMatcher *matcher,
+                               GtkCssNode          *node,
                                GtkCssLookup        *lookup,
                                GtkCssChange        *change)
 {
   GtkCssProvider *css_provider = GTK_CSS_PROVIDER (provider);
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
   GtkCssRuleset *ruleset;
+  GtkCssMatcher matcher;
   guint j;
   int i;
   GPtrArray *tree_rules;
@@ -461,10 +462,12 @@ gtk_css_style_provider_lookup (GtkStyleProvider    *provider,
   if (_gtk_css_selector_tree_is_empty (priv->tree))
     return;
 
-  tree_rules = _gtk_css_selector_tree_match_all (priv->tree, matcher);
+  _gtk_css_matcher_node_init (&matcher, node);
+
+  tree_rules = _gtk_css_selector_tree_match_all (priv->tree, &matcher);
   if (tree_rules)
     {
-      verify_tree_match_results (css_provider, matcher, tree_rules);
+      verify_tree_match_results (css_provider, &matcher, tree_rules);
 
       for (i = tree_rules->len - 1; i >= 0; i--)
         {
@@ -495,7 +498,7 @@ gtk_css_style_provider_lookup (GtkStyleProvider    *provider,
     }
 
   if (change)
-    *change = _gtk_css_selector_tree_get_change_all (priv->tree, matcher);
+    *change = _gtk_css_selector_tree_get_change_all (priv->tree, &matcher);
 }
 
 static void
