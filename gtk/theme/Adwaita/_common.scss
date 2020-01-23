@@ -60,10 +60,6 @@ flowboxchild:focus(visible) {
   -gtk-icon-size: 32px;
 }
 
-image.drag-icon {
-  -gtk-icon-size: 32px;
-}
-
 /*
    These wildcard seems unavoidable, need to investigate.
    Wildcards are bad and troublesome, use them with care,
