@@ -396,10 +396,10 @@ frame_callback (void               *data,
 #ifdef G_ENABLE_DEBUG
   if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
     _gdk_frame_clock_debug_print_timings (clock, timings);
+#endif
 
   if (gdk_profiler_is_running ())
     _gdk_frame_clock_add_timings_to_profiler (clock, timings);
-#endif
 }
 
 static const struct wl_callback_listener frame_listener = {
