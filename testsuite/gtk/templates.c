@@ -72,11 +72,11 @@ test_message_dialog_basic (void)
 static void
 test_about_dialog_basic (void)
 {
-  GtkWidget *dialog;
+  GtkAboutDialog *dialog;
 
   dialog = gtk_about_dialog_new ();
   g_assert (GTK_IS_ABOUT_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void

@@ -88,7 +88,7 @@ typedef enum {
 GDK_AVAILABLE_IN_ALL
 GType                  gtk_about_dialog_get_type               (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget             *gtk_about_dialog_new                    (void);
+GtkAboutDialog        *gtk_about_dialog_new                    (void);
 GDK_AVAILABLE_IN_ALL
 void                   gtk_show_about_dialog                   (GtkWindow       *parent,
                                                                 const gchar     *first_property_name,
