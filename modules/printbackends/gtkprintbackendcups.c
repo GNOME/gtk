@@ -3184,7 +3184,7 @@ avahi_service_resolver_cb (GObject      *source_object,
               g_strcanon (printer_name, PRINTER_NAME_ALLOWED_CHARACTERS, '-');
 
               printer_name_strv = g_strsplit_set (printer_name, "-", -1);
-              printer_name_compressed_strv = g_new0 (gchar *, g_strv_length (printer_name_strv));
+              printer_name_compressed_strv = g_new0 (gchar *, g_strv_length (printer_name_strv) + 1);
               for (i = 0, j = 0; printer_name_strv[i] != NULL; i++)
                 {
                   if (printer_name_strv[i][0] != '\0')
