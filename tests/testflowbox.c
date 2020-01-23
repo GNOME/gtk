@@ -101,7 +101,7 @@ populate_flowbox_focus (GtkFlowBox *flowbox)
       gtk_container_add (GTK_CONTAINER (box), widget);
 
       if (i % 5 == 0)
-        gtk_container_add (GTK_CONTAINER (box), gtk_switch_new ());
+        gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_switch_new ()));
 
       gtk_container_add (GTK_CONTAINER (flowbox), frame);
       if (!sensitive)
