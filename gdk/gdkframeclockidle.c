@@ -317,6 +317,7 @@ gdk_frame_clock_paint_idle (void *data)
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
   gboolean skip_to_resume_events;
   GdkFrameTimings *timings = NULL;
+  gint64 before = g_get_monotonic_time ();
 
   priv->paint_idle_id = 0;
   priv->in_paint_idle = TRUE;
@@ -499,6 +500,9 @@ gdk_frame_clock_paint_idle (void *data)
 
   if (priv->freeze_count == 0)
     priv->sleep_serial = get_sleep_serial ();
+
+  if (gdk_profiler_is_running ())
+    gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "frameclock", "paint_idle");
 
   return FALSE;
 }
