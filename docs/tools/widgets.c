@@ -1108,12 +1108,12 @@ static WidgetInfo *
 create_appchooserdialog (void)
 {
   WidgetInfo *info;
-  GtkWidget *widget;
+  GtkAppChooserDialog *widget;
 
   widget = gtk_app_chooser_dialog_new_for_content_type (NULL, 0, "image/png");
   gtk_window_set_default_size (GTK_WINDOW (widget), 200, 300);
 
-  info = new_widget_info ("appchooserdialog", widget, ASIS);
+  info = new_widget_info ("appchooserdialog", GTK_WIDGET (widget), ASIS);
   info->include_decorations = TRUE;
 
   return info;

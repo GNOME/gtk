@@ -175,7 +175,7 @@ test_app_chooser_widget_basic (void)
 static void
 test_app_chooser_dialog_basic (void)
 {
-  GtkWidget *widget;
+  GtkAppChooserDialog *widget;
 
   widget = gtk_app_chooser_dialog_new_for_content_type (NULL, 0, "text/plain");
   g_assert (GTK_IS_APP_CHOOSER_DIALOG (widget));
@@ -186,7 +186,7 @@ test_app_chooser_dialog_basic (void)
    */
   g_timeout_add (500, main_loop_quit_cb, NULL);
   gtk_main();
-  gtk_widget_destroy (widget);
+  gtk_widget_destroy (GTK_WIDGET (widget));
 }
 
 static void

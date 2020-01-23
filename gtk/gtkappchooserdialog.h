@@ -44,13 +44,13 @@ GDK_AVAILABLE_IN_ALL
 GType         gtk_app_chooser_dialog_get_type             (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *   gtk_app_chooser_dialog_new                  (GtkWindow           *parent,
-                                                           GtkDialogFlags       flags,
-                                                           GFile               *file);
+GtkAppChooserDialog * gtk_app_chooser_dialog_new                  (GtkWindow           *parent,
+                                                                   GtkDialogFlags       flags,
+                                                                   GFile               *file);
 GDK_AVAILABLE_IN_ALL
-GtkWidget *   gtk_app_chooser_dialog_new_for_content_type (GtkWindow           *parent,
-                                                           GtkDialogFlags       flags,
-                                                           const gchar         *content_type);
+GtkAppChooserDialog * gtk_app_chooser_dialog_new_for_content_type (GtkWindow           *parent,
+                                                                   GtkDialogFlags       flags,
+                                                                   const gchar         *content_type);
 
 GDK_AVAILABLE_IN_ALL
 GtkWidget *   gtk_app_chooser_dialog_get_widget           (GtkAppChooserDialog *self);
