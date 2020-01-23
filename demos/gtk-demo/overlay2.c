@@ -29,7 +29,7 @@ do_overlay2 (GtkWidget *do_widget)
       GtkWidget *overlay;
       GtkWidget *sw;
       GtkWidget *text;
-      GtkWidget *image;
+      GtkPicture *image;
       GtkWidget *scale;
       GtkTextBuffer *buffer;
       GtkTextIter start, end;
@@ -65,16 +65,16 @@ do_overlay2 (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       image = gtk_picture_new_for_resource ("/overlay2/decor1.png");
-      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), image);
-      gtk_widget_set_can_target (image, FALSE);
-      gtk_widget_set_halign (image, GTK_ALIGN_START);
-      gtk_widget_set_valign (image, GTK_ALIGN_START);
+      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), GTK_WIDGET (image));
+      gtk_widget_set_can_target (GTK_WIDGET (image), FALSE);
+      gtk_widget_set_halign (GTK_WIDGET (image), GTK_ALIGN_START);
+      gtk_widget_set_valign (GTK_WIDGET (image), GTK_ALIGN_START);
 
       image = gtk_picture_new_for_resource ("/overlay2/decor2.png");
-      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), image);
-      gtk_widget_set_can_target (image, FALSE);
-      gtk_widget_set_halign (image, GTK_ALIGN_END);
-      gtk_widget_set_valign (image, GTK_ALIGN_END);
+      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), GTK_WIDGET (image));
+      gtk_widget_set_can_target (GTK_WIDGET (image), FALSE);
+      gtk_widget_set_halign (GTK_WIDGET (image), GTK_ALIGN_END);
+      gtk_widget_set_valign (GTK_WIDGET (image), GTK_ALIGN_END);
 
       adjustment = gtk_adjustment_new (0, 0, 100, 1, 1, 0);
       g_signal_connect (adjustment, "value-changed",
