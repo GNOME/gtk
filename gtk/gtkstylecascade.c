@@ -180,7 +180,7 @@ gtk_style_cascade_get_keyframes (GtkStyleProvider *provider,
 
 static void
 gtk_style_cascade_lookup (GtkStyleProvider    *provider,
-                          const GtkCssMatcher *matcher,
+                          GtkCssNode          *node,
                           GtkCssLookup        *lookup,
                           GtkCssChange        *change)
 {
@@ -193,7 +193,7 @@ gtk_style_cascade_lookup (GtkStyleProvider    *provider,
        item;
        item = gtk_style_cascade_iter_next (cascade, &iter))
     {
-      gtk_style_provider_lookup (item, matcher, lookup,
+      gtk_style_provider_lookup (item, node, lookup,
                                  change ? &iter_change : NULL);
       if (change)
         *change |= iter_change;
