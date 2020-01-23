@@ -978,14 +978,54 @@ gtk_css_provider_postprocess (GtkCssProvider *css_provider)
 
       ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
 
+
       _gtk_css_selector_tree_builder_add (builder,
 					  ruleset->selector,
 					  &ruleset->selector_match,
 					  ruleset);
     }
 
+#if 0
+  {
+    GString *str = g_string_new ("");
+    g_string_append_printf (str, "%d rules\n", priv->rulesets->len);
+
+    for (i = 0; i < priv->rulesets->len; i++)
+      {
+        GtkCssRuleset *ruleset;
+
+        ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
+
+        _gtk_css_selector_print (ruleset->selector, str);
+        g_string_append (str, "\n");
+      }
+
+    g_print ("%s\n", str->str);
+    g_string_free (str, TRUE);
+  }
+#endif
+
   priv->tree = _gtk_css_selector_tree_builder_build (builder);
   _gtk_css_selector_tree_builder_free (builder);
+
+#ifdef PRINT_SELECTORS 
+  {
+    GString *str = g_string_new ("");
+
+    for (i = 0; i < priv->rulesets->len; i++)
+      {
+        GtkCssRuleset *ruleset;
+
+        ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
+
+        _gtk_css_selector_print (ruleset->selector, str);
+        g_string_append (str, "\n");
+      }
+
+    g_print ("%s\n", str->str);
+    g_string_free (str, TRUE);
+  }
+#endif
 
 #ifndef VERIFY_TREE
   for (i = 0; i < priv->rulesets->len; i++)
