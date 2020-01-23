@@ -2441,7 +2441,6 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   gtk_css_node_set_visible (priv->cssnode, priv->visible);
   /* need to set correct name here, and only class has the correct type here */
   gtk_css_node_set_name (priv->cssnode, GTK_WIDGET_CLASS (g_class)->priv->css_name);
-  gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_FROM_CLASS (g_class));
 
   if (g_type_is_a (G_TYPE_FROM_CLASS (g_class), GTK_TYPE_ROOT))
     priv->root = (GtkRoot *) widget;
