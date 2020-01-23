@@ -28,11 +28,11 @@ GtkCssNodeDeclaration * gtk_css_node_declaration_ref                    (GtkCssN
 void                    gtk_css_node_declaration_unref                  (GtkCssNodeDeclaration         *decl);
 
 gboolean                gtk_css_node_declaration_set_name               (GtkCssNodeDeclaration        **decl,
-                                                                         /*interned*/ const char       *name);
-/*interned*/ const char*gtk_css_node_declaration_get_name               (const GtkCssNodeDeclaration   *decl);
+                                                                         GQuark                         name);
+GQuark                  gtk_css_node_declaration_get_name               (const GtkCssNodeDeclaration   *decl);
 gboolean                gtk_css_node_declaration_set_id                 (GtkCssNodeDeclaration        **decl,
-                                                                         const char                    *id);
-const char *            gtk_css_node_declaration_get_id                 (const GtkCssNodeDeclaration   *decl);
+                                                                         GQuark                         id);
+GQuark                  gtk_css_node_declaration_get_id                 (const GtkCssNodeDeclaration   *decl);
 gboolean                gtk_css_node_declaration_set_state              (GtkCssNodeDeclaration        **decl,
                                                                          GtkStateFlags                  flags);
 GtkStateFlags           gtk_css_node_declaration_get_state              (const GtkCssNodeDeclaration   *decl);

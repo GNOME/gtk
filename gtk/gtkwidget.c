@@ -495,7 +495,7 @@ struct _GtkWidgetClassPrivate
   GtkWidgetTemplate *template;
   GType accessible_type;
   AtkRole accessible_role;
-  const char *css_name;
+  GQuark css_name;
   GType layout_manager_type;
   GPtrArray *actions;
 };
@@ -1905,7 +1905,7 @@ gtk_widget_set_property (GObject         *object,
       break;
     case PROP_CSS_NAME:
       if (g_value_get_string (value) != NULL)
-        gtk_css_node_set_name (priv->cssnode, g_intern_string (g_value_get_string (value)));
+        gtk_css_node_set_name (priv->cssnode, g_quark_from_string (g_value_get_string (value)));
       break;
     case PROP_LAYOUT_MANAGER:
       gtk_widget_set_layout_manager (widget, g_value_dup_object (value));
@@ -2051,7 +2051,7 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_int (value, gtk_widget_get_scale_factor (widget));
       break;
     case PROP_CSS_NAME:
-      g_value_set_string (value, gtk_css_node_get_name (priv->cssnode));
+      g_value_set_string (value, g_quark_to_string (gtk_css_node_get_name (priv->cssnode)));
       break;
     case PROP_LAYOUT_MANAGER:
       g_value_set_object (value, gtk_widget_get_layout_manager (widget));
@@ -4010,7 +4010,7 @@ gtk_widget_allocate (GtkWidget    *widget,
   if (adjusted.width < 0 || adjusted.height < 0)
     {
       g_warning ("gtk_widget_size_allocate(): attempt to allocate %s %s %p with width %d and height %d",
-                 G_OBJECT_TYPE_NAME (widget), gtk_css_node_get_name (priv->cssnode), widget,
+                 G_OBJECT_TYPE_NAME (widget), g_quark_to_string (gtk_css_node_get_name (priv->cssnode)), widget,
                  adjusted.width,
                  adjusted.height);
 
@@ -5643,7 +5643,7 @@ gtk_widget_set_name (GtkWidget	 *widget,
   g_free (priv->name);
   priv->name = g_strdup (name);
 
-  gtk_css_node_set_id (priv->cssnode, priv->name);
+  gtk_css_node_set_id (priv->cssnode, g_quark_from_string (priv->name));
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_NAME]);
 }
@@ -11198,7 +11198,7 @@ gtk_widget_class_set_css_name (GtkWidgetClass *widget_class,
 
   priv = widget_class->priv;
 
-  priv->css_name = g_intern_string (name);
+  priv->css_name = g_quark_from_string (name);
 }
 
 static gboolean
@@ -11221,7 +11221,7 @@ gtk_widget_class_get_css_name (GtkWidgetClass *widget_class)
 {
   g_return_val_if_fail (GTK_IS_WIDGET_CLASS (widget_class), NULL);
 
-  return widget_class->priv->css_name;
+  return g_quark_to_string (widget_class->priv->css_name);
 }
 
 void

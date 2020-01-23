@@ -809,8 +809,8 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
                                   draw_page,
                                   dialog, NULL);
 
-  gtk_css_node_set_name (gtk_widget_get_css_node (priv->collate_image), I_("drawing"));
-  gtk_css_node_set_name (gtk_widget_get_css_node (priv->page_layout_preview), I_("drawing"));
+  gtk_css_node_set_name (gtk_widget_get_css_node (priv->collate_image), g_quark_from_static_string ("drawing"));
+  gtk_css_node_set_name (gtk_widget_get_css_node (priv->page_layout_preview), g_quark_from_static_string ("drawing"));
 }
 
 static void

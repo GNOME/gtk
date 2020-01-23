@@ -23,8 +23,8 @@
 
 struct _GtkCssNodeDeclaration {
   guint refcount;
-  const /* interned */ char *name;
-  const /* interned */ char *id;
+  GQuark name;
+  GQuark id;
   GtkStateFlags state;
   guint n_classes;
   /* GQuark classes[n_classes]; */
@@ -97,8 +97,8 @@ gtk_css_node_declaration_new (void)
 {
   static GtkCssNodeDeclaration empty = {
     1, /* need to own a ref ourselves so the copy-on-write path kicks in when people change things */
-    NULL,
-    NULL,
+    0,
+    0,
     0,
     0
   };
@@ -125,8 +125,8 @@ gtk_css_node_declaration_unref (GtkCssNodeDeclaration *decl)
 }
 
 gboolean
-gtk_css_node_declaration_set_name (GtkCssNodeDeclaration   **decl,
-                                   /*interned*/ const char  *name)
+gtk_css_node_declaration_set_name (GtkCssNodeDeclaration **decl,
+                                   GQuark                  name)
 {
   if ((*decl)->name == name)
     return FALSE;
@@ -137,7 +137,7 @@ gtk_css_node_declaration_set_name (GtkCssNodeDeclaration   **decl,
   return TRUE;
 }
 
-/*interned*/ const char *
+GQuark
 gtk_css_node_declaration_get_name (const GtkCssNodeDeclaration *decl)
 {
   return decl->name;
@@ -145,10 +145,8 @@ gtk_css_node_declaration_get_name (const GtkCssNodeDeclaration *decl)
 
 gboolean
 gtk_css_node_declaration_set_id (GtkCssNodeDeclaration **decl,
-                                 const char             *id)
+                                 GQuark                  id)
 {
-  id = g_intern_string (id);
-
   if ((*decl)->id == id)
     return FALSE;
 
@@ -158,7 +156,7 @@ gtk_css_node_declaration_set_id (GtkCssNodeDeclaration **decl,
   return TRUE;
 }
 
-const char *
+GQuark
 gtk_css_node_declaration_get_id (const GtkCssNodeDeclaration *decl)
 {
   return decl->id;
@@ -402,14 +400,14 @@ gtk_css_node_declaration_print (const GtkCssNodeDeclaration *decl,
   char **classnames;
 
   if (decl->name)
-    g_string_append (string, decl->name);
+    g_string_append (string, g_quark_to_string (decl->name));
   else
     g_string_append (string, "*");
 
   if (decl->id)
     {
       g_string_append_c (string, '#');
-      g_string_append (string, decl->id);
+      g_string_append (string, g_quark_to_string (decl->id));
     }
 
   classes = get_classes (decl);

@@ -171,11 +171,11 @@ gtk_css_node_get_property (GObject    *object,
       break;
 
     case PROP_ID:
-      g_value_set_string (value, gtk_css_node_get_id (cssnode));
+      g_value_set_string (value, g_quark_to_string (gtk_css_node_get_id (cssnode)));
       break;
 
     case PROP_NAME:
-      g_value_set_string (value, gtk_css_node_get_name (cssnode));
+      g_value_set_string (value, g_quark_to_string (gtk_css_node_get_name (cssnode)));
       break;
 
     case PROP_STATE:
@@ -206,11 +206,11 @@ gtk_css_node_set_property (GObject      *object,
       break;
 
     case PROP_ID:
-      gtk_css_node_set_id (cssnode, g_value_get_string (value));
+      gtk_css_node_set_id (cssnode, g_quark_from_string (g_value_get_string (value)));
       break;
 
     case PROP_NAME:
-      gtk_css_node_set_name (cssnode, g_value_get_string (value));
+      gtk_css_node_set_name (cssnode, g_quark_from_string (g_value_get_string (value)));
       break;
 
     case PROP_STATE:
@@ -1070,8 +1070,8 @@ gtk_css_node_get_visible (GtkCssNode *cssnode)
 }
 
 void
-gtk_css_node_set_name (GtkCssNode              *cssnode,
-                       /*interned*/ const char *name)
+gtk_css_node_set_name (GtkCssNode *cssnode,
+                       GQuark      name)
 {
   if (gtk_css_node_declaration_set_name (&cssnode->decl, name))
     {
@@ -1080,15 +1080,15 @@ gtk_css_node_set_name (GtkCssNode              *cssnode,
     }
 }
 
-/* interned */ const char *
+GQuark
 gtk_css_node_get_name (GtkCssNode *cssnode)
 {
   return gtk_css_node_declaration_get_name (cssnode->decl);
 }
 
 void
-gtk_css_node_set_id (GtkCssNode                *cssnode,
-                     /* interned */ const char *id)
+gtk_css_node_set_id (GtkCssNode *cssnode,
+                     GQuark      id)
 {
   if (gtk_css_node_declaration_set_id (&cssnode->decl, id))
     {
@@ -1097,7 +1097,7 @@ gtk_css_node_set_id (GtkCssNode                *cssnode,
     }
 }
 
-/* interned */ const char *
+GQuark
 gtk_css_node_get_id (GtkCssNode *cssnode)
 {
   return gtk_css_node_declaration_get_id (cssnode->decl);

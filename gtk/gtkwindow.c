@@ -1828,7 +1828,7 @@ gtk_window_init (GtkWindow *window)
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (window));
   priv->decoration_node = gtk_css_node_new ();
-  gtk_css_node_set_name (priv->decoration_node, I_("decoration"));
+  gtk_css_node_set_name (priv->decoration_node, g_quark_from_static_string ("decoration"));
   gtk_css_node_set_parent (priv->decoration_node, widget_node);
   gtk_css_node_set_state (priv->decoration_node, gtk_css_node_get_state (widget_node));
   g_signal_connect_object (priv->decoration_node, "style-changed", G_CALLBACK (node_style_changed_cb), window, 0);
