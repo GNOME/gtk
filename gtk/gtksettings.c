@@ -1982,7 +1982,11 @@ gtk_settings_get_for_display (GdkDisplay *display)
   for (i = 0; i < display_settings->len; i++)
     {
       if (ds[i].display == display)
-        return ds[i].settings;
+        {
+          GtkSettings *settings = ds[i].settings;
+          settings->priv->screen = gdk_display_get_default_screen (display);
+          return settings;
+        }
     }
 
   return gtk_settings_create_for_display (display);
