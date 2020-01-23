@@ -317,7 +317,7 @@ toggle_sensitivity_callback (GtkWidget *togglebutton,
 GtkWidget *
 do_images (GtkWidget *do_widget)
 {
-  GtkWidget *video;
+  GtkVideo  *video;
   GtkWidget *frame;
   GtkWidget *vbox;
   GtkWidget *hbox;
@@ -444,8 +444,8 @@ do_images (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       video = gtk_video_new_for_resource ("/images/gtk-logo.webm");
-      gtk_media_stream_set_loop (gtk_video_get_media_stream (GTK_VIDEO (video)), TRUE);
-      gtk_container_add (GTK_CONTAINER (frame), video);
+      gtk_media_stream_set_loop (gtk_video_get_media_stream (video), TRUE);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (video));
 
       /* Widget paintables */
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
