@@ -499,59 +499,6 @@ treeview entry {
   }
 }
 
-.entry-tag {
-  // sizing
-  padding: 5px;
-
-  margin-top: 2px;
-  margin-bottom: 2px;
-
-  // side margins: compensate the entry padding with a negative margin
-  // then the negative margin itself
-  :dir(ltr) & {
-    margin-left: 8px;
-    margin-right: -5px;
-  }
-  :dir(rtl) & {
-    margin-left: -5px;
-    margin-right: 8px;
-  }
-
-  border-style: none;
-
-  $_entry_tag_color: if($variant=='light', $selected_fg_color, $base_color);
-  color: $_entry_tag_color;
-
-  $_entry_tag_bg: if($variant=='light', $selected_bg_color, mix($fg_color, $base_color, 50%));
-  background-color: $_entry_tag_bg;
-
-  &:hover {
-    background-color: lighten($_entry_tag_bg, 10%);
-  }
-
-  :backdrop & {
-    color: $backdrop_base_color;
-    background-color: if($variant=='light', $selected_bg_color,
-                                            mix($backdrop_fg_color, $backdrop_base_color, 50%));
-  }
-
-  &.button {
-    background-color: transparent;
-    color: transparentize($_entry_tag_color, 0.3);
-  }
-
-  :not(:backdrop) &.button {
-    &:hover {
-      border: 1px solid $_entry_tag_bg;
-      color: $_entry_tag_color;
-    }
-    &:active {
-      background-color: $_entry_tag_bg;
-      color: transparentize($_entry_tag_color, 0.3);
-    }
-  }
-}
-
 /***********
  * Buttons *
  ***********/

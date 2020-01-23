@@ -196,22 +196,6 @@ treeview entry.flat, treeview entry { border-radius: 0; background-image: none; 
 
 treeview entry.flat:focus, treeview entry:focus { border-color: #3584e4; }
 
-.entry-tag { padding: 5px; margin-top: 2px; margin-bottom: 2px; border-style: none; color: #ffffff; background-color: #3584e4; }
-
-:dir(ltr) .entry-tag { margin-left: 8px; margin-right: -5px; }
-
-:dir(rtl) .entry-tag { margin-left: -5px; margin-right: 8px; }
-
-.entry-tag:hover { background-color: #629fea; }
-
-:backdrop .entry-tag { color: #fcfcfc; background-color: #3584e4; }
-
-.entry-tag.button { background-color: transparent; color: rgba(255, 255, 255, 0.7); }
-
-:not(:backdrop) .entry-tag.button:hover { border: 1px solid #3584e4; color: #ffffff; }
-
-:not(:backdrop) .entry-tag.button:active { background-color: #3584e4; color: rgba(255, 255, 255, 0.7); }
-
 /*********** Buttons * */
 @keyframes needs_attention { from { background-image: radial-gradient(farthest-side, #3584e4 0%, rgba(53, 132, 228, 0) 0%); }
   to { background-image: radial-gradient(farthest-side, #3584e4 95%, rgba(53, 132, 228, 0)); } }
