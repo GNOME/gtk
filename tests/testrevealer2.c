@@ -12,7 +12,8 @@ on_activate (GApplication *app,
 
   if (window == NULL)
     {
-      GtkWidget *header, *sidebar_toggle, *animation_switch;
+      GtkWidget *header, *sidebar_toggle;
+      GtkSwitch *animation_switch;
       GtkWidget *hbox, *revealer, *sidebar, *img;
 
       window = gtk_application_window_new (GTK_APPLICATION (app));
@@ -27,8 +28,8 @@ on_activate (GApplication *app,
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), sidebar_toggle);
 
       animation_switch = gtk_switch_new ();
-      gtk_widget_set_valign (animation_switch, GTK_ALIGN_CENTER);
-      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), animation_switch);
+      gtk_widget_set_valign (GTK_WIDGET (animation_switch), GTK_ALIGN_CENTER);
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), GTK_WIDGET (animation_switch));
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header),
                                GTK_WIDGET (gtk_label_new ("Animations")));
 

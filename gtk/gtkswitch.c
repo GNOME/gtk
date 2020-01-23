@@ -667,7 +667,7 @@ gtk_switch_init (GtkSwitch *self)
  *
  * Returns: the newly created #GtkSwitch instance
  */
-GtkWidget *
+GtkSwitch *
 gtk_switch_new (void)
 {
   return g_object_new (GTK_TYPE_SWITCH, NULL);

@@ -87,14 +87,14 @@ static WidgetInfo *
 create_switch (void)
 {
   GtkWidget *widget;
-  GtkWidget *sw;
+  GtkSwitch *sw;
 
   widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   sw = gtk_switch_new ();
-  gtk_switch_set_active (GTK_SWITCH (sw), TRUE);
-  gtk_container_add (GTK_CONTAINER (widget), sw);
+  gtk_switch_set_active (sw, TRUE);
+  gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (sw));
   sw = gtk_switch_new ();
-  gtk_container_add (GTK_CONTAINER (widget), sw);
+  gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (sw));
 
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
