@@ -111,7 +111,6 @@ if print_backends.contains('file')
                 'file/gtkprintbackendfile.c',
                 c_args: printbackends_args,
                 dependencies: libgtk_dep,
-                name_suffix: module_suffix,
                 install_dir: printbackends_install_dir,
                 name_suffix: module_suffix,
                 install : true)
@@ -122,7 +121,6 @@ if print_backends.contains('lpr')
                 'lpr/gtkprintbackendlpr.c',
                 c_args: printbackends_args,
                 dependencies: libgtk_dep,
-                name_suffix: module_suffix,
                 install_dir: printbackends_install_dir,
                 name_suffix: module_suffix,
                 install : true)
@@ -133,7 +131,6 @@ if print_backends.contains('test')
                 'test/gtkprintbackendtest.c',
                 c_args: printbackends_args,
                 dependencies: libgtk_dep,
-                name_suffix: module_suffix,
                 install_dir: printbackends_install_dir,
                 name_suffix: module_suffix,
                 install : true)
@@ -146,7 +143,6 @@ if print_backends.contains('cloudprint')
                   'cloudprint/gtkcloudprintaccount.c',
                   c_args: printbackends_args,
                   dependencies: [ libgtk_dep, rest_dep, json_glib_dep ],
-                  name_suffix: module_suffix,
                   install_dir: printbackends_install_dir,
                   name_suffix: module_suffix,
                   install : true)
@@ -160,7 +156,6 @@ if print_backends.contains('cups')
                 'cups/gtkcupssecretsutils.c',
                 c_args: printbackends_args,
                 dependencies: [libgtk_dep, cups_dep] + cups_extra_deps,
-                name_suffix: module_suffix,
                 install_dir: printbackends_install_dir,
                 name_suffix: module_suffix,
                 install : true)
