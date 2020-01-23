@@ -108,7 +108,7 @@ textview {
   > text {
     @extend %view;
 
-    selection { &:focus, & { @extend %selected_items; }}
+    > selection { &:focus, & { @extend %selected_items; }}
   }
 
   &:drop(active) {
@@ -116,7 +116,7 @@ textview {
   }
 }
 
-textview border { background-color: mix($bg_color, $base_color, 50%); }
+textview > border { background-color: mix($bg_color, $base_color, 50%); }
 
 iconview { 
   @extend .view;
@@ -125,7 +125,7 @@ iconview {
     box-shadow: none;
   }
 
-  dndtarget:drop(active) {
+  > dndtarget:drop(active) {
     border-style: solid;
     border-width: 1px;
     border-color: $selected_borders_color;
@@ -138,9 +138,9 @@ rubberband {
 }
 
 flowbox {
-  rubberband { @extend rubberband; }
+  > rubberband { @extend rubberband; }
 
-  flowboxchild {
+  > flowboxchild {
     padding: 3px;
 
     &:selected {
@@ -171,7 +171,7 @@ label {
 
   &:selected { @extend %nobg_selected_items; }
 
-  selection {
+  > selection {
     background-color: $selected_bg_color;
     color: $selected_fg_color;
   }
@@ -187,11 +187,11 @@ label {
       button & { color: inherit; }
     }
 
-    selection { @extend %selected_items_disabled; }
+    > selection { @extend %selected_items_disabled; }
   }
 
   &:backdrop {
-    selection { @extend %selected_items_backdrop; }
+    > selection { @extend %selected_items_backdrop; }
   }
 }
 
@@ -213,9 +213,9 @@ assistant {
 
   &.csd .sidebar { border-top-style: none; }
 
-  .sidebar label { padding: 6px 12px; }
+  .sidebar > label { padding: 6px 12px; }
 
-  .sidebar label.highlight { background-color: mix($bg_color, $fg_color, 80%); }
+  .sidebar > label.highlight { background-color: mix($bg_color, $fg_color, 80%); }
 }
 
 %osd,
@@ -312,16 +312,16 @@ entry {
 
     @include entry(normal);
 
-    image { // icons inside the entry
+    > image { // icons inside the entry
       &.left { margin-right: 6px; }
       &.right { margin-left: 6px; }
     }
 
-    placeholder {
+    > placeholder {
       @extend .dim-label;
     }
 
-    block-cursor {
+    > block-cursor {
       @include entry(block_cursor);
     }
 
@@ -352,7 +352,7 @@ entry {
 
     &:backdrop:disabled { @include entry(backdrop-insensitive); }
 
-    selection { @extend %selected_items; }
+    > selection { @extend %selected_items; }
 
     // entry error and warning style
     @each $e_type, $e_color in (error, $error_color),
@@ -363,7 +363,7 @@ entry {
 
         &:focus { @include entry(focus, $e_color); }
 
-        selection { background-color: $e_color; }
+        > selection { background-color: $e_color; }
       }
     }
 
@@ -399,11 +399,11 @@ entry {
     }
   }
 
-  progress {
+  > progress {
     margin-bottom: 2px;
   }
 
-  progress>trough>progress {
+  progress > trough > progress {
     background-color: transparent;
     background-image: none;
     border-radius: 0;
@@ -1012,8 +1012,8 @@ modelbutton.flat arrow {
 button.color {
   padding: 4px;
 
-  colorswatch:only-child {
-    &, overlay { border-radius: 0; }
+  > colorswatch:only-child {
+    &, > overlay { border-radius: 0; }
 
     @if $variant == 'light' {
       box-shadow: 0 1px _text_shadow_color();
@@ -1035,7 +1035,7 @@ button.color {
 /* list buttons */
 /* tone down as per new designs, see issue #1473 */
 %list_button,
-list row button.image-button:not(.flat) {
+list > row button.image-button:not(.flat) {
   @extend %undecorated_button;
   border: 1px solid transparentize($borders_color, .5);
   &:hover { @include button(hover); }
@@ -1131,7 +1131,7 @@ spinbutton {
       &:backdrop:disabled { background-color: transparent; }
     }
 
-    text {
+    > text {
       @extend %spinbutton_horz_entry;
     }
 
@@ -1189,11 +1189,11 @@ spinbutton {
 
   // OSD horizontal
   .osd &:not(.vertical) {
-    text {
+    > text {
       @extend %spinbutton_horz_entry;
     }
 
-    button {
+    > button {
       @include button(undecorated);
 
       color: $osd_fg_color;
@@ -1256,7 +1256,7 @@ spinbutton {
       box-shadow: none;
     }
 
-    text {
+    > text {
       @extend %entry;
 
       min-height: 32px;
@@ -1265,7 +1265,7 @@ spinbutton {
       border-radius: 0;
     }
 
-    button {
+    > button {
       min-height: 32px;
       min-width: 32px;
       padding: 0;
@@ -1289,7 +1289,7 @@ spinbutton {
   }
 
   // OSD vertical
-  .osd &.vertical button:first-child {
+  .osd &.vertical > button:first-child {
     @include button(osd);
 
     &:hover { @include button(osd-hover);}
@@ -1307,7 +1307,7 @@ spinbutton {
     border-style: none;
     border-radius: 0;
 
-    entry {
+    > text {
       min-height: 0;
       padding: 1px 2px;
     }
@@ -1775,7 +1775,7 @@ window.devel {
  * Pathbars *
  ************/
 
-pathbar button {
+pathbar > button {
   &.text-button, &.image-button, & {
     padding-left: 4px;
     padding-right: 4px;
@@ -1810,7 +1810,7 @@ treeview.view {
   border-left-color: mix($fg_color, $base_color, 50%); // this is actually the tree lines color,
   border-top-color: $bg_color;                         // while this is the grid lines color, better then nothing
 
-  rubberband { @extend rubberband; } // to avoid borders being overridden by the previously set props
+  > rubberband { @extend rubberband; } // to avoid borders being overridden by the previously set props
 
   &:selected {
     &:focus, & {
@@ -1847,10 +1847,12 @@ treeview.view {
     border-left-color: mix($backdrop_fg_color, $backdrop_bg_color, 50%);
     border-top: $backdrop_bg_color;
   }
+
   &:drop(active) {
     box-shadow: none;
   }
-  dndtarget:drop(active) {
+
+  > dndtarget:drop(active) {
     border-style: solid none;
     border-width: 1px;
     border-color: $selected_borders_color;
@@ -1934,8 +1936,8 @@ treeview.view {
     }
   }
 
-  header {
-    button {
+  > header {
+    > button {
       $_column_header_color: mix($fg_color, $base_color, 50%);
 
       @extend %column_header_button;
@@ -2052,8 +2054,7 @@ menubar,
 .background.popup { background-color: transparent; }
 
 menu,
-.menu,
-.context-menu {
+.menu {
   // this is not a good solution, commenting out for now margin: 4px; // See https://bugzilla.gnome.org/show_bug.cgi?id=591258
   padding: 4px 0px;
   background-color: $menu_color;
@@ -2233,7 +2234,7 @@ notebook {
       background-color: $backdrop_dark_fill;
     }
 
-    tabs { margin: -1px; }
+    > tabs { margin: -1px; }
 
     &.top {
       border-bottom-style: solid;
@@ -2357,7 +2358,7 @@ notebook {
       &:disabled { @include button(undecorated); }
     }
 
-    tab {
+    > tabs > tab {
       min-height: 30px;
       min-width: 30px;
       padding: 3px 12px;
@@ -2434,7 +2435,7 @@ notebook {
 
     &.top,
     &.bottom {
-      tabs {
+      > tabs {
         padding-left: 4px;
         padding-right: 4px;
 
@@ -2446,7 +2447,7 @@ notebook {
           &:last-child { margin-right: -1px; }
         }
 
-        tab {
+        > tab {
           margin-left: 4px;
           margin-right: 4px;
 
@@ -2457,7 +2458,7 @@ notebook {
 
     &.left,
     &.right {
-      tabs {
+      > tabs {
         padding-top: 4px;
         padding-bottom: 4px;
 
@@ -2469,7 +2470,7 @@ notebook {
           &:last-child { margin-bottom: -1px; }
         }
 
-        tab {
+        > tab {
           margin-top: 4px;
           margin-bottom: 4px;
 
@@ -2478,8 +2479,8 @@ notebook {
       }
     }
 
-    &.top tab { padding-bottom: 4px; }
-    &.bottom tab { padding-top: 4px; }
+    &.top > tabs > tab { padding-bottom: 4px; }
+    &.bottom > tabs > tab { padding-top: 4px; }
   }
 
   > stack:not(:only-child) { // the :not(:only-child) is for "hidden" notebooks
@@ -2511,8 +2512,7 @@ scrollbar {
     transition: $backdrop_transition;
   }
 
-  // slider
-  slider {
+  > range > trough > slider {
     min-width: 6px;
     min-height: 6px;
     margin: -1px;
@@ -2530,7 +2530,7 @@ scrollbar {
     &:disabled { background-color: transparent; }
   }
 
-  & range.fine-tune {
+  > range.fine-tune {
     slider {
       min-width: 4px;
       min-height: 4px;
@@ -2546,7 +2546,7 @@ scrollbar {
       opacity: 0.4;
       background-color: transparent;
 
-      slider {
+      > range > trough > slider {
         margin: 0;
         min-width: 3px;
         min-height: 3px;
@@ -2554,7 +2554,7 @@ scrollbar {
         border: 1px solid if($variant == 'light', white, black);
       }
 
-      button {
+      > button {
         min-width: 5px;
         min-height: 5px;
         background-color: $fg_color;
@@ -2565,24 +2565,24 @@ scrollbar {
       }
 
       &.horizontal {
-        slider {
+        > slider {
           margin: 0 2px;
           min-width: $_slider_min_length;
         }
 
-        button {
+        > button {
           margin: 1px 2px;
           min-width: 5px;
         }
       }
 
       &.vertical {
-        slider {
+        > slider {
           margin: 2px 0;
           min-height: $_slider_min_length;
         }
 
-        button {
+        > button {
           margin: 2px 1px;
           min-height: 5px;
         }
@@ -2593,12 +2593,11 @@ scrollbar {
     &.hovering { opacity: 0.8; }
   }
 
-  &.horizontal slider { min-width: $_slider_min_length; }
+  &.horizontal > range > trough > slider { min-width: $_slider_min_length; }
 
-  &.vertical slider { min-height: $_slider_min_length; }
+  &.vertical > range > trough > slider { min-height: $_slider_min_length; }
 
-  // button styling
-  button {
+  > button {
     padding: 0;
     min-width: 12px;
     min-height: 12px;
@@ -2712,7 +2711,7 @@ switch {
     }
   }
 
-  slider {
+  > slider {
     margin: -1px;
     min-width: 24px;
     min-height: 24px;
@@ -2728,9 +2727,9 @@ switch {
     }
   }
   
-  image { color: transparent; } /* only show i / o for the accessible theme */
+  > image { color: transparent; } /* only show i / o for the accessible theme */
 
-  &:hover slider {
+  &:hover > slider {
     @if $variant == 'light' {
       @include button(hover-alt, $edge: $shadow_color);
     }
@@ -2739,20 +2738,20 @@ switch {
     }
   }
 
-  &:checked slider { border: 1px solid $selected_borders_color; }
+  &:checked > slider { border: 1px solid $selected_borders_color; }
 
-  &:disabled slider { @include button(insensitive); }
+  &:disabled > slider { @include button(insensitive); }
 
   &:backdrop {
-    slider {
+    > slider {
       transition: $backdrop_transition;
 
       @include button(backdrop);
     }
 
-    &:checked slider { border-color: if($variant == 'light', $selected_bg_color, $selected_borders_color); }
+    &:checked > slider { border-color: if($variant == 'light', $selected_bg_color, $selected_borders_color); }
 
-    &:disabled slider { @include button(backdrop-insensitive); }
+    &:disabled > slider { @include button(backdrop-insensitive); }
   }
 
   row:selected & {
@@ -2762,7 +2761,7 @@ switch {
 
       &:backdrop { border-color: $selected_borders_color; }
 
-      slider { &:checked, & { border-color: $selected_borders_color; } }
+      > slider { &:checked, & { border-color: $selected_borders_color; } }
     }
   }
 }
@@ -3024,15 +3023,17 @@ scale {
   padding: 12px;
 
   // those are inside the trough node, I need them to show their own border over the trough one, so negative margin
-  fill,
-  highlight { margin: -1px; }
+  > trough {
+    > fill,
+    > highlight { margin: -1px; }
 
   // the slider is inside the trough, so to have make it bigger there's a negative margin
 
-  slider {
-    min-height: 18px;
-    min-width: 18px;
-    margin: -9px;
+    > slider {
+      min-height: 18px;
+      min-width: 18px;
+      margin: -9px;
+    }
   }
 
   &:focus { outline: none; }
@@ -3052,18 +3053,18 @@ scale {
     }
 
     // to make the trough grow in fine-tune mode
-    slider { margin: -6px; }
+    > trough > slider { margin: -6px; }
 
-    fill,
-    highlight,
-    trough {
+    > trough > fill,
+    > trough > highlight,
+    > trough {
       border-radius: 5px;
       -gtk-outline-radius: 7px;
     }
   }
 
   // the backing bit
-  trough {
+  > trough {
     @extend %scale_trough;
 
     outline-offset: 2px;
@@ -3071,11 +3072,11 @@ scale {
   }
 
   // the colored part of the backing bit
-  highlight { @extend %scale_highlight; }
+  > trough > highlight { @extend %scale_highlight; }
 
   // this is another differently styled part of the backing bit, the most relevant use case is for example
   // in media player to indicate how much video stream as been cached
-  fill {
+  > trough > fill {
     @extend %scale_trough;
 
     &:backdrop, & { background-color: $borders_color; }
@@ -3100,7 +3101,7 @@ scale {
     }
   }
 
-  slider {
+  > trough > slider {
     @include button(normal-alt, $edge: $shadow_color);
 
     border: 1px solid darken($alt_borders_color, 3%);
@@ -3158,10 +3159,10 @@ scale {
     }
   }
 
-  value { color: gtkalpha(currentColor, 0.55); }
+  > value { color: gtkalpha(currentColor, 0.55); }
 
   &.horizontal {
-    >marks {
+    > marks {
       color: gtkalpha(currentColor, 0.55);
       &.top    { margin-bottom: $_marks_distance; }
       &.bottom { margin-top: $_marks_distance; }
@@ -3185,7 +3186,7 @@ scale {
   }
 
   &.vertical {
-    >marks {
+    > marks {
       color: gtkalpha(currentColor, 0.55);
       &.top    { margin-right: $_marks_distance; }
       &.bottom { margin-left: $_marks_distance; }
@@ -3225,7 +3226,7 @@ scale {
                                     (':backdrop:disabled', '-backdrop-insensitive') {
         &.#{$dir_class}.#{$marks_class} {
 
-          slider {
+          > trough > slider {
             &#{$state} {
               // an asymmetric slider asset is used here, so the margins are uneven, the smaller
               // margin is set on the point side.
@@ -3275,7 +3276,7 @@ scale {
             }
           }
 
-          &.fine-tune slider {
+          &.fine-tune > trough > slider {
             @if $dir_class == 'horizontal' {
               // bigger negative margins to make the trough grow here as well
               margin: -7px -10px;
@@ -3302,7 +3303,7 @@ scale {
     min-height: 0;
     min-width: 0;
 
-    trough {
+    > trough {
       background-image: image($borders_color);
       background-repeat: no-repeat;
     }
@@ -3310,14 +3311,14 @@ scale {
     &.horizontal {
       padding: 0 0 15px 0;
 
-      trough {
+      > trough {
         padding-bottom: 4px;
         background-position: 0 -3px;
         border-top-left-radius: 0;
         border-top-right-radius: 0;
       }
 
-      slider {
+      > trough > slider {
         &:dir(ltr), &:dir(rtl) { // specificity bumb
           &:hover, &:backdrop, &:disabled, &:backdrop:disabled, & {
             margin-bottom: -15px;
@@ -3331,14 +3332,14 @@ scale {
       &:dir(ltr) {
         padding: 0 0 0 15px;
 
-        trough {
+        > trough {
           padding-left: 4px;
           background-position: 3px 0;
           border-bottom-right-radius: 0;
           border-top-right-radius: 0;
         }
 
-        slider {
+        > trough > slider {
           &:hover, &:backdrop, &:disabled, &:backdrop:disabled, & {
             margin-left: -15px;
             margin-right: 6px;
@@ -3349,14 +3350,14 @@ scale {
       &:dir(rtl) {
         padding: 0 15px 0 0;
 
-        trough {
+        > trough {
           padding-right: 4px;
           background-position: -3px 0;
           border-bottom-left-radius: 0;
           border-top-left-radius: 0;
         }
 
-        slider {
+        > trough > slider {
           &:hover, &:backdrop, &:disabled, &:backdrop:disabled, & {
             margin-right: -15px;
             margin-left: 6px;
@@ -3370,12 +3371,12 @@ scale {
         &:dir(ltr), &:dir(rtl) { // specificity bump
           padding: 0 0 12px 0;
 
-          trough {
+          > trough {
             padding-bottom: 7px;
             background-position: 0 -6px;
           }
 
-          slider {
+          > trough > slider {
             margin-bottom: -15px;
             margin-top: 6px;
           }
@@ -3386,12 +3387,12 @@ scale {
         &:dir(ltr) {
           padding: 0 0 0 12px;
 
-          trough {
+          > trough {
             padding-left: 7px;
             background-position: 6px 0;
           }
 
-          slider {
+          > trough > slider {
             margin-left: -15px;
             margin-right: 6px;
           }
@@ -3400,12 +3401,12 @@ scale {
         &:dir(rtl) {
           padding: 0 12px 0 0;
 
-          trough {
+          > trough {
             padding-right: 7px;
             background-position: -6px 0;
           }
 
-          slider {
+          > trough > slider {
             margin-right: -15px;
             margin-left: 6px;
           }
@@ -3422,21 +3423,21 @@ scale {
 progressbar {
   // sizing
   &.horizontal {
-    trough { min-width: 150px; }
-
-    trough,
-    progress { min-height: 2px; }
+    > trough {
+      min-width: 150px;
+      &, > progress { min-height: 2px; }
+    }
   }
 
   &.vertical {
-    trough { min-height: 80px; }
-
-    trough,
-    progress { min-width: 2px; }
+    > trough {
+      min-height: 80px;
+      &, > progress { min-width: 2px; }
+    }
   }
 
-  &.horizontal progress { margin: 0 -1px; } // the progress node is positioned after the trough border
-  &.vertical progress { margin: -1px 0; }   // this moves it over it.
+  &.horizontal > trough > progress { margin: 0 -1px; } // the progress node is positioned after the trough border
+  &.vertical > trough > progress { margin: -1px 0; }   // this moves it over it.
 
 
   // FIXME: insensitive state missing and some other state should be set probably
@@ -3448,9 +3449,9 @@ progressbar {
     transition: $backdrop_transition;
   }
 
-  trough { @extend %scale_trough; }
+  > trough { @extend %scale_trough; }
 
-  progress {
+  > trough > progress {
     @extend %scale_highlight; /* share most of scales' */
     /* override insensitive that is specific to progress */
     &:disabled {
@@ -3492,20 +3493,20 @@ progressbar {
     min-height: 3px;
     background-color: transparent;
 
-    trough {
+    > trough {
       border-style: none;
       border-radius: 0;
       background-color: transparent;
       box-shadow: none;
-    }
 
-    progress {
-      border-style: none;
-      border-radius: 0;
+      > progress {
+        border-style: none;
+        border-radius: 0;
+      }
     }
   }
 
-  trough.empty progress { all: unset; } // makes the progress indicator disappear, when the fraction is 0
+  > trough.empty > progress { all: unset; } // makes the progress indicator disappear, when the fraction is 0
 }
 
 /*************
@@ -3517,7 +3518,7 @@ $levelbar_border_radius: 3px;
 
 levelbar {
   &.horizontal {
-    block {
+    > block {
       min-height: $levelbar_size;
       border-radius: $levelbar_border_radius;
 
@@ -3536,20 +3537,7 @@ levelbar {
 
     // segmented level bar
     &.discrete {
-      // trough
-      trough {
-        // border: 1px solid $borders_color;
-        // padding: 1px;
-        // padding-right:0;
-        // background-color: $base_color;
-        // border-radius: 7px;
-        // box-shadow: inset 0 1px 1px 0 rgba(0,0,0,0.05);
-        // &:dir(rtl) {padding-left:0;}
-        // &:dir(ltr) {padding-right:0;}
-      }
-
-      // block
-      block {
+      > block {
         min-height: 2px;
         margin: 1px;
         min-width: 24px;
@@ -3557,19 +3545,18 @@ levelbar {
         &:first-child {border-radius: 2px 0 0 2px;}
         &:last-child {
           border-radius: 0 2px 2px 0;
-          // margin-right:0;
         }
       }
     }
   }
 
   &.vertical {
-    block {
+    > block {
       min-width: $levelbar_size;
       border-radius: $levelbar_border_radius;
     }
 
-    &.discrete block {
+    &.discrete > block {
       min-width: $levelbar_size - 7px;
       margin: 1px 0;
       min-height: 32px;
@@ -3578,14 +3565,12 @@ levelbar {
 
   &:backdrop { transition: $backdrop_transition; }
 
-
-  // trough
-  trough {
+  > trough {
     padding: 0;
   }
 
   // level bar colours
-  block {
+  > block {
     border: 1px solid;
     box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.2);
 
@@ -3671,13 +3656,13 @@ actionbar > revealer >  box {
 }
 
 scrolledwindow {
-  viewport.frame { // avoid double borders when viewport inside scrolled window
+  > viewport.frame { // avoid double borders when viewport inside scrolled window
     border-style: none;
   }
 
   // This is used when content is touch-dragged past boundaries.
   // draws a box on top of the content, the size changes programmatically.
-  overshoot {
+  > overshoot {
     &.top {
       @include overshoot(top);
 
@@ -3704,7 +3689,7 @@ scrolledwindow {
   }
 
 
-  junction { // the small square between two scrollbars
+  > junction { // the small square between two scrollbars
     // Only color the top-left (or top right in RTL) pixel, to visually connect
     // the borders of the two scrollbars.
 
@@ -3755,11 +3740,11 @@ list {
     border-color: $backdrop_borders_color;
   }
 
-  row { padding: 2px; }
-  row.expander { padding: 0px; }
-  row.expander .row-header { padding: 2px; }
+  > row { padding: 2px; }
+  > row.expander { padding: 0px; }
+  > row.expander .row-header { padding: 2px; }
 
-  &.separators row:not(:first-child) {
+  &.separators > row:not(:first-child) {
     border-top: 1px solid $borders_color;
   }
 }
@@ -4295,6 +4280,7 @@ tooltip {
     border: 1px solid $tooltip_borders_color; // this suble border is meant to
                                               // not make the tooltip melt with
                                               // very dark backgrounds
+    color: white;
   }
 
   padding: 4px;
@@ -4333,7 +4319,7 @@ colorswatch {
     border-top-left-radius: $_colorswatch_radius + 0.5px;
     border-top-right-radius: $_colorswatch_radius + 0.5px;
 
-    overlay {
+    > overlay {
       border-top-left-radius: $_colorswatch_radius;
       border-top-right-radius: $_colorswatch_radius;
     }
@@ -4343,7 +4329,7 @@ colorswatch {
     border-bottom-left-radius: $_colorswatch_radius + 0.5px;
     border-bottom-right-radius: $_colorswatch_radius + 0.5px;
 
-    overlay {
+    > overlay {
       border-bottom-left-radius: $_colorswatch_radius;
       border-bottom-right-radius: $_colorswatch_radius;
     }
@@ -4354,7 +4340,7 @@ colorswatch {
     border-top-left-radius: $_colorswatch_radius + 0.5px;
     border-bottom-left-radius: $_colorswatch_radius + 0.5px;
 
-    overlay {
+    > overlay {
       border-top-left-radius: $_colorswatch_radius;
       border-bottom-left-radius: $_colorswatch_radius;
     }
@@ -4365,7 +4351,7 @@ colorswatch {
     border-top-right-radius: $_colorswatch_radius + 0.5px;
     border-bottom-right-radius: $_colorswatch_radius + 0.5px;
 
-    overlay {
+    > overlay {
       border-top-right-radius: $_colorswatch_radius;
       border-bottom-right-radius: $_colorswatch_radius;
     }
@@ -4374,7 +4360,7 @@ colorswatch {
   &.dark {
     outline-color: transparentize(white, 0.4);
 
-    overlay {
+    > overlay {
       color: white;
 
       &:hover { border-color: if($variant == 'light', transparentize(black, 0.2), $borders_color); }
@@ -4386,7 +4372,7 @@ colorswatch {
   &.light {
     outline-color: transparentize(black, 0.4);
 
-    overlay {
+    > overlay {
       color: black;
 
       &:hover { border-color: if($variant == 'light', transparentize(black, 0.5), $borders_color); }
@@ -4398,20 +4384,20 @@ colorswatch {
   &:drop(active) {
     box-shadow: none;
 
-    &.light overlay {
+    &.light > overlay {
       border-color: $drop_target_color;
       box-shadow: inset 0 0 0 2px if($variant == 'light', darken($drop_target_color, 7%), $borders_color),
                   inset 0 0 0 1px $drop_target_color;
     }
 
-    &.dark overlay {
+    &.dark > overlay {
       border-color: $drop_target_color;
       box-shadow: inset 0 0 0 2px if($variant == 'light', transparentize(black, 0.7), $borders_color),
                   inset 0 0 0 1px $drop_target_color;
     }
   }
 
-  overlay {
+  > overlay {
     border: 1px solid if($variant == 'light', transparentize(black, 0.7), $borders_color);
 
     &:hover {
@@ -4430,7 +4416,7 @@ colorswatch {
 
     &:only-child { border-radius: $_colorswatch_radius; }
 
-    overlay {
+    > overlay {
       @include button(normal);
 
       &:hover { @include button(hover); }
@@ -4442,7 +4428,7 @@ colorswatch {
   &:disabled {
     opacity: 0.5;
 
-    overlay {
+    > overlay {
       border-color: transparentize(black, 0.4);
       box-shadow: none;
     }
@@ -4453,7 +4439,7 @@ colorswatch {
   &#editor-color-sample {
     border-radius: 4px;
 
-    overlay { border-radius: 4.5px; }
+    > overlay { border-radius: 4.5px; }
   }
 }
 
@@ -4463,7 +4449,6 @@ colorchooser .popover.osd { border-radius: 5px; }
 /********
  * Misc *
  ********/
-//content view (grid/list)
 .content-view {
   background-color: darken($bg_color,7%);
 
@@ -4471,7 +4456,7 @@ colorchooser .popover.osd { border-radius: 5px; }
 
   &:backdrop { background-color: darken($bg_color,7%); }
 
-  rubberband { @extend rubberband; }
+  > rubberband { @extend rubberband; }
 }
 
 .scale-popup {
@@ -4526,37 +4511,37 @@ decoration {
     transition: $backdrop_transition;
   }
 
-  .maximized &,
-  .fullscreen &,
-  .tiled &,
-  .tiled-top &,
-  .tiled-left &,
-  .tiled-right &,
-  .tiled-bottom & { border-radius: 0; }
+  .maximized > &,
+  .fullscreen > &,
+  .tiled > &,
+  .tiled-top > &,
+  .tiled-left > &,
+  .tiled-right > &,
+  .tiled-bottom > & { border-radius: 0; }
 
-  .popup & { box-shadow: none; }
+  .popup > & { box-shadow: none; }
 
   // server-side decorations as used by mutter
-  .ssd & { box-shadow: 0 0 0 1px $_wm_border; } //just doing borders, wm draws actual shadows
+  .ssd > & { box-shadow: 0 0 0 1px $_wm_border; } //just doing borders, wm draws actual shadows
 
-  .csd.popup & {
+  .csd.popup > & {
     border-radius: $menu_radius;
     box-shadow: 0 1px 2px transparentize(black, 0.8),
                 0 0 0 1px transparentize($_wm_border, 0.1);
   }
 
-  tooltip.csd & {
+  tooltip.csd > & {
     border-radius: 5px;
     box-shadow: none;
   }
 
-  messagedialog.csd & {
+  messagedialog.csd > & {
     border-radius: $window_radius;
     box-shadow: 0 1px 2px transparentize(black, 0.8),
                 0 0 0 1px transparentize($_wm_border, 0.1);
   }
 
-  .solid-csd & {
+  .solid-csd > & {
     margin: 0;
     padding: 4px;
     background-color: $borders_color;
@@ -4795,7 +4780,7 @@ popover.emoji-picker emoji {
   }
 }
 
-emoji-completion-row box {
+emoji-completion-row > box {
   border-spacing: 10px;
   padding: 2px 10px;
 }
