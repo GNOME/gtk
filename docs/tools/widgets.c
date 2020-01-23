@@ -819,7 +819,7 @@ create_message_dialog (void)
 static WidgetInfo *
 create_about_dialog (void)
 {
-  GtkWidget *widget;
+  GtkAboutDialog *widget;
   const gchar *authors[] = {
     "Peter Mattis",
     "Spencer Kimball",
@@ -840,7 +840,7 @@ create_about_dialog (void)
                 "authors", authors,
 		NULL);
   gtk_window_set_icon_name (GTK_WINDOW (widget), "help-about");
-  return new_widget_info ("aboutdialog", widget, ASIS);
+  return new_widget_info ("aboutdialog", GTK_WIDGET (widget), ASIS);
 }
 
 static WidgetInfo *

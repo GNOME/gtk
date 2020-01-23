@@ -1703,8 +1703,8 @@ gtk_about_dialog_get_translator_credits (GtkAboutDialog *about)
  * Using gettext(), a simple way to achieve that is to mark the
  * string for translation:
  * |[<!-- language="C" -->
- * GtkWidget *about = gtk_about_dialog_new ();
- *  gtk_about_dialog_set_translator_credits (GTK_ABOUT_DIALOG (about),
+ * GtkAboutDialog *about = gtk_about_dialog_new ();
+ *  gtk_about_dialog_set_translator_credits (about,
  *                                           _("translator-credits"));
  * ]|
  * It is a good idea to use the customary msgid “translator-credits” for this
@@ -2354,7 +2354,7 @@ populate_system_page (GtkAboutDialog *about)
  *
  * Returns: a newly created #GtkAboutDialog
  */
-GtkWidget *
+GtkAboutDialog *
 gtk_about_dialog_new (void)
 {
   return g_object_new (GTK_TYPE_ABOUT_DIALOG, NULL);
@@ -2388,8 +2388,8 @@ gtk_show_about_dialog (GtkWindow   *parent,
                        const gchar *first_property_name,
                        ...)
 {
-  static GtkWidget *global_about_dialog = NULL;
-  GtkWidget *dialog = NULL;
+  static GtkAboutDialog *global_about_dialog = NULL;
+  GtkAboutDialog *dialog = NULL;
   va_list var_args;
 
   if (parent)
