@@ -414,7 +414,7 @@ list_box_header_func (GtkListBoxRow *row,
 {
   GtkPlacesSidebarSectionType row_section_type;
   GtkPlacesSidebarSectionType before_section_type;
-  GtkWidget *separator;
+  GtkSeparator *separator;
 
   gtk_list_box_row_set_header (row, NULL);
 
@@ -432,9 +432,9 @@ list_box_header_func (GtkListBoxRow *row,
   if (before && before_section_type != row_section_type)
     {
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_widget_set_margin_top (separator, 4);
-      gtk_widget_set_margin_bottom (separator, 4);
-      gtk_list_box_row_set_header (row, separator);
+      gtk_widget_set_margin_top (GTK_WIDGET (separator), 4);
+      gtk_widget_set_margin_bottom (GTK_WIDGET (separator), 4);
+      gtk_list_box_row_set_header (row, GTK_WIDGET (separator));
     }
 }
 

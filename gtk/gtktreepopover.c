@@ -323,7 +323,7 @@ ensure_submenu (GtkTreePopover *popover,
           gtk_tree_model_get_iter (popover->model, &iter, path);
           item = gtk_tree_popover_create_item (popover, path, &iter, TRUE);
           gtk_container_add (GTK_CONTAINER (box), item);
-          gtk_container_add (GTK_CONTAINER (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+          gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_HORIZONTAL)));
         }
 
     }
@@ -659,7 +659,7 @@ gtk_tree_popover_create_item (GtkTreePopover *popover,
 
   if (is_separator)
     {
-      item = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+      item = GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
       g_object_set_data_full (G_OBJECT (item), "gtk-tree-path",
                                                gtk_tree_row_reference_new (popover->model, path),
                                                (GDestroyNotify)gtk_tree_row_reference_free);

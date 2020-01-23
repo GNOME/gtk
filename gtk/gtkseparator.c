@@ -155,7 +155,7 @@ gtk_separator_class_init (GtkSeparatorClass *class)
  *
  * Returns: a new #GtkSeparator.
  */
-GtkWidget *
+GtkSeparator *
 gtk_separator_new (GtkOrientation orientation)
 {
   return g_object_new (GTK_TYPE_SEPARATOR,

@@ -70,7 +70,7 @@ add_separator (GtkListBoxRow *row, GtkListBoxRow *before, gpointer data)
   if (!before)
     return;
 
-  gtk_list_box_row_set_header (row, gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+  gtk_list_box_row_set_header (row, GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_HORIZONTAL)));
 }
 
 static GtkWidget *

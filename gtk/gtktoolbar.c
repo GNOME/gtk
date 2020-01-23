@@ -1123,7 +1123,7 @@ create_popup_func (GtkMenuButton *menu_button,
 	  !toolbar_content_is_placeholder (content))
 	{
           if (toolbar_content_is_separator (content))
-            gtk_container_add (GTK_CONTAINER (priv->menu_box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+            gtk_container_add (GTK_CONTAINER (priv->menu_box), GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_HORIZONTAL)));
           else if (toolbar_content_has_proxy_menu_item (content))
 	    {
               const char *text = toolbar_content_get_overflow_text (content);
