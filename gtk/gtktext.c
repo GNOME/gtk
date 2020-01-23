@@ -1726,6 +1726,7 @@ gtk_text_init (GtkText *self)
   priv->xalign = 0.0;
   priv->insert_pos = -1;
   priv->cursor_alpha = 1.0;
+  priv->invisible_char = 0;
   priv->history = gtk_text_history_new (&history_funcs, self);
 
   gtk_text_history_set_max_undo_levels (priv->history, DEFAULT_MAX_UNDO);
@@ -1755,8 +1756,6 @@ gtk_text_init (GtkText *self)
                     G_CALLBACK (gtk_text_retrieve_surrounding_cb), self);
   g_signal_connect (priv->im_context, "delete-surrounding",
                     G_CALLBACK (gtk_text_delete_surrounding_cb), self);
-
-  gtk_text_update_cached_style_values (self);
 
   priv->drag_gesture = gtk_gesture_drag_new ();
   g_signal_connect (priv->drag_gesture, "drag-update",
@@ -5425,6 +5424,7 @@ gtk_text_set_visibility (GtkText  *self,
       priv->visible = visible;
 
       g_object_notify (G_OBJECT (self), "visibility");
+      gtk_text_update_cached_style_values (self);
       gtk_text_recompute (self);
 
       /* disable undo when invisible text is used */
