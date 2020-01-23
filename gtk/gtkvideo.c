@@ -332,7 +332,7 @@ gtk_video_init (GtkVideo *self)
  *
  * Returns: a new #GtkVideo
  **/
-GtkWidget *
+GtkVideo *
 gtk_video_new (void)
 {
   return g_object_new (GTK_TYPE_VIDEO, NULL);
@@ -346,7 +346,7 @@ gtk_video_new (void)
  *
  * Returns: a new #GtkVideo
  **/
-GtkWidget *
+GtkVideo *
 gtk_video_new_for_media_stream (GtkMediaStream *stream)
 {
   g_return_val_if_fail (stream == NULL || GTK_IS_MEDIA_STREAM (stream), NULL);
@@ -364,7 +364,7 @@ gtk_video_new_for_media_stream (GtkMediaStream *stream)
  *
  * Returns: a new #GtkVideo
  **/
-GtkWidget *
+GtkVideo *
 gtk_video_new_for_file (GFile *file)
 {
   g_return_val_if_fail (file == NULL || G_IS_FILE (file), NULL);
@@ -385,10 +385,10 @@ gtk_video_new_for_file (GFile *file)
  *
  * Returns: a new #GtkVideo
  **/
-GtkWidget *
+GtkVideo *
 gtk_video_new_for_filename (const char *filename)
 {
-  GtkWidget *result;
+  GtkVideo *result;
   GFile *file;
 
   if (filename)
@@ -415,10 +415,10 @@ gtk_video_new_for_filename (const char *filename)
  *
  * Returns: a new #GtkVideo
  **/
-GtkWidget *
+GtkVideo *
 gtk_video_new_for_resource (const char *resource_path)
 {
-  GtkWidget *result;
+  GtkVideo *result;
   GFile *file;
 
   if (resource_path)

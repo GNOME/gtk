@@ -35,15 +35,15 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkVideo, gtk_video, GTK, VIDEO, GtkWidget)
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_video_new                           (void);
+GtkVideo *      gtk_video_new                           (void);
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_video_new_for_media_stream          (GtkMediaStream         *stream);
+GtkVideo *      gtk_video_new_for_media_stream          (GtkMediaStream         *stream);
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_video_new_for_file                  (GFile                  *file);
+GtkVideo *      gtk_video_new_for_file                  (GFile                  *file);
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_video_new_for_filename              (const char             *filename);
+GtkVideo *      gtk_video_new_for_filename              (const char             *filename);
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_video_new_for_resource              (const char             *resource_path);
+GtkVideo *      gtk_video_new_for_resource              (const char             *resource_path);
 
 GDK_AVAILABLE_IN_ALL
 GtkMediaStream *gtk_video_get_media_stream              (GtkVideo               *self);

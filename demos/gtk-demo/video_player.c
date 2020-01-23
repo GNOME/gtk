@@ -57,7 +57,7 @@ GtkWidget *
 do_video_player (GtkWidget *do_widget)
 {
   GtkWidget *title;
-  GtkWidget *video;
+  GtkVideo  *video;
   GtkWidget *open_button;
   GtkWidget *fullscreen_button;
 
@@ -71,7 +71,7 @@ do_video_player (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       video = gtk_video_new ();
-      gtk_container_add (GTK_CONTAINER (window), video);
+      gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (video));
 
       title = gtk_header_bar_new ();
       gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (title), TRUE);
