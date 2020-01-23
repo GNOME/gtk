@@ -82,7 +82,7 @@ typedef struct
   GtkWidget *button;
 
   GtkWidget *swatch;    /* Widget where we draw the color sample */
-  GtkWidget *cs_dialog; /* Color selection dialog */
+  GtkColorChooserDialog *cs_dialog; /* Color selection dialog */
 
   gchar *title;         /* Title for the color selection window */
   GdkRGBA rgba;
@@ -350,7 +350,7 @@ gtk_color_button_finalize (GObject *object)
   GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
 
   if (priv->cs_dialog != NULL)
-    gtk_widget_destroy (priv->cs_dialog);
+    gtk_widget_destroy (GTK_WIDGET (priv->cs_dialog));
 
   g_free (priv->title);
   gtk_widget_unparent (priv->button);
@@ -436,7 +436,8 @@ static void
 ensure_dialog (GtkColorButton *button)
 {
   GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
-  GtkWidget *parent, *dialog;
+  GtkWidget *parent;
+  GtkColorChooserDialog *dialog;
 
   if (priv->cs_dialog != NULL)
     return;

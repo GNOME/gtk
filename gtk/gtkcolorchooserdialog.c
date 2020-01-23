@@ -277,7 +277,7 @@ gtk_color_chooser_dialog_iface_init (GtkColorChooserInterface *iface)
  *
  * Returns: a new #GtkColorChooserDialog
  */
-GtkWidget *
+GtkColorChooserDialog *
 gtk_color_chooser_dialog_new (const gchar *title,
                               GtkWindow   *parent)
 {
@@ -288,5 +288,5 @@ gtk_color_chooser_dialog_new (const gchar *title,
                          "transient-for", parent,
                          NULL);
 
-  return GTK_WIDGET (dialog);
+  return dialog;
 }
