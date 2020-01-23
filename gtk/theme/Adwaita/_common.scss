@@ -4795,16 +4795,23 @@ popover.emoji-picker emoji {
   }
 }
 
-popover.emoji-completion contents row box {
+emoji-completion-row box {
   border-spacing: 10px;
   padding: 2px 10px;
 }
 
-popover.emoji-completion emoji:hover {
+emoji-completion-row:focus,
+emoji-completion-row:hover {
+  background-color: $selected_bg_color;
+  color: $selected_fg_color;
+}
+
+emoji-completion-row emoji:focus,
+emoji-completion-row emoji:hover {
   background-color: $popover_hover_color;
 }
 
-popover.entry-completion contents {
+popover.entry-completion > contents {
   padding: 0;
 }
 
