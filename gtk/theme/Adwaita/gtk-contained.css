@@ -101,15 +101,23 @@ spinner:checked { opacity: 1; animation: spin 1s linear infinite; }
 spinner:checked:disabled { opacity: 0.5; }
 
 /********************** General Typography * */
-.type-large-title { font-weight: 300; font-size: 24pt; letter-spacing: 0.2rem; }
+.large-title { font-weight: 300; font-size: 24pt; letter-spacing: 0.2rem; }
 
-.type-title { font-weight: 600; font-size: 16pt; }
+.title-1 { font-weight: 800; font-size: 20pt; }
 
-.type-heading { font-weight: 500; font-size: 11pt; }
+.title-2 { font-weight: 800; font-size: 15pt; }
 
-.type-body { font-weight: 400; font-size: 11pt; }
+.title-3 { font-weight: 700; font-size: 15pt; }
 
-.type-caption { font-weight: 400; font-size: 9pt; }
+.title-4 { font-weight: 700; font-size: 13pt; }
+
+.heading { font-weight: 700; font-size: 11pt; }
+
+.body { font-weight: 400; font-size: 11pt; }
+
+.caption-heading { font-weight: 700; font-size: 9pt; }
+
+.caption { font-weight: 400; font-size: 9pt; }
 
 /**************** Text Entries * */
 spinbutton:not(.vertical), spinbutton.vertical text, entry { min-height: 32px; padding-left: 8px; padding-right: 8px; border: 1px solid; border-radius: 5px; transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94); color: black; border-color: #cdc7c2; background-color: #ffffff; box-shadow: inset 0 0 0 1px rgba(53, 132, 228, 0); }
@@ -681,17 +689,17 @@ window.devel headerbar.titlebar:not(.selection-mode) { background: #f6f5f4 cross
 window.devel headerbar.titlebar:not(.selection-mode):backdrop { background: #f6f5f4 cross-fade(10% -gtk-icontheme("system-run-symbolic"), image(transparent)) 90% 0/256px 256px no-repeat, image(#f6f5f4); /* background-color would flash */ }
 
 /************ Pathbars * */
-.path-bar button.text-button, .path-bar button.image-button, .path-bar button { padding-left: 4px; padding-right: 4px; }
+pathbar button.text-button, pathbar button.image-button, pathbar button { padding-left: 4px; padding-right: 4px; }
 
-.path-bar button.text-button.image-button label { padding-left: 0; padding-right: 0; }
+pathbar button.text-button.image-button label { padding-left: 0; padding-right: 0; }
 
-.path-bar button.text-button.image-button label:last-child, .path-bar button label:last-child { padding-right: 8px; }
+pathbar button.text-button.image-button label:last-child, pathbar button label:last-child { padding-right: 8px; }
 
-.path-bar button.text-button.image-button label:first-child, .path-bar button label:first-child { padding-left: 8px; }
+pathbar button.text-button.image-button label:first-child, pathbar button label:first-child { padding-left: 8px; }
 
-.path-bar button image { padding-left: 4px; padding-right: 4px; }
+pathbar button image { padding-left: 4px; padding-right: 4px; }
 
-.path-bar button.slider-button { padding-left: 0; padding-right: 0; }
+pathbar button.slider-button { padding-left: 0; padding-right: 0; }
 
 /************** Tree Views * */
 treeview.view { border-left-color: #979a9b; border-top-color: #f6f5f4; }

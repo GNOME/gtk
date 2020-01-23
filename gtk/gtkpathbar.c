@@ -240,7 +240,6 @@ gtk_path_bar_init (GtkPathBar *path_bar)
 			    G_CALLBACK (gtk_path_bar_scroll_down), path_bar);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (path_bar));
-  gtk_style_context_add_class (context, "path-bar");
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LINKED);
 
   priv->get_info_cancellable = NULL;
@@ -304,6 +303,8 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_slider_down_defocus);
   gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_scroll_up);
   gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_scroll_down);
+
+  gtk_widget_class_set_css_name (widget_class, "pathbar");
 }
 
 
