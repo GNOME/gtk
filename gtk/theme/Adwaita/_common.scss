@@ -74,31 +74,6 @@ check:disabled,
 radio:disabled,
 treeview.expander:disabled { -gtk-icon-filter: opacity(0.5); }
 
-.gtkstyle-fallback {
-  color: $fg_color;
-  background-color: $bg_color;
-
-  &:hover {
-    color: $fg_color;
-    background-color: lighten($bg_color, 10%);
-  }
-
-  &:active {
-    color: $fg_color;
-    background-color: darken($bg_color, 10%);
-  }
-
-  &:disabled {
-    color: $insensitive_fg_color;
-    background-color: $insensitive_bg_color;
-  }
-
-  &:selected {
-    color: $selected_fg_color;
-    background-color: $selected_bg_color;
-  }
-}
-
 .view,
 %view {
   color: $text_color;

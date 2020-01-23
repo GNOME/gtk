@@ -15,16 +15,6 @@ button:focus(visible), checkbutton:focus(visible), radiobutton:focus(visible), s
 /* These wildcard seems unavoidable, need to investigate. Wildcards are bad and troublesome, use them with care, or better, just don't. Everytime a wildcard is used a kitten dies, painfully. */
 spinner:disabled, arrow:disabled, scrollbar:disabled, check:disabled, radio:disabled, treeview.expander:disabled { -gtk-icon-filter: opacity(0.5); }
 
-.gtkstyle-fallback { color: #2e3436; background-color: #f6f5f4; }
-
-.gtkstyle-fallback:hover { color: #2e3436; background-color: white; }
-
-.gtkstyle-fallback:active { color: #2e3436; background-color: #dfdcd8; }
-
-.gtkstyle-fallback:disabled { color: #929595; background-color: #faf9f8; }
-
-.gtkstyle-fallback:selected { color: #ffffff; background-color: #3584e4; }
-
 .view, iconview, textview > text { color: black; background-color: #ffffff; }
 
 .view:backdrop, iconview:backdrop, textview > text:backdrop { color: #323232; background-color: #fcfcfc; }
