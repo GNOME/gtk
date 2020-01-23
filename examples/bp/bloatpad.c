@@ -404,7 +404,7 @@ edit_accels (GSimpleAction *action,
 {
   GtkApplication *app = user_data;
   GtkWidget *combo;
-  GtkWidget *entry;
+  GtkEntry *entry;
   gchar **actions;
   GtkWidget *dialog;
   gint i;
@@ -418,7 +418,7 @@ edit_accels (GSimpleAction *action,
     gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), actions[i], actions[i]);
   g_signal_connect (combo, "changed", G_CALLBACK (combo_changed), dialog);
   entry = gtk_entry_new ();
-  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), entry);
+  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), GTK_WIDGET (entry));
   gtk_dialog_add_button (GTK_DIALOG (dialog), "Close", GTK_RESPONSE_CLOSE);
   gtk_dialog_add_button (GTK_DIALOG (dialog), "Set", GTK_RESPONSE_APPLY);
   g_signal_connect (dialog, "response", G_CALLBACK (response), dialog);

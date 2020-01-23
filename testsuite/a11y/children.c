@@ -260,7 +260,7 @@ main (int argc, char *argv[])
   add_child_tests (gtk_statusbar_new ());
 #endif
   add_child_tests (gtk_notebook_new ());
-  add_child_tests (gtk_entry_new ());
+  add_child_tests (GTK_WIDGET (gtk_entry_new ()));
 
   return g_test_run ();
 }

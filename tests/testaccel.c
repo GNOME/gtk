@@ -64,7 +64,8 @@ key_test (void)
 	GtkTreeViewColumn *column;
 	GtkCellRenderer *rend;
 	gint i;
-        GtkWidget *box, *entry;
+        GtkWidget *box;
+        GtkEntry *entry;
 
 	/* create window */
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -111,8 +112,8 @@ key_test (void)
 	}
 
         entry = gtk_entry_new ();
-        gtk_widget_show (entry);
-        gtk_container_add (GTK_CONTAINER (box), entry);
+        gtk_widget_show (GTK_WIDGET (entry));
+        gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (entry));
  
 	return window;
 }

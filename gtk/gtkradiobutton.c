@@ -96,7 +96,8 @@
  * |[<!-- language="C" -->
  * void create_radio_buttons (void) {
  *
- *    GtkWidget *window, *radio1, *radio2, *box, *entry;
+ *    GtkWidget *window, *radio1, *radio2, *box;
+ *    GtkEntry *entry;
  *    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
  *    box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
  *    gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
@@ -104,7 +105,7 @@
  *    // Create a radio button with a GtkEntry widget
  *    radio1 = gtk_radio_button_new (NULL);
  *    entry = gtk_entry_new ();
- *    gtk_container_add (GTK_CONTAINER (radio1), entry);
+ *    gtk_container_add (GTK_CONTAINER (radio1), GTK_WIDGET (entry));
  *
  *
  *    // Create a radio button with a label

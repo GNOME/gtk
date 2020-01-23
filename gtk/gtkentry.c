@@ -1869,10 +1869,10 @@ gtk_entry_clear_icon (GtkEntry             *entry,
  *
  * Returns: a new #GtkEntry.
  */
-GtkWidget*
+GtkEntry*
 gtk_entry_new (void)
 {
-  return g_object_new (GTK_TYPE_ENTRY, NULL);
+  return GTK_ENTRY (g_object_new (GTK_TYPE_ENTRY, NULL));
 }
 
 /**
@@ -1883,12 +1883,12 @@ gtk_entry_new (void)
  *
  * Returns: a new #GtkEntry
  */
-GtkWidget*
+GtkEntry*
 gtk_entry_new_with_buffer (GtkEntryBuffer *buffer)
 {
   g_return_val_if_fail (GTK_IS_ENTRY_BUFFER (buffer), NULL);
 
-  return g_object_new (GTK_TYPE_ENTRY, "buffer", buffer, NULL);
+  return GTK_ENTRY (g_object_new (GTK_TYPE_ENTRY, "buffer", buffer, NULL));
 }
 
 static GtkEntryBuffer*

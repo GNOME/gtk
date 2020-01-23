@@ -70,7 +70,8 @@ int
 main (int    argc,
       char **argv)
 {
-  GtkWidget *window, *entry, *button, *grid, *notebook;
+  GtkWidget *window, *button, *grid, *notebook;
+  GtkEntry *entry;
   GtkWidget *vbox, *hbox, *grid_hbox, *spin, *spin2, *toggle, *combo, *image;
   GtkLabel *label;
   GtkAdjustment *adjustment;
@@ -123,11 +124,11 @@ main (int    argc,
 	entry = gtk_entry_new ();
 	gtk_editable_set_text (GTK_EDITABLE (entry), "│XYyj,Ö...");
 
-        set_font_size (entry, i);
+        set_font_size (GTK_WIDGET (entry), i);
 
-	gtk_widget_set_valign (entry, aligns[j]);
+	gtk_widget_set_valign (GTK_WIDGET (entry), aligns[j]);
 
-	gtk_container_add (GTK_CONTAINER (hbox), entry);
+	gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (entry));
       }
 
       spin = gtk_spin_button_new (NULL, 0, 1);

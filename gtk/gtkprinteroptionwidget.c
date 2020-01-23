@@ -60,7 +60,7 @@ struct GtkPrinterOptionWidgetPrivate
 
   GtkWidget *check;
   GtkWidget *combo;
-  GtkWidget *entry;
+  GtkEntry  *entry;
   GtkWidget *image;
   GtkLabel *label;
   GtkLabel *info_label;
@@ -208,7 +208,7 @@ gtk_printer_option_widget_mnemonic_activate (GtkWidget *widget,
   if (priv->combo)
     return gtk_widget_mnemonic_activate (priv->combo, group_cycling);
   if (priv->entry)
-    return gtk_widget_mnemonic_activate (priv->entry, group_cycling);
+    return gtk_widget_mnemonic_activate (GTK_WIDGET (priv->entry), group_cycling);
   if (priv->button)
     return gtk_widget_mnemonic_activate (priv->button, group_cycling);
 
@@ -444,7 +444,7 @@ deconstruct_widgets (GtkPrinterOptionWidget *widget)
   
   if (priv->entry)
     {
-      gtk_widget_destroy (priv->entry);
+      gtk_widget_destroy (GTK_WIDGET (priv->entry));
       priv->entry = NULL;
     }
 
@@ -857,10 +857,10 @@ construct_widgets (GtkPrinterOptionWidget *widget)
 
     case GTK_PRINTER_OPTION_TYPE_STRING:
       priv->entry = gtk_entry_new ();
-      gtk_entry_set_activates_default (GTK_ENTRY (priv->entry),
+      gtk_entry_set_activates_default (priv->entry,
                                        gtk_printer_option_get_activates_default (source));
-      gtk_widget_show (priv->entry);
-      gtk_container_add (GTK_CONTAINER (widget), priv->entry);
+      gtk_widget_show (GTK_WIDGET (priv->entry));
+      gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (priv->entry));
       g_signal_connect (priv->entry, "changed", G_CALLBACK (entry_changed_cb), widget);
 
       text = g_strdup_printf ("%s:", source->display_text);

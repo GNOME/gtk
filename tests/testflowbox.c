@@ -84,7 +84,7 @@ populate_flowbox_focus (GtkFlowBox *flowbox)
       switch (i % 4)
         {
         case 0:
-          widget = gtk_entry_new ();
+          widget = GTK_WIDGET (gtk_entry_new ());
           break;
         case 1:
           widget = gtk_button_new_with_label ("Button");

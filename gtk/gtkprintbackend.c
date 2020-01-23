@@ -637,7 +637,8 @@ request_password (GtkPrintBackend  *backend,
                   gboolean          can_store_auth_info)
 {
   GtkPrintBackendPrivate *priv = backend->priv;
-  GtkWidget *dialog, *box, *main_box, *icon, *vbox, *entry, *chkbtn;
+  GtkWidget *dialog, *box, *main_box, *icon, *vbox, *chkbtn;
+  GtkEntry *entry;
   GtkLabel *label;
   GtkWidget *focus = NULL;
   GtkWidget *content_area;
@@ -708,18 +709,18 @@ request_password (GtkPrintBackend  *backend,
           gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
           entry = gtk_entry_new ();
-          focus = entry;
+          focus = GTK_WIDGET (entry);
 
           if (ai_default[i] != NULL)
             gtk_editable_set_text (GTK_EDITABLE (entry), ai_default[i]);
 
-          gtk_entry_set_visibility (GTK_ENTRY (entry), ai_visible[i]);
-          gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
+          gtk_entry_set_visibility (entry, ai_visible[i]);
+          gtk_entry_set_activates_default (entry, TRUE);
 
           gtk_container_add (GTK_CONTAINER (vbox), box);
 
           gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
-          gtk_container_add (GTK_CONTAINER (box), entry);
+          gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (entry));
 
           g_signal_connect (entry, "changed",
                             G_CALLBACK (store_entry), &(priv->auth_info[i]));
