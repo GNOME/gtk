@@ -1796,7 +1796,7 @@ gtk_text_init (GtkText *self)
   for (i = 0; i < 2; i++)
     {
       priv->undershoot_node[i] = gtk_css_node_new ();
-      gtk_css_node_set_name (priv->undershoot_node[i], I_("undershoot"));
+      gtk_css_node_set_name (priv->undershoot_node[i], g_quark_from_static_string ("undershoot"));
       gtk_css_node_add_class (priv->undershoot_node[i], g_quark_from_static_string (i == 0 ? GTK_STYLE_CLASS_LEFT : GTK_STYLE_CLASS_RIGHT));
       gtk_css_node_set_parent (priv->undershoot_node[i], widget_node);
       gtk_css_node_set_state (priv->undershoot_node[i], gtk_css_node_get_state (widget_node) & ~GTK_STATE_FLAG_DROP_ACTIVE);
@@ -4025,7 +4025,7 @@ gtk_text_toggle_overwrite (GtkText *self)
           GtkCssNode *widget_node = gtk_widget_get_css_node (GTK_WIDGET (self));
 
           priv->block_cursor_node = gtk_css_node_new ();
-          gtk_css_node_set_name (priv->block_cursor_node, I_("block-cursor"));
+          gtk_css_node_set_name (priv->block_cursor_node, g_quark_from_static_string ("block-cursor"));
           gtk_css_node_set_parent (priv->block_cursor_node, widget_node);
           gtk_css_node_set_state (priv->block_cursor_node, gtk_css_node_get_state (widget_node));
           g_object_unref (priv->block_cursor_node);
@@ -4216,7 +4216,7 @@ gtk_text_set_positions (GtkText *self,
           GtkCssNode *widget_node = gtk_widget_get_css_node (GTK_WIDGET (self));
 
           priv->selection_node = gtk_css_node_new ();
-          gtk_css_node_set_name (priv->selection_node, I_("selection"));
+          gtk_css_node_set_name (priv->selection_node, g_quark_from_static_string ("selection"));
           gtk_css_node_set_parent (priv->selection_node, widget_node);
           gtk_css_node_set_state (priv->selection_node, gtk_css_node_get_state (widget_node));
           g_object_unref (priv->selection_node);

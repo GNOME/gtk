@@ -2607,7 +2607,7 @@ gtk_flow_box_drag_gesture_update (GtkGestureDrag *gesture,
   
       widget_node = gtk_widget_get_css_node (GTK_WIDGET (box));
       priv->rubberband_node = gtk_css_node_new ();
-      gtk_css_node_set_name (priv->rubberband_node, I_("rubberband"));
+      gtk_css_node_set_name (priv->rubberband_node, g_quark_from_static_string ("rubberband"));
       gtk_css_node_set_parent (priv->rubberband_node, widget_node);
       gtk_css_node_set_state (priv->rubberband_node, gtk_css_node_get_state (widget_node));
       g_object_unref (priv->rubberband_node);

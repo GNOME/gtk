@@ -574,7 +574,7 @@ gtk_popover_init (GtkPopover *popover)
   gtk_widget_add_controller (GTK_WIDGET (popover), controller);
 
   priv->arrow_node = gtk_css_node_new ();
-  gtk_css_node_set_name (priv->arrow_node, I_("arrow"));
+  gtk_css_node_set_name (priv->arrow_node, g_quark_from_static_string ("arrow"));
   gtk_css_node_set_parent (priv->arrow_node, gtk_widget_get_css_node (widget));
   gtk_css_node_set_state (priv->arrow_node,
                           gtk_css_node_get_state (gtk_widget_get_css_node (widget)));

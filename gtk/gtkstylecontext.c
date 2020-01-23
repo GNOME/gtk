@@ -807,7 +807,7 @@ gtk_style_context_set_id (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  gtk_css_node_set_id (priv->cssnode, id);
+  gtk_css_node_set_id (priv->cssnode, g_quark_from_string (id));
 }
 
 /*
@@ -825,7 +825,7 @@ gtk_style_context_get_id (GtkStyleContext *context)
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
-  return gtk_css_node_get_id (priv->cssnode);
+  return g_quark_to_string (gtk_css_node_get_id (priv->cssnode));
 }
 
 /**
@@ -1028,7 +1028,7 @@ gtk_style_context_save_named (GtkStyleContext *context,
   cssnode = gtk_css_transient_node_new (priv->cssnode);
   gtk_css_node_set_parent (cssnode, gtk_style_context_get_root (context));
   if (name)
-    gtk_css_node_set_name (cssnode, g_intern_string (name));
+    gtk_css_node_set_name (cssnode, g_quark_from_string (name));
 
   gtk_style_context_save_to_node (context, cssnode);
 
