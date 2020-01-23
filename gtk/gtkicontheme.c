@@ -608,9 +608,10 @@ unset_screen (GtkIconTheme *icon_theme)
       g_signal_handlers_disconnect_by_func (display,
                                             (gpointer) display_closed,
                                             icon_theme);
-      g_signal_handlers_disconnect_by_func (settings,
-                                            (gpointer) theme_changed,
-                                            icon_theme);
+      if (settings)
+        g_signal_handlers_disconnect_by_func (settings,
+                                              (gpointer) theme_changed,
+                                              icon_theme);
 
       priv->screen = NULL;
     }
