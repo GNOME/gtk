@@ -623,12 +623,12 @@ display_text (const char *resource)
 static GtkWidget *
 display_video (const char *resource)
 {
-  GtkWidget *video;
+  GtkVideo *video;
 
   video = gtk_video_new_for_resource (resource);
-  gtk_video_set_loop (GTK_VIDEO (video), TRUE);
+  gtk_video_set_loop (video, TRUE);
 
-  return video;
+  return GTK_WIDGET (video);
 }
 
 static GtkWidget *
