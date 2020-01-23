@@ -358,8 +358,6 @@ gtk_css_node_create_style (GtkCssNode   *cssnode,
                            GtkCssChange  change)
 {
   const GtkCssNodeDeclaration *decl;
-  GtkCssMatcher matcher;
-  GtkCssStyle *parent;
   GtkCssStyle *style;
   GtkCssChange style_change;
 
@@ -371,8 +369,6 @@ gtk_css_node_create_style (GtkCssNode   *cssnode,
 
   created_styles++;
 
-  parent = cssnode->parent ? cssnode->parent->style : NULL;
-
   if (change & GTK_CSS_CHANGE_NEEDS_RECOMPUTE)
     {
       /* Need to recompute the change flags */
@@ -383,11 +379,8 @@ gtk_css_node_create_style (GtkCssNode   *cssnode,
       style_change = gtk_css_static_style_get_change (gtk_css_style_get_static_style (cssnode->style));
     }
 
-  _gtk_css_matcher_node_init (&matcher, cssnode);
-
   style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
-                                            &matcher,
-                                            parent,
+                                            cssnode,
                                             style_change);
 
   store_in_global_parent_cache (cssnode, decl, style);
