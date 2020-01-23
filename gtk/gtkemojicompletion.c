@@ -179,16 +179,11 @@ move_active_row (GtkEmojiCompletion *completion,
                  int                 direction)
 {
   GtkWidget *child;
-  GtkWidget *base;
 
   for (child = gtk_widget_get_first_child (completion->list);
        child != NULL;
        child = gtk_widget_get_next_sibling (child))
-    {
-      gtk_widget_unset_state_flags (child, GTK_STATE_FLAG_PRELIGHT);
-      base = GTK_WIDGET (g_object_get_data (G_OBJECT (child), "base"));
-      gtk_widget_unset_state_flags (base, GTK_STATE_FLAG_PRELIGHT);
-    }
+    gtk_widget_unset_state_flags (child, GTK_STATE_FLAG_FOCUSED);
 
   if (completion->active != NULL)
     {
@@ -207,11 +202,11 @@ move_active_row (GtkEmojiCompletion *completion,
     }
 
   if (completion->active != NULL)
-    gtk_widget_set_state_flags (completion->active, GTK_STATE_FLAG_PRELIGHT, FALSE);
+    gtk_widget_set_state_flags (completion->active, GTK_STATE_FLAG_FOCUSED, FALSE);
 
   if (completion->active_variation)
     {
-      gtk_widget_unset_state_flags (completion->active_variation, GTK_STATE_FLAG_PRELIGHT);
+      gtk_widget_unset_state_flags (completion->active_variation, GTK_STATE_FLAG_FOCUSED);
       completion->active_variation = NULL;
     }
 }
@@ -232,6 +227,7 @@ show_variations (GtkEmojiCompletion *completion,
 {
   GtkWidget *stack;
   GtkWidget *box;
+  GtkWidget *child;
   gboolean is_visible;
 
   if (!row)
@@ -246,17 +242,10 @@ show_variations (GtkEmojiCompletion *completion,
   if (is_visible == visible)
     return;
 
-  if (visible)
-    gtk_widget_unset_state_flags (row, GTK_STATE_FLAG_PRELIGHT);
-  else
-    gtk_widget_set_state_flags (row, GTK_STATE_FLAG_PRELIGHT, FALSE);
-
   gtk_stack_set_visible_child_name (GTK_STACK (stack), visible ? "variations" : "text");
-  if (completion->active_variation)
-    {
-      gtk_widget_unset_state_flags (completion->active_variation, GTK_STATE_FLAG_PRELIGHT);
-      completion->active_variation = NULL;
-    }
+  for (child = gtk_widget_get_first_child (box); child; child = gtk_widget_get_next_sibling (child))
+    gtk_widget_unset_state_flags (child, GTK_STATE_FLAG_FOCUSED);
+  completion->active_variation = NULL;
 }
 
 static gboolean
@@ -294,9 +283,9 @@ move_active_variation (GtkEmojiCompletion *completion,
   if (next)
     {
       if (completion->active_variation)
-        gtk_widget_unset_state_flags (completion->active_variation, GTK_STATE_FLAG_PRELIGHT);
+        gtk_widget_unset_state_flags (completion->active_variation, GTK_STATE_FLAG_FOCUSED);
       completion->active_variation = next;
-      gtk_widget_set_state_flags (completion->active_variation, GTK_STATE_FLAG_PRELIGHT, FALSE);
+      gtk_widget_set_state_flags (completion->active_variation, GTK_STATE_FLAG_FOCUSED, FALSE);
     }
 
   return next != NULL;
@@ -477,8 +466,7 @@ add_emoji_variation (GtkWidget *box,
   gtk_label_set_attributes (GTK_LABEL (label), attrs);
   pango_attr_list_unref (attrs);
 
-  child = gtk_flow_box_child_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (child), "emoji");
+  child = g_object_new (GTK_TYPE_FLOW_BOX_CHILD, "css-name", "emoji", NULL);
   g_object_set_data_full (G_OBJECT (child), "text", g_strdup (text), g_free);
   g_object_set_data_full (G_OBJECT (child), "emoji-data",
                           g_variant_ref (emoji_data),
@@ -513,7 +501,7 @@ add_emoji (GtkWidget          *list,
   pango_attr_list_unref (attrs);
   gtk_style_context_add_class (gtk_widget_get_style_context (label), "emoji");
 
-  child = gtk_list_box_row_new ();
+  child = g_object_new (GTK_TYPE_LIST_BOX_ROW, "css-name", "emoji-completion-row", NULL);
   gtk_widget_set_focus_on_click (child, FALSE);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (child), box);
@@ -550,7 +538,6 @@ add_emoji (GtkWidget          *list,
   g_object_set_data_full (G_OBJECT (child), "text", g_strdup (text), g_free);
   g_object_set_data_full (G_OBJECT (child), "emoji-data",
                           g_variant_ref (emoji_data), (GDestroyNotify)g_variant_unref);
-  gtk_style_context_add_class (gtk_widget_get_style_context (child), "emoji-completion-row");
 
   gtk_list_box_insert (GTK_LIST_BOX (list), child, -1);
 }
@@ -566,9 +553,12 @@ populate_completion (GtkEmojiCompletion *completion,
   GVariantIter iter;
   GVariant *item;
 
-  g_free (completion->text);
-  completion->text = g_strdup (text);
-  completion->length = g_utf8_strlen (text, -1);
+  if (completion->text != text)
+    {
+      g_free (completion->text);
+      completion->text = g_strdup (text);
+      completion->length = g_utf8_strlen (text, -1);
+    }
   completion->offset = offset;
 
   children = gtk_container_get_children (GTK_CONTAINER (completion->list));
@@ -603,7 +593,7 @@ populate_completion (GtkEmojiCompletion *completion,
   if (n_added > 0)
     {
       completion->active = gtk_widget_get_first_child (completion->list);
-      gtk_widget_set_state_flags (completion->active, GTK_STATE_FLAG_PRELIGHT, FALSE);
+      gtk_widget_set_state_flags (completion->active, GTK_STATE_FLAG_FOCUSED, FALSE);
     }
 
   return n_added;
