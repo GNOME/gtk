@@ -569,7 +569,7 @@ gtk_font_button_init (GtkFontButton *font_button)
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (priv->font_label));
 
-  gtk_container_add (GTK_CONTAINER (priv->font_size_box), gtk_separator_new (GTK_ORIENTATION_VERTICAL));
+  gtk_container_add (GTK_CONTAINER (priv->font_size_box), GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_VERTICAL)));
   gtk_container_add (GTK_CONTAINER (priv->font_size_box), GTK_WIDGET (priv->size_label));
   gtk_container_add (GTK_CONTAINER (box), priv->font_size_box);
 

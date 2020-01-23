@@ -674,9 +674,9 @@ create_calendar(void)
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, DEF_PAD_SMALL);
 
   gtk_container_add (GTK_CONTAINER (vbox), hpaned);
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_HORIZONTAL)));
   gtk_container_add (GTK_CONTAINER (vbox), frame);
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_HORIZONTAL)));
   gtk_container_add (GTK_CONTAINER (vbox), bbox);
 
   gtk_container_add (GTK_CONTAINER (window), vbox);

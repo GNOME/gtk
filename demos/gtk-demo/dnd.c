@@ -266,6 +266,7 @@ pressed_cb (GtkGesture *gesture,
       GtkWidget *menu;
       GtkWidget *box;
       GtkWidget *item;
+      GtkSeparator *separator;
       GdkClipboard *clipboard;
 
       pos_x = x;
@@ -286,8 +287,8 @@ pressed_cb (GtkGesture *gesture,
       g_signal_connect (item, "clicked", G_CALLBACK (new_spinner_cb), widget);
       gtk_container_add (GTK_CONTAINER (box), item);
 
-      item = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_container_add (GTK_CONTAINER (box), item);
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (separator));
 
       item = gtk_button_new_with_label ("Edit");
       gtk_button_set_relief (GTK_BUTTON (item), GTK_RELIEF_NONE);
@@ -295,8 +296,8 @@ pressed_cb (GtkGesture *gesture,
       g_signal_connect (item, "clicked", G_CALLBACK (edit_cb), child);
       gtk_container_add (GTK_CONTAINER (box), item);
 
-      item = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_container_add (GTK_CONTAINER (box), item);
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (separator));
 
       item = gtk_button_new_with_label ("Cut");
       gtk_button_set_relief (GTK_BUTTON (item), GTK_RELIEF_NONE);

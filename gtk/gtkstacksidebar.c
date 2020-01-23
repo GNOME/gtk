@@ -127,12 +127,12 @@ update_header (GtkListBoxRow *row,
                GtkListBoxRow *before,
                gpointer       userdata)
 {
-  GtkWidget *ret = NULL;
+  GtkSeparator *ret = NULL;
 
   if (before && !gtk_list_box_row_get_header (row))
     {
       ret = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_list_box_row_set_header (row, ret);
+      gtk_list_box_row_set_header (row, GTK_WIDGET (ret));
     }
 }
 

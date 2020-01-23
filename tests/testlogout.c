@@ -74,7 +74,7 @@ activate (GtkApplication *app,
           gpointer        data)
 {
   GtkWidget *box;
-  GtkWidget *separator;
+  GtkSeparator *separator;
   GtkWidget *grid;
   GtkWidget *button;
   GtkLabel *label;
@@ -118,7 +118,7 @@ activate (GtkApplication *app,
   gtk_grid_attach (GTK_GRID (grid), button, 2, 6, 1, 1);
 
   separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (box), separator);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (separator));
 
   grid = gtk_grid_new ();
   gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
