@@ -42,6 +42,7 @@
 #include <stdlib.h>
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include "gdk/gdkprofilerprivate.h"
 #include <cairo-gobject.h>
 
 /**
@@ -1004,6 +1005,8 @@ gtk_css_provider_load_internal (GtkCssProvider *self,
                                 GFile          *file,
                                 GBytes         *bytes)
 {
+  gint64 before = g_get_monotonic_time ();
+
   if (bytes == NULL)
     {
       GError *load_error = NULL;
@@ -1049,6 +1052,13 @@ gtk_css_provider_load_internal (GtkCssProvider *self,
         gtk_css_provider_postprocess (self);
 
       g_bytes_unref (bytes);
+    }
+
+  if (gdk_profiler_is_running ())
+    {
+      char *uri = g_file_get_uri (file);
+      gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "theme load", uri);
+      g_free (uri);
     }
 }
 
