@@ -25,7 +25,6 @@
 
 G_BEGIN_DECLS
 
-typedef union _GtkCssMatcher GtkCssMatcher;
 typedef struct _GtkCssNode GtkCssNode;
 typedef struct _GtkCssNodeDeclaration GtkCssNodeDeclaration;
 typedef struct _GtkCssStyle GtkCssStyle;
