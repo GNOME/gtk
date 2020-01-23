@@ -737,7 +737,6 @@ _gdk_frame_clock_emit_resume_events (GdkFrameClock *frame_clock)
                            "frameclock ::resume-events", "");
 }
 
-#ifdef G_ENABLE_DEBUG
 static gint64
 guess_refresh_interval (GdkFrameClock *frame_clock)
 {
@@ -807,35 +806,17 @@ frame_clock_get_fps (GdkFrameClock *frame_clock)
     
   return ((double) end_counter - start_counter) * G_USEC_PER_SEC / (end_timestamp - start_timestamp);
 }
-#endif
 
 void
 _gdk_frame_clock_add_timings_to_profiler (GdkFrameClock   *clock,
                                           GdkFrameTimings *timings)
 {
-#ifdef G_ENABLE_DEBUG
-#if 0
-  gdk_profiler_add_mark (timings->frame_time * 1000,
-                         (timings->frame_end_time - timings->frame_time) * 1000,
-                         "frame", "");
-
-  if (timings->layout_start_time != 0)
-    gdk_profiler_add_mark (timings->layout_start_time * 1000,
-                           (timings->paint_start_time - timings->layout_start_time) * 1000,
-                            "layout", "");
-
-  if (timings->paint_start_time != 0)
-    gdk_profiler_add_mark (timings->paint_start_time * 1000,
-                           (timings->frame_end_time - timings->paint_start_time) * 1000,
-                            "paint", "");
-#endif
   if (timings->presentation_time != 0)
     gdk_profiler_add_mark (timings->presentation_time * 1000,
                            0,
                            "presentation", "");
 
   gdk_profiler_set_counter (fps_counter,
-                            timings->frame_end_time * 1000,
+                            timings->presentation_time * 1000,
                             frame_clock_get_fps (clock)); 
-#endif
 }
