@@ -67,12 +67,12 @@ show_message_dialog2 (GtkWindow *parent)
 static void
 show_color_chooser (GtkWindow *parent)
 {
-  GtkWidget *dialog;
+  GtkColorChooserDialog *dialog;
 
   dialog = gtk_color_chooser_dialog_new ("Builtin", parent);
 
   gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void

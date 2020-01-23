@@ -733,7 +733,7 @@ create_filesel (void)
 					NULL); 
   gtk_window_set_default_size (GTK_WINDOW (widget), 505, 305);
   
-  info = new_widget_info ("filechooser", widget, ASIS);
+  info = new_widget_info ("filechooser", GTK_WIDGET (widget), ASIS);
   info->include_decorations = TRUE;
 
   return info;
@@ -1137,10 +1137,10 @@ static WidgetInfo *
 create_colorchooserdialog (void)
 {
   WidgetInfo *info;
-  GtkWidget *widget;
+  GtkColorChooserDialog *widget;
 
   widget = gtk_color_chooser_dialog_new ("Color Chooser Dialog", NULL);
-  info = new_widget_info ("colorchooser", widget, ASIS);
+  info = new_widget_info ("colorchooser", GTK_WIDGET (widget), ASIS);
   info->include_decorations = TRUE;
 
   return info;

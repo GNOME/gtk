@@ -1711,7 +1711,7 @@ cmw_destroy_cb(GtkWidget *widget)
 static void
 cmw_color (GtkWidget *widget, GtkWidget *parent)
 {
-    GtkWidget *csd;
+    GtkColorChooserDialog *csd;
 
     csd = gtk_color_chooser_dialog_new ("This is a modal color selection dialog", GTK_WINDOW (parent));
 
@@ -1724,7 +1724,7 @@ cmw_color (GtkWidget *widget, GtkWidget *parent)
                       G_CALLBACK (gtk_widget_destroy), NULL);
     
     /* wait until destroy calls gtk_main_quit */
-    gtk_widget_show (csd);    
+    gtk_widget_show (GTK_WIDGET (csd));
     gtk_main ();
 }
 
