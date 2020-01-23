@@ -157,11 +157,11 @@ create_gears (void)
 static GtkWidget *
 create_switch (void)
 {
-  GtkWidget *w = gtk_switch_new ();
+  GtkSwitch *w = gtk_switch_new ();
 
-  gtk_switch_set_state (GTK_SWITCH (w), TRUE);
+  gtk_switch_set_state (w, TRUE);
 
-  return w;
+  return GTK_WIDGET (w);
 }
 
 static void

@@ -60,14 +60,14 @@ struct _GtkInspectorVisualPrivate
   GtkWidget *box;
   GtkWidget *visual_box;
   GtkComboBoxText *theme_combo;
-  GtkWidget *dark_switch;
+  GtkSwitch *dark_switch;
   GtkComboBoxText *icon_combo;
   GtkComboBoxText *cursor_combo;
   GtkWidget *cursor_size_spin;
   GtkWidget *direction_combo;
   GtkWidget *font_button;
   GtkWidget *hidpi_spin;
-  GtkWidget *animation_switch;
+  GtkSwitch *animation_switch;
   GtkWidget *font_scale_entry;
   GtkAdjustment *font_scale_adjustment;
   GtkAdjustment *scale_adjustment;
@@ -76,17 +76,17 @@ struct _GtkInspectorVisualPrivate
   GtkAdjustment *cursor_size_adjustment;
 
   GtkWidget *debug_box;
-  GtkWidget *fps_switch;
-  GtkWidget *updates_switch;
-  GtkWidget *fallback_switch;
-  GtkWidget *baselines_switch;
-  GtkWidget *layout_switch;
-  GtkWidget *resize_switch;
-  GtkWidget *focus_switch;
+  GtkSwitch *fps_switch;
+  GtkSwitch *updates_switch;
+  GtkSwitch *fallback_switch;
+  GtkSwitch *baselines_switch;
+  GtkSwitch *layout_switch;
+  GtkSwitch *resize_switch;
+  GtkSwitch *focus_switch;
 
   GtkWidget *misc_box;
-  GtkWidget *touchscreen_switch;
-  GtkWidget *software_gl_switch;
+  GtkSwitch *touchscreen_switch;
+  GtkSwitch *software_gl_switch;
 
   GtkAdjustment *focus_adjustment;
 
@@ -574,7 +574,7 @@ init_dark (GtkInspectorVisual *vis)
       GtkWidget *row;
 
       /* theme is hardcoded, nothing we can do */
-      gtk_widget_set_sensitive (vis->priv->dark_switch, FALSE);
+      gtk_widget_set_sensitive (GTK_WIDGET (vis->priv->dark_switch), FALSE);
       row = gtk_widget_get_ancestor (GTK_WIDGET (vis->priv->theme_combo), GTK_TYPE_LIST_BOX_ROW);
       gtk_widget_set_tooltip_text (row, _("Theme is hardcoded by GTK_THEME"));
     }
@@ -870,7 +870,7 @@ update_touchscreen (GtkSwitch *sw)
 static void
 init_touchscreen (GtkInspectorVisual *vis)
 {
-  gtk_switch_set_active (GTK_SWITCH (vis->priv->touchscreen_switch), (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0);
+  gtk_switch_set_active (vis->priv->touchscreen_switch, (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0);
   g_signal_connect (vis->priv->touchscreen_switch, "notify::active",
                     G_CALLBACK (update_touchscreen), NULL);
 
@@ -879,9 +879,9 @@ init_touchscreen (GtkInspectorVisual *vis)
       GtkWidget *row;
 
       /* hardcoded, nothing we can do */
-      gtk_switch_set_active (GTK_SWITCH (vis->priv->touchscreen_switch), TRUE);
-      gtk_widget_set_sensitive (vis->priv->touchscreen_switch, FALSE);
-      row = gtk_widget_get_ancestor (vis->priv->touchscreen_switch, GTK_TYPE_LIST_BOX_ROW);
+      gtk_switch_set_active (vis->priv->touchscreen_switch, TRUE);
+      gtk_widget_set_sensitive (GTK_WIDGET (vis->priv->touchscreen_switch), FALSE);
+      row = gtk_widget_get_ancestor (GTK_WIDGET (vis->priv->touchscreen_switch), GTK_TYPE_LIST_BOX_ROW);
       gtk_widget_set_tooltip_text (row, _("Setting is hardcoded by GTK_TEST_TOUCHSCREEN"));
     }
 }
@@ -937,59 +937,59 @@ row_activated (GtkListBox         *box,
                GtkListBoxRow      *row,
                GtkInspectorVisual *vis)
 {
-  if (gtk_widget_is_ancestor (vis->priv->dark_switch, GTK_WIDGET (row)))
+  if (gtk_widget_is_ancestor (GTK_WIDGET (vis->priv->dark_switch), GTK_WIDGET (row)))
     {
-      GtkSwitch *sw = GTK_SWITCH (vis->priv->dark_switch);
+      GtkSwitch *sw = vis->priv->dark_switch;
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
-  else if (gtk_widget_is_ancestor (vis->priv->animation_switch, GTK_WIDGET (row)))
+  else if (gtk_widget_is_ancestor (GTK_WIDGET (vis->priv->animation_switch), GTK_WIDGET (row)))
     {
-      GtkSwitch *sw = GTK_SWITCH (vis->priv->animation_switch);
+      GtkSwitch *sw = vis->priv->animation_switch;
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
-  else if (gtk_widget_is_ancestor (vis->priv->fps_switch, GTK_WIDGET (row)))
+  else if (gtk_widget_is_ancestor (GTK_WIDGET (vis->priv->fps_switch), GTK_WIDGET (row)))
     {
-      GtkSwitch *sw = GTK_SWITCH (vis->priv->fps_switch);
+      GtkSwitch *sw = vis->priv->fps_switch;
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
-  else if (gtk_widget_is_ancestor (vis->priv->updates_switch, GTK_WIDGET (row)))
+  else if (gtk_widget_is_ancestor (GTK_WIDGET (vis->priv->updates_switch), GTK_WIDGET (row)))
     {
-      GtkSwitch *sw = GTK_SWITCH (vis->priv->updates_switch);
+      GtkSwitch *sw = vis->priv->updates_switch;
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
-  else if (gtk_widget_is_ancestor (vis->priv->fallback_switch, GTK_WIDGET (row)))
+  else if (gtk_widget_is_ancestor (GTK_WIDGET (vis->priv->fallback_switch), GTK_WIDGET (row)))
     {
-      GtkSwitch *sw = GTK_SWITCH (vis->priv->fallback_switch);
+      GtkSwitch *sw = vis->priv->fallback_switch;
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
-  else if (gtk_widget_is_ancestor (vis->priv->baselines_switch, GTK_WIDGET (row)))
+  else if (gtk_widget_is_ancestor (GTK_WIDGET (vis->priv->baselines_switch), GTK_WIDGET (row)))
     {
-      GtkSwitch *sw = GTK_SWITCH (vis->priv->baselines_switch);
+      GtkSwitch *sw = vis->priv->baselines_switch;
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
-  else if (gtk_widget_is_ancestor (vis->priv->layout_switch, GTK_WIDGET (row)))
+  else if (gtk_widget_is_ancestor (GTK_WIDGET (vis->priv->layout_switch), GTK_WIDGET (row)))
     {
-      GtkSwitch *sw = GTK_SWITCH (vis->priv->layout_switch);
+      GtkSwitch *sw = vis->priv->layout_switch;
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
-  else if (gtk_widget_is_ancestor (vis->priv->resize_switch, GTK_WIDGET (row)))
+  else if (gtk_widget_is_ancestor (GTK_WIDGET (vis->priv->resize_switch), GTK_WIDGET (row)))
     {
-      GtkSwitch *sw = GTK_SWITCH (vis->priv->resize_switch);
+      GtkSwitch *sw = vis->priv->resize_switch;
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
-  else if (gtk_widget_is_ancestor (vis->priv->focus_switch, GTK_WIDGET (row)))
+  else if (gtk_widget_is_ancestor (GTK_WIDGET (vis->priv->focus_switch), GTK_WIDGET (row)))
     {
-      GtkSwitch *sw = GTK_SWITCH (vis->priv->focus_switch);
+      GtkSwitch *sw = vis->priv->focus_switch;
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
-  else if (gtk_widget_is_ancestor (vis->priv->touchscreen_switch, GTK_WIDGET (row)))
+  else if (gtk_widget_is_ancestor (GTK_WIDGET (vis->priv->touchscreen_switch), GTK_WIDGET (row)))
     {
-      GtkSwitch *sw = GTK_SWITCH (vis->priv->touchscreen_switch);
+      GtkSwitch *sw = vis->priv->touchscreen_switch;
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
-  else if (gtk_widget_is_ancestor (vis->priv->software_gl_switch, GTK_WIDGET (row)))
+  else if (gtk_widget_is_ancestor (GTK_WIDGET (vis->priv->software_gl_switch), GTK_WIDGET (row)))
     {
-      GtkSwitch *sw = GTK_SWITCH (vis->priv->software_gl_switch);
+      GtkSwitch *sw = vis->priv->software_gl_switch;
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
 }
@@ -999,14 +999,14 @@ init_gl (GtkInspectorVisual *vis)
 {
   GdkDebugFlags flags = gdk_display_get_debug_flags (vis->priv->display);
 
-  gtk_switch_set_active (GTK_SWITCH (vis->priv->software_gl_switch), flags & GDK_DEBUG_GL_SOFTWARE);
+  gtk_switch_set_active (vis->priv->software_gl_switch, flags & GDK_DEBUG_GL_SOFTWARE);
 
   if (flags & GDK_DEBUG_GL_DISABLE)
     {
       GtkWidget *row;
 
-      gtk_widget_set_sensitive (vis->priv->software_gl_switch, FALSE);
-      row = gtk_widget_get_ancestor (vis->priv->software_gl_switch, GTK_TYPE_LIST_BOX_ROW);
+      gtk_widget_set_sensitive (GTK_WIDGET (vis->priv->software_gl_switch), FALSE);
+      row = gtk_widget_get_ancestor (GTK_WIDGET (vis->priv->software_gl_switch), GTK_TYPE_LIST_BOX_ROW);
       gtk_widget_set_tooltip_text (row, _("GL rendering is disabled"));
     }
 }
