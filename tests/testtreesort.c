@@ -108,7 +108,8 @@ main (int argc, char *argv[])
   GtkTreeIter iter;
   gint i;
 
-  GtkWidget *entry, *button;
+  GtkEntry *entry;
+  GtkWidget *button;
   GtkWidget *window2, *vbox2, *scrolled_window2, *tree_view2;
   GtkWidget *window3, *vbox3, *scrolled_window3, *tree_view3;
 
@@ -126,7 +127,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   entry = gtk_entry_new ();
-  gtk_container_add (GTK_CONTAINER (vbox), entry);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (entry));
 
   button = gtk_button_new_with_label ("Switch search method");
   gtk_container_add (GTK_CONTAINER (vbox), button);

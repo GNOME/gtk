@@ -6,7 +6,7 @@ edit_widget (GtkWidget *button)
   GtkWidget *dialog;
   GtkWidget *grid;
   GtkLabel *label;
-  GtkWidget *entry;
+  GtkEntry *entry;
   GtkWidget *check;
 
   dialog = GTK_WIDGET (g_object_get_data (G_OBJECT (button), "dialog"));
@@ -33,7 +33,7 @@ edit_widget (GtkWidget *button)
                               entry, "text",
                               G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
       gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 0, 1, 1);
-      gtk_grid_attach (GTK_GRID (grid), entry, 1, 0, 1, 1);
+      gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (entry), 1, 0, 1, 1);
 
       label = gtk_label_new ("Visible:");
       gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_END);

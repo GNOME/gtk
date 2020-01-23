@@ -394,7 +394,7 @@ main (int argc, char *Argv[])
 {
   GtkWidget *window;
   GtkWidget *grid;
-  GtkWidget *entry;
+  GtkEntry *entry;
 
   gtk_init ();
 
@@ -413,7 +413,7 @@ main (int argc, char *Argv[])
   gtk_grid_attach (GTK_GRID (grid), make_image ("process-stop", BOTTOM_RIGHT), 1, 0, 1, 1);
 
   entry = gtk_entry_new ();
-  gtk_grid_attach (GTK_GRID (grid), entry, 0, 1, 2, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (entry), 0, 1, 2, 1);
 
   gtk_grid_attach (GTK_GRID (grid), make_spinner (), 0, 2, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), make_image ("weather-clear", CENTER), 1, 2, 1, 1);

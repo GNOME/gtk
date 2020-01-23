@@ -66,7 +66,7 @@ int main (int argc, char *argv[])
 
   w = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 15);
   gtk_container_add (GTK_CONTAINER (box), w);
-  gtk_container_add (GTK_CONTAINER (w), gtk_entry_new ());
+  gtk_container_add (GTK_CONTAINER (w), GTK_WIDGET (gtk_entry_new ()));
   bu = gtk_button_new_with_label ("Bu");
   gtk_container_add (GTK_CONTAINER (w), bu);
   c = gtk_switch_new ();

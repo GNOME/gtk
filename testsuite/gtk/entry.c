@@ -110,7 +110,7 @@ changed (GtkEditable *editable,
 static void
 test_insert (void)
 {
-  GtkWidget *entry;
+  GtkEntry *entry;
   gint pos;
   EntryData data1;
   EntryData data2;
@@ -212,7 +212,7 @@ test_insert (void)
 static void
 test_delete (void)
 {
-  GtkWidget *entry;
+  GtkEntry *entry;
   gint pos;
   EntryData data1;
   EntryData data2;

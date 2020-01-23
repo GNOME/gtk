@@ -883,7 +883,7 @@ property_editor (GObject                *object,
     }
   else if (type == G_TYPE_PARAM_STRING)
     {
-      prop_edit = gtk_entry_new ();
+      prop_edit = GTK_WIDGET (gtk_entry_new ());
 
       g_object_connect_property (object, spec,
                                  G_CALLBACK (string_changed),
@@ -986,7 +986,7 @@ property_editor (GObject                *object,
     }
   else if (type == G_TYPE_PARAM_UNICHAR)
     {
-      prop_edit = gtk_entry_new ();
+      prop_edit = GTK_WIDGET (gtk_entry_new ());
       gtk_entry_set_max_length (GTK_ENTRY (prop_edit), 1);
 
       g_object_connect_property (object, spec,

@@ -82,7 +82,7 @@ variant_editor_new (const GVariantType   *type,
 {
   GtkWidget *editor;
   GtkLabel *label;
-  GtkWidget *entry;
+  GtkEntry *entry;
   VariantEditorData *d;
 
   d = g_new (VariantEditorData, 1);
@@ -96,14 +96,14 @@ variant_editor_new (const GVariantType   *type,
     }   
   else if (g_variant_type_equal (type, G_VARIANT_TYPE_STRING))
     {
-      editor = gtk_entry_new ();
+      editor = GTK_WIDGET (gtk_entry_new ());
       g_signal_connect (editor, "notify::text", G_CALLBACK (variant_editor_changed_cb), d);
     }
   else
     {
       editor = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       entry = gtk_entry_new ();
-      gtk_container_add (GTK_CONTAINER (editor), entry);
+      gtk_container_add (GTK_CONTAINER (editor), GTK_WIDGET (entry));
       label = gtk_label_new (g_variant_type_peek_string (type));
       gtk_container_add (GTK_CONTAINER (editor), GTK_WIDGET (label));
       g_signal_connect (entry, "notify::text", G_CALLBACK (variant_editor_changed_cb), d);

@@ -302,7 +302,8 @@ GtkWidget *
 do_combobox (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
-  GtkWidget *vbox, *frame, *box, *combo, *entry;
+  GtkWidget *vbox, *frame, *box, *combo;
+  GtkEntry *entry;
   GtkTreeModel *model;
   GtkCellRenderer *renderer;
   GtkTreePath *path;
@@ -409,7 +410,7 @@ do_combobox (GtkWidget *do_widget)
     MASK_ENTRY (entry)->mask = "^([0-9]*|One|Two|2\302\275|Three)$";
 
     gtk_container_remove (GTK_CONTAINER (combo), gtk_bin_get_child (GTK_BIN (combo)));
-    gtk_container_add (GTK_CONTAINER (combo), entry);
+    gtk_container_add (GTK_CONTAINER (combo), GTK_WIDGET (entry));
 
     /* A combobox with string IDs */
     frame = gtk_frame_new ("String IDs");
@@ -429,7 +430,7 @@ do_combobox (GtkWidget *do_widget)
     g_object_bind_property (combo, "active-id",
                             entry, "text",
                             G_BINDING_BIDIRECTIONAL);
-    gtk_container_add (GTK_CONTAINER (box), entry);
+    gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (entry));
   }
 
   if (!gtk_widget_get_visible (window))

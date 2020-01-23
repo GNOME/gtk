@@ -221,11 +221,11 @@ create_lockbutton (void)
 static WidgetInfo *
 create_entry (void)
 {
-  GtkWidget *widget;
+  GtkEntry *widget;
 
   widget = gtk_entry_new ();
-  gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
-  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (GTK_WIDGET (widget), GTK_ALIGN_FILL);
+  gtk_widget_set_valign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
   gtk_editable_set_text (GTK_EDITABLE (widget), "Entry");
   gtk_editable_set_position (GTK_EDITABLE (widget), -1);
 
@@ -1278,6 +1278,7 @@ create_list_box (void)
   GtkWidget *list;
   GtkWidget *row;
   GtkWidget *button;
+  GtkEntry *entry;
   WidgetInfo *info;
 
   widget = gtk_frame_new (NULL);
@@ -1309,10 +1310,10 @@ create_list_box (void)
   gtk_container_add (GTK_CONTAINER (list), row);
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_container_add (GTK_CONTAINER (row), gtk_label_new ("Line Three"));
-  button = gtk_entry_new ();
-  gtk_widget_set_hexpand (button, TRUE);
-  gtk_widget_set_halign (button, GTK_ALIGN_END);
-  gtk_container_add (GTK_CONTAINER (row), button);
+  entry = gtk_entry_new ();
+  gtk_widget_set_hexpand (GTK_WIDGET (entry), TRUE);
+  gtk_widget_set_halign (GTK_WIDGET (entry), GTK_ALIGN_END);
+  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (entry));
   gtk_container_add (GTK_CONTAINER (list), row);
 
   gtk_container_add (GTK_CONTAINER (widget), list);

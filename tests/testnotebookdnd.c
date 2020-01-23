@@ -150,7 +150,7 @@ static void
 action_clicked_cb (GtkWidget *button,
                    GtkWidget *notebook)
 {
-  GtkWidget *page;
+  GtkEntry *page;
   GtkLabel *title;
 
   page = gtk_entry_new ();
@@ -158,9 +158,9 @@ action_clicked_cb (GtkWidget *button,
 
   title = gtk_label_new ("Addition");
 
-  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), page, GTK_WIDGET (title));
-  gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (notebook), page, TRUE);
-  gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (notebook), page, TRUE);
+  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), GTK_WIDGET (page), GTK_WIDGET (title));
+  gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (notebook), GTK_WIDGET (page), TRUE);
+  gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (notebook), GTK_WIDGET (page), TRUE);
 }
 
 static GtkWidget*
@@ -168,7 +168,8 @@ create_notebook (gchar           **labels,
                  const gchar      *group,
                  GtkPositionType   pos)
 {
-  GtkWidget *notebook, *page, *action_widget;
+  GtkWidget *notebook, *action_widget;
+  GtkEntry *page;
   GtkLabel *title;
 
   notebook = gtk_notebook_new ();
@@ -193,9 +194,9 @@ create_notebook (gchar           **labels,
 
       title = gtk_label_new (*labels);
 
-      gtk_notebook_append_page (GTK_NOTEBOOK (notebook), page, GTK_WIDGET (title));
-      gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (notebook), page, TRUE);
-      gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (notebook), page, TRUE);
+      gtk_notebook_append_page (GTK_NOTEBOOK (notebook), GTK_WIDGET (page), GTK_WIDGET (title));
+      gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (notebook), GTK_WIDGET (page), TRUE);
+      gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (notebook), GTK_WIDGET (page), TRUE);
 
       labels++;
     }

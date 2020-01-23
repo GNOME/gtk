@@ -121,9 +121,9 @@ struct _GtkEntryClass
 GDK_AVAILABLE_IN_ALL
 GType      gtk_entry_get_type       		(void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_entry_new            		(void);
+GtkEntry*  gtk_entry_new            		(void);
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_entry_new_with_buffer            (GtkEntryBuffer *buffer);
+GtkEntry*  gtk_entry_new_with_buffer            (GtkEntryBuffer *buffer);
 
 GDK_AVAILABLE_IN_ALL
 GtkEntryBuffer* gtk_entry_get_buffer            (GtkEntry       *entry);
