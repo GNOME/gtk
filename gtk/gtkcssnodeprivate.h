@@ -118,9 +118,6 @@ gboolean                gtk_css_node_get_visible        (GtkCssNode            *
 void                    gtk_css_node_set_name           (GtkCssNode            *cssnode,
                                                          /*interned*/const char*name);
 /*interned*/const char *gtk_css_node_get_name           (GtkCssNode            *cssnode) G_GNUC_PURE;
-void                    gtk_css_node_set_widget_type    (GtkCssNode            *cssnode,
-                                                         GType                  widget_type);
-GType                   gtk_css_node_get_widget_type    (GtkCssNode            *cssnode) G_GNUC_PURE;
 void                    gtk_css_node_set_id             (GtkCssNode            *cssnode,
                                                          /*interned*/const char*id);
 /*interned*/const char *gtk_css_node_get_id             (GtkCssNode            *cssnode) G_GNUC_PURE;
