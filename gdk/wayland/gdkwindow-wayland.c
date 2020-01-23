@@ -992,15 +992,14 @@ gdk_window_impl_wayland_beep (GdkWindow *window)
 static void
 gdk_window_impl_wayland_finalize (GObject *object)
 {
-  GdkWindow *window = GDK_WINDOW (object);
   GdkWindowImplWayland *impl;
 
   g_return_if_fail (GDK_IS_WINDOW_IMPL_WAYLAND (object));
 
   impl = GDK_WINDOW_IMPL_WAYLAND (object);
 
-  if (gdk_wayland_window_is_exported (window))
-    gdk_wayland_window_unexport_handle (window);
+  if (gdk_wayland_window_is_exported (impl->wrapper))
+    gdk_wayland_window_unexport_handle (impl->wrapper);
 
   g_free (impl->title);
 
