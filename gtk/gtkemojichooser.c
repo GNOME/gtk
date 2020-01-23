@@ -387,8 +387,7 @@ add_emoji (GtkWidget    *box,
       return;
     }
 
-  child = gtk_flow_box_child_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (child), "emoji");
+  child = g_object_new (GTK_TYPE_FLOW_BOX_CHILD, "css-name", "emoji", NULL);
   g_object_set_data_full (G_OBJECT (child), "emoji-data",
                           g_variant_ref (item),
                           (GDestroyNotify)g_variant_unref);

@@ -1994,13 +1994,13 @@ button.emoji-section:hover label { opacity: 0.775; }
 
 button.emoji-section:checked label { opacity: 1; }
 
-popover.emoji-picker .emoji { font-size: x-large; padding: 6px; border-radius: 6px; }
+popover.emoji-picker emoji { font-size: x-large; padding: 6px; border-radius: 6px; }
 
-popover.emoji-picker .emoji:hover { background: #3584e4; }
+popover.emoji-picker emoji:hover { background: #3584e4; }
 
 popover.emoji-completion contents row box { border-spacing: 10px; padding: 2px 10px; }
 
-popover.emoji-completion .emoji:hover { background-color: white; }
+popover.emoji-completion emoji:hover { background-color: white; }
 
 popover.entry-completion contents { padding: 0; }
 
