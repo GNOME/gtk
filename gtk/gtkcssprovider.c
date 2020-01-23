@@ -967,6 +967,7 @@ gtk_css_provider_postprocess (GtkCssProvider *css_provider)
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
   GtkCssSelectorTreeBuilder *builder;
   guint i;
+  gint64 before = g_get_monotonic_time ();
 
   g_array_sort (priv->rulesets, gtk_css_provider_compare_rule);
 
@@ -997,6 +998,9 @@ gtk_css_provider_postprocess (GtkCssProvider *css_provider)
       ruleset->selector = NULL;
     }
 #endif
+
+  if (gdk_profiler_is_running ())
+    gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "create selector tree", NULL);
 }
 
 static void
