@@ -383,16 +383,12 @@ gtk_css_node_create_style (GtkCssNode   *cssnode,
       style_change = gtk_css_static_style_get_change (gtk_css_style_get_static_style (cssnode->style));
     }
 
-  if (gtk_css_node_init_matcher (cssnode, &matcher))
-    style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
-                                              &matcher,
-                                              parent,
-                                              style_change);
-  else
-    style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
-                                              NULL,
-                                              parent,
-                                              style_change);
+  _gtk_css_matcher_node_init (&matcher, cssnode);
+
+  style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
+                                            &matcher,
+                                            parent,
+                                            style_change);
 
   store_in_global_parent_cache (cssnode, decl, style);
 
@@ -488,15 +484,6 @@ gtk_css_node_real_validate (GtkCssNode *node)
 {
 }
 
-static gboolean
-gtk_css_node_real_init_matcher (GtkCssNode     *cssnode,
-                                GtkCssMatcher  *matcher)
-{
-  _gtk_css_matcher_node_init (matcher, cssnode);
-
-  return TRUE;
-}
-
 static GtkStyleProvider *
 gtk_css_node_real_get_style_provider (GtkCssNode *cssnode)
 {
@@ -576,7 +563,6 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
   klass->validate = gtk_css_node_real_validate;
   klass->queue_validate = gtk_css_node_real_queue_validate;
   klass->dequeue_validate = gtk_css_node_real_dequeue_validate;
-  klass->init_matcher = gtk_css_node_real_init_matcher;
   klass->get_style_provider = gtk_css_node_real_get_style_provider;
   klass->get_frame_clock = gtk_css_node_real_get_frame_clock;
 
@@ -1369,13 +1355,6 @@ gtk_css_node_validate (GtkCssNode *cssnode)
           created_styles = 0;
         }
     }
-}
-
-gboolean
-gtk_css_node_init_matcher (GtkCssNode     *cssnode,
-                           GtkCssMatcher  *matcher)
-{
-  return GTK_CSS_NODE_GET_CLASS (cssnode)->init_matcher (cssnode, matcher);
 }
 
 GtkStyleProvider *
