@@ -22,6 +22,7 @@ on_application_activate (GApplication *gapplication,
   GtkWidget *box;
   GIcon *gicon;
   GtkWidget *model_button;
+  GtkComboBoxText *combo;
   GtkWidget *widget;
 
   gtk_css_provider_load_from_data (css_provider,
@@ -56,18 +57,18 @@ on_application_activate (GApplication *gapplication,
 
   g_object_unref (gicon);
 
-  widget = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (widget),
+  combo = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append (combo,
                              NULL, "GTK_BUTTON_ROLE_NORMAL");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (widget),
+  gtk_combo_box_text_append (combo,
                              NULL, "GTK_BUTTON_ROLE_CHECK");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (widget),
+  gtk_combo_box_text_append (combo,
                              NULL, "GTK_BUTTON_ROLE_RADIO");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  g_object_bind_property (widget, "active",
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+  g_object_bind_property (combo, "active",
                           model_button, "role",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (combo));
 
   widget = gtk_toggle_button_new_with_label (":iconic");
   g_object_bind_property (widget, "active",

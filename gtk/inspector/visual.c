@@ -59,10 +59,10 @@ struct _GtkInspectorVisualPrivate
   GtkWidget *swin;
   GtkWidget *box;
   GtkWidget *visual_box;
-  GtkWidget *theme_combo;
+  GtkComboBoxText *theme_combo;
   GtkWidget *dark_switch;
-  GtkWidget *icon_combo;
-  GtkWidget *cursor_combo;
+  GtkComboBoxText *icon_combo;
+  GtkComboBoxText *cursor_combo;
   GtkWidget *cursor_size_spin;
   GtkWidget *direction_combo;
   GtkWidget *font_button;
@@ -539,7 +539,7 @@ init_theme (GtkInspectorVisual *vis)
   for (l = list; l; l = l->next)
     {
       theme = l->data;
-      gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (vis->priv->theme_combo), theme, theme);
+      gtk_combo_box_text_append (vis->priv->theme_combo, theme, theme);
     }
 
   g_list_free (list);
@@ -555,8 +555,8 @@ init_theme (GtkInspectorVisual *vis)
       GtkWidget *row;
 
       /* theme is hardcoded, nothing we can do */
-      gtk_widget_set_sensitive (vis->priv->theme_combo, FALSE);
-      row = gtk_widget_get_ancestor (vis->priv->theme_combo, GTK_TYPE_LIST_BOX_ROW);
+      gtk_widget_set_sensitive (GTK_WIDGET (vis->priv->theme_combo), FALSE);
+      row = gtk_widget_get_ancestor (GTK_WIDGET (vis->priv->theme_combo), GTK_TYPE_LIST_BOX_ROW);
       gtk_widget_set_tooltip_text (row, _("Theme is hardcoded by GTK_THEME"));
     }
 }
@@ -575,7 +575,7 @@ init_dark (GtkInspectorVisual *vis)
 
       /* theme is hardcoded, nothing we can do */
       gtk_widget_set_sensitive (vis->priv->dark_switch, FALSE);
-      row = gtk_widget_get_ancestor (vis->priv->theme_combo, GTK_TYPE_LIST_BOX_ROW);
+      row = gtk_widget_get_ancestor (GTK_WIDGET (vis->priv->theme_combo), GTK_TYPE_LIST_BOX_ROW);
       gtk_widget_set_tooltip_text (row, _("Theme is hardcoded by GTK_THEME"));
     }
 }
@@ -632,7 +632,7 @@ init_icons (GtkInspectorVisual *vis)
   for (l = list; l; l = l->next)
     {
       theme = l->data;
-      gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (vis->priv->icon_combo), theme, theme);
+      gtk_combo_box_text_append (vis->priv->icon_combo, theme, theme);
     }
 
   g_hash_table_destroy (t);
@@ -695,7 +695,7 @@ init_cursors (GtkInspectorVisual *vis)
   for (l = list; l; l = l->next)
     {
       theme = l->data;
-      gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (vis->priv->cursor_combo), theme, theme);
+      gtk_combo_box_text_append (vis->priv->cursor_combo, theme, theme);
     }
 
   g_hash_table_destroy (t);

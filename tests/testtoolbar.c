@@ -386,7 +386,8 @@ gint
 main (gint argc, gchar **argv)
 {
   GtkWidget *window, *toolbar, *grid, *treeview, *scrolled_window;
-  GtkWidget *hbox, *hbox1, *hbox2, *checkbox, *option_menu, *menu;
+  GtkWidget *hbox, *hbox1, *hbox2, *checkbox, *menu;
+  GtkComboBoxText *option_menu;
   gint i;
   GdkContentFormats *targets;
   GdkContentProvider *content;
@@ -438,14 +439,14 @@ main (gint argc, gchar **argv)
   gtk_container_add (GTK_CONTAINER (hbox1), checkbox);
 
   option_menu = gtk_combo_box_text_new ();
-  gtk_widget_set_sensitive (option_menu, FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (option_menu), FALSE);
   g_object_set_data (G_OBJECT (checkbox), "option-menu", option_menu);
 
   for (i = 0; i < G_N_ELEMENTS (toolbar_styles); i++)
-    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (option_menu), toolbar_styles[i]);
+    gtk_combo_box_text_append_text (option_menu, toolbar_styles[i]);
   gtk_combo_box_set_active (GTK_COMBO_BOX (option_menu),
                             gtk_toolbar_get_style (GTK_TOOLBAR (toolbar)));
-  gtk_container_add (GTK_CONTAINER (hbox2), option_menu);
+  gtk_container_add (GTK_CONTAINER (hbox2), GTK_WIDGET (option_menu));
   g_signal_connect (option_menu, "changed",
 		    G_CALLBACK (change_toolbar_style), toolbar);
 

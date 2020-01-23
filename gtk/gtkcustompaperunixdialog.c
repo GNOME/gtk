@@ -54,7 +54,7 @@ struct _GtkCustomPaperUnixDialogPrivate
 
   GtkWidget *treeview;
   GtkWidget *values_box;
-  GtkWidget *printer_combo;
+  GtkComboBox *printer_combo;
   GtkWidget *width_widget;
   GtkWidget *height_widget;
   GtkWidget *top_widget;
@@ -445,7 +445,7 @@ printer_added_cb (GtkPrintBackend          *backend,
       strcmp (priv->waiting_for_printer,
 	      gtk_printer_get_name (printer)) == 0)
     {
-      gtk_combo_box_set_active_iter (GTK_COMBO_BOX (priv->printer_combo),
+      gtk_combo_box_set_active_iter (priv->printer_combo,
 				     &iter);
       priv->waiting_for_printer = NULL;
     }
@@ -634,7 +634,7 @@ update_combo_sensitivity_from_printers (GtkCustomPaperUnixDialog *dialog)
       gtk_tree_selection_get_selected (selection, NULL, &iter))
     sensitive = TRUE;
 
-  gtk_widget_set_sensitive (priv->printer_combo, sensitive);
+  gtk_widget_set_sensitive (GTK_WIDGET (priv->printer_combo), sensitive);
 }
 
 static void
@@ -865,7 +865,7 @@ get_margins_finished_callback (GtkPrinter               *printer,
   if (success)
     set_margins_from_printer (dialog, printer);
 
-  gtk_combo_box_set_active (GTK_COMBO_BOX (priv->printer_combo), 0);
+  gtk_combo_box_set_active (priv->printer_combo, 0);
 }
 
 static void
@@ -873,10 +873,7 @@ margins_from_printer_changed (GtkCustomPaperUnixDialog *dialog)
 {
   GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   GtkTreeIter iter;
-  GtkComboBox *combo;
   GtkPrinter *printer;
-
-  combo = GTK_COMBO_BOX (priv->printer_combo);
 
   if (priv->request_details_tag)
     {
@@ -887,9 +884,9 @@ margins_from_printer_changed (GtkCustomPaperUnixDialog *dialog)
       priv->request_details_tag = 0;
     }
 
-  if (gtk_combo_box_get_active_iter (combo, &iter))
+  if (gtk_combo_box_get_active_iter (priv->printer_combo, &iter))
     {
-      gtk_tree_model_get (gtk_combo_box_get_model (combo), &iter,
+      gtk_tree_model_get (gtk_combo_box_get_model (priv->printer_combo), &iter,
 			  PRINTER_LIST_COL_PRINTER, &printer, -1);
 
       if (printer)
@@ -897,7 +894,7 @@ margins_from_printer_changed (GtkCustomPaperUnixDialog *dialog)
 	  if (gtk_printer_has_details (printer))
 	    {
 	      set_margins_from_printer (dialog, printer);
-	      gtk_combo_box_set_active (combo, 0);
+	      gtk_combo_box_set_active (priv->printer_combo, 0);
 	    }
 	  else
 	    {
@@ -1022,7 +1019,8 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   GtkCustomPaperUnixDialogPrivate *priv = dialog->priv;
   GtkDialog *cpu_dialog = GTK_DIALOG (dialog);
   GtkWidget *content_area;
-  GtkWidget *grid, *widget, *frame, *combo;
+  GtkWidget *grid, *widget, *frame;
+  GtkComboBox *combo;
   GtkWidget *hbox, *vbox, *treeview, *scrolled, *toolbar, *button;
   GtkLabel *label;
   GtkCellRenderer *cell;
@@ -1203,9 +1201,9 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
 				      custom_paper_printer_data_func,
 				      NULL, NULL);
 
-  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
-  gtk_container_add (GTK_CONTAINER (hbox), combo);
-  gtk_widget_show (combo);
+  gtk_combo_box_set_active (combo, 0);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (combo));
+  gtk_widget_show (GTK_WIDGET (combo));
 
   g_signal_connect_swapped (combo, "changed",
 			    G_CALLBACK (margins_from_printer_changed), dialog);

@@ -219,8 +219,9 @@ static void
 add_size_group (GtkInspectorSizeGroups *sl,
                 GtkSizeGroup           *group)
 {
-  GtkWidget *frame, *box, *box2, *combo;
+  GtkWidget *frame, *box, *box2;
   GtkLabel *label;
+  GtkComboBoxText *combo;
   GSList *widgets, *l;
   GtkWidget *listbox;
 
@@ -241,16 +242,16 @@ add_size_group (GtkInspectorSizeGroups *sl,
 
   combo = gtk_combo_box_text_new ();
   g_object_set (combo, "margin", 10, NULL);
-  gtk_widget_set_halign (combo, GTK_ALIGN_END);
-  gtk_widget_set_valign (combo, GTK_ALIGN_BASELINE);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "None"));
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "Horizontal"));
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "Vertical"));
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "Both"));
+  gtk_widget_set_halign (GTK_WIDGET (combo), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (combo), GTK_ALIGN_BASELINE);
+  gtk_combo_box_text_append_text (combo, C_("sizegroup mode", "None"));
+  gtk_combo_box_text_append_text (combo, C_("sizegroup mode", "Horizontal"));
+  gtk_combo_box_text_append_text (combo, C_("sizegroup mode", "Vertical"));
+  gtk_combo_box_text_append_text (combo, C_("sizegroup mode", "Both"));
   g_object_bind_property (group, "mode",
                           combo, "active",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-  gtk_container_add (GTK_CONTAINER (box2), combo);
+  gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (combo));
 
   listbox = gtk_list_box_new ();
   gtk_container_add (GTK_CONTAINER (box), listbox);

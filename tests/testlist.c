@@ -253,7 +253,8 @@ main (int argc, char *argv[])
 {
   GtkCssProvider *provider;
   GtkWidget *window, *hbox, *vbox, *list, *row, *row3, *row_vbox, *row_hbox;
-  GtkWidget *check, *button, *combo, *scrolled;
+  GtkWidget *check, *button, *scrolled;
+  GtkComboBoxText *combo;
   GtkLabel *l;
 
   gtk_init ();
@@ -275,14 +276,14 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (hbox), vbox);
 
   combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo),
+  gtk_combo_box_text_append_text (combo,
                                   "GTK_SELECTION_NONE");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo),
+  gtk_combo_box_text_append_text (combo,
                                   "GTK_SELECTION_SINGLE");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo),
+  gtk_combo_box_text_append_text (combo,
                                   "GTK_SELECTION_BROWSE");
   g_signal_connect (combo, "changed", G_CALLBACK (selection_mode_changed), list);
-  gtk_container_add (GTK_CONTAINER (vbox), combo);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (combo));
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), gtk_list_box_get_selection_mode (GTK_LIST_BOX (list)));
   check = gtk_check_button_new_with_label ("single click mode");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), gtk_list_box_get_activate_on_single_click (GTK_LIST_BOX (list)));

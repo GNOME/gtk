@@ -193,7 +193,7 @@ typedef struct
   GtkWidget *button;
   GtkWidget *image;
   GtkLabel *label;
-  GtkWidget *combo_box;
+  GtkComboBox *combo_box;
   GtkCellRenderer *icon_cell;
   GtkCellRenderer *name_cell;
 
@@ -488,8 +488,8 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (priv->combo_box),
                                   priv->name_cell, "text", DISPLAY_NAME_COLUMN, NULL);
 
-  gtk_widget_hide (priv->combo_box);
-  gtk_widget_set_parent (priv->combo_box, GTK_WIDGET (button));
+  gtk_widget_hide (GTK_WIDGET (priv->combo_box));
+  gtk_widget_set_parent (GTK_WIDGET (priv->combo_box), GTK_WIDGET (button));
 
   /* Bookmarks manager */
   priv->bookmarks_manager = _gtk_bookmarks_manager_new (bookmarks_changed_cb, button);
@@ -838,8 +838,8 @@ gtk_file_chooser_button_constructed (GObject *object)
 					  filter_model_visible_func,
 					  object, NULL);
 
-  gtk_combo_box_set_model (GTK_COMBO_BOX (priv->combo_box), priv->filter_model);
-  gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (priv->combo_box),
+  gtk_combo_box_set_model (priv->combo_box, priv->filter_model);
+  gtk_combo_box_set_row_separator_func (priv->combo_box,
 					combo_box_row_separator_func,
 					NULL, NULL);
 
@@ -905,12 +905,12 @@ gtk_file_chooser_button_set_property (GObject      *object,
       switch (g_value_get_enum (value))
         {
         case GTK_FILE_CHOOSER_ACTION_OPEN:
-          gtk_widget_hide (priv->combo_box);
+          gtk_widget_hide (GTK_WIDGET (priv->combo_box));
           gtk_widget_show (priv->button);
           gtk_widget_queue_resize (GTK_WIDGET (button));
           break;
         case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
-          gtk_widget_show (priv->combo_box);
+          gtk_widget_show (GTK_WIDGET (priv->combo_box));
           gtk_widget_hide (priv->button);
           gtk_widget_queue_resize (GTK_WIDGET (button));
           break;
@@ -995,7 +995,7 @@ gtk_file_chooser_button_finalize (GObject *object)
   g_clear_object (&priv->current_folder_while_inactive);
 
   gtk_widget_unparent (priv->button);
-  gtk_widget_unparent (priv->combo_box);
+  gtk_widget_unparent (GTK_WIDGET (priv->combo_box));
 
   G_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->finalize (object);
 }
@@ -1014,12 +1014,12 @@ gtk_file_chooser_button_state_flags_changed (GtkWidget     *widget,
   if (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_DROP_ACTIVE)
     {
       gtk_widget_set_state_flags (priv->button, GTK_STATE_FLAG_DROP_ACTIVE, FALSE);
-      gtk_widget_set_state_flags (priv->combo_box, GTK_STATE_FLAG_DROP_ACTIVE, FALSE);
+      gtk_widget_set_state_flags (GTK_WIDGET (priv->combo_box), GTK_STATE_FLAG_DROP_ACTIVE, FALSE);
     }
   else
     {
       gtk_widget_unset_state_flags (priv->button, GTK_STATE_FLAG_DROP_ACTIVE);
-      gtk_widget_unset_state_flags (priv->combo_box, GTK_STATE_FLAG_DROP_ACTIVE);
+      gtk_widget_unset_state_flags (GTK_WIDGET (priv->combo_box), GTK_STATE_FLAG_DROP_ACTIVE);
     }
 
   GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->state_flags_changed (widget, previous_state);
@@ -1283,7 +1283,7 @@ gtk_file_chooser_button_mnemonic_activate (GtkWidget *widget,
       gtk_widget_grab_focus (priv->button);
       break;
     case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
-      return gtk_widget_mnemonic_activate (priv->combo_box, group_cycling);
+      return gtk_widget_mnemonic_activate (GTK_WIDGET (priv->combo_box), group_cycling);
       break;
     case GTK_FILE_CHOOSER_ACTION_SAVE:
     case GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER:
@@ -2262,7 +2262,7 @@ select_combo_box_row_no_notify (GtkFileChooserButton *button, int pos)
 						    &filter_iter, &iter);
 
   g_signal_handlers_block_by_func (priv->combo_box, combo_box_changed_cb, button);
-  gtk_combo_box_set_active_iter (GTK_COMBO_BOX (priv->combo_box), &filter_iter);
+  gtk_combo_box_set_active_iter (priv->combo_box, &filter_iter);
   g_signal_handlers_unblock_by_func (priv->combo_box, combo_box_changed_cb, button);
 }
 
@@ -2321,7 +2321,7 @@ update_combo_box (GtkFileChooserButton *button)
       if (row_found)
 	{
 	  g_signal_handlers_block_by_func (priv->combo_box, combo_box_changed_cb, button);
-	  gtk_combo_box_set_active_iter (GTK_COMBO_BOX (priv->combo_box),
+	  gtk_combo_box_set_active_iter (priv->combo_box,
 					 &iter);
 	  g_signal_handlers_unblock_by_func (priv->combo_box, combo_box_changed_cb, button);
 	}
@@ -2628,7 +2628,7 @@ open_dialog (GtkFileChooserButton *button)
         }
     }
 
-  gtk_widget_set_sensitive (priv->combo_box, FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (priv->combo_box), FALSE);
   if (priv->dialog)
     {
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS
@@ -2792,7 +2792,7 @@ common_response_cb (GtkFileChooserButton *button,
   update_label_and_image (button);
   update_combo_box (button);
 
-  gtk_widget_set_sensitive (priv->combo_box, TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET (priv->combo_box), TRUE);
 }
 
 

@@ -141,7 +141,8 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *window, *list, *sw, *row;
-  GtkWidget *hbox, *vbox, *combo, *button;
+  GtkWidget *hbox, *vbox, *button;
+  GtkComboBoxText *combo;
   gint i;
   gchar *text;
   GtkCssProvider *provider;
@@ -180,12 +181,12 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (vbox), button);
 
   combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "None");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Single");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Browse");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Multiple");
+  gtk_combo_box_text_append_text (combo, "None");
+  gtk_combo_box_text_append_text (combo, "Single");
+  gtk_combo_box_text_append_text (combo, "Browse");
+  gtk_combo_box_text_append_text (combo, "Multiple");
   g_signal_connect (combo, "changed", G_CALLBACK (selection_mode_changed), list);
-  gtk_container_add (GTK_CONTAINER (vbox), combo);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (combo));
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), gtk_list_box_get_selection_mode (GTK_LIST_BOX (list)));
 
   for (i = 0; i < 20; i++)

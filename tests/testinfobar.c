@@ -31,6 +31,7 @@ on_activate (GApplication *application,
   GtkWidget *box;
   GtkWidget *info_bar;
   GtkWidget *widget;
+  GtkComboBoxText *combo;
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
 
@@ -59,22 +60,22 @@ on_activate (GApplication *application,
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   gtk_container_add (GTK_CONTAINER (box), widget);
 
-  widget = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (widget),
+  combo = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append (combo,
                              NULL, "GTK_MESSAGE_INFO");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (widget),
+  gtk_combo_box_text_append (combo,
                              NULL, "GTK_MESSAGE_WARNING");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (widget),
+  gtk_combo_box_text_append (combo,
                              NULL, "GTK_MESSAGE_QUESTION");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (widget),
+  gtk_combo_box_text_append (combo,
                              NULL, "GTK_MESSAGE_ERROR");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (widget),
+  gtk_combo_box_text_append (combo,
                              NULL, "GTK_MESSAGE_OTHER");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  g_object_bind_property (widget, "active",
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+  g_object_bind_property (combo, "active",
                           info_bar, "message-type",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (combo));
 
   gtk_container_add (GTK_CONTAINER (box), info_bar);
 

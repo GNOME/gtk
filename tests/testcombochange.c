@@ -70,12 +70,12 @@ combochange_log (const char *fmt,
   g_free (msg);
 }
 
-static GtkWidget *
+static GtkComboBox *
 create_combo (const char *name,
 	      gboolean is_list)
 {
   GtkCellRenderer *cell_renderer;
-  GtkWidget *combo;
+  GtkComboBox *combo;
   GtkCssProvider *provider;
   GtkStyleContext *context;
   gchar *css_data;
@@ -86,9 +86,9 @@ create_combo (const char *name,
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), cell_renderer,
 				  "text", 0, NULL);
 
-  gtk_widget_set_name (combo, name);
+  gtk_widget_set_name (GTK_WIDGET (combo), name);
 
-  context = gtk_widget_get_style_context (combo);
+  context = gtk_widget_get_style_context (GTK_WIDGET (combo));
 
   provider = gtk_css_provider_new ();
   css_data = g_strdup_printf ("#%s { -GtkComboBox-appears-as-list: %s }",
@@ -228,9 +228,9 @@ main (int argc, char **argv)
   GtkWidget *button_vbox;
   GtkWidget *combo_vbox;
   GtkWidget *button;
-  GtkWidget *menu_combo;
+  GtkComboBox *menu_combo;
   GtkLabel *label;
-  GtkWidget *list_combo;
+  GtkComboBox *list_combo;
   
   test_init ();
 
@@ -257,16 +257,16 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (combo_vbox), GTK_WIDGET (label));
 
   menu_combo = create_combo ("menu-combo", FALSE);
-  gtk_widget_set_margin_start (menu_combo, 12);
-  gtk_container_add (GTK_CONTAINER (combo_vbox), menu_combo);
+  gtk_widget_set_margin_start (GTK_WIDGET (menu_combo), 12);
+  gtk_container_add (GTK_CONTAINER (combo_vbox), GTK_WIDGET (menu_combo));
 
   label = gtk_label_new (NULL);
   gtk_label_set_markup (label, "<b>List mode</b>");
   gtk_container_add (GTK_CONTAINER (combo_vbox), GTK_WIDGET (label));
 
   list_combo = create_combo ("list-combo", TRUE);
-  gtk_widget_set_margin_start (list_combo, 12);
-  gtk_container_add (GTK_CONTAINER (combo_vbox), list_combo);
+  gtk_widget_set_margin_start (GTK_WIDGET (list_combo), 12);
+  gtk_container_add (GTK_CONTAINER (combo_vbox), GTK_WIDGET (list_combo));
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_hexpand (scrolled_window, TRUE);

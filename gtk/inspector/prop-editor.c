@@ -913,7 +913,7 @@ property_editor (GObject                *object,
         GEnumClass *eclass;
         gint j;
 
-        prop_edit = gtk_combo_box_text_new ();
+        prop_edit = GTK_WIDGET (gtk_combo_box_text_new ());
 
         eclass = G_ENUM_CLASS (g_type_class_ref (spec->value_type));
 
@@ -1197,7 +1197,7 @@ attribute_editor (GObject                *object,
   GtkLabel *label;
   GtkWidget *button;
   GtkWidget *box;
-  GtkWidget *combo;
+  GtkComboBox *combo;
   gchar *text;
   gint i;
   gboolean sensitive;
@@ -1245,11 +1245,11 @@ attribute_editor (GObject                *object,
       gtk_list_store_set (store, &iter, 0, text, 1, sensitive, -1);
       g_free (text);
     }
-  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), col + 1);
-  attribute_mapping_changed (GTK_COMBO_BOX (combo), editor);
+  gtk_combo_box_set_active (combo, col + 1);
+  attribute_mapping_changed (combo, editor);
   g_signal_connect (combo, "changed",
                     G_CALLBACK (attribute_mapping_changed), editor);
-  gtk_container_add (GTK_CONTAINER (box), combo);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (combo));
 
   return box;
 }

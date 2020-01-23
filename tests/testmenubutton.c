@@ -39,7 +39,7 @@ int main (int argc, char **argv)
 	GtkEntry *entry;
 	GtkLabel *label;
 	GtkWidget *check;
-	GtkWidget *combo;
+	GtkComboBoxText *combo;
 	GtkAccelGroup *accel_group;
 	guint i;
 	guint row = 0;
@@ -64,14 +64,14 @@ int main (int argc, char **argv)
 	gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, row++, 1, 1);
 
 	combo = gtk_combo_box_text_new ();
-	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Fill");
-	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Start");
-	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "End");
-	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Center");
-	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Baseline");
+	gtk_combo_box_text_append_text (combo, "Fill");
+	gtk_combo_box_text_append_text (combo, "Start");
+	gtk_combo_box_text_append_text (combo, "End");
+	gtk_combo_box_text_append_text (combo, "Center");
+	gtk_combo_box_text_append_text (combo, "Baseline");
 	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), INITIAL_HALIGN);
-	gtk_widget_show (combo);
-	gtk_grid_attach_next_to (GTK_GRID (grid), combo, GTK_WIDGET (label), GTK_POS_RIGHT, 1, 1);
+	gtk_widget_show (GTK_WIDGET (combo));
+	gtk_grid_attach_next_to (GTK_GRID (grid), GTK_WIDGET (combo), GTK_WIDGET (label), GTK_POS_RIGHT, 1, 1);
 	g_signal_connect (G_OBJECT (combo), "changed",
 			  G_CALLBACK (horizontal_alignment_changed), menubuttons);
 
@@ -81,14 +81,14 @@ int main (int argc, char **argv)
 	gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, row++, 1, 1);
 
 	combo = gtk_combo_box_text_new ();
-	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Fill");
-	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Start");
-	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "End");
-	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Center");
-	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Baseline");
+	gtk_combo_box_text_append_text (combo, "Fill");
+	gtk_combo_box_text_append_text (combo, "Start");
+	gtk_combo_box_text_append_text (combo, "End");
+	gtk_combo_box_text_append_text (combo, "Center");
+	gtk_combo_box_text_append_text (combo, "Baseline");
 	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), INITIAL_HALIGN);
-	gtk_widget_show (combo);
-	gtk_grid_attach_next_to (GTK_GRID (grid), combo, GTK_WIDGET (label), GTK_POS_RIGHT, 1, 1);
+	gtk_widget_show (GTK_WIDGET (combo));
+	gtk_grid_attach_next_to (GTK_GRID (grid), GTK_WIDGET (combo), GTK_WIDGET (label), GTK_POS_RIGHT, 1, 1);
 	g_signal_connect (G_OBJECT (combo), "changed",
 			  G_CALLBACK (vertical_alignment_changed), menubuttons);
 

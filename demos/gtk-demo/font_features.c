@@ -35,7 +35,7 @@ static GtkWidget *stack;
 static GtkEntry *entry;
 static GtkWidget *variations_heading;
 static GtkWidget *variations_grid;
-static GtkWidget *instance_combo;
+static GtkComboBoxText *instance_combo;
 static GtkWidget *edit_toggle;
 
 typedef struct {
@@ -867,7 +867,7 @@ static GHashTable *instances;
 static void
 add_instance (hb_face_t    *face,
               unsigned int  index,
-              GtkWidget    *combo,
+              GtkComboBoxText *combo,
               int           pos)
 {
   Instance *instance;
@@ -884,7 +884,7 @@ add_instance (hb_face_t    *face,
   instance->index = index;
 
   g_hash_table_add (instances, instance);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), instance->name);
+  gtk_combo_box_text_append_text (combo, instance->name);
 }
 
 static void
@@ -1068,7 +1068,7 @@ update_font_variations (void)
   if (hb_ot_var_get_named_instance_count (hb_face) > 0)
     {
       GtkLabel *label;
-      GtkWidget *combo;
+      GtkComboBoxText *combo;
 
       label = gtk_label_new ("Instance");
       gtk_label_set_xalign (label, 0);
@@ -1077,9 +1077,9 @@ update_font_variations (void)
       gtk_grid_attach (GTK_GRID (variations_grid), GTK_WIDGET (label), 0, -1, 2, 1);
 
       combo = gtk_combo_box_text_new ();
-      gtk_widget_set_valign (combo, GTK_ALIGN_BASELINE);
+      gtk_widget_set_valign (GTK_WIDGET (combo), GTK_ALIGN_BASELINE);
 
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "");
+      gtk_combo_box_text_append_text (combo, "");
 
       for (i = 0; i < hb_ot_var_get_named_instance_count (hb_face); i++)
         add_instance (hb_face, i, combo, i);
@@ -1093,7 +1093,7 @@ update_font_variations (void)
             }
         }
 
-      gtk_grid_attach (GTK_GRID (variations_grid), combo, 1, -1, 2, 1);
+      gtk_grid_attach (GTK_GRID (variations_grid), GTK_WIDGET (combo), 1, -1, 2, 1);
       g_signal_connect (combo, "changed", G_CALLBACK (instance_changed), NULL);
       instance_combo = combo;
    }
