@@ -16,7 +16,7 @@ do_transparent (GtkWidget *do_widget)
       GtkWidget *overlay;
       GtkWidget *button;
       GtkWidget *label;
-      GtkWidget *picture;
+      GtkPicture *picture;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_display (GTK_WINDOW (window),
@@ -52,7 +52,7 @@ do_transparent (GtkWidget *do_widget)
       blur_overlay_add_overlay (BLUR_OVERLAY (overlay), button, 5.0);
 
       picture = gtk_picture_new_for_resource ("/transparent/portland-rose.jpg");
-      gtk_container_add (GTK_CONTAINER (overlay), picture);
+      gtk_container_add (GTK_CONTAINER (overlay), GTK_WIDGET (picture));
     }
 
   if (!gtk_widget_get_visible (window))

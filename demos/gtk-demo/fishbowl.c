@@ -134,14 +134,14 @@ static GtkWidget *
 create_video (void)
 {
   GtkMediaStream *stream = gtk_media_file_new_for_resource ("/images/gtk-logo.webm");
-  GtkWidget *w = gtk_picture_new_for_paintable (GDK_PAINTABLE (stream));
+  GtkPicture *w = gtk_picture_new_for_paintable (GDK_PAINTABLE (stream));
 
-  gtk_widget_set_size_request (w, 64, 64);
+  gtk_widget_set_size_request (GTK_WIDGET (w), 64, 64);
   gtk_media_stream_set_loop (stream, TRUE);
   gtk_media_stream_play (stream);
   g_object_unref (stream);
 
-  return w;
+  return GTK_WIDGET (w);
 }
 
 static GtkWidget *
