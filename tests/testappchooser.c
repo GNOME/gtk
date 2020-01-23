@@ -24,7 +24,8 @@
 static GtkWidget *toplevel;
 static GFile *file;
 static GtkWidget *grid, *file_l, *open;
-static GtkWidget *radio_file, *radio_content, *dialog;
+static GtkWidget *radio_file, *radio_content;
+static GtkAppChooserDialog *dialog;
 static GtkWidget *app_chooser_widget;
 static GtkWidget *def, *recommended, *fallback, *other, *all;
 
@@ -105,14 +106,14 @@ prepare_dialog (void)
                                                             0, content_type);
     }
 
-  gtk_app_chooser_dialog_set_heading (GTK_APP_CHOOSER_DIALOG (dialog), "Select one already, you <i>fool</i>");
+  gtk_app_chooser_dialog_set_heading (dialog, "Select one already, you <i>fool</i>");
 
   g_signal_connect (dialog, "response",
                     G_CALLBACK (dialog_response), NULL);
 
   g_free (content_type);
 
-  app_chooser_widget = gtk_app_chooser_dialog_get_widget (GTK_APP_CHOOSER_DIALOG (dialog));
+  app_chooser_widget = gtk_app_chooser_dialog_get_widget (dialog);
   bind_props ();
 }
 
@@ -122,7 +123,7 @@ display_dialog (void)
   if (dialog == NULL)
     prepare_dialog ();
 
-  gtk_widget_show (dialog);
+  gtk_widget_show (GTK_WIDGET (dialog));
 }
 
 static void

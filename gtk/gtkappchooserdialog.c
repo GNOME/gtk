@@ -645,7 +645,7 @@ gtk_app_chooser_dialog_init (GtkAppChooserDialog *self)
 }
 
 static void
-set_parent_and_flags (GtkWidget      *dialog,
+set_parent_and_flags (GtkAppChooserDialog *dialog,
                       GtkWindow      *parent,
                       GtkDialogFlags  flags)
 {
@@ -670,12 +670,12 @@ set_parent_and_flags (GtkWidget      *dialog,
  *
  * Returns: a newly created #GtkAppChooserDialog
  **/
-GtkWidget *
+GtkAppChooserDialog *
 gtk_app_chooser_dialog_new (GtkWindow      *parent,
                             GtkDialogFlags  flags,
                             GFile          *file)
 {
-  GtkWidget *retval;
+  GtkAppChooserDialog *retval;
 
   g_return_val_if_fail (G_IS_FILE (file), NULL);
 
@@ -699,12 +699,12 @@ gtk_app_chooser_dialog_new (GtkWindow      *parent,
  *
  * Returns: a newly created #GtkAppChooserDialog
  **/
-GtkWidget *
+GtkAppChooserDialog *
 gtk_app_chooser_dialog_new_for_content_type (GtkWindow      *parent,
                                              GtkDialogFlags  flags,
                                              const gchar    *content_type)
 {
-  GtkWidget *retval;
+  GtkAppChooserDialog *retval;
 
   g_return_val_if_fail (content_type != NULL, NULL);
 

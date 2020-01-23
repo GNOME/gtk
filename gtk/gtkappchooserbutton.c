@@ -272,7 +272,8 @@ static void
 other_application_item_activated_cb (GtkAppChooserButton *self)
 {
   GtkAppChooserButtonPrivate *priv = gtk_app_chooser_button_get_instance_private (self);
-  GtkWidget *dialog, *widget;
+  GtkAppChooserDialog *dialog;
+  GtkWidget *widget;
   GtkRoot *root;
 
   root = gtk_widget_get_root (GTK_WIDGET (self));
@@ -280,14 +281,14 @@ other_application_item_activated_cb (GtkAppChooserButton *self)
                                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                                         priv->content_type);
   gtk_window_set_modal (GTK_WINDOW (dialog), gtk_window_get_modal (GTK_WINDOW (root)));
-  gtk_app_chooser_dialog_set_heading (GTK_APP_CHOOSER_DIALOG (dialog), priv->heading);
+  gtk_app_chooser_dialog_set_heading (dialog, priv->heading);
 
-  widget = gtk_app_chooser_dialog_get_widget (GTK_APP_CHOOSER_DIALOG (dialog));
+  widget = gtk_app_chooser_dialog_get_widget (dialog);
   g_object_set (widget,
                 "show-fallback", TRUE,
                 "show-other", TRUE,
                 NULL);
-  gtk_widget_show (dialog);
+  gtk_widget_show (GTK_WIDGET (dialog));
 
   g_signal_connect (dialog, "response",
                     G_CALLBACK (other_application_dialog_response_cb), self);
