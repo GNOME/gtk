@@ -1900,6 +1900,29 @@ settings_init_style (GtkSettings *settings)
   settings_update_key_theme (settings);
 }
 
+static void
+settings_display_closed (GdkDisplay *display,
+                         gboolean    is_error,
+                         gpointer    data)
+{
+  DisplaySettings *ds;
+  int i;
+
+  if (G_UNLIKELY (display_settings == NULL))
+    return;
+
+  ds = (DisplaySettings *)display_settings->data;
+  for (i = 0; i < display_settings->len; i++)
+    {
+      if (ds[i].display == display)
+        {
+          g_clear_object (&ds[i].settings);
+          display_settings = g_array_remove_index_fast (display_settings, i);
+          break;
+        }
+    }
+}
+
 static GtkSettings *
 gtk_settings_create_for_display (GdkDisplay *display)
 {
@@ -1955,7 +1978,9 @@ gtk_settings_create_for_display (GdkDisplay *display)
 
   v.display = display;
   v.settings = settings;
-  g_array_append_val (display_settings, v);
+  display_settings = g_array_append_val (display_settings, v);
+  g_signal_connect (display, "closed",
+                    G_CALLBACK (settings_display_closed), NULL);
 
   settings_init_style (settings);
   settings_update_xsettings (settings);
@@ -1974,6 +1999,10 @@ gtk_settings_get_for_display (GdkDisplay *display)
 {
   DisplaySettings *ds;
   int i;
+
+  /* If the display is closed, we don't want to recreate the settings! */
+  if G_UNLIKELY (gdk_display_is_closed (display))
+    return NULL;
 
   if G_UNLIKELY (display_settings == NULL)
     display_settings = g_array_new (FALSE, TRUE, sizeof (DisplaySettings));

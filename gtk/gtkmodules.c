@@ -463,10 +463,10 @@ display_closed_cb (GdkDisplay *display,
 
   screen = gdk_display_get_default_screen (display);
   settings = gtk_settings_get_for_screen (screen);
-
-  g_object_set_data_full (G_OBJECT (settings),
-			  I_("gtk-modules"),
-			  NULL, NULL);
+  if (settings)
+    g_object_set_data_full (G_OBJECT (settings),
+			    I_("gtk-modules"),
+			    NULL, NULL);
 }
 		   
 
