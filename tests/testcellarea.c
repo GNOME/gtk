@@ -178,6 +178,7 @@ static void
 simple_cell_area (void)
 {
   GtkWidget *window, *widget;
+  GtkComboBoxText *combo;
   GtkWidget *iconview, *frame, *vbox, *hbox;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -201,14 +202,14 @@ simple_cell_area (void)
 
   gtk_container_add (GTK_CONTAINER (hbox), frame);
 
-  widget = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Horizontal");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Vertical");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  gtk_widget_show (widget);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  combo = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append_text (combo, "Horizontal");
+  gtk_combo_box_text_append_text (combo, "Vertical");
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+  gtk_widget_show (GTK_WIDGET (combo));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (combo));
 
-  g_signal_connect (G_OBJECT (widget), "changed",
+  g_signal_connect (G_OBJECT (combo), "changed",
                     G_CALLBACK (orientation_changed), iconview);
 
   widget = gtk_check_button_new_with_label ("Align 2nd Cell");
@@ -421,6 +422,7 @@ static void
 focus_cell_area (void)
 {
   GtkWidget *window, *widget;
+  GtkComboBoxText *combo;
   GtkWidget *iconview, *frame, *vbox, *hbox;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -444,14 +446,14 @@ focus_cell_area (void)
   gtk_container_add (GTK_CONTAINER (hbox), vbox);
   gtk_container_add (GTK_CONTAINER (hbox), frame);
 
-  widget = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Horizontal");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Vertical");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  gtk_widget_show (widget);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  combo = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append_text (combo, "Horizontal");
+  gtk_combo_box_text_append_text (combo, "Vertical");
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+  gtk_widget_show (GTK_WIDGET (combo));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (combo));
 
-  g_signal_connect (G_OBJECT (widget), "changed",
+  g_signal_connect (G_OBJECT (combo), "changed",
                     G_CALLBACK (orientation_changed), iconview);
 
   widget = gtk_check_button_new_with_label ("Focus Sibling");
@@ -510,6 +512,7 @@ static void
 background_area (void)
 {
   GtkWidget *window, *widget, *main_vbox;
+  GtkComboBoxText *combo;
   GtkWidget *iconview, *frame, *vbox, *hbox;
   GtkLabel *label;
 
@@ -547,14 +550,14 @@ background_area (void)
 
   gtk_container_add (GTK_CONTAINER (main_vbox), hbox);
 
-  widget = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Horizontal");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Vertical");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  gtk_widget_show (widget);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  combo = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append_text (combo, "Horizontal");
+  gtk_combo_box_text_append_text (combo, "Vertical");
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+  gtk_widget_show (GTK_WIDGET (combo));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (combo));
 
-  g_signal_connect (G_OBJECT (widget), "changed",
+  g_signal_connect (G_OBJECT (combo), "changed",
                     G_CALLBACK (orientation_changed), iconview);
 
   widget = gtk_spin_button_new_with_range (0, 10, 1);

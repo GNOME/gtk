@@ -653,7 +653,7 @@ main (int    argc,
   GtkWidget *sw;
   GtkWidget *tv;
   GtkWidget *box;
-  GtkWidget *combo_box;
+  GtkComboBoxText *combo_box;
   GtkTreeModel *model;
   GdkContentFormats *targets;
   gint i;
@@ -710,11 +710,11 @@ main (int    argc,
   
   /* Model menu */
   combo_box = gtk_combo_box_text_new ();
-  gtk_widget_set_halign (combo_box, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (GTK_WIDGET (combo_box), GTK_ALIGN_CENTER);
   for (i = 0; i < MODEL_LAST; i++)
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), model_names[i]);
+      gtk_combo_box_text_append_text (combo_box, model_names[i]);
 
-  gtk_container_add (GTK_CONTAINER (box), combo_box);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (combo_box));
   g_signal_connect (combo_box,
                     "changed",
                     G_CALLBACK (model_selected),
@@ -722,11 +722,11 @@ main (int    argc,
   
   /* Columns menu */
   combo_box = gtk_combo_box_text_new ();
-  gtk_widget_set_halign (combo_box, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (GTK_WIDGET (combo_box), GTK_ALIGN_CENTER);
   for (i = 0; i < COLUMNS_LAST; i++)
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), column_type_names[i]);
+      gtk_combo_box_text_append_text (combo_box, column_type_names[i]);
 
-  gtk_container_add (GTK_CONTAINER (box), combo_box);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (combo_box));
 
   set_columns_type (GTK_TREE_VIEW (tv), COLUMNS_LOTS);
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), COLUMNS_LOTS);

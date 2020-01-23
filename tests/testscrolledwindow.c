@@ -81,6 +81,7 @@ static void
 scrollable_policy (void)
 {
   GtkWidget *window, *swindow, *hbox, *vbox, *frame, *cntl, *listbox;
+  GtkComboBoxText *combo;
   GtkWidget *viewport, *expander, *widget, *popover;
   GtkLabel *label;
 
@@ -139,16 +140,16 @@ scrollable_policy (void)
   gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
   gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
-  widget = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Minimum");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Natural");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  gtk_widget_set_hexpand (widget, TRUE);
+  combo = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append_text (combo, "Minimum");
+  gtk_combo_box_text_append_text (combo, "Natural");
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+  gtk_widget_set_hexpand (GTK_WIDGET (combo), TRUE);
 
-  gtk_container_add (GTK_CONTAINER (hbox), widget);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (combo));
   gtk_container_add (GTK_CONTAINER (cntl), hbox);
 
-  g_signal_connect (G_OBJECT (widget), "changed",
+  g_signal_connect (G_OBJECT (combo), "changed",
                     G_CALLBACK (horizontal_policy_changed), viewport);
 
   /* Add Vertical policy control here */
@@ -159,16 +160,16 @@ scrollable_policy (void)
   gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
   gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
-  widget = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Minimum");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Natural");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  gtk_widget_set_hexpand (widget, TRUE);
+  combo = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append_text (combo, "Minimum");
+  gtk_combo_box_text_append_text (combo, "Natural");
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+  gtk_widget_set_hexpand (GTK_WIDGET (combo), TRUE);
 
-  gtk_container_add (GTK_CONTAINER (hbox), widget);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (combo));
   gtk_container_add (GTK_CONTAINER (cntl), hbox);
 
-  g_signal_connect (G_OBJECT (widget), "changed",
+  g_signal_connect (G_OBJECT (combo), "changed",
                     G_CALLBACK (vertical_policy_changed), viewport);
 
   /* Content size controls */

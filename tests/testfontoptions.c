@@ -1,8 +1,8 @@
 #include <gtk/gtk.h>
 
-static GtkWidget *antialias;
-static GtkWidget *subpixel;
-static GtkWidget *hintstyle;
+static GtkComboBoxText *antialias;
+static GtkComboBoxText *subpixel;
+static GtkComboBoxText *hintstyle;
 
 static void
 set_font_options (GtkWidget *label)
@@ -46,39 +46,39 @@ main (int argc, char *argv[])
   gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (demo), 0, 1, 2, 1);
 
   antialias = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (antialias), "Default");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (antialias), "None");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (antialias), "Gray");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (antialias), "Subpixel");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (antialias), "Fast");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (antialias), "Good");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (antialias), "Best");
+  gtk_combo_box_text_append_text (antialias, "Default");
+  gtk_combo_box_text_append_text (antialias, "None");
+  gtk_combo_box_text_append_text (antialias, "Gray");
+  gtk_combo_box_text_append_text (antialias, "Subpixel");
+  gtk_combo_box_text_append_text (antialias, "Fast");
+  gtk_combo_box_text_append_text (antialias, "Good");
+  gtk_combo_box_text_append_text (antialias, "Best");
   g_signal_connect_swapped (antialias, "changed", G_CALLBACK (set_font_options), demo);
   label = gtk_label_new ("Antialias");
   gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 2, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), antialias, 1, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (antialias), 1, 2, 1, 1);
 
   subpixel = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (subpixel), "Default");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (subpixel), "RGB");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (subpixel), "BGR");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (subpixel), "Vertical RGB");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (subpixel), "Vertical BGR");
+  gtk_combo_box_text_append_text (subpixel, "Default");
+  gtk_combo_box_text_append_text (subpixel, "RGB");
+  gtk_combo_box_text_append_text (subpixel, "BGR");
+  gtk_combo_box_text_append_text (subpixel, "Vertical RGB");
+  gtk_combo_box_text_append_text (subpixel, "Vertical BGR");
   g_signal_connect_swapped (subpixel, "changed", G_CALLBACK (set_font_options), demo);
   label = gtk_label_new ("Subpixel");
   gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 3, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), subpixel, 1, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (subpixel), 1, 3, 1, 1);
 
   hintstyle = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (hintstyle), "Default");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (hintstyle), "None");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (hintstyle), "Slight");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (hintstyle), "Medium");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (hintstyle), "Full");
+  gtk_combo_box_text_append_text (hintstyle, "Default");
+  gtk_combo_box_text_append_text (hintstyle, "None");
+  gtk_combo_box_text_append_text (hintstyle, "Slight");
+  gtk_combo_box_text_append_text (hintstyle, "Medium");
+  gtk_combo_box_text_append_text (hintstyle, "Full");
   g_signal_connect_swapped (hintstyle, "changed", G_CALLBACK (set_font_options), demo);
   label = gtk_label_new ("Hintstyle");
   gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 4, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), hintstyle, 1, 4, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (hintstyle), 1, 4, 1, 1);
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (antialias), 0);
   gtk_combo_box_set_active (GTK_COMBO_BOX (subpixel), 0);

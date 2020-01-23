@@ -71,13 +71,13 @@ struct _GtkComboBoxClass
 GDK_AVAILABLE_IN_ALL
 GType         gtk_combo_box_get_type                 (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget    *gtk_combo_box_new                      (void);
+GtkComboBox  *gtk_combo_box_new                      (void);
 GDK_AVAILABLE_IN_ALL
-GtkWidget    *gtk_combo_box_new_with_entry           (void);
+GtkComboBox  *gtk_combo_box_new_with_entry           (void);
 GDK_AVAILABLE_IN_ALL
-GtkWidget    *gtk_combo_box_new_with_model           (GtkTreeModel *model);
+GtkComboBox  *gtk_combo_box_new_with_model           (GtkTreeModel *model);
 GDK_AVAILABLE_IN_ALL
-GtkWidget    *gtk_combo_box_new_with_model_and_entry (GtkTreeModel *model);
+GtkComboBox  *gtk_combo_box_new_with_model_and_entry (GtkTreeModel *model);
 
 /* get/set active item */
 GDK_AVAILABLE_IN_ALL

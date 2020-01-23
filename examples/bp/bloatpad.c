@@ -403,7 +403,7 @@ edit_accels (GSimpleAction *action,
              gpointer       user_data)
 {
   GtkApplication *app = user_data;
-  GtkWidget *combo;
+  GtkComboBoxText *combo;
   GtkEntry *entry;
   gchar **actions;
   GtkWidget *dialog;
@@ -413,9 +413,9 @@ edit_accels (GSimpleAction *action,
   gtk_window_set_application (GTK_WINDOW (dialog), app);
   actions = gtk_application_list_action_descriptions (app);
   combo = gtk_combo_box_text_new ();
-  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), combo);
+  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), GTK_WIDGET (combo));
   for (i = 0; actions[i]; i++)
-    gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), actions[i], actions[i]);
+    gtk_combo_box_text_append (combo, actions[i], actions[i]);
   g_signal_connect (combo, "changed", G_CALLBACK (combo_changed), dialog);
   entry = gtk_entry_new ();
   gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), GTK_WIDGET (entry));

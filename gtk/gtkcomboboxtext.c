@@ -350,7 +350,7 @@ gtk_combo_box_text_buildable_custom_finished (GtkBuildable *buildable,
  *
  * Returns: A new #GtkComboBoxText
  */
-GtkWidget *
+GtkComboBoxText *
 gtk_combo_box_text_new (void)
 {
   return g_object_new (GTK_TYPE_COMBO_BOX_TEXT,
@@ -365,7 +365,7 @@ gtk_combo_box_text_new (void)
  *
  * Returns: a new #GtkComboBoxText
  */
-GtkWidget *
+GtkComboBoxText *
 gtk_combo_box_text_new_with_entry (void)
 {
   return g_object_new (GTK_TYPE_COMBO_BOX_TEXT,

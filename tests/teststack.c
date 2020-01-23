@@ -108,7 +108,8 @@ gint
 main (gint argc,
       gchar ** argv)
 {
-  GtkWidget *window, *box, *button, *hbox, *combo, *layout;
+  GtkWidget *window, *box, *button, *hbox, *layout;
+  GtkComboBoxText *combo;
   GtkWidget *w2, *w3;
   GtkListStore* store;
   GtkWidget *tree_view;
@@ -233,10 +234,10 @@ main (gint argc,
   combo = gtk_combo_box_text_new ();
   class = g_type_class_ref (GTK_TYPE_STACK_TRANSITION_TYPE);
   for (i = 0; i < class->n_values; i++)
-    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), class->values[i].value_nick);
+    gtk_combo_box_text_append_text (combo, class->values[i].value_nick);
   g_type_class_unref (class);
 
-  gtk_container_add (GTK_CONTAINER (hbox), combo);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (combo));
   g_signal_connect (combo, "changed", (GCallback) toggle_transitions, NULL);
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 

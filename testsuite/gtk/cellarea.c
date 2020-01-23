@@ -79,7 +79,7 @@ test_iconview_object_new (void)
 static void
 test_combobox_new (void)
 {
-  GtkWidget *view;
+  GtkComboBox *view;
   GtkCellArea *area;
 
   view = gtk_combo_box_new ();
