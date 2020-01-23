@@ -47,6 +47,7 @@
 #include "gdkglcontext-wayland.h"
 #include "gdkvulkancontext-wayland.h"
 #include "gdkwaylandmonitor.h"
+#include "gdkprofilerprivate.h"
 #include <wayland/pointer-gestures-unstable-v1-client-protocol.h>
 #include "tablet-unstable-v2-client-protocol.h"
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>
@@ -1131,6 +1132,7 @@ _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland)
   guint size;
   const gchar *name;
   GValue v = G_VALUE_INIT;
+  gint64 before = g_get_monotonic_time ();
 
   g_assert (display_wayland);
   g_assert (display_wayland->shm);
@@ -1150,6 +1152,12 @@ _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland)
 
   gdk_wayland_display_set_cursor_theme (GDK_DISPLAY (display_wayland), name, size);
   g_value_unset (&v);
+
+  if (gdk_profiler_is_running ())
+    {
+      gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "wayland", "load cursor theme");
+    }
+
 }
 
 guint32
