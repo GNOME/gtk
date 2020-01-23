@@ -1946,8 +1946,6 @@ cursor-handle.bottom:active:dir(ltr), cursor-handle.top:active:dir(rtl) { -gtk-i
 
 cursor-handle.insertion-cursor:active:dir(ltr), cursor-handle.insertion-cursor:active:dir(rtl) { -gtk-icon-source: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-active.png"), url("assets/slider-horz-scale-has-marks-above-active@2.png")); }
 
-.context-menu { font: initial; }
-
 shortcuts-section { margin: 20px; }
 
 .shortcuts-search-results { margin: 20px; border-spacing: 24px; }
