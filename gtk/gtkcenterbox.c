@@ -230,10 +230,10 @@ gtk_center_box_init (GtkCenterBox *self)
  *
  * Returns: the new #GtkCenterBox.
  */
-GtkWidget *
+GtkCenterBox *
 gtk_center_box_new (void)
 {
-  return GTK_WIDGET (g_object_new (GTK_TYPE_CENTER_BOX, NULL));
+  return g_object_new (GTK_TYPE_CENTER_BOX, NULL);
 }
 
 /**

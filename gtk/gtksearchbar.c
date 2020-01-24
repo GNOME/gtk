@@ -95,14 +95,14 @@ struct _GtkSearchBarClass
 };
 
 typedef struct {
-  GtkWidget   *revealer;
-  GtkWidget   *box_center;
-  GtkWidget   *close_button;
+  GtkWidget    *revealer;
+  GtkCenterBox *box_center;
+  GtkWidget    *close_button;
 
-  GtkWidget   *entry;
-  gboolean     reveal_child;
+  GtkWidget    *entry;
+  gboolean      reveal_child;
 
-  GtkWidget   *capture_widget;
+  GtkWidget    *capture_widget;
   GtkEventController *capture_widget_controller;
 } GtkSearchBarPrivate;
 
@@ -169,7 +169,7 @@ gtk_search_bar_add (GtkContainer *container,
   GtkSearchBar *bar = GTK_SEARCH_BAR (container);
   GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
 
-  gtk_center_box_set_center_widget (GTK_CENTER_BOX (priv->box_center), child);
+  gtk_center_box_set_center_widget (priv->box_center, child);
   /* If an entry is the only child, save the developer a couple of
    * lines of code
    */
@@ -189,7 +189,7 @@ gtk_search_bar_remove (GtkContainer *container,
   if (GTK_IS_EDITABLE (child))
     gtk_search_bar_connect_entry (bar, NULL);
 
-  gtk_center_box_set_center_widget (GTK_CENTER_BOX (priv->box_center), NULL);
+  gtk_center_box_set_center_widget (priv->box_center, NULL);
   _gtk_bin_set_child (GTK_BIN (container), NULL);
 }
 
@@ -249,7 +249,7 @@ gtk_search_bar_dispose (GObject *object)
 
   if (gtk_bin_get_child (GTK_BIN (bar)) != NULL)
     {
-      gtk_center_box_set_center_widget (GTK_CENTER_BOX (priv->box_center), NULL);
+      gtk_center_box_set_center_widget (priv->box_center, NULL);
       _gtk_bin_set_child (GTK_BIN (bar), NULL);
     }
 
@@ -349,14 +349,14 @@ gtk_search_bar_init (GtkSearchBar *bar)
   gtk_widget_set_parent (priv->revealer, GTK_WIDGET (bar));
 
   priv->box_center = gtk_center_box_new ();
-  gtk_widget_set_hexpand (priv->box_center, TRUE);
+  gtk_widget_set_hexpand (GTK_WIDGET (priv->box_center), TRUE);
 
   priv->close_button = gtk_button_new_from_icon_name ("window-close-symbolic");
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->close_button), "close");
-  gtk_center_box_set_end_widget (GTK_CENTER_BOX (priv->box_center), priv->close_button);
+  gtk_center_box_set_end_widget (priv->box_center, priv->close_button);
   gtk_widget_hide (priv->close_button);
 
-  gtk_container_add (GTK_CONTAINER (priv->revealer), priv->box_center);
+  gtk_container_add (GTK_CONTAINER (priv->revealer), GTK_WIDGET (priv->box_center));
 
 
   g_signal_connect (priv->revealer, "notify::reveal-child",
