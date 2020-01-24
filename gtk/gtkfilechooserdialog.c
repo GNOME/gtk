@@ -69,7 +69,7 @@
  * #GtkFileChooserDialog to select a file for opening:
  *
  * |[
- * GtkWidget *dialog;
+ * GtkFileChooserDialog *dialog;
  * GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
  * gint res;
  *
@@ -92,13 +92,13 @@
  *     g_free (filename);
  *   }
  *
- * gtk_widget_destroy (dialog);
+ * gtk_widget_destroy (GTK_WIDGET (dialog));
  * ]|
  *
  * To use a dialog for saving, you can use this:
  *
  * |[
- * GtkWidget *dialog;
+ * GtkFileChooserDialog *dialog;
  * GtkFileChooser *chooser;
  * GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
  * gint res;
@@ -132,7 +132,7 @@
  *     g_free (filename);
  *   }
  *
- * gtk_widget_destroy (dialog);
+ * gtk_widget_destroy (GTK_WIDGET (dialog));
  * ]|
  *
  * ## Setting up a file chooser dialog ## {#gtkfilechooserdialog-setting-up}
@@ -168,7 +168,7 @@
  * could call gtk_file_chooser_dialog_new() as follows:
  *
  * |[
- * GtkWidget *dialog;
+ * GtkFileChooserDialog *dialog;
  * GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
  *
  * dialog = gtk_file_chooser_dialog_new ("Open File",
@@ -644,14 +644,14 @@ response_cb (GtkDialog *dialog,
   priv->response_requested = FALSE;
 }
 
-static GtkWidget *
+static GtkFileChooserDialog *
 gtk_file_chooser_dialog_new_valist (const gchar          *title,
                                     GtkWindow            *parent,
                                     GtkFileChooserAction  action,
                                     const gchar          *first_button_text,
                                     va_list               varargs)
 {
-  GtkWidget *result;
+  GtkFileChooserDialog *result;
   const char *button_text = first_button_text;
   gint response_id;
 
@@ -686,14 +686,14 @@ gtk_file_chooser_dialog_new_valist (const gchar          *title,
  *
  * Returns: a new #GtkFileChooserDialog
  **/
-GtkWidget *
+GtkFileChooserDialog *
 gtk_file_chooser_dialog_new (const gchar          *title,
                              GtkWindow            *parent,
                              GtkFileChooserAction  action,
                              const gchar          *first_button_text,
                              ...)
 {
-  GtkWidget *result;
+  GtkFileChooserDialog *result;
   va_list varargs;
 
   va_start (varargs, first_button_text);

@@ -532,7 +532,7 @@ filesave_choose_cb (GtkWidget              *button,
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
   gchar *last_location = NULL;
-  GtkWidget *dialog;
+  GtkFileChooserDialog *dialog;
   GtkWindow *toplevel;
 
   /* this will be unblocked in the dialog_response_callback function */

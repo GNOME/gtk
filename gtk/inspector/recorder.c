@@ -1014,7 +1014,7 @@ render_node_save (GtkButton            *button,
                   GtkInspectorRecorder *recorder)
 {
   GskRenderNode *node;
-  GtkWidget *dialog;
+  GtkFileChooserDialog *dialog;
   char *filename, *nodename;
 
   node = get_selected_node (recorder);
@@ -1036,7 +1036,7 @@ render_node_save (GtkButton            *button,
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
   g_signal_connect (dialog, "response", G_CALLBACK (render_node_save_response), node);
-  gtk_widget_show (dialog);
+  gtk_widget_show (GTK_WIDGET (dialog));
 }
 
 static char *

@@ -130,7 +130,7 @@ static void
 button_clicked (GtkButton *b,
                 gpointer   user_data)
 {
-  GtkWidget *w;
+  GtkFileChooserDialog *w;
   gchar *path;
 
   w = gtk_file_chooser_dialog_new ("Select file",
@@ -145,7 +145,7 @@ button_clicked (GtkButton *b,
   path = g_file_get_path (file);
   gtk_button_set_label (GTK_BUTTON (file_l), path);
 
-  gtk_widget_destroy (w);
+  gtk_widget_destroy (GTK_WIDGET (w));
 
   gtk_widget_set_sensitive (open, TRUE);
 

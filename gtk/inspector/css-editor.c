@@ -234,7 +234,7 @@ static void
 save_clicked (GtkButton             *button,
               GtkInspectorCssEditor *ce)
 {
-  GtkWidget *dialog;
+  GtkFileChooserDialog *dialog;
 
   dialog = gtk_file_chooser_dialog_new ("",
                                         GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (ce))),
@@ -247,7 +247,7 @@ save_clicked (GtkButton             *button,
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
   g_signal_connect (dialog, "response", G_CALLBACK (save_response), ce);
-  gtk_widget_show (dialog);
+  gtk_widget_show (GTK_WIDGET (dialog));
 }
 
 static void

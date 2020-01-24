@@ -480,7 +480,7 @@ activate_save_as (GSimpleAction *action,
                   GVariant      *parameter,
                   gpointer       user_data)
 {
-  GtkWidget *dialog;
+  GtkFileChooserDialog *dialog;
   gint response;
   char *save_filename;
 
@@ -500,7 +500,7 @@ activate_save_as (GSimpleAction *action,
       g_free (save_filename);
     }
 
-  gtk_widget_destroy (dialog);
+  gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
@@ -519,7 +519,7 @@ activate_open (GSimpleAction *action,
                GVariant      *parameter,
                gpointer       user_data)
 {
-  GtkWidget *dialog;
+  GtkFileChooserDialog *dialog;
   gint response;
   char *open_filename;
 
@@ -539,7 +539,7 @@ activate_open (GSimpleAction *action,
       g_free (open_filename);
     }
 
-  gtk_widget_destroy (dialog);
+  gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
