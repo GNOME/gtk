@@ -162,6 +162,12 @@ gtk_css_image_url_is_invalid (GtkCssImage *image)
 }
 
 static gboolean
+gtk_css_image_url_is_computed (GtkCssImage *image)
+{
+  return TRUE;
+}
+
+static gboolean
 gtk_css_image_url_parse (GtkCssImage  *image,
                          GtkCssParser *parser)
 {
@@ -249,6 +255,7 @@ _gtk_css_image_url_class_init (GtkCssImageUrlClass *klass)
   image_class->print = gtk_css_image_url_print;
   image_class->equal = gtk_css_image_url_equal;
   image_class->is_invalid = gtk_css_image_url_is_invalid;
+  image_class->is_computed = gtk_css_image_url_is_computed;
 
   object_class->dispose = gtk_css_image_url_dispose;
 }
