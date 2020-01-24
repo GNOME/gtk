@@ -382,8 +382,9 @@ static GtkWidget *
 create_window (void)
 {
   GtkWidget *window, *hbox, *vbox, *flowbox_cntl, *items_cntl;
-  GtkWidget *flowbox, *widget, *expander, *swindow;
+  GtkWidget *flowbox, *widget, *swindow;
   GtkComboBoxText *combo;
+  GtkExpander *expander;
   GtkLabel *label;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -425,12 +426,12 @@ create_window (void)
 
   /* Add Flowbox test control frame */
   expander = gtk_expander_new ("Flow Box controls");
-  gtk_expander_set_expanded (GTK_EXPANDER (expander), TRUE);
+  gtk_expander_set_expanded (expander, TRUE);
   flowbox_cntl = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
   gtk_widget_show (flowbox_cntl);
-  gtk_widget_show (expander);
+  gtk_widget_show (GTK_WIDGET (expander));
   gtk_container_add (GTK_CONTAINER (expander), flowbox_cntl);
-  gtk_container_add (GTK_CONTAINER (vbox), expander);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (expander));
 
   widget = gtk_check_button_new_with_label ("Homogeneous");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
@@ -599,12 +600,12 @@ create_window (void)
 
   /* Add test items control frame */
   expander = gtk_expander_new ("Test item controls");
-  gtk_expander_set_expanded (GTK_EXPANDER (expander), TRUE);
+  gtk_expander_set_expanded (expander, TRUE);
   items_cntl = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
   gtk_widget_show (items_cntl);
-  gtk_widget_show (expander);
+  gtk_widget_show (GTK_WIDGET (expander));
   gtk_container_add (GTK_CONTAINER (expander), items_cntl);
-  gtk_container_add (GTK_CONTAINER (vbox), expander);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (expander));
 
   /* Add Items control */
   combo = gtk_combo_box_text_new ();

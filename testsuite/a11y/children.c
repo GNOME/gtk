@@ -251,7 +251,7 @@ main (int argc, char *argv[])
   add_child_tests (gtk_window_new (GTK_WINDOW_TOPLEVEL));
   add_child_tests (gtk_assistant_new ());
   add_child_tests (gtk_frame_new ("frame"));
-  add_child_tests (gtk_expander_new ("expander"));
+  add_child_tests (GTK_WIDGET (gtk_expander_new ("expander")));
   add_child_tests (gtk_text_view_new ());
   add_child_tests (gtk_tree_view_new ());
 #if 0

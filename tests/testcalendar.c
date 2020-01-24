@@ -344,14 +344,14 @@ calendar_toggle_details (GtkWidget    *widget,
                                   NULL, NULL, NULL);
 }
 
-static GtkWidget*
+static GtkExpander*
 create_expander (const char *caption,
                  GtkWidget  *child,
                  GtkAlign    halign,
                  GtkAlign    valign)
 {
-  GtkWidget *expander = gtk_expander_new ("");
-  GtkWidget *label = gtk_expander_get_label_widget (GTK_EXPANDER (expander));
+  GtkExpander *expander = gtk_expander_new ("");
+  GtkWidget *label = gtk_expander_get_label_widget (expander);
 
   g_object_set (child,
                 "margin-top", 6,
@@ -417,6 +417,7 @@ create_calendar(void)
   GtkWidget *window, *hpaned, *vbox, *rpane, *hbox;
   GtkWidget *calendar, *toggle, *scroller, *button;
   GtkWidget *frame, *bbox, *details;
+  GtkExpander *expander;
   GtkLabel *label;
 
   GtkSizeGroup *size;
@@ -615,8 +616,8 @@ create_calendar(void)
   /* Build the Right frame with the flags in */
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  frame = create_expander ("<b>Flags</b>", vbox, GTK_ALIGN_FILL, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (rpane), frame);
+  expander = create_expander ("<b>Flags</b>", vbox, GTK_ALIGN_FILL, GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (rpane), GTK_WIDGET (expander));
 
   for (i = 0; i < G_N_ELEMENTS (calendar_data.settings); i++)
     {

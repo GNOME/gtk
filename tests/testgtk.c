@@ -2206,7 +2206,7 @@ static void
 create_expander (GtkWidget *widget)
 {
   GtkWidget *box1;
-  GtkWidget *expander;
+  GtkExpander *expander;
   GtkLabel *hidden;
   static GtkWidget *window = NULL;
 
@@ -2227,7 +2227,7 @@ create_expander (GtkWidget *widget)
 
       expander = gtk_expander_new ("The Hidden");
 
-      gtk_container_add (GTK_CONTAINER (box1), expander);
+      gtk_container_add (GTK_CONTAINER (box1), GTK_WIDGET (expander));
 
       hidden = gtk_label_new ("Revealed!");
 

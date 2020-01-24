@@ -30,7 +30,7 @@ do_expander (GtkWidget *do_widget)
 {
   GtkWidget *toplevel;
   GtkWidget *area;
-  GtkWidget *expander;
+  GtkExpander *expander;
   GtkLabel *label;
   GtkWidget *sw;
   GtkWidget *tv;
@@ -56,7 +56,7 @@ do_expander (GtkWidget *do_widget)
       gtk_widget_set_vexpand (GTK_WIDGET (label), FALSE);
 
       expander = gtk_expander_new ("Details:");
-      gtk_widget_set_vexpand (expander, TRUE);
+      gtk_widget_set_vexpand (GTK_WIDGET (expander), TRUE);
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (sw), 100);
       gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_IN);
@@ -80,7 +80,7 @@ do_expander (GtkWidget *do_widget)
                                 "resize the window. Do it already !", -1);
       gtk_container_add (GTK_CONTAINER (sw), tv);
       gtk_container_add (GTK_CONTAINER (expander), sw);
-      gtk_container_add (GTK_CONTAINER (area), expander);
+      gtk_container_add (GTK_CONTAINER (area), GTK_WIDGET (expander));
       g_signal_connect (expander, "notify::expanded",
                         G_CALLBACK (expander_cb), window);
 
