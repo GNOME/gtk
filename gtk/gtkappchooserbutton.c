@@ -850,7 +850,7 @@ real_insert_separator (GtkAppChooserButton *self,
  *
  * Returns: a newly created #GtkAppChooserButton
  */
-GtkWidget *
+GtkAppChooserButton *
 gtk_app_chooser_button_new (const gchar *content_type)
 {
   g_return_val_if_fail (content_type != NULL, NULL);

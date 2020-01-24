@@ -1090,14 +1090,14 @@ create_assistant (void)
 static WidgetInfo *
 create_appchooserbutton (void)
 {
-  GtkWidget *picker;
+  GtkAppChooserButton *picker;
   GtkWidget *vbox;
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   picker = gtk_app_chooser_button_new ("text/plain");
-  gtk_widget_set_halign (picker, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (picker, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (vbox), picker);
+  gtk_widget_set_halign (GTK_WIDGET (picker), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (picker), GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (picker));
   gtk_container_add (GTK_CONTAINER (vbox),
                       gtk_label_new ("Application Button"));
 

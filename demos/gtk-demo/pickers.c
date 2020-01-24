@@ -14,6 +14,7 @@ do_pickers (GtkWidget *do_widget)
   GtkWidget *picker;
   GtkColorButton *color_button;
   GtkFileChooserButton *file_button;
+  GtkAppChooserButton *app_button;
   GtkLabel *label;
 
   if (!window)
@@ -70,10 +71,10 @@ do_pickers (GtkWidget *do_widget)
     gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
     gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
     gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
-    picker = gtk_app_chooser_button_new ("x-scheme-handler/mailto");
-    gtk_app_chooser_button_set_show_dialog_item (GTK_APP_CHOOSER_BUTTON (picker), TRUE);
+    app_button = gtk_app_chooser_button_new ("x-scheme-handler/mailto");
+    gtk_app_chooser_button_set_show_dialog_item (app_button, TRUE);
     gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 0, 4, 1, 1);
-    gtk_grid_attach (GTK_GRID (table), picker, 1, 4, 1, 1);
+    gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (app_button), 1, 4, 1, 1);
   }
 
   if (!gtk_widget_get_visible (window))
