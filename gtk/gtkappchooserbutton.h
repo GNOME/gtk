@@ -38,38 +38,37 @@ G_BEGIN_DECLS
 typedef struct _GtkAppChooserButton        GtkAppChooserButton;
 
 GDK_AVAILABLE_IN_ALL
-GType       gtk_app_chooser_button_get_type           (void) G_GNUC_CONST;
+GType                 gtk_app_chooser_button_get_type           (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget * gtk_app_chooser_button_new                (const gchar         *content_type);
+GtkAppChooserButton * gtk_app_chooser_button_new                (const gchar         *content_type);
 
 GDK_AVAILABLE_IN_ALL
-void        gtk_app_chooser_button_append_separator   (GtkAppChooserButton *self);
+void                  gtk_app_chooser_button_append_separator   (GtkAppChooserButton *self);
 GDK_AVAILABLE_IN_ALL
-void        gtk_app_chooser_button_append_custom_item (GtkAppChooserButton *self,
-                                                       const gchar         *name,
-                                                       const gchar         *label,
-                                                       GIcon               *icon);
+void                  gtk_app_chooser_button_append_custom_item (GtkAppChooserButton *self,
+                                                                 const gchar         *name,
+                                                                 const gchar         *label,
+                                                                 GIcon               *icon);
 GDK_AVAILABLE_IN_ALL
-void     gtk_app_chooser_button_set_active_custom_item (GtkAppChooserButton *self,
-                                                        const gchar         *name);
+void                  gtk_app_chooser_button_set_active_custom_item (GtkAppChooserButton *self,
+                                                                     const gchar         *name);
 
 GDK_AVAILABLE_IN_ALL
-void     gtk_app_chooser_button_set_show_dialog_item  (GtkAppChooserButton *self,
-                                                       gboolean             setting);
+void                  gtk_app_chooser_button_set_show_dialog_item  (GtkAppChooserButton *self,
+                                                                    gboolean             setting);
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_app_chooser_button_get_show_dialog_item  (GtkAppChooserButton *self);
+gboolean              gtk_app_chooser_button_get_show_dialog_item  (GtkAppChooserButton *self);
 GDK_AVAILABLE_IN_ALL
-void     gtk_app_chooser_button_set_heading           (GtkAppChooserButton *self,
-                                                       const gchar         *heading);
+void                  gtk_app_chooser_button_set_heading           (GtkAppChooserButton *self,
+                                                                    const gchar         *heading);
 GDK_AVAILABLE_IN_ALL
-const gchar *
-         gtk_app_chooser_button_get_heading           (GtkAppChooserButton *self);
+const gchar *         gtk_app_chooser_button_get_heading           (GtkAppChooserButton *self);
 GDK_AVAILABLE_IN_ALL
-void     gtk_app_chooser_button_set_show_default_item (GtkAppChooserButton *self,
-                                                       gboolean             setting);
+void                  gtk_app_chooser_button_set_show_default_item (GtkAppChooserButton *self,
+                                                                    gboolean             setting);
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_app_chooser_button_get_show_default_item (GtkAppChooserButton *self);
+gboolean              gtk_app_chooser_button_get_show_default_item (GtkAppChooserButton *self);
 
 G_END_DECLS
 

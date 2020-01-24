@@ -23,7 +23,8 @@
 
 #define CUSTOM_ITEM "custom-item"
 
-static GtkWidget *toplevel, *button, *box;
+static GtkWidget *toplevel, *box;
+static GtkAppChooserButton *button;
 static GtkImage *sel_image;
 static GtkLabel *sel_name;
 
@@ -76,7 +77,7 @@ main (int argc,
   gtk_container_add (GTK_CONTAINER (toplevel), box);
 
   button = gtk_app_chooser_button_new ("image/jpeg");
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (button));
 
   g_signal_connect (button, "changed",
                     G_CALLBACK (combo_changed_cb), NULL);
@@ -94,21 +95,21 @@ main (int argc,
   gtk_container_add (GTK_CONTAINER (w), GTK_WIDGET (sel_name));
 
   gtk_app_chooser_button_set_heading (GTK_APP_CHOOSER_BUTTON (button), "Choose one, <i>not</i> two");
-  gtk_app_chooser_button_append_separator (GTK_APP_CHOOSER_BUTTON (button));
-  gtk_app_chooser_button_append_custom_item (GTK_APP_CHOOSER_BUTTON (button),
+  gtk_app_chooser_button_append_separator (button);
+  gtk_app_chooser_button_append_custom_item (button,
                                              CUSTOM_ITEM,
                                              "Hey, I'm special!",
                                              g_themed_icon_new ("face-smile"));
 
   /* this one will trigger a warning, and will not be added */
-  gtk_app_chooser_button_append_custom_item (GTK_APP_CHOOSER_BUTTON (button),
+  gtk_app_chooser_button_append_custom_item (button,
                                              CUSTOM_ITEM,
                                              "Hey, I'm fake!",
                                              g_themed_icon_new ("face-evil"));
 
-  gtk_app_chooser_button_set_show_dialog_item (GTK_APP_CHOOSER_BUTTON (button),
+  gtk_app_chooser_button_set_show_dialog_item (button,
                                                TRUE);
-  gtk_app_chooser_button_set_show_default_item (GTK_APP_CHOOSER_BUTTON (button),
+  gtk_app_chooser_button_set_show_default_item (button,
                                                 TRUE);
 
   /* connect to the detailed signal */
@@ -123,7 +124,7 @@ main (int argc,
   gtk_app_chooser_refresh (GTK_APP_CHOOSER (button));
 
 #if 0
-  gtk_app_chooser_button_set_active_custom_item (GTK_APP_CHOOSER_BUTTON (button),
+  gtk_app_chooser_button_set_active_custom_item (button,
                                                  CUSTOM_ITEM);
 #endif
   gtk_widget_show (toplevel);
