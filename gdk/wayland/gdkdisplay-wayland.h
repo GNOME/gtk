@@ -26,7 +26,6 @@
 
 #include <stdint.h>
 #include <wayland-client.h>
-#include <wayland-cursor.h>
 #include <wayland-egl.h>
 #include <gdk/wayland/tablet-unstable-v2-client-protocol.h>
 #include <gdk/wayland/gtk-shell-client-protocol.h>
@@ -45,6 +44,7 @@
 
 #include "gdkdisplayprivate.h"
 #include "gdkwaylanddevice.h"
+#include "cursor/wayland-cursor.h"
 
 #include <epoxy/egl.h>
 
@@ -126,7 +126,7 @@ struct _GdkWaylandDisplay
 
   GList *current_popups;
 
-  struct wl_cursor_theme *scaled_cursor_themes[GDK_WAYLAND_THEME_SCALES_COUNT];
+  struct wl_cursor_theme *cursor_theme;
   gchar *cursor_theme_name;
   int cursor_theme_size;
   GHashTable *cursor_surface_cache;

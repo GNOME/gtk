@@ -33,8 +33,7 @@
 #include "gdkdisplay-wayland.h"
 #include "gdkwayland.h"
 #include <gdk-pixbuf/gdk-pixbuf.h>
-
-#include <wayland-cursor.h>
+#include "cursor/wayland-cursor.h"
 
 static void
 gdk_wayland_cursor_remove_from_cache (gpointer data, GObject *cursor)
@@ -119,11 +118,12 @@ name_fallback (const gchar *name)
 static struct wl_cursor *
 gdk_wayland_cursor_load_for_name (GdkWaylandDisplay      *display_wayland,
                                   struct wl_cursor_theme *theme,
+                                  int                     scale,
                                   const char             *name)
 {
   struct wl_cursor *c;
 
-  c = wl_cursor_theme_get_cursor (theme, name);
+  c = wl_cursor_theme_get_cursor (theme, name, scale);
   if (!c)
     {
       const char *fallback;
@@ -131,7 +131,7 @@ gdk_wayland_cursor_load_for_name (GdkWaylandDisplay      *display_wayland,
       fallback = name_fallback (name);
       if (fallback)
         {
-          c = wl_cursor_theme_get_cursor (theme, fallback);
+          c = wl_cursor_theme_get_cursor (theme, fallback, scale);
         }
     }
 
@@ -172,7 +172,8 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
         goto none;
 
       c = gdk_wayland_cursor_load_for_name (display,
-                                            _gdk_wayland_display_get_scaled_cursor_theme (display, desired_scale),
+                                            _gdk_wayland_display_get_cursor_theme (display),
+                                            desired_scale,
                                             gdk_cursor_get_name (cursor));
       if (c)
         {
@@ -270,7 +271,8 @@ _gdk_wayland_cursor_get_next_image_index (GdkWaylandDisplay *display,
     }
 
   c = gdk_wayland_cursor_load_for_name (display,
-                                        _gdk_wayland_display_get_scaled_cursor_theme (display, scale),
+                                        _gdk_wayland_display_get_cursor_theme (display),
+                                        scale,
                                         gdk_cursor_get_name (cursor));
 
   if (c)
