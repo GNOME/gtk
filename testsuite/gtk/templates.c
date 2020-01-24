@@ -115,11 +115,11 @@ test_assistant_basic (void)
 static void
 test_scale_button_basic (void)
 {
-  GtkWidget *widget;
+  GtkScaleButton *widget;
 
   widget = gtk_scale_button_new (0, 100, 10, NULL);
   g_assert (GTK_IS_SCALE_BUTTON (widget));
-  gtk_widget_destroy (widget);
+  gtk_widget_destroy (GTK_WIDGET (widget));
 }
 
 static void

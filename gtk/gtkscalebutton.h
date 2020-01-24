@@ -73,7 +73,7 @@ struct _GtkScaleButtonClass
 GDK_AVAILABLE_IN_ALL
 GType            gtk_scale_button_get_type         (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget *      gtk_scale_button_new              (gdouble          min,
+GtkScaleButton * gtk_scale_button_new              (gdouble          min,
                                                     gdouble          max,
                                                     gdouble          step,
                                                     const gchar    **icons);
