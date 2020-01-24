@@ -277,7 +277,7 @@ gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
  *
  * Returns: a new #GtkFontChooserDialog
  */
-GtkWidget*
+GtkFontChooserDialog*
 gtk_font_chooser_dialog_new (const gchar *title,
                              GtkWindow   *parent)
 {
@@ -288,7 +288,7 @@ gtk_font_chooser_dialog_new (const gchar *title,
                          "transient-for", parent,
                          NULL);
 
-  return GTK_WIDGET (dialog);
+  return dialog;
 }
 
 static void

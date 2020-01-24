@@ -86,7 +86,7 @@ typedef struct
   guint         show_preview_entry : 1;
 
   GtkWidget     *button;
-  GtkWidget     *font_dialog;
+  GtkFontChooserDialog *font_dialog;
   GtkLabel      *font_label;
   GtkLabel      *size_label;
   GtkWidget     *font_size_box;
@@ -603,7 +603,7 @@ gtk_font_button_finalize (GObject *object)
   GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (font_button);
 
   if (priv->font_dialog != NULL) 
-    gtk_widget_destroy (priv->font_dialog);
+    gtk_widget_destroy (GTK_WIDGET (priv->font_dialog));
 
   g_free (priv->title);
 
@@ -952,7 +952,7 @@ gtk_font_button_clicked (GtkButton *button,
                         G_CALLBACK (dialog_destroy), font_button);
     }
 
-  if (!gtk_widget_get_visible (priv->font_dialog))
+  if (!gtk_widget_get_visible (GTK_WIDGET (priv->font_dialog)))
     {
       font_dialog = GTK_FONT_CHOOSER (priv->font_dialog);
       gtk_font_chooser_set_font_desc (font_dialog, priv->font_desc);
@@ -974,7 +974,7 @@ response_cb (GtkDialog *dialog,
   GtkFontChooser *font_chooser;
   GObject *object;
 
-  gtk_widget_hide (priv->font_dialog);
+  gtk_widget_hide (GTK_WIDGET (priv->font_dialog));
 
   if (response_id != GTK_RESPONSE_OK)
     return;
