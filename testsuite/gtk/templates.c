@@ -307,11 +307,11 @@ test_font_chooser_dialog_basic (void)
 static void
 test_page_setup_unix_dialog_basic (void)
 {
-  GtkWidget *widget;
+  GtkPageSetupUnixDialog *widget;
 
   widget = gtk_page_setup_unix_dialog_new ("Setup your Page !", NULL);
   g_assert (GTK_IS_PAGE_SETUP_UNIX_DIALOG (widget));
-  gtk_widget_destroy (widget);
+  gtk_widget_destroy (GTK_WIDGET (widget));
 }
 
 static void

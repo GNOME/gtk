@@ -897,11 +897,11 @@ page_name_func (GtkCellLayout   *cell_layout,
  *
  * Returns: the new #GtkPageSetupUnixDialog
  */
-GtkWidget *
+GtkPageSetupUnixDialog *
 gtk_page_setup_unix_dialog_new (const gchar *title,
                                 GtkWindow   *parent)
 {
-  GtkWidget *result;
+  GtkPageSetupUnixDialog *result;
 
   if (title == NULL)
     title = _("Page Setup");

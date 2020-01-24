@@ -14,10 +14,10 @@ done_cb (GtkDialog *dialog, gint response, gpointer data)
   gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
-GtkWidget *
+GtkPageSetupUnixDialog *
 do_pagesetup (GtkWidget *do_widget)
 {
-  static GtkWidget *window = NULL;
+  static GtkPageSetupUnixDialog *window = NULL;
 
   if (!window)
     {
@@ -26,10 +26,10 @@ do_pagesetup (GtkWidget *do_widget)
       g_signal_connect (window, "response", G_CALLBACK (done_cb), NULL);
     }
 
-  if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
+  if (!gtk_widget_get_visible (GTK_WIDGET (window)))
+    gtk_widget_show (GTK_WIDGET (window));
   else
-    gtk_widget_destroy (window);
+    gtk_widget_destroy (GTK_WIDGET (window));
 
   return window;
 }

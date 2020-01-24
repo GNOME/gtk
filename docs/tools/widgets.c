@@ -757,7 +757,7 @@ static WidgetInfo *
 create_page_setup_dialog (void)
 {
   WidgetInfo *info;
-  GtkWidget *widget;
+  GtkPageSetupUnixDialog *widget;
   GtkPageSetup *page_setup;
   GtkPrintSettings *settings;
 
@@ -769,7 +769,7 @@ create_page_setup_dialog (void)
   gtk_page_setup_unix_dialog_set_print_settings (GTK_PAGE_SETUP_UNIX_DIALOG (widget),
 						 settings);
 
-  info = new_widget_info ("pagesetupdialog", widget, ASIS);
+  info = new_widget_info ("pagesetupdialog", GTK_WIDGET (widget), ASIS);
   info->include_decorations = TRUE;
 
   return info;
