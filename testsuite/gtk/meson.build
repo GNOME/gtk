@@ -189,7 +189,7 @@ endif
 if get_option ('profiler')
 
   test('performance-layout', test_performance,
-       args: [ '--mark', 'layout', join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],
+       args: [ '--mark', 'size allocation', join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],
        env: [ 'GTK_THEME=Empty',
               'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir) ],
        suite: [ 'css' ])
@@ -199,7 +199,7 @@ endif
 if get_option ('profiler')
 
   test('performance-snapshot', test_performance,
-       args: [ '--mark', 'snapshot', join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],
+       args: [ '--mark', 'widget snapshot', join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],
        env: [ 'GTK_THEME=Empty',
               'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir) ],
        suite: [ 'css' ])
