@@ -124,6 +124,7 @@ struct _GtkCssSelectorTree
   gint32 previous_offset;
   gint32 sibling_offset;
   gint32 matches_offset; /* pointers that we return as matches if selector matches */
+  guint64 match_count;
 };
 
 static gboolean
@@ -1857,6 +1858,8 @@ gtk_css_selector_tree_match_foreach (const GtkCssSelector *selector,
   const GtkCssSelectorTree *tree = (const GtkCssSelectorTree *) selector;
   const GtkCssSelectorTree *prev;
 
+  ((GtkCssSelectorTree *)tree)->match_count++;
+
   if (!gtk_css_selector_match (selector, matcher))
     return FALSE;
 
@@ -1978,7 +1981,6 @@ _gtk_css_selector_tree_print (const GtkCssSelectorTree *tree, GString *str, char
 {
   gboolean first = TRUE;
   int len, i;
-  gpointer *matches;
 
   for (; tree != NULL; tree = gtk_css_selector_tree_get_sibling (tree), first = FALSE)
     {
@@ -2002,16 +2004,8 @@ _gtk_css_selector_tree_print (const GtkCssSelectorTree *tree, GString *str, char
 
       len = str->len;
       tree->selector.class->print (&tree->selector, str);
-      matches = gtk_css_selector_tree_get_matches (tree);
-      if (matches)
-        {
-          int n;
-          for (n = 0; matches[n] != NULL; n++) ;
-          if (n == 1)
-            g_string_append (str, " (1 match)");
-          else
-            g_string_append_printf (str, " (%d matches)", n);
-        }
+      if (tree->match_count)
+        g_string_append_printf (str, " (%ld hits)", tree->match_count);
       len = str->len - len;
 
       if (gtk_css_selector_tree_get_previous (tree))
@@ -2032,6 +2026,24 @@ _gtk_css_selector_tree_print (const GtkCssSelectorTree *tree, GString *str, char
 	g_string_append (str, "\n");
     }
 }
+
+static GSList *trees;
+
+static void print_atexit (void)
+{
+  GSList *l;
+
+  for (l = trees; l; l = l->next)
+    {
+      const GtkCssSelectorTree *tree = l->data;
+
+      GString *s = g_string_new ("");
+      _gtk_css_selector_tree_print (tree, s, "");
+      g_print ("%s", s->str);
+      g_string_free (s, TRUE);
+    }
+}
+
 #endif
 
 void
@@ -2159,6 +2171,7 @@ subdivide_infos (GByteArray *array, GList *infos, gint32 parent_offset)
   tree = alloc_tree (array, &tree_offset);
   tree->parent_offset = parent_offset;
   tree->selector = max_selector;
+  tree->match_count = 0;
 
   exact_matches = NULL;
   for (l = infos; l != NULL; l = l->next)
@@ -2298,12 +2311,9 @@ _gtk_css_selector_tree_builder_build (GtkCssSelectorTreeBuilder *builder)
     }
 
 #ifdef PRINT_TREE
-  {
-    GString *s = g_string_new ("");
-    _gtk_css_selector_tree_print (tree, s, "");
-    g_print ("%s", s->str);
-    g_string_free (s, TRUE);
-  }
+  if (trees == NULL)
+    atexit (print_atexit);
+  trees = g_slist_append (trees, tree);
 #endif
 
   return tree;
