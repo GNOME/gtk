@@ -127,6 +127,7 @@ draw_border_cb (GtkToggleButton *toggle_button, GtkFrame *frame)
 int main (int argc, char **argv)
 {
   GtkWidget *window, *widget;
+  GtkCheckButton *check;
   GtkLabel *label;
   GtkBox *vbox;
   GtkFrame *frame;
@@ -188,10 +189,10 @@ int main (int argc, char **argv)
 
   /* CheckButton to control whether to draw border */
   draw_border = gtk_frame_get_shadow_type (frame) != GTK_SHADOW_NONE;
-  widget = gtk_check_button_new_with_label ("draw border");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), draw_border);
-  g_signal_connect (widget, "toggled", G_CALLBACK (draw_border_cb), frame);
-  gtk_grid_attach (grid, widget, 0, 3, 1, 1);
+  check = gtk_check_button_new_with_label ("draw border");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), draw_border);
+  g_signal_connect (check, "toggled", G_CALLBACK (draw_border_cb), frame);
+  gtk_grid_attach (grid, GTK_WIDGET (check), 0, 3, 1, 1);
 
   gtk_widget_show (window);
 

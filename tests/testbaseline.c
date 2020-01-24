@@ -71,6 +71,7 @@ main (int    argc,
       char **argv)
 {
   GtkWidget *window, *button, *grid, *notebook;
+  GtkCheckButton *check;
   GtkEntry *entry;
   GtkWidget *vbox, *hbox, *grid_hbox, *spin, *spin2, *toggle;
   GtkImage *image;
@@ -212,10 +213,10 @@ main (int    argc,
 	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
       gtk_container_add (GTK_CONTAINER (hbox), button);
 
-      button = gtk_check_button_new_with_label ("│Xyj,Ö");
+      check = gtk_check_button_new_with_label ("│Xyj,Ö");
       if (j == 0)
-	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
-      gtk_container_add (GTK_CONTAINER (hbox), button);
+	gtk_widget_set_valign (GTK_WIDGET (check), GTK_ALIGN_BASELINE);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (check));
 
       button = gtk_radio_button_new_with_label (NULL, "│Xyj,Ö");
       if (j == 0)

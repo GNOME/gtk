@@ -559,12 +559,12 @@ create_add_remove_buttons (GActionGroup *group,
                            GtkWidget    *treeview)
 {
   GtkWidget *box;
-  GtkWidget *button;
+  GtkCheckButton *button;
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
 
   button = gtk_check_button_new_with_label ("Add Italic");
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (button));
 
   g_object_set_data  (G_OBJECT (button), "group", group);
   g_object_set_data  (G_OBJECT (button), "model", model);
@@ -573,7 +573,7 @@ create_add_remove_buttons (GActionGroup *group,
                     G_CALLBACK (toggle_italic), treeview);
 
   button = gtk_check_button_new_with_label ("Add Sumerian");
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (button));
 
   g_object_set_data  (G_OBJECT (button), "group", group);
   g_object_set_data  (G_OBJECT (button), "model", model);
@@ -582,7 +582,7 @@ create_add_remove_buttons (GActionGroup *group,
                     G_CALLBACK (toggle_sumerian), NULL);
 
   button = gtk_check_button_new_with_label ("Add Speed");
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (button));
 
   g_object_set_data  (G_OBJECT (button), "group", group);
   g_object_set_data  (G_OBJECT (button), "model", model);

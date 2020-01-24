@@ -126,8 +126,8 @@ struct _GtkMountOperationPrivate {
   GtkEntry  *password_entry;
   GtkEntry  *pim_entry;
   GtkWidget *anonymous_toggle;
-  GtkWidget *tcrypt_hidden_toggle;
-  GtkWidget *tcrypt_system_toggle;
+  GtkCheckButton *tcrypt_hidden_toggle;
+  GtkCheckButton *tcrypt_system_toggle;
   GList *user_widgets;
 
   GAskPasswordFlags ask_flags;
@@ -714,10 +714,10 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
       priv->user_widgets = g_list_prepend (priv->user_widgets, volume_type_box);
 
       priv->tcrypt_hidden_toggle = gtk_check_button_new_with_mnemonic (_("_Hidden"));
-      gtk_container_add (GTK_CONTAINER (volume_type_box), priv->tcrypt_hidden_toggle);
+      gtk_container_add (GTK_CONTAINER (volume_type_box), GTK_WIDGET (priv->tcrypt_hidden_toggle));
 
       priv->tcrypt_system_toggle = gtk_check_button_new_with_mnemonic (_("_Windows system"));
-      gtk_container_add (GTK_CONTAINER (volume_type_box), priv->tcrypt_system_toggle);
+      gtk_container_add (GTK_CONTAINER (volume_type_box), GTK_WIDGET (priv->tcrypt_system_toggle));
 
       priv->pim_entry = table_add_entry (operation, rows++, _("_PIM"), NULL, operation);
     }

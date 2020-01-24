@@ -141,13 +141,13 @@
  * An example for adding extra widgets:
  * |[<!-- language="C" -->
  *
- *   GtkWidget *toggle;
+ *   GtkCheckButton *toggle;
  *
  *   ...
  *
  *   toggle = gtk_check_button_new_with_label ("Open file read-only");
- *   gtk_widget_show (toggle);
- *   gtk_file_chooser_set_extra_widget (my_file_chooser, toggle);
+ *   gtk_widget_show (GTK_WIDGET (toggle));
+ *   gtk_file_chooser_set_extra_widget (my_file_chooser, GTK_WIDGET (toggle));
  * }
  * ]|
  *

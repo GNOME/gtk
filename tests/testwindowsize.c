@@ -6,7 +6,7 @@ static GtkWidget *width_chars_spin;
 static GtkWidget *max_width_chars_spin;
 static GtkWidget *default_width_spin;
 static GtkWidget *default_height_spin;
-static GtkWidget *resizable_check;
+static GtkCheckButton *resizable_check;
 
 static void
 size_changed_cb (GdkSurface *surface, int width, int height, GtkLabel *label)
@@ -119,10 +119,10 @@ create_window (void)
   label = gtk_label_new ("Resizable");
   gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
   resizable_check = gtk_check_button_new ();
-  gtk_widget_set_halign (resizable_check, GTK_ALIGN_START);
+  gtk_widget_set_halign (GTK_WIDGET (resizable_check), GTK_ALIGN_START);
 
   gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 3, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), resizable_check, 1, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (resizable_check), 1, 3, 1, 1);
 
   button = gtk_button_new_with_label ("Show");
   g_signal_connect (button, "clicked", G_CALLBACK (show_dialog), NULL);

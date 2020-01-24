@@ -81,6 +81,7 @@ static void
 scrollable_policy (void)
 {
   GtkWidget *window, *swindow, *hbox, *vbox, *frame, *cntl, *listbox;
+  GtkCheckButton *checkbutton;
   GtkComboBoxText *combo;
   GtkWidget *viewport, *widget, *popover;
   GtkExpander *expander;
@@ -207,10 +208,10 @@ scrollable_policy (void)
                     G_CALLBACK (content_height_changed), swindow);
 
   /* Add Kinetic scrolling control here */
-  widget = gtk_check_button_new_with_label ("Kinetic scrolling");
-  gtk_widget_set_hexpand (widget, TRUE);
-  gtk_container_add (GTK_CONTAINER (cntl), widget);
-  g_signal_connect (G_OBJECT (widget), "toggled",
+  checkbutton = gtk_check_button_new_with_label ("Kinetic scrolling");
+  gtk_widget_set_hexpand (GTK_WIDGET (checkbutton), TRUE);
+  gtk_container_add (GTK_CONTAINER (cntl), GTK_WIDGET (checkbutton));
+  g_signal_connect (G_OBJECT (checkbutton), "toggled",
                     G_CALLBACK (kinetic_scrolling_changed), swindow);
 
   gtk_widget_show (window);

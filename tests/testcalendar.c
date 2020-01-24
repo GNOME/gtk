@@ -415,7 +415,8 @@ create_calendar(void)
   static CalendarData calendar_data;
 
   GtkWidget *window, *hpaned, *vbox, *rpane, *hbox;
-  GtkWidget *calendar, *toggle, *scroller, *button;
+  GtkWidget *calendar, *scroller, *button;
+  GtkCheckButton *toggle;
   GtkWidget *frame, *bbox, *details;
   GtkExpander *expander;
   GtkLabel *label;
@@ -611,7 +612,7 @@ create_calendar(void)
   g_signal_connect (toggle, "toggled",
                     G_CALLBACK(calendar_toggle_details),
                     &calendar_data);
-  gtk_container_add (GTK_CONTAINER (vbox), toggle);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (toggle));
 
   /* Build the Right frame with the flags in */
 
@@ -622,8 +623,8 @@ create_calendar(void)
   for (i = 0; i < G_N_ELEMENTS (calendar_data.settings); i++)
     {
       toggle = gtk_check_button_new_with_mnemonic(flags[i].label);
-      gtk_container_add (GTK_CONTAINER (vbox), toggle);
-      calendar_data.flag_checkboxes[i] = toggle;
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (toggle));
+      calendar_data.flag_checkboxes[i] = GTK_WIDGET (toggle);
 
       g_signal_connect (toggle, "toggled",
                         G_CALLBACK (calendar_toggle_flag),

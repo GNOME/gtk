@@ -2,10 +2,10 @@
 
 static GtkWidget *win;
 static GtkEntry *inhibit_entry;
-static GtkWidget *inhibit_logout;
-static GtkWidget *inhibit_switch;
-static GtkWidget *inhibit_suspend;
-static GtkWidget *inhibit_idle;
+static GtkCheckButton *inhibit_logout;
+static GtkCheckButton *inhibit_switch;
+static GtkCheckButton *inhibit_suspend;
+static GtkCheckButton *inhibit_idle;
 static GtkLabel *inhibit_label;
 
 static void
@@ -63,10 +63,10 @@ inhibitor_toggled (GtkToggleButton *button, GtkApplication *app)
     }
 
   gtk_widget_set_sensitive (GTK_WIDGET (inhibit_entry), !active);
-  gtk_widget_set_sensitive (inhibit_logout, !active);
-  gtk_widget_set_sensitive (inhibit_switch, !active);
-  gtk_widget_set_sensitive (inhibit_suspend, !active);
-  gtk_widget_set_sensitive (inhibit_idle, !active);
+  gtk_widget_set_sensitive (GTK_WIDGET (inhibit_logout), !active);
+  gtk_widget_set_sensitive (GTK_WIDGET (inhibit_switch), !active);
+  gtk_widget_set_sensitive (GTK_WIDGET (inhibit_suspend), !active);
+  gtk_widget_set_sensitive (GTK_WIDGET (inhibit_idle), !active);
 }
 
 static void
@@ -98,16 +98,16 @@ activate (GtkApplication *app,
   gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (inhibit_label), 1, 0, 1, 1);
 
   inhibit_logout = gtk_check_button_new_with_label ("Logout");
-  gtk_grid_attach (GTK_GRID (grid), inhibit_logout, 1, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (inhibit_logout), 1, 1, 1, 1);
 
   inhibit_switch = gtk_check_button_new_with_label ("User switching");
-  gtk_grid_attach (GTK_GRID (grid), inhibit_switch, 1, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (inhibit_switch), 1, 2, 1, 1);
 
   inhibit_suspend = gtk_check_button_new_with_label ("Suspend");
-  gtk_grid_attach (GTK_GRID (grid), inhibit_suspend, 1, 4, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (inhibit_suspend), 1, 4, 1, 1);
 
   inhibit_idle = gtk_check_button_new_with_label ("Idle");
-  gtk_grid_attach (GTK_GRID (grid), inhibit_idle, 1, 5, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (inhibit_idle), 1, 5, 1, 1);
 
   inhibit_entry = gtk_entry_new ();
   gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (inhibit_entry), 1, 6, 1, 1);

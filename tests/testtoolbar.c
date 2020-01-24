@@ -387,7 +387,8 @@ main (gint argc, gchar **argv)
 {
   GtkWidget *window, *grid, *treeview, *scrolled_window;
   GtkToolbar *toolbar;
-  GtkWidget *hbox, *hbox1, *hbox2, *checkbox, *menu;
+  GtkWidget *hbox, *hbox1, *hbox2, *menu;
+  GtkCheckButton *checkbox;
   GtkComboBoxText *option_menu;
   gint i;
   GdkContentFormats *targets;
@@ -426,19 +427,19 @@ main (gint argc, gchar **argv)
   gtk_grid_attach (GTK_GRID (grid), hbox2, 1, 2, 1, 1);
 
   checkbox = gtk_check_button_new_with_mnemonic("_Vertical");
-  gtk_container_add (GTK_CONTAINER (hbox1), checkbox);
+  gtk_container_add (GTK_CONTAINER (hbox1), GTK_WIDGET (checkbox));
   g_signal_connect (checkbox, "toggled",
 		    G_CALLBACK (change_orientation), toolbar);
 
   checkbox = gtk_check_button_new_with_mnemonic("_Show Arrow");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbox), TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox1), checkbox);
+  gtk_container_add (GTK_CONTAINER (hbox1), GTK_WIDGET (checkbox));
   g_signal_connect (checkbox, "toggled",
 		    G_CALLBACK (change_show_arrow), toolbar);
 
   checkbox = gtk_check_button_new_with_mnemonic("_Set Toolbar Style:");
   g_signal_connect (checkbox, "toggled", G_CALLBACK (set_toolbar_style_toggled), toolbar);
-  gtk_container_add (GTK_CONTAINER (hbox1), checkbox);
+  gtk_container_add (GTK_CONTAINER (hbox1), GTK_WIDGET (checkbox));
 
   option_menu = gtk_combo_box_text_new ();
   gtk_widget_set_sensitive (GTK_WIDGET (option_menu), FALSE);
@@ -619,7 +620,7 @@ main (gint argc, gchar **argv)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbox), FALSE);
   g_signal_connect (checkbox, "toggled", G_CALLBACK (rtl_toggled), NULL);
 
-  gtk_container_add (GTK_CONTAINER (hbox), checkbox);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (checkbox));
 
   targets = gdk_content_formats_new (target_table, G_N_ELEMENTS (target_table));
   content = gdk_content_provider_new_for_bytes (target_table[0], g_bytes_new ("", 1));

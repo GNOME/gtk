@@ -146,7 +146,7 @@ static void
 set_inconsistent (GtkCheckButton *button,
                   gboolean        inconsistent)
 {
-  gtk_check_button_set_inconsistent (GTK_CHECK_BUTTON (button), inconsistent);
+  gtk_check_button_set_inconsistent (button, inconsistent);
   gtk_widget_set_opacity (gtk_widget_get_first_child (GTK_WIDGET (button)), inconsistent ? 0.0 : 1.0);
 }
 
@@ -199,26 +199,26 @@ add_check_group (GtkWidget   *box,
   for (i = 0; tags[i]; i++)
     {
       unsigned int tag;
-      GtkWidget *feat;
+      GtkCheckButton *feat;
       FeatureItem *item;
 
       tag = hb_tag_from_string (tags[i], -1);
 
       feat = gtk_check_button_new_with_label (get_feature_display_name (tag));
-      set_inconsistent (GTK_CHECK_BUTTON (feat), TRUE);
+      set_inconsistent (feat, TRUE);
 
       g_signal_connect (feat, "notify::active", G_CALLBACK (update_display), NULL);
       g_signal_connect (feat, "notify::inconsistent", G_CALLBACK (update_display), NULL);
       g_signal_connect (feat, "clicked", G_CALLBACK (feat_clicked), NULL);
 
-      gtk_container_add (GTK_CONTAINER (group), feat);
+      gtk_container_add (GTK_CONTAINER (group), GTK_WIDGET (feat));
 
       item = g_new (FeatureItem, 1);
       item->name = tags[i];
       item->tag = tag;
       item->icon = NULL;
       item->dflt = NULL;
-      item->feat = feat;
+      item->feat = GTK_WIDGET (feat);
 
       feature_items = g_list_prepend (feature_items, item);
     }

@@ -118,7 +118,7 @@ build_alpha_widgets (void)
 {
   GtkWidget *grid;
   GtkWidget *radio_button;
-  GtkWidget *check_button;
+  GtkCheckButton *check_button;
   GtkWidget *hbox;
   GtkLabel *label;
   GtkEntry *entry;
@@ -138,16 +138,16 @@ build_alpha_widgets (void)
   gtk_grid_attach (GTK_GRID (grid), radio_button, 0, 2, 1, 1);
 
   check_button = gtk_check_button_new_with_label ("Sedentary"),
-  gtk_widget_set_hexpand (check_button, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), check_button, 1, 0, 1, 1);
+  gtk_widget_set_hexpand (GTK_WIDGET (check_button), TRUE);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (check_button), 1, 0, 1, 1);
 
   check_button = gtk_check_button_new_with_label ("Nocturnal"),
-  gtk_widget_set_hexpand (check_button, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), check_button, 1, 1, 1, 1);
+  gtk_widget_set_hexpand (GTK_WIDGET (check_button), TRUE);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (check_button), 1, 1, 1, 1);
 
   check_button = gtk_check_button_new_with_label ("Compulsive"),
-  gtk_widget_set_hexpand (check_button, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), check_button, 1, 2, 1, 1);
+  gtk_widget_set_hexpand (GTK_WIDGET (check_button), TRUE);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (check_button), 1, 2, 1, 1);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   label = gtk_label_new (NULL);
@@ -449,7 +449,7 @@ create_check_buttons (GtkWidget *widget)
   static GtkWidget *window = NULL;
   GtkWidget *box1;
   GtkWidget *box2;
-  GtkWidget *button;
+  GtkCheckButton *button;
   GtkSeparator *separator;
   GtkWidget *table;
   
@@ -477,17 +477,17 @@ create_check_buttons (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (box1), box2);
 
       button = gtk_check_button_new_with_mnemonic ("_button1");
-      gtk_container_add (GTK_CONTAINER (box2), button);
+      gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (button));
 
       button = gtk_check_button_new_with_label ("button2");
-      gtk_container_add (GTK_CONTAINER (box2), button);
+      gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (button));
 
       button = gtk_check_button_new_with_label ("button3");
-      gtk_container_add (GTK_CONTAINER (box2), button);
+      gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (button));
 
       button = gtk_check_button_new_with_label ("inconsistent");
-      gtk_check_button_set_inconsistent (GTK_CHECK_BUTTON (button), TRUE);
-      gtk_container_add (GTK_CONTAINER (box2), button);
+      gtk_check_button_set_inconsistent (button, TRUE);
+      gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (button));
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_container_add (GTK_CONTAINER (box1), GTK_WIDGET (separator));
@@ -2104,9 +2104,9 @@ create_entry (GtkWidget *widget)
   GtkWidget *box1;
   GtkWidget *box2;
   GtkWidget *hbox;
-  GtkWidget *has_frame_check;
-  GtkWidget *sensitive_check;
-  GtkWidget *progress_check;
+  GtkCheckButton *has_frame_check;
+  GtkCheckButton *sensitive_check;
+  GtkCheckButton *progress_check;
   GtkEntry *entry;
   GtkComboBoxText *cb;
   GtkWidget *cb_entry;
@@ -2161,24 +2161,24 @@ create_entry (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (cb));
 
       sensitive_check = gtk_check_button_new_with_label("Sensitive");
-      gtk_container_add (GTK_CONTAINER (box2), sensitive_check);
+      gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (sensitive_check));
       g_signal_connect (sensitive_check, "toggled",
 			G_CALLBACK (entry_toggle_sensitive), entry);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (sensitive_check), TRUE);
 
       has_frame_check = gtk_check_button_new_with_label("Has Frame");
-      gtk_container_add (GTK_CONTAINER (box2), has_frame_check);
+      gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (has_frame_check));
       g_signal_connect (has_frame_check, "toggled",
 			G_CALLBACK (entry_toggle_frame), entry);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (has_frame_check), TRUE);
 
       progress_check = gtk_check_button_new_with_label("Show Progress");
-      gtk_container_add (GTK_CONTAINER (box2), progress_check);
+      gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (progress_check));
       g_signal_connect (progress_check, "toggled",
 			G_CALLBACK (entry_toggle_progress), entry);
 
       progress_check = gtk_check_button_new_with_label("Pulse Progress");
-      gtk_container_add (GTK_CONTAINER (box2), progress_check);
+      gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (progress_check));
       g_signal_connect (progress_check, "toggled",
 			G_CALLBACK (entry_toggle_pulse), entry);
 
@@ -2601,6 +2601,7 @@ create_spins (GtkWidget *widget)
   GtkWidget *spinner2;
   GtkWidget *spinner;
   GtkWidget *button;
+  GtkCheckButton *check;
   GtkLabel *label;
   GtkLabel *val_label;
   GtkAdjustment *adjustment;
@@ -2739,19 +2740,19 @@ create_spins (GtkWidget *widget)
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
-      button = gtk_check_button_new_with_label ("Snap to 0.5-ticks");
-      g_signal_connect (button, "clicked",
+      check = gtk_check_button_new_with_label ("Snap to 0.5-ticks");
+      g_signal_connect (check, "clicked",
 			G_CALLBACK (toggle_snap),
 			spinner1);
-      gtk_container_add (GTK_CONTAINER (vbox), button);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (check));
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
 
-      button = gtk_check_button_new_with_label ("Numeric only input mode");
-      g_signal_connect (button, "clicked",
+      check = gtk_check_button_new_with_label ("Numeric only input mode");
+      g_signal_connect (check, "clicked",
 			G_CALLBACK (toggle_numeric),
 			spinner1);
-      gtk_container_add (GTK_CONTAINER (vbox), button);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (check));
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
 
       val_label = gtk_label_new ("");
 
@@ -3286,7 +3287,7 @@ void
 create_flipping (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
-  GtkWidget *check_button;
+  GtkCheckButton *check_button;
   GtkWidget *content_area;
 
   if (!window)
@@ -3305,7 +3306,7 @@ create_flipping (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "Bidirectional Flipping");
 
       check_button = gtk_check_button_new_with_label ("Right-to-left global direction");
-      gtk_container_add (GTK_CONTAINER (content_area), check_button);
+      gtk_container_add (GTK_CONTAINER (content_area), GTK_WIDGET (check_button));
 
       if (gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
@@ -3314,7 +3315,7 @@ create_flipping (GtkWidget *widget)
 			G_CALLBACK (flipping_toggled_cb), NULL);
 
       check_button = gtk_check_button_new_with_label ("Toggle orientation of all boxes");
-      gtk_container_add (GTK_CONTAINER (content_area), check_button);
+      gtk_container_add (GTK_CONTAINER (content_area), GTK_WIDGET (check_button));
 
       g_signal_connect (check_button, "toggled",
 			G_CALLBACK (flipping_orientation_toggled_cb), NULL);
@@ -3825,6 +3826,7 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
 {
   GtkWidget *child = NULL;
   GtkWidget *button;
+  GtkCheckButton *check;
   GtkLabel *label;
   GtkWidget *hbox;
   GtkWidget *vbox;
@@ -3850,15 +3852,15 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
       gtk_box_set_homogeneous (GTK_BOX (hbox), TRUE);
       gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
-      button = gtk_check_button_new_with_label ("Fill Tab");
-      gtk_container_add (GTK_CONTAINER (hbox), button);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-      g_signal_connect (button, "toggled",
+      check = gtk_check_button_new_with_label ("Fill Tab");
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (check));
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
+      g_signal_connect (check, "toggled",
 			G_CALLBACK (tab_fill), child);
 
-      button = gtk_check_button_new_with_label ("Expand Tab");
-      gtk_container_add (GTK_CONTAINER (hbox), button);
-      g_signal_connect (button, "toggled",
+      check = gtk_check_button_new_with_label ("Expand Tab");
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (check));
+      g_signal_connect (check, "toggled",
 			G_CALLBACK (tab_expand), child);
 
       button = gtk_button_new_with_label ("Hide Page");
@@ -3987,6 +3989,7 @@ create_notebook (GtkWidget *widget)
   GtkWidget *box1;
   GtkWidget *box2;
   GtkWidget *button;
+  GtkCheckButton *check;
   GtkSeparator *separator;
   GtkWidget *omenu;
   GtkLabel *label;
@@ -4036,9 +4039,9 @@ create_notebook (GtkWidget *widget)
       box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
       gtk_container_add (GTK_CONTAINER (box1), box2);
 
-      button = gtk_check_button_new_with_label ("popup menu");
-      gtk_container_add (GTK_CONTAINER (box2), button);
-      g_signal_connect (button, "clicked",
+      check = gtk_check_button_new_with_label ("popup menu");
+      gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (check));
+      g_signal_connect (check, "clicked",
 			G_CALLBACK (notebook_popup),
 			sample_notebook);
 
@@ -4138,7 +4141,7 @@ create_pane_options (GtkPaned    *paned,
   GtkWidget *frame;
   GtkWidget *grid;
   GtkLabel *label;
-  GtkWidget *check_button;
+  GtkCheckButton *check_button;
 
   child1 = gtk_paned_get_child1 (paned);
   child2 = gtk_paned_get_child2 (paned);
@@ -4152,13 +4155,13 @@ create_pane_options (GtkPaned    *paned,
   gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 0, 1, 1);
   
   check_button = gtk_check_button_new_with_label ("Resize");
-  gtk_grid_attach (GTK_GRID (grid), check_button, 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (check_button), 0, 1, 1, 1);
   g_signal_connect (check_button, "toggled",
 		    G_CALLBACK (toggle_resize),
                     child1);
 
   check_button = gtk_check_button_new_with_label ("Shrink");
-  gtk_grid_attach (GTK_GRID (grid), check_button, 0, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (check_button), 0, 2, 1, 1);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
 			       TRUE);
   g_signal_connect (check_button, "toggled",
@@ -4169,7 +4172,7 @@ create_pane_options (GtkPaned    *paned,
   gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 1, 0, 1, 1);
   
   check_button = gtk_check_button_new_with_label ("Resize");
-  gtk_grid_attach (GTK_GRID (grid), check_button, 1, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (check_button), 1, 1, 1, 1);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
 			       TRUE);
   g_signal_connect (check_button, "toggled",
@@ -4177,7 +4180,7 @@ create_pane_options (GtkPaned    *paned,
                     child2);
 
   check_button = gtk_check_button_new_with_label ("Shrink");
-  gtk_grid_attach (GTK_GRID (grid), check_button, 1, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (check_button), 1, 2, 1, 1);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
 			       TRUE);
   g_signal_connect (check_button, "toggled",
@@ -5130,6 +5133,7 @@ window_controls (GtkWidget *window)
   GtkLabel *label;
   GtkWidget *vbox;
   GtkWidget *button;
+  GtkCheckButton *check;
   GtkWidget *spin;
   GtkAdjustment *adjustment;
   
@@ -5216,13 +5220,13 @@ window_controls (GtkWidget *window)
                     control_window);
   gtk_container_add (GTK_CONTAINER (vbox), button);
 
-  button = gtk_check_button_new_with_label ("Allow resize");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-  g_signal_connect (button,
+  check = gtk_check_button_new_with_label ("Allow resize");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
+  g_signal_connect (check,
 		    "toggled",
 		    G_CALLBACK (resizable_callback),
                     control_window);
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (check));
 
   button = gtk_button_new_with_mnemonic ("_Show");
   g_signal_connect_object (button,
@@ -5433,7 +5437,7 @@ create_progress_bar (GtkWidget *widget)
   GtkWidget *vbox;
   GtkWidget *vbox2;
   GtkWidget *hbox;
-  GtkWidget *check;
+  GtkCheckButton *check;
   GtkWidget *frame;
   GtkWidget *grid;
   GtkLabel *label;
@@ -5525,14 +5529,14 @@ create_progress_bar (GtkWidget *widget)
       g_signal_connect (check, "toggled",
 			G_CALLBACK (toggle_running),
 			pdata);
-      gtk_grid_attach (GTK_GRID (grid), check, 0, 1, 2, 1);
+      gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (check), 0, 1, 2, 1);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
 
       check = gtk_check_button_new_with_label ("Show text");
       g_signal_connect (check, "clicked",
 			G_CALLBACK (toggle_show_text),
 			pdata);
-      gtk_grid_attach (GTK_GRID (grid), check, 0, 2, 1, 1);
+      gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (check), 0, 2, 1, 1);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_grid_attach (GTK_GRID (grid), hbox, 1, 2, 1, 1);
@@ -5563,7 +5567,7 @@ create_progress_bar (GtkWidget *widget)
       check = gtk_check_button_new_with_label ("Activity mode");
       g_signal_connect (check, "clicked",
 			G_CALLBACK (toggle_activity_mode), pdata);
-      gtk_grid_attach (GTK_GRID (grid), check, 0, 15, 1, 1);
+      gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (check), 0, 15, 1, 1);
 
       gtk_dialog_add_button (GTK_DIALOG (pdata->window), "Close", GTK_RESPONSE_CLOSE);
       g_signal_connect (pdata->window, "response",
@@ -5850,9 +5854,9 @@ native_extra_widget_toggle (GtkWidget *checkbutton,
 
   if (extra_widget)
     {
-      GtkWidget *extra = gtk_check_button_new_with_label ("Extra toggle");
-      gtk_widget_show (extra);
-      gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (native), extra);
+      GtkCheckButton *extra = gtk_check_button_new_with_label ("Extra toggle");
+      gtk_widget_show (GTK_WIDGET (extra));
+      gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (native), GTK_WIDGET (extra));
     }
   else
     {
@@ -6016,7 +6020,8 @@ create_native_dialogs (GtkWidget *widget)
   static GtkWidget *window = NULL;
   GtkWidget *box;
   GtkLabel *label;
-  GtkWidget *show_button, *hide_button, *check_button;
+  GtkWidget *show_button, *hide_button;
+  GtkCheckButton *check_button;
   GtkFileChooserNative *native;
   GtkComboBoxText *combo;
 
@@ -6073,22 +6078,22 @@ create_native_dialogs (GtkWidget *widget)
       check_button = gtk_check_button_new_with_label ("Modal");
       g_signal_connect (check_button, "toggled",
                         G_CALLBACK (native_modal_toggle), native);
-      gtk_container_add (GTK_CONTAINER (box), check_button);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (check_button));
 
       check_button = gtk_check_button_new_with_label ("Multiple select");
       g_signal_connect (check_button, "toggled",
                         G_CALLBACK (native_multi_select_toggle), native);
-      gtk_container_add (GTK_CONTAINER (box), check_button);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (check_button));
 
       check_button = gtk_check_button_new_with_label ("Confirm overwrite");
       g_signal_connect (check_button, "toggled",
                         G_CALLBACK (native_overwrite_confirmation_toggle), native);
-      gtk_container_add (GTK_CONTAINER (box), check_button);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (check_button));
 
       check_button = gtk_check_button_new_with_label ("Extra widget");
       g_signal_connect (check_button, "toggled",
                         G_CALLBACK (native_extra_widget_toggle), native);
-      gtk_container_add (GTK_CONTAINER (box), check_button);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (check_button));
 
       show_button = gtk_button_new_with_label ("Show");
       hide_button = gtk_button_new_with_label ("Hide");

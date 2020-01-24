@@ -58,7 +58,7 @@ struct GtkPrinterOptionWidgetPrivate
   GtkPrinterOption *source;
   gulong source_changed_handler;
 
-  GtkWidget *check;
+  GtkCheckButton *check;
   GtkComboBox *combo;
   GtkEntry  *entry;
   GtkImage *image;
@@ -204,7 +204,7 @@ gtk_printer_option_widget_mnemonic_activate (GtkWidget *widget,
   GtkPrinterOptionWidgetPrivate *priv = powidget->priv;
 
   if (priv->check)
-    return gtk_widget_mnemonic_activate (priv->check, group_cycling);
+    return gtk_widget_mnemonic_activate (GTK_WIDGET (priv->check), group_cycling);
   if (priv->combo)
     return gtk_widget_mnemonic_activate (GTK_WIDGET (priv->combo), group_cycling);
   if (priv->entry)
@@ -432,7 +432,7 @@ deconstruct_widgets (GtkPrinterOptionWidget *widget)
 
   if (priv->check)
     {
-      gtk_widget_destroy (priv->check);
+      gtk_widget_destroy (GTK_WIDGET (priv->check));
       priv->check = NULL;
     }
   
@@ -785,8 +785,8 @@ construct_widgets (GtkPrinterOptionWidget *widget)
     case GTK_PRINTER_OPTION_TYPE_BOOLEAN:
       priv->check = gtk_check_button_new_with_mnemonic (source->display_text);
       g_signal_connect (priv->check, "toggled", G_CALLBACK (check_toggled_cb), widget);
-      gtk_widget_show (priv->check);
-      gtk_container_add (GTK_CONTAINER (widget), priv->check);
+      gtk_widget_show (GTK_WIDGET (priv->check));
+      gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (priv->check));
       break;
     case GTK_PRINTER_OPTION_TYPE_PICKONE:
     case GTK_PRINTER_OPTION_TYPE_PICKONE_PASSWORD:

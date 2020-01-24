@@ -27,7 +27,7 @@ static GtkWidget *grid, *file_l, *open;
 static GtkWidget *radio_file, *radio_content;
 static GtkAppChooserDialog *dialog;
 static GtkWidget *app_chooser_widget;
-static GtkWidget *def, *recommended, *fallback, *other, *all;
+static GtkCheckButton *def, *recommended, *fallback, *other, *all;
 
 static void
 dialog_response (GtkDialog *d,
@@ -194,25 +194,25 @@ main (int argc, char **argv)
                            radio_content, GTK_POS_BOTTOM, 1, 1);
 
   recommended = gtk_check_button_new_with_label ("Show recommended");
-  gtk_grid_attach_next_to (GTK_GRID (grid), recommended,
-                           open, GTK_POS_BOTTOM, 1, 1);
+  gtk_grid_attach_next_to (GTK_GRID (grid), GTK_WIDGET (recommended),
+                           GTK_WIDGET (open), GTK_POS_BOTTOM, 1, 1);
   g_object_set (recommended, "active", TRUE, NULL);
 
   fallback = gtk_check_button_new_with_label ("Show fallback");
-  gtk_grid_attach_next_to (GTK_GRID (grid), fallback,
-                           recommended, GTK_POS_RIGHT, 1, 1);
+  gtk_grid_attach_next_to (GTK_GRID (grid), GTK_WIDGET (fallback),
+                           GTK_WIDGET (recommended), GTK_POS_RIGHT, 1, 1);
 
   other = gtk_check_button_new_with_label ("Show other");
-  gtk_grid_attach_next_to (GTK_GRID (grid), other,
-                           fallback, GTK_POS_RIGHT, 1, 1);
+  gtk_grid_attach_next_to (GTK_GRID (grid), GTK_WIDGET (other),
+                           GTK_WIDGET (fallback), GTK_POS_RIGHT, 1, 1);
 
   all = gtk_check_button_new_with_label ("Show all");
-  gtk_grid_attach_next_to (GTK_GRID (grid), all,
-                           other, GTK_POS_RIGHT, 1, 1);
+  gtk_grid_attach_next_to (GTK_GRID (grid), GTK_WIDGET (all),
+                           GTK_WIDGET (other), GTK_POS_RIGHT, 1, 1);
 
   def = gtk_check_button_new_with_label ("Show default");
-  gtk_grid_attach_next_to (GTK_GRID (grid), def,
-                           all, GTK_POS_RIGHT, 1, 1);
+  gtk_grid_attach_next_to (GTK_GRID (grid), GTK_WIDGET (def),
+                           GTK_WIDGET (all), GTK_POS_RIGHT, 1, 1);
 
   g_object_set (recommended, "active", TRUE, NULL);
   prepare_dialog ();

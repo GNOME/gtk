@@ -316,6 +316,7 @@ main (int argc, char *argv[])
   GtkWidget *vbox;
   GtkWidget *box;
   GtkWidget *button;
+  GtkCheckButton *check;
 
 #ifdef GTK_SRCDIR
   g_chdir (GTK_SRCDIR);
@@ -405,13 +406,13 @@ main (int argc, char *argv[])
   gtk_widget_show (button);
   gtk_container_add (GTK_CONTAINER (box), button);
 
-  button = gtk_check_button_new_with_label ("Dialogs have headers");
+  check = gtk_check_button_new_with_label ("Dialogs have headers");
   g_object_bind_property (gtk_settings_get_default (), "gtk-dialogs-use-header",
-                          button, "active",
+                          check, "active",
                           G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
-  gtk_widget_show (button);
-  gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_widget_show (GTK_WIDGET (check));
+  gtk_widget_set_halign (GTK_WIDGET (check), GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (check));
 
   button = gtk_spinner_new ();
   gtk_spinner_start (GTK_SPINNER (button));

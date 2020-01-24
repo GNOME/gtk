@@ -48,7 +48,7 @@ main (int argc, char *argv[])
   GtkWidget *popover1;
   GtkWidget *popover2;
   GtkLabel *label;
-  GtkWidget *check;
+  GtkCheckButton *check;
   GtkComboBoxText *combo;
   GtkWidget *header_bar;
 
@@ -120,7 +120,7 @@ main (int argc, char *argv[])
   g_object_bind_property (check, "active", popover1, "hexpand", G_BINDING_SYNC_CREATE);
   g_object_bind_property (check, "active", popover2, "hexpand", G_BINDING_SYNC_CREATE);
   gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label) , 1, 1, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), check, 2, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (check), 2, 1, 1, 1);
 
   label = gtk_label_new ("Popover vexpand");
   check = gtk_check_button_new ();
@@ -128,7 +128,7 @@ main (int argc, char *argv[])
   g_object_bind_property (check, "active", popover1, "vexpand", G_BINDING_SYNC_CREATE);
   g_object_bind_property (check, "active", popover2, "vexpand", G_BINDING_SYNC_CREATE);
   gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label) , 1, 2, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), check, 2, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (check), 2, 2, 1, 1);
 
   label = gtk_label_new ("Button direction");
   combo = gtk_combo_box_text_new ();

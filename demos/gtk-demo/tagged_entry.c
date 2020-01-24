@@ -59,6 +59,7 @@ do_tagged_entry (GtkWidget *do_widget)
   GtkWidget *box2;
   GtkWidget *header;
   GtkWidget *entry;
+  GtkCheckButton *check;
   GtkWidget *button;
 
   if (!window)
@@ -90,9 +91,9 @@ do_tagged_entry (GtkWidget *do_widget)
       g_signal_connect (button, "clicked", G_CALLBACK (add_tag), entry);
       gtk_container_add (GTK_CONTAINER (box2), button);
 
-      button = gtk_check_button_new_with_mnemonic ("_Spinner");
-      g_signal_connect (button, "toggled", G_CALLBACK (toggle_spinner), entry);
-      gtk_container_add (GTK_CONTAINER (box2), button);
+      check = gtk_check_button_new_with_mnemonic ("_Spinner");
+      g_signal_connect (check, "toggled", G_CALLBACK (toggle_spinner), entry);
+      gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (check));
       
       button = gtk_button_new_with_mnemonic ("_Done");
       gtk_style_context_add_class (gtk_widget_get_style_context (button), "suggested-action");

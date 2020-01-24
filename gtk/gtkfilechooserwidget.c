@@ -8685,12 +8685,12 @@ gtk_file_chooser_widget_add_choice (GtkFileChooser  *chooser,
     }
   else
     {
-      GtkWidget *check;
+      GtkCheckButton *check;
 
       check = gtk_check_button_new_with_label (label);
       g_hash_table_insert (priv->choices, g_strdup (id), check);
 
-      widget = check;
+      widget = GTK_WIDGET (check);
     }
 
   gtk_container_add (GTK_CONTAINER (priv->choice_box), widget);

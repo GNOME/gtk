@@ -62,23 +62,23 @@ struct _GtkCheckButtonClass
 
 
 GDK_AVAILABLE_IN_ALL
-GType      gtk_check_button_get_type       (void) G_GNUC_CONST;
+GType           gtk_check_button_get_type       (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_check_button_new               (void);
+GtkCheckButton* gtk_check_button_new               (void);
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_check_button_new_with_label    (const gchar *label);
+GtkCheckButton* gtk_check_button_new_with_label    (const gchar *label);
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_check_button_new_with_mnemonic (const gchar *label);
+GtkCheckButton* gtk_check_button_new_with_mnemonic (const gchar *label);
 GDK_AVAILABLE_IN_ALL
-void       gtk_check_button_set_draw_indicator (GtkCheckButton *check_button,
-                                                gboolean        draw_indicator);
+void            gtk_check_button_set_draw_indicator (GtkCheckButton *check_button,
+                                                     gboolean        draw_indicator);
 GDK_AVAILABLE_IN_ALL
-gboolean   gtk_check_button_get_draw_indicator (GtkCheckButton *check_button);
+gboolean        gtk_check_button_get_draw_indicator (GtkCheckButton *check_button);
 GDK_AVAILABLE_IN_ALL
-void       gtk_check_button_set_inconsistent   (GtkCheckButton *check_button,
-                                                gboolean        inconsistent);
+void            gtk_check_button_set_inconsistent   (GtkCheckButton *check_button,
+                                                     gboolean        inconsistent);
 GDK_AVAILABLE_IN_ALL
-gboolean   gtk_check_button_get_inconsistent   (GtkCheckButton *check_button);
+gboolean        gtk_check_button_get_inconsistent   (GtkCheckButton *check_button);
 
 G_END_DECLS
 
