@@ -10502,12 +10502,15 @@ gtk_widget_do_pick (GtkWidget    *widget,
         {
           transform = NULL;
         }
-      if (gsk_transform_get_category (transform) >= GSK_TRANSFORM_CATEGORY_2D_TRANSLATE)
-        {
-          float dx, dy;
 
-          gsk_transform_to_translate (transform, &dx, &dy);
-          graphene_point3d_init (&res, x + dx, y + dy, 0.);
+      if (gsk_transform_get_category (transform) >= GSK_TRANSFORM_CATEGORY_2D_AFFINE)
+        {
+          graphene_point_t transformed_p;
+
+          gsk_transform_transform_point (transform,
+                                         &(graphene_point_t) { x, y },
+                                         &transformed_p);
+          graphene_point3d_init (&res, transformed_p.x, transformed_p.y, 0.);
         }
       else
         {
