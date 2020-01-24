@@ -55,7 +55,7 @@ struct _GtkCssValueClass {
                                                        GtkCssValue                *end,
                                                        guint                       property_id,
                                                        double                      progress);
-  gboolean      (* is_dynamic)                        (GtkCssValue                *value);
+  gboolean      (* is_dynamic)                        (const GtkCssValue          *value);
   GtkCssValue * (* get_dynamic_value)                 (GtkCssValue                *value,
                                                        gint64                      monotonic_time);
   void          (* print)                             (const GtkCssValue          *value,
@@ -77,16 +77,16 @@ GtkCssValue *_gtk_css_value_compute                   (GtkCssValue              
                                                        guint                       property_id,
                                                        GtkStyleProvider           *provider,
                                                        GtkCssStyle                *style,
-                                                       GtkCssStyle                *parent_style);
+                                                       GtkCssStyle                *parent_style) G_GNUC_PURE;
 gboolean     _gtk_css_value_equal                     (const GtkCssValue          *value1,
-                                                       const GtkCssValue          *value2);
+                                                       const GtkCssValue          *value2) G_GNUC_PURE;
 gboolean     _gtk_css_value_equal0                    (const GtkCssValue          *value1,
-                                                       const GtkCssValue          *value2);
+                                                       const GtkCssValue          *value2) G_GNUC_PURE;
 GtkCssValue *_gtk_css_value_transition                (GtkCssValue                *start,
                                                        GtkCssValue                *end,
                                                        guint                       property_id,
                                                        double                      progress);
-gboolean        gtk_css_value_is_dynamic              (GtkCssValue                *value);
+gboolean        gtk_css_value_is_dynamic              (const GtkCssValue          *value) G_GNUC_PURE;
 GtkCssValue *   gtk_css_value_get_dynamic_value       (GtkCssValue                *value,
                                                        gint64                      monotonic_time);
 
