@@ -49,7 +49,7 @@ endif
 if get_option ('profiler')
 
   test('performance-adwaita', test_performance,
-       args: [ '--mark', 'style',
+       args: [ '--mark', 'css validation',
                '--name',  'performance-adwaita',
                '--output', join_paths(meson.current_build_dir(), 'output'),
                join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],
@@ -58,7 +58,7 @@ if get_option ('profiler')
        suite: [ 'css' ])
 
   test('performance-empty', test_performance,
-       args: [ '--mark', 'style',
+       args: [ '--mark', 'css validation',
                '--name',  'performance-empty',
                '--output', join_paths(meson.current_build_dir(), 'output'),
                join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],
