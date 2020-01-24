@@ -82,7 +82,7 @@ gtk_css_value_image_transition (GtkCssValue *start,
 }
 
 static gboolean
-gtk_css_value_image_is_dynamic (GtkCssValue *value)
+gtk_css_value_image_is_dynamic (const GtkCssValue *value)
 {
   GtkCssImage *image = _gtk_css_image_value_get_image (value);
 

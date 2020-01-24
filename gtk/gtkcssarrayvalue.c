@@ -299,7 +299,7 @@ gtk_css_value_array_transition (GtkCssValue *start,
 }
 
 static gboolean
-gtk_css_value_array_is_dynamic (GtkCssValue *value)
+gtk_css_value_array_is_dynamic (const GtkCssValue *value)
 {
   guint i;
 

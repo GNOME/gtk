@@ -15,7 +15,7 @@ void                     gsk_rounded_rect_to_float              (const GskRounde
                                                                  float                     rect[12]);
 
 gboolean                 gsk_rounded_rect_equal                 (gconstpointer             rect1,
-                                                                 gconstpointer             rect2);
+                                                                 gconstpointer             rect2) G_GNUC_PURE;
 char *                   gsk_rounded_rect_to_string             (const GskRoundedRect     *self);
 
 
