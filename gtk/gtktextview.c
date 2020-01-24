@@ -4215,7 +4215,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   GdkRectangle right_rect;
   GdkRectangle top_rect;
   GdkRectangle bottom_rect;
-  GtkWidget *chooser;
+  GtkEmojiChooser *chooser;
   PangoLayout *layout;
   guint mru_size;
   
@@ -4318,7 +4318,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
    */
   gtk_text_view_flush_first_validate (text_view);
 
-  chooser = g_object_get_data (G_OBJECT (text_view), "gtk-emoji-chooser");
+  chooser = GTK_EMOJI_CHOOSER (g_object_get_data (G_OBJECT (text_view), "gtk-emoji-chooser"));
   if (chooser)
     gtk_native_check_resize (GTK_NATIVE (chooser));
 
@@ -9664,7 +9664,7 @@ gtk_text_view_get_monospace (GtkTextView *text_view)
 static void
 gtk_text_view_insert_emoji (GtkTextView *text_view)
 {
-  GtkWidget *chooser;
+  GtkEmojiChooser *chooser;
   GtkTextIter iter;
   GdkRectangle rect;
   GtkTextBuffer *buffer;
@@ -9672,7 +9672,7 @@ gtk_text_view_insert_emoji (GtkTextView *text_view)
   if (gtk_widget_get_ancestor (GTK_WIDGET (text_view), GTK_TYPE_EMOJI_CHOOSER) != NULL)
     return;
 
-  chooser = GTK_WIDGET (g_object_get_data (G_OBJECT (text_view), "gtk-emoji-chooser"));
+  chooser = GTK_EMOJI_CHOOSER (g_object_get_data (G_OBJECT (text_view), "gtk-emoji-chooser"));
   if (!chooser)
     {
       chooser = gtk_emoji_chooser_new ();
