@@ -3172,7 +3172,7 @@ create_color_selection (GtkWidget *widget)
 
   if (!window)
     {
-      GtkWidget *picker;
+      GtkColorButton *picker;
       GtkWidget *hbox;
       GtkLabel *label;
       
@@ -3194,7 +3194,7 @@ create_color_selection (GtkWidget *widget)
 
       picker = gtk_color_button_new ();
       gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (picker), TRUE);
-      gtk_container_add (GTK_CONTAINER (hbox), picker);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (picker));
     }
 
   if (!gtk_widget_get_visible (window))

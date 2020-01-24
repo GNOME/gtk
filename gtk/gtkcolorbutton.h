@@ -47,16 +47,16 @@ G_BEGIN_DECLS
 typedef struct _GtkColorButton GtkColorButton;
 
 GDK_AVAILABLE_IN_ALL
-GType        gtk_color_button_get_type      (void) G_GNUC_CONST;
+GType            gtk_color_button_get_type      (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget *  gtk_color_button_new           (void);
+GtkColorButton * gtk_color_button_new           (void);
 GDK_AVAILABLE_IN_ALL
-GtkWidget *  gtk_color_button_new_with_rgba (const GdkRGBA  *rgba);
+GtkColorButton * gtk_color_button_new_with_rgba (const GdkRGBA  *rgba);
 GDK_AVAILABLE_IN_ALL
-void         gtk_color_button_set_title     (GtkColorButton *button,
-                                             const gchar    *title);
+void             gtk_color_button_set_title     (GtkColorButton *button,
+                                                 const gchar    *title);
 GDK_AVAILABLE_IN_ALL
-const gchar *gtk_color_button_get_title     (GtkColorButton *button);
+const gchar *    gtk_color_button_get_title     (GtkColorButton *button);
 
 G_END_DECLS
 

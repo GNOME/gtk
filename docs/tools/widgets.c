@@ -552,7 +552,7 @@ static WidgetInfo *
 create_color_button (void)
 {
   GtkWidget *vbox;
-  GtkWidget *picker;
+  GtkColorButton *picker;
   GdkRGBA color;
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
@@ -560,9 +560,9 @@ create_color_button (void)
   color.green = 0x90<<8;
   color.blue = 0xff<<8;
   picker = gtk_color_button_new_with_rgba (&color);
-  gtk_widget_set_halign (picker, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (picker, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (vbox), picker);
+  gtk_widget_set_halign (GTK_WIDGET (picker), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (picker), GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (picker));
   gtk_container_add (GTK_CONTAINER (vbox),
 		      gtk_label_new ("Color Button"));
 

@@ -1060,7 +1060,7 @@ property_editor (GObject                *object,
   else if (type == G_TYPE_PARAM_BOXED &&
            G_PARAM_SPEC_VALUE_TYPE (spec) == GDK_TYPE_RGBA)
     {
-      prop_edit = gtk_color_button_new ();
+      prop_edit = GTK_WIDGET (gtk_color_button_new ());
       gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (prop_edit), TRUE);
 
       g_object_connect_property (object, spec,

@@ -325,7 +325,7 @@ int main (int argc, char *argv[])
   GtkWidget *window;
   GtkWidget *sw;
   GtkWidget *canvas;
-  GtkWidget *widget;
+  GtkColorButton *button;
   GtkWidget *box, *box2, *box3;
   const char *colors[] = {
     "red", "green", "blue", "magenta", "orange", "gray", "black", "yellow",
@@ -338,8 +338,8 @@ int main (int argc, char *argv[])
 
   gtk_init ();
 
-  widget = gtk_color_button_new ();
-  gtk_widget_destroy (widget);
+  button = gtk_color_button_new ();
+  gtk_widget_destroy (GTK_WIDGET (button));
   
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 640, 480);

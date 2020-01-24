@@ -372,7 +372,7 @@ gtk_color_button_finalize (GObject *object)
  *
  * Returns: a new color button
  */
-GtkWidget *
+GtkColorButton *
 gtk_color_button_new (void)
 {
   return g_object_new (GTK_TYPE_COLOR_BUTTON, NULL);
@@ -386,7 +386,7 @@ gtk_color_button_new (void)
  *
  * Returns: a new color button
  */
-GtkWidget *
+GtkColorButton *
 gtk_color_button_new_with_rgba (const GdkRGBA *rgba)
 {
   return g_object_new (GTK_TYPE_COLOR_BUTTON, "rgba", rgba, NULL);
