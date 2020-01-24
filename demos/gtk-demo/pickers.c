@@ -13,6 +13,7 @@ do_pickers (GtkWidget *do_widget)
   GtkWidget *table;
   GtkWidget *picker;
   GtkColorButton *color_button;
+  GtkFileChooserButton *file_button;
   GtkLabel *label;
 
   if (!window)
@@ -51,19 +52,19 @@ do_pickers (GtkWidget *do_widget)
     gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
     gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
     gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
-    picker = gtk_file_chooser_button_new ("Pick a File",
-                                          GTK_FILE_CHOOSER_ACTION_OPEN);
-    gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (picker), FALSE);
+    file_button = gtk_file_chooser_button_new ("Pick a File",
+                                               GTK_FILE_CHOOSER_ACTION_OPEN);
+    gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (file_button), FALSE);
     gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 0, 2, 1, 1);
-    gtk_grid_attach (GTK_GRID (table), picker, 1, 2, 1, 1);
+    gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (file_button), 1, 2, 1, 1);
 
     label = gtk_label_new ("Folder:");
     gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
     gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
-    picker = gtk_file_chooser_button_new ("Pick a Folder",
-                                          GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+    file_button = gtk_file_chooser_button_new ("Pick a Folder",
+                                               GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
     gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 0, 3, 1, 1);
-    gtk_grid_attach (GTK_GRID (table), picker, 1, 3, 1, 1);
+    gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (file_button), 1, 3, 1, 1);
 
     label = gtk_label_new ("Mail:");
     gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
