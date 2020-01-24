@@ -611,7 +611,7 @@ render_fallback_node (GskGLRenderer   *self,
   cairo_fill (cr);
   cairo_restore (cr);
 
-#if G_ENABLE_DEBUG
+#ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), FALLBACK))
     {
       cairo_move_to (cr, 0, 0);
