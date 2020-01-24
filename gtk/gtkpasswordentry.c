@@ -54,8 +54,8 @@
 
 typedef struct {
   GtkWidget *entry;
-  GtkWidget *icon;
-  GtkWidget *peek_icon;
+  GtkImage *icon;
+  GtkImage *peek_icon;
   GdkKeymap *keymap;
   GMenuModel *extra_menu;
 } GtkPasswordEntryPrivate;
@@ -92,9 +92,9 @@ keymap_state_changed (GdkKeymap *keymap,
       gtk_widget_has_focus (priv->entry) &&
       gdk_keymap_get_caps_lock_state (priv->keymap) &&
       !priv->peek_icon)
-    gtk_widget_show (priv->icon);
+    gtk_widget_show (GTK_WIDGET (priv->icon));
   else
-    gtk_widget_hide (priv->icon);
+    gtk_widget_hide (GTK_WIDGET (priv->icon));
 }
 
 static void
@@ -126,13 +126,13 @@ visibility_toggled (GObject          *object,
 
   if (gtk_text_get_visibility (GTK_TEXT (priv->entry)))
     {
-      gtk_image_set_from_icon_name (GTK_IMAGE (priv->peek_icon), "eye-open-negative-filled-symbolic");
-      gtk_widget_set_tooltip_text (priv->peek_icon, _("Hide text"));
+      gtk_image_set_from_icon_name (priv->peek_icon, "eye-open-negative-filled-symbolic");
+      gtk_widget_set_tooltip_text (GTK_WIDGET (priv->peek_icon), _("Hide text"));
     }
   else
     {
-      gtk_image_set_from_icon_name (GTK_IMAGE (priv->peek_icon), "eye-not-looking-symbolic");
-      gtk_widget_set_tooltip_text (priv->peek_icon, _("Show text"));
+      gtk_image_set_from_icon_name (priv->peek_icon, "eye-not-looking-symbolic");
+      gtk_widget_set_tooltip_text (GTK_WIDGET (priv->peek_icon), _("Show text"));
     }
 }
 
@@ -148,10 +148,10 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
   g_signal_connect_swapped (priv->entry, "notify::has-focus", G_CALLBACK (focus_changed), entry);
 
   priv->icon = gtk_image_new_from_icon_name ("caps-lock-symbolic");
-  gtk_widget_set_tooltip_text (priv->icon, _("Caps Lock is on"));
-  gtk_style_context_add_class (gtk_widget_get_style_context (priv->icon), "caps-lock-indicator");
-  gtk_widget_set_cursor (priv->icon, gtk_widget_get_cursor (priv->entry));
-  gtk_widget_set_parent (priv->icon, GTK_WIDGET (entry));
+  gtk_widget_set_tooltip_text (GTK_WIDGET (priv->icon), _("Caps Lock is on"));
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (priv->icon)), "caps-lock-indicator");
+  gtk_widget_set_cursor (GTK_WIDGET (priv->icon), gtk_widget_get_cursor (priv->entry));
+  gtk_widget_set_parent (GTK_WIDGET (priv->icon), GTK_WIDGET (entry));
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (entry)), I_("password"));
 
@@ -184,8 +184,8 @@ gtk_password_entry_dispose (GObject *object)
     gtk_editable_finish_delegate (GTK_EDITABLE (entry));
 
   g_clear_pointer (&priv->entry, gtk_widget_unparent);
-  g_clear_pointer (&priv->icon, gtk_widget_unparent);
-  g_clear_pointer (&priv->peek_icon, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **) &priv->icon, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **) &priv->peek_icon, gtk_widget_unparent);
   g_clear_object (&priv->extra_menu);
 
   G_OBJECT_CLASS (gtk_password_entry_parent_class)->dispose (object);
@@ -284,13 +284,13 @@ gtk_password_entry_measure (GtkWidget      *widget,
                       minimum, natural,
                       minimum_baseline, natural_baseline);
 
-  if (priv->icon && gtk_widget_get_visible (priv->icon))
-    gtk_widget_measure (priv->icon, orientation, for_size,
+  if (priv->icon && gtk_widget_get_visible (GTK_WIDGET (priv->icon)))
+    gtk_widget_measure (GTK_WIDGET (priv->icon), orientation, for_size,
                         &icon_min, &icon_nat,
                         NULL, NULL);
    
-  if (priv->peek_icon && gtk_widget_get_visible (priv->peek_icon))
-    gtk_widget_measure (priv->peek_icon, orientation, for_size,
+  if (priv->peek_icon && gtk_widget_get_visible (GTK_WIDGET (priv->peek_icon)))
+    gtk_widget_measure (GTK_WIDGET (priv->peek_icon), orientation, for_size,
                         &icon_min, &icon_nat,
                         NULL, NULL);
 }
@@ -307,13 +307,13 @@ gtk_password_entry_size_allocate (GtkWidget *widget,
   int peek_min = 0, peek_nat = 0;
   int text_width;
 
-  if (priv->icon && gtk_widget_get_visible (priv->icon))
-    gtk_widget_measure (priv->icon, GTK_ORIENTATION_HORIZONTAL, -1,
+  if (priv->icon && gtk_widget_get_visible (GTK_WIDGET (priv->icon)))
+    gtk_widget_measure (GTK_WIDGET (priv->icon), GTK_ORIENTATION_HORIZONTAL, -1,
                         &icon_min, &icon_nat,
                         NULL, NULL);
    
-  if (priv->peek_icon && gtk_widget_get_visible (priv->peek_icon))
-    gtk_widget_measure (priv->peek_icon, GTK_ORIENTATION_HORIZONTAL, -1,
+  if (priv->peek_icon && gtk_widget_get_visible (GTK_WIDGET (priv->peek_icon)))
+    gtk_widget_measure (GTK_WIDGET (priv->peek_icon), GTK_ORIENTATION_HORIZONTAL, -1,
                         &peek_min, &peek_nat,
                         NULL, NULL);
    
@@ -323,13 +323,13 @@ gtk_password_entry_size_allocate (GtkWidget *widget,
                             &(GtkAllocation) { 0, 0, text_width, height },
                             baseline);
 
-  if (priv->icon && gtk_widget_get_visible (priv->icon))
-    gtk_widget_size_allocate (priv->icon,
+  if (priv->icon && gtk_widget_get_visible (GTK_WIDGET (priv->icon)))
+    gtk_widget_size_allocate (GTK_WIDGET (priv->icon),
                               &(GtkAllocation) { text_width, 0, icon_nat, height },
                               baseline);
 
-  if (priv->peek_icon && gtk_widget_get_visible (priv->peek_icon))
-    gtk_widget_size_allocate (priv->peek_icon,
+  if (priv->peek_icon && gtk_widget_get_visible (GTK_WIDGET (priv->peek_icon)))
+    gtk_widget_size_allocate (GTK_WIDGET (priv->peek_icon),
                               &(GtkAllocation) { text_width + icon_nat, 0, peek_nat, height },
                               baseline);
 }
@@ -479,13 +479,13 @@ gtk_password_entry_set_show_peek_icon (GtkPasswordEntry *entry,
       GtkGesture *press;
 
       priv->peek_icon = gtk_image_new_from_icon_name ("eye-not-looking-symbolic");
-      gtk_widget_set_tooltip_text (priv->peek_icon, _("Show text"));
-      gtk_widget_set_parent (priv->peek_icon, GTK_WIDGET (entry));
+      gtk_widget_set_tooltip_text (GTK_WIDGET (priv->peek_icon), _("Show text"));
+      gtk_widget_set_parent (GTK_WIDGET (priv->peek_icon), GTK_WIDGET (entry));
 
       press = gtk_gesture_click_new ();
       g_signal_connect_swapped (press, "released",
                                 G_CALLBACK (gtk_password_entry_toggle_peek), entry);
-      gtk_widget_add_controller (priv->peek_icon, GTK_EVENT_CONTROLLER (press));
+      gtk_widget_add_controller (GTK_WIDGET (priv->peek_icon), GTK_EVENT_CONTROLLER (press));
 
       g_signal_connect (priv->entry, "notify::visibility",
                         G_CALLBACK (visibility_toggled), entry);
@@ -493,7 +493,7 @@ gtk_password_entry_set_show_peek_icon (GtkPasswordEntry *entry,
     }
   else
     {
-      g_clear_pointer (&priv->peek_icon, gtk_widget_unparent);
+      g_clear_pointer ((GtkWidget **) &priv->peek_icon, gtk_widget_unparent);
       gtk_text_set_visibility (GTK_TEXT (priv->entry), FALSE);
       g_signal_handlers_disconnect_by_func (priv->entry,
                                             visibility_toggled,

@@ -37,7 +37,7 @@ interactive_dialog_clicked (GtkButton *button,
   GtkWidget *content_area;
   GtkWidget *dialog;
   GtkWidget *hbox;
-  GtkWidget *image;
+  GtkImage  *image;
   GtkWidget *table;
   GtkEntry  *local_entry1;
   GtkEntry  *local_entry2;
@@ -59,8 +59,8 @@ interactive_dialog_clicked (GtkButton *button,
   gtk_container_add (GTK_CONTAINER (content_area), hbox);
 
   image = gtk_image_new_from_icon_name ("dialog-question");
-  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
-  gtk_container_add (GTK_CONTAINER (hbox), image);
+  gtk_image_set_icon_size (image, GTK_ICON_SIZE_LARGE);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (image));
 
   table = gtk_grid_new ();
   gtk_grid_set_row_spacing (GTK_GRID (table), 4);

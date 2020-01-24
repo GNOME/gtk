@@ -55,7 +55,7 @@ image_size_value_changed (GtkSpinButton *spin_button,
 {
   gint size = gtk_spin_button_get_value_as_int (spin_button);
 
-  gtk_image_set_pixel_size (GTK_IMAGE (image), size);
+  gtk_image_set_pixel_size (image, size);
 }
 
 static void
@@ -72,7 +72,8 @@ main (int    argc,
 {
   GtkWidget *window, *button, *grid, *notebook;
   GtkEntry *entry;
-  GtkWidget *vbox, *hbox, *grid_hbox, *spin, *spin2, *toggle, *image;
+  GtkWidget *vbox, *hbox, *grid_hbox, *spin, *spin2, *toggle;
+  GtkImage *image;
   GtkComboBoxText *combo;
   GtkLabel *label;
   GtkAdjustment *adjustment;
@@ -184,7 +185,7 @@ main (int    argc,
           button = gtk_button_new ();
 
           gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_label_new ("│Xyj,Ö")));
-          gtk_container_add (GTK_CONTAINER (box), gtk_image_new_from_icon_name ("face-sad"));
+          gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_image_new_from_icon_name ("face-sad")));
           gtk_container_add (GTK_CONTAINER (button), box);
 
           set_font_size (button, i);
@@ -196,10 +197,10 @@ main (int    argc,
 	}
 
       image = gtk_image_new_from_icon_name ("face-sad");
-      gtk_image_set_pixel_size (GTK_IMAGE (image), 34);
+      gtk_image_set_pixel_size (image, 34);
       if (j == 0)
-	gtk_widget_set_valign (image, GTK_ALIGN_BASELINE);
-      gtk_container_add (GTK_CONTAINER (hbox), image);
+	gtk_widget_set_valign (GTK_WIDGET (image), GTK_ALIGN_BASELINE);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (image));
 
       button = gtk_toggle_button_new_with_label ("│Xyj,Ö");
       if (j == 0)
@@ -276,7 +277,7 @@ main (int    argc,
           button = gtk_button_new ();
 
           gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_label_new ("│Xyj,Ö")));
-          gtk_container_add (GTK_CONTAINER (box), gtk_image_new_from_icon_name ("face-sad"));
+          gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_image_new_from_icon_name ("face-sad")));
           gtk_container_add (GTK_CONTAINER (button), box);
 
           set_font_size (button, i);
@@ -342,8 +343,8 @@ main (int    argc,
       gtk_widget_set_vexpand (GTK_WIDGET (label), TRUE);
 
       image = gtk_image_new_from_icon_name ("face-sad");
-      gtk_image_set_pixel_size (GTK_IMAGE (image), 34);
-      gtk_container_add (GTK_CONTAINER (hbox), image);
+      gtk_image_set_pixel_size (image, 34);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (image));
 
       g_signal_connect (spin, "value-changed", (GCallback)image_size_value_changed, image);
 
@@ -366,8 +367,8 @@ main (int    argc,
 
           gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_label_new ("│Xyj,Ö")));
           image = gtk_image_new_from_icon_name ("face-sad");
-          gtk_image_set_pixel_size (GTK_IMAGE (image), 16);
-          gtk_container_add (GTK_CONTAINER (box), image);
+          gtk_image_set_pixel_size (image, 16);
+          gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (image));
           gtk_container_add (GTK_CONTAINER (button), box);
 
 	  if (i == 0)

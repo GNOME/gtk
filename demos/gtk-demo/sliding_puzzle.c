@@ -394,12 +394,12 @@ static void
 add_choice (GtkWidget    *choices,
             GdkPaintable *paintable)
 {
-  GtkWidget *icon;
+  GtkImage *icon;
 
   icon = gtk_image_new_from_paintable (paintable);
-  gtk_image_set_icon_size (GTK_IMAGE (icon), GTK_ICON_SIZE_LARGE);
+  gtk_image_set_icon_size (icon, GTK_ICON_SIZE_LARGE);
 
-  gtk_container_add (GTK_CONTAINER (choices), icon);
+  gtk_container_add (GTK_CONTAINER (choices), GTK_WIDGET (icon));
 }
 
 GtkWidget *

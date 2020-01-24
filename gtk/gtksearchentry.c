@@ -120,7 +120,7 @@ typedef struct {
   GtkEventController *capture_widget_controller;
 
   GtkWidget *entry;
-  GtkWidget *icon;
+  GtkImage *icon;
 
   guint delayed_changed_id;
   gboolean content_changed;
@@ -154,7 +154,7 @@ gtk_search_entry_finalize (GObject *object)
   gtk_editable_finish_delegate (GTK_EDITABLE (entry));
 
   g_clear_pointer (&priv->entry, gtk_widget_unparent);
-  g_clear_pointer (&priv->icon, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **) &priv->icon, gtk_widget_unparent);
 
   if (priv->delayed_changed_id > 0)
     g_source_remove (priv->delayed_changed_id);
@@ -479,7 +479,7 @@ gtk_search_entry_changed (GtkEditable *editable,
 
   if (str == NULL || *str == '\0')
     {
-      gtk_widget_set_child_visible (priv->icon, FALSE);
+      gtk_widget_set_child_visible (GTK_WIDGET (priv->icon), FALSE);
 
       if (priv->delayed_changed_id > 0)
         {
@@ -490,7 +490,7 @@ gtk_search_entry_changed (GtkEditable *editable,
     }
   else
     {
-      gtk_widget_set_child_visible (priv->icon, TRUE);
+      gtk_widget_set_child_visible (GTK_WIDGET (priv->icon), TRUE);
 
       /* Queue up the timeout */
       reset_timeout (entry);
@@ -532,13 +532,13 @@ gtk_search_entry_init (GtkSearchEntry *entry)
   g_signal_connect (priv->entry, "activate", G_CALLBACK (activate_cb), entry);
 
   priv->icon = gtk_image_new_from_icon_name ("edit-clear-all-symbolic");
-  gtk_widget_set_tooltip_text (priv->icon, _("Clear entry"));
-  gtk_widget_set_parent (priv->icon, GTK_WIDGET (entry));
-  gtk_widget_set_child_visible (priv->icon, FALSE);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (priv->icon), _("Clear entry"));
+  gtk_widget_set_parent (GTK_WIDGET (priv->icon), GTK_WIDGET (entry));
+  gtk_widget_set_child_visible (GTK_WIDGET (priv->icon), FALSE);
 
   press = gtk_gesture_click_new ();
   g_signal_connect (press, "released", G_CALLBACK (gtk_search_entry_icon_release), entry);
-  gtk_widget_add_controller (priv->icon, GTK_EVENT_CONTROLLER (press));
+  gtk_widget_add_controller (GTK_WIDGET (priv->icon), GTK_EVENT_CONTROLLER (press));
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (entry)), I_("search"));
 }

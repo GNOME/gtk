@@ -72,19 +72,19 @@ GDK_AVAILABLE_IN_ALL
 GType      gtk_image_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_image_new                (void);
+GtkImage* gtk_image_new                (void);
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_image_new_from_file      (const gchar     *filename);
+GtkImage* gtk_image_new_from_file      (const gchar     *filename);
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_image_new_from_resource  (const gchar     *resource_path);
+GtkImage* gtk_image_new_from_resource  (const gchar     *resource_path);
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_image_new_from_pixbuf    (GdkPixbuf       *pixbuf);
+GtkImage* gtk_image_new_from_pixbuf    (GdkPixbuf       *pixbuf);
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_image_new_from_paintable (GdkPaintable    *paintable);
+GtkImage* gtk_image_new_from_paintable (GdkPaintable    *paintable);
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_image_new_from_icon_name (const gchar     *icon_name);
+GtkImage* gtk_image_new_from_icon_name (const gchar     *icon_name);
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_image_new_from_gicon     (GIcon           *icon);
+GtkImage* gtk_image_new_from_gicon     (GIcon           *icon);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_image_clear              (GtkImage        *image);

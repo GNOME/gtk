@@ -8794,7 +8794,8 @@ append_bubble_item (GtkTextView *text_view,
                     GMenuModel  *model,
                     int          index)
 {
-  GtkWidget *item, *image;
+  GtkWidget *item;
+  GtkImage *image;
   GVariant *att;
   const char *icon_name;
   const char *action_name;
@@ -8848,7 +8849,7 @@ append_bubble_item (GtkTextView *text_view,
     item = gtk_button_new ();
   gtk_widget_set_focus_on_click (item, FALSE);
   image = gtk_image_new_from_icon_name (icon_name);
-  gtk_container_add (GTK_CONTAINER (item), image);
+  gtk_container_add (GTK_CONTAINER (item), GTK_WIDGET (image));
   gtk_style_context_add_class (gtk_widget_get_style_context (item), "image-button");
   gtk_actionable_set_action_name (GTK_ACTIONABLE (item), action_name);
 

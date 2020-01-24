@@ -76,7 +76,7 @@ change_header (GtkButton *button, gpointer data)
   GtkWidget *window = GTK_WIDGET (data);
   GtkLabel *label;
   GtkWidget *widget;
-  GtkWidget *image;
+  GtkImage *image;
 
   if (button && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
     {
@@ -107,7 +107,7 @@ change_header (GtkButton *button, gpointer data)
       widget= gtk_button_new ();
       image = gtk_image_new_from_icon_name ("bookmark-new-symbolic");
       g_signal_connect (widget, "clicked", G_CALLBACK (on_bookmark_clicked), window);
-      gtk_container_add (GTK_CONTAINER (widget), image);
+      gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (image));
 
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), widget);
     }
@@ -122,7 +122,7 @@ main (int argc, char *argv[])
   GtkWidget *box;
   GtkWidget *footer;
   GtkWidget *button;
-  GtkWidget *content;
+  GtkImage *content;
   GtkCssProvider *provider;
 
   gtk_init ();
@@ -144,9 +144,9 @@ main (int argc, char *argv[])
 
 
   content = gtk_image_new_from_icon_name ("start-here-symbolic");
-  gtk_image_set_pixel_size (GTK_IMAGE (content), 512);
+  gtk_image_set_pixel_size (content, 512);
 
-  gtk_container_add (GTK_CONTAINER (box), content);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (content));
 
   footer = gtk_action_bar_new ();
   gtk_action_bar_set_center_widget (GTK_ACTION_BAR (footer), gtk_check_button_new_with_label ("Middle"));

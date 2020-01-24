@@ -14,7 +14,8 @@ on_activate (GApplication *app,
     {
       GtkWidget *header, *sidebar_toggle;
       GtkSwitch *animation_switch;
-      GtkWidget *hbox, *revealer, *sidebar, *img;
+      GtkWidget *hbox, *revealer, *sidebar;
+      GtkImage *img;
 
       window = gtk_application_window_new (GTK_APPLICATION (app));
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);
@@ -55,7 +56,7 @@ on_activate (GApplication *app,
                          "halign", GTK_ALIGN_CENTER,
                          "valign", GTK_ALIGN_CENTER,
                          NULL);
-      gtk_container_add (GTK_CONTAINER (hbox), img);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (img));
 
       g_object_bind_property (sidebar_toggle, "active",
                               revealer, "reveal-child",

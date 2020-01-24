@@ -220,6 +220,7 @@ static GtkWidget *
 get_contents_widget (GdkClipboard *clipboard)
 {
   GtkWidget *stack, *child;
+  GtkImage *image;
   GtkLabel *label;
 
   stack = gtk_stack_new ();
@@ -231,8 +232,8 @@ get_contents_widget (GdkClipboard *clipboard)
   child = get_formats_list (clipboard);
   gtk_stack_add_titled (GTK_STACK (stack), child, "info", "Info");
 
-  child = gtk_image_new ();
-  gtk_stack_add_titled (GTK_STACK (stack), child, "image", "Image");
+  image = gtk_image_new ();
+  gtk_stack_add_titled (GTK_STACK (stack), GTK_WIDGET (image), "image", "Image");
 
   label = gtk_label_new (NULL);
   gtk_label_set_wrap (label, TRUE);

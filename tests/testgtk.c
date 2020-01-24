@@ -596,11 +596,11 @@ create_radio_buttons (GtkWidget *widget)
  * GtkToolBar
  */
 
-static GtkWidget*
+static GtkImage*
 new_pixbuf (char      *filename,
 	    GdkSurface *window)
 {
-  GtkWidget *widget;
+  GtkImage *widget;
   GdkPixbuf *pixbuf;
 
   if (strcmp (filename, "test.xpm") == 0)
@@ -1216,7 +1216,7 @@ create_pixbuf (GtkWidget *widget)
   GtkWidget *button;
   GtkLabel *label;
   GtkSeparator *separator;
-  GtkWidget *pixbufwid;
+  GtkImage *pixbufwid;
   GdkSurface *gdk_surface;
 
   if (!window)
@@ -1248,7 +1248,7 @@ create_pixbuf (GtkWidget *widget)
 
       label = gtk_label_new ("Pixbuf\ntest");
       box3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_container_add (GTK_CONTAINER (box3), pixbufwid);
+      gtk_container_add (GTK_CONTAINER (box3), GTK_WIDGET (pixbufwid));
       gtk_container_add (GTK_CONTAINER (box3), GTK_WIDGET (label));
       gtk_container_add (GTK_CONTAINER (button), box3);
 
@@ -1259,7 +1259,7 @@ create_pixbuf (GtkWidget *widget)
 
       label = gtk_label_new ("Pixbuf\ntest");
       box3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_container_add (GTK_CONTAINER (box3), pixbufwid);
+      gtk_container_add (GTK_CONTAINER (box3), GTK_WIDGET (pixbufwid));
       gtk_container_add (GTK_CONTAINER (box3), GTK_WIDGET (label));
       gtk_container_add (GTK_CONTAINER (button), box3);
 
@@ -1383,13 +1383,13 @@ create_tooltips (GtkWidget *widget)
 static void
 pack_image (GtkWidget *box,
             const gchar *text,
-            GtkWidget *image)
+            GtkImage *image)
 {
   gtk_container_add (GTK_CONTAINER (box),
                      GTK_WIDGET (gtk_label_new (text)));
 
   gtk_container_add (GTK_CONTAINER (box),
-                      image);
+                     GTK_WIDGET (image));
 }
 
 static void
@@ -3780,15 +3780,15 @@ static void
 set_page_image (GtkNotebook *notebook, gint page_num, GdkPixbuf *pixbuf)
 {
   GtkWidget *page_widget;
-  GtkWidget *pixwid;
+  GtkImage *pixwid;
 
   page_widget = gtk_notebook_get_nth_page (notebook, page_num);
 
-  pixwid = g_object_get_data (G_OBJECT (page_widget), "tab_pixmap");
-  gtk_image_set_from_pixbuf (GTK_IMAGE (pixwid), pixbuf);
+  pixwid = GTK_IMAGE (g_object_get_data (G_OBJECT (page_widget), "tab_pixmap"));
+  gtk_image_set_from_pixbuf (pixwid, pixbuf);
   
-  pixwid = g_object_get_data (G_OBJECT (page_widget), "menu_pixmap");
-  gtk_image_set_from_pixbuf (GTK_IMAGE (pixwid), pixbuf);
+  pixwid = GTK_IMAGE (g_object_get_data (G_OBJECT (page_widget), "menu_pixmap"));
+  gtk_image_set_from_pixbuf (pixwid, pixbuf);
 }
 
 static void
@@ -3830,7 +3830,7 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
   GtkWidget *vbox;
   GtkWidget *label_box;
   GtkWidget *menu_box;
-  GtkWidget *pixwid;
+  GtkImage *pixwid;
   gint i;
   char buffer[32];
   char accel_buffer[32];
@@ -3872,11 +3872,11 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
       pixwid = gtk_image_new_from_pixbuf (book_closed);
       g_object_set_data (G_OBJECT (child), "tab_pixmap", pixwid);
 
-      gtk_container_add (GTK_CONTAINER (label_box), pixwid);
-      gtk_widget_set_margin_start (pixwid, 3);
-      gtk_widget_set_margin_end (pixwid, 3);
-      gtk_widget_set_margin_bottom (pixwid, 1);
-      gtk_widget_set_margin_top (pixwid, 1);
+      gtk_container_add (GTK_CONTAINER (label_box), GTK_WIDGET (pixwid));
+      gtk_widget_set_margin_start (GTK_WIDGET (pixwid), 3);
+      gtk_widget_set_margin_end (GTK_WIDGET (pixwid), 3);
+      gtk_widget_set_margin_bottom (GTK_WIDGET (pixwid), 1);
+      gtk_widget_set_margin_top (GTK_WIDGET (pixwid), 1);
       label = gtk_label_new_with_mnemonic (accel_buffer);
       gtk_container_add (GTK_CONTAINER (label_box), GTK_WIDGET (label));
       gtk_widget_show (label_box);
@@ -3886,11 +3886,11 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
       pixwid = gtk_image_new_from_pixbuf (book_closed);
       g_object_set_data (G_OBJECT (child), "menu_pixmap", pixwid);
 
-      gtk_container_add (GTK_CONTAINER (menu_box), pixwid);
-      gtk_widget_set_margin_start (pixwid, 3);
-      gtk_widget_set_margin_end (pixwid, 3);
-      gtk_widget_set_margin_bottom (pixwid, 1);
-      gtk_widget_set_margin_top (pixwid, 1);
+      gtk_container_add (GTK_CONTAINER (menu_box), GTK_WIDGET (pixwid));
+      gtk_widget_set_margin_start (GTK_WIDGET (pixwid), 3);
+      gtk_widget_set_margin_end (GTK_WIDGET (pixwid), 3);
+      gtk_widget_set_margin_bottom (GTK_WIDGET (pixwid), 1);
+      gtk_widget_set_margin_top (GTK_WIDGET (pixwid), 1);
       label = gtk_label_new (buffer);
       gtk_container_add (GTK_CONTAINER (menu_box), GTK_WIDGET (label));
       gtk_widget_show (menu_box);

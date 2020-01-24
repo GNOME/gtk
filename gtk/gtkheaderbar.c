@@ -379,13 +379,13 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
           for (j = 0; t[j]; j++)
             {
               GtkWidget *button = NULL;
-              GtkWidget *image = NULL;
+              GtkImage *image = NULL;
               AtkObject *accessible;
 
               if (strcmp (t[j], "icon") == 0 &&
                   is_sovereign_window)
                 {
-                  button = gtk_image_new ();
+                  button = GTK_WIDGET (gtk_image_new ());
                   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
                   priv->titlebar_icon = button;
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
@@ -409,14 +409,14 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "menu");
                   image = gtk_image_new ();
-                  gtk_menu_button_add_child (GTK_MENU_BUTTON (button), image);
+                  gtk_menu_button_add_child (GTK_MENU_BUTTON (button), GTK_WIDGET (image));
                   gtk_widget_set_can_focus (button, FALSE);
 
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))
                     atk_object_set_name (accessible, _("Application menu"));
 
-                  priv->titlebar_icon = image;
+                  priv->titlebar_icon = GTK_WIDGET (image);
                   if (!_gtk_header_bar_update_window_icon (bar, window))
                     gtk_image_set_from_icon_name (GTK_IMAGE (priv->titlebar_icon), "application-x-executable-symbolic");
 
@@ -431,7 +431,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "minimize");
                   image = gtk_image_new_from_icon_name ("window-minimize-symbolic");
                   g_object_set (image, "use-fallback", TRUE, NULL);
-                  gtk_container_add (GTK_CONTAINER (button), image);
+                  gtk_container_add (GTK_CONTAINER (button), GTK_WIDGET (image));
                   gtk_widget_set_can_focus (button, FALSE);
                   g_signal_connect_swapped (button, "clicked",
                                             G_CALLBACK (gtk_window_minimize), window);
@@ -454,7 +454,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "maximize");
                   image = gtk_image_new_from_icon_name (icon_name);
                   g_object_set (image, "use-fallback", TRUE, NULL);
-                  gtk_container_add (GTK_CONTAINER (button), image);
+                  gtk_container_add (GTK_CONTAINER (button), GTK_WIDGET (image));
                   gtk_widget_set_can_focus (button, FALSE);
                   g_signal_connect_swapped (button, "clicked",
                                             G_CALLBACK (_gtk_window_toggle_maximized), window);
@@ -472,7 +472,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "close");
                   g_object_set (image, "use-fallback", TRUE, NULL);
-                  gtk_container_add (GTK_CONTAINER (button), image);
+                  gtk_container_add (GTK_CONTAINER (button), GTK_WIDGET (image));
                   gtk_widget_set_can_focus (button, FALSE);
                   g_signal_connect_swapped (button, "clicked",
                                             G_CALLBACK (gtk_window_close), window);
