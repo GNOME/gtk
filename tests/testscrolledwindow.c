@@ -82,7 +82,8 @@ scrollable_policy (void)
 {
   GtkWidget *window, *swindow, *hbox, *vbox, *frame, *cntl, *listbox;
   GtkComboBoxText *combo;
-  GtkWidget *viewport, *expander, *widget, *popover;
+  GtkWidget *viewport, *widget, *popover;
+  GtkExpander *expander;
   GtkLabel *label;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -125,12 +126,12 @@ scrollable_policy (void)
 
   /* Add controls here */
   expander = gtk_expander_new ("Controls");
-  gtk_expander_set_expanded (GTK_EXPANDER (expander), TRUE);
+  gtk_expander_set_expanded (expander, TRUE);
   cntl = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
   gtk_widget_show (cntl);
-  gtk_widget_show (expander);
+  gtk_widget_show (GTK_WIDGET (expander));
   gtk_container_add (GTK_CONTAINER (expander), cntl);
-  gtk_container_add (GTK_CONTAINER (vbox), expander);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (expander));
 
   /* Add Horizontal policy control here */
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);

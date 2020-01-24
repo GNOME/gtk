@@ -65,7 +65,7 @@
  * static void
  * create_expander (void)
  * {
- *   GtkWidget *expander = gtk_expander_new_with_mnemonic ("_More Options");
+ *   GtkExpander *expander = gtk_expander_new_with_mnemonic ("_More Options");
  *   g_signal_connect (expander, "notify::expanded",
  *                     G_CALLBACK (expander_callback), NULL);
  *
@@ -870,7 +870,7 @@ gtk_expander_measure (GtkWidget      *widget,
  *
  * Returns: a new #GtkExpander widget.
  */
-GtkWidget *
+GtkExpander *
 gtk_expander_new (const gchar *label)
 {
   return g_object_new (GTK_TYPE_EXPANDER, "label", label, NULL);
@@ -890,7 +890,7 @@ gtk_expander_new (const gchar *label)
  *
  * Returns: a new #GtkExpander widget.
  */
-GtkWidget *
+GtkExpander *
 gtk_expander_new_with_mnemonic (const gchar *label)
 {
   return g_object_new (GTK_TYPE_EXPANDER,

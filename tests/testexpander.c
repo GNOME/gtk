@@ -22,7 +22,7 @@ main (int argc, char *argv[])
 {
   GtkWidget *dialog;
   GtkWidget *area;
-  GtkWidget *expander;
+  GtkExpander *expander;
   GtkWidget *sw;
   GtkWidget *tv;
   GtkTextBuffer *buffer;
@@ -65,9 +65,9 @@ main (int argc, char *argv[])
                             "resize the window. Do it already !", -1);
   gtk_container_add (GTK_CONTAINER (sw), tv);
   gtk_container_add (GTK_CONTAINER (expander), sw);
-  gtk_widget_set_hexpand (expander, TRUE);
-  gtk_widget_set_vexpand (expander, TRUE);
-  gtk_container_add (GTK_CONTAINER (area), expander);
+  gtk_widget_set_hexpand (GTK_WIDGET (expander), TRUE);
+  gtk_widget_set_vexpand (GTK_WIDGET (expander), TRUE);
+  gtk_container_add (GTK_CONTAINER (area), GTK_WIDGET (expander));
   g_signal_connect (expander, "notify::expanded",
                     G_CALLBACK (expander_cb), dialog);
 
