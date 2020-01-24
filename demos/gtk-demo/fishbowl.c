@@ -58,12 +58,12 @@ get_random_icon_name (GtkIconTheme *theme)
 GtkWidget *
 create_icon (void)
 {
-  GtkWidget *image;
+  GtkImage *image;
 
   image = gtk_image_new_from_icon_name (get_random_icon_name (gtk_icon_theme_get_default ()));
-  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
+  gtk_image_set_icon_size (image, GTK_ICON_SIZE_LARGE);
 
-  return image;
+  return GTK_WIDGET (image);
 }
 
 static GtkWidget *

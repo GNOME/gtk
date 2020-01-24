@@ -78,11 +78,11 @@ switch_direction (GtkWidget *widget)
 G_MODULE_EXPORT void
 swap_child (GtkWidget *window)
 {
-  GtkWidget *image;
+  GtkImage *image;
 
   gtk_container_remove (GTK_CONTAINER (window), gtk_bin_get_child (GTK_BIN (window)));
 
   image = gtk_image_new_from_icon_name ("go-next");
-  gtk_widget_show (image);
-  gtk_container_add (GTK_CONTAINER (window), image);
+  gtk_widget_show (GTK_WIDGET (image));
+  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (image));
 }

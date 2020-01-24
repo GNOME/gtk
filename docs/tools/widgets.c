@@ -144,14 +144,14 @@ static WidgetInfo *
 create_menu_button (void)
 {
   GtkWidget *widget;
-  GtkWidget *image;
+  GtkImage *image;
   GtkWidget *menu;
   GtkWidget *vbox;
 
   widget = gtk_menu_button_new ();
   image = gtk_image_new ();
-  gtk_image_set_from_icon_name (GTK_IMAGE (image), "emblem-system-symbolic");
-  gtk_container_add (GTK_CONTAINER (widget), image);
+  gtk_image_set_from_icon_name (image, "emblem-system-symbolic");
+  gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (image));
   menu = gtk_popover_new (NULL);
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (widget), menu);
 
@@ -998,16 +998,16 @@ create_scales (void)
 static WidgetInfo *
 create_image (void)
 {
-  GtkWidget *widget;
+  GtkImage *widget;
   GtkWidget *vbox;
 
   widget = gtk_image_new_from_icon_name ("applications-graphics");
-  gtk_image_set_icon_size (GTK_IMAGE (widget), GTK_ICON_SIZE_LARGE);
-  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_image_set_icon_size (widget, GTK_ICON_SIZE_LARGE);
+  gtk_widget_set_halign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (widget));
   gtk_container_add (GTK_CONTAINER (vbox),
 		      gtk_label_new ("Image"));
 
@@ -1164,7 +1164,7 @@ create_headerbar (void)
   gtk_header_bar_set_subtitle (GTK_HEADER_BAR (bar), "(subtitle)");
   gtk_window_set_titlebar (GTK_WINDOW (window), bar);
   button = gtk_button_new ();
-  gtk_container_add (GTK_CONTAINER (button), gtk_image_new_from_icon_name ("bookmark-new-symbolic"));
+  gtk_container_add (GTK_CONTAINER (button), GTK_WIDGET (gtk_image_new_from_icon_name ("bookmark-new-symbolic")));
   gtk_header_bar_pack_end (GTK_HEADER_BAR (bar), button);
 
   return new_widget_info ("headerbar", window, ASIS);

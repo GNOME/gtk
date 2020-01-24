@@ -83,7 +83,7 @@ main (int argc, char **argv)
   GtkEntry *entry;
   GtkWidget *password_entry;   
   GtkWidget *box;
-  GtkWidget *image;
+  GtkImage *image;
   GtkWidget *button1;
   GtkWidget *button2;
   GtkWidget *button3;
@@ -266,18 +266,18 @@ main (int argc, char **argv)
   gtk_widget_set_hexpand (GTK_WIDGET (entry), TRUE);
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (entry));
   image = gtk_image_new_from_icon_name ("edit-find-symbolic");
-  gtk_widget_set_cursor_from_name (image, "default");
+  gtk_widget_set_cursor_from_name (GTK_WIDGET (image), "default");
   g_object_set (image, "margin", 6, NULL);
-  gtk_widget_set_tooltip_text (image, "Click me");
+  gtk_widget_set_tooltip_text (GTK_WIDGET (image), "Click me");
 
   GtkGesture *gesture;
   gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "pressed", G_CALLBACK (icon_pressed_cb), NULL);
-  gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (gesture));
-  gtk_container_add (GTK_CONTAINER (box), image);
+  gtk_widget_add_controller (GTK_WIDGET (image), GTK_EVENT_CONTROLLER (gesture));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (image));
   image = gtk_image_new_from_icon_name ("document-save-symbolic");
   g_object_set (image, "margin", 6, NULL);
-  gtk_container_add (GTK_CONTAINER (box), image);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (image));
   gtk_grid_attach (GTK_GRID (grid), box, 1, 7, 1, 1);
 
   GtkCssProvider *provider;

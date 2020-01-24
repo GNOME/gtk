@@ -157,7 +157,7 @@ struct _GtkModelButton
   GtkWidget parent_instance;
 
   GtkWidget *box;
-  GtkWidget *image;
+  GtkImage *image;
   GtkLabel *label;
   GtkLabel *accel_label;
   GtkWidget *start_box;
@@ -559,7 +559,7 @@ update_visibility (GtkModelButton *self)
   gboolean has_icon;
   gboolean has_text;
 
-  has_icon = self->image && gtk_image_get_storage_type (GTK_IMAGE (self->image)) != GTK_IMAGE_EMPTY;
+  has_icon = self->image && gtk_image_get_storage_type (self->image) != GTK_IMAGE_EMPTY;
   has_text = gtk_label_get_text (self->label)[0] != '\0';
 
   gtk_widget_set_visible (GTK_WIDGET (self->label), has_text && (!self->iconic || !has_icon));
@@ -568,8 +568,8 @@ update_visibility (GtkModelButton *self)
 
   if (self->image)
     {
-      gtk_widget_set_visible (self->image, has_icon && (self->iconic || !has_text));
-      gtk_widget_set_hexpand (self->image,
+      gtk_widget_set_visible (GTK_WIDGET (self->image), has_icon && (self->iconic || !has_text));
+      gtk_widget_set_hexpand (GTK_WIDGET (self->image),
                               has_icon && (!has_text || !gtk_widget_get_visible (GTK_WIDGET (self->label))));
     }
 }
@@ -581,15 +581,15 @@ gtk_model_button_set_icon (GtkModelButton *self,
   if (!self->image && icon)
     {
       self->image = gtk_image_new_from_gicon (icon);
-      gtk_widget_insert_before (self->image, GTK_WIDGET (self), GTK_WIDGET (self->label));
+      gtk_widget_insert_before (GTK_WIDGET (self->image), GTK_WIDGET (self), GTK_WIDGET (self->label));
     }
   else if (self->image && !icon)
     {
-      g_clear_pointer (&self->image, gtk_widget_unparent);
+      g_clear_pointer ((GtkWidget **) &self->image, gtk_widget_unparent);
     }
   else if (icon)
     {
-      gtk_image_set_from_gicon (GTK_IMAGE (self->image), icon);
+      gtk_image_set_from_gicon (self->image, icon);
     }
 
   update_visibility (self);
@@ -777,7 +777,7 @@ gtk_model_button_get_property (GObject    *object,
       break;
 
     case PROP_ICON:
-      g_value_set_object (value, self->image ? gtk_image_get_gicon (GTK_IMAGE (self->image)) : NULL);
+      g_value_set_object (value, self->image ? gtk_image_get_gicon (self->image) : NULL);
       break;
 
     case PROP_TEXT:
@@ -968,7 +968,7 @@ gtk_model_button_finalize (GObject *object)
 {
   GtkModelButton *button = GTK_MODEL_BUTTON (object);
 
-  g_clear_pointer (&button->image, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **) &button->image, gtk_widget_unparent);
   g_clear_pointer ((GtkWidget **) &button->label, gtk_widget_unparent);
   g_clear_pointer (&button->start_box, gtk_widget_unparent);
   g_clear_pointer ((GtkWidget **) &button->accel_label, gtk_widget_unparent);

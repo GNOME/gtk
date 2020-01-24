@@ -637,8 +637,9 @@ request_password (GtkPrintBackend  *backend,
                   gboolean          can_store_auth_info)
 {
   GtkPrintBackendPrivate *priv = backend->priv;
-  GtkWidget *dialog, *box, *main_box, *icon, *vbox, *chkbtn;
+  GtkWidget *dialog, *box, *main_box, *vbox, *chkbtn;
   GtkEntry *entry;
+  GtkImage *icon;
   GtkLabel *label;
   GtkWidget *focus = NULL;
   GtkWidget *content_area;
@@ -666,9 +667,9 @@ request_password (GtkPrintBackend  *backend,
 
   /* Left */
   icon = gtk_image_new_from_icon_name ("dialog-password-symbolic");
-  gtk_image_set_icon_size (GTK_IMAGE (icon), GTK_ICON_SIZE_LARGE);
-  gtk_widget_set_halign (icon, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (icon, GTK_ALIGN_START);
+  gtk_image_set_icon_size (icon, GTK_ICON_SIZE_LARGE);
+  gtk_widget_set_halign (GTK_WIDGET (icon), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (icon), GTK_ALIGN_START);
   g_object_set (icon, "margin", 12, NULL);
 
   /* Right */
@@ -688,7 +689,7 @@ request_password (GtkPrintBackend  *backend,
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   gtk_container_add (GTK_CONTAINER (content_area), main_box);
 
-  gtk_container_add (GTK_CONTAINER (main_box), icon);
+  gtk_container_add (GTK_CONTAINER (main_box), GTK_WIDGET (icon));
   gtk_container_add (GTK_CONTAINER (main_box), vbox);
 
   gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));

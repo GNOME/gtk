@@ -265,7 +265,7 @@ do_clipboard (GtkWidget *do_widget)
       GtkLabel *label;
       GtkEntry *entry;
       GtkWidget *button;
-      GtkWidget *image;
+      GtkImage *image;
       GtkGesture *gesture;
       GActionEntry entries[] = {
         { "copy", copy_image, NULL, NULL, NULL },
@@ -333,63 +333,63 @@ do_clipboard (GtkWidget *do_widget)
 
       /* Create the first image */
       image = gtk_image_new_from_icon_name ("dialog-warning");
-      gtk_image_set_pixel_size (GTK_IMAGE (image), 48);
-      gtk_container_add (GTK_CONTAINER (hbox), image);
+      gtk_image_set_pixel_size (image, 48);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (image));
 
       /* make image a drag source */
       source = gtk_drag_source_new ();
       g_signal_connect (source, "prepare", G_CALLBACK (prepare_drag), NULL);
       g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), image);
-      gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
+      gtk_widget_add_controller (GTK_WIDGET (image), GTK_EVENT_CONTROLLER (source));
 
       /* accept drops on image */
       formats = gdk_content_formats_new_for_gtype (GDK_TYPE_TEXTURE);
       dest = gtk_drop_target_new (formats, GDK_ACTION_COPY);
       gdk_content_formats_unref (formats);
       g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), image);
-      gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (dest));
+      gtk_widget_add_controller (GTK_WIDGET (image), GTK_EVENT_CONTROLLER (dest));
 
       /* context menu on image */
       gesture = gtk_gesture_click_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
       g_signal_connect (gesture, "pressed", G_CALLBACK (pressed_cb), image);
-      gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (gesture));
+      gtk_widget_add_controller (GTK_WIDGET (image), GTK_EVENT_CONTROLLER (gesture));
 
       actions = G_ACTION_GROUP (g_simple_action_group_new ());
       g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS (entries), image);
 
-      gtk_widget_insert_action_group (image, "clipboard", actions);
+      gtk_widget_insert_action_group (GTK_WIDGET (image), "clipboard", actions);
 
       g_object_unref (actions);
 
       /* Create the second image */
       image = gtk_image_new_from_icon_name ("process-stop");
-      gtk_image_set_pixel_size (GTK_IMAGE (image), 48);
-      gtk_container_add (GTK_CONTAINER (hbox), image);
+      gtk_image_set_pixel_size (image, 48);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (image));
 
       /* make image a drag source */
       source = gtk_drag_source_new ();
       g_signal_connect (source, "prepare", G_CALLBACK (prepare_drag), NULL);
       g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), image);
-      gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
+      gtk_widget_add_controller (GTK_WIDGET (image), GTK_EVENT_CONTROLLER (source));
 
       /* accept drops on image */
       formats = gdk_content_formats_new_for_gtype (GDK_TYPE_TEXTURE);
       dest = gtk_drop_target_new (formats, GDK_ACTION_COPY);
       gdk_content_formats_unref (formats);
       g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), image);
-      gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (dest));
+      gtk_widget_add_controller (GTK_WIDGET (image), GTK_EVENT_CONTROLLER (dest));
 
       /* context menu on image */
       gesture = gtk_gesture_click_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
       g_signal_connect (gesture, "pressed", G_CALLBACK (pressed_cb), image);
-      gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (gesture));
+      gtk_widget_add_controller (GTK_WIDGET (image), GTK_EVENT_CONTROLLER (gesture));
 
       actions = G_ACTION_GROUP (g_simple_action_group_new ());
       g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS (entries), image);
 
-      gtk_widget_insert_action_group (image, "clipboard", actions);
+      gtk_widget_insert_action_group (GTK_WIDGET (image), "clipboard", actions);
 
       g_object_unref (actions);
     }

@@ -154,7 +154,7 @@ struct _GtkMenuButtonPrivate
   GDestroyNotify create_popup_destroy_notify;
 
   GtkWidget *align_widget;
-  GtkWidget *arrow_widget;
+  GtkImage *arrow_widget;
   GtkArrowType arrow_type;
 };
 
@@ -458,12 +458,12 @@ set_arrow_type (GtkImage     *image,
 static void
 add_arrow (GtkMenuButton *menu_button)
 {
-  GtkWidget *arrow;
+  GtkImage *arrow;
   GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
 
   arrow = gtk_image_new ();
-  set_arrow_type (GTK_IMAGE (arrow), priv->arrow_type);
-  gtk_container_add (GTK_CONTAINER (priv->button), arrow);
+  set_arrow_type (arrow, priv->arrow_type);
+  gtk_container_add (GTK_CONTAINER (priv->button), GTK_WIDGET (arrow));
   priv->arrow_widget = arrow;
 }
 
@@ -716,7 +716,7 @@ gtk_menu_button_set_direction (GtkMenuButton *menu_button,
 
   /* Is it custom content? We don't change that */
   child = gtk_bin_get_child (GTK_BIN (priv->button));
-  if (priv->arrow_widget != child)
+  if (GTK_WIDGET (priv->arrow_widget) != child)
     return;
 
   set_arrow_type (GTK_IMAGE (child), priv->arrow_type);
@@ -907,7 +907,7 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_label_new (label)));
-  gtk_container_add (GTK_CONTAINER (box), gtk_image_new_from_icon_name ("pan-down-symbolic"));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_image_new_from_icon_name ("pan-down-symbolic")));
   gtk_container_add (GTK_CONTAINER (priv->button), box);
 
   g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_LABEL]);

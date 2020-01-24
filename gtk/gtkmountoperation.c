@@ -557,7 +557,8 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   GtkWidget *widget;
   GtkDialog *dialog;
   GtkWindow *window;
-  GtkWidget *hbox, *main_vbox, *icon;
+  GtkWidget *hbox, *main_vbox;
+  GtkImage *icon;
   GtkWidget *grid;
   GtkLabel *label;
   GtkWidget *content_area, *action_area;
@@ -604,11 +605,11 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   gtk_container_add (GTK_CONTAINER (content_area), hbox);
 
   icon = gtk_image_new_from_icon_name ("dialog-password");
-  gtk_image_set_icon_size (GTK_IMAGE (icon), GTK_ICON_SIZE_LARGE);
+  gtk_image_set_icon_size (icon, GTK_ICON_SIZE_LARGE);
 
-  gtk_widget_set_halign (icon, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (icon, GTK_ALIGN_START);
-  gtk_container_add (GTK_CONTAINER (hbox), icon);
+  gtk_widget_set_halign (GTK_WIDGET (icon), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (icon), GTK_ALIGN_START);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (icon));
 
   main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
   gtk_container_add (GTK_CONTAINER (hbox), main_vbox);

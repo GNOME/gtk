@@ -92,7 +92,8 @@ main (int argc, char *argv[])
     {
       GError *error;
       GdkPaintable *paintable;
-      GtkWidget *window, *image;
+      GtkWidget *window;
+      GtkImage *image;
 
       if (argc < 4)
 	{
@@ -117,9 +118,9 @@ main (int argc, char *argv[])
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       image = gtk_image_new ();
-      gtk_image_set_from_paintable (GTK_IMAGE (image), paintable);
+      gtk_image_set_from_paintable (image, paintable);
       g_object_unref (paintable);
-      gtk_container_add (GTK_CONTAINER (window), image);
+      gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (image));
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
       gtk_widget_show (window);
       
@@ -127,7 +128,8 @@ main (int argc, char *argv[])
     }
   else if (strcmp (argv[1], "display-async") == 0)
     {
-      GtkWidget *window, *image;
+      GtkWidget *window;
+      GtkImage *image;
       GtkIconInfo *info;
 
       if (argc < 4)
@@ -145,7 +147,7 @@ main (int argc, char *argv[])
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       image = gtk_image_new ();
-      gtk_container_add (GTK_CONTAINER (window), image);
+      gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (image));
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
       gtk_widget_show (window);
 

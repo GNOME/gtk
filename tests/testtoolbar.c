@@ -397,7 +397,8 @@ main (gint argc, gchar **argv)
 					   "both (horizontal)" };
   GtkToolItem *item;
   GtkListStore *store;
-  GtkWidget *image;
+  GtkImage *image;
+  GtkWidget *spinner;
   GtkWidget *menuitem;
   GtkWidget *box;
   GtkWidget *button;
@@ -512,10 +513,10 @@ main (gint argc, gchar **argv)
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
   
   image = gtk_image_new_from_icon_name ("dialog-warning");
-  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
+  gtk_image_set_icon_size (image, GTK_ICON_SIZE_LARGE);
   item = gtk_tool_item_new ();
-  gtk_widget_show (image);
-  gtk_container_add (GTK_CONTAINER (item), image);
+  gtk_widget_show (GTK_WIDGET (image));
+  gtk_container_add (GTK_CONTAINER (item), GTK_WIDGET (image));
   add_item_to_list (store, item, "(Custom Item)");    
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
   
@@ -571,7 +572,7 @@ main (gint argc, gchar **argv)
   add_item_to_list (store, item, "Right");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
-  item = gtk_tool_button_new (gtk_image_new_from_file ("apple-red.png"), "_Apple");
+  item = gtk_tool_button_new (GTK_WIDGET (gtk_image_new_from_file ("apple-red.png")), "_Apple");
   add_item_to_list (store, item, "Apple");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
   gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON (item), TRUE);
@@ -579,18 +580,18 @@ main (gint argc, gchar **argv)
   gicon = g_content_type_get_icon ("video/ogg");
   image = gtk_image_new_from_gicon (gicon);
   g_object_unref (gicon);
-  item = gtk_tool_button_new (image, "Video");
+  item = gtk_tool_button_new (GTK_WIDGET (image), "Video");
   add_item_to_list (store, item, "Video");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
   image = gtk_image_new_from_icon_name ("utilities-terminal");
-  item = gtk_tool_button_new (image, "Terminal");
+  item = gtk_tool_button_new (GTK_WIDGET (image), "Terminal");
   add_item_to_list (store, item, "Terminal");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
-  image = gtk_spinner_new ();
-  gtk_spinner_start (GTK_SPINNER (image));
-  item = gtk_tool_button_new (image, "Spinner");
+  spinner = gtk_spinner_new ();
+  gtk_spinner_start (GTK_SPINNER (spinner));
+  item = gtk_tool_button_new (spinner, "Spinner");
   add_item_to_list (store, item, "Spinner");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 

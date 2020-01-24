@@ -24,7 +24,7 @@
 #define CUSTOM_ITEM "custom-item"
 
 static GtkWidget *toplevel, *button, *box;
-static GtkWidget *sel_image;
+static GtkImage *sel_image;
 static GtkLabel *sel_name;
 
 static void
@@ -38,7 +38,7 @@ combo_changed_cb (GtkAppChooserButton *button,
   if (app_info == NULL)
     return;
 
-  gtk_image_set_from_gicon (GTK_IMAGE (sel_image), g_app_info_get_icon (app_info));
+  gtk_image_set_from_gicon (sel_image, g_app_info_get_icon (app_info));
   gtk_label_set_text (sel_name, g_app_info_get_display_name (app_info));
 
   g_object_unref (app_info);
@@ -49,7 +49,7 @@ special_item_activated_cb (GtkAppChooserButton *b,
                            const gchar *item_name,
                            gpointer user_data)
 {
-  gtk_image_set_from_gicon (GTK_IMAGE (sel_image), g_themed_icon_new ("face-smile"));
+  gtk_image_set_from_gicon (sel_image, g_themed_icon_new ("face-smile"));
   gtk_label_set_text (sel_name, "Special Item");
 }
 
@@ -89,7 +89,7 @@ main (int argc,
   gtk_container_add (GTK_CONTAINER (box), w);
 
   sel_image = gtk_image_new ();
-  gtk_container_add (GTK_CONTAINER (w), sel_image);
+  gtk_container_add (GTK_CONTAINER (w), GTK_WIDGET (sel_image));
   sel_name = gtk_label_new (NULL);
   gtk_container_add (GTK_CONTAINER (w), GTK_WIDGET (sel_name));
 

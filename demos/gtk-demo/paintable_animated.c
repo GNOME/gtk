@@ -184,7 +184,7 @@ GtkWidget *
 do_paintable_animated (GtkWidget *do_widget)
 {
   GdkPaintable *nuclear;
-  GtkWidget *image;
+  GtkImage *image;
 
   if (!window)
     {
@@ -196,7 +196,7 @@ do_paintable_animated (GtkWidget *do_widget)
 
       nuclear = gtk_nuclear_animation_new ();
       image = gtk_image_new_from_paintable (nuclear);
-      gtk_container_add (GTK_CONTAINER (window), image);
+      gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (image));
       g_object_unref (nuclear);
     }
 

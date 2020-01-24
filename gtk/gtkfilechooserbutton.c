@@ -191,7 +191,7 @@ typedef struct
   GtkFileChooserNative *native; /* Otherwise this is set */
   GtkWidget *box;
   GtkWidget *button;
-  GtkWidget *image;
+  GtkImage *image;
   GtkLabel *label;
   GtkComboBox *combo_box;
   GtkCellRenderer *icon_cell;
@@ -443,7 +443,7 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
 {
   GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
   GtkWidget *box;
-  GtkWidget *icon;
+  GtkImage *icon;
   GdkContentFormatsBuilder *builder;
   GdkContentFormats *target_list;
   GtkDropTarget *dest;
@@ -456,12 +456,12 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   gtk_widget_set_hexpand (GTK_WIDGET (priv->label), TRUE);
   icon = gtk_image_new_from_icon_name ("document-open-symbolic");
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_widget_set_valign (priv->image, GTK_ALIGN_BASELINE);
-  gtk_container_add (GTK_CONTAINER (box), priv->image);
+  gtk_widget_set_valign (GTK_WIDGET (priv->image), GTK_ALIGN_BASELINE);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (priv->image));
   gtk_widget_set_valign (GTK_WIDGET (priv->label), GTK_ALIGN_BASELINE);
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (priv->label));
-  gtk_widget_set_valign (icon, GTK_ALIGN_BASELINE);
-  gtk_container_add (GTK_CONTAINER (box), icon);
+  gtk_widget_set_valign (GTK_WIDGET (icon), GTK_ALIGN_BASELINE);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (icon));
   gtk_container_add (GTK_CONTAINER (priv->button), box);
 
   gtk_widget_set_parent (priv->button, GTK_WIDGET (button));
@@ -2377,8 +2377,8 @@ update_label_get_info_cb (GCancellable *cancellable,
   gtk_label_set_text (priv->label, g_file_info_get_display_name (info));
 
   icon = _gtk_file_info_get_icon (info, ICON_SIZE, gtk_widget_get_scale_factor (GTK_WIDGET (button)));
-  gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon);
-  gtk_image_set_pixel_size (GTK_IMAGE (priv->image), ICON_SIZE);
+  gtk_image_set_from_gicon (priv->image, icon);
+  gtk_image_set_pixel_size (priv->image, ICON_SIZE);
   if (icon)
     g_object_unref (icon);
 
@@ -2424,8 +2424,8 @@ update_label_and_image (GtkFileChooserButton *button)
 
               label_text = _gtk_file_system_volume_get_display_name (volume);
               icon = _gtk_file_system_volume_get_icon (volume);
-              gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon);
-              gtk_image_set_pixel_size (GTK_IMAGE (priv->image), ICON_SIZE);
+              gtk_image_set_from_gicon (priv->image, icon);
+              gtk_image_set_pixel_size (priv->image, ICON_SIZE);
               if (icon)
                 g_object_unref (icon);
             }
@@ -2456,8 +2456,8 @@ update_label_and_image (GtkFileChooserButton *button)
 
           label_text = _gtk_bookmarks_manager_get_bookmark_label (priv->bookmarks_manager, file);
           icon = g_themed_icon_new ("text-x-generic");
-          gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon);
-          gtk_image_set_pixel_size (GTK_IMAGE (priv->image), ICON_SIZE);
+          gtk_image_set_from_gicon (priv->image, icon);
+          gtk_image_set_pixel_size (priv->image, ICON_SIZE);
           if (icon)
             g_object_unref (icon);
 
@@ -2483,7 +2483,7 @@ out:
   else
     {
       gtk_label_set_text (priv->label, _(FALLBACK_DISPLAY_NAME));
-      gtk_image_set_from_gicon (GTK_IMAGE (priv->image), NULL);
+      gtk_image_set_from_gicon (priv->image, NULL);
     }
 
   if (done_changing_selection)

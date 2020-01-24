@@ -108,7 +108,7 @@ struct _ButtonData
   ButtonType type;
   char *dir_name;
   GFile *file;
-  GtkWidget *image;
+  GtkImage *image;
   GtkLabel *label;
   GCancellable *cancellable;
   guint ignore_changes : 1;
@@ -1132,7 +1132,7 @@ set_button_image_get_info_cb (GCancellable *cancellable,
     goto out;
 
   icon = g_file_info_get_symbolic_icon (info);
-  gtk_image_set_from_gicon (GTK_IMAGE (data->button_data->image), icon);
+  gtk_image_set_from_gicon (data->button_data->image, icon);
 
   switch (data->button_data->type)
     {
@@ -1168,7 +1168,7 @@ set_button_image (GtkPathBar *path_bar,
 
       if (priv->root_icon != NULL)
         {
-          gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), priv->root_icon);
+          gtk_image_set_from_gicon (button_data->image, priv->root_icon);
 	  break;
 	}
 
@@ -1178,14 +1178,14 @@ set_button_image (GtkPathBar *path_bar,
 
       priv->root_icon = _gtk_file_system_volume_get_symbolic_icon (volume);
       _gtk_file_system_volume_unref (volume);
-      gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), priv->root_icon);
+      gtk_image_set_from_gicon (button_data->image, priv->root_icon);
 
       break;
 
     case HOME_BUTTON:
       if (priv->home_icon != NULL)
         {
-          gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), priv->home_icon);
+          gtk_image_set_from_gicon (button_data->image, priv->home_icon);
 	  break;
 	}
 
@@ -1210,7 +1210,7 @@ set_button_image (GtkPathBar *path_bar,
     case DESKTOP_BUTTON:
       if (priv->desktop_icon != NULL)
         {
-          gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), priv->desktop_icon);
+          gtk_image_set_from_gicon (button_data->image, priv->desktop_icon);
 	  break;
 	}
 
@@ -1332,7 +1332,7 @@ make_directory_button (GtkPathBar  *path_bar,
     {
     case ROOT_BUTTON:
       button_data->image = gtk_image_new ();
-      child = button_data->image;
+      child = GTK_WIDGET (button_data->image);
       button_data->label = NULL;
       atk_object_set_name (atk_obj, _("File System Root"));
       break;
@@ -1341,7 +1341,7 @@ make_directory_button (GtkPathBar  *path_bar,
       button_data->image = gtk_image_new ();
       button_data->label = gtk_label_new (NULL);
       child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_container_add (GTK_CONTAINER (child), button_data->image);
+      gtk_container_add (GTK_CONTAINER (child), GTK_WIDGET (button_data->image));
       gtk_container_add (GTK_CONTAINER (child), GTK_WIDGET (button_data->label));
       break;
     case NORMAL_BUTTON:
