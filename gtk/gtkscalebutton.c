@@ -524,7 +524,7 @@ gtk_scale_button_dispose (GObject *object)
  *
  * Returns: a new #GtkScaleButton
  */
-GtkWidget *
+GtkScaleButton *
 gtk_scale_button_new (gdouble       min,
 		      gdouble       max,
 		      gdouble       step,
@@ -540,7 +540,7 @@ gtk_scale_button_new (gdouble       min,
                          "icons", icons,
                          NULL);
 
-  return GTK_WIDGET (button);
+  return button;
 }
 
 /**
