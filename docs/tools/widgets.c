@@ -743,11 +743,11 @@ static WidgetInfo *
 create_print_dialog (void)
 {
   WidgetInfo *info;
-  GtkWidget *widget;
+  GtkPrintUnixDialog *widget;
 
   widget = gtk_print_unix_dialog_new ("Print Dialog", NULL);   
   gtk_widget_set_size_request (widget, 505, 350);
-  info = new_widget_info ("printdialog", widget, ASIS);
+  info = new_widget_info ("printdialog", GTK_WIDGET (widget), ASIS);
   info->include_decorations = TRUE;
 
   return info;

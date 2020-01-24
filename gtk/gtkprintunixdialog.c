@@ -3419,11 +3419,11 @@ page_name_func (GtkCellLayout   *cell_layout,
  *
  * Returns: a new #GtkPrintUnixDialog
  */
-GtkWidget *
+GtkPrintUnixDialog *
 gtk_print_unix_dialog_new (const gchar *title,
                            GtkWindow   *parent)
 {
-  GtkWidget *result;
+  GtkPrintUnixDialog *result;
 
   result = g_object_new (GTK_TYPE_PRINT_UNIX_DIALOG,
                          "transient-for", parent,

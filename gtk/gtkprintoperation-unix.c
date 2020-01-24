@@ -425,12 +425,12 @@ print_setup_changed_cb (GtkPrintUnixDialog *print_dialog,
                          print_settings);
 }
 
-static GtkWidget *
+static GtkPrintUnixDialog *
 get_print_dialog (GtkPrintOperation *op,
                   GtkWindow         *parent)
 {
   GtkPrintOperationPrivate *priv = op->priv;
-  GtkWidget *pd;
+  GtkPrintUnixDialog *pd;
   const gchar *custom_tab_label;
 
   pd = gtk_print_unix_dialog_new (NULL, parent);
@@ -446,23 +446,23 @@ get_print_dialog (GtkPrintOperation *op,
 						 GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT);
 
   if (priv->print_settings)
-    gtk_print_unix_dialog_set_settings (GTK_PRINT_UNIX_DIALOG (pd),
+    gtk_print_unix_dialog_set_settings (pd,
 					priv->print_settings);
 
   if (priv->default_page_setup)
-    gtk_print_unix_dialog_set_page_setup (GTK_PRINT_UNIX_DIALOG (pd), 
+    gtk_print_unix_dialog_set_page_setup (pd,
                                           priv->default_page_setup);
 
-  gtk_print_unix_dialog_set_embed_page_setup (GTK_PRINT_UNIX_DIALOG (pd),
+  gtk_print_unix_dialog_set_embed_page_setup (pd,
                                               priv->embed_page_setup);
 
-  gtk_print_unix_dialog_set_current_page (GTK_PRINT_UNIX_DIALOG (pd), 
+  gtk_print_unix_dialog_set_current_page (pd,
                                           priv->current_page);
 
-  gtk_print_unix_dialog_set_support_selection (GTK_PRINT_UNIX_DIALOG (pd),
+  gtk_print_unix_dialog_set_support_selection (pd,
                                                priv->support_selection);
 
-  gtk_print_unix_dialog_set_has_selection (GTK_PRINT_UNIX_DIALOG (pd),
+  gtk_print_unix_dialog_set_has_selection (pd,
                                            priv->has_selection);
 
   g_signal_emit_by_name (op, "create-custom-widget",
@@ -483,7 +483,7 @@ get_print_dialog (GtkPrintOperation *op,
 
       label = gtk_label_new (custom_tab_label);
       
-      gtk_print_unix_dialog_add_custom_tab (GTK_PRINT_UNIX_DIALOG (pd),
+      gtk_print_unix_dialog_add_custom_tab (pd,
 					    priv->custom_widget, GTK_WIDGET (label));
 
       g_signal_connect (pd, "notify::selected-printer", (GCallback) print_setup_changed_cb, op);
@@ -623,7 +623,7 @@ handle_print_response (GtkWidget *dialog,
 
   if (response == GTK_RESPONSE_OK)
     {
-      printer = gtk_print_unix_dialog_get_selected_printer (GTK_PRINT_UNIX_DIALOG (pd));
+      printer = gtk_print_unix_dialog_get_selected_printer (pd);
 
       rdata->result = GTK_PRINT_OPERATION_RESULT_APPLY;
       rdata->do_preview = FALSE;
@@ -642,9 +642,9 @@ handle_print_response (GtkWidget *dialog,
 
   if (rdata->do_print)
     {
-      settings = gtk_print_unix_dialog_get_settings (GTK_PRINT_UNIX_DIALOG (pd));
-      page_setup = gtk_print_unix_dialog_get_page_setup (GTK_PRINT_UNIX_DIALOG (pd));
-      page_setup_set = gtk_print_unix_dialog_get_page_setup_set (GTK_PRINT_UNIX_DIALOG (pd));
+      settings = gtk_print_unix_dialog_get_settings (pd);
+      page_setup = gtk_print_unix_dialog_get_page_setup (pd);
+      page_setup_set = gtk_print_unix_dialog_get_page_setup_set (pd);
 
       /* Set new print settings now so that custom-widget options
        * can be added to the settings in the callback
@@ -710,7 +710,7 @@ gtk_print_operation_unix_run_dialog_async (GtkPrintOperation          *op,
                                            GtkWindow                  *parent,
                                            GtkPrintOperationPrintFunc  print_cb)
 {
-  GtkWidget *pd;
+  GtkPrintUnixDialog *pd;
   PrintResponseData *rdata;
   const gchar *printer_name;
 
@@ -729,7 +729,7 @@ gtk_print_operation_unix_run_dialog_async (GtkPrintOperation          *op,
       pd = get_print_dialog (op, parent);
       gtk_window_set_modal (GTK_WINDOW (pd), TRUE);
 
-      g_signal_connect (pd, "response", 
+      g_signal_connect (pd, "response",
 			G_CALLBACK (handle_print_response), rdata);
 
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS
@@ -851,7 +851,7 @@ gtk_print_operation_unix_run_dialog (GtkPrintOperation *op,
                                      GtkWindow         *parent,
                                      gboolean          *do_print)
  {
-  GtkWidget *pd;
+  GtkPrintUnixDialog *pd;
   PrintResponseData rdata;
   gint response;  
   const gchar *printer_name;
@@ -870,7 +870,7 @@ gtk_print_operation_unix_run_dialog (GtkPrintOperation *op,
       pd = get_print_dialog (op, parent);
 
       response = gtk_dialog_run (GTK_DIALOG (pd));
-      handle_print_response (pd, response, &rdata);
+      handle_print_response (GTK_WIDGET (pd), response, &rdata);
     }
   else
     {
