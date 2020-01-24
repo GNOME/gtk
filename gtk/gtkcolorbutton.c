@@ -229,6 +229,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
+  gtk_widget_class_set_css_name (widget_class, "colorbutton");
 }
 
 static void
