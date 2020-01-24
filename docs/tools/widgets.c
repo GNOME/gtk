@@ -1123,11 +1123,11 @@ static WidgetInfo *
 create_fontchooserdialog (void)
 {
   WidgetInfo *info;
-  GtkWidget *widget;
+  GtkFontChooserDialog *widget;
 
   widget = gtk_font_chooser_dialog_new ("Font Chooser Dialog", NULL);
   gtk_window_set_default_size (GTK_WINDOW (widget), 200, 300);
-  info = new_widget_info ("fontchooser", widget, ASIS);
+  info = new_widget_info ("fontchooser", GTK_WIDGET (widget), ASIS);
   info->include_decorations = TRUE;
 
   return info;

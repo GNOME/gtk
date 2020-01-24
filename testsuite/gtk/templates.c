@@ -296,11 +296,11 @@ test_font_chooser_widget_basic (void)
 static void
 test_font_chooser_dialog_basic (void)
 {
-  GtkWidget *widget;
+  GtkFontChooserDialog *widget;
 
   widget = gtk_font_chooser_dialog_new ("Choose a font !", NULL);
   g_assert (GTK_IS_FONT_CHOOSER_DIALOG (widget));
-  gtk_widget_destroy (widget);
+  gtk_widget_destroy (GTK_WIDGET (widget));
 }
 
 #ifdef HAVE_UNIX_PRINT_WIDGETS
