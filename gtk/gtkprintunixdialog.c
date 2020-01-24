@@ -3338,7 +3338,7 @@ paper_size_changed (GtkComboBox        *combo_box,
 
       if (page_setup == NULL)
         {
-          GtkWidget *custom_paper_dialog;
+          GtkCustomPaperUnixDialog *custom_paper_dialog;
 
           /* Change from "manage" menu item to last value */
           if (priv->page_setup)

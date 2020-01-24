@@ -59,13 +59,13 @@ struct _GtkCustomPaperUnixDialogClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType             gtk_custom_paper_unix_dialog_get_type           (void) G_GNUC_CONST;
-GtkWidget *       _gtk_custom_paper_unix_dialog_new                (GtkWindow   *parent,
-								   const gchar *title);
-GtkUnit           _gtk_print_get_default_user_units                (void);
-void              _gtk_print_load_custom_papers                    (GtkListStore *store);
-void              _gtk_print_save_custom_papers                    (GtkListStore *store);
-GList *           _gtk_load_custom_papers                          (void);
+GType                      gtk_custom_paper_unix_dialog_get_type           (void) G_GNUC_CONST;
+GtkCustomPaperUnixDialog * _gtk_custom_paper_unix_dialog_new                (GtkWindow   *parent,
+                                                                            const gchar *title);
+GtkUnit                    _gtk_print_get_default_user_units                (void);
+void                       _gtk_print_load_custom_papers                    (GtkListStore *store);
+void                       _gtk_print_save_custom_papers                    (GtkListStore *store);
+GList *                    _gtk_load_custom_papers                          (void);
 
 
 G_END_DECLS
