@@ -8,7 +8,7 @@ rect_equal (const graphene_rect_t *a,
   return memcmp (a, b, sizeof (graphene_rect_t)) == 0;
 }
 
-static inline gboolean
+static inline gboolean G_GNUC_PURE
 rounded_rect_equal (const GskRoundedRect *r1,
                     const GskRoundedRect *r2)
 {
@@ -31,7 +31,7 @@ rounded_rect_equal (const GskRoundedRect *r1,
   return TRUE;
 }
 
-static inline gboolean
+static inline gboolean G_GNUC_PURE
 rounded_rect_corners_equal (const GskRoundedRect *r1,
                             const GskRoundedRect *r2)
 {

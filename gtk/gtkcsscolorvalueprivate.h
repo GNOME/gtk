@@ -24,18 +24,18 @@
 G_BEGIN_DECLS
 
 
-GtkCssValue *   gtk_css_color_value_new_transparent     (void);
-GtkCssValue *   gtk_css_color_value_new_white           (void);
-GtkCssValue *   _gtk_css_color_value_new_literal        (const GdkRGBA  *color);
-GtkCssValue *   _gtk_css_color_value_new_name           (const gchar    *name);
+GtkCssValue *   gtk_css_color_value_new_transparent     (void) G_GNUC_PURE;
+GtkCssValue *   gtk_css_color_value_new_white           (void) G_GNUC_PURE;
+GtkCssValue *   _gtk_css_color_value_new_literal        (const GdkRGBA  *color) G_GNUC_PURE;
+GtkCssValue *   _gtk_css_color_value_new_name           (const gchar    *name) G_GNUC_PURE;
 GtkCssValue *   _gtk_css_color_value_new_shade          (GtkCssValue    *color,
-                                                         gdouble         factor);
+                                                         gdouble         factor) G_GNUC_PURE;
 GtkCssValue *   _gtk_css_color_value_new_alpha          (GtkCssValue    *color,
-                                                         gdouble         factor);
+                                                         gdouble         factor) G_GNUC_PURE;
 GtkCssValue *   _gtk_css_color_value_new_mix            (GtkCssValue    *color1,
                                                          GtkCssValue    *color2,
-                                                         gdouble         factor);
-GtkCssValue *   _gtk_css_color_value_new_current_color  (void);
+                                                         gdouble         factor) G_GNUC_PURE;
+GtkCssValue *   _gtk_css_color_value_new_current_color  (void) G_GNUC_PURE;
 
 gboolean        gtk_css_color_value_can_parse           (GtkCssParser   *parser);
 GtkCssValue *   _gtk_css_color_value_parse              (GtkCssParser   *parser);
@@ -44,7 +44,7 @@ GtkCssValue *   _gtk_css_color_value_resolve            (GtkCssValue      *color
                                                          GtkStyleProvider *provider,
                                                          GtkCssValue      *current,
                                                          GSList           *cycle_list);
-const GdkRGBA * gtk_css_color_value_get_rgba            (const GtkCssValue *color);
+const GdkRGBA * gtk_css_color_value_get_rgba            (const GtkCssValue *color) G_GNUC_CONST;
 
 
 G_END_DECLS
