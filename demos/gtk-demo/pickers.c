@@ -10,7 +10,9 @@ GtkWidget *
 do_pickers (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
-  GtkWidget *table, *picker;
+  GtkWidget *table;
+  GtkWidget *picker;
+  GtkColorButton *color_button;
   GtkLabel *label;
 
   if (!window)
@@ -33,9 +35,9 @@ do_pickers (GtkWidget *do_widget)
     gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
     gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
     gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
-    picker = gtk_color_button_new ();
+    color_button = gtk_color_button_new ();
     gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 0, 0, 1, 1);
-    gtk_grid_attach (GTK_GRID (table), picker, 1, 0, 1, 1);
+    gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (color_button), 1, 0, 1, 1);
 
     label = gtk_label_new ("Font:");
     gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);

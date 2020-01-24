@@ -382,7 +382,8 @@ do_paint (GtkWidget *toplevel)
 
   if (!window)
     {
-      GtkWidget *draw_area, *headerbar, *colorbutton;
+      GtkWidget *draw_area, *headerbar;
+      GtkColorButton *colorbutton;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
@@ -401,7 +402,7 @@ do_paint (GtkWidget *toplevel)
       gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (colorbutton),
                                   &(GdkRGBA) { 0, 0, 0, 1 });
 
-      gtk_header_bar_pack_end (GTK_HEADER_BAR (headerbar), colorbutton);
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (headerbar), GTK_WIDGET (colorbutton));
       gtk_window_set_titlebar (GTK_WINDOW (window), headerbar);
 
       g_signal_connect (window, "destroy",
