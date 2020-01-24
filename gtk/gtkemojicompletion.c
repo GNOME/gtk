@@ -648,7 +648,7 @@ gtk_emoji_completion_class_init (GtkEmojiCompletionClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, row_activated);
 }
 
-GtkWidget *
+GtkEmojiCompletion *
 gtk_emoji_completion_new (GtkText *text)
 {
   GtkEmojiCompletion *completion;
@@ -659,5 +659,5 @@ gtk_emoji_completion_new (GtkText *text)
 
   connect_signals (completion, text);
 
-  return GTK_WIDGET (completion);
+  return completion;
 }
