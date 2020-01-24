@@ -70,6 +70,7 @@ struct _GtkIMContextWayland
   GtkIMContextSimple parent_instance;
   GtkWidget *widget;
 
+  GtkEventController *key_controller;
   GtkGesture *gesture;
   gdouble press_x;
   gdouble press_y;
@@ -474,6 +475,7 @@ gtk_im_context_wayland_finalize (GObject *object)
   GtkIMContextWayland *context = GTK_IM_CONTEXT_WAYLAND (object);
 
   g_clear_object (&context->widget);
+  g_clear_object (&context->key_controller);
   g_clear_object (&context->gesture);
   g_free (context->surrounding.text);
   g_free (context->current_preedit.text);
@@ -533,12 +535,17 @@ gtk_im_context_wayland_set_client_widget (GtkIMContext *context,
                                           GtkWidget    *widget)
 {
   GtkIMContextWayland *context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
+  GtkWidget *toplevel;
 
   if (widget == context_wayland->widget)
     return;
 
   if (context_wayland->widget)
     {
+      toplevel = gtk_widget_get_ancestor (context_wayland->widget, GTK_TYPE_WINDOW);
+      if (toplevel)
+        gtk_widget_remove_controller (toplevel, context_wayland->key_controller);
+      context_wayland->key_controller = NULL;
       gtk_widget_remove_controller (context_wayland->widget, GTK_EVENT_CONTROLLER (context_wayland->gesture));
       context_wayland->gesture = NULL;
     }
@@ -558,6 +565,16 @@ gtk_im_context_wayland_set_client_widget (GtkIMContext *context,
                         G_CALLBACK (released_cb), context);
       gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
       context_wayland->gesture = gesture;
+
+      toplevel = gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
+      if (!toplevel)
+        return;
+      context_wayland->key_controller = gtk_event_controller_key_new ();
+      gtk_event_controller_set_propagation_phase (context_wayland->key_controller,
+                                                  GTK_PHASE_CAPTURE);
+      gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (context_wayland->key_controller),
+                                               context);
+      gtk_widget_add_controller (toplevel, context_wayland->key_controller);
     }
 }
 
