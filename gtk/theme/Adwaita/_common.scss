@@ -2531,13 +2531,13 @@ scrollbar {
   }
 
   > range.fine-tune {
-    slider {
+    > trough > slider {
       min-width: 4px;
       min-height: 4px;
     }
 
-    &.horizontal slider { border-width: 5px 4px; }
-    &.vertical slider { border-width: 4px 5px; }
+    &.horizontal > trough > slider { border-width: 5px 4px; }
+    &.vertical > trough > slider { border-width: 4px 5px; }
   }
 
   &.overlay-indicator {
@@ -2553,40 +2553,6 @@ scrollbar {
         background-color: $fg_color;
         border: 1px solid if($variant == 'light', white, black);
       }
-
-      > button {
-        min-width: 5px;
-        min-height: 5px;
-        background-color: $fg_color;
-        background-clip: padding-box;
-        border-radius: 100%;
-        border: 1px solid if($variant == 'light', white, black);
-        -gtk-icon-source: none;
-      }
-
-      &.horizontal {
-        > slider {
-          margin: 0 2px;
-          min-width: $_slider_min_length;
-        }
-
-        > button {
-          margin: 1px 2px;
-          min-width: 5px;
-        }
-      }
-
-      &.vertical {
-        > slider {
-          margin: 2px 0;
-          min-height: $_slider_min_length;
-        }
-
-        > button {
-          margin: 2px 1px;
-          min-height: 5px;
-        }
-      }
     }
 
     &.dragging,
@@ -2596,63 +2562,6 @@ scrollbar {
   &.horizontal > range > trough > slider { min-width: $_slider_min_length; }
 
   &.vertical > range > trough > slider { min-height: $_slider_min_length; }
-
-  > button {
-    padding: 0;
-    min-width: 12px;
-    min-height: 12px;
-    border-style: none;
-    border-radius: 0;
-    transition-property: min-height, min-width, color;
-
-    @include button(undecorated);
-
-    color: $scrollbar_slider_color;
-
-    &:hover {
-      @include button(undecorated);
-
-      color: $scrollbar_slider_hover_color;
-    }
-    &:active, &:checked {
-      @include button(undecorated);
-
-      color: $scrollbar_slider_active_color;
-    }
-    &:disabled {
-      @include button(undecorated);
-
-      color: transparentize($scrollbar_slider_color, 0.8);
-    }
-    &:backdrop {
-      @include button(undecorated);
-
-      color: $backdrop_scrollbar_slider_color;
-
-      &:disabled {
-        @include button(undecorated);
-
-        color: transparentize($backdrop_scrollbar_slider_color, 0.8);
-      }
-    }
-  }
-
-  // button icons
-  &.vertical {
-    button {
-      &.down { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
-
-      &.up { -gtk-icon-source: -gtk-icontheme('pan-up-symbolic'); }
-    }
-  }
-
-  &.horizontal {
-    button {
-      &.down { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic'); }
-
-      &.up { -gtk-icon-source: -gtk-icontheme('pan-start-symbolic'); }
-    }
-  }
 }
 
 treeview ~ scrollbar.vertical {
@@ -3687,7 +3596,6 @@ scrolledwindow {
       &:backdrop { @include overshoot(right, backdrop); }
     }
   }
-
 
   > junction { // the small square between two scrollbars
     // Only color the top-left (or top right in RTL) pixel, to visually connect

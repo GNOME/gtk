@@ -986,51 +986,21 @@ scrollbar > range > trough > slider:backdrop { background-color: #cecfce; }
 
 scrollbar > range > trough > slider:disabled { background-color: transparent; }
 
-scrollbar > range.fine-tune slider { min-width: 4px; min-height: 4px; }
+scrollbar > range.fine-tune > trough > slider { min-width: 4px; min-height: 4px; }
 
-scrollbar > range.fine-tune.horizontal slider { border-width: 5px 4px; }
+scrollbar > range.fine-tune.horizontal > trough > slider { border-width: 5px 4px; }
 
-scrollbar > range.fine-tune.vertical slider { border-width: 4px 5px; }
+scrollbar > range.fine-tune.vertical > trough > slider { border-width: 4px 5px; }
 
 scrollbar.overlay-indicator:not(.dragging):not(.hovering) { border-color: transparent; opacity: 0.4; background-color: transparent; }
 
 scrollbar.overlay-indicator:not(.dragging):not(.hovering) > range > trough > slider { margin: 0; min-width: 3px; min-height: 3px; background-color: #2e3436; border: 1px solid white; }
-
-scrollbar.overlay-indicator:not(.dragging):not(.hovering) > button { min-width: 5px; min-height: 5px; background-color: #2e3436; background-clip: padding-box; border-radius: 100%; border: 1px solid white; -gtk-icon-source: none; }
-
-scrollbar.overlay-indicator:not(.dragging):not(.hovering).horizontal > slider { margin: 0 2px; min-width: 40px; }
-
-scrollbar.overlay-indicator:not(.dragging):not(.hovering).horizontal > button { margin: 1px 2px; min-width: 5px; }
-
-scrollbar.overlay-indicator:not(.dragging):not(.hovering).vertical > slider { margin: 2px 0; min-height: 40px; }
-
-scrollbar.overlay-indicator:not(.dragging):not(.hovering).vertical > button { margin: 2px 1px; min-height: 5px; }
 
 scrollbar.overlay-indicator.dragging, scrollbar.overlay-indicator.hovering { opacity: 0.8; }
 
 scrollbar.horizontal > range > trough > slider { min-width: 40px; }
 
 scrollbar.vertical > range > trough > slider { min-height: 40px; }
-
-scrollbar > button { padding: 0; min-width: 12px; min-height: 12px; border-style: none; border-radius: 0; transition-property: min-height, min-width, color; border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; color: #7e8182; }
-
-scrollbar > button:hover { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; color: #565b5c; }
-
-scrollbar > button:active, scrollbar > button:checked { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; color: #1b6acb; }
-
-scrollbar > button:disabled { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; color: rgba(126, 129, 130, 0.2); }
-
-scrollbar > button:backdrop { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; color: #cecfce; }
-
-scrollbar > button:backdrop:disabled { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; color: rgba(206, 207, 206, 0.2); }
-
-scrollbar.vertical button.down { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
-
-scrollbar.vertical button.up { -gtk-icon-source: -gtk-icontheme("pan-up-symbolic"); }
-
-scrollbar.horizontal button.down { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
-
-scrollbar.horizontal button.up { -gtk-icon-source: -gtk-icontheme("pan-start-symbolic"); }
 
 treeview ~ scrollbar.vertical { border-top: 1px solid #cdc7c2; margin-top: -1px; }
 
