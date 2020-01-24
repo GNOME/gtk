@@ -913,18 +913,16 @@ page_setup_data_free (gpointer data)
 }
 
 static void
-handle_page_setup_response (GtkWidget *dialog,
+handle_page_setup_response (GtkPageSetupUnixDialog *psd,
 			    gint       response,
 			    gpointer   data)
 {
-  GtkPageSetupUnixDialog *psd;
   PageSetupResponseData *rdata = data;
 
-  psd = GTK_PAGE_SETUP_UNIX_DIALOG (dialog);
   if (response == GTK_RESPONSE_OK)
     rdata->page_setup = gtk_page_setup_unix_dialog_get_page_setup (psd);
 
-  gtk_widget_destroy (dialog);
+  gtk_widget_destroy (GTK_WIDGET (psd));
 
   if (rdata->done_cb)
     rdata->done_cb (rdata->page_setup, rdata->data);
@@ -933,12 +931,12 @@ handle_page_setup_response (GtkWidget *dialog,
     rdata->destroy (rdata);
 }
 
-static GtkWidget *
+static GtkPageSetupUnixDialog *
 get_page_setup_dialog (GtkWindow        *parent,
 		       GtkPageSetup     *page_setup,
 		       GtkPrintSettings *settings)
 {
-  GtkWidget *dialog;
+  GtkPageSetupUnixDialog *dialog;
 
   dialog = gtk_page_setup_unix_dialog_new (NULL, parent);
   if (page_setup)
@@ -972,7 +970,7 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
 				 GtkPageSetup     *page_setup,
 				 GtkPrintSettings *settings)
 {
-  GtkWidget *dialog;
+  GtkPageSetupUnixDialog *dialog;
   gint response;
   PageSetupResponseData rdata;  
   
@@ -1015,7 +1013,7 @@ gtk_print_run_page_setup_dialog_async (GtkWindow            *parent,
 				       GtkPageSetupDoneFunc  done_cb,
 				       gpointer              data)
 {
-  GtkWidget *dialog;
+  GtkPageSetupUnixDialog *dialog;
   PageSetupResponseData *rdata;
   
   dialog = get_page_setup_dialog (parent, page_setup, settings);
