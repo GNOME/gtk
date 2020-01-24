@@ -57,8 +57,7 @@ gboolean           _gdk_wayland_keymap_key_is_modifier (GdkKeymap *keymap,
 void       _gdk_wayland_display_init_cursors (GdkWaylandDisplay *display);
 void       _gdk_wayland_display_finalize_cursors (GdkWaylandDisplay *display);
 
-struct wl_cursor_theme * _gdk_wayland_display_get_scaled_cursor_theme (GdkWaylandDisplay *display_wayland,
-                                                                       guint              scale);
+struct wl_cursor_theme * _gdk_wayland_display_get_cursor_theme (GdkWaylandDisplay *display_wayland);
 
 void       _gdk_wayland_display_get_default_cursor_size (GdkDisplay *display,
                                                          guint       *width,
