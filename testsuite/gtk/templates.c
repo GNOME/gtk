@@ -317,11 +317,11 @@ test_page_setup_unix_dialog_basic (void)
 static void
 test_print_unix_dialog_basic (void)
 {
-  GtkWidget *widget;
+  GtkPrintUnixDialog *widget;
 
   widget = gtk_print_unix_dialog_new ("Go Print !", NULL);
   g_assert (GTK_IS_PRINT_UNIX_DIALOG (widget));
-  gtk_widget_destroy (widget);
+  gtk_widget_destroy (GTK_WIDGET (widget));
 }
 #endif
 
