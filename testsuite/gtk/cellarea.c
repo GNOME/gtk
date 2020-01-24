@@ -163,7 +163,7 @@ test_combobox_subclass2 (void)
 static void
 test_cellview_new (void)
 {
-  GtkWidget *view;
+  GtkCellView *view;
   GtkCellArea *area;
 
   view = gtk_cell_view_new ();
@@ -179,7 +179,7 @@ test_cellview_new (void)
 static void
 test_cellview_new_with_context (void)
 {
-  GtkWidget *view;
+  GtkCellView *view;
   GtkCellArea *area;
   GtkCellAreaContext *context;
 
