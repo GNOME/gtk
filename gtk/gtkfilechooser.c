@@ -351,10 +351,10 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    * g_signal_connect (chooser, "confirm-overwrite",
    *                   G_CALLBACK (confirm_overwrite_callback), NULL);
    *
-   * if (gtk_dialog_run (chooser) == GTK_RESPONSE_ACCEPT)
+   * if (gtk_dialog_run (GTK_DIALOG (chooser)) == GTK_RESPONSE_ACCEPT)
    *         save_to_file (gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (chooser));
    *
-   * gtk_widget_destroy (chooser);
+   * gtk_widget_destroy (GTK_WIDGET (chooser));
    * ]|
    *
    * Returns: a #GtkFileChooserConfirmation value that indicates which

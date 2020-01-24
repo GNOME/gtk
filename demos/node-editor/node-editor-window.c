@@ -374,7 +374,7 @@ open_response_cb (GtkWidget        *dialog,
 static void
 show_open_filechooser (NodeEditorWindow *self)
 {
-  GtkWidget *dialog;
+  GtkFileChooserDialog *dialog;
 
   dialog = gtk_file_chooser_dialog_new ("Open node file",
                                         GTK_WINDOW (self),
@@ -387,7 +387,7 @@ show_open_filechooser (NodeEditorWindow *self)
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), ".");
   g_signal_connect (dialog, "response", G_CALLBACK (open_response_cb), self);
-  gtk_widget_show (dialog);
+  gtk_widget_show (GTK_WIDGET (dialog));
 }
 
 static void
@@ -437,7 +437,7 @@ static void
 save_cb (GtkWidget        *button,
          NodeEditorWindow *self)
 {
-  GtkWidget *dialog;
+  GtkFileChooserDialog *dialog;
 
   dialog = gtk_file_chooser_dialog_new ("Save node",
                                         GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
@@ -451,7 +451,7 @@ save_cb (GtkWidget        *button,
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), ".");
   g_signal_connect (dialog, "response", G_CALLBACK (save_response_cb), self);
-  gtk_widget_show (dialog);
+  gtk_widget_show (GTK_WIDGET (dialog));
 }
 
 static GdkTexture *
@@ -550,7 +550,7 @@ export_image_cb (GtkWidget        *button,
                  NodeEditorWindow *self)
 {
   GdkTexture *texture;
-  GtkWidget *dialog;
+  GtkFileChooserDialog *dialog;
 
   texture = create_texture (self);
   if (texture == NULL)
@@ -567,7 +567,7 @@ export_image_cb (GtkWidget        *button,
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
   g_signal_connect (dialog, "response", G_CALLBACK (export_image_response_cb), texture);
-  gtk_widget_show (dialog);
+  gtk_widget_show (GTK_WIDGET (dialog));
 }
 
 static void

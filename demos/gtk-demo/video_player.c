@@ -30,7 +30,7 @@ static void
 open_clicked_cb (GtkWidget *button,
                  GtkWidget *video)
 {
-  GtkWidget *dialog;
+  GtkFileChooserDialog *dialog;
 
   dialog = gtk_file_chooser_dialog_new ("Select a video",
                                         GTK_WINDOW (gtk_widget_get_root (button)),
@@ -41,7 +41,7 @@ open_clicked_cb (GtkWidget *button,
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   g_signal_connect (dialog, "response", G_CALLBACK (open_dialog_response_cb), video);
-  gtk_widget_show (dialog);
+  gtk_widget_show (GTK_WIDGET (dialog));
 }
 
 static void

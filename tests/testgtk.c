@@ -1731,7 +1731,7 @@ cmw_color (GtkWidget *widget, GtkWidget *parent)
 static void
 cmw_file (GtkWidget *widget, GtkWidget *parent)
 {
-    GtkWidget *fs;
+    GtkFileChooserDialog *fs;
 
     fs = gtk_file_chooser_dialog_new ("This is a modal file selection dialog",
                                       GTK_WINDOW (parent),
@@ -1748,7 +1748,7 @@ cmw_file (GtkWidget *widget, GtkWidget *parent)
                       G_CALLBACK (gtk_widget_destroy), fs);
 
     /* wait until destroy calls gtk_main_quit */
-    gtk_widget_show (fs);
+    gtk_widget_show (GTK_WIDGET (fs));
     gtk_main();
 }
 

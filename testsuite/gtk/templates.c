@@ -242,7 +242,7 @@ test_file_chooser_widget_basic (void)
 static void
 test_file_chooser_dialog_basic (void)
 {
-  GtkWidget *widget;
+  GtkFileChooserDialog *widget;
 
   g_test_log_set_fatal_handler (ignore_gvfs_warning, NULL);
 
@@ -255,7 +255,7 @@ test_file_chooser_dialog_basic (void)
   g_timeout_add (100, main_loop_quit_cb, NULL);
   gtk_main();
 
-  gtk_widget_destroy (widget);
+  gtk_widget_destroy (GTK_WIDGET (widget));
 }
 
 static void

@@ -19,7 +19,7 @@ static void
 on_bookmark_clicked (GtkButton *button, gpointer data)
 {
   GtkWindow *window = GTK_WINDOW (data);
-  GtkWidget *chooser;
+  GtkFileChooserDialog *chooser;
 
   chooser = gtk_file_chooser_dialog_new ("File Chooser Test",
                                          window,
@@ -31,7 +31,7 @@ on_bookmark_clicked (GtkButton *button, gpointer data)
   g_signal_connect (chooser, "response",
                     G_CALLBACK (gtk_widget_destroy), NULL);
 
-  gtk_widget_show (chooser);
+  gtk_widget_show (GTK_WIDGET (chooser));
 }
 
 static GtkWidget *header;

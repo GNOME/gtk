@@ -723,7 +723,7 @@ static WidgetInfo *
 create_filesel (void)
 {
   WidgetInfo *info;
-  GtkWidget *widget;
+  GtkFileChooserDialog *widget;
 
   widget = gtk_file_chooser_dialog_new ("File Chooser Dialog",
 					NULL,
