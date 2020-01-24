@@ -104,6 +104,53 @@
  * ]|
  */
 
+/* Threading:
+ *
+ * GtkIconTheme is partially threadsafe, construction and setup can
+ * only be done on the main thread (and this is not really fixable
+ * since it uses other things like GdkDisplay and GSettings and
+ * signals on those. However, once the icon theme is set up on the
+ * main thread we can pass it to a thread and do basic lookups on
+ * it. This will cause any parallel calls on the main thread (or any
+ * other thread) to block until its done, but most of the time
+ * lookups are fast. The only time its not fast is when we need
+ * to rescan the theme, but then it would be slow if we didn't block
+ * and did the rescan ourselves anyway.
+ *
+ * The threadsafe calls are marked in the docs.
+ *
+ * All private functions that take a GtkIconTheme (or one of its
+ * private data types (like IconThemeDir, UnthemedIcon, etc) arg are
+ * expected to be called with the icon theme lock held, unless the
+ * funcion has a _unlocked suffix. Any similar function that must be
+ * called on the main thread, will have a _mainthread suffix.
+ *
+ * So the rules for such functions are:
+ *
+ * *  non-_unlocked function cannot call _unlocked functions.
+ * * _unlocked must lock before calling a non-_unlocked.
+ * * non-_mainthread cannot call _mainthread.
+ * * Public APIs must lock before calling a non-_unlocked private function
+ * * Public APIs that never call _mainthread and threadsafe.
+ *
+ * Additionally there is a global "info_cache" G_LOCK, which protects
+ * both the GtkIconTheme->info_cache and its reverse pointer
+ * GtkIconInfo->in_cache. This is sometimes taken with the
+ * theme lock held (from the theme side) and sometimes not (from the
+ * icon info side), but we never take another lock after taking it, so
+ * this is safe.
+ *
+ * Sometimes there are references to the icon theme that are weak that
+ * can call into the icon theme. For example, from the "theme-changed"
+ * signal. Since these don't own the theme they can run in parallel
+ * with some other thread wich is finalizing the theme. To avoid this
+ * all such references are done via the GtkIconThemeRef object which
+ * contains an NULL:able pointer to the theme and the main lock for
+ * that theme. Using this we can safely generate a ref for the theme
+ * if it still lives (or get NULL if it doesn't).
+ */
+
+
 #define FALLBACK_ICON_THEME "hicolor"
 
 typedef enum
@@ -137,6 +184,9 @@ typedef enum
 typedef struct _GtkIconInfoClass    GtkIconInfoClass;
 typedef struct _GtkIconThemeClass   GtkIconThemeClass;
 
+
+typedef struct _GtkIconThemeRef GtkIconThemeRef;
+
 /**
  * GtkIconTheme:
  *
@@ -151,8 +201,9 @@ typedef struct _GtkIconThemeClass   GtkIconThemeClass;
 struct _GtkIconTheme
 {
   GObject parent_instance;
+  GtkIconThemeRef *ref;
 
-  GHashTable *info_cache;
+  GHashTable *info_cache; /* Protected by info_cache lock */
 
   GtkIconInfo *lru_cache[LRU_CACHE_SIZE];
   int lru_cache_next;
@@ -176,6 +227,7 @@ struct _GtkIconTheme
 
   /* GdkDisplay for the icon theme (may be NULL) */
   GdkDisplay *display;
+  GtkSettings *display_settings;
 
   /* time when we last stat:ed for theme changes */
   glong last_stat_time;
@@ -203,6 +255,10 @@ struct _GtkIconInfoClass
   GObjectClass parent_class;
 };
 
+/* This lock protects both IconTheme.info_cache and the dependent IconInfo.in_cache.
+ * Its a global lock, so hold it only for short times. */
+G_LOCK_DEFINE_STATIC(info_cache);
+
 /**
  * GtkIconInfo:
  *
@@ -216,7 +272,7 @@ struct _GtkIconInfo
   /* Information about the source
    */
   IconInfoKey key;
-  GtkIconTheme *in_cache;
+  GtkIconTheme *in_cache; /* Protected by info_cache lock */
 
   gchar *filename;
   GLoadableIcon *loadable;
@@ -300,6 +356,7 @@ typedef struct
 } IconThemeDirMtime;
 
 static void         gtk_icon_theme_finalize   (GObject          *object);
+static void         gtk_icon_theme_dispose    (GObject          *object);
 static void         theme_dir_destroy         (IconThemeDir     *dir);
 static void         theme_destroy              (IconTheme       *theme);
 static GtkIconInfo *theme_lookup_icon         (IconTheme        *theme,
@@ -326,8 +383,97 @@ static GtkIconInfo *icon_info_new             (IconThemeDirType  type,
                                                gint              dir_scale);
 static IconSuffix   suffix_from_name          (const gchar      *name);
 static gboolean     icon_info_ensure_scale_and_texture (GtkIconInfo* icon_info);
+static void         unset_display             (GtkIconTheme     *self);
+static void         update_current_theme__mainthread (GtkIconTheme *self);
 
 static guint signal_changed = 0;
+
+/* This is like a weak ref with a lock, anyone doing
+ * operations on the theme must take the lock in this,
+ * but you can also take the lock even if the theme
+ * has been finalized (but theme will then be NULL).
+ *
+ * This is used to avoid race conditions where signals
+ * like theme-changed happen on the main thread while
+ * the last active owning ref of the icon theme is
+ * on some thread.
+ */
+struct _GtkIconThemeRef
+{
+  gatomicrefcount count;
+  GMutex lock;
+  GtkIconTheme *theme;
+};
+
+static GtkIconThemeRef *
+gtk_icon_theme_ref_new (GtkIconTheme *theme)
+{
+  GtkIconThemeRef *ref = g_new0 (GtkIconThemeRef, 1);
+
+  g_atomic_ref_count_init (&ref->count);
+  g_mutex_init (&ref->lock);
+  ref->theme = theme;
+
+  return ref;
+}
+
+static GtkIconThemeRef *
+gtk_icon_theme_ref_ref (GtkIconThemeRef *ref)
+{
+  g_atomic_ref_count_inc (&ref->count);
+  return ref;
+}
+
+static void
+gtk_icon_theme_ref_unref (GtkIconThemeRef *ref)
+{
+  if (g_atomic_ref_count_dec (&ref->count))
+    {
+      g_assert (ref->theme == NULL);
+      g_mutex_clear (&ref->lock);
+      g_free (ref);
+    }
+}
+
+/* Take the lock and if available ensure the theme lives until (at
+ * least) ref_release is called. */
+static GtkIconTheme *
+gtk_icon_theme_ref_aquire (GtkIconThemeRef *ref)
+{
+  g_mutex_lock (&ref->lock);
+  if (ref->theme)
+    g_object_ref (ref->theme);
+  return ref->theme;
+}
+
+static void
+gtk_icon_theme_ref_release (GtkIconThemeRef *ref)
+{
+  if (ref->theme)
+    g_object_unref (ref->theme);
+  g_mutex_unlock (&ref->lock);
+}
+
+static void
+gtk_icon_theme_ref_dispose (GtkIconThemeRef *ref)
+{
+  gtk_icon_theme_ref_aquire (ref);
+  ref->theme = NULL;
+  gtk_icon_theme_ref_release (ref);
+}
+
+static void
+gtk_icon_theme_lock (GtkIconTheme *self)
+{
+  g_mutex_lock (&self->ref->lock);
+}
+
+static void
+gtk_icon_theme_unlock (GtkIconTheme *self)
+{
+  g_mutex_unlock (&self->ref->lock);
+}
+
 
 static guint
 icon_info_key_hash (gconstpointer _key)
@@ -376,13 +522,8 @@ icon_info_key_equal (gconstpointer _a,
 G_DEFINE_TYPE (GtkIconTheme, gtk_icon_theme, G_TYPE_OBJECT)
 
 static void
-add_to_lru_cache (GtkIconInfo *info)
+add_to_lru_cache (GtkIconTheme *self, GtkIconInfo *info)
 {
-  GtkIconTheme *self = info->in_cache;
-
-  if (!self)
-    return;
-
   if (info->texture &&
       info->texture->width <= MAX_LRU_TEXTURE_SIZE &&
       info->texture->height <= MAX_LRU_TEXTURE_SIZE)
@@ -480,6 +621,7 @@ gtk_icon_theme_class_init (GtkIconThemeClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   gobject_class->finalize = gtk_icon_theme_finalize;
+  gobject_class->dispose = gtk_icon_theme_dispose;
 
   /**
    * GtkIconTheme::changed:
@@ -504,28 +646,35 @@ gtk_icon_theme_class_init (GtkIconThemeClass *klass)
  * for the display, drop the reference
  */
 static void
-display_closed (GdkDisplay   *display,
-                gboolean      is_error,
-                GtkIconTheme *self)
+display_closed__mainthread_unlocked (GdkDisplay      *display,
+                                     gboolean         is_error,
+                                     GtkIconThemeRef *ref)
 {
-  gboolean was_display_singleton = self->is_display_singleton;
+  GtkIconTheme *self = gtk_icon_theme_ref_aquire (ref);
+  gboolean was_display_singleton;
 
-  if (was_display_singleton)
+  if (self)
     {
-      g_object_set_data (G_OBJECT (display), I_("gtk-icon-theme"), NULL);
-      self->is_display_singleton = FALSE;
+      /* This is only set at construction and accessed here in the main thread, so no locking necessary */
+      was_display_singleton = self->is_display_singleton;
+      if (was_display_singleton)
+        {
+          g_object_set_data (G_OBJECT (display), I_("gtk-icon-theme"), NULL);
+          self->is_display_singleton = FALSE;
+        }
+
+      unset_display (self);
+      update_current_theme__mainthread (self);
+
+      if (was_display_singleton)
+        g_object_unref (self);
     }
 
-  gtk_icon_theme_set_display (self, NULL);
-
-  if (was_display_singleton)
-    {
-      g_object_unref (self);
-    }
+  gtk_icon_theme_ref_release (ref);
 }
 
 static void
-update_current_theme (GtkIconTheme *self)
+update_current_theme__mainthread (GtkIconTheme *self)
 {
 #define theme_changed(_old, _new) \
   ((_old && !_new) || (!_old && _new) || \
@@ -560,30 +709,32 @@ update_current_theme (GtkIconTheme *self)
 /* Callback when the icon theme GtkSetting changes
  */
 static void
-theme_changed (GtkSettings  *settings,
-               GParamSpec   *pspec,
-               GtkIconTheme *self)
+theme_changed__mainthread_unlocked (GtkSettings  *settings,
+                                    GParamSpec   *pspec,
+                                    GtkIconThemeRef *ref)
 {
-  update_current_theme (self);
+  GtkIconTheme *self = gtk_icon_theme_ref_aquire (ref);
+
+  if (self)
+    update_current_theme__mainthread (self);
+
+  gtk_icon_theme_ref_release (ref);
 }
 
 static void
 unset_display (GtkIconTheme *self)
 {
-  GtkSettings *settings;
-  
   if (self->display)
     {
-      settings = gtk_settings_get_for_display (self->display);
-      
       g_signal_handlers_disconnect_by_func (self->display,
-                                            (gpointer) display_closed,
-                                            self);
-      g_signal_handlers_disconnect_by_func (settings,
-                                            (gpointer) theme_changed,
-                                            self);
+                                            (gpointer) display_closed__mainthread_unlocked,
+                                            self->ref);
+      g_signal_handlers_disconnect_by_func (self->display_settings,
+                                            (gpointer) theme_changed__mainthread_unlocked,
+                                            self->ref);
 
       self->display = NULL;
+      self->display_settings = NULL;
     }
 }
 
@@ -600,26 +751,33 @@ void
 gtk_icon_theme_set_display (GtkIconTheme *self,
                             GdkDisplay   *display)
 {
-  GtkSettings *settings;
-
   g_return_if_fail (GTK_ICON_THEME (self));
   g_return_if_fail (display == NULL || GDK_IS_DISPLAY (display));
 
+  gtk_icon_theme_lock (self);
+
   unset_display (self);
-  
+
   if (display)
     {
-      settings = gtk_settings_get_for_display (display);
-      
       self->display = display;
-      
-      g_signal_connect (display, "closed",
-                        G_CALLBACK (display_closed), self);
-      g_signal_connect (settings, "notify::gtk-icon-theme-name",
-                        G_CALLBACK (theme_changed), self);
+      self->display_settings = gtk_settings_get_for_display (display);
+
+      g_signal_connect_data (display, "closed",
+                             G_CALLBACK (display_closed__mainthread_unlocked),
+                             gtk_icon_theme_ref_ref (self->ref),
+                             (GClosureNotify)gtk_icon_theme_ref_unref,
+                             0);
+      g_signal_connect_data (self->display_settings, "notify::gtk-icon-theme-name",
+                             G_CALLBACK (theme_changed__mainthread_unlocked),
+                             gtk_icon_theme_ref_ref (self->ref),
+                             (GClosureNotify)gtk_icon_theme_ref_unref,
+                             0);
     }
 
-  update_current_theme (self);
+  update_current_theme__mainthread (self);
+
+  gtk_icon_theme_unlock (self);
 }
 
 /* Checks whether a loader for SVG files has been registered
@@ -657,7 +815,7 @@ pixbuf_supports_svg (void)
   return found_svg;
 }
 
-/* The icon info was removed from the icon_info_hash hash table */
+/* The icon info was removed from the icon_info_hash hash table. */
 static void
 icon_info_uncached (GtkIconInfo *icon_info)
 {
@@ -667,7 +825,8 @@ icon_info_uncached (GtkIconInfo *icon_info)
                 icon_info->key.size, icon_info->key.flags,
                 self,
                 icon_theme != NULL ? g_hash_table_size (self->info_cache) : 0));
-
+  /* This is a callback from the info_cache hashtable, so the info_cache lock is already held */
+  g_assert (icon_info->in_cache != NULL);
   icon_info->in_cache = NULL;
 }
 
@@ -676,6 +835,8 @@ gtk_icon_theme_init (GtkIconTheme *self)
 {
   const gchar * const *xdg_data_dirs;
   int i, j;
+
+  self->ref = gtk_icon_theme_ref_new (self);
 
   self->info_cache = g_hash_table_new_full (icon_info_key_hash, icon_info_key_equal, NULL,
                                             (GDestroyNotify)icon_info_uncached);
@@ -719,18 +880,37 @@ free_dir_mtime (IconThemeDirMtime *dir_mtime)
 }
 
 static gboolean
-theme_changed_idle (gpointer user_data)
+theme_changed_idle__mainthread_unlocked (gpointer user_data)
 {
+  GtkIconThemeRef *ref = (GtkIconThemeRef *)user_data;
   GtkIconTheme *self;
+  GdkDisplay *display = NULL;
 
-  self = GTK_ICON_THEME (user_data);
+  self = gtk_icon_theme_ref_aquire (ref);
+  if (self)
+    {
+      g_object_ref (self); /* Ensure theme lives during the changed signal emissions */
 
-  g_signal_emit (self, signal_changed, 0);
+      self->theme_changed_idle = 0;
 
-  if (self->display && self->is_display_singleton)
-    gtk_style_context_reset_widgets (self->display);
+      if (self->display && self->is_display_singleton)
+        display = g_object_ref (self->display);
+    }
+  gtk_icon_theme_ref_release (ref);
 
-  self->theme_changed_idle = 0;
+  if (self)
+    {
+      /* Emit signals outside locks. */
+      g_signal_emit (self, signal_changed, 0);
+
+      if (display)
+        {
+          gtk_style_context_reset_widgets (self->display);
+          g_object_unref (display);
+        }
+
+      g_object_unref (self);
+    }
 
   return FALSE;
 }
@@ -741,9 +921,9 @@ queue_theme_changed (GtkIconTheme *self)
   if (!self->theme_changed_idle)
     {
       self->theme_changed_idle = g_idle_add_full (GTK_PRIORITY_RESIZE - 2,
-                                                  theme_changed_idle,
-                                                  self,
-                                                  NULL);
+                                                  theme_changed_idle__mainthread_unlocked,
+                                                  gtk_icon_theme_ref_ref (self->ref),
+                                                  (GDestroyNotify)gtk_icon_theme_ref_unref);
       g_source_set_name_by_id (self->theme_changed_idle, "[gtk] theme_changed_idle");
     }
 }
@@ -751,7 +931,9 @@ queue_theme_changed (GtkIconTheme *self)
 static void
 do_theme_change (GtkIconTheme *self)
 {
+  G_LOCK (info_cache);
   g_hash_table_remove_all (self->info_cache);
+  G_UNLOCK (info_cache);
   clear_lru_cache (self);
 
   if (!self->themes_valid)
@@ -781,12 +963,39 @@ blow_themes (GtkIconTheme *self)
 }
 
 static void
+gtk_icon_theme_dispose (GObject *object)
+{
+  GtkIconTheme *self = GTK_ICON_THEME (object);
+
+  /* We make sure all outstanding GtkIconThemeRefs to us are NULLed
+   * out so that no other threads than the one running finalize will
+   * refer to the icon theme after this. This could happen if
+   * we finalize on a thread and on the main thread some display or
+   * setting signal is emitted.
+   *
+   * It is possible that before we aquire the lock this happens
+   * and the other thread refs the icon theme for some reason, but
+   * this is ok as it is allowed to resurrect objects in dispose
+   * (but not in finalize).
+   */
+  gtk_icon_theme_ref_dispose (self->ref);
+
+  G_OBJECT_CLASS (gtk_icon_theme_parent_class)->dispose (object);
+}
+
+static void
 gtk_icon_theme_finalize (GObject *object)
 {
   GtkIconTheme *self = GTK_ICON_THEME (object);
   int i;
 
+  /* We don't actually need to take the lock here, because by now
+     there can be no other threads that own a ref to this object, but
+     technically this is considered "locked" */
+
+  G_LOCK(info_cache);
   g_hash_table_destroy (self->info_cache);
+  G_UNLOCK(info_cache);
 
   if (self->theme_changed_idle)
     g_source_remove (self->theme_changed_idle);
@@ -803,6 +1012,8 @@ gtk_icon_theme_finalize (GObject *object)
 
   blow_themes (self);
   clear_lru_cache (self);
+
+  gtk_icon_theme_ref_unref (self->ref);
 
   G_OBJECT_CLASS (gtk_icon_theme_parent_class)->finalize (object);
 }
@@ -838,6 +1049,8 @@ gtk_icon_theme_set_search_path (GtkIconTheme *self,
 
   g_return_if_fail (GTK_IS_ICON_THEME (self));
 
+  gtk_icon_theme_lock (self);
+
   for (i = 0; i < self->search_path_len; i++)
     g_free (self->search_path[i]);
 
@@ -850,6 +1063,8 @@ gtk_icon_theme_set_search_path (GtkIconTheme *self,
     self->search_path[i] = g_strdup (path[i]);
 
   do_theme_change (self);
+
+  gtk_icon_theme_unlock (self);
 }
 
 /**
@@ -871,9 +1086,11 @@ gtk_icon_theme_get_search_path (GtkIconTheme  *self,
 
   g_return_if_fail (GTK_IS_ICON_THEME (self));
 
+  gtk_icon_theme_lock (self);
+
   if (n_elements)
     *n_elements = self->search_path_len;
-  
+
   if (path)
     {
       *path = g_new (gchar *, self->search_path_len + 1);
@@ -881,6 +1098,8 @@ gtk_icon_theme_get_search_path (GtkIconTheme  *self,
         (*path)[i] = g_strdup (self->search_path[i]);
       (*path)[i] = NULL;
     }
+
+  gtk_icon_theme_unlock (self);
 }
 
 /**
@@ -898,12 +1117,16 @@ gtk_icon_theme_append_search_path (GtkIconTheme *self,
   g_return_if_fail (GTK_IS_ICON_THEME (self));
   g_return_if_fail (path != NULL);
 
+  gtk_icon_theme_lock (self);
+
   self->search_path_len++;
 
   self->search_path = g_renew (gchar *, self->search_path, self->search_path_len);
   self->search_path[self->search_path_len-1] = g_strdup (path);
 
   do_theme_change (self);
+
+  gtk_icon_theme_unlock (self);
 }
 
 /**
@@ -923,15 +1146,19 @@ gtk_icon_theme_prepend_search_path (GtkIconTheme *self,
   g_return_if_fail (GTK_IS_ICON_THEME (self));
   g_return_if_fail (path != NULL);
 
+  gtk_icon_theme_lock (self);
+
   self->search_path_len++;
   self->search_path = g_renew (gchar *, self->search_path, self->search_path_len);
 
   for (i = self->search_path_len - 1; i > 0; i--)
     self->search_path[i] = self->search_path[i - 1];
-  
+
   self->search_path[0] = g_strdup (path);
 
   do_theme_change (self);
+
+  gtk_icon_theme_unlock (self);
 }
 
 /**
@@ -958,9 +1185,13 @@ gtk_icon_theme_add_resource_path (GtkIconTheme *self,
   g_return_if_fail (GTK_IS_ICON_THEME (self));
   g_return_if_fail (path != NULL);
 
+  gtk_icon_theme_lock (self);
+
   self->resource_paths = g_list_append (self->resource_paths, g_strdup (path));
 
   do_theme_change (self);
+
+  gtk_icon_theme_unlock (self);
 }
 
 /**
@@ -981,7 +1212,9 @@ gtk_icon_theme_set_custom_theme (GtkIconTheme *self,
   g_return_if_fail (GTK_IS_ICON_THEME (self));
 
   g_return_if_fail (!self->is_display_singleton);
-  
+
+  gtk_icon_theme_lock (self);
+
   if (theme_name != NULL)
     {
       self->custom_theme = TRUE;
@@ -998,9 +1231,11 @@ gtk_icon_theme_set_custom_theme (GtkIconTheme *self,
       if (self->custom_theme)
         {
           self->custom_theme = FALSE;
-          update_current_theme (self);
+          update_current_theme__mainthread (self);
         }
     }
+
+  gtk_icon_theme_unlock (self);
 }
 
 static const gchar builtin_hicolor_index[] =
@@ -1376,7 +1611,9 @@ ensure_valid_themes (GtkIconTheme *self)
       if (ABS (tv.tv_sec - self->last_stat_time) > 5 &&
           rescan_themes (self))
         {
+          G_LOCK(info_cache);
           g_hash_table_remove_all (self->info_cache);
+          G_UNLOCK(info_cache);
           blow_themes (self);
           clear_lru_cache (self);
         }
@@ -1468,7 +1705,12 @@ real_choose_icon (GtkIconTheme       *self,
   key.scale = scale;
   key.flags = flags;
 
+  G_LOCK(info_cache);
   icon_info = g_hash_table_lookup (self->info_cache, &key);
+  if (icon_info != NULL)
+    icon_info = g_object_ref (icon_info);
+  G_UNLOCK(info_cache);
+
   if (icon_info != NULL)
     {
       DEBUG_CACHE (("cache hit %p (%s %d 0x%x) (cache size %d)\n",
@@ -1477,10 +1719,8 @@ real_choose_icon (GtkIconTheme       *self,
                     icon_info->key.size, icon_info->key.flags,
                     g_hash_table_size (self->info_cache)));
 
-      icon_info = g_object_ref (icon_info);
-
       /* Move item to front in LRU cache */
-      add_to_lru_cache (icon_info);
+      add_to_lru_cache (self, icon_info);
 
       return icon_info;
     }
@@ -1621,13 +1861,15 @@ real_choose_icon (GtkIconTheme       *self,
       icon_info->key.size = size;
       icon_info->key.scale = scale;
       icon_info->key.flags = flags;
+      G_LOCK(info_cache);
       icon_info->in_cache = self;
+      g_hash_table_insert (self->info_cache, &icon_info->key, icon_info);
+      G_UNLOCK(info_cache);
       DEBUG_CACHE (("adding %p (%s %d 0x%x) to cache (cache size %d)\n",
                     icon_info,
                     g_strjoinv (",", icon_info->key.icon_names),
                     icon_info->key.size, icon_info->key.flags,
                     g_hash_table_size (self->info_cache)));
-     g_hash_table_insert (self->info_cache, &icon_info->key, icon_info);
     }
   else
     {
@@ -1798,7 +2040,10 @@ choose_icon (GtkIconTheme       *self,
  * like gdk_surface_get_scale_factor(). Instead, you should use
  * gtk_icon_theme_lookup_icon_for_scale(), as the assets loaded
  * for a given scaling factor may be different.
- * 
+ *
+ * This call is threadsafe, you can safely pass a GtkIconTheme
+ * to another thread and call this method on it.
+ *
  * Returns: (nullable) (transfer full): a #GtkIconInfo object
  *     containing information about the icon, or %NULL if the
  *     icon wasn’t found.
@@ -1835,6 +2080,9 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
  * gtk_icon_info_load_icon(). (gtk_icon_theme_load_icon() combines
  * these two steps if all you need is the pixbuf.)
  *
+ * This call is threadsafe, you can safely pass a GtkIconTheme
+ * to another thread and call this method on it.
+ *
  * Returns: (nullable) (transfer full): a #GtkIconInfo object
  *     containing information about the icon, or %NULL if the
  *     icon wasn’t found.
@@ -1856,6 +2104,8 @@ gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme       *self,
 
   GTK_DISPLAY_NOTE (self->display, ICONTHEME,
                     g_message ("looking up icon %s for scale %d", icon_name, scale));
+
+  gtk_icon_theme_lock (self);
 
   if (flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK)
     {
@@ -1918,6 +2168,8 @@ gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme       *self,
       info = choose_icon (self, names, size, scale, flags);
     }
 
+  gtk_icon_theme_unlock (self);
+
   return info;
 }
 
@@ -1938,7 +2190,10 @@ gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme       *self,
  * If @icon_names contains more than one name, this function 
  * tries them all in the given order before falling back to 
  * inherited icon themes.
- * 
+ *
+ * This call is threadsafe, you can safely pass a GtkIconTheme
+ * to another thread and call this method on it.
+ *
  * Returns: (nullable) (transfer full): a #GtkIconInfo object
  * containing information about the icon, or %NULL if the icon wasn’t
  * found.
@@ -1949,13 +2204,21 @@ gtk_icon_theme_choose_icon (GtkIconTheme       *self,
                             gint                size,
                             GtkIconLookupFlags  flags)
 {
+  GtkIconInfo *info;
+
   g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
   g_return_val_if_fail (icon_names != NULL, NULL);
   g_return_val_if_fail ((flags & GTK_ICON_LOOKUP_NO_SVG) == 0 ||
                         (flags & GTK_ICON_LOOKUP_FORCE_SVG) == 0, NULL);
   g_warn_if_fail ((flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK) == 0);
 
-  return choose_icon (self, icon_names, size, 1, flags);
+  gtk_icon_theme_lock (self);
+
+  info = choose_icon (self, icon_names, size, 1, flags);
+
+  gtk_icon_theme_unlock (self);
+
+  return info;
 }
 
 /**
@@ -1976,7 +2239,10 @@ gtk_icon_theme_choose_icon (GtkIconTheme       *self,
  * If @icon_names contains more than one name, this function 
  * tries them all in the given order before falling back to 
  * inherited icon themes.
- * 
+ *
+ * This call is threadsafe, you can safely pass a GtkIconTheme
+ * to another thread and call this method on it.
+ *
  * Returns: (nullable) (transfer full): a #GtkIconInfo object
  *     containing information about the icon, or %NULL if the
  *     icon wasn’t found.
@@ -1988,6 +2254,8 @@ gtk_icon_theme_choose_icon_for_scale (GtkIconTheme       *self,
                                       gint                scale,
                                       GtkIconLookupFlags  flags)
 {
+  GtkIconInfo *info;
+
   g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
   g_return_val_if_fail (icon_names != NULL, NULL);
   g_return_val_if_fail ((flags & GTK_ICON_LOOKUP_NO_SVG) == 0 ||
@@ -1995,7 +2263,13 @@ gtk_icon_theme_choose_icon_for_scale (GtkIconTheme       *self,
   g_return_val_if_fail (scale >= 1, NULL);
   g_warn_if_fail ((flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK) == 0);
 
-  return choose_icon (self, icon_names, size, scale, flags);
+  gtk_icon_theme_lock (self);
+
+  info = choose_icon (self, icon_names, size, scale, flags);
+
+  gtk_icon_theme_unlock (self);
+
+  return info;
 }
 
 
@@ -2119,10 +2393,13 @@ gtk_icon_theme_load_icon_for_scale (GtkIconTheme        *self,
  * gtk_icon_theme_has_icon:
  * @self: a #GtkIconTheme
  * @icon_name: the name of an icon
- * 
+ *
  * Checks whether an icon theme includes an icon
  * for a particular name.
- * 
+ *
+ * This call is threadsafe, you can safely pass a GtkIconTheme
+ * to another thread and call this method on it.
+ *
  * Returns: %TRUE if @self includes an
  *  icon for @icon_name.
  */
@@ -2131,9 +2408,12 @@ gtk_icon_theme_has_icon (GtkIconTheme *self,
                          const gchar  *icon_name)
 {
   GList *l;
+  gboolean res = FALSE;
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (self), FALSE);
   g_return_val_if_fail (icon_name != NULL, FALSE);
+
+  gtk_icon_theme_lock (self);
 
   ensure_valid_themes (self);
 
@@ -2141,18 +2421,27 @@ gtk_icon_theme_has_icon (GtkIconTheme *self,
     {
       IconThemeDirMtime *dir_mtime = l->data;
       GtkIconCache *cache = dir_mtime->cache;
-      
+
       if (cache && gtk_icon_cache_has_icon (cache, icon_name))
-        return TRUE;
+        {
+          res = TRUE;
+          goto out;
+        }
     }
 
   for (l = self->themes; l; l = l->next)
     {
       if (theme_has_icon (l->data, icon_name))
-        return TRUE;
+        {
+          res = TRUE;
+          goto out;
+        }
     }
 
-  return FALSE;
+ out:
+  gtk_icon_theme_unlock (self);
+
+  return res;
 }
 
 static void
@@ -2176,7 +2465,10 @@ add_size (gpointer key,
  * the icon is available without scaling. A size of -1 means 
  * that the icon is available in a scalable format. The array 
  * is zero-terminated.
- * 
+ *
+ * This call is threadsafe, you can safely pass a GtkIconTheme
+ * to another thread and call this method on it.
+ *
  * Returns: (array zero-terminated=1) (transfer full): A newly
  * allocated array describing the sizes at which the icon is
  * available. The array should be freed with g_free() when it is no
@@ -2189,10 +2481,12 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *self,
   GList *l, *d;
   GHashTable *sizes;
   gint *result, *r;
-  guint suffix;  
+  guint suffix;
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
-  
+
+  gtk_icon_theme_lock (self);
+
   ensure_valid_themes (self);
 
   sizes = g_hash_table_new (g_direct_hash, g_direct_equal);
@@ -2222,7 +2516,9 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *self,
 
   g_hash_table_foreach (sizes, add_size, &r);
   g_hash_table_destroy (sizes);
-  
+
+  gtk_icon_theme_unlock (self);
+
   return result;
 }
 
@@ -2261,6 +2557,9 @@ add_key_to_list (gpointer key,
  * The standard contexts are listed in the
  * [Icon Naming Specification](http://www.freedesktop.org/wiki/Specifications/icon-naming-spec).
  *
+ * This call is threadsafe, you can safely pass a GtkIconTheme
+ * to another thread and call this method on it.
+ *
  * Returns: (element-type utf8) (transfer full): a #GList list
  *     holding the names of all the icons in the theme. You must
  *     first free each element in the list with g_free(), then
@@ -2273,7 +2572,9 @@ gtk_icon_theme_list_icons (GtkIconTheme *self,
   GHashTable *icons;
   GList *list, *l;
   GQuark context_quark;
-  
+
+  gtk_icon_theme_lock (self);
+
   ensure_valid_themes (self);
 
   if (context)
@@ -2281,7 +2582,7 @@ gtk_icon_theme_list_icons (GtkIconTheme *self,
       context_quark = g_quark_try_string (context);
 
       if (!context_quark)
-        return NULL;
+        goto out;
     }
   else
     context_quark = 0;
@@ -2307,7 +2608,11 @@ gtk_icon_theme_list_icons (GtkIconTheme *self,
                         &list);
 
   g_hash_table_destroy (icons);
-  
+
+ out:
+
+  gtk_icon_theme_unlock (self);
+
   return list;
 }
 
@@ -2353,6 +2658,9 @@ rescan_themes (GtkIconTheme *self)
  * currently cached information is discarded and will be reloaded
  * next time @self is accessed.
  * 
+ * This call is threadsafe, you can safely pass a GtkIconTheme
+ * to another thread and call this method on it.
+ *
  * Returns: %TRUE if the icon theme has changed and needed
  *     to be reloaded.
  */
@@ -2363,9 +2671,13 @@ gtk_icon_theme_rescan_if_needed (GtkIconTheme *self)
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (self), FALSE);
 
+  gtk_icon_theme_lock (self);
+
   retval = rescan_themes (self);
   if (retval)
       do_theme_change (self);
+
+  gtk_icon_theme_unlock (self);
 
   return retval;
 }
@@ -3047,8 +3359,10 @@ gtk_icon_info_finalize (GObject *object)
 {
   GtkIconInfo *icon_info = (GtkIconInfo *) object;
 
+  G_LOCK(info_cache);
   if (icon_info->in_cache)
     g_hash_table_remove (icon_info->in_cache->info_cache, &icon_info->key);
+  G_UNLOCK(info_cache);
 
   g_strfreev (icon_info->key.icon_names);
 
@@ -3170,6 +3484,25 @@ icon_info_get_pixbuf_ready (GtkIconInfo *icon_info)
     return TRUE;
 
   return FALSE;
+}
+
+static void
+icon_info_add_to_lru_cache (GtkIconInfo *info)
+{
+  GtkIconTheme *theme = NULL;
+
+  G_LOCK(info_cache);
+  if (info->in_cache)
+    theme = g_object_ref (info->in_cache);
+  G_UNLOCK(info_cache);
+
+  if (theme)
+    {
+      gtk_icon_theme_lock (theme);
+      add_to_lru_cache (theme, info);
+      gtk_icon_theme_unlock (theme);
+      g_object_unref (theme);
+    }
 }
 
 static GLoadableIcon *
@@ -3404,7 +3737,7 @@ icon_info_ensure_scale_and_texture (GtkIconInfo *icon_info)
     }
 
   g_assert (icon_info->texture != NULL);
-  add_to_lru_cache (icon_info);
+  icon_info_add_to_lru_cache (icon_info);
 
   return TRUE;
 }
