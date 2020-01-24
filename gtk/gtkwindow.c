@@ -68,6 +68,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtkpopovermenubarprivate.h"
+#include "gtkcssboxesimplprivate.h"
 
 #include "a11y/gtkwindowaccessibleprivate.h"
 #include "a11y/gtkcontaineraccessibleprivate.h"
@@ -2354,17 +2355,14 @@ gtk_window_native_get_surface_transform (GtkNative *native,
                                          int       *x,
                                          int       *y)
 {
-  GtkWindow *self = GTK_WINDOW (native);
-  GtkStyleContext *context;
-  GtkBorder margin, border, padding;
+  const graphene_rect_t *margin_rect;
+  GtkCssBoxes boxes;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (self));
-  gtk_style_context_get_margin (context, &margin);
-  gtk_style_context_get_border (context, &border);
-  gtk_style_context_get_padding (context, &padding);
+  gtk_css_boxes_init (&boxes, GTK_WIDGET (native));
+  margin_rect = gtk_css_boxes_get_margin_rect (&boxes);
 
-  *x = margin.left + border.left + padding.left;
-  *y = margin.top + border.top + padding.top;
+  *x = - margin_rect->origin.x;
+  *y = - margin_rect->origin.y;
 }
 
 static void
