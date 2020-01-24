@@ -419,7 +419,7 @@ create_search_bar (void)
 static WidgetInfo *
 create_action_bar (void)
 {
-  GtkWidget *widget;
+  GtkActionBar *widget;
   GtkWidget *button;
   WidgetInfo *info;
   GtkWidget *view;
@@ -439,9 +439,9 @@ create_action_bar (void)
   gtk_container_add (GTK_CONTAINER (widget), button);
   g_object_set (gtk_widget_get_parent (button), "margin", 6, "spacing", 6, NULL);
 
-  gtk_widget_show (widget);
+  gtk_widget_show (GTK_WIDGET (widget));
 
-  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (widget));
 
   info = new_widget_info ("action-bar", box, SMALL);
 

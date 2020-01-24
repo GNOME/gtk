@@ -155,11 +155,11 @@ test_search_bar_basic (void)
 static void
 test_action_bar_basic (void)
 {
-  GtkWidget *widget;
+  GtkActionBar *widget;
 
   widget = gtk_action_bar_new ();
   g_assert (GTK_IS_ACTION_BAR (widget));
-  gtk_widget_destroy (widget);
+  gtk_widget_destroy (GTK_WIDGET (widget));
 }
 
 static void

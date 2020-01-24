@@ -396,10 +396,10 @@ gtk_action_bar_get_center_widget (GtkActionBar *action_bar)
  *
  * Returns: a new #GtkActionBar
  */
-GtkWidget *
+GtkActionBar *
 gtk_action_bar_new (void)
 {
-  return GTK_WIDGET (g_object_new (GTK_TYPE_ACTION_BAR, NULL));
+  return g_object_new (GTK_TYPE_ACTION_BAR, NULL);
 }
 
 /**
