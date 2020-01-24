@@ -196,7 +196,7 @@ dump_node (GskRenderNode *node,
   cairo_surface_destroy (surface);
 }
 
-static inline gboolean
+static inline gboolean G_GNUC_PURE
 node_is_invisible (const GskRenderNode *node)
 {
   return node->bounds.size.width == 0.0f ||
@@ -237,7 +237,7 @@ sort_border_sides (const GdkRGBA *colors,
     }
 }
 
-static inline gboolean
+static inline gboolean G_GNUC_PURE
 color_matrix_modifies_alpha (GskRenderNode *node)
 {
   const graphene_matrix_t *matrix = gsk_color_matrix_node_peek_color_matrix (node);
@@ -261,7 +261,7 @@ gsk_rounded_rect_shrink_to_minimum (GskRoundedRect *self)
                                          MAX (self->corner[2].height, self->corner[3].height)) * 2);
 }
 
-static inline gboolean
+static inline gboolean G_GNUC_PURE
 node_supports_transform (GskRenderNode *node)
 {
   /* Some nodes can't handle non-trivial transforms without being
@@ -611,7 +611,7 @@ render_fallback_node (GskGLRenderer   *self,
   cairo_fill (cr);
   cairo_restore (cr);
 
-#if G_ENABLE_DEBUG
+#ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), FALLBACK))
     {
       cairo_move_to (cr, 0, 0);

@@ -145,9 +145,9 @@ gsk_render_node_get_node_type (GskRenderNode *node)
   return node->node_class->node_type;
 }
 
-static inline
+G_GNUC_PURE static inline
 GskRenderNodeType
-_gsk_render_node_get_node_type (GskRenderNode *node)
+_gsk_render_node_get_node_type (const GskRenderNode *node)
 {
   return node->node_class->node_type;
 }
@@ -248,8 +248,8 @@ gsk_render_node_draw (GskRenderNode *node,
  * Returns: %TRUE if @node1 and @node2 can be expected to be compared
  **/
 gboolean
-gsk_render_node_can_diff (GskRenderNode *node1,
-                          GskRenderNode *node2)
+gsk_render_node_can_diff (const GskRenderNode *node1,
+                          const GskRenderNode *node2)
 {
   if (node1 == node2)
     return TRUE;
