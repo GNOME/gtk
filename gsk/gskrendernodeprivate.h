@@ -28,8 +28,8 @@ struct _GskRenderNodeClass
   void            (* finalize)    (GskRenderNode  *node);
   void            (* draw)        (GskRenderNode  *node,
                                    cairo_t        *cr);
-  gboolean        (* can_diff)    (GskRenderNode  *node1,
-                                   GskRenderNode  *node2);
+  gboolean        (* can_diff)    (const GskRenderNode  *node1,
+                                   const GskRenderNode  *node2);
   void            (* diff)        (GskRenderNode  *node1,
                                    GskRenderNode  *node2,
                                    cairo_region_t *region);
@@ -38,8 +38,8 @@ struct _GskRenderNodeClass
 GskRenderNode * gsk_render_node_new              (const GskRenderNodeClass  *node_class,
                                                   gsize                      extra_size);
 
-gboolean        gsk_render_node_can_diff         (GskRenderNode             *node1,
-                                                  GskRenderNode             *node2);
+gboolean        gsk_render_node_can_diff         (const GskRenderNode       *node1,
+                                                  const GskRenderNode       *node2) G_GNUC_PURE;
 void            gsk_render_node_diff             (GskRenderNode             *node1,
                                                   GskRenderNode             *node2,
                                                   cairo_region_t            *region);
