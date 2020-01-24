@@ -212,7 +212,7 @@ new_window (GApplication *app,
             GFile        *file)
 {
   GtkWidget *window, *grid, *scrolled, *view;
-  GtkWidget *toolbar;
+  GtkToolbar *toolbar;
   GtkToolItem *button;
   GtkSwitch *sw;
   GtkWidget *box;
@@ -258,7 +258,7 @@ new_window (GApplication *app,
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (sw));
   gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (button));
 
-  gtk_grid_attach (GTK_GRID (grid), toolbar, 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (toolbar), 0, 0, 1, 1);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_hexpand (scrolled, TRUE);

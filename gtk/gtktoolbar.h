@@ -50,7 +50,7 @@ typedef struct _GtkToolbar GtkToolbar;
 GDK_AVAILABLE_IN_ALL
 GType           gtk_toolbar_get_type                (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_toolbar_new                     (void);
+GtkToolbar *    gtk_toolbar_new                     (void);
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_toolbar_insert                  (GtkToolbar      *toolbar,

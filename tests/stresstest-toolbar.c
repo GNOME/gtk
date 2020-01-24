@@ -88,7 +88,7 @@ stress_test_old_api (gpointer data)
 
   if (!info->toolbar)
     {
-      info->toolbar = GTK_TOOLBAR (gtk_toolbar_new ());
+      info->toolbar = gtk_toolbar_new ();
       gtk_container_add (GTK_CONTAINER (info->window),
 			 GTK_WIDGET (info->toolbar));
       gtk_widget_show (GTK_WIDGET (info->toolbar));
