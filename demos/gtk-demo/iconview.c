@@ -247,7 +247,7 @@ do_iconview (GtkWidget *do_widget)
       GtkWidget *icon_view;
       GtkListStore *store;
       GtkWidget *vbox;
-      GtkWidget *tool_bar;
+      GtkToolbar *tool_bar;
       GtkToolItem *home_button;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -266,7 +266,7 @@ do_iconview (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       tool_bar = gtk_toolbar_new ();
-      gtk_container_add (GTK_CONTAINER (vbox), tool_bar);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (tool_bar));
 
       up_button = gtk_tool_button_new (NULL, NULL);
       gtk_tool_button_set_label (GTK_TOOL_BUTTON (up_button), _("_Up"));
@@ -274,14 +274,14 @@ do_iconview (GtkWidget *do_widget)
       gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (up_button), "go-up");
       gtk_tool_item_set_is_important (up_button, TRUE);
       gtk_widget_set_sensitive (GTK_WIDGET (up_button), FALSE);
-      gtk_toolbar_insert (GTK_TOOLBAR (tool_bar), up_button, -1);
+      gtk_toolbar_insert (tool_bar, up_button, -1);
 
       home_button = gtk_tool_button_new (NULL, NULL);
       gtk_tool_button_set_label (GTK_TOOL_BUTTON (home_button), _("_Home"));
       gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON (home_button), TRUE);
       gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (home_button), "go-home");
       gtk_tool_item_set_is_important (home_button, TRUE);
-      gtk_toolbar_insert (GTK_TOOLBAR (tool_bar), home_button, -1);
+      gtk_toolbar_insert (tool_bar, home_button, -1);
 
 
       sw = gtk_scrolled_window_new (NULL, NULL);

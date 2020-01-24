@@ -778,26 +778,26 @@ create_page_setup_dialog (void)
 static WidgetInfo *
 create_toolbar (void)
 {
-  GtkWidget *widget;
+  GtkToolbar *widget;
   GtkToolItem *item;
 
   widget = gtk_toolbar_new ();
 
   item = gtk_tool_button_new (NULL, NULL);
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "document-new");
-  gtk_toolbar_insert (GTK_TOOLBAR (widget), item, -1);
+  gtk_toolbar_insert (widget, item, -1);
 
   item = gtk_tool_button_new (NULL, NULL);
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "document-open");
-  gtk_toolbar_insert (GTK_TOOLBAR (widget), item, -1);
+  gtk_toolbar_insert (widget, item, -1);
 
   item = gtk_tool_button_new (NULL, NULL);
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "view-refresh");
-  gtk_toolbar_insert (GTK_TOOLBAR (widget), item, -1);
+  gtk_toolbar_insert (widget, item, -1);
 
-  gtk_toolbar_set_show_arrow (GTK_TOOLBAR (widget), FALSE);
+  gtk_toolbar_set_show_arrow (widget, FALSE);
 
-  return new_widget_info ("toolbar", widget, SMALL);
+  return new_widget_info ("toolbar", GTK_WIDGET (widget), SMALL);
 }
 
 static WidgetInfo *

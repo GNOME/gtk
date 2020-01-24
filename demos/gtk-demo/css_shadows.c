@@ -58,26 +58,26 @@ apply_css (GtkWidget *widget, GtkStyleProvider *provider)
     gtk_container_forall (GTK_CONTAINER (widget), (GtkCallback) apply_css, provider);
 }
 
-GtkWidget *
+GtkToolbar *
 create_toolbar (void)
 {
-  GtkWidget *toolbar;
+  GtkToolbar *toolbar;
   GtkToolItem *item;
 
   toolbar = gtk_toolbar_new ();
-  gtk_widget_set_valign (toolbar, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (toolbar), GTK_ALIGN_CENTER);
 
   item = gtk_tool_button_new (NULL, NULL);
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "go-next");
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
 
   item = gtk_tool_button_new (NULL, NULL);
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "go-previous");
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
 
   item = gtk_tool_button_new (NULL, "Hello World");
   gtk_tool_item_set_is_important (item, TRUE);
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
 
   return toolbar;
 }
@@ -90,6 +90,7 @@ do_css_shadows (GtkWidget *do_widget)
   if (!window)
     {
       GtkWidget *paned, *container, *child;
+      GtkToolbar *toolbar;
       GtkStyleProvider *provider;
       GtkTextBuffer *text;
       GBytes *bytes;
@@ -104,8 +105,8 @@ do_css_shadows (GtkWidget *do_widget)
       paned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
       gtk_container_add (GTK_CONTAINER (window), paned);
 
-      child = create_toolbar ();
-      gtk_container_add (GTK_CONTAINER (paned), child);
+      toolbar = create_toolbar ();
+      gtk_container_add (GTK_CONTAINER (paned), GTK_WIDGET (toolbar));
 
       text = gtk_text_buffer_new (NULL);
       gtk_text_buffer_create_tag (text,

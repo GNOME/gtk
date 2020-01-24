@@ -2128,14 +2128,14 @@ gtk_toolbar_popup_menu (GtkWidget *toolbar)
  
  * Returns: the newly-created toolbar.
  **/
-GtkWidget *
+GtkToolbar *
 gtk_toolbar_new (void)
 {
   GtkToolbar *toolbar;
   
   toolbar = g_object_new (GTK_TYPE_TOOLBAR, NULL);
   
-  return GTK_WIDGET (toolbar);
+  return toolbar;
 }
 
 /**

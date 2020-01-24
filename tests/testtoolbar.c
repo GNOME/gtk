@@ -385,7 +385,8 @@ timeout_cb1 (GtkWidget *widget)
 gint
 main (gint argc, gchar **argv)
 {
-  GtkWidget *window, *toolbar, *grid, *treeview, *scrolled_window;
+  GtkWidget *window, *grid, *treeview, *scrolled_window;
+  GtkToolbar *toolbar;
   GtkWidget *hbox, *hbox1, *hbox2, *checkbox, *menu;
   GtkComboBoxText *option_menu;
   gint i;
@@ -416,7 +417,7 @@ main (gint argc, gchar **argv)
   gtk_container_add (GTK_CONTAINER (window), grid);
 
   toolbar = gtk_toolbar_new ();
-  gtk_grid_attach (GTK_GRID (grid), toolbar, 0, 0, 2, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (toolbar), 0, 0, 2, 1);
 
   hbox1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
   gtk_grid_attach (GTK_GRID (grid), hbox1, 1, 1, 1, 1);
@@ -446,7 +447,7 @@ main (gint argc, gchar **argv)
   for (i = 0; i < G_N_ELEMENTS (toolbar_styles); i++)
     gtk_combo_box_text_append_text (option_menu, toolbar_styles[i]);
   gtk_combo_box_set_active (GTK_COMBO_BOX (option_menu),
-                            gtk_toolbar_get_style (GTK_TOOLBAR (toolbar)));
+                            gtk_toolbar_get_style (toolbar));
   gtk_container_add (GTK_CONTAINER (hbox2), GTK_WIDGET (option_menu));
   g_signal_connect (option_menu, "changed",
 		    G_CALLBACK (change_toolbar_style), toolbar);
@@ -465,7 +466,7 @@ main (gint argc, gchar **argv)
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "document-new");
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), "Custom label");
   add_item_to_list (store, item, "New");
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
   g_timeout_add (3000, (GSourceFunc) timeout_cb, item);
   gtk_tool_item_set_expand (item, TRUE);
 
@@ -486,7 +487,7 @@ main (gint argc, gchar **argv)
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), "Open");
   gtk_menu_tool_button_set_popover (GTK_MENU_TOOL_BUTTON (item), menu);
   add_item_to_list (store, item, "Open");
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
   g_timeout_add (3000, (GSourceFunc) timeout_cb1, item);
  
   menu = gtk_popover_new (NULL);
@@ -506,11 +507,11 @@ main (gint argc, gchar **argv)
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), "Back");
   gtk_menu_tool_button_set_popover (GTK_MENU_TOOL_BUTTON (item), menu);
   add_item_to_list (store, item, "BackWithHistory");
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
  
   item = gtk_separator_tool_item_new ();
   add_item_to_list (store, item, "-----");    
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
   
   image = gtk_image_new_from_icon_name ("dialog-warning");
   gtk_image_set_icon_size (image, GTK_ICON_SIZE_LARGE);
@@ -518,45 +519,45 @@ main (gint argc, gchar **argv)
   gtk_widget_show (GTK_WIDGET (image));
   gtk_container_add (GTK_CONTAINER (item), GTK_WIDGET (image));
   add_item_to_list (store, item, "(Custom Item)");    
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
   
   item = gtk_tool_button_new (NULL, NULL);
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "go-previous");
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), "Back");
   add_item_to_list (store, item, "Back");    
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
 
   item = gtk_separator_tool_item_new ();
   add_item_to_list (store, item, "-----");  
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
   
   item = gtk_tool_button_new (NULL, NULL);
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "go-next");
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), "Forward");
   add_item_to_list (store, item, "Forward");  
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
 
   item = gtk_toggle_tool_button_new ();
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), "Bold");
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "format-text-bold");
   g_signal_connect (item, "toggled", G_CALLBACK (bold_toggled), NULL);
   add_item_to_list (store, item, "Bold");  
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
   gtk_widget_set_sensitive (GTK_WIDGET (item), FALSE);
 
   item = gtk_separator_tool_item_new ();
   add_item_to_list (store, item, "-----");  
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
   gtk_tool_item_set_expand (item, TRUE);
   gtk_separator_tool_item_set_draw (GTK_SEPARATOR_TOOL_ITEM (item), FALSE);
-  g_assert (gtk_toolbar_get_nth_item (GTK_TOOLBAR (toolbar), 0) != 0);
+  g_assert (gtk_toolbar_get_nth_item (toolbar, 0) != 0);
   
   item = gtk_radio_tool_button_new (NULL);
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), "Left");
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "format-justify-left");
   group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (item));
   add_item_to_list (store, item, "Left");
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
   
   
   item = gtk_radio_tool_button_new (group);
@@ -564,17 +565,17 @@ main (gint argc, gchar **argv)
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "format-justify-center");
   group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (item));
   add_item_to_list (store, item, "Center");
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
 
   item = gtk_radio_tool_button_new (group);
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), "Right");
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "format-justify-right");
   add_item_to_list (store, item, "Right");
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
 
   item = gtk_tool_button_new (GTK_WIDGET (gtk_image_new_from_file ("apple-red.png")), "_Apple");
   add_item_to_list (store, item, "Apple");
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
   gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON (item), TRUE);
 
   gicon = g_content_type_get_icon ("video/ogg");
@@ -582,18 +583,18 @@ main (gint argc, gchar **argv)
   g_object_unref (gicon);
   item = gtk_tool_button_new (GTK_WIDGET (image), "Video");
   add_item_to_list (store, item, "Video");
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
 
   image = gtk_image_new_from_icon_name ("utilities-terminal");
   item = gtk_tool_button_new (GTK_WIDGET (image), "Terminal");
   add_item_to_list (store, item, "Terminal");
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
 
   spinner = gtk_spinner_new ();
   gtk_spinner_start (GTK_SPINNER (spinner));
   item = gtk_tool_button_new (spinner, "Spinner");
   add_item_to_list (store, item, "Spinner");
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_toolbar_insert (toolbar, item, -1);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
   gtk_widget_set_hexpand (hbox, TRUE);
@@ -631,7 +632,7 @@ main (gint argc, gchar **argv)
   g_signal_connect (dest, "drag_motion", G_CALLBACK (toolbar_drag_motion), toolbar);
   g_signal_connect (dest, "drag_leave", G_CALLBACK (toolbar_drag_leave), toolbar);
   g_signal_connect (dest, "drag_drop", G_CALLBACK (toolbar_drag_drop), label);
-  gtk_widget_add_controller (toolbar, GTK_EVENT_CONTROLLER (dest));
+  gtk_widget_add_controller (GTK_WIDGET (toolbar), GTK_EVENT_CONTROLLER (dest));
   gdk_content_formats_unref (targets);
 
   gtk_widget_show (window);

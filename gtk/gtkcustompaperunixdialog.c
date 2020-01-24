@@ -1021,8 +1021,9 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   GtkWidget *content_area;
   GtkWidget *grid, *widget, *frame;
   GtkComboBox *combo;
-  GtkWidget *hbox, *vbox, *treeview, *scrolled, *toolbar, *button;
+  GtkWidget *hbox, *vbox, *treeview, *scrolled, *button;
   GtkLabel *label;
+  GtkToolbar *toolbar;
   GtkCellRenderer *cell;
   GtkTreeViewColumn *column;
   GtkTreeIter iter;
@@ -1075,23 +1076,23 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
 
   toolbar = gtk_toolbar_new ();
 
-  context = gtk_widget_get_style_context (toolbar);
+  context = gtk_widget_get_style_context (GTK_WIDGET (toolbar));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_INLINE_TOOLBAR);
 
-  gtk_container_add (GTK_CONTAINER (vbox), toolbar);
-  gtk_widget_show (toolbar);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (toolbar));
+  gtk_widget_show (GTK_WIDGET (toolbar));
 
   icon = g_themed_icon_new_with_default_fallbacks ("list-add-symbolic");
   button = toolbutton_new (dialog, icon, TRUE, TRUE, G_CALLBACK (add_custom_paper));
   g_object_unref (icon);
 
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 0);
+  gtk_toolbar_insert (toolbar, GTK_TOOL_ITEM (button), 0);
 
   icon = g_themed_icon_new_with_default_fallbacks ("list-remove-symbolic");
   button = toolbutton_new (dialog, icon, TRUE, TRUE, G_CALLBACK (remove_custom_paper));
   g_object_unref (icon);
 
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 1);
+  gtk_toolbar_insert (toolbar, GTK_TOOL_ITEM (button), 1);
 
   user_units = _gtk_print_get_default_user_units ();
 
