@@ -127,6 +127,7 @@ GtkCssImage *  gtk_css_image_get_dynamic_image     (GtkCssImage                *
                                                     gint64                      monotonic_time);
 void           _gtk_css_image_print                (GtkCssImage                *image,
                                                     GString                    *string);
+char *         gtk_css_image_to_string             (GtkCssImage                *image);
 
 void           _gtk_css_image_get_concrete_size    (GtkCssImage                *image,
                                                     double                      specified_width,
