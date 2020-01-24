@@ -41,7 +41,7 @@ GtkCssKeyframes *   _gtk_css_keyframes_compute                (GtkCssKeyframes  
                                                                GtkCssStyle             *style,
                                                                GtkCssStyle             *parent_style);
 
-guint               _gtk_css_keyframes_get_n_properties       (GtkCssKeyframes        *keyframes);
+guint               _gtk_css_keyframes_get_n_properties       (GtkCssKeyframes        *keyframes) G_GNUC_PURE;
 guint               _gtk_css_keyframes_get_property_id        (GtkCssKeyframes        *keyframes,
                                                                guint                   id);
 GtkCssValue *       _gtk_css_keyframes_get_value              (GtkCssKeyframes        *keyframes,

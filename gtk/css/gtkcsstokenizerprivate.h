@@ -109,16 +109,16 @@ union _GtkCssToken {
 
 void                    gtk_css_token_clear                     (GtkCssToken            *token);
 
-gboolean                gtk_css_token_is_finite                 (const GtkCssToken      *token);
+gboolean                gtk_css_token_is_finite                 (const GtkCssToken      *token) G_GNUC_PURE;
 gboolean                gtk_css_token_is_preserved              (const GtkCssToken      *token,
-                                                                 GtkCssTokenType        *out_closing);
+                                                                 GtkCssTokenType        *out_closing) G_GNUC_PURE;
 #define gtk_css_token_is(token, _type) ((token)->type == (_type))
 gboolean                gtk_css_token_is_ident                  (const GtkCssToken      *token,
-                                                                 const char             *ident);
+                                                                 const char             *ident) G_GNUC_PURE;
 gboolean                gtk_css_token_is_function               (const GtkCssToken      *token,
-                                                                 const char             *ident);
+                                                                 const char             *ident) G_GNUC_PURE;
 gboolean                gtk_css_token_is_delim                  (const GtkCssToken      *token,
-                                                                 gunichar                delim);
+                                                                 gunichar                delim) G_GNUC_PURE;
 
 void                    gtk_css_token_print                     (const GtkCssToken      *token,
                                                                  GString                *string);
