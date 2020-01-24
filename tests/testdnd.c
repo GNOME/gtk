@@ -589,7 +589,7 @@ main (int argc, char **argv)
   GtkWidget *window;
   GtkWidget *grid;
   GtkLabel *label;
-  GtkWidget *pixmap;
+  GtkImage *pixmap;
   GdkPixbuf *drag_icon;
   GdkTexture *texture;
   GdkContentProvider *content;
@@ -647,12 +647,12 @@ main (int argc, char **argv)
   g_signal_connect (dest, "drag-leave", G_CALLBACK (target_drag_leave), pixmap);
   g_signal_connect (dest, "accept", G_CALLBACK (target_drag_motion), pixmap);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (target_drag_drop), pixmap);
-  gtk_widget_add_controller (pixmap, GTK_EVENT_CONTROLLER (dest));
+  gtk_widget_add_controller (GTK_WIDGET (pixmap), GTK_EVENT_CONTROLLER (dest));
   gdk_content_formats_unref (targets);
 
-  gtk_widget_set_hexpand (pixmap, TRUE);
-  gtk_widget_set_vexpand (pixmap, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), pixmap, 1, 0, 1, 1);
+  gtk_widget_set_hexpand (GTK_WIDGET (pixmap), TRUE);
+  gtk_widget_set_vexpand (GTK_WIDGET (pixmap), TRUE);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (pixmap), 1, 0, 1, 1);
 
 
   /* Drag site */

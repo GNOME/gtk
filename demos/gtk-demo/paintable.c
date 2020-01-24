@@ -152,7 +152,7 @@ GtkWidget *
 do_paintable (GtkWidget *do_widget)
 {
   GdkPaintable *nuclear;
-  GtkWidget *image;
+  GtkImage *image;
 
   if (!window)
     {
@@ -164,7 +164,7 @@ do_paintable (GtkWidget *do_widget)
 
       nuclear = gtk_nuclear_icon_new (0.0);
       image = gtk_image_new_from_paintable (nuclear);
-      gtk_container_add (GTK_CONTAINER (window), image);
+      gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (image));
       g_object_unref (nuclear);
     }
 

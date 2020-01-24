@@ -162,7 +162,8 @@ populate_flowbox_wrappy (GtkFlowBox *flowbox)
 static void
 populate_flowbox_images (GtkFlowBox *flowbox)
 {
-  GtkWidget *widget, *image;
+  GtkWidget *widget;
+  GtkImage *image;
   GtkLabel *label;
   gint i;
 
@@ -174,13 +175,13 @@ populate_flowbox_images (GtkFlowBox *flowbox)
       gtk_widget_set_hexpand (widget, TRUE);
 
       image = gtk_image_new_from_icon_name ("face-wink");
-      gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
-      gtk_widget_set_hexpand (image, TRUE);
-      gtk_image_set_pixel_size (GTK_IMAGE (image), 256);
+      gtk_image_set_icon_size (image, GTK_ICON_SIZE_LARGE);
+      gtk_widget_set_hexpand (GTK_WIDGET (image), TRUE);
+      gtk_image_set_pixel_size (image, 256);
 
       label = gtk_label_new (text);
 
-      gtk_container_add (GTK_CONTAINER (widget), image);
+      gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (image));
       gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (label));
 
       g_object_set_data_full (G_OBJECT (widget), "id", (gpointer)g_strdup (text), g_free);

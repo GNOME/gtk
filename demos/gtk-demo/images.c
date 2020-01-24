@@ -316,7 +316,7 @@ do_images (GtkWidget *do_widget)
   GtkWidget *vbox;
   GtkWidget *hbox;
   GtkWidget *base_vbox;
-  GtkWidget *image;
+  GtkImage *image;
   GtkPicture *picture;
   GtkLabel *label;
   GtkWidget *button;
@@ -357,9 +357,9 @@ do_images (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       image = gtk_image_new_from_icon_name ("gtk3-demo");
-      gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
+      gtk_image_set_icon_size (image, GTK_ICON_SIZE_LARGE);
 
-      gtk_container_add (GTK_CONTAINER (frame), image);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (image));
 
 
       /* Animation */
@@ -394,9 +394,9 @@ do_images (GtkWidget *do_widget)
 
       gicon = g_themed_icon_new_with_default_fallbacks ("battery-caution-charging-symbolic");
       image = gtk_image_new_from_gicon (gicon);
-      gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
+      gtk_image_set_icon_size (image, GTK_ICON_SIZE_LARGE);
 
-      gtk_container_add (GTK_CONTAINER (frame), image);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (image));
 
 
       /* Progressive */

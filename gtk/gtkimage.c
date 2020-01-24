@@ -54,7 +54,7 @@
  * There’s a convenience function to do this, gtk_image_new_from_file(),
  * used as follows:
  * |[<!-- language="C" -->
- *   GtkWidget *image;
+ *   GtkImage *image;
  *   image = gtk_image_new_from_file ("myfile.png");
  * ]|
  * If the file isn’t loaded successfully, the image will contain a
@@ -400,7 +400,7 @@ gtk_image_get_property (GObject     *object,
  * 
  * Returns: a new #GtkImage
  **/
-GtkWidget*
+GtkImage*
 gtk_image_new_from_file   (const gchar *filename)
 {
   GtkImage *image;
@@ -409,7 +409,7 @@ gtk_image_new_from_file   (const gchar *filename)
 
   gtk_image_set_from_file (image, filename);
 
-  return GTK_WIDGET (image);
+  return image;
 }
 
 /**
@@ -431,7 +431,7 @@ gtk_image_new_from_file   (const gchar *filename)
  *
  * Returns: a new #GtkImage
  **/
-GtkWidget*
+GtkImage*
 gtk_image_new_from_resource (const gchar *resource_path)
 {
   GtkImage *image;
@@ -440,7 +440,7 @@ gtk_image_new_from_resource (const gchar *resource_path)
 
   gtk_image_set_from_resource (image, resource_path);
 
-  return GTK_WIDGET (image);
+  return image;
 }
 
 /**
@@ -461,7 +461,7 @@ gtk_image_new_from_resource (const gchar *resource_path)
  * 
  * Returns: a new #GtkImage
  **/
-GtkWidget*
+GtkImage*
 gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
 {
   GtkImage *image;
@@ -470,7 +470,7 @@ gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
 
   gtk_image_set_from_pixbuf (image, pixbuf);
 
-  return GTK_WIDGET (image);  
+  return image;
 }
 
 /**
@@ -487,7 +487,7 @@ gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
  *
  * Returns: a new #GtkImage
  **/
-GtkWidget*
+GtkImage*
 gtk_image_new_from_paintable (GdkPaintable *paintable)
 {
   GtkImage *image;
@@ -496,7 +496,7 @@ gtk_image_new_from_paintable (GdkPaintable *paintable)
 
   gtk_image_set_from_paintable (image, paintable);
 
-  return GTK_WIDGET (image);  
+  return image;
 }
 
 /**
@@ -514,7 +514,7 @@ gtk_image_new_from_paintable (GdkPaintable *paintable)
  *
  * Returns: a new #GtkImage displaying the themed icon
  **/
-GtkWidget*
+GtkImage*
 gtk_image_new_from_icon_name (const gchar *icon_name)
 {
   GtkImage *image;
@@ -523,7 +523,7 @@ gtk_image_new_from_icon_name (const gchar *icon_name)
 
   gtk_image_set_from_icon_name (image, icon_name);
 
-  return GTK_WIDGET (image);
+  return image;
 }
 
 /**
@@ -541,7 +541,7 @@ gtk_image_new_from_icon_name (const gchar *icon_name)
  *
  * Returns: a new #GtkImage displaying the themed icon
  **/
-GtkWidget*
+GtkImage*
 gtk_image_new_from_gicon (GIcon *icon)
 {
   GtkImage *image;
@@ -550,7 +550,7 @@ gtk_image_new_from_gicon (GIcon *icon)
 
   gtk_image_set_from_gicon (image, icon);
 
-  return GTK_WIDGET (image);
+  return image;
 }
 
 typedef struct {
@@ -1054,7 +1054,7 @@ gtk_image_get_gicon (GtkImage *image)
  * 
  * Returns: a newly created #GtkImage widget. 
  **/
-GtkWidget*
+GtkImage*
 gtk_image_new (void)
 {
   return g_object_new (GTK_TYPE_IMAGE, NULL);

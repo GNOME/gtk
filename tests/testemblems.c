@@ -3,7 +3,7 @@
 int main (int argc, char **argv)
 {
 	GtkWidget *window;
-	GtkWidget *button;
+	GtkImage *button;
 	GtkWidget *grid;
         GIcon *icon;
         GIcon *icon2;
@@ -19,19 +19,19 @@ int main (int argc, char **argv)
 
         icon = g_themed_icon_new ("folder");
         button = gtk_image_new_from_gicon (icon);
-	gtk_grid_attach (GTK_GRID (grid), button, 1, 1, 1, 1);
+	gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (button), 1, 1, 1, 1);
 
         icon2 = g_themed_icon_new ("folder-symbolic");
         button = gtk_image_new_from_gicon (icon2);
-	gtk_grid_attach (GTK_GRID (grid), button, 2, 1, 1, 1);
+	gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (button), 2, 1, 1, 1);
 
 	icon = g_emblemed_icon_new (icon, g_emblem_new (g_themed_icon_new ("emblem-new")));
         button = gtk_image_new_from_gicon (icon);
-	gtk_grid_attach (GTK_GRID (grid), button, 1, 2, 1, 1);
+	gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (button), 1, 2, 1, 1);
 
 	icon2 = g_emblemed_icon_new (icon2, g_emblem_new (g_themed_icon_new ("emblem-new")));
         button = gtk_image_new_from_gicon (icon2);
-	gtk_grid_attach (GTK_GRID (grid), button, 2, 2, 1, 1);
+	gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (button), 2, 2, 1, 1);
 
 	gtk_widget_show (window);
 

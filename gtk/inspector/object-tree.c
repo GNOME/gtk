@@ -1034,7 +1034,7 @@ gtk_inspector_object_tree_create_list_widget (gpointer row_item,
     }
   else
     {
-      child = gtk_image_new (); /* empty whatever */
+      child = GTK_WIDGET (gtk_image_new ()); /* empty whatever */
     }
   gtk_container_add (GTK_CONTAINER (column), child);
 

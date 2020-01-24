@@ -318,7 +318,7 @@ main (int argc, char **argv)
   gtk_widget_set_valign (test_widget, GTK_ALIGN_CENTER);
 
 
-  test_child = gtk_image_new_from_icon_name ("weather-clear");
+  test_child = GTK_WIDGET (gtk_image_new_from_icon_name ("weather-clear"));
   gtk_widget_set_halign (test_child, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (test_child, GTK_ALIGN_CENTER);
   gtk_widget_set_size_request (test_child, TEST_WIDGET_MIN_SIZE / 2, TEST_WIDGET_MIN_SIZE / 2);

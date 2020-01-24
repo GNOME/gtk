@@ -335,12 +335,12 @@ create_widget_for_render_node (gpointer row_item,
     }
   else
     {
-      child = gtk_image_new (); /* empty whatever */
+      child = GTK_WIDGET (gtk_image_new ()); /* empty whatever */
     }
   gtk_container_add (GTK_CONTAINER (box), child);
 
   /* icon */
-  child = gtk_image_new_from_paintable (paintable);
+  child = GTK_WIDGET (gtk_image_new_from_paintable (paintable));
   gtk_container_add (GTK_CONTAINER (box), child);
 
   /* name */
@@ -1153,7 +1153,7 @@ node_property_activated (GtkTreeView *tv,
   GdkTexture *texture;
   gboolean visible;
   GtkWidget *popover;
-  GtkWidget *image;
+  GtkImage *image;
 
   gtk_tree_model_get_iter (GTK_TREE_MODEL (priv->render_node_properties), &iter, path);
   gtk_tree_model_get (GTK_TREE_MODEL (priv->render_node_properties), &iter,
@@ -1171,7 +1171,7 @@ node_property_activated (GtkTreeView *tv,
 
   image = gtk_image_new_from_paintable (GDK_PAINTABLE (texture));
   g_object_set (image, "margin", 20, NULL);
-  gtk_container_add (GTK_CONTAINER (popover), image);
+  gtk_container_add (GTK_CONTAINER (popover), GTK_WIDGET (image));
   gtk_popover_popup (GTK_POPOVER (popover));
 
   g_signal_connect (popover, "unmap", G_CALLBACK (gtk_widget_destroy), NULL);

@@ -315,7 +315,7 @@ drag_cancel (GtkDragSource       *source,
 GtkWidget *
 make_image (const gchar *icon_name, int hotspot)
 {
-  GtkWidget *image;
+  GtkImage *image;
   GtkDragSource *source;
   GtkDropTarget *dest;
   GdkContentFormats *formats;
@@ -323,7 +323,7 @@ make_image (const gchar *icon_name, int hotspot)
   GdkContentProvider *content;
 
   image = gtk_image_new_from_icon_name (icon_name);
-  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
+  gtk_image_set_icon_size (image, GTK_ICON_SIZE_LARGE);
 
   builder = gdk_content_formats_builder_new ();
   gdk_content_formats_builder_add_gtype (builder, GDK_TYPE_TEXTURE);
@@ -340,16 +340,16 @@ make_image (const gchar *icon_name, int hotspot)
   g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), NULL);
   g_signal_connect (source, "drag-end", G_CALLBACK (drag_end), NULL);
   g_signal_connect (source, "drag-cancel", G_CALLBACK (drag_cancel), NULL);
-  gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
+  gtk_widget_add_controller (GTK_WIDGET (image), GTK_EVENT_CONTROLLER (source));
 
   dest = gtk_drop_target_new (formats, GDK_ACTION_COPY|GDK_ACTION_MOVE|GDK_ACTION_ASK);
   g_signal_connect (dest, "accept", G_CALLBACK (image_drag_motion), image);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (image_drag_drop), image);
-  gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (dest));
+  gtk_widget_add_controller (GTK_WIDGET (image), GTK_EVENT_CONTROLLER (dest));
 
   gdk_content_formats_unref (formats);
 
-  return image;
+  return GTK_WIDGET (image);
 }
 
 static void

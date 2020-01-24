@@ -158,7 +158,8 @@ add_check_row (GtkInspectorGeneral *gen,
                gboolean             value,
                gint                 indent)
 {
-  GtkWidget *row, *box, *check;
+  GtkWidget *row, *box;
+  GtkImage *check;
   GtkLabel *label;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
@@ -175,10 +176,10 @@ add_check_row (GtkInspectorGeneral *gen,
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   check = gtk_image_new_from_icon_name ("object-select-symbolic");
-  gtk_widget_set_halign (check, GTK_ALIGN_END);
-  gtk_widget_set_valign (check, GTK_ALIGN_BASELINE);
-  gtk_widget_set_opacity (check, value ? 1.0 : 0.0);
-  gtk_container_add (GTK_CONTAINER (box), check);
+  gtk_widget_set_halign (GTK_WIDGET (check), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (check), GTK_ALIGN_BASELINE);
+  gtk_widget_set_opacity (GTK_WIDGET (check), value ? 1.0 : 0.0);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (check));
 
   row = gtk_list_box_row_new ();
   gtk_container_add (GTK_CONTAINER (row), box);

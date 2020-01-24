@@ -997,12 +997,12 @@ toolbutton_new (GtkCustomPaperUnixDialog *dialog,
                 GCallback                 callback)
 {
   GtkToolItem *item;
-  GtkWidget *image;
+  GtkImage *image;
 
   item = gtk_tool_button_new (NULL, NULL);
   image = gtk_image_new_from_gicon (icon);
-  gtk_widget_show (image);
-  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (item), image);
+  gtk_widget_show (GTK_WIDGET (image));
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (item), GTK_WIDGET (image));
 
   gtk_widget_set_sensitive (GTK_WIDGET (item), sensitive);
   g_signal_connect_swapped (item, "clicked", callback, dialog);

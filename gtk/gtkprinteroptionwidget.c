@@ -61,7 +61,7 @@ struct GtkPrinterOptionWidgetPrivate
   GtkWidget *check;
   GtkComboBox *combo;
   GtkEntry  *entry;
-  GtkWidget *image;
+  GtkImage *image;
   GtkLabel *label;
   GtkLabel *info_label;
   GtkWidget *box;
@@ -450,7 +450,7 @@ deconstruct_widgets (GtkPrinterOptionWidget *widget)
 
   if (priv->image)
     {
-      gtk_widget_destroy (priv->image);
+      gtk_widget_destroy (GTK_WIDGET (priv->image));
       priv->image = NULL;
     }
 
@@ -899,7 +899,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
     }
 
   priv->image = gtk_image_new_from_icon_name ("dialog-warning");
-  gtk_container_add (GTK_CONTAINER (widget), priv->image);
+  gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (priv->image));
 }
 
 /*
@@ -951,7 +951,7 @@ update_widgets (GtkPrinterOptionWidget *widget)
   
   if (source == NULL)
     {
-      gtk_widget_hide (priv->image);
+      gtk_widget_hide (GTK_WIDGET (priv->image));
       return;
     }
 
@@ -1021,9 +1021,9 @@ update_widgets (GtkPrinterOptionWidget *widget)
     }
 
   if (source->has_conflict)
-    gtk_widget_show (priv->image);
+    gtk_widget_show (GTK_WIDGET (priv->image));
   else
-    gtk_widget_hide (priv->image);
+    gtk_widget_hide (GTK_WIDGET (priv->image));
 }
 
 gboolean

@@ -66,7 +66,8 @@ drag_drop (GtkDropTarget    *dest,
 static GtkWidget *
 create_row (const gchar *text)
 {
-  GtkWidget *row, *box, *image;
+  GtkWidget *row, *box;
+  GtkImage *image;
   GtkLabel *label;
   GBytes *bytes;
   GdkContentProvider *content;
@@ -82,7 +83,7 @@ create_row (const gchar *text)
   gtk_container_add (GTK_CONTAINER (row), box);
   gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
-  gtk_container_add (GTK_CONTAINER (box), image);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (image));
 
   bytes = g_bytes_new (&row, sizeof (gpointer));
   content = gdk_content_provider_new_for_bytes ("GTK_LIST_BOX_ROW", bytes);
@@ -90,7 +91,7 @@ create_row (const gchar *text)
   gtk_drag_source_set_content (source, content);
   gtk_drag_source_set_actions (source, GDK_ACTION_MOVE);
   g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), image);
-  gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
+  gtk_widget_add_controller (GTK_WIDGET (image), GTK_EVENT_CONTROLLER (source));
 
   targets = gdk_content_formats_new (entries, 1);
   dest = gtk_drop_target_new (targets, GDK_ACTION_MOVE);

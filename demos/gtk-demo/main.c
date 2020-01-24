@@ -564,13 +564,14 @@ fontify (GtkTextBuffer *source_buffer)
 static GtkWidget *
 display_image (const char *resource)
 {
-  GtkWidget *sw, *image;
+  GtkWidget *sw;
+  GtkImage *image;
 
   image = gtk_image_new_from_resource (resource);
-  gtk_widget_set_halign (image, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (image, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (GTK_WIDGET (image), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (image), GTK_ALIGN_CENTER);
   sw = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (sw), image);
+  gtk_container_add (GTK_CONTAINER (sw), GTK_WIDGET (image));
 
   return sw;
 }
