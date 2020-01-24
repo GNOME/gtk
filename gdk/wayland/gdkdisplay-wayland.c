@@ -1068,6 +1068,7 @@ gdk_wayland_display_set_cursor_theme (GdkDisplay  *display,
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY(display);
   struct wl_cursor_theme *theme;
   int i;
+  char *path;
 
   g_assert (display_wayland);
   g_assert (display_wayland->shm);
@@ -1076,7 +1077,9 @@ gdk_wayland_display_set_cursor_theme (GdkDisplay  *display,
       display_wayland->cursor_theme_size == size)
     return;
 
-  theme = wl_cursor_theme_load (name, size, display_wayland->shm);
+  path = g_strconcat ("/usr/share/icons/", name, "/cursors", NULL);
+  theme = wl_cursor_theme_load (path, size, display_wayland->shm);
+  g_free (path);
   if (theme == NULL)
     {
       g_warning ("Failed to load cursor theme %s", name);
