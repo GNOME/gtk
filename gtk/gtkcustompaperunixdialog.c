@@ -393,11 +393,11 @@ gtk_custom_paper_unix_dialog_finalize (GObject *object)
  *
  * Returns: the new #GtkCustomPaperUnixDialog
  */
-GtkWidget *
+GtkCustomPaperUnixDialog *
 _gtk_custom_paper_unix_dialog_new (GtkWindow   *parent,
                                    const gchar *title)
 {
-  GtkWidget *result;
+  GtkCustomPaperUnixDialog *result;
 
   if (title == NULL)
     title = _("Manage Custom Sizes");
