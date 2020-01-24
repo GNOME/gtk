@@ -340,6 +340,17 @@ _gtk_css_image_print (GtkCssImage *image,
   klass->print (image, string);
 }
 
+char *
+gtk_css_image_to_string (GtkCssImage *image)
+{
+  GString *str = g_string_new ("");
+
+  _gtk_css_image_print (image, str);
+
+  return g_string_free (str, FALSE);
+}
+
+
 /* Applies the algorithm outlined in
  * http://dev.w3.org/csswg/css3-images/#default-sizing
  */
