@@ -79,7 +79,7 @@
  *
  * |[<!-- language="C" -->
  * {
- *   GtkWidget *button;
+ *   GtkFileChooserButton *button;
  *
  *   button = gtk_file_chooser_button_new (_("Select a file"),
  *                                         GTK_FILE_CHOOSER_ACTION_OPEN);
@@ -2843,7 +2843,7 @@ native_response_cb (GtkFileChooserNative *native,
  *
  * Returns: a new button widget.
  */
-GtkWidget *
+GtkFileChooserButton *
 gtk_file_chooser_button_new (const gchar          *title,
 			     GtkFileChooserAction  action)
 {
@@ -2873,7 +2873,7 @@ gtk_file_chooser_button_new (const gchar          *title,
  *
  * Returns: a new button widget.
  */
-GtkWidget *
+GtkFileChooserButton *
 gtk_file_chooser_button_new_with_dialog (GtkWidget *dialog)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (dialog) && GTK_IS_DIALOG (dialog), NULL);
