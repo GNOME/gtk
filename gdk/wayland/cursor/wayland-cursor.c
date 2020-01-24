@@ -36,6 +36,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <os-compatibility.h>
+#include <glib.h>
 
 #define ARRAY_LENGTH(a) (sizeof (a) / sizeof (a)[0])
 
@@ -134,8 +135,8 @@ struct wl_cursor_theme {
 	struct wl_cursor **cursors;
 	struct wl_shm *shm;
 	struct shm_pool *pool;
-	char *name;
 	int size;
+        char *path;
 };
 
 struct cursor_image {
@@ -200,7 +201,8 @@ wl_cursor_destroy(struct wl_cursor *cursor)
 
 static struct wl_cursor *
 wl_cursor_create_from_xcursor_images(XcursorImages *images,
-				     struct wl_cursor_theme *theme)
+				     struct wl_cursor_theme *theme,
+                                     const char *name)
 {
 	struct cursor *cursor;
 	struct cursor_image *image;
@@ -217,7 +219,7 @@ wl_cursor_create_from_xcursor_images(XcursorImages *images,
 		return NULL;
 	}
 
-	cursor->cursor.name = strdup(images->name);
+	cursor->cursor.name = strdup(name);
 	cursor->total_delay = 0;
 
 	for (i = 0; i < images->nimage; i++) {
@@ -260,17 +262,15 @@ wl_cursor_create_from_xcursor_images(XcursorImages *images,
 }
 
 static void
-load_callback(XcursorImages *images, void *data)
+load_cursor(struct wl_cursor_theme *theme, const char *name)
 {
-	struct wl_cursor_theme *theme = data;
+        XcursorImages *images;
 	struct wl_cursor *cursor;
+        char *path;
 
-	if (wl_cursor_theme_get_cursor(theme, images->name)) {
-		XcursorImagesDestroy(images);
-		return;
-	}
-
-	cursor = wl_cursor_create_from_xcursor_images(images, theme);
+        path = g_strconcat (theme->path, "/", name, NULL);
+        images = xcursor_load_images (path, theme->size);
+	cursor = wl_cursor_create_from_xcursor_images(images, theme, name);
 
 	if (cursor) {
 		theme->cursor_count++;
@@ -287,6 +287,7 @@ load_callback(XcursorImages *images, void *data)
 	}
 
 	XcursorImagesDestroy(images);
+        g_free (path);
 }
 
 /** Load a cursor theme to memory shared with the compositor
@@ -301,7 +302,7 @@ load_callback(XcursorImages *images, void *data)
  * name exists, a default theme will be loaded.
  */
 WL_EXPORT struct wl_cursor_theme *
-wl_cursor_theme_load(const char *name, int size, struct wl_shm *shm)
+wl_cursor_theme_load(const char *path, int size, struct wl_shm *shm)
 {
 	struct wl_cursor_theme *theme;
 
@@ -309,29 +310,19 @@ wl_cursor_theme_load(const char *name, int size, struct wl_shm *shm)
 	if (!theme)
 		return NULL;
 
-	if (!name)
-		name = "default";
-
-	theme->name = strdup(name);
-	if (!theme->name)
-		goto out_error_name;
+	theme->path = strdup (path);
 	theme->size = size;
 	theme->cursor_count = 0;
 	theme->cursors = NULL;
 
 	theme->pool = shm_pool_create(shm, size * size * 4);
-	if (!theme->pool)
-		goto out_error_pool;
-
-	xcursor_load_theme(name, size, load_callback, theme);
+	if (!theme->pool) {
+                free (theme->path);
+                free (theme);
+		return NULL;
+        }
 
 	return theme;
-
-out_error_pool:
-	free(theme->name);
-out_error_name:
-	free(theme);
-	return NULL;
 }
 
 /** Destroys a cursor theme object
@@ -348,8 +339,8 @@ wl_cursor_theme_destroy(struct wl_cursor_theme *theme)
 
 	shm_pool_destroy(theme->pool);
 
-	free(theme->name);
 	free(theme->cursors);
+        free(theme->path);
 	free(theme);
 }
 
@@ -364,78 +355,16 @@ WL_EXPORT struct wl_cursor *
 wl_cursor_theme_get_cursor(struct wl_cursor_theme *theme,
 			   const char *name)
 {
+        int t;
 	unsigned int i;
 
-	for (i = 0; i < theme->cursor_count; i++) {
-		if (strcmp(name, theme->cursors[i]->name) == 0)
-			return theme->cursors[i];
-	}
+        for (t = 0; t < 1; t++) {
+	        for (i = 0; i < theme->cursor_count; i++) {
+		        if (strcmp(name, theme->cursors[i]->name) == 0)
+			        return theme->cursors[i];
+	        }
+                load_cursor (theme, name);
+        }
 
 	return NULL;
-}
-
-/** Find the frame for a given elapsed time in a cursor animation
- *  as well as the time left until next cursor change.
- *
- * \param cursor The cursor
- * \param time Elapsed time in ms since the beginning of the animation
- * \param duration pointer to uint32_t to store time left for this image or
- *                 zero if the cursor won't change.
- *
- * \return The index of the image that should be displayed for the
- * given time in the cursor animation.
- */
-WL_EXPORT int
-wl_cursor_frame_and_duration(struct wl_cursor *_cursor, uint32_t time,
-			     uint32_t *duration)
-{
-	struct cursor *cursor = (struct cursor *) _cursor;
-	uint32_t t;
-	int i;
-
-	if (cursor->cursor.image_count == 1) {
-		if (duration)
-			*duration = 0;
-		return 0;
-	}
-
-	i = 0;
-	t = time % cursor->total_delay;
-
-	/* If there is a 0 delay in the image set then this
-	 * loop breaks on it and we display that cursor until
-	 * time % cursor->total_delay wraps again.
-	 * Since a 0 delay is silly, and we've never actually
-	 * seen one in a cursor file, we haven't bothered to
-	 * "fix" this.
-	 */
-	while (t - cursor->cursor.images[i]->delay < t)
-		t -= cursor->cursor.images[i++]->delay;
-
-	if (!duration)
-		return i;
-
-	/* Make sure we don't accidentally tell the caller this is
-	 * a static cursor image.
-	 */
-	if (t >= cursor->cursor.images[i]->delay)
-		*duration = 1;
-	else
-		*duration = cursor->cursor.images[i]->delay - t;
-
-	return i;
-}
-
-/** Find the frame for a given elapsed time in a cursor animation
- *
- * \param cursor The cursor
- * \param time Elapsed time in ms since the beginning of the animation
- *
- * \return The index of the image that should be displayed for the
- * given time in the cursor animation.
- */
-WL_EXPORT int
-wl_cursor_frame(struct wl_cursor *_cursor, uint32_t time)
-{
-	return wl_cursor_frame_and_duration(_cursor, time, NULL);
 }

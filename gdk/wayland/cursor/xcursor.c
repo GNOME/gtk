@@ -975,3 +975,16 @@ xcursor_load_theme(const char *theme, int size,
 	if (inherits)
 		free(inherits);
 }
+
+XcursorImages *
+xcursor_load_images (const char *path, int size)
+{
+        FILE    *f;
+        XcursorImages *images;
+
+        f = fopen (path, "r");
+        images = XcursorFileLoadImages (f, size);
+        fclose (f);
+
+        return images;
+}
