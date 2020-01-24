@@ -206,7 +206,7 @@ struct _GtkIconTheme
   GHashTable *info_cache; /* Protected by info_cache lock */
 
   GtkIconInfo *lru_cache[LRU_CACHE_SIZE];
-  int lru_cache_next;
+  int lru_cache_current;
 
   gchar *current_theme;
   gchar **search_path;
@@ -293,18 +293,23 @@ struct _GtkIconInfo
    */
   gint desired_size;
   gint desired_scale;
+  gdouble unscaled_scale;
   guint forced_size     : 1;
   guint is_svg          : 1;
   guint is_resource     : 1;
 
-  /* Cached information if we go ahead and try to load
-   * the icon.
+
+  /* Cached information if we go ahead and try to load the icon.
+   *
+   * All access to these are protected by the cache_lock. Everything
+   * above is immutable after construction and can be used without
+   * locks.
    */
+  GMutex cache_lock;
+
   GdkTexture *texture;
   GError *load_error;
-  gdouble unscaled_scale;
   gdouble scale;
-
   gint symbolic_width;
   gint symbolic_height;
 };
@@ -382,7 +387,7 @@ static GtkIconInfo *icon_info_new             (IconThemeDirType  type,
                                                gint              dir_size,
                                                gint              dir_scale);
 static IconSuffix   suffix_from_name          (const gchar      *name);
-static gboolean     icon_info_ensure_scale_and_texture (GtkIconInfo* icon_info);
+static gboolean     icon_info_ensure_scale_and_texture__locked (GtkIconInfo* icon_info);
 static void         unset_display             (GtkIconTheme     *self);
 static void         update_current_theme__mainthread (GtkIconTheme *self);
 
@@ -519,17 +524,37 @@ icon_info_key_equal (gconstpointer _a,
   return a->icon_names[i] == NULL && b->icon_names[i] == NULL;
 }
 
+static gboolean
+icon_info_should_cache__locked (GtkIconInfo *info)
+{
+  return
+    info->texture &&
+    info->texture->width <= MAX_LRU_TEXTURE_SIZE &&
+    info->texture->height <= MAX_LRU_TEXTURE_SIZE;
+}
+
+static gboolean
+icon_info_should_cache__unlocked (GtkIconInfo *info)
+{
+  gboolean res;
+
+  g_mutex_lock (&info->cache_lock);
+  res = icon_info_should_cache__locked (info);
+  g_mutex_unlock (&info->cache_lock);
+
+  return res;
+}
+
 G_DEFINE_TYPE (GtkIconTheme, gtk_icon_theme, G_TYPE_OBJECT)
 
 static void
 add_to_lru_cache (GtkIconTheme *self, GtkIconInfo *info)
 {
-  if (info->texture &&
-      info->texture->width <= MAX_LRU_TEXTURE_SIZE &&
-      info->texture->height <= MAX_LRU_TEXTURE_SIZE)
+  /* Avoid storing the same info multiple times in a row */
+  if (self->lru_cache[self->lru_cache_current] != info)
     {
-      g_set_object (&self->lru_cache[self->lru_cache_next], info);
-      self->lru_cache_next = (self->lru_cache_next + 1) % LRU_CACHE_SIZE;
+      self->lru_cache_current = (self->lru_cache_current + 1) % LRU_CACHE_SIZE;
+      g_set_object (&self->lru_cache[self->lru_cache_current], info);
     }
 }
 
@@ -1720,7 +1745,8 @@ real_choose_icon (GtkIconTheme       *self,
                     g_hash_table_size (self->info_cache)));
 
       /* Move item to front in LRU cache */
-      add_to_lru_cache (self, icon_info);
+      if (icon_info_should_cache__unlocked (icon_info))
+        add_to_lru_cache (self, icon_info);
 
       return icon_info;
     }
@@ -3297,6 +3323,7 @@ static void
 gtk_icon_info_init (GtkIconInfo *icon_info)
 {
   icon_info->scale = -1.;
+  g_mutex_init (&icon_info->cache_lock);
 }
 
 static GtkIconInfo *
@@ -3334,13 +3361,10 @@ icon_info_dup (GtkIconInfo *icon_info)
 
   if (icon_info->loadable)
     dup->loadable = g_object_ref (icon_info->loadable);
-  if (icon_info->texture)
-    dup->texture = g_object_ref (icon_info->texture);
 
   if (icon_info->cache_pixbuf)
     dup->cache_pixbuf = g_object_ref (icon_info->cache_pixbuf);
 
-  dup->scale = icon_info->scale;
   dup->unscaled_scale = icon_info->unscaled_scale;
   dup->desired_size = icon_info->desired_size;
   dup->desired_scale = icon_info->desired_scale;
@@ -3348,8 +3372,16 @@ icon_info_dup (GtkIconInfo *icon_info)
   dup->is_resource = icon_info->is_resource;
   dup->min_size = icon_info->min_size;
   dup->max_size = icon_info->max_size;
+
+  g_mutex_lock (&icon_info->cache_lock);
+
+  if (icon_info->texture)
+    dup->texture = g_object_ref (icon_info->texture);
+  dup->scale = icon_info->scale;
   dup->symbolic_width = icon_info->symbolic_width;
   dup->symbolic_height = icon_info->symbolic_height;
+
+  g_mutex_unlock (&icon_info->cache_lock);
 
   return dup;
 }
@@ -3372,6 +3404,8 @@ gtk_icon_info_finalize (GObject *object)
   g_clear_object (&icon_info->texture);
   g_clear_object (&icon_info->cache_pixbuf);
   g_clear_error (&icon_info->load_error);
+
+  g_mutex_clear (&icon_info->cache_lock);
 
   G_OBJECT_CLASS (gtk_icon_info_parent_class)->finalize (object);
 }
@@ -3471,23 +3505,31 @@ gtk_icon_info_is_symbolic (GtkIconInfo *icon_info)
          icon_uri_is_symbolic (icon_info->filename, -1);
 }
 
-/* If this returns TRUE, its safe to call icon_info_ensure_scale_and_texture
- * without blocking
+/* If this returns TRUE, its safe to call icon_info_ensure_scale_and_texture__locked
+ * without blocking. Call with cache_lock held.
  */
 static gboolean
-icon_info_get_pixbuf_ready (GtkIconInfo *icon_info)
+icon_info_get_pixbuf_ready__locked (GtkIconInfo *icon_info)
 {
-  if (icon_info->texture)
-    return TRUE;
+  return icon_info->texture != NULL || icon_info->load_error != NULL;
+}
 
-  if (icon_info->load_error)
-    return TRUE;
+static gboolean
+icon_info_get_pixbuf_ready__unlocked (GtkIconInfo *icon_info)
+{
+  gboolean res;
 
-  return FALSE;
+  g_mutex_lock (&icon_info->cache_lock);
+
+  res = icon_info_get_pixbuf_ready__locked (icon_info);
+
+  g_mutex_unlock (&icon_info->cache_lock);
+
+  return res;
 }
 
 static void
-icon_info_add_to_lru_cache (GtkIconInfo *info)
+icon_info_add_to_lru_cache__locked (GtkIconInfo *info)
 {
   GtkIconTheme *theme = NULL;
 
@@ -3499,7 +3541,8 @@ icon_info_add_to_lru_cache (GtkIconInfo *info)
   if (theme)
     {
       gtk_icon_theme_lock (theme);
-      add_to_lru_cache (theme, info);
+      if (icon_info_should_cache__locked (info))
+        add_to_lru_cache (theme, info);
       gtk_icon_theme_unlock (theme);
       g_object_unref (theme);
     }
@@ -3535,7 +3578,7 @@ icon_info_get_loadable (GtkIconInfo *icon_info)
  * that size.
  */
 static gboolean
-icon_info_ensure_scale_and_texture (GtkIconInfo *icon_info)
+icon_info_ensure_scale_and_texture__locked (GtkIconInfo *icon_info)
 {
   gint image_width, image_height, image_size;
   gint scaled_desired_size;
@@ -3737,7 +3780,7 @@ icon_info_ensure_scale_and_texture (GtkIconInfo *icon_info)
     }
 
   g_assert (icon_info->texture != NULL);
-  icon_info_add_to_lru_cache (icon_info);
+  icon_info_add_to_lru_cache__locked (icon_info);
 
   return TRUE;
 }
@@ -3769,10 +3812,13 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
 {
   g_return_val_if_fail (icon_info != NULL, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+  GdkPaintable *paintable = NULL;
+
+  g_mutex_lock (&icon_info->cache_lock);
 
   if (!icon_info->texture)
     {
-      icon_info_ensure_scale_and_texture (icon_info);
+      icon_info_ensure_scale_and_texture__locked (icon_info);
 
       /* Still no texture -> error */
       if (!icon_info->texture)
@@ -3790,11 +3836,16 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
                                    _("Failed to load icon"));
             }
 
-          return NULL;
+          goto out;
         }
     }
 
-  return GDK_PAINTABLE (g_object_ref (icon_info->texture));
+  paintable = GDK_PAINTABLE (g_object_ref (icon_info->texture));
+
+ out:
+  g_mutex_unlock (&icon_info->cache_lock);
+
+  return paintable;
 }
 
 static void
@@ -3805,7 +3856,9 @@ load_icon_thread  (GTask        *task,
 {
   GtkIconInfo *dup = task_data;
 
-  (void)icon_info_ensure_scale_and_texture (dup);
+  g_mutex_lock (&dup->cache_lock);
+  (void)icon_info_ensure_scale_and_texture__locked (dup);
+  g_mutex_unlock (&dup->cache_lock);
   g_task_return_pointer (task, NULL, NULL);
 }
 
@@ -3833,7 +3886,7 @@ gtk_icon_info_load_icon_async (GtkIconInfo         *icon_info,
 
   task = g_task_new (icon_info, cancellable, callback, user_data);
 
-  if (icon_info_get_pixbuf_ready (icon_info))
+  if (icon_info_get_pixbuf_ready__unlocked (icon_info))
     {
       GError *error = NULL;
       GdkPaintable *paintable = gtk_icon_info_load_icon (icon_info, &error);
@@ -3884,7 +3937,8 @@ gtk_icon_info_load_icon_finish (GtkIconInfo   *icon_info,
   /* We ran the thread and it was not cancelled */
 
   /* Check if someone else updated the icon_info in between */
-  if (!icon_info_get_pixbuf_ready (icon_info))
+  g_mutex_lock (&icon_info->cache_lock);
+  if (!icon_info_get_pixbuf_ready__locked (icon_info))
     {
       /* If not, copy results from dup back to icon_info */
       icon_info->scale = dup->scale;
@@ -3896,7 +3950,9 @@ gtk_icon_info_load_icon_finish (GtkIconInfo   *icon_info,
         icon_info->load_error = g_error_copy (dup->load_error);
     }
 
-  g_assert (icon_info_get_pixbuf_ready (icon_info));
+  g_assert (icon_info_get_pixbuf_ready__locked (icon_info));
+
+  g_mutex_unlock (&icon_info->cache_lock);
 
   /* This is now guaranteed to not block */
   return gtk_icon_info_load_icon (icon_info, error);
@@ -3917,7 +3973,9 @@ gtk_icon_info_load_symbolic_png (GtkIconInfo    *icon_info,
   GdkPixbuf *pixbuf;
   GdkPixbuf *colored;
 
-  if (!icon_info_ensure_scale_and_texture (icon_info))
+  g_mutex_lock (&icon_info->cache_lock);
+
+  if (!icon_info_ensure_scale_and_texture__locked (icon_info))
     {
       if (icon_info->load_error)
         {
@@ -3931,11 +3989,14 @@ gtk_icon_info_load_symbolic_png (GtkIconInfo    *icon_info,
                                GTK_ICON_THEME_NOT_FOUND,
                                _("Failed to load icon"));
         }
+      g_mutex_unlock (&icon_info->cache_lock);
 
       return NULL;
     }
 
   pixbuf = gdk_pixbuf_get_from_texture (icon_info->texture);
+  g_mutex_unlock (&icon_info->cache_lock);
+
   colored = gtk_color_symbolic_pixbuf (pixbuf,
                                        fg ? fg : &fg_default,
                                        success_color ? success_color : &success_default,
@@ -3977,6 +4038,7 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
   gchar *svg_data;
   gchar *width;
   gchar *height;
+  guint texture_width, texture_height;
   char *escaped_file_data;
   double alpha;
   gchar alphastr[G_ASCII_DTOSTR_BUF_SIZE];
@@ -4018,10 +4080,12 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
       g_free (file_data);
     }
 
-  if (!icon_info_ensure_scale_and_texture (icon_info))
+  g_mutex_lock (&icon_info->cache_lock);
+  if (!icon_info_ensure_scale_and_texture__locked (icon_info))
     {
       g_propagate_error (error, icon_info->load_error);
       icon_info->load_error = NULL;
+      g_mutex_unlock (&icon_info->cache_lock);
       g_free (escaped_file_data);
       return NULL;
     }
@@ -4038,6 +4102,7 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
       if (!pixbuf)
         {
           g_free (escaped_file_data);
+          g_mutex_unlock (&icon_info->cache_lock);
           return NULL;
         }
 
@@ -4060,6 +4125,11 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
 
   width = g_strdup_printf ("%d", icon_info->symbolic_width);
   height = g_strdup_printf ("%d", icon_info->symbolic_height);
+
+  texture_width = gdk_texture_get_width (icon_info->texture);
+  texture_height = gdk_texture_get_height (icon_info->texture);
+
+  g_mutex_unlock (&icon_info->cache_lock);
 
   g_ascii_dtostr (alphastr, G_ASCII_DTOSTR_BUF_SIZE, CLAMP (alpha, 0, 1));
 
@@ -4093,8 +4163,8 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
   stream = g_memory_input_stream_new_from_data (svg_data, -1, g_free);
   pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream,
                                                  "svg",
-                                                gdk_texture_get_width (icon_info->texture),
-                                                gdk_texture_get_height (icon_info->texture),
+                                                texture_width,
+                                                texture_height,
                                                 TRUE,
                                                 NULL,
                                                 error);
@@ -4184,7 +4254,6 @@ gtk_icon_info_load_symbolic (GtkIconInfo    *icon_info,
                                                  fg, success_color,
                                                  warning_color, error_color,
                                                  error);
-
   if (pixbuf)
     {
       GdkTexture *texture = gdk_texture_new_for_pixbuf (pixbuf);
