@@ -329,7 +329,7 @@ _gtk_css_value_print (const GtkCssValue *value,
  * Returns %TRUE if the value is dynamic
  */
 gboolean
-gtk_css_value_is_dynamic (GtkCssValue *value)
+gtk_css_value_is_dynamic (const GtkCssValue *value)
 {
   gtk_internal_return_val_if_fail (value != NULL, FALSE);
 

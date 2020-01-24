@@ -97,9 +97,9 @@ GType          _gtk_css_image_get_type             (void) G_GNUC_CONST;
 gboolean       _gtk_css_image_can_parse            (GtkCssParser               *parser);
 GtkCssImage *  _gtk_css_image_new_parse            (GtkCssParser               *parser);
 
-int            _gtk_css_image_get_width            (GtkCssImage                *image);
-int            _gtk_css_image_get_height           (GtkCssImage                *image);
-double         _gtk_css_image_get_aspect_ratio     (GtkCssImage                *image);
+int            _gtk_css_image_get_width            (GtkCssImage                *image) G_GNUC_PURE;
+int            _gtk_css_image_get_height           (GtkCssImage                *image) G_GNUC_PURE;
+double         _gtk_css_image_get_aspect_ratio     (GtkCssImage                *image) G_GNUC_PURE;
 
 GtkCssImage *  _gtk_css_image_compute              (GtkCssImage                *image,
                                                     guint                       property_id,
@@ -107,7 +107,7 @@ GtkCssImage *  _gtk_css_image_compute              (GtkCssImage                *
                                                     GtkCssStyle                *style,
                                                     GtkCssStyle                *parent_style);
 gboolean       _gtk_css_image_equal                (GtkCssImage                *image1,
-                                                    GtkCssImage                *image2);
+                                                    GtkCssImage                *image2) G_GNUC_PURE;
 GtkCssImage *  _gtk_css_image_transition           (GtkCssImage                *start,
                                                     GtkCssImage                *end,
                                                     guint                       property_id,
@@ -121,8 +121,8 @@ void           gtk_css_image_snapshot              (GtkCssImage                *
                                                     GtkSnapshot                *snapshot,
                                                     double                      width,
                                                     double                      height);
-gboolean       gtk_css_image_is_invalid            (GtkCssImage                *image);
-gboolean       gtk_css_image_is_dynamic            (GtkCssImage                *image);
+gboolean       gtk_css_image_is_invalid            (GtkCssImage                *image) G_GNUC_PURE;
+gboolean       gtk_css_image_is_dynamic            (GtkCssImage                *image) G_GNUC_PURE;
 GtkCssImage *  gtk_css_image_get_dynamic_image     (GtkCssImage                *image,
                                                     gint64                      monotonic_time);
 void           _gtk_css_image_print                (GtkCssImage                *image,
@@ -141,7 +141,7 @@ cairo_surface_t *
                                                     cairo_surface_t            *target,
                                                     int                         surface_width,
                                                     int                         surface_height);
-gboolean       gtk_css_image_is_computed           (GtkCssImage                *image);
+gboolean       gtk_css_image_is_computed           (GtkCssImage                *image) G_GNUC_PURE;
 
 
 G_END_DECLS

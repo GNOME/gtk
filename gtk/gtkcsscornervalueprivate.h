@@ -30,9 +30,9 @@ GtkCssValue *   _gtk_css_corner_value_new           (GtkCssValue            *x,
 GtkCssValue *   _gtk_css_corner_value_parse         (GtkCssParser           *parser);
 
 double          _gtk_css_corner_value_get_x         (const GtkCssValue      *corner,
-                                                     double                  one_hundred_percent);
+                                                     double                  one_hundred_percent) G_GNUC_PURE;
 double          _gtk_css_corner_value_get_y         (const GtkCssValue      *corner,
-                                                     double                  one_hundred_percent);
+                                                     double                  one_hundred_percent) G_GNUC_PURE;
 
 
 G_END_DECLS
