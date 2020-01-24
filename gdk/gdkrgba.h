@@ -53,15 +53,15 @@ GDK_AVAILABLE_IN_ALL
 void      gdk_rgba_free      (GdkRGBA       *rgba);
 
 GDK_AVAILABLE_IN_ALL
-gboolean  gdk_rgba_is_clear  (const GdkRGBA *rgba);
+gboolean  gdk_rgba_is_clear  (const GdkRGBA *rgba) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
-gboolean  gdk_rgba_is_opaque (const GdkRGBA *rgba);
+gboolean  gdk_rgba_is_opaque (const GdkRGBA *rgba) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
-guint     gdk_rgba_hash      (gconstpointer  p);
+guint     gdk_rgba_hash      (gconstpointer  p) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 gboolean  gdk_rgba_equal     (gconstpointer  p1,
-                              gconstpointer  p2);
+                              gconstpointer  p2) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
 gboolean  gdk_rgba_parse     (GdkRGBA       *rgba,
