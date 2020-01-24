@@ -744,10 +744,6 @@ render_border_node (GskGLRenderer   *self,
                     GskRenderNode   *node,
                     RenderOpBuilder *builder)
 {
-  const float min_x = builder->dx + node->bounds.origin.x;
-  const float min_y = builder->dy + node->bounds.origin.y;
-  const float max_x = min_x + node->bounds.size.width;
-  const float max_y = min_y + node->bounds.size.height;
   const GdkRGBA *colors = gsk_border_node_peek_colors (node);
   const GskRoundedRect *rounded_outline = gsk_border_node_peek_outline (node);
   const float *widths = gsk_border_node_peek_widths (node);
@@ -824,6 +820,10 @@ render_border_node (GskGLRenderer   *self,
     sizes[3].h = 0;
 
   {
+    const float min_x = builder->dx + node->bounds.origin.x;
+    const float min_y = builder->dy + node->bounds.origin.y;
+    const float max_x = min_x + node->bounds.size.width;
+    const float max_y = min_y + node->bounds.size.height;
     const GskQuadVertex side_data[4][6] = {
       /* Top */
       {
