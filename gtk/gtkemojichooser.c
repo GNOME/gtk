@@ -771,8 +771,8 @@ gtk_emoji_chooser_class_init (GtkEmojiChooserClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, long_pressed_cb);
 }
 
-GtkWidget *
+GtkEmojiChooser *
 gtk_emoji_chooser_new (void)
 {
-  return GTK_WIDGET (g_object_new (GTK_TYPE_EMOJI_CHOOSER, NULL));
+  return g_object_new (GTK_TYPE_EMOJI_CHOOSER, NULL);
 }

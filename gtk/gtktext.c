@@ -1834,7 +1834,7 @@ gtk_text_dispose (GObject *object)
   GtkText *self = GTK_TEXT (object);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GdkKeymap *keymap;
-  GtkWidget *chooser;
+  GtkEmojiChooser *chooser;
 
   priv->current_pos = 0;
 
@@ -1846,9 +1846,9 @@ gtk_text_dispose (GObject *object)
     }
 
   g_clear_pointer (&priv->emoji_completion, gtk_widget_unparent);
-  chooser = g_object_get_data (object, "gtk-emoji-chooser");
+  chooser = GTK_EMOJI_CHOOSER (g_object_get_data (object, "gtk-emoji-chooser"));
   if (chooser)
-    gtk_widget_unparent (chooser);
+    gtk_widget_unparent (GTK_WIDGET (chooser));
 
   keymap = gdk_display_get_keymap (gtk_widget_get_display (GTK_WIDGET (object)));
   g_signal_handlers_disconnect_by_func (keymap, keymap_direction_changed, self);
@@ -2341,7 +2341,7 @@ gtk_text_size_allocate (GtkWidget *widget,
   gtk_text_check_cursor_blink (self);
   update_im_cursor_location (self);
 
-  chooser = g_object_get_data (G_OBJECT (self), "gtk-emoji-chooser");
+  chooser = GTK_EMOJI_CHOOSER (g_object_get_data (G_OBJECT (self), "gtk-emoji-chooser"));
   if (chooser)
     gtk_native_check_resize (GTK_NATIVE (chooser));
 
@@ -6800,12 +6800,12 @@ static void
 gtk_text_insert_emoji (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GtkWidget *chooser;
+  GtkEmojiChooser *chooser;
 
   if (gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_EMOJI_CHOOSER) != NULL)
     return;
 
-  chooser = GTK_WIDGET (g_object_get_data (G_OBJECT (self), "gtk-emoji-chooser"));
+  chooser = GTK_EMOJI_CHOOSER (g_object_get_data (G_OBJECT (self), "gtk-emoji-chooser"));
   if (!chooser)
     {
       chooser = gtk_emoji_chooser_new ();
