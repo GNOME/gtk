@@ -138,7 +138,7 @@ gtk_css_selector_equal (const GtkCssSelector *a,
 static guint
 gtk_css_selector_hash_one (const GtkCssSelector *selector)
 {
-  return GPOINTER_TO_UINT (selector->class) ^ selector->class->hash_one (selector);
+  return selector->class->hash_one (selector);
 }
 
 static inline gpointer *
@@ -277,7 +277,7 @@ gtk_css_selector_default_match_one (const GtkCssSelector *selector,
 static guint
 gtk_css_selector_default_hash_one (const GtkCssSelector *selector)
 {
-  return 0;
+  return GPOINTER_TO_UINT (selector->class);
 }
 
 static int
@@ -610,7 +610,7 @@ match_name (const GtkCssSelector *selector,
 static guint
 hash_name (const GtkCssSelector *a)
 {
-  return a->name.name;
+  return gtk_css_hash_name (a->name.name);
 }
 
 static int
@@ -642,7 +642,7 @@ match_class (const GtkCssSelector *selector,
 static guint
 hash_class (const GtkCssSelector *a)
 {
-  return a->style_class.style_class;
+  return gtk_css_hash_class (a->style_class.style_class);
 }
 
 static int
@@ -679,7 +679,7 @@ match_id (const GtkCssSelector *selector,
 static guint
 hash_id (const GtkCssSelector *a)
 {
-  return a->id.name;
+  return gtk_css_hash_id (a->id.name);
 }
 
 static int
