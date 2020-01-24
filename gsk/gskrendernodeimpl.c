@@ -41,8 +41,8 @@ rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
 }
 
 static gboolean
-gsk_render_node_can_diff_true (GskRenderNode *node1,
-                               GskRenderNode *node2)
+gsk_render_node_can_diff_true (const GskRenderNode *node1,
+                               const GskRenderNode *node2)
 {
   return TRUE;
 }
@@ -1707,8 +1707,8 @@ gsk_container_node_draw (GskRenderNode *node,
 }
 
 static gboolean
-gsk_container_node_can_diff (GskRenderNode *node1,
-                             GskRenderNode *node2)
+gsk_container_node_can_diff (const GskRenderNode *node1,
+                             const GskRenderNode *node2)
 {
   return TRUE;
 }
@@ -1726,7 +1726,7 @@ gsk_render_node_add_to_region (GskRenderNode  *node,
 static int
 gsk_container_node_compare_func (gconstpointer elem1, gconstpointer elem2, gpointer data)
 {
-  return gsk_render_node_can_diff ((GskRenderNode *) elem1, (GskRenderNode *) elem2) ? 0 : 1;
+  return gsk_render_node_can_diff ((const GskRenderNode *) elem1, (const GskRenderNode *) elem2) ? 0 : 1;
 }
 
 static void
@@ -1918,8 +1918,8 @@ gsk_transform_node_draw (GskRenderNode *node,
 }
 
 static gboolean
-gsk_transform_node_can_diff (GskRenderNode *node1,
-                             GskRenderNode *node2)
+gsk_transform_node_can_diff (const GskRenderNode *node1,
+                             const GskRenderNode *node2)
 {
   GskTransformNode *self1 = (GskTransformNode *) node1;
   GskTransformNode *self2 = (GskTransformNode *) node2;
@@ -2092,8 +2092,8 @@ gsk_debug_node_draw (GskRenderNode *node,
 }
 
 static gboolean
-gsk_debug_node_can_diff (GskRenderNode *node1,
-                         GskRenderNode *node2)
+gsk_debug_node_can_diff (const GskRenderNode *node1,
+                         const GskRenderNode *node2)
 {
   GskDebugNode *self1 = (GskDebugNode *) node1;
   GskDebugNode *self2 = (GskDebugNode *) node2;

@@ -98,16 +98,16 @@ GskRoundedRect *        gsk_rounded_rect_shrink                 (GskRoundedRect 
                                                                  float                     left);
 
 GDK_AVAILABLE_IN_ALL
-gboolean                gsk_rounded_rect_is_rectilinear         (const GskRoundedRect     *self);
+gboolean                gsk_rounded_rect_is_rectilinear         (const GskRoundedRect     *self) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 gboolean                gsk_rounded_rect_contains_point         (const GskRoundedRect     *self,
-                                                                 const graphene_point_t   *point);
+                                                                 const graphene_point_t   *point) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 gboolean                gsk_rounded_rect_contains_rect          (const GskRoundedRect     *self,
-                                                                 const graphene_rect_t    *rect);
+                                                                 const graphene_rect_t    *rect) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 gboolean                gsk_rounded_rect_intersects_rect        (const GskRoundedRect     *self,
-                                                                 const graphene_rect_t    *rect);
+                                                                 const graphene_rect_t    *rect) G_GNUC_PURE;
 
 G_END_DECLS
 
