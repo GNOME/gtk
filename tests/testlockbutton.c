@@ -165,10 +165,10 @@ g_test_permission_set_success (GTestPermission *permission,
   permission->success = success;
 }
 
-static GtkWidget *allowed_button;
-static GtkWidget *can_acquire_button;
-static GtkWidget *can_release_button;
-static GtkWidget *success_button;
+static GtkCheckButton *allowed_button;
+static GtkCheckButton *can_acquire_button;
+static GtkCheckButton *can_release_button;
+static GtkCheckButton *success_button;
 
 static void
 update_clicked (GtkButton *button, GtkLockButton *lockbutton)
@@ -229,13 +229,13 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (window), box);
 
   allowed_button = gtk_check_button_new_with_label ("Allowed");
-  gtk_container_add (GTK_CONTAINER (box), allowed_button);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (allowed_button));
   can_acquire_button = gtk_check_button_new_with_label ("Can acquire");
-  gtk_container_add (GTK_CONTAINER (box), can_acquire_button);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (can_acquire_button));
   can_release_button = gtk_check_button_new_with_label ("Can release");
-  gtk_container_add (GTK_CONTAINER (box), can_release_button);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (can_release_button));
   success_button = gtk_check_button_new_with_label ("Will succeed");
-  gtk_container_add (GTK_CONTAINER (box), success_button);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (success_button));
   update = gtk_button_new_with_label ("Update");
   gtk_container_add (GTK_CONTAINER (box), update);
   g_signal_connect (permission, "notify",
@@ -253,8 +253,8 @@ main (int argc, char *argv[])
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 
   content = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-  gtk_container_add (GTK_CONTAINER (content), gtk_check_button_new_with_label ("Control 1"));
-  gtk_container_add (GTK_CONTAINER (content), gtk_check_button_new_with_label ("Control 2"));
+  gtk_container_add (GTK_CONTAINER (content), GTK_WIDGET (gtk_check_button_new_with_label ("Control 1")));
+  gtk_container_add (GTK_CONTAINER (content), GTK_WIDGET (gtk_check_button_new_with_label ("Control 2")));
   gtk_widget_set_sensitive (content, FALSE);
 
   gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), content);

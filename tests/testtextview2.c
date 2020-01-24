@@ -134,8 +134,8 @@ toggle_cursor (GtkToggleButton *button)
 }
 
 static GtkTextMark *the_mark;
-static GtkWidget *mark_check;
-static GtkWidget *mark_visible;
+static GtkCheckButton *mark_check;
+static GtkCheckButton *mark_visible;
 static GtkWidget *position_spin;
 
 static void
@@ -209,10 +209,10 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (box), box2);
   mark_check = gtk_check_button_new_with_label ("Mark");
   g_signal_connect (mark_check, "notify::active", G_CALLBACK (update_mark_exists), NULL);
-  gtk_container_add (GTK_CONTAINER (box2), mark_check);
+  gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (mark_check));
   mark_visible = gtk_check_button_new_with_label ("Visible");
   g_signal_connect (mark_visible, "notify::active", G_CALLBACK (update_mark_visible), NULL);
-  gtk_container_add (GTK_CONTAINER (box2), mark_visible);
+  gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (mark_visible));
   gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (gtk_label_new ("Position:")));
   position_spin = gtk_spin_button_new_with_range (0, len, 1);  
   g_signal_connect (position_spin, "value-changed", G_CALLBACK (update_mark_position), NULL);

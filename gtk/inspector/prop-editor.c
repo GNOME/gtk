@@ -898,7 +898,7 @@ property_editor (GObject                *object,
     }
   else if (type == G_TYPE_PARAM_BOOLEAN)
     {
-      prop_edit = gtk_check_button_new_with_label ("");
+      prop_edit = GTK_WIDGET (gtk_check_button_new_with_label (""));
 
       g_object_connect_property (object, spec,
                                  G_CALLBACK (bool_changed),
@@ -964,12 +964,12 @@ property_editor (GObject                *object,
 
         for (j = 0; j < fclass->n_values; j++)
           {
-            GtkWidget *b;
+            GtkCheckButton *b;
 
             b = gtk_check_button_new_with_label (fclass->values[j].value_nick);
             g_object_set_data (G_OBJECT (b), "index", GINT_TO_POINTER (j));
-            gtk_widget_show (b);
-            gtk_container_add (GTK_CONTAINER (box), b);
+            gtk_widget_show (GTK_WIDGET (b));
+            gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (b));
             connect_controller (G_OBJECT (b), "toggled",
                                 object, spec, G_CALLBACK (flags_modified));
           }

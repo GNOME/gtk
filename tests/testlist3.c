@@ -142,7 +142,8 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *window, *list, *sw, *row;
-  GtkWidget *hbox, *vbox, *button;
+  GtkWidget *hbox, *vbox;
+  GtkCheckButton *button;
   GtkComboBoxText *combo;
   gint i;
   gchar *text;
@@ -179,7 +180,7 @@ main (int argc, char *argv[])
   g_object_bind_property (list, "activate-on-single-click",
                           button, "active",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (button));
 
   combo = gtk_combo_box_text_new ();
   gtk_combo_box_text_append_text (combo, "None");

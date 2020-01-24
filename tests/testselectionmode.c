@@ -5,7 +5,7 @@ typedef struct {
   GtkListBoxRow parent;
   GtkWidget *box;
   GtkWidget *revealer;
-  GtkWidget *check;
+  GtkCheckButton *check;
 } SelectableRow;
 
 typedef struct {
@@ -24,11 +24,11 @@ selectable_row_init (SelectableRow *row)
   g_object_set (row->check, "margin", 10, NULL);
 
   gtk_widget_show (row->box);
-  gtk_widget_show (row->check);
+  gtk_widget_show (GTK_WIDGET (row->check));
 
   gtk_container_add (GTK_CONTAINER (row), row->box);
   gtk_container_add (GTK_CONTAINER (row->box), row->revealer);
-  gtk_container_add (GTK_CONTAINER (row->revealer), row->check);
+  gtk_container_add (GTK_CONTAINER (row->revealer), GTK_WIDGET (row->check));
 }
 
 void

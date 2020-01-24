@@ -2007,7 +2007,7 @@ add_check_group (GtkFontChooserWidget *fontchooser,
   for (i = 0; tags[i]; i++)
     {
       hb_tag_t tag;
-      GtkWidget *feat;
+      GtkCheckButton *feat;
       FeatureItem *item;
       GtkGesture *gesture;
       GtkWidget *box;
@@ -2016,7 +2016,7 @@ add_check_group (GtkFontChooserWidget *fontchooser,
       tag = hb_tag_from_string (tags[i], -1);
 
       feat = gtk_check_button_new_with_label (get_feature_display_name (tag));
-      set_inconsistent (GTK_CHECK_BUTTON (feat), TRUE);
+      set_inconsistent (feat, TRUE);
       g_signal_connect_swapped (feat, "notify::active", G_CALLBACK (update_font_features), fontchooser);
       g_signal_connect_swapped (feat, "notify::inconsistent", G_CALLBACK (update_font_features), fontchooser);
       g_signal_connect (feat, "clicked", G_CALLBACK (feat_clicked), NULL);
@@ -2024,7 +2024,7 @@ add_check_group (GtkFontChooserWidget *fontchooser,
       gesture = gtk_gesture_click_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
       g_signal_connect (gesture, "pressed", G_CALLBACK (feat_pressed), feat);
-      gtk_widget_add_controller (feat, GTK_EVENT_CONTROLLER (gesture));
+      gtk_widget_add_controller (GTK_WIDGET (feat), GTK_EVENT_CONTROLLER (gesture));
 
       example = gtk_label_new ("");
       gtk_label_set_selectable (example, TRUE);
@@ -2032,7 +2032,7 @@ add_check_group (GtkFontChooserWidget *fontchooser,
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
-      gtk_container_add (GTK_CONTAINER (box), feat);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (feat));
       gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (example));
       gtk_container_add (GTK_CONTAINER (group), box);
 
@@ -2040,7 +2040,7 @@ add_check_group (GtkFontChooserWidget *fontchooser,
       item->name = tags[i];
       item->tag = tag;
       item->top = box;
-      item->feat = feat;
+      item->feat = GTK_WIDGET (feat);
       item->example = example;
 
       priv->feature_items = g_list_prepend (priv->feature_items, item);

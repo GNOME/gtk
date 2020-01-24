@@ -391,8 +391,8 @@ test_stacking (void)
   GtkLabel *label;
   GtkLabel *child;
   GtkWidget *grid;
-  GtkWidget *check1;
-  GtkWidget *check2;
+  GtkCheckButton *check1;
+  GtkCheckButton *check2;
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (win), "Stacking");
@@ -419,8 +419,8 @@ test_stacking (void)
   gtk_grid_attach (GTK_GRID (grid), overlay, 1, 0, 1, 3);
   gtk_container_add (GTK_CONTAINER (win), grid);
 
-  gtk_grid_attach (GTK_GRID (grid), check1, 0, 0, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), check2, 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (check1), 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (check2), 0, 1, 1, 1);
   child = gtk_label_new ("");
   gtk_widget_set_vexpand (GTK_WIDGET (child), TRUE);
   gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (child), 0, 2, 1, 1);

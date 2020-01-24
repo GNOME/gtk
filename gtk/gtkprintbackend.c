@@ -637,7 +637,8 @@ request_password (GtkPrintBackend  *backend,
                   gboolean          can_store_auth_info)
 {
   GtkPrintBackendPrivate *priv = backend->priv;
-  GtkWidget *dialog, *box, *main_box, *vbox, *chkbtn;
+  GtkWidget *dialog, *box, *main_box, *vbox;
+  GtkCheckButton *chkbtn;
   GtkEntry *entry;
   GtkImage *icon;
   GtkLabel *label;
@@ -731,10 +732,10 @@ request_password (GtkPrintBackend  *backend,
   if (can_store_auth_info)
     {
       chkbtn = gtk_check_button_new_with_mnemonic (_("_Remember password"));
-      gtk_widget_set_margin_top (chkbtn, 6);
-      gtk_widget_set_margin_bottom (chkbtn, 6);
+      gtk_widget_set_margin_top (GTK_WIDGET (chkbtn), 6);
+      gtk_widget_set_margin_bottom (GTK_WIDGET (chkbtn), 6);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (chkbtn), FALSE);
-      gtk_container_add (GTK_CONTAINER (vbox), chkbtn);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (chkbtn));
       g_signal_connect (chkbtn, "toggled",
                         G_CALLBACK (store_auth_info_toggled),
                         &(priv->store_auth_info));

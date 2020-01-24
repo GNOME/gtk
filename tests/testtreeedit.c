@@ -186,7 +186,7 @@ enum {
 static void
 create_control (GtkWidget *box, gint number, gint cntl, CallbackData *data)
 {
-  GtkWidget *checkbutton;
+  GtkCheckButton *checkbutton;
   GCallback  callback = NULL;
   gchar *name = NULL;
 
@@ -208,7 +208,7 @@ create_control (GtkWidget *box, gint number, gint cntl, CallbackData *data)
 
   checkbutton = gtk_check_button_new_with_label (name);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbutton), cntl == CNTL_FIXED);
-  gtk_container_add (GTK_CONTAINER (box), checkbutton);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (checkbutton));
 
   g_signal_connect (G_OBJECT (checkbutton), "toggled", callback, data);
   g_free (name);

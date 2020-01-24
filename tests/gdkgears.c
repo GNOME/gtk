@@ -111,9 +111,10 @@ less_gears (GtkButton *button, gpointer data)
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *window, *box, *hbox, *button, *spinner, *check,
+  GtkWidget *window, *box, *hbox, *button, *spinner,
     *gears, *extra_hbox, *bbox, *overlay,
     *revealer, *frame, *scrolled, *popover;
+  GtkCheckButton *check;
   GtkLabel *fps_label, *label;
   int i;
 
@@ -192,7 +193,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (hbox), button);
 
   check = gtk_check_button_new_with_label ("Overlay");
-  gtk_container_add (GTK_CONTAINER (hbox), check);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (check));
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), FALSE);
   g_signal_connect (check, "toggled",
                     G_CALLBACK (toggle_overlay), revealer);
@@ -200,7 +201,7 @@ main (int argc, char *argv[])
 
 
   check = gtk_check_button_new_with_label ("Animate spinner");
-  gtk_container_add (GTK_CONTAINER (hbox), check);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (check));
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
 
 

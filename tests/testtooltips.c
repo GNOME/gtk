@@ -266,6 +266,7 @@ main (int argc, char *argv[])
   GtkWidget *window;
   GtkWidget *box;
   GtkWidget *drawing_area;
+  GtkCheckButton *checkbutton;
   GtkWidget *button;
   GtkWidget *tooltip;
   GtkLabel  *label;
@@ -300,22 +301,22 @@ main (int argc, char *argv[])
 
 
   /* A check button using the tooltip-markup property */
-  button = gtk_check_button_new_with_label ("This one uses the tooltip-markup property");
-  gtk_widget_set_tooltip_text (button, "Hello, I am a static tooltip.");
-  gtk_container_add (GTK_CONTAINER (box), button);
+  checkbutton = gtk_check_button_new_with_label ("This one uses the tooltip-markup property");
+  gtk_widget_set_tooltip_text (GTK_WIDGET (checkbutton), "Hello, I am a static tooltip.");
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (checkbutton));
 
-  text = gtk_widget_get_tooltip_text (button);
-  markup = gtk_widget_get_tooltip_markup (button);
+  text = gtk_widget_get_tooltip_text (GTK_WIDGET (checkbutton));
+  markup = gtk_widget_get_tooltip_markup (GTK_WIDGET (checkbutton));
   g_assert (g_str_equal ("Hello, I am a static tooltip.", text));
   g_assert (g_str_equal ("Hello, I am a static tooltip.", markup));
   g_free (text); g_free (markup);
 
   /* A check button using the query-tooltip signal */
-  button = gtk_check_button_new_with_label ("I use the query-tooltip signal");
-  g_object_set (button, "has-tooltip", TRUE, NULL);
-  g_signal_connect (button, "query-tooltip",
+  checkbutton = gtk_check_button_new_with_label ("I use the query-tooltip signal");
+  g_object_set (checkbutton, "has-tooltip", TRUE, NULL);
+  g_signal_connect (checkbutton, "query-tooltip",
 		    G_CALLBACK (query_tooltip_cb), NULL);
-  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (checkbutton));
 
   /* A label */
   label = gtk_label_new ("I am just a label");

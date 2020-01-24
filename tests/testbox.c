@@ -7,7 +7,7 @@ edit_widget (GtkWidget *button)
   GtkWidget *grid;
   GtkLabel *label;
   GtkEntry *entry;
-  GtkWidget *check;
+  GtkCheckButton *check;
 
   dialog = GTK_WIDGET (g_object_get_data (G_OBJECT (button), "dialog"));
 
@@ -42,7 +42,7 @@ edit_widget (GtkWidget *button)
                               check, "active",
                               G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
       gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 1, 1, 1);
-      gtk_grid_attach (GTK_GRID (grid), check, 1, 1, 1, 1);
+      gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (check), 1, 1, 1, 1);
 
       g_object_set_data (G_OBJECT (button), "dialog", dialog);
     }
@@ -76,7 +76,7 @@ main (int argc, char *argv[])
   GtkWidget *window;
   GtkWidget *vbox;
   GtkWidget *box;
-  GtkWidget *check;
+  GtkCheckButton *check;
   GtkWidget *b;
   GtkLabel *label;
   GtkWidget *spin;
@@ -103,9 +103,9 @@ main (int argc, char *argv[])
                           check, "active",
                           G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
   g_object_set (check, "margin", 10, NULL);
-  gtk_widget_set_halign (check, GTK_ALIGN_CENTER);
-  gtk_widget_show (check);
-  gtk_container_add (GTK_CONTAINER (vbox), check);
+  gtk_widget_set_halign (GTK_WIDGET (check), GTK_ALIGN_CENTER);
+  gtk_widget_show (GTK_WIDGET (check));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (check));
 
   b = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   g_object_set (b, "margin", 10, NULL);

@@ -118,14 +118,14 @@ create_toggle_button (void)
 static WidgetInfo *
 create_check_button (void)
 {
-  GtkWidget *widget;
+  GtkCheckButton *widget;
 
   widget = gtk_check_button_new_with_mnemonic ("_Check Button");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
 
-  return new_widget_info ("check-button", widget, SMALL);
+  return new_widget_info ("check-button", GTK_WIDGET (widget), SMALL);
 }
 
 static WidgetInfo *

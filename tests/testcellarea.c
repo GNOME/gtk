@@ -177,7 +177,8 @@ expand_cell_3_toggled (GtkToggleButton  *toggle,
 static void
 simple_cell_area (void)
 {
-  GtkWidget *window, *widget;
+  GtkWidget *window;
+  GtkCheckButton *widget;
   GtkComboBoxText *combo;
   GtkWidget *iconview, *frame, *vbox, *hbox;
 
@@ -214,16 +215,16 @@ simple_cell_area (void)
 
   widget = gtk_check_button_new_with_label ("Align 2nd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-  gtk_widget_show (widget);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  gtk_widget_show (GTK_WIDGET (widget));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (widget));
 
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (align_cell_2_toggled), iconview);
 
   widget = gtk_check_button_new_with_label ("Align 3rd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-  gtk_widget_show (widget);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  gtk_widget_show (GTK_WIDGET (widget));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (widget));
 
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (align_cell_3_toggled), iconview);
@@ -231,24 +232,24 @@ simple_cell_area (void)
 
   widget = gtk_check_button_new_with_label ("Expand 1st Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-  gtk_widget_show (widget);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  gtk_widget_show (GTK_WIDGET (widget));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (widget));
 
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (expand_cell_1_toggled), iconview);
 
   widget = gtk_check_button_new_with_label ("Expand 2nd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-  gtk_widget_show (widget);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  gtk_widget_show (GTK_WIDGET (widget));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (widget));
 
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (expand_cell_2_toggled), iconview);
 
   widget = gtk_check_button_new_with_label ("Expand 3rd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-  gtk_widget_show (widget);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  gtk_widget_show (GTK_WIDGET (widget));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (widget));
 
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (expand_cell_3_toggled), iconview);
@@ -421,7 +422,8 @@ focus_sibling_toggled (GtkToggleButton  *toggle,
 static void
 focus_cell_area (void)
 {
-  GtkWidget *window, *widget;
+  GtkWidget *window;
+  GtkCheckButton *widget;
   GtkComboBoxText *combo;
   GtkWidget *iconview, *frame, *vbox, *hbox;
 
@@ -458,8 +460,8 @@ focus_cell_area (void)
 
   widget = gtk_check_button_new_with_label ("Focus Sibling");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-  gtk_widget_show (widget);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  gtk_widget_show (GTK_WIDGET (widget));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (widget));
 
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (focus_sibling_toggled), iconview);

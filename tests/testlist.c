@@ -253,7 +253,8 @@ main (int argc, char *argv[])
 {
   GtkCssProvider *provider;
   GtkWidget *window, *hbox, *vbox, *list, *row, *row3, *row_vbox, *row_hbox;
-  GtkWidget *check, *button, *scrolled;
+  GtkWidget *button, *scrolled;
+  GtkCheckButton *check;
   GtkComboBoxText *combo;
   GtkLabel *l;
 
@@ -288,7 +289,7 @@ main (int argc, char *argv[])
   check = gtk_check_button_new_with_label ("single click mode");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), gtk_list_box_get_activate_on_single_click (GTK_LIST_BOX (list)));
   g_signal_connect (check, "toggled", G_CALLBACK (single_click_clicked), list);
-  gtk_container_add (GTK_CONTAINER (vbox), check);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (check));
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
@@ -313,12 +314,12 @@ main (int argc, char *argv[])
   l = gtk_label_new ("da box for da man");
   gtk_container_add (GTK_CONTAINER (row_hbox), GTK_WIDGET (l));
   check = gtk_check_button_new ();
-  gtk_container_add (GTK_CONTAINER (row_hbox), check);
+  gtk_container_add (GTK_CONTAINER (row_hbox), GTK_WIDGET (check));
   button = gtk_button_new_with_label ("ya!");
   gtk_container_add (GTK_CONTAINER (row_hbox), button);
   gtk_container_add (GTK_CONTAINER (row_vbox), row_hbox);
   check = gtk_check_button_new ();
-  gtk_container_add (GTK_CONTAINER (row_vbox), check);
+  gtk_container_add (GTK_CONTAINER (row_vbox), GTK_WIDGET (check));
   gtk_container_add (GTK_CONTAINER (row), row_vbox);
   gtk_container_add (GTK_CONTAINER (list), row);
 

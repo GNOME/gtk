@@ -383,6 +383,7 @@ create_window (void)
 {
   GtkWidget *window, *hbox, *vbox, *flowbox_cntl, *items_cntl;
   GtkWidget *flowbox, *widget, *swindow;
+  GtkCheckButton *check;
   GtkComboBoxText *combo;
   GtkExpander *expander;
   GtkLabel *label;
@@ -433,23 +434,23 @@ create_window (void)
   gtk_container_add (GTK_CONTAINER (expander), flowbox_cntl);
   gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (expander));
 
-  widget = gtk_check_button_new_with_label ("Homogeneous");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-  gtk_widget_show (widget);
+  check = gtk_check_button_new_with_label ("Homogeneous");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), FALSE);
+  gtk_widget_show (GTK_WIDGET (check));
 
-  gtk_widget_set_tooltip_text (widget, "Set whether the items should be displayed at the same size");
-  gtk_container_add (GTK_CONTAINER (flowbox_cntl), widget);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (check), "Set whether the items should be displayed at the same size");
+  gtk_container_add (GTK_CONTAINER (flowbox_cntl), GTK_WIDGET (check));
 
-  g_signal_connect (G_OBJECT (widget), "toggled",
+  g_signal_connect (G_OBJECT (check), "toggled",
                     G_CALLBACK (homogeneous_toggled), flowbox);
 
-  widget = gtk_check_button_new_with_label ("Activate on single click");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-  g_object_bind_property (widget, "active",
+  check = gtk_check_button_new_with_label ("Activate on single click");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), FALSE);
+  g_object_bind_property (check, "active",
                           flowbox, "activate-on-single-click",
                           G_BINDING_SYNC_CREATE);
-  gtk_widget_show (widget);
-  gtk_container_add (GTK_CONTAINER (flowbox_cntl), widget);
+  gtk_widget_show (GTK_WIDGET (check));
+  gtk_container_add (GTK_CONTAINER (flowbox_cntl), GTK_WIDGET (check));
 
   /* Add alignment controls */
   combo = gtk_combo_box_text_new ();
@@ -577,24 +578,24 @@ create_window (void)
 
   /* filtering and sorting */
 
-  widget = gtk_check_button_new_with_label ("Filter");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-  gtk_widget_show (widget);
+  check = gtk_check_button_new_with_label ("Filter");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), FALSE);
+  gtk_widget_show (GTK_WIDGET (check));
 
-  gtk_widget_set_tooltip_text (widget, "Set whether some items should be filtered out");
-  gtk_container_add (GTK_CONTAINER (flowbox_cntl), widget);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (check), "Set whether some items should be filtered out");
+  gtk_container_add (GTK_CONTAINER (flowbox_cntl), GTK_WIDGET (check));
 
-  g_signal_connect (G_OBJECT (widget), "toggled",
+  g_signal_connect (G_OBJECT (check), "toggled",
                     G_CALLBACK (filter_toggled), flowbox);
 
-  widget = gtk_check_button_new_with_label ("Sort");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-  gtk_widget_show (widget);
+  check = gtk_check_button_new_with_label ("Sort");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), FALSE);
+  gtk_widget_show (GTK_WIDGET (check));
 
-  gtk_widget_set_tooltip_text (widget, "Set whether items should be sorted");
-  gtk_container_add (GTK_CONTAINER (flowbox_cntl), widget);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (check), "Set whether items should be sorted");
+  gtk_container_add (GTK_CONTAINER (flowbox_cntl), GTK_WIDGET (check));
 
-  g_signal_connect (G_OBJECT (widget), "toggled",
+  g_signal_connect (G_OBJECT (check), "toggled",
                     G_CALLBACK (sort_toggled), flowbox);
 
 

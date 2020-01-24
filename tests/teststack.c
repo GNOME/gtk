@@ -109,6 +109,7 @@ main (gint argc,
       gchar ** argv)
 {
   GtkWidget *window, *box, *button, *hbox, *layout;
+  GtkCheckButton *checkbutton;
   GtkComboBoxText *combo;
   GtkWidget *w2, *w3;
   GtkListStore* store;
@@ -215,17 +216,17 @@ main (gint argc,
   gtk_container_add (GTK_CONTAINER (hbox), button);
   g_signal_connect (button, "clicked", (GCallback) set_visible_child_name, (gpointer) "3");
 
-  button = gtk_check_button_new ();
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),
+  checkbutton = gtk_check_button_new ();
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbutton),
 				gtk_stack_get_hhomogeneous (GTK_STACK (stack)));
-  gtk_container_add (GTK_CONTAINER (hbox), button);
-  g_signal_connect (button, "clicked", (GCallback) toggle_hhomogeneous, NULL);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (checkbutton));
+  g_signal_connect (checkbutton, "clicked", (GCallback) toggle_hhomogeneous, NULL);
 
-  button = gtk_check_button_new_with_label ("homogeneous");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),
+  checkbutton = gtk_check_button_new_with_label ("homogeneous");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbutton),
 				gtk_stack_get_vhomogeneous (GTK_STACK (stack)));
-  gtk_container_add (GTK_CONTAINER (hbox), button);
-  g_signal_connect (button, "clicked", (GCallback) toggle_vhomogeneous, NULL);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (checkbutton));
+  g_signal_connect (checkbutton, "clicked", (GCallback) toggle_vhomogeneous, NULL);
 
   button = gtk_toggle_button_new_with_label ("Add icon");
   g_signal_connect (button, "toggled", (GCallback) toggle_icon_name, NULL);

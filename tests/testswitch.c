@@ -112,7 +112,8 @@ make_delayed_switch (gboolean is_on,
 {
   GtkWidget *hbox;
   GtkSwitch *sw;
-  GtkWidget *spinner, *check;
+  GtkWidget *spinner;
+  GtkCheckButton *check;
   GtkLabel *label;
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
@@ -140,7 +141,7 @@ make_delayed_switch (gboolean is_on,
                                NULL, NULL);
 
   check = gtk_check_button_new ();
-  gtk_container_add (GTK_CONTAINER (hbox), check);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (check));
   g_object_bind_property (sw, "state",
                           check, "active",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);

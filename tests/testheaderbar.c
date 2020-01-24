@@ -149,7 +149,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (content));
 
   footer = gtk_action_bar_new ();
-  gtk_action_bar_set_center_widget (footer, gtk_check_button_new_with_label ("Middle"));
+  gtk_action_bar_set_center_widget (footer, GTK_WIDGET (gtk_check_button_new_with_label ("Middle")));
   button = gtk_toggle_button_new_with_label ("Custom");
   g_signal_connect (button, "clicked", G_CALLBACK (change_header), window);
   gtk_action_bar_pack_start (footer, button);

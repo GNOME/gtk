@@ -83,7 +83,7 @@ do_sizegroup (GtkWidget *do_widget)
   GtkWidget *table;
   GtkWidget *frame;
   GtkWidget *vbox;
-  GtkWidget *check_button;
+  GtkCheckButton *check_button;
   GtkSizeGroup *size_group;
 
   static const char *color_options[] = {
@@ -142,7 +142,7 @@ do_sizegroup (GtkWidget *do_widget)
 
       /* And a check button to turn grouping on and off */
       check_button = gtk_check_button_new_with_mnemonic ("_Enable grouping");
-      gtk_container_add (GTK_CONTAINER (vbox), check_button);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (check_button));
 
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
       g_signal_connect (check_button, "toggled",
