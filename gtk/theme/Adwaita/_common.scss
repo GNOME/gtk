@@ -956,7 +956,7 @@ toolbar.inline-toolbar toolbutton {
   border-bottom-right-radius: 0;
 }
 
-%linked_vertical{
+%linked_vertical {
   &:not(:first-child) { @extend %linked_not_top; }
 
   &:not(:last-child) { @extend %linked_not_bottom; }
@@ -973,8 +973,7 @@ toolbar.inline-toolbar toolbutton {
 }
 
 /* menu buttons */
-modelbutton.flat,
-.menuitem.button.flat {
+modelbutton.flat {
   min-height: 26px;
   padding-left: 5px;
   padding-right: 5px;
@@ -2023,28 +2022,6 @@ menubar,
 
   &:backdrop { background-color: $backdrop_bg_color; }
 
-  > menuitem {
-    min-height: 16px;
-    padding: 4px 8px;
-
-    // remove padding and rounding from menubar submenus
-    menu {
-      .csd &, & {
-        border-radius: 0;
-        padding: 0;
-      }
-    }
-
-    &:hover { //Seems like it :hover even with keyboard focus
-      box-shadow: inset 0 -3px $selected_bg_color;
-      color: $link_color;
-    }
-
-    &:disabled {
-      color: $insensitive_fg_color;
-      box-shadow: none;
-    }
-  }
   // remove padding and rounding from menubar submenu decoration
   .csd.popup decoration {border-radius:0;}
 }
@@ -2066,49 +2043,6 @@ menu,
   }
 
   &:backdrop { background-color: $backdrop_menu_color; }
-
-  menuitem {
-    min-height: 16px;
-    min-width: 40px;
-    padding: 4px 6px;
-    text-shadow: none;
-
-    &:hover {
-      color: $selected_fg_color;
-      background-color: $selected_bg_color;
-    }
-
-    &:disabled {
-      color: $insensitive_fg_color;
-      &:backdrop { color: $backdrop_insensitive_color; }
-    }
-
-    &:backdrop,
-    &:backdrop:hover {
-      color: $backdrop_fg_color;
-      background-color: transparent;
-    }
-
-    // submenu indicators
-    arrow {
-      min-height: 16px;
-      min-width: 16px;
-
-      &:dir(ltr) {
-        -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
-        margin-left: 10px;
-      }
-
-      &:dir(rtl) {
-        -gtk-icon-source:-gtk-icontheme('pan-end-symbolic-rtl');
-        margin-right: 10px;
-      }
-    }
-
-    // avoids labels color being overridden, see
-    // https://bugzilla.gnome.org/show_bug.cgi?id=767058
-    label { &:dir(rtl), &:dir(ltr) { color: inherit; }}
-  }
 
   // overflow arrows
   > arrow {
@@ -2145,19 +2079,6 @@ menu,
       background-color: transparent;
       border-color: transparent ;
     }
-  }
-}
-
-menuitem {
-  accelerator { color: gtkalpha(currentColor,0.55); }
-
-  check,
-  radio {
-    min-height: 16px;
-    min-width: 16px;
-
-    &:dir(ltr) { margin-right: 7px; }
-    &:dir(rtl) { margin-left: 7px; }
   }
 }
 
@@ -2778,24 +2699,6 @@ radio {
     &:active { @include button(osd-active); }
     &:backdrop { @include button(osd-backdrop); }
     &:disabled { @include button(osd-insensitive); }
-  }
-
-  @at-root %menu_check_radio,
-  menu menuitem & {
-    margin: 0; // this is a workaround for a menu check/radio size allocation issue
-
-    &, &:checked, &:indeterminate {
-      &, &:hover, &:disabled { //FIXME use button reset mixin
-        min-height: 14px;
-        min-width: 14px;
-        background-image: none;
-        background-color: transparent;
-        box-shadow: none;
-        -gtk-icon-shadow: none;
-        color: inherit;
-        border-color: currentColor;
-      }
-    }
   }
 }
 
