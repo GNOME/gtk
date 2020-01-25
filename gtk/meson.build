@@ -391,7 +391,6 @@ gtk_public_sources = files([
   'gtktreestore.c',
   'gtktreeview.c',
   'gtktreeviewcolumn.c',
-  'gtkutils.c',
   'gtkvideo.c',
   'gtkviewport.c',
   'gtkvolumebutton.c',
