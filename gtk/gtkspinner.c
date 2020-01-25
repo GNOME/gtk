@@ -123,6 +123,29 @@ gtk_spinner_snapshot (GtkWidget   *widget,
                                gtk_widget_get_height (widget));
 }
 
+static void
+gtk_spinner_style_updated (GtkWidget *widget)
+{ 
+  GtkStyleContext *context; 
+  GtkCssStyleChange *change = NULL;
+  
+  context = gtk_widget_get_style_context (widget);
+  change = gtk_style_context_get_change (context);
+  
+  GTK_WIDGET_CLASS (gtk_spinner_parent_class)->style_updated (widget);
+  
+  if (change == NULL ||
+      gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_SIZE))
+    {
+      gtk_widget_queue_resize (widget);
+    }
+  else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_TEXTURE) ||
+           gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_REDRAW))
+    {
+      gtk_widget_queue_draw (widget);
+    }
+}
+
 static gboolean
 gtk_spinner_get_active (GtkSpinner *spinner)
 {
@@ -195,6 +218,7 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   widget_class = GTK_WIDGET_CLASS(klass);
   widget_class->snapshot = gtk_spinner_snapshot;
   widget_class->measure = gtk_spinner_measure;
+  widget_class->style_updated = gtk_spinner_style_updated;
 
   /* GtkSpinner:active:
    *
