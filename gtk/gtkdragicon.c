@@ -22,9 +22,12 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcssstyleprivate.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkcsstypesprivate.h"
 #include "gtknativeprivate.h"
 #include "gtkpicture.h"
+#include "gtkcssnumbervalueprivate.h"
 
 
 /**
@@ -107,16 +110,15 @@ gtk_drag_icon_native_get_surface_transform (GtkNative *native,
                                             int       *x,
                                             int       *y)
 {
-  GtkStyleContext *context;
-  GtkBorder margin, border, padding;
+  GtkCssStyle *style;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (native));
-  gtk_style_context_get_margin (context, &margin);
-  gtk_style_context_get_border (context, &border);
-  gtk_style_context_get_padding (context, &padding);
-
-  *x = margin.left + border.left + padding.left;
-  *y = margin.top + border.top + padding.top;
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (native)));
+  *x  = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_LEFT), 100) +
+        _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100) +
+        _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_LEFT), 100);
+  *y  = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_TOP), 100) +
+        _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100) +
+        _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_TOP), 100);
 }
 
 static void

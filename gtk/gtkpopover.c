@@ -117,7 +117,10 @@
 #include "gtkmenusectionboxprivate.h"
 #include "gdk/gdkeventsprivate.h"
 #include "gtkpointerfocusprivate.h"
+#include "gtkcsstypesprivate.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkcsscolorvalueprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtksnapshot.h"
 
 #include "gtkrender.h"
@@ -207,16 +210,15 @@ gtk_popover_native_get_surface_transform (GtkNative *native,
                                           int       *x,
                                           int       *y)
 {
-  GtkStyleContext *context;
-  GtkBorder margin, border, padding;
+  GtkCssStyle *style;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (native));
-  gtk_style_context_get_margin (context, &margin);
-  gtk_style_context_get_border (context, &border);
-  gtk_style_context_get_padding (context, &padding);
-
-  *x = margin.left + border.left + padding.left;
-  *y = margin.top + border.top + padding.top;
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (native)));
+  *x  = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_LEFT), 100) +
+        _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100) +
+        _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_LEFT), 100);
+  *y  = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_TOP), 100) +
+        _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100) +
+        _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_TOP), 100);
 }
 
 static void
@@ -560,7 +562,6 @@ gtk_popover_init (GtkPopover *popover)
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *widget = GTK_WIDGET (popover);
   GtkEventController *controller;
-  GtkStyleContext *context;
 
   priv->position = GTK_POS_BOTTOM;
   priv->final_position = GTK_POS_BOTTOM;
@@ -586,8 +587,8 @@ gtk_popover_init (GtkPopover *popover)
   gtk_widget_set_layout_manager (priv->contents_widget, gtk_bin_layout_new ());
   gtk_widget_set_parent (priv->contents_widget, GTK_WIDGET (popover));
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (popover));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
+  gtk_css_node_add_class (gtk_widget_get_css_node (GTK_WIDGET (popover)),
+                          g_quark_from_static_string (GTK_STYLE_CLASS_BACKGROUND));
 
   add_actions (popover);
 }
@@ -775,10 +776,10 @@ gtk_popover_get_gap_coords (GtkPopover *popover,
   gint tip_x, tip_y;
   gint final_x, final_y;
   GtkPositionType pos;
-  gint border_radius;
-  GtkStyleContext *context;
-  GtkBorder border;
+  int border_top, border_right, border_bottom;
+  int border_radius;
   int popover_width, popover_height;
+  GtkCssStyle *style;
 
   popover_width = gtk_widget_get_allocated_width (widget);
   popover_height = gtk_widget_get_allocated_height (widget);
@@ -795,28 +796,27 @@ gtk_popover_get_gap_coords (GtkPopover *popover,
   rect.x -= priv->final_rect.x;
   rect.y -= priv->final_rect.y;
 
-  context = gtk_widget_get_style_context (priv->contents_widget);
-
   pos = priv->final_position;
 
-  gtk_style_context_get_border (context, &border);
-  gtk_style_context_get (context,
-                         GTK_STYLE_PROPERTY_BORDER_RADIUS, &border_radius,
-                         NULL);
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+  border_radius = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS), 100);
+  border_top = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
+  border_right = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
+  border_bottom = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
 
   if (pos == GTK_POS_BOTTOM || pos == GTK_POS_RIGHT)
     {
       tip = 0;
-      base = TAIL_HEIGHT + border.top;
+      base = TAIL_HEIGHT + border_top;
     }
   else if (pos == GTK_POS_TOP)
     {
-      base = popover_height - border.bottom - TAIL_HEIGHT;
+      base = popover_height - border_bottom - TAIL_HEIGHT;
       tip = popover_height;
     }
   else if (pos == GTK_POS_LEFT)
     {
-      base = popover_width - border.right - TAIL_HEIGHT;
+      base = popover_width - border_right - TAIL_HEIGHT;
       tip = popover_width;
     }
   else
@@ -870,11 +870,16 @@ static void
 get_margin (GtkWidget *widget,
             GtkBorder *border)
 {
-  GtkStyleContext *context;
+  GtkCssStyle *style;
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get_margin (context, border);
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+
+  border->top = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_TOP), 100);
+  border->right = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_RIGHT), 100);
+  border->bottom = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_BOTTOM), 100);
+  border->left = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_LEFT), 100);
 }
+
 static void
 gtk_popover_get_rect_for_size (GtkPopover   *popover,
                                int           popover_width,
@@ -924,6 +929,20 @@ gtk_popover_get_rect_coords (GtkPopover *popover,
 }
 
 static void
+get_border (GtkCssNode *node,
+            GtkBorder *border)
+{
+  GtkCssStyle *style;
+
+  style = gtk_css_node_get_style (node);
+
+  border->top = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
+  border->right = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
+  border->bottom = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
+  border->left = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
+}
+
+static void
 gtk_popover_apply_tail_path (GtkPopover *popover,
                              cairo_t    *cr)
 {
@@ -931,14 +950,12 @@ gtk_popover_apply_tail_path (GtkPopover *popover,
   gint initial_x, initial_y;
   gint tip_x, tip_y;
   gint final_x, final_y;
-  GtkStyleContext *context;
   GtkBorder border;
 
   if (!priv->relative_to)
     return;
 
-  context = gtk_widget_get_style_context (priv->contents_widget);
-  gtk_style_context_get_border (context, &border);
+  get_border (priv->arrow_node, &border);
 
   cairo_set_line_width (cr, 1);
   gtk_popover_get_gap_coords (popover,
@@ -957,11 +974,9 @@ gtk_popover_fill_border_path (GtkPopover *popover,
 {
   GtkWidget *widget = GTK_WIDGET (popover);
   GtkAllocation allocation;
-  GtkStyleContext *context;
   int x, y, w, h;
   GskRoundedRect box;
 
-  context = gtk_widget_get_style_context (widget);
   gtk_widget_get_allocation (widget, &allocation);
 
   cairo_set_source_rgba (cr, 0, 0, 0, 1);
@@ -974,7 +989,7 @@ gtk_popover_fill_border_path (GtkPopover *popover,
 
   gtk_rounded_boxes_init_for_style (&box,
                                     NULL, NULL,
-                                    gtk_style_context_lookup_style (context),
+                                    gtk_css_node_get_style (gtk_widget_get_css_node (widget)),
                                     x, y, w, h);
   gsk_rounded_rect_path (&box, cr);
   cairo_fill (cr);
@@ -1016,14 +1031,10 @@ gtk_popover_update_shape (GtkPopover *popover)
 static gint
 get_border_radius (GtkWidget *widget)
 {
-  GtkStyleContext *context;
-  gint border_radius;
+  GtkCssStyle *style;
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get (context,
-                         GTK_STYLE_PROPERTY_BORDER_RADIUS, &border_radius,
-                         NULL);
-  return border_radius;
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+  return round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS), 100));
 }
 
 static gint
@@ -1146,9 +1157,10 @@ create_arrow_render_node (GtkPopover *popover)
   gtk_popover_apply_tail_path (popover, cr);
   cairo_clip (cr);
 
+  get_border (priv->arrow_node, &border);
+
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save_to_node (context, priv->arrow_node);
-  gtk_style_context_get_border (context, &border);
 
   /* Render the arrow background */
   gtk_render_background (context, cr,
@@ -1159,15 +1171,17 @@ create_arrow_render_node (GtkPopover *popover)
   /* Render the border of the arrow tip */
   if (border.bottom > 0)
     {
-      GdkRGBA *border_color;
+      GtkCssValue *value;
+      const GdkRGBA *border_color;
 
-      gtk_style_context_get (context, "border-color", &border_color, NULL);
+      value = gtk_css_style_get_value (gtk_css_node_get_style (priv->arrow_node), GTK_CSS_PROPERTY_BORDER_LEFT_COLOR);
+      border_color = gtk_css_color_value_get_rgba (value);
+
       gtk_popover_apply_tail_path (popover, cr);
       gdk_cairo_set_source_rgba (cr, border_color);
 
       cairo_set_line_width (cr, border.bottom + 1);
       cairo_stroke (cr);
-      gdk_rgba_free (border_color);
     }
 
   cairo_restore (cr);
