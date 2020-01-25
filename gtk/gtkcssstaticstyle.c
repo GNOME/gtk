@@ -192,6 +192,8 @@ gtk_css_static_style_new_compute (GtkStyleProvider    *provider,
                                &lookup,
                                change == 0 ? &change : NULL);
 
+  g_print ("%d specified values\n", lookup.n_set_values);
+
   result = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
 
   result->change = change;
