@@ -10524,10 +10524,15 @@ gtk_widget_do_pick (GtkWidget    *widget,
           graphene_matrix_transform_point3d (&inv, &p0, &p0);
           graphene_matrix_transform_point3d (&inv, &p1, &p1);
           if (fabs (p0.z - p1.z) < 1.f / 4096)
-            continue;
+            {
+              gsk_transform_unref (transform);
+              continue;
+            }
 
           graphene_point3d_interpolate (&p0, &p1, p0.z / (p0.z - p1.z), &res);
         }
+
+      gsk_transform_unref (transform);
 
       picked = gtk_widget_do_pick (child, res.x, res.y, flags);
       if (picked)
