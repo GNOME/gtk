@@ -37,6 +37,7 @@ typedef struct {
 
 struct _GtkCssLookup {
   guint              n_set_values;
+  gboolean           has_section;
   GtkCssLookupValue  values[GTK_CSS_PROPERTY_N_PROPERTIES];
 };
 
@@ -49,10 +50,6 @@ void                    _gtk_css_lookup_set                     (GtkCssLookup   
                                                                  guint                       id,
                                                                  GtkCssSection              *section,
                                                                  GtkCssValue                *value);
-void                    _gtk_css_lookup_resolve                 (GtkCssLookup               *lookup,
-                                                                 GtkStyleProvider           *provider,
-                                                                 GtkCssStaticStyle          *style,
-                                                                 GtkCssStyle                *parent_style);
 
 G_END_DECLS
 
