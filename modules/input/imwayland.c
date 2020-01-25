@@ -92,6 +92,7 @@ struct _GtkIMContextWayland
 
   cairo_rectangle_int_t cursor_rect;
   guint use_preedit : 1;
+  guint enabled : 1;
 };
 
 GType type_wayland = 0;
@@ -126,6 +127,9 @@ notify_external_change (GtkIMContextWayland *context)
   gboolean result;
 
   if (!global->current)
+    return;
+
+  if (!context->enabled)
     return;
 
   context->surrounding_change = ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER;
@@ -278,7 +282,7 @@ notify_surrounding_text (GtkIMContextWayland *context)
     return;
   if (global->current != GTK_IM_CONTEXT (context))
     return;
-  if (!context->surrounding.text)
+  if (!context->enabled || !context->surrounding.text)
     return;
 
   len = strlen (context->surrounding.text);
@@ -353,7 +357,7 @@ notify_cursor_location (GtkIMContextWayland *context)
     return;
   if (global->current != GTK_IM_CONTEXT (context))
     return;
-  if (!context->window)
+  if (!context->enabled || !context->window)
     return;
 
   rect = context->cursor_rect;
@@ -435,6 +439,9 @@ notify_content_type (GtkIMContextWayland *context)
   if (global->current != GTK_IM_CONTEXT (context))
     return;
 
+  if (!context->enabled)
+    return;
+
   g_object_get (context,
                 "input-hints", &hints,
                 "input-purpose", &purpose,
@@ -449,6 +456,8 @@ static void
 commit_state (GtkIMContextWayland *context)
 {
   if (global->current != GTK_IM_CONTEXT (context))
+    return;
+  if (!context->enabled)
     return;
   global->serial++;
   zwp_text_input_v3_commit (global->text_input);
@@ -534,6 +543,10 @@ static void
 enable (GtkIMContextWayland *context_wayland)
 {
   gboolean result;
+  /* Technically, text input isn't enabled until after the commit.
+   * In reality, enable can't fail, and notify functions need to know
+   * that they are free to send requests. */
+  context_wayland->enabled = TRUE;
   zwp_text_input_v3_enable (global->text_input);
   g_signal_emit_by_name (global->current, "retrieve-surrounding", &result);
   notify_content_type (context_wayland);
@@ -546,6 +559,7 @@ disable (GtkIMContextWayland *context_wayland)
 {
   zwp_text_input_v3_disable (global->text_input);
   commit_state (context_wayland);
+  context_wayland->enabled = FALSE;
 
   /* after disable, incoming state changes won't take effect anyway */
   if (context_wayland->current_preedit.text)
