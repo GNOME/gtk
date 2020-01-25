@@ -471,87 +471,6 @@ gtk_im_context_wayland_finalize (GObject *object)
 }
 
 static void
-pressed_cb (GtkGestureMultiPress *gesture,
-            gint                  n_press,
-            gdouble               x,
-            gdouble               y,
-            GtkIMContextWayland  *context)
-{
-  if (n_press == 1)
-    {
-      context->press_x = x;
-      context->press_y = y;
-    }
-}
-
-static void
-released_cb (GtkGestureMultiPress *gesture,
-             gint                  n_press,
-             gdouble               x,
-             gdouble               y,
-             GtkIMContextWayland  *context)
-{
-  GtkInputHints hints;
-  gboolean result;
-
-  if (!global->current)
-    return;
-
-  g_object_get (context, "input-hints", &hints, NULL);
-
-  if (global->focused &&
-      n_press == 1 &&
-      (hints & GTK_INPUT_HINT_INHIBIT_OSK) == 0 &&
-      !gtk_drag_check_threshold (context->widget,
-                                 context->press_x,
-                                 context->press_y,
-                                 x, y))
-    {
-      zwp_text_input_v3_enable (global->text_input);
-      g_signal_emit_by_name (global->current, "retrieve-surrounding", &result);
-      commit_state (context);
-    }
-}
-
-static void
-gtk_im_context_wayland_set_client_window (GtkIMContext *context,
-                                          GdkWindow    *window)
-{
-  GtkIMContextWayland *context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
-  GtkWidget *widget = NULL;
-
-  if (window == context_wayland->window)
-    return;
-
-  if (window)
-    gdk_window_get_user_data (window, (gpointer*) &widget);
-
-  if (context_wayland->widget && context_wayland->widget != widget)
-    g_clear_object (&context_wayland->gesture);
-
-  g_set_object (&context_wayland->window, window);
-
-  if (context_wayland->widget != widget)
-    {
-      context_wayland->widget = widget;
-
-      if (widget)
-        {
-          GtkGesture *gesture;
-
-          gesture = gtk_gesture_multi_press_new (widget);
-          gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
-                                                      GTK_PHASE_CAPTURE);
-          g_signal_connect (gesture, "pressed",
-                            G_CALLBACK (pressed_cb), context);
-          g_signal_connect (gesture, "released",
-                            G_CALLBACK (released_cb), context);
-          context_wayland->gesture = gesture;
-        }
-    }
-}
-
-static void
 gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
                                            gchar         **str,
                                            PangoAttrList **attrs,
@@ -633,6 +552,88 @@ disable (GtkIMContextWayland *context_wayland)
     {
       text_input_preedit (global, global->text_input, NULL, 0, 0);
       text_input_preedit_apply (global);
+    }
+}
+
+
+static void
+pressed_cb (GtkGestureMultiPress *gesture,
+            gint                  n_press,
+            gdouble               x,
+            gdouble               y,
+            GtkIMContextWayland  *context)
+{
+  if (n_press == 1)
+    {
+      context->press_x = x;
+      context->press_y = y;
+    }
+}
+
+static void
+released_cb (GtkGestureMultiPress *gesture,
+             gint                  n_press,
+             gdouble               x,
+             gdouble               y,
+             GtkIMContextWayland  *context)
+{
+  GtkInputHints hints;
+  gboolean result;
+
+  if (!global->current)
+    return;
+
+  g_object_get (context, "input-hints", &hints, NULL);
+
+  if (global->focused &&
+      n_press == 1 &&
+      (hints & GTK_INPUT_HINT_INHIBIT_OSK) == 0 &&
+      !gtk_drag_check_threshold (context->widget,
+                                 context->press_x,
+                                 context->press_y,
+                                 x, y))
+    {
+      zwp_text_input_v3_enable (global->text_input);
+      g_signal_emit_by_name (global->current, "retrieve-surrounding", &result);
+      commit_state (context);
+    }
+}
+
+static void
+gtk_im_context_wayland_set_client_window (GtkIMContext *context,
+                                          GdkWindow    *window)
+{
+  GtkIMContextWayland *context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
+  GtkWidget *widget = NULL;
+
+  if (window == context_wayland->window)
+    return;
+
+  if (window)
+    gdk_window_get_user_data (window, (gpointer*) &widget);
+
+  if (context_wayland->widget && context_wayland->widget != widget)
+    g_clear_object (&context_wayland->gesture);
+
+  g_set_object (&context_wayland->window, window);
+
+  if (context_wayland->widget != widget)
+    {
+      context_wayland->widget = widget;
+
+      if (widget)
+        {
+          GtkGesture *gesture;
+
+          gesture = gtk_gesture_multi_press_new (widget);
+          gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
+                                                      GTK_PHASE_CAPTURE);
+          g_signal_connect (gesture, "pressed",
+                            G_CALLBACK (pressed_cb), context);
+          g_signal_connect (gesture, "released",
+                            G_CALLBACK (released_cb), context);
+          context_wayland->gesture = gesture;
+        }
     }
 }
 
