@@ -115,34 +115,6 @@ maybe_unref_section (gpointer section)
     gtk_css_section_unref (section);
 }
 
-static void
-gtk_css_static_style_set_value (GtkCssStaticStyle *style,
-                                guint              id,
-                                GtkCssValue       *value,
-                                GtkCssSection     *section)
-{
-  if (style->values[id])
-    _gtk_css_value_unref (style->values[id]);
-
-  style->values[id] = value;
-
-  if (style->sections && style->sections->len > id && g_ptr_array_index (style->sections, id))
-    {
-      gtk_css_section_unref (g_ptr_array_index (style->sections, id));
-      g_ptr_array_index (style->sections, id) = NULL;
-    }
-
-  if (section)
-    {
-      if (style->sections == NULL)
-        style->sections = g_ptr_array_new_with_free_func (maybe_unref_section);
-      if (style->sections->len <= id)
-        g_ptr_array_set_size (style->sections, id + 1);
-
-      g_ptr_array_index (style->sections, id) = gtk_css_section_ref (section);
-    }
-}
-
 static GtkCssStyle *default_style;
 
 static void
@@ -175,6 +147,120 @@ gtk_css_static_style_get_default (void)
   return default_style;
 }
 
+G_STATIC_ASSERT (GTK_CSS_PROPERTY_BORDER_TOP_STYLE == GTK_CSS_PROPERTY_BORDER_TOP_WIDTH - 1);
+G_STATIC_ASSERT (GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE == GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH - 1);
+G_STATIC_ASSERT (GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE == GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH - 1);
+G_STATIC_ASSERT (GTK_CSS_PROPERTY_BORDER_LEFT_STYLE == GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH - 1);
+G_STATIC_ASSERT (GTK_CSS_PROPERTY_OUTLINE_STYLE == GTK_CSS_PROPERTY_OUTLINE_WIDTH - 1);
+
+static inline gboolean
+is_border_style_special_case (guint id)
+{
+  switch (id)
+    {
+    case GTK_CSS_PROPERTY_BORDER_TOP_STYLE:
+    case GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE:
+    case GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE:
+    case GTK_CSS_PROPERTY_BORDER_LEFT_STYLE:
+    case GTK_CSS_PROPERTY_OUTLINE_STYLE:
+      return TRUE;
+    default:
+      return FALSE;
+   }
+}
+
+static void
+gtk_css_static_style_compute_values (GtkCssStaticStyle *style,
+                                     GtkStyleProvider  *provider,
+                                     GtkCssStyle       *parent_style,
+                                     GtkCssLookup      *lookup)
+{
+  GtkCssLookupValue *values = lookup->values;
+  guint id;
+  GtkCssValue **parent_values;
+  guint border_prop[] = {
+    GTK_CSS_PROPERTY_BORDER_TOP_STYLE,
+    GTK_CSS_PROPERTY_BORDER_LEFT_STYLE,
+    GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE,
+    GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE,
+    GTK_CSS_PROPERTY_OUTLINE_STYLE,
+    0
+  };
+  int b = 0;
+
+  if (GTK_IS_CSS_STATIC_STYLE (parent_style))
+    parent_values = GTK_CSS_STATIC_STYLE (parent_style)->values;
+  else
+    parent_values = NULL;
+
+  for (id = 0; id < GTK_CSS_PROPERTY_N_PROPERTIES; id++)
+    {
+      GtkCssValue *specified = values[id].value;
+
+      /* http://www.w3.org/TR/css3-cascade/#cascade
+       * Then, for every element, the value for each property can be found
+       * by following this pseudo-algorithm:
+       * 1) Identify all declarations that apply to the element
+       */
+      if (specified)
+        {
+          style->values[id] = _gtk_css_value_compute (specified, id, provider, (GtkCssStyle *)style, parent_style);
+
+          /* special case according to http://dev.w3.org/csswg/css-backgrounds/#the-border-width */
+          if (id == border_prop[b])
+            {
+              b++;
+              /* We have them ordered in gtkcssstylepropertyimpl.c accordingly, so the
+               * border styles are computed before the border widths.
+               * Note that we rely on ..._WIDTH == ..._STYLE + 1 here.
+               */
+              GtkBorderStyle border_style = _gtk_css_border_style_value_get (style->values[id]);
+              if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
+                {
+                  id++;
+                  style->values[id] = gtk_css_dimension_value_new (0, GTK_CSS_NUMBER);
+                }
+            }
+        }
+      else if (parent_values && gtk_css_style_property_is_inherit (id))
+        {
+          style->values[id] = _gtk_css_value_ref (parent_values[id]);
+
+          /* the border properties are not inherit, so no need to check the special case here */
+        }
+      else if (parent_style && gtk_css_style_property_is_inherit (id))
+        {
+          style->values[id] = _gtk_css_value_ref (gtk_css_style_get_value (parent_style, id));
+
+          /* the border properties are not inherit, so no need to check the special case here */
+        }
+      else
+        {
+          style->values[id] = _gtk_css_initial_value_new_compute (id, provider, (GtkCssStyle *)style, parent_style);
+
+          /* special case according to http://dev.w3.org/csswg/css-backgrounds/#the-border-width */
+          if (id == border_prop[b])
+            {
+              b++;
+              /* no need to check the value. The initial value of the border-style properties is none */
+              id++;
+              style->values[id] = gtk_css_dimension_value_new (0, GTK_CSS_NUMBER);
+            }
+        }
+    }
+
+  if (lookup->has_section)
+    {
+      style->sections = g_ptr_array_new_full (GTK_CSS_PROPERTY_N_PROPERTIES, maybe_unref_section);
+      for (id = 0; id < GTK_CSS_PROPERTY_N_PROPERTIES; id++)
+        {
+          GtkCssSection *section = values[id].section;
+          if (section)
+            g_ptr_array_index (style->sections, id) = gtk_css_section_ref (section);
+        }
+    }
+}
+
 GtkCssStyle *
 gtk_css_static_style_new_compute (GtkStyleProvider    *provider,
                                   const GtkCssMatcher *matcher,
@@ -196,82 +282,11 @@ gtk_css_static_style_new_compute (GtkStyleProvider    *provider,
 
   result->change = change;
 
-  _gtk_css_lookup_resolve (&lookup,
-                           provider,
-                           result,
-                           parent);
+  gtk_css_static_style_compute_values (result, provider, parent, &lookup);
 
   _gtk_css_lookup_destroy (&lookup);
 
   return GTK_CSS_STYLE (result);
-}
-
-G_STATIC_ASSERT (GTK_CSS_PROPERTY_BORDER_TOP_STYLE == GTK_CSS_PROPERTY_BORDER_TOP_WIDTH - 1);
-G_STATIC_ASSERT (GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE == GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH - 1);
-G_STATIC_ASSERT (GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE == GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH - 1);
-G_STATIC_ASSERT (GTK_CSS_PROPERTY_BORDER_LEFT_STYLE == GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH - 1);
-G_STATIC_ASSERT (GTK_CSS_PROPERTY_OUTLINE_STYLE == GTK_CSS_PROPERTY_OUTLINE_WIDTH - 1);
-
-void
-gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
-                                    GtkStyleProvider  *provider,
-                                    GtkCssStyle       *parent_style,
-                                    guint              id,
-                                    GtkCssValue       *specified,
-                                    GtkCssSection     *section)
-{
-  GtkCssValue *value;
-  GtkBorderStyle border_style;
-
-  gtk_internal_return_if_fail (id < GTK_CSS_PROPERTY_N_PROPERTIES);
-
-  /* special case according to http://dev.w3.org/csswg/css-backgrounds/#the-border-width */
-  switch (id)
-    {
-      /* We have them ordered in gtkcssstylepropertyimpl.c accordingly, so the
-       * border styles are already computed when we compute the border widths.
-       *
-       * Note that we rely on ..._STYLE == ..._WIDTH - 1 here.
-       */
-      case GTK_CSS_PROPERTY_BORDER_TOP_WIDTH:
-      case GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH:
-      case GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH:
-      case GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH:
-      case GTK_CSS_PROPERTY_OUTLINE_WIDTH:
-        border_style = _gtk_css_border_style_value_get (gtk_css_style_get_value ((GtkCssStyle *)style, id - 1));
-        if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
-          {
-            gtk_css_static_style_set_value (style, id, gtk_css_dimension_value_new (0, GTK_CSS_NUMBER), section);
-            return;
-          }
-        break;
-
-      default:
-        /* Go ahead */
-        break;
-    }
-
-
-  /* http://www.w3.org/TR/css3-cascade/#cascade
-   * Then, for every element, the value for each property can be found
-   * by following this pseudo-algorithm:
-   * 1) Identify all declarations that apply to the element
-   */
-  if (specified)
-    {
-      value = _gtk_css_value_compute (specified, id, provider, (GtkCssStyle *)style, parent_style);
-    }
-  else if (parent_style && _gtk_css_style_property_is_inherit (_gtk_css_style_property_lookup_by_id (id)))
-    {
-      /* Just take the style from the parent */
-      value = _gtk_css_value_ref (gtk_css_style_get_value (parent_style, id));
-    }
-  else
-    {
-      value = _gtk_css_initial_value_new_compute (id, provider, (GtkCssStyle *)style, parent_style);
-    }
-
-  gtk_css_static_style_set_value (style, id, value, section);
 }
 
 GtkCssChange
