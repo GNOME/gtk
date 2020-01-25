@@ -578,7 +578,6 @@ released_cb (GtkGestureMultiPress *gesture,
              GtkIMContextWayland  *context)
 {
   GtkInputHints hints;
-  gboolean result;
 
   if (!global->current)
     return;
@@ -592,11 +591,7 @@ released_cb (GtkGestureMultiPress *gesture,
                                  context->press_x,
                                  context->press_y,
                                  x, y))
-    {
-      zwp_text_input_v3_enable (global->text_input);
-      g_signal_emit_by_name (global->current, "retrieve-surrounding", &result);
-      commit_state (context);
-    }
+    enable (context);
 }
 
 static void
