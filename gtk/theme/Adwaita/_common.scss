@@ -2276,6 +2276,20 @@ scrollbar {
         background-color: $fg_color;
         border: 1px solid if($variant == 'light', white, black);
       }
+
+      &.horizontal {
+        > range > trough > slider {
+          margin: 0 2px;
+          min-width: $_slider_min_length;
+        }
+      }
+
+      &.vertical {
+        > range > trough > slider {
+          margin: 2px 0;
+          min-height: $_slider_min_length;
+        }
+      }
     }
 
     &.dragging,
@@ -2283,7 +2297,6 @@ scrollbar {
   }
 
   &.horizontal > range > trough > slider { min-width: $_slider_min_length; }
-
   &.vertical > range > trough > slider { min-height: $_slider_min_length; }
 }
 
