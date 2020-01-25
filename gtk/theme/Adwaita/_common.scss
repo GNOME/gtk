@@ -317,11 +317,11 @@ entry {
       &.right { margin-left: 6px; }
     }
 
-    > placeholder {
+    > text > placeholder {
       @extend .dim-label;
     }
 
-    > block-cursor {
+    > text > block-cursor {
       @include entry(block_cursor);
     }
 
@@ -352,7 +352,7 @@ entry {
 
     &:backdrop:disabled { @include entry(backdrop-insensitive); }
 
-    > selection { @extend %selected_items; }
+    > text > selection { @extend %selected_items; }
 
     // entry error and warning style
     @each $e_type, $e_color in (error, $error_color),

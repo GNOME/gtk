@@ -57,9 +57,13 @@ label > selection { background-color: #15539e; color: #ffffff; }
 
 label:disabled { color: #919190; }
 
+button label:disabled { color: inherit; }
+
 label:disabled:backdrop { color: #5b5b5b; }
 
-.dim-label, label.separator, spinbutton:not(.vertical) > placeholder, spinbutton.vertical > text > placeholder, entry > placeholder, .titlebar:not(headerbar) .subtitle, headerbar .subtitle { opacity: 0.55; text-shadow: none; }
+button label:disabled:backdrop { color: inherit; }
+
+.dim-label, label.separator, spinbutton:not(.vertical) > text > placeholder, spinbutton.vertical > text > text > placeholder, entry > text > placeholder, .titlebar:not(headerbar) .subtitle, headerbar .subtitle { opacity: 0.55; text-shadow: none; }
 
 assistant .sidebar { background-color: #2d2d2d; border-top: 1px solid #1b1b1b; }
 
@@ -110,7 +114,7 @@ spinbutton:not(.vertical) > image.left, spinbutton.vertical > text > image.left,
 
 spinbutton:not(.vertical) > image.right, spinbutton.vertical > text > image.right, entry > image.right { margin-left: 6px; }
 
-spinbutton:not(.vertical) > block-cursor, spinbutton.vertical > text > block-cursor, entry > block-cursor { color: #2d2d2d; background-color: white; }
+spinbutton:not(.vertical) > text > block-cursor, spinbutton.vertical > text > text > block-cursor, entry > text > block-cursor { color: #2d2d2d; background-color: white; }
 
 spinbutton.flat:focus:not(.vertical), spinbutton.vertical > text.flat:focus, spinbutton.flat:backdrop:not(.vertical), spinbutton.vertical > text.flat:backdrop, spinbutton.flat:disabled:not(.vertical), spinbutton.vertical > text.flat:disabled, spinbutton.flat:backdrop:disabled:not(.vertical), spinbutton.vertical > text.flat:backdrop:disabled, spinbutton.flat:not(.vertical), spinbutton.vertical > text.flat, entry.flat:focus, entry.flat:backdrop, entry.flat:disabled, entry.flat:backdrop:disabled, entry.flat { min-height: 0; padding: 2px; background-color: transparent; border-color: transparent; border-radius: 0; }
 
@@ -228,7 +232,7 @@ notebook > header > tabs > arrow.text-button, button.text-button.titlebutton, bu
 
 notebook > header > tabs > arrow.text-button.image-button, button.text-button.image-button.titlebutton, button.text-button.image-button { padding-left: 8px; padding-right: 8px; }
 
-notebook > header > tabs > arrow.text-button.image-button > label, button.text-button.image-button.titlebutton > label, notebook > header > tabs > arrow.text-button.image-button > * > label, button.text-button.image-button.titlebutton > * > label, button.text-button.image-button > label, button.text-button.image-button > * > label { padding-left: 8px; padding-right: 8px; }
+notebook > header > tabs > arrow.text-button.image-button label, button.text-button.image-button.titlebutton label, button.text-button.image-button label { padding-left: 8px; padding-right: 8px; }
 
 combobox:drop(active) button.combo, notebook > header > tabs > arrow:drop(active), button.titlebutton:drop(active), button:drop(active) { color: #4e9a06; border-color: #4e9a06; box-shadow: inset 0 0 0 1px #4e9a06; }
 
@@ -356,7 +360,7 @@ button.font > box > box > label { font-weight: bold; }
 
 button.circular { border-radius: 9999px; -gtk-outline-radius: 9999px; }
 
-button.circular > label { padding: 0; }
+button.circular label { padding: 0; }
 
 stackswitcher > button.needs-attention > label, stackswitcher > button.needs-attention > image, stacksidebar row.needs-attention > label { animation: needs_attention 150ms ease-in; background-image: radial-gradient(farthest-side, #1f76e1 96%, rgba(31, 118, 225, 0)), radial-gradient(farthest-side, rgba(0, 0, 0, 0.834353) 95%, rgba(0, 0, 0, 0)); background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; background-position: right 3px, right 2px; }
 
@@ -605,11 +609,11 @@ window.devel headerbar.titlebar:backdrop { background: #353535 cross-fade(10% -g
 /************ Pathbars * */
 pathbar > button.text-button, pathbar > button.image-button, pathbar > button { padding-left: 4px; padding-right: 4px; }
 
-pathbar > button.text-button.image-button > label { padding-left: 0; padding-right: 0; }
+pathbar > button.text-button.image-button label { padding-left: 0; padding-right: 0; }
 
-pathbar > button.text-button.image-button > label:last-child, pathbar > button > label:last-child { padding-right: 8px; }
+pathbar > button.text-button.image-button label:last-child, pathbar > button label:last-child { padding-right: 8px; }
 
-pathbar > button.text-button.image-button > label:first-child, pathbar > button > label:first-child { padding-left: 8px; }
+pathbar > button.text-button.image-button label:first-child, pathbar > button label:first-child { padding-left: 8px; }
 
 pathbar > button image { padding-left: 4px; padding-right: 4px; }
 
@@ -1606,6 +1610,8 @@ infobar.info, infobar.question, infobar.warning, infobar.error { text-shadow: no
 
 infobar.info:backdrop, infobar.info, infobar.question:backdrop, infobar.question, infobar.warning:backdrop, infobar.warning, infobar.error:backdrop, infobar.error { background-color: #44403b; border-color: #353535; }
 
+infobar.info:backdrop label, infobar.info:backdrop, infobar.info label, infobar.info, infobar.question:backdrop label, infobar.question:backdrop, infobar.question label, infobar.question, infobar.warning:backdrop label, infobar.warning:backdrop, infobar.warning label, infobar.warning, infobar.error:backdrop label, infobar.error:backdrop, infobar.error label, infobar.error { color: #eeeeec; }
+
 infobar.info:backdrop, infobar.question:backdrop, infobar.warning:backdrop, infobar.error:backdrop { text-shadow: none; }
 
 infobar.info > revealer > box, infobar.question > revealer > box, infobar.warning > revealer > box, infobar.error > revealer > box { padding-top: 8px; padding-bottom: 8px; border-bottom: 1px solid #282828; border-spacing: 12px; }
@@ -1623,6 +1629,8 @@ infobar.info button:disabled, infobar.question button:disabled, infobar.warning 
 infobar.info button:backdrop, infobar.question button:backdrop, infobar.warning button:backdrop, infobar.error button:backdrop { color: #919190; border-color: #202020; background-image: image(#353535); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #1b1b1b; }
 
 infobar.info button:backdrop:disabled, infobar.question button:backdrop:disabled, infobar.warning button:backdrop:disabled, infobar.error button:backdrop:disabled { color: #5b5b5b; border-color: #202020; background-image: image(#323232); text-shadow: none; -gtk-icon-shadow: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); border-color: #1b1b1b; }
+
+infobar.info button:backdrop label, infobar.info button:backdrop, infobar.info button label, infobar.info button, infobar.question button:backdrop label, infobar.question button:backdrop, infobar.question button label, infobar.question button, infobar.warning button:backdrop label, infobar.warning button:backdrop, infobar.warning button label, infobar.warning button, infobar.error button:backdrop label, infobar.error button:backdrop, infobar.error button label, infobar.error button { color: #eeeeec; }
 
 infobar.info selection, infobar.question selection, infobar.warning selection, infobar.error selection { background-color: #1b1b1b; }
 
@@ -1740,15 +1748,15 @@ button.titlebutton:not(.menu) { border-radius: 9999px; -gtk-outline-radius: 9999
 
 button.titlebutton:backdrop { -gtk-icon-shadow: none; }
 
-.view:selected:focus, .view:selected, iconview:selected, textview > text:selected, textview > text > selection:focus, textview > text > selection, flowbox > flowboxchild:selected, spinbutton:not(.vertical) > selection, spinbutton.vertical > text > selection, entry > selection, modelbutton.flat:selected, treeview.view:selected:focus, treeview.view:selected, row:selected, calendar:selected, popover.menu box.inline-buttons button.image-button.model:selected, popover.menu modelbutton:selected { background-color: #15539e; }
+.view:selected:focus, .view:selected, iconview:selected, textview > text:selected, textview > text > selection:focus, textview > text > selection, flowbox > flowboxchild:selected, spinbutton:not(.vertical) > text > selection, spinbutton.vertical > text > text > selection, entry > text > selection, modelbutton.flat:selected, treeview.view:selected:focus, treeview.view:selected, row:selected, calendar:selected, popover.menu box.inline-buttons button.image-button.model:selected, popover.menu modelbutton:selected { background-color: #15539e; }
 
-label:selected, .view:selected:focus, .view:selected, iconview:selected, textview > text:selected, textview > text > selection:focus, textview > text > selection, flowbox > flowboxchild:selected, spinbutton:not(.vertical) > selection, spinbutton.vertical > text > selection, entry > selection, modelbutton.flat:selected, treeview.view:selected:focus, treeview.view:selected, row:selected, calendar:selected, popover.menu box.inline-buttons button.image-button.model:selected, popover.menu modelbutton:selected { color: #ffffff; }
+label:selected, .view:selected:focus, .view:selected, iconview:selected, textview > text:selected, textview > text > selection:focus, textview > text > selection, flowbox > flowboxchild:selected, spinbutton:not(.vertical) > text > selection, spinbutton.vertical > text > text > selection, entry > text > selection, modelbutton.flat:selected, treeview.view:selected:focus, treeview.view:selected, row:selected, calendar:selected, popover.menu box.inline-buttons button.image-button.model:selected, popover.menu modelbutton:selected { color: #ffffff; }
 
-label:disabled > selection, label:disabled:selected, iconview:disabled:selected:focus, .view:disabled:selected, iconview:disabled:selected, textview > text:disabled:selected:focus, textview > text:disabled:selected, textview > text > selection:disabled, flowbox > flowboxchild:disabled:selected, spinbutton:not(.vertical) > selection:disabled, spinbutton.vertical > text > selection:disabled, entry > selection:disabled, modelbutton.flat:disabled:selected, row:disabled:selected, calendar:disabled:selected, popover.menu box.inline-buttons button.image-button.model:disabled:selected, popover.menu modelbutton:disabled:selected { color: #8aa9ce; }
+label:disabled > selection, label:disabled:selected, iconview:disabled:selected:focus, .view:disabled:selected, iconview:disabled:selected, textview > text:disabled:selected:focus, textview > text:disabled:selected, textview > text > selection:disabled, flowbox > flowboxchild:disabled:selected, spinbutton:not(.vertical) > text > selection:disabled, spinbutton.vertical > text > text > selection:disabled, entry > text > selection:disabled, modelbutton.flat:disabled:selected, row:disabled:selected, calendar:disabled:selected, popover.menu box.inline-buttons button.image-button.model:disabled:selected, popover.menu modelbutton:disabled:selected { color: #8aa9ce; }
 
-label:backdrop > selection, label:backdrop:selected, iconview:backdrop:selected:focus, .view:backdrop:selected, iconview:backdrop:selected, textview > text:backdrop:selected:focus, textview > text:backdrop:selected, textview > text > selection:backdrop, flowbox > flowboxchild:backdrop:selected, spinbutton:not(.vertical) > selection:backdrop, spinbutton.vertical > text > selection:backdrop, entry > selection:backdrop, modelbutton.flat:backdrop:selected, row:backdrop:selected, calendar:backdrop:selected, popover.menu box.inline-buttons button.image-button.model:backdrop:selected, popover.menu modelbutton:backdrop:selected { color: #d6d6d6; }
+label:backdrop > selection, label:backdrop:selected, iconview:backdrop:selected:focus, .view:backdrop:selected, iconview:backdrop:selected, textview > text:backdrop:selected:focus, textview > text:backdrop:selected, textview > text > selection:backdrop, flowbox > flowboxchild:backdrop:selected, spinbutton:not(.vertical) > text > selection:backdrop, spinbutton.vertical > text > text > selection:backdrop, entry > text > selection:backdrop, modelbutton.flat:backdrop:selected, row:backdrop:selected, calendar:backdrop:selected, popover.menu box.inline-buttons button.image-button.model:backdrop:selected, popover.menu modelbutton:backdrop:selected { color: #d6d6d6; }
 
-label:backdrop > selection:disabled, label:backdrop:disabled:selected, .view:backdrop:disabled:selected, iconview:backdrop:disabled:selected, textview > text:backdrop:disabled:selected, textview > text > selection:backdrop:disabled, flowbox > flowboxchild:backdrop:disabled:selected, spinbutton:not(.vertical) > selection:backdrop:disabled, spinbutton.vertical > text > selection:backdrop:disabled, entry > selection:backdrop:disabled, modelbutton.flat:backdrop:disabled:selected, row:backdrop:disabled:selected, calendar:backdrop:disabled:selected, popover.menu box.inline-buttons button.image-button.model:backdrop:disabled:selected, popover.menu modelbutton:backdrop:disabled:selected { color: #4f7aaf; }
+label:backdrop > selection:disabled, label:backdrop:disabled:selected, .view:backdrop:disabled:selected, iconview:backdrop:disabled:selected, textview > text:backdrop:disabled:selected, textview > text > selection:backdrop:disabled, flowbox > flowboxchild:backdrop:disabled:selected, spinbutton:not(.vertical) > text > selection:backdrop:disabled, spinbutton.vertical > text > text > selection:backdrop:disabled, entry > text > selection:backdrop:disabled, modelbutton.flat:backdrop:disabled:selected, row:backdrop:disabled:selected, calendar:backdrop:disabled:selected, popover.menu box.inline-buttons button.image-button.model:backdrop:disabled:selected, popover.menu modelbutton:backdrop:disabled:selected { color: #4f7aaf; }
 
 .monospace { font-family: monospace; }
 
@@ -1815,11 +1823,11 @@ button.emoji-section:hover { border-color: rgba(238, 238, 236, 0.1); }
 
 button.emoji-section:checked { border-color: #15539e; }
 
-button.emoji-section > label { padding: 0; opacity: 0.55; }
+button.emoji-section label { padding: 0; opacity: 0.55; }
 
-button.emoji-section:hover > label { opacity: 0.775; }
+button.emoji-section:hover label { opacity: 0.775; }
 
-button.emoji-section:checked > label { opacity: 1; }
+button.emoji-section:checked label { opacity: 1; }
 
 popover.emoji-picker emoji { font-size: x-large; padding: 6px; border-radius: 6px; }
 
