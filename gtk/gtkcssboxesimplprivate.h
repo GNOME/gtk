@@ -23,6 +23,7 @@
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcssnumbervalueprivate.h"
+#include "gtkcssdimensionvalueprivate.h"
 #include "gtkwidgetprivate.h"
 
 /* This file is included from gtkcssboxesprivate.h */
@@ -79,15 +80,50 @@ gtk_css_boxes_rect_grow (GskRoundedRect *dest,
                          int             bottom_property,
                          int             left_property)
 {
-  double top = _gtk_css_number_value_get (gtk_css_style_get_value (style, top_property), 100);
-  double right = _gtk_css_number_value_get (gtk_css_style_get_value (style, right_property), 100);
-  double bottom = _gtk_css_number_value_get (gtk_css_style_get_value (style, bottom_property), 100);
-  double left = _gtk_css_number_value_get (gtk_css_style_get_value (style, left_property), 100);
+  GtkCssValue *top = gtk_css_style_get_value (style, top_property);
+  GtkCssValue *right = gtk_css_style_get_value (style, right_property);
+  GtkCssValue *bottom = gtk_css_style_get_value (style, bottom_property);
+  GtkCssValue *left = gtk_css_style_get_value (style, left_property);
 
-  dest->bounds.origin.x = src->bounds.origin.x - left;
-  dest->bounds.origin.y = src->bounds.origin.y - top;
-  dest->bounds.size.width = src->bounds.size.width + left + right;
-  dest->bounds.size.height = src->bounds.size.height + top + bottom;
+  if (gtk_css_dimension_value_is_zero (left))
+    {
+      dest->bounds.origin.x = src->bounds.origin.x;
+      if (gtk_css_dimension_value_is_zero (right))
+        dest->bounds.size.width = src->bounds.size.width;
+      else
+        dest->bounds.size.width = src->bounds.size.width + _gtk_css_number_value_get (right, 100);
+    }
+  else
+    {
+      const double left_value = _gtk_css_number_value_get (left, 100);
+
+      dest->bounds.origin.x = src->bounds.origin.x - left_value;
+      if (gtk_css_dimension_value_is_zero (right))
+        dest->bounds.size.width = src->bounds.size.width + left_value;
+      else
+        dest->bounds.size.width = src->bounds.size.width + left_value + _gtk_css_number_value_get (right, 100);
+
+    }
+
+
+  if (gtk_css_dimension_value_is_zero (top))
+    {
+      dest->bounds.origin.y = src->bounds.origin.y;
+      if (gtk_css_dimension_value_is_zero (bottom))
+        dest->bounds.size.height = src->bounds.size.height;
+      else
+        dest->bounds.size.height = src->bounds.size.height + _gtk_css_number_value_get (bottom, 100);
+    }
+  else
+    {
+      const double top_value = _gtk_css_number_value_get (top, 100);
+
+      dest->bounds.origin.y = src->bounds.origin.y - top_value;
+      if (gtk_css_dimension_value_is_zero (bottom))
+        dest->bounds.size.height = src->bounds.size.height + top_value;
+      else
+        dest->bounds.size.height = src->bounds.size.height + top_value + _gtk_css_number_value_get (bottom, 100);
+    }
 }
 
 static inline void
@@ -323,19 +359,38 @@ gtk_css_boxes_apply_border_radius (GskRoundedRect    *box,
                                    const GtkCssValue *bottom_right,
                                    const GtkCssValue *bottom_left)
 {
-  box->corner[GSK_CORNER_TOP_LEFT].width = _gtk_css_corner_value_get_x (top_left, box->bounds.size.width);
-  box->corner[GSK_CORNER_TOP_LEFT].height = _gtk_css_corner_value_get_y (top_left, box->bounds.size.height);
+  gboolean has_border_radius = FALSE;
 
-  box->corner[GSK_CORNER_TOP_RIGHT].width = _gtk_css_corner_value_get_x (top_right, box->bounds.size.width);
-  box->corner[GSK_CORNER_TOP_RIGHT].height = _gtk_css_corner_value_get_y (top_right, box->bounds.size.height);
+  if (!gtk_css_corner_value_is_zero (top_left))
+    {
+      box->corner[GSK_CORNER_TOP_LEFT].width = _gtk_css_corner_value_get_x (top_left, box->bounds.size.width);
+      box->corner[GSK_CORNER_TOP_LEFT].height = _gtk_css_corner_value_get_y (top_left, box->bounds.size.height);
+      has_border_radius = TRUE;
+    }
 
-  box->corner[GSK_CORNER_BOTTOM_RIGHT].width = _gtk_css_corner_value_get_x (bottom_right, box->bounds.size.width);
-  box->corner[GSK_CORNER_BOTTOM_RIGHT].height = _gtk_css_corner_value_get_y (bottom_right, box->bounds.size.height);
+  if (!gtk_css_corner_value_is_zero (top_right))
+    {
+      box->corner[GSK_CORNER_TOP_RIGHT].width = _gtk_css_corner_value_get_x (top_right, box->bounds.size.width);
+      box->corner[GSK_CORNER_TOP_RIGHT].height = _gtk_css_corner_value_get_y (top_right, box->bounds.size.height);
+      has_border_radius = TRUE;
+    }
 
-  box->corner[GSK_CORNER_BOTTOM_LEFT].width = _gtk_css_corner_value_get_x (bottom_left, box->bounds.size.width);
-  box->corner[GSK_CORNER_BOTTOM_LEFT].height = _gtk_css_corner_value_get_y (bottom_left, box->bounds.size.height);
+  if (!gtk_css_corner_value_is_zero (bottom_right))
+    {
+      box->corner[GSK_CORNER_BOTTOM_RIGHT].width = _gtk_css_corner_value_get_x (bottom_right, box->bounds.size.width);
+      box->corner[GSK_CORNER_BOTTOM_RIGHT].height = _gtk_css_corner_value_get_y (bottom_right, box->bounds.size.height);
+      has_border_radius = TRUE;
+    }
 
-  gtk_css_boxes_clamp_border_radius (box);
+  if (!gtk_css_corner_value_is_zero (bottom_left))
+    {
+      box->corner[GSK_CORNER_BOTTOM_LEFT].width = _gtk_css_corner_value_get_x (bottom_left, box->bounds.size.width);
+      box->corner[GSK_CORNER_BOTTOM_LEFT].height = _gtk_css_corner_value_get_y (bottom_left, box->bounds.size.height);
+      has_border_radius = TRUE;
+    }
+
+  if (has_border_radius)
+    gtk_css_boxes_clamp_border_radius (box);
 }
 
 /* NB: width and height must be >= 0 */
