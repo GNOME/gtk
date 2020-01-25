@@ -497,3 +497,14 @@ gtk_css_dimension_value_parse (GtkCssParser           *parser,
   return result;
 }
 
+gboolean
+gtk_css_dimension_value_is_zero (const GtkCssValue *value)
+{
+  if (!value)
+    return TRUE;
+
+  if (value->class != &GTK_CSS_VALUE_DIMENSION.value_class)
+    return FALSE;
+
+  return value->value == 0;
+}
