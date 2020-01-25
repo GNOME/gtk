@@ -18,8 +18,8 @@
 #include "config.h"
 
 #include "gtkcsscornervalueprivate.h"
-
 #include "gtkcssnumbervalueprivate.h"
+#include "gtkcssdimensionvalueprivate.h"
 
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
@@ -184,3 +184,12 @@ _gtk_css_corner_value_get_y (const GtkCssValue *corner,
   return _gtk_css_number_value_get (corner->y, one_hundred_percent);
 }
 
+gboolean
+gtk_css_corner_value_is_zero (const GtkCssValue *corner)
+{
+  if (corner->class != &GTK_CSS_VALUE_CORNER)
+    return gtk_css_dimension_value_is_zero (corner);
+
+  return gtk_css_dimension_value_is_zero (corner->x) &&
+         gtk_css_dimension_value_is_zero (corner->y);
+}
