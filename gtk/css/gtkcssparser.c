@@ -261,14 +261,14 @@ gtk_css_parser_get_end_location (GtkCssParser *self)
 const GtkCssLocation *
 gtk_css_parser_get_block_location (GtkCssParser *self)
 {
-  GtkCssParserBlock *block;
+  const GtkCssParserBlock *block;
 
   if (self->blocks->len == 0)
     {
       static const GtkCssLocation start_of_document = { 0, };
       return &start_of_document;
     }
-  
+
   block = &g_array_index (self->blocks, GtkCssParserBlock, self->blocks->len - 1);
   return &block->start_location;
 }
@@ -301,7 +301,7 @@ gtk_css_parser_peek_token (GtkCssParser *self)
 
   if (self->blocks->len)
     {
-      GtkCssParserBlock *block = &g_array_index (self->blocks, GtkCssParserBlock, self->blocks->len - 1);
+      const GtkCssParserBlock *block = &g_array_index (self->blocks, GtkCssParserBlock, self->blocks->len - 1);
       if (gtk_css_token_is (&self->token, block->end_token) ||
           gtk_css_token_is (&self->token, block->inherited_end_token) ||
           gtk_css_token_is (&self->token, block->alternative_token))
