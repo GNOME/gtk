@@ -891,6 +891,10 @@ scrollbar.overlay-indicator:not(.dragging):not(.hovering) { border-color: transp
 
 scrollbar.overlay-indicator:not(.dragging):not(.hovering) > range > trough > slider { margin: 0; min-width: 3px; min-height: 3px; background-color: #2e3436; border: 1px solid white; }
 
+scrollbar.overlay-indicator:not(.dragging):not(.hovering).horizontal > range > trough > slider { margin: 0 2px; min-width: 40px; }
+
+scrollbar.overlay-indicator:not(.dragging):not(.hovering).vertical > range > trough > slider { margin: 2px 0; min-height: 40px; }
+
 scrollbar.overlay-indicator.dragging, scrollbar.overlay-indicator.hovering { opacity: 0.8; }
 
 scrollbar.horizontal > range > trough > slider { min-width: 40px; }
