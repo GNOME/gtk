@@ -55,6 +55,29 @@ gtk_icon_snapshot (GtkWidget   *widget,
 }
 
 static void
+gtk_icon_style_updated (GtkWidget *widget)
+{
+  GtkStyleContext *context;
+  GtkCssStyleChange *change = NULL;
+
+  context = gtk_widget_get_style_context (widget);
+  change = gtk_style_context_get_change (context);
+
+  GTK_WIDGET_CLASS (gtk_icon_parent_class)->style_updated (widget);
+
+  if (change == NULL ||
+      gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_SIZE))
+    {
+      gtk_widget_queue_resize (widget);
+    }
+  else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_TEXTURE) ||
+           gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_REDRAW))
+    {
+      gtk_widget_queue_draw (widget);
+    }
+}
+
+static void
 gtk_icon_measure (GtkWidget      *widget,
                   GtkOrientation  orientation,
                   int             for_size,
@@ -76,6 +99,7 @@ gtk_icon_class_init (GtkIconClass *klass)
 
   wclass->snapshot = gtk_icon_snapshot;
   wclass->measure = gtk_icon_measure;
+  wclass->style_updated = gtk_icon_style_updated;
 }
 
 static void
