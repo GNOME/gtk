@@ -210,37 +210,6 @@ gtk_render_background (GtkStyleContext *context,
 }
 
 /**
- * gtk_render_background_get_clip:
- * @context: a #GtkStyleContext
- * @x: X origin of the rectangle
- * @y: Y origin of the rectangle
- * @width: rectangle width
- * @height: rectangle height
- * @out_clip: (out): return location for the clip
- *
- * Returns the area that will be affected (i.e. drawn to) when
- * calling gtk_render_background() for the given @context and
- * rectangle.
- */
-void
-gtk_render_background_get_clip (GtkStyleContext *context,
-                                gdouble          x,
-                                gdouble          y,
-                                gdouble          width,
-                                gdouble          height,
-                                GdkRectangle    *out_clip)
-{
-  GtkBorder shadow;
-
-  gtk_css_shadow_value_get_extents (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BOX_SHADOW), &shadow);
-
-  out_clip->x = floor (x) - shadow.left;
-  out_clip->y = floor (y) - shadow.top;
-  out_clip->width = ceil (width) + shadow.left + shadow.right;
-  out_clip->height = ceil (height) + shadow.top + shadow.bottom;
-}
-
-/**
  * gtk_render_frame:
  * @context: a #GtkStyleContext
  * @cr: a #cairo_t
