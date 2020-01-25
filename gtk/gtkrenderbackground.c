@@ -269,63 +269,65 @@ void
 gtk_css_style_snapshot_background (GtkCssBoxes *boxes,
                                    GtkSnapshot *snapshot)
 {
+  GtkCssValue *background_image = gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
+  const GdkRGBA *bg_color = gtk_css_color_value_get_rgba (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+  const GtkCssValue *box_shadow = gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BOX_SHADOW);
+  const gboolean has_bg_color = !gdk_rgba_is_clear (bg_color);
+  const gboolean has_bg_image = _gtk_css_image_value_get_image (_gtk_css_array_value_get_nth (background_image, 0)) != NULL;
+  const gboolean has_shadow = !gtk_css_shadow_value_is_none (box_shadow);
   gint idx;
-  GtkCssValue *background_image;
-  GtkCssValue *box_shadow;
-  GtkCssValue *blend_modes;
-  const GdkRGBA *bg_color;
-  gint number_of_layers;
-  GskBlendMode *blend_mode_values;
-
-  background_image = gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
-  bg_color = gtk_css_color_value_get_rgba (gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
-  box_shadow = gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BOX_SHADOW);
 
   /* This is the common default case of no background */
-  if (gdk_rgba_is_clear (bg_color) &&
-      _gtk_css_array_value_get_n_values (background_image) == 1 &&
-      _gtk_css_image_value_get_image (_gtk_css_array_value_get_nth (background_image, 0)) == NULL &&
-      gtk_css_shadow_value_is_none (box_shadow))
+  if (!has_bg_color && !has_bg_image && !has_shadow)
     return;
 
   gtk_snapshot_push_debug (snapshot, "CSS background");
 
-  gtk_css_shadow_value_snapshot_outset (box_shadow,
-                                        snapshot,
-                                        gtk_css_boxes_get_border_box (boxes));
+  if (has_shadow)
+    gtk_css_shadow_value_snapshot_outset (box_shadow,
+                                          snapshot,
+                                          gtk_css_boxes_get_border_box (boxes));
 
-  blend_modes = gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE);
-  number_of_layers = _gtk_css_array_value_get_n_values (background_image);
-  blend_mode_values = g_alloca (sizeof (GskBlendMode) * number_of_layers);
-
-  for (idx = number_of_layers - 1; idx >= 0; idx--)
+  if (has_bg_image)
     {
-      blend_mode_values[idx] = _gtk_css_blend_mode_value_get (_gtk_css_array_value_get_nth (blend_modes, idx));
+      GtkCssValue *blend_modes = gtk_css_style_get_value (boxes->style, GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE);
+      const int number_of_layers = _gtk_css_array_value_get_n_values (background_image);
+      GskBlendMode *blend_mode_values = g_alloca (sizeof (GskBlendMode) * number_of_layers);
 
-      if (blend_mode_values[idx] != GSK_BLEND_MODE_DEFAULT)
-        gtk_snapshot_push_blend (snapshot, blend_mode_values[idx]);
+      for (idx = number_of_layers - 1; idx >= 0; idx--)
+        {
+          blend_mode_values[idx] = _gtk_css_blend_mode_value_get (_gtk_css_array_value_get_nth (blend_modes, idx));
+
+          if (blend_mode_values[idx] != GSK_BLEND_MODE_DEFAULT)
+            gtk_snapshot_push_blend (snapshot, blend_mode_values[idx]);
+        }
+
+      if (has_bg_color)
+        gtk_theming_background_snapshot_color (boxes, snapshot, bg_color, background_image);
+
+      for (idx = number_of_layers - 1; idx >= 0; idx--)
+        {
+          if (blend_mode_values[idx] == GSK_BLEND_MODE_DEFAULT)
+            {
+              gtk_theming_background_snapshot_layer (boxes, idx, snapshot);
+            }
+          else
+            {
+              gtk_snapshot_pop (snapshot);
+              gtk_theming_background_snapshot_layer (boxes, idx, snapshot);
+              gtk_snapshot_pop (snapshot);
+            }
+        }
+    }
+  else if (has_bg_color)
+    {
+      gtk_theming_background_snapshot_color (boxes, snapshot, bg_color, background_image);
     }
 
-  if (!gdk_rgba_is_clear (bg_color))
-    gtk_theming_background_snapshot_color (boxes, snapshot, bg_color, background_image);
-
-  for (idx = number_of_layers - 1; idx >= 0; idx--)
-    {
-      if (blend_mode_values[idx] == GSK_BLEND_MODE_DEFAULT)
-        {
-          gtk_theming_background_snapshot_layer (boxes, idx, snapshot);
-        }
-      else
-        {
-          gtk_snapshot_pop (snapshot);
-          gtk_theming_background_snapshot_layer (boxes, idx, snapshot);
-          gtk_snapshot_pop (snapshot);
-        }
-    }
-
-  gtk_css_shadow_value_snapshot_inset (box_shadow,
-                                       snapshot,
-                                       gtk_css_boxes_get_padding_box (boxes));
+  if (has_shadow)
+    gtk_css_shadow_value_snapshot_inset (box_shadow,
+                                         snapshot,
+                                         gtk_css_boxes_get_padding_box (boxes));
 
   gtk_snapshot_pop (snapshot);
 }
