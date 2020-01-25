@@ -132,13 +132,16 @@ typedef guint64 GtkCssChange;
  *   see @GTK_CSS_AFFECTS_TEXT.
  * @GTK_CSS_AFFECTS_BACKGROUND: The background rendering is affected.
  * @GTK_CSS_AFFECTS_BORDER: The border styling is affected.
- * @GTK_CSS_AFFECTS_ICON_SIZE: Icon size is affected.
  * @GTK_CSS_AFFECTS_TEXT_ATTRS: Text attributes are affected.
  * @GTK_CSS_AFFECTS_TEXT_SIZE: Text size is affected.
  * @GTK_CSS_AFFECTS_TEXT_CONTENT: Text rendering is affected, but size or
  *   attributes are not.
- * @GTK_CSS_AFFECTS_ICON: Fullcolor icons and their rendering is affected.
- * @GTK_CSS_AFFECTS_SYMBOLIC_ICON: Symbolic icons and their rendering is affected.
+ * @GTK_CSS_AFFECTS_ICON_SIZE: Icon size is affected.
+ * @GTK_CSS_AFFECTS_ICON_TEXTURE: The icon texture has changed and needs to be
+ *   reloaded.
+ * @GTK_CSS_AFFECTS_ICON_REDRAW: Icons need to be redrawn (both symbolic and
+ *   non-symbolic).
+ * @GTK_CSS_AFFECTS_ICON_REDRAW_SYMBOLIC: Symbolic icons need to be redrawn.
  * @GTK_CSS_AFFECTS_OUTLINE: The outline styling is affected.
  * @GTK_CSS_AFFECTS_SIZE: Changes in this property may have an effect
  *   on the allocated size of the element. Changes in these properties
@@ -154,26 +157,25 @@ typedef guint64 GtkCssChange;
  * Note that multiple values can be set.
  */
 typedef enum {
-  GTK_CSS_AFFECTS_CONTENT       = (1 << 0),
-  GTK_CSS_AFFECTS_BACKGROUND    = (1 << 1),
-  GTK_CSS_AFFECTS_BORDER        = (1 << 2),
-  GTK_CSS_AFFECTS_ICON_SIZE     = (1 << 3),
-  GTK_CSS_AFFECTS_TEXT_ATTRS    = (1 << 4),
-  GTK_CSS_AFFECTS_TEXT_SIZE     = (1 << 5),
-  GTK_CSS_AFFECTS_TEXT_CONTENT  = (1 << 6),
-  GTK_CSS_AFFECTS_ICON          = (1 << 7),
-  GTK_CSS_AFFECTS_SYMBOLIC_ICON = (1 << 8),
-  GTK_CSS_AFFECTS_OUTLINE       = (1 << 9),
-  GTK_CSS_AFFECTS_SIZE          = (1 << 10),
-  GTK_CSS_AFFECTS_POSTEFFECT    = (1 << 11),
-  GTK_CSS_AFFECTS_TRANSFORM     = (1 << 12),
+  GTK_CSS_AFFECTS_CONTENT              = (1 << 0),
+  GTK_CSS_AFFECTS_BACKGROUND           = (1 << 1),
+  GTK_CSS_AFFECTS_BORDER               = (1 << 2),
+  GTK_CSS_AFFECTS_TEXT_ATTRS           = (1 << 3),
+  GTK_CSS_AFFECTS_TEXT_SIZE            = (1 << 4),
+  GTK_CSS_AFFECTS_TEXT_CONTENT         = (1 << 5),
+  GTK_CSS_AFFECTS_ICON_SIZE            = (1 << 6),
+  GTK_CSS_AFFECTS_ICON_TEXTURE         = (1 << 7),
+  GTK_CSS_AFFECTS_ICON_REDRAW          = (1 << 8),
+  GTK_CSS_AFFECTS_ICON_REDRAW_SYMBOLIC = (1 << 9),
+  GTK_CSS_AFFECTS_OUTLINE              = (1 << 10),
+  GTK_CSS_AFFECTS_SIZE                 = (1 << 11),
+  GTK_CSS_AFFECTS_POSTEFFECT           = (1 << 12),
+  GTK_CSS_AFFECTS_TRANSFORM            = (1 << 13),
 } GtkCssAffects;
 
 #define GTK_CSS_AFFECTS_REDRAW (GTK_CSS_AFFECTS_CONTENT |       \
                                 GTK_CSS_AFFECTS_BACKGROUND |    \
                                 GTK_CSS_AFFECTS_BORDER |        \
-                                GTK_CSS_AFFECTS_ICON |          \
-                                GTK_CSS_AFFECTS_SYMBOLIC_ICON | \
                                 GTK_CSS_AFFECTS_OUTLINE |       \
                                 GTK_CSS_AFFECTS_POSTEFFECT)
 
