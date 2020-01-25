@@ -11,12 +11,6 @@ $menu_radius: 5px;
 $window_radius: $button_radius + 3;
 $popover_radius: $button_radius + 4;
 
-* {
-  padding: 0;
-
-  -gtk-secondary-caret-color: $selected_bg_color
-}
-
 button:focus(visible),
 checkbutton:focus(visible),
 radiobutton:focus(visible),
