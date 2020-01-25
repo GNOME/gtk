@@ -23,9 +23,11 @@
 #include "gsk/gskrendernodeprivate.h"
 #include "gskpango.h"
 #include "gtksnapshotprivate.h"
-#include "gtkstylecontextprivate.h"
 #include "gtktextlayoutprivate.h"
 #include "gtktextviewprivate.h"
+#include "gtkwidgetprivate.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 
 #include <math.h>
 
@@ -307,7 +309,6 @@ static void
 gsk_pango_renderer_prepare_run (PangoRenderer  *renderer,
                                 PangoLayoutRun *run)
 {
-  GtkStyleContext *context;
   GskPangoRenderer *crenderer = GSK_PANGO_RENDERER (renderer);
   GdkRGBA *bg_rgba = NULL;
   GdkRGBA *fg_rgba = NULL;
@@ -320,8 +321,6 @@ gsk_pango_renderer_prepare_run (PangoRenderer  *renderer,
   if (appearance == NULL)
     return;
 
-  context = gtk_widget_get_style_context (crenderer->widget);
-
   if (appearance->draw_bg && crenderer->state == GSK_PANGO_RENDERER_NORMAL)
     bg_rgba = appearance->bg_rgba;
   else
@@ -332,22 +331,21 @@ gsk_pango_renderer_prepare_run (PangoRenderer  *renderer,
   if (crenderer->state == GSK_PANGO_RENDERER_SELECTED &&
       GTK_IS_TEXT_VIEW (crenderer->widget))
     {
-      GtkCssNode *selection_node;
+      GtkCssNode *node;
+      GtkCssValue *value;
 
-      selection_node = gtk_text_view_get_selection_node ((GtkTextView *)crenderer->widget);
-      gtk_style_context_save_to_node (context, selection_node);
-
-      gtk_style_context_get (context,
-                             "color", &fg_rgba,
-                             NULL);
-
-      gtk_style_context_restore (context);
+      node = gtk_text_view_get_selection_node ((GtkTextView *)crenderer->widget);
+      value = gtk_css_style_get_value (gtk_css_node_get_style (node), GTK_CSS_PROPERTY_COLOR);
+      fg_rgba = (GdkRGBA *)gtk_css_color_value_get_rgba (value);
     }
   else if (crenderer->state == GSK_PANGO_RENDERER_CURSOR && gtk_widget_has_focus (crenderer->widget))
     {
-      gtk_style_context_get (context,
-                             "background-color", &fg_rgba,
-                             NULL);
+      GtkCssNode *node;
+      GtkCssValue *value;
+
+      node = gtk_widget_get_css_node (crenderer->widget);
+      value = gtk_css_style_get_value (gtk_css_node_get_style (node), GTK_CSS_PROPERTY_BACKGROUND_COLOR);
+      fg_rgba = (GdkRGBA *)gtk_css_color_value_get_rgba (value);
     }
   else
     fg_rgba = appearance->fg_rgba;
