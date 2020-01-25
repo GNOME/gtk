@@ -385,19 +385,24 @@ gtk_icon_helper_invalidate_for_change (GtkIconHelper     *self,
                                        GtkCssStyleChange *change)
 {
   if (change == NULL ||
-      ((gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SYMBOLIC_ICON) &&
-        self->texture_is_symbolic) ||
-       (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON) &&
-        !self->texture_is_symbolic)))
+      gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_TEXTURE))
     {
       /* Avoid the queue_resize in gtk_icon_helper_invalidate */
       g_clear_object (&self->paintable);
       self->texture_is_symbolic = FALSE;
+    }
 
-      if (change == NULL ||
-          (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_SIZE) &&
-          !GTK_IS_CSS_TRANSIENT_NODE (self->node)))
-        gtk_widget_queue_resize (self->owner);
+  if (change == NULL ||
+      (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_SIZE) &&
+       !GTK_IS_CSS_TRANSIENT_NODE (self->node)))
+    {
+      gtk_widget_queue_resize (self->owner);
+    }
+  else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_REDRAW) ||
+           (self->texture_is_symbolic &&
+            gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_REDRAW_SYMBOLIC)))
+    {
+      gtk_widget_queue_draw (self->owner);
     }
 }
 
