@@ -37,7 +37,6 @@
 #include "gtkmodulesprivate.h"
 #include "gtksettings.h"
 #include "gtkprivate.h"
-#include "gtkutilsprivate.h"
 #include "gtkintl.h"
 
 #ifdef GDK_WINDOWING_X11
