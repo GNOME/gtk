@@ -2773,6 +2773,7 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
                          GError      **error)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
+  gint64 before = g_get_monotonic_time ();
 
   /* If we didn't get a GdkGLContext before realization, try creating
    * one now, for our exclusive use.
@@ -2801,6 +2802,9 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
   self->glyph_cache = get_glyph_cache_for_display (gdk_surface_get_display (surface), self->atlases);
   self->icon_cache = get_icon_cache_for_display (gdk_surface_get_display (surface), self->atlases);
   gsk_gl_shadow_cache_init (&self->shadow_cache);
+
+  if (gdk_profiler_is_running ())
+    gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "gl renderer realize", NULL);
 
   return TRUE;
 }
