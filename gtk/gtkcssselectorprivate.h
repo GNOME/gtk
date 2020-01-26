@@ -25,6 +25,7 @@ G_BEGIN_DECLS
 
 typedef union _GtkCssSelector GtkCssSelector;
 typedef struct _GtkCssSelectorTree GtkCssSelectorTree;
+typedef struct _GtkCssSelectorTrees GtkCssSelectorTrees;
 typedef struct _GtkCssSelectorTreeBuilder GtkCssSelectorTreeBuilder;
 
 GtkCssSelector *  _gtk_css_selector_parse           (GtkCssParser           *parser);
@@ -40,14 +41,14 @@ GtkCssChange      _gtk_css_selector_get_change      (const GtkCssSelector   *sel
 int               _gtk_css_selector_compare         (const GtkCssSelector   *a,
                                                      const GtkCssSelector   *b);
 
-void         _gtk_css_selector_tree_free             (GtkCssSelectorTree       *tree);
-GPtrArray *  _gtk_css_selector_tree_match_all        (const GtkCssSelectorTree *tree,
+void         _gtk_css_selector_tree_free             (GtkCssSelectorTrees      *tree);
+GPtrArray *  _gtk_css_selector_tree_match_all        (const GtkCssSelectorTrees *tree,
 						      const GtkCssMatcher      *matcher);
-GtkCssChange _gtk_css_selector_tree_get_change_all   (const GtkCssSelectorTree *tree,
+GtkCssChange _gtk_css_selector_tree_get_change_all   (const GtkCssSelectorTrees *tree,
 						      const GtkCssMatcher *matcher);
 void         _gtk_css_selector_tree_match_print      (const GtkCssSelectorTree *tree,
 						      GString                  *str);
-gboolean     _gtk_css_selector_tree_is_empty         (const GtkCssSelectorTree *tree) G_GNUC_CONST;
+gboolean     _gtk_css_selector_tree_is_empty         (const GtkCssSelectorTrees *tree) G_GNUC_CONST;
 
 
 
@@ -56,7 +57,7 @@ void                       _gtk_css_selector_tree_builder_add   (GtkCssSelectorT
 								 GtkCssSelector            *selectors,
 								 GtkCssSelectorTree       **selector_match,
 								 gpointer                   match);
-GtkCssSelectorTree *       _gtk_css_selector_tree_builder_build (GtkCssSelectorTreeBuilder *builder);
+GtkCssSelectorTrees *      _gtk_css_selector_tree_builder_build (GtkCssSelectorTreeBuilder *builder);
 void                       _gtk_css_selector_tree_builder_free  (GtkCssSelectorTreeBuilder *builder);
 
 const char *gtk_css_pseudoclass_name (GtkStateFlags flags);

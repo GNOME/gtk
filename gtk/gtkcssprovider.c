@@ -119,7 +119,7 @@ struct _GtkCssProviderPrivate
   GHashTable *keyframes;
 
   GArray *rulesets;
-  GtkCssSelectorTree *tree;
+  GtkCssSelectorTrees *tree;
   GResource *resource;
   gchar *path;
 };
