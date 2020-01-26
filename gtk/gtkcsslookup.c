@@ -28,11 +28,14 @@ void
 _gtk_css_lookup_init (GtkCssLookup     *lookup)
 {
   memset (lookup, 0, sizeof (*lookup));
+
+  lookup->set_values = _gtk_bitmask_new ();
 }
 
 void
 _gtk_css_lookup_destroy (GtkCssLookup *lookup)
 {
+  _gtk_bitmask_free (lookup->set_values);
 }
 
 gboolean
@@ -41,13 +44,7 @@ _gtk_css_lookup_is_missing (const GtkCssLookup *lookup,
 {
   gtk_internal_return_val_if_fail (lookup != NULL, FALSE);
 
-  return lookup->values[id].value == NULL;
-}
-
-gboolean
-_gtk_css_lookup_all_set (const GtkCssLookup *lookup)
-{
-  return lookup->n_set_values == GTK_CSS_PROPERTY_N_PROPERTIES;
+  return !_gtk_bitmask_get (lookup->set_values, id);
 }
 
 /**
@@ -75,7 +72,7 @@ _gtk_css_lookup_set (GtkCssLookup  *lookup,
 
   lookup->values[id].value = value;
   lookup->values[id].section = section;
-  lookup->n_set_values ++;
+  lookup->set_values = _gtk_bitmask_set (lookup->set_values, id, TRUE);
 }
 
 /**
