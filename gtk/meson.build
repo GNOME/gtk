@@ -770,13 +770,11 @@ gtk_gresources_xml = configure_file(output: 'gtk.gresources.xml',
 
 # Re-build the theme files if sassc is available
 theme_deps = []
-sassc = find_program('sassc', required: false)
-if sassc.found()
-  sassc_opts = [ '-a', '-M', '-t', 'compact' ]
+sassc = find_program('sassc')
+sassc_opts = [ '-a', '-M', '-t', 'compact' ]
 
-  subdir('theme/Adwaita')
-  subdir('theme/HighContrast')
-endif
+subdir('theme/Adwaita')
+subdir('theme/HighContrast')
 
 gtkresources = gnome.compile_resources('gtkresources',
                                        gtk_gresources_xml,
