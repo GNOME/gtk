@@ -28,11 +28,14 @@ void
 _gtk_css_lookup_init (GtkCssLookup     *lookup)
 {
   memset (lookup, 0, sizeof (*lookup));
+
+  lookup->set_values = _gtk_bitmask_new ();
 }
 
 void
 _gtk_css_lookup_destroy (GtkCssLookup *lookup)
 {
+  _gtk_bitmask_free (lookup->set_values);
 }
 
 gboolean
@@ -41,7 +44,7 @@ _gtk_css_lookup_is_missing (const GtkCssLookup *lookup,
 {
   gtk_internal_return_val_if_fail (lookup != NULL, FALSE);
 
-  return lookup->values[id].value == NULL;
+  return !_gtk_bitmask_get (lookup->set_values, id);
 }
 
 /**
@@ -69,40 +72,5 @@ _gtk_css_lookup_set (GtkCssLookup  *lookup,
 
   lookup->values[id].value = value;
   lookup->values[id].section = section;
-}
-
-/**
- * _gtk_css_lookup_resolve:
- * @lookup: the lookup
- * @context: the context the values are resolved for
- * @values: a new #GtkCssStyle to be filled with the new properties
- *
- * Resolves the current lookup into a styleproperties object. This is done
- * by converting from the “winning declaration” to the “computed value”.
- *
- * XXX: This bypasses the notion of “specified value”. If this ever becomes
- * an issue, go fix it.
- **/
-void
-_gtk_css_lookup_resolve (GtkCssLookup      *lookup,
-                         GtkStyleProvider  *provider,
-                         GtkCssStaticStyle *style,
-                         GtkCssStyle       *parent_style)
-{
-  guint i;
-
-  gtk_internal_return_if_fail (lookup != NULL);
-  gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
-  gtk_internal_return_if_fail (GTK_IS_CSS_STATIC_STYLE (style));
-  gtk_internal_return_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style));
-
-  for (i = 0; i < GTK_CSS_PROPERTY_N_PROPERTIES; i++)
-    {
-      gtk_css_static_style_compute_value (style,
-                                          provider,
-                                          parent_style,
-                                          i,
-                                          lookup->values[i].value,
-                                          lookup->values[i].section);
-    }
+  lookup->set_values = _gtk_bitmask_set (lookup->set_values, id, TRUE);
 }
