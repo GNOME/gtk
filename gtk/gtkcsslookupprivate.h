@@ -36,7 +36,7 @@ typedef struct {
 } GtkCssLookupValue;
 
 struct _GtkCssLookup {
-  guint              n_set_values;
+  GtkBitmask *set_values;
   GtkCssLookupValue  values[GTK_CSS_PROPERTY_N_PROPERTIES];
 };
 
@@ -44,7 +44,6 @@ void                    _gtk_css_lookup_init                    (GtkCssLookup   
 void                    _gtk_css_lookup_destroy                 (GtkCssLookup               *lookup);
 gboolean                _gtk_css_lookup_is_missing              (const GtkCssLookup         *lookup,
                                                                  guint                       id);
-gboolean                _gtk_css_lookup_all_set                 (const GtkCssLookup         *lookup);
 void                    _gtk_css_lookup_set                     (GtkCssLookup               *lookup,
                                                                  guint                       id,
                                                                  GtkCssSection              *section,
@@ -53,6 +52,12 @@ void                    _gtk_css_lookup_resolve                 (GtkCssLookup   
                                                                  GtkStyleProvider           *provider,
                                                                  GtkCssStaticStyle          *style,
                                                                  GtkCssStyle                *parent_style);
+
+static inline const GtkBitmask *
+_gtk_css_lookup_get_set_values (const GtkCssLookup *lookup)
+{
+  return lookup->set_values;
+}
 
 G_END_DECLS
 
