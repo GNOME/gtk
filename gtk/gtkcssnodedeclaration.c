@@ -27,14 +27,8 @@ struct _GtkCssNodeDeclaration {
   GQuark id;
   GtkStateFlags state;
   guint n_classes;
-  /* GQuark classes[n_classes]; */
+  GQuark classes[0];
 };
-
-static inline GQuark *
-get_classes (const GtkCssNodeDeclaration *decl)
-{
-  return (GQuark *) (decl + 1);
-}
 
 static inline gsize
 sizeof_node (guint n_classes)
@@ -188,7 +182,6 @@ find_class (const GtkCssNodeDeclaration *decl,
 {
   gint min, max, mid;
   gboolean found = FALSE;
-  GQuark *classes;
   guint pos;
 
   *position = 0;
@@ -198,14 +191,13 @@ find_class (const GtkCssNodeDeclaration *decl,
 
   min = 0;
   max = decl->n_classes - 1;
-  classes = get_classes (decl);
 
   do
     {
       GQuark item;
 
       mid = (min + max) / 2;
-      item = classes[mid];
+      item = decl->classes[mid];
 
       if (class_quark == item)
         {
@@ -238,11 +230,11 @@ gtk_css_node_declaration_add_class (GtkCssNodeDeclaration **decl,
     return FALSE;
 
   gtk_css_node_declaration_make_writable_resize (decl,
-                                                 (char *) &get_classes (*decl)[pos] - (char *) *decl,
+                                                 (char *) &(*decl)->classes[pos] - (char *) *decl,
                                                  sizeof (GQuark),
                                                  0);
   (*decl)->n_classes++;
-  get_classes(*decl)[pos] = class_quark;
+  (*decl)->classes[pos] = class_quark;
 
   return TRUE;
 }
@@ -257,7 +249,7 @@ gtk_css_node_declaration_remove_class (GtkCssNodeDeclaration **decl,
     return FALSE;
 
   gtk_css_node_declaration_make_writable_resize (decl,
-                                                 (char *) &get_classes (*decl)[pos] - (char *) *decl,
+                                                 (char *) &(*decl)->classes[pos] - (char *) *decl,
                                                  0,
                                                  sizeof (GQuark));
   (*decl)->n_classes--;
@@ -272,7 +264,7 @@ gtk_css_node_declaration_clear_classes (GtkCssNodeDeclaration **decl)
     return FALSE;
 
   gtk_css_node_declaration_make_writable_resize (decl,
-                                                 (char *) get_classes (*decl) - (char *) *decl,
+                                                 (char *) (*decl)->classes - (char *) *decl,
                                                  0,
                                                  sizeof (GQuark) * (*decl)->n_classes);
   (*decl)->n_classes = 0;
@@ -285,22 +277,21 @@ gtk_css_node_declaration_has_class (const GtkCssNodeDeclaration *decl,
                                     GQuark                       class_quark)
 {
   guint pos;
-  GQuark *classes = get_classes (decl);
 
   switch (decl->n_classes)
     {
     case 3:
-      if (classes[2] == class_quark)
+      if (decl->classes[2] == class_quark)
         return TRUE;
       G_GNUC_FALLTHROUGH;
 
     case 2:
-      if (classes[1] == class_quark)
+      if (decl->classes[1] == class_quark)
         return TRUE;
       G_GNUC_FALLTHROUGH;
 
     case 1:
-      if (classes[0] == class_quark)
+      if (decl->classes[0] == class_quark)
         return TRUE;
       G_GNUC_FALLTHROUGH;
 
@@ -318,25 +309,23 @@ gtk_css_node_declaration_get_classes (const GtkCssNodeDeclaration *decl,
 {
   *n_classes = decl->n_classes;
 
-  return get_classes (decl);
+  return decl->classes;
 }
 
 guint
 gtk_css_node_declaration_hash (gconstpointer elem)
 {
   const GtkCssNodeDeclaration *decl = elem;
-  GQuark *classes;
   guint hash, i;
   
   hash = GPOINTER_TO_UINT (decl->name);
   hash <<= 5;
   hash ^= GPOINTER_TO_UINT (decl->id);
 
-  classes = get_classes (decl);
   for (i = 0; i < decl->n_classes; i++)
     {
       hash <<= 5;
-      hash += classes[i];
+      hash += decl->classes[i];
     }
 
   hash ^= decl->state;
@@ -350,7 +339,6 @@ gtk_css_node_declaration_equal (gconstpointer elem1,
 {
   const GtkCssNodeDeclaration *decl1 = elem1;
   const GtkCssNodeDeclaration *decl2 = elem2;
-  GQuark *classes1, *classes2;
   guint i;
 
   if (decl1 == decl2)
@@ -368,11 +356,9 @@ gtk_css_node_declaration_equal (gconstpointer elem1,
   if (decl1->n_classes != decl2->n_classes)
     return FALSE;
 
-  classes1 = get_classes (decl1);
-  classes2 = get_classes (decl2);
   for (i = 0; i < decl1->n_classes; i++)
     {
-      if (classes1[i] != classes2[i])
+      if (decl1->classes[i] != decl2->classes[i])
         return FALSE;
     }
 
@@ -395,7 +381,6 @@ void
 gtk_css_node_declaration_print (const GtkCssNodeDeclaration *decl,
                                 GString                     *string)
 {
-  const GQuark *classes;
   guint i;
   char **classnames;
 
@@ -410,11 +395,9 @@ gtk_css_node_declaration_print (const GtkCssNodeDeclaration *decl,
       g_string_append (string, g_quark_to_string (decl->id));
     }
 
-  classes = get_classes (decl);
-
   classnames = g_new (char *, decl->n_classes);
   for (i = 0; i < decl->n_classes; i++)
-    classnames[i] = (char *)g_quark_to_string (classes[i]);
+    classnames[i] = (char *)g_quark_to_string (decl->classes[i]);
 
   g_qsort_with_data (classnames, decl->n_classes, sizeof (char *), cmpstr, NULL);
 
