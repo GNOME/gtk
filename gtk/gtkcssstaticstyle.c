@@ -317,6 +317,48 @@ DEFINE_VALUES (GtkCssTransitionValues, transition)
 DEFINE_VALUES (GtkCssSizeValues, size)
 DEFINE_VALUES (GtkCssOtherValues, other)
 
+#define VERIFY_MASK(NAME) \
+  { \
+    GtkBitmask *copy; \
+    copy = _gtk_bitmask_intersect (_gtk_bitmask_copy (gtk_css_ ## NAME ## _values_mask), all); \
+    g_assert (_gtk_bitmask_equals (copy, gtk_css_ ## NAME ## _values_mask)); \
+    _gtk_bitmask_free (copy); \
+  } \
+ all = _gtk_bitmask_subtract (all, gtk_css_ ## NAME ## _values_mask);
+  
+/* Verify that every style property is present in one group, and none
+ * is present in more than one group.
+ */
+static void
+verify_style_groups (void)
+{
+  GtkBitmask *all;
+  guint id;
+
+  all = _gtk_bitmask_new ();
+
+  for (id = 0; id < GTK_CSS_PROPERTY_N_PROPERTIES; id++)
+    all = _gtk_bitmask_set (all, id, TRUE);
+
+  VERIFY_MASK (core);
+  VERIFY_MASK (background);
+  VERIFY_MASK (border);
+  VERIFY_MASK (icon);
+  VERIFY_MASK (outline);
+  VERIFY_MASK (font);
+  VERIFY_MASK (font_variant);
+  VERIFY_MASK (animation);
+  VERIFY_MASK (transition);
+  VERIFY_MASK (size);
+  VERIFY_MASK (other);
+
+  g_assert (_gtk_bitmask_is_empty (all));
+
+  _gtk_bitmask_free (all);
+}
+
+#undef VERIFY_MASK
+
 G_DEFINE_TYPE (GtkCssStaticStyle, gtk_css_static_style, GTK_TYPE_CSS_STYLE)
 
 static GtkCssValue *
@@ -592,6 +634,7 @@ gtk_css_static_style_class_init (GtkCssStaticStyleClass *klass)
   gtk_css_other_values_init ();
 
   init_style_counts ();
+  verify_style_groups ();
 }
 
 static void
