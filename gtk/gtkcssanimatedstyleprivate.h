@@ -40,7 +40,6 @@ struct _GtkCssAnimatedStyle
 
   GtkCssStyle           *style;                /* the style if we weren't animating */
 
-  GPtrArray             *animated_values;      /* NULL or array of animated values/NULL if not animated */
   gint64                 current_time;         /* the current time in our world */
   gpointer              *animations;           /* GtkStyleAnimation**, least important one first */
   guint                  n_animations;
