@@ -178,6 +178,68 @@ typedef struct {
   GtkCssValue *values[0];
 } GtkCssValues;
 
+#ifdef STYLE_ACCOUNTING
+static int num_lookups;
+static int num_empty;
+static int num_core;
+static int num_background;
+static int num_border;
+static int num_icon;
+static int num_outline;
+static int num_font;
+static int num_font_variant;
+static int num_animation;
+static int num_transition;
+static int num_size;
+static int num_other;
+static int num_styles;
+
+static gboolean
+dump_style_counts (gpointer data)
+{
+  g_print ("%4d lookups       \t%.2f%% empty\n", num_lookups, num_empty * 100 / (double)num_lookups);
+  g_print ("%4d styles\n", num_styles);
+  g_print ("%4d core          \t%.2f%% shared\n", num_core, (num_styles - num_core) * 100. / (double)num_styles);
+  g_print ("%4d background    \t%.2f%% shared\n", num_background, (num_styles - num_background) * 100. / (double)num_styles);
+  g_print ("%4d border        \t%.2f%% shared\n", num_border, (num_styles - num_border) * 100. / (double)num_styles);
+  g_print ("%4d icon          \t%.2f%% shared\n", num_icon, (num_styles - num_icon) * 100. / (double)num_styles);
+  g_print ("%4d outline       \t%.2f%% shared\n", num_outline, (num_styles - num_outline) * 100. / (double)num_styles);
+  g_print ("%4d font          \t%.2f%% shared\n", num_font, (num_styles - num_font) * 100. / (double)num_styles);
+  g_print ("%4d font variant  \t%.2f%% shared\n", num_font_variant, (num_styles - num_font_variant) * 100. / (double)num_styles);
+  g_print ("%4d animation     \t%.2f%% shared\n", num_animation, (num_styles - num_animation) * 100. / (double)num_styles);
+  g_print ("%4d transition    \t%.2f%% shared\n", num_transition, (num_styles - num_transition) * 100. / (double)num_styles);
+  g_print ("%4d size          \t%.2f%% shared\n", num_size, (num_styles - num_size) * 100. / (double)num_styles);
+  g_print ("%4d other         \t%.2f%% shared\n", num_other, (num_styles - num_other) * 100. / (double)num_styles);
+  guint64 size;
+
+  size = num_styles       * sizeof (GtkCssStaticStyle)
+       + num_core         * sizeof (GtkCssCoreValues)
+       + num_background   * sizeof (GtkCssBackgroundValues)
+       + num_border       * sizeof (GtkCssBorderValues)
+       + num_icon         * sizeof (GtkCssIconValues)
+       + num_outline      * sizeof (GtkCssOutlineValues)
+       + num_font         * sizeof (GtkCssFontValues)
+       + num_font_variant * sizeof (GtkCssFontVariantValues)
+       + num_animation    * sizeof (GtkCssAnimationValues)
+       + num_transition   * sizeof (GtkCssTransitionValues)
+       + num_size         * sizeof (GtkCssSizeValues)
+       + num_other        * sizeof (GtkCssOtherValues);
+  char *s = g_format_size (size);
+  g_print ("style memory: %s\n\n", s);
+  g_free (s);
+
+  return G_SOURCE_CONTINUE;
+}
+
+#define init_style_counts() g_timeout_add (1000, dump_style_counts, NULL)
+#define style_accounting_new_style(NAME)  num_ ## NAME ++;
+#define style_accounting_free_style(NAME)  num_ ## NAME --;
+#else
+#define init_style_counts()
+#define style_accounting_new_style(NAME)
+#define style_accounting_free_style(NAME)
+#endif
+
 #define DEFINE_VALUES(TYPE, NAME) \
 static inline TYPE * \
 gtk_css_ ## NAME ## _values_ref (TYPE *style) \
@@ -191,6 +253,8 @@ gtk_css_ ## NAME ## _values_free (TYPE *style) \
 { \
   GtkCssValues *group = (GtkCssValues *)style; \
   int i; \
+\
+  style_accounting_free_style (NAME); \
 \
   for (i = 0; i < G_N_ELEMENTS(NAME ## _props); i++) \
     gtk_css_value_unref (group->values[i]); \
@@ -206,13 +270,15 @@ gtk_css_ ## NAME ## _values_unref (TYPE *style) \
     gtk_css_ ## NAME ## _values_free (style); \
 } \
 \
-static TYPE * \
+static inline TYPE * \
 gtk_css_ ## NAME ## _values_new (void) \
 { \
   TYPE *style; \
 \
   style = g_new0 (TYPE, 1); \
   style->ref_count = 1; \
+\
+  style_accounting_new_style (NAME); \
 \
   return style; \
 } \
@@ -527,12 +593,15 @@ gtk_css_static_style_get_static_style (GtkCssStyle *style)
   return (GtkCssStaticStyle *)style;
 }
 
+static void gtk_css_static_style_finalize (GObject *object);
+
 static void
 gtk_css_static_style_class_init (GtkCssStaticStyleClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkCssStyleClass *style_class = GTK_CSS_STYLE_CLASS (klass);
 
+  object_class->finalize = gtk_css_static_style_finalize;
   object_class->dispose = gtk_css_static_style_dispose;
 
   style_class->get_value = gtk_css_static_style_get_value;
@@ -550,11 +619,26 @@ gtk_css_static_style_class_init (GtkCssStaticStyleClass *klass)
   gtk_css_transition_values_init ();
   gtk_css_size_values_init ();
   gtk_css_other_values_init ();
+
+  init_style_counts ();
 }
 
 static void
 gtk_css_static_style_init (GtkCssStaticStyle *style)
 {
+#ifdef STYLE_ACCOUNTING
+  num_styles++;
+#endif
+}
+
+static void
+gtk_css_static_style_finalize (GObject *object)
+{
+#ifdef STYLE_ACCOUNTING
+  num_styles--;
+#endif
+
+  G_OBJECT_CLASS (gtk_css_static_style_parent_class)->finalize (object);
 }
 
 static void
@@ -1114,8 +1198,17 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
 
   parent_is_static = GTK_IS_CSS_STATIC_STYLE (parent_style);
 
+#ifdef STYLE_ACCOUNTING
+  num_lookups++;
+#endif
+
   if (_gtk_bitmask_is_empty (_gtk_css_lookup_get_set_values (lookup)))
     {
+
+#ifdef STYLE_ACCOUNTING
+      num_empty++;
+#endif
+
       style->background = gtk_css_background_values_ref (gtk_css_background_initial_values);
       style->border = gtk_css_border_values_ref (gtk_css_border_initial_values);
       style->outline = gtk_css_outline_values_ref (gtk_css_outline_initial_values);
@@ -1185,7 +1278,6 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
     style->transition = gtk_css_transition_values_ref (gtk_css_transition_initial_values);
   else
     gtk_css_transition_values_new_compute (style, provider, parent_style, lookup);
-
   if (gtk_css_size_values_unset (lookup))
     style->size = gtk_css_size_values_ref (gtk_css_size_initial_values);
   else
