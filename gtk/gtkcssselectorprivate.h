@@ -24,8 +24,6 @@
 G_BEGIN_DECLS
 
 typedef union _GtkCssSelector GtkCssSelector;
-typedef struct _GtkCssSelectorTree GtkCssSelectorTree;
-typedef struct _GtkCssSelectorTreeBuilder GtkCssSelectorTreeBuilder;
 
 GtkCssSelector *  _gtk_css_selector_parse           (GtkCssParser           *parser);
 void              _gtk_css_selector_free            (GtkCssSelector         *selector);
@@ -34,30 +32,14 @@ char *            _gtk_css_selector_to_string       (const GtkCssSelector   *sel
 void              _gtk_css_selector_print           (const GtkCssSelector   *selector,
                                                      GString                *str);
 
-gboolean          _gtk_css_selector_matches         (const GtkCssSelector   *selector,
+gboolean          gtk_css_selector_matches_radical  (const GtkCssSelector   *selector,
+                                                     GtkCssNode             *node);
+gboolean          gtk_css_selector_matches          (const GtkCssSelector   *selector,
 						     GtkCssNode             *node);
 GtkCssChange      _gtk_css_selector_get_change      (const GtkCssSelector   *selector);
 int               _gtk_css_selector_compare         (const GtkCssSelector   *a,
                                                      const GtkCssSelector   *b);
 
-void         _gtk_css_selector_tree_free             (GtkCssSelectorTree       *tree);
-GPtrArray *  _gtk_css_selector_tree_match_all        (const GtkCssSelectorTree *tree,
-						      GtkCssNode               *node);
-GtkCssChange _gtk_css_selector_tree_get_change_all   (const GtkCssSelectorTree *tree,
-						      GtkCssNode               *node);
-void         _gtk_css_selector_tree_match_print      (const GtkCssSelectorTree *tree,
-						      GString                  *str);
-gboolean     _gtk_css_selector_tree_is_empty         (const GtkCssSelectorTree *tree) G_GNUC_CONST;
-
-
-
-GtkCssSelectorTreeBuilder *_gtk_css_selector_tree_builder_new   (void);
-void                       _gtk_css_selector_tree_builder_add   (GtkCssSelectorTreeBuilder *builder,
-								 GtkCssSelector            *selectors,
-								 GtkCssSelectorTree       **selector_match,
-								 gpointer                   match);
-GtkCssSelectorTree *       _gtk_css_selector_tree_builder_build (GtkCssSelectorTreeBuilder *builder);
-void                       _gtk_css_selector_tree_builder_free  (GtkCssSelectorTreeBuilder *builder);
 
 #include "gtkenums.h"
 
