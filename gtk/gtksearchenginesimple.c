@@ -109,7 +109,8 @@ search_thread_data_new (GtkSearchEngineSimple *engine,
   data->engine = g_object_ref (engine);
   data->directories = g_queue_new ();
   data->query = g_object_ref (query);
-  data->recursive = _gtk_search_engine_get_recursive (GTK_SEARCH_ENGINE (engine));
+  /* Simple search engine is too slow to be recursive */
+  data->recursive = FALSE;
   queue_if_local (data, gtk_query_get_location (query));
 
   data->cancellable = g_cancellable_new ();
