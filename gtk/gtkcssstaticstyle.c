@@ -178,6 +178,45 @@ typedef struct {
   GtkCssValue *values[0];
 } GtkCssValues;
 
+#ifdef STYLE_ACCOUNTING
+static int num_lookups;
+static int num_empty;
+static int num_core;
+static int num_background;
+static int num_border;
+static int num_icon;
+static int num_outline;
+static int num_font;
+static int num_font_variant;
+static int num_animation;
+static int num_transition;
+static int num_size;
+static int num_other;
+
+static void
+dump_style_counts (void)
+{
+  g_print ("%d lookups \t%.2f%% empty\n", num_lookups, num_empty * 100 / (double)num_lookups);
+  g_print ("core          \t%.2f%% shared\n", (num_lookups - num_core) * 100. / (double)num_lookups);
+  g_print ("background    \t%.2f%% shared\n", (num_lookups - num_background) * 100. / (double)num_lookups);
+  g_print ("border        \t%.2f%% shared\n", (num_lookups - num_border) * 100. / (double)num_lookups);
+  g_print ("icon          \t%.2f%% shared\n", (num_lookups - num_icon) * 100. / (double)num_lookups);
+  g_print ("outline       \t%.2f%% shared\n", (num_lookups - num_outline) * 100. / (double)num_lookups);
+  g_print ("font          \t%.2f%% shared\n", (num_lookups - num_font) * 100. / (double)num_lookups);
+  g_print ("font variant  \t%.2f%% shared\n", (num_lookups - num_font_variant) * 100. / (double)num_lookups);
+  g_print ("animation     \t%.2f%% shared\n", (num_lookups - num_animation) * 100. / (double)num_lookups);
+  g_print ("transition    \t%.2f%% shared\n", (num_lookups - num_transition) * 100. / (double)num_lookups);
+  g_print ("size          \t%.2f%% shared\n", (num_lookups - num_size) * 100. / (double)num_lookups);
+  g_print ("other         \t%.2f%% shared\n", (num_lookups - num_other) * 100. / (double)num_lookups);
+}
+
+#define init_style_counts() atexit (dump_style_counts);
+#define style_accounting_new_style(NAME)  num_ ## NAME ++;
+#else
+#define init_style_counts()
+#define style_accounting_new_style(NAME)
+#endif
+
 #define DEFINE_VALUES(TYPE, NAME) \
 static inline TYPE * \
 gtk_css_ ## NAME ## _values_ref (TYPE *style) \
@@ -206,13 +245,14 @@ gtk_css_ ## NAME ## _values_unref (TYPE *style) \
     gtk_css_ ## NAME ## _values_free (style); \
 } \
 \
-static TYPE * \
+static inline TYPE * \
 gtk_css_ ## NAME ## _values_new (void) \
 { \
   TYPE *style; \
 \
   style = g_new0 (TYPE, 1); \
   style->ref_count = 1; \
+  style_accounting_new_style (NAME); \
 \
   return style; \
 } \
@@ -550,6 +590,8 @@ gtk_css_static_style_class_init (GtkCssStaticStyleClass *klass)
   gtk_css_transition_values_init ();
   gtk_css_size_values_init ();
   gtk_css_other_values_init ();
+
+  init_style_counts ();
 }
 
 static void
@@ -1114,8 +1156,17 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
 
   parent_is_static = GTK_IS_CSS_STATIC_STYLE (parent_style);
 
+#ifdef STYLE_ACCOUNTING
+  num_lookups++;
+#endif
+
   if (_gtk_bitmask_is_empty (_gtk_css_lookup_get_set_values (lookup)))
     {
+
+#ifdef STYLE_ACCOUNTING
+      num_empty++;
+#endif
+
       style->background = gtk_css_background_values_ref (gtk_css_background_initial_values);
       style->border = gtk_css_border_values_ref (gtk_css_border_initial_values);
       style->outline = gtk_css_outline_values_ref (gtk_css_outline_initial_values);
@@ -1185,7 +1236,6 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
     style->transition = gtk_css_transition_values_ref (gtk_css_transition_initial_values);
   else
     gtk_css_transition_values_new_compute (style, provider, parent_style, lookup);
-
   if (gtk_css_size_values_unset (lookup))
     style->size = gtk_css_size_values_ref (gtk_css_size_initial_values);
   else
