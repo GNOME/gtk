@@ -179,10 +179,11 @@ gtk_style_cascade_get_keyframes (GtkStyleProvider *provider,
 }
 
 static void
-gtk_style_cascade_lookup (GtkStyleProvider    *provider,
-                          GtkCssNode          *node,
-                          GtkCssLookup        *lookup,
-                          GtkCssChange        *change)
+gtk_style_cascade_lookup (GtkStyleProvider             *provider,
+                          const GtkCountingBloomFilter *filter,
+                          GtkCssNode                   *node,
+                          GtkCssLookup                 *lookup,
+                          GtkCssChange                 *change)
 {
   GtkStyleCascade *cascade = GTK_STYLE_CASCADE (provider);
   GtkStyleCascadeIter iter;
@@ -193,7 +194,7 @@ gtk_style_cascade_lookup (GtkStyleProvider    *provider,
        item;
        item = gtk_style_cascade_iter_next (cascade, &iter))
     {
-      gtk_style_provider_lookup (item, node, lookup,
+      gtk_style_provider_lookup (item, filter, node, lookup,
                                  change ? &iter_change : NULL);
       if (change)
         *change |= iter_change;

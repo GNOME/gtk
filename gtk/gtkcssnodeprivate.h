@@ -18,6 +18,7 @@
 #ifndef __GTK_CSS_NODE_PRIVATE_H__
 #define __GTK_CSS_NODE_PRIVATE_H__
 
+#include "gtkcountingbloomfilterprivate.h"
 #include "gtkcssnodedeclarationprivate.h"
 #include "gtkcssnodestylecacheprivate.h"
 #include "gtkcssstylechangeprivate.h"
@@ -81,6 +82,7 @@ struct _GtkCssNodeClass
   /* get frame clock or NULL (only relevant for root node) */
   GdkFrameClock *       (* get_frame_clock)             (GtkCssNode            *cssnode);
   GtkCssStyle *         (* update_style)                (GtkCssNode            *cssnode,
+                                                         const GtkCountingBloomFilter *filter,
                                                          GtkCssChange           pending_changes,
                                                          gint64                 timestamp,
                                                          GtkCssStyle           *old_style);

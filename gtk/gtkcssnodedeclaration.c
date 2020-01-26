@@ -312,6 +312,40 @@ gtk_css_node_declaration_get_classes (const GtkCssNodeDeclaration *decl,
   return decl->classes;
 }
 
+void
+gtk_css_node_declaration_add_bloom_hashes (const GtkCssNodeDeclaration *decl,
+                                           GtkCountingBloomFilter      *filter)
+{
+  guint i;
+
+  if (decl->name)
+    gtk_counting_bloom_filter_add (filter, gtk_css_hash_name (decl->name));
+  if (decl->id)
+    gtk_counting_bloom_filter_add (filter, gtk_css_hash_id (decl->id));
+
+  for (i = 0; i < decl->n_classes; i++)
+    {
+      gtk_counting_bloom_filter_add (filter, gtk_css_hash_class (decl->classes[i]));
+    }
+}
+
+void
+gtk_css_node_declaration_remove_bloom_hashes (const GtkCssNodeDeclaration *decl,
+                                              GtkCountingBloomFilter      *filter)
+{
+  guint i;
+
+  if (decl->name)
+    gtk_counting_bloom_filter_remove (filter, gtk_css_hash_name (decl->name));
+  if (decl->id)
+    gtk_counting_bloom_filter_remove (filter, gtk_css_hash_id (decl->id));
+
+  for (i = 0; i < decl->n_classes; i++)
+    {
+      gtk_counting_bloom_filter_remove (filter, gtk_css_hash_class (decl->classes[i]));
+    }
+}
+
 guint
 gtk_css_node_declaration_hash (gconstpointer elem)
 {
