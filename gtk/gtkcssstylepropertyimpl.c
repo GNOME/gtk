@@ -66,6 +66,8 @@ typedef enum {
   GTK_STYLE_PROPERTY_ANIMATED = (1 << 1),
 } GtkStylePropertyFlags;
 
+gboolean inherit_properties[ GTK_CSS_PROPERTY_N_PROPERTIES];
+
 static void
 gtk_css_style_property_register (const char *                   name,
                                  guint                          expected_id,
@@ -95,6 +97,8 @@ gtk_css_style_property_register (const char *                   name,
   node->query_value = query_value;
 
   _gtk_css_value_unref (initial_value);
+
+  inherit_properties[expected_id] = (flags & GTK_STYLE_PROPERTY_INHERIT) ? TRUE : FALSE;
 
   g_assert (_gtk_css_style_property_get_id (node) == expected_id);
 }
@@ -924,6 +928,7 @@ icon_theme_value_parse (GtkCssStyleProperty *property,
 G_STATIC_ASSERT (GTK_CSS_PROPERTY_COLOR == 0);
 G_STATIC_ASSERT (GTK_CSS_PROPERTY_DPI < GTK_CSS_PROPERTY_FONT_SIZE);
 
+
 void
 _gtk_css_style_property_init_properties (void)
 {
@@ -1720,4 +1725,5 @@ _gtk_css_style_property_init_properties (void)
                                           parse_font_variation_settings,
                                           NULL,
                                           gtk_css_font_variations_value_new_default ());
+
 }

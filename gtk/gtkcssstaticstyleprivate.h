@@ -56,14 +56,6 @@ GtkCssStyle *           gtk_css_static_style_new_compute        (GtkStyleProvide
                                                                  const GtkCssMatcher    *matcher,
                                                                  GtkCssStyle            *parent,
                                                                  GtkCssChange            change);
-
-void                    gtk_css_static_style_compute_value      (GtkCssStaticStyle      *style,
-                                                                 GtkStyleProvider       *provider,
-                                                                 GtkCssStyle            *parent_style,
-                                                                 guint                   id,
-                                                                 GtkCssValue            *specified,
-                                                                 GtkCssSection          *section);
-
 GtkCssChange            gtk_css_static_style_get_change         (GtkCssStaticStyle      *style);
 
 G_END_DECLS

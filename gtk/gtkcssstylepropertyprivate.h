@@ -80,6 +80,13 @@ void                    _gtk_css_style_property_print_value     (GtkCssStyleProp
                                                                  GtkCssValue            *value,
                                                                  GString                *string);
 
+extern gboolean inherit_properties[];
+
+inline gboolean         gtk_css_style_property_is_inherit (uint id)
+{
+  return inherit_properties[id];
+}
+
 /* XXX - find a better place for these */
 GtkCssValue * gtk_css_font_family_value_parse (GtkCssParser *parser);
 GtkCssValue * gtk_css_font_size_value_parse   (GtkCssParser *parser);
