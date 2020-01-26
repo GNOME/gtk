@@ -23,13 +23,14 @@
 G_DEFINE_TYPE (GtkCssTransientNode, gtk_css_transient_node, GTK_TYPE_CSS_NODE)
 
 static GtkCssStyle *
-gtk_css_transient_node_update_style (GtkCssNode   *cssnode,
-                                     GtkCssChange  change,
-                                     gint64        timestamp,
-                                     GtkCssStyle  *style)
+gtk_css_transient_node_update_style (GtkCssNode                   *cssnode,
+                                     const GtkCountingBloomFilter *filter,
+                                     GtkCssChange                  change,
+                                     gint64                        timestamp,
+                                     GtkCssStyle                  *style)
 {
   /* This should get rid of animations */
-  return GTK_CSS_NODE_CLASS (gtk_css_transient_node_parent_class)->update_style (cssnode, change, 0, style);
+  return GTK_CSS_NODE_CLASS (gtk_css_transient_node_parent_class)->update_style (cssnode, filter, change, 0, style);
 }
 
 static void

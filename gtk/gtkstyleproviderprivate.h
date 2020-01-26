@@ -19,6 +19,7 @@
 #define __GTK_STYLE_PROVIDER_PRIVATE_H__
 
 #include <glib-object.h>
+#include "gtk/gtkcountingbloomfilterprivate.h"
 #include "gtk/gtkcsskeyframesprivate.h"
 #include "gtk/gtkcsslookupprivate.h"
 #include "gtk/gtkcssnodeprivate.h"
@@ -42,6 +43,7 @@ struct _GtkStyleProviderInterface
                                                  const char              *name);
   int                   (* get_scale)           (GtkStyleProvider        *provider);
   void                  (* lookup)              (GtkStyleProvider        *provider,
+                                                 const GtkCountingBloomFilter *filter,
                                                  GtkCssNode              *node,
                                                  GtkCssLookup            *lookup,
                                                  GtkCssChange            *out_change);
@@ -59,6 +61,7 @@ GtkCssKeyframes *       gtk_style_provider_get_keyframes         (GtkStyleProvid
                                                                   const char              *name);
 int                     gtk_style_provider_get_scale             (GtkStyleProvider        *provider);
 void                    gtk_style_provider_lookup                (GtkStyleProvider        *provider,
+                                                                  const GtkCountingBloomFilter *filter,
                                                                   GtkCssNode              *node,
                                                                   GtkCssLookup            *lookup,
                                                                   GtkCssChange            *out_change);

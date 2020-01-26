@@ -406,10 +406,11 @@ gtk_css_style_provider_get_keyframes (GtkStyleProvider *provider,
 }
 
 static void
-gtk_css_style_provider_lookup (GtkStyleProvider    *provider,
-                               GtkCssNode          *node,
-                               GtkCssLookup        *lookup,
-                               GtkCssChange        *change)
+gtk_css_style_provider_lookup (GtkStyleProvider             *provider,
+                               const GtkCountingBloomFilter *filter,
+                               GtkCssNode                   *node,
+                               GtkCssLookup                 *lookup,
+                               GtkCssChange                 *change)
 {
   GtkCssProvider *css_provider = GTK_CSS_PROVIDER (provider);
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
@@ -427,7 +428,7 @@ gtk_css_style_provider_lookup (GtkStyleProvider    *provider,
       if (ruleset->styles == NULL)
         continue;
 
-      if (!gtk_css_selector_matches_radical (ruleset->selector, node))
+      if (!gtk_css_selector_matches_radical (ruleset->selector, filter, node))
         continue;
 
       if (change)

@@ -1632,13 +1632,50 @@ gtk_css_selector_foreach_match (const GtkCssSelector *selector,
   return gtk_css_selector_foreach (selector, node, gtk_css_selector_foreach_match, NULL);
 }
 
+static gboolean
+gtk_css_selector_matches_bloom (const GtkCssSelector         *selector,
+                                const GtkCountingBloomFilter *filter)
+{
+  gboolean skip_all = FALSE;
+
+  for (;
+       selector;
+       selector = gtk_css_selector_previous (selector))
+    {
+      switch (selector->class->category)
+        {
+          case GTK_CSS_SELECTOR_CATEGORY_SIMPLE:
+            break;
+          case GTK_CSS_SELECTOR_CATEGORY_SIMPLE_RADICAL:
+            if (skip_all)
+              break;
+            if (!gtk_counting_bloom_filter_may_contain (filter,
+                                                        selector->class->hash_one (selector)))
+              return FALSE;
+            break;
+          case GTK_CSS_SELECTOR_CATEGORY_PARENT:
+            skip_all = FALSE;
+            break;
+          case GTK_CSS_SELECTOR_CATEGORY_SIBLING:
+            skip_all = TRUE;
+            break;
+          default:
+            g_assert_not_reached ();
+            return FALSE;
+        }
+    }
+
+  return TRUE;
+}
+
 /* The code for determining matches assumes that the name, id and classes
  * of a node remain unchanged, and anything else can change. This needs to
  * be kept in sync with the definition of 'radical change' in gtkcssnode.c.
  */
 gboolean
-gtk_css_selector_matches_radical (const GtkCssSelector   *selector,
-                                  GtkCssNode             *node)
+gtk_css_selector_matches_radical (const GtkCssSelector         *selector,
+                                  const GtkCountingBloomFilter *filter,
+                                  GtkCssNode                   *node)
 {
   for (;
        selector;
@@ -1654,7 +1691,10 @@ gtk_css_selector_matches_radical (const GtkCssSelector   *selector,
             break;
           case GTK_CSS_SELECTOR_CATEGORY_PARENT:
           case GTK_CSS_SELECTOR_CATEGORY_SIBLING:
-            return TRUE;
+            if (filter)
+              return gtk_css_selector_matches_bloom (selector, filter);
+            else
+              return TRUE;
           default:
             g_assert_not_reached ();
             return FALSE;

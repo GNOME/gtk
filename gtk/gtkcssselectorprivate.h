@@ -18,6 +18,7 @@
 #ifndef __GTK_CSS_SELECTOR_PRIVATE_H__
 #define __GTK_CSS_SELECTOR_PRIVATE_H__
 
+#include "gtk/gtkcountingbloomfilterprivate.h"
 #include "gtk/gtkcsstypesprivate.h"
 #include "gtk/gtkcssparserprivate.h"
 
@@ -33,6 +34,7 @@ void              _gtk_css_selector_print           (const GtkCssSelector   *sel
                                                      GString                *str);
 
 gboolean          gtk_css_selector_matches_radical  (const GtkCssSelector   *selector,
+                                                     const GtkCountingBloomFilter *filter,
                                                      GtkCssNode             *node);
 gboolean          gtk_css_selector_matches          (const GtkCssSelector   *selector,
 						     GtkCssNode             *node);
