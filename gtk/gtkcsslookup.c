@@ -24,18 +24,31 @@
 #include "gtkprivatetypebuiltins.h"
 #include "gtkprivate.h"
 
+static void
+free_value (gpointer data)
+{
+  GtkCssLookupValue *value = data;
+
+  gtk_css_value_unref (value->value);
+  if (value->section)
+    gtk_css_section_unref (value->section);
+}
+
 void
 _gtk_css_lookup_init (GtkCssLookup     *lookup)
 {
   memset (lookup, 0, sizeof (*lookup));
 
   lookup->set_values = _gtk_bitmask_new ();
+  lookup->values = g_array_new (FALSE, FALSE, sizeof (GtkCssLookupValue));
+  g_array_set_clear_func (lookup->values, free_value);
 }
 
 void
 _gtk_css_lookup_destroy (GtkCssLookup *lookup)
 {
   _gtk_bitmask_free (lookup->set_values);
+  g_array_unref (lookup->values);
 }
 
 gboolean
@@ -66,11 +79,36 @@ _gtk_css_lookup_set (GtkCssLookup  *lookup,
                      GtkCssSection *section,
                      GtkCssValue   *value)
 {
+  GtkCssLookupValue v;
+
   gtk_internal_return_if_fail (lookup != NULL);
   gtk_internal_return_if_fail (value != NULL);
-  gtk_internal_return_if_fail (lookup->values[id].value == NULL);
+  gtk_internal_return_if_fail (_gtk_css_lookup_is_missing (lookup, id));
 
-  lookup->values[id].value = value;
-  lookup->values[id].section = section;
+  v.value = gtk_css_value_ref (value);
+  v.section = section ? gtk_css_section_ref (section) : NULL;
+  v.id = id;
+
+  g_array_append_val (lookup->values, v);
   lookup->set_values = _gtk_bitmask_set (lookup->set_values, id, TRUE);
+}
+
+GtkCssLookupValue *
+_gtk_css_lookup_get (GtkCssLookup *lookup,
+                     guint         id)
+{
+  gtk_internal_return_val_if_fail (lookup != NULL, NULL);
+
+  if (_gtk_bitmask_get (lookup->set_values, id))
+    {
+      int i;
+      for (i = 0; i < lookup->values->len; i++)
+        {
+          GtkCssLookupValue *value = &g_array_index (lookup->values, GtkCssLookupValue, i);
+          if (value->id == id)
+            return value;
+        }
+    }
+
+  return NULL;
 }

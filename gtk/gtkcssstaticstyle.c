@@ -211,12 +211,13 @@ gtk_css_ ## NAME ## _values_new_compute (GtkCssStaticStyle *sstyle, \
   for (i = 0; i < G_N_ELEMENTS (NAME ## _props); i++) \
     { \
       guint id = NAME ## _props[i]; \
+      GtkCssLookupValue *value = _gtk_css_lookup_get (lookup, id); \
       gtk_css_static_style_compute_value (sstyle, \
                                           provider, \
                                           parent_style, \
                                           id, \
-                                          lookup->values[id].value, \
-                                          lookup->values[id].section); \
+                                          value ? value->value : NULL, \
+                                          value ? value->section : NULL); \
     } \
 } \
 static GtkBitmask * gtk_css_ ## NAME ## _values_mask; \
