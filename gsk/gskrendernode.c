@@ -314,9 +314,6 @@ gsk_render_node_diff (GskRenderNode  *node1,
   return node1->node_class->diff (node1, node2, region);
 }
 
-#define GSK_RENDER_NODE_SERIALIZATION_VERSION 0
-#define GSK_RENDER_NODE_SERIALIZATION_ID "GskRenderNode"
-
 /**
  * gsk_render_node_write_to_file:
  * @node: a #GskRenderNode
