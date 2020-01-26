@@ -20,7 +20,6 @@
 
 #include "gtkcsstypesprivate.h"
 #include "gtkenums.h"
-#include "gtkwidgetpath.h"
 
 G_BEGIN_DECLS
 
@@ -54,10 +53,6 @@ const GQuark *          gtk_css_node_declaration_get_classes            (const G
 guint                   gtk_css_node_declaration_hash                   (gconstpointer                  elem);
 gboolean                gtk_css_node_declaration_equal                  (gconstpointer                  elem1,
                                                                          gconstpointer                  elem2);
-
-void                    gtk_css_node_declaration_add_to_widget_path     (const GtkCssNodeDeclaration   *decl,
-                                                                         GtkWidgetPath                 *path,
-                                                                         guint                          pos);
 
 void                    gtk_css_node_declaration_print                  (const GtkCssNodeDeclaration   *decl,
                                                                          GString                       *string);

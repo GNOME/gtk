@@ -18,7 +18,7 @@
 #ifndef __GTK_CSS_SELECTOR_PRIVATE_H__
 #define __GTK_CSS_SELECTOR_PRIVATE_H__
 
-#include "gtk/gtkcssmatcherprivate.h"
+#include "gtk/gtkcsstypesprivate.h"
 #include "gtk/gtkcssparserprivate.h"
 
 G_BEGIN_DECLS
@@ -35,16 +35,16 @@ void              _gtk_css_selector_print           (const GtkCssSelector   *sel
                                                      GString                *str);
 
 gboolean          _gtk_css_selector_matches         (const GtkCssSelector   *selector,
-                                                     const GtkCssMatcher    *matcher);
+						     GtkCssNode             *node);
 GtkCssChange      _gtk_css_selector_get_change      (const GtkCssSelector   *selector);
 int               _gtk_css_selector_compare         (const GtkCssSelector   *a,
                                                      const GtkCssSelector   *b);
 
 void         _gtk_css_selector_tree_free             (GtkCssSelectorTree       *tree);
 GPtrArray *  _gtk_css_selector_tree_match_all        (const GtkCssSelectorTree *tree,
-						      const GtkCssMatcher      *matcher);
+						      GtkCssNode               *node);
 GtkCssChange _gtk_css_selector_tree_get_change_all   (const GtkCssSelectorTree *tree,
-						      const GtkCssMatcher *matcher);
+						      GtkCssNode               *node);
 void         _gtk_css_selector_tree_match_print      (const GtkCssSelectorTree *tree,
 						      GString                  *str);
 gboolean     _gtk_css_selector_tree_is_empty         (const GtkCssSelectorTree *tree) G_GNUC_CONST;
@@ -58,6 +58,8 @@ void                       _gtk_css_selector_tree_builder_add   (GtkCssSelectorT
 								 gpointer                   match);
 GtkCssSelectorTree *       _gtk_css_selector_tree_builder_build (GtkCssSelectorTreeBuilder *builder);
 void                       _gtk_css_selector_tree_builder_free  (GtkCssSelectorTreeBuilder *builder);
+
+#include "gtkenums.h"
 
 const char *gtk_css_pseudoclass_name (GtkStateFlags flags);
 

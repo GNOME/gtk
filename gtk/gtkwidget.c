@@ -67,7 +67,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
 #include "gtkwidgetpaintableprivate.h"
-#include "gtkwidgetpathprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
 #include "gtknativeprivate.h"
@@ -2442,7 +2441,6 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   gtk_css_node_set_visible (priv->cssnode, priv->visible);
   /* need to set correct name here, and only class has the correct type here */
   gtk_css_node_set_name (priv->cssnode, GTK_WIDGET_CLASS (g_class)->priv->css_name);
-  gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_FROM_CLASS (g_class));
 
   if (g_type_is_a (G_TYPE_FROM_CLASS (g_class), GTK_TYPE_ROOT))
     priv->root = (GtkRoot *) widget;
@@ -11177,46 +11175,6 @@ _gtk_widget_remove_attached_window (GtkWidget    *widget,
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   priv->attached_windows = g_list_remove (priv->attached_windows, window);
-}
-
-/**
- * gtk_widget_path_append_for_widget:
- * @path: a widget path
- * @widget: the widget to append to the widget path
- *
- * Appends the data from @widget to the widget hierarchy represented
- * by @path. This function is a shortcut for adding information from
- * @widget to the given @path. This includes setting the name or
- * adding the style classes from @widget.
- *
- * Returns: the position where the data was inserted
- */
-gint
-gtk_widget_path_append_for_widget (GtkWidgetPath *path,
-                                   GtkWidget     *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  const GQuark *classes;
-  guint n_classes, i;
-  gint pos;
-
-  g_return_val_if_fail (path != NULL, 0);
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
-
-  pos = gtk_widget_path_append_type (path, gtk_css_node_get_widget_type (priv->cssnode));
-  gtk_widget_path_iter_set_object_name (path, pos, gtk_css_node_get_name (priv->cssnode));
-
-  if (priv->name)
-    gtk_widget_path_iter_set_name (path, pos, priv->name);
-
-  gtk_widget_path_iter_set_state (path, pos, priv->state_flags);
-
-  classes = gtk_css_node_list_classes (priv->cssnode, &n_classes);
-
-  for (i = n_classes; i-- > 0;)
-    gtk_widget_path_iter_add_qclass (path, pos, classes[i]);
-
-  return pos;
 }
 
 /**

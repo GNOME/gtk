@@ -110,7 +110,6 @@ enum {
   PROP_NAME,
   PROP_STATE,
   PROP_VISIBLE,
-  PROP_WIDGET_TYPE,
   NUM_PROPERTIES
 };
 
@@ -187,10 +186,6 @@ gtk_css_node_get_property (GObject    *object,
       g_value_set_boolean (value, gtk_css_node_get_visible (cssnode));
       break;
 
-    case PROP_WIDGET_TYPE:
-      g_value_set_gtype (value, gtk_css_node_get_widget_type (cssnode));
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -224,10 +219,6 @@ gtk_css_node_set_property (GObject      *object,
 
     case PROP_VISIBLE:
       gtk_css_node_set_visible (cssnode, g_value_get_boolean (value));
-      break;
-
-    case PROP_WIDGET_TYPE:
-      gtk_css_node_set_widget_type (cssnode, g_value_get_gtype (value));
       break;
 
     default:
@@ -367,8 +358,6 @@ gtk_css_node_create_style (GtkCssNode   *cssnode,
                            GtkCssChange  change)
 {
   const GtkCssNodeDeclaration *decl;
-  GtkCssMatcher matcher;
-  GtkCssStyle *parent;
   GtkCssStyle *style;
   GtkCssChange style_change;
 
@@ -380,8 +369,6 @@ gtk_css_node_create_style (GtkCssNode   *cssnode,
 
   created_styles++;
 
-  parent = cssnode->parent ? cssnode->parent->style : NULL;
-
   if (change & GTK_CSS_CHANGE_NEEDS_RECOMPUTE)
     {
       /* Need to recompute the change flags */
@@ -392,16 +379,9 @@ gtk_css_node_create_style (GtkCssNode   *cssnode,
       style_change = gtk_css_static_style_get_change (gtk_css_style_get_static_style (cssnode->style));
     }
 
-  if (gtk_css_node_init_matcher (cssnode, &matcher))
-    style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
-                                              &matcher,
-                                              parent,
-                                              style_change);
-  else
-    style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
-                                              NULL,
-                                              parent,
-                                              style_change);
+  style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
+                                            cssnode,
+                                            style_change);
 
   store_in_global_parent_cache (cssnode, decl, style);
 
@@ -497,15 +477,6 @@ gtk_css_node_real_validate (GtkCssNode *node)
 {
 }
 
-static gboolean
-gtk_css_node_real_init_matcher (GtkCssNode     *cssnode,
-                                GtkCssMatcher  *matcher)
-{
-  _gtk_css_matcher_node_init (matcher, cssnode);
-
-  return TRUE;
-}
-
 static GtkStyleProvider *
 gtk_css_node_real_get_style_provider (GtkCssNode *cssnode)
 {
@@ -585,7 +556,6 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
   klass->validate = gtk_css_node_real_validate;
   klass->queue_validate = gtk_css_node_real_queue_validate;
   klass->dequeue_validate = gtk_css_node_real_dequeue_validate;
-  klass->init_matcher = gtk_css_node_real_init_matcher;
   klass->get_style_provider = gtk_css_node_real_get_style_provider;
   klass->get_frame_clock = gtk_css_node_real_get_frame_clock;
 
@@ -655,11 +625,6 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
                           TRUE,
                           G_PARAM_READWRITE
                           | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
-  cssnode_properties[PROP_WIDGET_TYPE] =
-    g_param_spec_gtype ("widget-type", P_("Widget type"), P_("GType of the widget"),
-                        G_TYPE_NONE,
-                        G_PARAM_READWRITE
-                        | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, cssnode_properties);
 
@@ -1122,23 +1087,6 @@ gtk_css_node_get_name (GtkCssNode *cssnode)
 }
 
 void
-gtk_css_node_set_widget_type (GtkCssNode *cssnode,
-                              GType       widget_type)
-{
-  if (gtk_css_node_declaration_set_type (&cssnode->decl, widget_type))
-    {
-      gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_NAME);
-      g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_WIDGET_TYPE]);
-    }
-}
-
-GType
-gtk_css_node_get_widget_type (GtkCssNode *cssnode)
-{
-  return gtk_css_node_declaration_get_type (cssnode->decl);
-}
-
-void
 gtk_css_node_set_id (GtkCssNode                *cssnode,
                      /* interned */ const char *id)
 {
@@ -1400,13 +1348,6 @@ gtk_css_node_validate (GtkCssNode *cssnode)
           created_styles = 0;
         }
     }
-}
-
-gboolean
-gtk_css_node_init_matcher (GtkCssNode     *cssnode,
-                           GtkCssMatcher  *matcher)
-{
-  return GTK_CSS_NODE_GET_CLASS (cssnode)->init_matcher (cssnode, matcher);
 }
 
 GtkStyleProvider *

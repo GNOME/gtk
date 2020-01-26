@@ -31,7 +31,6 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkstylepropertyprivate.h"
 #include "gtkstyleproviderprivate.h"
-#include "gtkwidgetpath.h"
 #include "gtkbindings.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
@@ -391,8 +390,8 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
 
 static void
 verify_tree_match_results (GtkCssProvider *provider,
-			   const GtkCssMatcher *matcher,
-			   GPtrArray *tree_rules)
+			   GtkCssNode     *node,
+			   GPtrArray      *tree_rules)
 {
 #ifdef VERIFY_TREE
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
@@ -414,7 +413,7 @@ verify_tree_match_results (GtkCssProvider *provider,
 	      break;
 	    }
 	}
-      should_match = _gtk_css_selector_matches (ruleset->selector, matcher);
+      should_match = _gtk_css_selector_matches (ruleset->selector, node);
       if (found != !!should_match)
 	{
 	  g_error ("expected rule '%s' to %s, but it %s",
@@ -448,7 +447,7 @@ gtk_css_style_provider_get_keyframes (GtkStyleProvider *provider,
 
 static void
 gtk_css_style_provider_lookup (GtkStyleProvider    *provider,
-                               const GtkCssMatcher *matcher,
+                               GtkCssNode          *node,
                                GtkCssLookup        *lookup,
                                GtkCssChange        *change)
 {
@@ -462,10 +461,10 @@ gtk_css_style_provider_lookup (GtkStyleProvider    *provider,
   if (_gtk_css_selector_tree_is_empty (priv->tree))
     return;
 
-  tree_rules = _gtk_css_selector_tree_match_all (priv->tree, matcher);
+  tree_rules = _gtk_css_selector_tree_match_all (priv->tree, node);
   if (tree_rules)
     {
-      verify_tree_match_results (css_provider, matcher, tree_rules);
+      verify_tree_match_results (css_provider, node, tree_rules);
 
       for (i = tree_rules->len - 1; i >= 0; i--)
         {
@@ -496,7 +495,7 @@ gtk_css_style_provider_lookup (GtkStyleProvider    *provider,
     }
 
   if (change)
-    *change = _gtk_css_selector_tree_get_change_all (priv->tree, matcher);
+    *change = _gtk_css_selector_tree_get_change_all (priv->tree, node);
 }
 
 static void

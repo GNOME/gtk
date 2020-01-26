@@ -60,7 +60,6 @@
 #include "gtktreemodelsort.h"
 #include "gtktreeprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtknative.h"
