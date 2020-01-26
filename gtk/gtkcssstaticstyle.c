@@ -161,10 +161,12 @@ gtk_css_static_style_get_default (void)
    */
   if (default_style == NULL)
     {
+      GtkCountingBloomFilter filter = GTK_COUNTING_BLOOM_FILTER_INIT;
       GtkSettings *settings;
 
       settings = gtk_settings_get_default ();
       default_style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER (settings),
+                                                        &filter,
                                                         NULL,
                                                         0);
       g_object_set_data_full (G_OBJECT (settings), I_("gtk-default-style"),
@@ -175,9 +177,10 @@ gtk_css_static_style_get_default (void)
 }
 
 GtkCssStyle *
-gtk_css_static_style_new_compute (GtkStyleProvider    *provider,
-                                  GtkCssNode          *node,
-                                  GtkCssChange         change)
+gtk_css_static_style_new_compute (GtkStyleProvider             *provider,
+                                  const GtkCountingBloomFilter *filter,
+                                  GtkCssNode                   *node,
+                                  GtkCssChange                  change)
 {
   GtkCssStaticStyle *result;
   GtkCssLookup lookup;
@@ -187,6 +190,7 @@ gtk_css_static_style_new_compute (GtkStyleProvider    *provider,
 
   if (node)
     gtk_style_provider_lookup (provider,
+                               filter,
                                node,
                                &lookup,
                                change == 0 ? &change : NULL);

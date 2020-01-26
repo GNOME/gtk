@@ -168,24 +168,6 @@ g_ptr_array_insert_sorted (GPtrArray *array,
   g_ptr_array_insert (array, i, data);
 }
 
-static void
-gtk_css_selector_tree_found_match (const GtkCssSelectorTree  *tree,
-				   GPtrArray                **array)
-{
-  int i;
-  gpointer *matches;
-
-  matches = gtk_css_selector_tree_get_matches (tree);
-  if (matches)
-    {
-      if (!*array)
-        *array = g_ptr_array_sized_new (16);
-
-      for (i = 0; matches[i] != NULL; i++)
-        g_ptr_array_insert_sorted (*array, matches[i]);
-    }
-}
-
 static inline gboolean
 gtk_css_selector_match (const GtkCssSelector *selector,
                         GtkCssNode           *node)
@@ -1865,37 +1847,114 @@ gtk_css_selectors_skip_initial_selector (GtkCssSelector *selector, const GtkCssS
 }
 
 static gboolean
+gtk_css_selector_tree_match_bloom (const GtkCssSelectorTree     *tree,
+                                   const GtkCountingBloomFilter *filter,
+                                   gboolean                      skipping)
+{
+  const GtkCssSelectorTree *prev;
+
+  switch (tree->selector.class->category)
+    {
+      case GTK_CSS_SELECTOR_CATEGORY_SIMPLE:
+        break;
+      case GTK_CSS_SELECTOR_CATEGORY_SIMPLE_RADICAL:
+        if (skipping)
+          break;
+        if (!gtk_counting_bloom_filter_may_contain (filter,
+                                                    gtk_css_selector_hash_one (&tree->selector)))
+          return FALSE;
+        break;
+      case GTK_CSS_SELECTOR_CATEGORY_PARENT:
+        skipping = FALSE;
+        break;
+      case GTK_CSS_SELECTOR_CATEGORY_SIBLING:
+        skipping = TRUE;
+        break;
+      default:
+        g_assert_not_reached ();
+        return FALSE;
+    }
+
+  if (gtk_css_selector_tree_get_matches (tree))
+    return TRUE;
+
+  for (prev = gtk_css_selector_tree_get_previous (tree);
+       prev != NULL;
+       prev = gtk_css_selector_tree_get_sibling (prev))
+    {
+      if (gtk_css_selector_tree_match_bloom (prev, filter, skipping))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+typedef struct
+{
+  const GtkCountingBloomFilter *filter;
+  GPtrArray *results;
+} TreeMatchData;
+
+static void
+gtk_css_selector_tree_found_match (const GtkCssSelectorTree *tree,
+				   TreeMatchData            *tm)
+{
+  int i;
+  gpointer *matches;
+
+  matches = gtk_css_selector_tree_get_matches (tree);
+  if (matches)
+    {
+      if (tm->results == NULL)
+        tm->results = g_ptr_array_sized_new (16);
+
+      for (i = 0; matches[i] != NULL; i++)
+        g_ptr_array_insert_sorted (tm->results, matches[i]);
+    }
+}
+
+static gboolean
 gtk_css_selector_tree_match_foreach (const GtkCssSelector *selector,
                                      GtkCssNode           *node,
-                                     gpointer              res)
+                                     gpointer              data)
 {
+  TreeMatchData *tm = data;
   const GtkCssSelectorTree *tree = (const GtkCssSelectorTree *) selector;
   const GtkCssSelectorTree *prev;
 
   if (!gtk_css_selector_match (selector, node))
     return FALSE;
 
-  gtk_css_selector_tree_found_match (tree, res);
+  gtk_css_selector_tree_found_match (tree, tm);
+
+  if (tm->filter && !gtk_css_selector_is_simple (&tree->selector))
+    {
+      /* We can pass both TRUE or FALSE for skipping here, because the
+       * function will immediately update it. */
+      if (!gtk_css_selector_tree_match_bloom (tree, tm->filter, FALSE))
+          return FALSE;
+    }
 
   for (prev = gtk_css_selector_tree_get_previous (tree);
        prev != NULL;
        prev = gtk_css_selector_tree_get_sibling (prev))
-    gtk_css_selector_foreach (&prev->selector, node, gtk_css_selector_tree_match_foreach, res);
+    gtk_css_selector_foreach (&prev->selector, node, gtk_css_selector_tree_match_foreach, tm);
 
   return FALSE;
 }
 
 GPtrArray *
-_gtk_css_selector_tree_match_all (const GtkCssSelectorTree *tree,
-                                  GtkCssNode               *node)
+_gtk_css_selector_tree_match_all (const GtkCssSelectorTree     *tree,
+                                  const GtkCountingBloomFilter *filter,
+                                  GtkCssNode                   *node)
 {
-  GPtrArray *array = NULL;
+  TreeMatchData tm = { filter, NULL };
 
   for (; tree != NULL;
        tree = gtk_css_selector_tree_get_sibling (tree))
-    gtk_css_selector_foreach (&tree->selector, node, gtk_css_selector_tree_match_foreach, &array);
+    gtk_css_selector_foreach (&tree->selector, node, gtk_css_selector_tree_match_foreach, &tm);
 
-  return array;
+  return tm.results;
 }
 
 /* The code for collecting matches assumes that the name, id and classes

@@ -354,8 +354,9 @@ store_in_global_parent_cache (GtkCssNode                  *node,
 }
 
 static GtkCssStyle *
-gtk_css_node_create_style (GtkCssNode   *cssnode,
-                           GtkCssChange  change)
+gtk_css_node_create_style (GtkCssNode                   *cssnode,
+                           const GtkCountingBloomFilter *filter,
+                           GtkCssChange                  change)
 {
   const GtkCssNodeDeclaration *decl;
   GtkCssStyle *style;
@@ -380,6 +381,7 @@ gtk_css_node_create_style (GtkCssNode   *cssnode,
     }
 
   style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
+                                            filter,
                                             cssnode,
                                             style_change);
 
@@ -411,17 +413,18 @@ gtk_css_style_needs_recreation (GtkCssStyle  *style,
 }
 
 static GtkCssStyle *
-gtk_css_node_real_update_style (GtkCssNode   *cssnode,
-                                GtkCssChange  change,
-                                gint64        timestamp,
-                                GtkCssStyle  *style)
+gtk_css_node_real_update_style (GtkCssNode                   *cssnode,
+                                const GtkCountingBloomFilter *filter,
+                                GtkCssChange                  change,
+                                gint64                        timestamp,
+                                GtkCssStyle                  *style)
 {
   GtkCssStyle *static_style, *new_static_style, *new_style;
 
   static_style = GTK_CSS_STYLE (gtk_css_style_get_static_style (style));
 
   if (gtk_css_style_needs_recreation (static_style, change))
-    new_static_style = gtk_css_node_create_style (cssnode, change);
+    new_static_style = gtk_css_node_create_style (cssnode, filter, change);
   else
     new_static_style = g_object_ref (static_style);
 
@@ -950,8 +953,9 @@ gtk_css_node_needs_new_style (GtkCssNode *cssnode)
 }
 
 static void
-gtk_css_node_ensure_style (GtkCssNode *cssnode,
-                           gint64      current_time)
+gtk_css_node_ensure_style (GtkCssNode                   *cssnode,
+                           const GtkCountingBloomFilter *filter,
+                           gint64                        current_time)
 {
   gboolean style_changed;
 
@@ -959,18 +963,19 @@ gtk_css_node_ensure_style (GtkCssNode *cssnode,
     return;
 
   if (cssnode->parent)
-    gtk_css_node_ensure_style (cssnode->parent, current_time);
+    gtk_css_node_ensure_style (cssnode->parent, filter, current_time);
 
   if (cssnode->style_is_invalid)
     {
       GtkCssStyle *new_style;
 
       if (cssnode->previous_sibling)
-        gtk_css_node_ensure_style (cssnode->previous_sibling, current_time);
+        gtk_css_node_ensure_style (cssnode->previous_sibling, filter, current_time);
 
       g_clear_pointer (&cssnode->cache, gtk_css_node_style_cache_unref);
 
       new_style = GTK_CSS_NODE_GET_CLASS (cssnode)->update_style (cssnode,
+                                                                  filter,
                                                                   cssnode->pending_changes,
                                                                   current_time,
                                                                   cssnode->style);
@@ -996,7 +1001,7 @@ gtk_css_node_get_style (GtkCssNode *cssnode)
     {
       gint64 timestamp = gtk_css_node_get_timestamp (cssnode);
 
-      gtk_css_node_ensure_style (cssnode, timestamp);
+      gtk_css_node_ensure_style (cssnode, NULL, timestamp);
     }
 
   return cssnode->style;
@@ -1300,15 +1305,17 @@ gtk_css_node_invalidate (GtkCssNode   *cssnode,
 }
 
 static void
-gtk_css_node_validate_internal (GtkCssNode *cssnode,
-                                gint64      timestamp)
+gtk_css_node_validate_internal (GtkCssNode             *cssnode,
+                                GtkCountingBloomFilter *filter,
+                                gint64                  timestamp)
 {
   GtkCssNode *child;
+  gboolean bloomed = FALSE;
 
   if (!cssnode->invalid)
     return;
 
-  gtk_css_node_ensure_style (cssnode, timestamp);
+  gtk_css_node_ensure_style (cssnode, filter, timestamp);
 
   /* need to set to FALSE then to TRUE here to make it chain up */
   gtk_css_node_set_invalid (cssnode, FALSE);
@@ -1321,20 +1328,32 @@ gtk_css_node_validate_internal (GtkCssNode *cssnode,
        child;
        child = gtk_css_node_get_next_sibling (child))
     {
-      if (child->visible)
-        gtk_css_node_validate_internal (child, timestamp);
+      if (!child->visible)
+        continue;
+
+      if (!bloomed)
+        {
+          gtk_css_node_declaration_add_bloom_hashes (cssnode->decl, filter);
+          bloomed = TRUE;
+        }
+
+      gtk_css_node_validate_internal (child, filter, timestamp);
     }
+
+  if (bloomed)
+    gtk_css_node_declaration_remove_bloom_hashes (cssnode->decl, filter);
 }
 
 void
 gtk_css_node_validate (GtkCssNode *cssnode)
 {
+  GtkCountingBloomFilter filter = GTK_COUNTING_BLOOM_FILTER_INIT;
   gint64 timestamp;
   gint64 before = g_get_monotonic_time ();
 
   timestamp = gtk_css_node_get_timestamp (cssnode);
 
-  gtk_css_node_validate_internal (cssnode, timestamp);
+  gtk_css_node_validate_internal (cssnode, &filter, timestamp);
 
   if (cssnode->parent == NULL)
     {
