@@ -92,10 +92,11 @@ gtk_style_provider_get_keyframes (GtkStyleProvider *provider,
 }
 
 void
-gtk_style_provider_lookup (GtkStyleProvider *provider,
-                           GtkCssNode       *node,
-                           GtkCssLookup     *lookup,
-                           GtkCssChange     *out_change)
+gtk_style_provider_lookup (GtkStyleProvider             *provider,
+                           const GtkCountingBloomFilter *filter,
+                           GtkCssNode                   *node,
+                           GtkCssLookup                 *lookup,
+                           GtkCssChange                 *out_change)
 {
   GtkStyleProviderInterface *iface;
 
@@ -111,7 +112,7 @@ gtk_style_provider_lookup (GtkStyleProvider *provider,
   if (!iface->lookup)
     return;
 
-  iface->lookup (provider, node, lookup, out_change);
+  iface->lookup (provider, filter, node, lookup, out_change);
 }
 
 void

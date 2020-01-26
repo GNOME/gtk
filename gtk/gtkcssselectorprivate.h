@@ -18,6 +18,7 @@
 #ifndef __GTK_CSS_SELECTOR_PRIVATE_H__
 #define __GTK_CSS_SELECTOR_PRIVATE_H__
 
+#include "gtk/gtkcountingbloomfilterprivate.h"
 #include "gtk/gtkcsstypesprivate.h"
 #include "gtk/gtkcssparserprivate.h"
 
@@ -42,6 +43,7 @@ int               _gtk_css_selector_compare         (const GtkCssSelector   *a,
 
 void         _gtk_css_selector_tree_free             (GtkCssSelectorTree       *tree);
 GPtrArray *  _gtk_css_selector_tree_match_all        (const GtkCssSelectorTree *tree,
+                                                      const GtkCountingBloomFilter *filter,
 						      GtkCssNode               *node);
 GtkCssChange _gtk_css_selector_tree_get_change_all   (const GtkCssSelectorTree *tree,
 						      GtkCssNode               *node);
