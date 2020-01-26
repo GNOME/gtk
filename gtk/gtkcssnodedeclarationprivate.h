@@ -18,6 +18,7 @@
 #ifndef __GTK_CSS_NODE_DECLARATION_PRIVATE_H__
 #define __GTK_CSS_NODE_DECLARATION_PRIVATE_H__
 
+#include "gtkcountingbloomfilterprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkenums.h"
 
@@ -46,6 +47,11 @@ gboolean                gtk_css_node_declaration_has_class              (const G
                                                                          GQuark                         class_quark);
 const GQuark *          gtk_css_node_declaration_get_classes            (const GtkCssNodeDeclaration   *decl,
                                                                          guint                         *n_classes);
+
+void                    gtk_css_node_declaration_add_bloom_hashes       (const GtkCssNodeDeclaration   *decl,
+                                                                         GtkCountingBloomFilter        *filter);
+void                    gtk_css_node_declaration_remove_bloom_hashes    (const GtkCssNodeDeclaration   *decl,
+                                                                         GtkCountingBloomFilter        *filter);
 
 guint                   gtk_css_node_declaration_hash                   (gconstpointer                  elem);
 gboolean                gtk_css_node_declaration_equal                  (gconstpointer                  elem1,
