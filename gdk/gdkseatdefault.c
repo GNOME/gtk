@@ -396,6 +396,7 @@ gdk_seat_default_remove_slave (GdkSeatDefault *seat,
         priv->capabilities |= device_get_capability (GDK_DEVICE (l->data));
 
       gdk_seat_device_removed (GDK_SEAT (seat), device);
+      g_object_unref (device);
     }
   else if (g_list_find (priv->slave_keyboards, device))
     {
@@ -405,6 +406,7 @@ gdk_seat_default_remove_slave (GdkSeatDefault *seat,
         priv->capabilities &= ~GDK_SEAT_CAPABILITY_KEYBOARD;
 
       gdk_seat_device_removed (GDK_SEAT (seat), device);
+      g_object_unref (device);
     }
 }
 
