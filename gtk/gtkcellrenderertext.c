@@ -19,6 +19,7 @@
 
 #include "gtkcellrenderertext.h"
 
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkeditable.h"
 #include "gtkentry.h"
 #include "gtkentryprivate.h"
@@ -27,7 +28,7 @@
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
 #include "gtksnapshot.h"
-#include "gtkstylecontext.h"
+#include "gtkstylecontextprivate.h"
 #include "gtktreeprivate.h"
 
 #include "a11y/gtktextcellaccessible.h"
@@ -1631,7 +1632,7 @@ get_size (GtkCellRenderer    *cell,
 
       style_context = gtk_widget_get_style_context (widget);
 
-      gtk_style_context_get (style_context, "font", &font_desc, NULL);
+      font_desc = gtk_css_style_get_pango_font (gtk_style_context_lookup_style (style_context));
       pango_font_description_merge_static (font_desc, priv->font, TRUE);
 
       if (priv->scale_set)

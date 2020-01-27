@@ -31,6 +31,7 @@
 
 #include "gtkadjustmentprivate.h"
 #include "gtkbindings.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkdebug.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
@@ -7437,7 +7438,7 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
 {
   GtkStyleContext *context;
   const GdkRGBA black = { 0, };
-  GdkRGBA *bg;
+  const GdkRGBA *color;
 
   if (!values->appearance.bg_rgba)
     values->appearance.bg_rgba = gdk_rgba_copy (&black);
@@ -7446,15 +7447,15 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
 
   context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
 
-  gtk_style_context_get (context, "background-color", &bg, NULL);
-  *values->appearance.bg_rgba = *bg;
-  gdk_rgba_free (bg);
-  gtk_style_context_get_color (context, values->appearance.fg_rgba);
+  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+  *values->appearance.bg_rgba = *color;
+  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
+  *values->appearance.fg_rgba = *color;
 
   if (values->font)
     pango_font_description_free (values->font);
 
-  gtk_style_context_get (context, "font", &values->font, NULL);
+  values->font = gtk_css_style_get_pango_font (gtk_style_context_lookup_style (context));
 }
 
 static void
