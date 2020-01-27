@@ -76,7 +76,7 @@ activate (GtkApplication *app,
   GtkWidget *box;
   GtkSeparator *separator;
   GtkWidget *grid;
-  GtkWidget *button;
+  GtkToggleButton *button;
   GtkLabel *label;
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -115,7 +115,7 @@ activate (GtkApplication *app,
   button = gtk_toggle_button_new_with_label ("Inhibit");
   g_signal_connect (button, "toggled",
                     G_CALLBACK (inhibitor_toggled), app);
-  gtk_grid_attach (GTK_GRID (grid), button, 2, 6, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (button), 2, 6, 1, 1);
 
   separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (separator));

@@ -480,17 +480,17 @@ setup_search (GtkFileChooserDialog *dialog)
   g_object_get (dialog, "use-header-bar", &use_header, NULL);
   if (use_header)
     {
-      GtkWidget *button;
+      GtkToggleButton *button;
       GtkWidget *header;
 
       button = gtk_toggle_button_new ();
-      gtk_widget_set_focus_on_click (button, FALSE);
-      gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+      gtk_widget_set_focus_on_click (GTK_WIDGET (button), FALSE);
+      gtk_widget_set_valign (GTK_WIDGET (button), GTK_ALIGN_CENTER);
       gtk_button_set_icon_name (GTK_BUTTON (button), "edit-find-symbolic");
-      gtk_widget_show (button);
+      gtk_widget_show (GTK_WIDGET (button));
 
       header = gtk_dialog_get_header_bar (GTK_DIALOG (dialog));
-      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), GTK_WIDGET (button));
 
       g_object_bind_property (button, "active",
                               priv->widget, "search-mode",

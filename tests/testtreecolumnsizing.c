@@ -168,7 +168,7 @@ main (int argc, char **argv)
   GtkComboBoxText *combo_box;
   GtkWidget *sw;
   GtkWidget *tree_view;
-  GtkWidget *button;
+  GtkToggleButton *button;
 
   gtk_init ();
 
@@ -221,7 +221,7 @@ main (int argc, char **argv)
   button = gtk_toggle_button_new_with_label ("Toggle long content row");
   g_signal_connect (button, "toggled",
                     G_CALLBACK (toggle_long_content_row), tree_view);
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (button));
 
   /* Set up option menu callback and default item */
   g_signal_connect (combo_box, "changed",

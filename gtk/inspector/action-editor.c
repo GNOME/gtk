@@ -91,7 +91,7 @@ variant_editor_new (const GVariantType   *type,
 
   if (g_variant_type_equal (type, G_VARIANT_TYPE_BOOLEAN))
     {
-      editor = gtk_toggle_button_new_with_label ("FALSE");
+      editor = GTK_WIDGET (gtk_toggle_button_new_with_label ("FALSE"));
       g_signal_connect (editor, "notify::active", G_CALLBACK (variant_editor_changed_cb), d);
     }   
   else if (g_variant_type_equal (type, G_VARIANT_TYPE_STRING))

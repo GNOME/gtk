@@ -105,12 +105,12 @@ create_switch (void)
 static WidgetInfo *
 create_toggle_button (void)
 {
-  GtkWidget *widget;
+  GtkToggleButton *widget;
 
   widget = gtk_toggle_button_new_with_mnemonic ("_Toggle Button");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_toggle_button_set_active (widget, FALSE);
+  gtk_widget_set_halign (GTK_WIDGDET (widget), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGDET (widget), GTK_ALIGN_CENTER);
 
   return new_widget_info ("toggle-button", widget, SMALL);
 }

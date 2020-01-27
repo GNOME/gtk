@@ -31,6 +31,7 @@ on_activate (GApplication *application,
   GtkWidget *box;
   GtkWidget *info_bar;
   GtkWidget *widget;
+  GtkToggleButton *toggle;
   GtkComboBoxText *combo;
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
@@ -39,26 +40,26 @@ on_activate (GApplication *application,
   gtk_container_add (GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar))),
                      GTK_WIDGET (gtk_label_new ("Hello!\nI am a GtkInfoBar")));
 
-  widget = gtk_toggle_button_new_with_label ("Toggle :visible");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-  g_object_bind_property (widget, "active",
+  toggle = gtk_toggle_button_new_with_label ("Toggle :visible");
+  gtk_toggle_button_set_active (toggle, TRUE);
+  g_object_bind_property (toggle, "active",
                           info_bar, "visible",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (toggle));
 
-  widget = gtk_toggle_button_new_with_label ("Toggle :revealed");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-  g_object_bind_property (widget, "active",
+  toggle = gtk_toggle_button_new_with_label ("Toggle :revealed");
+  gtk_toggle_button_set_active (toggle, TRUE);
+  g_object_bind_property (toggle, "active",
                           info_bar, "revealed",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (toggle));
 
-  widget = gtk_toggle_button_new_with_label ("Toggle :show-close-button");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-  g_object_bind_property (widget, "active",
+  toggle = gtk_toggle_button_new_with_label ("Toggle :show-close-button");
+  gtk_toggle_button_set_active (toggle, TRUE);
+  g_object_bind_property (toggle, "active",
                           info_bar, "show-close-button",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (toggle));
 
   combo = gtk_combo_box_text_new ();
   gtk_combo_box_text_append (combo,

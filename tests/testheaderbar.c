@@ -122,6 +122,7 @@ main (int argc, char *argv[])
   GtkWidget *box;
   GtkActionBar *footer;
   GtkWidget *button;
+  GtkToggleButton *toggle;
   GtkImage *content;
   GtkCssProvider *provider;
 
@@ -150,9 +151,9 @@ main (int argc, char *argv[])
 
   footer = gtk_action_bar_new ();
   gtk_action_bar_set_center_widget (footer, GTK_WIDGET (gtk_check_button_new_with_label ("Middle")));
-  button = gtk_toggle_button_new_with_label ("Custom");
-  g_signal_connect (button, "clicked", G_CALLBACK (change_header), window);
-  gtk_action_bar_pack_start (footer, button);
+  toggle = gtk_toggle_button_new_with_label ("Custom");
+  g_signal_connect (toggle, "clicked", G_CALLBACK (change_header), window);
+  gtk_action_bar_pack_start (footer, GTK_WIDGET (toggle));
   button = gtk_button_new_with_label ("Subtitle");
   g_signal_connect (button, "clicked", G_CALLBACK (change_subtitle), NULL);
   gtk_action_bar_pack_end (footer, button);

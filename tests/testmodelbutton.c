@@ -23,6 +23,7 @@ on_application_activate (GApplication *gapplication,
   GIcon *gicon;
   GtkWidget *model_button;
   GtkComboBoxText *combo;
+  GtkToggleButton *toggle;
   GtkWidget *widget;
 
   gtk_css_provider_load_from_data (css_provider,
@@ -70,11 +71,11 @@ on_application_activate (GApplication *gapplication,
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (combo));
 
-  widget = gtk_toggle_button_new_with_label (":iconic");
-  g_object_bind_property (widget, "active",
+  toggle = gtk_toggle_button_new_with_label (":iconic");
+  g_object_bind_property (toggle, "active",
                           model_button, "iconic",
                           G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL);
-  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (toggle));
 
   widget = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_container_add (GTK_CONTAINER (widget), box);

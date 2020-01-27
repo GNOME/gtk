@@ -71,7 +71,8 @@
  * }
  *
  * void make_toggles (void) {
- *   GtkWidget *window, *toggle1, *toggle2;
+ *   GtkWidget *window;
+ *   GtkToggleButton *toggle1, *toggle2;
  *   GtkWidget *box;
  *   const char *text;
  *
@@ -84,14 +85,14 @@
  *   g_signal_connect (toggle1, "toggled",
  *                     G_CALLBACK (output_state),
  *                     NULL);
- *   gtk_container_add (GTK_CONTAINER (box), toggle1);
+ *   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (toggle1));
  *
  *   text = "Hi, I’m a toggle button.";
  *   toggle2 = gtk_toggle_button_new_with_label (text);
  *   g_signal_connect (toggle2, "toggled",
  *                     G_CALLBACK (output_state),
  *                     NULL);
- *   gtk_container_add (GTK_CONTAINER (box), toggle2);
+ *   gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (toggle2));
  *
  *   gtk_container_add (GTK_CONTAINER (window), box);
  *   gtk_widget_show (window);
@@ -205,7 +206,7 @@ gtk_toggle_button_init (GtkToggleButton *toggle_button)
  *
  * Returns: a new toggle button.
  */
-GtkWidget*
+GtkToggleButton*
 gtk_toggle_button_new (void)
 {
   return g_object_new (GTK_TYPE_TOGGLE_BUTTON, NULL);
@@ -219,7 +220,7 @@ gtk_toggle_button_new (void)
  *
  * Returns: a new toggle button.
  */
-GtkWidget*
+GtkToggleButton*
 gtk_toggle_button_new_with_label (const gchar *label)
 {
   return g_object_new (GTK_TYPE_TOGGLE_BUTTON, "label", label, NULL);
@@ -236,7 +237,7 @@ gtk_toggle_button_new_with_label (const gchar *label)
  *
  * Returns: a new #GtkToggleButton
  */
-GtkWidget*
+GtkToggleButton*
 gtk_toggle_button_new_with_mnemonic (const gchar *label)
 {
   return g_object_new (GTK_TYPE_TOGGLE_BUTTON, 

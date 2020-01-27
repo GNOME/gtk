@@ -37,14 +37,14 @@ static void
 create_dark_popup (GtkWidget *parent)
 {
   GtkWidget *popup = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  GtkWidget *button = gtk_toggle_button_new_with_label ("Dark");
+  GtkToggleButton *button = gtk_toggle_button_new_with_label ("Dark");
 
   gtk_window_set_decorated (GTK_WINDOW (popup), FALSE);
   gtk_widget_set_size_request (popup, 100, 100);
   gtk_window_set_resizable (GTK_WINDOW (popup), FALSE);
   gtk_window_set_hide_on_close (GTK_WINDOW (popup), TRUE);
 
-  gtk_container_add (GTK_CONTAINER (popup), button);
+  gtk_container_add (GTK_CONTAINER (popup), GTK_WIDGET (button));
   g_signal_connect (button, "toggled",
                     G_CALLBACK (dark_button_toggled_cb), NULL);
 

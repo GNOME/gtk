@@ -336,6 +336,7 @@ create_toggle_buttons (GtkWidget *widget)
   static GtkWidget *window = NULL;
   GtkWidget *box1;
   GtkWidget *box2;
+  GtkToggleButton *toggle;
   GtkWidget *button;
   GtkSeparator *separator;
 
@@ -357,14 +358,14 @@ create_toggle_buttons (GtkWidget *widget)
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_container_add (GTK_CONTAINER (box1), box2);
 
-      button = gtk_toggle_button_new_with_label ("button1");
-      gtk_container_add (GTK_CONTAINER (box2), button);
+      toggle = gtk_toggle_button_new_with_label ("button1");
+      gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (toggle));
 
-      button = gtk_toggle_button_new_with_label ("button2");
-      gtk_container_add (GTK_CONTAINER (box2), button);
+      toggle = gtk_toggle_button_new_with_label ("button2");
+      gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (toggle));
 
-      button = gtk_toggle_button_new_with_label ("button3");
-      gtk_container_add (GTK_CONTAINER (box2), button);
+      toggle = gtk_toggle_button_new_with_label ("button3");
+      gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (toggle));
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_container_add (GTK_CONTAINER (box1), GTK_WIDGET (separator));
@@ -805,11 +806,11 @@ sensitivity_toggled (GtkWidget *toggle,
 static GtkWidget*
 create_sensitivity_control (GtkWidget *widget)
 {
-  GtkWidget *button;
+  GtkToggleButton *button;
 
   button = gtk_toggle_button_new_with_label ("Sensitive");  
 
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),
+  gtk_toggle_button_set_active (button,
                                 gtk_widget_is_sensitive (widget));
   
   g_signal_connect (button,
@@ -817,9 +818,9 @@ create_sensitivity_control (GtkWidget *widget)
                     G_CALLBACK (sensitivity_toggled),
                     widget);
   
-  gtk_widget_show (button);
+  gtk_widget_show (GTK_WIDGET (button));
 
-  return button;
+  return GTK_WIDGET (button);
 }
 
 static void
@@ -858,11 +859,11 @@ selectable_toggled (GtkWidget *toggle,
 static GtkWidget*
 create_selectable_control (GtkWidget *widget)
 {
-  GtkWidget *button;
+  GtkToggleButton *button;
 
   button = gtk_toggle_button_new_with_label ("Selectable");  
 
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),
+  gtk_toggle_button_set_active (button,
                                 FALSE);
   
   g_signal_connect (button,
@@ -870,9 +871,9 @@ create_selectable_control (GtkWidget *widget)
                     G_CALLBACK (selectable_toggled),
                     widget);
   
-  gtk_widget_show (button);
+  gtk_widget_show (GTK_WIDGET (button));
 
-  return button;
+  return GTK_WIDGET (button);
 }
 
 static void
@@ -1293,7 +1294,7 @@ create_tooltips (GtkWidget *widget)
   GtkWidget *box2;
   GtkWidget *box3;
   GtkWidget *button;
-  GtkWidget *toggle;
+  GtkToggleButton *toggle;
   GtkWidget *frame;
   GtkSeparator *separator;
 
@@ -1315,23 +1316,23 @@ create_tooltips (GtkWidget *widget)
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_container_add (GTK_CONTAINER (box1), box2);
 
-      button = gtk_toggle_button_new_with_label ("button1");
-      gtk_container_add (GTK_CONTAINER (box2), button);
+      toggle = gtk_toggle_button_new_with_label ("button1");
+      gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (toggle));
 
-      gtk_widget_set_tooltip_text (button, "This is button 1");
+      gtk_widget_set_tooltip_text (GTK_WIDGET (toggle), "This is button 1");
 
-      button = gtk_toggle_button_new_with_label ("button2");
-      gtk_container_add (GTK_CONTAINER (box2), button);
+      toggle = gtk_toggle_button_new_with_label ("button2");
+      gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (toggle));
 
-      gtk_widget_set_tooltip_text (button,
+      gtk_widget_set_tooltip_text (GTK_WIDGET (toggle),
         "This is button 2. This is also a really long tooltip which probably "
         "won't fit on a single line and will therefore need to be wrapped. "
         "Hopefully the wrapping will work correctly.");
 
       toggle = gtk_toggle_button_new_with_label ("Override TipsQuery Label");
-      gtk_container_add (GTK_CONTAINER (box2), toggle);
+      gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (toggle));
 
-      gtk_widget_set_tooltip_text (toggle, "Toggle TipsQuery view.");
+      gtk_widget_set_tooltip_text (GTK_WIDGET (toggle), "Toggle TipsQuery view.");
 
       box3 =
 	g_object_new (GTK_TYPE_BOX,
@@ -1951,7 +1952,7 @@ create_scrolled_windows (GtkWidget *widget)
   static GtkWidget *window;
   GtkWidget *content_area;
   GtkWidget *scrolled_window;
-  GtkWidget *button;
+  GtkToggleButton *button;
   GtkWidget *grid;
   char buffer[32];
   int i, j;
@@ -1995,8 +1996,8 @@ create_scrolled_windows (GtkWidget *widget)
 	  {
 	    sprintf (buffer, "button (%d,%d)\n", i, j);
 	    button = gtk_toggle_button_new_with_label (buffer);
-	    gtk_grid_attach (GTK_GRID (grid), button, i, j, 1, 1);
-	    gtk_widget_show (button);
+	    gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (button), i, j, 1, 1);
+	    gtk_widget_show (GTK_WIDGET (button));
 	  }
 
       gtk_dialog_add_button (GTK_DIALOG (window),
@@ -4866,8 +4867,8 @@ get_state_controls (GtkWidget *window)
 {
   GtkWidget *vbox;
   GtkWidget *button;
-  GtkWidget *button_above;
-  GtkWidget *button_below;
+  GtkToggleButton *button_above;
+  GtkToggleButton *button_below;
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
@@ -4932,14 +4933,14 @@ get_state_controls (GtkWidget *window)
 		    "toggled",
 		    G_CALLBACK (keep_window_above),
 		    window);
-  gtk_container_add (GTK_CONTAINER (vbox), button_above);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (button_above));
 
   button_below = gtk_toggle_button_new_with_label ("Keep below");
   g_signal_connect (button_below,
 		    "toggled",
 		    G_CALLBACK (keep_window_below),
 		    window);
-  gtk_container_add (GTK_CONTAINER (vbox), button_below);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (button_below));
 
   g_object_set_data (G_OBJECT (button_above), "radio", button_below);
   g_object_set_data (G_OBJECT (button_below), "radio", button_above);

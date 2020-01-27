@@ -1069,7 +1069,8 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
       char *time_str, *str;
       const char *render_str;
       cairo_region_t *region;
-      GtkWidget *hbox, *button;
+      GtkWidget *hbox;
+      GtkToggleButton *button;
       GtkLabel *label;
       guint i;
 
@@ -1123,7 +1124,7 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
       gtk_button_set_icon_name (GTK_BUTTON (button), "view-more-symbolic");
 
-      gtk_container_add (GTK_CONTAINER (hbox), button);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (button));
 
       label = gtk_label_new (gtk_inspector_render_recording_get_profiler_info (GTK_INSPECTOR_RENDER_RECORDING (recording)));
       gtk_widget_hide (GTK_WIDGET (label));

@@ -284,7 +284,7 @@ cleanup_callback (GObject   *object,
 }
 
 static void
-toggle_sensitivity_callback (GtkWidget *togglebutton,
+toggle_sensitivity_callback (GtkToggleButton *togglebutton,
                              gpointer   user_data)
 {
   GtkContainer *container = user_data;
@@ -297,9 +297,9 @@ toggle_sensitivity_callback (GtkWidget *togglebutton,
   while (tmp != NULL)
     {
       /* don't disable our toggle */
-      if (GTK_WIDGET (tmp->data) != togglebutton)
+      if (GTK_WIDGET (tmp->data) != GTK_WIDGET (togglebutton))
         gtk_widget_set_sensitive (GTK_WIDGET (tmp->data),
-                                  !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (togglebutton)));
+                                  !gtk_toggle_button_get_active (togglebutton));
 
       tmp = tmp->next;
     }
@@ -319,7 +319,7 @@ do_images (GtkWidget *do_widget)
   GtkImage *image;
   GtkPicture *picture;
   GtkLabel *label;
-  GtkWidget *button;
+  GtkToggleButton *button;
   GdkPaintable *paintable;
   GIcon *gicon;
 
@@ -458,7 +458,7 @@ do_images (GtkWidget *do_widget)
 
       /* Sensitivity control */
       button = gtk_toggle_button_new_with_mnemonic ("_Insensitive");
-      gtk_container_add (GTK_CONTAINER (base_vbox), button);
+      gtk_container_add (GTK_CONTAINER (base_vbox), GTK_WIDGET (button));
 
       g_signal_connect (button, "toggled",
                         G_CALLBACK (toggle_sensitivity_callback),

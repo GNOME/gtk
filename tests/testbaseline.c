@@ -71,6 +71,7 @@ main (int    argc,
       char **argv)
 {
   GtkWidget *window, *button, *grid, *notebook;
+  GtkToggleButton *toggle_button;
   GtkCheckButton *check;
   GtkEntry *entry;
   GtkWidget *vbox, *hbox, *grid_hbox, *spin, *spin2, *toggle;
@@ -203,15 +204,15 @@ main (int    argc,
 	gtk_widget_set_valign (GTK_WIDGET (image), GTK_ALIGN_BASELINE);
       gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (image));
 
-      button = gtk_toggle_button_new_with_label ("│Xyj,Ö");
+      toggle_button = gtk_toggle_button_new_with_label ("│Xyj,Ö");
       if (j == 0)
-	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
-      gtk_container_add (GTK_CONTAINER (hbox), button);
+	gtk_widget_set_valign (GTK_WIDGET (toggle_button), GTK_ALIGN_BASELINE);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (toggle_button));
 
-      button = gtk_toggle_button_new_with_label ("│Xyj,Ö");
+      toggle_button = gtk_toggle_button_new_with_label ("│Xyj,Ö");
       if (j == 0)
-	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
-      gtk_container_add (GTK_CONTAINER (hbox), button);
+	gtk_widget_set_valign (GTK_WIDGET (toggle_button), GTK_ALIGN_BASELINE);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (toggle_button));
 
       check = gtk_check_button_new_with_label ("│Xyj,Ö");
       if (j == 0)

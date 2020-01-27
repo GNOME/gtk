@@ -4,7 +4,8 @@ gint
 main (gint argc,
       gchar ** argv)
 {
-  GtkWidget *window, *revealer, *box, *widget;
+  GtkWidget *window, *revealer, *box;
+  GtkToggleButton *widget;
   GtkEntry *entry;
   GtkLabel *label;
 
@@ -31,7 +32,7 @@ main (gint argc,
   gtk_grid_attach (GTK_GRID (box), GTK_WIDGET (label), 4, 4, 1, 1);
 
   widget = gtk_toggle_button_new_with_label ("None");
-  gtk_grid_attach (GTK_GRID (box), widget, 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (box), GTK_WIDGET (widget), 0, 0, 1, 1);
   revealer = gtk_revealer_new ();
   gtk_widget_set_halign (revealer, GTK_ALIGN_START);
   gtk_widget_set_valign (revealer, GTK_ALIGN_START);
@@ -44,7 +45,7 @@ main (gint argc,
   gtk_grid_attach (GTK_GRID (box), revealer, 1, 0, 1, 1);
 
   widget = gtk_toggle_button_new_with_label ("Fade");
-  gtk_grid_attach (GTK_GRID (box), widget, 5, 5, 1, 1);
+  gtk_grid_attach (GTK_GRID (box), GTK_WIDGET (widget), 5, 5, 1, 1);
   revealer = gtk_revealer_new ();
   gtk_widget_set_halign (revealer, GTK_ALIGN_END);
   gtk_widget_set_valign (revealer, GTK_ALIGN_END);
@@ -57,7 +58,7 @@ main (gint argc,
   gtk_grid_attach (GTK_GRID (box), revealer, 4, 5, 1, 1);
 
   widget = gtk_toggle_button_new_with_label ("Slide");
-  gtk_grid_attach (GTK_GRID (box), widget, 0, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (box), GTK_WIDGET (widget), 0, 2, 1, 1);
   revealer = gtk_revealer_new ();
   gtk_widget_set_hexpand (revealer, TRUE);
   gtk_widget_set_halign (revealer, GTK_ALIGN_START);
@@ -70,8 +71,8 @@ main (gint argc,
   gtk_grid_attach (GTK_GRID (box), revealer, 1, 2, 1, 1);
 
   widget = gtk_toggle_button_new_with_label ("Swing");
-  gtk_widget_set_valign (widget, GTK_ALIGN_START);
-  gtk_grid_attach (GTK_GRID (box), widget, 0, 3, 1, 1);
+  gtk_widget_set_valign (GTK_WIDGET (widget), GTK_ALIGN_START);
+  gtk_grid_attach (GTK_GRID (box), GTK_WIDGET (widget), 0, 3, 1, 1);
   revealer = gtk_revealer_new ();
   gtk_widget_set_hexpand (revealer, TRUE);
   gtk_widget_set_halign (revealer, GTK_ALIGN_START);
@@ -85,7 +86,7 @@ main (gint argc,
   gtk_grid_attach (GTK_GRID (box), revealer, 1, 3, 1, 1);
 
   widget = gtk_toggle_button_new_with_label ("Slide");
-  gtk_grid_attach (GTK_GRID (box), widget, 2, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (box), GTK_WIDGET (widget), 2, 0, 1, 1);
   revealer = gtk_revealer_new ();
   gtk_widget_set_vexpand (revealer, TRUE);
   gtk_widget_set_valign (revealer, GTK_ALIGN_START);
@@ -98,7 +99,7 @@ main (gint argc,
   gtk_grid_attach (GTK_GRID (box), revealer, 2, 1, 1, 1);
 
   widget = gtk_toggle_button_new_with_label ("Swing");
-  gtk_grid_attach (GTK_GRID (box), widget, 3, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (box), GTK_WIDGET (widget), 3, 0, 1, 1);
   revealer = gtk_revealer_new ();
   gtk_widget_set_vexpand (revealer, TRUE);
   gtk_widget_set_valign (revealer, GTK_ALIGN_START);
@@ -111,7 +112,7 @@ main (gint argc,
   gtk_grid_attach (GTK_GRID (box), revealer, 3, 1, 1, 1);
 
   widget = gtk_toggle_button_new_with_label ("Slide");
-  gtk_grid_attach (GTK_GRID (box), widget, 5, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (box), GTK_WIDGET (widget), 5, 2, 1, 1);
   revealer = gtk_revealer_new ();
   gtk_widget_set_hexpand (revealer, TRUE);
   gtk_widget_set_halign (revealer, GTK_ALIGN_END);
@@ -124,8 +125,8 @@ main (gint argc,
   gtk_grid_attach (GTK_GRID (box), revealer, 4, 2, 1, 1);
 
   widget = gtk_toggle_button_new_with_label ("Swing");
-  gtk_widget_set_valign (widget, GTK_ALIGN_START);
-  gtk_grid_attach (GTK_GRID (box), widget, 5, 3, 1, 1);
+  gtk_widget_set_valign (GTK_WIDGET (widget), GTK_ALIGN_START);
+  gtk_grid_attach (GTK_GRID (box), GTK_WIDGET (widget), 5, 3, 1, 1);
   revealer = gtk_revealer_new ();
   gtk_widget_set_hexpand (revealer, TRUE);
   gtk_widget_set_halign (revealer, GTK_ALIGN_END);
@@ -139,7 +140,7 @@ main (gint argc,
   gtk_grid_attach (GTK_GRID (box), revealer, 4, 3, 1, 1);
 
   widget = gtk_toggle_button_new_with_label ("Slide");
-  gtk_grid_attach (GTK_GRID (box), widget, 2, 5, 1, 1);
+  gtk_grid_attach (GTK_GRID (box), GTK_WIDGET (widget), 2, 5, 1, 1);
   revealer = gtk_revealer_new ();
   gtk_widget_set_vexpand (revealer, TRUE);
   gtk_widget_set_valign (revealer, GTK_ALIGN_END);
@@ -152,7 +153,7 @@ main (gint argc,
   gtk_grid_attach (GTK_GRID (box), revealer, 2, 4, 1, 1);
 
   widget = gtk_toggle_button_new_with_label ("Swing");
-  gtk_grid_attach (GTK_GRID (box), widget, 3, 5, 1, 1);
+  gtk_grid_attach (GTK_GRID (box), GTK_WIDGET (widget), 3, 5, 1, 1);
   revealer = gtk_revealer_new ();
   gtk_widget_set_vexpand (revealer, TRUE);
   gtk_widget_set_valign (revealer, GTK_ALIGN_END);

@@ -444,20 +444,20 @@ setup_search (GtkAppChooserDialog *self)
   g_object_get (self, "use-header-bar", &use_header, NULL);
   if (use_header)
     {
-      GtkWidget *button;
+      GtkToggleButton *button;
       GtkImage *image;
       GtkWidget *header;
 
       button = gtk_toggle_button_new ();
-      gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (GTK_WIDGET (button), GTK_ALIGN_CENTER);
       image = gtk_image_new_from_icon_name ("edit-find-symbolic");
       gtk_container_add (GTK_CONTAINER (button), GTK_WIDGET (image));
-      gtk_style_context_add_class (gtk_widget_get_style_context (button), "image-button");
-      gtk_style_context_remove_class (gtk_widget_get_style_context (button), "text-button");
+      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (button)), "image-button");
+      gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (button)), "text-button");
 
       header = gtk_dialog_get_header_bar (GTK_DIALOG (self));
-      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
-      gtk_size_group_add_widget (priv->buttons, button);
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), GTK_WIDGET (button));
+      gtk_size_group_add_widget (priv->buttons, GTK_WIDGET (button));
 
       g_object_bind_property (button, "active",
                               priv->search_bar, "search-mode-enabled",

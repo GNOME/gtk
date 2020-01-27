@@ -64,7 +64,7 @@ do_search_entry2 (GtkWidget *do_widget)
   GtkWidget *entry;
   GtkWidget *container;
   GtkWidget *searchbar;
-  GtkWidget *button;
+  GtkToggleButton *button;
 
   if (!window)
     {
@@ -102,7 +102,7 @@ do_search_entry2 (GtkWidget *do_widget)
       g_object_bind_property (button, "active",
                               searchbar, "search-mode-enabled",
                               G_BINDING_BIDIRECTIONAL);
-      gtk_container_add (GTK_CONTAINER (vbox), button);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (button));
 
       /* Result */
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);

@@ -174,7 +174,8 @@ update_mark_position (void)
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *window, *sw, *box, *box2, *button;
+  GtkWidget *window, *sw, *box, *box2;
+  GtkToggleButton *button;
 
   gtk_init ();
 
@@ -224,11 +225,11 @@ main (int argc, char *argv[])
 
   button = gtk_toggle_button_new_with_label ("Random marks");
   g_signal_connect (button, "notify::active", G_CALLBACK (toggle_marks), NULL);
-  gtk_container_add (GTK_CONTAINER (box2), button);
+  gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (button));
 
   button = gtk_toggle_button_new_with_label ("Wandering cursor");
   g_signal_connect (button, "notify::active", G_CALLBACK (toggle_cursor), NULL);
-  gtk_container_add (GTK_CONTAINER (box2), button);
+  gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (button));
 
   gtk_widget_show (window);
 

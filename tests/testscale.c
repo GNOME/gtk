@@ -95,6 +95,7 @@ int main (int argc, char *argv[])
   GtkWidget *box1;
   GtkWidget *box2;
   GtkWidget *button;
+  GtkToggleButton *toggle;
   GtkWidget *frame;
   GtkWidget *scale;
   const gchar *labels[3] = {
@@ -216,16 +217,16 @@ int main (int argc, char *argv[])
   g_signal_connect (button, "clicked", G_CALLBACK (invert), NULL);
   gtk_container_add (GTK_CONTAINER (box2), button);
 
-  button = gtk_toggle_button_new_with_label ("Trough");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-  g_signal_connect (button, "toggled", G_CALLBACK (trough), NULL);
-  gtk_container_add (GTK_CONTAINER (box2), button);
+  toggle = gtk_toggle_button_new_with_label ("Trough");
+  gtk_toggle_button_set_active (toggle, TRUE);
+  g_signal_connect (toggle, "toggled", G_CALLBACK (trough), NULL);
+  gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (toggle));
   gtk_widget_show (window);
 
-  button = gtk_toggle_button_new_with_label ("Extra");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
-  g_signal_connect (button, "toggled", G_CALLBACK (extra), NULL);
-  gtk_container_add (GTK_CONTAINER (box2), button);
+  toggle = gtk_toggle_button_new_with_label ("Extra");
+  gtk_toggle_button_set_active (toggle, FALSE);
+  g_signal_connect (toggle, "toggled", G_CALLBACK (extra), NULL);
+  gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (toggle));
   gtk_widget_show (window);
 
   gtk_main ();

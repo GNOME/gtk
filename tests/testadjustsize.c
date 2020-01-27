@@ -126,7 +126,7 @@ open_control_window (void)
 {
   GtkWidget *window;
   GtkWidget *box;
-  GtkWidget *toggle;
+  GtkToggleButton *toggle;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Controls");
@@ -141,14 +141,14 @@ open_control_window (void)
   g_signal_connect (G_OBJECT (toggle),
                     "toggled", G_CALLBACK (on_set_small_size_requests),
                     NULL);
-  gtk_container_add (GTK_CONTAINER (box), toggle);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (toggle));
 
   toggle =
     gtk_toggle_button_new_with_label ("Set large size requests");
   g_signal_connect (G_OBJECT (toggle),
                     "toggled", G_CALLBACK (on_set_large_size_requests),
                     NULL);
-  gtk_container_add (GTK_CONTAINER (box), toggle);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (toggle));
 
 
   gtk_widget_show (window);

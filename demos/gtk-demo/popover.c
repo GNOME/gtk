@@ -127,6 +127,7 @@ do_popover (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *popover, *box, *widget;
+  GtkToggleButton *button;
   GtkEntry *entry;
 
   if (!window)
@@ -140,14 +141,14 @@ do_popover (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
-      widget = gtk_toggle_button_new_with_label ("Button");
-      popover = create_popover (widget,
+      button = gtk_toggle_button_new_with_label ("Button");
+      popover = create_popover (GTK_WIDGET (button),
                                 GTK_WIDGET (gtk_label_new ("This popover does not grab input")),
                                 GTK_POS_TOP);
       gtk_popover_set_autohide (GTK_POPOVER (popover), FALSE);
-      g_signal_connect (widget, "toggled",
+      g_signal_connect (button, "toggled",
                         G_CALLBACK (toggle_changed_cb), popover);
-      gtk_container_add (GTK_CONTAINER (box), widget);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (button));
 
       entry = gtk_entry_new ();
       popover = create_complex_popover (GTK_WIDGET (entry), GTK_POS_TOP);

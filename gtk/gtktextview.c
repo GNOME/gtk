@@ -8844,7 +8844,7 @@ append_bubble_item (GtkTextView *text_view,
     }
 
   if (is_toggle_action)
-    item = gtk_toggle_button_new ();
+    item = GTK_WIDGET (gtk_toggle_button_new ());
   else
     item = gtk_button_new ();
   gtk_widget_set_focus_on_click (item, FALSE);

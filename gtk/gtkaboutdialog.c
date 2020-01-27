@@ -178,8 +178,8 @@ typedef struct
 
   GtkWidget *stack;
   GtkWidget *stack_switcher;
-  GtkWidget *credits_button;
-  GtkWidget *license_button;
+  GtkToggleButton *credits_button;
+  GtkToggleButton *license_button;
   GtkWidget *system_button;
 
   GtkWidget *logo_image;
@@ -724,10 +724,10 @@ switch_page (GtkAboutDialog *about,
 
   priv->in_switch_page = TRUE;
   if (priv->credits_button)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->credits_button),
+    gtk_toggle_button_set_active (priv->credits_button,
                                   g_str_equal (name, "credits"));
   if (priv->license_button)
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->license_button),
+    gtk_toggle_button_set_active (priv->license_button,
                                   g_str_equal (name, "license"));
   priv->in_switch_page = FALSE;
 }
@@ -746,7 +746,7 @@ apply_use_header_bar (GtkAboutDialog *about)
                               priv->credits_button, "visible", G_BINDING_SYNC_CREATE);
       g_signal_connect (priv->credits_button, "toggled", G_CALLBACK (toggle_credits), about);
 
-      gtk_dialog_add_action_widget (GTK_DIALOG (about), priv->credits_button, GTK_RESPONSE_NONE);
+      gtk_dialog_add_action_widget (GTK_DIALOG (about), GTK_WIDGET (priv->credits_button), GTK_RESPONSE_NONE);
 
       priv->license_button = gtk_toggle_button_new_with_mnemonic (_("_License"));
       g_object_bind_property (priv->license_page, "visible",

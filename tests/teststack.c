@@ -109,6 +109,7 @@ main (gint argc,
       gchar ** argv)
 {
   GtkWidget *window, *box, *button, *hbox, *layout;
+  GtkToggleButton *toggle;
   GtkCheckButton *checkbutton;
   GtkComboBoxText *combo;
   GtkWidget *w2, *w3;
@@ -228,9 +229,9 @@ main (gint argc,
   gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (checkbutton));
   g_signal_connect (checkbutton, "clicked", (GCallback) toggle_vhomogeneous, NULL);
 
-  button = gtk_toggle_button_new_with_label ("Add icon");
-  g_signal_connect (button, "toggled", (GCallback) toggle_icon_name, NULL);
-  gtk_container_add (GTK_CONTAINER (hbox), button);
+  toggle = gtk_toggle_button_new_with_label ("Add icon");
+  g_signal_connect (toggle, "toggled", (GCallback) toggle_icon_name, NULL);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (toggle));
 
   combo = gtk_combo_box_text_new ();
   class = g_type_class_ref (GTK_TYPE_STACK_TRANSITION_TYPE);
