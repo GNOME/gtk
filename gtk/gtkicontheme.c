@@ -48,6 +48,7 @@
 #include "gtksettingsprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkprivate.h"
+#include "gtksnapshot.h"
 #include "gdkpixbufutilsprivate.h"
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdkprofilerprivate.h"
@@ -293,6 +294,7 @@ struct _GtkIconInfo
    */
   gint desired_size;
   gint desired_scale;
+  gint rendered_size;
   gdouble unscaled_scale;
   guint forced_size     : 1;
   guint is_svg          : 1;
@@ -386,6 +388,7 @@ static IconSuffix   theme_dir_get_icon_suffix (IconThemeDir     *dir,
 static GtkIconInfo *icon_info_new             (IconThemeDirType  type,
                                                gint              dir_size,
                                                gint              dir_scale);
+static void         icon_info_compute_rendered_size (GtkIconInfo *icon_info);
 static IconSuffix   suffix_from_name          (const gchar      *name);
 static gboolean     icon_info_ensure_scale_and_texture__locked (GtkIconInfo* icon_info);
 static void         unset_display             (GtkIconTheme     *self);
@@ -1883,6 +1886,8 @@ real_choose_icon (GtkIconTheme       *self,
             }
         }
 
+      icon_info_compute_rendered_size (icon_info);
+
       icon_info->key.icon_names = g_strdupv ((char **)icon_names);
       icon_info->key.size = size;
       icon_info->key.scale = scale;
@@ -3317,7 +3322,12 @@ theme_subdir_load (GtkIconTheme *self,
  * GtkIconInfo
  */
 
-G_DEFINE_TYPE (GtkIconInfo, gtk_icon_info, G_TYPE_OBJECT)
+static void icon_info_paintable_init (GdkPaintableInterface *iface);
+
+
+G_DEFINE_TYPE_WITH_CODE (GtkIconInfo, gtk_icon_info, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
+                                                icon_info_paintable_init))
 
 static void
 gtk_icon_info_init (GtkIconInfo *icon_info)
@@ -3341,8 +3351,48 @@ icon_info_new (IconThemeDirType type,
   icon_info->unscaled_scale = 1.0;
   icon_info->is_svg = FALSE;
   icon_info->is_resource = FALSE;
+  icon_info->rendered_size = -1;
 
   return icon_info;
+}
+
+static void
+icon_info_compute_rendered_size (GtkIconInfo *icon_info)
+{
+  int rendered_size;
+
+  if (icon_info->forced_size ||
+      icon_info->dir_type == ICON_THEME_DIR_UNTHEMED)
+    {
+      rendered_size = icon_info->desired_size;
+    }
+  else if (icon_info->dir_type == ICON_THEME_DIR_FIXED ||
+           icon_info->dir_type == ICON_THEME_DIR_THRESHOLD)
+    {
+      rendered_size = icon_info->dir_size * icon_info->dir_scale * icon_info->unscaled_scale /  icon_info->desired_scale;
+    }
+  else /* Scalable */
+    {
+      gdouble dir_scale = icon_info->dir_scale;
+      gint scaled_desired_size;
+
+      scaled_desired_size = icon_info->desired_size * icon_info->desired_scale;
+
+      /* See icon_info_ensure_scale_and_texture() comment for why we do this */
+      if (icon_info->is_svg)
+        dir_scale = icon_info->desired_scale;
+
+      if (scaled_desired_size < icon_info->min_size * dir_scale)
+        rendered_size = icon_info->min_size * dir_scale;
+      else if (scaled_desired_size > icon_info->max_size * dir_scale)
+        rendered_size = icon_info->max_size * dir_scale;
+      else
+        rendered_size = scaled_desired_size;
+
+      rendered_size /= icon_info->desired_scale;
+    }
+
+  icon_info->rendered_size = rendered_size;
 }
 
 /* This only copies whatever is needed to load the pixbuf,
@@ -3369,6 +3419,7 @@ icon_info_dup (GtkIconInfo *icon_info)
   dup->desired_size = icon_info->desired_size;
   dup->desired_scale = icon_info->desired_scale;
   dup->forced_size = icon_info->forced_size;
+  dup->rendered_size = icon_info->rendered_size;
   dup->is_resource = icon_info->is_resource;
   dup->min_size = icon_info->min_size;
   dup->max_size = icon_info->max_size;
@@ -3756,10 +3807,6 @@ icon_info_ensure_scale_and_texture__locked (GtkIconInfo *icon_info)
         icon_info->scale = (gdouble)scaled_desired_size / (gdouble)image_size;
       else
         icon_info->scale = 1.0;
-
-      if (icon_info->dir_type == ICON_THEME_DIR_UNTHEMED && 
-          !icon_info->forced_size)
-        icon_info->scale = MIN (icon_info->scale, 1.0);
     }
 
   if (icon_info->is_svg ||
@@ -3784,6 +3831,76 @@ icon_info_ensure_scale_and_texture__locked (GtkIconInfo *icon_info)
 
   return TRUE;
 }
+
+
+static void
+icon_info_paintable_snapshot (GdkPaintable *paintable,
+                              GdkSnapshot  *snapshot,
+                              double        width,
+                              double        height)
+{
+  GtkIconInfo *icon_info = GTK_ICON_INFO (paintable);
+  GdkTexture *texture = NULL;
+
+  g_mutex_lock (&icon_info->cache_lock);
+
+  if (!icon_info->texture)
+    icon_info_ensure_scale_and_texture__locked (icon_info);
+
+  if (icon_info->texture)
+    texture = g_object_ref (icon_info->texture);
+
+  g_mutex_unlock (&icon_info->cache_lock);
+
+  if (texture)
+    {
+      if (icon_info->desired_scale != 1)
+        {
+          gtk_snapshot_save (snapshot);
+          gtk_snapshot_scale (snapshot, 1.0 / icon_info->desired_scale, 1.0 / icon_info->desired_scale);
+        }
+
+      gtk_snapshot_append_texture (snapshot, texture,
+                                   &GRAPHENE_RECT_INIT (0, 0, width * icon_info->desired_scale, height * icon_info->desired_scale));
+
+      if (icon_info->desired_scale != 1)
+        gtk_snapshot_restore (snapshot);
+
+      g_object_unref (texture);
+    }
+}
+
+static GdkPaintableFlags
+icon_info_paintable_get_flags (GdkPaintable *paintable)
+{
+  return GDK_PAINTABLE_STATIC_SIZE | GDK_PAINTABLE_STATIC_CONTENTS;
+}
+
+static int
+icon_info_paintable_get_intrinsic_width (GdkPaintable *paintable)
+{
+  GtkIconInfo *icon_info = GTK_ICON_INFO (paintable);
+
+  return icon_info->rendered_size;
+}
+
+static int
+icon_info_paintable_get_intrinsic_height (GdkPaintable *paintable)
+{
+  GtkIconInfo *icon_info = GTK_ICON_INFO (paintable);
+
+  return icon_info->rendered_size;
+}
+
+static void
+icon_info_paintable_init (GdkPaintableInterface *iface)
+{
+  iface->snapshot = icon_info_paintable_snapshot;
+  iface->get_flags = icon_info_paintable_get_flags;
+  iface->get_intrinsic_width = icon_info_paintable_get_intrinsic_width;
+  iface->get_intrinsic_height = icon_info_paintable_get_intrinsic_height;
+}
+
 
 /**
  * gtk_icon_info_load_icon:
@@ -4684,6 +4801,8 @@ gtk_icon_info_new_for_file (GFile *file,
  info->desired_scale = scale;
  info->forced_size = FALSE;
 
+ info->rendered_size = size;
+
  return info;
 }
 
@@ -4692,10 +4811,18 @@ gtk_icon_info_new_for_pixbuf (GtkIconTheme *icon_theme,
                               GdkPixbuf    *pixbuf)
 {
   GtkIconInfo *info;
+  gint width, height, max;
+
+  width = gdk_pixbuf_get_width (pixbuf);
+  height = gdk_pixbuf_get_height (pixbuf);
+  max = MAX (width, height);
 
   info = icon_info_new (ICON_THEME_DIR_UNTHEMED, 0, 1);
   info->texture = gdk_texture_new_for_pixbuf (pixbuf);
+  info->desired_size = max;
+  info->desired_scale = 1.0;
   info->scale = 1.0;
+  info->rendered_size = max;
 
   return info;
 }
