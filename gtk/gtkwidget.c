@@ -12593,6 +12593,9 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
   if (GTK_IS_NATIVE (child))
     return;
 
+  if (!_gtk_widget_is_drawable (child))
+    return;
+
   if (priv->transform)
     {
       gtk_snapshot_save (snapshot);
