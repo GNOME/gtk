@@ -683,6 +683,7 @@ create_calendar(void)
   gtk_window_set_default_widget (GTK_WINDOW (window), button);
 
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 0);
+  g_signal_connect (window, "close-request", G_CALLBACK (gtk_main_quit), NULL);
   gtk_widget_show (window);
 }
 
