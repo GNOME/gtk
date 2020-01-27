@@ -50,52 +50,49 @@ test_get_other_file (const char *ui_file, const char *extension)
   return g_string_free (file, FALSE);
 }
 
-static char *
+static GBytes *
 diff_with_file (const char  *file1,
                 char        *text,
                 gssize       len,
                 GError     **error)
 {
-  const char *command[] = { "diff", "-u", file1, NULL, NULL };
-  char *diff, *tmpfile;
-  int fd;
+  GSubprocess *process;
+  GBytes *input, *output;
 
-  diff = NULL;
-
-  if (len < 0)
-    len = strlen (text);
-  
-  /* write the text buffer to a temporary file */
-  fd = g_file_open_tmp (NULL, &tmpfile, error);
-  if (fd < 0)
+  process = g_subprocess_new (G_SUBPROCESS_FLAGS_STDIN_PIPE
+                              | G_SUBPROCESS_FLAGS_STDOUT_PIPE,
+                              error,
+                              "diff", "-u", file1, "-", NULL);
+  if (process == NULL)
     return NULL;
 
-  if (write (fd, text, len) != (int) len)
+  input = g_bytes_new_static (text, len >= 0 ? len : strlen (text));
+  if (!g_subprocess_communicate (process,
+                                 input,
+                                 NULL,
+                                 &output,
+                                 NULL,
+                                 error))
     {
-      close (fd);
-      g_set_error (error,
-                   G_FILE_ERROR, G_FILE_ERROR_FAILED,
-                   "Could not write data to temporary file '%s'", tmpfile);
-      goto done;
+      g_object_unref (process);
+      g_bytes_unref (input);
+      return NULL;
     }
-  close (fd);
-  command[3] = tmpfile;
 
-  /* run diff command */
-  g_spawn_sync (NULL, 
-                (char **) command,
-                NULL,
-                G_SPAWN_SEARCH_PATH,
-                NULL, NULL,
-	        &diff,
-                NULL, NULL,
-                error);
+  if (!g_subprocess_get_successful (process) &&
+      /* this is the condition when the files differ */
+      !(g_subprocess_get_if_exited (process) && g_subprocess_get_exit_status (process) == 1))
+    {
+      g_clear_pointer (&output, g_bytes_unref);
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "The `diff' process exited with error status %d",
+                   g_subprocess_get_exit_status (process));
+    }
 
-done:
-  g_unlink (tmpfile);
-  g_free (tmpfile);
+  g_object_unref (process);
+  g_bytes_unref (input);
 
-  return diff;
+  return output;
 }
 
 static void
@@ -115,7 +112,8 @@ load_ui_file (GFile *file, gboolean generate)
 {
   GtkBuilder *builder;
   GtkWidget *window;
-  char *output, *diff;
+  char *output;
+  GBytes *diff;
   char *ui_file, *css_file, *reference_file;
   GtkCssProvider *provider;
   GError *error = NULL;
@@ -151,17 +149,18 @@ load_ui_file (GFile *file, gboolean generate)
     }
 
   reference_file = test_get_other_file (ui_file, ".nodes");
+  g_assert (reference_file != NULL);
 
   diff = diff_with_file (reference_file, output, -1, &error);
   g_assert_no_error (error);
 
-  if (diff && diff[0])
+  if (diff && g_bytes_get_size (diff) > 0)
     {
-      g_test_message ("Resulting output doesn't match reference:\n%s", diff);
+      g_test_message ("Resulting output doesn't match reference:\n%s", (const char *) g_bytes_get_data (diff, NULL));
       g_test_fail ();
     }
   g_free (reference_file);
-  g_free (diff);
+  g_clear_pointer (&diff, g_bytes_unref);
 
 out:
   gtk_style_context_remove_provider_for_display (gdk_display_get_default (),
