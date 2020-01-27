@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-25 11:38+0000\n"
-"PO-Revision-Date: 2020-01-26 21:28+0100\n"
+"POT-Creation-Date: 2020-01-26 20:36+0000\n"
+"PO-Revision-Date: 2020-01-27 08:59+0100\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -4823,11 +4823,9 @@ msgid "Above-base Substitutions"
 msgstr ""
 
 #: gtk/open-type-layout.h:17
-#, fuzzy
-#| msgid "Authentication"
 msgctxt "OpenType layout"
 msgid "Alternative Fractions"
-msgstr "Overenie totožnosti"
+msgstr "Alternatívne úlomky"
 
 #: gtk/open-type-layout.h:18
 msgctxt "OpenType layout"
@@ -4912,7 +4910,7 @@ msgstr ""
 #: gtk/open-type-layout.h:34
 msgctxt "OpenType layout"
 msgid "Distances"
-msgstr ""
+msgstr "Vzdialenosti"
 
 #: gtk/open-type-layout.h:35
 msgctxt "OpenType layout"
@@ -4927,12 +4925,12 @@ msgstr ""
 #: gtk/open-type-layout.h:37
 msgctxt "OpenType layout"
 msgid "Dotless Forms"
-msgstr ""
+msgstr "Formy bez bodky"
 
 #: gtk/open-type-layout.h:38
 msgctxt "OpenType layout"
 msgid "Expert Forms"
-msgstr ""
+msgstr "Expertné formy"
 
 #: gtk/open-type-layout.h:39
 msgctxt "OpenType layout"
@@ -4940,25 +4938,19 @@ msgid "Final Glyph on Line Alternates"
 msgstr ""
 
 #: gtk/open-type-layout.h:40
-#, fuzzy
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #2"
-msgstr "Stránkovač pre terminál"
+msgstr "Terminálové formy č.2"
 
 #: gtk/open-type-layout.h:41
-#, fuzzy
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #3"
-msgstr "Stránkovač pre terminál"
+msgstr "Terminálové formy č.3"
 
 #: gtk/open-type-layout.h:42
-#, fuzzy
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms"
-msgstr "Stránkovač pre terminál"
+msgstr "Terminálové formy"
 
 #: gtk/open-type-layout.h:43
 msgctxt "OpenType layout"
@@ -4966,23 +4958,19 @@ msgid "Flattened accent forms"
 msgstr ""
 
 #: gtk/open-type-layout.h:44
-#, fuzzy
-#| msgid "Actions"
 msgctxt "OpenType layout"
 msgid "Fractions"
-msgstr "Akcie"
+msgstr "Úlomky"
 
 #: gtk/open-type-layout.h:45
-#, fuzzy
-#| msgid "Focus Widget"
 msgctxt "OpenType layout"
 msgid "Full Widths"
-msgstr "Ovládací prvok zamerania"
+msgstr "Plné šírky"
 
 #: gtk/open-type-layout.h:46
 msgctxt "OpenType layout"
 msgid "Half Forms"
-msgstr ""
+msgstr "Polovičné formy"
 
 #: gtk/open-type-layout.h:47
 msgctxt "OpenType layout"
@@ -4997,7 +4985,7 @@ msgstr ""
 #: gtk/open-type-layout.h:49
 msgctxt "OpenType layout"
 msgid "Historical Forms"
-msgstr ""
+msgstr "Historické formy"
 
 #: gtk/open-type-layout.h:50
 msgctxt "OpenType layout"
@@ -5012,7 +5000,7 @@ msgstr ""
 #: gtk/open-type-layout.h:52
 msgctxt "OpenType layout"
 msgid "Hangul"
-msgstr ""
+msgstr "Hangul"
 
 #: gtk/open-type-layout.h:53
 msgctxt "OpenType layout"
@@ -5022,28 +5010,22 @@ msgstr ""
 #: gtk/open-type-layout.h:54
 msgctxt "OpenType layout"
 msgid "Half Widths"
-msgstr ""
+msgstr "Polovičné šírky"
 
 #: gtk/open-type-layout.h:55
-#, fuzzy
-#| msgctxt "print operation status"
-#| msgid "Initial state"
 msgctxt "OpenType layout"
 msgid "Initial Forms"
-msgstr "Počiatočný stav"
+msgstr "Počiatočné formy"
 
 #: gtk/open-type-layout.h:56
 msgctxt "OpenType layout"
 msgid "Isolated Forms"
-msgstr ""
+msgstr "Izolované formy"
 
 #: gtk/open-type-layout.h:57
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgctxt "OpenType layout"
 msgid "Italics"
-msgstr "_Kurzíva"
+msgstr "Kurzíva"
 
 #: gtk/open-type-layout.h:58
 msgctxt "OpenType layout"
@@ -5053,7 +5035,7 @@ msgstr ""
 #: gtk/open-type-layout.h:59
 msgctxt "OpenType layout"
 msgid "JIS78 Forms"
-msgstr ""
+msgstr "Formy JIS78"
 
 #: gtk/open-type-layout.h:60
 msgctxt "OpenType layout"
@@ -5063,27 +5045,22 @@ msgstr ""
 #: gtk/open-type-layout.h:61
 msgctxt "OpenType layout"
 msgid "JIS90 Forms"
-msgstr ""
+msgstr "Formy JIS90"
 
 #: gtk/open-type-layout.h:62
 msgctxt "OpenType layout"
 msgid "JIS2004 Forms"
-msgstr ""
+msgstr "Formy JIS2004"
 
 #: gtk/open-type-layout.h:63
-#, fuzzy
-#| msgid "Warning"
 msgctxt "OpenType layout"
 msgid "Kerning"
-msgstr "Upozornenie"
+msgstr "Kerning"
 
 #: gtk/open-type-layout.h:64
-#, fuzzy
-#| msgctxt "output-bin"
-#| msgid "Left Bin"
 msgctxt "OpenType layout"
 msgid "Left Bounds"
-msgstr "Ľavý výstupný zásobník"
+msgstr "Ľavé ohraničenia"
 
 #: gtk/open-type-layout.h:65
 #, fuzzy
@@ -5106,7 +5083,7 @@ msgstr ""
 #: gtk/open-type-layout.h:68
 msgctxt "OpenType layout"
 msgid "Localized Forms"
-msgstr ""
+msgstr "Lokalizované formy"
 
 #: gtk/open-type-layout.h:69
 #, fuzzy
@@ -5130,12 +5107,12 @@ msgstr ""
 #: gtk/open-type-layout.h:72
 msgctxt "OpenType layout"
 msgid "Medial Forms #2"
-msgstr ""
+msgstr "Mediálne formy č.2"
 
 #: gtk/open-type-layout.h:73
 msgctxt "OpenType layout"
 msgid "Medial Forms"
-msgstr ""
+msgstr "Mediálne formy"
 
 #: gtk/open-type-layout.h:74
 msgctxt "OpenType layout"
@@ -5180,7 +5157,7 @@ msgstr ""
 #: gtk/open-type-layout.h:82
 msgctxt "OpenType layout"
 msgid "Optical Bounds"
-msgstr ""
+msgstr "Optické ohraničenia"
 
 #: gtk/open-type-layout.h:83
 #, fuzzy
@@ -5192,7 +5169,7 @@ msgstr "Signály"
 #: gtk/open-type-layout.h:84
 msgctxt "OpenType layout"
 msgid "Ornaments"
-msgstr ""
+msgstr "Ornamenty"
 
 #: gtk/open-type-layout.h:85
 msgctxt "OpenType layout"
@@ -5244,7 +5221,7 @@ msgstr ""
 #: gtk/open-type-layout.h:94
 msgctxt "OpenType layout"
 msgid "Quarter Widths"
-msgstr ""
+msgstr "Štvrtinové šírky"
 
 #: gtk/open-type-layout.h:95
 msgctxt "OpenType layout"
@@ -5259,7 +5236,7 @@ msgstr ""
 #: gtk/open-type-layout.h:97
 msgctxt "OpenType layout"
 msgid "Rakar Forms"
-msgstr ""
+msgstr "Formy Rakar"
 
 #: gtk/open-type-layout.h:98
 msgctxt "OpenType layout"
@@ -5306,7 +5283,7 @@ msgstr ""
 #: gtk/open-type-layout.h:105
 msgctxt "OpenType layout"
 msgid "Stylistic Alternates"
-msgstr ""
+msgstr "Štylistické alternatívy"
 
 #: gtk/open-type-layout.h:106
 msgctxt "OpenType layout"
@@ -5316,119 +5293,117 @@ msgstr ""
 #: gtk/open-type-layout.h:107
 msgctxt "OpenType layout"
 msgid "Optical size"
-msgstr ""
+msgstr "Optická veľkosť"
 
 #: gtk/open-type-layout.h:108
 msgctxt "OpenType layout"
 msgid "Small Capitals"
-msgstr ""
+msgstr "Malé kapitálky"
 
 #: gtk/open-type-layout.h:109
 msgctxt "OpenType layout"
 msgid "Simplified Forms"
-msgstr ""
+msgstr "Zjednodušené formy"
 
 #: gtk/open-type-layout.h:110
 msgctxt "OpenType layout"
 msgid "Stylistic Set 1"
-msgstr ""
+msgstr "Štylistická sada č. 1"
 
 #: gtk/open-type-layout.h:111
 msgctxt "OpenType layout"
 msgid "Stylistic Set 2"
-msgstr ""
+msgstr "Štylistická sada č. 2"
 
 #: gtk/open-type-layout.h:112
 msgctxt "OpenType layout"
 msgid "Stylistic Set 3"
-msgstr ""
+msgstr "Štylistická sada č. 3"
 
 #: gtk/open-type-layout.h:113
 msgctxt "OpenType layout"
 msgid "Stylistic Set 4"
-msgstr ""
+msgstr "Štylistická sada č. 4"
 
 #: gtk/open-type-layout.h:114
 msgctxt "OpenType layout"
 msgid "Stylistic Set 5"
-msgstr ""
+msgstr "Štylistická sada č. 5"
 
 #: gtk/open-type-layout.h:115
 msgctxt "OpenType layout"
 msgid "Stylistic Set 6"
-msgstr ""
+msgstr "Štylistická sada č. 6"
 
 #: gtk/open-type-layout.h:116
 msgctxt "OpenType layout"
 msgid "Stylistic Set 7"
-msgstr ""
+msgstr "Štylistická sada č. 7"
 
 #: gtk/open-type-layout.h:117
 msgctxt "OpenType layout"
 msgid "Stylistic Set 8"
-msgstr ""
+msgstr "Štylistická sada č. 8"
 
 #: gtk/open-type-layout.h:118
 msgctxt "OpenType layout"
 msgid "Stylistic Set 9"
-msgstr ""
+msgstr "Štylistická sada č. 9"
 
 #: gtk/open-type-layout.h:119
 msgctxt "OpenType layout"
 msgid "Stylistic Set 10"
-msgstr ""
+msgstr "Štylistická sada č. 10"
 
 #: gtk/open-type-layout.h:120
 msgctxt "OpenType layout"
 msgid "Stylistic Set 11"
-msgstr ""
+msgstr "Štylistická sada č. 11"
 
 #: gtk/open-type-layout.h:121
 msgctxt "OpenType layout"
 msgid "Stylistic Set 12"
-msgstr ""
+msgstr "Štylistická sada č. 12"
 
 #: gtk/open-type-layout.h:122
 msgctxt "OpenType layout"
 msgid "Stylistic Set 13"
-msgstr ""
+msgstr "Štylistická sada č. 13"
 
 #: gtk/open-type-layout.h:123
 msgctxt "OpenType layout"
 msgid "Stylistic Set 14"
-msgstr ""
+msgstr "Štylistická sada č. 14"
 
 #: gtk/open-type-layout.h:124
 msgctxt "OpenType layout"
 msgid "Stylistic Set 15"
-msgstr ""
+msgstr "Štylistická sada č. 15"
 
 #: gtk/open-type-layout.h:125
 msgctxt "OpenType layout"
 msgid "Stylistic Set 16"
-msgstr ""
+msgstr "Štylistická sada č. 16"
 
 #: gtk/open-type-layout.h:126
 msgctxt "OpenType layout"
 msgid "Stylistic Set 17"
-msgstr ""
+msgstr "Štylistická sada č. 17"
 
 #: gtk/open-type-layout.h:127
 msgctxt "OpenType layout"
 msgid "Stylistic Set 18"
-msgstr ""
+msgstr "Štylistická sada č. 18"
 
 #: gtk/open-type-layout.h:128
 msgctxt "OpenType layout"
 msgid "Stylistic Set 19"
-msgstr ""
+msgstr "Štylistická sada č. 19"
 
 #: gtk/open-type-layout.h:129
-#, fuzzy
-#| msgid "Artistic License 2.0"
 msgctxt "OpenType layout"
 msgid "Stylistic Set 20"
-msgstr "Umelecká licencia 2.0"
+msgstr "Štylistická sada č. 20"
 
 #: gtk/open-type-layout.h:130
 msgctxt "OpenType layout"
@@ -5441,19 +5416,14 @@ msgid "Stretching Glyph Decomposition"
 msgstr ""
 
 #: gtk/open-type-layout.h:132
-#, fuzzy
-#| msgid "Postscript"
 msgctxt "OpenType layout"
 msgid "Subscript"
-msgstr "Postscript"
+msgstr "Dolný index"
 
 #: gtk/open-type-layout.h:133
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Super"
 msgctxt "OpenType layout"
 msgid "Superscript"
-msgstr "Super"
+msgstr "Horný index"
 
 #: gtk/open-type-layout.h:134
 msgctxt "OpenType layout"
@@ -5508,12 +5478,9 @@ msgid "Vattu Variants"
 msgstr "Tmavý variant"
 
 #: gtk/open-type-layout.h:144
-#, fuzzy
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Writing"
-msgstr "Zvislý"
+msgstr "Zvislé písanie"
 
 #: gtk/open-type-layout.h:145
 msgctxt "OpenType layout"
@@ -5531,12 +5498,9 @@ msgid "Vertical Kana Alternates"
 msgstr ""
 
 #: gtk/open-type-layout.h:148
-#, fuzzy
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Kerning"
-msgstr "Zvislý"
+msgstr "Zvislý Kerning"
 
 #: gtk/open-type-layout.h:149
 msgctxt "OpenType layout"
@@ -6721,7 +6685,7 @@ msgstr "Lineárne B"
 #: gtk/script-names.c:68
 msgctxt "Script"
 msgid "Tai Le"
-msgstr ""
+msgstr "Tai Le"
 
 #: gtk/script-names.c:69
 msgctxt "Script"
@@ -6746,7 +6710,7 @@ msgstr "Hlaholika"
 #: gtk/script-names.c:73
 msgctxt "Script"
 msgid "Tifinagh"
-msgstr ""
+msgstr "Tifinagh"
 
 #: gtk/script-names.c:74
 msgctxt "Script"
@@ -6800,7 +6764,7 @@ msgstr "N'Ko"
 #: gtk/script-names.c:83
 msgctxt "Script"
 msgid "Kayah Li"
-msgstr ""
+msgstr "Kayah Li"
 
 #: gtk/script-names.c:84
 msgctxt "Script"
@@ -7155,17 +7119,17 @@ msgstr "Tangut"
 #: gtk/script-names.c:154
 msgctxt "Script"
 msgid "Masaram Gondi"
-msgstr ""
+msgstr "Masaram Gondi"
 
 #: gtk/script-names.c:155
 msgctxt "Script"
 msgid "Nushu"
-msgstr ""
+msgstr "Nushu"
 
 #: gtk/script-names.c:156
 msgctxt "Script"
 msgid "Soyombo"
-msgstr ""
+msgstr "Soyombo"
 
 #: gtk/script-names.c:157
 msgctxt "Script"
