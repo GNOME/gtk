@@ -45,7 +45,8 @@ void         _gtk_css_selector_tree_free             (GtkCssSelectorTree       *
 GPtrArray *  _gtk_css_selector_tree_match_all        (const GtkCssSelectorTree *tree,
                                                       const GtkCountingBloomFilter *filter,
 						      GtkCssNode               *node);
-GtkCssChange _gtk_css_selector_tree_get_change_all   (const GtkCssSelectorTree *tree,
+GtkCssChange gtk_css_selector_tree_get_change_all    (const GtkCssSelectorTree *tree,
+                                                      const GtkCountingBloomFilter *filter,
 						      GtkCssNode               *node);
 void         _gtk_css_selector_tree_match_print      (const GtkCssSelectorTree *tree,
 						      GString                  *str);
