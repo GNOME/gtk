@@ -27,6 +27,8 @@
 #include "gtktextview.h"
 #include "gtktextutil.h"
 
+#include "gtkcsscolorvalueprivate.h"
+#include "gtkstylecontextprivate.h"
 #include "gtktextbuffer.h"
 #include "gtktextlayoutprivate.h"
 #include "gtkintl.h"
@@ -151,27 +153,19 @@ set_attributes_from_style (GtkWidget         *widget,
 {
   GtkCssStyle *style;
   const GdkRGBA black = { 0, };
-  const GdkRGBA *color;
-  GValue value = G_VALUE_INIT;
 
   if (!values->appearance.bg_rgba)
     values->appearance.bg_rgba = gdk_rgba_copy (&black);
   if (!values->appearance.fg_rgba)
     values->appearance.fg_rgba = gdk_rgba_copy (&black);
 
-  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  color = gtk_css_color_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
-  *values->appearance.bg_rgba = *color;
-  color = gtk_css_color_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
-  *values->appearance.fg_rgba = *color;
+  *values->appearance.bg_rgba = *gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+  *values->appearance.fg_rgba = *gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
 
   if (values->font)
     pango_font_description_free (values->font);
 
-  _gtk_style_property_query (_gtk_style_property_lookup ("font"), &value, query_func, style);
-  
-  values->font = g_value_get_boxed (&value);
-  g_value_unset (&value);
+  values->font = gtk_css_style_get_pango_font (gtk_style_context_lookup_style (context));
 }
 
 static gint
