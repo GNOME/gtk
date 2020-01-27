@@ -62,17 +62,6 @@ gtk_css_shorthand_property_set_property (GObject      *object,
     }
 }
 
-static void
-_gtk_css_shorthand_property_query (GtkStyleProperty   *property,
-                                   GValue             *value,
-                                   GtkStyleQueryFunc   query_func,
-                                   gpointer            query_data)
-{
-  GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
-
-  shorthand->query (shorthand, value, query_func, query_data);
-}
-
 static GtkCssValue *
 gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
                                         GtkCssParser     *parser)
@@ -160,7 +149,6 @@ _gtk_css_shorthand_property_class_init (GtkCssShorthandPropertyClass *klass)
                                                        G_TYPE_STRV,
                                                        G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
-  property_class->query = _gtk_css_shorthand_property_query;
   property_class->parse_value = gtk_css_shorthand_property_parse_value;
 }
 
