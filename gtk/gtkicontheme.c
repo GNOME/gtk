@@ -3832,14 +3832,9 @@ icon_info_ensure_scale_and_texture__locked (GtkIconInfo *icon_info)
   return TRUE;
 }
 
-
-static void
-icon_info_paintable_snapshot (GdkPaintable *paintable,
-                              GdkSnapshot  *snapshot,
-                              double        width,
-                              double        height)
+static GdkTexture *
+icon_info_get_texture (GtkIconInfo *icon_info)
 {
-  GtkIconInfo *icon_info = GTK_ICON_INFO (paintable);
   GdkTexture *texture = NULL;
 
   g_mutex_lock (&icon_info->cache_lock);
@@ -3852,6 +3847,19 @@ icon_info_paintable_snapshot (GdkPaintable *paintable,
 
   g_mutex_unlock (&icon_info->cache_lock);
 
+  return texture;
+}
+
+static void
+icon_info_paintable_snapshot (GdkPaintable *paintable,
+                              GdkSnapshot  *snapshot,
+                              double        width,
+                              double        height)
+{
+  GtkIconInfo *icon_info = GTK_ICON_INFO (paintable);
+  GdkTexture *texture;
+
+  texture = icon_info_get_texture (icon_info);
   if (texture)
     {
       if (icon_info->desired_scale != 1)
@@ -3869,6 +3877,64 @@ icon_info_paintable_snapshot (GdkPaintable *paintable,
       g_object_unref (texture);
     }
 }
+
+void
+gtk_icon_info_snapshot_with_colors (GtkIconInfo *icon_info,
+                                    GdkSnapshot  *snapshot,
+                                    double        width,
+                                    double        height,
+                                    const GdkRGBA *foreground_color,
+                                    const GdkRGBA *success_color,
+                                    const GdkRGBA *warning_color,
+                                    const GdkRGBA *error_color)
+{
+  GdkTexture *texture;
+
+  texture = icon_info_get_texture (icon_info);
+  if (texture)
+    {
+      gboolean symbolic = gtk_icon_info_is_symbolic (icon_info);
+
+      if (icon_info->desired_scale != 1)
+        {
+          gtk_snapshot_save (snapshot);
+          gtk_snapshot_scale (snapshot, 1.0 / icon_info->desired_scale, 1.0 / icon_info->desired_scale);
+        }
+
+      if (symbolic)
+        {
+          const GdkRGBA *fg = foreground_color;
+          const GdkRGBA *sc = success_color;
+          const GdkRGBA *wc = warning_color;
+          const GdkRGBA *ec = error_color;
+          graphene_matrix_t matrix;
+          graphene_vec4_t offset;
+
+          graphene_matrix_init_from_float (&matrix,
+                                           (float[16]) {
+                                             sc->red - fg->red, sc->green - fg->green, sc->blue - fg->blue, 0,
+                                               wc->red - fg->red, wc->green - fg->green, wc->blue - fg->blue, 0,
+                                               ec->red - fg->red, ec->green - fg->green, ec->blue - fg->blue, 0,
+                                               0, 0, 0, fg->alpha
+                                               });
+          graphene_vec4_init (&offset, fg->red, fg->green, fg->blue, 0);
+
+          gtk_snapshot_push_color_matrix (snapshot, &matrix, &offset);
+        }
+
+      gtk_snapshot_append_texture (snapshot, texture,
+                                   &GRAPHENE_RECT_INIT (0, 0, width * icon_info->desired_scale, height * icon_info->desired_scale));
+
+      if (symbolic)
+        gtk_snapshot_pop (snapshot);
+
+      if (icon_info->desired_scale != 1)
+        gtk_snapshot_restore (snapshot);
+
+      g_object_unref (texture);
+    }
+}
+
 
 static GdkPaintableFlags
 icon_info_paintable_get_flags (GdkPaintable *paintable)
