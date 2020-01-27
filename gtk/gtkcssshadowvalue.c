@@ -131,6 +131,7 @@ gtk_css_value_shadow_compute (GtkCssValue      *value,
       shadows[i].radius = _gtk_css_value_compute (shadow->radius, property_id, provider, style, parent_style);
       shadows[i].spread = _gtk_css_value_compute (shadow->spread, property_id, provider, style, parent_style),
       shadows[i].color = _gtk_css_value_compute (shadow->color, property_id, provider, style, parent_style);
+      shadows[i].inset = shadow->inset;
     }
 
   return gtk_css_shadow_value_new (shadows, value->n_shadows);
