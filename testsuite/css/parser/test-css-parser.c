@@ -101,6 +101,16 @@ diff_with_file (const char  *file1,
       return NULL;
     }
 
+  if (!g_subprocess_get_successful (process) &&
+      /* this is the condition when the files differ */
+      !(g_subprocess_get_if_exited (process) && g_subprocess_get_exit_status (process) == 1))
+    {
+      g_clear_pointer (&output, g_bytes_unref);
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "The `diff' process exited with error status %d",
+                   g_subprocess_get_exit_status (process));
+    }
+
   g_object_unref (process);
   g_bytes_unref (input);
 
