@@ -83,6 +83,7 @@
 #include "gtkentryprivate.h"
 #include "gtkroot.h"
 #include "gtkbinlayout.h"
+#include "gtkwidgetprivate.h"
 
 #include <cairo-gobject.h>
 
@@ -6178,20 +6179,11 @@ find_good_size_from_style (GtkWidget *widget,
                            gint      *width,
                            gint      *height)
 {
-  GtkStyleContext *context;
+  GtkCssStyle *style;
   double font_size;
-  double resolution;
 
-  context = gtk_widget_get_style_context (widget);
-
-  resolution = _gtk_css_number_value_get (_gtk_style_context_peek_property (context,
-                                                                            GTK_CSS_PROPERTY_DPI),
-                                          100);
-
-  gtk_style_context_get (context,
-                         "font-size", &font_size,
-                         NULL);
-  font_size = font_size * resolution / 72.0 + 0.5;
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+  font_size = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_SIZE), 100);
 
   *width = font_size * NUM_CHARS;
   *height = font_size * NUM_LINES;
