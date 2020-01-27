@@ -39,12 +39,6 @@
 #include "gtkstyleproviderprivate.h"
 #include "gtkcssdimensionvalueprivate.h"
 
-static void gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
-                                                GtkStyleProvider  *provider,
-                                                GtkCssStyle       *parent_style,
-                                                guint              id,
-                                                GtkCssValue       *specified,
-                                                GtkCssSection     *section);
 
 static int core_props[] = {
   GTK_CSS_PROPERTY_COLOR,
@@ -240,7 +234,35 @@ dump_style_counts (gpointer data)
 #define style_accounting_free_style(NAME)
 #endif
 
-#define DEFINE_VALUES(TYPE, NAME) \
+static void
+maybe_unref_section (gpointer section)
+{
+  if (section)
+    gtk_css_section_unref (section);
+}
+
+static void
+set_section (GtkCssStaticStyle *style,
+             guint              id,
+             GtkCssSection     *section)
+{
+  if (style->sections && style->sections->len > id && g_ptr_array_index (style->sections, id))
+    {
+      gtk_css_section_unref (g_ptr_array_index (style->sections, id));
+      g_ptr_array_index (style->sections, id) = NULL;
+    }
+
+  if (section)
+    {
+      if (style->sections == NULL)
+        style->sections = g_ptr_array_new_with_free_func (maybe_unref_section);
+      if (style->sections->len <= id)
+        g_ptr_array_set_size (style->sections, id + 1);
+      g_ptr_array_index (style->sections, id) = gtk_css_section_ref (section);
+    }
+}
+
+#define DEFINE_VALUES(TYPE, NAME, INHERIT) \
 static inline TYPE * \
 gtk_css_ ## NAME ## _values_ref (TYPE *style) \
 { \
@@ -290,18 +312,24 @@ gtk_css_ ## NAME ## _values_new_compute (GtkCssStaticStyle *style, \
                                          GtkCssLookup *lookup) \
 { \
   int i; \
+  GtkCssValues *group; \
 \
   style->NAME = gtk_css_ ## NAME ## _values_new (); \
+\
+  group = (GtkCssValues *)style->NAME; \
 \
   for (i = 0; i < G_N_ELEMENTS (NAME ## _props); i++) \
     { \
       guint id = NAME ## _props[i]; \
-      gtk_css_static_style_compute_value (style, \
-                                          provider, \
-                                          parent_style, \
-                                          id, \
-                                          lookup->values[id].value, \
-                                          lookup->values[id].section); \
+      GtkCssValue *specified = lookup->values[id].value; \
+      COMPUTE_VALUE \
+      if (specified) \
+        group->values[i] = _gtk_css_value_compute (specified, id, provider, (GtkCssStyle *)style, parent_style); \
+      else if (parent_style && INHERIT) \
+        group->values[i] = _gtk_css_value_ref (gtk_css_style_get_value (parent_style, id)); \
+      else \
+        group->values[i] = _gtk_css_initial_value_new_compute (id, provider, (GtkCssStyle *)style, parent_style); \
+      set_section (style, id, lookup->values[id].section); \
     } \
 } \
 \
@@ -331,17 +359,46 @@ gtk_css_ ## NAME ## _values_unset (const GtkCssLookup *lookup) \
   return !_gtk_bitmask_intersects (set_values, gtk_css_ ## NAME ## _values_mask); \
 }
 
-DEFINE_VALUES (GtkCssCoreValues, core)
-DEFINE_VALUES (GtkCssBackgroundValues, background)
-DEFINE_VALUES (GtkCssBorderValues, border)
-DEFINE_VALUES (GtkCssIconValues, icon)
-DEFINE_VALUES (GtkCssOutlineValues, outline)
-DEFINE_VALUES (GtkCssFontValues, font)
-DEFINE_VALUES (GtkCssFontVariantValues, font_variant)
-DEFINE_VALUES (GtkCssAnimationValues, animation)
-DEFINE_VALUES (GtkCssTransitionValues, transition)
-DEFINE_VALUES (GtkCssSizeValues, size)
-DEFINE_VALUES (GtkCssOtherValues, other)
+#define COMPUTE_VALUE \
+  if (id == GTK_CSS_PROPERTY_BORDER_TOP_WIDTH || \
+      id == GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH || \
+      id == GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH || \
+      id == GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH) \
+    { \
+      GtkBorderStyle border_style = _gtk_css_border_style_value_get (group->values[i - 1]); \
+      if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN) \
+        { \
+          group->values[i] = gtk_css_dimension_value_new (0, GTK_CSS_NUMBER); \
+          continue; \
+        } \
+    }
+DEFINE_VALUES (GtkCssBorderValues, border, FALSE)
+#undef COMPUTE_VALUE
+
+#define COMPUTE_VALUE \
+  if (id == GTK_CSS_PROPERTY_OUTLINE_WIDTH) \
+    { \
+      GtkBorderStyle border_style = _gtk_css_border_style_value_get (group->values[i - 1]); \
+      if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN) \
+        { \
+          group->values[i] = gtk_css_dimension_value_new (0, GTK_CSS_NUMBER); \
+          continue; \
+        } \
+    }
+DEFINE_VALUES (GtkCssOutlineValues, outline, FALSE)
+#undef COMPUTE_VALUE
+
+#define COMPUTE_VALUE
+DEFINE_VALUES (GtkCssCoreValues, core, TRUE)
+DEFINE_VALUES (GtkCssBackgroundValues, background, FALSE)
+DEFINE_VALUES (GtkCssIconValues, icon, TRUE)
+DEFINE_VALUES (GtkCssFontValues, font, TRUE)
+DEFINE_VALUES (GtkCssFontVariantValues, font_variant, FALSE)
+DEFINE_VALUES (GtkCssAnimationValues, animation, FALSE)
+DEFINE_VALUES (GtkCssTransitionValues, transition, FALSE)
+DEFINE_VALUES (GtkCssSizeValues, size, FALSE)
+DEFINE_VALUES (GtkCssOtherValues, other, FALSE)
+#undef COMPUTE_VALUE
 
 #define VERIFY_MASK(NAME) \
   { \
@@ -684,13 +741,6 @@ gtk_css_static_style_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_css_static_style_parent_class)->finalize (object);
 }
 
-static void
-maybe_unref_section (gpointer section)
-{
-  if (section)
-    gtk_css_section_unref (section);
-}
-
 static inline void
 gtk_css_take_value (GtkCssValue **variable,
                    GtkCssValue  *value)
@@ -698,318 +748,6 @@ gtk_css_take_value (GtkCssValue **variable,
   if (*variable)
     gtk_css_value_unref (*variable);
   *variable = value;
-}
-
-static void
-gtk_css_static_style_set_value (GtkCssStaticStyle *style,
-                                guint              id,
-                                GtkCssValue       *value,
-                                GtkCssSection     *section)
-{
-  switch (id)
-    {
-    case GTK_CSS_PROPERTY_COLOR:
-      gtk_css_take_value (&style->core->color, value);
-      break;
-    case GTK_CSS_PROPERTY_DPI:
-      gtk_css_take_value (&style->core->dpi, value);
-      break;
-    case GTK_CSS_PROPERTY_FONT_SIZE:
-      gtk_css_take_value (&style->core->font_size, value);
-      break;
-    case GTK_CSS_PROPERTY_ICON_THEME:
-      gtk_css_take_value (&style->core->icon_theme, value);
-      break;
-    case GTK_CSS_PROPERTY_ICON_PALETTE:
-      gtk_css_take_value (&style->core->icon_palette, value);
-      break;
-    case GTK_CSS_PROPERTY_BACKGROUND_COLOR:
-      gtk_css_take_value (&style->background->background_color, value);
-      break;
-    case GTK_CSS_PROPERTY_FONT_FAMILY:
-      gtk_css_take_value (&style->font->font_family, value);
-      break;
-    case GTK_CSS_PROPERTY_FONT_STYLE:
-      gtk_css_take_value (&style->font->font_style, value);
-      break;
-    case GTK_CSS_PROPERTY_FONT_WEIGHT:
-      gtk_css_take_value (&style->font->font_weight, value);
-      break;
-    case GTK_CSS_PROPERTY_FONT_STRETCH:
-      gtk_css_take_value (&style->font->font_stretch, value);
-      break;
-    case GTK_CSS_PROPERTY_LETTER_SPACING:
-      gtk_css_take_value (&style->font->letter_spacing, value);
-      break;
-    case GTK_CSS_PROPERTY_TEXT_DECORATION_LINE:
-      gtk_css_take_value (&style->font_variant->text_decoration_line, value);
-      break;
-    case GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR:
-      gtk_css_take_value (&style->font_variant->text_decoration_color, value);
-      break;
-    case GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE:
-      gtk_css_take_value (&style->font_variant->text_decoration_style, value);
-      break;
-    case GTK_CSS_PROPERTY_FONT_KERNING:
-      gtk_css_take_value (&style->font_variant->font_kerning, value);
-      break;
-    case GTK_CSS_PROPERTY_FONT_VARIANT_LIGATURES:
-      gtk_css_take_value (&style->font_variant->font_variant_ligatures, value);
-      break;
-    case GTK_CSS_PROPERTY_FONT_VARIANT_POSITION:
-      gtk_css_take_value (&style->font_variant->font_variant_position, value);
-      break;
-    case GTK_CSS_PROPERTY_FONT_VARIANT_CAPS:
-      gtk_css_take_value (&style->font_variant->font_variant_caps, value);
-      break;
-    case GTK_CSS_PROPERTY_FONT_VARIANT_NUMERIC:
-      gtk_css_take_value (&style->font_variant->font_variant_numeric, value);
-      break;
-    case GTK_CSS_PROPERTY_FONT_VARIANT_ALTERNATES:
-      gtk_css_take_value (&style->font_variant->font_variant_alternates, value);
-      break;
-    case GTK_CSS_PROPERTY_FONT_VARIANT_EAST_ASIAN:
-      gtk_css_take_value (&style->font_variant->font_variant_east_asian, value);
-      break;
-    case GTK_CSS_PROPERTY_TEXT_SHADOW:
-      gtk_css_take_value (&style->font->text_shadow, value);
-      break;
-    case GTK_CSS_PROPERTY_BOX_SHADOW:
-      gtk_css_take_value (&style->background->box_shadow, value);
-      break;
-    case GTK_CSS_PROPERTY_MARGIN_TOP:
-      gtk_css_take_value (&style->size->margin_top, value);
-      break;
-    case GTK_CSS_PROPERTY_MARGIN_LEFT:
-      gtk_css_take_value (&style->size->margin_left, value);
-      break;
-    case GTK_CSS_PROPERTY_MARGIN_BOTTOM:
-      gtk_css_take_value (&style->size->margin_bottom, value);
-      break;
-    case GTK_CSS_PROPERTY_MARGIN_RIGHT:
-      gtk_css_take_value (&style->size->margin_right, value);
-      break;
-    case GTK_CSS_PROPERTY_PADDING_TOP:
-      gtk_css_take_value (&style->size->padding_top, value);
-      break;
-    case GTK_CSS_PROPERTY_PADDING_LEFT:
-      gtk_css_take_value (&style->size->padding_left, value);
-      break;
-    case GTK_CSS_PROPERTY_PADDING_BOTTOM:
-      gtk_css_take_value (&style->size->padding_bottom, value);
-      break;
-    case GTK_CSS_PROPERTY_PADDING_RIGHT:
-      gtk_css_take_value (&style->size->padding_right, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_TOP_STYLE:
-      gtk_css_take_value (&style->border->border_top_style, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_TOP_WIDTH:
-      gtk_css_take_value (&style->border->border_top_width, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_LEFT_STYLE:
-      gtk_css_take_value (&style->border->border_left_style, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH:
-      gtk_css_take_value (&style->border->border_left_width, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE:
-      gtk_css_take_value (&style->border->border_bottom_style, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH:
-      gtk_css_take_value (&style->border->border_bottom_width, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE:
-      gtk_css_take_value (&style->border->border_right_style, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH:
-      gtk_css_take_value (&style->border->border_right_width, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS:
-      gtk_css_take_value (&style->border->border_top_left_radius, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS:
-      gtk_css_take_value (&style->border->border_top_right_radius, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS:
-      gtk_css_take_value (&style->border->border_bottom_right_radius, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS:
-      gtk_css_take_value (&style->border->border_bottom_left_radius, value);
-      break;
-    case GTK_CSS_PROPERTY_OUTLINE_STYLE:
-      gtk_css_take_value (&style->outline->outline_style, value);
-      break;
-    case GTK_CSS_PROPERTY_OUTLINE_WIDTH:
-      gtk_css_take_value (&style->outline->outline_width, value);
-      break;
-    case GTK_CSS_PROPERTY_OUTLINE_OFFSET:
-      gtk_css_take_value (&style->outline->outline_offset, value);
-      break;
-    case GTK_CSS_PROPERTY_OUTLINE_TOP_LEFT_RADIUS:
-      gtk_css_take_value (&style->outline->outline_top_left_radius, value);
-      break;
-    case GTK_CSS_PROPERTY_OUTLINE_TOP_RIGHT_RADIUS:
-      gtk_css_take_value (&style->outline->outline_top_right_radius, value);
-      break;
-    case GTK_CSS_PROPERTY_OUTLINE_BOTTOM_RIGHT_RADIUS:
-      gtk_css_take_value (&style->outline->outline_bottom_right_radius, value);
-      break;
-    case GTK_CSS_PROPERTY_OUTLINE_BOTTOM_LEFT_RADIUS:
-      gtk_css_take_value (&style->outline->outline_bottom_left_radius, value);
-      break;
-    case GTK_CSS_PROPERTY_BACKGROUND_CLIP:
-      gtk_css_take_value (&style->background->background_clip, value);
-      break;
-    case GTK_CSS_PROPERTY_BACKGROUND_ORIGIN:
-      gtk_css_take_value (&style->background->background_origin, value);
-      break;
-    case GTK_CSS_PROPERTY_BACKGROUND_SIZE:
-      gtk_css_take_value (&style->background->background_size, value);
-      break;
-    case GTK_CSS_PROPERTY_BACKGROUND_POSITION:
-      gtk_css_take_value (&style->background->background_position, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_TOP_COLOR:
-      gtk_css_take_value (&style->border->border_top_color, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR:
-      gtk_css_take_value (&style->border->border_right_color, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR:
-      gtk_css_take_value (&style->border->border_bottom_color, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_LEFT_COLOR:
-      gtk_css_take_value (&style->border->border_left_color, value);
-      break;
-    case GTK_CSS_PROPERTY_OUTLINE_COLOR:
-      gtk_css_take_value (&style->outline->outline_color, value);
-      break;
-    case GTK_CSS_PROPERTY_BACKGROUND_REPEAT:
-      gtk_css_take_value (&style->background->background_repeat, value);
-      break;
-    case GTK_CSS_PROPERTY_BACKGROUND_IMAGE:
-      gtk_css_take_value (&style->background->background_image, value);
-      break;
-    case GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE:
-      gtk_css_take_value (&style->background->background_blend_mode, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE:
-      gtk_css_take_value (&style->border->border_image_source, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_IMAGE_REPEAT:
-      gtk_css_take_value (&style->border->border_image_repeat, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_IMAGE_SLICE:
-      gtk_css_take_value (&style->border->border_image_slice, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_IMAGE_WIDTH:
-      gtk_css_take_value (&style->border->border_image_width, value);
-      break;
-    case GTK_CSS_PROPERTY_ICON_SOURCE:
-      gtk_css_take_value (&style->other->icon_source, value);
-      break;
-    case GTK_CSS_PROPERTY_ICON_SIZE:
-      gtk_css_take_value (&style->icon->icon_size, value);
-      break;
-    case GTK_CSS_PROPERTY_ICON_SHADOW:
-      gtk_css_take_value (&style->icon->icon_shadow, value);
-      break;
-    case GTK_CSS_PROPERTY_ICON_STYLE:
-      gtk_css_take_value (&style->icon->icon_style, value);
-      break;
-    case GTK_CSS_PROPERTY_ICON_TRANSFORM:
-      gtk_css_take_value (&style->other->icon_transform, value);
-      break;
-    case GTK_CSS_PROPERTY_ICON_FILTER:
-      gtk_css_take_value (&style->other->icon_filter, value);
-      break;
-    case GTK_CSS_PROPERTY_BORDER_SPACING:
-      gtk_css_take_value (&style->size->border_spacing, value);
-      break;
-    case GTK_CSS_PROPERTY_TRANSFORM:
-      gtk_css_take_value (&style->other->transform, value);
-      break;
-    case GTK_CSS_PROPERTY_MIN_WIDTH:
-      gtk_css_take_value (&style->size->min_width, value);
-      break;
-    case GTK_CSS_PROPERTY_MIN_HEIGHT:
-      gtk_css_take_value (&style->size->min_height, value);
-      break;
-    case GTK_CSS_PROPERTY_TRANSITION_PROPERTY:
-      gtk_css_take_value (&style->transition->transition_property, value);
-      break;
-    case GTK_CSS_PROPERTY_TRANSITION_DURATION:
-      gtk_css_take_value (&style->transition->transition_duration, value);
-      break;
-    case GTK_CSS_PROPERTY_TRANSITION_TIMING_FUNCTION:
-      gtk_css_take_value (&style->transition->transition_timing_function, value);
-      break;
-    case GTK_CSS_PROPERTY_TRANSITION_DELAY:
-      gtk_css_take_value (&style->transition->transition_delay, value);
-      break;
-    case GTK_CSS_PROPERTY_ANIMATION_NAME:
-      gtk_css_take_value (&style->animation->animation_name, value);
-      break;
-    case GTK_CSS_PROPERTY_ANIMATION_DURATION:
-      gtk_css_take_value (&style->animation->animation_duration, value);
-      break;
-    case GTK_CSS_PROPERTY_ANIMATION_TIMING_FUNCTION:
-      gtk_css_take_value (&style->animation->animation_timing_function, value);
-      break;
-    case GTK_CSS_PROPERTY_ANIMATION_ITERATION_COUNT:
-      gtk_css_take_value (&style->animation->animation_iteration_count, value);
-      break;
-    case GTK_CSS_PROPERTY_ANIMATION_DIRECTION:
-      gtk_css_take_value (&style->animation->animation_direction, value);
-      break;
-    case GTK_CSS_PROPERTY_ANIMATION_PLAY_STATE:
-      gtk_css_take_value (&style->animation->animation_play_state, value);
-      break;
-    case GTK_CSS_PROPERTY_ANIMATION_DELAY:
-      gtk_css_take_value (&style->animation->animation_delay, value);
-      break;
-    case GTK_CSS_PROPERTY_ANIMATION_FILL_MODE:
-      gtk_css_take_value (&style->animation->animation_fill_mode, value);
-      break;
-    case GTK_CSS_PROPERTY_OPACITY:
-      gtk_css_take_value (&style->other->opacity, value);
-      break;
-    case GTK_CSS_PROPERTY_FILTER:
-      gtk_css_take_value (&style->other->filter, value);
-      break;
-    case GTK_CSS_PROPERTY_CARET_COLOR:
-      gtk_css_take_value (&style->font->caret_color, value);
-      break;
-    case GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR:
-      gtk_css_take_value (&style->font->secondary_caret_color, value);
-      break;
-    case GTK_CSS_PROPERTY_FONT_FEATURE_SETTINGS:
-      gtk_css_take_value (&style->font->font_feature_settings, value);
-      break;
-    case GTK_CSS_PROPERTY_FONT_VARIATION_SETTINGS:
-      gtk_css_take_value (&style->font->font_variation_settings, value);
-      break;
-
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-
-  if (style->sections && style->sections->len > id && g_ptr_array_index (style->sections, id))
-    {
-      gtk_css_section_unref (g_ptr_array_index (style->sections, id));
-      g_ptr_array_index (style->sections, id) = NULL;
-    }
-
-  if (section)
-    {
-      if (style->sections == NULL)
-        style->sections = g_ptr_array_new_with_free_func (maybe_unref_section);
-      if (style->sections->len <= id)
-        g_ptr_array_set_size (style->sections, id + 1);
-      g_ptr_array_index (style->sections, id) = gtk_css_section_ref (section);
-    }
 }
 
 static GtkCssStyle *default_style;
@@ -1368,67 +1106,6 @@ G_STATIC_ASSERT (GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE == GTK_CSS_PROPERTY_BORDER_
 G_STATIC_ASSERT (GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE == GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH - 1);
 G_STATIC_ASSERT (GTK_CSS_PROPERTY_BORDER_LEFT_STYLE == GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH - 1);
 G_STATIC_ASSERT (GTK_CSS_PROPERTY_OUTLINE_STYLE == GTK_CSS_PROPERTY_OUTLINE_WIDTH - 1);
-
-static void
-gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
-                                    GtkStyleProvider  *provider,
-                                    GtkCssStyle       *parent_style,
-                                    guint              id,
-                                    GtkCssValue       *specified,
-                                    GtkCssSection     *section)
-{
-  GtkCssValue *value;
-  GtkBorderStyle border_style;
-
-  gtk_internal_return_if_fail (id < GTK_CSS_PROPERTY_N_PROPERTIES);
-
-  /* special case according to http://dev.w3.org/csswg/css-backgrounds/#the-border-width */
-  switch (id)
-    {
-      /* We have them ordered in gtkcssstylepropertyimpl.c accordingly, so the
-       * border styles are already computed when we compute the border widths.
-       *
-       * Note that we rely on ..._STYLE == ..._WIDTH - 1 here.
-       */
-      case GTK_CSS_PROPERTY_BORDER_TOP_WIDTH:
-      case GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH:
-      case GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH:
-      case GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH:
-      case GTK_CSS_PROPERTY_OUTLINE_WIDTH:
-        border_style = _gtk_css_border_style_value_get (gtk_css_style_get_value ((GtkCssStyle *)style, id - 1));
-        if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
-          {
-            gtk_css_static_style_set_value (style, id, gtk_css_dimension_value_new (0, GTK_CSS_NUMBER), section);
-            return;
-          }
-        break;
-
-      default:
-        /* Go ahead */
-        break;
-    }
-
-  /* http://www.w3.org/TR/css3-cascade/#cascade
-   * Then, for every element, the value for each property can be found
-   * by following this pseudo-algorithm:
-   * 1) Identify all declarations that apply to the element
-   */
-  if (specified)
-    {
-      value = _gtk_css_value_compute (specified, id, provider, (GtkCssStyle *)style, parent_style);
-    }
-  else if (parent_style && _gtk_css_style_property_is_inherit (_gtk_css_style_property_lookup_by_id (id)))
-    {
-      /* Just take the style from the parent */
-      value = _gtk_css_value_ref (gtk_css_style_get_value (parent_style, id));
-    }
-  else
-    {
-      value = _gtk_css_initial_value_new_compute (id, provider, (GtkCssStyle *)style, parent_style);
-    }
-
-  gtk_css_static_style_set_value (style, id, value, section);
-}
 
 GtkCssChange
 gtk_css_static_style_get_change (GtkCssStaticStyle *style)
