@@ -104,7 +104,6 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
   gint width, height;
   GtkIconInfo *info;
   GtkIconLookupFlags flags;
-  GdkPaintable *paintable;
 
   icon_theme = gtk_css_icon_theme_value_get_icon_theme (style->core->icon_theme);
   flags = get_icon_lookup_flags (self, style, dir);
@@ -122,18 +121,7 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
                                        flags | GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
   *symbolic = gtk_icon_info_is_symbolic (info);
-  paintable = gtk_icon_info_load_icon (info, NULL);
-  g_object_unref (info);
-
-  if (paintable && scale != 1)
-    {
-      GdkPaintable *orig = paintable;
-
-      paintable = gtk_scaler_new (orig, scale);
-      g_object_unref (orig);
-    }
-
-  return paintable;
+  return GDK_PAINTABLE (info);
 }
 
 static GdkPaintable *
