@@ -875,9 +875,6 @@ GDK_AVAILABLE_IN_ALL
 void gtk_style_context_restore (GtkStyleContext *context);
 
 GDK_AVAILABLE_IN_ALL
-GtkCssSection * gtk_style_context_get_section (GtkStyleContext *context,
-                                               const gchar     *property);
-GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_property (GtkStyleContext *context,
                                      const gchar     *property,
                                      GValue          *value);

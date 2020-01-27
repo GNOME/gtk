@@ -617,45 +617,6 @@ gtk_style_context_remove_provider_for_display (GdkDisplay       *display,
   _gtk_style_cascade_remove_provider (cascade, provider);
 }
 
-/**
- * gtk_style_context_get_section:
- * @context: a #GtkStyleContext
- * @property: style property name
- *
- * Queries the location in the CSS where @property was defined for the
- * current @context. Note that the state to be queried is taken from
- * gtk_style_context_get_state().
- *
- * If the location is not available, %NULL will be returned. The
- * location might not be available for various reasons, such as the
- * property being overridden, @property not naming a supported CSS
- * property or tracking of definitions being disabled for performance
- * reasons.
- *
- * Shorthand CSS properties cannot be queried for a location and will
- * always return %NULL.
- *
- * Returns: (nullable) (transfer none): %NULL or the section where a value
- * for @property was defined
- **/
-GtkCssSection *
-gtk_style_context_get_section (GtkStyleContext *context,
-                               const gchar     *property)
-{
-  GtkCssStyle *values;
-  GtkStyleProperty *prop;
-
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-  g_return_val_if_fail (property != NULL, NULL);
-
-  prop = _gtk_style_property_lookup (property);
-  if (!GTK_IS_CSS_STYLE_PROPERTY (prop))
-    return NULL;
-
-  values = gtk_style_context_lookup_style (context);
-  return gtk_css_style_get_section (values, _gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (prop)));
-}
-
 static GtkCssValue *
 gtk_style_context_query_func (guint    id,
                               gpointer values)
