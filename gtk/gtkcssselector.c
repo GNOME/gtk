@@ -540,7 +540,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ ## c = { \
 \
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_NOT_ ## c = { \
   "not_" G_STRINGIFY(n), \
-  ignore_for_change ? GTK_CSS_SELECTOR_CATEGORY_SIMPLE : GTK_CSS_SELECTOR_CATEGORY_SIMPLE_RADICAL, \
+  GTK_CSS_SELECTOR_CATEGORY_SIMPLE, \
   gtk_css_selector_not_ ## n ## _print, \
   gtk_css_selector_default_foreach_matcher, \
   gtk_css_selector_not_ ## n ## _match_one, \
