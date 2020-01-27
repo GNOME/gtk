@@ -22,13 +22,8 @@
 #include "gtkintl.h"
 
 static void gtk_file_chooser_embed_class_init (gpointer g_iface);
-static void delegate_get_default_size         (GtkFileChooserEmbed *chooser_embed,
-					       gint                *default_width,
-					       gint                *default_height);
 static gboolean delegate_should_respond       (GtkFileChooserEmbed *chooser_embed);
 static void delegate_initial_focus            (GtkFileChooserEmbed *chooser_embed);
-static void delegate_default_size_changed     (GtkFileChooserEmbed *chooser_embed,
-					       gpointer             data);
 static void delegate_response_requested       (GtkFileChooserEmbed *chooser_embed,
 					       gpointer             data);
 
@@ -50,7 +45,6 @@ get_delegate (GtkFileChooserEmbed *receiver)
 void
 _gtk_file_chooser_embed_delegate_iface_init (GtkFileChooserEmbedIface *iface)
 {
-  iface->get_default_size = delegate_get_default_size;
   iface->should_respond = delegate_should_respond;
   iface->initial_focus = delegate_initial_focus;
 }
@@ -74,21 +68,11 @@ _gtk_file_chooser_embed_set_delegate (GtkFileChooserEmbed *receiver,
   
   g_object_set_data (G_OBJECT (receiver), I_("gtk-file-chooser-embed-delegate"), delegate);
 
-  g_signal_connect (delegate, "default-size-changed",
-		    G_CALLBACK (delegate_default_size_changed), receiver);
   g_signal_connect (delegate, "response-requested",
 		    G_CALLBACK (delegate_response_requested), receiver);
 }
 
 
-
-static void
-delegate_get_default_size (GtkFileChooserEmbed *chooser_embed,
-			   gint                *default_width,
-			   gint                *default_height)
-{
-  _gtk_file_chooser_embed_get_default_size (get_delegate (chooser_embed), default_width, default_height);
-}
 
 static gboolean
 delegate_should_respond (GtkFileChooserEmbed *chooser_embed)
@@ -100,13 +84,6 @@ static void
 delegate_initial_focus (GtkFileChooserEmbed *chooser_embed)
 {
   _gtk_file_chooser_embed_initial_focus (get_delegate (chooser_embed));
-}
-
-static void
-delegate_default_size_changed (GtkFileChooserEmbed *chooser_embed,
-			       gpointer             data)
-{
-  g_signal_emit_by_name (data, "default-size-changed");
 }
 
 static void
@@ -149,13 +126,6 @@ gtk_file_chooser_embed_class_init (gpointer g_iface)
 {
   GType iface_type = G_TYPE_FROM_INTERFACE (g_iface);
 
-  g_signal_new (I_("default-size-changed"),
-		iface_type,
-		G_SIGNAL_RUN_LAST,
-		G_STRUCT_OFFSET (GtkFileChooserEmbedIface, default_size_changed),
-		NULL, NULL,
-		NULL,
-		G_TYPE_NONE, 0);
   g_signal_new (I_("response-requested"),
 		iface_type,
 		G_SIGNAL_RUN_LAST,
@@ -163,18 +133,6 @@ gtk_file_chooser_embed_class_init (gpointer g_iface)
 		NULL, NULL,
 		NULL,
 		G_TYPE_NONE, 0);
-}
-
-void
-_gtk_file_chooser_embed_get_default_size (GtkFileChooserEmbed *chooser_embed,
-					 gint                *default_width,
-					 gint                *default_height)
-{
-  g_return_if_fail (GTK_IS_FILE_CHOOSER_EMBED (chooser_embed));
-  g_return_if_fail (default_width != NULL);
-  g_return_if_fail (default_height != NULL);
-
-  GTK_FILE_CHOOSER_EMBED_GET_IFACE (chooser_embed)->get_default_size (chooser_embed, default_width, default_height);
 }
 
 gboolean

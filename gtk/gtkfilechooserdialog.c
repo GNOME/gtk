@@ -240,6 +240,7 @@ static void     gtk_file_chooser_dialog_get_property (GObject               *obj
 static void     gtk_file_chooser_dialog_notify       (GObject               *object,
                                                       GParamSpec            *pspec);
 
+static void     gtk_file_chooser_dialog_realize      (GtkWidget             *widget);
 static void     gtk_file_chooser_dialog_map          (GtkWidget             *widget);
 static void     gtk_file_chooser_dialog_unmap        (GtkWidget             *widget);
 static void     gtk_file_chooser_dialog_size_allocate (GtkWidget            *widget,
@@ -248,8 +249,6 @@ static void     gtk_file_chooser_dialog_size_allocate (GtkWidget            *wid
                                                        int                    baseline);
 static void     file_chooser_widget_file_activated   (GtkFileChooser        *chooser,
                                                       GtkFileChooserDialog  *dialog);
-static void     file_chooser_widget_default_size_changed (GtkWidget            *widget,
-                                                          GtkFileChooserDialog *dialog);
 static void     file_chooser_widget_response_requested (GtkWidget            *widget,
                                                         GtkFileChooserDialog *dialog);
 static void     file_chooser_widget_selection_changed (GtkWidget            *widget,
@@ -275,6 +274,7 @@ gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
   gobject_class->get_property = gtk_file_chooser_dialog_get_property;
   gobject_class->notify = gtk_file_chooser_dialog_notify;
 
+  widget_class->realize = gtk_file_chooser_dialog_realize;
   widget_class->map = gtk_file_chooser_dialog_map;
   widget_class->unmap = gtk_file_chooser_dialog_unmap;
   widget_class->size_allocate = gtk_file_chooser_dialog_size_allocate;
@@ -292,7 +292,6 @@ gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserDialog, buttons);
   gtk_widget_class_bind_template_callback (widget_class, response_cb);
   gtk_widget_class_bind_template_callback (widget_class, file_chooser_widget_file_activated);
-  gtk_widget_class_bind_template_callback (widget_class, file_chooser_widget_default_size_changed);
   gtk_widget_class_bind_template_callback (widget_class, file_chooser_widget_response_requested);
   gtk_widget_class_bind_template_callback (widget_class, file_chooser_widget_selection_changed);
 }
@@ -355,32 +354,6 @@ file_chooser_widget_file_activated (GtkFileChooser       *chooser,
                                     GtkFileChooserDialog *dialog)
 {
   gtk_widget_activate_default (GTK_WIDGET (chooser));
-}
-
-static void
-file_chooser_widget_default_size_changed (GtkWidget            *widget,
-                                          GtkFileChooserDialog *dialog)
-{
-  GtkFileChooserDialogPrivate *priv = gtk_file_chooser_dialog_get_instance_private (dialog);
-  gint default_width, default_height;
-  GtkRequisition req, widget_req;
-
-  /* Unset any previously set size */
-  gtk_widget_set_size_request (GTK_WIDGET (dialog), -1, -1);
-
-  if (gtk_widget_is_drawable (widget))
-    {
-      /* Force a size request of everything before we start. This will make sure
-       * that widget->requisition is meaningful.
-       */
-      gtk_widget_get_preferred_size (GTK_WIDGET (dialog), &req, NULL);
-      gtk_widget_get_preferred_size (widget, &widget_req, NULL);
-    }
-
-  _gtk_file_chooser_embed_get_default_size (GTK_FILE_CHOOSER_EMBED (priv->widget),
-                                            &default_width, &default_height);
-
-  gtk_window_resize (GTK_WINDOW (dialog), default_width, default_height);
 }
 
 static void
@@ -560,6 +533,23 @@ ensure_default_response (GtkFileChooserDialog *dialog)
   widget = get_accept_action_widget (GTK_DIALOG (dialog), TRUE);
   if (widget)
     gtk_window_set_default_widget (GTK_WINDOW (dialog), widget);
+}
+
+static void
+gtk_file_chooser_dialog_realize (GtkWidget *widget)
+{
+  GtkFileChooserDialog *dialog = GTK_FILE_CHOOSER_DIALOG (widget);
+  GSettings *settings;
+  gint width, height;
+
+  settings = _gtk_file_chooser_get_settings_for_widget (widget);
+  g_settings_get (settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", &width, &height);
+
+  if (width != 0 && height != 0)
+    gtk_window_set_default_size (GTK_WINDOW (dialog), width, height);
+  g_print ("%d %d\n", width, height);
+
+  GTK_WIDGET_CLASS (gtk_file_chooser_dialog_parent_class)->realize (widget);
 }
 
 static void
