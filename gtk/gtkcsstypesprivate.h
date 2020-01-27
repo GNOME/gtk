@@ -21,6 +21,8 @@
 #include <glib-object.h>
 #include <gsk/gsk.h>
 
+#include <gtk/gtkenums.h>
+
 G_BEGIN_DECLS
 
 typedef union _GtkCssMatcher GtkCssMatcher;
@@ -455,6 +457,9 @@ GtkCssDimension         gtk_css_unit_get_dimension               (GtkCssUnit    
 char *                  gtk_css_change_to_string                 (GtkCssChange       change);
 void                    gtk_css_change_print                     (GtkCssChange       change,
                                                                   GString           *string);
+
+const char *            gtk_css_pseudoclass_name                 (GtkStateFlags      flags);
+
 
 G_END_DECLS
 
