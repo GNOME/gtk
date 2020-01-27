@@ -42,17 +42,12 @@ struct _GtkStyleProperty
   GObject parent;
 
   char *name;
-  GType value_type;
 };
 
 struct _GtkStylePropertyClass
 {
   GObjectClass  parent_class;
   
-  void              (* query)                              (GtkStyleProperty       *property,
-                                                            GValue                 *value,
-                                                            GtkStyleQueryFunc       query_func,
-                                                            gpointer                query_data);
   GtkCssValue *     (* parse_value)                        (GtkStyleProperty *      property,
                                                             GtkCssParser           *parser);
 
@@ -69,12 +64,6 @@ const char *             _gtk_style_property_get_name      (GtkStyleProperty    
 
 GtkCssValue *            _gtk_style_property_parse_value   (GtkStyleProperty *      property,
                                                             GtkCssParser           *parser);
-
-GType                    _gtk_style_property_get_value_type(GtkStyleProperty *      property);
-void                     _gtk_style_property_query         (GtkStyleProperty *      property,
-                                                            GValue                 *value,
-                                                            GtkStyleQueryFunc       query_func,
-                                                            gpointer                query_data);
 
 G_END_DECLS
 
