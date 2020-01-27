@@ -4807,7 +4807,6 @@ gtk_style_context_get_property
 gtk_style_context_get_display
 gtk_style_context_get_state
 gtk_style_context_get_valist
-gtk_style_context_get_section
 gtk_style_context_get_color
 gtk_style_context_get_border
 gtk_style_context_get_padding
