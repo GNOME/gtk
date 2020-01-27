@@ -447,21 +447,6 @@ void
 gtk_css_node_declaration_print (const GtkCssNodeDeclaration *decl,
                                 GString                     *string)
 {
-  static const char *state_names[] = {
-    "active",
-    "hover",
-    "selected",
-    "disabled",
-    "indeterminate",
-    "focus",
-    "backdrop",
-    "dir(ltr)",
-    "dir(rtl)",
-    "link",
-    "visited",
-    "checked",
-    "drop(active)"
-  };
   const GQuark *classes;
   guint i;
   char **classnames;
@@ -492,12 +477,14 @@ gtk_css_node_declaration_print (const GtkCssNodeDeclaration *decl,
     }
   g_free (classnames);
 
-  for (i = 0; i < G_N_ELEMENTS (state_names); i++)
+  for (i = 0; i < sizeof (GtkStateFlags); i++)
     {
       if (decl->state & (1 << i))
         {
+          const char *name = gtk_css_pseudoclass_name (1 << i);
+          g_assert (name);
           g_string_append_c (string, ':');
-          g_string_append (string, state_names[i]);
+          g_string_append (string, name);
         }
     }
 }
