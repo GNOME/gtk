@@ -257,3 +257,33 @@ gtk_css_change_to_string (GtkCssChange change)
   return g_string_free (string, FALSE);
 }
 
+const gchar *
+gtk_css_pseudoclass_name (GtkStateFlags state)
+{
+  static const char * state_names[] = {
+    "active",
+    "hover",
+    "selected",
+    "disabled",
+    "indeterminate",
+    "focus",
+    "backdrop",
+    "dir(ltr)",
+    "dir(rtl)",
+    "link",
+    "visited",
+    "checked",
+    "drop(active)",
+    "focus(visible)"
+  };
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (state_names); i++)
+    {
+      if (state == (1 << i))
+        return state_names[i];
+    }
+
+  return NULL;
+}
+

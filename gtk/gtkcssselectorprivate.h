@@ -59,8 +59,6 @@ void                       _gtk_css_selector_tree_builder_add   (GtkCssSelectorT
 GtkCssSelectorTree *       _gtk_css_selector_tree_builder_build (GtkCssSelectorTreeBuilder *builder);
 void                       _gtk_css_selector_tree_builder_free  (GtkCssSelectorTreeBuilder *builder);
 
-const char *gtk_css_pseudoclass_name (GtkStateFlags flags);
-
 G_END_DECLS
 
 #endif /* __GTK_CSS_SELECTOR_PRIVATE_H__ */
