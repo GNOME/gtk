@@ -798,7 +798,7 @@ gtk_popover_get_gap_coords (GtkPopover *popover,
 
   pos = priv->final_position;
 
-  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (priv->contents_widget));
   border_radius = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS), 100);
   border_top = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
   border_right = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
