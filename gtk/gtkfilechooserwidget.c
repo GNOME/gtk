@@ -476,7 +476,6 @@ static void     gtk_file_chooser_widget_get_property (GObject               *obj
                                                        GValue                *value,
                                                        GParamSpec            *pspec);
 static void     gtk_file_chooser_widget_dispose      (GObject               *object);
-static void     gtk_file_chooser_widget_realize        (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_map            (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_unmap          (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_root           (GtkWidget             *widget);
@@ -518,9 +517,6 @@ static gboolean       gtk_file_chooser_widget_remove_shortcut_folder (GtkFileCho
                                                                        GError           **error);
 static GSList *       gtk_file_chooser_widget_list_shortcut_folders  (GtkFileChooser    *chooser);
 
-static void           gtk_file_chooser_widget_get_default_size       (GtkFileChooserEmbed *chooser_embed,
-                                                                       gint                *default_width,
-                                                                       gint                *default_height);
 static gboolean       gtk_file_chooser_widget_should_respond         (GtkFileChooserEmbed *chooser_embed);
 static void           gtk_file_chooser_widget_initial_focus          (GtkFileChooserEmbed *chooser_embed);
 
@@ -660,7 +656,6 @@ gtk_file_chooser_widget_iface_init (GtkFileChooserIface *iface)
 static void
 gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface *iface)
 {
-  iface->get_default_size = gtk_file_chooser_widget_get_default_size;
   iface->should_respond = gtk_file_chooser_widget_should_respond;
   iface->initial_focus = gtk_file_chooser_widget_initial_focus;
 }
@@ -946,14 +941,6 @@ change_folder_and_display_error (GtkFileChooserWidget *impl,
 }
 
 static void
-emit_default_size_changed (GtkFileChooserWidget *impl)
-{
-  profile_msg ("    emit default-size-changed start", NULL);
-  g_signal_emit_by_name (impl, "default-size-changed");
-  profile_msg ("    emit default-size-changed end", NULL);
-}
-
-static void
 update_preview_widget_visibility (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
@@ -980,9 +967,6 @@ update_preview_widget_visibility (GtkFileChooserWidget *impl)
     gtk_widget_show (priv->preview_box);
   else
     gtk_widget_hide (priv->preview_box);
-
-  if (!gtk_widget_get_mapped (GTK_WIDGET (impl)))
-    emit_default_size_changed (impl);
 }
 
 static void
@@ -3226,8 +3210,6 @@ update_appearance (GtkFileChooserWidget *impl)
    * of files may change depending whether we are in a file or folder-only mode.
    */
   gtk_widget_queue_draw (priv->browse_files_tree_view);
-
-  emit_default_size_changed (impl);
 }
 
 static gchar *
@@ -3679,8 +3661,6 @@ gtk_file_chooser_widget_style_updated (GtkWidget *widget)
 
   change_icon_theme (impl);
 
-  emit_default_size_changed (impl);
-
   profile_end ("end", NULL);
 }
 
@@ -3787,19 +3767,6 @@ settings_save (GtkFileChooserWidget *impl)
 
   /* Now apply the settings */
   g_settings_apply (settings);
-}
-
-/* GtkWidget::realize method */
-static void
-gtk_file_chooser_widget_realize (GtkWidget *widget)
-{
-  GtkFileChooserWidget *impl;
-
-  impl = GTK_FILE_CHOOSER_WIDGET (widget);
-
-  GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->realize (widget);
-
-  emit_default_size_changed (impl);
 }
 
 /* Changes the current folder to $CWD */
@@ -6173,64 +6140,6 @@ gtk_file_chooser_widget_list_shortcut_folders (GtkFileChooser *chooser)
   return gtk_places_sidebar_list_shortcuts (GTK_PLACES_SIDEBAR (priv->places_sidebar));
 }
 
-/* Guesses a size based upon font sizes */
-static void
-find_good_size_from_style (GtkWidget *widget,
-                           gint      *width,
-                           gint      *height)
-{
-  GtkCssStyle *style;
-  double font_size;
-
-  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  font_size = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_SIZE), 100);
-
-  *width = font_size * NUM_CHARS;
-  *height = font_size * NUM_LINES;
-}
-
-static void
-gtk_file_chooser_widget_get_default_size (GtkFileChooserEmbed *chooser_embed,
-                                          gint                *default_width,
-                                          gint                *default_height)
-{
-  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser_embed);
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-  GtkRequisition req;
-  int width, height;
-  GSettings *settings;
-
-  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
-
-  g_settings_get (settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", &width, &height);
-
-  if (width > 0 && height > 0)
-    {
-      *default_width = width;
-      *default_height = height;
-      return;
-    }
-
-  find_good_size_from_style (GTK_WIDGET (chooser_embed), default_width, default_height);
-
-  if (priv->preview_widget_active &&
-      priv->preview_widget &&
-      gtk_widget_get_visible (priv->preview_widget))
-    {
-      gtk_widget_get_preferred_size (priv->preview_box,
-                                     &req, NULL);
-      *default_width += PREVIEW_HBOX_SPACING + req.width;
-    }
-
-  if (priv->extra_widget &&
-      gtk_widget_get_visible (priv->extra_widget))
-    {
-      gtk_widget_get_preferred_size (priv->extra_align,
-                                     &req, NULL);
-      *default_height += gtk_box_get_spacing (GTK_BOX (priv->box)) + req.height;
-    }
-}
-
 struct switch_folder_closure {
   GtkFileChooserWidget *impl;
   GFile *file;
@@ -8032,7 +7941,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gobject_class->get_property = gtk_file_chooser_widget_get_property;
   gobject_class->dispose = gtk_file_chooser_widget_dispose;
 
-  widget_class->realize = gtk_file_chooser_widget_realize;
   widget_class->map = gtk_file_chooser_widget_map;
   widget_class->unmap = gtk_file_chooser_widget_unmap;
   widget_class->root = gtk_file_chooser_widget_root;
