@@ -142,9 +142,9 @@ struct _GtkPlacesSidebar {
   GFile             *current_location;
 
   GtkWidget *rename_popover;
-  GtkWidget *rename_entry;
+  GtkEntry *rename_entry;
   GtkWidget *rename_button;
-  GtkWidget *rename_error;
+  GtkLabel *rename_error;
   gchar *rename_uri;
 
   gulong trash_monitor_changed_id;
@@ -414,7 +414,7 @@ list_box_header_func (GtkListBoxRow *row,
 {
   GtkPlacesSidebarSectionType row_section_type;
   GtkPlacesSidebarSectionType before_section_type;
-  GtkWidget *separator;
+  GtkSeparator *separator;
 
   gtk_list_box_row_set_header (row, NULL);
 
@@ -432,9 +432,9 @@ list_box_header_func (GtkListBoxRow *row,
   if (before && before_section_type != row_section_type)
     {
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_widget_set_margin_top (separator, 4);
-      gtk_widget_set_margin_bottom (separator, 4);
-      gtk_list_box_row_set_header (row, separator);
+      gtk_widget_set_margin_top (GTK_WIDGET (separator), 4);
+      gtk_widget_set_margin_bottom (GTK_WIDGET (separator), 4);
+      gtk_list_box_row_set_header (row, GTK_WIDGET (separator));
     }
 }
 
@@ -2544,7 +2544,7 @@ rename_entry_changed (GtkEntry         *entry,
   if (strcmp (new_name, "") == 0)
     {
       gtk_widget_set_sensitive (sidebar->rename_button, FALSE);
-      gtk_label_set_label (GTK_LABEL (sidebar->rename_error), "");
+      gtk_label_set_label (sidebar->rename_error, "");
       return;
     }
 
@@ -2568,7 +2568,7 @@ rename_entry_changed (GtkEntry         *entry,
   g_list_free (rows);
 
   gtk_widget_set_sensitive (sidebar->rename_button, !found);
-  gtk_label_set_label (GTK_LABEL (sidebar->rename_error),
+  gtk_label_set_label (sidebar->rename_error,
                        found ? _("This name is already taken") : "");
 }
 
@@ -2614,10 +2614,10 @@ create_rename_popover (GtkPlacesSidebar *sidebar)
 {
   GtkWidget *popover;
   GtkWidget *grid;
-  GtkWidget *label;
-  GtkWidget *entry;
+  GtkLabel *label;
+  GtkEntry  *entry;
   GtkWidget *button;
-  GtkWidget *error;
+  GtkLabel *error;
   gchar *str;
 
   if (sidebar->rename_popover)
@@ -2636,23 +2636,23 @@ create_rename_popover (GtkPlacesSidebar *sidebar)
                 "column-spacing", 6,
                 NULL);
   entry = gtk_entry_new ();
-  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
+  gtk_entry_set_activates_default (entry, TRUE);
   g_signal_connect (entry, "changed", G_CALLBACK (rename_entry_changed), sidebar);
   str = g_strdup_printf ("<b>%s</b>", _("Name"));
   label = gtk_label_new (str);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_label_set_use_markup (label, TRUE);
+  gtk_label_set_mnemonic_widget (label, GTK_WIDGET (entry));
   g_free (str);
   button = gtk_button_new_with_mnemonic (_("_Rename"));
   gtk_style_context_add_class (gtk_widget_get_style_context (button), "suggested-action");
   g_signal_connect (button, "clicked", G_CALLBACK (do_rename), sidebar);
   error = gtk_label_new ("");
-  gtk_widget_set_halign (error, GTK_ALIGN_START);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 2, 1);
-  gtk_grid_attach (GTK_GRID (grid), entry, 0, 1, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (error), GTK_ALIGN_START);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 0, 2, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (entry), 0, 1, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), button,1, 1, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), error, 0, 2, 2, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (error), 0, 2, 2, 1);
   gtk_popover_set_default_widget (GTK_POPOVER (popover), button);
 
   sidebar->rename_popover = popover;
@@ -2732,7 +2732,7 @@ show_rename_popover (GtkSidebarRow *row)
   setup_popover_shadowing (sidebar->rename_popover);
 
   gtk_popover_popup (GTK_POPOVER (sidebar->rename_popover));
-  gtk_widget_grab_focus (sidebar->rename_entry);
+  gtk_widget_grab_focus (GTK_WIDGET (sidebar->rename_entry));
 
   g_free (name);
   g_free (uri);

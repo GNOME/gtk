@@ -77,7 +77,7 @@ struct _GtkAppChooserDialogPrivate {
   GFile *gfile;
   char *heading;
 
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *inner_box;
 
   GtkWidget *open_label;
@@ -242,12 +242,12 @@ set_dialog_properties (GtkAppChooserDialog *self)
 
   if (priv->heading != NULL)
     {
-      gtk_label_set_markup (GTK_LABEL (priv->label), priv->heading);
-      gtk_widget_show (priv->label);
+      gtk_label_set_markup (priv->label, priv->heading);
+      gtk_widget_show (GTK_WIDGET (priv->label));
     }
   else
     {
-      gtk_widget_hide (priv->label);
+      gtk_widget_hide (GTK_WIDGET (priv->label));
     }
 
   gtk_app_chooser_widget_set_default_text (GTK_APP_CHOOSER_WIDGET (priv->app_chooser_widget),
@@ -444,20 +444,20 @@ setup_search (GtkAppChooserDialog *self)
   g_object_get (self, "use-header-bar", &use_header, NULL);
   if (use_header)
     {
-      GtkWidget *button;
-      GtkWidget *image;
+      GtkToggleButton *button;
+      GtkImage *image;
       GtkWidget *header;
 
       button = gtk_toggle_button_new ();
-      gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (GTK_WIDGET (button), GTK_ALIGN_CENTER);
       image = gtk_image_new_from_icon_name ("edit-find-symbolic");
-      gtk_container_add (GTK_CONTAINER (button), image);
-      gtk_style_context_add_class (gtk_widget_get_style_context (button), "image-button");
-      gtk_style_context_remove_class (gtk_widget_get_style_context (button), "text-button");
+      gtk_container_add (GTK_CONTAINER (button), GTK_WIDGET (image));
+      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (button)), "image-button");
+      gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (button)), "text-button");
 
       header = gtk_dialog_get_header_bar (GTK_DIALOG (self));
-      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
-      gtk_size_group_add_widget (priv->buttons, button);
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), GTK_WIDGET (button));
+      gtk_size_group_add_widget (priv->buttons, GTK_WIDGET (button));
 
       g_object_bind_property (button, "active",
                               priv->search_bar, "search-mode-enabled",
@@ -645,7 +645,7 @@ gtk_app_chooser_dialog_init (GtkAppChooserDialog *self)
 }
 
 static void
-set_parent_and_flags (GtkWidget      *dialog,
+set_parent_and_flags (GtkAppChooserDialog *dialog,
                       GtkWindow      *parent,
                       GtkDialogFlags  flags)
 {
@@ -670,12 +670,12 @@ set_parent_and_flags (GtkWidget      *dialog,
  *
  * Returns: a newly created #GtkAppChooserDialog
  **/
-GtkWidget *
+GtkAppChooserDialog *
 gtk_app_chooser_dialog_new (GtkWindow      *parent,
                             GtkDialogFlags  flags,
                             GFile          *file)
 {
-  GtkWidget *retval;
+  GtkAppChooserDialog *retval;
 
   g_return_val_if_fail (G_IS_FILE (file), NULL);
 
@@ -699,12 +699,12 @@ gtk_app_chooser_dialog_new (GtkWindow      *parent,
  *
  * Returns: a newly created #GtkAppChooserDialog
  **/
-GtkWidget *
+GtkAppChooserDialog *
 gtk_app_chooser_dialog_new_for_content_type (GtkWindow      *parent,
                                              GtkDialogFlags  flags,
                                              const gchar    *content_type)
 {
-  GtkWidget *retval;
+  GtkAppChooserDialog *retval;
 
   g_return_val_if_fail (content_type != NULL, NULL);
 
@@ -758,12 +758,12 @@ gtk_app_chooser_dialog_set_heading (GtkAppChooserDialog *self,
     {
       if (priv->heading)
         {
-          gtk_label_set_markup (GTK_LABEL (priv->label), priv->heading);
-          gtk_widget_show (priv->label);
+          gtk_label_set_markup (priv->label, priv->heading);
+          gtk_widget_show (GTK_WIDGET (priv->label));
         }
       else
         {
-          gtk_widget_hide (priv->label);
+          gtk_widget_hide (GTK_WIDGET (priv->label));
         }
     }
 

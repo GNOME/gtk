@@ -211,12 +211,12 @@ is_capital_sensitive (GtkCellLayout   *cell_layout,
 }
 
 static void
-fill_combo_entry (GtkWidget *combo)
+fill_combo_entry (GtkComboBoxText *combo)
 {
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "One");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Two");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "2\302\275");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Three");
+  gtk_combo_box_text_append_text (combo, "One");
+  gtk_combo_box_text_append_text (combo, "Two");
+  gtk_combo_box_text_append_text (combo, "2\302\275");
+  gtk_combo_box_text_append_text (combo, "Three");
 }
 
 
@@ -302,7 +302,10 @@ GtkWidget *
 do_combobox (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
-  GtkWidget *vbox, *frame, *box, *combo, *entry;
+  GtkWidget *vbox, *frame, *box;
+  GtkComboBox *combo;
+  GtkComboBoxText *combo_text;
+  GtkEntry *entry;
   GtkTreeModel *model;
   GtkCellRenderer *renderer;
   GtkTreePath *path;
@@ -335,7 +338,7 @@ do_combobox (GtkWidget *do_widget)
     model = create_icon_store ();
     combo = gtk_combo_box_new_with_model (model);
     g_object_unref (model);
-    gtk_container_add (GTK_CONTAINER (box), combo);
+    gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (combo));
 
     renderer = gtk_cell_renderer_pixbuf_new ();
     gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, FALSE);
@@ -359,10 +362,10 @@ do_combobox (GtkWidget *do_widget)
                                         set_sensitive,
                                         NULL, NULL);
 
-    gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (combo),
+    gtk_combo_box_set_row_separator_func (combo,
                                           is_separator, NULL, NULL);
 
-    gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+    gtk_combo_box_set_active (combo, 0);
 
     /* A combobox demonstrating trees.
      */
@@ -376,7 +379,7 @@ do_combobox (GtkWidget *do_widget)
     model = create_capital_store ();
     combo = gtk_combo_box_new_with_model (model);
     g_object_unref (model);
-    gtk_container_add (GTK_CONTAINER (box), combo);
+    gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (combo));
 
     renderer = gtk_cell_renderer_text_new ();
     gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
@@ -391,7 +394,7 @@ do_combobox (GtkWidget *do_widget)
     path = gtk_tree_path_new_from_indices (0, 8, -1);
     gtk_tree_model_get_iter (model, &iter, path);
     gtk_tree_path_free (path);
-    gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combo), &iter);
+    gtk_combo_box_set_active_iter (combo, &iter);
 
     /* A GtkComboBoxEntry with validation */
     frame = gtk_frame_new ("Editable");
@@ -401,15 +404,15 @@ do_combobox (GtkWidget *do_widget)
     g_object_set (box, "margin", 5, NULL);
     gtk_container_add (GTK_CONTAINER (frame), box);
 
-    combo = gtk_combo_box_text_new_with_entry ();
-    fill_combo_entry (combo);
-    gtk_container_add (GTK_CONTAINER (box), combo);
+    combo_text = gtk_combo_box_text_new_with_entry ();
+    fill_combo_entry (combo_text);
+    gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (combo_text));
 
     entry = g_object_new (TYPE_MASK_ENTRY, NULL);
     MASK_ENTRY (entry)->mask = "^([0-9]*|One|Two|2\302\275|Three)$";
 
-    gtk_container_remove (GTK_CONTAINER (combo), gtk_bin_get_child (GTK_BIN (combo)));
-    gtk_container_add (GTK_CONTAINER (combo), entry);
+    gtk_container_remove (GTK_CONTAINER (combo_text), gtk_bin_get_child (GTK_BIN (combo)));
+    gtk_container_add (GTK_CONTAINER (combo_text), GTK_WIDGET (entry));
 
     /* A combobox with string IDs */
     frame = gtk_frame_new ("String IDs");
@@ -419,17 +422,17 @@ do_combobox (GtkWidget *do_widget)
     g_object_set (box, "margin", 5, NULL);
     gtk_container_add (GTK_CONTAINER (frame), box);
 
-    combo = gtk_combo_box_text_new ();
-    gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "never", "Not visible");
-    gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "when-active", "Visible when active");
-    gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "always", "Always visible");
-    gtk_container_add (GTK_CONTAINER (box), combo);
+    combo_text = gtk_combo_box_text_new ();
+    gtk_combo_box_text_append (combo_text, "never", "Not visible");
+    gtk_combo_box_text_append (combo_text, "when-active", "Visible when active");
+    gtk_combo_box_text_append (combo_text, "always", "Always visible");
+    gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (combo_text));
 
     entry = gtk_entry_new ();
-    g_object_bind_property (combo, "active-id",
+    g_object_bind_property (combo_text, "active-id",
                             entry, "text",
                             G_BINDING_BIDIRECTIONAL);
-    gtk_container_add (GTK_CONTAINER (box), entry);
+    gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (entry));
   }
 
   if (!gtk_widget_get_visible (window))

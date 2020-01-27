@@ -290,8 +290,8 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *vbox;
-  GtkWidget *label;
-  GtkWidget *entry;
+  GtkLabel *label;
+  GtkEntry *entry;
   GtkEntryCompletion *completion;
   GtkTreeModel *completion_model;
   GtkCellRenderer *cell;
@@ -306,8 +306,8 @@ main (int argc, char *argv[])
     
   label = gtk_label_new (NULL);
 
-  gtk_label_set_markup (GTK_LABEL (label), "Completion demo, try writing <b>total</b> or <b>gnome</b> for example.");
-  gtk_container_add (GTK_CONTAINER (vbox), label);
+  gtk_label_set_markup (label, "Completion demo, try writing <b>total</b> or <b>gnome</b> for example.");
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
   /* Create our first entry */
   entry = gtk_entry_new ();
@@ -317,10 +317,10 @@ main (int argc, char *argv[])
   gtk_entry_completion_set_inline_completion (completion, TRUE);
   
   /* Assign the completion to the entry */
-  gtk_entry_set_completion (GTK_ENTRY (entry), completion);
+  gtk_entry_set_completion (entry, completion);
   g_object_unref (completion);
   
-  gtk_container_add (GTK_CONTAINER (vbox), entry);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (entry));
 
   /* Create a tree model and use it as the completion model */
   completion_model = create_simple_completion_model ();
@@ -337,10 +337,10 @@ main (int argc, char *argv[])
   completion = gtk_entry_completion_new ();
   
   /* Assign the completion to the entry */
-  gtk_entry_set_completion (GTK_ENTRY (entry), completion);
+  gtk_entry_set_completion (entry, completion);
   g_object_unref (completion);
   
-  gtk_container_add (GTK_CONTAINER (vbox), entry);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (entry));
 
   /* Create a tree model and use it as the completion model */
   completion_model = create_completion_model ();
@@ -374,10 +374,10 @@ main (int argc, char *argv[])
   completion = gtk_entry_completion_new ();
   
   /* Assign the completion to the entry */
-  gtk_entry_set_completion (GTK_ENTRY (entry), completion);
+  gtk_entry_set_completion (entry, completion);
   g_object_unref (completion);
   
-  gtk_container_add (GTK_CONTAINER (vbox), entry);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (entry));
 
   /* Create a tree model and use it as the completion model */
   completion_model = GTK_TREE_MODEL (gtk_list_store_new (1, G_TYPE_STRING));
@@ -392,7 +392,7 @@ main (int argc, char *argv[])
   g_timeout_add (1000, (GSourceFunc) animation_timer, completion);
 
   /* Fourth entry */
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new ("Model-less entry completion"));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (gtk_label_new ("Model-less entry completion")));
 
   entry = gtk_entry_new ();
 
@@ -400,10 +400,10 @@ main (int argc, char *argv[])
   completion = gtk_entry_completion_new ();
 
   /* Assign the completion to the entry */
-  gtk_entry_set_completion (GTK_ENTRY (entry), completion);
+  gtk_entry_set_completion (entry, completion);
   g_object_unref (completion);
 
-  gtk_container_add (GTK_CONTAINER (vbox), entry);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (entry));
 
   gtk_widget_show (window);
 

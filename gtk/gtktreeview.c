@@ -10114,7 +10114,7 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
 		    tree_view);
   gtk_widget_add_controller (tree_view->search_popover, controller);
 
-  tree_view->search_entry = gtk_text_new ();
+  tree_view->search_entry = GTK_WIDGET (gtk_text_new ());
 
   controller = gtk_text_get_key_controller (GTK_TEXT (tree_view->search_entry));
   gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);

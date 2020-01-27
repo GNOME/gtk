@@ -40,13 +40,13 @@ struct _NodeEditorWindow
 {
   GtkApplicationWindow parent;
 
-  GtkWidget *picture;
+  GtkPicture *picture;
   GtkWidget *text_view;
   GtkTextBuffer *text_buffer;
   GtkTextTagTable *tag_table;
 
   GtkWidget *testcase_popover;
-  GtkWidget *testcase_error_label;
+  GtkLabel *testcase_error_label;
   GtkWidget *testcase_cairo_checkbutton;
   GtkWidget *testcase_name_entry;
   GtkWidget *testcase_save_button;
@@ -185,7 +185,7 @@ text_changed (GtkTextBuffer    *buffer,
       gtk_snapshot_append_node (snapshot, node);
       gsk_render_node_unref (node);
       paintable = gtk_snapshot_free_to_paintable (snapshot, &bounds.size);
-      gtk_picture_set_paintable (GTK_PICTURE (self->picture), paintable);
+      gtk_picture_set_paintable (self->picture, paintable);
       for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->renderers)); i++)
         {
           gpointer item = g_list_model_get_item (G_LIST_MODEL (self->renderers), i);
@@ -196,7 +196,7 @@ text_changed (GtkTextBuffer    *buffer,
     }
   else
     {
-      gtk_picture_set_paintable (GTK_PICTURE (self->picture), NULL);
+      gtk_picture_set_paintable (self->picture, NULL);
     }
 
   GtkTextIter iter;
@@ -374,7 +374,7 @@ open_response_cb (GtkWidget        *dialog,
 static void
 show_open_filechooser (NodeEditorWindow *self)
 {
-  GtkWidget *dialog;
+  GtkFileChooserDialog *dialog;
 
   dialog = gtk_file_chooser_dialog_new ("Open node file",
                                         GTK_WINDOW (self),
@@ -387,7 +387,7 @@ show_open_filechooser (NodeEditorWindow *self)
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), ".");
   g_signal_connect (dialog, "response", G_CALLBACK (open_response_cb), self);
-  gtk_widget_show (dialog);
+  gtk_widget_show (GTK_WIDGET (dialog));
 }
 
 static void
@@ -437,7 +437,7 @@ static void
 save_cb (GtkWidget        *button,
          NodeEditorWindow *self)
 {
-  GtkWidget *dialog;
+  GtkFileChooserDialog *dialog;
 
   dialog = gtk_file_chooser_dialog_new ("Save node",
                                         GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
@@ -451,7 +451,7 @@ save_cb (GtkWidget        *button,
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), ".");
   g_signal_connect (dialog, "response", G_CALLBACK (save_response_cb), self);
-  gtk_widget_show (dialog);
+  gtk_widget_show (GTK_WIDGET (dialog));
 }
 
 static GdkTexture *
@@ -463,7 +463,7 @@ create_texture (NodeEditorWindow *self)
   GskRenderNode *node;
   GdkTexture *texture;
 
-  paintable = gtk_picture_get_paintable (GTK_PICTURE (self->picture));
+  paintable = gtk_picture_get_paintable (self->picture);
   if (paintable == NULL ||
       gdk_paintable_get_intrinsic_width (paintable) <= 0 ||
       gdk_paintable_get_intrinsic_height (paintable) <= 0)
@@ -491,7 +491,7 @@ create_cairo_texture (NodeEditorWindow *self)
   GdkTexture *texture;
   GdkSurface *surface;
 
-  paintable = gtk_picture_get_paintable (GTK_PICTURE (self->picture));
+  paintable = gtk_picture_get_paintable (self->picture);
   if (paintable == NULL ||
       gdk_paintable_get_intrinsic_width (paintable) <= 0 ||
       gdk_paintable_get_intrinsic_height (paintable) <= 0)
@@ -550,7 +550,7 @@ export_image_cb (GtkWidget        *button,
                  NodeEditorWindow *self)
 {
   GdkTexture *texture;
-  GtkWidget *dialog;
+  GtkFileChooserDialog *dialog;
 
   texture = create_texture (self);
   if (texture == NULL)
@@ -567,7 +567,7 @@ export_image_cb (GtkWidget        *button,
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
   g_signal_connect (dialog, "response", G_CALLBACK (export_image_response_cb), texture);
-  gtk_widget_show (dialog);
+  gtk_widget_show (GTK_WIDGET (dialog));
 }
 
 static void
@@ -613,7 +613,7 @@ testcase_save_clicked_cb (GtkWidget        *button,
 
   if (!gdk_texture_save_to_png (texture, png_file))
     {
-      gtk_label_set_label (GTK_LABEL (self->testcase_error_label),
+      gtk_label_set_label (self->testcase_error_label,
                            "Could not save texture file");
       goto out;
     }
@@ -621,7 +621,7 @@ testcase_save_clicked_cb (GtkWidget        *button,
   text = get_current_text (self->text_buffer);
   if (!g_file_set_contents (node_file, text, -1, &error))
     {
-      gtk_label_set_label (GTK_LABEL (self->testcase_error_label), error->message);
+      gtk_label_set_label (self->testcase_error_label, error->message);
       /* TODO: Remove texture file again? */
       goto out;
     }
@@ -665,7 +665,7 @@ node_editor_window_add_renderer (NodeEditorWindow *self,
       return;
     }
 
-  paintable = gtk_renderer_paintable_new (renderer, gtk_picture_get_paintable (GTK_PICTURE (self->picture)));
+  paintable = gtk_renderer_paintable_new (renderer, gtk_picture_get_paintable (self->picture));
   g_object_set_data_full (G_OBJECT (paintable), "description", g_strdup (description), g_free);
   g_clear_object (&renderer);
 
@@ -757,20 +757,22 @@ node_editor_window_create_renderer_widget (gpointer item,
                                            gpointer user_data)
 {
   GdkPaintable *paintable = item;
-  GtkWidget *box, *label, *picture;
+  GtkWidget *box;
+  GtkPicture *picture;
+  GtkLabel *label;
   GtkWidget *row;
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_set_size_request (box, 120, 90);
 
   label = gtk_label_new (g_object_get_data (G_OBJECT (paintable), "description"));
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   picture = gtk_picture_new_for_paintable (paintable);
   /* don't ever scale up, we want to be as accurate as possible */
-  gtk_widget_set_halign (picture, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (picture, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (box), picture);
+  gtk_widget_set_halign (GTK_WIDGET (picture), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (picture), GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (picture));
 
   row = gtk_list_box_row_new ();
   gtk_container_add (GTK_CONTAINER (row), box);

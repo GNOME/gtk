@@ -158,7 +158,7 @@ struct _GtkTextPrivate
 
   char         *im_module;
 
-  GtkWidget     *emoji_completion;
+  GtkEmojiCompletion *emoji_completion;
   GtkTextHandle *text_handle;
   GtkWidget     *selection_bubble;
   guint          selection_bubble_timeout_id;
@@ -166,7 +166,7 @@ struct _GtkTextPrivate
   GtkWidget     *magnifier_popover;
   GtkWidget     *magnifier;
 
-  GtkWidget     *placeholder;
+  GtkLabel      *placeholder;
 
   GtkGesture    *drag_gesture;
   GtkEventController *key_controller;
@@ -1833,7 +1833,7 @@ gtk_text_dispose (GObject *object)
   GtkText *self = GTK_TEXT (object);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GdkKeymap *keymap;
-  GtkWidget *chooser;
+  GtkEmojiChooser *chooser;
 
   priv->current_pos = 0;
 
@@ -1844,10 +1844,10 @@ gtk_text_dispose (GObject *object)
       priv->buffer = NULL;
     }
 
-  g_clear_pointer (&priv->emoji_completion, gtk_widget_unparent);
-  chooser = g_object_get_data (object, "gtk-emoji-chooser");
+  g_clear_pointer ((GtkWidget **) &priv->emoji_completion, gtk_widget_unparent);
+  chooser = GTK_EMOJI_CHOOSER (g_object_get_data (object, "gtk-emoji-chooser"));
   if (chooser)
-    gtk_widget_unparent (chooser);
+    gtk_widget_unparent (GTK_WIDGET (chooser));
 
   keymap = gdk_display_get_keymap (gtk_widget_get_display (GTK_WIDGET (object)));
   g_signal_handlers_disconnect_by_func (keymap, keymap_direction_changed, self);
@@ -1874,7 +1874,7 @@ gtk_text_finalize (GObject *object)
   g_clear_object (&priv->text_handle);
   g_free (priv->im_module);
 
-  g_clear_pointer (&priv->placeholder, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **) &priv->placeholder, gtk_widget_unparent);
 
   if (priv->tabs)
     pango_tab_array_free (priv->tabs);
@@ -2271,7 +2271,7 @@ gtk_text_measure (GtkWidget      *widget,
         {
           int pmin, pnat;
 
-          gtk_widget_measure (priv->placeholder, GTK_ORIENTATION_HORIZONTAL, -1,
+          gtk_widget_measure (GTK_WIDGET (priv->placeholder), GTK_ORIENTATION_HORIZONTAL, -1,
                               &pmin, &pnat, NULL, NULL);
           min = MAX (min, pmin);
           nat = MAX (nat, pnat);
@@ -2302,7 +2302,7 @@ gtk_text_measure (GtkWidget      *widget,
         {
           int min, nat;
 
-          gtk_widget_measure (priv->placeholder, GTK_ORIENTATION_VERTICAL, -1,
+          gtk_widget_measure (GTK_WIDGET (priv->placeholder), GTK_ORIENTATION_VERTICAL, -1,
                               &min, &nat, NULL, NULL);
           *minimum = MAX (*minimum, min);
           *natural = MAX (*natural, nat);
@@ -2331,7 +2331,7 @@ gtk_text_size_allocate (GtkWidget *widget,
 
   if (priv->placeholder)
     {
-      gtk_widget_size_allocate (priv->placeholder,
+      gtk_widget_size_allocate (GTK_WIDGET (priv->placeholder),
                                 &(GtkAllocation) { 0, 0, width, height },
                                 -1);
     }
@@ -2340,7 +2340,7 @@ gtk_text_size_allocate (GtkWidget *widget,
   gtk_text_check_cursor_blink (self);
   update_im_cursor_location (self);
 
-  chooser = g_object_get_data (G_OBJECT (self), "gtk-emoji-chooser");
+  chooser = GTK_EMOJI_CHOOSER (g_object_get_data (G_OBJECT (self), "gtk-emoji-chooser"));
   if (chooser)
     gtk_native_check_resize (GTK_NATIVE (chooser));
 
@@ -2408,7 +2408,7 @@ gtk_text_snapshot (GtkWidget   *widget,
     gtk_text_draw_cursor (self, snapshot, CURSOR_DND);
 
   if (priv->placeholder)
-    gtk_widget_snapshot_child (widget, priv->placeholder, snapshot);
+    gtk_widget_snapshot_child (widget, GTK_WIDGET (priv->placeholder), snapshot);
 
   gtk_text_draw_text (self, snapshot);
 
@@ -3410,7 +3410,7 @@ update_placeholder_visibility (GtkText *self)
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
   if (priv->placeholder)
-    gtk_widget_set_child_visible (priv->placeholder,
+    gtk_widget_set_child_visible (GTK_WIDGET (priv->placeholder),
                                   gtk_entry_buffer_get_length (priv->buffer) == 0);
 }
 
@@ -5208,7 +5208,7 @@ gtk_text_update_primary_selection (GtkText *self)
  *
  * Returns: a new #GtkText.
  */
-GtkWidget *
+GtkText *
 gtk_text_new (void)
 {
   return g_object_new (GTK_TYPE_TEXT, NULL);
@@ -5222,7 +5222,7 @@ gtk_text_new (void)
  *
  * Returns: a new #GtkText
  */
-GtkWidget *
+GtkText *
 gtk_text_new_with_buffer (GtkEntryBuffer *buffer)
 {
   g_return_val_if_fail (GTK_IS_ENTRY_BUFFER (buffer), NULL);
@@ -5970,7 +5970,8 @@ append_bubble_item (GtkText    *self,
                     int         index)
 {
   GtkActionMuxer *muxer;
-  GtkWidget *item, *image;
+  GtkWidget *item;
+  GtkImage *image;
   GVariant *att;
   const char *icon_name;
   const char *action_name;
@@ -6006,8 +6007,8 @@ append_bubble_item (GtkText    *self,
   item = gtk_button_new ();
   gtk_widget_set_focus_on_click (item, FALSE);
   image = gtk_image_new_from_icon_name (icon_name);
-  gtk_widget_show (image);
-  gtk_container_add (GTK_CONTAINER (item), image);
+  gtk_widget_show (GTK_WIDGET (image));
+  gtk_container_add (GTK_CONTAINER (item), GTK_WIDGET (image));
   gtk_style_context_add_class (gtk_widget_get_style_context (item), "image-button");
   gtk_actionable_set_action_name (GTK_ACTIONABLE (item), action_name);
   gtk_widget_show (GTK_WIDGET (item));
@@ -6546,12 +6547,12 @@ gtk_text_set_placeholder_text (GtkText    *self,
                                         "xalign", 0.0f,
                                         "ellipsize", PANGO_ELLIPSIZE_END,
                                         NULL);
-      gtk_label_set_attributes (GTK_LABEL (priv->placeholder), priv->attrs);
-      gtk_widget_insert_after (priv->placeholder, GTK_WIDGET (self), NULL);
+      gtk_label_set_attributes (priv->placeholder, priv->attrs);
+      gtk_widget_insert_after (GTK_WIDGET (priv->placeholder), GTK_WIDGET (self), NULL);
     }
   else
     {
-      gtk_label_set_text (GTK_LABEL (priv->placeholder), text);
+      gtk_label_set_text (priv->placeholder, text);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), text_props[PROP_PLACEHOLDER_TEXT]);
@@ -6578,7 +6579,7 @@ gtk_text_get_placeholder_text (GtkText *self)
   if (!priv->placeholder)
     return NULL;
 
-  return gtk_label_get_text (GTK_LABEL (priv->placeholder));
+  return gtk_label_get_text (priv->placeholder);
 }
 
 /**
@@ -6702,7 +6703,7 @@ gtk_text_set_attributes (GtkText       *self,
   priv->attrs = attrs;
 
   if (priv->placeholder)
-    gtk_label_set_attributes (GTK_LABEL (priv->placeholder), attrs);
+    gtk_label_set_attributes (priv->placeholder, attrs);
 
   g_object_notify_by_pspec (G_OBJECT (self), text_props[PROP_ATTRIBUTES]);
 
@@ -6799,12 +6800,12 @@ static void
 gtk_text_insert_emoji (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GtkWidget *chooser;
+  GtkEmojiChooser *chooser;
 
   if (gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_EMOJI_CHOOSER) != NULL)
     return;
 
-  chooser = GTK_WIDGET (g_object_get_data (G_OBJECT (self), "gtk-emoji-chooser"));
+  chooser = GTK_EMOJI_CHOOSER (g_object_get_data (G_OBJECT (self), "gtk-emoji-chooser"));
   if (!chooser)
     {
       chooser = gtk_emoji_chooser_new ();
@@ -6834,7 +6835,7 @@ set_enable_emoji_completion (GtkText  *self,
   if (priv->enable_emoji_completion)
     priv->emoji_completion = gtk_emoji_completion_new (self);
   else
-    g_clear_pointer (&priv->emoji_completion, gtk_widget_unparent);
+    g_clear_pointer ((GtkWidget **) &priv->emoji_completion, gtk_widget_unparent);
 
   g_object_notify_by_pspec (G_OBJECT (self), text_props[PROP_ENABLE_EMOJI_COMPLETION]);
 }

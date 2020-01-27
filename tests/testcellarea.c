@@ -177,7 +177,9 @@ expand_cell_3_toggled (GtkToggleButton  *toggle,
 static void
 simple_cell_area (void)
 {
-  GtkWidget *window, *widget;
+  GtkWidget *window;
+  GtkCheckButton *widget;
+  GtkComboBoxText *combo;
   GtkWidget *iconview, *frame, *vbox, *hbox;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -201,28 +203,28 @@ simple_cell_area (void)
 
   gtk_container_add (GTK_CONTAINER (hbox), frame);
 
-  widget = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Horizontal");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Vertical");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  gtk_widget_show (widget);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  combo = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append_text (combo, "Horizontal");
+  gtk_combo_box_text_append_text (combo, "Vertical");
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+  gtk_widget_show (GTK_WIDGET (combo));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (combo));
 
-  g_signal_connect (G_OBJECT (widget), "changed",
+  g_signal_connect (G_OBJECT (combo), "changed",
                     G_CALLBACK (orientation_changed), iconview);
 
   widget = gtk_check_button_new_with_label ("Align 2nd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-  gtk_widget_show (widget);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  gtk_widget_show (GTK_WIDGET (widget));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (widget));
 
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (align_cell_2_toggled), iconview);
 
   widget = gtk_check_button_new_with_label ("Align 3rd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-  gtk_widget_show (widget);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  gtk_widget_show (GTK_WIDGET (widget));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (widget));
 
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (align_cell_3_toggled), iconview);
@@ -230,24 +232,24 @@ simple_cell_area (void)
 
   widget = gtk_check_button_new_with_label ("Expand 1st Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-  gtk_widget_show (widget);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  gtk_widget_show (GTK_WIDGET (widget));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (widget));
 
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (expand_cell_1_toggled), iconview);
 
   widget = gtk_check_button_new_with_label ("Expand 2nd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-  gtk_widget_show (widget);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  gtk_widget_show (GTK_WIDGET (widget));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (widget));
 
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (expand_cell_2_toggled), iconview);
 
   widget = gtk_check_button_new_with_label ("Expand 3rd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-  gtk_widget_show (widget);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  gtk_widget_show (GTK_WIDGET (widget));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (widget));
 
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (expand_cell_3_toggled), iconview);
@@ -420,7 +422,9 @@ focus_sibling_toggled (GtkToggleButton  *toggle,
 static void
 focus_cell_area (void)
 {
-  GtkWidget *window, *widget;
+  GtkWidget *window;
+  GtkCheckButton *widget;
+  GtkComboBoxText *combo;
   GtkWidget *iconview, *frame, *vbox, *hbox;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -444,20 +448,20 @@ focus_cell_area (void)
   gtk_container_add (GTK_CONTAINER (hbox), vbox);
   gtk_container_add (GTK_CONTAINER (hbox), frame);
 
-  widget = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Horizontal");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Vertical");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  gtk_widget_show (widget);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  combo = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append_text (combo, "Horizontal");
+  gtk_combo_box_text_append_text (combo, "Vertical");
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+  gtk_widget_show (GTK_WIDGET (combo));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (combo));
 
-  g_signal_connect (G_OBJECT (widget), "changed",
+  g_signal_connect (G_OBJECT (combo), "changed",
                     G_CALLBACK (orientation_changed), iconview);
 
   widget = gtk_check_button_new_with_label ("Focus Sibling");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-  gtk_widget_show (widget);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  gtk_widget_show (GTK_WIDGET (widget));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (widget));
 
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (focus_sibling_toggled), iconview);
@@ -509,8 +513,10 @@ item_padding_changed (GtkSpinButton    *spin_button,
 static void
 background_area (void)
 {
-  GtkWidget *window, *widget, *label, *main_vbox;
+  GtkWidget *window, *widget, *main_vbox;
+  GtkComboBoxText *combo;
   GtkWidget *iconview, *frame, *vbox, *hbox;
+  GtkLabel *label;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   hbox  = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
@@ -524,9 +530,9 @@ background_area (void)
   label = gtk_label_new ("In this example, row spacing gets devided into the background area, "
 			 "column spacing is added between each background area, item_padding is "
 			 "prepended space distributed to the background area.");
-  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-  gtk_label_set_width_chars (GTK_LABEL (label), 40);
-  gtk_container_add (GTK_CONTAINER (main_vbox), label);
+  gtk_label_set_wrap (label, TRUE);
+  gtk_label_set_width_chars (label, 40);
+  gtk_container_add (GTK_CONTAINER (main_vbox), GTK_WIDGET (label));
 
   iconview = focus_iconview (TRUE, NULL, NULL);
 
@@ -546,21 +552,21 @@ background_area (void)
 
   gtk_container_add (GTK_CONTAINER (main_vbox), hbox);
 
-  widget = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Horizontal");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Vertical");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  gtk_widget_show (widget);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  combo = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append_text (combo, "Horizontal");
+  gtk_combo_box_text_append_text (combo, "Vertical");
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+  gtk_widget_show (GTK_WIDGET (combo));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (combo));
 
-  g_signal_connect (G_OBJECT (widget), "changed",
+  g_signal_connect (G_OBJECT (combo), "changed",
                     G_CALLBACK (orientation_changed), iconview);
 
   widget = gtk_spin_button_new_with_range (0, 10, 1);
   label = gtk_label_new ("Cell spacing");
-  gtk_widget_set_hexpand (label, TRUE);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
   gtk_container_add (GTK_CONTAINER (hbox), widget);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
@@ -571,9 +577,9 @@ background_area (void)
   widget = gtk_spin_button_new_with_range (0, 10, 1);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), gtk_icon_view_get_row_spacing (GTK_ICON_VIEW (iconview)));
   label = gtk_label_new ("Row spacing");
-  gtk_widget_set_hexpand (label, TRUE);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
   gtk_container_add (GTK_CONTAINER (hbox), widget);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
@@ -582,10 +588,10 @@ background_area (void)
 
   widget = gtk_spin_button_new_with_range (0, 30, 1);
   label = gtk_label_new ("Item padding");
-  gtk_widget_set_hexpand (label, TRUE);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), gtk_icon_view_get_item_padding (GTK_ICON_VIEW (iconview)));
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
   gtk_container_add (GTK_CONTAINER (hbox), widget);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
 

@@ -18,16 +18,16 @@
 
 /* Convenience function to create a combo box holding a number of strings
  */
-GtkWidget *
+GtkComboBoxText *
 create_combo_box (const char **strings)
 {
-  GtkWidget *combo_box;
+  GtkComboBoxText *combo_box;
   const char **str;
 
   combo_box = gtk_combo_box_text_new ();
 
   for (str = strings; *str; str++)
-    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), *str);
+    gtk_combo_box_text_append_text (combo_box, *str);
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
 
@@ -41,21 +41,21 @@ add_row (GtkGrid      *table,
          const char   *label_text,
          const char  **options)
 {
-  GtkWidget *combo_box;
-  GtkWidget *label;
+  GtkComboBoxText *combo_box;
+  GtkLabel *label;
 
   label = gtk_label_new_with_mnemonic (label_text);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_grid_attach (table, label, 0, row, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_BASELINE);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_grid_attach (table, GTK_WIDGET (label), 0, row, 1, 1);
 
   combo_box = create_combo_box (options);
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo_box);
-  gtk_widget_set_halign (combo_box, GTK_ALIGN_END);
-  gtk_widget_set_valign (combo_box, GTK_ALIGN_BASELINE);
-  gtk_size_group_add_widget (size_group, combo_box);
-  gtk_grid_attach (table, combo_box, 1, row, 1, 1);
+  gtk_label_set_mnemonic_widget (label, GTK_WIDGET (combo_box));
+  gtk_widget_set_halign (GTK_WIDGET (combo_box), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (combo_box), GTK_ALIGN_BASELINE);
+  gtk_size_group_add_widget (size_group, GTK_WIDGET (combo_box));
+  gtk_grid_attach (table, GTK_WIDGET (combo_box), 1, row, 1, 1);
 }
 
 static void
@@ -83,7 +83,7 @@ do_sizegroup (GtkWidget *do_widget)
   GtkWidget *table;
   GtkWidget *frame;
   GtkWidget *vbox;
-  GtkWidget *check_button;
+  GtkCheckButton *check_button;
   GtkSizeGroup *size_group;
 
   static const char *color_options[] = {
@@ -142,7 +142,7 @@ do_sizegroup (GtkWidget *do_widget)
 
       /* And a check button to turn grouping on and off */
       check_button = gtk_check_button_new_with_mnemonic ("_Enable grouping");
-      gtk_container_add (GTK_CONTAINER (vbox), check_button);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (check_button));
 
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
       g_signal_connect (check_button, "toggled",

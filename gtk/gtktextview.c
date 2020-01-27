@@ -4215,7 +4215,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   GdkRectangle right_rect;
   GdkRectangle top_rect;
   GdkRectangle bottom_rect;
-  GtkWidget *chooser;
+  GtkEmojiChooser *chooser;
   PangoLayout *layout;
   guint mru_size;
   
@@ -4318,7 +4318,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
    */
   gtk_text_view_flush_first_validate (text_view);
 
-  chooser = g_object_get_data (G_OBJECT (text_view), "gtk-emoji-chooser");
+  chooser = GTK_EMOJI_CHOOSER (g_object_get_data (G_OBJECT (text_view), "gtk-emoji-chooser"));
   if (chooser)
     gtk_native_check_resize (GTK_NATIVE (chooser));
 
@@ -8794,7 +8794,8 @@ append_bubble_item (GtkTextView *text_view,
                     GMenuModel  *model,
                     int          index)
 {
-  GtkWidget *item, *image;
+  GtkWidget *item;
+  GtkImage *image;
   GVariant *att;
   const char *icon_name;
   const char *action_name;
@@ -8843,12 +8844,12 @@ append_bubble_item (GtkTextView *text_view,
     }
 
   if (is_toggle_action)
-    item = gtk_toggle_button_new ();
+    item = GTK_WIDGET (gtk_toggle_button_new ());
   else
     item = gtk_button_new ();
   gtk_widget_set_focus_on_click (item, FALSE);
   image = gtk_image_new_from_icon_name (icon_name);
-  gtk_container_add (GTK_CONTAINER (item), image);
+  gtk_container_add (GTK_CONTAINER (item), GTK_WIDGET (image));
   gtk_style_context_add_class (gtk_widget_get_style_context (item), "image-button");
   gtk_actionable_set_action_name (GTK_ACTIONABLE (item), action_name);
 
@@ -9663,7 +9664,7 @@ gtk_text_view_get_monospace (GtkTextView *text_view)
 static void
 gtk_text_view_insert_emoji (GtkTextView *text_view)
 {
-  GtkWidget *chooser;
+  GtkEmojiChooser *chooser;
   GtkTextIter iter;
   GdkRectangle rect;
   GtkTextBuffer *buffer;
@@ -9671,7 +9672,7 @@ gtk_text_view_insert_emoji (GtkTextView *text_view)
   if (gtk_widget_get_ancestor (GTK_WIDGET (text_view), GTK_TYPE_EMOJI_CHOOSER) != NULL)
     return;
 
-  chooser = GTK_WIDGET (g_object_get_data (G_OBJECT (text_view), "gtk-emoji-chooser"));
+  chooser = GTK_EMOJI_CHOOSER (g_object_get_data (G_OBJECT (text_view), "gtk-emoji-chooser"));
   if (!chooser)
     {
       chooser = gtk_emoji_chooser_new ();

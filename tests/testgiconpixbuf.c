@@ -24,7 +24,9 @@ main (int argc,
       char **argv)
 {
   GdkPixbuf *pixbuf, *otherpix;
-  GtkWidget *image, *image2, *hbox, *vbox, *label, *toplevel;
+  GtkImage *image, *image2;
+  GtkWidget *hbox, *vbox, *toplevel;
+  GtkLabel *label;
   GIcon *emblemed;
   GEmblem *emblem;
   gchar *str;
@@ -44,13 +46,13 @@ main (int argc,
   gtk_container_add (GTK_CONTAINER (hbox), vbox);
 
   image = gtk_image_new_from_gicon (G_ICON (pixbuf));
-  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
-  gtk_container_add (GTK_CONTAINER (vbox), image);
+  gtk_image_set_icon_size (image, GTK_ICON_SIZE_LARGE);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (image));
 
   label = gtk_label_new (NULL);
   str = g_strdup_printf ("Normal icon, hash %u", g_icon_hash (G_ICON (pixbuf)));
-  gtk_label_set_label (GTK_LABEL (label), str);
-  gtk_container_add (GTK_CONTAINER (vbox), label);
+  gtk_label_set_label (label, str);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
   otherpix = gdk_pixbuf_new_from_file ("gnome-textfile.png", NULL);
   emblem = g_emblem_new (G_ICON (otherpix));
@@ -60,13 +62,13 @@ main (int argc,
   gtk_container_add (GTK_CONTAINER (hbox), vbox);
 
   image2 = gtk_image_new_from_gicon (emblemed);
-  gtk_image_set_icon_size (GTK_IMAGE (image2), GTK_ICON_SIZE_LARGE);
-  gtk_container_add (GTK_CONTAINER (vbox), image2);
+  gtk_image_set_icon_size (image2, GTK_ICON_SIZE_LARGE);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (image2));
 
   label = gtk_label_new (NULL);
   str = g_strdup_printf ("Emblemed icon, hash %u", g_icon_hash (emblemed));
   gtk_label_set_label (GTK_LABEL (label), str);
-  gtk_container_add (GTK_CONTAINER (vbox), label);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
   gtk_widget_show (toplevel);
 

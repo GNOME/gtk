@@ -48,7 +48,7 @@ main (int argc, char *argv[])
   GtkWidget *sw;
   GtkWidget *tv;
   GtkWidget *sb2;
-  GtkWidget *combo;
+  GtkComboBoxText *combo;
   GtkAdjustment *adj;
 
   gtk_init ();
@@ -79,13 +79,13 @@ main (int argc, char *argv[])
   adj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (tv));
 
   combo = gtk_combo_box_text_new ();
-  gtk_widget_set_valign (combo, GTK_ALIGN_START);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Traditional");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Overlay");
+  gtk_widget_set_valign (GTK_WIDGET (combo), GTK_ALIGN_START);
+  gtk_combo_box_text_append_text (combo, "Traditional");
+  gtk_combo_box_text_append_text (combo, "Overlay");
   g_signal_connect (combo, "changed", G_CALLBACK (mode_changed), sw);
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 1);
 
-  gtk_container_add (GTK_CONTAINER (box), combo);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (combo));
 
   sb2 = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, adj);
   gtk_container_add (GTK_CONTAINER (box), sb2);

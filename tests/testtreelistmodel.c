@@ -166,6 +166,7 @@ create_widget_for_model (gpointer item,
                          gpointer root)
 {
   GtkWidget *row, *box, *child;
+  GtkLabel *label;
   GFileInfo *info;
   GFile *file;
   guint depth;
@@ -202,7 +203,7 @@ create_widget_for_model (gpointer item,
     }
   else
     {
-      child = gtk_image_new (); /* empty whatever */
+      child = GTK_WIDGET (gtk_image_new ()); /* empty whatever */
     }
   gtk_container_add (GTK_CONTAINER (box), child);
 
@@ -211,15 +212,15 @@ create_widget_for_model (gpointer item,
   icon = g_file_info_get_icon (info);
   if (icon)
     {
-      child = gtk_image_new_from_gicon (icon);
+      child = GTK_WIDGET (gtk_image_new_from_gicon (icon));
       gtk_container_add (GTK_CONTAINER (box), child);
     }
 
   file = g_object_get_data (G_OBJECT (info), "file");
-  child = gtk_label_new (g_file_get_basename (file));
+  label = gtk_label_new (g_file_get_basename (file));
   g_object_unref (info);
 
-  gtk_container_add (GTK_CONTAINER (box), child);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   return row;
 }

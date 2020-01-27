@@ -108,7 +108,10 @@ gint
 main (gint argc,
       gchar ** argv)
 {
-  GtkWidget *window, *box, *button, *hbox, *combo, *layout;
+  GtkWidget *window, *box, *button, *hbox, *layout;
+  GtkToggleButton *toggle;
+  GtkCheckButton *checkbutton;
+  GtkComboBoxText *combo;
   GtkWidget *w2, *w3;
   GtkListStore* store;
   GtkWidget *tree_view;
@@ -214,29 +217,29 @@ main (gint argc,
   gtk_container_add (GTK_CONTAINER (hbox), button);
   g_signal_connect (button, "clicked", (GCallback) set_visible_child_name, (gpointer) "3");
 
-  button = gtk_check_button_new ();
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),
+  checkbutton = gtk_check_button_new ();
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbutton),
 				gtk_stack_get_hhomogeneous (GTK_STACK (stack)));
-  gtk_container_add (GTK_CONTAINER (hbox), button);
-  g_signal_connect (button, "clicked", (GCallback) toggle_hhomogeneous, NULL);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (checkbutton));
+  g_signal_connect (checkbutton, "clicked", (GCallback) toggle_hhomogeneous, NULL);
 
-  button = gtk_check_button_new_with_label ("homogeneous");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),
+  checkbutton = gtk_check_button_new_with_label ("homogeneous");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbutton),
 				gtk_stack_get_vhomogeneous (GTK_STACK (stack)));
-  gtk_container_add (GTK_CONTAINER (hbox), button);
-  g_signal_connect (button, "clicked", (GCallback) toggle_vhomogeneous, NULL);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (checkbutton));
+  g_signal_connect (checkbutton, "clicked", (GCallback) toggle_vhomogeneous, NULL);
 
-  button = gtk_toggle_button_new_with_label ("Add icon");
-  g_signal_connect (button, "toggled", (GCallback) toggle_icon_name, NULL);
-  gtk_container_add (GTK_CONTAINER (hbox), button);
+  toggle = gtk_toggle_button_new_with_label ("Add icon");
+  g_signal_connect (toggle, "toggled", (GCallback) toggle_icon_name, NULL);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (toggle));
 
   combo = gtk_combo_box_text_new ();
   class = g_type_class_ref (GTK_TYPE_STACK_TRANSITION_TYPE);
   for (i = 0; i < class->n_values; i++)
-    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), class->values[i].value_nick);
+    gtk_combo_box_text_append_text (combo, class->values[i].value_nick);
   g_type_class_unref (class);
 
-  gtk_container_add (GTK_CONTAINER (hbox), combo);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (combo));
   g_signal_connect (combo, "changed", (GCallback) toggle_transitions, NULL);
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 

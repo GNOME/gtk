@@ -423,7 +423,7 @@ attach_widgets (GtkTextView *text_view)
         }
       else if (i == 1)
         {
-          widget = gtk_combo_box_text_new ();
+          widget = GTK_WIDGET (gtk_combo_box_text_new ());
 
           gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Option 1");
           gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Option 2");
@@ -437,7 +437,7 @@ attach_widgets (GtkTextView *text_view)
         }
       else if (i == 3)
         {
-          widget = gtk_entry_new ();
+          widget = GTK_WIDGET (gtk_entry_new ());
         }
       else
         {

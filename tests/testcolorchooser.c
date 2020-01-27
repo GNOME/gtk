@@ -33,7 +33,7 @@ dialog_response (GtkDialog *dialog, gint response)
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *dialog;
+  GtkColorChooserDialog *dialog;
   gint i;
 
   gtk_init ();
@@ -86,7 +86,7 @@ main (int argc, char *argv[])
         }
       else if (g_strcmp0 (argv[i], "--no-palette") == 0)
         {
-          gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (dialog), 
+          gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (dialog),
                                          GTK_ORIENTATION_VERTICAL, 0, 0, NULL);
         }
     }
@@ -94,7 +94,7 @@ main (int argc, char *argv[])
   g_signal_connect (dialog, "notify::color", G_CALLBACK (color_changed), NULL);
   g_signal_connect (dialog, "response", G_CALLBACK (dialog_response), NULL);
 
-  gtk_widget_show (dialog);
+  gtk_widget_show (GTK_WIDGET (dialog));
 
   gtk_main ();
 

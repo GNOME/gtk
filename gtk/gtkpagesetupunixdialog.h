@@ -35,20 +35,20 @@ typedef struct _GtkPageSetupUnixDialog GtkPageSetupUnixDialog;
 
 
 GDK_AVAILABLE_IN_ALL
-GType 		  gtk_page_setup_unix_dialog_get_type	        (void) G_GNUC_CONST;
+GType 		         gtk_page_setup_unix_dialog_get_type	       (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget *       gtk_page_setup_unix_dialog_new                (const gchar            *title,
-								 GtkWindow              *parent);
+GtkPageSetupUnixDialog * gtk_page_setup_unix_dialog_new                (const gchar            *title,
+                                                                        GtkWindow              *parent);
 GDK_AVAILABLE_IN_ALL
-void              gtk_page_setup_unix_dialog_set_page_setup     (GtkPageSetupUnixDialog *dialog,
-								 GtkPageSetup           *page_setup);
+void                     gtk_page_setup_unix_dialog_set_page_setup     (GtkPageSetupUnixDialog *dialog,
+                                                                        GtkPageSetup           *page_setup);
 GDK_AVAILABLE_IN_ALL
-GtkPageSetup *    gtk_page_setup_unix_dialog_get_page_setup     (GtkPageSetupUnixDialog *dialog);
+GtkPageSetup *           gtk_page_setup_unix_dialog_get_page_setup     (GtkPageSetupUnixDialog *dialog);
 GDK_AVAILABLE_IN_ALL
-void              gtk_page_setup_unix_dialog_set_print_settings (GtkPageSetupUnixDialog *dialog,
-								 GtkPrintSettings       *print_settings);
+void                     gtk_page_setup_unix_dialog_set_print_settings (GtkPageSetupUnixDialog *dialog,
+                                                                        GtkPrintSettings       *print_settings);
 GDK_AVAILABLE_IN_ALL
-GtkPrintSettings *gtk_page_setup_unix_dialog_get_print_settings (GtkPageSetupUnixDialog *dialog);
+GtkPrintSettings *       gtk_page_setup_unix_dialog_get_print_settings (GtkPageSetupUnixDialog *dialog);
 
 G_END_DECLS
 

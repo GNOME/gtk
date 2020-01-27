@@ -300,6 +300,7 @@ create_widget_for_render_node (gpointer row_item,
   GdkPaintable *paintable;
   GskRenderNode *node;
   GtkWidget *row, *box, *child;
+  GtkLabel *label;
   char *name;
   guint depth;
 
@@ -334,19 +335,19 @@ create_widget_for_render_node (gpointer row_item,
     }
   else
     {
-      child = gtk_image_new (); /* empty whatever */
+      child = GTK_WIDGET (gtk_image_new ()); /* empty whatever */
     }
   gtk_container_add (GTK_CONTAINER (box), child);
 
   /* icon */
-  child = gtk_image_new_from_paintable (paintable);
+  child = GTK_WIDGET (gtk_image_new_from_paintable (paintable));
   gtk_container_add (GTK_CONTAINER (box), child);
 
   /* name */
   name = node_name (node);
-  child = gtk_label_new (name);
+  label = gtk_label_new (name);
   g_free (name);
-  gtk_container_add (GTK_CONTAINER (box), child);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   g_object_unref (paintable);
 
@@ -1013,7 +1014,7 @@ render_node_save (GtkButton            *button,
                   GtkInspectorRecorder *recorder)
 {
   GskRenderNode *node;
-  GtkWidget *dialog;
+  GtkFileChooserDialog *dialog;
   char *filename, *nodename;
 
   node = get_selected_node (recorder);
@@ -1035,7 +1036,7 @@ render_node_save (GtkButton            *button,
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
   g_signal_connect (dialog, "response", G_CALLBACK (render_node_save_response), node);
-  gtk_widget_show (dialog);
+  gtk_widget_show (GTK_WIDGET (dialog));
 }
 
 static char *
@@ -1068,7 +1069,9 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
       char *time_str, *str;
       const char *render_str;
       cairo_region_t *region;
-      GtkWidget *hbox, *label, *button;
+      GtkWidget *hbox;
+      GtkToggleButton *button;
+      GtkLabel *label;
       guint i;
 
       widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
@@ -1113,24 +1116,24 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
           str = g_strdup_printf ("<b>%s</b>\n", render_str);
         }
       label = gtk_label_new (str);
-      gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+      gtk_label_set_use_markup (label, TRUE);
       g_free (str);
-      gtk_container_add (GTK_CONTAINER (hbox), label);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
       button = gtk_toggle_button_new ();
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
       gtk_button_set_icon_name (GTK_BUTTON (button), "view-more-symbolic");
 
-      gtk_container_add (GTK_CONTAINER (hbox), button);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (button));
 
       label = gtk_label_new (gtk_inspector_render_recording_get_profiler_info (GTK_INSPECTOR_RENDER_RECORDING (recording)));
-      gtk_widget_hide (label);
-      gtk_container_add (GTK_CONTAINER (widget), label);
+      gtk_widget_hide (GTK_WIDGET (label));
+      gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (label));
       g_object_bind_property (button, "active", label, "visible", 0);
     }
   else
     {
-      widget = gtk_label_new ("<b>Start of Recording</b>");
+      widget = GTK_WIDGET (gtk_label_new ("<b>Start of Recording</b>"));
       gtk_label_set_use_markup (GTK_LABEL (widget), TRUE);
     }
 
@@ -1151,7 +1154,7 @@ node_property_activated (GtkTreeView *tv,
   GdkTexture *texture;
   gboolean visible;
   GtkWidget *popover;
-  GtkWidget *image;
+  GtkImage *image;
 
   gtk_tree_model_get_iter (GTK_TREE_MODEL (priv->render_node_properties), &iter, path);
   gtk_tree_model_get (GTK_TREE_MODEL (priv->render_node_properties), &iter,
@@ -1169,7 +1172,7 @@ node_property_activated (GtkTreeView *tv,
 
   image = gtk_image_new_from_paintable (GDK_PAINTABLE (texture));
   g_object_set (image, "margin", 20, NULL);
-  gtk_container_add (GTK_CONTAINER (popover), image);
+  gtk_container_add (GTK_CONTAINER (popover), GTK_WIDGET (image));
   gtk_popover_popup (GTK_POPOVER (popover));
 
   g_signal_connect (popover, "unmap", G_CALLBACK (gtk_widget_destroy), NULL);

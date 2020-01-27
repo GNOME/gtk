@@ -23,7 +23,7 @@
 static void
 test_popover_parent (void)
 {
-  GtkWidget *w;
+  GtkEntry *w;
   GtkWidget *p;
   AtkObject *a;
 
@@ -37,11 +37,11 @@ test_popover_parent (void)
   g_assert (a != NULL);
   g_assert (atk_object_get_parent (a) == NULL);
 
-  gtk_popover_set_relative_to (GTK_POPOVER (p), w);
+  gtk_popover_set_relative_to (GTK_POPOVER (p), GTK_WIDGET (w));
 
   g_assert (atk_object_get_parent (a) != NULL);
 
-  gtk_widget_destroy (w);
+  gtk_widget_destroy (GTK_WIDGET (w));
   gtk_widget_destroy (p);
 }
 

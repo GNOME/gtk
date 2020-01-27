@@ -26,7 +26,7 @@
 static GtkWidget*
 get_test_page (const gchar *text)
 {
-  return gtk_label_new (text);
+  return GTK_WIDGET (gtk_label_new (text));
 }
 
 typedef struct {
@@ -55,14 +55,14 @@ add_completion_test_page (GtkWidget   *assistant,
 			  gboolean     complete)
 {
   GtkWidget *page;
-  GtkWidget *check;
+  GtkCheckButton *check;
   PageData *pdata;
 
   page = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   check = gtk_check_button_new_with_label ("Complete");
 
-  gtk_container_add (GTK_CONTAINER (page), gtk_label_new (text));
-  gtk_container_add (GTK_CONTAINER (page), check);
+  gtk_container_add (GTK_CONTAINER (page), GTK_WIDGET (gtk_label_new (text)));
+  gtk_container_add (GTK_CONTAINER (page), GTK_WIDGET (check));
   
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), complete);
 
@@ -247,7 +247,8 @@ create_generous_assistant (GtkWidget *widget)
 
   if (!assistant)
     {
-      GtkWidget *page, *next, *check;
+      GtkWidget *page, *next;
+      GtkCheckButton *check;
       PageData  *pdata;
 
       assistant = gtk_assistant_new ();
@@ -276,8 +277,8 @@ create_generous_assistant (GtkWidget *widget)
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
       g_signal_connect (G_OBJECT (check), "toggled", 
 			G_CALLBACK (visible_cb), next);
-      gtk_widget_show (check);
-      gtk_container_add (GTK_CONTAINER (page), check);
+      gtk_widget_show (GTK_WIDGET (check));
+      gtk_container_add (GTK_CONTAINER (page), GTK_WIDGET (check));
       
       add_completion_test_page (assistant, "Even More Content", TRUE, TRUE);
 
@@ -297,19 +298,19 @@ create_generous_assistant (GtkWidget *widget)
       gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Progress");
       gtk_assistant_set_page_type  (GTK_ASSISTANT (assistant), page, GTK_ASSISTANT_PAGE_PROGRESS);
 
-      page = gtk_check_button_new_with_label ("Summary complete");
-      gtk_widget_show (page);
-      gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
-      gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Summary");
-      gtk_assistant_set_page_type  (GTK_ASSISTANT (assistant), page, GTK_ASSISTANT_PAGE_SUMMARY);
+      check = gtk_check_button_new_with_label ("Summary complete");
+      gtk_widget_show (GTK_WIDGET (check));
+      gtk_assistant_append_page (GTK_ASSISTANT (assistant), GTK_WIDGET (check));
+      gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), GTK_WIDGET (check), "Summary");
+      gtk_assistant_set_page_type  (GTK_ASSISTANT (assistant), GTK_WIDGET (check), GTK_ASSISTANT_PAGE_SUMMARY);
 
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (page),
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check),
                                     gtk_assistant_get_page_complete (GTK_ASSISTANT (assistant),
-                                                                     page));
+                                                                     GTK_WIDGET (check)));
 
       pdata = g_new (PageData, 1);
       pdata->assistant = GTK_ASSISTANT (assistant);
-      pdata->page = page;
+      pdata->page = GTK_WIDGET (check);
       g_signal_connect (page, "toggled",
                       G_CALLBACK (complete_cb), pdata);
     }
@@ -457,6 +458,7 @@ create_looping_assistant (GtkWidget *widget)
   if (!assistant)
     {
       GtkWidget *page;
+      GtkCheckButton *check;
 
       assistant = gtk_assistant_new ();
       gtk_window_set_default_size (GTK_WINDOW (assistant), 400, 300);
@@ -493,11 +495,11 @@ create_looping_assistant (GtkWidget *widget)
       gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "More content");
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
 
-      page = gtk_check_button_new_with_label ("Loop?");
-      gtk_widget_show (page);
-      gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
-      gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Loop?");
-      gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
+      check = gtk_check_button_new_with_label ("Loop?");
+      gtk_widget_show (GTK_WIDGET (check));
+      gtk_assistant_append_page (GTK_ASSISTANT (assistant), GTK_WIDGET (check));
+      gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), GTK_WIDGET (check), "Loop?");
+      gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), GTK_WIDGET (check), TRUE);
       
       page = get_test_page ("Confirmation");
       gtk_widget_show (page);

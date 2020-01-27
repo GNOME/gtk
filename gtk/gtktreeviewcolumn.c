@@ -156,7 +156,7 @@ struct _GtkTreeViewColumnPrivate
   GtkWidget *tree_view;
   GtkWidget *button;
   GtkWidget *child;
-  GtkWidget *arrow;
+  GtkImage *arrow;
   GtkWidget *frame;
   gulong property_changed_signal;
   gfloat xalign;
@@ -881,7 +881,7 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
     child = priv->child;
   else
     {
-      child = gtk_label_new (priv->title);
+      child = GTK_WIDGET (gtk_label_new (priv->title));
     }
 
   g_signal_connect (child, "mnemonic-activate",
@@ -891,11 +891,11 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   if (priv->xalign <= 0.5)
     {
       gtk_container_add (GTK_CONTAINER (hbox), priv->frame);
-      gtk_container_add (GTK_CONTAINER (hbox), priv->arrow);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (priv->arrow));
     }
   else
     {
-      gtk_container_add (GTK_CONTAINER (hbox), priv->arrow);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (priv->arrow));
       gtk_container_add (GTK_CONTAINER (hbox), priv->frame);
     }
 
@@ -910,7 +910,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
   gint sort_column_id = -1;
   GtkWidget *hbox;
   GtkWidget *frame;
-  GtkWidget *arrow;
+  GtkImage *arrow;
   GtkWidget *current_child;
   const gchar *icon_name = "missing-image";
   GtkTreeModel *model;
@@ -940,7 +940,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
     {
       if (current_child == NULL)
 	{
-	  current_child = gtk_label_new (NULL);
+	  current_child = GTK_WIDGET (gtk_label_new (NULL));
 	  gtk_widget_show (current_child);
           gtk_container_add (GTK_CONTAINER (frame),
 			     current_child);
@@ -988,27 +988,27 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
 	}
     }
 
-  gtk_image_set_from_icon_name (GTK_IMAGE (arrow), icon_name);
+  gtk_image_set_from_icon_name (arrow, icon_name);
 
   /* Put arrow on the right if the text is left-or-center justified, and on the
    * left otherwise; do this by packing boxes, so flipping text direction will
    * reverse things
    */
   if (priv->xalign <= 0.5)
-    gtk_box_reorder_child_after (GTK_BOX (hbox), arrow, gtk_widget_get_last_child (hbox));
+    gtk_box_reorder_child_after (GTK_BOX (hbox), GTK_WIDGET (arrow), gtk_widget_get_last_child (hbox));
   else
-    gtk_box_reorder_child_after (GTK_BOX (hbox), arrow, NULL);
+    gtk_box_reorder_child_after (GTK_BOX (hbox), GTK_WIDGET (arrow), NULL);
 
   if (priv->show_sort_indicator
       || (GTK_IS_TREE_SORTABLE (model) && priv->sort_column_id >= 0))
-    gtk_widget_show (arrow);
+    gtk_widget_show (GTK_WIDGET (arrow));
   else
-    gtk_widget_hide (arrow);
+    gtk_widget_hide (GTK_WIDGET (arrow));
 
   if (priv->show_sort_indicator)
-    gtk_widget_set_opacity (arrow, 1.0);
+    gtk_widget_set_opacity (GTK_WIDGET (arrow), 1.0);
   else
-    gtk_widget_set_opacity (arrow, 0.0);
+    gtk_widget_set_opacity (GTK_WIDGET (arrow), 0.0);
 
   /* It's always safe to hide the button.  It isn't always safe to show it, as
    * if you show it before it's realized, it'll get the wrong window. */

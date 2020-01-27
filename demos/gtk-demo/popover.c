@@ -113,7 +113,7 @@ day_selected_cb (GtkCalendar *calendar,
   rect.width = rect.height = 1;
 
   popover = create_popover (GTK_WIDGET (calendar),
-                            gtk_entry_new (),
+                            GTK_WIDGET (gtk_entry_new ()),
                             GTK_POS_BOTTOM);
   gtk_popover_set_pointing_to (GTK_POPOVER (popover), &rect);
 
@@ -127,6 +127,8 @@ do_popover (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *popover, *box, *widget;
+  GtkToggleButton *button;
+  GtkEntry *entry;
 
   if (!window)
     {
@@ -139,27 +141,27 @@ do_popover (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
-      widget = gtk_toggle_button_new_with_label ("Button");
-      popover = create_popover (widget,
-                                gtk_label_new ("This popover does not grab input"),
+      button = gtk_toggle_button_new_with_label ("Button");
+      popover = create_popover (GTK_WIDGET (button),
+                                GTK_WIDGET (gtk_label_new ("This popover does not grab input")),
                                 GTK_POS_TOP);
       gtk_popover_set_autohide (GTK_POPOVER (popover), FALSE);
-      g_signal_connect (widget, "toggled",
+      g_signal_connect (button, "toggled",
                         G_CALLBACK (toggle_changed_cb), popover);
-      gtk_container_add (GTK_CONTAINER (box), widget);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (button));
 
-      widget = gtk_entry_new ();
-      popover = create_complex_popover (widget, GTK_POS_TOP);
-      gtk_entry_set_icon_from_icon_name (GTK_ENTRY (widget),
+      entry = gtk_entry_new ();
+      popover = create_complex_popover (GTK_WIDGET (entry), GTK_POS_TOP);
+      gtk_entry_set_icon_from_icon_name (entry,
                                          GTK_ENTRY_ICON_PRIMARY, "edit-find");
-      gtk_entry_set_icon_from_icon_name (GTK_ENTRY (widget),
+      gtk_entry_set_icon_from_icon_name (entry,
                                          GTK_ENTRY_ICON_SECONDARY, "edit-clear");
 
-      g_signal_connect (widget, "icon-press",
+      g_signal_connect (entry, "icon-press",
                         G_CALLBACK (entry_icon_press_cb), popover);
-      g_signal_connect (widget, "size-allocate",
+      g_signal_connect (entry, "size-allocate",
                         G_CALLBACK (entry_size_allocate_cb), popover);
-      gtk_container_add (GTK_CONTAINER (box), widget);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (entry));
 
       widget = gtk_calendar_new ();
       g_signal_connect (widget, "day-selected",

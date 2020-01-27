@@ -212,9 +212,11 @@ new_window (GApplication *app,
             GFile        *file)
 {
   GtkWidget *window, *grid, *scrolled, *view;
-  GtkWidget *toolbar;
+  GtkToolbar *toolbar;
   GtkToolItem *button;
-  GtkWidget *sw, *box, *label;
+  GtkSwitch *sw;
+  GtkWidget *box;
+  GtkLabel *label;
 
   window = gtk_application_window_new (GTK_APPLICATION (app));
   gtk_window_set_default_size ((GtkWindow*)window, 640, 480);
@@ -249,14 +251,14 @@ new_window (GApplication *app,
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_container_add (GTK_CONTAINER (button), box);
   label = gtk_label_new ("Fullscreen:");
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
   sw = gtk_switch_new ();
-  gtk_widget_set_valign (sw, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (sw), GTK_ALIGN_CENTER);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (sw), "win.fullscreen");
-  gtk_container_add (GTK_CONTAINER (box), sw);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (sw));
   gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (button));
 
-  gtk_grid_attach (GTK_GRID (grid), toolbar, 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (toolbar), 0, 0, 1, 1);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_hexpand (scrolled, TRUE);
@@ -402,8 +404,8 @@ edit_accels (GSimpleAction *action,
              gpointer       user_data)
 {
   GtkApplication *app = user_data;
-  GtkWidget *combo;
-  GtkWidget *entry;
+  GtkComboBoxText *combo;
+  GtkEntry *entry;
   gchar **actions;
   GtkWidget *dialog;
   gint i;
@@ -412,12 +414,12 @@ edit_accels (GSimpleAction *action,
   gtk_window_set_application (GTK_WINDOW (dialog), app);
   actions = gtk_application_list_action_descriptions (app);
   combo = gtk_combo_box_text_new ();
-  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), combo);
+  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), GTK_WIDGET (combo));
   for (i = 0; actions[i]; i++)
-    gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), actions[i], actions[i]);
+    gtk_combo_box_text_append (combo, actions[i], actions[i]);
   g_signal_connect (combo, "changed", G_CALLBACK (combo_changed), dialog);
   entry = gtk_entry_new ();
-  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), entry);
+  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), GTK_WIDGET (entry));
   gtk_dialog_add_button (GTK_DIALOG (dialog), "Close", GTK_RESPONSE_CLOSE);
   gtk_dialog_add_button (GTK_DIALOG (dialog), "Set", GTK_RESPONSE_APPLY);
   g_signal_connect (dialog, "response", G_CALLBACK (response), dialog);

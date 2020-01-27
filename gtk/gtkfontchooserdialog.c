@@ -60,7 +60,7 @@ struct _GtkFontChooserDialogPrivate
 
   GtkWidget *select_button;
   GtkWidget *cancel_button;
-  GtkWidget *tweak_button;
+  GtkToggleButton *tweak_button;
 };
 
 /**
@@ -161,9 +161,9 @@ update_tweak_button (GtkFontChooserDialog *dialog)
 
   g_object_get (priv->fontchooser, "level", &level, NULL);
   if ((level & (GTK_FONT_CHOOSER_LEVEL_FEATURES | GTK_FONT_CHOOSER_LEVEL_VARIATIONS)) != 0)
-    gtk_widget_show (priv->tweak_button);
+    gtk_widget_show (GTK_WIDGET (priv->tweak_button));
   else
-    gtk_widget_hide (priv->tweak_button);
+    gtk_widget_hide (GTK_WIDGET (priv->tweak_button));
 }
 
 static void
@@ -178,7 +178,7 @@ setup_tweak_button (GtkFontChooserDialog *dialog)
   g_object_get (dialog, "use-header-bar", &use_header, NULL);
   if (use_header)
     {
-      GtkWidget *button;
+      GtkToggleButton *button;
       GtkWidget *header;
       GActionGroup *actions;
 
@@ -189,12 +189,12 @@ setup_tweak_button (GtkFontChooserDialog *dialog)
 
       button = gtk_toggle_button_new ();
       gtk_actionable_set_action_name (GTK_ACTIONABLE (button), "font.tweak");
-      gtk_widget_set_focus_on_click (button, FALSE);
-      gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+      gtk_widget_set_focus_on_click (GTK_WIDGET (button), FALSE);
+      gtk_widget_set_valign (GTK_WIDGET (button), GTK_ALIGN_CENTER);
       gtk_button_set_icon_name (GTK_BUTTON (button), "emblem-system-symbolic");
 
       header = gtk_dialog_get_header_bar (GTK_DIALOG (dialog));
-      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), GTK_WIDGET (button));
 
       priv->tweak_button = button;
     }
@@ -277,7 +277,7 @@ gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
  *
  * Returns: a new #GtkFontChooserDialog
  */
-GtkWidget*
+GtkFontChooserDialog*
 gtk_font_chooser_dialog_new (const gchar *title,
                              GtkWindow   *parent)
 {
@@ -288,7 +288,7 @@ gtk_font_chooser_dialog_new (const gchar *title,
                          "transient-for", parent,
                          NULL);
 
-  return GTK_WIDGET (dialog);
+  return dialog;
 }
 
 static void

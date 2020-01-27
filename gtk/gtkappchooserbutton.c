@@ -120,7 +120,7 @@ struct _GtkAppChooserButtonClass {
 
 typedef struct
 {
-  GtkWidget *combobox;
+  GtkComboBox *combobox;
   GtkListStore *store;
 
   gchar *content_type;
@@ -210,7 +210,7 @@ select_application_func_cb (GtkTreeModel *model,
     result = TRUE;
   else if (g_app_info_equal (app, app_to_match))
     {
-      gtk_combo_box_set_active_iter (GTK_COMBO_BOX (priv->combobox), iter);
+      gtk_combo_box_set_active_iter (priv->combobox, iter);
       result = TRUE;
     }
   else
@@ -252,7 +252,7 @@ other_application_dialog_response_cb (GtkDialog *dialog,
       /* reset the active item, otherwise we are stuck on
        * 'Other application…'
        */
-      gtk_combo_box_set_active (GTK_COMBO_BOX (priv->combobox), priv->last_active);
+      gtk_combo_box_set_active (priv->combobox, priv->last_active);
       gtk_widget_destroy (GTK_WIDGET (dialog));
       return;
     }
@@ -272,7 +272,8 @@ static void
 other_application_item_activated_cb (GtkAppChooserButton *self)
 {
   GtkAppChooserButtonPrivate *priv = gtk_app_chooser_button_get_instance_private (self);
-  GtkWidget *dialog, *widget;
+  GtkAppChooserDialog *dialog;
+  GtkWidget *widget;
   GtkRoot *root;
 
   root = gtk_widget_get_root (GTK_WIDGET (self));
@@ -280,14 +281,14 @@ other_application_item_activated_cb (GtkAppChooserButton *self)
                                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                                         priv->content_type);
   gtk_window_set_modal (GTK_WINDOW (dialog), gtk_window_get_modal (GTK_WINDOW (root)));
-  gtk_app_chooser_dialog_set_heading (GTK_APP_CHOOSER_DIALOG (dialog), priv->heading);
+  gtk_app_chooser_dialog_set_heading (dialog, priv->heading);
 
-  widget = gtk_app_chooser_dialog_get_widget (GTK_APP_CHOOSER_DIALOG (dialog));
+  widget = gtk_app_chooser_dialog_get_widget (dialog);
   g_object_set (widget,
                 "show-fallback", TRUE,
                 "show-other", TRUE,
                 NULL);
-  gtk_widget_show (dialog);
+  gtk_widget_show (GTK_WIDGET (dialog));
 
   g_signal_connect (dialog, "response",
                     G_CALLBACK (other_application_dialog_response_cb), self);
@@ -402,7 +403,7 @@ gtk_app_chooser_button_populate (GtkAppChooserButton *self)
   else
     gtk_app_chooser_button_ensure_dialog_item (self, &iter);
 
-  gtk_combo_box_set_active (GTK_COMBO_BOX (priv->combobox), 0);
+  gtk_combo_box_set_active (priv->combobox, 0);
 }
 
 static void
@@ -412,12 +413,12 @@ gtk_app_chooser_button_build_ui (GtkAppChooserButton *self)
   GtkCellRenderer *cell;
   GtkCellArea *area;
 
-  gtk_combo_box_set_model (GTK_COMBO_BOX (priv->combobox),
+  gtk_combo_box_set_model (priv->combobox,
                            GTK_TREE_MODEL (priv->store));
 
   area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (priv->combobox));
 
-  gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (priv->combobox),
+  gtk_combo_box_set_row_separator_func (priv->combobox,
                                         row_separator_func, NULL, NULL);
 
   cell = gtk_cell_renderer_pixbuf_new ();
@@ -524,7 +525,7 @@ gtk_app_chooser_button_get_app_info (GtkAppChooser *object)
   GtkTreeIter iter;
   GAppInfo *info;
 
-  if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX (priv->combobox), &iter))
+  if (!gtk_combo_box_get_active_iter (priv->combobox, &iter))
     return NULL;
 
   gtk_tree_model_get (GTK_TREE_MODEL (priv->store), &iter,
@@ -613,7 +614,7 @@ gtk_app_chooser_button_finalize (GObject *obj)
   g_free (priv->content_type);
   g_free (priv->heading);
   g_object_unref (priv->store);
-  gtk_widget_unparent (priv->combobox);
+  gtk_widget_unparent (GTK_WIDGET (priv->combobox));
 
   G_OBJECT_CLASS (gtk_app_chooser_button_parent_class)->finalize (obj);
 }
@@ -630,7 +631,7 @@ gtk_app_chooser_button_measure (GtkWidget       *widget,
   GtkAppChooserButton *button = GTK_APP_CHOOSER_BUTTON (widget);
   GtkAppChooserButtonPrivate *priv = gtk_app_chooser_button_get_instance_private (button);
 
-  gtk_widget_measure (priv->combobox, orientation, for_size,
+  gtk_widget_measure (GTK_WIDGET (priv->combobox), orientation, for_size,
                       minimum, natural,
                       minimum_baseline, natural_baseline);
 }
@@ -644,7 +645,7 @@ gtk_app_chooser_button_size_allocate (GtkWidget *widget,
   GtkAppChooserButton *button = GTK_APP_CHOOSER_BUTTON (widget);
   GtkAppChooserButtonPrivate *priv = gtk_app_chooser_button_get_instance_private (button);
 
-  gtk_widget_size_allocate (priv->combobox, &(GtkAllocation){0, 0, width, height}, baseline);
+  gtk_widget_size_allocate (GTK_WIDGET (priv->combobox), &(GtkAllocation){0, 0, width, height}, baseline);
 }
 
 static void
@@ -759,7 +760,7 @@ gtk_app_chooser_button_init (GtkAppChooserButton *self)
                                     G_TYPE_BOOLEAN, /* separator */
                                     G_TYPE_BOOLEAN); /* custom */
   priv->combobox = gtk_combo_box_new_with_model (GTK_TREE_MODEL (priv->store));
-  gtk_widget_set_parent (priv->combobox, GTK_WIDGET (self));
+  gtk_widget_set_parent (GTK_WIDGET (priv->combobox), GTK_WIDGET (self));
 
   g_signal_connect (priv->combobox, "changed",
                     G_CALLBACK (gtk_app_chooser_button_changed), self);
@@ -849,7 +850,7 @@ real_insert_separator (GtkAppChooserButton *self,
  *
  * Returns: a newly created #GtkAppChooserButton
  */
-GtkWidget *
+GtkAppChooserButton *
 gtk_app_chooser_button_new (const gchar *content_type)
 {
   g_return_val_if_fail (content_type != NULL, NULL);
@@ -936,7 +937,7 @@ gtk_app_chooser_button_set_active_custom_item (GtkAppChooserButton *self,
       return;
     }
 
-  gtk_combo_box_set_active_iter (GTK_COMBO_BOX (priv->combobox), &iter);
+  gtk_combo_box_set_active_iter (priv->combobox, &iter);
 }
 
 /**

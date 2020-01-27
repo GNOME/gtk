@@ -315,7 +315,8 @@ static GtkWidget *
 create_custom_widget (GtkPrintOperation *operation,
 		      PrintData *data)
 {
-  GtkWidget *vbox, *hbox, *font, *label;
+  GtkWidget *vbox, *hbox, *font;
+  GtkLabel *label;
 
   gtk_print_operation_set_custom_tab_label (operation, "Other");
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
@@ -325,8 +326,8 @@ create_custom_widget (GtkPrintOperation *operation,
   gtk_widget_show (hbox);
 
   label = gtk_label_new ("Font:");
-  gtk_container_add (GTK_CONTAINER (hbox), label);
-  gtk_widget_show (label);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
+  gtk_widget_show (GTK_WIDGET (label));
 
   font = gtk_font_button_new_with_font  (data->font);
   gtk_container_add (GTK_CONTAINER (hbox), font);
@@ -479,7 +480,7 @@ activate_save_as (GSimpleAction *action,
                   GVariant      *parameter,
                   gpointer       user_data)
 {
-  GtkWidget *dialog;
+  GtkFileChooserDialog *dialog;
   gint response;
   char *save_filename;
 
@@ -499,7 +500,7 @@ activate_save_as (GSimpleAction *action,
       g_free (save_filename);
     }
 
-  gtk_widget_destroy (dialog);
+  gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
@@ -518,7 +519,7 @@ activate_open (GSimpleAction *action,
                GVariant      *parameter,
                gpointer       user_data)
 {
-  GtkWidget *dialog;
+  GtkFileChooserDialog *dialog;
   gint response;
   char *open_filename;
 
@@ -538,7 +539,7 @@ activate_open (GSimpleAction *action,
       g_free (open_filename);
     }
 
-  gtk_widget_destroy (dialog);
+  gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void

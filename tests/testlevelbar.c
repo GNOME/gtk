@@ -71,7 +71,7 @@ main (int argc, char *argv[])
   GtkWidget *box;
   GtkWidget *bar;
   GtkWidget *box2;
-  GtkWidget *sw;
+  GtkSwitch *sw;
 
   gtk_init ();
 
@@ -86,9 +86,9 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (box), bar);
   box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_container_add (GTK_CONTAINER (box), box2);
-  gtk_container_add (GTK_CONTAINER (box2), gtk_label_new ("Discrete"));
+  gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (gtk_label_new ("Discrete")));
   sw = gtk_switch_new ();
-  gtk_container_add (GTK_CONTAINER (box2), sw);
+  gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (sw));
   g_signal_connect (sw, "notify::active", G_CALLBACK (toggle), bar);
 
   gtk_widget_show (window);

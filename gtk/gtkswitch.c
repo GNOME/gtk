@@ -97,8 +97,8 @@ struct _GtkSwitch
   guint state                 : 1;
   guint is_active             : 1;
 
-  GtkWidget *on_image;
-  GtkWidget *off_image;
+  GtkImage *on_image;
+  GtkImage *off_image;
   GtkWidget *slider;
 };
 
@@ -311,8 +311,8 @@ gtk_switch_measure (GtkWidget      *widget,
                       &slider_minimum, &slider_natural,
                       NULL, NULL);
 
-  gtk_widget_measure (self->on_image, orientation, for_size, NULL, &on_nat, NULL, NULL);
-  gtk_widget_measure (self->off_image, orientation, for_size, NULL, &off_nat, NULL, NULL);
+  gtk_widget_measure (GTK_WIDGET (self->on_image), orientation, for_size, NULL, &on_nat, NULL, NULL);
+  gtk_widget_measure (GTK_WIDGET (self->off_image), orientation, for_size, NULL, &off_nat, NULL, NULL);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -345,22 +345,22 @@ gtk_switch_allocate (GtkWidget *widget,
                             }, -1);
 
   /* Center ON icon in left half */
-  gtk_widget_measure (self->on_image, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
+  gtk_widget_measure (GTK_WIDGET (self->on_image), GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
   child_alloc.x = ((width / 2) - min) / 2;
   child_alloc.width = min;
-  gtk_widget_measure (self->on_image, GTK_ORIENTATION_VERTICAL, min, &min, NULL, NULL, NULL);
+  gtk_widget_measure (GTK_WIDGET (self->on_image), GTK_ORIENTATION_VERTICAL, min, &min, NULL, NULL, NULL);
   child_alloc.y = (height - min) / 2;
   child_alloc.height = min;
-  gtk_widget_size_allocate (self->on_image, &child_alloc, -1);
+  gtk_widget_size_allocate (GTK_WIDGET (self->on_image), &child_alloc, -1);
 
   /* Center OFF icon in right half */
-  gtk_widget_measure (self->off_image, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
+  gtk_widget_measure (GTK_WIDGET (self->off_image), GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
   child_alloc.x = (width / 2) + ((width / 2) - min) / 2;
   child_alloc.width = min;
-  gtk_widget_measure (self->off_image, GTK_ORIENTATION_VERTICAL, min, &min, NULL, NULL, NULL);
+  gtk_widget_measure (GTK_WIDGET (self->off_image), GTK_ORIENTATION_VERTICAL, min, &min, NULL, NULL, NULL);
   child_alloc.y = (height - min) / 2;
   child_alloc.height = min;
-  gtk_widget_size_allocate (self->off_image, &child_alloc, -1);
+  gtk_widget_size_allocate (GTK_WIDGET (self->off_image), &child_alloc, -1);
 }
 
 static void
@@ -491,8 +491,8 @@ gtk_switch_finalize (GObject *object)
 
   gtk_switch_end_toggle_animation (self);
 
-  gtk_widget_unparent (self->on_image);
-  gtk_widget_unparent (self->off_image);
+  gtk_widget_unparent (GTK_WIDGET (self->on_image));
+  gtk_widget_unparent (GTK_WIDGET (self->off_image));
   gtk_widget_unparent (self->slider);
 
   G_OBJECT_CLASS (gtk_switch_parent_class)->finalize (object);
@@ -651,10 +651,10 @@ gtk_switch_init (GtkSwitch *self)
   gtk_widget_set_layout_manager (GTK_WIDGET (self), layout);
 
   self->on_image = gtk_image_new_from_icon_name ("switch-on-symbolic");
-  gtk_widget_set_parent (self->on_image, GTK_WIDGET (self));
+  gtk_widget_set_parent (GTK_WIDGET (self->on_image), GTK_WIDGET (self));
 
   self->off_image = gtk_image_new_from_icon_name ("switch-off-symbolic");
-  gtk_widget_set_parent (self->off_image, GTK_WIDGET (self));
+  gtk_widget_set_parent (GTK_WIDGET (self->off_image), GTK_WIDGET (self));
 
   self->slider = gtk_gizmo_new ("slider", NULL, NULL, NULL, NULL);
   gtk_widget_set_parent (self->slider, GTK_WIDGET (self));
@@ -667,7 +667,7 @@ gtk_switch_init (GtkSwitch *self)
  *
  * Returns: the newly created #GtkSwitch instance
  */
-GtkWidget *
+GtkSwitch *
 gtk_switch_new (void)
 {
   return g_object_new (GTK_TYPE_SWITCH, NULL);

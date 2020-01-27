@@ -34,7 +34,7 @@ struct _ConstraintEditor
   GtkWidget *multiplier;
   GtkWidget *constant;
   GtkWidget *strength;
-  GtkWidget *preview;
+  GtkLabel *preview;
   GtkWidget *button;
 
   GtkConstraint *constraint;
@@ -433,7 +433,7 @@ update_preview (ConstraintEditor *editor)
   else
     g_string_append_printf (str, "%g", c);
 
-  gtk_label_set_label (GTK_LABEL (editor->preview), str->str);
+  gtk_label_set_label (editor->preview, str->str);
 
   g_string_free (str, TRUE);
 }

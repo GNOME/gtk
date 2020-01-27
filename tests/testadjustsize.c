@@ -35,18 +35,18 @@ static GtkWidget *test_widgets[TEST_WIDGET_LAST];
 static GtkWidget*
 create_image (void)
 {
-  return gtk_image_new_from_icon_name ("document-open");
+  return GTK_WIDGET (gtk_image_new_from_icon_name ("document-open"));
 }
 
-static GtkWidget*
+static GtkLabel*
 create_label (gboolean wrap)
 {
-  GtkWidget *widget;
+  GtkLabel *widget;
 
   widget = gtk_label_new ("This is a label, label label label");
 
   if (wrap)
-    gtk_label_set_wrap (GTK_LABEL (widget), TRUE);
+    gtk_label_set_wrap (widget, TRUE);
 
   return widget;
 }
@@ -71,8 +71,8 @@ open_test_window (void)
   gtk_window_set_resizable (GTK_WINDOW (test_window), FALSE);
 
   test_widgets[TEST_WIDGET_IMAGE] = create_image ();
-  test_widgets[TEST_WIDGET_LABEL] = create_label (FALSE);
-  test_widgets[TEST_WIDGET_WRAP_LABEL] = create_label (TRUE);
+  test_widgets[TEST_WIDGET_LABEL] = GTK_WIDGET (create_label (FALSE));
+  test_widgets[TEST_WIDGET_WRAP_LABEL] = GTK_WIDGET (create_label (TRUE));
   test_widgets[TEST_WIDGET_BUTTON] = create_button ();
 
   grid = gtk_grid_new ();
@@ -126,7 +126,7 @@ open_control_window (void)
 {
   GtkWidget *window;
   GtkWidget *box;
-  GtkWidget *toggle;
+  GtkToggleButton *toggle;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Controls");
@@ -141,14 +141,14 @@ open_control_window (void)
   g_signal_connect (G_OBJECT (toggle),
                     "toggled", G_CALLBACK (on_set_small_size_requests),
                     NULL);
-  gtk_container_add (GTK_CONTAINER (box), toggle);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (toggle));
 
   toggle =
     gtk_toggle_button_new_with_label ("Set large size requests");
   g_signal_connect (G_OBJECT (toggle),
                     "toggled", G_CALLBACK (on_set_large_size_requests),
                     NULL);
-  gtk_container_add (GTK_CONTAINER (box), toggle);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (toggle));
 
 
   gtk_widget_show (window);
@@ -162,7 +162,7 @@ create_widget_visible_border (const char *text)
   GtkWidget *outer_box;
   GtkWidget *inner_box;
   GtkWidget *test_widget;
-  GtkWidget *label;
+  GtkLabel *label;
 
   outer_box = gtk_overlay_new ();
   gtk_style_context_add_class (gtk_widget_get_style_context (outer_box), "black-bg");
@@ -179,7 +179,7 @@ create_widget_visible_border (const char *text)
   gtk_container_add (GTK_CONTAINER (inner_box), test_widget);
 
   label = gtk_label_new (text);
-  gtk_container_add (GTK_CONTAINER (test_widget), label);
+  gtk_container_add (GTK_CONTAINER (test_widget), GTK_WIDGET (label));
 
   g_assert (TEST_WIDGET (outer_box) == test_widget);
 
@@ -313,7 +313,8 @@ open_margin_window (void)
 static void
 open_valigned_label_window (void)
 {
-  GtkWidget *window, *box, *label, *frame;
+  GtkWidget *window, *box, *frame;
+  GtkLabel *label;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
@@ -324,19 +325,19 @@ open_valigned_label_window (void)
   gtk_container_add (GTK_CONTAINER (window), box);
 
   label = gtk_label_new ("Both labels expand");
-  gtk_widget_show (label);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_widget_show (GTK_WIDGET (label));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   label = gtk_label_new ("Some wrapping text with width-chars = 15 and max-width-chars = 35");
-  gtk_label_set_wrap  (GTK_LABEL (label), TRUE);
-  gtk_label_set_width_chars  (GTK_LABEL (label), 15);
-  gtk_label_set_max_width_chars  (GTK_LABEL (label), 35);
+  gtk_label_set_wrap (label, TRUE);
+  gtk_label_set_width_chars (label, 15);
+  gtk_label_set_max_width_chars (label, 35);
 
-  gtk_widget_show (label);
+  gtk_widget_show (GTK_WIDGET (label));
 
   frame  = gtk_frame_new (NULL);
   gtk_widget_show (frame);
-  gtk_container_add (GTK_CONTAINER (frame), label);
+  gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (label));
 
   gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
   gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);

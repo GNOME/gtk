@@ -47,9 +47,9 @@ main (int argc, char *argv[])
   GtkWidget *popover;
   GtkWidget *popover1;
   GtkWidget *popover2;
-  GtkWidget *label;
-  GtkWidget *check;
-  GtkWidget *combo;
+  GtkLabel *label;
+  GtkCheckButton *check;
+  GtkComboBoxText *combo;
   GtkWidget *header_bar;
 
 #ifdef GTK_SRCDIR
@@ -80,14 +80,14 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (overlay), grid);
 
   label = gtk_label_new ("");
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_widget_set_vexpand (label, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_widget_set_vexpand (GTK_WIDGET (label), TRUE);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 0, 1, 1);
 
   label = gtk_label_new ("");
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_widget_set_vexpand (label, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), label, 3, 6, 1, 1);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_widget_set_vexpand (GTK_WIDGET (label), TRUE);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 3, 6, 1, 1);
 
   builder = gtk_builder_new_from_file ("popover.ui");
   model = (GMenuModel *)gtk_builder_get_object (builder, "menu");
@@ -119,51 +119,51 @@ main (int argc, char *argv[])
   g_object_bind_property (check, "active", popover, "hexpand", G_BINDING_SYNC_CREATE);
   g_object_bind_property (check, "active", popover1, "hexpand", G_BINDING_SYNC_CREATE);
   g_object_bind_property (check, "active", popover2, "hexpand", G_BINDING_SYNC_CREATE);
-  gtk_grid_attach (GTK_GRID (grid), label , 1, 1, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), check, 2, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label) , 1, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (check), 2, 1, 1, 1);
 
   label = gtk_label_new ("Popover vexpand");
   check = gtk_check_button_new ();
   g_object_bind_property (check, "active", popover, "vexpand", G_BINDING_SYNC_CREATE);
   g_object_bind_property (check, "active", popover1, "vexpand", G_BINDING_SYNC_CREATE);
   g_object_bind_property (check, "active", popover2, "vexpand", G_BINDING_SYNC_CREATE);
-  gtk_grid_attach (GTK_GRID (grid), label , 1, 2, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), check, 2, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label) , 1, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (check), 2, 2, 1, 1);
 
   label = gtk_label_new ("Button direction");
   combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "up", "Up");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "down", "Down");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "left", "Left");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "right", "Right");
+  gtk_combo_box_text_append (combo, "up", "Up");
+  gtk_combo_box_text_append (combo, "down", "Down");
+  gtk_combo_box_text_append (combo, "left", "Left");
+  gtk_combo_box_text_append (combo, "right", "Right");
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 1);
   g_object_bind_property (combo, "active", button, "direction", G_BINDING_SYNC_CREATE);
   g_object_bind_property (combo, "active", button1, "direction", G_BINDING_SYNC_CREATE);
   g_object_bind_property (combo, "active", button2, "direction", G_BINDING_SYNC_CREATE);
-  gtk_grid_attach (GTK_GRID (grid), label , 1, 3, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), combo, 2, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label) , 1, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (combo), 2, 3, 1, 1);
 
   label = gtk_label_new ("Button halign");
   combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "fill", "Fill");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "start", "Start");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "end", "End");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "center", "Center");
+  gtk_combo_box_text_append (combo, "fill", "Fill");
+  gtk_combo_box_text_append (combo, "start", "Start");
+  gtk_combo_box_text_append (combo, "end", "End");
+  gtk_combo_box_text_append (combo, "center", "Center");
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 2);
   g_object_bind_property (combo, "active", box, "halign", G_BINDING_SYNC_CREATE);
-  gtk_grid_attach (GTK_GRID (grid), label , 1, 4, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), combo, 2, 4, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label) , 1, 4, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (combo), 2, 4, 1, 1);
 
   label = gtk_label_new ("Button valign");
   combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "fill", "Fill");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "start", "Start");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "end", "End");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "center", "Center");
+  gtk_combo_box_text_append (combo, "fill", "Fill");
+  gtk_combo_box_text_append (combo, "start", "Start");
+  gtk_combo_box_text_append (combo, "end", "End");
+  gtk_combo_box_text_append (combo, "center", "Center");
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 1);
   g_object_bind_property (combo, "active", box, "valign", G_BINDING_SYNC_CREATE);
-  gtk_grid_attach (GTK_GRID (grid), label , 1, 5, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), combo, 2, 5, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label) , 1, 5, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (combo), 2, 5, 1, 1);
   g_object_unref (builder);
 
 

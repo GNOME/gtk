@@ -198,14 +198,14 @@ main (int argc, char **argv)
       GdkSurface *gdk_surface = gdk_surface_new_toplevel (gdk_display_get_default(), 10 , 10);
       GskRenderer *renderer = gsk_renderer_new_for_surface (gdk_surface);
       GdkTexture *texture = gsk_renderer_render_texture (renderer, GTK_NODE_VIEW (nodeview)->node, NULL);
-      GtkWidget *image = gtk_image_new_from_paintable (GDK_PAINTABLE (texture));
+      GtkImage *image = gtk_image_new_from_paintable (GDK_PAINTABLE (texture));
 
-      gtk_widget_set_size_request (image,
+      gtk_widget_set_size_request (GTK_WIDGET (image),
                                    gdk_texture_get_width (texture),
                                    gdk_texture_get_height (texture));
 
       gtk_container_add (GTK_CONTAINER (box), nodeview);
-      gtk_container_add (GTK_CONTAINER (box), image);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (image));
       gtk_container_add (GTK_CONTAINER (window), box);
 
       gsk_renderer_unrealize (renderer);

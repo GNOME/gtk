@@ -56,9 +56,9 @@ GDK_AVAILABLE_IN_ALL
 GType           gtk_text_get_type                       (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_text_new                            (void);
+GtkText *       gtk_text_new                            (void);
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_text_new_with_buffer                (GtkEntryBuffer  *buffer);
+GtkText *       gtk_text_new_with_buffer                (GtkEntryBuffer  *buffer);
 
 GDK_AVAILABLE_IN_ALL
 GtkEntryBuffer *gtk_text_get_buffer                     (GtkText         *self);

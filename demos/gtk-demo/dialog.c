@@ -7,8 +7,8 @@
 #include <gtk/gtk.h>
 
 static GtkWidget *window = NULL;
-static GtkWidget *entry1 = NULL;
-static GtkWidget *entry2 = NULL;
+static GtkEntry  *entry1 = NULL;
+static GtkEntry  *entry2 = NULL;
 
 static void
 message_dialog_clicked (GtkButton *button,
@@ -37,11 +37,11 @@ interactive_dialog_clicked (GtkButton *button,
   GtkWidget *content_area;
   GtkWidget *dialog;
   GtkWidget *hbox;
-  GtkWidget *image;
+  GtkImage  *image;
   GtkWidget *table;
-  GtkWidget *local_entry1;
-  GtkWidget *local_entry2;
-  GtkWidget *label;
+  GtkEntry  *local_entry1;
+  GtkEntry  *local_entry2;
+  GtkLabel *label;
   gint response;
 
   dialog = gtk_dialog_new_with_buttons ("Interactive Dialog",
@@ -59,27 +59,27 @@ interactive_dialog_clicked (GtkButton *button,
   gtk_container_add (GTK_CONTAINER (content_area), hbox);
 
   image = gtk_image_new_from_icon_name ("dialog-question");
-  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
-  gtk_container_add (GTK_CONTAINER (hbox), image);
+  gtk_image_set_icon_size (image, GTK_ICON_SIZE_LARGE);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (image));
 
   table = gtk_grid_new ();
   gtk_grid_set_row_spacing (GTK_GRID (table), 4);
   gtk_grid_set_column_spacing (GTK_GRID (table), 4);
   gtk_container_add (GTK_CONTAINER (hbox), table);
   label = gtk_label_new_with_mnemonic ("_Entry 1");
-  gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 0, 0, 1, 1);
   local_entry1 = gtk_entry_new ();
   gtk_editable_set_text (GTK_EDITABLE (local_entry1), gtk_editable_get_text (GTK_EDITABLE (entry1)));
-  gtk_grid_attach (GTK_GRID (table), local_entry1, 1, 0, 1, 1);
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), local_entry1);
+  gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (local_entry1), 1, 0, 1, 1);
+  gtk_label_set_mnemonic_widget (label, GTK_WIDGET (local_entry1));
 
   label = gtk_label_new_with_mnemonic ("E_ntry 2");
-  gtk_grid_attach (GTK_GRID (table), label, 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 0, 1, 1, 1);
 
   local_entry2 = gtk_entry_new ();
   gtk_editable_set_text (GTK_EDITABLE (local_entry2), gtk_editable_get_text (GTK_EDITABLE (entry2)));
-  gtk_grid_attach (GTK_GRID (table), local_entry2, 1, 1, 1, 1);
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), local_entry2);
+  gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (local_entry2), 1, 1, 1, 1);
+  gtk_label_set_mnemonic_widget (label, GTK_WIDGET (local_entry2));
 
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
@@ -101,7 +101,7 @@ do_dialog (GtkWidget *do_widget)
   GtkWidget *hbox;
   GtkWidget *button;
   GtkWidget *table;
-  GtkWidget *label;
+  GtkLabel *label;
 
   if (!window)
     {
@@ -129,7 +129,7 @@ do_dialog (GtkWidget *do_widget)
                         G_CALLBACK (message_dialog_clicked), NULL);
       gtk_container_add (GTK_CONTAINER (hbox), button);
 
-      gtk_container_add (GTK_CONTAINER (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_HORIZONTAL)));
 
       /* Interactive dialog*/
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
@@ -148,17 +148,17 @@ do_dialog (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (hbox), table);
 
       label = gtk_label_new_with_mnemonic ("_Entry 1");
-      gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);
+      gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 0, 0, 1, 1);
 
       entry1 = gtk_entry_new ();
-      gtk_grid_attach (GTK_GRID (table), entry1, 1, 0, 1, 1);
-      gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry1);
+      gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (entry1), 1, 0, 1, 1);
+      gtk_label_set_mnemonic_widget (label, GTK_WIDGET (entry1));
 
       label = gtk_label_new_with_mnemonic ("E_ntry 2");
-      gtk_grid_attach (GTK_GRID (table), label, 0, 1, 1, 1);
+      gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 0, 1, 1, 1);
 
       entry2 = gtk_entry_new ();
-      gtk_grid_attach (GTK_GRID (table), entry2, 1, 1, 1, 1);
+      gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (entry2), 1, 1, 1, 1);
     }
 
   if (!gtk_widget_get_visible (window))

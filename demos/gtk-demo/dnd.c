@@ -76,7 +76,7 @@ deserialize_widget (GtkDemoWidget *demo)
 
   if (demo->type == GTK_TYPE_LABEL)
     {
-      widget = gtk_label_new (demo->text);
+      widget = GTK_WIDGET (gtk_label_new (demo->text));
     }
   else if (demo->type == GTK_TYPE_SPINNER)
     {
@@ -98,10 +98,10 @@ new_label_cb (GtkWidget *button,
               gpointer     data)
 {
   GtkFixed *fixed = data;
-  GtkWidget *widget;
+  GtkLabel *widget;
 
   widget = gtk_label_new ("Label");
-  gtk_fixed_put (fixed, widget, pos_x, pos_y);
+  gtk_fixed_put (fixed, GTK_WIDGET (widget), pos_x, pos_y);
 
   gtk_popover_popdown (GTK_POPOVER (gtk_widget_get_ancestor (button, GTK_TYPE_POPOVER)));
 }
@@ -205,13 +205,13 @@ static void
 edit_label_done (GtkWidget *entry, gpointer data)
 {
   GtkWidget *fixed = gtk_widget_get_parent (entry);
-  GtkWidget *label;
+  GtkLabel *label;
   int x, y;
 
   gtk_fixed_get_child_position (GTK_FIXED (fixed), entry, &x, &y);
 
-  label = GTK_WIDGET (g_object_get_data (G_OBJECT (entry), "label"));
-  gtk_label_set_text (GTK_LABEL (label), gtk_editable_get_text (GTK_EDITABLE (entry)));
+  label = GTK_LABEL (g_object_get_data (G_OBJECT (entry), "label"));
+  gtk_label_set_text (label, gtk_editable_get_text (GTK_EDITABLE (entry)));
 
   gtk_widget_destroy (entry);
 }
@@ -226,15 +226,15 @@ edit_cb (GtkWidget *button, GtkWidget *child)
 
   if (GTK_IS_LABEL (child))
     {
-      GtkWidget *entry = gtk_entry_new ();
+      GtkEntry *entry = gtk_entry_new ();
 
       g_object_set_data (G_OBJECT (entry), "label", child);
 
       gtk_editable_set_text (GTK_EDITABLE (entry), gtk_label_get_text (GTK_LABEL (child)));
       gtk_editable_set_width_chars (GTK_EDITABLE (entry), 12);
       g_signal_connect (entry, "activate", G_CALLBACK (edit_label_done), NULL);
-      gtk_fixed_put (GTK_FIXED (fixed), entry, x, y);
-      gtk_widget_grab_focus (entry);
+      gtk_fixed_put (GTK_FIXED (fixed), GTK_WIDGET (entry), x, y);
+      gtk_widget_grab_focus (GTK_WIDGET (entry));
     }
   else if (GTK_IS_SPINNER (child))
     {
@@ -266,6 +266,7 @@ pressed_cb (GtkGesture *gesture,
       GtkWidget *menu;
       GtkWidget *box;
       GtkWidget *item;
+      GtkSeparator *separator;
       GdkClipboard *clipboard;
 
       pos_x = x;
@@ -286,8 +287,8 @@ pressed_cb (GtkGesture *gesture,
       g_signal_connect (item, "clicked", G_CALLBACK (new_spinner_cb), widget);
       gtk_container_add (GTK_CONTAINER (box), item);
 
-      item = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_container_add (GTK_CONTAINER (box), item);
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (separator));
 
       item = gtk_button_new_with_label ("Edit");
       gtk_button_set_relief (GTK_BUTTON (item), GTK_RELIEF_NONE);
@@ -295,8 +296,8 @@ pressed_cb (GtkGesture *gesture,
       g_signal_connect (item, "clicked", G_CALLBACK (edit_cb), child);
       gtk_container_add (GTK_CONTAINER (box), item);
 
-      item = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_container_add (GTK_CONTAINER (box), item);
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (separator));
 
       item = gtk_button_new_with_label ("Cut");
       gtk_button_set_relief (GTK_BUTTON (item), GTK_RELIEF_NONE);

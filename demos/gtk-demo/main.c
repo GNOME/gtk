@@ -564,13 +564,14 @@ fontify (GtkTextBuffer *source_buffer)
 static GtkWidget *
 display_image (const char *resource)
 {
-  GtkWidget *sw, *image;
+  GtkWidget *sw;
+  GtkImage *image;
 
   image = gtk_image_new_from_resource (resource);
-  gtk_widget_set_halign (image, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (image, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (GTK_WIDGET (image), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (image), GTK_ALIGN_CENTER);
   sw = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (sw), image);
+  gtk_container_add (GTK_CONTAINER (sw), GTK_WIDGET (image));
 
   return sw;
 }
@@ -623,27 +624,27 @@ display_text (const char *resource)
 static GtkWidget *
 display_video (const char *resource)
 {
-  GtkWidget *video;
+  GtkVideo *video;
 
   video = gtk_video_new_for_resource (resource);
-  gtk_video_set_loop (GTK_VIDEO (video), TRUE);
+  gtk_video_set_loop (video, TRUE);
 
-  return video;
+  return GTK_WIDGET (video);
 }
 
 static GtkWidget *
 display_nothing (const char *resource)
 {
-  GtkWidget *widget;
+  GtkLabel *widget;
   char *str;
 
   str = g_strdup_printf ("The lazy GTK developers forgot to add a way to display the resource '%s'", resource);
   widget = gtk_label_new (str);
-  gtk_label_set_wrap (GTK_LABEL (widget), TRUE);
+  gtk_label_set_wrap (widget, TRUE);
 
   g_free (str);
 
-  return widget;
+  return GTK_WIDGET (widget);
 }
 
 static struct {
@@ -667,7 +668,8 @@ add_data_tab (const gchar *demoname)
 {
   gchar *resource_dir, *resource_name;
   gchar **resources;
-  GtkWidget *widget, *label;
+  GtkWidget *widget;
+  GtkLabel *label;
   guint i, j;
 
   resource_dir = g_strconcat ("/", demoname, NULL);
@@ -694,8 +696,8 @@ add_data_tab (const gchar *demoname)
         widget = display_nothing (resource_name);
 
       label = gtk_label_new (resources[i]);
-      gtk_widget_show (label);
-      gtk_notebook_append_page (GTK_NOTEBOOK (notebook), widget, label);
+      gtk_widget_show (GTK_WIDGET (label));
+      gtk_notebook_append_page (GTK_NOTEBOOK (notebook), widget, GTK_WIDGET (label));
       g_object_set (gtk_notebook_get_page (GTK_NOTEBOOK (notebook), widget),
                     "tab-expand", FALSE,
                     NULL);

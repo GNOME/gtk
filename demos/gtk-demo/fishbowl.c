@@ -58,12 +58,12 @@ get_random_icon_name (GtkIconTheme *theme)
 GtkWidget *
 create_icon (void)
 {
-  GtkWidget *image;
+  GtkImage *image;
 
   image = gtk_image_new_from_icon_name (get_random_icon_name (gtk_icon_theme_get_default ()));
-  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
+  gtk_image_set_icon_size (image, GTK_ICON_SIZE_LARGE);
 
-  return image;
+  return GTK_WIDGET (image);
 }
 
 static GtkWidget *
@@ -122,26 +122,26 @@ create_spinbutton (void)
 static GtkWidget *
 create_label (void)
 {
-  GtkWidget *w = gtk_label_new ("pLorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.");
+  GtkLabel *w = gtk_label_new ("pLorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.");
 
-  gtk_label_set_wrap (GTK_LABEL (w), TRUE);
-  gtk_label_set_max_width_chars (GTK_LABEL (w), 100);
+  gtk_label_set_wrap (w, TRUE);
+  gtk_label_set_max_width_chars (w, 100);
 
-  return w;
+  return GTK_WIDGET (w);
 }
 
 static GtkWidget *
 create_video (void)
 {
   GtkMediaStream *stream = gtk_media_file_new_for_resource ("/images/gtk-logo.webm");
-  GtkWidget *w = gtk_picture_new_for_paintable (GDK_PAINTABLE (stream));
+  GtkPicture *w = gtk_picture_new_for_paintable (GDK_PAINTABLE (stream));
 
-  gtk_widget_set_size_request (w, 64, 64);
+  gtk_widget_set_size_request (GTK_WIDGET (w), 64, 64);
   gtk_media_stream_set_loop (stream, TRUE);
   gtk_media_stream_play (stream);
   g_object_unref (stream);
 
-  return w;
+  return GTK_WIDGET (w);
 }
 
 static GtkWidget *
@@ -157,11 +157,11 @@ create_gears (void)
 static GtkWidget *
 create_switch (void)
 {
-  GtkWidget *w = gtk_switch_new ();
+  GtkSwitch *w = gtk_switch_new ();
 
-  gtk_switch_set_state (GTK_SWITCH (w), TRUE);
+  gtk_switch_set_state (w, TRUE);
 
-  return w;
+  return GTK_WIDGET (w);
 }
 
 static void

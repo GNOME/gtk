@@ -433,15 +433,15 @@ gtk_drag_icon_set_from_paintable (GdkDrag      *drag,
                                   int           hot_y)
 {
   GtkWidget *icon;
-  GtkWidget *picture;
+  GtkPicture *picture;
 
   gdk_drag_set_hotspot (drag, hot_x, hot_y);
 
   icon = gtk_drag_icon_new_for_drag (drag);
 
   picture = gtk_picture_new_for_paintable (paintable);
-  gtk_picture_set_can_shrink (GTK_PICTURE (picture), FALSE);
-  gtk_container_add (GTK_CONTAINER (icon), picture);
+  gtk_picture_set_can_shrink (picture, FALSE);
+  gtk_container_add (GTK_CONTAINER (icon), GTK_WIDGET (picture));
 
   g_object_set_data_full (G_OBJECT (drag),
                           "icon",

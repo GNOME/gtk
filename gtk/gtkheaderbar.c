@@ -111,11 +111,11 @@ struct _GtkHeaderBarPrivate
 
   gchar *title;
   gchar *subtitle;
-  GtkWidget *title_label;
-  GtkWidget *subtitle_label;
+  GtkLabel *title_label;
+  GtkLabel *subtitle_label;
   GtkWidget *label_box;
   GtkWidget *label_sizing_box;
-  GtkWidget *subtitle_sizing_label;
+  GtkLabel *subtitle_sizing_label;
   GtkWidget *custom_title;
   gboolean has_subtitle;
 
@@ -127,8 +127,8 @@ struct _GtkHeaderBarPrivate
   GtkWidget *titlebar_start_box;
   GtkWidget *titlebar_end_box;
 
-  GtkWidget *titlebar_start_separator;
-  GtkWidget *titlebar_end_separator;
+  GtkSeparator *titlebar_start_separator;
+  GtkSeparator *titlebar_end_separator;
 
   GtkWidget *titlebar_icon;
 
@@ -163,6 +163,7 @@ init_sizing_box (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GtkWidget *w;
+  GtkLabel *label;
   GtkStyleContext *context;
 
   /* We use this box to always request size for the two labels (title
@@ -173,57 +174,57 @@ init_sizing_box (GtkHeaderBar *bar)
   w = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   priv->label_sizing_box = g_object_ref_sink (w);
 
-  w = gtk_label_new (NULL);
-  context = gtk_widget_get_style_context (w);
+  label = gtk_label_new (NULL);
+  context = gtk_widget_get_style_context (GTK_WIDGET (label));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TITLE);
-  gtk_container_add (GTK_CONTAINER (priv->label_sizing_box), w);
-  gtk_label_set_wrap (GTK_LABEL (w), FALSE);
-  gtk_label_set_single_line_mode (GTK_LABEL (w), TRUE);
-  gtk_label_set_ellipsize (GTK_LABEL (w), PANGO_ELLIPSIZE_END);
-  gtk_label_set_width_chars (GTK_LABEL (w), MIN_TITLE_CHARS);
+  gtk_container_add (GTK_CONTAINER (priv->label_sizing_box), GTK_WIDGET (label));
+  gtk_label_set_wrap (label, FALSE);
+  gtk_label_set_single_line_mode (label, TRUE);
+  gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+  gtk_label_set_width_chars (label, MIN_TITLE_CHARS);
 
-  w = gtk_label_new (NULL);
-  context = gtk_widget_get_style_context (w);
+  label = gtk_label_new (NULL);
+  context = gtk_widget_get_style_context (GTK_WIDGET (label));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SUBTITLE);
-  gtk_container_add (GTK_CONTAINER (priv->label_sizing_box), w);
-  gtk_label_set_wrap (GTK_LABEL (w), FALSE);
-  gtk_label_set_single_line_mode (GTK_LABEL (w), TRUE);
-  gtk_label_set_ellipsize (GTK_LABEL (w), PANGO_ELLIPSIZE_END);
-  gtk_widget_set_visible (w, priv->has_subtitle || (priv->subtitle && priv->subtitle[0]));
-  priv->subtitle_sizing_label = w;
+  gtk_container_add (GTK_CONTAINER (priv->label_sizing_box), GTK_WIDGET (label));
+  gtk_label_set_wrap (label, FALSE);
+  gtk_label_set_single_line_mode (label, TRUE);
+  gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+  gtk_widget_set_visible (GTK_WIDGET (label), priv->has_subtitle || (priv->subtitle && priv->subtitle[0]));
+  priv->subtitle_sizing_label = label;
 }
 
 static GtkWidget *
 create_title_box (const char *title,
                   const char *subtitle,
-                  GtkWidget **ret_title_label,
-                  GtkWidget **ret_subtitle_label)
+                  GtkLabel **ret_title_label,
+                  GtkLabel **ret_subtitle_label)
 {
   GtkWidget *label_box;
-  GtkWidget *title_label;
-  GtkWidget *subtitle_label;
+  GtkLabel *title_label;
+  GtkLabel *subtitle_label;
   GtkStyleContext *context;
 
   label_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_set_valign (label_box, GTK_ALIGN_CENTER);
 
   title_label = gtk_label_new (title);
-  context = gtk_widget_get_style_context (title_label);
+  context = gtk_widget_get_style_context (GTK_WIDGET (title_label));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TITLE);
-  gtk_label_set_wrap (GTK_LABEL (title_label), FALSE);
-  gtk_label_set_single_line_mode (GTK_LABEL (title_label), TRUE);
-  gtk_label_set_ellipsize (GTK_LABEL (title_label), PANGO_ELLIPSIZE_END);
-  gtk_container_add (GTK_CONTAINER (label_box), title_label);
-  gtk_label_set_width_chars (GTK_LABEL (title_label), MIN_TITLE_CHARS);
+  gtk_label_set_wrap (title_label, FALSE);
+  gtk_label_set_single_line_mode (title_label, TRUE);
+  gtk_label_set_ellipsize (title_label, PANGO_ELLIPSIZE_END);
+  gtk_container_add (GTK_CONTAINER (label_box), GTK_WIDGET (title_label));
+  gtk_label_set_width_chars (title_label, MIN_TITLE_CHARS);
 
   subtitle_label = gtk_label_new (subtitle);
-  context = gtk_widget_get_style_context (subtitle_label);
+  context = gtk_widget_get_style_context (GTK_WIDGET (subtitle_label));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SUBTITLE);
-  gtk_label_set_wrap (GTK_LABEL (subtitle_label), FALSE);
-  gtk_label_set_single_line_mode (GTK_LABEL (subtitle_label), TRUE);
-  gtk_label_set_ellipsize (GTK_LABEL (subtitle_label), PANGO_ELLIPSIZE_END);
-  gtk_container_add (GTK_CONTAINER (label_box), subtitle_label);
-  gtk_widget_set_visible (subtitle_label, subtitle && subtitle[0]);
+  gtk_label_set_wrap (subtitle_label, FALSE);
+  gtk_label_set_single_line_mode (subtitle_label, TRUE);
+  gtk_label_set_ellipsize (subtitle_label, PANGO_ELLIPSIZE_END);
+  gtk_container_add (GTK_CONTAINER (label_box), GTK_WIDGET (subtitle_label));
+  gtk_widget_set_visible (GTK_WIDGET (subtitle_label), subtitle && subtitle[0]);
 
   if (ret_title_label)
     *ret_title_label = title_label;
@@ -288,10 +289,10 @@ _gtk_header_bar_update_separator_visibility (GtkHeaderBar *bar)
   g_list_free (children);
 
   if (priv->titlebar_start_separator != NULL)
-    gtk_widget_set_visible (priv->titlebar_start_separator, have_visible_at_start);
+    gtk_widget_set_visible (GTK_WIDGET (priv->titlebar_start_separator), have_visible_at_start);
 
   if (priv->titlebar_end_separator != NULL)
-    gtk_widget_set_visible (priv->titlebar_end_separator, have_visible_at_end);
+    gtk_widget_set_visible (GTK_WIDGET (priv->titlebar_end_separator), have_visible_at_end);
 }
 
 void
@@ -362,7 +363,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
       for (i = 0; i < 2; i++)
         {
           GtkWidget *box;
-          GtkWidget *separator;
+          GtkSeparator *separator;
           int n_children = 0;
 
           if (tokens[i] == NULL)
@@ -371,20 +372,20 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
           t = g_strsplit (tokens[i], ",", -1);
 
           separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-          gtk_style_context_add_class (gtk_widget_get_style_context (separator), "titlebutton");
+          gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (separator)), "titlebutton");
 
           box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
           for (j = 0; t[j]; j++)
             {
               GtkWidget *button = NULL;
-              GtkWidget *image = NULL;
+              GtkImage *image = NULL;
               AtkObject *accessible;
 
               if (strcmp (t[j], "icon") == 0 &&
                   is_sovereign_window)
                 {
-                  button = gtk_image_new ();
+                  button = GTK_WIDGET (gtk_image_new ());
                   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
                   priv->titlebar_icon = button;
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
@@ -408,14 +409,14 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "menu");
                   image = gtk_image_new ();
-                  gtk_menu_button_add_child (GTK_MENU_BUTTON (button), image);
+                  gtk_menu_button_add_child (GTK_MENU_BUTTON (button), GTK_WIDGET (image));
                   gtk_widget_set_can_focus (button, FALSE);
 
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))
                     atk_object_set_name (accessible, _("Application menu"));
 
-                  priv->titlebar_icon = image;
+                  priv->titlebar_icon = GTK_WIDGET (image);
                   if (!_gtk_header_bar_update_window_icon (bar, window))
                     gtk_image_set_from_icon_name (GTK_IMAGE (priv->titlebar_icon), "application-x-executable-symbolic");
 
@@ -430,7 +431,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "minimize");
                   image = gtk_image_new_from_icon_name ("window-minimize-symbolic");
                   g_object_set (image, "use-fallback", TRUE, NULL);
-                  gtk_container_add (GTK_CONTAINER (button), image);
+                  gtk_container_add (GTK_CONTAINER (button), GTK_WIDGET (image));
                   gtk_widget_set_can_focus (button, FALSE);
                   g_signal_connect_swapped (button, "clicked",
                                             G_CALLBACK (gtk_window_minimize), window);
@@ -453,7 +454,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "maximize");
                   image = gtk_image_new_from_icon_name (icon_name);
                   g_object_set (image, "use-fallback", TRUE, NULL);
-                  gtk_container_add (GTK_CONTAINER (button), image);
+                  gtk_container_add (GTK_CONTAINER (button), GTK_WIDGET (image));
                   gtk_widget_set_can_focus (button, FALSE);
                   g_signal_connect_swapped (button, "clicked",
                                             G_CALLBACK (_gtk_window_toggle_maximized), window);
@@ -471,7 +472,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "close");
                   g_object_set (image, "use-fallback", TRUE, NULL);
-                  gtk_container_add (GTK_CONTAINER (button), image);
+                  gtk_container_add (GTK_CONTAINER (button), GTK_WIDGET (image));
                   gtk_widget_set_can_focus (button, FALSE);
                   g_signal_connect_swapped (button, "clicked",
                                             G_CALLBACK (gtk_window_close), window);
@@ -498,9 +499,9 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
               continue;
             }
 
-          gtk_container_add (GTK_CONTAINER (box), separator);
+          gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (separator));
           if (i == 1)
-            gtk_box_reorder_child_after (GTK_BOX (box), separator, NULL);
+            gtk_box_reorder_child_after (GTK_BOX (box), GTK_WIDGET (separator), NULL);
 
           if (i == 0)
             gtk_style_context_add_class (gtk_widget_get_style_context (box), GTK_STYLE_CLASS_LEFT);
@@ -634,7 +635,7 @@ gtk_header_bar_set_title (GtkHeaderBar *bar,
 
   if (priv->title_label != NULL)
     {
-      gtk_label_set_label (GTK_LABEL (priv->title_label), priv->title);
+      gtk_label_set_label (priv->title_label, priv->title);
       gtk_widget_queue_resize (GTK_WIDGET (bar));
     }
 
@@ -688,12 +689,12 @@ gtk_header_bar_set_subtitle (GtkHeaderBar *bar,
 
   if (priv->subtitle_label != NULL)
     {
-      gtk_label_set_label (GTK_LABEL (priv->subtitle_label), priv->subtitle);
-      gtk_widget_set_visible (priv->subtitle_label, priv->subtitle && priv->subtitle[0]);
+      gtk_label_set_label (priv->subtitle_label, priv->subtitle);
+      gtk_widget_set_visible (GTK_WIDGET (priv->subtitle_label), priv->subtitle && priv->subtitle[0]);
       gtk_widget_queue_resize (GTK_WIDGET (bar));
     }
 
-  gtk_widget_set_visible (priv->subtitle_sizing_label, priv->has_subtitle || (priv->subtitle && priv->subtitle[0]));
+  gtk_widget_set_visible (GTK_WIDGET (priv->subtitle_sizing_label), priv->has_subtitle || (priv->subtitle && priv->subtitle[0]));
 
   g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_SUBTITLE]);
 }
@@ -1396,7 +1397,7 @@ gtk_header_bar_set_has_subtitle (GtkHeaderBar *bar,
     return;
 
   priv->has_subtitle = setting;
-  gtk_widget_set_visible (priv->subtitle_sizing_label, setting || (priv->subtitle && priv->subtitle[0]));
+  gtk_widget_set_visible (GTK_WIDGET (priv->subtitle_sizing_label), setting || (priv->subtitle && priv->subtitle[0]));
 
   gtk_widget_queue_resize (GTK_WIDGET (bar));
 

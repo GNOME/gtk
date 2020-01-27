@@ -800,7 +800,7 @@ gtk_button_set_label (GtkButton   *button,
       if (child != NULL)
         gtk_container_remove (GTK_CONTAINER (button), child);
 
-      child = gtk_label_new (NULL);
+      child = GTK_WIDGET (gtk_label_new (NULL));
       if (priv->use_underline)
         {
           gtk_label_set_use_underline (GTK_LABEL (child), priv->use_underline);
@@ -957,7 +957,7 @@ gtk_button_set_icon_name (GtkButton  *button,
       if (child != NULL)
         gtk_container_remove (GTK_CONTAINER (button), child);
 
-      child = gtk_image_new_from_icon_name (icon_name);
+      child = GTK_WIDGET (gtk_image_new_from_icon_name (icon_name));
       gtk_container_add (GTK_CONTAINER (button), child);
       gtk_style_context_remove_class (context, "text-button");
       gtk_style_context_add_class (context, "image-button");

@@ -407,7 +407,7 @@ test_phases (void)
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
-  C = gtk_image_new ();
+  C = GTK_WIDGET (gtk_image_new ());
   gtk_widget_set_hexpand (C, TRUE);
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
@@ -459,7 +459,7 @@ test_mixed (void)
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
-  C = gtk_image_new ();
+  C = GTK_WIDGET (gtk_image_new ());
   gtk_widget_set_hexpand (C, TRUE);
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
@@ -518,7 +518,7 @@ test_early_exit (void)
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
-  C = gtk_image_new ();
+  C = GTK_WIDGET (gtk_image_new ());
   gtk_widget_set_hexpand (C, TRUE);
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
@@ -573,7 +573,7 @@ test_claim_capture (void)
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
-  C = gtk_image_new ();
+  C = GTK_WIDGET (gtk_image_new ());
   gtk_widget_set_hexpand (C, TRUE);
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
@@ -620,7 +620,7 @@ test_claim_target (void)
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
-  C = gtk_image_new ();
+  C = GTK_WIDGET (gtk_image_new ());
   gtk_widget_set_hexpand (C, TRUE);
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
@@ -667,7 +667,7 @@ test_claim_bubble (void)
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
-  C = gtk_image_new ();
+  C = GTK_WIDGET (gtk_image_new ());
   gtk_widget_set_hexpand (C, TRUE);
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
@@ -721,7 +721,7 @@ test_early_claim_capture (void)
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
-  C = gtk_image_new ();
+  C = GTK_WIDGET (gtk_image_new ());
   gtk_widget_set_hexpand (C, TRUE);
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
@@ -778,7 +778,7 @@ test_late_claim_capture (void)
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
-  C = gtk_image_new ();
+  C = GTK_WIDGET (gtk_image_new ());
   gtk_widget_set_hexpand (C, TRUE);
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
@@ -837,7 +837,7 @@ test_group (void)
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
-  C = gtk_image_new ();
+  C = GTK_WIDGET (gtk_image_new ());
   gtk_widget_set_hexpand (C, TRUE);
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
@@ -890,7 +890,7 @@ test_gestures_outside_grab (void)
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
-  C = gtk_image_new ();
+  C = GTK_WIDGET (gtk_image_new ());
   gtk_widget_set_hexpand (C, TRUE);
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
@@ -950,7 +950,7 @@ test_gestures_inside_grab (void)
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
-  C = gtk_image_new ();
+  C = GTK_WIDGET (gtk_image_new ());
   gtk_widget_set_hexpand (C, TRUE);
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
@@ -1011,7 +1011,7 @@ test_multitouch_on_single (void)
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
-  C = gtk_image_new ();
+  C = GTK_WIDGET (gtk_image_new ());
   gtk_widget_set_hexpand (C, TRUE);
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
@@ -1063,7 +1063,7 @@ test_multitouch_activation (void)
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
-  C = gtk_image_new ();
+  C = GTK_WIDGET (gtk_image_new ());
   gtk_widget_set_hexpand (C, TRUE);
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");
@@ -1141,7 +1141,7 @@ test_multitouch_interaction (void)
   gtk_widget_set_name (A, "A");
   B = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_name (B, "B");
-  C = gtk_image_new ();
+  C = GTK_WIDGET (gtk_image_new ());
   gtk_widget_set_hexpand (C, TRUE);
   gtk_widget_set_vexpand (C, TRUE);
   gtk_widget_set_name (C, "C");

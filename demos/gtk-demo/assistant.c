@@ -91,18 +91,20 @@ on_entry_changed (GtkWidget *widget, gpointer data)
 static void
 create_page1 (GtkWidget *assistant)
 {
-  GtkWidget *box, *label, *entry;
+  GtkWidget *box;
+  GtkEntry *entry;
+  GtkLabel *label;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   g_object_set (box, "margin", 12, NULL);
 
   label = gtk_label_new ("You must fill out this entry to continue:");
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   entry = gtk_entry_new ();
-  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-  gtk_widget_set_valign (entry, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (box), entry);
+  gtk_entry_set_activates_default (entry, TRUE);
+  gtk_widget_set_valign (GTK_WIDGET (entry), GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (entry));
   g_signal_connect (G_OBJECT (entry), "changed",
                     G_CALLBACK (on_entry_changed), assistant);
 
@@ -114,15 +116,16 @@ create_page1 (GtkWidget *assistant)
 static void
 create_page2 (GtkWidget *assistant)
 {
-  GtkWidget *box, *checkbutton;
+  GtkWidget *box;
+  GtkCheckButton *checkbutton;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   g_object_set (box, "margin", 12, NULL);
 
   checkbutton = gtk_check_button_new_with_label ("This is optional data, you may continue "
                                                  "even if you do not check this");
-  gtk_widget_set_valign (checkbutton, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (box), checkbutton);
+  gtk_widget_set_valign (GTK_WIDGET (checkbutton), GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (checkbutton));
 
   gtk_assistant_append_page (GTK_ASSISTANT (assistant), box);
   gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), box, TRUE);
@@ -132,15 +135,15 @@ create_page2 (GtkWidget *assistant)
 static void
 create_page3 (GtkWidget *assistant)
 {
-  GtkWidget *label;
+  GtkLabel *label;
 
   label = gtk_label_new ("This is a confirmation page, press 'Apply' to apply changes");
 
-  gtk_widget_show (label);
-  gtk_assistant_append_page (GTK_ASSISTANT (assistant), label);
-  gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), label, GTK_ASSISTANT_PAGE_CONFIRM);
-  gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), label, TRUE);
-  gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), label, "Confirmation");
+  gtk_widget_show (GTK_WIDGET (label));
+  gtk_assistant_append_page (GTK_ASSISTANT (assistant), GTK_WIDGET (label));
+  gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), GTK_WIDGET (label), GTK_ASSISTANT_PAGE_CONFIRM);
+  gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), GTK_WIDGET (label), TRUE);
+  gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), GTK_WIDGET (label), "Confirmation");
 }
 
 static void

@@ -90,8 +90,8 @@ create_pane_options (GtkPaned    *paned,
   GtkWidget *child1, *child2;
   GtkWidget *frame;
   GtkWidget *table;
-  GtkWidget *label;
-  GtkWidget *check_button;
+  GtkLabel *label;
+  GtkCheckButton *check_button;
 
   child1 = gtk_paned_get_child1 (paned);
   child2 = gtk_paned_get_child2 (paned);
@@ -103,30 +103,30 @@ create_pane_options (GtkPaned    *paned,
   gtk_container_add (GTK_CONTAINER (frame), table);
 
   label = gtk_label_new (label1);
-  gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 0, 0, 1, 1);
 
   check_button = gtk_check_button_new_with_mnemonic ("_Resize");
-  gtk_grid_attach (GTK_GRID (table), check_button, 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (check_button), 0, 1, 1, 1);
   g_signal_connect (check_button, "toggled",
                     G_CALLBACK (toggle_resize), child1);
 
   check_button = gtk_check_button_new_with_mnemonic ("_Shrink");
-  gtk_grid_attach (GTK_GRID (table), check_button, 0, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (check_button), 0, 2, 1, 1);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
   g_signal_connect (check_button, "toggled",
                     G_CALLBACK (toggle_shrink), child1);
 
   label = gtk_label_new (label2);
-  gtk_grid_attach (GTK_GRID (table), label, 1, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 1, 0, 1, 1);
 
   check_button = gtk_check_button_new_with_mnemonic ("_Resize");
-  gtk_grid_attach (GTK_GRID (table), check_button, 1, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (check_button), 1, 1, 1, 1);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
   g_signal_connect (check_button, "toggled",
                     G_CALLBACK (toggle_resize), child2);
 
   check_button = gtk_check_button_new_with_mnemonic ("_Shrink");
-  gtk_grid_attach (GTK_GRID (table), check_button, 1, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (check_button), 1, 2, 1, 1);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
   g_signal_connect (check_button, "toggled",
                     G_CALLBACK (toggle_shrink), child2);

@@ -20,18 +20,19 @@ make_switch (gboolean is_on,
              gboolean is_sensitive)
 {
   GtkWidget *hbox;
-  GtkWidget *sw, *label;
+  GtkSwitch *sw;
+  GtkLabel *label;
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 
   sw = gtk_switch_new ();
-  gtk_switch_set_active (GTK_SWITCH (sw), is_on);
-  gtk_container_add (GTK_CONTAINER (hbox), sw);
-  gtk_widget_set_sensitive (sw, is_sensitive);
+  gtk_switch_set_active (sw, is_on);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (sw));
+  gtk_widget_set_sensitive (GTK_WIDGET (sw), is_sensitive);
 
   label = gtk_label_new (is_on ? "Enabled" : "Disabled");
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
   g_object_bind_property_full (sw, "active",
                                label, "label",
@@ -110,14 +111,17 @@ make_delayed_switch (gboolean is_on,
                      gboolean is_sensitive)
 {
   GtkWidget *hbox;
-  GtkWidget *sw, *label, *spinner, *check;
+  GtkSwitch *sw;
+  GtkWidget *spinner;
+  GtkCheckButton *check;
+  GtkLabel *label;
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 
   sw = gtk_switch_new ();
-  gtk_switch_set_active (GTK_SWITCH (sw), is_on);
-  gtk_container_add (GTK_CONTAINER (hbox), sw);
-  gtk_widget_set_sensitive (sw, is_sensitive);
+  gtk_switch_set_active (sw, is_on);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (sw));
+  gtk_widget_set_sensitive (GTK_WIDGET (sw), is_sensitive);
 
   g_signal_connect (sw, "state-set", G_CALLBACK (set_state), NULL);
 
@@ -126,8 +130,8 @@ make_delayed_switch (gboolean is_on,
   gtk_widget_set_opacity (spinner, 0.0);
 
   label = gtk_label_new (is_on ? "Enabled" : "Disabled");
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
   g_object_bind_property_full (sw, "active",
                                label, "label",
@@ -137,7 +141,7 @@ make_delayed_switch (gboolean is_on,
                                NULL, NULL);
 
   check = gtk_check_button_new ();
-  gtk_container_add (GTK_CONTAINER (hbox), check);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (check));
   g_object_bind_property (sw, "state",
                           check, "active",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);

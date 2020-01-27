@@ -67,7 +67,7 @@ struct _GtkShortcutsSection
   GtkStack         *stack;
   GtkStackSwitcher *switcher;
   GtkWidget        *show_all;
-  GtkWidget        *footer;
+  GtkCenterBox     *footer;
   GList            *groups;
 
   gboolean          has_filtered_group;
@@ -441,12 +441,12 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
                             G_CALLBACK (gtk_shortcuts_section_show_all), self);
 
   self->footer = gtk_center_box_new ();
-  GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->add (GTK_CONTAINER (self), self->footer);
+  GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->add (GTK_CONTAINER (self), GTK_WIDGET (self->footer));
 
   gtk_widget_set_hexpand (GTK_WIDGET (self->switcher), TRUE);
   gtk_widget_set_halign (GTK_WIDGET (self->switcher), GTK_ALIGN_CENTER);
-  gtk_center_box_set_center_widget (GTK_CENTER_BOX (self->footer), GTK_WIDGET (self->switcher));
-  gtk_center_box_set_end_widget (GTK_CENTER_BOX (self->footer), self->show_all);
+  gtk_center_box_set_center_widget (self->footer, GTK_WIDGET (self->switcher));
+  gtk_center_box_set_end_widget (self->footer, self->show_all);
   gtk_widget_set_halign (self->show_all, GTK_ALIGN_END);
 
   gesture = gtk_gesture_pan_new (GTK_ORIENTATION_HORIZONTAL);

@@ -33,11 +33,11 @@ G_BEGIN_DECLS
 typedef struct _GtkColorChooserDialog        GtkColorChooserDialog;
 
 GDK_AVAILABLE_IN_ALL
-GType       gtk_color_chooser_dialog_get_type (void) G_GNUC_CONST;
+GType                   gtk_color_chooser_dialog_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget * gtk_color_chooser_dialog_new      (const gchar *title,
-                                               GtkWindow   *parent);
+GtkColorChooserDialog * gtk_color_chooser_dialog_new      (const gchar *title,
+                                                           GtkWindow   *parent);
 
 G_END_DECLS
 

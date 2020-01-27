@@ -44,7 +44,7 @@ static void
 change_color_callback (GtkWidget *button,
                        gpointer   data)
 {
-  GtkWidget *dialog;
+  GtkColorChooserDialog *dialog;
 
   dialog = gtk_color_chooser_dialog_new ("Changing color", GTK_WINDOW (window));
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
@@ -53,7 +53,7 @@ change_color_callback (GtkWidget *button,
   g_signal_connect (dialog, "response",
                     G_CALLBACK (response_cb), NULL);
 
-  gtk_widget_show (dialog);
+  gtk_widget_show (GTK_WIDGET (dialog));
 }
 
 GtkWidget *

@@ -87,14 +87,14 @@ static WidgetInfo *
 create_switch (void)
 {
   GtkWidget *widget;
-  GtkWidget *sw;
+  GtkSwitch *sw;
 
   widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   sw = gtk_switch_new ();
-  gtk_switch_set_active (GTK_SWITCH (sw), TRUE);
-  gtk_container_add (GTK_CONTAINER (widget), sw);
+  gtk_switch_set_active (sw, TRUE);
+  gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (sw));
   sw = gtk_switch_new ();
-  gtk_container_add (GTK_CONTAINER (widget), sw);
+  gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (sw));
 
   gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
@@ -105,12 +105,12 @@ create_switch (void)
 static WidgetInfo *
 create_toggle_button (void)
 {
-  GtkWidget *widget;
+  GtkToggleButton *widget;
 
   widget = gtk_toggle_button_new_with_mnemonic ("_Toggle Button");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_toggle_button_set_active (widget, FALSE);
+  gtk_widget_set_halign (GTK_WIDGDET (widget), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGDET (widget), GTK_ALIGN_CENTER);
 
   return new_widget_info ("toggle-button", widget, SMALL);
 }
@@ -118,14 +118,14 @@ create_toggle_button (void)
 static WidgetInfo *
 create_check_button (void)
 {
-  GtkWidget *widget;
+  GtkCheckButton *widget;
 
   widget = gtk_check_button_new_with_mnemonic ("_Check Button");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
 
-  return new_widget_info ("check-button", widget, SMALL);
+  return new_widget_info ("check-button", GTK_WIDGET (widget), SMALL);
 }
 
 static WidgetInfo *
@@ -144,14 +144,14 @@ static WidgetInfo *
 create_menu_button (void)
 {
   GtkWidget *widget;
-  GtkWidget *image;
+  GtkImage *image;
   GtkWidget *menu;
   GtkWidget *vbox;
 
   widget = gtk_menu_button_new ();
   image = gtk_image_new ();
-  gtk_image_set_from_icon_name (GTK_IMAGE (image), "emblem-system-symbolic");
-  gtk_container_add (GTK_CONTAINER (widget), image);
+  gtk_image_set_from_icon_name (image, "emblem-system-symbolic");
+  gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (image));
   menu = gtk_popover_new (NULL);
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (widget), menu);
 
@@ -221,11 +221,11 @@ create_lockbutton (void)
 static WidgetInfo *
 create_entry (void)
 {
-  GtkWidget *widget;
+  GtkEntry *widget;
 
   widget = gtk_entry_new ();
-  gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
-  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (GTK_WIDGET (widget), GTK_ALIGN_FILL);
+  gtk_widget_set_valign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
   gtk_editable_set_text (GTK_EDITABLE (widget), "Entry");
   gtk_editable_set_position (GTK_EDITABLE (widget), -1);
 
@@ -330,7 +330,7 @@ create_combo_box_entry (void)
 static WidgetInfo *
 create_combo_box (void)
 {
-  GtkWidget *widget;
+  GtkComboBox *widget;
   GtkCellRenderer *cell;
   GtkListStore *store;
 
@@ -342,28 +342,28 @@ create_combo_box (void)
 
   store = gtk_list_store_new (1, G_TYPE_STRING);
   gtk_list_store_insert_with_values (store, NULL, -1, 0, "Combo Box", -1);
-  gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (store));
+  gtk_combo_box_set_model (widget, GTK_TREE_MODEL (store));
 
-  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_combo_box_set_active (GTK_WIDGET (widget), 0);
+  gtk_widget_set_halign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
 
-  return new_widget_info ("combo-box", widget, SMALL);
+  return new_widget_info ("combo-box", GTK_WIDGET (widget), SMALL);
 }
 
 static WidgetInfo *
 create_combo_box_text (void)
 {
-  GtkWidget *widget;
+  GtkComboBoxText *widget;
 
   widget = gtk_combo_box_text_new ();
 
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Combo Box Text");
+  gtk_combo_box_text_append_text (widget, "Combo Box Text");
   gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
 
-  return new_widget_info ("combo-box-text", widget, SMALL);
+  return new_widget_info ("combo-box-text", GTK_WIDGET (widget), SMALL);
 }
 
 static WidgetInfo *
@@ -419,7 +419,7 @@ create_search_bar (void)
 static WidgetInfo *
 create_action_bar (void)
 {
-  GtkWidget *widget;
+  GtkActionBar *widget;
   GtkWidget *button;
   WidgetInfo *info;
   GtkWidget *view;
@@ -439,9 +439,9 @@ create_action_bar (void)
   gtk_container_add (GTK_CONTAINER (widget), button);
   g_object_set (gtk_widget_get_parent (button), "margin", 6, "spacing", 6, NULL);
 
-  gtk_widget_show (widget);
+  gtk_widget_show (GTK_WIDGET (widget));
 
-  gtk_container_add (GTK_CONTAINER (box), widget);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (widget));
 
   info = new_widget_info ("action-bar", box, SMALL);
 
@@ -552,7 +552,7 @@ static WidgetInfo *
 create_color_button (void)
 {
   GtkWidget *vbox;
-  GtkWidget *picker;
+  GtkColorButton *picker;
   GdkRGBA color;
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
@@ -560,9 +560,9 @@ create_color_button (void)
   color.green = 0x90<<8;
   color.blue = 0xff<<8;
   picker = gtk_color_button_new_with_rgba (&color);
-  gtk_widget_set_halign (picker, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (picker, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (vbox), picker);
+  gtk_widget_set_halign (GTK_WIDGET (picker), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (picker), GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (picker));
   gtk_container_add (GTK_CONTAINER (vbox),
 		      gtk_label_new ("Color Button"));
 
@@ -608,7 +608,7 @@ create_file_button (void)
   gtk_container_add (GTK_CONTAINER (vbox),
 		      vbox2);
   gtk_container_add (GTK_CONTAINER (vbox),
-		      gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+		      GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_HORIZONTAL)));
 
   vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   picker = gtk_file_chooser_button_new ("File Chooser Button",
@@ -638,9 +638,9 @@ create_separator (void)
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_set_homogeneous (GTK_BOX (hbox), TRUE);
   gtk_container_add (GTK_CONTAINER (hbox),
-		      gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+		      GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_HORIZONTAL)));
   gtk_container_add (GTK_CONTAINER (hbox),
-		      gtk_separator_new (GTK_ORIENTATION_VERTICAL));
+		      GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_VERTICAL)));
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
   gtk_container_add (GTK_CONTAINER (vbox),
 		      g_object_new (GTK_TYPE_LABEL,
@@ -723,7 +723,7 @@ static WidgetInfo *
 create_filesel (void)
 {
   WidgetInfo *info;
-  GtkWidget *widget;
+  GtkFileChooserDialog *widget;
 
   widget = gtk_file_chooser_dialog_new ("File Chooser Dialog",
 					NULL,
@@ -733,7 +733,7 @@ create_filesel (void)
 					NULL); 
   gtk_window_set_default_size (GTK_WINDOW (widget), 505, 305);
   
-  info = new_widget_info ("filechooser", widget, ASIS);
+  info = new_widget_info ("filechooser", GTK_WIDGET (widget), ASIS);
   info->include_decorations = TRUE;
 
   return info;
@@ -743,11 +743,11 @@ static WidgetInfo *
 create_print_dialog (void)
 {
   WidgetInfo *info;
-  GtkWidget *widget;
+  GtkPrintUnixDialog *widget;
 
   widget = gtk_print_unix_dialog_new ("Print Dialog", NULL);   
   gtk_widget_set_size_request (widget, 505, 350);
-  info = new_widget_info ("printdialog", widget, ASIS);
+  info = new_widget_info ("printdialog", GTK_WIDGET (widget), ASIS);
   info->include_decorations = TRUE;
 
   return info;
@@ -757,7 +757,7 @@ static WidgetInfo *
 create_page_setup_dialog (void)
 {
   WidgetInfo *info;
-  GtkWidget *widget;
+  GtkPageSetupUnixDialog *widget;
   GtkPageSetup *page_setup;
   GtkPrintSettings *settings;
 
@@ -769,7 +769,7 @@ create_page_setup_dialog (void)
   gtk_page_setup_unix_dialog_set_print_settings (GTK_PAGE_SETUP_UNIX_DIALOG (widget),
 						 settings);
 
-  info = new_widget_info ("pagesetupdialog", widget, ASIS);
+  info = new_widget_info ("pagesetupdialog", GTK_WIDGET (widget), ASIS);
   info->include_decorations = TRUE;
 
   return info;
@@ -778,26 +778,26 @@ create_page_setup_dialog (void)
 static WidgetInfo *
 create_toolbar (void)
 {
-  GtkWidget *widget;
+  GtkToolbar *widget;
   GtkToolItem *item;
 
   widget = gtk_toolbar_new ();
 
   item = gtk_tool_button_new (NULL, NULL);
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "document-new");
-  gtk_toolbar_insert (GTK_TOOLBAR (widget), item, -1);
+  gtk_toolbar_insert (widget, item, -1);
 
   item = gtk_tool_button_new (NULL, NULL);
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "document-open");
-  gtk_toolbar_insert (GTK_TOOLBAR (widget), item, -1);
+  gtk_toolbar_insert (widget, item, -1);
 
   item = gtk_tool_button_new (NULL, NULL);
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "view-refresh");
-  gtk_toolbar_insert (GTK_TOOLBAR (widget), item, -1);
+  gtk_toolbar_insert (widget, item, -1);
 
-  gtk_toolbar_set_show_arrow (GTK_TOOLBAR (widget), FALSE);
+  gtk_toolbar_set_show_arrow (widget, FALSE);
 
-  return new_widget_info ("toolbar", widget, SMALL);
+  return new_widget_info ("toolbar", GTK_WIDGET (widget), SMALL);
 }
 
 static WidgetInfo *
@@ -819,7 +819,7 @@ create_message_dialog (void)
 static WidgetInfo *
 create_about_dialog (void)
 {
-  GtkWidget *widget;
+  GtkAboutDialog *widget;
   const gchar *authors[] = {
     "Peter Mattis",
     "Spencer Kimball",
@@ -840,7 +840,7 @@ create_about_dialog (void)
                 "authors", authors,
 		NULL);
   gtk_window_set_icon_name (GTK_WINDOW (widget), "help-about");
-  return new_widget_info ("aboutdialog", widget, ASIS);
+  return new_widget_info ("aboutdialog", GTK_WIDGET (widget), ASIS);
 }
 
 static WidgetInfo *
@@ -998,16 +998,16 @@ create_scales (void)
 static WidgetInfo *
 create_image (void)
 {
-  GtkWidget *widget;
+  GtkImage *widget;
   GtkWidget *vbox;
 
   widget = gtk_image_new_from_icon_name ("applications-graphics");
-  gtk_image_set_icon_size (GTK_IMAGE (widget), GTK_ICON_SIZE_LARGE);
-  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+  gtk_image_set_icon_size (widget, GTK_ICON_SIZE_LARGE);
+  gtk_widget_set_halign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (widget), GTK_ALIGN_CENTER);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  gtk_container_add (GTK_CONTAINER (vbox), widget);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (widget));
   gtk_container_add (GTK_CONTAINER (vbox),
 		      gtk_label_new ("Image"));
 
@@ -1090,14 +1090,14 @@ create_assistant (void)
 static WidgetInfo *
 create_appchooserbutton (void)
 {
-  GtkWidget *picker;
+  GtkAppChooserButton *picker;
   GtkWidget *vbox;
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   picker = gtk_app_chooser_button_new ("text/plain");
-  gtk_widget_set_halign (picker, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (picker, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (vbox), picker);
+  gtk_widget_set_halign (GTK_WIDGET (picker), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (picker), GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (picker));
   gtk_container_add (GTK_CONTAINER (vbox),
                       gtk_label_new ("Application Button"));
 
@@ -1108,12 +1108,12 @@ static WidgetInfo *
 create_appchooserdialog (void)
 {
   WidgetInfo *info;
-  GtkWidget *widget;
+  GtkAppChooserDialog *widget;
 
   widget = gtk_app_chooser_dialog_new_for_content_type (NULL, 0, "image/png");
   gtk_window_set_default_size (GTK_WINDOW (widget), 200, 300);
 
-  info = new_widget_info ("appchooserdialog", widget, ASIS);
+  info = new_widget_info ("appchooserdialog", GTK_WIDGET (widget), ASIS);
   info->include_decorations = TRUE;
 
   return info;
@@ -1123,11 +1123,11 @@ static WidgetInfo *
 create_fontchooserdialog (void)
 {
   WidgetInfo *info;
-  GtkWidget *widget;
+  GtkFontChooserDialog *widget;
 
   widget = gtk_font_chooser_dialog_new ("Font Chooser Dialog", NULL);
   gtk_window_set_default_size (GTK_WINDOW (widget), 200, 300);
-  info = new_widget_info ("fontchooser", widget, ASIS);
+  info = new_widget_info ("fontchooser", GTK_WIDGET (widget), ASIS);
   info->include_decorations = TRUE;
 
   return info;
@@ -1137,10 +1137,10 @@ static WidgetInfo *
 create_colorchooserdialog (void)
 {
   WidgetInfo *info;
-  GtkWidget *widget;
+  GtkColorChooserDialog *widget;
 
   widget = gtk_color_chooser_dialog_new ("Color Chooser Dialog", NULL);
-  info = new_widget_info ("colorchooser", widget, ASIS);
+  info = new_widget_info ("colorchooser", GTK_WIDGET (widget), ASIS);
   info->include_decorations = TRUE;
 
   return info;
@@ -1164,7 +1164,7 @@ create_headerbar (void)
   gtk_header_bar_set_subtitle (GTK_HEADER_BAR (bar), "(subtitle)");
   gtk_window_set_titlebar (GTK_WINDOW (window), bar);
   button = gtk_button_new ();
-  gtk_container_add (GTK_CONTAINER (button), gtk_image_new_from_icon_name ("bookmark-new-symbolic"));
+  gtk_container_add (GTK_CONTAINER (button), GTK_WIDGET (gtk_image_new_from_icon_name ("bookmark-new-symbolic")));
   gtk_header_bar_pack_end (GTK_HEADER_BAR (bar), button);
 
   return new_widget_info ("headerbar", window, ASIS);
@@ -1264,7 +1264,7 @@ create_sidebar (void)
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   gtk_container_add (GTK_CONTAINER (hbox), sidebar);
-  gtk_container_add (GTK_CONTAINER (hbox), gtk_separator_new (GTK_ORIENTATION_VERTICAL));
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_VERTICAL)));
   gtk_container_add (GTK_CONTAINER (hbox), stack);
   gtk_container_add (GTK_CONTAINER (frame), hbox);
 
@@ -1278,6 +1278,7 @@ create_list_box (void)
   GtkWidget *list;
   GtkWidget *row;
   GtkWidget *button;
+  GtkEntry *entry;
   WidgetInfo *info;
 
   widget = gtk_frame_new (NULL);
@@ -1309,10 +1310,10 @@ create_list_box (void)
   gtk_container_add (GTK_CONTAINER (list), row);
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_container_add (GTK_CONTAINER (row), gtk_label_new ("Line Three"));
-  button = gtk_entry_new ();
-  gtk_widget_set_hexpand (button, TRUE);
-  gtk_widget_set_halign (button, GTK_ALIGN_END);
-  gtk_container_add (GTK_CONTAINER (row), button);
+  entry = gtk_entry_new ();
+  gtk_widget_set_hexpand (GTK_WIDGET (entry), TRUE);
+  gtk_widget_set_halign (GTK_WIDGET (entry), GTK_ALIGN_END);
+  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (entry));
   gtk_container_add (GTK_CONTAINER (list), row);
 
   gtk_container_add (GTK_CONTAINER (widget), list);

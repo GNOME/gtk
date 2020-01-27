@@ -888,7 +888,7 @@ main (int argc, char *argv[])
 					GDK_ACTION_MOVE);
   gdk_content_formats_unref (targets);
 
-  gtk_container_add (GTK_CONTAINER (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_HORIZONTAL)));
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);

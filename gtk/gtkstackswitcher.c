@@ -169,7 +169,7 @@ rebuild_child (GtkWidget   *self,
 
   if (icon_name != NULL)
     {
-      button_child = gtk_image_new_from_icon_name (icon_name);
+      button_child = GTK_WIDGET (gtk_image_new_from_icon_name (icon_name));
       if (title != NULL)
         gtk_widget_set_tooltip_text (GTK_WIDGET (self), title);
 
@@ -178,7 +178,7 @@ rebuild_child (GtkWidget   *self,
     }
   else if (title != NULL)
     {
-      button_child = gtk_label_new (title);
+      button_child = GTK_WIDGET (gtk_label_new (title));
 
       gtk_widget_set_tooltip_text (GTK_WIDGET (self), NULL);
 
@@ -327,21 +327,21 @@ add_child (guint             position,
            GtkStackSwitcher *self)
 {
   GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (self);
-  GtkWidget *button;
+  GtkToggleButton *button;
   gboolean selected;
   GtkStackPage *page;
 
   button = gtk_toggle_button_new ();
-  gtk_widget_set_focus_on_click (button, FALSE);
+  gtk_widget_set_focus_on_click (GTK_WIDGET (button), FALSE);
 
   page = g_list_model_get_item (G_LIST_MODEL (priv->pages), position);
-  update_button (self, page, button);
+  update_button (self, page, GTK_WIDGET (button));
 
-  gtk_widget_set_parent (button, GTK_WIDGET (self));
+  gtk_widget_set_parent (GTK_WIDGET (button), GTK_WIDGET (self));
 
   g_object_set_data (G_OBJECT (button), "child-index", GUINT_TO_POINTER (position));
   selected = gtk_selection_model_is_selected (priv->pages, position);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), selected);
+  gtk_toggle_button_set_active (button, selected);
 
   g_signal_connect (button, "notify::active", G_CALLBACK (on_button_toggled), self);
   g_signal_connect (page, "notify", G_CALLBACK (on_page_updated), self);

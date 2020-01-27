@@ -119,8 +119,8 @@ typedef struct {
   GtkWidget *capture_widget;
   GtkEventController *capture_widget_controller;
 
-  GtkWidget *entry;
-  GtkWidget *icon;
+  GtkText *entry;
+  GtkImage *icon;
 
   guint delayed_changed_id;
   gboolean content_changed;
@@ -153,8 +153,8 @@ gtk_search_entry_finalize (GObject *object)
 
   gtk_editable_finish_delegate (GTK_EDITABLE (entry));
 
-  g_clear_pointer (&priv->entry, gtk_widget_unparent);
-  g_clear_pointer (&priv->icon, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **) &priv->entry, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **) &priv->icon, gtk_widget_unparent);
 
   if (priv->delayed_changed_id > 0)
     g_source_remove (priv->delayed_changed_id);
@@ -187,13 +187,13 @@ gtk_search_entry_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_PLACEHOLDER_TEXT:
-      gtk_text_set_placeholder_text (GTK_TEXT (priv->entry), g_value_get_string (value));
+      gtk_text_set_placeholder_text (priv->entry, g_value_get_string (value));
       break;
 
     case PROP_ACTIVATES_DEFAULT:
-      if (gtk_text_get_activates_default (GTK_TEXT (priv->entry)) != g_value_get_boolean (value))
+      if (gtk_text_get_activates_default (priv->entry) != g_value_get_boolean (value))
         {
-          gtk_text_set_activates_default (GTK_TEXT (priv->entry), g_value_get_boolean (value));
+          gtk_text_set_activates_default (priv->entry, g_value_get_boolean (value));
           g_object_notify_by_pspec (object, pspec);
         }
       break;
@@ -218,11 +218,11 @@ gtk_search_entry_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_PLACEHOLDER_TEXT:
-      g_value_set_string (value, gtk_text_get_placeholder_text (GTK_TEXT (priv->entry)));
+      g_value_set_string (value, gtk_text_get_placeholder_text (priv->entry));
       break;
 
     case PROP_ACTIVATES_DEFAULT:
-      g_value_set_boolean (value, gtk_text_get_activates_default (GTK_TEXT (priv->entry)));
+      g_value_set_boolean (value, gtk_text_get_activates_default (priv->entry));
       break;
 
     default:
@@ -247,7 +247,7 @@ gtk_search_entry_grab_focus (GtkWidget *widget)
   GtkSearchEntry *entry = GTK_SEARCH_ENTRY (widget);
   GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
 
-  return gtk_text_grab_focus_without_selecting (GTK_TEXT (priv->entry));
+  return gtk_text_grab_focus_without_selecting (priv->entry);
 }
 
 static gboolean
@@ -257,7 +257,7 @@ gtk_search_entry_mnemonic_activate (GtkWidget *widget,
   GtkSearchEntry *entry = GTK_SEARCH_ENTRY (widget);
   GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
 
-  gtk_widget_grab_focus (priv->entry);
+  gtk_widget_grab_focus (GTK_WIDGET (priv->entry));
 
   return TRUE;
 }
@@ -479,7 +479,7 @@ gtk_search_entry_changed (GtkEditable *editable,
 
   if (str == NULL || *str == '\0')
     {
-      gtk_widget_set_child_visible (priv->icon, FALSE);
+      gtk_widget_set_child_visible (GTK_WIDGET (priv->icon), FALSE);
 
       if (priv->delayed_changed_id > 0)
         {
@@ -490,7 +490,7 @@ gtk_search_entry_changed (GtkEditable *editable,
     }
   else
     {
-      gtk_widget_set_child_visible (priv->icon, TRUE);
+      gtk_widget_set_child_visible (GTK_WIDGET (priv->icon), TRUE);
 
       /* Queue up the timeout */
       reset_timeout (entry);
@@ -522,8 +522,8 @@ gtk_search_entry_init (GtkSearchEntry *entry)
   GtkGesture *press;
 
   priv->entry = gtk_text_new ();
-  gtk_widget_set_parent (priv->entry, GTK_WIDGET (entry));
-  gtk_widget_set_hexpand (priv->entry, TRUE);
+  gtk_widget_set_parent (GTK_WIDGET (priv->entry), GTK_WIDGET (entry));
+  gtk_widget_set_hexpand (GTK_WIDGET (priv->entry), TRUE);
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
   g_signal_connect_swapped (priv->entry, "changed", G_CALLBACK (text_changed), entry);
   g_signal_connect_after (priv->entry, "changed", G_CALLBACK (gtk_search_entry_changed), entry);
@@ -532,13 +532,13 @@ gtk_search_entry_init (GtkSearchEntry *entry)
   g_signal_connect (priv->entry, "activate", G_CALLBACK (activate_cb), entry);
 
   priv->icon = gtk_image_new_from_icon_name ("edit-clear-all-symbolic");
-  gtk_widget_set_tooltip_text (priv->icon, _("Clear entry"));
-  gtk_widget_set_parent (priv->icon, GTK_WIDGET (entry));
-  gtk_widget_set_child_visible (priv->icon, FALSE);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (priv->icon), _("Clear entry"));
+  gtk_widget_set_parent (GTK_WIDGET (priv->icon), GTK_WIDGET (entry));
+  gtk_widget_set_child_visible (GTK_WIDGET (priv->icon), FALSE);
 
   press = gtk_gesture_click_new ();
   g_signal_connect (press, "released", G_CALLBACK (gtk_search_entry_icon_release), entry);
-  gtk_widget_add_controller (priv->icon, GTK_EVENT_CONTROLLER (press));
+  gtk_widget_add_controller (GTK_WIDGET (priv->icon), GTK_EVENT_CONTROLLER (press));
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (entry)), I_("search"));
 }
@@ -596,9 +596,9 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
 
   priv->content_changed = FALSE;
   priv->search_stopped = FALSE;
-  was_empty = (gtk_text_get_text_length (GTK_TEXT (priv->entry)) == 0);
+  was_empty = (gtk_text_get_text_length (priv->entry) == 0);
 
-  handled = gtk_event_controller_key_forward (controller, priv->entry);
+  handled = gtk_event_controller_key_forward (controller, GTK_WIDGET (priv->entry));
 
   if (handled && priv->content_changed && !priv->search_stopped)
     {
@@ -683,7 +683,7 @@ gtk_search_entry_get_key_controller (GtkSearchEntry *entry)
 {
   GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
 
-  return gtk_text_get_key_controller (GTK_TEXT (priv->entry));
+  return gtk_text_get_key_controller (priv->entry);
 }
 
 GtkText *
@@ -691,5 +691,5 @@ gtk_search_entry_get_text_widget (GtkSearchEntry *entry)
 {
   GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
 
-  return GTK_TEXT (priv->entry);
+  return priv->entry;
 }

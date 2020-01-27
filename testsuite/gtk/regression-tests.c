@@ -22,18 +22,19 @@
 static void
 test_9d6da33ff5c5e41e3521e1afd63d2d67bc915753 (void)
 {
-  GtkWidget *window, *label;
+  GtkWidget *window;
+  GtkLabel *label;
 
   window = gtk_window_new (GTK_WINDOW_POPUP);
   label = gtk_label_new ("I am sensitive.");
-  gtk_container_add (GTK_CONTAINER (window), label);
+  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (label));
 
-  gtk_widget_set_sensitive (label, FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (label), FALSE);
   gtk_widget_set_sensitive (window, FALSE);
-  gtk_widget_set_sensitive (label, TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET (label), TRUE);
   gtk_widget_set_sensitive (window, TRUE);
 
-  g_assert (gtk_widget_get_sensitive (label));
+  g_assert (gtk_widget_get_sensitive (GTK_WIDGET (label)));
 
   gtk_widget_destroy (window);
 }
@@ -41,17 +42,18 @@ test_9d6da33ff5c5e41e3521e1afd63d2d67bc915753 (void)
 static void
 test_94f00eb04dd1433cf1cc9a3341f485124e38abd1 (void)
 {
-  GtkWidget *window, *label;
+  GtkWidget *window;
+  GtkLabel *label;
 
   window = gtk_window_new (GTK_WINDOW_POPUP);
   label = gtk_label_new ("I am insensitive.");
-  gtk_container_add (GTK_CONTAINER (window), label);
+  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (label));
 
   gtk_widget_set_sensitive (window, FALSE);
-  gtk_widget_set_sensitive (label, FALSE);
-  gtk_widget_set_sensitive (label, TRUE);
+  gtk_widget_set_sensitive (GTK_WIDGET (label), FALSE);
+  gtk_widget_set_sensitive (GTK_WIDGET (label), TRUE);
 
-  g_assert (!gtk_widget_is_sensitive (label));
+  g_assert (!gtk_widget_is_sensitive (GTK_WIDGET (label)));
 
   gtk_widget_destroy (window);
 }

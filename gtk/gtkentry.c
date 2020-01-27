@@ -157,7 +157,7 @@ struct _GtkEntryPrivate
 {
   EntryIconInfo *icons[MAX_ICONS];
 
-  GtkWidget     *text;
+  GtkText       *text;
   GtkWidget     *progress_widget;
   GtkWidget     *emoji_chooser;
 
@@ -167,7 +167,7 @@ struct _GtkEntryPrivate
 
 struct _EntryIconInfo
 {
-  GtkWidget *widget;
+  GtkImage *widget;
   gchar *tooltip;
   guint nonactivatable : 1;
   guint in_drag        : 1;
@@ -308,7 +308,7 @@ gtk_entry_grab_focus (GtkWidget *widget)
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
-  return gtk_widget_grab_focus (priv->text);
+  return gtk_widget_grab_focus (GTK_WIDGET (priv->text));
 }
 
 static gboolean
@@ -318,7 +318,7 @@ gtk_entry_mnemonic_activate (GtkWidget *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
-  gtk_widget_grab_focus (priv->text);
+  gtk_widget_grab_focus (GTK_WIDGET (priv->text));
 
   return TRUE;
 }
@@ -1275,7 +1275,7 @@ gtk_entry_init (GtkEntry *entry)
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
   priv->text = gtk_text_new ();
-  gtk_widget_set_parent (priv->text, GTK_WIDGET (entry));
+  gtk_widget_set_parent (GTK_WIDGET (priv->text), GTK_WIDGET (entry));
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
   connect_text_signals (entry);
 
@@ -1295,7 +1295,7 @@ gtk_entry_dispose (GObject *object)
       disconnect_text_signals (entry);
       gtk_editable_finish_delegate (GTK_EDITABLE (entry));
     }
-  g_clear_pointer (&priv->text, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **) &priv->text, gtk_widget_unparent);
 
   g_clear_pointer (&priv->emoji_chooser, gtk_widget_unparent);
 
@@ -1323,7 +1323,7 @@ gtk_entry_finalize (GObject *object)
 
       g_clear_object (&icon_info->content);
 
-      gtk_widget_unparent (icon_info->widget);
+      gtk_widget_unparent (GTK_WIDGET (icon_info->widget));
 
       g_slice_free (EntryIconInfo, icon_info);
     }
@@ -1349,7 +1349,7 @@ update_icon_style (GtkWidget            *widget,
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     icon_pos = 1 - icon_pos;
 
-  context = gtk_widget_get_style_context (icon_info->widget);
+  context = gtk_widget_get_style_context (GTK_WIDGET (icon_info->widget));
   gtk_style_context_add_class (context, sides[icon_pos]);
   gtk_style_context_remove_class (context, sides[1 - icon_pos]);
 }
@@ -1384,11 +1384,11 @@ update_node_ordering (GtkEntry *entry)
 
   icon_info = priv->icons[first_icon_pos];
   if (icon_info)
-    gtk_css_node_insert_after (parent, gtk_widget_get_css_node (icon_info->widget), NULL);
+    gtk_css_node_insert_after (parent, gtk_widget_get_css_node (GTK_WIDGET (icon_info->widget)), NULL);
 
   icon_info = priv->icons[second_icon_pos];
   if (icon_info)
-    gtk_css_node_insert_before (parent, gtk_widget_get_css_node (icon_info->widget), NULL);
+    gtk_css_node_insert_before (parent, gtk_widget_get_css_node (GTK_WIDGET (icon_info->widget)), NULL);
 }
 
 static GtkEntryIconPosition
@@ -1399,10 +1399,10 @@ get_icon_position_from_controller (GtkEntry           *entry,
   GtkWidget *widget = gtk_event_controller_get_widget (controller);
 
   if (priv->icons[GTK_ENTRY_ICON_PRIMARY] &&
-      priv->icons[GTK_ENTRY_ICON_PRIMARY]->widget == widget)
+      GTK_WIDGET (priv->icons[GTK_ENTRY_ICON_PRIMARY]->widget) == widget)
     return GTK_ENTRY_ICON_PRIMARY;
   else if (priv->icons[GTK_ENTRY_ICON_SECONDARY] &&
-           priv->icons[GTK_ENTRY_ICON_SECONDARY]->widget == widget)
+           GTK_WIDGET (priv->icons[GTK_ENTRY_ICON_SECONDARY]->widget) == widget)
     return GTK_ENTRY_ICON_SECONDARY;
 
   g_assert_not_reached ();
@@ -1463,7 +1463,7 @@ icon_drag_update_cb (GtkGestureDrag *gesture,
   icon_info = priv->icons[pos];
 
   if (icon_info->content != NULL &&
-      gtk_drag_check_threshold (icon_info->widget, start_x, start_y, x, y))
+      gtk_drag_check_threshold (GTK_WIDGET (icon_info->widget), start_x, start_y, x, y))
     {
       GdkPaintable *paintable;
       GdkSurface *surface;
@@ -1476,7 +1476,7 @@ icon_drag_update_cb (GtkGestureDrag *gesture,
       device = gtk_gesture_get_device (GTK_GESTURE (gesture));
 
       drag = gdk_drag_begin (surface, device, icon_info->content, icon_info->actions, start_x, start_y);
-      paintable = gtk_widget_paintable_new (icon_info->widget);
+      paintable = gtk_widget_paintable_new (GTK_WIDGET (icon_info->widget));
       gtk_drag_icon_set_from_paintable (drag, paintable, -2, -2);
       g_object_unref (paintable);
 
@@ -1499,11 +1499,11 @@ construct_icon_info (GtkWidget            *widget,
   priv->icons[icon_pos] = icon_info;
 
   icon_info->widget = gtk_image_new ();
-  gtk_widget_set_cursor_from_name (icon_info->widget, "default");
+  gtk_widget_set_cursor_from_name (GTK_WIDGET (icon_info->widget), "default");
   if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
-    gtk_widget_insert_before (icon_info->widget, widget, priv->text);
+    gtk_widget_insert_before (GTK_WIDGET (icon_info->widget), widget, GTK_WIDGET (priv->text));
   else
-    gtk_widget_insert_after (icon_info->widget, widget, priv->text);
+    gtk_widget_insert_after (GTK_WIDGET (icon_info->widget), widget, GTK_WIDGET (priv->text));
 
   update_icon_style (widget, icon_pos);
   update_node_ordering (entry);
@@ -1511,12 +1511,12 @@ construct_icon_info (GtkWidget            *widget,
   press = gtk_gesture_click_new ();
   g_signal_connect (press, "pressed", G_CALLBACK (icon_pressed_cb), entry);
   g_signal_connect (press, "released", G_CALLBACK (icon_released_cb), entry);
-  gtk_widget_add_controller (icon_info->widget, GTK_EVENT_CONTROLLER (press));
+  gtk_widget_add_controller (GTK_WIDGET (icon_info->widget), GTK_EVENT_CONTROLLER (press));
 
   drag = gtk_gesture_drag_new ();
   g_signal_connect (drag, "drag-update",
                     G_CALLBACK (icon_drag_update_cb), entry);
-  gtk_widget_add_controller (icon_info->widget, GTK_EVENT_CONTROLLER (drag));
+  gtk_widget_add_controller (GTK_WIDGET (icon_info->widget), GTK_EVENT_CONTROLLER (drag));
 
   gtk_gesture_group (press, drag);
 
@@ -1536,7 +1536,7 @@ gtk_entry_measure (GtkWidget      *widget,
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   int i;
 
-  gtk_widget_measure (priv->text,
+  gtk_widget_measure (GTK_WIDGET (priv->text),
                       orientation,
                       for_size,
                       minimum, natural,
@@ -1550,7 +1550,7 @@ gtk_entry_measure (GtkWidget      *widget,
       if (!icon_info)
         continue;
 
-      gtk_widget_measure (icon_info->widget,
+      gtk_widget_measure (GTK_WIDGET (icon_info->widget),
                           GTK_ORIENTATION_HORIZONTAL,
                           -1, &icon_min, &icon_nat, NULL, NULL);
 
@@ -1607,7 +1607,7 @@ gtk_entry_size_allocate (GtkWidget *widget,
       if (!icon_info)
         continue;
 
-      gtk_widget_measure (icon_info->widget,
+      gtk_widget_measure (GTK_WIDGET (icon_info->widget),
                           GTK_ORIENTATION_HORIZONTAL,
                           -1,
                           NULL, &icon_width,
@@ -1622,7 +1622,7 @@ gtk_entry_size_allocate (GtkWidget *widget,
       icon_alloc.width = icon_width;
       icon_alloc.height = height;
 
-      gtk_widget_size_allocate (icon_info->widget, &icon_alloc, baseline);
+      gtk_widget_size_allocate (GTK_WIDGET (icon_info->widget), &icon_alloc, baseline);
 
       text_alloc.width -= icon_width;
 
@@ -1631,7 +1631,7 @@ gtk_entry_size_allocate (GtkWidget *widget,
         text_alloc.x += icon_width;
     }
 
-  gtk_widget_size_allocate (priv->text, &text_alloc, baseline);
+  gtk_widget_size_allocate (GTK_WIDGET (priv->text), &text_alloc, baseline);
 
   if (priv->progress_widget && gtk_widget_get_visible (priv->progress_widget))
     {
@@ -1679,7 +1679,7 @@ gtk_entry_snapshot (GtkWidget   *widget,
   if (priv->progress_widget && gtk_widget_get_visible (priv->progress_widget))
     gtk_widget_snapshot_child (widget, priv->progress_widget, snapshot);
 
-  gtk_widget_snapshot_child (widget, priv->text, snapshot);
+  gtk_widget_snapshot_child (widget, GTK_WIDGET (priv->text), snapshot);
 
   /* Draw icons */
   for (i = 0; i < MAX_ICONS; i++)
@@ -1687,7 +1687,7 @@ gtk_entry_snapshot (GtkWidget   *widget,
       EntryIconInfo *icon_info = priv->icons[i];
 
       if (icon_info != NULL)
-        gtk_widget_snapshot_child (widget, icon_info->widget, snapshot);
+        gtk_widget_snapshot_child (widget, GTK_WIDGET (icon_info->widget), snapshot);
     }
 }
 
@@ -1712,7 +1712,7 @@ gtk_entry_grab_focus_without_selecting (GtkEntry *entry)
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
 
-  return gtk_text_grab_focus_without_selecting (GTK_TEXT (priv->text));
+  return gtk_text_grab_focus_without_selecting (priv->text);
 }
 
 static void
@@ -1799,7 +1799,7 @@ gtk_entry_reset_im_context (GtkEntry *entry)
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  gtk_text_reset_im_context (GTK_TEXT (priv->text));
+  gtk_text_reset_im_context (priv->text);
 }
 
 static void
@@ -1813,7 +1813,7 @@ gtk_entry_clear_icon (GtkEntry             *entry,
   if (icon_info == NULL)
     return;
 
-  storage_type = gtk_image_get_storage_type (GTK_IMAGE (icon_info->widget));
+  storage_type = gtk_image_get_storage_type (icon_info->widget);
 
   if (storage_type == GTK_IMAGE_EMPTY)
     return;
@@ -1849,7 +1849,7 @@ gtk_entry_clear_icon (GtkEntry             *entry,
       break;
     }
 
-  gtk_image_clear (GTK_IMAGE (icon_info->widget));
+  gtk_image_clear (icon_info->widget);
 
   g_object_notify_by_pspec (G_OBJECT (entry),
                             entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
@@ -1869,7 +1869,7 @@ gtk_entry_clear_icon (GtkEntry             *entry,
  *
  * Returns: a new #GtkEntry.
  */
-GtkWidget*
+GtkEntry*
 gtk_entry_new (void)
 {
   return g_object_new (GTK_TYPE_ENTRY, NULL);
@@ -1883,7 +1883,7 @@ gtk_entry_new (void)
  *
  * Returns: a new #GtkEntry
  */
-GtkWidget*
+GtkEntry*
 gtk_entry_new_with_buffer (GtkEntryBuffer *buffer)
 {
   g_return_val_if_fail (GTK_IS_ENTRY_BUFFER (buffer), NULL);
@@ -1896,7 +1896,7 @@ get_buffer (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
-  return gtk_text_get_buffer (GTK_TEXT (priv->text));
+  return gtk_text_get_buffer (priv->text);
 }
 
 /**
@@ -1932,7 +1932,7 @@ gtk_entry_set_buffer (GtkEntry       *entry,
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  gtk_text_set_buffer (GTK_TEXT (priv->text), buffer);
+  gtk_text_set_buffer (priv->text, buffer);
 }
 
 /**
@@ -1963,7 +1963,7 @@ gtk_entry_set_visibility (GtkEntry *entry,
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  gtk_text_set_visibility (GTK_TEXT (priv->text), visible);
+  gtk_text_set_visibility (priv->text, visible);
 }
 
 /**
@@ -1982,7 +1982,7 @@ gtk_entry_get_visibility (GtkEntry *entry)
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
 
-  return gtk_text_get_visibility (GTK_TEXT (priv->text));
+  return gtk_text_get_visibility (priv->text);
 }
 
 /**
@@ -2006,7 +2006,7 @@ gtk_entry_set_invisible_char (GtkEntry *entry,
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  gtk_text_set_invisible_char (GTK_TEXT (priv->text), ch);
+  gtk_text_set_invisible_char (priv->text, ch);
 }
 
 /**
@@ -2026,7 +2026,7 @@ gtk_entry_get_invisible_char (GtkEntry *entry)
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
 
-  return gtk_text_get_invisible_char (GTK_TEXT (priv->text));
+  return gtk_text_get_invisible_char (priv->text);
 }
 
 /**
@@ -2044,7 +2044,7 @@ gtk_entry_unset_invisible_char (GtkEntry *entry)
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  gtk_text_unset_invisible_char (GTK_TEXT (priv->text));
+  gtk_text_unset_invisible_char (priv->text);
 }
 
 /**
@@ -2062,7 +2062,7 @@ gtk_entry_set_overwrite_mode (GtkEntry *entry,
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  gtk_text_set_overwrite_mode (GTK_TEXT (priv->text), overwrite);
+  gtk_text_set_overwrite_mode (priv->text, overwrite);
 }
 
 /**
@@ -2080,7 +2080,7 @@ gtk_entry_get_overwrite_mode (GtkEntry *entry)
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
 
-  return gtk_text_get_overwrite_mode (GTK_TEXT (priv->text));
+  return gtk_text_get_overwrite_mode (priv->text);
 
 }
 
@@ -2107,7 +2107,7 @@ gtk_entry_set_max_length (GtkEntry     *entry,
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  gtk_text_set_max_length (GTK_TEXT (priv->text), max);
+  gtk_text_set_max_length (priv->text, max);
 }
 
 /**
@@ -2130,7 +2130,7 @@ gtk_entry_get_max_length (GtkEntry *entry)
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
 
-  return gtk_text_get_max_length (GTK_TEXT (priv->text));
+  return gtk_text_get_max_length (priv->text);
 }
 
 /**
@@ -2154,7 +2154,7 @@ gtk_entry_get_text_length (GtkEntry *entry)
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
 
-  return gtk_text_get_text_length (GTK_TEXT (priv->text));
+  return gtk_text_get_text_length (priv->text);
 }
 
 /**
@@ -2175,7 +2175,7 @@ gtk_entry_set_activates_default (GtkEntry *entry,
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  gtk_text_set_activates_default (GTK_TEXT (priv->text), setting);
+  gtk_text_set_activates_default (priv->text, setting);
 }
 
 /**
@@ -2193,7 +2193,7 @@ gtk_entry_get_activates_default (GtkEntry *entry)
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
 
-  return gtk_text_get_activates_default (GTK_TEXT (priv->text));
+  return gtk_text_get_activates_default (priv->text);
 }
 
 /**
@@ -2313,7 +2313,7 @@ gtk_entry_set_icon_from_paintable (GtkEntry             *entry,
     {
       g_object_ref (paintable);
 
-      gtk_image_set_from_paintable (GTK_IMAGE (icon_info->widget), paintable);
+      gtk_image_set_from_paintable (icon_info->widget, paintable);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
@@ -2370,7 +2370,7 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
 
   if (icon_name != NULL)
     {
-      gtk_image_set_from_icon_name (GTK_IMAGE (icon_info->widget), icon_name);
+      gtk_image_set_from_icon_name (icon_info->widget, icon_name);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
@@ -2423,7 +2423,7 @@ gtk_entry_set_icon_from_gicon (GtkEntry             *entry,
 
   if (icon)
     {
-      gtk_image_set_from_gicon (GTK_IMAGE (icon_info->widget), icon);
+      gtk_image_set_from_gicon (icon_info->widget, icon);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
@@ -2531,7 +2531,7 @@ gtk_entry_get_icon_paintable (GtkEntry             *entry,
   if (!icon_info)
     return NULL;
 
-  return gtk_image_get_paintable (GTK_IMAGE (icon_info->widget));
+  return gtk_image_get_paintable (icon_info->widget);
 }
 
 /**
@@ -2561,7 +2561,7 @@ gtk_entry_get_icon_gicon (GtkEntry             *entry,
   if (!icon_info)
     return NULL;
 
-  return gtk_image_get_gicon (GTK_IMAGE (icon_info->widget));
+  return gtk_image_get_gicon (icon_info->widget);
 }
 
 /**
@@ -2591,7 +2591,7 @@ gtk_entry_get_icon_name (GtkEntry             *entry,
   if (!icon_info)
     return NULL;
 
-  return gtk_image_get_icon_name (GTK_IMAGE (icon_info->widget));
+  return gtk_image_get_icon_name (icon_info->widget);
 }
 
 /**
@@ -2617,9 +2617,9 @@ gtk_entry_set_icon_sensitive (GtkEntry             *entry,
   if ((icon_info = priv->icons[icon_pos]) == NULL)
     icon_info = construct_icon_info (GTK_WIDGET (entry), icon_pos);
 
-  if (gtk_widget_get_sensitive (icon_info->widget) != sensitive)
+  if (gtk_widget_get_sensitive (GTK_WIDGET (icon_info->widget)) != sensitive)
     {
-      gtk_widget_set_sensitive (icon_info->widget, sensitive);
+      gtk_widget_set_sensitive (GTK_WIDGET (icon_info->widget), sensitive);
 
       g_object_notify_by_pspec (G_OBJECT (entry),
                                 entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
@@ -2652,7 +2652,7 @@ gtk_entry_get_icon_sensitive (GtkEntry             *entry,
   if (!icon_info)
     return TRUE; /* Default of the property */
 
-  return gtk_widget_get_sensitive (icon_info->widget);
+  return gtk_widget_get_sensitive (GTK_WIDGET (icon_info->widget));
 }
 
 /**
@@ -2681,7 +2681,7 @@ gtk_entry_get_icon_storage_type (GtkEntry             *entry,
   if (!icon_info)
     return GTK_IMAGE_EMPTY;
 
-  return gtk_image_get_storage_type (GTK_IMAGE (icon_info->widget));
+  return gtk_image_get_storage_type (icon_info->widget);
 }
 
 /**
@@ -2716,10 +2716,10 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
       if (icon_info == NULL)
         continue;
 
-      gtk_widget_translate_coordinates (GTK_WIDGET (entry), icon_info->widget,
+      gtk_widget_translate_coordinates (GTK_WIDGET (entry), GTK_WIDGET (icon_info->widget),
                                         x, y, &icon_x, &icon_y);
 
-      if (gtk_widget_contains (icon_info->widget, icon_x, icon_y))
+      if (gtk_widget_contains (GTK_WIDGET (icon_info->widget), icon_x, icon_y))
         return i;
     }
 
@@ -2829,7 +2829,7 @@ gtk_entry_get_icon_area (GtkEntry             *entry,
   icon_info = priv->icons[icon_pos];
 
   if (icon_info &&
-      gtk_widget_compute_bounds (icon_info->widget, GTK_WIDGET (entry), &r))
+      gtk_widget_compute_bounds (GTK_WIDGET (icon_info->widget), GTK_WIDGET (entry), &r))
     {
       *icon_area = (GdkRectangle){
         floorf (r.origin.x),
@@ -3300,7 +3300,7 @@ gtk_entry_set_placeholder_text (GtkEntry    *entry,
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  gtk_text_set_placeholder_text (GTK_TEXT (priv->text), text);
+  gtk_text_set_placeholder_text (priv->text, text);
 }
 
 /**
@@ -3321,7 +3321,7 @@ gtk_entry_get_placeholder_text (GtkEntry *entry)
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
 
-  return gtk_text_get_placeholder_text (GTK_TEXT (priv->text));
+  return gtk_text_get_placeholder_text (priv->text);
 }
 
 /**
@@ -3342,7 +3342,7 @@ gtk_entry_set_input_purpose (GtkEntry        *entry,
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  gtk_text_set_input_purpose (GTK_TEXT (priv->text), purpose);
+  gtk_text_set_input_purpose (priv->text, purpose);
 }
 
 /**
@@ -3358,7 +3358,7 @@ gtk_entry_get_input_purpose (GtkEntry *entry)
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), GTK_INPUT_PURPOSE_FREE_FORM);
 
-  return gtk_text_get_input_purpose (GTK_TEXT (priv->text));
+  return gtk_text_get_input_purpose (priv->text);
 }
 
 /**
@@ -3378,7 +3378,7 @@ gtk_entry_set_input_hints (GtkEntry      *entry,
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  gtk_text_set_input_hints (GTK_TEXT (priv->text), hints);
+  gtk_text_set_input_hints (priv->text, hints);
 }
 
 /**
@@ -3394,7 +3394,7 @@ gtk_entry_get_input_hints (GtkEntry *entry)
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), GTK_INPUT_HINT_NONE);
 
-  return gtk_text_get_input_hints (GTK_TEXT (priv->text));
+  return gtk_text_get_input_hints (priv->text);
 }
 
 /**
@@ -3413,7 +3413,7 @@ gtk_entry_set_attributes (GtkEntry      *entry,
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  gtk_text_set_attributes (GTK_TEXT (priv->text), attrs);
+  gtk_text_set_attributes (priv->text, attrs);
 }
 
 /**
@@ -3433,7 +3433,7 @@ gtk_entry_get_attributes (GtkEntry *entry)
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
 
-  return gtk_text_get_attributes (GTK_TEXT (priv->text));
+  return gtk_text_get_attributes (priv->text);
 }
 
 /**
@@ -3453,7 +3453,7 @@ gtk_entry_set_tabs (GtkEntry      *entry,
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  gtk_text_set_tabs (GTK_TEXT (priv->text), tabs);
+  gtk_text_set_tabs (priv->text, tabs);
 }
 
 /**
@@ -3473,7 +3473,7 @@ gtk_entry_get_tabs (GtkEntry *entry)
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
 
-  return gtk_text_get_tabs (GTK_TEXT (priv->text));
+  return gtk_text_get_tabs (priv->text);
 }
 
 static void
@@ -3544,7 +3544,7 @@ gtk_entry_get_key_controller (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
-  return gtk_text_get_key_controller (GTK_TEXT (priv->text));
+  return gtk_text_get_key_controller (priv->text);
 }
 
 GtkText *
@@ -3552,7 +3552,7 @@ gtk_entry_get_text_widget (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
-  return GTK_TEXT (priv->text);
+  return priv->text;
 }
 
 /**
@@ -3571,7 +3571,7 @@ gtk_entry_set_extra_menu (GtkEntry   *entry,
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  gtk_text_set_extra_menu (GTK_TEXT (priv->text), model);
+  gtk_text_set_extra_menu (priv->text, model);
 
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_EXTRA_MENU]);
 }
@@ -3591,5 +3591,5 @@ gtk_entry_get_extra_menu (GtkEntry *entry)
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
 
-  return gtk_text_get_extra_menu (GTK_TEXT (priv->text));
+  return gtk_text_get_extra_menu (priv->text);
 }

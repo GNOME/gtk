@@ -285,7 +285,7 @@ main (int argc, char **argv)
   GtkWidget *matrix_chooser;
   GtkWidget *box;
   GtkWidget *titlebar;
-  GtkWidget *toggle_button;
+  GtkToggleButton *toggle_button;
   GtkCssProvider *provider;
 
   gtk_init ();
@@ -308,9 +308,9 @@ main (int argc, char **argv)
 
   toggle_button = gtk_toggle_button_new ();
   gtk_button_set_label (GTK_BUTTON (toggle_button), "Picking");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle_button), do_picking);
+  gtk_toggle_button_set_active (toggle_button, do_picking);
   g_signal_connect (toggle_button, "toggled", G_CALLBACK (toggled_cb), NULL);
-  gtk_container_add (GTK_CONTAINER (titlebar), toggle_button);
+  gtk_container_add (GTK_CONTAINER (titlebar), GTK_WIDGET (toggle_button));
 
   test_widget = gtk_button_new ();
   gtk_widget_set_size_request (test_widget, TEST_WIDGET_MIN_SIZE, TEST_WIDGET_MIN_SIZE);
@@ -318,7 +318,7 @@ main (int argc, char **argv)
   gtk_widget_set_valign (test_widget, GTK_ALIGN_CENTER);
 
 
-  test_child = gtk_image_new_from_icon_name ("weather-clear");
+  test_child = GTK_WIDGET (gtk_image_new_from_icon_name ("weather-clear"));
   gtk_widget_set_halign (test_child, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (test_child, GTK_ALIGN_CENTER);
   gtk_widget_set_size_request (test_child, TEST_WIDGET_MIN_SIZE / 2, TEST_WIDGET_MIN_SIZE / 2);

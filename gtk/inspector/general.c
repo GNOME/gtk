@@ -69,23 +69,23 @@ struct _GtkInspectorGeneralPrivate
   GtkWidget *gl_box;
   GtkWidget *vulkan_box;
   GtkWidget *device_box;
-  GtkWidget *gtk_version;
-  GtkWidget *gdk_backend;
-  GtkWidget *gsk_renderer;
-  GtkWidget *pango_fontmap;
-  GtkWidget *gl_version;
-  GtkWidget *gl_vendor;
-  GtkWidget *vk_device;
-  GtkWidget *vk_api_version;
-  GtkWidget *vk_driver_version;
-  GtkWidget *prefix;
-  GtkWidget *xdg_data_home;
-  GtkWidget *xdg_data_dirs;
-  GtkWidget *gtk_path;
-  GtkWidget *gtk_exe_prefix;
-  GtkWidget *gtk_data_prefix;
-  GtkWidget *gsettings_schema_dir;
-  GtkWidget *display_name;
+  GtkLabel  *gtk_version;
+  GtkLabel  *gdk_backend;
+  GtkLabel  *gsk_renderer;
+  GtkLabel  *pango_fontmap;
+  GtkLabel  *gl_version;
+  GtkLabel  *gl_vendor;
+  GtkLabel  *vk_device;
+  GtkLabel  *vk_api_version;
+  GtkLabel  *vk_driver_version;
+  GtkLabel  *prefix;
+  GtkLabel  *xdg_data_home;
+  GtkLabel  *xdg_data_dirs;
+  GtkLabel  *gtk_path;
+  GtkLabel  *gtk_exe_prefix;
+  GtkLabel  *gtk_data_prefix;
+  GtkLabel  *gsettings_schema_dir;
+  GtkLabel  *display_name;
   GtkWidget *display_rgba;
   GtkWidget *display_composited;
   GtkSizeGroup *labels;
@@ -146,9 +146,9 @@ init_version (GtkInspectorGeneral *gen)
   g_object_unref (gsk_renderer);
   gdk_surface_destroy (surface);
 
-  gtk_label_set_text (GTK_LABEL (gen->priv->gtk_version), GTK_VERSION);
-  gtk_label_set_text (GTK_LABEL (gen->priv->gdk_backend), backend);
-  gtk_label_set_text (GTK_LABEL (gen->priv->gsk_renderer), renderer);
+  gtk_label_set_text (gen->priv->gtk_version, GTK_VERSION);
+  gtk_label_set_text (gen->priv->gdk_backend, backend);
+  gtk_label_set_text (gen->priv->gsk_renderer, renderer);
 }
 
 static G_GNUC_UNUSED void
@@ -158,7 +158,9 @@ add_check_row (GtkInspectorGeneral *gen,
                gboolean             value,
                gint                 indent)
 {
-  GtkWidget *row, *box, *label, *check;
+  GtkWidget *row, *box;
+  GtkImage *check;
+  GtkLabel *label;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
   g_object_set (box,
@@ -167,17 +169,17 @@ add_check_row (GtkInspectorGeneral *gen,
                 NULL);
 
   label = gtk_label_new (name);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_BASELINE);
+  gtk_label_set_xalign (label, 0.0);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   check = gtk_image_new_from_icon_name ("object-select-symbolic");
-  gtk_widget_set_halign (check, GTK_ALIGN_END);
-  gtk_widget_set_valign (check, GTK_ALIGN_BASELINE);
-  gtk_widget_set_opacity (check, value ? 1.0 : 0.0);
-  gtk_container_add (GTK_CONTAINER (box), check);
+  gtk_widget_set_halign (GTK_WIDGET (check), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (check), GTK_ALIGN_BASELINE);
+  gtk_widget_set_opacity (GTK_WIDGET (check), value ? 1.0 : 0.0);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (check));
 
   row = gtk_list_box_row_new ();
   gtk_container_add (GTK_CONTAINER (row), box);
@@ -186,7 +188,7 @@ add_check_row (GtkInspectorGeneral *gen,
   gtk_widget_set_hexpand (box, FALSE);
   gtk_list_box_insert (list, row, -1);
 
-  gtk_size_group_add_widget (GTK_SIZE_GROUP (gen->priv->labels), label);
+  gtk_size_group_add_widget (GTK_SIZE_GROUP (gen->priv->labels), GTK_WIDGET (label));
 }
 
 static void
@@ -197,7 +199,7 @@ add_label_row (GtkInspectorGeneral *gen,
                gint                 indent)
 {
   GtkWidget *box;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *row;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
@@ -207,18 +209,18 @@ add_label_row (GtkInspectorGeneral *gen,
                 NULL);
 
   label = gtk_label_new (name);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_BASELINE);
+  gtk_label_set_xalign (label, 0.0);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   label = gtk_label_new (value);
-  gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-  gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_label_set_xalign (GTK_LABEL (label), 1.0);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_label_set_selectable (label, TRUE);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_BASELINE);
+  gtk_label_set_xalign (label, 1.0);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   row = gtk_list_box_row_new ();
   gtk_container_add (GTK_CONTAINER (row), box);
@@ -227,7 +229,7 @@ add_label_row (GtkInspectorGeneral *gen,
   gtk_widget_set_hexpand (box, FALSE);
   gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
 
-  gtk_size_group_add_widget (GTK_SIZE_GROUP (gen->priv->labels), label);
+  gtk_size_group_add_widget (GTK_SIZE_GROUP (gen->priv->labels), GTK_WIDGET (label));
 }
 
 #ifdef GDK_WINDOWING_X11
@@ -298,9 +300,9 @@ init_gl (GtkInspectorGeneral *gen)
         return;
 
       version = g_strconcat ("GLX ", glXGetClientString (dpy, GLX_VERSION), NULL);
-      gtk_label_set_text (GTK_LABEL (gen->priv->gl_version), version);
+      gtk_label_set_text (gen->priv->gl_version, version);
       g_free (version);
-      gtk_label_set_text (GTK_LABEL (gen->priv->gl_vendor), glXGetClientString (dpy, GLX_VENDOR));
+      gtk_label_set_text (gen->priv->gl_vendor, glXGetClientString (dpy, GLX_VENDOR));
 
       append_glx_extension_row (gen, dpy, "GLX_ARB_create_context_profile");
       append_glx_extension_row (gen, dpy, "GLX_SGI_swap_control");
@@ -326,9 +328,9 @@ init_gl (GtkInspectorGeneral *gen)
         return;
 
       version = g_strconcat ("EGL ", eglQueryString (dpy, EGL_VERSION), NULL);
-      gtk_label_set_text (GTK_LABEL (gen->priv->gl_version), version);
+      gtk_label_set_text (gen->priv->gl_version, version);
       g_free (version);
-      gtk_label_set_text (GTK_LABEL (gen->priv->gl_vendor), eglQueryString (dpy, EGL_VENDOR));
+      gtk_label_set_text (gen->priv->gl_vendor, eglQueryString (dpy, EGL_VENDOR));
 
       append_egl_extension_row (gen, dpy, "EGL_KHR_create_context");
       append_egl_extension_row (gen, dpy, "EGL_EXT_buffer_age");
@@ -338,8 +340,8 @@ init_gl (GtkInspectorGeneral *gen)
   else
 #endif
     {
-      gtk_label_set_text (GTK_LABEL (gen->priv->gl_version), C_("GL version", "None"));
-      gtk_label_set_text (GTK_LABEL (gen->priv->gl_vendor), C_("GL vendor", "None"));
+      gtk_label_set_text (gen->priv->gl_version, C_("GL version", "None"));
+      gtk_label_set_text (gen->priv->gl_vendor, C_("GL vendor", "None"));
     }
 }
 
@@ -413,9 +415,9 @@ init_vulkan (GtkInspectorGeneral *gen)
                                         VK_VERSION_MINOR (props.driverVersion),
                                         VK_VERSION_PATCH (props.driverVersion));
 
-      gtk_label_set_text (GTK_LABEL (gen->priv->vk_device), device_name);
-      gtk_label_set_text (GTK_LABEL (gen->priv->vk_api_version), api_version);
-      gtk_label_set_text (GTK_LABEL (gen->priv->vk_driver_version), driver_version);
+      gtk_label_set_text (gen->priv->vk_device, device_name);
+      gtk_label_set_text (gen->priv->vk_api_version, api_version);
+      gtk_label_set_text (gen->priv->vk_driver_version, driver_version);
 
       g_free (device_name);
       g_free (api_version);
@@ -440,26 +442,26 @@ init_vulkan (GtkInspectorGeneral *gen)
   else
 #endif
     {
-      gtk_label_set_text (GTK_LABEL (gen->priv->vk_device), C_("Vulkan device", "None"));
-      gtk_label_set_text (GTK_LABEL (gen->priv->vk_api_version), C_("Vulkan version", "None"));
-      gtk_label_set_text (GTK_LABEL (gen->priv->vk_driver_version), C_("Vulkan version", "None"));
+      gtk_label_set_text (gen->priv->vk_device, C_("Vulkan device", "None"));
+      gtk_label_set_text (gen->priv->vk_api_version, C_("Vulkan version", "None"));
+      gtk_label_set_text (gen->priv->vk_driver_version, C_("Vulkan version", "None"));
     }
 }
 
 static void
-set_monospace_font (GtkWidget *w)
+set_monospace_font (GtkLabel *w)
 {
   PangoAttrList *attrs;
 
   attrs = pango_attr_list_new ();
   pango_attr_list_insert (attrs, pango_attr_fallback_new (FALSE));
   pango_attr_list_insert (attrs, pango_attr_family_new ("Monospace"));
-  gtk_label_set_attributes (GTK_LABEL (w), attrs);
+  gtk_label_set_attributes (w, attrs);
   pango_attr_list_unref (attrs);
 }
 
 static void
-set_path_label (GtkWidget   *w,
+set_path_label (GtkLabel    *w,
                 const gchar *var)
 {
   const gchar *v;
@@ -468,12 +470,12 @@ set_path_label (GtkWidget   *w,
   if (v != NULL)
     {
       set_monospace_font (w);
-      gtk_label_set_text (GTK_LABEL (w), v);
+      gtk_label_set_text (w, v);
     }
   else
     {
        GtkWidget *r;
-       r = gtk_widget_get_ancestor (w, GTK_TYPE_LIST_BOX_ROW);
+       r = gtk_widget_get_ancestor (GTK_WIDGET (w), GTK_TYPE_LIST_BOX_ROW);
        gtk_widget_hide (r);
     }
 }
@@ -482,7 +484,7 @@ static void
 init_env (GtkInspectorGeneral *gen)
 {
   set_monospace_font (gen->priv->prefix);
-  gtk_label_set_text (GTK_LABEL (gen->priv->prefix), _gtk_get_data_prefix ());
+  gtk_label_set_text (gen->priv->prefix, _gtk_get_data_prefix ());
   set_path_label (gen->priv->xdg_data_home, "XDG_DATA_HOME");
   set_path_label (gen->priv->xdg_data_dirs, "XDG_DATA_DIRS");
   set_path_label (gen->priv->gtk_path, "GTK_PATH");
@@ -521,7 +523,7 @@ populate_display (GdkDisplay *display, GtkInspectorGeneral *gen)
   for (l = children; l; l = l->next)
     {
       child = l->data;
-      if (gtk_widget_is_ancestor (gen->priv->display_name, child) ||
+      if (gtk_widget_is_ancestor (GTK_WIDGET (gen->priv->display_name), child) ||
           gtk_widget_is_ancestor (gen->priv->display_rgba, child) ||
           gtk_widget_is_ancestor (gen->priv->display_composited, child))
         continue;
@@ -530,7 +532,7 @@ populate_display (GdkDisplay *display, GtkInspectorGeneral *gen)
     }
   g_list_free (children);
 
-  gtk_label_set_label (GTK_LABEL (gen->priv->display_name), gdk_display_get_name (display));
+  gtk_label_set_label (gen->priv->display_name, gdk_display_get_name (display));
 
   gtk_widget_set_visible (gen->priv->display_rgba,
                           gdk_display_is_rgba (display));
@@ -637,7 +639,7 @@ init_pango (GtkInspectorGeneral *gen)
   else
     name = type;
 
-  gtk_label_set_label (GTK_LABEL (gen->priv->pango_fontmap), name);
+  gtk_label_set_label (gen->priv->pango_fontmap, name);
 }
 
 static void populate_seats (GtkInspectorGeneral *gen);

@@ -65,7 +65,7 @@
  * static void
  * create_expander (void)
  * {
- *   GtkWidget *expander = gtk_expander_new_with_mnemonic ("_More Options");
+ *   GtkExpander *expander = gtk_expander_new_with_mnemonic ("_More Options");
  *   g_signal_connect (expander, "notify::expanded",
  *                     G_CALLBACK (expander_callback), NULL);
  *
@@ -870,7 +870,7 @@ gtk_expander_measure (GtkWidget      *widget,
  *
  * Returns: a new #GtkExpander widget.
  */
-GtkWidget *
+GtkExpander *
 gtk_expander_new (const gchar *label)
 {
   return g_object_new (GTK_TYPE_EXPANDER, "label", label, NULL);
@@ -890,7 +890,7 @@ gtk_expander_new (const gchar *label)
  *
  * Returns: a new #GtkExpander widget.
  */
-GtkWidget *
+GtkExpander *
 gtk_expander_new_with_mnemonic (const gchar *label)
 {
   return g_object_new (GTK_TYPE_EXPANDER,
@@ -993,14 +993,14 @@ gtk_expander_set_label (GtkExpander *expander,
     }
   else
     {
-      GtkWidget *child;
+      GtkLabel *child;
 
       child = gtk_label_new (label);
-      gtk_label_set_use_underline (GTK_LABEL (child), priv->use_underline);
-      gtk_label_set_use_markup (GTK_LABEL (child), priv->use_markup);
-      gtk_widget_show (child);
+      gtk_label_set_use_underline (child, priv->use_underline);
+      gtk_label_set_use_markup (child, priv->use_markup);
+      gtk_widget_show (GTK_WIDGET (child));
 
-      gtk_expander_set_label_widget (expander, child);
+      gtk_expander_set_label_widget (expander, GTK_WIDGET (child));
     }
 
   g_object_notify (G_OBJECT (expander), "label");

@@ -12,8 +12,11 @@ on_activate (GApplication *app,
 
   if (window == NULL)
     {
-      GtkWidget *header, *sidebar_toggle, *animation_switch;
-      GtkWidget *hbox, *revealer, *sidebar, *img;
+      GtkWidget *header;
+      GtkToggleButton *sidebar_toggle;
+      GtkSwitch *animation_switch;
+      GtkWidget *hbox, *revealer, *sidebar;
+      GtkImage *img;
 
       window = gtk_application_window_new (GTK_APPLICATION (app));
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);
@@ -24,13 +27,13 @@ on_activate (GApplication *app,
       gtk_window_set_titlebar (GTK_WINDOW (window), header);
 
       sidebar_toggle = gtk_toggle_button_new_with_label ("Show Sidebar");
-      gtk_header_bar_pack_start (GTK_HEADER_BAR (header), sidebar_toggle);
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (header), GTK_WIDGET (sidebar_toggle));
 
       animation_switch = gtk_switch_new ();
-      gtk_widget_set_valign (animation_switch, GTK_ALIGN_CENTER);
-      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), animation_switch);
+      gtk_widget_set_valign (GTK_WIDGET (animation_switch), GTK_ALIGN_CENTER);
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), GTK_WIDGET (animation_switch));
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header),
-                               gtk_label_new ("Animations"));
+                               GTK_WIDGET (gtk_label_new ("Animations")));
 
       /* content */
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -54,7 +57,7 @@ on_activate (GApplication *app,
                          "halign", GTK_ALIGN_CENTER,
                          "valign", GTK_ALIGN_CENTER,
                          NULL);
-      gtk_container_add (GTK_CONTAINER (hbox), img);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (img));
 
       g_object_bind_property (sidebar_toggle, "active",
                               revealer, "reveal-child",

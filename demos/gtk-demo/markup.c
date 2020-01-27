@@ -52,7 +52,7 @@ do_markup (GtkWidget *do_widget)
       GBytes *bytes;
       const gchar *markup;
       GtkWidget *header;
-      GtkWidget *show_source;
+      GtkCheckButton *show_source;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_display (GTK_WINDOW (window),
@@ -66,12 +66,12 @@ do_markup (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (window), stack);
 
       show_source = gtk_check_button_new_with_label ("Source");
-      gtk_widget_set_valign (show_source, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (GTK_WIDGET (show_source), GTK_ALIGN_CENTER);
       g_signal_connect (show_source, "toggled", G_CALLBACK (source_toggled), stack);
 
       header = gtk_header_bar_new ();
       gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (header), TRUE);
-      gtk_header_bar_pack_start (GTK_HEADER_BAR (header), show_source);
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (header), GTK_WIDGET (show_source));
       gtk_window_set_titlebar (GTK_WINDOW (window), header);
 
       gtk_window_set_title (GTK_WINDOW (window), "Markup");

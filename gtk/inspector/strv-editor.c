@@ -58,7 +58,7 @@ add_string (GtkInspectorStrvEditor *editor,
             const gchar            *str)
 {
   GtkWidget *box;
-  GtkWidget *entry;
+  GtkEntry *entry;
   GtkWidget *button;
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -67,8 +67,8 @@ add_string (GtkInspectorStrvEditor *editor,
 
   entry = gtk_entry_new ();
   gtk_editable_set_text (GTK_EDITABLE (entry), str);
-  gtk_widget_show (entry);
-  gtk_container_add (GTK_CONTAINER (box), entry);
+  gtk_widget_show (GTK_WIDGET (entry));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (entry));
   g_object_set_data (G_OBJECT (box), "entry", entry);
   g_signal_connect_swapped (entry, "notify::text", G_CALLBACK (emit_changed), editor);
 
@@ -80,7 +80,7 @@ add_string (GtkInspectorStrvEditor *editor,
 
   gtk_container_add (GTK_CONTAINER (editor->box), box);
 
-  gtk_widget_grab_focus (entry);
+  gtk_widget_grab_focus (GTK_WIDGET (entry));
 
   emit_changed (editor);
 }

@@ -77,7 +77,7 @@ struct _GtkPlacesViewPrivate
   GtkWidget                     *server_adresses_popover;
   GtkWidget                     *available_protocols_grid;
   GtkWidget                     *network_placeholder;
-  GtkWidget                     *network_placeholder_label;
+  GtkLabel                      *network_placeholder_label;
 
   GtkSizeGroup                  *path_size_group;
   GtkSizeGroup                  *space_size_group;
@@ -571,7 +571,7 @@ populate_servers (GtkPlacesView *view)
       GtkWidget *row;
       GtkWidget *grid;
       GtkWidget *button;
-      GtkWidget *label;
+      GtkLabel *label;
       gchar *name;
       gchar *dup_uri;
 
@@ -595,18 +595,18 @@ populate_servers (GtkPlacesView *view)
 
       /* name of the connected uri, if any */
       label = gtk_label_new (name);
-      gtk_widget_set_hexpand (label, TRUE);
-      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-      gtk_container_add (GTK_CONTAINER (grid), label);
+      gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+      gtk_label_set_xalign (label, 0.0);
+      gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+      gtk_container_add (GTK_CONTAINER (grid), GTK_WIDGET (label));
 
       /* the uri itself */
       label = gtk_label_new (uris[i]);
-      gtk_widget_set_hexpand (label, TRUE);
-      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-      gtk_style_context_add_class (gtk_widget_get_style_context (label), "dim-label");
-      gtk_container_add (GTK_CONTAINER (grid), label);
+      gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+      gtk_label_set_xalign (label, 0.0);
+      gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
+      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (label)), "dim-label");
+      gtk_container_add (GTK_CONTAINER (grid), GTK_WIDGET (label));
 
       /* remove button */
       button = gtk_button_new_from_icon_name ("window-close-symbolic");
@@ -872,15 +872,15 @@ update_network_state (GtkPlacesView *view)
     {
       priv->network_placeholder = gtk_list_box_row_new ();
       priv->network_placeholder_label = gtk_label_new ("");
-      gtk_label_set_xalign (GTK_LABEL (priv->network_placeholder_label), 0.0);
-      gtk_widget_set_margin_start (priv->network_placeholder_label, 12);
-      gtk_widget_set_margin_end (priv->network_placeholder_label, 12);
-      gtk_widget_set_margin_top (priv->network_placeholder_label, 6);
-      gtk_widget_set_margin_bottom (priv->network_placeholder_label, 6);
-      gtk_widget_set_hexpand (priv->network_placeholder_label, TRUE);
+      gtk_label_set_xalign (priv->network_placeholder_label, 0.0);
+      gtk_widget_set_margin_start (GTK_WIDGET (priv->network_placeholder_label), 12);
+      gtk_widget_set_margin_end (GTK_WIDGET (priv->network_placeholder_label), 12);
+      gtk_widget_set_margin_top (GTK_WIDGET (priv->network_placeholder_label), 6);
+      gtk_widget_set_margin_bottom (GTK_WIDGET (priv->network_placeholder_label), 6);
+      gtk_widget_set_hexpand (GTK_WIDGET (GTK_WIDGET (priv->network_placeholder_label)), TRUE);
       gtk_widget_set_sensitive (priv->network_placeholder, FALSE);
       gtk_container_add (GTK_CONTAINER (priv->network_placeholder),
-                         priv->network_placeholder_label);
+                         GTK_WIDGET (priv->network_placeholder_label));
       g_object_set_data (G_OBJECT (priv->network_placeholder),
                          "is-network", GINT_TO_POINTER (TRUE));
       /* mark the row as placeholder, so it always goes first */
@@ -896,14 +896,14 @@ update_network_state (GtkPlacesView *view)
       if (!has_networks (view))
         {
           gtk_widget_show (priv->network_placeholder);
-          gtk_label_set_text (GTK_LABEL (priv->network_placeholder_label),
+          gtk_label_set_text (priv->network_placeholder_label,
                               _("Searching for network locations"));
         }
     }
   else if (!has_networks (view))
     {
       gtk_widget_show (priv->network_placeholder);
-      gtk_label_set_text (GTK_LABEL (priv->network_placeholder_label),
+      gtk_label_set_text (priv->network_placeholder_label,
                           _("No network locations found"));
     }
   else
@@ -1614,16 +1614,16 @@ attach_protocol_row_to_grid (GtkGrid     *grid,
                              const gchar *protocol_name,
                              const gchar *protocol_prefix)
 {
-  GtkWidget *name_label;
-  GtkWidget *prefix_label;
+  GtkLabel *name_label;
+  GtkLabel *prefix_label;
 
   name_label = gtk_label_new (protocol_name);
-  gtk_widget_set_halign (name_label, GTK_ALIGN_START);
-  gtk_grid_attach_next_to (grid, name_label, NULL, GTK_POS_BOTTOM, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (name_label), GTK_ALIGN_START);
+  gtk_grid_attach_next_to (grid, GTK_WIDGET (name_label), NULL, GTK_POS_BOTTOM, 1, 1);
 
   prefix_label = gtk_label_new (protocol_prefix);
-  gtk_widget_set_halign (prefix_label, GTK_ALIGN_START);
-  gtk_grid_attach_next_to (grid, prefix_label, name_label, GTK_POS_RIGHT, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (prefix_label), GTK_ALIGN_START);
+  gtk_grid_attach_next_to (grid, GTK_WIDGET (prefix_label), GTK_WIDGET (name_label), GTK_POS_RIGHT, 1, 1);
 }
 
 static void
@@ -2078,8 +2078,8 @@ listbox_header_func (GtkListBoxRow *row,
   if (text)
     {
       GtkWidget *header;
-      GtkWidget *label;
-      GtkWidget *separator;
+      GtkLabel *label;
+      GtkSeparator *separator;
 
       header = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
       gtk_widget_set_margin_top (header, 6);
@@ -2097,7 +2097,7 @@ listbox_header_func (GtkListBoxRow *row,
           GtkWidget *header_name;
           GtkWidget *network_header_spinner;
 
-          gtk_widget_set_margin_end (label, 6);
+          gtk_widget_set_margin_end (GTK_WIDGET (label), 6);
 
           header_name = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
           network_header_spinner = gtk_spinner_new ();
@@ -2108,18 +2108,18 @@ listbox_header_func (GtkListBoxRow *row,
                                   "active",
                                   G_BINDING_SYNC_CREATE);
 
-          gtk_container_add (GTK_CONTAINER (header_name), label);
+          gtk_container_add (GTK_CONTAINER (header_name), GTK_WIDGET (label));
           gtk_container_add (GTK_CONTAINER (header_name), network_header_spinner);
           gtk_container_add (GTK_CONTAINER (header), header_name);
         }
       else
         {
-          gtk_widget_set_hexpand (label, TRUE);
-          gtk_widget_set_margin_end (label, 12);
-          gtk_container_add (GTK_CONTAINER (header), label);
+          gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+          gtk_widget_set_margin_end (GTK_WIDGET (label), 12);
+          gtk_container_add (GTK_CONTAINER (header), GTK_WIDGET (label));
         }
 
-      gtk_container_add (GTK_CONTAINER (header), separator);
+      gtk_container_add (GTK_CONTAINER (header), GTK_WIDGET (separator));
 
       gtk_list_box_row_set_header (row, header);
 

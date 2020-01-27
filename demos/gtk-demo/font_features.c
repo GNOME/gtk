@@ -25,17 +25,17 @@
 
 #define MAKE_TAG(a,b,c,d) (unsigned int)(((a) << 24) | ((b) << 16) | ((c) <<  8) | (d))
 
-static GtkWidget *label;
-static GtkWidget *settings;
-static GtkWidget *description;
+static GtkLabel *label;
+static GtkLabel *settings;
+static GtkLabel *description;
 static GtkWidget *font;
 static GtkWidget *script_lang;
 static GtkWidget *resetbutton;
 static GtkWidget *stack;
-static GtkWidget *entry;
+static GtkEntry *entry;
 static GtkWidget *variations_heading;
 static GtkWidget *variations_grid;
-static GtkWidget *instance_combo;
+static GtkComboBoxText *instance_combo;
 static GtkWidget *edit_toggle;
 
 typedef struct {
@@ -146,7 +146,7 @@ static void
 set_inconsistent (GtkCheckButton *button,
                   gboolean        inconsistent)
 {
-  gtk_check_button_set_inconsistent (GTK_CHECK_BUTTON (button), inconsistent);
+  gtk_check_button_set_inconsistent (button, inconsistent);
   gtk_widget_set_opacity (gtk_widget_get_first_child (GTK_WIDGET (button)), inconsistent ? 0.0 : 1.0);
 }
 
@@ -178,7 +178,7 @@ add_check_group (GtkWidget   *box,
                  const char  *title,
                  const char **tags)
 {
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *group;
   PangoAttrList *attrs;
   int i;
@@ -187,38 +187,38 @@ add_check_group (GtkWidget   *box,
   gtk_widget_set_halign (group, GTK_ALIGN_START);
 
   label = gtk_label_new (title);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_label_set_xalign (label, 0.0);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
   g_object_set (label, "margin-top", 10, "margin-bottom", 10, NULL);
   attrs = pango_attr_list_new ();
   pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
+  gtk_label_set_attributes (label, attrs);
   pango_attr_list_unref (attrs);
-  gtk_container_add (GTK_CONTAINER (group), label);
+  gtk_container_add (GTK_CONTAINER (group), GTK_WIDGET (label));
 
   for (i = 0; tags[i]; i++)
     {
       unsigned int tag;
-      GtkWidget *feat;
+      GtkCheckButton *feat;
       FeatureItem *item;
 
       tag = hb_tag_from_string (tags[i], -1);
 
       feat = gtk_check_button_new_with_label (get_feature_display_name (tag));
-      set_inconsistent (GTK_CHECK_BUTTON (feat), TRUE);
+      set_inconsistent (feat, TRUE);
 
       g_signal_connect (feat, "notify::active", G_CALLBACK (update_display), NULL);
       g_signal_connect (feat, "notify::inconsistent", G_CALLBACK (update_display), NULL);
       g_signal_connect (feat, "clicked", G_CALLBACK (feat_clicked), NULL);
 
-      gtk_container_add (GTK_CONTAINER (group), feat);
+      gtk_container_add (GTK_CONTAINER (group), GTK_WIDGET (feat));
 
       item = g_new (FeatureItem, 1);
       item->name = tags[i];
       item->tag = tag;
       item->icon = NULL;
       item->dflt = NULL;
-      item->feat = feat;
+      item->feat = GTK_WIDGET (feat);
 
       feature_items = g_list_prepend (feature_items, item);
     }
@@ -231,7 +231,7 @@ add_radio_group (GtkWidget *box,
                  const char  *title,
                  const char **tags)
 {
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *group;
   int i;
   GtkWidget *group_button = NULL;
@@ -241,14 +241,14 @@ add_radio_group (GtkWidget *box,
   gtk_widget_set_halign (group, GTK_ALIGN_START);
 
   label = gtk_label_new (title);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_label_set_xalign (label, 0.0);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
   g_object_set (label, "margin-top", 10, "margin-bottom", 10, NULL);
   attrs = pango_attr_list_new ();
   pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
+  gtk_label_set_attributes (label, attrs);
   pango_attr_list_unref (attrs);
-  gtk_container_add (GTK_CONTAINER (group), label);
+  gtk_container_add (GTK_CONTAINER (group), GTK_WIDGET (label));
 
   for (i = 0; tags[i]; i++)
     {
@@ -303,7 +303,7 @@ update_display (void)
 
   text = gtk_editable_get_text (GTK_EDITABLE (entry));
 
-  if (gtk_label_get_selection_bounds (GTK_LABEL (label), &ins, &bound))
+  if (gtk_label_get_selection_bounds (label, &ins, &bound))
     {
       start = g_utf8_offset_to_pointer (text, ins) - text;
       end = g_utf8_offset_to_pointer (text, bound) - text;
@@ -407,10 +407,10 @@ update_display (void)
         }
     }
 
-  gtk_label_set_text (GTK_LABEL (description), font_desc);
-  gtk_label_set_text (GTK_LABEL (settings), features);
-  gtk_label_set_text (GTK_LABEL (label), text);
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
+  gtk_label_set_text (description, font_desc);
+  gtk_label_set_text (settings, features);
+  gtk_label_set_text (label, text);
+  gtk_label_set_attributes (label, attrs);
 
   g_free (font_desc);
   pango_font_description_free (desc);
@@ -791,8 +791,8 @@ add_axis (hb_face_t             *hb_face,
           float                  value,
           int                    i)
 {
-  GtkWidget *axis_label;
-  GtkWidget *axis_entry;
+  GtkLabel *axis_label;
+  GtkEntry *axis_entry;
   GtkWidget *axis_scale;
   GtkAdjustment *adjustment;
   Axis *axis;
@@ -802,9 +802,9 @@ add_axis (hb_face_t             *hb_face,
   hb_ot_name_get_utf8 (hb_face, ax->name_id, HB_LANGUAGE_INVALID, &name_len, name);
 
   axis_label = gtk_label_new (name);
-  gtk_widget_set_halign (axis_label, GTK_ALIGN_START);
-  gtk_widget_set_valign (axis_label, GTK_ALIGN_BASELINE);
-  gtk_grid_attach (GTK_GRID (variations_grid), axis_label, 0, i, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (axis_label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (axis_label), GTK_ALIGN_BASELINE);
+  gtk_grid_attach (GTK_GRID (variations_grid), GTK_WIDGET (axis_label), 0, i, 1, 1);
   adjustment = gtk_adjustment_new (value, ax->min_value, ax->max_value,
                                    1.0, 10.0, 0.0);
   axis_scale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, adjustment);
@@ -815,16 +815,16 @@ add_axis (hb_face_t             *hb_face,
   gtk_scale_set_draw_value (GTK_SCALE (axis_scale), FALSE);
   gtk_grid_attach (GTK_GRID (variations_grid), axis_scale, 1, i, 1, 1);
   axis_entry = gtk_entry_new ();
-  gtk_widget_set_valign (axis_entry, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (GTK_WIDGET (axis_entry), GTK_ALIGN_BASELINE);
   gtk_editable_set_width_chars (GTK_EDITABLE (axis_entry), 4);
-  gtk_grid_attach (GTK_GRID (variations_grid), axis_entry, 2, i, 1, 1);
+  gtk_grid_attach (GTK_GRID (variations_grid), GTK_WIDGET (axis_entry), 2, i, 1, 1);
 
   axis = g_new (Axis, 1);
   axis->tag = ax->tag;
   axis->adjustment = adjustment;
   g_hash_table_add (axes, axis);
 
-  adjustment_changed (adjustment, GTK_ENTRY (axis_entry));
+  adjustment_changed (adjustment, axis_entry);
 
   g_signal_connect (adjustment, "value-changed", G_CALLBACK (adjustment_changed), axis_entry);
   g_signal_connect (adjustment, "value-changed", G_CALLBACK (unset_instance), NULL);
@@ -867,7 +867,7 @@ static GHashTable *instances;
 static void
 add_instance (hb_face_t    *face,
               unsigned int  index,
-              GtkWidget    *combo,
+              GtkComboBoxText *combo,
               int           pos)
 {
   Instance *instance;
@@ -884,7 +884,7 @@ add_instance (hb_face_t    *face,
   instance->index = index;
 
   g_hash_table_add (instances, instance);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), instance->name);
+  gtk_combo_box_text_append_text (combo, instance->name);
 }
 
 static void
@@ -1067,19 +1067,19 @@ update_font_variations (void)
 
   if (hb_ot_var_get_named_instance_count (hb_face) > 0)
     {
-      GtkWidget *label;
-      GtkWidget *combo;
+      GtkLabel *label;
+      GtkComboBoxText *combo;
 
       label = gtk_label_new ("Instance");
-      gtk_label_set_xalign (GTK_LABEL (label), 0);
-      gtk_widget_set_halign (label, GTK_ALIGN_START);
-      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-      gtk_grid_attach (GTK_GRID (variations_grid), label, 0, -1, 2, 1);
+      gtk_label_set_xalign (label, 0);
+      gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+      gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_BASELINE);
+      gtk_grid_attach (GTK_GRID (variations_grid), GTK_WIDGET (label), 0, -1, 2, 1);
 
       combo = gtk_combo_box_text_new ();
-      gtk_widget_set_valign (combo, GTK_ALIGN_BASELINE);
+      gtk_widget_set_valign (GTK_WIDGET (combo), GTK_ALIGN_BASELINE);
 
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "");
+      gtk_combo_box_text_append_text (combo, "");
 
       for (i = 0; i < hb_ot_var_get_named_instance_count (hb_face); i++)
         add_instance (hb_face, i, combo, i);
@@ -1093,7 +1093,7 @@ update_font_variations (void)
             }
         }
 
-      gtk_grid_attach (GTK_GRID (variations_grid), combo, 1, -1, 2, 1);
+      gtk_grid_attach (GTK_GRID (variations_grid), GTK_WIDGET (combo), 1, -1, 2, 1);
       g_signal_connect (combo, "changed", G_CALLBACK (instance_changed), NULL);
       instance_combo = combo;
    }
@@ -1129,7 +1129,7 @@ font_features_reset_features (void)
 {
   GList *l;
 
-  gtk_label_select_region (GTK_LABEL (label), 0, 0);
+  gtk_label_select_region (label, 0, 0);
 
   g_list_free_full (ranges, free_range);
   ranges = NULL;
@@ -1158,7 +1158,7 @@ switch_to_entry (void)
 {
   text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry)));
   gtk_stack_set_visible_child_name (GTK_STACK (stack), "entry");
-  gtk_widget_grab_focus (entry);
+  gtk_widget_grab_focus (GTK_WIDGET (entry));
 }
 
 static void
@@ -1217,20 +1217,20 @@ do_font_features (GtkWidget *do_widget)
 
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       feature_list = GTK_WIDGET (gtk_builder_get_object (builder, "feature_list"));
-      label = GTK_WIDGET (gtk_builder_get_object (builder, "label"));
-      settings = GTK_WIDGET (gtk_builder_get_object (builder, "settings"));
-      description = GTK_WIDGET (gtk_builder_get_object (builder, "description"));
+      label = GTK_LABEL (gtk_builder_get_object (builder, "label"));
+      settings = GTK_LABEL (gtk_builder_get_object (builder, "settings"));
+      description = GTK_LABEL (gtk_builder_get_object (builder, "description"));
       resetbutton = GTK_WIDGET (gtk_builder_get_object (builder, "reset"));
       font = GTK_WIDGET (gtk_builder_get_object (builder, "font"));
       script_lang = GTK_WIDGET (gtk_builder_get_object (builder, "script_lang"));
       stack = GTK_WIDGET (gtk_builder_get_object (builder, "stack"));
-      entry = GTK_WIDGET (gtk_builder_get_object (builder, "entry"));
+      entry = GTK_ENTRY (gtk_builder_get_object (builder, "entry"));
       edit_toggle = GTK_WIDGET (gtk_builder_get_object (builder, "edit_toggle"));
 
       controller = gtk_event_controller_key_new ();
       g_object_set_data_full (G_OBJECT (entry), "controller", g_object_ref (controller), g_object_unref);
       g_signal_connect (controller, "key-pressed", G_CALLBACK (entry_key_press), entry);
-      gtk_widget_add_controller (entry, controller);
+      gtk_widget_add_controller (GTK_WIDGET (entry), controller);
 
       add_check_group (feature_list, _("Kerning"), (const char *[]){ "kern", NULL });
       add_check_group (feature_list, _("Ligatures"), (const char *[]){ "liga",

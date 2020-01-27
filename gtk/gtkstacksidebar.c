@@ -127,12 +127,12 @@ update_header (GtkListBoxRow *row,
                GtkListBoxRow *before,
                gpointer       userdata)
 {
-  GtkWidget *ret = NULL;
+  GtkSeparator *ret = NULL;
 
   if (before && !gtk_list_box_row_get_header (row))
     {
       ret = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_list_box_row_set_header (row, ret);
+      gtk_list_box_row_set_header (row, GTK_WIDGET (ret));
     }
 }
 
@@ -225,16 +225,16 @@ static void
 add_child (guint            position,
            GtkStackSidebar *self)
 {
-  GtkWidget *item;
+  GtkLabel *item;
   GtkWidget *row;
   GtkStackPage *page;
 
   /* Make a pretty item when we add kids */
   item = gtk_label_new ("");
-  gtk_widget_set_halign (item, GTK_ALIGN_START);
-  gtk_widget_set_valign (item, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (GTK_WIDGET (item), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (item), GTK_ALIGN_CENTER);
   row = gtk_list_box_row_new ();
-  gtk_container_add (GTK_CONTAINER (row), item);
+  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (item));
 
   page = g_list_model_get_item (G_LIST_MODEL (self->pages), position);
   update_row (self, page, row);

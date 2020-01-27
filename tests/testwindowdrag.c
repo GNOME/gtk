@@ -33,17 +33,17 @@ start_resize (GtkGestureClick *gesture,
 static GtkWidget *
 resize_button (GdkSurfaceEdge edge)
 {
-  GtkWidget *button;
+  GtkImage *button;
   GtkGesture *gesture;
 
   button = gtk_image_new_from_icon_name ("view-fullscreen-symbolic");
-  gtk_widget_set_hexpand (button, TRUE);
-  gtk_widget_set_vexpand (button, TRUE);
+  gtk_widget_set_hexpand (GTK_WIDGET (button), TRUE);
+  gtk_widget_set_vexpand (GTK_WIDGET (button), TRUE);
   gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "pressed", G_CALLBACK (start_resize), GINT_TO_POINTER (edge));
-  gtk_widget_add_controller (button, GTK_EVENT_CONTROLLER (gesture));
+  gtk_widget_add_controller (GTK_WIDGET (button), GTK_EVENT_CONTROLLER (gesture));
 
-  return button;
+  return GTK_WIDGET (button);
 }
 
 static void
@@ -77,17 +77,17 @@ start_move (GtkGestureClick *gesture,
 static GtkWidget *
 move_button (void)
 {
-  GtkWidget *button;
+  GtkImage *button;
   GtkGesture *gesture;
 
   button = gtk_image_new_from_icon_name ("view-grid-symbolic");
-  gtk_widget_set_hexpand (button, TRUE);
-  gtk_widget_set_vexpand (button, TRUE);
+  gtk_widget_set_hexpand (GTK_WIDGET (button), TRUE);
+  gtk_widget_set_vexpand (GTK_WIDGET (button), TRUE);
   gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "pressed", G_CALLBACK (start_move), NULL);
-  gtk_widget_add_controller (button, GTK_EVENT_CONTROLLER (gesture));
+  gtk_widget_add_controller (GTK_WIDGET (button), GTK_EVENT_CONTROLLER (gesture));
 
-  return button;
+  return GTK_WIDGET (button);
 }
 
 int

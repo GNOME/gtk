@@ -28,7 +28,7 @@ move_puzzle (GtkWidget *grid,
              int        dx,
              int        dy)
 {
-  GtkWidget *pos, *next;
+  GtkPicture *pos, *next;
   GdkPaintable *piece;
   guint next_x, next_y;
 
@@ -50,13 +50,13 @@ move_puzzle (GtkWidget *grid,
   next_y = pos_y + dy;
 
   /* Get the current and next image */
-  pos = gtk_grid_get_child_at (GTK_GRID (grid), pos_x, pos_y);
-  next = gtk_grid_get_child_at (GTK_GRID (grid), next_x, next_y);
+  pos = GTK_PICTURE (gtk_grid_get_child_at (GTK_GRID (grid), pos_x, pos_y));
+  next = GTK_PICTURE (gtk_grid_get_child_at (GTK_GRID (grid), next_x, next_y));
 
   /* Move the displayed piece. */
-  piece = gtk_picture_get_paintable (GTK_PICTURE (next));
-  gtk_picture_set_paintable (GTK_PICTURE (pos), piece);
-  gtk_picture_set_paintable (GTK_PICTURE (next), NULL);
+  piece = gtk_picture_get_paintable (next);
+  gtk_picture_set_paintable (pos, piece);
+  gtk_picture_set_paintable (next, NULL);
 
   /* Update the current position */
   pos_x = next_x;
@@ -109,7 +109,7 @@ shuffle_puzzle (GtkWidget *grid)
 static gboolean
 check_solved (GtkWidget *grid)
 {
-  GtkWidget *picture;
+  GtkPicture *picture;
   GdkPaintable *piece;
   guint x, y;
 
@@ -128,8 +128,8 @@ check_solved (GtkWidget *grid)
     {
       for (x = 0; x < width; x++)
         {
-          picture = gtk_grid_get_child_at (GTK_GRID (grid), x, y);
-          piece = gtk_picture_get_paintable (GTK_PICTURE (picture));
+          picture = GTK_PICTURE (gtk_grid_get_child_at (GTK_GRID (grid), x, y));
+          piece = gtk_picture_get_paintable (picture);
 
           /* empty cell */
           if (piece == NULL)
@@ -147,14 +147,14 @@ check_solved (GtkWidget *grid)
 
   /* Fill the empty cell to show that we're done.
    */
-  picture = gtk_grid_get_child_at (GTK_GRID (grid), 0, 0);
-  piece = gtk_picture_get_paintable (GTK_PICTURE (picture));
+  picture = GTK_PICTURE (gtk_grid_get_child_at (GTK_GRID (grid), 0, 0));
+  piece = gtk_picture_get_paintable (picture);
 
   piece = gtk_puzzle_piece_new (gtk_puzzle_piece_get_puzzle (GTK_PUZZLE_PIECE (piece)),
                                 pos_x, pos_y,
                                 width, height);
-  picture = gtk_grid_get_child_at (GTK_GRID (grid), pos_x, pos_y);
-  gtk_picture_set_paintable (GTK_PICTURE (picture), piece);
+  picture = GTK_PICTURE (gtk_grid_get_child_at (GTK_GRID (grid), pos_x, pos_y));
+  gtk_picture_set_paintable (picture, piece);
 
   return TRUE;
 }
@@ -279,7 +279,8 @@ puzzle_button_pressed (GtkGestureClick *gesture,
 static void
 start_puzzle (GdkPaintable *puzzle)
 {
-  GtkWidget *picture, *grid;
+  GtkPicture *picture;
+  GtkWidget *grid;
   GtkEventController *controller;
   guint x, y;
   float aspect_ratio;
@@ -336,9 +337,9 @@ start_puzzle (GdkPaintable *puzzle)
                                           x, y,
                                           width, height);
           picture = gtk_picture_new_for_paintable (piece);
-          gtk_picture_set_keep_aspect_ratio (GTK_PICTURE (picture), FALSE);
+          gtk_picture_set_keep_aspect_ratio (picture, FALSE);
           gtk_grid_attach (GTK_GRID (grid),
-                           picture,
+                           GTK_WIDGET (picture),
                            x, y,
                            1, 1);
         }
@@ -393,12 +394,12 @@ static void
 add_choice (GtkWidget    *choices,
             GdkPaintable *paintable)
 {
-  GtkWidget *icon;
+  GtkImage *icon;
 
   icon = gtk_image_new_from_paintable (paintable);
-  gtk_image_set_icon_size (GTK_IMAGE (icon), GTK_ICON_SIZE_LARGE);
+  gtk_image_set_icon_size (icon, GTK_ICON_SIZE_LARGE);
 
-  gtk_container_add (GTK_CONTAINER (choices), icon);
+  gtk_container_add (GTK_CONTAINER (choices), GTK_WIDGET (icon));
 }
 
 GtkWidget *
@@ -412,7 +413,7 @@ do_sliding_puzzle (GtkWidget *do_widget)
       GtkWidget *popover;
       GtkWidget *tweaks;
       GtkWidget *apply;
-      GtkWidget *label;
+      GtkLabel *label;
       GtkWidget *sw;
       GtkMediaStream *media;
 
@@ -437,8 +438,8 @@ do_sliding_puzzle (GtkWidget *do_widget)
       gtk_grid_attach (GTK_GRID (tweaks), sw, 0, 0, 2, 1);
 
       label = gtk_label_new ("Size");
-      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-      gtk_grid_attach (GTK_GRID (tweaks), label, 0, 1, 1, 1);
+      gtk_label_set_xalign (label, 0.0);
+      gtk_grid_attach (GTK_GRID (tweaks), GTK_WIDGET (label), 0, 1, 1, 1);
       size_spin = gtk_spin_button_new_with_range (2, 10, 1);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (size_spin), width);
       gtk_grid_attach (GTK_GRID (tweaks), size_spin, 1, 1, 1, 1);

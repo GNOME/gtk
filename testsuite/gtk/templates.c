@@ -72,11 +72,11 @@ test_message_dialog_basic (void)
 static void
 test_about_dialog_basic (void)
 {
-  GtkWidget *dialog;
+  GtkAboutDialog *dialog;
 
   dialog = gtk_about_dialog_new ();
   g_assert (GTK_IS_ABOUT_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
@@ -115,11 +115,11 @@ test_assistant_basic (void)
 static void
 test_scale_button_basic (void)
 {
-  GtkWidget *widget;
+  GtkScaleButton *widget;
 
   widget = gtk_scale_button_new (0, 100, 10, NULL);
   g_assert (GTK_IS_SCALE_BUTTON (widget));
-  gtk_widget_destroy (widget);
+  gtk_widget_destroy (GTK_WIDGET (widget));
 }
 
 static void
@@ -155,11 +155,11 @@ test_search_bar_basic (void)
 static void
 test_action_bar_basic (void)
 {
-  GtkWidget *widget;
+  GtkActionBar *widget;
 
   widget = gtk_action_bar_new ();
   g_assert (GTK_IS_ACTION_BAR (widget));
-  gtk_widget_destroy (widget);
+  gtk_widget_destroy (GTK_WIDGET (widget));
 }
 
 static void
@@ -175,7 +175,7 @@ test_app_chooser_widget_basic (void)
 static void
 test_app_chooser_dialog_basic (void)
 {
-  GtkWidget *widget;
+  GtkAppChooserDialog *widget;
 
   widget = gtk_app_chooser_dialog_new_for_content_type (NULL, 0, "text/plain");
   g_assert (GTK_IS_APP_CHOOSER_DIALOG (widget));
@@ -186,18 +186,18 @@ test_app_chooser_dialog_basic (void)
    */
   g_timeout_add (500, main_loop_quit_cb, NULL);
   gtk_main();
-  gtk_widget_destroy (widget);
+  gtk_widget_destroy (GTK_WIDGET (widget));
 }
 
 static void
 test_color_chooser_dialog_basic (void)
 {
-  GtkWidget *widget;
+  GtkColorChooserDialog *widget;
 
   /* This test also tests the internal GtkColorEditor widget */
   widget = gtk_color_chooser_dialog_new (NULL, NULL);
   g_assert (GTK_IS_COLOR_CHOOSER_DIALOG (widget));
-  gtk_widget_destroy (widget);
+  gtk_widget_destroy (GTK_WIDGET (widget));
 }
 
 /* Avoid warnings from GVFS-RemoteVolumeMonitor */
@@ -242,7 +242,7 @@ test_file_chooser_widget_basic (void)
 static void
 test_file_chooser_dialog_basic (void)
 {
-  GtkWidget *widget;
+  GtkFileChooserDialog *widget;
 
   g_test_log_set_fatal_handler (ignore_gvfs_warning, NULL);
 
@@ -255,13 +255,13 @@ test_file_chooser_dialog_basic (void)
   g_timeout_add (100, main_loop_quit_cb, NULL);
   gtk_main();
 
-  gtk_widget_destroy (widget);
+  gtk_widget_destroy (GTK_WIDGET (widget));
 }
 
 static void
 test_file_chooser_button_basic (void)
 {
-  GtkWidget *widget;
+  GtkFileChooserButton *widget;
 
   g_test_log_set_fatal_handler (ignore_gvfs_warning, NULL);
 
@@ -270,7 +270,7 @@ test_file_chooser_button_basic (void)
   g_timeout_add (100, main_loop_quit_cb, NULL);
   gtk_main();
 
-  gtk_widget_destroy (widget);
+  gtk_widget_destroy (GTK_WIDGET (widget));
 }
 
 static void
@@ -296,32 +296,32 @@ test_font_chooser_widget_basic (void)
 static void
 test_font_chooser_dialog_basic (void)
 {
-  GtkWidget *widget;
+  GtkFontChooserDialog *widget;
 
   widget = gtk_font_chooser_dialog_new ("Choose a font !", NULL);
   g_assert (GTK_IS_FONT_CHOOSER_DIALOG (widget));
-  gtk_widget_destroy (widget);
+  gtk_widget_destroy (GTK_WIDGET (widget));
 }
 
 #ifdef HAVE_UNIX_PRINT_WIDGETS
 static void
 test_page_setup_unix_dialog_basic (void)
 {
-  GtkWidget *widget;
+  GtkPageSetupUnixDialog *widget;
 
   widget = gtk_page_setup_unix_dialog_new ("Setup your Page !", NULL);
   g_assert (GTK_IS_PAGE_SETUP_UNIX_DIALOG (widget));
-  gtk_widget_destroy (widget);
+  gtk_widget_destroy (GTK_WIDGET (widget));
 }
 
 static void
 test_print_unix_dialog_basic (void)
 {
-  GtkWidget *widget;
+  GtkPrintUnixDialog *widget;
 
   widget = gtk_print_unix_dialog_new ("Go Print !", NULL);
   g_assert (GTK_IS_PRINT_UNIX_DIALOG (widget));
-  gtk_widget_destroy (widget);
+  gtk_widget_destroy (GTK_WIDGET (widget));
 }
 #endif
 

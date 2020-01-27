@@ -27,7 +27,7 @@
 static GtkTreeModel *
 create_tree_blaat (void)
 {
-        GtkWidget *cellview;
+        GtkCellView *cellview;
         GtkTreeIter iter, iter2;
         GtkTreeStore *store;
 
@@ -79,7 +79,7 @@ create_tree_blaat (void)
 			    2, FALSE,
                             -1);
 
-        gtk_widget_destroy (cellview);
+        gtk_widget_destroy (GTK_WIDGET (cellview));
 
         return GTK_TREE_MODEL (store);
 }
@@ -87,7 +87,7 @@ create_tree_blaat (void)
 static GtkTreeModel *
 create_empty_list_blaat (void)
 {
-        GtkWidget *cellview;
+        GtkCellView *cellview;
         GtkTreeIter iter;
         GtkListStore *store;
 
@@ -101,7 +101,7 @@ create_empty_list_blaat (void)
                             1, "dialog-warning",
                             -1);
 
-        gtk_widget_destroy (cellview);
+        gtk_widget_destroy (GTK_WIDGET (cellview));
 
         return GTK_TREE_MODEL (store);
 }
@@ -111,7 +111,7 @@ populate_list_blaat (gpointer data)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (data);
   GtkListStore *store;
-  GtkWidget *cellview;
+  GtkCellView *cellview;
   GtkTreeIter iter;
   
   store = GTK_LIST_STORE (gtk_combo_box_get_model (combo_box));
@@ -153,13 +153,13 @@ populate_list_blaat (gpointer data)
 		      1, "document-open",
 		      -1);
   
-  gtk_widget_destroy (cellview);  
+  gtk_widget_destroy (GTK_WIDGET (cellview));
 }
 
 static GtkTreeModel *
 create_list_blaat (void)
 {
-        GtkWidget *cellview;
+        GtkCellView *cellview;
         GtkTreeIter iter;
         GtkListStore *store;
 
@@ -203,7 +203,7 @@ create_list_blaat (void)
                             1, "document-open",
                             -1);
 
-        gtk_widget_destroy (cellview);
+        gtk_widget_destroy (GTK_WIDGET (cellview));
 
         return GTK_TREE_MODEL (store);
 }
@@ -922,8 +922,10 @@ displayed_row_changed (GtkComboBox *combo,
 int
 main (int argc, char **argv)
 {
-        GtkWidget *window, *cellview, *mainbox;
-        GtkWidget *combobox, *comboboxtext;
+        GtkWidget *window, *mainbox;
+        GtkCellView *cellview;
+        GtkComboBox *combobox;
+        GtkComboBoxText *comboboxtext;
         GtkWidget *tmp, *boom;
         GtkCellRenderer *renderer;
         GtkTreeModel *model;
@@ -963,7 +965,7 @@ main (int argc, char **argv)
                                     renderer,
                                     TRUE);
         g_object_set (renderer, "text", "la la la", NULL);
-        gtk_container_add (GTK_CONTAINER (boom), cellview);
+        gtk_container_add (GTK_CONTAINER (boom), GTK_WIDGET (cellview));
 
         /* GtkComboBox list */
         tmp = gtk_frame_new ("GtkComboBox (list)");
@@ -975,7 +977,7 @@ main (int argc, char **argv)
         model = create_list_blaat ();
         combobox = gtk_combo_box_new_with_model (model);
         g_object_unref (model);
-        gtk_container_add (GTK_CONTAINER (boom), combobox);
+        gtk_container_add (GTK_CONTAINER (boom), GTK_WIDGET (combobox));
 
         renderer = gtk_cell_renderer_pixbuf_new ();
         gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combobox),
@@ -1000,10 +1002,10 @@ main (int argc, char **argv)
 					    renderer,
 					    set_sensitive,
 					    NULL, NULL);
-	gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (combobox),
+	gtk_combo_box_set_row_separator_func (combobox,
 					      is_separator, NULL, NULL);
 
-        gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
+        gtk_combo_box_set_active (combobox, 0);
 
         /* GtkComboBox dynamic list */
         tmp = gtk_frame_new ("GtkComboBox (dynamic list)");
@@ -1018,7 +1020,7 @@ main (int argc, char **argv)
 			  G_CALLBACK (populate_list_blaat), combobox);
 
         g_object_unref (model);
-        gtk_container_add (GTK_CONTAINER (boom), combobox);
+        gtk_container_add (GTK_CONTAINER (boom), GTK_WIDGET (combobox));
 
         renderer = gtk_cell_renderer_pixbuf_new ();
         gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combobox),
@@ -1043,10 +1045,10 @@ main (int argc, char **argv)
 					    renderer,
 					    set_sensitive,
 					    NULL, NULL);
-	gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (combobox),
+	gtk_combo_box_set_row_separator_func (combobox,
 					      is_separator, NULL, NULL);
 
-        gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
+        gtk_combo_box_set_active (combobox, 0);
 
         /* GtkComboBox custom entry */
         tmp = gtk_frame_new ("GtkComboBox (custom)");
@@ -1058,7 +1060,7 @@ main (int argc, char **argv)
         model = create_list_blaat ();
         combobox = gtk_combo_box_new_with_model (model);
         g_object_unref (model);
-        gtk_container_add (GTK_CONTAINER (boom), combobox);
+        gtk_container_add (GTK_CONTAINER (boom), GTK_WIDGET (combobox));
 
         renderer = gtk_cell_renderer_pixbuf_new ();
         gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combobox),
@@ -1083,24 +1085,24 @@ main (int argc, char **argv)
 					    renderer,
 					    set_sensitive,
 					    NULL, NULL);
-	gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (combobox), 
+	gtk_combo_box_set_row_separator_func (combobox,
 					      is_separator, NULL, NULL);
 						
-        gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
+        gtk_combo_box_set_active (combobox, 0);
 
-        tmp = gtk_cell_view_new ();
-        gtk_widget_show (tmp);
-        gtk_cell_view_set_model (GTK_CELL_VIEW (tmp), model);
+        cellview = gtk_cell_view_new ();
+        gtk_widget_show (GTK_WIDGET (cellview));
+        gtk_cell_view_set_model (cellview, model);
 
         renderer = gtk_cell_renderer_text_new ();
-        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (tmp), renderer, TRUE);
-        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (tmp), renderer,
+        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview), renderer, TRUE);
+        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (cellview), renderer,
                                         "text", 1,
                                         NULL);
-        displayed_row_changed (GTK_COMBO_BOX (combobox), GTK_CELL_VIEW (tmp));
-        g_signal_connect (combobox, "changed", G_CALLBACK (displayed_row_changed), tmp);
+        displayed_row_changed (combobox, cellview);
+        g_signal_connect (combobox, "changed", G_CALLBACK (displayed_row_changed), cellview);
 
-        gtk_container_add (GTK_CONTAINER (combobox), tmp);
+        gtk_container_add (GTK_CONTAINER (combobox), GTK_WIDGET (cellview));
 
         /* GtkComboBox tree */
         tmp = gtk_frame_new ("GtkComboBox (tree)");
@@ -1112,7 +1114,7 @@ main (int argc, char **argv)
         model = create_tree_blaat ();
         combobox = gtk_combo_box_new_with_model (model);
         g_object_unref (model);
-        gtk_container_add (GTK_CONTAINER (boom), combobox);
+        gtk_container_add (GTK_CONTAINER (boom), GTK_WIDGET (combobox));
 
         renderer = gtk_cell_renderer_pixbuf_new ();
         gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combobox),
@@ -1137,10 +1139,10 @@ main (int argc, char **argv)
 					    renderer,
 					    set_sensitive,
 					    NULL, NULL);
-	gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (combobox), 
+	gtk_combo_box_set_row_separator_func (combobox,
 					      is_separator, NULL, NULL);
 						
-        gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
+        gtk_combo_box_set_active (combobox, 0);
 #if 0
 	g_timeout_add (1000, (GSourceFunc) animation_timer, model);
 #endif
@@ -1161,8 +1163,8 @@ main (int argc, char **argv)
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
         comboboxtext = gtk_combo_box_text_new_with_entry ();
-        setup_combo_entry (GTK_COMBO_BOX_TEXT (comboboxtext));
-        gtk_container_add (GTK_CONTAINER (boom), comboboxtext);
+        setup_combo_entry (comboboxtext);
+        gtk_container_add (GTK_CONTAINER (boom), GTK_WIDGET (comboboxtext));
 
 
         /* Phylogenetic tree */
@@ -1175,7 +1177,7 @@ main (int argc, char **argv)
         model = create_phylogenetic_tree ();
         combobox = gtk_combo_box_new_with_model (model);
         g_object_unref (model);
-        gtk_container_add (GTK_CONTAINER (boom), combobox);
+        gtk_container_add (GTK_CONTAINER (boom), GTK_WIDGET (combobox));
 
         renderer = gtk_cell_renderer_text_new ();
         gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combobox),
@@ -1185,7 +1187,7 @@ main (int argc, char **argv)
                                         "text", 0,
                                         NULL);
 
-        gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
+        gtk_combo_box_set_active (combobox, 0);
 
         /* Capitals */
         tmp = gtk_frame_new ("Where are you ?");
@@ -1197,7 +1199,7 @@ main (int argc, char **argv)
         model = create_capital_tree ();
 	combobox = gtk_combo_box_new_with_model (model);
         g_object_unref (model);
-        gtk_container_add (GTK_CONTAINER (boom), combobox);
+        gtk_container_add (GTK_CONTAINER (boom), GTK_WIDGET (combobox));
         renderer = gtk_cell_renderer_text_new ();
         gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combobox),
                                     renderer,
@@ -1212,7 +1214,7 @@ main (int argc, char **argv)
 	path = gtk_tree_path_new_from_indices (0, 8, -1);
 	gtk_tree_model_get_iter (model, &iter, path);
 	gtk_tree_path_free (path);
-        gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combobox), &iter);
+        gtk_combo_box_set_active_iter (combobox, &iter);
 
 #if 1
 	g_timeout_add (1000, (GSourceFunc) capital_animation, model);
@@ -1228,7 +1230,7 @@ main (int argc, char **argv)
         model = create_food_list ();
 	combobox = gtk_combo_box_new_with_model (model);
         g_object_unref (model);
-        gtk_container_add (GTK_CONTAINER (boom), combobox);
+        gtk_container_add (GTK_CONTAINER (boom), GTK_WIDGET (combobox));
 
 	area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (combobox));
 
@@ -1250,7 +1252,7 @@ main (int argc, char **argv)
                                         "text", 1,
                                         NULL);
 
-        gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
+        gtk_combo_box_set_active (combobox, 0);
 
 	/* Ellipsizing growing combos */
         tmp = gtk_frame_new ("Unconstrained Menu");
@@ -1262,27 +1264,27 @@ main (int argc, char **argv)
 	model = create_list_long ();
 	combobox = gtk_combo_box_new_with_model (model);
         g_object_unref (model);
-        gtk_container_add (GTK_CONTAINER (boom), combobox);
+        gtk_container_add (GTK_CONTAINER (boom), GTK_WIDGET (combobox));
         renderer = gtk_cell_renderer_text_new ();
 	g_object_set (G_OBJECT (renderer), "ellipsize", PANGO_ELLIPSIZE_END, NULL);
 
         gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combobox), renderer, TRUE);
         gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combobox), renderer,
                                         "text", 0, NULL);
-        gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
-	gtk_combo_box_set_popup_fixed_width (GTK_COMBO_BOX (combobox), FALSE);
+        gtk_combo_box_set_active (combobox, 0);
+	gtk_combo_box_set_popup_fixed_width (combobox, FALSE);
 
         tmp = gtk_frame_new ("Looong");
         gtk_container_add (GTK_CONTAINER (mainbox), tmp);
-        combobox = gtk_combo_box_text_new ();
+        comboboxtext = gtk_combo_box_text_new ();
         for (i = 0; i < 200; i++)
           {
             text = g_strdup_printf ("Item %d", i);
-            gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combobox), text);
+            gtk_combo_box_text_append_text (comboboxtext, text);
             g_free (text);
           }
-        gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 53);
-        gtk_container_add (GTK_CONTAINER (tmp), combobox);
+        gtk_combo_box_set_active (GTK_COMBO_BOX (comboboxtext), 53);
+        gtk_container_add (GTK_CONTAINER (tmp), GTK_WIDGET (comboboxtext));
 
         gtk_widget_show (window);
 

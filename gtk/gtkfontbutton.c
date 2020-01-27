@@ -86,9 +86,9 @@ typedef struct
   guint         show_preview_entry : 1;
 
   GtkWidget     *button;
-  GtkWidget     *font_dialog;
-  GtkWidget     *font_label;
-  GtkWidget     *size_label;
+  GtkFontChooserDialog *font_dialog;
+  GtkLabel      *font_label;
+  GtkLabel      *size_label;
   GtkWidget     *font_size_box;
 
   PangoFontDescription *font_desc;
@@ -445,7 +445,7 @@ gtk_font_button_font_chooser_set_font_map (GtkFontChooser *chooser,
       if (!font_map)
         font_map = pango_cairo_font_map_get_default ();
 
-      context = gtk_widget_get_pango_context (priv->font_label);
+      context = gtk_widget_get_pango_context (GTK_WIDGET (priv->font_label));
       pango_context_set_font_map (context, font_map);
     }
 }
@@ -562,15 +562,15 @@ gtk_font_button_init (GtkFontButton *font_button)
   priv->button = gtk_button_new ();
   g_signal_connect (priv->button, "clicked", G_CALLBACK (gtk_font_button_clicked), font_button);
   priv->font_label = gtk_label_new (_("Font"));
-  gtk_widget_set_hexpand (priv->font_label, TRUE);
+  gtk_widget_set_hexpand (GTK_WIDGET (priv->font_label), TRUE);
   priv->size_label = gtk_label_new ("14");
   priv->font_size_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (box), priv->font_label);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (priv->font_label));
 
-  gtk_container_add (GTK_CONTAINER (priv->font_size_box), gtk_separator_new (GTK_ORIENTATION_VERTICAL));
-  gtk_container_add (GTK_CONTAINER (priv->font_size_box), priv->size_label);
+  gtk_container_add (GTK_CONTAINER (priv->font_size_box), GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_VERTICAL)));
+  gtk_container_add (GTK_CONTAINER (priv->font_size_box), GTK_WIDGET (priv->size_label));
   gtk_container_add (GTK_CONTAINER (box), priv->font_size_box);
 
   gtk_container_add (GTK_CONTAINER (priv->button), box);
@@ -603,7 +603,7 @@ gtk_font_button_finalize (GObject *object)
   GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (font_button);
 
   if (priv->font_dialog != NULL) 
-    gtk_widget_destroy (priv->font_dialog);
+    gtk_widget_destroy (GTK_WIDGET (priv->font_dialog));
 
   g_free (priv->title);
 
@@ -952,7 +952,7 @@ gtk_font_button_clicked (GtkButton *button,
                         G_CALLBACK (dialog_destroy), font_button);
     }
 
-  if (!gtk_widget_get_visible (priv->font_dialog))
+  if (!gtk_widget_get_visible (GTK_WIDGET (priv->font_dialog)))
     {
       font_dialog = GTK_FONT_CHOOSER (priv->font_dialog);
       gtk_font_chooser_set_font_desc (font_dialog, priv->font_desc);
@@ -974,7 +974,7 @@ response_cb (GtkDialog *dialog,
   GtkFontChooser *font_chooser;
   GObject *object;
 
-  gtk_widget_hide (priv->font_dialog);
+  gtk_widget_hide (GTK_WIDGET (priv->font_dialog));
 
   if (response_id != GTK_RESPONSE_OK)
     return;
@@ -1230,7 +1230,7 @@ gtk_font_button_label_use_font (GtkFontButton *font_button)
   GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (font_button);
   GtkStyleContext *context;
 
-  context = gtk_widget_get_style_context (priv->font_label);
+  context = gtk_widget_get_style_context (GTK_WIDGET (priv->font_label));
 
   if (!priv->use_font)
     {
@@ -1290,7 +1290,7 @@ gtk_font_button_update_font_info (GtkFontButton *font_button)
   else
     family_style = g_strdup (fam_name);
 
-  gtk_label_set_text (GTK_LABEL (priv->font_label), family_style);
+  gtk_label_set_text (priv->font_label, family_style);
   g_free (family_style);
 
   if ((priv->level & GTK_FONT_CHOOSER_LEVEL_SIZE) != 0)
@@ -1300,7 +1300,7 @@ gtk_font_button_update_font_info (GtkFontButton *font_button)
                                      pango_font_description_get_size (priv->font_desc) / (double)PANGO_SCALE,
                                      pango_font_description_get_size_is_absolute (priv->font_desc) ? "px" : "");
 
-      gtk_label_set_text (GTK_LABEL (priv->size_label), size);
+      gtk_label_set_text (priv->size_label, size);
 
       g_free (size);
 

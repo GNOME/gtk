@@ -284,7 +284,7 @@ GtkWidget *
 do_paintable_mediastream (GtkWidget *do_widget)
 {
   GtkMediaStream *nuclear;
-  GtkWidget *video;
+  GtkVideo *video;
 
   if (!window)
     {
@@ -298,7 +298,7 @@ do_paintable_mediastream (GtkWidget *do_widget)
       gtk_media_stream_set_loop (GTK_MEDIA_STREAM (nuclear), TRUE);
 
       video = gtk_video_new_for_media_stream (nuclear);
-      gtk_container_add (GTK_CONTAINER (window), video);
+      gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (video));
 
       g_object_unref (nuclear);
     }

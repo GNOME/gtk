@@ -81,8 +81,8 @@ variant_editor_new (const GVariantType   *type,
                     gpointer              data)
 {
   GtkWidget *editor;
-  GtkWidget *label;
-  GtkWidget *entry;
+  GtkLabel *label;
+  GtkEntry *entry;
   VariantEditorData *d;
 
   d = g_new (VariantEditorData, 1);
@@ -91,21 +91,21 @@ variant_editor_new (const GVariantType   *type,
 
   if (g_variant_type_equal (type, G_VARIANT_TYPE_BOOLEAN))
     {
-      editor = gtk_toggle_button_new_with_label ("FALSE");
+      editor = GTK_WIDGET (gtk_toggle_button_new_with_label ("FALSE"));
       g_signal_connect (editor, "notify::active", G_CALLBACK (variant_editor_changed_cb), d);
     }   
   else if (g_variant_type_equal (type, G_VARIANT_TYPE_STRING))
     {
-      editor = gtk_entry_new ();
+      editor = GTK_WIDGET (gtk_entry_new ());
       g_signal_connect (editor, "notify::text", G_CALLBACK (variant_editor_changed_cb), d);
     }
   else
     {
       editor = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       entry = gtk_entry_new ();
-      gtk_container_add (GTK_CONTAINER (editor), entry);
+      gtk_container_add (GTK_CONTAINER (editor), GTK_WIDGET (entry));
       label = gtk_label_new (g_variant_type_peek_string (type));
-      gtk_container_add (GTK_CONTAINER (editor), label);
+      gtk_container_add (GTK_CONTAINER (editor), GTK_WIDGET (label));
       g_signal_connect (entry, "notify::text", G_CALLBACK (variant_editor_changed_cb), d);
     }
 
@@ -283,7 +283,7 @@ constructed (GObject *object)
   GVariant *state;
   GtkWidget *row;
   GtkWidget *activate;
-  GtkWidget *label;
+  GtkLabel *label;
 
   r->priv->enabled = g_action_group_get_action_enabled (r->priv->group, r->priv->name);
   state = g_action_group_get_action_state (r->priv->group, r->priv->name);
@@ -314,8 +314,8 @@ constructed (GObject *object)
       r->priv->state_type = g_variant_type_copy (g_variant_get_type (state));
       row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       label = gtk_label_new (_("Set State"));
-      gtk_size_group_add_widget (r->priv->sg, label);
-      gtk_container_add (GTK_CONTAINER (row), label);
+      gtk_size_group_add_widget (r->priv->sg, GTK_WIDGET (label));
+      gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (label));
       r->priv->state_entry = variant_editor_new (r->priv->state_type, state_changed, r);
       variant_editor_set_value (r->priv->state_entry, state);
       gtk_container_add (GTK_CONTAINER (row), r->priv->state_entry);

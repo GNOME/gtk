@@ -116,8 +116,8 @@ create_controller_widget (gpointer item,
   GtkInspectorControllers *sl = user_data;
   GtkWidget *row;
   GtkWidget *box;
-  GtkWidget *label;
-  GtkWidget *combo;
+  GtkLabel *label;
+  GtkComboBoxText *combo;
 
   row = gtk_list_box_row_new ();
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
@@ -126,20 +126,20 @@ create_controller_widget (gpointer item,
   g_object_set (box, "margin", 10, NULL);
   label = gtk_label_new (G_OBJECT_TYPE_NAME (controller));
   g_object_set (label, "xalign", 0.0, NULL);
-  gtk_container_add (GTK_CONTAINER (box), label);
-  gtk_size_group_add_widget (sl->priv->sizegroup, label);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
+  gtk_size_group_add_widget (sl->priv->sizegroup, GTK_WIDGET (label));
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_BASELINE);
 
   combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_NONE, C_("event phase", "None"));
-  gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_CAPTURE, C_("event phase", "Capture"));
-  gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_BUBBLE, C_("event phase", "Bubble"));
-  gtk_combo_box_text_insert_text (GTK_COMBO_BOX_TEXT (combo), GTK_PHASE_TARGET, C_("event phase", "Target"));
+  gtk_combo_box_text_insert_text (combo, GTK_PHASE_NONE, C_("event phase", "None"));
+  gtk_combo_box_text_insert_text (combo, GTK_PHASE_CAPTURE, C_("event phase", "Capture"));
+  gtk_combo_box_text_insert_text (combo, GTK_PHASE_BUBBLE, C_("event phase", "Bubble"));
+  gtk_combo_box_text_insert_text (combo, GTK_PHASE_TARGET, C_("event phase", "Target"));
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), gtk_event_controller_get_propagation_phase (controller));
-  gtk_container_add (GTK_CONTAINER (box), combo);
-  gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (combo));
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_BASELINE);
 
   g_object_set_data (G_OBJECT (row), "controller", controller);
   g_signal_connect (combo, "changed", G_CALLBACK (phase_changed_cb), sl);

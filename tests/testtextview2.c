@@ -134,8 +134,8 @@ toggle_cursor (GtkToggleButton *button)
 }
 
 static GtkTextMark *the_mark;
-static GtkWidget *mark_check;
-static GtkWidget *mark_visible;
+static GtkCheckButton *mark_check;
+static GtkCheckButton *mark_visible;
 static GtkWidget *position_spin;
 
 static void
@@ -174,7 +174,8 @@ update_mark_position (void)
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *window, *sw, *box, *box2, *button;
+  GtkWidget *window, *sw, *box, *box2;
+  GtkToggleButton *button;
 
   gtk_init ();
 
@@ -209,11 +210,11 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (box), box2);
   mark_check = gtk_check_button_new_with_label ("Mark");
   g_signal_connect (mark_check, "notify::active", G_CALLBACK (update_mark_exists), NULL);
-  gtk_container_add (GTK_CONTAINER (box2), mark_check);
+  gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (mark_check));
   mark_visible = gtk_check_button_new_with_label ("Visible");
   g_signal_connect (mark_visible, "notify::active", G_CALLBACK (update_mark_visible), NULL);
-  gtk_container_add (GTK_CONTAINER (box2), mark_visible);
-  gtk_container_add (GTK_CONTAINER (box2), gtk_label_new ("Position:"));
+  gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (mark_visible));
+  gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (gtk_label_new ("Position:")));
   position_spin = gtk_spin_button_new_with_range (0, len, 1);  
   g_signal_connect (position_spin, "value-changed", G_CALLBACK (update_mark_position), NULL);
   gtk_container_add (GTK_CONTAINER (box2), position_spin);
@@ -224,11 +225,11 @@ main (int argc, char *argv[])
 
   button = gtk_toggle_button_new_with_label ("Random marks");
   g_signal_connect (button, "notify::active", G_CALLBACK (toggle_marks), NULL);
-  gtk_container_add (GTK_CONTAINER (box2), button);
+  gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (button));
 
   button = gtk_toggle_button_new_with_label ("Wandering cursor");
   g_signal_connect (button, "notify::active", G_CALLBACK (toggle_cursor), NULL);
-  gtk_container_add (GTK_CONTAINER (box2), button);
+  gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (button));
 
   gtk_widget_show (window);
 

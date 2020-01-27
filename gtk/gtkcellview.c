@@ -818,14 +818,14 @@ row_changed_cb (GtkTreeModel         *model,
  *
  * Returns: A newly created #GtkCellView widget.
  */
-GtkWidget *
+GtkCellView *
 gtk_cell_view_new (void)
 {
   GtkCellView *cellview;
 
   cellview = g_object_new (GTK_TYPE_CELL_VIEW, NULL);
 
-  return GTK_WIDGET (cellview);
+  return cellview;
 }
 
 
@@ -844,17 +844,17 @@ gtk_cell_view_new (void)
  *
  * Returns: A newly created #GtkCellView widget.
  */
-GtkWidget *
+GtkCellView *
 gtk_cell_view_new_with_context (GtkCellArea        *area,
 				GtkCellAreaContext *context)
 {
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
   g_return_val_if_fail (context == NULL || GTK_IS_CELL_AREA_CONTEXT (context), NULL);
 
-  return (GtkWidget *)g_object_new (GTK_TYPE_CELL_VIEW, 
-				    "cell-area", area,
-				    "cell-area-context", context,
-				    NULL);
+  return g_object_new (GTK_TYPE_CELL_VIEW,
+                       "cell-area", area,
+                       "cell-area-context", context,
+                       NULL);
 }
 
 /**
@@ -866,7 +866,7 @@ gtk_cell_view_new_with_context (GtkCellArea        *area,
  *
  * Returns: A newly created #GtkCellView widget.
  */
-GtkWidget *
+GtkCellView *
 gtk_cell_view_new_with_text (const gchar *text)
 {
   GtkCellView *cellview;
@@ -884,7 +884,7 @@ gtk_cell_view_new_with_text (const gchar *text)
   gtk_cell_view_set_value (cellview, renderer, "text", &value);
   g_value_unset (&value);
 
-  return GTK_WIDGET (cellview);
+  return cellview;
 }
 
 /**
@@ -897,7 +897,7 @@ gtk_cell_view_new_with_text (const gchar *text)
  *
  * Returns: A newly created #GtkCellView widget.
  */
-GtkWidget *
+GtkCellView *
 gtk_cell_view_new_with_markup (const gchar *markup)
 {
   GtkCellView *cellview;
@@ -915,7 +915,7 @@ gtk_cell_view_new_with_markup (const gchar *markup)
   gtk_cell_view_set_value (cellview, renderer, "markup", &value);
   g_value_unset (&value);
 
-  return GTK_WIDGET (cellview);
+  return cellview;
 }
 
 /**
@@ -927,7 +927,7 @@ gtk_cell_view_new_with_markup (const gchar *markup)
  *
  * Returns: A newly created #GtkCellView widget.
  */
-GtkWidget *
+GtkCellView *
 gtk_cell_view_new_with_texture (GdkTexture *texture)
 {
   GtkCellView *cellview;
@@ -945,7 +945,7 @@ gtk_cell_view_new_with_texture (GdkTexture *texture)
   gtk_cell_view_set_value (cellview, renderer, "texture", &value);
   g_value_unset (&value);
 
-  return GTK_WIDGET (cellview);
+  return cellview;
 }
 
 /**

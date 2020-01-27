@@ -5,7 +5,7 @@ typedef struct {
   GtkListBoxRow parent;
   GtkWidget *box;
   GtkWidget *revealer;
-  GtkWidget *check;
+  GtkCheckButton *check;
 } SelectableRow;
 
 typedef struct {
@@ -24,11 +24,11 @@ selectable_row_init (SelectableRow *row)
   g_object_set (row->check, "margin", 10, NULL);
 
   gtk_widget_show (row->box);
-  gtk_widget_show (row->check);
+  gtk_widget_show (GTK_WIDGET (row->check));
 
   gtk_container_add (GTK_CONTAINER (row), row->box);
   gtk_container_add (GTK_CONTAINER (row->box), row->revealer);
-  gtk_container_add (GTK_CONTAINER (row->revealer), row->check);
+  gtk_container_add (GTK_CONTAINER (row->revealer), GTK_WIDGET (row->check));
 }
 
 void
@@ -80,14 +80,14 @@ static void
 add_row (GtkWidget *list, gint i)
 {
   GtkWidget *row;
-  GtkWidget *label;
+  GtkLabel *label;
   gchar *text;
 
   row = selectable_row_new ();
   text = g_strdup_printf ("Docker %d", i);
   label = gtk_label_new (text);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  selectable_row_add ((SelectableRow*)row, label);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  selectable_row_add ((SelectableRow*)row, GTK_WIDGET (label));
   g_free (text);
 
   gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);

@@ -6679,6 +6679,7 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *menuitem;
+  GtkSeparator *separator;
   GdkSurfaceState state;
   gboolean maximized, minimized;
   GtkWidget *box;
@@ -6754,8 +6755,8 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
                     G_CALLBACK (maximize_window_clicked), window);
   gtk_container_add (GTK_CONTAINER (box), menuitem);
 
-  menuitem = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (separator));
 
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem,
@@ -6770,8 +6771,8 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
                     G_CALLBACK (ontop_window_clicked), window);
   gtk_container_add (GTK_CONTAINER (box), menuitem);
 
-  menuitem = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (box), menuitem);
+  separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (separator));
 
   menuitem = gtk_model_button_new ();
   g_object_set (menuitem, "text", _("Close"), NULL);
@@ -8983,7 +8984,7 @@ gtk_window_set_debugging (GdkDisplay *display,
 {
   GtkWidget *dialog = NULL;
   GtkWidget *area;
-  GtkWidget *check;
+  GtkCheckButton *check;
   GtkWidget *inspector_window;
   gboolean was_debugging;
 
@@ -9014,9 +9015,9 @@ gtk_window_set_debugging (GdkDisplay *display,
 
           area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (dialog));
           check = gtk_check_button_new_with_label (_("Don’t show this message again"));
-          gtk_widget_set_margin_start (check, 10);
-          gtk_widget_show (check);
-          gtk_container_add (GTK_CONTAINER (area), check);
+          gtk_widget_set_margin_start (GTK_WIDGET (check), 10);
+          gtk_widget_show (GTK_WIDGET (check));
+          gtk_container_add (GTK_CONTAINER (area), GTK_WIDGET (check));
           g_object_set_data (G_OBJECT (dialog), "check", check);
           gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_NO);
           gtk_dialog_add_button (GTK_DIALOG (dialog), _("_OK"), GTK_RESPONSE_YES);

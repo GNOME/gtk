@@ -40,7 +40,8 @@ static GtkWidget *
 create_axis_slider (GtkGears *gears,
                     int axis)
 {
-  GtkWidget *box, *label, *slider;
+  GtkWidget *box, *slider;
+  GtkLabel *label;
   GtkAdjustment *adj;
   const char *text;
 
@@ -65,8 +66,8 @@ create_axis_slider (GtkGears *gears,
     }
 
   label = gtk_label_new (text);
-  gtk_container_add (GTK_CONTAINER (box), label);
-  gtk_widget_show (label);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
+  gtk_widget_show (GTK_WIDGET (label));
 
   adj = gtk_adjustment_new (gtk_gears_get_axis (gears, axis), 0.0, 360.0, 1.0, 12.0, 0.0);
   g_object_set_data (G_OBJECT (adj), "axis", GINT_TO_POINTER (axis));
@@ -110,9 +111,11 @@ less_gears (GtkButton *button, gpointer data)
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *window, *box, *hbox, *button, *spinner, *check,
-    *fps_label, *gears, *extra_hbox, *bbox, *overlay,
-    *revealer, *frame, *label, *scrolled, *popover;
+  GtkWidget *window, *box, *hbox, *button, *spinner,
+    *gears, *extra_hbox, *bbox, *overlay,
+    *revealer, *frame, *scrolled, *popover;
+  GtkCheckButton *check;
+  GtkLabel *fps_label, *label;
   int i;
 
   gtk_init ();
@@ -146,8 +149,8 @@ main (int argc, char *argv[])
   gtk_widget_show (hbox);
 
   label = gtk_label_new ("This is a transparent overlay widget!!!!\nAmazing, eh?");
-  gtk_container_add (GTK_CONTAINER (hbox), label);
-  gtk_widget_show (label);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
+  gtk_widget_show (GTK_WIDGET (label));
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE);
   gtk_box_set_spacing (GTK_BOX (box), 6);
@@ -174,23 +177,23 @@ main (int argc, char *argv[])
   gtk_widget_show (hbox);
 
   fps_label = gtk_label_new ("");
-  gtk_widget_set_hexpand (fps_label, TRUE);
-  gtk_widget_set_halign (fps_label, GTK_ALIGN_START);
-  gtk_container_add (GTK_CONTAINER (hbox), fps_label);
-  gtk_gears_set_fps_label (GTK_GEARS (gears), GTK_LABEL (fps_label));
+  gtk_widget_set_hexpand (GTK_WIDGET (fps_label), TRUE);
+  gtk_widget_set_halign (GTK_WIDGET (fps_label), GTK_ALIGN_START);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (fps_label));
+  gtk_gears_set_fps_label (GTK_GEARS (gears), fps_label);
 
 
   button = gtk_menu_button_new ();
   gtk_menu_button_set_direction (GTK_MENU_BUTTON (button), GTK_ARROW_UP);
   popover = gtk_popover_new (NULL);
   label = gtk_label_new ("Popovers work too!");
-  gtk_container_add (GTK_CONTAINER (popover), label);
+  gtk_container_add (GTK_CONTAINER (popover), GTK_WIDGET (label));
 
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), popover);
   gtk_container_add (GTK_CONTAINER (hbox), button);
 
   check = gtk_check_button_new_with_label ("Overlay");
-  gtk_container_add (GTK_CONTAINER (hbox), check);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (check));
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), FALSE);
   g_signal_connect (check, "toggled",
                     G_CALLBACK (toggle_overlay), revealer);
@@ -198,7 +201,7 @@ main (int argc, char *argv[])
 
 
   check = gtk_check_button_new_with_label ("Animate spinner");
-  gtk_container_add (GTK_CONTAINER (hbox), check);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (check));
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
 
 

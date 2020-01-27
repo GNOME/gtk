@@ -116,7 +116,7 @@ typedef struct
   gint active; /* Only temporary */
   GtkTreeRowReference *active_row;
 
-  GtkWidget *cell_view;
+  GtkCellView *cell_view;
 
   GtkWidget *box;
   GtkWidget *button;
@@ -391,7 +391,7 @@ gtk_combo_box_compute_expand (GtkWidget *widget,
   GtkWidget *child;
 
   child = gtk_bin_get_child (GTK_BIN (combo_box));
-  if (child && child != priv->cell_view)
+  if (child && child != GTK_WIDGET (priv->cell_view))
     {
       *hexpand = gtk_widget_compute_expand (child, GTK_ORIENTATION_HORIZONTAL);
       *vexpand = gtk_widget_compute_expand (child, GTK_ORIENTATION_VERTICAL);
@@ -1024,15 +1024,14 @@ static void
 gtk_combo_box_create_child (GtkComboBox *combo_box)
 {
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
-  GtkWidget *child;
 
   if (priv->has_entry)
     {
-      GtkWidget *entry;
+      GtkEntry *entry;
       GtkStyleContext *context;
 
       entry = gtk_entry_new ();
-      gtk_container_add (GTK_CONTAINER (combo_box), entry);
+      gtk_container_add (GTK_CONTAINER (combo_box), GTK_WIDGET (entry));
 
       context = gtk_widget_get_style_context (GTK_WIDGET (entry));
       gtk_style_context_add_class (context, "combo");
@@ -1042,13 +1041,12 @@ gtk_combo_box_create_child (GtkComboBox *combo_box)
     }
   else
     {
-      child = gtk_cell_view_new_with_context (priv->area, NULL);
-      priv->cell_view = child;
-      gtk_widget_set_hexpand (child, TRUE);
-      gtk_cell_view_set_fit_model (GTK_CELL_VIEW (priv->cell_view), TRUE);
-      gtk_cell_view_set_model (GTK_CELL_VIEW (priv->cell_view), priv->model);
-      gtk_box_insert_child_after (GTK_BOX (gtk_widget_get_parent (priv->arrow)), priv->cell_view, NULL);
-      _gtk_bin_set_child (GTK_BIN (combo_box), priv->cell_view);
+      priv->cell_view = gtk_cell_view_new_with_context (priv->area, NULL);
+      gtk_widget_set_hexpand (GTK_WIDGET (priv->cell_view), TRUE);
+      gtk_cell_view_set_fit_model (priv->cell_view, TRUE);
+      gtk_cell_view_set_model (priv->cell_view, priv->model);
+      gtk_box_insert_child_after (GTK_BOX (gtk_widget_get_parent (priv->arrow)), GTK_WIDGET (priv->cell_view), NULL);
+      _gtk_bin_set_child (GTK_BIN (combo_box), GTK_WIDGET (priv->cell_view));
     }
 }
 
@@ -1075,8 +1073,8 @@ gtk_combo_box_add (GtkContainer *container,
 
   if (priv->cell_view)
     {
-      gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (priv->cell_view)),
-                            priv->cell_view);
+      gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (GTK_WIDGET (priv->cell_view))),
+                            GTK_WIDGET (priv->cell_view));
       _gtk_bin_set_child (GTK_BIN (container), NULL);
       priv->cell_view = NULL;
     }
@@ -1446,7 +1444,7 @@ gtk_combo_box_unset_model (GtkComboBox *combo_box)
     }
 
   if (priv->cell_view)
-    gtk_cell_view_set_model (GTK_CELL_VIEW (priv->cell_view), NULL);
+    gtk_cell_view_set_model (priv->cell_view, NULL);
 }
 
 static void
@@ -1459,7 +1457,7 @@ gtk_combo_box_forall (GtkContainer *container,
   GtkWidget *child;
 
   child = gtk_bin_get_child (GTK_BIN (container));
-  if (child && child != priv->cell_view)
+  if (child && child != GTK_WIDGET (priv->cell_view))
     (* callback) (child, callback_data);
 }
 
@@ -1748,7 +1746,7 @@ gtk_combo_box_model_row_deleted (GtkTreeModel     *model,
   if (!gtk_tree_row_reference_valid (priv->active_row))
     {
       if (priv->cell_view)
-        gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (priv->cell_view), NULL);
+        gtk_cell_view_set_displayed_row (priv->cell_view, NULL);
       g_signal_emit (combo_box, combo_box_signals[CHANGED], 0);
     }
 
@@ -1832,7 +1830,7 @@ gtk_combo_box_cell_layout_get_area (GtkCellLayout *cell_layout)
  *
  * Returns: A new #GtkComboBox.
  */
-GtkWidget *
+GtkComboBox *
 gtk_combo_box_new (void)
 {
   return g_object_new (GTK_TYPE_COMBO_BOX, NULL);
@@ -1845,7 +1843,7 @@ gtk_combo_box_new (void)
  *
  * Returns: A new #GtkComboBox.
  */
-GtkWidget *
+GtkComboBox *
 gtk_combo_box_new_with_entry (void)
 {
   return g_object_new (GTK_TYPE_COMBO_BOX, "has-entry", TRUE, NULL);
@@ -1859,7 +1857,7 @@ gtk_combo_box_new_with_entry (void)
  *
  * Returns: A new #GtkComboBox.
  */
-GtkWidget *
+GtkComboBox *
 gtk_combo_box_new_with_model (GtkTreeModel *model)
 {
   GtkComboBox *combo_box;
@@ -1868,7 +1866,7 @@ gtk_combo_box_new_with_model (GtkTreeModel *model)
 
   combo_box = g_object_new (GTK_TYPE_COMBO_BOX, "model", model, NULL);
 
-  return GTK_WIDGET (combo_box);
+  return combo_box;
 }
 
 /**
@@ -1880,7 +1878,7 @@ gtk_combo_box_new_with_model (GtkTreeModel *model)
  *
  * Returns: A new #GtkComboBox
  */
-GtkWidget *
+GtkComboBox *
 gtk_combo_box_new_with_model_and_entry (GtkTreeModel *model)
 {
   return g_object_new (GTK_TYPE_COMBO_BOX,
@@ -1990,7 +1988,7 @@ gtk_combo_box_set_active_internal (GtkComboBox *combo_box,
       gtk_tree_popover_set_active (GTK_TREE_POPOVER (priv->popup_widget), -1);
 
       if (priv->cell_view)
-        gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (priv->cell_view), NULL);
+        gtk_cell_view_set_displayed_row (priv->cell_view, NULL);
 
       /*
        *  Do not emit a "changed" signal when an already invalid selection was
@@ -2008,7 +2006,7 @@ gtk_combo_box_set_active_internal (GtkComboBox *combo_box,
                                    gtk_tree_path_get_indices (path)[0]);
 
       if (priv->cell_view)
-        gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (priv->cell_view), path);
+        gtk_cell_view_set_displayed_row (priv->cell_view, path);
     }
 
   g_signal_emit (combo_box, combo_box_signals[CHANGED], 0);
@@ -2119,7 +2117,7 @@ gtk_combo_box_set_model (GtkComboBox  *combo_box,
   gtk_tree_popover_set_model (GTK_TREE_POPOVER (priv->popup_widget), priv->model);
 
   if (priv->cell_view)
-    gtk_cell_view_set_model (GTK_CELL_VIEW (priv->cell_view),
+    gtk_cell_view_set_model (priv->cell_view,
                              priv->model);
 
   if (priv->active != -1)

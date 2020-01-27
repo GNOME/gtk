@@ -1060,7 +1060,7 @@ add_text_tests (GtkWidget *widget)
 static void
 test_bold_label (void)
 {
-  GtkWidget *label;
+  GtkLabel *label;
   AtkObject *atk_obj;
   gchar *text;
 
@@ -1069,13 +1069,13 @@ test_bold_label (void)
   label = gtk_label_new ("<b>Bold?</b>");
   g_object_ref_sink (label);
 
-  atk_obj = gtk_widget_get_accessible (label);
+  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (label));
 
   text = atk_text_get_text (ATK_TEXT (atk_obj), 0, -1);
   g_assert_cmpstr (text, ==, "<b>Bold?</b>");
   g_free (text);
 
-  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+  gtk_label_set_use_markup (label, TRUE);
 
   text = atk_text_get_text (ATK_TEXT (atk_obj), 0, -1);
   g_assert_cmpstr (text, ==, "Bold?");
@@ -1091,8 +1091,8 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/text/bold/GtkLabel", test_bold_label);
 
-  add_text_tests (gtk_label_new (""));
-  add_text_tests (gtk_text_new ());
+  add_text_tests (GTK_WIDGET (gtk_label_new ("")));
+  add_text_tests (GTK_WIDGET (gtk_text_new ()));
   add_text_tests (gtk_text_view_new ());
 
   return g_test_run ();

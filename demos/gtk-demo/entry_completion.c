@@ -38,8 +38,8 @@ do_entry_completion (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *vbox;
-  GtkWidget *label;
-  GtkWidget *entry;
+  GtkLabel *label;
+  GtkEntry *entry;
   GtkEntryCompletion *completion;
   GtkTreeModel *completion_model;
 
@@ -59,12 +59,12 @@ do_entry_completion (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label), "Completion demo, try writing <b>total</b> or <b>gnome</b> for example.");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_label_set_markup (label, "Completion demo, try writing <b>total</b> or <b>gnome</b> for example.");
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       /* Create our entry */
       entry = gtk_entry_new ();
-      gtk_container_add (GTK_CONTAINER (vbox), entry);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (entry));
 
       /* Create the completion object */
       completion = gtk_entry_completion_new ();

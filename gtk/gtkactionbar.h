@@ -35,27 +35,27 @@ G_BEGIN_DECLS
 typedef struct _GtkActionBar              GtkActionBar;
 
 GDK_AVAILABLE_IN_ALL
-GType        gtk_action_bar_get_type          (void) G_GNUC_CONST;
+GType         gtk_action_bar_get_type          (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget   *gtk_action_bar_new               (void);
+GtkActionBar *gtk_action_bar_new               (void);
 GDK_AVAILABLE_IN_ALL
-GtkWidget   *gtk_action_bar_get_center_widget (GtkActionBar *action_bar);
+GtkWidget    *gtk_action_bar_get_center_widget (GtkActionBar *action_bar);
 GDK_AVAILABLE_IN_ALL
-void         gtk_action_bar_set_center_widget (GtkActionBar *action_bar,
-                                               GtkWidget    *center_widget);
+void          gtk_action_bar_set_center_widget (GtkActionBar *action_bar,
+                                                GtkWidget    *center_widget);
 
 GDK_AVAILABLE_IN_ALL
-void         gtk_action_bar_pack_start        (GtkActionBar *action_bar,
-                                               GtkWidget    *child);
+void          gtk_action_bar_pack_start        (GtkActionBar *action_bar,
+                                                GtkWidget    *child);
 GDK_AVAILABLE_IN_ALL
-void         gtk_action_bar_pack_end          (GtkActionBar *action_bar,
-                                               GtkWidget    *child);
+void          gtk_action_bar_pack_end          (GtkActionBar *action_bar,
+                                                GtkWidget    *child);
 
 GDK_AVAILABLE_IN_ALL
-void        gtk_action_bar_set_revealed       (GtkActionBar *action_bar,
-                                               gboolean      revealed);
+void         gtk_action_bar_set_revealed       (GtkActionBar *action_bar,
+                                                gboolean      revealed);
 GDK_AVAILABLE_IN_ALL
-gboolean    gtk_action_bar_get_revealed       (GtkActionBar *action_bar);
+gboolean     gtk_action_bar_get_revealed       (GtkActionBar *action_bar);
 
 
 G_END_DECLS

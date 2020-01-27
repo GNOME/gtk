@@ -988,6 +988,7 @@ gtk_inspector_object_tree_create_list_widget (gpointer row_item,
   GtkInspectorObjectTree *wt = user_data;
   gpointer item;
   GtkWidget *row, *box, *column, *child;
+  GtkLabel *label;
   guint depth;
 
   item = gtk_tree_list_row_get_item (row_item);
@@ -1033,37 +1034,37 @@ gtk_inspector_object_tree_create_list_widget (gpointer row_item,
     }
   else
     {
-      child = gtk_image_new (); /* empty whatever */
+      child = GTK_WIDGET (gtk_image_new ()); /* empty whatever */
     }
   gtk_container_add (GTK_CONTAINER (column), child);
 
   /* 1st column: type name */
-  child = gtk_label_new (G_OBJECT_TYPE_NAME (item));
-  gtk_label_set_width_chars (GTK_LABEL (child), 30);
-  gtk_label_set_xalign (GTK_LABEL (child), 0.0);
-  gtk_container_add (GTK_CONTAINER (column), child);
+  label = gtk_label_new (G_OBJECT_TYPE_NAME (item));
+  gtk_label_set_width_chars (label, 30);
+  gtk_label_set_xalign (label, 0.0);
+  gtk_container_add (GTK_CONTAINER (column), GTK_WIDGET (label));
 
   /* 2nd column: name */
-  child = gtk_label_new (gtk_inspector_get_object_name (item));
-  gtk_label_set_width_chars (GTK_LABEL (child), 15);
-  gtk_label_set_xalign (GTK_LABEL (child), 0.0);
-  gtk_size_group_add_widget (wt->priv->name_size_group, child);
-  gtk_container_add (GTK_CONTAINER (box), child);
+  label = gtk_label_new (gtk_inspector_get_object_name (item));
+  gtk_label_set_width_chars (label, 15);
+  gtk_label_set_xalign (label, 0.0);
+  gtk_size_group_add_widget (wt->priv->name_size_group, GTK_WIDGET (label));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   /* 3rd column: label */
-  child = gtk_label_new (NULL);
+  label = gtk_label_new (NULL);
   if (GTK_IS_LABEL (item))
-    g_object_bind_property (item, "label", child, "label", G_BINDING_SYNC_CREATE);
+    g_object_bind_property (item, "label", label, "label", G_BINDING_SYNC_CREATE);
   else if (GTK_IS_BUTTON (item))
-    g_object_bind_property (item, "label", child, "label", G_BINDING_SYNC_CREATE);
+    g_object_bind_property (item, "label", label, "label", G_BINDING_SYNC_CREATE);
   else if (GTK_IS_WINDOW (item))
-    g_object_bind_property (item, "title", child, "label", G_BINDING_SYNC_CREATE);
+    g_object_bind_property (item, "title", label, "label", G_BINDING_SYNC_CREATE);
   else if (GTK_IS_TREE_VIEW_COLUMN (item))
-    g_object_bind_property (item, "title", child, "label", G_BINDING_SYNC_CREATE);
-  gtk_label_set_width_chars (GTK_LABEL (child), 15);
-  gtk_label_set_xalign (GTK_LABEL (child), 0.0);
-  gtk_size_group_add_widget (wt->priv->label_size_group, child);
-  gtk_container_add (GTK_CONTAINER (box), child);
+    g_object_bind_property (item, "title", label, "label", G_BINDING_SYNC_CREATE);
+  gtk_label_set_width_chars (label, 15);
+  gtk_label_set_xalign (label, 0.0);
+  gtk_size_group_add_widget (wt->priv->label_size_group, GTK_WIDGET (label));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
 
   g_object_unref (item);
 

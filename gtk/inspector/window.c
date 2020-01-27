@@ -82,7 +82,7 @@ set_selected_object (GtkInspectorWindow *iw,
     return FALSE;
 
   title = gtk_inspector_get_object_title (selected);
-  gtk_label_set_label (GTK_LABEL (iw->object_title), title);
+  gtk_label_set_label (iw->object_title, title);
   g_free (title);
 
   gtk_inspector_prop_list_set_layout_child (GTK_INSPECTOR_PROP_LIST (iw->layout_prop_list), selected);

@@ -83,7 +83,7 @@ struct _GtkPageSetupUnixDialogPrivate
 
   GtkWidget *printer_combo;
   GtkWidget *paper_size_combo;
-  GtkWidget *paper_size_label;
+  GtkLabel *paper_size_label;
   GtkCellRenderer *paper_size_cell;
 
   GtkWidget *portrait_radio;
@@ -778,7 +778,7 @@ paper_size_changed (GtkComboBox            *combo_box,
   GtkLabel *label;
   const gchar *unit_str;
 
-  label = GTK_LABEL (priv->paper_size_label);
+  label = priv->paper_size_label;
 
   if (gtk_combo_box_get_active_iter (combo_box, &iter))
     {
@@ -787,7 +787,7 @@ paper_size_changed (GtkComboBox            *combo_box,
 
       if (page_setup == NULL)
         {
-          GtkWidget *custom_paper_dialog;
+          GtkCustomPaperUnixDialog *custom_paper_dialog;
 
           /* Change from "manage" menu item to last value */
           if (priv->last_setup)
@@ -850,7 +850,7 @@ paper_size_changed (GtkComboBox            *combo_box,
       g_free (left);
       g_free (right);
 
-      gtk_widget_set_tooltip_text (priv->paper_size_label, str);
+      gtk_widget_set_tooltip_text (GTK_WIDGET (priv->paper_size_label), str);
       g_free (str);
 
       g_object_unref (page_setup);
@@ -858,7 +858,7 @@ paper_size_changed (GtkComboBox            *combo_box,
   else
     {
       gtk_label_set_text (label, "");
-      gtk_widget_set_tooltip_text (priv->paper_size_label, NULL);
+      gtk_widget_set_tooltip_text (GTK_WIDGET (priv->paper_size_label), NULL);
       if (priv->last_setup)
         g_object_unref (priv->last_setup);
       priv->last_setup = NULL;
@@ -897,11 +897,11 @@ page_name_func (GtkCellLayout   *cell_layout,
  *
  * Returns: the new #GtkPageSetupUnixDialog
  */
-GtkWidget *
+GtkPageSetupUnixDialog *
 gtk_page_setup_unix_dialog_new (const gchar *title,
                                 GtkWindow   *parent)
 {
-  GtkWidget *result;
+  GtkPageSetupUnixDialog *result;
 
   if (title == NULL)
     title = _("Page Setup");

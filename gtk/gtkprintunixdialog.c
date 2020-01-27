@@ -1299,20 +1299,21 @@ static GtkWidget *
 wrap_in_frame (const gchar *label,
                GtkWidget   *child)
 {
-  GtkWidget *frame, *label_widget;
+  GtkLabel *label_widget;
+  GtkWidget *frame;
   gchar *bold_text;
 
   label_widget = gtk_label_new (NULL);
-  gtk_widget_set_halign (label_widget, GTK_ALIGN_START);
-  gtk_widget_set_valign (label_widget, GTK_ALIGN_CENTER);
-  gtk_widget_show (label_widget);
+  gtk_widget_set_halign (GTK_WIDGET (label_widget), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label_widget), GTK_ALIGN_CENTER);
+  gtk_widget_show (GTK_WIDGET (label_widget));
 
   bold_text = g_markup_printf_escaped ("<b>%s</b>", label);
-  gtk_label_set_markup (GTK_LABEL (label_widget), bold_text);
+  gtk_label_set_markup (label_widget, bold_text);
   g_free (bold_text);
 
   frame = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_container_add (GTK_CONTAINER (frame), label_widget);
+  gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (label_widget));
 
   gtk_widget_set_margin_start (child, 12);
   gtk_widget_set_halign (child, GTK_ALIGN_FILL);
@@ -3337,7 +3338,7 @@ paper_size_changed (GtkComboBox        *combo_box,
 
       if (page_setup == NULL)
         {
-          GtkWidget *custom_paper_dialog;
+          GtkCustomPaperUnixDialog *custom_paper_dialog;
 
           /* Change from "manage" menu item to last value */
           if (priv->page_setup)
@@ -3418,11 +3419,11 @@ page_name_func (GtkCellLayout   *cell_layout,
  *
  * Returns: a new #GtkPrintUnixDialog
  */
-GtkWidget *
+GtkPrintUnixDialog *
 gtk_print_unix_dialog_new (const gchar *title,
                            GtkWindow   *parent)
 {
-  GtkWidget *result;
+  GtkPrintUnixDialog *result;
 
   result = g_object_new (GTK_TYPE_PRINT_UNIX_DIALOG,
                          "transient-for", parent,

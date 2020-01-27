@@ -70,17 +70,18 @@ add_separator (GtkListBoxRow *row, GtkListBoxRow *before, gpointer data)
   if (!before)
     return;
 
-  gtk_list_box_row_set_header (row, gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+  gtk_list_box_row_set_header (row, GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_HORIZONTAL)));
 }
 
 static GtkWidget *
 create_row (const gchar *text)
 {
-  GtkWidget *row, *label, *button;
+  GtkWidget *row, *button;
+  GtkLabel *label;
 
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   label = gtk_label_new (text);
-  gtk_container_add (GTK_CONTAINER (row), label);
+  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (label));
   button = gtk_button_new_with_label ("x");
   gtk_widget_set_hexpand (button, TRUE);
   gtk_widget_set_halign (button, GTK_ALIGN_END);

@@ -323,7 +323,7 @@ ensure_submenu (GtkTreePopover *popover,
           gtk_tree_model_get_iter (popover->model, &iter, path);
           item = gtk_tree_popover_create_item (popover, path, &iter, TRUE);
           gtk_container_add (GTK_CONTAINER (box), item);
-          gtk_container_add (GTK_CONTAINER (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+          gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_HORIZONTAL)));
         }
 
     }
@@ -497,9 +497,9 @@ gtk_tree_popover_get_path_item (GtkTreePopover *popover,
             }
           else
             {
-              GtkWidget *view = GTK_WIDGET (g_object_get_data (G_OBJECT (child), "view"));
+              GtkCellView *view = GTK_CELL_VIEW (g_object_get_data (G_OBJECT (child), "view"));
 
-              path = gtk_cell_view_get_displayed_row (GTK_CELL_VIEW (view));
+              path = gtk_cell_view_get_displayed_row (view);
 
               if (!path)
                 item = child;
@@ -651,7 +651,8 @@ gtk_tree_popover_create_item (GtkTreePopover *popover,
                               GtkTreeIter    *iter,
                               gboolean        header_item)
 {
-  GtkWidget *item, *view;
+  GtkWidget *item;
+  GtkCellView *view;
   gboolean is_separator = FALSE;
 
   if (popover->row_separator_func)
@@ -659,7 +660,7 @@ gtk_tree_popover_create_item (GtkTreePopover *popover,
 
   if (is_separator)
     {
-      item = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+      item = GTK_WIDGET (gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
       g_object_set_data_full (G_OBJECT (item), "gtk-tree-path",
                                                gtk_tree_row_reference_new (popover->model, path),
                                                (GDestroyNotify)gtk_tree_row_reference_free);
@@ -676,9 +677,9 @@ gtk_tree_popover_create_item (GtkTreePopover *popover,
         has_submenu = TRUE;
 
       view = gtk_cell_view_new_with_context (popover->area, popover->context);
-      gtk_cell_view_set_model (GTK_CELL_VIEW (view), popover->model);
-      gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (view), path);
-      gtk_widget_set_hexpand (view, TRUE);
+      gtk_cell_view_set_model (view, popover->model);
+      gtk_cell_view_set_displayed_row (view, path);
+      gtk_widget_set_hexpand (GTK_WIDGET (view), TRUE);
 
       item = gtk_gizmo_new ("modelbutton", NULL, NULL, NULL, NULL);
       gtk_widget_set_layout_manager (item, gtk_box_layout_new (GTK_ORIENTATION_HORIZONTAL));
@@ -691,7 +692,7 @@ gtk_tree_popover_create_item (GtkTreePopover *popover,
           gtk_widget_set_parent (indicator, item);
         }
 
-      gtk_widget_set_parent (view, item);
+      gtk_widget_set_parent (GTK_WIDGET (view), item);
 
       indicator = gtk_icon_new (has_submenu ? "arrow" : "none");
       gtk_style_context_add_class (gtk_widget_get_style_context (indicator), "right");

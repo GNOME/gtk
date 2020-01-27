@@ -33,7 +33,8 @@ on_delete (GtkWindow *w)
 static void
 prepare_window_for_orientation (GtkOrientation orientation)
 {
-  GtkWidget *window, *mainbox, *wrap_button;
+  GtkWidget *window, *mainbox;
+  GtkToggleButton *wrap_button;
   int max;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -43,7 +44,7 @@ prepare_window_for_orientation (GtkOrientation orientation)
   gtk_container_add (GTK_CONTAINER (window), mainbox);
 
   wrap_button = gtk_toggle_button_new_with_label ("Wrap");
-  gtk_container_add (GTK_CONTAINER (mainbox), wrap_button);
+  gtk_container_add (GTK_CONTAINER (mainbox), GTK_WIDGET (wrap_button));
 
   for (max = 9; max <= 999999999; max = max * 10 + 9)
     {

@@ -25,13 +25,13 @@
 #include <gtk/gtk.h>
 
 static void
-combo_changed_cb (GtkWidget *combo,
-		  gpointer   data)
+combo_changed_cb (GtkComboBox *combo,
+		  gpointer     data)
 {
   GtkWidget *label = GTK_WIDGET (data);
   gint active;
 
-  active = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
+  active = gtk_combo_box_get_active (combo);
   gtk_label_set_ellipsize (GTK_LABEL (label), (PangoEllipsizeMode)active);
 }
 
@@ -97,8 +97,10 @@ overlay_draw (GtkDrawingArea *da,
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *window, *vbox, *label;
-  GtkWidget *combo, *scale, *overlay, *da;
+  GtkWidget *window, *vbox;
+  GtkComboBoxText *combo;
+  GtkWidget *scale, *overlay, *da;
+  GtkLabel *label;
 
   gtk_init ();
 
@@ -114,14 +116,14 @@ main (int argc, char *argv[])
                                     0, 360, 1);
   label = gtk_label_new ("This label may be ellipsized\nto make it fit.");
 
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "NONE");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "START");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "MIDDLE");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "END");
+  gtk_combo_box_text_append_text (combo, "NONE");
+  gtk_combo_box_text_append_text (combo, "START");
+  gtk_combo_box_text_append_text (combo, "MIDDLE");
+  gtk_combo_box_text_append_text (combo, "END");
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
-  gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
   da = gtk_drawing_area_new ();
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), overlay_draw, label, NULL);
@@ -129,9 +131,9 @@ main (int argc, char *argv[])
   overlay = gtk_overlay_new ();
   gtk_container_add (GTK_CONTAINER (overlay), da);
   gtk_widget_set_vexpand (overlay, TRUE);
-  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), label);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), GTK_WIDGET (label));
 
-  gtk_container_add (GTK_CONTAINER (vbox), combo);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (combo));
   gtk_container_add (GTK_CONTAINER (vbox), scale);
   gtk_container_add (GTK_CONTAINER (vbox), overlay);
 

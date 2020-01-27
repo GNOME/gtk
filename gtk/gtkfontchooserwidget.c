@@ -117,7 +117,7 @@ struct _GtkFontChooserWidgetPrivate
 
   GtkWidget       *preview;
   GtkWidget       *preview2;
-  GtkWidget       *font_name_label;
+  GtkLabel        *font_name_label;
   gchar           *preview_text;
   gboolean         show_preview_entry;
 
@@ -827,7 +827,7 @@ change_tweak (GSimpleAction *action,
 typedef struct {
   guint32 tag;
   GtkAdjustment *adjustment;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *scale;
   GtkWidget *spin;
   GtkWidget *fontchooser;
@@ -857,7 +857,7 @@ axis_remove (gpointer key,
 {
   Axis *a = value;
 
-  gtk_widget_destroy (a->label);
+  gtk_widget_destroy (GTK_WIDGET (a->label));
   gtk_widget_destroy (a->scale);
   gtk_widget_destroy (a->spin);
 }
@@ -1409,10 +1409,10 @@ gtk_font_chooser_widget_update_font_name (GtkFontChooserWidget *fontchooser,
     title = g_strdup (fam_name);
 
   attrs = gtk_font_chooser_widget_get_preview_attributes (fontchooser, font_desc);
-  gtk_label_set_attributes (GTK_LABEL (priv->font_name_label), attrs);
+  gtk_label_set_attributes (priv->font_name_label, attrs);
   pango_attr_list_unref (attrs);
 
-  gtk_label_set_label (GTK_LABEL (priv->font_name_label), title);
+  gtk_label_set_label (priv->font_name_label, title);
   g_free (title);
 }
 
@@ -1582,9 +1582,9 @@ add_axis (GtkFontChooserWidget  *fontchooser,
 
   axis->label = gtk_label_new (name);
 
-  gtk_widget_set_halign (axis->label, GTK_ALIGN_START);
-  gtk_widget_set_valign (axis->label, GTK_ALIGN_BASELINE);
-  gtk_grid_attach (GTK_GRID (priv->axis_grid), axis->label, 0, row, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (axis->label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (axis->label), GTK_ALIGN_BASELINE);
+  gtk_grid_attach (GTK_GRID (priv->axis_grid), GTK_WIDGET (axis->label), 0, row, 1, 1);
   axis->adjustment = gtk_adjustment_new ((double)value,
                                          (double)ax->min_value,
                                          (double)ax->max_value,
@@ -1607,7 +1607,7 @@ add_axis (GtkFontChooserWidget  *fontchooser,
   g_signal_connect (axis->adjustment, "value-changed", G_CALLBACK (adjustment_changed), axis);
   if (is_named_instance (hb_font) || !should_show_axis (ax))
     {
-      gtk_widget_hide (axis->label);
+      gtk_widget_hide (GTK_WIDGET (axis->label));
       gtk_widget_hide (axis->scale);
       gtk_widget_hide (axis->spin);
 
@@ -1749,7 +1749,7 @@ typedef struct {
   const char *name;
   GtkWidget *top;
   GtkWidget *feat;
-  GtkWidget *example;
+  GtkLabel *example;
 } FeatureItem;
 
 static const char *
@@ -1917,8 +1917,8 @@ update_feature_example (FeatureItem          *item,
       attr = pango_attr_font_features_new (str);
       pango_attr_list_insert (attrs, attr);
 
-      gtk_label_set_text (GTK_LABEL (item->example), "0123456789");
-      gtk_label_set_attributes (GTK_LABEL (item->example), attrs);
+      gtk_label_set_text (item->example, "0123456789");
+      gtk_label_set_attributes (item->example, attrs);
 
       pango_attr_list_unref (attrs);
     }
@@ -1968,14 +1968,14 @@ update_feature_example (FeatureItem          *item,
           attr->end_index = attr->start_index + strlen (input);
           pango_attr_list_insert (attrs, attr);
 
-          gtk_label_set_text (GTK_LABEL (item->example), text);
-          gtk_label_set_attributes (GTK_LABEL (item->example), attrs);
+          gtk_label_set_text (item->example, text);
+          gtk_label_set_attributes (item->example, attrs);
 
           g_free (text);
           pango_attr_list_unref (attrs);
         }
       else
-        gtk_label_set_markup (GTK_LABEL (item->example), "");
+        gtk_label_set_markup (item->example, "");
       g_free (input);
     }
 }
@@ -1986,7 +1986,7 @@ add_check_group (GtkFontChooserWidget *fontchooser,
                  const char **tags)
 {
   GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *group;
   PangoAttrList *attrs;
   int i;
@@ -1995,28 +1995,28 @@ add_check_group (GtkFontChooserWidget *fontchooser,
   gtk_widget_set_halign (group, GTK_ALIGN_FILL);
 
   label = gtk_label_new (title);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_label_set_xalign (label, 0.0);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
   g_object_set (label, "margin-top", 10, "margin-bottom", 10, NULL);
   attrs = pango_attr_list_new ();
   pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
+  gtk_label_set_attributes (label, attrs);
   pango_attr_list_unref (attrs);
-  gtk_container_add (GTK_CONTAINER (group), label);
+  gtk_container_add (GTK_CONTAINER (group), GTK_WIDGET (label));
 
   for (i = 0; tags[i]; i++)
     {
       hb_tag_t tag;
-      GtkWidget *feat;
+      GtkCheckButton *feat;
       FeatureItem *item;
       GtkGesture *gesture;
       GtkWidget *box;
-      GtkWidget *example;
+      GtkLabel *example;
 
       tag = hb_tag_from_string (tags[i], -1);
 
       feat = gtk_check_button_new_with_label (get_feature_display_name (tag));
-      set_inconsistent (GTK_CHECK_BUTTON (feat), TRUE);
+      set_inconsistent (feat, TRUE);
       g_signal_connect_swapped (feat, "notify::active", G_CALLBACK (update_font_features), fontchooser);
       g_signal_connect_swapped (feat, "notify::inconsistent", G_CALLBACK (update_font_features), fontchooser);
       g_signal_connect (feat, "clicked", G_CALLBACK (feat_clicked), NULL);
@@ -2024,23 +2024,23 @@ add_check_group (GtkFontChooserWidget *fontchooser,
       gesture = gtk_gesture_click_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
       g_signal_connect (gesture, "pressed", G_CALLBACK (feat_pressed), feat);
-      gtk_widget_add_controller (feat, GTK_EVENT_CONTROLLER (gesture));
+      gtk_widget_add_controller (GTK_WIDGET (feat), GTK_EVENT_CONTROLLER (gesture));
 
       example = gtk_label_new ("");
-      gtk_label_set_selectable (GTK_LABEL (example), TRUE);
-      gtk_widget_set_halign (example, GTK_ALIGN_START);
+      gtk_label_set_selectable (example, TRUE);
+      gtk_widget_set_halign (GTK_WIDGET (example), GTK_ALIGN_START);
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
-      gtk_container_add (GTK_CONTAINER (box), feat);
-      gtk_container_add (GTK_CONTAINER (box), example);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (feat));
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (example));
       gtk_container_add (GTK_CONTAINER (group), box);
 
       item = g_new (FeatureItem, 1);
       item->name = tags[i];
       item->tag = tag;
       item->top = box;
-      item->feat = feat;
+      item->feat = GTK_WIDGET (feat);
       item->example = example;
 
       priv->feature_items = g_list_prepend (priv->feature_items, item);
@@ -2055,7 +2055,7 @@ add_radio_group (GtkFontChooserWidget *fontchooser,
                  const char **tags)
 {
   GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *group;
   int i;
   GtkWidget *group_button = NULL;
@@ -2065,14 +2065,14 @@ add_radio_group (GtkFontChooserWidget *fontchooser,
   gtk_widget_set_halign (group, GTK_ALIGN_FILL);
 
   label = gtk_label_new (title);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_label_set_xalign (label, 0.0);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
   g_object_set (label, "margin-top", 10, "margin-bottom", 10, NULL);
   attrs = pango_attr_list_new ();
   pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
+  gtk_label_set_attributes (label, attrs);
   pango_attr_list_unref (attrs);
-  gtk_container_add (GTK_CONTAINER (group), label);
+  gtk_container_add (GTK_CONTAINER (group), GTK_WIDGET (label));
 
   for (i = 0; tags[i]; i++)
     {
@@ -2081,7 +2081,7 @@ add_radio_group (GtkFontChooserWidget *fontchooser,
       FeatureItem *item;
       const char *name;
       GtkWidget *box;
-      GtkWidget *example;
+      GtkLabel *example;
 
       tag = hb_tag_from_string (tags[i], -1);
       name = get_feature_display_name (tag);
@@ -2095,13 +2095,13 @@ add_radio_group (GtkFontChooserWidget *fontchooser,
       g_object_set_data (G_OBJECT (feat), "default", group_button);
 
       example = gtk_label_new ("");
-      gtk_label_set_selectable (GTK_LABEL (example), TRUE);
-      gtk_widget_set_halign (example, GTK_ALIGN_START);
+      gtk_label_set_selectable (example, TRUE);
+      gtk_widget_set_halign (GTK_WIDGET (example), GTK_ALIGN_START);
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
       gtk_container_add (GTK_CONTAINER (box), feat);
-      gtk_container_add (GTK_CONTAINER (box), example);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (example));
       gtk_container_add (GTK_CONTAINER (group), box);
 
       item = g_new (FeatureItem, 1);

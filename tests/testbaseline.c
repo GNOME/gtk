@@ -55,7 +55,7 @@ image_size_value_changed (GtkSpinButton *spin_button,
 {
   gint size = gtk_spin_button_get_value_as_int (spin_button);
 
-  gtk_image_set_pixel_size (GTK_IMAGE (image), size);
+  gtk_image_set_pixel_size (image, size);
 }
 
 static void
@@ -70,8 +70,14 @@ int
 main (int    argc,
       char **argv)
 {
-  GtkWidget *window, *label, *entry, *button, *grid, *notebook;
-  GtkWidget *vbox, *hbox, *grid_hbox, *spin, *spin2, *toggle, *combo, *image;
+  GtkWidget *window, *button, *grid, *notebook;
+  GtkToggleButton *toggle_button;
+  GtkCheckButton *check;
+  GtkEntry *entry;
+  GtkWidget *vbox, *hbox, *grid_hbox, *spin, *spin2, *toggle;
+  GtkImage *image;
+  GtkComboBoxText *combo;
+  GtkLabel *label;
   GtkAdjustment *adjustment;
   int i, j;
   GtkCssProvider *provider;
@@ -95,7 +101,7 @@ main (int    argc,
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
-			    vbox, gtk_label_new ("hboxes"));
+			    vbox, GTK_WIDGET (gtk_label_new ("hboxes")));
 
   for (j = 0; j < 2; j++)
     {
@@ -106,27 +112,27 @@ main (int    argc,
       GtkAlign aligns[] = { GTK_ALIGN_FILL, GTK_ALIGN_BASELINE};
 
       label = gtk_label_new (aligns_names[j]);
-      gtk_container_add (GTK_CONTAINER (hbox), label);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
       for (i = 0; i < 3; i++) {
 	label = gtk_label_new ("│XYyj,Ö...");
 
-        set_font_size (label, i);
+        set_font_size (GTK_WIDGET (label), i);
 
-	gtk_widget_set_valign (label, aligns[j]);
+	gtk_widget_set_valign (GTK_WIDGET (label), aligns[j]);
 
-	gtk_container_add (GTK_CONTAINER (hbox), label);
+	gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
       }
 
       for (i = 0; i < 3; i++) {
 	entry = gtk_entry_new ();
 	gtk_editable_set_text (GTK_EDITABLE (entry), "│XYyj,Ö...");
 
-        set_font_size (entry, i);
+        set_font_size (GTK_WIDGET (entry), i);
 
-	gtk_widget_set_valign (entry, aligns[j]);
+	gtk_widget_set_valign (GTK_WIDGET (entry), aligns[j]);
 
-	gtk_container_add (GTK_CONTAINER (hbox), entry);
+	gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (entry));
       }
 
       spin = gtk_spin_button_new (NULL, 0, 1);
@@ -143,11 +149,11 @@ main (int    argc,
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
   combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), baseline_pos_str[0]);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), baseline_pos_str[1]);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), baseline_pos_str[2]);
+  gtk_combo_box_text_append_text (combo, baseline_pos_str[0]);
+  gtk_combo_box_text_append_text (combo, baseline_pos_str[1]);
+  gtk_combo_box_text_append_text (combo, baseline_pos_str[2]);
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 1);
-  gtk_container_add (GTK_CONTAINER (hbox), combo);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (combo));
 
   for (j = 0; j < 2; j++)
     {
@@ -161,7 +167,7 @@ main (int    argc,
 	label = gtk_label_new ("Baseline:");
       else
 	label = gtk_label_new ("Normal:");
-      gtk_container_add (GTK_CONTAINER (hbox), label);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
       for (i = 0; i < 3; i++)
 	{
@@ -180,8 +186,8 @@ main (int    argc,
           GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL,  6);
           button = gtk_button_new ();
 
-          gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("│Xyj,Ö"));
-          gtk_container_add (GTK_CONTAINER (box), gtk_image_new_from_icon_name ("face-sad"));
+          gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_label_new ("│Xyj,Ö")));
+          gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_image_new_from_icon_name ("face-sad")));
           gtk_container_add (GTK_CONTAINER (button), box);
 
           set_font_size (button, i);
@@ -193,25 +199,25 @@ main (int    argc,
 	}
 
       image = gtk_image_new_from_icon_name ("face-sad");
-      gtk_image_set_pixel_size (GTK_IMAGE (image), 34);
+      gtk_image_set_pixel_size (image, 34);
       if (j == 0)
-	gtk_widget_set_valign (image, GTK_ALIGN_BASELINE);
-      gtk_container_add (GTK_CONTAINER (hbox), image);
+	gtk_widget_set_valign (GTK_WIDGET (image), GTK_ALIGN_BASELINE);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (image));
 
-      button = gtk_toggle_button_new_with_label ("│Xyj,Ö");
+      toggle_button = gtk_toggle_button_new_with_label ("│Xyj,Ö");
       if (j == 0)
-	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
-      gtk_container_add (GTK_CONTAINER (hbox), button);
+	gtk_widget_set_valign (GTK_WIDGET (toggle_button), GTK_ALIGN_BASELINE);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (toggle_button));
 
-      button = gtk_toggle_button_new_with_label ("│Xyj,Ö");
+      toggle_button = gtk_toggle_button_new_with_label ("│Xyj,Ö");
       if (j == 0)
-	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
-      gtk_container_add (GTK_CONTAINER (hbox), button);
+	gtk_widget_set_valign (GTK_WIDGET (toggle_button), GTK_ALIGN_BASELINE);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (toggle_button));
 
-      button = gtk_check_button_new_with_label ("│Xyj,Ö");
+      check = gtk_check_button_new_with_label ("│Xyj,Ö");
       if (j == 0)
-	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
-      gtk_container_add (GTK_CONTAINER (hbox), button);
+	gtk_widget_set_valign (GTK_WIDGET (check), GTK_ALIGN_BASELINE);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (check));
 
       button = gtk_radio_button_new_with_label (NULL, "│Xyj,Ö");
       if (j == 0)
@@ -222,15 +228,15 @@ main (int    argc,
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
-			    vbox, gtk_label_new ("grid"));
+			    vbox, GTK_WIDGET (gtk_label_new ("grid")));
 
   grid_hbox = hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
   label = gtk_label_new ("Align me:");
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_BASELINE);
 
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
   grid = gtk_grid_new ();
   gtk_widget_set_valign (grid, GTK_ALIGN_BASELINE);
@@ -243,10 +249,10 @@ main (int    argc,
       label = gtk_label_new (labels[j]);
 
       gtk_grid_attach (GTK_GRID (grid),
-		       label,
+		       GTK_WIDGET (label),
 		       0, j,
 		       1, 1);
-      gtk_widget_set_vexpand (label, TRUE);
+      gtk_widget_set_vexpand (GTK_WIDGET (label), TRUE);
 
       if (j != 0)
 	gtk_grid_set_row_baseline_position (GTK_GRID (grid),
@@ -256,13 +262,13 @@ main (int    argc,
 	{
 	  label = gtk_label_new ("Xyjg,Ö.");
 
-          set_font_size (label, i);
+          set_font_size (GTK_WIDGET (label), i);
 
 	  if (j != 0)
-	    gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+	    gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_BASELINE);
 
 	  gtk_grid_attach (GTK_GRID (grid),
-			   label,
+			   GTK_WIDGET (label),
 			   i+1, j,
 			   1, 1);
 	}
@@ -272,8 +278,8 @@ main (int    argc,
           GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL,  6);
           button = gtk_button_new ();
 
-          gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("│Xyj,Ö"));
-          gtk_container_add (GTK_CONTAINER (box), gtk_image_new_from_icon_name ("face-sad"));
+          gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_label_new ("│Xyj,Ö")));
+          gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_image_new_from_icon_name ("face-sad")));
           gtk_container_add (GTK_CONTAINER (button), box);
 
           set_font_size (button, i);
@@ -304,17 +310,17 @@ main (int    argc,
   gtk_container_add (GTK_CONTAINER (hbox), toggle);
 
   combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), baseline_pos_str[0]);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), baseline_pos_str[1]);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), baseline_pos_str[2]);
+  gtk_combo_box_text_append_text (combo, baseline_pos_str[0]);
+  gtk_combo_box_text_append_text (combo, baseline_pos_str[1]);
+  gtk_combo_box_text_append_text (combo, baseline_pos_str[2]);
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 1);
   g_signal_connect (G_OBJECT (combo), "changed",
 		    G_CALLBACK (baseline_position_changed), grid_hbox);
-  gtk_container_add (GTK_CONTAINER (hbox), combo);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (combo));
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
-			    vbox, gtk_label_new ("button box"));
+			    vbox, GTK_WIDGET (gtk_label_new ("button box")));
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
@@ -335,12 +341,12 @@ main (int    argc,
       gtk_box_set_baseline_position (GTK_BOX (hbox), j);
 
       label = gtk_label_new (baseline_pos_str[j]);
-      gtk_container_add (GTK_CONTAINER (hbox), label);
-      gtk_widget_set_vexpand (label, TRUE);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
+      gtk_widget_set_vexpand (GTK_WIDGET (label), TRUE);
 
       image = gtk_image_new_from_icon_name ("face-sad");
-      gtk_image_set_pixel_size (GTK_IMAGE (image), 34);
-      gtk_container_add (GTK_CONTAINER (hbox), image);
+      gtk_image_set_pixel_size (image, 34);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (image));
 
       g_signal_connect (spin, "value-changed", (GCallback)image_size_value_changed, image);
 
@@ -361,10 +367,10 @@ main (int    argc,
           GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL,  6);
           button = gtk_button_new ();
 
-          gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("│Xyj,Ö"));
+          gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (gtk_label_new ("│Xyj,Ö")));
           image = gtk_image_new_from_icon_name ("face-sad");
-          gtk_image_set_pixel_size (GTK_IMAGE (image), 16);
-          gtk_container_add (GTK_CONTAINER (box), image);
+          gtk_image_set_pixel_size (image, 16);
+          gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (image));
           gtk_container_add (GTK_CONTAINER (button), box);
 
 	  if (i == 0)

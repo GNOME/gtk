@@ -69,7 +69,7 @@
  * #GtkFileChooserDialog to select a file for opening:
  *
  * |[
- * GtkWidget *dialog;
+ * GtkFileChooserDialog *dialog;
  * GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
  * gint res;
  *
@@ -92,13 +92,13 @@
  *     g_free (filename);
  *   }
  *
- * gtk_widget_destroy (dialog);
+ * gtk_widget_destroy (GTK_WIDGET (dialog));
  * ]|
  *
  * To use a dialog for saving, you can use this:
  *
  * |[
- * GtkWidget *dialog;
+ * GtkFileChooserDialog *dialog;
  * GtkFileChooser *chooser;
  * GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
  * gint res;
@@ -132,7 +132,7 @@
  *     g_free (filename);
  *   }
  *
- * gtk_widget_destroy (dialog);
+ * gtk_widget_destroy (GTK_WIDGET (dialog));
  * ]|
  *
  * ## Setting up a file chooser dialog ## {#gtkfilechooserdialog-setting-up}
@@ -168,7 +168,7 @@
  * could call gtk_file_chooser_dialog_new() as follows:
  *
  * |[
- * GtkWidget *dialog;
+ * GtkFileChooserDialog *dialog;
  * GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
  *
  * dialog = gtk_file_chooser_dialog_new ("Open File",
@@ -480,17 +480,17 @@ setup_search (GtkFileChooserDialog *dialog)
   g_object_get (dialog, "use-header-bar", &use_header, NULL);
   if (use_header)
     {
-      GtkWidget *button;
+      GtkToggleButton *button;
       GtkWidget *header;
 
       button = gtk_toggle_button_new ();
-      gtk_widget_set_focus_on_click (button, FALSE);
-      gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+      gtk_widget_set_focus_on_click (GTK_WIDGET (button), FALSE);
+      gtk_widget_set_valign (GTK_WIDGET (button), GTK_ALIGN_CENTER);
       gtk_button_set_icon_name (GTK_BUTTON (button), "edit-find-symbolic");
-      gtk_widget_show (button);
+      gtk_widget_show (GTK_WIDGET (button));
 
       header = gtk_dialog_get_header_bar (GTK_DIALOG (dialog));
-      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), GTK_WIDGET (button));
 
       g_object_bind_property (button, "active",
                               priv->widget, "search-mode",
@@ -528,7 +528,7 @@ setup_save_entry (GtkFileChooserDialog *dialog)
   if (need_entry && !priv->has_entry)
     {
       GtkWidget *box;
-      GtkWidget *label;
+      GtkLabel *label;
       GtkWidget *entry;
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -536,9 +536,9 @@ setup_save_entry (GtkFileChooserDialog *dialog)
       entry = _gtk_file_chooser_entry_new (FALSE, FALSE);
       g_object_set (label, "margin-start", 6, "margin-end", 6, NULL);
       g_object_set (entry, "margin-start", 6, "margin-end", 6, NULL);
-      gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-      gtk_container_add (GTK_CONTAINER (box), label);
-      gtk_container_add (GTK_CONTAINER (box), entry);
+      gtk_label_set_mnemonic_widget (label, entry);
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
+      gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (entry));
 
       gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header), box);
       gtk_file_chooser_widget_set_save_entry (GTK_FILE_CHOOSER_WIDGET (priv->widget), entry);
@@ -644,14 +644,14 @@ response_cb (GtkDialog *dialog,
   priv->response_requested = FALSE;
 }
 
-static GtkWidget *
+static GtkFileChooserDialog *
 gtk_file_chooser_dialog_new_valist (const gchar          *title,
                                     GtkWindow            *parent,
                                     GtkFileChooserAction  action,
                                     const gchar          *first_button_text,
                                     va_list               varargs)
 {
-  GtkWidget *result;
+  GtkFileChooserDialog *result;
   const char *button_text = first_button_text;
   gint response_id;
 
@@ -686,14 +686,14 @@ gtk_file_chooser_dialog_new_valist (const gchar          *title,
  *
  * Returns: a new #GtkFileChooserDialog
  **/
-GtkWidget *
+GtkFileChooserDialog *
 gtk_file_chooser_dialog_new (const gchar          *title,
                              GtkWindow            *parent,
                              GtkFileChooserAction  action,
                              const gchar          *first_button_text,
                              ...)
 {
-  GtkWidget *result;
+  GtkFileChooserDialog *result;
   va_list varargs;
 
   va_start (varargs, first_button_text);

@@ -91,14 +91,14 @@ toggle_long_content_row (GtkToggleButton *button,
 }
 
 static void
-combo_box_changed (GtkComboBox *combo_box,
-                   gpointer     user_data)
+combo_box_changed (GtkComboBoxText *combo_box,
+                   gpointer         user_data)
 {
   gchar *str;
   GList *list;
   GList *columns;
 
-  str = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (combo_box));
+  str = gtk_combo_box_text_get_active_text (combo_box);
   if (!str)
     return;
 
@@ -165,10 +165,10 @@ main (int argc, char **argv)
   int i;
   GtkWidget *window;
   GtkWidget *vbox;
-  GtkWidget *combo_box;
+  GtkComboBoxText *combo_box;
   GtkWidget *sw;
   GtkWidget *tree_view;
-  GtkWidget *button;
+  GtkToggleButton *button;
 
   gtk_init ();
 
@@ -183,14 +183,14 @@ main (int argc, char **argv)
   /* Option menu contents */
   combo_box = gtk_combo_box_text_new ();
 
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), NO_EXPAND);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), SINGLE_EXPAND);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), MULTI_EXPAND);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), LAST_EXPAND);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), BORDER_EXPAND);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), ALL_EXPAND);
+  gtk_combo_box_text_append_text (combo_box, NO_EXPAND);
+  gtk_combo_box_text_append_text (combo_box, SINGLE_EXPAND);
+  gtk_combo_box_text_append_text (combo_box, MULTI_EXPAND);
+  gtk_combo_box_text_append_text (combo_box, LAST_EXPAND);
+  gtk_combo_box_text_append_text (combo_box, BORDER_EXPAND);
+  gtk_combo_box_text_append_text (combo_box, ALL_EXPAND);
 
-  gtk_container_add (GTK_CONTAINER (vbox), combo_box);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (combo_box));
 
   /* Scrolled window and tree view */
   sw = gtk_scrolled_window_new (NULL, NULL);
@@ -221,7 +221,7 @@ main (int argc, char **argv)
   button = gtk_toggle_button_new_with_label ("Toggle long content row");
   g_signal_connect (button, "toggled",
                     G_CALLBACK (toggle_long_content_row), tree_view);
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (button));
 
   /* Set up option menu callback and default item */
   g_signal_connect (combo_box, "changed",

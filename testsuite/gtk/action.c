@@ -150,7 +150,7 @@ static void
 test_text (void)
 {
   GtkWidget *box;
-  GtkWidget *text;
+  GtkText *text;
   GSimpleActionGroup *clipboard_actions;
   GActionEntry clipboard_entries[] = {
     { "cut", cut_activate, NULL, NULL, NULL },
@@ -160,7 +160,7 @@ test_text (void)
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   text = gtk_text_new ();
 
-  gtk_container_add (GTK_CONTAINER (box), text);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (text));
 
   clipboard_actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (clipboard_actions),
@@ -170,9 +170,9 @@ test_text (void)
 
   gtk_widget_insert_action_group (box, "clipboard", G_ACTION_GROUP (clipboard_actions));
 
-  gtk_widget_activate_action (text, "cut.clipboard", NULL);
-  gtk_widget_activate_action (text, "copy.clipboard", NULL);
-  gtk_widget_activate_action (text, "paste.clipboard", NULL);
+  gtk_widget_activate_action (GTK_WIDGET (text), "cut.clipboard", NULL);
+  gtk_widget_activate_action (GTK_WIDGET (text), "copy.clipboard", NULL);
+  gtk_widget_activate_action (GTK_WIDGET (text), "paste.clipboard", NULL);
 
   g_assert_cmpint (cut_activated, ==, 0);
   g_assert_cmpint (copy_activated, ==, 0);
@@ -181,7 +181,7 @@ test_text (void)
   g_signal_connect (text, "notify::visibility",
                     G_CALLBACK (visibility_changed_cb), NULL);
 
-  gtk_widget_activate_action (text, "misc.toggle-visibility", NULL);
+  gtk_widget_activate_action (GTK_WIDGET (text), "misc.toggle-visibility", NULL);
 
   g_assert_cmpint (visibility_changed, ==, 1);
 
@@ -282,8 +282,8 @@ activate2 (GSimpleAction *action,
 static void
 test_overlap2 (void)
 {
-  GtkWidget *text;
-  GtkWidget *child;
+  GtkText *text;
+  GtkLabel *child;
   GSimpleActionGroup *group1;
   GSimpleActionGroup *group2;
   GActionEntry entries1[] = {
@@ -298,13 +298,13 @@ test_overlap2 (void)
                     G_CALLBACK (visibility_toggled), NULL);
 
   child = gtk_label_new ("");
-  gtk_widget_set_parent (child, text);
+  gtk_widget_set_parent (GTK_WIDGET (child), GTK_WIDGET (text));
 
   g_assert_cmpint (toggled, ==, 0);
   g_assert_cmpint (act1, ==, 0);
   g_assert_cmpint (act2, ==, 0);
 
-  gtk_widget_activate_action (child, "misc.toggle-visibility", NULL);
+  gtk_widget_activate_action (GTK_WIDGET (child), "misc.toggle-visibility", NULL);
 
   g_assert_cmpint (toggled, ==, 1);
   g_assert_cmpint (act1, ==, 0);
@@ -315,8 +315,8 @@ test_overlap2 (void)
                                    entries1,
                                    G_N_ELEMENTS (entries1),
                                    NULL);
-  gtk_widget_insert_action_group (text, "misc", G_ACTION_GROUP (group1));
-  gtk_widget_activate_action (child, "misc.toggle-visibility", NULL);
+  gtk_widget_insert_action_group (GTK_WIDGET (text), "misc", G_ACTION_GROUP (group1));
+  gtk_widget_activate_action (GTK_WIDGET (child), "misc.toggle-visibility", NULL);
 
   g_assert_cmpint (toggled, ==, 2);
   g_assert_cmpint (act1, ==, 0);
@@ -327,15 +327,15 @@ test_overlap2 (void)
                                    entries2,
                                    G_N_ELEMENTS (entries2),
                                    NULL);
-  gtk_widget_insert_action_group (child, "misc", G_ACTION_GROUP (group2));
+  gtk_widget_insert_action_group (GTK_WIDGET (child), "misc", G_ACTION_GROUP (group2));
 
-  gtk_widget_activate_action (child, "misc.toggle-visibility", NULL);
+  gtk_widget_activate_action (GTK_WIDGET (child), "misc.toggle-visibility", NULL);
 
   g_assert_cmpint (toggled, ==, 2);
   g_assert_cmpint (act1, ==, 0);
   g_assert_cmpint (act2, ==, 1);
 
-  gtk_widget_destroy (text);
+  gtk_widget_destroy (GTK_WIDGET (text));
   g_object_unref (group1);
   g_object_unref (group2);
 }
@@ -394,7 +394,7 @@ test_introspection (void)
 static void
 test_enabled (void)
 {
-  GtkWidget *text;
+  GtkText *text;
 
   text = gtk_text_new ();
   g_signal_connect (text, "notify::visibility",
@@ -402,17 +402,17 @@ test_enabled (void)
 
   toggled = 0;
 
-  gtk_widget_activate_action (text, "misc.toggle-visibility", NULL);
+  gtk_widget_activate_action (GTK_WIDGET (text), "misc.toggle-visibility", NULL);
 
   g_assert_cmpint (toggled, ==, 1);
 
-  gtk_widget_action_set_enabled (text, "misc.toggle-visibility", FALSE);
+  gtk_widget_action_set_enabled (GTK_WIDGET (text), "misc.toggle-visibility", FALSE);
 
-  gtk_widget_activate_action (text, "misc.toggle-visibility", NULL);
+  gtk_widget_activate_action (GTK_WIDGET (text), "misc.toggle-visibility", NULL);
 
   g_assert_cmpint (toggled, ==, 1);
 
-  gtk_widget_destroy (text);
+  gtk_widget_destroy (GTK_WIDGET (text));
 }
 
 int

@@ -24,9 +24,10 @@
 static GtkWidget *toplevel;
 static GFile *file;
 static GtkWidget *grid, *file_l, *open;
-static GtkWidget *radio_file, *radio_content, *dialog;
+static GtkWidget *radio_file, *radio_content;
+static GtkAppChooserDialog *dialog;
 static GtkWidget *app_chooser_widget;
-static GtkWidget *def, *recommended, *fallback, *other, *all;
+static GtkCheckButton *def, *recommended, *fallback, *other, *all;
 
 static void
 dialog_response (GtkDialog *d,
@@ -105,14 +106,14 @@ prepare_dialog (void)
                                                             0, content_type);
     }
 
-  gtk_app_chooser_dialog_set_heading (GTK_APP_CHOOSER_DIALOG (dialog), "Select one already, you <i>fool</i>");
+  gtk_app_chooser_dialog_set_heading (dialog, "Select one already, you <i>fool</i>");
 
   g_signal_connect (dialog, "response",
                     G_CALLBACK (dialog_response), NULL);
 
   g_free (content_type);
 
-  app_chooser_widget = gtk_app_chooser_dialog_get_widget (GTK_APP_CHOOSER_DIALOG (dialog));
+  app_chooser_widget = gtk_app_chooser_dialog_get_widget (dialog);
   bind_props ();
 }
 
@@ -122,14 +123,14 @@ display_dialog (void)
   if (dialog == NULL)
     prepare_dialog ();
 
-  gtk_widget_show (dialog);
+  gtk_widget_show (GTK_WIDGET (dialog));
 }
 
 static void
 button_clicked (GtkButton *b,
                 gpointer   user_data)
 {
-  GtkWidget *w;
+  GtkFileChooserDialog *w;
   gchar *path;
 
   w = gtk_file_chooser_dialog_new ("Select file",
@@ -144,7 +145,7 @@ button_clicked (GtkButton *b,
   path = g_file_get_path (file);
   gtk_button_set_label (GTK_BUTTON (file_l), path);
 
-  gtk_widget_destroy (w);
+  gtk_widget_destroy (GTK_WIDGET (w));
 
   gtk_widget_set_sensitive (open, TRUE);
 
@@ -154,7 +155,7 @@ button_clicked (GtkButton *b,
 int
 main (int argc, char **argv)
 {
-  GtkWidget *w1;
+  GtkLabel *w1;
   gchar *path;
 
   gtk_init ();
@@ -163,9 +164,9 @@ main (int argc, char **argv)
   grid = gtk_grid_new ();
 
   w1 = gtk_label_new ("File:");
-  gtk_widget_set_halign (w1, GTK_ALIGN_START);
+  gtk_widget_set_halign (GTK_WIDGET (w1), GTK_ALIGN_START);
   gtk_grid_attach (GTK_GRID (grid),
-                   w1, 0, 0, 1, 1);
+                   GTK_WIDGET (w1), 0, 0, 1, 1);
 
   file_l = gtk_button_new ();
   path = g_build_filename (g_get_current_dir (), "apple-red.png", NULL);
@@ -175,7 +176,7 @@ main (int argc, char **argv)
 
   gtk_widget_set_halign (file_l, GTK_ALIGN_START);
   gtk_grid_attach_next_to (GTK_GRID (grid), file_l,
-                           w1, GTK_POS_RIGHT, 3, 1);
+                           GTK_WIDGET (w1), GTK_POS_RIGHT, 3, 1);
   g_signal_connect (file_l, "clicked",
                     G_CALLBACK (button_clicked), NULL);
 
@@ -193,25 +194,25 @@ main (int argc, char **argv)
                            radio_content, GTK_POS_BOTTOM, 1, 1);
 
   recommended = gtk_check_button_new_with_label ("Show recommended");
-  gtk_grid_attach_next_to (GTK_GRID (grid), recommended,
-                           open, GTK_POS_BOTTOM, 1, 1);
+  gtk_grid_attach_next_to (GTK_GRID (grid), GTK_WIDGET (recommended),
+                           GTK_WIDGET (open), GTK_POS_BOTTOM, 1, 1);
   g_object_set (recommended, "active", TRUE, NULL);
 
   fallback = gtk_check_button_new_with_label ("Show fallback");
-  gtk_grid_attach_next_to (GTK_GRID (grid), fallback,
-                           recommended, GTK_POS_RIGHT, 1, 1);
+  gtk_grid_attach_next_to (GTK_GRID (grid), GTK_WIDGET (fallback),
+                           GTK_WIDGET (recommended), GTK_POS_RIGHT, 1, 1);
 
   other = gtk_check_button_new_with_label ("Show other");
-  gtk_grid_attach_next_to (GTK_GRID (grid), other,
-                           fallback, GTK_POS_RIGHT, 1, 1);
+  gtk_grid_attach_next_to (GTK_GRID (grid), GTK_WIDGET (other),
+                           GTK_WIDGET (fallback), GTK_POS_RIGHT, 1, 1);
 
   all = gtk_check_button_new_with_label ("Show all");
-  gtk_grid_attach_next_to (GTK_GRID (grid), all,
-                           other, GTK_POS_RIGHT, 1, 1);
+  gtk_grid_attach_next_to (GTK_GRID (grid), GTK_WIDGET (all),
+                           GTK_WIDGET (other), GTK_POS_RIGHT, 1, 1);
 
   def = gtk_check_button_new_with_label ("Show default");
-  gtk_grid_attach_next_to (GTK_GRID (grid), def,
-                           all, GTK_POS_RIGHT, 1, 1);
+  gtk_grid_attach_next_to (GTK_GRID (grid), GTK_WIDGET (def),
+                           GTK_WIDGET (all), GTK_POS_RIGHT, 1, 1);
 
   g_object_set (recommended, "active", TRUE, NULL);
   prepare_dialog ();

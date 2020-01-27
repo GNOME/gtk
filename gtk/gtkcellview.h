@@ -39,16 +39,16 @@ typedef struct _GtkCellView             GtkCellView;
 GDK_AVAILABLE_IN_ALL
 GType             gtk_cell_view_get_type                (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget        *gtk_cell_view_new                     (void);
+GtkCellView      *gtk_cell_view_new                     (void);
 GDK_AVAILABLE_IN_ALL
-GtkWidget        *gtk_cell_view_new_with_context        (GtkCellArea        *area,
+GtkCellView      *gtk_cell_view_new_with_context        (GtkCellArea        *area,
                                                          GtkCellAreaContext *context);
 GDK_AVAILABLE_IN_ALL
-GtkWidget        *gtk_cell_view_new_with_text           (const gchar     *text);
+GtkCellView      *gtk_cell_view_new_with_text           (const gchar     *text);
 GDK_AVAILABLE_IN_ALL
-GtkWidget        *gtk_cell_view_new_with_markup         (const gchar     *markup);
+GtkCellView      *gtk_cell_view_new_with_markup         (const gchar     *markup);
 GDK_AVAILABLE_IN_ALL
-GtkWidget        *gtk_cell_view_new_with_texture        (GdkTexture      *texture);
+GtkCellView      *gtk_cell_view_new_with_texture        (GdkTexture      *texture);
 GDK_AVAILABLE_IN_ALL
 void              gtk_cell_view_set_model               (GtkCellView     *cell_view,
                                                          GtkTreeModel    *model);

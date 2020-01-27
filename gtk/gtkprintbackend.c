@@ -637,7 +637,11 @@ request_password (GtkPrintBackend  *backend,
                   gboolean          can_store_auth_info)
 {
   GtkPrintBackendPrivate *priv = backend->priv;
-  GtkWidget *dialog, *box, *main_box, *label, *icon, *vbox, *entry, *chkbtn;
+  GtkWidget *dialog, *box, *main_box, *vbox;
+  GtkCheckButton *chkbtn;
+  GtkEntry *entry;
+  GtkImage *icon;
+  GtkLabel *label;
   GtkWidget *focus = NULL;
   GtkWidget *content_area;
   gchar     *markup;
@@ -664,9 +668,9 @@ request_password (GtkPrintBackend  *backend,
 
   /* Left */
   icon = gtk_image_new_from_icon_name ("dialog-password-symbolic");
-  gtk_image_set_icon_size (GTK_IMAGE (icon), GTK_ICON_SIZE_LARGE);
-  gtk_widget_set_halign (icon, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (icon, GTK_ALIGN_START);
+  gtk_image_set_icon_size (icon, GTK_ICON_SIZE_LARGE);
+  gtk_widget_set_halign (GTK_WIDGET (icon), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (icon), GTK_ALIGN_START);
   g_object_set (icon, "margin", 12, NULL);
 
   /* Right */
@@ -676,8 +680,8 @@ request_password (GtkPrintBackend  *backend,
   /* Right - 1. */
   label = gtk_label_new (NULL);
   markup = g_markup_printf_escaped ("<span weight=\"bold\" size=\"large\">%s</span>", prompt);
-  gtk_label_set_markup (GTK_LABEL (label), markup);
-  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_markup (label, markup);
+  gtk_label_set_wrap (label, TRUE);
   gtk_widget_set_size_request (GTK_WIDGET (label), 320, -1);
   g_free (markup);
 
@@ -686,10 +690,10 @@ request_password (GtkPrintBackend  *backend,
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   gtk_container_add (GTK_CONTAINER (content_area), main_box);
 
-  gtk_container_add (GTK_CONTAINER (main_box), icon);
+  gtk_container_add (GTK_CONTAINER (main_box), GTK_WIDGET (icon));
   gtk_container_add (GTK_CONTAINER (main_box), vbox);
 
-  gtk_container_add (GTK_CONTAINER (vbox), label);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
   /* Right - 2. */
   for (i = 0; i < length; i++)
@@ -703,22 +707,22 @@ request_password (GtkPrintBackend  *backend,
           gtk_widget_set_margin_bottom (box, 6);
 
           label = gtk_label_new (ai_display[i]);
-          gtk_widget_set_halign (label, GTK_ALIGN_START);
-          gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+          gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+          gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
           entry = gtk_entry_new ();
-          focus = entry;
+          focus = GTK_WIDGET (entry);
 
           if (ai_default[i] != NULL)
             gtk_editable_set_text (GTK_EDITABLE (entry), ai_default[i]);
 
-          gtk_entry_set_visibility (GTK_ENTRY (entry), ai_visible[i]);
-          gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
+          gtk_entry_set_visibility (entry, ai_visible[i]);
+          gtk_entry_set_activates_default (entry, TRUE);
 
           gtk_container_add (GTK_CONTAINER (vbox), box);
 
-          gtk_container_add (GTK_CONTAINER (box), label);
-          gtk_container_add (GTK_CONTAINER (box), entry);
+          gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
+          gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (entry));
 
           g_signal_connect (entry, "changed",
                             G_CALLBACK (store_entry), &(priv->auth_info[i]));
@@ -728,10 +732,10 @@ request_password (GtkPrintBackend  *backend,
   if (can_store_auth_info)
     {
       chkbtn = gtk_check_button_new_with_mnemonic (_("_Remember password"));
-      gtk_widget_set_margin_top (chkbtn, 6);
-      gtk_widget_set_margin_bottom (chkbtn, 6);
+      gtk_widget_set_margin_top (GTK_WIDGET (chkbtn), 6);
+      gtk_widget_set_margin_bottom (GTK_WIDGET (chkbtn), 6);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (chkbtn), FALSE);
-      gtk_container_add (GTK_CONTAINER (vbox), chkbtn);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (chkbtn));
       g_signal_connect (chkbtn, "toggled",
                         G_CALLBACK (store_auth_info_toggled),
                         &(priv->store_auth_info));

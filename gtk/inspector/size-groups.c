@@ -201,7 +201,7 @@ add_widget (GtkInspectorSizeGroups *sl,
             GtkWidget              *widget)
 {
   GtkWidget *row;
-  GtkWidget *label;
+  GtkLabel *label;
   gchar *text;
 
   row = g_object_new (size_group_row_get_type (), "widget", widget, NULL);
@@ -209,9 +209,9 @@ add_widget (GtkInspectorSizeGroups *sl,
   label = gtk_label_new (text);
   g_free (text);
   g_object_set (label, "margin", 10, NULL);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_container_add (GTK_CONTAINER (row), label);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_BASELINE);
+  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (label));
   gtk_container_add (GTK_CONTAINER (listbox), row);
 }
 
@@ -220,7 +220,8 @@ add_size_group (GtkInspectorSizeGroups *sl,
                 GtkSizeGroup           *group)
 {
   GtkWidget *frame, *box, *box2;
-  GtkWidget *label, *combo;
+  GtkLabel *label;
+  GtkComboBoxText *combo;
   GSList *widgets, *l;
   GtkWidget *listbox;
 
@@ -235,22 +236,22 @@ add_size_group (GtkInspectorSizeGroups *sl,
 
   label = gtk_label_new (_("Mode"));
   g_object_set (label, "margin", 10, NULL);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_container_add (GTK_CONTAINER (box2), label);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_BASELINE);
+  gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (label));
 
   combo = gtk_combo_box_text_new ();
   g_object_set (combo, "margin", 10, NULL);
-  gtk_widget_set_halign (combo, GTK_ALIGN_END);
-  gtk_widget_set_valign (combo, GTK_ALIGN_BASELINE);
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "None"));
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "Horizontal"));
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "Vertical"));
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), C_("sizegroup mode", "Both"));
+  gtk_widget_set_halign (GTK_WIDGET (combo), GTK_ALIGN_END);
+  gtk_widget_set_valign (GTK_WIDGET (combo), GTK_ALIGN_BASELINE);
+  gtk_combo_box_text_append_text (combo, C_("sizegroup mode", "None"));
+  gtk_combo_box_text_append_text (combo, C_("sizegroup mode", "Horizontal"));
+  gtk_combo_box_text_append_text (combo, C_("sizegroup mode", "Vertical"));
+  gtk_combo_box_text_append_text (combo, C_("sizegroup mode", "Both"));
   g_object_bind_property (group, "mode",
                           combo, "active",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-  gtk_container_add (GTK_CONTAINER (box2), combo);
+  gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (combo));
 
   listbox = gtk_list_box_new ();
   gtk_container_add (GTK_CONTAINER (box), listbox);

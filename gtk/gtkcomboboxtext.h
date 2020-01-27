@@ -36,9 +36,9 @@ typedef struct _GtkComboBoxText GtkComboBoxText;
 GDK_AVAILABLE_IN_ALL
 GType         gtk_combo_box_text_get_type        (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget*    gtk_combo_box_text_new             (void);
+GtkComboBoxText* gtk_combo_box_text_new             (void);
 GDK_AVAILABLE_IN_ALL
-GtkWidget*    gtk_combo_box_text_new_with_entry  (void);
+GtkComboBoxText* gtk_combo_box_text_new_with_entry  (void);
 GDK_AVAILABLE_IN_ALL
 void          gtk_combo_box_text_append_text     (GtkComboBoxText     *combo_box,
                                                   const gchar         *text);

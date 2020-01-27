@@ -66,7 +66,9 @@ drag_drop (GtkDropTarget    *dest,
 static GtkWidget *
 create_row (const gchar *text)
 {
-  GtkWidget *row, *box, *label, *image;
+  GtkWidget *row, *box;
+  GtkImage *image;
+  GtkLabel *label;
   GBytes *bytes;
   GdkContentProvider *content;
   GdkContentFormats *targets;
@@ -79,9 +81,9 @@ create_row (const gchar *text)
   g_object_set (box, "margin-start", 10, "margin-end", 10, NULL);
   label = gtk_label_new (text);
   gtk_container_add (GTK_CONTAINER (row), box);
-  gtk_widget_set_hexpand (label, TRUE);
-  gtk_container_add (GTK_CONTAINER (box), label);
-  gtk_container_add (GTK_CONTAINER (box), image);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (label));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (image));
 
   bytes = g_bytes_new (&row, sizeof (gpointer));
   content = gdk_content_provider_new_for_bytes ("GTK_LIST_BOX_ROW", bytes);
@@ -89,7 +91,7 @@ create_row (const gchar *text)
   gtk_drag_source_set_content (source, content);
   gtk_drag_source_set_actions (source, GDK_ACTION_MOVE);
   g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), image);
-  gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
+  gtk_widget_add_controller (GTK_WIDGET (image), GTK_EVENT_CONTROLLER (source));
 
   targets = gdk_content_formats_new (entries, 1);
   dest = gtk_drop_target_new (targets, GDK_ACTION_MOVE);
@@ -140,7 +142,9 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *window, *list, *sw, *row;
-  GtkWidget *hbox, *vbox, *combo, *button;
+  GtkWidget *hbox, *vbox;
+  GtkCheckButton *button;
+  GtkComboBoxText *combo;
   gint i;
   gchar *text;
   GtkCssProvider *provider;
@@ -176,15 +180,15 @@ main (int argc, char *argv[])
   g_object_bind_property (list, "activate-on-single-click",
                           button, "active",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-  gtk_container_add (GTK_CONTAINER (vbox), button);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (button));
 
   combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "None");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Single");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Browse");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Multiple");
+  gtk_combo_box_text_append_text (combo, "None");
+  gtk_combo_box_text_append_text (combo, "Single");
+  gtk_combo_box_text_append_text (combo, "Browse");
+  gtk_combo_box_text_append_text (combo, "Multiple");
   g_signal_connect (combo, "changed", G_CALLBACK (selection_mode_changed), list);
-  gtk_container_add (GTK_CONTAINER (vbox), combo);
+  gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (combo));
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), gtk_list_box_get_selection_mode (GTK_LIST_BOX (list)));
 
   for (i = 0; i < 20; i++)

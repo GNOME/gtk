@@ -24,12 +24,9 @@ static GInputStream * image_stream = NULL;
 
 static void
 progressive_prepared_callback (GdkPixbufLoader *loader,
-                               gpointer         data)
+                               GtkPicture      *picture)
 {
   GdkPixbuf *pixbuf;
-  GtkWidget *picture;
-
-  picture = GTK_WIDGET (data);
 
   pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
 
@@ -38,7 +35,7 @@ progressive_prepared_callback (GdkPixbufLoader *loader,
    */
   gdk_pixbuf_fill (pixbuf, 0xaaaaaaff);
 
-  gtk_picture_set_pixbuf (GTK_PICTURE (picture), pixbuf);
+  gtk_picture_set_pixbuf (picture, pixbuf);
 }
 
 static void
@@ -47,15 +44,12 @@ progressive_updated_callback (GdkPixbufLoader *loader,
                               gint                 y,
                               gint                 width,
                               gint                 height,
-                              gpointer     data)
+                              GtkPicture          *picture)
 {
-  GtkWidget *picture;
   GdkPixbuf *pixbuf;
 
-  picture = GTK_WIDGET (data);
-
   pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
-  gtk_picture_set_pixbuf (GTK_PICTURE (picture), pixbuf);
+  gtk_picture_set_pixbuf (picture, pixbuf);
 }
 
 static gint
@@ -252,7 +246,7 @@ progressive_timeout (gpointer data)
 }
 
 static void
-start_progressive_loading (GtkWidget *picture)
+start_progressive_loading (GtkPicture *picture)
 {
   /* This is obviously totally contrived (we slow down loading
    * on purpose to show how incremental loading works).
@@ -290,7 +284,7 @@ cleanup_callback (GObject   *object,
 }
 
 static void
-toggle_sensitivity_callback (GtkWidget *togglebutton,
+toggle_sensitivity_callback (GtkToggleButton *togglebutton,
                              gpointer   user_data)
 {
   GtkContainer *container = user_data;
@@ -303,9 +297,9 @@ toggle_sensitivity_callback (GtkWidget *togglebutton,
   while (tmp != NULL)
     {
       /* don't disable our toggle */
-      if (GTK_WIDGET (tmp->data) != togglebutton)
+      if (GTK_WIDGET (tmp->data) != GTK_WIDGET (togglebutton))
         gtk_widget_set_sensitive (GTK_WIDGET (tmp->data),
-                                  !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (togglebutton)));
+                                  !gtk_toggle_button_get_active (togglebutton));
 
       tmp = tmp->next;
     }
@@ -317,15 +311,15 @@ toggle_sensitivity_callback (GtkWidget *togglebutton,
 GtkWidget *
 do_images (GtkWidget *do_widget)
 {
-  GtkWidget *video;
+  GtkVideo  *video;
   GtkWidget *frame;
   GtkWidget *vbox;
   GtkWidget *hbox;
   GtkWidget *base_vbox;
-  GtkWidget *image;
-  GtkWidget *picture;
-  GtkWidget *label;
-  GtkWidget *button;
+  GtkImage *image;
+  GtkPicture *picture;
+  GtkLabel *label;
+  GtkToggleButton *button;
   GdkPaintable *paintable;
   GIcon *gicon;
 
@@ -352,9 +346,9 @@ do_images (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (hbox), vbox);
 
       label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
+      gtk_label_set_markup (label,
                             "<u>Image loaded from a file</u>");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
@@ -363,17 +357,17 @@ do_images (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       image = gtk_image_new_from_icon_name ("gtk3-demo");
-      gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
+      gtk_image_set_icon_size (image, GTK_ICON_SIZE_LARGE);
 
-      gtk_container_add (GTK_CONTAINER (frame), image);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (image));
 
 
       /* Animation */
 
       label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
+      gtk_label_set_markup (label,
                             "<u>Animation loaded from a file</u>");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
@@ -383,14 +377,14 @@ do_images (GtkWidget *do_widget)
 
       picture = gtk_picture_new_for_resource ("/images/floppybuddy.gif");
 
-      gtk_container_add (GTK_CONTAINER (frame), picture);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (picture));
 
       /* Symbolic icon */
 
       label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
+      gtk_label_set_markup (label,
                             "<u>Symbolic themed icon</u>");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
@@ -400,9 +394,9 @@ do_images (GtkWidget *do_widget)
 
       gicon = g_themed_icon_new_with_default_fallbacks ("battery-caution-charging-symbolic");
       image = gtk_image_new_from_gicon (gicon);
-      gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
+      gtk_image_set_icon_size (image, GTK_ICON_SIZE_LARGE);
 
-      gtk_container_add (GTK_CONTAINER (frame), image);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (image));
 
 
       /* Progressive */
@@ -410,9 +404,9 @@ do_images (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (hbox), vbox);
 
       label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
+      gtk_label_set_markup (label,
                             "<u>Progressive image loading</u>");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
@@ -424,7 +418,7 @@ do_images (GtkWidget *do_widget)
        * will create the pixbuf and fill it in.
        */
       picture = gtk_picture_new ();
-      gtk_container_add (GTK_CONTAINER (frame), picture);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (picture));
 
       start_progressive_loading (picture);
 
@@ -433,9 +427,9 @@ do_images (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (hbox), vbox);
 
       label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
+      gtk_label_set_markup (label,
                             "<u>Displaying video</u>");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
@@ -444,27 +438,27 @@ do_images (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
       video = gtk_video_new_for_resource ("/images/gtk-logo.webm");
-      gtk_media_stream_set_loop (gtk_video_get_media_stream (GTK_VIDEO (video)), TRUE);
-      gtk_container_add (GTK_CONTAINER (frame), video);
+      gtk_media_stream_set_loop (gtk_video_get_media_stream (video), TRUE);
+      gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (video));
 
       /* Widget paintables */
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
       gtk_container_add (GTK_CONTAINER (hbox), vbox);
 
       label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label),
+      gtk_label_set_markup (label,
                             "<u>GtkWidgetPaintable</u>");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       paintable = gtk_widget_paintable_new (do_widget);
       picture = gtk_picture_new_for_paintable (paintable);
-      gtk_widget_set_size_request (picture, 100, 100);
-      gtk_widget_set_valign (picture, GTK_ALIGN_START);
-      gtk_container_add (GTK_CONTAINER (vbox), picture);
+      gtk_widget_set_size_request (GTK_WIDGET (picture), 100, 100);
+      gtk_widget_set_valign (GTK_WIDGET (picture), GTK_ALIGN_START);
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (picture));
 
       /* Sensitivity control */
       button = gtk_toggle_button_new_with_mnemonic ("_Insensitive");
-      gtk_container_add (GTK_CONTAINER (base_vbox), button);
+      gtk_container_add (GTK_CONTAINER (base_vbox), GTK_WIDGET (button));
 
       g_signal_connect (button, "toggled",
                         G_CALLBACK (toggle_sensitivity_callback),

@@ -10,7 +10,12 @@ GtkWidget *
 do_pickers (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
-  GtkWidget *table, *label, *picker;
+  GtkWidget *table;
+  GtkWidget *picker;
+  GtkColorButton *color_button;
+  GtkFileChooserButton *file_button;
+  GtkAppChooserButton *app_button;
+  GtkLabel *label;
 
   if (!window)
   {
@@ -29,47 +34,47 @@ do_pickers (GtkWidget *do_widget)
     gtk_container_add (GTK_CONTAINER (window), table);
 
     label = gtk_label_new ("Color:");
-    gtk_widget_set_halign (label, GTK_ALIGN_START);
-    gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-    gtk_widget_set_hexpand (label, TRUE);
-    picker = gtk_color_button_new ();
-    gtk_grid_attach (GTK_GRID (table), label, 0, 0, 1, 1);
-    gtk_grid_attach (GTK_GRID (table), picker, 1, 0, 1, 1);
+    gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+    gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+    gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+    color_button = gtk_color_button_new ();
+    gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 0, 0, 1, 1);
+    gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (color_button), 1, 0, 1, 1);
 
     label = gtk_label_new ("Font:");
-    gtk_widget_set_halign (label, GTK_ALIGN_START);
-    gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-    gtk_widget_set_hexpand (label, TRUE);
+    gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+    gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+    gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
     picker = gtk_font_button_new ();
-    gtk_grid_attach (GTK_GRID (table), label, 0, 1, 1, 1);
+    gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 0, 1, 1, 1);
     gtk_grid_attach (GTK_GRID (table), picker, 1, 1, 1, 1);
 
     label = gtk_label_new ("File:");
-    gtk_widget_set_halign (label, GTK_ALIGN_START);
-    gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-    gtk_widget_set_hexpand (label, TRUE);
-    picker = gtk_file_chooser_button_new ("Pick a File",
-                                          GTK_FILE_CHOOSER_ACTION_OPEN);
-    gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (picker), FALSE);
-    gtk_grid_attach (GTK_GRID (table), label, 0, 2, 1, 1);
-    gtk_grid_attach (GTK_GRID (table), picker, 1, 2, 1, 1);
+    gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+    gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+    gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+    file_button = gtk_file_chooser_button_new ("Pick a File",
+                                               GTK_FILE_CHOOSER_ACTION_OPEN);
+    gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (file_button), FALSE);
+    gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 0, 2, 1, 1);
+    gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (file_button), 1, 2, 1, 1);
 
     label = gtk_label_new ("Folder:");
-    gtk_widget_set_halign (label, GTK_ALIGN_START);
-    gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-    picker = gtk_file_chooser_button_new ("Pick a Folder",
-                                          GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-    gtk_grid_attach (GTK_GRID (table), label, 0, 3, 1, 1);
-    gtk_grid_attach (GTK_GRID (table), picker, 1, 3, 1, 1);
+    gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+    gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+    file_button = gtk_file_chooser_button_new ("Pick a Folder",
+                                               GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+    gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 0, 3, 1, 1);
+    gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (file_button), 1, 3, 1, 1);
 
     label = gtk_label_new ("Mail:");
-    gtk_widget_set_halign (label, GTK_ALIGN_START);
-    gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-    gtk_widget_set_hexpand (label, TRUE);
-    picker = gtk_app_chooser_button_new ("x-scheme-handler/mailto");
-    gtk_app_chooser_button_set_show_dialog_item (GTK_APP_CHOOSER_BUTTON (picker), TRUE);
-    gtk_grid_attach (GTK_GRID (table), label, 0, 4, 1, 1);
-    gtk_grid_attach (GTK_GRID (table), picker, 1, 4, 1, 1);
+    gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+    gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
+    gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+    app_button = gtk_app_chooser_button_new ("x-scheme-handler/mailto");
+    gtk_app_chooser_button_set_show_dialog_item (app_button, TRUE);
+    gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (label), 0, 4, 1, 1);
+    gtk_grid_attach (GTK_GRID (table), GTK_WIDGET (app_button), 1, 4, 1, 1);
   }
 
   if (!gtk_widget_get_visible (window))

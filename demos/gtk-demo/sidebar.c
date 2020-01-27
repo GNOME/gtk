@@ -62,13 +62,13 @@ do_sidebar (GtkWidget *do_widget)
         {
           if (i == 0)
             {
-              widget = gtk_image_new_from_icon_name ("org.gtk.Demo4");
+              widget = GTK_WIDGET (gtk_image_new_from_icon_name ("org.gtk.Demo4"));
               gtk_style_context_add_class (gtk_widget_get_style_context (widget), "icon-dropshadow");
               gtk_image_set_pixel_size (GTK_IMAGE (widget), 256);
             }
           else
             {
-              widget = gtk_label_new (c);
+              widget = GTK_WIDGET (gtk_label_new (c));
             }
           gtk_stack_add_named (GTK_STACK (stack), widget, c);
           g_object_set (gtk_stack_get_page (GTK_STACK (stack), widget), "title", c, NULL);

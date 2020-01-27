@@ -243,8 +243,8 @@ do_search_entry (GtkWidget *do_widget)
 {
   GtkWidget *vbox;
   GtkWidget *hbox;
-  GtkWidget *label;
-  GtkWidget *entry;
+  GtkLabel *label;
+  GtkEntry *entry;
   GtkWidget *find_button;
   GtkWidget *cancel_button;
 
@@ -262,18 +262,18 @@ do_search_entry (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label), "Search entry demo");
-      gtk_container_add (GTK_CONTAINER (vbox), label);
+      gtk_label_set_markup (label, "Search entry demo");
+      gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (label));
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
       /* Create our entry */
       entry = gtk_entry_new ();
-      gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+      gtk_entry_set_icon_from_icon_name (entry,
                                          GTK_ENTRY_ICON_PRIMARY,
                                          "edit-find-symbolic");
-      gtk_container_add (GTK_CONTAINER (hbox), entry);
+      gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (entry));
 
       /* Create the find and cancel buttons */
       notebook = gtk_notebook_new ();
@@ -298,14 +298,14 @@ do_search_entry (GtkWidget *do_widget)
       set_search_by (NULL, value, entry);
       g_variant_unref (value);
 
-      gtk_entry_set_icon_activatable (GTK_ENTRY (entry), GTK_ENTRY_ICON_PRIMARY, TRUE);
-      gtk_entry_set_icon_sensitive (GTK_ENTRY (entry), GTK_ENTRY_ICON_PRIMARY, TRUE);
+      gtk_entry_set_icon_activatable (entry, GTK_ENTRY_ICON_PRIMARY, TRUE);
+      gtk_entry_set_icon_sensitive (entry, GTK_ENTRY_ICON_PRIMARY, TRUE);
 
       g_signal_connect (entry, "icon-press", G_CALLBACK (icon_press_cb), NULL);
       g_signal_connect (entry, "activate", G_CALLBACK (activate_cb), NULL);
 
       /* add accessible alternatives for icon functionality */
-      entry_add_to_context_menu (GTK_ENTRY (entry));
+      entry_add_to_context_menu (entry);
     }
 
   if (!gtk_widget_get_visible (window))

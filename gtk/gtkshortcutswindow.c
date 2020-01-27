@@ -867,7 +867,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   GtkWidget *search_button;
   GtkBox *box;
   GtkWidget *scroller;
-  GtkWidget *label;
+  GtkLabel *label;
   GtkWidget *empty;
   PangoAttrList *attributes;
 
@@ -917,13 +917,13 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
 
   /* Translators: This is the window title for the shortcuts window in normal mode */
   label = gtk_label_new (_("Shortcuts"));
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), GTK_STYLE_CLASS_TITLE);
-  gtk_stack_add_named (priv->title_stack, label, "title");
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (label)), GTK_STYLE_CLASS_TITLE);
+  gtk_stack_add_named (priv->title_stack, GTK_WIDGET (label), "title");
 
   /* Translators: This is the window title for the shortcuts window in search mode */
   label = gtk_label_new (_("Search Results"));
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), GTK_STYLE_CLASS_TITLE);
-  gtk_stack_add_named (priv->title_stack, label, "search");
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (label)), GTK_STYLE_CLASS_TITLE);
+  gtk_stack_add_named (priv->title_stack, GTK_WIDGET (label), "search");
 
   priv->menu_button = g_object_new (GTK_TYPE_MENU_BUTTON,
                                     "focus-on-click", FALSE,
@@ -1012,11 +1012,11 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                         "attributes", attributes,
                         NULL);
   pango_attr_list_unref (attributes);
-  gtk_grid_attach (GTK_GRID (empty), label, 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (empty), GTK_WIDGET (label), 0, 1, 1, 1);
   label = g_object_new (GTK_TYPE_LABEL,
                         "label", _("Try a different search"),
                         NULL);
-  gtk_grid_attach (GTK_GRID (empty), label, 0, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (empty), GTK_WIDGET (label), 0, 2, 1, 1);
 
   gtk_stack_add_named (priv->stack, empty, "no-search-results");
 

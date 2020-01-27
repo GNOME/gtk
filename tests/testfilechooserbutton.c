@@ -213,29 +213,31 @@ add_new_filechooser_button (const gchar          *mnemonic,
                             GtkWidget            *group_box,
                             GtkSizeGroup         *label_group)
 {
-  GtkWidget *hbox, *label, *chooser, *button;
+  GtkWidget *hbox, *button;
+  GtkFileChooserButton *chooser;
+  GtkLabel *label;
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   gtk_container_add (GTK_CONTAINER (group_box), hbox);
 
   label = gtk_label_new_with_mnemonic (mnemonic);
-  gtk_size_group_add_widget (GTK_SIZE_GROUP (label_group), label);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_container_add (GTK_CONTAINER (hbox), label);
+  gtk_size_group_add_widget (GTK_SIZE_GROUP (label_group), GTK_WIDGET (label));
+  gtk_label_set_xalign (label, 0.0);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (label));
 
   chooser = gtk_file_chooser_button_new (g_strconcat(chooser_title,
                                                      " - testfilechooserbutton", NULL),
                                          action);
-  gtk_widget_set_hexpand (chooser, TRUE);
+  gtk_widget_set_hexpand (GTK_WIDGET (chooser), TRUE);
   gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (chooser), gtk_src_dir, NULL);
   gtk_file_chooser_remove_shortcut_folder (GTK_FILE_CHOOSER (chooser), gtk_src_dir, NULL);
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), chooser);
+  gtk_label_set_mnemonic_widget (label, GTK_WIDGET (chooser));
   g_signal_connect (chooser, "current-folder-changed",
 		    G_CALLBACK (chooser_current_folder_changed_cb), NULL);
   g_signal_connect (chooser, "selection-changed", G_CALLBACK (chooser_selection_changed_cb), NULL);
   g_signal_connect (chooser, "file-activated", G_CALLBACK (chooser_file_activated_cb), NULL);
   g_signal_connect (chooser, "update-preview", G_CALLBACK (chooser_update_preview_cb), NULL);
-  gtk_container_add (GTK_CONTAINER (hbox), chooser);
+  gtk_container_add (GTK_CONTAINER (hbox), GTK_WIDGET (chooser));
 
   button = gtk_button_new_with_label ("Tests");
   g_signal_connect (button, "clicked", G_CALLBACK (tests_button_clicked_cb), chooser);

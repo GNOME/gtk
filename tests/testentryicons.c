@@ -79,10 +79,11 @@ main (int argc, char **argv)
 {
   GtkWidget *window;
   GtkWidget *grid;
-  GtkWidget *label;
-  GtkWidget *entry;
+  GtkLabel *label;
+  GtkEntry *entry;
+  GtkWidget *password_entry;   
   GtkWidget *box;
-  GtkWidget *image;
+  GtkImage *image;
   GtkWidget *button1;
   GtkWidget *button2;
   GtkWidget *button3;
@@ -109,26 +110,26 @@ main (int argc, char **argv)
    * Open File - Sets the icon using a GIcon
    */
   label = gtk_label_new ("Open File:");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 0, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
   entry = gtk_entry_new ();
-  gtk_widget_set_hexpand (entry, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), entry, 1, 0, 1, 1);
+  gtk_widget_set_hexpand (GTK_WIDGET (entry), TRUE);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (entry), 1, 0, 1, 1);
 
   icon = g_themed_icon_new ("folder-symbolic");
   g_themed_icon_append_name (G_THEMED_ICON (icon), "folder-symbolic");
 
-  gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),
+  gtk_entry_set_icon_from_gicon (entry,
                                  GTK_ENTRY_ICON_PRIMARY,
                                  icon);
   g_object_unref (icon);
-  gtk_entry_set_icon_sensitive (GTK_ENTRY (entry),
+  gtk_entry_set_icon_sensitive (entry,
 			        GTK_ENTRY_ICON_PRIMARY,
 				FALSE);
 
-  gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
+  gtk_entry_set_icon_tooltip_text (entry,
 				   GTK_ENTRY_ICON_PRIMARY,
 				   "Open a file");
 
@@ -136,20 +137,20 @@ main (int argc, char **argv)
    * Save File - sets the icon using an icon name.
    */
   label = gtk_label_new ("Save File:");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 1, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
   entry = gtk_entry_new ();
-  gtk_widget_set_hexpand (entry, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), entry, 1, 1, 1, 1);
+  gtk_widget_set_hexpand (GTK_WIDGET (entry), TRUE);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (entry), 1, 1, 1, 1);
   gtk_editable_set_text (GTK_EDITABLE (entry), "‏Right-to-left");
-  gtk_widget_set_direction (entry, GTK_TEXT_DIR_RTL);
+  gtk_widget_set_direction (GTK_WIDGET (entry), GTK_TEXT_DIR_RTL);
   
-  gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+  gtk_entry_set_icon_from_icon_name (entry,
                                      GTK_ENTRY_ICON_PRIMARY,
                                      "document-save-symbolic");
-  gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
+  gtk_entry_set_icon_tooltip_text (entry,
 				   GTK_ENTRY_ICON_PRIMARY,
 				   "Save a file");
  
@@ -157,7 +158,7 @@ main (int argc, char **argv)
   g_value_set_string (&value, "Amazing");
   content = gdk_content_provider_new_for_value (&value);
   g_value_unset (&value);
-  gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
+  gtk_entry_set_icon_drag_source (entry,
                                   GTK_ENTRY_ICON_PRIMARY,
                                   content, GDK_ACTION_COPY); 
   g_object_unref (content);
@@ -166,30 +167,30 @@ main (int argc, char **argv)
    * Search - Uses a helper function
    */
   label = gtk_label_new ("Search:");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 2, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
   entry = gtk_entry_new ();
-  gtk_widget_set_hexpand (entry, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), entry, 1, 2, 1, 1);
+  gtk_widget_set_hexpand (GTK_WIDGET (entry), TRUE);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (entry), 1, 2, 1, 1);
 
-  gtk_entry_set_placeholder_text (GTK_ENTRY (entry),
+  gtk_entry_set_placeholder_text (entry,
                                   "Type some text, then click an icon");
 
-  gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+  gtk_entry_set_icon_from_icon_name (entry,
                                      GTK_ENTRY_ICON_PRIMARY,
                                      "edit-find-symbolic");
 
-  gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
+  gtk_entry_set_icon_tooltip_text (entry,
                                    GTK_ENTRY_ICON_PRIMARY,
                                    "Clicking the other icon is more interesting!");
 
-  gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+  gtk_entry_set_icon_from_icon_name (entry,
                                      GTK_ENTRY_ICON_SECONDARY,
                                      "edit-clear-symbolic");
 
-  gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
+  gtk_entry_set_icon_tooltip_text (entry,
                                    GTK_ENTRY_ICON_SECONDARY,
                                    "Clear");
 
@@ -199,29 +200,29 @@ main (int argc, char **argv)
    * Password - Sets the icon using an icon name
    */
   label = gtk_label_new ("Password:");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 3, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
-  entry = gtk_password_entry_new ();
-  gtk_password_entry_set_show_peek_icon (GTK_PASSWORD_ENTRY (entry), TRUE);
-  gtk_widget_set_hexpand (entry, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), entry, 1, 3, 1, 1);
+  password_entry = gtk_password_entry_new ();
+  gtk_password_entry_set_show_peek_icon (GTK_PASSWORD_ENTRY (password_entry), TRUE);
+  gtk_widget_set_hexpand (password_entry, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), password_entry, 1, 3, 1, 1);
 
   /* Name - Does not set any icons. */
   label = gtk_label_new ("Name:");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 4, 1, 1);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 4, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
   entry = gtk_entry_new ();
-  gtk_widget_set_hexpand (entry, TRUE);
-  gtk_entry_set_placeholder_text (GTK_ENTRY (entry),
+  gtk_widget_set_hexpand (GTK_WIDGET (entry), TRUE);
+  gtk_entry_set_placeholder_text (entry,
                                   "Use the RadioButtons to choose an icon");
-  gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
+  gtk_entry_set_icon_tooltip_text (entry,
                                    GTK_ENTRY_ICON_SECONDARY,
                                    "Use the RadioButtons to change this icon");
-  gtk_grid_attach (GTK_GRID (grid), entry, 1, 4, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (entry), 1, 4, 1, 1);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_widget_set_vexpand (GTK_WIDGET (box), TRUE);
@@ -248,35 +249,35 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (box), button4);
 
   label = gtk_label_new ("Emoji:");
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 6, 1, 1);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (label), 0, 6, 1, 1);
+  gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+  gtk_widget_set_valign (GTK_WIDGET (label), GTK_ALIGN_CENTER);
 
   entry = gtk_entry_new ();
   g_object_set (entry, "show-emoji-icon", TRUE, NULL);
-  gtk_widget_set_hexpand (entry, TRUE);
-  gtk_grid_attach (GTK_GRID (grid), entry, 1, 6, 1, 1);
+  gtk_widget_set_hexpand (GTK_WIDGET (entry), TRUE);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (entry), 1, 6, 1, 1);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_style_context_add_class (gtk_widget_get_style_context (box), "view");
   gtk_style_context_add_class (gtk_widget_get_style_context (box), "entry-frame");
   gtk_widget_set_cursor_from_name (box, "text");
   entry = gtk_entry_new ();
-  gtk_widget_set_hexpand (entry, TRUE);
-  gtk_container_add (GTK_CONTAINER (box), entry);
+  gtk_widget_set_hexpand (GTK_WIDGET (entry), TRUE);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (entry));
   image = gtk_image_new_from_icon_name ("edit-find-symbolic");
-  gtk_widget_set_cursor_from_name (image, "default");
+  gtk_widget_set_cursor_from_name (GTK_WIDGET (image), "default");
   g_object_set (image, "margin", 6, NULL);
-  gtk_widget_set_tooltip_text (image, "Click me");
+  gtk_widget_set_tooltip_text (GTK_WIDGET (image), "Click me");
 
   GtkGesture *gesture;
   gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "pressed", G_CALLBACK (icon_pressed_cb), NULL);
-  gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (gesture));
-  gtk_container_add (GTK_CONTAINER (box), image);
+  gtk_widget_add_controller (GTK_WIDGET (image), GTK_EVENT_CONTROLLER (gesture));
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (image));
   image = gtk_image_new_from_icon_name ("document-save-symbolic");
   g_object_set (image, "margin", 6, NULL);
-  gtk_container_add (GTK_CONTAINER (box), image);
+  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (image));
   gtk_grid_attach (GTK_GRID (grid), box, 1, 7, 1, 1);
 
   GtkCssProvider *provider;

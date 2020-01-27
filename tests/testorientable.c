@@ -48,7 +48,9 @@ main (int argc, char **argv)
 {
   GtkWidget *window;
   GtkWidget *grid;
-  GtkWidget *box, *button;
+  GtkWidget *box;
+  GtkToggleButton *button;
+  GtkSeparator *separator;
   GList *orientables = NULL;
 
   gtk_init ();
@@ -70,12 +72,12 @@ main (int argc, char **argv)
                   gtk_button_new_with_label ("GtkBox 3"));
 
   /* GtkSeparator */
-  box = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-  orientables = g_list_prepend (orientables, box);
-  gtk_grid_attach (GTK_GRID (grid), box, 2, 1, 1, 1);
+  separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+  orientables = g_list_prepend (orientables, separator);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (separator), 2, 1, 1, 1);
 
   button = gtk_toggle_button_new_with_label ("Horizontal");
-  gtk_grid_attach (GTK_GRID (grid), button, 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET (button), 0, 0, 1, 1);
   g_signal_connect (button, "toggled",
                   G_CALLBACK (orient_toggled), orientables);
 
