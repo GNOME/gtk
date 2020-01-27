@@ -39,6 +39,409 @@
 #include "gtkstyleproviderprivate.h"
 #include "gtkcssdimensionvalueprivate.h"
 
+
+static int core_props[] = {
+  GTK_CSS_PROPERTY_COLOR,
+  GTK_CSS_PROPERTY_DPI,
+  GTK_CSS_PROPERTY_FONT_SIZE,
+  GTK_CSS_PROPERTY_ICON_THEME,
+  GTK_CSS_PROPERTY_ICON_PALETTE
+};
+
+static int background_props[] = {
+  GTK_CSS_PROPERTY_BACKGROUND_COLOR,
+  GTK_CSS_PROPERTY_BOX_SHADOW,
+  GTK_CSS_PROPERTY_BACKGROUND_CLIP,
+  GTK_CSS_PROPERTY_BACKGROUND_ORIGIN,
+  GTK_CSS_PROPERTY_BACKGROUND_SIZE,
+  GTK_CSS_PROPERTY_BACKGROUND_POSITION,
+  GTK_CSS_PROPERTY_BACKGROUND_REPEAT,
+  GTK_CSS_PROPERTY_BACKGROUND_IMAGE,
+  GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE
+};
+
+static int border_props[] = {
+  GTK_CSS_PROPERTY_BORDER_TOP_STYLE,
+  GTK_CSS_PROPERTY_BORDER_TOP_WIDTH,
+  GTK_CSS_PROPERTY_BORDER_LEFT_STYLE,
+  GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH,
+  GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE,
+  GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH,
+  GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE,
+  GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH,
+  GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS,
+  GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS,
+  GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS,
+  GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS,
+  GTK_CSS_PROPERTY_BORDER_TOP_COLOR,
+  GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR,
+  GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR,
+  GTK_CSS_PROPERTY_BORDER_LEFT_COLOR,
+  GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE,
+  GTK_CSS_PROPERTY_BORDER_IMAGE_REPEAT,
+  GTK_CSS_PROPERTY_BORDER_IMAGE_SLICE,
+  GTK_CSS_PROPERTY_BORDER_IMAGE_WIDTH
+};
+
+static int icon_props[] = {
+  GTK_CSS_PROPERTY_ICON_SIZE,
+  GTK_CSS_PROPERTY_ICON_SHADOW,
+  GTK_CSS_PROPERTY_ICON_STYLE,
+};
+
+static int outline_props[] = {
+  GTK_CSS_PROPERTY_OUTLINE_STYLE,
+  GTK_CSS_PROPERTY_OUTLINE_WIDTH,
+  GTK_CSS_PROPERTY_OUTLINE_OFFSET,
+  GTK_CSS_PROPERTY_OUTLINE_TOP_LEFT_RADIUS,
+  GTK_CSS_PROPERTY_OUTLINE_TOP_RIGHT_RADIUS,
+  GTK_CSS_PROPERTY_OUTLINE_BOTTOM_RIGHT_RADIUS,
+  GTK_CSS_PROPERTY_OUTLINE_BOTTOM_LEFT_RADIUS,
+  GTK_CSS_PROPERTY_OUTLINE_COLOR,
+};
+
+static int font_props[] = {
+  GTK_CSS_PROPERTY_FONT_FAMILY,
+  GTK_CSS_PROPERTY_FONT_STYLE,
+  GTK_CSS_PROPERTY_FONT_WEIGHT,
+  GTK_CSS_PROPERTY_FONT_STRETCH,
+  GTK_CSS_PROPERTY_LETTER_SPACING,
+  GTK_CSS_PROPERTY_TEXT_SHADOW,  
+  GTK_CSS_PROPERTY_CARET_COLOR,
+  GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR,
+  GTK_CSS_PROPERTY_FONT_FEATURE_SETTINGS,
+  GTK_CSS_PROPERTY_FONT_VARIATION_SETTINGS,
+};
+static int font_variant_props[] = {
+  GTK_CSS_PROPERTY_TEXT_DECORATION_LINE,
+  GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR,
+  GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE,
+  GTK_CSS_PROPERTY_FONT_KERNING,
+  GTK_CSS_PROPERTY_FONT_VARIANT_LIGATURES,
+  GTK_CSS_PROPERTY_FONT_VARIANT_POSITION,
+  GTK_CSS_PROPERTY_FONT_VARIANT_CAPS,
+  GTK_CSS_PROPERTY_FONT_VARIANT_NUMERIC,
+  GTK_CSS_PROPERTY_FONT_VARIANT_ALTERNATES,
+  GTK_CSS_PROPERTY_FONT_VARIANT_EAST_ASIAN,
+};
+
+static int animation_props[] = {
+  GTK_CSS_PROPERTY_ANIMATION_NAME,
+  GTK_CSS_PROPERTY_ANIMATION_DURATION,
+  GTK_CSS_PROPERTY_ANIMATION_TIMING_FUNCTION,
+  GTK_CSS_PROPERTY_ANIMATION_ITERATION_COUNT,
+  GTK_CSS_PROPERTY_ANIMATION_DIRECTION,
+  GTK_CSS_PROPERTY_ANIMATION_PLAY_STATE,
+  GTK_CSS_PROPERTY_ANIMATION_DELAY,
+  GTK_CSS_PROPERTY_ANIMATION_FILL_MODE,
+};
+
+static int transition_props[] = {
+  GTK_CSS_PROPERTY_TRANSITION_PROPERTY,
+  GTK_CSS_PROPERTY_TRANSITION_DURATION,
+  GTK_CSS_PROPERTY_TRANSITION_TIMING_FUNCTION,
+  GTK_CSS_PROPERTY_TRANSITION_DELAY,
+};
+
+static int size_props[] = {
+  GTK_CSS_PROPERTY_MARGIN_TOP,
+  GTK_CSS_PROPERTY_MARGIN_LEFT,
+  GTK_CSS_PROPERTY_MARGIN_BOTTOM,
+  GTK_CSS_PROPERTY_MARGIN_RIGHT,
+  GTK_CSS_PROPERTY_PADDING_TOP,
+  GTK_CSS_PROPERTY_PADDING_LEFT,
+  GTK_CSS_PROPERTY_PADDING_BOTTOM,
+  GTK_CSS_PROPERTY_PADDING_RIGHT,
+  GTK_CSS_PROPERTY_BORDER_SPACING,
+  GTK_CSS_PROPERTY_MIN_WIDTH,
+  GTK_CSS_PROPERTY_MIN_HEIGHT,
+};
+
+static int other_props[] = {
+  GTK_CSS_PROPERTY_ICON_SOURCE,
+  GTK_CSS_PROPERTY_ICON_TRANSFORM,
+  GTK_CSS_PROPERTY_ICON_FILTER,
+  GTK_CSS_PROPERTY_TRANSFORM,
+  GTK_CSS_PROPERTY_OPACITY,
+  GTK_CSS_PROPERTY_FILTER,
+};
+
+
+typedef struct {
+  int ref_count;
+  GtkCssValue *values[0];
+} GtkCssValues;
+
+#ifdef STYLE_ACCOUNTING
+static int num_lookups;
+static int num_empty;
+static int num_core;
+static int num_background;
+static int num_border;
+static int num_icon;
+static int num_outline;
+static int num_font;
+static int num_font_variant;
+static int num_animation;
+static int num_transition;
+static int num_size;
+static int num_other;
+static int num_styles;
+
+static gboolean
+dump_style_counts (gpointer data)
+{
+  g_print ("%4d lookups       \t%.2f%% empty\n", num_lookups, num_empty * 100 / (double)num_lookups);
+  g_print ("%4d styles\n", num_styles);
+  g_print ("%4d core          \t%.2f%% shared\n", num_core, (num_styles - num_core) * 100. / (double)num_styles);
+  g_print ("%4d background    \t%.2f%% shared\n", num_background, (num_styles - num_background) * 100. / (double)num_styles);
+  g_print ("%4d border        \t%.2f%% shared\n", num_border, (num_styles - num_border) * 100. / (double)num_styles);
+  g_print ("%4d icon          \t%.2f%% shared\n", num_icon, (num_styles - num_icon) * 100. / (double)num_styles);
+  g_print ("%4d outline       \t%.2f%% shared\n", num_outline, (num_styles - num_outline) * 100. / (double)num_styles);
+  g_print ("%4d font          \t%.2f%% shared\n", num_font, (num_styles - num_font) * 100. / (double)num_styles);
+  g_print ("%4d font variant  \t%.2f%% shared\n", num_font_variant, (num_styles - num_font_variant) * 100. / (double)num_styles);
+  g_print ("%4d animation     \t%.2f%% shared\n", num_animation, (num_styles - num_animation) * 100. / (double)num_styles);
+  g_print ("%4d transition    \t%.2f%% shared\n", num_transition, (num_styles - num_transition) * 100. / (double)num_styles);
+  g_print ("%4d size          \t%.2f%% shared\n", num_size, (num_styles - num_size) * 100. / (double)num_styles);
+  g_print ("%4d other         \t%.2f%% shared\n", num_other, (num_styles - num_other) * 100. / (double)num_styles);
+  guint64 size;
+
+  size = num_styles       * sizeof (GtkCssStaticStyle)
+       + num_core         * sizeof (GtkCssCoreValues)
+       + num_background   * sizeof (GtkCssBackgroundValues)
+       + num_border       * sizeof (GtkCssBorderValues)
+       + num_icon         * sizeof (GtkCssIconValues)
+       + num_outline      * sizeof (GtkCssOutlineValues)
+       + num_font         * sizeof (GtkCssFontValues)
+       + num_font_variant * sizeof (GtkCssFontVariantValues)
+       + num_animation    * sizeof (GtkCssAnimationValues)
+       + num_transition   * sizeof (GtkCssTransitionValues)
+       + num_size         * sizeof (GtkCssSizeValues)
+       + num_other        * sizeof (GtkCssOtherValues);
+  char *s = g_format_size (size);
+  g_print ("style memory: %s\n\n", s);
+  g_free (s);
+
+  return G_SOURCE_CONTINUE;
+}
+
+#define init_style_counts() g_timeout_add (1000, dump_style_counts, NULL)
+#define style_accounting_new_style(NAME)  num_ ## NAME ++;
+#define style_accounting_free_style(NAME)  num_ ## NAME --;
+#else
+#define init_style_counts()
+#define style_accounting_new_style(NAME)
+#define style_accounting_free_style(NAME)
+#endif
+
+static void
+maybe_unref_section (gpointer section)
+{
+  if (section)
+    gtk_css_section_unref (section);
+}
+
+static void
+set_section (GtkCssStaticStyle *style,
+             guint              id,
+             GtkCssSection     *section)
+{
+  if (style->sections && style->sections->len > id && g_ptr_array_index (style->sections, id))
+    {
+      gtk_css_section_unref (g_ptr_array_index (style->sections, id));
+      g_ptr_array_index (style->sections, id) = NULL;
+    }
+
+  if (section)
+    {
+      if (style->sections == NULL)
+        style->sections = g_ptr_array_new_with_free_func (maybe_unref_section);
+      if (style->sections->len <= id)
+        g_ptr_array_set_size (style->sections, id + 1);
+      g_ptr_array_index (style->sections, id) = gtk_css_section_ref (section);
+    }
+}
+
+#define DEFINE_VALUES(TYPE, NAME, INHERIT) \
+static inline TYPE * \
+gtk_css_ ## NAME ## _values_ref (TYPE *style) \
+{ \
+  style->ref_count++; \
+  return style; \
+} \
+\
+static void \
+gtk_css_ ## NAME ## _values_free (TYPE *style) \
+{ \
+  GtkCssValues *group = (GtkCssValues *)style; \
+  int i; \
+\
+  style_accounting_free_style (NAME); \
+\
+  for (i = 0; i < G_N_ELEMENTS(NAME ## _props); i++) \
+    gtk_css_value_unref (group->values[i]); \
+\
+  g_free (style); \
+} \
+\
+static inline void \
+gtk_css_ ## NAME ## _values_unref (TYPE *style) \
+{ \
+  style->ref_count--; \
+  if (style->ref_count == 0) \
+    gtk_css_ ## NAME ## _values_free (style); \
+} \
+\
+static inline TYPE * \
+gtk_css_ ## NAME ## _values_new (void) \
+{ \
+  TYPE *style; \
+\
+  style = g_new0 (TYPE, 1); \
+  style->ref_count = 1; \
+\
+  style_accounting_new_style (NAME); \
+\
+  return style; \
+} \
+\
+static inline void \
+gtk_css_ ## NAME ## _values_new_compute (GtkCssStaticStyle *style, \
+                                         GtkStyleProvider *provider, \
+                                         GtkCssStyle *parent_style, \
+                                         GtkCssLookup *lookup) \
+{ \
+  int i; \
+  GtkCssValues *group; \
+\
+  style->NAME = gtk_css_ ## NAME ## _values_new (); \
+\
+  group = (GtkCssValues *)style->NAME; \
+\
+  for (i = 0; i < G_N_ELEMENTS (NAME ## _props); i++) \
+    { \
+      guint id = NAME ## _props[i]; \
+      GtkCssValue *specified = lookup->values[id].value; \
+      COMPUTE_VALUE \
+      if (specified) \
+        group->values[i] = _gtk_css_value_compute (specified, id, provider, (GtkCssStyle *)style, parent_style); \
+      else if (parent_style && INHERIT) \
+        group->values[i] = _gtk_css_value_ref (gtk_css_style_get_value (parent_style, id)); \
+      else \
+        group->values[i] = _gtk_css_initial_value_new_compute (id, provider, (GtkCssStyle *)style, parent_style); \
+      set_section (style, id, lookup->values[id].section); \
+    } \
+} \
+\
+static GtkBitmask * gtk_css_ ## NAME ## _values_mask; \
+static TYPE * gtk_css_ ## NAME ## _initial_values; \
+\
+static TYPE * gtk_css_ ## NAME ## _create_initial_values (void); \
+\
+static void \
+gtk_css_ ## NAME ## _values_init (void) \
+{ \
+  int i; \
+  gtk_css_ ## NAME ## _values_mask = _gtk_bitmask_new (); \
+  for (i = 0; i < G_N_ELEMENTS(NAME ## _props); i++) \
+    { \
+      guint id = NAME ## _props[i]; \
+      gtk_css_ ## NAME ## _values_mask = _gtk_bitmask_set (gtk_css_ ## NAME ## _values_mask, id, TRUE); \
+    } \
+\
+  gtk_css_ ## NAME ## _initial_values = gtk_css_ ## NAME ## _create_initial_values (); \
+} \
+\
+static inline gboolean \
+gtk_css_ ## NAME ## _values_unset (const GtkCssLookup *lookup) \
+{ \
+  const GtkBitmask *set_values = _gtk_css_lookup_get_set_values (lookup); \
+  return !_gtk_bitmask_intersects (set_values, gtk_css_ ## NAME ## _values_mask); \
+}
+
+#define COMPUTE_VALUE \
+  if (id == GTK_CSS_PROPERTY_BORDER_TOP_WIDTH || \
+      id == GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH || \
+      id == GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH || \
+      id == GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH) \
+    { \
+      GtkBorderStyle border_style = _gtk_css_border_style_value_get (group->values[i - 1]); \
+      if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN) \
+        { \
+          group->values[i] = gtk_css_dimension_value_new (0, GTK_CSS_NUMBER); \
+          continue; \
+        } \
+    }
+DEFINE_VALUES (GtkCssBorderValues, border, FALSE)
+#undef COMPUTE_VALUE
+
+#define COMPUTE_VALUE \
+  if (id == GTK_CSS_PROPERTY_OUTLINE_WIDTH) \
+    { \
+      GtkBorderStyle border_style = _gtk_css_border_style_value_get (group->values[i - 1]); \
+      if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN) \
+        { \
+          group->values[i] = gtk_css_dimension_value_new (0, GTK_CSS_NUMBER); \
+          continue; \
+        } \
+    }
+DEFINE_VALUES (GtkCssOutlineValues, outline, FALSE)
+#undef COMPUTE_VALUE
+
+#define COMPUTE_VALUE
+DEFINE_VALUES (GtkCssCoreValues, core, TRUE)
+DEFINE_VALUES (GtkCssBackgroundValues, background, FALSE)
+DEFINE_VALUES (GtkCssIconValues, icon, TRUE)
+DEFINE_VALUES (GtkCssFontValues, font, TRUE)
+DEFINE_VALUES (GtkCssFontVariantValues, font_variant, FALSE)
+DEFINE_VALUES (GtkCssAnimationValues, animation, FALSE)
+DEFINE_VALUES (GtkCssTransitionValues, transition, FALSE)
+DEFINE_VALUES (GtkCssSizeValues, size, FALSE)
+DEFINE_VALUES (GtkCssOtherValues, other, FALSE)
+#undef COMPUTE_VALUE
+
+#define VERIFY_MASK(NAME) \
+  { \
+    GtkBitmask *copy; \
+    copy = _gtk_bitmask_intersect (_gtk_bitmask_copy (gtk_css_ ## NAME ## _values_mask), all); \
+    g_assert (_gtk_bitmask_equals (copy, gtk_css_ ## NAME ## _values_mask)); \
+    _gtk_bitmask_free (copy); \
+  } \
+ all = _gtk_bitmask_subtract (all, gtk_css_ ## NAME ## _values_mask);
+  
+/* Verify that every style property is present in one group, and none
+ * is present in more than one group.
+ */
+static void
+verify_style_groups (void)
+{
+  GtkBitmask *all;
+  guint id;
+
+  all = _gtk_bitmask_new ();
+
+  for (id = 0; id < GTK_CSS_PROPERTY_N_PROPERTIES; id++)
+    all = _gtk_bitmask_set (all, id, TRUE);
+
+  VERIFY_MASK (core);
+  VERIFY_MASK (background);
+  VERIFY_MASK (border);
+  VERIFY_MASK (icon);
+  VERIFY_MASK (outline);
+  VERIFY_MASK (font);
+  VERIFY_MASK (font_variant);
+  VERIFY_MASK (animation);
+  VERIFY_MASK (transition);
+  VERIFY_MASK (size);
+  VERIFY_MASK (other);
+
+  g_assert (_gtk_bitmask_is_empty (all));
+
+  _gtk_bitmask_free (all);
+}
+
+#undef VERIFY_MASK
+
 G_DEFINE_TYPE (GtkCssStaticStyle, gtk_css_static_style, GTK_TYPE_CSS_STYLE)
 
 static GtkCssValue *
@@ -48,7 +451,200 @@ gtk_css_static_style_get_value (GtkCssStyle *style,
   /* This is called a lot, so we avoid a dynamic type check here */
   GtkCssStaticStyle *sstyle = (GtkCssStaticStyle *) style;
 
-  return sstyle->values[id];
+  switch (id)
+    {
+    case GTK_CSS_PROPERTY_COLOR:
+      return sstyle->core->color;
+    case GTK_CSS_PROPERTY_DPI:
+      return sstyle->core->dpi;
+    case GTK_CSS_PROPERTY_FONT_SIZE:
+      return sstyle->core->font_size;
+    case GTK_CSS_PROPERTY_ICON_THEME:
+      return sstyle->core->icon_theme;
+    case GTK_CSS_PROPERTY_ICON_PALETTE:
+      return sstyle->core->icon_palette;
+    case GTK_CSS_PROPERTY_BACKGROUND_COLOR:
+      return sstyle->background->background_color;
+    case GTK_CSS_PROPERTY_FONT_FAMILY:
+      return sstyle->font->font_family;
+    case GTK_CSS_PROPERTY_FONT_STYLE:
+      return sstyle->font->font_style;
+    case GTK_CSS_PROPERTY_FONT_WEIGHT:
+      return sstyle->font->font_weight;
+    case GTK_CSS_PROPERTY_FONT_STRETCH:
+      return sstyle->font->font_stretch;
+    case GTK_CSS_PROPERTY_LETTER_SPACING:
+      return sstyle->font->letter_spacing;
+    case GTK_CSS_PROPERTY_TEXT_DECORATION_LINE:
+      return sstyle->font_variant->text_decoration_line;
+    case GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR:
+      return sstyle->font_variant->text_decoration_color ? sstyle->font_variant->text_decoration_color : sstyle->core->color;
+    case GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE:
+      return sstyle->font_variant->text_decoration_style;
+    case GTK_CSS_PROPERTY_FONT_KERNING:
+      return sstyle->font_variant->font_kerning;
+    case GTK_CSS_PROPERTY_FONT_VARIANT_LIGATURES:
+      return sstyle->font_variant->font_variant_ligatures;
+    case GTK_CSS_PROPERTY_FONT_VARIANT_POSITION:
+      return sstyle->font_variant->font_variant_position;
+    case GTK_CSS_PROPERTY_FONT_VARIANT_CAPS:
+      return sstyle->font_variant->font_variant_caps;
+    case GTK_CSS_PROPERTY_FONT_VARIANT_NUMERIC:
+      return sstyle->font_variant->font_variant_numeric;
+    case GTK_CSS_PROPERTY_FONT_VARIANT_ALTERNATES:
+      return sstyle->font_variant->font_variant_alternates;
+    case GTK_CSS_PROPERTY_FONT_VARIANT_EAST_ASIAN:
+      return sstyle->font_variant->font_variant_east_asian;
+    case GTK_CSS_PROPERTY_TEXT_SHADOW:
+      return sstyle->font->text_shadow;
+    case GTK_CSS_PROPERTY_BOX_SHADOW:
+      return sstyle->background->box_shadow;
+    case GTK_CSS_PROPERTY_MARGIN_TOP:
+      return sstyle->size->margin_top;
+    case GTK_CSS_PROPERTY_MARGIN_LEFT:
+      return sstyle->size->margin_left;
+    case GTK_CSS_PROPERTY_MARGIN_BOTTOM:
+      return sstyle->size->margin_bottom;
+    case GTK_CSS_PROPERTY_MARGIN_RIGHT:
+      return sstyle->size->margin_right;
+    case GTK_CSS_PROPERTY_PADDING_TOP:
+      return sstyle->size->padding_top;
+    case GTK_CSS_PROPERTY_PADDING_LEFT:
+      return sstyle->size->padding_left;
+    case GTK_CSS_PROPERTY_PADDING_BOTTOM:
+      return sstyle->size->padding_bottom;
+    case GTK_CSS_PROPERTY_PADDING_RIGHT:
+      return sstyle->size->padding_right;
+    case GTK_CSS_PROPERTY_BORDER_TOP_STYLE:
+      return sstyle->border->border_top_style;
+    case GTK_CSS_PROPERTY_BORDER_TOP_WIDTH:
+      return sstyle->border->border_top_width;
+    case GTK_CSS_PROPERTY_BORDER_LEFT_STYLE:
+      return sstyle->border->border_left_style;
+    case GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH:
+      return sstyle->border->border_left_width;
+    case GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE:
+      return sstyle->border->border_bottom_style;
+    case GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH:
+      return sstyle->border->border_bottom_width;
+    case GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE:
+      return sstyle->border->border_right_style;
+    case GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH:
+      return sstyle->border->border_right_width;
+    case GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS:
+      return sstyle->border->border_top_left_radius;
+    case GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS:
+      return sstyle->border->border_top_right_radius;
+    case GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS:
+      return sstyle->border->border_bottom_right_radius;
+    case GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS:
+      return sstyle->border->border_bottom_left_radius;
+    case GTK_CSS_PROPERTY_OUTLINE_STYLE:
+      return sstyle->outline->outline_style;
+    case GTK_CSS_PROPERTY_OUTLINE_WIDTH:
+      return sstyle->outline->outline_width;
+    case GTK_CSS_PROPERTY_OUTLINE_OFFSET:
+      return sstyle->outline->outline_offset;
+    case GTK_CSS_PROPERTY_OUTLINE_TOP_LEFT_RADIUS:
+      return sstyle->outline->outline_top_left_radius;
+    case GTK_CSS_PROPERTY_OUTLINE_TOP_RIGHT_RADIUS:
+      return sstyle->outline->outline_top_right_radius;
+    case GTK_CSS_PROPERTY_OUTLINE_BOTTOM_RIGHT_RADIUS:
+      return sstyle->outline->outline_bottom_right_radius;
+    case GTK_CSS_PROPERTY_OUTLINE_BOTTOM_LEFT_RADIUS:
+      return sstyle->outline->outline_bottom_left_radius;
+    case GTK_CSS_PROPERTY_BACKGROUND_CLIP:
+      return sstyle->background->background_clip;
+    case GTK_CSS_PROPERTY_BACKGROUND_ORIGIN:
+      return sstyle->background->background_origin;
+    case GTK_CSS_PROPERTY_BACKGROUND_SIZE:
+      return sstyle->background->background_size;
+    case GTK_CSS_PROPERTY_BACKGROUND_POSITION:
+      return sstyle->background->background_position;
+    case GTK_CSS_PROPERTY_BORDER_TOP_COLOR:
+      return sstyle->border->border_top_color ? sstyle->border->border_top_color : sstyle->core->color;
+    case GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR:
+      return sstyle->border->border_right_color ? sstyle->border->border_right_color : sstyle->core->color;
+    case GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR:
+      return sstyle->border->border_bottom_color ? sstyle->border->border_bottom_color : sstyle->core->color;
+    case GTK_CSS_PROPERTY_BORDER_LEFT_COLOR:
+      return sstyle->border->border_left_color ? sstyle->border->border_left_color: sstyle->core->color;
+    case GTK_CSS_PROPERTY_OUTLINE_COLOR:
+      return sstyle->outline->outline_color ? sstyle->outline->outline_color : sstyle->core->color;
+    case GTK_CSS_PROPERTY_BACKGROUND_REPEAT:
+      return sstyle->background->background_repeat;
+    case GTK_CSS_PROPERTY_BACKGROUND_IMAGE:
+      return sstyle->background->background_image;
+    case GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE:
+      return sstyle->background->background_blend_mode;
+    case GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE:
+      return sstyle->border->border_image_source;
+    case GTK_CSS_PROPERTY_BORDER_IMAGE_REPEAT:
+      return sstyle->border->border_image_repeat;
+    case GTK_CSS_PROPERTY_BORDER_IMAGE_SLICE:
+      return sstyle->border->border_image_slice;
+    case GTK_CSS_PROPERTY_BORDER_IMAGE_WIDTH:
+      return sstyle->border->border_image_width;
+    case GTK_CSS_PROPERTY_ICON_SOURCE:
+      return sstyle->other->icon_source;
+    case GTK_CSS_PROPERTY_ICON_SIZE:
+      return sstyle->icon->icon_size;
+    case GTK_CSS_PROPERTY_ICON_SHADOW:
+      return sstyle->icon->icon_shadow;
+    case GTK_CSS_PROPERTY_ICON_STYLE:
+      return sstyle->icon->icon_style;
+    case GTK_CSS_PROPERTY_ICON_TRANSFORM:
+      return sstyle->other->icon_transform;
+    case GTK_CSS_PROPERTY_ICON_FILTER:
+      return sstyle->other->icon_filter;
+    case GTK_CSS_PROPERTY_BORDER_SPACING:
+      return sstyle->size->border_spacing;
+    case GTK_CSS_PROPERTY_TRANSFORM:
+      return sstyle->other->transform;
+    case GTK_CSS_PROPERTY_MIN_WIDTH:
+      return sstyle->size->min_width;
+    case GTK_CSS_PROPERTY_MIN_HEIGHT:
+      return sstyle->size->min_height;
+    case GTK_CSS_PROPERTY_TRANSITION_PROPERTY:
+      return sstyle->transition->transition_property;
+    case GTK_CSS_PROPERTY_TRANSITION_DURATION:
+      return sstyle->transition->transition_duration;
+    case GTK_CSS_PROPERTY_TRANSITION_TIMING_FUNCTION:
+      return sstyle->transition->transition_timing_function;
+    case GTK_CSS_PROPERTY_TRANSITION_DELAY:
+      return sstyle->transition->transition_delay;
+    case GTK_CSS_PROPERTY_ANIMATION_NAME:
+      return sstyle->animation->animation_name;
+    case GTK_CSS_PROPERTY_ANIMATION_DURATION:
+      return sstyle->animation->animation_duration;
+    case GTK_CSS_PROPERTY_ANIMATION_TIMING_FUNCTION:
+      return sstyle->animation->animation_timing_function;
+    case GTK_CSS_PROPERTY_ANIMATION_ITERATION_COUNT:
+      return sstyle->animation->animation_iteration_count;
+    case GTK_CSS_PROPERTY_ANIMATION_DIRECTION:
+      return sstyle->animation->animation_direction;
+    case GTK_CSS_PROPERTY_ANIMATION_PLAY_STATE:
+      return sstyle->animation->animation_play_state;
+    case GTK_CSS_PROPERTY_ANIMATION_DELAY:
+      return sstyle->animation->animation_delay;
+    case GTK_CSS_PROPERTY_ANIMATION_FILL_MODE:
+      return sstyle->animation->animation_fill_mode;
+    case GTK_CSS_PROPERTY_OPACITY:
+      return sstyle->other->opacity;
+    case GTK_CSS_PROPERTY_FILTER:
+      return sstyle->other->filter;
+    case GTK_CSS_PROPERTY_CARET_COLOR:
+      return sstyle->font->caret_color ? sstyle->font->caret_color : sstyle->core->color;
+    case GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR:
+      return sstyle->font->secondary_caret_color ? sstyle->font->secondary_caret_color : sstyle->core->color;
+    case GTK_CSS_PROPERTY_FONT_FEATURE_SETTINGS:
+      return sstyle->font->font_feature_settings;
+    case GTK_CSS_PROPERTY_FONT_VARIATION_SETTINGS:
+      return sstyle->font->font_variation_settings;
+
+    default:
+      g_assert_not_reached ();
+    }
 }
 
 static GtkCssSection *
@@ -68,13 +664,19 @@ static void
 gtk_css_static_style_dispose (GObject *object)
 {
   GtkCssStaticStyle *style = GTK_CSS_STATIC_STYLE (object);
-  guint i;
 
-  for (i = 0; i < GTK_CSS_PROPERTY_N_PROPERTIES; i++)
-    {
-      if (style->values[i])
-        _gtk_css_value_unref (style->values[i]);
-    }
+  gtk_css_core_values_unref (style->core);
+  gtk_css_background_values_unref (style->background);
+  gtk_css_border_values_unref (style->border);
+  gtk_css_icon_values_unref (style->icon);
+  gtk_css_outline_values_unref (style->outline);
+  gtk_css_font_values_unref (style->font);
+  gtk_css_font_variant_values_unref (style->font_variant);
+  gtk_css_animation_values_unref (style->animation);
+  gtk_css_transition_values_unref (style->transition);
+  gtk_css_size_values_unref (style->size);
+  gtk_css_other_values_unref (style->other);
+ 
   if (style->sections)
     {
       g_ptr_array_unref (style->sections);
@@ -90,57 +692,62 @@ gtk_css_static_style_get_static_style (GtkCssStyle *style)
   return (GtkCssStaticStyle *)style;
 }
 
+static void gtk_css_static_style_finalize (GObject *object);
+
 static void
 gtk_css_static_style_class_init (GtkCssStaticStyleClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkCssStyleClass *style_class = GTK_CSS_STYLE_CLASS (klass);
 
+  object_class->finalize = gtk_css_static_style_finalize;
   object_class->dispose = gtk_css_static_style_dispose;
 
   style_class->get_value = gtk_css_static_style_get_value;
   style_class->get_section = gtk_css_static_style_get_section;
   style_class->get_static_style = gtk_css_static_style_get_static_style;
+
+  gtk_css_core_values_init ();
+  gtk_css_background_values_init ();
+  gtk_css_border_values_init ();
+  gtk_css_icon_values_init ();
+  gtk_css_outline_values_init ();
+  gtk_css_font_values_init ();
+  gtk_css_font_variant_values_init ();
+  gtk_css_animation_values_init ();
+  gtk_css_transition_values_init ();
+  gtk_css_size_values_init ();
+  gtk_css_other_values_init ();
+
+  init_style_counts ();
+  verify_style_groups ();
 }
 
 static void
 gtk_css_static_style_init (GtkCssStaticStyle *style)
 {
+#ifdef STYLE_ACCOUNTING
+  num_styles++;
+#endif
 }
 
 static void
-maybe_unref_section (gpointer section)
+gtk_css_static_style_finalize (GObject *object)
 {
-  if (section)
-    gtk_css_section_unref (section);
+#ifdef STYLE_ACCOUNTING
+  num_styles--;
+#endif
+
+  G_OBJECT_CLASS (gtk_css_static_style_parent_class)->finalize (object);
 }
 
-static void
-gtk_css_static_style_set_value (GtkCssStaticStyle *style,
-                                guint              id,
-                                GtkCssValue       *value,
-                                GtkCssSection     *section)
+static inline void
+gtk_css_take_value (GtkCssValue **variable,
+                   GtkCssValue  *value)
 {
-  if (style->values[id])
-    _gtk_css_value_unref (style->values[id]);
-
-  style->values[id] = value;
-
-  if (style->sections && style->sections->len > id && g_ptr_array_index (style->sections, id))
-    {
-      gtk_css_section_unref (g_ptr_array_index (style->sections, id));
-      g_ptr_array_index (style->sections, id) = NULL;
-    }
-
-  if (section)
-    {
-      if (style->sections == NULL)
-        style->sections = g_ptr_array_new_with_free_func (maybe_unref_section);
-      if (style->sections->len <= id)
-        g_ptr_array_set_size (style->sections, id + 1);
-
-      g_ptr_array_index (style->sections, id) = gtk_css_section_ref (section);
-    }
+  if (*variable)
+    gtk_css_value_unref (*variable);
+  *variable = value;
 }
 
 static GtkCssStyle *default_style;
@@ -175,6 +782,294 @@ gtk_css_static_style_get_default (void)
   return default_style;
 }
 
+static GtkCssCoreValues *
+gtk_css_core_create_initial_values (void)
+{
+  return NULL;
+
+}
+static GtkCssBackgroundValues *
+gtk_css_background_create_initial_values (void)
+{
+  GtkCssBackgroundValues *style;
+
+  /* none of the initial values depend on the context */
+  style = gtk_css_background_values_new ();
+  style->background_color = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BACKGROUND_COLOR, NULL, NULL, NULL);
+  style->box_shadow = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BOX_SHADOW, NULL, NULL, NULL);
+  style->background_clip = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BACKGROUND_CLIP, NULL, NULL, NULL);
+  style->background_origin = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BACKGROUND_ORIGIN, NULL, NULL, NULL);
+  style->background_size = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BACKGROUND_SIZE, NULL, NULL, NULL);
+  style->background_position = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BACKGROUND_POSITION, NULL, NULL, NULL);
+  style->background_repeat = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BACKGROUND_REPEAT, NULL, NULL, NULL);
+  style->background_image = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BACKGROUND_IMAGE, NULL, NULL, NULL);
+  style->background_blend_mode = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE, NULL, NULL, NULL);
+
+  return style;
+}
+
+static GtkCssBorderValues *
+gtk_css_border_create_initial_values (void)
+{
+  GtkCssBorderValues *border;
+
+  border = gtk_css_border_values_new ();
+
+  border->border_top_style = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_TOP_STYLE, NULL, NULL, NULL);
+  border->border_top_width = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_TOP_WIDTH, NULL, NULL, NULL);
+  border->border_left_style = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_LEFT_STYLE, NULL, NULL, NULL);
+  border->border_left_width = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH, NULL, NULL, NULL);
+  border->border_bottom_style = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE, NULL, NULL, NULL);
+  border->border_bottom_width = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH, NULL, NULL, NULL);
+  border->border_right_style = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE, NULL, NULL, NULL);
+  border->border_right_width = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH, NULL, NULL, NULL);
+  border->border_top_left_radius = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS, NULL, NULL, NULL);
+  border->border_top_right_radius = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS, NULL, NULL, NULL);
+  border->border_bottom_left_radius = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS, NULL, NULL, NULL);
+  border->border_bottom_right_radius = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS, NULL, NULL, NULL);
+  border->border_top_color = NULL;
+  border->border_right_color = NULL;
+  border->border_bottom_color = NULL;
+  border->border_left_color = NULL;
+  border->border_image_source = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE, NULL, NULL, NULL);
+  border->border_image_repeat = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_IMAGE_REPEAT, NULL, NULL, NULL);
+  border->border_image_slice = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_IMAGE_SLICE, NULL, NULL, NULL);
+  border->border_image_width = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_IMAGE_WIDTH, NULL, NULL, NULL);
+
+  return border;
+}
+
+static GtkCssOutlineValues *
+gtk_css_outline_create_initial_values (void)
+{
+  GtkCssOutlineValues *values;
+
+  values = gtk_css_outline_values_new ();
+
+  values->outline_style = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_STYLE, NULL, NULL, NULL);
+  values->outline_width = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_WIDTH, NULL, NULL, NULL);
+  values->outline_offset = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_OFFSET, NULL, NULL, NULL);
+  values->outline_top_left_radius = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_TOP_LEFT_RADIUS, NULL, NULL, NULL);
+  values->outline_top_right_radius = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_TOP_RIGHT_RADIUS, NULL, NULL, NULL);
+  values->outline_bottom_right_radius = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_BOTTOM_RIGHT_RADIUS, NULL, NULL, NULL);
+  values->outline_bottom_left_radius = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_BOTTOM_LEFT_RADIUS, NULL, NULL, NULL);
+  values->outline_color = NULL;
+
+  return values;
+}
+
+static GtkCssIconValues *
+gtk_css_icon_create_initial_values (void)
+{
+  return NULL;
+}
+
+static GtkCssFontValues *
+gtk_css_font_create_initial_values (void)
+{
+  return NULL;
+}
+
+static GtkCssFontVariantValues *
+gtk_css_font_variant_create_initial_values (void)
+{
+  GtkCssFontVariantValues *values;
+
+  values = gtk_css_font_variant_values_new ();
+
+  values->text_decoration_line = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TEXT_DECORATION_LINE, NULL, NULL, NULL);
+  values->text_decoration_color = NULL;
+  values->text_decoration_style = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE, NULL, NULL, NULL);
+  values->font_kerning = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_KERNING, NULL, NULL, NULL);
+  values->font_variant_ligatures = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_VARIANT_LIGATURES, NULL, NULL, NULL);
+  values->font_variant_position = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_VARIANT_POSITION, NULL, NULL, NULL);
+  values->font_variant_caps = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_VARIANT_CAPS, NULL, NULL, NULL);
+  values->font_variant_numeric = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_VARIANT_NUMERIC, NULL, NULL, NULL);
+  values->font_variant_alternates = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_VARIANT_ALTERNATES, NULL, NULL, NULL);
+  values->font_variant_east_asian = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_VARIANT_EAST_ASIAN, NULL, NULL, NULL);
+
+  return values;
+}
+
+static GtkCssAnimationValues *
+gtk_css_animation_create_initial_values (void)
+{
+  GtkCssAnimationValues *values;
+
+  values = gtk_css_animation_values_new ();
+
+  values->animation_name = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_ANIMATION_NAME, NULL, NULL, NULL);
+  values->animation_duration = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_ANIMATION_DURATION, NULL, NULL, NULL);
+  values->animation_timing_function = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_ANIMATION_TIMING_FUNCTION, NULL, NULL, NULL);
+  values->animation_iteration_count = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_ANIMATION_ITERATION_COUNT, NULL, NULL, NULL);
+  values->animation_direction = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_ANIMATION_DIRECTION, NULL, NULL, NULL);
+  values->animation_play_state = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_ANIMATION_PLAY_STATE, NULL, NULL, NULL);
+  values->animation_delay = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_ANIMATION_DELAY, NULL, NULL, NULL);
+  values->animation_fill_mode = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_ANIMATION_FILL_MODE, NULL, NULL, NULL);
+
+  return values;
+}
+
+static GtkCssTransitionValues *
+gtk_css_transition_create_initial_values (void)
+{
+  GtkCssTransitionValues *values;
+
+  values = gtk_css_transition_values_new ();
+
+  values->transition_property = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TRANSITION_PROPERTY, NULL, NULL, NULL);
+  values->transition_duration = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TRANSITION_DURATION, NULL, NULL, NULL);
+  values->transition_timing_function = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TRANSITION_TIMING_FUNCTION, NULL, NULL, NULL);
+  values->transition_delay = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TRANSITION_DELAY, NULL, NULL, NULL);
+
+  return values;
+}
+
+static GtkCssSizeValues *
+gtk_css_size_create_initial_values (void)
+{
+  GtkCssSizeValues *values;
+
+  values = gtk_css_size_values_new ();
+
+  values->margin_top = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_MARGIN_TOP, NULL, NULL, NULL);
+  values->margin_left = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_MARGIN_LEFT, NULL, NULL, NULL);
+  values->margin_bottom = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_MARGIN_BOTTOM, NULL, NULL, NULL);
+  values->margin_right = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_MARGIN_RIGHT, NULL, NULL, NULL);
+  values->padding_top = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_PADDING_TOP, NULL, NULL, NULL);
+  values->padding_left = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_PADDING_LEFT, NULL, NULL, NULL);
+  values->padding_bottom = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_PADDING_BOTTOM, NULL, NULL, NULL);
+  values->padding_right = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_PADDING_RIGHT, NULL, NULL, NULL);
+  values->border_spacing = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_SPACING, NULL, NULL, NULL);
+  values->min_width = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_MIN_WIDTH, NULL, NULL, NULL);
+  values->min_height = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_MIN_HEIGHT, NULL, NULL, NULL);
+
+  return values;
+}
+
+static GtkCssOtherValues *
+gtk_css_other_create_initial_values (void)
+{
+  GtkCssOtherValues *values;
+
+  values = gtk_css_other_values_new ();
+
+  values->icon_source = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_ICON_SOURCE, NULL, NULL, NULL);
+  values->icon_transform = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_ICON_TRANSFORM, NULL, NULL, NULL);
+  values->icon_filter = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_ICON_FILTER, NULL, NULL, NULL);
+  values->transform = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TRANSFORM, NULL, NULL, NULL);
+  values->opacity = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OPACITY, NULL, NULL, NULL);
+  values->filter = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FILTER, NULL, NULL, NULL);
+
+  return values;
+}
+
+static void
+gtk_css_lookup_resolve (GtkCssLookup      *lookup,
+                        GtkStyleProvider  *provider,
+                        GtkCssStaticStyle *style,
+                        GtkCssStyle       *parent_style)
+{
+  gboolean parent_is_static;
+
+  gtk_internal_return_if_fail (lookup != NULL);
+  gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
+  gtk_internal_return_if_fail (GTK_IS_CSS_STATIC_STYLE (style));
+  gtk_internal_return_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style));
+
+  parent_is_static = GTK_IS_CSS_STATIC_STYLE (parent_style);
+
+#ifdef STYLE_ACCOUNTING
+  num_lookups++;
+#endif
+
+  if (_gtk_bitmask_is_empty (_gtk_css_lookup_get_set_values (lookup)))
+    {
+
+#ifdef STYLE_ACCOUNTING
+      num_empty++;
+#endif
+
+      style->background = gtk_css_background_values_ref (gtk_css_background_initial_values);
+      style->border = gtk_css_border_values_ref (gtk_css_border_initial_values);
+      style->outline = gtk_css_outline_values_ref (gtk_css_outline_initial_values);
+      style->font_variant = gtk_css_font_variant_values_ref (gtk_css_font_variant_initial_values);
+      style->animation = gtk_css_animation_values_ref (gtk_css_animation_initial_values);
+      style->transition = gtk_css_transition_values_ref (gtk_css_transition_initial_values);
+      style->size = gtk_css_size_values_ref (gtk_css_size_initial_values);
+      style->other = gtk_css_other_values_ref (gtk_css_other_initial_values);
+
+      if (parent_is_static)
+        {
+          style->core = gtk_css_core_values_ref (GTK_CSS_STATIC_STYLE (parent_style)->core);
+          style->icon = gtk_css_icon_values_ref (GTK_CSS_STATIC_STYLE (parent_style)->icon);
+          style->font = gtk_css_font_values_ref (GTK_CSS_STATIC_STYLE (parent_style)->font);
+        }
+      else
+        {
+          gtk_css_core_values_new_compute (style, provider, parent_style, lookup);
+          gtk_css_icon_values_new_compute (style, provider, parent_style, lookup);
+          gtk_css_font_values_new_compute (style, provider, parent_style, lookup);
+        }
+
+      return;
+    }
+
+  if (parent_is_static && gtk_css_core_values_unset (lookup))
+    style->core = gtk_css_core_values_ref (GTK_CSS_STATIC_STYLE (parent_style)->core);
+  else
+    gtk_css_core_values_new_compute (style, provider, parent_style, lookup);
+
+  if (gtk_css_background_values_unset (lookup))
+    style->background = gtk_css_background_values_ref (gtk_css_background_initial_values);
+  else
+    gtk_css_background_values_new_compute (style, provider, parent_style, lookup);
+
+  if (gtk_css_border_values_unset (lookup))
+    style->border = gtk_css_border_values_ref (gtk_css_border_initial_values);
+  else
+    gtk_css_border_values_new_compute (style, provider, parent_style, lookup);
+
+  if (parent_is_static && gtk_css_icon_values_unset (lookup))
+    style->icon = gtk_css_icon_values_ref (GTK_CSS_STATIC_STYLE (parent_style)->icon);
+  else
+    gtk_css_icon_values_new_compute (style, provider, parent_style, lookup);
+
+  if (gtk_css_outline_values_unset (lookup))
+    style->outline = gtk_css_outline_values_ref (gtk_css_outline_initial_values);
+  else
+    gtk_css_outline_values_new_compute (style, provider, parent_style, lookup);
+
+  if (parent_is_static && gtk_css_font_values_unset (lookup))
+    style->font = gtk_css_font_values_ref (GTK_CSS_STATIC_STYLE (parent_style)->font);
+  else
+    gtk_css_font_values_new_compute (style, provider, parent_style, lookup);
+
+  if (gtk_css_font_variant_values_unset (lookup))
+    style->font_variant = gtk_css_font_variant_values_ref (gtk_css_font_variant_initial_values);
+  else
+    gtk_css_font_variant_values_new_compute (style, provider, parent_style, lookup);
+
+  if (gtk_css_animation_values_unset (lookup))
+    style->animation = gtk_css_animation_values_ref (gtk_css_animation_initial_values);
+  else
+    gtk_css_animation_values_new_compute (style, provider, parent_style, lookup);
+
+  if (gtk_css_transition_values_unset (lookup))
+    style->transition = gtk_css_transition_values_ref (gtk_css_transition_initial_values);
+  else
+    gtk_css_transition_values_new_compute (style, provider, parent_style, lookup);
+  if (gtk_css_size_values_unset (lookup))
+    style->size = gtk_css_size_values_ref (gtk_css_size_initial_values);
+  else
+    gtk_css_size_values_new_compute (style, provider, parent_style, lookup);
+
+  if (gtk_css_other_values_unset (lookup))
+    style->other = gtk_css_other_values_ref (gtk_css_other_initial_values);
+  else
+    gtk_css_other_values_new_compute (style, provider, parent_style, lookup);
+}
+
 GtkCssStyle *
 gtk_css_static_style_new_compute (GtkStyleProvider    *provider,
                                   const GtkCssMatcher *matcher,
@@ -196,10 +1091,10 @@ gtk_css_static_style_new_compute (GtkStyleProvider    *provider,
 
   result->change = change;
 
-  _gtk_css_lookup_resolve (&lookup,
-                           provider,
-                           result,
-                           parent);
+  gtk_css_lookup_resolve (&lookup,
+                          provider,
+                          result,
+                          parent);
 
   _gtk_css_lookup_destroy (&lookup);
 
@@ -211,68 +1106,6 @@ G_STATIC_ASSERT (GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE == GTK_CSS_PROPERTY_BORDER_
 G_STATIC_ASSERT (GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE == GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH - 1);
 G_STATIC_ASSERT (GTK_CSS_PROPERTY_BORDER_LEFT_STYLE == GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH - 1);
 G_STATIC_ASSERT (GTK_CSS_PROPERTY_OUTLINE_STYLE == GTK_CSS_PROPERTY_OUTLINE_WIDTH - 1);
-
-void
-gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
-                                    GtkStyleProvider  *provider,
-                                    GtkCssStyle       *parent_style,
-                                    guint              id,
-                                    GtkCssValue       *specified,
-                                    GtkCssSection     *section)
-{
-  GtkCssValue *value;
-  GtkBorderStyle border_style;
-
-  gtk_internal_return_if_fail (id < GTK_CSS_PROPERTY_N_PROPERTIES);
-
-  /* special case according to http://dev.w3.org/csswg/css-backgrounds/#the-border-width */
-  switch (id)
-    {
-      /* We have them ordered in gtkcssstylepropertyimpl.c accordingly, so the
-       * border styles are already computed when we compute the border widths.
-       *
-       * Note that we rely on ..._STYLE == ..._WIDTH - 1 here.
-       */
-      case GTK_CSS_PROPERTY_BORDER_TOP_WIDTH:
-      case GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH:
-      case GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH:
-      case GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH:
-      case GTK_CSS_PROPERTY_OUTLINE_WIDTH:
-        border_style = _gtk_css_border_style_value_get (gtk_css_style_get_value ((GtkCssStyle *)style, id - 1));
-        if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
-          {
-            gtk_css_static_style_set_value (style, id, gtk_css_dimension_value_new (0, GTK_CSS_NUMBER), section);
-            return;
-          }
-        break;
-
-      default:
-        /* Go ahead */
-        break;
-    }
-
-
-  /* http://www.w3.org/TR/css3-cascade/#cascade
-   * Then, for every element, the value for each property can be found
-   * by following this pseudo-algorithm:
-   * 1) Identify all declarations that apply to the element
-   */
-  if (specified)
-    {
-      value = _gtk_css_value_compute (specified, id, provider, (GtkCssStyle *)style, parent_style);
-    }
-  else if (parent_style && _gtk_css_style_property_is_inherit (_gtk_css_style_property_lookup_by_id (id)))
-    {
-      /* Just take the style from the parent */
-      value = _gtk_css_value_ref (gtk_css_style_get_value (parent_style, id));
-    }
-  else
-    {
-      value = _gtk_css_initial_value_new_compute (id, provider, (GtkCssStyle *)style, parent_style);
-    }
-
-  gtk_css_static_style_set_value (style, id, value, section);
-}
 
 GtkCssChange
 gtk_css_static_style_get_change (GtkCssStaticStyle *style)
