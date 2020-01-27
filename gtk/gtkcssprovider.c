@@ -496,7 +496,7 @@ gtk_css_style_provider_lookup (GtkStyleProvider             *provider,
     }
 
   if (change)
-    *change = _gtk_css_selector_tree_get_change_all (priv->tree, node);
+    *change = gtk_css_selector_tree_get_change_all (priv->tree, filter, node);
 }
 
 static void
