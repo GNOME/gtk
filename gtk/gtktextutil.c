@@ -30,6 +30,10 @@
 #include "gtktextbuffer.h"
 #include "gtktextlayoutprivate.h"
 #include "gtkintl.h"
+#include "gtkwidgetprivate.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkcssstyleprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 
 #define DRAG_ICON_MAX_WIDTH 250
 #define DRAG_ICON_MAX_HEIGHT 250
@@ -98,13 +102,13 @@ gtk_text_util_create_drag_icon (GtkWidget *widget,
                                 gchar     *text,
                                 gssize     len)
 {
-  GtkStyleContext *style_context;
+  GtkCssStyle *style;
   GtkSnapshot *snapshot;
   PangoContext *context;
   PangoLayout  *layout;
   GdkPaintable *paintable;
   gint          layout_width;
-  GdkRGBA       color;
+  const GdkRGBA *color;
 
   g_return_val_if_fail (widget != NULL, NULL);
   g_return_val_if_fail (text != NULL, NULL);
@@ -123,10 +127,10 @@ gtk_text_util_create_drag_icon (GtkWidget *widget,
 
   snapshot = gtk_snapshot_new ();
 
-  style_context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get_color (style_context,
-                               &color);
-  gtk_snapshot_append_layout (snapshot, layout, &color);
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+  color = gtk_css_color_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR));
+
+  gtk_snapshot_append_layout (snapshot, layout, color);
 
   paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
   g_object_unref (layout);
@@ -135,22 +139,23 @@ gtk_text_util_create_drag_icon (GtkWidget *widget,
 }
 
 static void
-set_attributes_from_style (GtkStyleContext   *context,
+set_attributes_from_style (GtkWidget         *widget,
                            GtkTextAttributes *values)
 {
+  GtkCssStyle *style;
   const GdkRGBA black = { 0, };
-  GdkRGBA *bg;
+  const GdkRGBA *bg;
 
   if (!values->appearance.bg_rgba)
     values->appearance.bg_rgba = gdk_rgba_copy (&black);
   if (!values->appearance.fg_rgba)
     values->appearance.fg_rgba = gdk_rgba_copy (&black);
 
-  
-  gtk_style_context_get (context, "background-color", &bg, NULL);
-  *values->appearance.bg_rgba = *bg;
-  gdk_rgba_free (bg);
-  gtk_style_context_get_color (context, values->appearance.fg_rgba);
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+  color = gtk_css_color_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+  *values->appearance.bg_rgba = *color;
+  color = gtk_css_color_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+  *values->appearance.fg_rgba = *color;
 
   if (values->font)
     pango_font_description_free (values->font);
@@ -216,7 +221,7 @@ gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
   gtk_widget_get_allocation (widget, &allocation);
   layout_width = allocation.width;
 
-  set_attributes_from_style (gtk_widget_get_style_context (widget), style);
+  set_attributes_from_style (widget, style);
 
   if (GTK_IS_TEXT_VIEW (widget))
     {
