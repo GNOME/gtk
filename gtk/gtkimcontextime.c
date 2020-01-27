@@ -36,8 +36,8 @@
 #include "gdk/gdkkeysyms.h"
 #include "gdk/win32/gdkwin32.h"
 #include "gtk/gtkimmodule.h"
-
-#include <pango/pango.h>
+#include "gtk/gtkstylecontextprivate.h"
+#include "gtk/gtkcssstyleprivate.h"
 
 /* avoid warning */
 #ifdef STRICT
@@ -869,7 +869,6 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
   PangoContext *pango_context;
   PangoFont *font;
   LOGFONT *logfont;
-  GtkStyleContext *style;
   PangoFontDescription *font_desc;
 
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context));
@@ -923,11 +922,7 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
       lang = ""; break;
     }
 
-  style = gtk_widget_get_style_context (widget);
-  gtk_style_context_get (style,
-                         "font",
-                         &font_desc,
-                         NULL);
+  font_desc = gtk_css_style_get_pango_font (gtk_style_context_lookup_style (gtk_widget_get_style_context (widget)));
 
   if (lang[0])
     {
