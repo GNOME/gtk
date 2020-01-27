@@ -90,8 +90,7 @@ main (int argc, char *argv[])
 
   if (strcmp (argv[1], "display") == 0)
     {
-      GError *error;
-      GdkPaintable *paintable;
+      GtkIconInfo *icon;
       GtkWidget *window, *image;
 
       if (argc < 4)
@@ -107,22 +106,21 @@ main (int argc, char *argv[])
       if (argc >= 6)
 	scale = atoi (argv[5]);
 
-      error = NULL;
-      paintable = gtk_icon_theme_load_icon_for_scale (icon_theme, argv[3], size, scale, flags, &error);
-      if (!paintable)
+      icon = gtk_icon_theme_lookup_icon_for_scale (icon_theme, argv[3], size, scale, flags);
+      if (!icon)
         {
-          g_print ("%s\n", error->message);
+          g_print ("Icon '%s' not found\n", argv[3]);
           return 1;
         }
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       image = gtk_image_new ();
-      gtk_image_set_from_paintable (GTK_IMAGE (image), paintable);
-      g_object_unref (paintable);
+      gtk_image_set_from_paintable (GTK_IMAGE (image), GDK_PAINTABLE (icon));
+      g_object_unref (icon);
       gtk_container_add (GTK_CONTAINER (window), image);
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
       gtk_widget_show (window);
-      
+
       gtk_main ();
     }
   else if (strcmp (argv[1], "display-async") == 0)
@@ -199,16 +197,10 @@ main (int argc, char *argv[])
 
       if (icon_info)
 	{
-          GdkTexture *texture;
+          GdkPaintable *paintable = GDK_PAINTABLE (icon_info);
 
           g_print ("Base size: %d, Scale: %d\n", gtk_icon_info_get_base_size (icon_info), gtk_icon_info_get_base_scale (icon_info));
-
-          texture = GDK_TEXTURE (gtk_icon_info_load_icon (icon_info, NULL));
-          if (texture != NULL)
-            {
-              g_print ("texture size: %dx%d\n", gdk_texture_get_width (texture), gdk_texture_get_height (texture));
-              g_object_unref (texture);
-            }
+          g_print ("texture size: %dx%d\n", gdk_paintable_get_intrinsic_width (paintable), gdk_paintable_get_intrinsic_height (paintable));
 
 	  g_object_unref (icon_info);
 	}

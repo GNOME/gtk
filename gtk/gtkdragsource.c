@@ -484,9 +484,9 @@ gtk_drag_source_drag_begin (GtkDragSource *source)
   if (!source->paintable)
     {
       GtkIconTheme *theme;
- 
+
       theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (widget));
-      source->paintable = gtk_icon_theme_load_icon (theme, "text-x-generic", 32, 0, NULL);
+      source->paintable = GDK_PAINTABLE(gtk_icon_theme_lookup_icon (theme, "text-x-generic", 32, 0));
       source->hot_x = 0;
       source->hot_y = 0;
     }

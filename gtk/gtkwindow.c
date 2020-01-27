@@ -4102,7 +4102,6 @@ gtk_window_get_icon_for_size (GtkWindow *window,
 {
   const char *name;
   GtkIconInfo *info;
-  GdkPaintable *paintable;
 
   name = gtk_window_get_icon_name (window);
 
@@ -4117,10 +4116,7 @@ gtk_window_get_icon_for_size (GtkWindow *window,
   if (info == NULL)
     return NULL;
 
-  paintable = gtk_icon_info_load_icon (info, NULL);
-  g_object_unref (info);
-
-  return paintable;
+  return GDK_PAINTABLE (info);
 }
 
 static void

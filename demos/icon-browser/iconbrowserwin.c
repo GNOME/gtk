@@ -363,7 +363,7 @@ get_image_paintable (GtkImage *image)
                                               GTK_ICON_LOOKUP_FORCE_SIZE | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
       if (icon_info == NULL)
         return NULL;
-      return gtk_icon_info_load_icon (icon_info, NULL);
+      return GDK_PAINTABLE (icon_info);
     default:
       g_warning ("Image storage type %d not handled",
                  gtk_image_get_storage_type (image));
