@@ -90,6 +90,10 @@
 #include "gtknative.h"
 #include "gtkicontheme.h"
 #include "gtkdragicon.h"
+#include "gtkbutton.h"
+#include "gtkbox.h"
+#include "gtklabel.h"
+#include "gtkstack.h"
 
 #define TIMEOUT_INITIAL  500
 #define TIMEOUT_REPEAT    50
@@ -211,6 +215,11 @@ struct _GtkCalendarClass
 struct _GtkCalendarPrivate
 {
   GtkCalendarDisplayOptions display_flags;
+
+  GtkWidget *header_box;
+  GtkWidget *year_label;
+  GtkWidget *month_name_stack;
+  GtkWidget *arrow_widgets[4];
 
   gint  month;
   gint  year;
@@ -364,10 +373,26 @@ static gboolean gtk_calendar_scroll_controller_scroll (GtkEventControllerScroll 
                                                        gdouble                   dy,
                                                        GtkWidget                *widget);
 
+static void     calendar_set_month_prev (GtkCalendar *calendar);
+static void     calendar_set_month_next (GtkCalendar *calendar);
+static void     calendar_set_year_prev  (GtkCalendar *calendar);
+static void     calendar_set_year_next  (GtkCalendar *calendar);
+
+
 static char    *default_abbreviated_dayname[7];
 static char    *default_monthname[12];
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkCalendar, gtk_calendar, GTK_TYPE_WIDGET)
+
+static void
+gtk_calendar_dispose (GObject *object)
+{
+  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (GTK_CALENDAR (object));
+
+  g_clear_pointer (&priv->header_box, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (gtk_calendar_parent_class)->dispose (object);
+}
 
 static void
 gtk_calendar_class_init (GtkCalendarClass *class)
@@ -378,6 +403,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   gobject_class = (GObjectClass*)  class;
   widget_class = (GtkWidgetClass*) class;
 
+  gobject_class->dispose = gtk_calendar_dispose;
   gobject_class->set_property = gtk_calendar_set_property;
   gobject_class->get_property = gtk_calendar_get_property;
 
@@ -637,12 +663,59 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   gtk_widget_class_set_css_name (widget_class, I_("calendar"));
 }
 
+static void
+set_year (GtkCalendar *calendar,
+          int          new_year)
+{
+  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
+  char buffer[255];
+  char *str;
+  time_t tmp_time;
+  struct tm *tm;
+
+  priv->year = new_year;
+
+  tmp_time = 1;  /* Jan 1 1970, 00:00:01 UTC */
+  tm = gmtime (&tmp_time);
+  tm->tm_year = priv->year - 1900;
+
+  /* Translators: This dictates how the year is displayed in
+   * gtkcalendar widget.  See strftime() manual for the format.
+   * Use only ASCII in the translation.
+   *
+   * Also look for the msgid "2000".
+   * Translate that entry to a year with the widest output of this
+   * msgid.
+   *
+   * "%Y" is appropriate for most locales.
+   */
+  strftime (buffer, sizeof (buffer), C_("calendar year format", "%Y"), tm);
+  str = g_locale_to_utf8 (buffer, -1, NULL, NULL, NULL);
+  gtk_label_set_label (GTK_LABEL (priv->year_label), str);
+  g_free (str);
+}
+
+static void
+set_month (GtkCalendar *calendar,
+           int          new_month)
+{
+  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
+
+  g_return_if_fail (new_month >= 0);
+  g_return_if_fail (new_month < 12);
+
+  priv->month = new_month;
+  gtk_stack_set_visible_child_name (GTK_STACK (priv->month_name_stack),
+                                    default_monthname[priv->month]);
+}
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"
 
 static void
 gtk_calendar_init (GtkCalendar *calendar)
 {
+  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
   GtkWidget *widget = GTK_WIDGET (calendar);
   GtkEventController *controller;
   GtkGesture *gesture;
@@ -656,7 +729,6 @@ gtk_calendar_init (GtkCalendar *calendar)
   char buffer[255];
   time_t tmp_time;
 #endif
-  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
   gchar *year_before;
 #ifdef HAVE__NL_TIME_FIRST_WEEKDAY
   union { unsigned int word; char *string; } langinfo;
@@ -673,6 +745,33 @@ gtk_calendar_init (GtkCalendar *calendar)
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (calendar)),
                                GTK_STYLE_CLASS_VIEW);
+
+  priv->header_box = g_object_new (GTK_TYPE_BOX,
+                                   "css-name", "header",
+                                   NULL);
+  priv->year_label = gtk_label_new ("");
+  gtk_style_context_add_class (gtk_widget_get_style_context (priv->year_label), "year");
+  priv->month_name_stack = gtk_stack_new ();
+  gtk_style_context_add_class (gtk_widget_get_style_context (priv->month_name_stack), "month");
+  priv->arrow_widgets[0] = gtk_button_new_from_icon_name ("pan-start-symbolic");
+  g_signal_connect_swapped (priv->arrow_widgets[0], "clicked", G_CALLBACK (calendar_set_month_prev), calendar);
+  priv->arrow_widgets[1] = gtk_button_new_from_icon_name ("pan-end-symbolic");
+  g_signal_connect_swapped (priv->arrow_widgets[1], "clicked", G_CALLBACK (calendar_set_month_next), calendar);
+  gtk_widget_set_hexpand (priv->arrow_widgets[1], TRUE);
+  gtk_widget_set_halign (priv->arrow_widgets[1], GTK_ALIGN_START);
+  priv->arrow_widgets[2] = gtk_button_new_from_icon_name ("pan-start-symbolic");
+  g_signal_connect_swapped (priv->arrow_widgets[2], "clicked", G_CALLBACK (calendar_set_year_prev), calendar);
+  priv->arrow_widgets[3] = gtk_button_new_from_icon_name ("pan-end-symbolic");
+  g_signal_connect_swapped (priv->arrow_widgets[3], "clicked", G_CALLBACK (calendar_set_year_next), calendar);
+
+  gtk_container_add (GTK_CONTAINER (priv->header_box), priv->arrow_widgets[0]);
+  gtk_container_add (GTK_CONTAINER (priv->header_box), priv->month_name_stack);
+  gtk_container_add (GTK_CONTAINER (priv->header_box), priv->arrow_widgets[1]);
+  gtk_container_add (GTK_CONTAINER (priv->header_box), priv->arrow_widgets[2]);
+  gtk_container_add (GTK_CONTAINER (priv->header_box), priv->year_label);
+  gtk_container_add (GTK_CONTAINER (priv->header_box), priv->arrow_widgets[3]);
+
+  gtk_widget_set_parent (priv->header_box, GTK_WIDGET (calendar));
 
   gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "pressed", G_CALLBACK (gtk_calendar_button_press), calendar);
@@ -750,11 +849,19 @@ gtk_calendar_init (GtkCalendar *calendar)
 #endif
       }
 
+  for (i = 0; i < 12; i ++)
+    {
+      GtkWidget *month_label = gtk_label_new (default_monthname[i]);
+
+      gtk_stack_add_named (GTK_STACK (priv->month_name_stack), month_label, default_monthname[i]);
+    }
+
   /* Set defaults */
   secs = time (NULL);
   tm = localtime (&secs);
-  priv->month = tm->tm_mon;
-  priv->year  = 1900 + tm->tm_year;
+  set_month (calendar, tm->tm_mon);
+  set_year (calendar, 1900 + tm->tm_year);
+
 
   for (i=0;i<31;i++)
     priv->marked_date[i] = FALSE;
@@ -894,11 +1001,11 @@ calendar_set_month_next (GtkCalendar *calendar)
 
   if (priv->month == 11)
     {
-      priv->month = 0;
-      priv->year++;
+      set_month (calendar, 0);
+      set_year (calendar, priv->year + 1);
     }
   else
-    priv->month++;
+    set_month (calendar, priv->month + 1);
 
   calendar_compute_days (calendar);
   g_signal_emit (calendar,
@@ -927,7 +1034,8 @@ calendar_set_year_prev (GtkCalendar *calendar)
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
   gint month_len;
 
-  priv->year--;
+  set_year (calendar, priv->year - 1);
+
   calendar_compute_days (calendar);
   g_signal_emit (calendar,
                  gtk_calendar_signals[PREV_YEAR_SIGNAL],
@@ -955,7 +1063,8 @@ calendar_set_year_next (GtkCalendar *calendar)
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
   gint month_len;
 
-  priv->year++;
+  set_year (calendar, priv->year + 1);
+
   calendar_compute_days (calendar);
   g_signal_emit (calendar,
                  gtk_calendar_signals[NEXT_YEAR_SIGNAL],
@@ -1229,51 +1338,9 @@ calendar_arrow_rectangle (GtkCalendar  *calendar,
                           GdkRectangle *rect)
 {
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
-  GtkWidget *widget = GTK_WIDGET (calendar);
-  int width;
-  gboolean year_left;
 
-  width = gtk_widget_get_width (widget);
-
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    year_left = priv->year_before;
-  else
-    year_left = !priv->year_before;
-
-  rect->y = 3;
-  rect->width = priv->arrow_width;
-  rect->height = priv->header_h - 7;
-
-  switch (arrow)
-    {
-    case ARROW_MONTH_LEFT:
-      if (year_left)
-        rect->x = (width - (3 + 2 * priv->arrow_width + priv->max_month_width));
-      else
-        rect->x = 3;
-      break;
-    case ARROW_MONTH_RIGHT:
-      if (year_left)
-        rect->x = width - 3 - priv->arrow_width;
-      else
-        rect->x = priv->arrow_width + priv->max_month_width;
-      break;
-    case ARROW_YEAR_LEFT:
-      if (year_left)
-        rect->x = 3;
-      else
-        rect->x = width - (3 + 2 * priv->arrow_width + priv->max_year_width);
-      break;
-    case ARROW_YEAR_RIGHT:
-      if (year_left)
-        rect->x = (priv->arrow_width + priv->max_year_width);
-      else
-        rect->x = width - 3 - priv->arrow_width;
-      break;
-
-    default:
-      g_assert_not_reached();
-    }
+  gtk_widget_get_allocation (priv->arrow_widgets[arrow],
+                             rect);
 }
 
 static void
@@ -1301,11 +1368,11 @@ calendar_set_month_prev (GtkCalendar *calendar)
 
   if (priv->month == 0)
     {
-      priv->month = 11;
-      priv->year--;
+      set_month (calendar, 11);
+      set_year (calendar, priv->year - 1);
     }
   else
-    priv->month--;
+    set_month (calendar, priv->month - 1);
 
   month_len = month_length[leap (priv->year)][priv->month + 1];
 
@@ -1628,50 +1695,20 @@ gtk_calendar_size_request (GtkWidget      *widget,
 
   layout = gtk_widget_create_pango_layout (widget, NULL);
 
-  /*
-   * Calculate the requisition  width for the widget.
-   */
-
   /* Header width */
 
   if (priv->display_flags & GTK_CALENDAR_SHOW_HEADING)
     {
-      priv->max_month_width = 0;
-      for (i = 0; i < 12; i++)
-        {
-          pango_layout_set_text (layout, default_monthname[i], -1);
-          pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
-          priv->max_month_width = MAX (priv->max_month_width,
-                                               logical_rect.width + 8);
-          max_header_height = MAX (max_header_height, logical_rect.height);
-        }
-
-      priv->max_year_width = 0;
-      /* Translators:  This is a text measurement template.
-       * Translate it to the widest year text
-       *
-       * If you don't understand this, leave it as "2000"
-       */
-      pango_layout_set_text (layout, C_("year measurement template", "2000"), -1);
-      pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
-      priv->max_year_width = MAX (priv->max_year_width,
-                                  logical_rect.width + 8);
-      max_header_height = MAX (max_header_height, logical_rect.height);
+      gtk_widget_measure (priv->header_box, GTK_ORIENTATION_HORIZONTAL, -1,
+                          &header_width, NULL, NULL, NULL);
+      gtk_widget_measure (priv->header_box, GTK_ORIENTATION_VERTICAL, -1,
+                          &max_header_height, NULL, NULL, NULL);
     }
   else
     {
       priv->max_month_width = 0;
       priv->max_year_width = 0;
     }
-
-  if (priv->display_flags & GTK_CALENDAR_NO_MONTH_CHANGE)
-    header_width = (priv->max_month_width
-                    + priv->max_year_width
-                    + 3 * 3);
-  else
-    header_width = (priv->max_month_width
-                    + priv->max_year_width
-                    + 4 * priv->arrow_width + 3 * 3);
 
   /* Mainwindow labels width */
 
@@ -1875,6 +1912,7 @@ gtk_calendar_size_allocate (GtkWidget *widget,
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
   gint inner_border = calendar_get_inner_border (calendar);
   gint calendar_xsep = calendar_get_xsep (calendar);
+  int header_height;
 
   if (priv->display_flags & GTK_CALENDAR_SHOW_WEEK_NUMBERS)
     {
@@ -1894,120 +1932,17 @@ gtk_calendar_size_allocate (GtkWidget *widget,
                          - (DAY_XSEP * 6))/7;
       priv->week_width = 0;
     }
+
+  gtk_widget_measure (priv->header_box, GTK_ORIENTATION_VERTICAL, width,
+                      &header_height, NULL, NULL, NULL);
+  gtk_widget_size_allocate (priv->header_box,
+                            &(GtkAllocation){ 0, 0, width, header_height }, -1);
 }
 
 
 /****************************************
  *              Repainting              *
  ****************************************/
-
-static void
-calendar_snapshot_header (GtkCalendar *calendar,
-                          GtkSnapshot *snapshot)
-{
-  GtkWidget *widget = GTK_WIDGET (calendar);
-  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
-  GtkStyleContext *context;
-  GtkStateFlags state;
-  char buffer[255];
-  gint x, y;
-  gint header_width;
-  gint max_month_width;
-  gint max_year_width;
-  PangoLayout *layout;
-  PangoRectangle logical_rect;
-  gboolean year_left;
-  time_t tmp_time;
-  struct tm *tm;
-  gchar *str;
-
-  context = gtk_widget_get_style_context (widget);
-
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    year_left = priv->year_before;
-  else
-    year_left = !priv->year_before;
-
-  header_width = gtk_widget_get_width (widget);
-
-  max_month_width = priv->max_month_width;
-  max_year_width = priv->max_year_width;
-
-  state = gtk_style_context_get_state (context);
-  state &= ~GTK_STATE_FLAG_DROP_ACTIVE;
-
-  gtk_style_context_save (context);
-
-  gtk_style_context_set_state (context, state);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_HEADER);
-
-  gtk_snapshot_render_background (snapshot, context, 0, 0, header_width, priv->header_h);
-  gtk_snapshot_render_frame (snapshot, context, 0, 0, header_width, priv->header_h);
-
-  tmp_time = 1;  /* Jan 1 1970, 00:00:01 UTC */
-  tm = gmtime (&tmp_time);
-  tm->tm_year = priv->year - 1900;
-
-  /* Translators: This dictates how the year is displayed in
-   * gtkcalendar widget.  See strftime() manual for the format.
-   * Use only ASCII in the translation.
-   *
-   * Also look for the msgid "2000".
-   * Translate that entry to a year with the widest output of this
-   * msgid.
-   *
-   * "%Y" is appropriate for most locales.
-   */
-  strftime (buffer, sizeof (buffer), C_("calendar year format", "%Y"), tm);
-  str = g_locale_to_utf8 (buffer, -1, NULL, NULL, NULL);
-  layout = gtk_widget_create_pango_layout (widget, str);
-  g_free (str);
-
-  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
-
-  /* Draw title */
-  y = (priv->header_h - logical_rect.height) / 2;
-
-  /* Draw year and its arrows */
-
-  if (priv->display_flags & GTK_CALENDAR_NO_MONTH_CHANGE)
-    if (year_left)
-      x = 3 + (max_year_width - logical_rect.width)/2;
-    else
-      x = header_width - (3 + max_year_width
-                          - (max_year_width - logical_rect.width)/2);
-  else
-    if (year_left)
-      x = 3 + priv->arrow_width + (max_year_width - logical_rect.width)/2;
-    else
-      x = header_width - (3 + priv->arrow_width + max_year_width
-                          - (max_year_width - logical_rect.width)/2);
-
-  gtk_snapshot_render_layout (snapshot, context, x, y, layout);
-
-  /* Draw month */
-  g_snprintf (buffer, sizeof (buffer), "%s", default_monthname[priv->month]);
-  pango_layout_set_text (layout, buffer, -1);
-  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
-
-  if (priv->display_flags & GTK_CALENDAR_NO_MONTH_CHANGE)
-    if (year_left)
-      x = header_width - (3 + max_month_width
-                          - (max_month_width - logical_rect.width)/2);
-    else
-      x = 3 + (max_month_width - logical_rect.width) / 2;
-  else
-    if (year_left)
-      x = header_width - (3 + priv->arrow_width + max_month_width
-                          - (max_month_width - logical_rect.width)/2);
-    else
-      x = 3 + priv->arrow_width + (max_month_width - logical_rect.width)/2;
-
-  gtk_snapshot_render_layout (snapshot, context, x, y, layout);
-  g_object_unref (layout);
-
-  gtk_style_context_restore (context);
-}
 
 static void
 calendar_snapshot_day_names (GtkCalendar *calendar,
@@ -2388,60 +2323,15 @@ calendar_snapshot_main (GtkCalendar *calendar,
 }
 
 static void
-calendar_snapshot_arrow (GtkCalendar *calendar,
-                         GtkSnapshot *snapshot,
-                         guint        arrow)
-{
-  GtkWidget *widget = GTK_WIDGET (calendar);
-  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
-  GtkStyleContext *context;
-  GtkStateFlags state;
-  GdkRectangle rect;
-
-  calendar_arrow_rectangle (calendar, arrow, &rect);
-
-  context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-
-  if (priv->arrow_prelight & (1 << arrow))
-    state |= GTK_STATE_FLAG_PRELIGHT;
-  else
-    state &= ~(GTK_STATE_FLAG_PRELIGHT);
-
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
-
-  gtk_snapshot_render_background (snapshot, context,
-                                  rect.x, rect.y,
-                                  rect.width, rect.height);
-
-  gtk_snapshot_save (snapshot);
-  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT(
-                          rect.x + (rect.width - 8) / 2,
-                          rect.y + (rect.height - 8) / 2));
-  gtk_css_style_snapshot_icon (gtk_style_context_lookup_style (context), snapshot, 8, 8);
-  gtk_snapshot_restore (snapshot);
-
-  gtk_style_context_restore (context);
-}
-
-static void
 gtk_calendar_snapshot (GtkWidget   *widget,
                        GtkSnapshot *snapshot)
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
-  int i;
 
   calendar_snapshot_main (calendar, snapshot);
 
-  if (priv->display_flags & GTK_CALENDAR_SHOW_HEADING)
-    {
-      calendar_snapshot_header (calendar, snapshot);
-      for (i = 0; i < 4; i++)
-        calendar_snapshot_arrow (calendar, snapshot, i);
-    }
+  gtk_widget_snapshot_child (widget, priv->header_box, snapshot);
 
   if (priv->display_flags & GTK_CALENDAR_SHOW_DAY_NAMES)
     calendar_snapshot_day_names (calendar, snapshot);
@@ -3149,11 +3039,14 @@ gtk_calendar_set_display_options (GtkCalendar          *calendar,
 
       if ((flags ^ priv->display_flags) & GTK_CALENDAR_SHOW_HEADING)
         {
-          resize++;
-
           if (flags & GTK_CALENDAR_SHOW_HEADING)
             {
               priv->display_flags |= GTK_CALENDAR_SHOW_HEADING;
+              gtk_widget_show (priv->header_box);
+            }
+          else
+            {
+              gtk_widget_hide (priv->header_box);
             }
         }
 
@@ -3217,12 +3110,12 @@ gtk_calendar_select_month (GtkCalendar *calendar,
 
   if (priv->month != month)
     {
-      priv->month = month;
+      set_month (calendar, month);
       g_object_notify (G_OBJECT (calendar), "month");
     }
   if (priv->year != year)
     {
-      priv->year  = year;
+      set_year (calendar, year);
       g_object_notify (G_OBJECT (calendar), "year");
     }
 
