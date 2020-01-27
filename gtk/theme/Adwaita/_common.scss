@@ -3458,6 +3458,17 @@ calendar {
   color: $text_color;
   border: 1px solid $borders_color;
 
+  > header {
+    border-bottom: 1px solid $borders_color;
+
+    > button {
+      border: none;
+      box-shadow: none;
+      background: none;
+      border-radius: 0;
+    }
+  }
+
   &:selected {
     @extend %selected_items;
 
