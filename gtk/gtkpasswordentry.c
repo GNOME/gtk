@@ -53,7 +53,7 @@
  */
 
 typedef struct {
-  GtkWidget *entry;
+  GtkText *entry;
   GtkImage *icon;
   GtkImage *peek_icon;
   GdkKeymap *keymap;
@@ -89,7 +89,7 @@ keymap_state_changed (GdkKeymap *keymap,
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
 
   if (gtk_editable_get_editable (GTK_EDITABLE (entry)) &&
-      gtk_widget_has_focus (priv->entry) &&
+      gtk_widget_has_focus (GTK_WIDGET (priv->entry)) &&
       gdk_keymap_get_caps_lock_state (priv->keymap) &&
       !priv->peek_icon)
     gtk_widget_show (GTK_WIDGET (priv->icon));
@@ -113,8 +113,8 @@ gtk_password_entry_toggle_peek (GtkPasswordEntry *entry)
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
   gboolean visibility;
 
-  visibility = gtk_text_get_visibility (GTK_TEXT (priv->entry));
-  gtk_text_set_visibility (GTK_TEXT (priv->entry), !visibility);
+  visibility = gtk_text_get_visibility (priv->entry);
+  gtk_text_set_visibility (priv->entry, !visibility);
 }
 
 static void
@@ -124,7 +124,7 @@ visibility_toggled (GObject          *object,
 {
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
 
-  if (gtk_text_get_visibility (GTK_TEXT (priv->entry)))
+  if (gtk_text_get_visibility (priv->entry))
     {
       gtk_image_set_from_icon_name (priv->peek_icon, "eye-open-negative-filled-symbolic");
       gtk_widget_set_tooltip_text (GTK_WIDGET (priv->peek_icon), _("Hide text"));
@@ -142,15 +142,15 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
 
   priv->entry = gtk_text_new ();
-  gtk_text_set_visibility (GTK_TEXT (priv->entry), FALSE);
-  gtk_widget_set_parent (priv->entry, GTK_WIDGET (entry));
+  gtk_text_set_visibility (priv->entry, FALSE);
+  gtk_widget_set_parent (GTK_WIDGET (priv->entry), GTK_WIDGET (entry));
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
   g_signal_connect_swapped (priv->entry, "notify::has-focus", G_CALLBACK (focus_changed), entry);
 
   priv->icon = gtk_image_new_from_icon_name ("caps-lock-symbolic");
   gtk_widget_set_tooltip_text (GTK_WIDGET (priv->icon), _("Caps Lock is on"));
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (priv->icon)), "caps-lock-indicator");
-  gtk_widget_set_cursor (GTK_WIDGET (priv->icon), gtk_widget_get_cursor (priv->entry));
+  gtk_widget_set_cursor (GTK_WIDGET (priv->icon), gtk_widget_get_cursor (GTK_WIDGET (priv->entry)));
   gtk_widget_set_parent (GTK_WIDGET (priv->icon), GTK_WIDGET (entry));
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (entry)), I_("password"));
@@ -183,7 +183,7 @@ gtk_password_entry_dispose (GObject *object)
   if (priv->entry)
     gtk_editable_finish_delegate (GTK_EDITABLE (entry));
 
-  g_clear_pointer (&priv->entry, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **) &priv->entry, gtk_widget_unparent);
   g_clear_pointer ((GtkWidget **) &priv->icon, gtk_widget_unparent);
   g_clear_pointer ((GtkWidget **) &priv->peek_icon, gtk_widget_unparent);
   g_clear_object (&priv->extra_menu);
@@ -206,13 +206,13 @@ gtk_password_entry_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_PLACEHOLDER_TEXT:
-      gtk_text_set_placeholder_text (GTK_TEXT (priv->entry), g_value_get_string (value));
+      gtk_text_set_placeholder_text (priv->entry, g_value_get_string (value));
       break;
 
     case PROP_ACTIVATES_DEFAULT:
-      if (gtk_text_get_activates_default (GTK_TEXT (priv->entry)) != g_value_get_boolean (value))
+      if (gtk_text_get_activates_default (priv->entry) != g_value_get_boolean (value))
         {
-          gtk_text_set_activates_default (GTK_TEXT (priv->entry), g_value_get_boolean (value));
+          gtk_text_set_activates_default (priv->entry, g_value_get_boolean (value));
           g_object_notify_by_pspec (object, pspec);
         }
       break;
@@ -246,11 +246,11 @@ gtk_password_entry_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_PLACEHOLDER_TEXT:
-      g_value_set_string (value, gtk_text_get_placeholder_text (GTK_TEXT (priv->entry)));
+      g_value_set_string (value, gtk_text_get_placeholder_text (priv->entry));
       break;
 
     case PROP_ACTIVATES_DEFAULT:
-      g_value_set_boolean (value, gtk_text_get_activates_default (GTK_TEXT (priv->entry)));
+      g_value_set_boolean (value, gtk_text_get_activates_default (priv->entry));
       break;
 
     case PROP_SHOW_PEEK_ICON:
@@ -280,7 +280,7 @@ gtk_password_entry_measure (GtkWidget      *widget,
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
   int icon_min = 0, icon_nat = 0;
 
-  gtk_widget_measure (priv->entry, orientation, for_size,
+  gtk_widget_measure (GTK_WIDGET (priv->entry), orientation, for_size,
                       minimum, natural,
                       minimum_baseline, natural_baseline);
 
@@ -319,7 +319,7 @@ gtk_password_entry_size_allocate (GtkWidget *widget,
    
   text_width = width - icon_nat - peek_nat;
 
-  gtk_widget_size_allocate (priv->entry,
+  gtk_widget_size_allocate (GTK_WIDGET (priv->entry),
                             &(GtkAllocation) { 0, 0, text_width, height },
                             baseline);
 
@@ -351,7 +351,7 @@ gtk_password_entry_grab_focus (GtkWidget *widget)
   GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (widget);
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
 
-  return gtk_widget_grab_focus (priv->entry);
+  return gtk_widget_grab_focus (GTK_WIDGET (priv->entry));
 }
 
 static gboolean
@@ -361,7 +361,7 @@ gtk_password_entry_mnemonic_activate (GtkWidget *widget,
   GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (widget);
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
 
-  gtk_widget_grab_focus (priv->entry);
+  gtk_widget_grab_focus (GTK_WIDGET (priv->entry));
 
   return TRUE;
 }
@@ -494,7 +494,7 @@ gtk_password_entry_set_show_peek_icon (GtkPasswordEntry *entry,
   else
     {
       g_clear_pointer ((GtkWidget **) &priv->peek_icon, gtk_widget_unparent);
-      gtk_text_set_visibility (GTK_TEXT (priv->entry), FALSE);
+      gtk_text_set_visibility (priv->entry, FALSE);
       g_signal_handlers_disconnect_by_func (priv->entry,
                                             visibility_toggled,
                                             entry);
@@ -564,7 +564,7 @@ gtk_password_entry_set_extra_menu (GtkPasswordEntry *entry,
   if (model)
     g_menu_append_section (menu, NULL, model);
 
-  gtk_text_set_extra_menu (GTK_TEXT (priv->entry), G_MENU_MODEL (menu));
+  gtk_text_set_extra_menu (priv->entry, G_MENU_MODEL (menu));
 
   g_object_unref (menu);
 

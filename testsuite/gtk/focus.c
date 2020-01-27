@@ -77,8 +77,8 @@ test_window_focus (void)
   GtkWidget *box2;
   GtkLabel *label1;
   GtkLabel *label2;
-  GtkWidget *entry1;
-  GtkWidget *entry2;
+  GtkText *entry1;
+  GtkText *entry2;
   GString *s = g_string_new ("");
 
   /*
@@ -111,9 +111,9 @@ test_window_focus (void)
   add_controller (box1, s);
   gtk_container_add (GTK_CONTAINER (box), box1);
   entry1 = gtk_text_new ();
-  gtk_widget_set_name (entry1, "entry1");
-  add_controller (entry1, s);
-  gtk_container_add (GTK_CONTAINER (box1), entry1);
+  gtk_widget_set_name (GTK_WIDGET (entry1), "entry1");
+  add_controller (GTK_WIDGET (entry1), s);
+  gtk_container_add (GTK_CONTAINER (box1), GTK_WIDGET (entry1));
   box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_set_name (box2, "box2");
   add_controller (box2, s);
@@ -123,9 +123,9 @@ test_window_focus (void)
   add_controller (GTK_WIDGET (label2), s);
   gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (label2));
   entry2 = gtk_text_new ();
-  gtk_widget_set_name (entry2, "entry2");
-  add_controller (entry2, s);
-  gtk_container_add (GTK_CONTAINER (box2), entry2);
+  gtk_widget_set_name (GTK_WIDGET (entry2), "entry2");
+  add_controller (GTK_WIDGET (entry2), s);
+  gtk_container_add (GTK_CONTAINER (box2), GTK_WIDGET (entry2));
 
   g_assert_null (gtk_window_get_focus (GTK_WINDOW (window)));
 
@@ -142,7 +142,7 @@ test_window_focus (void)
 "box: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_ANCESTOR is-focus: 1 contains-focus: 1\n");
   g_string_truncate (s, 0);
 
-  gtk_widget_grab_focus (entry1);
+  gtk_widget_grab_focus (GTK_WIDGET (entry1));
 
   if (g_test_verbose ())
     g_print ("box -> entry1\n%s\n", s->str);
@@ -154,9 +154,9 @@ test_window_focus (void)
 
   g_string_truncate (s, 0);
 
-  g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == entry1);
+  g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == GTK_WIDGET (entry1));
 
-  gtk_widget_grab_focus (entry2);
+  gtk_widget_grab_focus (GTK_WIDGET (entry2));
 
   if (g_test_verbose ())
     g_print ("entry1 -> entry2\n%s\n", s->str);
@@ -169,7 +169,7 @@ test_window_focus (void)
 
   g_string_truncate (s, 0);
 
-  g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == entry2);
+  g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == GTK_WIDGET (entry2));
 
   gtk_widget_grab_focus (box);
 
@@ -187,9 +187,9 @@ test_window_focus (void)
 
   g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == box);
    
-  gtk_window_set_focus (GTK_WINDOW (window), entry1);
+  gtk_window_set_focus (GTK_WINDOW (window), GTK_WIDGET (entry1));
 
-  g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == entry1);
+  g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == GTK_WIDGET (entry1));
 
   gtk_widget_destroy (window);
 }

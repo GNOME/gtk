@@ -27,7 +27,7 @@
 
 typedef struct {
   GtkWidget *box;
-  GtkWidget *entry;
+  GtkText *entry;
 } DemoTaggedEntryPrivate;
 
 static void demo_tagged_entry_editable_init (GtkEditableInterface *iface);
@@ -45,11 +45,11 @@ demo_tagged_entry_init (DemoTaggedEntry *entry)
   gtk_widget_set_parent (priv->box, GTK_WIDGET (entry));
 
   priv->entry = gtk_text_new ();
-  gtk_widget_set_hexpand (priv->entry, TRUE);
-  gtk_widget_set_vexpand (priv->entry, TRUE);
+  gtk_widget_set_hexpand (GTK_WIDGET (priv->entry), TRUE);
+  gtk_widget_set_vexpand (GTK_WIDGET (priv->entry), TRUE);
   gtk_widget_set_hexpand (priv->box, FALSE);
   gtk_widget_set_vexpand (priv->box, FALSE);
-  gtk_container_add (GTK_CONTAINER (priv->box), priv->entry);
+  gtk_container_add (GTK_CONTAINER (priv->box), GTK_WIDGET (priv->entry));
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
 }
 
@@ -62,7 +62,7 @@ demo_tagged_entry_dispose (GObject *object)
   if (priv->entry)
     gtk_editable_finish_delegate (GTK_EDITABLE (entry));
 
-  g_clear_pointer (&priv->entry, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **) &priv->entry, gtk_widget_unparent);
   g_clear_pointer (&priv->box, gtk_widget_unparent);
 
   G_OBJECT_CLASS (demo_tagged_entry_parent_class)->dispose (object);
@@ -135,7 +135,7 @@ demo_tagged_entry_grab_focus (GtkWidget *widget)
   DemoTaggedEntry *entry = DEMO_TAGGED_ENTRY (widget);
   DemoTaggedEntryPrivate *priv = demo_tagged_entry_get_instance_private (entry);
 
-  return gtk_widget_grab_focus (priv->entry);
+  return gtk_widget_grab_focus (GTK_WIDGET (priv->entry));
 }
 
 static void

@@ -1092,7 +1092,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/text/bold/GtkLabel", test_bold_label);
 
   add_text_tests (GTK_WIDGET (gtk_label_new ("")));
-  add_text_tests (gtk_text_new ());
+  add_text_tests (GTK_WIDGET (gtk_text_new ()));
   add_text_tests (gtk_text_view_new ());
 
   return g_test_run ();

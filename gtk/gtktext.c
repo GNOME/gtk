@@ -5208,7 +5208,7 @@ gtk_text_update_primary_selection (GtkText *self)
  *
  * Returns: a new #GtkText.
  */
-GtkWidget *
+GtkText *
 gtk_text_new (void)
 {
   return g_object_new (GTK_TYPE_TEXT, NULL);
@@ -5222,7 +5222,7 @@ gtk_text_new (void)
  *
  * Returns: a new #GtkText
  */
-GtkWidget *
+GtkText *
 gtk_text_new_with_buffer (GtkEntryBuffer *buffer)
 {
   g_return_val_if_fail (GTK_IS_ENTRY_BUFFER (buffer), NULL);

@@ -127,7 +127,7 @@
  * {
  *   ...
  *   gtk_editable_finish_delegate (GTK_EDITABLE (self));
- *   g_clear_pointer (&self->text_widget, gtk_widget_unparent);
+ *   g_clear_pointer ((GtkWidget **) &self->text_widget, gtk_widget_unparent);
  *   ...
  * }
  * ]|
