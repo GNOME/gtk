@@ -16,6 +16,8 @@
  */
 
 #include "config.h"
+
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkprivatetypebuiltins.h"
 #include "gtktexthandleprivate.h"
 #include "gtkmarshalers.h"
@@ -25,6 +27,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkgizmoprivate.h"
 #include "gtkrendericonprivate.h"
+#include "gtkstylecontextprivate.h"
 #include "gtkintl.h"
 
 #include <gtk/gtk.h>
@@ -89,11 +92,9 @@ _gtk_text_handle_get_size (GtkTextHandle         *handle,
   GtkStyleContext *context;
 
   context = gtk_widget_get_style_context (widget);
-
-  gtk_style_context_get (context,
-                         "min-width", width,
-                         "min-height", height,
-                         NULL);
+  
+  *width = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_MIN_WIDTH), 100);
+  *height = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_MIN_HEIGHT), 100);
 }
 
 static gint
