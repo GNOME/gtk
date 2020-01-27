@@ -691,6 +691,8 @@ remove_device (GdkX11DeviceManagerXI2 *device_manager,
 
       g_hash_table_remove (device_manager->id_table,
                            GINT_TO_POINTER (device_id));
+
+      g_object_unref (G_OBJECT (device));
     }
 }
 
