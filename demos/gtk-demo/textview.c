@@ -130,13 +130,15 @@ insert_text (GtkTextBuffer *buffer)
   GtkTextIter start, end;
   GdkTexture *texture;
   GtkIconTheme *icon_theme;
+  GtkIconInfo *icon;
 
   icon_theme = gtk_icon_theme_get_default ();
-  texture = GDK_TEXTURE (gtk_icon_theme_load_icon (icon_theme,
-                                                   "gtk3-demo",
-                                                   32,
-                                                   GTK_ICON_LOOKUP_GENERIC_FALLBACK,
-                                                   NULL));
+  icon = gtk_icon_theme_lookup_icon (icon_theme,
+                                     "gtk3-demo",
+                                     32,
+                                     GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+  texture = gtk_icon_info_download_texture (icon, NULL);
+  g_object_unref (icon);
   g_assert (texture);
 
   /* get start of buffer; each insertion will revalidate the
