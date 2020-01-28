@@ -709,7 +709,6 @@ test_nonsquare_symbolic (void)
   GFile *file;
   GIcon *icon;
   GdkRGBA black = { 0.0, 0.0, 0.0, 1.0 };
-  gboolean was_symbolic = FALSE;
   GError *error = NULL;
   GdkTexture *texture;
   gchar *path = g_build_filename (g_test_get_dir (G_TEST_DIST),
@@ -736,13 +735,11 @@ test_nonsquare_symbolic (void)
   g_assert_nonnull (info);
 
   g_object_unref (pixbuf);
-  texture = GDK_TEXTURE (gtk_icon_info_load_symbolic (info, &black, NULL, NULL, NULL,
-                                                      &was_symbolic, &error));
+  texture = gtk_icon_info_download_colored_texture (info, &black, NULL, NULL, NULL, &error);
 
   /* we are loaded successfully */
   g_assert_no_error (error);
   g_assert_nonnull (texture);
-  g_assert_true (was_symbolic);
 
   /* the original dimensions have been preserved */
   g_assert_cmpint (gdk_texture_get_width (texture), ==, width);
