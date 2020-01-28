@@ -2339,11 +2339,6 @@ gsk_color_matrix_node_draw (GskRenderNode *node,
   GskColorMatrixNode *self = (GskColorMatrixNode *) node;
   cairo_pattern_t *pattern;
   cairo_surface_t *surface, *image_surface;
-  graphene_vec4_t pixel;
-  guint32* pixel_data;
-  guchar *data;
-  gsize x, y, width, height, stride;
-  float alpha;
 
   cairo_save (cr);
 
@@ -2360,52 +2355,10 @@ gsk_color_matrix_node_draw (GskRenderNode *node,
   cairo_pattern_get_surface (pattern, &surface);
   image_surface = cairo_surface_map_to_image (surface, NULL);
 
-  data = cairo_image_surface_get_data (image_surface);
-  width = cairo_image_surface_get_width (image_surface);
-  height = cairo_image_surface_get_height (image_surface);
-  stride = cairo_image_surface_get_stride (image_surface);
+  gdk_cairo_image_surface_recolor (image_surface,
+                                   &self->color_matrix,
+                                   &self->color_offset);
 
-  for (y = 0; y < height; y++)
-    {
-      pixel_data = (guint32 *) data;
-      for (x = 0; x < width; x++)
-        {
-          alpha = ((pixel_data[x] >> 24) & 0xFF) / 255.0;
-
-          if (alpha == 0)
-            {
-              graphene_vec4_init (&pixel, 0.0, 0.0, 0.0, 0.0);
-            }
-          else
-            {
-              graphene_vec4_init (&pixel,
-                                  ((pixel_data[x] >> 16) & 0xFF) / (255.0 * alpha),
-                                  ((pixel_data[x] >>  8) & 0xFF) / (255.0 * alpha),
-                                  ( pixel_data[x]        & 0xFF) / (255.0 * alpha),
-                                  alpha);
-              graphene_matrix_transform_vec4 (&self->color_matrix, &pixel, &pixel);
-            }
-
-          graphene_vec4_add (&pixel, &self->color_offset, &pixel);
-
-          alpha = graphene_vec4_get_w (&pixel);
-          if (alpha > 0.0)
-            {
-              alpha = MIN (alpha, 1.0);
-              pixel_data[x] = (((guint32) roundf (alpha * 255)) << 24) |
-                              (((guint32) roundf (CLAMP (graphene_vec4_get_x (&pixel), 0, 1) * alpha * 255)) << 16) |
-                              (((guint32) roundf (CLAMP (graphene_vec4_get_y (&pixel), 0, 1) * alpha * 255)) <<  8) |
-                               ((guint32) roundf (CLAMP (graphene_vec4_get_z (&pixel), 0, 1) * alpha * 255));
-            }
-          else
-            {
-              pixel_data[x] = 0;
-            }
-        }
-      data += stride;
-    }
-
-  cairo_surface_mark_dirty (image_surface);
   cairo_surface_unmap_image (surface, image_surface);
 
   cairo_set_source (cr, pattern);
