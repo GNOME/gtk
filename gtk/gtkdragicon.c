@@ -113,12 +113,12 @@ gtk_drag_icon_native_get_surface_transform (GtkNative *native,
   GtkCssStyle *style;
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (native)));
-  *x  = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_LEFT), 100) +
-        _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100) +
-        _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_LEFT), 100);
-  *y  = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_TOP), 100) +
-        _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100) +
-        _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_TOP), 100);
+  *x  = _gtk_css_number_value_get (style->size->margin_left, 100) +
+        _gtk_css_number_value_get (style->border->border_left_width, 100) +
+        _gtk_css_number_value_get (style->size->padding_left, 100);
+  *y  = _gtk_css_number_value_get (style->size->margin_top, 100) +
+        _gtk_css_number_value_get (style->border->border_top_width, 100) +
+        _gtk_css_number_value_get (style->size->padding_top, 100);
 }
 
 static void

@@ -38,7 +38,6 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
                              double                  width,
                              double                  height)
 {
-  const GtkCssValue *shadows_value, *transform_value, *filter_value;
   GskTransform *transform;
   GtkCssImage *image;
   gboolean has_shadow;
@@ -49,21 +48,17 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
   if (width == 0.0 || height == 0.0)
     return;
 
-  image = _gtk_css_image_value_get_image (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SOURCE));
+  image = _gtk_css_image_value_get_image (style->other->icon_source);
   if (image == NULL)
     return;
 
-  shadows_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SHADOW);
-  transform_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM);
-  filter_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_FILTER);
-
-  transform = gtk_css_transform_value_get_transform (transform_value);
+  transform = gtk_css_transform_value_get_transform (style->other->icon_transform);
 
   gtk_snapshot_push_debug (snapshot, "CSS Icon @ %gx%g", width, height);
 
-  gtk_css_filter_value_push_snapshot (filter_value, snapshot);
+  gtk_css_filter_value_push_snapshot (style->other->icon_filter, snapshot);
 
-  has_shadow = gtk_css_shadow_value_push_snapshot (shadows_value, snapshot);
+  has_shadow = gtk_css_shadow_value_push_snapshot (style->icon->icon_shadow, snapshot);
 
   if (transform == NULL)
     {
@@ -86,7 +81,7 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
   if (has_shadow)
     gtk_snapshot_pop (snapshot);
 
-  gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
+  gtk_css_filter_value_pop_snapshot (style->other->icon_filter, snapshot);
 
   gtk_snapshot_pop (snapshot);
 
@@ -101,7 +96,6 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
                                        double        height,
                                        gboolean      recolor)
 {
-  const GtkCssValue *shadows_value, *transform_value, *filter_value;
   GskTransform *transform;
   gboolean has_shadow;
 
@@ -111,15 +105,11 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
   g_return_if_fail (width > 0);
   g_return_if_fail (height > 0);
 
-  shadows_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SHADOW);
-  transform_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM);
-  filter_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_FILTER);
+  transform = gtk_css_transform_value_get_transform (style->other->icon_transform);
 
-  transform = gtk_css_transform_value_get_transform (transform_value);
+  gtk_css_filter_value_push_snapshot (style->other->icon_filter, snapshot);
 
-  gtk_css_filter_value_push_snapshot (filter_value, snapshot);
-
-  has_shadow = gtk_css_shadow_value_push_snapshot (shadows_value, snapshot);
+  has_shadow = gtk_css_shadow_value_push_snapshot (style->icon->icon_shadow, snapshot);
 
   if (recolor)
     {
@@ -168,7 +158,7 @@ transparent:
   if (has_shadow)
     gtk_snapshot_pop (snapshot);
 
-  gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
+  gtk_css_filter_value_pop_snapshot (style->other->icon_filter, snapshot);
 
   gsk_transform_unref (transform);
 }
