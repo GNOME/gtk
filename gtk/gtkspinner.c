@@ -93,17 +93,14 @@ gtk_spinner_measure (GtkWidget      *widget,
                      int            *natural_baseline)
 {
   double min_size;
-  guint property;
   GtkCssStyle *style;
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    property = GTK_CSS_PROPERTY_MIN_WIDTH;
-  else
-    property = GTK_CSS_PROPERTY_MIN_HEIGHT;
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
 
-  min_size = _gtk_css_number_value_get (gtk_css_style_get_value (style, property), 100);
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    min_size = _gtk_css_number_value_get (style->size->min_width, 100);
+  else
+    min_size = _gtk_css_number_value_get (style->size->min_height, 100);
 
   if (min_size > 0.0)
     *minimum = *natural = min_size;

@@ -131,7 +131,7 @@ gtk_text_util_create_drag_icon (GtkWidget *widget,
   snapshot = gtk_snapshot_new ();
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  color = gtk_css_color_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR));
+  color = gtk_css_color_value_get_rgba (style->core->color);
 
   gtk_snapshot_append_layout (snapshot, layout, color);
 
@@ -145,6 +145,7 @@ static void
 set_attributes_from_style (GtkWidget         *widget,
                            GtkTextAttributes *values)
 {
+  GtkCssStyle *style;
   GtkStyleContext *context;
   const GdkRGBA black = { 0, };
 
@@ -154,13 +155,15 @@ set_attributes_from_style (GtkWidget         *widget,
     values->appearance.fg_rgba = gdk_rgba_copy (&black);
 
   context = gtk_widget_get_style_context (widget);
-  *values->appearance.bg_rgba = *gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
-  *values->appearance.fg_rgba = *gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
+  style = gtk_style_context_lookup_style (context);
+
+  *values->appearance.bg_rgba = *gtk_css_color_value_get_rgba (style->background->background_color);
+  *values->appearance.fg_rgba = *gtk_css_color_value_get_rgba (style->core->color);
 
   if (values->font)
     pango_font_description_free (values->font);
 
-  values->font = gtk_css_style_get_pango_font (gtk_style_context_lookup_style (context));
+  values->font = gtk_css_style_get_pango_font (style);
 }
 
 static gint
