@@ -3867,6 +3867,65 @@ gtk_icon_info_download_texture (GtkIconInfo *self,
 }
 
 static void
+init_color_matrix (graphene_matrix_t *color_matrix,
+                   graphene_vec4_t *color_offset,
+                   const GdkRGBA *foreground_color,
+                   const GdkRGBA *success_color,
+                   const GdkRGBA *warning_color,
+                   const GdkRGBA *error_color)
+{
+  GdkRGBA fg_default = { 0.7450980392156863, 0.7450980392156863, 0.7450980392156863, 1.0};
+  GdkRGBA success_default = { 0.3046921492332342,0.6015716792553597, 0.023437857633325704, 1.0};
+  GdkRGBA warning_default = {0.9570458533607996, 0.47266346227206835, 0.2421911955443656, 1.0 };
+  GdkRGBA error_default = { 0.796887159533074, 0 ,0, 1.0 };
+  const GdkRGBA *fg = foreground_color ? foreground_color : &fg_default;
+  const GdkRGBA *sc = success_color ? success_color : &success_default;
+  const GdkRGBA *wc = warning_color ? warning_color : &warning_default;
+  const GdkRGBA *ec = error_color ? error_color : &error_default;
+
+  graphene_matrix_init_from_float (color_matrix,
+                                   (float[16]) {
+                                     sc->red - fg->red, sc->green - fg->green, sc->blue - fg->blue, 0,
+                                       wc->red - fg->red, wc->green - fg->green, wc->blue - fg->blue, 0,
+                                       ec->red - fg->red, ec->green - fg->green, ec->blue - fg->blue, 0,
+                                       0, 0, 0, fg->alpha
+                                       });
+  graphene_vec4_init (color_offset, fg->red, fg->green, fg->blue, 0);
+}
+
+
+GdkTexture *
+gtk_icon_info_download_colored_texture (GtkIconInfo *self,
+                                        const GdkRGBA *foreground_color,
+                                        const GdkRGBA *success_color,
+                                        const GdkRGBA *warning_color,
+                                        const GdkRGBA *error_color,
+                                        GError **error)
+{
+  GdkTexture *texture, *colored_texture;
+  graphene_matrix_t matrix;
+  graphene_vec4_t offset;
+  cairo_surface_t *surface;
+
+  texture = gtk_icon_info_download_texture (self, error);
+
+  if (texture == NULL || gtk_icon_info_is_symbolic (self))
+    return texture;
+
+  init_color_matrix (&matrix, &offset,
+                     foreground_color, success_color,
+                     warning_color, error_color);
+
+  surface = gdk_texture_download_surface (texture);
+  gdk_cairo_image_surface_recolor (surface, &matrix, &offset);
+  colored_texture = gdk_texture_new_for_surface (surface);
+  cairo_surface_destroy (surface);
+  g_object_unref (texture);
+
+  return colored_texture;
+}
+
+static void
 icon_info_paintable_snapshot (GdkPaintable *paintable,
                               GdkSnapshot  *snapshot,
                               double        width,
@@ -3919,21 +3978,12 @@ gtk_icon_info_snapshot_with_colors (GtkIconInfo *icon_info,
 
       if (symbolic)
         {
-          const GdkRGBA *fg = foreground_color;
-          const GdkRGBA *sc = success_color;
-          const GdkRGBA *wc = warning_color;
-          const GdkRGBA *ec = error_color;
           graphene_matrix_t matrix;
           graphene_vec4_t offset;
 
-          graphene_matrix_init_from_float (&matrix,
-                                           (float[16]) {
-                                             sc->red - fg->red, sc->green - fg->green, sc->blue - fg->blue, 0,
-                                               wc->red - fg->red, wc->green - fg->green, wc->blue - fg->blue, 0,
-                                               ec->red - fg->red, ec->green - fg->green, ec->blue - fg->blue, 0,
-                                               0, 0, 0, fg->alpha
-                                               });
-          graphene_vec4_init (&offset, fg->red, fg->green, fg->blue, 0);
+          init_color_matrix (&matrix, &offset,
+                             foreground_color, success_color,
+                             warning_color, error_color);
 
           gtk_snapshot_push_color_matrix (snapshot, &matrix, &offset);
         }

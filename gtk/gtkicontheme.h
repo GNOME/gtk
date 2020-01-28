@@ -216,6 +216,13 @@ gboolean              gtk_icon_info_is_symbolic        (GtkIconInfo   *self);
 GDK_AVAILABLE_IN_ALL
 GdkTexture *          gtk_icon_info_download_texture   (GtkIconInfo   *self,
                                                         GError       **error);
+GDK_AVAILABLE_IN_ALL
+GdkTexture *         gtk_icon_info_download_colored_texture (GtkIconInfo *self,
+                                                             const GdkRGBA *foreground_color,
+                                                             const GdkRGBA *success_color,
+                                                             const GdkRGBA *warning_color,
+                                                             const GdkRGBA *error_color,
+                                                             GError **error);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_icon_info_snapshot_with_colors (GtkIconInfo *icon_info,
