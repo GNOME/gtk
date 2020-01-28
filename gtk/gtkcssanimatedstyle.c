@@ -687,9 +687,9 @@ gtk_css_animated_style_create_css_transitions (GPtrArray   *animations,
   gboolean source_is_animated;
   guint i;
 
-  durations = gtk_css_style_get_value (base_style, GTK_CSS_PROPERTY_TRANSITION_DURATION);
-  delays = gtk_css_style_get_value (base_style, GTK_CSS_PROPERTY_TRANSITION_DELAY);
-  timing_functions = gtk_css_style_get_value (base_style, GTK_CSS_PROPERTY_TRANSITION_TIMING_FUNCTION);
+  durations = base_style->transition->transition_duration;
+  delays = base_style->transition->transition_delay;
+  timing_functions = base_style->transition->transition_timing_function;
 
   if (_gtk_css_array_value_get_n_values (durations) == 1 &&
       _gtk_css_array_value_get_n_values (delays) == 1 &&
@@ -697,7 +697,7 @@ gtk_css_animated_style_create_css_transitions (GPtrArray   *animations,
       _gtk_css_number_value_get (_gtk_css_array_value_get_nth (delays, 0), 100) == 0)
     return animations;
 
-  transition_infos_set (transitions, gtk_css_style_get_value (base_style, GTK_CSS_PROPERTY_TRANSITION_PROPERTY));
+  transition_infos_set (transitions, base_style->transition->transition_property);
 
   source_is_animated = GTK_IS_CSS_ANIMATED_STYLE (source);
   for (i = 0; i < GTK_CSS_PROPERTY_N_PROPERTIES; i++)
@@ -787,14 +787,14 @@ gtk_css_animated_style_create_css_animations (GPtrArray        *animations,
   GtkCssValue *iteration_counts, *directions, *play_states, *fill_modes;
   guint i;
 
-  animation_names = gtk_css_style_get_value (base_style, GTK_CSS_PROPERTY_ANIMATION_NAME);
-  durations = gtk_css_style_get_value (base_style, GTK_CSS_PROPERTY_ANIMATION_DURATION);
-  delays = gtk_css_style_get_value (base_style, GTK_CSS_PROPERTY_ANIMATION_DELAY);
-  timing_functions = gtk_css_style_get_value (base_style, GTK_CSS_PROPERTY_ANIMATION_TIMING_FUNCTION);
-  iteration_counts = gtk_css_style_get_value (base_style, GTK_CSS_PROPERTY_ANIMATION_ITERATION_COUNT);
-  directions = gtk_css_style_get_value (base_style, GTK_CSS_PROPERTY_ANIMATION_DIRECTION);
-  play_states = gtk_css_style_get_value (base_style, GTK_CSS_PROPERTY_ANIMATION_PLAY_STATE);
-  fill_modes = gtk_css_style_get_value (base_style, GTK_CSS_PROPERTY_ANIMATION_FILL_MODE);
+  animation_names = base_style->animation->animation_name;
+  durations = base_style->animation->animation_duration;
+  delays = base_style->animation->animation_delay;
+  timing_functions = base_style->animation->animation_timing_function;
+  iteration_counts = base_style->animation->animation_iteration_count;
+  directions = base_style->animation->animation_direction;
+  play_states = base_style->animation->animation_play_state;
+  fill_modes = base_style->animation->animation_fill_mode;
 
   for (i = 0; i < _gtk_css_array_value_get_n_values (animation_names); i++)
     {
