@@ -23,26 +23,26 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkiconprivate.h"
+#include "gtkbuiltiniconprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkrendericonprivate.h"
 #include "gtksnapshot.h"
 
-/* GtkIcon was a minimal widget wrapped around a GtkBuiltinIcon gadget,
+/* GtkBuiltinIcon was a minimal widget wrapped around a GtkBuiltinIcon gadget,
  * It should be used whenever builtin-icon functionality is desired
  * but a widget is needed for other reasons.
  */
 
-struct _GtkIcon
+struct _GtkBuiltinIcon
 {
   GtkWidget parent;
 };
 
-G_DEFINE_TYPE (GtkIcon, gtk_icon, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE (GtkBuiltinIcon, gtk_builtin_icon, GTK_TYPE_WIDGET)
 
 static void
-gtk_icon_snapshot (GtkWidget   *widget,
-                   GtkSnapshot *snapshot)
+gtk_builtin_icon_snapshot (GtkWidget   *widget,
+                           GtkSnapshot *snapshot)
 {
   GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
   int width, height;
@@ -55,7 +55,7 @@ gtk_icon_snapshot (GtkWidget   *widget,
 }
 
 static void
-gtk_icon_style_updated (GtkWidget *widget)
+gtk_builtin_icon_style_updated (GtkWidget *widget)
 {
   GtkStyleContext *context;
   GtkCssStyleChange *change = NULL;
@@ -63,7 +63,7 @@ gtk_icon_style_updated (GtkWidget *widget)
   context = gtk_widget_get_style_context (widget);
   change = gtk_style_context_get_change (context);
 
-  GTK_WIDGET_CLASS (gtk_icon_parent_class)->style_updated (widget);
+  GTK_WIDGET_CLASS (gtk_builtin_icon_parent_class)->style_updated (widget);
 
   if (change == NULL ||
       gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_SIZE))
@@ -78,13 +78,13 @@ gtk_icon_style_updated (GtkWidget *widget)
 }
 
 static void
-gtk_icon_measure (GtkWidget      *widget,
-                  GtkOrientation  orientation,
-                  int             for_size,
-                  int            *minimum,
-                  int            *natural,
-                  int            *minimum_baseline,
-                  int            *natural_baseline)
+gtk_builtin_icon_measure (GtkWidget      *widget,
+                          GtkOrientation  orientation,
+                          int             for_size,
+                          int            *minimum,
+                          int            *natural,
+                          int            *minimum_baseline,
+                          int            *natural_baseline)
 {
   GtkCssValue *icon_size;
 
@@ -93,31 +93,31 @@ gtk_icon_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_icon_class_init (GtkIconClass *klass)
+gtk_builtin_icon_class_init (GtkBuiltinIconClass *klass)
 {
   GtkWidgetClass *wclass = GTK_WIDGET_CLASS (klass);
 
-  wclass->snapshot = gtk_icon_snapshot;
-  wclass->measure = gtk_icon_measure;
-  wclass->style_updated = gtk_icon_style_updated;
+  wclass->snapshot = gtk_builtin_icon_snapshot;
+  wclass->measure = gtk_builtin_icon_measure;
+  wclass->style_updated = gtk_builtin_icon_style_updated;
 }
 
 static void
-gtk_icon_init (GtkIcon *self)
+gtk_builtin_icon_init (GtkBuiltinIcon *self)
 {
 }
 
 GtkWidget *
-gtk_icon_new (const char *css_name)
+gtk_builtin_icon_new (const char *css_name)
 {
-  return g_object_new (GTK_TYPE_ICON,
+  return g_object_new (GTK_TYPE_BUILTIN_ICON,
                        "css-name", css_name,
                        NULL);
 }
 
 void
-gtk_icon_set_css_name (GtkIcon    *self,
-                       const char *css_name)
+gtk_builtin_icon_set_css_name (GtkBuiltinIcon *self,
+                               const char *css_name)
 {
   gtk_css_node_set_name (gtk_widget_get_css_node (GTK_WIDGET (self)),
                          g_quark_from_string (css_name));
