@@ -1353,6 +1353,8 @@ gtk_css_node_validate (GtkCssNode *cssnode)
   gint64 timestamp;
   gint64 before = g_get_monotonic_time ();
 
+  g_assert (cssnode->parent == NULL);
+
   timestamp = gtk_css_node_get_timestamp (cssnode);
 
   gtk_css_node_validate_internal (cssnode, &filter, timestamp);

@@ -647,7 +647,6 @@ gtk_popover_show (GtkWidget *widget)
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   _gtk_widget_set_visible_flag (widget, TRUE);
-  gtk_css_node_validate (gtk_widget_get_css_node (widget));
   gtk_widget_realize (widget);
   gtk_popover_native_check_resize (GTK_NATIVE (widget));
   gtk_widget_map (widget);
