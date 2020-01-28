@@ -202,7 +202,7 @@ _gtk_css_blend_mode_value_get (const GtkCssValue *value)
 static double
 get_dpi (GtkCssStyle *style)
 {
-  return _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_DPI), 96);
+  return _gtk_css_number_value_get (style->core->dpi, 96);
 }
 
 /* XXX: Kinda bad to have that machinery here, nobody expects vital font
@@ -267,7 +267,7 @@ gtk_css_value_font_size_compute (GtkCssValue      *value,
       break;
     case GTK_CSS_FONT_SIZE_SMALLER:
       if (parent_style)
-        font_size = _gtk_css_number_value_get (gtk_css_style_get_value (parent_style, GTK_CSS_PROPERTY_FONT_SIZE), 100);
+        font_size = _gtk_css_number_value_get (parent_style->core->font_size, 100);
       else
         font_size = gtk_css_font_size_get_default_px (provider, style);
       /* XXX: This is what WebKit does... */
@@ -275,7 +275,7 @@ gtk_css_value_font_size_compute (GtkCssValue      *value,
       break;
     case GTK_CSS_FONT_SIZE_LARGER:
       if (parent_style)
-        font_size = _gtk_css_number_value_get (gtk_css_style_get_value (parent_style, GTK_CSS_PROPERTY_FONT_SIZE), 100);
+        font_size = _gtk_css_number_value_get (parent_style->core->font_size, 100);
       else
         font_size = gtk_css_font_size_get_default_px (provider, style);
       /* XXX: This is what WebKit does... */
@@ -411,7 +411,7 @@ gtk_css_value_font_weight_compute (GtkCssValue      *value,
     return _gtk_css_value_ref (value);
 
   if (parent_style)
-    parent_value = _gtk_css_number_value_get (gtk_css_style_get_value (parent_style, property_id), 100);
+    parent_value = _gtk_css_number_value_get (parent_style->font->font_weight, 100);
   else
     parent_value = 400;
 
