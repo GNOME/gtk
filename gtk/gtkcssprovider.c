@@ -464,7 +464,7 @@ gtk_css_style_provider_lookup (GtkStyleProvider             *provider,
   if (_gtk_css_selector_tree_is_empty (priv->tree))
     return;
 
-  tree_rules = _gtk_css_selector_tree_match_all (priv->tree, filter, node);
+  tree_rules = gtk_css_selector_tree_match_all (priv->tree, filter, node, change);
   if (tree_rules)
     {
       verify_tree_match_results (css_provider, node, tree_rules);
@@ -493,9 +493,6 @@ gtk_css_style_provider_lookup (GtkStyleProvider             *provider,
 
       g_ptr_array_free (tree_rules, TRUE);
     }
-
-  if (change)
-    *change = gtk_css_selector_tree_get_change_all (priv->tree, filter, node);
 }
 
 static void

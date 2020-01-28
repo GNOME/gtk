@@ -1835,7 +1835,7 @@ static GtkCssChange
 gtk_css_selector_tree_get_change (const GtkCssSelectorTree     *tree,
                                   const GtkCountingBloomFilter *filter,
 				  GtkCssNode                   *node,
-                                  gboolean                      skipping)
+                                  gboolean                      in_sibling)
 {
   GtkCssChange change = 0;
   const GtkCssSelectorTree *prev;
@@ -1845,7 +1845,7 @@ gtk_css_selector_tree_get_change (const GtkCssSelectorTree     *tree,
       case GTK_CSS_SELECTOR_CATEGORY_SIMPLE:
         break;
       case GTK_CSS_SELECTOR_CATEGORY_SIMPLE_RADICAL:
-        if (skipping)
+        if (in_sibling)
           break;
         if (node)
           {
@@ -1860,11 +1860,11 @@ gtk_css_selector_tree_get_change (const GtkCssSelectorTree     *tree,
           }
         break;
       case GTK_CSS_SELECTOR_CATEGORY_PARENT:
-        skipping = FALSE;
+        in_sibling = FALSE;
         node = NULL;
         break;
       case GTK_CSS_SELECTOR_CATEGORY_SIBLING:
-        skipping = TRUE;
+        in_sibling = TRUE;
         node = NULL;
         break;
       default:
@@ -1875,7 +1875,7 @@ gtk_css_selector_tree_get_change (const GtkCssSelectorTree     *tree,
   for (prev = gtk_css_selector_tree_get_previous (tree);
        prev != NULL;
        prev = gtk_css_selector_tree_get_sibling (prev))
-    change |= gtk_css_selector_tree_get_change (prev, filter, node, skipping);
+    change |= gtk_css_selector_tree_get_change (prev, filter, node, in_sibling);
 
   if (change || gtk_css_selector_tree_get_matches (tree))
     change = tree->selector.class->get_change (&tree->selector, change & ~GTK_CSS_CHANGE_GOT_MATCH) | GTK_CSS_CHANGE_GOT_MATCH;
@@ -1886,7 +1886,7 @@ gtk_css_selector_tree_get_change (const GtkCssSelectorTree     *tree,
 static gboolean
 gtk_css_selector_tree_match_bloom (const GtkCssSelectorTree     *tree,
                                    const GtkCountingBloomFilter *filter,
-                                   gboolean                      skipping)
+                                   gboolean                      in_sibling)
 {
   const GtkCssSelectorTree *prev;
 
@@ -1895,17 +1895,17 @@ gtk_css_selector_tree_match_bloom (const GtkCssSelectorTree     *tree,
       case GTK_CSS_SELECTOR_CATEGORY_SIMPLE:
         break;
       case GTK_CSS_SELECTOR_CATEGORY_SIMPLE_RADICAL:
-        if (skipping)
+        if (in_sibling)
           break;
         if (!gtk_counting_bloom_filter_may_contain (filter,
                                                     gtk_css_selector_hash_one (&tree->selector)))
           return FALSE;
         break;
       case GTK_CSS_SELECTOR_CATEGORY_PARENT:
-        skipping = FALSE;
+        in_sibling = FALSE;
         break;
       case GTK_CSS_SELECTOR_CATEGORY_SIBLING:
-        skipping = TRUE;
+        in_sibling = TRUE;
         break;
       default:
         g_assert_not_reached ();
@@ -1919,7 +1919,7 @@ gtk_css_selector_tree_match_bloom (const GtkCssSelectorTree     *tree,
        prev != NULL;
        prev = gtk_css_selector_tree_get_sibling (prev))
     {
-      if (gtk_css_selector_tree_match_bloom (prev, filter, skipping))
+      if (gtk_css_selector_tree_match_bloom (prev, filter, in_sibling))
         return TRUE;
     }
 
@@ -1928,7 +1928,8 @@ gtk_css_selector_tree_match_bloom (const GtkCssSelectorTree     *tree,
 
 static void
 gtk_css_selector_tree_found_match (const GtkCssSelectorTree  *tree,
-				   GPtrArray                **results)
+				   GPtrArray                **results,
+                                   GtkCssChange              *change)
 {
   int i;
   gpointer *matches;
@@ -1942,28 +1943,37 @@ gtk_css_selector_tree_found_match (const GtkCssSelectorTree  *tree,
 
   for (i = 0; matches[i] != NULL; i++)
     g_ptr_array_insert_sorted (*results, matches[i]);
+
+  if (change)
+    *change |= GTK_CSS_CHANGE_GOT_MATCH;
 }
 
 static void
 gtk_css_selector_tree_match (const GtkCssSelectorTree      *tree,
                              const GtkCountingBloomFilter  *filter,
                              GtkCssNode                    *node,
-                             GPtrArray                    **results)
+                             gboolean                       in_sibling,
+                             GPtrArray                    **results,
+                             GtkCssChange                  *change)
 {
   const GtkCssSelectorTree *prev;
   GtkCssNode *child;
 
   if (!gtk_css_selector_match_one (&tree->selector, node))
-    return;
-
-  gtk_css_selector_tree_found_match (tree, results);
-
-  if (filter && !gtk_css_selector_is_simple (&tree->selector))
     {
-      /* We can pass both TRUE or FALSE for skipping here, because the
-       * function will immediately update it. */
-      if (!gtk_css_selector_tree_match_bloom (tree, filter, FALSE))
-          return;
+      if (change)
+        *change = gtk_css_selector_tree_get_change (tree, filter, node, in_sibling);
+      return;
+    }
+
+  gtk_css_selector_tree_found_match (tree, results, change);
+
+  if (!gtk_css_selector_is_simple (&tree->selector))
+    {
+      if (filter && !gtk_css_selector_tree_match_bloom (tree, filter, in_sibling))
+        goto out;
+
+      in_sibling = tree->selector.class->category == GTK_CSS_SELECTOR_CATEGORY_SIBLING;
     }
 
   for (prev = gtk_css_selector_tree_get_previous (tree);
@@ -1974,24 +1984,38 @@ gtk_css_selector_tree_match (const GtkCssSelectorTree      *tree,
            child;
            child = gtk_css_selector_iterator (&tree->selector, node, child))
         {
-          gtk_css_selector_tree_match (prev, filter, child, results);
+          GtkCssChange child_change = 0;
+          gtk_css_selector_tree_match (prev, filter, child, in_sibling, results, change ? &child_change : NULL);
+          if (change)
+            *change |= child_change;
         }
     }
+
+out:
+  if (change && *change)
+    *change = tree->selector.class->get_change (&tree->selector, *change & ~GTK_CSS_CHANGE_GOT_MATCH) | GTK_CSS_CHANGE_GOT_MATCH;
 
   return;
 }
 
 GPtrArray *
-_gtk_css_selector_tree_match_all (const GtkCssSelectorTree     *tree,
-                                  const GtkCountingBloomFilter *filter,
-                                  GtkCssNode                   *node)
+gtk_css_selector_tree_match_all (const GtkCssSelectorTree     *tree,
+                                 const GtkCountingBloomFilter *filter,
+                                 GtkCssNode                   *node,
+                                 GtkCssChange                 *change)
 {
   GPtrArray *results = NULL;
+
+  if (change)
+    *change = 0;
 
   for (; tree != NULL;
        tree = gtk_css_selector_tree_get_sibling (tree))
     {
-      gtk_css_selector_tree_match (tree, filter, node, &results);
+      GtkCssChange child_change = 0;
+      gtk_css_selector_tree_match (tree, filter, node, FALSE, &results, change ? &child_change : NULL);
+      if (change)
+        *change |= child_change;
     }
 
   return results;
@@ -2001,21 +2025,6 @@ gboolean
 _gtk_css_selector_tree_is_empty (const GtkCssSelectorTree *tree)
 {
   return tree == NULL;
-}
-
-GtkCssChange
-gtk_css_selector_tree_get_change_all (const GtkCssSelectorTree     *tree,
-                                      const GtkCountingBloomFilter *filter,
-				      GtkCssNode                   *node)
-{
-  GtkCssChange change = 0;
-
-  for (; tree != NULL;
-       tree = gtk_css_selector_tree_get_sibling (tree))
-    change |= gtk_css_selector_tree_get_change (tree, filter, node, FALSE);
-
-  /* Never return reserved bit set */
-  return change & ~GTK_CSS_CHANGE_RESERVED_BIT;
 }
 
 #ifdef PRINT_TREE
