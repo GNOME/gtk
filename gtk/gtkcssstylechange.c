@@ -21,6 +21,66 @@
 
 #include "gtkcssstylepropertyprivate.h"
 
+static void
+compute_change (GtkCssStyleChange *change)
+{
+  if (change->old_style->core != change->new_style->core)
+    gtk_css_core_values_compute_changes_and_affects (change->old_style,
+                                                     change->new_style,
+                                                     &change->changes,
+                                                     &change->affects);
+  if (change->old_style->background != change->new_style->background)
+    gtk_css_background_values_compute_changes_and_affects (change->old_style,
+                                                           change->new_style,
+                                                           &change->changes,
+                                                           &change->affects);
+  if (change->old_style->border != change->new_style->border)
+    gtk_css_border_values_compute_changes_and_affects (change->old_style,
+                                                       change->new_style,
+                                                       &change->changes,
+                                                       &change->affects);
+  if (change->old_style->icon != change->new_style->icon)
+    gtk_css_icon_values_compute_changes_and_affects (change->old_style,
+                                                     change->new_style,
+                                                     &change->changes,
+                                                     &change->affects);
+  if (change->old_style->outline != change->new_style->outline)
+    gtk_css_outline_values_compute_changes_and_affects (change->old_style,
+                                                        change->new_style,
+                                                        &change->changes,
+                                                        &change->affects);
+  if (change->old_style->font != change->new_style->font)
+    gtk_css_font_values_compute_changes_and_affects (change->old_style,
+                                                     change->new_style,
+                                                     &change->changes,
+                                                     &change->affects);
+  if (change->old_style->font_variant != change->new_style->font_variant)
+    gtk_css_font_variant_values_compute_changes_and_affects (change->old_style,
+                                                             change->new_style,
+                                                             &change->changes,
+                                                             &change->affects);
+  if (change->old_style->animation != change->new_style->animation)
+    gtk_css_animation_values_compute_changes_and_affects (change->old_style,
+                                                          change->new_style,
+                                                          &change->changes,
+                                                          &change->affects);
+  if (change->old_style->transition != change->new_style->transition)
+    gtk_css_transition_values_compute_changes_and_affects (change->old_style,
+                                                           change->new_style,
+                                                           &change->changes,
+                                                           &change->affects);
+  if (change->old_style->size != change->new_style->size)
+    gtk_css_size_values_compute_changes_and_affects (change->old_style,
+                                                     change->new_style,
+                                                     &change->changes,
+                                                     &change->affects);
+  if (change->old_style->other != change->new_style->other)
+    gtk_css_other_values_compute_changes_and_affects (change->old_style,
+                                                      change->new_style,
+                                                      &change->changes,
+                                                      &change->affects);
+}
+
 void
 gtk_css_style_change_init (GtkCssStyleChange *change,
                            GtkCssStyle       *old_style,
@@ -29,14 +89,11 @@ gtk_css_style_change_init (GtkCssStyleChange *change,
   change->old_style = g_object_ref (old_style);
   change->new_style = g_object_ref (new_style);
 
-  change->n_compared = 0;
-
   change->affects = 0;
   change->changes = _gtk_bitmask_new ();
   
-  /* Make sure we don't do extra work if old and new are equal. */
-  if (old_style == new_style)
-    change->n_compared = GTK_CSS_PROPERTY_N_PROPERTIES;
+  if (old_style != new_style)
+    compute_change (change);
 }
 
 void
@@ -59,54 +116,23 @@ gtk_css_style_change_get_new_style (GtkCssStyleChange *change)
   return change->new_style;
 }
 
-static gboolean
-gtk_css_style_compare_next_value (GtkCssStyleChange *change)
-{
-  if (change->n_compared == GTK_CSS_PROPERTY_N_PROPERTIES)
-    return FALSE;
-
-  if (!_gtk_css_value_equal (gtk_css_style_get_value (change->old_style, change->n_compared),
-                             gtk_css_style_get_value (change->new_style, change->n_compared)))
-    {
-      change->affects |= _gtk_css_style_property_get_affects (_gtk_css_style_property_lookup_by_id (change->n_compared));
-      change->changes = _gtk_bitmask_set (change->changes, change->n_compared, TRUE);
-    }
-
-  change->n_compared++;
-
-  return TRUE;
-}
-
 gboolean
 gtk_css_style_change_has_change (GtkCssStyleChange *change)
 {
-  do {
-    if (!_gtk_bitmask_is_empty (change->changes))
-      return TRUE;
-  } while (gtk_css_style_compare_next_value (change));
-
-  return FALSE;
+  return !_gtk_bitmask_is_empty (change->changes);
 }
 
 gboolean
 gtk_css_style_change_affects (GtkCssStyleChange *change,
                               GtkCssAffects      affects)
 {
-  do {
-    if (change->affects & affects)
-      return TRUE;
-  } while (gtk_css_style_compare_next_value (change));
-
-  return FALSE;
+  return (change->affects & affects) != 0;
 }
 
 gboolean
 gtk_css_style_change_changes_property (GtkCssStyleChange *change,
                                        guint              id)
 {
-  while (change->n_compared <= id)
-    gtk_css_style_compare_next_value (change);
-
   return _gtk_bitmask_get (change->changes, id);
 }
 
@@ -125,10 +151,6 @@ gtk_css_style_change_print (GtkCssStyleChange *change,
           GtkCssStyleProperty *prop;
           GtkCssValue *value;
           const char *name;
-
-          if (_gtk_css_value_equal (gtk_css_style_get_value (change->old_style, i),
-                                     gtk_css_style_get_value (change->new_style, i)))
-            continue;
 
           prop = _gtk_css_style_property_lookup_by_id (i);
           name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop));

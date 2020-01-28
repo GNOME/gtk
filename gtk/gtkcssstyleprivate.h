@@ -265,6 +265,50 @@ GtkCssValues *gtk_css_values_ref   (GtkCssValues     *values);
 void          gtk_css_values_unref (GtkCssValues     *values);
 GtkCssValues *gtk_css_values_copy  (GtkCssValues     *values);
 
+void gtk_css_core_values_compute_changes_and_affects (GtkCssStyle *style1,
+                                                      GtkCssStyle *style2,
+                                                      GtkBitmask    **changes,
+                                                      GtkCssAffects *affects);
+void gtk_css_background_values_compute_changes_and_affects (GtkCssStyle *style1,
+                                                      GtkCssStyle *style2,
+                                                      GtkBitmask    **changes,
+                                                      GtkCssAffects *affects);
+void gtk_css_border_values_compute_changes_and_affects (GtkCssStyle *style1,
+                                                      GtkCssStyle *style2,
+                                                      GtkBitmask    **changes,
+                                                      GtkCssAffects *affects);
+void gtk_css_icon_values_compute_changes_and_affects (GtkCssStyle *style1,
+                                                      GtkCssStyle *style2,
+                                                      GtkBitmask    **changes,
+                                                      GtkCssAffects *affects);
+void gtk_css_outline_values_compute_changes_and_affects (GtkCssStyle *style1,
+                                                      GtkCssStyle *style2,
+                                                      GtkBitmask    **changes,
+                                                      GtkCssAffects *affects);
+void gtk_css_font_values_compute_changes_and_affects (GtkCssStyle *style1,
+                                                      GtkCssStyle *style2,
+                                                      GtkBitmask    **changes,
+                                                      GtkCssAffects *affects);
+void gtk_css_font_variant_values_compute_changes_and_affects (GtkCssStyle *style1,
+                                                      GtkCssStyle *style2,
+                                                      GtkBitmask    **changes,
+                                                      GtkCssAffects *affects);
+void gtk_css_animation_values_compute_changes_and_affects (GtkCssStyle *style1,
+                                                      GtkCssStyle *style2,
+                                                      GtkBitmask    **changes,
+                                                      GtkCssAffects *affects);
+void gtk_css_transition_values_compute_changes_and_affects (GtkCssStyle *style1,
+                                                      GtkCssStyle *style2,
+                                                      GtkBitmask    **changes,
+                                                      GtkCssAffects *affects);
+void gtk_css_size_values_compute_changes_and_affects (GtkCssStyle *style1,
+                                                      GtkCssStyle *style2,
+                                                      GtkBitmask    **changes,
+                                                      GtkCssAffects *affects);
+void gtk_css_other_values_compute_changes_and_affects (GtkCssStyle *style1,
+                                                      GtkCssStyle *style2,
+                                                      GtkBitmask    **changes,
+                                                      GtkCssAffects *affects);
 
 G_END_DECLS
 
