@@ -27,7 +27,7 @@
 #include "gtkcellview.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkframe.h"
-#include "gtkiconprivate.h"
+#include "gtkbuiltiniconprivate.h"
 #include "gtkintl.h"
 #include "gtkliststore.h"
 #include "gtkmain.h"
@@ -844,7 +844,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   priv->text_renderer = NULL;
   priv->id_column = -1;
 
-  g_type_ensure (GTK_TYPE_ICON);
+  g_type_ensure (GTK_TYPE_BUILTIN_ICON);
   g_type_ensure (GTK_TYPE_TREE_POPOVER);
   gtk_widget_init_template (GTK_WIDGET (combo_box));
 

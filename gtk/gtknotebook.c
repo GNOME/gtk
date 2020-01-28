@@ -38,7 +38,7 @@
 #include "gtkeventcontrollermotion.h"
 #include "gtkgestureclick.h"
 #include "gtkgizmoprivate.h"
-#include "gtkiconprivate.h"
+#include "gtkbuiltiniconprivate.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
