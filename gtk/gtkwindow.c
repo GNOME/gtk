@@ -4036,9 +4036,9 @@ icon_list_from_theme (GtkWindow   *window,
 					             0);
       if (info)
         {
-          GdkPaintable *paintable = gtk_icon_info_load_icon (info, NULL);
-          if (paintable && GDK_IS_TEXTURE (paintable))
-            list = g_list_insert_sorted (list, GDK_TEXTURE (paintable), (GCompareFunc) icon_size_compare);
+          GdkTexture *texture = gtk_icon_info_download_texture (info, NULL);
+          if (texture)
+            list = g_list_insert_sorted (list, texture, (GCompareFunc) icon_size_compare);
 
           g_object_unref (info);
         }
