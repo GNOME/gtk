@@ -135,7 +135,7 @@ insert_text (GtkTextBuffer *buffer)
   icon_theme = gtk_icon_theme_get_default ();
   icon = gtk_icon_theme_lookup_icon (icon_theme,
                                      "gtk3-demo",
-                                     32,
+                                     32, 1,
                                      GTK_ICON_LOOKUP_GENERIC_FALLBACK);
   texture = gtk_icon_download_texture (icon, NULL);
   g_object_unref (icon);
