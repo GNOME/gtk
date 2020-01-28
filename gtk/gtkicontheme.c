@@ -218,7 +218,6 @@ struct _GtkIconTheme
   guint is_display_singleton : 1;
   guint pixbuf_supports_svg  : 1;
   guint themes_valid         : 1;
-  guint loading_themes       : 1;
 
   /* A list of all the themes needed to look up icons.
    * In search order, without duplicates
@@ -1628,10 +1627,6 @@ ensure_valid_themes (GtkIconTheme *self, gboolean non_blocking)
   gboolean was_valid = self->themes_valid;
   gint64 before = g_get_monotonic_time ();
 
-  if (self->loading_themes)
-    return TRUE;
-  self->loading_themes = TRUE;
-
   if (self->themes_valid)
     {
       g_get_current_time (&tv);
@@ -1666,7 +1661,6 @@ ensure_valid_themes (GtkIconTheme *self, gboolean non_blocking)
   if (gdk_profiler_is_running ())
     gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "icon theme load", NULL);
 
-  self->loading_themes = FALSE;
   return TRUE;
 }
 
