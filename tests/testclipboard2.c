@@ -288,7 +288,7 @@ get_button_list (GdkClipboard *clipboard,
   g_value_init (&value, GDK_TYPE_PIXBUF);
   icon = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
                                      "utilities-terminal",
-                                     48, 0);
+                                     48, 1, 0);
   texture = gtk_icon_download_texture (icon, NULL);
   g_value_take_object (&value, gdk_pixbuf_get_from_texture (texture));
   g_object_unref (texture);
