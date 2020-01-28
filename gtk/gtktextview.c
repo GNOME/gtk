@@ -229,6 +229,7 @@ struct _GtkTextViewPrivate
 
   GtkGesture *drag_gesture;
   GtkEventController *key_controller;
+  GtkEventController *key_controller_toplevel;
 
   GtkCssNode *selection_node;
 
@@ -1699,14 +1700,6 @@ gtk_text_view_init (GtkTextView *text_view)
   g_signal_connect (priv->key_controller, "im-update",
                     G_CALLBACK (gtk_text_view_key_controller_im_update),
                     widget);
-  g_signal_connect_swapped (priv->key_controller, "focus-in",
-                            G_CALLBACK (gtk_text_view_focus_in),
-                            widget);
-  g_signal_connect_swapped (priv->key_controller, "focus-out",
-                            G_CALLBACK (gtk_text_view_focus_out),
-                            widget);
-  gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller),
-                                           priv->im_context);
   gtk_widget_add_controller (widget, priv->key_controller);
 
   priv->selection_node = gtk_css_node_new ();
@@ -2899,6 +2892,11 @@ gtk_text_view_set_editable (GtkTextView *text_view,
 
       gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller),
                                                setting ? priv->im_context : NULL);
+      if (priv->key_controller_toplevel)
+        {
+          gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller_toplevel),
+                                                   setting ? priv->im_context : NULL);
+        }
 
       if (priv->layout && priv->layout->default_style)
         {
@@ -4581,11 +4579,28 @@ gtk_text_view_realize (GtkWidget *widget)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
+  GtkWidget *toplevel;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
 
   GTK_WIDGET_CLASS (gtk_text_view_parent_class)->realize (widget);
+
+  toplevel = gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
+  if (toplevel && !priv->key_controller_toplevel)
+    {
+      priv->key_controller_toplevel = gtk_event_controller_key_new ();
+      gtk_event_controller_set_propagation_phase (priv->key_controller_toplevel, GTK_PHASE_CAPTURE);
+      g_signal_connect_swapped (priv->key_controller_toplevel, "focus-in",
+                                G_CALLBACK (gtk_text_view_focus_in),
+                                widget);
+      g_signal_connect_swapped (priv->key_controller_toplevel, "focus-out",
+                                G_CALLBACK (gtk_text_view_focus_out),
+                                widget);
+      gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller_toplevel),
+                                               priv->im_context);
+      gtk_widget_add_controller (toplevel, priv->key_controller_toplevel);
+    }
 
   if (gtk_widget_is_sensitive (widget))
     {
@@ -4611,9 +4626,19 @@ gtk_text_view_unrealize (GtkWidget *widget)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
+  GtkWidget *toplevel;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
+
+  toplevel = gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
+  if (toplevel && priv->key_controller_toplevel)
+    {
+      gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller_toplevel),
+                                               NULL);
+      gtk_widget_remove_controller (toplevel, priv->key_controller_toplevel);
+      priv->key_controller_toplevel = NULL;
+    }
 
   if (priv->buffer)
     {
@@ -5347,12 +5372,6 @@ gtk_text_view_focus_in (GtkWidget *widget)
 		    "direction-changed",
 		    G_CALLBACK (keymap_direction_changed), text_view);
   gtk_text_view_check_keymap_direction (text_view);
-
-  if (priv->editable)
-    {
-      priv->need_im_reset = TRUE;
-      gtk_im_context_focus_in (priv->im_context);
-    }
 }
 
 static void
@@ -5384,12 +5403,6 @@ gtk_text_view_focus_out (GtkWidget *widget)
   if (priv->text_handle)
     _gtk_text_handle_set_mode (priv->text_handle,
                                GTK_TEXT_HANDLE_MODE_NONE);
-
-  if (priv->editable)
-    {
-      priv->need_im_reset = TRUE;
-      gtk_im_context_focus_out (priv->im_context);
-    }
 }
 
 static void
