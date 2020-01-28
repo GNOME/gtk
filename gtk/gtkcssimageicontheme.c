@@ -61,15 +61,15 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
     }
   else
     {
-      icon_info = gtk_icon_theme_lookup_icon_for_scale (icon_theme->icon_theme,
-                                                        icon_theme->name,
-                                                        size,
-                                                        icon_theme->scale,
-                                                        GTK_ICON_LOOKUP_USE_BUILTIN);
+      icon_info = gtk_icon_theme_lookup_icon (icon_theme->icon_theme,
+                                              icon_theme->name,
+                                              size,
+                                              icon_theme->scale,
+                                              GTK_ICON_LOOKUP_USE_BUILTIN);
       if (icon_info == NULL)
         icon_info = gtk_icon_theme_lookup_icon (icon_theme->icon_theme,
                                                 "image-missing",
-                                                size,
+                                                size, icon_theme->scale,
                                                 GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
       g_assert (icon_info != NULL);

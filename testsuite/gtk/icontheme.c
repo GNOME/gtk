@@ -57,7 +57,7 @@ assert_icon_lookup_size (const char         *icon_name,
 {
   GtkIcon *info;
 
-  info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, size, flags);
+  info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, size, 1, flags);
   if (info == NULL)
     {
       g_error ("Could not look up an icon for \"%s\" with flags %s at size %d",
@@ -110,7 +110,7 @@ assert_icon_lookup_fails (const char         *icon_name,
 {
   GtkIcon *info;
 
-  info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, size, flags);
+  info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, size, 1, flags);
 
   if (info != NULL)
     {
@@ -173,7 +173,7 @@ assert_lookup_order (const char         *icon_name,
 
   g_assert (lookups == NULL);
 
-  info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, size, flags);
+  info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, size, 1, flags);
   if (info)
     g_object_unref (info);
   
@@ -690,8 +690,8 @@ test_nonsquare_symbolic (void)
   icon_theme = gtk_icon_theme_get_default ();
   file = g_file_new_for_path (path);
   icon = g_file_icon_new (file);
-  info = gtk_icon_theme_lookup_by_gicon_for_scale (icon_theme, icon,
-						   height, 1, 0);
+  info = gtk_icon_theme_lookup_by_gicon (icon_theme, icon,
+                                         height, 1, 0);
   g_assert_nonnull (info);
 
   g_object_unref (pixbuf);
