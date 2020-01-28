@@ -45,18 +45,18 @@ get_base_font_size_px (guint             property_id,
   if (property_id == GTK_CSS_PROPERTY_FONT_SIZE)
     {
       if (parent_style)
-        return _gtk_css_number_value_get (gtk_css_style_get_value (parent_style, GTK_CSS_PROPERTY_FONT_SIZE), 100);
+        return _gtk_css_number_value_get (parent_style->core->font_size, 100);
       else
         return gtk_css_font_size_get_default_px (provider, style);
     }
 
-  return _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_SIZE), 100);
+  return _gtk_css_number_value_get (style->core->font_size, 100);
 }
 
 static double
 get_dpi (GtkCssStyle *style)
 {
-  return _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_DPI), 96);
+  return _gtk_css_number_value_get (style->core->dpi, 96);
 }
 
 static GtkCssValue *
