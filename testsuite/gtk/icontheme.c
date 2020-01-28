@@ -55,7 +55,7 @@ assert_icon_lookup_size (const char         *icon_name,
                          const char         *filename,
                          gint                pixbuf_size)
 {
-  GtkIconInfo *info;
+  GtkIcon *info;
 
   info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, size, flags);
   if (info == NULL)
@@ -67,17 +67,17 @@ assert_icon_lookup_size (const char         *icon_name,
 
   if (filename)
     {
-      if (!g_str_has_suffix (gtk_icon_info_get_filename (info), filename))
+      if (!g_str_has_suffix (gtk_icon_get_filename (info), filename))
         {
           g_error ("Icon for \"%s\" with flags %s at size %d should be \"...%s\" but is \"...%s\"",
                    icon_name, lookup_flags_to_string (flags), size,
-                   filename, gtk_icon_info_get_filename (info) + strlen (g_get_current_dir ()));
+                   filename, gtk_icon_get_filename (info) + strlen (g_get_current_dir ()));
           return;
         }
     }
   else
     {
-      g_assert (gtk_icon_info_get_filename (info) == NULL);
+      g_assert (gtk_icon_get_filename (info) == NULL);
     }
 
   if (pixbuf_size > 0)
@@ -85,7 +85,7 @@ assert_icon_lookup_size (const char         *icon_name,
       GdkTexture *texture;
       GError *error = NULL;
 
-      texture = gtk_icon_info_download_texture (info, &error);
+      texture = gtk_icon_download_texture (info, &error);
       g_assert_no_error (error);
       g_assert_cmpint (gdk_texture_get_width (texture), ==, pixbuf_size);
       g_object_unref (texture);
@@ -108,14 +108,14 @@ assert_icon_lookup_fails (const char         *icon_name,
                           gint                size,
                           GtkIconLookupFlags  flags)
 {
-  GtkIconInfo *info;
+  GtkIcon *info;
 
   info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, size, flags);
 
   if (info != NULL)
     {
       g_error ("Should not find an icon for \"%s\" with flags %s at size %d, but found \"%s\"",
-               icon_name, lookup_flags_to_string (flags), size, gtk_icon_info_get_filename (info) + strlen (g_get_current_dir ()));
+               icon_name, lookup_flags_to_string (flags), size, gtk_icon_get_filename (info) + strlen (g_get_current_dir ()));
       g_object_unref (info);
       return;
     }
@@ -164,7 +164,7 @@ assert_lookup_order (const char         *icon_name,
   guint debug_flags;
   va_list args;
   const gchar *s;
-  GtkIconInfo *info;
+  GtkIcon *info;
   GList *l;
 
   debug_flags = gtk_get_debug_flags ();
@@ -599,7 +599,7 @@ load_icon (GObject      *source,
   GMainLoop *loop = data;
   GtkIconTheme *theme = GTK_ICON_THEME (source);
   GError *error = NULL;
-  GtkIconInfo *icon;
+  GtkIcon *icon;
 
   icon = gtk_icon_theme_choose_icon_finish (theme, res, &error);
   g_assert (icon != NULL);
@@ -665,7 +665,7 @@ test_nonsquare_symbolic (void)
 {
   gint width, height;
   GtkIconTheme *icon_theme;
-  GtkIconInfo *info;
+  GtkIcon *info;
   GFile *file;
   GIcon *icon;
   GdkRGBA black = { 0.0, 0.0, 0.0, 1.0 };
@@ -695,7 +695,7 @@ test_nonsquare_symbolic (void)
   g_assert_nonnull (info);
 
   g_object_unref (pixbuf);
-  texture = gtk_icon_info_download_colored_texture (info, &black, NULL, NULL, NULL, &error);
+  texture = gtk_icon_download_colored_texture (info, &black, NULL, NULL, NULL, &error);
 
   /* we are loaded successfully */
   g_assert_no_error (error);
