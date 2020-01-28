@@ -3832,20 +3832,36 @@ icon_info_ensure_scale_and_texture__locked (GtkIconInfo *icon_info)
   return TRUE;
 }
 
-static GdkTexture *
-icon_info_get_texture (GtkIconInfo *icon_info)
+GdkTexture *
+gtk_icon_info_download_texture (GtkIconInfo *self,
+                                GError **error)
 {
   GdkTexture *texture = NULL;
 
-  g_mutex_lock (&icon_info->cache_lock);
+  g_mutex_lock (&self->cache_lock);
 
-  if (!icon_info->texture)
-    icon_info_ensure_scale_and_texture__locked (icon_info);
+  if (!self->texture)
+    icon_info_ensure_scale_and_texture__locked (self);
 
-  if (icon_info->texture)
-    texture = g_object_ref (icon_info->texture);
+  if (self->texture)
+    texture = g_object_ref (self->texture);
+  else
+    {
+      if (self->load_error)
+        {
+          if (error)
+            *error = g_error_copy (self->load_error);
+        }
+      else
+        {
+          g_set_error_literal (error,
+                               GTK_ICON_THEME_ERROR,
+                               GTK_ICON_THEME_NOT_FOUND,
+                               _("Failed to load icon"));
+        }
+    }
 
-  g_mutex_unlock (&icon_info->cache_lock);
+  g_mutex_unlock (&self->cache_lock);
 
   return texture;
 }
@@ -3859,7 +3875,7 @@ icon_info_paintable_snapshot (GdkPaintable *paintable,
   GtkIconInfo *icon_info = GTK_ICON_INFO (paintable);
   GdkTexture *texture;
 
-  texture = icon_info_get_texture (icon_info);
+  texture = gtk_icon_info_download_texture (icon_info, NULL);
   if (texture)
     {
       if (icon_info->desired_scale != 1)
@@ -3890,7 +3906,7 @@ gtk_icon_info_snapshot_with_colors (GtkIconInfo *icon_info,
 {
   GdkTexture *texture;
 
-  texture = icon_info_get_texture (icon_info);
+  texture = gtk_icon_info_download_texture (icon_info, NULL);
   if (texture)
     {
       gboolean symbolic = gtk_icon_info_is_symbolic (icon_info);
