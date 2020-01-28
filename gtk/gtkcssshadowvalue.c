@@ -19,6 +19,8 @@
 
 #include "config.h"
 
+#include "gtkdebug.h"
+
 #include "gtkcssshadowvalueprivate.h"
 
 #include "gtkcairoblurprivate.h"
@@ -30,6 +32,8 @@
 #include "gtkpango.h"
 
 #include <math.h>
+
+#define CORNER_MASK_CACHE_SIZE 300U
 
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
@@ -698,6 +702,7 @@ draw_shadow_corner (const GtkCssValue   *shadow,
   GtkRoundedBox corner_box;
   cairo_t *mask_cr;
   cairo_surface_t *mask;
+  gboolean mask_not_in_cache;
   cairo_pattern_t *pattern;
   cairo_matrix_t matrix;
   double sx, sy;
@@ -798,6 +803,7 @@ draw_shadow_corner (const GtkCssValue   *shadow,
   key.radius = radius;
   key.corner = box->corner[corner];
 
+  mask_not_in_cache = FALSE;
   mask = g_hash_table_lookup (corner_mask_cache, &key);
   if (mask == NULL)
     {
@@ -811,7 +817,15 @@ draw_shadow_corner (const GtkCssValue   *shadow,
       cairo_fill (mask_cr);
       _gtk_cairo_blur_surface (mask, radius, GTK_BLUR_X | GTK_BLUR_Y);
       cairo_destroy (mask_cr);
-      g_hash_table_insert (corner_mask_cache, g_memdup (&key, sizeof (key)), mask);
+
+      if (g_hash_table_size (corner_mask_cache) < CORNER_MASK_CACHE_SIZE)
+        {
+          g_hash_table_insert (corner_mask_cache, g_memdup (&key, sizeof (key)), mask);
+          GTK_NOTE (MISC, (g_print("corner_mask_cache now contains %u items\n",
+                                   g_hash_table_size(corner_mask_cache))));
+        }
+      else
+        mask_not_in_cache = TRUE;
     }
 
   gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
@@ -822,6 +836,9 @@ draw_shadow_corner (const GtkCssValue   *shadow,
   cairo_pattern_set_matrix (pattern, &matrix);
   cairo_mask (cr, pattern);
   cairo_pattern_destroy (pattern);
+
+  if (mask_not_in_cache)
+    cairo_surface_destroy (mask);
 }
 
 static void
