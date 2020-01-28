@@ -22,48 +22,6 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkstylecontextprivate.h"
 
-cairo_operator_t
-_gtk_css_blend_mode_get_operator (GskBlendMode mode)
-{
-  switch (mode)
-    {
-    case GSK_BLEND_MODE_COLOR:
-      return CAIRO_OPERATOR_HSL_COLOR;
-    case GSK_BLEND_MODE_COLOR_BURN:
-      return CAIRO_OPERATOR_COLOR_BURN;
-    case GSK_BLEND_MODE_COLOR_DODGE:
-      return CAIRO_OPERATOR_COLOR_DODGE;
-    case GSK_BLEND_MODE_DARKEN:
-      return CAIRO_OPERATOR_DARKEN;
-    case GSK_BLEND_MODE_DIFFERENCE:
-      return CAIRO_OPERATOR_DIFFERENCE;
-    case GSK_BLEND_MODE_EXCLUSION:
-      return CAIRO_OPERATOR_EXCLUSION;
-    case GSK_BLEND_MODE_HARD_LIGHT:
-      return CAIRO_OPERATOR_HARD_LIGHT;
-    case GSK_BLEND_MODE_SOFT_LIGHT:
-      return CAIRO_OPERATOR_SOFT_LIGHT;
-    case GSK_BLEND_MODE_HUE:
-      return CAIRO_OPERATOR_HSL_HUE;
-    case GSK_BLEND_MODE_LIGHTEN:
-      return CAIRO_OPERATOR_LIGHTEN;
-    case GSK_BLEND_MODE_LUMINOSITY:
-      return CAIRO_OPERATOR_HSL_LUMINOSITY;
-    case GSK_BLEND_MODE_MULTIPLY:
-      return CAIRO_OPERATOR_MULTIPLY;
-    case GSK_BLEND_MODE_OVERLAY:
-      return CAIRO_OPERATOR_OVERLAY;
-    case GSK_BLEND_MODE_SATURATION:
-      return CAIRO_OPERATOR_HSL_SATURATION;
-    case GSK_BLEND_MODE_SCREEN:
-      return CAIRO_OPERATOR_SCREEN;
-
-    case GSK_BLEND_MODE_DEFAULT:
-    default:
-      return CAIRO_OPERATOR_OVER;
-    }
-}
-
 GtkCssChange
 _gtk_css_change_for_sibling (GtkCssChange match)
 {
