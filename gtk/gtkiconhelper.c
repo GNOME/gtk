@@ -102,7 +102,7 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
 {
   GtkIconTheme *icon_theme;
   gint width, height;
-  GtkIconInfo *info;
+  GtkIcon *info;
   GtkIconLookupFlags flags;
 
   icon_theme = gtk_css_icon_theme_value_get_icon_theme (style->core->icon_theme);
@@ -120,7 +120,7 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
                                        width,
                                        flags | GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
-  *symbolic = gtk_icon_info_is_symbolic (info);
+  *symbolic = gtk_icon_is_symbolic (info);
   return GDK_PAINTABLE (info);
 }
 
