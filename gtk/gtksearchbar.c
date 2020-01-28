@@ -222,12 +222,11 @@ gtk_search_bar_get_property (GObject    *object,
                              GParamSpec *pspec)
 {
   GtkSearchBar *bar = GTK_SEARCH_BAR (object);
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
 
   switch (prop_id)
     {
     case PROP_SEARCH_MODE_ENABLED:
-      g_value_set_boolean (value, priv->reveal_child);
+      g_value_set_boolean (value, gtk_search_bar_get_search_mode (bar));
       break;
     case PROP_SHOW_CLOSE_BUTTON:
       g_value_set_boolean (value, gtk_search_bar_get_show_close_button (bar));
