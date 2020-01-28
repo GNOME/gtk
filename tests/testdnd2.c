@@ -10,7 +10,7 @@ get_image_texture (GtkImage *image,
   int width = 48;
   GdkPaintable *paintable;
   GdkTexture *texture = NULL;
-  GtkIconInfo *icon_info;
+  GtkIcon *icon_info;
 
   switch (gtk_image_get_storage_type (image))
     {
@@ -27,7 +27,7 @@ get_image_texture (GtkImage *image,
       *out_size = width;
       icon_info = gtk_icon_theme_lookup_icon (icon_theme, icon_name, width, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
       if (icon_info)
-        texture = gtk_icon_info_download_texture (icon_info, NULL);
+        texture = gtk_icon_download_texture (icon_info, NULL);
       g_object_unref (icon_info);
     default:
       g_warning ("Image storage type %d not handled",
@@ -223,7 +223,7 @@ update_source_icon (GtkDragSource *source,
                     const char *icon_name,
                     int hotspot)
 {
-  GtkIconInfo *icon;
+  GtkIcon *icon;
   int hot_x, hot_y;
   int size = 48;
 

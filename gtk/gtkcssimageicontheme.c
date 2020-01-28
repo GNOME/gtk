@@ -45,7 +45,7 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
                                    double       height)
 {
   GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (image);
-  GtkIconInfo *icon_info;
+  GtkIcon *icon_info;
   double icon_width, icon_height;
   gint size;
   double x, y;
@@ -91,7 +91,7 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
       gtk_snapshot_save (snapshot);
       gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
     }
-  gtk_icon_info_snapshot_with_colors (icon_info, snapshot,
+  gtk_icon_snapshot_with_colors (icon_info, snapshot,
                                       icon_width,
                                       icon_height,
                                       &icon_theme->color,
