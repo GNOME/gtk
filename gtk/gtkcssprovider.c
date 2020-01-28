@@ -489,9 +489,6 @@ gtk_css_style_provider_lookup (GtkStyleProvider             *provider,
                                    ruleset->styles[j].section,
                                    ruleset->styles[j].value);
             }
-
-          if (_gtk_css_lookup_all_set (lookup))
-            break;
         }
 
       g_ptr_array_free (tree_rules, TRUE);
