@@ -596,77 +596,37 @@ load_icon (GObject      *source,
            GAsyncResult *res,
            gpointer      data)
 {
-  GtkIconInfo *info = (GtkIconInfo *)source;
-  GError *error = NULL;
-  GdkPaintable *paintable;
-
-  paintable = gtk_icon_info_load_icon_finish (info, res, &error);
-  g_assert (paintable != NULL);
-  g_assert_no_error (error);
-  g_object_unref (paintable);
-
-  loaded++;
-}
-
-static void
-load_symbolic (GObject      *source,
-               GAsyncResult *res,
-               gpointer      data)
-{
-  GtkIconInfo *info = (GtkIconInfo *)source;
-  GError *error = NULL;
-  gboolean symbolic;
-  GdkPaintable *paintable;
-
-  paintable = gtk_icon_info_load_symbolic_finish (info, res, &symbolic, &error);
-  g_assert (paintable != NULL);
-  g_assert_no_error (error);
-  g_object_unref (paintable);
-
-  loaded++;
-}
-
-static gboolean
-quit_loop (gpointer data)
-{
   GMainLoop *loop = data;
+  GtkIconTheme *theme = GTK_ICON_THEME (source);
+  GError *error = NULL;
+  GtkIconInfo *icon;
 
+  icon = gtk_icon_theme_choose_icon_finish (theme, res, &error);
+  g_assert (icon != NULL);
+  g_assert_no_error (error);
+  g_object_unref (icon);
+
+  loaded++;
   if (loaded == 2)
-    {
-      g_main_loop_quit (loop);
-      return G_SOURCE_REMOVE;
-    }
-  return G_SOURCE_CONTINUE;
+    g_main_loop_quit (loop);
 }
 
 static void
 test_async (void)
 {
-  GtkIconInfo *info1, *info2;
   GtkIconTheme *theme;
   GMainLoop *loop;
-  GdkRGBA fg, red, green, blue;
-
-  gdk_rgba_parse (&fg, "white");
-  gdk_rgba_parse (&red, "red");
-  gdk_rgba_parse (&green, "green");
-  gdk_rgba_parse (&blue, "blue");
+  const char *icons[] = { "twosize-fixed", NULL };
 
   loop = g_main_loop_new (NULL, FALSE);
-  g_idle_add_full (G_PRIORITY_LOW, quit_loop, loop, NULL);
 
+  g_printerr ("test_async\n");
   theme = get_test_icontheme (TRUE);
-  info1 = gtk_icon_theme_lookup_icon (theme, "twosize-fixed", 32, 0);
-  info2 = gtk_icon_theme_lookup_icon (theme, "only32-symbolic", 32, 0);
-  g_assert (info1);
-  g_assert (info2);
-  gtk_icon_info_load_icon_async (info1, NULL, load_icon, NULL);
-  gtk_icon_info_load_symbolic_async (info2, &fg, &red, &green, &blue, NULL, load_symbolic, NULL);
-  g_object_unref (info1);
-  g_object_unref (info2);
+  gtk_icon_theme_choose_icon_async (theme, icons, 32, 1, 0, NULL, load_icon, loop);
+  gtk_icon_theme_choose_icon_async (theme, icons, 48, 1, 0, NULL, load_icon, loop);
 
   g_main_loop_run (loop);
-  g_main_loop_unref (loop);  
+  g_main_loop_unref (loop);
 
   g_assert (loaded == 2);
 }

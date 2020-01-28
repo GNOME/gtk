@@ -29,6 +29,8 @@ usage (void)
 	   "usage: test-icon-theme list <theme name> [context]\n"
 	   " or\n"
 	   "usage: test-icon-theme display <theme name> <icon name> [size] [scale]\n"
+	   " or\n"
+	   "usage: test-icon-theme display-async <theme name> <icon name> [size] [scale]\n"
 	   );
 }
 
@@ -37,23 +39,22 @@ icon_loaded_cb (GObject *source_object,
 		GAsyncResult *res,
 		gpointer user_data)
 {
-  GdkPaintable *paintable;
+  GtkIconInfo *icon;
   GError *error;
 
   error = NULL;
-  paintable = gtk_icon_info_load_icon_finish (GTK_ICON_INFO (source_object),
-                                              res, &error);
+  icon = gtk_icon_theme_choose_icon_finish (GTK_ICON_THEME (source_object),
+                                           res, &error);
 
-  if (paintable == NULL)
+  if (icon == NULL)
     {
       g_print ("%s\n", error->message);
       exit (1);
     }
 
-  gtk_image_set_from_paintable (GTK_IMAGE (user_data), paintable);
-  g_object_unref (paintable);
+  gtk_image_set_from_paintable (GTK_IMAGE (user_data), GDK_PAINTABLE (icon));
+  g_object_unref (icon);
 }
-
 
 int
 main (int argc, char *argv[])
@@ -126,7 +127,7 @@ main (int argc, char *argv[])
   else if (strcmp (argv[1], "display-async") == 0)
     {
       GtkWidget *window, *image;
-      GtkIconInfo *info;
+      const char *icons[2] = { NULL, NULL };
 
       if (argc < 4)
 	{
@@ -147,16 +148,8 @@ main (int argc, char *argv[])
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
       gtk_widget_show (window);
 
-      info = gtk_icon_theme_lookup_icon_for_scale (icon_theme, argv[3], size, scale, flags);
-
-      if (info == NULL)
-	{
-          g_print ("Icon not found\n");
-          return 1;
-	}
-
-      gtk_icon_info_load_icon_async (info,
-				     NULL, icon_loaded_cb, image);
+      icons[0] = argv[3];
+      gtk_icon_theme_choose_icon_async (icon_theme, icons, size, scale, flags, NULL, icon_loaded_cb, image);
 
       gtk_main ();
     }
