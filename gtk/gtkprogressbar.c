@@ -833,8 +833,6 @@ gtk_progress_bar_set_text (GtkProgressBar *pbar,
   if (priv->label)
     gtk_label_set_label (GTK_LABEL (priv->label), text);
 
-  gtk_widget_queue_resize (GTK_WIDGET (pbar));
-
   g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_TEXT]);
 }
 
@@ -884,8 +882,6 @@ gtk_progress_bar_set_show_text (GtkProgressBar *pbar,
     {
       g_clear_pointer (&priv->label, gtk_widget_unparent);
     }
-
-  gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
   g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_SHOW_TEXT]);
 }
@@ -970,7 +966,6 @@ gtk_progress_bar_set_orientation (GtkProgressBar *pbar,
 
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (pbar));
   update_node_classes (pbar);
-  gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
   layout = GTK_BOX_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (pbar)));
   gtk_orientable_set_orientation (GTK_ORIENTABLE (layout), GTK_ORIENTATION_VERTICAL);
@@ -1000,7 +995,6 @@ gtk_progress_bar_set_inverted (GtkProgressBar *pbar,
   priv->inverted = inverted;
 
   update_node_classes (pbar);
-  gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
   g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_INVERTED]);
 }
@@ -1107,7 +1101,6 @@ gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
         gtk_label_set_ellipsize (GTK_LABEL (priv->label), mode);
 
       g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_ELLIPSIZE]);
-      gtk_widget_queue_resize (GTK_WIDGET (pbar));
     }
 }
 
