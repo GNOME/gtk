@@ -38,7 +38,7 @@
 #include "gtkcsstypesprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcontainerprivate.h"
-#include "gtkiconprivate.h"
+#include "gtkbuiltiniconprivate.h"
 #include "gtksizegroup.h"
 #include "gtkaccellabelprivate.h"
 #include "gtkactionable.h"
@@ -492,7 +492,7 @@ update_node_name (GtkModelButton *self)
 
   if (start_name && !self->start_indicator)
     {
-      self->start_indicator = gtk_icon_new (start_name);
+      self->start_indicator = gtk_builtin_icon_new (start_name);
       gtk_widget_set_halign (self->start_indicator, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (self->start_indicator, GTK_ALIGN_CENTER);
       update_start_indicator (self);
@@ -511,7 +511,7 @@ update_node_name (GtkModelButton *self)
 
   if (end_name && !self->end_indicator)
     {
-      self->end_indicator = gtk_icon_new (end_name);
+      self->end_indicator = gtk_builtin_icon_new (end_name);
       gtk_widget_set_halign (self->end_indicator, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (self->end_indicator, GTK_ALIGN_CENTER);
       gtk_widget_set_parent (self->end_indicator, GTK_WIDGET (self));

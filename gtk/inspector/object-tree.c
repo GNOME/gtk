@@ -37,7 +37,7 @@
 #include "gtkcomboboxprivate.h"
 #include "gtkfilterlistmodel.h"
 #include "gtkflattenlistmodel.h"
-#include "gtkiconprivate.h"
+#include "gtkbuiltiniconprivate.h"
 #include "gtkiconview.h"
 #include "gtklabel.h"
 #include "gtklistbox.h"
@@ -1028,7 +1028,7 @@ gtk_inspector_object_tree_create_list_widget (gpointer row_item,
       g_object_bind_property (row_item, "expanded", title, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
       gtk_container_add (GTK_CONTAINER (child), title);
 
-      arrow = gtk_icon_new ("expander");
+      arrow = gtk_builtin_icon_new ("expander");
       gtk_container_add (GTK_CONTAINER (title), arrow);
     }
   else

@@ -38,7 +38,7 @@
 #include <glib/gi18n-lib.h>
 #include <gdk/gdktextureprivate.h>
 #include "gtk/gtkdebug.h"
-#include "gtk/gtkiconprivate.h"
+#include "gtk/gtkbuiltiniconprivate.h"
 #include "gtk/gtkrendernodepaintableprivate.h"
 
 #include "recording.h"
@@ -329,7 +329,7 @@ create_widget_for_render_node (gpointer row_item,
       gtk_container_add (GTK_CONTAINER (child), title);
       g_object_set_data_full (G_OBJECT (row), "make-sure-its-not-unreffed", g_object_ref (row_item), g_object_unref);
 
-      arrow = gtk_icon_new ("expander");
+      arrow = gtk_builtin_icon_new ("expander");
       gtk_container_add (GTK_CONTAINER (title), arrow);
     }
   else
