@@ -111,14 +111,14 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
 
   width = height = gtk_icon_helper_get_size (self);
 
-  info = gtk_icon_theme_lookup_by_gicon_for_scale (icon_theme,
-                                                   gicon,
-                                                   MIN (width, height),
-                                                   scale, flags);
+  info = gtk_icon_theme_lookup_by_gicon (icon_theme,
+                                         gicon,
+                                         MIN (width, height),
+                                         scale, flags);
   if (info == NULL)
     info = gtk_icon_theme_lookup_icon (icon_theme,
                                        "image-missing",
-                                       width,
+                                       width, scale,
                                        flags | GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
   *symbolic = gtk_icon_is_symbolic (info);

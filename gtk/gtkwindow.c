@@ -4027,13 +4027,13 @@ icon_list_from_theme (GtkWindow   *window,
        * fixed size of 48.
        */
       if (sizes[i] == -1)
-        info = gtk_icon_theme_lookup_icon_for_scale (icon_theme, name,
-					             48, priv->scale,
-					             0);
+        info = gtk_icon_theme_lookup_icon (icon_theme, name,
+                                           48, priv->scale,
+                                           0);
       else
-        info = gtk_icon_theme_lookup_icon_for_scale (icon_theme, name,
-					             sizes[i], priv->scale,
-					             0);
+        info = gtk_icon_theme_lookup_icon (icon_theme, name,
+                                           sizes[i], priv->scale,
+                                           0);
       if (info)
         {
           GdkTexture *texture = gtk_icon_download_texture (info, NULL);
@@ -4100,6 +4100,7 @@ GdkPaintable *
 gtk_window_get_icon_for_size (GtkWindow *window,
                               int        size)
 {
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   const char *name;
   GtkIcon *info;
 
@@ -4111,7 +4112,7 @@ gtk_window_get_icon_for_size (GtkWindow *window,
     return NULL;
 
   info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
-                                     name, size,
+                                     name, size, priv->scale,
                                      GTK_ICON_LOOKUP_FORCE_SIZE);
   if (info == NULL)
     return NULL;

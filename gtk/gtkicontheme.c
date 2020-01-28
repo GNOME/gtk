@@ -2071,51 +2071,7 @@ choose_icon (GtkIconTheme       *self,
 }
 
 /**
- * gtk_icon_theme_lookup_icon:
- * @self: a #GtkIconTheme
- * @icon_name: the name of the icon to lookup
- * @size: desired icon size
- * @flags: flags modifying the behavior of the icon lookup
- * 
- * Looks up a named icon and returns a #GtkIcon containing
- * information such as the filename of the icon. The icon
- * can then be rendered into a pixbuf using
- * gtk_icon_load_icon(). (gtk_icon_theme_load_icon()
- * combines these two steps if all you need is the pixbuf.)
- *
- * When rendering on displays with high pixel densities you should not
- * use a @size multiplied by the scaling factor returned by functions
- * like gdk_surface_get_scale_factor(). Instead, you should use
- * gtk_icon_theme_lookup_icon_for_scale(), as the assets loaded
- * for a given scaling factor may be different.
- *
- * This call is threadsafe, you can safely pass a GtkIconTheme
- * to another thread and call this method on it.
- *
- * Returns: (nullable) (transfer full): a #GtkIcon object
- *     containing information about the icon, or %NULL if the
- *     icon wasn’t found.
- */
-GtkIcon *
-gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
-                            const gchar        *icon_name,
-                            gint                size,
-                            GtkIconLookupFlags  flags)
-{
-  g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
-  g_return_val_if_fail (icon_name != NULL, NULL);
-  g_return_val_if_fail ((flags & GTK_ICON_LOOKUP_NO_SVG) == 0 ||
-                        (flags & GTK_ICON_LOOKUP_FORCE_SVG) == 0, NULL);
-
-  GTK_DISPLAY_NOTE (self->display, ICONTHEME,
-                    g_message ("looking up icon %s", icon_name));
-
-  return gtk_icon_theme_lookup_icon_for_scale (self, icon_name,
-                                               size, 1, flags);
-}
-
-/**
- * gtk_icon_theme_lookup_icon_for_scale:
+ * gtk_icon_theme_lookup_icon_scale:
  * @self: a #GtkIconTheme
  * @icon_name: the name of the icon to lookup
  * @size: desired icon size
@@ -2136,11 +2092,11 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
  *     icon wasn’t found.
  */
 GtkIcon *
-gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme       *self,
-                                      const gchar        *icon_name,
-                                      gint                size,
-                                      gint                scale,
-                                      GtkIconLookupFlags  flags)
+gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
+                            const gchar        *icon_name,
+                            gint                size,
+                            gint                scale,
+                            GtkIconLookupFlags  flags)
 {
   GtkIcon *icon;
 
@@ -2224,54 +2180,6 @@ gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme       *self,
 /**
  * gtk_icon_theme_choose_icon:
  * @self: a #GtkIconTheme
- * @icon_names: (array zero-terminated=1): %NULL-terminated array of
- *     icon names to lookup
- * @size: desired icon size
- * @flags: flags modifying the behavior of the icon lookup
- * 
- * Looks up a named icon and returns a #GtkIcon containing
- * information such as the filename of the icon. The icon
- * can then be rendered into a pixbuf using
- * gtk_icon_load_icon(). (gtk_icon_theme_load_icon()
- * combines these two steps if all you need is the pixbuf.)
- *
- * If @icon_names contains more than one name, this function 
- * tries them all in the given order before falling back to 
- * inherited icon themes.
- *
- * This call is threadsafe, you can safely pass a GtkIconTheme
- * to another thread and call this method on it.
- *
- * Returns: (nullable) (transfer full): a #GtkIcon object
- * containing information about the icon, or %NULL if the icon wasn’t
- * found.
- */
-GtkIcon *
-gtk_icon_theme_choose_icon (GtkIconTheme       *self,
-                            const gchar        *icon_names[],
-                            gint                size,
-                            GtkIconLookupFlags  flags)
-{
-  GtkIcon *icon;
-
-  g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
-  g_return_val_if_fail (icon_names != NULL, NULL);
-  g_return_val_if_fail ((flags & GTK_ICON_LOOKUP_NO_SVG) == 0 ||
-                        (flags & GTK_ICON_LOOKUP_FORCE_SVG) == 0, NULL);
-  g_warn_if_fail ((flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK) == 0);
-
-  gtk_icon_theme_lock (self);
-
-  icon = choose_icon (self, icon_names, size, 1, flags, FALSE, NULL);
-
-  gtk_icon_theme_unlock (self);
-
-  return icon;
-}
-
-/**
- * gtk_icon_theme_choose_icon_for_scale:
- * @self: a #GtkIconTheme
  * @icon_names: (array zero-terminated=1): %NULL-terminated
  *     array of icon names to lookup
  * @size: desired icon size
@@ -2296,11 +2204,11 @@ gtk_icon_theme_choose_icon (GtkIconTheme       *self,
  *     icon wasn’t found.
  */
 GtkIcon *
-gtk_icon_theme_choose_icon_for_scale (GtkIconTheme       *self,
-                                      const gchar        *icon_names[],
-                                      gint                size,
-                                      gint                scale,
-                                      GtkIconLookupFlags  flags)
+gtk_icon_theme_choose_icon (GtkIconTheme       *self,
+                            const gchar        *icon_names[],
+                            gint                size,
+                            gint                scale,
+                            GtkIconLookupFlags  flags)
 {
   GtkIcon *icon;
 
@@ -2358,11 +2266,11 @@ choose_icon_thread  (GTask        *task,
   GtkIconTheme *self = GTK_ICON_THEME (source_object);
   GtkIcon *icon;
 
-  icon = gtk_icon_theme_choose_icon_for_scale (self,
-                                               (const char **)data->icon_names,
-                                               data->size,
-                                               data->scale,
-                                               data->flags);
+  icon = gtk_icon_theme_choose_icon (self,
+                                     (const char **)data->icon_names,
+                                     data->size,
+                                     data->scale,
+                                     data->flags);
 
   if (icon)
     {
@@ -2415,7 +2323,7 @@ load_icon_thread  (GTask        *task,
  *
  * Asynchronously lookup, load, render and scale an icon .
  *
- * For more details, see gtk_icon_theme_choose_icon_for_scale() which is the synchronous
+ * For more details, see gtk_icon_theme_choose_icon() which is the synchronous
  * version of this call.
  *
  * Returns: (nullable) (transfer full): a #GtkIcon object
@@ -4101,37 +4009,6 @@ icon_paintable_init (GdkPaintableInterface *iface)
   iface->get_intrinsic_height = icon_paintable_get_intrinsic_height;
 }
 
-/**
- * gtk_icon_theme_lookup_by_gicon:
- * @self: a #GtkIconTheme
- * @icon: the #GIcon to look up
- * @size: desired icon size
- * @flags: flags modifying the behavior of the icon lookup
- * 
- * Looks up an icon and returns a #GtkIcon containing information
- * such as the filename of the icon. The icon can then be rendered
- * into a pixbuf using gtk_icon_load_icon().
- *
- * When rendering on displays with high pixel densities you should not
- * use a @size multiplied by the scaling factor returned by functions
- * like gdk_surface_get_scale_factor(). Instead, you should use
- * gtk_icon_theme_lookup_by_gicon_for_scale(), as the assets loaded
- * for a given scaling factor may be different.
- *
- * Returns: (nullable) (transfer full): a #GtkIcon containing
- *     information about the icon, or %NULL if the icon wasn’t
- *     found. Unref with g_object_unref()
- */
-GtkIcon *
-gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
-                                GIcon              *icon,
-                                gint                size,
-                                GtkIconLookupFlags  flags)
-{
-  return gtk_icon_theme_lookup_by_gicon_for_scale (self, icon,
-                                                   size, 1, flags);
-}
-
 static GtkIcon *
 gtk_icon_new_for_file (GFile *file,
                             gint   size,
@@ -4189,7 +4066,7 @@ gtk_icon_new_for_pixbuf (GtkIconTheme *icon_theme,
 }
 
 /**
- * gtk_icon_theme_lookup_by_gicon_for_scale:
+ * gtk_icon_theme_lookup_by_gicon:
  * @self: a #GtkIconTheme
  * @icon: the #GIcon to look up
  * @size: desired icon size
@@ -4205,11 +4082,11 @@ gtk_icon_new_for_pixbuf (GtkIconTheme *icon_theme,
  *     found. Unref with g_object_unref()
  */
 GtkIcon *
-gtk_icon_theme_lookup_by_gicon_for_scale (GtkIconTheme       *self,
-                                          GIcon              *gicon,
-                                          gint                size,
-                                          gint                scale,
-                                          GtkIconLookupFlags  flags)
+gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
+                                GIcon              *gicon,
+                                gint                size,
+                                gint                scale,
+                                GtkIconLookupFlags  flags)
 {
   GtkIcon *icon;
 
@@ -4281,7 +4158,7 @@ gtk_icon_theme_lookup_by_gicon_for_scale (GtkIconTheme       *self,
       const gchar **names;
 
       names = (const gchar **)g_themed_icon_get_names (G_THEMED_ICON (gicon));
-      icon = gtk_icon_theme_choose_icon_for_scale (self, names, size, scale, flags);
+      icon = gtk_icon_theme_choose_icon (self, names, size, scale, flags);
 
       return icon;
     }
