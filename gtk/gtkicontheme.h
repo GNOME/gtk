@@ -213,6 +213,11 @@ GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_icon_info_get_filename       (GtkIconInfo   *self);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_icon_info_is_symbolic        (GtkIconInfo   *self);
+GDK_AVAILABLE_IN_ALL
+GdkTexture *          gtk_icon_info_download_texture   (GtkIconInfo   *self,
+                                                        GError       **error);
+
+GDK_AVAILABLE_IN_ALL
 void                  gtk_icon_info_snapshot_with_colors (GtkIconInfo *icon_info,
                                                           GdkSnapshot  *snapshot,
                                                           double        width,
