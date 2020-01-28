@@ -5,4 +5,4 @@ window.background:dir(ltr)
     label.b:dir(ltr)    class|name|hover|backdrop
     label.c:dir(ltr)    class|name|parent-name|parent-hover
     label.d:dir(ltr)    class|name|parent-name|parent-hover|parent-backdrop
-    label.e.f:dir(ltr)    
+    label.e.f:dir(ltr)    class|name|parent-name|parent-hover|parent-backdrop

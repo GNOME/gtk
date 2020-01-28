@@ -1991,14 +1991,14 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   for (i = 0; i < 4; i++)
     {
       priv->overshoot_node[i] = gtk_css_node_new ();
-      gtk_css_node_set_name (priv->overshoot_node[i], I_("overshoot"));
+      gtk_css_node_set_name (priv->overshoot_node[i], g_quark_from_static_string ("overshoot"));
       gtk_css_node_add_class (priv->overshoot_node[i], classes[i]);
       gtk_css_node_set_parent (priv->overshoot_node[i], widget_node);
       gtk_css_node_set_state (priv->overshoot_node[i], gtk_css_node_get_state (widget_node));
       g_object_unref (priv->overshoot_node[i]);
 
       priv->undershoot_node[i] = gtk_css_node_new ();
-      gtk_css_node_set_name (priv->undershoot_node[i], I_("undershoot"));
+      gtk_css_node_set_name (priv->undershoot_node[i], g_quark_from_static_string ("undershoot"));
       gtk_css_node_add_class (priv->undershoot_node[i], classes[i]);
       gtk_css_node_set_parent (priv->undershoot_node[i], widget_node);
       gtk_css_node_set_state (priv->undershoot_node[i], gtk_css_node_get_state (widget_node));

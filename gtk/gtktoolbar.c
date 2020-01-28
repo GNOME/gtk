@@ -56,7 +56,6 @@
 #include "gtkseparatortoolitem.h"
 #include "gtktoolshell.h"
 #include "gtktypebuiltins.h"
-#include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtkgestureclick.h"

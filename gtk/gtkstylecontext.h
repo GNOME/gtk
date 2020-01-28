@@ -57,92 +57,6 @@ struct _GtkStyleContextClass
   void (*_gtk_reserved4) (void);
 };
 
-/* Default set of properties that GtkStyleContext may contain */
-
-/**
- * GTK_STYLE_PROPERTY_BACKGROUND_COLOR:
- *
- * A property holding the background color of rendered elements as a #GdkRGBA.
- */
-#define GTK_STYLE_PROPERTY_BACKGROUND_COLOR "background-color"
-
-/**
- * GTK_STYLE_PROPERTY_COLOR:
- *
- * A property holding the foreground color of rendered elements as a #GdkRGBA.
- */
-#define GTK_STYLE_PROPERTY_COLOR "color"
-
-/**
- * GTK_STYLE_PROPERTY_FONT:
- *
- * A property holding the font properties used when rendering text
- * as a #PangoFontDescription.
- */
-#define GTK_STYLE_PROPERTY_FONT "font"
-
-/**
- * GTK_STYLE_PROPERTY_PADDING:
- *
- * A property holding the rendered element’s padding as a #GtkBorder. The
- * padding is defined as the spacing between the inner part of the element border
- * and its child. It’s the innermost spacing property of the padding/border/margin
- * series.
- */
-#define GTK_STYLE_PROPERTY_PADDING "padding"
-
-/**
- * GTK_STYLE_PROPERTY_BORDER_WIDTH:
- *
- * A property holding the rendered element’s border width in pixels as
- * a #GtkBorder. The border is the intermediary spacing property of the
- * padding/border/margin series.
- *
- * gtk_render_frame() uses this property to find out the frame line width,
- * so #GtkWidgets rendering frames may need to add up this padding when
- * requesting size
- */
-#define GTK_STYLE_PROPERTY_BORDER_WIDTH "border-width"
-
-/**
- * GTK_STYLE_PROPERTY_MARGIN:
- *
- * A property holding the rendered element’s margin as a #GtkBorder. The
- * margin is defined as the spacing between the border of the element
- * and its surrounding elements. It is external to #GtkWidget's
- * size allocations, and the most external spacing property of the
- * padding/border/margin series.
- */
-#define GTK_STYLE_PROPERTY_MARGIN "margin"
-
-/**
- * GTK_STYLE_PROPERTY_BORDER_RADIUS:
- *
- * A property holding the rendered element’s border radius in pixels as a #gint.
- */
-#define GTK_STYLE_PROPERTY_BORDER_RADIUS "border-radius"
-
-/**
- * GTK_STYLE_PROPERTY_BORDER_STYLE:
- *
- * A property holding the element’s border style as a #GtkBorderStyle.
- */
-#define GTK_STYLE_PROPERTY_BORDER_STYLE "border-style"
-
-/**
- * GTK_STYLE_PROPERTY_BORDER_COLOR:
- *
- * A property holding the element’s border color as a #GdkRGBA.
- */
-#define GTK_STYLE_PROPERTY_BORDER_COLOR "border-color"
-
-/**
- * GTK_STYLE_PROPERTY_BACKGROUND_IMAGE:
- *
- * A property holding the element’s background as a #cairo_pattern_t.
- */
-#define GTK_STYLE_PROPERTY_BACKGROUND_IMAGE "background-image"
-
 /* Predefined set of CSS classes */
 
 /**
@@ -961,22 +875,6 @@ GDK_AVAILABLE_IN_ALL
 void gtk_style_context_restore (GtkStyleContext *context);
 
 GDK_AVAILABLE_IN_ALL
-GtkCssSection * gtk_style_context_get_section (GtkStyleContext *context,
-                                               const gchar     *property);
-GDK_AVAILABLE_IN_ALL
-void gtk_style_context_get_property (GtkStyleContext *context,
-                                     const gchar     *property,
-                                     GValue          *value);
-GDK_AVAILABLE_IN_ALL
-void gtk_style_context_get_valist   (GtkStyleContext *context,
-                                     const char      *first_property_name,
-                                     va_list          args);
-GDK_AVAILABLE_IN_ALL
-void gtk_style_context_get          (GtkStyleContext *context,
-                                     const char      *first_property_name,
-                                     ...) G_GNUC_NULL_TERMINATED;
-
-GDK_AVAILABLE_IN_ALL
 void          gtk_style_context_set_state    (GtkStyleContext *context,
                                               GtkStateFlags    flags);
 GDK_AVAILABLE_IN_ALL
@@ -988,11 +886,6 @@ void          gtk_style_context_set_scale    (GtkStyleContext *context,
 GDK_AVAILABLE_IN_ALL
 gint          gtk_style_context_get_scale    (GtkStyleContext *context);
 
-GDK_AVAILABLE_IN_ALL
-void          gtk_style_context_set_path     (GtkStyleContext *context,
-                                              GtkWidgetPath   *path);
-GDK_AVAILABLE_IN_ALL
-const GtkWidgetPath * gtk_style_context_get_path (GtkStyleContext *context);
 GDK_AVAILABLE_IN_ALL
 void          gtk_style_context_set_parent   (GtkStyleContext *context,
                                               GtkStyleContext *parent);

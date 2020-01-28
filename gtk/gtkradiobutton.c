@@ -247,9 +247,9 @@ gtk_radio_button_init (GtkRadioButton *self)
   priv->group = g_slist_prepend (NULL, self);
 
   css_node = gtk_widget_get_css_node (widget);
-  gtk_css_node_set_name (css_node, I_("radiobutton"));
+  gtk_css_node_set_name (css_node, g_quark_from_static_string ("radiobutton"));
   css_node = gtk_check_button_get_indicator_node (GTK_CHECK_BUTTON (self));
-  gtk_css_node_set_name (css_node, I_("radio"));
+  gtk_css_node_set_name (css_node, g_quark_from_static_string ("radio"));
 }
 
 static void

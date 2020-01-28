@@ -60,7 +60,6 @@
 #include "gtktreemodelsort.h"
 #include "gtktreeprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtknative.h"
@@ -1786,7 +1785,7 @@ gtk_tree_view_init (GtkTreeView *tree_view)
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (tree_view));
   tree_view->header_node = gtk_css_node_new ();
-  gtk_css_node_set_name (tree_view->header_node, I_("header"));
+  gtk_css_node_set_name (tree_view->header_node, g_quark_from_static_string ("header"));
   gtk_css_node_set_parent (tree_view->header_node, widget_node);
   gtk_css_node_set_state (tree_view->header_node, gtk_css_node_get_state (widget_node));
   g_object_unref (tree_view->header_node);
@@ -4122,7 +4121,7 @@ gtk_tree_view_drag_gesture_update (GtkGestureDrag *gesture,
 
       widget_node = gtk_widget_get_css_node (GTK_WIDGET (tree_view));
       tree_view->rubber_band_cssnode = gtk_css_node_new ();
-      gtk_css_node_set_name (tree_view->rubber_band_cssnode, I_("rubberband"));
+      gtk_css_node_set_name (tree_view->rubber_band_cssnode, g_quark_from_static_string ("rubberband"));
       gtk_css_node_set_parent (tree_view->rubber_band_cssnode, widget_node);
       gtk_css_node_set_state (tree_view->rubber_band_cssnode, gtk_css_node_get_state (widget_node));
       g_object_unref (tree_view->rubber_band_cssnode);
@@ -12921,7 +12920,7 @@ gtk_tree_view_enable_model_drag_dest (GtkTreeView       *tree_view,
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (tree_view));
   di->cssnode = gtk_css_node_new ();
-  gtk_css_node_set_name (di->cssnode, I_("dndtarget"));
+  gtk_css_node_set_name (di->cssnode, g_quark_from_static_string ("dndtarget"));
   gtk_css_node_set_parent (di->cssnode, widget_node);
   gtk_css_node_set_state (di->cssnode, gtk_css_node_get_state (widget_node));
   g_object_unref (di->cssnode);

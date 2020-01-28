@@ -18,25 +18,17 @@
 #include "config.h"
 
 #include "gtkcssnodedeclarationprivate.h"
-#include "gtkwidgetpathprivate.h"
 
 #include <string.h>
 
 struct _GtkCssNodeDeclaration {
   guint refcount;
-  GType type;
-  const /* interned */ char *name;
-  const /* interned */ char *id;
+  GQuark name;
+  GQuark id;
   GtkStateFlags state;
   guint n_classes;
-  /* GQuark classes[n_classes]; */
+  GQuark classes[0];
 };
-
-static inline GQuark *
-get_classes (const GtkCssNodeDeclaration *decl)
-{
-  return (GQuark *) (decl + 1);
-}
 
 static inline gsize
 sizeof_node (guint n_classes)
@@ -100,8 +92,7 @@ gtk_css_node_declaration_new (void)
   static GtkCssNodeDeclaration empty = {
     1, /* need to own a ref ourselves so the copy-on-write path kicks in when people change things */
     0,
-    NULL,
-    NULL,
+    0,
     0,
     0
   };
@@ -128,27 +119,8 @@ gtk_css_node_declaration_unref (GtkCssNodeDeclaration *decl)
 }
 
 gboolean
-gtk_css_node_declaration_set_type (GtkCssNodeDeclaration **decl,
-                                   GType                   type)
-{
-  if ((*decl)->type == type)
-    return FALSE;
-
-  gtk_css_node_declaration_make_writable (decl);
-  (*decl)->type = type;
-
-  return TRUE;
-}
-
-GType
-gtk_css_node_declaration_get_type (const GtkCssNodeDeclaration *decl)
-{
-  return decl->type;
-}
-
-gboolean
-gtk_css_node_declaration_set_name (GtkCssNodeDeclaration   **decl,
-                                   /*interned*/ const char  *name)
+gtk_css_node_declaration_set_name (GtkCssNodeDeclaration **decl,
+                                   GQuark                  name)
 {
   if ((*decl)->name == name)
     return FALSE;
@@ -159,7 +131,7 @@ gtk_css_node_declaration_set_name (GtkCssNodeDeclaration   **decl,
   return TRUE;
 }
 
-/*interned*/ const char *
+GQuark
 gtk_css_node_declaration_get_name (const GtkCssNodeDeclaration *decl)
 {
   return decl->name;
@@ -167,10 +139,8 @@ gtk_css_node_declaration_get_name (const GtkCssNodeDeclaration *decl)
 
 gboolean
 gtk_css_node_declaration_set_id (GtkCssNodeDeclaration **decl,
-                                 const char             *id)
+                                 GQuark                  id)
 {
-  id = g_intern_string (id);
-
   if ((*decl)->id == id)
     return FALSE;
 
@@ -180,7 +150,7 @@ gtk_css_node_declaration_set_id (GtkCssNodeDeclaration **decl,
   return TRUE;
 }
 
-const char *
+GQuark
 gtk_css_node_declaration_get_id (const GtkCssNodeDeclaration *decl)
 {
   return decl->id;
@@ -212,7 +182,6 @@ find_class (const GtkCssNodeDeclaration *decl,
 {
   gint min, max, mid;
   gboolean found = FALSE;
-  GQuark *classes;
   guint pos;
 
   *position = 0;
@@ -222,14 +191,13 @@ find_class (const GtkCssNodeDeclaration *decl,
 
   min = 0;
   max = decl->n_classes - 1;
-  classes = get_classes (decl);
 
   do
     {
       GQuark item;
 
       mid = (min + max) / 2;
-      item = classes[mid];
+      item = decl->classes[mid];
 
       if (class_quark == item)
         {
@@ -262,11 +230,11 @@ gtk_css_node_declaration_add_class (GtkCssNodeDeclaration **decl,
     return FALSE;
 
   gtk_css_node_declaration_make_writable_resize (decl,
-                                                 (char *) &get_classes (*decl)[pos] - (char *) *decl,
+                                                 (char *) &(*decl)->classes[pos] - (char *) *decl,
                                                  sizeof (GQuark),
                                                  0);
   (*decl)->n_classes++;
-  get_classes(*decl)[pos] = class_quark;
+  (*decl)->classes[pos] = class_quark;
 
   return TRUE;
 }
@@ -281,7 +249,7 @@ gtk_css_node_declaration_remove_class (GtkCssNodeDeclaration **decl,
     return FALSE;
 
   gtk_css_node_declaration_make_writable_resize (decl,
-                                                 (char *) &get_classes (*decl)[pos] - (char *) *decl,
+                                                 (char *) &(*decl)->classes[pos] - (char *) *decl,
                                                  0,
                                                  sizeof (GQuark));
   (*decl)->n_classes--;
@@ -296,7 +264,7 @@ gtk_css_node_declaration_clear_classes (GtkCssNodeDeclaration **decl)
     return FALSE;
 
   gtk_css_node_declaration_make_writable_resize (decl,
-                                                 (char *) get_classes (*decl) - (char *) *decl,
+                                                 (char *) (*decl)->classes - (char *) *decl,
                                                  0,
                                                  sizeof (GQuark) * (*decl)->n_classes);
   (*decl)->n_classes = 0;
@@ -309,22 +277,21 @@ gtk_css_node_declaration_has_class (const GtkCssNodeDeclaration *decl,
                                     GQuark                       class_quark)
 {
   guint pos;
-  GQuark *classes = get_classes (decl);
 
   switch (decl->n_classes)
     {
     case 3:
-      if (classes[2] == class_quark)
+      if (decl->classes[2] == class_quark)
         return TRUE;
       G_GNUC_FALLTHROUGH;
 
     case 2:
-      if (classes[1] == class_quark)
+      if (decl->classes[1] == class_quark)
         return TRUE;
       G_GNUC_FALLTHROUGH;
 
     case 1:
-      if (classes[0] == class_quark)
+      if (decl->classes[0] == class_quark)
         return TRUE;
       G_GNUC_FALLTHROUGH;
 
@@ -342,26 +309,57 @@ gtk_css_node_declaration_get_classes (const GtkCssNodeDeclaration *decl,
 {
   *n_classes = decl->n_classes;
 
-  return get_classes (decl);
+  return decl->classes;
+}
+
+void
+gtk_css_node_declaration_add_bloom_hashes (const GtkCssNodeDeclaration *decl,
+                                           GtkCountingBloomFilter      *filter)
+{
+  guint i;
+
+  if (decl->name)
+    gtk_counting_bloom_filter_add (filter, gtk_css_hash_name (decl->name));
+  if (decl->id)
+    gtk_counting_bloom_filter_add (filter, gtk_css_hash_id (decl->id));
+
+  for (i = 0; i < decl->n_classes; i++)
+    {
+      gtk_counting_bloom_filter_add (filter, gtk_css_hash_class (decl->classes[i]));
+    }
+}
+
+void
+gtk_css_node_declaration_remove_bloom_hashes (const GtkCssNodeDeclaration *decl,
+                                              GtkCountingBloomFilter      *filter)
+{
+  guint i;
+
+  if (decl->name)
+    gtk_counting_bloom_filter_remove (filter, gtk_css_hash_name (decl->name));
+  if (decl->id)
+    gtk_counting_bloom_filter_remove (filter, gtk_css_hash_id (decl->id));
+
+  for (i = 0; i < decl->n_classes; i++)
+    {
+      gtk_counting_bloom_filter_remove (filter, gtk_css_hash_class (decl->classes[i]));
+    }
 }
 
 guint
 gtk_css_node_declaration_hash (gconstpointer elem)
 {
   const GtkCssNodeDeclaration *decl = elem;
-  GQuark *classes;
   guint hash, i;
   
-  hash = (guint) decl->type;
-  hash ^= GPOINTER_TO_UINT (decl->name);
+  hash = GPOINTER_TO_UINT (decl->name);
   hash <<= 5;
   hash ^= GPOINTER_TO_UINT (decl->id);
 
-  classes = get_classes (decl);
   for (i = 0; i < decl->n_classes; i++)
     {
       hash <<= 5;
-      hash += classes[i];
+      hash += decl->classes[i];
     }
 
   hash ^= decl->state;
@@ -375,14 +373,10 @@ gtk_css_node_declaration_equal (gconstpointer elem1,
 {
   const GtkCssNodeDeclaration *decl1 = elem1;
   const GtkCssNodeDeclaration *decl2 = elem2;
-  GQuark *classes1, *classes2;
   guint i;
 
   if (decl1 == decl2)
     return TRUE;
-
-  if (decl1->type != decl2->type)
-    return FALSE;
 
   if (decl1->name != decl2->name)
     return FALSE;
@@ -396,39 +390,13 @@ gtk_css_node_declaration_equal (gconstpointer elem1,
   if (decl1->n_classes != decl2->n_classes)
     return FALSE;
 
-  classes1 = get_classes (decl1);
-  classes2 = get_classes (decl2);
   for (i = 0; i < decl1->n_classes; i++)
     {
-      if (classes1[i] != classes2[i])
+      if (decl1->classes[i] != decl2->classes[i])
         return FALSE;
     }
 
   return TRUE;
-}
-
-void
-gtk_css_node_declaration_add_to_widget_path (const GtkCssNodeDeclaration *decl,
-                                             GtkWidgetPath               *path,
-                                             guint                        pos)
-{
-  GQuark *classes;
-  guint i;
-
-  /* Set name and id */
-  gtk_widget_path_iter_set_object_name (path, pos, decl->name);
-  if (decl->id)
-    gtk_widget_path_iter_set_name (path, pos, decl->id);
-
-  /* Set widget classes */
-  classes = get_classes (decl);
-  for (i = 0; i < decl->n_classes; i++)
-    {
-      gtk_widget_path_iter_add_qclass (path, pos, classes[i]);
-    }
-
-  /* Set widget state */
-  gtk_widget_path_iter_set_state (path, pos, decl->state);
 }
 
 static int
@@ -447,41 +415,23 @@ void
 gtk_css_node_declaration_print (const GtkCssNodeDeclaration *decl,
                                 GString                     *string)
 {
-  static const char *state_names[] = {
-    "active",
-    "hover",
-    "selected",
-    "disabled",
-    "indeterminate",
-    "focus",
-    "backdrop",
-    "dir(ltr)",
-    "dir(rtl)",
-    "link",
-    "visited",
-    "checked",
-    "drop(active)"
-  };
-  const GQuark *classes;
   guint i;
   char **classnames;
 
   if (decl->name)
-    g_string_append (string, decl->name);
+    g_string_append (string, g_quark_to_string (decl->name));
   else
-    g_string_append (string, g_type_name (decl->type));
+    g_string_append (string, "*");
 
   if (decl->id)
     {
       g_string_append_c (string, '#');
-      g_string_append (string, decl->id);
+      g_string_append (string, g_quark_to_string (decl->id));
     }
-
-  classes = get_classes (decl);
 
   classnames = g_new (char *, decl->n_classes);
   for (i = 0; i < decl->n_classes; i++)
-    classnames[i] = (char *)g_quark_to_string (classes[i]);
+    classnames[i] = (char *)g_quark_to_string (decl->classes[i]);
 
   g_qsort_with_data (classnames, decl->n_classes, sizeof (char *), cmpstr, NULL);
 
@@ -492,12 +442,14 @@ gtk_css_node_declaration_print (const GtkCssNodeDeclaration *decl,
     }
   g_free (classnames);
 
-  for (i = 0; i < G_N_ELEMENTS (state_names); i++)
+  for (i = 0; i < sizeof (GtkStateFlags) * 8; i++)
     {
       if (decl->state & (1 << i))
         {
+          const char *name = gtk_css_pseudoclass_name (1 << i);
+          g_assert (name);
           g_string_append_c (string, ':');
-          g_string_append (string, state_names[i]);
+          g_string_append (string, name);
         }
     }
 }

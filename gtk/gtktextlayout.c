@@ -76,9 +76,12 @@
  */
 
 #include "config.h"
+
+#include "gtktextlayoutprivate.h"
+
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkstylecontextprivate.h"
-#include "gtktextlayoutprivate.h"
 #include "gtktextbtree.h"
 #include "gtktextbufferprivate.h"
 #include "gtktextiterprivate.h"
@@ -3866,7 +3869,7 @@ render_para (GskPangoRenderer   *crenderer,
   int byte_offset = 0;
   PangoLayoutIter *iter;
   int screen_width;
-  GdkRGBA *selection = NULL;
+  const GdkRGBA *selection = NULL;
   gboolean first = TRUE;
 
   g_return_if_fail (GTK_IS_TEXT_VIEW (crenderer->widget));
@@ -3880,7 +3883,7 @@ render_para (GskPangoRenderer   *crenderer,
       GtkCssNode *selection_node = gtk_text_view_get_selection_node ((GtkTextView*)crenderer->widget);
       gtk_style_context_save_to_node (context, selection_node);
 
-      gtk_style_context_get (context, "background-color", &selection, NULL);
+      selection = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
 
       gtk_style_context_restore (context);
     }
@@ -4066,7 +4069,6 @@ render_para (GskPangoRenderer   *crenderer,
   if (offset_y)
     gtk_snapshot_restore (crenderer->snapshot);
 
-  gdk_rgba_free (selection);
   pango_layout_iter_free (iter);
 }
 

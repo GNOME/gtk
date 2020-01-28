@@ -41,10 +41,6 @@ typedef struct _GtkCssShorthandPropertyClass      GtkCssShorthandPropertyClass;
 typedef gboolean              (* GtkCssShorthandPropertyParseFunc)      (GtkCssShorthandProperty *shorthand,
                                                                          GtkCssValue            **values,
                                                                          GtkCssParser            *parser);
-typedef void                  (* GtkCssShorthandPropertyQueryFunc)      (GtkCssShorthandProperty *shorthand,
-                                                                         GValue                  *value,
-                                                                         GtkStyleQueryFunc        query_func,
-                                                                         gpointer                 query_data);
 
 struct _GtkCssShorthandProperty
 {
@@ -53,7 +49,6 @@ struct _GtkCssShorthandProperty
   GPtrArray *subproperties;
 
   GtkCssShorthandPropertyParseFunc parse;
-  GtkCssShorthandPropertyQueryFunc query;
 };
 
 struct _GtkCssShorthandPropertyClass

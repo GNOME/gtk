@@ -314,7 +314,7 @@ gtk_inspector_css_node_tree_get_node_value (GtkTreeModelCssNode *model,
   switch (column)
     {
     case COLUMN_NODE_NAME:
-      g_value_set_string (value, gtk_css_node_get_name (node));
+      g_value_set_string (value, g_quark_to_string (gtk_css_node_get_name (node)));
       break;
 
     case COLUMN_NODE_VISIBLE:
@@ -330,7 +330,7 @@ gtk_inspector_css_node_tree_get_node_value (GtkTreeModelCssNode *model,
       break;
 
     case COLUMN_NODE_ID:
-      g_value_set_string (value, gtk_css_node_get_id (node));
+      g_value_set_string (value, g_quark_to_string (gtk_css_node_get_id (node)));
       break;
 
     case COLUMN_NODE_STATE:

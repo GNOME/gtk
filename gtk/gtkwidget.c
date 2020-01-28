@@ -67,7 +67,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
 #include "gtkwidgetpaintableprivate.h"
-#include "gtkwidgetpathprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
 #include "gtknativeprivate.h"
@@ -496,7 +495,7 @@ struct _GtkWidgetClassPrivate
   GtkWidgetTemplate *template;
   GType accessible_type;
   AtkRole accessible_role;
-  const char *css_name;
+  GQuark css_name;
   GType layout_manager_type;
   GPtrArray *actions;
 };
@@ -1906,7 +1905,7 @@ gtk_widget_set_property (GObject         *object,
       break;
     case PROP_CSS_NAME:
       if (g_value_get_string (value) != NULL)
-        gtk_css_node_set_name (priv->cssnode, g_intern_string (g_value_get_string (value)));
+        gtk_css_node_set_name (priv->cssnode, g_quark_from_string (g_value_get_string (value)));
       break;
     case PROP_LAYOUT_MANAGER:
       gtk_widget_set_layout_manager (widget, g_value_dup_object (value));
@@ -2052,7 +2051,7 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_int (value, gtk_widget_get_scale_factor (widget));
       break;
     case PROP_CSS_NAME:
-      g_value_set_string (value, gtk_css_node_get_name (priv->cssnode));
+      g_value_set_string (value, g_quark_to_string (gtk_css_node_get_name (priv->cssnode)));
       break;
     case PROP_LAYOUT_MANAGER:
       g_value_set_object (value, gtk_widget_get_layout_manager (widget));
@@ -2442,7 +2441,6 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   gtk_css_node_set_visible (priv->cssnode, priv->visible);
   /* need to set correct name here, and only class has the correct type here */
   gtk_css_node_set_name (priv->cssnode, GTK_WIDGET_CLASS (g_class)->priv->css_name);
-  gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_FROM_CLASS (g_class));
 
   if (g_type_is_a (G_TYPE_FROM_CLASS (g_class), GTK_TYPE_ROOT))
     priv->root = (GtkRoot *) widget;
@@ -4012,7 +4010,7 @@ gtk_widget_allocate (GtkWidget    *widget,
   if (adjusted.width < 0 || adjusted.height < 0)
     {
       g_warning ("gtk_widget_size_allocate(): attempt to allocate %s %s %p with width %d and height %d",
-                 G_OBJECT_TYPE_NAME (widget), gtk_css_node_get_name (priv->cssnode), widget,
+                 G_OBJECT_TYPE_NAME (widget), g_quark_to_string (gtk_css_node_get_name (priv->cssnode)), widget,
                  adjusted.width,
                  adjusted.height);
 
@@ -5645,7 +5643,7 @@ gtk_widget_set_name (GtkWidget	 *widget,
   g_free (priv->name);
   priv->name = g_strdup (name);
 
-  gtk_css_node_set_id (priv->cssnode, priv->name);
+  gtk_css_node_set_id (priv->cssnode, g_quark_from_string (priv->name));
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_NAME]);
 }
@@ -11181,46 +11179,6 @@ _gtk_widget_remove_attached_window (GtkWidget    *widget,
 }
 
 /**
- * gtk_widget_path_append_for_widget:
- * @path: a widget path
- * @widget: the widget to append to the widget path
- *
- * Appends the data from @widget to the widget hierarchy represented
- * by @path. This function is a shortcut for adding information from
- * @widget to the given @path. This includes setting the name or
- * adding the style classes from @widget.
- *
- * Returns: the position where the data was inserted
- */
-gint
-gtk_widget_path_append_for_widget (GtkWidgetPath *path,
-                                   GtkWidget     *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  const GQuark *classes;
-  guint n_classes, i;
-  gint pos;
-
-  g_return_val_if_fail (path != NULL, 0);
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
-
-  pos = gtk_widget_path_append_type (path, gtk_css_node_get_widget_type (priv->cssnode));
-  gtk_widget_path_iter_set_object_name (path, pos, gtk_css_node_get_name (priv->cssnode));
-
-  if (priv->name)
-    gtk_widget_path_iter_set_name (path, pos, priv->name);
-
-  gtk_widget_path_iter_set_state (path, pos, priv->state_flags);
-
-  classes = gtk_css_node_list_classes (priv->cssnode, &n_classes);
-
-  for (i = n_classes; i-- > 0;)
-    gtk_widget_path_iter_add_qclass (path, pos, classes[i]);
-
-  return pos;
-}
-
-/**
  * gtk_widget_class_set_css_name:
  * @widget_class: class to set the name on
  * @name: name to use
@@ -11241,7 +11199,7 @@ gtk_widget_class_set_css_name (GtkWidgetClass *widget_class,
 
   priv = widget_class->priv;
 
-  priv->css_name = g_intern_string (name);
+  priv->css_name = g_quark_from_string (name);
 }
 
 static gboolean
@@ -11264,7 +11222,7 @@ gtk_widget_class_get_css_name (GtkWidgetClass *widget_class)
 {
   g_return_val_if_fail (GTK_IS_WIDGET_CLASS (widget_class), NULL);
 
-  return widget_class->priv->css_name;
+  return g_quark_to_string (widget_class->priv->css_name);
 }
 
 void

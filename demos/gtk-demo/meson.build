@@ -28,7 +28,6 @@ demos = files([
   'fishbowl.c',
   'fixed.c',
   'fontrendering.c',
-  'foreigndrawing.c',
   'gestures.c',
   'glarea.c',
   'headerbar.c',

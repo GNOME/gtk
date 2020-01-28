@@ -18,9 +18,9 @@
 #ifndef __GTK_CSS_NODE_DECLARATION_PRIVATE_H__
 #define __GTK_CSS_NODE_DECLARATION_PRIVATE_H__
 
+#include "gtkcountingbloomfilterprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkenums.h"
-#include "gtkwidgetpath.h"
 
 G_BEGIN_DECLS
 
@@ -28,15 +28,12 @@ GtkCssNodeDeclaration * gtk_css_node_declaration_new                    (void);
 GtkCssNodeDeclaration * gtk_css_node_declaration_ref                    (GtkCssNodeDeclaration         *decl);
 void                    gtk_css_node_declaration_unref                  (GtkCssNodeDeclaration         *decl);
 
-gboolean                gtk_css_node_declaration_set_type               (GtkCssNodeDeclaration        **decl,
-                                                                         GType                          type);
-GType                   gtk_css_node_declaration_get_type               (const GtkCssNodeDeclaration   *decl);
 gboolean                gtk_css_node_declaration_set_name               (GtkCssNodeDeclaration        **decl,
-                                                                         /*interned*/ const char       *name);
-/*interned*/ const char*gtk_css_node_declaration_get_name               (const GtkCssNodeDeclaration   *decl);
+                                                                         GQuark                         name);
+GQuark                  gtk_css_node_declaration_get_name               (const GtkCssNodeDeclaration   *decl);
 gboolean                gtk_css_node_declaration_set_id                 (GtkCssNodeDeclaration        **decl,
-                                                                         const char                    *id);
-const char *            gtk_css_node_declaration_get_id                 (const GtkCssNodeDeclaration   *decl);
+                                                                         GQuark                         id);
+GQuark                  gtk_css_node_declaration_get_id                 (const GtkCssNodeDeclaration   *decl);
 gboolean                gtk_css_node_declaration_set_state              (GtkCssNodeDeclaration        **decl,
                                                                          GtkStateFlags                  flags);
 GtkStateFlags           gtk_css_node_declaration_get_state              (const GtkCssNodeDeclaration   *decl);
@@ -51,13 +48,14 @@ gboolean                gtk_css_node_declaration_has_class              (const G
 const GQuark *          gtk_css_node_declaration_get_classes            (const GtkCssNodeDeclaration   *decl,
                                                                          guint                         *n_classes);
 
+void                    gtk_css_node_declaration_add_bloom_hashes       (const GtkCssNodeDeclaration   *decl,
+                                                                         GtkCountingBloomFilter        *filter);
+void                    gtk_css_node_declaration_remove_bloom_hashes    (const GtkCssNodeDeclaration   *decl,
+                                                                         GtkCountingBloomFilter        *filter);
+
 guint                   gtk_css_node_declaration_hash                   (gconstpointer                  elem);
 gboolean                gtk_css_node_declaration_equal                  (gconstpointer                  elem1,
                                                                          gconstpointer                  elem2);
-
-void                    gtk_css_node_declaration_add_to_widget_path     (const GtkCssNodeDeclaration   *decl,
-                                                                         GtkWidgetPath                 *path,
-                                                                         guint                          pos);
 
 void                    gtk_css_node_declaration_print                  (const GtkCssNodeDeclaration   *decl,
                                                                          GString                       *string);

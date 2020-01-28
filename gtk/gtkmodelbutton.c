@@ -454,28 +454,28 @@ update_node_name (GtkModelButton *self)
     {
     case GTK_BUTTON_ROLE_TITLE:
       a11y_role = ATK_ROLE_PUSH_BUTTON;
-      start_name = I_("arrow");
-      end_name = I_("none");
+      start_name = "arrow";
+      end_name = NULL;
       break;
     case GTK_BUTTON_ROLE_NORMAL:
       a11y_role = ATK_ROLE_PUSH_BUTTON;
-      start_name = I_("none");
+      start_name = NULL;
       if (self->menu_name || self->popover)
-        end_name = I_("arrow");
+        end_name = "arrow";
       else
-        end_name = I_("none");
+        end_name = NULL;
       break;
 
     case GTK_BUTTON_ROLE_CHECK:
       a11y_role = ATK_ROLE_CHECK_BOX;
-      start_name = I_("check");
-      end_name = I_("none");
+      start_name = "check";
+      end_name = NULL;
       break;
 
     case GTK_BUTTON_ROLE_RADIO:
       a11y_role = ATK_ROLE_RADIO_BUTTON;
-      start_name = I_("radio");
-      end_name = I_("none");
+      start_name = "radio";
+      end_name = NULL;
       break;
 
     default:
@@ -484,13 +484,13 @@ update_node_name (GtkModelButton *self)
 
   if (self->iconic)
     {
-      start_name = I_("none");
-      end_name = I_("none");
+      start_name = NULL;
+      end_name = NULL;
     }
 
   atk_object_set_role (accessible, a11y_role);
 
-  if (start_name != I_("none") && !self->start_indicator)
+  if (start_name && !self->start_indicator)
     {
       self->start_indicator = gtk_icon_new (start_name);
       gtk_widget_set_halign (self->start_indicator, GTK_ALIGN_CENTER);
@@ -499,9 +499,9 @@ update_node_name (GtkModelButton *self)
 
       gtk_container_add (GTK_CONTAINER (self->start_box), self->start_indicator);
     }
-  else if (start_name != I_("none"))
+  else if (start_name)
     {
-      gtk_css_node_set_name (gtk_widget_get_css_node (self->start_indicator), start_name);
+      gtk_css_node_set_name (gtk_widget_get_css_node (self->start_indicator), g_quark_from_static_string (start_name));
     }
   else if (self->start_indicator)
     {
@@ -509,7 +509,7 @@ update_node_name (GtkModelButton *self)
       self->start_indicator = NULL;
     }
 
-  if (end_name != I_("none") && !self->end_indicator)
+  if (end_name && !self->end_indicator)
     {
       self->end_indicator = gtk_icon_new (end_name);
       gtk_widget_set_halign (self->end_indicator, GTK_ALIGN_CENTER);
@@ -517,9 +517,9 @@ update_node_name (GtkModelButton *self)
       gtk_widget_set_parent (self->end_indicator, GTK_WIDGET (self));
       update_end_indicator (self);
     }
-  else if (end_name != I_("none"))
+  else if (end_name)
     {
-      gtk_css_node_set_name (gtk_widget_get_css_node (self->end_indicator), end_name);
+      gtk_css_node_set_name (gtk_widget_get_css_node (self->end_indicator), g_quark_from_static_string (end_name));
     }
   else
     {
@@ -665,7 +665,7 @@ gtk_model_button_set_iconic (GtkModelButton *self,
   if (iconic)
     {
       gtk_widget_hide (self->start_box);
-      gtk_css_node_set_name (widget_node, I_("button"));
+      gtk_css_node_set_name (widget_node, g_quark_from_static_string ("button"));
       gtk_style_context_add_class (context, "model");
       gtk_style_context_add_class (context, "image-button");
       gtk_style_context_remove_class (context, "flat");
@@ -673,7 +673,7 @@ gtk_model_button_set_iconic (GtkModelButton *self,
   else
     {
       gtk_widget_show (self->start_box);
-      gtk_css_node_set_name (widget_node, I_("modelbutton"));
+      gtk_css_node_set_name (widget_node, g_quark_from_static_string ("modelbutton"));
       gtk_style_context_remove_class (context, "model");
       gtk_style_context_remove_class (context, "image-button");
       gtk_style_context_add_class (context, "flat");

@@ -17,7 +17,6 @@
         <child>
           <object class="GtkFileChooserWidget" id="widget">
             <property name="expand">1</property>
-            <signal name="default-size-changed" handler="file_chooser_widget_default_size_changed" swapped="no"/>
             <signal name="file-activated" handler="file_chooser_widget_file_activated" swapped="no"/>
             <signal name="response-requested" handler="file_chooser_widget_response_requested" swapped="no"/>
             <signal name="selection-changed" handler="file_chooser_widget_selection_changed" swapped="no"/>

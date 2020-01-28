@@ -363,12 +363,12 @@ draw_indicator_changed (GtkCheckButton *check_button)
       if (GTK_IS_RADIO_BUTTON (check_button))
         {
           gtk_css_node_remove_class (widget_node, g_quark_from_static_string ("radio"));
-          gtk_css_node_set_name (widget_node, I_("radiobutton"));
+          gtk_css_node_set_name (widget_node, g_quark_from_static_string ("radiobutton"));
         }
       else if (GTK_IS_CHECK_BUTTON (check_button))
         {
           gtk_css_node_remove_class (widget_node, g_quark_from_static_string ("check"));
-          gtk_css_node_set_name (widget_node, I_("checkbutton"));
+          gtk_css_node_set_name (widget_node, g_quark_from_static_string ("checkbutton"));
         }
     }
   else
@@ -378,12 +378,12 @@ draw_indicator_changed (GtkCheckButton *check_button)
       if (GTK_IS_RADIO_BUTTON (check_button))
         {
           gtk_css_node_add_class (widget_node, g_quark_from_static_string ("radio"));
-          gtk_css_node_set_name (widget_node, I_("button"));
+          gtk_css_node_set_name (widget_node, g_quark_from_static_string ("button"));
         }
       else if (GTK_IS_CHECK_BUTTON (check_button))
         {
           gtk_css_node_add_class (widget_node, g_quark_from_static_string ("check"));
-          gtk_css_node_set_name (widget_node, I_("button"));
+          gtk_css_node_set_name (widget_node, g_quark_from_static_string ("button"));
         }
     }
 }

@@ -30,7 +30,6 @@
 #include "gtkcssnodedeclarationprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkcsspathnodeprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
@@ -46,7 +45,6 @@
 #include "gtkstylecascadeprivate.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 
 
@@ -56,7 +54,7 @@
  * @Title: GtkStyleContext
  *
  * #GtkStyleContext is an object that stores styling information affecting
- * a widget defined by #GtkWidgetPath.
+ * a widget.
  *
  * In order to construct the final style information, #GtkStyleContext
  * queries information from all attached #GtkStyleProviders. Style providers
@@ -66,9 +64,9 @@
  * combination of all providers’ information in priority order.
  *
  * For GTK+ widgets, any #GtkStyleContext returned by
- * gtk_widget_get_style_context() will already have a #GtkWidgetPath, a
- * #GdkDisplay and RTL/LTR information set. The style context will also be
- * updated automatically if any of these settings change on the widget.
+ * gtk_widget_get_style_context() will already have a #GdkDisplay and
+ * RTL/LTR information set. The style context will also be updated
+ * automatically if any of these settings change on the widget.
  *
  * If you are using the theming layer standalone, you will need to set a
  * widget path and a display yourself to the created style context through
@@ -308,9 +306,6 @@ gtk_style_context_finalize (GObject *object)
   while (priv->saved_nodes)
     gtk_style_context_pop_style_node (context);
 
-  if (GTK_IS_CSS_PATH_NODE (priv->cssnode))
-    gtk_css_path_node_unset_context (GTK_CSS_PATH_NODE (priv->cssnode));
-
   gtk_style_context_clear_parent (context);
   gtk_style_context_set_cascade (context, NULL);
 
@@ -445,7 +440,7 @@ gtk_style_context_new (void)
 
 
   /* Create default info store */
-  priv->cssnode = gtk_css_path_node_new (context);
+  priv->cssnode = gtk_css_node_new ();
   gtk_css_node_set_state (priv->cssnode, GTK_STATE_FLAG_DIR_LTR);
 
   return context;
@@ -622,181 +617,6 @@ gtk_style_context_remove_provider_for_display (GdkDisplay       *display,
   _gtk_style_cascade_remove_provider (cascade, provider);
 }
 
-/**
- * gtk_style_context_get_section:
- * @context: a #GtkStyleContext
- * @property: style property name
- *
- * Queries the location in the CSS where @property was defined for the
- * current @context. Note that the state to be queried is taken from
- * gtk_style_context_get_state().
- *
- * If the location is not available, %NULL will be returned. The
- * location might not be available for various reasons, such as the
- * property being overridden, @property not naming a supported CSS
- * property or tracking of definitions being disabled for performance
- * reasons.
- *
- * Shorthand CSS properties cannot be queried for a location and will
- * always return %NULL.
- *
- * Returns: (nullable) (transfer none): %NULL or the section where a value
- * for @property was defined
- **/
-GtkCssSection *
-gtk_style_context_get_section (GtkStyleContext *context,
-                               const gchar     *property)
-{
-  GtkCssStyle *values;
-  GtkStyleProperty *prop;
-
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-  g_return_val_if_fail (property != NULL, NULL);
-
-  prop = _gtk_style_property_lookup (property);
-  if (!GTK_IS_CSS_STYLE_PROPERTY (prop))
-    return NULL;
-
-  values = gtk_style_context_lookup_style (context);
-  return gtk_css_style_get_section (values, _gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (prop)));
-}
-
-static GtkCssValue *
-gtk_style_context_query_func (guint    id,
-                              gpointer values)
-{
-  return gtk_css_style_get_value (values, id);
-}
-
-/**
- * gtk_style_context_get_property:
- * @context: a #GtkStyleContext
- * @property: style property name
- * @value: (out) (transfer full):  return location for the style property value
- *
- * Gets a style property from @context for the current state.
- *
- * Note that not all CSS properties that are supported by GTK+ can be
- * retrieved in this way, since they may not be representable as #GValue.
- * GTK+ defines macros for a number of properties that can be used
- * with this function.
- *
- * When @value is no longer needed, g_value_unset() must be called
- * to free any allocated memory.
- **/
-void
-gtk_style_context_get_property (GtkStyleContext *context,
-                                const gchar     *property,
-                                GValue          *value)
-{
-  GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
-  GtkStyleProperty *prop;
-
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (property != NULL);
-  g_return_if_fail (value != NULL);
-
-  prop = _gtk_style_property_lookup (property);
-  if (prop == NULL)
-    {
-      g_warning ("Style property \"%s\" is not registered", property);
-      return;
-    }
-  if (_gtk_style_property_get_value_type (prop) == G_TYPE_NONE)
-    {
-      g_warning ("Style property \"%s\" is not gettable", property);
-      return;
-    }
-
-  _gtk_style_property_query (prop,
-                             value,
-                             gtk_style_context_query_func,
-                             gtk_css_node_get_style (priv->cssnode));
-}
-
-/**
- * gtk_style_context_get_valist:
- * @context: a #GtkStyleContext
- * @first_property_name: Name of the first property
- * @args: va_list of property name/return location pairs, followed by %NULL
- *
- * Retrieves several style property values from @context for a given state.
- *
- * See gtk_style_context_get_property() for details.
- *
- * As with g_object_get(), a copy is made of the property contents for
- * pointer-valued properties, and the caller is responsible for freeing the
- * memory in the appropriate manner for the type. For example, by calling
- * g_free() or g_object_unref(). Non-pointer-valued properties, such as
- * integers, are returned by value and do not need to be freed.
- */
-void
-gtk_style_context_get_valist (GtkStyleContext *context,
-                              const char      *first_property_name,
-                              va_list          args)
-{
-  const gchar *property_name;
-
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (first_property_name != NULL);
-
-  property_name = first_property_name;
-
-  while (property_name)
-    {
-      gchar *error = NULL;
-      GValue value = G_VALUE_INIT;
-
-      gtk_style_context_get_property (context,
-                                      property_name,
-                                      &value);
-
-      G_VALUE_LCOPY (&value, args, 0, &error);
-      g_value_unset (&value);
-
-      if (error)
-        {
-          g_warning ("Could not get style property \"%s\": %s", property_name, error);
-          g_free (error);
-          break;
-        }
-
-      property_name = va_arg (args, const gchar *);
-    }
-}
-
-/**
- * gtk_style_context_get:
- * @context: a #GtkStyleContext
- * @first_property_name: Name of the first property
- * @...: property name /return value pairs, followed by %NULL
- *
- * Retrieves several style property values from @context for a
- * given state.
- *
- * See gtk_style_context_get_property() for details.
- *
- * As with g_object_get(), a copy is made of the property contents for
- * pointer-valued properties, and the caller is responsible for freeing the
- * memory in the appropriate manner for the type. For example, by calling
- * g_free() or g_object_unref(). Non-pointer-valued properties, such as
- * integers, are returned by value and do not need to be freed.
- */
-void
-gtk_style_context_get (GtkStyleContext *context,
-                       const char      *first_property_name,
-                       ...)
-{
-  va_list args;
-
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (first_property_name != NULL);
-
-  va_start (args, first_property_name);
-  gtk_style_context_get_valist (context, first_property_name, args);
-  va_end (args);
-}
-
 /*
  * gtk_style_context_set_id:
  * @context: a #GtkStyleContext
@@ -812,7 +632,7 @@ gtk_style_context_set_id (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  gtk_css_node_set_id (priv->cssnode, id);
+  gtk_css_node_set_id (priv->cssnode, g_quark_from_string (id));
 }
 
 /*
@@ -830,7 +650,7 @@ gtk_style_context_get_id (GtkStyleContext *context)
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
-  return gtk_css_node_get_id (priv->cssnode);
+  return g_quark_to_string (gtk_css_node_get_id (priv->cssnode));
 }
 
 /**
@@ -922,74 +742,6 @@ gtk_style_context_get_scale (GtkStyleContext *context)
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
 
   return _gtk_style_cascade_get_scale (priv->cascade);
-}
-
-/**
- * gtk_style_context_set_path:
- * @context: a #GtkStyleContext
- * @path: a #GtkWidgetPath
- *
- * Sets the #GtkWidgetPath used for style matching. As a
- * consequence, the style will be regenerated to match
- * the new given path.
- *
- * If you are using a #GtkStyleContext returned from
- * gtk_widget_get_style_context(), you do not need to call
- * this yourself.
- **/
-void
-gtk_style_context_set_path (GtkStyleContext *context,
-                            GtkWidgetPath   *path)
-{
-  GtkCssNode *root;
-
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (path != NULL);
-
-  root = gtk_style_context_get_root (context);
-  g_return_if_fail (GTK_IS_CSS_PATH_NODE (root));
-
-  if (path && gtk_widget_path_length (path) > 0)
-    {
-      GtkWidgetPath *copy = gtk_widget_path_copy (path);
-      gtk_css_path_node_set_widget_path (GTK_CSS_PATH_NODE (root), copy);
-      gtk_css_node_set_widget_type (root,
-                                    gtk_widget_path_iter_get_object_type (copy, -1));
-      gtk_css_node_set_name (root, gtk_widget_path_iter_get_object_name (copy, -1));
-      gtk_widget_path_unref (copy);
-    }
-  else
-    {
-      gtk_css_path_node_set_widget_path (GTK_CSS_PATH_NODE (root), NULL);
-      gtk_css_node_set_widget_type (root, G_TYPE_NONE);
-      gtk_css_node_set_name (root, NULL);
-    }
-}
-
-/**
- * gtk_style_context_get_path:
- * @context: a #GtkStyleContext
- *
- * Returns the widget path used for style matching set via
- * gtk_style_context_set_path().
- *
- * If no path has been set - in particular if this style context
- * was returned from a #GtkWidget - this function returns %NULL.
- *
- * Returns: (transfer none) (nullable): A #GtkWidgetPath or %NULL
- **/
-const GtkWidgetPath *
-gtk_style_context_get_path (GtkStyleContext *context)
-{
-  GtkCssNode *root;
-
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-
-  root = gtk_style_context_get_root (context);
-  if (!GTK_IS_CSS_PATH_NODE (root))
-    return NULL;
-
-  return gtk_css_path_node_get_widget_path (GTK_CSS_PATH_NODE (root));
 }
 
 /**
@@ -1101,7 +853,7 @@ gtk_style_context_save_named (GtkStyleContext *context,
   cssnode = gtk_css_transient_node_new (priv->cssnode);
   gtk_css_node_set_parent (cssnode, gtk_style_context_get_root (context));
   if (name)
-    gtk_css_node_set_name (cssnode, g_intern_string (name));
+    gtk_css_node_set_name (cssnode, g_quark_from_string (name));
 
   gtk_style_context_save_to_node (context, cssnode);
 
@@ -1429,17 +1181,10 @@ void
 gtk_style_context_get_color (GtkStyleContext *context,
                              GdkRGBA         *color)
 {
-  GdkRGBA *c;
-
   g_return_if_fail (color != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  gtk_style_context_get (context,
-                         "color", &c,
-                         NULL);
-
-  *color = *c;
-  gdk_rgba_free (c);
+  *color = *gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
 }
 
 /**
@@ -1544,20 +1289,11 @@ _gtk_style_context_get_cursor_color (GtkStyleContext *context,
                                      GdkRGBA         *primary_color,
                                      GdkRGBA         *secondary_color)
 {
-  GdkRGBA *pc, *sc;
-
-  gtk_style_context_get (context,
-                         "caret-color", &pc,
-                         "-gtk-secondary-caret-color", &sc,
-                         NULL);
   if (primary_color)
-    *primary_color = *pc;
+    *primary_color = *gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_CARET_COLOR));
 
   if (secondary_color)
-    *secondary_color = *sc;
-
-  gdk_rgba_free (pc);
-  gdk_rgba_free (sc);
+    *secondary_color = *gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR));
 }
 
 static void
@@ -1939,26 +1675,22 @@ AtkAttributeSet *
 _gtk_style_context_get_attributes (AtkAttributeSet *attributes,
                                    GtkStyleContext *context)
 {
-  GdkRGBA *bg; 
-  GdkRGBA color;
+  const GdkRGBA *color; 
   gchar *value;
 
-  gtk_style_context_get (context, "background-color", &bg, NULL);
+  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
   value = g_strdup_printf ("%u,%u,%u",
-                           (guint) ceil (bg->red * 65536 - bg->red),
-                           (guint) ceil (bg->green * 65536 - bg->green),
-                           (guint) ceil (bg->blue * 65536 - bg->blue));
+                           (guint) ceil (color->red * 65536 - color->red),
+                           (guint) ceil (color->green * 65536 - color->green),
+                           (guint) ceil (color->blue * 65536 - color->blue));
   attributes = add_attribute (attributes, ATK_TEXT_ATTR_BG_COLOR, value);
-  g_free (value);
-  gdk_rgba_free (bg);
 
-  gtk_style_context_get_color (context, &color);
+  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
   value = g_strdup_printf ("%u,%u,%u",
-                           (guint) ceil (color.red * 65536 - color.red),
-                           (guint) ceil (color.green * 65536 - color.green),
-                           (guint) ceil (color.blue * 65536 - color.blue));
+                           (guint) ceil (color->red * 65536 - color->red),
+                           (guint) ceil (color->green * 65536 - color->green),
+                           (guint) ceil (color->blue * 65536 - color->blue));
   attributes = add_attribute (attributes, ATK_TEXT_ATTR_FG_COLOR, value);
-  g_free (value);
 
   return attributes;
 }
