@@ -169,6 +169,19 @@ GtkIconInfo * gtk_icon_theme_choose_icon_for_scale (GtkIconTheme                
                                                     gint                         scale,
 						    GtkIconLookupFlags           flags);
 GDK_AVAILABLE_IN_ALL
+void          gtk_icon_theme_choose_icon_async     (GtkIconTheme                *self,
+                                                    const gchar                 *icon_names[],
+                                                    gint                         size,
+                                                    gint                         scale,
+                                                    GtkIconLookupFlags           flags,
+                                                    GCancellable                *cancellable,
+                                                    GAsyncReadyCallback          callback,
+                                                    gpointer                     user_data);
+GDK_AVAILABLE_IN_ALL
+GtkIconInfo * gtk_icon_theme_choose_icon_finish    (GtkIconTheme                *self,
+                                                    GAsyncResult                *result,
+                                                    GError                     **error);
+GDK_AVAILABLE_IN_ALL
 GdkPaintable *gtk_icon_theme_load_icon             (GtkIconTheme                *self,
                                                     const char                  *icon_name,
                                                     int                          size,
