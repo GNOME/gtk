@@ -39,7 +39,7 @@ icon_loaded_cb (GObject *source_object,
 		GAsyncResult *res,
 		gpointer user_data)
 {
-  GtkIconInfo *icon;
+  GtkIcon *icon;
   GError *error;
 
   error = NULL;
@@ -60,7 +60,7 @@ int
 main (int argc, char *argv[])
 {
   GtkIconTheme *icon_theme;
-  GtkIconInfo *icon_info;
+  GtkIcon *icon_info;
   char *context;
   char *themename;
   GList *list;
@@ -91,7 +91,7 @@ main (int argc, char *argv[])
 
   if (strcmp (argv[1], "display") == 0)
     {
-      GtkIconInfo *icon;
+      GtkIcon *icon;
       GtkWidget *window, *image;
 
       if (argc < 4)
@@ -186,13 +186,13 @@ main (int argc, char *argv[])
 
       icon_info = gtk_icon_theme_lookup_icon_for_scale (icon_theme, argv[3], size, scale, flags);
       g_print ("icon for %s at %dx%d@%dx is %s\n", argv[3], size, size, scale,
-               icon_info ? gtk_icon_info_get_filename (icon_info) : "<none>");
+               icon_info ? gtk_icon_get_filename (icon_info) : "<none>");
 
       if (icon_info)
 	{
           GdkPaintable *paintable = GDK_PAINTABLE (icon_info);
 
-          g_print ("Base size: %d, Scale: %d\n", gtk_icon_info_get_base_size (icon_info), gtk_icon_info_get_base_scale (icon_info));
+          g_print ("Base size: %d, Scale: %d\n", gtk_icon_get_base_size (icon_info), gtk_icon_get_base_scale (icon_info));
           g_print ("texture size: %dx%d\n", gdk_paintable_get_intrinsic_width (paintable), gdk_paintable_get_intrinsic_height (paintable));
 
 	  g_object_unref (icon_info);
