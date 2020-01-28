@@ -1735,7 +1735,6 @@ ensure_valid_themes (GtkIconTheme *self,
 {
   GTimeVal tv;
   gboolean was_valid = self->themes_valid;
-  gint64 before = g_get_monotonic_time ();
 
   if (self->themes_valid)
     {
@@ -1756,17 +1755,20 @@ ensure_valid_themes (GtkIconTheme *self,
 
   if (!self->themes_valid)
     {
+      gint64 before;
       if (non_blocking)
         return FALSE;
 
+       before = g_get_monotonic_time ();
+
       load_themes (self);
+
+      if (gdk_profiler_is_running ())
+        gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "icon theme load", NULL);
 
       if (was_valid)
         queue_theme_changed (self);
     }
-
-  if (gdk_profiler_is_running ())
-    gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "icon theme load", NULL);
 
   return TRUE;
 }
