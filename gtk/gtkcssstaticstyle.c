@@ -173,6 +173,28 @@ static int other_props[] = {
 };
 
 #define DEFINE_VALUES(ENUM, TYPE, NAME) \
+void \
+gtk_css_## NAME ## _values_compute_changes_and_affects (GtkCssStyle *style1, \
+                                                        GtkCssStyle *style2, \
+                                                        GtkBitmask    **changes, \
+                                                        GtkCssAffects *affects) \
+{ \
+  GtkCssValues *g1 = (GtkCssValues *)style1->NAME; \
+  GtkCssValues *g2 = (GtkCssValues *)style2->NAME; \
+  int i; \
+  for (i = 0; i < G_N_ELEMENTS (NAME ## _props); i++) \
+    { \
+      GtkCssValue *v1 = g1->values[i] ? g1->values[i] : style1->core->color; \
+      GtkCssValue *v2 = g2->values[i] ? g2->values[i] : style2->core->color; \
+      if (!_gtk_css_value_equal (v1, v2)) \
+        { \
+          guint id = NAME ## _props[i]; \
+          *changes = _gtk_bitmask_set (*changes, id, TRUE); \
+          *affects |= _gtk_css_style_property_get_affects (_gtk_css_style_property_lookup_by_id (id)); \
+        } \
+    } \
+} \
+\
 static inline void \
 gtk_css_ ## NAME ## _values_new_compute (GtkCssStaticStyle *sstyle, \
                                          GtkStyleProvider *provider, \
@@ -195,7 +217,6 @@ gtk_css_ ## NAME ## _values_new_compute (GtkCssStaticStyle *sstyle, \
                                           lookup->values[id].section); \
     } \
 } \
-\
 static GtkBitmask * gtk_css_ ## NAME ## _values_mask; \
 static GtkCssValues * gtk_css_ ## NAME ## _initial_values; \
 \
