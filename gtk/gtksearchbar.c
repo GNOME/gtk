@@ -150,7 +150,7 @@ reveal_child_changed_cb (GObject      *object,
         gtk_editable_set_text (GTK_EDITABLE (priv->entry), "");
     }
 
-  g_object_notify (G_OBJECT (bar), "search-mode-enabled");
+  g_object_notify_by_pspec (G_OBJECT (bar), widget_props[PROP_SEARCH_MODE_ENABLED]);
 }
 
 static void
@@ -510,7 +510,7 @@ gtk_search_bar_set_show_close_button (GtkSearchBar *bar,
   if (gtk_widget_get_visible (priv->close_button) != visible)
     {
       gtk_widget_set_visible (priv->close_button, visible);
-      g_object_notify (G_OBJECT (bar), "show-close-button");
+      g_object_notify_by_pspec (G_OBJECT (bar), widget_props[PROP_SHOW_CLOSE_BUTTON]);
     }
 }
 
