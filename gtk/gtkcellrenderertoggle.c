@@ -319,7 +319,7 @@ static int
 calc_indicator_size (GtkStyleContext *context)
 {
   GtkCssStyle *style = gtk_style_context_lookup_style (context);
-  return _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SIZE), 100);
+  return _gtk_css_number_value_get (style->icon->icon_size, 100);
 }
 
 static void

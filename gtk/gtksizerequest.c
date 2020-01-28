@@ -83,10 +83,9 @@ fetch_request_mode (GtkWidget *widget)
 }
 
 static gint
-get_number (GtkCssStyle *style,
-            guint        property)
+get_number (GtkCssValue *value)
 {
-  double d = _gtk_css_number_value_get (gtk_css_style_get_value (style, property), 100);
+  double d = _gtk_css_number_value_get (value, 100);
 
   if (d < 1)
     return ceil (d);
@@ -96,40 +95,39 @@ get_number (GtkCssStyle *style,
 
 /* Special-case min-width|height to round upwards, to avoid underalloc by 1px */
 static int
-get_number_ceil (GtkCssStyle *style,
-                 guint        property)
+get_number_ceil (GtkCssValue *value)
 {
-  return ceil (_gtk_css_number_value_get (gtk_css_style_get_value (style, property), 100));
+  return ceil (_gtk_css_number_value_get (value, 100));
 }
 
 static void
 get_box_margin (GtkCssStyle *style,
                 GtkBorder   *margin)
 {
-  margin->top = get_number (style, GTK_CSS_PROPERTY_MARGIN_TOP);
-  margin->left = get_number (style, GTK_CSS_PROPERTY_MARGIN_LEFT);
-  margin->bottom = get_number (style, GTK_CSS_PROPERTY_MARGIN_BOTTOM);
-  margin->right = get_number (style, GTK_CSS_PROPERTY_MARGIN_RIGHT);
+  margin->top = get_number (style->size->margin_top);
+  margin->left = get_number (style->size->margin_left);
+  margin->bottom = get_number (style->size->margin_bottom);
+  margin->right = get_number (style->size->margin_right);
 }
 
 static void
 get_box_border (GtkCssStyle *style,
                 GtkBorder   *border)
 {
-  border->top = get_number (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH);
-  border->left = get_number (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH);
-  border->bottom = get_number (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH);
-  border->right = get_number (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH);
+  border->top = get_number (style->border->border_top_width);
+  border->left = get_number (style->border->border_left_width);
+  border->bottom = get_number (style->border->border_bottom_width);
+  border->right = get_number (style->border->border_right_width);
 }
 
 static void
 get_box_padding (GtkCssStyle *style,
                  GtkBorder   *border)
 {
-  border->top = get_number (style, GTK_CSS_PROPERTY_PADDING_TOP);
-  border->left = get_number (style, GTK_CSS_PROPERTY_PADDING_LEFT);
-  border->bottom = get_number (style, GTK_CSS_PROPERTY_PADDING_BOTTOM);
-  border->right = get_number (style, GTK_CSS_PROPERTY_PADDING_RIGHT);
+  border->top = get_number (style->size->padding_top);
+  border->left = get_number (style->size->padding_left);
+  border->bottom = get_number (style->size->padding_bottom);
+  border->right = get_number (style->size->padding_right);
 }
 
 static void
@@ -196,15 +194,15 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
         {
           css_extra_size = margin.left + margin.right + border.left + border.right + padding.left + padding.right;
           css_extra_for_size = margin.top + margin.bottom + border.top + border.bottom + padding.top + padding.bottom;
-          css_min_size = get_number_ceil (style, GTK_CSS_PROPERTY_MIN_WIDTH);
-          css_min_for_size = get_number_ceil (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
+          css_min_size = get_number_ceil (style->size->min_width);
+          css_min_for_size = get_number_ceil (style->size->min_height);
         }
       else
         {
           css_extra_size = margin.top + margin.bottom + border.top + border.bottom + padding.top + padding.bottom;
           css_extra_for_size = margin.left + margin.right + border.left + border.right + padding.left + padding.right;
-          css_min_size = get_number_ceil (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
-          css_min_for_size = get_number_ceil (style, GTK_CSS_PROPERTY_MIN_WIDTH);
+          css_min_size = get_number_ceil (style->size->min_height);
+          css_min_for_size = get_number_ceil (style->size->min_width);
         }
 
       GtkLayoutManager *layout_manager = gtk_widget_get_layout_manager (widget);

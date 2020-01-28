@@ -120,7 +120,7 @@ gtk_css_value_color_get_fallback (guint             property_id,
                                        style,
                                        parent_style);
       case GTK_CSS_PROPERTY_ICON_PALETTE:
-        return _gtk_css_value_ref (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR));
+        return _gtk_css_value_ref (style->core->color);
       default:
         if (property_id < GTK_CSS_PROPERTY_N_PROPERTIES)
           g_warning ("No fallback color defined for property '%s'", 
@@ -147,7 +147,7 @@ gtk_css_value_color_compute (GtkCssValue      *value,
       GtkCssValue *current;
 
       if (parent_style)
-        current = gtk_css_style_get_value (parent_style, GTK_CSS_PROPERTY_COLOR);
+        current = parent_style->core->color;
       else
         current = NULL;
 
@@ -162,7 +162,7 @@ gtk_css_value_color_compute (GtkCssValue      *value,
     }
   else
     {
-      GtkCssValue *current = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR);
+      GtkCssValue *current = style->core->color;
 
       resolved = _gtk_css_color_value_resolve (value,
                                                provider,
