@@ -29,8 +29,7 @@
 
 enum {
   PROP_0,
-  PROP_NAME,
-  PROP_VALUE_TYPE
+  PROP_NAME
 };
 
 G_DEFINE_ABSTRACT_TYPE (GtkStyleProperty, _gtk_style_property, G_TYPE_OBJECT)
@@ -62,9 +61,6 @@ gtk_style_property_set_property (GObject      *object,
       g_assert (g_hash_table_lookup (klass->properties, property->name) == NULL);
       g_hash_table_insert (klass->properties, property->name, property);
       break;
-    case PROP_VALUE_TYPE:
-      property->value_type = g_value_get_gtype (value);
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -83,9 +79,6 @@ gtk_style_property_get_property (GObject    *object,
     {
     case PROP_NAME:
       g_value_set_string (value, property->name);
-      break;
-    case PROP_VALUE_TYPE:
-      g_value_set_gtype (value, property->value_type);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -109,13 +102,6 @@ _gtk_style_property_class_init (GtkStylePropertyClass *klass)
                                                         P_("The name of the property"),
                                                         NULL,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-  g_object_class_install_property (object_class,
-                                   PROP_VALUE_TYPE,
-                                   g_param_spec_gtype ("value-type",
-                                                       P_("Value type"),
-                                                       P_("The value type returned by GtkStyleContext"),
-                                                       G_TYPE_NONE,
-                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   klass->properties = g_hash_table_new (g_str_hash, g_str_equal);
 }
@@ -123,7 +109,6 @@ _gtk_style_property_class_init (GtkStylePropertyClass *klass)
 static void
 _gtk_style_property_init (GtkStyleProperty *property)
 {
-  property->value_type = G_TYPE_NONE;
 }
 
 /**
@@ -155,35 +140,6 @@ _gtk_style_property_parse_value (GtkStyleProperty *property,
   klass = GTK_STYLE_PROPERTY_GET_CLASS (property);
 
   return klass->parse_value (property, parser);
-}
-
-/**
- * _gtk_style_property_query:
- * @property: the property
- * @value: (out): an uninitialized #GValue to be filled with the
- *   contents of the lookup
- * @query_func: The function to use to query properties
- * @query_data: The data to pass to @query_func
- *
- * This function is called by gtk_style_properties_get() and in
- * turn gtk_style_context_get() and similar functions to get the
- * value to return to code using old APIs.
- **/
-void
-_gtk_style_property_query (GtkStyleProperty  *property,
-                           GValue            *value,
-                           GtkStyleQueryFunc  query_func,
-                           gpointer           query_data)
-{
-  GtkStylePropertyClass *klass;
-
-  g_return_if_fail (value != NULL);
-  g_return_if_fail (GTK_IS_STYLE_PROPERTY (property));
-  g_return_if_fail (query_func != NULL);
-
-  klass = GTK_STYLE_PROPERTY_GET_CLASS (property);
-
-  klass->query (property, value, query_func, query_data);
 }
 
 void
@@ -239,22 +195,4 @@ _gtk_style_property_get_name (GtkStyleProperty *property)
   g_return_val_if_fail (GTK_IS_STYLE_PROPERTY (property), NULL);
 
   return property->name;
-}
-
-/**
- * _gtk_style_property_get_value_type:
- * @property: the property to query
- *
- * Gets the value type of the @property, if the property is usable
- * in public API via _gtk_style_property_query(). If the @property is not
- * usable in that way, %G_TYPE_NONE is returned.
- *
- * Returns: the value type in use or %G_TYPE_NONE if none.
- **/
-GType
-_gtk_style_property_get_value_type (GtkStyleProperty *property)
-{
-  g_return_val_if_fail (GTK_IS_STYLE_PROPERTY (property), G_TYPE_NONE);
-
-  return property->value_type;
 }

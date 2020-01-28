@@ -18,6 +18,7 @@
 #ifndef __GTK_CSS_NODE_PRIVATE_H__
 #define __GTK_CSS_NODE_PRIVATE_H__
 
+#include "gtkcountingbloomfilterprivate.h"
 #include "gtkcssnodedeclarationprivate.h"
 #include "gtkcssnodestylecacheprivate.h"
 #include "gtkcssstylechangeprivate.h"
@@ -76,13 +77,12 @@ struct _GtkCssNodeClass
   void                  (* style_changed)               (GtkCssNode            *cssnode,
                                                          GtkCssStyleChange     *style_change);
 
-  gboolean              (* init_matcher)                (GtkCssNode            *cssnode,
-                                                         GtkCssMatcher         *matcher);
   /* get style provider to use or NULL to use parent's */
   GtkStyleProvider *    (* get_style_provider)          (GtkCssNode            *cssnode);
   /* get frame clock or NULL (only relevant for root node) */
   GdkFrameClock *       (* get_frame_clock)             (GtkCssNode            *cssnode);
   GtkCssStyle *         (* update_style)                (GtkCssNode            *cssnode,
+                                                         const GtkCountingBloomFilter *filter,
                                                          GtkCssChange           pending_changes,
                                                          gint64                 timestamp,
                                                          GtkCssStyle           *old_style);
@@ -116,14 +116,11 @@ void                    gtk_css_node_set_visible        (GtkCssNode            *
 gboolean                gtk_css_node_get_visible        (GtkCssNode            *cssnode) G_GNUC_PURE;
 
 void                    gtk_css_node_set_name           (GtkCssNode            *cssnode,
-                                                         /*interned*/const char*name);
-/*interned*/const char *gtk_css_node_get_name           (GtkCssNode            *cssnode) G_GNUC_PURE;
-void                    gtk_css_node_set_widget_type    (GtkCssNode            *cssnode,
-                                                         GType                  widget_type);
-GType                   gtk_css_node_get_widget_type    (GtkCssNode            *cssnode) G_GNUC_PURE;
+                                                         GQuark                 name);
+GQuark                  gtk_css_node_get_name           (GtkCssNode            *cssnode) G_GNUC_PURE;
 void                    gtk_css_node_set_id             (GtkCssNode            *cssnode,
-                                                         /*interned*/const char*id);
-/*interned*/const char *gtk_css_node_get_id             (GtkCssNode            *cssnode) G_GNUC_PURE;
+                                                         GQuark                 id);
+GQuark                  gtk_css_node_get_id             (GtkCssNode            *cssnode) G_GNUC_PURE;
 void                    gtk_css_node_set_state          (GtkCssNode            *cssnode,
                                                          GtkStateFlags          state_flags);
 GtkStateFlags           gtk_css_node_get_state          (GtkCssNode            *cssnode) G_GNUC_PURE;
@@ -153,8 +150,6 @@ void                    gtk_css_node_invalidate         (GtkCssNode            *
                                                          GtkCssChange           change);
 void                    gtk_css_node_validate           (GtkCssNode            *cssnode);
 
-gboolean                gtk_css_node_init_matcher       (GtkCssNode            *cssnode,
-                                                         GtkCssMatcher         *matcher);
 GtkStyleProvider *      gtk_css_node_get_style_provider (GtkCssNode            *cssnode) G_GNUC_PURE;
 
 void                    gtk_css_node_print              (GtkCssNode                *cssnode,

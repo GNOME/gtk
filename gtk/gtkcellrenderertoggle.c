@@ -19,6 +19,7 @@
 
 #include "gtkcellrenderertoggle.h"
 
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
@@ -85,8 +86,6 @@ enum {
   PROP_RADIO,
   PROP_INCONSISTENT
 };
-
-#define TOGGLE_WIDTH 16
 
 static guint toggle_cell_signals[LAST_SIGNAL] = { 0 };
 
@@ -316,20 +315,11 @@ gtk_cell_renderer_toggle_save_context (GtkCellRenderer *cell,
   return context;
 }
  
-static void
-calc_indicator_size (GtkStyleContext *context,
-                     gint            *width,
-                     gint            *height)
+static int
+calc_indicator_size (GtkStyleContext *context)
 {
-  gtk_style_context_get (context, 
-                         "min-width", width,
-                         "min-height", height,
-                         NULL);
-
-  if (*width == 0)
-    *width = TOGGLE_WIDTH;
-  if (*height == 0)
-    *height = TOGGLE_WIDTH;
+  GtkCssStyle *style = gtk_style_context_lookup_style (context);
+  return _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SIZE), 100);
 }
 
 static void
@@ -353,7 +343,7 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer    *cell,
   gtk_style_context_get_padding (context, &padding);
   gtk_style_context_get_border (context, &border);
 
-  calc_indicator_size (context, &calc_width, &calc_height);
+  calc_width = calc_height = calc_indicator_size (context);
   calc_width += xpad * 2 + padding.left + padding.right + border.left + border.right;
   calc_height += ypad * 2 + padding.top + padding.bottom + border.top + border.bottom;
 

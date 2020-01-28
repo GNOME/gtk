@@ -19,9 +19,10 @@
 #define __GTK_STYLE_PROVIDER_PRIVATE_H__
 
 #include <glib-object.h>
+#include "gtk/gtkcountingbloomfilterprivate.h"
 #include "gtk/gtkcsskeyframesprivate.h"
 #include "gtk/gtkcsslookupprivate.h"
-#include "gtk/gtkcssmatcherprivate.h"
+#include "gtk/gtkcssnodeprivate.h"
 #include "gtk/gtkcssvalueprivate.h"
 #include <gtk/gtktypes.h>
 
@@ -35,37 +36,39 @@ struct _GtkStyleProviderInterface
 {
   GTypeInterface g_iface;
 
-  GtkCssValue *         (* get_color)           (GtkStyleProvider *provider,
+  GtkCssValue *         (* get_color)           (GtkStyleProvider        *provider,
                                                  const char              *name);
-  GtkSettings *         (* get_settings)        (GtkStyleProvider *provider);
-  GtkCssKeyframes *     (* get_keyframes)       (GtkStyleProvider *provider,
+  GtkSettings *         (* get_settings)        (GtkStyleProvider        *provider);
+  GtkCssKeyframes *     (* get_keyframes)       (GtkStyleProvider        *provider,
                                                  const char              *name);
-  int                   (* get_scale)           (GtkStyleProvider *provider);
-  void                  (* lookup)              (GtkStyleProvider *provider,
-                                                 const GtkCssMatcher     *matcher,
+  int                   (* get_scale)           (GtkStyleProvider        *provider);
+  void                  (* lookup)              (GtkStyleProvider        *provider,
+                                                 const GtkCountingBloomFilter *filter,
+                                                 GtkCssNode              *node,
                                                  GtkCssLookup            *lookup,
                                                  GtkCssChange            *out_change);
-  void                  (* emit_error)          (GtkStyleProvider *provider,
+  void                  (* emit_error)          (GtkStyleProvider        *provider,
                                                  GtkCssSection           *section,
                                                  const GError            *error);
   /* signal */
-  void                  (* changed)             (GtkStyleProvider *provider);
+  void                  (* changed)             (GtkStyleProvider        *provider);
 };
 
-GtkSettings *           gtk_style_provider_get_settings          (GtkStyleProvider *provider);
-GtkCssValue *           gtk_style_provider_get_color             (GtkStyleProvider *provider,
+GtkSettings *           gtk_style_provider_get_settings          (GtkStyleProvider        *provider);
+GtkCssValue *           gtk_style_provider_get_color             (GtkStyleProvider        *provider,
                                                                   const char              *name);
-GtkCssKeyframes *       gtk_style_provider_get_keyframes         (GtkStyleProvider *provider,
+GtkCssKeyframes *       gtk_style_provider_get_keyframes         (GtkStyleProvider        *provider,
                                                                   const char              *name);
-int                     gtk_style_provider_get_scale             (GtkStyleProvider *provider);
-void                    gtk_style_provider_lookup                (GtkStyleProvider *provider,
-                                                                  const GtkCssMatcher     *matcher,
+int                     gtk_style_provider_get_scale             (GtkStyleProvider        *provider);
+void                    gtk_style_provider_lookup                (GtkStyleProvider        *provider,
+                                                                  const GtkCountingBloomFilter *filter,
+                                                                  GtkCssNode              *node,
                                                                   GtkCssLookup            *lookup,
                                                                   GtkCssChange            *out_change);
 
-void                    gtk_style_provider_changed               (GtkStyleProvider *provider);
+void                    gtk_style_provider_changed               (GtkStyleProvider        *provider);
 
-void                    gtk_style_provider_emit_error            (GtkStyleProvider *provider,
+void                    gtk_style_provider_emit_error            (GtkStyleProvider        *provider,
                                                                   GtkCssSection           *section,
                                                                   GError                  *error);
 

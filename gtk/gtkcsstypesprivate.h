@@ -21,9 +21,10 @@
 #include <glib-object.h>
 #include <gsk/gsk.h>
 
+#include <gtk/gtkenums.h>
+
 G_BEGIN_DECLS
 
-typedef union _GtkCssMatcher GtkCssMatcher;
 typedef struct _GtkCssNode GtkCssNode;
 typedef struct _GtkCssNodeDeclaration GtkCssNodeDeclaration;
 typedef struct _GtkCssStyle GtkCssStyle;
@@ -455,6 +456,34 @@ GtkCssDimension         gtk_css_unit_get_dimension               (GtkCssUnit    
 char *                  gtk_css_change_to_string                 (GtkCssChange       change);
 void                    gtk_css_change_print                     (GtkCssChange       change,
                                                                   GString           *string);
+
+const char *            gtk_css_pseudoclass_name                 (GtkStateFlags      flags);
+
+/* These hash functions are selected so they achieve 2 things:
+ * 1. collision free among each other
+ *    Hashing the CSS selectors "button", ".button" and "#button" should give different results.
+ *    So we multiply the hash values with distinct prime numbers.
+ * 2. generate small numbers
+ *    It's why the code uses quarks instead of interned strings. Interned strings are random
+ *    pointers, quarks are numbers increasing from 0.
+ * Both of these goals should achieve a bloom filter for selector matching that is as free
+ * of collisions as possible.
+ */
+static inline guint
+gtk_css_hash_class (GQuark klass)
+{
+  return klass * 5;
+}
+static inline guint
+gtk_css_hash_name (GQuark name)
+{
+  return name * 7;
+}
+static inline guint
+gtk_css_hash_id (GQuark id)
+{
+  return id * 11;
+}
 
 G_END_DECLS
 

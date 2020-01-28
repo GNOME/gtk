@@ -80,6 +80,7 @@
 #include "gtkadjustment.h"
 #include "gtkbindings.h"
 #include "gtkcontainerprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkgesturedrag.h"
 #include "gtkgestureclick.h"
@@ -2385,7 +2386,7 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
         {
           cairo_path_t *path;
           GtkBorder border;
-          GdkRGBA *border_color;
+          const GdkRGBA *border_color;
 
           if (vertical)
             path_from_vertical_line_rects (cr, (GdkRectangle *)lines->data, lines->len);
@@ -2405,13 +2406,12 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
           cairo_append_path (cr, path);
           cairo_path_destroy (path);
 
-          gtk_style_context_get (context, "border-color", &border_color, NULL);
+          border_color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
           gtk_style_context_get_border (context, &border);
 
           cairo_set_line_width (cr, border.left);
           gdk_cairo_set_source_rgba (cr, border_color);
           cairo_stroke (cr);
-          gdk_rgba_free (border_color);
         }
       g_array_free (lines, TRUE);
 
@@ -2607,7 +2607,7 @@ gtk_flow_box_drag_gesture_update (GtkGestureDrag *gesture,
   
       widget_node = gtk_widget_get_css_node (GTK_WIDGET (box));
       priv->rubberband_node = gtk_css_node_new ();
-      gtk_css_node_set_name (priv->rubberband_node, I_("rubberband"));
+      gtk_css_node_set_name (priv->rubberband_node, g_quark_from_static_string ("rubberband"));
       gtk_css_node_set_parent (priv->rubberband_node, widget_node);
       gtk_css_node_set_state (priv->rubberband_node, gtk_css_node_get_state (widget_node));
       g_object_unref (priv->rubberband_node);

@@ -419,9 +419,6 @@ create_calendar(void)
   GtkWidget *frame, *label, *bbox, *details;
 
   GtkSizeGroup *size;
-  GtkStyleContext *context;
-  PangoFontDescription *font_desc;
-  gchar *font;
   gint i;
   
   struct {
@@ -487,34 +484,10 @@ create_calendar(void)
   rpane = gtk_box_new (GTK_ORIENTATION_VERTICAL, DEF_PAD_SMALL);
   gtk_paned_pack2 (GTK_PANED (hpaned), rpane, FALSE, FALSE);
 
-  /* Build the right font-button */
-
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, DEF_PAD_SMALL);
   frame = create_frame ("<b>Options</b>", vbox, GTK_ALIGN_FILL, GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (rpane), frame);
   size = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-
-  context = gtk_widget_get_style_context (calendar);
-  gtk_style_context_get (context, GTK_STYLE_PROPERTY_FONT, &font_desc, NULL);
-  font = pango_font_description_to_string (font_desc);
-  button = gtk_font_button_new_with_font (font);
-  g_free (font);
-  pango_font_description_free (font_desc);
-
-  g_signal_connect (button, "font-set",
-                    G_CALLBACK(calendar_select_font),
-                    &calendar_data);
-
-  label = gtk_label_new_with_mnemonic ("_Font:");
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), button);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-  gtk_size_group_add_widget (size, label);
-
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, DEF_PAD_SMALL);
-  gtk_container_add (GTK_CONTAINER (hbox), label);
-  gtk_container_add (GTK_CONTAINER (hbox), button);
-  gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
   /* Build the width entry */
 

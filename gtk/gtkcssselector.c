@@ -49,7 +49,7 @@ typedef enum {
 
 typedef struct _GtkCssSelectorClass GtkCssSelectorClass;
 typedef gboolean (* GtkCssSelectorForeachFunc) (const GtkCssSelector *selector,
-                                                const GtkCssMatcher  *matcher,
+                                                GtkCssNode           *node,
                                                 gpointer              data);
 
 struct _GtkCssSelectorClass {
@@ -58,18 +58,18 @@ struct _GtkCssSelectorClass {
 
   void              (* print)       (const GtkCssSelector       *selector,
                                      GString                    *string);
-  /* NULL or an iterator that calls func with each submatcher of @matcher.
-   * Potentially no submatcher exists.
+  /* NULL or an iterator that calls func with each subnode of @node.
+   * Potentially no subnode exists.
    * If any @invocation of @func returns %TRUE, the function will immediately
    * return %TRUE itself. If @func never returns %TRUE (or isn't called at all),
    * %FALSE will be returned.
    */
   gboolean          (* foreach_matcher)  (const GtkCssSelector       *selector,
-                                          const GtkCssMatcher        *matcher,
+                                          GtkCssNode                 *node,
                                           GtkCssSelectorForeachFunc   func,
                                           gpointer                    data);
   gboolean          (* match_one)   (const GtkCssSelector       *selector,
-                                     const GtkCssMatcher        *matcher);
+                                     GtkCssNode                 *node);
   GtkCssChange      (* get_change)  (const GtkCssSelector       *selector,
 				     GtkCssChange                previous_change);
   void              (* add_specificity)  (const GtkCssSelector  *selector,
@@ -94,7 +94,7 @@ union _GtkCssSelector
   const GtkCssSelectorClass     *class;         /* type of check this selector does */
   struct {
     const GtkCssSelectorClass   *class;
-    const char                  *name;          /* interned */
+    GQuark                       name;
   }                              id;
   struct {
     const GtkCssSelectorClass   *class;
@@ -102,7 +102,7 @@ union _GtkCssSelector
   }                              style_class;
   struct {
     const GtkCssSelectorClass   *class;
-    const char                  *name;          /* interned */
+    GQuark                       name;
   }                              name;
   struct {
     const GtkCssSelectorClass   *class;
@@ -138,7 +138,7 @@ gtk_css_selector_equal (const GtkCssSelector *a,
 static guint
 gtk_css_selector_hash_one (const GtkCssSelector *selector)
 {
-  return GPOINTER_TO_UINT (selector->class) ^ selector->class->hash_one (selector);
+  return selector->class->hash_one (selector);
 }
 
 static inline gpointer *
@@ -168,38 +168,20 @@ g_ptr_array_insert_sorted (GPtrArray *array,
   g_ptr_array_insert (array, i, data);
 }
 
-static void
-gtk_css_selector_tree_found_match (const GtkCssSelectorTree  *tree,
-				   GPtrArray                **array)
-{
-  int i;
-  gpointer *matches;
-
-  matches = gtk_css_selector_tree_get_matches (tree);
-  if (matches)
-    {
-      if (!*array)
-        *array = g_ptr_array_sized_new (16);
-
-      for (i = 0; matches[i] != NULL; i++)
-        g_ptr_array_insert_sorted (*array, matches[i]);
-    }
-}
-
 static inline gboolean
 gtk_css_selector_match (const GtkCssSelector *selector,
-                        const GtkCssMatcher  *matcher)
+                        GtkCssNode           *node)
 {
-  return selector->class->match_one (selector, matcher);
+  return selector->class->match_one (selector, node);
 }
 
 static inline gboolean
 gtk_css_selector_foreach (const GtkCssSelector      *selector,
-                          const GtkCssMatcher       *matcher,
+                          GtkCssNode                *node,
                           GtkCssSelectorForeachFunc  func,
                           gpointer                   data)
 {
-  return selector->class->foreach_matcher (selector, matcher, func, data);
+  return selector->class->foreach_matcher (selector, node, func, data);
 }
 
 static int
@@ -260,16 +242,16 @@ gtk_css_selector_default_add_specificity (const GtkCssSelector *selector,
  
 static gboolean
 gtk_css_selector_default_foreach_matcher (const GtkCssSelector       *selector,
-                                          const GtkCssMatcher        *matcher,
+                                          GtkCssNode                 *node,
                                           GtkCssSelectorForeachFunc   func,
                                           gpointer                    data)
 {
-  return func (selector, matcher, data);
+  return func (selector, node, data);
 }
 
 static gboolean
 gtk_css_selector_default_match_one (const GtkCssSelector *selector,
-                                    const GtkCssMatcher  *matcher)
+                                    GtkCssNode           *node)
 {
   return TRUE;
 }
@@ -277,7 +259,7 @@ gtk_css_selector_default_match_one (const GtkCssSelector *selector,
 static guint
 gtk_css_selector_default_hash_one (const GtkCssSelector *selector)
 {
-  return 0;
+  return GPOINTER_TO_UINT (selector->class);
 }
 
 static int
@@ -298,17 +280,17 @@ gtk_css_selector_descendant_print (const GtkCssSelector *selector,
 
 static gboolean
 gtk_css_selector_descendant_foreach_matcher (const GtkCssSelector      *selector,
-                                             const GtkCssMatcher       *matcher,
+                                             GtkCssNode                *node,
                                              GtkCssSelectorForeachFunc  func,
                                              gpointer                   data)
 {
-  GtkCssMatcher ancestor;
+  GtkCssNode *parent;
 
-  while (_gtk_css_matcher_get_parent (&ancestor, matcher))
+  for (parent = gtk_css_node_get_parent (node);
+       parent;
+       parent = gtk_css_node_get_parent (parent))
     {
-      matcher = &ancestor;
-
-      if (func (selector, &ancestor, data))
+      if (func (selector, parent, data))
         return TRUE;
     }
 
@@ -344,16 +326,17 @@ gtk_css_selector_child_print (const GtkCssSelector *selector,
 
 static gboolean
 gtk_css_selector_child_foreach_matcher (const GtkCssSelector      *selector,
-                                        const GtkCssMatcher       *matcher,
+                                        GtkCssNode                *node,
                                         GtkCssSelectorForeachFunc  func,
                                         gpointer                   data)
 {
-  GtkCssMatcher parent;
+  GtkCssNode *parent;
 
-  if (!_gtk_css_matcher_get_parent (&parent, matcher))
+  parent = gtk_css_node_get_parent (node);
+  if (parent == NULL)
     return FALSE;
 
-  return func (selector, &parent, data);
+  return func (selector, parent, data);
 }
 
 static GtkCssChange
@@ -383,19 +366,39 @@ gtk_css_selector_sibling_print (const GtkCssSelector *selector,
   g_string_append (string, " ~ ");
 }
 
+static GtkCssNode *
+get_previous_visible_sibling (GtkCssNode *node)
+{
+  do {
+    node = gtk_css_node_get_previous_sibling (node);
+  } while (node && !gtk_css_node_get_visible (node));
+
+  return node;
+}
+
+static GtkCssNode *
+get_next_visible_sibling (GtkCssNode *node)
+{
+  do {
+    node = gtk_css_node_get_next_sibling (node);
+  } while (node && !gtk_css_node_get_visible (node));
+
+  return node;
+}
+
 static gboolean
 gtk_css_selector_sibling_foreach_matcher (const GtkCssSelector      *selector,
-                                          const GtkCssMatcher       *matcher,
+                                          GtkCssNode                *node,
                                           GtkCssSelectorForeachFunc  func,
                                           gpointer                   data)
 {
-  GtkCssMatcher previous;
+  GtkCssNode *prev;
 
-  while (_gtk_css_matcher_get_previous (&previous, matcher))
+  for (prev = get_previous_visible_sibling (node);
+       prev;
+       prev = get_previous_visible_sibling (prev))
     {
-      matcher = &previous;
-
-      if (func (selector, matcher, data))
+      if (func (selector, prev, data))
         return TRUE;
     }
 
@@ -431,16 +434,17 @@ gtk_css_selector_adjacent_print (const GtkCssSelector *selector,
 
 static gboolean
 gtk_css_selector_adjacent_foreach_matcher (const GtkCssSelector      *selector,
-                                           const GtkCssMatcher       *matcher,
+                                           GtkCssNode                *node,
                                            GtkCssSelectorForeachFunc  func,
                                            gpointer                   data)
 {
-  GtkCssMatcher previous;
+  GtkCssNode *prev;
 
-  if (!_gtk_css_matcher_get_previous (&previous, matcher))
+  prev = get_previous_visible_sibling (node);
+  if (prev == NULL)
     return FALSE;
-  
-  return func (selector, &previous, data);
+
+  return func (selector, prev, data);
 }
 
 static GtkCssChange
@@ -491,9 +495,9 @@ gtk_css_selector_not_ ## n ## _print (const GtkCssSelector *selector, \
 \
 static gboolean \
 gtk_css_selector_not_ ## n ## _match_one (const GtkCssSelector *selector, \
-                                          const GtkCssMatcher  *matcher) \
+                                          GtkCssNode           *node) \
 { \
-  return !match_func (selector, matcher); \
+  return !match_func (selector, node); \
 } \
 \
 static GtkCssChange \
@@ -536,7 +540,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ ## c = { \
 \
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_NOT_ ## c = { \
   "not_" G_STRINGIFY(n), \
-  ignore_for_change ? GTK_CSS_SELECTOR_CATEGORY_SIMPLE : GTK_CSS_SELECTOR_CATEGORY_SIMPLE_RADICAL, \
+  GTK_CSS_SELECTOR_CATEGORY_SIMPLE, \
   gtk_css_selector_not_ ## n ## _print, \
   gtk_css_selector_default_foreach_matcher, \
   gtk_css_selector_not_ ## n ## _match_one, \
@@ -557,7 +561,7 @@ print_any (const GtkCssSelector *selector,
 
 static gboolean
 match_any (const GtkCssSelector *selector,
-           const GtkCssMatcher  *matcher)
+           GtkCssNode           *node)
 {
   return TRUE;
 }
@@ -575,28 +579,27 @@ static void
 print_name (const GtkCssSelector *selector,
             GString              *string)
 {
-  g_string_append (string, selector->name.name);
+  g_string_append (string, g_quark_to_string (selector->name.name));
 }
 
 static gboolean
 match_name (const GtkCssSelector *selector,
-            const GtkCssMatcher  *matcher)
+            GtkCssNode           *node)
 {
-  return _gtk_css_matcher_has_name (matcher, selector->name.name);
+  return gtk_css_node_get_name (node) == selector->name.name;
 }
 
 static guint
 hash_name (const GtkCssSelector *a)
 {
-  return g_str_hash (a->name.name);
+  return gtk_css_hash_name (a->name.name);
 }
 
 static int
 comp_name (const GtkCssSelector *a,
            const GtkCssSelector *b)
 {
-  return strcmp (a->name.name,
-		 b->name.name);
+  return a->name.name - b->name.name;
 }
 
 DEFINE_SIMPLE_SELECTOR(name, NAME, print_name, match_name, hash_name, comp_name, FALSE, FALSE, TRUE, FALSE)
@@ -613,15 +616,15 @@ print_class (const GtkCssSelector *selector,
 
 static gboolean
 match_class (const GtkCssSelector *selector,
-             const GtkCssMatcher  *matcher)
+             GtkCssNode           *node)
 {
-  return _gtk_css_matcher_has_class (matcher, selector->style_class.style_class);
+  return gtk_css_node_has_class (node, selector->style_class.style_class);
 }
 
 static guint
 hash_class (const GtkCssSelector *a)
 {
-  return a->style_class.style_class;
+  return gtk_css_hash_class (a->style_class.style_class);
 }
 
 static int
@@ -645,65 +648,30 @@ print_id (const GtkCssSelector *selector,
           GString              *string)
 {
   g_string_append_c (string, '#');
-  g_string_append (string, selector->id.name);
+  g_string_append (string, g_quark_to_string (selector->id.name));
 }
 
 static gboolean
 match_id (const GtkCssSelector *selector,
-          const GtkCssMatcher  *matcher)
+          GtkCssNode           *node)
 {
-  return _gtk_css_matcher_has_id (matcher, selector->id.name);
+  return gtk_css_node_get_id (node) == selector->id.name;
 }
 
 static guint
 hash_id (const GtkCssSelector *a)
 {
-  return GPOINTER_TO_UINT (a->id.name);
+  return gtk_css_hash_id (a->id.name);
 }
 
 static int
 comp_id (const GtkCssSelector *a,
 	 const GtkCssSelector *b)
 {
-  if (a->id.name < b->id.name)
-    return -1;
-  else if (a->id.name > b->id.name)
-    return 1;
-  else
-    return 0;
+  return a->id.name - b->id.name;
 }
 
 DEFINE_SIMPLE_SELECTOR(id, ID, print_id, match_id, hash_id, comp_id, TRUE, FALSE, FALSE, FALSE)
-
-const gchar *
-gtk_css_pseudoclass_name (GtkStateFlags state)
-{
-  static const char * state_names[] = {
-    "active",
-    "hover",
-    "selected",
-    "disabled",
-    "indeterminate",
-    "focus",
-    "backdrop",
-    "dir(ltr)",
-    "dir(rtl)",
-    "link",
-    "visited",
-    "checked",
-    "drop(active)",
-    "focus(visible)"
-  };
-  guint i;
-
-  for (i = 0; i < G_N_ELEMENTS (state_names); i++)
-    {
-      if (state == (1 << i))
-        return state_names[i];
-    }
-
-  return NULL;
-}
 
 /* PSEUDOCLASS FOR STATE */
 static void
@@ -716,9 +684,9 @@ print_pseudoclass_state (const GtkCssSelector *selector,
 
 static gboolean
 match_pseudoclass_state (const GtkCssSelector *selector,
-                         const GtkCssMatcher  *matcher)
+                         GtkCssNode           *node)
 {
-  return _gtk_css_matcher_has_state (matcher, selector->state.state);
+  return (gtk_css_node_get_state (node) & selector->state.state) == selector->state.state;
 }
 
 static guint
@@ -840,22 +808,56 @@ print_pseudoclass_position (const GtkCssSelector *selector,
 }
 
 static gboolean
+match_position (GtkCssNode *node,
+                GtkCssNode *(* prev_node_func) (GtkCssNode *),
+                int         a,
+                int         b)
+{
+  int pos, x;
+
+  /* special-case the common "first-child" and "last-child" */
+  if (a == 0)
+    {
+      while (b > 0 && node != NULL)
+        {
+          b--;
+          node = prev_node_func (node);
+        }
+
+      return b == 0 && node == NULL;
+    }
+
+  /* count nodes */
+  for (pos = 0; node != NULL; pos++)
+    node = prev_node_func (node);
+
+  /* solve pos = a * X + b
+   * and return TRUE if X is integer >= 0 */
+  x = pos - b;
+
+  if (x % a)
+    return FALSE;
+
+  return x / a >= 0;
+}
+
+static gboolean
 match_pseudoclass_position (const GtkCssSelector *selector,
-		            const GtkCssMatcher  *matcher)
+		            GtkCssNode           *node)
 {
   switch (selector->position.type)
     {
     case POSITION_FORWARD:
-      if (!_gtk_css_matcher_has_position (matcher, TRUE, selector->position.a, selector->position.b))
+      if (!match_position (node, get_previous_visible_sibling, selector->position.a, selector->position.b))
         return FALSE;
       break;
     case POSITION_BACKWARD:
-      if (!_gtk_css_matcher_has_position (matcher, FALSE, selector->position.a, selector->position.b))
+      if (!match_position (node, get_next_visible_sibling, selector->position.a, selector->position.b))
         return FALSE;
       break;
     case POSITION_ONLY:
-      if (!_gtk_css_matcher_has_position (matcher, TRUE, 0, 1) ||
-          !_gtk_css_matcher_has_position (matcher, FALSE, 0, 1))
+      if (get_previous_visible_sibling (node) ||
+          get_next_visible_sibling (node))
         return FALSE;
       break;
     default:
@@ -1406,13 +1408,13 @@ gtk_css_selector_parse_selector_pseudo_class (GtkCssParser   *parser,
               else if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
                 {
                   selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NOT_NAME, selector);
-                  selector->name.name = g_intern_string (token->string.string);
+                  selector->name.name = g_quark_from_string (token->string.string);
                   gtk_css_parser_consume_token (parser);
                 }
               else if (gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_ID))
                 {
                   selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NOT_ID, selector);
-                  selector->id.name = g_intern_string (token->string.string);
+                  selector->id.name = g_quark_from_string (token->string.string);
                   gtk_css_parser_consume_token (parser);
                 }
               else if (gtk_css_token_is_delim (token, '.'))
@@ -1538,13 +1540,13 @@ gtk_css_selector_parse_simple_selector (GtkCssParser   *parser,
       else if (!parsed_something && gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
         {
           selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NAME, selector);
-          selector->name.name = g_intern_string (token->string.string);
+          selector->name.name = g_quark_from_string (token->string.string);
           gtk_css_parser_consume_token (parser);
         }
       else if (gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_ID))
         {
           selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_ID, selector);
-          selector->id.name = g_intern_string (token->string.string);
+          selector->id.name = g_quark_from_string (token->string.string);
           gtk_css_parser_consume_token (parser);
         }
       else if (gtk_css_token_is_delim (token, '.'))
@@ -1675,7 +1677,7 @@ _gtk_css_selector_to_string (const GtkCssSelector *selector)
 
 static gboolean
 gtk_css_selector_foreach_match (const GtkCssSelector *selector,
-                                const GtkCssMatcher  *matcher,
+                                GtkCssNode           *node,
                                 gpointer              unused)
 {
   selector = gtk_css_selector_previous (selector);
@@ -1683,38 +1685,33 @@ gtk_css_selector_foreach_match (const GtkCssSelector *selector,
   if (selector == NULL)
     return TRUE;
 
-  if (!gtk_css_selector_match (selector, matcher))
+  if (!gtk_css_selector_match (selector, node))
     return FALSE;
 
-  return gtk_css_selector_foreach (selector, matcher, gtk_css_selector_foreach_match, NULL);
+  return gtk_css_selector_foreach (selector, node, gtk_css_selector_foreach_match, NULL);
 }
 
 /**
  * _gtk_css_selector_matches:
  * @selector: the selector
- * @path: the path to check
- * @state: The state to match
+ * @node: The node to match
  *
- * Checks if the @selector matches the given @path. If @length is
- * smaller than the number of elements in @path, it is assumed that
- * only the first @length element of @path are valid and the rest
- * does not exist. This is useful for doing parent matches for the
- * 'inherit' keyword.
+ * Checks if the @selector matches the given @node.
  *
- * Returns: %TRUE if the selector matches @path
+ * Returns: %TRUE if the selector matches @node
  **/
 gboolean
 _gtk_css_selector_matches (const GtkCssSelector *selector,
-                           const GtkCssMatcher  *matcher)
+                           GtkCssNode           *node)
 {
 
   g_return_val_if_fail (selector != NULL, FALSE);
-  g_return_val_if_fail (matcher != NULL, FALSE);
+  g_return_val_if_fail (node != NULL, FALSE);
 
-  if (!gtk_css_selector_match (selector, matcher))
+  if (!gtk_css_selector_match (selector, node))
     return FALSE;
 
-  return gtk_css_selector_foreach (selector, matcher, gtk_css_selector_foreach_match, NULL);
+  return gtk_css_selector_foreach (selector, node, gtk_css_selector_foreach_match, NULL);
 }
 
 /* Computes specificity according to CSS 2.1.
@@ -1850,52 +1847,114 @@ gtk_css_selectors_skip_initial_selector (GtkCssSelector *selector, const GtkCssS
 }
 
 static gboolean
-gtk_css_selector_tree_match_foreach (const GtkCssSelector *selector,
-                                     const GtkCssMatcher  *matcher,
-                                     gpointer              res)
+gtk_css_selector_tree_match_bloom (const GtkCssSelectorTree     *tree,
+                                   const GtkCountingBloomFilter *filter,
+                                   gboolean                      skipping)
 {
-  const GtkCssSelectorTree *tree = (const GtkCssSelectorTree *) selector;
   const GtkCssSelectorTree *prev;
 
-  if (!gtk_css_selector_match (selector, matcher))
-    return FALSE;
+  switch (tree->selector.class->category)
+    {
+      case GTK_CSS_SELECTOR_CATEGORY_SIMPLE:
+        break;
+      case GTK_CSS_SELECTOR_CATEGORY_SIMPLE_RADICAL:
+        if (skipping)
+          break;
+        if (!gtk_counting_bloom_filter_may_contain (filter,
+                                                    gtk_css_selector_hash_one (&tree->selector)))
+          return FALSE;
+        break;
+      case GTK_CSS_SELECTOR_CATEGORY_PARENT:
+        skipping = FALSE;
+        break;
+      case GTK_CSS_SELECTOR_CATEGORY_SIBLING:
+        skipping = TRUE;
+        break;
+      default:
+        g_assert_not_reached ();
+        return FALSE;
+    }
 
-  gtk_css_selector_tree_found_match (tree, res);
+  if (gtk_css_selector_tree_get_matches (tree))
+    return TRUE;
 
   for (prev = gtk_css_selector_tree_get_previous (tree);
        prev != NULL;
        prev = gtk_css_selector_tree_get_sibling (prev))
-    gtk_css_selector_foreach (&prev->selector, matcher, gtk_css_selector_tree_match_foreach, res);
+    {
+      if (gtk_css_selector_tree_match_bloom (prev, filter, skipping))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+typedef struct
+{
+  const GtkCountingBloomFilter *filter;
+  GPtrArray *results;
+} TreeMatchData;
+
+static void
+gtk_css_selector_tree_found_match (const GtkCssSelectorTree *tree,
+				   TreeMatchData            *tm)
+{
+  int i;
+  gpointer *matches;
+
+  matches = gtk_css_selector_tree_get_matches (tree);
+  if (matches)
+    {
+      if (tm->results == NULL)
+        tm->results = g_ptr_array_sized_new (16);
+
+      for (i = 0; matches[i] != NULL; i++)
+        g_ptr_array_insert_sorted (tm->results, matches[i]);
+    }
+}
+
+static gboolean
+gtk_css_selector_tree_match_foreach (const GtkCssSelector *selector,
+                                     GtkCssNode           *node,
+                                     gpointer              data)
+{
+  TreeMatchData *tm = data;
+  const GtkCssSelectorTree *tree = (const GtkCssSelectorTree *) selector;
+  const GtkCssSelectorTree *prev;
+
+  if (!gtk_css_selector_match (selector, node))
+    return FALSE;
+
+  gtk_css_selector_tree_found_match (tree, tm);
+
+  if (tm->filter && !gtk_css_selector_is_simple (&tree->selector))
+    {
+      /* We can pass both TRUE or FALSE for skipping here, because the
+       * function will immediately update it. */
+      if (!gtk_css_selector_tree_match_bloom (tree, tm->filter, FALSE))
+          return FALSE;
+    }
+
+  for (prev = gtk_css_selector_tree_get_previous (tree);
+       prev != NULL;
+       prev = gtk_css_selector_tree_get_sibling (prev))
+    gtk_css_selector_foreach (&prev->selector, node, gtk_css_selector_tree_match_foreach, tm);
 
   return FALSE;
 }
 
 GPtrArray *
-_gtk_css_selector_tree_match_all (const GtkCssSelectorTree *tree,
-				  const GtkCssMatcher *matcher)
+_gtk_css_selector_tree_match_all (const GtkCssSelectorTree     *tree,
+                                  const GtkCountingBloomFilter *filter,
+                                  GtkCssNode                   *node)
 {
-  GPtrArray *array = NULL;
+  TreeMatchData tm = { filter, NULL };
 
   for (; tree != NULL;
        tree = gtk_css_selector_tree_get_sibling (tree))
-    gtk_css_selector_foreach (&tree->selector, matcher, gtk_css_selector_tree_match_foreach, &array);
+    gtk_css_selector_foreach (&tree->selector, node, gtk_css_selector_tree_match_foreach, &tm);
 
-  return array;
-}
-
-/* The code for collecting matches assumes that the name, id and classes
- * of a node remain unchanged, and anything else can change. This needs to
- * be kept in sync with the definition of 'radical change' in gtkcssnode.c.
- */
-
-static gboolean
-gtk_css_selector_match_for_change (const GtkCssSelector *selector,
-                                   const GtkCssMatcher  *matcher)
-{
-  if (selector->class->category != GTK_CSS_SELECTOR_CATEGORY_SIMPLE_RADICAL)
-    return TRUE;
-
-  return selector->class->match_one (selector, matcher);
+  return tm.results;
 }
 
 /* When checking for changes via the tree we need to know if a rule further
@@ -1909,39 +1968,56 @@ gtk_css_selector_match_for_change (const GtkCssSelector *selector,
    that change != 0 on any match. */
 #define GTK_CSS_CHANGE_GOT_MATCH GTK_CSS_CHANGE_RESERVED_BIT
 
+/* The code for collecting matches assumes that the name, id and classes
+ * of a node remain unchanged, and anything else can change. This needs to
+ * be kept in sync with the definition of 'radical change' in gtkcssnode.c.
+ */
+
 static GtkCssChange
-gtk_css_selector_tree_collect_change (const GtkCssSelectorTree *tree)
+gtk_css_selector_tree_get_change (const GtkCssSelectorTree     *tree,
+                                  const GtkCountingBloomFilter *filter,
+				  GtkCssNode                   *node,
+                                  gboolean                      skipping)
 {
   GtkCssChange change = 0;
   const GtkCssSelectorTree *prev;
 
+  switch (tree->selector.class->category)
+    {
+      case GTK_CSS_SELECTOR_CATEGORY_SIMPLE:
+        break;
+      case GTK_CSS_SELECTOR_CATEGORY_SIMPLE_RADICAL:
+        if (skipping)
+          break;
+        if (node)
+          {
+            if (!tree->selector.class->match_one (&tree->selector, node))
+              return 0;
+          }
+        else if (filter)
+          {
+            if (!gtk_counting_bloom_filter_may_contain (filter,
+                                                        gtk_css_selector_hash_one (&tree->selector)))
+              return 0;
+          }
+        break;
+      case GTK_CSS_SELECTOR_CATEGORY_PARENT:
+        skipping = FALSE;
+        node = NULL;
+        break;
+      case GTK_CSS_SELECTOR_CATEGORY_SIBLING:
+        skipping = TRUE;
+        node = NULL;
+        break;
+      default:
+        g_assert_not_reached ();
+        return 0;
+    }
+
   for (prev = gtk_css_selector_tree_get_previous (tree);
        prev != NULL;
        prev = gtk_css_selector_tree_get_sibling (prev))
-    change |= gtk_css_selector_tree_collect_change (prev);
-
-  change = tree->selector.class->get_change (&tree->selector, change);
-
-  return change;
-}
-
-static GtkCssChange
-gtk_css_selector_tree_get_change (const GtkCssSelectorTree *tree,
-				  const GtkCssMatcher      *matcher)
-{
-  GtkCssChange change = 0;
-  const GtkCssSelectorTree *prev;
-
-  if (!gtk_css_selector_match_for_change (&tree->selector, matcher))
-    return 0;
-
-  if (!gtk_css_selector_is_simple (&tree->selector))
-    return gtk_css_selector_tree_collect_change (tree) | GTK_CSS_CHANGE_GOT_MATCH;
-
-  for (prev = gtk_css_selector_tree_get_previous (tree);
-       prev != NULL;
-       prev = gtk_css_selector_tree_get_sibling (prev))
-    change |= gtk_css_selector_tree_get_change (prev, matcher);
+    change |= gtk_css_selector_tree_get_change (prev, filter, node, skipping);
 
   if (change || gtk_css_selector_tree_get_matches (tree))
     change = tree->selector.class->get_change (&tree->selector, change & ~GTK_CSS_CHANGE_GOT_MATCH) | GTK_CSS_CHANGE_GOT_MATCH;
@@ -1956,17 +2032,15 @@ _gtk_css_selector_tree_is_empty (const GtkCssSelectorTree *tree)
 }
 
 GtkCssChange
-_gtk_css_selector_tree_get_change_all (const GtkCssSelectorTree *tree,
-				       const GtkCssMatcher *matcher)
+gtk_css_selector_tree_get_change_all (const GtkCssSelectorTree     *tree,
+                                      const GtkCountingBloomFilter *filter,
+				      GtkCssNode                   *node)
 {
-  GtkCssChange change;
+  GtkCssChange change = 0;
 
-  change = 0;
-
-  /* no need to foreach here because we abort for non-simple selectors */
   for (; tree != NULL;
        tree = gtk_css_selector_tree_get_sibling (tree))
-    change |= gtk_css_selector_tree_get_change (tree, matcher);
+    change |= gtk_css_selector_tree_get_change (tree, filter, node, FALSE);
 
   /* Never return reserved bit set */
   return change & ~GTK_CSS_CHANGE_RESERVED_BIT;

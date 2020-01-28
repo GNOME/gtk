@@ -31,6 +31,7 @@
 
 #include "gtkadjustmentprivate.h"
 #include "gtkbindings.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkdebug.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
@@ -1710,7 +1711,7 @@ gtk_text_view_init (GtkTextView *text_view)
   gtk_widget_add_controller (widget, priv->key_controller);
 
   priv->selection_node = gtk_css_node_new ();
-  gtk_css_node_set_name (priv->selection_node, I_("selection"));
+  gtk_css_node_set_name (priv->selection_node, g_quark_from_static_string ("selection"));
   gtk_css_node_set_parent (priv->selection_node, priv->text_window->css_node);
   gtk_css_node_set_state (priv->selection_node,
                           gtk_css_node_get_state (priv->text_window->css_node) & ~GTK_STATE_FLAG_DROP_ACTIVE);
@@ -7437,7 +7438,7 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
 {
   GtkStyleContext *context;
   const GdkRGBA black = { 0, };
-  GdkRGBA *bg;
+  const GdkRGBA *color;
 
   if (!values->appearance.bg_rgba)
     values->appearance.bg_rgba = gdk_rgba_copy (&black);
@@ -7446,15 +7447,15 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
 
   context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
 
-  gtk_style_context_get (context, "background-color", &bg, NULL);
-  *values->appearance.bg_rgba = *bg;
-  gdk_rgba_free (bg);
-  gtk_style_context_get_color (context, values->appearance.fg_rgba);
+  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+  *values->appearance.bg_rgba = *color;
+  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
+  *values->appearance.fg_rgba = *color;
 
   if (values->font)
     pango_font_description_free (values->font);
 
-  gtk_style_context_get (context, "font", &values->font, NULL);
+  values->font = gtk_css_style_get_pango_font (gtk_style_context_lookup_style (context));
 }
 
 static void
@@ -9016,7 +9017,7 @@ text_window_new (GtkWidget *widget)
   gtk_css_node_set_parent (win->css_node, widget_node);
   gtk_css_node_set_state (win->css_node, gtk_css_node_get_state (widget_node));
   g_signal_connect_object (win->css_node, "style-changed", G_CALLBACK (node_style_changed_cb), widget, 0);
-  gtk_css_node_set_name (win->css_node, I_("text"));
+  gtk_css_node_set_name (win->css_node, g_quark_from_static_string ("text"));
 
   g_object_unref (win->css_node);
 

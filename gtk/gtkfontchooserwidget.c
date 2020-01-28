@@ -1111,17 +1111,14 @@ gtk_font_chooser_widget_get_preview_text_height (GtkFontChooserWidget *fontchoos
   GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   GtkWidget *treeview = priv->family_face_list;
   GtkStyleContext *context;
-  double dpi, font_size;
+  double font_size;
 
   context = gtk_widget_get_style_context (treeview);
-  dpi = _gtk_css_number_value_get (_gtk_style_context_peek_property (context,
-                                                                     GTK_CSS_PROPERTY_DPI),
-                                   100);
-  gtk_style_context_get (context,
-                         "font-size", &font_size,
-                         NULL);
+  font_size = _gtk_css_number_value_get (_gtk_style_context_peek_property (context,
+                                                                     GTK_CSS_PROPERTY_FONT_SIZE),
+                                         100);
 
-  return (dpi < 0.0 ? 96.0 : dpi) / 72.0 * PANGO_SCALE_X_LARGE * font_size * PANGO_SCALE;
+  return PANGO_SCALE_X_LARGE * font_size * PANGO_SCALE;
 }
 
 static PangoAttrList *
