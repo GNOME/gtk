@@ -1,4 +1,13 @@
 if get_option('gtk_doc')
+  if not meson.version().version_compare('>=0.52.0')
+    error('Building the GTK documentation requires Meson 0.52.0')
+  endif
+
+  # Use gtk-doc as a sub-project if the version isn't new enough
+  dependency('gtk-doc', version: '>=1.32',
+    fallback: ['gtk-doc', 'dummy_dep'],
+    default_options: ['tests=false'])
+
   glib_prefix = dependency('glib-2.0').get_pkgconfig_variable('prefix')
   glib_docpath = join_paths(glib_prefix, 'share', 'gtk-doc', 'html')
 
