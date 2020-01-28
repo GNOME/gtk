@@ -415,7 +415,7 @@ verify_tree_match_results (GtkCssProvider *provider,
 	      break;
 	    }
 	}
-      should_match = _gtk_css_selector_matches (ruleset->selector, node);
+      should_match = gtk_css_selector_matches (ruleset->selector, node);
       if (found != !!should_match)
 	{
 	  g_error ("expected rule '%s' to %s, but it %s",
