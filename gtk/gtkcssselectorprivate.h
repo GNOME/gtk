@@ -35,7 +35,7 @@ char *            _gtk_css_selector_to_string       (const GtkCssSelector   *sel
 void              _gtk_css_selector_print           (const GtkCssSelector   *selector,
                                                      GString                *str);
 
-gboolean          _gtk_css_selector_matches         (const GtkCssSelector   *selector,
+gboolean          gtk_css_selector_matches          (const GtkCssSelector   *selector,
 						     GtkCssNode             *node);
 GtkCssChange      _gtk_css_selector_get_change      (const GtkCssSelector   *selector);
 int               _gtk_css_selector_compare         (const GtkCssSelector   *a,
