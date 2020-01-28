@@ -67,7 +67,7 @@ get_icon_lookup_flags (GtkIconHelper    *self,
   if (self->pixel_size != -1 || self->force_scale_pixbuf)
     flags |= GTK_ICON_LOOKUP_FORCE_SIZE;
 
-  icon_style = _gtk_css_icon_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_STYLE));
+  icon_style = _gtk_css_icon_style_value_get (style->icon->icon_style);
 
   switch (icon_style)
     {
@@ -106,8 +106,7 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
   GtkIconLookupFlags flags;
   GdkPaintable *paintable;
 
-  icon_theme = gtk_css_icon_theme_value_get_icon_theme
-    (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_THEME));
+  icon_theme = gtk_css_icon_theme_value_get_icon_theme (style->core->icon_theme);
   flags = get_icon_lookup_flags (self, style, dir);
 
   width = height = gtk_icon_helper_get_size (self);
@@ -489,7 +488,7 @@ gtk_icon_helper_get_size (GtkIconHelper *self)
     return self->pixel_size;
 
   style = gtk_css_node_get_style (self->node);
-  return _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SIZE), 100);
+  return _gtk_css_number_value_get (style->icon->icon_size, 100);
 }
 
 void
