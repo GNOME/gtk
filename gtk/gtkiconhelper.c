@@ -175,6 +175,54 @@ gtk_icon_helper_load_paintable (GtkIconHelper   *self,
   return paintable;
 }
 
+void
+_gtk_icon_helper_preload (GtkIconHelper *self)
+{
+  GtkIconTheme *icon_theme;
+  GtkIconLookupFlags flags = 0;
+  int size, scale;
+  GtkCssStyle *style;
+  GIcon *gicon = NULL;
+  GIcon *free_gicon = NULL;
+
+  switch (gtk_image_definition_get_storage_type (self->def))
+    {
+    case GTK_IMAGE_ICON_NAME:
+      if (self->use_fallback)
+        free_gicon = g_themed_icon_new_with_default_fallbacks (gtk_image_definition_get_icon_name (self->def));
+      else
+        free_gicon = g_themed_icon_new (gtk_image_definition_get_icon_name (self->def));
+      gicon = free_gicon;
+      break;
+    case GTK_IMAGE_GICON:
+      gicon = gtk_image_definition_get_gicon (self->def) ;
+     break;
+    case GTK_IMAGE_EMPTY:
+    case GTK_IMAGE_PAINTABLE:
+    default:
+      break;
+    }
+
+  if (gicon && G_IS_THEMED_ICON (gicon))
+    {
+      style = gtk_css_node_get_style (self->node);
+      icon_theme = gtk_css_icon_theme_value_get_icon_theme
+        (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_THEME));
+      flags |= get_icon_lookup_flags (self, style,
+                                      gtk_widget_get_direction (self->owner));
+      size = gtk_icon_helper_get_size (self);
+      scale = gtk_widget_get_scale_factor (self->owner);
+
+      gtk_icon_theme_choose_icon_async (icon_theme,
+                                        (const gchar **)g_themed_icon_get_names (G_THEMED_ICON (gicon)),
+                                        size, scale,
+                                        flags, NULL, NULL, NULL);
+    }
+
+  if (free_gicon)
+    g_object_unref (free_gicon);
+}
+
 static void
 gtk_icon_helper_ensure_paintable (GtkIconHelper *self)
 {
