@@ -129,6 +129,13 @@ update_focus (GtkEventControllerKey *key,
     {
       key->is_focus = is_focus;
       g_object_notify (G_OBJECT (key), "is-focus");
+      if (key->im_context)
+        {
+          if (focus_in)
+            gtk_im_context_focus_in (key->im_context);
+          else
+            gtk_im_context_focus_out (key->im_context);
+        }
     }
   if (key->contains_focus != contains_focus)
     {
