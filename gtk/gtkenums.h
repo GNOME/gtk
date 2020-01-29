@@ -784,10 +784,10 @@ typedef enum
 /**
  * GtkBorderStyle:
  * @GTK_BORDER_STYLE_NONE: No visible border
+ * @GTK_BORDER_STYLE_HIDDEN: Same as @GTK_BORDER_STYLE_NONE
  * @GTK_BORDER_STYLE_SOLID: A single line segment
  * @GTK_BORDER_STYLE_INSET: Looks as if the content is sunken into the canvas
  * @GTK_BORDER_STYLE_OUTSET: Looks as if the content is coming out of the canvas
- * @GTK_BORDER_STYLE_HIDDEN: Same as @GTK_BORDER_STYLE_NONE
  * @GTK_BORDER_STYLE_DOTTED: A series of round dots
  * @GTK_BORDER_STYLE_DASHED: A series of square-ended dashes
  * @GTK_BORDER_STYLE_DOUBLE: Two parallel lines with some space between them
@@ -798,10 +798,10 @@ typedef enum
  */
 typedef enum {
   GTK_BORDER_STYLE_NONE,
+  GTK_BORDER_STYLE_HIDDEN,
   GTK_BORDER_STYLE_SOLID,
   GTK_BORDER_STYLE_INSET,
   GTK_BORDER_STYLE_OUTSET,
-  GTK_BORDER_STYLE_HIDDEN,
   GTK_BORDER_STYLE_DOTTED,
   GTK_BORDER_STYLE_DASHED,
   GTK_BORDER_STYLE_DOUBLE,
