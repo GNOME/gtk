@@ -241,7 +241,6 @@ gtk_lock_button_init (GtkLockButton *button)
 {
   GtkLockButtonPrivate *priv = gtk_lock_button_get_instance_private (button);
   const char *names[3];
-  GtkStyleContext *context;
 
   gtk_widget_init_template (GTK_WIDGET (button));
 
@@ -257,8 +256,7 @@ gtk_lock_button_init (GtkLockButton *button)
 
   update_state (button);
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (button));
-  gtk_style_context_add_class (context, I_("lock"));
+  gtk_widget_add_style_class (GTK_WIDGET (button), I_("lock"));
 }
 
 static void

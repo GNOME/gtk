@@ -729,8 +729,7 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
   {
     GtkWidget *w;
 
-    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (self->switcher)),
-                                 "circular");
+    gtk_widget_add_style_class (GTK_WIDGET (self->switcher), "circular");
 
     for (w = gtk_widget_get_first_child (GTK_WIDGET (self->switcher));
          w != NULL;
@@ -738,7 +737,7 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
       {
         GtkWidget *label;
 
-        gtk_style_context_add_class (gtk_widget_get_style_context (w), "circular");
+        gtk_widget_add_style_class (w, "circular");
 
         label = gtk_bin_get_child (GTK_BIN (w));
         gtk_label_set_use_underline (GTK_LABEL (label), TRUE);
