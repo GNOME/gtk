@@ -2845,17 +2845,18 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
 static void
 gsk_gl_renderer_clear_tree (GskGLRenderer *self)
 {
-  int removed_textures;
-
   if (self->gl_context == NULL)
     return;
 
   gdk_gl_context_make_current (self->gl_context);
 
   ops_reset (&self->op_builder);
-  removed_textures = gsk_gl_driver_collect_textures (self->gl_driver);
+
+#ifdef G_ENABLE_DEBUG
+  int removed_textures = gsk_gl_driver_collect_textures (self->gl_driver);
 
   GSK_RENDERER_NOTE (GSK_RENDERER (self), OPENGL, g_message ("Collected: %d textures", removed_textures));
+#endif
 }
 
 static void
@@ -3050,7 +3051,7 @@ add_offscreen_ops (GskGLRenderer         *self,
   graphene_matrix_t prev_projection;
   graphene_rect_t prev_viewport;
   graphene_matrix_t item_proj;
-  float prev_opacity;
+  float prev_opacity = 1.0;
   int texture_id = 0;
 
   if (node_is_invisible (child_node))
