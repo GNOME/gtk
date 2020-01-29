@@ -22,6 +22,7 @@
 #include "gtkcssstaticstyleprivate.h"
 #include "gtkcssanimatedstyleprivate.h"
 #include "gtkcssstylepropertyprivate.h"
+#include "gtkcsstransientnodeprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtksettingsprivate.h"
@@ -999,12 +1000,9 @@ gtk_css_node_ensure_style (GtkCssNode                   *cssnode,
 GtkCssStyle *
 gtk_css_node_get_style (GtkCssNode *cssnode)
 {
-  if (gtk_css_node_needs_new_style (cssnode))
-    {
-      gint64 timestamp = gtk_css_node_get_timestamp (cssnode);
-
-      gtk_css_node_ensure_style (cssnode, NULL, timestamp);
-    }
+  if (gtk_css_node_needs_new_style (cssnode) &&
+      GTK_IS_CSS_TRANSIENT_NODE (cssnode))
+    gtk_css_node_ensure_style (cssnode, NULL, 0);
 
   return cssnode->style;
 }
@@ -1367,9 +1365,12 @@ gtk_css_node_validate (GtkCssNode *cssnode)
           gdk_profiler_add_mark (before * 1000, (after - before) * 1000, "css validation", "");
           gdk_profiler_set_int_counter (invalidated_nodes_counter, after * 1000, invalidated_nodes);
           gdk_profiler_set_int_counter (created_styles_counter, after * 1000, created_styles);
+        }
+      g_print ("%g ms, nodes invalidated %d, styles created %d\n",
+                ((double)(g_get_monotonic_time () - before)) / G_TIME_SPAN_MILLISECOND,
+                 invalidated_nodes, created_styles);
           invalidated_nodes = 0;
           created_styles = 0;
-        }
     }
 }
 
