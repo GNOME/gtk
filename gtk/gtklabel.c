@@ -3315,7 +3315,6 @@ gtk_label_update_layout_attributes (GtkLabel *label)
   if (priv->layout == NULL)
     return;
 
-  context = gtk_widget_get_style_context (widget);
 
   if (priv->select_info && priv->select_info->links)
     {
@@ -3323,6 +3322,7 @@ gtk_label_update_layout_attributes (GtkLabel *label)
       PangoAttribute *attribute;
       GList *list;
 
+      context = gtk_widget_get_style_context (widget);
       attrs = pango_attr_list_new ();
 
       for (list = priv->select_info->links; list; list = list->next)
@@ -3351,9 +3351,16 @@ gtk_label_update_layout_attributes (GtkLabel *label)
   else
     attrs = NULL;
 
-  style_attrs = _gtk_style_context_get_pango_attributes (context);
+  if ((context = _gtk_widget_peek_style_context (widget)))
+    {
+      style_attrs = _gtk_style_context_get_pango_attributes (context);
 
-  attrs = _gtk_pango_attr_list_merge (attrs, style_attrs);
+      attrs = _gtk_pango_attr_list_merge (attrs, style_attrs);
+
+      if (style_attrs)
+        pango_attr_list_unref (style_attrs);
+    }
+
   attrs = _gtk_pango_attr_list_merge (attrs, priv->markup_attrs);
   attrs = _gtk_pango_attr_list_merge (attrs, priv->attrs);
 
@@ -3361,8 +3368,6 @@ gtk_label_update_layout_attributes (GtkLabel *label)
 
   if (attrs)
     pango_attr_list_unref (attrs);
-  if (style_attrs)
-    pango_attr_list_unref (style_attrs);
 }
 
 static void
