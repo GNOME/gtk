@@ -1,7 +1,7 @@
 stages:
   - build
   - flatpak
-#  - deploy
+  - deploy
 
 .cache-paths: &cache-paths
   paths:
@@ -13,7 +13,7 @@ stages:
     - subprojects/pango/
 
 fedora-x86_64: &fedora-x86_64-defaults
-  image: registry.gitlab.gnome.org/gnome/gtk/master:v9
+  image: registry.gitlab.gnome.org/gnome/gtk/master:v10
   stage: build
   script:
     - bash -x ./.gitlab-ci/test-docker.sh
@@ -107,19 +107,19 @@ flatpak-master:icon-browser:
     APPID: org.gtk.IconBrowser4
   <<: *flatpak-master
 
-#pages:
-#  image: registry.gitlab.gnome.org/gnome/gtk/master:v6
-#  stage: deploy 
-#  script:
-#    - meson -Dgtk_doc=true _build .
-#    - ninja -C _build
-#    - ninja -C _build gdk4-doc gsk4-doc gtk4-doc
-#    - mkdir -p public/
-#    - mv _build/docs/reference/gtk/html/ public/gtk/
-#    - mv _build/docs/reference/gdk/html/ public/gdk/
-#    - mv _build/docs/reference/gsk/html/ public/gsk/
-#  artifacts:
-#    paths:
-#      - public
-#  only:
-#    - master
+pages:
+  image: registry.gitlab.gnome.org/gnome/gtk/master:v10
+  stage: deploy
+  script:
+    - meson -Dgtk_doc=true _build .
+    - ninja -C _build
+    - ninja -C _build gdk4-doc gsk4-doc gtk4-doc
+    - mkdir -p public/
+    - mv _build/docs/reference/gtk/html/ public/gtk/
+    - mv _build/docs/reference/gdk/html/ public/gdk/
+    - mv _build/docs/reference/gsk/html/ public/gsk/
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
