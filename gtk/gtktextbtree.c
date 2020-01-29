@@ -5701,7 +5701,7 @@ tag_changed_cb (GtkTextTagTable *table,
 
       while (view != NULL)
         {
-          gint width, height;
+          gint width = 0, height = 0;
 
           _gtk_text_btree_get_view_size (tree, view->view_id, &width, &height);
           gtk_text_layout_changed (view->layout, 0, height, height);
