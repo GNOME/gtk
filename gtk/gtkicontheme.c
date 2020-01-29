@@ -2429,7 +2429,7 @@ gtk_icon_theme_choose_icon_async (GtkIconTheme       *self,
 
   if (gtk_icon_theme_trylock (self))
     {
-      icon = choose_icon (self, icon_names, size, 1, flags, TRUE, &would_block);
+      icon = choose_icon (self, icon_names, size, scale, flags, TRUE, &would_block);
       gtk_icon_theme_unlock (self);
     }
   else
