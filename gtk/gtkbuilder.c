@@ -1219,6 +1219,7 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GError *tmp_error;
+  char *filename;
 
   g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
@@ -1234,11 +1235,13 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
   priv->resource_prefix = NULL;
   priv->template_type = template_type;
 
+  filename = g_strconcat ("<", g_type_name (template_type), " template>", NULL);
   gtk_builder_expose_object (builder, g_type_name (template_type), G_OBJECT (widget));
-  _gtk_builder_parser_parse_buffer (builder, "<input>",
+  _gtk_builder_parser_parse_buffer (builder, filename,
                                     buffer, length,
                                     NULL,
                                     &tmp_error);
+  g_free (filename);
 
   if (tmp_error != NULL)
     {
