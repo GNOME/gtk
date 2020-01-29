@@ -13175,3 +13175,23 @@ gtk_widget_class_query_action (GtkWidgetClass      *widget_class,
 
   return FALSE;
 }
+
+/**
+ * gtk_widget_add_style_class:
+ * @widget: a #GtkWidget
+ * @style_class: The style class to add to @widget
+ *
+ * Adds @style_class to @widget. After calling this function, @widget's
+ * style will match for @style_class, after the CSS matching rules.
+ */
+void
+gtk_widget_add_style_class (GtkWidget   *widget,
+                            const char  *style_class)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (style_class != NULL);
+  g_return_if_fail (style_class[0] != '\0');
+  g_return_if_fail (style_class[0] != '.');
+
+  gtk_style_context_add_class (gtk_widget_get_style_context (widget), style_class);
+}
