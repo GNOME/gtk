@@ -5476,16 +5476,13 @@ _gtk_widget_set_has_default (GtkWidget *widget,
                              gboolean   has_default)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkStyleContext *context;
 
   priv->has_default = has_default;
 
-  context = _gtk_widget_get_style_context (widget);
-
   if (has_default)
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_DEFAULT);
+    gtk_widget_add_style_class (widget, GTK_STYLE_CLASS_DEFAULT);
   else
-    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_DEFAULT);
+    gtk_widget_remove_style_class (widget, GTK_STYLE_CLASS_DEFAULT);
 }
 
 /**
@@ -9770,13 +9767,10 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
   else if (strcmp (tagname, "style") == 0)
     {
       StyleParserData *style_data = (StyleParserData *)user_data;
-      GtkStyleContext *context;
       GSList *l;
 
-      context = _gtk_widget_get_style_context (GTK_WIDGET (buildable));
-
       for (l = style_data->classes; l; l = l->next)
-        gtk_style_context_add_class (context, (const gchar *)l->data);
+        gtk_widget_add_style_class (GTK_WIDGET (buildable), (const char *)l->data);
 
       gtk_widget_reset_style (GTK_WIDGET (buildable));
 

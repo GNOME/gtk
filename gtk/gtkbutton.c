@@ -654,9 +654,8 @@ gtk_button_new_with_mnemonic (const gchar *label)
  */
 void
 gtk_button_set_relief (GtkButton      *button,
-		       GtkReliefStyle  relief)
+                       GtkReliefStyle  relief)
 {
-  GtkStyleContext *context;
   GtkReliefStyle old_relief;
 
   g_return_if_fail (GTK_IS_BUTTON (button));
@@ -664,11 +663,10 @@ gtk_button_set_relief (GtkButton      *button,
   old_relief = gtk_button_get_relief (button);
   if (old_relief != relief)
     {
-      context = gtk_widget_get_style_context (GTK_WIDGET (button));
       if (relief == GTK_RELIEF_NONE)
-        gtk_style_context_add_class (context, GTK_STYLE_CLASS_FLAT);
+        gtk_widget_add_style_class (GTK_WIDGET (button), GTK_STYLE_CLASS_FLAT);
       else
-        gtk_style_context_remove_class (context, GTK_STYLE_CLASS_FLAT);
+        gtk_widget_remove_style_class (GTK_WIDGET (button), GTK_STYLE_CLASS_FLAT);
 
       g_object_notify_by_pspec (G_OBJECT (button), props[PROP_RELIEF]);
     }
@@ -685,12 +683,9 @@ gtk_button_set_relief (GtkButton      *button,
 GtkReliefStyle
 gtk_button_get_relief (GtkButton *button)
 {
-  GtkStyleContext *context;
-
   g_return_val_if_fail (GTK_IS_BUTTON (button), GTK_RELIEF_NORMAL);
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (button));
-  if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_FLAT))
+  if (gtk_widget_has_style_class (GTK_WIDGET (button), GTK_STYLE_CLASS_FLAT))
     return GTK_RELIEF_NONE;
   else
     return GTK_RELIEF_NORMAL;
@@ -787,11 +782,8 @@ gtk_button_set_label (GtkButton   *button,
 {
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
   GtkWidget *child;
-  GtkStyleContext *context;
 
   g_return_if_fail (GTK_IS_BUTTON (button));
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (button));
 
   child = gtk_bin_get_child (GTK_BIN (button));
 
@@ -811,8 +803,8 @@ gtk_button_set_label (GtkButton   *button,
           gtk_label_set_xalign (GTK_LABEL (child), 0.0);
         }
       gtk_container_add (GTK_CONTAINER (button), child);
-      gtk_style_context_remove_class (context, "image-button");
-      gtk_style_context_add_class (context, "text-button");
+      gtk_widget_remove_style_class (GTK_WIDGET (button), "image-button");
+      gtk_widget_add_style_class (GTK_WIDGET (button), "text-button");
     }
 
   gtk_label_set_label (GTK_LABEL (child), label);
@@ -944,13 +936,11 @@ gtk_button_set_icon_name (GtkButton  *button,
 {
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
   GtkWidget *child;
-  GtkStyleContext *context;
 
   g_return_if_fail (GTK_IS_BUTTON (button));
   g_return_if_fail (icon_name != NULL);
 
   child = gtk_bin_get_child (GTK_BIN (button));
-  context = gtk_widget_get_style_context (GTK_WIDGET (button));
 
   if (priv->child_type != ICON_CHILD || child == NULL)
     {
@@ -959,8 +949,8 @@ gtk_button_set_icon_name (GtkButton  *button,
 
       child = gtk_image_new_from_icon_name (icon_name);
       gtk_container_add (GTK_CONTAINER (button), child);
-      gtk_style_context_remove_class (context, "text-button");
-      gtk_style_context_add_class (context, "image-button");
+      gtk_widget_remove_style_class (GTK_WIDGET (button), "text-button");
+      gtk_widget_add_style_class (GTK_WIDGET (button), "image-button");
     }
   else
     {
