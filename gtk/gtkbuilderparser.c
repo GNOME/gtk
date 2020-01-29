@@ -26,6 +26,7 @@
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
+#include "gdkprofilerprivate.h"
 
 #include <gio/gio.h>
 #include <string.h>
@@ -1548,6 +1549,7 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   const gchar* domain;
   ParserData data;
   GSList *l;
+  gint64 before = g_get_monotonic_time ();
 
   /* Store the original domain so that interface domain attribute can be
    * applied for the builder and the original domain can be restored after
@@ -1622,4 +1624,6 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
 
   /* restore the original domain */
   gtk_builder_set_translation_domain (builder, domain);
+
+  gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "builder load", filename);
 }
