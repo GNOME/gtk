@@ -61,10 +61,10 @@ RUN dnf -y install \
     ninja-build \
     pango-devel \
     pcre-devel \
-    pygments \
     python3 \
     python3-jinja2 \
     python3-pip \
+    python3-pygments \
     python3-wheel \
     redhat-rpm-config \
     sassc \

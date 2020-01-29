@@ -19,7 +19,7 @@ variables:
   G_MESSAGES_DEBUG: all
 
 fedora-x86_64:
-  image: registry.gitlab.gnome.org/gnome/gtk/master:v10
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v11
   stage: build
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
@@ -62,7 +62,7 @@ fedora-x86_64:
     <<: *cache-paths
 
 fedora-x86_64-release:
-  image: registry.gitlab.gnome.org/gnome/gtk/master:v10
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v11
   stage: build
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
@@ -144,11 +144,12 @@ flatpak-master:icon-browser:
   <<: *flatpak-master
 
 pages:
-  image: registry.gitlab.gnome.org/gnome/gtk/master:v10
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v11
   stage: deploy
+  variables:
+    EXTRA_MESON_FLAGS: "--buildtype=release"
   script:
-    - meson -Dgtk_doc=true _build .
-    - ninja -C _build
+    - meson ${COMMON_MESON_FLAGS} -Dgtk_doc=true _build
     - ninja -C _build gdk4-doc gsk4-doc gtk4-doc
     - mkdir -p public/
     - mv _build/docs/reference/gtk/html/ public/gtk/
