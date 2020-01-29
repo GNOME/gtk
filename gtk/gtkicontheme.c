@@ -733,6 +733,30 @@ gtk_icon_theme_get_default (void)
   return gtk_icon_theme_get_for_display (gdk_display_get_default ());
 }
 
+static void
+load_theme_thread  (GTask        *task,
+                    gpointer      source_object,
+                    gpointer      task_data,
+                    GCancellable *cancellable)
+{
+  GtkIconTheme *self = GTK_ICON_THEME (source_object);
+
+  gtk_icon_theme_lock (self);
+  ensure_valid_themes (self, FALSE);
+  gtk_icon_theme_unlock (self);
+  g_task_return_pointer (task, NULL, NULL);
+}
+
+static void
+gtk_icon_theme_load_in_thread (GtkIconTheme *self)
+{
+  GTask *task;
+
+  task = g_task_new (self, NULL, NULL, NULL);
+  g_task_set_task_data (task, g_object_ref (self), g_object_unref);
+  g_task_run_in_thread (task, load_theme_thread);
+}
+
 /**
  * gtk_icon_theme_get_for_display:
  * @display: a #GdkDisplay
@@ -767,6 +791,9 @@ gtk_icon_theme_get_for_display (GdkDisplay *display)
       self->is_display_singleton = TRUE;
 
       g_object_set_data (G_OBJECT (display), I_("gtk-icon-theme"), self);
+
+      /* Queue early read of the default themes, we read the icon theme name in _set_display(). */
+      gtk_icon_theme_load_in_thread (self);
     }
 
   return self;
@@ -873,7 +900,12 @@ theme_changed__mainthread_unlocked (GtkSettings  *settings,
   GtkIconTheme *self = gtk_icon_theme_ref_aquire (ref);
 
   if (self)
-    update_current_theme__mainthread (self);
+    {
+      update_current_theme__mainthread (self);
+
+      /* Queue early read of the new theme */
+      gtk_icon_theme_load_in_thread (self);
+    }
 
   gtk_icon_theme_ref_release (ref);
 }
