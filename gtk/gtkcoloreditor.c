@@ -386,11 +386,9 @@ gtk_color_editor_init (GtkColorEditor *editor)
   gtk_widget_init_template (GTK_WIDGET (editor));
 
   if (gtk_widget_get_direction (editor->priv->h_slider) == GTK_TEXT_DIR_RTL)
-    gtk_style_context_add_class (gtk_widget_get_style_context (editor->priv->h_slider),
-                                 "marks-before");
+    gtk_widget_add_style_class (editor->priv->h_slider, "marks-before");
   else
-    gtk_style_context_add_class (gtk_widget_get_style_context (editor->priv->h_slider),
-                                 "marks-after");
+    gtk_widget_add_style_class (editor->priv->h_slider, "marks-after");
 
   /* Create the scaled popup adjustments manually here because connecting user data is not
    * supported by template GtkBuilder xml (it would be possible to set this up in the xml
@@ -419,7 +417,7 @@ gtk_color_editor_init (GtkColorEditor *editor)
   g_signal_connect (controller, "key-pressed", G_CALLBACK (popup_key_pressed), editor);
   gtk_widget_add_controller (editor->priv->a_entry, controller);
 
-  gtk_style_context_remove_class (gtk_widget_get_style_context (editor->priv->swatch), "activatable");
+  gtk_widget_remove_style_class (editor->priv->swatch, "activatable");
 
   editor->priv->picker = gtk_color_picker_new ();
   if (editor->priv->picker == NULL)
