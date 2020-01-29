@@ -287,28 +287,20 @@ gtk_model_button_actionable_iface_init (GtkActionableInterface *iface)
 static void
 update_node_ordering (GtkModelButton *button)
 {
-  GtkStyleContext *start_indicator_context = NULL;
-  GtkStyleContext *end_indicator_context = NULL;
   GtkWidget *child;
-
-  if (button->start_indicator)
-    start_indicator_context = gtk_widget_get_style_context (button->start_indicator);
-
-  if (button->end_indicator)
-    end_indicator_context = gtk_widget_get_style_context (button->end_indicator);
 
   if (gtk_widget_get_direction (GTK_WIDGET (button)) == GTK_TEXT_DIR_LTR)
     {
-      if (start_indicator_context)
+      if (button->start_indicator)
         {
-          gtk_style_context_add_class (start_indicator_context, GTK_STYLE_CLASS_LEFT);
-          gtk_style_context_remove_class (start_indicator_context, GTK_STYLE_CLASS_RIGHT);
+          gtk_widget_add_style_class (button->start_indicator, GTK_STYLE_CLASS_LEFT);
+          gtk_widget_remove_style_class (button->start_indicator, GTK_STYLE_CLASS_RIGHT);
         }
 
-      if (end_indicator_context)
+      if (button->end_indicator)
         {
-          gtk_style_context_add_class (end_indicator_context, GTK_STYLE_CLASS_RIGHT);
-          gtk_style_context_remove_class (end_indicator_context, GTK_STYLE_CLASS_LEFT);
+          gtk_widget_add_style_class (button->end_indicator, GTK_STYLE_CLASS_RIGHT);
+          gtk_widget_remove_style_class (button->end_indicator, GTK_STYLE_CLASS_LEFT);
         }
 
       child = gtk_widget_get_first_child (GTK_WIDGET (button));
@@ -321,16 +313,17 @@ update_node_ordering (GtkModelButton *button)
     }
   else
     {
-      if (start_indicator_context)
+      if (button->start_indicator)
         {
-          gtk_style_context_add_class (start_indicator_context, GTK_STYLE_CLASS_RIGHT);
-          gtk_style_context_remove_class (start_indicator_context, GTK_STYLE_CLASS_LEFT);
+          gtk_widget_add_style_class (button->start_indicator, GTK_STYLE_CLASS_RIGHT);
+          gtk_widget_remove_style_class (button->start_indicator, GTK_STYLE_CLASS_LEFT);
         }
 
-      if (end_indicator_context)
+      if (button->end_indicator)
         {
-          gtk_style_context_add_class (end_indicator_context, GTK_STYLE_CLASS_LEFT);
-          gtk_style_context_remove_class (end_indicator_context, GTK_STYLE_CLASS_RIGHT);
+          gtk_widget_add_style_class (button->end_indicator, GTK_STYLE_CLASS_LEFT);
+          gtk_widget_remove_style_class (button->end_indicator, GTK_STYLE_CLASS_RIGHT);
+
         }
 
       child = gtk_widget_get_first_child (GTK_WIDGET (button));
@@ -347,22 +340,19 @@ static void
 update_end_indicator (GtkModelButton *self)
 {
   const gboolean is_ltr = gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_LTR;
-  GtkStyleContext *context;
 
   if (!self->end_indicator)
     return;
 
-  context = gtk_widget_get_style_context (self->end_indicator);
-
   if (is_ltr)
     {
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_LEFT);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+      gtk_widget_add_style_class (self->end_indicator, GTK_STYLE_CLASS_RIGHT);
+      gtk_widget_remove_style_class (self->end_indicator, GTK_STYLE_CLASS_LEFT);
     }
   else
     {
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_RIGHT);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
+      gtk_widget_add_style_class (self->end_indicator, GTK_STYLE_CLASS_LEFT);
+      gtk_widget_remove_style_class (self->end_indicator, GTK_STYLE_CLASS_RIGHT);
     }
 }
 
@@ -387,25 +377,23 @@ static void
 update_start_indicator (GtkModelButton *self)
 {
   const gboolean is_ltr = gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_LTR;
-  GtkStyleContext *context;
 
   if (!self->start_indicator)
     return;
 
   gtk_widget_set_state_flags (self->start_indicator, get_start_indicator_state (self), TRUE);
 
-  context = gtk_widget_get_style_context (self->start_indicator);
-
   if (is_ltr)
     {
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_RIGHT);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
+      gtk_widget_add_style_class (self->start_indicator, GTK_STYLE_CLASS_LEFT);
+      gtk_widget_remove_style_class (self->start_indicator, GTK_STYLE_CLASS_RIGHT);
     }
   else
     {
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_LEFT);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+      gtk_widget_add_style_class (self->start_indicator, GTK_STYLE_CLASS_RIGHT);
+      gtk_widget_remove_style_class (self->start_indicator, GTK_STYLE_CLASS_LEFT);
     }
+
 }
 
 static void
@@ -538,12 +526,12 @@ gtk_model_button_set_role (GtkModelButton *self,
 
   if (role == GTK_BUTTON_ROLE_TITLE)
     {
-      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (self)), "title");
+      gtk_widget_add_style_class (GTK_WIDGET (self), "title");
       gtk_widget_set_halign (self->label, GTK_ALIGN_CENTER);
     }
   else
     {
-      gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (self)), "title");
+      gtk_widget_remove_style_class (GTK_WIDGET (self), "title");
       gtk_widget_set_halign (self->label, GTK_ALIGN_START);
     }
 
@@ -652,7 +640,6 @@ gtk_model_button_set_iconic (GtkModelButton *self,
                              gboolean        iconic)
 {
   GtkCssNode *widget_node;
-  GtkStyleContext *context;
 
   iconic = !!iconic;
   if (self->iconic == iconic)
@@ -661,22 +648,22 @@ gtk_model_button_set_iconic (GtkModelButton *self,
   self->iconic = iconic;
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (self));
-  context = gtk_widget_get_style_context (GTK_WIDGET (self));
   if (iconic)
     {
       gtk_widget_hide (self->start_box);
       gtk_css_node_set_name (widget_node, g_quark_from_static_string ("button"));
-      gtk_style_context_add_class (context, "model");
-      gtk_style_context_add_class (context, "image-button");
-      gtk_style_context_remove_class (context, "flat");
+      gtk_widget_add_style_class (self->start_box, "model");
+      gtk_widget_add_style_class (self->start_box, "image-button");
+      gtk_widget_remove_style_class (self->start_box, "flat");
     }
   else
     {
       gtk_widget_show (self->start_box);
       gtk_css_node_set_name (widget_node, g_quark_from_static_string ("modelbutton"));
-      gtk_style_context_remove_class (context, "model");
-      gtk_style_context_remove_class (context, "image-button");
-      gtk_style_context_add_class (context, "flat");
+      gtk_widget_remove_style_class (self->start_box, "model");
+      gtk_widget_remove_style_class (self->start_box, "image-button");
+      gtk_widget_add_style_class (self->start_box, "flat");
+
     }
 
   self->centered = iconic;
@@ -1374,7 +1361,7 @@ gtk_model_button_init (GtkModelButton *self)
   gtk_widget_insert_after (self->start_box, GTK_WIDGET (self), NULL);
   update_node_ordering (self);
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (self)), "flat");
+  gtk_widget_add_style_class (GTK_WIDGET (self), "flat");
 
   controller = gtk_event_controller_motion_new ();
   g_signal_connect (controller, "enter", G_CALLBACK (enter_cb), self);

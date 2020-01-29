@@ -917,18 +917,18 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
 
   /* Translators: This is the window title for the shortcuts window in normal mode */
   label = gtk_label_new (_("Shortcuts"));
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), GTK_STYLE_CLASS_TITLE);
+  gtk_widget_add_style_class (label, GTK_STYLE_CLASS_TITLE);
   gtk_stack_add_named (priv->title_stack, label, "title");
 
   /* Translators: This is the window title for the shortcuts window in search mode */
   label = gtk_label_new (_("Search Results"));
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), GTK_STYLE_CLASS_TITLE);
+  gtk_widget_add_style_class (label, GTK_STYLE_CLASS_TITLE);
   gtk_stack_add_named (priv->title_stack, label, "search");
 
   priv->menu_button = g_object_new (GTK_TYPE_MENU_BUTTON,
                                     "focus-on-click", FALSE,
                                     NULL);
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (priv->menu_button)), "flat");
+  gtk_widget_add_style_class (GTK_WIDGET (priv->menu_button), "flat");
   gtk_stack_add_named (priv->title_stack, GTK_WIDGET (priv->menu_button), "sections");
 
   priv->popover = g_object_new (GTK_TYPE_POPOVER,
@@ -971,7 +971,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                       "halign", GTK_ALIGN_CENTER,
                       "orientation", GTK_ORIENTATION_VERTICAL,
                       NULL);
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (box)), "shortcuts-search-results");
+  gtk_widget_add_style_class (GTK_WIDGET (box), "shortcuts-search-results");
   gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (box));
   gtk_stack_add_named (priv->stack, scroller, "internal-search");
 
@@ -997,7 +997,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                         "halign", GTK_ALIGN_CENTER,
                         "valign", GTK_ALIGN_CENTER,
                         NULL);
-  gtk_style_context_add_class (gtk_widget_get_style_context (empty), GTK_STYLE_CLASS_DIM_LABEL);
+  gtk_widget_add_style_class (empty, GTK_STYLE_CLASS_DIM_LABEL);
   gtk_grid_attach (GTK_GRID (empty),
                    g_object_new (GTK_TYPE_IMAGE,
                                  "icon-name", "edit-find-symbolic",
