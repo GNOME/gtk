@@ -16,6 +16,7 @@ SYNOPSIS
 |   **gtk4-builder-tool** enumerate <FILE>
 |   **gtk4-builder-tool** simplify [OPTIONS...] <FILE>
 |   **gtk4-builder-tool** preview [OPTIONS...] <FILE>
+|   **gtk4-builder-tool** precompile [OPTIONS...] <FILE>
 
 DESCRIPTION
 -----------
@@ -83,3 +84,10 @@ to do manual fixups  after the initial conversion.
 ``--3to4``
 
   Transform a GTK 3 UI definition file to the equivalent GTK 4 definitions.
+
+Precompilation
+^^^^^^^^^^^^^^
+
+The ``precompile`` command creates a more compact, and faster to load compiled
+form of the ui file that is understood by GtkBuilder. The output is written
+to a file with the extension ``.precompiled``.

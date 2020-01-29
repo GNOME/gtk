@@ -134,6 +134,8 @@ main (int argc, const char *argv[])
     do_enumerate (&argc, &argv);
   else if (strcmp (argv[0], "preview") == 0)
     do_preview (&argc, &argv);
+  else if (strcmp (argv[0], "precompile") == 0)
+    do_precompile (&argc, &argv);
   else
     usage ();
 
