@@ -22,7 +22,7 @@ fedora-x86_64:
   image: registry.gitlab.gnome.org/gnome/gtk/fedora:v11
   stage: build
   variables:
-    EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
+    EXTRA_MESON_FLAGS: "--buildtype=debug"
   script:
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS}
             -Dx11-backend=true
@@ -48,7 +48,7 @@ fedora-x86_64:
     when: always
     reports:
       junit:
-        - "${CI_PROJECT_DIR}/_build/report.xml" 
+        - "${CI_PROJECT_DIR}/_build/report.xml"
     name: "gtk-${CI_COMMIT_REF_NAME}"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
@@ -61,7 +61,39 @@ fedora-x86_64:
     key: "$CI_JOB_NAME"
     <<: *cache-paths
 
-fedora-x86_64-release:
+static-build:
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v11
+  stage: build
+  variables:
+    EXTRA_MESON_FLAGS: "--default-library=both"
+  script:
+    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS}
+            -Dx11-backend=true
+            -Dwayland-backend=true
+            -Dbroadway-backend=true
+            -Dvulkan=yes
+            _build
+    - ninja -C _build
+    - .gitlab-ci/run-tests.sh _build
+    - .gitlab-ci/meson-junit-report.py
+            --project-name=gtk
+            --job-id="${CI_JOB_NAME}"
+            --output=_build/report.xml
+            _build/meson-logs/testlog.json
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - "${CI_PROJECT_DIR}/_build/report.xml"
+    name: "gtk-${CI_COMMIT_REF_NAME}"
+    paths:
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
+      - "${CI_PROJECT_DIR}/_build/report.xml"
+  cache:
+    key: "$CI_JOB_NAME"
+    <<: *cache-paths
+
+release-build:
   image: registry.gitlab.gnome.org/gnome/gtk/fedora:v11
   stage: build
   variables:
@@ -74,6 +106,24 @@ fedora-x86_64-release:
             -Dvulkan=yes
             _build
     - ninja -C _build
+    - .gitlab-ci/run-tests.sh _build
+    - .gitlab-ci/meson-junit-report.py
+            --project-name=gtk
+            --job-id="${CI_JOB_NAME}"
+            --output=_build/report.xml
+            _build/meson-logs/testlog.json
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - "${CI_PROJECT_DIR}/_build/report.xml"
+    name: "gtk-${CI_COMMIT_REF_NAME}"
+    paths:
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
+      - "${CI_PROJECT_DIR}/_build/report.xml"
+  cache:
+    key: "$CI_JOB_NAME"
+    <<: *cache-paths
 
 .mingw-defaults: &mingw-defaults
   stage: build
