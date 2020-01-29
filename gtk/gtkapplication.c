@@ -105,8 +105,8 @@
  * If there is a resource located at "gtk/help-overlay.ui" which
  * defines a #GtkShortcutsWindow with ID "help_overlay" then GtkApplication
  * associates an instance of this shortcuts window with each
- * #GtkApplicationWindow and sets up keyboard accelerators (Control-F1
- * and Control-?) to open it. To create a menu item that displays the
+ * #GtkApplicationWindow and sets up the keyboard accelerator Control-?
+ * to open it. To create a menu item that displays the
  * shortcuts window, associate the item with the action win.show-help-overlay.
  *
  * ## A simple application ## {#gtkapplication}
@@ -279,7 +279,7 @@ gtk_application_load_resources (GtkApplication *application)
     path = g_strconcat (base_path, "/gtk/help-overlay.ui", NULL);
     if (g_resources_get_info (path, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL, NULL, NULL))
       {
-        const gchar * const accels[] = { "<Primary>F1", "<Primary>question", NULL };
+        const gchar * const accels[] = { "<Primary>question", NULL };
 
         priv->help_overlay_path = path;
         gtk_application_set_accels_for_action (application, "win.show-help-overlay", accels);
