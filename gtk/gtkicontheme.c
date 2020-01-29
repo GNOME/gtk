@@ -118,8 +118,6 @@
  * to rescan the theme, but then it would be slow if we didn't block
  * and did the rescan ourselves anyway.
  *
- * The threadsafe calls are marked in the docs.
- *
  * All private functions that take a GtkIconTheme (or one of its
  * private data types (like IconThemeDir, UnthemedIcon, etc) arg are
  * expected to be called with the icon theme lock held, unless the
@@ -132,23 +130,30 @@
  * * _unlocked must lock before calling a non-_unlocked.
  * * non-_mainthread cannot call _mainthread.
  * * Public APIs must lock before calling a non-_unlocked private function
- * * Public APIs that never call _mainthread and threadsafe.
+ * * Public APIs that never call _mainthread are threadsafe.
  *
- * Additionally there is a global "icon_cache" G_LOCK, which protects
- * both the GtkIconTheme->icon_cache and its reverse pointer
- * GtkIcon->in_cache. This is sometimes taken with the
- * theme lock held (from the theme side) and sometimes not (from the
- * icon info side), but we never take another lock after taking it, so
- * this is safe.
+ * There is a global "icon_cache" G_LOCK, which protects icon_cache
+ * and lru_cache in GtkIconTheme as well as its reverse pointer
+ * GtkIcon->in_cache. This is sometimes taken with the theme lock held
+ * (from the theme side) and sometimes not (from the icon info side),
+ * but we never take another lock after taking it, so this is safe.
+ * Since this is a global (not per icon/theme) lock we should never
+ * block while holding it.
  *
- * Sometimes there are references to the icon theme that are weak that
- * can call into the icon theme. For example, from the "theme-changed"
+ * Sometimes there are "weak" references to the icon theme that can
+ * call into the icon theme. For example, from the "theme-changed"
  * signal. Since these don't own the theme they can run in parallel
- * with some other thread wich is finalizing the theme. To avoid this
- * all such references are done via the GtkIconThemeRef object which
- * contains an NULL:able pointer to the theme and the main lock for
- * that theme. Using this we can safely generate a ref for the theme
- * if it still lives (or get NULL if it doesn't).
+ * with some other thread which could be finalizing the theme. To
+ * avoid this all such references are done via the GtkIconThemeRef
+ * object which contains an NULL:able pointer to the theme and the
+ * main lock for that theme. Using this we can safely generate a ref
+ * for the theme if it still lives (or get NULL if it doesn't).
+ *
+ * The icon theme needs to call into the icons sometimes, for example
+ * when checking if it should be cached (icon_should_cache__unlocked)
+ * this takes the icon->texture_lock while the icon theme is locked.
+ * In order to avoid ABBA style deadlocks this means the icon code
+ * should never try to lock an icon theme.
  */
 
 
@@ -204,10 +209,10 @@ struct _GtkIconTheme
   GObject parent_instance;
   GtkIconThemeRef *ref;
 
-  GHashTable *icon_cache; /* Protected by icon_cache lock */
+  GHashTable *icon_cache;              /* Protected by icon_cache lock */
 
-  GtkIcon *lru_cache[LRU_CACHE_SIZE];
-  int lru_cache_current;
+  GtkIcon *lru_cache[LRU_CACHE_SIZE];  /* Protected by icon_cache lock */
+  int lru_cache_current;               /* Protected by icon_cache lock */
 
   gchar *current_theme;
   gchar **search_path;
@@ -302,11 +307,11 @@ struct _GtkIcon
 
   /* Cached information if we go ahead and try to load the icon.
    *
-   * All access to these are protected by the cache_lock. Everything
+   * All access to these are protected by the texture_lock. Everything
    * above is immutable after construction and can be used without
    * locks.
    */
-  GMutex cache_lock;
+  GMutex texture_lock;
 
   GdkTexture *texture;
   GError *load_error;
@@ -392,6 +397,12 @@ static IconSuffix suffix_from_name                      (const gchar      *name)
 static gboolean   icon_ensure_scale_and_texture__locked (GtkIcon          *icon);
 static void       unset_display                         (GtkIconTheme     *self);
 static void       update_current_theme__mainthread      (GtkIconTheme     *self);
+static void       load_icon_thread                      (GTask            *task,
+                                                         gpointer          source_object,
+                                                         gpointer          task_data,
+                                                         GCancellable     *cancellable);
+static gboolean   ensure_valid_themes                   (GtkIconTheme     *self,
+                                                         gboolean          non_blocking);
 
 
 static guint signal_changed = 0;
@@ -527,48 +538,164 @@ icon_key_equal (gconstpointer _a,
   return a->icon_names[i] == NULL && b->icon_names[i] == NULL;
 }
 
+/****************** Icon cache ***********************
+ *
+ * The icon cache, this spans both GtkIconTheme and GtkIcon, so the locking is
+ * a bit tricky. Never do block with the lock held, and never do any
+ * callouts to other code. In particular, don't call theme or finalizers
+ * because that will take the lock when removing from the icon cache.
+ */
+
+/* This is called with icon_cache lock held so must not take any locks */
 static gboolean
-icon_should_cache__locked (GtkIcon *info)
+_icon_cache_should_lru_cache (GtkIcon *info)
 {
-  return
-    info->texture &&
-    info->texture->width <= MAX_LRU_TEXTURE_SIZE &&
-    info->texture->height <= MAX_LRU_TEXTURE_SIZE;
+  return info->desired_size <= MAX_LRU_TEXTURE_SIZE;
 }
 
-static gboolean
-icon_should_cache__unlocked (GtkIcon *info)
+/* This returns the old lru element because we can't unref it with
+ * the lock held */
+static GtkIcon *
+_icon_cache_add_to_lru_cache (GtkIconTheme *theme, GtkIcon *icon)
 {
-  gboolean res;
+  GtkIcon *old_icon = NULL;
 
-  g_mutex_lock (&info->cache_lock);
-  res = icon_should_cache__locked (info);
-  g_mutex_unlock (&info->cache_lock);
+  /* Avoid storing the same info multiple times in a row */
+  if (theme->lru_cache[theme->lru_cache_current] != icon)
+    {
+      theme->lru_cache_current = (theme->lru_cache_current + 1) % LRU_CACHE_SIZE;
+      old_icon = theme->lru_cache[theme->lru_cache_current];
+      theme->lru_cache[theme->lru_cache_current] = g_object_ref (icon);
+    }
 
-  return res;
+  return old_icon;
 }
 
-G_DEFINE_TYPE (GtkIconTheme, gtk_icon_theme, G_TYPE_OBJECT)
+static GtkIcon *
+icon_cache_lookup (GtkIconTheme *theme, IconInfoKey *key)
+{
+  GtkIcon *old_icon = NULL;
+  GtkIcon *icon;
+
+  G_LOCK (icon_cache);
+
+  icon = g_hash_table_lookup (theme->icon_cache, key);
+  if (icon != NULL)
+    {
+      DEBUG_CACHE (("cache hit %p (%s %d 0x%x) (cache size %d)\n",
+                    icon,
+                    g_strjoinv (",", icon->key.icon_names),
+                    icon->key.size, icon->key.flags,
+                    g_hash_table_size (theme->icon_cache)));
+
+      icon = g_object_ref (icon);
+
+      /* Move item to front in LRU cache */
+      if (_icon_cache_should_lru_cache (icon))
+        old_icon = _icon_cache_add_to_lru_cache (theme, icon);
+    }
+
+  G_UNLOCK (icon_cache);
+
+  /* Call potential finalizer outside the lock */
+  if (old_icon)
+    g_object_unref (old_icon);
+
+  return icon;
+}
+
+/* The icon info was removed from the icon_hash hash table.
+ * This is a callback from the icon_cache hashtable, so the icon_cache lock is already held.
+ */
+static void
+icon_uncached_cb (GtkIcon *icon)
+{
+  DEBUG_CACHE (("removing %p (%s %d 0x%x) from cache (icon_them: %p)  (cache size %d)\n",
+                icon,
+                g_strjoinv (",", icon->key.icon_names),
+                icon->key.size, icon->key.flags,
+                self,
+                icon_theme != NULL ? g_hash_table_size (self->icon_cache) : 0));
+  g_assert (icon->in_cache != NULL);
+  icon->in_cache = NULL;
+}
 
 static void
-add_to_lru_cache (GtkIconTheme *self, GtkIcon *info)
+icon_cache_mark_used_if_cached (GtkIcon *icon)
 {
-  /* Avoid storing the same info multiple times in a row */
-  if (self->lru_cache[self->lru_cache_current] != info)
+  GtkIcon *old_icon = NULL;
+
+  if (!_icon_cache_should_lru_cache (icon))
+    return;
+
+  G_LOCK (icon_cache);
+  if (icon->in_cache)
+    old_icon = _icon_cache_add_to_lru_cache (icon->in_cache, icon);
+  G_UNLOCK (icon_cache);
+
+  /* Call potential finalizers outside the lock */
+  if (old_icon)
+    g_object_unref (old_icon);
+}
+
+static void
+icon_cache_add (GtkIconTheme *theme, GtkIcon *icon)
+{
+  GtkIcon *old_icon = NULL;
+
+  G_LOCK (icon_cache);
+  icon->in_cache = theme;
+  g_hash_table_insert (theme->icon_cache, &icon->key, icon);
+
+  if (_icon_cache_should_lru_cache (icon))
+    old_icon = _icon_cache_add_to_lru_cache (theme, icon);
+  DEBUG_CACHE (("adding %p (%s %d 0x%x) to cache (cache size %d)\n",
+                icon,
+                g_strjoinv (",", icon->key.icon_names),
+                icon->key.size, icon->key.flags,
+                g_hash_table_size (theme->icon_cache)));
+  G_UNLOCK (icon_cache);
+
+  /* Call potential finalizer outside the lock */
+  if (old_icon)
+    g_object_unref (old_icon);
+}
+
+static void
+icon_cache_remove (GtkIcon *icon)
+{
+  G_LOCK (icon_cache);
+  if (icon->in_cache)
+    g_hash_table_remove (icon->in_cache->icon_cache, &icon->key);
+  G_UNLOCK (icon_cache);
+}
+
+static void
+icon_cache_clear (GtkIconTheme *theme)
+{
+  int i;
+  GtkIcon *old_icons[LRU_CACHE_SIZE];
+
+  G_LOCK (icon_cache);
+  g_hash_table_remove_all (theme->icon_cache);
+  for (i = 0; i < LRU_CACHE_SIZE; i ++)
     {
-      self->lru_cache_current = (self->lru_cache_current + 1) % LRU_CACHE_SIZE;
-      g_set_object (&self->lru_cache[self->lru_cache_current], info);
+      old_icons[i] = theme->lru_cache[i];
+      theme->lru_cache[i] = NULL;
+    }
+  G_UNLOCK (icon_cache);
+
+  /* Call potential finalizers outside the lock */
+  for (i = 0; i < LRU_CACHE_SIZE; i ++)
+    {
+      if (old_icons[i] != NULL)
+        g_object_unref (old_icons[i]);
     }
 }
 
-static void
-clear_lru_cache (GtkIconTheme *self)
-{
-  int i;
+/****************** End of icon cache ***********************/
 
-  for (i = 0; i < LRU_CACHE_SIZE; i ++)
-    g_clear_object (&self->lru_cache[i]);
-}
+G_DEFINE_TYPE (GtkIconTheme, gtk_icon_theme, G_TYPE_OBJECT)
 
 /**
  * gtk_icon_theme_new:
@@ -843,21 +970,6 @@ pixbuf_supports_svg (void)
   return found_svg;
 }
 
-/* The icon info was removed from the icon_hash hash table. */
-static void
-icon_uncached (GtkIcon *icon)
-{
-  DEBUG_CACHE (("removing %p (%s %d 0x%x) from cache (icon_them: %p)  (cache size %d)\n",
-                icon,
-                g_strjoinv (",", icon->key.icon_names),
-                icon->key.size, icon->key.flags,
-                self,
-                icon_theme != NULL ? g_hash_table_size (self->icon_cache) : 0));
-  /* This is a callback from the icon_cache hashtable, so the icon_cache lock is already held */
-  g_assert (icon->in_cache != NULL);
-  icon->in_cache = NULL;
-}
-
 static void
 gtk_icon_theme_init (GtkIconTheme *self)
 {
@@ -867,7 +979,7 @@ gtk_icon_theme_init (GtkIconTheme *self)
   self->ref = gtk_icon_theme_ref_new (self);
 
   self->icon_cache = g_hash_table_new_full (icon_key_hash, icon_key_equal, NULL,
-                                            (GDestroyNotify)icon_uncached);
+                                            (GDestroyNotify)icon_uncached_cb);
 
   self->custom_theme = FALSE;
 
@@ -959,10 +1071,7 @@ queue_theme_changed (GtkIconTheme *self)
 static void
 do_theme_change (GtkIconTheme *self)
 {
-  G_LOCK (icon_cache);
-  g_hash_table_remove_all (self->icon_cache);
-  G_UNLOCK (icon_cache);
-  clear_lru_cache (self);
+  icon_cache_clear (self);
 
   if (!self->themes_valid)
     return;
@@ -1021,9 +1130,7 @@ gtk_icon_theme_finalize (GObject *object)
      there can be no other threads that own a ref to this object, but
      technically this is considered "locked" */
 
-  G_LOCK(icon_cache);
-  g_hash_table_destroy (self->icon_cache);
-  G_UNLOCK(icon_cache);
+  icon_cache_clear (self);
 
   if (self->theme_changed_idle)
     g_source_remove (self->theme_changed_idle);
@@ -1039,7 +1146,6 @@ gtk_icon_theme_finalize (GObject *object)
   g_list_free_full (self->resource_paths, g_free);
 
   blow_themes (self);
-  clear_lru_cache (self);
 
   gtk_icon_theme_ref_unref (self->ref);
 
@@ -1640,11 +1746,8 @@ ensure_valid_themes (GtkIconTheme *self,
 
           if (rescan_themes (self))
             {
-              G_LOCK(icon_cache);
-              g_hash_table_remove_all (self->icon_cache);
-              G_UNLOCK(icon_cache);
+              icon_cache_clear (self);
               blow_themes (self);
-              clear_lru_cache (self);
             }
         }
     }
@@ -1744,26 +1847,9 @@ real_choose_icon (GtkIconTheme       *self,
   key.scale = scale;
   key.flags = flags;
 
-  G_LOCK(icon_cache);
-  icon = g_hash_table_lookup (self->icon_cache, &key);
-  if (icon != NULL)
-    icon = g_object_ref (icon);
-  G_UNLOCK(icon_cache);
-
-  if (icon != NULL)
-    {
-      DEBUG_CACHE (("cache hit %p (%s %d 0x%x) (cache size %d)\n",
-                    icon,
-                    g_strjoinv (",", icon->key.icon_names),
-                    icon->key.size, icon->key.flags,
-                    g_hash_table_size (self->icon_cache)));
-
-      /* Move item to front in LRU cache */
-      if (icon_should_cache__unlocked (icon))
-        add_to_lru_cache (self, icon);
-
-      return icon;
-    }
+  icon = icon_cache_lookup (self, &key);
+  if (icon)
+    return icon;
 
   if (flags & GTK_ICON_LOOKUP_NO_SVG)
     allow_svg = FALSE;
@@ -1903,15 +1989,8 @@ real_choose_icon (GtkIconTheme       *self,
       icon->key.size = size;
       icon->key.scale = scale;
       icon->key.flags = flags;
-      G_LOCK(icon_cache);
-      icon->in_cache = self;
-      g_hash_table_insert (self->icon_cache, &icon->key, icon);
-      G_UNLOCK(icon_cache);
-      DEBUG_CACHE (("adding %p (%s %d 0x%x) to cache (cache size %d)\n",
-                    icon,
-                    g_strjoinv (",", icon->key.icon_names),
-                    icon->key.size, icon->key.flags,
-                    g_hash_table_size (self->icon_cache)));
+
+      icon_cache_add (self, icon);
     }
   else
     {
@@ -2084,9 +2163,6 @@ choose_icon (GtkIconTheme       *self,
  * gtk_icon_load_icon(). (gtk_icon_theme_load_icon() combines
  * these two steps if all you need is the pixbuf.)
  *
- * This call is threadsafe, you can safely pass a GtkIconTheme
- * to another thread and call this method on it.
- *
  * Returns: (nullable) (transfer full): a #GtkIcon object
  *     containing information about the icon, or %NULL if the
  *     icon wasn’t found.
@@ -2196,9 +2272,6 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
  * tries them all in the given order before falling back to 
  * inherited icon themes.
  *
- * This call is threadsafe, you can safely pass a GtkIconTheme
- * to another thread and call this method on it.
- *
  * Returns: (nullable) (transfer full): a #GtkIcon object
  *     containing information about the icon, or %NULL if the
  *     icon wasn’t found.
@@ -2274,7 +2347,7 @@ choose_icon_thread  (GTask        *task,
 
   if (icon)
     {
-      g_mutex_lock (&icon->cache_lock);
+      g_mutex_lock (&icon->texture_lock);
       (void)icon_ensure_scale_and_texture__locked (icon);
 
       if (icon->texture)
@@ -2286,7 +2359,7 @@ choose_icon_thread  (GTask        *task,
                                  GTK_ICON_THEME_ERROR,  GTK_ICON_THEME_NOT_FOUND,
                                  _("Icon not present in theme %s"), self->current_theme);
 
-      g_mutex_unlock (&icon->cache_lock);
+      g_mutex_unlock (&icon->texture_lock);
     }
   else
     g_task_return_new_error (task,
@@ -2302,9 +2375,9 @@ load_icon_thread  (GTask        *task,
 {
   GtkIcon *icon = task_data;
 
-  g_mutex_lock (&icon->cache_lock);
+  g_mutex_lock (&icon->texture_lock);
   (void)icon_ensure_scale_and_texture__locked (icon);
-  g_mutex_unlock (&icon->cache_lock);
+  g_mutex_unlock (&icon->texture_lock);
   g_task_return_pointer (task, g_object_ref (icon), g_object_unref);
 }
 
@@ -2375,7 +2448,7 @@ gtk_icon_theme_choose_icon_async (GtkIconTheme       *self,
 
   if (icon)
     {
-      g_mutex_lock (&icon->cache_lock);
+      g_mutex_lock (&icon->texture_lock);
 
       if (icon->texture)
         g_task_return_pointer (task, icon, g_object_unref);
@@ -2390,7 +2463,7 @@ gtk_icon_theme_choose_icon_async (GtkIconTheme       *self,
           g_task_set_task_data (task, icon, g_object_unref);
           g_task_run_in_thread (task, load_icon_thread);
         }
-      g_mutex_unlock (&icon->cache_lock);
+      g_mutex_unlock (&icon->texture_lock);
     }
 }
 
@@ -2469,9 +2542,6 @@ gtk_icon_theme_lookup_symbolic_colors (GtkCssStyle *style,
  * Checks whether an icon theme includes an icon
  * for a particular name.
  *
- * This call is threadsafe, you can safely pass a GtkIconTheme
- * to another thread and call this method on it.
- *
  * Returns: %TRUE if @self includes an
  *  icon for @icon_name.
  */
@@ -2537,9 +2607,6 @@ add_size (gpointer key,
  * the icon is available without scaling. A size of -1 means 
  * that the icon is available in a scalable format. The array 
  * is zero-terminated.
- *
- * This call is threadsafe, you can safely pass a GtkIconTheme
- * to another thread and call this method on it.
  *
  * Returns: (array zero-terminated=1) (transfer full): A newly
  * allocated array describing the sizes at which the icon is
@@ -2628,9 +2695,6 @@ add_key_to_list (gpointer key,
  * [Icon Theme Specification](http://www.freedesktop.org/wiki/Specifications/icon-theme-spec).
  * The standard contexts are listed in the
  * [Icon Naming Specification](http://www.freedesktop.org/wiki/Specifications/icon-naming-spec).
- *
- * This call is threadsafe, you can safely pass a GtkIconTheme
- * to another thread and call this method on it.
  *
  * Returns: (element-type utf8) (transfer full): a #GList list
  *     holding the names of all the icons in the theme. You must
@@ -2730,9 +2794,6 @@ rescan_themes (GtkIconTheme *self)
  * currently cached information is discarded and will be reloaded
  * next time @self is accessed.
  * 
- * This call is threadsafe, you can safely pass a GtkIconTheme
- * to another thread and call this method on it.
- *
  * Returns: %TRUE if the icon theme has changed and needed
  *     to be reloaded.
  */
@@ -3374,7 +3435,7 @@ static void
 gtk_icon_init (GtkIcon *icon)
 {
   icon->scale = -1.;
-  g_mutex_init (&icon->cache_lock);
+  g_mutex_init (&icon->texture_lock);
 }
 
 static GtkIcon *
@@ -3441,10 +3502,7 @@ gtk_icon_finalize (GObject *object)
 {
   GtkIcon *icon = (GtkIcon *) object;
 
-  G_LOCK(icon_cache);
-  if (icon->in_cache)
-    g_hash_table_remove (icon->in_cache->icon_cache, &icon->key);
-  G_UNLOCK(icon_cache);
+  icon_cache_remove (icon);
 
   g_strfreev (icon->key.icon_names);
 
@@ -3455,7 +3513,7 @@ gtk_icon_finalize (GObject *object)
   g_clear_object (&icon->cache_pixbuf);
   g_clear_error (&icon->load_error);
 
-  g_mutex_clear (&icon->cache_lock);
+  g_mutex_clear (&icon->texture_lock);
 
   G_OBJECT_CLASS (gtk_icon_parent_class)->finalize (object);
 }
@@ -3555,26 +3613,6 @@ gtk_icon_is_symbolic (GtkIcon *icon)
          icon_uri_is_symbolic (icon->filename, -1);
 }
 
-static void
-icon_add_to_lru_cache__locked (GtkIcon *info)
-{
-  GtkIconTheme *theme = NULL;
-
-  G_LOCK(icon_cache);
-  if (info->in_cache)
-    theme = g_object_ref (info->in_cache);
-  G_UNLOCK(icon_cache);
-
-  if (theme)
-    {
-      gtk_icon_theme_lock (theme);
-      if (icon_should_cache__locked (info))
-        add_to_lru_cache (theme, info);
-      gtk_icon_theme_unlock (theme);
-      g_object_unref (theme);
-    }
-}
-
 static GLoadableIcon *
 icon_get_loadable (GtkIcon *icon)
 {
@@ -3611,6 +3649,8 @@ icon_ensure_scale_and_texture__locked (GtkIcon *icon)
   gint scaled_desired_size;
   GdkPixbuf *source_pixbuf;
   gdouble dir_scale;
+
+  icon_cache_mark_used_if_cached (icon);
 
   if (icon->texture)
     return TRUE;
@@ -3803,21 +3843,19 @@ icon_ensure_scale_and_texture__locked (GtkIcon *icon)
     }
 
   g_assert (icon->texture != NULL);
-  icon_add_to_lru_cache__locked (icon);
 
   return TRUE;
 }
 
 GdkTexture *
 gtk_icon_download_texture (GtkIcon *self,
-                                GError **error)
+                           GError **error)
 {
   GdkTexture *texture = NULL;
 
-  g_mutex_lock (&self->cache_lock);
+  g_mutex_lock (&self->texture_lock);
 
-  if (!self->texture)
-    icon_ensure_scale_and_texture__locked (self);
+  icon_ensure_scale_and_texture__locked (self);
 
   if (self->texture)
     texture = g_object_ref (self->texture);
@@ -3837,7 +3875,7 @@ gtk_icon_download_texture (GtkIcon *self,
         }
     }
 
-  g_mutex_unlock (&self->cache_lock);
+  g_mutex_unlock (&self->texture_lock);
 
   return texture;
 }
@@ -3872,11 +3910,11 @@ init_color_matrix (graphene_matrix_t *color_matrix,
 
 GdkTexture *
 gtk_icon_download_colored_texture (GtkIcon *self,
-                                        const GdkRGBA *foreground_color,
-                                        const GdkRGBA *success_color,
-                                        const GdkRGBA *warning_color,
-                                        const GdkRGBA *error_color,
-                                        GError **error)
+                                   const GdkRGBA *foreground_color,
+                                   const GdkRGBA *success_color,
+                                   const GdkRGBA *warning_color,
+                                   const GdkRGBA *error_color,
+                                   GError **error)
 {
   GdkTexture *texture, *colored_texture;
   graphene_matrix_t matrix;
@@ -3903,9 +3941,9 @@ gtk_icon_download_colored_texture (GtkIcon *self,
 
 static void
 icon_paintable_snapshot (GdkPaintable *paintable,
-                              GdkSnapshot  *snapshot,
-                              double        width,
-                              double        height)
+                         GdkSnapshot  *snapshot,
+                         double        width,
+                         double        height)
 {
   GtkIcon *icon = GTK_ICON (paintable);
   GdkTexture *texture;
@@ -3931,13 +3969,13 @@ icon_paintable_snapshot (GdkPaintable *paintable,
 
 void
 gtk_icon_snapshot_with_colors (GtkIcon *icon,
-                                    GdkSnapshot  *snapshot,
-                                    double        width,
-                                    double        height,
-                                    const GdkRGBA *foreground_color,
-                                    const GdkRGBA *success_color,
-                                    const GdkRGBA *warning_color,
-                                    const GdkRGBA *error_color)
+                               GdkSnapshot  *snapshot,
+                               double        width,
+                               double        height,
+                               const GdkRGBA *foreground_color,
+                               const GdkRGBA *success_color,
+                               const GdkRGBA *warning_color,
+                               const GdkRGBA *error_color)
 {
   GdkTexture *texture;
 
