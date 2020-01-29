@@ -156,6 +156,7 @@ gtk_picture_measure (GtkWidget      *widget,
                      int           *natural_baseline)
 {
   GtkPicture *self = GTK_PICTURE (widget);
+  GtkCssStyle *style;
   double min_width, min_height, nat_width, nat_height;
   double default_size;
 
@@ -166,7 +167,8 @@ gtk_picture_measure (GtkWidget      *widget,
       return;
     }
 
-  default_size = _gtk_css_number_value_get (gtk_css_style_get_value (gtk_css_node_get_style (gtk_widget_get_css_node (widget)), GTK_CSS_PROPERTY_ICON_SIZE), 100);
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+  default_size = _gtk_css_number_value_get (style->icon->icon_size, 100);
 
   if (self->can_shrink)
     {

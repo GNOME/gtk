@@ -1202,22 +1202,16 @@ gtk_style_context_get_border (GtkStyleContext *context,
                               GtkBorder       *border)
 {
   GtkCssStyle *style;
-  double top, left, bottom, right;
 
   g_return_if_fail (border != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   style = gtk_style_context_lookup_style (context);
 
-  top = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100));
-  right = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100));
-  bottom = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100));
-  left = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100));
-
-  border->top = top;
-  border->left = left;
-  border->bottom = bottom;
-  border->right = right;
+  border->top = round (_gtk_css_number_value_get (style->border->border_top_width, 100));
+  border->right = round (_gtk_css_number_value_get (style->border->border_right_width, 100));
+  border->bottom = round (_gtk_css_number_value_get (style->border->border_bottom_width, 100));
+  border->left = round (_gtk_css_number_value_get (style->border->border_left_width, 100));
 }
 
 /**
@@ -1234,22 +1228,16 @@ gtk_style_context_get_padding (GtkStyleContext *context,
                                GtkBorder       *padding)
 {
   GtkCssStyle *style;
-  double top, left, bottom, right;
 
   g_return_if_fail (padding != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   style = gtk_style_context_lookup_style (context);
 
-  top = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_TOP), 100));
-  right = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_RIGHT), 100));
-  bottom = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_BOTTOM), 100));
-  left = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_LEFT), 100));
-
-  padding->top = top;
-  padding->left = left;
-  padding->bottom = bottom;
-  padding->right = right;
+  padding->top = round (_gtk_css_number_value_get (style->size->padding_top, 100));
+  padding->right = round (_gtk_css_number_value_get (style->size->padding_right, 100));
+  padding->bottom = round (_gtk_css_number_value_get (style->size->padding_bottom, 100));
+  padding->left = round (_gtk_css_number_value_get (style->size->padding_left, 100));
 }
 
 /**
@@ -1266,22 +1254,16 @@ gtk_style_context_get_margin (GtkStyleContext *context,
                               GtkBorder       *margin)
 {
   GtkCssStyle *style;
-  double top, left, bottom, right;
 
   g_return_if_fail (margin != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   style = gtk_style_context_lookup_style (context);
 
-  top = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_TOP), 100));
-  right = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_RIGHT), 100));
-  bottom = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_BOTTOM), 100));
-  left = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_LEFT), 100));
-
-  margin->top = top;
-  margin->left = left;
-  margin->bottom = bottom;
-  margin->right = right;
+  margin->top = round (_gtk_css_number_value_get (style->size->margin_top, 100));
+  margin->right = round (_gtk_css_number_value_get (style->size->margin_right, 100));
+  margin->bottom = round (_gtk_css_number_value_get (style->size->margin_bottom, 100));
+  margin->left = round (_gtk_css_number_value_get (style->size->margin_left, 100));
 }
 
 void
@@ -1289,11 +1271,15 @@ _gtk_style_context_get_cursor_color (GtkStyleContext *context,
                                      GdkRGBA         *primary_color,
                                      GdkRGBA         *secondary_color)
 {
+  GtkCssStyle *style;
+
+  style = gtk_style_context_lookup_style (context);
+
   if (primary_color)
-    *primary_color = *gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_CARET_COLOR));
+    *primary_color = *gtk_css_color_value_get_rgba (style->font->caret_color ? style->font->caret_color : style->core->color);
 
   if (secondary_color)
-    *secondary_color = *gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR));
+    *secondary_color = *gtk_css_color_value_get_rgba (style->font->secondary_caret_color ? style->font->secondary_caret_color : style->core->color);
 }
 
 static void

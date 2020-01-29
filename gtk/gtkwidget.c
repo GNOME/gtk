@@ -3810,10 +3810,9 @@ gtk_widget_get_frame_clock (GtkWidget *widget)
 }
 
 static gint
-get_number (GtkCssStyle *style,
-            guint        property)
+get_number (GtkCssValue *value)
 {
-  double d = _gtk_css_number_value_get (gtk_css_style_get_value (style, property), 100);
+  double d = _gtk_css_number_value_get (value, 100);
 
   if (d < 1)
     return ceil (d);
@@ -3825,30 +3824,30 @@ static void
 get_box_margin (GtkCssStyle *style,
                 GtkBorder   *margin)
 {
-  margin->top = get_number (style, GTK_CSS_PROPERTY_MARGIN_TOP);
-  margin->left = get_number (style, GTK_CSS_PROPERTY_MARGIN_LEFT);
-  margin->bottom = get_number (style, GTK_CSS_PROPERTY_MARGIN_BOTTOM);
-  margin->right = get_number (style, GTK_CSS_PROPERTY_MARGIN_RIGHT);
+  margin->top = get_number (style->size->margin_top);
+  margin->left = get_number (style->size->margin_left);
+  margin->bottom = get_number (style->size->margin_bottom);
+  margin->right = get_number (style->size->margin_right);
 }
 
 static void
 get_box_border (GtkCssStyle *style,
                 GtkBorder   *border)
 {
-  border->top = get_number (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH);
-  border->left = get_number (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH);
-  border->bottom = get_number (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH);
-  border->right = get_number (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH);
+  border->top = get_number (style->border->border_top_width);
+  border->left = get_number (style->border->border_left_width);
+  border->bottom = get_number (style->border->border_bottom_width);
+  border->right = get_number (style->border->border_right_width);
 }
 
 static void
 get_box_padding (GtkCssStyle *style,
                  GtkBorder   *border)
 {
-  border->top = get_number (style, GTK_CSS_PROPERTY_PADDING_TOP);
-  border->left = get_number (style, GTK_CSS_PROPERTY_PADDING_LEFT);
-  border->bottom = get_number (style, GTK_CSS_PROPERTY_PADDING_BOTTOM);
-  border->right = get_number (style, GTK_CSS_PROPERTY_PADDING_RIGHT);
+  border->top = get_number (style->size->padding_top);
+  border->left = get_number (style->size->padding_left);
+  border->bottom = get_number (style->size->padding_bottom);
+  border->right = get_number (style->size->padding_right);
 }
 
 /**
@@ -4034,7 +4033,7 @@ gtk_widget_allocate (GtkWidget    *widget,
   adjusted.y += margin.top;
   adjusted.width -= margin.left + margin.right;
   adjusted.height -= margin.top + margin.bottom;
-  css_transform = gtk_css_transform_value_get_transform (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_TRANSFORM));
+  css_transform = gtk_css_transform_value_get_transform (style->other->transform);
 
   if (css_transform)
     {
@@ -6588,9 +6587,7 @@ update_pango_context (GtkWidget    *widget,
 			      _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
 			      PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);
 
-  pango_cairo_context_set_resolution (context,
-                                      _gtk_css_number_value_get (
-                                          gtk_css_style_get_value (style, GTK_CSS_PROPERTY_DPI), 100));
+  pango_cairo_context_set_resolution (context, _gtk_css_number_value_get (style->core->dpi, 100));
 
   settings = gtk_widget_get_settings (widget);
   font_options = (cairo_font_options_t*)g_object_get_qdata (G_OBJECT (widget), quark_font_options);
@@ -10829,15 +10826,15 @@ static void
 gtk_widget_update_alpha (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkCssStyle *style;
   gdouble opacity;
   guint8 alpha;
 
-  opacity = _gtk_css_number_value_get (gtk_css_style_get_value (gtk_css_node_get_style (priv->cssnode),
-                                                                GTK_CSS_PROPERTY_OPACITY),
-                                       100);
+  style = gtk_css_node_get_style (priv->cssnode);
 
-
+  opacity = _gtk_css_number_value_get (style->other->opacity, 100);
   opacity = CLAMP (opacity, 0.0, 1.0);
+
   alpha = round (priv->user_alpha * opacity);
 
   if (alpha == priv->alpha)
@@ -12165,7 +12162,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
                            "RenderNode for %s %p",
                            G_OBJECT_TYPE_NAME (widget), widget);
 
-  filter_value = gtk_css_style_get_value (gtk_css_node_get_style (priv->cssnode), GTK_CSS_PROPERTY_FILTER);
+  filter_value = gtk_css_node_get_style (priv->cssnode)->other->filter;
   if (filter_value)
     gtk_css_filter_value_push_snapshot (filter_value, snapshot);
 

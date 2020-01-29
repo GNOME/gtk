@@ -56,6 +56,7 @@ main (int argc, char *argv[])
   char fd_str[20];
   gint64 *values;
   gint64 min, max, total;
+  int count;
   char *output_dir = NULL;
   int i;
 
@@ -89,6 +90,8 @@ main (int argc, char *argv[])
       g_object_unref (file);
     }
 
+  opt_rep++;
+
   values = g_new (gint64, opt_rep);
 
   for (i = 0; i < opt_rep; i++)
@@ -101,9 +104,9 @@ main (int argc, char *argv[])
       SysprofCaptureCursor *cursor;
       SysprofCaptureCondition *condition;
 
-       fd = g_file_open_tmp ("gtk.XXXXXX.syscap", &name, &error);
-       if (error)
-         g_error ("Create syscap file: %s", error->message);
+      fd = g_file_open_tmp ("gtk.XXXXXX.syscap", &name, &error);
+      if (error)
+        g_error ("Create syscap file: %s", error->message);
 
       launcher = g_subprocess_launcher_new (0);
       g_subprocess_launcher_take_fd (launcher, fd, fd);
@@ -164,24 +167,30 @@ main (int argc, char *argv[])
         remove (name);
 
       g_free (name);
+
+      /* A poor mans way to try and isolate the runs from each other */
+      g_usleep (300000);
     }
 
   min = G_MAXINT64;
   max = 0;
+  count = 0;
   total = 0;
 
-  for (i = 0; i < opt_rep; i++)
+  /* Ignore the first run, to avoid cache effects */
+  for (i = 1; i < opt_rep; i++)
     {
       if (min > values[i])
         min = values[i];
       if (max < values[i])
         max = values[i];
+      count++;
       total += values[i];
     }
 
   g_print ("%d runs, min %g, max %g, avg %g\n",
-           opt_rep,
+           count,
            MILLISECONDS (min),
            MILLISECONDS (max),
-           MILLISECONDS (total / opt_rep));
+           MILLISECONDS (total / count));
 }

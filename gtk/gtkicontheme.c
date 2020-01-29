@@ -3872,9 +3872,9 @@ gtk_icon_theme_lookup_symbolic_colors (GtkCssStyle *style,
 {
   GtkCssValue *palette, *color;
   const GdkRGBA *lookup;
-
-  color = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR);
-  palette = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_PALETTE);
+ 
+  color = style->core->color;
+  palette = style->core->icon_palette;
   *color_out = *gtk_css_color_value_get_rgba (color);
 
   lookup = gtk_css_palette_value_get_color (palette, "success");

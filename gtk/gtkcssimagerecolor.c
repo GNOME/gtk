@@ -70,11 +70,9 @@ lookup_symbolic_colors (GtkCssStyle *style,
                         GdkRGBA     *warning_out,
                         GdkRGBA     *error_out)
 {
-  GtkCssValue *color;
   const GdkRGBA *lookup;
 
-  color = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR);
-  *color_out = *gtk_css_color_value_get_rgba (color);
+  *color_out = *gtk_css_color_value_get_rgba (style->core->color);
 
   lookup = gtk_css_palette_value_get_color (palette, "success");
   if (lookup)
@@ -220,7 +218,7 @@ gtk_css_image_recolor_compute (GtkCssImage      *image,
   if (recolor->palette)
     palette = _gtk_css_value_compute (recolor->palette, property_id, provider, style, parent_style);
   else
-    palette = _gtk_css_value_ref (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_PALETTE));
+    palette = _gtk_css_value_ref (style->core->icon_palette);
 
   img = gtk_css_image_recolor_load (recolor, style, palette, scale, &error);
 
