@@ -585,7 +585,7 @@ gtk_entry_completion_constructed (GObject *object)
   gtk_popover_set_position (GTK_POPOVER (priv->popup_window), GTK_POS_BOTTOM);
   gtk_popover_set_autohide (GTK_POPOVER (priv->popup_window), FALSE);
   gtk_popover_set_has_arrow (GTK_POPOVER (priv->popup_window), FALSE);
-  gtk_style_context_add_class (gtk_widget_get_style_context (priv->popup_window), "entry-completion");
+  gtk_widget_add_style_class (priv->popup_window, "entry-completion");
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed",

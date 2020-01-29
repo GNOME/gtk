@@ -299,7 +299,6 @@ gtk_color_button_init (GtkColorButton *button)
   GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
   PangoLayout *layout;
   PangoRectangle rect;
-  GtkStyleContext *context;
   GdkContentFormats *targets;
   GdkContentProvider *content;
   GtkDragSource *source;
@@ -340,8 +339,7 @@ gtk_color_button_init (GtkColorButton *button)
   g_signal_connect (source, "drag-begin", G_CALLBACK (gtk_color_button_drag_begin), button);
   gtk_widget_add_controller (priv->button, GTK_EVENT_CONTROLLER (source));
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (priv->button));
-  gtk_style_context_add_class (context, "color");
+  gtk_widget_add_style_class (priv->button, "color");
 }
 
 static void

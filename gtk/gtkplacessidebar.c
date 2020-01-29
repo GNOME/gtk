@@ -1018,7 +1018,6 @@ update_places (GtkPlacesSidebar *sidebar)
   CloudProvidersAccount *cloud_provider_account;
   CloudProvidersProvider *cloud_provider;
 #endif
-  GtkStyleContext *context;
 
   /* save original selection */
   selected = gtk_list_box_get_selected_row (GTK_LIST_BOX (sidebar->list_box));
@@ -1437,8 +1436,7 @@ update_places (GtkPlacesSidebar *sidebar)
                                          _("New bookmark"), new_bookmark_icon, NULL, NULL,
                                          NULL, NULL, NULL, NULL, 0,
                                          _("Add a new bookmark"));
-  context = gtk_widget_get_style_context (sidebar->new_bookmark_row);
-  gtk_style_context_add_class (context, "sidebar-new-bookmark-row");
+  gtk_widget_add_style_class (sidebar->new_bookmark_row, "sidebar-new-bookmark-row");
   g_object_unref (new_bookmark_icon);
 
   /* network */
@@ -2646,7 +2644,7 @@ create_rename_popover (GtkPlacesSidebar *sidebar)
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
   g_free (str);
   button = gtk_button_new_with_mnemonic (_("_Rename"));
-  gtk_style_context_add_class (gtk_widget_get_style_context (button), "suggested-action");
+  gtk_widget_add_style_class (button, "suggested-action");
   g_signal_connect (button, "clicked", G_CALLBACK (do_rename), sidebar);
   error = gtk_label_new ("");
   gtk_widget_set_halign (error, GTK_ALIGN_START);
@@ -2676,18 +2674,16 @@ static void
 update_popover_shadowing (GtkWidget *row,
                           gboolean   shown)
 {
-  GtkStyleContext *context;
   gint count;
 
   count = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), "popover-count"));
   count = shown ? count + 1 : count - 1;
   g_object_set_data (G_OBJECT (row), "popover-count", GINT_TO_POINTER (count));
 
-  context = gtk_widget_get_style_context (row);
   if (count > 0)
-    gtk_style_context_add_class (context, "has-open-popup");
+    gtk_widget_add_style_class (row, "has-open-popup");
   else
-    gtk_style_context_remove_class (context, "has-open-popup");
+    gtk_widget_remove_style_class (row, "has-open-popup");
 }
 
 static void
@@ -4024,7 +4020,6 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   GdkContentFormats *formats;
   GtkDropTarget *dest;
   gboolean show_desktop;
-  GtkStyleContext *context;
   GtkEventController *controller;
   GtkGesture *gesture;
   GdkContentFormatsBuilder *builder;
@@ -4052,8 +4047,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
                                   GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sidebar->swin), GTK_SHADOW_IN);
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (sidebar));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SIDEBAR);
+  gtk_widget_add_style_class (GTK_WIDGET (sidebar), "sidebar");
 
   /* list box */
   sidebar->list_box = gtk_list_box_new ();
