@@ -709,12 +709,27 @@ gtk_css_style_snapshot_border (GtkCssBoxes *boxes,
       border_width[3] = _gtk_css_number_value_get (border->border_left_width, 100);
 
       gtk_snapshot_push_debug (snapshot, "CSS border");
-      snapshot_border (snapshot,
-                       gtk_css_boxes_get_border_box (boxes),
-                       border_width,
-                       colors,
-                       border_style);
-      gtk_snapshot_pop (snapshot);
+      if (border_style[0] <= GTK_BORDER_STYLE_SOLID &&
+          border_style[1] <= GTK_BORDER_STYLE_SOLID &&
+          border_style[2] <= GTK_BORDER_STYLE_SOLID &&
+          border_style[3] <= GTK_BORDER_STYLE_SOLID)
+        {
+          /* The most common case of a solid border */
+          gtk_snapshot_append_border (snapshot,
+                                      gtk_css_boxes_get_border_box (boxes),
+                                      border_width,
+                                      colors);
+        }
+      else
+        {
+           snapshot_border (snapshot,
+                            gtk_css_boxes_get_border_box (boxes),
+                            border_width,
+                            colors,
+                            border_style);
+        }
+       gtk_snapshot_pop (snapshot);
+
     }
 }
 
