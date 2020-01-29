@@ -175,7 +175,9 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
   g_object_class_install_properties (gobject_class, LAST_PROP, pspecs);
 }
 
+#ifdef G_ENABLE_DEBUG
 static guint pixels_counter;
+#endif
 
 static void
 gdk_draw_context_init (GdkDrawContext *self)
