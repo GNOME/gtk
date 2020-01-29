@@ -119,6 +119,9 @@ void _gdk_x11_screen_get_edge_monitors      (GdkScreen *screen,
 					     gint      *right);
 void _gdk_x11_screen_set_window_scale       (GdkX11Screen *x11_screen,
 					     int        scale);
+gboolean _gdk_x11_screen_get_monitor_work_area (GdkScreen    *screen,
+                                                GdkMonitor   *monitor,
+                                                GdkRectangle *area);
 void gdk_x11_screen_get_work_area           (GdkScreen    *screen,
                                              GdkRectangle *area);
 gint gdk_x11_screen_get_width               (GdkScreen *screen);
