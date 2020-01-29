@@ -605,7 +605,7 @@ populate_servers (GtkPlacesView *view)
       gtk_widget_set_hexpand (label, TRUE);
       gtk_label_set_xalign (GTK_LABEL (label), 0.0);
       gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-      gtk_style_context_add_class (gtk_widget_get_style_context (label), "dim-label");
+      gtk_widget_add_style_class (label, "dim-label");
       gtk_container_add (GTK_CONTAINER (grid), label);
 
       /* remove button */
@@ -613,7 +613,7 @@ populate_servers (GtkPlacesView *view)
       gtk_widget_set_halign (button, GTK_ALIGN_END);
       gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-      gtk_style_context_add_class (gtk_widget_get_style_context (button), "sidebar-button");
+      gtk_widget_add_style_class (button, "sidebar-button");
       gtk_grid_attach (GTK_GRID (grid), button, 1, 0, 1, 2);
 
       gtk_container_add (GTK_CONTAINER (row), grid);
@@ -1900,11 +1900,9 @@ on_address_entry_text_changed (GtkPlacesView *view)
 out:
   gtk_widget_set_sensitive (priv->connect_button, supported);
   if (scheme && !supported)
-    gtk_style_context_add_class (gtk_widget_get_style_context (priv->address_entry),
-                                 GTK_STYLE_CLASS_ERROR);
+    gtk_widget_add_style_class (priv->address_entry, GTK_STYLE_CLASS_ERROR);
   else
-    gtk_style_context_remove_class (gtk_widget_get_style_context (priv->address_entry),
-                                    GTK_STYLE_CLASS_ERROR);
+    gtk_widget_add_style_class (priv->address_entry, GTK_STYLE_CLASS_ERROR);
 
   g_free (address);
   g_free (scheme);
