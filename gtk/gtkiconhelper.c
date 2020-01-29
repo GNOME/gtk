@@ -131,14 +131,11 @@ gtk_icon_helper_load_paintable (GtkIconHelper   *self,
   GdkPaintable *paintable;
   GIcon *gicon;
   gboolean symbolic;
-  gint64 before = g_get_monotonic_time ();
-  char *item;
 
   switch (gtk_image_definition_get_storage_type (self->def))
     {
     case GTK_IMAGE_PAINTABLE:
       paintable = g_object_ref (gtk_image_definition_get_paintable (self->def));
-      item = g_strdup ("paintable");
       symbolic = FALSE;
       break;
 
@@ -147,7 +144,6 @@ gtk_icon_helper_load_paintable (GtkIconHelper   *self,
         gicon = g_themed_icon_new_with_default_fallbacks (gtk_image_definition_get_icon_name (self->def));
       else
         gicon = g_themed_icon_new (gtk_image_definition_get_icon_name (self->def));
-      item = g_icon_to_string (gicon);
       paintable = ensure_paintable_for_gicon (self,
                                               gtk_css_node_get_style (self->node),
                                               gtk_widget_get_direction (self->owner),
@@ -158,7 +154,6 @@ gtk_icon_helper_load_paintable (GtkIconHelper   *self,
       break;
 
     case GTK_IMAGE_GICON:
-      item = g_icon_to_string (gtk_image_definition_get_gicon (self->def));
       paintable = ensure_paintable_for_gicon (self, 
                                               gtk_css_node_get_style (self->node),
                                               gtk_widget_get_direction (self->owner),
@@ -171,15 +166,10 @@ gtk_icon_helper_load_paintable (GtkIconHelper   *self,
     default:
       paintable = NULL;
       symbolic = FALSE;
-      item = NULL;
       break;
     }
 
   *out_symbolic = symbolic;
-
-  if (gdk_profiler_is_running ())
-    gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "icon helper load", item);
-  g_free (item);
 
   return paintable;
 }
