@@ -1934,16 +1934,19 @@ gtk_css_selector_tree_match (const GtkCssSelectorTree      *tree,
        prev != NULL;
        prev = gtk_css_selector_tree_get_sibling (prev))
     {
+      GtkCssChange child_change = 0;
+      GtkCssChange *child_change_ptr = change ? &child_change : NULL;
+
       for (child = gtk_css_selector_iterator (&tree->selector, node, NULL);
            child;
            child = gtk_css_selector_iterator (&tree->selector, node, child))
         {
-          GtkCssChange child_change = 0;
-          if (!gtk_css_selector_tree_match (prev, filter, match_filter, child, results, change ? &child_change : NULL))
+          if (!gtk_css_selector_tree_match (prev, filter, match_filter, child, results, child_change_ptr))
             break;
-          if (change)
-            *change |= child_change;
+          child_change_ptr = NULL;
         }
+      if (change)
+        *change |= child_change;
     }
 
   if (change && *change)
@@ -1959,15 +1962,17 @@ gtk_css_selector_tree_match_all (const GtkCssSelectorTree     *tree,
                                  GtkCssChange                 *change)
 {
   GPtrArray *results = NULL;
+  const GtkCssSelectorTree *iter;
 
   if (change)
     *change = 0;
 
-  for (; tree != NULL;
-       tree = gtk_css_selector_tree_get_sibling (tree))
+  for (iter = tree;
+       iter != NULL;
+       iter = gtk_css_selector_tree_get_sibling (iter))
     {
       GtkCssChange child_change = 0;
-      gtk_css_selector_tree_match (tree, filter, FALSE, node, &results, change ? &child_change : NULL);
+      gtk_css_selector_tree_match (iter, filter, FALSE, node, &results, change ? &child_change : NULL);
       if (change)
         *change |= child_change;
     }
@@ -1983,7 +1988,7 @@ _gtk_css_selector_tree_is_empty (const GtkCssSelectorTree *tree)
 
 #ifdef PRINT_TREE
 static void
-_gtk_css_selector_tree_print (const GtkCssSelectorTree *tree, GString *str, char *prefix)
+_gtk_css_selector_tree_print (const GtkCssSelectorTree *tree, GString *str, const char *prefix)
 {
   gboolean first = TRUE;
   int len, i;
