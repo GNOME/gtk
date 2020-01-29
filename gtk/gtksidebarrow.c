@@ -212,7 +212,6 @@ gtk_sidebar_row_set_property (GObject      *object,
                               GParamSpec   *pspec)
 {
   GtkSidebarRow *self = GTK_SIDEBAR_ROW (object);
-  GtkStyleContext *context;
 
   switch (prop_id)
     {
@@ -353,8 +352,7 @@ gtk_sidebar_row_set_property (GObject      *object,
                                    (GtkCallback) gtk_widget_destroy,
                                    NULL);
 
-            context = gtk_widget_get_style_context (GTK_WIDGET (self));
-            gtk_style_context_add_class (context, "sidebar-placeholder-row");
+            gtk_widget_add_style_class (GTK_WIDGET (self), "sidebar-placeholder-row");
           }
 
         break;

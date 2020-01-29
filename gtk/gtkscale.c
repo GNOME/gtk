@@ -1042,24 +1042,21 @@ static void
 update_value_position (GtkScale *scale)
 {
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
-  GtkStyleContext *context;
 
   if (!priv->value_widget)
     return;
 
-  context = gtk_widget_get_style_context (priv->value_widget);
-
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TOP);
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_RIGHT);
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BOTTOM);
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_LEFT);
+  gtk_widget_remove_style_class (priv->value_widget, GTK_STYLE_CLASS_TOP);
+  gtk_widget_remove_style_class (priv->value_widget, GTK_STYLE_CLASS_RIGHT);
+  gtk_widget_remove_style_class (priv->value_widget, GTK_STYLE_CLASS_BOTTOM);
+  gtk_widget_remove_style_class (priv->value_widget, GTK_STYLE_CLASS_LEFT);
 
   switch (priv->value_pos)
     {
-    case GTK_POS_TOP:    gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP); break;
-    case GTK_POS_RIGHT:  gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT); break;
-    case GTK_POS_BOTTOM: gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM); break;
-    case GTK_POS_LEFT:   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT); break;
+    case GTK_POS_TOP:    gtk_widget_add_style_class (priv->value_widget, GTK_STYLE_CLASS_TOP); break;
+    case GTK_POS_RIGHT:  gtk_widget_add_style_class (priv->value_widget, GTK_STYLE_CLASS_RIGHT); break;
+    case GTK_POS_BOTTOM: gtk_widget_add_style_class (priv->value_widget, GTK_STYLE_CLASS_BOTTOM); break;
+    case GTK_POS_LEFT:   gtk_widget_add_style_class (priv->value_widget, GTK_STYLE_CLASS_LEFT); break;
 
     default: g_assert_not_reached ();
     }
@@ -1646,20 +1643,17 @@ void
 gtk_scale_clear_marks (GtkScale *scale)
 {
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
-  GtkStyleContext *context;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
 
   g_slist_free_full (priv->marks, gtk_scale_mark_free);
   priv->marks = NULL;
 
-
   g_clear_pointer (&priv->top_marks_widget, gtk_widget_unparent);
   g_clear_pointer (&priv->bottom_marks_widget, gtk_widget_unparent);
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (scale));
-  gtk_style_context_remove_class (context, "marks-before");
-  gtk_style_context_remove_class (context, "marks-after");
+  gtk_widget_remove_style_class (GTK_WIDGET (scale), "marks-before");
+  gtk_widget_remove_style_class (GTK_WIDGET (scale), "marks-after");
 
   _gtk_range_set_stop_values (GTK_RANGE (scale), NULL, 0);
 
@@ -1700,7 +1694,6 @@ gtk_scale_add_mark (GtkScale        *scale,
   GSList *m;
   gdouble *values;
   gint n, i;
-  GtkStyleContext *context;
   GtkWidget *marks_widget;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
@@ -1735,8 +1728,7 @@ gtk_scale_add_mark (GtkScale        *scale,
                                    (priv->value_widget &&
                                     (priv->value_pos == GTK_POS_TOP || priv->value_pos == GTK_POS_LEFT)) ?
                                      priv->value_widget : NULL);
-          gtk_style_context_add_class (gtk_widget_get_style_context (priv->top_marks_widget),
-                                       GTK_STYLE_CLASS_TOP);
+          gtk_widget_add_style_class (priv->top_marks_widget, GTK_STYLE_CLASS_TOP);
         }
       marks_widget = priv->top_marks_widget;
     }
@@ -1755,8 +1747,7 @@ gtk_scale_add_mark (GtkScale        *scale,
                                     (priv->value_widget &&
                                      (priv->value_pos == GTK_POS_BOTTOM || priv->value_pos == GTK_POS_RIGHT)) ?
                                       priv->value_widget: NULL);
-          gtk_style_context_add_class (gtk_widget_get_style_context (priv->bottom_marks_widget),
-                                       GTK_STYLE_CLASS_BOTTOM);
+          gtk_widget_add_style_class (priv->bottom_marks_widget, GTK_STYLE_CLASS_BOTTOM);
         }
       marks_widget = priv->bottom_marks_widget;
     }
@@ -1810,11 +1801,11 @@ gtk_scale_add_mark (GtkScale        *scale,
 
   g_free (values);
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (scale));
   if (priv->top_marks_widget)
-    gtk_style_context_add_class (context, "marks-before");
+    gtk_widget_add_style_class (GTK_WIDGET (scale), "marks-before");
+
   if (priv->bottom_marks_widget)
-    gtk_style_context_add_class (context, "marks-after");
+    gtk_widget_add_style_class (GTK_WIDGET (scale), "marks-after");
 
   gtk_widget_queue_resize (widget);
 }
