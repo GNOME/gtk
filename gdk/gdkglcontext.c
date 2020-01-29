@@ -638,8 +638,10 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
                                      int           minor)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-  GdkDisplay *display;
   int version, min_ver;
+#ifdef G_ENABLE_DEBUG
+  GdkDisplay *display;
+#endif
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
   g_return_if_fail (!priv->realized);
@@ -655,8 +657,9 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
   /* Enforce a minimum context version number of 3.2 */
   version = (major * 100) + minor;
 
+#ifdef G_ENABLE_DEBUG
   display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
-
+#endif
   if (priv->use_es > 0 || GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES))
     min_ver = 200;
   else
@@ -686,13 +689,17 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
                                      int          *minor)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+#ifdef G_ENABLE_DEBUG
   GdkDisplay *display;
+#endif
   int default_major, default_minor;
   int maj, min;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
+#ifdef G_ENABLE_DEBUG
   display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
+#endif
 
   if (priv->use_es > 0 || GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES))
     {
@@ -941,8 +948,10 @@ static void
 gdk_gl_context_check_extensions (GdkGLContext *context)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-  GdkDisplay *display;
   gboolean has_npot, has_texture_rectangle;
+#ifdef G_ENABLE_DEBUG
+  GdkDisplay *display;
+#endif
 
   if (!priv->realized)
     return;
@@ -1000,7 +1009,9 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
         priv->is_legacy = TRUE;
     }
 
+#ifdef G_ENABLE_DEBUG
   display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
+#endif
 
   if (priv->has_khr_debug && GDK_DISPLAY_DEBUG_CHECK (display, GL_DEBUG))
     {
