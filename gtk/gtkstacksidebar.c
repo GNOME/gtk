@@ -154,7 +154,6 @@ gtk_stack_sidebar_row_selected (GtkListBox    *box,
 static void
 gtk_stack_sidebar_init (GtkStackSidebar *self)
 {
-  GtkStyleContext *style;
   GtkWidget *sw;
 
   sw = gtk_scrolled_window_new (NULL, NULL);
@@ -173,8 +172,7 @@ gtk_stack_sidebar_init (GtkStackSidebar *self)
   g_signal_connect (self->list, "row-selected",
                     G_CALLBACK (gtk_stack_sidebar_row_selected), self);
 
-  style = gtk_widget_get_style_context (GTK_WIDGET (self));
-  gtk_style_context_add_class (style, "sidebar");
+  gtk_widget_add_style_class (GTK_WIDGET (self), "sidebar");
 
   self->rows = g_hash_table_new (NULL, NULL);
 }
@@ -188,7 +186,6 @@ update_row (GtkStackSidebar *self,
   gchar *title;
   gboolean needs_attention;
   gboolean visible;
-  GtkStyleContext *context;
 
   g_object_get (page,
                 "title", &title,
@@ -201,11 +198,10 @@ update_row (GtkStackSidebar *self,
 
   gtk_widget_set_visible (row, visible && title != NULL);
 
-  context = gtk_widget_get_style_context (row);
   if (needs_attention)
-     gtk_style_context_add_class (context, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+    gtk_widget_add_style_class (row, GTK_STYLE_CLASS_NEEDS_ATTENTION);
   else
-    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+    gtk_widget_remove_style_class (row, GTK_STYLE_CLASS_NEEDS_ATTENTION);
 
   g_free (title);
 }
