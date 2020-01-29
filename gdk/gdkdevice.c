@@ -738,7 +738,7 @@ gdk_device_get_source (GdkDevice *device)
  *
  * Determines the mode of the device.
  *
- * Returns: a #GdkInputSource
+ * Returns: a #GdkInputMode
  **/
 GdkInputMode
 gdk_device_get_mode (GdkDevice *device)
