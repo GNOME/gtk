@@ -3659,6 +3659,11 @@ tablet_tool_handle_proximity_in (void                      *data,
   gdk_event_set_source_device (event, tablet->current_device);
   gdk_event_set_device_tool (event, tool->tool);
 
+  tablet->pointer_info.pointer_surface_outputs =
+    g_slist_append (tablet->pointer_info.pointer_surface_outputs,
+                    gdk_wayland_window_get_wl_output (window));
+  pointer_surface_update_scale (tablet->master);
+
   GDK_NOTE (EVENTS,
             g_message ("proximity in, seat %p surface %p tool %d",
                        seat, tablet->pointer_info.focus,
@@ -3686,7 +3691,11 @@ tablet_tool_handle_proximity_out (void                      *data,
 
   gdk_wayland_pointer_stop_cursor_animation (&tablet->pointer_info);
 
-  gdk_wayland_device_update_window_cursor (tablet->master);
+  tablet->pointer_info.pointer_surface_outputs =
+    g_slist_remove (tablet->pointer_info.pointer_surface_outputs,
+                    gdk_wayland_window_get_wl_output (tablet->pointer_info.focus));
+  pointer_surface_update_scale (tablet->master);
+
   g_object_unref (tablet->pointer_info.focus);
   tablet->pointer_info.focus = NULL;
 
@@ -4520,7 +4529,15 @@ static void
 on_monitors_changed (GdkScreen      *screen,
                      GdkWaylandSeat *seat)
 {
+  GList *l;
+
   pointer_surface_update_scale (seat->master_pointer);
+
+  for (l = seat->tablets; l; l = l->next)
+    {
+      GdkWaylandTabletData *tablet = l->data;
+      pointer_surface_update_scale (tablet->master);
+    }
 }
 
 static void
