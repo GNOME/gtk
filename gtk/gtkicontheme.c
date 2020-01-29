@@ -3662,6 +3662,7 @@ icon_ensure_scale_and_texture__locked (GtkIcon *icon)
   gint scaled_desired_size;
   GdkPixbuf *source_pixbuf;
   gdouble dir_scale;
+  gint64 before;
 
   icon_cache_mark_used_if_cached (icon);
 
@@ -3670,6 +3671,8 @@ icon_ensure_scale_and_texture__locked (GtkIcon *icon)
 
   if (icon->load_error)
     return FALSE;
+
+  before = g_get_monotonic_time ();
 
   scaled_desired_size = icon->desired_size * icon->desired_scale;
 
@@ -3703,8 +3706,6 @@ icon_ensure_scale_and_texture__locked (GtkIcon *icon)
       else
         icon->scale = (gdouble) scaled_desired_size / (icon->dir_size * dir_scale);
     }
-
-  gdk_profiler_add_mark (g_get_monotonic_time () * 1000, 0, "icon load", icon->filename);
 
   /* At this point, we need to actually get the icon; either from the
    * builtin image or by loading the file
@@ -3856,6 +3857,14 @@ icon_ensure_scale_and_texture__locked (GtkIcon *icon)
     }
 
   g_assert (icon->texture != NULL);
+
+
+  if (gdk_profiler_is_running ())
+    {
+      char *message = g_strdup_printf ("%s size %d@%d", icon->filename, icon->desired_size, icon->desired_scale);
+      gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "icon load", message);
+      g_free (message);
+    }
 
   return TRUE;
 }
