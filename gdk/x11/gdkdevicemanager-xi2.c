@@ -685,12 +685,13 @@ remove_device (GdkX11DeviceManagerXI2 *device_manager,
   if (device)
     {
       detach_from_seat (device);
-      device_manager->devices = g_list_remove (device_manager->devices, device);
-
-      g_object_run_dispose (G_OBJECT (device));
 
       g_hash_table_remove (device_manager->id_table,
                            GINT_TO_POINTER (device_id));
+
+      device_manager->devices = g_list_remove (device_manager->devices, device);
+      g_object_run_dispose (G_OBJECT (device));
+      g_object_unref (device);
     }
 }
 
