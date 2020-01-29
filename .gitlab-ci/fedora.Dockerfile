@@ -61,6 +61,7 @@ RUN dnf -y install \
     ninja-build \
     pango-devel \
     pcre-devel \
+    pygments \
     python3 \
     python3-jinja2 \
     python3-pip \
