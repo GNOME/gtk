@@ -632,30 +632,35 @@ update_level_style_classes (GtkLevelBar *self)
 
   for (i = 0; i < num_filled; i++)
     {
-      GtkStyleContext *context = gtk_widget_get_style_context (priv->block_widget[inverted ? num_blocks - 1 - i : i]);
-      GList *classes = gtk_style_context_list_classes (context);
+      GtkCssNode *node = gtk_widget_get_css_node (priv->block_widget[inverted ? num_blocks - 1 - i : i]);
+      const GQuark *classes;
+      guint n_classes;
+      guint j;
 
-      for (l = classes; l; l = l->next)
-        gtk_style_context_remove_class (context, l->data);
+      classes = gtk_css_node_list_classes (node, &n_classes);
 
-      g_list_free (classes);
+      for (j = 0; j < n_classes; j++)
+        gtk_css_node_remove_class (node, classes[j]);
 
-      gtk_style_context_add_class (context, "filled");
+      gtk_css_node_add_class (node, g_quark_from_static_string ("filled"));
+
       if (value_class)
-        gtk_style_context_add_class (context, value_class);
+        gtk_css_node_add_class (node, g_quark_from_string (value_class));
     }
 
   for (; i < num_blocks; i++)
     {
-      GtkStyleContext *context = gtk_widget_get_style_context (priv->block_widget[inverted ? num_blocks - 1 - i : i]);
-      GList *classes = gtk_style_context_list_classes (context);
+      GtkCssNode *node = gtk_widget_get_css_node (priv->block_widget[inverted ? num_blocks - 1 - i : i]);
+      const GQuark *classes;
+      guint n_classes;
+      guint j;
 
-      for (l = classes; l; l = l->next)
-        gtk_style_context_remove_class (context, l->data);
+      classes = gtk_css_node_list_classes (node, &n_classes);
 
-      g_list_free (classes);
+      for (j = 0; j < n_classes; j++)
+        gtk_css_node_remove_class (node, classes[j]);
 
-      gtk_style_context_add_class (context, "empty");
+      gtk_css_node_add_class (node, g_quark_from_static_string ("empty"));
     }
 }
 
