@@ -4409,6 +4409,8 @@ gtk_widget_insert_after
 gtk_widget_set_layout_manager
 gtk_widget_get_layout_manager
 gtk_widget_should_layout
+gtk_widget_add_style_class
+gtk_widget_remove_style_class
 
 <SUBSECTION>
 gtk_widget_get_style_context
