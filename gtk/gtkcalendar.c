@@ -743,16 +743,15 @@ gtk_calendar_init (GtkCalendar *calendar)
 
   gtk_widget_set_can_focus (widget, TRUE);
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (calendar)),
-                               GTK_STYLE_CLASS_VIEW);
+  gtk_widget_add_style_class (GTK_WIDGET (calendar), GTK_STYLE_CLASS_VIEW);
 
   priv->header_box = g_object_new (GTK_TYPE_BOX,
                                    "css-name", "header",
                                    NULL);
   priv->year_label = gtk_label_new ("");
-  gtk_style_context_add_class (gtk_widget_get_style_context (priv->year_label), "year");
+  gtk_widget_add_style_class (priv->year_label, "year");
   priv->month_name_stack = gtk_stack_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (priv->month_name_stack), "month");
+  gtk_widget_add_style_class (priv->month_name_stack, "month");
   priv->arrow_widgets[0] = gtk_button_new_from_icon_name ("pan-start-symbolic");
   g_signal_connect_swapped (priv->arrow_widgets[0], "clicked", G_CALLBACK (calendar_set_month_prev), calendar);
   priv->arrow_widgets[1] = gtk_button_new_from_icon_name ("pan-end-symbolic");
