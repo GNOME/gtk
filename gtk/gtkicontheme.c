@@ -397,10 +397,6 @@ static IconSuffix suffix_from_name                      (const gchar      *name)
 static gboolean   icon_ensure_scale_and_texture__locked (GtkIcon          *icon);
 static void       unset_display                         (GtkIconTheme     *self);
 static void       update_current_theme__mainthread      (GtkIconTheme     *self);
-static void       load_icon_thread                      (GTask            *task,
-                                                         gpointer          source_object,
-                                                         gpointer          task_data,
-                                                         GCancellable     *cancellable);
 static gboolean   ensure_valid_themes                   (GtkIconTheme     *self,
                                                          gboolean          non_blocking);
 
@@ -485,6 +481,12 @@ static void
 gtk_icon_theme_lock (GtkIconTheme *self)
 {
   g_mutex_lock (&self->ref->lock);
+}
+
+static gboolean
+gtk_icon_theme_trylock (GtkIconTheme *self)
+{
+  return g_mutex_trylock (&self->ref->lock);
 }
 
 static void
@@ -2414,7 +2416,7 @@ gtk_icon_theme_choose_icon_async (GtkIconTheme       *self,
                                   gpointer             user_data)
 {
   GTask *task;
-  GtkIcon *icon;
+  GtkIcon *icon = NULL;
   gboolean would_block = FALSE;
 
   g_return_if_fail (GTK_IS_ICON_THEME (self));
@@ -2425,9 +2427,14 @@ gtk_icon_theme_choose_icon_async (GtkIconTheme       *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  gtk_icon_theme_lock (self);
+  if (gtk_icon_theme_trylock (self))
+    {
+      icon = choose_icon (self, icon_names, size, 1, flags, TRUE, &would_block);
+      gtk_icon_theme_unlock (self);
+    }
+  else
+    would_block = TRUE;
 
-  icon = choose_icon (self, icon_names, size, 1, flags, TRUE, &would_block);
   if (icon == NULL)
     {
       if (would_block)
@@ -2443,27 +2450,31 @@ gtk_icon_theme_choose_icon_async (GtkIconTheme       *self,
                                    _("Icon not present in theme %s"), self->current_theme);
         }
     }
-
-  gtk_icon_theme_unlock (self);
-
-  if (icon)
+  else
     {
-      g_mutex_lock (&icon->texture_lock);
-
-      if (icon->texture)
-        g_task_return_pointer (task, icon, g_object_unref);
-      else if (icon->load_error)
+      gboolean done = FALSE;
+      if (g_mutex_trylock (&icon->texture_lock))
         {
-          g_task_return_error (task, g_error_copy (icon->load_error));
-          g_object_unref (icon);
+          if (icon->texture)
+            {
+              done = TRUE;
+              g_task_return_pointer (task, icon, g_object_unref);
+            }
+          else if (icon->load_error)
+            {
+              done = TRUE;
+              g_task_return_error (task, g_error_copy (icon->load_error));
+              g_object_unref (icon);
+            }
+          g_mutex_unlock (&icon->texture_lock);
         }
-      else
+
+      if (!done)
         {
           /* Not here, load it in a thread */
           g_task_set_task_data (task, icon, g_object_unref);
           g_task_run_in_thread (task, load_icon_thread);
         }
-      g_mutex_unlock (&icon->texture_lock);
     }
 }
 
