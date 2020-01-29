@@ -999,13 +999,6 @@ gtk_css_node_ensure_style (GtkCssNode                   *cssnode,
 GtkCssStyle *
 gtk_css_node_get_style (GtkCssNode *cssnode)
 {
-  if (gtk_css_node_needs_new_style (cssnode))
-    {
-      gint64 timestamp = gtk_css_node_get_timestamp (cssnode);
-
-      gtk_css_node_ensure_style (cssnode, NULL, timestamp);
-    }
-
   return cssnode->style;
 }
 
