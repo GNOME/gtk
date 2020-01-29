@@ -57,6 +57,11 @@ for f in get_files('ui', '.ui'):
 
 xml += '\n'
 
+for f in get_files('ui', '.ui.precompiled'):
+  xml += '    <file>ui/{0}</file>\n'.format(f)
+
+xml += '\n'
+
 for s in ['16x16', '24x24', '32x32', '48x48', 'scalable']:
   for c in ['actions', 'categories', 'emblems', 'emotes', 'devices', 'mimetypes', 'places', 'status']:
     icons_dir = 'icons/{0}/{1}'.format(s,c)
