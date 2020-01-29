@@ -2634,8 +2634,9 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
          gtk_widget_get_modifier_mask (widget,
                                        GDK_MODIFIER_INTENT_EXTEND_SELECTION));
 
-      if (extend_selection)
-        gtk_text_reset_im_context (self);
+      /* Always emit reset when preedit is shown */
+      priv->need_im_reset = TRUE;
+      gtk_text_reset_im_context (self);
 
       switch (n_press)
         {

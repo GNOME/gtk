@@ -5201,7 +5201,11 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
                    gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
 
   if (n_press == 1)
-    gtk_text_view_reset_im_context (text_view);
+    {
+      /* Always emit reset when preedit is shown */
+      priv->need_im_reset = TRUE;
+      gtk_text_view_reset_im_context (text_view);
+    }
 
   if (n_press == 1 &&
       gdk_event_triggers_context_menu (event))
