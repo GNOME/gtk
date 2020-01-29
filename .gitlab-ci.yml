@@ -16,7 +16,8 @@ stages:
 variables:
   COMMON_MESON_FLAGS: "--fatal-meson-warnings --werror"
   MESON_TEST_TIMEOUT_MULTIPLIER: 2
-  G_MESSAGES_DEBUG: all
+  G_MESSAGES_DEBUG: "all"
+  CCACHE_DISABLE: "true"
 
 fedora-x86_64:
   image: registry.gitlab.gnome.org/gnome/gtk/fedora:v11
