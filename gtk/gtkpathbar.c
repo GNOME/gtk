@@ -217,7 +217,6 @@ static void
 gtk_path_bar_init (GtkPathBar *path_bar)
 {
   GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (path_bar);
-  GtkStyleContext *context;
   GtkEventController *controller;
 
   priv = gtk_path_bar_get_instance_private (path_bar);
@@ -238,8 +237,7 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   g_signal_connect_swapped (priv->down_slider_button, "clicked",
 			    G_CALLBACK (gtk_path_bar_scroll_down), path_bar);
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (path_bar));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_LINKED);
+  gtk_widget_add_style_class (GTK_WIDGET (path_bar), GTK_STYLE_CLASS_LINKED);
 
   priv->get_info_cancellable = NULL;
   priv->cancellables = NULL;
@@ -1257,25 +1255,22 @@ gtk_path_bar_update_button_appearance (GtkPathBar *path_bar,
 				       gboolean    current_dir)
 {
   const gchar *dir_name = get_dir_name (button_data);
-  GtkStyleContext *context;
 
-  context = gtk_widget_get_style_context (button_data->button);
-
-  gtk_style_context_remove_class (context, "text-button");
-  gtk_style_context_remove_class (context, "image-button");
+  gtk_widget_remove_style_class (button_data->button, "text-button");
+  gtk_widget_remove_style_class (button_data->button, "image-button");
 
   if (button_data->label != NULL)
     {
       gtk_label_set_text (GTK_LABEL (button_data->label), dir_name);
       if (button_data->image == NULL)
-        gtk_style_context_add_class (context, "text-button");
+        gtk_widget_add_style_class (button_data->button, "text-button");
     }
 
   if (button_data->image != NULL)
     {
       set_button_image (path_bar, button_data);
       if (button_data->label == NULL)
-        gtk_style_context_add_class (context, "image-button");
+        gtk_widget_add_style_class (button_data->button, "image-button");
     }
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button_data->button)) != current_dir)

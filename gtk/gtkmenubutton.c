@@ -471,7 +471,6 @@ static void
 gtk_menu_button_init (GtkMenuButton *menu_button)
 {
   GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
-  GtkStyleContext *context;
 
   priv->arrow_type = GTK_ARROW_DOWN;
 
@@ -482,8 +481,7 @@ gtk_menu_button_init (GtkMenuButton *menu_button)
 
   gtk_widget_set_sensitive (priv->button, FALSE);
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (menu_button));
-  gtk_style_context_add_class (context, "popup");
+  gtk_widget_add_style_class (GTK_WIDGET (menu_button), "popup");
 }
 
 /**

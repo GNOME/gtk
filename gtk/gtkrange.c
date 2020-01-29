@@ -712,22 +712,19 @@ static void
 update_highlight_position (GtkRange *range)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-  GtkStyleContext *context;
 
   if (!priv->highlight_widget)
     return;
 
-  context = gtk_widget_get_style_context (priv->highlight_widget);
-
   if (should_invert (range))
     {
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TOP);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
+      gtk_widget_add_style_class (priv->highlight_widget, GTK_STYLE_CLASS_BOTTOM);
+      gtk_widget_remove_style_class (priv->highlight_widget, GTK_STYLE_CLASS_TOP);
     }
   else
     {
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BOTTOM);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
+      gtk_widget_add_style_class (priv->highlight_widget, GTK_STYLE_CLASS_TOP);
+      gtk_widget_remove_style_class (priv->highlight_widget, GTK_STYLE_CLASS_BOTTOM);
     }
 }
 
@@ -735,22 +732,19 @@ static void
 update_fill_position (GtkRange *range)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-  GtkStyleContext *context;
 
   if (!priv->fill_widget)
     return;
 
-  context = gtk_widget_get_style_context (priv->fill_widget);
-
   if (should_invert (range))
     {
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TOP);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
+      gtk_widget_add_style_class (priv->fill_widget, GTK_STYLE_CLASS_BOTTOM);
+      gtk_widget_remove_style_class (priv->fill_widget, GTK_STYLE_CLASS_TOP);
     }
   else
     {
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BOTTOM);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
+      gtk_widget_add_style_class (priv->fill_widget, GTK_STYLE_CLASS_TOP);
+      gtk_widget_remove_style_class (priv->fill_widget, GTK_STYLE_CLASS_BOTTOM);
     }
 }
 
@@ -1662,9 +1656,6 @@ range_grab_add (GtkRange  *range,
                 GtkWidget *location)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (range));
 
   /* Don't perform any GDK/GTK+ grab here. Since a button
    * is down, there's an ongoing implicit grab on
@@ -1673,7 +1664,7 @@ range_grab_add (GtkRange  *range,
    */
   priv->grab_location = location;
 
-  gtk_style_context_add_class (context, "dragging");
+  gtk_widget_add_style_class (GTK_WIDGET (range), "dragging");
 }
 
 static void
@@ -1681,14 +1672,11 @@ update_zoom_state (GtkRange *range,
                    gboolean  enabled)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (range));
 
   if (enabled)
-    gtk_style_context_add_class (context, "fine-tune");
+    gtk_widget_add_style_class (GTK_WIDGET (range), "fine-tune");
   else
-    gtk_style_context_remove_class (context, "fine-tune");
+    gtk_widget_remove_style_class (GTK_WIDGET (range), "fine-tune");
 
   priv->zoom = enabled;
 }
@@ -1697,18 +1685,15 @@ static void
 range_grab_remove (GtkRange *range)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-  GtkStyleContext *context;
 
   if (!priv->grab_location)
     return;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (range));
 
   priv->grab_location = NULL;
 
   update_zoom_state (range, FALSE);
 
-  gtk_style_context_remove_class (context, "dragging");
+  gtk_widget_remove_style_class (GTK_WIDGET (range), "dragging");
 }
 
 static GtkScrollType

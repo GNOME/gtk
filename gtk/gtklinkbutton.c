@@ -320,7 +320,6 @@ gtk_link_content_init (GtkLinkContent *content)
 static void
 gtk_link_button_init (GtkLinkButton *link_button)
 {
-  GtkStyleContext *context;
   GtkGesture *gesture;
   GdkContentProvider *content;
   GtkDragSource *source;
@@ -347,8 +346,7 @@ gtk_link_button_init (GtkLinkButton *link_button)
                     link_button);
   gtk_widget_add_controller (GTK_WIDGET (link_button), GTK_EVENT_CONTROLLER (gesture));
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (link_button));
-  gtk_style_context_add_class (context, "link");
+  gtk_widget_add_style_class (GTK_WIDGET (link_button), "link");
 
   gtk_widget_set_cursor_from_name (GTK_WIDGET (link_button), "pointer");
 }

@@ -256,7 +256,6 @@ static void
 gtk_tree_popover_init (GtkTreePopover *popover)
 {
   GtkWidget *stack;
-  GtkStyleContext *style_context;
 
   stack = gtk_stack_new ();
   gtk_stack_set_vhomogeneous (GTK_STACK (stack), FALSE);
@@ -264,8 +263,7 @@ gtk_tree_popover_init (GtkTreePopover *popover)
   gtk_stack_set_interpolate_size (GTK_STACK (stack), TRUE);
   gtk_container_add (GTK_CONTAINER (popover), stack);
 
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (popover));
-  gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_MENU);
+  gtk_widget_add_style_class (GTK_WIDGET (popover), GTK_STYLE_CLASS_MENU);
 }
 
 static GtkCellArea *
@@ -682,19 +680,19 @@ gtk_tree_popover_create_item (GtkTreePopover *popover,
 
       item = gtk_gizmo_new ("modelbutton", NULL, NULL, NULL, NULL);
       gtk_widget_set_layout_manager (item, gtk_box_layout_new (GTK_ORIENTATION_HORIZONTAL));
-      gtk_style_context_add_class (gtk_widget_get_style_context (item), "flat");
+      gtk_widget_add_style_class (item, "flat");
 
       if (header_item)
         {
           indicator = gtk_builtin_icon_new ("arrow");
-          gtk_style_context_add_class (gtk_widget_get_style_context (indicator), "left");
+          gtk_widget_add_style_class (indicator, "left");
           gtk_widget_set_parent (indicator, item);
         }
 
       gtk_widget_set_parent (view, item);
 
       indicator = gtk_builtin_icon_new (has_submenu ? "arrow" : "none");
-      gtk_style_context_add_class (gtk_widget_get_style_context (indicator), "right");
+      gtk_widget_add_style_class (indicator, "right");
       gtk_widget_set_parent (indicator, item);
 
       controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());

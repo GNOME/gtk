@@ -277,7 +277,7 @@ show_variations (GtkEmojiChooser *chooser,
   parent_popover = gtk_widget_get_ancestor (child, GTK_TYPE_POPOVER);
   popover = gtk_popover_new (child);
   view = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_style_context_add_class (gtk_widget_get_style_context (view), "view");
+  gtk_widget_add_style_class (view, "view");
   box = gtk_flow_box_new ();
   gtk_flow_box_set_homogeneous (GTK_FLOW_BOX (box), TRUE);
   gtk_flow_box_set_min_children_per_line (GTK_FLOW_BOX (box), 6);
