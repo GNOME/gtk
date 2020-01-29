@@ -44,12 +44,6 @@ _gtk_css_lookup_is_missing (const GtkCssLookup *lookup,
   return lookup->values[id].value == NULL;
 }
 
-gboolean
-_gtk_css_lookup_all_set (const GtkCssLookup *lookup)
-{
-  return lookup->n_set_values == GTK_CSS_PROPERTY_N_PROPERTIES;
-}
-
 /**
  * _gtk_css_lookup_set:
  * @lookup: the lookup
@@ -75,7 +69,6 @@ _gtk_css_lookup_set (GtkCssLookup  *lookup,
 
   lookup->values[id].value = value;
   lookup->values[id].section = section;
-  lookup->n_set_values ++;
 }
 
 /**
