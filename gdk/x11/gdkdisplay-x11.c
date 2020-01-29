@@ -2956,17 +2956,6 @@ gdk_x11_display_get_monitor (GdkDisplay *display,
   return NULL;
 }
 
-static GdkMonitor *
-gdk_x11_display_get_primary_monitor (GdkDisplay *display)
-{
-  GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
-
-  if (0 <= x11_display->primary_monitor && x11_display->primary_monitor < x11_display->monitors->len)
-    return x11_display->monitors->pdata[x11_display->primary_monitor];
-
-  return NULL;
-}
-
 int
 gdk_x11_display_get_window_depth (GdkX11Display *display)
 {
@@ -3062,7 +3051,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
 
   display_class->get_n_monitors = gdk_x11_display_get_n_monitors;
   display_class->get_monitor = gdk_x11_display_get_monitor;
-  display_class->get_primary_monitor = gdk_x11_display_get_primary_monitor;
   display_class->get_setting = gdk_x11_display_get_setting;
   display_class->get_last_seen_time = gdk_x11_display_get_last_seen_time;
   display_class->set_cursor_theme = gdk_x11_display_set_cursor_theme;

@@ -33,8 +33,7 @@
  * GdkMonitor objects represent the individual outputs that are
  * associated with a #GdkDisplay. GdkDisplay has APIs to enumerate
  * monitors with gdk_display_get_n_monitors() and gdk_display_get_monitor(), and
- * to find particular monitors with gdk_display_get_primary_monitor() or
- * gdk_display_get_monitor_at_surface().
+ * to find particular monitors with gdk_display_get_monitor_at_surface().
  */
 
 /**
@@ -490,23 +489,6 @@ gdk_monitor_get_subpixel_layout (GdkMonitor *monitor)
   g_return_val_if_fail (GDK_IS_MONITOR (monitor), GDK_SUBPIXEL_LAYOUT_UNKNOWN);
 
   return monitor->subpixel_layout;
-}
-
-/**
- * gdk_monitor_is_primary:
- * @monitor: a #GdkMonitor
- *
- * Gets whether this monitor should be considered primary
- * (see gdk_display_get_primary_monitor()).
- *
- * Returns: %TRUE if @monitor is primary
- */
-gboolean
-gdk_monitor_is_primary (GdkMonitor *monitor)
-{
-  g_return_val_if_fail (GDK_IS_MONITOR (monitor), FALSE);
-
-  return monitor == gdk_display_get_primary_monitor (monitor->display);
 }
 
 GdkMonitor *
