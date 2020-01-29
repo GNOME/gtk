@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include <sys/types.h>
+#include <signal.h>
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -38,7 +39,7 @@ static SysprofCaptureWriter *writer = NULL;
 static gboolean running = FALSE;
 
 static void
-profiler_stop (void)
+profiler_stop (int s)
 {
   if (writer)
     sysprof_capture_writer_unref (writer);
@@ -67,7 +68,8 @@ gdk_profiler_start (int fd)
   if (writer)
     running = TRUE;
 
-  atexit (profiler_stop);
+  atexit (G_CALLBACK (profiler_stop));
+  signal (SIGTERM, profiler_stop);
 }
 
 void
