@@ -1899,8 +1899,7 @@ gtk_text_ensure_magnifier (GtkText *self)
   gtk_widget_set_size_request (priv->magnifier, 100, 60);
   _gtk_magnifier_set_magnification (GTK_MAGNIFIER (priv->magnifier), 2.0);
   priv->magnifier_popover = gtk_popover_new (GTK_WIDGET (self));
-  gtk_style_context_add_class (gtk_widget_get_style_context (priv->magnifier_popover),
-                               "magnifier");
+  gtk_widget_add_style_class (priv->magnifier_popover, "magnifier");
   gtk_popover_set_autohide (GTK_POPOVER (priv->magnifier_popover), FALSE);
   gtk_container_add (GTK_CONTAINER (priv->magnifier_popover),
                      priv->magnifier);
@@ -5324,7 +5323,6 @@ gtk_text_set_editable (GtkText  *self,
                        gboolean  is_editable)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (self));
 
   if (is_editable != priv->editable)
     {
@@ -5339,11 +5337,11 @@ gtk_text_set_editable (GtkText  *self,
           priv->preedit_length = 0;
           priv->preedit_cursor = 0;
 
-          gtk_style_context_remove_class (context, GTK_STYLE_CLASS_READ_ONLY);
+          gtk_widget_remove_style_class (GTK_WIDGET (self), GTK_STYLE_CLASS_READ_ONLY);
         }
       else
         {
-          gtk_style_context_add_class (context, GTK_STYLE_CLASS_READ_ONLY);
+          gtk_widget_add_style_class (GTK_WIDGET (self), GTK_STYLE_CLASS_READ_ONLY);
         }
 
       priv->editable = is_editable;
@@ -6006,7 +6004,7 @@ append_bubble_item (GtkText    *self,
   image = gtk_image_new_from_icon_name (icon_name);
   gtk_widget_show (image);
   gtk_container_add (GTK_CONTAINER (item), image);
-  gtk_style_context_add_class (gtk_widget_get_style_context (item), "image-button");
+  gtk_widget_add_style_class (item, "image-button");
   gtk_actionable_set_action_name (GTK_ACTIONABLE (item), action_name);
   gtk_widget_show (GTK_WIDGET (item));
   gtk_container_add (GTK_CONTAINER (toolbar), item);
@@ -6041,8 +6039,7 @@ gtk_text_selection_bubble_popup_show (gpointer user_data)
   g_clear_pointer (&priv->selection_bubble, gtk_widget_unparent);
 
   priv->selection_bubble = gtk_popover_new (GTK_WIDGET (self));
-  gtk_style_context_add_class (gtk_widget_get_style_context (priv->selection_bubble),
-                               GTK_STYLE_CLASS_TOUCH_SELECTION);
+  gtk_widget_add_style_class (priv->selection_bubble, GTK_STYLE_CLASS_TOUCH_SELECTION);
   gtk_popover_set_position (GTK_POPOVER (priv->selection_bubble), GTK_POS_BOTTOM);
   gtk_popover_set_autohide (GTK_POPOVER (priv->selection_bubble), FALSE);
   g_signal_connect (priv->selection_bubble, "notify::visible",
@@ -6052,7 +6049,7 @@ gtk_text_selection_bubble_popup_show (gpointer user_data)
   g_object_set (box, "margin", 10, NULL);
   gtk_widget_show (box);
   toolbar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_style_context_add_class (gtk_widget_get_style_context (toolbar), "linked");
+  gtk_widget_add_style_class (toolbar, "linked");
   gtk_container_add (GTK_CONTAINER (priv->selection_bubble), box);
   gtk_container_add (GTK_CONTAINER (box), toolbar);
 
