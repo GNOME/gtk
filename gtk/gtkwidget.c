@@ -11647,6 +11647,16 @@ gtk_widget_class_set_template (GtkWidgetClass    *widget_class,
           g_warning ("Failed to precompile template for class %s: %s", G_OBJECT_CLASS_NAME (widget_class), error->message);
           g_error_free (error);
         }
+      else
+        {
+          char *filename = g_strconcat (g_type_name (((GTypeClass*)widget_class)->g_type), ".precompiled", NULL);
+          if (!g_file_set_contents (filename, g_bytes_get_data (data, NULL), g_bytes_get_size (data), &error))
+            {
+              g_warning ("Failed to save precompile template for class %s: %s", G_OBJECT_CLASS_NAME (widget_class), error->message);
+              g_error_free (error);
+            }
+          g_free (filename);
+        }
     }
 
   if (data)
@@ -11671,6 +11681,7 @@ gtk_widget_class_set_template_from_resource (GtkWidgetClass    *widget_class,
 {
   GError *error = NULL;
   GBytes *bytes = NULL;
+  char *precompiled;
 
   g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
   g_return_if_fail (widget_class->priv->template == NULL);
@@ -11683,7 +11694,11 @@ gtk_widget_class_set_template_from_resource (GtkWidgetClass    *widget_class,
    */
   _gtk_ensure_resources ();
 
-  bytes = g_resources_lookup_data (resource_name, 0, &error);
+  precompiled = g_strconcat (resource_name, ".precompiled", NULL);
+  bytes = g_resources_lookup_data (precompiled, 0, NULL);
+  g_free (precompiled);
+  if (bytes == NULL)
+    bytes = g_resources_lookup_data (resource_name, 0, &error);
   if (!bytes)
     {
       g_critical ("Unable to load resource for composite template for type '%s': %s",
