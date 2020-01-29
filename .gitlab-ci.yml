@@ -20,7 +20,7 @@ variables:
   CCACHE_DISABLE: "true"
 
 fedora-x86_64:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v11
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v12
   stage: build
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug"
@@ -63,7 +63,7 @@ fedora-x86_64:
     <<: *cache-paths
 
 static-build:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v11
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v12
   stage: build
   variables:
     EXTRA_MESON_FLAGS: "--default-library=both"
@@ -95,7 +95,7 @@ static-build:
     <<: *cache-paths
 
 release-build:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v11
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v12
   stage: build
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
@@ -195,7 +195,7 @@ flatpak-master:icon-browser:
   <<: *flatpak-master
 
 pages:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v11
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v12
   stage: deploy
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
