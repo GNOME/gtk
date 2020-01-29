@@ -31,6 +31,7 @@ extern void do_simplify  (int *argc, const char ***argv);
 extern void do_validate  (int *argc, const char ***argv);
 extern void do_enumerate (int *argc, const char ***argv);
 extern void do_preview   (int *argc, const char ***argv);
+extern void do_precompile (int *argc, const char ***argv);
 
 static void
 usage (void)
@@ -82,6 +83,8 @@ main (int argc, const char *argv[])
     do_enumerate (&argc, &argv);
   else if (strcmp (argv[0], "preview") == 0)
     do_preview (&argc, &argv);
+  else if (strcmp (argv[0], "precompile") == 0)
+    do_precompile (&argc, &argv);
   else
     usage ();
 
