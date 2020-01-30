@@ -106,6 +106,9 @@ GDK_AVAILABLE_IN_ALL
 GdkX11Screen *gdk_x11_display_get_screen (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_ALL
+GdkMonitor * gdk_x11_display_get_primary_monitor (GdkDisplay *display);
+
+GDK_AVAILABLE_IN_ALL
 void        gdk_x11_display_grab              (GdkDisplay *display);
 GDK_AVAILABLE_IN_ALL
 void        gdk_x11_display_ungrab            (GdkDisplay *display);
@@ -129,7 +132,6 @@ void        gdk_x11_register_standard_event_type (GdkDisplay *display,
 
 GDK_AVAILABLE_IN_ALL
 void        gdk_x11_set_sm_client_id (const gchar *sm_client_id);
-
 
 G_END_DECLS
 

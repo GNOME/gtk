@@ -201,7 +201,7 @@ main(int argc, char **argv)
   on_frame (0.);
 
   display = gtk_widget_get_display (window);
-  monitor = gdk_display_get_primary_monitor (display);
+  monitor = gdk_display_get_monitor (display, 0);
   gdk_monitor_get_geometry (monitor, &monitor_bounds);
 
   gtk_widget_show (window);

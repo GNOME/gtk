@@ -2956,7 +2956,25 @@ gdk_x11_display_get_monitor (GdkDisplay *display,
   return NULL;
 }
 
-static GdkMonitor *
+/**
+ * gdk_x11_display_get_primary_monitor:
+ * @display: a #GdkDisplay
+ *
+ * Gets the primary monitor for the display.
+ *
+ * The primary monitor is considered the monitor where the “main desktop”
+ * lives. While normal application surfaces typically allow the window
+ * manager to place the surfaces, specialized desktop applications
+ * such as panels should place themselves on the primary monitor.
+ *
+ * If no monitor is the designated primary monitor, any monitor
+ * (usually the first) may be returned. To make sure there is a dedicated
+ * primary monitor, use gdk_monitor_is_primary() on the returned monitor.
+ *
+ * Returns: (transfer none): the primary monitor, or any monitor if no
+ *     primary monitor is configured by the user
+ */
+GdkMonitor *
 gdk_x11_display_get_primary_monitor (GdkDisplay *display)
 {
   GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
@@ -3062,7 +3080,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
 
   display_class->get_n_monitors = gdk_x11_display_get_n_monitors;
   display_class->get_monitor = gdk_x11_display_get_monitor;
-  display_class->get_primary_monitor = gdk_x11_display_get_primary_monitor;
   display_class->get_setting = gdk_x11_display_get_setting;
   display_class->get_last_seen_time = gdk_x11_display_get_last_seen_time;
   display_class->set_cursor_theme = gdk_x11_display_set_cursor_theme;
