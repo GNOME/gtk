@@ -2822,7 +2822,7 @@ _gdk_win32_surface_handle_aerosnap (GdkSurface            *window,
 	  unsnap (window, monitor);
 	  snap_right (window,
 	              monitor,
-	              gdk_monitor_is_primary (monitor) ? monitor : gdk_display_get_monitor (display, n_monitors - 1));
+	              (gdk_win32_display_get_primary_monitor (monitor->display) == monitor) ? monitor : gdk_display_get_monitor (display, n_monitors - 1));
 	}
       else if (impl->snap_state == GDK_WIN32_AEROSNAP_STATE_HALFRIGHT)
 	{
