@@ -101,6 +101,10 @@ void       gdk_win32_display_remove_filter       (GdkWin32Display               
                                                   GdkWin32MessageFilterFunc        function,
                                                   gpointer                         data);
 
+GDK_AVAILABLE_IN_ALL
+GdkMonitor * gdk_win32_display_get_primary_monitor (GdkDisplay *display);
+
+
 G_END_DECLS
 
 #endif /* __GDK_WIN32_DISPLAY_H__ */

@@ -155,12 +155,6 @@ gdk_display_real_get_default_seat (GdkDisplay *display)
   return display->seats->data;
 }
 
-static GdkMonitor *
-gdk_display_real_get_primary_monitor (GdkDisplay *display)
-{
-  return gdk_display_get_monitor (display, 0);
-}
-
 static void
 gdk_display_class_init (GdkDisplayClass *class)
 {
@@ -176,8 +170,6 @@ gdk_display_class_init (GdkDisplayClass *class)
   class->event_data_copy = gdk_display_real_event_data_copy;
   class->event_data_free = gdk_display_real_event_data_free;
   class->get_default_seat = gdk_display_real_get_default_seat;
-
-  class->get_primary_monitor = gdk_display_real_get_primary_monitor;
 
   /**
    * GdkDisplay:composited:
@@ -1586,32 +1578,6 @@ gdk_display_get_monitor (GdkDisplay *display,
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   return GDK_DISPLAY_GET_CLASS (display)->get_monitor (display, monitor_num);
-}
-
-/**
- * gdk_display_get_primary_monitor:
- * @display: a #GdkDisplay
- *
- * Gets the primary monitor for the display.
- *
- * The primary monitor is considered the monitor where the “main desktop”
- * lives. While normal application surfaces typically allow the window
- * manager to place the surfaces, specialized desktop applications
- * such as panels should place themselves on the primary monitor.
- *
- * If no monitor is the designated primary monitor, any monitor
- * (usually the first) may be returned. To make sure there is a dedicated
- * primary monitor, use gdk_monitor_is_primary() on the returned monitor.
- *
- * Returns: (transfer none): the primary monitor, or any monitor if no
- *     primary monitor is configured by the user
- */
-GdkMonitor *
-gdk_display_get_primary_monitor (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  return GDK_DISPLAY_GET_CLASS (display)->get_primary_monitor (display);
 }
 
 /**
