@@ -176,7 +176,7 @@ gdk_x11_cursor_create_for_texture (GdkDisplay *display,
   int target_scale;
 
   target_scale =
-    gdk_monitor_get_scale_factor (gdk_display_get_primary_monitor (display));
+    gdk_monitor_get_scale_factor (gdk_x11_display_get_primary_monitor (display));
   xcimage = create_cursor_image (texture, x, y, target_scale);
   xcursor = XcursorImageLoadCursor (GDK_DISPLAY_XDISPLAY (display), xcimage);
   XcursorImageDestroy (xcimage);
