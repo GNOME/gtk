@@ -134,7 +134,7 @@
  * There is a global "icon_cache" G_LOCK, which protects icon_cache
  * and lru_cache in GtkIconTheme as well as its reverse pointer
  * GtkIcon->in_cache. This is sometimes taken with the theme lock held
- * (from the theme side) and sometimes not (from the icon info side),
+ * (from the theme side) and sometimes not (from the icon side),
  * but we never take another lock after taking it, so this is safe.
  * Since this is a global (not per icon/theme) lock we should never
  * block while holding it.
@@ -252,7 +252,7 @@ typedef struct {
   gint size;
   gint scale;
   GtkIconLookupFlags flags;
-} IconInfoKey;
+} IconKey;
 
 struct _GtkIconClass
 {
@@ -275,7 +275,7 @@ struct _GtkIcon
 
   /* Information about the source
    */
-  IconInfoKey key;
+  IconKey key;
   GtkIconTheme *in_cache; /* Protected by icon_cache lock */
 
   gchar *filename;
@@ -498,7 +498,7 @@ gtk_icon_theme_unlock (GtkIconTheme *self)
 static guint
 icon_key_hash (gconstpointer _key)
 {
-  const IconInfoKey *key = _key;
+  const IconKey *key = _key;
   guint h = 0;
   int i;
   for (i = 0; key->icon_names[i] != NULL; i++)
@@ -515,8 +515,8 @@ static gboolean
 icon_key_equal (gconstpointer _a,
                 gconstpointer _b)
 {
-  const IconInfoKey *a = _a;
-  const IconInfoKey *b = _b;
+  const IconKey *a = _a;
+  const IconKey *b = _b;
   int i;
 
   if (a->size != b->size)
@@ -549,9 +549,9 @@ icon_key_equal (gconstpointer _a,
 
 /* This is called with icon_cache lock held so must not take any locks */
 static gboolean
-_icon_cache_should_lru_cache (GtkIcon *info)
+_icon_cache_should_lru_cache (GtkIcon *icon)
 {
-  return info->desired_size <= MAX_LRU_TEXTURE_SIZE;
+  return icon->desired_size <= MAX_LRU_TEXTURE_SIZE;
 }
 
 /* This returns the old lru element because we can't unref it with
@@ -573,7 +573,7 @@ _icon_cache_add_to_lru_cache (GtkIconTheme *theme, GtkIcon *icon)
 }
 
 static GtkIcon *
-icon_cache_lookup (GtkIconTheme *theme, IconInfoKey *key)
+icon_cache_lookup (GtkIconTheme *theme, IconKey *key)
 {
   GtkIcon *old_icon = NULL;
   GtkIcon *icon;
@@ -605,7 +605,7 @@ icon_cache_lookup (GtkIconTheme *theme, IconInfoKey *key)
   return icon;
 }
 
-/* The icon info was removed from the icon_hash hash table.
+/* The icon was removed from the icon_hash hash table.
  * This is a callback from the icon_cache hashtable, so the icon_cache lock is already held.
  */
 static void
@@ -1869,7 +1869,7 @@ real_choose_icon (GtkIconTheme       *self,
   gboolean allow_svg;
   IconTheme *theme = NULL;
   gint i;
-  IconInfoKey key;
+  IconKey key;
 
   if (!ensure_valid_themes (self, non_blocking))
     {

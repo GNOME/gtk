@@ -45,7 +45,7 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
                                    double       height)
 {
   GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (image);
-  GtkIcon *icon_info;
+  GtkIcon *icon;
   double icon_width, icon_height;
   gint size;
   double x, y;
@@ -57,31 +57,31 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
   if (size == icon_theme->cached_size &&
       icon_theme->cached_icon != NULL)
     {
-      icon_info = icon_theme->cached_icon;
+      icon = icon_theme->cached_icon;
     }
   else
     {
-      icon_info = gtk_icon_theme_lookup_icon (icon_theme->icon_theme,
-                                              icon_theme->name,
-                                              size,
-                                              icon_theme->scale,
-                                              GTK_ICON_LOOKUP_USE_BUILTIN);
-      if (icon_info == NULL)
-        icon_info = gtk_icon_theme_lookup_icon (icon_theme->icon_theme,
-                                                "image-missing",
-                                                size, icon_theme->scale,
-                                                GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+      icon = gtk_icon_theme_lookup_icon (icon_theme->icon_theme,
+                                         icon_theme->name,
+                                         size,
+                                         icon_theme->scale,
+                                         GTK_ICON_LOOKUP_USE_BUILTIN);
+      if (icon == NULL)
+        icon = gtk_icon_theme_lookup_icon (icon_theme->icon_theme,
+                                           "image-missing",
+                                           size, icon_theme->scale,
+                                           GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
-      g_assert (icon_info != NULL);
+      g_assert (icon != NULL);
 
       g_clear_object (&icon_theme->cached_icon);
 
       icon_theme->cached_size = size;
-      icon_theme->cached_icon = icon_info;
+      icon_theme->cached_icon = icon;
     }
 
-  icon_width = (double) MIN (gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (icon_info)), width);
-  icon_height = (double) MIN (gdk_paintable_get_intrinsic_height (GDK_PAINTABLE (icon_info)), height);
+  icon_width = (double) MIN (gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (icon)), width);
+  icon_height = (double) MIN (gdk_paintable_get_intrinsic_height (GDK_PAINTABLE (icon)), height);
 
   x = (width - icon_width) / 2;
   y = (height - icon_height) / 2;
@@ -91,13 +91,13 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
       gtk_snapshot_save (snapshot);
       gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
     }
-  gtk_icon_snapshot_with_colors (icon_info, snapshot,
-                                      icon_width,
-                                      icon_height,
-                                      &icon_theme->color,
-                                      &icon_theme->success,
-                                      &icon_theme->warning,
-                                      &icon_theme->error);
+  gtk_icon_snapshot_with_colors (icon, snapshot,
+                                 icon_width,
+                                 icon_height,
+                                 &icon_theme->color,
+                                 &icon_theme->success,
+                                 &icon_theme->warning,
+                                 &icon_theme->error);
   if (x != 0 || y != 0)
     gtk_snapshot_restore (snapshot);
 }

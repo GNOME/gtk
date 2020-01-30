@@ -60,7 +60,7 @@ int
 main (int argc, char *argv[])
 {
   GtkIconTheme *icon_theme;
-  GtkIcon *icon_info;
+  GtkIcon *icon;
   char *context;
   char *themename;
   GList *list;
@@ -184,18 +184,18 @@ main (int argc, char *argv[])
       if (argc >= 6)
 	scale = atoi (argv[5]);
 
-      icon_info = gtk_icon_theme_lookup_icon (icon_theme, argv[3], size, scale, flags);
+      icon = gtk_icon_theme_lookup_icon (icon_theme, argv[3], size, scale, flags);
       g_print ("icon for %s at %dx%d@%dx is %s\n", argv[3], size, size, scale,
-               icon_info ? gtk_icon_get_filename (icon_info) : "<none>");
+               icon ? gtk_icon_get_filename (icon) : "<none>");
 
-      if (icon_info)
+      if (icon)
 	{
-          GdkPaintable *paintable = GDK_PAINTABLE (icon_info);
+          GdkPaintable *paintable = GDK_PAINTABLE (icon);
 
-          g_print ("Base size: %d, Scale: %d\n", gtk_icon_get_base_size (icon_info), gtk_icon_get_base_scale (icon_info));
+          g_print ("Base size: %d, Scale: %d\n", gtk_icon_get_base_size (icon), gtk_icon_get_base_scale (icon));
           g_print ("texture size: %dx%d\n", gdk_paintable_get_intrinsic_width (paintable), gdk_paintable_get_intrinsic_height (paintable));
 
-	  g_object_unref (icon_info);
+	  g_object_unref (icon);
 	}
     }
   else
