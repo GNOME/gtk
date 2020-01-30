@@ -82,25 +82,24 @@
  * so that the icon information is shared with other people
  * looking up icons.
  * |[<!-- language="C" -->
- * GError *error = NULL;
  * GtkIconTheme *icon_theme;
- * GdkPaintable *paintable;
+ * GtkIcon *icon;
  *
  * icon_theme = gtk_icon_theme_get_default ();
- * paintable = gtk_icon_theme_load_icon (icon_theme,
- *                                       "my-icon-name", // icon name
- *                                       48, // icon size
- *                                       0,  // flags
- *                                       &error);
- * if (!paintable)
+ * icon = gtk_icon_theme_lookup_icon (icon_theme,
+ *                                    "my-icon-name", // icon name
+ *                                    48, // icon size
+ *                                    1,  // scale
+ *                                    0,  // flags);
+ * if (!icon)
  *   {
- *     g_warning ("Couldn’t load icon: %s", error->message);
- *     g_error_free (error);
+ *     g_warning ("No icon '%s' in theme");
  *   }
  * else
  *   {
- *     // Use the icon
- *     g_object_unref (paintable);
+ *     GdkPaintable *paintable = GDK_PAINTABLE (icon);
+ *     // Use the paintable
+ *     g_object_unref (icon);
  *   }
  * ]|
  */
@@ -268,7 +267,7 @@ G_LOCK_DEFINE_STATIC(icon_cache);
  * GtkIcon:
  *
  * Contains information found when looking up an icon in
- * an icon theme.
+ * an icon theme and supports painting it as a #GdkPaintable.
  */
 struct _GtkIcon
 {
@@ -2186,18 +2185,33 @@ choose_icon (GtkIconTheme       *self,
 }
 
 /**
- * gtk_icon_theme_lookup_icon_scale:
+ * gtk_icon_theme_lookup_icon:
  * @self: a #GtkIconTheme
  * @icon_name: the name of the icon to lookup
- * @size: desired icon size
- * @scale: the desired scale
+ * @size: desired icon size.  The resulting icon may not be exactly this size.
+ * @scale: the window scale this will be displayed on
  * @flags: flags modifying the behavior of the icon lookup
  *
- * Looks up a named icon for a particular window scale and returns a
- * #GtkIcon containing information such as the filename of the
- * icon. The icon can then be rendered into a pixbuf using
- * gtk_icon_load_icon(). (gtk_icon_theme_load_icon() combines
- * these two steps if all you need is the pixbuf.)
+ * Looks up a named icon for a desired size and window scale, returning a
+ * #GtkIcon. The icon can then be rendered by using it as a #GdkPaintable,
+ * or you can get information such as the filename and size. The pixels
+ * of the texture can be access by using gtk_icon_download_texture().
+ *
+ * The icon icon size will be based on the requested @size, but may
+ * not be exactly this size; an icon theme may have icons that differ
+ * slightly from their nominal sizes, and in addition GTK+ will avoid
+ * scaling icons that it considers sufficiently close to the requested
+ * size or for which the source image would have to be scaled up too
+ * far. (This maintains sharpness.). This behaviour can be changed by
+ * passing the %GTK_ICON_LOOKUP_FORCE_SIZE flag, which causes the icon
+ * to be scaled to the exact size.
+ *
+ * Note that you probably want to listen for icon theme changes and
+ * update the icon. This is usually done by connecting to the
+ * GtkWidget::style-updated signal.
+ *
+ * Often you want to look up multiple icons at the same time, as fallbacks.
+ * For this use the gtk_icon_theme_choose_icon() method is a better option.
  *
  * Returns: (nullable) (transfer full): a #GtkIcon object
  *     containing information about the icon, or %NULL if the
@@ -2294,19 +2308,35 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
  * @self: a #GtkIconTheme
  * @icon_names: (array zero-terminated=1): %NULL-terminated
  *     array of icon names to lookup
- * @size: desired icon size
- * @scale: desired scale
+ * @size: desired icon size. The resulting icon may not be exactly this size.
+ * @scale: the window scale this will be displayed on
  * @flags: flags modifying the behavior of the icon lookup
  *
- * Looks up a named icon for a particular window scale and returns
- * a #GtkIcon containing information such as the filename of the
- * icon. The icon can then be rendered into a pixbuf using
- * gtk_icon_load_icon(). (gtk_icon_theme_load_icon()
- * combines these two steps if all you need is the pixbuf.)
+ * Looks up a named icon for a desired size and window scale, returning a
+ * #GtkIcon. The icon can then be rendered by using it as a #GdkPaintable,
+ * or you can get information such as the filename and size. The pixels
+ * of the texture can be access by using gtk_icon_download_texture().
  *
  * If @icon_names contains more than one name, this function
  * tries them all in the given order before falling back to
  * inherited icon themes.
+ *
+ * The icon icon size will be based on the requested @size, but may
+ * not be exactly this size; an icon theme may have icons that differ
+ * slightly from their nominal sizes, and in addition GTK+ will avoid
+ * scaling icons that it considers sufficiently close to the requested
+ * size or for which the source image would have to be scaled up too
+ * far. (This maintains sharpness.). This behaviour can be changed by
+ * passing the %GTK_ICON_LOOKUP_FORCE_SIZE flag, which causes the icon
+ * to be scaled to the exact size.
+ *
+ * Note that you probably want to listen for icon theme changes and
+ * update the icon. This is usually done by connecting to the
+ * GtkWidget::style-updated signal.
+ *
+ * This function does not support the flag
+ * GTK_ICON_LOOKUP_GENERIC_FALLBACK, that only works with the simpler
+ * gtk_icon_theme_lookup_icon() method.
  *
  * Returns: (nullable) (transfer full): a #GtkIcon object
  *     containing information about the icon, or %NULL if the
@@ -2422,8 +2452,8 @@ load_icon_thread  (GTask        *task,
  * @self: a #GtkIconTheme
  * @icon_names: (array zero-terminated=1): %NULL-terminated array of
  *     icon names to lookup
- * @size: desired icon size
- * @scale: desired scale
+ * @size: desired icon size.
+ * @scale: the window scale this will be displayed on
  * @flags: flags modifying the behavior of the icon lookup
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
  * @callback: (scope async): a #GAsyncReadyCallback to call when the
@@ -2434,10 +2464,6 @@ load_icon_thread  (GTask        *task,
  *
  * For more details, see gtk_icon_theme_choose_icon() which is the synchronous
  * version of this call.
- *
- * Returns: (nullable) (transfer full): a #GtkIcon object
- *     containing information about the icon, or %NULL if the
- *     icon wasn’t found.
  */
 void
 gtk_icon_theme_choose_icon_async (GtkIconTheme       *self,
@@ -2515,11 +2541,11 @@ gtk_icon_theme_choose_icon_async (GtkIconTheme       *self,
 /**
  * gtk_icon_theme_choose_icon_finish:
  * @self: a #GtkIconTheme
- * @res: a #GAsyncResult
+ * @result: a #GAsyncResult
  * @error: (allow-none): location to store error information on failure,
  *     or %NULL.
  *
- * Finishes an async icon load, see gtk_icon_load_icon_async().
+ * Finishes an async icon load, see gtk_icon_theme_choose_icon_async().
  *
  * Returns: (transfer full): the rendered icon; this may be a newly
  *     created icon or a new reference to an internal icon, so you must
@@ -3901,6 +3927,17 @@ icon_ensure_scale_and_texture__locked (GtkIcon *icon)
   return TRUE;
 }
 
+/**
+ * gtk_icon_download_texture:
+ * @self: a #GtkIcon
+ * @error: (allow-none): location to store error information on failure,
+ *     or %NULL.
+ *
+ * Tries to access the pixels of an icon. This can fail if the icon file is missing or
+ * there is some kind of problem loading the icon file.
+ *
+ * Returns: (transfer full): An texture with the contents of the icon, or %NULL on failure.
+ */
 GdkTexture *
 gtk_icon_download_texture (GtkIcon *self,
                            GError **error)
@@ -3962,6 +3999,26 @@ init_color_matrix (graphene_matrix_t *color_matrix,
 }
 
 
+/**
+ * gtk_icon_download_colored_texture:
+ * @self: a #GtkIcon
+ * @foreground_color: (allow-none): a #GdkRGBA representing the foreground color
+ *      of the icon or %NULL to use the default color.
+ * @success_color: (allow-none): a #GdkRGBA representing the warning color
+ *     of the icon or %NULL to use the default color
+ * @warning_color: (allow-none): a #GdkRGBA representing the warning color
+ *     of the icon or %NULL to use the default color
+ * @error_color: (allow-none): a #GdkRGBA representing the error color
+ *     of the icon or %NULL to use the default color (allow-none)
+ * @error: (allow-none): location to store error information on failure,
+ *     or %NULL.
+ *
+ * Tries to access the pixels of an icon, with colors applied to a
+ * symbolic icon. This can fail if the icon file is missing or there
+ * is some kind of problem loading the icon file.
+ *
+ * Returns: (transfer full): An texture with the contents of the icon, or %NULL on failure.
+ */
 GdkTexture *
 gtk_icon_download_colored_texture (GtkIcon *self,
                                    const GdkRGBA *foreground_color,
@@ -4021,6 +4078,24 @@ icon_paintable_snapshot (GdkPaintable *paintable,
     }
 }
 
+/**
+ * gtk_icon_snapshot_with_colors:
+ * @icon: a #GtkIcon
+ * @snapshot: a #GdkSnapshot to snapshot to
+ * @width: width to snapshot in
+ * @height: height to snapshot in
+ * @foreground_color: (allow-none): a #GdkRGBA representing the foreground color
+ *      of the icon or %NULL to use the default color.
+ * @success_color: (allow-none): a #GdkRGBA representing the warning color
+ *     of the icon or %NULL to use the default color
+ * @warning_color: (allow-none): a #GdkRGBA representing the warning color
+ *     of the icon or %NULL to use the default color
+ * @error_color: (allow-none): a #GdkRGBA representing the error color
+ *     of the icon or %NULL to use the default color (allow-none)
+ *
+ * This is similar to the implementation of gdk_paintable_snapshot(), but if the icon is
+ * symbolic it will be recolored with the specified colors (which ususally comes from the theme).
+ */
 void
 gtk_icon_snapshot_with_colors (GtkIcon *icon,
                                GtkSnapshot  *snapshot,
@@ -4165,9 +4240,9 @@ gtk_icon_new_for_pixbuf (GtkIconTheme *icon_theme,
  * @scale: the desired scale
  * @flags: flags modifying the behavior of the icon lookup
  *
- * Looks up an icon and returns a #GtkIcon containing information
- * such as the filename of the icon. The icon can then be rendered into
- * a pixbuf using gtk_icon_load_icon().
+ * Looks up a icon for a desired size and window scale, returning a
+ * #GtkIcon. The icon can then be rendered by using it as a #GdkPaintable,
+ * or you can get information such as the filename and size.
  *
  * Returns: (nullable) (transfer full): a #GtkIcon containing
  *     information about the icon, or %NULL if the icon wasn’t
