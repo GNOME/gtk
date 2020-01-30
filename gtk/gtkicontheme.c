@@ -557,7 +557,8 @@ _icon_cache_should_lru_cache (GtkIcon *icon)
 /* This returns the old lru element because we can't unref it with
  * the lock held */
 static GtkIcon *
-_icon_cache_add_to_lru_cache (GtkIconTheme *theme, GtkIcon *icon)
+_icon_cache_add_to_lru_cache (GtkIconTheme *theme,
+                              GtkIcon      *icon)
 {
   GtkIcon *old_icon = NULL;
 
@@ -573,7 +574,8 @@ _icon_cache_add_to_lru_cache (GtkIconTheme *theme, GtkIcon *icon)
 }
 
 static GtkIcon *
-icon_cache_lookup (GtkIconTheme *theme, IconKey *key)
+icon_cache_lookup (GtkIconTheme *theme,
+                   IconKey      *key)
 {
   GtkIcon *old_icon = NULL;
   GtkIcon *icon;
@@ -640,7 +642,8 @@ icon_cache_mark_used_if_cached (GtkIcon *icon)
 }
 
 static void
-icon_cache_add (GtkIconTheme *theme, GtkIcon *icon)
+icon_cache_add (GtkIconTheme *theme,
+                GtkIcon      *icon)
 {
   GtkIcon *old_icon = NULL;
 
@@ -892,8 +895,8 @@ update_current_theme__mainthread (GtkIconTheme *self)
 /* Callback when the icon theme GtkSetting changes
  */
 static void
-theme_changed__mainthread_unlocked (GtkSettings  *settings,
-                                    GParamSpec   *pspec,
+theme_changed__mainthread_unlocked (GtkSettings     *settings,
+                                    GParamSpec      *pspec,
                                     GtkIconThemeRef *ref)
 {
   GtkIconTheme *self = gtk_icon_theme_ref_aquire (ref);
@@ -1762,7 +1765,7 @@ load_themes (GtkIconTheme *self)
 
 static gboolean
 ensure_valid_themes (GtkIconTheme *self,
-                     gboolean non_blocking)
+                     gboolean      non_blocking)
 {
   GTimeVal tv;
   gboolean was_valid = self->themes_valid;
@@ -1853,13 +1856,13 @@ icon_uri_is_symbolic (const gchar *icon_name,
 }
 
 static GtkIcon *
-real_choose_icon (GtkIconTheme       *self,
-                  const gchar        *icon_names[],
-                  gint                size,
-                  gint                scale,
-                  GtkIconLookupFlags  flags,
-                  gboolean            non_blocking,
-                  gboolean            *would_block)
+real_choose_icon (GtkIconTheme      *self,
+                  const gchar       *icon_names[],
+                  gint               size,
+                  gint               scale,
+                  GtkIconLookupFlags flags,
+                  gboolean           non_blocking,
+                  gboolean           *would_block)
 {
   GList *l;
   GtkIcon *icon = NULL;
@@ -2072,13 +2075,13 @@ icon_name_list_add_icon (GPtrArray   *icons,
 }
 
 static GtkIcon *
-choose_icon (GtkIconTheme       *self,
-             const gchar        *icon_names[],
-             gint                size,
-             gint                scale,
-             GtkIconLookupFlags  flags,
-             gboolean            non_blocking,
-             gboolean            *would_block)
+choose_icon (GtkIconTheme      *self,
+             const gchar       *icon_names[],
+             gint               size,
+             gint               scale,
+             GtkIconLookupFlags flags,
+             gboolean           non_blocking,
+             gboolean           *would_block)
 {
   gboolean has_regular = FALSE, has_symbolic = FALSE;
   GtkIcon *icon;
@@ -2119,11 +2122,11 @@ choose_icon (GtkIconTheme       *self,
       g_ptr_array_add (new_names, NULL);
 
       icon = real_choose_icon (self,
-                                    (const gchar **) new_names->pdata,
-                                    size,
-                                    scale,
-                                    flags & ~(GTK_ICON_LOOKUP_FORCE_REGULAR | GTK_ICON_LOOKUP_FORCE_SYMBOLIC),
-                                    non_blocking, would_block);
+                               (const gchar **) new_names->pdata,
+                               size,
+                               scale,
+                               flags & ~(GTK_ICON_LOOKUP_FORCE_REGULAR | GTK_ICON_LOOKUP_FORCE_SYMBOLIC),
+                               non_blocking, would_block);
 
       g_ptr_array_free (new_names, TRUE);
     }
@@ -2145,11 +2148,11 @@ choose_icon (GtkIconTheme       *self,
       g_ptr_array_add (new_names, NULL);
 
       icon = real_choose_icon (self,
-                                    (const gchar **) new_names->pdata,
-                                    size,
-                                    scale,
-                                    flags & ~(GTK_ICON_LOOKUP_FORCE_REGULAR | GTK_ICON_LOOKUP_FORCE_SYMBOLIC),
-                                    non_blocking, would_block);
+                               (const gchar **) new_names->pdata,
+                               size,
+                               scale,
+                               flags & ~(GTK_ICON_LOOKUP_FORCE_REGULAR | GTK_ICON_LOOKUP_FORCE_SYMBOLIC),
+                               non_blocking, would_block);
 
       g_ptr_array_free (new_names, TRUE);
     }
@@ -2163,22 +2166,22 @@ choose_icon (GtkIconTheme       *self,
       g_ptr_array_add (new_names, NULL);
 
       icon = real_choose_icon (self,
-                                    (const gchar **) new_names->pdata,
-                                    size,
-                                    scale,
-                                    flags & ~(GTK_ICON_LOOKUP_FORCE_REGULAR | GTK_ICON_LOOKUP_FORCE_SYMBOLIC),
-                                    non_blocking, would_block);
+                               (const gchar **) new_names->pdata,
+                               size,
+                               scale,
+                               flags & ~(GTK_ICON_LOOKUP_FORCE_REGULAR | GTK_ICON_LOOKUP_FORCE_SYMBOLIC),
+                               non_blocking, would_block);
 
       g_ptr_array_free (new_names, TRUE);
     }
   else
     {
       icon = real_choose_icon (self,
-                                    icon_names,
-                                    size,
-                                    scale,
-                                    flags & ~(GTK_ICON_LOOKUP_FORCE_REGULAR | GTK_ICON_LOOKUP_FORCE_SYMBOLIC),
-                                    non_blocking, would_block);
+                               icon_names,
+                               size,
+                               scale,
+                               flags & ~(GTK_ICON_LOOKUP_FORCE_REGULAR | GTK_ICON_LOOKUP_FORCE_SYMBOLIC),
+                               non_blocking, would_block);
     }
 
   return icon;
@@ -3191,7 +3194,7 @@ theme_lookup_icon (IconTheme   *theme,
       if (min_dir->cache)
         {
           icon->cache_pixbuf = gtk_icon_cache_get_icon (min_dir->cache, icon_name,
-                                                              min_dir->subdir_index);
+                                                        min_dir->subdir_index);
         }
 
       return icon;
@@ -4178,8 +4181,8 @@ icon_paintable_init (GdkPaintableInterface *iface)
 
 static GtkIcon *
 gtk_icon_new_for_file (GFile *file,
-                            gint   size,
-                            gint   scale)
+                       gint   size,
+                       gint   scale)
 {
   GtkIcon *icon;
 

@@ -117,7 +117,7 @@ gtk_builtin_icon_new (const char *css_name)
 
 void
 gtk_builtin_icon_set_css_name (GtkBuiltinIcon *self,
-                               const char *css_name)
+                               const char     *css_name)
 {
   gtk_css_node_set_name (gtk_widget_get_css_node (GTK_WIDGET (self)),
                          g_quark_from_string (css_name));

@@ -74,9 +74,9 @@ void      gdk_cairo_surface_upload_to_gl (cairo_surface_t *surface,
                                           GdkGLContext    *context);
 
 GDK_AVAILABLE_IN_ALL
-void      gdk_cairo_image_surface_recolor (cairo_surface_t *image_surface,
+void      gdk_cairo_image_surface_recolor (cairo_surface_t         *image_surface,
                                            const graphene_matrix_t *color_matrix,
-                                           const graphene_vec4_t *color_offset);
+                                           const graphene_vec4_t   *color_offset);
 
 G_END_DECLS
 

@@ -470,9 +470,9 @@ gdk_cairo_region_from_clip (cairo_t *cr)
  * always done on the cpu.
  */
 void
-gdk_cairo_image_surface_recolor (cairo_surface_t *image_surface,
+gdk_cairo_image_surface_recolor (cairo_surface_t         *image_surface,
                                  const graphene_matrix_t *color_matrix,
-                                 const graphene_vec4_t *color_offset)
+                                 const graphene_vec4_t   *color_offset)
 {
   graphene_vec4_t pixel;
   guint32* pixel_data;

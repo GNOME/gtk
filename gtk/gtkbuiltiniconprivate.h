@@ -29,9 +29,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GtkBuiltinIcon, gtk_builtin_icon, GTK, BUILTIN_ICON, GtkWidget)
 
-GtkWidget *  gtk_builtin_icon_new              (const char      *css_name);
-void         gtk_builtin_icon_set_css_name     (GtkBuiltinIcon *self,
-                                                const char      *css_name);
+GtkWidget *  gtk_builtin_icon_new          (const char     *css_name);
+void         gtk_builtin_icon_set_css_name (GtkBuiltinIcon *self,
+                                            const char     *css_name);
 
 G_END_DECLS
 

@@ -360,7 +360,7 @@ get_image_paintable (GtkImage *image)
       size = gtk_image_get_pixel_size (image);
       icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (image)));
       icon = gtk_icon_theme_lookup_icon (icon_theme, icon_name, size, 1,
-                                              GTK_ICON_LOOKUP_FORCE_SIZE | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+                                         GTK_ICON_LOOKUP_FORCE_SIZE | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
       if (icon == NULL)
         return NULL;
       return GDK_PAINTABLE (icon);

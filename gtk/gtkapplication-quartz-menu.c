@@ -306,7 +306,7 @@ icon_loaded (GObject      *object,
         {
           cancellable = g_cancellable_new ();
           gtk_icon_load_symbolic_async (icon, &foreground, &success, &warning, &error,
-                                             cancellable, icon_loaded, self);
+                                        cancellable, icon_loaded, self);
           g_object_unref (icon);
           return;
         }
