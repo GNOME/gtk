@@ -622,8 +622,8 @@ test_async (void)
 
   g_printerr ("test_async\n");
   theme = get_test_icontheme (TRUE);
-  gtk_icon_theme_choose_icon_async (theme, icons, 32, 1, 0, NULL, load_icon, loop);
-  gtk_icon_theme_choose_icon_async (theme, icons, 48, 1, 0, NULL, load_icon, loop);
+  gtk_icon_theme_choose_icon_async (theme, icons, 32, 1, 0, 0, NULL, load_icon, loop);
+  gtk_icon_theme_choose_icon_async (theme, icons, 48, 1, 0, 0, NULL, load_icon, loop);
 
   g_main_loop_run (loop);
   g_main_loop_unref (loop);

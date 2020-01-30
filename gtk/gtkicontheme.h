@@ -163,6 +163,7 @@ void         gtk_icon_theme_choose_icon_async      (GtkIconTheme                
                                                     gint                         size,
                                                     gint                         scale,
                                                     GtkIconLookupFlags           flags,
+                                                    int                          priority,
                                                     GCancellable                *cancellable,
                                                     GAsyncReadyCallback          callback,
                                                     gpointer                     user_data);

@@ -2458,6 +2458,7 @@ load_icon_thread  (GTask        *task,
  * @size: desired icon size.
  * @scale: the window scale this will be displayed on
  * @flags: flags modifying the behavior of the icon lookup
+ * @io_priority: the [I/O priority][io-priority] of the request.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
  * @callback: (scope async): a #GAsyncReadyCallback to call when the
  *     request is satisfied
@@ -2474,9 +2475,10 @@ gtk_icon_theme_choose_icon_async (GtkIconTheme       *self,
                                   gint                size,
                                   gint                scale,
                                   GtkIconLookupFlags  flags,
-                                  GCancellable        *cancellable,
-                                  GAsyncReadyCallback  callback,
-                                  gpointer             user_data)
+                                  int                 priority,
+                                  GCancellable       *cancellable,
+                                  GAsyncReadyCallback callback,
+                                  gpointer            user_data)
 {
   GTask *task;
   GtkIcon *icon = NULL;
@@ -2489,6 +2491,7 @@ gtk_icon_theme_choose_icon_async (GtkIconTheme       *self,
   g_warn_if_fail ((flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK) == 0);
 
   task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_priority (task, priority);
 
   if (gtk_icon_theme_trylock (self))
     {

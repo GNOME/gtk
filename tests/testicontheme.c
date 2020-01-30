@@ -149,7 +149,7 @@ main (int argc, char *argv[])
       gtk_widget_show (window);
 
       icons[0] = argv[3];
-      gtk_icon_theme_choose_icon_async (icon_theme, icons, size, scale, flags, NULL, icon_loaded_cb, image);
+      gtk_icon_theme_choose_icon_async (icon_theme, icons, size, scale, flags, 0, NULL, icon_loaded_cb, image);
 
       gtk_main ();
     }

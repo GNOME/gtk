@@ -215,7 +215,7 @@ _gtk_icon_helper_preload (GtkIconHelper *self)
       gtk_icon_theme_choose_icon_async (icon_theme,
                                         (const gchar **)g_themed_icon_get_names (G_THEMED_ICON (gicon)),
                                         size, scale,
-                                        flags, NULL, NULL, NULL);
+                                        flags, 0, NULL, NULL, NULL);
     }
 
   if (free_gicon)
