@@ -3995,7 +3995,7 @@ gtk_icon_download_colored_texture (GtkIcon *self,
 
 static void
 icon_paintable_snapshot (GdkPaintable *paintable,
-                         GdkSnapshot  *snapshot,
+                         GtkSnapshot  *snapshot,
                          double        width,
                          double        height)
 {
@@ -4023,7 +4023,7 @@ icon_paintable_snapshot (GdkPaintable *paintable,
 
 void
 gtk_icon_snapshot_with_colors (GtkIcon *icon,
-                               GdkSnapshot  *snapshot,
+                               GtkSnapshot  *snapshot,
                                double        width,
                                double        height,
                                const GdkRGBA *foreground_color,
