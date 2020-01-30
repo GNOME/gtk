@@ -444,7 +444,7 @@ gtk_drag_dest_set (GtkWidget            *widget,
 
   old_site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
 
-  site = g_new (GtkDragDestSite, 1);
+  site = g_new0 (GtkDragDestSite, 1);
   site->flags = flags;
   site->have_drag = FALSE;
   if (targets)
@@ -519,6 +519,7 @@ gtk_drag_dest_unset (GtkWidget *widget)
 /**
  * gtk_drag_dest_get_target_list: (method)
  * @widget: a #GtkWidget
+ * Returns: (nullable) (transfer none): the #GtkTargetList, or %NULL if none
  */
 GtkTargetList*
 gtk_drag_dest_get_target_list (GtkWidget *widget)
@@ -1202,7 +1203,8 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 
   window = [(id<GdkNSView>)[nswindow contentView] gdkWindow];
   g_return_val_if_fail (nsevent != NULL, NULL);
-
+  g_return_val_if_fail (target_list != NULL, NULL);
+  
   context = gdk_drag_begin (window, g_list_copy (target_list->list));
   g_return_val_if_fail (context != NULL, NULL);
 
