@@ -789,11 +789,12 @@ gtk_icon_theme_get_for_display (GdkDisplay *display)
   if (!self)
     {
       self = gtk_icon_theme_new ();
-      gtk_icon_theme_set_display (self, display);
-
       self->is_display_singleton = TRUE;
 
       g_object_set_data (G_OBJECT (display), I_("gtk-icon-theme"), self);
+
+      /* Call this after setting the user-data, because it recurses into gtk_icon_theme_get_for_display via the thememing machinery */
+      gtk_icon_theme_set_display (self, display);
 
       /* Queue early read of the default themes, we read the icon theme name in _set_display(). */
       gtk_icon_theme_load_in_thread (self);
