@@ -1294,6 +1294,8 @@ gtk_image_style_updated (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_image_parent_class)->style_updated (widget);
 
+  _gtk_icon_helper_preload (priv->icon_helper);
+
   priv->baseline_align = 0.0;
 }
 

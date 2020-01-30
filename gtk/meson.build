@@ -108,7 +108,7 @@ gtk_private_sources = files([
   'gtkgizmo.c',
   'gtkgladecatalog.c',
   'gtkhsla.c',
-  'gtkicon.c',
+  'gtkbuiltinicon.c',
   'gtkiconcache.c',
   'tools/gtkiconcachevalidator.c',
   'gtkiconhelper.c',
@@ -1008,6 +1008,12 @@ if build_gir
   # the installed one
   gdk_gir_inc = [ 'cairo-1.0', 'Gio-2.0', ]
 
+  if graphene_dep.type_name() == 'internal'
+    gdk_gir_inc += subproject('graphene').get_variable('graphene_gir').get(0)
+  else
+    gdk_gir_inc += 'Graphene-1.0'
+  endif
+
   if pixbuf_dep.type_name() == 'internal'
     gdk_gir_inc += subproject('gdk-pixbuf').get_variable('gdkpixbuf_gir').get(0)
   else
@@ -1052,12 +1058,7 @@ if build_gir
     gtk_dep_sources += gdk_x11_gir
   endif
 
-  gsk_gir_inc = [ gdk_gir[0], ]
-  if graphene_dep.type_name() == 'internal'
-    gsk_gir_inc += subproject('graphene').get_variable('graphene_gir').get(0)
-  else
-    gsk_gir_inc += 'Graphene-1.0'
-  endif
+  gsk_gir_inc = [ gdk_gir[0] ]
 
   gsk_gir = gnome.generate_gir(libgtk,
                                sources: gsk_public_headers + gsk_public_sources + [ gskenum_h ],

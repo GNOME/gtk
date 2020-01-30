@@ -12,7 +12,7 @@
             <child>
               <object class="GtkBox">
                 <child>
-                  <object class="GtkIcon" id="arrow">
+                  <object class="GtkBuiltinIcon" id="arrow">
                     <property name="css-name">arrow</property>
                   </object>
                 </child>

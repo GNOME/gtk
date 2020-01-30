@@ -48,6 +48,7 @@ struct _GtkIconHelper
   guint use_fallback : 1;
   guint force_scale_pixbuf : 1;
   guint texture_is_symbolic : 1;
+  guint preloaded : 1;
 
   GtkWidget *owner;
   GtkCssNode *node;
@@ -102,38 +103,26 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
 {
   GtkIconTheme *icon_theme;
   gint width, height;
-  GtkIconInfo *info;
+  GtkIcon *icon;
   GtkIconLookupFlags flags;
-  GdkPaintable *paintable;
 
   icon_theme = gtk_css_icon_theme_value_get_icon_theme (style->core->icon_theme);
   flags = get_icon_lookup_flags (self, style, dir);
 
   width = height = gtk_icon_helper_get_size (self);
 
-  info = gtk_icon_theme_lookup_by_gicon_for_scale (icon_theme,
-                                                   gicon,
-                                                   MIN (width, height),
-                                                   scale, flags);
-  if (info == NULL)
-    info = gtk_icon_theme_lookup_icon (icon_theme,
+  icon = gtk_icon_theme_lookup_by_gicon (icon_theme,
+                                         gicon,
+                                         MIN (width, height),
+                                         scale, flags);
+  if (icon == NULL)
+    icon = gtk_icon_theme_lookup_icon (icon_theme,
                                        "image-missing",
-                                       width,
+                                       width, scale,
                                        flags | GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
-  *symbolic = gtk_icon_info_is_symbolic (info);
-  paintable = gtk_icon_info_load_icon (info, NULL);
-  g_object_unref (info);
-
-  if (paintable && scale != 1)
-    {
-      GdkPaintable *orig = paintable;
-
-      paintable = gtk_scaler_new (orig, scale);
-      g_object_unref (orig);
-    }
-
-  return paintable;
+  *symbolic = gtk_icon_is_symbolic (icon);
+  return GDK_PAINTABLE (icon);
 }
 
 static GdkPaintable *
@@ -143,14 +132,11 @@ gtk_icon_helper_load_paintable (GtkIconHelper   *self,
   GdkPaintable *paintable;
   GIcon *gicon;
   gboolean symbolic;
-  gint64 before = g_get_monotonic_time ();
-  char *item;
 
   switch (gtk_image_definition_get_storage_type (self->def))
     {
     case GTK_IMAGE_PAINTABLE:
       paintable = g_object_ref (gtk_image_definition_get_paintable (self->def));
-      item = g_strdup ("paintable");
       symbolic = FALSE;
       break;
 
@@ -159,7 +145,6 @@ gtk_icon_helper_load_paintable (GtkIconHelper   *self,
         gicon = g_themed_icon_new_with_default_fallbacks (gtk_image_definition_get_icon_name (self->def));
       else
         gicon = g_themed_icon_new (gtk_image_definition_get_icon_name (self->def));
-      item = g_icon_to_string (gicon);
       paintable = ensure_paintable_for_gicon (self,
                                               gtk_css_node_get_style (self->node),
                                               gtk_widget_get_direction (self->owner),
@@ -170,7 +155,6 @@ gtk_icon_helper_load_paintable (GtkIconHelper   *self,
       break;
 
     case GTK_IMAGE_GICON:
-      item = g_icon_to_string (gtk_image_definition_get_gicon (self->def));
       paintable = ensure_paintable_for_gicon (self, 
                                               gtk_css_node_get_style (self->node),
                                               gtk_widget_get_direction (self->owner),
@@ -183,17 +167,89 @@ gtk_icon_helper_load_paintable (GtkIconHelper   *self,
     default:
       paintable = NULL;
       symbolic = FALSE;
-      item = NULL;
       break;
     }
 
   *out_symbolic = symbolic;
 
-  if (gdk_profiler_is_running ())
-    gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "icon helper load", item);
-  g_free (item);
-
   return paintable;
+}
+
+/* We are calling this from css-validate, and the mapped state is not yet set, so
+ * we have to calculate ahead of time if a widget will be mapped. */
+static gboolean
+will_be_mapped (GtkWidget *widget)
+{
+  while (widget)
+    {
+      if (!_gtk_widget_get_visible (widget) ||
+          !_gtk_widget_get_child_visible (widget))
+        return FALSE;
+      widget = _gtk_widget_get_parent (widget);
+    }
+
+  return TRUE;
+}
+
+void
+_gtk_icon_helper_preload (GtkIconHelper *self)
+{
+  GtkIconTheme *icon_theme;
+  GtkIconLookupFlags flags = 0;
+  int size, scale;
+  GtkCssStyle *style;
+  GIcon *gicon = NULL;
+  GIcon *free_gicon = NULL;
+
+  /* Avoid constantly preloading as it may cause issues if we're trashing the icon cache */
+  if (self->preloaded)
+    return;
+
+  self->preloaded = TRUE;
+
+  switch (gtk_image_definition_get_storage_type (self->def))
+    {
+    case GTK_IMAGE_ICON_NAME:
+      if (self->use_fallback)
+        free_gicon = g_themed_icon_new_with_default_fallbacks (gtk_image_definition_get_icon_name (self->def));
+      else
+        free_gicon = g_themed_icon_new (gtk_image_definition_get_icon_name (self->def));
+      gicon = free_gicon;
+      break;
+    case GTK_IMAGE_GICON:
+      gicon = gtk_image_definition_get_gicon (self->def) ;
+     break;
+    case GTK_IMAGE_EMPTY:
+    case GTK_IMAGE_PAINTABLE:
+    default:
+      break;
+    }
+
+  if (gicon && G_IS_THEMED_ICON (gicon))
+    {
+      int priority;
+      style = gtk_css_node_get_style (self->node);
+      icon_theme = gtk_css_icon_theme_value_get_icon_theme
+        (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_THEME));
+      flags |= get_icon_lookup_flags (self, style,
+                                      gtk_widget_get_direction (self->owner));
+      size = gtk_icon_helper_get_size (self);
+      scale = gtk_widget_get_scale_factor (self->owner);
+
+      /* Icons for widgets are visible have higher priority so they are loaded first */
+      if (will_be_mapped (self->owner))
+        priority = G_PRIORITY_DEFAULT;
+      else
+        priority = G_PRIORITY_DEFAULT + 1;
+
+      gtk_icon_theme_choose_icon_async (icon_theme,
+                                        (const gchar **)g_themed_icon_get_names (G_THEMED_ICON (gicon)),
+                                        size, scale,
+                                        flags, priority, NULL, NULL, NULL);
+    }
+
+  if (free_gicon)
+    g_object_unref (free_gicon);
 }
 
 static void

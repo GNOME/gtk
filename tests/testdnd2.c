@@ -1,35 +1,40 @@
 #include <unistd.h>
 #include <gtk/gtk.h>
 
-static GdkPaintable *
-get_image_paintable (GtkImage *image,
-                    int      *out_size)
+static GdkTexture *
+get_image_texture (GtkImage *image,
+                   int      *out_size)
 {
   GtkIconTheme *icon_theme;
   const char *icon_name;
   int width = 48;
   GdkPaintable *paintable;
-  GtkIconInfo *icon_info;
+  GdkTexture *texture = NULL;
+  GtkIcon *icon;
 
   switch (gtk_image_get_storage_type (image))
     {
     case GTK_IMAGE_PAINTABLE:
       paintable = gtk_image_get_paintable (image);
-      *out_size = gdk_paintable_get_intrinsic_width (paintable);
-      return g_object_ref (paintable);
+      if (GDK_IS_TEXTURE (paintable))
+        {
+          *out_size = gdk_paintable_get_intrinsic_width (paintable);
+          texture = g_object_ref (GDK_TEXTURE (paintable));
+        }
     case GTK_IMAGE_ICON_NAME:
       icon_name = gtk_image_get_icon_name (image);
       icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (image)));
       *out_size = width;
-      icon_info = gtk_icon_theme_lookup_icon (icon_theme, icon_name, width, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
-      paintable = gtk_icon_info_load_icon (icon_info, NULL);
-      g_object_unref (icon_info);
-      return paintable;
+      icon = gtk_icon_theme_lookup_icon (icon_theme, icon_name, width, 1, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+      if (icon)
+        texture = gtk_icon_download_texture (icon, NULL);
+      g_object_unref (icon);
     default:
       g_warning ("Image storage type %d not handled",
                  gtk_image_get_storage_type (image));
-      return NULL;
     }
+
+  return texture;
 }
 
 enum {
@@ -44,17 +49,18 @@ image_drag_data_get (GtkWidget        *widget,
                      GtkSelectionData *selection_data,
                      gpointer          data)
 {
-  GdkPaintable *paintable;
+  GdkTexture *texture;
   const gchar *name;
   int size;
 
   if (gtk_selection_data_targets_include_image (selection_data, TRUE))
     {
-      paintable = get_image_paintable (GTK_IMAGE (data), &size);
-      if (GDK_IS_TEXTURE (paintable))
-        gtk_selection_data_set_texture (selection_data, GDK_TEXTURE (paintable));
-      if (paintable)
-        g_object_unref (paintable);
+      texture = get_image_texture (GTK_IMAGE (data), &size);
+      if (texture)
+        {
+          gtk_selection_data_set_texture (selection_data, texture);
+          g_object_unref (texture);
+        }
     }
   else if (gtk_selection_data_targets_include_text (selection_data))
     {
@@ -217,12 +223,12 @@ update_source_icon (GtkDragSource *source,
                     const char *icon_name,
                     int hotspot)
 {
-  GdkPaintable *paintable;
+  GtkIcon *icon;
   int hot_x, hot_y;
   int size = 48;
 
-  paintable = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
-                                        icon_name, size, 0, NULL);
+  icon = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
+                                     icon_name, size, 1, 0);
   switch (hotspot)
     {
     default:
@@ -239,8 +245,8 @@ update_source_icon (GtkDragSource *source,
       hot_y = size;
       break;
     }
-  gtk_drag_source_set_icon (source, paintable, hot_x, hot_y);
-  g_object_unref (paintable);
+  gtk_drag_source_set_icon (source, GDK_PAINTABLE (icon), hot_x, hot_y);
+  g_object_unref (icon);
 }
 
 static GBytes *
@@ -265,8 +271,8 @@ get_data (const char *mimetype,
   else if (strcmp (mimetype, "image/png") == 0)
     {
       int size;
-      GdkPaintable *paintable = get_image_paintable (GTK_IMAGE (image), &size);
-      if (GDK_IS_TEXTURE (paintable))
+      GdkTexture *texture = get_image_texture (GTK_IMAGE (image), &size);
+      if (texture)
         {
           char *name = g_strdup ("drag-data-XXXXXX");
           int fd;
@@ -278,15 +284,14 @@ get_data (const char *mimetype,
           fd = g_mkstemp (name);
           close (fd);
 
-          gdk_texture_save_to_png (GDK_TEXTURE (paintable), name);
+          gdk_texture_save_to_png (texture, name);
+          g_object_unref (texture);
 
           g_file_get_contents (name, &data, &size, NULL);
           g_free (name);
 
           return g_bytes_new_take (data, size);
         }
-      
-      g_clear_object (&paintable);
     }
   return NULL;
 }

@@ -348,7 +348,7 @@ get_image_paintable (GtkImage *image)
 {
   const gchar *icon_name;
   GtkIconTheme *icon_theme;
-  GtkIconInfo *icon_info;
+  GtkIcon *icon;
   int size;
 
   switch (gtk_image_get_storage_type (image))
@@ -359,11 +359,11 @@ get_image_paintable (GtkImage *image)
       icon_name = gtk_image_get_icon_name (image);
       size = gtk_image_get_pixel_size (image);
       icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (image)));
-      icon_info = gtk_icon_theme_lookup_icon (icon_theme, icon_name, size,
-                                              GTK_ICON_LOOKUP_FORCE_SIZE | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
-      if (icon_info == NULL)
+      icon = gtk_icon_theme_lookup_icon (icon_theme, icon_name, size, 1,
+                                         GTK_ICON_LOOKUP_FORCE_SIZE | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+      if (icon == NULL)
         return NULL;
-      return gtk_icon_info_load_icon (icon_info, NULL);
+      return GDK_PAINTABLE (icon);
     default:
       g_warning ("Image storage type %d not handled",
                  gtk_image_get_storage_type (image));
@@ -405,13 +405,13 @@ get_file (GValue   *value,
           gpointer  data)
 {
   const char *name;
-  GtkIconInfo *info;
+  GtkIcon *info;
   GFile *file;
 
   name = gtk_image_get_icon_name (GTK_IMAGE (data));
 
-  info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), name, -1, 0);
-  file = g_file_new_for_path (gtk_icon_info_get_filename (info));
+  info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), name, 32, 1, 0);
+  file = g_file_new_for_path (gtk_icon_get_filename (info));
   g_value_set_object (value, file);
   g_object_unref (file);
   g_object_unref (info);

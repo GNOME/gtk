@@ -37,7 +37,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkradiobutton.h"
-#include "gtkiconprivate.h"
+#include "gtkbuiltiniconprivate.h"
 
 
 /**
@@ -356,7 +356,7 @@ draw_indicator_changed (GtkCheckButton *check_button)
 
   if (priv->draw_indicator)
     {
-      priv->indicator_widget = gtk_icon_new ("check");
+      priv->indicator_widget = gtk_builtin_icon_new ("check");
       gtk_widget_set_halign (priv->indicator_widget, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (priv->indicator_widget, GTK_ALIGN_CENTER);
       gtk_widget_set_parent (priv->indicator_widget, GTK_WIDGET (check_button));

@@ -116,7 +116,7 @@
 #include "gtkbuildable.h"
 #include "gtkcontainerprivate.h"
 #include "gtkdragdest.h"
-#include "gtkiconprivate.h"
+#include "gtkbuiltiniconprivate.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
 #include "gtkintl.h"
@@ -369,7 +369,7 @@ gtk_expander_init (GtkExpander *expander)
                                      NULL);
   gtk_container_add (GTK_CONTAINER (priv->box), priv->title_widget);
 
-  priv->arrow_widget = gtk_icon_new ("expander");
+  priv->arrow_widget = gtk_builtin_icon_new ("expander");
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->arrow_widget),
                                GTK_STYLE_CLASS_HORIZONTAL);
   gtk_container_add (GTK_CONTAINER (priv->title_widget), priv->arrow_widget);
