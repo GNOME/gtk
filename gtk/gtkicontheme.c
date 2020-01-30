@@ -3954,10 +3954,10 @@ init_color_matrix (graphene_matrix_t *color_matrix,
   graphene_matrix_init_from_float (color_matrix,
                                    (float[16]) {
                                      sc->red - fg->red, sc->green - fg->green, sc->blue - fg->blue, 0,
-                                       wc->red - fg->red, wc->green - fg->green, wc->blue - fg->blue, 0,
-                                       ec->red - fg->red, ec->green - fg->green, ec->blue - fg->blue, 0,
-                                       0, 0, 0, fg->alpha
-                                       });
+                                     wc->red - fg->red, wc->green - fg->green, wc->blue - fg->blue, 0,
+                                     ec->red - fg->red, ec->green - fg->green, ec->blue - fg->blue, 0,
+                                     0, 0, 0, fg->alpha
+                                   });
   graphene_vec4_init (color_offset, fg->red, fg->green, fg->blue, 0);
 }
 
