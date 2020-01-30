@@ -4008,7 +4008,7 @@ icon_list_from_theme (GtkWindow   *window,
   GtkStyleContext *context;
   GtkCssValue *value;
   GtkIconTheme *icon_theme;
-  GtkIconInfo *info;
+  GtkIcon *info;
   gint *sizes;
   gint i;
 
@@ -4027,18 +4027,18 @@ icon_list_from_theme (GtkWindow   *window,
        * fixed size of 48.
        */
       if (sizes[i] == -1)
-        info = gtk_icon_theme_lookup_icon_for_scale (icon_theme, name,
-					             48, priv->scale,
-					             0);
+        info = gtk_icon_theme_lookup_icon (icon_theme, name,
+                                           48, priv->scale,
+                                           0);
       else
-        info = gtk_icon_theme_lookup_icon_for_scale (icon_theme, name,
-					             sizes[i], priv->scale,
-					             0);
+        info = gtk_icon_theme_lookup_icon (icon_theme, name,
+                                           sizes[i], priv->scale,
+                                           0);
       if (info)
         {
-          GdkPaintable *paintable = gtk_icon_info_load_icon (info, NULL);
-          if (paintable && GDK_IS_TEXTURE (paintable))
-            list = g_list_insert_sorted (list, GDK_TEXTURE (paintable), (GCompareFunc) icon_size_compare);
+          GdkTexture *texture = gtk_icon_download_texture (info, NULL);
+          if (texture)
+            list = g_list_insert_sorted (list, texture, (GCompareFunc) icon_size_compare);
 
           g_object_unref (info);
         }
@@ -4100,9 +4100,9 @@ GdkPaintable *
 gtk_window_get_icon_for_size (GtkWindow *window,
                               int        size)
 {
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   const char *name;
-  GtkIconInfo *info;
-  GdkPaintable *paintable;
+  GtkIcon *info;
 
   name = gtk_window_get_icon_name (window);
 
@@ -4112,15 +4112,12 @@ gtk_window_get_icon_for_size (GtkWindow *window,
     return NULL;
 
   info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
-                                     name, size,
+                                     name, size, priv->scale,
                                      GTK_ICON_LOOKUP_FORCE_SIZE);
   if (info == NULL)
     return NULL;
 
-  paintable = gtk_icon_info_load_icon (info, NULL);
-  g_object_unref (info);
-
-  return paintable;
+  return GDK_PAINTABLE (info);
 }
 
 static void

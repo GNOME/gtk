@@ -376,6 +376,7 @@ gdk_cairo_region
 gdk_cairo_region_create_from_surface
 gdk_cairo_draw_from_gl
 gdk_cairo_surface_upload_to_gl
+gdk_cairo_image_surface_recolor
 </SECTION>
 
 <SECTION>

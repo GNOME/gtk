@@ -29,7 +29,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkgizmoprivate.h"
-#include "gtkiconprivate.h"
+#include "gtkbuiltiniconprivate.h"
 
 // TODO
 // positioning + sizing
@@ -686,14 +686,14 @@ gtk_tree_popover_create_item (GtkTreePopover *popover,
 
       if (header_item)
         {
-          indicator = gtk_icon_new ("arrow");
+          indicator = gtk_builtin_icon_new ("arrow");
           gtk_style_context_add_class (gtk_widget_get_style_context (indicator), "left");
           gtk_widget_set_parent (indicator, item);
         }
 
       gtk_widget_set_parent (view, item);
 
-      indicator = gtk_icon_new (has_submenu ? "arrow" : "none");
+      indicator = gtk_builtin_icon_new (has_submenu ? "arrow" : "none");
       gtk_style_context_add_class (gtk_widget_get_style_context (indicator), "right");
       gtk_widget_set_parent (indicator, item);
 

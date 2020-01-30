@@ -103,7 +103,7 @@ icon_loaded (GObject      *object,
              GAsyncResult *result,
              gpointer      user_data)
 {
-  GtkIconInfo *info = GTK_ICON_INFO (object);
+  GtkIcon *icon = GTK_ICON (object);
   GNSMenuItem *item = user_data;
   GError *error = NULL;
   GdkPixbuf *pixbuf;
@@ -117,7 +117,7 @@ icon_loaded (GObject      *object,
         scale = roundf ([[NSScreen mainScreen] backingScaleFactor]);
 #endif
 
-  pixbuf = gtk_icon_info_load_symbolic_finish (info, result, NULL, &error);
+  pixbuf = gtk_icon_load_symbolic_finish (icon, result, NULL, &error);
 
   if (pixbuf != NULL)
     {
@@ -278,7 +278,7 @@ icon_loaded (GObject      *object,
       static GdkRGBA error;
 
       GtkIconTheme *theme;
-      GtkIconInfo *info;
+      GtkIcon *icon;
       gint scale = 1;
 
       if (!parsed)
@@ -300,14 +300,14 @@ icon_loaded (GObject      *object,
       if ([[NSScreen mainScreen] respondsToSelector:@selector(backingScaleFactor)])
         scale = roundf ([[NSScreen mainScreen] backingScaleFactor]);
 #endif
-      info = gtk_icon_theme_lookup_by_gicon_for_scale (theme, icon, ICON_SIZE, scale, GTK_ICON_LOOKUP_USE_BUILTIN);
+      icon = gtk_icon_theme_lookup_by_gicon (theme, icon, ICON_SIZE, scale, GTK_ICON_LOOKUP_USE_BUILTIN);
 
-      if (info != NULL)
+      if (icon != NULL)
         {
           cancellable = g_cancellable_new ();
-          gtk_icon_info_load_symbolic_async (info, &foreground, &success, &warning, &error,
-                                             cancellable, icon_loaded, self);
-          g_object_unref (info);
+          gtk_icon_load_symbolic_async (icon, &foreground, &success, &warning, &error,
+                                        cancellable, icon_loaded, self);
+          g_object_unref (icon);
           return;
         }
     }

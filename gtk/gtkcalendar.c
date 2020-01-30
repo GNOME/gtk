@@ -2585,7 +2585,7 @@ gtk_calendar_drag_update (GtkGestureDrag *gesture,
   GdkDevice *device;
   GdkDrag *drag;
   GtkIconTheme *theme;
-  GdkPaintable *paintable;
+  GtkIcon *icon;
   GdkSurface *surface;
 
   if (!priv->in_drag)
@@ -2604,9 +2604,9 @@ gtk_calendar_drag_update (GtkGestureDrag *gesture,
   drag = gdk_drag_begin (surface, device, content, GDK_ACTION_COPY, start_x, start_y);
 
   theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (widget));
-  paintable = gtk_icon_theme_load_icon (theme, "text-x-generic", 32, 0, NULL);
-  gtk_drag_icon_set_from_paintable (drag, paintable, 0, 0);
-  g_clear_object (&paintable);
+  icon = gtk_icon_theme_lookup_icon (theme, "text-x-generic", 32, 1, 0);
+  gtk_drag_icon_set_from_paintable (drag, GDK_PAINTABLE (icon), 0, 0);
+  g_clear_object (&icon);
 
   g_object_unref (content);
   g_object_unref (drag);

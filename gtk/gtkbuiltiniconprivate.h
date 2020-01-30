@@ -17,23 +17,22 @@
  * Authors: Cosimo Cecchi <cosimoc@gnome.org>
  */
 
-#ifndef __GTK_ICON_PRIVATE_H__
-#define __GTK_ICON_PRIVATE_H__
+#ifndef __GTK_BUILTIN_ICON_PRIVATE_H__
+#define __GTK_BUILTIN_ICON_PRIVATE_H__
 
 #include "gtkwidget.h"
 #include "gtkcsstypesprivate.h"
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_ICON (gtk_icon_get_type ())
+#define GTK_TYPE_BUILTIN_ICON (gtk_builtin_icon_get_type ())
 
-G_DECLARE_FINAL_TYPE (GtkIcon, gtk_icon, GTK, ICON, GtkWidget)
+G_DECLARE_FINAL_TYPE (GtkBuiltinIcon, gtk_builtin_icon, GTK, BUILTIN_ICON, GtkWidget)
 
-GtkWidget *  gtk_icon_new                    (const char *css_name);
-
-void         gtk_icon_set_css_name           (GtkIcon    *self,
-                                              const char *css_name);
+GtkWidget *  gtk_builtin_icon_new          (const char     *css_name);
+void         gtk_builtin_icon_set_css_name (GtkBuiltinIcon *self,
+                                            const char     *css_name);
 
 G_END_DECLS
 
-#endif /* __GTK_ICON_PRIVATE_H__ */
+#endif /* __GTK_BUILTIN_ICON_PRIVATE_H__ */
