@@ -393,7 +393,8 @@ static GtkIcon *  icon_new                              (IconThemeDirType  type,
                                                          gint              dir_scale);
 static void       icon_compute_rendered_size            (GtkIcon          *icon);
 static IconSuffix suffix_from_name                      (const gchar      *name);
-static gboolean   icon_ensure_scale_and_texture__locked (GtkIcon          *icon);
+static gboolean   icon_ensure_scale_and_texture__locked (GtkIcon          *icon,
+                                                         gboolean          in_thread);
 static void       unset_display                         (GtkIconTheme     *self);
 static void       update_current_theme__mainthread      (GtkIconTheme     *self);
 static gboolean   ensure_valid_themes                   (GtkIconTheme     *self,
@@ -2417,7 +2418,7 @@ choose_icon_thread  (GTask        *task,
   if (icon)
     {
       g_mutex_lock (&icon->texture_lock);
-      (void)icon_ensure_scale_and_texture__locked (icon);
+      (void)icon_ensure_scale_and_texture__locked (icon, TRUE);
 
       if (icon->texture)
         g_task_return_pointer (task, g_object_ref (icon), g_object_unref);
@@ -2445,7 +2446,7 @@ load_icon_thread  (GTask        *task,
   GtkIcon *icon = task_data;
 
   g_mutex_lock (&icon->texture_lock);
-  (void)icon_ensure_scale_and_texture__locked (icon);
+  (void)icon_ensure_scale_and_texture__locked (icon, TRUE);
   g_mutex_unlock (&icon->texture_lock);
   g_task_return_pointer (task, g_object_ref (icon), g_object_unref);
 }
@@ -3720,7 +3721,8 @@ icon_get_loadable (GtkIcon *icon)
  * that size.
  */
 static gboolean
-icon_ensure_scale_and_texture__locked (GtkIcon *icon)
+icon_ensure_scale_and_texture__locked (GtkIcon *icon,
+                                       gboolean in_thread)
 {
   gint image_width, image_height, image_size;
   gint scaled_desired_size;
@@ -3926,7 +3928,7 @@ icon_ensure_scale_and_texture__locked (GtkIcon *icon)
   if (gdk_profiler_is_running ())
     {
       char *message = g_strdup_printf ("%s size %d@%d", icon->filename, icon->desired_size, icon->desired_scale);
-      gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "icon load", message);
+      gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, in_thread ?  "icon load (thread)" : "icon load" , message);
       g_free (message);
     }
 
@@ -3952,7 +3954,7 @@ gtk_icon_download_texture (GtkIcon *self,
 
   g_mutex_lock (&self->texture_lock);
 
-  icon_ensure_scale_and_texture__locked (self);
+  icon_ensure_scale_and_texture__locked (self, FALSE);
 
   if (self->texture)
     texture = g_object_ref (self->texture);
