@@ -175,6 +175,22 @@ gtk_icon_helper_load_paintable (GtkIconHelper   *self,
   return paintable;
 }
 
+/* We are calling this from css-validate, and the mapped state is not yet set, so
+ * we have to calculate ahead of time if a widget will be mapped. */
+static gboolean
+will_be_mapped (GtkWidget *widget)
+{
+  while (widget)
+    {
+      if (!_gtk_widget_get_visible (widget) ||
+          !_gtk_widget_get_child_visible (widget))
+        return FALSE;
+      widget = _gtk_widget_get_parent (widget);
+    }
+
+  return TRUE;
+}
+
 void
 _gtk_icon_helper_preload (GtkIconHelper *self)
 {
@@ -211,6 +227,7 @@ _gtk_icon_helper_preload (GtkIconHelper *self)
 
   if (gicon && G_IS_THEMED_ICON (gicon))
     {
+      int priority;
       style = gtk_css_node_get_style (self->node);
       icon_theme = gtk_css_icon_theme_value_get_icon_theme
         (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_THEME));
@@ -219,10 +236,16 @@ _gtk_icon_helper_preload (GtkIconHelper *self)
       size = gtk_icon_helper_get_size (self);
       scale = gtk_widget_get_scale_factor (self->owner);
 
+      /* Icons for widgets are visible have higher priority so they are loaded first */
+      if (will_be_mapped (self->owner))
+        priority = G_PRIORITY_DEFAULT;
+      else
+        priority = G_PRIORITY_DEFAULT + 1;
+
       gtk_icon_theme_choose_icon_async (icon_theme,
                                         (const gchar **)g_themed_icon_get_names (G_THEMED_ICON (gicon)),
                                         size, scale,
-                                        flags, 0, NULL, NULL, NULL);
+                                        flags, priority, NULL, NULL, NULL);
     }
 
   if (free_gicon)
