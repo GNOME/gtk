@@ -770,7 +770,7 @@ gdk_broadway_surface_maximize (GdkSurface *surface)
   impl->pre_maximize_height = surface->height;
 
   display = gdk_surface_get_display (surface);
-  monitor = gdk_display_get_primary_monitor (display);
+  monitor = gdk_display_get_monitor (display, 0);
   gdk_monitor_get_geometry (monitor, &geom);
 
   gdk_broadway_surface_move_resize (surface,

@@ -492,23 +492,6 @@ gdk_monitor_get_subpixel_layout (GdkMonitor *monitor)
   return monitor->subpixel_layout;
 }
 
-/**
- * gdk_monitor_is_primary:
- * @monitor: a #GdkMonitor
- *
- * Gets whether this monitor should be considered primary
- * (see gdk_display_get_primary_monitor()).
- *
- * Returns: %TRUE if @monitor is primary
- */
-gboolean
-gdk_monitor_is_primary (GdkMonitor *monitor)
-{
-  g_return_val_if_fail (GDK_IS_MONITOR (monitor), FALSE);
-
-  return monitor == gdk_display_get_primary_monitor (monitor->display);
-}
-
 GdkMonitor *
 gdk_monitor_new (GdkDisplay *display)
 {
