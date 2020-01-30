@@ -48,6 +48,7 @@ struct _GtkIconHelper
   guint use_fallback : 1;
   guint force_scale_pixbuf : 1;
   guint texture_is_symbolic : 1;
+  guint preloaded : 1;
 
   GtkWidget *owner;
   GtkCssNode *node;
@@ -183,6 +184,12 @@ _gtk_icon_helper_preload (GtkIconHelper *self)
   GtkCssStyle *style;
   GIcon *gicon = NULL;
   GIcon *free_gicon = NULL;
+
+  /* Avoid constantly preloading as it may cause issues if we're trashing the icon cache */
+  if (self->preloaded)
+    return;
+
+  self->preloaded = TRUE;
 
   switch (gtk_image_definition_get_storage_type (self->def))
     {
