@@ -38,7 +38,7 @@ G_BEGIN_DECLS
 #define GTK_IS_ICON_THEME(obj)     (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ICON_THEME))
 
 typedef struct _GtkIcon         GtkIcon;
-typedef struct _GtkIconTheme        GtkIconTheme;
+typedef struct _GtkIconTheme    GtkIconTheme;
 
 /**
  * GtkIconLookupFlags:
@@ -205,8 +205,8 @@ GdkTexture *         gtk_icon_download_colored_texture (GtkIcon *self,
                                                         const GdkRGBA *error_color,
                                                         GError **error);
 GDK_AVAILABLE_IN_ALL
-void                  gtk_icon_snapshot_with_colors (GtkIcon *icon_info,
-                                                     GdkSnapshot  *snapshot,
+void                  gtk_icon_snapshot_with_colors (GtkIcon      *icon,
+                                                     GtkSnapshot  *snapshot,
                                                      double        width,
                                                      double        height,
                                                      const GdkRGBA *foreground_color,
