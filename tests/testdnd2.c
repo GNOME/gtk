@@ -1,5 +1,10 @@
-#include <unistd.h>
 #include <gtk/gtk.h>
+
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#elif defined (G_OS_WIN32)
+#include <io.h>
+#endif
 
 static GdkPaintable *
 get_image_paintable (GtkImage *image,
