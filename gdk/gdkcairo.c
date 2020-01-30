@@ -457,6 +457,18 @@ gdk_cairo_region_from_clip (cairo_t *cr)
   return region;
 }
 
+/**
+ * gdk_cairo_image_surface_recolor:
+ * @image_surface: a cairo image surface
+ * @color_matrix: the color matrix to use
+ * @color_offset: the color offset to use
+ *
+ * Modifies the colors of an surfaceimage by applying an affine transformation
+ * in RGB space.
+ *
+ * This is the same operation as in gtk_snapshot_push_color_matrix() but
+ * always done on the cpu.
+ */
 void
 gdk_cairo_image_surface_recolor (cairo_surface_t *image_surface,
                                  const graphene_matrix_t *color_matrix,
