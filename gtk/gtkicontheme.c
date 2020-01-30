@@ -53,7 +53,7 @@
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdkprofilerprivate.h"
 
-/* this is in case round() is not provided by the compiler, 
+/* this is in case round() is not provided by the compiler,
  * such as in the case of C89 compilers, like MSVC
  */
 #include "fallback-c89.c"
@@ -161,8 +161,8 @@
 
 typedef enum
 {
-  ICON_THEME_DIR_FIXED,  
-  ICON_THEME_DIR_SCALABLE,  
+  ICON_THEME_DIR_FIXED,
+  ICON_THEME_DIR_SCALABLE,
   ICON_THEME_DIR_THRESHOLD,
   ICON_THEME_DIR_UNTHEMED
 } IconThemeDirType;
@@ -345,9 +345,9 @@ typedef struct
   gchar *dir;
   gchar *subdir;
   gint subdir_index;
-  
+
   GtkIconCache *cache;
-  
+
   GHashTable *icons;
 } IconThemeDir;
 
@@ -358,7 +358,7 @@ typedef struct
   gboolean is_resource;
 } UnthemedIcon;
 
-typedef struct 
+typedef struct
 {
   gchar *dir;
   time_t mtime;
@@ -701,13 +701,13 @@ G_DEFINE_TYPE (GtkIconTheme, gtk_icon_theme, G_TYPE_OBJECT)
 
 /**
  * gtk_icon_theme_new:
- * 
+ *
  * Creates a new icon theme object. Icon theme objects are used
  * to lookup up an icon by name in a particular icon theme.
  * Usually, you’ll want to use gtk_icon_theme_get_default()
  * or gtk_icon_theme_get_for_display() rather than creating
  * a new icon theme object for scratch.
- * 
+ *
  * Returns: the newly created #GtkIconTheme object.
  */
 GtkIconTheme *
@@ -718,7 +718,7 @@ gtk_icon_theme_new (void)
 
 /**
  * gtk_icon_theme_get_default:
- * 
+ *
  * Gets the icon theme for the default display. See
  * gtk_icon_theme_get_for_display().
  *
@@ -760,7 +760,7 @@ gtk_icon_theme_load_in_thread (GtkIconTheme *self)
 /**
  * gtk_icon_theme_get_for_display:
  * @display: a #GdkDisplay
- * 
+ *
  * Gets the icon theme object associated with @display; if this
  * function has not previously been called for the given
  * display, a new icon theme object will be created and
@@ -931,7 +931,7 @@ unset_display (GtkIconTheme *self)
  * gtk_icon_theme_set_display:
  * @self: a #GtkIconTheme
  * @display: a #GdkDisplay
- * 
+ *
  * Sets the display for an icon theme; the display is used
  * to track the user’s currently configured icon theme,
  * which might be different for different displays.
@@ -984,12 +984,12 @@ pixbuf_supports_svg (void)
 
   formats = gdk_pixbuf_get_formats ();
 
-  found_svg = FALSE; 
+  found_svg = FALSE;
   for (tmp_list = formats; tmp_list && !found_svg; tmp_list = tmp_list->next)
     {
       gchar **mime_types = gdk_pixbuf_format_get_mime_types (tmp_list->data);
       gchar **mime_type;
-      
+
       for (mime_type = mime_types; *mime_type && !found_svg; mime_type++)
         {
           if (strcmp (*mime_type, "image/svg") == 0)
@@ -1000,7 +1000,7 @@ pixbuf_supports_svg (void)
     }
 
   g_slist_free (formats);
-  
+
   return found_svg;
 }
 
@@ -1021,17 +1021,17 @@ gtk_icon_theme_init (GtkIconTheme *self)
   for (i = 0; xdg_data_dirs[i]; i++) ;
 
   self->search_path_len = 2 * i + 2;
-  
+
   self->search_path = g_new (char *, self->search_path_len);
-  
+
   i = 0;
   self->search_path[i++] = g_build_filename (g_get_user_data_dir (), "icons", NULL);
   self->search_path[i++] = g_build_filename (g_get_home_dir (), ".icons", NULL);
-  
-  for (j = 0; xdg_data_dirs[j]; j++) 
+
+  for (j = 0; xdg_data_dirs[j]; j++)
     self->search_path[i++] = g_build_filename (xdg_data_dirs[j], "icons", NULL);
 
-  for (j = 0; xdg_data_dirs[j]; j++) 
+  for (j = 0; xdg_data_dirs[j]; j++)
     self->search_path[i++] = g_build_filename (xdg_data_dirs[j], "pixmaps", NULL);
 
   self->resource_paths = g_list_append (NULL, g_strdup ("/org/gtk/libgtk/icons/"));
@@ -1192,7 +1192,7 @@ gtk_icon_theme_finalize (GObject *object)
  * @path: (array length=n_elements) (element-type filename): array of
  *     directories that are searched for icon themes
  * @n_elements: number of elements in @path.
- * 
+ *
  * Sets the search path for the icon theme object. When looking
  * for an icon theme, GTK+ will search for a subdirectory of
  * one or more of the directories in @path with the same name
@@ -1274,9 +1274,9 @@ gtk_icon_theme_get_search_path (GtkIconTheme  *self,
  * gtk_icon_theme_append_search_path:
  * @self: a #GtkIconTheme
  * @path: (type filename): directory name to append to the icon path
- * 
- * Appends a directory to the search path. 
- * See gtk_icon_theme_set_search_path(). 
+ *
+ * Appends a directory to the search path.
+ * See gtk_icon_theme_set_search_path().
  */
 void
 gtk_icon_theme_append_search_path (GtkIconTheme *self,
@@ -1301,8 +1301,8 @@ gtk_icon_theme_append_search_path (GtkIconTheme *self,
  * gtk_icon_theme_prepend_search_path:
  * @self: a #GtkIconTheme
  * @path: (type filename): directory name to prepend to the icon path
- * 
- * Prepends a directory to the search path. 
+ *
+ * Prepends a directory to the search path.
  * See gtk_icon_theme_set_search_path().
  */
 void
@@ -1367,7 +1367,7 @@ gtk_icon_theme_add_resource_path (GtkIconTheme *self,
  * @self: a #GtkIconTheme
  * @theme_name: (allow-none): name of icon theme to use instead of
  *   configured theme, or %NULL to unset a previously set custom theme
- * 
+ *
  * Sets the name of the icon theme that the #GtkIconTheme object uses
  * overriding system configuration. This function cannot be called
  * on the icon theme objects returned from gtk_icon_theme_get_default()
@@ -1461,7 +1461,7 @@ insert_theme (GtkIconTheme *self,
       if (strcmp (theme->name, theme_name) == 0)
         return;
     }
-  
+
   for (i = 0; i < self->search_path_len; i++)
     {
       path = g_build_filename (self->search_path[i],
@@ -1488,7 +1488,7 @@ insert_theme (GtkIconTheme *self,
                                theme_name,
                                "index.theme",
                                NULL);
-      if (g_file_test (path, G_FILE_TEST_IS_REGULAR)) 
+      if (g_file_test (path, G_FILE_TEST_IS_REGULAR))
         {
           theme_file = g_key_file_new ();
           g_key_file_set_list_separator (theme_file, ',');
@@ -1519,7 +1519,7 @@ insert_theme (GtkIconTheme *self,
   if (theme_file == NULL)
     return;
 
-  theme->display_name = 
+  theme->display_name =
     g_key_file_get_locale_string (theme_file, "Icon Theme", "Name", NULL, NULL);
   if (!theme->display_name)
     g_warning ("Theme file for %s has no name", theme_name);
@@ -1538,8 +1538,8 @@ insert_theme (GtkIconTheme *self,
 
   scaled_dirs = g_key_file_get_string_list (theme_file, "Icon Theme", "ScaledDirectories", NULL, NULL);
 
-  theme->comment = 
-    g_key_file_get_locale_string (theme_file, 
+  theme->comment =
+    g_key_file_get_locale_string (theme_file,
                                   "Icon Theme", "Comment",
                                   NULL, NULL);
 
@@ -2236,7 +2236,7 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
         nonsymbolic_icon_name = g_strndup (icon_name, icon_name_len - strlen ("-symbolic"));
       else
         nonsymbolic_icon_name = g_strdup (icon_name);
- 
+
       dashes = 0;
       for (p = (gchar *) nonsymbolic_icon_name; *p; p++)
         if (*p == '-')
@@ -2297,15 +2297,15 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
  * @size: desired icon size
  * @scale: desired scale
  * @flags: flags modifying the behavior of the icon lookup
- * 
+ *
  * Looks up a named icon for a particular window scale and returns
  * a #GtkIcon containing information such as the filename of the
  * icon. The icon can then be rendered into a pixbuf using
  * gtk_icon_load_icon(). (gtk_icon_theme_load_icon()
  * combines these two steps if all you need is the pixbuf.)
  *
- * If @icon_names contains more than one name, this function 
- * tries them all in the given order before falling back to 
+ * If @icon_names contains more than one name, this function
+ * tries them all in the given order before falling back to
  * inherited icon themes.
  *
  * Returns: (nullable) (transfer full): a #GtkIcon object
@@ -2590,7 +2590,7 @@ gtk_icon_theme_lookup_symbolic_colors (GtkCssStyle *style,
  * Returns: %TRUE if @self includes an
  *  icon for @icon_name.
  */
-gboolean 
+gboolean
 gtk_icon_theme_has_icon (GtkIconTheme *self,
                          const gchar  *icon_name)
 {
@@ -2647,10 +2647,10 @@ add_size (gpointer key,
  * gtk_icon_theme_get_icon_sizes:
  * @self: a #GtkIconTheme
  * @icon_name: the name of an icon
- * 
+ *
  * Returns an array of integers describing the sizes at which
- * the icon is available without scaling. A size of -1 means 
- * that the icon is available in a scalable format. The array 
+ * the icon is available without scaling. A size of -1 means
+ * that the icon is available in a scalable format. The array
  * is zero-terminated.
  *
  * Returns: (array zero-terminated=1) (transfer full): A newly
@@ -2769,7 +2769,7 @@ gtk_icon_theme_list_icons (GtkIconTheme *self,
     context_quark = 0;
 
   icons = g_hash_table_new (g_str_hash, g_str_equal);
-  
+
   l = self->themes;
   while (l != NULL)
     {
@@ -2783,7 +2783,7 @@ gtk_icon_theme_list_icons (GtkIconTheme *self,
                           icons);
 
   list = NULL;
-  
+
   g_hash_table_foreach (icons,
                         add_key_to_list,
                         &list);
@@ -2834,11 +2834,11 @@ rescan_themes (GtkIconTheme *self)
 /**
  * gtk_icon_theme_rescan_if_needed:
  * @self: a #GtkIconTheme
- * 
+ *
  * Checks to see if the icon theme has changed; if it has, any
  * currently cached information is discarded and will be reloaded
  * next time @self is accessed.
- * 
+ *
  * Returns: %TRUE if the icon theme has changed and needed
  *     to be reloaded.
  */
@@ -2868,7 +2868,7 @@ theme_destroy (IconTheme *theme)
   g_free (theme->name);
 
   g_list_free_full (theme->dirs, (GDestroyNotify) theme_dir_destroy);
-  
+
   g_free (theme);
 }
 
@@ -2879,7 +2879,7 @@ theme_dir_destroy (IconThemeDir *dir)
     gtk_icon_cache_unref (dir->cache);
   if (dir->icons)
     g_hash_table_destroy (dir->icons);
-  
+
   g_free (dir->dir);
   g_free (dir->subdir);
   g_free (dir);
@@ -2986,7 +2986,7 @@ best_suffix (IconSuffix suffix,
   else
     return ICON_SUFFIX_NONE;
 }
- 
+
 static IconSuffix
 theme_dir_get_icon_suffix (IconThemeDir *dir,
                            const gchar  *icon_name)
@@ -3042,7 +3042,7 @@ compare_dir_matches (IconThemeDir *dir_a, gint difference_a,
     {
       if (difference_b != 0)
         return TRUE;
-      
+
       /* a and b both exact matches */
     }
   else
@@ -3055,7 +3055,7 @@ compare_dir_matches (IconThemeDir *dir_a, gint difference_a,
       if (dir_a->size < requested_size &&
           dir_b->size >= requested_size)
         return FALSE;
- 
+
       /* Otherwise prefer the closest match */
 
       if (difference_a < difference_b)
@@ -3084,7 +3084,7 @@ compare_dir_matches (IconThemeDir *dir_a, gint difference_a,
   if (dir_a->type == ICON_THEME_DIR_SCALABLE &&
       dir_b->type != ICON_THEME_DIR_SCALABLE)
     return FALSE;
-      
+
   /* a and b both are scalable */
 
   diff_a = abs (requested_size * requested_scale - dir_a->size * dir_a->scale);
@@ -3175,13 +3175,13 @@ theme_lookup_icon (IconTheme   *theme,
 }
 
 static void
-theme_list_icons (IconTheme  *theme, 
+theme_list_icons (IconTheme  *theme,
                   GHashTable *icons,
                   GQuark      context)
 {
   GList *l = theme->dirs;
   IconThemeDir *dir;
-  
+
   while (l != NULL)
     {
       dir = l->data;
@@ -3574,7 +3574,7 @@ gtk_icon_class_init (GtkIconClass *klass)
 /**
  * gtk_icon_get_base_size:
  * @self: a #GtkIcon
- * 
+ *
  * Gets the base size for the icon. The base size
  * is a size for the icon that was specified by
  * the icon theme creator. This may be different
@@ -3620,12 +3620,12 @@ gtk_icon_get_base_scale (GtkIcon *icon)
 /**
  * gtk_icon_get_filename:
  * @self: a #GtkIcon
- * 
+ *
  * Gets the filename for the icon. If the %GTK_ICON_LOOKUP_USE_BUILTIN
  * flag was passed to gtk_icon_theme_lookup_icon(), there may be no
  * filename if a builtin icon is returned; in this case, you should
  * use gtk_icon_get_builtin_pixbuf().
- * 
+ *
  * Returns: (nullable) (type filename): the filename for the icon, or %NULL
  *     if gtk_icon_get_builtin_pixbuf() should be used instead.
  *     The return value is owned by GTK+ and should not be modified
