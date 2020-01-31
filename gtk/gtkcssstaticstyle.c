@@ -739,7 +739,7 @@ gtk_css_background_create_initial_values (void)
 {
   GtkCssBackgroundValues *values;
 
-  values = (GtkCssBackgroundValues *)gtk_css_values_new (GTK_CSS_BACKGROUND_VALUES);
+  values = (GtkCssBackgroundValues *)gtk_css_values_new (GTK_CSS_BACKGROUND_INITIAL_VALUES);
 
   values->background_color = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BACKGROUND_COLOR, NULL, NULL, NULL);
   values->box_shadow = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BOX_SHADOW, NULL, NULL, NULL);
@@ -759,7 +759,7 @@ gtk_css_border_create_initial_values (void)
 {
   GtkCssBorderValues *values;
 
-  values = (GtkCssBorderValues *)gtk_css_values_new (GTK_CSS_BORDER_VALUES);
+  values = (GtkCssBorderValues *)gtk_css_values_new (GTK_CSS_BORDER_INITIAL_VALUES);
 
   values->border_top_style = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_TOP_STYLE, NULL, NULL, NULL);
   values->border_top_width = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_TOP_WIDTH, NULL, NULL, NULL);
@@ -790,7 +790,7 @@ gtk_css_outline_create_initial_values (void)
 {
   GtkCssOutlineValues *values;
 
-  values = (GtkCssOutlineValues *)gtk_css_values_new (GTK_CSS_OUTLINE_VALUES);
+  values = (GtkCssOutlineValues *)gtk_css_values_new (GTK_CSS_OUTLINE_INITIAL_VALUES);
 
   values->outline_style = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_STYLE, NULL, NULL, NULL);
   values->outline_width = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_WIDTH, NULL, NULL, NULL);
@@ -821,7 +821,7 @@ gtk_css_font_variant_create_initial_values (void)
 {
   GtkCssFontVariantValues *values;
 
-  values = (GtkCssFontVariantValues *)gtk_css_values_new (GTK_CSS_FONT_VARIANT_VALUES);
+  values = (GtkCssFontVariantValues *)gtk_css_values_new (GTK_CSS_FONT_VARIANT_INITIAL_VALUES);
 
   values->text_decoration_line = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TEXT_DECORATION_LINE, NULL, NULL, NULL);
   values->text_decoration_color = NULL;
@@ -842,7 +842,7 @@ gtk_css_animation_create_initial_values (void)
 {
   GtkCssAnimationValues *values;
 
-  values = (GtkCssAnimationValues *)gtk_css_values_new (GTK_CSS_ANIMATION_VALUES);
+  values = (GtkCssAnimationValues *)gtk_css_values_new (GTK_CSS_ANIMATION_INITIAL_VALUES);
 
   values->animation_name = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_ANIMATION_NAME, NULL, NULL, NULL);
   values->animation_duration = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_ANIMATION_DURATION, NULL, NULL, NULL);
@@ -861,7 +861,7 @@ gtk_css_transition_create_initial_values (void)
 {
   GtkCssTransitionValues *values;
 
-  values = (GtkCssTransitionValues *)gtk_css_values_new (GTK_CSS_TRANSITION_VALUES);
+  values = (GtkCssTransitionValues *)gtk_css_values_new (GTK_CSS_TRANSITION_INITIAL_VALUES);
 
   values->transition_property = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TRANSITION_PROPERTY, NULL, NULL, NULL);
   values->transition_duration = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TRANSITION_DURATION, NULL, NULL, NULL);
@@ -876,7 +876,7 @@ gtk_css_size_create_initial_values (void)
 {
   GtkCssSizeValues *values;
 
-  values = (GtkCssSizeValues *)gtk_css_values_new (GTK_CSS_SIZE_VALUES);
+  values = (GtkCssSizeValues *)gtk_css_values_new (GTK_CSS_SIZE_INITIAL_VALUES);
 
   values->margin_top = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_MARGIN_TOP, NULL, NULL, NULL);
   values->margin_left = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_MARGIN_LEFT, NULL, NULL, NULL);
@@ -898,7 +898,7 @@ gtk_css_other_create_initial_values (void)
 {
   GtkCssOtherValues *values;
 
-  values = (GtkCssOtherValues *)gtk_css_values_new (GTK_CSS_OTHER_VALUES);
+  values = (GtkCssOtherValues *)gtk_css_values_new (GTK_CSS_OTHER_INITIAL_VALUES);
 
   values->icon_source = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_ICON_SOURCE, NULL, NULL, NULL);
   values->icon_transform = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_ICON_TRANSFORM, NULL, NULL, NULL);
