@@ -104,6 +104,10 @@ void                    gtk_snapshot_append_text                (GtkSnapshot    
                                                                  const GdkRGBA          *color,
                                                                  float                   x,
                                                                  float                   y);
+
+void                    gtk_snapshot_push_collect               (GtkSnapshot            *snapshot);
+GskRenderNode *         gtk_snapshot_pop_collect                (GtkSnapshot            *snapshot);
+
 G_END_DECLS
 
 #endif /* __GTK_SNAPSHOT_PRIVATE_H__ */
