@@ -1139,6 +1139,30 @@ gtk_snapshot_pop_internal (GtkSnapshot *snapshot)
 }
 
 /**
+ * gtk_snapshot_push_collect:
+ *
+ * PRIVATE.
+ *
+ * Puhses state so a later pop_collect call can collect all nodes
+ * appended until that point.
+ */
+void
+gtk_snapshot_push_collect (GtkSnapshot *snapshot)
+{
+  gtk_snapshot_push_state (snapshot,
+                           NULL,
+                           gtk_snapshot_collect_default);
+}
+
+GskRenderNode *
+gtk_snapshot_pop_collect (GtkSnapshot *snapshot)
+{
+  GskRenderNode *result = gtk_snapshot_pop_internal (snapshot);
+
+  return result;
+}
+
+/**
  * gtk_snapshot_to_node:
  * @snapshot: a #GtkSnapshot
  *
