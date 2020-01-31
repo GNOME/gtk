@@ -88,15 +88,11 @@ struct _GdkSnapshot {
 
   GArray                *state_stack;
   GPtrArray             *nodes;
-
-  guint from_parent : 1;
 };
 
 struct _GtkSnapshotClass {
   GObjectClass           parent_class; /* it's really GdkSnapshotClass, but don't tell anyone! */
 };
-
-GtkSnapshot *           gtk_snapshot_new_with_parent            (GtkSnapshot            *parent_snapshot);
 
 void                    gtk_snapshot_append_text                (GtkSnapshot            *snapshot,
                                                                  PangoFont              *font,
