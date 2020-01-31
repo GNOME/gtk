@@ -13185,7 +13185,7 @@ gtk_widget_remove_style_class (GtkWidget  *widget,
   g_return_if_fail (style_class[0] != '\0');
   g_return_if_fail (style_class[0] != '.');
 
-  class_quark = g_quark_from_string (style_class);
+  class_quark = g_quark_try_string (style_class);
   if (!class_quark)
     return;
 
@@ -13215,7 +13215,7 @@ gtk_widget_has_style_class (GtkWidget  *widget,
   g_return_val_if_fail (style_class[0] != '\0', FALSE);
   g_return_val_if_fail (style_class[0] != '.', FALSE);
 
-  class_quark = g_quark_from_string (style_class);
+  class_quark = g_quark_try_string (style_class);
   if (!class_quark)
     return FALSE;
 
