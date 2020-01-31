@@ -411,13 +411,23 @@ update_start_indicator (GtkModelButton *self)
 static void
 gtk_model_button_update_state (GtkModelButton *self)
 {
+  GtkStateFlags indicator_state;
+
   update_start_indicator (self);
   update_end_indicator (self);
 
+  indicator_state = get_start_indicator_state (self);
   if (self->iconic)
-    gtk_widget_set_state_flags (GTK_WIDGET (self),
-                                get_start_indicator_state (self),
-                                TRUE);
+    gtk_widget_set_state_flags (GTK_WIDGET (self), indicator_state, TRUE);
+
+  if (self->role == GTK_BUTTON_ROLE_CHECK ||
+      self->role == GTK_BUTTON_ROLE_RADIO)
+    {
+      AtkObject *object = _gtk_widget_peek_accessible (GTK_WIDGET (self));
+      if (object)
+        atk_object_notify_state_change (object, ATK_STATE_CHECKED,
+                                        (indicator_state & GTK_STATE_FLAG_CHECKED));
+    }
 }
 
 static void
@@ -1071,6 +1081,18 @@ gtk_model_button_focus (GtkWidget        *widget,
   return FALSE;
 }
 
+static AtkObject *
+gtk_model_button_get_accessible (GtkWidget *widget)
+{
+  AtkObject *object;
+
+  object = GTK_WIDGET_CLASS (gtk_model_button_parent_class)->get_accessible (widget);
+
+  gtk_model_button_update_state (GTK_MODEL_BUTTON (widget));
+
+  return object;
+}
+
 static void
 gtk_model_button_class_init (GtkModelButtonClass *class)
 {
@@ -1086,6 +1108,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   widget_class->direction_changed = gtk_model_button_direction_changed;
   widget_class->focus = gtk_model_button_focus;
   widget_class->root = gtk_model_button_root;
+  widget_class->get_accessible = gtk_model_button_get_accessible;
 
   /**
    * GtkModelButton:role:
