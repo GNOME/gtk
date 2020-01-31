@@ -547,7 +547,6 @@ gtk_file_chooser_dialog_realize (GtkWidget *widget)
 
   if (width != 0 && height != 0)
     gtk_window_set_default_size (GTK_WINDOW (dialog), width, height);
-  g_print ("%d %d\n", width, height);
 
   GTK_WIDGET_CLASS (gtk_file_chooser_dialog_parent_class)->realize (widget);
 }
