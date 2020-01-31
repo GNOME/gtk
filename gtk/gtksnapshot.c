@@ -162,28 +162,9 @@ gtk_snapshot_new (void)
 
   snapshot = g_object_new (GTK_TYPE_SNAPSHOT, NULL);
 
-  snapshot->from_parent = FALSE;
   snapshot->state_stack = g_array_new (FALSE, TRUE, sizeof (GtkSnapshotState));
   g_array_set_clear_func (snapshot->state_stack, (GDestroyNotify)gtk_snapshot_state_clear);
   snapshot->nodes = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_render_node_unref);
-
-  gtk_snapshot_push_state (snapshot,
-                           NULL,
-                           gtk_snapshot_collect_default);
-
-  return snapshot;
-}
-
-/* Private. Does the same as _new but does not allocate a NEW
- * state/node stack. */
-GtkSnapshot *
-gtk_snapshot_new_with_parent (GtkSnapshot *parent_snapshot)
-{
-  GtkSnapshot *snapshot = g_object_new (GTK_TYPE_SNAPSHOT, NULL);
-
-  snapshot->state_stack = parent_snapshot->state_stack;
-  snapshot->nodes = parent_snapshot->nodes;
-  snapshot->from_parent = TRUE;
 
   gtk_snapshot_push_state (snapshot,
                            NULL,
@@ -1048,8 +1029,7 @@ gtk_snapshot_pop_one (GtkSnapshot *snapshot)
   guint state_index;
   GskRenderNode *node;
 
-  if (snapshot->state_stack->len == 0 &&
-      !snapshot->from_parent)
+  if (snapshot->state_stack->len == 0)
     {
       g_warning ("Too many gtk_snapshot_pop() calls.");
       return NULL;
@@ -1182,17 +1162,13 @@ gtk_snapshot_to_node (GtkSnapshot *snapshot)
   result = gtk_snapshot_pop_internal (snapshot);
 
   /* We should have exactly our initial state */
-  if (snapshot->state_stack->len > 0 &&
-      !snapshot->from_parent)
+  if (snapshot->state_stack->len > 0)
     {
       g_warning ("Too many gtk_snapshot_push() calls. %u states remaining.", snapshot->state_stack->len);
     }
 
-  if (!snapshot->from_parent)
-    {
-      g_array_free (snapshot->state_stack, TRUE);
-      g_ptr_array_free (snapshot->nodes, TRUE);
-    }
+  g_array_free (snapshot->state_stack, TRUE);
+  g_ptr_array_free (snapshot->nodes, TRUE);
 
   snapshot->state_stack = NULL;
   snapshot->nodes = NULL;
