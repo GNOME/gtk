@@ -704,6 +704,8 @@ static int values_size[] = {
 
 #define N_VALUES(type) ((values_size[type] - sizeof (GtkCssValues)) / sizeof (GtkCssValue *))
 
+#define GET_VALUES(v) (GtkCssValue **)((guint8 *)(v) + sizeof (GtkCssValues))
+
 GtkCssValues *gtk_css_values_ref (GtkCssValues *values)
 {
   values->ref_count++;
@@ -715,11 +717,12 @@ static void
 gtk_css_values_free (GtkCssValues *values)
 {
   int i;
+  GtkCssValue **v = GET_VALUES (values);
 
   for (i = 0; i < N_VALUES (values->type); i++)
     {
-      if (values->values[i])
-        gtk_css_value_unref (values->values[i]);
+      if (v[i])
+        gtk_css_value_unref (v[i]);
     }
 
   g_free (values);
@@ -740,14 +743,18 @@ GtkCssValues *
 gtk_css_values_copy (GtkCssValues *values)
 {
   GtkCssValues *copy;
+  GtkCssValue **v, **v2;
   int i;
 
   copy = gtk_css_values_new (values->type);
 
+  v = GET_VALUES (values);
+  v2 = GET_VALUES (copy);
+
   for (i = 0; i < N_VALUES (values->type); i++)
     {
-      if (values->values[i])
-        copy->values[i] = gtk_css_value_ref (values->values[i]);
+      if (v[i])
+        v2[i] = gtk_css_value_ref (v[i]);
     }
 
   return copy;
