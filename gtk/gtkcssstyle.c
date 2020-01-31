@@ -690,15 +690,26 @@ gtk_css_style_get_pango_font (GtkCssStyle *style)
 
 static int values_size[] = {
   sizeof (GtkCssCoreValues),
+  sizeof (GtkCssCoreValues),
+  sizeof (GtkCssBackgroundValues),
   sizeof (GtkCssBackgroundValues),
   sizeof (GtkCssBorderValues),
+  sizeof (GtkCssBorderValues),
+  sizeof (GtkCssIconValues),
   sizeof (GtkCssIconValues),
   sizeof (GtkCssOutlineValues),
+  sizeof (GtkCssOutlineValues),
+  sizeof (GtkCssFontValues),
   sizeof (GtkCssFontValues),
   sizeof (GtkCssFontVariantValues),
+  sizeof (GtkCssFontVariantValues),
+  sizeof (GtkCssAnimationValues),
   sizeof (GtkCssAnimationValues),
   sizeof (GtkCssTransitionValues),
+  sizeof (GtkCssTransitionValues),
   sizeof (GtkCssSizeValues),
+  sizeof (GtkCssSizeValues),
+  sizeof (GtkCssOtherValues),
   sizeof (GtkCssOtherValues)
 };
 
@@ -767,7 +778,7 @@ gtk_css_values_new (GtkCssValuesType type)
 
   values = (GtkCssValues *)g_malloc0 (values_size[type]);
   values->ref_count = 1;
-  values->type = type;
+  values->type = type - (type % 2);
 
   return values;  
 }
