@@ -12108,22 +12108,21 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget   *widget,
 
 static GskRenderNode *
 gtk_widget_create_render_node (GtkWidget   *widget,
-                               GtkSnapshot *parent_snapshot)
+                               GtkSnapshot *snapshot)
 {
   GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (widget);
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkCssBoxes boxes;
   GtkCssValue *filter_value;
   double opacity;
-  GtkSnapshot *snapshot;
 
   opacity = priv->alpha / 255.0;
   if (opacity <= 0.0)
     return NULL;
 
   gtk_css_boxes_init (&boxes, widget);
-  snapshot = gtk_snapshot_new_with_parent (parent_snapshot);
 
+  gtk_snapshot_push_collect (snapshot);
   gtk_snapshot_push_debug (snapshot,
                            "RenderNode for %s %p",
                            G_OBJECT_TYPE_NAME (widget), widget);
@@ -12162,7 +12161,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
 
   gtk_snapshot_pop (snapshot);
 
-  return gtk_snapshot_free_to_node (snapshot);
+  return gtk_snapshot_pop_collect (snapshot);
 }
 
 void
