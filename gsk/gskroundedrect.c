@@ -338,7 +338,10 @@ gboolean
 gsk_rounded_rect_contains_point (const GskRoundedRect   *self,
                                  const graphene_point_t *point)
 {
-  if (!graphene_rect_contains_point (&self->bounds, point))
+  if (point->x < self->bounds.origin.x ||
+      point->y < self->bounds.origin.y ||
+      point->x >= self->bounds.origin.x + self->bounds.size.width ||
+      point->y >= self->bounds.origin.y + self->bounds.size.height)
     return FALSE;
 
   if (self->bounds.origin.x + self->corner[GSK_CORNER_TOP_LEFT].width > point->x &&
@@ -395,7 +398,10 @@ gboolean
 gsk_rounded_rect_contains_rect (const GskRoundedRect  *self,
                                 const graphene_rect_t *rect)
 {
-  if (!graphene_rect_contains_rect (&self->bounds, rect))
+  if (rect->origin.x < self->bounds.origin.x ||
+      rect->origin.y < self->bounds.origin.y ||
+      rect->origin.x + rect->size.width >= self->bounds.origin.x + self->bounds.size.width ||
+      rect->origin.y + rect->size.height >= self->bounds.origin.y + self->bounds.size.height)
     return FALSE;
 
   if (!gsk_rounded_rect_contains_point (self, &rect->origin) ||
