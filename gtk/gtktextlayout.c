@@ -4160,15 +4160,13 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
           if (line_display->node == NULL)
             {
-              GtkSnapshot *sub = gtk_snapshot_new_with_parent (snapshot);
+              gtk_snapshot_push_collect (snapshot);
 
-              crenderer->snapshot = sub;
               render_para (crenderer, 0, line_display,
                            selection_start_index, selection_end_index,
                            cursor_alpha);
-              crenderer->snapshot = snapshot;
 
-              line_display->node = gtk_snapshot_free_to_node (sub);
+              line_display->node = gtk_snapshot_pop_collect (snapshot);
             }
 
           if (line_display->node != NULL)
