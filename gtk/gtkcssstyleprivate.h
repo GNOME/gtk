@@ -65,7 +65,6 @@ typedef struct _GtkCssOtherValues GtkCssOtherValues;
 struct _GtkCssValues {
   int ref_count;
   GtkCssValuesType type;
-  GtkCssValue *values[];
 };
 
 struct _GtkCssCoreValues {

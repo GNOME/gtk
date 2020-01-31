@@ -172,6 +172,8 @@ static int other_props[] = {
   GTK_CSS_PROPERTY_FILTER,
 };
 
+#define GET_VALUES(v) (GtkCssValue **)((guint8*)(v) + sizeof (GtkCssValues))
+
 #define DEFINE_VALUES(ENUM, TYPE, NAME) \
 void \
 gtk_css_## NAME ## _values_compute_changes_and_affects (GtkCssStyle *style1, \
@@ -179,13 +181,13 @@ gtk_css_## NAME ## _values_compute_changes_and_affects (GtkCssStyle *style1, \
                                                         GtkBitmask    **changes, \
                                                         GtkCssAffects *affects) \
 { \
-  GtkCssValues *g1 = (GtkCssValues *)style1->NAME; \
-  GtkCssValues *g2 = (GtkCssValues *)style2->NAME; \
+  GtkCssValue **g1 = GET_VALUES (style1->NAME); \
+  GtkCssValue **g2 = GET_VALUES (style2->NAME); \
   int i; \
   for (i = 0; i < G_N_ELEMENTS (NAME ## _props); i++) \
     { \
-      GtkCssValue *v1 = g1->values[i] ? g1->values[i] : style1->core->color; \
-      GtkCssValue *v2 = g2->values[i] ? g2->values[i] : style2->core->color; \
+      GtkCssValue *v1 = g1[i] ? g1[i] : style1->core->color; \
+      GtkCssValue *v2 = g2[i] ? g2[i] : style2->core->color; \
       if (!_gtk_css_value_equal (v1, v2)) \
         { \
           guint id = NAME ## _props[i]; \
