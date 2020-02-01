@@ -670,7 +670,6 @@ test_nonsquare_symbolic (void)
   GtkIcon *info;
   GFile *file;
   GIcon *icon;
-  GdkRGBA black = { 0.0, 0.0, 0.0, 1.0 };
   GError *error = NULL;
   GdkTexture *texture;
   gchar *path = g_build_filename (g_test_get_dir (G_TEST_DIST),
@@ -697,7 +696,7 @@ test_nonsquare_symbolic (void)
   g_assert_nonnull (info);
 
   g_object_unref (pixbuf);
-  texture = gtk_icon_download_colored_texture (info, &black, NULL, NULL, NULL, &error);
+  texture = gtk_icon_download_texture (info, &error);
 
   /* we are loaded successfully */
   g_assert_no_error (error);
