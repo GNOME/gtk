@@ -300,7 +300,7 @@ icon_loaded (GObject      *object,
       if ([[NSScreen mainScreen] respondsToSelector:@selector(backingScaleFactor)])
         scale = roundf ([[NSScreen mainScreen] backingScaleFactor]);
 #endif
-      icon = gtk_icon_theme_lookup_by_gicon (theme, icon, ICON_SIZE, scale, GTK_ICON_LOOKUP_USE_BUILTIN);
+      icon = gtk_icon_theme_lookup_by_gicon (theme, icon, ICON_SIZE, scale, 0);
 
       if (icon != NULL)
         {

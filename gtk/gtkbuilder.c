@@ -2173,7 +2173,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
 
               icon = gtk_icon_theme_lookup_icon (theme, "image-missing", 16, 1,
                                                  GTK_TEXT_DIR_NONE,
-                                                 GTK_ICON_LOOKUP_USE_BUILTIN);
+                                                 0);
               texture = gtk_icon_download_texture (icon, NULL);
               pixbuf = gdk_pixbuf_get_from_texture (texture);
               g_object_unref (icon);

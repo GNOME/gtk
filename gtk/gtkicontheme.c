@@ -3445,15 +3445,10 @@ gtk_icon_get_base_scale (GtkIcon *icon)
  * gtk_icon_get_filename:
  * @self: a #GtkIcon
  *
- * Gets the filename for the icon. If the %GTK_ICON_LOOKUP_USE_BUILTIN
- * flag was passed to gtk_icon_theme_lookup_icon(), there may be no
- * filename if a builtin icon is returned; in this case, you should
- * use gtk_icon_get_builtin_pixbuf().
+ * Gets the filename for the icon.
  *
  * Returns: (nullable) (type filename): the filename for the icon, or %NULL
- *     if gtk_icon_get_builtin_pixbuf() should be used instead.
- *     The return value is owned by GTK+ and should not be modified
- *     or freed.
+ *     if the icon is not represented by a filename.
  */
 const gchar *
 gtk_icon_get_filename (GtkIcon *icon)
