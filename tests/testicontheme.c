@@ -43,6 +43,7 @@ main (int argc, char *argv[])
   int size = 48;
   int scale = 1;
   GtkIconLookupFlags flags;
+  GtkTextDirection direction;
   
   gtk_init ();
 
@@ -55,9 +56,11 @@ main (int argc, char *argv[])
   flags = GTK_ICON_LOOKUP_USE_BUILTIN;
 
   if (g_getenv ("RTL"))
-    flags |= GTK_ICON_LOOKUP_DIR_RTL;
+    direction = GTK_TEXT_DIR_RTL;
+  else if (g_getenv ("LTR"))
+    direction = GTK_TEXT_DIR_LTR;
   else
-    flags |= GTK_ICON_LOOKUP_DIR_LTR;
+    direction = GTK_TEXT_DIR_NONE;
 
   themename = argv[2];
   
@@ -83,7 +86,7 @@ main (int argc, char *argv[])
       if (argc >= 6)
 	scale = atoi (argv[5]);
 
-      icon = gtk_icon_theme_lookup_icon (icon_theme, argv[3], size, scale, flags);
+      icon = gtk_icon_theme_lookup_icon (icon_theme, argv[3], size, scale, direction, flags);
       if (!icon)
         {
           g_print ("Icon '%s' not found\n", argv[3]);
@@ -131,7 +134,7 @@ main (int argc, char *argv[])
       if (argc >= 6)
 	scale = atoi (argv[5]);
 
-      icon = gtk_icon_theme_lookup_icon (icon_theme, argv[3], size, scale, flags);
+      icon = gtk_icon_theme_lookup_icon (icon_theme, argv[3], size, scale, direction, flags);
       g_print ("icon for %s at %dx%d@%dx is %s\n", argv[3], size, size, scale,
                icon ? gtk_icon_get_filename (icon) : "<none>");
 

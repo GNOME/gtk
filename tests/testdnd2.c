@@ -25,7 +25,11 @@ get_image_texture (GtkImage *image,
       icon_name = gtk_image_get_icon_name (image);
       icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (image)));
       *out_size = width;
-      icon = gtk_icon_theme_lookup_icon (icon_theme, icon_name, width, 1, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+      icon = gtk_icon_theme_lookup_icon (icon_theme,
+                                         icon_name,
+                                         width, 1,
+                                         gtk_widget_get_direction (GTK_WIDGET (image)),
+                                         GTK_ICON_LOOKUP_GENERIC_FALLBACK);
       if (icon)
         texture = gtk_icon_download_texture (icon, NULL);
       g_object_unref (icon);
@@ -223,14 +227,16 @@ update_source_icon (GtkDragSource *source,
                     const char *icon_name,
                     int hotspot)
 {
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
   GtkIcon *icon;
   int hot_x, hot_y;
   int size = 48;
 
-  icon = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_for_display (
-                                         gtk_widget_get_display (
-                                             gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source)))),
-                                     icon_name, size, 1, 0);
+  icon = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_for_display (gtk_widget_get_display (widget)),
+                                     icon_name,
+                                     size, 1,
+                                     gtk_widget_get_direction (widget),
+                                     0);
   switch (hotspot)
     {
     default:

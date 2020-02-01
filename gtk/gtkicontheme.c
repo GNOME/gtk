@@ -2056,6 +2056,7 @@ choose_icon (GtkIconTheme      *self,
              const gchar       *icon_names[],
              gint               size,
              gint               scale,
+             GtkTextDirection   direction,
              GtkIconLookupFlags flags,
              gboolean           non_blocking,
              gboolean           *would_block)
@@ -2066,12 +2067,22 @@ choose_icon (GtkIconTheme      *self,
   const gchar *dir_suffix;
   guint i;
 
-  if (flags & GTK_ICON_LOOKUP_DIR_LTR)
-    dir_suffix = "-ltr";
-  else if (flags & GTK_ICON_LOOKUP_DIR_RTL)
-    dir_suffix = "-rtl";
-  else
+  switch (direction)
+  {
+  case GTK_TEXT_DIR_NONE:
     dir_suffix = NULL;
+    break;
+  case GTK_TEXT_DIR_LTR:
+    dir_suffix = "-ltr";
+    break;
+  case GTK_TEXT_DIR_RTL:
+    dir_suffix = "-rtl";
+    break;
+  default:
+    g_assert_not_reached();
+    dir_suffix = NULL;
+    break;
+  }
 
   for (i = 0; icon_names[i]; i++)
     {
@@ -2170,6 +2181,7 @@ choose_icon (GtkIconTheme      *self,
  * @icon_name: the name of the icon to lookup
  * @size: desired icon size.  The resulting icon may not be exactly this size.
  * @scale: the window scale this will be displayed on
+ * @direction: text direction the icon will be displayed in
  * @flags: flags modifying the behavior of the icon lookup
  *
  * Looks up a named icon for a desired size and window scale, returning a
@@ -2202,6 +2214,7 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
                             const gchar        *icon_name,
                             gint                size,
                             gint                scale,
+                            GtkTextDirection    direction,
                             GtkIconLookupFlags  flags)
 {
   GtkIcon *icon;
@@ -2264,7 +2277,7 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
           names = nonsymbolic_names;
         }
 
-      icon = choose_icon (self, (const gchar **) names, size, scale, flags, FALSE, NULL);
+      icon = choose_icon (self, (const gchar **) names, size, scale, direction, flags, FALSE, NULL);
 
       g_strfreev (names);
     }
@@ -2275,7 +2288,7 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
       names[0] = icon_name;
       names[1] = NULL;
 
-      icon = choose_icon (self, names, size, scale, flags, FALSE, NULL);
+      icon = choose_icon (self, names, size, scale, direction, flags, FALSE, NULL);
     }
 
   gtk_icon_theme_unlock (self);
@@ -2290,6 +2303,7 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
  *     array of icon names to lookup
  * @size: desired icon size. The resulting icon may not be exactly this size.
  * @scale: the window scale this will be displayed on
+ * @direction: text direction the icon will be displayed in
  * @flags: flags modifying the behavior of the icon lookup
  *
  * Looks up a named icon for a desired size and window scale, returning a
@@ -2327,6 +2341,7 @@ gtk_icon_theme_choose_icon (GtkIconTheme       *self,
                             const gchar        *icon_names[],
                             gint                size,
                             gint                scale,
+                            GtkTextDirection    direction,
                             GtkIconLookupFlags  flags)
 {
   GtkIcon *icon;
@@ -2340,7 +2355,7 @@ gtk_icon_theme_choose_icon (GtkIconTheme       *self,
 
   gtk_icon_theme_lock (self);
 
-  icon = choose_icon (self, icon_names, size, scale, flags, FALSE, NULL);
+  icon = choose_icon (self, icon_names, size, scale, direction, flags, FALSE, NULL);
 
   gtk_icon_theme_unlock (self);
 
@@ -4022,6 +4037,7 @@ gtk_icon_new_for_pixbuf (GtkIconTheme *icon_theme,
  * @icon: the #GIcon to look up
  * @size: desired icon size
  * @scale: the desired scale
+ * @direction: text direction the icon will be displayed in
  * @flags: flags modifying the behavior of the icon lookup
  *
  * Looks up a icon for a desired size and window scale, returning a
@@ -4037,6 +4053,7 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
                                 GIcon              *gicon,
                                 gint                size,
                                 gint                scale,
+                                GtkTextDirection    direction,
                                 GtkIconLookupFlags  flags)
 {
   GtkIcon *icon;
@@ -4109,7 +4126,7 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
       const gchar **names;
 
       names = (const gchar **)g_themed_icon_get_names (G_THEMED_ICON (gicon));
-      icon = gtk_icon_theme_choose_icon (self, names, size, scale, flags);
+      icon = gtk_icon_theme_choose_icon (self, names, size, scale, direction, flags);
 
       return icon;
     }
