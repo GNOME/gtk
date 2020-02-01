@@ -291,7 +291,7 @@ icon_loaded (GObject      *object,
           parsed = TRUE;
         }
 
-      theme = gtk_icon_theme_get_default ();
+      theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
 
 #ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
        /* we need a run-time check for the backingScaleFactor selector because we

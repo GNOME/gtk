@@ -109,8 +109,6 @@ GType         gtk_icon_theme_get_type              (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkIconTheme *gtk_icon_theme_new                   (void);
 GDK_AVAILABLE_IN_ALL
-GtkIconTheme *gtk_icon_theme_get_default           (void);
-GDK_AVAILABLE_IN_ALL
 GtkIconTheme *gtk_icon_theme_get_for_display       (GdkDisplay                  *display);
 GDK_AVAILABLE_IN_ALL
 void          gtk_icon_theme_set_display           (GtkIconTheme                *self,

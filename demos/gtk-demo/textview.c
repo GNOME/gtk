@@ -124,15 +124,16 @@ create_tags (GtkTextBuffer *buffer)
 }
 
 static void
-insert_text (GtkTextBuffer *buffer)
+insert_text (GtkTextView *view)
 {
+  GtkTextBuffer *buffer = gtk_text_view_get_buffer (view);
   GtkTextIter iter;
   GtkTextIter start, end;
   GdkTexture *texture;
   GtkIconTheme *icon_theme;
   GtkIcon *icon;
 
-  icon_theme = gtk_icon_theme_get_default ();
+  icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (view)));
   icon = gtk_icon_theme_lookup_icon (icon_theme,
                                      "gtk3-demo",
                                      32, 1,
@@ -508,7 +509,7 @@ do_textview (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (sw), view2);
 
       create_tags (buffer);
-      insert_text (buffer);
+      insert_text (GTK_TEXT_VIEW (view1));
 
       attach_widgets (GTK_TEXT_VIEW (view1));
       attach_widgets (GTK_TEXT_VIEW (view2));

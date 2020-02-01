@@ -687,7 +687,7 @@ test_nonsquare_symbolic (void)
   g_assert_cmpint (width, !=, height);
 
   /* now load it through GtkIconTheme */
-  icon_theme = gtk_icon_theme_get_default ();
+  icon_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
   file = g_file_new_for_path (path);
   icon = g_file_icon_new (file);
   info = gtk_icon_theme_lookup_by_gicon (icon_theme, icon,

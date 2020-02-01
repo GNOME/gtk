@@ -2168,7 +2168,8 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
               g_error_free (tmp_error);
 
               /* fall back to a missing image */
-              theme = gtk_icon_theme_get_default ();
+              /* FIXME: this should be using the correct display */
+              theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
 
               icon = gtk_icon_theme_lookup_icon (theme, "image-missing", 16, 1,
                                                  GTK_ICON_LOOKUP_USE_BUILTIN);
