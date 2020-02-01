@@ -657,6 +657,9 @@ gtk_css_style_snapshot_border (GtkCssBoxes *boxes,
 
   border = boxes->style->border;
 
+  if (border->base.type == GTK_CSS_BORDER_INITIAL_VALUES)
+    return;
+
   if (gtk_border_image_init (&border_image, boxes->style))
     {
       cairo_t *cr;
