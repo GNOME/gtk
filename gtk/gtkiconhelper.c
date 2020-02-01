@@ -48,7 +48,6 @@ struct _GtkIconHelper
   guint use_fallback : 1;
   guint force_scale_pixbuf : 1;
   guint texture_is_symbolic : 1;
-  guint preloaded : 1;
 
   GtkWidget *owner;
   GtkCssNode *node;
@@ -173,83 +172,6 @@ gtk_icon_helper_load_paintable (GtkIconHelper   *self,
   *out_symbolic = symbolic;
 
   return paintable;
-}
-
-/* We are calling this from css-validate, and the mapped state is not yet set, so
- * we have to calculate ahead of time if a widget will be mapped. */
-static gboolean
-will_be_mapped (GtkWidget *widget)
-{
-  while (widget)
-    {
-      if (!_gtk_widget_get_visible (widget) ||
-          !_gtk_widget_get_child_visible (widget))
-        return FALSE;
-      widget = _gtk_widget_get_parent (widget);
-    }
-
-  return TRUE;
-}
-
-void
-_gtk_icon_helper_preload (GtkIconHelper *self)
-{
-  GtkIconTheme *icon_theme;
-  GtkIconLookupFlags flags = 0;
-  int size, scale;
-  GtkCssStyle *style;
-  GIcon *gicon = NULL;
-  GIcon *free_gicon = NULL;
-
-  /* Avoid constantly preloading as it may cause issues if we're trashing the icon cache */
-  if (self->preloaded)
-    return;
-
-  self->preloaded = TRUE;
-
-  switch (gtk_image_definition_get_storage_type (self->def))
-    {
-    case GTK_IMAGE_ICON_NAME:
-      if (self->use_fallback)
-        free_gicon = g_themed_icon_new_with_default_fallbacks (gtk_image_definition_get_icon_name (self->def));
-      else
-        free_gicon = g_themed_icon_new (gtk_image_definition_get_icon_name (self->def));
-      gicon = free_gicon;
-      break;
-    case GTK_IMAGE_GICON:
-      gicon = gtk_image_definition_get_gicon (self->def) ;
-     break;
-    case GTK_IMAGE_EMPTY:
-    case GTK_IMAGE_PAINTABLE:
-    default:
-      break;
-    }
-
-  if (gicon && G_IS_THEMED_ICON (gicon))
-    {
-      int priority;
-      style = gtk_css_node_get_style (self->node);
-      icon_theme = gtk_css_icon_theme_value_get_icon_theme
-        (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_THEME));
-      flags |= get_icon_lookup_flags (self, style,
-                                      gtk_widget_get_direction (self->owner));
-      size = gtk_icon_helper_get_size (self);
-      scale = gtk_widget_get_scale_factor (self->owner);
-
-      /* Icons for widgets are visible have higher priority so they are loaded first */
-      if (will_be_mapped (self->owner))
-        priority = G_PRIORITY_DEFAULT;
-      else
-        priority = G_PRIORITY_DEFAULT + 1;
-
-      gtk_icon_theme_choose_icon_async (icon_theme,
-                                        (const gchar **)g_themed_icon_get_names (G_THEMED_ICON (gicon)),
-                                        size, scale,
-                                        flags, priority, NULL, NULL, NULL);
-    }
-
-  if (free_gicon)
-    g_object_unref (free_gicon);
 }
 
 static void

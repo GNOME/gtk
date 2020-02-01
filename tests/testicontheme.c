@@ -29,31 +29,7 @@ usage (void)
 	   "usage: test-icon-theme list <theme name> [context]\n"
 	   " or\n"
 	   "usage: test-icon-theme display <theme name> <icon name> [size] [scale]\n"
-	   " or\n"
-	   "usage: test-icon-theme display-async <theme name> <icon name> [size] [scale]\n"
 	   );
-}
-
-static void
-icon_loaded_cb (GObject *source_object,
-		GAsyncResult *res,
-		gpointer user_data)
-{
-  GtkIcon *icon;
-  GError *error;
-
-  error = NULL;
-  icon = gtk_icon_theme_choose_icon_finish (GTK_ICON_THEME (source_object),
-                                           res, &error);
-
-  if (icon == NULL)
-    {
-      g_print ("%s\n", error->message);
-      exit (1);
-    }
-
-  gtk_image_set_from_paintable (GTK_IMAGE (user_data), GDK_PAINTABLE (icon));
-  g_object_unref (icon);
 }
 
 int
@@ -121,35 +97,6 @@ main (int argc, char *argv[])
       gtk_container_add (GTK_CONTAINER (window), image);
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
       gtk_widget_show (window);
-
-      gtk_main ();
-    }
-  else if (strcmp (argv[1], "display-async") == 0)
-    {
-      GtkWidget *window, *image;
-      const char *icons[2] = { NULL, NULL };
-
-      if (argc < 4)
-	{
-	  g_object_unref (icon_theme);
-	  usage ();
-	  return 1;
-	}
-
-      if (argc >= 5)
-	size = atoi (argv[4]);
-
-      if (argc >= 6)
-	scale = atoi (argv[5]);
-
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      image = gtk_image_new ();
-      gtk_container_add (GTK_CONTAINER (window), image);
-      g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
-      gtk_widget_show (window);
-
-      icons[0] = argv[3];
-      gtk_icon_theme_choose_icon_async (icon_theme, icons, size, scale, flags, 0, NULL, icon_loaded_cb, image);
 
       gtk_main ();
     }

@@ -48,7 +48,6 @@ void _gtk_icon_helper_set_icon_name (GtkIconHelper *self,
                                      const gchar *icon_name);
 void _gtk_icon_helper_set_paintable (GtkIconHelper *self,
 				     GdkPaintable  *paintable);
-void _gtk_icon_helper_preload (GtkIconHelper *self);
 
 gboolean _gtk_icon_helper_set_pixel_size   (GtkIconHelper *self,
                                             gint           pixel_size);
