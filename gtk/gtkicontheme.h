@@ -76,9 +76,7 @@ typedef enum
   GTK_ICON_LOOKUP_GENERIC_FALLBACK = 1 << 3,
   GTK_ICON_LOOKUP_FORCE_SIZE       = 1 << 4,
   GTK_ICON_LOOKUP_FORCE_REGULAR    = 1 << 5,
-  GTK_ICON_LOOKUP_FORCE_SYMBOLIC   = 1 << 6,
-  GTK_ICON_LOOKUP_DIR_LTR          = 1 << 7,
-  GTK_ICON_LOOKUP_DIR_RTL          = 1 << 8
+  GTK_ICON_LOOKUP_FORCE_SYMBOLIC   = 1 << 6
 } GtkIconLookupFlags;
 
 /**
@@ -148,18 +146,21 @@ GtkIcon *    gtk_icon_theme_lookup_icon            (GtkIconTheme                
                                                     const gchar                 *icon_name,
                                                     gint                         size,
                                                     gint                         scale,
+                                                    GtkTextDirection             direction,
                                                     GtkIconLookupFlags           flags);
 GDK_AVAILABLE_IN_ALL
 GtkIcon *    gtk_icon_theme_choose_icon            (GtkIconTheme                *self,
                                                     const gchar                 *icon_names[],
                                                     gint                         size,
                                                     gint                         scale,
+                                                    GtkTextDirection             direction,
                                                     GtkIconLookupFlags           flags);
 GDK_AVAILABLE_IN_ALL
 GtkIcon *   gtk_icon_theme_lookup_by_gicon         (GtkIconTheme                *self,
                                                     GIcon                       *icon,
                                                     gint                         size,
                                                     gint                         scale,
+                                                    GtkTextDirection             direction,
                                                     GtkIconLookupFlags           flags);
 GDK_AVAILABLE_IN_ALL
 GList *       gtk_icon_theme_list_icons            (GtkIconTheme                *self,
