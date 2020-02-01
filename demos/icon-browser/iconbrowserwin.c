@@ -367,7 +367,10 @@ get_image_paintable (GtkImage *image)
       icon_name = gtk_image_get_icon_name (image);
       size = gtk_image_get_pixel_size (image);
       icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (image)));
-      icon = gtk_icon_theme_lookup_icon (icon_theme, icon_name, size, 1,
+      icon = gtk_icon_theme_lookup_icon (icon_theme,
+                                         icon_name,
+                                         size, 1,
+                                         gtk_widget_get_direction (GTK_WIDGET (image)),
                                          GTK_ICON_LOOKUP_FORCE_SIZE | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
       if (icon == NULL)
         return NULL;
@@ -420,7 +423,11 @@ get_file (GValue   *value,
   name = gtk_image_get_icon_name (GTK_IMAGE (data));
   icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (data)));
 
-  info = gtk_icon_theme_lookup_icon (icon_theme, name, 32, 1, 0);
+  info = gtk_icon_theme_lookup_icon (icon_theme,
+                                     name,
+                                     32, 1,
+                                     gtk_widget_get_direction (GTK_WIDGET (data)),
+                                     0);
   file = g_file_new_for_path (gtk_icon_get_filename (info));
   g_value_set_object (value, file);
   g_object_unref (file);

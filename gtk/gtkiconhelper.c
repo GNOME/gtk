@@ -55,9 +55,8 @@ struct _GtkIconHelper
 };
 
 static GtkIconLookupFlags
-get_icon_lookup_flags (GtkIconHelper    *self,
-                       GtkCssStyle      *style,
-                       GtkTextDirection  dir)
+get_icon_lookup_flags (GtkIconHelper *self,
+                       GtkCssStyle   *style)
 {
   GtkIconLookupFlags flags;
   GtkCssIconStyle icon_style;
@@ -84,11 +83,6 @@ get_icon_lookup_flags (GtkIconHelper    *self,
       return 0;
     }
 
-  if (dir == GTK_TEXT_DIR_LTR)
-    flags |= GTK_ICON_LOOKUP_DIR_LTR;
-  else if (dir == GTK_TEXT_DIR_RTL)
-    flags |= GTK_ICON_LOOKUP_DIR_RTL;
-
   return flags;
 }
 
@@ -106,18 +100,20 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
   GtkIconLookupFlags flags;
 
   icon_theme = gtk_css_icon_theme_value_get_icon_theme (style->core->icon_theme);
-  flags = get_icon_lookup_flags (self, style, dir);
+  flags = get_icon_lookup_flags (self, style);
 
   width = height = gtk_icon_helper_get_size (self);
 
   icon = gtk_icon_theme_lookup_by_gicon (icon_theme,
                                          gicon,
                                          MIN (width, height),
+                                         dir,
                                          scale, flags);
   if (icon == NULL)
     icon = gtk_icon_theme_lookup_icon (icon_theme,
                                        "image-missing",
                                        width, scale,
+                                       dir,
                                        flags | GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
   *symbolic = gtk_icon_is_symbolic (icon);
