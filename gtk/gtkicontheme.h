@@ -169,22 +169,6 @@ gboolean              gtk_icon_is_symbolic        (GtkIcon   *self);
 GDK_AVAILABLE_IN_ALL
 GdkTexture *          gtk_icon_download_texture   (GtkIcon   *self,
                                                    GError       **error);
-GDK_AVAILABLE_IN_ALL
-GdkTexture *         gtk_icon_download_colored_texture (GtkIcon *self,
-                                                        const GdkRGBA *foreground_color,
-                                                        const GdkRGBA *success_color,
-                                                        const GdkRGBA *warning_color,
-                                                        const GdkRGBA *error_color,
-                                                        GError **error);
-GDK_AVAILABLE_IN_ALL
-void                  gtk_icon_snapshot_with_colors (GtkIcon      *icon,
-                                                     GtkSnapshot  *snapshot,
-                                                     double        width,
-                                                     double        height,
-                                                     const GdkRGBA *foreground_color,
-                                                     const GdkRGBA *success_color,
-                                                     const GdkRGBA *warning_color,
-                                                     const GdkRGBA *error_color);
 
 G_END_DECLS
 
