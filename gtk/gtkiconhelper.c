@@ -61,7 +61,7 @@ get_icon_lookup_flags (GtkIconHelper *self,
   GtkIconLookupFlags flags;
   GtkCssIconStyle icon_style;
 
-  flags = GTK_ICON_LOOKUP_USE_BUILTIN;
+  flags = 0;
 
   if (self->pixel_size != -1 || self->force_scale_pixbuf)
     flags |= GTK_ICON_LOOKUP_FORCE_SIZE;
@@ -114,7 +114,7 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
                                        "image-missing",
                                        width, scale,
                                        dir,
-                                       flags | GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+                                       flags | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
   *symbolic = gtk_icon_is_symbolic (icon);
   return GDK_PAINTABLE (icon);
