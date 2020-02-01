@@ -47,10 +47,6 @@ typedef struct _GtkIconTheme    GtkIconTheme;
  * @GTK_ICON_LOOKUP_FORCE_SVG: Get SVG icons, even if gdk-pixbuf
  *   doesn’t support them.
  *   Cannot be used together with %GTK_ICON_LOOKUP_NO_SVG.
- * @GTK_ICON_LOOKUP_USE_BUILTIN: When passed to
- *   gtk_icon_theme_lookup_icon() includes builtin icons
- *   as well as files. For a builtin icon, gtk_icon_get_filename()
- *   is %NULL and you need to call gtk_icon_get_builtin_pixbuf().
  * @GTK_ICON_LOOKUP_GENERIC_FALLBACK: Try to shorten icon name at '-'
  *   characters before looking at inherited themes. This flag is only
  *   supported in functions that take a single icon name. For more general
@@ -68,11 +64,10 @@ typedef enum
 {
   GTK_ICON_LOOKUP_NO_SVG           = 1 << 0,
   GTK_ICON_LOOKUP_FORCE_SVG        = 1 << 1,
-  GTK_ICON_LOOKUP_USE_BUILTIN      = 1 << 2,
-  GTK_ICON_LOOKUP_GENERIC_FALLBACK = 1 << 3,
-  GTK_ICON_LOOKUP_FORCE_SIZE       = 1 << 4,
-  GTK_ICON_LOOKUP_FORCE_REGULAR    = 1 << 5,
-  GTK_ICON_LOOKUP_FORCE_SYMBOLIC   = 1 << 6
+  GTK_ICON_LOOKUP_GENERIC_FALLBACK = 1 << 2,
+  GTK_ICON_LOOKUP_FORCE_SIZE       = 1 << 3,
+  GTK_ICON_LOOKUP_FORCE_REGULAR    = 1 << 4,
+  GTK_ICON_LOOKUP_FORCE_SYMBOLIC   = 1 << 5
 } GtkIconLookupFlags;
 
 /**
