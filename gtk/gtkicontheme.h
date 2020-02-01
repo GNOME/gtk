@@ -153,8 +153,6 @@ GtkIcon *   gtk_icon_theme_lookup_by_gicon         (GtkIconTheme                
 GDK_AVAILABLE_IN_ALL
 GList *       gtk_icon_theme_list_icons            (GtkIconTheme                *self,
                                                     const gchar                 *context);
-GDK_AVAILABLE_IN_ALL
-gboolean      gtk_icon_theme_rescan_if_needed      (GtkIconTheme                *self);
 
 
 GDK_AVAILABLE_IN_ALL
