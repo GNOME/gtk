@@ -4029,10 +4029,12 @@ icon_list_from_theme (GtkWindow   *window,
       if (sizes[i] == -1)
         info = gtk_icon_theme_lookup_icon (icon_theme, name,
                                            48, priv->scale,
+                                           gtk_widget_get_direction (GTK_WIDGET (window)),
                                            0);
       else
         info = gtk_icon_theme_lookup_icon (icon_theme, name,
                                            sizes[i], priv->scale,
+                                           gtk_widget_get_direction (GTK_WIDGET (window)),
                                            0);
       if (info)
         {
@@ -4113,6 +4115,7 @@ gtk_window_get_icon_for_size (GtkWindow *window,
 
   info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (window))),
                                      name, size, priv->scale,
+                                     gtk_widget_get_direction (GTK_WIDGET (window)),
                                      GTK_ICON_LOOKUP_FORCE_SIZE);
   if (info == NULL)
     return NULL;

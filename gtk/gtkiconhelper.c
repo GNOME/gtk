@@ -55,9 +55,8 @@ struct _GtkIconHelper
 };
 
 static GtkIconLookupFlags
-get_icon_lookup_flags (GtkIconHelper    *self,
-                       GtkCssStyle      *style,
-                       GtkTextDirection  dir)
+get_icon_lookup_flags (GtkIconHelper *self,
+                       GtkCssStyle   *style)
 {
   GtkIconLookupFlags flags;
   GtkCssIconStyle icon_style;
@@ -84,11 +83,6 @@ get_icon_lookup_flags (GtkIconHelper    *self,
       return 0;
     }
 
-  if (dir == GTK_TEXT_DIR_LTR)
-    flags |= GTK_ICON_LOOKUP_DIR_LTR;
-  else if (dir == GTK_TEXT_DIR_RTL)
-    flags |= GTK_ICON_LOOKUP_DIR_RTL;
-
   return flags;
 }
 
@@ -106,18 +100,20 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
   GtkIconLookupFlags flags;
 
   icon_theme = gtk_css_icon_theme_value_get_icon_theme (style->core->icon_theme);
-  flags = get_icon_lookup_flags (self, style, dir);
+  flags = get_icon_lookup_flags (self, style);
 
   width = height = gtk_icon_helper_get_size (self);
 
   icon = gtk_icon_theme_lookup_by_gicon (icon_theme,
                                          gicon,
                                          MIN (width, height),
+                                         dir,
                                          scale, flags);
   if (icon == NULL)
     icon = gtk_icon_theme_lookup_icon (icon_theme,
                                        "image-missing",
                                        width, scale,
+                                       dir,
                                        flags | GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
   *symbolic = gtk_icon_is_symbolic (icon);
@@ -146,8 +142,8 @@ gtk_icon_helper_load_paintable (GtkIconHelper   *self,
         gicon = g_themed_icon_new (gtk_image_definition_get_icon_name (self->def));
       paintable = ensure_paintable_for_gicon (self,
                                               gtk_css_node_get_style (self->node),
-                                              gtk_widget_get_direction (self->owner),
                                               gtk_widget_get_scale_factor (self->owner),
+                                              gtk_widget_get_direction (self->owner),
                                               gicon,
                                               &symbolic);
       g_object_unref (gicon);
@@ -156,8 +152,8 @@ gtk_icon_helper_load_paintable (GtkIconHelper   *self,
     case GTK_IMAGE_GICON:
       paintable = ensure_paintable_for_gicon (self, 
                                               gtk_css_node_get_style (self->node),
-                                              gtk_widget_get_direction (self->owner),
                                               gtk_widget_get_scale_factor (self->owner),
+                                              gtk_widget_get_direction (self->owner),
                                               gtk_image_definition_get_gicon (self->def),
                                               &symbolic);
       break;
