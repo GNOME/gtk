@@ -261,13 +261,24 @@ gtk_css_style_snapshot_background (GtkCssBoxes *boxes,
                                    GtkSnapshot *snapshot)
 {
   GtkCssBackgroundValues *background = boxes->style->background;
-  GtkCssValue *background_image = background->background_image;
-  const GdkRGBA *bg_color = gtk_css_color_value_get_rgba (background->background_color);
-  const GtkCssValue *box_shadow = background->box_shadow;
-  const gboolean has_bg_color = !gdk_rgba_is_clear (bg_color);
-  const gboolean has_bg_image = _gtk_css_image_value_get_image (_gtk_css_array_value_get_nth (background_image, 0)) != NULL;
-  const gboolean has_shadow = !gtk_css_shadow_value_is_none (box_shadow);
+  GtkCssValue *background_image;
+  const GdkRGBA *bg_color;
+  const GtkCssValue *box_shadow;
+  gboolean has_bg_color;
+  gboolean has_bg_image;
+  gboolean has_shadow;
   gint idx;
+
+  if (background->base.type == GTK_CSS_BACKGROUND_INITIAL_VALUES)
+    return;
+
+  background_image = background->background_image;
+  bg_color = gtk_css_color_value_get_rgba (background->background_color);
+  box_shadow = background->box_shadow;
+
+  has_bg_color = !gdk_rgba_is_clear (bg_color);
+  has_bg_image = _gtk_css_image_value_get_image (_gtk_css_array_value_get_nth (background_image, 0)) != NULL;
+  has_shadow = !gtk_css_shadow_value_is_none (box_shadow);
 
   /* This is the common default case of no background */
   if (!has_bg_color && !has_bg_image && !has_shadow)
