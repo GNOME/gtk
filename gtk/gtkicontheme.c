@@ -78,14 +78,14 @@
  * directly is also simple. The #GtkIconTheme object acts
  * as a database of all the icons in the current theme. You
  * can create new #GtkIconTheme objects, but it’s much more
- * efficient to use the standard icon theme for the #GdkDisplay
+ * efficient to use the standard icon theme of the #GtkWidget
  * so that the icon information is shared with other people
  * looking up icons.
  * |[<!-- language="C" -->
  * GtkIconTheme *icon_theme;
  * GtkIcon *icon;
  *
- * icon_theme = gtk_icon_theme_get_default ();
+ * icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (my_widget));
  * icon = gtk_icon_theme_lookup_icon (icon_theme,
  *                                    "my-icon-name", // icon name
  *                                    48, // icon size
@@ -707,9 +707,8 @@ G_DEFINE_TYPE (GtkIconTheme, gtk_icon_theme, G_TYPE_OBJECT)
  *
  * Creates a new icon theme object. Icon theme objects are used
  * to lookup up an icon by name in a particular icon theme.
- * Usually, you’ll want to use gtk_icon_theme_get_default()
- * or gtk_icon_theme_get_for_display() rather than creating
- * a new icon theme object for scratch.
+ * Usually, you’ll want to use gtk_icon_theme_get_for_display()
+ * rather than creating a new icon theme object for scratch.
  *
  * Returns: the newly created #GtkIconTheme object.
  */
@@ -717,23 +716,6 @@ GtkIconTheme *
 gtk_icon_theme_new (void)
 {
   return g_object_new (GTK_TYPE_ICON_THEME, NULL);
-}
-
-/**
- * gtk_icon_theme_get_default:
- *
- * Gets the icon theme for the default display. See
- * gtk_icon_theme_get_for_display().
- *
- * Returns: (transfer none): A unique #GtkIconTheme associated with
- *     the default display. This icon theme is associated with
- *     the display and can be used as long as the display
- *     is open. Do not ref or unref it.
- */
-GtkIconTheme *
-gtk_icon_theme_get_default (void)
-{
-  return gtk_icon_theme_get_for_display (gdk_display_get_default ());
 }
 
 static void
@@ -1374,8 +1356,7 @@ gtk_icon_theme_add_resource_path (GtkIconTheme *self,
  *
  * Sets the name of the icon theme that the #GtkIconTheme object uses
  * overriding system configuration. This function cannot be called
- * on the icon theme objects returned from gtk_icon_theme_get_default()
- * and gtk_icon_theme_get_for_display().
+ * on the icon theme objects returned from gtk_icon_theme_get_for_display().
  */
 void
 gtk_icon_theme_set_custom_theme (GtkIconTheme *self,

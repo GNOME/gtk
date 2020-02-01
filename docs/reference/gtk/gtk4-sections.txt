@@ -4995,7 +4995,6 @@ GTK_TYPE_ICON_THEME_ERROR
 GTK_TYPE_ICON_LOOKUP_FLAGS
 GtkIconThemeError
 gtk_icon_theme_new
-gtk_icon_theme_get_default
 gtk_icon_theme_get_for_display
 gtk_icon_theme_set_display
 gtk_icon_theme_set_search_path

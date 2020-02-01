@@ -227,7 +227,9 @@ update_source_icon (GtkDragSource *source,
   int hot_x, hot_y;
   int size = 48;
 
-  icon = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
+  icon = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_for_display (
+                                         gtk_widget_get_display (
+                                             gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source)))),
                                      icon_name, size, 1, 0);
   switch (hotspot)
     {

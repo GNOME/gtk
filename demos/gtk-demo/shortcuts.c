@@ -76,7 +76,7 @@ do_shortcuts (GtkWidget *do_widget)
   if (!icons_added)
     {
       icons_added = TRUE;
-      gtk_icon_theme_add_resource_path (gtk_icon_theme_get_default (), "/icons");
+      gtk_icon_theme_add_resource_path (gtk_icon_theme_get_for_display (gtk_widget_get_display (do_widget)), "/icons");
     }
 
   g_type_ensure (G_TYPE_FILE_ICON);

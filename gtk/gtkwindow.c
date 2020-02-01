@@ -4111,7 +4111,7 @@ gtk_window_get_icon_for_size (GtkWindow *window,
   if (!name)
     return NULL;
 
-  info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
+  info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (window))),
                                      name, size, priv->scale,
                                      GTK_ICON_LOOKUP_FORCE_SIZE);
   if (info == NULL)

@@ -201,7 +201,7 @@ _gtk_css_image_icon_theme_class_init (GtkCssImageIconThemeClass *klass)
 static void
 _gtk_css_image_icon_theme_init (GtkCssImageIconTheme *icon_theme)
 {
-  icon_theme->icon_theme = gtk_icon_theme_get_default ();
+  icon_theme->icon_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
   icon_theme->scale = 1;
   icon_theme->cached_size = -1;
   icon_theme->cached_icon = NULL;

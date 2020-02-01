@@ -60,6 +60,12 @@ struct _IconBrowserWindowClass
 
 G_DEFINE_TYPE(IconBrowserWindow, icon_browser_window, GTK_TYPE_APPLICATION_WINDOW);
 
+static GtkIconTheme *
+icon_browser_window_get_icon_theme (IconBrowserWindow *win)
+{
+  return gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (win)));
+}
+
 static void
 search_text_changed (GtkEntry *entry, IconBrowserWindow *win)
 {
@@ -83,6 +89,7 @@ set_image (GtkWidget *image, const gchar *name, gint size)
 static void
 item_activated (GtkIconView *icon_view, GtkTreePath *path, IconBrowserWindow *win)
 {
+  GtkIconTheme *icon_theme = icon_browser_window_get_icon_theme (win);
   GtkTreeIter iter;
   gchar *name;
   gchar *description;
@@ -99,7 +106,7 @@ item_activated (GtkIconView *icon_view, GtkTreePath *path, IconBrowserWindow *wi
                       ICON_STORE_DESCRIPTION_COLUMN, &description,
                       -1);
 
-  if (name == NULL || !gtk_icon_theme_has_icon (gtk_icon_theme_get_default (), name))
+  if (name == NULL || !gtk_icon_theme_has_icon (icon_theme, name))
     {
       g_free (description);
       return;
@@ -144,18 +151,19 @@ add_icon (IconBrowserWindow *win,
           const gchar       *description,
           const gchar       *context)
 {
+  GtkIconTheme *icon_theme = icon_browser_window_get_icon_theme (win);
   gchar *regular_name;
   gchar *symbolic_name;
 
   regular_name = g_strdup (name);
-  if (!gtk_icon_theme_has_icon (gtk_icon_theme_get_default (), regular_name))
+  if (!gtk_icon_theme_has_icon (icon_theme, regular_name))
     {
       g_free (regular_name);
       regular_name = NULL;
     }
 
   symbolic_name = g_strconcat (name, "-symbolic", NULL);
-  if (!gtk_icon_theme_has_icon (gtk_icon_theme_get_default (), symbolic_name))
+  if (!gtk_icon_theme_has_icon (icon_theme, symbolic_name))
     {
       g_free (symbolic_name);
       symbolic_name = NULL;
@@ -404,13 +412,15 @@ static void
 get_file (GValue   *value,
           gpointer  data)
 {
+  GtkIconTheme *icon_theme;
   const char *name;
   GtkIcon *info;
   GFile *file;
 
   name = gtk_image_get_icon_name (GTK_IMAGE (data));
+  icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (data)));
 
-  info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), name, 32, 1, 0);
+  info = gtk_icon_theme_lookup_icon (icon_theme, name, 32, 1, 0);
   file = g_file_new_for_path (gtk_icon_get_filename (info));
   g_value_set_object (value, file);
   g_object_unref (file);
