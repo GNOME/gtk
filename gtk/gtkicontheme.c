@@ -2612,35 +2612,6 @@ rescan_themes (GtkIconTheme *self)
   return FALSE;
 }
 
-/**
- * gtk_icon_theme_rescan_if_needed:
- * @self: a #GtkIconTheme
- *
- * Checks to see if the icon theme has changed; if it has, any
- * currently cached information is discarded and will be reloaded
- * next time @self is accessed.
- *
- * Returns: %TRUE if the icon theme has changed and needed
- *     to be reloaded.
- */
-gboolean
-gtk_icon_theme_rescan_if_needed (GtkIconTheme *self)
-{
-  gboolean retval;
-
-  g_return_val_if_fail (GTK_IS_ICON_THEME (self), FALSE);
-
-  gtk_icon_theme_lock (self);
-
-  retval = rescan_themes (self);
-  if (retval)
-      do_theme_change (self);
-
-  gtk_icon_theme_unlock (self);
-
-  return retval;
-}
-
 static IconTheme *
 theme_new (const char *theme_name,
            GKeyFile   *theme_file)
