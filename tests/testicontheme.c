@@ -53,7 +53,7 @@ main (int argc, char *argv[])
       return 1;
     }
 
-  flags = GTK_ICON_LOOKUP_USE_BUILTIN;
+  flags = 0;
 
   if (g_getenv ("RTL"))
     direction = GTK_TEXT_DIR_RTL;
