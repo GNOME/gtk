@@ -3803,57 +3803,6 @@ init_color_matrix (graphene_matrix_t *color_matrix,
 }
 
 
-/**
- * gtk_icon_download_colored_texture:
- * @self: a #GtkIcon
- * @foreground_color: (allow-none): a #GdkRGBA representing the foreground color
- *      of the icon or %NULL to use the default color.
- * @success_color: (allow-none): a #GdkRGBA representing the warning color
- *     of the icon or %NULL to use the default color
- * @warning_color: (allow-none): a #GdkRGBA representing the warning color
- *     of the icon or %NULL to use the default color
- * @error_color: (allow-none): a #GdkRGBA representing the error color
- *     of the icon or %NULL to use the default color (allow-none)
- * @error: (allow-none): location to store error information on failure,
- *     or %NULL.
- *
- * Tries to access the pixels of an icon, with colors applied to a
- * symbolic icon. This can fail if the icon file is missing or there
- * is some kind of problem loading the icon file.
- *
- * Returns: (transfer full): An texture with the contents of the icon, or %NULL on failure.
- */
-GdkTexture *
-gtk_icon_download_colored_texture (GtkIcon *self,
-                                   const GdkRGBA *foreground_color,
-                                   const GdkRGBA *success_color,
-                                   const GdkRGBA *warning_color,
-                                   const GdkRGBA *error_color,
-                                   GError **error)
-{
-  GdkTexture *texture, *colored_texture;
-  graphene_matrix_t matrix;
-  graphene_vec4_t offset;
-  cairo_surface_t *surface;
-
-  texture = gtk_icon_download_texture (self, error);
-
-  if (texture == NULL || gtk_icon_is_symbolic (self))
-    return texture;
-
-  init_color_matrix (&matrix, &offset,
-                     foreground_color, success_color,
-                     warning_color, error_color);
-
-  surface = gdk_texture_download_surface (texture);
-  gdk_cairo_image_surface_recolor (surface, &matrix, &offset);
-  colored_texture = gdk_texture_new_for_surface (surface);
-  cairo_surface_destroy (surface);
-  g_object_unref (texture);
-
-  return colored_texture;
-}
-
 static void
 icon_paintable_snapshot (GdkPaintable *paintable,
                          GtkSnapshot  *snapshot,
