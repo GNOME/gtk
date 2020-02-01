@@ -589,48 +589,6 @@ test_list (void)
   g_list_free_full (icons, g_free);
 }
 
-static gint loaded;
-
-static void
-load_icon (GObject      *source,
-           GAsyncResult *res,
-           gpointer      data)
-{
-  GMainLoop *loop = data;
-  GtkIconTheme *theme = GTK_ICON_THEME (source);
-  GError *error = NULL;
-  GtkIcon *icon;
-
-  icon = gtk_icon_theme_choose_icon_finish (theme, res, &error);
-  g_assert (icon != NULL);
-  g_assert_no_error (error);
-  g_object_unref (icon);
-
-  loaded++;
-  if (loaded == 2)
-    g_main_loop_quit (loop);
-}
-
-static void
-test_async (void)
-{
-  GtkIconTheme *theme;
-  GMainLoop *loop;
-  const char *icons[] = { "twosize-fixed", NULL };
-
-  loop = g_main_loop_new (NULL, FALSE);
-
-  g_printerr ("test_async\n");
-  theme = get_test_icontheme (TRUE);
-  gtk_icon_theme_choose_icon_async (theme, icons, 32, 1, 0, 0, NULL, load_icon, loop);
-  gtk_icon_theme_choose_icon_async (theme, icons, 48, 1, 0, 0, NULL, load_icon, loop);
-
-  g_main_loop_run (loop);
-  g_main_loop_unref (loop);
-
-  g_assert (loaded == 2);
-}
-
 static void
 test_inherit (void)
 {
@@ -749,7 +707,6 @@ main (int argc, char *argv[])
   g_test_add_func ("/icontheme/svg-size", test_svg_size);
   g_test_add_func ("/icontheme/size", test_size);
   g_test_add_func ("/icontheme/list", test_list);
-  g_test_add_func ("/icontheme/async", test_async);
   g_test_add_func ("/icontheme/inherit", test_inherit);
   g_test_add_func ("/icontheme/nonsquare-symbolic", test_nonsquare_symbolic);
 
