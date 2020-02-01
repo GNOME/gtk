@@ -1827,7 +1827,6 @@ real_choose_icon (GtkIconTheme      *self,
   GtkIcon *unscaled_icon;
   UnthemedIcon *unthemed_icon = NULL;
   const gchar *icon_name = NULL;
-  gboolean allow_svg;
   IconTheme *theme = NULL;
   gint i;
   IconKey key;
@@ -1846,13 +1845,6 @@ real_choose_icon (GtkIconTheme      *self,
   icon = icon_cache_lookup (self, &key);
   if (icon)
     return icon;
-
-  if (flags & GTK_ICON_LOOKUP_NO_SVG)
-    allow_svg = FALSE;
-  else if (flags & GTK_ICON_LOOKUP_FORCE_SVG)
-    allow_svg = TRUE;
-  else
-    allow_svg = self->pixbuf_supports_svg;
 
   /* This is used in the icontheme unit test */
   GTK_DISPLAY_NOTE (self->display, ICONTHEME,
@@ -1873,7 +1865,7 @@ real_choose_icon (GtkIconTheme      *self,
       for (i = 0; icon_names[i] && icon_name_is_symbolic (icon_names[i], -1); i++)
         {
           icon_name = icon_names[i];
-          icon = theme_lookup_icon (theme, icon_name, size, scale, allow_svg);
+          icon = theme_lookup_icon (theme, icon_name, size, scale, self->pixbuf_supports_svg);
           if (icon)
             goto out;
         }
@@ -1886,7 +1878,7 @@ real_choose_icon (GtkIconTheme      *self,
       for (i = 0; icon_names[i]; i++)
         {
           icon_name = icon_names[i];
-          icon = theme_lookup_icon (theme, icon_name, size, scale, allow_svg);
+          icon = theme_lookup_icon (theme, icon_name, size, scale, self->pixbuf_supports_svg);
           if (icon)
             goto out;
         }
@@ -1930,7 +1922,7 @@ real_choose_icon (GtkIconTheme      *self,
       icon = icon_new (ICON_THEME_DIR_UNTHEMED, size, 1);
 
       /* A SVG icon, when allowed, beats out a XPM icon, but not a PNG icon */
-      if (allow_svg &&
+      if (self->pixbuf_supports_svg &&
           unthemed_icon->svg_filename &&
           (!unthemed_icon->no_svg_filename ||
            suffix_from_name (unthemed_icon->no_svg_filename) < ICON_CACHE_FLAG_PNG_SUFFIX))
@@ -1970,7 +1962,7 @@ real_choose_icon (GtkIconTheme      *self,
       icon->unscaled_scale = 1.0;
       if (scale != 1 && !icon->forced_size && theme != NULL)
         {
-          unscaled_icon = theme_lookup_icon (theme, icon_name, size, 1, allow_svg);
+          unscaled_icon = theme_lookup_icon (theme, icon_name, size, 1, self->pixbuf_supports_svg);
           if (unscaled_icon)
             {
               icon->unscaled_scale =
@@ -2202,8 +2194,6 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
   g_return_val_if_fail (icon_name != NULL, NULL);
-  g_return_val_if_fail ((flags & GTK_ICON_LOOKUP_NO_SVG) == 0 ||
-                        (flags & GTK_ICON_LOOKUP_FORCE_SVG) == 0, NULL);
   g_return_val_if_fail (scale >= 1, NULL);
 
   GTK_DISPLAY_NOTE (self->display, ICONTHEME,
@@ -2329,8 +2319,6 @@ gtk_icon_theme_choose_icon (GtkIconTheme       *self,
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
   g_return_val_if_fail (icon_names != NULL, NULL);
-  g_return_val_if_fail ((flags & GTK_ICON_LOOKUP_NO_SVG) == 0 ||
-                        (flags & GTK_ICON_LOOKUP_FORCE_SVG) == 0, NULL);
   g_return_val_if_fail (scale >= 1, NULL);
   g_warn_if_fail ((flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK) == 0);
 
