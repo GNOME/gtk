@@ -24,56 +24,79 @@
 static void
 compute_change (GtkCssStyleChange *change)
 {
+  gboolean color_changed = FALSE;
+
   if (change->old_style->core != change->new_style->core)
-    gtk_css_core_values_compute_changes_and_affects (change->old_style,
-                                                     change->new_style,
-                                                     &change->changes,
-                                                     &change->affects);
+    {
+      gtk_css_core_values_compute_changes_and_affects (change->old_style,
+                                                       change->new_style,
+                                                       &change->changes,
+                                                       &change->affects);
+      color_changed = _gtk_bitmask_get (change->changes, GTK_CSS_PROPERTY_COLOR);
+    }
+
   if (change->old_style->background != change->new_style->background)
     gtk_css_background_values_compute_changes_and_affects (change->old_style,
                                                            change->new_style,
                                                            &change->changes,
                                                            &change->affects);
-  if (change->old_style->border != change->new_style->border)
+
+  if (change->old_style->border != change->new_style->border ||
+      (color_changed && (change->old_style->border->border_top_color == NULL ||
+                         change->old_style->border->border_right_color == NULL ||
+                         change->old_style->border->border_bottom_color == NULL ||
+                         change->old_style->border->border_left_color == NULL)))
     gtk_css_border_values_compute_changes_and_affects (change->old_style,
                                                        change->new_style,
                                                        &change->changes,
                                                        &change->affects);
+
   if (change->old_style->icon != change->new_style->icon)
     gtk_css_icon_values_compute_changes_and_affects (change->old_style,
                                                      change->new_style,
                                                      &change->changes,
                                                      &change->affects);
-  if (change->old_style->outline != change->new_style->outline)
+
+  if (change->old_style->outline != change->new_style->outline ||
+      (color_changed && change->old_style->outline->outline_color == NULL))
     gtk_css_outline_values_compute_changes_and_affects (change->old_style,
                                                         change->new_style,
                                                         &change->changes,
                                                         &change->affects);
-  if (change->old_style->font != change->new_style->font)
+
+  if (change->old_style->font != change->new_style->font ||
+      (color_changed && (change->old_style->font->caret_color == NULL ||
+                         change->old_style->font->secondary_caret_color == NULL)))
     gtk_css_font_values_compute_changes_and_affects (change->old_style,
                                                      change->new_style,
                                                      &change->changes,
                                                      &change->affects);
-  if (change->old_style->font_variant != change->new_style->font_variant)
+
+  if (change->old_style->font_variant != change->new_style->font_variant ||
+      (color_changed && change->old_style->font_variant->text_decoration_color == NULL))
     gtk_css_font_variant_values_compute_changes_and_affects (change->old_style,
                                                              change->new_style,
                                                              &change->changes,
                                                              &change->affects);
+
   if (change->old_style->animation != change->new_style->animation)
     gtk_css_animation_values_compute_changes_and_affects (change->old_style,
                                                           change->new_style,
                                                           &change->changes,
                                                           &change->affects);
+
   if (change->old_style->transition != change->new_style->transition)
     gtk_css_transition_values_compute_changes_and_affects (change->old_style,
                                                            change->new_style,
                                                            &change->changes,
                                                            &change->affects);
+
   if (change->old_style->size != change->new_style->size)
     gtk_css_size_values_compute_changes_and_affects (change->old_style,
                                                      change->new_style,
                                                      &change->changes,
                                                      &change->affects);
+
   if (change->old_style->other != change->new_style->other)
     gtk_css_other_values_compute_changes_and_affects (change->old_style,
                                                       change->new_style,
