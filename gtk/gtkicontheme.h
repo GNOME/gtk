@@ -22,10 +22,8 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdk.h>
-#include <gtk/gtkstylecontext.h>
-#include <gsk/gsk.h>
+#include <gtk/gtkenums.h>
 
 G_BEGIN_DECLS
 

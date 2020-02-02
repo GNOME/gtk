@@ -66,6 +66,7 @@
 #include "gtkdragicon.h"
 #include "gtkwidgetpaintable.h"
 #include "gtkselectionprivate.h"
+#include "gtkstylecontext.h"
 
 /*< private >
  * SECTION:gtkplacessidebar
