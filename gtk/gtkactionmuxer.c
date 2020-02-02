@@ -328,6 +328,21 @@ gtk_action_muxer_action_removed_from_group (GActionGroup *action_group,
   g_free (fullname);
 }
 
+static gboolean
+gtk_action_muxer_has_own_action (GtkActionMuxer *muxer,
+                                 const gchar    *full_name)
+{
+  Group *group;
+  const gchar *action_name;
+
+  group = gtk_action_muxer_find_group (muxer, full_name, &action_name);
+
+  if (group == NULL)
+    return FALSE;
+
+  return g_action_group_has_action (group->group, action_name);
+}
+
 static void
 gtk_action_muxer_action_removed_from_parent (GActionGroup *action_group,
                                              const gchar  *action_name,
@@ -335,7 +350,8 @@ gtk_action_muxer_action_removed_from_parent (GActionGroup *action_group,
 {
   GtkActionMuxer *muxer = user_data;
 
-  gtk_action_muxer_action_removed (muxer, action_name);
+  if (!gtk_action_muxer_has_own_action (muxer, action_name))
+    gtk_action_muxer_action_removed (muxer, action_name);
 }
 
 static void
@@ -858,7 +874,8 @@ gtk_action_muxer_set_parent (GtkActionMuxer *muxer,
 
       actions = g_action_group_list_actions (G_ACTION_GROUP (muxer->parent));
       for (it = actions; *it; it++)
-        gtk_action_muxer_action_removed (muxer, *it);
+        if (!gtk_action_muxer_has_own_action (muxer, *it))
+          gtk_action_muxer_action_removed (muxer, *it);
       g_strfreev (actions);
 
       emit_changed_accels (muxer, muxer->parent);
