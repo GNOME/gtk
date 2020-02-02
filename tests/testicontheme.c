@@ -37,7 +37,6 @@ main (int argc, char *argv[])
 {
   GtkIconTheme *icon_theme;
   GtkIcon *icon;
-  char *context;
   char *themename;
   GList *list;
   int size = 48;
@@ -105,13 +104,7 @@ main (int argc, char *argv[])
     }
   else if (strcmp (argv[1], "list") == 0)
     {
-      if (argc >= 4)
-	context = argv[3];
-      else
-	context = NULL;
-
-      list = gtk_icon_theme_list_icons (icon_theme,
-					   context);
+      list = gtk_icon_theme_list_icons (icon_theme);
       
       while (list)
 	{

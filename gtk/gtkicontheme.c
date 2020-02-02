@@ -332,7 +332,6 @@ typedef struct
 typedef struct
 {
   IconThemeDirType type;
-  GQuark context;
 
   gint size;
   gint min_size;
@@ -375,8 +374,7 @@ static GtkIcon *  theme_lookup_icon                     (IconTheme        *theme
                                                          gint              scale,
                                                          gboolean          allow_svg);
 static void       theme_list_icons                      (IconTheme        *theme,
-                                                         GHashTable       *icons,
-                                                         GQuark            context);
+                                                         GHashTable       *icons);
 static gboolean   theme_has_icon                        (IconTheme        *theme,
                                                          const gchar      *icon_name);
 static void       theme_subdir_load                     (GtkIconTheme     *self,
@@ -2541,8 +2539,6 @@ add_key_to_list (gpointer key,
 /**
  * gtk_icon_theme_list_icons:
  * @self: a #GtkIconTheme
- * @context: (allow-none): a string identifying a particular type of
- *           icon, or %NULL to list all icons.
  *
  * Lists the icons in the current icon theme. Only a subset
  * of the icons can be listed by providing a context string.
@@ -2559,40 +2555,27 @@ add_key_to_list (gpointer key,
  *     free the list itself with g_list_free().
  */
 GList *
-gtk_icon_theme_list_icons (GtkIconTheme *self,
-                           const gchar  *context)
+gtk_icon_theme_list_icons (GtkIconTheme *self)
 {
   GHashTable *icons;
   GList *list, *l;
-  GQuark context_quark;
 
   gtk_icon_theme_lock (self);
 
   ensure_valid_themes (self, FALSE);
-
-  if (context)
-    {
-      context_quark = g_quark_try_string (context);
-
-      if (!context_quark)
-        goto out;
-    }
-  else
-    context_quark = 0;
 
   icons = g_hash_table_new (g_str_hash, g_str_equal);
 
   l = self->themes;
   while (l != NULL)
     {
-      theme_list_icons (l->data, icons, context_quark);
+      theme_list_icons (l->data, icons);
       l = l->next;
     }
 
-  if (context_quark == 0)
-    g_hash_table_foreach (self->unthemed_icons,
-                          add_key_to_hash,
-                          icons);
+  g_hash_table_foreach (self->unthemed_icons,
+                        add_key_to_hash,
+                        icons);
 
   list = NULL;
 
@@ -2601,8 +2584,6 @@ gtk_icon_theme_list_icons (GtkIconTheme *self,
                         &list);
 
   g_hash_table_destroy (icons);
-
- out:
 
   gtk_icon_theme_unlock (self);
 
@@ -2959,8 +2940,7 @@ theme_lookup_icon (IconTheme   *theme,
 
 static void
 theme_list_icons (IconTheme  *theme,
-                  GHashTable *icons,
-                  GQuark      context)
+                  GHashTable *icons)
 {
   GList *l = theme->dirs;
   IconThemeDir *dir;
@@ -2969,14 +2949,10 @@ theme_list_icons (IconTheme  *theme,
     {
       dir = l->data;
 
-      if (context == dir->context ||
-          context == 0)
-        {
-          if (dir->cache)
-            gtk_icon_cache_add_icons (dir->cache, dir->subdir, icons);
-          else
-            g_hash_table_foreach (dir->icons, add_key_to_hash, icons);
-        }
+      if (dir->cache)
+        gtk_icon_cache_add_icons (dir->cache, dir->subdir, icons);
+      else
+        g_hash_table_foreach (dir->icons, add_key_to_hash, icons);
       l = l->next;
     }
 }
@@ -3056,8 +3032,6 @@ theme_subdir_load (GtkIconTheme *self,
   gchar *type_string;
   IconThemeDir *dir;
   IconThemeDirType type;
-  gchar *context_string;
-  GQuark context;
   gint size;
   gint min_size;
   gint max_size;
@@ -3088,14 +3062,6 @@ theme_subdir_load (GtkIconTheme *self,
         type = ICON_THEME_DIR_THRESHOLD;
 
       g_free (type_string);
-    }
-
-  context = 0;
-  context_string = g_key_file_get_string (theme_file, subdir, "Context", NULL);
-  if (context_string)
-    {
-      context = g_quark_from_string (context_string);
-      g_free (context_string);
     }
 
   if (g_key_file_has_key (theme_file, subdir, "MaxSize", NULL))
@@ -3162,7 +3128,6 @@ theme_subdir_load (GtkIconTheme *self,
           dir = g_new0 (IconThemeDir, 1);
           dir->type = type;
           dir->is_resource = FALSE;
-          dir->context = context;
           dir->size = size;
           dir->min_size = min_size;
           dir->max_size = max_size;
@@ -3212,7 +3177,6 @@ theme_subdir_load (GtkIconTheme *self,
           dir->icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
           dir->type = type;
           dir->is_resource = TRUE;
-          dir->context = context;
           dir->size = size;
           dir->min_size = min_size;
           dir->max_size = max_size;
