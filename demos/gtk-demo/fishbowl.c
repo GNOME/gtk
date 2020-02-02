@@ -28,7 +28,7 @@ init_icon_names (GtkIconTheme *theme)
   if (icon_names)
     return;
 
-  icon_list = gtk_icon_theme_list_icons (theme, NULL);
+  icon_list = gtk_icon_theme_list_icons (theme);
   icons = g_ptr_array_new ();
 
   for (l = icon_list; l; l = l->next)
