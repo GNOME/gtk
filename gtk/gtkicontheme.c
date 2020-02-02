@@ -3355,52 +3355,6 @@ gtk_icon_class_init (GtkIconClass *klass)
 }
 
 /**
- * gtk_icon_get_base_size:
- * @self: a #GtkIcon
- *
- * Gets the base size for the icon. The base size
- * is a size for the icon that was specified by
- * the icon theme creator. This may be different
- * than the actual size of image;
- * These icons will be given
- * the same base size as the larger icons to which
- * they are attached.
- *
- * Note that for scaled icons the base size does
- * not include the base scale.
- *
- * Returns: the base size, or 0, if no base
- *     size is known for the icon.
- */
-gint
-gtk_icon_get_base_size (GtkIcon *icon)
-{
-  g_return_val_if_fail (icon != NULL, 0);
-
-  return icon->dir_size;
-}
-
-/**
- * gtk_icon_get_base_scale:
- * @self: a #GtkIcon
- *
- * Gets the base scale for the icon. The base scale is a scale
- * for the icon that was specified by the icon theme creator.
- * For instance an icon drawn for a high-dpi monitor with window
- * scale 2 for a base size of 32 will be 64 pixels tall and have
- * a base scale of 2.
- *
- * Returns: the base scale
- */
-gint
-gtk_icon_get_base_scale (GtkIcon *icon)
-{
-  g_return_val_if_fail (icon != NULL, 0);
-
-  return icon->dir_scale;
-}
-
-/**
  * gtk_icon_get_filename:
  * @self: a #GtkIcon
  *

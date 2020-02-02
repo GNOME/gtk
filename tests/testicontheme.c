@@ -142,7 +142,6 @@ main (int argc, char *argv[])
 	{
           GdkPaintable *paintable = GDK_PAINTABLE (icon);
 
-          g_print ("Base size: %d, Scale: %d\n", gtk_icon_get_base_size (icon), gtk_icon_get_base_scale (icon));
           g_print ("texture size: %dx%d\n", gdk_paintable_get_intrinsic_width (paintable), gdk_paintable_get_intrinsic_height (paintable));
 
 	  g_object_unref (icon);
