@@ -596,7 +596,7 @@ test_list (void)
   GList *icons;
 
   theme = get_test_icontheme (TRUE);
-  icons = gtk_icon_theme_list_icons (theme, NULL);
+  icons = gtk_icon_theme_list_icons (theme);
 
   g_assert (g_list_find_custom (icons, "size-test", (GCompareFunc)g_strcmp0));
   g_assert (g_list_find_custom (icons, "simple", (GCompareFunc)g_strcmp0));
