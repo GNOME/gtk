@@ -155,10 +155,6 @@ GDK_AVAILABLE_IN_ALL
 GType                 gtk_icon_get_type           (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-gint                  gtk_icon_get_base_size      (GtkIcon   *self);
-GDK_AVAILABLE_IN_ALL
-gint                  gtk_icon_get_base_scale     (GtkIcon   *self);
-GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_icon_get_filename       (GtkIcon   *self);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_icon_is_symbolic        (GtkIcon   *self);
