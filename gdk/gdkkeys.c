@@ -887,8 +887,9 @@ gdk_keyval_convert_case (guint symbol,
         xupper -= (GDK_KEY_Greek_alphaaccent - GDK_KEY_Greek_ALPHAaccent);
       else if (symbol >= GDK_KEY_Greek_ALPHA && symbol <= GDK_KEY_Greek_OMEGA)
         xlower += (GDK_KEY_Greek_alpha - GDK_KEY_Greek_ALPHA);
-      else if (symbol >= GDK_KEY_Greek_alpha && symbol <= GDK_KEY_Greek_omega &&
-               symbol != GDK_KEY_Greek_finalsmallsigma)
+      else if (symbol == GDK_KEY_Greek_finalsmallsigma)
+        xupper = GDK_KEY_Greek_SIGMA;
+      else if (symbol >= GDK_KEY_Greek_alpha && symbol <= GDK_KEY_Greek_omega)
         xupper -= (GDK_KEY_Greek_alpha - GDK_KEY_Greek_ALPHA);
       break;
 
