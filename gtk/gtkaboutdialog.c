@@ -61,6 +61,7 @@
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkgestureclick.h"
+#include "gtkstylecontext.h"
 
 
 /**
