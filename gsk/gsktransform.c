@@ -834,6 +834,9 @@ normalize_angle (float angle)
   if (f < 0)
     f = 360 + f;
 
+  g_assert (f < 360.0);
+  g_assert (f >= 0.0);
+
   return f;
 }
 
