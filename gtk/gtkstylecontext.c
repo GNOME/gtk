@@ -1288,6 +1288,7 @@ draw_insertion_cursor (GtkStyleContext *context,
                        gdouble          x,
                        gdouble          y,
                        gdouble          height,
+                       float            aspect_ratio,
                        gboolean         is_primary,
                        PangoDirection   direction,
                        gboolean         draw_arrow)
@@ -1303,7 +1304,7 @@ draw_insertion_cursor (GtkStyleContext *context,
   _gtk_style_context_get_cursor_color (context, &primary_color, &secondary_color);
   gdk_cairo_set_source_rgba (cr, is_primary ? &primary_color : &secondary_color);
 
-  stem_width = height * CURSOR_ASPECT_RATIO + 1;
+  stem_width = height * aspect_ratio + 1;
 
   /* put (stem_width % 2) on the proper side of the cursor */
   if (direction == PANGO_DIRECTION_LTR)
@@ -1350,6 +1351,7 @@ draw_insertion_cursor (GtkStyleContext *context,
 
 static void
 get_insertion_cursor_bounds (gdouble          height,
+                             float            aspect_ratio,
                              PangoDirection   direction,
                              gboolean         draw_arrow,
                              graphene_rect_t *bounds)
@@ -1357,7 +1359,7 @@ get_insertion_cursor_bounds (gdouble          height,
   gint stem_width;
   gint offset;
 
-  stem_width = height * CURSOR_ASPECT_RATIO + 1;
+  stem_width = height * aspect_ratio + 1;
   if (direction == PANGO_DIRECTION_LTR)
     offset = stem_width / 2;
   else
@@ -1390,6 +1392,7 @@ static void
 snapshot_insertion_cursor (GtkSnapshot     *snapshot,
                            GtkStyleContext *context,
                            gdouble          height,
+                           float            aspect_ratio,
                            gboolean         is_primary,
                            PangoDirection   direction,
                            gboolean         draw_arrow)
@@ -1399,10 +1402,10 @@ snapshot_insertion_cursor (GtkSnapshot     *snapshot,
       cairo_t *cr;
       graphene_rect_t bounds;
 
-      get_insertion_cursor_bounds (height, direction, draw_arrow, &bounds);
+      get_insertion_cursor_bounds (height, aspect_ratio, direction, draw_arrow, &bounds);
       cr = gtk_snapshot_append_cairo (snapshot, &bounds);
 
-      draw_insertion_cursor (context, cr, 0, 0, height, is_primary, direction, draw_arrow);
+      draw_insertion_cursor (context, cr, 0, 0, height, aspect_ratio, is_primary, direction, draw_arrow);
 
       cairo_destroy (cr);
     }
@@ -1415,7 +1418,7 @@ snapshot_insertion_cursor (GtkSnapshot     *snapshot,
 
       _gtk_style_context_get_cursor_color (context, &primary_color, &secondary_color);
 
-      stem_width = height * CURSOR_ASPECT_RATIO + 1;
+      stem_width = height * aspect_ratio + 1;
 
       /* put (stem_width % 2) on the proper side of the cursor */
       if (direction == PANGO_DIRECTION_LTR)
@@ -1495,6 +1498,7 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
                          x + PANGO_PIXELS (cursor1->x),
                          y + PANGO_PIXELS (cursor1->y),
                          PANGO_PIXELS (cursor1->height),
+                         0.04,
                          TRUE,
                          direction,
                          direction2 != PANGO_DIRECTION_NEUTRAL);
@@ -1506,6 +1510,7 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
                              x + PANGO_PIXELS (cursor2->x),
                              y + PANGO_PIXELS (cursor2->y),
                              PANGO_PIXELS (cursor2->height),
+                             0.04,
                              FALSE,
                              direction2,
                              TRUE);
@@ -1535,6 +1540,7 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
   gboolean split_cursor;
+  float aspect_ratio;
   PangoRectangle strong_pos, weak_pos;
   PangoRectangle *cursor1, *cursor2;
   PangoDirection keymap_direction;
@@ -1547,6 +1553,7 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
 
   g_object_get (gtk_settings_get_for_display (priv->display),
                 "gtk-split-cursor", &split_cursor,
+                "gtk-cursor-aspect-ratio", &aspect_ratio,
                 NULL);
 
   keymap_direction = gdk_keymap_get_direction (gdk_display_get_keymap (priv->display));
@@ -1578,6 +1585,7 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
   snapshot_insertion_cursor (snapshot,
                              context,
                              PANGO_PIXELS (cursor1->height),
+                             aspect_ratio,
                              TRUE,
                              direction,
                              direction2 != PANGO_DIRECTION_NEUTRAL);
@@ -1590,6 +1598,7 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
       snapshot_insertion_cursor (snapshot,
                                  context,
                                  PANGO_PIXELS (cursor2->height),
+                                 aspect_ratio,
                                  FALSE,
                                  direction2,
                                  TRUE);
