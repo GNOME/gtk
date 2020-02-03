@@ -132,68 +132,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkToolbar">
-        <property name="hexpand">1</property>
-        <property name="toolbar-style">icons</property>
-        <style>
-          <class name="inline-toolbar"/>
-        </style>
-        <child>
-          <object class="GtkToggleToolButton">
-            <property name="homogeneous">1</property>
-            <property name="label" translatable="yes">Normal</property>
-            <property name="use-underline">1</property>
-            <property name="icon-name">list-add-symbolic</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkToggleToolButton">
-            <property name="homogeneous">1</property>
-            <property name="label" translatable="yes">Normal</property>
-            <property name="use-underline">1</property>
-            <property name="icon-name">list-add-symbolic</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkToggleToolButton">
-            <property name="homogeneous">1</property>
-            <property name="label" translatable="yes">Active</property>
-            <property name="use-underline">1</property>
-            <property name="icon-name">list-remove-symbolic</property>
-            <property name="active">1</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkToggleToolButton">
-            <property name="homogeneous">1</property>
-            <property name="label" translatable="yes">Active</property>
-            <property name="use-underline">1</property>
-            <property name="icon-name">list-remove-symbolic</property>
-            <property name="active">1</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkToggleToolButton">
-            <property name="homogeneous">1</property>
-            <property name="sensitive">0</property>
-            <property name="label" translatable="yes">Insensitive</property>
-            <property name="use-underline">1</property>
-            <property name="icon-name">edit-find-symbolic</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkToggleToolButton">
-            <property name="homogeneous">1</property>
-            <property name="sensitive">0</property>
-            <property name="label" translatable="yes">Insensitive Active</property>
-            <property name="use-underline">1</property>
-            <property name="icon-name">go-up-symbolic</property>
-            <property name="active">1</property>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
       <object class="GtkBox">
         <property name="spacing">10</property>
         <child>

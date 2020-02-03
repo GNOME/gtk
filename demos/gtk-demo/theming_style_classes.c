@@ -4,8 +4,8 @@
  * with widgets to inform the theme about intended rendering.
  *
  * This demo shows some common examples where theming features
- * of GTK are used for certain effects: primary toolbars,
- * inline toolbars and linked buttons.
+ * of GTK are used for certain effects: primary toolbars
+ * and linked buttons.
  */
 
 #include <gtk/gtk.h>
