@@ -2376,6 +2376,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   GtkWidget *widget = GTK_WIDGET (instance);
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GType layout_manager_type;
+  GdkDisplay *display;
 
   widget->priv = priv;
 
@@ -2441,6 +2442,12 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   gtk_css_node_set_visible (priv->cssnode, priv->visible);
   /* need to set correct name here, and only class has the correct type here */
   gtk_css_node_set_name (priv->cssnode, GTK_WIDGET_CLASS (g_class)->priv->css_name);
+
+  priv->context = gtk_style_context_new_for_node (priv->cssnode);
+  gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
+  display = _gtk_widget_get_display (widget);
+  if (display)
+    gtk_style_context_set_display (priv->context, display);
 
   if (g_type_is_a (G_TYPE_FROM_CLASS (g_class), GTK_TYPE_ROOT))
     priv->root = (GtkRoot *) widget;
@@ -11249,19 +11256,6 @@ gtk_widget_get_style_context (GtkWidget *widget)
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  if (G_UNLIKELY (priv->context == NULL))
-    {
-      GdkDisplay *display;
-
-      priv->context = gtk_style_context_new_for_node (priv->cssnode);
-
-      gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
-
-      display = _gtk_widget_get_display (widget);
-      if (display)
-        gtk_style_context_set_display (priv->context, display);
-    }
 
   return priv->context;
 }
