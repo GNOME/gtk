@@ -3242,7 +3242,6 @@ void
 gtk_window_set_attached_to (GtkWindow *window,
                             GtkWidget *attach_widget)
 {
-  GtkStyleContext *context;
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
   g_return_if_fail (GTK_IS_WINDOW (window));
@@ -3261,11 +3260,11 @@ gtk_window_set_attached_to (GtkWindow *window,
     }
 
   /* Update the style, as the widget path might change. */
-  context = gtk_widget_get_style_context (GTK_WIDGET (window));
   if (priv->attach_widget)
-    gtk_style_context_set_parent (context, gtk_widget_get_style_context (priv->attach_widget));
+    gtk_css_node_set_parent (gtk_widget_get_css_node (GTK_WIDGET (window)),
+                             gtk_widget_get_css_node (priv->attach_widget));
   else
-    gtk_style_context_set_parent (context, NULL);
+    gtk_css_node_set_parent (gtk_widget_get_css_node (GTK_WIDGET (window)), NULL);
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_ATTACHED_TO]);
 }
