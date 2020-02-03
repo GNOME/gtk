@@ -49,6 +49,7 @@ enum {
 struct _GtkTextHandleWidget
 {
   GtkWidget parent_instance;
+  GtkWidget *parent;
 };
 
 struct _TextHandle
@@ -115,11 +116,16 @@ gtk_text_handle_widget_init (GtkTextHandleWidget *widget)
 }
 
 static GtkWidget *
-gtk_text_handle_widget_new (void)
+gtk_text_handle_widget_new (GtkWidget *parent)
 {
-  return g_object_new (gtk_text_handle_widget_get_type (),
-                       "css-name", I_("cursor-handle"),
-                       NULL);
+  GtkTextHandleWidget *handle;
+
+  handle = g_object_new (gtk_text_handle_widget_get_type (),
+                         "css-name", I_("cursor-handle"),
+                         NULL);
+  handle->parent = parent;
+
+  return GTK_WIDGET (handle);
 }
 
 static void _gtk_text_handle_update (GtkTextHandle         *handle,
@@ -235,7 +241,7 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
       GtkStyleContext *context;
       GtkEventController *controller;
 
-      widget = gtk_text_handle_widget_new ();
+      widget = gtk_text_handle_widget_new (priv->parent);
 
       gtk_widget_set_direction (widget, priv->handles[pos].dir);
 
