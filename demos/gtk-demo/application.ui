@@ -8,27 +8,27 @@
     <child>
       <object class="GtkGrid">
         <child>
-          <object class="GtkToolbar">
+          <object class="GtkBox">
             <property name="hexpand">1</property>
             <style>
               <class name="primary-toolbar"/>
             </style>
             <child>
-              <object class="GtkMenuToolButton" id="menutool">
+              <object class="GtkMenuButton" id="menubutton">
                 <property name="icon-name">document-open</property>
               </object>
             </child>
             <child>
-              <object class="GtkToolButton">
+              <object class="GtkButton">
                 <property name="icon-name">application-exit</property>
                 <property name="action-name">app.quit</property>
               </object>
             </child>
             <child>
-              <object class="GtkSeparatorToolItem"/>
+              <object class="GtkSeparator"/>
             </child>
             <child>
-              <object class="GtkToolButton">
+              <object class="GtkButton">
                 <property name="icon-name">applications-other</property>
                 <property name="action-name">win.logo</property>
               </object>
