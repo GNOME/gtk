@@ -1227,54 +1227,6 @@ rewrite_event_for_grabs (GdkEvent *event)
     return NULL;
 }
 
-static GtkWidget *
-widget_get_popover_ancestor (GtkWidget *widget,
-                             GtkWindow *window)
-{
-  GtkWidget *parent = gtk_widget_get_parent (widget);
-
-  while (parent && parent != GTK_WIDGET (window))
-    {
-      widget = parent;
-      parent = gtk_widget_get_parent (widget);
-    }
-
-  if (!parent || parent != GTK_WIDGET (window))
-    return NULL;
-
-  if (_gtk_window_is_popover_widget (GTK_WINDOW (window), widget))
-    return widget;
-
-  return NULL;
-}
-
-static gboolean
-check_event_in_child_popover (GtkWidget *event_widget,
-                              GtkWidget *grab_widget)
-{
-  GtkWidget *window, *popover = NULL, *popover_parent = NULL;
-
-  if (grab_widget == event_widget)
-    return FALSE;
-
-  window = gtk_widget_get_ancestor (event_widget, GTK_TYPE_WINDOW);
-
-  if (!window)
-    return FALSE;
-
-  popover = widget_get_popover_ancestor (event_widget, GTK_WINDOW (window));
-
-  if (!popover)
-    return FALSE;
-
-  popover_parent = _gtk_window_get_popover_parent (GTK_WINDOW (window), popover);
-
-  if (!popover_parent)
-    return FALSE;
-
-  return (popover_parent == grab_widget || gtk_widget_is_ancestor (popover_parent, grab_widget));
-}
-
 static gboolean
 translate_event_coordinates (GdkEvent  *event,
                              double    *x,
@@ -1728,14 +1680,6 @@ gtk_main_do_event (GdkEvent *event)
   if (!grab_widget ||
       ((gtk_widget_is_sensitive (target_widget) || gdk_event_get_event_type (event) == GDK_SCROLL) &&
        gtk_widget_is_ancestor (target_widget, grab_widget)))
-    grab_widget = target_widget;
-
-  /* popovers are not really a "child" of their "parent" in the widget/window
-   * hierarchy sense, we however want to interact with popovers spawn by widgets
-   * within grab_widget. If this is the case, we let the event go through
-   * unaffected by the grab.
-   */
-  if (check_event_in_child_popover (target_widget, grab_widget))
     grab_widget = target_widget;
 
   /* If the widget receiving events is actually blocked by another
