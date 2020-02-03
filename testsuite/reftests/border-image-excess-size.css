@@ -1,6 +1,6 @@
 @import "reset-to-defaults.css";
 
-toolbar {
+box {
   border-image: url("green-20x20.png") 5000;
   background-image: none;
   background-color: #000;
