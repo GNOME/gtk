@@ -1018,6 +1018,7 @@ toolbar.inline-toolbar toolbutton:backdrop {
 %linked_middle {
   border-radius: 0;
   border-right-style: none;
+  -gtk-outline-radius: 0;
 }
 
 %linked_left {
@@ -1026,6 +1027,10 @@ toolbar.inline-toolbar toolbutton:backdrop {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     border-right-style: none;
+    -gtk-outline-bottom-left-radius: $button_radius;
+    -gtk-outline-top-left-radius: $button_radius;
+    -gtk-outline-top-right-radius: 0;
+    -gtk-outline-bottom-right-radius: 0;
 }
 
 %linked_right {
@@ -1034,11 +1039,16 @@ toolbar.inline-toolbar toolbutton:backdrop {
     border-top-right-radius: $button_radius;
     border-bottom-right-radius: $button_radius;
     border-right-style: solid;
+    -gtk-outline-bottom-right-radius: $button_radius;
+    -gtk-outline-top-right-radius: $button_radius;
+    -gtk-outline-bottom-left-radius: 0;
+    -gtk-outline-top-left-radius: 0;
 }
 
 %linked_only_child {
     border-radius: $button_radius;
     border-style: solid;
+    -gtk-outline-radius: $button_radius;
 }
 
 // .linked assumes Box, which reverses nodes in RTL, so 1st child is always left
@@ -3981,15 +3991,31 @@ messagedialog { // Message Dialog styling
       border-right-style: none;
       border-bottom-style: none;
 
-      &:first-child{
+      &:first-child:not(:only-child) {
         border-left-style: none;
-        border-bottom-left-radius: 7px;
-        -gtk-outline-bottom-left-radius: 5px;
+        border-bottom-left-radius: $button_radius + 2;
+        -gtk-outline-bottom-left-radius: $button_radius + 2;
+        -gtk-outline-top-left-radius: 0px;
+        -gtk-outline-top-right-radius: 0px;
+        -gtk-outline-bottom-right-radius: 0px;
       }
-
-      &:last-child {
-        border-bottom-right-radius: 7px;
-        -gtk-outline-bottom-right-radius: 5px;
+  
+      &:last-child:not(:only-child) {
+        border-bottom-right-radius: $button_radius + 2;
+        -gtk-outline-bottom-right-radius: $button_radius + 2;
+        -gtk-outline-top-right-radius: 0px;
+        -gtk-outline-bottom-left-radius: 0px;
+        -gtk-outline-top-left-radius: 0px;
+      }
+      &:only-child {
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: $button_radius + 2;
+        border-bottom-right-radius: $button_radius + 2;
+        -gtk-outline-top-right-radius: 0px;
+        -gtk-outline-top-left-radius: 0px;
+        -gtk-outline-bottom-left-radius: $button_radius + 2;
+        -gtk-outline-bottom-right-radius: $button_radius + 2;
       }
     }
   }
