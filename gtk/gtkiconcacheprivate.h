@@ -25,28 +25,8 @@ typedef struct _GtkIconCache GtkIconCache;
 
 GtkIconCache *gtk_icon_cache_new                        (const gchar  *data);
 GtkIconCache *gtk_icon_cache_new_for_path               (const gchar  *path);
-gint          gtk_icon_cache_get_directory_index        (GtkIconCache *cache,
-                                                         const gchar  *directory);
-gboolean      gtk_icon_cache_has_icon                   (GtkIconCache *cache,
-                                                         const gchar  *icon_name);
-gboolean      gtk_icon_cache_has_icon_in_directory      (GtkIconCache *cache,
-                                                         const gchar  *icon_name,
-                                                         const gchar  *directory);
 GHashTable   *gtk_icon_cache_list_icons_in_directory    (GtkIconCache *cache,
                                                          const gchar  *directory);
-gboolean      gtk_icon_cache_has_icons                  (GtkIconCache *cache,
-                                                         const gchar  *directory);
-void	      gtk_icon_cache_add_icons                  (GtkIconCache *cache,
-                                                         const gchar  *directory,
-                                                         GHashTable   *hash_table);
-
-gint          gtk_icon_cache_get_icon_flags             (GtkIconCache *cache,
-                                                         const gchar  *icon_name,
-                                                         gint          directory_index);
-GdkPixbuf    *gtk_icon_cache_get_icon                   (GtkIconCache *cache,
-                                                         const gchar  *icon_name,
-                                                         gint          directory_index);
-
 GtkIconCache *gtk_icon_cache_ref                        (GtkIconCache *cache);
 void          gtk_icon_cache_unref                      (GtkIconCache *cache);
 
