@@ -140,6 +140,13 @@
 
 static GQuark          quark_password_hint  = 0;
 
+enum
+{
+  TEXT_HANDLE_CURSOR,
+  TEXT_HANDLE_SELECTION_BOUND,
+  TEXT_HANDLE_N_HANDLES
+};
+
 typedef struct _GtkTextPasswordHint GtkTextPasswordHint;
 
 typedef struct _GtkTextPrivate GtkTextPrivate;
@@ -159,7 +166,7 @@ struct _GtkTextPrivate
   char         *im_module;
 
   GtkWidget     *emoji_completion;
-  GtkTextHandle *text_handle;
+  GtkTextHandle *text_handles[TEXT_HANDLE_N_HANDLES];
   GtkWidget     *selection_bubble;
   guint          selection_bubble_timeout_id;
 
@@ -230,6 +237,7 @@ struct _GtkTextPrivate
   guint         selection_handle_dragged : 1;
   guint         populate_all            : 1;
   guint         propagate_text_width    : 1;
+  guint         text_handles_enabled    : 1;
 };
 
 struct _GtkTextPasswordHint
@@ -467,15 +475,12 @@ static gboolean gtk_text_key_controller_key_pressed  (GtkEventControllerKey   *c
 
 /* GtkTextHandle handlers */
 static void gtk_text_handle_drag_started  (GtkTextHandle          *handle,
-                                           GtkTextHandlePosition   pos,
                                            GtkText                *self);
 static void gtk_text_handle_dragged       (GtkTextHandle          *handle,
-                                           GtkTextHandlePosition   pos,
                                            int                     x,
                                            int                     y,
                                            GtkText                *self);
 static void gtk_text_handle_drag_finished (GtkTextHandle          *handle,
-                                           GtkTextHandlePosition   pos,
                                            GtkText                *self);
 
 /* Internal routines
@@ -542,6 +547,7 @@ static void         emit_changed                       (GtkText *self);
 
 static void         gtk_text_update_clipboard_actions (GtkText *self);
 static void         gtk_text_update_emoji_action      (GtkText *self);
+static void         gtk_text_update_handles           (GtkText *self);
 
 static void gtk_text_activate_clipboard_cut          (GtkWidget  *widget,
                                                       const char *action_name,
@@ -1705,6 +1711,24 @@ gtk_text_get_property (GObject    *object,
 }
 
 static void
+gtk_text_create_text_handles (GtkText *self)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  int i;
+
+  for (i = 0; i < TEXT_HANDLE_N_HANDLES; i++)
+    {
+      priv->text_handles[i] = gtk_text_handle_new (GTK_WIDGET (self));
+      g_signal_connect (priv->text_handles[i], "drag-started",
+                        G_CALLBACK (gtk_text_handle_drag_started), self);
+      g_signal_connect (priv->text_handles[i], "handle-dragged",
+                        G_CALLBACK (gtk_text_handle_dragged), self);
+      g_signal_connect (priv->text_handles[i], "drag-finished",
+                        G_CALLBACK (gtk_text_handle_drag_finished), self);
+    }
+}
+
+static void
 gtk_text_init (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
@@ -1804,6 +1828,8 @@ gtk_text_init (GtkText *self)
     }
 
   set_text_cursor (GTK_WIDGET (self));
+
+  gtk_text_create_text_handles (self);
 }
 
 static void
@@ -1872,7 +1898,8 @@ gtk_text_finalize (GObject *object)
   g_clear_object (&priv->cached_layout);
   g_clear_object (&priv->im_context);
   g_clear_pointer (&priv->magnifier_popover, gtk_widget_destroy);
-  g_clear_object (&priv->text_handle);
+  g_clear_object (&priv->text_handles[TEXT_HANDLE_CURSOR]);
+  g_clear_object (&priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]);
   g_free (priv->im_module);
 
   g_clear_pointer (&priv->placeholder, gtk_widget_unparent);
@@ -1905,23 +1932,6 @@ gtk_text_ensure_magnifier (GtkText *self)
   gtk_container_add (GTK_CONTAINER (priv->magnifier_popover),
                      priv->magnifier);
   gtk_widget_show (priv->magnifier);
-}
-
-static void
-gtk_text_ensure_text_handles (GtkText *self)
-{
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-
-  if (priv->text_handle)
-    return;
-
-  priv->text_handle = _gtk_text_handle_new (GTK_WIDGET (self));
-  g_signal_connect (priv->text_handle, "drag-started",
-                    G_CALLBACK (gtk_text_handle_drag_started), self);
-  g_signal_connect (priv->text_handle, "handle-dragged",
-                    G_CALLBACK (gtk_text_handle_dragged), self);
-  g_signal_connect (priv->text_handle, "drag-finished",
-                    G_CALLBACK (gtk_text_handle_drag_finished), self);
 }
 
 static void
@@ -2054,10 +2064,8 @@ gtk_text_unmap (GtkWidget *widget)
   GtkText *self = GTK_TEXT (widget);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
-  if (priv->text_handle)
-    _gtk_text_handle_set_mode (priv->text_handle,
-                               GTK_TEXT_HANDLE_MODE_NONE);
-
+  priv->text_handles_enabled = FALSE;
+  gtk_text_update_handles (self);
   priv->cursor_alpha = 1.0;
 
   GTK_WIDGET_CLASS (gtk_text_parent_class)->unmap (widget);
@@ -2121,21 +2129,21 @@ update_im_cursor_location (GtkText *self)
 }
 
 static void
-gtk_text_move_handle (GtkText               *self,
-                      GtkTextHandlePosition  pos,
-                      int                    x,
-                      int                    y,
-                      int                    height)
+gtk_text_move_handle (GtkText       *self,
+                      GtkTextHandle *handle,
+                      int            x,
+                      int            y,
+                      int            height)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
-  if (!_gtk_text_handle_get_is_dragged (priv->text_handle, pos) &&
+  if (!gtk_text_handle_get_is_dragged (handle) &&
       (x < 0 || x > gtk_widget_get_width (GTK_WIDGET (self))))
     {
       /* Hide the handle if it's not being manipulated
        * and fell outside of the visible text area.
        */
-      _gtk_text_handle_set_visible (priv->text_handle, pos, FALSE);
+      gtk_widget_hide (GTK_WIDGET (handle));
     }
   else
     {
@@ -2146,9 +2154,9 @@ gtk_text_move_handle (GtkText               *self,
       rect.width = 1;
       rect.height = height;
 
-      _gtk_text_handle_set_visible (priv->text_handle, pos, TRUE);
-      _gtk_text_handle_set_position (priv->text_handle, pos, &rect);
-      _gtk_text_handle_set_direction (priv->text_handle, pos, priv->resolved_dir);
+      gtk_text_handle_set_position (handle, &rect);
+      gtk_widget_set_direction (GTK_WIDGET (handle), priv->resolved_dir);
+      gtk_widget_show (GTK_WIDGET (handle));
     }
 }
 
@@ -2176,45 +2184,62 @@ gtk_text_get_selection_bound_location (GtkText *self)
 }
 
 static void
-gtk_text_update_handles (GtkText           *self,
-                         GtkTextHandleMode  mode)
+gtk_text_update_handles (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   const int text_height = gtk_widget_get_height (GTK_WIDGET (self));
   int strong_x;
   int cursor, bound;
 
-  _gtk_text_handle_set_mode (priv->text_handle, mode);
-
-  gtk_text_get_cursor_locations (self, &strong_x, NULL);
-  cursor = strong_x - priv->scroll_offset;
-
-  if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
+  if (!priv->text_handles_enabled)
     {
-      int start, end;
+      gtk_widget_hide (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_CURSOR]));
+      gtk_widget_hide (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]));
+    }
+  else
+    {
+      gtk_text_get_cursor_locations (self, &strong_x, NULL);
+      cursor = strong_x - priv->scroll_offset;
 
-      bound = gtk_text_get_selection_bound_location (self) - priv->scroll_offset;
-
-      if (priv->selection_bound > priv->current_pos)
+      if (priv->selection_bound != priv->current_pos)
         {
-          start = cursor;
-          end = bound;
+          int start, end;
+
+          bound = gtk_text_get_selection_bound_location (self) - priv->scroll_offset;
+
+          if (priv->selection_bound > priv->current_pos)
+            {
+              start = cursor;
+              end = bound;
+            }
+          else
+            {
+              start = bound;
+              end = cursor;
+            }
+
+          /* Update start selection bound */
+          gtk_text_handle_set_role (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND],
+                                    GTK_TEXT_HANDLE_ROLE_SELECTION_END);
+          gtk_text_move_handle (self,
+                                priv->text_handles[TEXT_HANDLE_SELECTION_BOUND],
+                                end, 0, text_height);
+          gtk_text_handle_set_role (priv->text_handles[TEXT_HANDLE_CURSOR],
+                                    GTK_TEXT_HANDLE_ROLE_SELECTION_START);
+          gtk_text_move_handle (self,
+                                priv->text_handles[TEXT_HANDLE_CURSOR],
+                                start, 0, text_height);
         }
       else
         {
-          start = bound;
-          end = cursor;
+          gtk_widget_hide (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]));
+          gtk_text_handle_set_role (priv->text_handles[TEXT_HANDLE_CURSOR],
+                                    GTK_TEXT_HANDLE_ROLE_CURSOR);
+          gtk_text_move_handle (self,
+                                priv->text_handles[TEXT_HANDLE_CURSOR],
+                                cursor, 0, text_height);
         }
-
-      /* Update start selection bound */
-      gtk_text_move_handle (self, GTK_TEXT_HANDLE_POSITION_SELECTION_START,
-                             start, 0, text_height);
-      gtk_text_move_handle (self, GTK_TEXT_HANDLE_POSITION_SELECTION_END,
-                             end, 0, text_height);
     }
-  else
-    gtk_text_move_handle (self, GTK_TEXT_HANDLE_POSITION_CURSOR,
-                           cursor, 0, text_height);
 }
 
 static void
@@ -2345,13 +2370,7 @@ gtk_text_size_allocate (GtkWidget *widget,
   if (chooser)
     gtk_native_check_resize (GTK_NATIVE (chooser));
 
-  if (priv->text_handle)
-    {
-      GtkTextHandleMode handle_mode = _gtk_text_handle_get_mode (priv->text_handle);
-
-      if (handle_mode != GTK_TEXT_HANDLE_MODE_NONE)
-        gtk_text_update_handles (self, handle_mode);
-    }
+  gtk_text_update_handles (self);
 
   if (priv->emoji_completion)
     gtk_native_check_resize (GTK_NATIVE (priv->emoji_completion));
@@ -2364,6 +2383,12 @@ gtk_text_size_allocate (GtkWidget *widget,
 
   if (priv->selection_bubble)
     gtk_native_check_resize (GTK_NATIVE (priv->selection_bubble));
+
+  if (priv->text_handles[TEXT_HANDLE_CURSOR])
+    gtk_native_check_resize (GTK_NATIVE (priv->text_handles[TEXT_HANDLE_CURSOR]));
+
+  if (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND])
+    gtk_native_check_resize (GTK_NATIVE (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND]));
 }
 
 static void
@@ -2602,7 +2627,6 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
   else if (button == GDK_BUTTON_PRIMARY)
     {
       gboolean have_selection;
-      GtkTextHandleMode mode;
       gboolean is_touchscreen, extend_selection;
       GdkDevice *source;
       guint state;
@@ -2615,15 +2639,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
       is_touchscreen = gtk_simulate_touchscreen () ||
                        gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN;
 
-      if (!is_touchscreen)
-        mode = GTK_TEXT_HANDLE_MODE_NONE;
-      else if (have_selection)
-        mode = GTK_TEXT_HANDLE_MODE_SELECTION;
-      else
-        mode = GTK_TEXT_HANDLE_MODE_CURSOR;
-
-      if (is_touchscreen)
-        gtk_text_ensure_text_handles (self);
+      priv->text_handles_enabled = is_touchscreen;
 
       priv->in_drag = FALSE;
       priv->select_words = FALSE;
@@ -2696,15 +2712,11 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
         case 2:
           priv->select_words = TRUE;
           gtk_text_select_word (self);
-          if (is_touchscreen)
-            mode = GTK_TEXT_HANDLE_MODE_SELECTION;
           break;
 
         case 3:
           priv->select_lines = TRUE;
           gtk_text_select_line (self);
-          if (is_touchscreen)
-            mode = GTK_TEXT_HANDLE_MODE_SELECTION;
           break;
 
         default:
@@ -2736,8 +2748,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
       gtk_gesture_set_state (priv->drag_gesture,
                              GTK_EVENT_SEQUENCE_CLAIMED);
 
-      if (priv->text_handle)
-        gtk_text_update_handles (self, mode);
+      gtk_text_update_handles (self);
     }
 
   if (n_press >= 3)
@@ -2953,11 +2964,8 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
       if (gtk_simulate_touchscreen () ||
           input_source == GDK_SOURCE_TOUCHSCREEN)
         {
-          gtk_text_ensure_text_handles (self);
-          gtk_text_update_handles (self,
-                                    (priv->current_pos == priv->selection_bound) ?
-                                    GTK_TEXT_HANDLE_MODE_CURSOR :
-                                    GTK_TEXT_HANDLE_MODE_SELECTION);
+          priv->text_handles_enabled = TRUE;
+          gtk_text_update_handles (self);
           gtk_text_show_magnifier (self, x - priv->scroll_offset, y);
         }
     }
@@ -2970,10 +2978,8 @@ gtk_text_drag_gesture_end (GtkGestureDrag *gesture,
                            GtkText        *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  gboolean in_drag, is_touchscreen;
+  gboolean in_drag;
   GdkEventSequence *sequence;
-  GdkEvent *event;
-  GdkDevice *source;
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   in_drag = priv->in_drag;
@@ -2986,11 +2992,6 @@ gtk_text_drag_gesture_end (GtkGestureDrag *gesture,
   if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
     return;
 
-  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-  source = gdk_event_get_source_device (event);
-  is_touchscreen = gtk_simulate_touchscreen () ||
-                   gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN;
-
   if (in_drag)
     {
       int tmp_pos = gtk_text_find_position (self, priv->drag_start_x);
@@ -2998,8 +2999,7 @@ gtk_text_drag_gesture_end (GtkGestureDrag *gesture,
       gtk_text_set_selection_bounds (self, tmp_pos, tmp_pos);
     }
 
-  if (is_touchscreen && priv->selection_bound != priv->current_pos)
-    gtk_text_update_handles (self, GTK_TEXT_HANDLE_MODE_CURSOR);
+  gtk_text_update_handles (self);
 
   gtk_text_update_primary_selection (self);
 }
@@ -3032,9 +3032,8 @@ gtk_text_key_controller_key_pressed (GtkEventControllerKey *controller,
 
   gtk_text_selection_bubble_popup_unset (self);
 
-  if (priv->text_handle)
-    _gtk_text_handle_set_mode (priv->text_handle,
-                               GTK_TEXT_HANDLE_MODE_NONE);
+  priv->text_handles_enabled = FALSE;
+  gtk_text_update_handles (self);
 
   if (keyval == GDK_KEY_Return ||
       keyval == GDK_KEY_KP_Enter ||
@@ -3085,9 +3084,8 @@ gtk_text_focus_out (GtkWidget *widget)
 
   gtk_text_selection_bubble_popup_unset (self);
 
-  if (priv->text_handle)
-    _gtk_text_handle_set_mode (priv->text_handle,
-                               GTK_TEXT_HANDLE_MODE_NONE);
+  priv->text_handles_enabled = FALSE;
+  gtk_text_update_handles (self);
 
   gtk_widget_queue_draw (widget);
 
@@ -3961,15 +3959,7 @@ gtk_text_cut_clipboard (GtkText *self)
 
   gtk_text_selection_bubble_popup_unset (self);
 
-  if (priv->text_handle)
-    {
-      GtkTextHandleMode handle_mode;
-
-      handle_mode = _gtk_text_handle_get_mode (priv->text_handle);
-
-      if (handle_mode != GTK_TEXT_HANDLE_MODE_NONE)
-        gtk_text_update_handles (self, GTK_TEXT_HANDLE_MODE_CURSOR);
-    }
+  gtk_text_update_handles (self);
 }
 
 static void
@@ -3982,15 +3972,7 @@ gtk_text_paste_clipboard (GtkText *self)
   else
     gtk_widget_error_bell (GTK_WIDGET (self));
 
-  if (priv->text_handle)
-    {
-      GtkTextHandleMode handle_mode;
-
-      handle_mode = _gtk_text_handle_get_mode (priv->text_handle);
-
-      if (handle_mode != GTK_TEXT_HANDLE_MODE_NONE)
-        gtk_text_update_handles (self, GTK_TEXT_HANDLE_MODE_CURSOR);
-    }
+  gtk_text_update_handles (self);
 }
 
 static void
@@ -4247,9 +4229,6 @@ gtk_text_reset_layout (GtkText *self)
 static void
 gtk_text_recompute (GtkText *self)
 {
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GtkTextHandleMode handle_mode;
-
   gtk_text_reset_layout (self);
   gtk_text_check_cursor_blink (self);
 
@@ -4257,13 +4236,7 @@ gtk_text_recompute (GtkText *self)
 
   update_im_cursor_location (self);
 
-  if (priv->text_handle)
-    {
-      handle_mode = _gtk_text_handle_get_mode (priv->text_handle);
-
-      if (handle_mode != GTK_TEXT_HANDLE_MODE_NONE)
-        gtk_text_update_handles (self, handle_mode);
-    }
+  gtk_text_update_handles (self);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
@@ -4546,84 +4519,67 @@ gtk_text_draw_cursor (GtkText     *self,
 }
 
 static void
-gtk_text_handle_dragged (GtkTextHandle         *handle,
-                         GtkTextHandlePosition  pos,
-                         int                    x,
-                         int                    y,
-                         GtkText               *self)
+gtk_text_handle_dragged (GtkTextHandle *handle,
+                         int            x,
+                         int            y,
+                         GtkText       *self)
 {
-  int cursor_pos, selection_bound_pos, tmp_pos;
+  int cursor_pos, selection_bound_pos, tmp_pos, *old_pos;
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GtkTextHandleMode mode;
-  int *min, *max;
 
   gtk_text_selection_bubble_popup_unset (self);
 
   cursor_pos = priv->current_pos;
   selection_bound_pos = priv->selection_bound;
-  mode = _gtk_text_handle_get_mode (handle);
 
   tmp_pos = gtk_text_find_position (self, x + priv->scroll_offset);
 
-  if (mode == GTK_TEXT_HANDLE_MODE_CURSOR ||
-      cursor_pos >= selection_bound_pos)
+  if (handle == priv->text_handles[TEXT_HANDLE_CURSOR])
     {
-      max = &cursor_pos;
-      min = &selection_bound_pos;
+      /* Avoid running past the other handle in selection mode */
+      if (tmp_pos >= selection_bound_pos &&
+          gtk_widget_is_visible (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND])))
+        {
+          tmp_pos = selection_bound_pos - 1;
+        }
+
+      old_pos = &cursor_pos;
+    }
+  else if (handle == priv->text_handles[TEXT_HANDLE_SELECTION_BOUND])
+    {
+      /* Avoid running past the other handle */
+      if (tmp_pos <= cursor_pos)
+        tmp_pos = cursor_pos + 1;
+
+      old_pos = &selection_bound_pos;
     }
   else
+    g_assert_not_reached ();
+
+  if (tmp_pos != *old_pos)
     {
-      max = &selection_bound_pos;
-      min = &cursor_pos;
-    }
+      *old_pos = tmp_pos;
 
-  if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_END)
-    {
-      if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
-        {
-          int min_pos;
-
-          min_pos = MAX (*min + 1, 0);
-          tmp_pos = MAX (tmp_pos, min_pos);
-        }
-
-      *max = tmp_pos;
-    }
-  else
-    {
-      if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
-        {
-          int max_pos;
-
-          max_pos = *max - 1;
-          *min = MIN (tmp_pos, max_pos);
-        }
-    }
-
-  if (cursor_pos != priv->current_pos ||
-      selection_bound_pos != priv->selection_bound)
-    {
-      if (mode == GTK_TEXT_HANDLE_MODE_CURSOR)
-        {
-          priv->cursor_handle_dragged = TRUE;
-          gtk_text_set_positions (self, cursor_pos, cursor_pos);
-        }
+      if (handle == priv->text_handles[TEXT_HANDLE_CURSOR] &&
+          !gtk_widget_is_visible (GTK_WIDGET (priv->text_handles[TEXT_HANDLE_SELECTION_BOUND])))
+        gtk_text_set_positions (self, cursor_pos, cursor_pos);
       else
-        {
-          priv->selection_handle_dragged = TRUE;
-          gtk_text_set_positions (self, cursor_pos, selection_bound_pos);
-        }
+        gtk_text_set_positions (self, cursor_pos, selection_bound_pos);
 
-      gtk_text_update_handles (self, mode);
+      if (handle == priv->text_handles[TEXT_HANDLE_CURSOR])
+        priv->cursor_handle_dragged = TRUE;
+      else if (handle == priv->text_handles[TEXT_HANDLE_SELECTION_BOUND])
+        priv->selection_handle_dragged = TRUE;
+
+      gtk_text_update_handles (self);
     }
 
   gtk_text_show_magnifier (self, x, y);
 }
 
 static void
-gtk_text_handle_drag_started (GtkTextHandle         *handle,
-                              GtkTextHandlePosition  pos,
-                              GtkText               *self)
+gtk_text_handle_drag_started (GtkTextHandle *handle,
+                              GtkText       *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
@@ -4632,9 +4588,8 @@ gtk_text_handle_drag_started (GtkTextHandle         *handle,
 }
 
 static void
-gtk_text_handle_drag_finished (GtkTextHandle         *handle,
-                               GtkTextHandlePosition  pos,
-                               GtkText               *self)
+gtk_text_handle_drag_finished (GtkTextHandle *handle,
+                               GtkText       *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
@@ -4648,7 +4603,7 @@ gtk_text_handle_drag_finished (GtkTextHandle         *handle,
       if (g_get_monotonic_time() - priv->handle_place_time < double_click_time * 1000)
         {
           gtk_text_select_word (self);
-          gtk_text_update_handles (self, GTK_TEXT_HANDLE_MODE_SELECTION);
+          gtk_text_update_handles (self);
         }
       else
         gtk_text_selection_bubble_popup_set (self);
@@ -4759,20 +4714,14 @@ static gboolean
 gtk_text_get_is_selection_handle_dragged (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GtkTextHandlePosition pos;
-
-  if (!priv->text_handle)
-    return FALSE;
-
-  if (_gtk_text_handle_get_mode (priv->text_handle) != GTK_TEXT_HANDLE_MODE_SELECTION)
-    return FALSE;
+  GtkTextHandle *handle;
 
   if (priv->current_pos >= priv->selection_bound)
-    pos = GTK_TEXT_HANDLE_POSITION_SELECTION_START;
+    handle = priv->text_handles[TEXT_HANDLE_CURSOR];
   else
-    pos = GTK_TEXT_HANDLE_POSITION_SELECTION_END;
+    handle = priv->text_handles[TEXT_HANDLE_SELECTION_BOUND];
 
-  return _gtk_text_handle_get_is_dragged (priv->text_handle, pos);
+  return gtk_text_handle_get_is_dragged (handle);
 }
 
 static void
@@ -4822,7 +4771,6 @@ gtk_text_adjust_scroll (GtkText *self)
   int min_offset, max_offset;
   int strong_x, weak_x;
   int strong_xoffset, weak_xoffset;
-  GtkTextHandleMode handle_mode;
 
   if (!gtk_widget_get_realized (GTK_WIDGET (self)))
     return;
@@ -4885,13 +4833,7 @@ gtk_text_adjust_scroll (GtkText *self)
 
   g_object_notify_by_pspec (G_OBJECT (self), text_props[PROP_SCROLL_OFFSET]);
 
-  if (priv->text_handle)
-    {
-      handle_mode = _gtk_text_handle_get_mode (priv->text_handle);
-
-      if (handle_mode != GTK_TEXT_HANDLE_MODE_NONE)
-        gtk_text_update_handles (self, handle_mode);
-    }
+  gtk_text_update_handles (self);
 }
 
 static int
@@ -5930,23 +5872,10 @@ show_or_hide_handles (GtkWidget  *popover,
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   gboolean visible;
-  GtkTextHandle *handle;
-  GtkTextHandleMode mode;
 
   visible = gtk_widget_get_visible (popover);
-
-  handle = priv->text_handle;
-  mode = _gtk_text_handle_get_mode (handle);
-
-  if (mode == GTK_TEXT_HANDLE_MODE_CURSOR)
-    {
-      _gtk_text_handle_set_visible (handle, GTK_TEXT_HANDLE_POSITION_CURSOR, !visible);
-    }
-  else if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
-    {
-      _gtk_text_handle_set_visible (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START, !visible);
-      _gtk_text_handle_set_visible (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_END, !visible);
-    }
+  priv->text_handles_enabled = !visible;
+  gtk_text_update_handles (self);
 }
 
 static void
