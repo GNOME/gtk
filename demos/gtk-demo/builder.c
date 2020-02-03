@@ -63,7 +63,6 @@ GtkWidget *
 do_builder (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
-  GtkWidget *toolbar;
   GActionGroup *actions;
 
   if (!window)
@@ -77,9 +76,6 @@ do_builder (GtkWidget *do_widget)
                               gtk_widget_get_display (do_widget));
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
-      toolbar = GTK_WIDGET (gtk_builder_get_object (builder, "toolbar1"));
-      gtk_style_context_add_class (gtk_widget_get_style_context (toolbar),
-                                   "primary-toolbar");
       actions = (GActionGroup*)g_simple_action_group_new ();
       g_action_map_add_action_entries (G_ACTION_MAP (actions),
                                        win_entries, G_N_ELEMENTS (win_entries),
