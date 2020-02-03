@@ -2630,8 +2630,6 @@ gtk_widget_unparent (GtkWidget *widget)
 
   /* Unset BACKDROP since we are no longer inside a toplevel window */
   gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_BACKDROP);
-  if (priv->context)
-    gtk_style_context_set_parent (priv->context, NULL);
   gtk_css_node_set_parent (priv->cssnode, NULL);
 
   _gtk_widget_update_parent_muxer (widget);
@@ -6128,10 +6126,6 @@ gtk_widget_reposition_after (GtkWidget *widget,
                                  priv->cssnode,
                                  previous_sibling ? previous_sibling->priv->cssnode : NULL);
     }
-
-  if (priv->context)
-    gtk_style_context_set_parent (priv->context,
-                                  _gtk_widget_get_style_context (parent));
 
   _gtk_widget_update_parent_muxer (widget);
 
@@ -11255,10 +11249,6 @@ gtk_widget_get_style_context (GtkWidget *widget)
       display = _gtk_widget_get_display (widget);
       if (display)
         gtk_style_context_set_display (priv->context, display);
-
-      if (priv->parent)
-        gtk_style_context_set_parent (priv->context,
-                                      _gtk_widget_get_style_context (priv->parent));
     }
 
   return priv->context;

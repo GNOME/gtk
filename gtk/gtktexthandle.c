@@ -200,7 +200,6 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
   if (!priv->windows[pos].widget)
     {
       GtkWidget *widget, *window;
-      GtkStyleContext *context;
       GtkEventController *controller;
 
       widget = gtk_gizmo_new (I_("cursor-handle"), NULL, NULL, snapshot_func, NULL);
@@ -220,16 +219,14 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
       priv->toplevel = window = gtk_widget_get_ancestor (priv->parent, GTK_TYPE_WINDOW);
       _gtk_window_add_popover (GTK_WINDOW (window), widget, priv->parent, FALSE);
 
-      context = gtk_widget_get_style_context (widget);
-      gtk_style_context_set_parent (context, gtk_widget_get_style_context (priv->parent));
       if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_END)
         {
-          gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
+          gtk_widget_add_style_class (widget, GTK_STYLE_CLASS_BOTTOM);
           if (priv->mode == GTK_TEXT_HANDLE_MODE_CURSOR)
-            gtk_style_context_add_class (context, GTK_STYLE_CLASS_INSERTION_CURSOR);
+            gtk_widget_add_style_class (widget, GTK_STYLE_CLASS_INSERTION_CURSOR);
         }
       else
-        gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
+        gtk_widget_add_style_class (widget, GTK_STYLE_CLASS_TOP);
     }
 
   return priv->windows[pos].widget;
