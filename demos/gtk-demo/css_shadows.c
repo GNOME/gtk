@@ -62,22 +62,19 @@ GtkWidget *
 create_toolbar (void)
 {
   GtkWidget *toolbar;
-  GtkToolItem *item;
+  GtkWidget *item;
 
-  toolbar = gtk_toolbar_new ();
+  toolbar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_widget_set_valign (toolbar, GTK_ALIGN_CENTER);
 
-  item = gtk_tool_button_new (NULL, NULL);
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "go-next");
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  item = gtk_button_new_from_icon_name ("go-next");
+  gtk_container_add (GTK_CONTAINER (toolbar), item);
 
-  item = gtk_tool_button_new (NULL, NULL);
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "go-previous");
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  item = gtk_button_new_from_icon_name ("go-previous");
+  gtk_container_add (GTK_CONTAINER (toolbar), item);
 
-  item = gtk_tool_button_new (NULL, "Hello World");
-  gtk_tool_item_set_is_important (item, TRUE);
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  item = gtk_button_new_with_label ("Hello World");
+  gtk_container_add (GTK_CONTAINER (toolbar), item);
 
   return toolbar;
 }
