@@ -50,6 +50,8 @@ struct _GtkTextHandleWidget
 {
   GtkWidget parent_instance;
   GtkWidget *parent;
+  GdkSurface *surface;
+  GskRenderer *renderer;
 };
 
 struct _TextHandle
@@ -79,6 +81,8 @@ struct _GtkTextHandlePrivate
   guint mode : 2;
 };
 
+static void gtk_text_handle_widget_native_interface_init (GtkNativeInterface *iface);
+
 G_DEFINE_TYPE_WITH_PRIVATE (GtkTextHandle, _gtk_text_handle, G_TYPE_OBJECT)
 
 G_DECLARE_FINAL_TYPE (GtkTextHandleWidget,
@@ -86,9 +90,146 @@ G_DECLARE_FINAL_TYPE (GtkTextHandleWidget,
                       GTK, TEXT_HANDLE_WIDGET,
                       GtkWidget)
 
-G_DEFINE_TYPE (GtkTextHandleWidget, gtk_text_handle_widget, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE_WITH_CODE (GtkTextHandleWidget, gtk_text_handle_widget, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_NATIVE,
+                                                gtk_text_handle_widget_native_interface_init))
 
 static guint signals[LAST_SIGNAL] = { 0 };
+
+static GdkSurface *
+gtk_text_handle_widget_native_get_surface (GtkNative *native)
+{
+  GtkTextHandleWidget *handle_widget = GTK_TEXT_HANDLE_WIDGET (native);
+
+  return handle_widget->surface;
+}
+
+static GskRenderer *
+gtk_text_handle_widget_native_get_renderer (GtkNative *native)
+{
+  GtkTextHandleWidget *handle_widget = GTK_TEXT_HANDLE_WIDGET (native);
+
+  return handle_widget->renderer;
+}
+
+static void
+gtk_text_handle_widget_native_get_surface_transform (GtkNative *native,
+                                                     int       *x,
+                                                     int       *y)
+{
+  GtkCssStyle *style;
+
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (native)));
+  *x  = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_LEFT), 100) +
+        _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100) +
+        _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_LEFT), 100);
+  *y  = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_TOP), 100) +
+        _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100) +
+        _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_TOP), 100);
+}
+
+static void
+gtk_text_handle_widget_native_check_resize (GtkNative *native)
+{
+  GtkTextHandleWidget *handle_widget = GTK_TEXT_HANDLE_WIDGET (native);
+  GtkWidget *widget = GTK_WIDGET (native);
+
+  if (!_gtk_widget_get_alloc_needed (widget))
+    gtk_widget_ensure_allocate (widget);
+  else if (gtk_widget_get_visible (widget) &&
+           handle_widget->surface)
+    {
+      GtkRequisition req;
+
+      gtk_widget_get_preferred_size (GTK_WIDGET (handle_widget), NULL, &req);
+      gdk_surface_resize (handle_widget->surface, req.width, req.height);
+
+      gtk_widget_allocate (widget,
+                           req.width, req.height,
+                           -1, NULL);
+    }
+}
+
+static void
+gtk_text_handle_widget_native_interface_init (GtkNativeInterface *iface)
+{
+  iface->get_surface = gtk_text_handle_widget_native_get_surface;
+  iface->get_renderer = gtk_text_handle_widget_native_get_renderer;
+  iface->get_surface_transform = gtk_text_handle_widget_native_get_surface_transform;
+  iface->check_resize = gtk_text_handle_widget_native_check_resize;
+}
+
+static gboolean
+surface_render (GdkSurface          *surface,
+                cairo_region_t      *region,
+                GtkTextHandleWidget *handle)
+{
+  gtk_widget_render (GTK_WIDGET (handle), surface, region);
+  return TRUE;
+}
+
+static gboolean
+surface_event (GdkSurface          *surface,
+               GdkEvent            *event,
+               GtkTextHandleWidget *handle)
+{
+  gtk_main_do_event (event);
+  return TRUE;
+}
+
+static void
+gtk_text_handle_widget_realize (GtkWidget *widget)
+{
+  GtkTextHandleWidget *handle_widget = GTK_TEXT_HANDLE_WIDGET (widget);
+  GdkDisplay *display;
+  GdkSurface *parent_surface;
+
+  display = gtk_widget_get_display (handle_widget->parent);
+  parent_surface = gtk_native_get_surface (GTK_NATIVE (gtk_widget_get_ancestor (handle_widget->parent, GTK_TYPE_WINDOW)));
+
+  handle_widget->surface = gdk_surface_new_popup (display, parent_surface, FALSE);
+  gdk_surface_set_widget (handle_widget->surface, widget);
+
+  g_signal_connect (handle_widget->surface, "render", G_CALLBACK (surface_render), widget);
+  g_signal_connect (handle_widget->surface, "event", G_CALLBACK (surface_event), widget);
+
+  GTK_WIDGET_CLASS (gtk_text_handle_widget_parent_class)->realize (widget);
+
+  handle_widget->renderer = gsk_renderer_new_for_surface (handle_widget->surface);
+}
+
+static void
+gtk_text_handle_widget_unrealize (GtkWidget *widget)
+{
+  GtkTextHandleWidget *handle_widget = GTK_TEXT_HANDLE_WIDGET (widget);
+
+  GTK_WIDGET_CLASS (gtk_text_handle_widget_parent_class)->unrealize (widget);
+
+  gsk_renderer_unrealize (handle_widget->renderer);
+  g_clear_object (&handle_widget->renderer);
+
+  gdk_surface_set_widget (handle_widget->surface, NULL);
+  gdk_surface_destroy (handle_widget->surface);
+  g_clear_object (&handle_widget->surface);
+}
+
+static void
+gtk_text_handle_widget_map (GtkWidget *widget)
+{
+  GtkTextHandleWidget *handle_widget = GTK_TEXT_HANDLE_WIDGET (widget);
+
+  gdk_surface_show (handle_widget->surface);
+  GTK_WIDGET_CLASS (gtk_text_handle_widget_parent_class)->map (widget);
+}
+
+static void
+gtk_text_handle_widget_unmap (GtkWidget *widget)
+{
+  GtkTextHandleWidget *handle_widget = GTK_TEXT_HANDLE_WIDGET (widget);
+
+  GTK_WIDGET_CLASS (gtk_text_handle_widget_parent_class)->unmap (widget);
+  gdk_surface_hide (handle_widget->surface);
+}
 
 static void
 gtk_text_handle_widget_snapshot (GtkWidget   *widget,
@@ -107,6 +248,10 @@ gtk_text_handle_widget_class_init (GtkTextHandleWidgetClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  widget_class->realize = gtk_text_handle_widget_realize;
+  widget_class->unrealize = gtk_text_handle_widget_unrealize;
+  widget_class->map = gtk_text_handle_widget_map;
+  widget_class->unmap = gtk_text_handle_widget_unmap;
   widget_class->snapshot = gtk_text_handle_widget_snapshot;
 }
 
@@ -124,8 +269,24 @@ gtk_text_handle_widget_new (GtkWidget *parent)
                          "css-name", I_("cursor-handle"),
                          NULL);
   handle->parent = parent;
+  gtk_widget_set_parent (GTK_WIDGET (handle), parent);
 
   return GTK_WIDGET (handle);
+}
+
+static void
+gtk_text_handle_widget_move (GtkTextHandleWidget *handle,
+                             GdkRectangle        *rect)
+{
+  if (!gtk_widget_get_realized (GTK_WIDGET (handle)))
+    gtk_widget_realize (GTK_WIDGET (handle));
+
+  gdk_surface_move_to_rect (handle->surface,
+                            rect,
+                            GDK_GRAVITY_SOUTH,
+                            GDK_GRAVITY_NORTH,
+                            GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X,
+                            0, 0);
 }
 
 static void _gtk_text_handle_update (GtkTextHandle         *handle,
@@ -256,7 +417,6 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
 
       priv->handles[pos].widget = g_object_ref_sink (widget);
       priv->toplevel = window = gtk_widget_get_ancestor (priv->parent, GTK_TYPE_WINDOW);
-      _gtk_window_add_popover (GTK_WINDOW (window), widget, priv->parent, FALSE);
 
       context = gtk_widget_get_style_context (widget);
       gtk_style_context_set_parent (context, gtk_widget_get_style_context (priv->parent));
@@ -327,7 +487,6 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
     {
       cairo_rectangle_int_t rect;
       gint width, height;
-      GtkWidget *window;
       GtkAllocation alloc;
       gint w, h;
 
@@ -346,8 +505,7 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
 
       _handle_update_child_visible (handle, pos);
 
-      window = gtk_widget_get_parent (text_handle->widget);
-      gtk_widget_translate_coordinates (priv->parent, window,
+      gtk_widget_translate_coordinates (priv->parent, priv->toplevel,
                                         rect.x, rect.y, &rect.x, &rect.y);
 
       if (pos == GTK_TEXT_HANDLE_POSITION_CURSOR &&
@@ -366,7 +524,7 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
        * knowledge about how popover_get_rect() works.
        */
 
-      gtk_widget_get_allocation (window, &alloc);
+      gtk_widget_get_allocation (priv->toplevel, &alloc);
 
       w = width + border->left + border->right;
       h = height + border->top + border->bottom;
@@ -385,10 +543,13 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
 
       gtk_widget_set_size_request (text_handle->widget, width, height);
       gtk_widget_show (text_handle->widget);
-      _gtk_window_raise_popover (GTK_WINDOW (window), text_handle->widget);
-      _gtk_window_set_popover_position (GTK_WINDOW (window),
-                                        text_handle->widget,
-                                        GTK_POS_BOTTOM, &rect);
+
+      rect.width = MAX (rect.width, 1);
+      rect.height = MAX (rect.height, 1);
+
+      gtk_text_handle_widget_move (GTK_TEXT_HANDLE_WIDGET (text_handle->widget),
+                                   &rect);
+      gtk_native_check_resize (GTK_NATIVE (text_handle->widget));
     }
   else if (text_handle->widget)
     gtk_widget_hide (text_handle->widget);
@@ -519,18 +680,14 @@ _gtk_text_handle_parent_hierarchy_changed (GtkWidget     *widget,
     {
       if (priv->handles[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget)
         {
-          _gtk_window_remove_popover (GTK_WINDOW (priv->toplevel),
-                                      priv->handles[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget);
-          g_object_unref (priv->handles[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget);
-          priv->handles[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget = NULL;
+          gtk_widget_destroy (priv->handles[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget);
+          g_clear_object (&priv->handles[GTK_TEXT_HANDLE_POSITION_SELECTION_START].widget);
         }
 
       if (priv->handles[GTK_TEXT_HANDLE_POSITION_SELECTION_END].widget)
         {
-          _gtk_window_remove_popover (GTK_WINDOW (priv->toplevel),
-                                      priv->handles[GTK_TEXT_HANDLE_POSITION_SELECTION_END].widget);
-          g_object_unref (priv->handles[GTK_TEXT_HANDLE_POSITION_SELECTION_END].widget);
-          priv->handles[GTK_TEXT_HANDLE_POSITION_SELECTION_END].widget = NULL;
+          gtk_widget_destroy (priv->handles[GTK_TEXT_HANDLE_POSITION_SELECTION_END].widget);
+          g_clear_object (&priv->handles[GTK_TEXT_HANDLE_POSITION_SELECTION_END].widget);
         }
 
       priv->toplevel = NULL;
