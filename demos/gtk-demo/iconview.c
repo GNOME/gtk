@@ -188,8 +188,8 @@ item_activated (GtkIconView *icon_view,
 }
 
 static void
-up_clicked (GtkToolItem *item,
-            gpointer     user_data)
+up_clicked (GtkButton *item,
+            gpointer   user_data)
 {
   GtkListStore *store;
   gchar *dir_name;
@@ -209,8 +209,8 @@ up_clicked (GtkToolItem *item,
 }
 
 static void
-home_clicked (GtkToolItem *item,
-              gpointer     user_data)
+home_clicked (GtkButton *item,
+              gpointer   user_data)
 {
   GtkListStore *store;
 

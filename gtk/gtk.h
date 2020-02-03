@@ -157,7 +157,6 @@
 #include <gtk/gtkmediafile.h>
 #include <gtk/gtkmediastream.h>
 #include <gtk/gtkmenubutton.h>
-#include <gtk/gtkmenutoolbutton.h>
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkmountoperation.h>
 #include <gtk/gtknative.h>
@@ -181,7 +180,6 @@
 #include <gtk/gtkprintsettings.h>
 #include <gtk/gtkprogressbar.h>
 #include <gtk/gtkradiobutton.h>
-#include <gtk/gtkradiotoolbutton.h>
 #include <gtk/gtkrange.h>
 #include <gtk/gtkrecentmanager.h>
 #include <gtk/gtkrender.h>
@@ -197,7 +195,6 @@
 #include <gtk/gtkselection.h>
 #include <gtk/gtkselectionmodel.h>
 #include <gtk/gtkseparator.h>
-#include <gtk/gtkseparatortoolitem.h>
 #include <gtk/gtksettings.h>
 #include <gtk/gtkshortcutlabel.h>
 #include <gtk/gtkshortcutsgroup.h>
@@ -229,11 +226,6 @@
 #include <gtk/gtktexttagtable.h>
 #include <gtk/gtktextview.h>
 #include <gtk/gtktogglebutton.h>
-#include <gtk/gtktoggletoolbutton.h>
-#include <gtk/gtktoolbar.h>
-#include <gtk/gtktoolbutton.h>
-#include <gtk/gtktoolitem.h>
-#include <gtk/gtktoolshell.h>
 #include <gtk/gtktooltip.h>
 #include <gtk/gtktestutils.h>
 #include <gtk/gtktreednd.h>

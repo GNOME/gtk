@@ -50,7 +50,6 @@
 #include "gtktexthandleprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkpopover.h"
-#include "gtktoolbar.h"
 #include "gtkmagnifierprivate.h"
 #include "gtkemojichooser.h"
 #include "gtkpango.h"

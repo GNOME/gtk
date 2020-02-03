@@ -877,20 +877,19 @@
         switching to menu models and actions.
       </para>
       <para>
-        Since menus are gone, GtkMenuButton and GtkMenuToolButton also lost their
-        ability to show menus, and need to be used with popovers in GTK 4.
+        Since menus are gone, GtkMenuButton also lost its ability to show menus,
+        and needs to be used with popovers in GTK 4.
       </para>
     </section>
 
     <section>
-      <title>GtkToolbar overflow handling has changed</title>
+      <title>GtkToolbar has been removed</title>
       <para>
-        The handling of overflow in toolbars has been simplified.
-        Instead of creating a proxy menuitem and setting it with
-        gtk_tool_item_set_proxy_menu_item(), you simply provide
-        a label for the overflow menu with gtk_tool_item_set_overflow_text().
-        GTK will figure out itself whether to create a check- or
-        radioitem as proxy.
+        Toolbars were using outdated concepts such as requiring special toolitem
+        widgets.
+      </para>
+      <para>
+        Toolbars should be replaced by using a GtkBox with regular widgets instead.
       </para>
     </section>
 
