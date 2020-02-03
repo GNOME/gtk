@@ -36,6 +36,18 @@
 #include "gtkstylecontext.h"
 #include "gtktext.h"
 
+/**
+ * SECTION:emojichooser
+ * @Title: GtkEmojiChooser
+ * @Short_description: A popover to choose an Emoji character
+ *
+ * The #GtkEmojiChooser popover is used by text widgets such as #GtkEntry or
+ * #GtkTextView to offer users a convenient way to insert Emoji characters.
+ *
+ * GtkEmojiChooser emits the #GtkEmojiChooser:emoji-picked signal when an
+ * Emoji is selected.
+ */
+
 #define BOX_SPACE 6
 
 typedef struct {
@@ -711,6 +723,14 @@ gtk_emoji_chooser_class_init (GtkEmojiChooserClass *klass)
   object_class->finalize = gtk_emoji_chooser_finalize;
   widget_class->show = gtk_emoji_chooser_show;
 
+  /**
+   * GtkEmojiChooser::emoji-picked:
+   * @chooser: the #GtkEmojiChooser
+   * @text: the Unicode sequence for the picked Emoji, in UTF-8
+   *
+   * The ::emoji-picked signal is emitted when the user selects an
+   * Emoji.
+   */
   signals[EMOJI_PICKED] = g_signal_new ("emoji-picked",
                                         G_OBJECT_CLASS_TYPE (object_class),
                                         G_SIGNAL_RUN_LAST,
@@ -771,6 +791,13 @@ gtk_emoji_chooser_class_init (GtkEmojiChooserClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, long_pressed_cb);
 }
 
+/**
+ * gtk_emoji_chooser_new:
+ *
+ * Creates a new #GtkEmojiChooser.
+ *
+ * Returns: a new #GtkEmojiChoser
+ */
 GtkWidget *
 gtk_emoji_chooser_new (void)
 {

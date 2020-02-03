@@ -7147,3 +7147,20 @@ GTK_DRAG_ICON_GET_CLASS
 <SUBSECTION Private>
 gtk_drag_icon_get_type
 </SECTION>
+
+<SECTION>
+<FILE>gtkemojichooser</FILE>
+GtkEmojiChooser
+gtk_emoji_chooser_new
+
+<SUBSECTION Standard>
+GTK_TYPE_EMOJI_CHOOSER
+GTK_EMOJI_CHOOSER
+GTK_EMOJI_CHOOSER_CLASS
+GTK_IS_EMOJI_CHOOSER
+GTK_IS_EMOJI_CHOOSER_CLASS
+GTK_EMOJI_CHOOSER_GET_CLASS
+
+<SUBSECTION Private>
+gtk_emoji_chooser_get_type
+</SECTION>
