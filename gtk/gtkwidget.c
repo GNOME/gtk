@@ -10335,15 +10335,6 @@ gtk_widget_pick (GtkWidget    *widget,
   if (!gtk_widget_can_be_picked (widget, flags))
     return NULL;
 
-  if (GTK_IS_WINDOW (widget))
-    {
-      GtkWidget *picked;
-
-      picked = gtk_window_pick_popover (GTK_WINDOW (widget), x, y, flags);
-      if (picked)
-        return picked;
-    }
-
   return gtk_widget_do_pick (widget, x, y, flags);
 }
 
