@@ -1815,26 +1815,26 @@ microphone-sensitivity-medium-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkToolbar" id="toolbar">
+                                      <object class="GtkBox" id="toolbar">
                                         <child>
-                                          <object class="GtkToolButton">
+                                          <object class="GtkButton">
                                             <property name="label" translatable="yes">New</property>
                                             <property name="icon-name">document-new</property>
                                             <property name="tooltip-text" translatable="yes">Create a new document</property>
                                           </object>
                                         </child>
                                         <child>
-                                          <object class="GtkToolButton">
+                                          <object class="GtkButton">
                                             <property name="label" translatable="yes">Save</property>
                                             <property name="icon-name">document-save</property>
                                             <property name="tooltip-text" translatable="yes">Save the current document</property>
                                           </object>
                                         </child>
                                         <child>
-                                          <object class="GtkSeparatorToolItem"/>
+                                          <object class="GtkSeparator"/>
                                         </child>
                                         <child>
-                                          <object class="GtkToolButton">
+                                          <object class="GtkButton">
                                             <property name="label" translatable="yes">Search</property>
                                             <property name="icon-name">edit-find</property>
                                             <property name="action-name">win.search</property>
@@ -1842,7 +1842,7 @@ microphone-sensitivity-medium-symbolic</property>
                                           </object>
                                         </child>
                                         <child>
-                                          <object class="GtkToolButton">
+                                          <object class="GtkButton">
                                             <property name="sensitive">0</property>
                                             <property name="label" translatable="yes">Insert</property>
                                             <property name="icon-name">insert-image</property>
@@ -2007,27 +2007,26 @@ microphone-sensitivity-medium-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkToolbar">
-                                        <property name="toolbar-style">icons</property>
+                                      <object class="GtkBox">
                                         <style>
-                                          <class name="inline-toolbar"/>
+                                          <class name="linked"/>
                                         </style>
                                         <child>
-                                          <object class="GtkToolButton" id="decrease_button">
+                                          <object class="GtkButton" id="decrease_button">
                                             <property name="icon-name">zoom-out-symbolic</property>
                                             <property name="tooltip-text">Normal icons</property>
                                             <signal name="clicked" handler="decrease_icon_size" object="iconview1" swapped="yes"/>
                                           </object>
                                         </child>
                                         <child>
-                                          <object class="GtkToolButton" id="increase_button">
+                                          <object class="GtkButton" id="increase_button">
                                             <property name="icon-name">zoom-in-symbolic</property>
                                             <property name="tooltip-text">Large icons</property>
                                             <signal name="clicked" handler="increase_icon_size" object="iconview1" swapped="yes"/>
                                           </object>
                                         </child>
                                         <child>
-                                          <object class="GtkToolButton" id="reset_button">
+                                          <object class="GtkButton" id="reset_button">
                                             <property name="icon-name">zoom-original-symbolic</property>
                                             <property name="tooltip-text">Inherited icon size</property>
                                             <signal name="clicked" handler="reset_icon_size" object="iconview1" swapped="yes"/>
@@ -2478,26 +2477,25 @@ microphone-sensitivity-medium-symbolic</property>
                             <child>
                               <object class="GtkBox">
                                 <child>
-                                  <object class="GtkToolbar">
+                                  <object class="GtkBox">
                                     <property name="orientation">vertical</property>
-                                    <property name="toolbar-style">icons</property>
                                     <child>
-                                      <object class="GtkToolButton" id="toolbutton1">
+                                      <object class="GtkButton" id="toolbutton1">
                                         <property name="icon-name">document-open-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="toolbutton2">
+                                      <object class="GtkButton" id="toolbutton2">
                                         <property name="icon-name">send-to-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="toolbutton3">
+                                      <object class="GtkButton" id="toolbutton3">
                                         <property name="icon-name">view-fullscreen-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="toolbutton4">
+                                      <object class="GtkButton" id="toolbutton4">
                                         <property name="icon-name">star-new-symbolic</property>
                                       </object>
                                     </child>
@@ -2557,7 +2555,7 @@ microphone-sensitivity-medium-symbolic</property>
                         <child>
                           <object class="GtkOverlay">
                             <child type="overlay">
-                              <object class="GtkToolbar" id="totem_like_osd">
+                              <object class="GtkBox" id="totem_like_osd">
                                 <property name="visible">0</property>
                                 <property name="opacity">0.9</property>
                                 <property name="margin">20</property>
@@ -2566,48 +2564,36 @@ microphone-sensitivity-medium-symbolic</property>
                                   <class name="osd"/>
                                 </style>
                                 <child>
-                                  <object class="GtkToolItem">
+                                  <object class="GtkBox">
+                                    <style>
+                                      <class name="linked"/>
+                                    </style>
                                     <child>
-                                      <object class="GtkBox">
-                                        <style>
-                                          <class name="linked"/>
-                                        </style>
-                                        <child>
-                                          <object class="GtkButton">
-                                            <property name="icon-name">pan-start-symbolic</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkButton">
-                                            <property name="icon-name">pan-end-symbolic</property>
-                                          </object>
-                                        </child>
+                                      <object class="GtkButton">
+                                        <property name="icon-name">pan-start-symbolic</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton">
+                                        <property name="icon-name">pan-end-symbolic</property>
                                       </object>
                                     </child>
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkToolItem">
-                                    <property name="expand-item">1</property>
-                                    <child>
-                                      <object class="GtkScale">
-                                        <property name="draw-value">0</property>
-                                        <property name="adjustment">adjustment1</property>
-                                      </object>
-                                    </child>
+                                  <object class="GtkScale">
+                                    <property name="hexpand">1</property>
+                                    <property name="draw-value">0</property>
+                                    <property name="adjustment">adjustment1</property>
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkToolItem">
-                                    <child>
-                                      <object class="GtkVolumeButton">
-                                        <property name="orientation">vertical</property>
-                                        <property name="value">.5</property>
-                                        <style>
-                                          <class name="image-button"/>
-                                        </style>
-                                      </object>
-                                    </child>
+                                  <object class="GtkVolumeButton">
+                                    <property name="orientation">vertical</property>
+                                    <property name="value">.5</property>
+                                    <style>
+                                      <class name="image-button"/>
+                                    </style>
                                   </object>
                                 </child>
                               </object>
