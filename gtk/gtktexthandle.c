@@ -25,7 +25,6 @@
 #include "gtkwindowprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtkgizmoprivate.h"
 #include "gtkrendericonprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkintl.h"
@@ -45,6 +44,11 @@ enum {
 enum {
   PROP_0,
   PROP_PARENT
+};
+
+struct _GtkTextHandleWidget
+{
+  GtkWidget parent_instance;
 };
 
 struct _TextHandle
@@ -76,7 +80,47 @@ struct _GtkTextHandlePrivate
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkTextHandle, _gtk_text_handle, G_TYPE_OBJECT)
 
+G_DECLARE_FINAL_TYPE (GtkTextHandleWidget,
+                      gtk_text_handle_widget,
+                      GTK, TEXT_HANDLE_WIDGET,
+                      GtkWidget)
+
+G_DEFINE_TYPE (GtkTextHandleWidget, gtk_text_handle_widget, GTK_TYPE_WIDGET)
+
 static guint signals[LAST_SIGNAL] = { 0 };
+
+static void
+gtk_text_handle_widget_snapshot (GtkWidget   *widget,
+                                 GtkSnapshot *snapshot)
+{
+  GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+
+  gtk_css_style_snapshot_icon (style,
+                               snapshot,
+                               gtk_widget_get_width (widget),
+                               gtk_widget_get_height (widget));
+}
+
+static void
+gtk_text_handle_widget_class_init (GtkTextHandleWidgetClass *klass)
+{
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  widget_class->snapshot = gtk_text_handle_widget_snapshot;
+}
+
+static void
+gtk_text_handle_widget_init (GtkTextHandleWidget *widget)
+{
+}
+
+static GtkWidget *
+gtk_text_handle_widget_new (void)
+{
+  return g_object_new (gtk_text_handle_widget_get_type (),
+                       "css-name", I_("cursor-handle"),
+                       NULL);
+}
 
 static void _gtk_text_handle_update (GtkTextHandle         *handle,
                                      GtkTextHandlePosition  pos);
@@ -177,18 +221,6 @@ handle_drag_end (GtkGestureDrag *gesture,
   priv->handles[pos].dragged = FALSE;
 }
 
-static void
-snapshot_func (GtkGizmo    *gizmo,
-               GtkSnapshot *snapshot)
-{
-  GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (gizmo)));
-
-  gtk_css_style_snapshot_icon (style,
-                               snapshot,
-                               gtk_widget_get_width (GTK_WIDGET (gizmo)),
-                               gtk_widget_get_height (GTK_WIDGET (gizmo)));
-}
-
 static GtkWidget *
 _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
                                 GtkTextHandlePosition  pos)
@@ -203,7 +235,7 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
       GtkStyleContext *context;
       GtkEventController *controller;
 
-      widget = gtk_gizmo_new (I_("cursor-handle"), NULL, NULL, snapshot_func, NULL);
+      widget = gtk_text_handle_widget_new ();
 
       gtk_widget_set_direction (widget, priv->handles[pos].dir);
 
