@@ -313,8 +313,6 @@ testsuite/tools/simplify-data-3to4/notebook.ui
 testsuite/tools/simplify-data-3to4/office-runner.ui
 testsuite/tools/simplify-data-3to4/stack.ui
 testsuite/tools/simplify-data/test3.ui
-tests/visuals/inline-toolbar-horizontal.ui
-tests/visuals/inline-toolbar-vertical.ui
 tests/visuals/linked-buttons-horizontal.ui
 tests/visuals/linked-buttons-vertical.ui
 tests/visuals/primary-toolbar.ui
