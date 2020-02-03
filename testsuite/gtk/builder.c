@@ -639,6 +639,7 @@ test_types (void)
 {
   const gchar buffer[] = 
     "<interface>"
+    "  <object class=\"GtkBox\" id=\"box\"/>"
     "  <object class=\"GtkButton\" id=\"button\"/>"
     "  <object class=\"GtkCheckButton\" id=\"checkbutton\"/>"
     "  <object class=\"GtkDialog\" id=\"dialog\"/>"
@@ -657,7 +658,6 @@ test_types (void)
     "  <object class=\"GtkStatusbar\" id=\"statusbar\"/>"
     "  <object class=\"GtkTextView\" id=\"textview\"/>"
     "  <object class=\"GtkToggleButton\" id=\"togglebutton\"/>"
-    "  <object class=\"GtkToolbar\" id=\"toolbar\"/>"
     "  <object class=\"GtkTreeStore\" id=\"treestore\"/>"
     "  <object class=\"GtkTreeView\" id=\"treeview\"/>"
     "  <object class=\"GtkViewport\" id=\"viewport\"/>"
