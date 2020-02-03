@@ -825,8 +825,6 @@ button {
     > box > box > label { font-weight: bold; }
   }
 
-  .primary-toolbar & { -gtk-icon-shadow: none; } // tango icons don't need shadows
-
   .linked:not(.vertical) > & { @extend %linked; }
 
   .linked.vertical > & { @extend %linked_vertical; }
