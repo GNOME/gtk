@@ -2968,8 +2968,7 @@ gdk_x11_display_get_monitor (GdkDisplay *display,
  * such as panels should place themselves on the primary monitor.
  *
  * If no monitor is the designated primary monitor, any monitor
- * (usually the first) may be returned. To make sure there is a dedicated
- * primary monitor, use gdk_monitor_is_primary() on the returned monitor.
+ * (usually the first) may be returned.
  *
  * Returns: (transfer none): the primary monitor, or any monitor if no
  *     primary monitor is configured by the user
