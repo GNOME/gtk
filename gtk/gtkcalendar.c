@@ -1679,11 +1679,10 @@ gtk_calendar_size_request (GtkWidget      *widget,
   GtkBorder day_padding, day_name_padding, week_padding;
   PangoLayout *layout;
   PangoRectangle logical_rect;
-
   gint height;
   gint i, r, c;
   gint calendar_margin = CALENDAR_MARGIN;
-  gint header_width, main_width;
+  gint header_width = 0, main_width;
   gint max_header_height = 0;
   gint max_detail_height;
   gint inner_border = calendar_get_inner_border (calendar);
