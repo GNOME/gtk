@@ -884,9 +884,6 @@ GDK_AVAILABLE_IN_ALL
 gint          gtk_style_context_get_scale    (GtkStyleContext *context);
 
 GDK_AVAILABLE_IN_ALL
-void          gtk_style_context_set_parent   (GtkStyleContext *context,
-                                              GtkStyleContext *parent);
-GDK_AVAILABLE_IN_ALL
 GtkStyleContext *gtk_style_context_get_parent (GtkStyleContext *context);
 
 GDK_AVAILABLE_IN_ALL

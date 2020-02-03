@@ -111,7 +111,6 @@ struct _GtkStyleContextPrivate
 
   guint cascade_changed_id;
   GtkStyleCascade *cascade;
-  GtkStyleContext *parent;
   GtkCssNode *cssnode;
   GSList *saved_nodes;
 
@@ -122,7 +121,6 @@ typedef struct _GtkStyleContextPrivate GtkStyleContextPrivate;
 enum {
   PROP_0,
   PROP_DISPLAY,
-  PROP_PARENT,
   LAST_PROP
 };
 
@@ -157,19 +155,6 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
                            P_("Display"),
                            P_("The associated GdkDisplay"),
                            GDK_TYPE_DISPLAY,
-                           GTK_PARAM_READWRITE);
-
-  /**
-   * GtkStyleContext:parent:
-   *
-   * Sets or gets the style context’s parent. See gtk_style_context_set_parent()
-   * for details.
-   */
-  properties[PROP_PARENT] =
-      g_param_spec_object ("parent",
-                           P_("Parent"),
-                           P_("The parent style context"),
-                           GTK_TYPE_STYLE_CONTEXT,
                            GTK_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
@@ -242,15 +227,6 @@ gtk_style_context_init (GtkStyleContext *context)
 }
 
 static void
-gtk_style_context_clear_parent (GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
-
-  if (priv->parent)
-    g_object_unref (priv->parent);
-}
-
-static void
 gtk_style_context_finalize (GObject *object)
 {
   GtkStyleContext *context = GTK_STYLE_CONTEXT (object);
@@ -259,7 +235,6 @@ gtk_style_context_finalize (GObject *object)
   while (priv->saved_nodes)
     gtk_style_context_pop_style_node (context);
 
-  gtk_style_context_clear_parent (context);
   gtk_style_context_set_cascade (context, NULL);
 
   if (priv->cssnode)
@@ -281,9 +256,6 @@ gtk_style_context_impl_set_property (GObject      *object,
     case PROP_DISPLAY:
       gtk_style_context_set_display (context, g_value_get_object (value));
       break;
-    case PROP_PARENT:
-      gtk_style_context_set_parent (context, g_value_get_object (value));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -303,9 +275,6 @@ gtk_style_context_impl_get_property (GObject    *object,
     {
     case PROP_DISPLAY:
       g_value_set_object (value, priv->display);
-      break;
-    case PROP_PARENT:
-      g_value_set_object (value, priv->parent);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -667,70 +636,6 @@ gtk_style_context_get_scale (GtkStyleContext *context)
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
 
   return _gtk_style_cascade_get_scale (priv->cascade);
-}
-
-/**
- * gtk_style_context_set_parent:
- * @context: a #GtkStyleContext
- * @parent: (allow-none): the new parent or %NULL
- *
- * Sets the parent style context for @context. The parent style
- * context is used to implement
- * [inheritance](http://www.w3.org/TR/css3-cascade/#inheritance)
- * of properties.
- *
- * If you are using a #GtkStyleContext returned from
- * gtk_widget_get_style_context(), the parent will be set for you.
- **/
-void
-gtk_style_context_set_parent (GtkStyleContext *context,
-                              GtkStyleContext *parent)
-{
-  GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
-
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (parent == NULL || GTK_IS_STYLE_CONTEXT (parent));
-
-  if (priv->parent == parent)
-    return;
-
-  if (parent)
-    {
-      GtkCssNode *root = gtk_style_context_get_root (context);
-      g_object_ref (parent);
-
-      if (gtk_css_node_get_parent (root) == NULL)
-        gtk_css_node_set_parent (root, gtk_style_context_get_root (parent));
-    }
-  else
-    {
-      gtk_css_node_set_parent (gtk_style_context_get_root (context), NULL);
-    }
-
-  gtk_style_context_clear_parent (context);
-
-  priv->parent = parent;
-
-  g_object_notify_by_pspec (G_OBJECT (context), properties[PROP_PARENT]);
-}
-
-/**
- * gtk_style_context_get_parent:
- * @context: a #GtkStyleContext
- *
- * Gets the parent context set via gtk_style_context_set_parent().
- * See that function for details.
- *
- * Returns: (nullable) (transfer none): the parent context or %NULL
- **/
-GtkStyleContext *
-gtk_style_context_get_parent (GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
-
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-
-  return priv->parent;
 }
 
 /*
