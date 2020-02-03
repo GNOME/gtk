@@ -43,6 +43,18 @@
 #define GET_UINT16(cache, offset) (GUINT16_FROM_BE (*(guint16 *)((cache) + (offset))))
 #define GET_UINT32(cache, offset) (GUINT32_FROM_BE (*(guint32 *)((cache) + (offset))))
 
+/* Keep in sync with gtkicontheme.c */
+typedef enum
+{
+  /* These are used in the file format: */
+  ICON_SUFFIX_NONE = 0,
+  ICON_SUFFIX_XPM = 1 << 0,
+  ICON_SUFFIX_SVG = 1 << 1,
+  ICON_SUFFIX_PNG = 1 << 2,
+  HAS_ICON_FILE = 1 << 3,
+  /* This is just used by Gtk, so we convert internally to this: */
+  ICON_SUFFIX_SYMBOLIC_PNG = 1 << 4
+} IconSuffix;
 
 struct _GtkIconCache {
   gint ref_count;
@@ -332,6 +344,78 @@ gtk_icon_cache_has_icons (GtkIconCache *cache,
     }
 
   return FALSE;
+}
+
+GHashTable *
+gtk_icon_cache_list_icons_in_directory (GtkIconCache *cache,
+                                        const gchar  *directory)
+{
+  gint directory_index;
+  guint32 hash_offset, n_buckets;
+  guint32 chain_offset;
+  guint32 image_list_offset, n_images;
+  int i, j;
+  GHashTable *icons = NULL;
+
+  directory_index = get_directory_index (cache, directory);
+
+  if (directory_index == -1)
+    return NULL;
+
+  hash_offset = GET_UINT32 (cache->buffer, 4);
+  n_buckets = GET_UINT32 (cache->buffer, hash_offset);
+
+  for (i = 0; i < n_buckets; i++)
+    {
+      chain_offset = GET_UINT32 (cache->buffer, hash_offset + 4 + 4 * i);
+      while (chain_offset != 0xffffffff)
+        {
+          guint32 flags = 0;
+
+          image_list_offset = GET_UINT32 (cache->buffer, chain_offset + 8);
+          n_images = GET_UINT32 (cache->buffer, image_list_offset);
+
+          for (j = 0; j < n_images; j++)
+            {
+              if (GET_UINT16 (cache->buffer, image_list_offset + 4 + 8 * j) ==
+                  directory_index)
+                {
+                  flags = GET_UINT16 (cache->buffer, image_list_offset + 4 + 8 * j + 2);
+                  break;
+                }
+            }
+
+          if (flags != 0)
+            {
+              guint32 name_offset = GET_UINT32 (cache->buffer, chain_offset + 4);
+              const char *name = cache->buffer + name_offset;
+              char *converted_name;
+              guint32 hash_flags = 0;
+
+              /* Icons named foo.symbolic.png are stored in the cache as "foo.symbolic" with ICON_SUFFIX_PNG,
+               * but we convert it internally to ICON_SUFFIX_SYMBOLIC_PNG.
+               * Otherwise we use the same enum values and names as on disk. */
+              if (g_str_has_suffix (name, ".symbolic") && (flags & ICON_SUFFIX_PNG) != 0)
+                {
+                  flags |= ICON_SUFFIX_SYMBOLIC_PNG;
+                  flags &= ~ICON_SUFFIX_PNG;
+                  converted_name = g_strndup (name, strlen(name) - 9);
+                }
+              else
+                converted_name = g_strdup (name);
+
+              if (!icons)
+                icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+              hash_flags = GPOINTER_TO_INT (g_hash_table_lookup (icons, converted_name));
+              g_hash_table_replace (icons, converted_name, GUINT_TO_POINTER (hash_flags|flags));
+            }
+
+          chain_offset = GET_UINT32 (cache->buffer, chain_offset);
+        }
+    }
+
+  return icons;
 }
 
 void
