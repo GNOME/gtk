@@ -355,5 +355,4 @@ testsuite/tools/simplify-data-3to4/stack.ui
 testsuite/tools/simplify-data/test3.ui
 tests/visuals/linked-buttons-horizontal.ui
 tests/visuals/linked-buttons-vertical.ui
-tests/visuals/primary-toolbar.ui
 tests/visuals/suggested-action-buttons.ui
