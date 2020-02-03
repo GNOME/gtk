@@ -489,7 +489,8 @@ check_manager_window (GdkX11Screen *x11_screen,
 
   gdk_x11_display_grab (display);
 
-  x11_screen->xsettings_manager_window = XGetSelectionOwner (xdisplay, get_selection_atom (x11_screen));
+  if (!GDK_DISPLAY_DEBUG_CHECK (display, DEFAULT_SETTINGS))
+    x11_screen->xsettings_manager_window = XGetSelectionOwner (xdisplay, get_selection_atom (x11_screen));
 
   if (x11_screen->xsettings_manager_window != 0)
     XSelectInput (xdisplay,

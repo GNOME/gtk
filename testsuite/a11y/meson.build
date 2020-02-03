@@ -56,6 +56,7 @@ foreach t: a11y_state_tests
     env: [
       'GIO_USE_VOLUME_MONITOR=unix',
       'GSETTINGS_BACKEND=memory',
+      'GDK_DEBUG=default-settings',
       'GTK_CSD=1',
       'G_ENABLE_DIAGNOSTIC=0',
       'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
