@@ -49,7 +49,6 @@ typedef GdkSnapshot                    GtkSnapshot;
 typedef struct _GtkStyleContext        GtkStyleContext;
 typedef struct _GtkTooltip             GtkTooltip;
 typedef struct _GtkWidget              GtkWidget;
-typedef struct _GtkWidgetPath          GtkWidgetPath;
 typedef struct _GtkWindow              GtkWindow;
 
 /**
