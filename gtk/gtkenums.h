@@ -332,7 +332,7 @@ typedef enum
  * @GTK_ORIENTATION_VERTICAL: The element is in vertical orientation.
  *
  * Represents the orientation of widgets and other objects which can be switched
- * between horizontal and vertical orientation on the fly, like #GtkToolbar or
+ * between horizontal and vertical orientation on the fly, like #GtkBox or
  * #GtkGesturePan.
  */
 typedef enum
@@ -493,28 +493,6 @@ typedef enum
 } GtkShadowType;
 
 /* Widget states */
-
-/**
- * GtkToolbarStyle:
- * @GTK_TOOLBAR_ICONS: Buttons display only icons in the toolbar.
- * @GTK_TOOLBAR_TEXT: Buttons display only text labels in the toolbar.
- * @GTK_TOOLBAR_BOTH: Buttons display text and icons in the toolbar.
- * @GTK_TOOLBAR_BOTH_HORIZ: Buttons display icons and text alongside each
- *  other, rather than vertically stacked
- *
- * Used to customize the appearance of a #GtkToolbar. Note that
- * setting the toolbar style overrides the user’s preferences
- * for the default toolbar style.  Note that if the button has only
- * a label set and GTK_TOOLBAR_ICONS is used, the label will be
- * visible, and vice versa.
- */
-typedef enum
-{
-  GTK_TOOLBAR_ICONS,
-  GTK_TOOLBAR_TEXT,
-  GTK_TOOLBAR_BOTH,
-  GTK_TOOLBAR_BOTH_HORIZ
-} GtkToolbarStyle;
 
 /**
  * GtkWrapMode:

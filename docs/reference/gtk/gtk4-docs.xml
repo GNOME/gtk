@@ -214,17 +214,9 @@
     </chapter>
 
     <chapter id="MenusAndCombos">
-      <title>Menus, Combo Box, Toolbar</title>
+      <title>Menus, Combo Box</title>
       <xi:include href="xml/gtkcombobox.xml" />
       <xi:include href="xml/gtkcomboboxtext.xml" />
-      <xi:include href="xml/gtktoolshell.xml" />
-      <xi:include href="xml/gtktoolbar.xml" />
-      <xi:include href="xml/gtktoolitem.xml" />
-      <xi:include href="xml/gtkseparatortoolitem.xml" />
-      <xi:include href="xml/gtktoolbutton.xml" />
-      <xi:include href="xml/gtkmenutoolbutton.xml" />
-      <xi:include href="xml/gtktoggletoolbutton.xml" />
-      <xi:include href="xml/gtkradiotoolbutton.xml" />
       <xi:include href="xml/gtkpopover.xml" />
       <xi:include href="xml/gtkpopovermenu.xml" />
       <xi:include href="xml/gtkpopovermenubar.xml" />

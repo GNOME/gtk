@@ -122,7 +122,6 @@ gtk_media_controls_get_type
 gtk_media_file_get_type
 gtk_media_stream_get_type
 gtk_menu_button_get_type
-gtk_menu_tool_button_get_type
 gtk_message_dialog_get_type
 gtk_mount_operation_get_type
 gtk_native_get_type
@@ -150,7 +149,6 @@ gtk_print_settings_get_type
 @DISABLE_ON_W32@gtk_print_unix_dialog_get_type
 gtk_progress_bar_get_type
 gtk_radio_button_get_type
-gtk_radio_tool_button_get_type
 gtk_range_get_type
 gtk_recent_manager_get_type
 gtk_revealer_get_type
@@ -164,7 +162,6 @@ gtk_search_bar_get_type
 gtk_search_entry_get_type
 gtk_selection_model_get_type
 gtk_separator_get_type
-gtk_separator_tool_item_get_type
 gtk_settings_get_type
 gtk_shortcut_label_get_type
 gtk_shortcuts_window_get_type
@@ -196,10 +193,6 @@ gtk_text_tag_get_type
 gtk_text_tag_table_get_type
 gtk_text_view_get_type
 gtk_toggle_button_get_type
-gtk_toggle_tool_button_get_type
-gtk_toolbar_get_type
-gtk_tool_button_get_type
-gtk_tool_item_get_type
 gtk_tree_drag_dest_get_type
 gtk_tree_drag_source_get_type
 gtk_tree_list_model_get_type
