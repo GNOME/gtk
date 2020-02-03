@@ -72,8 +72,6 @@ test_widget_path_parent (void)
   parent = gtk_style_context_new ();
   context = gtk_style_context_new ();
 
-  gtk_style_context_set_parent (context, parent);
-
   g_object_unref (parent);
   g_object_unref (context);
 }
