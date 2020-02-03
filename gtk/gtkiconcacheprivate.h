@@ -32,6 +32,8 @@ gboolean      gtk_icon_cache_has_icon                   (GtkIconCache *cache,
 gboolean      gtk_icon_cache_has_icon_in_directory      (GtkIconCache *cache,
                                                          const gchar  *icon_name,
                                                          const gchar  *directory);
+GHashTable   *gtk_icon_cache_list_icons_in_directory    (GtkIconCache *cache,
+                                                         const gchar  *directory);
 gboolean      gtk_icon_cache_has_icons                  (GtkIconCache *cache,
                                                          const gchar  *directory);
 void	      gtk_icon_cache_add_icons                  (GtkIconCache *cache,

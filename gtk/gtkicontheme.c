@@ -167,6 +167,7 @@ typedef enum
 } IconThemeDirType;
 
 /* In reverse search order: */
+/* Keep in sync with gtkiconcache.c */
 typedef enum
 {
   ICON_SUFFIX_NONE = 0,
