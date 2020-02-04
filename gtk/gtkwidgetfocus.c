@@ -424,7 +424,7 @@ gtk_widget_focus_sort (GtkWidget        *widget,
            child = _gtk_widget_get_next_sibling (child))
         {
           if (_gtk_widget_get_realized (child) &&
-              _gtk_widget_is_drawable (child) &&
+              _gtk_widget_get_mapped (child) &&
               gtk_widget_get_sensitive (child))
             g_ptr_array_add (focus_order, child);
         }
@@ -475,7 +475,7 @@ gtk_widget_focus_move (GtkWidget        *widget,
               ret = gtk_widget_child_focus (child, direction);
             }
         }
-      else if (_gtk_widget_is_drawable (child) &&
+      else if (_gtk_widget_get_mapped (child) &&
                gtk_widget_is_ancestor (child, widget))
         {
           ret = gtk_widget_child_focus (child, direction);
