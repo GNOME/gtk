@@ -36,7 +36,11 @@ typedef struct _GtkTrashMonitor GtkTrashMonitor;
 typedef struct _GtkTrashMonitorClass GtkTrashMonitorClass;
 
 GType _gtk_trash_monitor_get_type (void);
-GtkTrashMonitor *_gtk_trash_monitor_get (void);
+
+void gtk_trash_monitor_get (GAsyncReadyCallback  callback,
+                            gpointer             data,
+                            GCancellable        *cancellable);
+
 
 GIcon *_gtk_trash_monitor_get_icon (GtkTrashMonitor *monitor);
 

@@ -68,6 +68,7 @@
 #include "gtkselectionprivate.h"
 #include "gtkstylecontext.h"
 #include "gtkvolumemonitor.h"
+#include "gdk/gdkprofilerprivate.h"
 
 /*< private >
  * SECTION:gtkplacessidebar
@@ -4016,15 +4017,23 @@ got_volume_monitor (GObject *source,
 }
 
 static void
-create_volume_monitor (GtkPlacesSidebar *sidebar)
+got_trash_monitor (GObject *source,
+                   GAsyncResult *result,
+                   gpointer data)
 {
-  GTask *task;
+  GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (data);
+  GTask *task = G_TASK (result);
 
-  g_assert (sidebar->volume_monitor == NULL);
+  sidebar->trash_monitor = g_task_propagate_pointer (task, NULL);
+  if (!sidebar->trash_monitor)
+    return;
 
-  sidebar->init_cancellable = g_cancellable_new ();
-  
-  gtk_volume_monitor_get (got_volume_monitor, sidebar, sidebar->init_cancellable);
+  g_object_ref (sidebar->trash_monitor);
+
+  sidebar->trash_monitor_changed_id = g_signal_connect_swapped (sidebar->trash_monitor, "trash-state-changed",
+                                                                G_CALLBACK (update_trash_icon), sidebar);
+
+  update_trash_icon (sidebar);
 }
 
 static void
@@ -4070,15 +4079,13 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   sidebar->show_recent = TRUE;
   sidebar->show_desktop = TRUE;
 
-  create_volume_monitor (sidebar);
-
   sidebar->open_flags = GTK_PLACES_OPEN_NORMAL;
 
-  sidebar->bookmarks_manager = _gtk_bookmarks_manager_new ((GtkBookmarksChangedFunc)update_places, sidebar);
+  sidebar->init_cancellable = g_cancellable_new ();
 
-  sidebar->trash_monitor = _gtk_trash_monitor_get ();
-  sidebar->trash_monitor_changed_id = g_signal_connect_swapped (sidebar->trash_monitor, "trash-state-changed",
-                                                                G_CALLBACK (update_trash_icon), sidebar);
+  gtk_volume_monitor_get (got_volume_monitor, sidebar, sidebar->init_cancellable);
+  gtk_trash_monitor_get (got_trash_monitor, sidebar, sidebar->init_cancellable);
+  sidebar->bookmarks_manager = _gtk_bookmarks_manager_new ((GtkBookmarksChangedFunc)update_places, sidebar);
 
   sidebar->swin = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_parent (sidebar->swin, GTK_WIDGET (sidebar));

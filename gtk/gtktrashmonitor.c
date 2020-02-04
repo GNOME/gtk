@@ -51,6 +51,7 @@ static guint signals[LAST_SIGNAL];
 G_DEFINE_TYPE (GtkTrashMonitor, _gtk_trash_monitor, G_TYPE_OBJECT)
 
 static GtkTrashMonitor *the_trash_monitor;
+static GList *pending_tasks;
 
 #define ICON_NAME_TRASH_EMPTY "user-trash-symbolic"
 #define ICON_NAME_TRASH_FULL  "user-trash-full-symbolic"
@@ -183,27 +184,52 @@ _gtk_trash_monitor_init (GtkTrashMonitor *monitor)
   recompute_trash_state (monitor);
 }
 
-/*
- * _gtk_trash_monitor_get:
- *
- * Returns: (transfer full): a new reference to the singleton
- * #GtkTrashMonitor object.  Be sure to call g_object_unref() on it when you are
- * done with the trash monitor.
- */
-GtkTrashMonitor *
-_gtk_trash_monitor_get (void)
+static void
+get_trash_monitor_thread (GTask        *running_task,
+                          gpointer      source_object,
+                          gpointer      task_data,
+                          GCancellable *cancellable)
 {
-  if (the_trash_monitor != NULL)
+  GList *l;
+
+  the_trash_monitor = g_object_new (GTK_TYPE_TRASH_MONITOR, NULL);
+  g_object_add_weak_pointer (G_OBJECT (the_trash_monitor), (gpointer *)&the_trash_monitor);
+
+  for (l = pending_tasks; l; l = l->next)
     {
-      g_object_ref (the_trash_monitor);
+      GTask *task = l->data;
+
+      if (!g_task_return_error_if_cancelled (task))
+        g_task_return_pointer (task, g_object_ref (the_trash_monitor), g_object_unref);
+    }
+
+  g_list_free_full (pending_tasks, g_object_unref);
+  pending_tasks = NULL;
+
+  g_object_unref (the_trash_monitor);
+}
+
+void
+gtk_trash_monitor_get (GAsyncReadyCallback  callback,
+                       gpointer             data,
+                       GCancellable        *cancellable)
+{
+  GTask *task;
+
+  task = g_task_new (NULL, cancellable, callback, data);
+  g_task_set_return_on_cancel (task, TRUE);
+
+  if (the_trash_monitor)
+    {
+      g_task_return_pointer (task, g_object_ref (the_trash_monitor), g_object_unref);
+      g_object_unref (task);
     }
   else
     {
-      the_trash_monitor = g_object_new (GTK_TYPE_TRASH_MONITOR, NULL);
-      g_object_add_weak_pointer (G_OBJECT (the_trash_monitor), (gpointer *) &the_trash_monitor);
+      pending_tasks = g_list_prepend (pending_tasks, task);
+      if (pending_tasks->next == NULL)
+        g_task_run_in_thread (task, get_trash_monitor_thread);
     }
-
-  return the_trash_monitor;
 }
 
 /*
