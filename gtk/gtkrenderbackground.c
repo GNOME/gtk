@@ -260,7 +260,7 @@ void
 gtk_css_style_snapshot_background (GtkCssBoxes *boxes,
                                    GtkSnapshot *snapshot)
 {
-  GtkCssBackgroundValues *background = boxes->style->background;
+  const GtkCssBackgroundValues *background = boxes->style->background;
   GtkCssValue *background_image;
   const GdkRGBA *bg_color;
   const GtkCssValue *box_shadow;
