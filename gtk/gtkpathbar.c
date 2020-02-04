@@ -79,7 +79,6 @@ typedef struct
   GList *fake_root;
   GtkWidget *up_slider_button;
   GtkWidget *down_slider_button;
-  guint settings_signal_id;
   gint16 slider_width;
 } GtkPathBarPrivate;
 
@@ -149,10 +148,6 @@ static gboolean gtk_path_bar_slider_up_defocus    (GtkWidget        *widget,
 static gboolean gtk_path_bar_slider_down_defocus  (GtkWidget        *widget,
 						   GdkEventButton   *event,
 						   GtkPathBar       *path_bar);
-static void gtk_path_bar_style_updated            (GtkWidget        *widget);
-static void gtk_path_bar_root                     (GtkWidget        *widget);
-static void gtk_path_bar_unroot                   (GtkWidget        *widget);
-static void gtk_path_bar_check_icon_theme         (GtkPathBar       *path_bar);
 static void gtk_path_bar_update_button_appearance (GtkPathBar       *path_bar,
 						   ButtonData       *button_data,
 						   gboolean          current_dir);
@@ -268,9 +263,6 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
 
   widget_class->measure = gtk_path_bar_measure;
   widget_class->size_allocate = gtk_path_bar_size_allocate;
-  widget_class->style_updated = gtk_path_bar_style_updated;
-  widget_class->root = gtk_path_bar_root;
-  widget_class->unroot = gtk_path_bar_unroot;
 
   container_class->add = gtk_path_bar_add;
   container_class->forall = gtk_path_bar_forall;
@@ -329,31 +321,11 @@ gtk_path_bar_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_path_bar_parent_class)->finalize (object);
 }
 
-/* Removes the settings signal handler.  It's safe to call multiple times */
-static void
-remove_settings_signal (GtkPathBar *path_bar,
-			GdkDisplay *display)
-{
-  GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (path_bar);
-
-  if (priv->settings_signal_id)
-    {
-      GtkSettings *settings;
-
-      settings = gtk_settings_get_for_display (display);
-      g_signal_handler_disconnect (settings,
-				   priv->settings_signal_id);
-      priv->settings_signal_id = 0;
-    }
-}
-
 static void
 gtk_path_bar_dispose (GObject *object)
 {
   GtkPathBar *path_bar = GTK_PATH_BAR (object);
   GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (path_bar);
-
-  remove_settings_signal (path_bar, gtk_widget_get_display (GTK_WIDGET (object)));
 
   priv->get_info_cancellable = NULL;
   cancel_all_cancellables (path_bar);
@@ -719,30 +691,6 @@ gtk_path_bar_size_allocate (GtkWidget *widget,
     }
 }
 
-static void
-gtk_path_bar_style_updated (GtkWidget *widget)
-{
-  GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->style_updated (widget);
-
-  gtk_path_bar_check_icon_theme (GTK_PATH_BAR (widget));
-}
-
-static void
-gtk_path_bar_root (GtkWidget *widget)
-{
-  GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->root (widget);
-
-  gtk_path_bar_check_icon_theme (GTK_PATH_BAR (widget));
-}
-
-static void
-gtk_path_bar_unroot (GtkWidget *widget)
-{
-  remove_settings_signal (GTK_PATH_BAR (widget), gtk_widget_get_display (widget));
-
-  GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->unroot (widget);
-}
-
 static gboolean
 gtk_path_bar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                        gdouble                   dx,
@@ -973,68 +921,6 @@ gtk_path_bar_slider_down_defocus (GtkWidget      *widget,
     gtk_widget_grab_focus (BUTTON_DATA (down_button->data)->button);
 
   return FALSE;
-}
-
-/* Changes the icons wherever it is needed */
-static void
-reload_icons (GtkPathBar *path_bar)
-{
-  GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (path_bar);
-  GList *list;
-
-  g_clear_object (&priv->root_icon);
-  g_clear_object (&priv->home_icon);
-  g_clear_object (&priv->desktop_icon);
-
-  for (list = priv->button_list; list; list = list->next)
-    {
-      ButtonData *button_data;
-      gboolean current_dir;
-
-      button_data = BUTTON_DATA (list->data);
-      if (button_data->type != NORMAL_BUTTON)
-	{
-	  current_dir = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button_data->button));
-	  gtk_path_bar_update_button_appearance (path_bar, button_data, current_dir);
-	}
-    }
-}
-
-static void
-change_icon_theme (GtkPathBar *path_bar)
-{
-  reload_icons (path_bar);
-}
-
-/* Callback used when a GtkSettings value changes */
-static void
-settings_notify_cb (GObject    *object,
-		    GParamSpec *pspec,
-		    GtkPathBar *path_bar)
-{
-  const char *name;
-
-  name = g_param_spec_get_name (pspec);
-
-  if (strcmp (name, "gtk-icon-theme-name") == 0)
-    change_icon_theme (path_bar);
-}
-
-static void
-gtk_path_bar_check_icon_theme (GtkPathBar *path_bar)
-{
-  GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (path_bar);
-
-  if (priv->settings_signal_id == 0)
-    {
-      GtkSettings *settings;
-
-      settings = gtk_widget_get_settings (GTK_WIDGET (path_bar));
-      priv->settings_signal_id = g_signal_connect (settings, "notify",
-                                                             G_CALLBACK (settings_notify_cb), path_bar);
-    }
-
-  change_icon_theme (path_bar);
 }
 
 /* Public functions and their helpers */
