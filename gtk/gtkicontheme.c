@@ -166,18 +166,6 @@ typedef enum
   ICON_THEME_DIR_UNTHEMED
 } IconThemeDirType;
 
-/* In reverse search order: */
-/* Keep in sync with gtkiconcache.c */
-typedef enum
-{
-  ICON_SUFFIX_NONE = 0,
-  ICON_SUFFIX_XPM = 1 << 0,
-  ICON_SUFFIX_SVG = 1 << 1,
-  ICON_SUFFIX_PNG = 1 << 2,
-  HAS_ICON_FILE = 1 << 3,
-  ICON_SUFFIX_SYMBOLIC_PNG = 1 << 4
-} IconSuffix;
-
 #if 0
 #define DEBUG_CACHE(args) g_print args
 #else
@@ -373,41 +361,42 @@ typedef struct
   gboolean exists;
 } IconThemeDirMtime;
 
-static void       gtk_icon_theme_finalize               (GObject          *object);
-static void       gtk_icon_theme_dispose                (GObject          *object);
-static IconTheme *theme_new                             (const char       *theme_name,
-                                                         GKeyFile         *theme_file);
-static void       theme_dir_size_destroy                (IconThemeDirSize *dir_size);
-static void       theme_dir_destroy                     (IconThemeDir     *dir);
-static void       theme_destroy                         (IconTheme        *theme);
-static GtkIcon *  theme_lookup_icon                     (IconTheme        *theme,
-                                                         const gchar      *icon_name,
-                                                         gint              size,
-                                                         gint              scale,
-                                                         gboolean          allow_svg);
-static void       theme_list_icons                      (IconTheme        *theme,
-                                                         GHashTable       *icons,
-                                                         GQuark            context);
-static gboolean   theme_has_icon                        (IconTheme        *theme,
-                                                         const gchar      *icon_name);
-static void       theme_subdir_load                     (GtkIconTheme     *self,
-                                                         IconTheme        *theme,
-                                                         GKeyFile         *theme_file,
-                                                         gchar            *subdir);
-static void       do_theme_change                       (GtkIconTheme     *self);
-static void       blow_themes                           (GtkIconTheme     *self);
-static gboolean   rescan_themes                         (GtkIconTheme     *self);
-static GtkIcon *  icon_new                              (IconThemeDirType  type,
-                                                         gint              dir_size,
-                                                         gint              dir_scale);
-static void       icon_compute_rendered_size            (GtkIcon          *icon);
-static IconSuffix suffix_from_name                      (const gchar      *name);
-static gboolean   icon_ensure_scale_and_texture__locked (GtkIcon          *icon,
-                                                         gboolean          in_thread);
-static void       unset_display                         (GtkIconTheme     *self);
-static void       update_current_theme__mainthread      (GtkIconTheme     *self);
-static gboolean   ensure_valid_themes                   (GtkIconTheme     *self,
-                                                         gboolean          non_blocking);
+static void          gtk_icon_theme_finalize               (GObject          *object);
+static void          gtk_icon_theme_dispose                (GObject          *object);
+static IconTheme *   theme_new                             (const char       *theme_name,
+                                                            GKeyFile         *theme_file);
+static void          theme_dir_size_destroy                (IconThemeDirSize *dir_size);
+static void          theme_dir_destroy                     (IconThemeDir     *dir);
+static void          theme_destroy                         (IconTheme        *theme);
+static GtkIcon *     theme_lookup_icon                     (IconTheme        *theme,
+                                                            const gchar      *icon_name,
+                                                            gint              size,
+                                                            gint              scale,
+                                                            gboolean          allow_svg);
+static void          theme_list_icons                      (IconTheme        *theme,
+                                                            GHashTable       *icons,
+                                                            GQuark            context);
+static gboolean      theme_has_icon                        (IconTheme        *theme,
+                                                            const gchar      *icon_name);
+static void          theme_subdir_load                     (GtkIconTheme     *self,
+                                                            IconTheme        *theme,
+                                                            GKeyFile         *theme_file,
+                                                            gchar            *subdir);
+static void          do_theme_change                       (GtkIconTheme     *self);
+static void          blow_themes                           (GtkIconTheme     *self);
+static gboolean      rescan_themes                         (GtkIconTheme     *self);
+static GtkIcon *     icon_new                              (IconThemeDirType  type,
+                                                            gint              dir_size,
+                                                            gint              dir_scale);
+static void          icon_compute_rendered_size            (GtkIcon          *icon);
+static IconCacheFlag suffix_from_name                      (const gchar      *name);
+static gboolean      icon_ensure_scale_and_texture__locked (GtkIcon          *icon,
+                                                            gboolean          in_thread);
+static void          unset_display                         (GtkIconTheme     *self);
+static void          update_current_theme__mainthread      (GtkIconTheme     *self);
+static gboolean      ensure_valid_themes                   (GtkIconTheme     *self,
+                                                            gboolean          non_blocking);
+
 
 
 static guint signal_changed = 0;
@@ -1599,14 +1588,14 @@ add_unthemed_icon (GtkIconTheme *self,
                    const gchar  *file,
                    gboolean      is_resource)
 {
-  IconSuffix new_suffix, old_suffix;
+  IconCacheFlag new_suffix, old_suffix;
   gchar *abs_file;
   gchar *base_name;
   UnthemedIcon *unthemed_icon;
 
   new_suffix = suffix_from_name (file);
 
-  if (new_suffix == ICON_SUFFIX_NONE)
+  if (new_suffix == ICON_CACHE_FLAG_NONE)
     return;
 
   abs_file = g_build_filename (dir, file, NULL);
@@ -1616,7 +1605,7 @@ add_unthemed_icon (GtkIconTheme *self,
 
   if (unthemed_icon)
     {
-      if (new_suffix == ICON_SUFFIX_SVG)
+      if (new_suffix == ICON_CACHE_FLAG_SVG_SUFFIX)
         {
           if (unthemed_icon->svg_filename)
             g_free (abs_file);
@@ -1648,7 +1637,7 @@ add_unthemed_icon (GtkIconTheme *self,
 
       unthemed_icon->is_resource = is_resource;
 
-      if (new_suffix == ICON_SUFFIX_SVG)
+      if (new_suffix == ICON_CACHE_FLAG_SVG_SUFFIX)
         unthemed_icon->svg_filename = abs_file;
       else
         unthemed_icon->no_svg_filename = abs_file;
@@ -1969,7 +1958,7 @@ real_choose_icon (GtkIconTheme      *self,
       if (allow_svg &&
           unthemed_icon->svg_filename &&
           (!unthemed_icon->no_svg_filename ||
-           suffix_from_name (unthemed_icon->no_svg_filename) < ICON_SUFFIX_PNG))
+           suffix_from_name (unthemed_icon->no_svg_filename) < ICON_CACHE_FLAG_PNG_SUFFIX))
         icon->filename = g_strdup (unthemed_icon->svg_filename);
       else if (unthemed_icon->no_svg_filename)
         icon->filename = g_strdup (unthemed_icon->no_svg_filename);
@@ -1988,7 +1977,7 @@ real_choose_icon (GtkIconTheme      *self,
           goto out;
         }
 
-      icon->is_svg = suffix_from_name (icon->filename) == ICON_SUFFIX_SVG;
+      icon->is_svg = suffix_from_name (icon->filename) == ICON_CACHE_FLAG_SVG_SUFFIX;
       icon->is_resource = unthemed_icon->is_resource;
     }
 
@@ -2974,27 +2963,27 @@ theme_dir_size_difference (IconThemeDirSize *dir_size,
 }
 
 static const gchar *
-string_from_suffix (IconSuffix suffix)
+string_from_suffix (IconCacheFlag suffix)
 {
   switch (suffix)
     {
-    case ICON_SUFFIX_XPM:
+    case ICON_CACHE_FLAG_XPM_SUFFIX:
       return ".xpm";
-    case ICON_SUFFIX_SVG:
+    case ICON_CACHE_FLAG_SVG_SUFFIX:
       return ".svg";
-    case ICON_SUFFIX_PNG:
+    case ICON_CACHE_FLAG_PNG_SUFFIX:
       return ".png";
-    case ICON_SUFFIX_SYMBOLIC_PNG:
+    case ICON_CACHE_FLAG_SYMBOLIC_PNG_SUFFIX:
       return ".symbolic.png";
-    case ICON_SUFFIX_NONE:
-    case HAS_ICON_FILE:
+    case ICON_CACHE_FLAG_NONE:
+    case ICON_CACHE_FLAG_HAS_ICON_FILE:
     default:
       g_assert_not_reached();
       return NULL;
     }
 }
 
-static inline IconSuffix
+static inline IconCacheFlag
 suffix_from_name (const gchar *name)
 {
   const gsize name_len = strlen (name);
@@ -3004,36 +2993,36 @@ suffix_from_name (const gchar *name)
       if (name_len > strlen (".symbolic.png"))
         {
           if (strcmp (name + name_len - strlen (".symbolic.png"), ".symbolic.png") == 0)
-            return ICON_SUFFIX_SYMBOLIC_PNG;
+            return ICON_CACHE_FLAG_SYMBOLIC_PNG_SUFFIX;
         }
 
       if (strcmp (name + name_len - strlen (".png"), ".png") == 0)
-        return ICON_SUFFIX_PNG;
+        return ICON_CACHE_FLAG_PNG_SUFFIX;
 
       if (strcmp (name + name_len - strlen (".svg"), ".svg") == 0)
-        return ICON_SUFFIX_SVG;
+        return ICON_CACHE_FLAG_SVG_SUFFIX;
 
       if (strcmp (name + name_len - strlen (".xpm"), ".xpm") == 0)
-        return ICON_SUFFIX_XPM;
+        return ICON_CACHE_FLAG_XPM_SUFFIX;
     }
 
-  return ICON_SUFFIX_NONE;
+  return ICON_CACHE_FLAG_NONE;
 }
 
-static IconSuffix
-best_suffix (IconSuffix suffix,
-             gboolean   allow_svg)
+static IconCacheFlag
+best_suffix (IconCacheFlag suffix,
+             gboolean      allow_svg)
 {
-  if ((suffix & ICON_SUFFIX_SYMBOLIC_PNG) != 0)
-    return ICON_SUFFIX_SYMBOLIC_PNG;
-  else if ((suffix & ICON_SUFFIX_PNG) != 0)
-    return ICON_SUFFIX_PNG;
-  else if (allow_svg && ((suffix & ICON_SUFFIX_SVG) != 0))
-    return ICON_SUFFIX_SVG;
-  else if ((suffix & ICON_SUFFIX_XPM) != 0)
-    return ICON_SUFFIX_XPM;
+  if ((suffix & ICON_CACHE_FLAG_SYMBOLIC_PNG_SUFFIX) != 0)
+    return ICON_CACHE_FLAG_SYMBOLIC_PNG_SUFFIX;
+  else if ((suffix & ICON_CACHE_FLAG_PNG_SUFFIX) != 0)
+    return ICON_CACHE_FLAG_PNG_SUFFIX;
+  else if (allow_svg && ((suffix & ICON_CACHE_FLAG_SVG_SUFFIX) != 0))
+    return ICON_CACHE_FLAG_SVG_SUFFIX;
+  else if ((suffix & ICON_CACHE_FLAG_XPM_SUFFIX) != 0)
+    return ICON_CACHE_FLAG_XPM_SUFFIX;
   else
-    return ICON_SUFFIX_NONE;
+    return ICON_CACHE_FLAG_NONE;
 }
 
 /* returns TRUE if dir_a is a better match */
@@ -3111,7 +3100,7 @@ theme_lookup_icon (IconTheme   *theme,
   IconThemeDirSize *min_dir_size;
   IconThemeFile *min_file;
   gint min_difference;
-  IconSuffix min_suffix;
+  IconCacheFlag min_suffix;
   int i;
 
   /* Its not uncommon with misses, so we do an early check which allows us do
@@ -3141,7 +3130,7 @@ theme_lookup_icon (IconTheme   *theme,
       else
         best_suffix = file->best_suffix_no_svg;
 
-      if (best_suffix == ICON_SUFFIX_NONE)
+      if (best_suffix == ICON_CACHE_FLAG_NONE)
         continue;
 
       difference = theme_dir_size_difference (dir_size, size, scale);
@@ -3169,7 +3158,7 @@ theme_lookup_icon (IconTheme   *theme,
 
       filename = g_strconcat (icon_name, string_from_suffix (min_suffix), NULL);
       icon->filename = g_build_filename (dir->path, filename, NULL);
-      icon->is_svg = min_suffix == ICON_SUFFIX_SVG;
+      icon->is_svg = min_suffix == ICON_CACHE_FLAG_SVG_SUFFIX;
       icon->is_resource = dir->is_resource;
       g_free (filename);
 
@@ -3238,10 +3227,10 @@ scan_directory (GtkIconTheme  *self,
   while ((name = g_dir_read_name (gdir)))
     {
       gchar *base_name;
-      IconSuffix suffix, hash_suffix;
+      IconCacheFlag suffix, hash_suffix;
 
       suffix = suffix_from_name (name);
-      if (suffix == ICON_SUFFIX_NONE)
+      if (suffix == ICON_CACHE_FLAG_NONE)
         continue;
 
       if (!icons)
@@ -3276,10 +3265,10 @@ scan_resource_directory (GtkIconTheme  *self,
     {
       const char *name = children[i];
       gchar *base_name;
-      IconSuffix suffix, hash_suffix;
+      IconCacheFlag suffix, hash_suffix;
 
       suffix = suffix_from_name (name);
-      if (suffix == ICON_SUFFIX_NONE)
+      if (suffix == ICON_CACHE_FLAG_NONE)
         continue;
 
       if (!icons)
@@ -4271,7 +4260,7 @@ gtk_icon_new_for_file (GFile *file,
       icon->filename = g_file_get_path (file);
     }
 
-  icon->is_svg = suffix_from_name (icon->filename) == ICON_SUFFIX_SVG;
+  icon->is_svg = suffix_from_name (icon->filename) == ICON_CACHE_FLAG_SVG_SUFFIX;
 
   icon->desired_size = size;
   icon->desired_scale = scale;

@@ -43,19 +43,6 @@
 #define GET_UINT16(cache, offset) (GUINT16_FROM_BE (*(guint16 *)((cache) + (offset))))
 #define GET_UINT32(cache, offset) (GUINT32_FROM_BE (*(guint32 *)((cache) + (offset))))
 
-/* Keep in sync with gtkicontheme.c */
-typedef enum
-{
-  /* These are used in the file format: */
-  ICON_SUFFIX_NONE = 0,
-  ICON_SUFFIX_XPM = 1 << 0,
-  ICON_SUFFIX_SVG = 1 << 1,
-  ICON_SUFFIX_PNG = 1 << 2,
-  HAS_ICON_FILE = 1 << 3,
-  /* This is just used by Gtk, so we convert internally to this: */
-  ICON_SUFFIX_SYMBOLIC_PNG = 1 << 4
-} IconSuffix;
-
 struct _GtkIconCache {
   gint ref_count;
 
@@ -255,13 +242,13 @@ gtk_icon_cache_list_icons_in_directory (GtkIconCache *cache,
               char *converted_name;
               guint32 hash_flags = 0;
 
-              /* Icons named foo.symbolic.png are stored in the cache as "foo.symbolic" with ICON_SUFFIX_PNG,
-               * but we convert it internally to ICON_SUFFIX_SYMBOLIC_PNG.
+              /* Icons named foo.symbolic.png are stored in the cache as "foo.symbolic" with ICON_CACHE_FLAG_PNG,
+               * but we convert it internally to ICON_CACHE_FLAG_SYMBOLIC_PNG.
                * Otherwise we use the same enum values and names as on disk. */
-              if (g_str_has_suffix (name, ".symbolic") && (flags & ICON_SUFFIX_PNG) != 0)
+              if (g_str_has_suffix (name, ".symbolic") && (flags & ICON_CACHE_FLAG_PNG_SUFFIX) != 0)
                 {
-                  flags |= ICON_SUFFIX_SYMBOLIC_PNG;
-                  flags &= ~ICON_SUFFIX_PNG;
+                  flags |= ICON_CACHE_FLAG_SYMBOLIC_PNG_SUFFIX;
+                  flags &= ~ICON_CACHE_FLAG_PNG_SUFFIX;
                   converted_name = g_strndup (name, strlen(name) - 9);
                 }
               else

@@ -21,6 +21,20 @@
 
 G_BEGIN_DECLS
 
+/* These are (mostly, see below) the on disk flags for each icon file, don't change */
+typedef enum
+{
+  ICON_CACHE_FLAG_NONE = 0,
+  ICON_CACHE_FLAG_XPM_SUFFIX = 1 << 0,
+  ICON_CACHE_FLAG_SVG_SUFFIX = 1 << 1,
+  ICON_CACHE_FLAG_PNG_SUFFIX = 1 << 2,
+  ICON_CACHE_FLAG_HAS_ICON_FILE = 1 << 3,
+
+  /* This is a virtual flag we recreate in memory as the file format actually stores .symbolic.png as png */
+  ICON_CACHE_FLAG_SYMBOLIC_PNG_SUFFIX = 1 << 4,
+} IconCacheFlag;
+
+
 typedef struct _GtkIconCache GtkIconCache;
 
 GtkIconCache *gtk_icon_cache_new                        (const gchar  *data);
