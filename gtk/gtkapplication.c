@@ -214,7 +214,7 @@ gtk_application_load_resources (GtkApplication *application)
     GtkIconTheme *default_theme;
     gchar *iconspath;
 
-    default_theme = gtk_icon_theme_get_default ();
+    default_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
     iconspath = g_strconcat (base_path, "/icons/", NULL);
     gtk_icon_theme_add_resource_path (default_theme, iconspath);
     g_free (iconspath);

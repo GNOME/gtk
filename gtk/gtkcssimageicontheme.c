@@ -45,7 +45,7 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
                                    double       height)
 {
   GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (image);
-  GtkIcon *icon;
+  GtkIconPaintable *icon;
   double icon_width, icon_height;
   gint size;
   double x, y;
@@ -63,14 +63,18 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
     {
       icon = gtk_icon_theme_lookup_icon (icon_theme->icon_theme,
                                          icon_theme->name,
+                                         NULL,
                                          size,
                                          icon_theme->scale,
-                                         GTK_ICON_LOOKUP_USE_BUILTIN);
+                                         GTK_TEXT_DIR_NONE,
+                                         0);
       if (icon == NULL)
         icon = gtk_icon_theme_lookup_icon (icon_theme->icon_theme,
                                            "image-missing",
+                                           NULL,
                                            size, icon_theme->scale,
-                                           GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+                                           GTK_TEXT_DIR_NONE,
+                                           0);
 
       g_assert (icon != NULL);
 
@@ -91,13 +95,13 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
       gtk_snapshot_save (snapshot);
       gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
     }
-  gtk_icon_snapshot_with_colors (icon, snapshot,
-                                 icon_width,
-                                 icon_height,
-                                 &icon_theme->color,
-                                 &icon_theme->success,
-                                 &icon_theme->warning,
-                                 &icon_theme->error);
+  gtk_icon_paintable_snapshot_with_colors (icon, snapshot,
+                                           icon_width,
+                                           icon_height,
+                                           &icon_theme->color,
+                                           &icon_theme->success,
+                                           &icon_theme->warning,
+                                           &icon_theme->error);
   if (x != 0 || y != 0)
     gtk_snapshot_restore (snapshot);
 }
@@ -201,7 +205,7 @@ _gtk_css_image_icon_theme_class_init (GtkCssImageIconThemeClass *klass)
 static void
 _gtk_css_image_icon_theme_init (GtkCssImageIconTheme *icon_theme)
 {
-  icon_theme->icon_theme = gtk_icon_theme_get_default ();
+  icon_theme->icon_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
   icon_theme->scale = 1;
   icon_theme->cached_size = -1;
   icon_theme->cached_icon = NULL;

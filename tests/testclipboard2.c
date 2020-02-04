@@ -272,7 +272,7 @@ get_button_list (GdkClipboard *clipboard,
                                          0xc9, 'g', 'a', 'l', 'i', 't', 0xe9, ',', ' ',
                                           'F', 'r', 'a', 't', 'e', 'r', 'n', 'i', 't', 0xe9, 0 };
   GtkWidget *box;
-  GtkIcon *icon;
+  GtkIconPaintable *icon;
   GdkTexture *texture;
   GValue value = G_VALUE_INIT;
 
@@ -286,10 +286,13 @@ get_button_list (GdkClipboard *clipboard,
                        "Empty");
 
   g_value_init (&value, GDK_TYPE_PIXBUF);
-  icon = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
+  icon = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_for_display (gdk_clipboard_get_display (clipboard)),
                                      "utilities-terminal",
-                                     48, 1, 0);
-  texture = gtk_icon_download_texture (icon, NULL);
+                                     NULL,
+                                     48, 1,
+                                     gtk_widget_get_direction (box),
+                                     0);
+  texture = gtk_icon_paintable_download_texture (icon, NULL);
   g_value_take_object (&value, gdk_pixbuf_get_from_texture (texture));
   g_object_unref (texture);
   g_object_unref (icon);

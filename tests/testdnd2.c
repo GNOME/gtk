@@ -10,7 +10,7 @@ get_image_texture (GtkImage *image,
   int width = 48;
   GdkPaintable *paintable;
   GdkTexture *texture = NULL;
-  GtkIcon *icon;
+  GtkIconPaintable *icon;
 
   switch (gtk_image_get_storage_type (image))
     {
@@ -25,9 +25,14 @@ get_image_texture (GtkImage *image,
       icon_name = gtk_image_get_icon_name (image);
       icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (image)));
       *out_size = width;
-      icon = gtk_icon_theme_lookup_icon (icon_theme, icon_name, width, 1, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+      icon = gtk_icon_theme_lookup_icon (icon_theme,
+                                         icon_name,
+                                         NULL,
+                                         width, 1,
+                                         gtk_widget_get_direction (GTK_WIDGET (image)),
+                                         0);
       if (icon)
-        texture = gtk_icon_download_texture (icon, NULL);
+        texture = gtk_icon_paintable_download_texture (icon, NULL);
       g_object_unref (icon);
     default:
       g_warning ("Image storage type %d not handled",
@@ -223,12 +228,17 @@ update_source_icon (GtkDragSource *source,
                     const char *icon_name,
                     int hotspot)
 {
-  GtkIcon *icon;
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
+  GtkIconPaintable *icon;
   int hot_x, hot_y;
   int size = 48;
 
-  icon = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
-                                     icon_name, size, 1, 0);
+  icon = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_for_display (gtk_widget_get_display (widget)),
+                                     icon_name,
+                                     NULL,
+                                     size, 1,
+                                     gtk_widget_get_direction (widget),
+                                     0);
   switch (hotspot)
     {
     default:

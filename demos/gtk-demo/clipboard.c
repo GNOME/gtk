@@ -98,7 +98,7 @@ get_image_paintable (GtkImage *image)
 {
   const gchar *icon_name;
   GtkIconTheme *icon_theme;
-  GtkIcon *icon;
+  GtkIconPaintable *icon;
 
   switch (gtk_image_get_storage_type (image))
     {
@@ -107,7 +107,12 @@ get_image_paintable (GtkImage *image)
     case GTK_IMAGE_ICON_NAME:
       icon_name = gtk_image_get_icon_name (image);
       icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (image)));
-      icon = gtk_icon_theme_lookup_icon (icon_theme, icon_name, 48, 1, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+      icon = gtk_icon_theme_lookup_icon (icon_theme,
+                                         icon_name,
+                                         NULL,
+                                         48, 1,
+                                         gtk_widget_get_direction (GTK_WIDGET (image)),
+                                         0);
       if (icon == NULL)
         return NULL;
       return GDK_PAINTABLE (icon);

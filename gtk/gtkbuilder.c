@@ -2160,7 +2160,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
           if (pixbuf == NULL)
             {
               GtkIconTheme *theme;
-              GtkIcon *icon;
+              GtkIconPaintable *icon;
               GdkTexture *texture;
 
               g_warning ("Could not load image '%s': %s",
@@ -2168,11 +2168,13 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
               g_error_free (tmp_error);
 
               /* fall back to a missing image */
-              theme = gtk_icon_theme_get_default ();
+              /* FIXME: this should be using the correct display */
+              theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
 
-              icon = gtk_icon_theme_lookup_icon (theme, "image-missing", 16, 1,
-                                                 GTK_ICON_LOOKUP_USE_BUILTIN);
-              texture = gtk_icon_download_texture (icon, NULL);
+              icon = gtk_icon_theme_lookup_icon (theme, "image-missing", NULL, 16, 1,
+                                                 GTK_TEXT_DIR_NONE,
+                                                 0);
+              texture = gtk_icon_paintable_download_texture (icon, NULL);
               pixbuf = gdk_pixbuf_get_from_texture (texture);
               g_object_unref (icon);
               g_object_unref (texture);
