@@ -1828,8 +1828,6 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 {
   GtkTextViewPrivate *priv;
   GtkTextBuffer *old_buffer;
-  gboolean can_undo = FALSE;
-  gboolean can_redo = FALSE;
 
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (buffer == NULL || GTK_IS_TEXT_BUFFER (buffer));
@@ -1888,6 +1886,8 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
   if (buffer != NULL)
     {
       GtkTextIter start;
+      gboolean can_undo = FALSE;
+      gboolean can_redo = FALSE;
 
       g_object_ref (buffer);
 
@@ -1931,10 +1931,10 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 
       if (priv->text_handle)
         gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_NONE);
-    }
 
-  gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "text.undo", can_undo);
-  gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "text.redo", can_redo);
+      gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "text.undo", can_undo);
+      gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "text.redo", can_redo);
+    }
 
   _gtk_text_view_accessible_set_buffer (text_view, old_buffer);
   if (old_buffer)
