@@ -728,6 +728,7 @@ gtk_icon_theme_load_in_thread (GtkIconTheme *self)
   task = g_task_new (self, NULL, NULL, NULL);
   g_task_set_task_data (task, g_object_ref (self), g_object_unref);
   g_task_run_in_thread (task, load_theme_thread);
+  g_object_unref (task);
 }
 
 /**
@@ -2853,24 +2854,29 @@ scan_resource_directory (GtkIconTheme  *self,
 
   children = g_resources_enumerate_children (full_dir, 0, NULL);
 
-  for (i = 0; children != NULL && children[i]; i++)
+  if (children)
     {
-      const char *name = children[i];
-      gchar *base_name;
-      IconCacheFlag suffix, hash_suffix;
+      for (i = 0; children[i]; i++)
+        {
+          const char *name = children[i];
+          gchar *base_name;
+          IconCacheFlag suffix, hash_suffix;
 
-      suffix = suffix_from_name (name);
-      if (suffix == ICON_CACHE_FLAG_NONE)
-        continue;
+          suffix = suffix_from_name (name);
+          if (suffix == ICON_CACHE_FLAG_NONE)
+            continue;
 
-      if (!icons)
-        icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+          if (!icons)
+            icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
-      base_name = strip_suffix (name);
+          base_name = strip_suffix (name);
 
-      hash_suffix = GPOINTER_TO_INT (g_hash_table_lookup (icons, base_name));
-      /* takes ownership of base_name */
-      g_hash_table_replace (icons, base_name, GUINT_TO_POINTER (hash_suffix|suffix));
+          hash_suffix = GPOINTER_TO_INT (g_hash_table_lookup (icons, base_name));
+          /* takes ownership of base_name */
+          g_hash_table_replace (icons, base_name, GUINT_TO_POINTER (hash_suffix|suffix));
+        }
+
+      g_strfreev (children);
     }
 
   return icons;
