@@ -633,15 +633,8 @@ update_level_style_classes (GtkLevelBar *self)
   for (i = 0; i < num_filled; i++)
     {
       GtkCssNode *node = gtk_widget_get_css_node (priv->block_widget[inverted ? num_blocks - 1 - i : i]);
-      const GQuark *classes;
-      guint n_classes;
-      guint j;
 
-      classes = gtk_css_node_list_classes (node, &n_classes);
-
-      for (j = 0; j < n_classes; j++)
-        gtk_css_node_remove_class (node, classes[j]);
-
+      gtk_css_node_set_classes (node, NULL);
       gtk_css_node_add_class (node, g_quark_from_static_string ("filled"));
 
       if (value_class)
@@ -651,15 +644,8 @@ update_level_style_classes (GtkLevelBar *self)
   for (; i < num_blocks; i++)
     {
       GtkCssNode *node = gtk_widget_get_css_node (priv->block_widget[inverted ? num_blocks - 1 - i : i]);
-      const GQuark *classes;
-      guint n_classes;
-      guint j;
 
-      classes = gtk_css_node_list_classes (node, &n_classes);
-
-      for (j = 0; j < n_classes; j++)
-        gtk_css_node_remove_class (node, classes[j]);
-
+      gtk_css_node_set_classes (node, NULL);
       gtk_css_node_add_class (node, g_quark_from_static_string ("empty"));
     }
 }
