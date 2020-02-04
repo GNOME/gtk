@@ -188,7 +188,8 @@ dump_relation_set (GString        *string,
 }
 
 static void
-dump_state_set (GString     *string,
+dump_state_set (AtkObject   *accessible,
+                GString     *string,
                 guint        depth,
                 AtkStateSet *set)
 {
@@ -202,6 +203,10 @@ dump_state_set (GString     *string,
       g_string_append_printf (string, "%*sstate:", depth, "");
       for (i = 0; i < ATK_STATE_LAST_DEFINED; i++)
         {
+          /* The toplevel active state depends on focus interaction with the WM, so lets ignore it */
+          if (ATK_IS_WINDOW (accessible) && i == ATK_STATE_ACTIVE)
+            continue;
+
           if (atk_state_set_contains_state (set, i))
             g_string_append_printf (string, " %s", atk_state_type_get_name (i));
         }
@@ -694,7 +699,7 @@ dump_accessible (AtkObject     *accessible,
   if (atk_object_get_description (accessible))
     g_string_append_printf (string, "%*sdescription: %s\n", depth, "", atk_object_get_description (accessible));
   dump_relation_set (string, depth, atk_object_ref_relation_set (accessible));
-  dump_state_set (string, depth, atk_object_ref_state_set (accessible));
+  dump_state_set (accessible, string, depth, atk_object_ref_state_set (accessible));
   dump_attribute_set (string, depth, atk_object_get_attributes (accessible));
 
   if (ATK_IS_COMPONENT (accessible))
