@@ -655,6 +655,7 @@ gtk_calendar_init (GtkCalendar *calendar)
 #endif
   GdkContentFormats *formats;
   GtkDropTarget *dest;
+  int min_year_width;
 
   gtk_widget_set_can_focus (widget, TRUE);
 
@@ -775,6 +776,12 @@ gtk_calendar_init (GtkCalendar *calendar)
   tm = localtime (&secs);
   set_month (calendar, tm->tm_mon);
   set_year (calendar, 1900 + tm->tm_year);
+
+  /* We just initialized the year label, now add some space to it so
+   * changing the year does not increase the calendar width */
+  gtk_widget_measure (priv->year_label, GTK_ORIENTATION_HORIZONTAL, -1,
+                      &min_year_width, NULL, NULL, NULL);
+  gtk_widget_set_size_request (priv->year_label, min_year_width + 10, -1);
 
 
   for (i=0;i<31;i++)
