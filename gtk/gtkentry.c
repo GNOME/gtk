@@ -1288,6 +1288,11 @@ gtk_entry_dispose (GObject *object)
   GtkEntry *entry = GTK_ENTRY (object);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
+  gtk_entry_set_icon_from_paintable (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
+  gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
+  gtk_entry_set_icon_from_paintable (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
+  gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
+
   gtk_entry_set_completion (entry, NULL);
 
   if (priv->text)
@@ -1298,11 +1303,6 @@ gtk_entry_dispose (GObject *object)
   g_clear_pointer (&priv->text, gtk_widget_unparent);
 
   g_clear_pointer (&priv->emoji_chooser, gtk_widget_unparent);
-
-  gtk_entry_set_icon_from_paintable (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
-  gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
-  gtk_entry_set_icon_from_paintable (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
-  gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
 
   G_OBJECT_CLASS (gtk_entry_parent_class)->dispose (object);
 }
@@ -2299,18 +2299,19 @@ gtk_entry_set_icon_from_paintable (GtkEntry             *entry,
                                  GdkPaintable           *paintable)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-  EntryIconInfo *icon_info;
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
   g_return_if_fail (IS_VALID_ICON_POSITION (icon_pos));
-
-  if ((icon_info = priv->icons[icon_pos]) == NULL)
-    icon_info = construct_icon_info (GTK_WIDGET (entry), icon_pos);
 
   g_object_freeze_notify (G_OBJECT (entry));
 
   if (paintable)
     {
+      EntryIconInfo *icon_info;
+
+      if ((icon_info = priv->icons[icon_pos]) == NULL)
+        icon_info = construct_icon_info (GTK_WIDGET (entry), icon_pos);
+
       g_object_ref (paintable);
 
       gtk_image_set_from_paintable (GTK_IMAGE (icon_info->widget), paintable);
