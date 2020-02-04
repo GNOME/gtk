@@ -166,17 +166,6 @@ typedef enum
   ICON_THEME_DIR_UNTHEMED
 } IconThemeDirType;
 
-/* In reverse search order: */
-typedef enum
-{
-  ICON_SUFFIX_NONE = 0,
-  ICON_SUFFIX_XPM = 1 << 0,
-  ICON_SUFFIX_SVG = 1 << 1,
-  ICON_SUFFIX_PNG = 1 << 2,
-  HAS_ICON_FILE = 1 << 3,
-  ICON_SUFFIX_SYMBOLIC_PNG = 1 << 4
-} IconSuffix;
-
 #if 0
 #define DEBUG_CACHE(args) g_print args
 #else
@@ -325,29 +314,36 @@ typedef struct
   gchar *display_name;
   gchar *comment;
 
-  /* In search order */
-  GList *dirs;
+  GArray *dir_sizes;     /* IconThemeDirSize */
+  GArray *dirs;          /* IconThemeDir */
+  GHashTable *icons;     /* name (owned) -> name */
 } IconTheme;
 
 typedef struct
 {
-  IconThemeDirType type;
-  GQuark context;
+  guint16 dir_index;    /* index in dirs */
+  guint8 best_suffix;
+  guint8 best_suffix_no_svg;
+} IconThemeFile;
 
+typedef struct
+{
+  IconThemeDirType type;
   gint size;
   gint min_size;
   gint max_size;
   gint threshold;
   gint scale;
+
+  GArray *icon_files;
+  GHashTable *icon_hash; /* name (unowned) -> file index */
+} IconThemeDirSize;
+
+typedef struct
+{
+  GQuark context;
   gboolean is_resource;
-
-  gchar *dir;
-  gchar *subdir;
-  gint subdir_index;
-
-  GtkIconCache *cache;
-
-  GHashTable *icons;
+  char *path;  /* e.g. "/usr/share/icons/hicolor/32x32/apps" */
 } IconThemeDir;
 
 typedef struct
@@ -365,40 +361,42 @@ typedef struct
   gboolean exists;
 } IconThemeDirMtime;
 
-static void       gtk_icon_theme_finalize               (GObject          *object);
-static void       gtk_icon_theme_dispose                (GObject          *object);
-static void       theme_dir_destroy                     (IconThemeDir     *dir);
-static void       theme_destroy                         (IconTheme        *theme);
-static GtkIcon *  theme_lookup_icon                     (IconTheme        *theme,
-                                                         const gchar      *icon_name,
-                                                         gint              size,
-                                                         gint              scale,
-                                                         gboolean          allow_svg);
-static void       theme_list_icons                      (IconTheme        *theme,
-                                                         GHashTable       *icons,
-                                                         GQuark            context);
-static gboolean   theme_has_icon                        (IconTheme        *theme,
-                                                         const gchar      *icon_name);
-static void       theme_subdir_load                     (GtkIconTheme     *self,
-                                                         IconTheme        *theme,
-                                                         GKeyFile         *theme_file,
-                                                         gchar            *subdir);
-static void       do_theme_change                       (GtkIconTheme     *self);
-static void       blow_themes                           (GtkIconTheme     *self);
-static gboolean   rescan_themes                         (GtkIconTheme     *self);
-static IconSuffix theme_dir_get_icon_suffix             (IconThemeDir     *dir,
-                                                         const gchar      *icon_name);
-static GtkIcon *  icon_new                              (IconThemeDirType  type,
-                                                         gint              dir_size,
-                                                         gint              dir_scale);
-static void       icon_compute_rendered_size            (GtkIcon          *icon);
-static IconSuffix suffix_from_name                      (const gchar      *name);
-static gboolean   icon_ensure_scale_and_texture__locked (GtkIcon          *icon,
-                                                         gboolean          in_thread);
-static void       unset_display                         (GtkIconTheme     *self);
-static void       update_current_theme__mainthread      (GtkIconTheme     *self);
-static gboolean   ensure_valid_themes                   (GtkIconTheme     *self,
-                                                         gboolean          non_blocking);
+static void          gtk_icon_theme_finalize               (GObject          *object);
+static void          gtk_icon_theme_dispose                (GObject          *object);
+static IconTheme *   theme_new                             (const char       *theme_name,
+                                                            GKeyFile         *theme_file);
+static void          theme_dir_size_destroy                (IconThemeDirSize *dir_size);
+static void          theme_dir_destroy                     (IconThemeDir     *dir);
+static void          theme_destroy                         (IconTheme        *theme);
+static GtkIcon *     theme_lookup_icon                     (IconTheme        *theme,
+                                                            const gchar      *icon_name,
+                                                            gint              size,
+                                                            gint              scale,
+                                                            gboolean          allow_svg);
+static void          theme_list_icons                      (IconTheme        *theme,
+                                                            GHashTable       *icons,
+                                                            GQuark            context);
+static gboolean      theme_has_icon                        (IconTheme        *theme,
+                                                            const gchar      *icon_name);
+static void          theme_subdir_load                     (GtkIconTheme     *self,
+                                                            IconTheme        *theme,
+                                                            GKeyFile         *theme_file,
+                                                            gchar            *subdir);
+static void          do_theme_change                       (GtkIconTheme     *self);
+static void          blow_themes                           (GtkIconTheme     *self);
+static gboolean      rescan_themes                         (GtkIconTheme     *self);
+static GtkIcon *     icon_new                              (IconThemeDirType  type,
+                                                            gint              dir_size,
+                                                            gint              dir_scale);
+static void          icon_compute_rendered_size            (GtkIcon          *icon);
+static IconCacheFlag suffix_from_name                      (const gchar      *name);
+static gboolean      icon_ensure_scale_and_texture__locked (GtkIcon          *icon,
+                                                            gboolean          in_thread);
+static void          unset_display                         (GtkIconTheme     *self);
+static void          update_current_theme__mainthread      (GtkIconTheme     *self);
+static gboolean      ensure_valid_themes                   (GtkIconTheme     *self,
+                                                            gboolean          non_blocking);
+
 
 
 static guint signal_changed = 0;
@@ -1507,47 +1505,31 @@ insert_theme (GtkIconTheme *self,
       g_free (path);
     }
 
-  if (theme_file || strcmp (theme_name, FALLBACK_ICON_THEME) == 0)
+  if (theme_file == NULL)
     {
-      theme = g_new0 (IconTheme, 1);
-      theme->name = g_strdup (theme_name);
-      self->themes = g_list_prepend (self->themes, theme);
-      if (!theme_file)
+      if (strcmp (theme_name, FALLBACK_ICON_THEME) == 0)
         {
           theme_file = g_key_file_new ();
           g_key_file_set_list_separator (theme_file, ',');
           g_key_file_load_from_data (theme_file, builtin_hicolor_index, -1, 0, NULL);
         }
+      else
+        return;
     }
-
-  if (theme_file == NULL)
-    return;
-
-  theme->display_name =
-    g_key_file_get_locale_string (theme_file, "Icon Theme", "Name", NULL, NULL);
-  if (!theme->display_name)
-    g_warning ("Theme file for %s has no name", theme_name);
 
   dirs = g_key_file_get_string_list (theme_file, "Icon Theme", "Directories", NULL, NULL);
   if (!dirs)
     {
       g_warning ("Theme file for %s has no directories", theme_name);
-      self->themes = g_list_remove (self->themes, theme);
-      g_free (theme->name);
-      g_free (theme->display_name);
-      g_free (theme);
       g_key_file_free (theme_file);
       return;
     }
 
   scaled_dirs = g_key_file_get_string_list (theme_file, "Icon Theme", "ScaledDirectories", NULL, NULL);
 
-  theme->comment =
-    g_key_file_get_locale_string (theme_file,
-                                  "Icon Theme", "Comment",
-                                  NULL, NULL);
+  theme = theme_new (theme_name, theme_file);
+  self->themes = g_list_prepend (self->themes, theme);
 
-  theme->dirs = NULL;
   for (i = 0; dirs[i] != NULL; i++)
     theme_subdir_load (self, theme, theme_file, dirs[i]);
 
@@ -1556,10 +1538,9 @@ insert_theme (GtkIconTheme *self,
       for (i = 0; scaled_dirs[i] != NULL; i++)
         theme_subdir_load (self, theme, theme_file, scaled_dirs[i]);
     }
+
   g_strfreev (dirs);
   g_strfreev (scaled_dirs);
-
-  theme->dirs = g_list_reverse (theme->dirs);
 
   themes = g_key_file_get_string_list (theme_file,
                                        "Icon Theme",
@@ -1607,14 +1588,14 @@ add_unthemed_icon (GtkIconTheme *self,
                    const gchar  *file,
                    gboolean      is_resource)
 {
-  IconSuffix new_suffix, old_suffix;
+  IconCacheFlag new_suffix, old_suffix;
   gchar *abs_file;
   gchar *base_name;
   UnthemedIcon *unthemed_icon;
 
   new_suffix = suffix_from_name (file);
 
-  if (new_suffix == ICON_SUFFIX_NONE)
+  if (new_suffix == ICON_CACHE_FLAG_NONE)
     return;
 
   abs_file = g_build_filename (dir, file, NULL);
@@ -1624,7 +1605,7 @@ add_unthemed_icon (GtkIconTheme *self,
 
   if (unthemed_icon)
     {
-      if (new_suffix == ICON_SUFFIX_SVG)
+      if (new_suffix == ICON_CACHE_FLAG_SVG_SUFFIX)
         {
           if (unthemed_icon->svg_filename)
             g_free (abs_file);
@@ -1656,7 +1637,7 @@ add_unthemed_icon (GtkIconTheme *self,
 
       unthemed_icon->is_resource = is_resource;
 
-      if (new_suffix == ICON_SUFFIX_SVG)
+      if (new_suffix == ICON_CACHE_FLAG_SVG_SUFFIX)
         unthemed_icon->svg_filename = abs_file;
       else
         unthemed_icon->no_svg_filename = abs_file;
@@ -1977,7 +1958,7 @@ real_choose_icon (GtkIconTheme      *self,
       if (allow_svg &&
           unthemed_icon->svg_filename &&
           (!unthemed_icon->no_svg_filename ||
-           suffix_from_name (unthemed_icon->no_svg_filename) < ICON_SUFFIX_PNG))
+           suffix_from_name (unthemed_icon->no_svg_filename) < ICON_CACHE_FLAG_PNG_SUFFIX))
         icon->filename = g_strdup (unthemed_icon->svg_filename);
       else if (unthemed_icon->no_svg_filename)
         icon->filename = g_strdup (unthemed_icon->no_svg_filename);
@@ -1996,7 +1977,7 @@ real_choose_icon (GtkIconTheme      *self,
           goto out;
         }
 
-      icon->is_svg = suffix_from_name (icon->filename) == ICON_SUFFIX_SVG;
+      icon->is_svg = suffix_from_name (icon->filename) == ICON_CACHE_FLAG_SVG_SUFFIX;
       icon->is_resource = unthemed_icon->is_resource;
     }
 
@@ -2638,18 +2619,6 @@ gtk_icon_theme_has_icon (GtkIconTheme *self,
 
   ensure_valid_themes (self, FALSE);
 
-  for (l = self->dir_mtimes; l; l = l->next)
-    {
-      IconThemeDirMtime *dir_mtime = l->data;
-      GtkIconCache *cache = dir_mtime->cache;
-
-      if (cache && gtk_icon_cache_has_icon (cache, icon_name))
-        {
-          res = TRUE;
-          goto out;
-        }
-    }
-
   for (l = self->themes; l; l = l->next)
     {
       if (theme_has_icon (l->data, icon_name))
@@ -2696,10 +2665,10 @@ gint *
 gtk_icon_theme_get_icon_sizes (GtkIconTheme *self,
                                const gchar  *icon_name)
 {
-  GList *l, *d;
+  GList *l;
+  int i;
   GHashTable *sizes;
   gint *result, *r;
-  guint suffix;
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
 
@@ -2712,21 +2681,21 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *self,
   for (l = self->themes; l; l = l->next)
     {
       IconTheme *theme = l->data;
-      for (d = theme->dirs; d; d = d->next)
-        {
-          IconThemeDir *dir = d->data;
 
-          if (dir->type != ICON_THEME_DIR_SCALABLE && g_hash_table_lookup_extended (sizes, GINT_TO_POINTER (dir->size), NULL, NULL))
+      for (i = 0; i < theme->dir_sizes->len; i++)
+        {
+          IconThemeDirSize *dir_size = &g_array_index (theme->dir_sizes, IconThemeDirSize, i);
+
+          if (dir_size->type != ICON_THEME_DIR_SCALABLE && g_hash_table_lookup_extended (sizes, GINT_TO_POINTER (dir_size->size), NULL, NULL))
             continue;
 
-          suffix = theme_dir_get_icon_suffix (dir, icon_name);
-          if (suffix != ICON_SUFFIX_NONE)
-            {
-              if (suffix == ICON_SUFFIX_SVG)
-                g_hash_table_insert (sizes, GINT_TO_POINTER (-1), NULL);
-              else
-                g_hash_table_insert (sizes, GINT_TO_POINTER (dir->size), NULL);
-            }
+          if (!g_hash_table_contains (dir_size->icon_hash, icon_name))
+            continue;
+
+          if (dir_size->type == ICON_THEME_DIR_SCALABLE)
+            g_hash_table_insert (sizes, GINT_TO_POINTER (-1), NULL);
+          else
+            g_hash_table_insert (sizes, GINT_TO_POINTER (dir_size->size), NULL);
         }
     }
 
@@ -2894,57 +2863,92 @@ gtk_icon_theme_rescan_if_needed (GtkIconTheme *self)
   return retval;
 }
 
+static IconTheme *
+theme_new (const char *theme_name,
+           GKeyFile   *theme_file)
+{
+  IconTheme *theme;
+
+  theme = g_new0 (IconTheme, 1);
+  theme->name = g_strdup (theme_name);
+  theme->dir_sizes = g_array_new (FALSE, FALSE, sizeof (IconThemeDirSize));
+  theme->dirs = g_array_new (FALSE, FALSE, sizeof (IconThemeDir));
+  theme->icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+  theme->display_name =
+    g_key_file_get_locale_string (theme_file, "Icon Theme", "Name", NULL, NULL);
+  if (!theme->display_name)
+    g_warning ("Theme file for %s has no name", theme_name);
+
+  theme->comment =
+    g_key_file_get_locale_string (theme_file,
+                                  "Icon Theme", "Comment",
+                                  NULL, NULL);
+  return theme;
+}
+
 static void
 theme_destroy (IconTheme *theme)
 {
+  gsize i;
+
+  g_free (theme->name);
   g_free (theme->display_name);
   g_free (theme->comment);
-  g_free (theme->name);
 
-  g_list_free_full (theme->dirs, (GDestroyNotify) theme_dir_destroy);
+  for (i = 0; i < theme->dir_sizes->len; i++)
+    theme_dir_size_destroy (&g_array_index (theme->dir_sizes, IconThemeDirSize, i));
+  g_array_free (theme->dir_sizes, TRUE);
+
+  for (i = 0; i < theme->dirs->len; i++)
+    theme_dir_destroy (&g_array_index (theme->dirs, IconThemeDir, i));
+  g_array_free (theme->dirs, TRUE);
+  g_hash_table_destroy (theme->icons);
 
   g_free (theme);
 }
 
 static void
+theme_dir_size_destroy (IconThemeDirSize *dir)
+{
+  if (dir->icon_hash)
+    g_hash_table_destroy (dir->icon_hash);
+  if (dir->icon_files)
+    g_array_free (dir->icon_files, TRUE);
+}
+
+static void
 theme_dir_destroy (IconThemeDir *dir)
 {
-  if (dir->cache)
-    gtk_icon_cache_unref (dir->cache);
-  if (dir->icons)
-    g_hash_table_destroy (dir->icons);
-
-  g_free (dir->dir);
-  g_free (dir->subdir);
-  g_free (dir);
+  g_free (dir->path);
 }
 
 static int
-theme_dir_size_difference (IconThemeDir *dir,
-                           gint          size,
-                           gint          scale)
+theme_dir_size_difference (IconThemeDirSize *dir_size,
+                           gint              size,
+                           gint              scale)
 {
   gint scaled_size, scaled_dir_size;
   gint min, max;
 
   scaled_size = size * scale;
-  scaled_dir_size = dir->size * dir->scale;
+  scaled_dir_size = dir_size->size * dir_size->scale;
 
-  switch (dir->type)
+  switch (dir_size->type)
     {
     case ICON_THEME_DIR_FIXED:
       return abs (scaled_size - scaled_dir_size);
 
     case ICON_THEME_DIR_SCALABLE:
-      if (scaled_size < (dir->min_size * dir->scale))
-        return (dir->min_size * dir->scale) - scaled_size;
-      if (size > (dir->max_size * dir->scale))
-        return scaled_size - (dir->max_size * dir->scale);
+      if (scaled_size < (dir_size->min_size * dir_size->scale))
+        return (dir_size->min_size * dir_size->scale) - scaled_size;
+      if (size > (dir_size->max_size * dir_size->scale))
+        return scaled_size - (dir_size->max_size * dir_size->scale);
       return 0;
 
     case ICON_THEME_DIR_THRESHOLD:
-      min = (dir->size - dir->threshold) * dir->scale;
-      max = (dir->size + dir->threshold) * dir->scale;
+      min = (dir_size->size - dir_size->threshold) * dir_size->scale;
+      max = (dir_size->size + dir_size->threshold) * dir_size->scale;
       if (scaled_size < min)
         return min - scaled_size;
       if (scaled_size > max)
@@ -2959,27 +2963,27 @@ theme_dir_size_difference (IconThemeDir *dir,
 }
 
 static const gchar *
-string_from_suffix (IconSuffix suffix)
+string_from_suffix (IconCacheFlag suffix)
 {
   switch (suffix)
     {
-    case ICON_SUFFIX_XPM:
+    case ICON_CACHE_FLAG_XPM_SUFFIX:
       return ".xpm";
-    case ICON_SUFFIX_SVG:
+    case ICON_CACHE_FLAG_SVG_SUFFIX:
       return ".svg";
-    case ICON_SUFFIX_PNG:
+    case ICON_CACHE_FLAG_PNG_SUFFIX:
       return ".png";
-    case ICON_SUFFIX_SYMBOLIC_PNG:
+    case ICON_CACHE_FLAG_SYMBOLIC_PNG_SUFFIX:
       return ".symbolic.png";
-    case ICON_SUFFIX_NONE:
-    case HAS_ICON_FILE:
+    case ICON_CACHE_FLAG_NONE:
+    case ICON_CACHE_FLAG_HAS_ICON_FILE:
     default:
       g_assert_not_reached();
       return NULL;
     }
 }
 
-static inline IconSuffix
+static inline IconCacheFlag
 suffix_from_name (const gchar *name)
 {
   const gsize name_len = strlen (name);
@@ -2989,85 +2993,44 @@ suffix_from_name (const gchar *name)
       if (name_len > strlen (".symbolic.png"))
         {
           if (strcmp (name + name_len - strlen (".symbolic.png"), ".symbolic.png") == 0)
-            return ICON_SUFFIX_SYMBOLIC_PNG;
+            return ICON_CACHE_FLAG_SYMBOLIC_PNG_SUFFIX;
         }
 
       if (strcmp (name + name_len - strlen (".png"), ".png") == 0)
-        return ICON_SUFFIX_PNG;
+        return ICON_CACHE_FLAG_PNG_SUFFIX;
 
       if (strcmp (name + name_len - strlen (".svg"), ".svg") == 0)
-        return ICON_SUFFIX_SVG;
+        return ICON_CACHE_FLAG_SVG_SUFFIX;
 
       if (strcmp (name + name_len - strlen (".xpm"), ".xpm") == 0)
-        return ICON_SUFFIX_XPM;
+        return ICON_CACHE_FLAG_XPM_SUFFIX;
     }
 
-  return ICON_SUFFIX_NONE;
+  return ICON_CACHE_FLAG_NONE;
 }
 
-static IconSuffix
-best_suffix (IconSuffix suffix,
-             gboolean   allow_svg)
+static IconCacheFlag
+best_suffix (IconCacheFlag suffix,
+             gboolean      allow_svg)
 {
-  if ((suffix & ICON_SUFFIX_SYMBOLIC_PNG) != 0)
-    return ICON_SUFFIX_SYMBOLIC_PNG;
-  else if ((suffix & ICON_SUFFIX_PNG) != 0)
-    return ICON_SUFFIX_PNG;
-  else if (allow_svg && ((suffix & ICON_SUFFIX_SVG) != 0))
-    return ICON_SUFFIX_SVG;
-  else if ((suffix & ICON_SUFFIX_XPM) != 0)
-    return ICON_SUFFIX_XPM;
+  if ((suffix & ICON_CACHE_FLAG_SYMBOLIC_PNG_SUFFIX) != 0)
+    return ICON_CACHE_FLAG_SYMBOLIC_PNG_SUFFIX;
+  else if ((suffix & ICON_CACHE_FLAG_PNG_SUFFIX) != 0)
+    return ICON_CACHE_FLAG_PNG_SUFFIX;
+  else if (allow_svg && ((suffix & ICON_CACHE_FLAG_SVG_SUFFIX) != 0))
+    return ICON_CACHE_FLAG_SVG_SUFFIX;
+  else if ((suffix & ICON_CACHE_FLAG_XPM_SUFFIX) != 0)
+    return ICON_CACHE_FLAG_XPM_SUFFIX;
   else
-    return ICON_SUFFIX_NONE;
-}
-
-static IconSuffix
-theme_dir_get_icon_suffix (IconThemeDir *dir,
-                           const gchar  *icon_name)
-{
-  IconSuffix suffix, symbolic_suffix;
-
-  if (dir->cache)
-    {
-      int icon_name_len = strlen (icon_name);
-
-      if (icon_name_is_symbolic (icon_name, icon_name_len))
-        {
-          /* Look for foo-symbolic.symbolic.png, as the cache only stores the ".png" suffix */
-          char *icon_name_with_prefix = g_strconcat (icon_name, ".symbolic", NULL);
-          symbolic_suffix = (IconSuffix)gtk_icon_cache_get_icon_flags (dir->cache,
-                                                                        icon_name_with_prefix,
-                                                                        dir->subdir_index);
-          g_free (icon_name_with_prefix);
-
-          if (symbolic_suffix & ICON_SUFFIX_PNG)
-            suffix = ICON_SUFFIX_SYMBOLIC_PNG;
-          else
-            suffix = (IconSuffix)gtk_icon_cache_get_icon_flags (dir->cache,
-                                                                icon_name,
-                                                                dir->subdir_index);
-        }
-      else
-        suffix = (IconSuffix)gtk_icon_cache_get_icon_flags (dir->cache,
-                                                            icon_name,
-                                                            dir->subdir_index);
-
-      suffix = suffix & ~HAS_ICON_FILE;
-    }
-  else
-    suffix = GPOINTER_TO_UINT (g_hash_table_lookup (dir->icons, icon_name));
-
-  GTK_NOTE (ICONTHEME, g_message ("get icon suffix%s: %u", dir->cache ? " (cached)" : "", suffix));
-
-  return suffix;
+    return ICON_CACHE_FLAG_NONE;
 }
 
 /* returns TRUE if dir_a is a better match */
 static gboolean
-compare_dir_matches (IconThemeDir *dir_a, gint difference_a,
-                     IconThemeDir *dir_b, gint difference_b,
-                     gint requested_size,
-                     gint requested_scale)
+compare_dir_size_matches (IconThemeDirSize *dir_a, gint difference_a,
+                          IconThemeDirSize *dir_b, gint difference_b,
+                          gint requested_size,
+                          gint requested_scale)
 {
   gint diff_a;
   gint diff_b;
@@ -3134,73 +3097,70 @@ theme_lookup_icon (IconTheme   *theme,
                    gint         scale,
                    gboolean     allow_svg)
 {
-  GList *dirs, *l;
-  IconThemeDir *dir, *min_dir;
-  gchar *file;
-  gint min_difference, difference;
-  IconSuffix suffix;
-  IconSuffix min_suffix;
+  IconThemeDirSize *min_dir_size;
+  IconThemeFile *min_file;
+  gint min_difference;
+  IconCacheFlag min_suffix;
+  int i;
+
+  /* Its not uncommon with misses, so we do an early check which allows us do
+     do a lot less work. */
+  if (!g_hash_table_contains (theme->icons, icon_name))
+    return FALSE;
 
   min_difference = G_MAXINT;
-  min_dir = NULL;
+  min_dir_size = NULL;
 
-  dirs = theme->dirs;
-
-  l = dirs;
-  while (l != NULL)
+  for (i = 0; i < theme->dir_sizes->len; i++)
     {
-      dir = l->data;
+      IconThemeDirSize *dir_size = &g_array_index (theme->dir_sizes, IconThemeDirSize, i);
+      IconThemeFile *file;
+      guint best_suffix;
+      gint difference;
+      gpointer file_index;
 
-      GTK_NOTE (ICONTHEME, g_message ("look up icon dir %s", dir->dir));
-      suffix = theme_dir_get_icon_suffix (dir, icon_name);
-      if (best_suffix (suffix, allow_svg) != ICON_SUFFIX_NONE)
+      if (!g_hash_table_lookup_extended (dir_size->icon_hash, icon_name, NULL, &file_index))
+        continue;
+
+      file = &g_array_index (dir_size->icon_files, IconThemeFile, GPOINTER_TO_INT(file_index));
+
+
+      if (allow_svg)
+        best_suffix = file->best_suffix;
+      else
+        best_suffix = file->best_suffix_no_svg;
+
+      if (best_suffix == ICON_CACHE_FLAG_NONE)
+        continue;
+
+      difference = theme_dir_size_difference (dir_size, size, scale);
+      if (min_dir_size == NULL ||
+          compare_dir_size_matches (dir_size, difference,
+                                    min_dir_size, min_difference,
+                                    size, scale))
         {
-          difference = theme_dir_size_difference (dir, size, scale);
-          if (min_dir == NULL ||
-              compare_dir_matches (dir, difference,
-                                   min_dir, min_difference,
-                                   size, scale))
-            {
-              min_dir = dir;
-              min_suffix = suffix;
-              min_difference = difference;
-            }
+          min_dir_size = dir_size;
+          min_file = file;
+          min_suffix = best_suffix;
+          min_difference = difference;
         }
-
-      l = l->next;
     }
 
-  if (min_dir)
+  if (min_dir_size)
     {
       GtkIcon *icon;
+      IconThemeDir *dir = &g_array_index (theme->dirs, IconThemeDir, min_file->dir_index);
+      gchar *filename;
 
-      icon = icon_new (min_dir->type, min_dir->size, min_dir->scale);
-      icon->min_size = min_dir->min_size;
-      icon->max_size = min_dir->max_size;
+      icon = icon_new (min_dir_size->type, min_dir_size->size, min_dir_size->scale);
+      icon->min_size = min_dir_size->min_size;
+      icon->max_size = min_dir_size->max_size;
 
-      suffix = min_suffix;
-      suffix = best_suffix (suffix, allow_svg);
-      g_assert (suffix != ICON_SUFFIX_NONE);
-
-      if (min_dir->dir)
-        {
-          file = g_strconcat (icon_name, string_from_suffix (suffix), NULL);
-          icon->filename = g_build_filename (min_dir->dir, file, NULL);
-
-          icon->is_svg = suffix == ICON_SUFFIX_SVG;
-          icon->is_resource = min_dir->is_resource;
-          g_free (file);
-        }
-      else
-        {
-          icon->filename = NULL;
-        }
-
-      if (min_dir->cache)
-        {
-          icon->cache_pixbuf = gtk_icon_cache_get_icon (min_dir->cache, icon_name,
-                                                        min_dir->subdir_index);
-        }
+      filename = g_strconcat (icon_name, string_from_suffix (min_suffix), NULL);
+      icon->filename = g_build_filename (dir->path, filename, NULL);
+      icon->is_svg = min_suffix == ICON_CACHE_FLAG_SVG_SUFFIX;
+      icon->is_resource = dir->is_resource;
+      g_free (filename);
 
       return icon;
     }
@@ -3213,22 +3173,31 @@ theme_list_icons (IconTheme  *theme,
                   GHashTable *icons,
                   GQuark      context)
 {
-  GList *l = theme->dirs;
-  IconThemeDir *dir;
+  int i;
 
-  while (l != NULL)
+  for (i = 0; i < theme->dir_sizes->len; i++)
     {
-      dir = l->data;
+      IconThemeDirSize *dir_size = &g_array_index (theme->dir_sizes, IconThemeDirSize, i);
+      GHashTableIter iter;
+      gpointer key, value;
 
-      if (context == dir->context ||
-          context == 0)
+      g_hash_table_iter_init (&iter, dir_size->icon_hash);
+      while (g_hash_table_iter_next (&iter, &key, &value))
         {
-          if (dir->cache)
-            gtk_icon_cache_add_icons (dir->cache, dir->subdir, icons);
-          else
-            g_hash_table_foreach (dir->icons, add_key_to_hash, icons);
+          char *icon_name = key;
+          gint file_index = GPOINTER_TO_INT (value);
+
+          if (context != 0)
+            {
+              IconThemeFile *file = &g_array_index (dir_size->icon_files, IconThemeFile, file_index);
+              IconThemeDir *dir = &g_array_index (theme->dirs, IconThemeDir, file->dir_index);
+
+              if (dir->context != context)
+                continue;
+            }
+
+          g_hash_table_insert (icons, icon_name, NULL);
         }
-      l = l->next;
     }
 }
 
@@ -3236,25 +3205,7 @@ static gboolean
 theme_has_icon (IconTheme   *theme,
                 const gchar *icon_name)
 {
-  GList *l;
-
-  for (l = theme->dirs; l; l = l->next)
-    {
-      IconThemeDir *dir = l->data;
-
-      if (dir->cache)
-        {
-          if (gtk_icon_cache_has_icon (dir->cache, icon_name))
-            return TRUE;
-        }
-      else
-        {
-          if (g_hash_table_lookup (dir->icons, icon_name) != NULL)
-            return TRUE;
-        }
-    }
-
-  return FALSE;
+  return g_hash_table_contains (theme->icons, icon_name);
 }
 
 static GHashTable *
@@ -3276,10 +3227,10 @@ scan_directory (GtkIconTheme  *self,
   while ((name = g_dir_read_name (gdir)))
     {
       gchar *base_name;
-      IconSuffix suffix, hash_suffix;
+      IconCacheFlag suffix, hash_suffix;
 
       suffix = suffix_from_name (name);
-      if (suffix == ICON_SUFFIX_NONE)
+      if (suffix == ICON_CACHE_FLAG_NONE)
         continue;
 
       if (!icons)
@@ -3297,6 +3248,164 @@ scan_directory (GtkIconTheme  *self,
   return icons;
 }
 
+static GHashTable *
+scan_resource_directory (GtkIconTheme  *self,
+                         char          *full_dir)
+{
+  GHashTable *icons = NULL;
+  char **children;
+  int i;
+
+  GTK_DISPLAY_NOTE (self->display, ICONTHEME,
+                    g_message ("scanning resource directory %s", full_dir));
+
+  children = g_resources_enumerate_children (full_dir, 0, NULL);
+
+  for (i = 0; children != NULL && children[i]; i++)
+    {
+      const char *name = children[i];
+      gchar *base_name;
+      IconCacheFlag suffix, hash_suffix;
+
+      suffix = suffix_from_name (name);
+      if (suffix == ICON_CACHE_FLAG_NONE)
+        continue;
+
+      if (!icons)
+        icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+      base_name = strip_suffix (name);
+
+      hash_suffix = GPOINTER_TO_INT (g_hash_table_lookup (icons, base_name));
+      /* takes ownership of base_name */
+      g_hash_table_replace (icons, base_name, GUINT_TO_POINTER (hash_suffix|suffix));
+    }
+
+  return icons;
+}
+
+static gboolean
+theme_dir_size_equal (IconThemeDirSize *a,
+                      IconThemeDirSize *b)
+{
+  return
+    a->type == b->type &&
+    a->size == b->size &&
+    a->min_size == b->min_size &&
+    a->max_size == b->max_size &&
+    a->threshold == b->threshold &&
+    a->scale == b->scale;
+ }
+
+static guint32
+theme_ensure_dir_size (IconTheme *theme,
+                       IconThemeDirType type,
+                       gint size,
+                       gint min_size,
+                       gint max_size,
+                       gint threshold,
+                       gint scale)
+{
+  guint32 index;
+  IconThemeDirSize new = { 0 };
+
+  new.type = type;
+  new.size = size;
+  new.min_size = min_size;
+  new.max_size = max_size;
+  new.threshold = threshold;
+  new.scale = scale;
+
+  for (index = 0; index < theme->dir_sizes->len; index++)
+    {
+      IconThemeDirSize *dir_size = &g_array_index (theme->dir_sizes, IconThemeDirSize, index);
+
+      if (theme_dir_size_equal (dir_size, &new))
+        return index;
+    }
+
+  new.icon_files = g_array_new (FALSE, FALSE, sizeof (IconThemeFile));
+  new.icon_hash = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, NULL);
+
+  index = theme->dir_sizes->len;
+  g_array_append_val (theme->dir_sizes, new);
+
+  return index;
+}
+
+static guint32
+theme_add_icon_dir (IconTheme *theme,
+                    GQuark context,
+                    gboolean is_resource,
+                    char *path /* takes ownership */)
+{
+  IconThemeDir new_dir = { 0 };
+  guint32 dir_index;
+
+  new_dir.context = context;
+  new_dir.is_resource = is_resource;
+  new_dir.path = path;
+
+  dir_index = theme->dirs->len;
+  g_array_append_val (theme->dirs, new_dir);
+  return dir_index;
+}
+
+static void
+theme_add_icon_file (IconTheme *theme,
+                     const char *icon_name,
+                     guint suffixes,
+                     IconThemeDirSize *dir_size,
+                     guint dir_index)
+{
+  IconThemeFile new_file = { 0 };
+  guint index;
+  char *owned_icon_name = NULL;
+
+  if (g_hash_table_contains (dir_size->icon_hash, icon_name))
+    return;
+
+  owned_icon_name = g_hash_table_lookup (theme->icons, icon_name);
+  if (owned_icon_name == NULL)
+    {
+      owned_icon_name = g_strdup (icon_name);
+      g_hash_table_insert (theme->icons, owned_icon_name, owned_icon_name);
+    }
+
+  new_file.dir_index = dir_index;
+  new_file.best_suffix = best_suffix (suffixes, TRUE);
+  new_file.best_suffix_no_svg = best_suffix (suffixes, FALSE);
+
+  index = dir_size->icon_files->len;
+  g_array_append_val (dir_size->icon_files, new_file);
+
+  g_hash_table_insert (dir_size->icon_hash, owned_icon_name, GINT_TO_POINTER(index));
+
+}
+
+static void
+theme_add_dir_with_icons (IconTheme *theme,
+                          IconThemeDirSize *dir_size,
+                          GQuark context,
+                          gboolean is_resource,
+                          char *path /* takes ownership */,
+                          GHashTable *icons)
+{
+  GHashTableIter iter;
+  gpointer key, value;
+  guint32 dir_index;
+
+  dir_index = theme_add_icon_dir (theme, context, is_resource, path);
+
+  g_hash_table_iter_init (&iter, icons);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      const char *icon_name = key;
+      guint suffixes = GPOINTER_TO_INT(value);
+      theme_add_icon_file (theme, icon_name, suffixes, dir_size, dir_index);
+    }
+}
+
 static void
 theme_subdir_load (GtkIconTheme *self,
                    IconTheme    *theme,
@@ -3305,7 +3414,6 @@ theme_subdir_load (GtkIconTheme *self,
 {
   GList *d;
   gchar *type_string;
-  IconThemeDir *dir;
   IconThemeDirType type;
   gchar *context_string;
   GQuark context;
@@ -3313,16 +3421,17 @@ theme_subdir_load (GtkIconTheme *self,
   gint min_size;
   gint max_size;
   gint threshold;
-  gchar *full_dir;
   GError *error = NULL;
   IconThemeDirMtime *dir_mtime;
+  guint32 dir_size_index;
+  IconThemeDirSize *dir_size;
   gint scale;
 
   size = g_key_file_get_integer (theme_file, subdir, "Size", &error);
   if (error)
     {
       g_error_free (error);
-      g_warning ("Theme directory %s of theme %s has no size field\n", 
+      g_warning ("Theme directory %s of theme %s has no size field\n",
                  subdir, theme->name);
       return;
     }
@@ -3339,14 +3448,6 @@ theme_subdir_load (GtkIconTheme *self,
         type = ICON_THEME_DIR_THRESHOLD;
 
       g_free (type_string);
-    }
-
-  context = 0;
-  context_string = g_key_file_get_string (theme_file, subdir, "Context", NULL);
-  if (context_string)
-    {
-      context = g_quark_from_string (context_string);
-      g_free (context_string);
     }
 
   if (g_key_file_has_key (theme_file, subdir, "MaxSize", NULL))
@@ -3369,8 +3470,20 @@ theme_subdir_load (GtkIconTheme *self,
   else
     scale = 1;
 
+  dir_size_index = theme_ensure_dir_size (theme, type, size, min_size, max_size, threshold, scale);
+  dir_size = &g_array_index (theme->dir_sizes, IconThemeDirSize, dir_size_index);
+
+  context = 0;
+  context_string = g_key_file_get_string (theme_file, subdir, "Context", NULL);
+  if (context_string)
+    {
+      context = g_quark_from_string (context_string);
+      g_free (context_string);
+    }
+
   for (d = self->dir_mtimes; d; d = d->next)
     {
+      gchar *full_dir;
       dir_mtime = (IconThemeDirMtime *)d->data;
 
       if (!dir_mtime->exists)
@@ -3381,9 +3494,7 @@ theme_subdir_load (GtkIconTheme *self,
       /* First, see if we have a cache for the directory */
       if (dir_mtime->cache != NULL || g_file_test (full_dir, G_FILE_TEST_IS_DIR))
         {
-          gboolean has_icons;
-          GtkIconCache *dir_cache;
-          GHashTable *icon_table = NULL;
+          GHashTable *icons = NULL;
 
           if (dir_mtime->cache == NULL)
             {
@@ -3392,109 +3503,49 @@ theme_subdir_load (GtkIconTheme *self,
             }
 
           if (dir_mtime->cache != NULL)
-            {
-              dir_cache = dir_mtime->cache;
-              has_icons = gtk_icon_cache_has_icons (dir_cache, subdir);
-            }
+            icons = gtk_icon_cache_list_icons_in_directory (dir_mtime->cache, subdir);
           else
-            {
-              dir_cache = NULL;
-              icon_table = scan_directory (self, full_dir);
-              has_icons = icon_table != NULL;
-            }
+            icons = scan_directory (self, full_dir);
 
-          if (!has_icons)
+          if (icons)
             {
-              g_assert (!icon_table);
-              g_free (full_dir);
-              continue;
+              theme_add_dir_with_icons (theme,
+                                        dir_size,
+                                        context,
+                                        FALSE,
+                                        g_steal_pointer (&full_dir),
+                                        icons);
+              g_hash_table_destroy (icons);
             }
-
-          dir = g_new0 (IconThemeDir, 1);
-          dir->type = type;
-          dir->is_resource = FALSE;
-          dir->context = context;
-          dir->size = size;
-          dir->min_size = min_size;
-          dir->max_size = max_size;
-          dir->threshold = threshold;
-          dir->dir = full_dir;
-          dir->subdir = g_strdup (subdir);
-          dir->scale = scale;
-          dir->icons = icon_table;
-
-          if (dir_cache)
-            {
-              dir->cache = gtk_icon_cache_ref (dir_cache);
-              dir->subdir_index = gtk_icon_cache_get_directory_index (dir->cache, dir->subdir);
-            }
-          else
-            {
-              dir_cache = NULL;
-              dir->subdir_index = -1;
-            }
-
-          theme->dirs = g_list_prepend (theme->dirs, dir);
         }
-      else
-        g_free (full_dir);
+
+      g_free (full_dir);
     }
 
   if (strcmp (theme->name, FALLBACK_ICON_THEME) == 0)
     {
       for (d = self->resource_paths; d; d = d->next)
         {
-          int i;
-          char **children;
+          GHashTable *icons;
+          gchar *full_dir;
 
           /* Force a trailing / here, to avoid extra copies in GResource */
           full_dir = g_build_filename ((const gchar *)d->data, subdir, " ", NULL);
           full_dir[strlen (full_dir) - 1] = '\0';
 
-          children = g_resources_enumerate_children (full_dir, 0, NULL);
-
-          if (!children)
+          icons = scan_resource_directory (self, full_dir);
+          if (icons)
             {
-              g_free (full_dir);
-              continue;
+              theme_add_dir_with_icons (theme,
+                                        dir_size,
+                                        context,
+                                        TRUE,
+                                        g_steal_pointer (&full_dir),
+                                        icons);
+              g_hash_table_destroy (icons);
             }
 
-          dir = g_new0 (IconThemeDir, 1);
-          dir->icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-          dir->type = type;
-          dir->is_resource = TRUE;
-          dir->context = context;
-          dir->size = size;
-          dir->min_size = min_size;
-          dir->max_size = max_size;
-          dir->threshold = threshold;
-          dir->dir = full_dir;
-          dir->subdir = g_strdup (subdir);
-          dir->scale = scale;
-          dir->cache = NULL;
-          dir->subdir_index = -1;
-
-          for (i = 0; children[i]; i++)
-            {
-              gchar *base_name;
-              IconSuffix suffix, hash_suffix;
-
-              suffix = suffix_from_name (children[i]);
-              if (suffix == ICON_SUFFIX_NONE)
-                continue;
-
-              base_name = strip_suffix (children[i]);
-
-              hash_suffix = GPOINTER_TO_INT (g_hash_table_lookup (dir->icons, base_name));
-              /* takes ownership of base_name */
-              g_hash_table_replace (dir->icons, base_name, GUINT_TO_POINTER (hash_suffix|suffix));
-            }
-          g_strfreev (children);
-
-          if (g_hash_table_size (dir->icons) > 0)
-            theme->dirs = g_list_prepend (theme->dirs, dir);
-          else
-            theme_dir_destroy (dir);
+          g_free (full_dir);
         }
     }
 }
@@ -4209,7 +4260,7 @@ gtk_icon_new_for_file (GFile *file,
       icon->filename = g_file_get_path (file);
     }
 
-  icon->is_svg = suffix_from_name (icon->filename) == ICON_SUFFIX_SVG;
+  icon->is_svg = suffix_from_name (icon->filename) == ICON_CACHE_FLAG_SVG_SUFFIX;
 
   icon->desired_size = size;
   icon->desired_scale = scale;
