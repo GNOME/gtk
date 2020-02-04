@@ -85,16 +85,11 @@ get_bookmarks_file (void)
 }
 
 static GSList *
-read_bookmarks (GFile *file)
+parse_bookmarks (const char *contents)
 {
-  gchar *contents;
   gchar **lines, *space;
   GSList *bookmarks = NULL;
   gint i;
-
-  if (!g_file_load_contents (file, NULL, &contents,
-			     NULL, NULL, NULL))
-    return NULL;
 
   lines = g_strsplit (contents, "\n", -1);
 
@@ -122,9 +117,57 @@ read_bookmarks (GFile *file)
 
   bookmarks = g_slist_reverse (bookmarks);
   g_strfreev (lines);
+
+  return bookmarks;
+}
+
+static GSList *
+read_bookmarks (GFile *file)
+{
+  gchar *contents;
+  GSList *bookmarks = NULL;
+
+  if (!g_file_load_contents (file, NULL, &contents,
+			     NULL, NULL, NULL))
+    return NULL;
+
+  bookmarks = parse_bookmarks (contents);
+
   g_free (contents);
 
   return bookmarks;
+}
+
+static void
+notify_changed (GtkBookmarksManager *manager)
+{
+  if (manager->changed_func)
+    manager->changed_func (manager->changed_func_data);
+}
+
+static void
+read_bookmarks_finish (GObject      *source,
+                       GAsyncResult *result,
+                       gpointer      data)
+{
+  GFile *file = G_FILE (source);
+  GtkBookmarksManager *manager = data;
+  char *contents = NULL;
+  GError *error = NULL;
+
+  if (!g_file_load_contents_finish (file, result, &contents, NULL, NULL, &error)) 
+    {
+      g_warning ("Failed to load '%s': %s", g_file_peek_path (file), error->message);
+      g_error_free (error);
+      return;
+    }
+
+  g_slist_free_full (manager->bookmarks, _gtk_bookmark_free);
+  manager->bookmarks = parse_bookmarks (contents);
+
+  g_free (contents);
+
+  notify_changed (manager);
 }
 
 static void
@@ -182,13 +225,6 @@ save_bookmarks (GFile  *bookmarks_file,
 }
 
 static void
-notify_changed (GtkBookmarksManager *manager)
-{
-  if (manager->changed_func)
-    manager->changed_func (manager->changed_func_data);
-}
-
-static void
 bookmarks_file_changed (GFileMonitor      *monitor,
 			GFile             *file,
 			GFile             *other_file,
@@ -203,9 +239,7 @@ bookmarks_file_changed (GFileMonitor      *monitor,
     case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
     case G_FILE_MONITOR_EVENT_CREATED:
     case G_FILE_MONITOR_EVENT_DELETED:
-      g_slist_free_full (manager->bookmarks, _gtk_bookmark_free);
-      manager->bookmarks = read_bookmarks (file);
-      notify_changed (manager);
+      g_file_load_contents_async (file, NULL, read_bookmarks_finish, manager);
       break;
 
     case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:
@@ -234,8 +268,7 @@ _gtk_bookmarks_manager_new (GtkBookmarksChangedFunc changed_func, gpointer chang
   manager->changed_func_data = changed_func_data;
 
   bookmarks_file = get_bookmarks_file ();
-  manager->bookmarks = read_bookmarks (bookmarks_file);
-  if (!manager->bookmarks)
+  if (!g_file_query_exists (bookmarks_file, NULL))
     {
       GFile *legacy_bookmarks_file;
 
