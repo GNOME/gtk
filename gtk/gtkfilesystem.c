@@ -31,6 +31,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkvolumemonitor.h"
 
 /* #define DEBUG_MODE */
 #ifdef DEBUG_MODE
@@ -77,6 +78,8 @@ typedef struct AsyncFuncData AsyncFuncData;
 struct GtkFileSystemPrivate
 {
   GVolumeMonitor *volume_monitor;
+
+  GCancellable *init_cancellable;
 
   /* This list contains elements that can be
    * of type GDrive, GVolume and GMount
@@ -128,6 +131,11 @@ gtk_file_system_dispose (GObject *object)
       g_object_unref (priv->volume_monitor);
       priv->volume_monitor = NULL;
     }
+
+  if (priv->init_cancellable)
+    g_cancellable_cancel (priv->init_cancellable);
+
+  g_clear_object (&priv->init_cancellable);
 
   G_OBJECT_CLASS (_gtk_file_system_parent_class)->dispose (object);
 }
@@ -201,7 +209,10 @@ get_volumes_list (GtkFileSystem *file_system)
     }
 
   /* first go through all connected drives */
-  drives = g_volume_monitor_get_connected_drives (priv->volume_monitor);
+  if (priv->volume_monitor)
+    drives = g_volume_monitor_get_connected_drives (priv->volume_monitor);
+  else
+    drives = NULL;
 
   for (l = drives; l != NULL; l = l->next)
     {
@@ -259,7 +270,10 @@ get_volumes_list (GtkFileSystem *file_system)
   g_list_free (drives);
 
   /* add all volumes that is not associated with a drive */
-  volumes = g_volume_monitor_get_volumes (priv->volume_monitor);
+  if (priv->volume_monitor)
+    volumes = g_volume_monitor_get_volumes (priv->volume_monitor);
+  else
+    volumes = NULL;
 
   for (l = volumes; l != NULL; l = l->next)
     {
@@ -290,7 +304,10 @@ get_volumes_list (GtkFileSystem *file_system)
     }
 
   /* add mounts that has no volume (/etc/mtab mounts, ftp, sftp,...) */
-  mounts = g_volume_monitor_get_mounts (priv->volume_monitor);
+  if (priv->volume_monitor)
+    mounts = g_volume_monitor_get_mounts (priv->volume_monitor);
+  else
+    mounts = NULL;
 
   for (l = mounts; l != NULL; l = l->next)
     {
@@ -323,16 +340,19 @@ get_volumes_list (GtkFileSystem *file_system)
 }
 
 static void
-_gtk_file_system_init (GtkFileSystem *file_system)
+got_volume_monitor (GObject *source,
+                    GAsyncResult *result,
+                    gpointer data)
 {
-  GtkFileSystemPrivate *priv;
+  GtkFileSystem *file_system = GTK_FILE_SYSTEM (data);
+  GtkFileSystemPrivate *priv = file_system->priv;
+  GTask *task = G_TASK (result);
 
-  DEBUG ("init");
+  priv->volume_monitor = g_task_propagate_pointer (task, NULL);
+  if (!priv->volume_monitor)
+    return;
 
-  file_system->priv = priv = _gtk_file_system_get_instance_private (file_system);
-
-  /* Volumes */
-  priv->volume_monitor = g_volume_monitor_get ();
+  g_object_ref (priv->volume_monitor);
 
   g_signal_connect (priv->volume_monitor, "mount-added",
 		    G_CALLBACK (volumes_changed), file_system);
@@ -352,6 +372,21 @@ _gtk_file_system_init (GtkFileSystem *file_system)
 		    G_CALLBACK (volumes_changed), file_system);
   g_signal_connect (priv->volume_monitor, "drive-changed",
 		    G_CALLBACK (volumes_changed), file_system);
+}
+
+static void
+_gtk_file_system_init (GtkFileSystem *file_system)
+{
+  GtkFileSystemPrivate *priv;
+
+  DEBUG ("init");
+
+  file_system->priv = priv = _gtk_file_system_get_instance_private (file_system);
+
+  /* Volumes */
+  priv->init_cancellable = g_cancellable_new ();
+
+  gtk_volume_monitor_get (got_volume_monitor, file_system, priv->init_cancellable);
 }
 
 /* GtkFileSystem public methods */

@@ -30,6 +30,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkpopovermenu.h"
+#include "gtkvolumemonitor.h"
 
 /*
  * SECTION:gtkplacesview
@@ -86,6 +87,7 @@ struct _GtkPlacesViewPrivate
   GtkListStore                  *completion_store;
 
   GCancellable                  *networks_fetching_cancellable;
+  GCancellable                  *init_cancellable;
 
   GtkPlacesViewRow              *row_for_action;
 
@@ -390,7 +392,8 @@ gtk_places_view_destroy (GtkWidget *widget)
 
   priv->destroyed = 1;
 
-  g_signal_handlers_disconnect_by_func (priv->volume_monitor, update_places, widget);
+  if (priv->volume_monitor)
+    g_signal_handlers_disconnect_by_func (priv->volume_monitor, update_places, widget);
 
   if (priv->network_monitor)
     g_signal_handlers_disconnect_by_func (priv->network_monitor, update_places, widget);
@@ -400,6 +403,7 @@ gtk_places_view_destroy (GtkWidget *widget)
 
   g_cancellable_cancel (priv->cancellable);
   g_cancellable_cancel (priv->networks_fetching_cancellable);
+  g_cancellable_cancel (priv->init_cancellable);
 
   g_clear_pointer (&priv->server_adresses_popover, gtk_widget_unparent);
 
@@ -424,6 +428,7 @@ gtk_places_view_finalize (GObject *object)
   g_clear_object (&priv->networks_fetching_cancellable);
   g_clear_object (&priv->path_size_group);
   g_clear_object (&priv->space_size_group);
+  g_clear_object (&priv->init_cancellable);
 
   G_OBJECT_CLASS (gtk_places_view_parent_class)->finalize (object);
 }
@@ -1127,7 +1132,10 @@ update_places (GtkPlacesView *view)
   g_clear_object (&icon);
 
   /* Add currently connected drives */
-  drives = g_volume_monitor_get_connected_drives (priv->volume_monitor);
+  if ( priv->volume_monitor)
+    drives = g_volume_monitor_get_connected_drives (priv->volume_monitor);
+  else
+    drives = NULL;
 
   for (l = drives; l != NULL; l = l->next)
     add_drive (view, l->data);
@@ -1139,7 +1147,10 @@ update_places (GtkPlacesView *view)
    * add_drive before, add all volumes that aren't associated with a
    * drive.
    */
-  volumes = g_volume_monitor_get_volumes (priv->volume_monitor);
+  if (priv->volume_monitor)
+    volumes = g_volume_monitor_get_volumes (priv->volume_monitor);
+  else
+    volumes = NULL;
 
   for (l = volumes; l != NULL; l = l->next)
     {
@@ -1164,7 +1175,10 @@ update_places (GtkPlacesView *view)
    * Now that all necessary drives and volumes were already added, add mounts
    * that have no volume, such as /etc/mtab mounts, ftp, sftp, etc.
    */
-  mounts = g_volume_monitor_get_mounts (priv->volume_monitor);
+  if (priv->volume_monitor)
+    mounts = g_volume_monitor_get_mounts (priv->volume_monitor);
+  else
+    mounts = NULL;
 
   for (l = mounts; l != NULL; l = l->next)
     {
@@ -2199,30 +2213,6 @@ gtk_places_view_constructed (GObject *object)
   /* load drives */
   update_places (GTK_PLACES_VIEW (object));
 
-  g_signal_connect_swapped (priv->volume_monitor,
-                            "mount-added",
-                            G_CALLBACK (update_places),
-                            object);
-  g_signal_connect_swapped (priv->volume_monitor,
-                            "mount-changed",
-                            G_CALLBACK (update_places),
-                            object);
-  g_signal_connect_swapped (priv->volume_monitor,
-                            "mount-removed",
-                            G_CALLBACK (update_places),
-                            object);
-  g_signal_connect_swapped (priv->volume_monitor,
-                            "volume-added",
-                            G_CALLBACK (update_places),
-                            object);
-  g_signal_connect_swapped (priv->volume_monitor,
-                            "volume-changed",
-                            G_CALLBACK (update_places),
-                            object);
-  g_signal_connect_swapped (priv->volume_monitor,
-                            "volume-removed",
-                            G_CALLBACK (update_places),
-                            object);
 }
 
 static void
@@ -2365,6 +2355,35 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
 }
 
 static void
+got_volume_monitor (GObject *source,
+                    GAsyncResult *result,
+                    gpointer data)
+{
+  GtkPlacesView *self = GTK_PLACES_VIEW (data);
+  GtkPlacesViewPrivate *priv = gtk_places_view_get_instance_private (self);
+  GTask *task = G_TASK (result);
+
+  priv->volume_monitor = g_task_propagate_pointer (task, NULL);
+  if (!priv->volume_monitor)
+    return;
+
+  g_object_ref (priv->volume_monitor);
+
+  g_signal_connect_swapped (priv->volume_monitor, "mount-added",
+                            G_CALLBACK (update_places), self);
+  g_signal_connect_swapped (priv->volume_monitor, "mount-changed",
+                            G_CALLBACK (update_places), self);
+  g_signal_connect_swapped (priv->volume_monitor, "mount-removed",
+                            G_CALLBACK (update_places), self);
+  g_signal_connect_swapped (priv->volume_monitor, "volume-added",
+                            G_CALLBACK (update_places), self);
+  g_signal_connect_swapped (priv->volume_monitor, "volume-changed",
+                            G_CALLBACK (update_places), self);
+  g_signal_connect_swapped (priv->volume_monitor, "volume-removed",
+                            G_CALLBACK (update_places), self);
+}
+
+static void
 gtk_places_view_init (GtkPlacesView *self)
 {
   GtkPlacesViewPrivate *priv;
@@ -2372,7 +2391,9 @@ gtk_places_view_init (GtkPlacesView *self)
 
   priv = gtk_places_view_get_instance_private (self);
 
-  priv->volume_monitor = g_volume_monitor_get ();
+  priv->init_cancellable = g_cancellable_new ();
+  gtk_volume_monitor_get (got_volume_monitor, self, priv->init_cancellable);
+
   priv->open_flags = GTK_PLACES_OPEN_NORMAL;
   priv->path_size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
   priv->space_size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);

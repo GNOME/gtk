@@ -67,6 +67,7 @@
 #include "gtkwidgetpaintable.h"
 #include "gtkselectionprivate.h"
 #include "gtkstylecontext.h"
+#include "gtkvolumemonitor.h"
 
 /*< private >
  * SECTION:gtkplacessidebar
@@ -166,6 +167,7 @@ struct _GtkPlacesSidebar {
   /* volume mounting - delayed open process */
   GtkPlacesOpenFlags go_to_after_mount_open_flags;
   GCancellable *cancellable;
+  GCancellable *init_cancellable;
 
   GtkWidget *popover;
   GtkSidebarRow *context_row;
@@ -1162,7 +1164,10 @@ update_places (GtkPlacesSidebar *sidebar)
 #endif
 
   /* go through all connected drives */
-  drives = g_volume_monitor_get_connected_drives (sidebar->volume_monitor);
+  if (sidebar->volume_monitor)
+    drives = g_volume_monitor_get_connected_drives (sidebar->volume_monitor);
+  else
+    drives = NULL;
 
   for (l = drives; l != NULL; l = l->next)
     {
@@ -1270,7 +1275,11 @@ update_places (GtkPlacesSidebar *sidebar)
   /* add all network volumes that are not associated with a drive, and
    * loop devices
    */
-  volumes = g_volume_monitor_get_volumes (sidebar->volume_monitor);
+  if (sidebar->volume_monitor)
+    volumes = g_volume_monitor_get_volumes (sidebar->volume_monitor);
+  else
+    volumes = NULL;
+
   for (l = volumes; l != NULL; l = l->next)
     {
       gboolean is_loop = FALSE;
@@ -1353,7 +1362,10 @@ update_places (GtkPlacesSidebar *sidebar)
     }
 
   /* add mounts that has no volume (/etc/mtab mounts, ftp, sftp,...) */
-  mounts = g_volume_monitor_get_mounts (sidebar->volume_monitor);
+  if (sidebar->volume_monitor)
+    mounts = g_volume_monitor_get_mounts (sidebar->volume_monitor);
+  else
+    mounts = NULL;
 
   for (l = mounts; l != NULL; l = l->next)
     {
@@ -3968,11 +3980,18 @@ hostname_proxy_new_cb (GObject      *source_object,
 }
 
 static void
-create_volume_monitor (GtkPlacesSidebar *sidebar)
+got_volume_monitor (GObject *source,
+                    GAsyncResult *result,
+                    gpointer data)
 {
-  g_assert (sidebar->volume_monitor == NULL);
+  GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (data);
+  GTask *task = G_TASK (result);
 
-  sidebar->volume_monitor = g_volume_monitor_get ();
+  sidebar->volume_monitor = g_task_propagate_pointer (task, NULL);
+  if (!sidebar->volume_monitor)
+    return;
+
+  g_object_ref (sidebar->volume_monitor);
 
   g_signal_connect_object (sidebar->volume_monitor, "volume_added",
                            G_CALLBACK (update_places), sidebar, G_CONNECT_SWAPPED);
@@ -3992,6 +4011,20 @@ create_volume_monitor (GtkPlacesSidebar *sidebar)
                            G_CALLBACK (update_places), sidebar, G_CONNECT_SWAPPED);
   g_signal_connect_object (sidebar->volume_monitor, "drive_changed",
                            G_CALLBACK (update_places), sidebar, G_CONNECT_SWAPPED);
+
+  update_places (sidebar);
+}
+
+static void
+create_volume_monitor (GtkPlacesSidebar *sidebar)
+{
+  GTask *task;
+
+  g_assert (sidebar->volume_monitor == NULL);
+
+  sidebar->init_cancellable = g_cancellable_new ();
+  
+  gtk_volume_monitor_get (got_volume_monitor, sidebar, sidebar->init_cancellable);
 }
 
 static void
@@ -4137,10 +4170,9 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
                             sidebar);
 #endif
 
-  /* populate the sidebar */
-  update_places (sidebar);
-
   add_actions (sidebar);
+
+  /* we'll populate the sidebar when gtk_volume_manager_get returns in an idle */
 }
 
 static void
@@ -4262,6 +4294,13 @@ gtk_places_sidebar_dispose (GObject *object)
       g_cancellable_cancel (sidebar->cancellable);
       g_object_unref (sidebar->cancellable);
       sidebar->cancellable = NULL;
+    }
+
+  if (sidebar->init_cancellable)
+    {
+      g_cancellable_cancel (sidebar->init_cancellable);
+      g_object_unref (sidebar->init_cancellable);
+      sidebar->init_cancellable = NULL;
     }
 
   free_drag_data (sidebar);
