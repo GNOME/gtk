@@ -132,7 +132,7 @@ insert_text (GtkTextView *view)
   GtkTextIter start, end;
   GdkTexture *texture;
   GtkIconTheme *icon_theme;
-  GtkIcon *icon;
+  GtkIconPaintable *icon;
 
   icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (widget));
   icon = gtk_icon_theme_lookup_icon (icon_theme,
@@ -141,7 +141,7 @@ insert_text (GtkTextView *view)
                                      32, 1,
                                      gtk_widget_get_direction (widget),
                                      0);
-  texture = gtk_icon_download_texture (icon, NULL);
+  texture = gtk_icon_paintable_download_texture (icon, NULL);
   g_object_unref (icon);
   g_assert (texture);
 

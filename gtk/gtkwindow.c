@@ -4008,7 +4008,7 @@ icon_list_from_theme (GtkWindow   *window,
   GtkStyleContext *context;
   GtkCssValue *value;
   GtkIconTheme *icon_theme;
-  GtkIcon *info;
+  GtkIconPaintable *info;
   gint *sizes;
   gint i;
 
@@ -4038,7 +4038,7 @@ icon_list_from_theme (GtkWindow   *window,
                                            0);
       if (info)
         {
-          GdkTexture *texture = gtk_icon_download_texture (info, NULL);
+          GdkTexture *texture = gtk_icon_paintable_download_texture (info, NULL);
           if (texture)
             list = g_list_insert_sorted (list, texture, (GCompareFunc) icon_size_compare);
 
@@ -4104,7 +4104,7 @@ gtk_window_get_icon_for_size (GtkWindow *window,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   const char *name;
-  GtkIcon *info;
+  GtkIconPaintable *info;
 
   name = gtk_window_get_icon_name (window);
 

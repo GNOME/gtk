@@ -103,7 +103,7 @@ icon_loaded (GObject      *object,
              GAsyncResult *result,
              gpointer      user_data)
 {
-  GtkIcon *icon = GTK_ICON (object);
+  GtkIconPaintable *icon = GTK_ICON (object);
   GNSMenuItem *item = user_data;
   GError *error = NULL;
   GdkPixbuf *pixbuf;
@@ -278,7 +278,7 @@ icon_loaded (GObject      *object,
       static GdkRGBA error;
 
       GtkIconTheme *theme;
-      GtkIcon *icon;
+      GtkIconPaintable *icon;
       gint scale = 1;
 
       if (!parsed)

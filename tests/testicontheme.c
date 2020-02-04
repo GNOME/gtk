@@ -36,7 +36,7 @@ int
 main (int argc, char *argv[])
 {
   GtkIconTheme *icon_theme;
-  GtkIcon *icon;
+  GtkIconPaintable *icon;
   char *themename;
   GList *list;
   int size = 48;
@@ -69,7 +69,7 @@ main (int argc, char *argv[])
 
   if (strcmp (argv[1], "display") == 0)
     {
-      GtkIcon *icon;
+      GtkIconPaintable *icon;
       GtkWidget *window, *image;
 
       if (argc < 4)
@@ -129,7 +129,7 @@ main (int argc, char *argv[])
 
       icon = gtk_icon_theme_lookup_icon (icon_theme, argv[3], NULL, size, scale, direction, flags);
       g_print ("icon for %s at %dx%d@%dx is %s\n", argv[3], size, size, scale,
-               icon ? gtk_icon_get_filename (icon) : "<none>");
+               icon ? gtk_icon_paintable_get_filename (icon) : "<none>");
 
       if (icon)
 	{

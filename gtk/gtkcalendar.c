@@ -2585,7 +2585,7 @@ gtk_calendar_drag_update (GtkGestureDrag *gesture,
   GdkDevice *device;
   GdkDrag *drag;
   GtkIconTheme *theme;
-  GtkIcon *icon;
+  GtkIconPaintable *icon;
   GdkSurface *surface;
 
   if (!priv->in_drag)

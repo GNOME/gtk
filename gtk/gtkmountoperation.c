@@ -1169,7 +1169,7 @@ add_pid_to_process_list_store (GtkMountOperation              *mount_operation,
   if (texture == NULL)
     {
       GtkIconTheme *theme;
-      GtkIcon *icon;
+      GtkIconPaintable *icon;
 
       theme = gtk_css_icon_theme_value_get_icon_theme
         (_gtk_style_context_peek_property (gtk_widget_get_style_context (GTK_WIDGET (mount_operation->priv->dialog)),
@@ -1180,7 +1180,7 @@ add_pid_to_process_list_store (GtkMountOperation              *mount_operation,
                                          24, 1,
                                          gtk_widget_get_direction (GTK_WIDGET (mount_operation->priv->dialog)),
                                          0);
-      texture = gtk_icon_download_texture (icon, NULL);
+      texture = gtk_icon_paintable_download_texture (icon, NULL);
       g_object_unref (icon);
     }
 

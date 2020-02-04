@@ -98,7 +98,7 @@ get_image_paintable (GtkImage *image)
 {
   const gchar *icon_name;
   GtkIconTheme *icon_theme;
-  GtkIcon *icon;
+  GtkIconPaintable *icon;
 
   switch (gtk_image_get_storage_type (image))
     {

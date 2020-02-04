@@ -356,7 +356,7 @@ get_image_paintable (GtkImage *image)
 {
   const gchar *icon_name;
   GtkIconTheme *icon_theme;
-  GtkIcon *icon;
+  GtkIconPaintable *icon;
   int size;
 
   switch (gtk_image_get_storage_type (image))
@@ -418,7 +418,7 @@ get_file (GValue   *value,
 {
   GtkIconTheme *icon_theme;
   const char *name;
-  GtkIcon *info;
+  GtkIconPaintable *info;
   GFile *file;
 
   name = gtk_image_get_icon_name (GTK_IMAGE (data));
@@ -430,7 +430,7 @@ get_file (GValue   *value,
                                      32, 1,
                                      gtk_widget_get_direction (GTK_WIDGET (data)),
                                      0);
-  file = g_file_new_for_path (gtk_icon_get_filename (info));
+  file = g_file_new_for_path (gtk_icon_paintable_get_filename (info));
   g_value_set_object (value, file);
   g_object_unref (file);
   g_object_unref (info);

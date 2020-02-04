@@ -96,7 +96,7 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
 {
   GtkIconTheme *icon_theme;
   gint width, height;
-  GtkIcon *icon;
+  GtkIconPaintable *icon;
   GtkIconLookupFlags flags;
 
   icon_theme = gtk_css_icon_theme_value_get_icon_theme (style->core->icon_theme);
@@ -117,7 +117,7 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
                                        dir,
                                        flags);
 
-  *symbolic = gtk_icon_is_symbolic (icon);
+  *symbolic = gtk_icon_paintable_is_symbolic (icon);
   return GDK_PAINTABLE (icon);
 }
 

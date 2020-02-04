@@ -83,7 +83,7 @@
  * looking up icons.
  * |[<!-- language="C" -->
  * GtkIconTheme *icon_theme;
- * GtkIcon *icon;
+ * GtkIconPaintable *icon;
  *
  * icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (my_widget));
  * icon = gtk_icon_theme_lookup_icon (icon_theme,
@@ -175,8 +175,8 @@ typedef enum
 #define LRU_CACHE_SIZE 100
 #define MAX_LRU_TEXTURE_SIZE 128
 
-typedef struct _GtkIconClass    GtkIconClass;
-typedef struct _GtkIconThemeClass   GtkIconThemeClass;
+typedef struct _GtkIconPaintableClass GtkIconPaintableClass;
+typedef struct _GtkIconThemeClass     GtkIconThemeClass;
 
 
 typedef struct _GtkIconThemeRef GtkIconThemeRef;
@@ -197,10 +197,10 @@ struct _GtkIconTheme
   GObject parent_instance;
   GtkIconThemeRef *ref;
 
-  GHashTable *icon_cache;              /* Protected by icon_cache lock */
+  GHashTable *icon_cache;                       /* Protected by icon_cache lock */
 
-  GtkIcon *lru_cache[LRU_CACHE_SIZE];  /* Protected by icon_cache lock */
-  int lru_cache_current;               /* Protected by icon_cache lock */
+  GtkIconPaintable *lru_cache[LRU_CACHE_SIZE];  /* Protected by icon_cache lock */
+  int lru_cache_current;                        /* Protected by icon_cache lock */
 
   gchar *current_theme;
   gchar **search_path;
@@ -243,7 +243,7 @@ typedef struct {
   GtkIconLookupFlags flags;
 } IconKey;
 
-struct _GtkIconClass
+struct _GtkIconPaintableClass
 {
   GObjectClass parent_class;
 };
@@ -253,12 +253,12 @@ struct _GtkIconClass
 G_LOCK_DEFINE_STATIC(icon_cache);
 
 /**
- * GtkIcon:
+ * GtkIconPaintable:
  *
  * Contains information found when looking up an icon in
  * an icon theme and supports painting it as a #GdkPaintable.
  */
-struct _GtkIcon
+struct _GtkIconPaintable
 {
   GObject parent_instance;
 
@@ -360,40 +360,40 @@ typedef struct
   gboolean exists;
 } IconThemeDirMtime;
 
-static void          gtk_icon_theme_finalize               (GObject          *object);
-static void          gtk_icon_theme_dispose                (GObject          *object);
-static IconTheme *   theme_new                             (const char       *theme_name,
-                                                            GKeyFile         *theme_file);
-static void          theme_dir_size_destroy                (IconThemeDirSize *dir_size);
-static void          theme_dir_destroy                     (IconThemeDir     *dir);
-static void          theme_destroy                         (IconTheme        *theme);
-static GtkIcon *     theme_lookup_icon                     (IconTheme        *theme,
-                                                            const gchar      *icon_name,
-                                                            gint              size,
-                                                            gint              scale,
-                                                            gboolean          allow_svg);
-static void          theme_list_icons                      (IconTheme        *theme,
-                                                            GHashTable       *icons);
-static gboolean      theme_has_icon                        (IconTheme        *theme,
-                                                            const gchar      *icon_name);
-static void          theme_subdir_load                     (GtkIconTheme     *self,
-                                                            IconTheme        *theme,
-                                                            GKeyFile         *theme_file,
-                                                            gchar            *subdir);
-static void          do_theme_change                       (GtkIconTheme     *self);
-static void          blow_themes                           (GtkIconTheme     *self);
-static gboolean      rescan_themes                         (GtkIconTheme     *self);
-static GtkIcon *     icon_new                              (IconThemeDirType  type,
-                                                            gint              dir_size,
-                                                            gint              dir_scale);
-static void          icon_compute_rendered_size            (GtkIcon          *icon);
-static IconCacheFlag suffix_from_name                      (const gchar      *name);
-static gboolean      icon_ensure_scale_and_texture__locked (GtkIcon          *icon,
-                                                            gboolean          in_thread);
-static void          unset_display                         (GtkIconTheme     *self);
-static void          update_current_theme__mainthread      (GtkIconTheme     *self);
-static gboolean      ensure_valid_themes                   (GtkIconTheme     *self,
-                                                            gboolean          non_blocking);
+static void              gtk_icon_theme_finalize               (GObject          *object);
+static void              gtk_icon_theme_dispose                (GObject          *object);
+static IconTheme *       theme_new                             (const char       *theme_name,
+                                                                GKeyFile         *theme_file);
+static void              theme_dir_size_destroy                (IconThemeDirSize *dir_size);
+static void              theme_dir_destroy                     (IconThemeDir     *dir);
+static void              theme_destroy                         (IconTheme        *theme);
+static GtkIconPaintable *theme_lookup_icon                     (IconTheme        *theme,
+                                                                const gchar      *icon_name,
+                                                                gint              size,
+                                                                gint              scale,
+                                                                gboolean          allow_svg);
+static void              theme_list_icons                      (IconTheme        *theme,
+                                                                GHashTable       *icons);
+static gboolean          theme_has_icon                        (IconTheme        *theme,
+                                                                const gchar      *icon_name);
+static void              theme_subdir_load                     (GtkIconTheme     *self,
+                                                                IconTheme        *theme,
+                                                                GKeyFile         *theme_file,
+                                                                gchar            *subdir);
+static void              do_theme_change                       (GtkIconTheme     *self);
+static void              blow_themes                           (GtkIconTheme     *self);
+static gboolean          rescan_themes                         (GtkIconTheme     *self);
+static GtkIconPaintable *icon_paintable_new                    (IconThemeDirType  type,
+                                                                gint              dir_size,
+                                                                gint              dir_scale);
+static void              icon_compute_rendered_size            (GtkIconPaintable *icon);
+static IconCacheFlag     suffix_from_name                      (const gchar      *name);
+static gboolean          icon_ensure_scale_and_texture__locked (GtkIconPaintable *icon,
+                                                                gboolean          in_thread);
+static void              unset_display                         (GtkIconTheme     *self);
+static void              update_current_theme__mainthread      (GtkIconTheme     *self);
+static gboolean          ensure_valid_themes                   (GtkIconTheme     *self,
+                                                                gboolean          non_blocking);
 
 static guint signal_changed = 0;
 
@@ -538,18 +538,18 @@ icon_key_equal (gconstpointer _a,
 
 /* This is called with icon_cache lock held so must not take any locks */
 static gboolean
-_icon_cache_should_lru_cache (GtkIcon *icon)
+_icon_cache_should_lru_cache (GtkIconPaintable *icon)
 {
   return icon->desired_size <= MAX_LRU_TEXTURE_SIZE;
 }
 
 /* This returns the old lru element because we can't unref it with
  * the lock held */
-static GtkIcon *
-_icon_cache_add_to_lru_cache (GtkIconTheme *theme,
-                              GtkIcon      *icon)
+static GtkIconPaintable *
+_icon_cache_add_to_lru_cache (GtkIconTheme     *theme,
+                              GtkIconPaintable *icon)
 {
-  GtkIcon *old_icon = NULL;
+  GtkIconPaintable *old_icon = NULL;
 
   /* Avoid storing the same info multiple times in a row */
   if (theme->lru_cache[theme->lru_cache_current] != icon)
@@ -562,12 +562,12 @@ _icon_cache_add_to_lru_cache (GtkIconTheme *theme,
   return old_icon;
 }
 
-static GtkIcon *
+static GtkIconPaintable *
 icon_cache_lookup (GtkIconTheme *theme,
                    IconKey      *key)
 {
-  GtkIcon *old_icon = NULL;
-  GtkIcon *icon;
+  GtkIconPaintable *old_icon = NULL;
+  GtkIconPaintable *icon;
 
   G_LOCK (icon_cache);
 
@@ -600,7 +600,7 @@ icon_cache_lookup (GtkIconTheme *theme,
  * This is a callback from the icon_cache hashtable, so the icon_cache lock is already held.
  */
 static void
-icon_uncached_cb (GtkIcon *icon)
+icon_uncached_cb (GtkIconPaintable *icon)
 {
   DEBUG_CACHE (("removing %p (%s %d 0x%x) from cache (icon_them: %p)  (cache size %d)\n",
                 icon,
@@ -613,9 +613,9 @@ icon_uncached_cb (GtkIcon *icon)
 }
 
 static void
-icon_cache_mark_used_if_cached (GtkIcon *icon)
+icon_cache_mark_used_if_cached (GtkIconPaintable *icon)
 {
-  GtkIcon *old_icon = NULL;
+  GtkIconPaintable *old_icon = NULL;
 
   if (!_icon_cache_should_lru_cache (icon))
     return;
@@ -631,10 +631,10 @@ icon_cache_mark_used_if_cached (GtkIcon *icon)
 }
 
 static void
-icon_cache_add (GtkIconTheme *theme,
-                GtkIcon      *icon)
+icon_cache_add (GtkIconTheme     *theme,
+                GtkIconPaintable *icon)
 {
-  GtkIcon *old_icon = NULL;
+  GtkIconPaintable *old_icon = NULL;
 
   G_LOCK (icon_cache);
   icon->in_cache = theme;
@@ -655,7 +655,7 @@ icon_cache_add (GtkIconTheme *theme,
 }
 
 static void
-icon_cache_remove (GtkIcon *icon)
+icon_cache_remove (GtkIconPaintable *icon)
 {
   G_LOCK (icon_cache);
   if (icon->in_cache)
@@ -667,7 +667,7 @@ static void
 icon_cache_clear (GtkIconTheme *theme)
 {
   int i;
-  GtkIcon *old_icons[LRU_CACHE_SIZE];
+  GtkIconPaintable *old_icons[LRU_CACHE_SIZE];
 
   G_LOCK (icon_cache);
   g_hash_table_remove_all (theme->icon_cache);
@@ -1809,7 +1809,7 @@ icon_uri_is_symbolic (const gchar *icon_name,
   return FALSE;
 }
 
-static GtkIcon *
+static GtkIconPaintable *
 real_choose_icon (GtkIconTheme      *self,
                   const gchar       *icon_names[],
                   gint               size,
@@ -1819,8 +1819,8 @@ real_choose_icon (GtkIconTheme      *self,
                   gboolean           *would_block)
 {
   GList *l;
-  GtkIcon *icon = NULL;
-  GtkIcon *unscaled_icon;
+  GtkIconPaintable *icon = NULL;
+  GtkIconPaintable *unscaled_icon;
   UnthemedIcon *unthemed_icon = NULL;
   const gchar *icon_name = NULL;
   IconTheme *theme = NULL;
@@ -1905,7 +1905,7 @@ real_choose_icon (GtkIconTheme      *self,
 
       if (hIcon)
         {
-          icon = icon_new (ICON_THEME_DIR_UNTHEMED, size, 1);
+          icon = icon_paintable_new (ICON_THEME_DIR_UNTHEMED, size, 1);
           icon->cache_pixbuf = gdk_win32_icon_to_pixbuf_libgtk_only (hIcon, NULL, NULL);
           DestroyIcon (hIcon);
         }
@@ -1915,7 +1915,7 @@ real_choose_icon (GtkIconTheme      *self,
 
   if (unthemed_icon)
     {
-      icon = icon_new (ICON_THEME_DIR_UNTHEMED, size, 1);
+      icon = icon_paintable_new (ICON_THEME_DIR_UNTHEMED, size, 1);
 
       /* A SVG icon, when allowed, beats out a XPM icon, but not a PNG icon */
       if (self->pixbuf_supports_svg &&
@@ -2020,7 +2020,7 @@ icon_name_list_add_icon (GPtrArray   *icons,
   g_ptr_array_add (icons, icon_name);
 }
 
-static GtkIcon *
+static GtkIconPaintable *
 choose_icon (GtkIconTheme      *self,
              const gchar       *icon_names[],
              gint               size,
@@ -2031,7 +2031,7 @@ choose_icon (GtkIconTheme      *self,
              gboolean           *would_block)
 {
   gboolean has_regular = FALSE, has_symbolic = FALSE;
-  GtkIcon *icon;
+  GtkIconPaintable *icon;
   GPtrArray *new_names;
   const gchar *dir_suffix;
   guint i;
@@ -2157,7 +2157,7 @@ choose_icon (GtkIconTheme      *self,
  * Looks up a named icon for a desired size and window scale, returning a
  * #GtkIcon. The icon can then be rendered by using it as a #GdkPaintable,
  * or you can get information such as the filename and size. The pixels
- * of the texture can be access by using gtk_icon_download_texture().
+ * of the texture can be access by using gtk_icon_paintable_download_texture().
  *
  * The icon icon size will be based on the requested @size, but may
  * not be exactly this size; an icon theme may have icons that differ
@@ -2175,10 +2175,10 @@ choose_icon (GtkIconTheme      *self,
  * update the icon. This is usually done by connecting to the
  * GtkWidget::style-updated signal.
  *
- * Returns: (nullable) (transfer full): a #GtkIcon object
+ * Returns: (nullable) (transfer full): a #GtkIconPaintable object
  *     containing the icon, or %NULL if the icon wasn’t found.
  */
-GtkIcon *
+GtkIconPaintable *
 gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
                             const char         *icon_name,
                             const char         *fallbacks[],
@@ -2187,7 +2187,7 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
                             GtkTextDirection    direction,
                             GtkIconLookupFlags  flags)
 {
-  GtkIcon *icon;
+  GtkIconPaintable *icon;
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
   g_return_val_if_fail (icon_name != NULL, NULL);
@@ -2710,7 +2710,7 @@ compare_dir_size_matches (IconThemeDirSize *dir_a, gint difference_a,
   return diff_a <= diff_b;
 }
 
-static GtkIcon *
+static GtkIconPaintable *
 theme_lookup_icon (IconTheme   *theme,
                    const gchar *icon_name,
                    gint         size,
@@ -2768,11 +2768,11 @@ theme_lookup_icon (IconTheme   *theme,
 
   if (min_dir_size)
     {
-      GtkIcon *icon;
+      GtkIconPaintable *icon;
       IconThemeDir *dir = &g_array_index (theme->dirs, IconThemeDir, min_file->dir_index);
       gchar *filename;
 
-      icon = icon_new (min_dir_size->type, min_dir_size->size, min_dir_size->scale);
+      icon = icon_paintable_new (min_dir_size->type, min_dir_size->size, min_dir_size->scale);
       icon->min_size = min_dir_size->min_size;
       icon->max_size = min_dir_size->max_size;
 
@@ -3144,25 +3144,25 @@ theme_subdir_load (GtkIconTheme *self,
 static void icon_paintable_init (GdkPaintableInterface *iface);
 
 
-G_DEFINE_TYPE_WITH_CODE (GtkIcon, gtk_icon, G_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (GtkIconPaintable, gtk_icon_paintable, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
                                                 icon_paintable_init))
 
 static void
-gtk_icon_init (GtkIcon *icon)
+gtk_icon_paintable_init (GtkIconPaintable *icon)
 {
   icon->scale = -1.;
   g_mutex_init (&icon->texture_lock);
 }
 
-static GtkIcon *
-icon_new (IconThemeDirType type,
-               gint             dir_size,
-               gint             dir_scale)
+static GtkIconPaintable *
+icon_paintable_new (IconThemeDirType type,
+                    gint             dir_size,
+                    gint             dir_scale)
 {
-  GtkIcon *icon;
+  GtkIconPaintable *icon;
 
-  icon = g_object_new (GTK_TYPE_ICON, NULL);
+  icon = g_object_new (GTK_TYPE_ICON_PAINTABLE, NULL);
 
   icon->dir_type = type;
   icon->dir_size = dir_size;
@@ -3176,7 +3176,7 @@ icon_new (IconThemeDirType type,
 }
 
 static void
-icon_compute_rendered_size (GtkIcon *icon)
+icon_compute_rendered_size (GtkIconPaintable *icon)
 {
   int rendered_size;
 
@@ -3215,9 +3215,9 @@ icon_compute_rendered_size (GtkIcon *icon)
 }
 
 static void
-gtk_icon_finalize (GObject *object)
+gtk_icon_paintable_finalize (GObject *object)
 {
-  GtkIcon *icon = (GtkIcon *) object;
+  GtkIconPaintable *icon = (GtkIconPaintable *) object;
 
   icon_cache_remove (icon);
 
@@ -3232,19 +3232,19 @@ gtk_icon_finalize (GObject *object)
 
   g_mutex_clear (&icon->texture_lock);
 
-  G_OBJECT_CLASS (gtk_icon_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_icon_paintable_parent_class)->finalize (object);
 }
 
 static void
-gtk_icon_class_init (GtkIconClass *klass)
+gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  gobject_class->finalize = gtk_icon_finalize;
+  gobject_class->finalize = gtk_icon_paintable_finalize;
 }
 
 /**
- * gtk_icon_get_filename:
+ * gtk_icon_paintable_get_filename:
  * @self: a #GtkIcon
  *
  * Gets the filename for the icon.
@@ -3253,7 +3253,7 @@ gtk_icon_class_init (GtkIconClass *klass)
  *     if the icon is not represented by a filename.
  */
 const gchar *
-gtk_icon_get_filename (GtkIcon *icon)
+gtk_icon_paintable_get_filename (GtkIconPaintable *icon)
 {
   g_return_val_if_fail (icon != NULL, NULL);
 
@@ -3261,7 +3261,7 @@ gtk_icon_get_filename (GtkIcon *icon)
 }
 
 /**
- * gtk_icon_is_symbolic:
+ * gtk_icon_paintable_is_symbolic:
  * @self: a #GtkIcon
  *
  * Checks if the icon is symbolic or not. This currently uses only
@@ -3271,16 +3271,16 @@ gtk_icon_get_filename (GtkIcon *icon)
  * Returns: %TRUE if the icon is symbolic, %FALSE otherwise
  */
 gboolean
-gtk_icon_is_symbolic (GtkIcon *icon)
+gtk_icon_paintable_is_symbolic (GtkIconPaintable *icon)
 {
-  g_return_val_if_fail (GTK_IS_ICON (icon), FALSE);
+  g_return_val_if_fail (GTK_IS_ICON_PAINTABLE (icon), FALSE);
 
   return icon->filename != NULL &&
          icon_uri_is_symbolic (icon->filename, -1);
 }
 
 static GLoadableIcon *
-icon_get_loadable (GtkIcon *icon)
+icon_get_loadable (GtkIconPaintable *icon)
 {
   GFile *file;
   GLoadableIcon *loadable;
@@ -3309,7 +3309,7 @@ icon_get_loadable (GtkIcon *icon)
  * that size.
  */
 static gboolean
-icon_ensure_scale_and_texture__locked (GtkIcon *icon,
+icon_ensure_scale_and_texture__locked (GtkIconPaintable *icon,
                                        gboolean in_thread)
 {
   gint image_width, image_height, image_size;
@@ -3378,7 +3378,7 @@ icon_ensure_scale_and_texture__locked (GtkIcon *icon,
           else
             size = icon->dir_size * dir_scale * icon->scale;
 
-          if (gtk_icon_is_symbolic (icon))
+          if (gtk_icon_paintable_is_symbolic (icon))
             source_pixbuf = gtk_make_symbolic_pixbuf_from_resource (icon->filename,
                                                                     size, size,
                                                                     icon->desired_scale,
@@ -3425,7 +3425,7 @@ icon_ensure_scale_and_texture__locked (GtkIcon *icon,
               else
                 size = icon->dir_size * dir_scale * icon->scale;
 
-              if (gtk_icon_is_symbolic (icon))
+              if (gtk_icon_paintable_is_symbolic (icon))
                 source_pixbuf = gtk_make_symbolic_pixbuf_from_path (icon->filename,
                                                                     size, size,
                                                                     icon->desired_scale,
@@ -3524,7 +3524,7 @@ icon_ensure_scale_and_texture__locked (GtkIcon *icon,
 }
 
 /**
- * gtk_icon_download_texture:
+ * gtk_icon_paintable_download_texture:
  * @self: a #GtkIcon
  * @error: (allow-none): location to store error information on failure,
  *     or %NULL.
@@ -3535,7 +3535,7 @@ icon_ensure_scale_and_texture__locked (GtkIcon *icon,
  * Returns: (transfer full): An texture with the contents of the icon, or %NULL on failure.
  */
 GdkTexture *
-gtk_icon_download_texture (GtkIcon *self,
+gtk_icon_paintable_download_texture (GtkIconPaintable *self,
                            GError **error)
 {
   GdkTexture *texture = NULL;
@@ -3601,10 +3601,10 @@ icon_paintable_snapshot (GdkPaintable *paintable,
                          double        width,
                          double        height)
 {
-  GtkIcon *icon = GTK_ICON (paintable);
+  GtkIconPaintable *icon = GTK_ICON_PAINTABLE (paintable);
   GdkTexture *texture;
 
-  texture = gtk_icon_download_texture (icon, NULL);
+  texture = gtk_icon_paintable_download_texture (icon, NULL);
   if (texture)
     {
       if (icon->desired_scale != 1)
@@ -3624,7 +3624,7 @@ icon_paintable_snapshot (GdkPaintable *paintable,
 }
 
 /**
- * gtk_icon_snapshot_with_colors:
+ * gtk_icon_paintable_snapshot_with_colors:
  * @icon: a #GtkIcon
  * @snapshot: a #GdkSnapshot to snapshot to
  * @width: width to snapshot in
@@ -3642,7 +3642,7 @@ icon_paintable_snapshot (GdkPaintable *paintable,
  * symbolic it will be recolored with the specified colors (which ususally comes from the theme).
  */
 void
-gtk_icon_snapshot_with_colors (GtkIcon *icon,
+gtk_icon_paintable_snapshot_with_colors (GtkIconPaintable *icon,
                                GtkSnapshot  *snapshot,
                                double        width,
                                double        height,
@@ -3653,10 +3653,10 @@ gtk_icon_snapshot_with_colors (GtkIcon *icon,
 {
   GdkTexture *texture;
 
-  texture = gtk_icon_download_texture (icon, NULL);
+  texture = gtk_icon_paintable_download_texture (icon, NULL);
   if (texture)
     {
-      gboolean symbolic = gtk_icon_is_symbolic (icon);
+      gboolean symbolic = gtk_icon_paintable_is_symbolic (icon);
 
       if (icon->desired_scale != 1)
         {
@@ -3699,7 +3699,7 @@ icon_paintable_get_flags (GdkPaintable *paintable)
 static int
 icon_paintable_get_intrinsic_width (GdkPaintable *paintable)
 {
-  GtkIcon *icon = GTK_ICON (paintable);
+  GtkIconPaintable *icon = GTK_ICON_PAINTABLE (paintable);
 
   return icon->rendered_size;
 }
@@ -3707,7 +3707,7 @@ icon_paintable_get_intrinsic_width (GdkPaintable *paintable)
 static int
 icon_paintable_get_intrinsic_height (GdkPaintable *paintable)
 {
-  GtkIcon *icon = GTK_ICON (paintable);
+  GtkIconPaintable *icon = GTK_ICON_PAINTABLE (paintable);
 
   return icon->rendered_size;
 }
@@ -3721,14 +3721,14 @@ icon_paintable_init (GdkPaintableInterface *iface)
   iface->get_intrinsic_height = icon_paintable_get_intrinsic_height;
 }
 
-static GtkIcon *
-gtk_icon_new_for_file (GFile *file,
+static GtkIconPaintable *
+gtk_icon_paintable_new_for_file (GFile *file,
                        gint   size,
                        gint   scale)
 {
-  GtkIcon *icon;
+  GtkIconPaintable *icon;
 
-  icon = icon_new (ICON_THEME_DIR_UNTHEMED, size, 1);
+  icon = icon_paintable_new (ICON_THEME_DIR_UNTHEMED, size, 1);
   icon->loadable = G_LOADABLE_ICON (g_file_icon_new (file));
   icon->is_resource = g_file_has_uri_scheme (file, "resource");
 
@@ -3756,18 +3756,18 @@ gtk_icon_new_for_file (GFile *file,
   return icon;
 }
 
-static GtkIcon *
-gtk_icon_new_for_pixbuf (GtkIconTheme *icon_theme,
+static GtkIconPaintable *
+gtk_icon_paintable_new_for_pixbuf (GtkIconTheme *icon_theme,
                          GdkPixbuf    *pixbuf)
 {
-  GtkIcon *icon;
+  GtkIconPaintable *icon;
   gint width, height, max;
 
   width = gdk_pixbuf_get_width (pixbuf);
   height = gdk_pixbuf_get_height (pixbuf);
   max = MAX (width, height);
 
-  icon = icon_new (ICON_THEME_DIR_UNTHEMED, 0, 1);
+  icon = icon_paintable_new (ICON_THEME_DIR_UNTHEMED, 0, 1);
   icon->texture = gdk_texture_new_for_pixbuf (pixbuf);
   icon->desired_size = max;
   icon->desired_scale = 1.0;
@@ -3790,11 +3790,11 @@ gtk_icon_new_for_pixbuf (GtkIconTheme *icon_theme,
  * #GtkIcon. The icon can then be rendered by using it as a #GdkPaintable,
  * or you can get information such as the filename and size.
  *
- * Returns: (nullable) (transfer full): a #GtkIcon containing
+ * Returns: (nullable) (transfer full): a #GtkIconPaintable containing
  *     information about the icon, or %NULL if the icon wasn’t
  *     found. Unref with g_object_unref()
  */
-GtkIcon *
+GtkIconPaintable *
 gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
                                 GIcon              *gicon,
                                 gint                size,
@@ -3802,7 +3802,7 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
                                 GtkTextDirection    direction,
                                 GtkIconLookupFlags  flags)
 {
-  GtkIcon *icon;
+  GtkIconPaintable *icon;
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
   g_return_val_if_fail (G_IS_ICON (gicon), NULL);
@@ -3831,17 +3831,17 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
                                                 0.5 + height * pixbuf_scale,
                                                 GDK_INTERP_BILINEAR);
 
-              icon = gtk_icon_new_for_pixbuf (self, scaled);
+              icon = gtk_icon_paintable_new_for_pixbuf (self, scaled);
               g_object_unref (scaled);
              }
            else
              {
-              icon = gtk_icon_new_for_pixbuf (self, pixbuf);
+              icon = gtk_icon_paintable_new_for_pixbuf (self, pixbuf);
              }
         }
       else
         {
-          icon = gtk_icon_new_for_pixbuf (self, pixbuf);
+          icon = gtk_icon_paintable_new_for_pixbuf (self, pixbuf);
         }
 
       return icon;
@@ -3850,14 +3850,14 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
     {
       GFile *file = g_file_icon_get_file (G_FILE_ICON (gicon));
 
-      icon = gtk_icon_new_for_file (file, size, scale);
+      icon = gtk_icon_paintable_new_for_file (file, size, scale);
       icon->forced_size = (flags & GTK_ICON_LOOKUP_FORCE_SIZE) != 0;
 
       return icon;
     }
   else if (G_IS_LOADABLE_ICON (gicon))
     {
-      icon = icon_new (ICON_THEME_DIR_UNTHEMED, size, 1);
+      icon = icon_paintable_new (ICON_THEME_DIR_UNTHEMED, size, 1);
       icon->loadable = G_LOADABLE_ICON (g_object_ref (gicon));
       icon->is_svg = FALSE;
       icon->desired_size = size;
