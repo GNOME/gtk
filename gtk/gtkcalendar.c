@@ -268,7 +268,6 @@ struct _GtkCalendarPrivate
   gint drag_start_y;
 };
 
-static void gtk_calendar_destroy      (GtkWidget    *widget);
 static void gtk_calendar_set_property (GObject      *object,
                                        guint         prop_id,
                                        const GValue *value,
@@ -318,8 +317,6 @@ static void     gtk_calendar_key_controller_focus       (GtkEventControllerKey *
                                                          GdkCrossingMode        mode,
                                                          GdkNotifyType          detail,
                                                          GtkWidget             *widget);
-static void     gtk_calendar_grab_notify    (GtkWidget        *widget,
-                                             gboolean          was_grabbed);
 static void     gtk_calendar_state_flags_changed  (GtkWidget     *widget,
                                                    GtkStateFlags  previous_state);
 static gboolean gtk_calendar_drag_accept        (GtkDropTarget    *dest,
@@ -334,10 +331,6 @@ static gboolean gtk_calendar_drag_drop          (GtkDropTarget    *dest,
                                                  int               y,
                                                  GtkCalendar      *calendar);
 
-
-static void calendar_start_spinning (GtkCalendar *calendar,
-                                     gint         click_child);
-static void calendar_stop_spinning  (GtkCalendar *calendar);
 
 static void calendar_invalidate_day     (GtkCalendar *widget,
                                          gint       row,
@@ -389,12 +382,10 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   gobject_class->set_property = gtk_calendar_set_property;
   gobject_class->get_property = gtk_calendar_get_property;
 
-  widget_class->destroy = gtk_calendar_destroy;
   widget_class->snapshot = gtk_calendar_snapshot;
   widget_class->measure = gtk_calendar_measure;
   widget_class->size_allocate = gtk_calendar_size_allocate;
   widget_class->state_flags_changed = gtk_calendar_state_flags_changed;
-  widget_class->grab_notify = gtk_calendar_grab_notify;
 
   /**
    * GtkCalendar:year:
@@ -1245,17 +1236,6 @@ calendar_row_from_y (GtkCalendar *calendar,
 }
 
 static void
-calendar_arrow_rectangle (GtkCalendar  *calendar,
-                          guint         arrow,
-                          GdkRectangle *rect)
-{
-  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
-
-  gtk_widget_get_allocation (priv->arrow_widgets[arrow],
-                             rect);
-}
-
-static void
 calendar_day_rectangle (GtkCalendar  *calendar,
                         gint          row,
                         gint          col,
@@ -1307,21 +1287,6 @@ calendar_set_month_prev (GtkCalendar *calendar)
     }
 
   calendar_queue_refresh (calendar);
-}
-
-
-/****************************************
- *           Basic object methods       *
- ****************************************/
-
-static void
-gtk_calendar_destroy (GtkWidget *widget)
-{
-  GtkCalendar *calendar = GTK_CALENDAR (widget);
-
-  calendar_stop_spinning (calendar);
-
-  GTK_WIDGET_CLASS (gtk_calendar_parent_class)->destroy (widget);
 }
 
 static void
@@ -2002,38 +1967,6 @@ calendar_timer (gpointer data)
 }
 
 static void
-calendar_start_spinning (GtkCalendar *calendar,
-                         gint         click_child)
-{
-  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
-
-  priv->click_child = click_child;
-
-  if (!priv->timer)
-    {
-      priv->need_timer = TRUE;
-      priv->timer = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE,
-                                        TIMEOUT_INITIAL,
-                                        (GSourceFunc) calendar_timer,
-                                        calendar, NULL);
-      g_source_set_name_by_id (priv->timer, "[gtk] calendar_timer");
-    }
-}
-
-static void
-calendar_stop_spinning (GtkCalendar *calendar)
-{
-  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
-
-  if (priv->timer)
-    {
-      g_source_remove (priv->timer);
-      priv->timer = 0;
-      priv->need_timer = FALSE;
-    }
-}
-
-static void
 calendar_main_button_press (GtkCalendar *calendar,
                             double       x,
                             double       y,
@@ -2098,30 +2031,12 @@ gtk_calendar_button_press (GtkGestureClick *gesture,
   GtkWidget *widget = GTK_WIDGET (calendar);
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
   int button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
-  gint arrow = -1;
 
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
   if (y > priv->header_h)
     calendar_main_button_press (calendar, x, y, n_press, button);
-
-  for (arrow = ARROW_YEAR_LEFT; arrow <= ARROW_MONTH_RIGHT; arrow++)
-    {
-      GdkRectangle arrow_rect;
-
-      calendar_arrow_rectangle (calendar, arrow, &arrow_rect);
-
-      if (gdk_rectangle_contains_point (&arrow_rect, (int)x, (int)y))
-        {
-          if (button == GDK_BUTTON_PRIMARY)
-            calendar_start_spinning (calendar, arrow);
-
-          calendar_arrow_action (calendar, arrow);
-
-          return;
-        }
-    }
 }
 
 static void
@@ -2137,8 +2052,6 @@ gtk_calendar_button_release (GtkGestureClick *gesture,
 
   if (button == GDK_BUTTON_PRIMARY)
     {
-      calendar_stop_spinning (calendar);
-
       if (priv->in_drag)
         priv->in_drag = 0;
     }
@@ -2399,14 +2312,8 @@ gtk_calendar_key_controller_focus (GtkEventControllerKey *key,
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
 
   calendar_queue_refresh (calendar);
-  calendar_stop_spinning (calendar);
   priv->in_drag = 0;
 }
-
-
-/****************************************
- *           Misc widget methods        *
- ****************************************/
 
 static void
 gtk_calendar_state_flags_changed (GtkWidget     *widget,
@@ -2418,24 +2325,8 @@ gtk_calendar_state_flags_changed (GtkWidget     *widget,
   if (!gtk_widget_is_sensitive (widget))
     {
       priv->in_drag = 0;
-      calendar_stop_spinning (calendar);
     }
 }
-
-static void
-gtk_calendar_grab_notify (GtkWidget *widget,
-                          gboolean   was_grabbed)
-{
-  GTK_WIDGET_CLASS (gtk_calendar_parent_class)->grab_notify (widget, was_grabbed);
-
-  if (!was_grabbed)
-    calendar_stop_spinning (GTK_CALENDAR (widget));
-}
-
-
-/****************************************
- *          Drag and Drop               *
- ****************************************/
 
 /* Get/set whether drag_motion requested the drag data and
  * drag_data_received should thus not actually insert the data,
