@@ -30,7 +30,7 @@ get_image_texture (GtkImage *image,
                                          NULL,
                                          width, 1,
                                          gtk_widget_get_direction (GTK_WIDGET (image)),
-                                         GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+                                         0);
       if (icon)
         texture = gtk_icon_download_texture (icon, NULL);
       g_object_unref (icon);

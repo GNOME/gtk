@@ -40,10 +40,6 @@ typedef struct _GtkIconTheme    GtkIconTheme;
 
 /**
  * GtkIconLookupFlags:
- * @GTK_ICON_LOOKUP_GENERIC_FALLBACK: Try to shorten icon name at '-'
- *   characters before looking at inherited themes. This flag is only
- *   supported in functions that take a single icon name. For more general
- *   fallback, see gtk_icon_theme_choose_icon()
  * @GTK_ICON_LOOKUP_FORCE_SIZE: Always get the icon scaled to the
  *   requested size
  * @GTK_ICON_LOOKUP_FORCE_REGULAR: Try to always load regular icons, even
@@ -55,10 +51,9 @@ typedef struct _GtkIconTheme    GtkIconTheme;
  */
 typedef enum
 {
-  GTK_ICON_LOOKUP_GENERIC_FALLBACK = 1 << 0,
-  GTK_ICON_LOOKUP_FORCE_SIZE       = 1 << 1,
-  GTK_ICON_LOOKUP_FORCE_REGULAR    = 1 << 2,
-  GTK_ICON_LOOKUP_FORCE_SYMBOLIC   = 1 << 3
+  GTK_ICON_LOOKUP_FORCE_SIZE       = 1 << 0,
+  GTK_ICON_LOOKUP_FORCE_REGULAR    = 1 << 1,
+  GTK_ICON_LOOKUP_FORCE_SYMBOLIC   = 1 << 2
 } GtkIconLookupFlags;
 
 /**
