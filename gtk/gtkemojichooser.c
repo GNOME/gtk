@@ -35,6 +35,7 @@
 #include "gtksearchentryprivate.h"
 #include "gtkstylecontext.h"
 #include "gtktext.h"
+#include "gdk/gdkprofilerprivate.h"
 
 #define BOX_SPACE 6
 
@@ -451,13 +452,23 @@ populate_emoji_chooser (gpointer data)
 
       now = g_get_monotonic_time ();
       if (now > start + 8000)
-        return G_SOURCE_CONTINUE;
+        {
+          if (gdk_profiler_is_running ())
+            gdk_profiler_add_mark (start * 1000, (now - start) * 1000, "emojichooser", "populate");
+          return G_SOURCE_CONTINUE;
+        }
     }
 
   g_variant_iter_free (chooser->iter);
   chooser->iter = NULL;
   chooser->box = NULL;
   chooser->populate_idle = 0;
+
+  if (gdk_profiler_is_running ())
+    {
+      now = g_get_monotonic_time ();
+      gdk_profiler_add_mark (start * 1000, (now - start) * 1000, "emojichooser", "populate (finish)");
+    }
 
   return G_SOURCE_REMOVE;
 }
