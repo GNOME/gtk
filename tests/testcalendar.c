@@ -48,26 +48,19 @@ enum
  * GtkCalendar
  */
 
-static void
+static char *
 calendar_date_to_string (CalendarData *data,
-			      char         *buffer,
-			      gint          buff_len)
+                         char         *format)
 {
-  GDate *date;
-  guint year, month, day;
+  GDateTime *date;
+  char *str;
 
-  gtk_calendar_get_date (GTK_CALENDAR (data->calendar_widget),
-                         &year, &month, &day);
-  if (g_date_valid_dmy (day, month + 1, year))
-    {
-      date = g_date_new_dmy (day, month + 1, year);
-      g_date_strftime (buffer, buff_len-1, "%x", date);
-      g_date_free (date);
-    }
-  else
-    {
-      g_snprintf (buffer, buff_len - 1, "%d/%d/%d (invalid)", month + 1, day, year);
-    }
+  date = gtk_calendar_get_date (GTK_CALENDAR (data->calendar_widget));
+  str = g_date_time_format (date, format);
+
+  g_date_time_unref (date);
+
+  return str;
 }
 
 static void
@@ -88,78 +81,76 @@ static void
 calendar_month_changed (GtkWidget    *widget,
                              CalendarData *data)
 {
-  char buffer[256] = "month_changed: ";
-
-  calendar_date_to_string (data, buffer+15, 256-15);
-  calendar_set_signal_strings (buffer, data);
+  char *str = calendar_date_to_string (data, "month-changed: %c");
+  calendar_set_signal_strings (str, data);
+  g_free (str);
 }
 
 static void
 calendar_day_selected (GtkWidget    *widget,
                             CalendarData *data)
 {
-  char buffer[256] = "day_selected: ";
-
-  calendar_date_to_string (data, buffer+14, 256-14);
-  calendar_set_signal_strings (buffer, data);
+  char *str = calendar_date_to_string (data, "day-selected: %c");
+  calendar_set_signal_strings (str, data);
+  g_free (str);
 }
 
 static void
 calendar_day_selected_double_click (GtkWidget    *widget,
                                          CalendarData *data)
 {
-  char buffer[256] = "day_selected_double_click: ";
+  char *str;
   guint day;
+  GDateTime *date;
 
-  calendar_date_to_string (data, buffer+27, 256-27);
-  calendar_set_signal_strings (buffer, data);
-  gtk_calendar_get_date (GTK_CALENDAR (data->calendar_widget),
-                         NULL, NULL, &day);
+  str = calendar_date_to_string (data, "day-selected-double-click: %c");
+  calendar_set_signal_strings (str, data);
+  date = gtk_calendar_get_date (GTK_CALENDAR (data->calendar_widget));
+  day = g_date_time_get_day_of_month (date);
 
   if (gtk_calendar_get_day_is_marked (GTK_CALENDAR (data->calendar_widget), day))
     gtk_calendar_unmark_day (GTK_CALENDAR (data->calendar_widget), day);
   else
     gtk_calendar_mark_day (GTK_CALENDAR (data->calendar_widget), day);
+
+  g_date_time_unref (date);
 }
 
 static void
 calendar_prev_month (GtkWidget    *widget,
                           CalendarData *data)
 {
-  char buffer[256] = "prev_month: ";
-
-  calendar_date_to_string (data, buffer+12, 256-12);
-  calendar_set_signal_strings (buffer, data);
+  char *str = calendar_date_to_string (data, "prev-month: %c");
+  calendar_set_signal_strings (str, data);
+  g_free (str);
 }
 
 static void
 calendar_next_month (GtkWidget    *widget,
                      CalendarData *data)
 {
-  char buffer[256] = "next_month: ";
+  char *str = calendar_date_to_string (data, "next-month: %c");
+  calendar_set_signal_strings (str, data);
+  g_free (str);
 
-  calendar_date_to_string (data, buffer+12, 256-12);
-  calendar_set_signal_strings (buffer, data);
 }
 
 static void
 calendar_prev_year (GtkWidget    *widget,
                     CalendarData *data)
 {
-  char buffer[256] = "prev_year: ";
-
-  calendar_date_to_string (data, buffer+11, 256-11);
-  calendar_set_signal_strings (buffer, data);
+  char *str = calendar_date_to_string (data, "prev-year: %c");
+  calendar_set_signal_strings (str, data);
+  g_free (str);
 }
 
 static void
 calendar_next_year (GtkWidget    *widget,
                     CalendarData *data)
 {
-  char buffer[256] = "next_year: ";
-
-  calendar_date_to_string (data, buffer+11, 256-11);
-  calendar_set_signal_strings (buffer, data);
+  char *str = calendar_date_to_string (data, "next-year: %c");
+  calendar_set_signal_strings (str, data);
+  g_free (str);
 }
 
 static void
