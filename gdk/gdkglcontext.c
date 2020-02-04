@@ -638,7 +638,6 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
                                      int           minor)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-  GdkDisplay *display;
   int version, min_ver;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
@@ -655,9 +654,7 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
   /* Enforce a minimum context version number of 3.2 */
   version = (major * 100) + minor;
 
-  display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
-
-  if (priv->use_es > 0 || GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES))
+  if (priv->use_es > 0 || GDK_DISPLAY_DEBUG_CHECK (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), GL_GLES))
     min_ver = 200;
   else
     min_ver = 302;
@@ -686,15 +683,12 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
                                      int          *minor)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-  GdkDisplay *display;
   int default_major, default_minor;
   int maj, min;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
-  display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
-
-  if (priv->use_es > 0 || GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES))
+  if (priv->use_es > 0 || GDK_DISPLAY_DEBUG_CHECK (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), GL_GLES))
     {
       default_major = 2;
       default_minor = 0;
@@ -941,7 +935,6 @@ static void
 gdk_gl_context_check_extensions (GdkGLContext *context)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-  GdkDisplay *display;
   gboolean has_npot, has_texture_rectangle;
 
   if (!priv->realized)
@@ -1000,14 +993,12 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
         priv->is_legacy = TRUE;
     }
 
-  display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
-
-  if (priv->has_khr_debug && GDK_DISPLAY_DEBUG_CHECK (display, GL_DEBUG))
+  if (priv->has_khr_debug && GDK_DISPLAY_DEBUG_CHECK (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), GL_DEBUG))
     {
       priv->use_khr_debug = TRUE;
       glGetIntegerv (GL_MAX_LABEL_LENGTH, &priv->max_debug_label_length);
     }
-  if (!priv->use_es && GDK_DISPLAY_DEBUG_CHECK (display, GL_TEXTURE_RECT))
+  if (!priv->use_es && GDK_DISPLAY_DEBUG_CHECK (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), GL_TEXTURE_RECT))
     priv->use_texture_rectangle = TRUE;
   else if (has_npot)
     priv->use_texture_rectangle = FALSE;
