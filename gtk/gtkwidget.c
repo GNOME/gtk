@@ -2587,7 +2587,7 @@ gtk_widget_unparent (GtkWidget *widget)
   if (gtk_widget_get_focus_child (priv->parent) == widget)
     gtk_widget_set_focus_child (priv->parent, NULL);
 
-  if (_gtk_widget_is_drawable (priv->parent))
+  if (_gtk_widget_get_mapped (priv->parent))
     gtk_widget_queue_draw (priv->parent);
 
   if (priv->visible && _gtk_widget_get_visible (priv->parent))
@@ -4372,7 +4372,7 @@ gtk_widget_real_can_activate_accel (GtkWidget *widget,
 
   /* widgets must be onscreen for accels to take effect */
   return gtk_widget_is_sensitive (widget) &&
-         _gtk_widget_is_drawable (widget) &&
+         _gtk_widget_get_mapped (widget) &&
          gdk_surface_is_viewable (priv->surface);
 }
 
@@ -10424,7 +10424,7 @@ gtk_widget_contains (GtkWidget  *widget,
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  if (!_gtk_widget_is_drawable (widget))
+  if (!_gtk_widget_get_mapped (widget))
     return FALSE;
 
   return GTK_WIDGET_GET_CLASS (widget)->contains (widget, x, y);
@@ -10435,7 +10435,7 @@ static gboolean
 gtk_widget_can_be_picked (GtkWidget    *widget,
                           GtkPickFlags  flags)
 {
-  if (!_gtk_widget_is_drawable (widget))
+  if (!_gtk_widget_get_mapped (widget))
     return FALSE;
 
   if (!(flags & GTK_PICK_NON_TARGETABLE) &&
@@ -12205,7 +12205,7 @@ gtk_widget_snapshot (GtkWidget   *widget,
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  if (!_gtk_widget_is_drawable (widget))
+  if (!_gtk_widget_get_mapped (widget))
     return;
 
   if (_gtk_widget_get_alloc_needed (widget))
@@ -12591,6 +12591,9 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
   g_return_if_fail (snapshot != NULL);
 
   if (GTK_IS_NATIVE (child))
+    return;
+
+  if (!_gtk_widget_get_mapped (child))
     return;
 
   if (priv->transform)

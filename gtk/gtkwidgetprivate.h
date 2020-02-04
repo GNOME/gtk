@@ -382,12 +382,6 @@ _gtk_widget_get_mapped (GtkWidget *widget)
 }
 
 static inline gboolean
-_gtk_widget_is_drawable (GtkWidget *widget)
-{
-  return widget->priv->visible && widget->priv->mapped;
-}
-
-static inline gboolean
 _gtk_widget_get_realized (GtkWidget *widget)
 {
   return widget->priv->realized;
