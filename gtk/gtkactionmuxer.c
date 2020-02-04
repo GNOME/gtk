@@ -357,7 +357,8 @@ gtk_action_muxer_action_added_to_parent (GActionGroup *action_group,
 {
   GtkActionMuxer *muxer = user_data;
 
-  gtk_action_muxer_action_added (muxer, action_name, action_group, action_name);
+  if (!gtk_action_muxer_find_group (muxer, action_name, NULL))
+    gtk_action_muxer_action_added (muxer, action_name, action_group, action_name);
 }
 
 static void
@@ -394,7 +395,8 @@ gtk_action_muxer_action_removed_from_parent (GActionGroup *action_group,
 {
   GtkActionMuxer *muxer = user_data;
 
-  gtk_action_muxer_action_removed (muxer, action_name);
+  if (!gtk_action_muxer_find_group (muxer, action_name, NULL))
+    gtk_action_muxer_action_removed (muxer, action_name);
 }
 
 static void
@@ -1132,7 +1134,10 @@ gtk_action_muxer_set_parent (GtkActionMuxer *muxer,
 
       actions = g_action_group_list_actions (G_ACTION_GROUP (muxer->parent));
       for (it = actions; *it; it++)
-        gtk_action_muxer_action_removed (muxer, *it);
+        {
+          if (!gtk_action_muxer_find (muxer, *it, NULL))
+            gtk_action_muxer_action_removed (muxer, *it);
+        }
       g_strfreev (actions);
 
       emit_changed_accels (muxer, muxer->parent);
@@ -1157,7 +1162,10 @@ gtk_action_muxer_set_parent (GtkActionMuxer *muxer,
 
       actions = g_action_group_list_actions (G_ACTION_GROUP (muxer->parent));
       for (it = actions; *it; it++)
-        gtk_action_muxer_action_added (muxer, *it, G_ACTION_GROUP (muxer->parent), *it);
+        {
+          if (!gtk_action_muxer_find (muxer, *it, NULL))
+            gtk_action_muxer_action_added (muxer, *it, G_ACTION_GROUP (muxer->parent), *it);
+        }
       g_strfreev (actions);
 
       emit_changed_accels (muxer, muxer->parent);
