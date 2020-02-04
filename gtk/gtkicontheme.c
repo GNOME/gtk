@@ -2219,60 +2219,7 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
 
   gtk_icon_theme_lock (self);
 
-  if (flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK)
-    {
-      gchar **names, **nonsymbolic_names;
-      gint dashes, i;
-      gchar *p, *nonsymbolic_icon_name;
-      gboolean is_symbolic;
-      int icon_name_len = strlen (icon_name);
-
-      g_warn_if_fail (fallbacks == NULL);
-
-      is_symbolic = icon_name_is_symbolic (icon_name, icon_name_len);
-      if (is_symbolic)
-        nonsymbolic_icon_name = g_strndup (icon_name, icon_name_len - strlen ("-symbolic"));
-      else
-        nonsymbolic_icon_name = g_strdup (icon_name);
-
-      dashes = 0;
-      for (p = (gchar *) nonsymbolic_icon_name; *p; p++)
-        if (*p == '-')
-          dashes++;
-
-      nonsymbolic_names = g_new (gchar *, dashes + 2);
-      nonsymbolic_names[0] = nonsymbolic_icon_name;
-
-      for (i = 1; i <= dashes; i++)
-        {
-          nonsymbolic_names[i] = g_strdup (nonsymbolic_names[i - 1]);
-          p = strrchr (nonsymbolic_names[i], '-');
-          *p = '\0';
-        }
-      nonsymbolic_names[dashes + 1] = NULL;
-
-      if (is_symbolic)
-        {
-          names = g_new (gchar *, 2 * dashes + 3);
-          for (i = 0; nonsymbolic_names[i] != NULL; i++)
-            {
-              names[i] = g_strconcat (nonsymbolic_names[i], "-symbolic", NULL);
-              names[dashes + 1 + i] = nonsymbolic_names[i];
-            }
-
-          names[dashes + 1 + i] = NULL;
-          g_free (nonsymbolic_names);
-        }
-      else
-        {
-          names = nonsymbolic_names;
-        }
-
-      icon = choose_icon (self, (const char **) names, size, scale, direction, flags, FALSE, NULL);
-
-      g_strfreev (names);
-    }
-  else if (fallbacks)
+  if (fallbacks)
     {
       gsize n_fallbacks = g_strv_length ((char **) fallbacks);
       const char **names = g_new (const char *, n_fallbacks + 2);
@@ -3833,7 +3780,6 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
   g_return_val_if_fail (G_IS_ICON (gicon), NULL);
-  g_warn_if_fail ((flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK) == 0);
 
   if (GDK_IS_PIXBUF (gicon))
     {

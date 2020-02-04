@@ -140,7 +140,7 @@ insert_text (GtkTextView *view)
                                      NULL,
                                      32, 1,
                                      gtk_widget_get_direction (widget),
-                                     GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+                                     0);
   texture = gtk_icon_download_texture (icon, NULL);
   g_object_unref (icon);
   g_assert (texture);

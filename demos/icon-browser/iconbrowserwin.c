@@ -372,7 +372,7 @@ get_image_paintable (GtkImage *image)
                                          NULL,
                                          size, 1,
                                          gtk_widget_get_direction (GTK_WIDGET (image)),
-                                         GTK_ICON_LOOKUP_FORCE_SIZE | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+                                         GTK_ICON_LOOKUP_FORCE_SIZE);
       if (icon == NULL)
         return NULL;
       return GDK_PAINTABLE (icon);

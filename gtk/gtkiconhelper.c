@@ -115,7 +115,7 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
                                        NULL,
                                        width, scale,
                                        dir,
-                                       flags | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+                                       flags);
 
   *symbolic = gtk_icon_is_symbolic (icon);
   return GDK_PAINTABLE (icon);
