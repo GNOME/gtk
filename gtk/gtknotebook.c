@@ -6544,7 +6544,8 @@ gtk_notebook_get_tab_label (GtkNotebook *notebook,
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
 
   list = gtk_notebook_find_child (notebook, child);
-  g_return_val_if_fail (list != NULL, NULL);
+  if (list == NULL)
+    return NULL;
 
   if (GTK_NOTEBOOK_PAGE_FROM_LIST (list)->default_tab)
     return NULL;
