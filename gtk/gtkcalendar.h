@@ -45,24 +45,6 @@ G_BEGIN_DECLS
 
 typedef struct _GtkCalendar	       GtkCalendar;
 
-/**
- * GtkCalendarDisplayOptions:
- * @GTK_CALENDAR_SHOW_HEADING: Specifies that the month and year should be displayed.
- * @GTK_CALENDAR_SHOW_DAY_NAMES: Specifies that three letter day descriptions should be present.
- * @GTK_CALENDAR_NO_MONTH_CHANGE: Prevents the user from switching months with the calendar.
- * @GTK_CALENDAR_SHOW_WEEK_NUMBERS: Displays each week numbers of the current year, down the
- * left side of the calendar.
- *
- * These options can be used to influence the display and behaviour of a #GtkCalendar.
- */
-typedef enum
-{
-  GTK_CALENDAR_SHOW_HEADING		= 1 << 0,
-  GTK_CALENDAR_SHOW_DAY_NAMES		= 1 << 1,
-  GTK_CALENDAR_NO_MONTH_CHANGE		= 1 << 2,
-  GTK_CALENDAR_SHOW_WEEK_NUMBERS	= 1 << 3,
-} GtkCalendarDisplayOptions;
-
 GDK_AVAILABLE_IN_ALL
 GType	   gtk_calendar_get_type	(void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
@@ -85,13 +67,22 @@ void       gtk_calendar_unmark_day	(GtkCalendar *calendar,
 GDK_AVAILABLE_IN_ALL
 void	   gtk_calendar_clear_marks	(GtkCalendar *calendar);
 
+GDK_AVAILABLE_IN_ALL
+void       gtk_calendar_set_show_week_numbers       (GtkCalendar *self,
+                                                     gboolean     value);
+GDK_AVAILABLE_IN_ALL
+gboolean   gtk_calendar_get_show_week_numbers       (GtkCalendar *self);
+GDK_AVAILABLE_IN_ALL
+void       gtk_calendar_set_show_heading            (GtkCalendar *self,
+                                                     gboolean     value);
+GDK_AVAILABLE_IN_ALL
+gboolean   gtk_calendar_get_show_heading            (GtkCalendar *self);
+GDK_AVAILABLE_IN_ALL
+void       gtk_calendar_set_show_day_names          (GtkCalendar *self,
+                                                     gboolean     value);
+GDK_AVAILABLE_IN_ALL
+gboolean   gtk_calendar_get_show_day_names          (GtkCalendar *self);
 
-GDK_AVAILABLE_IN_ALL
-void	   gtk_calendar_set_display_options (GtkCalendar    	      *calendar,
-					     GtkCalendarDisplayOptions flags);
-GDK_AVAILABLE_IN_ALL
-GtkCalendarDisplayOptions
-           gtk_calendar_get_display_options (GtkCalendar   	      *calendar);
 GDK_AVAILABLE_IN_ALL
 void	   gtk_calendar_get_date	(GtkCalendar *calendar,
 					 guint	     *year,
