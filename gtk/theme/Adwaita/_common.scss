@@ -3398,42 +3398,31 @@ calendar {
     }
   }
 
-  &:selected {
-    @extend %selected_items;
+  > grid {
+    > label.day-name {
+    }
 
-    border-radius: 3px;
-  }
+    > label.week-number {
+    }
 
-  &.header {
-    border-bottom-color: transparentize(black, 0.9);
+    > label.day-number {
+      padding: 4px;
 
-    &:backdrop { border-bottom-color: transparentize(black, 0.9); }
-  }
+      &:selected{
+        @extend %selected_items;
+        border-radius: 3px;
+      }
+    }
 
-  &.button {
-    @extend %undecorated_button;
-
-    color: transparentize($fg_color, 0.55);
-
-    &:hover { color: $fg_color; }
-
-    &:backdrop { color: transparentize($backdrop_fg_color,0.55); }
-
-    &:disabled { color:  transparentize($insensitive_fg_color,0.55); }
-  }
-
-  &.highlight {
-    color: $insensitive_fg_color;
-
-    &:backdrop { color: $backdrop_insensitive_color; }
+    > label.day-number.other-month {
+      color: gtkalpha(currentColor, 0.3);
+    }
   }
 
   &:backdrop {
     color: $backdrop_text_color;
     border-color: $backdrop_borders_color;
   }
-
-  &:indeterminate { color: gtkalpha(currentColor, 0.1); }
 }
 
 
