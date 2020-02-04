@@ -690,30 +690,21 @@ gtk_css_style_get_pango_font (GtkCssStyle *style)
 
 static int values_size[] = {
   sizeof (GtkCssCoreValues),
-  sizeof (GtkCssCoreValues),
-  sizeof (GtkCssBackgroundValues),
   sizeof (GtkCssBackgroundValues),
   sizeof (GtkCssBorderValues),
-  sizeof (GtkCssBorderValues),
-  sizeof (GtkCssIconValues),
   sizeof (GtkCssIconValues),
   sizeof (GtkCssOutlineValues),
-  sizeof (GtkCssOutlineValues),
-  sizeof (GtkCssFontValues),
   sizeof (GtkCssFontValues),
   sizeof (GtkCssFontVariantValues),
-  sizeof (GtkCssFontVariantValues),
-  sizeof (GtkCssAnimationValues),
   sizeof (GtkCssAnimationValues),
   sizeof (GtkCssTransitionValues),
-  sizeof (GtkCssTransitionValues),
   sizeof (GtkCssSizeValues),
-  sizeof (GtkCssSizeValues),
-  sizeof (GtkCssOtherValues),
   sizeof (GtkCssOtherValues)
 };
 
-#define N_VALUES(type) ((values_size[type] - sizeof (GtkCssValues)) / sizeof (GtkCssValue *))
+#define TYPE_INDEX(type) ((type) - ((type) % 2))
+#define VALUES_SIZE(type) (values_size[(type) / 2])
+#define N_VALUES(type) ((VALUES_SIZE(type) - sizeof (GtkCssValues)) / sizeof (GtkCssValue *))
 
 #define GET_VALUES(v) (GtkCssValue **)((guint8 *)(v) + sizeof (GtkCssValues))
 
@@ -757,7 +748,7 @@ gtk_css_values_copy (GtkCssValues *values)
   GtkCssValue **v, **v2;
   int i;
 
-  copy = gtk_css_values_new (values->type - (values->type % 2));
+  copy = gtk_css_values_new (TYPE_INDEX(values->type));
 
   v = GET_VALUES (values);
   v2 = GET_VALUES (copy);
@@ -776,9 +767,9 @@ gtk_css_values_new (GtkCssValuesType type)
 {
   GtkCssValues *values;
 
-  values = (GtkCssValues *)g_malloc0 (values_size[type]);
+  values = (GtkCssValues *)g_malloc0 (VALUES_SIZE(type));
   values->ref_count = 1;
-  values->type = type - (type % 2);
+  values->type = type;
 
   return values;  
 }
