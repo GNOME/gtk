@@ -4987,7 +4987,7 @@ GtkIconSize
 <SECTION>
 <FILE>gtkicontheme</FILE>
 <TITLE>GtkIconTheme</TITLE>
-GtkIcon
+GtkIconPaintable
 GtkIconTheme
 GtkIconLookupFlags
 GTK_ICON_THEME_ERROR
@@ -4995,7 +4995,6 @@ GTK_TYPE_ICON_THEME_ERROR
 GTK_TYPE_ICON_LOOKUP_FLAGS
 GtkIconThemeError
 gtk_icon_theme_new
-gtk_icon_theme_get_default
 gtk_icon_theme_get_for_display
 gtk_icon_theme_set_display
 gtk_icon_theme_set_search_path
@@ -5006,20 +5005,14 @@ gtk_icon_theme_add_resource_path
 gtk_icon_theme_set_custom_theme
 gtk_icon_theme_has_icon
 gtk_icon_theme_lookup_icon
-gtk_icon_theme_choose_icon
 gtk_icon_theme_choose_icon_async
 gtk_icon_theme_choose_icon_finish
 gtk_icon_theme_lookup_by_gicon
 gtk_icon_theme_list_icons
 gtk_icon_theme_get_icon_sizes
-gtk_icon_theme_rescan_if_needed
-gtk_icon_get_base_size
-gtk_icon_get_base_scale
-gtk_icon_get_filename
-gtk_icon_is_symbolic
-gtk_icon_snapshot_with_colors
-gtk_icon_download_colored_texture
-gtk_icon_download_texture
+gtk_icon_paintable_get_filename
+gtk_icon_paintable_is_symbolic
+gtk_icon_paintable_download_texture
 <SUBSECTION Standard>
 GtkIconClass
 GTK_ICON_THEME
@@ -5029,12 +5022,12 @@ gtk_icon_theme_get_type
 GTK_ICON_THEME_CLASS
 GTK_IS_ICON_THEME_CLASS
 GTK_ICON_THEME_GET_CLASS
-gtk_icon_get_type
-GTK_ICON
+gtk_icon_paintable_get_type
+GTK_ICON_PAINTABLE
 GTK_IS_ICON
 GTK_TYPE_ICON
-GTK_ICON_CLASS
-GTK_ICON_GET_CLASS
+GTK_ICON_PAINTABLE_CLASS
+GTK_ICON_PAINTABLE_GET_CLASS
 GTK_IS_ICON_CLASS
 <SUBSECTION Private>
 GtkIconThemePrivate

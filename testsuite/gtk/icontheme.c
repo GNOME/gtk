@@ -51,13 +51,26 @@ lookup_flags_to_string (GtkIconLookupFlags flags)
 static void
 assert_icon_lookup_size (const char         *icon_name,
                          gint                size,
+                         GtkTextDirection    direction,
                          GtkIconLookupFlags  flags,
+                         gboolean            fallbacks,
                          const char         *filename,
                          gint                pixbuf_size)
 {
-  GtkIcon *info;
+  GtkIconPaintable *info;
 
-  info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, size, 1, flags);
+  if (fallbacks)
+    {
+      GThemedIcon *fallback_icons = G_THEMED_ICON (g_themed_icon_new_with_default_fallbacks (icon_name));
+      const char **fallback_names = (const char **) g_themed_icon_get_names (fallback_icons);
+      info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, &fallback_names[1], size, 1, direction, flags);
+      g_object_unref (fallback_icons);
+    }
+  else
+    {
+      info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, NULL, size, 1, direction, flags);
+    }
+
   if (info == NULL)
     {
       g_error ("Could not look up an icon for \"%s\" with flags %s at size %d",
@@ -67,17 +80,17 @@ assert_icon_lookup_size (const char         *icon_name,
 
   if (filename)
     {
-      if (!g_str_has_suffix (gtk_icon_get_filename (info), filename))
+      if (!g_str_has_suffix (gtk_icon_paintable_get_filename (info), filename))
         {
           g_error ("Icon for \"%s\" with flags %s at size %d should be \"...%s\" but is \"...%s\"",
                    icon_name, lookup_flags_to_string (flags), size,
-                   filename, gtk_icon_get_filename (info) + strlen (g_get_current_dir ()));
+                   filename, gtk_icon_paintable_get_filename (info) + strlen (g_get_current_dir ()));
           return;
         }
     }
   else
     {
-      g_assert (gtk_icon_get_filename (info) == NULL);
+      g_assert (gtk_icon_paintable_get_filename (info) == NULL);
     }
 
   if (pixbuf_size > 0)
@@ -85,7 +98,7 @@ assert_icon_lookup_size (const char         *icon_name,
       GdkTexture *texture;
       GError *error = NULL;
 
-      texture = gtk_icon_download_texture (info, &error);
+      texture = gtk_icon_paintable_download_texture (info, &error);
       g_assert_no_error (error);
       g_assert_cmpint (gdk_texture_get_width (texture), ==, pixbuf_size);
       g_object_unref (texture);
@@ -97,25 +110,28 @@ assert_icon_lookup_size (const char         *icon_name,
 static void
 assert_icon_lookup (const char         *icon_name,
                     gint                size,
+                    GtkTextDirection    direction,
                     GtkIconLookupFlags  flags,
+                    gboolean            fallbacks,
                     const char         *filename)
 {
-  assert_icon_lookup_size (icon_name, size, flags, filename, -1);
+  assert_icon_lookup_size (icon_name, size, direction, flags, fallbacks, filename, -1);
 }
 
 static void
 assert_icon_lookup_fails (const char         *icon_name,
                           gint                size,
+                          GtkTextDirection    direction,
                           GtkIconLookupFlags  flags)
 {
-  GtkIcon *info;
+  GtkIconPaintable *info;
 
-  info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, size, 1, flags);
+  info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, NULL, size, 1, direction, flags);
 
   if (info != NULL)
     {
       g_error ("Should not find an icon for \"%s\" with flags %s at size %d, but found \"%s\"",
-               icon_name, lookup_flags_to_string (flags), size, gtk_icon_get_filename (info) + strlen (g_get_current_dir ()));
+               icon_name, lookup_flags_to_string (flags), size, gtk_icon_paintable_get_filename (info) + strlen (g_get_current_dir ()));
       g_object_unref (info);
       return;
     }
@@ -157,14 +173,16 @@ log_writer (GLogLevelFlags   log_level,
 static void
 assert_lookup_order (const char         *icon_name,
                      gint                size,
+                     GtkTextDirection    direction,
                      GtkIconLookupFlags  flags,
+                     gboolean            fallbacks,
                      const char         *first,
                      ...)
 {
   guint debug_flags;
   va_list args;
   const gchar *s;
-  GtkIcon *info;
+  GtkIconPaintable *info;
   GList *l;
 
   debug_flags = gtk_get_debug_flags ();
@@ -173,7 +191,18 @@ assert_lookup_order (const char         *icon_name,
 
   g_assert (lookups == NULL);
 
-  info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, size, 1, flags);
+  if (fallbacks)
+    {
+      GThemedIcon *fallback_icons = G_THEMED_ICON (g_themed_icon_new_with_default_fallbacks (icon_name));
+      const char **fallback_names = (const char **) g_themed_icon_get_names (fallback_icons);
+      info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, &fallback_names[1], size, 1, direction, flags);
+      g_object_unref (fallback_icons);
+    }
+  else
+    {
+      info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, NULL, size, 1, direction, flags);
+    }
+
   if (info)
     g_object_unref (info);
   
@@ -201,30 +230,39 @@ static void
 test_basics (void)
 {
   /* just a basic boring lookup so we know everything works */
-  assert_icon_lookup ("simple", 16, 0, "/icons/16x16/simple.png");
+  assert_icon_lookup ("simple", 16, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16x16/simple.png");
 }
 
 static void
 test_lookup_order (void)
 {
-  assert_lookup_order ("foo-bar-baz", 16, GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+  assert_lookup_order ("foo-bar-baz", 16, GTK_TEXT_DIR_NONE, 0, TRUE,
                        "foo-bar-baz",
                        "foo-bar",
                        "foo",
+                       "foo-bar-baz-symbolic",
+                       "foo-bar-symbolic",
+                       "foo-symbolic",
                        NULL);
-  assert_lookup_order ("foo-bar-baz", 16, GTK_ICON_LOOKUP_GENERIC_FALLBACK|GTK_ICON_LOOKUP_DIR_RTL,
+  assert_lookup_order ("foo-bar-baz", 16, GTK_TEXT_DIR_RTL, 0, TRUE,
                        "foo-bar-baz-rtl",
                        "foo-bar-baz",
                        "foo-bar-rtl",
                        "foo-bar",
                        "foo-rtl",
                        "foo",
+                       "foo-bar-baz-symbolic-rtl",
+                       "foo-bar-baz-symbolic",
+                       "foo-bar-symbolic-rtl",
+                       "foo-bar-symbolic",
+                       "foo-symbolic-rtl",
+                       "foo-symbolic",
                        NULL);
-  assert_lookup_order ("foo-bar-baz", 16, GTK_ICON_LOOKUP_DIR_RTL,
+  assert_lookup_order ("foo-bar-baz", 16, GTK_TEXT_DIR_RTL, 0, FALSE,
                        "foo-bar-baz-rtl",
                        "foo-bar-baz",
                        NULL);
-  assert_lookup_order ("foo-bar-baz-symbolic", 16, GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+  assert_lookup_order ("foo-bar-baz-symbolic", 16, GTK_TEXT_DIR_NONE, 0, TRUE,
                        "foo-bar-baz-symbolic",
                        "foo-bar-symbolic",
                        "foo-symbolic",
@@ -233,13 +271,15 @@ test_lookup_order (void)
                        "foo",
                        NULL);
 
-  assert_lookup_order ("bla-bla", 16, GTK_ICON_LOOKUP_GENERIC_FALLBACK|GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+  assert_lookup_order ("bla-bla", 16, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SYMBOLIC, TRUE,
                        "bla-bla-symbolic",
                        "bla-symbolic",
+                       "bla-bla-symbolic", /* awkward */
+                       "bla-symbolic", /* awkward */
                        "bla-bla",
                        "bla",
                        NULL);
-  assert_lookup_order ("bla-bla-symbolic", 16, GTK_ICON_LOOKUP_GENERIC_FALLBACK|GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+  assert_lookup_order ("bla-bla-symbolic", 16, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SYMBOLIC, TRUE,
                        "bla-bla-symbolic",
                        "bla-symbolic",
                        "bla-bla-symbolic", /* awkward */
@@ -248,17 +288,21 @@ test_lookup_order (void)
                        "bla",
                        NULL);
 
-  assert_lookup_order ("bar-baz", 16, GTK_ICON_LOOKUP_FORCE_SYMBOLIC|GTK_ICON_LOOKUP_GENERIC_FALLBACK|GTK_ICON_LOOKUP_DIR_RTL,
+  assert_lookup_order ("bar-baz", 16, GTK_TEXT_DIR_RTL, GTK_ICON_LOOKUP_FORCE_SYMBOLIC, TRUE,
                        "bar-baz-symbolic-rtl",
                        "bar-baz-symbolic",
                        "bar-symbolic-rtl",
                        "bar-symbolic",
+                       "bar-baz-symbolic-rtl", /* awkward */
+                       "bar-baz-symbolic", /* awkward */
+                       "bar-symbolic-rtl", /* awkward */
+                       "bar-symbolic", /* awkward */
                        "bar-baz-rtl",
                        "bar-baz",
                        "bar-rtl",
                        "bar",
                        NULL);
-  assert_lookup_order ("bar-baz-symbolic", 16, GTK_ICON_LOOKUP_FORCE_SYMBOLIC|GTK_ICON_LOOKUP_GENERIC_FALLBACK|GTK_ICON_LOOKUP_DIR_RTL,
+  assert_lookup_order ("bar-baz-symbolic", 16, GTK_TEXT_DIR_RTL, GTK_ICON_LOOKUP_FORCE_SYMBOLIC, TRUE,
                        "bar-baz-symbolic-rtl",
                        "bar-baz-symbolic",
                        "bar-symbolic-rtl",
@@ -273,17 +317,21 @@ test_lookup_order (void)
                        "bar",
                        NULL);
 
-  assert_lookup_order ("bar-baz", 16, GTK_ICON_LOOKUP_FORCE_SYMBOLIC|GTK_ICON_LOOKUP_GENERIC_FALLBACK|GTK_ICON_LOOKUP_DIR_LTR,
+  assert_lookup_order ("bar-baz", 16, GTK_TEXT_DIR_LTR, GTK_ICON_LOOKUP_FORCE_SYMBOLIC, TRUE,
                        "bar-baz-symbolic-ltr",
                        "bar-baz-symbolic",
                        "bar-symbolic-ltr",
                        "bar-symbolic",
+                       "bar-baz-symbolic-ltr", /* awkward */
+                       "bar-baz-symbolic", /* awkward */
+                       "bar-symbolic-ltr", /* awkward */
+                       "bar-symbolic", /* awkward */
                        "bar-baz-ltr",
                        "bar-baz",
                        "bar-ltr",
                        "bar",
                        NULL);
-  assert_lookup_order ("bar-baz-symbolic", 16, GTK_ICON_LOOKUP_FORCE_SYMBOLIC|GTK_ICON_LOOKUP_GENERIC_FALLBACK|GTK_ICON_LOOKUP_DIR_LTR,
+  assert_lookup_order ("bar-baz-symbolic", 16, GTK_TEXT_DIR_LTR, GTK_ICON_LOOKUP_FORCE_SYMBOLIC, TRUE,
                        "bar-baz-symbolic-ltr",
                        "bar-baz-symbolic",
                        "bar-symbolic-ltr",
@@ -305,20 +353,26 @@ test_generic_fallback (void)
   /* simple test for generic fallback */
   assert_icon_lookup ("simple-foo-bar",
                       16,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                      GTK_TEXT_DIR_NONE,
+                      0,
+                      TRUE,
                       "/icons/16x16/simple.png");
 
   /* Check generic fallback also works for symbolics falling back to regular items */
   assert_icon_lookup ("simple-foo-bar-symbolic",
                       16,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                      GTK_TEXT_DIR_NONE,
+                      0,
+                      TRUE,
                       "/icons/16x16/simple.png");
 
   /* Check we fall back to more generic symbolic icons before falling back to
    * non-symbolics */
   assert_icon_lookup ("everything-justregular-symbolic",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                      GTK_TEXT_DIR_NONE,
+                      0,
+                      TRUE,
                       "/icons/scalable/everything-symbolic.svg");
 }
 
@@ -328,47 +382,66 @@ test_force_symbolic (void)
   /* check forcing symbolic works */
   assert_icon_lookup ("everything",
                       SCALABLE_IMAGE_SIZE,
+                      GTK_TEXT_DIR_NONE,
                       GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      FALSE,
                       "/icons/scalable/everything-symbolic.svg");
   /* check forcing symbolic also works for symbolic icons (d'oh) */
   assert_icon_lookup ("everything-symbolic",
                       SCALABLE_IMAGE_SIZE,
+                      GTK_TEXT_DIR_NONE,
                       GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      FALSE,
                       "/icons/scalable/everything-symbolic.svg");
 
   /* check all the combos for fallbacks on an icon that only exists as symbolic */
   assert_icon_lookup ("everything-justsymbolic",
                       SCALABLE_IMAGE_SIZE,
+                      GTK_TEXT_DIR_NONE,
                       GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      FALSE,
                       "/icons/scalable/everything-justsymbolic-symbolic.svg");
   assert_icon_lookup ("everything-justsymbolic",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
-                      "/icons/scalable/everything-justsymbolic-symbolic.svg");
-  assert_icon_lookup ("everything-justsymbolic-symbolic",
-                      SCALABLE_IMAGE_SIZE,
+                      GTK_TEXT_DIR_NONE,
                       GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      TRUE,
                       "/icons/scalable/everything-justsymbolic-symbolic.svg");
   assert_icon_lookup ("everything-justsymbolic-symbolic",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      GTK_TEXT_DIR_NONE,
+                      GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      FALSE,
+                      "/icons/scalable/everything-justsymbolic-symbolic.svg");
+  assert_icon_lookup ("everything-justsymbolic-symbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_TEXT_DIR_NONE,
+                      GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      TRUE,
                       "/icons/scalable/everything-justsymbolic-symbolic.svg");
 
   /* check all the combos for fallbacks, this time for an icon that only exists as regular */
   assert_icon_lookup ("everything-justregular",
                       SCALABLE_IMAGE_SIZE,
+                      GTK_TEXT_DIR_NONE,
                       GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      FALSE,
                       "/icons/scalable/everything-justregular.svg");
   assert_icon_lookup ("everything-justregular",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      GTK_TEXT_DIR_NONE,
+                      GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      TRUE,
                       "/icons/scalable/everything-symbolic.svg");
   assert_icon_lookup_fails ("everything-justregular-symbolic",
                             SCALABLE_IMAGE_SIZE,
+                            GTK_TEXT_DIR_NONE,
                             GTK_ICON_LOOKUP_FORCE_SYMBOLIC);
   assert_icon_lookup ("everything-justregular-symbolic",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      GTK_TEXT_DIR_NONE,
+                      GTK_ICON_LOOKUP_FORCE_SYMBOLIC,
+                      TRUE,
                       "/icons/scalable/everything-symbolic.svg");
 }
 
@@ -378,47 +451,66 @@ test_force_regular (void)
   /* check forcing regular works (d'oh) */
   assert_icon_lookup ("everything",
                       SCALABLE_IMAGE_SIZE,
+                      GTK_TEXT_DIR_NONE,
                       GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      FALSE,
                       "/icons/scalable/everything.svg");
   /* check forcing regular also works for symbolic icons ) */
   assert_icon_lookup ("everything-symbolic",
                       SCALABLE_IMAGE_SIZE,
+                      GTK_TEXT_DIR_NONE,
                       GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      FALSE,
                       "/icons/scalable/everything.svg");
 
   /* check all the combos for fallbacks on an icon that only exists as regular */
   assert_icon_lookup ("everything-justregular",
                       SCALABLE_IMAGE_SIZE,
+                      GTK_TEXT_DIR_NONE,
                       GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      FALSE,
                       "/icons/scalable/everything-justregular.svg");
   assert_icon_lookup ("everything-justregular",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_FORCE_REGULAR,
-                      "/icons/scalable/everything-justregular.svg");
-  assert_icon_lookup ("everything-justregular-symbolic",
-                      SCALABLE_IMAGE_SIZE,
+                      GTK_TEXT_DIR_NONE,
                       GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      TRUE,
                       "/icons/scalable/everything-justregular.svg");
   assert_icon_lookup ("everything-justregular-symbolic",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      GTK_TEXT_DIR_NONE,
+                      GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      FALSE,
+                      "/icons/scalable/everything-justregular.svg");
+  assert_icon_lookup ("everything-justregular-symbolic",
+                      SCALABLE_IMAGE_SIZE,
+                      GTK_TEXT_DIR_NONE,
+                      GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      TRUE,
                       "/icons/scalable/everything-justregular.svg");
 
   /* check all the combos for fallbacks, this time for an icon that only exists as symbolic */
   assert_icon_lookup_fails ("everything-justsymbolic",
                             SCALABLE_IMAGE_SIZE,
+                            GTK_TEXT_DIR_NONE,
                             GTK_ICON_LOOKUP_FORCE_REGULAR);
   assert_icon_lookup ("everything-justsymbolic",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      GTK_TEXT_DIR_NONE,
+                      GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      TRUE,
                       "/icons/scalable/everything.svg");
   assert_icon_lookup ("everything-justsymbolic-symbolic",
                       SCALABLE_IMAGE_SIZE,
+                      GTK_TEXT_DIR_NONE,
                       GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      FALSE,
                       "/icons/scalable/everything-justsymbolic-symbolic.svg");
   assert_icon_lookup ("everything-justsymbolic-symbolic",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      GTK_TEXT_DIR_NONE,
+                      GTK_ICON_LOOKUP_FORCE_REGULAR,
+                      TRUE,
                       "/icons/scalable/everything.svg");
 }
 
@@ -427,35 +519,49 @@ test_rtl (void)
 {
   assert_icon_lookup ("everything",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_DIR_RTL,
+                      GTK_TEXT_DIR_RTL,
+                      0,
+                      FALSE,
                       "/icons/scalable/everything-rtl.svg");
   assert_icon_lookup ("everything-symbolic",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_DIR_RTL,
+                      GTK_TEXT_DIR_RTL,
+                      0,
+                      FALSE,
                       "/icons/scalable/everything-symbolic-rtl.svg");
 
   assert_icon_lookup_fails ("everything-justrtl",
                             SCALABLE_IMAGE_SIZE,
+                            GTK_TEXT_DIR_NONE,
                             0);
   assert_icon_lookup_fails ("everything-justrtl",
                             SCALABLE_IMAGE_SIZE,
-                            GTK_ICON_LOOKUP_DIR_LTR);
+                            GTK_TEXT_DIR_LTR,
+                            0);
   assert_icon_lookup ("everything-justrtl",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_DIR_RTL,
+                      GTK_TEXT_DIR_RTL,
+                      0,
+                      FALSE,
                       "/icons/scalable/everything-justrtl-rtl.svg");
 
   assert_icon_lookup ("everything-justrtl",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                      GTK_TEXT_DIR_NONE,
+                      0,
+                      TRUE,
                       "/icons/scalable/everything.svg");
   assert_icon_lookup ("everything-justrtl",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_DIR_LTR,
+                      GTK_TEXT_DIR_LTR,
+                      0,
+                      TRUE,
                       "/icons/scalable/everything.svg");
   assert_icon_lookup ("everything-justrtl",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_DIR_RTL,
+                      GTK_TEXT_DIR_RTL,
+                      0,
+                      TRUE,
                       "/icons/scalable/everything-justrtl-rtl.svg");
 }
 
@@ -465,16 +571,22 @@ test_symbolic_single_size (void)
   /* Check we properly load a symbolic icon from a sized directory */
   assert_icon_lookup ("only32-symbolic",
                       32,
+                      GTK_TEXT_DIR_NONE,
                       0,
+                      FALSE,
                       "/icons/32x32/only32-symbolic.svg");
   /* Check that we still properly load it even if a different size is requested */
   assert_icon_lookup ("only32-symbolic",
                       16,
+                      GTK_TEXT_DIR_NONE,
                       0,
+                      FALSE,
                       "/icons/32x32/only32-symbolic.svg");
   assert_icon_lookup ("only32-symbolic",
                       128,
+                      GTK_TEXT_DIR_NONE,
                       0,
+                      FALSE,
                       "/icons/32x32/only32-symbolic.svg");
 }
 
@@ -486,69 +598,69 @@ test_svg_size (void)
    * account for choosing).
    */
   /* Check we properly load a svg icon from a sized directory */
-  assert_icon_lookup_size ("twosize-fixed", 48, 0, "/icons/32x32/twosize-fixed.svg", 32);
-  assert_icon_lookup_size ("twosize-fixed", 32, 0, "/icons/32x32/twosize-fixed.svg", 32);
-  assert_icon_lookup_size ("twosize-fixed", 20, 0, "/icons/32x32/twosize-fixed.svg", 32);
-  assert_icon_lookup_size ("twosize-fixed", 16, 0, "/icons/16x16/twosize-fixed.svg", 16);
+  assert_icon_lookup_size ("twosize-fixed", 48, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32/twosize-fixed.svg", 32);
+  assert_icon_lookup_size ("twosize-fixed", 32, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32/twosize-fixed.svg", 32);
+  assert_icon_lookup_size ("twosize-fixed", 20, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32/twosize-fixed.svg", 32);
+  assert_icon_lookup_size ("twosize-fixed", 16, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16x16/twosize-fixed.svg", 16);
 
   /* Check that we still properly load it even if a different size is requested */
-  assert_icon_lookup_size ("twosize", 64, 0, "/icons/32x32s/twosize.svg", 48);
-  assert_icon_lookup_size ("twosize", 48, 0, "/icons/32x32s/twosize.svg", 48);
-  assert_icon_lookup_size ("twosize", 32, 0, "/icons/32x32s/twosize.svg", 32);
-  assert_icon_lookup_size ("twosize", 24, 0, "/icons/32x32s/twosize.svg", 24);
-  assert_icon_lookup_size ("twosize", 16, 0, "/icons/16x16s/twosize.svg", 16);
-  assert_icon_lookup_size ("twosize", 12, 0, "/icons/16x16s/twosize.svg", 12);
-  assert_icon_lookup_size ("twosize",  8, 0, "/icons/16x16s/twosize.svg", 12);
+  assert_icon_lookup_size ("twosize", 64, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32s/twosize.svg", 48);
+  assert_icon_lookup_size ("twosize", 48, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32s/twosize.svg", 48);
+  assert_icon_lookup_size ("twosize", 32, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32s/twosize.svg", 32);
+  assert_icon_lookup_size ("twosize", 24, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32s/twosize.svg", 24);
+  assert_icon_lookup_size ("twosize", 16, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16x16s/twosize.svg", 16);
+  assert_icon_lookup_size ("twosize", 12, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16x16s/twosize.svg", 12);
+  assert_icon_lookup_size ("twosize",  8, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16x16s/twosize.svg", 12);
 }
 
 static void
 test_size (void)
 {
-  assert_icon_lookup_size ("size-test", 12, 0, "/icons/15/size-test.png", 15);
-  assert_icon_lookup_size ("size-test", 13, 0, "/icons/15/size-test.png", 15);
-  assert_icon_lookup_size ("size-test", 14, 0, "/icons/15/size-test.png", 15);
-  assert_icon_lookup_size ("size-test", 15, 0, "/icons/15/size-test.png", 15);
-  assert_icon_lookup_size ("size-test", 16, 0, "/icons/16-22/size-test.png", 19);
-  assert_icon_lookup_size ("size-test", 17, 0, "/icons/16-22/size-test.png", 19);
-  assert_icon_lookup_size ("size-test", 18, 0, "/icons/16-22/size-test.png", 19);
-  assert_icon_lookup_size ("size-test", 19, 0, "/icons/16-22/size-test.png", 19);
+  assert_icon_lookup_size ("size-test", 12, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/15/size-test.png", 15);
+  assert_icon_lookup_size ("size-test", 13, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/15/size-test.png", 15);
+  assert_icon_lookup_size ("size-test", 14, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/15/size-test.png", 15);
+  assert_icon_lookup_size ("size-test", 15, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/15/size-test.png", 15);
+  assert_icon_lookup_size ("size-test", 16, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16-22/size-test.png", 19);
+  assert_icon_lookup_size ("size-test", 17, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16-22/size-test.png", 19);
+  assert_icon_lookup_size ("size-test", 18, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16-22/size-test.png", 19);
+  assert_icon_lookup_size ("size-test", 19, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16-22/size-test.png", 19);
   /* the next 3 are because we never scale up */
-  assert_icon_lookup_size ("size-test", 20, 0, "/icons/25+/size-test.svg", 25);
-  assert_icon_lookup_size ("size-test", 21, 0, "/icons/25+/size-test.svg", 25);
-  assert_icon_lookup_size ("size-test", 22, 0, "/icons/25+/size-test.svg", 25);
+  assert_icon_lookup_size ("size-test", 20, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 25);
+  assert_icon_lookup_size ("size-test", 21, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 25);
+  assert_icon_lookup_size ("size-test", 22, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 25);
 
-  assert_icon_lookup_size ("size-test", 23, 0, "/icons/25+/size-test.svg", 25);
-  assert_icon_lookup_size ("size-test", 23, 0, "/icons/25+/size-test.svg", 25);
-  assert_icon_lookup_size ("size-test", 25, 0, "/icons/25+/size-test.svg", 25);
-  assert_icon_lookup_size ("size-test", 28, 0, "/icons/25+/size-test.svg", 28);
+  assert_icon_lookup_size ("size-test", 23, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 25);
+  assert_icon_lookup_size ("size-test", 23, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 25);
+  assert_icon_lookup_size ("size-test", 25, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 25);
+  assert_icon_lookup_size ("size-test", 28, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 28);
   /* the next 2 are because we never scale up */
-  assert_icon_lookup_size ("size-test", 31, 0, "/icons/35+/size-test.svg", 35);
-  assert_icon_lookup_size ("size-test", 34, 0, "/icons/35+/size-test.svg", 35);
+  assert_icon_lookup_size ("size-test", 31, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/35+/size-test.svg", 35);
+  assert_icon_lookup_size ("size-test", 34, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/35+/size-test.svg", 35);
 
-  assert_icon_lookup_size ("size-test", 37, 0, "/icons/35+/size-test.svg", 37);
-  assert_icon_lookup_size ("size-test", 40, 0, "/icons/35+/size-test.svg", 40);
-  assert_icon_lookup_size ("size-test", 45, 0, "/icons/35+/size-test.svg", 45);
+  assert_icon_lookup_size ("size-test", 37, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/35+/size-test.svg", 37);
+  assert_icon_lookup_size ("size-test", 40, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/35+/size-test.svg", 40);
+  assert_icon_lookup_size ("size-test", 45, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/35+/size-test.svg", 45);
 
-  assert_icon_lookup_size ("size-test", 12, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/15/size-test.png", 12);
-  assert_icon_lookup_size ("size-test", 13, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/15/size-test.png", 13);
-  assert_icon_lookup_size ("size-test", 14, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/15/size-test.png", 14);
-  assert_icon_lookup_size ("size-test", 15, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/15/size-test.png", 15);
-  assert_icon_lookup_size ("size-test", 16, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/16-22/size-test.png", 16);
-  assert_icon_lookup_size ("size-test", 17, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/16-22/size-test.png", 17);
-  assert_icon_lookup_size ("size-test", 18, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/16-22/size-test.png", 18);
-  assert_icon_lookup_size ("size-test", 19, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/16-22/size-test.png", 19);
-  //assert_icon_lookup_size ("size-test", 20, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/16-22/size-test.png", 20);
-  //assert_icon_lookup_size ("size-test", 21, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/16-22/size-test.png", 21);
-  //assert_icon_lookup_size ("size-test", 22, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/16-22/size-test.png", 22);
-  assert_icon_lookup_size ("size-test", 23, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/25+/size-test.svg", 23);
-  assert_icon_lookup_size ("size-test", 24, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/25+/size-test.svg", 24);
-  assert_icon_lookup_size ("size-test", 25, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/25+/size-test.svg", 25);
-  assert_icon_lookup_size ("size-test", 28, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/25+/size-test.svg", 28);
-  //assert_icon_lookup_size ("size-test", 31, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/25+/size-test.svg", 31);
-  //assert_icon_lookup_size ("size-test", 34, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/25+/size-test.svg", 34);
-  assert_icon_lookup_size ("size-test", 37, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/35+/size-test.svg", 37);
-  assert_icon_lookup_size ("size-test", 40, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/35+/size-test.svg", 40);
-  assert_icon_lookup_size ("size-test", 45, GTK_ICON_LOOKUP_FORCE_SIZE, "/icons/35+/size-test.svg", 45);
+  assert_icon_lookup_size ("size-test", 12, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/15/size-test.png", 12);
+  assert_icon_lookup_size ("size-test", 13, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/15/size-test.png", 13);
+  assert_icon_lookup_size ("size-test", 14, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/15/size-test.png", 14);
+  assert_icon_lookup_size ("size-test", 15, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/15/size-test.png", 15);
+  assert_icon_lookup_size ("size-test", 16, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 16);
+  assert_icon_lookup_size ("size-test", 17, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 17);
+  assert_icon_lookup_size ("size-test", 18, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 18);
+  assert_icon_lookup_size ("size-test", 19, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 19);
+  //assert_icon_lookup_size ("size-test", 20, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 20);
+  //assert_icon_lookup_size ("size-test", 21, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 21);
+  //assert_icon_lookup_size ("size-test", 22, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 22);
+  assert_icon_lookup_size ("size-test", 23, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/25+/size-test.svg", 23);
+  assert_icon_lookup_size ("size-test", 24, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/25+/size-test.svg", 24);
+  assert_icon_lookup_size ("size-test", 25, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/25+/size-test.svg", 25);
+  assert_icon_lookup_size ("size-test", 28, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/25+/size-test.svg", 28);
+  //assert_icon_lookup_size ("size-test", 31, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/25+/size-test.svg", 31);
+  //assert_icon_lookup_size ("size-test", 34, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/25+/size-test.svg", 34);
+  assert_icon_lookup_size ("size-test", 37, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/35+/size-test.svg", 37);
+  assert_icon_lookup_size ("size-test", 40, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/35+/size-test.svg", 40);
+  assert_icon_lookup_size ("size-test", 45, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/35+/size-test.svg", 45);
 }
 
 static void
@@ -558,7 +670,7 @@ test_list (void)
   GList *icons;
 
   theme = get_test_icontheme (TRUE);
-  icons = gtk_icon_theme_list_icons (theme, NULL);
+  icons = gtk_icon_theme_list_icons (theme);
 
   g_assert (g_list_find_custom (icons, "size-test", (GCompareFunc)g_strcmp0));
   g_assert (g_list_find_custom (icons, "simple", (GCompareFunc)g_strcmp0));
@@ -589,74 +701,44 @@ test_list (void)
   g_list_free_full (icons, g_free);
 }
 
-static gint loaded;
-
-static void
-load_icon (GObject      *source,
-           GAsyncResult *res,
-           gpointer      data)
-{
-  GMainLoop *loop = data;
-  GtkIconTheme *theme = GTK_ICON_THEME (source);
-  GError *error = NULL;
-  GtkIcon *icon;
-
-  icon = gtk_icon_theme_choose_icon_finish (theme, res, &error);
-  g_assert (icon != NULL);
-  g_assert_no_error (error);
-  g_object_unref (icon);
-
-  loaded++;
-  if (loaded == 2)
-    g_main_loop_quit (loop);
-}
-
-static void
-test_async (void)
-{
-  GtkIconTheme *theme;
-  GMainLoop *loop;
-  const char *icons[] = { "twosize-fixed", NULL };
-
-  loop = g_main_loop_new (NULL, FALSE);
-
-  g_printerr ("test_async\n");
-  theme = get_test_icontheme (TRUE);
-  gtk_icon_theme_choose_icon_async (theme, icons, 32, 1, 0, 0, NULL, load_icon, loop);
-  gtk_icon_theme_choose_icon_async (theme, icons, 48, 1, 0, 0, NULL, load_icon, loop);
-
-  g_main_loop_run (loop);
-  g_main_loop_unref (loop);
-
-  g_assert (loaded == 2);
-}
-
 static void
 test_inherit (void)
 {
   assert_icon_lookup ("one-two-three",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                      GTK_TEXT_DIR_NONE,
+                      0,
+                      TRUE,
                       "/icons/scalable/one-two.svg");
   assert_icon_lookup ("one-two-three",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_DIR_RTL,
+                      GTK_TEXT_DIR_RTL,
+                      0,
+                      TRUE,
                       "/icons/scalable/one-two-rtl.svg");
   assert_icon_lookup ("one-two-three-symbolic",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                      GTK_TEXT_DIR_NONE,
+                      0,
+                      TRUE,
                       "/icons2/scalable/one-two-three-symbolic.svg");
   assert_icon_lookup ("one-two-three-symbolic",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_DIR_RTL,
+                      GTK_TEXT_DIR_RTL,
+                      0,
+                      TRUE,
                       "/icons2/scalable/one-two-three-symbolic.svg");
   assert_icon_lookup ("one-two-symbolic",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                      GTK_TEXT_DIR_NONE,
+                      0,
+                      TRUE,
                       "/icons2/scalable/one-two-symbolic.svg");
   assert_icon_lookup ("one-two-symbolic",
                       SCALABLE_IMAGE_SIZE,
-                      GTK_ICON_LOOKUP_GENERIC_FALLBACK | GTK_ICON_LOOKUP_DIR_RTL,
+                      GTK_TEXT_DIR_RTL,
+                      0,
+                      TRUE,
                       "/icons2/scalable/one-two-symbolic-rtl.svg");
 }
 
@@ -665,10 +747,9 @@ test_nonsquare_symbolic (void)
 {
   gint width, height;
   GtkIconTheme *icon_theme;
-  GtkIcon *info;
+  GtkIconPaintable *info;
   GFile *file;
   GIcon *icon;
-  GdkRGBA black = { 0.0, 0.0, 0.0, 1.0 };
   GError *error = NULL;
   GdkTexture *texture;
   gchar *path = g_build_filename (g_test_get_dir (G_TEST_DIST),
@@ -687,15 +768,15 @@ test_nonsquare_symbolic (void)
   g_assert_cmpint (width, !=, height);
 
   /* now load it through GtkIconTheme */
-  icon_theme = gtk_icon_theme_get_default ();
+  icon_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
   file = g_file_new_for_path (path);
   icon = g_file_icon_new (file);
   info = gtk_icon_theme_lookup_by_gicon (icon_theme, icon,
-                                         height, 1, 0);
+                                         height, 1, GTK_TEXT_DIR_NONE, 0);
   g_assert_nonnull (info);
 
   g_object_unref (pixbuf);
-  texture = gtk_icon_download_colored_texture (info, &black, NULL, NULL, NULL, &error);
+  texture = gtk_icon_paintable_download_texture (info, &error);
 
   /* we are loaded successfully */
   g_assert_no_error (error);
@@ -736,7 +817,7 @@ main (int argc, char *argv[])
   /* Ignore the one-time warning that the fallback icon theme can’t be found
    * (because we’ve changed the search paths). */
   g_log_set_writer_func (log_writer_drop_warnings, &ignore_warnings, NULL);
-  assert_icon_lookup_fails ("this-icon-totally-does-not-exist", 16, 0);
+  assert_icon_lookup_fails ("this-icon-totally-does-not-exist", 16, GTK_TEXT_DIR_NONE, 0);
   ignore_warnings = FALSE;
 
   g_test_add_func ("/icontheme/basics", test_basics);
@@ -749,7 +830,6 @@ main (int argc, char *argv[])
   g_test_add_func ("/icontheme/svg-size", test_svg_size);
   g_test_add_func ("/icontheme/size", test_size);
   g_test_add_func ("/icontheme/list", test_list);
-  g_test_add_func ("/icontheme/async", test_async);
   g_test_add_func ("/icontheme/inherit", test_inherit);
   g_test_add_func ("/icontheme/nonsquare-symbolic", test_nonsquare_symbolic);
 

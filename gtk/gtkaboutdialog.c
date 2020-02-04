@@ -61,6 +61,7 @@
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkgestureclick.h"
+#include "gtkstylecontext.h"
 
 
 /**
@@ -1831,8 +1832,8 @@ gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
 
   if (icon_name)
     {
-      gint *sizes = gtk_icon_theme_get_icon_sizes (gtk_icon_theme_get_default (),
-                                                   icon_name);
+      GtkIconTheme *icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (about)));
+      gint *sizes = gtk_icon_theme_get_icon_sizes (icon_theme, icon_name);
       gint i, best_size = 0;
 
       for (i = 0; sizes[i]; i++)

@@ -29,44 +29,20 @@ usage (void)
 	   "usage: test-icon-theme list <theme name> [context]\n"
 	   " or\n"
 	   "usage: test-icon-theme display <theme name> <icon name> [size] [scale]\n"
-	   " or\n"
-	   "usage: test-icon-theme display-async <theme name> <icon name> [size] [scale]\n"
 	   );
-}
-
-static void
-icon_loaded_cb (GObject *source_object,
-		GAsyncResult *res,
-		gpointer user_data)
-{
-  GtkIcon *icon;
-  GError *error;
-
-  error = NULL;
-  icon = gtk_icon_theme_choose_icon_finish (GTK_ICON_THEME (source_object),
-                                           res, &error);
-
-  if (icon == NULL)
-    {
-      g_print ("%s\n", error->message);
-      exit (1);
-    }
-
-  gtk_image_set_from_paintable (GTK_IMAGE (user_data), GDK_PAINTABLE (icon));
-  g_object_unref (icon);
 }
 
 int
 main (int argc, char *argv[])
 {
   GtkIconTheme *icon_theme;
-  GtkIcon *icon;
-  char *context;
+  GtkIconPaintable *icon;
   char *themename;
   GList *list;
   int size = 48;
   int scale = 1;
   GtkIconLookupFlags flags;
+  GtkTextDirection direction;
   
   gtk_init ();
 
@@ -76,12 +52,14 @@ main (int argc, char *argv[])
       return 1;
     }
 
-  flags = GTK_ICON_LOOKUP_USE_BUILTIN;
+  flags = 0;
 
   if (g_getenv ("RTL"))
-    flags |= GTK_ICON_LOOKUP_DIR_RTL;
+    direction = GTK_TEXT_DIR_RTL;
+  else if (g_getenv ("LTR"))
+    direction = GTK_TEXT_DIR_LTR;
   else
-    flags |= GTK_ICON_LOOKUP_DIR_LTR;
+    direction = GTK_TEXT_DIR_NONE;
 
   themename = argv[2];
   
@@ -91,7 +69,7 @@ main (int argc, char *argv[])
 
   if (strcmp (argv[1], "display") == 0)
     {
-      GtkIcon *icon;
+      GtkIconPaintable *icon;
       GtkWidget *window, *image;
 
       if (argc < 4)
@@ -107,7 +85,7 @@ main (int argc, char *argv[])
       if (argc >= 6)
 	scale = atoi (argv[5]);
 
-      icon = gtk_icon_theme_lookup_icon (icon_theme, argv[3], size, scale, flags);
+      icon = gtk_icon_theme_lookup_icon (icon_theme, argv[3], NULL, size, scale, direction, flags);
       if (!icon)
         {
           g_print ("Icon '%s' not found\n", argv[3]);
@@ -124,44 +102,9 @@ main (int argc, char *argv[])
 
       gtk_main ();
     }
-  else if (strcmp (argv[1], "display-async") == 0)
-    {
-      GtkWidget *window, *image;
-      const char *icons[2] = { NULL, NULL };
-
-      if (argc < 4)
-	{
-	  g_object_unref (icon_theme);
-	  usage ();
-	  return 1;
-	}
-
-      if (argc >= 5)
-	size = atoi (argv[4]);
-
-      if (argc >= 6)
-	scale = atoi (argv[5]);
-
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      image = gtk_image_new ();
-      gtk_container_add (GTK_CONTAINER (window), image);
-      g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
-      gtk_widget_show (window);
-
-      icons[0] = argv[3];
-      gtk_icon_theme_choose_icon_async (icon_theme, icons, size, scale, flags, 0, NULL, icon_loaded_cb, image);
-
-      gtk_main ();
-    }
   else if (strcmp (argv[1], "list") == 0)
     {
-      if (argc >= 4)
-	context = argv[3];
-      else
-	context = NULL;
-
-      list = gtk_icon_theme_list_icons (icon_theme,
-					   context);
+      list = gtk_icon_theme_list_icons (icon_theme);
       
       while (list)
 	{
@@ -184,15 +127,14 @@ main (int argc, char *argv[])
       if (argc >= 6)
 	scale = atoi (argv[5]);
 
-      icon = gtk_icon_theme_lookup_icon (icon_theme, argv[3], size, scale, flags);
+      icon = gtk_icon_theme_lookup_icon (icon_theme, argv[3], NULL, size, scale, direction, flags);
       g_print ("icon for %s at %dx%d@%dx is %s\n", argv[3], size, size, scale,
-               icon ? gtk_icon_get_filename (icon) : "<none>");
+               icon ? gtk_icon_paintable_get_filename (icon) : "<none>");
 
       if (icon)
 	{
           GdkPaintable *paintable = GDK_PAINTABLE (icon);
 
-          g_print ("Base size: %d, Scale: %d\n", gtk_icon_get_base_size (icon), gtk_icon_get_base_scale (icon));
           g_print ("texture size: %dx%d\n", gdk_paintable_get_intrinsic_width (paintable), gdk_paintable_get_intrinsic_height (paintable));
 
 	  g_object_unref (icon);

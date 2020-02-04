@@ -4008,7 +4008,7 @@ icon_list_from_theme (GtkWindow   *window,
   GtkStyleContext *context;
   GtkCssValue *value;
   GtkIconTheme *icon_theme;
-  GtkIcon *info;
+  GtkIconPaintable *info;
   gint *sizes;
   gint i;
 
@@ -4027,16 +4027,18 @@ icon_list_from_theme (GtkWindow   *window,
        * fixed size of 48.
        */
       if (sizes[i] == -1)
-        info = gtk_icon_theme_lookup_icon (icon_theme, name,
+        info = gtk_icon_theme_lookup_icon (icon_theme, name, NULL,
                                            48, priv->scale,
+                                           gtk_widget_get_direction (GTK_WIDGET (window)),
                                            0);
       else
-        info = gtk_icon_theme_lookup_icon (icon_theme, name,
+        info = gtk_icon_theme_lookup_icon (icon_theme, name, NULL,
                                            sizes[i], priv->scale,
+                                           gtk_widget_get_direction (GTK_WIDGET (window)),
                                            0);
       if (info)
         {
-          GdkTexture *texture = gtk_icon_download_texture (info, NULL);
+          GdkTexture *texture = gtk_icon_paintable_download_texture (info, NULL);
           if (texture)
             list = g_list_insert_sorted (list, texture, (GCompareFunc) icon_size_compare);
 
@@ -4102,7 +4104,7 @@ gtk_window_get_icon_for_size (GtkWindow *window,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   const char *name;
-  GtkIcon *info;
+  GtkIconPaintable *info;
 
   name = gtk_window_get_icon_name (window);
 
@@ -4111,8 +4113,9 @@ gtk_window_get_icon_for_size (GtkWindow *window,
   if (!name)
     return NULL;
 
-  info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
-                                     name, size, priv->scale,
+  info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (window))),
+                                     name, NULL, size, priv->scale,
+                                     gtk_widget_get_direction (GTK_WIDGET (window)),
                                      GTK_ICON_LOOKUP_FORCE_SIZE);
   if (info == NULL)
     return NULL;

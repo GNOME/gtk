@@ -29,6 +29,7 @@
 #include "gtkicontheme.h"
 #include "gtkactionable.h"
 #include "gtkprivate.h"
+#include "gtkstylecontext.h"
 
 #include <string.h>
 

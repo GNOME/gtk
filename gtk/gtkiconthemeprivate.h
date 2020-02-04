@@ -21,10 +21,18 @@
 #include <gtk/gtkicontheme.h>
 #include <gtk/gtkcssstyleprivate.h>
 
-void        gtk_icon_theme_lookup_symbolic_colors       (GtkCssStyle    *style,
-                                                         GdkRGBA        *color_out,
-                                                         GdkRGBA        *success_out,
-                                                         GdkRGBA        *warning_out,
-                                                         GdkRGBA        *error_out);
+void gtk_icon_theme_lookup_symbolic_colors   (GtkCssStyle      *style,
+                                              GdkRGBA          *color_out,
+                                              GdkRGBA          *success_out,
+                                              GdkRGBA          *warning_out,
+                                              GdkRGBA          *error_out);
+void gtk_icon_paintable_snapshot_with_colors (GtkIconPaintable *icon,
+                                              GtkSnapshot      *snapshot,
+                                              double            width,
+                                              double            height,
+                                              const GdkRGBA    *foreground_color,
+                                              const GdkRGBA    *success_color,
+                                              const GdkRGBA    *warning_color,
+                                              const GdkRGBA    *error_color);
 
 #endif /* __GTK_ICON_THEME_PRIVATE_H__ */
