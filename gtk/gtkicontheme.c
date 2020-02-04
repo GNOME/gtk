@@ -2148,6 +2148,7 @@ choose_icon (GtkIconTheme      *self,
  * gtk_icon_theme_lookup_icon:
  * @self: a #GtkIconTheme
  * @icon_name: the name of the icon to lookup
+ * @fallbacks: (nullable) (array zero-terminated=1): 
  * @size: desired icon size.  The resulting icon may not be exactly this size.
  * @scale: the window scale this will be displayed on
  * @direction: text direction the icon will be displayed in
@@ -2167,20 +2168,20 @@ choose_icon (GtkIconTheme      *self,
  * passing the %GTK_ICON_LOOKUP_FORCE_SIZE flag, which causes the icon
  * to be scaled to the exact size.
  *
+ * If the available @icon_name is not available and @fallbacks are provided,
+ * they will be tried in order.
+ *
  * Note that you probably want to listen for icon theme changes and
  * update the icon. This is usually done by connecting to the
  * GtkWidget::style-updated signal.
  *
- * Often you want to look up multiple icons at the same time, as fallbacks.
- * For this use the gtk_icon_theme_choose_icon() method is a better option.
- *
  * Returns: (nullable) (transfer full): a #GtkIcon object
- *     containing information about the icon, or %NULL if the
- *     icon wasn’t found.
+ *     containing the icon, or %NULL if the icon wasn’t found.
  */
 GtkIcon *
 gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
-                            const gchar        *icon_name,
+                            const char         *icon_name,
+                            const char         *fallbacks[],
                             gint                size,
                             gint                scale,
                             GtkTextDirection    direction,
@@ -2204,6 +2205,8 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
       gchar *p, *nonsymbolic_icon_name;
       gboolean is_symbolic;
       int icon_name_len = strlen (icon_name);
+
+      g_warn_if_fail (fallbacks == NULL);
 
       is_symbolic = icon_name_is_symbolic (icon_name, icon_name_len);
       if (is_symbolic)
@@ -2244,9 +2247,22 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
           names = nonsymbolic_names;
         }
 
-      icon = choose_icon (self, (const gchar **) names, size, scale, direction, flags, FALSE, NULL);
+      icon = choose_icon (self, (const char **) names, size, scale, direction, flags, FALSE, NULL);
 
       g_strfreev (names);
+    }
+  else if (fallbacks)
+    {
+      gsize n_fallbacks = g_strv_length ((char **) fallbacks);
+      const char **names = g_new (const char *, n_fallbacks + 2);
+
+      names[0] = icon_name;
+      memcpy (&names[1], fallbacks, sizeof (char *) * n_fallbacks);
+      names[n_fallbacks + 1] = NULL;
+
+      icon = choose_icon (self, names, size, scale, direction, flags, FALSE, NULL);
+
+      g_free (names);
     }
   else
     {
@@ -2257,70 +2273,6 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
 
       icon = choose_icon (self, names, size, scale, direction, flags, FALSE, NULL);
     }
-
-  gtk_icon_theme_unlock (self);
-
-  return icon;
-}
-
-/**
- * gtk_icon_theme_choose_icon:
- * @self: a #GtkIconTheme
- * @icon_names: (array zero-terminated=1): %NULL-terminated
- *     array of icon names to lookup
- * @size: desired icon size. The resulting icon may not be exactly this size.
- * @scale: the window scale this will be displayed on
- * @direction: text direction the icon will be displayed in
- * @flags: flags modifying the behavior of the icon lookup
- *
- * Looks up a named icon for a desired size and window scale, returning a
- * #GtkIcon. The icon can then be rendered by using it as a #GdkPaintable,
- * or you can get information such as the filename and size. The pixels
- * of the texture can be access by using gtk_icon_download_texture().
- *
- * If @icon_names contains more than one name, this function
- * tries them all in the given order before falling back to
- * inherited icon themes.
- *
- * The icon icon size will be based on the requested @size, but may
- * not be exactly this size; an icon theme may have icons that differ
- * slightly from their nominal sizes, and in addition GTK+ will avoid
- * scaling icons that it considers sufficiently close to the requested
- * size or for which the source image would have to be scaled up too
- * far. (This maintains sharpness.). This behaviour can be changed by
- * passing the %GTK_ICON_LOOKUP_FORCE_SIZE flag, which causes the icon
- * to be scaled to the exact size.
- *
- * Note that you probably want to listen for icon theme changes and
- * update the icon. This is usually done by connecting to the
- * GtkWidget::style-updated signal.
- *
- * This function does not support the flag
- * GTK_ICON_LOOKUP_GENERIC_FALLBACK, that only works with the simpler
- * gtk_icon_theme_lookup_icon() method.
- *
- * Returns: (nullable) (transfer full): a #GtkIcon object
- *     containing information about the icon, or %NULL if the
- *     icon wasn’t found.
- */
-GtkIcon *
-gtk_icon_theme_choose_icon (GtkIconTheme       *self,
-                            const gchar        *icon_names[],
-                            gint                size,
-                            gint                scale,
-                            GtkTextDirection    direction,
-                            GtkIconLookupFlags  flags)
-{
-  GtkIcon *icon;
-
-  g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
-  g_return_val_if_fail (icon_names != NULL, NULL);
-  g_return_val_if_fail (scale >= 1, NULL);
-  g_warn_if_fail ((flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK) == 0);
-
-  gtk_icon_theme_lock (self);
-
-  icon = choose_icon (self, icon_names, size, scale, direction, flags, FALSE, NULL);
 
   gtk_icon_theme_unlock (self);
 
@@ -3972,8 +3924,8 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
     {
       const gchar **names;
 
-      names = (const gchar **)g_themed_icon_get_names (G_THEMED_ICON (gicon));
-      icon = gtk_icon_theme_choose_icon (self, names, size, scale, direction, flags);
+      names = (const gchar **) g_themed_icon_get_names (G_THEMED_ICON (gicon));
+      icon = gtk_icon_theme_lookup_icon (self, names[0], &names[1], size, scale, direction, flags);
 
       return icon;
     }

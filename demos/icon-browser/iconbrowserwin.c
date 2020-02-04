@@ -369,6 +369,7 @@ get_image_paintable (GtkImage *image)
       icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (image)));
       icon = gtk_icon_theme_lookup_icon (icon_theme,
                                          icon_name,
+                                         NULL,
                                          size, 1,
                                          gtk_widget_get_direction (GTK_WIDGET (image)),
                                          GTK_ICON_LOOKUP_FORCE_SIZE | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
@@ -425,6 +426,7 @@ get_file (GValue   *value,
 
   info = gtk_icon_theme_lookup_icon (icon_theme,
                                      name,
+                                     NULL,
                                      32, 1,
                                      gtk_widget_get_direction (GTK_WIDGET (data)),
                                      0);

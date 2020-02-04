@@ -125,14 +125,8 @@ gint         *gtk_icon_theme_get_icon_sizes        (GtkIconTheme                
                                                     const gchar                 *icon_name);
 GDK_AVAILABLE_IN_ALL
 GtkIcon *    gtk_icon_theme_lookup_icon            (GtkIconTheme                *self,
-                                                    const gchar                 *icon_name,
-                                                    gint                         size,
-                                                    gint                         scale,
-                                                    GtkTextDirection             direction,
-                                                    GtkIconLookupFlags           flags);
-GDK_AVAILABLE_IN_ALL
-GtkIcon *    gtk_icon_theme_choose_icon            (GtkIconTheme                *self,
-                                                    const gchar                 *icon_names[],
+                                                    const char                  *icon_name,
+                                                    const char                  *fallbacks[],
                                                     gint                         size,
                                                     gint                         scale,
                                                     GtkTextDirection             direction,

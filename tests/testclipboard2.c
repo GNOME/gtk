@@ -288,6 +288,7 @@ get_button_list (GdkClipboard *clipboard,
   g_value_init (&value, GDK_TYPE_PIXBUF);
   icon = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_for_display (gdk_clipboard_get_display (clipboard)),
                                      "utilities-terminal",
+                                     NULL,
                                      48, 1,
                                      gtk_widget_get_direction (box),
                                      0);

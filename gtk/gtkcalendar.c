@@ -2606,6 +2606,7 @@ gtk_calendar_drag_update (GtkGestureDrag *gesture,
   theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (widget));
   icon = gtk_icon_theme_lookup_icon (theme,
                                      "text-x-generic",
+                                     NULL,
                                      32,
                                      1,
                                      GTK_TEXT_DIR_NONE,
