@@ -85,7 +85,7 @@ main (int argc, char *argv[])
       if (argc >= 6)
 	scale = atoi (argv[5]);
 
-      icon = gtk_icon_theme_lookup_icon (icon_theme, argv[3], size, scale, direction, flags);
+      icon = gtk_icon_theme_lookup_icon (icon_theme, argv[3], NULL, size, scale, direction, flags);
       if (!icon)
         {
           g_print ("Icon '%s' not found\n", argv[3]);
@@ -127,7 +127,7 @@ main (int argc, char *argv[])
       if (argc >= 6)
 	scale = atoi (argv[5]);
 
-      icon = gtk_icon_theme_lookup_icon (icon_theme, argv[3], size, scale, direction, flags);
+      icon = gtk_icon_theme_lookup_icon (icon_theme, argv[3], NULL, size, scale, direction, flags);
       g_print ("icon for %s at %dx%d@%dx is %s\n", argv[3], size, size, scale,
                icon ? gtk_icon_get_filename (icon) : "<none>");
 

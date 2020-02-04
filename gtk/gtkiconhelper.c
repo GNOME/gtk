@@ -112,6 +112,7 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
   if (icon == NULL)
     icon = gtk_icon_theme_lookup_icon (icon_theme,
                                        "image-missing",
+                                       NULL,
                                        width, scale,
                                        dir,
                                        flags | GTK_ICON_LOOKUP_GENERIC_FALLBACK);

@@ -58,7 +58,7 @@ assert_icon_lookup_size (const char         *icon_name,
 {
   GtkIcon *info;
 
-  info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, size, 1, direction, flags);
+  info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, NULL, size, 1, direction, flags);
   if (info == NULL)
     {
       g_error ("Could not look up an icon for \"%s\" with flags %s at size %d",
@@ -113,7 +113,7 @@ assert_icon_lookup_fails (const char         *icon_name,
 {
   GtkIcon *info;
 
-  info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, size, 1, direction, flags);
+  info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, NULL, size, 1, direction, flags);
 
   if (info != NULL)
     {
@@ -177,7 +177,7 @@ assert_lookup_order (const char         *icon_name,
 
   g_assert (lookups == NULL);
 
-  info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, size, 1, direction, flags);
+  info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, NULL, size, 1, direction, flags);
   if (info)
     g_object_unref (info);
   
