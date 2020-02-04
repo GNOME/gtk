@@ -51,15 +51,11 @@ struct _GtkColorPickerInterface {
                              GError             **error);
 };
 
-GDK_AVAILABLE_IN_ALL
 GType            gtk_color_picker_get_type    (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
 GtkColorPicker * gtk_color_picker_new         (void);
-GDK_AVAILABLE_IN_ALL
 void             gtk_color_picker_pick        (GtkColorPicker       *picker,
                                                GAsyncReadyCallback   callback,
                                                gpointer              user_data);
-GDK_AVAILABLE_IN_ALL
 GdkRGBA *        gtk_color_picker_pick_finish (GtkColorPicker       *picker,
                                                GAsyncResult         *res,
                                                GError              **error);
