@@ -354,7 +354,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                      P_("Year"),
                                                      P_("The selected year"),
                                                      0, G_MAXINT >> 9, 0,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                     G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCalendar:month:
@@ -368,7 +368,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                      P_("Month"),
                                                      P_("The selected month (as a number between 0 and 11)"),
                                                      0, 11, 0,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                     G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCalendar:day:
@@ -383,7 +383,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                      P_("Day"),
                                                      P_("The selected day (as a number between 1 and 31, or 0 to unselect the currently selected day)"),
                                                      0, 31, 0,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                                     G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCalendar:show-heading:
@@ -1007,13 +1007,20 @@ calendar_set_month_next (GtkCalendar *calendar)
 
   if (month_len < priv->selected_day)
     {
+      GDateTime *new_date = g_date_time_new_local (priv->year, priv->month + 1, month_len,
+                                                   0, 0, 0);
       priv->selected_day = 0;
-      gtk_calendar_select_day (calendar, month_len);
+      gtk_calendar_select_day (calendar, new_date);
+      g_date_time_unref (new_date);
     }
   else
-    gtk_calendar_select_day (calendar, priv->selected_day);
+    {
+      GDateTime *new_date = g_date_time_new_local (priv->year, priv->month + 1, priv->selected_day,
+                                                   0, 0, 0);
 
-  calendar_queue_refresh (calendar);
+      gtk_calendar_select_day (calendar, new_date);
+      g_date_time_unref (new_date);
+    }
 }
 
 static void
@@ -1036,13 +1043,20 @@ calendar_set_year_prev (GtkCalendar *calendar)
 
   if (month_len < priv->selected_day)
     {
+      GDateTime *new_date = g_date_time_new_local (priv->year, priv->month + 1, month_len,
+                                                   0, 0, 0);
       priv->selected_day = 0;
-      gtk_calendar_select_day (calendar, month_len);
+      gtk_calendar_select_day (calendar, new_date);
+      g_date_time_unref (new_date);
     }
   else
-    gtk_calendar_select_day (calendar, priv->selected_day);
+    {
+      GDateTime *new_date = g_date_time_new_local (priv->year, priv->month + 1, priv->selected_day,
+                                                   0, 0, 0);
 
-  calendar_queue_refresh (calendar);
+      gtk_calendar_select_day (calendar, new_date);
+      g_date_time_unref (new_date);
+    }
 }
 
 static void
@@ -1065,13 +1079,20 @@ calendar_set_year_next (GtkCalendar *calendar)
 
   if (month_len < priv->selected_day)
     {
+      GDateTime *new_date = g_date_time_new_local (priv->year, priv->month + 1, month_len,
+                                                   0, 0, 0);
       priv->selected_day = 0;
-      gtk_calendar_select_day (calendar, month_len);
+      gtk_calendar_select_day (calendar, new_date);
+      g_date_time_unref (new_date);
     }
   else
-    gtk_calendar_select_day (calendar, priv->selected_day);
+    {
+      GDateTime *new_date = g_date_time_new_local (priv->year, priv->month + 1, priv->selected_day,
+                                                   0, 0, 0);
 
-  calendar_queue_refresh (calendar);
+      gtk_calendar_select_day (calendar, new_date);
+      g_date_time_unref (new_date);
+    }
 }
 
 static void
@@ -1143,9 +1164,10 @@ calendar_compute_days (GtkCalendar *calendar)
 
 static void
 calendar_select_and_focus_day (GtkCalendar *calendar,
-                               guint        day)
+                               int          day)
 {
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
+  GDateTime *new_date;
   gint row;
   gint col;
 
@@ -1157,10 +1179,15 @@ calendar_select_and_focus_day (GtkCalendar *calendar,
           {
             priv->focus_row = row;
             priv->focus_col = col;
+            break;
           }
       }
 
-  gtk_calendar_select_day (calendar, day);
+  new_date = g_date_time_new_local (priv->year, priv->month + 1, day,
+                                    0, 0, 0);
+
+  gtk_calendar_select_day (calendar, new_date);
+  g_date_time_unref (new_date);
 }
 
 static void
@@ -1190,14 +1217,29 @@ calendar_set_month_prev (GtkCalendar *calendar)
 
   if (month_len < priv->selected_day)
     {
+      GDateTime *new_date;
       priv->selected_day = 0;
-      gtk_calendar_select_day (calendar, month_len);
+
+      new_date = g_date_time_new_local (priv->year, priv->month + 1, month_len,
+                                        0, 0, 0);
+
+      gtk_calendar_select_day (calendar, new_date);
+
+      g_date_time_unref (new_date);
     }
   else
     {
+      GDateTime *new_date;
+
       if (priv->selected_day < 0)
         priv->selected_day = priv->selected_day + 1 + month_length[leap (priv->year)][priv->month + 1];
-      gtk_calendar_select_day (calendar, priv->selected_day);
+
+      new_date = g_date_time_new_local (priv->year, priv->month + 1, priv->selected_day,
+                                        0, 0, 0);
+
+      gtk_calendar_select_day (calendar, new_date);
+
+      g_date_time_unref (new_date);
     }
 
   calendar_queue_refresh (calendar);
@@ -1210,24 +1252,9 @@ gtk_calendar_set_property (GObject      *object,
                            GParamSpec   *pspec)
 {
   GtkCalendar *calendar = GTK_CALENDAR (object);
-  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
 
   switch (prop_id)
     {
-    case PROP_YEAR:
-      gtk_calendar_select_month (calendar,
-                                 priv->month,
-                                 g_value_get_int (value));
-      break;
-    case PROP_MONTH:
-      gtk_calendar_select_month (calendar,
-                                 g_value_get_int (value),
-                                 priv->year);
-      break;
-    case PROP_DAY:
-      gtk_calendar_select_day (calendar,
-                               g_value_get_int (value));
-      break;
     case PROP_SHOW_HEADING:
       gtk_calendar_set_show_heading (calendar, g_value_get_boolean (value));
       break;
@@ -1305,14 +1332,14 @@ gtk_calendar_button_press (GtkGestureClick *gesture,
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
   int button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   GtkWidget *label;
-  int row, col;
+  int row = -1, col = -1;
   int ix, iy;
   int day_month;
   int day;
 
   label = gtk_widget_pick (widget, x, y, GTK_PICK_DEFAULT);
   for (iy = 0; iy < 6; iy ++)
-    for (ix = 0; ix < 6; ix ++)
+    for (ix = 0; ix < 7; ix ++)
       {
         if (label == priv->day_number_labels[iy][ix])
           {
@@ -1682,9 +1709,9 @@ got_text (GObject      *source,
   GtkDropTarget *dest = GTK_DROP_TARGET (data);
   GtkCalendar *calendar = GTK_CALENDAR (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest)));
   GdkDrop *drop = GDK_DROP (source);
-  guint day;
   gchar *str;
   GDate *date;
+  GDateTime *datetime;
   GdkDragAction suggested_action;
 
   suggested_action = get_status_pending (drop);
@@ -1727,14 +1754,16 @@ got_text (GObject      *source,
       return;
     }
 
-  day = g_date_get_day (date);
+  datetime = g_date_time_new_local (g_date_get_year (date),
+                                    g_date_get_month (date),
+                                    g_date_get_day (date),
+                                    0, 0, 0);
   g_date_free (date);
 
   gdk_drop_finish (drop, suggested_action);
 
-  g_object_freeze_notify (G_OBJECT (calendar));
-  gtk_calendar_select_day (calendar, day);
-  g_object_thaw_notify (G_OBJECT (calendar));
+  gtk_calendar_select_day (calendar, datetime);
+  g_date_time_unref (datetime);
 }
 
 static gboolean
@@ -1799,67 +1828,76 @@ gtk_calendar_new (void)
 /**
  * gtk_calendar_select_month:
  * @calendar: a #GtkCalendar
- * @month: a month number between 0 and 11.
- * @year: the year the month is in.
+ * @date: (transfer none): a #GDateTime to use as reference
  *
- * Shifts the calendar to a different month.
+ * Shifts the calendar to the month showing @date.
+ * The exact day of @date will *NOT* be selected, only the month.
+ * If you want to select @date's day, use gtk_calendar_select_day()
  **/
 void
-gtk_calendar_select_month (GtkCalendar *calendar,
-                           guint        month,
-                           guint        year)
+gtk_calendar_select_month (GtkCalendar *self,
+                           GDateTime   *date)
 {
-  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
+  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (self);
+  int month, year;
 
-  g_return_if_fail (GTK_IS_CALENDAR (calendar));
-  g_return_if_fail (month <= 11);
+  g_return_if_fail (GTK_IS_CALENDAR (self));
+  g_return_if_fail (date != NULL);
 
-  g_object_freeze_notify (G_OBJECT (calendar));
+  year = g_date_time_get_year (date);
+  month = g_date_time_get_month (date);
+
+  g_object_freeze_notify (G_OBJECT (self));
 
   if (priv->month != month)
     {
-      set_month (calendar, month);
-      g_object_notify (G_OBJECT (calendar), "month");
+      set_month (self, month);
+      g_object_notify (G_OBJECT (self), "month");
     }
   if (priv->year != year)
     {
-      set_year (calendar, year);
-      g_object_notify (G_OBJECT (calendar), "year");
+      set_year (self, year);
+      g_object_notify (G_OBJECT (self), "year");
     }
 
-  calendar_compute_days (calendar);
-  calendar_queue_refresh (calendar);
+  g_object_thaw_notify (G_OBJECT (self));
 
-  g_object_thaw_notify (G_OBJECT (calendar));
-
-  g_signal_emit (calendar, gtk_calendar_signals[MONTH_CHANGED_SIGNAL], 0);
+  g_signal_emit (self, gtk_calendar_signals[MONTH_CHANGED_SIGNAL], 0);
 }
 
 /**
  * gtk_calendar_select_day:
  * @calendar: a #GtkCalendar.
- * @day: the day number between 1 and 31, or 0 to unselect
- *   the currently selected day.
+ * @date: (transfer none): a #GDateTime representing the day to select
  *
- * Selects a day from the current month.
+ * Will switch to @date's year and month and select its day.
  **/
 void
-gtk_calendar_select_day (GtkCalendar *calendar,
-                         guint        day)
+gtk_calendar_select_day (GtkCalendar *self,
+                         GDateTime   *date)
 {
-  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
+  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (self);
+  int day, month, year;
 
-  g_return_if_fail (GTK_IS_CALENDAR (calendar));
-  g_return_if_fail (day <= 31);
+  g_return_if_fail (GTK_IS_CALENDAR (self));
+  g_return_if_fail (date != NULL);
+
+  year = g_date_time_get_year (date);
+  month = g_date_time_get_month (date);
+  day = g_date_time_get_day_of_month (date);
 
   if (priv->selected_day != day)
     {
       priv->selected_day = day;
 
-      set_month (calendar, priv->month);
+      g_object_freeze_notify (G_OBJECT (self));
+      set_year (self, year);
+      set_month (self, month - 1);
 
-      g_object_notify (G_OBJECT (calendar), "day");
-      g_signal_emit (calendar, gtk_calendar_signals[DAY_SELECTED_SIGNAL], 0);
+      g_object_notify (G_OBJECT (self), "day");
+      g_object_thaw_notify (G_OBJECT (self));
+
+      g_signal_emit (self, gtk_calendar_signals[DAY_SELECTED_SIGNAL], 0);
     }
 }
 
