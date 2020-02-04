@@ -4032,6 +4032,10 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   sidebar->cancellable = g_cancellable_new ();
 
   sidebar->show_trash = TRUE;
+  sidebar->local_only = TRUE;
+  sidebar->show_other_locations = TRUE;
+  sidebar->show_recent = TRUE;
+  sidebar->show_desktop = TRUE;
 
   create_volume_monitor (sidebar);
 
@@ -4674,7 +4678,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
           g_param_spec_boolean ("local-only",
                                 P_("Local Only"),
                                 P_("Whether the sidebar only includes local files"),
-                                FALSE,
+                                TRUE,
                                 GTK_PARAM_READWRITE);
   properties[PROP_SHOW_TRASH] =
           g_param_spec_boolean ("show-trash",
@@ -4686,7 +4690,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
           g_param_spec_boolean ("show-other-locations",
                                 P_("Show “Other locations”"),
                                 P_("Whether the sidebar includes an item to show external locations"),
-                                FALSE,
+                                TRUE,
                                 GTK_PARAM_READWRITE);
   properties[PROP_SHOW_STARRED_LOCATION] =
           g_param_spec_boolean ("show-starred-location",
