@@ -1633,18 +1633,8 @@ load_themes (GtkIconTheme *self)
   if (self->current_theme)
     insert_theme (self, self->current_theme);
 
-  /* Always look in the Adwaita, gnome and hicolor icon themes.
-   * Looking in hicolor is mandated by the spec, looking in Adwaita
-   * and gnome is a pragmatic solution to prevent missing icons in
-   * GTK+ applications when run under, e.g. KDE.
-   */
-#if 0
-  insert_theme (self, DEFAULT_self);
-  insert_theme (self, "gnome");
-#endif
   insert_theme (self, FALLBACK_ICON_THEME);
   self->themes = g_list_reverse (self->themes);
-
 
   self->unthemed_icons = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                 g_free, (GDestroyNotify)free_unthemed_icon);
