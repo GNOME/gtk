@@ -1997,33 +1997,19 @@ gtk_calendar_unmark_day (GtkCalendar *calendar,
 /**
  * gtk_calendar_get_date:
  * @calendar: a #GtkCalendar
- * @year: (out) (allow-none): location to store the year as a decimal
- *     number (e.g. 2011), or %NULL
- * @month: (out) (allow-none): location to store the month number
- *     (between 0 and 11), or %NULL
- * @day: (out) (allow-none): location to store the day number (between
- *     1 and 31), or %NULL
  *
- * Obtains the selected date from a #GtkCalendar.
+ * Returns: (transfer full): A #GDateTime representing the shown
+ *   year, month and the selected day, in the local time zone.
  */
-void
-gtk_calendar_get_date (GtkCalendar *calendar,
-                       guint       *year,
-                       guint       *month,
-                       guint       *day)
+GDateTime *
+gtk_calendar_get_date (GtkCalendar *self)
 {
-  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
+  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (self);
 
-  g_return_if_fail (GTK_IS_CALENDAR (calendar));
+  g_return_val_if_fail (GTK_IS_CALENDAR (self), NULL);
 
-  if (year)
-    *year = priv->year;
-
-  if (month)
-    *month = priv->month;
-
-  if (day)
-    *day = priv->selected_day;
+  return g_date_time_new_local (priv->year, priv->month + 1, priv->selected_day,
+                                0, 0, 0);
 }
 
 /**
