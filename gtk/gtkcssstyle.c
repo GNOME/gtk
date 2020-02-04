@@ -688,7 +688,7 @@ gtk_css_style_get_pango_font (GtkCssStyle *style)
 
 /* Refcounted value structs */
 
-static int values_size[] = {
+static const int values_size[] = {
   sizeof (GtkCssCoreValues),
   sizeof (GtkCssCoreValues),
   sizeof (GtkCssBackgroundValues),
@@ -780,5 +780,5 @@ gtk_css_values_new (GtkCssValuesType type)
   values->ref_count = 1;
   values->type = type - (type % 2);
 
-  return values;  
+  return values;
 }
