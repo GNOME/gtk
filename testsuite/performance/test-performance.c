@@ -7,7 +7,8 @@
 #include <gio/gio.h>
 
 typedef struct {
-  const char *group;
+  const char *mark;
+  const char *detail;
   gboolean do_start;
   gint64 start_time;
   gint64 value;
@@ -23,7 +24,8 @@ callback (const SysprofCaptureFrame *frame,
     {
       SysprofCaptureMark *mark = (SysprofCaptureMark *)frame;
       if (strcmp (mark->group, "gtk") == 0 &&
-          strcmp (mark->name, data->group) == 0)
+          strcmp (mark->name, data->mark) == 0 &&
+          (data->detail == NULL || strcmp (mark->message, data->detail) == 0))
         {
           if (data->do_start)
             data->value = frame->time - data->start_time;
@@ -40,12 +42,14 @@ callback (const SysprofCaptureFrame *frame,
 
 static int opt_rep = 10;
 static char *opt_mark;
+static char *opt_detail;
 static char *opt_name;
 static char *opt_output;
 static gboolean opt_start_time;
 
 static GOptionEntry options[] = {
   { "mark", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_STRING, &opt_mark, "Name of the mark", "NAME" },
+  { "detail", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_STRING, &opt_detail, "Detail of the mark", "DETAIL" },
   { "start", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, &opt_start_time, "Measure the start time", NULL },
   { "runs", '0', G_OPTION_FLAG_NONE, G_OPTION_ARG_INT, &opt_rep, "Number of runs", "COUNT" },
   { "name", '0', G_OPTION_FLAG_NONE, G_OPTION_ARG_STRING, &opt_name, "Name of this test", "NAME" },
@@ -138,7 +142,8 @@ main (int argc, char *argv[])
       if (error)
         g_error ("Opening syscap file: %s", error->message);
 
-      data.group = opt_mark ? opt_mark : "css validation";
+      data.mark = opt_mark ? opt_mark : "css validation";
+      data.detail = opt_detail ? opt_detail : NULL;
       data.do_start = opt_start_time;
       data.start_time = sysprof_capture_reader_get_start_time (reader);
       data.value = 0;
