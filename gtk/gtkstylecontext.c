@@ -119,8 +119,6 @@ struct _GtkStyleContextPrivate
   GtkStyleContext *parent;
   GtkCssNode *cssnode;
   GSList *saved_nodes;
-
-  GtkCssStyleChange *invalidating_context;
 };
 typedef struct _GtkStyleContextPrivate GtkStyleContextPrivate;
 
@@ -131,14 +129,7 @@ enum {
   LAST_PROP
 };
 
-enum {
-  CHANGED,
-  LAST_SIGNAL
-};
-
 static GParamSpec *properties[LAST_PROP] = { NULL, };
-
-static guint signals[LAST_SIGNAL] = { 0 };
 
 static void gtk_style_context_finalize (GObject *object);
 
@@ -156,19 +147,6 @@ static GtkCssNode * gtk_style_context_get_root (GtkStyleContext *context);
 G_DEFINE_TYPE_WITH_PRIVATE (GtkStyleContext, gtk_style_context, G_TYPE_OBJECT)
 
 static void
-gtk_style_context_real_changed (GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
-
-  if (GTK_IS_CSS_WIDGET_NODE (priv->cssnode))
-    {
-      GtkWidget *widget = gtk_css_widget_node_get_widget (GTK_CSS_WIDGET_NODE (priv->cssnode));
-      if (widget != NULL)
-        gtk_widget_css_changed (widget, gtk_style_context_get_change (context));
-    }
-}
-
-static void
 gtk_style_context_class_init (GtkStyleContextClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -176,28 +154,6 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
   object_class->finalize = gtk_style_context_finalize;
   object_class->set_property = gtk_style_context_impl_set_property;
   object_class->get_property = gtk_style_context_impl_get_property;
-
-  klass->changed = gtk_style_context_real_changed;
-
-  /**
-   * GtkStyleContext::changed:
-   *
-   * The ::changed signal is emitted when there is a change in the
-   * #GtkStyleContext.
-   *
-   * For a #GtkStyleContext returned by gtk_widget_get_style_context(), the
-   * #GtkWidget:css-changed vfunc might be more convenient to use.
-   *
-   * This signal is useful when using the theming layer standalone.
-   */
-  signals[CHANGED] =
-    g_signal_new (I_("changed"),
-                  G_TYPE_FROM_CLASS (object_class),
-                  G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (GtkStyleContextClass, changed),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 0);
 
   properties[PROP_DISPLAY] =
       g_param_spec_object ("display",
@@ -1143,30 +1099,6 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
   return gtk_style_context_resolve_color (context, value, color);
 }
 
-static GtkCssStyleChange magic_number;
-
-void
-gtk_style_context_validate (GtkStyleContext  *context,
-                            GtkCssStyleChange *change)
-{
-  GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
-
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-
-  /* Avoid reentrancy */
-  if (priv->invalidating_context)
-    return;
-
-  if (change)
-    priv->invalidating_context = change;
-  else
-    priv->invalidating_context = &magic_number;
-
-  g_signal_emit (context, signals[CHANGED], 0);
-
-  priv->invalidating_context = NULL;
-}
-
 /**
  * gtk_style_context_get_color:
  * @context: a #GtkStyleContext
@@ -1595,32 +1527,6 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
                                  TRUE);
       gtk_snapshot_restore (snapshot);
     }
-}
-
-/**
- * gtk_style_context_get_change:
- * @context: the context to query
- *
- * Queries the context for the changes for the currently executing
- * GtkStyleContext::invalidate signal. If no signal is currently
- * emitted or the signal has not been triggered by a CssNode
- * invalidation, this function returns %NULL.
- *
- * FIXME 4.0: Make this part of the signal.
- *
- * Returns: %NULL or the currently invalidating changes
- **/
-GtkCssStyleChange *
-gtk_style_context_get_change (GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
-
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-
-  if (priv->invalidating_context == &magic_number)
-    return NULL;
-
-  return priv->invalidating_context;
 }
 
 PangoAttrList *
