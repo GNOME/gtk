@@ -223,8 +223,7 @@ gtk_icon_helper_paintable_snapshot (GdkPaintable *paintable,
             gtk_css_style_snapshot_icon_paintable (style,
                                                    snapshot,
                                                    self->paintable,
-                                                   w, h,
-                                                   self->texture_is_symbolic);
+                                                   w, h);
             gtk_snapshot_restore (snapshot);
           }
         else
@@ -232,8 +231,7 @@ gtk_icon_helper_paintable_snapshot (GdkPaintable *paintable,
             gtk_css_style_snapshot_icon_paintable (style,
                                                    snapshot,
                                                    self->paintable,
-                                                   w, h,
-                                                   self->texture_is_symbolic);
+                                                   w, h);
 
           }
 
@@ -280,8 +278,7 @@ gtk_icon_helper_paintable_snapshot (GdkPaintable *paintable,
             gtk_css_style_snapshot_icon_paintable (style,
                                                    snapshot,
                                                    self->paintable,
-                                                   w, h,
-                                                   self->texture_is_symbolic);
+                                                   w, h);
             gtk_snapshot_restore (snapshot);
           }
         else
@@ -289,8 +286,7 @@ gtk_icon_helper_paintable_snapshot (GdkPaintable *paintable,
             gtk_css_style_snapshot_icon_paintable (style,
                                                    snapshot,
                                                    self->paintable,
-                                                   w, h,
-                                                   self->texture_is_symbolic);
+                                                   w, h);
           }
       }
       break;
