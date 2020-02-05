@@ -269,7 +269,7 @@ typedef struct
   GtkGesture *bubble_drag_gesture;
   GtkEventController *key_controller;
 
-  GtkWidget *decoration_widget;
+  GtkWidget *contents_widget;
 
   GdkSurface  *surface;
   GskRenderer *renderer;
@@ -647,79 +647,30 @@ gtk_window_measure (GtkWidget      *widget,
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
   gboolean has_size_request = gtk_widget_has_size_request (widget);
-  int title_min_size = 0;
-  int title_nat_size = 0;
   int child_min_size = 0;
   int child_nat_size = 0;
-  int min_decoration;
   GtkBorder window_border = { 0 };
 
+  gtk_widget_measure (priv->contents_widget, orientation, for_size,
+                      &child_min_size, &child_nat_size, NULL, NULL);
 
-  if (priv->decorated && !priv->fullscreen)
-    {
-      get_shadow_width (window, &window_border);
+  if (!gtk_bin_get_child (GTK_BIN (window)) && !has_size_request)
+    child_nat_size = NO_CONTENT_CHILD_NAT;
 
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        for_size -= window_border.left + window_border.right;
-      else
-        for_size -= window_border.top + window_border.bottom;
-
-      if (priv->title_box != NULL &&
-          gtk_widget_get_visible (priv->title_box) &&
-          gtk_widget_get_child_visible (priv->title_box))
-        {
-          int size = for_size;
-          if (orientation == GTK_ORIENTATION_HORIZONTAL && for_size >= 0)
-            gtk_widget_measure (priv->title_box,
-                                GTK_ORIENTATION_VERTICAL,
-                                -1,
-                                NULL, &size,
-                                NULL, NULL);
-
-          gtk_widget_measure (priv->title_box,
-                              orientation,
-                              MAX (size, -1),
-                              &title_min_size, &title_nat_size,
-                              NULL, NULL);
-        }
-
-    }
-
-  if (child != NULL && gtk_widget_get_visible (child))
-    {
-      gtk_widget_measure (child,
-                          orientation,
-                          MAX (for_size, -1),
-                          &child_min_size, &child_nat_size,
-                          NULL, NULL);
-
-      if (child_nat_size == 0 && !has_size_request)
-        child_nat_size = NO_CONTENT_CHILD_NAT;
-    }
-  else if (!has_size_request)
-    {
-      child_nat_size = NO_CONTENT_CHILD_NAT;
-    }
-
-  gtk_widget_measure (priv->decoration_widget, orientation, -1,
-                      &min_decoration, NULL, NULL, NULL);
-  child_min_size = MAX (child_min_size, min_decoration);
+  get_shadow_width (window, &window_border);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      title_min_size += window_border.left + window_border.right;
-      title_nat_size += window_border.left + window_border.right;
       child_min_size += window_border.left + window_border.right;
       child_nat_size += window_border.left + window_border.right;
-      *minimum = MAX (title_min_size, child_min_size);
-      *natural = MAX (title_nat_size, child_nat_size);
+      *minimum = child_min_size;
+      *natural = child_nat_size;
     }
   else
     {
-      *minimum = title_min_size + child_min_size + window_border.top + window_border.bottom;
-      *natural = title_nat_size + child_nat_size + window_border.top + window_border.bottom;
+      *minimum = child_min_size + window_border.top + window_border.bottom;
+      *natural = child_nat_size + window_border.top + window_border.bottom;
     }
 }
 
@@ -727,7 +678,9 @@ static void
 gtk_window_add (GtkContainer *container,
                 GtkWidget    *child)
 {
-  gtk_widget_set_parent (child, GTK_WIDGET (container));
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (container));
+
+  gtk_container_add (GTK_CONTAINER (priv->contents_widget), child);
   _gtk_bin_set_child (GTK_BIN (container), child);
 }
 
@@ -746,7 +699,7 @@ get_resize_handle_size (GtkWindow *window,
     }
   else
     {
-      gtk_style_context_get_border (gtk_widget_get_style_context (priv->decoration_widget), out_size);
+      gtk_style_context_get_border (gtk_widget_get_style_context (priv->contents_widget), out_size);
     }
 }
 
@@ -1655,10 +1608,10 @@ edge_under_coordinates (GtkWindow     *window,
       (priv->edge_constraints & constraints) != constraints)
     return FALSE;
 
-  gtk_css_boxes_init (&css_boxes, priv->decoration_widget);
+  gtk_css_boxes_init (&css_boxes, priv->contents_widget);
   border_rect = *gtk_css_boxes_get_border_rect (&css_boxes);
 
-  if (!gtk_widget_compute_point (priv->decoration_widget, GTK_WIDGET (window),
+  if (!gtk_widget_compute_point (priv->contents_widget, GTK_WIDGET (window),
                                  &border_rect.origin, &border_rect.origin))
     return FALSE;
 
@@ -1827,11 +1780,12 @@ gtk_window_init (GtkWindow *window)
                     G_CALLBACK (gtk_window_on_theme_variant_changed), window);
 #endif
 
-  priv->decoration_widget = g_object_new (GTK_TYPE_GIZMO,
-                                          "css-name", "decoration",
-                                          NULL);
-  gtk_widget_add_style_class (priv->decoration_widget, "background");
-  gtk_widget_set_parent (priv->decoration_widget, GTK_WIDGET (window));
+  priv->contents_widget = g_object_new (GTK_TYPE_BOX,
+                                        "css-name", "decoration",
+                                        "orientation", GTK_ORIENTATION_VERTICAL,
+                                        NULL);
+  gtk_widget_add_style_class (priv->contents_widget, "background");
+  gtk_widget_set_parent (priv->contents_widget, GTK_WIDGET (window));
 
   priv->scale = gtk_widget_get_scale_factor (widget);
 
@@ -3004,8 +2958,6 @@ gtk_window_dispose (GObject *object)
   gtk_window_set_default_widget (window, NULL);
   remove_attach_widget (window);
 
-  g_clear_pointer (&priv->decoration_widget, gtk_widget_unparent);
-
   G_OBJECT_CLASS (gtk_window_parent_class)->dispose (object);
   unset_titlebar (window);
 
@@ -3757,7 +3709,9 @@ gtk_window_set_titlebar (GtkWindow *window,
 
   gtk_window_enable_csd (window);
   priv->title_box = titlebar;
-  gtk_widget_insert_before (titlebar, GTK_WIDGET (window),
+
+  gtk_container_add (GTK_CONTAINER (priv->contents_widget), priv->title_box);
+  gtk_widget_insert_before (priv->title_box, priv->contents_widget,
                             gtk_bin_get_child (GTK_BIN (widget)));
 
   if (GTK_IS_HEADER_BAR (titlebar))
@@ -4627,6 +4581,11 @@ gtk_window_destroy (GtkWidget *widget)
         g_object_unref (item);
     }
 
+  g_clear_pointer (&priv->contents_widget, gtk_widget_unparent);
+  _gtk_bin_set_child (GTK_BIN (widget), NULL);
+  priv->title_box = NULL;
+  priv->titlebar = NULL;
+
   if (priv->transient_parent)
     gtk_window_set_transient_for (window, NULL);
 
@@ -5287,7 +5246,7 @@ get_shadow_width (GtkWindow *window,
       priv->fullscreen)
     return;
 
-  context = _gtk_widget_get_style_context (priv->decoration_widget);
+  context = _gtk_widget_get_style_context (priv->contents_widget);
 
   gtk_style_context_save (context);
 
@@ -5329,16 +5288,16 @@ update_opaque_region (GtkWindow           *window,
   if (!_gtk_widget_get_realized (widget))
       return;
 
-  context = gtk_widget_get_style_context (priv->decoration_widget);
+  context = gtk_widget_get_style_context (priv->contents_widget);
 
   is_opaque = gdk_rgba_is_opaque (gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)));
 
   if (gtk_widget_get_opacity (widget) < 1.0)
     is_opaque = FALSE;
 
-  gtk_css_boxes_init (&css_boxes, priv->decoration_widget);
+  gtk_css_boxes_init (&css_boxes, priv->contents_widget);
   border_box = *gtk_css_boxes_get_border_box (&css_boxes);
-  if (!gtk_widget_compute_point (priv->decoration_widget, widget,
+  if (!gtk_widget_compute_point (priv->contents_widget, widget,
                                  &border_box.bounds.origin, &border_box.bounds.origin))
     return;
 
@@ -5419,11 +5378,11 @@ update_realized_window_properties (GtkWindow     *window,
   if (!priv->client_decorated)
     return;
 
-  gtk_css_boxes_init (&css_boxes, priv->decoration_widget);
+  gtk_css_boxes_init (&css_boxes, priv->contents_widget);
   border_box = *gtk_css_boxes_get_border_rect (&css_boxes);
 
   /* Move into window coords */
-  if (!gtk_widget_compute_point (priv->decoration_widget, widget,
+  if (!gtk_widget_compute_point (priv->contents_widget, widget,
                                  &border_box.origin, &border_box.origin))
     return;
 
@@ -5736,10 +5695,10 @@ popover_size_allocate (GtkWindowPopover *popover,
  * returned in the @allocation_out parameter.
  */
 void
-_gtk_window_set_allocation (GtkWindow           *window,
-                            int                  width,
-                            int                  height,
-                            GtkAllocation       *allocation_out)
+_gtk_window_set_allocation (GtkWindow     *window,
+                            int            width,
+                            int            height,
+                            GtkAllocation *allocation_out)
 {
   GtkWidget *widget = (GtkWidget *)window;
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
@@ -5759,45 +5718,18 @@ _gtk_window_set_allocation (GtkWindow           *window,
   if (_gtk_widget_get_realized (widget))
     update_realized_window_properties (window, &child_allocation, &window_border);
 
-  priv->title_height = 0;
-
-  if (priv->title_box != NULL &&
-      gtk_widget_get_visible (priv->title_box) &&
-      gtk_widget_get_child_visible (priv->title_box) &&
-      priv->decorated &&
-      !priv->fullscreen)
-    {
-      GtkAllocation title_allocation;
-
-      title_allocation.x = window_border.left;
-      title_allocation.y = window_border.top;
-      title_allocation.width = MAX (1, width - window_border.left - window_border.right);
-
-      gtk_widget_measure (priv->title_box, GTK_ORIENTATION_VERTICAL,
-                          title_allocation.width,
-                          NULL, &priv->title_height,
-                          NULL, NULL);
-
-      title_allocation.height = priv->title_height;
-
-      gtk_widget_size_allocate (priv->title_box, &title_allocation, -1);
-    }
-
   if (priv->decorated &&
       !priv->fullscreen)
     {
       child_allocation.x += window_border.left;
-      child_allocation.y += window_border.top + priv->title_height;
+      child_allocation.y += window_border.top;
       child_allocation.width -= window_border.left + window_border.right;
-      child_allocation.height -= window_border.top + window_border.bottom +
-                                 priv->title_height;
+      child_allocation.height -= window_border.top + window_border.bottom;
     }
 
   *allocation_out = child_allocation;
 
-  child_allocation.y -= priv->title_height;
-  child_allocation.height += priv->title_height;
-  gtk_widget_size_allocate (priv->decoration_widget, &child_allocation, -1);
+  gtk_widget_size_allocate (priv->contents_widget, &child_allocation, -1);
 
   for (link = priv->popovers.head; link; link = link->next)
     {
@@ -5814,14 +5746,9 @@ gtk_window_size_allocate (GtkWidget *widget,
                           int        baseline)
 {
   GtkWindow *window = GTK_WINDOW (widget);
-  GtkWidget *child;
   GtkAllocation child_allocation;
 
   _gtk_window_set_allocation (window, width, height, &child_allocation);
-
-  child = gtk_bin_get_child (GTK_BIN (window));
-  if (child && gtk_widget_get_visible (child))
-    gtk_widget_size_allocate (child, &child_allocation, -1);
 }
 
 gboolean
