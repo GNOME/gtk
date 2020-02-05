@@ -5360,20 +5360,6 @@ update_csd_shape (GtkWindow *window)
 }
 
 static void
-update_shadow_width (GtkWindow *window,
-                     GtkBorder *border)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (priv->surface)
-    gdk_surface_set_shadow_width (priv->surface,
-				  border->left,
-				  border->right,
-				  border->top,
-				  border->bottom);
-}
-
-static void
 corner_rect (cairo_rectangle_int_t *rect,
              const GtkCssValue     *value)
 {
@@ -5468,8 +5454,12 @@ update_realized_window_properties (GtkWindow     *window,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  if (priv->client_decorated && priv->use_client_shadow)
-    update_shadow_width (window, window_border);
+  if (priv->surface && priv->client_decorated && priv->use_client_shadow)
+    gdk_surface_set_shadow_width (priv->surface,
+                                  window_border->left,
+                                  window_border->right,
+                                  window_border->top,
+                                  window_border->bottom);
 
   update_opaque_region (window, window_border, child_allocation);
   update_csd_shape (window);
