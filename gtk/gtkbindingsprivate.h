@@ -30,6 +30,11 @@ gboolean gtk_binding_emit_signal     (GObject         *object,
                                       GVariant        *args,
                                       gboolean        *handled,
                                       GError         **error);
+gboolean gtk_binding_activate_action (GObject         *object,
+                                      const char      *action,
+                                      GVariant        *args,
+                                      gboolean        *handled,
+                                      GError         **error);
 
 G_END_DECLS
 
