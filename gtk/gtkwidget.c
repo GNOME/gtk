@@ -12114,11 +12114,8 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   if (opacity < 1.0)
     gtk_snapshot_push_opacity (snapshot, opacity);
 
-  if (!GTK_IS_WINDOW (widget))
-    {
-      gtk_css_style_snapshot_background (&boxes, snapshot);
-      gtk_css_style_snapshot_border (&boxes, snapshot);
-    }
+  gtk_css_style_snapshot_background (&boxes, snapshot);
+  gtk_css_style_snapshot_border (&boxes, snapshot);
 
   if (priv->overflow == GTK_OVERFLOW_HIDDEN)
     gtk_snapshot_push_rounded_clip (snapshot, gtk_css_boxes_get_padding_box (&boxes));
