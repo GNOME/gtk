@@ -92,74 +92,10 @@ typedef struct
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
 
-static void gtk_box_set_property       (GObject        *object,
-                                        guint           prop_id,
-                                        const GValue   *value,
-                                        GParamSpec     *pspec);
-static void gtk_box_get_property       (GObject        *object,
-                                        guint           prop_id,
-                                        GValue         *value,
-                                        GParamSpec     *pspec);
-static void gtk_box_add                (GtkContainer   *container,
-                                        GtkWidget      *widget);
-static void gtk_box_remove             (GtkContainer   *container,
-                                        GtkWidget      *widget);
-static void gtk_box_forall             (GtkContainer   *container,
-                                        GtkCallback     callback,
-                                        gpointer        callback_data);
-static GType gtk_box_child_type        (GtkContainer   *container);
-
 G_DEFINE_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkBox)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
-static void
-gtk_box_class_init (GtkBoxClass *class)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (class);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
-
-  object_class->set_property = gtk_box_set_property;
-  object_class->get_property = gtk_box_get_property;
-
-  container_class->add = gtk_box_add;
-  container_class->remove = gtk_box_remove;
-  container_class->forall = gtk_box_forall;
-  container_class->child_type = gtk_box_child_type;
-
-  g_object_class_override_property (object_class,
-                                    PROP_ORIENTATION,
-                                    "orientation");
-
-  props[PROP_SPACING] =
-    g_param_spec_int ("spacing",
-                      P_("Spacing"),
-                      P_("The amount of space between children"),
-                      0, G_MAXINT, 0,
-                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  props[PROP_HOMOGENEOUS] =
-    g_param_spec_boolean ("homogeneous",
-                          P_("Homogeneous"),
-                          P_("Whether the children should all be the same size"),
-                          FALSE,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  props[PROP_BASELINE_POSITION] =
-    g_param_spec_enum ("baseline-position",
-                       P_("Baseline position"),
-                       P_("The position of the baseline aligned widgets if extra space is available"),
-                       GTK_TYPE_BASELINE_POSITION,
-                       GTK_BASELINE_POSITION_CENTER,
-                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  g_object_class_install_properties (object_class, LAST_PROP, props);
-
-  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FILLER);
-  gtk_widget_class_set_css_name (widget_class, I_("box"));
-}
 
 static void
 gtk_box_set_property (GObject      *object,
@@ -231,12 +167,92 @@ gtk_box_get_property (GObject    *object,
     }
 }
 
+static void
+gtk_box_add (GtkContainer *container,
+             GtkWidget    *child)
+{
+  gtk_widget_set_parent (child, GTK_WIDGET (container));
+}
+
+static void
+gtk_box_remove (GtkContainer *container,
+                GtkWidget    *widget)
+{
+  gtk_widget_unparent (widget);
+}
+
+static void
+gtk_box_forall (GtkContainer *container,
+                GtkCallback   callback,
+                gpointer      callback_data)
+{
+  GtkWidget *child;
+
+  child = _gtk_widget_get_first_child (GTK_WIDGET (container));
+  while (child)
+    {
+      GtkWidget *next = _gtk_widget_get_next_sibling (child);
+
+      (* callback) (child, callback_data);
+
+      child = next;
+    }
+
+}
+
 static GType
 gtk_box_child_type (GtkContainer   *container)
 {
   return GTK_TYPE_WIDGET;
 }
 
+static void
+gtk_box_class_init (GtkBoxClass *class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
+
+  object_class->set_property = gtk_box_set_property;
+  object_class->get_property = gtk_box_get_property;
+
+  container_class->add = gtk_box_add;
+  container_class->remove = gtk_box_remove;
+  container_class->forall = gtk_box_forall;
+  container_class->child_type = gtk_box_child_type;
+
+  g_object_class_override_property (object_class,
+                                    PROP_ORIENTATION,
+                                    "orientation");
+
+  props[PROP_SPACING] =
+    g_param_spec_int ("spacing",
+                      P_("Spacing"),
+                      P_("The amount of space between children"),
+                      0, G_MAXINT, 0,
+                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  props[PROP_HOMOGENEOUS] =
+    g_param_spec_boolean ("homogeneous",
+                          P_("Homogeneous"),
+                          P_("Whether the children should all be the same size"),
+                          FALSE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  props[PROP_BASELINE_POSITION] =
+    g_param_spec_enum ("baseline-position",
+                       P_("Baseline position"),
+                       P_("The position of the baseline aligned widgets if extra space is available"),
+                       GTK_TYPE_BASELINE_POSITION,
+                       GTK_BASELINE_POSITION_CENTER,
+                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, LAST_PROP, props);
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FILLER);
+  gtk_widget_class_set_css_name (widget_class, I_("box"));
+}
 static void
 gtk_box_init (GtkBox *box)
 {
@@ -404,39 +420,6 @@ gtk_box_get_baseline_position (GtkBox *box)
   box_layout = gtk_widget_get_layout_manager (GTK_WIDGET (box));
 
   return gtk_box_layout_get_baseline_position (GTK_BOX_LAYOUT (box_layout));
-}
-
-static void
-gtk_box_add (GtkContainer *container,
-             GtkWidget    *child)
-{
-  gtk_widget_set_parent (child, GTK_WIDGET (container));
-}
-
-static void
-gtk_box_remove (GtkContainer *container,
-		GtkWidget    *widget)
-{
-  gtk_widget_unparent (widget);
-}
-
-static void
-gtk_box_forall (GtkContainer *container,
-		GtkCallback   callback,
-		gpointer      callback_data)
-{
-  GtkWidget *child;
-
-  child = _gtk_widget_get_first_child (GTK_WIDGET (container));
-  while (child)
-    {
-      GtkWidget *next = _gtk_widget_get_next_sibling (child);
-
-      (* callback) (child, callback_data);
-
-      child = next;
-    }
-
 }
 
 /**
