@@ -156,7 +156,6 @@ enum {
 };
 
 enum {
-  MONTH_CHANGED_SIGNAL,
   DAY_SELECTED_SIGNAL,
   DAY_SELECTED_DOUBLE_CLICK_SIGNAL,
   PREV_MONTH_SIGNAL,
@@ -191,7 +190,6 @@ struct _GtkCalendarClass
 {
   GtkWidgetClass parent_class;
 
-  void (* month_changed)                (GtkCalendar *calendar);
   void (* day_selected)                 (GtkCalendar *calendar);
   void (* day_selected_double_click)    (GtkCalendar *calendar);
   void (* prev_month)                   (GtkCalendar *calendar);
@@ -416,22 +414,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                          P_("If TRUE, week numbers are displayed"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-
-  /**
-   * GtkCalendar::month-changed:
-   * @calendar: the object which received the signal.
-   *
-   * Emitted when the user clicks a button to change the selected month on a
-   * calendar.
-   */
-  gtk_calendar_signals[MONTH_CHANGED_SIGNAL] =
-    g_signal_new (I_("month-changed"),
-                  G_OBJECT_CLASS_TYPE (gobject_class),
-                  G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (GtkCalendarClass, month_changed),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 0);
 
   /**
    * GtkCalendar::day-selected:
