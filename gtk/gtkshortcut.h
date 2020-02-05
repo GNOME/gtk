@@ -67,6 +67,11 @@ void            gtk_shortcut_set_callback                       (GtkShortcut    
                                                                  GtkShortcutFunc         callback,
                                                                  gpointer                data,
                                                                  GDestroyNotify          destroy);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_shortcut_has_action                         (GtkShortcut            *self);
+GDK_AVAILABLE_IN_ALL
+void            gtk_shortcut_set_action                         (GtkShortcut            *self,
+                                                                 const char             *action);
 
 G_END_DECLS
 
