@@ -8,6 +8,8 @@
 
 typedef struct {
   const char *group;
+  gboolean do_start;
+  gint64 start_time;
   gint64 value;
 } Data;
 
@@ -23,7 +25,10 @@ callback (const SysprofCaptureFrame *frame,
       if (strcmp (mark->group, "gtk") == 0 &&
           strcmp (mark->name, data->group) == 0)
         {
-          data->value = mark->duration;
+          if (data->do_start)
+            data->value = frame->time - data->start_time;
+          else
+            data->value = mark->duration;
           return FALSE;
         }
     }
@@ -37,9 +42,11 @@ static int opt_rep = 10;
 static char *opt_mark;
 static char *opt_name;
 static char *opt_output;
+static gboolean opt_start_time;
 
 static GOptionEntry options[] = {
   { "mark", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_STRING, &opt_mark, "Name of the mark", "NAME" },
+  { "start", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, &opt_start_time, "Measure the start time", NULL },
   { "runs", '0', G_OPTION_FLAG_NONE, G_OPTION_ARG_INT, &opt_rep, "Number of runs", "COUNT" },
   { "name", '0', G_OPTION_FLAG_NONE, G_OPTION_ARG_STRING, &opt_name, "Name of this test", "NAME" },
   { "output", '0', G_OPTION_FLAG_NONE, G_OPTION_ARG_STRING, &opt_output, "Directory to save syscap files", "DIRECTORY" },
@@ -67,7 +74,7 @@ main (int argc, char *argv[])
 
   if (argc < 2)
     {
-      g_print ("Usage: testperf [OPTIONS] COMMANDLINE\n");
+      g_print ("Usage: %s [OPTIONS] COMMANDLINE\n", argv[0]);
       exit (1);
     }
 
@@ -131,7 +138,9 @@ main (int argc, char *argv[])
       if (error)
         g_error ("Opening syscap file: %s", error->message);
 
-      data.group = opt_mark ? opt_mark : "style";
+      data.group = opt_mark ? opt_mark : "css validation";
+      data.do_start = opt_start_time;
+      data.start_time = sysprof_capture_reader_get_start_time (reader);
       data.value = 0;
 
       cursor = sysprof_capture_cursor_new (reader);
