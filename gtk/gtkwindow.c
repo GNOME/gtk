@@ -69,6 +69,7 @@
 #include "gtkwindowgroup.h"
 #include "gtkpopovermenubarprivate.h"
 #include "gtkcssboxesimplprivate.h"
+#include "gtkgizmoprivate.h"
 
 #include "a11y/gtkwindowaccessibleprivate.h"
 #include "a11y/gtkcontaineraccessibleprivate.h"
@@ -160,7 +161,7 @@
  */
 
 #define MENU_BAR_ACCEL "F10"
-#define RESIZE_HANDLE_SIZE 20
+#define RESIZE_HANDLE_SIZE 10
 #define MNEMONICS_DELAY 300 /* ms */
 #define NO_CONTENT_CHILD_NAT 200
 /* In case the content (excluding header bar and shadows) of the window
@@ -268,7 +269,7 @@ typedef struct
   GtkGesture *bubble_drag_gesture;
   GtkEventController *key_controller;
 
-  GtkCssNode *decoration_node;
+  GtkWidget *decoration_widget;
 
   GdkSurface  *surface;
   GskRenderer *renderer;
@@ -437,8 +438,6 @@ static void gtk_window_real_activate_focus   (GtkWindow         *window);
 static void gtk_window_keys_changed          (GtkWindow         *window);
 static gboolean gtk_window_enable_debugging  (GtkWindow         *window,
                                               gboolean           toggle);
-static void gtk_window_snapshot                    (GtkWidget   *widget,
-                                                    GtkSnapshot *snapshot);
 static void gtk_window_unset_transient_for         (GtkWindow  *window);
 static void gtk_window_transient_parent_realized   (GtkWidget  *parent,
 						    GtkWidget  *window);
@@ -504,8 +503,8 @@ static void        gtk_window_do_popup                  (GtkWindow      *window,
                                                          GdkEventButton *event);
 static void        gtk_window_css_changed               (GtkWidget      *widget,
                                                          GtkCssStyleChange *change);
-static void gtk_window_state_flags_changed (GtkWidget     *widget,
-					     GtkStateFlags  previous_state);
+static void        gtk_window_do_popup         (GtkWindow      *window,
+                                                GdkEventButton *event);
 static void _gtk_window_set_is_active (GtkWindow *window,
 			               gboolean   is_active);
 
@@ -657,6 +656,7 @@ gtk_window_measure (GtkWidget      *widget,
   int title_nat_size = 0;
   int child_min_size = 0;
   int child_nat_size = 0;
+  int min_decoration;
   GtkBorder window_border = { 0 };
 
 
@@ -687,6 +687,7 @@ gtk_window_measure (GtkWidget      *widget,
                               &title_min_size, &title_nat_size,
                               NULL, NULL);
         }
+
     }
 
   if (child != NULL && gtk_widget_get_visible (child))
@@ -704,6 +705,10 @@ gtk_window_measure (GtkWidget      *widget,
     {
       child_nat_size = NO_CONTENT_CHILD_NAT;
     }
+
+  gtk_widget_measure (priv->decoration_widget, orientation, -1,
+                      &min_decoration, NULL, NULL, NULL);
+  child_min_size = MAX (child_min_size, min_decoration);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -725,12 +730,27 @@ static void
 gtk_window_add (GtkContainer *container,
                 GtkWidget    *child)
 {
-  /* Insert the child's css node now at the end so the order wrt. decoration_node is correct */
-  gtk_css_node_insert_before (gtk_widget_get_css_node (GTK_WIDGET (container)),
-                              gtk_widget_get_css_node (child),
-                              NULL);
+  gtk_widget_set_parent (child, GTK_WIDGET (container));
+  _gtk_bin_set_child (GTK_BIN (container), child);
+}
 
-  GTK_CONTAINER_CLASS (gtk_window_parent_class)->add (container, child);
+static void
+get_resize_handle_size (GtkWindow *window,
+                        GtkBorder *out_size)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  if (priv->use_client_shadow)
+    {
+      out_size->left = RESIZE_HANDLE_SIZE;
+      out_size->top = RESIZE_HANDLE_SIZE;
+      out_size->right = RESIZE_HANDLE_SIZE;
+      out_size->bottom = RESIZE_HANDLE_SIZE;
+    }
+  else
+    {
+      gtk_style_context_get_border (gtk_widget_get_style_context (priv->decoration_widget), out_size);
+    }
 }
 
 static void popover_get_rect (GtkWindowPopover      *popover,
@@ -800,9 +820,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->focus = gtk_window_focus;
   widget_class->move_focus = gtk_window_move_focus;
   widget_class->measure = gtk_window_measure;
-  widget_class->state_flags_changed = gtk_window_state_flags_changed;
   widget_class->css_changed = gtk_window_css_changed;
-  widget_class->snapshot = gtk_window_snapshot;
 
   container_class->add = gtk_window_add;
   container_class->remove = gtk_window_remove;
@@ -1556,17 +1574,6 @@ drag_gesture_update_cb (GtkGestureDrag *gesture,
 }
 
 static void
-node_style_changed_cb (GtkCssNode        *node,
-                       GtkCssStyleChange *change,
-                       GtkWidget         *widget)
-{
-  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE))
-    gtk_widget_queue_resize (widget);
-  else
-    gtk_widget_queue_draw (widget);
-}
-
-static void
 device_removed_cb (GdkSeat   *seat,
                    GdkDevice *device,
                    gpointer   user_data)
@@ -1626,10 +1633,11 @@ edge_under_coordinates (GtkWindow     *window,
                         GdkSurfaceEdge  edge)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkAllocation allocation;
-  GtkStyleContext *context;
-  gint handle_v, handle_h;
+  GtkCssBoxes css_boxes;
+  graphene_rect_t border_rect;
+  gint handle_v = 0, handle_h = 0;
   GtkBorder border;
+  GtkAllocation allocation;
   gboolean supports_edge_constraints;
   guint constraints;
 
@@ -1650,24 +1658,19 @@ edge_under_coordinates (GtkWindow     *window,
       (priv->edge_constraints & constraints) != constraints)
     return FALSE;
 
-  gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
-  context = _gtk_widget_get_style_context (GTK_WIDGET (window));
-  gtk_style_context_save_to_node (context, priv->decoration_node);
+  gtk_css_boxes_init (&css_boxes, priv->decoration_widget);
+  border_rect = *gtk_css_boxes_get_border_rect (&css_boxes);
 
-  if (priv->use_client_shadow)
-    {
-      handle_h = MIN (RESIZE_HANDLE_SIZE, allocation.width / 2);
-      handle_v = MIN (RESIZE_HANDLE_SIZE, allocation.height / 2);
-      get_shadow_width (window, &border);
-    }
-  else
-    {
-      handle_h = 0;
-      handle_v = 0;
-      gtk_style_context_get_padding (context, &border);
-    }
+  if (!gtk_widget_compute_point (priv->decoration_widget, GTK_WIDGET (window),
+                                 &border_rect.origin, &border_rect.origin))
+    return FALSE;
 
-  gtk_style_context_restore (context);
+  get_resize_handle_size (window, &border);
+
+  allocation.x = border_rect.origin.x - border.left;
+  allocation.y = border_rect.origin.y - border.top;
+  allocation.width = border_rect.size.width + border.left + border.top;
+  allocation.height = border_rect.size.height + border.top + border.bottom;
 
   /* Check whether the click falls outside the handle area */
   if (x >= allocation.x + border.left &&
@@ -1782,7 +1785,6 @@ gtk_window_init (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget;
-  GtkCssNode *widget_node;
   GdkSeat *seat;
   GtkEventController *motion_controller;
 #ifdef GDK_WINDOWING_X11
@@ -1828,15 +1830,11 @@ gtk_window_init (GtkWindow *window)
                     G_CALLBACK (gtk_window_on_theme_variant_changed), window);
 #endif
 
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (window));
-  priv->decoration_node = gtk_css_node_new ();
-  gtk_css_node_set_name (priv->decoration_node, g_quark_from_static_string ("decoration"));
-  gtk_css_node_set_parent (priv->decoration_node, widget_node);
-  gtk_css_node_set_state (priv->decoration_node, gtk_css_node_get_state (widget_node));
-  g_signal_connect_object (priv->decoration_node, "style-changed", G_CALLBACK (node_style_changed_cb), window, 0);
-  g_object_unref (priv->decoration_node);
-
-  gtk_css_node_add_class (widget_node, g_quark_from_static_string (GTK_STYLE_CLASS_BACKGROUND));
+  priv->decoration_widget = g_object_new (GTK_TYPE_GIZMO,
+                                          "css-name", "decoration",
+                                          NULL);
+  gtk_widget_add_style_class (priv->decoration_widget, "background");
+  gtk_widget_set_parent (priv->decoration_widget, GTK_WIDGET (window));
 
   priv->scale = gtk_widget_get_scale_factor (widget);
 
@@ -3009,6 +3007,8 @@ gtk_window_dispose (GObject *object)
   gtk_window_set_default_widget (window, NULL);
   remove_attach_widget (window);
 
+  g_clear_pointer (&priv->decoration_widget, gtk_widget_unparent);
+
   G_OBJECT_CLASS (gtk_window_parent_class)->dispose (object);
   unset_titlebar (window);
 
@@ -3760,12 +3760,9 @@ gtk_window_set_titlebar (GtkWindow *window,
 
   gtk_window_enable_csd (window);
   priv->title_box = titlebar;
-  /* Same reason as in gtk_window_add */
-  gtk_css_node_insert_before (gtk_widget_get_css_node (GTK_WIDGET (window)),
-                              gtk_widget_get_css_node (titlebar),
-                              NULL);
+  gtk_widget_insert_before (titlebar, GTK_WIDGET (window),
+                            gtk_bin_get_child (GTK_BIN (widget)));
 
-  gtk_widget_set_parent (priv->title_box, widget);
   if (GTK_IS_HEADER_BAR (titlebar))
     {
       g_signal_connect (titlebar, "notify::title",
@@ -5269,16 +5266,6 @@ max_borders (GtkBorder *one,
 }
 
 static void
-subtract_borders (GtkBorder *one,
-                  GtkBorder *two)
-{
-  one->top -= two->top;
-  one->right -= two->right;
-  one->bottom -= two->bottom;
-  one->left -= two->left;
-}
-
-static void
 get_shadow_width (GtkWindow *window,
                   GtkBorder *shadow_width)
 {
@@ -5303,9 +5290,9 @@ get_shadow_width (GtkWindow *window,
       priv->fullscreen)
     return;
 
-  context = _gtk_widget_get_style_context (GTK_WIDGET (window));
+  context = _gtk_widget_get_style_context (priv->decoration_widget);
 
-  gtk_style_context_save_to_node (context, priv->decoration_node);
+  gtk_style_context_save (context);
 
   /* Always sum border + padding */
   gtk_style_context_get_border (context, &border);
@@ -5332,42 +5319,41 @@ get_shadow_width (GtkWindow *window,
 static void
 update_csd_shape (GtkWindow *window)
 {
-  GtkWidget *widget = (GtkWidget *)window;
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  cairo_rectangle_int_t rect;
-  GtkBorder border, tmp;
-  GtkBorder window_border;
-  GtkStyleContext *context;
+  GtkWidget *widget = (GtkWidget *)window;
+  GtkCssBoxes css_boxes;
+  graphene_rect_t border_box;
+  GtkBorder handle_size;
 
   if (!priv->client_decorated)
     return;
 
-  context = _gtk_widget_get_style_context (widget);
+  gtk_css_boxes_init (&css_boxes, priv->decoration_widget);
+  border_box = *gtk_css_boxes_get_border_rect (&css_boxes);
 
-  gtk_style_context_save_to_node (context, priv->decoration_node);
-  gtk_style_context_get_margin (context, &border);
-  gtk_style_context_get_border (context, &tmp);
-  sum_borders (&border, &tmp);
-  gtk_style_context_get_padding (context, &tmp);
-  sum_borders (&border, &tmp);
-  gtk_style_context_restore (context);
-  get_shadow_width (window, &window_border);
+  /* Move into window coords */
+  if (!gtk_widget_compute_point (priv->decoration_widget, widget,
+                                 &border_box.origin, &border_box.origin))
+    return;
 
-  /* update the input shape, which makes it so that clicks
-   * outside the border windows go through.
-   */
+  get_resize_handle_size (window, &handle_size);
 
   if (priv->type != GTK_WINDOW_POPUP)
-    subtract_borders (&window_border, &border);
-
-  rect.x = window_border.left;
-  rect.y = window_border.top;
-  rect.width = gtk_widget_get_allocated_width (widget) - window_border.left - window_border.right;
-  rect.height = gtk_widget_get_allocated_height (widget) - window_border.top - window_border.bottom;
-
-  if (rect.width > 0 && rect.height > 0)
     {
-      cairo_region_t *region = cairo_region_create_rectangle (&rect);
+      border_box.origin.x -= handle_size.left;
+      border_box.origin.y -= handle_size.top;
+      border_box.size.width += handle_size.left + handle_size.right;
+      border_box.size.height += handle_size.top + handle_size.bottom;
+    }
+
+  if (border_box.size.width > 0 && border_box.size.height > 0)
+    {
+      cairo_region_t *region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
+                                                                border_box.origin.x,
+                                                                border_box.origin.y,
+                                                                border_box.size.width,
+                                                                border_box.size.height
+                                                              });
       gtk_widget_set_csd_input_shape (widget, region);
       cairo_region_destroy (region);
     }
@@ -5410,8 +5396,6 @@ subtract_decoration_corners_from_region (cairo_region_t        *region,
       priv->maximized)
     return;
 
-  gtk_style_context_save_to_node (context, priv->decoration_node);
-
   corner_rect (&rect, _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS));
   rect.x = extents->x;
   rect.y = extents->y;
@@ -5431,8 +5415,6 @@ subtract_decoration_corners_from_region (cairo_region_t        *region,
   rect.x = extents->x + extents->width - rect.width;
   rect.y = extents->y + extents->height - rect.height;
   cairo_region_subtract_rectangle (region, &rect);
-
-  gtk_style_context_restore (context);
 }
 
 static void
@@ -5449,7 +5431,7 @@ update_opaque_region (GtkWindow           *window,
   if (!_gtk_widget_get_realized (widget))
       return;
 
-  context = gtk_widget_get_style_context (widget);
+  context = gtk_widget_get_style_context (priv->decoration_widget);
 
   is_opaque = gdk_rgba_is_opaque (gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)));
 
@@ -5837,6 +5819,10 @@ _gtk_window_set_allocation (GtkWindow           *window,
     }
 
   *allocation_out = child_allocation;
+
+  child_allocation.y -= priv->title_height;
+  child_allocation.height += priv->title_height;
+  gtk_widget_size_allocate (priv->decoration_widget, &child_allocation, -1);
 
   for (link = priv->popovers.head; link; link = link->next)
     {
@@ -6461,20 +6447,6 @@ gtk_window_set_focus (GtkWindow *window,
   g_clear_object (&old_focus);
 
   g_object_notify (G_OBJECT (window), "focus-widget");
-}
-
-static void
-gtk_window_state_flags_changed (GtkWidget     *widget,
-                                GtkStateFlags  previous_state)
-{
-  GtkWindow *window = GTK_WINDOW (widget);
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkStateFlags state;
-
-  state = gtk_widget_get_state_flags (widget);
-  gtk_css_node_set_state (priv->decoration_node, state);
-
-  GTK_WIDGET_CLASS (gtk_window_parent_class)->state_flags_changed (widget, previous_state);
 }
 
 static void
@@ -7394,105 +7366,6 @@ gtk_window_compute_hints (GtkWindow   *window,
 
 #undef INCLUDE_CSD_SIZE
 #undef EXCLUDE_CSD_SIZE
-
-/***********************
- * Redrawing functions *
- ***********************/
-
-static void
-gtk_window_snapshot (GtkWidget   *widget,
-                     GtkSnapshot *snapshot)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (widget));
-  GtkStyleContext *context;
-  GtkBorder window_border;
-  gint title_height;
-  GList *l;
-  int width, height;
-  GtkWidget *child;
-
-  context = gtk_widget_get_style_context (widget);
-
-  get_shadow_width (GTK_WINDOW (widget), &window_border);
-  width = gtk_widget_get_width (widget);
-  height = gtk_widget_get_height (widget);
-
-  if (priv->client_decorated &&
-      priv->decorated &&
-      !priv->fullscreen &&
-      !priv->maximized)
-    {
-      gtk_style_context_save_to_node (context, priv->decoration_node);
-
-      if (priv->use_client_shadow)
-        {
-          GtkBorder padding, border;
-
-          gtk_style_context_get_padding (context, &padding);
-          gtk_style_context_get_border (context, &border);
-          sum_borders (&border, &padding);
-
-          gtk_snapshot_render_background (snapshot, context,
-                                          window_border.left - border.left, window_border.top - border.top,
-                                          width -
-                                            (window_border.left + window_border.right - border.left - border.right),
-                                          height -
-                                            (window_border.top + window_border.bottom - border.top - border.bottom));
-          gtk_snapshot_render_frame (snapshot, context,
-                                     window_border.left - border.left, window_border.top - border.top,
-                                     width -
-                                       (window_border.left + window_border.right - border.left - border.right),
-                                     height -
-                                       (window_border.top + window_border.bottom - border.top - border.bottom));
-        }
-      else
-        {
-          gtk_snapshot_render_background (snapshot, context, 0, 0,
-                                          width, height);
-
-          gtk_snapshot_render_frame (snapshot, context, 0, 0,
-                                     width, height);
-        }
-      gtk_style_context_restore (context);
-    }
-
-  if (priv->title_box &&
-      gtk_widget_get_visible (priv->title_box) &&
-      gtk_widget_get_child_visible (priv->title_box))
-    title_height = priv->title_height;
-  else
-    title_height = 0;
-
-  gtk_snapshot_render_background (snapshot, context,
-                                  window_border.left,
-                                  window_border.top + title_height,
-                                  width -
-                                    (window_border.left + window_border.right),
-                                  height -
-                                    (window_border.top + window_border.bottom + title_height));
-  gtk_snapshot_render_frame (snapshot, context,
-                             window_border.left,
-                             window_border.top + title_height,
-                             width -
-                               (window_border.left + window_border.right),
-                             height -
-                               (window_border.top + window_border.bottom + title_height));
-
-  for (child = _gtk_widget_get_first_child (widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
-    {
-      /* Handle popovers separately until their stacking order is fixed */
-      if (!GTK_IS_POPOVER (child))
-        gtk_widget_snapshot_child (widget, child, snapshot);
-    }
-
-  for (l = priv->popovers.head; l; l = l->next)
-    {
-      GtkWindowPopover *data = l->data;
-      gtk_widget_snapshot_child (widget, data->widget, snapshot);
-    }
-}
 
 /**
  * gtk_window_present:
