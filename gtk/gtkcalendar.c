@@ -143,13 +143,6 @@ week_of_year (guint year, guint mm, guint dd)
 }
 
 enum {
-  ARROW_YEAR_LEFT,
-  ARROW_YEAR_RIGHT,
-  ARROW_MONTH_LEFT,
-  ARROW_MONTH_RIGHT
-};
-
-enum {
   MONTH_PREV,
   MONTH_CURRENT,
   MONTH_NEXT
