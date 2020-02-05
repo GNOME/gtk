@@ -56,6 +56,7 @@ struct _GtkShortcut
 
   GtkShortcutTrigger *trigger;
   char *signal;
+  char *action;
   GtkShortcutFunc callback;
   gpointer user_data;
   GDestroyNotify destroy_notify;
@@ -68,6 +69,7 @@ enum
   PROP_ARGUMENTS,
   PROP_CALLBACK,
   PROP_SIGNAL,
+  PROP_ACTION,
   PROP_TRIGGER,
 
   N_PROPS
@@ -84,6 +86,7 @@ gtk_shortcut_dispose (GObject *object)
 
   g_clear_pointer (&self->trigger, gtk_shortcut_trigger_unref);
   g_clear_pointer (&self->signal, g_free);
+  g_clear_pointer (&self->action, g_free);
   g_clear_pointer (&self->args, g_variant_unref);
   if (self->callback)
     {
@@ -120,6 +123,10 @@ gtk_shortcut_get_property (GObject    *object,
       g_value_set_string (value, self->signal);
       break;
 
+    case PROP_ACTION:
+      g_value_set_string (value, self->action);
+      break;
+
     case PROP_TRIGGER:
       g_value_set_boxed (value, self->trigger);
       break;
@@ -146,6 +153,10 @@ gtk_shortcut_set_property (GObject      *object,
 
     case PROP_SIGNAL:
       gtk_shortcut_set_signal (self, g_value_get_string (value));
+      break;
+
+    case PROP_ACTION:
+      gtk_shortcut_set_action (self, g_value_get_string (value));
       break;
 
     case PROP_TRIGGER:
@@ -201,6 +212,17 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
     g_param_spec_string ("signal",
                          P_("Signal"),
                          P_("The action signal to emit"),
+                         NULL,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+  /**
+   * GtkShortcut:action:
+   *
+   * The name of the action to activate on the widget upon activation.
+   */
+  properties[PROP_ACTION] =
+    g_param_spec_string ("action",
+                         P_("Action"),
+                         P_("The action to activate"),
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -272,6 +294,28 @@ gtk_shortcut_activate (GtkShortcut *self,
                      accelerator,
                      error->message);
           g_clear_error (&error);
+          return FALSE;
+        }
+
+      return handled;
+    }
+  else if (self->action)
+    {
+      GError *error = NULL;
+      gboolean handled;
+
+      if (!gtk_binding_activate_action (G_OBJECT (widget),
+                                        self->action,
+                                        self->args,
+                                        &handled,
+                                        &error))
+        {
+          char *accelerator = gtk_shortcut_trigger_to_string (self->trigger);
+          g_warning ("gtk_shortcut_activate(): \":%s\": %s",
+                     accelerator,
+                     error->message);
+          g_clear_error (&error);
+          g_free (accelerator);
           return FALSE;
         }
 
@@ -362,6 +406,12 @@ gtk_shortcut_clear_activation (GtkShortcut *self)
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SIGNAL]);
     }
 
+  if (self->action)
+    {
+      g_clear_pointer (&self->action, g_free);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACTION]);
+    }
+
   if (self->callback)
     {
       if (self->destroy_notify)
@@ -398,6 +448,33 @@ gtk_shortcut_set_signal (GtkShortcut *self,
   self->signal = g_strdup (signal);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SIGNAL]);
+
+  g_object_thaw_notify (G_OBJECT (self));
+}
+
+gboolean
+gtk_shortcut_has_action (GtkShortcut *self)
+{
+  g_return_val_if_fail (GTK_IS_SHORTCUT (self), FALSE);
+
+  return self->action != NULL;
+}
+
+void
+gtk_shortcut_set_action (GtkShortcut *self,
+                         const char  *action)
+{
+  g_return_if_fail (GTK_IS_SHORTCUT (self));
+
+  if (g_strcmp0 (self->action, action) == 0)
+    return;
+
+  g_object_freeze_notify (G_OBJECT (self));
+
+  gtk_shortcut_clear_activation (self);
+  self->action = g_strdup (action);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACTION]);
 
   g_object_thaw_notify (G_OBJECT (self));
 }
