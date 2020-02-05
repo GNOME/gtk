@@ -232,10 +232,6 @@ GListModel *gtk_window_get_toplevels (void);
 GDK_AVAILABLE_IN_ALL
 GList*     gtk_window_list_toplevels (void);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_has_user_ref_count (GtkWindow *window,
-                                              gboolean   setting);
-
-GDK_AVAILABLE_IN_ALL
 void     gtk_window_add_mnemonic          (GtkWindow       *window,
 					   guint            keyval,
 					   GtkWidget       *target);

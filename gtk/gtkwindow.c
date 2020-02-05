@@ -8480,30 +8480,6 @@ gtk_window_set_focus_visible (GtkWindow *window,
     }
 }
 
-/**
- * gtk_window_set_has_user_ref_count:
- * @window: a #GtkWindow
- * @setting: the new value
- *
- * Tells GTK+ whether to drop its extra reference to the window
- * when gtk_widget_destroy() is called.
- *
- * This function is only exported for the benefit of language
- * bindings which may need to keep the window alive until their
- * wrapper object is garbage collected. There is no justification
- * for ever calling this function in an application.
- */
-void
-gtk_window_set_has_user_ref_count (GtkWindow *window,
-                                   gboolean   setting)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  priv->has_user_ref_count = setting;
-}
-
 static void
 ensure_state_flag_backdrop (GtkWidget *widget)
 {
