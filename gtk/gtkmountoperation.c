@@ -1180,7 +1180,7 @@ add_pid_to_process_list_store (GtkMountOperation              *mount_operation,
                                          24, 1,
                                          gtk_widget_get_direction (GTK_WIDGET (mount_operation->priv->dialog)),
                                          0);
-      texture = gtk_icon_paintable_download_texture (icon, NULL);
+      texture = gtk_icon_paintable_download_texture (icon);
       g_object_unref (icon);
     }
 

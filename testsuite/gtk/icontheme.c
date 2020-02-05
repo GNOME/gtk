@@ -96,10 +96,8 @@ assert_icon_lookup_size (const char         *icon_name,
   if (pixbuf_size > 0)
     {
       GdkTexture *texture;
-      GError *error = NULL;
 
-      texture = gtk_icon_paintable_download_texture (info, &error);
-      g_assert_no_error (error);
+      texture = gtk_icon_paintable_download_texture (info);
       g_assert_cmpint (gdk_texture_get_width (texture), ==, pixbuf_size);
       g_object_unref (texture);
     }
@@ -128,13 +126,9 @@ assert_icon_lookup_fails (const char         *icon_name,
 
   info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, NULL, size, 1, direction, flags);
 
-  if (info != NULL)
-    {
-      g_error ("Should not find an icon for \"%s\" with flags %s at size %d, but found \"%s\"",
-               icon_name, lookup_flags_to_string (flags), size, gtk_icon_paintable_get_filename (info) + strlen (g_get_current_dir ()));
-      g_object_unref (info);
-      return;
-    }
+  /* We never truly *fail*, but check that we got the image-missing fallback */
+  g_assert (info != NULL);
+  g_assert (g_str_has_suffix (gtk_icon_paintable_get_filename (info), "image-missing.png"));
 }
 
 static GList *lookups = NULL;
@@ -751,10 +745,9 @@ test_nonsquare_symbolic (void)
   g_assert_nonnull (info);
 
   g_object_unref (pixbuf);
-  texture = gtk_icon_paintable_download_texture (info, &error);
+  texture = gtk_icon_paintable_download_texture (info);
 
   /* we are loaded successfully */
-  g_assert_no_error (error);
   g_assert_nonnull (texture);
 
   /* the original dimensions have been preserved */
@@ -768,32 +761,10 @@ test_nonsquare_symbolic (void)
   g_object_unref (info);
 }
 
-static GLogWriterOutput
-log_writer_drop_warnings (GLogLevelFlags   log_level,
-                          const GLogField *fields,
-                          gsize            n_fields,
-                          gpointer         user_data)
-{
-  gboolean *ignore_warnings = user_data;
-
-  if (log_level == G_LOG_LEVEL_WARNING && *ignore_warnings)
-    return G_LOG_WRITER_HANDLED;
-
-  return g_log_writer_default (log_level, fields, n_fields, user_data);
-}
-
 int
 main (int argc, char *argv[])
 {
-  gboolean ignore_warnings = TRUE;
-
   gtk_test_init (&argc, &argv);
-
-  /* Ignore the one-time warning that the fallback icon theme can’t be found
-   * (because we’ve changed the search paths). */
-  g_log_set_writer_func (log_writer_drop_warnings, &ignore_warnings, NULL);
-  assert_icon_lookup_fails ("this-icon-totally-does-not-exist", 16, GTK_TEXT_DIR_NONE, 0);
-  ignore_warnings = FALSE;
 
   g_test_add_func ("/icontheme/basics", test_basics);
   g_test_add_func ("/icontheme/lookup-order", test_lookup_order);

@@ -37,7 +37,7 @@ get_image_texture (GtkImage *image,
                                          gtk_widget_get_direction (GTK_WIDGET (image)),
                                          0);
       if (icon)
-        texture = gtk_icon_paintable_download_texture (icon, NULL);
+        texture = gtk_icon_paintable_download_texture (icon);
       g_object_unref (icon);
     default:
       g_warning ("Image storage type %d not handled",

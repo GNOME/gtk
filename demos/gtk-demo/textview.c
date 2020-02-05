@@ -141,7 +141,7 @@ insert_text (GtkTextView *view)
                                      32, 1,
                                      gtk_widget_get_direction (widget),
                                      0);
-  texture = gtk_icon_paintable_download_texture (icon, NULL);
+  texture = gtk_icon_paintable_download_texture (icon);
   g_object_unref (icon);
   g_assert (texture);
 

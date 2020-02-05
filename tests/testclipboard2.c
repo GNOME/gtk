@@ -292,7 +292,7 @@ get_button_list (GdkClipboard *clipboard,
                                      48, 1,
                                      gtk_widget_get_direction (box),
                                      0);
-  texture = gtk_icon_paintable_download_texture (icon, NULL);
+  texture = gtk_icon_paintable_download_texture (icon);
   g_value_take_object (&value, gdk_pixbuf_get_from_texture (texture));
   g_object_unref (texture);
   g_object_unref (icon);
