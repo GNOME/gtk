@@ -108,20 +108,31 @@ main (int argc, char **argv)
   guint n_types = 0, i;
   GTestDBus *bus;
   gint result;
+  const char *display, *x_r_d;
 
   /* These must be set before before gtk_test_init */
   g_setenv ("GIO_USE_VFS", "local", TRUE);
   g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
 
-  /* initialize test program */
-  gtk_test_init (&argc, &argv);
-  gtk_test_register_all_types ();
+  /* g_test_dbus_up() helpfully clears these, so we have to re-set it */
+  display = g_getenv ("DISPLAY");
+  x_r_d = g_getenv ("XDG_RUNTIME_DIR");
 
   /* Create one test bus for all tests, as we have a lot of very small
    * and quick tests.
    */
   bus = g_test_dbus_new (G_TEST_DBUS_NONE);
   g_test_dbus_up (bus);
+
+  if (display)
+    g_setenv ("DISPLAY", display, TRUE);
+  if (x_r_d)
+    g_setenv ("XDG_RUNTIME_DIR", x_r_d, TRUE);
+
+  /* initialize test program */
+  gtk_test_init (&argc, &argv);
+  gtk_test_register_all_types ();
+
 
   all_types = gtk_test_list_all_types (&n_types);
 

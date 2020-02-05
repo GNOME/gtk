@@ -148,7 +148,8 @@ static const GDebugKey gdk_debug_keys[] = {
   { "gl-gles",         GDK_DEBUG_GL_GLES },
   { "gl-debug",        GDK_DEBUG_GL_DEBUG },
   { "vulkan-disable",  GDK_DEBUG_VULKAN_DISABLE },
-  { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE }
+  { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE },
+  { "default-settings",GDK_DEBUG_DEFAULT_SETTINGS },
 };
 #endif
 

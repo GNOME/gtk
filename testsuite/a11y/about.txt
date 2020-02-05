@@ -2,7 +2,7 @@ window1
   "dialog"
   index: 0
   name: About FancyPants
-  state: active enabled sensitive showing visible
+  state: enabled sensitive showing visible
   toolkit: gtk
   window-type: dialog
   <AtkComponent>
