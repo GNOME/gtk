@@ -3536,7 +3536,7 @@ icon_ensure_scale_and_texture__locked (GtkIconPaintable *icon,
  */
 GdkTexture *
 gtk_icon_paintable_download_texture (GtkIconPaintable *self,
-                           GError **error)
+                                     GError **error)
 {
   GdkTexture *texture = NULL;
 
@@ -3643,13 +3643,13 @@ icon_paintable_snapshot (GdkPaintable *paintable,
  */
 void
 gtk_icon_paintable_snapshot_with_colors (GtkIconPaintable *icon,
-                               GtkSnapshot  *snapshot,
-                               double        width,
-                               double        height,
-                               const GdkRGBA *foreground_color,
-                               const GdkRGBA *success_color,
-                               const GdkRGBA *warning_color,
-                               const GdkRGBA *error_color)
+                                         GtkSnapshot  *snapshot,
+                                         double        width,
+                                         double        height,
+                                         const GdkRGBA *foreground_color,
+                                         const GdkRGBA *success_color,
+                                         const GdkRGBA *warning_color,
+                                         const GdkRGBA *error_color)
 {
   GdkTexture *texture;
 
