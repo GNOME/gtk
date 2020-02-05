@@ -614,7 +614,8 @@ static gboolean gtk_widget_real_query_tooltip    (GtkWidget         *widget,
 						  gint               y,
 						  gboolean           keyboard_tip,
 						  GtkTooltip        *tooltip);
-static void     gtk_widget_real_style_updated    (GtkWidget         *widget);
+static void     gtk_widget_real_css_changed      (GtkWidget         *widget,
+                                                  GtkCssStyleChange *change);
 
 static gboolean		gtk_widget_real_focus			(GtkWidget        *widget,
 								 GtkDirectionType  direction);
@@ -908,7 +909,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->keynav_failed = gtk_widget_real_keynav_failed;
   klass->can_activate_accel = gtk_widget_real_can_activate_accel;
   klass->query_tooltip = gtk_widget_real_query_tooltip;
-  klass->style_updated = gtk_widget_real_style_updated;
+  klass->css_changed = gtk_widget_real_css_changed;
 
   /* Accessibility support */
   klass->priv->accessible_type = GTK_TYPE_ACCESSIBLE;
@@ -1511,23 +1512,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_STATE_FLAGS);
-
-  /**
-   * GtkWidget::style-updated:
-   * @widget: the object on which the signal is emitted
-   *
-   * The ::style-updated signal is a convenience signal that is emitted when the
-   * #GtkStyleContext::changed signal is emitted on the @widget's associated
-   * #GtkStyleContext as returned by gtk_widget_get_style_context().
-   */
-  widget_signals[STYLE_UPDATED] =
-    g_signal_new (I_("style-updated"),
-                  G_TYPE_FROM_CLASS (gobject_class),
-                  G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (GtkWidgetClass, style_updated),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 0);
 
   /**
    * GtkWidget::direction-changed:
@@ -5115,15 +5099,12 @@ gtk_widget_real_state_flags_changed (GtkWidget     *widget,
 }
 
 static void
-gtk_widget_real_style_updated (GtkWidget *widget)
+gtk_widget_real_css_changed (GtkWidget         *widget,
+                             GtkCssStyleChange *change)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkCssStyleChange *change = NULL;
 
   gtk_widget_update_alpha (widget);
-
-  if (priv->context)
-    change = gtk_style_context_get_change (priv->context);
 
   if (change)
     {
@@ -11223,9 +11204,10 @@ gtk_widget_class_get_css_name (GtkWidgetClass *widget_class)
 }
 
 void
-_gtk_widget_style_context_invalidated (GtkWidget *widget)
+gtk_widget_css_changed (GtkWidget         *widget,
+                        GtkCssStyleChange *change)
 {
-  g_signal_emit (widget, widget_signals[STYLE_UPDATED], 0);
+  GTK_WIDGET_GET_CLASS (widget)->css_changed (widget, change);
 }
 
 GtkCssNode *

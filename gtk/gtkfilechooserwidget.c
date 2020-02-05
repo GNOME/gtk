@@ -480,7 +480,8 @@ static void     gtk_file_chooser_widget_map            (GtkWidget             *w
 static void     gtk_file_chooser_widget_unmap          (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_root           (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_unroot         (GtkWidget             *widget);
-static void     gtk_file_chooser_widget_style_updated   (GtkWidget             *widget);
+static void     gtk_file_chooser_widget_css_changed    (GtkWidget             *widget,
+                                                        GtkCssStyleChange     *change);
 
 static gboolean       gtk_file_chooser_widget_set_current_folder           (GtkFileChooser    *chooser,
                                                                             GFile             *folder,
@@ -3647,7 +3648,8 @@ check_icon_theme (GtkFileChooserWidget *impl)
 }
 
 static void
-gtk_file_chooser_widget_style_updated (GtkWidget *widget)
+gtk_file_chooser_widget_css_changed (GtkWidget         *widget,
+                                     GtkCssStyleChange *change)
 {
   GtkFileChooserWidget *impl;
 
@@ -3655,9 +3657,9 @@ gtk_file_chooser_widget_style_updated (GtkWidget *widget)
 
   impl = GTK_FILE_CHOOSER_WIDGET (widget);
 
-  profile_msg ("    parent class style_udpated start", NULL);
-  GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->style_updated (widget);
-  profile_msg ("    parent class style_updated end", NULL);
+  profile_msg ("    parent class css_changed start", NULL);
+  GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->css_changed (widget, change);
+  profile_msg ("    parent class css_changed end", NULL);
 
   change_icon_theme (impl);
 
@@ -7945,7 +7947,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   widget_class->unmap = gtk_file_chooser_widget_unmap;
   widget_class->root = gtk_file_chooser_widget_root;
   widget_class->unroot = gtk_file_chooser_widget_unroot;
-  widget_class->style_updated = gtk_file_chooser_widget_style_updated;
+  widget_class->css_changed = gtk_file_chooser_widget_css_changed;
 
   /*
    * Signals

@@ -75,7 +75,6 @@
                                     <property name="fixed-height-mode">1</property>
                                     <signal name="cursor-changed" handler="cursor_changed_cb" swapped="no"/>
                                     <signal name="row-activated" handler="row_activated_cb" swapped="no"/>
-                                    <signal name="style-updated" handler="gtk_font_chooser_widget_set_cell_size" object="GtkFontChooserWidget" after="yes" swapped="yes"/>
                                     <child internal-child="selection">
                                       <object class="GtkTreeSelection" id="treeview-selection1">
                                         <property name="mode">browse</property>

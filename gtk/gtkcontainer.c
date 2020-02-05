@@ -350,7 +350,7 @@ gtk_container_idle_sizer (GdkFrameClock *clock,
   /* We validate the style contexts in a single loop before even trying
    * to handle resizes instead of doing validations inline.
    * This is mostly necessary for compatibility reasons with old code,
-   * because both style_updated and size_allocate functions often change
+   * because both css_changed and size_allocate functions often change
    * styles and so could cause infinite loops in this function.
    *
    * It's important to note that even an invalid style context returns

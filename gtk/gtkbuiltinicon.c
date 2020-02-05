@@ -55,15 +55,10 @@ gtk_builtin_icon_snapshot (GtkWidget   *widget,
 }
 
 static void
-gtk_builtin_icon_style_updated (GtkWidget *widget)
+gtk_builtin_icon_css_changed (GtkWidget         *widget,
+                              GtkCssStyleChange *change)
 {
-  GtkStyleContext *context;
-  GtkCssStyleChange *change = NULL;
-
-  context = gtk_widget_get_style_context (widget);
-  change = gtk_style_context_get_change (context);
-
-  GTK_WIDGET_CLASS (gtk_builtin_icon_parent_class)->style_updated (widget);
+  GTK_WIDGET_CLASS (gtk_builtin_icon_parent_class)->css_changed (widget, change);
 
   if (change == NULL ||
       gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_SIZE))
@@ -99,7 +94,7 @@ gtk_builtin_icon_class_init (GtkBuiltinIconClass *klass)
 
   wclass->snapshot = gtk_builtin_icon_snapshot;
   wclass->measure = gtk_builtin_icon_measure;
-  wclass->style_updated = gtk_builtin_icon_style_updated;
+  wclass->css_changed = gtk_builtin_icon_css_changed;
 }
 
 static void

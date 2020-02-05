@@ -675,7 +675,8 @@ static void     gtk_tree_view_key_controller_focus_out    (GtkEventControllerKey
 static gint     gtk_tree_view_focus                (GtkWidget        *widget,
 						    GtkDirectionType  direction);
 static gboolean gtk_tree_view_grab_focus           (GtkWidget        *widget);
-static void     gtk_tree_view_style_updated        (GtkWidget        *widget);
+static void     gtk_tree_view_css_changed          (GtkWidget        *widget,
+                                                    GtkCssStyleChange *change);
 
 /* container signals */
 static void     gtk_tree_view_remove               (GtkContainer     *container,
@@ -1028,7 +1029,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->snapshot = gtk_tree_view_snapshot;
   widget_class->focus = gtk_tree_view_focus;
   widget_class->grab_focus = gtk_tree_view_grab_focus;
-  widget_class->style_updated = gtk_tree_view_style_updated;
+  widget_class->css_changed = gtk_tree_view_css_changed;
 
   /* GtkContainer signals */
   container_class->remove = gtk_tree_view_remove;
@@ -7958,24 +7959,20 @@ gtk_tree_view_grab_focus (GtkWidget *widget)
 }
 
 static void
-gtk_tree_view_style_updated (GtkWidget *widget)
+gtk_tree_view_css_changed (GtkWidget         *widget,
+                           GtkCssStyleChange *change)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GList *list;
   GtkTreeViewColumn *column;
-  GtkStyleContext *style_context;
-  GtkCssStyleChange *change;
 
-  GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->style_updated (widget);
+  GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->css_changed (widget, change);
 
   if (gtk_widget_get_realized (widget))
     {
       gtk_tree_view_set_grid_lines (tree_view, tree_view->grid_lines);
       gtk_tree_view_set_enable_tree_lines (tree_view, tree_view->tree_lines_enabled);
     }
-
-  style_context = gtk_widget_get_style_context (widget);
-  change = gtk_style_context_get_change (style_context);
 
   if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE))
     {

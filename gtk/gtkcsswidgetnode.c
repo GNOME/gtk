@@ -101,7 +101,7 @@ gtk_css_widget_node_validate (GtkCssNode *node)
       if (context)
         gtk_style_context_validate (context, &change);
       else
-        _gtk_widget_style_context_invalidated (widget_node->widget);
+        gtk_widget_css_changed (widget_node->widget, &change);
       g_set_object (&widget_node->last_updated_style, style);
     }
   gtk_css_style_change_finish (&change);

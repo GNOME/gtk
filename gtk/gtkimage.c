@@ -111,7 +111,8 @@ static void gtk_image_measure (GtkWidget      *widget,
                                int           *minimum_baseline,
                                int           *natural_baseline);
 
-static void gtk_image_style_updated        (GtkWidget    *widget);
+static void gtk_image_css_changed          (GtkWidget    *widget,
+                                            GtkCssStyleChange *change);
 static void gtk_image_finalize             (GObject      *object);
 
 static void gtk_image_set_property         (GObject      *object,
@@ -158,7 +159,7 @@ gtk_image_class_init (GtkImageClass *class)
   widget_class->snapshot = gtk_image_snapshot;
   widget_class->measure = gtk_image_measure;
   widget_class->unrealize = gtk_image_unrealize;
-  widget_class->style_updated = gtk_image_style_updated;
+  widget_class->css_changed = gtk_image_css_changed;
 
   image_props[PROP_PAINTABLE] =
       g_param_spec_object ("paintable",
@@ -1283,16 +1284,15 @@ gtk_image_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_image_style_updated (GtkWidget *widget)
+gtk_image_css_changed (GtkWidget         *widget,
+                       GtkCssStyleChange *change)
 {
   GtkImage *image = GTK_IMAGE (widget);
   GtkImagePrivate *priv = gtk_image_get_instance_private (image);
-  GtkStyleContext *context = gtk_widget_get_style_context (widget);
-  GtkCssStyleChange *change = gtk_style_context_get_change (context);
 
   gtk_icon_helper_invalidate_for_change (priv->icon_helper, change);
 
-  GTK_WIDGET_CLASS (gtk_image_parent_class)->style_updated (widget);
+  GTK_WIDGET_CLASS (gtk_image_parent_class)->css_changed (widget, change);
 
   priv->baseline_align = 0.0;
 }

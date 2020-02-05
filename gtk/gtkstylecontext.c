@@ -164,7 +164,7 @@ gtk_style_context_real_changed (GtkStyleContext *context)
     {
       GtkWidget *widget = gtk_css_widget_node_get_widget (GTK_CSS_WIDGET_NODE (priv->cssnode));
       if (widget != NULL)
-        _gtk_widget_style_context_invalidated (widget);
+        gtk_widget_css_changed (widget, gtk_style_context_get_change (context));
     }
 }
 
@@ -186,7 +186,7 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
    * #GtkStyleContext.
    *
    * For a #GtkStyleContext returned by gtk_widget_get_style_context(), the
-   * #GtkWidget::style-updated signal/vfunc might be more convenient to use.
+   * #GtkWidget:css-changed vfunc might be more convenient to use.
    *
    * This signal is useful when using the theming layer standalone.
    */

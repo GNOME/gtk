@@ -37,6 +37,7 @@ typedef struct _GtkAdjustment          GtkAdjustment;
 typedef struct _GtkBuilder             GtkBuilder;
 typedef struct _GtkBuilderScope        GtkBuilderScope;
 typedef struct _GtkClipboard	       GtkClipboard;
+typedef struct _GtkCssStyleChange      GtkCssStyleChange;
 typedef struct _GtkEventController     GtkEventController;
 typedef struct _GtkGesture             GtkGesture;
 typedef struct _GtkLayoutManager       GtkLayoutManager;

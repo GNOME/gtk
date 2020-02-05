@@ -199,8 +199,10 @@ struct _GtkWidget
  *   widget; or emitted when widget got focus in keyboard mode.
  * @compute_expand: Computes whether a container should give this
  *   widget extra space when possible.
- * @style_updated: Signal emitted when the GtkStyleContext of a widget
- *   is changed.
+ * @css_changed: Signal emitted when the CSS used by widget was changed. Widgets
+ *   should then discard their caches that depend on CSS and queue resizes or
+ *   redraws accordingly. The default implementation will take care of this for
+ *   all the default CSS properties, so implementations must chain up.
  * @snapshot: Vfunc for gtk_widget_snapshot().
  * @contains: Vfunc for gtk_widget_contains().
  */
@@ -279,7 +281,8 @@ struct _GtkWidgetClass
                                        gboolean   *hexpand_p,
                                        gboolean   *vexpand_p);
 
-  void         (* style_updated)          (GtkWidget *widget);
+  void         (* css_changed)                 (GtkWidget            *widget,
+                                                GtkCssStyleChange    *change);
 
   void         (* snapshot)                    (GtkWidget            *widget,
                                                 GtkSnapshot          *snapshot);

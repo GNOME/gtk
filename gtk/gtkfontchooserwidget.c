@@ -790,7 +790,6 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, stop_search_cb);
   gtk_widget_class_bind_template_callback (widget_class, cursor_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, row_activated_cb);
-  gtk_widget_class_bind_template_callback (widget_class, gtk_font_chooser_widget_set_cell_size);
   gtk_widget_class_bind_template_callback (widget_class, rows_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, size_change_cb);
   gtk_widget_class_bind_template_callback (widget_class, output_cb);

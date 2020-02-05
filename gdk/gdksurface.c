@@ -3793,7 +3793,7 @@ gdk_surface_get_unscaled_size (GdkSurface *surface,
  * GTK will update this property automatically if
  * the @surface background is opaque, as we know where the opaque regions
  * are. If your surface background is not opaque, please update this
- * property in your #GtkWidget::style-updated handler.
+ * property in your #GtkWidget:css-changed handler.
  */
 void
 gdk_surface_set_opaque_region (GdkSurface      *surface,
