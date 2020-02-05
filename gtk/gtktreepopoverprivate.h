@@ -17,7 +17,7 @@
  * Author: Matthias Clasen
  */
 
-#ifndef __GTK_TREE_POPOPVER_PRIVATE_H__
+#ifndef __GTK_TREE_POPOVER_PRIVATE_H__
 #define __GTK_TREE_POPOVER_PRIVATE_H__
 
 #include <gtk/gtk.h>
