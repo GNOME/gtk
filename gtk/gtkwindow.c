@@ -5317,49 +5317,6 @@ get_shadow_width (GtkWindow *window,
 }
 
 static void
-update_csd_shape (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *widget = (GtkWidget *)window;
-  GtkCssBoxes css_boxes;
-  graphene_rect_t border_box;
-  GtkBorder handle_size;
-
-  if (!priv->client_decorated)
-    return;
-
-  gtk_css_boxes_init (&css_boxes, priv->decoration_widget);
-  border_box = *gtk_css_boxes_get_border_rect (&css_boxes);
-
-  /* Move into window coords */
-  if (!gtk_widget_compute_point (priv->decoration_widget, widget,
-                                 &border_box.origin, &border_box.origin))
-    return;
-
-  get_resize_handle_size (window, &handle_size);
-
-  if (priv->type != GTK_WINDOW_POPUP)
-    {
-      border_box.origin.x -= handle_size.left;
-      border_box.origin.y -= handle_size.top;
-      border_box.size.width += handle_size.left + handle_size.right;
-      border_box.size.height += handle_size.top + handle_size.bottom;
-    }
-
-  if (border_box.size.width > 0 && border_box.size.height > 0)
-    {
-      cairo_region_t *region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
-                                                                border_box.origin.x,
-                                                                border_box.origin.y,
-                                                                border_box.size.width,
-                                                                border_box.size.height
-                                                              });
-      gtk_widget_set_csd_input_shape (widget, region);
-      cairo_region_destroy (region);
-    }
-}
-
-static void
 update_opaque_region (GtkWindow           *window,
                       const GtkBorder     *border,
                       const GtkAllocation *allocation)
@@ -5447,6 +5404,10 @@ update_realized_window_properties (GtkWindow     *window,
                                    GtkBorder     *window_border)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GtkWidget *widget = (GtkWidget *)window;
+  GtkCssBoxes css_boxes;
+  graphene_rect_t border_box;
+  GtkBorder handle_size;
 
   if (priv->surface && priv->client_decorated && priv->use_client_shadow)
     gdk_surface_set_shadow_width (priv->surface,
@@ -5456,7 +5417,40 @@ update_realized_window_properties (GtkWindow     *window,
                                   window_border->bottom);
 
   update_opaque_region (window, window_border, child_allocation);
-  update_csd_shape (window);
+
+  /* Update input shape */
+  if (!priv->client_decorated)
+    return;
+
+  gtk_css_boxes_init (&css_boxes, priv->decoration_widget);
+  border_box = *gtk_css_boxes_get_border_rect (&css_boxes);
+
+  /* Move into window coords */
+  if (!gtk_widget_compute_point (priv->decoration_widget, widget,
+                                 &border_box.origin, &border_box.origin))
+    return;
+
+  get_resize_handle_size (window, &handle_size);
+
+  if (priv->type != GTK_WINDOW_POPUP)
+    {
+      border_box.origin.x -= handle_size.left;
+      border_box.origin.y -= handle_size.top;
+      border_box.size.width += handle_size.left + handle_size.right;
+      border_box.size.height += handle_size.top + handle_size.bottom;
+    }
+
+  if (border_box.size.width > 0 && border_box.size.height > 0)
+    {
+      cairo_region_t *region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
+                                                                border_box.origin.x,
+                                                                border_box.origin.y,
+                                                                border_box.size.width,
+                                                                border_box.size.height
+                                                              });
+      gtk_widget_set_csd_input_shape (widget, region);
+      cairo_region_destroy (region);
+    }
 }
 
 static void
