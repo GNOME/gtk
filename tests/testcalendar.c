@@ -78,15 +78,6 @@ calendar_set_signal_strings (char         *sig_str,
 }
 
 static void
-calendar_month_changed (GtkWidget    *widget,
-                             CalendarData *data)
-{
-  char *str = calendar_date_to_string (data, "month-changed: %c");
-  calendar_set_signal_strings (str, data);
-  g_free (str);
-}
-
-static void
 calendar_day_selected (GtkWidget    *widget,
                             CalendarData *data)
 {
@@ -228,9 +219,6 @@ create_calendar(void)
 
   gtk_calendar_mark_day (GTK_CALENDAR (calendar), 19);	
 
-  g_signal_connect (calendar, "month-changed", 
-		    G_CALLBACK (calendar_month_changed),
-		    &calendar_data);
   g_signal_connect (calendar, "day-selected", 
 		    G_CALLBACK (calendar_day_selected),
 		    &calendar_data);
