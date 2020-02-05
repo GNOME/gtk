@@ -51,10 +51,6 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_calendar_new		(void);
 
 GDK_AVAILABLE_IN_ALL
-void          gtk_calendar_select_month                (GtkCalendar *self,
-                                                        GDateTime   *date);
-
-GDK_AVAILABLE_IN_ALL
 void          gtk_calendar_select_day                  (GtkCalendar *self,
                                                         GDateTime   *date);
 
