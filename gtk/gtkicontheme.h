@@ -40,8 +40,6 @@ typedef struct _GtkIconTheme      GtkIconTheme;
 
 /**
  * GtkIconLookupFlags:
- * @GTK_ICON_LOOKUP_FORCE_SIZE: Always get the icon scaled to the
- *   requested size
  * @GTK_ICON_LOOKUP_FORCE_REGULAR: Try to always load regular icons, even
  *   when symbolic icon names are given
  * @GTK_ICON_LOOKUP_FORCE_SYMBOLIC: Try to always load symbolic icons, even
@@ -51,9 +49,8 @@ typedef struct _GtkIconTheme      GtkIconTheme;
  */
 typedef enum
 {
-  GTK_ICON_LOOKUP_FORCE_SIZE       = 1 << 0,
-  GTK_ICON_LOOKUP_FORCE_REGULAR    = 1 << 1,
-  GTK_ICON_LOOKUP_FORCE_SYMBOLIC   = 1 << 2
+  GTK_ICON_LOOKUP_FORCE_REGULAR    = 1 << 0,
+  GTK_ICON_LOOKUP_FORCE_SYMBOLIC   = 1 << 1
 } GtkIconLookupFlags;
 
 /**

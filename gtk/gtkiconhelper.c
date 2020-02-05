@@ -46,7 +46,6 @@ struct _GtkIconHelper
   gint pixel_size;
 
   guint use_fallback : 1;
-  guint force_scale_pixbuf : 1;
   guint texture_is_symbolic : 1;
 
   GtkWidget *owner;
@@ -62,9 +61,6 @@ get_icon_lookup_flags (GtkIconHelper *self,
   GtkCssIconStyle icon_style;
 
   flags = 0;
-
-  if (self->pixel_size != -1 || self->force_scale_pixbuf)
-    flags |= GTK_ICON_LOOKUP_FORCE_SIZE;
 
   icon_style = _gtk_css_icon_style_value_get (style->icon->icon_style);
 
@@ -565,23 +561,6 @@ gboolean
 _gtk_icon_helper_get_is_empty (GtkIconHelper *self)
 {
   return gtk_image_definition_get_storage_type (self->def) == GTK_IMAGE_EMPTY;
-}
-
-gboolean
-_gtk_icon_helper_get_force_scale_pixbuf (GtkIconHelper *self)
-{
-  return self->force_scale_pixbuf;
-}
-
-void
-_gtk_icon_helper_set_force_scale_pixbuf (GtkIconHelper *self,
-                                         gboolean       force_scale)
-{
-  if (self->force_scale_pixbuf != force_scale)
-    {
-      self->force_scale_pixbuf = force_scale;
-      gtk_icon_helper_invalidate (self);
-    }
 }
 
 void
