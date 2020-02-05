@@ -5360,56 +5360,14 @@ update_csd_shape (GtkWindow *window)
 }
 
 static void
-corner_rect (cairo_rectangle_int_t *rect,
-             const GtkCssValue     *value)
-{
-  rect->width = _gtk_css_corner_value_get_x (value, 100);
-  rect->height = _gtk_css_corner_value_get_y (value, 100);
-}
-
-static void
-subtract_decoration_corners_from_region (cairo_region_t        *region,
-                                         cairo_rectangle_int_t *extents,
-                                         GtkStyleContext       *context,
-                                         GtkWindow             *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  cairo_rectangle_int_t rect;
-
-  if (!priv->client_decorated ||
-      !priv->decorated ||
-      priv->fullscreen ||
-      priv->maximized)
-    return;
-
-  corner_rect (&rect, _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS));
-  rect.x = extents->x;
-  rect.y = extents->y;
-  cairo_region_subtract_rectangle (region, &rect);
-
-  corner_rect (&rect, _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS));
-  rect.x = extents->x + extents->width - rect.width;
-  rect.y = extents->y;
-  cairo_region_subtract_rectangle (region, &rect);
-
-  corner_rect (&rect, _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS));
-  rect.x = extents->x;
-  rect.y = extents->y + extents->height - rect.height;
-  cairo_region_subtract_rectangle (region, &rect);
-
-  corner_rect (&rect, _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS));
-  rect.x = extents->x + extents->width - rect.width;
-  rect.y = extents->y + extents->height - rect.height;
-  cairo_region_subtract_rectangle (region, &rect);
-}
-
-static void
 update_opaque_region (GtkWindow           *window,
                       const GtkBorder     *border,
                       const GtkAllocation *allocation)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget = GTK_WIDGET (window);
+  GtkCssBoxes css_boxes;
+  GskRoundedRect border_box;
   cairo_region_t *opaque_region;
   GtkStyleContext *context;
   gboolean is_opaque = FALSE;
@@ -5424,18 +5382,54 @@ update_opaque_region (GtkWindow           *window,
   if (gtk_widget_get_opacity (widget) < 1.0)
     is_opaque = FALSE;
 
-  if (is_opaque)
+  gtk_css_boxes_init (&css_boxes, priv->decoration_widget);
+  border_box = *gtk_css_boxes_get_border_box (&css_boxes);
+  if (!gtk_widget_compute_point (priv->decoration_widget, widget,
+                                 &border_box.bounds.origin, &border_box.bounds.origin))
+    return;
+
+  if (is_opaque &&
+      priv->client_decorated &&
+      priv->decorated &&
+      !priv->fullscreen &&
+      !priv->maximized)
     {
-      cairo_rectangle_int_t rect;
+      const graphene_rect_t *box = &border_box.bounds;
 
-      rect.x = border->left;
-      rect.y = border->top;
-      rect.width = allocation->width - border->left - border->right;
-      rect.height = allocation->height - border->top - border->bottom;
-
-      opaque_region = cairo_region_create_rectangle (&rect);
-
-      subtract_decoration_corners_from_region (opaque_region, &rect, context, window);
+      opaque_region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
+                                                       box->origin.x,
+                                                       box->origin.y,
+                                                       box->size.width,
+                                                       box->size.height
+                                                     });
+      cairo_region_subtract_rectangle (opaque_region,
+                                       &(cairo_rectangle_int_t) {
+                                         box->origin.x,
+                                         box->origin.y,
+                                         border_box.corner[0].width,
+                                         border_box.corner[0].height,
+                                       });
+      cairo_region_subtract_rectangle (opaque_region,
+                                       &(cairo_rectangle_int_t) {
+                                         box->origin.x + box->size.width - border_box.corner[1].width,
+                                         box->origin.y,
+                                         border_box.corner[1].width,
+                                         border_box.corner[1].height,
+                                       });
+      cairo_region_subtract_rectangle (opaque_region,
+                                       &(cairo_rectangle_int_t) {
+                                         box->origin.x + box->size.width - border_box.corner[2].width,
+                                         box->origin.y + box->size.height - border_box.corner[2].width,
+                                         border_box.corner[2].width,
+                                         border_box.corner[2].height,
+                                       });
+      cairo_region_subtract_rectangle (opaque_region,
+                                       &(cairo_rectangle_int_t) {
+                                         box->origin.x,
+                                         box->origin.y + box->size.height - border_box.corner[3].width,
+                                         border_box.corner[3].width,
+                                         border_box.corner[3].height,
+                                       });
     }
   else
     {
