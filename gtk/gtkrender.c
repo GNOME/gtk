@@ -519,8 +519,7 @@ gtk_render_icon (GtkStyleContext *context,
                                          snapshot,
                                          GDK_PAINTABLE (texture),
                                          gdk_texture_get_width (texture),
-                                         gdk_texture_get_height (texture),
-                                         FALSE);
+                                         gdk_texture_get_height (texture));
   node = gtk_snapshot_free_to_node (snapshot);
   if (node == NULL)
     return;

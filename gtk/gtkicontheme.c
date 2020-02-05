@@ -3598,25 +3598,9 @@ icon_paintable_snapshot (GdkPaintable *paintable,
                          double        height)
 {
   GtkIconPaintable *icon = GTK_ICON_PAINTABLE (paintable);
-  GdkTexture *texture;
 
-  texture = gtk_icon_paintable_download_texture (icon, NULL);
-  if (texture)
-    {
-      if (icon->desired_scale != 1)
-        {
-          gtk_snapshot_save (snapshot);
-          gtk_snapshot_scale (snapshot, 1.0 / icon->desired_scale, 1.0 / icon->desired_scale);
-        }
-
-      gtk_snapshot_append_texture (snapshot, texture,
-                                   &GRAPHENE_RECT_INIT (0, 0, width * icon->desired_scale, height * icon->desired_scale));
-
-      if (icon->desired_scale != 1)
-        gtk_snapshot_restore (snapshot);
-
-      g_object_unref (texture);
-    }
+  gtk_icon_paintable_snapshot_with_colors (icon, snapshot, width, height,
+                                           NULL, NULL, NULL, NULL);
 }
 
 /**
@@ -3754,7 +3738,7 @@ gtk_icon_paintable_new_for_file (GFile *file,
 
 static GtkIconPaintable *
 gtk_icon_paintable_new_for_pixbuf (GtkIconTheme *icon_theme,
-                         GdkPixbuf    *pixbuf)
+                                   GdkPixbuf    *pixbuf)
 {
   GtkIconPaintable *icon;
   gint width, height, max;

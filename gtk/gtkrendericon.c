@@ -93,11 +93,12 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
                                        GtkSnapshot  *snapshot,
                                        GdkPaintable *paintable,
                                        double        width,
-                                       double        height,
-                                       gboolean      recolor)
+                                       double        height)
 {
   GskTransform *transform;
   gboolean has_shadow;
+  gboolean is_icon_paintable;
+  GdkRGBA fg, sc, wc, ec;
 
   g_return_if_fail (GTK_IS_CSS_STYLE (style));
   g_return_if_fail (snapshot != NULL);
@@ -111,31 +112,19 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
 
   has_shadow = gtk_css_shadow_value_push_snapshot (style->icon->icon_shadow, snapshot);
 
-  if (recolor)
-    {
-      graphene_matrix_t color_matrix;
-      graphene_vec4_t color_offset;
-      GdkRGBA fg, sc, wc, ec;
+  is_icon_paintable = GTK_IS_ICON_PAINTABLE (paintable);
+  if (is_icon_paintable)
+    gtk_icon_theme_lookup_symbolic_colors (style, &fg, &sc, &wc, &ec);
 
-      gtk_icon_theme_lookup_symbolic_colors (style, &fg, &sc, &wc, &ec);
-
-      if (fg.alpha == 0.0f)
-        goto transparent;
-
-      graphene_matrix_init_from_float (&color_matrix, (float[16]) {
-                                         sc.red - fg.red, sc.green - fg.green, sc.blue - fg.blue, 0,
-                                         wc.red - fg.red, wc.green - fg.green, wc.blue - fg.blue, 0,
-                                         ec.red - fg.red, ec.green - fg.green, ec.blue - fg.blue, 0,
-                                         0, 0, 0, fg.alpha
-                                       });
-      graphene_vec4_init (&color_offset, fg.red, fg.green, fg.blue, 0);
-
-      gtk_snapshot_push_color_matrix (snapshot, &color_matrix, &color_offset);
-    }
+  if (fg.alpha == 0.0f)
+    goto transparent;
 
   if (transform == NULL)
     {
-      gdk_paintable_snapshot (paintable, snapshot, width, height);
+      if (is_icon_paintable)
+        gtk_icon_paintable_snapshot_with_colors (GTK_ICON_PAINTABLE (paintable), snapshot, width, height, &fg, &sc, &wc, &ec);
+      else
+        gdk_paintable_snapshot (paintable, snapshot, width, height);
     }
   else
     {
@@ -146,13 +135,13 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
       gtk_snapshot_transform (snapshot, transform);
       gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- width / 2.0, - height / 2.0));
 
-      gdk_paintable_snapshot (paintable, snapshot, width, height);
+      if (is_icon_paintable)
+        gtk_icon_paintable_snapshot_with_colors (GTK_ICON_PAINTABLE (paintable), snapshot, width, height, &fg, &sc, &wc, &ec);
+      else
+        gdk_paintable_snapshot (paintable, snapshot, width, height);
 
       gtk_snapshot_restore (snapshot);
     }
-
-  if (recolor)
-    gtk_snapshot_pop (snapshot);
 
 transparent:
   if (has_shadow)
