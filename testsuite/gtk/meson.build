@@ -54,7 +54,6 @@ tests = [
   ['slicelistmodel'],
   ['sortlistmodel'],
   ['spinbutton'],
-  ['stylecontext'],
   ['templates'],
   ['textbuffer'],
   ['textiter'],
