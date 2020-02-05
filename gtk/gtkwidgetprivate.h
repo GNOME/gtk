@@ -278,7 +278,8 @@ GtkStyleContext * _gtk_widget_peek_style_context           (GtkWidget *widget);
 gboolean          _gtk_widget_captured_event               (GtkWidget *widget,
                                                             GdkEvent  *event);
 
-void              _gtk_widget_style_context_invalidated    (GtkWidget    *widget);
+void              gtk_widget_css_changed                   (GtkWidget           *widget,
+                                                            GtkCssStyleChange   *change);
 
 void              _gtk_widget_update_parent_muxer          (GtkWidget    *widget);
 GtkActionMuxer *  _gtk_widget_get_action_muxer             (GtkWidget    *widget,

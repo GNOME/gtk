@@ -121,15 +121,10 @@ gtk_spinner_snapshot (GtkWidget   *widget,
 }
 
 static void
-gtk_spinner_style_updated (GtkWidget *widget)
+gtk_spinner_css_changed (GtkWidget         *widget,
+                         GtkCssStyleChange *change)
 { 
-  GtkStyleContext *context; 
-  GtkCssStyleChange *change = NULL;
-  
-  context = gtk_widget_get_style_context (widget);
-  change = gtk_style_context_get_change (context);
-  
-  GTK_WIDGET_CLASS (gtk_spinner_parent_class)->style_updated (widget);
+  GTK_WIDGET_CLASS (gtk_spinner_parent_class)->css_changed (widget, change);
   
   if (change == NULL ||
       gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_SIZE))
@@ -215,7 +210,7 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   widget_class = GTK_WIDGET_CLASS(klass);
   widget_class->snapshot = gtk_spinner_snapshot;
   widget_class->measure = gtk_spinner_measure;
-  widget_class->style_updated = gtk_spinner_style_updated;
+  widget_class->css_changed = gtk_spinner_css_changed;
 
   /* GtkSpinner:active:
    *

@@ -1359,17 +1359,14 @@ gtk_css_node_validate (GtkCssNode *cssnode)
 
   gtk_css_node_validate_internal (cssnode, &filter, timestamp);
 
-  if (cssnode->parent == NULL)
+  if (gdk_profiler_is_running ())
     {
-      if (gdk_profiler_is_running ())
-        {
-          gint64 after = g_get_monotonic_time ();
-          gdk_profiler_add_mark (before * 1000, (after - before) * 1000, "css validation", "");
-          gdk_profiler_set_int_counter (invalidated_nodes_counter, after * 1000, invalidated_nodes);
-          gdk_profiler_set_int_counter (created_styles_counter, after * 1000, created_styles);
-          invalidated_nodes = 0;
-          created_styles = 0;
-        }
+      gint64 after = g_get_monotonic_time ();
+      gdk_profiler_add_mark (before * 1000, (after - before) * 1000, "css validation", "");
+      gdk_profiler_set_int_counter (invalidated_nodes_counter, after * 1000, invalidated_nodes);
+      gdk_profiler_set_int_counter (created_styles_counter, after * 1000, created_styles);
+      invalidated_nodes = 0;
+      created_styles = 0;
     }
 }
 

@@ -434,9 +434,10 @@ static void gtk_label_size_allocate     (GtkWidget        *widget,
                                          int               baseline);
 static void gtk_label_state_flags_changed   (GtkWidget        *widget,
                                              GtkStateFlags     prev_state);
-static void gtk_label_style_updated     (GtkWidget        *widget);
-static void gtk_label_snapshot          (GtkWidget        *widget,
-                                         GtkSnapshot      *snapshot);
+static void gtk_label_css_changed       (GtkWidget         *widget,
+                                         GtkCssStyleChange *change);
+static void gtk_label_snapshot          (GtkWidget         *widget,
+                                         GtkSnapshot       *snapshot);
 static gboolean gtk_label_focus         (GtkWidget         *widget,
                                          GtkDirectionType   direction);
 
@@ -641,7 +642,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->destroy = gtk_label_destroy;
   widget_class->size_allocate = gtk_label_size_allocate;
   widget_class->state_flags_changed = gtk_label_state_flags_changed;
-  widget_class->style_updated = gtk_label_style_updated;
+  widget_class->css_changed = gtk_label_css_changed;
   widget_class->query_tooltip = gtk_label_query_tooltip;
   widget_class->snapshot = gtk_label_snapshot;
   widget_class->unrealize = gtk_label_unrealize;
@@ -3790,17 +3791,13 @@ gtk_label_state_flags_changed (GtkWidget     *widget,
 }
 
 static void 
-gtk_label_style_updated (GtkWidget *widget)
+gtk_label_css_changed (GtkWidget         *widget,
+                       GtkCssStyleChange *change)
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GtkStyleContext *context;
-  GtkCssStyleChange *change;
 
-  GTK_WIDGET_CLASS (gtk_label_parent_class)->style_updated (widget);
-
-  context = gtk_widget_get_style_context (widget);
-  change = gtk_style_context_get_change (context);
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->css_changed (widget, change);
 
   if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS) ||
       (priv->select_info && priv->select_info->links))

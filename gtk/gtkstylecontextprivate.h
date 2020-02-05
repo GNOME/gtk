@@ -44,14 +44,9 @@ void            gtk_style_context_save_named                 (GtkStyleContext *c
 void            gtk_style_context_save_to_node               (GtkStyleContext *context,
                                                               GtkCssNode      *node);
 
-GtkCssStyleChange *
-                gtk_style_context_get_change                 (GtkStyleContext *context);
-
 GtkCssStyle *   gtk_style_context_lookup_style               (GtkStyleContext *context);
 GtkCssValue   * _gtk_style_context_peek_property             (GtkStyleContext *context,
                                                               guint            property_id);
-void            gtk_style_context_validate                   (GtkStyleContext *context,
-                                                              GtkCssStyleChange *change);
 gboolean       _gtk_style_context_check_region_name          (const gchar     *str);
 
 void           _gtk_style_context_get_cursor_color           (GtkStyleContext    *context,

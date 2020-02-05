@@ -278,9 +278,10 @@ static void     gtk_file_chooser_button_root               (GtkWidget *widget);
 static void     gtk_file_chooser_button_map                (GtkWidget        *widget);
 static gboolean gtk_file_chooser_button_mnemonic_activate  (GtkWidget        *widget,
 							    gboolean          group_cycling);
-static void     gtk_file_chooser_button_style_updated      (GtkWidget        *widget);
-static void     gtk_file_chooser_button_state_flags_changed (GtkWidget       *widget,
-                                                             GtkStateFlags    previous_state);
+static void     gtk_file_chooser_button_css_changed             (GtkWidget              *widget,
+                                                                 GtkCssStyleChange      *change);
+static void     gtk_file_chooser_button_state_flags_changed     (GtkWidget       *widget,
+                                                                 GtkStateFlags    previous_state);
 
 /* Utility Functions */
 static void          set_info_for_file_at_iter         (GtkFileChooserButton *fs,
@@ -371,7 +372,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   widget_class->show = gtk_file_chooser_button_show;
   widget_class->hide = gtk_file_chooser_button_hide;
   widget_class->map = gtk_file_chooser_button_map;
-  widget_class->style_updated = gtk_file_chooser_button_style_updated;
+  widget_class->css_changed = gtk_file_chooser_button_css_changed;
   widget_class->root = gtk_file_chooser_button_root;
   widget_class->mnemonic_activate = gtk_file_chooser_button_mnemonic_activate;
   widget_class->state_flags_changed = gtk_file_chooser_button_state_flags_changed;
@@ -1456,12 +1457,10 @@ change_icon_theme (GtkFileChooserButton *button)
 }
 
 static void
-gtk_file_chooser_button_style_updated (GtkWidget *widget)
+gtk_file_chooser_button_css_changed (GtkWidget         *widget,
+                                     GtkCssStyleChange *change)
 {
-  GtkStyleContext *context = gtk_widget_get_style_context (widget);
-  GtkCssStyleChange *change = gtk_style_context_get_change (context);
-
-  GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->style_updated (widget);
+  GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->css_changed (widget, change);
 
   /* We need to update the icon surface, but only in case
    * the icon theme really changed. */

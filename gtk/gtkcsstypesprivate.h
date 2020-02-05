@@ -446,8 +446,6 @@ typedef enum /*< skip >*/ {
   GTK_CSS_FONT_VARIANT_EAST_ASIAN_RUBY         = 1 << 9
 } GtkCssFontVariantEastAsian;
 
-cairo_operator_t        _gtk_css_blend_mode_get_operator         (GskBlendMode       mode);
-
 GtkCssChange            _gtk_css_change_for_sibling              (GtkCssChange       match);
 GtkCssChange            _gtk_css_change_for_child                (GtkCssChange       match);
 
