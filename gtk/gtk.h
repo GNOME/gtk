@@ -95,6 +95,7 @@
 #include <gtk/gtkdragsource.h>
 #include <gtk/gtkdrawingarea.h>
 #include <gtk/gtkeditable.h>
+#include <gtk/gtkemojichooser.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkentrybuffer.h>
 #include <gtk/gtkentrycompletion.h>
