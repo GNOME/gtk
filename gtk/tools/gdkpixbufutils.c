@@ -126,7 +126,28 @@ size_prepared_cb2 (GdkPixbufLoader *loader,
 {
   int *scales = data;
 
-  gdk_pixbuf_loader_set_size (loader, scales[0], scales[1]);
+  if (scales[2]) /* keep same aspect ratio as original, while fitting in given size */
+    {
+      double aspect = (double) height / width;
+
+      /* First use given width and calculate size */
+      width = scales[0];
+      height = scales[0] * aspect;
+
+      /* Check if it fits given height, otherwise scale down */
+      if (height > scales[1])
+        {
+          width *= (double) scales[1] / height;
+          height = scales[1];
+        }
+    }
+  else
+    {
+      width = scales[0];
+      height = scales[1];
+    }
+
+  gdk_pixbuf_loader_set_size (loader, width, scales[1]);
 }
 
 GdkPixbuf *
@@ -140,7 +161,7 @@ _gdk_pixbuf_new_from_stream_at_scale (GInputStream  *stream,
 {
   GdkPixbufLoader *loader;
   GdkPixbuf *pixbuf;
-  int scales[2];
+  int scales[3];
 
   if (format)
     {
@@ -153,6 +174,7 @@ _gdk_pixbuf_new_from_stream_at_scale (GInputStream  *stream,
 
   scales[0] = width;
   scales[1] = height;
+  scales[2] = aspect;
   g_signal_connect (loader, "size-prepared",
                     G_CALLBACK (size_prepared_cb2), scales);
 
