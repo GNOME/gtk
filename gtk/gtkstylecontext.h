@@ -850,9 +850,6 @@ GDK_AVAILABLE_IN_ALL
 GType gtk_style_context_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkStyleContext * gtk_style_context_new (void);
-
-GDK_AVAILABLE_IN_ALL
 void gtk_style_context_add_provider_for_display    (GdkDisplay       *display,
                                                     GtkStyleProvider *provider,
                                                     guint             priority);

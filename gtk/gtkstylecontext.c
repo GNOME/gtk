@@ -68,11 +68,6 @@
  * RTL/LTR information set. The style context will also be updated
  * automatically if any of these settings change on the widget.
  *
- * If you are using the theming layer standalone, you will need to set a
- * widget path and a display yourself to the created style context through
- * gtk_style_context_set_path() and possibly gtk_style_context_set_display().
- * See the “Foreign drawing“ example in gtk4-demo.
- *
  * # Style Classes # {#gtkstylecontext-classes}
  *
  * Widgets can add style classes to their context, which can be used to associate
@@ -374,34 +369,6 @@ gtk_style_context_get_node (GtkStyleContext *context)
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
 
   return priv->cssnode;
-}
-
-/**
- * gtk_style_context_new:
- *
- * Creates a standalone #GtkStyleContext, this style context
- * won’t be attached to any widget, so you may want
- * to call gtk_style_context_set_path() yourself.
- *
- * This function is only useful when using the theming layer
- * separated from GTK+, if you are using #GtkStyleContext to
- * theme #GtkWidgets, use gtk_widget_get_style_context()
- * in order to get a style context ready to theme the widget.
- *
- * Returns: A newly created #GtkStyleContext.
- **/
-GtkStyleContext *
-gtk_style_context_new (void)
-{
-  GtkStyleContext *context = g_object_new (GTK_TYPE_STYLE_CONTEXT, NULL);
-  GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
-
-
-  /* Create default info store */
-  priv->cssnode = gtk_css_node_new ();
-  gtk_css_node_set_state (priv->cssnode, GTK_STATE_FLAG_DIR_LTR);
-
-  return context;
 }
 
 GtkStyleContext *
