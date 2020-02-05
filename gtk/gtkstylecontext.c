@@ -96,14 +96,6 @@
  */
 
 #define CURSOR_ASPECT_RATIO (0.04)
-typedef struct PropertyValue PropertyValue;
-
-struct PropertyValue
-{
-  GType       widget_type;
-  GParamSpec *pspec;
-  GValue      value;
-};
 
 struct _GtkStyleContextPrivate
 {
