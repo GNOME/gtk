@@ -227,10 +227,11 @@ static void     gtk_paned_size_allocate         (GtkWidget           *widget,
                                                  int                  width,
                                                  int                  height,
                                                  int                  baseline);
-static void     gtk_paned_unrealize             (GtkWidget        *widget);
-static gboolean gtk_paned_focus                 (GtkWidget        *widget,
-						 GtkDirectionType  direction);
-static void     gtk_paned_style_updated         (GtkWidget        *widget);
+static void     gtk_paned_unrealize             (GtkWidget           *widget);
+static gboolean gtk_paned_focus                 (GtkWidget           *widget,
+						 GtkDirectionType     direction);
+static void     gtk_paned_css_changed           (GtkWidget           *widget,
+                                                 GtkCssStyleChange   *change);
 static void     gtk_paned_add                   (GtkContainer     *container,
 						 GtkWidget        *widget);
 static void     gtk_paned_remove                (GtkContainer     *container,
@@ -355,7 +356,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->size_allocate = gtk_paned_size_allocate;
   widget_class->unrealize = gtk_paned_unrealize;
   widget_class->focus = gtk_paned_focus;
-  widget_class->style_updated = gtk_paned_style_updated;
+  widget_class->css_changed = gtk_paned_css_changed;
 
   container_class->add = gtk_paned_add;
   container_class->remove = gtk_paned_remove;
@@ -1465,15 +1466,10 @@ gtk_paned_focus (GtkWidget        *widget,
 }
 
 static void
-gtk_paned_style_updated (GtkWidget *widget)
+gtk_paned_css_changed (GtkWidget         *widget,
+                       GtkCssStyleChange *change)
 {
-  GtkStyleContext *context;
-  GtkCssStyleChange *change = NULL;
-
-  context = gtk_widget_get_style_context (widget);
-  change = gtk_style_context_get_change (context);
-
-  GTK_WIDGET_CLASS (gtk_paned_parent_class)->style_updated (widget);
+  GTK_WIDGET_CLASS (gtk_paned_parent_class)->css_changed (widget, change);
 
   if (change == NULL ||
       gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_SIZE))

@@ -205,7 +205,8 @@ static void       gtk_toolbar_size_allocate        (GtkWidget           *widget,
                                                     int                  width,
                                                     int                  height,
                                                     int                  baseline);
-static void       gtk_toolbar_style_updated        (GtkWidget           *widget);
+static void       gtk_toolbar_css_changed          (GtkWidget           *widget,
+                                                    GtkCssStyleChange   *change);
 static gboolean   gtk_toolbar_focus                (GtkWidget           *widget,
 						    GtkDirectionType     dir);
 static void       gtk_toolbar_move_focus           (GtkWidget           *widget,
@@ -371,7 +372,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   widget_class->snapshot = gtk_toolbar_snapshot;
   widget_class->measure = gtk_toolbar_measure;
   widget_class->size_allocate = gtk_toolbar_size_allocate;
-  widget_class->style_updated = gtk_toolbar_style_updated;
+  widget_class->css_changed = gtk_toolbar_css_changed;
   widget_class->focus = gtk_toolbar_focus;
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_TOOL_BAR);
@@ -1440,12 +1441,13 @@ gtk_toolbar_size_allocate (GtkWidget *widget,
 }
 
 static void
-gtk_toolbar_style_updated (GtkWidget *widget)
+gtk_toolbar_css_changed (GtkWidget         *widget,
+                         GtkCssStyleChange *change)
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = toolbar->priv;
 
-  GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->style_updated (widget);
+  GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->css_changed (widget, change);
 
   priv->max_homogeneous_pixels = -1;
 }

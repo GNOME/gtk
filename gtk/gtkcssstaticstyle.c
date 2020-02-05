@@ -46,7 +46,7 @@ static void gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
                                                 GtkCssValue       *specified,
                                                 GtkCssSection     *section);
 
-static int core_props[] = {
+static const int core_props[] = {
   GTK_CSS_PROPERTY_COLOR,
   GTK_CSS_PROPERTY_DPI,
   GTK_CSS_PROPERTY_FONT_SIZE,
@@ -54,7 +54,7 @@ static int core_props[] = {
   GTK_CSS_PROPERTY_ICON_PALETTE
 };
 
-static int background_props[] = {
+static const int background_props[] = {
   GTK_CSS_PROPERTY_BACKGROUND_COLOR,
   GTK_CSS_PROPERTY_BOX_SHADOW,
   GTK_CSS_PROPERTY_BACKGROUND_CLIP,
@@ -66,7 +66,7 @@ static int background_props[] = {
   GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE
 };
 
-static int border_props[] = {
+static const int border_props[] = {
   GTK_CSS_PROPERTY_BORDER_TOP_STYLE,
   GTK_CSS_PROPERTY_BORDER_TOP_WIDTH,
   GTK_CSS_PROPERTY_BORDER_LEFT_STYLE,
@@ -89,13 +89,13 @@ static int border_props[] = {
   GTK_CSS_PROPERTY_BORDER_IMAGE_WIDTH
 };
 
-static int icon_props[] = {
+static const int icon_props[] = {
   GTK_CSS_PROPERTY_ICON_SIZE,
   GTK_CSS_PROPERTY_ICON_SHADOW,
   GTK_CSS_PROPERTY_ICON_STYLE,
 };
 
-static int outline_props[] = {
+static const int outline_props[] = {
   GTK_CSS_PROPERTY_OUTLINE_STYLE,
   GTK_CSS_PROPERTY_OUTLINE_WIDTH,
   GTK_CSS_PROPERTY_OUTLINE_OFFSET,
@@ -106,7 +106,7 @@ static int outline_props[] = {
   GTK_CSS_PROPERTY_OUTLINE_COLOR,
 };
 
-static int font_props[] = {
+static const int font_props[] = {
   GTK_CSS_PROPERTY_FONT_FAMILY,
   GTK_CSS_PROPERTY_FONT_STYLE,
   GTK_CSS_PROPERTY_FONT_WEIGHT,
@@ -118,7 +118,7 @@ static int font_props[] = {
   GTK_CSS_PROPERTY_FONT_FEATURE_SETTINGS,
   GTK_CSS_PROPERTY_FONT_VARIATION_SETTINGS,
 };
-static int font_variant_props[] = {
+static const int font_variant_props[] = {
   GTK_CSS_PROPERTY_TEXT_DECORATION_LINE,
   GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR,
   GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE,
@@ -131,7 +131,7 @@ static int font_variant_props[] = {
   GTK_CSS_PROPERTY_FONT_VARIANT_EAST_ASIAN,
 };
 
-static int animation_props[] = {
+static const int animation_props[] = {
   GTK_CSS_PROPERTY_ANIMATION_NAME,
   GTK_CSS_PROPERTY_ANIMATION_DURATION,
   GTK_CSS_PROPERTY_ANIMATION_TIMING_FUNCTION,
@@ -142,14 +142,14 @@ static int animation_props[] = {
   GTK_CSS_PROPERTY_ANIMATION_FILL_MODE,
 };
 
-static int transition_props[] = {
+static const int transition_props[] = {
   GTK_CSS_PROPERTY_TRANSITION_PROPERTY,
   GTK_CSS_PROPERTY_TRANSITION_DURATION,
   GTK_CSS_PROPERTY_TRANSITION_TIMING_FUNCTION,
   GTK_CSS_PROPERTY_TRANSITION_DELAY,
 };
 
-static int size_props[] = {
+static const int size_props[] = {
   GTK_CSS_PROPERTY_MARGIN_TOP,
   GTK_CSS_PROPERTY_MARGIN_LEFT,
   GTK_CSS_PROPERTY_MARGIN_BOTTOM,
@@ -163,7 +163,7 @@ static int size_props[] = {
   GTK_CSS_PROPERTY_MIN_HEIGHT,
 };
 
-static int other_props[] = {
+static const int other_props[] = {
   GTK_CSS_PROPERTY_ICON_SOURCE,
   GTK_CSS_PROPERTY_ICON_TRANSFORM,
   GTK_CSS_PROPERTY_ICON_FILTER,

@@ -327,7 +327,8 @@ static void   gtk_text_snapshot             (GtkWidget        *widget,
 static void   gtk_text_focus_in             (GtkWidget        *widget);
 static void   gtk_text_focus_out            (GtkWidget        *widget);
 static gboolean gtk_text_grab_focus         (GtkWidget        *widget);
-static void   gtk_text_style_updated        (GtkWidget        *widget);
+static void   gtk_text_css_changed          (GtkWidget        *widget,
+                                             GtkCssStyleChange *change);
 static void   gtk_text_direction_changed    (GtkWidget        *widget,
                                              GtkTextDirection  previous_dir);
 static void   gtk_text_state_flags_changed  (GtkWidget        *widget,
@@ -725,7 +726,7 @@ gtk_text_class_init (GtkTextClass *class)
   widget_class->size_allocate = gtk_text_size_allocate;
   widget_class->snapshot = gtk_text_snapshot;
   widget_class->grab_focus = gtk_text_grab_focus;
-  widget_class->style_updated = gtk_text_style_updated;
+  widget_class->css_changed = gtk_text_css_changed;
   widget_class->direction_changed = gtk_text_direction_changed;
   widget_class->state_flags_changed = gtk_text_state_flags_changed;
   widget_class->root = gtk_text_root;
@@ -3362,16 +3363,12 @@ gtk_text_update_cached_style_values (GtkText *self)
 }
 
 static void 
-gtk_text_style_updated (GtkWidget *widget)
+gtk_text_css_changed (GtkWidget         *widget,
+                      GtkCssStyleChange *change)
 {
   GtkText *self = GTK_TEXT (widget);
-  GtkStyleContext *context;
-  GtkCssStyleChange *change = NULL;
 
-  context = gtk_widget_get_style_context (widget);
-  change = gtk_style_context_get_change (context);
-
-  GTK_WIDGET_CLASS (gtk_text_parent_class)->style_updated (widget);
+  GTK_WIDGET_CLASS (gtk_text_parent_class)->css_changed (widget, change);
 
   gtk_text_update_cached_style_values (self);
 

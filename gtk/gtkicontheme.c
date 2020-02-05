@@ -2163,8 +2163,8 @@ choose_icon (GtkIconTheme      *self,
  * they will be tried in order.
  *
  * Note that you probably want to listen for icon theme changes and
- * update the icon. This is usually done by connecting to the
- * GtkWidget::style-updated signal.
+ * update the icon. This is usually done by overriding the
+ * #GtkWidget:css-changed function.
  *
  * Returns: (nullable) (transfer full): a #GtkIconPaintable object
  *     containing the icon, or %NULL if the icon wasn’t found.

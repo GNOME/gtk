@@ -373,10 +373,11 @@ static void gtk_text_view_size_allocate        (GtkWidget           *widget,
                                                 int                  width,
                                                 int                  height,
                                                 int                  baseline);
-static void gtk_text_view_realize              (GtkWidget        *widget);
-static void gtk_text_view_unrealize            (GtkWidget        *widget);
-static void gtk_text_view_map                  (GtkWidget        *widget);
-static void gtk_text_view_style_updated        (GtkWidget        *widget);
+static void gtk_text_view_realize              (GtkWidget           *widget);
+static void gtk_text_view_unrealize            (GtkWidget           *widget);
+static void gtk_text_view_map                  (GtkWidget           *widget);
+static void gtk_text_view_css_changed          (GtkWidget           *widget,
+                                                GtkCssStyleChange   *change);
 static void gtk_text_view_direction_changed    (GtkWidget        *widget,
                                                 GtkTextDirection  previous_direction);
 static void gtk_text_view_state_flags_changed  (GtkWidget        *widget,
@@ -702,7 +703,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->realize = gtk_text_view_realize;
   widget_class->unrealize = gtk_text_view_unrealize;
   widget_class->map = gtk_text_view_map;
-  widget_class->style_updated = gtk_text_view_style_updated;
+  widget_class->css_changed = gtk_text_view_css_changed;
   widget_class->direction_changed = gtk_text_view_direction_changed;
   widget_class->state_flags_changed = gtk_text_view_state_flags_changed;
   widget_class->measure = gtk_text_view_measure;
@@ -4640,21 +4641,17 @@ gtk_text_view_map (GtkWidget *widget)
 }
 
 static void
-gtk_text_view_style_updated (GtkWidget *widget)
+gtk_text_view_css_changed (GtkWidget         *widget,
+                           GtkCssStyleChange *change)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
   PangoContext *ltr_context, *rtl_context;
-  GtkStyleContext *style_context;
-  GtkCssStyleChange *change;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
 
-  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->style_updated (widget);
-
-  style_context = gtk_widget_get_style_context (widget);
-  change = gtk_style_context_get_change (style_context);
+  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->css_changed (widget, change);
 
   if ((change == NULL ||
        gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT |

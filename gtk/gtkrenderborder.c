@@ -651,11 +651,9 @@ void
 gtk_css_style_snapshot_border (GtkCssBoxes *boxes,
                                GtkSnapshot *snapshot)
 {
-  GtkCssBorderValues *border;
+  const GtkCssBorderValues *border = boxes->style->border;
   GtkBorderImage border_image;
   float border_width[4];
-
-  border = boxes->style->border;
 
   if (border->base.type == GTK_CSS_BORDER_INITIAL_VALUES)
     return;

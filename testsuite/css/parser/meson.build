@@ -406,6 +406,8 @@ test_data = [
   'radial.ref.css',
   'selector.css',
   'selector.ref.css',
+  'selector-original.css',
+  'selector-original.ref.css',
   'shadow.css',
   'shadow.ref.css',
   'shadow-ordering.css',
