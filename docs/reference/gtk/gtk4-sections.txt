@@ -4801,7 +4801,6 @@ GTK_STYLE_CLASS_WARNING
 GTK_STYLE_CLASS_WIDE
 <SUBSECTION>
 GtkStyleContext
-gtk_style_context_new
 gtk_style_context_add_provider
 gtk_style_context_add_provider_for_display
 gtk_style_context_get_parent
