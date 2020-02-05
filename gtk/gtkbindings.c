@@ -724,35 +724,32 @@ gtk_binding_emit_signal (GObject     *object,
   return TRUE;
 }
 
-static gboolean
-binding_signal_activate_action (GtkBindingSignalAction *sig,
-                                const char             *set_name,
-                                guint                   keyval,
-                                GdkModifierType         modifiers,
-                                GObject                *object)
+gboolean
+gtk_binding_activate_action (GObject     *object,
+                             const char  *action,
+                             GVariant    *args,
+                             gboolean    *handled,
+                             GError     **error)
 {
   if (!GTK_IS_WIDGET (object))
     {
-      char *accelerator = gtk_accelerator_name (keyval, modifiers);
-      g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
-                 "actions must be emitted on GtkWidget subtypes, %s is not supported",
-                 set_name, accelerator,
-                 G_OBJECT_TYPE_NAME (object));
-      g_free (accelerator);
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "actions must be emitted on GtkWidget subtypes, \"%s\" is not supported",
+                   G_OBJECT_TYPE_NAME (object));
       return FALSE;
     }
 
-  if (!gtk_widget_activate_action_variant (GTK_WIDGET (object), sig->action_name, sig->variant))
+  if (!gtk_widget_activate_action_variant (GTK_WIDGET (object), action, args))
     {
-      char *accelerator = gtk_accelerator_name (keyval, modifiers);
-      g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
-                 "action \"%s\" does not exist on class \"%s\"",
-                 set_name, accelerator,
-                 sig->action_name,
-                 G_OBJECT_TYPE_NAME (object));
-      g_free (accelerator);
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "action \"%s\" does not exist on class \"%s\"",
+                   action,
+                   G_OBJECT_TYPE_NAME (object));
       return FALSE;
     }
+
+  if (handled)
+    *handled = TRUE;
 
   return TRUE;
 }
@@ -821,10 +818,26 @@ gtk_binding_entry_activate (GtkBindingEntry *entry,
           break;
 
         case GTK_BINDING_ACTION:
-          handled = binding_signal_activate_action ((GtkBindingSignalAction *) sig,
-                                                    entry->binding_set->set_name,
-                                                    entry->keyval, entry->modifiers,
-                                                    object);
+          {
+            GtkBindingSignalAction *action = (GtkBindingSignalAction *) sig;
+            GError *error = NULL;
+            gboolean action_handled = FALSE;
+
+            if (gtk_binding_activate_action (object, action->action_name, action->variant, &action_handled, &error))
+              {
+                handled |= action_handled;
+              }
+            else
+              {
+                char *accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
+                g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": %s",
+                           entry->binding_set->set_name,
+                           accelerator,
+                           error->message);
+                g_free (accelerator);
+                g_clear_error (&error);
+              }
+          }
           break;
 
         case GTK_BINDING_CALLBACK:
