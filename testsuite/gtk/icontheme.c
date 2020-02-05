@@ -593,24 +593,20 @@ test_symbolic_single_size (void)
 static void
 test_svg_size (void)
 {
-   /* To understand these results, keep in mind that we never allow upscaling,
-   * and don't respect min/max size for scaling (though we do take it into
-   * account for choosing).
-   */
   /* Check we properly load a svg icon from a sized directory */
-  assert_icon_lookup_size ("twosize-fixed", 48, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32/twosize-fixed.svg", 32);
+  assert_icon_lookup_size ("twosize-fixed", 48, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32/twosize-fixed.svg", 48);
   assert_icon_lookup_size ("twosize-fixed", 32, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32/twosize-fixed.svg", 32);
-  assert_icon_lookup_size ("twosize-fixed", 20, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32/twosize-fixed.svg", 32);
+  assert_icon_lookup_size ("twosize-fixed", 20, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32/twosize-fixed.svg", 20);
   assert_icon_lookup_size ("twosize-fixed", 16, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16x16/twosize-fixed.svg", 16);
 
   /* Check that we still properly load it even if a different size is requested */
-  assert_icon_lookup_size ("twosize", 64, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32s/twosize.svg", 48);
+  assert_icon_lookup_size ("twosize", 64, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32s/twosize.svg", 64);
   assert_icon_lookup_size ("twosize", 48, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32s/twosize.svg", 48);
   assert_icon_lookup_size ("twosize", 32, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32s/twosize.svg", 32);
   assert_icon_lookup_size ("twosize", 24, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32s/twosize.svg", 24);
   assert_icon_lookup_size ("twosize", 16, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16x16s/twosize.svg", 16);
   assert_icon_lookup_size ("twosize", 12, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16x16s/twosize.svg", 12);
-  assert_icon_lookup_size ("twosize",  8, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16x16s/twosize.svg", 12);
+  assert_icon_lookup_size ("twosize",  8, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16x16s/twosize.svg", 8);
 }
 
 static void
@@ -625,42 +621,21 @@ test_size (void)
   assert_icon_lookup_size ("size-test", 18, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16-22/size-test.png", 19);
   assert_icon_lookup_size ("size-test", 19, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16-22/size-test.png", 19);
   /* the next 3 are because we never scale up */
-  assert_icon_lookup_size ("size-test", 20, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 25);
-  assert_icon_lookup_size ("size-test", 21, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 25);
-  assert_icon_lookup_size ("size-test", 22, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 25);
+  assert_icon_lookup_size ("size-test", 20, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 20);
+  assert_icon_lookup_size ("size-test", 21, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 21);
+  assert_icon_lookup_size ("size-test", 22, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 22);
 
-  assert_icon_lookup_size ("size-test", 23, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 25);
-  assert_icon_lookup_size ("size-test", 23, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 25);
+  assert_icon_lookup_size ("size-test", 23, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 23);
+  assert_icon_lookup_size ("size-test", 23, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 23);
   assert_icon_lookup_size ("size-test", 25, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 25);
   assert_icon_lookup_size ("size-test", 28, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 28);
   /* the next 2 are because we never scale up */
-  assert_icon_lookup_size ("size-test", 31, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/35+/size-test.svg", 35);
-  assert_icon_lookup_size ("size-test", 34, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/35+/size-test.svg", 35);
+  assert_icon_lookup_size ("size-test", 31, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/35+/size-test.svg", 31);
+  assert_icon_lookup_size ("size-test", 34, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/35+/size-test.svg", 34);
 
   assert_icon_lookup_size ("size-test", 37, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/35+/size-test.svg", 37);
   assert_icon_lookup_size ("size-test", 40, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/35+/size-test.svg", 40);
   assert_icon_lookup_size ("size-test", 45, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/35+/size-test.svg", 45);
-
-  assert_icon_lookup_size ("size-test", 12, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/15/size-test.png", 12);
-  assert_icon_lookup_size ("size-test", 13, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/15/size-test.png", 13);
-  assert_icon_lookup_size ("size-test", 14, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/15/size-test.png", 14);
-  assert_icon_lookup_size ("size-test", 15, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/15/size-test.png", 15);
-  assert_icon_lookup_size ("size-test", 16, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 16);
-  assert_icon_lookup_size ("size-test", 17, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 17);
-  assert_icon_lookup_size ("size-test", 18, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 18);
-  assert_icon_lookup_size ("size-test", 19, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 19);
-  //assert_icon_lookup_size ("size-test", 20, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 20);
-  //assert_icon_lookup_size ("size-test", 21, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 21);
-  //assert_icon_lookup_size ("size-test", 22, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 22);
-  assert_icon_lookup_size ("size-test", 23, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/25+/size-test.svg", 23);
-  assert_icon_lookup_size ("size-test", 24, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/25+/size-test.svg", 24);
-  assert_icon_lookup_size ("size-test", 25, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/25+/size-test.svg", 25);
-  assert_icon_lookup_size ("size-test", 28, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/25+/size-test.svg", 28);
-  //assert_icon_lookup_size ("size-test", 31, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/25+/size-test.svg", 31);
-  //assert_icon_lookup_size ("size-test", 34, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/25+/size-test.svg", 34);
-  assert_icon_lookup_size ("size-test", 37, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/35+/size-test.svg", 37);
-  assert_icon_lookup_size ("size-test", 40, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/35+/size-test.svg", 40);
-  assert_icon_lookup_size ("size-test", 45, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/35+/size-test.svg", 45);
 }
 
 static void
