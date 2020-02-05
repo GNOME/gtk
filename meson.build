@@ -223,9 +223,17 @@ endif
 if cc.get_id() == 'msvc'
   # Compiler options taken from msvc_recommended_pragmas.h
   # in GLib, based on _Win32_Programming_ by Rector and Newcomer
-  test_cflags = []
-  add_project_arguments('-FImsvc_recommended_pragmas.h', language: 'c')
-  add_project_arguments('-D_USE_MATH_DEFINES', language: 'c')
+  test_cflags = [
+    '-FImsvc_recommended_pragmas.h',
+	'-D_USE_MATH_DEFINES',
+	'-utf-8',
+  ]
+  add_project_arguments(cc.get_supported_arguments(test_cflags), language: 'c')
+
+  cxx = meson.get_compiler('cpp')
+  if cxx.get_id() == 'msvc'
+    add_project_arguments(cxx.get_supported_arguments(test_cflags), language: 'cpp')
+  endif
 elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
   test_cflags = [
     '-fno-strict-aliasing',
