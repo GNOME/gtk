@@ -2,11 +2,9 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkPopover" id="menu">
-    <property name="visible">True</property>
     <child>
       <object class="GtkButton" id="button">
         <property name="label" translatable="yes">_New</property>
-        <property name="visible">True</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -15,9 +13,8 @@
     <property name="can_focus">False</property>
     <child>
       <object class="GtkMenuButton" id="menubutton">
-        <property name="visible">True</property>
         <property name="can_focus">True</property>
-        <property name="popup">menu</property>
+        <property name="popover">menu</property>
       </object>
     </child>
   </object>
