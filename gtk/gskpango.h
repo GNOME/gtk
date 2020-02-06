@@ -41,6 +41,11 @@ typedef enum
   GSK_PANGO_RENDERER_CURSOR
 } GskPangoRendererState;
 
+typedef gboolean (*GskPangoShapeHandler) (PangoAttrShape         *attr,
+                                          GdkSnapshot            *snapshot,
+                                          double                  width,
+                                          double                  height);
+
 /*
  * This is a PangoRenderer implementation that translates all the draw calls to
  * gsk render nodes, using the GtkSnapshot helper class. Glyphs are translated
@@ -60,6 +65,7 @@ struct _GskPangoRenderer
   GdkRGBA               *error_color;
 
   GskPangoRendererState  state;
+  GskPangoShapeHandler shape_handler;
 
   /* house-keeping options */
   guint                  is_cached_renderer : 1;
@@ -73,6 +79,8 @@ struct _GskPangoRendererClass
 GType             gsk_pango_renderer_get_type  (void) G_GNUC_CONST;
 void              gsk_pango_renderer_set_state (GskPangoRenderer      *crenderer,
                                                 GskPangoRendererState  state);
+void              gsk_pango_renderer_set_shape_handler (GskPangoRenderer      *crenderer,
+                                                        GskPangoShapeHandler handler);
 GskPangoRenderer *gsk_pango_renderer_acquire   (void);
 void              gsk_pango_renderer_release   (GskPangoRenderer      *crenderer);
 
