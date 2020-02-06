@@ -3130,7 +3130,28 @@ gtk_icon_paintable_get_filename (GtkIconPaintable *icon)
 {
   g_return_val_if_fail (icon != NULL, NULL);
 
-  return icon->filename;
+  if (!icon->is_resource)
+    return icon->filename;
+  return NULL;
+}
+
+/**
+ * gtk_icon_paintable_get_resource_path:
+ * @self: a #GtkIcon
+ *
+ * Gets the resource path for the icon.
+ *
+ * Returns: (nullable) (type filename): the resource for the icon, or %NULL
+ *     if the icon is not represented by a resource.
+ */
+const gchar *
+gtk_icon_paintable_get_resource_path (GtkIconPaintable *icon)
+{
+  g_return_val_if_fail (icon != NULL, NULL);
+
+  if (icon->is_resource)
+    return icon->filename;
+  return NULL;
 }
 
 /**
