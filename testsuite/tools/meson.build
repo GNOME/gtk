@@ -21,6 +21,7 @@ if bash.found()
          workdir: meson.current_build_dir(),
          env: [ 'GIO_USE_VOLUME_MONITOR=unix',
                 'GSETTINGS_BACKEND=memory',
+                'GDK_DEBUG=default-settings',
                 'GTK_CSD=1',
                 'G_ENABLE_DIAGNOSTIC=0',
                 'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),

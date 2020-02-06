@@ -81,13 +81,17 @@ parse_boolean (char *v)
 }
 
 static gboolean
-get_boolean_default (Display     *dpy,
+get_boolean_default (GdkX11Screen *x11_screen,
 		     const gchar *option,
 		     gboolean    *value)
 {
+  Display *dpy = GDK_SCREEN_XDISPLAY (x11_screen);
   gchar *v;
   gint i;
-  
+
+  if (GDK_DISPLAY_DEBUG_CHECK (GDK_SCREEN_DISPLAY (x11_screen), DEFAULT_SETTINGS))
+      return FALSE;
+
   v = XGetDefault (dpy, "Xft", option);
   if (v)
     {
@@ -103,12 +107,16 @@ get_boolean_default (Display     *dpy,
 }
 
 static gboolean
-get_double_default (Display     *dpy,
+get_double_default (GdkX11Screen *x11_screen,
 		    const gchar *option,
 		    gdouble     *value)
 {
+  Display *dpy = GDK_SCREEN_XDISPLAY (x11_screen);
   gchar    *v, *e;
-  
+
+  if (GDK_DISPLAY_DEBUG_CHECK (GDK_SCREEN_DISPLAY (x11_screen), DEFAULT_SETTINGS))
+      return FALSE;
+
   v = XGetDefault (dpy, "Xft", option);
   if (v)
     {
@@ -126,12 +134,16 @@ get_double_default (Display     *dpy,
 }
 
 static gboolean
-get_integer_default (Display     *dpy,
+get_integer_default (GdkX11Screen *x11_screen,
 		     const gchar *option,
 		     gint        *value)
 {
+  Display *dpy = GDK_SCREEN_XDISPLAY (x11_screen);
   gchar *v, *e;
-  
+
+  if (GDK_DISPLAY_DEBUG_CHECK (GDK_SCREEN_DISPLAY (x11_screen), DEFAULT_SETTINGS))
+      return FALSE;
+
   v = XGetDefault (dpy, "Xft", option);
   if (v)
     {
@@ -149,7 +161,6 @@ get_integer_default (Display     *dpy,
 static void
 init_xft_settings (GdkX11Screen *x11_screen)
 {
-  Display *xdisplay = GDK_SCREEN_XDISPLAY (x11_screen);
   double dpi_double;
   gboolean b;
 
@@ -158,21 +169,21 @@ init_xft_settings (GdkX11Screen *x11_screen)
 
   x11_screen->xft_init = TRUE;
 
-  if (!get_boolean_default (xdisplay, "antialias", &b))
+  if (!get_boolean_default (x11_screen, "antialias", &b))
     b = TRUE;
   x11_screen->xft_antialias = b;
 
-  if (!get_boolean_default (xdisplay, "hinting", &b))
+  if (!get_boolean_default (x11_screen, "hinting", &b))
     b = TRUE;
   x11_screen->xft_hinting = b;
 
-  if (!get_integer_default (xdisplay, "hintstyle", &x11_screen->xft_hintstyle))
+  if (!get_integer_default (x11_screen, "hintstyle", &x11_screen->xft_hintstyle))
     x11_screen->xft_hintstyle = FC_HINT_MEDIUM;
 
-  if (!get_integer_default (xdisplay, "rgba", &x11_screen->xft_rgba))
+  if (!get_integer_default (x11_screen, "rgba", &x11_screen->xft_rgba))
     x11_screen->xft_rgba = FC_RGBA_UNKNOWN;
 
-  if (!get_double_default (xdisplay, "dpi", &dpi_double))
+  if (!get_double_default (x11_screen, "dpi", &dpi_double))
     dpi_double = 96.0;
 
   x11_screen->xft_dpi = (int)(0.5 + PANGO_SCALE * dpi_double);
