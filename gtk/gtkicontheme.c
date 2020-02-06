@@ -2072,8 +2072,7 @@ choose_icon (GtkIconTheme      *self,
  *
  * Looks up a named icon for a desired size and window scale, returning a
  * #GtkIcon. The icon can then be rendered by using it as a #GdkPaintable,
- * or you can get information such as the filename and size. The pixels
- * of the texture can be access by using gtk_icon_paintable_download_texture().
+ * or you can get information such as the filename and size.
  *
  * If the available @icon_name is not available and @fallbacks are provided,
  * they will be tried in order.
@@ -3301,16 +3300,8 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
     }
 }
 
-/**
- * gtk_icon_paintable_download_texture:
- * @self: a #GtkIcon
- *
- * Tries to access the pixels of an icon.
- *
- * Returns: (transfer full): An texture with the contents of the icon.
- */
-GdkTexture *
-gtk_icon_paintable_download_texture (GtkIconPaintable *self)
+static GdkTexture *
+gtk_icon_paintable_ensure_texture (GtkIconPaintable *self)
 {
   GdkTexture *texture = NULL;
 
@@ -3401,7 +3392,7 @@ gtk_icon_paintable_snapshot_with_colors (GtkIconPaintable *icon,
   double render_height;
   gboolean symbolic;
 
-  texture = gtk_icon_paintable_download_texture (icon);
+  texture = gtk_icon_paintable_ensure_texture (icon);
   symbolic = gtk_icon_paintable_is_symbolic (icon);
 
   if (symbolic)

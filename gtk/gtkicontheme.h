@@ -140,8 +140,6 @@ GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_icon_paintable_get_filename     (GtkIconPaintable  *self);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_icon_paintable_is_symbolic      (GtkIconPaintable  *self);
-GDK_AVAILABLE_IN_ALL
-GdkTexture *          gtk_icon_paintable_download_texture (GtkIconPaintable  *self);
 
 G_END_DECLS
 

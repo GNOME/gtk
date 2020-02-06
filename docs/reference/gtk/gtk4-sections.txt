@@ -5011,7 +5011,6 @@ gtk_icon_theme_list_icons
 gtk_icon_theme_get_icon_sizes
 gtk_icon_paintable_get_filename
 gtk_icon_paintable_is_symbolic
-gtk_icon_paintable_download_texture
 <SUBSECTION Standard>
 GtkIconClass
 GTK_ICON_THEME
