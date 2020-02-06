@@ -114,10 +114,12 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
 
   is_icon_paintable = GTK_IS_ICON_PAINTABLE (paintable);
   if (is_icon_paintable)
-    gtk_icon_theme_lookup_symbolic_colors (style, &fg, &sc, &wc, &ec);
+    {
+      gtk_icon_theme_lookup_symbolic_colors (style, &fg, &sc, &wc, &ec);
 
-  if (fg.alpha == 0.0f)
-    goto transparent;
+      if (fg.alpha == 0.0f)
+        goto transparent;
+    }
 
   if (transform == NULL)
     {
