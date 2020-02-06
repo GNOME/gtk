@@ -155,10 +155,6 @@ void	       gtk_accel_group_connect		  (GtkAccelGroup  *accel_group,
 						   GtkAccelFlags   accel_flags,
 						   GClosure	  *closure);
 GDK_AVAILABLE_IN_ALL
-void           gtk_accel_group_connect_by_path    (GtkAccelGroup  *accel_group,
-						   const gchar	  *accel_path,
-						   GClosure	  *closure);
-GDK_AVAILABLE_IN_ALL
 gboolean       gtk_accel_group_disconnect	  (GtkAccelGroup  *accel_group,
 						   GClosure	  *closure);
 GDK_AVAILABLE_IN_ALL
