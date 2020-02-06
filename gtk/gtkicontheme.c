@@ -3541,9 +3541,8 @@ gtk_icon_paintable_new_for_pixbuf (GtkIconTheme *icon_theme,
  * #GtkIcon. The icon can then be rendered by using it as a #GdkPaintable,
  * or you can get information such as the filename and size.
  *
- * Returns: (nullable) (transfer full): a #GtkIconPaintable containing
- *     information about the icon, or %NULL if the icon wasn’t
- *     found. Unref with g_object_unref()
+ * Returns: (transfer full): a #GtkIconPaintable containing
+ *     information about the icon. Unref with g_object_unref()
  */
 GtkIconPaintable *
 gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
@@ -3582,6 +3581,13 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
 
       names = (const gchar **) g_themed_icon_get_names (G_THEMED_ICON (gicon));
       icon = gtk_icon_theme_lookup_icon (self, names[0], &names[1], size, scale, direction, flags);
+    }
+  else
+    {
+      g_debug ("Unhandled GIcon type %s", g_type_name_from_instance (gicon));
+      icon = icon_paintable_new (size, scale);
+      icon->filename = g_strdup (IMAGE_MISSING_RESOURCE_PATH);
+      icon->is_resource = TRUE;
     }
 
   return icon;
