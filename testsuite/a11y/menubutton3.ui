@@ -15,7 +15,6 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="menu-model">menu</property>
-        <property name="use-popover">True</property>
       </object>
     </child>
   </object>
