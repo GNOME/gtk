@@ -415,6 +415,19 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   g_type_class_unref (klass);
 }
 
+static gboolean
+dbind_warning_handler (const char     *log_domain,
+                       GLogLevelFlags  log_level,
+                       const char     *message,
+                       gpointer        user_data)
+{
+  if (strcmp (log_domain, "dbind") == 0 &&
+      log_level == (G_LOG_LEVEL_WARNING|G_LOG_FLAG_FATAL))
+    return FALSE;
+
+  return TRUE;
+}
+
 int
 main (int argc, char **argv)
 {
@@ -444,6 +457,8 @@ main (int argc, char **argv)
     g_setenv ("DISPLAY", display, TRUE);
   if (x_r_d)
     g_setenv ("XDG_RUNTIME_DIR", x_r_d, TRUE);
+
+  g_test_log_set_fatal_handler (dbind_warning_handler, NULL);
 
   gtk_test_init (&argc, &argv);
   gtk_test_register_all_types();

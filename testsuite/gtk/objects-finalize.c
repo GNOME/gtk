@@ -101,6 +101,19 @@ test_finalize_object (gconstpointer data)
   gtk_main();
 }
 
+static gboolean
+dbind_warning_handler (const char     *log_domain,
+                       GLogLevelFlags  log_level,
+                       const char     *message,
+                       gpointer        user_data)
+{
+  if (strcmp (log_domain, "dbind") == 0 &&
+      log_level == (G_LOG_LEVEL_WARNING|G_LOG_FLAG_FATAL))
+    return FALSE;
+
+  return TRUE;
+}
+
 int
 main (int argc, char **argv)
 {
@@ -129,10 +142,11 @@ main (int argc, char **argv)
   if (x_r_d)
     g_setenv ("XDG_RUNTIME_DIR", x_r_d, TRUE);
 
+  g_test_log_set_fatal_handler (dbind_warning_handler, NULL);
+
   /* initialize test program */
   gtk_test_init (&argc, &argv);
   gtk_test_register_all_types ();
-
 
   all_types = gtk_test_list_all_types (&n_types);
 
