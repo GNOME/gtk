@@ -50,7 +50,7 @@ struct _GtkShortcutAction
 {
   const GtkShortcutActionClass *action_class;
 
-  volatile int ref_count;
+  gatomicrefcount ref_count;
 };
 
 struct _GtkShortcutActionClass
@@ -94,10 +94,9 @@ gtk_shortcut_action_new (const GtkShortcutActionClass *action_class)
   g_return_val_if_fail (action_class != NULL, NULL);
 
   self = g_malloc0 (action_class->struct_size);
+  g_atomic_ref_count_init (&self->ref_count);
 
   self->action_class = action_class;
-
-  self->ref_count = 1;
 
   return self;
 }
@@ -115,7 +114,7 @@ gtk_shortcut_action_ref (GtkShortcutAction *action)
 {
   g_return_val_if_fail (GTK_IS_SHORTCUT_ACTION (action), NULL);
 
-  g_atomic_int_inc (&action->ref_count);
+  g_atomic_ref_count_inc (&action->ref_count);
 
   return action;
 }
@@ -134,7 +133,7 @@ gtk_shortcut_action_unref (GtkShortcutAction *action)
 {
   g_return_if_fail (GTK_IS_SHORTCUT_ACTION (action));
 
-  if (g_atomic_int_dec_and_test (&action->ref_count))
+  if (g_atomic_ref_count_dec (&action->ref_count))
     gtk_shortcut_action_finalize (action);
 }
 
