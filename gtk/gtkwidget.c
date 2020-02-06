@@ -6336,12 +6336,9 @@ gtk_widget_verify_invariants (GtkWidget *widget)
         g_warning ("%s %p is mapped but not visible",
                    gtk_widget_get_name (widget), widget);
 
-      if (!GTK_IS_ROOT (widget))
-        {
-          if (!priv->child_visible)
-            g_warning ("%s %p is mapped but not child_visible",
-                       gtk_widget_get_name (widget), widget);
-        }
+      if (!priv->child_visible && !GTK_IS_ROOT (widget))
+        g_warning ("%s %p is mapped but not child_visible",
+                   gtk_widget_get_name (widget), widget);
     }
   else
     {
@@ -6384,14 +6381,12 @@ gtk_widget_verify_invariants (GtkWidget *widget)
                        G_OBJECT_TYPE_NAME (widget), widget);
 #endif
         }
-      else if (!GTK_IS_ROOT (widget))
+      else if (priv->realized && !GTK_IS_ROOT (widget))
         {
           /* No parent or parent not realized on non-toplevel implies... */
-
-          if (priv->realized)
-            g_warning ("%s %p is not realized but child %s %p is realized",
-                       parent ? gtk_widget_get_name (parent) : "no parent", parent,
-                       gtk_widget_get_name (widget), widget);
+          g_warning ("%s %p is not realized but child %s %p is realized",
+                     parent ? gtk_widget_get_name (parent) : "no parent", parent,
+                     gtk_widget_get_name (widget), widget);
         }
 
       if (parent &&
@@ -6406,17 +6401,15 @@ gtk_widget_verify_invariants (GtkWidget *widget)
                        gtk_widget_get_name (parent), parent,
                        gtk_widget_get_name (widget), widget);
         }
-      else if (!GTK_IS_ROOT (widget))
+      else if (priv->mapped && !GTK_IS_ROOT (widget))
         {
           /* No parent or parent not mapped on non-toplevel implies... */
-
-          if (priv->mapped)
-            g_warning ("%s %p is mapped but visible=%d child_visible=%d parent %s %p mapped=%d",
-                       gtk_widget_get_name (widget), widget,
-                       priv->visible,
-                       priv->child_visible,
-                       parent ? gtk_widget_get_name (parent) : "no parent", parent,
-                       parent ? parent->priv->mapped : FALSE);
+          g_warning ("%s %p is mapped but visible=%d child_visible=%d parent %s %p mapped=%d",
+                     gtk_widget_get_name (widget), widget,
+                     priv->visible,
+                     priv->child_visible,
+                     parent ? gtk_widget_get_name (parent) : "no parent", parent,
+                     parent ? parent->priv->mapped : FALSE);
         }
     }
 
