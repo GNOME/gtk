@@ -51,6 +51,7 @@ window1
     button5
       "push button"
       parent: unnamed-GtkWidgetAccessible-1
+      index: 1
       name: Center
       state: enabled focusable sensitive showing visible
       toolkit: gtk

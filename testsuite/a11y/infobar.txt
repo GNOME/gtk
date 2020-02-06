@@ -12,12 +12,12 @@ window1
     parent: window1
     index: 0
     name: Information
-    state: enabled horizontal sensitive showing visible
+    state: enabled sensitive showing visible
     toolkit: gtk
     <AtkComponent>
     layer: widget
     alpha: 1
-    revealer
+    unnamed-GtkContainerAccessible-0
       "panel"
       parent: bar1
       index: 0
@@ -26,18 +26,18 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      content
+      unnamed-GtkContainerAccessible-1
         "filler"
-        parent: revealer
+        parent: unnamed-GtkContainerAccessible-0
         index: 0
         state: enabled horizontal sensitive showing visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
-        box1
+        unnamed-GtkContainerAccessible-2
           "filler"
-          parent: content
+          parent: unnamed-GtkContainerAccessible-1
           index: 0
           state: enabled horizontal sensitive showing visible
           toolkit: gtk
@@ -46,7 +46,7 @@ window1
           alpha: 1
           label1
             "label"
-            parent: box1
+            parent: unnamed-GtkContainerAccessible-2
             index: 0
             name: Some important info
             state: enabled multi-line sensitive showing visible
@@ -84,18 +84,18 @@ window1
                                 weight: <omitted>
                                 wrap-mode: word
             <AtkHypertext>
-        action_area
+        unnamed-GtkContainerAccessible-3
           "filler"
-          parent: content
+          parent: unnamed-GtkContainerAccessible-1
           index: 1
           state: enabled horizontal sensitive showing visible
           toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
-        close_button
+        unnamed-GtkButtonAccessible-4
           "push button"
-          parent: content
+          parent: unnamed-GtkContainerAccessible-1
           index: 2
           name: Close
           state: enabled focusable sensitive
