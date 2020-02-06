@@ -6454,13 +6454,6 @@ gtk_widget_push_verify_invariants (GtkWidget *widget)
 }
 
 static void
-gtk_widget_verify_child_invariants (GtkWidget *widget)
-{
-  /* We don't recurse further; this is a one-level check. */
-  gtk_widget_verify_invariants (widget);
-}
-
-static void
 gtk_widget_pop_verify_invariants (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
@@ -6486,7 +6479,7 @@ gtk_widget_pop_verify_invariants (GtkWidget *widget)
            child != NULL;
            child = _gtk_widget_get_next_sibling (child))
         {
-          gtk_widget_verify_child_invariants (child);
+          gtk_widget_verify_invariants (child);
         }
     }
 }
