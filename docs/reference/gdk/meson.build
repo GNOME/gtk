@@ -44,6 +44,7 @@ private_headers = [
   'server-decoration-client-protocol.h',
   'tablet-unstable-v2-client-protocol.h',
   'xdg-foreign-unstable-v1-client-protocol.h',
+  'xdg-foreign-unstable-v2-client-protocol.h',
   'xdg-shell-unstable-v6-client-protocol.h',
   'win32',
   'quartz',
