@@ -493,8 +493,8 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
     case GTK_TOOLBAR_ICONS:
       if (icon)
         gtk_container_add (GTK_CONTAINER (button->priv->button), icon);
-      gtk_widget_add_style_class (button->priv->button, "image-button");
-      gtk_widget_remove_style_class (button->priv->button, "text-button");
+      gtk_widget_add_css_class (button->priv->button, "image-button");
+      gtk_widget_remove_css_class (button->priv->button, "text-button");
       break;
 
     case GTK_TOOLBAR_BOTH:
@@ -508,8 +508,8 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 
       gtk_container_add (GTK_CONTAINER (box), label);
       gtk_container_add (GTK_CONTAINER (button->priv->button), box);
-      gtk_widget_add_style_class (button->priv->button, "image-button");
-      gtk_widget_add_style_class (button->priv->button, "text-button");
+      gtk_widget_add_css_class (button->priv->button, "image-button");
+      gtk_widget_add_css_class (button->priv->button, "text-button");
 
       break;
 
@@ -539,14 +539,14 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
             gtk_container_add (GTK_CONTAINER (box), label);
 	}
       gtk_container_add (GTK_CONTAINER (button->priv->button), box);
-      gtk_widget_add_style_class (button->priv->button, "image-button");
-      gtk_widget_add_style_class (button->priv->button, "text-button");
+      gtk_widget_add_css_class (button->priv->button, "image-button");
+      gtk_widget_add_css_class (button->priv->button, "text-button");
       break;
 
     case GTK_TOOLBAR_TEXT:
       gtk_container_add (GTK_CONTAINER (button->priv->button), label);
-      gtk_widget_add_style_class (button->priv->button, "text-button");
-      gtk_widget_remove_style_class (button->priv->button, "image-button");
+      gtk_widget_add_css_class (button->priv->button, "text-button");
+      gtk_widget_remove_css_class (button->priv->button, "image-button");
       break;
     }
 

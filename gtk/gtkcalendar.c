@@ -537,15 +537,15 @@ gtk_calendar_init (GtkCalendar *calendar)
 
   gtk_widget_set_can_focus (widget, TRUE);
 
-  gtk_widget_add_style_class (GTK_WIDGET (calendar), GTK_STYLE_CLASS_VIEW);
+  gtk_widget_add_css_class (GTK_WIDGET (calendar), GTK_STYLE_CLASS_VIEW);
 
   priv->header_box = g_object_new (GTK_TYPE_BOX,
                                    "css-name", "header",
                                    NULL);
   priv->year_label = gtk_label_new ("");
-  gtk_widget_add_style_class (priv->year_label, "year");
+  gtk_widget_add_css_class (priv->year_label, "year");
   priv->month_name_stack = gtk_stack_new ();
-  gtk_widget_add_style_class (priv->month_name_stack, "month");
+  gtk_widget_add_css_class (priv->month_name_stack, "month");
   priv->arrow_widgets[0] = gtk_button_new_from_icon_name ("pan-start-symbolic");
   g_signal_connect_swapped (priv->arrow_widgets[0], "clicked", G_CALLBACK (calendar_set_month_prev), calendar);
   priv->arrow_widgets[1] = gtk_button_new_from_icon_name ("pan-end-symbolic");
@@ -659,7 +659,7 @@ gtk_calendar_init (GtkCalendar *calendar)
 
       gtk_widget_set_hexpand (label, TRUE);
       gtk_widget_set_vexpand (label, TRUE);
-      gtk_widget_add_style_class (label, "day-name");
+      gtk_widget_add_css_class (label, "day-name");
       gtk_grid_attach (GTK_GRID (priv->grid), label, 1 + i, 0, 1, 1);
 
       priv->day_name_labels[i] = label;
@@ -672,7 +672,7 @@ gtk_calendar_init (GtkCalendar *calendar)
 
       gtk_widget_set_hexpand (label, TRUE);
       gtk_widget_set_vexpand (label, TRUE);
-      gtk_widget_add_style_class (label, "week-number");
+      gtk_widget_add_css_class (label, "week-number");
       gtk_grid_attach (GTK_GRID (priv->grid), label, 0, 1 + i, 1, 1);
 
       priv->week_number_labels[i] = label;
@@ -689,7 +689,7 @@ gtk_calendar_init (GtkCalendar *calendar)
 
           gtk_widget_set_hexpand (label, TRUE);
           gtk_widget_set_vexpand (label, TRUE);
-          gtk_widget_add_style_class (label, "day-number");
+          gtk_widget_add_css_class (label, "day-number");
           gtk_grid_attach (GTK_GRID (priv->grid), label, 1 + x, 1 + y, 1, 1);
 
           priv->day_number_labels[y][x] = label;
@@ -1623,9 +1623,9 @@ gtk_calendar_select_day (GtkCalendar *self,
 
         if (priv->day_month[y][x] == MONTH_PREV ||
             priv->day_month[y][x] == MONTH_NEXT)
-          gtk_widget_add_style_class (label, "other-month");
+          gtk_widget_add_css_class (label, "other-month");
         else
-          gtk_widget_remove_style_class (label, "other-month");
+          gtk_widget_remove_css_class (label, "other-month");
 
         if (priv->marked_date[day-1])
           gtk_widget_set_state_flags (label, GTK_STATE_FLAG_CHECKED, FALSE);

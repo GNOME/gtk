@@ -591,7 +591,7 @@ gtk_font_button_init (GtkFontButton *font_button)
 
   gtk_font_button_take_font_desc (font_button, NULL);
 
-  gtk_widget_add_style_class (priv->button, "font");
+  gtk_widget_add_css_class (priv->button, "font");
 }
 
 static void

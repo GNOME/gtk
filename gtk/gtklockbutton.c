@@ -256,7 +256,7 @@ gtk_lock_button_init (GtkLockButton *button)
 
   update_state (button);
 
-  gtk_widget_add_style_class (GTK_WIDGET (button), I_("lock"));
+  gtk_widget_add_css_class (GTK_WIDGET (button), I_("lock"));
 }
 
 static void

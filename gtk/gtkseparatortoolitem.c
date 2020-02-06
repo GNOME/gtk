@@ -190,7 +190,7 @@ gtk_separator_tool_item_get_draw (GtkSeparatorToolItem *item)
 {
   g_return_val_if_fail (GTK_IS_SEPARATOR_TOOL_ITEM (item), FALSE);
 
-  return !gtk_widget_has_style_class (GTK_WIDGET (item), "invisible");
+  return !gtk_widget_has_css_class (GTK_WIDGET (item), "invisible");
 }
 
 /**
@@ -214,9 +214,9 @@ gtk_separator_tool_item_set_draw (GtkSeparatorToolItem *item,
     return;
 
   if (draw)
-    gtk_widget_remove_style_class (GTK_WIDGET (item), "invisible");
+    gtk_widget_remove_css_class (GTK_WIDGET (item), "invisible");
   else
-    gtk_widget_add_style_class (GTK_WIDGET (item), "invisible");
+    gtk_widget_add_css_class (GTK_WIDGET (item), "invisible");
 
   g_object_notify (G_OBJECT (item), "draw");
 }

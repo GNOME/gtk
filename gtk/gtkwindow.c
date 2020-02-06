@@ -1785,7 +1785,7 @@ gtk_window_init (GtkWindow *window)
                                         "css-name", "decoration",
                                         "orientation", GTK_ORIENTATION_VERTICAL,
                                         NULL);
-  gtk_widget_add_style_class (priv->contents_widget, "background");
+  gtk_widget_add_css_class (priv->contents_widget, "background");
   gtk_widget_set_parent (priv->contents_widget, GTK_WIDGET (window));
 
   priv->scale = gtk_widget_get_scale_factor (widget);
@@ -3640,9 +3640,9 @@ gtk_window_enable_csd (GtkWindow *window)
 
   /* We need a visual with alpha for client shadows */
   if (priv->use_client_shadow)
-    gtk_widget_add_style_class (widget, GTK_STYLE_CLASS_CSD);
+    gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_CSD);
   else
-    gtk_widget_add_style_class (widget, "solid-csd");
+    gtk_widget_add_css_class (widget, "solid-csd");
 
   priv->client_decorated = TRUE;
 }
@@ -3701,7 +3701,7 @@ gtk_window_set_titlebar (GtkWindow *window,
   if (titlebar == NULL)
     {
       priv->client_decorated = FALSE;
-      gtk_widget_remove_style_class (widget, GTK_STYLE_CLASS_CSD);
+      gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_CSD);
 
       goto out;
     }
@@ -3722,7 +3722,7 @@ gtk_window_set_titlebar (GtkWindow *window,
       on_titlebar_title_notify (GTK_HEADER_BAR (titlebar), NULL, window);
     }
 
-  gtk_widget_add_style_class (titlebar, GTK_STYLE_CLASS_TITLEBAR);
+  gtk_widget_add_css_class (titlebar, GTK_STYLE_CLASS_TITLEBAR);
 
 out:
   if (was_mapped)
@@ -4743,8 +4743,8 @@ create_titlebar (GtkWindow *window)
                 "has-subtitle", FALSE,
                 "show-title-buttons", TRUE,
                 NULL);
-  gtk_widget_add_style_class (titlebar, GTK_STYLE_CLASS_TITLEBAR);
-  gtk_widget_add_style_class (titlebar, "default-decoration");
+  gtk_widget_add_css_class (titlebar, GTK_STYLE_CLASS_TITLEBAR);
+  gtk_widget_add_css_class (titlebar, "default-decoration");
 
   return titlebar;
 }
@@ -5620,42 +5620,42 @@ update_window_style_classes (GtkWindow *window)
   if (!priv->edge_constraints)
     {
       if (priv->tiled)
-        gtk_widget_add_style_class (widget, "titled");
+        gtk_widget_add_css_class (widget, "titled");
       else
-        gtk_widget_remove_style_class (widget, "tiled");
+        gtk_widget_remove_css_class (widget, "tiled");
     }
   else
     {
       if (edge_constraints & GDK_SURFACE_STATE_TOP_TILED)
-        gtk_widget_add_style_class (widget, "titled-top");
+        gtk_widget_add_css_class (widget, "titled-top");
       else
-        gtk_widget_remove_style_class (widget, "tiled-top");
+        gtk_widget_remove_css_class (widget, "tiled-top");
 
       if (edge_constraints & GDK_SURFACE_STATE_RIGHT_TILED)
-        gtk_widget_add_style_class (widget, "titled-right");
+        gtk_widget_add_css_class (widget, "titled-right");
       else
-        gtk_widget_remove_style_class (widget, "tiled-right");
+        gtk_widget_remove_css_class (widget, "tiled-right");
 
       if (edge_constraints & GDK_SURFACE_STATE_BOTTOM_TILED)
-        gtk_widget_add_style_class (widget, "titled-bottom");
+        gtk_widget_add_css_class (widget, "titled-bottom");
       else
-        gtk_widget_remove_style_class (widget, "tiled-bottom");
+        gtk_widget_remove_css_class (widget, "tiled-bottom");
 
       if (edge_constraints & GDK_SURFACE_STATE_LEFT_TILED)
-        gtk_widget_add_style_class (widget, "titled-left");
+        gtk_widget_add_css_class (widget, "titled-left");
       else
-        gtk_widget_remove_style_class (widget, "tiled-left");
+        gtk_widget_remove_css_class (widget, "tiled-left");
     }
 
   if (priv->maximized)
-    gtk_widget_add_style_class (widget, "maximized");
+    gtk_widget_add_css_class (widget, "maximized");
   else
-    gtk_widget_remove_style_class (widget, "maximized");
+    gtk_widget_remove_css_class (widget, "maximized");
 
   if (priv->fullscreen)
-    gtk_widget_add_style_class (widget, "fullscreen");
+    gtk_widget_add_css_class (widget, "fullscreen");
   else
-    gtk_widget_remove_style_class (widget, "fullscreen");
+    gtk_widget_remove_css_class (widget, "fullscreen");
 }
 
 static void

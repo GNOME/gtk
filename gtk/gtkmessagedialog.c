@@ -366,7 +366,7 @@ gtk_message_dialog_constructed (GObject *object)
       gtk_widget_set_margin_bottom (label, 6);
       gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
       gtk_widget_set_hexpand (label, TRUE);
-      gtk_widget_add_style_class (label, "title");
+      gtk_widget_add_css_class (label, "title");
       gtk_container_add (GTK_CONTAINER (box), label);
       g_signal_connect_object (dialog, "notify::title", G_CALLBACK (update_title), label, 0);
 

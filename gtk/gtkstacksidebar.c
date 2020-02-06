@@ -172,7 +172,7 @@ gtk_stack_sidebar_init (GtkStackSidebar *self)
   g_signal_connect (self->list, "row-selected",
                     G_CALLBACK (gtk_stack_sidebar_row_selected), self);
 
-  gtk_widget_add_style_class (GTK_WIDGET (self), "sidebar");
+  gtk_widget_add_css_class (GTK_WIDGET (self), "sidebar");
 
   self->rows = g_hash_table_new (NULL, NULL);
 }
@@ -199,9 +199,9 @@ update_row (GtkStackSidebar *self,
   gtk_widget_set_visible (row, visible && title != NULL);
 
   if (needs_attention)
-    gtk_widget_add_style_class (row, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+    gtk_widget_add_css_class (row, GTK_STYLE_CLASS_NEEDS_ATTENTION);
   else
-    gtk_widget_remove_style_class (row, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+    gtk_widget_remove_css_class (row, GTK_STYLE_CLASS_NEEDS_ATTENTION);
 
   g_free (title);
 }

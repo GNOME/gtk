@@ -119,12 +119,12 @@ _gtk_orientable_set_style_classes (GtkOrientable *orientable)
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      gtk_widget_add_style_class (GTK_WIDGET (orientable), GTK_STYLE_CLASS_HORIZONTAL);
-      gtk_widget_remove_style_class (GTK_WIDGET (orientable), GTK_STYLE_CLASS_VERTICAL);
+      gtk_widget_add_css_class (GTK_WIDGET (orientable), GTK_STYLE_CLASS_HORIZONTAL);
+      gtk_widget_remove_css_class (GTK_WIDGET (orientable), GTK_STYLE_CLASS_VERTICAL);
     }
   else
     {
-      gtk_widget_add_style_class (GTK_WIDGET (orientable), GTK_STYLE_CLASS_VERTICAL);
-      gtk_widget_remove_style_class (GTK_WIDGET (orientable), GTK_STYLE_CLASS_HORIZONTAL);
+      gtk_widget_add_css_class (GTK_WIDGET (orientable), GTK_STYLE_CLASS_VERTICAL);
+      gtk_widget_remove_css_class (GTK_WIDGET (orientable), GTK_STYLE_CLASS_HORIZONTAL);
     }
 }
