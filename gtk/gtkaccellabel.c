@@ -29,9 +29,7 @@
 #include <string.h>
 
 #include "gtklabel.h"
-#include "gtkaccellabel.h"
 #include "gtkaccellabelprivate.h"
-#include "gtkaccelmap.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkprivate.h"
