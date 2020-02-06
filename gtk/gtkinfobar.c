@@ -531,7 +531,7 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
   priv->close_button = gtk_button_new_from_icon_name ("window-close-symbolic");
   gtk_widget_hide (priv->close_button);
   gtk_widget_set_valign (priv->close_button, GTK_ALIGN_CENTER);
-  gtk_widget_add_style_class (priv->close_button, "close");
+  gtk_widget_add_css_class (priv->close_button, "close");
   gtk_container_add (GTK_CONTAINER (main_box), priv->close_button);
   g_signal_connect (priv->close_button, "clicked",
                     G_CALLBACK (close_button_clicked_cb), info_bar);
@@ -802,9 +802,9 @@ update_default_response (GtkInfoBar *info_bar,
   priv->default_response_sensitive = sensitive;
 
   if (response_id && sensitive)
-    gtk_widget_add_style_class (GTK_WIDGET (info_bar), "action");
+    gtk_widget_add_css_class (GTK_WIDGET (info_bar), "action");
   else
-    gtk_widget_remove_style_class (GTK_WIDGET (info_bar), "action");
+    gtk_widget_remove_css_class (GTK_WIDGET (info_bar), "action");
 }
 
 /**
@@ -1162,7 +1162,7 @@ gtk_info_bar_set_message_type (GtkInfoBar     *info_bar,
       };
 
       if (type_class[priv->message_type])
-        gtk_widget_remove_style_class (GTK_WIDGET (info_bar), type_class[priv->message_type]);
+        gtk_widget_remove_css_class (GTK_WIDGET (info_bar), type_class[priv->message_type]);
 
       priv->message_type = message_type;
 
@@ -1206,7 +1206,7 @@ gtk_info_bar_set_message_type (GtkInfoBar     *info_bar,
         }
 
       if (type_class[priv->message_type])
-        gtk_widget_add_style_class (GTK_WIDGET (info_bar), type_class[priv->message_type]);
+        gtk_widget_add_css_class (GTK_WIDGET (info_bar), type_class[priv->message_type]);
 
       g_object_notify_by_pspec (G_OBJECT (info_bar), props[PROP_MESSAGE_TYPE]);
     }

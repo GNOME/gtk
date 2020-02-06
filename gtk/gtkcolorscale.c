@@ -157,7 +157,7 @@ gtk_color_scale_init (GtkColorScale *scale)
                                               GTK_PHASE_TARGET);
   gtk_widget_add_controller (GTK_WIDGET (scale), GTK_EVENT_CONTROLLER (gesture));
 
-  gtk_widget_add_style_class (GTK_WIDGET (scale), "color");
+  gtk_widget_add_css_class (GTK_WIDGET (scale), "color");
 }
 
 static void

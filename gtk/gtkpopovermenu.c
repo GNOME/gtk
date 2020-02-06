@@ -211,7 +211,7 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
   g_signal_connect (stack, "notify::visible-child-name",
                     G_CALLBACK (visible_submenu_changed), popover);
 
-  gtk_widget_add_style_class (GTK_WIDGET (popover), "menu");
+  gtk_widget_add_css_class (GTK_WIDGET (popover), "menu");
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "focus-out", G_CALLBACK (focus_out), popover);

@@ -293,14 +293,14 @@ update_node_ordering (GtkModelButton *button)
     {
       if (button->start_indicator)
         {
-          gtk_widget_add_style_class (button->start_indicator, GTK_STYLE_CLASS_LEFT);
-          gtk_widget_remove_style_class (button->start_indicator, GTK_STYLE_CLASS_RIGHT);
+          gtk_widget_add_css_class (button->start_indicator, GTK_STYLE_CLASS_LEFT);
+          gtk_widget_remove_css_class (button->start_indicator, GTK_STYLE_CLASS_RIGHT);
         }
 
       if (button->end_indicator)
         {
-          gtk_widget_add_style_class (button->end_indicator, GTK_STYLE_CLASS_RIGHT);
-          gtk_widget_remove_style_class (button->end_indicator, GTK_STYLE_CLASS_LEFT);
+          gtk_widget_add_css_class (button->end_indicator, GTK_STYLE_CLASS_RIGHT);
+          gtk_widget_remove_css_class (button->end_indicator, GTK_STYLE_CLASS_LEFT);
         }
 
       child = gtk_widget_get_first_child (GTK_WIDGET (button));
@@ -315,14 +315,14 @@ update_node_ordering (GtkModelButton *button)
     {
       if (button->start_indicator)
         {
-          gtk_widget_add_style_class (button->start_indicator, GTK_STYLE_CLASS_RIGHT);
-          gtk_widget_remove_style_class (button->start_indicator, GTK_STYLE_CLASS_LEFT);
+          gtk_widget_add_css_class (button->start_indicator, GTK_STYLE_CLASS_RIGHT);
+          gtk_widget_remove_css_class (button->start_indicator, GTK_STYLE_CLASS_LEFT);
         }
 
       if (button->end_indicator)
         {
-          gtk_widget_add_style_class (button->end_indicator, GTK_STYLE_CLASS_LEFT);
-          gtk_widget_remove_style_class (button->end_indicator, GTK_STYLE_CLASS_RIGHT);
+          gtk_widget_add_css_class (button->end_indicator, GTK_STYLE_CLASS_LEFT);
+          gtk_widget_remove_css_class (button->end_indicator, GTK_STYLE_CLASS_RIGHT);
 
         }
 
@@ -346,13 +346,13 @@ update_end_indicator (GtkModelButton *self)
 
   if (is_ltr)
     {
-      gtk_widget_add_style_class (self->end_indicator, GTK_STYLE_CLASS_RIGHT);
-      gtk_widget_remove_style_class (self->end_indicator, GTK_STYLE_CLASS_LEFT);
+      gtk_widget_add_css_class (self->end_indicator, GTK_STYLE_CLASS_RIGHT);
+      gtk_widget_remove_css_class (self->end_indicator, GTK_STYLE_CLASS_LEFT);
     }
   else
     {
-      gtk_widget_add_style_class (self->end_indicator, GTK_STYLE_CLASS_LEFT);
-      gtk_widget_remove_style_class (self->end_indicator, GTK_STYLE_CLASS_RIGHT);
+      gtk_widget_add_css_class (self->end_indicator, GTK_STYLE_CLASS_LEFT);
+      gtk_widget_remove_css_class (self->end_indicator, GTK_STYLE_CLASS_RIGHT);
     }
 }
 
@@ -385,13 +385,13 @@ update_start_indicator (GtkModelButton *self)
 
   if (is_ltr)
     {
-      gtk_widget_add_style_class (self->start_indicator, GTK_STYLE_CLASS_LEFT);
-      gtk_widget_remove_style_class (self->start_indicator, GTK_STYLE_CLASS_RIGHT);
+      gtk_widget_add_css_class (self->start_indicator, GTK_STYLE_CLASS_LEFT);
+      gtk_widget_remove_css_class (self->start_indicator, GTK_STYLE_CLASS_RIGHT);
     }
   else
     {
-      gtk_widget_add_style_class (self->start_indicator, GTK_STYLE_CLASS_RIGHT);
-      gtk_widget_remove_style_class (self->start_indicator, GTK_STYLE_CLASS_LEFT);
+      gtk_widget_add_css_class (self->start_indicator, GTK_STYLE_CLASS_RIGHT);
+      gtk_widget_remove_css_class (self->start_indicator, GTK_STYLE_CLASS_LEFT);
     }
 
 }
@@ -536,12 +536,12 @@ gtk_model_button_set_role (GtkModelButton *self,
 
   if (role == GTK_BUTTON_ROLE_TITLE)
     {
-      gtk_widget_add_style_class (GTK_WIDGET (self), "title");
+      gtk_widget_add_css_class (GTK_WIDGET (self), "title");
       gtk_widget_set_halign (self->label, GTK_ALIGN_CENTER);
     }
   else
     {
-      gtk_widget_remove_style_class (GTK_WIDGET (self), "title");
+      gtk_widget_remove_css_class (GTK_WIDGET (self), "title");
       gtk_widget_set_halign (self->label, GTK_ALIGN_START);
     }
 
@@ -663,17 +663,17 @@ gtk_model_button_set_iconic (GtkModelButton *self,
     {
       gtk_widget_hide (self->start_box);
       gtk_css_node_set_name (widget_node, g_quark_from_static_string ("button"));
-      gtk_widget_add_style_class (widget, "model");
-      gtk_widget_add_style_class (widget, "image-button");
-      gtk_widget_remove_style_class (widget, "flat");
+      gtk_widget_add_css_class (widget, "model");
+      gtk_widget_add_css_class (widget, "image-button");
+      gtk_widget_remove_css_class (widget, "flat");
     }
   else
     {
       gtk_widget_show (self->start_box);
       gtk_css_node_set_name (widget_node, g_quark_from_static_string ("modelbutton"));
-      gtk_widget_remove_style_class (widget, "model");
-      gtk_widget_remove_style_class (widget, "image-button");
-      gtk_widget_add_style_class (widget, "flat");
+      gtk_widget_remove_css_class (widget, "model");
+      gtk_widget_remove_css_class (widget, "image-button");
+      gtk_widget_add_css_class (widget, "flat");
     }
 
   self->centered = iconic;
@@ -1384,7 +1384,7 @@ gtk_model_button_init (GtkModelButton *self)
   gtk_widget_insert_after (self->start_box, GTK_WIDGET (self), NULL);
   update_node_ordering (self);
 
-  gtk_widget_add_style_class (GTK_WIDGET (self), "flat");
+  gtk_widget_add_css_class (GTK_WIDGET (self), "flat");
 
   controller = gtk_event_controller_motion_new ();
   g_signal_connect (controller, "enter", G_CALLBACK (enter_cb), self);

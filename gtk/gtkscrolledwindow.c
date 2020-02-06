@@ -469,13 +469,13 @@ update_scrollbar_positions (GtkScrolledWindow *scrolled_window)
       if (priv->window_placement == GTK_CORNER_TOP_LEFT ||
           priv->window_placement == GTK_CORNER_TOP_RIGHT)
         {
-          gtk_widget_add_style_class (priv->hscrollbar, GTK_STYLE_CLASS_BOTTOM);
-          gtk_widget_remove_style_class (priv->hscrollbar, GTK_STYLE_CLASS_TOP);
+          gtk_widget_add_css_class (priv->hscrollbar, GTK_STYLE_CLASS_BOTTOM);
+          gtk_widget_remove_css_class (priv->hscrollbar, GTK_STYLE_CLASS_TOP);
         }
       else
         {
-          gtk_widget_add_style_class (priv->hscrollbar, GTK_STYLE_CLASS_TOP);
-          gtk_widget_remove_style_class (priv->hscrollbar, GTK_STYLE_CLASS_BOTTOM);
+          gtk_widget_add_css_class (priv->hscrollbar, GTK_STYLE_CLASS_TOP);
+          gtk_widget_remove_css_class (priv->hscrollbar, GTK_STYLE_CLASS_BOTTOM);
         }
     }
 
@@ -489,13 +489,13 @@ update_scrollbar_positions (GtkScrolledWindow *scrolled_window)
           (priv->window_placement == GTK_CORNER_TOP_LEFT ||
            priv->window_placement == GTK_CORNER_BOTTOM_LEFT)))
         {
-          gtk_widget_add_style_class (priv->vscrollbar, GTK_STYLE_CLASS_RIGHT);
-          gtk_widget_remove_style_class (priv->vscrollbar, GTK_STYLE_CLASS_LEFT);
+          gtk_widget_add_css_class (priv->vscrollbar, GTK_STYLE_CLASS_RIGHT);
+          gtk_widget_remove_css_class (priv->vscrollbar, GTK_STYLE_CLASS_LEFT);
         }
       else
         {
-          gtk_widget_add_style_class (priv->vscrollbar, GTK_STYLE_CLASS_LEFT);
-          gtk_widget_remove_style_class (priv->vscrollbar, GTK_STYLE_CLASS_RIGHT);
+          gtk_widget_add_css_class (priv->vscrollbar, GTK_STYLE_CLASS_LEFT);
+          gtk_widget_remove_css_class (priv->vscrollbar, GTK_STYLE_CLASS_RIGHT);
         }
     }
 }
@@ -1045,9 +1045,9 @@ indicator_set_over (Indicator *indicator,
   indicator->over = over;
 
   if (indicator->over)
-    gtk_widget_add_style_class (indicator->scrollbar, "hovering");
+    gtk_widget_add_css_class (indicator->scrollbar, "hovering");
   else
-    gtk_widget_remove_style_class (indicator->scrollbar, "hovering");
+    gtk_widget_remove_css_class (indicator->scrollbar, "hovering");
 
   gtk_widget_queue_resize (indicator->scrollbar);
 }
@@ -2445,9 +2445,9 @@ gtk_scrolled_window_set_shadow_type (GtkScrolledWindow *scrolled_window,
       priv->shadow_type = type;
 
       if (type != GTK_SHADOW_NONE)
-        gtk_widget_add_style_class (GTK_WIDGET (scrolled_window), GTK_STYLE_CLASS_FRAME);
+        gtk_widget_add_css_class (GTK_WIDGET (scrolled_window), GTK_STYLE_CLASS_FRAME);
       else
-        gtk_widget_remove_style_class (GTK_WIDGET (scrolled_window), GTK_STYLE_CLASS_FRAME);
+        gtk_widget_remove_css_class (GTK_WIDGET (scrolled_window), GTK_STYLE_CLASS_FRAME);
 
       g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties[PROP_SHADOW_TYPE]);
     }
@@ -3764,7 +3764,7 @@ setup_indicator (GtkScrolledWindow *scrolled_window,
 
   indicator->scrollbar = scrollbar;
 
-  gtk_widget_add_style_class (scrollbar, "overlay-indicator");
+  gtk_widget_add_css_class (scrollbar, "overlay-indicator");
   g_signal_connect (adjustment, "value-changed",
                     G_CALLBACK (indicator_value_changed), indicator);
 
@@ -3785,7 +3785,7 @@ remove_indicator (GtkScrolledWindow *scrolled_window,
   scrollbar = indicator->scrollbar;
   indicator->scrollbar = NULL;
 
-  gtk_widget_remove_style_class (scrollbar, "overlay-indicator");
+  gtk_widget_remove_css_class (scrollbar, "overlay-indicator");
 
   adjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (scrollbar));
   g_signal_handlers_disconnect_by_data (adjustment, indicator);

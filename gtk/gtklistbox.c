@@ -3166,9 +3166,9 @@ gtk_list_box_update_row_style (GtkListBox    *box,
 
   if (ROW_PRIV (row)->activatable ||
       (ROW_PRIV (row)->selectable && can_select))
-    gtk_widget_add_style_class (GTK_WIDGET (row), "activatable");
+    gtk_widget_add_css_class (GTK_WIDGET (row), "activatable");
   else
-    gtk_widget_remove_style_class (GTK_WIDGET (row), "activatable");
+    gtk_widget_remove_css_class (GTK_WIDGET (row), "activatable");
 }
 
 static void
@@ -3494,7 +3494,7 @@ gtk_list_box_row_init (GtkListBoxRow *row)
   ROW_PRIV (row)->activatable = TRUE;
   ROW_PRIV (row)->selectable = TRUE;
 
-  gtk_widget_add_style_class (GTK_WIDGET (row), "activatable");
+  gtk_widget_add_css_class (GTK_WIDGET (row), "activatable");
 }
 
 static void
@@ -3666,9 +3666,9 @@ gtk_list_box_set_show_separators (GtkListBox *box,
   priv->show_separators = show_separators;
 
   if (show_separators)
-    gtk_widget_add_style_class (GTK_WIDGET (box), "separators");
+    gtk_widget_add_css_class (GTK_WIDGET (box), "separators");
   else
-    gtk_widget_remove_style_class (GTK_WIDGET (box), "separators");
+    gtk_widget_remove_css_class (GTK_WIDGET (box), "separators");
 
   g_object_notify_by_pspec (G_OBJECT (box), properties[PROP_SHOW_SEPARATORS]);
 }

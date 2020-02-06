@@ -1436,7 +1436,7 @@ update_places (GtkPlacesSidebar *sidebar)
                                          _("New bookmark"), new_bookmark_icon, NULL, NULL,
                                          NULL, NULL, NULL, NULL, 0,
                                          _("Add a new bookmark"));
-  gtk_widget_add_style_class (sidebar->new_bookmark_row, "sidebar-new-bookmark-row");
+  gtk_widget_add_css_class (sidebar->new_bookmark_row, "sidebar-new-bookmark-row");
   g_object_unref (new_bookmark_icon);
 
   /* network */
@@ -2644,7 +2644,7 @@ create_rename_popover (GtkPlacesSidebar *sidebar)
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
   g_free (str);
   button = gtk_button_new_with_mnemonic (_("_Rename"));
-  gtk_widget_add_style_class (button, "suggested-action");
+  gtk_widget_add_css_class (button, "suggested-action");
   g_signal_connect (button, "clicked", G_CALLBACK (do_rename), sidebar);
   error = gtk_label_new ("");
   gtk_widget_set_halign (error, GTK_ALIGN_START);
@@ -2681,9 +2681,9 @@ update_popover_shadowing (GtkWidget *row,
   g_object_set_data (G_OBJECT (row), "popover-count", GINT_TO_POINTER (count));
 
   if (count > 0)
-    gtk_widget_add_style_class (row, "has-open-popup");
+    gtk_widget_add_css_class (row, "has-open-popup");
   else
-    gtk_widget_remove_style_class (row, "has-open-popup");
+    gtk_widget_remove_css_class (row, "has-open-popup");
 }
 
 static void
@@ -4051,7 +4051,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
                                   GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sidebar->swin), GTK_SHADOW_IN);
 
-  gtk_widget_add_style_class (GTK_WIDGET (sidebar), "sidebar");
+  gtk_widget_add_css_class (GTK_WIDGET (sidebar), "sidebar");
 
   /* list box */
   sidebar->list_box = gtk_list_box_new ();

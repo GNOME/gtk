@@ -339,7 +339,7 @@ gtk_color_button_init (GtkColorButton *button)
   g_signal_connect (source, "drag-begin", G_CALLBACK (gtk_color_button_drag_begin), button);
   gtk_widget_add_controller (priv->button, GTK_EVENT_CONTROLLER (source));
 
-  gtk_widget_add_style_class (priv->button, "color");
+  gtk_widget_add_css_class (priv->button, "color");
 }
 
 static void

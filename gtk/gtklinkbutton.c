@@ -346,7 +346,7 @@ gtk_link_button_init (GtkLinkButton *link_button)
                     link_button);
   gtk_widget_add_controller (GTK_WIDGET (link_button), GTK_EVENT_CONTROLLER (gesture));
 
-  gtk_widget_add_style_class (GTK_WIDGET (link_button), "link");
+  gtk_widget_add_css_class (GTK_WIDGET (link_button), "link");
 
   gtk_widget_set_cursor_from_name (GTK_WIDGET (link_button), "pointer");
 }

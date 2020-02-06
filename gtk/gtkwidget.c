@@ -5458,9 +5458,9 @@ _gtk_widget_set_has_default (GtkWidget *widget,
   priv->has_default = has_default;
 
   if (has_default)
-    gtk_widget_add_style_class (widget, GTK_STYLE_CLASS_DEFAULT);
+    gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_DEFAULT);
   else
-    gtk_widget_remove_style_class (widget, GTK_STYLE_CLASS_DEFAULT);
+    gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_DEFAULT);
 }
 
 /**
@@ -9728,7 +9728,7 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
       GSList *l;
 
       for (l = style_data->classes; l; l = l->next)
-        gtk_widget_add_style_class (GTK_WIDGET (buildable), (const char *)l->data);
+        gtk_widget_add_css_class (GTK_WIDGET (buildable), (const char *)l->data);
 
       gtk_widget_reset_style (GTK_WIDGET (buildable));
 
@@ -13128,50 +13128,50 @@ gtk_widget_class_query_action (GtkWidgetClass      *widget_class,
 }
 
 /**
- * gtk_widget_add_style_class:
+ * gtk_widget_add_css_class:
  * @widget: a #GtkWidget
- * @style_class: The style class to add to @widget, without
+ * @css_class: The style class to add to @widget, without
  *   the leading '.' used for notation of style classes
  *
- * Adds @style_class to @widget. After calling this function, @widget's
- * style will match for @style_class, after the CSS matching rules.
+ * Adds @css_class to @widget. After calling this function, @widget's
+ * style will match for @css_class, after the CSS matching rules.
  */
 void
-gtk_widget_add_style_class (GtkWidget  *widget,
-                            const char *style_class)
+gtk_widget_add_css_class (GtkWidget  *widget,
+                          const char *css_class)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (style_class != NULL);
-  g_return_if_fail (style_class[0] != '\0');
-  g_return_if_fail (style_class[0] != '.');
+  g_return_if_fail (css_class != NULL);
+  g_return_if_fail (css_class[0] != '\0');
+  g_return_if_fail (css_class[0] != '.');
 
-  gtk_css_node_add_class (priv->cssnode, g_quark_from_string (style_class));
+  gtk_css_node_add_class (priv->cssnode, g_quark_from_string (css_class));
 }
 
 /**
- * gtk_widget_remove_style_class:
+ * gtk_widget_remove_css_class:
  * @widget: a #GtkWidget
- * @style_class: The style class to remove from @widget, without
+ * @css_class: The style class to remove from @widget, without
  *   the leading '.' used for notation of style classes
  *
- * Removes @style_class from @widget. After this, the style of @widget
- * will stop matching for @style_class.
+ * Removes @css_class from @widget. After this, the style of @widget
+ * will stop matching for @css_class.
  */
 void
-gtk_widget_remove_style_class (GtkWidget  *widget,
-                               const char *style_class)
+gtk_widget_remove_css_class (GtkWidget  *widget,
+                             const char *css_class)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GQuark class_quark;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (style_class != NULL);
-  g_return_if_fail (style_class[0] != '\0');
-  g_return_if_fail (style_class[0] != '.');
+  g_return_if_fail (css_class != NULL);
+  g_return_if_fail (css_class[0] != '\0');
+  g_return_if_fail (css_class[0] != '.');
 
-  class_quark = g_quark_try_string (style_class);
+  class_quark = g_quark_try_string (css_class);
   if (!class_quark)
     return;
 
@@ -13179,29 +13179,29 @@ gtk_widget_remove_style_class (GtkWidget  *widget,
 }
 
 /**
- * gtk_widget_has_style_class:
+ * gtk_widget_has_css_class:
  * @widget: a #GtkWidget
- * @style_class: A CSS style class, without the leading '.'
+ * @css_class: A CSS style class, without the leading '.'
  *   used for notation of style classes
  *
- * Returns whether @style_class is currently applied to @widget.
+ * Returns whether @css_class is currently applied to @widget.
  *
- * Returns: %TRUE if @style_class is currently applied to @widget,
+ * Returns: %TRUE if @css_class is currently applied to @widget,
  *   %FALSE otherwise.
  */
 gboolean
-gtk_widget_has_style_class (GtkWidget  *widget,
-                            const char *style_class)
+gtk_widget_has_css_class (GtkWidget  *widget,
+                          const char *css_class)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GQuark class_quark;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  g_return_val_if_fail (style_class != NULL, FALSE);
-  g_return_val_if_fail (style_class[0] != '\0', FALSE);
-  g_return_val_if_fail (style_class[0] != '.', FALSE);
+  g_return_val_if_fail (css_class != NULL, FALSE);
+  g_return_val_if_fail (css_class[0] != '\0', FALSE);
+  g_return_val_if_fail (css_class[0] != '.', FALSE);
 
-  class_quark = g_quark_try_string (style_class);
+  class_quark = g_quark_try_string (css_class);
   if (!class_quark)
     return FALSE;
 

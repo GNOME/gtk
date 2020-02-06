@@ -281,14 +281,14 @@ update_fraction_classes (GtkProgressBar *pbar)
     }
 
   if (empty)
-    gtk_widget_add_style_class (priv->trough_widget, "empty");
+    gtk_widget_add_css_class (priv->trough_widget, "empty");
   else
-    gtk_widget_remove_style_class (priv->trough_widget, "empty");
+    gtk_widget_remove_css_class (priv->trough_widget, "empty");
 
   if (full)
-    gtk_widget_add_style_class (priv->trough_widget, "full");
+    gtk_widget_add_css_class (priv->trough_widget, "full");
   else
-    gtk_widget_remove_style_class (priv->trough_widget, "full");
+    gtk_widget_remove_css_class (priv->trough_widget, "full");
 }
 
 static void
@@ -341,24 +341,24 @@ update_node_classes (GtkProgressBar *pbar)
     }
 
   if (left)
-    gtk_widget_add_style_class (priv->progress_widget, GTK_STYLE_CLASS_LEFT);
+    gtk_widget_add_css_class (priv->progress_widget, GTK_STYLE_CLASS_LEFT);
   else
-    gtk_widget_remove_style_class (priv->progress_widget, GTK_STYLE_CLASS_LEFT);
+    gtk_widget_remove_css_class (priv->progress_widget, GTK_STYLE_CLASS_LEFT);
 
   if (right)
-    gtk_widget_add_style_class (priv->progress_widget, GTK_STYLE_CLASS_RIGHT);
+    gtk_widget_add_css_class (priv->progress_widget, GTK_STYLE_CLASS_RIGHT);
   else
-    gtk_widget_remove_style_class (priv->progress_widget, GTK_STYLE_CLASS_RIGHT);
+    gtk_widget_remove_css_class (priv->progress_widget, GTK_STYLE_CLASS_RIGHT);
 
   if (top)
-    gtk_widget_add_style_class (priv->progress_widget, GTK_STYLE_CLASS_TOP);
+    gtk_widget_add_css_class (priv->progress_widget, GTK_STYLE_CLASS_TOP);
   else
-    gtk_widget_remove_style_class (priv->progress_widget, GTK_STYLE_CLASS_TOP);
+    gtk_widget_remove_css_class (priv->progress_widget, GTK_STYLE_CLASS_TOP);
 
   if (bottom)
-    gtk_widget_add_style_class (priv->progress_widget, GTK_STYLE_CLASS_BOTTOM);
+    gtk_widget_add_css_class (priv->progress_widget, GTK_STYLE_CLASS_BOTTOM);
   else
-    gtk_widget_remove_style_class (priv->progress_widget, GTK_STYLE_CLASS_BOTTOM);
+    gtk_widget_remove_css_class (priv->progress_widget, GTK_STYLE_CLASS_BOTTOM);
 
   update_fraction_classes (pbar);
 }
@@ -661,7 +661,7 @@ gtk_progress_bar_act_mode_enter (GtkProgressBar *pbar)
   GtkWidget *widget = GTK_WIDGET (pbar);
   gboolean inverted;
 
-  gtk_widget_add_style_class (priv->progress_widget, GTK_STYLE_CLASS_PULSE);
+  gtk_widget_add_css_class (priv->progress_widget, GTK_STYLE_CLASS_PULSE);
 
   inverted = priv->inverted;
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
@@ -701,7 +701,7 @@ gtk_progress_bar_act_mode_leave (GtkProgressBar *pbar)
     gtk_widget_remove_tick_callback (GTK_WIDGET (pbar), priv->tick_id);
   priv->tick_id = 0;
 
-  gtk_widget_remove_style_class (priv->progress_widget, GTK_STYLE_CLASS_PULSE);
+  gtk_widget_remove_css_class (priv->progress_widget, GTK_STYLE_CLASS_PULSE);
   update_node_classes (pbar);
 }
 

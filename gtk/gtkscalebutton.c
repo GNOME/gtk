@@ -383,7 +383,7 @@ gtk_scale_button_init (GtkScaleButton *button)
   g_object_ref_sink (priv->adjustment);
   gtk_range_set_adjustment (GTK_RANGE (priv->scale), priv->adjustment);
 
-  gtk_widget_add_style_class (GTK_WIDGET (button), "scale");
+  gtk_widget_add_css_class (GTK_WIDGET (button), "scale");
 
   controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
   g_signal_connect (controller, "scroll",
