@@ -3508,16 +3508,21 @@ gtk_icon_paintable_new_for_file (GFile *file,
 
 static GtkIconPaintable *
 gtk_icon_paintable_new_for_pixbuf (GtkIconTheme *icon_theme,
-                                   GdkPixbuf    *pixbuf)
+                                   GdkPixbuf    *pixbuf,
+                                   int           size,
+                                   int           scale)
 {
   GtkIconPaintable *icon;
-  gint width, height, max;
+  gint width, height;
 
-  width = gdk_pixbuf_get_width (pixbuf);
-  height = gdk_pixbuf_get_height (pixbuf);
-  max = MAX (width, height);
+  if (size <= 0)
+    {
+      width = gdk_pixbuf_get_width (pixbuf);
+      height = gdk_pixbuf_get_height (pixbuf);
+      size = MAX (width, height);
+    }
 
-  icon = icon_paintable_new (max, 1);
+  icon = icon_paintable_new (size, scale);
   icon->texture = gdk_texture_new_for_pixbuf (pixbuf);
 
   return icon;
@@ -3548,57 +3553,28 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
                                 GtkTextDirection    direction,
                                 GtkIconLookupFlags  flags)
 {
-  GtkIconPaintable *icon;
+  GtkIconPaintable *icon = NULL;
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
   g_return_val_if_fail (G_IS_ICON (gicon), NULL);
 
   if (GDK_IS_PIXBUF (gicon))
     {
-      GdkPixbuf *pixbuf;
-      int width, height, max;
-      double pixbuf_scale;
+      GdkPixbuf *pixbuf = GDK_PIXBUF (gicon);
 
-      pixbuf = GDK_PIXBUF (gicon);
-
-      width = gdk_pixbuf_get_width (pixbuf);
-      height = gdk_pixbuf_get_height (pixbuf);
-      max = MAX (width, height);
-      pixbuf_scale = (gdouble) size * scale / (gdouble) max;
-
-      if (pixbuf_scale != 1.0)
-        {
-          GdkPixbuf *scaled;
-          scaled = gdk_pixbuf_scale_simple (pixbuf,
-                                            0.5 + width * pixbuf_scale,
-                                            0.5 + height * pixbuf_scale,
-                                            GDK_INTERP_BILINEAR);
-
-          icon = gtk_icon_paintable_new_for_pixbuf (self, scaled);
-          g_object_unref (scaled);
-        }
-      else
-        {
-          icon = gtk_icon_paintable_new_for_pixbuf (self, pixbuf);
-        }
-
-      return icon;
+      icon = gtk_icon_paintable_new_for_pixbuf (self, pixbuf, size, scale);
     }
   else if (G_IS_FILE_ICON (gicon))
     {
       GFile *file = g_file_icon_get_file (G_FILE_ICON (gicon));
 
       icon = gtk_icon_paintable_new_for_file (file, size, scale);
-
-      return icon;
     }
   else if (G_IS_LOADABLE_ICON (gicon))
     {
       icon = icon_paintable_new (size, scale);
       icon->loadable = G_LOADABLE_ICON (g_object_ref (gicon));
       icon->is_svg = FALSE;
-
-      return icon;
     }
   else if (G_IS_THEMED_ICON (gicon))
     {
@@ -3606,9 +3582,7 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
 
       names = (const gchar **) g_themed_icon_get_names (G_THEMED_ICON (gicon));
       icon = gtk_icon_theme_lookup_icon (self, names[0], &names[1], size, scale, direction, flags);
-
-      return icon;
     }
 
-  return NULL;
+  return icon;
 }
