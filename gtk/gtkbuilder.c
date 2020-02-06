@@ -223,6 +223,8 @@
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkicontheme.h"
+#include "gtkiconthemeprivate.h"
+#include "gdkpixbufutilsprivate.h"
 
 static void gtk_builder_finalize       (GObject         *object);
 static void gtk_builder_set_property   (GObject         *object,
@@ -2159,25 +2161,11 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
 
           if (pixbuf == NULL)
             {
-              GtkIconTheme *theme;
-              GtkIconPaintable *icon;
-              GdkTexture *texture;
-
               g_warning ("Could not load image '%s': %s",
                          string, tmp_error->message);
               g_error_free (tmp_error);
 
-              /* fall back to a missing image */
-              /* FIXME: this should be using the correct display */
-              theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
-
-              icon = gtk_icon_theme_lookup_icon (theme, "image-missing", NULL, 16, 1,
-                                                 GTK_TEXT_DIR_NONE,
-                                                 0);
-              texture = gtk_icon_paintable_download_texture (icon);
-              pixbuf = gdk_pixbuf_get_from_texture (texture);
-              g_object_unref (icon);
-              g_object_unref (texture);
+              pixbuf = _gdk_pixbuf_new_from_resource (IMAGE_MISSING_RESOURCE_PATH, "png", NULL);
             }
 
           if (pixbuf)
