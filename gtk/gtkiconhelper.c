@@ -105,13 +105,6 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
                                          MIN (width, height),
                                          dir,
                                          scale, flags);
-  if (icon == NULL)
-    icon = gtk_icon_theme_lookup_icon (icon_theme,
-                                       "image-missing",
-                                       NULL,
-                                       width, scale,
-                                       dir,
-                                       flags);
 
   *symbolic = gtk_icon_paintable_is_symbolic (icon);
   return GDK_PAINTABLE (icon);

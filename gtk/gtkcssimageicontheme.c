@@ -68,13 +68,6 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
                                          icon_theme->scale,
                                          GTK_TEXT_DIR_NONE,
                                          0);
-      if (icon == NULL)
-        icon = gtk_icon_theme_lookup_icon (icon_theme->icon_theme,
-                                           "image-missing",
-                                           NULL,
-                                           size, icon_theme->scale,
-                                           GTK_TEXT_DIR_NONE,
-                                           0);
 
       g_assert (icon != NULL);
 
