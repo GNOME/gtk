@@ -107,25 +107,25 @@ gtk_shortcut_trigger_new (const GtkShortcutTriggerClass *trigger_class)
 
 /**
  * gtk_shortcut_trigger_ref:
- * @trigger: a #GtkShortcutTrigger
+ * @self: a #GtkShortcutTrigger
  *
  * Acquires a reference on the given #GtkShortcutTrigger.
  *
  * Returns: (transfer full): the #GtkShortcutTrigger with an additional reference
  */
 GtkShortcutTrigger *
-gtk_shortcut_trigger_ref (GtkShortcutTrigger *trigger)
+gtk_shortcut_trigger_ref (GtkShortcutTrigger *self)
 {
-  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER (trigger), NULL);
+  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER (self), NULL);
 
-  g_atomic_ref_count_inc (&trigger->ref_count);
+  g_atomic_ref_count_inc (&self->ref_count);
 
-  return trigger;
+  return self;
 }
 
 /**
  * gtk_shortcut_trigger_unref:
- * @trigger: (transfer full): a #GtkShortcutTrigger
+ * @self: (transfer full): a #GtkShortcutTrigger
  *
  * Releases a reference on the given #GtkShortcutTrigger.
  *
@@ -133,12 +133,12 @@ gtk_shortcut_trigger_ref (GtkShortcutTrigger *trigger)
  * freed.
  */
 void
-gtk_shortcut_trigger_unref (GtkShortcutTrigger *trigger)
+gtk_shortcut_trigger_unref (GtkShortcutTrigger *self)
 {
-  g_return_if_fail (GTK_IS_SHORTCUT_TRIGGER (trigger));
+  g_return_if_fail (GTK_IS_SHORTCUT_TRIGGER (self));
 
-  if (g_atomic_ref_count_dec (&trigger->ref_count))
-    gtk_shortcut_trigger_finalize (trigger);
+  if (g_atomic_ref_count_dec (&self->ref_count))
+    gtk_shortcut_trigger_finalize (self);
 }
 
 /**
@@ -938,7 +938,7 @@ gtk_alternative_trigger_new (GtkShortcutTrigger *first,
 
 /**
  * gtk_alternative_trigger_get_first:
- * @self: an alternative #GtkShortcutTrigger
+ * @trigger: an alternative #GtkShortcutTrigger
  *
  * Gets the first of the 2 alternative triggers that may trigger @self.
  * gtk_alternative_trigger_get_second() will return the other one.
@@ -957,7 +957,7 @@ gtk_alternative_trigger_get_first (GtkShortcutTrigger *trigger)
 
 /**
  * gtk_alternative_trigger_get_second:
- * @self: an alternative #GtkShortcutTrigger
+ * @trigger: an alternative #GtkShortcutTrigger
  *
  * Gets the second of the 2 alternative triggers that may trigger @self.
  * gtk_alternative_trigger_get_first() will return the other one.
@@ -973,4 +973,3 @@ gtk_alternative_trigger_get_second (GtkShortcutTrigger *trigger)
 
   return self->second;
 }
-
