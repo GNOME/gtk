@@ -103,25 +103,25 @@ gtk_shortcut_action_new (const GtkShortcutActionClass *action_class)
 
 /**
  * gtk_shortcut_action_ref:
- * @action: a #GtkShortcutAction
+ * @self: a #GtkShortcutAction
  *
  * Acquires a reference on the given #GtkShortcutAction.
  *
  * Returns: (transfer full): the #GtkShortcutAction with an additional reference
  */
 GtkShortcutAction *
-gtk_shortcut_action_ref (GtkShortcutAction *action)
+gtk_shortcut_action_ref (GtkShortcutAction *self)
 {
-  g_return_val_if_fail (GTK_IS_SHORTCUT_ACTION (action), NULL);
+  g_return_val_if_fail (GTK_IS_SHORTCUT_ACTION (self), NULL);
 
-  g_atomic_ref_count_inc (&action->ref_count);
+  g_atomic_ref_count_inc (&self->ref_count);
 
-  return action;
+  return self;
 }
 
 /**
  * gtk_shortcut_action_unref:
- * @action: (transfer full): a #GtkShortcutAction
+ * @self: (transfer full): a #GtkShortcutAction
  *
  * Releases a reference on the given #GtkShortcutAction.
  *
@@ -129,12 +129,12 @@ gtk_shortcut_action_ref (GtkShortcutAction *action)
  * freed.
  */
 void
-gtk_shortcut_action_unref (GtkShortcutAction *action)
+gtk_shortcut_action_unref (GtkShortcutAction *self)
 {
-  g_return_if_fail (GTK_IS_SHORTCUT_ACTION (action));
+  g_return_if_fail (GTK_IS_SHORTCUT_ACTION (self));
 
-  if (g_atomic_ref_count_dec (&action->ref_count))
-    gtk_shortcut_action_finalize (action);
+  if (g_atomic_ref_count_dec (&self->ref_count))
+    gtk_shortcut_action_finalize (self);
 }
 
 /**
