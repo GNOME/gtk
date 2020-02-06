@@ -29,7 +29,6 @@
 #include "gtkaccelgroup.h"
 #include "gtkaccelgroupprivate.h"
 #include "gtkaccellabelprivate.h"
-#include "gtkaccelmapprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
@@ -176,12 +175,6 @@ gtk_accel_group_finalize (GObject *object)
     {
       GtkAccelGroupEntry *entry = &accel_group->priv->priv_accels[i];
 
-      if (entry->accel_path_quark)
-        {
-          const gchar *accel_path = g_quark_to_string (entry->accel_path_quark);
-
-          _gtk_accel_map_remove_group (accel_path, accel_group);
-        }
       g_closure_remove_invalidate_notifier (entry->closure, accel_group, accel_closure_invalidate);
 
       /* remove quick_accel_add() refcount */
@@ -473,8 +466,7 @@ quick_accel_add (GtkAccelGroup   *accel_group,
                  guint            accel_key,
                  GdkModifierType  accel_mods,
                  GtkAccelFlags    accel_flags,
-                 GClosure        *closure,
-                 GQuark           path_quark)
+                 GClosure        *closure)
 {
   guint pos, i = accel_group->priv->n_accels++;
   GtkAccelGroupEntry key;
@@ -494,15 +486,10 @@ quick_accel_add (GtkAccelGroup   *accel_group,
   accel_group->priv->priv_accels[pos].key.accel_mods = accel_mods;
   accel_group->priv->priv_accels[pos].key.accel_flags = accel_flags;
   accel_group->priv->priv_accels[pos].closure = g_closure_ref (closure);
-  accel_group->priv->priv_accels[pos].accel_path_quark = path_quark;
   g_closure_sink (closure);
 
   /* handle closure invalidation and reverse lookups */
   g_closure_add_invalidate_notifier (closure, accel_group, accel_closure_invalidate);
-
-  /* get accel path notification */
-  if (path_quark)
-    _gtk_accel_map_add_group (g_quark_to_string (path_quark), accel_group);
 
   /* connect and notify changed */
   if (accel_key)
@@ -546,9 +533,6 @@ quick_accel_remove (GtkAccelGroup *accel_group,
                                           G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DETAIL | G_SIGNAL_MATCH_CLOSURE,
                                           signal_accel_activate, accel_quark,
                                           closure, NULL, NULL);
-  /* clean up accel path notification */
-  if (entry->accel_path_quark)
-    _gtk_accel_map_remove_group (g_quark_to_string (entry->accel_path_quark), accel_group);
 
   /* physically remove */
   accel_group->priv->n_accels -= 1;
@@ -632,56 +616,7 @@ gtk_accel_group_connect (GtkAccelGroup   *accel_group,
   if (!closure->is_invalid)
     quick_accel_add (accel_group,
                      gdk_keyval_to_lower (accel_key),
-                     accel_mods, accel_flags, closure, 0);
-  g_object_unref (accel_group);
-}
-
-/**
- * gtk_accel_group_connect_by_path:
- * @accel_group: the accelerator group to install an accelerator in
- * @accel_path: path used for determining key and modifiers
- * @closure: closure to be executed upon accelerator activation
- *
- * Installs an accelerator in this group, using an accelerator path
- * to look up the appropriate key and modifiers (see
- * gtk_accel_map_add_entry()). When @accel_group is being activated
- * in response to a call to gtk_accel_groups_activate(), @closure will
- * be invoked if the @accel_key and @accel_mods from
- * gtk_accel_groups_activate() match the key and modifiers for the path.
- *
- * The signature used for the @closure is that of #GtkAccelGroupActivate.
- *
- * Note that @accel_path string will be stored in a #GQuark. Therefore,
- * if you pass a static string, you can save some memory by interning it
- * first with g_intern_static_string().
- */
-void
-gtk_accel_group_connect_by_path (GtkAccelGroup *accel_group,
-                                 const gchar   *accel_path,
-                                 GClosure      *closure)
-{
-  guint accel_key = 0;
-  GdkModifierType accel_mods = 0;
-  GtkAccelKey key;
-
-  g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
-  g_return_if_fail (closure != NULL);
-  g_return_if_fail (_gtk_accel_path_is_valid (accel_path));
-
-  if (closure->is_invalid)
-    return;
-
-  g_object_ref (accel_group);
-
-  if (gtk_accel_map_lookup_entry (accel_path, &key))
-    {
-      accel_key = gdk_keyval_to_lower (key.accel_key);
-      accel_mods = key.accel_mods;
-    }
-
-  quick_accel_add (accel_group, accel_key, accel_mods, GTK_ACCEL_VISIBLE, closure,
-                   g_quark_from_string (accel_path));
-
+                     accel_mods, accel_flags, closure);
   g_object_unref (accel_group);
 }
 
@@ -762,38 +697,6 @@ gtk_accel_group_disconnect_key (GtkAccelGroup   *accel_group,
   g_object_unref (accel_group);
 
   return removed_one;
-}
-
-void
-_gtk_accel_group_reconnect (GtkAccelGroup *accel_group,
-                            GQuark         accel_path_quark)
-{
-  GSList *slist, *clist = NULL;
-  guint i;
-
-  g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
-
-  g_object_ref (accel_group);
-
-  for (i = 0; i < accel_group->priv->n_accels; i++)
-    if (accel_group->priv->priv_accels[i].accel_path_quark == accel_path_quark)
-      {
-        GClosure *closure = g_closure_ref (accel_group->priv->priv_accels[i].closure);
-
-        clist = g_slist_prepend (clist, closure);
-      }
-
-  for (slist = clist; slist; slist = slist->next)
-    {
-      GClosure *closure = slist->data;
-
-      gtk_accel_group_disconnect (accel_group, closure);
-      gtk_accel_group_connect_by_path (accel_group, g_quark_to_string (accel_path_quark), closure);
-      g_closure_unref (closure);
-    }
-  g_slist_free (clist);
-
-  g_object_unref (accel_group);
 }
 
 GSList*
