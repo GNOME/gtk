@@ -364,7 +364,7 @@ See the GNU General Public License, version 3 or later for details.
       "filler"
       parent: headerbar1
       index: 0
-      state: enabled horizontal sensitive
+      state: enabled sensitive
       toolkit: gtk
       <AtkComponent>
       layer: widget

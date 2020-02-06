@@ -30,7 +30,7 @@ window1
         "filler"
         parent: dialog-vbox1
         index: 0
-        state: enabled sensitive showing vertical visible
+        state: enabled sensitive showing visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
@@ -741,87 +741,176 @@ window1
               action 1 description: Activates the color
               action 2 name: customize
               action 2 description: Customizes the color
-        unnamed-GtkContainerAccessible-41
+        GtkColorEditor
           "filler"
           parent: chooser
           index: 1
-          state: enabled horizontal sensitive showing visible
+          state: enabled horizontal sensitive
           toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
-          GtkColorEditor
-            "filler"
-            parent: unnamed-GtkContainerAccessible-41
+          overlay
+            "panel"
+            parent: GtkColorEditor
             index: 0
-            state: enabled horizontal sensitive
+            state: enabled sensitive visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
-            overlay
+            grid
               "panel"
-              parent: GtkColorEditor
+              parent: overlay
               index: 0
-              state: enabled sensitive visible
+              state: enabled horizontal sensitive visible
               toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
-              grid
+              picker_button
+                "push button"
+                parent: grid
+                index: 0
+                description: Pick a color from the screen
+                state: enabled focusable sensitive visible has-tooltip
+                toolkit: gtk
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkImage>
+                image size: 16 x 16
+                image description: (null)
+                <AtkAction>
+                action 0 name: click
+                action 0 description: Clicks the button
+              swatch
+                "radio button"
+                parent: grid
+                index: 1
+                state: enabled sensitive visible
+                toolkit: gtk
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkAction>
+                action 0 name: select
+                action 0 description: Selects the color
+                action 1 name: activate
+                action 1 description: Activates the color
+                action 2 name: customize
+                action 2 description: Customizes the color
+              entry
+                "text"
+                parent: grid
+                index: 2
+                name: Color Name
+                state: editable enabled focusable sensitive single-line visible
+                toolkit: gtk
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkText>
+                text: 
+                character count: 0
+                caret offset: -1
+                default attributes: bg-color: <omitted>
+                                    bg-full-height: 0
+                                    direction: <omitted>
+                                    editable: false
+                                    family-name: <omitted>
+                                    fg-color: <omitted>
+                                    indent: 0
+                                    invisible: false
+                                    justification: left
+                                    language: <omitted>
+                                    left-margin: 0
+                                    pixels-above-lines: 0
+                                    pixels-below-lines: 0
+                                    pixels-inside-wrap: 0
+                                    right-margin: 0
+                                    rise: 0
+                                    scale: 1
+                                    size: <omitted>
+                                    stretch: <omitted>
+                                    strikethrough: false
+                                    style: <omitted>
+                                    underline: none
+                                    variant: <omitted>
+                                    weight: <omitted>
+                                    wrap-mode: word
+                <AtkAction>
+                action 0 name: activate
+                action 0 description: Activates the entry
+              h_slider
+                "color chooser"
+                parent: grid
+                index: 3
+                name: Hue
+                state: enabled focusable sensitive vertical visible
+                toolkit: gtk
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkValue>
+                minimum value: 0.000000
+                maximum value: 1.000000
+                current value: 0.000000
+              a_slider
+                "color chooser"
+                parent: grid
+                index: 4
+                name: Alpha
+                state: enabled focusable horizontal sensitive visible
+                toolkit: gtk
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkValue>
+                minimum value: 0.000000
+                maximum value: 1.000000
+                current value: 0.000000
+              sv_plane
+                "color chooser"
+                parent: grid
+                index: 5
+                name: Color Plane
+                state: enabled focusable sensitive visible
+                toolkit: gtk
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+            sv_popup
+              "filler"
+              parent: overlay
+              index: 1
+              state: enabled horizontal sensitive
+              toolkit: gtk
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              grid2
                 "panel"
-                parent: overlay
+                parent: sv_popup
                 index: 0
                 state: enabled horizontal sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                picker_button
-                  "push button"
-                  parent: grid
+                label1
+                  "label"
+                  parent: grid2
                   index: 0
-                  description: Pick a color from the screen
-                  state: enabled focusable sensitive visible has-tooltip
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-                  <AtkImage>
-                  image size: 16 x 16
-                  image description: (null)
-                  <AtkAction>
-                  action 0 name: click
-                  action 0 description: Clicks the button
-                swatch
-                  "radio button"
-                  parent: grid
-                  index: 1
-                  state: enabled sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-                  <AtkAction>
-                  action 0 name: select
-                  action 0 description: Selects the color
-                  action 1 name: activate
-                  action 1 description: Activates the color
-                  action 2 name: customize
-                  action 2 description: Customizes the color
-                entry
-                  "text"
-                  parent: grid
-                  index: 2
-                  name: Color Name
-                  state: editable enabled focusable sensitive single-line visible
+                  name: S
+                  state: enabled multi-line sensitive visible
                   toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
                   <AtkText>
-                  text: 
-                  character count: 0
+                  text: S
+                  character count: 1
                   caret offset: -1
                   default attributes: bg-color: <omitted>
                                       bg-full-height: 0
@@ -848,27 +937,209 @@ window1
                                       variant: <omitted>
                                       weight: <omitted>
                                       wrap-mode: word
-                  <AtkAction>
-                  action 0 name: activate
-                  action 0 description: Activates the entry
-                h_slider
-                  "color chooser"
-                  parent: grid
-                  index: 3
-                  name: Hue
-                  state: enabled focusable sensitive vertical visible
+                  <AtkHypertext>
+                label2
+                  "label"
+                  parent: grid2
+                  index: 1
+                  name: V
+                  state: enabled multi-line sensitive visible
+                  toolkit: gtk
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: V
+                  character count: 1
+                  caret offset: -1
+                  default attributes: bg-color: <omitted>
+                                      bg-full-height: 0
+                                      direction: <omitted>
+                                      editable: false
+                                      family-name: <omitted>
+                                      fg-color: <omitted>
+                                      indent: 0
+                                      invisible: false
+                                      justification: left
+                                      language: <omitted>
+                                      left-margin: 0
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      right-margin: 0
+                                      rise: 0
+                                      scale: 1
+                                      size: <omitted>
+                                      stretch: <omitted>
+                                      strikethrough: false
+                                      style: <omitted>
+                                      underline: none
+                                      variant: <omitted>
+                                      weight: <omitted>
+                                      wrap-mode: word
+                  <AtkHypertext>
+                s_entry
+                  "spin button"
+                  parent: grid2
+                  index: 2
+                  name: Saturation
+                  state: enabled focusable horizontal sensitive visible
                   toolkit: gtk
                   <AtkComponent>
                   layer: widget
                   alpha: 1
                   <AtkValue>
                   minimum value: 0.000000
-                  maximum value: 1.000000
+                  maximum value: 100.000000
                   current value: 0.000000
-                a_slider
-                  "color chooser"
-                  parent: grid
-                  index: 4
+                v_entry
+                  "spin button"
+                  parent: grid2
+                  index: 3
+                  name: Value
+                  state: enabled focusable horizontal sensitive visible
+                  toolkit: gtk
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkValue>
+                  minimum value: 0.000000
+                  maximum value: 100.000000
+                  current value: 0.000000
+            h_popup
+              "filler"
+              parent: overlay
+              index: 2
+              state: enabled horizontal sensitive
+              toolkit: gtk
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              grid3
+                "panel"
+                parent: h_popup
+                index: 0
+                state: enabled horizontal sensitive visible
+                toolkit: gtk
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                label3
+                  "label"
+                  parent: grid3
+                  index: 0
+                  name: H
+                  state: enabled multi-line sensitive visible
+                  toolkit: gtk
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: H
+                  character count: 1
+                  caret offset: -1
+                  default attributes: bg-color: <omitted>
+                                      bg-full-height: 0
+                                      direction: <omitted>
+                                      editable: false
+                                      family-name: <omitted>
+                                      fg-color: <omitted>
+                                      indent: 0
+                                      invisible: false
+                                      justification: left
+                                      language: <omitted>
+                                      left-margin: 0
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      right-margin: 0
+                                      rise: 0
+                                      scale: 1
+                                      size: <omitted>
+                                      stretch: <omitted>
+                                      strikethrough: false
+                                      style: <omitted>
+                                      underline: none
+                                      variant: <omitted>
+                                      weight: <omitted>
+                                      wrap-mode: word
+                  <AtkHypertext>
+                h_entry
+                  "spin button"
+                  parent: grid3
+                  index: 1
+                  name: Hue
+                  state: enabled focusable horizontal sensitive visible
+                  toolkit: gtk
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkValue>
+                  minimum value: 0.000000
+                  maximum value: 100.000000
+                  current value: 0.000000
+            a_popup
+              "filler"
+              parent: overlay
+              index: 3
+              state: enabled horizontal sensitive
+              toolkit: gtk
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              grid4
+                "panel"
+                parent: a_popup
+                index: 0
+                state: enabled horizontal sensitive visible
+                toolkit: gtk
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                label4
+                  "label"
+                  parent: grid4
+                  index: 0
+                  name: A
+                  state: enabled multi-line sensitive visible
+                  toolkit: gtk
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+                  <AtkText>
+                  text: A
+                  character count: 1
+                  caret offset: -1
+                  default attributes: bg-color: <omitted>
+                                      bg-full-height: 0
+                                      direction: <omitted>
+                                      editable: false
+                                      family-name: <omitted>
+                                      fg-color: <omitted>
+                                      indent: 0
+                                      invisible: false
+                                      justification: left
+                                      language: <omitted>
+                                      left-margin: 0
+                                      pixels-above-lines: 0
+                                      pixels-below-lines: 0
+                                      pixels-inside-wrap: 0
+                                      right-margin: 0
+                                      rise: 0
+                                      scale: 1
+                                      size: <omitted>
+                                      stretch: <omitted>
+                                      strikethrough: false
+                                      style: <omitted>
+                                      underline: none
+                                      variant: <omitted>
+                                      weight: <omitted>
+                                      wrap-mode: word
+                  <AtkHypertext>
+                a_entry
+                  "spin button"
+                  parent: grid4
+                  index: 1
                   name: Alpha
                   state: enabled focusable horizontal sensitive visible
                   toolkit: gtk
@@ -877,288 +1148,8 @@ window1
                   alpha: 1
                   <AtkValue>
                   minimum value: 0.000000
-                  maximum value: 1.000000
+                  maximum value: 100.000000
                   current value: 0.000000
-                sv_plane
-                  "color chooser"
-                  parent: grid
-                  index: 5
-                  name: Color Plane
-                  state: enabled focusable sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-              sv_popup
-                "filler"
-                parent: overlay
-                index: 1
-                state: enabled horizontal sensitive
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                grid2
-                  "panel"
-                  parent: sv_popup
-                  index: 0
-                  state: enabled horizontal sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-                  label1
-                    "label"
-                    parent: grid2
-                    index: 0
-                    name: S
-                    state: enabled multi-line sensitive visible
-                    toolkit: gtk
-                    <AtkComponent>
-                    layer: widget
-                    alpha: 1
-                    <AtkText>
-                    text: S
-                    character count: 1
-                    caret offset: -1
-                    default attributes: bg-color: <omitted>
-                                        bg-full-height: 0
-                                        direction: <omitted>
-                                        editable: false
-                                        family-name: <omitted>
-                                        fg-color: <omitted>
-                                        indent: 0
-                                        invisible: false
-                                        justification: left
-                                        language: <omitted>
-                                        left-margin: 0
-                                        pixels-above-lines: 0
-                                        pixels-below-lines: 0
-                                        pixels-inside-wrap: 0
-                                        right-margin: 0
-                                        rise: 0
-                                        scale: 1
-                                        size: <omitted>
-                                        stretch: <omitted>
-                                        strikethrough: false
-                                        style: <omitted>
-                                        underline: none
-                                        variant: <omitted>
-                                        weight: <omitted>
-                                        wrap-mode: word
-                    <AtkHypertext>
-                  label2
-                    "label"
-                    parent: grid2
-                    index: 1
-                    name: V
-                    state: enabled multi-line sensitive visible
-                    toolkit: gtk
-                    <AtkComponent>
-                    layer: widget
-                    alpha: 1
-                    <AtkText>
-                    text: V
-                    character count: 1
-                    caret offset: -1
-                    default attributes: bg-color: <omitted>
-                                        bg-full-height: 0
-                                        direction: <omitted>
-                                        editable: false
-                                        family-name: <omitted>
-                                        fg-color: <omitted>
-                                        indent: 0
-                                        invisible: false
-                                        justification: left
-                                        language: <omitted>
-                                        left-margin: 0
-                                        pixels-above-lines: 0
-                                        pixels-below-lines: 0
-                                        pixels-inside-wrap: 0
-                                        right-margin: 0
-                                        rise: 0
-                                        scale: 1
-                                        size: <omitted>
-                                        stretch: <omitted>
-                                        strikethrough: false
-                                        style: <omitted>
-                                        underline: none
-                                        variant: <omitted>
-                                        weight: <omitted>
-                                        wrap-mode: word
-                    <AtkHypertext>
-                  s_entry
-                    "spin button"
-                    parent: grid2
-                    index: 2
-                    name: Saturation
-                    state: enabled focusable horizontal sensitive visible
-                    toolkit: gtk
-                    <AtkComponent>
-                    layer: widget
-                    alpha: 1
-                    <AtkValue>
-                    minimum value: 0.000000
-                    maximum value: 100.000000
-                    current value: 0.000000
-                  v_entry
-                    "spin button"
-                    parent: grid2
-                    index: 3
-                    name: Value
-                    state: enabled focusable horizontal sensitive visible
-                    toolkit: gtk
-                    <AtkComponent>
-                    layer: widget
-                    alpha: 1
-                    <AtkValue>
-                    minimum value: 0.000000
-                    maximum value: 100.000000
-                    current value: 0.000000
-              h_popup
-                "filler"
-                parent: overlay
-                index: 2
-                state: enabled horizontal sensitive
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                grid3
-                  "panel"
-                  parent: h_popup
-                  index: 0
-                  state: enabled horizontal sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-                  label3
-                    "label"
-                    parent: grid3
-                    index: 0
-                    name: H
-                    state: enabled multi-line sensitive visible
-                    toolkit: gtk
-                    <AtkComponent>
-                    layer: widget
-                    alpha: 1
-                    <AtkText>
-                    text: H
-                    character count: 1
-                    caret offset: -1
-                    default attributes: bg-color: <omitted>
-                                        bg-full-height: 0
-                                        direction: <omitted>
-                                        editable: false
-                                        family-name: <omitted>
-                                        fg-color: <omitted>
-                                        indent: 0
-                                        invisible: false
-                                        justification: left
-                                        language: <omitted>
-                                        left-margin: 0
-                                        pixels-above-lines: 0
-                                        pixels-below-lines: 0
-                                        pixels-inside-wrap: 0
-                                        right-margin: 0
-                                        rise: 0
-                                        scale: 1
-                                        size: <omitted>
-                                        stretch: <omitted>
-                                        strikethrough: false
-                                        style: <omitted>
-                                        underline: none
-                                        variant: <omitted>
-                                        weight: <omitted>
-                                        wrap-mode: word
-                    <AtkHypertext>
-                  h_entry
-                    "spin button"
-                    parent: grid3
-                    index: 1
-                    name: Hue
-                    state: enabled focusable horizontal sensitive visible
-                    toolkit: gtk
-                    <AtkComponent>
-                    layer: widget
-                    alpha: 1
-                    <AtkValue>
-                    minimum value: 0.000000
-                    maximum value: 100.000000
-                    current value: 0.000000
-              a_popup
-                "filler"
-                parent: overlay
-                index: 3
-                state: enabled horizontal sensitive
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                grid4
-                  "panel"
-                  parent: a_popup
-                  index: 0
-                  state: enabled horizontal sensitive visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-                  label4
-                    "label"
-                    parent: grid4
-                    index: 0
-                    name: A
-                    state: enabled multi-line sensitive visible
-                    toolkit: gtk
-                    <AtkComponent>
-                    layer: widget
-                    alpha: 1
-                    <AtkText>
-                    text: A
-                    character count: 1
-                    caret offset: -1
-                    default attributes: bg-color: <omitted>
-                                        bg-full-height: 0
-                                        direction: <omitted>
-                                        editable: false
-                                        family-name: <omitted>
-                                        fg-color: <omitted>
-                                        indent: 0
-                                        invisible: false
-                                        justification: left
-                                        language: <omitted>
-                                        left-margin: 0
-                                        pixels-above-lines: 0
-                                        pixels-below-lines: 0
-                                        pixels-inside-wrap: 0
-                                        right-margin: 0
-                                        rise: 0
-                                        scale: 1
-                                        size: <omitted>
-                                        stretch: <omitted>
-                                        strikethrough: false
-                                        style: <omitted>
-                                        underline: none
-                                        variant: <omitted>
-                                        weight: <omitted>
-                                        wrap-mode: word
-                    <AtkHypertext>
-                  a_entry
-                    "spin button"
-                    parent: grid4
-                    index: 1
-                    name: Alpha
-                    state: enabled focusable horizontal sensitive visible
-                    toolkit: gtk
-                    <AtkComponent>
-                    layer: widget
-                    alpha: 1
-                    <AtkValue>
-                    minimum value: 0.000000
-                    maximum value: 100.000000
-                    current value: 0.000000
     action_box
       "filler"
       parent: ___object_1___
@@ -1188,7 +1179,7 @@ window1
     alpha: 1
     cancel_button
       "push button"
-      parent: headerbar
+      parent: unnamed-GtkContainerAccessible-41
       index: 0
       name: Cancel
       state: enabled focusable sensitive showing visible
@@ -1205,8 +1196,8 @@ window1
       action 0 keybinding: <Alt>c
     ok_button
       "push button"
-      parent: headerbar
-      index: 1
+      parent: unnamed-GtkContainerAccessible-42
+      index: 0
       name: Select
       state: enabled focusable sensitive showing visible default
       toolkit: gtk
