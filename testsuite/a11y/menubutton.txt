@@ -25,16 +25,3 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    imagemenuitem
-      "menu item"
-      parent: menu
-      index: 0
-      state: enabled selectable sensitive visible
-      toolkit: gtk
-      <AtkComponent>
-      layer: popup
-      alpha: 1
-      <AtkAction>
-      action 0 name: click
-      action 0 description: Clicks the menuitem
-      <AtkSelection>

@@ -33,6 +33,7 @@
 #include <gtk/a11y/gtkcellaccessible.h>
 #include <gtk/a11y/gtkcellaccessibleparent.h>
 #include <gtk/a11y/gtkcomboboxaccessible.h>
+#include <gtk/a11y/gtkcompositeaccessible.h>
 #include <gtk/a11y/gtkcontaineraccessible.h>
 #include <gtk/a11y/gtkcontainercellaccessible.h>
 #include <gtk/a11y/gtkentryaccessible.h>

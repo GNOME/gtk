@@ -31,6 +31,8 @@
 #include "gtkstylecontext.h"
 #include "gtkboxlayout.h"
 
+#include "a11y/gtkcompositeaccessible.h"
+
 #include <math.h>
 
 /**
@@ -745,6 +747,8 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
    */
   gtk_widget_class_install_action (widget_class, "color.customize", "(dddd)",
                                    gtk_color_chooser_widget_activate_color_customize);
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_COMPOSITE_ACCESSIBLE);
 }
 
 /* GtkColorChooser implementation {{{1 */

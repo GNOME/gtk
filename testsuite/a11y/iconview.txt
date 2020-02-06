@@ -28,7 +28,7 @@ window1
       <AtkText>
       text: One
       character count: 3
-      caret offset: 0
+      caret offset: -1
       <AtkImage>
       image size: 0 x 0
       image description: (null)
@@ -46,7 +46,7 @@ window1
       <AtkText>
       text: Three
       character count: 5
-      caret offset: 0
+      caret offset: -1
       <AtkImage>
       image size: 0 x 0
       image description: (null)
@@ -64,7 +64,7 @@ window1
       <AtkText>
       text: Five
       character count: 4
-      caret offset: 0
+      caret offset: -1
       <AtkImage>
       image size: 0 x 0
       image description: (null)
@@ -82,7 +82,7 @@ window1
       <AtkText>
       text: Seven
       character count: 5
-      caret offset: 0
+      caret offset: -1
       <AtkImage>
       image size: 0 x 0
       image description: (null)
