@@ -1,4 +1,4 @@
-window.background.solid-csd:dir(ltr)
+window.background.csd:dir(ltr)
   decoration:dir(ltr)
   headerbar.titlebar:dir(ltr)
     box.horizontal.start:dir(ltr)
