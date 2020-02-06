@@ -95,15 +95,35 @@ diff_with_file (const char  *file1,
   return output;
 }
 
+static char *
+fixup_style_differences (const char *str)
+{
+  GRegex *regex;
+  char *result;
+
+  /* normalize differences that creep in from hard-to-control environmental influences */
+  regex = g_regex_new ("[.]solid-csd", 0, 0, NULL);
+  result = g_regex_replace_literal (regex, str, -1, 0, ".csd", 0, NULL);
+  g_regex_unref (regex);
+
+  return result;
+}
+
 static void
 style_context_changed (GtkWidget *window, const char **output)
 {
   GtkStyleContext *context;
+  char *str;
 
   context = gtk_widget_get_style_context (window);
 
-  *output = gtk_style_context_to_string (context, GTK_STYLE_CONTEXT_PRINT_RECURSE |
-                                                  GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE);
+  str = gtk_style_context_to_string (context, GTK_STYLE_CONTEXT_PRINT_RECURSE |
+                                              GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE);
+
+  *output = fixup_style_differences (str);
+
+  g_free (str);
+
   g_main_context_wakeup (NULL);
 }
 
