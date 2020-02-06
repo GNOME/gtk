@@ -49,7 +49,7 @@ struct _GtkShortcutTrigger
 {
   const GtkShortcutTriggerClass *trigger_class;
 
-  volatile int ref_count;
+  gatomicrefcount ref_count;
 };
 
 struct _GtkShortcutTriggerClass
@@ -98,10 +98,9 @@ gtk_shortcut_trigger_new (const GtkShortcutTriggerClass *trigger_class)
   g_return_val_if_fail (trigger_class != NULL, NULL);
 
   self = g_malloc0 (trigger_class->struct_size);
+  g_atomic_ref_count_init (&self->ref_count);
 
   self->trigger_class = trigger_class;
-
-  self->ref_count = 1;
 
   return self;
 }
@@ -119,7 +118,7 @@ gtk_shortcut_trigger_ref (GtkShortcutTrigger *trigger)
 {
   g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER (trigger), NULL);
 
-  g_atomic_int_inc (&trigger->ref_count);
+  g_atomic_ref_count_inc (&trigger->ref_count);
 
   return trigger;
 }
@@ -138,7 +137,7 @@ gtk_shortcut_trigger_unref (GtkShortcutTrigger *trigger)
 {
   g_return_if_fail (GTK_IS_SHORTCUT_TRIGGER (trigger));
 
-  if (g_atomic_int_dec_and_test (&trigger->ref_count))
+  if (g_atomic_ref_count_dec (&trigger->ref_count))
     gtk_shortcut_trigger_finalize (trigger);
 }
 
