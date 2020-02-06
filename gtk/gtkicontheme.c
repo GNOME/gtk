@@ -3557,6 +3557,10 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
   g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
   g_return_val_if_fail (G_IS_ICON (gicon), NULL);
 
+  /* We can't render emblemed icons atm, but at least render the base */
+  while (G_IS_EMBLEMED_ICON (gicon))
+    gicon = g_emblemed_icon_get_icon (G_EMBLEMED_ICON (gicon));
+
   if (GDK_IS_PIXBUF (gicon))
     {
       GdkPixbuf *pixbuf = GDK_PIXBUF (gicon);
@@ -3584,7 +3588,7 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
     }
   else
     {
-      g_debug ("Unhandled GIcon type %s", g_type_name_from_instance (gicon));
+      g_debug ("Unhandled GIcon type %s", g_type_name_from_instance ((GTypeInstance *)gicon));
       icon = icon_paintable_new (size, scale);
       icon->filename = g_strdup (IMAGE_MISSING_RESOURCE_PATH);
       icon->is_resource = TRUE;
