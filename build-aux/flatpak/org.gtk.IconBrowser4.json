@@ -55,6 +55,18 @@
             ]
         },
         {
+            "name" : "sassc",
+            "buildsystem" : "autotools",
+            "no-autogen" : true,
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/lazka/sassc.git"
+                }
+            ]
+        },
+        {
             "name": "gtk",
             "buildsystem": "meson",
             "builddir": true,
