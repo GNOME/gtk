@@ -51,6 +51,8 @@
 #include "gtkbinlayout.h"
 #include "gtkgestureclick.h"
 
+#include "a11y/gtkcontaineraccessibleprivate.h"
+
 /**
  * SECTION:gtkinfobar
  * @short_description: Report important messages to the user
@@ -352,6 +354,18 @@ gtk_info_bar_remove (GtkContainer *container,
 }
 
 static void
+gtk_info_bar_forall (GtkContainer *container,
+                     GtkCallback   callback,
+                     gpointer      user_data)
+{
+  GtkInfoBar *self = GTK_INFO_BAR (container);
+  GtkInfoBarPrivate *priv = gtk_info_bar_get_instance_private (self);
+
+  if (priv->revealer)
+    (*callback) (priv->revealer, user_data);
+}
+
+static void
 gtk_info_bar_dispose (GObject *object)
 {
   GtkInfoBar *self = GTK_INFO_BAR (object);
@@ -380,6 +394,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
 
   container_class->add = gtk_info_bar_add;
   container_class->remove = gtk_info_bar_remove;
+  container_class->forall = gtk_info_bar_forall;
 
   klass->close = gtk_info_bar_close;
 
