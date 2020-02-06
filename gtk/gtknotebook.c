@@ -693,6 +693,8 @@ static void gtk_notebook_grab_notify         (GtkWidget          *widget,
                                               gboolean            was_grabbed);
 static void gtk_notebook_state_flags_changed (GtkWidget          *widget,
                                               GtkStateFlags       previous_state);
+static void gtk_notebook_direction_changed   (GtkWidget        *widget,
+                                              GtkTextDirection  previous_direction);
 static gboolean gtk_notebook_focus           (GtkWidget        *widget,
                                               GtkDirectionType  direction);
 
@@ -958,6 +960,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->popup_menu = gtk_notebook_popup_menu;
   widget_class->grab_notify = gtk_notebook_grab_notify;
   widget_class->state_flags_changed = gtk_notebook_state_flags_changed;
+  widget_class->direction_changed = gtk_notebook_direction_changed;
   widget_class->focus = gtk_notebook_focus;
   widget_class->compute_expand = gtk_notebook_compute_expand;
 
@@ -3016,10 +3019,15 @@ update_arrow_nodes (GtkNotebook *notebook)
       up_icon_name = "pan-down-symbolic";
       down_icon_name = "pan-up-symbolic";
     }
-  else
+  else if (gtk_widget_get_direction (GTK_WIDGET (notebook)) == GTK_TEXT_DIR_LTR)
     {
       up_icon_name = "pan-end-symbolic";
       down_icon_name = "pan-start-symbolic";
+    }
+  else
+    {
+      up_icon_name = "pan-start-symbolic";
+      down_icon_name = "pan-end-symbolic";
     }
 
   arrow[0] = TRUE;
@@ -3103,6 +3111,13 @@ update_arrow_nodes (GtkNotebook *notebook)
           g_clear_pointer (&priv->arrow_widget[i], gtk_widget_unparent);
         }
     }
+}
+
+static void
+gtk_notebook_direction_changed (GtkWidget        *widget,
+                                GtkTextDirection  previous_direction)
+{
+  update_arrow_nodes (GTK_NOTEBOOK (widget));
 }
 
 static void
