@@ -3999,6 +3999,37 @@ icon_size_compare (GdkTexture *a,
   return area_a - area_b;
 }
 
+static GdkTexture *
+render_paintable_to_texture (GdkPaintable *paintable)
+{
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
+  int width, height;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  GdkTexture *texture;
+
+  width = gdk_paintable_get_intrinsic_width (paintable);
+  height = gdk_paintable_get_intrinsic_height (paintable);
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+
+  snapshot = gtk_snapshot_new ();
+  gdk_paintable_snapshot (paintable, snapshot, width, height);
+  node = gtk_snapshot_free_to_node (snapshot);
+
+  cr = cairo_create (surface);
+  gsk_render_node_draw (node, cr);
+  cairo_destroy (cr);
+
+  gsk_render_node_unref (node);
+
+  texture = gdk_texture_new_for_surface (surface);
+  cairo_surface_destroy (surface);
+
+  return texture;
+}
+
 static GList *
 icon_list_from_theme (GtkWindow   *window,
 		      const gchar *name)
@@ -4009,6 +4040,7 @@ icon_list_from_theme (GtkWindow   *window,
   GtkCssValue *value;
   GtkIconTheme *icon_theme;
   GtkIconPaintable *info;
+  GdkTexture *texture;
   gint *sizes;
   gint i;
 
@@ -4036,14 +4068,10 @@ icon_list_from_theme (GtkWindow   *window,
                                            sizes[i], priv->scale,
                                            gtk_widget_get_direction (GTK_WIDGET (window)),
                                            0);
-      if (info)
-        {
-          GdkTexture *texture = gtk_icon_paintable_download_texture (info);
-          if (texture)
-            list = g_list_insert_sorted (list, texture, (GCompareFunc) icon_size_compare);
 
-          g_object_unref (info);
-        }
+      texture = render_paintable_to_texture (GDK_PAINTABLE (info));
+      list = g_list_insert_sorted (list, texture, (GCompareFunc) icon_size_compare);
+      g_object_unref (info);
     }
 
   g_free (sizes);

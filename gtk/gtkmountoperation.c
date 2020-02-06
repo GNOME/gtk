@@ -55,7 +55,8 @@
 #include "gtkgestureclick.h"
 #include "gtkmodelbuttonprivate.h"
 #include "gtkpopover.h"
-
+#include "gtksnapshot.h"
+#include "gdktextureprivate.h"
 #include <glib/gprintf.h>
 
 /**
@@ -1137,6 +1138,36 @@ diff_sorted_arrays (GArray         *array1,
     }
 }
 
+static GdkTexture *
+render_paintable_to_texture (GdkPaintable *paintable)
+{
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
+  int width, height;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  GdkTexture *texture;
+
+  width = gdk_paintable_get_intrinsic_width (paintable);
+  height = gdk_paintable_get_intrinsic_height (paintable);
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+
+  snapshot = gtk_snapshot_new ();
+  gdk_paintable_snapshot (paintable, snapshot, width, height);
+  node = gtk_snapshot_free_to_node (snapshot);
+
+  cr = cairo_create (surface);
+  gsk_render_node_draw (node, cr);
+  cairo_destroy (cr);
+
+  gsk_render_node_unref (node);
+
+  texture = gdk_texture_new_for_surface (surface);
+  cairo_surface_destroy (surface);
+
+  return texture;
+}
 
 static void
 add_pid_to_process_list_store (GtkMountOperation              *mount_operation,
@@ -1180,7 +1211,7 @@ add_pid_to_process_list_store (GtkMountOperation              *mount_operation,
                                          24, 1,
                                          gtk_widget_get_direction (GTK_WIDGET (mount_operation->priv->dialog)),
                                          0);
-      texture = gtk_icon_paintable_download_texture (icon);
+      texture = render_paintable_to_texture (GDK_PAINTABLE (icon));
       g_object_unref (icon);
     }
 

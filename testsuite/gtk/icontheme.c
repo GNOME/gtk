@@ -93,14 +93,7 @@ assert_icon_lookup_size (const char         *icon_name,
       g_assert (gtk_icon_paintable_get_filename (info) == NULL);
     }
 
-  if (pixbuf_size > 0)
-    {
-      GdkTexture *texture;
-
-      texture = gtk_icon_paintable_download_texture (info);
-      g_assert_cmpint (gdk_texture_get_width (texture), ==, pixbuf_size);
-      g_object_unref (texture);
-    }
+  g_assert_cmpint (gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (info)), ==, size);
 
   g_object_unref (info);
 }
@@ -711,56 +704,6 @@ test_inherit (void)
                       "/icons2/scalable/one-two-symbolic-rtl.svg");
 }
 
-static void
-test_nonsquare_symbolic (void)
-{
-  gint width, height;
-  GtkIconTheme *icon_theme;
-  GtkIconPaintable *info;
-  GFile *file;
-  GIcon *icon;
-  GError *error = NULL;
-  GdkTexture *texture;
-  gchar *path = g_build_filename (g_test_get_dir (G_TEST_DIST),
-				  "icons",
-				  "scalable",
-				  "nonsquare-symbolic.svg",
-				  NULL);
-
-  /* load the original image for reference */
-  GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file (path, &error);
-  g_assert_no_error (error);
-  g_assert_nonnull (pixbuf);
-
-  width = gdk_pixbuf_get_width (pixbuf);
-  height = gdk_pixbuf_get_height (pixbuf);
-  g_assert_cmpint (width, !=, height);
-
-  /* now load it through GtkIconTheme */
-  icon_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
-  file = g_file_new_for_path (path);
-  icon = g_file_icon_new (file);
-  info = gtk_icon_theme_lookup_by_gicon (icon_theme, icon,
-                                         height, 1, GTK_TEXT_DIR_NONE, 0);
-  g_assert_nonnull (info);
-
-  g_object_unref (pixbuf);
-  texture = gtk_icon_paintable_download_texture (info);
-
-  /* we are loaded successfully */
-  g_assert_nonnull (texture);
-
-  /* the original dimensions have been preserved */
-  g_assert_cmpint (gdk_texture_get_width (texture), ==, width);
-  g_assert_cmpint (gdk_texture_get_height (texture), ==, height);
-
-  g_free (path);
-  g_object_unref (texture);
-  g_object_unref (file);
-  g_object_unref (icon);
-  g_object_unref (info);
-}
-
 int
 main (int argc, char *argv[])
 {
@@ -777,7 +720,6 @@ main (int argc, char *argv[])
   g_test_add_func ("/icontheme/size", test_size);
   g_test_add_func ("/icontheme/list", test_list);
   g_test_add_func ("/icontheme/inherit", test_inherit);
-  g_test_add_func ("/icontheme/nonsquare-symbolic", test_nonsquare_symbolic);
 
   return g_test_run();
 }
