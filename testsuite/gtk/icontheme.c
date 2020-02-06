@@ -121,7 +121,7 @@ assert_icon_lookup_fails (const char         *icon_name,
 
   /* We never truly *fail*, but check that we got the image-missing fallback */
   g_assert (info != NULL);
-  g_assert (g_str_has_suffix (gtk_icon_paintable_get_filename (info), "image-missing.png"));
+  g_assert_cmpstr (gtk_icon_paintable_get_icon_name (info), ==, "image-missing");
 }
 
 static GList *lookups = NULL;

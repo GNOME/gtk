@@ -261,6 +261,7 @@ struct _GtkIconPaintable
   IconKey key;
   GtkIconTheme *in_cache; /* Protected by icon_cache lock */
 
+  gchar *icon_name;
   gchar *filename;
   GLoadableIcon *loadable;
 
@@ -1909,6 +1910,7 @@ real_choose_icon (GtkIconTheme      *self,
   if (icon == NULL)
     {
       icon = icon_paintable_new (size, scale);
+      icon->icon_name = g_strdup ("image-missing");
       icon->filename = g_strdup (IMAGE_MISSING_RESOURCE_PATH);
       icon->is_resource = TRUE;
     }
@@ -2686,6 +2688,7 @@ theme_lookup_icon (IconTheme   *theme,
 
       filename = g_strconcat (icon_name, string_from_suffix (min_suffix), NULL);
       icon->filename = g_build_filename (dir->path, filename, NULL);
+      icon->icon_name = g_strdup (icon_name);
       icon->is_svg = min_suffix == ICON_CACHE_FLAG_SVG_SUFFIX;
       icon->is_resource = dir->is_resource;
       icon->is_symbolic = icon_uri_is_symbolic (filename, -1);
@@ -3092,6 +3095,7 @@ gtk_icon_paintable_finalize (GObject *object)
   g_strfreev (icon->key.icon_names);
 
   g_free (icon->filename);
+  g_free (icon->icon_name);
 
   g_clear_object (&icon->loadable);
   g_clear_object (&icon->texture);
@@ -3127,6 +3131,25 @@ gtk_icon_paintable_get_filename (GtkIconPaintable *icon)
   g_return_val_if_fail (icon != NULL, NULL);
 
   return icon->filename;
+}
+
+/**
+ * gtk_icon_paintable_get_icon_name:
+ * @self: a #GtkIcon
+ *
+ * Gets the icon name being used for the icon. This is only set
+ * if a themed icon was used, and will show the actual icon-name
+ * the was chosen.
+ *
+ * Returns: (nullable) (type filename): the themed icon-name for the icon, or %NULL
+ *     if its not a themed icon.
+ */
+const gchar *
+gtk_icon_paintable_get_icon_name (GtkIconPaintable *icon)
+{
+  g_return_val_if_fail (icon != NULL, NULL);
+
+  return icon->icon_name;
 }
 
 /**
@@ -3282,6 +3305,7 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
   if (!source_pixbuf)
     {
       source_pixbuf = _gdk_pixbuf_new_from_resource (IMAGE_MISSING_RESOURCE_PATH, "png", NULL);
+      icon->icon_name = g_strdup ("image-missing");
       icon->is_symbolic = FALSE;
       g_assert (source_pixbuf != NULL);
     }
@@ -3579,6 +3603,7 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
     {
       g_debug ("Unhandled GIcon type %s", g_type_name_from_instance ((GTypeInstance *)gicon));
       icon = icon_paintable_new (size, scale);
+      icon->icon_name = g_strdup ("image-missing");
       icon->filename = g_strdup (IMAGE_MISSING_RESOURCE_PATH);
       icon->is_resource = TRUE;
     }
