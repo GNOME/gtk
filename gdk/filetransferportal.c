@@ -472,6 +472,14 @@ portal_file_deserializer (GdkContentDeserializer *deserializer)
 }
 
 static void
+connection_closed (GDBusConnection *connection,
+                   gboolean         remote_peer_vanished,
+                   GError          *error)
+{
+  g_clear_object (&file_transfer_proxy);
+}
+
+static void
 got_proxy (GObject *source,
            GAsyncResult *result,
            gpointer data)
@@ -509,6 +517,10 @@ got_proxy (GObject *source,
                                      portal_file_deserializer,
                                      NULL,
                                      NULL);
+
+  /* Free the singleton when the connection closes, important for test */
+  g_signal_connect (g_dbus_proxy_get_connection (G_DBUS_PROXY (file_transfer_proxy)),
+                    "closed", G_CALLBACK (connection_closed), NULL);
 }
 
 void
