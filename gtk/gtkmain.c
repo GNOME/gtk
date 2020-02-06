@@ -114,7 +114,6 @@
 
 #include "gtkintl.h"
 
-#include "gtkaccelmapprivate.h"
 #include "gtkbox.h"
 #include "gtkdebug.h"
 #include "gtkdropprivate.h"
@@ -662,8 +661,6 @@ do_post_parse_initialization (void)
 
   gsk_ensure_resources ();
   _gtk_ensure_resources ();
-
-  _gtk_accel_map_init ();
 
   gtk_initialized = TRUE;
 
