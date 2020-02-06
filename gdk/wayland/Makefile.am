@@ -29,6 +29,8 @@ BUILT_SOURCES = 				\
 	xdg-shell-unstable-v6-protocol.c			\
 	xdg-foreign-unstable-v1-client-protocol.h		\
 	xdg-foreign-unstable-v1-protocol.c			\
+	xdg-foreign-unstable-v2-client-protocol.h		\
+	xdg-foreign-unstable-v2-protocol.c			\
 	gtk-primary-selection-client-protocol.h			\
 	gtk-primary-selection-protocol.c			\
 	tablet-unstable-v2-client-protocol.h	\
