@@ -103,7 +103,6 @@
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkcssnodeprivate.h"
-#include "gtkbindings.h"
 #include "gtkbinlayout.h"
 #include "gtkenums.h"
 #include "gtktypebuiltins.h"
