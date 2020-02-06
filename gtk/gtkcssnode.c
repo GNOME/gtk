@@ -463,11 +463,6 @@ gtk_css_node_real_update_style (GtkCssNode                   *cssnode,
 }
 
 static void
-gtk_css_node_real_invalidate (GtkCssNode *node)
-{
-}
-
-static void
 gtk_css_node_real_queue_validate (GtkCssNode *node)
 {
 }
@@ -557,7 +552,6 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
   object_class->finalize = gtk_css_node_finalize;
 
   klass->update_style = gtk_css_node_real_update_style;
-  klass->invalidate = gtk_css_node_real_invalidate;
   klass->validate = gtk_css_node_real_validate;
   klass->queue_validate = gtk_css_node_real_queue_validate;
   klass->dequeue_validate = gtk_css_node_real_dequeue_validate;
@@ -1298,8 +1292,6 @@ gtk_css_node_invalidate (GtkCssNode   *cssnode,
     return;
 
   cssnode->pending_changes |= change;
-
-  GTK_CSS_NODE_GET_CLASS (cssnode)->invalidate (cssnode);
 
   if (cssnode->parent)
     cssnode->parent->needs_propagation = TRUE;
