@@ -302,6 +302,9 @@ gboolean          gtk_widget_has_size_request              (GtkWidget *widget);
 
 void              gtk_widget_reset_controllers             (GtkWidget *widget);
 
+GList *           gtk_widget_list_controllers              (GtkWidget           *widget,
+                                                            GtkPropagationPhase  phase);
+
 gboolean          gtk_widget_query_tooltip                 (GtkWidget  *widget,
                                                             gint        x,
                                                             gint        y,
