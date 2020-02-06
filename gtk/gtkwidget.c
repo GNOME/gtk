@@ -12023,6 +12023,24 @@ gtk_widget_reset_controllers (GtkWidget *widget)
     }
 }
 
+GList *
+gtk_widget_list_controllers (GtkWidget           *widget,
+                             GtkPropagationPhase  phase)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GList *res = NULL, *l;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      GtkEventController *controller = l->data;
+
+      if (gtk_event_controller_get_propagation_phase (controller) == phase)
+        res = g_list_prepend (res, controller);
+    }
+
+  return g_list_reverse (res);
+}
+
 static inline void
 gtk_widget_maybe_add_debug_render_nodes (GtkWidget   *widget,
                                          GtkSnapshot *snapshot)
