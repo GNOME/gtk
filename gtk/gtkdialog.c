@@ -399,10 +399,10 @@ update_suggested_action (GtkDialog *dialog)
         {
           GtkWidget *child = l->data;
 
-          if (gtk_widget_has_style_class (child, GTK_STYLE_CLASS_DEFAULT))
-            gtk_widget_add_style_class (child, GTK_STYLE_CLASS_SUGGESTED_ACTION);
+          if (gtk_widget_has_css_class (child, GTK_STYLE_CLASS_DEFAULT))
+            gtk_widget_add_css_class (child, GTK_STYLE_CLASS_SUGGESTED_ACTION);
           else
-            gtk_widget_remove_style_class (child, GTK_STYLE_CLASS_SUGGESTED_ACTION);
+            gtk_widget_remove_css_class (child, GTK_STYLE_CLASS_SUGGESTED_ACTION);
         }
       g_list_free (children);
     }

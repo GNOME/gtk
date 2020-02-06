@@ -232,7 +232,7 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   g_signal_connect_swapped (priv->down_slider_button, "clicked",
 			    G_CALLBACK (gtk_path_bar_scroll_down), path_bar);
 
-  gtk_widget_add_style_class (GTK_WIDGET (path_bar), GTK_STYLE_CLASS_LINKED);
+  gtk_widget_add_css_class (GTK_WIDGET (path_bar), GTK_STYLE_CLASS_LINKED);
 
   priv->get_info_cancellable = NULL;
   priv->cancellables = NULL;
@@ -1142,21 +1142,21 @@ gtk_path_bar_update_button_appearance (GtkPathBar *path_bar,
 {
   const gchar *dir_name = get_dir_name (button_data);
 
-  gtk_widget_remove_style_class (button_data->button, "text-button");
-  gtk_widget_remove_style_class (button_data->button, "image-button");
+  gtk_widget_remove_css_class (button_data->button, "text-button");
+  gtk_widget_remove_css_class (button_data->button, "image-button");
 
   if (button_data->label != NULL)
     {
       gtk_label_set_text (GTK_LABEL (button_data->label), dir_name);
       if (button_data->image == NULL)
-        gtk_widget_add_style_class (button_data->button, "text-button");
+        gtk_widget_add_css_class (button_data->button, "text-button");
     }
 
   if (button_data->image != NULL)
     {
       set_button_image (path_bar, button_data);
       if (button_data->label == NULL)
-        gtk_widget_add_style_class (button_data->button, "image-button");
+        gtk_widget_add_css_class (button_data->button, "image-button");
     }
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button_data->button)) != current_dir)

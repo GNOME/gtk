@@ -1348,8 +1348,8 @@ update_icon_style (GtkWidget            *widget,
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     icon_pos = 1 - icon_pos;
 
-  gtk_widget_add_style_class (icon_info->widget, sides[icon_pos]);
-  gtk_widget_remove_style_class (icon_info->widget, sides[1 - icon_pos]);
+  gtk_widget_add_css_class (icon_info->widget, sides[icon_pos]);
+  gtk_widget_remove_css_class (icon_info->widget, sides[1 - icon_pos]);
 }
 
 static void
@@ -2213,9 +2213,9 @@ gtk_entry_set_has_frame (GtkEntry *entry,
     return;
 
   if (setting)
-    gtk_widget_remove_style_class (GTK_WIDGET (entry), GTK_STYLE_CLASS_FLAT);
+    gtk_widget_remove_css_class (GTK_WIDGET (entry), GTK_STYLE_CLASS_FLAT);
   else
-    gtk_widget_add_style_class (GTK_WIDGET (entry), GTK_STYLE_CLASS_FLAT);
+    gtk_widget_add_css_class (GTK_WIDGET (entry), GTK_STYLE_CLASS_FLAT);
 
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_HAS_FRAME]);
 }
@@ -2233,7 +2233,7 @@ gtk_entry_get_has_frame (GtkEntry *entry)
 {
   g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
 
-  return !gtk_widget_has_style_class (GTK_WIDGET (entry), GTK_STYLE_CLASS_FRAME);
+  return !gtk_widget_has_css_class (GTK_WIDGET (entry), GTK_STYLE_CLASS_FRAME);
 }
 
 /**

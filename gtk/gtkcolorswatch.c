@@ -558,7 +558,7 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
                     G_CALLBACK (key_controller_key_pressed), swatch);
   gtk_widget_add_controller (GTK_WIDGET (swatch), controller);
 
-  gtk_widget_add_style_class (GTK_WIDGET (swatch), "activatable");
+  gtk_widget_add_css_class (GTK_WIDGET (swatch), "activatable");
 
   priv->overlay_widget = g_object_new (GTK_TYPE_IMAGE,
                                                "css-name", "overlay",
@@ -611,13 +611,13 @@ gtk_color_swatch_set_rgba (GtkColorSwatch *swatch,
 
   if (INTENSITY (priv->color.red, priv->color.green, priv->color.blue) > 0.5)
     {
-      gtk_widget_add_style_class (GTK_WIDGET (swatch), "light");
-      gtk_widget_remove_style_class (GTK_WIDGET (swatch), "dark");
+      gtk_widget_add_css_class (GTK_WIDGET (swatch), "light");
+      gtk_widget_remove_css_class (GTK_WIDGET (swatch), "dark");
     }
   else
     {
-      gtk_widget_add_style_class (GTK_WIDGET (swatch), "dark");
-      gtk_widget_remove_style_class (GTK_WIDGET (swatch), "light");
+      gtk_widget_add_css_class (GTK_WIDGET (swatch), "dark");
+      gtk_widget_remove_css_class (GTK_WIDGET (swatch), "light");
 
     }
 

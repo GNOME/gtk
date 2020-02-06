@@ -433,7 +433,7 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
                                  "visible", FALSE,
                                  NULL);
 
-  gtk_widget_remove_style_class (GTK_WIDGET (self->switcher), GTK_STYLE_CLASS_LINKED);
+  gtk_widget_remove_css_class (GTK_WIDGET (self->switcher), GTK_STYLE_CLASS_LINKED);
 
   self->show_all = gtk_button_new_with_mnemonic (_("_Show All"));
   gtk_widget_hide (self->show_all);
@@ -729,7 +729,7 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
   {
     GtkWidget *w;
 
-    gtk_widget_add_style_class (GTK_WIDGET (self->switcher), "circular");
+    gtk_widget_add_css_class (GTK_WIDGET (self->switcher), "circular");
 
     for (w = gtk_widget_get_first_child (GTK_WIDGET (self->switcher));
          w != NULL;
@@ -737,7 +737,7 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
       {
         GtkWidget *label;
 
-        gtk_widget_add_style_class (w, "circular");
+        gtk_widget_add_css_class (w, "circular");
 
         label = gtk_bin_get_child (GTK_BIN (w));
         gtk_label_set_use_underline (GTK_LABEL (label), TRUE);

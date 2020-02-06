@@ -192,7 +192,7 @@ gtk_toggle_button_init (GtkToggleButton *toggle_button)
 
   priv->active = FALSE;
 
-  gtk_widget_add_style_class (GTK_WIDGET (toggle_button), "toggle");
+  gtk_widget_add_css_class (GTK_WIDGET (toggle_button), "toggle");
 }
 
 

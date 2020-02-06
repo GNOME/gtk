@@ -221,12 +221,12 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
 
       if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_END)
         {
-          gtk_widget_add_style_class (widget, GTK_STYLE_CLASS_BOTTOM);
+          gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_BOTTOM);
           if (priv->mode == GTK_TEXT_HANDLE_MODE_CURSOR)
-            gtk_widget_add_style_class (widget, GTK_STYLE_CLASS_INSERTION_CURSOR);
+            gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_INSERTION_CURSOR);
         }
       else
-        gtk_widget_add_style_class (widget, GTK_STYLE_CLASS_TOP);
+        gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_TOP);
     }
 
   return priv->windows[pos].widget;

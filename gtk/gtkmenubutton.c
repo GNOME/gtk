@@ -481,7 +481,7 @@ gtk_menu_button_init (GtkMenuButton *menu_button)
 
   gtk_widget_set_sensitive (priv->button, FALSE);
 
-  gtk_widget_add_style_class (GTK_WIDGET (menu_button), "popup");
+  gtk_widget_add_css_class (GTK_WIDGET (menu_button), "popup");
 }
 
 /**

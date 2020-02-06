@@ -352,7 +352,7 @@ gtk_sidebar_row_set_property (GObject      *object,
                                    (GtkCallback) gtk_widget_destroy,
                                    NULL);
 
-            gtk_widget_add_style_class (GTK_WIDGET (self), "sidebar-placeholder-row");
+            gtk_widget_add_css_class (GTK_WIDGET (self), "sidebar-placeholder-row");
           }
 
         break;

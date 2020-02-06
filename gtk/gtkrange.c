@@ -718,13 +718,13 @@ update_highlight_position (GtkRange *range)
 
   if (should_invert (range))
     {
-      gtk_widget_add_style_class (priv->highlight_widget, GTK_STYLE_CLASS_BOTTOM);
-      gtk_widget_remove_style_class (priv->highlight_widget, GTK_STYLE_CLASS_TOP);
+      gtk_widget_add_css_class (priv->highlight_widget, GTK_STYLE_CLASS_BOTTOM);
+      gtk_widget_remove_css_class (priv->highlight_widget, GTK_STYLE_CLASS_TOP);
     }
   else
     {
-      gtk_widget_add_style_class (priv->highlight_widget, GTK_STYLE_CLASS_TOP);
-      gtk_widget_remove_style_class (priv->highlight_widget, GTK_STYLE_CLASS_BOTTOM);
+      gtk_widget_add_css_class (priv->highlight_widget, GTK_STYLE_CLASS_TOP);
+      gtk_widget_remove_css_class (priv->highlight_widget, GTK_STYLE_CLASS_BOTTOM);
     }
 }
 
@@ -738,13 +738,13 @@ update_fill_position (GtkRange *range)
 
   if (should_invert (range))
     {
-      gtk_widget_add_style_class (priv->fill_widget, GTK_STYLE_CLASS_BOTTOM);
-      gtk_widget_remove_style_class (priv->fill_widget, GTK_STYLE_CLASS_TOP);
+      gtk_widget_add_css_class (priv->fill_widget, GTK_STYLE_CLASS_BOTTOM);
+      gtk_widget_remove_css_class (priv->fill_widget, GTK_STYLE_CLASS_TOP);
     }
   else
     {
-      gtk_widget_add_style_class (priv->fill_widget, GTK_STYLE_CLASS_TOP);
-      gtk_widget_remove_style_class (priv->fill_widget, GTK_STYLE_CLASS_BOTTOM);
+      gtk_widget_add_css_class (priv->fill_widget, GTK_STYLE_CLASS_TOP);
+      gtk_widget_remove_css_class (priv->fill_widget, GTK_STYLE_CLASS_BOTTOM);
     }
 }
 
@@ -1664,7 +1664,7 @@ range_grab_add (GtkRange  *range,
    */
   priv->grab_location = location;
 
-  gtk_widget_add_style_class (GTK_WIDGET (range), "dragging");
+  gtk_widget_add_css_class (GTK_WIDGET (range), "dragging");
 }
 
 static void
@@ -1674,9 +1674,9 @@ update_zoom_state (GtkRange *range,
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
 
   if (enabled)
-    gtk_widget_add_style_class (GTK_WIDGET (range), "fine-tune");
+    gtk_widget_add_css_class (GTK_WIDGET (range), "fine-tune");
   else
-    gtk_widget_remove_style_class (GTK_WIDGET (range), "fine-tune");
+    gtk_widget_remove_css_class (GTK_WIDGET (range), "fine-tune");
 
   priv->zoom = enabled;
 }
@@ -1693,7 +1693,7 @@ range_grab_remove (GtkRange *range)
 
   update_zoom_state (range, FALSE);
 
-  gtk_widget_remove_style_class (GTK_WIDGET (range), "dragging");
+  gtk_widget_remove_css_class (GTK_WIDGET (range), "dragging");
 }
 
 static GtkScrollType

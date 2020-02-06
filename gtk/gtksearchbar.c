@@ -351,7 +351,7 @@ gtk_search_bar_init (GtkSearchBar *bar)
   gtk_widget_set_hexpand (priv->box_center, TRUE);
 
   priv->close_button = gtk_button_new_from_icon_name ("window-close-symbolic");
-  gtk_widget_add_style_class (priv->close_button, "close");
+  gtk_widget_add_css_class (priv->close_button, "close");
   gtk_center_box_set_end_widget (GTK_CENTER_BOX (priv->box_center), priv->close_button);
   gtk_widget_hide (priv->close_button);
 

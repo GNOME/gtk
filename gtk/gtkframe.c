@@ -534,9 +534,9 @@ gtk_frame_set_shadow_type (GtkFrame      *frame,
       priv->shadow_type = type;
 
       if (type == GTK_SHADOW_NONE)
-        gtk_widget_add_style_class (GTK_WIDGET (frame), "flat");
+        gtk_widget_add_css_class (GTK_WIDGET (frame), "flat");
       else
-        gtk_widget_remove_style_class (GTK_WIDGET (frame), "flat");
+        gtk_widget_remove_css_class (GTK_WIDGET (frame), "flat");
 
       g_object_notify_by_pspec (G_OBJECT (frame), frame_props[PROP_SHADOW_TYPE]);
     }

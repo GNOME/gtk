@@ -116,7 +116,7 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
 
   priv->buttons = g_hash_table_new_full (g_direct_hash, g_direct_equal, g_object_unref, NULL);
 
-  gtk_widget_add_style_class (GTK_WIDGET (switcher), "linked");
+  gtk_widget_add_css_class (GTK_WIDGET (switcher), "linked");
 
   formats = gdk_content_formats_new (NULL, 0);
   dest = gtk_drop_target_new (formats, 0);
@@ -169,8 +169,8 @@ rebuild_child (GtkWidget   *self,
       if (title != NULL)
         gtk_widget_set_tooltip_text (GTK_WIDGET (self), title);
 
-      gtk_widget_remove_style_class (self, "text-button");
-      gtk_widget_add_style_class (self, "image-button");
+      gtk_widget_remove_css_class (self, "text-button");
+      gtk_widget_add_css_class (self, "image-button");
     }
   else if (title != NULL)
     {
@@ -178,8 +178,8 @@ rebuild_child (GtkWidget   *self,
 
       gtk_widget_set_tooltip_text (GTK_WIDGET (self), NULL);
 
-      gtk_widget_remove_style_class (self, "image-button");
-      gtk_widget_add_style_class (self, "text-button");
+      gtk_widget_remove_css_class (self, "image-button");
+      gtk_widget_add_css_class (self, "text-button");
     }
 
   if (button_child)
@@ -211,9 +211,9 @@ update_button (GtkStackSwitcher *self,
   gtk_widget_set_visible (button, visible && (title != NULL || icon_name != NULL));
 
   if (needs_attention)
-    gtk_widget_add_style_class (button, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+    gtk_widget_add_css_class (button, GTK_STYLE_CLASS_NEEDS_ATTENTION);
   else
-    gtk_widget_remove_style_class (button, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+    gtk_widget_remove_css_class (button, GTK_STYLE_CLASS_NEEDS_ATTENTION);
 
   g_free (title);
   g_free (icon_name);
