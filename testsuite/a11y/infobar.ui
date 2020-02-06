@@ -8,14 +8,10 @@
       <object class="GtkInfoBar" id="bar1">
         <property name="visible">True</property>
         <property name="message-type">info</property>
-        <child internal-child="content_area">
-          <object class="GtkBox" id="box1">
-            <child>
-              <object class="GtkLabel" id="label1">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Some important info</property>
-              </object>
-            </child>
+        <child>
+          <object class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Some important info</property>
           </object>
         </child>
       </object>
