@@ -54,14 +54,16 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkTextTexture GtkTextTexture;
+typedef struct _GtkTextPaintable GtkTextPaintable;
 
-struct _GtkTextTexture
+struct _GtkTextPaintable
 {
-  GdkTexture *texture;
+  GdkPaintable *paintable;
+  GtkTextBTree *tree;
+  GtkTextLine *line;
 };
 
-GtkTextLineSegment *_gtk_texture_segment_new (GdkTexture *texture);
+GtkTextLineSegment *_gtk_paintable_segment_new (GdkPaintable *paintable);
 
 typedef struct _GtkTextChildBody GtkTextChildBody;
 

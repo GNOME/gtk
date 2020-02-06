@@ -1710,20 +1710,31 @@ add_text_attrs (GtkTextLayout      *layout,
 }
 
 static void
-add_texture_attrs (GtkTextLayout      *layout,
-                   GtkTextLineDisplay *display,
-                   GtkTextAttributes  *style,
-                   GtkTextLineSegment *seg,
-                   PangoAttrList      *attrs,
-                   gint                start)
+add_paintable_attrs (GtkTextLayout      *layout,
+                     GtkTextLineDisplay *display,
+                     GtkTextAttributes  *style,
+                     GtkTextLineSegment *seg,
+                     PangoAttrList      *attrs,
+                     gint                start)
 {
   PangoAttribute *attr;
   PangoRectangle logical_rect;
-  GtkTextTexture *texture = &seg->body.texture;
+  GtkTextPaintable *paintable = &seg->body.paintable;
   gint width, height;
 
-  width = gdk_texture_get_width (texture->texture);
-  height = gdk_texture_get_height (texture->texture);
+  width = gdk_paintable_get_intrinsic_width (paintable->paintable);
+  height = gdk_paintable_get_intrinsic_height (paintable->paintable);
+
+  /* Pick *some* default size */
+  if (width == 0)
+    width = 32;
+  if (height == 0)
+    {
+      double aspect = gdk_paintable_get_intrinsic_aspect_ratio (paintable->paintable);
+      if (aspect == 0)
+        aspect = 1.0;
+      height = width / aspect;
+    }
 
   logical_rect.x = 0;
   logical_rect.y = -height * PANGO_SCALE;
@@ -1731,7 +1742,7 @@ add_texture_attrs (GtkTextLayout      *layout,
   logical_rect.height = height * PANGO_SCALE;
 
   attr = pango_attr_shape_new_with_data (&logical_rect, &logical_rect,
-					 texture->texture, NULL, NULL);
+					 paintable->paintable, NULL, NULL);
   attr->start_index = start;
   attr->end_index = start + seg->byte_count;
   pango_attr_list_insert (attrs, attr);
@@ -2149,7 +2160,7 @@ gtk_text_layout_update_display_cursors (GtkTextLayout      *layout,
     {
       /* Displayable segments */
       if (seg->type == &gtk_text_char_type ||
-          seg->type == &gtk_text_texture_type ||
+          seg->type == &gtk_text_paintable_type ||
           seg->type == &gtk_text_child_type)
         {
           gtk_text_layout_get_iter_at_line (layout, &iter, line,
@@ -2346,14 +2357,14 @@ gtk_text_layout_create_display (GtkTextLayout *layout,
     {
       /* Displayable segments */
       if (seg->type == &gtk_text_char_type ||
-          seg->type == &gtk_text_texture_type ||
+          seg->type == &gtk_text_paintable_type ||
           seg->type == &gtk_text_child_type)
         {
           style = get_style (layout, tags);
           initial_toggle_segments = FALSE;
 
           /* We have to delay setting the paragraph values until we
-           * hit the first texture or text segment because toggles at
+           * hit the first paintable or text segment because toggles at
            * the beginning of the paragraph should affect the
            * paragraph-global values
            */
@@ -2430,15 +2441,15 @@ gtk_text_layout_create_display (GtkTextLayout *layout,
                                   &last_scale_attr,
                                   &last_fallback_attr);
                 }
-              else if (seg->type == &gtk_text_texture_type)
+              else if (seg->type == &gtk_text_paintable_type)
                 {
                   add_generic_attrs (layout,
                                      &style->appearance,
                                      seg->byte_count,
                                      attrs, layout_byte_offset,
                                      size_only, FALSE);
-                  add_texture_attrs (layout, display, style,
-                                     seg, attrs, layout_byte_offset);
+                  add_paintable_attrs (layout, display, style,
+                                       seg, attrs, layout_byte_offset);
                   memcpy (text + layout_byte_offset, _gtk_text_unknown_char_utf8,
                           seg->byte_count);
                   layout_byte_offset += seg->byte_count;
@@ -4072,6 +4083,21 @@ render_para (GskPangoRenderer   *crenderer,
   pango_layout_iter_free (iter);
 }
 
+static gboolean
+snapshot_shape (PangoAttrShape         *attr,
+                GdkSnapshot            *snapshot,
+                double                  width,
+                double                  height)
+{
+  if (GDK_IS_PAINTABLE (attr->data))
+    {
+      gdk_paintable_snapshot (GDK_PAINTABLE (attr->data), snapshot, width, height);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 void
 gtk_text_layout_snapshot (GtkTextLayout      *layout,
                           GtkWidget          *widget,
@@ -4105,6 +4131,8 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
     return; /* nothing on the screen */
 
   crenderer = gsk_pango_renderer_acquire ();
+
+  gsk_pango_renderer_set_shape_handler (crenderer, snapshot_shape);
 
   crenderer->widget = widget;
   crenderer->snapshot = snapshot;

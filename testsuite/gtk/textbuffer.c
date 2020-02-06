@@ -686,11 +686,11 @@ fill_buffer (GtkTextBuffer *buffer)
 
       gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
 
-      gtk_text_buffer_insert_texture (buffer, &iter, texture);
+      gtk_text_buffer_insert_paintable (buffer, &iter, GDK_PAINTABLE (texture));
 
       gtk_text_buffer_get_iter_at_offset (buffer, &iter, 1);
 
-      gtk_text_buffer_insert_texture (buffer, &iter, texture);
+      gtk_text_buffer_insert_paintable (buffer, &iter, GDK_PAINTABLE (texture));
 
       str = g_strdup_printf ("%d Hello World!\nwoo woo woo woo woo woo woo woo\n",
                             i);
@@ -706,20 +706,20 @@ fill_buffer (GtkTextBuffer *buffer)
                               "Spanish (Espa\303\261ol) \302\241Hola! / French (Fran\303\247ais) Bonjour, Salut / German (Deutsch S\303\274d) Gr\303\274\303\237 Gott (testing Latin-1 chars encoded in UTF8)\nThai (we can't display this, just making sure we don't crash)  (\340\270\240\340\270\262\340\270\251\340\270\262\340\271\204\340\270\227\340\270\242)  \340\270\252\340\270\247\340\270\261\340\270\252\340\270\224\340\270\265\340\270\204\340\270\243\340\270\261\340\270\232, \340\270\252\340\270\247\340\270\261\340\270\252\340\270\224\340\270\265\340\270\204\340\271\210\340\270\260\n",
                               -1);
 
-      gtk_text_buffer_insert_texture (buffer, &iter, texture);
-      gtk_text_buffer_insert_texture (buffer, &iter, texture);
+      gtk_text_buffer_insert_paintable (buffer, &iter, GDK_PAINTABLE(texture));
+      gtk_text_buffer_insert_paintable (buffer, &iter, GDK_PAINTABLE(texture));
 
       gtk_text_buffer_get_iter_at_offset (buffer, &iter, 4);
 
-      gtk_text_buffer_insert_texture (buffer, &iter, texture);
+      gtk_text_buffer_insert_paintable (buffer, &iter, GDK_PAINTABLE(texture));
 
       gtk_text_buffer_get_iter_at_offset (buffer, &iter, 7);
 
-      gtk_text_buffer_insert_texture (buffer, &iter, texture);
+      gtk_text_buffer_insert_paintable (buffer, &iter, GDK_PAINTABLE(texture));
 
       gtk_text_buffer_get_iter_at_offset (buffer, &iter, 8);
 
-      gtk_text_buffer_insert_texture (buffer, &iter, texture);
+      gtk_text_buffer_insert_paintable (buffer, &iter, GDK_PAINTABLE(texture));
 
       gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, 8);
       iter2 = iter;

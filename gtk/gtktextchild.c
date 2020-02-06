@@ -72,67 +72,109 @@
       }                                                                 \
   } G_STMT_END
 
-#define TEXTURE_SEG_SIZE ((unsigned) (G_STRUCT_OFFSET (GtkTextLineSegment, body) \
-        + sizeof (GtkTextTexture)))
+#define PAINTABLE_SEG_SIZE ((unsigned) (G_STRUCT_OFFSET (GtkTextLineSegment, body) \
+        + sizeof (GtkTextPaintable)))
 
 #define WIDGET_SEG_SIZE ((unsigned) (G_STRUCT_OFFSET (GtkTextLineSegment, body) \
         + sizeof (GtkTextChildBody)))
 
-static GtkTextLineSegment *
-texture_segment_cleanup_func (GtkTextLineSegment *seg,
-                              GtkTextLine        *line)
+
+static void
+paintable_invalidate_size (GdkPaintable       *paintable,
+                           GtkTextLineSegment *seg)
 {
-  /* nothing */
+  if (seg->body.paintable.tree)
+    {
+      GtkTextIter start, end;
+
+      _gtk_text_btree_get_iter_at_paintable (seg->body.paintable.tree, &start, seg);
+      end = start;
+      gtk_text_iter_forward_char (&end);
+
+      _gtk_text_btree_invalidate_region (seg->body.paintable.tree, &start, &end, FALSE);
+    }
+}
+
+static void
+paintable_invalidate_contents (GdkPaintable       *paintable,
+                               GtkTextLineSegment *seg)
+{
+  /* These do the same anyway */
+  paintable_invalidate_size (paintable, seg);
+}
+
+static GtkTextLineSegment *
+paintable_segment_cleanup_func (GtkTextLineSegment *seg,
+                                GtkTextLine        *line)
+{
+  seg->body.paintable.line = line;
+
   return seg;
 }
 
 static int
-texture_segment_delete_func (GtkTextLineSegment *seg,
-                             GtkTextLine        *line,
-                             gboolean            tree_gone)
+paintable_segment_delete_func (GtkTextLineSegment *seg,
+                               GtkTextLine        *line,
+                               gboolean            tree_gone)
 {
-  if (seg->body.texture.texture)
-    g_object_unref (seg->body.texture.texture);
+  GdkPaintable *paintable;
+  guint flags;
 
-  g_slice_free1 (TEXTURE_SEG_SIZE, seg);
+  seg->body.paintable.tree = NULL;
+  seg->body.paintable.line = NULL;
+
+  paintable = seg->body.paintable.paintable;
+  if (paintable)
+    {
+      flags = gdk_paintable_get_flags (paintable);
+      if ((flags & GDK_PAINTABLE_STATIC_CONTENTS) == 0)
+        g_signal_handlers_disconnect_by_func (paintable, G_CALLBACK (paintable_invalidate_contents), seg);
+
+      if ((flags & GDK_PAINTABLE_STATIC_SIZE) == 0)
+        g_signal_handlers_disconnect_by_func (paintable, G_CALLBACK (paintable_invalidate_size), seg);
+
+      g_object_unref (paintable);
+    }
+
+  g_slice_free1 (PAINTABLE_SEG_SIZE, seg);
 
   return 0;
 }
 
 static void
-texture_segment_check_func (GtkTextLineSegment *seg,
-                            GtkTextLine        *line)
+paintable_segment_check_func (GtkTextLineSegment *seg,
+                              GtkTextLine        *line)
 {
   if (seg->next == NULL)
-    g_error ("texture segment is the last segment in a line");
+    g_error ("paintable segment is the last segment in a line");
 
   if (seg->byte_count != GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN)
-    g_error ("texture segment has byte count of %d", seg->byte_count);
+    g_error ("paintable segment has byte count of %d", seg->byte_count);
 
   if (seg->char_count != 1)
-    g_error ("texture segment has char count of %d", seg->char_count);
+    g_error ("paintable segment has char count of %d", seg->char_count);
 }
 
-
-const GtkTextLineSegmentClass gtk_text_texture_type = {
-  "texture",                          /* name */
-  FALSE,                                            /* leftGravity */
-  NULL,                                          /* splitFunc */
-  texture_segment_delete_func,                             /* deleteFunc */
-  texture_segment_cleanup_func,                            /* cleanupFunc */
-  NULL,                                                    /* lineChangeFunc */
-  texture_segment_check_func                               /* checkFunc */
+const GtkTextLineSegmentClass gtk_text_paintable_type = {
+  "paintable",                          /* name */
+  FALSE,                                /* leftGravity */
+  NULL,                                 /* splitFunc */
+  paintable_segment_delete_func,        /* deleteFunc */
+  paintable_segment_cleanup_func,       /* cleanupFunc */
+  NULL,                                 /* lineChangeFunc */
+  paintable_segment_check_func          /* checkFunc */
 
 };
 
 GtkTextLineSegment *
-_gtk_texture_segment_new (GdkTexture *texture)
+_gtk_paintable_segment_new (GdkPaintable *paintable)
 {
   GtkTextLineSegment *seg;
+  guint flags;
 
-  seg = g_slice_alloc (TEXTURE_SEG_SIZE);
+  seg = g_slice_alloc (PAINTABLE_SEG_SIZE);
 
-  seg->type = &gtk_text_texture_type;
+  seg->type = &gtk_text_paintable_type;
 
   seg->next = NULL;
 
@@ -142,9 +184,24 @@ _gtk_texture_segment_new (GdkTexture *texture)
   seg->byte_count = GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN;
   seg->char_count = 1;
 
-  seg->body.texture.texture = texture;
+  seg->body.paintable.paintable = paintable;
+  seg->body.paintable.tree = NULL;
+  seg->body.paintable.line = NULL;
 
-  g_object_ref (texture);
+  flags = gdk_paintable_get_flags (paintable);
+  if ((flags & GDK_PAINTABLE_STATIC_CONTENTS) == 0)
+    g_signal_connect (paintable,
+                      "invalidate-contents",
+                      G_CALLBACK (paintable_invalidate_contents),
+                      seg);
+
+  if ((flags & GDK_PAINTABLE_STATIC_SIZE) == 0)
+    g_signal_connect (paintable,
+                      "invalidate-size",
+                      G_CALLBACK (paintable_invalidate_size),
+                      seg);
+
+  g_object_ref (paintable);
 
   return seg;
 }
