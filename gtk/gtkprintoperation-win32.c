@@ -713,6 +713,10 @@ devmode_to_settings (GtkPrintSettings *settings,
       g_free (extra);
     }
   
+  char *devmode_name = g_utf16_to_utf8 (devmode->dmDeviceName, -1, NULL, NULL, NULL);
+  gtk_print_settings_set (settings, "win32-devmode-name", devmode_name);
+  g_free (devmode_name);
+
   if (devmode->dmFields & DM_ORIENTATION)
     gtk_print_settings_set_orientation (settings,
 					orientation_from_win32 (devmode->dmOrientation));
@@ -956,9 +960,10 @@ dialog_to_print_settings (GtkPrintOperation *op,
 
 static HANDLE
 devmode_from_settings (GtkPrintSettings *settings,
-		       GtkPageSetup *page_setup)
+		       GtkPageSetup *page_setup,
+		       HANDLE hDevModeParam)
 {
-  HANDLE hDevMode;
+  HANDLE hDevMode = hDevModeParam;
   LPDEVMODEW devmode;
   guchar *extras;
   GtkPaperSize *paper_size;
@@ -966,31 +971,47 @@ devmode_from_settings (GtkPrintSettings *settings,
   gsize extras_len;
   const char *val;
 
-  extras = NULL;
-  extras_len = 0;
-  extras_base64 = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_WIN32_DRIVER_EXTRA);
-  if (extras_base64)
-    extras = g_base64_decode (extras_base64, &extras_len);
-  
-  hDevMode = GlobalAlloc (GMEM_MOVEABLE, 
-			  sizeof (DEVMODEW) + extras_len);
-
-  devmode = GlobalLock (hDevMode);
-
-  memset (devmode, 0, sizeof (DEVMODEW));
-  
-  devmode->dmSpecVersion = DM_SPECVERSION;
-  devmode->dmSize = sizeof (DEVMODEW);
-  
-  devmode->dmDriverExtra = 0;
-  if (extras && extras_len > 0)
+  /* If we already provided a valid hDevMode, don't initialize a new one; just lock the one we have */
+  if (hDevMode)
     {
-      devmode->dmDriverExtra = extras_len;
-      memcpy (((char *)devmode) + sizeof (DEVMODEW), extras, extras_len);
+      devmode = GlobalLock (hDevMode);
     }
-  g_free (extras);
-  if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION))
-    devmode->dmDriverVersion = gtk_print_settings_get_int (settings, GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION);
+  else
+    {
+      extras = NULL;
+      extras_len = 0;
+      extras_base64 = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_WIN32_DRIVER_EXTRA);
+      if (extras_base64)
+        extras = g_base64_decode (extras_base64, &extras_len);
+  
+      hDevMode = GlobalAlloc (GMEM_MOVEABLE, 
+			      sizeof (DEVMODEW) + extras_len);
+
+      devmode = GlobalLock (hDevMode);
+
+      memset (devmode, 0, sizeof (DEVMODEW));
+  
+      devmode->dmSpecVersion = DM_SPECVERSION;
+      devmode->dmSize = sizeof (DEVMODEW);
+  
+      gunichar2 *device_name = g_utf8_to_utf16 (gtk_print_settings_get (settings, "win32-devmode-name"), -1, NULL, NULL, NULL);
+      memcpy (devmode->dmDeviceName, device_name, CCHDEVICENAME);
+      g_free (device_name);
+
+
+      devmode->dmDriverExtra = 0;
+      if (extras && extras_len > 0)
+        {
+          devmode->dmDriverExtra = extras_len;
+          memcpy (((char *)devmode) + sizeof (DEVMODEW), extras, extras_len);
+        }
+      g_free (extras);
+  
+      if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION))
+        {
+          devmode->dmDriverVersion = gtk_print_settings_get_int (settings, GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION);
+        }
+    }
   
   if (page_setup ||
       gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_ORIENTATION))
@@ -1245,12 +1266,25 @@ dialog_from_print_settings (GtkPrintOperation *op,
 	}
     }
   
+  /* If we have a printer saved, restore our settings */
   printer = gtk_print_settings_get_printer (settings);
   if (printer)
-    printdlgex->hDevNames = gtk_print_win32_devnames_to_win32_from_printer_name (printer);
+    {
+      printdlgex->hDevNames = gtk_print_win32_devnames_to_win32_from_printer_name (printer);
   
-  printdlgex->hDevMode = devmode_from_settings (settings,
-						op->priv->default_page_setup);
+      printdlgex->hDevMode = devmode_from_settings (settings,
+						  op->priv->default_page_setup, NULL);
+    }
+  else
+    {
+      /* Otherwise, use the default settings */
+      DWORD FlagsCopy = printdlgex->Flags;
+      printdlgex->Flags |= PD_RETURNDEFAULT;
+      PrintDlgExW (printdlgex);
+      printdlgex->Flags = FlagsCopy;
+
+      devmode_from_settings (settings, op->priv->default_page_setup, printdlgex->hDevMode);
+    }
 }
 
 typedef struct {
@@ -1424,7 +1458,7 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
       if (message == WM_SIZE)
         {
           gtk_widget_queue_resize (op_win32->embed_widget);
-        }
+    }
 
       return FALSE;
     }
@@ -1580,7 +1614,7 @@ gtk_print_operation_run_without_dialog (GtkPrintOperation *op,
     }
 
   hDevNames = gtk_print_win32_devnames_to_win32_from_printer_name (printer);
-  hDevMode = devmode_from_settings (settings, op->priv->default_page_setup);
+  hDevMode = devmode_from_settings (settings, op->priv->default_page_setup, NULL);
 
   /* Create a printer DC for the print settings and page setup provided. */
   pdn = GlobalLock (hDevNames);
@@ -2078,7 +2112,7 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
     pagesetupdlg->hwndOwner = NULL;
 
   pagesetupdlg->Flags = PSD_DEFAULTMINMARGINS;
-  pagesetupdlg->hDevMode = devmode_from_settings (settings, page_setup);
+  pagesetupdlg->hDevMode = devmode_from_settings (settings, page_setup, NULL);
   pagesetupdlg->hDevNames = NULL;
   printer = gtk_print_settings_get_printer (settings);
   if (printer)
