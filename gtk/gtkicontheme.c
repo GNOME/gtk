@@ -58,8 +58,6 @@
  */
 #include "fallback-c89.c"
 
-#define IMAGE_MISSING_RESOURCE_PATH "/org/gtk/libgtk/icons/16x16/status/image-missing.png"
-
 /**
  * SECTION:gtkicontheme
  * @Short_description: Looking up icons by name

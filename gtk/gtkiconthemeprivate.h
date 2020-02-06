@@ -21,6 +21,8 @@
 #include <gtk/gtkicontheme.h>
 #include <gtk/gtkcssstyleprivate.h>
 
+#define IMAGE_MISSING_RESOURCE_PATH "/org/gtk/libgtk/icons/16x16/status/image-missing.png"
+
 void gtk_icon_theme_lookup_symbolic_colors   (GtkCssStyle      *style,
                                               GdkRGBA          *color_out,
                                               GdkRGBA          *success_out,
