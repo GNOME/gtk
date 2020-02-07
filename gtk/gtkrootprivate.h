@@ -25,7 +25,7 @@ struct _GtkRootInterface
 
 GtkConstraintSolver *   gtk_root_get_constraint_solver  (GtkRoot *self);
 
-enum {
+typedef enum {
   GTK_ROOT_PROP_FOCUS_WIDGET,
   GTK_ROOT_NUM_PROPERTIES
 } GtkRootProperties;

@@ -1742,9 +1742,14 @@ handle_pointing_event (GdkEvent *event)
   switch ((guint) event->any.type)
     {
     case GDK_LEAVE_NOTIFY:
-      if (event->crossing.mode == GDK_CROSSING_GRAB ||
-          event->crossing.mode == GDK_CROSSING_UNGRAB)
-        break;
+      if (event->crossing.mode == GDK_CROSSING_NORMAL &&
+          gtk_window_lookup_pointer_focus_implicit_grab (toplevel, device, NULL))
+        {
+          /* We have an implicit grab, wait for the corresponding
+           * GDK_CROSSING_UNGRAB.
+           */
+          break;
+        }
       G_GNUC_FALLTHROUGH;
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
