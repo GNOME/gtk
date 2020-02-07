@@ -1,3 +1,70 @@
+Overview of Changes in GTK 3.98.0
+=================================
+
+  While this release gets significantly closer to what we aim for in GTK 4,
+  there are still a few big items outstanding that are we are currently work
+  on.
+
+  - Animation API
+  - Row-recycling list and grid views
+  - Event controllers for keyboard shortcuts
+  - Movable popovers
+  - Revamped infrastructure
+
+  We will do further 3.9x snapshots as these land:
+
+  *****************
+
+* The DND refactoring has been completed. The GTK api for DND has been turned
+  into event controllers: GtkDragSource and GtkDropTarget. Support for file
+  transfers via file transfer portal has been added to both DND and the clipboard.
+
+* Child surfaces have been removed. GDK only supports toplevel and popup surfaces
+  now. The client-side window implementation has been removed too. On the GTK side,
+  the GtkNative interface has been introduced for widgets that have their own
+  surface.
+
+* Global positions and related apis such as gdk_surface_move are no longer available.
+  
+* A constraint-based layout manager has been added.
+
+* Many classes have been made explicitly non-subclassable, and the widget hierarchy has
+  been simplified, by making widgets derive directly from GtkWidget instead of a container.
+
+* Menu-related changes:
+ - GtkMenu, GtkMenuBar and related classes have been removed. They are being replaced
+   by popover-based variants. Popover menus can now do traditional, nested menus, and
+   model buttons show accelerators.
+ - Context menus are no longer created with ::populate-popup signals, but use menu
+   models and actions.
+ - There are apis to create actions at class_init time, like gtk_widget_class_install_action.
+
+* Text-related changed:
+ - Text cursor blinking has been made smooth.
+ - GtkTextView is caching rendernodes for the visible text range now, improving the
+   scrolling performance of text.
+ - Add a simple undo stack for text edits has been added.
+
+* The native Win32 filechooser backend supports choices.
+
+* GtkTreeView renders tree and grid lines with textures.
+
+* GtkGestureMultiPress has been renamed to GtkGestureClick.
+
+* X11-specific changes:
+ - XI2 is now mandatory
+ - The xim input method has been removed
+
+* The GL renderer is now sharing icon and glyph caches for all surfaces, and
+  has better support for blurring and shadow rendering.
+
+* Performance-related changes:
+ - GTK provides profiling information for Sysprof when launched with GTK_TRACE=1.
+ - Css computation has been optimized
+ - Css lookups are using a Bloom filter
+ - Icon loading IO has been moved to a thread
+
+
 Overview of Changes in GTK+ 3.96.0
 ==================================
 
@@ -360,7 +427,7 @@ Overview of Changes in GTK+ 3.92.1, 重庆市
 The bulk of the preparation for this release was done during
 and after the fantastic GNOME.Asia Summit 2017 in Chongqing, China.
 
-* Drop autotools support. Meson 0.42.1 is now required
+ * Drop autotools support. Meson 0.42.1 is now required
 
 * Implement most of CSS3 font-variant
 
