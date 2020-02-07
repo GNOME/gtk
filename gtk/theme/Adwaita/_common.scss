@@ -1203,6 +1203,8 @@ spinbutton {
       min-width: 32px;
       padding: 0;
       border-radius: 0;
+
+      > selection { @extend %selected_items; }
     }
 
     > button {
