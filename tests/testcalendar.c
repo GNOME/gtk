@@ -87,27 +87,6 @@ calendar_day_selected (GtkWidget    *widget,
 }
 
 static void
-calendar_day_selected_double_click (GtkWidget    *widget,
-                                         CalendarData *data)
-{
-  char *str;
-  guint day;
-  GDateTime *date;
-
-  str = calendar_date_to_string (data, "day-selected-double-click: %c");
-  calendar_set_signal_strings (str, data);
-  date = gtk_calendar_get_date (GTK_CALENDAR (data->calendar_widget));
-  day = g_date_time_get_day_of_month (date);
-
-  if (gtk_calendar_get_day_is_marked (GTK_CALENDAR (data->calendar_widget), day))
-    gtk_calendar_unmark_day (GTK_CALENDAR (data->calendar_widget), day);
-  else
-    gtk_calendar_mark_day (GTK_CALENDAR (data->calendar_widget), day);
-
-  g_date_time_unref (date);
-}
-
-static void
 calendar_prev_month (GtkWidget    *widget,
                           CalendarData *data)
 {
@@ -221,9 +200,6 @@ create_calendar(void)
 
   g_signal_connect (calendar, "day-selected", 
 		    G_CALLBACK (calendar_day_selected),
-		    &calendar_data);
-  g_signal_connect (calendar, "day-selected-double-click", 
-		    G_CALLBACK (calendar_day_selected_double_click),
 		    &calendar_data);
   g_signal_connect (calendar, "prev-month", 
 		    G_CALLBACK (calendar_prev_month),
