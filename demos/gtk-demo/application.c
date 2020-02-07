@@ -14,7 +14,7 @@ typedef struct {
   GtkWidget *message;
   GtkWidget *infobar;
   GtkWidget *status;
-  GtkWidget *menutool;
+  GtkWidget *menubutton;
   GMenuModel *toolmenu;
   GtkTextBuffer *buffer;
 
@@ -428,8 +428,8 @@ demo_application_window_init (DemoApplicationWindow *window)
 
   gtk_widget_init_template (GTK_WIDGET (window));
 
-  popover = gtk_popover_menu_new_from_model (window->menutool, window->toolmenu);
-  gtk_menu_tool_button_set_popover (GTK_MENU_TOOL_BUTTON (window->menutool), popover);
+  popover = gtk_popover_menu_new_from_model (window->menubutton, window->toolmenu);
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (window->menubutton), popover);
 
   g_action_map_add_action_entries (G_ACTION_MAP (window),
                                    win_entries, G_N_ELEMENTS (win_entries),
@@ -528,7 +528,7 @@ demo_application_window_class_init (DemoApplicationWindowClass *class)
   gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, infobar);
   gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, status);
   gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, buffer);
-  gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, menutool);
+  gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, menubutton);
   gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, toolmenu);
   gtk_widget_class_bind_template_callback (widget_class, clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, update_statusbar);

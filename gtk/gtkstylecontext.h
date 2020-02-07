@@ -241,24 +241,6 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_TOOLBAR "toolbar"
 
 /**
- * GTK_STYLE_CLASS_PRIMARY_TOOLBAR:
- *
- * A CSS class to match primary toolbars.
- *
- * Refer to individual widget documentation for used style classes.
- */
-#define GTK_STYLE_CLASS_PRIMARY_TOOLBAR "primary-toolbar"
-
-/**
- * GTK_STYLE_CLASS_INLINE_TOOLBAR:
- *
- * A CSS class to match inline toolbars.
- *
- * Refer to individual widget documentation for used style classes.
- */
-#define GTK_STYLE_CLASS_INLINE_TOOLBAR "inline-toolbar"
-
-/**
  * GTK_STYLE_CLASS_STATUSBAR:
  *
  * A CSS class to match statusbars.

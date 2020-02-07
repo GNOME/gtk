@@ -686,11 +686,6 @@ button {
     }
   }
 
-  //inline-toolbar buttons
-  .inline-toolbar & { @extend %linked; }
-
-  .primary-toolbar & { -gtk-icon-shadow: none; } // tango icons don't need shadows
-
   .linked:not(.vertical) > & { @extend %linked; }
 
   .linked.vertical > & { @extend %linked_vertical; }
@@ -709,52 +704,6 @@ button {
   &:dir(rtl) { background-position: left 3px; }
 }
 
-
-// all the following is for the +|- buttons on inline toolbars, that way
-// should really be deprecated...
-.inline-toolbar toolbutton > button { // redefining the button look is
-                                      // needed since those are flat...
-  @include button(normal);
-
-  &:hover { @include button(hover); }
-
-  &:active,
-  &:checked{ @include button(active); }
-
-  &:disabled {
-    @include button(insensitive);
-
-    &:active,
-    &:checked { @include button(insensitive-active); }
-  }
-
-  &:backdrop {
-    @include button(backdrop);
-
-    &:active,
-    &:checked { @include button(backdrop-active); }
-
-    &:disabled {
-      @include button(backdrop-insensitive);
-
-      &:active,
-      &:checked { @include button(backdrop-insensitive-active); }
-    }
-  }
-}
-
-// More inline toolbar buttons
-toolbar.inline-toolbar toolbutton {
-  &:dir(ltr) {
-    &:not(:first-child) > button.flat { @extend %linked_not_left; }
-    &:not(:last-child) > button.flat { @extend %linked_not_right; }
-  }
-
-  &:dir(rtl) {
-    &:not(:first-child) > button.flat { @extend %linked_not_right; }
-    &:not(:last-child) > button.flat { @extend %linked_not_left; }
-  }
-}
 
 %linked_not_left {
   border-top-left-radius: 0;
@@ -1155,13 +1104,7 @@ toolbar { //FIXME: why is all this being ignored?
     padding: 12px;
     & label { color: $osd_fg_color; }
   }
-  //searchbar & inline-toolbar
-  &.inline-toolbar {
-    @extend %inset-bar;
-    border-width: 0 1px 1px;
-    padding: 3px;
-    border-radius: 0  0 4px 4px;
-  }
+  //searchbar
   &.vertical {
     border-right: 1px solid $borders_color;
     &:dir(rtl) {

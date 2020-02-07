@@ -20,7 +20,6 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include "gtkimageaccessible.h"
-#include "gtktoolbarprivate.h"
 #include "gtkimageprivate.h"
 #include "gtkintl.h"
 
@@ -129,6 +128,50 @@ static const NameMapEntry name_map[] = {
   { "zoom-out", NC_("Stock label", "Zoom _Out") }
 };
 
+/* GTK+ internal methods */
+static gchar *
+elide_underscores (const gchar *original)
+{
+  gchar *q, *result;
+  const gchar *p, *end;
+  gsize len;
+  gboolean last_underscore;
+
+  if (!original)
+    return NULL;
+
+  len = strlen (original);
+  q = result = g_malloc (len + 1);
+  last_underscore = FALSE;
+
+  end = original + len;
+  for (p = original; p < end; p++)
+    {
+      if (!last_underscore && *p == '_')
+        last_underscore = TRUE;
+      else
+        {
+          last_underscore = FALSE;
+          if (original + 2 <= p && p + 1 <= end &&
+              p[-2] == '(' && p[-1] == '_' && p[0] != '_' && p[1] == ')')
+            {
+              q--;
+              *q = '\0';
+              p++;
+            }
+          else
+            *q++ = *p;
+        }
+    }
+
+  if (last_underscore)
+    *q++ = '_';
+
+  *q = '\0';
+
+  return result;
+}
+
 static gchar *
 name_from_icon_name (const gchar *icon_name)
 {
@@ -147,7 +190,7 @@ name_from_icon_name (const gchar *icon_name)
           label = g_dpgettext2 (GETTEXT_PACKAGE, "Stock label", name_map[i].label);
           g_free (name);
 
-          return _gtk_toolbar_elide_underscores (label);
+          return elide_underscores (label);
         }
     }
 
