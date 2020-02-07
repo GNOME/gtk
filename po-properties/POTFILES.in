@@ -192,7 +192,6 @@ gtk/gtkmediacontrols.c
 gtk/gtkmediafile.c
 gtk/gtkmediastream.c
 gtk/gtkmenubutton.c
-gtk/gtkmenutoolbutton.c
 gtk/gtkmenutrackeritem.c
 gtk/gtkmessagedialog.c
 gtk/gtkmodelbutton.c
@@ -236,7 +235,6 @@ gtk/gtkprintunixdialog.c
 gtk/gtkprogressbar.c
 gtk/gtkpropertylookuplistmodel.c
 gtk/gtkradiobutton.c
-gtk/gtkradiotoolbutton.c
 gtk/gtkrange.c
 gtk/gtkrecentmanager.c
 gtk/gtkrevealer.c
@@ -249,10 +247,8 @@ gtk/gtkscrolledwindow.c
 gtk/gtksearchbar.c
 gtk/gtksearchengine.c
 gtk/gtksearchentry.c
-gtk/gtksearchlistmodel.c
 gtk/gtkselection.c
 gtk/gtkseparator.c
-gtk/gtkseparatortoolitem.c
 gtk/gtksettings.c
 gtk/gtkshortcutlabel.c
 gtk/gtkshortcutsgroup.c
@@ -287,11 +283,6 @@ gtk/gtktextutil.c
 gtk/gtktextview.c
 gtk/gtktextviewchild.c
 gtk/gtktogglebutton.c
-gtk/gtktoggletoolbutton.c
-gtk/gtktoolbar.c
-gtk/gtktoolbutton.c
-gtk/gtktoolitem.c
-gtk/gtktoolshell.c
 gtk/gtktooltipwindow.c
 gtk/gtktrashmonitor.c
 gtk/gtktreednd.c
