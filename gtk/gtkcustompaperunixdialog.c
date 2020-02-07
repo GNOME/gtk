@@ -990,30 +990,6 @@ wrap_in_frame (const gchar *label,
   return frame;
 }
 
-static GtkWidget *
-toolbutton_new (GtkCustomPaperUnixDialog *dialog,
-                GIcon                    *icon,
-                gboolean                  sensitive,
-                gboolean                  show,
-                GCallback                 callback)
-{
-  GtkToolItem *item;
-  GtkWidget *image;
-
-  item = gtk_tool_button_new (NULL, NULL);
-  image = gtk_image_new_from_gicon (icon);
-  gtk_widget_show (image);
-  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (item), image);
-
-  gtk_widget_set_sensitive (GTK_WIDGET (item), sensitive);
-  g_signal_connect_swapped (item, "clicked", callback, dialog);
-
-  if (show)
-    gtk_widget_show (GTK_WIDGET (item));
-
-  return GTK_WIDGET (item);
-}
-
 static void
 populate_dialog (GtkCustomPaperUnixDialog *dialog)
 {
@@ -1027,7 +1003,6 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   GtkTreeIter iter;
   GtkTreeSelection *selection;
   GtkUnit user_units;
-  GIcon *icon;
   GtkStyleContext *context;
 
   content_area = gtk_dialog_get_content_area (cpu_dialog);
@@ -1072,25 +1047,22 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_container_add (GTK_CONTAINER (scrolled), treeview);
   gtk_widget_show (treeview);
 
-  toolbar = gtk_toolbar_new ();
+  toolbar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   context = gtk_widget_get_style_context (toolbar);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_INLINE_TOOLBAR);
+  gtk_style_context_add_class (context, "linked");
 
   gtk_container_add (GTK_CONTAINER (vbox), toolbar);
-  gtk_widget_show (toolbar);
 
-  icon = g_themed_icon_new_with_default_fallbacks ("list-add-symbolic");
-  button = toolbutton_new (dialog, icon, TRUE, TRUE, G_CALLBACK (add_custom_paper));
-  g_object_unref (icon);
+  button = gtk_button_new_from_icon_name ("list-add-symbolic");
+  g_signal_connect_swapped (button, "clicked", G_CALLBACK (add_custom_paper), dialog);
 
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 0);
+  gtk_container_add (GTK_CONTAINER (toolbar), button);
 
-  icon = g_themed_icon_new_with_default_fallbacks ("list-remove-symbolic");
-  button = toolbutton_new (dialog, icon, TRUE, TRUE, G_CALLBACK (remove_custom_paper));
-  g_object_unref (icon);
+  button = gtk_button_new_from_icon_name ("list-remove-symbolic");
+  g_signal_connect_swapped (button, "clicked", G_CALLBACK (remove_custom_paper), dialog);
 
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 1);
+  gtk_container_add (GTK_CONTAINER (toolbar), button);
 
   user_units = _gtk_print_get_default_user_units ();
 

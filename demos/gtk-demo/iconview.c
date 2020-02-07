@@ -26,7 +26,7 @@ enum
 
 static GdkPixbuf *file_pixbuf, *folder_pixbuf;
 gchar *parent;
-GtkToolItem *up_button;
+GtkWidget *up_button;
 
 /* Loads the images for the demo and returns whether the operation succeeded */
 static void
@@ -188,8 +188,8 @@ item_activated (GtkIconView *icon_view,
 }
 
 static void
-up_clicked (GtkToolItem *item,
-            gpointer     user_data)
+up_clicked (GtkButton *item,
+            gpointer   user_data)
 {
   GtkListStore *store;
   gchar *dir_name;
@@ -209,8 +209,8 @@ up_clicked (GtkToolItem *item,
 }
 
 static void
-home_clicked (GtkToolItem *item,
-              gpointer     user_data)
+home_clicked (GtkButton *item,
+              gpointer   user_data)
 {
   GtkListStore *store;
 
@@ -248,7 +248,7 @@ do_iconview (GtkWidget *do_widget)
       GtkListStore *store;
       GtkWidget *vbox;
       GtkWidget *tool_bar;
-      GtkToolItem *home_button;
+      GtkWidget *home_button;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_default_size (GTK_WINDOW (window), 650, 400);
@@ -265,23 +265,15 @@ do_iconview (GtkWidget *do_widget)
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
-      tool_bar = gtk_toolbar_new ();
+      tool_bar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (vbox), tool_bar);
 
-      up_button = gtk_tool_button_new (NULL, NULL);
-      gtk_tool_button_set_label (GTK_TOOL_BUTTON (up_button), _("_Up"));
-      gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON (up_button), TRUE);
-      gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (up_button), "go-up");
-      gtk_tool_item_set_is_important (up_button, TRUE);
+      up_button = gtk_button_new_with_mnemonic ("_Up");
       gtk_widget_set_sensitive (GTK_WIDGET (up_button), FALSE);
-      gtk_toolbar_insert (GTK_TOOLBAR (tool_bar), up_button, -1);
+      gtk_container_add (GTK_CONTAINER (tool_bar), up_button);
 
-      home_button = gtk_tool_button_new (NULL, NULL);
-      gtk_tool_button_set_label (GTK_TOOL_BUTTON (home_button), _("_Home"));
-      gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON (home_button), TRUE);
-      gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (home_button), "go-home");
-      gtk_tool_item_set_is_important (home_button, TRUE);
-      gtk_toolbar_insert (GTK_TOOLBAR (tool_bar), home_button, -1);
+      home_button = gtk_button_new_with_mnemonic ("_Home");
+      gtk_container_add (GTK_CONTAINER (tool_bar), home_button);
 
 
       sw = gtk_scrolled_window_new (NULL, NULL);

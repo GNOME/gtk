@@ -825,11 +825,6 @@ button {
     > box > box > label { font-weight: bold; }
   }
 
-  // inline-toolbar buttons
-  .inline-toolbar & { @extend %linked; }
-
-  .primary-toolbar & { -gtk-icon-shadow: none; } // tango icons don't need shadows
-
   .linked:not(.vertical) > & { @extend %linked; }
 
   .linked.vertical > & { @extend %linked_vertical; }
@@ -866,52 +861,6 @@ button {
   }
 }
 
-
-// all the following is for the +|- buttons on inline toolbars, that way
-// should really be deprecated...
-.inline-toolbar toolbutton > button { // redefining the button look is
-                                      // needed since those are flat...
-  @include button(normal);
-
-  &:hover { @include button(hover); }
-
-  &:active,
-  &:checked{ @include button(active); }
-
-  &:disabled {
-    @include button(insensitive);
-
-    &:active,
-    &:checked { @include button(insensitive-active); }
-  }
-
-  &:backdrop {
-    @include button(backdrop);
-
-    &:active,
-    &:checked { @include button(backdrop-active); }
-
-    &:disabled {
-      @include button(backdrop-insensitive);
-
-      &:active,
-      &:checked { @include button(backdrop-insensitive-active); }
-    }
-  }
-}
-
-// More inline toolbar buttons
-toolbar.inline-toolbar toolbutton {
-  &:dir(ltr) {
-    &:not(:first-child) > button.flat { @extend %linked_not_left; }
-    &:not(:last-child) > button.flat { @extend %linked_not_right; }
-  }
-
-  &:dir(rtl) {
-    &:not(:first-child) > button.flat { @extend %linked_not_right; }
-    &:not(:last-child) > button.flat { @extend %linked_not_left; }
-  }
-}
 
 %linked_not_left {
   border-top-left-radius: 0;
@@ -1384,29 +1333,9 @@ toolbar {
   // toolbar separators
   &.horizontal separator { margin: 0 7px 1px 6px; }
   &.vertical separator { margin: 6px 1px 7px 0; }
-
-  &:not(.inline-toolbar):not(.osd) {
-    // workaround: add margins to the children of tool items to simulate
-    // spacing, ignore the overflow button (.toggle) and the overflow menu
-    // (.popup)
-    > *:not(.toggle):not(.popup) > * {
-      margin-right: 1px;
-      margin-bottom: 1px;
-    }
-  }
 }
 
-//searchbar, location-bar & inline-toolbar
-.inline-toolbar {
-  @extend %toolbar;
-
-  @extend %darkbar;
-
-  padding: 3px;
-  border-width: 0 1px 1px;
-  border-radius: 0  0 5px 5px;
-}
-
+//searchbar & location-bar
 searchbar {
   padding: 0px;
   >revealer>box {

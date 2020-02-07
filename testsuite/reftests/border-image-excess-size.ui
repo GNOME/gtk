@@ -3,11 +3,10 @@
   <object class="GtkWindow" id="window1">
     <property name="type">popup</property>
     <child>
-      <object class="GtkToolbar" id="toolbar1">
+      <object class="GtkBox">
         <property name="width_request">10</property>
         <property name="height_request">10</property>
         <property name="can_focus">1</property>
-        <property name="show_arrow">0</property>
       </object>
     </child>
   </object>
