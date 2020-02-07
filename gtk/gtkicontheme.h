@@ -44,13 +44,16 @@ typedef struct _GtkIconTheme      GtkIconTheme;
  *   when symbolic icon names are given
  * @GTK_ICON_LOOKUP_FORCE_SYMBOLIC: Try to always load symbolic icons, even
  *   when regular icon names are given
+ * @GTK_ICON_LOOKUP_LOAD_IN_THREAD: Starts loading the texture in the background
+ *   so it is ready when later needed.
  *
  * Used to specify options for gtk_icon_theme_lookup_icon()
  */
 typedef enum
 {
   GTK_ICON_LOOKUP_FORCE_REGULAR    = 1 << 0,
-  GTK_ICON_LOOKUP_FORCE_SYMBOLIC   = 1 << 1
+  GTK_ICON_LOOKUP_FORCE_SYMBOLIC   = 1 << 1,
+  GTK_ICON_LOOKUP_LOAD_IN_THREAD   = 1 << 2,
 } GtkIconLookupFlags;
 
 /**

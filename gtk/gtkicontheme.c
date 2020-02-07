@@ -2185,6 +2185,20 @@ choose_icon (GtkIconTheme      *self,
   return icon;
 }
 
+static void
+load_icon_thread (GTask        *task,
+                  gpointer      source_object,
+                  gpointer      task_data,
+                  GCancellable *cancellable)
+{
+  GtkIconPaintable *self = GTK_ICON_PAINTABLE (source_object);
+
+  g_mutex_lock (&self->texture_lock);
+  icon_ensure_texture__locked (self, TRUE);
+  g_mutex_unlock (&self->texture_lock);
+  g_task_return_pointer (task, NULL, NULL);
+}
+
 /**
  * gtk_icon_theme_lookup_icon:
  * @self: a #GtkIconTheme
@@ -2257,6 +2271,26 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
     }
 
   gtk_icon_theme_unlock (self);
+
+  if (flags & GTK_ICON_LOOKUP_LOAD_IN_THREAD)
+    {
+      gboolean has_texture = FALSE;
+
+      /* If we fail to get the lock it is because some other thread is
+         currently loading the icon, so we need to do nothing */
+      if (g_mutex_trylock (&icon->texture_lock))
+        {
+          has_texture = icon->texture != NULL;
+          g_mutex_unlock (&icon->texture_lock);
+
+          if (!has_texture)
+            {
+              GTask *task = g_task_new (icon, NULL, NULL, NULL);
+              g_task_run_in_thread (task, load_icon_thread);
+              g_object_unref (task);
+            }
+        }
+    }
 
   return icon;
 }
