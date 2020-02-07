@@ -3622,7 +3622,7 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
     }
   else
     {
-      g_debug ("Unhandled GIcon type %s", g_type_name_from_instance ((GTypeInstance *)gicon));
+      g_debug ("Unhandled GIcon type %s", G_OBJECT_TYPE_NAME (gicon));
       icon = icon_paintable_new (size, scale);
       icon->icon_name = g_strdup ("image-missing");
       icon->filename = g_strdup (IMAGE_MISSING_RESOURCE_PATH);
