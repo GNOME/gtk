@@ -825,7 +825,6 @@ static void
 gtk_combo_box_init (GtkComboBox *combo_box)
 {
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
-  GtkStyleContext *context;
   GtkEventController *controller;
 
   priv->active = -1;
@@ -848,9 +847,8 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   g_type_ensure (GTK_TYPE_TREE_POPOVER);
   gtk_widget_init_template (GTK_WIDGET (combo_box));
 
-  context = gtk_widget_get_style_context (priv->button);
-  gtk_style_context_remove_class (context, "toggle");
-  gtk_style_context_add_class (context, "combo");
+  gtk_widget_remove_css_class (priv->button, "toggle");
+  gtk_widget_add_css_class (priv->button, "combo");
 
   gtk_tree_popover_set_row_separator_func (GTK_TREE_POPOVER (priv->popup_widget),
                                            (GtkTreeViewRowSeparatorFunc)gtk_combo_box_row_separator_func,
@@ -1029,13 +1027,11 @@ gtk_combo_box_create_child (GtkComboBox *combo_box)
   if (priv->has_entry)
     {
       GtkWidget *entry;
-      GtkStyleContext *context;
 
       entry = gtk_entry_new ();
       gtk_container_add (GTK_CONTAINER (combo_box), entry);
 
-      context = gtk_widget_get_style_context (GTK_WIDGET (entry));
-      gtk_style_context_add_class (context, "combo");
+      gtk_widget_add_css_class (GTK_WIDGET (entry), "combo");
 
       g_signal_connect (combo_box, "changed",
                         G_CALLBACK (gtk_combo_box_entry_active_changed), NULL);

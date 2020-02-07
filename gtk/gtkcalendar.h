@@ -45,60 +45,14 @@ G_BEGIN_DECLS
 
 typedef struct _GtkCalendar	       GtkCalendar;
 
-/**
- * GtkCalendarDisplayOptions:
- * @GTK_CALENDAR_SHOW_HEADING: Specifies that the month and year should be displayed.
- * @GTK_CALENDAR_SHOW_DAY_NAMES: Specifies that three letter day descriptions should be present.
- * @GTK_CALENDAR_NO_MONTH_CHANGE: Prevents the user from switching months with the calendar.
- * @GTK_CALENDAR_SHOW_WEEK_NUMBERS: Displays each week numbers of the current year, down the
- * left side of the calendar.
- * @GTK_CALENDAR_SHOW_DETAILS: Just show an indicator, not the full details
- * text when details are provided. See gtk_calendar_set_detail_func().
- *
- * These options can be used to influence the display and behaviour of a #GtkCalendar.
- */
-typedef enum
-{
-  GTK_CALENDAR_SHOW_HEADING		= 1 << 0,
-  GTK_CALENDAR_SHOW_DAY_NAMES		= 1 << 1,
-  GTK_CALENDAR_NO_MONTH_CHANGE		= 1 << 2,
-  GTK_CALENDAR_SHOW_WEEK_NUMBERS	= 1 << 3,
-  GTK_CALENDAR_SHOW_DETAILS		= 1 << 5
-} GtkCalendarDisplayOptions;
-
-/**
- * GtkCalendarDetailFunc:
- * @calendar: a #GtkCalendar.
- * @year: the year for which details are needed.
- * @month: the month for which details are needed.
- * @day: the day of @month for which details are needed.
- * @user_data: the data passed with gtk_calendar_set_detail_func().
- *
- * This kind of functions provide Pango markup with detail information for the
- * specified day. Examples for such details are holidays or appointments. The
- * function returns %NULL when no information is available.
- *
- * Returns: (nullable) (transfer full): Newly allocated string with Pango markup
- *     with details for the specified day or %NULL.
- */
-typedef gchar* (*GtkCalendarDetailFunc) (GtkCalendar *calendar,
-                                         guint        year,
-                                         guint        month,
-                                         guint        day,
-                                         gpointer     user_data);
-
 GDK_AVAILABLE_IN_ALL
 GType	   gtk_calendar_get_type	(void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_calendar_new		(void);
 
 GDK_AVAILABLE_IN_ALL
-void       gtk_calendar_select_month	(GtkCalendar *calendar,
-					 guint	      month,
-					 guint	      year);
-GDK_AVAILABLE_IN_ALL
-void	   gtk_calendar_select_day	(GtkCalendar *calendar,
-					 guint	      day);
+void          gtk_calendar_select_day                  (GtkCalendar *self,
+                                                        GDateTime   *date);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_calendar_mark_day	(GtkCalendar *calendar,
@@ -109,36 +63,24 @@ void       gtk_calendar_unmark_day	(GtkCalendar *calendar,
 GDK_AVAILABLE_IN_ALL
 void	   gtk_calendar_clear_marks	(GtkCalendar *calendar);
 
+GDK_AVAILABLE_IN_ALL
+void          gtk_calendar_set_show_week_numbers       (GtkCalendar *self,
+                                                        gboolean     value);
+GDK_AVAILABLE_IN_ALL
+gboolean      gtk_calendar_get_show_week_numbers       (GtkCalendar *self);
+GDK_AVAILABLE_IN_ALL
+void          gtk_calendar_set_show_heading            (GtkCalendar *self,
+                                                        gboolean     value);
+GDK_AVAILABLE_IN_ALL
+gboolean      gtk_calendar_get_show_heading            (GtkCalendar *self);
+GDK_AVAILABLE_IN_ALL
+void          gtk_calendar_set_show_day_names          (GtkCalendar *self,
+                                                        gboolean     value);
+GDK_AVAILABLE_IN_ALL
+gboolean      gtk_calendar_get_show_day_names          (GtkCalendar *self);
 
 GDK_AVAILABLE_IN_ALL
-void	   gtk_calendar_set_display_options (GtkCalendar    	      *calendar,
-					     GtkCalendarDisplayOptions flags);
-GDK_AVAILABLE_IN_ALL
-GtkCalendarDisplayOptions
-           gtk_calendar_get_display_options (GtkCalendar   	      *calendar);
-GDK_AVAILABLE_IN_ALL
-void	   gtk_calendar_get_date	(GtkCalendar *calendar, 
-					 guint	     *year,
-					 guint	     *month,
-					 guint	     *day);
-
-GDK_AVAILABLE_IN_ALL
-void       gtk_calendar_set_detail_func (GtkCalendar           *calendar,
-                                         GtkCalendarDetailFunc  func,
-                                         gpointer               data,
-                                         GDestroyNotify         destroy);
-
-GDK_AVAILABLE_IN_ALL
-void       gtk_calendar_set_detail_width_chars (GtkCalendar    *calendar,
-                                                gint            chars);
-GDK_AVAILABLE_IN_ALL
-void       gtk_calendar_set_detail_height_rows (GtkCalendar    *calendar,
-                                                gint            rows);
-
-GDK_AVAILABLE_IN_ALL
-gint       gtk_calendar_get_detail_width_chars (GtkCalendar    *calendar);
-GDK_AVAILABLE_IN_ALL
-gint       gtk_calendar_get_detail_height_rows (GtkCalendar    *calendar);
+GDateTime *   gtk_calendar_get_date                    (GtkCalendar *self);
 
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_calendar_get_day_is_marked      (GtkCalendar    *calendar,

@@ -110,23 +110,21 @@ gtk_orientable_get_orientation (GtkOrientable *orientable)
 void
 _gtk_orientable_set_style_classes (GtkOrientable *orientable)
 {
-  GtkStyleContext *context;
   GtkOrientation orientation;
 
   g_return_if_fail (GTK_IS_ORIENTABLE (orientable));
   g_return_if_fail (GTK_IS_WIDGET (orientable));
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (orientable));
   orientation = gtk_orientable_get_orientation (orientable);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_HORIZONTAL);
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_VERTICAL);
+      gtk_widget_add_css_class (GTK_WIDGET (orientable), GTK_STYLE_CLASS_HORIZONTAL);
+      gtk_widget_remove_css_class (GTK_WIDGET (orientable), GTK_STYLE_CLASS_VERTICAL);
     }
   else
     {
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_VERTICAL);
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_HORIZONTAL);
+      gtk_widget_add_css_class (GTK_WIDGET (orientable), GTK_STYLE_CLASS_VERTICAL);
+      gtk_widget_remove_css_class (GTK_WIDGET (orientable), GTK_STYLE_CLASS_HORIZONTAL);
     }
 }

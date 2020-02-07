@@ -266,7 +266,6 @@ static void
 update_fraction_classes (GtkProgressBar *pbar)
 {
   GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
-  GtkStyleContext *context;
   gboolean empty = FALSE;
   gboolean full = FALSE;
 
@@ -281,25 +280,22 @@ update_fraction_classes (GtkProgressBar *pbar)
         full = TRUE;
     }
 
-  context = gtk_widget_get_style_context (priv->trough_widget);
-
   if (empty)
-    gtk_style_context_add_class (context, "empty");
+    gtk_widget_add_css_class (priv->trough_widget, "empty");
   else
-    gtk_style_context_remove_class (context, "empty");
+    gtk_widget_remove_css_class (priv->trough_widget, "empty");
 
   if (full)
-    gtk_style_context_add_class (context, "full");
+    gtk_widget_add_css_class (priv->trough_widget, "full");
   else
-    gtk_style_context_remove_class (context, "full");
+    gtk_widget_remove_css_class (priv->trough_widget, "full");
 }
 
 static void
 update_node_classes (GtkProgressBar *pbar)
 {
   GtkProgressBarPrivate *priv = gtk_progress_bar_get_instance_private (pbar);
-  GtkStyleContext *context;
-  gboolean left = FALSE;
+    gboolean left = FALSE;
   gboolean right = FALSE;
   gboolean top = FALSE;
   gboolean bottom = FALSE;
@@ -344,27 +340,25 @@ update_node_classes (GtkProgressBar *pbar)
         }
     }
 
-  context = gtk_widget_get_style_context (priv->progress_widget);
-
   if (left)
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
+    gtk_widget_add_css_class (priv->progress_widget, GTK_STYLE_CLASS_LEFT);
   else
-    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_LEFT);
+    gtk_widget_remove_css_class (priv->progress_widget, GTK_STYLE_CLASS_LEFT);
 
   if (right)
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+    gtk_widget_add_css_class (priv->progress_widget, GTK_STYLE_CLASS_RIGHT);
   else
-    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_RIGHT);
+    gtk_widget_remove_css_class (priv->progress_widget, GTK_STYLE_CLASS_RIGHT);
 
   if (top)
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
+    gtk_widget_add_css_class (priv->progress_widget, GTK_STYLE_CLASS_TOP);
   else
-    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TOP);
+    gtk_widget_remove_css_class (priv->progress_widget, GTK_STYLE_CLASS_TOP);
 
   if (bottom)
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
+    gtk_widget_add_css_class (priv->progress_widget, GTK_STYLE_CLASS_BOTTOM);
   else
-    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BOTTOM);
+    gtk_widget_remove_css_class (priv->progress_widget, GTK_STYLE_CLASS_BOTTOM);
 
   update_fraction_classes (pbar);
 }
@@ -667,7 +661,7 @@ gtk_progress_bar_act_mode_enter (GtkProgressBar *pbar)
   GtkWidget *widget = GTK_WIDGET (pbar);
   gboolean inverted;
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (priv->progress_widget), GTK_STYLE_CLASS_PULSE);
+  gtk_widget_add_css_class (priv->progress_widget, GTK_STYLE_CLASS_PULSE);
 
   inverted = priv->inverted;
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
@@ -707,8 +701,7 @@ gtk_progress_bar_act_mode_leave (GtkProgressBar *pbar)
     gtk_widget_remove_tick_callback (GTK_WIDGET (pbar), priv->tick_id);
   priv->tick_id = 0;
 
-  gtk_style_context_remove_class (gtk_widget_get_style_context (priv->progress_widget),
-                                  GTK_STYLE_CLASS_PULSE);
+  gtk_widget_remove_css_class (priv->progress_widget, GTK_STYLE_CLASS_PULSE);
   update_node_classes (pbar);
 }
 
@@ -833,8 +826,6 @@ gtk_progress_bar_set_text (GtkProgressBar *pbar,
   if (priv->label)
     gtk_label_set_label (GTK_LABEL (priv->label), text);
 
-  gtk_widget_queue_resize (GTK_WIDGET (pbar));
-
   g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_TEXT]);
 }
 
@@ -884,8 +875,6 @@ gtk_progress_bar_set_show_text (GtkProgressBar *pbar,
     {
       g_clear_pointer (&priv->label, gtk_widget_unparent);
     }
-
-  gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
   g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_SHOW_TEXT]);
 }
@@ -970,7 +959,6 @@ gtk_progress_bar_set_orientation (GtkProgressBar *pbar,
 
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (pbar));
   update_node_classes (pbar);
-  gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
   layout = GTK_BOX_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (pbar)));
   gtk_orientable_set_orientation (GTK_ORIENTABLE (layout), GTK_ORIENTATION_VERTICAL);
@@ -1000,7 +988,6 @@ gtk_progress_bar_set_inverted (GtkProgressBar *pbar,
   priv->inverted = inverted;
 
   update_node_classes (pbar);
-  gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
   g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_INVERTED]);
 }
@@ -1107,7 +1094,6 @@ gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
         gtk_label_set_ellipsize (GTK_LABEL (priv->label), mode);
 
       g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_ELLIPSIZE]);
-      gtk_widget_queue_resize (GTK_WIDGET (pbar));
     }
 }
 

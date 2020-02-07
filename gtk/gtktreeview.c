@@ -1781,8 +1781,7 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   gtk_tree_view_do_set_vadjustment (tree_view, NULL);
   gtk_tree_view_do_set_hadjustment (tree_view, NULL);
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (tree_view)),
-                               GTK_STYLE_CLASS_VIEW);
+  gtk_widget_add_css_class (GTK_WIDGET (tree_view), GTK_STYLE_CLASS_VIEW);
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (tree_view));
   tree_view->header_node = gtk_css_node_new ();

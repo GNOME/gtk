@@ -398,12 +398,11 @@ update_suggested_action (GtkDialog *dialog)
       for (l = children; l != NULL; l = l->next)
         {
           GtkWidget *child = l->data;
-	  GtkStyleContext *context = gtk_widget_get_style_context (child);
 
-          if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_DEFAULT))
-            gtk_style_context_add_class (context, GTK_STYLE_CLASS_SUGGESTED_ACTION);
+          if (gtk_widget_has_css_class (child, GTK_STYLE_CLASS_DEFAULT))
+            gtk_widget_add_css_class (child, GTK_STYLE_CLASS_SUGGESTED_ACTION);
           else
-            gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SUGGESTED_ACTION);
+            gtk_widget_remove_css_class (child, GTK_STYLE_CLASS_SUGGESTED_ACTION);
         }
       g_list_free (children);
     }

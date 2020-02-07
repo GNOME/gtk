@@ -393,10 +393,9 @@ gtk_check_button_init (GtkCheckButton *check_button)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (check_button);
 
-
   gtk_widget_set_receives_default (GTK_WIDGET (check_button), FALSE);
 
-  gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (check_button)), "toggle");
+  gtk_widget_remove_css_class (GTK_WIDGET (check_button), "toggle");
 
   priv->draw_indicator = TRUE;
   draw_indicator_changed (check_button);

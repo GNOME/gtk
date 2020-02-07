@@ -555,7 +555,6 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
 static void
 gtk_font_button_init (GtkFontButton *font_button)
 {
-  GtkStyleContext *context;
   GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (font_button);
   GtkWidget *box;
 
@@ -592,8 +591,7 @@ gtk_font_button_init (GtkFontButton *font_button)
 
   gtk_font_button_take_font_desc (font_button, NULL);
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (priv->button));
-  gtk_style_context_add_class (context, "font");
+  gtk_widget_add_css_class (priv->button, "font");
 }
 
 static void

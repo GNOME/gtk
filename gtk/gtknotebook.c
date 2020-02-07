@@ -1331,8 +1331,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   priv->header_widget = g_object_new (GTK_TYPE_BOX,
                                       "css-name", "header",
                                       NULL);
-  gtk_style_context_add_class (gtk_widget_get_style_context (priv->header_widget),
-                               GTK_STYLE_CLASS_TOP);
+  gtk_widget_add_css_class (priv->header_widget, GTK_STYLE_CLASS_TOP);
   gtk_widget_hide (priv->header_widget);
   gtk_widget_set_parent (priv->header_widget, GTK_WIDGET (notebook));
 
@@ -1368,8 +1367,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   g_signal_connect (controller, "motion", G_CALLBACK (gtk_notebook_motion), notebook);
   gtk_widget_add_controller (GTK_WIDGET (notebook), controller);
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (notebook)),
-                               GTK_STYLE_CLASS_FRAME);
+  gtk_widget_add_css_class (GTK_WIDGET (notebook), GTK_STYLE_CLASS_FRAME);
 
   layout = gtk_widget_get_layout_manager (GTK_WIDGET (notebook));
   gtk_orientable_set_orientation (GTK_ORIENTABLE (layout), GTK_ORIENTATION_VERTICAL);
@@ -2637,7 +2635,7 @@ static void
 tab_drag_begin (GtkNotebook     *notebook,
                 GtkNotebookPage *page)
 {
-  gtk_style_context_add_class (gtk_widget_get_style_context (page->tab_widget), GTK_STYLE_CLASS_DND);
+  gtk_widget_add_css_class (page->tab_widget, GTK_STYLE_CLASS_DND);
 }
 
 /* This function undoes the reparenting that happens both when drag_surface
@@ -2655,7 +2653,7 @@ tab_drag_end (GtkNotebook     *notebook,
       g_object_unref (page->tab_label);
     }
 
-  gtk_style_context_remove_class (gtk_widget_get_style_context (page->tab_widget), GTK_STYLE_CLASS_DND);
+  gtk_widget_remove_css_class (page->tab_widget, GTK_STYLE_CLASS_DND);
 }
 
 static void
@@ -3042,7 +3040,6 @@ update_arrow_nodes (GtkNotebook *notebook)
           if (priv->arrow_widget[i] == NULL)
             {
               GtkWidget *next_widget;
-              GtkStyleContext *context;
 
               switch (i)
                 {
@@ -3087,16 +3084,14 @@ update_arrow_nodes (GtkNotebook *notebook)
                                                     "css-name", "arrow",
                                                     NULL);
 
-              context = gtk_widget_get_style_context (priv->arrow_widget[i]);
-
               if (i == ARROW_LEFT_BEFORE || i == ARROW_LEFT_AFTER)
                 {
-                  gtk_style_context_add_class (context, "down");
+                  gtk_widget_add_css_class (priv->arrow_widget[i], "down");
                   gtk_widget_insert_after (priv->arrow_widget[i], priv->tabs_widget, next_widget);
                 }
               else
                 {
-                  gtk_style_context_add_class (context, "up");
+                  gtk_widget_add_css_class (priv->arrow_widget[i], "up");
                   gtk_widget_insert_before (priv->arrow_widget[i], priv->tabs_widget, next_widget);
                 }
            }
@@ -6142,13 +6137,12 @@ gtk_notebook_set_show_border (GtkNotebook *notebook,
 
   if (priv->show_border != show_border)
     {
-      GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (notebook));
       priv->show_border = show_border;
 
       if (show_border)
-        gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
+        gtk_widget_add_css_class (GTK_WIDGET (notebook), GTK_STYLE_CLASS_FRAME);
       else
-        gtk_style_context_remove_class (context, GTK_STYLE_CLASS_FRAME);
+        gtk_widget_remove_css_class (GTK_WIDGET (notebook), GTK_STYLE_CLASS_FRAME);
 
       g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_SHOW_BORDER]);
     }
@@ -6273,11 +6267,9 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
   for (i = 0; i < G_N_ELEMENTS (tab_pos_names); i++)
     {
       if (tab_pos == i)
-        gtk_style_context_add_class (gtk_widget_get_style_context (priv->header_widget),
-                                     tab_pos_names[i]);
+        gtk_widget_add_css_class (priv->header_widget, tab_pos_names[i]);
       else
-        gtk_style_context_remove_class (gtk_widget_get_style_context (priv->header_widget),
-                                        tab_pos_names[i]);
+        gtk_widget_remove_css_class (priv->header_widget, tab_pos_names[i]);
     }
 
   layout = gtk_widget_get_layout_manager (GTK_WIDGET (notebook));
@@ -7037,11 +7029,10 @@ gtk_notebook_set_tab_reorderable (GtkNotebook *notebook,
     {
       page->reorderable = reorderable;
       if (reorderable)
-        gtk_style_context_add_class (gtk_widget_get_style_context (page->tab_widget),
-                                     "reorderable-page");
+        gtk_widget_add_css_class (page->tab_widget, "reorderable-page");
       else
-        gtk_style_context_remove_class (gtk_widget_get_style_context (page->tab_widget),
-                                        "reorderable-page");
+        gtk_widget_remove_css_class (page->tab_widget, "reorderable-page");
+
       g_object_notify (G_OBJECT (page), "reorderable");
     }
 }

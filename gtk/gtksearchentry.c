@@ -540,7 +540,7 @@ gtk_search_entry_init (GtkSearchEntry *entry)
   g_signal_connect (press, "released", G_CALLBACK (gtk_search_entry_icon_release), entry);
   gtk_widget_add_controller (priv->icon, GTK_EVENT_CONTROLLER (press));
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (entry)), I_("search"));
+  gtk_widget_add_css_class (GTK_WIDGET (entry), I_("search"));
 }
 
 /**

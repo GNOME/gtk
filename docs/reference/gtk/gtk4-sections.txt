@@ -616,7 +616,6 @@ gtk_button_get_type
 <FILE>gtkcalendar</FILE>
 <TITLE>GtkCalendar</TITLE>
 GtkCalendar
-GtkCalendarDetailFunc
 GtkCalendarDisplayOptions
 
 <SUBSECTION>
@@ -632,13 +631,6 @@ gtk_calendar_clear_marks
 gtk_calendar_get_display_options
 gtk_calendar_set_display_options
 gtk_calendar_get_date
-
-<SUBSECTION>
-gtk_calendar_set_detail_func
-gtk_calendar_get_detail_width_chars
-gtk_calendar_set_detail_width_chars
-gtk_calendar_get_detail_height_rows
-gtk_calendar_set_detail_height_rows
 
 <SUBSECTION Standard>
 GTK_CALENDAR
@@ -4409,9 +4401,9 @@ gtk_widget_insert_after
 gtk_widget_set_layout_manager
 gtk_widget_get_layout_manager
 gtk_widget_should_layout
-gtk_widget_add_style_class
-gtk_widget_remove_style_class
-gtk_widget_has_style_class
+gtk_widget_add_css_class
+gtk_widget_remove_css_class
+gtk_widget_has_css_class
 
 <SUBSECTION>
 gtk_widget_get_style_context

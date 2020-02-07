@@ -258,7 +258,7 @@ dim_label (const gchar *text)
   GtkWidget *label;
 
   label = gtk_label_new (text);
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "dim-label");
+  gtk_widget_add_css_class (label, "dim-label");
 
   return label;
 }
@@ -284,7 +284,7 @@ display_shortcut (GtkWidget       *self,
       if (i < n_mods)
         gtk_widget_set_size_request (disp, 50, -1);
 
-      gtk_style_context_add_class (gtk_widget_get_style_context (disp), "keycap");
+      gtk_widget_add_css_class (disp, "keycap");
       gtk_label_set_use_markup (GTK_LABEL (disp), TRUE);
 
       gtk_widget_set_parent (disp, self);

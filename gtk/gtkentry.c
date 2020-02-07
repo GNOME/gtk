@@ -1341,7 +1341,6 @@ update_icon_style (GtkWidget            *widget,
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   EntryIconInfo *icon_info = priv->icons[icon_pos];
   const gchar *sides[2] = { GTK_STYLE_CLASS_LEFT, GTK_STYLE_CLASS_RIGHT };
-  GtkStyleContext *context;
 
   if (icon_info == NULL)
     return;
@@ -1349,9 +1348,8 @@ update_icon_style (GtkWidget            *widget,
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     icon_pos = 1 - icon_pos;
 
-  context = gtk_widget_get_style_context (icon_info->widget);
-  gtk_style_context_add_class (context, sides[icon_pos]);
-  gtk_style_context_remove_class (context, sides[1 - icon_pos]);
+  gtk_widget_add_css_class (icon_info->widget, sides[icon_pos]);
+  gtk_widget_remove_css_class (icon_info->widget, sides[1 - icon_pos]);
 }
 
 static void
@@ -2200,15 +2198,13 @@ gtk_entry_get_activates_default (GtkEntry *entry)
  * gtk_entry_set_has_frame:
  * @entry: a #GtkEntry
  * @setting: new value
- * 
+ *
  * Sets whether the entry has a beveled frame around it.
  **/
 void
 gtk_entry_set_has_frame (GtkEntry *entry,
                          gboolean  setting)
 {
-  GtkStyleContext *context;
-
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   setting = (setting != FALSE);
@@ -2216,11 +2212,10 @@ gtk_entry_set_has_frame (GtkEntry *entry,
   if (setting == gtk_entry_get_has_frame (entry))
     return;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (entry));
   if (setting)
-    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_FLAT);
+    gtk_widget_remove_css_class (GTK_WIDGET (entry), GTK_STYLE_CLASS_FLAT);
   else
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_FLAT);
+    gtk_widget_add_css_class (GTK_WIDGET (entry), GTK_STYLE_CLASS_FLAT);
 
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_HAS_FRAME]);
 }
@@ -2236,13 +2231,9 @@ gtk_entry_set_has_frame (GtkEntry *entry,
 gboolean
 gtk_entry_get_has_frame (GtkEntry *entry)
 {
-  GtkStyleContext *context;
-
   g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (entry));
-
-  return !gtk_style_context_has_class (context, GTK_STYLE_CLASS_FLAT);
+  return !gtk_widget_has_css_class (GTK_WIDGET (entry), GTK_STYLE_CLASS_FRAME);
 }
 
 /**

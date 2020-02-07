@@ -201,7 +201,6 @@ static void
 gtk_popover_menu_init (GtkPopoverMenu *popover)
 {
   GtkWidget *stack;
-  GtkStyleContext *style_context;
   GtkEventController *controller;
 
   stack = gtk_stack_new ();
@@ -212,8 +211,7 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
   g_signal_connect (stack, "notify::visible-child-name",
                     G_CALLBACK (visible_submenu_changed), popover);
 
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (popover));
-  gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_MENU);
+  gtk_widget_add_css_class (GTK_WIDGET (popover), "menu");
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "focus-out", G_CALLBACK (focus_out), popover);
@@ -222,7 +220,6 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
   controller = gtk_event_controller_motion_new ();
   g_signal_connect (controller, "leave", G_CALLBACK (leave_cb), popover);
   gtk_widget_add_controller (GTK_WIDGET (popover), controller);
-
 }
 
 static void

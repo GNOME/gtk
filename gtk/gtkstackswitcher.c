@@ -113,14 +113,12 @@ static void
 gtk_stack_switcher_init (GtkStackSwitcher *switcher)
 {
   GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (switcher);
-  GtkStyleContext *context;
   GdkContentFormats *formats;
   GtkDropTarget *dest;
 
   priv->buttons = g_hash_table_new_full (g_direct_hash, g_direct_equal, g_object_unref, NULL);
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (switcher));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_LINKED);
+  gtk_widget_add_css_class (GTK_WIDGET (switcher), "linked");
 
   formats = gdk_content_formats_new (NULL, 0);
   dest = gtk_drop_target_new (formats, 0);
@@ -159,7 +157,6 @@ rebuild_child (GtkWidget   *self,
                const gchar *icon_name,
                const gchar *title)
 {
-  GtkStyleContext *context;
   GtkWidget *button_child;
 
   button_child = gtk_bin_get_child (GTK_BIN (self));
@@ -167,7 +164,6 @@ rebuild_child (GtkWidget   *self,
     gtk_widget_destroy (button_child);
 
   button_child = NULL;
-  context = gtk_widget_get_style_context (GTK_WIDGET (self));
 
   if (icon_name != NULL)
     {
@@ -175,8 +171,8 @@ rebuild_child (GtkWidget   *self,
       if (title != NULL)
         gtk_widget_set_tooltip_text (GTK_WIDGET (self), title);
 
-      gtk_style_context_remove_class (context, "text-button");
-      gtk_style_context_add_class (context, "image-button");
+      gtk_widget_remove_css_class (self, "text-button");
+      gtk_widget_add_css_class (self, "image-button");
     }
   else if (title != NULL)
     {
@@ -184,8 +180,8 @@ rebuild_child (GtkWidget   *self,
 
       gtk_widget_set_tooltip_text (GTK_WIDGET (self), NULL);
 
-      gtk_style_context_remove_class (context, "image-button");
-      gtk_style_context_add_class (context, "text-button");
+      gtk_widget_remove_css_class (self, "image-button");
+      gtk_widget_add_css_class (self, "text-button");
     }
 
   if (button_child)
@@ -204,7 +200,6 @@ update_button (GtkStackSwitcher *self,
   gchar *icon_name;
   gboolean needs_attention;
   gboolean visible;
-  GtkStyleContext *context;
 
   g_object_get (page,
                 "title", &title,
@@ -217,11 +212,10 @@ update_button (GtkStackSwitcher *self,
 
   gtk_widget_set_visible (button, visible && (title != NULL || icon_name != NULL));
 
-  context = gtk_widget_get_style_context (button);
   if (needs_attention)
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+    gtk_widget_add_css_class (button, GTK_STYLE_CLASS_NEEDS_ATTENTION);
   else
-    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+    gtk_widget_remove_css_class (button, GTK_STYLE_CLASS_NEEDS_ATTENTION);
 
   g_free (title);
   g_free (icon_name);

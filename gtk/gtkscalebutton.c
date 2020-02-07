@@ -369,7 +369,6 @@ static void
 gtk_scale_button_init (GtkScaleButton *button)
 {
   GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
-  GtkStyleContext *context;
   GtkEventController *controller;
 
   priv->click_id = 0;
@@ -384,8 +383,7 @@ gtk_scale_button_init (GtkScaleButton *button)
   g_object_ref_sink (priv->adjustment);
   gtk_range_set_adjustment (GTK_RANGE (priv->scale), priv->adjustment);
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (button));
-  gtk_style_context_add_class (context, "scale");
+  gtk_widget_add_css_class (GTK_WIDGET (button), "scale");
 
   controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
   g_signal_connect (controller, "scroll",

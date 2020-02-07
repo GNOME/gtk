@@ -5454,16 +5454,13 @@ _gtk_widget_set_has_default (GtkWidget *widget,
                              gboolean   has_default)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkStyleContext *context;
 
   priv->has_default = has_default;
 
-  context = _gtk_widget_get_style_context (widget);
-
   if (has_default)
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_DEFAULT);
+    gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_DEFAULT);
   else
-    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_DEFAULT);
+    gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_DEFAULT);
 }
 
 /**
@@ -6332,12 +6329,9 @@ gtk_widget_verify_invariants (GtkWidget *widget)
         g_warning ("%s %p is mapped but not visible",
                    gtk_widget_get_name (widget), widget);
 
-      if (!GTK_IS_ROOT (widget))
-        {
-          if (!priv->child_visible)
-            g_warning ("%s %p is mapped but not child_visible",
-                       gtk_widget_get_name (widget), widget);
-        }
+      if (!priv->child_visible && !GTK_IS_ROOT (widget))
+        g_warning ("%s %p is mapped but not child_visible",
+                   gtk_widget_get_name (widget), widget);
     }
   else
     {
@@ -6380,14 +6374,12 @@ gtk_widget_verify_invariants (GtkWidget *widget)
                        G_OBJECT_TYPE_NAME (widget), widget);
 #endif
         }
-      else if (!GTK_IS_ROOT (widget))
+      else if (priv->realized && !GTK_IS_ROOT (widget))
         {
           /* No parent or parent not realized on non-toplevel implies... */
-
-          if (priv->realized)
-            g_warning ("%s %p is not realized but child %s %p is realized",
-                       parent ? gtk_widget_get_name (parent) : "no parent", parent,
-                       gtk_widget_get_name (widget), widget);
+          g_warning ("%s %p is not realized but child %s %p is realized",
+                     parent ? gtk_widget_get_name (parent) : "no parent", parent,
+                     gtk_widget_get_name (widget), widget);
         }
 
       if (parent &&
@@ -6402,17 +6394,15 @@ gtk_widget_verify_invariants (GtkWidget *widget)
                        gtk_widget_get_name (parent), parent,
                        gtk_widget_get_name (widget), widget);
         }
-      else if (!GTK_IS_ROOT (widget))
+      else if (priv->mapped && !GTK_IS_ROOT (widget))
         {
           /* No parent or parent not mapped on non-toplevel implies... */
-
-          if (priv->mapped)
-            g_warning ("%s %p is mapped but visible=%d child_visible=%d parent %s %p mapped=%d",
-                       gtk_widget_get_name (widget), widget,
-                       priv->visible,
-                       priv->child_visible,
-                       parent ? gtk_widget_get_name (parent) : "no parent", parent,
-                       parent ? parent->priv->mapped : FALSE);
+          g_warning ("%s %p is mapped but visible=%d child_visible=%d parent %s %p mapped=%d",
+                     gtk_widget_get_name (widget), widget,
+                     priv->visible,
+                     priv->child_visible,
+                     parent ? gtk_widget_get_name (parent) : "no parent", parent,
+                     parent ? parent->priv->mapped : FALSE);
         }
     }
 
@@ -6450,13 +6440,6 @@ gtk_widget_push_verify_invariants (GtkWidget *widget)
 }
 
 static void
-gtk_widget_verify_child_invariants (GtkWidget *widget)
-{
-  /* We don't recurse further; this is a one-level check. */
-  gtk_widget_verify_invariants (widget);
-}
-
-static void
 gtk_widget_pop_verify_invariants (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
@@ -6482,7 +6465,7 @@ gtk_widget_pop_verify_invariants (GtkWidget *widget)
            child != NULL;
            child = _gtk_widget_get_next_sibling (child))
         {
-          gtk_widget_verify_child_invariants (child);
+          gtk_widget_verify_invariants (child);
         }
     }
 }
@@ -9742,13 +9725,10 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
   else if (strcmp (tagname, "style") == 0)
     {
       StyleParserData *style_data = (StyleParserData *)user_data;
-      GtkStyleContext *context;
       GSList *l;
 
-      context = _gtk_widget_get_style_context (GTK_WIDGET (buildable));
-
       for (l = style_data->classes; l; l = l->next)
-        gtk_style_context_add_class (context, (const gchar *)l->data);
+        gtk_widget_add_css_class (GTK_WIDGET (buildable), (const char *)l->data);
 
       gtk_widget_reset_style (GTK_WIDGET (buildable));
 
@@ -12114,22 +12094,21 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget   *widget,
 
 static GskRenderNode *
 gtk_widget_create_render_node (GtkWidget   *widget,
-                               GtkSnapshot *parent_snapshot)
+                               GtkSnapshot *snapshot)
 {
   GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (widget);
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkCssBoxes boxes;
   GtkCssValue *filter_value;
   double opacity;
-  GtkSnapshot *snapshot;
 
   opacity = priv->alpha / 255.0;
   if (opacity <= 0.0)
     return NULL;
 
   gtk_css_boxes_init (&boxes, widget);
-  snapshot = gtk_snapshot_new_with_parent (parent_snapshot);
 
+  gtk_snapshot_push_collect (snapshot);
   gtk_snapshot_push_debug (snapshot,
                            "RenderNode for %s %p",
                            G_OBJECT_TYPE_NAME (widget), widget);
@@ -12168,7 +12147,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
 
   gtk_snapshot_pop (snapshot);
 
-  return gtk_snapshot_free_to_node (snapshot);
+  return gtk_snapshot_pop_collect (snapshot);
 }
 
 void
@@ -13149,50 +13128,50 @@ gtk_widget_class_query_action (GtkWidgetClass      *widget_class,
 }
 
 /**
- * gtk_widget_add_style_class:
+ * gtk_widget_add_css_class:
  * @widget: a #GtkWidget
- * @style_class: The style class to add to @widget, without
+ * @css_class: The style class to add to @widget, without
  *   the leading '.' used for notation of style classes
  *
- * Adds @style_class to @widget. After calling this function, @widget's
- * style will match for @style_class, after the CSS matching rules.
+ * Adds @css_class to @widget. After calling this function, @widget's
+ * style will match for @css_class, after the CSS matching rules.
  */
 void
-gtk_widget_add_style_class (GtkWidget  *widget,
-                            const char *style_class)
+gtk_widget_add_css_class (GtkWidget  *widget,
+                          const char *css_class)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (style_class != NULL);
-  g_return_if_fail (style_class[0] != '\0');
-  g_return_if_fail (style_class[0] != '.');
+  g_return_if_fail (css_class != NULL);
+  g_return_if_fail (css_class[0] != '\0');
+  g_return_if_fail (css_class[0] != '.');
 
-  gtk_css_node_add_class (priv->cssnode, g_quark_from_string (style_class));
+  gtk_css_node_add_class (priv->cssnode, g_quark_from_string (css_class));
 }
 
 /**
- * gtk_widget_remove_style_class:
+ * gtk_widget_remove_css_class:
  * @widget: a #GtkWidget
- * @style_class: The style class to remove from @widget, without
+ * @css_class: The style class to remove from @widget, without
  *   the leading '.' used for notation of style classes
  *
- * Removes @style_class from @widget. After this, the style of @widget
- * will stop matching for @style_class.
+ * Removes @css_class from @widget. After this, the style of @widget
+ * will stop matching for @css_class.
  */
 void
-gtk_widget_remove_style_class (GtkWidget  *widget,
-                               const char *style_class)
+gtk_widget_remove_css_class (GtkWidget  *widget,
+                             const char *css_class)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GQuark class_quark;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (style_class != NULL);
-  g_return_if_fail (style_class[0] != '\0');
-  g_return_if_fail (style_class[0] != '.');
+  g_return_if_fail (css_class != NULL);
+  g_return_if_fail (css_class[0] != '\0');
+  g_return_if_fail (css_class[0] != '.');
 
-  class_quark = g_quark_from_string (style_class);
+  class_quark = g_quark_try_string (css_class);
   if (!class_quark)
     return;
 
@@ -13200,29 +13179,29 @@ gtk_widget_remove_style_class (GtkWidget  *widget,
 }
 
 /**
- * gtk_widget_has_style_class:
+ * gtk_widget_has_css_class:
  * @widget: a #GtkWidget
- * @style_class: A CSS style class, without the leading '.'
+ * @css_class: A CSS style class, without the leading '.'
  *   used for notation of style classes
  *
- * Returns whether @style_class is currently applied to @widget.
+ * Returns whether @css_class is currently applied to @widget.
  *
- * Returns: %TRUE if @style_class is currently applied to @widget,
+ * Returns: %TRUE if @css_class is currently applied to @widget,
  *   %FALSE otherwise.
  */
 gboolean
-gtk_widget_has_style_class (GtkWidget  *widget,
-                            const char *style_class)
+gtk_widget_has_css_class (GtkWidget  *widget,
+                          const char *css_class)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GQuark class_quark;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  g_return_val_if_fail (style_class != NULL, FALSE);
-  g_return_val_if_fail (style_class[0] != '\0', FALSE);
-  g_return_val_if_fail (style_class[0] != '.', FALSE);
+  g_return_val_if_fail (css_class != NULL, FALSE);
+  g_return_val_if_fail (css_class[0] != '\0', FALSE);
+  g_return_val_if_fail (css_class[0] != '.', FALSE);
 
-  class_quark = g_quark_from_string (style_class);
+  class_quark = g_quark_try_string (css_class);
   if (!class_quark)
     return FALSE;
 

@@ -971,14 +971,14 @@ void                    gtk_widget_snapshot_child       (GtkWidget   *widget,
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_widget_should_layout        (GtkWidget   *widget);
 GDK_AVAILABLE_IN_ALL
-void                    gtk_widget_add_style_class      (GtkWidget   *widget,
-                                                         const char  *style_class);
+void                    gtk_widget_add_css_class        (GtkWidget   *widget,
+                                                         const char  *css_class);
 GDK_AVAILABLE_IN_ALL
-void                    gtk_widget_remove_style_class   (GtkWidget   *widget,
-                                                         const char  *style_class);
+void                    gtk_widget_remove_css_class     (GtkWidget   *widget,
+                                                         const char  *css_class);
 GDK_AVAILABLE_IN_ALL
-gboolean                gtk_widget_has_style_class      (GtkWidget   *widget,
-                                                         const char  *style_class);
+gboolean                gtk_widget_has_css_class        (GtkWidget   *widget,
+                                                         const char  *css_class);
 
 
 

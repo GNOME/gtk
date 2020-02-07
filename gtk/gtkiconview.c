@@ -956,8 +956,7 @@ gtk_icon_view_init (GtkIconView *icon_view)
   icon_view->priv->row_contexts = 
     g_ptr_array_new_with_free_func ((GDestroyNotify)g_object_unref);
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (icon_view)),
-                               GTK_STYLE_CLASS_VIEW);
+  gtk_widget_add_css_class (GTK_WIDGET (icon_view), GTK_STYLE_CLASS_VIEW);
 
   gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "pressed", G_CALLBACK (gtk_icon_view_button_press),

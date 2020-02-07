@@ -148,7 +148,6 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
 static void
 gtk_color_scale_init (GtkColorScale *scale)
 {
-  GtkStyleContext *context;
   GtkGesture *gesture;
 
   gesture = gtk_gesture_long_press_new ();
@@ -158,8 +157,7 @@ gtk_color_scale_init (GtkColorScale *scale)
                                               GTK_PHASE_TARGET);
   gtk_widget_add_controller (GTK_WIDGET (scale), GTK_EVENT_CONTROLLER (gesture));
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (scale));
-  gtk_style_context_add_class (context, "color");
+  gtk_widget_add_css_class (GTK_WIDGET (scale), "color");
 }
 
 static void

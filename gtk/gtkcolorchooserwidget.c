@@ -378,19 +378,19 @@ add_palette (GtkColorChooserWidget  *cc,
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-            if (pos == left)
-              gtk_style_context_add_class (gtk_widget_get_style_context (p), GTK_STYLE_CLASS_LEFT);
-            else if (pos == right)
-              gtk_style_context_add_class (gtk_widget_get_style_context (p), GTK_STYLE_CLASS_RIGHT);
+          if (pos == left)
+            gtk_widget_add_css_class (p, GTK_STYLE_CLASS_LEFT);
+          else if (pos == right)
+            gtk_widget_add_css_class (p, GTK_STYLE_CLASS_RIGHT);
 
-            gtk_grid_attach (GTK_GRID (grid), p, pos, line, 1, 1);
+          gtk_grid_attach (GTK_GRID (grid), p, pos, line, 1, 1);
         }
       else
         {
           if (pos == 0)
-            gtk_style_context_add_class (gtk_widget_get_style_context (p), GTK_STYLE_CLASS_TOP);
+            gtk_widget_add_css_class (p, GTK_STYLE_CLASS_TOP);
           else if (pos == colors_per_line - 1)
-            gtk_style_context_add_class (gtk_widget_get_style_context (p), GTK_STYLE_CLASS_BOTTOM);
+            gtk_widget_add_css_class (p, GTK_STYLE_CLASS_BOTTOM);
 
           gtk_grid_attach (GTK_GRID (grid), p, line, pos, 1, 1);
        }

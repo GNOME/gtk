@@ -1369,14 +1369,14 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
   if (n_press > 1)
     gtk_gesture_set_state (priv->drag_gesture, GTK_EVENT_SEQUENCE_DENIED);
 
-  region = get_active_region_type (window, x, y);
-
   if (gdk_display_device_is_grabbed (gtk_widget_get_display (widget),
                                      gtk_gesture_get_device (GTK_GESTURE (gesture))))
     {
       gtk_gesture_set_state (priv->drag_gesture, GTK_EVENT_SEQUENCE_DENIED);
       return;
     }
+
+  region = get_active_region_type (window, x, y);
 
   if (button == GDK_BUTTON_SECONDARY && region == GTK_WINDOW_REGION_TITLE)
     {
@@ -3690,13 +3690,9 @@ gtk_window_enable_csd (GtkWindow *window)
 
   /* We need a visual with alpha for client shadows */
   if (priv->use_client_shadow)
-    {
-      gtk_style_context_add_class (gtk_widget_get_style_context (widget), GTK_STYLE_CLASS_CSD);
-    }
+    gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_CSD);
   else
-    {
-      gtk_style_context_add_class (gtk_widget_get_style_context (widget), "solid-csd");
-    }
+    gtk_widget_add_css_class (widget, "solid-csd");
 
   priv->client_decorated = TRUE;
 }
@@ -3755,7 +3751,7 @@ gtk_window_set_titlebar (GtkWindow *window,
   if (titlebar == NULL)
     {
       priv->client_decorated = FALSE;
-      gtk_style_context_remove_class (gtk_widget_get_style_context (widget), GTK_STYLE_CLASS_CSD);
+      gtk_widget_remove_css_class (widget, GTK_STYLE_CLASS_CSD);
 
       goto out;
     }
@@ -3777,8 +3773,7 @@ gtk_window_set_titlebar (GtkWindow *window,
       on_titlebar_title_notify (GTK_HEADER_BAR (titlebar), NULL, window);
     }
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (titlebar),
-                               GTK_STYLE_CLASS_TITLEBAR);
+  gtk_widget_add_css_class (titlebar, GTK_STYLE_CLASS_TITLEBAR);
 
 out:
   if (was_mapped)
@@ -4787,7 +4782,6 @@ create_titlebar (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *titlebar;
-  GtkStyleContext *context;
 
   titlebar = gtk_header_bar_new ();
   g_object_set (titlebar,
@@ -4795,9 +4789,8 @@ create_titlebar (GtkWindow *window)
                 "has-subtitle", FALSE,
                 "show-title-buttons", TRUE,
                 NULL);
-  context = gtk_widget_get_style_context (titlebar);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_TITLEBAR);
-  gtk_style_context_add_class (context, "default-decoration");
+  gtk_widget_add_css_class (titlebar, GTK_STYLE_CLASS_TITLEBAR);
+  gtk_widget_add_css_class (titlebar, "default-decoration");
 
   return titlebar;
 }
@@ -5381,20 +5374,6 @@ update_csd_shape (GtkWindow *window)
 }
 
 static void
-update_shadow_width (GtkWindow *window,
-                     GtkBorder *border)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (priv->surface)
-    gdk_surface_set_shadow_width (priv->surface,
-				  border->left,
-				  border->right,
-				  border->top,
-				  border->bottom);
-}
-
-static void
 corner_rect (cairo_rectangle_int_t *rect,
              const GtkCssValue     *value)
 {
@@ -5493,8 +5472,12 @@ update_realized_window_properties (GtkWindow     *window,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  if (priv->client_decorated && priv->use_client_shadow)
-    update_shadow_width (window, window_border);
+  if (priv->surface && priv->client_decorated && priv->use_client_shadow)
+    gdk_surface_set_shadow_width (priv->surface,
+                                  window_border->left,
+                                  window_border->right,
+                                  window_border->top,
+                                  window_border->bottom);
 
   update_opaque_region (window, window_border, child_allocation);
   update_csd_shape (window);
@@ -5702,56 +5685,50 @@ static void
 update_window_style_classes (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkStyleContext *context;
+  GtkWidget *widget = GTK_WIDGET (window);
   guint edge_constraints;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (window));
   edge_constraints = priv->edge_constraints;
 
   if (!priv->edge_constraints)
     {
       if (priv->tiled)
-        gtk_style_context_add_class (context, "tiled");
+        gtk_widget_add_css_class (widget, "titled");
       else
-        gtk_style_context_remove_class (context, "tiled");
+        gtk_widget_remove_css_class (widget, "tiled");
     }
   else
     {
       if (edge_constraints & GDK_SURFACE_STATE_TOP_TILED)
-        gtk_style_context_add_class (context, "tiled-top");
+        gtk_widget_add_css_class (widget, "titled-top");
       else
-        gtk_style_context_remove_class (context, "tiled-top");
+        gtk_widget_remove_css_class (widget, "tiled-top");
 
       if (edge_constraints & GDK_SURFACE_STATE_RIGHT_TILED)
-        gtk_style_context_add_class (context, "tiled-right");
+        gtk_widget_add_css_class (widget, "titled-right");
       else
-        gtk_style_context_remove_class (context, "tiled-right");
+        gtk_widget_remove_css_class (widget, "tiled-right");
 
       if (edge_constraints & GDK_SURFACE_STATE_BOTTOM_TILED)
-        gtk_style_context_add_class (context, "tiled-bottom");
+        gtk_widget_add_css_class (widget, "titled-bottom");
       else
-        gtk_style_context_remove_class (context, "tiled-bottom");
+        gtk_widget_remove_css_class (widget, "tiled-bottom");
 
       if (edge_constraints & GDK_SURFACE_STATE_LEFT_TILED)
-        gtk_style_context_add_class (context, "tiled-left");
+        gtk_widget_add_css_class (widget, "titled-left");
       else
-        gtk_style_context_remove_class (context, "tiled-left");
+        gtk_widget_remove_css_class (widget, "tiled-left");
     }
 
   if (priv->maximized)
-    gtk_style_context_add_class (context, "maximized");
+    gtk_widget_add_css_class (widget, "maximized");
   else
-    gtk_style_context_remove_class (context, "maximized");
-
-  if (priv->maximized)
-    gtk_style_context_add_class (context, "maximized");
-  else
-    gtk_style_context_remove_class (context, "maximized");
+    gtk_widget_remove_css_class (widget, "maximized");
 
   if (priv->fullscreen)
-    gtk_style_context_add_class (context, "fullscreen");
+    gtk_widget_add_css_class (widget, "fullscreen");
   else
-    gtk_style_context_remove_class (context, "fullscreen");
+    gtk_widget_remove_css_class (widget, "fullscreen");
 }
 
 static void

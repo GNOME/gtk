@@ -1615,7 +1615,6 @@ gtk_text_view_init (GtkTextView *text_view)
   GdkContentFormats *formats;
   GtkDropTarget *dest;
   GtkTextViewPrivate *priv;
-  GtkStyleContext *context;
   GtkEventController *controller;
   GtkGesture *gesture;
 
@@ -1625,8 +1624,7 @@ gtk_text_view_init (GtkTextView *text_view)
   gtk_widget_set_can_focus (widget, TRUE);
   gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
+  gtk_widget_add_css_class (widget, GTK_STYLE_CLASS_VIEW);
 
   gtk_widget_set_cursor_from_name (widget, "text");
 
@@ -1763,8 +1761,7 @@ _gtk_text_view_ensure_magnifier (GtkTextView *text_view)
   priv->magnifier = _gtk_magnifier_new (GTK_WIDGET (text_view));
   _gtk_magnifier_set_magnification (GTK_MAGNIFIER (priv->magnifier), 2.0);
   priv->magnifier_popover = gtk_popover_new (GTK_WIDGET (text_view));
-  gtk_style_context_add_class (gtk_widget_get_style_context (priv->magnifier_popover),
-                               "magnifier");
+  gtk_widget_add_css_class (priv->magnifier_popover, "magnifier");
   gtk_popover_set_autohide (GTK_POPOVER (priv->magnifier_popover), FALSE);
   gtk_container_add (GTK_CONTAINER (priv->magnifier_popover),
                      priv->magnifier);
@@ -8851,7 +8848,7 @@ append_bubble_item (GtkTextView *text_view,
   gtk_widget_set_focus_on_click (item, FALSE);
   image = gtk_image_new_from_icon_name (icon_name);
   gtk_container_add (GTK_CONTAINER (item), image);
-  gtk_style_context_add_class (gtk_widget_get_style_context (item), "image-button");
+  gtk_widget_add_css_class (item, "image-button");
   gtk_actionable_set_action_name (GTK_ACTIONABLE (item), action_name);
 
   gtk_container_add (GTK_CONTAINER (toolbar), item);
@@ -8875,8 +8872,7 @@ gtk_text_view_selection_bubble_popup_show (gpointer user_data)
   g_clear_pointer (&priv->selection_bubble, gtk_widget_unparent);
 
   priv->selection_bubble = gtk_popover_new (GTK_WIDGET (text_view));
-  gtk_style_context_add_class (gtk_widget_get_style_context (priv->selection_bubble),
-                               GTK_STYLE_CLASS_TOUCH_SELECTION);
+  gtk_widget_add_css_class (priv->selection_bubble, GTK_STYLE_CLASS_TOUCH_SELECTION);
   gtk_popover_set_position (GTK_POPOVER (priv->selection_bubble), GTK_POS_BOTTOM);
   gtk_popover_set_autohide (GTK_POPOVER (priv->selection_bubble), FALSE);
   g_signal_connect (priv->selection_bubble, "notify::visible",
@@ -8885,7 +8881,7 @@ gtk_text_view_selection_bubble_popup_show (gpointer user_data)
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   g_object_set (box, "margin", 10, NULL);
   toolbar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_style_context_add_class (gtk_widget_get_style_context (toolbar), "linked");
+  gtk_widget_add_css_class (toolbar, "linked");
   gtk_container_add (GTK_CONTAINER (priv->selection_bubble), box);
   gtk_container_add (GTK_CONTAINER (box), toolbar);
 
@@ -9624,20 +9620,19 @@ void
 gtk_text_view_set_monospace (GtkTextView *text_view,
                              gboolean     monospace)
 {
-  GtkStyleContext *context;
   gboolean has_monospace;
 
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
-  has_monospace = gtk_style_context_has_class (context, GTK_STYLE_CLASS_MONOSPACE);
+  has_monospace = gtk_text_view_get_monospace (text_view);
 
   if (has_monospace != monospace)
     {
       if (monospace)
-        gtk_style_context_add_class (context, GTK_STYLE_CLASS_MONOSPACE);
+        gtk_widget_add_css_class (GTK_WIDGET (text_view), GTK_STYLE_CLASS_MONOSPACE);
       else
-        gtk_style_context_remove_class (context, GTK_STYLE_CLASS_MONOSPACE);
+        gtk_widget_remove_css_class (GTK_WIDGET (text_view), GTK_STYLE_CLASS_MONOSPACE);
+
       g_object_notify (G_OBJECT (text_view), "monospace");
     }
 }
@@ -9653,13 +9648,9 @@ gtk_text_view_set_monospace (GtkTextView *text_view,
 gboolean
 gtk_text_view_get_monospace (GtkTextView *text_view)
 {
-  GtkStyleContext *context;
-
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
-  
-  return gtk_style_context_has_class (context, GTK_STYLE_CLASS_MONOSPACE);
+  return gtk_widget_has_css_class (GTK_WIDGET (text_view), GTK_STYLE_CLASS_MONOSPACE);
 }
 
 static void

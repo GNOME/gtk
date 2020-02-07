@@ -751,9 +751,6 @@ gsk_rotate_transform_apply_2d (GskTransform *transform,
   GskRotateTransform *self = (GskRotateTransform *) transform;
   float s, c, xx, xy, yx, yy;
 
-  if (fmodf (self->angle, 360.0f) == 0.0)
-    return;
-
   _sincos (self->angle, &s, &c);
 
   xx =  c * *out_xx + s * *out_xy;
@@ -833,6 +830,9 @@ normalize_angle (float angle)
 
   if (f < 0)
     f = 360 + f;
+
+  g_assert (f < 360.0);
+  g_assert (f >= 0.0);
 
   return f;
 }

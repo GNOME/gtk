@@ -150,7 +150,7 @@ reveal_child_changed_cb (GObject      *object,
         gtk_editable_set_text (GTK_EDITABLE (priv->entry), "");
     }
 
-  g_object_notify (G_OBJECT (bar), "search-mode-enabled");
+  g_object_notify_by_pspec (G_OBJECT (bar), widget_props[PROP_SEARCH_MODE_ENABLED]);
 }
 
 static void
@@ -222,12 +222,11 @@ gtk_search_bar_get_property (GObject    *object,
                              GParamSpec *pspec)
 {
   GtkSearchBar *bar = GTK_SEARCH_BAR (object);
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
 
   switch (prop_id)
     {
     case PROP_SEARCH_MODE_ENABLED:
-      g_value_set_boolean (value, priv->reveal_child);
+      g_value_set_boolean (value, gtk_search_bar_get_search_mode (bar));
       break;
     case PROP_SHOW_CLOSE_BUTTON:
       g_value_set_boolean (value, gtk_search_bar_get_show_close_button (bar));
@@ -352,7 +351,7 @@ gtk_search_bar_init (GtkSearchBar *bar)
   gtk_widget_set_hexpand (priv->box_center, TRUE);
 
   priv->close_button = gtk_button_new_from_icon_name ("window-close-symbolic");
-  gtk_style_context_add_class (gtk_widget_get_style_context (priv->close_button), "close");
+  gtk_widget_add_css_class (priv->close_button, "close");
   gtk_center_box_set_end_widget (GTK_CENTER_BOX (priv->box_center), priv->close_button);
   gtk_widget_hide (priv->close_button);
 
@@ -510,7 +509,7 @@ gtk_search_bar_set_show_close_button (GtkSearchBar *bar,
   if (gtk_widget_get_visible (priv->close_button) != visible)
     {
       gtk_widget_set_visible (priv->close_button, visible);
-      g_object_notify (G_OBJECT (bar), "show-close-button");
+      g_object_notify_by_pspec (G_OBJECT (bar), widget_props[PROP_SHOW_CLOSE_BUTTON]);
     }
 }
 
