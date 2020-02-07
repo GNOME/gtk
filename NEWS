@@ -9,7 +9,7 @@ Overview of Changes in GTK 3.98.0
   - Row-recycling list and grid views
   - Event controllers for keyboard shortcuts
   - Movable popovers
-  - Revamped infrastructure
+  - Revamped accessibility infrastructure
 
   We will do further 3.9x snapshots as these land:
 
