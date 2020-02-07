@@ -18,6 +18,7 @@
 #define __GTK_ICON_CACHE_PRIVATE_H__
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include <gtk/gtkiconthemeprivate.h>
 
 G_BEGIN_DECLS
 
@@ -40,7 +41,8 @@ typedef struct _GtkIconCache GtkIconCache;
 GtkIconCache *gtk_icon_cache_new                        (const gchar  *data);
 GtkIconCache *gtk_icon_cache_new_for_path               (const gchar  *path);
 GHashTable   *gtk_icon_cache_list_icons_in_directory    (GtkIconCache *cache,
-                                                         const gchar  *directory);
+                                                         const gchar  *directory,
+                                                         GtkStringSet *set);
 GtkIconCache *gtk_icon_cache_ref                        (GtkIconCache *cache);
 void          gtk_icon_cache_unref                      (GtkIconCache *cache);
 

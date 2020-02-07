@@ -98,6 +98,118 @@
  * ]|
  */
 
+
+/* There are a lot of icon names (around 1000 in adwaita and 1000 in
+ * hicolor), and the are short, which makes individual allocations
+ * wasteful (i.e. glibc malloc min chunk size is 32 byte), so we and
+ * fragmenting. Instead we store the string in larger chunks of memory
+ * for the string data, avoiding duplicates via a hash.
+ *
+ * Additionally, doing a up-front hash lookup to intern an
+ * icon name allows further hash lookups (for each directory in
+ * the theme) to use g_direct_hash/equal() which makes those
+ * lookups faster.
+ */
+
+typedef struct _GtkStringSetChunk GtkStringSetChunk;
+
+/* This size allows a malloc to be one page, including the next_chunk
+   pointer and the malloc overhead, which is a good size (one page) */
+#define STRING_SET_CHUNK_SIZE (4096 - 2 *sizeof (gpointer))
+
+struct _GtkStringSetChunk {
+  GtkStringSetChunk *next;
+  char data[STRING_SET_CHUNK_SIZE];
+};
+
+struct _GtkStringSet {
+  GHashTable *hash;
+  GtkStringSetChunk *chunks;
+  int used_in_chunk;
+};
+
+static void
+gtk_string_set_init (GtkStringSet *set)
+{
+  set->hash = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, NULL);
+  set->chunks = NULL;
+  set->used_in_chunk = STRING_SET_CHUNK_SIZE; /* To trigger a grow directly */
+}
+
+static void
+gtk_string_set_destroy (GtkStringSet *set)
+{
+  GtkStringSetChunk *next, *chunk;
+  g_hash_table_destroy (set->hash);
+  for (chunk = set->chunks; chunk != NULL; chunk = next)
+    {
+      next = chunk->next;
+      g_free (chunk);
+    }
+}
+
+static const char *
+gtk_string_set_lookup (GtkStringSet *set,
+                       const char   *string)
+{
+  return g_hash_table_lookup (set->hash, string);
+}
+
+static void
+gtk_string_set_list (GtkStringSet *set,
+                     GHashTable   *result)
+{
+  GHashTableIter iter;
+  gpointer key;
+
+  g_hash_table_iter_init (&iter, set->hash);
+  while (g_hash_table_iter_next (&iter, &key, NULL))
+    {
+      char *string = key;
+      g_hash_table_insert (result, string, string);
+    }
+}
+
+const char *
+gtk_string_set_add (GtkStringSet *set,
+                    const char   *string)
+{
+  const char *intern = g_hash_table_lookup (set->hash, string);
+
+  if (intern == NULL)
+    {
+      GtkStringSetChunk *chunk;
+      int string_len = strlen (string) + 1;
+
+      if (string_len > STRING_SET_CHUNK_SIZE - set->used_in_chunk)
+        {
+          gsize chunk_size = sizeof (GtkStringSetChunk);
+          /* Doesn't fit in existing chunk, need a new one.  Normally
+           * we allocate one of regular size, but in the case the
+           * string is longer than CHUNK_SIZE that we allocate enough
+           * for it to fit this one string. */
+          if (string_len > STRING_SET_CHUNK_SIZE)
+            chunk_size += string_len - STRING_SET_CHUNK_SIZE;
+          chunk = g_malloc (chunk_size);
+          chunk->next = set->chunks;
+          set->chunks = chunk;
+          set->used_in_chunk = 0;
+        }
+      else
+        {
+          /* We fit in existing chunk */
+          chunk = set->chunks;
+        }
+
+      intern = &chunk->data[set->used_in_chunk];
+      memcpy ((char *)intern, string, string_len);
+      set->used_in_chunk += string_len;
+      g_hash_table_insert (set->hash, (char *)intern, (char *)intern);
+    }
+
+  return intern;
+}
+
 /* Threading:
  *
  * GtkIconTheme is partially threadsafe, construction and setup can
@@ -148,7 +260,6 @@
  * In order to avoid ABBA style deadlocks this means the icon code
  * should never try to lock an icon theme.
  */
-
 
 #define FALLBACK_ICON_THEME "hicolor"
 
@@ -297,7 +408,7 @@ typedef struct
 
   GArray *dir_sizes;     /* IconThemeDirSize */
   GArray *dirs;          /* IconThemeDir */
-  GHashTable *icons;     /* name (owned) -> name */
+  GtkStringSet icons;
 } IconTheme;
 
 typedef struct
@@ -317,7 +428,7 @@ typedef struct
   gint scale;
 
   GArray *icon_files;
-  GHashTable *icon_hash; /* name (unowned) -> file index */
+  GHashTable *icon_hash; /* name (interned) -> file index */
 } IconThemeDirSize;
 
 typedef struct
@@ -353,8 +464,6 @@ static GtkIconPaintable *theme_lookup_icon                (IconTheme        *the
                                                            gint              size,
                                                            gint              scale,
                                                            gboolean          allow_svg);
-static void              theme_list_icons                 (IconTheme        *theme,
-                                                           GHashTable       *icons);
 static gboolean          theme_has_icon                   (IconTheme        *theme,
                                                            const gchar      *icon_name);
 static void              theme_subdir_load                (GtkIconTheme     *self,
@@ -1518,6 +1627,20 @@ free_unthemed_icon (UnthemedIcon *unthemed_icon)
   g_slice_free (UnthemedIcon, unthemed_icon);
 }
 
+static void
+strip_suffix_inline (char *filename)
+{
+  gchar *dot;
+
+  if (g_str_has_suffix (filename, ".symbolic.png"))
+    filename[strlen(filename)-13] = 0;
+
+  dot = strrchr (filename, '.');
+
+  if (dot != NULL)
+    *dot = 0;
+}
+
 static gchar *
 strip_suffix (const gchar *filename)
 {
@@ -2266,6 +2389,7 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *self,
   for (l = self->themes; l; l = l->next)
     {
       IconTheme *theme = l->data;
+      const char *interned_icon_name = gtk_string_set_lookup (&theme->icons, icon_name);
 
       for (i = 0; i < theme->dir_sizes->len; i++)
         {
@@ -2274,7 +2398,7 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *self,
           if (dir_size->type != ICON_THEME_DIR_SCALABLE && g_hash_table_lookup_extended (sizes, GINT_TO_POINTER (dir_size->size), NULL, NULL))
             continue;
 
-          if (!g_hash_table_contains (dir_size->icon_hash, icon_name))
+          if (!g_hash_table_contains (dir_size->icon_hash, interned_icon_name))
             continue;
 
           if (dir_size->type == ICON_THEME_DIR_SCALABLE)
@@ -2301,7 +2425,7 @@ add_key_to_hash (gpointer key,
 {
   GHashTable *hash = user_data;
 
-  g_hash_table_insert (hash, key, NULL);
+  g_hash_table_insert (hash, key, key);
 }
 
 static void
@@ -2340,7 +2464,8 @@ gtk_icon_theme_list_icons (GtkIconTheme *self)
   l = self->themes;
   while (l != NULL)
     {
-      theme_list_icons (l->data, icons);
+      IconTheme *theme = l->data;
+      gtk_string_set_list (&theme->icons, icons);
       l = l->next;
     }
 
@@ -2405,7 +2530,7 @@ theme_new (const char *theme_name,
   theme->name = g_strdup (theme_name);
   theme->dir_sizes = g_array_new (FALSE, FALSE, sizeof (IconThemeDirSize));
   theme->dirs = g_array_new (FALSE, FALSE, sizeof (IconThemeDir));
-  theme->icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  gtk_string_set_init (&theme->icons);
 
   theme->display_name =
     g_key_file_get_locale_string (theme_file, "Icon Theme", "Name", NULL, NULL);
@@ -2435,7 +2560,8 @@ theme_destroy (IconTheme *theme)
   for (i = 0; i < theme->dirs->len; i++)
     theme_dir_destroy (&g_array_index (theme->dirs, IconThemeDir, i));
   g_array_free (theme->dirs, TRUE);
-  g_hash_table_destroy (theme->icons);
+
+  gtk_string_set_destroy (&theme->icons);
 
   g_free (theme);
 }
@@ -2624,7 +2750,7 @@ compare_dir_size_matches (IconThemeDirSize *dir_a, gint difference_a,
 
 static GtkIconPaintable *
 theme_lookup_icon (IconTheme   *theme,
-                   const gchar *icon_name,
+                   const gchar *icon_name, /* interned */
                    gint         size,
                    gint         scale,
                    gboolean     allow_svg)
@@ -2636,8 +2762,10 @@ theme_lookup_icon (IconTheme   *theme,
   int i;
 
   /* Its not uncommon with misses, so we do an early check which allows us do
-     do a lot less work. */
-  if (!g_hash_table_contains (theme->icons, icon_name))
+   * do a lot less work.
+   * We also intern the name so later hash lookups are faster. */
+  icon_name = gtk_string_set_lookup (&theme->icons, icon_name);
+  if (icon_name == NULL)
     return FALSE;
 
   min_difference = G_MAXINT;
@@ -2700,31 +2828,17 @@ theme_lookup_icon (IconTheme   *theme,
   return NULL;
 }
 
-static void
-theme_list_icons (IconTheme  *theme,
-                  GHashTable *icons)
-{
-  GHashTableIter iter;
-  gpointer key;
-
-  g_hash_table_iter_init (&iter, theme->icons);
-  while (g_hash_table_iter_next (&iter, &key, NULL))
-    {
-      char *icon_name = key;
-      g_hash_table_insert (icons, icon_name, NULL);
-    }
-}
-
 static gboolean
 theme_has_icon (IconTheme   *theme,
                 const gchar *icon_name)
 {
-  return g_hash_table_contains (theme->icons, icon_name);
+  return gtk_string_set_lookup (&theme->icons, icon_name) != NULL;
 }
 
 static GHashTable *
 scan_directory (GtkIconTheme  *self,
-                char          *full_dir)
+                char          *full_dir,
+                GtkStringSet  *set)
 {
   GDir *gdir;
   const gchar *name;
@@ -2740,21 +2854,22 @@ scan_directory (GtkIconTheme  *self,
 
   while ((name = g_dir_read_name (gdir)))
     {
-      gchar *base_name;
+      const char *interned;
       IconCacheFlag suffix, hash_suffix;
 
       suffix = suffix_from_name (name);
       if (suffix == ICON_CACHE_FLAG_NONE)
         continue;
 
+      strip_suffix_inline ((char *)name);
+      interned = gtk_string_set_add (set, name);
+
       if (!icons)
-        icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+        icons = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
 
-      base_name = strip_suffix (name);
-
-      hash_suffix = GPOINTER_TO_INT (g_hash_table_lookup (icons, base_name));
+      hash_suffix = GPOINTER_TO_INT (g_hash_table_lookup (icons, interned));
       /* takes ownership of base_name */
-      g_hash_table_replace (icons, base_name, GUINT_TO_POINTER (hash_suffix|suffix));
+      g_hash_table_replace (icons, (char *)interned, GUINT_TO_POINTER (hash_suffix|suffix));
     }
 
   g_dir_close (gdir);
@@ -2764,7 +2879,8 @@ scan_directory (GtkIconTheme  *self,
 
 static GHashTable *
 scan_resource_directory (GtkIconTheme  *self,
-                         char          *full_dir)
+                         char          *full_dir,
+                         GtkStringSet  *set)
 {
   GHashTable *icons = NULL;
   char **children;
@@ -2779,8 +2895,8 @@ scan_resource_directory (GtkIconTheme  *self,
     {
       for (i = 0; children[i]; i++)
         {
-          const char *name = children[i];
-          gchar *base_name;
+          char *name = children[i];
+          const char *interned;
           IconCacheFlag suffix, hash_suffix;
 
           suffix = suffix_from_name (name);
@@ -2788,13 +2904,14 @@ scan_resource_directory (GtkIconTheme  *self,
             continue;
 
           if (!icons)
-            icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+            icons = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
 
-          base_name = strip_suffix (name);
+          strip_suffix_inline (name);
+          interned = gtk_string_set_add (set, name);
 
-          hash_suffix = GPOINTER_TO_INT (g_hash_table_lookup (icons, base_name));
+          hash_suffix = GPOINTER_TO_INT (g_hash_table_lookup (icons, interned));
           /* takes ownership of base_name */
-          g_hash_table_replace (icons, base_name, GUINT_TO_POINTER (hash_suffix|suffix));
+          g_hash_table_replace (icons, (char *)interned, GUINT_TO_POINTER (hash_suffix|suffix));
         }
 
       g_strfreev (children);
@@ -2844,7 +2961,8 @@ theme_ensure_dir_size (IconTheme *theme,
     }
 
   new.icon_files = g_array_new (FALSE, FALSE, sizeof (IconThemeFile));
-  new.icon_hash = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, NULL);
+  /* The keys are interned strings, so use direct hash/equal */
+  new.icon_hash = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
 
   index = theme->dir_sizes->len;
   g_array_append_val (theme->dir_sizes, new);
@@ -2870,24 +2988,16 @@ theme_add_icon_dir (IconTheme *theme,
 
 static void
 theme_add_icon_file (IconTheme *theme,
-                     const char *icon_name,
+                     const char *icon_name, /* interned */
                      guint suffixes,
                      IconThemeDirSize *dir_size,
                      guint dir_index)
 {
   IconThemeFile new_file = { 0 };
   guint index;
-  char *owned_icon_name = NULL;
 
   if (g_hash_table_contains (dir_size->icon_hash, icon_name))
     return;
-
-  owned_icon_name = g_hash_table_lookup (theme->icons, icon_name);
-  if (owned_icon_name == NULL)
-    {
-      owned_icon_name = g_strdup (icon_name);
-      g_hash_table_insert (theme->icons, owned_icon_name, owned_icon_name);
-    }
 
   new_file.dir_index = dir_index;
   new_file.best_suffix = best_suffix (suffixes, TRUE);
@@ -2896,10 +3006,11 @@ theme_add_icon_file (IconTheme *theme,
   index = dir_size->icon_files->len;
   g_array_append_val (dir_size->icon_files, new_file);
 
-  g_hash_table_insert (dir_size->icon_hash, owned_icon_name, GINT_TO_POINTER(index));
+  g_hash_table_insert (dir_size->icon_hash, (char *)icon_name, GINT_TO_POINTER(index));
 
 }
 
+/* Icon names are are already interned */
 static void
 theme_add_dir_with_icons (IconTheme *theme,
                           IconThemeDirSize *dir_size,
@@ -2916,7 +3027,7 @@ theme_add_dir_with_icons (IconTheme *theme,
   g_hash_table_iter_init (&iter, icons);
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
-      const char *icon_name = key;
+      const char *icon_name = key; /* interned */
       guint suffixes = GPOINTER_TO_INT(value);
       theme_add_icon_file (theme, icon_name, suffixes, dir_size, dir_index);
     }
@@ -3009,9 +3120,9 @@ theme_subdir_load (GtkIconTheme *self,
             }
 
           if (dir_mtime->cache != NULL)
-            icons = gtk_icon_cache_list_icons_in_directory (dir_mtime->cache, subdir);
+            icons = gtk_icon_cache_list_icons_in_directory (dir_mtime->cache, subdir, &theme->icons);
           else
-            icons = scan_directory (self, full_dir);
+            icons = scan_directory (self, full_dir, &theme->icons);
 
           if (icons)
             {
@@ -3038,7 +3149,7 @@ theme_subdir_load (GtkIconTheme *self,
           full_dir = g_build_filename ((const gchar *)d->data, subdir, " ", NULL);
           full_dir[strlen (full_dir) - 1] = '\0';
 
-          icons = scan_resource_directory (self, full_dir);
+          icons = scan_resource_directory (self, full_dir, &theme->icons);
           if (icons)
             {
               theme_add_dir_with_icons (theme,
