@@ -374,7 +374,7 @@
     </section>
 
     <section>
-      <title>Adapt to GtkButton API changes</title>
+      <title>Adapt to GtkBox API changes</title>
       <para>
         GtkBox no longer has pack-start and -end. Pack your widgets in the 
         correct order, or reorder them as necessary.
