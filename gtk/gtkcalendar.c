@@ -150,7 +150,6 @@ enum {
 
 enum {
   DAY_SELECTED_SIGNAL,
-  DAY_SELECTED_DOUBLE_CLICK_SIGNAL,
   PREV_MONTH_SIGNAL,
   NEXT_MONTH_SIGNAL,
   PREV_YEAR_SIGNAL,
@@ -184,7 +183,6 @@ struct _GtkCalendarClass
   GtkWidgetClass parent_class;
 
   void (* day_selected)                 (GtkCalendar *calendar);
-  void (* day_selected_double_click)    (GtkCalendar *calendar);
   void (* prev_month)                   (GtkCalendar *calendar);
   void (* next_month)                   (GtkCalendar *calendar);
   void (* prev_year)                    (GtkCalendar *calendar);
@@ -419,21 +417,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                   G_OBJECT_CLASS_TYPE (gobject_class),
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkCalendarClass, day_selected),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 0);
-
-  /**
-   * GtkCalendar::day-selected-double-click:
-   * @calendar: the object which received the signal.
-   *
-   * Emitted when the user double-clicks a day.
-   */
-  gtk_calendar_signals[DAY_SELECTED_DOUBLE_CLICK_SIGNAL] =
-    g_signal_new (I_("day-selected-double-click"),
-                  G_OBJECT_CLASS_TYPE (gobject_class),
-                  G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (GtkCalendarClass, day_selected_double_click),
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE, 0);
@@ -1061,36 +1044,24 @@ gtk_calendar_button_press (GtkGestureClick *gesture,
     return;
 
   day_month = priv->day_month[row][col];
+  day = priv->day[row][col];
 
-  if (n_press == 1)
+  if (day_month == MONTH_PREV)
+    calendar_set_month_prev (calendar);
+  else if (day_month == MONTH_NEXT)
+    calendar_set_month_next (calendar);
+
+  if (!gtk_widget_has_focus (widget))
+    gtk_widget_grab_focus (widget);
+
+  if (button == GDK_BUTTON_PRIMARY)
     {
-      day = priv->day[row][col];
-
-      if (day_month == MONTH_PREV)
-        calendar_set_month_prev (calendar);
-      else if (day_month == MONTH_NEXT)
-        calendar_set_month_next (calendar);
-
-      if (!gtk_widget_has_focus (widget))
-        gtk_widget_grab_focus (widget);
-
-      if (button == GDK_BUTTON_PRIMARY)
-        {
-          priv->in_drag = 1;
-          priv->drag_start_x = x;
-          priv->drag_start_y = y;
-        }
-
-      calendar_select_and_focus_day (calendar, day);
+      priv->in_drag = 1;
+      priv->drag_start_x = x;
+      priv->drag_start_y = y;
     }
-  else if (n_press == 2)
-    {
-      priv->in_drag = 0;
-      if (day_month == MONTH_CURRENT)
-        g_signal_emit (calendar,
-                       gtk_calendar_signals[DAY_SELECTED_DOUBLE_CLICK_SIGNAL],
-                       0);
-    }
+
+  calendar_select_and_focus_day (calendar, day);
 }
 
 static void
