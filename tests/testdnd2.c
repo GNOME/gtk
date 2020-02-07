@@ -291,7 +291,7 @@ update_source_icon (GtkDragSource *source,
                                      icon_name,
                                      NULL,
                                      size, 1,
-                                     gtk_widget_get_direction (widget) ,
+                                     gtk_widget_get_direction (widget),
                                      0);
   switch (hotspot)
     {
