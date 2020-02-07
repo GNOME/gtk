@@ -54,6 +54,7 @@
 #include "gtknative.h"
 #include "gtkdragsource.h"
 #include "gtkdragicon.h"
+#include "gtkcsscolorvalueprivate.h"
 
 #include "a11y/gtklabelaccessibleprivate.h"
 
@@ -3308,7 +3309,7 @@ gtk_label_update_layout_attributes (GtkLabel *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
   GtkWidget *widget = GTK_WIDGET (label);
-  GtkStyleContext *context;
+  GtkCssStyle *style;
   PangoAttrList *attrs;
   PangoAttrList *style_attrs;
 
@@ -3318,11 +3319,10 @@ gtk_label_update_layout_attributes (GtkLabel *label)
 
   if (priv->select_info && priv->select_info->links)
     {
-      GdkRGBA link_color;
+      const GdkRGBA *link_color;
       PangoAttribute *attribute;
       GList *list;
 
-      context = gtk_widget_get_style_context (widget);
       attrs = pango_attr_list_new ();
 
       for (list = priv->select_info->links; list; list = list->next)
@@ -3334,13 +3334,12 @@ gtk_label_update_layout_attributes (GtkLabel *label)
           attribute->end_index = link->end;
           pango_attr_list_insert (attrs, attribute);
 
-          gtk_style_context_save_to_node (context, link->cssnode);
-          gtk_style_context_get_color (context, &link_color);
-          gtk_style_context_restore (context);
+          style = gtk_css_node_get_style (link->cssnode);
+          link_color = gtk_css_color_value_get_rgba (style->core->color);
 
-          attribute = pango_attr_foreground_new (link_color.red * 65535,
-                                                 link_color.green * 65535,
-                                                 link_color.blue * 65535);
+          attribute = pango_attr_foreground_new (link_color->red * 65535,
+                                                 link_color->green * 65535,
+                                                 link_color->blue * 65535);
           attribute->start_index = link->start;
           attribute->end_index = link->end;
           pango_attr_list_insert (attrs, attribute);
@@ -3351,15 +3350,11 @@ gtk_label_update_layout_attributes (GtkLabel *label)
   else
     attrs = NULL;
 
-  if ((context = _gtk_widget_peek_style_context (widget)))
-    {
-      style_attrs = _gtk_style_context_get_pango_attributes (context);
-
-      attrs = _gtk_pango_attr_list_merge (attrs, style_attrs);
-
-      if (style_attrs)
-        pango_attr_list_unref (style_attrs);
-    }
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+  style_attrs = gtk_css_style_get_pango_attributes (style);
+  attrs = _gtk_pango_attr_list_merge (attrs, style_attrs);
+  if (style_attrs)
+    pango_attr_list_unref (style_attrs);
 
   attrs = _gtk_pango_attr_list_merge (attrs, priv->markup_attrs);
   attrs = _gtk_pango_attr_list_merge (attrs, priv->attrs);
