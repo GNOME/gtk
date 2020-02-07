@@ -28,7 +28,6 @@
     <property name="default-width">800</property>
     <property name="default-height">600</property>
     <property name="title">GTK Demo</property>
-    <signal name="destroy" handler="gtk_main_quit" swapped="no"/>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar">
         <property name="show-title-buttons">1</property>
