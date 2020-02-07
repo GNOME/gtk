@@ -32,12 +32,13 @@ Overview of Changes in GTK 3.98.0
   been simplified, by making widgets derive directly from GtkWidget instead of a container.
 
 * Menu-related changes:
- - GtkMenu, GtkMenuBar and related classes have been removed. They are being replaced
-   by popover-based variants. Popover menus can now do traditional, nested menus, and
-   model buttons show accelerators.
+ - GtkMenu, GtkMenuBar and related classes have been removed. They are being replaced by
+   GMenu and popover-based variants. Popover menus can now do traditional, nested menus,
+   and model buttons show accelerators.
  - Context menus are no longer created with ::populate-popup signals, but use menu
    models and actions.
  - There are apis to create actions at class_init time, like gtk_widget_class_install_action.
+ - GtkToolbar has been removed as well.
 
 * Text-related changed:
  - Text cursor blinking has been made smooth.
@@ -49,11 +50,20 @@ Overview of Changes in GTK 3.98.0
 
 * GtkTreeView renders tree and grid lines with textures.
 
+* GtkEmojiChooser has been made public.
+
 * GtkGestureMultiPress has been renamed to GtkGestureClick.
+
+* GtkWidget has api to handle style classes: gtk_widget_add_style_class.
+  This is the first step towards moving away from GtkStyleContext.
 
 * X11-specific changes:
  - XI2 is now mandatory
  - The xim input method has been removed
+
+* Wayland-specific changes:
+ - The loading of cursor themes has been improved to load cursors on demand, and
+   no longer relies on libwayland-cursor.
 
 * The GL renderer is now sharing icon and glyph caches for all surfaces, and
   has better support for blurring and shadow rendering.
