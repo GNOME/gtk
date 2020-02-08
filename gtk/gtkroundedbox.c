@@ -159,20 +159,6 @@ gtk_rounded_boxes_init_for_style (GskRoundedRect *border_box,
     }
 }
 
-void
-_gtk_rounded_box_apply_outline_radius_for_style (GskRoundedRect   *box,
-                                                 GtkCssStyle      *style)
-{
-  const GtkCssValue *corner[4];
-
-  corner[GSK_CORNER_TOP_LEFT] = style->outline->outline_top_left_radius;
-  corner[GSK_CORNER_TOP_RIGHT] = style->outline->outline_top_right_radius;
-  corner[GSK_CORNER_BOTTOM_LEFT] = style->outline->outline_bottom_left_radius;
-  corner[GSK_CORNER_BOTTOM_RIGHT] = style->outline->outline_bottom_right_radius;
-
-  _gtk_rounded_box_apply_border_radius (box, corner);
-}
-
 typedef struct {
   double angle1;
   double angle2;

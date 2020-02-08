@@ -27,7 +27,6 @@ flowboxchild:focus(visible) {
   outline-style: dashed;
   outline-offset: -3px;
   outline-width: 1px;
-  -gtk-outline-radius: $button-radius - 2;
 }
 
 
@@ -831,7 +830,6 @@ button {
 
   &.circular { // The Bloody Circul Button
     border-radius: 9999px;
-    -gtk-outline-radius: 9999px;
 
     label { padding: 0; }
   }
@@ -2609,7 +2607,6 @@ scale {
     > trough > highlight,
     > trough {
       border-radius: 5px;
-      -gtk-outline-radius: 7px;
     }
   }
 
@@ -2618,7 +2615,6 @@ scale {
     @extend %scale_trough;
 
     outline-offset: 2px;
-    -gtk-outline-radius: 5px;
   }
 
   // the colored part of the backing bit
@@ -3467,12 +3463,10 @@ messagedialog { // Message Dialog styling
       &:first-child{
         border-left-style: none;
         border-bottom-left-radius: 7px;
-        -gtk-outline-bottom-left-radius: 5px;
       }
 
       &:last-child {
         border-bottom-right-radius: 7px;
-        -gtk-outline-bottom-right-radius: 5px;
       }
     }
   }
@@ -3613,7 +3607,6 @@ placessidebar {
       margin-bottom: 3px;
       padding: 0;
       border-radius: 100%;
-      -gtk-outline-radius: 100%;
 
       &:not(:hover):not(:active),
       &:backdrop { > image { opacity: $_placesidebar_icons_opacity; }}
@@ -4099,7 +4092,6 @@ button.titlebutton {
 
   &:not(.menu) {
     border-radius: 9999px;
-    -gtk-outline-radius: 9999px;
     padding: 6px;
     margin: 0 2px;
     min-width: 0;

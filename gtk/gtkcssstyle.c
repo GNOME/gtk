@@ -189,14 +189,6 @@ gtk_css_style_get_value (GtkCssStyle *style,
       return style->outline->outline_width;
     case GTK_CSS_PROPERTY_OUTLINE_OFFSET:
       return style->outline->outline_offset;
-    case GTK_CSS_PROPERTY_OUTLINE_TOP_LEFT_RADIUS:
-      return style->outline->outline_top_left_radius;
-    case GTK_CSS_PROPERTY_OUTLINE_TOP_RIGHT_RADIUS:
-      return style->outline->outline_top_right_radius;
-    case GTK_CSS_PROPERTY_OUTLINE_BOTTOM_RIGHT_RADIUS:
-      return style->outline->outline_bottom_right_radius;
-    case GTK_CSS_PROPERTY_OUTLINE_BOTTOM_LEFT_RADIUS:
-      return style->outline->outline_bottom_left_radius;
     case GTK_CSS_PROPERTY_BACKGROUND_CLIP:
       return style->background->background_clip;
     case GTK_CSS_PROPERTY_BACKGROUND_ORIGIN:

@@ -137,10 +137,6 @@ struct _GtkCssOutlineValues {
   GtkCssValue *outline_style;
   GtkCssValue *outline_width;
   GtkCssValue *outline_offset;
-  GtkCssValue *outline_top_left_radius;
-  GtkCssValue *outline_top_right_radius;
-  GtkCssValue *outline_bottom_right_radius;
-  GtkCssValue *outline_bottom_left_radius;
   GtkCssValue *outline_color;
 };
 
