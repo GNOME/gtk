@@ -28,19 +28,6 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkCssLookup GtkCssLookup;
-
-typedef struct {
-  GtkCssSection     *section;
-  GtkCssValue       *value;
-  guint id;
-} GtkCssLookupValue;
-
-struct _GtkCssLookup {
-  GtkBitmask *set_values;
-  GArray *values;
-};
-
 void                    _gtk_css_lookup_init                    (GtkCssLookup               *lookup);
 void                    _gtk_css_lookup_destroy                 (GtkCssLookup               *lookup);
 gboolean                _gtk_css_lookup_is_missing              (const GtkCssLookup         *lookup,
@@ -51,6 +38,9 @@ void                    _gtk_css_lookup_set                     (GtkCssLookup   
                                                                  GtkCssValue                *value);
 GtkCssLookupValue *     _gtk_css_lookup_get                     (GtkCssLookup               *lookup,
                                                                  guint                       id);
+void                   _gtk_css_lookup_copy                     (GtkCssLookup               *dest,
+                                                                 GtkCssLookup               *src);
+
 
 static inline const GtkBitmask *
 _gtk_css_lookup_get_set_values (const GtkCssLookup *lookup)

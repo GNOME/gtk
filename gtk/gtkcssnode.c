@@ -372,20 +372,30 @@ gtk_css_node_create_style (GtkCssNode                   *cssnode,
 
   created_styles++;
 
-  if (change & GTK_CSS_CHANGE_NEEDS_RECOMPUTE)
+  /* We don't need to match again unless one of our change flags is set,
+   * or the theme changed.
+   */
+  if ((change & (GTK_CSS_CHANGE_SOURCE|GTK_CSS_CHANGE_ANIMATIONS)) == 0 &&
+      GTK_IS_CSS_STATIC_STYLE (cssnode->style) &&
+      (gtk_css_static_style_get_change (GTK_CSS_STATIC_STYLE (cssnode->style)) & change) == 0)
     {
-      /* Need to recompute the change flags */
-      style_change = 0;
+      /* Reuse the cached lookup */
+       style = gtk_css_static_style_recompute (GTK_CSS_STATIC_STYLE (cssnode->style),
+                                               gtk_css_node_get_style_provider (cssnode),
+                                               cssnode->parent ? cssnode->parent->style : NULL);
     }
   else
     {
-      style_change = gtk_css_static_style_get_change (gtk_css_style_get_static_style (cssnode->style));
-    }
+      if (change & GTK_CSS_CHANGE_NEEDS_RECOMPUTE)
+        style_change = 0; /* Need to recompute the change flags */
+      else
+        style_change = gtk_css_static_style_get_change (gtk_css_style_get_static_style (cssnode->style));
 
-  style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
-                                            filter,
-                                            cssnode,
-                                            style_change);
+      style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
+                                                filter,
+                                                cssnode,
+                                                style_change);
+    }
 
   store_in_global_parent_cache (cssnode, decl, style);
 

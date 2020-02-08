@@ -326,6 +326,8 @@ gtk_css_static_style_dispose (GObject *object)
       style->sections = NULL;
     }
 
+  _gtk_css_lookup_destroy (&style->lookup);
+
   G_OBJECT_CLASS (gtk_css_static_style_parent_class)->dispose (object);
 }
 
@@ -364,6 +366,7 @@ gtk_css_static_style_class_init (GtkCssStaticStyleClass *klass)
 static void
 gtk_css_static_style_init (GtkCssStaticStyle *style)
 {
+  _gtk_css_lookup_init (&style->lookup);
 }
 
 static void
@@ -1008,39 +1011,48 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
 }
 
 GtkCssStyle *
+gtk_css_static_style_recompute (GtkCssStaticStyle *style,
+                                GtkStyleProvider  *provider,
+                                GtkCssStyle       *parent)
+{
+  GtkCssStaticStyle *result;
+
+  result = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
+
+  _gtk_css_lookup_copy (&result->lookup, &style->lookup);
+  result->change = style->change;
+
+  gtk_css_lookup_resolve (&result->lookup, provider, result, parent);
+
+  return GTK_CSS_STYLE (result);
+}
+
+GtkCssStyle *
 gtk_css_static_style_new_compute (GtkStyleProvider             *provider,
                                   const GtkCountingBloomFilter *filter,
                                   GtkCssNode                   *node,
                                   GtkCssChange                  change)
 {
   GtkCssStaticStyle *result;
-  GtkCssLookup lookup;
-  GtkCssNode *parent;
+  GtkCssStyle *parent;
 
-  _gtk_css_lookup_init (&lookup);
+  result = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
 
   if (node)
     gtk_style_provider_lookup (provider,
                                filter,
                                node,
-                               &lookup,
+                               &result->lookup,
                                change == 0 ? &change : NULL);
-
-  result = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
 
   result->change = change;
 
-  if (node)
-    parent = gtk_css_node_get_parent (node);
+  if (node && gtk_css_node_get_parent (node))
+    parent = gtk_css_node_get_style (gtk_css_node_get_parent (node));
   else
     parent = NULL;
 
-  gtk_css_lookup_resolve (&lookup,
-                          provider,
-                          result,
-                          parent ? gtk_css_node_get_style (parent) : NULL);
-
-  _gtk_css_lookup_destroy (&lookup);
+  gtk_css_lookup_resolve (&result->lookup, provider, result, parent);
 
   return GTK_CSS_STYLE (result);
 }
