@@ -561,6 +561,19 @@ gtk_make_symbolic_pixbuf_from_file (GFile       *file,
 }
 
 GdkTexture *
+gtk_load_symbolic_texture_from_resource (const char *path)
+{
+  GdkPixbuf *pixbuf;
+  GdkTexture *texture;
+
+  pixbuf = _gdk_pixbuf_new_from_resource (path, "png", NULL);
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
+  g_object_unref (pixbuf);
+
+  return texture;
+}
+
+GdkTexture *
 gtk_make_symbolic_texture_from_resource (const char  *path,
                                          int          width,
                                          int          height,
@@ -576,6 +589,28 @@ gtk_make_symbolic_texture_from_resource (const char  *path,
       texture = gdk_texture_new_for_pixbuf (pixbuf);
       g_object_unref (pixbuf);
     }
+
+  return texture;
+}
+
+GdkTexture *
+gtk_load_symbolic_texture_from_file (GFile *file)
+{
+  GdkPixbuf *pixbuf;
+  GdkTexture *texture;
+  GInputStream *stream;
+
+  stream = G_INPUT_STREAM (g_file_read (file, NULL, NULL));
+  if (stream == NULL)
+    return NULL;
+
+  pixbuf = _gdk_pixbuf_new_from_stream (stream, "png", NULL, NULL);
+  g_object_unref (stream);
+  if (pixbuf == NULL)
+    return NULL;
+
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
+  g_object_unref (pixbuf);
 
   return texture;
 }
