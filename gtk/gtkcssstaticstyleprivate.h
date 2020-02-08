@@ -26,6 +26,19 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GtkCssLookup GtkCssLookup;
+
+typedef struct {
+  GtkCssSection     *section;
+  GtkCssValue       *value;
+  guint id;
+} GtkCssLookupValue;
+
+struct _GtkCssLookup {
+  GtkBitmask *set_values;
+  GArray *values;
+};
+
 #define GTK_TYPE_CSS_STATIC_STYLE           (gtk_css_static_style_get_type ())
 #define GTK_CSS_STATIC_STYLE(obj)           (G_TYPE_CHECK_INSTANCE_CAST (obj, GTK_TYPE_CSS_STATIC_STYLE, GtkCssStaticStyle))
 #define GTK_CSS_STATIC_STYLE_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST (cls, GTK_TYPE_CSS_STATIC_STYLE, GtkCssStaticStyleClass))
@@ -35,13 +48,12 @@ G_BEGIN_DECLS
 
 typedef struct _GtkCssStaticStyleClass      GtkCssStaticStyleClass;
 
-
 struct _GtkCssStaticStyle
 {
   GtkCssStyle parent;
 
+  GtkCssLookup           lookup;
   GPtrArray             *sections;             /* sections the values are defined in */
-
   GtkCssChange           change;               /* change as returned by value lookup */
 };
 
@@ -57,6 +69,9 @@ GtkCssStyle *           gtk_css_static_style_new_compute        (GtkStyleProvide
                                                                  const GtkCountingBloomFilter   *filter,
                                                                  GtkCssNode                     *node,
                                                                  GtkCssChange                    change);
+GtkCssStyle *           gtk_css_static_style_recompute          (GtkCssStaticStyle              *style,
+                                                                 GtkStyleProvider               *provider,
+                                                                 GtkCssStyle                    *parent);
 GtkCssChange            gtk_css_static_style_get_change         (GtkCssStaticStyle              *style);
 
 G_END_DECLS

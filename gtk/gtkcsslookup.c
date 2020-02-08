@@ -112,3 +112,25 @@ _gtk_css_lookup_get (GtkCssLookup *lookup,
 
   return NULL;
 }
+
+void
+_gtk_css_lookup_copy (GtkCssLookup *dest,
+                      GtkCssLookup *src)
+{
+  int i;
+
+  _gtk_bitmask_free (dest->set_values);
+  dest->set_values = _gtk_bitmask_copy (src->set_values);
+  g_array_set_size (dest->values, src->values->len);
+  for (i = 0; i < src->values->len; i++)
+    {
+      GtkCssLookupValue *s = &g_array_index (src->values, GtkCssLookupValue, i);
+      GtkCssLookupValue *d = &g_array_index (dest->values, GtkCssLookupValue, i);
+      d->value = gtk_css_value_ref (s->value);
+      d->id = s->id;
+      if (s->section)
+        d->section = gtk_css_section_ref (s->section);
+      else
+        d->section = NULL;
+    }
+}
