@@ -244,29 +244,6 @@ calendar_toggle_flag (GtkWidget    *toggle,
   
 }
 
-void calendar_select_font (GtkWidget    *button,
-                                 CalendarData *calendar)
-{
-  const char *font = NULL;
-  GtkCssProvider *provider;
-  gchar *data;
-
-  if (calendar->window)
-    {
-      provider = g_object_get_data (G_OBJECT (calendar->window), "css-provider");
-      if (!provider)
-        {
-          provider = gtk_css_provider_new ();
-          gtk_style_context_add_provider (gtk_widget_get_style_context (calendar->window), GTK_STYLE_PROVIDER (provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-          g_object_set_data_full (G_OBJECT (calendar->window), "css-provider", provider, g_object_unref);
-        }
-      font = gtk_font_chooser_get_font (GTK_FONT_CHOOSER (button));
-      data = g_strdup_printf ("GtkCalendar { font: %s; }", font);
-      gtk_css_provider_load_from_data (provider, data, -1);
-      g_free (data);
-    }
-}
-
 static gchar*
 calendar_detail_cb (GtkCalendar *calendar,
                     guint        year,
