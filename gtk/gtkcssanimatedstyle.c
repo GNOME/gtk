@@ -348,22 +348,6 @@ gtk_css_animated_style_set_animated_value (GtkCssAnimatedStyle *animated,
       unshare_outline (animated);
       gtk_css_take_value (&style->outline->outline_offset, value);
       break;
-    case GTK_CSS_PROPERTY_OUTLINE_TOP_LEFT_RADIUS:
-      unshare_outline (animated);
-      gtk_css_take_value (&style->outline->outline_top_left_radius, value);
-      break;
-    case GTK_CSS_PROPERTY_OUTLINE_TOP_RIGHT_RADIUS:
-      unshare_outline (animated);
-      gtk_css_take_value (&style->outline->outline_top_right_radius, value);
-      break;
-    case GTK_CSS_PROPERTY_OUTLINE_BOTTOM_RIGHT_RADIUS:
-      unshare_outline (animated);
-      gtk_css_take_value (&style->outline->outline_bottom_right_radius, value);
-      break;
-    case GTK_CSS_PROPERTY_OUTLINE_BOTTOM_LEFT_RADIUS:
-      unshare_outline (animated);
-      gtk_css_take_value (&style->outline->outline_bottom_left_radius, value);
-      break;
     case GTK_CSS_PROPERTY_BACKGROUND_CLIP:
       unshare_background (animated);
       gtk_css_take_value (&style->background->background_clip, value);
