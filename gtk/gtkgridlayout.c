@@ -472,15 +472,12 @@ get_spacing (GtkGridLayout  *self,
 {
   GtkCssNode *node = gtk_widget_get_css_node (widget);
   GtkCssStyle *style = gtk_css_node_get_style (node);
-  GtkCssValue *border_spacing;
   int css_spacing;
 
-  border_spacing = style->size->border_spacing;
-
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    css_spacing = _gtk_css_position_value_get_x (border_spacing, 100);
+    css_spacing = style->size->_border_spacing_x;
   else
-    css_spacing = _gtk_css_position_value_get_y (border_spacing, 100);
+    css_spacing = style->size->_border_spacing_y;
 
   return css_spacing + self->linedata[orientation].spacing;
 }

@@ -25,6 +25,7 @@
 
 #include "gtk/gtkbitmaskprivate.h"
 #include "gtk/gtkcssvalueprivate.h"
+#include "gtk/gtkicontheme.h"
 
 G_BEGIN_DECLS
 
@@ -85,6 +86,11 @@ struct _GtkCssCoreValues {
   GtkCssValue *font_size;
   GtkCssValue *icon_theme;
   GtkCssValue *icon_palette;
+
+  const GdkRGBA *_color;
+  double         _dpi;
+  double         _font_size;
+  GtkIconTheme  *_icon_theme;
 };
 
 struct _GtkCssBackgroundValues {
@@ -122,6 +128,27 @@ struct _GtkCssBorderValues {
   GtkCssValue *border_image_repeat;
   GtkCssValue *border_image_slice;
   GtkCssValue *border_image_width;
+
+  GtkBorderStyle _border_top_style;
+  GtkBorderStyle _border_left_style;
+  GtkBorderStyle _border_bottom_style;
+  GtkBorderStyle _border_right_style;
+  double _border_top_width;
+  double _border_left_width;
+  double _border_bottom_width;
+  double _border_right_width;
+  double _border_top_left_radius_x;
+  double _border_top_left_radius_y;
+  double _border_top_right_radius_x;
+  double _border_top_right_radius_y;
+  double _border_bottom_right_radius_x;
+  double _border_bottom_right_radius_y;
+  double _border_bottom_left_radius_x;
+  double _border_bottom_left_radius_y;
+  const GdkRGBA *_border_top_color;
+  const GdkRGBA *_border_right_color;
+  const GdkRGBA *_border_bottom_color;
+  const GdkRGBA *_border_left_color;
 };
 
 struct _GtkCssIconValues {
@@ -141,7 +168,20 @@ struct _GtkCssOutlineValues {
   GtkCssValue *outline_top_right_radius;
   GtkCssValue *outline_bottom_right_radius;
   GtkCssValue *outline_bottom_left_radius;
-  GtkCssValue *outline_color;
+  GtkCssValue *outline_color; // NULL if currentColor
+
+  GtkBorderStyle _outline_style;
+  double         _outline_width;
+  double         _outline_offset;
+  double         _outline_top_left_radius_x;
+  double         _outline_top_left_radius_y;
+  double         _outline_top_right_radius_x;
+  double         _outline_top_right_radius_y;
+  double         _outline_bottom_right_radius_x;
+  double         _outline_bottom_right_radius_y;
+  double         _outline_bottom_left_radius_x;
+  double         _outline_bottom_left_radius_y;
+  const GdkRGBA *_outline_color;
 };
 
 struct _GtkCssFontValues {
@@ -205,6 +245,19 @@ struct _GtkCssSizeValues {
   GtkCssValue *border_spacing;
   GtkCssValue *min_width;
   GtkCssValue *min_height;
+
+  double _margin_top;
+  double _margin_left;
+  double _margin_bottom;
+  double _margin_right;
+  double _padding_top;
+  double _padding_left;
+  double _padding_bottom;
+  double _padding_right;
+  double _border_spacing_x;
+  double _border_spacing_y;
+  double _min_width;
+  double _min_height;
 };
 
 struct _GtkCssOtherValues {

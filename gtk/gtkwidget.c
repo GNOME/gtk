@@ -6545,7 +6545,7 @@ update_pango_context (GtkWidget    *widget,
 			      _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
 			      PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);
 
-  pango_cairo_context_set_resolution (context, _gtk_css_number_value_get (style->core->dpi, 100));
+  pango_cairo_context_set_resolution (context, style->core->_dpi);
 
   settings = gtk_widget_get_settings (widget);
   font_options = (cairo_font_options_t*)g_object_get_qdata (G_OBJECT (widget), quark_font_options);
