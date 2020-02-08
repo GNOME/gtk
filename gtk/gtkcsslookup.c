@@ -35,20 +35,18 @@ free_value (gpointer data)
 }
 
 void
-_gtk_css_lookup_init (GtkCssLookup     *lookup)
+_gtk_css_lookup_init (GtkCssLookup *lookup)
 {
-  memset (lookup, 0, sizeof (*lookup));
-
   lookup->set_values = _gtk_bitmask_new ();
-  lookup->values = g_array_new (FALSE, FALSE, sizeof (GtkCssLookupValue));
-  g_array_set_clear_func (lookup->values, free_value);
+  lookup->values = NULL;
 }
 
 void
 _gtk_css_lookup_destroy (GtkCssLookup *lookup)
 {
   _gtk_bitmask_free (lookup->set_values);
-  g_array_unref (lookup->values);
+  if (lookup->values)
+    g_array_unref (lookup->values);
 }
 
 gboolean
@@ -58,6 +56,17 @@ _gtk_css_lookup_is_missing (const GtkCssLookup *lookup,
   gtk_internal_return_val_if_fail (lookup != NULL, FALSE);
 
   return !_gtk_bitmask_get (lookup->set_values, id);
+}
+
+static inline void
+ensure_values (GtkCssLookup *lookup,
+               int           size)
+{
+  if (!lookup->values)
+    {
+      lookup ->values = g_array_sized_new (FALSE, FALSE, sizeof (GtkCssLookupValue), size);
+      g_array_set_clear_func (lookup->values, free_value);
+    }
 }
 
 /**
@@ -88,6 +97,8 @@ _gtk_css_lookup_set (GtkCssLookup  *lookup,
   v.value = gtk_css_value_ref (value);
   v.section = section ? gtk_css_section_ref (section) : NULL;
   v.id = id;
+
+  ensure_values (lookup, 16);
 
   g_array_append_val (lookup->values, v);
   lookup->set_values = _gtk_bitmask_set (lookup->set_values, id, TRUE);
@@ -121,16 +132,16 @@ _gtk_css_lookup_copy (GtkCssLookup *dest,
 
   _gtk_bitmask_free (dest->set_values);
   dest->set_values = _gtk_bitmask_copy (src->set_values);
-  g_array_set_size (dest->values, src->values->len);
-  for (i = 0; i < src->values->len; i++)
+  if (src->values)
     {
-      GtkCssLookupValue *s = &g_array_index (src->values, GtkCssLookupValue, i);
-      GtkCssLookupValue *d = &g_array_index (dest->values, GtkCssLookupValue, i);
-      d->value = gtk_css_value_ref (s->value);
-      d->id = s->id;
-      if (s->section)
-        d->section = gtk_css_section_ref (s->section);
-      else
-        d->section = NULL;
+      ensure_values (dest, src->values->len);
+      for (i = 0; i < src->values->len; i++)
+        {
+          GtkCssLookupValue *s = &g_array_index (src->values, GtkCssLookupValue, i);
+          GtkCssLookupValue *d = &g_array_index (dest->values, GtkCssLookupValue, i);
+          d->value = gtk_css_value_ref (s->value);
+          d->id = s->id;
+          d->section = s->section ? gtk_css_section_ref (s->section) : NULL;
+        }
     }
 }
