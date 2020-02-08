@@ -79,11 +79,13 @@ GdkPixbuf *gtk_make_symbolic_pixbuf_from_resource (const char    *path,
                                                    int            height,
                                                    double         scale,
                                                    GError       **error);
+GdkTexture *gtk_load_symbolic_texture_from_file     (GFile         *file);
 GdkTexture *gtk_make_symbolic_texture_from_file     (GFile         *file,
                                                      int            width,
                                                      int            height,
                                                      double         scale,
                                                      GError       **error);
+GdkTexture *gtk_load_symbolic_texture_from_resource (const char    *data);
 GdkTexture *gtk_make_symbolic_texture_from_resource (const char    *path,
                                                      int            width,
                                                      int            height,

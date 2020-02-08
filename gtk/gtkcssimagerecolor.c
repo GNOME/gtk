@@ -109,7 +109,7 @@ gtk_css_image_recolor_load_texture (GtkCssImageRecolor  *recolor,
       char *resource_path = g_uri_unescape_string (uri + strlen ("resource://"), NULL);
 
       if (g_str_has_suffix (uri, ".symbolic.png"))
-        recolor->texture = gdk_texture_new_from_resource (resource_path);
+        recolor->texture = gtk_load_symbolic_texture_from_resource (resource_path);
       else
         recolor->texture = gtk_make_symbolic_texture_from_resource (resource_path, 0, 0, 1.0, NULL);
 
@@ -118,7 +118,7 @@ gtk_css_image_recolor_load_texture (GtkCssImageRecolor  *recolor,
   else
     {
       if (g_str_has_suffix (uri, ".symbolic.png"))
-        recolor->texture = gdk_texture_new_from_file (recolor->file, NULL);
+        recolor->texture = gtk_load_symbolic_texture_from_file (recolor->file);
       else
         recolor->texture = gtk_make_symbolic_texture_from_file (recolor->file, 0, 0, 1.0, NULL);
     }
