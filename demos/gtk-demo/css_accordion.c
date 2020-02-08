@@ -7,11 +7,10 @@
 #include <gtk/gtk.h>
 
 static void
-apply_css (GtkWidget *widget, GtkStyleProvider *provider)
+destroy_provider (GtkWidget      *window,
+                  GtkCssProvider *provider)
 {
-  gtk_style_context_add_provider (gtk_widget_get_style_context (widget), provider, G_MAXUINT);
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget), (GtkCallback) apply_css, provider);
+  gtk_style_context_remove_provider_for_display (gtk_widget_get_display (window), GTK_STYLE_PROVIDER (provider));
 }
 
 GtkWidget *
@@ -21,7 +20,7 @@ do_css_accordion (GtkWidget *do_widget)
 
   if (!window)
     {
-      GtkWidget *container, *child;
+      GtkWidget *container, *styled_box, *child;
       GtkStyleProvider *provider;
 
       window = gtk_window_new ();
@@ -30,11 +29,14 @@ do_css_accordion (GtkWidget *do_widget)
       gtk_window_set_default_size (GTK_WINDOW (window), 600, 300);
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
-
+      
+      styled_box = gtk_frame_new (NULL);
+      gtk_container_add (GTK_CONTAINER (window), styled_box);
+      gtk_widget_add_css_class (styled_box, "accordion");
       container = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_widget_set_halign (container, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (container, GTK_ALIGN_CENTER);
-      gtk_container_add (GTK_CONTAINER (window), container);
+      gtk_container_add (GTK_CONTAINER (styled_box), container);
 
       child = gtk_button_new_with_label ("This");
       gtk_container_add (GTK_CONTAINER (container), child);
@@ -57,7 +59,12 @@ do_css_accordion (GtkWidget *do_widget)
       provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
       gtk_css_provider_load_from_resource (GTK_CSS_PROVIDER (provider), "/css_accordion/css_accordion.css");
 
-      apply_css (window, provider);
+      gtk_style_context_add_provider_for_display (gtk_widget_get_display (window),
+                                                  GTK_STYLE_PROVIDER (provider),
+                                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+      g_signal_connect (window, "destroy",
+                        G_CALLBACK (destroy_provider), provider);
+      g_object_unref (provider);
     }
 
   if (!gtk_widget_get_visible (window))
