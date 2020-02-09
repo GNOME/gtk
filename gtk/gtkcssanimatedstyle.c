@@ -765,6 +765,7 @@ gtk_css_animated_style_create_css_animations (GPtrArray        *animations,
                                               GtkCssStyle      *parent_style,
                                               gint64            timestamp,
                                               GtkStyleProvider *provider,
+                                              GtkWidget        *root,
                                               GtkCssStyle      *source)
 {
   GtkCssValue *durations, *delays, *timing_functions, *animation_names;
@@ -813,7 +814,7 @@ gtk_css_animated_style_create_css_animations (GPtrArray        *animations,
           if (keyframes == NULL)
             continue;
 
-          keyframes = _gtk_css_keyframes_compute (keyframes, provider, base_style, parent_style);
+          keyframes = gtk_css_keyframes_compute (keyframes, provider, root, base_style, parent_style);
 
           animation = _gtk_css_animation_new (name,
                                               keyframes,
@@ -857,6 +858,7 @@ gtk_css_animated_style_new (GtkCssStyle      *base_style,
                             GtkCssStyle      *parent_style,
                             gint64            timestamp,
                             GtkStyleProvider *provider,
+                            GtkWidget        *root,
                             GtkCssStyle      *previous_style)
 {
   GtkCssAnimatedStyle *result;
@@ -874,7 +876,7 @@ gtk_css_animated_style_new (GtkCssStyle      *base_style,
   if (previous_style != NULL)
     animations = gtk_css_animated_style_create_css_transitions (animations, base_style, timestamp, previous_style);
 
-  animations = gtk_css_animated_style_create_css_animations (animations, base_style, parent_style, timestamp, provider, previous_style);
+  animations = gtk_css_animated_style_create_css_animations (animations, base_style, parent_style, timestamp, provider, root, previous_style);
   animations = gtk_css_animated_style_create_dynamic (animations, base_style, timestamp);
 
   if (animations == NULL)

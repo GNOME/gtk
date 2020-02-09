@@ -125,6 +125,7 @@ static GtkCssImage *
 gtk_css_image_url_compute (GtkCssImage      *image,
                            guint             property_id,
                            GtkStyleProvider *provider,
+                           GtkWidget        *root,
                            GtkCssStyle      *style,
                            GtkCssStyle      *parent_style)
 {

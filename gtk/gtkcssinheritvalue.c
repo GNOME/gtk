@@ -37,6 +37,7 @@ static GtkCssValue *
 gtk_css_value_inherit_compute (GtkCssValue      *value,
                                guint             property_id,
                                GtkStyleProvider *provider,
+                               GtkWidget        *root,
                                GtkCssStyle      *style,
                                GtkCssStyle      *parent_style)
 {
@@ -46,11 +47,12 @@ gtk_css_value_inherit_compute (GtkCssValue      *value,
     }
   else
     {
-      return _gtk_css_value_compute (_gtk_css_initial_value_get (),
-                                     property_id,
-                                     provider,
-                                     style,
-                                     parent_style);
+      return gtk_css_value_compute (_gtk_css_initial_value_get (),
+                                    property_id,
+                                    provider,
+                                    root,
+                                    style,
+                                    parent_style);
     }
 }
 

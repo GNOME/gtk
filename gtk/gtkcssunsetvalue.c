@@ -38,6 +38,7 @@ static GtkCssValue *
 gtk_css_value_unset_compute (GtkCssValue      *value,
                              guint             property_id,
                              GtkStyleProvider *provider,
+                             GtkWidget        *root,
                              GtkCssStyle      *style,
                              GtkCssStyle      *parent_style)
 {
@@ -51,11 +52,12 @@ gtk_css_value_unset_compute (GtkCssValue      *value,
   else
     unset_value = _gtk_css_initial_value_get ();
 
-  return _gtk_css_value_compute (unset_value,
-                                 property_id,
-                                 provider,
-                                 style,
-                                 parent_style);
+  return gtk_css_value_compute (unset_value,
+                                property_id,
+                                provider,
+                                root,
+                                style,
+                                parent_style);
 }
 
 static gboolean

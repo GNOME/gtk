@@ -19,10 +19,10 @@
 
 #include "gtkcssenumvalueprivate.h"
 
-#include "gtkcssstyleprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkstyleproviderprivate.h"
+#include "gtkcssstyleprivate.h"
 #include "gtksettingsprivate.h"
+#include "gtkwidget.h"
 
 #ifdef _MSC_VER
 # include <intrin.h>
@@ -46,6 +46,7 @@ static GtkCssValue *
 gtk_css_value_enum_compute (GtkCssValue      *value,
                             guint             property_id,
                             GtkStyleProvider *provider,
+                            GtkWidget        *root,
                             GtkCssStyle      *style,
                             GtkCssStyle      *parent_style)
 {
@@ -211,16 +212,16 @@ get_dpi (GtkCssStyle *style)
 #define DEFAULT_FONT_SIZE_PT 10
 
 double
-gtk_css_font_size_get_default_px (GtkStyleProvider *provider,
-                                  GtkCssStyle      *style)
+gtk_css_font_size_get_default_px (GtkWidget   *root,
+                                  GtkCssStyle *style)
 {
   GtkSettings *settings;
   int font_size;
 
-  settings = gtk_style_provider_get_settings (provider);
-  if (settings == NULL)
+  if (root == NULL)
     return DEFAULT_FONT_SIZE_PT * get_dpi (style) / 72.0;
 
+  settings = gtk_widget_get_settings (root);
   font_size = gtk_settings_get_font_size (settings);
   if (font_size == 0)
     return DEFAULT_FONT_SIZE_PT * get_dpi (style) / 72.0;
@@ -234,6 +235,7 @@ static GtkCssValue *
 gtk_css_value_font_size_compute (GtkCssValue      *value,
                                  guint             property_id,
                                  GtkStyleProvider *provider,
+                                 GtkWidget        *root,
                                  GtkCssStyle      *style,
                                  GtkCssStyle      *parent_style)
 {
@@ -242,34 +244,34 @@ gtk_css_value_font_size_compute (GtkCssValue      *value,
   switch (value->value)
     {
     case GTK_CSS_FONT_SIZE_XX_SMALL:
-      font_size = gtk_css_font_size_get_default_px (provider, style) * 3. / 5;
+      font_size = gtk_css_font_size_get_default_px (root, style) * 3. / 5;
       break;
     case GTK_CSS_FONT_SIZE_X_SMALL:
-      font_size = gtk_css_font_size_get_default_px (provider, style) * 3. / 4;
+      font_size = gtk_css_font_size_get_default_px (root, style) * 3. / 4;
       break;
     case GTK_CSS_FONT_SIZE_SMALL:
-      font_size = gtk_css_font_size_get_default_px (provider, style) * 8. / 9;
+      font_size = gtk_css_font_size_get_default_px (root, style) * 8. / 9;
       break;
     default:
       g_assert_not_reached ();
       /* fall thru */
     case GTK_CSS_FONT_SIZE_MEDIUM:
-      font_size = gtk_css_font_size_get_default_px (provider, style);
+      font_size = gtk_css_font_size_get_default_px (root, style);
       break;
     case GTK_CSS_FONT_SIZE_LARGE:
-      font_size = gtk_css_font_size_get_default_px (provider, style) * 6. / 5;
+      font_size = gtk_css_font_size_get_default_px (root, style) * 6. / 5;
       break;
     case GTK_CSS_FONT_SIZE_X_LARGE:
-      font_size = gtk_css_font_size_get_default_px (provider, style) * 3. / 2;
+      font_size = gtk_css_font_size_get_default_px (root, style) * 3. / 2;
       break;
     case GTK_CSS_FONT_SIZE_XX_LARGE:
-      font_size = gtk_css_font_size_get_default_px (provider, style) * 2;
+      font_size = gtk_css_font_size_get_default_px (root, style) * 2;
       break;
     case GTK_CSS_FONT_SIZE_SMALLER:
       if (parent_style)
         font_size = _gtk_css_number_value_get (parent_style->core->font_size, 100);
       else
-        font_size = gtk_css_font_size_get_default_px (provider, style);
+        font_size = gtk_css_font_size_get_default_px (root, style);
       /* XXX: This is what WebKit does... */
       font_size /= 1.2;
       break;
@@ -277,7 +279,7 @@ gtk_css_value_font_size_compute (GtkCssValue      *value,
       if (parent_style)
         font_size = _gtk_css_number_value_get (parent_style->core->font_size, 100);
       else
-        font_size = gtk_css_font_size_get_default_px (provider, style);
+        font_size = gtk_css_font_size_get_default_px (root, style);
       /* XXX: This is what WebKit does... */
       font_size *= 1.2;
       break;
@@ -401,6 +403,7 @@ static GtkCssValue *
 gtk_css_value_font_weight_compute (GtkCssValue      *value,
                                    guint             property_id,
                                    GtkStyleProvider *provider,
+                                   GtkWidget        *root,
                                    GtkCssStyle      *style,
                                    GtkCssStyle      *parent_style)
 {

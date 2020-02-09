@@ -382,6 +382,7 @@ static GtkCssImage *
 gtk_css_image_cross_fade_compute (GtkCssImage      *image,
                                   guint             property_id,
                                   GtkStyleProvider *provider,
+                                  GtkWidget        *root,
                                   GtkCssStyle      *style,
                                   GtkCssStyle      *parent_style)
 {
@@ -398,7 +399,7 @@ gtk_css_image_cross_fade_compute (GtkCssImage      *image,
       gtk_css_image_cross_fade_add (result,
                                     entry->has_progress,
                                     entry->progress,
-                                    _gtk_css_image_compute (entry->image, property_id, provider, style, parent_style));
+                                    gtk_css_image_compute (entry->image, property_id, provider, root, style, parent_style));
     }
 
   return GTK_CSS_IMAGE (result);

@@ -41,6 +41,7 @@ static GtkCssValue *
 gtk_css_value_initial_compute (GtkCssValue      *value,
                                guint             property_id,
                                GtkStyleProvider *provider,
+                               GtkWidget        *root,
                                GtkCssStyle      *style,
                                GtkCssStyle      *parent_style)
 {
@@ -71,11 +72,12 @@ gtk_css_value_initial_compute (GtkCssValue      *value,
       break;
     }
 
-  return _gtk_css_value_compute (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (property_id)),
-                                 property_id,
-                                 provider,
-                                 style,
-                                 parent_style);
+  return gtk_css_value_compute (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (property_id)),
+                                property_id,
+                                provider,
+                                root,
+                                style,
+                                parent_style);
 }
 
 static gboolean
@@ -125,15 +127,18 @@ _gtk_css_initial_value_get (void)
 {
   return &initial;
 }
+
 GtkCssValue *
-_gtk_css_initial_value_new_compute (guint             property_id,
-                                    GtkStyleProvider *provider,
-                                    GtkCssStyle      *style,
-                                    GtkCssStyle      *parent_style)
+gtk_css_initial_value_new_compute (guint             property_id,
+                                   GtkStyleProvider *provider,
+                                   GtkWidget        *root,
+                                   GtkCssStyle      *style,
+                                   GtkCssStyle      *parent_style)
 {
   return gtk_css_value_initial_compute (NULL,
                                         property_id,
                                         provider,
+                                        root,
                                         style,
                                         parent_style);
 }

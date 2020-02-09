@@ -60,6 +60,7 @@ struct _GtkCssImageClass
   GtkCssImage *(* compute)                         (GtkCssImage                *image,
                                                     guint                       property_id,
                                                     GtkStyleProvider           *provider,
+                                                    GtkWidget                  *root,
                                                     GtkCssStyle                *style,
                                                     GtkCssStyle                *parent_style);
   /* compare two images for equality */
@@ -101,9 +102,10 @@ int            _gtk_css_image_get_width            (GtkCssImage                *
 int            _gtk_css_image_get_height           (GtkCssImage                *image) G_GNUC_PURE;
 double         _gtk_css_image_get_aspect_ratio     (GtkCssImage                *image) G_GNUC_PURE;
 
-GtkCssImage *  _gtk_css_image_compute              (GtkCssImage                *image,
+GtkCssImage *  gtk_css_image_compute               (GtkCssImage                *image,
                                                     guint                       property_id,
                                                     GtkStyleProvider           *provider,
+                                                    GtkWidget                  *root,
                                                     GtkCssStyle                *style,
                                                     GtkCssStyle                *parent_style);
 gboolean       _gtk_css_image_equal                (GtkCssImage                *image1,

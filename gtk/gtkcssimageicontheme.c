@@ -141,6 +141,7 @@ static GtkCssImage *
 gtk_css_image_icon_theme_compute (GtkCssImage      *image,
                                   guint             property_id,
                                   GtkStyleProvider *provider,
+                                  GtkWidget        *root,
                                   GtkCssStyle      *style,
                                   GtkCssStyle      *parent_style)
 {

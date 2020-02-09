@@ -44,6 +44,7 @@ static GtkCssValue *
 gtk_css_value_bg_size_compute (GtkCssValue      *value,
                                guint             property_id,
                                GtkStyleProvider *provider,
+                               GtkWidget        *root,
                                GtkCssStyle      *style,
                                GtkCssStyle      *parent_style)
 {
@@ -55,10 +56,10 @@ gtk_css_value_bg_size_compute (GtkCssValue      *value,
   x = y = NULL;
 
   if (value->x)
-    x = _gtk_css_value_compute (value->x, property_id, provider, style, parent_style);
+    x = gtk_css_value_compute (value->x, property_id, provider, root, style, parent_style);
 
   if (value->y)
-    y = _gtk_css_value_compute (value->y, property_id, provider, style, parent_style);
+    y = gtk_css_value_compute (value->y, property_id, provider, root, style, parent_style);
 
   if (x == value->x && y == value->y)
     {

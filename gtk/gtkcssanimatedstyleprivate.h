@@ -56,6 +56,7 @@ GtkCssStyle *           gtk_css_animated_style_new              (GtkCssStyle    
                                                                  GtkCssStyle            *parent_style,
                                                                  gint64                  timestamp,
                                                                  GtkStyleProvider       *provider,
+                                                                 GtkWidget              *root,
                                                                  GtkCssStyle            *previous_style);
 GtkCssStyle *           gtk_css_animated_style_new_advance      (GtkCssAnimatedStyle    *source,
                                                                  GtkCssStyle            *base,

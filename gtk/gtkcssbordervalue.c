@@ -45,6 +45,7 @@ static GtkCssValue *
 gtk_css_value_border_compute (GtkCssValue      *value,
                               guint             property_id,
                               GtkStyleProvider *provider,
+                              GtkWidget        *root,
                               GtkCssStyle      *style,
                               GtkCssStyle      *parent_style)
 {
@@ -57,7 +58,7 @@ gtk_css_value_border_compute (GtkCssValue      *value,
     {
       if (value->values[i])
         {
-          values[i] = _gtk_css_value_compute (value->values[i], property_id, provider, style, parent_style);
+          values[i] = gtk_css_value_compute (value->values[i], property_id, provider, root, style, parent_style);
           changed |= (values[i] != value->values[i]);
         }
       else
