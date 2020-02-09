@@ -89,7 +89,7 @@
  * if we need to change things. */
 #define GTK_CSS_RADICAL_CHANGE (GTK_CSS_CHANGE_ID | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS | \
                                 GTK_CSS_CHANGE_PARENT_ID | GTK_CSS_CHANGE_PARENT_NAME | GTK_CSS_CHANGE_PARENT_CLASS | \
-                                GTK_CSS_CHANGE_SOURCE | GTK_CSS_CHANGE_PARENT_STYLE)
+                                GTK_CSS_CHANGE_SOURCE | GTK_CSS_CHANGE_ROOT | GTK_CSS_CHANGE_PARENT_STYLE)
 
 /* When these change, we need to recompute the change flags for the new style
  * since they may have changed.
@@ -754,7 +754,9 @@ gtk_css_node_reposition (GtkCssNode *node,
 
       if (gtk_css_node_get_style_provider_or_null (node) == NULL)
         gtk_css_node_invalidate_style_provider (node);
-      gtk_css_node_invalidate (node, GTK_CSS_CHANGE_TIMESTAMP | GTK_CSS_CHANGE_ANIMATIONS);
+      gtk_css_node_invalidate (node, GTK_CSS_CHANGE_ROOT
+                                   | GTK_CSS_CHANGE_TIMESTAMP
+                                   | GTK_CSS_CHANGE_ANIMATIONS);
 
       if (new_parent)
         {

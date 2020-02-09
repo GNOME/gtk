@@ -38,7 +38,7 @@ _gtk_css_change_for_sibling (GtkCssChange match)
                     | GTK_CSS_CHANGE_SELECTED \
                     | GTK_CSS_CHANGE_BACKDROP)
 
-#define KEEP_STATES ( ~(BASE_STATES|GTK_CSS_CHANGE_SOURCE|GTK_CSS_CHANGE_PARENT_STYLE) \
+#define KEEP_STATES ( ~(BASE_STATES|GTK_CSS_CHANGE_SOURCE|GTK_CSS_CHANGE_ROOT|GTK_CSS_CHANGE_PARENT_STYLE) \
                     | GTK_CSS_CHANGE_NTH_CHILD \
                     | GTK_CSS_CHANGE_NTH_LAST_CHILD)
 
@@ -76,7 +76,7 @@ _gtk_css_change_for_child (GtkCssChange match)
                     | GTK_CSS_CHANGE_SIBLING_BACKDROP \
                     | GTK_CSS_CHANGE_SIBLING_SELECTED)
 
-#define KEEP_STATES (~(BASE_STATES|GTK_CSS_CHANGE_SOURCE|GTK_CSS_CHANGE_PARENT_STYLE))
+#define KEEP_STATES (~(BASE_STATES|GTK_CSS_CHANGE_SOURCE|GTK_CSS_CHANGE_ROOT|GTK_CSS_CHANGE_PARENT_STYLE))
 
   return (match & KEEP_STATES) | ((match & BASE_STATES) << GTK_CSS_CHANGE_PARENT_SHIFT);
 
@@ -145,6 +145,7 @@ gtk_css_change_print (GtkCssChange  change,
     { GTK_CSS_CHANGE_PARENT_SIBLING_SELECTED, "parent-sibling-selected" },
 
     { GTK_CSS_CHANGE_SOURCE, "source" },
+    { GTK_CSS_CHANGE_ROOT, "root" },
     { GTK_CSS_CHANGE_PARENT_STYLE, "parent-style" },
     { GTK_CSS_CHANGE_TIMESTAMP, "timestamp" },
     { GTK_CSS_CHANGE_ANIMATIONS, "animations" },

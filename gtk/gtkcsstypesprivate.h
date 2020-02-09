@@ -90,9 +90,10 @@ typedef struct _GtkCssStaticStyle GtkCssStaticStyle;
 
 /* add more */
 #define GTK_CSS_CHANGE_SOURCE                         (1ULL << 48)
-#define GTK_CSS_CHANGE_PARENT_STYLE                   (1ULL << 49)
-#define GTK_CSS_CHANGE_TIMESTAMP                      (1ULL << 50)
-#define GTK_CSS_CHANGE_ANIMATIONS                     (1ULL << 51)
+#define GTK_CSS_CHANGE_ROOT                           (1ULL << 49)
+#define GTK_CSS_CHANGE_PARENT_STYLE                   (1ULL << 50)
+#define GTK_CSS_CHANGE_TIMESTAMP                      (1ULL << 51)
+#define GTK_CSS_CHANGE_ANIMATIONS                     (1ULL << 52)
 
 #define GTK_CSS_CHANGE_RESERVED_BIT                   (1ULL << 62)
 
@@ -122,6 +123,7 @@ typedef guint64 GtkCssChange;
                             GTK_CSS_CHANGE_ANY_PARENT         | \
                             GTK_CSS_CHANGE_ANY_PARENT_SIBLING | \
                             GTK_CSS_CHANGE_SOURCE             | \
+                            GTK_CSS_CHANGE_ROOT               | \
                             GTK_CSS_CHANGE_PARENT_STYLE       | \
                             GTK_CSS_CHANGE_TIMESTAMP          | \
                             GTK_CSS_CHANGE_ANIMATIONS)
