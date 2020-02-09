@@ -19,6 +19,14 @@ static PointState touch_state[10]; /* touchpoint 0 gets pointer emulation,
 #define EVENT_SEQUENCE(point) (GdkEventSequence*) ((point) - touch_state + 1)
 
 static void
+inject_event (GdkEvent *event)
+{
+  gboolean handled;
+
+  g_signal_emit_by_name (event->any.surface, "event", event, &handled);
+}
+
+static void
 point_press (PointState *point,
              GtkWidget  *widget,
              guint       button)
@@ -61,7 +69,7 @@ point_press (PointState *point,
 
   gdk_event_set_device (ev, device);
 
-  gtk_main_do_event (ev);
+  inject_event (ev);
 
   g_object_unref (ev);
 
@@ -116,7 +124,7 @@ point_update (PointState *point,
 
   gdk_event_set_device (ev, device);
 
-  gtk_main_do_event (ev);
+  inject_event (ev);
 
   g_object_unref (ev);
 }
@@ -172,7 +180,7 @@ point_release (PointState *point,
 
   gdk_event_set_device (ev, device);
 
-  gtk_main_do_event (ev);
+  inject_event (ev);
 
   g_object_unref (ev);
 }
