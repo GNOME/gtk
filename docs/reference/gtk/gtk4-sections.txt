@@ -4424,7 +4424,6 @@ gtk_main_level
 gtk_main_quit
 gtk_main_iteration
 gtk_main_iteration_do
-gtk_main_do_event
 
 <SUBSECTION>
 gtk_grab_add
