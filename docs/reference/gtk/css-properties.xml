@@ -1092,42 +1092,6 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><ulink url="https://www.w3.org/TR/css3-ui/#outline-offset">CSS3</ulink></entry>
               <entry></entry>
             </row>
-            <row>
-              <entry><phrase role="nowrap">-gtk-outline-top-left-radius</phrase></entry>
-              <entry><code>〈corner radius〉</code></entry>
-              <entry><code>0</code></entry>
-              <entry></entry>
-              <entry>✓</entry>
-              <entry></entry>
-              <entry></entry>
-            </row>
-            <row>
-              <entry><phrase role="nowrap">-gtk-outline-top-right-radius</phrase></entry>
-              <entry><code>〈corner radius〉</code></entry>
-              <entry><code>0</code></entry>
-              <entry></entry>
-              <entry>✓</entry>
-              <entry></entry>
-              <entry></entry>
-            </row>
-            <row>
-              <entry><phrase role="nowrap">-gtk-outline-bottom-right-radius</phrase></entry>
-              <entry><code>〈corner radius〉</code></entry>
-              <entry><code>0</code></entry>
-              <entry></entry>
-              <entry>✓</entry>
-              <entry></entry>
-              <entry></entry>
-            </row>
-            <row>
-              <entry><phrase role="nowrap">-gtk-outline-bottom-left-radius</phrase></entry>
-              <entry><code>〈corner radius〉</code></entry>
-              <entry><code>0</code></entry>
-              <entry></entry>
-              <entry>✓</entry>
-              <entry></entry>
-              <entry></entry>
-            </row>
           </tbody>
         </tgroup>
         <tgroup cols="5">
@@ -1141,13 +1105,6 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>see individual properties</entry>
               <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/ui.html#propdef-outline">CSS2</ulink>,
                      <ulink url="https://www.w3.org/TR/css3-ui/#propdef-outline">CSS3</ulink></entry>
-              <entry></entry>
-            </row>
-            <row>
-              <entry><phrase role="nowrap">-gtk-outline-radius</phrase></entry>
-              <entry><code>[ 〈length〉 | 〈percentage〉 ]{1,4} [ / [ 〈length〉 | 〈percentage〉 ]{1,4} ]?</code></entry>
-              <entry>see individual properties</entry>
-              <entry></entry>
               <entry></entry>
             </row>
           </tbody>

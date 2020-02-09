@@ -32,7 +32,6 @@ flowboxchild:focus {
   outline-style: dashed;
   outline-offset: -4px;
   outline-width: 2px;
-  -gtk-outline-radius: 2px;
 }
 
 /***************
@@ -2274,7 +2273,6 @@ scale {
     highlight,
     trough {
       border-radius: 5px;
-      -gtk-outline-radius: 7px;
     }
   }
 
@@ -2283,7 +2281,6 @@ scale {
     @extend %scale_trough;
 
     outline-offset: 2px;
-    -gtk-outline-radius: 5px;
   }
 
   // the colored part of the backing bit
@@ -2883,13 +2880,11 @@ messagedialog { // Message Dialog styling
 
     %last_button {
       border-bottom-right-radius: 7px;
-      -gtk-outline-bottom-right-radius: 5px;
     }
 
     %first_button {
       border-left-style: none;
       border-bottom-left-radius: 7px;
-      -gtk-outline-bottom-left-radius: 5px;
     }
   }
 }
@@ -2989,7 +2984,6 @@ placessidebar {
       margin-bottom: 3px;
       padding: 0;
       border-radius: 100%;
-      -gtk-outline-radius: 100%;
 
       &:not(:hover):not(:active),
       &:backdrop { > image { opacity: $_placesidebar_icons_opacity; }}
@@ -3392,7 +3386,6 @@ cursor-handle {
 
 button.circular { // FIXME: aggregate to buttons
   border-radius: 20px;
-  -gtk-outline-radius: 20px;
 
   label { padding: 0; }
   row:selected & { 
