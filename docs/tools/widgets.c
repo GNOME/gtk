@@ -776,31 +776,6 @@ create_page_setup_dialog (void)
 }
 
 static WidgetInfo *
-create_toolbar (void)
-{
-  GtkWidget *widget;
-  GtkToolItem *item;
-
-  widget = gtk_toolbar_new ();
-
-  item = gtk_tool_button_new (NULL, NULL);
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "document-new");
-  gtk_toolbar_insert (GTK_TOOLBAR (widget), item, -1);
-
-  item = gtk_tool_button_new (NULL, NULL);
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "document-open");
-  gtk_toolbar_insert (GTK_TOOLBAR (widget), item, -1);
-
-  item = gtk_tool_button_new (NULL, NULL);
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "view-refresh");
-  gtk_toolbar_insert (GTK_TOOLBAR (widget), item, -1);
-
-  gtk_toolbar_set_show_arrow (GTK_TOOLBAR (widget), FALSE);
-
-  return new_widget_info ("toolbar", widget, SMALL);
-}
-
-static WidgetInfo *
 create_message_dialog (void)
 {
   GtkWidget *widget;
@@ -1425,7 +1400,6 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_statusbar ());
   retval = g_list_prepend (retval, create_text_view ());
   retval = g_list_prepend (retval, create_toggle_button ());
-  retval = g_list_prepend (retval, create_toolbar ());
   retval = g_list_prepend (retval, create_tree_view ());
   retval = g_list_prepend (retval, create_window ());
   retval = g_list_prepend (retval, create_filesel ());
