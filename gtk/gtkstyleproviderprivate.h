@@ -40,7 +40,6 @@ struct _GtkStyleProviderInterface
                                                  const char              *name);
   GtkCssKeyframes *     (* get_keyframes)       (GtkStyleProvider        *provider,
                                                  const char              *name);
-  int                   (* get_scale)           (GtkStyleProvider        *provider);
   void                  (* lookup)              (GtkStyleProvider        *provider,
                                                  const GtkCountingBloomFilter *filter,
                                                  GtkCssNode              *node,
@@ -57,7 +56,6 @@ GtkCssValue *           gtk_style_provider_get_color             (GtkStyleProvid
                                                                   const char              *name);
 GtkCssKeyframes *       gtk_style_provider_get_keyframes         (GtkStyleProvider        *provider,
                                                                   const char              *name);
-int                     gtk_style_provider_get_scale             (GtkStyleProvider        *provider);
 void                    gtk_style_provider_lookup                (GtkStyleProvider        *provider,
                                                                   const GtkCountingBloomFilter *filter,
                                                                   GtkCssNode              *node,

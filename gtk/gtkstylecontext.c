@@ -213,7 +213,7 @@ gtk_style_context_init (GtkStyleContext *context)
     g_error ("Can't create a GtkStyleContext without a display connection");
 
   gtk_style_context_set_cascade (context,
-                                 _gtk_settings_get_style_cascade (gtk_settings_get_for_display (priv->display), 1));
+                                 gtk_settings_get_style_cascade (gtk_settings_get_for_display (priv->display)));
 }
 
 static void
@@ -310,7 +310,7 @@ gtk_style_context_has_custom_cascade (GtkStyleContext *context)
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
   GtkSettings *settings = gtk_settings_get_for_display (priv->display);
 
-  return priv->cascade != _gtk_settings_get_style_cascade (settings, _gtk_style_cascade_get_scale (priv->cascade));
+  return priv->cascade != gtk_settings_get_style_cascade (settings);
 }
 
 GtkCssStyle *
@@ -380,9 +380,8 @@ gtk_style_context_add_provider (GtkStyleContext  *context,
       GtkStyleCascade *new_cascade;
 
       new_cascade = _gtk_style_cascade_new ();
-      _gtk_style_cascade_set_scale (new_cascade, _gtk_style_cascade_get_scale (priv->cascade));
       _gtk_style_cascade_set_parent (new_cascade,
-                                     _gtk_settings_get_style_cascade (gtk_settings_get_for_display (priv->display), 1));
+                                     gtk_settings_get_style_cascade (gtk_settings_get_for_display (priv->display)));
       _gtk_style_cascade_add_provider (new_cascade, provider, priority);
       gtk_style_context_set_cascade (context, new_cascade);
       g_object_unref (new_cascade);
@@ -476,7 +475,7 @@ gtk_style_context_add_provider_for_display (GdkDisplay       *display,
   g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
   g_return_if_fail (!GTK_IS_SETTINGS (provider) || _gtk_settings_get_display (GTK_SETTINGS (provider)) == display);
 
-  cascade = _gtk_settings_get_style_cascade (gtk_settings_get_for_display (display), 1);
+  cascade = gtk_settings_get_style_cascade (gtk_settings_get_for_display (display));
   _gtk_style_cascade_add_provider (cascade, provider, priority);
 }
 
@@ -497,7 +496,7 @@ gtk_style_context_remove_provider_for_display (GdkDisplay       *display,
   g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
   g_return_if_fail (!GTK_IS_SETTINGS (provider));
 
-  cascade = _gtk_settings_get_style_cascade (gtk_settings_get_for_display (display), 1);
+  cascade = gtk_settings_get_style_cascade (gtk_settings_get_for_display (display));
   _gtk_style_cascade_remove_provider (cascade, provider);
 }
 
@@ -576,56 +575,6 @@ gtk_style_context_get_state (GtkStyleContext *context)
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
 
   return gtk_css_node_get_state (priv->cssnode);
-}
-
-/**
- * gtk_style_context_set_scale:
- * @context: a #GtkStyleContext
- * @scale: scale
- *
- * Sets the scale to use when getting image assets for the style.
- **/
-void
-gtk_style_context_set_scale (GtkStyleContext *context,
-                             gint             scale)
-{
-  GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
-
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-
-  if (scale == _gtk_style_cascade_get_scale (priv->cascade))
-    return;
-
-  if (gtk_style_context_has_custom_cascade (context))
-    {
-      _gtk_style_cascade_set_scale (priv->cascade, scale);
-    }
-  else
-    {
-      GtkStyleCascade *new_cascade;
-
-      new_cascade = _gtk_settings_get_style_cascade (gtk_settings_get_for_display (priv->display),
-                                                     scale);
-      gtk_style_context_set_cascade (context, new_cascade);
-    }
-}
-
-/**
- * gtk_style_context_get_scale:
- * @context: a #GtkStyleContext
- *
- * Returns the scale used for assets.
- *
- * Returns: the scale
- **/
-gint
-gtk_style_context_get_scale (GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
-
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
-
-  return _gtk_style_cascade_get_scale (priv->cascade);
 }
 
 /*
@@ -877,13 +826,12 @@ gtk_style_context_set_display (GtkStyleContext *context,
 
   if (gtk_style_context_has_custom_cascade (context))
     {
-      display_cascade = _gtk_settings_get_style_cascade (gtk_settings_get_for_display (display), 1);
+      display_cascade = gtk_settings_get_style_cascade (gtk_settings_get_for_display (display));
       _gtk_style_cascade_set_parent (priv->cascade, display_cascade);
     }
   else
     {
-      display_cascade = _gtk_settings_get_style_cascade (gtk_settings_get_for_display (display),
-                                                        _gtk_style_cascade_get_scale (priv->cascade));
+      display_cascade = gtk_settings_get_style_cascade (gtk_settings_get_for_display (display));
       gtk_style_context_set_cascade (context, display_cascade);
     }
 

@@ -20,13 +20,14 @@
 #include "config.h"
 
 #include "gtkcssimagerecolorprivate.h"
+
 #include "gtkcssimageprivate.h"
 #include "gtkcsspalettevalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkiconthemeprivate.h"
 #include "gdkpixbufutilsprivate.h"
-
 #include "gtkstyleproviderprivate.h"
+#include "gtkwidget.h"
 
 G_DEFINE_TYPE (GtkCssImageRecolor, _gtk_css_image_recolor, GTK_TYPE_CSS_IMAGE)
 
@@ -214,7 +215,10 @@ gtk_css_image_recolor_compute (GtkCssImage      *image,
   int scale;
   GError *error = NULL;
 
-  scale = gtk_style_provider_get_scale (provider);
+  if (root)
+    scale = gtk_widget_get_scale_factor (root);
+  else
+    scale = 1;
 
   if (recolor->palette)
     palette = gtk_css_value_compute (recolor->palette, property_id, provider, root, style, parent_style);

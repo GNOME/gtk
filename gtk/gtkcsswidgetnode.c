@@ -115,8 +115,8 @@ gtk_css_widget_node_get_style_provider (GtkCssNode *node)
   if (context)
     return gtk_style_context_get_style_provider (context);
 
-  cascade = _gtk_settings_get_style_cascade (gtk_widget_get_settings (widget_node->widget),
-                                             gtk_widget_get_scale_factor (widget_node->widget));
+  cascade = gtk_settings_get_style_cascade (gtk_widget_get_settings (widget_node->widget));
+
   return GTK_STYLE_PROVIDER (cascade);
 }
 

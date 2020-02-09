@@ -1378,7 +1378,7 @@ gtk_css_node_get_style_provider (GtkCssNode *cssnode)
   if (cssnode->parent)
     return gtk_css_node_get_style_provider (cssnode->parent);
 
-  return GTK_STYLE_PROVIDER (_gtk_settings_get_style_cascade (gtk_settings_get_default (), 1));
+  return GTK_STYLE_PROVIDER (gtk_settings_get_style_cascade (gtk_settings_get_default ()));
 }
 
 GtkWidget *

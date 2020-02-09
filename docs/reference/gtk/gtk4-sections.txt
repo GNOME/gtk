@@ -4591,8 +4591,6 @@ gtk_style_context_has_class
 gtk_style_context_list_classes
 gtk_style_context_set_display
 gtk_style_context_set_state
-gtk_style_context_set_scale
-gtk_style_context_get_scale
 GtkStyleContextPrintFlags
 gtk_style_context_to_string
 

@@ -860,12 +860,6 @@ GDK_AVAILABLE_IN_ALL
 GtkStateFlags gtk_style_context_get_state    (GtkStyleContext *context);
 
 GDK_AVAILABLE_IN_ALL
-void          gtk_style_context_set_scale    (GtkStyleContext *context,
-                                              gint             scale);
-GDK_AVAILABLE_IN_ALL
-gint          gtk_style_context_get_scale    (GtkStyleContext *context);
-
-GDK_AVAILABLE_IN_ALL
 GList *  gtk_style_context_list_classes (GtkStyleContext *context);
 
 GDK_AVAILABLE_IN_ALL

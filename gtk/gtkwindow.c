@@ -5216,7 +5216,10 @@ check_scale_changed (GtkWindow *window)
   old_scale = priv->scale;
   priv->scale = gtk_widget_get_scale_factor (widget);
   if (old_scale != priv->scale)
-    _gtk_widget_scale_changed (widget);
+    {
+      gtk_css_node_invalidate (gtk_widget_get_css_node (widget), GTK_CSS_CHANGE_ROOT);
+      _gtk_widget_scale_changed (widget);
+    }
 }
 
 static void
