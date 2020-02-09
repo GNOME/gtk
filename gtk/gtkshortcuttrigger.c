@@ -864,7 +864,6 @@ gtk_alternative_trigger_compare (GtkShortcutTrigger  *trigger1,
 static void
 gtk_alternative_trigger_print (GtkShortcutTrigger *trigger,
                                GString            *string)
-                  
 {
   GtkAlternativeTrigger *self = (GtkAlternativeTrigger *) trigger;
 
@@ -877,7 +876,6 @@ static gboolean
 gtk_alternative_trigger_print_label (GtkShortcutTrigger *trigger,
                                      GdkDisplay         *display,
                                      GString            *string)
-                  
 {
   GtkAlternativeTrigger *self = (GtkAlternativeTrigger *) trigger;
 
