@@ -754,7 +754,8 @@ gtk_css_node_reposition (GtkCssNode *node,
 
       if (gtk_css_node_get_style_provider_or_null (node) == NULL)
         gtk_css_node_invalidate_style_provider (node);
-      gtk_css_node_invalidate (node, GTK_CSS_CHANGE_ROOT
+      gtk_css_node_invalidate (node, GTK_CSS_CHANGE_ANY_PARENT
+                                   | GTK_CSS_CHANGE_ROOT
                                    | GTK_CSS_CHANGE_TIMESTAMP
                                    | GTK_CSS_CHANGE_ANIMATIONS);
 
@@ -800,8 +801,7 @@ gtk_css_node_reposition (GtkCssNode *node,
         gtk_css_node_invalidate_style (node->next_sibling);
     }
 
-  gtk_css_node_invalidate (node, GTK_CSS_CHANGE_ANY_PARENT
-                                 | GTK_CSS_CHANGE_ANY_SIBLING
+  gtk_css_node_invalidate (node, GTK_CSS_CHANGE_ANY_SIBLING
                                  | GTK_CSS_CHANGE_NTH_CHILD
                                  | (node->previous_sibling ? 0 : GTK_CSS_CHANGE_FIRST_CHILD)
                                  | (node->next_sibling ? 0 : GTK_CSS_CHANGE_LAST_CHILD));
