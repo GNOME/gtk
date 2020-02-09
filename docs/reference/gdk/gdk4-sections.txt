@@ -94,7 +94,6 @@ gdk_display_get_default_seat
 gdk_display_list_seats
 gdk_display_get_n_monitors
 gdk_display_get_monitor
-gdk_display_get_primary_monitor
 gdk_display_get_monitor_at_surface
 gdk_display_get_clipboard
 gdk_display_get_primary_clipboard
@@ -186,7 +185,6 @@ gdk_surface_get_surface_type
 gdk_surface_get_display
 gdk_surface_show
 gdk_surface_show_unraised
-gdk_surface_show_with_auto_dismissal
 gdk_surface_hide
 gdk_surface_is_destroyed
 gdk_surface_is_visible
@@ -376,7 +374,6 @@ gdk_cairo_region
 gdk_cairo_region_create_from_surface
 gdk_cairo_draw_from_gl
 gdk_cairo_surface_upload_to_gl
-gdk_cairo_image_surface_recolor
 </SECTION>
 
 <SECTION>
