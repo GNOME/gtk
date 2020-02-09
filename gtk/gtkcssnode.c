@@ -437,6 +437,7 @@ gtk_css_node_real_update_style (GtkCssNode                   *cssnode,
                                               parent ? gtk_css_node_get_style (parent) : NULL,
                                               timestamp,
                                               gtk_css_node_get_style_provider (cssnode),
+                                              gtk_css_node_get_root (cssnode),
                                               should_create_transitions (change) ? style : NULL);
 
       /* Clear the cache again, the static style we looked up above
@@ -1375,6 +1376,12 @@ gtk_css_node_get_style_provider (GtkCssNode *cssnode)
     return gtk_css_node_get_style_provider (cssnode->parent);
 
   return GTK_STYLE_PROVIDER (_gtk_settings_get_style_cascade (gtk_settings_get_default (), 1));
+}
+
+GtkWidget *
+gtk_css_node_get_root (GtkCssNode *cssnode)
+{
+  return NULL;
 }
 
 void

@@ -507,6 +507,7 @@ static GtkCssImage *
 gtk_css_image_radial_compute (GtkCssImage      *image,
                               guint             property_id,
                               GtkStyleProvider *provider,
+                              GtkWidget        *root,
                               GtkCssStyle      *style,
                               GtkCssStyle      *parent_style)
 {
@@ -519,13 +520,13 @@ gtk_css_image_radial_compute (GtkCssImage      *image,
   copy->circle = radial->circle;
   copy->size = radial->size;
 
-  copy->position = _gtk_css_value_compute (radial->position, property_id, provider, style, parent_style);
+  copy->position = gtk_css_value_compute (radial->position, property_id, provider, root, style, parent_style);
 
   if (radial->sizes[0])
-    copy->sizes[0] = _gtk_css_value_compute (radial->sizes[0], property_id, provider, style, parent_style);
+    copy->sizes[0] = gtk_css_value_compute (radial->sizes[0], property_id, provider, root, style, parent_style);
 
   if (radial->sizes[1])
-    copy->sizes[1] = _gtk_css_value_compute (radial->sizes[1], property_id, provider, style, parent_style);
+    copy->sizes[1] = gtk_css_value_compute (radial->sizes[1], property_id, provider, root, style, parent_style);
 
   copy->n_stops = radial->n_stops;
   copy->color_stops = g_malloc (sizeof (GtkCssImageRadialColorStop) * copy->n_stops);
@@ -534,11 +535,11 @@ gtk_css_image_radial_compute (GtkCssImage      *image,
       const GtkCssImageRadialColorStop *stop = &radial->color_stops[i];
       GtkCssImageRadialColorStop *scopy = &copy->color_stops[i];
 
-      scopy->color = _gtk_css_value_compute (stop->color, property_id, provider, style, parent_style);
+      scopy->color = gtk_css_value_compute (stop->color, property_id, provider, root, style, parent_style);
 
       if (stop->offset)
         {
-          scopy->offset = _gtk_css_value_compute (stop->offset, property_id, provider, style, parent_style);
+          scopy->offset = gtk_css_value_compute (stop->offset, property_id, provider, root, style, parent_style);
         }
       else
         {

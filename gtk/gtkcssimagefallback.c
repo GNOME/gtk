@@ -136,6 +136,7 @@ static GtkCssImage *
 gtk_css_image_fallback_compute (GtkCssImage      *image,
                                 guint             property_id,
                                 GtkStyleProvider *provider,
+                                GtkWidget        *root,
                                 GtkCssStyle      *style,
                                 GtkCssStyle      *parent_style)
 {
@@ -148,11 +149,12 @@ gtk_css_image_fallback_compute (GtkCssImage      *image,
       GtkCssValue *computed_color = NULL;
 
       if (fallback->color)
-          computed_color= _gtk_css_value_compute (fallback->color,
-                                                           property_id,
-                                                           provider,
-                                                           style,
-                                                           parent_style);
+          computed_color= gtk_css_value_compute (fallback->color,
+                                                 property_id,
+                                                 provider,
+                                                 root,
+                                                 style,
+                                                 parent_style);
 
       /* image($color) that didn't change */
       if (computed_color && !fallback->images &&
@@ -164,11 +166,12 @@ gtk_css_image_fallback_compute (GtkCssImage      *image,
       copy->images = g_new (GtkCssImage *, fallback->n_images);
       for (i = 0; i < fallback->n_images; i++)
         {
-          copy->images[i] = _gtk_css_image_compute (fallback->images[i],
-                                                    property_id,
-                                                    provider,
-                                                    style,
-                                                    parent_style);
+          copy->images[i] = gtk_css_image_compute (fallback->images[i],
+                                                   property_id,
+                                                   provider,
+                                                   root,
+                                                   style,
+                                                   parent_style);
 
           if (gtk_css_image_is_invalid (copy->images[i]))
             continue;

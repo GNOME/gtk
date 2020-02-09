@@ -36,10 +36,11 @@ void                _gtk_css_keyframes_unref                  (GtkCssKeyframes  
 void                _gtk_css_keyframes_print                  (GtkCssKeyframes        *keyframes,
                                                                GString                *string);
 
-GtkCssKeyframes *   _gtk_css_keyframes_compute                (GtkCssKeyframes         *keyframes,
-                                                               GtkStyleProvider        *provider,
-                                                               GtkCssStyle             *style,
-                                                               GtkCssStyle             *parent_style);
+GtkCssKeyframes *   gtk_css_keyframes_compute                 (GtkCssKeyframes        *keyframes,
+                                                               GtkStyleProvider       *provider,
+                                                               GtkWidget              *root,
+                                                               GtkCssStyle            *style,
+                                                               GtkCssStyle            *parent_style);
 
 guint               _gtk_css_keyframes_get_n_properties       (GtkCssKeyframes        *keyframes) G_GNUC_PURE;
 guint               _gtk_css_keyframes_get_property_id        (GtkCssKeyframes        *keyframes,

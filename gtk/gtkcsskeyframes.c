@@ -426,10 +426,11 @@ _gtk_css_keyframes_print (GtkCssKeyframes *keyframes,
 }
 
 GtkCssKeyframes *
-_gtk_css_keyframes_compute (GtkCssKeyframes  *keyframes,
-                            GtkStyleProvider *provider,
-                            GtkCssStyle      *style,
-                            GtkCssStyle      *parent_style)
+gtk_css_keyframes_compute (GtkCssKeyframes  *keyframes,
+                           GtkStyleProvider *provider,
+                           GtkWidget        *root,
+                           GtkCssStyle      *style,
+                           GtkCssStyle      *parent_style)
 {
   GtkCssKeyframes *resolved;
   guint k, p;
@@ -453,11 +454,12 @@ _gtk_css_keyframes_compute (GtkCssKeyframes  *keyframes,
           if (KEYFRAMES_VALUE (keyframes, k, p) == NULL)
             continue;
 
-          KEYFRAMES_VALUE (resolved, k, p) =  _gtk_css_value_compute (KEYFRAMES_VALUE (keyframes, k, p),
-                                                                      resolved->property_ids[p],
-                                                                      provider,
-                                                                      style,
-                                                                      parent_style);
+          KEYFRAMES_VALUE (resolved, k, p) =  gtk_css_value_compute (KEYFRAMES_VALUE (keyframes, k, p),
+                                                                     resolved->property_ids[p],
+                                                                     provider,
+                                                                     root,
+                                                                     style,
+                                                                     parent_style);
         }
     }
 

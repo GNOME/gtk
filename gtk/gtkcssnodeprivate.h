@@ -150,12 +150,13 @@ void                    gtk_css_node_invalidate         (GtkCssNode            *
                                                          GtkCssChange           change);
 void                    gtk_css_node_validate           (GtkCssNode            *cssnode);
 
-GtkStyleProvider *      gtk_css_node_get_style_provider (GtkCssNode            *cssnode) G_GNUC_PURE;
+GtkStyleProvider *      gtk_css_node_get_style_provider (GtkCssNode                     *cssnode) G_GNUC_PURE;
+GtkWidget *             gtk_css_node_get_root           (GtkCssNode                     *cssnode) G_GNUC_PURE;
 
-void                    gtk_css_node_print              (GtkCssNode                *cssnode,
-                                                         GtkStyleContextPrintFlags  flags,
-                                                         GString                   *string,
-                                                         guint                      indent);
+void                    gtk_css_node_print              (GtkCssNode                     *cssnode,
+                                                         GtkStyleContextPrintFlags       flags,
+                                                         GString                        *string,
+                                                         guint                           indent);
 
 G_END_DECLS
 

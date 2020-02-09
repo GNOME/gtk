@@ -74,6 +74,7 @@ static GtkCssValue *
 gtk_css_value_icon_theme_compute (GtkCssValue      *icon_theme,
                                   guint             property_id,
                                   GtkStyleProvider *provider,
+                                  GtkWidget        *root,
                                   GtkCssStyle      *style,
                                   GtkCssStyle      *parent_style)
 {

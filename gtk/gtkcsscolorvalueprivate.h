@@ -40,8 +40,9 @@ GtkCssValue *   _gtk_css_color_value_new_current_color  (void) G_GNUC_PURE;
 gboolean        gtk_css_color_value_can_parse           (GtkCssParser   *parser);
 GtkCssValue *   _gtk_css_color_value_parse              (GtkCssParser   *parser);
 
-GtkCssValue *   _gtk_css_color_value_resolve            (GtkCssValue      *color,
+GtkCssValue *   gtk_css_color_value_resolve             (GtkCssValue      *color,
                                                          GtkStyleProvider *provider,
+                                                         GtkWidget        *root,
                                                          GtkCssValue      *current,
                                                          GSList           *cycle_list);
 const GdkRGBA * gtk_css_color_value_get_rgba            (const GtkCssValue *color) G_GNUC_CONST;

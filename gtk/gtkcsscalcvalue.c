@@ -101,6 +101,7 @@ static GtkCssValue *
 gtk_css_value_calc_compute (GtkCssValue      *value,
                             guint             property_id,
                             GtkStyleProvider *provider,
+                            GtkWidget        *root,
                             GtkCssStyle      *style,
                             GtkCssStyle      *parent_style)
 {
@@ -112,7 +113,7 @@ gtk_css_value_calc_compute (GtkCssValue      *value,
   array = g_ptr_array_new ();
   for (i = 0; i < value->n_terms; i++)
     {
-      GtkCssValue *computed = _gtk_css_value_compute (value->terms[i], property_id, provider, style, parent_style);
+      GtkCssValue *computed = gtk_css_value_compute (value->terms[i], property_id, provider, root, style, parent_style);
       changed |= computed != value->terms[i];
       gtk_css_calc_array_add (array, computed);
     }

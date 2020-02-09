@@ -100,6 +100,7 @@ static GtkCssImage *
 gtk_css_image_scaled_compute (GtkCssImage      *image,
                               guint             property_id,
                               GtkStyleProvider *provider,
+                              GtkWidget        *root,
                               GtkCssStyle      *style,
                               GtkCssStyle      *parent_style)
 {
@@ -133,11 +134,12 @@ gtk_css_image_scaled_compute (GtkCssImage      *image,
   res->images = g_new (GtkCssImage *, 1);
   res->scales = g_new (int, 1);
 
-  res->images[0] = _gtk_css_image_compute (scaled->images[best],
-                                           property_id,
-                                           provider,
-                                           style,
-                                           parent_style);
+  res->images[0] = gtk_css_image_compute (scaled->images[best],
+                                          property_id,
+                                          provider,
+                                          root,
+                                          style,
+                                          parent_style);
   res->scales[0] = scaled->scales[best];
 
   return GTK_CSS_IMAGE (res);

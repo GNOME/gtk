@@ -37,6 +37,7 @@ static GtkCssValue *
 gtk_css_value_repeat_compute (GtkCssValue      *value,
                               guint             property_id,
                               GtkStyleProvider *provider,
+                              GtkWidget        *root,
                               GtkCssStyle      *style,
                               GtkCssStyle      *parent_style)
 {

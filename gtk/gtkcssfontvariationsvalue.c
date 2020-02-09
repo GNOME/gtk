@@ -53,6 +53,7 @@ static GtkCssValue *
 gtk_css_value_font_variations_compute (GtkCssValue      *specified,
                                        guint             property_id,
                                        GtkStyleProvider *provider,
+                                       GtkWidget        *root,
                                        GtkCssStyle      *style,
                                        GtkCssStyle      *parent_style)
 {

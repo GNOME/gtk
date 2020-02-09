@@ -40,13 +40,14 @@ static GtkCssValue *
 gtk_css_value_position_compute (GtkCssValue      *position,
                                 guint             property_id,
                                 GtkStyleProvider *provider,
+                                GtkWidget        *root,
                                 GtkCssStyle      *style,
                                 GtkCssStyle      *parent_style)
 {
   GtkCssValue *x, *y;
 
-  x = _gtk_css_value_compute (position->x, property_id, provider, style, parent_style);
-  y = _gtk_css_value_compute (position->y, property_id, provider, style, parent_style);
+  x = gtk_css_value_compute (position->x, property_id, provider, root, style, parent_style);
+  y = gtk_css_value_compute (position->y, property_id, provider, root, style, parent_style);
   if (x == position->x && y == position->y)
     {
       _gtk_css_value_unref (x);

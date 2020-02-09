@@ -37,17 +37,17 @@ gtk_css_value_dimension_free (GtkCssValue *value)
 }
 
 static double
-get_base_font_size_px (guint             property_id,
-                       GtkStyleProvider *provider,
-                       GtkCssStyle      *style,
-                       GtkCssStyle      *parent_style)
+get_base_font_size_px (guint        property_id,
+                       GtkWidget   *root,
+                       GtkCssStyle *style,
+                       GtkCssStyle *parent_style)
 {
   if (property_id == GTK_CSS_PROPERTY_FONT_SIZE)
     {
       if (parent_style)
         return _gtk_css_number_value_get (parent_style->core->font_size, 100);
       else
-        return gtk_css_font_size_get_default_px (provider, style);
+        return gtk_css_font_size_get_default_px (root, style);
     }
 
   return _gtk_css_number_value_get (style->core->font_size, 100);
@@ -63,6 +63,7 @@ static GtkCssValue *
 gtk_css_value_dimension_compute (GtkCssValue      *number,
                                  guint             property_id,
                                  GtkStyleProvider *provider,
+                                 GtkWidget        *root,
                                  GtkCssStyle      *style,
                                  GtkCssStyle      *parent_style)
 {
@@ -75,7 +76,7 @@ gtk_css_value_dimension_compute (GtkCssValue      *number,
       /* percentages for font sizes are computed, other percentages aren't */
       if (property_id == GTK_CSS_PROPERTY_FONT_SIZE)
         return gtk_css_dimension_value_new (number->value / 100.0 * 
-                                            get_base_font_size_px (property_id, provider, style, parent_style),
+                                            get_base_font_size_px (property_id, root, style, parent_style),
                                             GTK_CSS_PX);
       G_GNUC_FALLTHROUGH;
     case GTK_CSS_NUMBER:
@@ -100,16 +101,16 @@ gtk_css_value_dimension_compute (GtkCssValue      *number,
                                           GTK_CSS_PX);
     case GTK_CSS_EM:
       return gtk_css_dimension_value_new (number->value *
-                                          get_base_font_size_px (property_id, provider, style, parent_style),
+                                          get_base_font_size_px (property_id, root, style, parent_style),
                                           GTK_CSS_PX);
     case GTK_CSS_EX:
       /* for now we pretend ex is half of em */
       return gtk_css_dimension_value_new (number->value * 0.5 *
-                                          get_base_font_size_px (property_id, provider, style, parent_style),
+                                          get_base_font_size_px (property_id, root, style, parent_style),
                                           GTK_CSS_PX);
     case GTK_CSS_REM:
       return gtk_css_dimension_value_new (number->value *
-                                          gtk_css_font_size_get_default_px (provider, style),
+                                          gtk_css_font_size_get_default_px (root, style),
                                           GTK_CSS_PX);
     case GTK_CSS_RAD:
       return gtk_css_dimension_value_new (number->value * 360.0 / (2 * G_PI),
