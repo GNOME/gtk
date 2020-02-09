@@ -199,7 +199,7 @@ gdk_content_provider_class_init (GdkContentProviderClass *class)
                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkContentProvider:content-changed:
+   * GdkContentProvider::content-changed:
    *
    * Emitted whenever the content provided by this provider has changed.
    */
