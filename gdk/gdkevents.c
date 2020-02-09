@@ -45,9 +45,9 @@
  * This section describes functions dealing with events from the window
  * system.
  *
- * In GTK+ applications the events are handled automatically in
- * gtk_main_do_event() and passed on to the appropriate widgets,
- * so these functions are rarely needed.
+ * In GTK+ applications the events are handled automatically by toplevel
+ * widgets and passed on to the appropriate widgets, so these functions are
+ * rarely needed.
  */
 
 /**
