@@ -445,7 +445,7 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   /* text-decoration */
   decoration_line = _gtk_css_text_decoration_line_value_get (style->font_variant->text_decoration_line);
   decoration_style = _gtk_css_text_decoration_style_value_get (style->font_variant->text_decoration_style);
-  color = gtk_css_color_value_get_rgba (style->core->color);
+  color = style->core->_color;
   decoration_color = gtk_css_color_value_get_rgba (style->font_variant->text_decoration_color
                                                    ? style->font_variant->text_decoration_color
                                                    : style->core->color);
@@ -666,8 +666,7 @@ gtk_css_style_get_pango_font (GtkCssStyle *style)
                                          _gtk_css_string_value_get (_gtk_css_array_value_get_nth (v, 0)));
     }
 
-  v = style->core->font_size;
-  pango_font_description_set_absolute_size (description, round (_gtk_css_number_value_get (v, 100) * PANGO_SCALE));
+  pango_font_description_set_absolute_size (description, round (style->core->_font_size * PANGO_SCALE));
 
   v = style->font->font_style;
   pango_font_description_set_style (description, _gtk_css_font_style_value_get (v));
@@ -702,9 +701,13 @@ static const int values_size[] = {
   sizeof (GtkCssOtherValues)
 };
 
+static int n_values[] = {
+  5, 9, 20, 3, 8, 10, 10, 8, 4, 11, 6
+};
+
 #define TYPE_INDEX(type) ((type) - ((type) % 2))
 #define VALUES_SIZE(type) (values_size[(type) / 2])
-#define N_VALUES(type) ((VALUES_SIZE(type) - sizeof (GtkCssValues)) / sizeof (GtkCssValue *))
+#define N_VALUES(type) (n_values[(type) / 2])
 
 #define GET_VALUES(v) (GtkCssValue **)((guint8 *)(v) + sizeof (GtkCssValues))
 

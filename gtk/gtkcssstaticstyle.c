@@ -27,6 +27,8 @@
 #include "gtkcssinheritvalueprivate.h"
 #include "gtkcssinitialvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
+#include "gtkcssiconthemevalueprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
@@ -38,6 +40,9 @@
 #include "gtkstylepropertyprivate.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtkcssdimensionvalueprivate.h"
+#include "gtkcsscornervalueprivate.h"
+#include "gtkcsspositionvalueprivate.h"
+
 
 static void gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
                                                 GtkStyleProvider  *provider,
@@ -223,6 +228,7 @@ static GtkBitmask * gtk_css_ ## NAME ## _values_mask; \
 static GtkCssValues * gtk_css_ ## NAME ## _initial_values; \
 \
 static GtkCssValues * gtk_css_ ## NAME ## _create_initial_values (void); \
+void gtk_css_ ## NAME ## _values_unbox (GtkCss ## TYPE ## Values *values); \
 \
 static void \
 gtk_css_ ## NAME ## _values_init (void) \
@@ -393,15 +399,19 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
     {
     case GTK_CSS_PROPERTY_COLOR:
       gtk_css_take_value (&style->core->color, value);
+      style->core->_color = gtk_css_color_value_get_rgba (style->core->color);
       break;
     case GTK_CSS_PROPERTY_DPI:
       gtk_css_take_value (&style->core->dpi, value);
+      style->core->_dpi = _gtk_css_number_value_get (style->core->dpi, 96);
       break;
     case GTK_CSS_PROPERTY_FONT_SIZE:
       gtk_css_take_value (&style->core->font_size, value);
+      style->core->_font_size = _gtk_css_number_value_get (style->core->font_size, 100);
       break;
     case GTK_CSS_PROPERTY_ICON_THEME:
       gtk_css_take_value (&style->core->icon_theme, value);
+      style->core->_icon_theme = gtk_css_icon_theme_value_get_icon_theme (style->core->icon_theme);
       break;
     case GTK_CSS_PROPERTY_ICON_PALETTE:
       gtk_css_take_value (&style->core->icon_palette, value);
@@ -462,84 +472,120 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
       break;
     case GTK_CSS_PROPERTY_MARGIN_TOP:
       gtk_css_take_value (&style->size->margin_top, value);
+      style->size->_margin_top = _gtk_css_number_value_get (style->size->margin_top, 100);
       break;
     case GTK_CSS_PROPERTY_MARGIN_LEFT:
       gtk_css_take_value (&style->size->margin_left, value);
+      style->size->_margin_left = _gtk_css_number_value_get (style->size->margin_left, 100);
       break;
     case GTK_CSS_PROPERTY_MARGIN_BOTTOM:
       gtk_css_take_value (&style->size->margin_bottom, value);
+      style->size->_margin_bottom = _gtk_css_number_value_get (style->size->margin_bottom, 100);
       break;
     case GTK_CSS_PROPERTY_MARGIN_RIGHT:
       gtk_css_take_value (&style->size->margin_right, value);
+      style->size->_margin_right = _gtk_css_number_value_get (style->size->margin_right, 100);
       break;
     case GTK_CSS_PROPERTY_PADDING_TOP:
       gtk_css_take_value (&style->size->padding_top, value);
+      style->size->_padding_top = _gtk_css_number_value_get (style->size->padding_top, 100);
       break;
     case GTK_CSS_PROPERTY_PADDING_LEFT:
       gtk_css_take_value (&style->size->padding_left, value);
+      style->size->_padding_left = _gtk_css_number_value_get (style->size->padding_left, 100);
       break;
     case GTK_CSS_PROPERTY_PADDING_BOTTOM:
       gtk_css_take_value (&style->size->padding_bottom, value);
+      style->size->_padding_bottom = _gtk_css_number_value_get (style->size->padding_bottom, 100);
       break;
     case GTK_CSS_PROPERTY_PADDING_RIGHT:
       gtk_css_take_value (&style->size->padding_right, value);
+      style->size->_padding_right = _gtk_css_number_value_get (style->size->padding_right, 100);
       break;
     case GTK_CSS_PROPERTY_BORDER_TOP_STYLE:
       gtk_css_take_value (&style->border->border_top_style, value);
+      style->border->_border_top_style = _gtk_css_border_style_value_get (style->border->border_top_style);
       break;
     case GTK_CSS_PROPERTY_BORDER_TOP_WIDTH:
       gtk_css_take_value (&style->border->border_top_width, value);
+      style->border->_border_top_width = _gtk_css_number_value_get (style->border->border_top_width, 100);
       break;
     case GTK_CSS_PROPERTY_BORDER_LEFT_STYLE:
       gtk_css_take_value (&style->border->border_left_style, value);
+      style->border->_border_left_style = _gtk_css_border_style_value_get (style->border->border_left_style);
       break;
     case GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH:
       gtk_css_take_value (&style->border->border_left_width, value);
+      style->border->_border_left_width = _gtk_css_number_value_get (style->border->border_left_width, 100);
       break;
     case GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE:
       gtk_css_take_value (&style->border->border_bottom_style, value);
+      style->border->_border_bottom_style = _gtk_css_border_style_value_get (style->border->border_bottom_style);
       break;
     case GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH:
       gtk_css_take_value (&style->border->border_bottom_width, value);
+      style->border->_border_bottom_width = _gtk_css_number_value_get (style->border->border_bottom_width, 100);
       break;
     case GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE:
       gtk_css_take_value (&style->border->border_right_style, value);
+      style->border->_border_right_style = _gtk_css_border_style_value_get (style->border->border_right_style);
       break;
     case GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH:
       gtk_css_take_value (&style->border->border_right_width, value);
+      style->border->_border_right_width = _gtk_css_number_value_get (style->border->border_right_width, 100);
       break;
     case GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS:
       gtk_css_take_value (&style->border->border_top_left_radius, value);
+      style->border->_border_top_left_radius_x = _gtk_css_corner_value_get_x (style->border->border_top_left_radius, 100);
+      style->border->_border_top_left_radius_y = _gtk_css_corner_value_get_y (style->border->border_top_left_radius, 100);
       break;
     case GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS:
       gtk_css_take_value (&style->border->border_top_right_radius, value);
+      style->border->_border_top_right_radius_x = _gtk_css_corner_value_get_x (style->border->border_top_right_radius, 100);
+      style->border->_border_top_right_radius_y = _gtk_css_corner_value_get_y (style->border->border_top_right_radius, 100);
       break;
     case GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS:
       gtk_css_take_value (&style->border->border_bottom_right_radius, value);
+      style->border->_border_bottom_right_radius_x = _gtk_css_corner_value_get_x (style->border->border_bottom_right_radius, 100);
+      style->border->_border_bottom_right_radius_y = _gtk_css_corner_value_get_y (style->border->border_bottom_right_radius, 100);
       break;
     case GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS:
       gtk_css_take_value (&style->border->border_bottom_left_radius, value);
+      style->border->_border_bottom_left_radius_x = _gtk_css_corner_value_get_x (style->border->border_bottom_left_radius, 100);
+      style->border->_border_bottom_left_radius_y = _gtk_css_corner_value_get_y (style->border->border_bottom_left_radius, 100);
       break;
     case GTK_CSS_PROPERTY_OUTLINE_STYLE:
       gtk_css_take_value (&style->outline->outline_style, value);
+      style->outline->_outline_style = _gtk_css_border_style_value_get (style->outline->outline_style);
       break;
     case GTK_CSS_PROPERTY_OUTLINE_WIDTH:
       gtk_css_take_value (&style->outline->outline_width, value);
+      style->outline->_outline_width = _gtk_css_number_value_get (style->outline->outline_width, 100);
       break;
     case GTK_CSS_PROPERTY_OUTLINE_OFFSET:
       gtk_css_take_value (&style->outline->outline_offset, value);
+      style->outline->_outline_offset = _gtk_css_number_value_get (style->outline->outline_offset, 100);
       break;
     case GTK_CSS_PROPERTY_OUTLINE_TOP_LEFT_RADIUS:
       gtk_css_take_value (&style->outline->outline_top_left_radius, value);
+      style->outline->_outline_top_left_radius_x = _gtk_css_corner_value_get_x (style->outline->outline_top_left_radius, 100);
+      style->outline->_outline_top_left_radius_y = _gtk_css_corner_value_get_y (style->outline->outline_top_left_radius, 100);
       break;
     case GTK_CSS_PROPERTY_OUTLINE_TOP_RIGHT_RADIUS:
       gtk_css_take_value (&style->outline->outline_top_right_radius, value);
+      style->outline->_outline_top_right_radius_x = _gtk_css_corner_value_get_x (style->outline->outline_top_right_radius, 100);
+      style->outline->_outline_top_right_radius_y = _gtk_css_corner_value_get_y (style->outline->outline_top_right_radius, 100);
       break;
     case GTK_CSS_PROPERTY_OUTLINE_BOTTOM_RIGHT_RADIUS:
       gtk_css_take_value (&style->outline->outline_bottom_right_radius, value);
+      style->outline->_outline_bottom_right_radius_x = _gtk_css_corner_value_get_x (style->outline->outline_bottom_right_radius, 100);
+      style->outline->_outline_bottom_right_radius_y = _gtk_css_corner_value_get_y (style->outline->outline_bottom_right_radius, 100);
       break;
     case GTK_CSS_PROPERTY_OUTLINE_BOTTOM_LEFT_RADIUS:
       gtk_css_take_value (&style->outline->outline_bottom_left_radius, value);
+      style->outline->_outline_bottom_left_radius_x = _gtk_css_corner_value_get_x (style->outline->outline_bottom_left_radius, 100);
+      style->outline->_outline_bottom_left_radius_y = _gtk_css_corner_value_get_y (style->outline->outline_bottom_left_radius, 100);
+      break;
       break;
     case GTK_CSS_PROPERTY_BACKGROUND_CLIP:
       gtk_css_take_value (&style->background->background_clip, value);
@@ -555,18 +601,28 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
       break;
     case GTK_CSS_PROPERTY_BORDER_TOP_COLOR:
       gtk_css_take_value (&style->border->border_top_color, value);
+      if (style->border->border_top_color)
+        style->border->_border_top_color = gtk_css_color_value_get_rgba (style->border->border_top_color);
       break;
     case GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR:
       gtk_css_take_value (&style->border->border_right_color, value);
+      if (style->border->border_right_color)
+        style->border->_border_right_color = gtk_css_color_value_get_rgba (style->border->border_right_color);
       break;
     case GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR:
       gtk_css_take_value (&style->border->border_bottom_color, value);
+      if (style->border->border_bottom_color)
+        style->border->_border_bottom_color = gtk_css_color_value_get_rgba (style->border->border_bottom_color);
       break;
     case GTK_CSS_PROPERTY_BORDER_LEFT_COLOR:
       gtk_css_take_value (&style->border->border_left_color, value);
+      if (style->border->border_left_color)
+        style->border->_border_left_color = gtk_css_color_value_get_rgba (style->border->border_left_color);
       break;
     case GTK_CSS_PROPERTY_OUTLINE_COLOR:
       gtk_css_take_value (&style->outline->outline_color, value);
+      if (style->outline->outline_color)
+        style->outline->_outline_color = gtk_css_color_value_get_rgba (style->outline->outline_color);
       break;
     case GTK_CSS_PROPERTY_BACKGROUND_REPEAT:
       gtk_css_take_value (&style->background->background_repeat, value);
@@ -609,15 +665,19 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
       break;
     case GTK_CSS_PROPERTY_BORDER_SPACING:
       gtk_css_take_value (&style->size->border_spacing, value);
+      style->size->_border_spacing_x = _gtk_css_position_value_get_x (style->size->border_spacing, 100);
+      style->size->_border_spacing_y = _gtk_css_position_value_get_y (style->size->border_spacing, 100);
       break;
     case GTK_CSS_PROPERTY_TRANSFORM:
       gtk_css_take_value (&style->other->transform, value);
       break;
     case GTK_CSS_PROPERTY_MIN_WIDTH:
       gtk_css_take_value (&style->size->min_width, value);
+      style->size->_min_width = _gtk_css_number_value_get (style->size->min_width, 100);
       break;
     case GTK_CSS_PROPERTY_MIN_HEIGHT:
       gtk_css_take_value (&style->size->min_height, value);
+      style->size->_min_height = _gtk_css_number_value_get (style->size->min_height, 100);
       break;
     case GTK_CSS_PROPERTY_TRANSITION_PROPERTY:
       gtk_css_take_value (&style->transition->transition_property, value);
@@ -734,6 +794,16 @@ gtk_css_core_create_initial_values (void)
   return NULL;
 
 }
+
+void
+gtk_css_core_values_unbox (GtkCssCoreValues *values)
+{
+  values->_color = gtk_css_color_value_get_rgba (values->color);
+  values->_dpi = _gtk_css_number_value_get (values->dpi, 96);
+  values->_font_size = _gtk_css_number_value_get (values->font_size, 100);
+  values->_icon_theme = gtk_css_icon_theme_value_get_icon_theme (values->icon_theme);
+}
+
 static GtkCssValues *
 gtk_css_background_create_initial_values (void)
 {
@@ -752,6 +822,11 @@ gtk_css_background_create_initial_values (void)
   values->background_blend_mode = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE, NULL, NULL, NULL);
 
   return (GtkCssValues *)values;
+}
+
+void
+gtk_css_background_values_unbox (GtkCssBackgroundValues *values)
+{
 }
 
 static GtkCssValues *
@@ -785,6 +860,35 @@ gtk_css_border_create_initial_values (void)
   return (GtkCssValues *)values;
 }
 
+void
+gtk_css_border_values_unbox (GtkCssBorderValues *values)
+{
+  values->_border_top_style = _gtk_css_border_style_value_get (values->border_top_style);
+  values->_border_right_style = _gtk_css_border_style_value_get (values->border_right_style);
+  values->_border_bottom_style = _gtk_css_border_style_value_get (values->border_bottom_style);
+  values->_border_left_style = _gtk_css_border_style_value_get (values->border_left_style);
+  values->_border_top_width = _gtk_css_number_value_get (values->border_top_width, 100);
+  values->_border_right_width = _gtk_css_number_value_get (values->border_right_width, 100);
+  values->_border_bottom_width = _gtk_css_number_value_get (values->border_bottom_width, 100);
+  values->_border_left_width = _gtk_css_number_value_get (values->border_left_width, 100);
+  values->_border_top_left_radius_x = _gtk_css_corner_value_get_x (values->border_top_left_radius, 100);
+  values->_border_top_left_radius_y = _gtk_css_corner_value_get_y (values->border_top_left_radius, 100);
+  values->_border_top_right_radius_x = _gtk_css_corner_value_get_x (values->border_top_right_radius, 100);
+  values->_border_top_right_radius_y = _gtk_css_corner_value_get_y (values->border_top_right_radius, 100);
+  values->_border_bottom_right_radius_x = _gtk_css_corner_value_get_x (values->border_bottom_right_radius, 100);
+  values->_border_bottom_right_radius_y = _gtk_css_corner_value_get_y (values->border_bottom_right_radius, 100);
+  values->_border_bottom_left_radius_x = _gtk_css_corner_value_get_x (values->border_bottom_left_radius, 100);
+  values->_border_bottom_left_radius_y = _gtk_css_corner_value_get_y (values->border_bottom_left_radius, 100);
+  if (values->border_top_color)
+    values->_border_top_color = gtk_css_color_value_get_rgba (values->border_top_color);
+  if (values->border_right_color)
+    values->_border_right_color = gtk_css_color_value_get_rgba (values->border_right_color);
+  if (values->border_bottom_color)
+    values->_border_bottom_color = gtk_css_color_value_get_rgba (values->border_bottom_color);
+  if (values->border_left_color)
+    values->_border_left_color = gtk_css_color_value_get_rgba (values->border_left_color);
+}
+
 static GtkCssValues *
 gtk_css_outline_create_initial_values (void)
 {
@@ -804,16 +908,44 @@ gtk_css_outline_create_initial_values (void)
   return (GtkCssValues *)values;
 }
 
+void
+gtk_css_outline_values_unbox (GtkCssOutlineValues *values)
+{
+  values->_outline_style = _gtk_css_border_style_value_get (values->outline_style);
+  values->_outline_width = _gtk_css_number_value_get (values->outline_width, 100);
+  values->_outline_offset = _gtk_css_number_value_get (values->outline_offset, 100);
+  values->_outline_top_left_radius_x = _gtk_css_corner_value_get_x (values->outline_top_left_radius, 100);
+  values->_outline_top_left_radius_y = _gtk_css_corner_value_get_y (values->outline_top_left_radius, 100);
+  values->_outline_top_right_radius_x = _gtk_css_corner_value_get_x (values->outline_top_right_radius, 100);
+  values->_outline_top_right_radius_y = _gtk_css_corner_value_get_y (values->outline_top_right_radius, 100);
+  values->_outline_bottom_right_radius_x = _gtk_css_corner_value_get_x (values->outline_bottom_right_radius, 100);
+  values->_outline_bottom_right_radius_y = _gtk_css_corner_value_get_y (values->outline_bottom_right_radius, 100);
+  values->_outline_bottom_left_radius_x = _gtk_css_corner_value_get_x (values->outline_bottom_left_radius, 100);
+  values->_outline_bottom_left_radius_y = _gtk_css_corner_value_get_y (values->outline_bottom_left_radius, 100);
+  if (values->outline_color)
+    values->_outline_color = gtk_css_color_value_get_rgba (values->outline_color);
+}
+
 static GtkCssValues *
 gtk_css_icon_create_initial_values (void)
 {
   return NULL;
 }
 
+void
+gtk_css_icon_values_unbox (GtkCssIconValues *values)
+{
+}
+
 static GtkCssValues *
 gtk_css_font_create_initial_values (void)
 {
   return NULL;
+}
+
+void
+gtk_css_font_values_unbox (GtkCssFontValues *values)
+{
 }
 
 static GtkCssValues *
@@ -837,6 +969,11 @@ gtk_css_font_variant_create_initial_values (void)
   return (GtkCssValues *)values;
 }
 
+void
+gtk_css_font_variant_values_unbox (GtkCssFontVariantValues *values)
+{
+}
+
 static GtkCssValues *
 gtk_css_animation_create_initial_values (void)
 {
@@ -856,6 +993,11 @@ gtk_css_animation_create_initial_values (void)
   return (GtkCssValues *)values;
 }
 
+void
+gtk_css_animation_values_unbox (GtkCssAnimationValues *values)
+{
+}
+
 static GtkCssValues *
 gtk_css_transition_create_initial_values (void)
 {
@@ -869,6 +1011,11 @@ gtk_css_transition_create_initial_values (void)
   values->transition_delay = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TRANSITION_DELAY, NULL, NULL, NULL);
 
   return (GtkCssValues *)values;
+}
+
+void
+gtk_css_transition_values_unbox (GtkCssTransitionValues *values)
+{
 }
 
 static GtkCssValues *
@@ -893,6 +1040,23 @@ gtk_css_size_create_initial_values (void)
   return (GtkCssValues *)values;
 }
 
+void
+gtk_css_size_values_unbox (GtkCssSizeValues *values)
+{
+   values->_margin_top = _gtk_css_number_value_get (values->margin_top, 100);
+   values->_margin_left = _gtk_css_number_value_get (values->margin_left, 100);
+   values->_margin_bottom = _gtk_css_number_value_get (values->margin_bottom, 100);
+   values->_margin_right = _gtk_css_number_value_get (values->margin_right, 100);
+   values->_padding_top = _gtk_css_number_value_get (values->padding_top, 100);
+   values->_padding_left = _gtk_css_number_value_get (values->padding_left, 100);
+   values->_padding_bottom = _gtk_css_number_value_get (values->padding_bottom, 100);
+   values->_padding_right = _gtk_css_number_value_get (values->padding_right, 100);
+   values->_border_spacing_x = _gtk_css_position_value_get_x (values->border_spacing, 100);
+   values->_border_spacing_y = _gtk_css_position_value_get_y (values->border_spacing, 100);
+   values->_min_width = _gtk_css_number_value_get (values->min_width, 100);
+   values->_min_height = _gtk_css_number_value_get (values->min_height, 100);
+}
+
 static GtkCssValues *
 gtk_css_other_create_initial_values (void)
 {
@@ -908,6 +1072,11 @@ gtk_css_other_create_initial_values (void)
   values->filter = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FILTER, NULL, NULL, NULL);
 
   return (GtkCssValues *)values;
+}
+
+void
+gtk_css_other_values_unbox (GtkCssOtherValues *values)
+{
 }
 
 static void
