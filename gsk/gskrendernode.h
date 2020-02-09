@@ -53,6 +53,15 @@ struct _GskShadow
   float radius;
 };
 
+/**
+ * GskParseErrorFunc:
+ * @section: the #GtkCssSection where the error occurred
+ * @error:  the error
+ * @user_data: user data
+ *
+ * The type of callback that is called when a parse error occurs
+ * during deserialization of node data.
+ */
 typedef void           (* GskParseErrorFunc)                    (const GtkCssSection *section,
                                                                  const GError        *error,
                                                                  gpointer             user_data);

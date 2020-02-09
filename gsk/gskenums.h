@@ -45,6 +45,7 @@
  * @GSK_CROSS_FADE_NODE: A node that cross-fades between two children
  * @GSK_TEXT_NODE: A node containing a glyph string
  * @GSK_BLUR_NODE: A node that applies a blur
+ * @GSK_DEBUG_NODE: Debug information that does not affect the rendering
  *
  * The type of a node determines what the node is rendering.
  **/
