@@ -38,7 +38,7 @@
 #include "gdk/gdkprofilerprivate.h"
 
 /**
- * SECTION:emojichooser
+ * SECTION:gtkemojichooser
  * @Title: GtkEmojiChooser
  * @Short_description: A popover to choose an Emoji character
  *
