@@ -157,18 +157,25 @@ gdk_frame_clock_idle_dispose (GObject *object)
 }
 
 static gint64
+_get_monotonic_frame_time (gint64 current_time,
+                           gint64 frame_time)
+{
+  /* ensure monotonicity of frame time */
+  return (current_time <= frame_time) ?
+          frame_time + 1 :
+          current_time;
+}
+
+static gint64
 compute_frame_time (GdkFrameClockIdle *idle)
 {
   GdkFrameClockIdlePrivate *priv = idle->priv;
-  gint64 computed_frame_time;
+  gint64 current_time;
 
-  computed_frame_time = g_get_monotonic_time ();
+  current_time = g_get_monotonic_time ();
 
-  /* ensure monotonicity of frame time */
-  if (computed_frame_time <= priv->frame_time)
-      computed_frame_time = priv->frame_time + 1;
-
-  return computed_frame_time;
+  return _get_monotonic_frame_time (current_time,
+                                    priv->frame_time);
 }
 
 static gint64
@@ -346,6 +353,7 @@ gdk_frame_clock_paint_idle (void *data)
               gint64 reset_frame_time;
               gint64 smoothest_frame_time;
               gint64 frame_time_error;
+              gint64 current_time = g_get_monotonic_time ();
               GdkFrameTimings *prev_timings =
                 gdk_frame_clock_get_current_timings (clock);
 
@@ -364,9 +372,17 @@ gdk_frame_clock_paint_idle (void *data)
                * missed frames before they occur.
                */
               smoothest_frame_time = priv->frame_time + frame_interval;
-              reset_frame_time = compute_frame_time (clock_idle);
-              frame_time_error = ABS (reset_frame_time - smoothest_frame_time);
-              if (frame_time_error >= frame_interval)
+              reset_frame_time = _get_monotonic_frame_time (current_time,
+                                                            priv->frame_time);
+              frame_time_error = ABS (current_time - smoothest_frame_time);
+
+              /*
+               * frame_time_error should be close to 0. If it's more than half
+               * a frame interval it probably means that we skipped at least
+               * one frame. This can happen if we haven't received one or more
+               * frame callbacks, if we take too long to render a frame etc.
+               */
+              if (frame_time_error >= (frame_interval / 2))
                 priv->frame_time = reset_frame_time;
               else
                 priv->frame_time = smoothest_frame_time;
