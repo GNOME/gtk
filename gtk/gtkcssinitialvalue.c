@@ -24,7 +24,7 @@
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtksettingsprivate.h"
-#include "gtkstyleproviderprivate.h"
+#include "gtkwidget.h"
 
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
@@ -50,7 +50,10 @@ gtk_css_value_initial_compute (GtkCssValue      *value,
   switch (property_id)
     {
     case GTK_CSS_PROPERTY_DPI:
-      settings = gtk_style_provider_get_settings (provider);
+      if (root)
+        settings = gtk_widget_get_settings (root);
+      else
+        settings = gtk_settings_get_for_display (gdk_display_get_default ());
       if (settings)
         {
           int dpi_int;
@@ -63,7 +66,10 @@ gtk_css_value_initial_compute (GtkCssValue      *value,
       break;
 
     case GTK_CSS_PROPERTY_FONT_FAMILY:
-      settings = gtk_style_provider_get_settings (provider);
+      if (root)
+        settings = gtk_widget_get_settings (root);
+      else
+        settings = gtk_settings_get_for_display (gdk_display_get_default ());
       if (settings && gtk_settings_get_font_family (settings) != NULL)
         return _gtk_css_string_value_new (gtk_settings_get_font_family (settings));
       break;

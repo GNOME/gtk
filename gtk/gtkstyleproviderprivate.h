@@ -38,7 +38,6 @@ struct _GtkStyleProviderInterface
 
   GtkCssValue *         (* get_color)           (GtkStyleProvider        *provider,
                                                  const char              *name);
-  GtkSettings *         (* get_settings)        (GtkStyleProvider        *provider);
   GtkCssKeyframes *     (* get_keyframes)       (GtkStyleProvider        *provider,
                                                  const char              *name);
   int                   (* get_scale)           (GtkStyleProvider        *provider);
@@ -54,7 +53,6 @@ struct _GtkStyleProviderInterface
   void                  (* changed)             (GtkStyleProvider        *provider);
 };
 
-GtkSettings *           gtk_style_provider_get_settings          (GtkStyleProvider        *provider);
 GtkCssValue *           gtk_style_provider_get_color             (GtkStyleProvider        *provider,
                                                                   const char              *name);
 GtkCssKeyframes *       gtk_style_provider_get_keyframes         (GtkStyleProvider        *provider,

@@ -123,21 +123,6 @@ gtk_style_provider_changed (GtkStyleProvider *provider)
   g_signal_emit (provider, signals[CHANGED], 0);
 }
 
-GtkSettings *
-gtk_style_provider_get_settings (GtkStyleProvider *provider)
-{
-  GtkStyleProviderInterface *iface;
-
-  gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), NULL);
-
-  iface = GTK_STYLE_PROVIDER_GET_INTERFACE (provider);
-
-  if (!iface->get_settings)
-    return NULL;
-
-  return iface->get_settings (provider);
-}
-
 int
 gtk_style_provider_get_scale (GtkStyleProvider *provider)
 {
