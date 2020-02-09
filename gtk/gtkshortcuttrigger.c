@@ -706,7 +706,6 @@ gtk_mnemonic_trigger_compare (GtkShortcutTrigger  *trigger1,
 static void
 gtk_mnemonic_trigger_print (GtkShortcutTrigger *trigger,
                             GString            *string)
-                  
 {
   GtkMnemonicTrigger *self = (GtkMnemonicTrigger *) trigger;
   const char *keyval_str;
@@ -722,7 +721,6 @@ static gboolean
 gtk_mnemonic_trigger_print_label (GtkShortcutTrigger *trigger,
                                   GdkDisplay         *display,
                                   GString            *string)
-                  
 {
   GtkMnemonicTrigger *self = (GtkMnemonicTrigger *) trigger;
   const char *keyval_str;
@@ -754,7 +752,7 @@ static const GtkShortcutTriggerClass GTK_MNEMONIC_TRIGGER_CLASS = {
  *
  * Creates a #GtkShortcutTrigger that will trigger whenever the key with
  * the given @keyval is pressed and mnemonics have been activated.
- * 
+ *
  * Mnemonics are activated by calling code when a key event with the right
  * modifiers is detected.
  *
