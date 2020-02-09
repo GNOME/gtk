@@ -53,6 +53,7 @@ struct _GtkCssNode
 
   GtkCssChange           pending_changes;       /* changes that accumulated since the style was last computed */
 
+  guint                  is_root :1;            /* node is the root of a CSS tree and never has parents */
   guint                  visible :1;            /* node will be skipped when validating or computing styles */
   guint                  invalid :1;            /* node or a child needs to be validated (even if just for animation) */
   guint                  needs_propagation :1;  /* children have state changes that need to be propagated to their siblings */
@@ -79,6 +80,8 @@ struct _GtkCssNodeClass
 
   /* get style provider to use or NULL to use parent's */
   GtkStyleProvider *    (* get_style_provider)          (GtkCssNode            *cssnode);
+  /* get the root widget for this node - will only be called if cssnode->is_root == TRUE */
+  GtkWidget *           (* get_root)                    (GtkCssNode            *cssnode);
   /* get frame clock or NULL (only relevant for root node) */
   GdkFrameClock *       (* get_frame_clock)             (GtkCssNode            *cssnode);
   GtkCssStyle *         (* update_style)                (GtkCssNode            *cssnode,
