@@ -717,6 +717,7 @@ gtk_css_node_reposition (GtkCssNode *node,
   GtkCssNode *old_parent;
 
   g_assert (! (new_parent == NULL && previous != NULL));
+  g_assert (!node->is_root);
 
   old_parent = node->parent;
   /* Take a reference here so the whole function has a reference */
@@ -1379,9 +1380,16 @@ gtk_css_node_get_style_provider (GtkCssNode *cssnode)
 }
 
 GtkWidget *
-gtk_css_node_get_root (GtkCssNode *cssnode)
+gtk_css_node_get_root (GtkCssNode *self)
 {
-  return NULL;
+  while (!self->is_root)
+    {
+      self = self->parent;
+      if (self == NULL)
+        return NULL;
+    }
+
+  return GTK_CSS_NODE_GET_CLASS (self)->get_root (self);
 }
 
 void

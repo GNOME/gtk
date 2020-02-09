@@ -120,6 +120,16 @@ gtk_css_widget_node_get_style_provider (GtkCssNode *node)
   return GTK_STYLE_PROVIDER (cascade);
 }
 
+static GtkWidget *
+gtk_css_widget_node_get_root (GtkCssNode *node)
+{
+  GtkCssWidgetNode *self = GTK_CSS_WIDGET_NODE (node);
+
+  g_assert (self->widget == NULL || GTK_IS_ROOT (self->widget));
+
+  return self->widget;
+}
+
 static GdkFrameClock *
 gtk_css_widget_node_get_frame_clock (GtkCssNode *node)
 {
@@ -145,6 +155,7 @@ gtk_css_widget_node_class_init (GtkCssWidgetNodeClass *klass)
   node_class->queue_validate = gtk_css_widget_node_queue_validate;
   node_class->dequeue_validate = gtk_css_widget_node_dequeue_validate;
   node_class->get_style_provider = gtk_css_widget_node_get_style_provider;
+  node_class->get_root = gtk_css_widget_node_get_root;
   node_class->get_frame_clock = gtk_css_widget_node_get_frame_clock;
 }
 
@@ -163,6 +174,8 @@ gtk_css_widget_node_new (GtkWidget *widget)
 
   result = g_object_new (GTK_TYPE_CSS_WIDGET_NODE, NULL);
   result->widget = widget;
+  if (GTK_IS_ROOT (widget))
+    GTK_CSS_NODE (result)->is_root = TRUE;
   gtk_css_node_set_visible (GTK_CSS_NODE (result),
                             _gtk_widget_get_visible (widget));
 
