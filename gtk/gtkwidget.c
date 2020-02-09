@@ -674,6 +674,11 @@ static gboolean         gtk_widget_buildable_custom_tag_start   (GtkBuildable   
                                                                  const gchar        *tagname,
                                                                  GtkBuildableParser *parser,
                                                                  gpointer           *data);
+static void             gtk_widget_buildable_custom_tag_end     (GtkBuildable       *buildable,
+                                                                 GtkBuilder         *builder,
+                                                                 GObject            *child,
+                                                                 const gchar        *tagname,
+                                                                 gpointer            data);
 static void             gtk_widget_buildable_custom_finished    (GtkBuildable       *buildable,
                                                                  GtkBuilder         *builder,
                                                                  GObject            *child,
@@ -8820,6 +8825,7 @@ gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
   iface->get_internal_child = gtk_widget_buildable_get_internal_child;
   iface->parser_finished = gtk_widget_buildable_parser_finished;
   iface->custom_tag_start = gtk_widget_buildable_custom_tag_start;
+  iface->custom_tag_end = gtk_widget_buildable_custom_tag_end;
   iface->custom_finished = gtk_widget_buildable_custom_finished;
   iface->add_child = gtk_widget_buildable_add_child;
 }
@@ -9361,6 +9367,15 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable       *buildable,
     }
 
   return FALSE;
+}
+
+static void
+gtk_widget_buildable_custom_tag_end (GtkBuildable  *buildable,
+                                     GtkBuilder    *builder,
+                                     GObject       *child,
+                                     const gchar   *tagname,
+                                     gpointer       data)
+{
 }
 
 static void
