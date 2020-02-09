@@ -3542,9 +3542,6 @@ gtk_widget_realize (GtkWidget *widget)
 
       gtk_widget_update_alpha (widget);
 
-      if (priv->context)
-	gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
-
       gtk_widget_pop_verify_invariants (widget);
     }
 }
@@ -6848,12 +6845,7 @@ gtk_widget_get_child_visible (GtkWidget *widget)
 void
 _gtk_widget_scale_changed (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  if (priv->context)
-    gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_SCALE_FACTOR]);
 
@@ -11241,8 +11233,6 @@ gtk_widget_get_style_context (GtkWidget *widget)
       GdkDisplay *display;
 
       priv->context = gtk_style_context_new_for_node (priv->cssnode);
-
-      gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
 
       display = _gtk_widget_get_display (widget);
       if (display)

@@ -121,14 +121,6 @@ gtk_style_cascade_get_color (GtkStyleProvider *provider,
   return NULL;
 }
 
-static int
-gtk_style_cascade_get_scale (GtkStyleProvider *provider)
-{
-  GtkStyleCascade *cascade = GTK_STYLE_CASCADE (provider);
-
-  return cascade->scale;
-}
-
 static GtkCssKeyframes *
 gtk_style_cascade_get_keyframes (GtkStyleProvider *provider,
                                  const char       *name)
@@ -182,7 +174,6 @@ static void
 gtk_style_cascade_provider_iface_init (GtkStyleProviderInterface *iface)
 {
   iface->get_color = gtk_style_cascade_get_color;
-  iface->get_scale = gtk_style_cascade_get_scale;
   iface->get_keyframes = gtk_style_cascade_get_keyframes;
   iface->lookup = gtk_style_cascade_lookup;
 }
@@ -222,8 +213,6 @@ style_provider_data_clear (gpointer data_)
 static void
 _gtk_style_cascade_init (GtkStyleCascade *cascade)
 {
-  cascade->scale = 1;
-
   cascade->providers = g_array_new (FALSE, FALSE, sizeof (GtkStyleProviderData));
   g_array_set_clear_func (cascade->providers, style_provider_data_clear);
 }
@@ -319,24 +308,3 @@ _gtk_style_cascade_remove_provider (GtkStyleCascade  *cascade,
     }
 }
 
-void
-_gtk_style_cascade_set_scale (GtkStyleCascade *cascade,
-                              int              scale)
-{
-  gtk_internal_return_if_fail (GTK_IS_STYLE_CASCADE (cascade));
-
-  if (cascade->scale == scale)
-    return;
-
-  cascade->scale = scale;
-
-  gtk_style_provider_changed (GTK_STYLE_PROVIDER (cascade));
-}
-
-int
-_gtk_style_cascade_get_scale (GtkStyleCascade *cascade)
-{
-  gtk_internal_return_val_if_fail (GTK_IS_STYLE_CASCADE (cascade), 1);
-
-  return cascade->scale;
-}

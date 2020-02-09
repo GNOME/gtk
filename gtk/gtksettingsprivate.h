@@ -29,8 +29,7 @@ G_BEGIN_DECLS
 const cairo_font_options_t *
                     gtk_settings_get_font_options            (GtkSettings            *settings);
 GdkDisplay         *_gtk_settings_get_display                (GtkSettings            *settings);
-GtkStyleCascade    *_gtk_settings_get_style_cascade          (GtkSettings            *settings,
-                                                              gint                    scale);
+GtkStyleCascade    *gtk_settings_get_style_cascade           (GtkSettings            *settings);
 
 typedef enum
 {

@@ -21,7 +21,7 @@
 
 #include "gtkcssimagescaledprivate.h"
 
-#include "gtkstyleproviderprivate.h"
+#include "gtkwidget.h"
 
 G_DEFINE_TYPE (GtkCssImageScaled, _gtk_css_image_scaled, GTK_TYPE_CSS_IMAGE)
 
@@ -110,8 +110,10 @@ gtk_css_image_scaled_compute (GtkCssImage      *image,
   int i;
   int best;
 
-  scale = gtk_style_provider_get_scale (provider);
-  scale = MAX(scale, 1);
+  if (root)
+    scale = gtk_widget_get_scale_factor (root);
+  else
+    scale = 1;
 
   best = 0;
   for (i = 0; i < scaled->n_images; i++)
