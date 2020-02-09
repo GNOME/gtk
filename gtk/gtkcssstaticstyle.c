@@ -682,17 +682,11 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
     }
 }
 
-static GtkCssStyle *default_style;
-
-static void
-clear_default_style (gpointer data)
-{
-  g_set_object (&default_style, NULL);
-}
-
 GtkCssStyle *
 gtk_css_static_style_get_default (void)
 {
+  static GtkCssStyle *default_style = NULL;
+
   /* FIXME: This really depends on the screen, but we don't have
    * a screen at hand when we call this function, and in practice,
    * the default style is always replaced by something else
@@ -701,15 +695,14 @@ gtk_css_static_style_get_default (void)
   if (default_style == NULL)
     {
       GtkCountingBloomFilter filter = GTK_COUNTING_BLOOM_FILTER_INIT;
-      GtkSettings *settings;
+      GtkCssProvider *provider;
 
-      settings = gtk_settings_get_default ();
-      default_style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER (settings),
+      provider = gtk_css_provider_new ();
+      default_style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER (provider),
                                                         &filter,
                                                         NULL,
                                                         0);
-      g_object_set_data_full (G_OBJECT (settings), I_("gtk-default-style"),
-                              default_style, clear_default_style);
+      g_object_unref (provider);
     }
 
   return default_style;

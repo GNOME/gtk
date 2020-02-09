@@ -26,10 +26,10 @@
 #include "gtkprivate.h"
 #include "gtkscrolledwindow.h"
 #include "gtkstylecontext.h"
-#include "gtkstyleproviderprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
-#include "gtkwidget.h"
+#include "gtkwidgetprivate.h"
+#include "gtkwindow.h"
 
 #include "gdk/gdk-private.h"
 
@@ -196,8 +196,6 @@ enum {
 };
 
 /* --- prototypes --- */
-static void     gtk_settings_provider_iface_init (GtkStyleProviderInterface *iface);
-
 static void     gtk_settings_finalize            (GObject               *object);
 static void     gtk_settings_get_property        (GObject               *object,
                                                   guint                  property_id,
@@ -238,10 +236,7 @@ static guint             class_n_properties = 0;
 static GPtrArray *display_settings;
 
 
-G_DEFINE_TYPE_EXTENDED (GtkSettings, gtk_settings, G_TYPE_OBJECT, 0,
-                        G_ADD_PRIVATE (GtkSettings)
-                        G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
-                                               gtk_settings_provider_iface_init));
+G_DEFINE_TYPE_WITH_PRIVATE (GtkSettings, gtk_settings, G_TYPE_OBJECT);
 
 /* --- functions --- */
 static void
@@ -967,18 +962,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_assert (result == PROP_OVERLAY_SCROLLING);
 }
 
-static GtkSettings *
-gtk_settings_style_provider_get_settings (GtkStyleProvider *provider)
-{
-  return GTK_SETTINGS (provider);
-}
-
-static void
-gtk_settings_provider_iface_init (GtkStyleProviderInterface *iface)
-{
-  iface->get_settings = gtk_settings_style_provider_get_settings;
-}
-
 static void
 gtk_settings_finalize (GObject *object)
 {
@@ -1064,10 +1047,6 @@ settings_init_style (GtkSettings *settings)
   _gtk_style_cascade_add_provider (cascade,
                                    GTK_STYLE_PROVIDER (css_provider),
                                    GTK_STYLE_PROVIDER_PRIORITY_USER);
-
-  _gtk_style_cascade_add_provider (cascade,
-                                   GTK_STYLE_PROVIDER (settings),
-                                   GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
 
   _gtk_style_cascade_add_provider (cascade,
                                    GTK_STYLE_PROVIDER (priv->theme_provider),
@@ -1192,10 +1171,29 @@ gtk_settings_set_property (GObject      *object,
   priv->property_values[property_id - 1].source = GTK_SETTINGS_SOURCE_APPLICATION;
 }
 
+/* This function exists to avoid roots needing to connect to
+ * GtkSettings::notify to track CSS changes
+ */
 static void
-settings_invalidate_style (GtkSettings *settings)
+settings_invalidate_style (GtkSettings  *settings,
+                           GtkCssChange  change)
 {
-  gtk_style_provider_changed (GTK_STYLE_PROVIDER (settings));
+  GList *list, *toplevels;
+  GdkDisplay *display;
+
+  display = _gtk_settings_get_display (settings);
+  toplevels = gtk_window_list_toplevels ();
+  g_list_foreach (toplevels, (GFunc) g_object_ref, NULL);
+
+  for (list = toplevels; list; list = list->next)
+    {
+      if (gtk_widget_get_display (list->data) == display)
+        gtk_css_node_invalidate (gtk_widget_get_css_node (list->data), change);
+
+      g_object_unref (list->data);
+    }
+
+  g_list_free (toplevels);
 }
 
 static void
@@ -1255,8 +1253,7 @@ gtk_settings_notify (GObject    *object,
       break;
     case PROP_FONT_NAME:
       settings_update_font_values (settings);
-      settings_invalidate_style (settings);
-      gtk_style_context_reset_widgets (priv->display);
+      settings_invalidate_style (settings, GTK_CSS_CHANGE_ROOT);
       break;
     case PROP_THEME_NAME:
     case PROP_APPLICATION_PREFER_DARK_THEME:
@@ -1267,6 +1264,7 @@ gtk_settings_notify (GObject    *object,
        * widgets with gtk_widget_style_set(), and also causes more
        * recomputation than necessary.
        */
+      settings_invalidate_style (settings, GTK_CSS_CHANGE_ROOT);
       gtk_style_context_reset_widgets (priv->display);
       break;
     case PROP_XFT_ANTIALIAS:

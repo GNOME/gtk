@@ -20,9 +20,10 @@
 #include "gtkcssiconthemevalueprivate.h"
 
 #include "gtkicontheme.h"
+#include "gtkintl.h"
 #include "gtksettingsprivate.h"
 #include "gtkstyleproviderprivate.h"
-#include "gtkintl.h"
+#include "gtkwidget.h"
 
 /*
  * The idea behind this value (and the '-gtk-icon-theme' CSS property) is
@@ -79,11 +80,17 @@ gtk_css_value_icon_theme_compute (GtkCssValue      *icon_theme,
                                   GtkCssStyle      *parent_style)
 {
   GtkIconTheme *icontheme;
+  GdkDisplay *display;
+
+  if (root)
+    display = gtk_widget_get_display (root);
+  else
+    display = gdk_display_get_default ();
 
   if (icon_theme->icontheme)
     icontheme = icon_theme->icontheme;
   else
-    icontheme = gtk_icon_theme_get_for_display (_gtk_settings_get_display (gtk_style_provider_get_settings (provider)));
+    icontheme = gtk_icon_theme_get_for_display (display);
 
   return gtk_css_icon_theme_value_new (icontheme);
 }
