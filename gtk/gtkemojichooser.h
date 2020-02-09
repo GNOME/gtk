@@ -35,7 +35,9 @@ G_BEGIN_DECLS
 typedef struct _GtkEmojiChooser      GtkEmojiChooser;
 typedef struct _GtkEmojiChooserClass GtkEmojiChooserClass;
 
+GDK_AVAILABLE_IN_ALL
 GType      gtk_emoji_chooser_get_type (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_emoji_chooser_new      (void);
 
 G_END_DECLS
