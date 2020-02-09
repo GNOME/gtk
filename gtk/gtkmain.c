@@ -2702,15 +2702,9 @@ gtk_propagate_event_internal (GtkWidget *widget,
  * if the event remains unhandled. This function will emit the event
  * through all the hierarchy of @widget through all propagation phases.
  *
- * Events received by GTK from GDK normally begin in gtk_main_do_event().
+ * Events received by GTK from GDK normally begin at a #GtkRoot widget.
  * Depending on the type of event, existence of modal dialogs, grabs, etc.,
  * the event may be propagated; if so, this function is used.
- *
- * gtk_propagate_event() calls gtk_widget_event() on each widget it
- * decides to send the event to. So gtk_widget_event() is the lowest-level
- * function; it simply emits the #GtkWidget::event and possibly an
- * event-specific signal on a widget. gtk_propagate_event() is a bit
- * higher-level, and gtk_main_do_event() is the highest level.
  *
  * All that said, you most likely don’t want to use any of these
  * functions; synthesizing events is rarely needed. There are almost
