@@ -996,7 +996,7 @@ typedef enum
 /**
  * GtkShortcutScope:
  * @GTK_SHORTCUT_SCOPE_LOCAL: Shortcuts are handled inside
- *     the widget hte controller belongs to.
+ *     the widget the controller belongs to.
  * @GTK_SHORTCUT_SCOPE_MANAGED: Shortcuts are handled by
  *     the first ancestor that is a #GtkShortcutManager
  * @GTK_SHORTCUT_SCOPE_GLOBAL: Shortcuts are handled by
