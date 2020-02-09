@@ -93,6 +93,7 @@ gboolean _gtk_translate_keyboard_accel_state   (GdkKeymap       *keymap,
 gboolean         gtk_propagate_event_internal  (GtkWidget       *widget,
                                                 GdkEvent        *event,
                                                 GtkWidget       *topmost);
+void       gtk_main_do_event       (GdkEvent           *event);
 
 gdouble _gtk_get_slowdown (void);
 void    _gtk_set_slowdown (gdouble slowdown_factor);
