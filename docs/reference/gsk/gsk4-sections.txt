@@ -109,9 +109,8 @@ gsk_text_node_new
 gsk_text_node_peek_font
 gsk_text_node_peek_glyphs
 gsk_text_node_peek_color
-gsk_text_node_get_x
-gsk_text_node_get_y
 gsk_text_node_get_num_glyphs
+gsk_text_node_get_offset
 gsk_blur_node_new
 gsk_blur_node_get_child
 gsk_blur_node_get_radius
