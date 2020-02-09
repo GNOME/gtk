@@ -137,7 +137,7 @@ struct _GtkCssOutlineValues {
   GtkCssValue *outline_style;
   GtkCssValue *outline_width;
   GtkCssValue *outline_offset;
-  GtkCssValue *outline_color;
+  GtkCssValue *outline_color; // NULL if currentColor
 };
 
 struct _GtkCssFontValues {
