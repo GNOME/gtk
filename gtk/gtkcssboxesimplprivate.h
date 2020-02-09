@@ -477,10 +477,10 @@ gtk_css_boxes_compute_outline_box (GtkCssBoxes *boxes)
   gtk_css_boxes_compute_outline_rect (boxes);
 
   gtk_css_boxes_apply_border_radius (&boxes->box[GTK_CSS_AREA_OUTLINE_BOX],
-                                     boxes->style->outline->outline_top_left_radius,
-                                     boxes->style->outline->outline_top_right_radius,
-                                     boxes->style->outline->outline_bottom_right_radius,
-                                     boxes->style->outline->outline_bottom_left_radius);
+                                     boxes->style->border->border_top_left_radius,
+                                     boxes->style->border->border_top_right_radius,
+                                     boxes->style->border->border_bottom_right_radius,
+                                     boxes->style->border->border_bottom_left_radius);
 
   boxes->has_box[GTK_CSS_AREA_OUTLINE_BOX] = TRUE;
 }

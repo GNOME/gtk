@@ -1105,31 +1105,6 @@ _gtk_css_style_property_init_properties (void)
                                           outline_parse,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
 
-  gtk_css_style_property_register        ("-gtk-outline-top-left-radius",
-                                          GTK_CSS_PROPERTY_OUTLINE_TOP_LEFT_RADIUS,
-                                          GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_OUTLINE,
-                                          border_corner_radius_value_parse,
-                                          _gtk_css_number_value_new (0, GTK_CSS_PX));
-  gtk_css_style_property_register        ("-gtk-outline-top-right-radius",
-                                          GTK_CSS_PROPERTY_OUTLINE_TOP_RIGHT_RADIUS,
-                                          GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_OUTLINE,
-                                          border_corner_radius_value_parse,
-                                          _gtk_css_number_value_new (0, GTK_CSS_PX));
-  gtk_css_style_property_register        ("-gtk-outline-bottom-right-radius",
-                                          GTK_CSS_PROPERTY_OUTLINE_BOTTOM_RIGHT_RADIUS,
-                                          GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_OUTLINE,
-                                          border_corner_radius_value_parse,
-                                          _gtk_css_number_value_new (0, GTK_CSS_PX));
-  gtk_css_style_property_register        ("-gtk-outline-bottom-left-radius",
-                                          GTK_CSS_PROPERTY_OUTLINE_BOTTOM_LEFT_RADIUS,
-                                          GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_OUTLINE,
-                                          border_corner_radius_value_parse,
-                                          _gtk_css_number_value_new (0, GTK_CSS_PX));
-
   gtk_css_style_property_register        ("background-clip",
                                           GTK_CSS_PROPERTY_BACKGROUND_CLIP,
                                           0,

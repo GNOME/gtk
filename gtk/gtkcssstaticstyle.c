@@ -99,10 +99,6 @@ static const int outline_props[] = {
   GTK_CSS_PROPERTY_OUTLINE_STYLE,
   GTK_CSS_PROPERTY_OUTLINE_WIDTH,
   GTK_CSS_PROPERTY_OUTLINE_OFFSET,
-  GTK_CSS_PROPERTY_OUTLINE_TOP_LEFT_RADIUS,
-  GTK_CSS_PROPERTY_OUTLINE_TOP_RIGHT_RADIUS,
-  GTK_CSS_PROPERTY_OUTLINE_BOTTOM_RIGHT_RADIUS,
-  GTK_CSS_PROPERTY_OUTLINE_BOTTOM_LEFT_RADIUS,
   GTK_CSS_PROPERTY_OUTLINE_COLOR,
 };
 
@@ -529,18 +525,6 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
     case GTK_CSS_PROPERTY_OUTLINE_OFFSET:
       gtk_css_take_value (&style->outline->outline_offset, value);
       break;
-    case GTK_CSS_PROPERTY_OUTLINE_TOP_LEFT_RADIUS:
-      gtk_css_take_value (&style->outline->outline_top_left_radius, value);
-      break;
-    case GTK_CSS_PROPERTY_OUTLINE_TOP_RIGHT_RADIUS:
-      gtk_css_take_value (&style->outline->outline_top_right_radius, value);
-      break;
-    case GTK_CSS_PROPERTY_OUTLINE_BOTTOM_RIGHT_RADIUS:
-      gtk_css_take_value (&style->outline->outline_bottom_right_radius, value);
-      break;
-    case GTK_CSS_PROPERTY_OUTLINE_BOTTOM_LEFT_RADIUS:
-      gtk_css_take_value (&style->outline->outline_bottom_left_radius, value);
-      break;
     case GTK_CSS_PROPERTY_BACKGROUND_CLIP:
       gtk_css_take_value (&style->background->background_clip, value);
       break;
@@ -795,10 +779,6 @@ gtk_css_outline_create_initial_values (void)
   values->outline_style = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_STYLE, NULL, NULL, NULL);
   values->outline_width = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_WIDTH, NULL, NULL, NULL);
   values->outline_offset = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_OFFSET, NULL, NULL, NULL);
-  values->outline_top_left_radius = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_TOP_LEFT_RADIUS, NULL, NULL, NULL);
-  values->outline_top_right_radius = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_TOP_RIGHT_RADIUS, NULL, NULL, NULL);
-  values->outline_bottom_right_radius = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_BOTTOM_RIGHT_RADIUS, NULL, NULL, NULL);
-  values->outline_bottom_left_radius = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_BOTTOM_LEFT_RADIUS, NULL, NULL, NULL);
   values->outline_color = NULL;
 
   return (GtkCssValues *)values;
