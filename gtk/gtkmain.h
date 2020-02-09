@@ -157,10 +157,6 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_get_event_target_with_type (GdkEvent *event,
                                            GType     type);
 
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_propagate_event          (GtkWidget       *widget,
-                                         GdkEvent        *event);
-
 
 G_END_DECLS
 

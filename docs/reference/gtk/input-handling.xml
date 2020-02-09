@@ -156,8 +156,7 @@
     </para>
 
     <para>
-      An event is propagated to a widget using gtk_propagate_event().
-      Propagation goes down and up the widget hierarchy in three phases
+      An event is propagated down and up the widget hierarchy in three phases
       (see #GtkPropagationPhase) towards a target widget.
     </para>
 
