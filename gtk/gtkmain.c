@@ -1152,52 +1152,6 @@ gtk_main_quit (void)
   g_main_loop_quit (main_loops->data);
 }
 
-/**
- * gtk_main_iteration:
- *
- * Runs a single iteration of the mainloop.
- *
- * If no events are waiting to be processed GTK will block
- * until the next event is noticed. If you don’t want to block
- * look at gtk_main_iteration_do() or check if any events are
- * pending with gtk_events_pending() first.
- *
- * Returns: %TRUE if gtk_main_quit() has been called for the
- *     innermost mainloop
- */
-gboolean
-gtk_main_iteration (void)
-{
-  g_main_context_iteration (NULL, TRUE);
-
-  if (main_loops)
-    return !g_main_loop_is_running (main_loops->data);
-  else
-    return TRUE;
-}
-
-/**
- * gtk_main_iteration_do:
- * @blocking: %TRUE if you want GTK to block if no events are pending
- *
- * Runs a single iteration of the mainloop.
- * If no events are available either return or block depending on
- * the value of @blocking.
- *
- * Returns: %TRUE if gtk_main_quit() has been called for the
- *     innermost mainloop
- */
-gboolean
-gtk_main_iteration_do (gboolean blocking)
-{
-  g_main_context_iteration (NULL, blocking);
-
-  if (main_loops)
-    return !g_main_loop_is_running (main_loops->data);
-  else
-    return TRUE;
-}
-
 static void
 rewrite_events_translate (GdkSurface *old_surface,
                           GdkSurface *new_surface,

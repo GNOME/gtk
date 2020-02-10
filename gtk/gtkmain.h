@@ -118,10 +118,6 @@ GDK_AVAILABLE_IN_ALL
 guint      gtk_main_level          (void);
 GDK_AVAILABLE_IN_ALL
 void       gtk_main_quit           (void);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_main_iteration      (void);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_main_iteration_do   (gboolean            blocking);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_grab_add            (GtkWidget          *widget);

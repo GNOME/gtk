@@ -4421,8 +4421,6 @@ gtk_init_check
 gtk_main
 gtk_main_level
 gtk_main_quit
-gtk_main_iteration
-gtk_main_iteration_do
 gtk_main_do_event
 
 <SUBSECTION>
