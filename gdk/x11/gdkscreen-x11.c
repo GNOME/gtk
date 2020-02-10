@@ -341,11 +341,6 @@ gdk_x11_screen_get_work_area (GdkX11Screen *x11_screen,
   area->width = workareas[desktop * 4 + 2];
   area->height = workareas[desktop * 4 + 3];
 
-  area->x /= x11_screen->surface_scale;
-  area->y /= x11_screen->surface_scale;
-  area->width /= x11_screen->surface_scale;
-  area->height /= x11_screen->surface_scale;
-
 out:
   if (ret_workarea)
     XFree (ret_workarea);
