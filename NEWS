@@ -3,41 +3,42 @@ Overview of Changes in GTK 3.98.0
 
   While this release gets significantly closer to what we aim for in GTK 4,
   there are still a few big items outstanding that we are currently working
-  on.
+  on:
 
-  - Animation API
-  - Row-recycling list and grid views
   - Event controllers for keyboard shortcuts
   - Movable popovers
+  - Row-recycling list and grid views
   - Revamped accessibility infrastructure
+  - Animation API
 
-  We will do further 3.9x snapshots as these land:
+  We will do further 3.98.x snapshots as these land.
 
   *****************
 
-* The DND refactoring has been completed. The GTK api for DND has been turned
+* The DND refactoring has been completed. The GTK API for DND has been turned
   into event controllers: GtkDragSource and GtkDropTarget. Support for file
-  transfers via file transfer portal has been added to both DND and the clipboard.
+  transfers via file transfer portal has been added for both DND and the clipboard.
 
 * Child surfaces have been removed. GDK only supports toplevel and popup surfaces
   now. The client-side window implementation has been removed too. On the GTK side,
   the GtkNative interface has been introduced for widgets that have their own
-  surface.
+  surface. This cleanup is not 100% complete yet.
 
 * Global positions and related apis such as gdk_surface_move are no longer available.
   
 * A constraint-based layout manager has been added.
 
-* Many classes have been made explicitly non-subclassable, and the widget hierarchy has
-  been simplified, by making widgets derive directly from GtkWidget instead of a container.
+* Many classes have been made explicitly non-subclassable, and the widget hierarchy
+  has been simplified, by making widgets derive directly from GtkWidget instead of
+  a container.
 
 * Menu-related changes:
- - GtkMenu, GtkMenuBar and related classes have been removed. They are being replaced by
-   GMenu and popover-based variants. Popover menus can now do traditional, nested menus,
-   and model buttons show accelerators.
+ - GtkMenu, GtkMenuBar and related classes have been removed. They are being replaced
+   by GMenu and popover-based variants. Popover menus can now do traditional, nested
+   menus, and model buttons show accelerators.
  - Context menus are no longer created with ::populate-popup signals, but use menu
    models and actions.
- - There are apis to create actions at class_init time, like gtk_widget_class_install_action.
+ - Widget actions can be created in class_init, with gtk_widget_class_install_action.
  - GtkToolbar has been removed as well.
 
 * Text-related changed:
@@ -62,11 +63,11 @@ Overview of Changes in GTK 3.98.0
  - The xim input method has been removed
 
 * Wayland-specific changes:
- - The loading of cursor themes has been improved to load cursors on demand, and
-   no longer relies on libwayland-cursor.
+ - The loading of cursor themes has been improved to load cursors on demand,
+   and no longer relies on libwayland-cursor.
 
-* The GL renderer is now sharing icon and glyph caches for all surfaces, and
-  has better support for blurring and shadow rendering.
+* The GL renderer is now sharing icon and glyph caches for all surfaces,
+  and has better support for blurring and shadow rendering.
 
 * Performance-related changes:
  - GTK provides profiling information for Sysprof when launched with GTK_TRACE=1.
