@@ -2297,7 +2297,6 @@ static GdkWaylandSeat *
 find_grab_input_seat (GdkSurface *surface,
                       GdkSurface *transient_for)
 {
-  GdkSurface *attached_grab_surface;
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkWaylandSurface *tmp_impl;
 
@@ -2307,20 +2306,6 @@ find_grab_input_seat (GdkSurface *surface,
    */
   if (impl->grab_input_seat)
     return GDK_WAYLAND_SEAT (impl->grab_input_seat);
-
-  /* HACK: GtkMenu grabs a special surface known as the "grab transfer surface"
-   * and then transfers the grab over to the correct surface later. Look for
-   * this surface when taking the grab to know it's correct.
-   *
-   * See: associate_menu_grab_transfer_surface in gtkmenu.c
-   */
-  attached_grab_surface = g_object_get_data (G_OBJECT (surface), "gdk-attached-grab-surface");
-  if (attached_grab_surface)
-    {
-      tmp_impl = GDK_WAYLAND_SURFACE (attached_grab_surface);
-      if (tmp_impl->grab_input_seat)
-        return GDK_WAYLAND_SEAT (tmp_impl->grab_input_seat);
-    }
 
   while (transient_for)
     {
@@ -2437,27 +2422,7 @@ gdk_wayland_surface_map (GdkSurface *surface)
         {
           GdkDevice *grab_device = NULL;
 
-          /* The popup menu surface is not the grabbed surface. This may mean
-           * that a "transfer surface" (see gtkmenu.c) is used, and we need
-           * to find that surface to get the grab device. If so is the case
-           * the "transfer surface" can be retrieved via the
-           * "gdk-attached-grab-surface" associated data field.
-           */
-          if (!impl->grab_input_seat)
-            {
-              GdkSurface *attached_grab_surface =
-                g_object_get_data (G_OBJECT (surface),
-                                   "gdk-attached-grab-surface");
-              if (attached_grab_surface)
-                {
-                  GdkWaylandSurface *attached_impl =
-                    GDK_WAYLAND_SURFACE (attached_grab_surface);
-                  grab_device = gdk_seat_get_pointer (attached_impl->grab_input_seat);
-                  transient_for =
-                    gdk_device_get_surface_at_position (grab_device, NULL, NULL);
-                }
-            }
-          else
+          if (impl->grab_input_seat)
             {
               grab_device = gdk_seat_get_pointer (impl->grab_input_seat);
               transient_for =
