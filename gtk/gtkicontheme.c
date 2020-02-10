@@ -3779,7 +3779,19 @@ icon_paintable_init (GdkPaintableInterface *iface)
   iface->get_intrinsic_height = icon_paintable_get_intrinsic_height;
 }
 
-static GtkIconPaintable *
+/**
+ * gtk_icon_paintable_new_for_file:
+ * @file: a #GFile
+ * @size: desired icon size
+ * @scale: the desired scale
+ *
+ * Creates a #GtkIconPaintable for a file with a given size and scale
+ * #GtkIcon. The icon can then be rendered by using it as a #GdkPaintable.
+ *
+ * Returns: (transfer full): a #GtkIconPaintable containing
+ *     for the icon. Unref with g_object_unref()
+ */
+GtkIconPaintable *
 gtk_icon_paintable_new_for_file (GFile *file,
                                  gint   size,
                                  gint   scale)
