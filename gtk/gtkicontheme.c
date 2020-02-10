@@ -473,7 +473,8 @@ static void              theme_subdir_load                (GtkIconTheme     *sel
 static void              do_theme_change                  (GtkIconTheme     *self);
 static void              blow_themes                      (GtkIconTheme     *self);
 static gboolean          rescan_themes                    (GtkIconTheme     *self);
-static GtkIconPaintable *icon_paintable_new               (int               desired_size,
+static GtkIconPaintable *icon_paintable_new               (const char       *icon_name,
+                                                           int               desired_size,
                                                            int               desired_scale);
 static IconCacheFlag     suffix_from_name                 (const gchar      *name);
 static void              icon_ensure_texture__locked      (GtkIconPaintable *icon,
@@ -1980,7 +1981,7 @@ real_choose_icon (GtkIconTheme      *self,
       unthemed_icon = g_hash_table_lookup (self->unthemed_icons, icon_names[i]);
       if (unthemed_icon)
         {
-          icon = icon_paintable_new (size, scale);
+          icon = icon_paintable_new (icon_names[i], size, scale);
 
           /* A SVG icon, when allowed, beats out a XPM icon, but not a PNG icon */
           if (self->pixbuf_supports_svg &&
@@ -2019,7 +2020,7 @@ real_choose_icon (GtkIconTheme      *self,
 
       if (hIcon)
         {
-          icon = icon_paintable_new (size, scale);
+          icon = icon_paintable_new (resources[0], size, scale);
           icon->win32_icon = gdk_win32_icon_to_pixbuf_libgtk_only (hIcon, NULL, NULL);
           DestroyIcon (hIcon);
           goto out;
@@ -2032,8 +2033,7 @@ real_choose_icon (GtkIconTheme      *self,
   /* Fall back to missing icon */
   if (icon == NULL)
     {
-      icon = icon_paintable_new (size, scale);
-      icon->icon_name = g_strdup ("image-missing");
+      icon = icon_paintable_new ("image-missing", size, scale);
       icon->filename = g_strdup (IMAGE_MISSING_RESOURCE_PATH);
       icon->is_resource = TRUE;
     }
@@ -2846,11 +2846,10 @@ theme_lookup_icon (IconTheme   *theme,
       IconThemeDir *dir = &g_array_index (theme->dirs, IconThemeDir, min_file->dir_index);
       gchar *filename;
 
-      icon = icon_paintable_new (size, scale);
+      icon = icon_paintable_new (icon_name, size, scale);
 
       filename = g_strconcat (icon_name, string_from_suffix (min_suffix), NULL);
       icon->filename = g_build_filename (dir->path, filename, NULL);
-      icon->icon_name = g_strdup (icon_name);
       icon->is_svg = min_suffix == ICON_CACHE_FLAG_SVG_SUFFIX;
       icon->is_resource = dir->is_resource;
       icon->is_symbolic = icon_uri_is_symbolic (filename, -1);
@@ -3217,13 +3216,15 @@ gtk_icon_paintable_init (GtkIconPaintable *icon)
 }
 
 static GtkIconPaintable *
-icon_paintable_new (int desired_size,
+icon_paintable_new (const char *icon_name,
+                    int desired_size,
                     int desired_scale)
 {
   GtkIconPaintable *icon;
 
   icon = g_object_new (GTK_TYPE_ICON_PAINTABLE, NULL);
 
+  icon->icon_name = g_strdup (icon_name);
   icon->desired_size = desired_size;
   icon->desired_scale = desired_scale;
 
@@ -3303,9 +3304,15 @@ gtk_icon_paintable_get_resource_path (GtkIconPaintable *icon)
  * gtk_icon_paintable_get_icon_name:
  * @self: a #GtkIcon
  *
- * Gets the icon name being used for the icon. This is only set
- * if a themed icon was used, and will show the actual icon-name
- * the was chosen.
+ * Get the icon name being used for this icon.
+ *
+ * When an icon looked up in the icon theme was not available, the
+ * icon theme may use fallback icons - either those specified to
+ * gtk_icon_theme_lookup() or the always-available
+ * "image-missing". The icon chosen is returned by this function.
+ *
+ * If the icon was created without an icon theme, this function returns %NULL.
+ *
  *
  * Returns: (nullable) (type filename): the themed icon-name for the icon, or %NULL
  *     if its not a themed icon.
@@ -3663,7 +3670,7 @@ gtk_icon_paintable_new_for_file (GFile *file,
 {
   GtkIconPaintable *icon;
 
-  icon = icon_paintable_new (size, scale);
+  icon = icon_paintable_new (NULL, size, scale);
   icon->loadable = G_LOADABLE_ICON (g_file_icon_new (file));
   icon->is_resource = g_file_has_uri_scheme (file, "resource");
 
@@ -3701,7 +3708,7 @@ gtk_icon_paintable_new_for_pixbuf (GtkIconTheme *icon_theme,
       size = MAX (width, height);
     }
 
-  icon = icon_paintable_new (size, scale);
+  icon = icon_paintable_new (NULL, size, scale);
   icon->texture = gdk_texture_new_for_pixbuf (pixbuf);
 
   return icon;
@@ -3754,7 +3761,7 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
     }
   else if (G_IS_LOADABLE_ICON (gicon))
     {
-      icon = icon_paintable_new (size, scale);
+      icon = icon_paintable_new (NULL, size, scale);
       icon->loadable = G_LOADABLE_ICON (g_object_ref (gicon));
       icon->is_svg = FALSE;
     }
@@ -3768,8 +3775,7 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
   else
     {
       g_debug ("Unhandled GIcon type %s", G_OBJECT_TYPE_NAME (gicon));
-      icon = icon_paintable_new (size, scale);
-      icon->icon_name = g_strdup ("image-missing");
+      icon = icon_paintable_new ("image-missing", size, scale);
       icon->filename = g_strdup (IMAGE_MISSING_RESOURCE_PATH);
       icon->is_resource = TRUE;
     }
