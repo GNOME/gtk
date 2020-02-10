@@ -49,6 +49,7 @@
 static void gdk_x11_screen_dispose  (GObject      *object);
 static void gdk_x11_screen_finalize (GObject      *object);
 static void init_randr_support	    (GdkX11Screen *screen);
+static void process_monitors_change (GdkX11Screen *screen);
 
 enum
 {
@@ -963,6 +964,9 @@ _gdk_x11_screen_set_surface_scale (GdkX11Screen *x11_screen,
 
       gdk_monitor_set_scale_factor (monitor, scale);
     }
+
+  /* We re-read the monitor sizes so we can apply the new scale */
+  process_monitors_change (x11_screen);
 }
 
 static void
