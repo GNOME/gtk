@@ -357,6 +357,7 @@ store_in_global_parent_cache (GtkCssNode                  *node,
 
 static GtkCssStyle *
 gtk_css_node_create_style (GtkCssNode                   *cssnode,
+                           GtkCssStyle                  *static_style,
                            const GtkCountingBloomFilter *filter,
                            GtkCssChange                  change)
 {
@@ -364,8 +365,13 @@ gtk_css_node_create_style (GtkCssNode                   *cssnode,
   GtkCssStyle *style;
   GtkCssChange style_change;
 
-  decl = gtk_css_node_get_declaration (cssnode);
+  style_change = gtk_css_static_style_get_change (GTK_CSS_STATIC_STYLE (static_style));
 
+  if ((change & GTK_CSS_RADICAL_CHANGE) == 0 &&
+      (change & style_change) == 0)
+    return g_object_ref (static_style);
+
+  decl = gtk_css_node_get_declaration (cssnode);
   style = lookup_in_global_parent_cache (cssnode, decl);
   if (style)
     return g_object_ref (style);
@@ -373,14 +379,7 @@ gtk_css_node_create_style (GtkCssNode                   *cssnode,
   created_styles++;
 
   if (change & GTK_CSS_CHANGE_NEEDS_RECOMPUTE)
-    {
-      /* Need to recompute the change flags */
-      style_change = 0;
-    }
-  else
-    {
-      style_change = gtk_css_static_style_get_change (gtk_css_style_get_static_style (cssnode->style));
-    }
+    style_change = 0;
 
   style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
                                             filter,
@@ -399,22 +398,6 @@ should_create_transitions (GtkCssChange change)
   return (change & GTK_CSS_CHANGE_ANIMATIONS) == 0;
 }
 
-static gboolean
-gtk_css_style_needs_recreation (GtkCssStyle  *style,
-                                GtkCssChange  change)
-{
-  gtk_internal_return_val_if_fail (GTK_IS_CSS_STATIC_STYLE (style), TRUE);
-
-  /* Try to avoid invalidating if we can */
-  if (change & GTK_CSS_RADICAL_CHANGE)
-    return TRUE;
-
-  if (gtk_css_static_style_get_change (GTK_CSS_STATIC_STYLE (style)) & change)
-    return TRUE;
-  else
-    return FALSE;
-}
-
 static GtkCssStyle *
 gtk_css_node_real_update_style (GtkCssNode                   *cssnode,
                                 const GtkCountingBloomFilter *filter,
@@ -426,10 +409,7 @@ gtk_css_node_real_update_style (GtkCssNode                   *cssnode,
 
   static_style = GTK_CSS_STYLE (gtk_css_style_get_static_style (style));
 
-  if (gtk_css_style_needs_recreation (static_style, change))
-    new_static_style = gtk_css_node_create_style (cssnode, filter, change);
-  else
-    new_static_style = g_object_ref (static_style);
+  new_static_style = gtk_css_node_create_style (cssnode, static_style, filter, change);
 
   if (new_static_style != static_style || (change & GTK_CSS_CHANGE_ANIMATIONS))
     {
