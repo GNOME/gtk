@@ -33,9 +33,8 @@
  * #GtkCalendar is a widget that displays a Gregorian calendar, one month
  * at a time. It can be created with gtk_calendar_new().
  *
- * The month and year currently displayed can be altered with
- * gtk_calendar_select_month(). The exact day can be selected from the
- * displayed month using gtk_calendar_select_day().
+ * The date that is currently displayed can be altered with
+ * gtk_calendar_select_day().
  *
  * To place a visual marker on a particular day, use gtk_calendar_mark_day()
  * and to remove the marker, gtk_calendar_unmark_day(). Alternative, all
@@ -337,7 +336,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                      P_("Year"),
                                                      P_("The selected year"),
                                                      0, G_MAXINT >> 9, 0,
-                                                     G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY));
+                                                     G_PARAM_READWRITE));
 
   /**
    * GtkCalendar:month:
@@ -351,7 +350,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                      P_("Month"),
                                                      P_("The selected month (as a number between 0 and 11)"),
                                                      0, 11, 0,
-                                                     G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY));
+                                                     G_PARAM_READWRITE));
 
   /**
    * GtkCalendar:day:
@@ -366,7 +365,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                      P_("Day"),
                                                      P_("The selected day (as a number between 1 and 31, or 0 to unselect the currently selected day)"),
                                                      0, 31, 0,
-                                                     G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY));
+                                                     G_PARAM_READWRITE));
 
   /**
    * GtkCalendar:show-heading:
@@ -943,9 +942,35 @@ gtk_calendar_set_property (GObject      *object,
                            GParamSpec   *pspec)
 {
   GtkCalendar *calendar = GTK_CALENDAR (object);
+  GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
+  GDateTime *date;
 
   switch (prop_id)
     {
+    case PROP_YEAR:
+      date = g_date_time_new_local (g_value_get_int (value),
+                                    g_date_time_get_month (priv->date),
+                                    g_date_time_get_day_of_month (priv->date),
+                                    0, 0, 0);
+      gtk_calendar_select_day (calendar, date);
+      g_date_time_unref (date);
+      break;
+    case PROP_MONTH:
+      date = g_date_time_new_local (g_date_time_get_year (priv->date),
+                                    g_value_get_int (value),
+                                    g_date_time_get_day_of_month (priv->date),
+                                    0, 0, 0);
+      gtk_calendar_select_day (calendar, date);
+      g_date_time_unref (date);
+      break;
+    case PROP_DAY:
+      date = g_date_time_new_local (g_date_time_get_year (priv->date),
+                                    g_date_time_get_month (priv->date),
+                                    g_value_get_int (value),
+                                    0, 0, 0);
+      gtk_calendar_select_day (calendar, date);
+      g_date_time_unref (date);
+      break;
     case PROP_SHOW_HEADING:
       gtk_calendar_set_show_heading (calendar, g_value_get_boolean (value));
       break;
