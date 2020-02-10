@@ -321,6 +321,8 @@ gtk_css_static_style_dispose (GObject *object)
       style->sections = NULL;
     }
 
+  g_clear_pointer (&style->lookup, gtk_css_lookup_unref);
+
   G_OBJECT_CLASS (gtk_css_static_style_parent_class)->dispose (object);
 }
 
@@ -1004,6 +1006,7 @@ gtk_css_static_style_new_compute (GtkStyleProvider             *provider,
 
   result = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
 
+  result->lookup = lookup;
   result->change = change;
 
   if (node)
@@ -1015,8 +1018,6 @@ gtk_css_static_style_new_compute (GtkStyleProvider             *provider,
                           provider,
                           result,
                           parent ? gtk_css_node_get_style (parent) : NULL);
-
-  gtk_css_lookup_unref (lookup);
 
   return GTK_CSS_STYLE (result);
 }
@@ -1094,4 +1095,12 @@ gtk_css_static_style_get_change (GtkCssStaticStyle *style)
   g_return_val_if_fail (GTK_IS_CSS_STATIC_STYLE (style), GTK_CSS_CHANGE_ANY);
 
   return style->change;
+}
+
+GtkCssLookup *
+gtk_css_static_style_get_lookup (GtkCssStaticStyle *style)
+{
+  g_return_val_if_fail (GTK_IS_CSS_STATIC_STYLE (style), NULL);
+
+  return style->lookup;
 }
