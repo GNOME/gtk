@@ -214,6 +214,17 @@ create_control (GtkWidget *box, gint number, gint cntl, CallbackData *data)
   g_free (name);
 }
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 gint
 main (gint argc, gchar **argv)
 {
@@ -227,6 +238,7 @@ main (gint argc, gchar **argv)
   GtkCellArea *area;
   CallbackData callback[4];
   GtkGesture *gesture;
+  gboolean done = FALSE;
 
   gtk_init ();
 
@@ -235,7 +247,7 @@ main (gint argc, gchar **argv)
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "GtkTreeView editing sample");
-  g_signal_connect (window, "destroy", gtk_main_quit, NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_container_add (GTK_CONTAINER (window), vbox);
@@ -381,7 +393,8 @@ main (gint argc, gchar **argv)
 
   gtk_widget_show (window);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

@@ -11,6 +11,19 @@ on_button_clicked (GtkWidget *widget, gpointer data)
   g_print ("Button %d clicked\n", GPOINTER_TO_INT (data));
 }
 
+static gboolean done = FALSE;
+
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 static void
 kinetic_scrolling (void)
 {
@@ -26,7 +39,7 @@ kinetic_scrolling (void)
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
-  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   grid = gtk_grid_new ();
 
@@ -136,7 +149,8 @@ main (int argc, char **argv)
 
   kinetic_scrolling ();
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

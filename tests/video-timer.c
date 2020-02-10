@@ -359,6 +359,17 @@ static GOptionEntry options[] = {
   { NULL }
 };
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int
 main(int argc, char **argv)
 {
@@ -366,6 +377,7 @@ main(int argc, char **argv)
   GError *error = NULL;
   GdkFrameClock *frame_clock;
   GOptionContext *context;
+  gboolean done = FALSE;
 
   context = g_option_context_new ("");
   g_option_context_add_main_entries (context, options, NULL);
@@ -383,7 +395,7 @@ main(int argc, char **argv)
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
   g_signal_connect (window, "destroy",
-                    G_CALLBACK (gtk_main_quit), NULL);
+                    G_CALLBACK (quit_cb), &done);
 
   da = gtk_drawing_area_new ();
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), on_draw, NULL, NULL);
@@ -402,7 +414,8 @@ main(int argc, char **argv)
                     G_CALLBACK (on_update), NULL);
   gdk_frame_clock_begin_updating (frame_clock);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

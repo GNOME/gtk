@@ -163,7 +163,8 @@ main (gint argc,
   gtk_grid_attach (GTK_GRID (box), revealer, 3, 4, 1, 1);
 
   gtk_widget_show (window);
-  gtk_main ();
+  while (TRUE)
+    g_main_context_iteration (NULL, TRUE);
 
   gtk_widget_destroy (window);
 

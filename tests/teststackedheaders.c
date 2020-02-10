@@ -39,7 +39,8 @@ main (int argc, char *argv[])
 
   gtk_window_present (GTK_WINDOW (win));
 
-  gtk_main ();
+  while (TRUE)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

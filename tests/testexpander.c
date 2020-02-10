@@ -12,9 +12,13 @@ do_not_expand (GtkWidget *child, gpointer data)
 }
 
 static void
-response_cb (GtkDialog *dialog, gint response_id)
+response_cb (GtkDialog *dialog, gint response_id, gpointer data)
 {
-  gtk_main_quit ();
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
 }
 
 int
@@ -26,6 +30,7 @@ main (int argc, char *argv[])
   GtkWidget *sw;
   GtkWidget *tv;
   GtkTextBuffer *buffer;
+  gboolean done = FALSE;
 
   gtk_init ();
 
@@ -71,11 +76,12 @@ main (int argc, char *argv[])
   g_signal_connect (expander, "notify::expanded",
                     G_CALLBACK (expander_cb), dialog);
 
-  g_signal_connect (dialog, "response", G_CALLBACK (response_cb), NULL);
+  g_signal_connect (dialog, "response", G_CALLBACK (response_cb), &done);
 
   gtk_window_present (GTK_WINDOW (dialog));
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

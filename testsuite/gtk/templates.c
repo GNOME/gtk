@@ -180,7 +180,7 @@ static void
 test_app_chooser_dialog_basic (void)
 {
   GtkWidget *widget;
-  gboolean done;
+  gboolean done = FALSE;
 
   widget = gtk_app_chooser_dialog_new_for_content_type (NULL, 0, "text/plain");
   g_assert (GTK_IS_APP_CHOOSER_DIALOG (widget));
@@ -189,7 +189,6 @@ test_app_chooser_dialog_basic (void)
    * the main context then app_chooser_online_get_default_ready_cb()
    * will be eventually called and segfault.
    */
-  done = FALSE;
   g_timeout_add (500, main_loop_quit_cb, &done);
   while (!done)
     g_main_context_iteration (NULL,  TRUE);
@@ -224,6 +223,7 @@ static void
 test_file_chooser_widget_basic (void)
 {
   GtkWidget *widget;
+  gboolean done = FALSE;
 
   /* This test also tests the internal GtkPathBar widget */
   g_test_log_set_fatal_handler (ignore_gvfs_warning, NULL);
@@ -240,8 +240,9 @@ test_file_chooser_widget_basic (void)
    * Since we assert all automated children are finalized we
    * can catch this
    */
-  g_timeout_add (100, main_loop_quit_cb, NULL);
-  gtk_main();
+  g_timeout_add (100, main_loop_quit_cb, &done);
+  while (!done)
+    g_main_context_iteration (NULL,  TRUE);
 
   gtk_widget_destroy (widget);
 }
@@ -272,13 +273,15 @@ static void
 test_file_chooser_button_basic (void)
 {
   GtkWidget *widget;
+  gboolean done = FALSE;
 
   g_test_log_set_fatal_handler (ignore_gvfs_warning, NULL);
 
   widget = gtk_file_chooser_button_new ("Choose a file !", GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
   g_assert (GTK_IS_FILE_CHOOSER_BUTTON (widget));
-  g_timeout_add (100, main_loop_quit_cb, NULL);
-  gtk_main();
+  g_timeout_add (100, main_loop_quit_cb, &done);
+  while (!done)
+    g_main_context_iteration (NULL,  TRUE);
 
   gtk_widget_destroy (widget);
 }

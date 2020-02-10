@@ -242,6 +242,16 @@ add_new_filechooser_button (const gchar          *mnemonic,
   gtk_container_add (GTK_CONTAINER (hbox), button);
 }
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
 
 int
 main (int   argc,
@@ -251,6 +261,7 @@ main (int   argc,
   GtkSizeGroup *label_group;
   GOptionContext *context;
   gchar *cwd;
+  gboolean done = FALSE;
 
   context = g_option_context_new ("- test GtkFileChooserButton widget");
   g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
@@ -269,7 +280,7 @@ main (int   argc,
 
   win = gtk_dialog_new_with_buttons ("TestFileChooserButton", NULL, 0,
 				     "_Quit", GTK_RESPONSE_CLOSE, NULL);
-  g_signal_connect (win, "response", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (win, "response", G_CALLBACK (quit_cb), &done);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
   g_object_set (vbox, "margin", 6, NULL);
@@ -304,7 +315,8 @@ main (int   argc,
   gtk_widget_show (win);
   gtk_window_present (GTK_WINDOW (win));
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

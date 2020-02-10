@@ -327,7 +327,8 @@ main (int argc, char *argv[])
 
   scrollable_policy ();
 
-  gtk_main ();
+  while (TRUE)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

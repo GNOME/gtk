@@ -276,6 +276,19 @@ iter_append (GtkWidget *button, GtkTreeView *tree_view)
     }
 }
 
+static gboolean done = FALSE;
+
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 static void
 make_window (gint view_type)
 {
@@ -334,7 +347,7 @@ make_window (gint view_type)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
 				  GTK_POLICY_AUTOMATIC,
 				  GTK_POLICY_AUTOMATIC);
-  g_signal_connect (window, "destroy", gtk_main_quit, NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   /* buttons */
   button = gtk_button_new_with_label ("gtk_tree_store_remove");
@@ -448,7 +461,8 @@ main (int argc, char *argv[])
   make_window (0);
   make_window (1);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

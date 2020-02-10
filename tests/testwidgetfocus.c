@@ -265,12 +265,24 @@ gtk_focus_widget_class_init (GtkFocusWidgetClass *klass)
   gtk_widget_class_set_css_name (widget_class, "focuswidget");
 }
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int
 main()
 {
   GtkWidget *window;
   GtkWidget *widget;
   GtkCssProvider *provider;
+  gboolean done = FALSE;
 
   gtk_init ();
 
@@ -286,9 +298,10 @@ main()
   gtk_window_set_decorated (GTK_WINDOW (window), FALSE);
 
   gtk_container_add (GTK_CONTAINER (window), widget);
-  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   gtk_widget_show (window);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 }

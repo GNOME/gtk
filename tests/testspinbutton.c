@@ -20,12 +20,17 @@
 
 static gint num_windows = 0;
 
+static gboolean done = FALSE;
+
 static gboolean
 on_delete (GtkWindow *w)
 {
   num_windows--;
   if (num_windows == 0)
-    gtk_main_quit ();
+    {
+      done = TRUE;
+      g_main_context_wakeup (NULL);
+    }
 
   return FALSE;
 }
@@ -76,7 +81,8 @@ main (int argc, char **argv)
   prepare_window_for_orientation (GTK_ORIENTATION_HORIZONTAL);
   prepare_window_for_orientation (GTK_ORIENTATION_VERTICAL);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

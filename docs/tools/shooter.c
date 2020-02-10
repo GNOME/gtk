@@ -308,7 +308,8 @@ int main (int argc, char **argv)
   toplevels = get_all_widgets ();
 
   queue_show ();
-  gtk_main ();
+  while (TRUE)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

@@ -297,6 +297,17 @@ match_file (gpointer item, gpointer data)
   return result;
 }
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -307,12 +318,13 @@ main (int argc, char *argv[])
   GtkFilterListModel *filter;
   GtkSliceListModel *slice;
   GFile *root;
+  gboolean done = FALSE;
 
   gtk_init ();
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (win), 400, 600);
-  g_signal_connect (win, "destroy", G_CALLBACK (gtk_main_quit), win);
+  g_signal_connect (win, "destroy", G_CALLBACK (quit_cb), &done);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (win), vbox);
@@ -375,7 +387,8 @@ main (int argc, char *argv[])
 
   gtk_widget_show (win);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

@@ -464,6 +464,17 @@ setup_sanity_checks (GtkTreeView *treeview)
   selection_changed_cb (gtk_tree_view_get_selection (treeview), NULL);
 }
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int
 main (int    argc,
       char **argv)
@@ -473,6 +484,7 @@ main (int    argc,
   GtkWidget *treeview;
   GtkTreeModel *model;
   guint i;
+  gboolean done = FALSE;
   
   gtk_init ();
 
@@ -480,7 +492,7 @@ main (int    argc,
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   gtk_window_set_default_size (GTK_WINDOW (window), 430, 400);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
@@ -509,7 +521,8 @@ main (int    argc,
 
   g_idle_add (dance, treeview);
   
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }
