@@ -206,9 +206,7 @@ create_alpha_window (GtkWidget *widget)
                                            "  background: radial-gradient(ellipse at center, #FFBF00, #FFBF0000);\n"
                                            "}\n",
                                            -1);
-          gtk_style_context_add_provider_for_display (gtk_widget_get_display (window),
-                                                      GTK_STYLE_PROVIDER (stylesheet),
-                                                      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+          gtk_style_context_add_style_sheet_for_display (gtk_widget_get_display (window), stylesheet);
           g_object_unref (stylesheet);
         }
 
@@ -6327,7 +6325,7 @@ usage (void)
 int
 main (int argc, char *argv[])
 {
-  GtkCssStyleSheet *stylesheet, *memory_provider;
+  GtkCssStyleSheet *stylesheet, *memory_stylesheet;
   GdkDisplay *display;
   GtkBindingSet *binding_set;
   int i;
@@ -6359,8 +6357,7 @@ main (int argc, char *argv[])
 
   display = gdk_display_get_default ();
 
-  gtk_style_context_add_provider_for_display (display, GTK_STYLE_PROVIDER (stylesheet),
-                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_style_sheet_for_display (display, stylesheet);
   g_object_unref (stylesheet);
 
   gtk_accelerator_set_default_mod_mask (GDK_SHIFT_MASK |
@@ -6422,16 +6419,17 @@ main (int argc, char *argv[])
 				1,
 				G_TYPE_STRING, "GtkWidgetClass <ctrl><release>9 test");
 
-  memory_provider = gtk_css_style_sheet_new ();
-  gtk_css_style_sheet_load_from_data (memory_provider,
+  memory_stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_set_priority (memory_stylesheet, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 1);
+  gtk_css_style_sheet_load_from_data (memory_stylesheet,
                                    "#testgtk-version-label {\n"
                                    "  color: #f00;\n"
                                    "  font-family: Sans;\n"
                                    "  font-size: 18px;\n"
                                    "}",
                                    -1);
-  gtk_style_context_add_provider_for_display (display, GTK_STYLE_PROVIDER (memory_provider),
-                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 1);
+  gtk_style_context_add_style_sheet_for_display (display, memory_stylesheet);
+  g_object_unref (memory_stylesheet);
 
   create_main_window ();
 

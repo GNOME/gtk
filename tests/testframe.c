@@ -33,9 +33,7 @@ spin_hpadding_cb (GtkSpinButton *spin, gpointer user_data)
     {
       stylesheet = gtk_css_style_sheet_new ();
       g_object_set_data (G_OBJECT (frame), "stylesheet", stylesheet);
-      gtk_style_context_add_provider (context,
-                                      GTK_STYLE_PROVIDER (stylesheet),
-                                      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+      gtk_style_context_add_style_sheet (context, stylesheet);
     }
 
   gtk_style_context_save (context);
@@ -69,9 +67,7 @@ spin_vpadding_cb (GtkSpinButton *spin, gpointer user_data)
     {
       stylesheet = gtk_css_style_sheet_new ();
       g_object_set_data (G_OBJECT (frame), "stylesheet", stylesheet);
-      gtk_style_context_add_provider (context,
-                                      GTK_STYLE_PROVIDER (stylesheet),
-                                      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+      gtk_style_context_add_style_sheet (context, stylesheet);
     }
 
   gtk_style_context_save (context);

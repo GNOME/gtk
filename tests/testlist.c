@@ -262,9 +262,8 @@ main (int argc, char *argv[])
 
   stylesheet = gtk_css_style_sheet_new ();
   gtk_css_style_sheet_load_from_data (stylesheet, css, -1);
-  gtk_style_context_add_provider_for_display (gtk_widget_get_display (window),
-                                              GTK_STYLE_PROVIDER (stylesheet),
-                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
+  gtk_style_context_add_style_sheet_for_display (gtk_widget_get_display (window), stylesheet);
+  g_object_unref (stylesheet);
 
 
   list = gtk_list_box_new ();

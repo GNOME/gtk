@@ -25,7 +25,8 @@
 #include <gtk/css/gtkcss.h>
 
 #include <gtk/gtkborder.h>
-#include <gtk/gtkstyleprovider.h>
+#include <gtk/gtkcssstylesheet.h>
+#include <gtk/gtkenums.h>
 #include <gtk/gtktypes.h>
 
 G_BEGIN_DECLS
@@ -832,21 +833,18 @@ GDK_AVAILABLE_IN_ALL
 GType gtk_style_context_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-void gtk_style_context_add_provider_for_display    (GdkDisplay       *display,
-                                                    GtkStyleProvider *provider,
-                                                    guint             priority);
+void gtk_style_context_add_style_sheet_for_display (GdkDisplay       *display,
+                                                    GtkCssStyleSheet *stylesheet);
 GDK_AVAILABLE_IN_ALL
-void gtk_style_context_remove_provider_for_display (GdkDisplay       *display,
-                                                    GtkStyleProvider *provider);
+void gtk_style_context_remove_style_sheet_for_display (GdkDisplay       *display,
+                                                    GtkCssStyleSheet *stylesheet);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_style_context_add_provider    (GtkStyleContext  *context,
-                                        GtkStyleProvider *provider,
-                                        guint             priority);
-
+void gtk_style_context_add_style_sheet             (GtkStyleContext  *context,
+                                                    GtkCssStyleSheet *stylesheet);
 GDK_AVAILABLE_IN_ALL
-void gtk_style_context_remove_provider (GtkStyleContext  *context,
-                                        GtkStyleProvider *provider);
+void gtk_style_context_remove_style_sheet          (GtkStyleContext  *context,
+                                                    GtkCssStyleSheet *stylesheet);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_save    (GtkStyleContext *context);

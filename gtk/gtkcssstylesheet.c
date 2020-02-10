@@ -55,8 +55,8 @@
  *
  * An application can make GTK+ parse a specific CSS style sheet by calling
  * gtk_css_style_sheet_load_from_file() or gtk_css_style_sheet_load_from_resource()
- * and adding the provider with gtk_style_context_add_provider() or
- * gtk_style_context_add_provider_for_display().
+ * and adding the provider with gtk_style_context_add_style_sheet() or
+ * gtk_style_context_add_style_sheet_for_display().
  *
  * In addition, certain files will be read when GTK+ is initialized. First, the
  * file `$XDG_CONFIG_HOME/gtk-4.0/gtk.css` is loaded if it exists. Then, GTK+

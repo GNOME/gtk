@@ -325,10 +325,9 @@ gtk_inspector_window_realize (GtkWidget *widget)
   gsk_renderer_set_debug_flags (renderer, 0);
 
   stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_set_priority (stylesheet, 800);
   gtk_css_style_sheet_load_from_resource (stylesheet, "/org/gtk/libgtk/inspector/inspector.css");
-  gtk_style_context_add_provider_for_display (gtk_widget_get_display (widget),
-                                              GTK_STYLE_PROVIDER (stylesheet),
-                                              800);
+  gtk_style_context_add_style_sheet_for_display (gtk_widget_get_display (widget), stylesheet);
   g_object_unref (stylesheet);
 }
 

@@ -58,8 +58,8 @@ update_css_for_blend_mode (GtkCssStyleSheet *stylesheet,
 #pragma GCC diagnostic pop
 
 static void
-row_activated (GtkListBox     *listbox,
-               GtkListBoxRow  *row,
+row_activated (GtkListBox       *listbox,
+               GtkListBoxRow    *row,
                GtkCssStyleSheet *stylesheet)
 {
   const gchar *blend_mode;
@@ -71,7 +71,7 @@ row_activated (GtkListBox     *listbox,
 
 static void
 setup_listbox (GtkBuilder       *builder,
-               GtkStyleProvider *stylesheet)
+               GtkCssStyleSheet *stylesheet)
 {
   GtkWidget *normal_row;
   GtkWidget *listbox;
@@ -118,7 +118,7 @@ do_css_blendmodes (GtkWidget *do_widget)
 
   if (!window)
     {
-      GtkStyleProvider *stylesheet;
+      GtkCssStyleSheet *stylesheet;
       GtkBuilder *builder;
 
       builder = gtk_builder_new_from_resource ("/css_blendmodes/blendmodes.ui");
@@ -128,11 +128,9 @@ do_css_blendmodes (GtkWidget *do_widget)
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
 
       /* Setup the CSS stylesheet for window */
-      stylesheet = GTK_STYLE_PROVIDER (gtk_css_style_sheet_new ());
+      stylesheet = gtk_css_style_sheet_new ();
 
-      gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                                  stylesheet,
-                                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+      gtk_style_context_add_style_sheet_for_display (gdk_display_get_default (), stylesheet);
 
       setup_listbox (builder, stylesheet);
     }

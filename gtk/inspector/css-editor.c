@@ -163,12 +163,9 @@ disable_toggled (GtkToggleButton       *button,
     return;
 
   if (gtk_toggle_button_get_active (button))
-    gtk_style_context_remove_provider_for_display (ce->priv->display,
-                                                   GTK_STYLE_PROVIDER (ce->priv->stylesheet));
+    gtk_style_context_remove_style_sheet_for_display (ce->priv->display, ce->priv->stylesheet);
   else
-    gtk_style_context_add_provider_for_display (ce->priv->display,
-                                                GTK_STYLE_PROVIDER (ce->priv->stylesheet),
-                                                GTK_STYLE_PROVIDER_PRIORITY_USER);
+    gtk_style_context_add_style_sheet_for_display (ce->priv->display, ce->priv->stylesheet);
 }
 
 static gchar *
@@ -331,6 +328,7 @@ static void
 create_provider (GtkInspectorCssEditor *ce)
 {
   ce->priv->stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_set_priority (ce->priv->stylesheet, GTK_STYLE_PROVIDER_PRIORITY_USER);
   g_signal_connect (ce->priv->stylesheet, "parsing-error",
                     G_CALLBACK (show_parsing_error), ce);
 
@@ -347,17 +345,15 @@ static void
 add_provider (GtkInspectorCssEditor *ce,
               GdkDisplay *display)
 {
-  gtk_style_context_add_provider_for_display (display,
-                                              GTK_STYLE_PROVIDER (ce->priv->stylesheet),
-                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
+  gtk_style_context_add_style_sheet_for_display (display, ce->priv->stylesheet);
 }
 
 static void
 remove_provider (GtkInspectorCssEditor *ce,
                  GdkDisplay *display)
 {
-  gtk_style_context_remove_provider_for_display (display,
-                                                 GTK_STYLE_PROVIDER (ce->priv->stylesheet));
+  gtk_style_context_remove_style_sheet_for_display (display,
+                                                    ce->priv->stylesheet);
 }
 
 static void

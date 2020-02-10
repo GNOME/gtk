@@ -370,9 +370,7 @@ main (int argc, char *argv[])
     ".black-bg { background-color: black; }"
     ".red-bg { background-color: red; }"
     ".blue-bg { background-color: blue; }", -1);
-  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (stylesheet),
-                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_style_sheet_for_display (gdk_display_get_default (), stylesheet);
   g_object_unref (stylesheet);
   
   if (g_getenv ("RTL"))

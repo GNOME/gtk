@@ -294,7 +294,8 @@ main (int argc, char **argv)
   GtkCssStyleSheet *stylesheet;
   stylesheet = gtk_css_style_sheet_new ();
   gtk_css_style_sheet_load_from_data (stylesheet, cssdata, -1);
-  gtk_style_context_add_provider_for_display (gdk_display_get_default (), GTK_STYLE_PROVIDER (stylesheet), 800);
+  gtk_style_context_add_style_sheet_for_display (gdk_display_get_default (), stylesheet);
+  g_object_unref (stylesheet);
   gtk_widget_show (window);
 
   while (!done)

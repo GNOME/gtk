@@ -112,8 +112,7 @@ close_window (GtkWidget *widget)
   for (int i = 0; i < N_FACES; i++)
     faces[i].face = NULL;
 
-  gtk_style_context_remove_provider_for_display (gdk_display_get_default (),
-                                                 GTK_STYLE_PROVIDER (stylesheet));
+  gtk_style_context_remove_style_sheet_for_display (gdk_display_get_default (), stylesheet);
   stylesheet = NULL;
 
   demo_window = NULL;
@@ -143,10 +142,9 @@ create_demo_window (GtkWidget *do_widget)
   gtk_widget_set_overflow (fixed, GTK_OVERFLOW_VISIBLE);
 
   stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_set_priority (stylesheet, 800);
   gtk_css_style_sheet_load_from_resource (stylesheet, "/fixed/fixed.css");
-  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (stylesheet),
-                                              800);
+  gtk_style_context_add_style_sheet_for_display (gdk_display_get_default (), stylesheet);
   g_object_unref (stylesheet);
 
   return window;

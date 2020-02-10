@@ -81,9 +81,7 @@ node_editor_application_startup (GApplication *app)
 
   stylesheet = gtk_css_style_sheet_new ();
   gtk_css_style_sheet_load_from_data (stylesheet, css, -1);
-  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (stylesheet),
-                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_style_sheet_for_display (gdk_display_get_default (), stylesheet);
 }
 
 static void

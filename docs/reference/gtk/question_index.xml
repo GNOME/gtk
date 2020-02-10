@@ -645,7 +645,7 @@ How do I change the color of a widget?
 The background color of a widget is determined by the CSS style that applies
 to it. To change that, you can set style classes on the widget, and provide
 custom CSS to change the appearance. Such CSS can be loaded with
-gtk_css_provider_load_from_file() and its variants. See gtk_style_context_add_provider().
+gtk_css_provider_load_from_file() and its variants. See gtk_style_context_add_style_sheet().
 </para></answer>
 </qandaentry>
 
@@ -672,7 +672,7 @@ You can also change the font of a widget by putting
  }
 </programlisting>
 in a CSS file, loading it with gtk_css_provider_load_from_file(), and
-adding the provider with gtk_style_context_add_provider_for_display().
+adding the provider with gtk_style_context_add_style_sheet_for_display().
 To associate this style information with your widget, set a style class
 on its #GtkStyleContext using gtk_style_context_add_class().
 The advantage of this approach is that users can then override the font

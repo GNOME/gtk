@@ -51,9 +51,9 @@ css_text_changed (GtkTextBuffer  *buffer,
 }
 
 static void
-apply_css (GtkWidget *widget, GtkStyleProvider *stylesheet)
+apply_css (GtkWidget *widget, GtkCssStyleSheet *stylesheet)
 {
-  gtk_style_context_add_provider (gtk_widget_get_style_context (widget), stylesheet, G_MAXUINT);
+  gtk_style_context_add_style_sheet (gtk_widget_get_style_context (widget), stylesheet);
   if (GTK_IS_CONTAINER (widget))
     gtk_container_forall (GTK_CONTAINER (widget), (GtkCallback) apply_css, stylesheet);
 }
@@ -87,7 +87,7 @@ do_css_shadows (GtkWidget *do_widget)
   if (!window)
     {
       GtkWidget *paned, *container, *child;
-      GtkStyleProvider *stylesheet;
+      GtkCssStyleSheet *stylesheet;
       GtkTextBuffer *text;
       GBytes *bytes;
 
@@ -114,7 +114,8 @@ do_css_shadows (GtkWidget *do_widget)
                                   "underline", PANGO_UNDERLINE_ERROR,
                                   NULL);
 
-      stylesheet = GTK_STYLE_PROVIDER (gtk_css_style_sheet_new ());
+      stylesheet = gtk_css_style_sheet_new ();
+      gtk_css_style_sheet_set_priority (stylesheet, G_MAXUINT);
 
       container = gtk_scrolled_window_new (NULL, NULL);
       gtk_container_add (GTK_CONTAINER (paned), container);

@@ -144,10 +144,9 @@ load_ui_file (GFile *file, gboolean generate)
   g_assert (css_file != NULL);
 
   stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_set_priority (stylesheet, GTK_STYLE_PROVIDER_PRIORITY_FORCE);
   gtk_css_style_sheet_load_from_path (stylesheet, css_file);
-  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (stylesheet),
-                                              GTK_STYLE_PROVIDER_PRIORITY_FORCE);
+  gtk_style_context_add_style_sheet_for_display (gdk_display_get_default (), stylesheet);
 
   builder = gtk_builder_new_from_file (ui_file);
   window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
@@ -183,8 +182,7 @@ load_ui_file (GFile *file, gboolean generate)
   g_clear_pointer (&diff, g_bytes_unref);
 
 out:
-  gtk_style_context_remove_provider_for_display (gdk_display_get_default (),
-                                                 GTK_STYLE_PROVIDER (stylesheet));
+  gtk_style_context_remove_style_sheet_for_display (gdk_display_get_default (), stylesheet);
   g_object_unref (stylesheet);
 
   g_free (output);

@@ -65,9 +65,7 @@ preview_file (const char *filename,
       stylesheet = gtk_css_style_sheet_new ();
       gtk_css_style_sheet_load_from_path (stylesheet, cssfile);
 
-      gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                                  GTK_STYLE_PROVIDER (stylesheet),
-                                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+      gtk_style_context_add_style_sheet_for_display (gdk_display_get_default (), stylesheet);
     }
 
   builder = gtk_builder_new ();

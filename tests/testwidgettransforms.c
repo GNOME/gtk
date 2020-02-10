@@ -304,9 +304,7 @@ main (int argc, char **argv)
 
   stylesheet = gtk_css_style_sheet_new ();
   gtk_css_style_sheet_load_from_data (stylesheet, css, -1);
-  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (stylesheet),
-                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_style_sheet_for_display (gdk_display_get_default (), stylesheet);
 
   window = gtk_window_new ();
   matrix_chooser = g_object_new (GTK_TYPE_MATRIX_CHOOSER, NULL);
