@@ -25,6 +25,7 @@
 #include "gtksettingsprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcssstaticstyleprivate.h"
 
 G_DEFINE_TYPE (GtkCssWidgetNode, gtk_css_widget_node, GTK_TYPE_CSS_NODE)
 
