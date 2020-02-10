@@ -993,16 +993,16 @@ gtk_css_static_style_new_compute (GtkStyleProvider             *provider,
                                   GtkCssChange                  change)
 {
   GtkCssStaticStyle *result;
-  GtkCssLookup lookup;
+  GtkCssLookup *lookup;
   GtkCssNode *parent;
 
-  gtk_css_lookup_init (&lookup);
+  lookup = gtk_css_lookup_new ();
 
   if (node)
     gtk_style_provider_lookup (provider,
                                filter,
                                node,
-                               &lookup,
+                               lookup,
                                change == 0 ? &change : NULL);
 
   result = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
@@ -1014,12 +1014,12 @@ gtk_css_static_style_new_compute (GtkStyleProvider             *provider,
   else
     parent = NULL;
 
-  gtk_css_lookup_resolve (&lookup,
+  gtk_css_lookup_resolve (lookup,
                           provider,
                           result,
                           parent ? gtk_css_node_get_style (parent) : NULL);
 
-  gtk_css_lookup_destroy (&lookup);
+  gtk_css_lookup_unref (lookup);
 
   return GTK_CSS_STYLE (result);
 }
