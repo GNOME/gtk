@@ -85,7 +85,7 @@ struct _GtkTextBuffer
  * GtkTextBufferClass:
  * @parent_class: The object class structure needs to be the first.
  * @insert_text: The class handler for the #GtkTextBuffer::insert-text signal.
- * @insert_texture: The class handler for the #GtkTextBuffer::insert-texture signal.
+ * @insert_paintable: The class handler for the #GtkTextBuffer::insert-paintable signal.
  * @insert_child_anchor: The class handler for the #GtkTextBuffer::insert-child-anchor signal.
  * @delete_range: The class handler for the #GtkTextBuffer::delete-range signal.
  * @changed: The class handler for the #GtkTextBuffer::changed signal.
@@ -107,9 +107,9 @@ struct _GtkTextBufferClass
                                    const gchar        *new_text,
                                    gint                new_text_length);
 
-  void (* insert_texture)         (GtkTextBuffer      *buffer,
+  void (* insert_paintable)       (GtkTextBuffer      *buffer,
                                    GtkTextIter        *iter,
-                                   GdkTexture         *texture);
+                                   GdkPaintable       *paintable);
 
   void (* insert_child_anchor)    (GtkTextBuffer      *buffer,
                                    GtkTextIter        *iter,
@@ -267,11 +267,11 @@ gchar          *gtk_text_buffer_get_slice           (GtkTextBuffer     *buffer,
                                                      const GtkTextIter *end,
                                                      gboolean           include_hidden_chars);
 
-/* Insert a texture */
+/* Insert a paintable */
 GDK_AVAILABLE_IN_ALL
-void gtk_text_buffer_insert_texture        (GtkTextBuffer *buffer,
+void gtk_text_buffer_insert_paintable      (GtkTextBuffer *buffer,
                                             GtkTextIter   *iter,
-                                            GdkTexture    *texture);
+                                            GdkPaintable  *texture);
 
 /* Insert a child anchor */
 GDK_AVAILABLE_IN_ALL

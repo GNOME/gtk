@@ -198,7 +198,8 @@ get_directory_index (GtkIconCache *cache,
 
 GHashTable *
 gtk_icon_cache_list_icons_in_directory (GtkIconCache *cache,
-                                        const gchar  *directory)
+                                        const gchar  *directory,
+                                        GtkStringSet *set)
 {
   gint directory_index;
   guint32 hash_offset, n_buckets;
@@ -239,7 +240,7 @@ gtk_icon_cache_list_icons_in_directory (GtkIconCache *cache,
             {
               guint32 name_offset = GET_UINT32 (cache->buffer, chain_offset + 4);
               const char *name = cache->buffer + name_offset;
-              char *converted_name;
+              const char *interned_name;
               guint32 hash_flags = 0;
 
               /* Icons named foo.symbolic.png are stored in the cache as "foo.symbolic" with ICON_CACHE_FLAG_PNG,
@@ -247,18 +248,20 @@ gtk_icon_cache_list_icons_in_directory (GtkIconCache *cache,
                * Otherwise we use the same enum values and names as on disk. */
               if (g_str_has_suffix (name, ".symbolic") && (flags & ICON_CACHE_FLAG_PNG_SUFFIX) != 0)
                 {
+                  char *converted_name = g_strndup (name, strlen (name) - 9);
+                  interned_name = gtk_string_set_add (set, converted_name);
+                  g_free (converted_name);
                   flags |= ICON_CACHE_FLAG_SYMBOLIC_PNG_SUFFIX;
                   flags &= ~ICON_CACHE_FLAG_PNG_SUFFIX;
-                  converted_name = g_strndup (name, strlen(name) - 9);
                 }
               else
-                converted_name = g_strdup (name);
+                interned_name = gtk_string_set_add (set, name);
 
               if (!icons)
-                icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+                icons = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
 
-              hash_flags = GPOINTER_TO_INT (g_hash_table_lookup (icons, converted_name));
-              g_hash_table_replace (icons, converted_name, GUINT_TO_POINTER (hash_flags|flags));
+              hash_flags = GPOINTER_TO_INT (g_hash_table_lookup (icons, interned_name));
+              g_hash_table_replace (icons, (char *)interned_name, GUINT_TO_POINTER (hash_flags|flags));
             }
 
           chain_offset = GET_UINT32 (cache->buffer, chain_offset);

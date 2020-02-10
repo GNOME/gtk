@@ -49,7 +49,9 @@ struct _IconBrowserWindow
   GtkWidget *image4;
   GtkWidget *image5;
   GtkWidget *image6;
-  GtkWidget *label6;
+  GtkWidget *image7;
+  GtkWidget *image8;
+  GtkWidget *label8;
   GtkWidget *description;
 };
 
@@ -113,21 +115,23 @@ item_activated (GtkIconView *icon_view, GtkTreePath *path, IconBrowserWindow *wi
     }
 
   gtk_window_set_title (GTK_WINDOW (win->details), name);
-  set_image (win->image1, name, 16);
-  set_image (win->image2, name, 24);
-  set_image (win->image3, name, 32);
-  set_image (win->image4, name, 48);
-  set_image (win->image5, name, 64);
+  set_image (win->image1, name, 8);
+  set_image (win->image2, name, 16);
+  set_image (win->image3, name, 18);
+  set_image (win->image4, name, 24);
+  set_image (win->image5, name, 32);
+  set_image (win->image6, name, 48);
+  set_image (win->image7, name, 64);
   if (win->symbolic)
     {
-      gtk_widget_show (win->image6);
-      gtk_widget_show (win->label6);
-      set_image (win->image6, name, 64);
+      gtk_widget_show (win->image8);
+      gtk_widget_show (win->label8);
+      set_image (win->image8, name, 64);
     }
   else
     {
-      gtk_widget_hide (win->image6);
-      gtk_widget_hide (win->label6);
+      gtk_widget_hide (win->image8);
+      gtk_widget_hide (win->label8);
     }
   if (description && description[0])
     {
@@ -372,7 +376,7 @@ get_image_paintable (GtkImage *image)
                                          NULL,
                                          size, 1,
                                          gtk_widget_get_direction (GTK_WIDGET (image)),
-                                         GTK_ICON_LOOKUP_FORCE_SIZE);
+                                         0);
       if (icon == NULL)
         return NULL;
       return GDK_PAINTABLE (icon);
@@ -419,7 +423,6 @@ get_file (GValue   *value,
   GtkIconTheme *icon_theme;
   const char *name;
   GtkIconPaintable *info;
-  GFile *file;
 
   name = gtk_image_get_icon_name (GTK_IMAGE (data));
   icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (data)));
@@ -430,9 +433,7 @@ get_file (GValue   *value,
                                      32, 1,
                                      gtk_widget_get_direction (GTK_WIDGET (data)),
                                      0);
-  file = g_file_new_for_path (gtk_icon_paintable_get_filename (info));
-  g_value_set_object (value, file);
-  g_object_unref (file);
+  g_value_take_object (value, gtk_icon_paintable_get_file (info));
   g_object_unref (info);
 }
 
@@ -484,7 +485,9 @@ icon_browser_window_init (IconBrowserWindow *win)
   setup_image_dnd (win->image3);
   setup_image_dnd (win->image4);
   setup_image_dnd (win->image5);
-  setup_scalable_image_dnd (win->image6);
+  setup_image_dnd (win->image6);
+  setup_image_dnd (win->image7);
+  setup_scalable_image_dnd (win->image8);
 
   win->contexts = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, context_free);
 
@@ -541,7 +544,9 @@ icon_browser_window_class_init (IconBrowserWindowClass *class)
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, image4);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, image5);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, image6);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, label6);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, image7);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, image8);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, label8);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, description);
 
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), search_text_changed);

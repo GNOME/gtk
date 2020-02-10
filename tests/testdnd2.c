@@ -7,13 +7,60 @@
 #endif
 
 static GdkTexture *
+render_paintable_to_texture (GdkPaintable *paintable)
+{
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
+  int width, height;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  GdkTexture *texture;
+  GBytes *bytes;
+
+  width = gdk_paintable_get_intrinsic_width (paintable);
+  if (width == 0)
+    width = 32;
+
+  height = gdk_paintable_get_intrinsic_height (paintable);
+  if (height == 0)
+    height = 32;
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+
+  snapshot = gtk_snapshot_new ();
+  gdk_paintable_snapshot (paintable, snapshot, width, height);
+  node = gtk_snapshot_free_to_node (snapshot);
+
+  cr = cairo_create (surface);
+  gsk_render_node_draw (node, cr);
+  cairo_destroy (cr);
+
+  gsk_render_node_unref (node);
+
+  bytes = g_bytes_new_with_free_func (cairo_image_surface_get_data (surface),
+                                      cairo_image_surface_get_height (surface)
+                                      * cairo_image_surface_get_stride (surface),
+                                      (GDestroyNotify) cairo_surface_destroy,
+                                      cairo_surface_reference (surface));
+  texture = gdk_memory_texture_new (cairo_image_surface_get_width (surface),
+                                    cairo_image_surface_get_height (surface),
+                                    GDK_MEMORY_DEFAULT,
+                                    bytes,
+                                    cairo_image_surface_get_stride (surface));
+  g_bytes_unref (bytes);
+  cairo_surface_destroy (surface);
+
+  return texture;
+}
+
+static GdkTexture *
 get_image_texture (GtkImage *image,
                    int      *out_size)
 {
   GtkIconTheme *icon_theme;
   const char *icon_name;
   int width = 48;
-  GdkPaintable *paintable;
+  GdkPaintable *paintable = NULL;
   GdkTexture *texture = NULL;
   GtkIconPaintable *icon;
 
@@ -21,28 +68,27 @@ get_image_texture (GtkImage *image,
     {
     case GTK_IMAGE_PAINTABLE:
       paintable = gtk_image_get_paintable (image);
-      if (GDK_IS_TEXTURE (paintable))
-        {
-          *out_size = gdk_paintable_get_intrinsic_width (paintable);
-          texture = g_object_ref (GDK_TEXTURE (paintable));
-        }
+      break;
     case GTK_IMAGE_ICON_NAME:
       icon_name = gtk_image_get_icon_name (image);
       icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (image)));
-      *out_size = width;
       icon = gtk_icon_theme_lookup_icon (icon_theme,
                                          icon_name,
                                          NULL,
                                          width, 1,
                                          gtk_widget_get_direction (GTK_WIDGET (image)),
                                          0);
-      if (icon)
-        texture = gtk_icon_paintable_download_texture (icon, NULL);
-      g_object_unref (icon);
+      paintable = GDK_PAINTABLE (icon);
+      break;
     default:
       g_warning ("Image storage type %d not handled",
                  gtk_image_get_storage_type (image));
     }
+
+  if (paintable)
+    texture = render_paintable_to_texture (paintable);
+
+  g_object_unref (paintable);
 
   return texture;
 }
@@ -237,6 +283,9 @@ update_source_icon (GtkDragSource *source,
   GtkIconPaintable *icon;
   int hot_x, hot_y;
   int size = 48;
+
+  if (widget == NULL)
+    return;
 
   icon = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_for_display (gtk_widget_get_display (widget)),
                                      icon_name,

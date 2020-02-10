@@ -58,6 +58,8 @@ assert_icon_lookup_size (const char         *icon_name,
                          gint                pixbuf_size)
 {
   GtkIconPaintable *info;
+  GFile *file;
+  char *path = NULL;
 
   if (fallbacks)
     {
@@ -78,31 +80,31 @@ assert_icon_lookup_size (const char         *icon_name,
       return;
     }
 
+  file = gtk_icon_paintable_get_file (info);
+  if (file)
+    {
+      path = g_file_get_path (file);
+      g_object_unref (file);
+    }
+
   if (filename)
     {
-      if (!g_str_has_suffix (gtk_icon_paintable_get_filename (info), filename))
+      if (path == NULL || !g_str_has_suffix (path, filename))
         {
           g_error ("Icon for \"%s\" with flags %s at size %d should be \"...%s\" but is \"...%s\"",
                    icon_name, lookup_flags_to_string (flags), size,
-                   filename, gtk_icon_paintable_get_filename (info) + strlen (g_get_current_dir ()));
+                   filename, path);
           return;
         }
     }
   else
     {
-      g_assert (gtk_icon_paintable_get_filename (info) == NULL);
+      g_assert (path == NULL);
     }
 
-  if (pixbuf_size > 0)
-    {
-      GdkTexture *texture;
-      GError *error = NULL;
+  g_free (path);
 
-      texture = gtk_icon_paintable_download_texture (info, &error);
-      g_assert_no_error (error);
-      g_assert_cmpint (gdk_texture_get_width (texture), ==, pixbuf_size);
-      g_object_unref (texture);
-    }
+  g_assert_cmpint (gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (info)), ==, size);
 
   g_object_unref (info);
 }
@@ -128,13 +130,9 @@ assert_icon_lookup_fails (const char         *icon_name,
 
   info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, NULL, size, 1, direction, flags);
 
-  if (info != NULL)
-    {
-      g_error ("Should not find an icon for \"%s\" with flags %s at size %d, but found \"%s\"",
-               icon_name, lookup_flags_to_string (flags), size, gtk_icon_paintable_get_filename (info) + strlen (g_get_current_dir ()));
-      g_object_unref (info);
-      return;
-    }
+  /* We never truly *fail*, but check that we got the image-missing fallback */
+  g_assert (info != NULL);
+  g_assert_cmpstr (gtk_icon_paintable_get_icon_name (info), ==, "image-missing");
 }
 
 static GList *lookups = NULL;
@@ -593,24 +591,20 @@ test_symbolic_single_size (void)
 static void
 test_svg_size (void)
 {
-   /* To understand these results, keep in mind that we never allow upscaling,
-   * and don't respect min/max size for scaling (though we do take it into
-   * account for choosing).
-   */
   /* Check we properly load a svg icon from a sized directory */
-  assert_icon_lookup_size ("twosize-fixed", 48, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32/twosize-fixed.svg", 32);
+  assert_icon_lookup_size ("twosize-fixed", 48, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32/twosize-fixed.svg", 48);
   assert_icon_lookup_size ("twosize-fixed", 32, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32/twosize-fixed.svg", 32);
-  assert_icon_lookup_size ("twosize-fixed", 20, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32/twosize-fixed.svg", 32);
+  assert_icon_lookup_size ("twosize-fixed", 20, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32/twosize-fixed.svg", 20);
   assert_icon_lookup_size ("twosize-fixed", 16, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16x16/twosize-fixed.svg", 16);
 
   /* Check that we still properly load it even if a different size is requested */
-  assert_icon_lookup_size ("twosize", 64, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32s/twosize.svg", 48);
+  assert_icon_lookup_size ("twosize", 64, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32s/twosize.svg", 64);
   assert_icon_lookup_size ("twosize", 48, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32s/twosize.svg", 48);
   assert_icon_lookup_size ("twosize", 32, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32s/twosize.svg", 32);
   assert_icon_lookup_size ("twosize", 24, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/32x32s/twosize.svg", 24);
   assert_icon_lookup_size ("twosize", 16, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16x16s/twosize.svg", 16);
   assert_icon_lookup_size ("twosize", 12, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16x16s/twosize.svg", 12);
-  assert_icon_lookup_size ("twosize",  8, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16x16s/twosize.svg", 12);
+  assert_icon_lookup_size ("twosize",  8, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16x16s/twosize.svg", 8);
 }
 
 static void
@@ -625,42 +619,21 @@ test_size (void)
   assert_icon_lookup_size ("size-test", 18, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16-22/size-test.png", 19);
   assert_icon_lookup_size ("size-test", 19, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/16-22/size-test.png", 19);
   /* the next 3 are because we never scale up */
-  assert_icon_lookup_size ("size-test", 20, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 25);
-  assert_icon_lookup_size ("size-test", 21, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 25);
-  assert_icon_lookup_size ("size-test", 22, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 25);
+  assert_icon_lookup_size ("size-test", 20, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 20);
+  assert_icon_lookup_size ("size-test", 21, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 21);
+  assert_icon_lookup_size ("size-test", 22, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 22);
 
-  assert_icon_lookup_size ("size-test", 23, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 25);
-  assert_icon_lookup_size ("size-test", 23, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 25);
+  assert_icon_lookup_size ("size-test", 23, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 23);
+  assert_icon_lookup_size ("size-test", 23, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 23);
   assert_icon_lookup_size ("size-test", 25, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 25);
   assert_icon_lookup_size ("size-test", 28, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/25+/size-test.svg", 28);
   /* the next 2 are because we never scale up */
-  assert_icon_lookup_size ("size-test", 31, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/35+/size-test.svg", 35);
-  assert_icon_lookup_size ("size-test", 34, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/35+/size-test.svg", 35);
+  assert_icon_lookup_size ("size-test", 31, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/35+/size-test.svg", 31);
+  assert_icon_lookup_size ("size-test", 34, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/35+/size-test.svg", 34);
 
   assert_icon_lookup_size ("size-test", 37, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/35+/size-test.svg", 37);
   assert_icon_lookup_size ("size-test", 40, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/35+/size-test.svg", 40);
   assert_icon_lookup_size ("size-test", 45, GTK_TEXT_DIR_NONE, 0, FALSE, "/icons/35+/size-test.svg", 45);
-
-  assert_icon_lookup_size ("size-test", 12, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/15/size-test.png", 12);
-  assert_icon_lookup_size ("size-test", 13, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/15/size-test.png", 13);
-  assert_icon_lookup_size ("size-test", 14, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/15/size-test.png", 14);
-  assert_icon_lookup_size ("size-test", 15, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/15/size-test.png", 15);
-  assert_icon_lookup_size ("size-test", 16, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 16);
-  assert_icon_lookup_size ("size-test", 17, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 17);
-  assert_icon_lookup_size ("size-test", 18, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 18);
-  assert_icon_lookup_size ("size-test", 19, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 19);
-  //assert_icon_lookup_size ("size-test", 20, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 20);
-  //assert_icon_lookup_size ("size-test", 21, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 21);
-  //assert_icon_lookup_size ("size-test", 22, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/16-22/size-test.png", 22);
-  assert_icon_lookup_size ("size-test", 23, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/25+/size-test.svg", 23);
-  assert_icon_lookup_size ("size-test", 24, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/25+/size-test.svg", 24);
-  assert_icon_lookup_size ("size-test", 25, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/25+/size-test.svg", 25);
-  assert_icon_lookup_size ("size-test", 28, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/25+/size-test.svg", 28);
-  //assert_icon_lookup_size ("size-test", 31, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/25+/size-test.svg", 31);
-  //assert_icon_lookup_size ("size-test", 34, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/25+/size-test.svg", 34);
-  assert_icon_lookup_size ("size-test", 37, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/35+/size-test.svg", 37);
-  assert_icon_lookup_size ("size-test", 40, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/35+/size-test.svg", 40);
-  assert_icon_lookup_size ("size-test", 45, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SIZE, FALSE, "/icons/35+/size-test.svg", 45);
 }
 
 static void
@@ -745,26 +718,34 @@ test_inherit (void)
 static void
 test_nonsquare_symbolic (void)
 {
-  gint width, height;
+  gint width, height, size;
   GtkIconTheme *icon_theme;
   GtkIconPaintable *info;
   GFile *file;
   GIcon *icon;
   GError *error = NULL;
-  GdkTexture *texture;
+  GdkPixbuf *pixbuf;
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
+  graphene_rect_t bounds;
+
   gchar *path = g_build_filename (g_test_get_dir (G_TEST_DIST),
-				  "icons",
-				  "scalable",
-				  "nonsquare-symbolic.svg",
-				  NULL);
+                                  "icons",
+                                  "scalable",
+                                  "nonsquare-symbolic.svg",
+                                  NULL);
 
   /* load the original image for reference */
-  GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file (path, &error);
+  pixbuf = gdk_pixbuf_new_from_file (path, &error);
+
   g_assert_no_error (error);
   g_assert_nonnull (pixbuf);
 
   width = gdk_pixbuf_get_width (pixbuf);
   height = gdk_pixbuf_get_height (pixbuf);
+  size = MAX (width, height);
+  g_object_unref (pixbuf);
+
   g_assert_cmpint (width, !=, height);
 
   /* now load it through GtkIconTheme */
@@ -775,50 +756,27 @@ test_nonsquare_symbolic (void)
                                          height, 1, GTK_TEXT_DIR_NONE, 0);
   g_assert_nonnull (info);
 
-  g_object_unref (pixbuf);
-  texture = gtk_icon_paintable_download_texture (info, &error);
-
-  /* we are loaded successfully */
-  g_assert_no_error (error);
-  g_assert_nonnull (texture);
+  snapshot = gtk_snapshot_new ();
+  gdk_paintable_snapshot (GDK_PAINTABLE (info), snapshot, size, size);
+  node = gtk_snapshot_free_to_node (snapshot);
 
   /* the original dimensions have been preserved */
-  g_assert_cmpint (gdk_texture_get_width (texture), ==, width);
-  g_assert_cmpint (gdk_texture_get_height (texture), ==, height);
 
+  gsk_render_node_get_bounds (node, &bounds);
+  g_assert (bounds.size.width == width);
+  g_assert (bounds.size.height == height);
+
+  gsk_render_node_unref (node);
   g_free (path);
-  g_object_unref (texture);
   g_object_unref (file);
   g_object_unref (icon);
   g_object_unref (info);
 }
 
-static GLogWriterOutput
-log_writer_drop_warnings (GLogLevelFlags   log_level,
-                          const GLogField *fields,
-                          gsize            n_fields,
-                          gpointer         user_data)
-{
-  gboolean *ignore_warnings = user_data;
-
-  if (log_level == G_LOG_LEVEL_WARNING && *ignore_warnings)
-    return G_LOG_WRITER_HANDLED;
-
-  return g_log_writer_default (log_level, fields, n_fields, user_data);
-}
-
 int
 main (int argc, char *argv[])
 {
-  gboolean ignore_warnings = TRUE;
-
   gtk_test_init (&argc, &argv);
-
-  /* Ignore the one-time warning that the fallback icon theme can’t be found
-   * (because we’ve changed the search paths). */
-  g_log_set_writer_func (log_writer_drop_warnings, &ignore_warnings, NULL);
-  assert_icon_lookup_fails ("this-icon-totally-does-not-exist", 16, GTK_TEXT_DIR_NONE, 0);
-  ignore_warnings = FALSE;
 
   g_test_add_func ("/icontheme/basics", test_basics);
   g_test_add_func ("/icontheme/lookup-order", test_lookup_order);

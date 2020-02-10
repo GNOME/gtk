@@ -21,6 +21,12 @@
 #include <gtk/gtkicontheme.h>
 #include <gtk/gtkcssstyleprivate.h>
 
+typedef struct _GtkStringSet GtkStringSet;
+const char *gtk_string_set_add (GtkStringSet *set,
+                                const char   *string);
+
+#define IMAGE_MISSING_RESOURCE_PATH "/org/gtk/libgtk/icons/16x16/status/image-missing.png"
+
 void gtk_icon_theme_lookup_symbolic_colors   (GtkCssStyle      *style,
                                               GdkRGBA          *color_out,
                                               GdkRGBA          *success_out,

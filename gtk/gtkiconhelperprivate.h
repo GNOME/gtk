@@ -66,10 +66,6 @@ const gchar *_gtk_icon_helper_get_icon_name (GtkIconHelper *self);
 
 int gtk_icon_helper_get_size (GtkIconHelper *self);
 
-gboolean _gtk_icon_helper_get_force_scale_pixbuf (GtkIconHelper *self);
-void     _gtk_icon_helper_set_force_scale_pixbuf (GtkIconHelper *self,
-                                                  gboolean       force_scale);
-
 void      gtk_icon_helper_invalidate (GtkIconHelper *self);
 void      gtk_icon_helper_invalidate_for_change (GtkIconHelper     *self,
                                                  GtkCssStyleChange *change);

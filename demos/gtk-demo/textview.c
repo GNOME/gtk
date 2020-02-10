@@ -9,6 +9,7 @@
 
 #include <gtk/gtk.h>
 #include <stdlib.h> /* for exit() */
+#include "paintable.h"
 
 static void easter_egg_callback (GtkWidget *button, gpointer data);
 
@@ -130,20 +131,18 @@ insert_text (GtkTextView *view)
   GtkTextBuffer *buffer = gtk_text_view_get_buffer (view);
   GtkTextIter iter;
   GtkTextIter start, end;
-  GdkTexture *texture;
   GtkIconTheme *icon_theme;
   GtkIconPaintable *icon;
+  GdkPaintable *nuclear;
 
   icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (widget));
   icon = gtk_icon_theme_lookup_icon (icon_theme,
-                                     "gtk3-demo",
+                                     "face-cool",
                                      NULL,
                                      32, 1,
                                      gtk_widget_get_direction (widget),
                                      0);
-  texture = gtk_icon_paintable_download_texture (icon, NULL);
-  g_object_unref (icon);
-  g_assert (texture);
+  nuclear = gtk_nuclear_animation_new ();
 
   /* get start of buffer; each insertion will revalidate the
    * iterator to point to just after the inserted text.
@@ -239,9 +238,11 @@ insert_text (GtkTextView *view)
                                             "heading", NULL);
 
   gtk_text_buffer_insert (buffer, &iter, "The buffer can have images in it: ", -1);
-  gtk_text_buffer_insert_texture (buffer, &iter, texture);
-  gtk_text_buffer_insert_texture (buffer, &iter, texture);
-  gtk_text_buffer_insert_texture (buffer, &iter, texture);
+  gtk_text_buffer_insert_paintable (buffer, &iter, GDK_PAINTABLE (icon));
+  gtk_text_buffer_insert_paintable (buffer, &iter, GDK_PAINTABLE (icon));
+
+  gtk_text_buffer_insert_paintable (buffer, &iter, nuclear);
+
   gtk_text_buffer_insert (buffer, &iter, " for example.\n\n", -1);
 
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter, "Spacing. ", -1,
@@ -386,7 +387,8 @@ insert_text (GtkTextView *view)
 
   gtk_text_buffer_end_irreversible_action (buffer);
 
-  g_object_unref (texture);
+  g_object_unref (icon);
+  g_object_unref (nuclear);
 }
 
 static gboolean

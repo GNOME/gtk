@@ -50,7 +50,7 @@ extern G_GNUC_INTERNAL const GtkTextLineSegmentClass gtk_text_left_mark_type;
 extern G_GNUC_INTERNAL const GtkTextLineSegmentClass gtk_text_right_mark_type;
 
 /* In gtktextchild.c */
-extern G_GNUC_INTERNAL const GtkTextLineSegmentClass gtk_text_texture_type;
+extern G_GNUC_INTERNAL const GtkTextLineSegmentClass gtk_text_paintable_type;
 extern G_GNUC_INTERNAL const GtkTextLineSegmentClass gtk_text_child_type;
 
 /*
