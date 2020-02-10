@@ -21,9 +21,9 @@
 #include <glib-object.h>
 
 #include "gtk/gtkbitmaskprivate.h"
-#include "gtk/gtkcssstaticstyleprivate.h"
 
 #include "gtk/css/gtkcsssection.h"
+#include "gtk/gtkcssvalueprivate.h"
 
 
 G_BEGIN_DECLS
