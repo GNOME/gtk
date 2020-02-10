@@ -25,7 +25,7 @@
 #include "gtkprivate.h"
 
 void
-_gtk_css_lookup_init (GtkCssLookup     *lookup)
+gtk_css_lookup_init (GtkCssLookup     *lookup)
 {
   memset (lookup, 0, sizeof (*lookup));
 
@@ -33,14 +33,14 @@ _gtk_css_lookup_init (GtkCssLookup     *lookup)
 }
 
 void
-_gtk_css_lookup_destroy (GtkCssLookup *lookup)
+gtk_css_lookup_destroy (GtkCssLookup *lookup)
 {
   _gtk_bitmask_free (lookup->set_values);
 }
 
 gboolean
-_gtk_css_lookup_is_missing (const GtkCssLookup *lookup,
-                            guint               id)
+gtk_css_lookup_is_missing (const GtkCssLookup *lookup,
+                           guint               id)
 {
   gtk_internal_return_val_if_fail (lookup != NULL, FALSE);
 
@@ -61,10 +61,10 @@ _gtk_css_lookup_is_missing (const GtkCssLookup *lookup,
  * to ensure they are kept alive until _gtk_css_lookup_free() is called.
  **/
 void
-_gtk_css_lookup_set (GtkCssLookup  *lookup,
-                     guint          id,
-                     GtkCssSection *section,
-                     GtkCssValue   *value)
+gtk_css_lookup_set (GtkCssLookup  *lookup,
+                    guint          id,
+                    GtkCssSection *section,
+                    GtkCssValue   *value)
 {
   gtk_internal_return_if_fail (lookup != NULL);
   gtk_internal_return_if_fail (value != NULL);
