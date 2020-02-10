@@ -112,8 +112,10 @@ struct _GtkCssScanner
   GtkCssScanner *parent;
 };
 
-struct _GtkCssStyleSheetPrivate
+struct _GtkCssStyleSheet
 {
+  GObject parent_instance;
+
   GScanner *scanner;
 
   GHashTable *symbolic_colors;
@@ -147,7 +149,6 @@ gtk_css_style_sheet_load_internal (GtkCssStyleSheet *self,
                                    GBytes           *bytes);
 
 G_DEFINE_TYPE_EXTENDED (GtkCssStyleSheet, gtk_css_style_sheet, G_TYPE_OBJECT, 0,
-                        G_ADD_PRIVATE (GtkCssStyleSheet)
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
                                                gtk_css_style_provider_iface_init));
 
@@ -377,14 +378,12 @@ gtk_css_scanner_would_recurse (GtkCssScanner *scanner,
 static void
 gtk_css_style_sheet_init (GtkCssStyleSheet *self)
 {
-  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
+  self->rulesets = g_array_new (FALSE, FALSE, sizeof (GtkCssRuleset));
 
-  priv->rulesets = g_array_new (FALSE, FALSE, sizeof (GtkCssRuleset));
-
-  priv->symbolic_colors = g_hash_table_new_full (g_str_hash, g_str_equal,
+  self->symbolic_colors = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                  (GDestroyNotify) g_free,
                                                  (GDestroyNotify) _gtk_css_value_unref);
-  priv->keyframes = g_hash_table_new_full (g_str_hash, g_str_equal,
+  self->keyframes = g_hash_table_new_full (g_str_hash, g_str_equal,
                                            (GDestroyNotify) g_free,
                                            (GDestroyNotify) _gtk_css_keyframes_unref);
 }
@@ -395,16 +394,15 @@ verify_tree_match_results (GtkCssStyleSheet *self,
                            GPtrArray        *tree_rules)
 {
 #ifdef VERIFY_TREE
-  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
   GtkCssRuleset *ruleset;
   gboolean should_match;
   int i, j;
 
-  for (i = 0; i < priv->rulesets->len; i++)
+  for (i = 0; i < self->rulesets->len; i++)
     {
       gboolean found = FALSE;
 
-      ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
+      ruleset = &g_array_index (self->rulesets, GtkCssRuleset, i);
 
       for (j = 0; j < tree_rules->len; j++)
         {
@@ -431,9 +429,8 @@ gtk_css_style_provider_get_color (GtkStyleProvider *provider,
                                   const char       *name)
 {
   GtkCssStyleSheet *self = GTK_CSS_STYLE_SHEET (provider);
-  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
 
-  return g_hash_table_lookup (priv->symbolic_colors, name);
+  return g_hash_table_lookup (self->symbolic_colors, name);
 }
 
 static GtkCssKeyframes *
@@ -441,9 +438,8 @@ gtk_css_style_provider_get_keyframes (GtkStyleProvider *provider,
                                       const char       *name)
 {
   GtkCssStyleSheet *self = GTK_CSS_STYLE_SHEET (provider);
-  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
 
-  return g_hash_table_lookup (priv->keyframes, name);
+  return g_hash_table_lookup (self->keyframes, name);
 }
 
 static void
@@ -454,16 +450,15 @@ gtk_css_style_provider_lookup (GtkStyleProvider             *provider,
                                GtkCssChange                 *change)
 {
   GtkCssStyleSheet *self = GTK_CSS_STYLE_SHEET (provider);
-  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
   GtkCssRuleset *ruleset;
   guint j;
   int i;
   GPtrArray *tree_rules;
 
-  if (_gtk_css_selector_tree_is_empty (priv->tree))
+  if (_gtk_css_selector_tree_is_empty (self->tree))
     return;
 
-  tree_rules = _gtk_css_selector_tree_match_all (priv->tree, filter, node);
+  tree_rules = _gtk_css_selector_tree_match_all (self->tree, filter, node);
   if (tree_rules)
     {
       verify_tree_match_results (self, node, tree_rules);
@@ -494,7 +489,7 @@ gtk_css_style_provider_lookup (GtkStyleProvider             *provider,
     }
 
   if (change)
-    *change = gtk_css_selector_tree_get_change_all (priv->tree, filter, node);
+    *change = gtk_css_selector_tree_get_change_all (self->tree, filter, node);
 }
 
 static void
@@ -510,26 +505,25 @@ static void
 gtk_css_style_sheet_finalize (GObject *object)
 {
   GtkCssStyleSheet *self = GTK_CSS_STYLE_SHEET (object);
-  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
   guint i;
 
-  for (i = 0; i < priv->rulesets->len; i++)
-    gtk_css_ruleset_clear (&g_array_index (priv->rulesets, GtkCssRuleset, i));
+  for (i = 0; i < self->rulesets->len; i++)
+    gtk_css_ruleset_clear (&g_array_index (self->rulesets, GtkCssRuleset, i));
 
-  g_array_free (priv->rulesets, TRUE);
-  _gtk_css_selector_tree_free (priv->tree);
+  g_array_free (self->rulesets, TRUE);
+  _gtk_css_selector_tree_free (self->tree);
 
-  g_hash_table_destroy (priv->symbolic_colors);
-  g_hash_table_destroy (priv->keyframes);
+  g_hash_table_destroy (self->symbolic_colors);
+  g_hash_table_destroy (self->keyframes);
 
-  if (priv->resource)
+  if (self->resource)
     {
-      g_resources_unregister (priv->resource);
-      g_resource_unref (priv->resource);
-      priv->resource = NULL;
+      g_resources_unregister (self->resource);
+      g_resource_unref (self->resource);
+      self->resource = NULL;
     }
 
-  g_free (priv->path);
+  g_free (self->path);
 
   G_OBJECT_CLASS (gtk_css_style_sheet_parent_class)->finalize (object);
 }
@@ -553,7 +547,6 @@ css_style_sheet_commit (GtkCssStyleSheet  *self,
                         guint              n_selectors,
                         GtkCssRuleset     *ruleset)
 {
-  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
   guint i;
 
   if (ruleset->styles == NULL)
@@ -565,9 +558,9 @@ css_style_sheet_commit (GtkCssStyleSheet  *self,
     {
       GtkCssRuleset *new;
 
-      g_array_set_size (priv->rulesets, priv->rulesets->len + 1);
+      g_array_set_size (self->rulesets, self->rulesets->len + 1);
 
-      new = &g_array_index (priv->rulesets, GtkCssRuleset, priv->rulesets->len - 1);
+      new = &g_array_index (self->rulesets, GtkCssRuleset, self->rulesets->len - 1);
       gtk_css_ruleset_init_copy (new, ruleset, selectors[i]);
     }
 }
@@ -575,30 +568,29 @@ css_style_sheet_commit (GtkCssStyleSheet  *self,
 static void
 gtk_css_style_sheet_reset (GtkCssStyleSheet *self)
 {
-  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
   guint i;
 
-  if (priv->resource)
+  if (self->resource)
     {
-      g_resources_unregister (priv->resource);
-      g_resource_unref (priv->resource);
-      priv->resource = NULL;
+      g_resources_unregister (self->resource);
+      g_resource_unref (self->resource);
+      self->resource = NULL;
     }
 
-  if (priv->path)
+  if (self->path)
     {
-      g_free (priv->path);
-      priv->path = NULL;
+      g_free (self->path);
+      self->path = NULL;
     }
 
-  g_hash_table_remove_all (priv->symbolic_colors);
-  g_hash_table_remove_all (priv->keyframes);
+  g_hash_table_remove_all (self->symbolic_colors);
+  g_hash_table_remove_all (self->keyframes);
 
-  for (i = 0; i < priv->rulesets->len; i++)
-    gtk_css_ruleset_clear (&g_array_index (priv->rulesets, GtkCssRuleset, i));
-  g_array_set_size (priv->rulesets, 0);
-  _gtk_css_selector_tree_free (priv->tree);
-  priv->tree = NULL;
+  for (i = 0; i < self->rulesets->len; i++)
+    gtk_css_ruleset_clear (&g_array_index (self->rulesets, GtkCssRuleset, i));
+  g_array_set_size (self->rulesets, 0);
+  _gtk_css_selector_tree_free (self->tree);
+  self->tree = NULL;
 }
 
 static gboolean
@@ -675,7 +667,6 @@ parse_import (GtkCssScanner *scanner)
 static gboolean
 parse_color_definition (GtkCssScanner *scanner)
 {
-  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (scanner->stylesheet);
   GtkCssValue *color;
   char *name;
 
@@ -702,7 +693,7 @@ parse_color_definition (GtkCssScanner *scanner)
       return TRUE;
     }
 
-  g_hash_table_insert (priv->symbolic_colors, name, color);
+  g_hash_table_insert (scanner->stylesheet->symbolic_colors, name, color);
 
   return TRUE;
 }
@@ -710,7 +701,6 @@ parse_color_definition (GtkCssScanner *scanner)
 static gboolean
 parse_keyframes (GtkCssScanner *scanner)
 {
-  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (scanner->stylesheet);
   GtkCssKeyframes *keyframes;
   char *name;
 
@@ -731,7 +721,7 @@ parse_keyframes (GtkCssScanner *scanner)
 
   keyframes = _gtk_css_keyframes_parse (scanner->parser);
   if (keyframes != NULL)
-    g_hash_table_insert (priv->keyframes, name, keyframes);
+    g_hash_table_insert (scanner->stylesheet->keyframes, name, keyframes);
 
   if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
     gtk_css_parser_error_syntax (scanner->parser, "Expected '}' after declarations");
@@ -973,19 +963,18 @@ gtk_css_style_sheet_compare_rule (gconstpointer a_,
 static void
 gtk_css_style_sheet_postprocess (GtkCssStyleSheet *self)
 {
-  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
   GtkCssSelectorTreeBuilder *builder;
   guint i;
   gint64 before = g_get_monotonic_time ();
 
-  g_array_sort (priv->rulesets, gtk_css_style_sheet_compare_rule);
+  g_array_sort (self->rulesets, gtk_css_style_sheet_compare_rule);
 
   builder = _gtk_css_selector_tree_builder_new ();
-  for (i = 0; i < priv->rulesets->len; i++)
+  for (i = 0; i < self->rulesets->len; i++)
     {
       GtkCssRuleset *ruleset;
 
-      ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
+      ruleset = &g_array_index (self->rulesets, GtkCssRuleset, i);
 
       _gtk_css_selector_tree_builder_add (builder,
                                           ruleset->selector,
@@ -993,15 +982,15 @@ gtk_css_style_sheet_postprocess (GtkCssStyleSheet *self)
                                           ruleset);
     }
 
-  priv->tree = _gtk_css_selector_tree_builder_build (builder);
+  self->tree = _gtk_css_selector_tree_builder_build (builder);
   _gtk_css_selector_tree_builder_free (builder);
 
 #ifndef VERIFY_TREE
-  for (i = 0; i < priv->rulesets->len; i++)
+  for (i = 0; i < self->rulesets->len; i++)
     {
       GtkCssRuleset *ruleset;
 
-      ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
+      ruleset = &g_array_index (self->rulesets, GtkCssRuleset, i);
 
       _gtk_css_selector_free (ruleset->selector);
       ruleset->selector = NULL;
@@ -1207,9 +1196,7 @@ gtk_get_theme_dir (void)
 const gchar *
 gtk_css_style_sheet_get_theme_dir (GtkCssStyleSheet *self)
 {
-  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
-
-  return priv->path;
+  return self->path;
 }
 
 #if (GTK_MINOR_VERSION % 2)
@@ -1350,7 +1337,6 @@ gtk_css_style_sheet_load_named (GtkCssStyleSheet *self,
   path = _gtk_css_find_theme (name, variant);
   if (path)
     {
-      GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
       char *dir, *resource_file;
       GResource *resource;
 
@@ -1365,8 +1351,8 @@ gtk_css_style_sheet_load_named (GtkCssStyleSheet *self,
       gtk_css_style_sheet_load_from_path (self, path);
 
       /* Only set this after load, as load_from_path will clear it */
-      priv->resource = resource;
-      priv->path = dir;
+      self->resource = resource;
+      self->path = dir;
 
       g_free (path);
     }
@@ -1506,7 +1492,6 @@ gtk_css_style_sheet_print_keyframes (GHashTable *keyframes,
 char *
 gtk_css_style_sheet_to_string (GtkCssStyleSheet *self)
 {
-  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
   GString *str;
   guint i;
 
@@ -1514,14 +1499,14 @@ gtk_css_style_sheet_to_string (GtkCssStyleSheet *self)
 
   str = g_string_new ("");
 
-  gtk_css_style_sheet_print_colors (priv->symbolic_colors, str);
-  gtk_css_style_sheet_print_keyframes (priv->keyframes, str);
+  gtk_css_style_sheet_print_colors (self->symbolic_colors, str);
+  gtk_css_style_sheet_print_keyframes (self->keyframes, str);
 
-  for (i = 0; i < priv->rulesets->len; i++)
+  for (i = 0; i < self->rulesets->len; i++)
     {
       if (str->len != 0)
         g_string_append (str, "\n");
-      gtk_css_ruleset_print (&g_array_index (priv->rulesets, GtkCssRuleset, i), str);
+      gtk_css_ruleset_print (&g_array_index (self->rulesets, GtkCssRuleset, i), str);
     }
 
   return g_string_free (str, FALSE);
