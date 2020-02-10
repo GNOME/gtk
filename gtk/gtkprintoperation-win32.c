@@ -113,13 +113,13 @@ run_mainloop_hook (HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
   if (uiMsg == WM_INITDIALOG)
     {
       gdk_win32_set_modal_dialog_libgtk_only (hdlg);
-      while (gtk_events_pending ())
-	gtk_main_iteration ();
+      while (g_main_context_pending (NULL))
+	g_main_context_iteration (NULL, TRUE);
     }
   else if (uiMsg == got_gdk_events_message)
     {
-      while (gtk_events_pending ())
-	gtk_main_iteration ();
+      while (g_main_context_pending (NULL))
+	g_main_context_iteration (NULL, TRUE);
       return 1;
     }
   return 0;
@@ -1358,13 +1358,13 @@ iprintdialogcallback_handlemessage (IPrintDialogCallback *This,
     {
       gdk_win32_set_modal_dialog_libgtk_only (hDlg);
       callback->set_hwnd = TRUE;
-      while (gtk_events_pending ())
-	gtk_main_iteration ();
+      while (g_main_context_pending (NULL))
+        g_main_context_iteration (NULL, TRUE);
     }
   else if (uMsg == got_gdk_events_message)
     {
-      while (gtk_events_pending ())
-	gtk_main_iteration ();
+      while (g_main_context_pending (NULL))
+        g_main_context_iteration (NULL, TRUE);
       *pResult = TRUE;
       return S_OK;
     }
