@@ -53,7 +53,6 @@
 #include "gtkpopover.h"
 #include "gtkprivate.h"
 #include "gtkprogressbar.h"
-#include "gtkselection.h"
 #include "gtksettings.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"

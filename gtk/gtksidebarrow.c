@@ -26,7 +26,6 @@
 #include "gtklabel.h"
 #include "gtkstylecontext.h"
 #include "gtkrevealer.h"
-#include "gtkselection.h"
 #include "gtkintl.h"
 #include "gtkspinner.h"
 

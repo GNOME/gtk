@@ -31,7 +31,6 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkselection.h>
 #include <gtk/gtkwidget.h>
 
 

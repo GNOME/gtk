@@ -50,7 +50,6 @@
 #include "gtkpango.h"
 #include "gtkpopovermenu.h"
 #include "gtkprivate.h"
-#include "gtkselection.h"
 #include "gtksettings.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
