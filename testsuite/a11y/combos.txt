@@ -73,15 +73,23 @@ window1
       action 0 keybinding: <Alt>c
       <AtkSelection>
       popup_widget
-        "menu"
+        "panel"
         parent: combo1
         index: 0
-        state: enabled sensitive visible
+        state: enabled sensitive
         toolkit: gtk
         <AtkComponent>
-        layer: popup
+        layer: widget
         alpha: 1
-        <AtkSelection>
+        unnamed-GtkStackAccessible-0
+          "panel"
+          parent: unnamed-GtkWidgetAccessible-1
+          index: 0
+          state: enabled sensitive visible
+          toolkit: gtk
+          <AtkComponent>
+          layer: widget
+          alpha: 1
     combo2
       "combo box"
       parent: box1
@@ -96,15 +104,23 @@ window1
       action 0 description: Presses the combobox
       <AtkSelection>
       popup_widget
-        "menu"
+        "panel"
         parent: combo2
         index: 0
-        state: enabled sensitive visible
+        state: enabled sensitive
         toolkit: gtk
         <AtkComponent>
-        layer: popup
+        layer: widget
         alpha: 1
-        <AtkSelection>
+        unnamed-GtkStackAccessible-2
+          "panel"
+          parent: unnamed-GtkWidgetAccessible-3
+          index: 0
+          state: enabled sensitive visible
+          toolkit: gtk
+          <AtkComponent>
+          layer: widget
+          alpha: 1
       
         "text"
         parent: combo2
@@ -160,15 +176,23 @@ window1
       action 0 description: Presses the combobox
       <AtkSelection>
       popup_widget
-        "menu"
+        "panel"
         parent: combo3
         index: 0
-        state: enabled sensitive visible
+        state: enabled sensitive
         toolkit: gtk
         <AtkComponent>
-        layer: popup
+        layer: widget
         alpha: 1
-        <AtkSelection>
+        unnamed-GtkStackAccessible-4
+          "panel"
+          parent: unnamed-GtkWidgetAccessible-5
+          index: 0
+          state: enabled sensitive visible
+          toolkit: gtk
+          <AtkComponent>
+          layer: widget
+          alpha: 1
     combo4
       "combo box"
       parent: box1
@@ -183,15 +207,23 @@ window1
       action 0 description: Presses the combobox
       <AtkSelection>
       popup_widget
-        "menu"
+        "panel"
         parent: combo4
         index: 0
-        state: enabled sensitive visible
+        state: enabled sensitive
         toolkit: gtk
         <AtkComponent>
-        layer: popup
+        layer: widget
         alpha: 1
-        <AtkSelection>
+        unnamed-GtkStackAccessible-6
+          "panel"
+          parent: unnamed-GtkWidgetAccessible-7
+          index: 0
+          state: enabled sensitive visible
+          toolkit: gtk
+          <AtkComponent>
+          layer: widget
+          alpha: 1
       
         "text"
         parent: combo4
