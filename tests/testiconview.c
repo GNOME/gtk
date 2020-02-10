@@ -588,7 +588,8 @@ main (gint argc, gchar **argv)
 
   gtk_widget_show (window);
 
-  gtk_main ();
+  while (TRUE)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

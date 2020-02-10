@@ -107,6 +107,17 @@ less_gears (GtkButton *button, gpointer data)
     gtk_widget_destroy (gears);
 }
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -114,13 +125,14 @@ main (int argc, char *argv[])
     *fps_label, *gears, *extra_hbox, *bbox, *overlay,
     *revealer, *frame, *label, *scrolled, *popover;
   int i;
+  gboolean done = FALSE;
 
   gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_titlebar (GTK_WINDOW (window), g_object_new (GTK_TYPE_HEADER_BAR, "visible", TRUE, "title", "GdkGears", NULL));
   gtk_window_set_default_size (GTK_WINDOW (window), 640, 640);
-  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   overlay = gtk_overlay_new ();
   g_object_set (overlay, "margin", 12, NULL);
@@ -244,7 +256,8 @@ main (int argc, char *argv[])
 
   gtk_widget_show (window);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return EXIT_SUCCESS;
 }

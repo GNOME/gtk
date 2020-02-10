@@ -97,6 +97,17 @@ tree_view_select_func (GtkTreeSelection *selection,
   return FALSE;
 }
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -104,13 +115,14 @@ main (int argc, char **argv)
   GtkTreeModel *model;
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
+  gboolean done = FALSE;
 
   gtk_init ();
 
   model = create_model ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   gtk_window_set_default_size (GTK_WINDOW (window), 320, 480);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
@@ -148,7 +160,8 @@ main (int argc, char **argv)
 
   gtk_widget_show (window);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

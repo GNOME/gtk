@@ -17,6 +17,17 @@ toggle_reveal (GtkRevealer *revealer)
   gtk_revealer_set_reveal_child (revealer, !gtk_revealer_get_reveal_child (revealer));
 }
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int
 main(int argc, char **argv)
 {
@@ -24,6 +35,7 @@ main(int argc, char **argv)
   GtkCssProvider *cssprovider;
   GError *error = NULL;
   guint x, y;
+  gboolean done = FALSE;
 
   GOptionContext *context = g_option_context_new (NULL);
   g_option_context_add_main_entries (context, options, NULL);
@@ -38,7 +50,7 @@ main(int argc, char **argv)
   gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  g_signal_connect (window, "destroy", gtk_main_quit, NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   frame_stats_ensure (GTK_WINDOW (window));
 
   revealer = gtk_revealer_new ();
@@ -70,7 +82,8 @@ main(int argc, char **argv)
 
   gtk_widget_show (window);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

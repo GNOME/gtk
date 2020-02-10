@@ -88,6 +88,17 @@ extra (GtkToggleButton *button)
     }
 }
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int main (int argc, char *argv[])
 {
   GtkWidget *window;
@@ -113,12 +124,13 @@ int main (int argc, char *argv[])
 
   gdouble pos_marks[4] = { 0.0, 33.3, 66.6, 100.0 };
   const gchar *pos_labels[4] = { "Left", "Right", "Top", "Bottom" };
+  gboolean done = FALSE;
 
   gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Ranges with marks");
-  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   flipbox = box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   gtk_widget_set_hexpand (flipbox, TRUE);
@@ -228,7 +240,8 @@ int main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (box2), button);
   gtk_widget_show (window);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

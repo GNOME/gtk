@@ -102,7 +102,7 @@ on_frame_clock_after_paint (GdkFrameClock *frame_clock,
       variable_init (&frame_stats->latency);
 
       if (frame_stats->num_stats == max_stats)
-        gtk_main_quit ();
+        exit (0);
     }
 
   frame_stats->frames_since_last_print++;

@@ -3,17 +3,29 @@
 
 #include "gtkgears.h"
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int
 main (int argc, char *argv[])
 {
   GtkWidget *window, *fixed, *gears, *spinner;
+  gboolean done = FALSE;
 
   gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Test GL/gtk inter-blending");
   gtk_window_set_default_size (GTK_WINDOW (window), 250, 250);
-  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   fixed = gtk_fixed_new ();
   gtk_container_add (GTK_CONTAINER (window), fixed);
@@ -75,7 +87,8 @@ main (int argc, char *argv[])
 
   gtk_widget_show (window);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return EXIT_SUCCESS;
 }

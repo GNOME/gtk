@@ -31,6 +31,17 @@ static GActionEntry entries[] = {
   { "action10", activate, NULL, NULL, NULL }
 };
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -51,6 +62,7 @@ main (int argc, char *argv[])
   GtkWidget *check;
   GtkWidget *combo;
   GtkWidget *header_bar;
+  gboolean done = FALSE;
 
 #ifdef GTK_SRCDIR
   g_chdir (GTK_SRCDIR);
@@ -167,10 +179,11 @@ main (int argc, char *argv[])
   g_object_unref (builder);
 
 
-  g_signal_connect (win, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (win, "destroy", G_CALLBACK (quit_cb), &done);
   gtk_widget_show (win);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

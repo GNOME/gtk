@@ -32,6 +32,17 @@ usage (void)
 	   );
 }
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -71,6 +82,7 @@ main (int argc, char *argv[])
     {
       GtkIconPaintable *icon;
       GtkWidget *window, *image;
+      gboolean done = FALSE;
 
       if (argc < 4)
 	{
@@ -97,10 +109,11 @@ main (int argc, char *argv[])
       gtk_image_set_from_paintable (GTK_IMAGE (image), GDK_PAINTABLE (icon));
       g_object_unref (icon);
       gtk_container_add (GTK_CONTAINER (window), image);
-      g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+      g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
       gtk_widget_show (window);
 
-      gtk_main ();
+      while (!done)
+        g_main_context_iteration (NULL, TRUE);
     }
   else if (strcmp (argv[1], "list") == 0)
     {
