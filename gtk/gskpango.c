@@ -45,6 +45,15 @@ gsk_pango_renderer_set_state (GskPangoRenderer      *crenderer,
   crenderer->state = state;
 }
 
+void
+gsk_pango_renderer_set_shape_handler (GskPangoRenderer    *crenderer,
+                                      GskPangoShapeHandler handler)
+{
+  g_return_if_fail (GSK_IS_PANGO_RENDERER (crenderer));
+
+  crenderer->shape_handler = handler;
+}
+
 static void
 get_color (GskPangoRenderer *crenderer,
            PangoRenderPart   part,
@@ -240,26 +249,49 @@ gsk_pango_renderer_draw_shape (PangoRenderer  *renderer,
   gpointer shape_renderer_data;
   double base_x = (double)x / PANGO_SCALE;
   double base_y = (double)y / PANGO_SCALE;
+  gboolean handled = FALSE;
 
-  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds);
+  if (crenderer->shape_handler)
+    {
+      double shape_x = base_x;
+      double shape_y = (double) (y + attr->logical_rect.y) / PANGO_SCALE;
 
-  layout = pango_renderer_get_layout (renderer);
-  if (!layout)
-    return;
+      if (shape_x != 0 || shape_y != 0)
+        {
+          gtk_snapshot_save (crenderer->snapshot);
+          gtk_snapshot_translate (crenderer->snapshot, &GRAPHENE_POINT_INIT (shape_x, shape_y));
+        }
 
-  shape_renderer = pango_cairo_context_get_shape_renderer (pango_layout_get_context (layout),
-                                                           &shape_renderer_data);
+      handled = crenderer->shape_handler (attr,
+                                          crenderer->snapshot,
+                                          (double)attr->logical_rect.width / PANGO_SCALE,
+                                          (double)attr->logical_rect.height / PANGO_SCALE);
+      if (shape_x != 0 || shape_y != 0)
+        gtk_snapshot_restore (crenderer->snapshot);
+    }
 
-  if (!shape_renderer)
-    return;
+  if (!handled)
+    {
+      cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds);
 
-  set_color (crenderer, PANGO_RENDER_PART_FOREGROUND, cr);
+      layout = pango_renderer_get_layout (renderer);
+      if (!layout)
+        return;
 
-  cairo_move_to (cr, base_x, base_y);
+      shape_renderer = pango_cairo_context_get_shape_renderer (pango_layout_get_context (layout),
+                                                               &shape_renderer_data);
 
-  shape_renderer (cr, attr, FALSE, shape_renderer_data);
+      if (!shape_renderer)
+        return;
 
-  cairo_destroy (cr);
+      set_color (crenderer, PANGO_RENDER_PART_FOREGROUND, cr);
+
+      cairo_move_to (cr, base_x, base_y);
+
+      shape_renderer (cr, attr, FALSE, shape_renderer_data);
+
+      cairo_destroy (cr);
+    }
 }
 
 static void
@@ -408,6 +440,10 @@ gsk_pango_renderer_acquire (void)
         }
 
       renderer = cached_renderer;
+
+      /* Reset to standard state */
+      renderer->state = GSK_PANGO_RENDERER_NORMAL;
+      renderer->shape_handler = NULL;
     }
   else
     {

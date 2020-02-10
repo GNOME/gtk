@@ -17,6 +17,48 @@
 
 #include <gtk/gtk.h>
 
+static GdkTexture *
+render_paintable_to_texture (GdkPaintable *paintable)
+{
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
+  int width, height;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  GdkTexture *texture;
+  GBytes *bytes;
+
+  width = gdk_paintable_get_intrinsic_width (paintable);
+  height = gdk_paintable_get_intrinsic_height (paintable);
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+
+  snapshot = gtk_snapshot_new ();
+  gdk_paintable_snapshot (paintable, snapshot, width, height);
+  node = gtk_snapshot_free_to_node (snapshot);
+
+  cr = cairo_create (surface);
+  gsk_render_node_draw (node, cr);
+  cairo_destroy (cr);
+
+  gsk_render_node_unref (node);
+
+  bytes = g_bytes_new_with_free_func (cairo_image_surface_get_data (surface),
+                                      cairo_image_surface_get_height (surface)
+                                      * cairo_image_surface_get_stride (surface),
+                                      (GDestroyNotify) cairo_surface_destroy,
+                                      cairo_surface_reference (surface));
+  texture = gdk_memory_texture_new (cairo_image_surface_get_width (surface),
+                                    cairo_image_surface_get_height (surface),
+                                    GDK_MEMORY_DEFAULT,
+                                    bytes,
+                                    cairo_image_surface_get_stride (surface));
+  g_bytes_unref (bytes);
+  cairo_surface_destroy (surface);
+
+  return texture;
+}
+
 static void
 clipboard_changed_cb (GdkClipboard *clipboard,
                       GtkWidget    *stack)
@@ -292,7 +334,7 @@ get_button_list (GdkClipboard *clipboard,
                                      48, 1,
                                      gtk_widget_get_direction (box),
                                      0);
-  texture = gtk_icon_paintable_download_texture (icon, NULL);
+  texture = render_paintable_to_texture (GDK_PAINTABLE (icon));
   g_value_take_object (&value, gdk_pixbuf_get_from_texture (texture));
   g_object_unref (texture);
   g_object_unref (icon);

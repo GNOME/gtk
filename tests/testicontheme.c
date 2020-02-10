@@ -114,6 +114,8 @@ main (int argc, char *argv[])
     }
   else if (strcmp (argv[1], "lookup") == 0)
     {
+      GFile *file;
+
       if (argc < 4)
 	{
 	  g_object_unref (icon_theme);
@@ -128,17 +130,12 @@ main (int argc, char *argv[])
 	scale = atoi (argv[5]);
 
       icon = gtk_icon_theme_lookup_icon (icon_theme, argv[3], NULL, size, scale, direction, flags);
+      file = gtk_icon_paintable_get_file (icon);
       g_print ("icon for %s at %dx%d@%dx is %s\n", argv[3], size, size, scale,
-               icon ? gtk_icon_paintable_get_filename (icon) : "<none>");
+               file ? g_file_get_uri (file) : "<none>");
 
-      if (icon)
-	{
-          GdkPaintable *paintable = GDK_PAINTABLE (icon);
-
-          g_print ("texture size: %dx%d\n", gdk_paintable_get_intrinsic_width (paintable), gdk_paintable_get_intrinsic_height (paintable));
-
-	  g_object_unref (icon);
-	}
+      g_print ("texture size: %dx%d\n", gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (icon)), gdk_paintable_get_intrinsic_height (GDK_PAINTABLE (icon)));
+      g_object_unref (icon);
     }
   else
     {

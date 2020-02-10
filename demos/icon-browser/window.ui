@@ -198,7 +198,7 @@
                 <property name="halign">center</property>
                 <property name="valign">end</property>
                 <accessibility>
-                  <relation type="labelled-by" target="label6"/>
+                  <relation type="labelled-by" target="label5"/>
                 </accessibility>
                 <layout>
                   <property name="left-attach">5</property>
@@ -207,10 +207,36 @@
               </object>
             </child>
             <child>
+              <object class="GtkImage" id="image7">
+                <property name="halign">center</property>
+                <property name="valign">end</property>
+                <accessibility>
+                  <relation type="labelled-by" target="label5"/>
+                </accessibility>
+                <layout>
+                  <property name="left-attach">6</property>
+                  <property name="top-attach">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImage" id="image8">
+                <property name="halign">center</property>
+                <property name="valign">end</property>
+                <accessibility>
+                  <relation type="labelled-by" target="label6"/>
+                </accessibility>
+                <layout>
+                  <property name="left-attach">7</property>
+                  <property name="top-attach">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
               <object class="GtkLabel" id="label1">
                 <property name="halign">center</property>
                 <property name="valign">baseline</property>
-                <property name="label">16×16</property>
+                <property name="label">8×8</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -227,7 +253,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="halign">center</property>
                 <property name="valign">baseline</property>
-                <property name="label">24×24</property>
+                <property name="label">16×16</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -244,7 +270,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="halign">center</property>
                 <property name="valign">baseline</property>
-                <property name="label">32×32</property>
+                <property name="label">18×18</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -261,7 +287,7 @@
               <object class="GtkLabel" id="label4">
                 <property name="halign">center</property>
                 <property name="valign">baseline</property>
-                <property name="label">48×48</property>
+                <property name="label">24×24</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -278,7 +304,7 @@
               <object class="GtkLabel" id="label5">
                 <property name="halign">center</property>
                 <property name="valign">baseline</property>
-                <property name="label">64×64</property>
+                <property name="label">32×32</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -295,7 +321,7 @@
               <object class="GtkLabel" id="label6">
                 <property name="halign">center</property>
                 <property name="valign">baseline</property>
-                <property name="label">scalable</property>
+                <property name="label">48×48</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -304,6 +330,40 @@
                 </accessibility>
                 <layout>
                   <property name="left-attach">5</property>
+                  <property name="top-attach">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label7">
+                <property name="halign">center</property>
+                <property name="valign">baseline</property>
+                <property name="label">64×64</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <accessibility>
+                  <relation type="label-for" target="image7"/>
+                </accessibility>
+                <layout>
+                  <property name="left-attach">6</property>
+                  <property name="top-attach">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label8">
+                <property name="halign">center</property>
+                <property name="valign">baseline</property>
+                <property name="label">scalable</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <accessibility>
+                  <relation type="label-for" target="image8"/>
+                </accessibility>
+                <layout>
+                  <property name="left-attach">7</property>
                   <property name="top-attach">2</property>
                 </layout>
               </object>

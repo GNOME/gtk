@@ -87,7 +87,7 @@ struct _ClipboardRequest
 
 enum {
   INSERT_TEXT,
-  INSERT_TEXTURE,
+  INSERT_PAINTABLE,
   INSERT_CHILD_ANCHOR,
   DELETE_RANGE,
   CHANGED,
@@ -128,9 +128,9 @@ static void gtk_text_buffer_real_insert_text           (GtkTextBuffer     *buffe
                                                         GtkTextIter       *iter,
                                                         const gchar       *text,
                                                         gint               len);
-static void gtk_text_buffer_real_insert_texture        (GtkTextBuffer     *buffer,
+static void gtk_text_buffer_real_insert_paintable      (GtkTextBuffer     *buffer,
                                                         GtkTextIter       *iter,
-                                                        GdkTexture        *texture);
+                                                        GdkPaintable      *paintable);
 static void gtk_text_buffer_real_insert_anchor         (GtkTextBuffer     *buffer,
                                                         GtkTextIter       *iter,
                                                         GtkTextChildAnchor *anchor);
@@ -434,7 +434,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   object_class->get_property = gtk_text_buffer_get_property;
  
   klass->insert_text = gtk_text_buffer_real_insert_text;
-  klass->insert_texture = gtk_text_buffer_real_insert_texture;
+  klass->insert_paintable = gtk_text_buffer_real_insert_paintable;
   klass->insert_child_anchor = gtk_text_buffer_real_insert_anchor;
   klass->delete_range = gtk_text_buffer_real_delete_range;
   klass->apply_tag = gtk_text_buffer_real_apply_tag;
@@ -596,33 +596,33 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                               _gtk_marshal_VOID__BOXED_STRING_INTv);
 
   /**
-   * GtkTextBuffer::insert-texture:
+   * GtkTextBuffer::insert-paintable:
    * @textbuffer: the object which received the signal
-   * @location: position to insert @texture in @textbuffer
-   * @texture: the #GdkTexture to be inserted
+   * @location: position to insert @paintable in @textbuffer
+   * @paintable: the #GdkPaintable to be inserted
    *
-   * The ::insert-texture signal is emitted to insert a #GdkTexture
+   * The ::insert-paintable signal is emitted to insert a #GdkPaintable
    * in a #GtkTextBuffer. Insertion actually occurs in the default handler.
    *
    * Note that if your handler runs before the default handler it must not
    * invalidate the @location iter (or has to revalidate it).
    * The default signal handler revalidates it to be placed after the
-   * inserted @texture.
+   * inserted @paintable.
    *
-   * See also: gtk_text_buffer_insert_texture().
+   * See also: gtk_text_buffer_insert_paintable().
    */
-  signals[INSERT_TEXTURE] =
-    g_signal_new (I_("insert-texture"),
+  signals[INSERT_PAINTABLE] =
+    g_signal_new (I_("insert-paintable"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkTextBufferClass, insert_texture),
+                  G_STRUCT_OFFSET (GtkTextBufferClass, insert_paintable),
                   NULL, NULL,
                   _gtk_marshal_VOID__BOXED_OBJECT,
                   G_TYPE_NONE,
                   2,
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
-                  GDK_TYPE_TEXTURE);
-  g_signal_set_va_marshaller (signals[INSERT_TEXTURE],
+                  GDK_TYPE_PAINTABLE);
+  g_signal_set_va_marshaller (signals[INSERT_PAINTABLE],
                               G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_VOID__BOXED_OBJECTv);
 
@@ -1519,19 +1519,19 @@ insert_range_untagged (GtkTextBuffer     *buffer,
             }
           else if (gtk_text_iter_get_char (&range_end) == GTK_TEXT_UNKNOWN_CHAR)
             {
-              GdkTexture *texture;
+              GdkPaintable *paintable;
               GtkTextChildAnchor *anchor;
 
-              texture = gtk_text_iter_get_texture (&range_end);
+              paintable = gtk_text_iter_get_paintable (&range_end);
               anchor = gtk_text_iter_get_child_anchor (&range_end);
 
-              if (texture)
+              if (paintable)
                 {
                   r = save_range (&range_start,
                                   &range_end,
                                   &end);
 
-                  gtk_text_buffer_insert_texture (buffer, iter, texture);
+                  gtk_text_buffer_insert_paintable (buffer, iter, paintable);
 
                   restore_range (r);
                   r = NULL;
@@ -1733,7 +1733,7 @@ gtk_text_buffer_real_insert_range (GtkTextBuffer     *buffer,
  * @start: a position in a #GtkTextBuffer
  * @end: another position in the same buffer as @start
  *
- * Copies text, tags, and texture between @start and @end (the order
+ * Copies text, tags, and paintables between @start and @end (the order
  * of @start and @end doesn’t matter) and inserts the copy at @iter.
  * Used instead of simply getting/inserting text because it preserves
  * images and tags. If @start and @end are in a different buffer from
@@ -2215,7 +2215,7 @@ gtk_text_buffer_get_text (GtkTextBuffer     *buffer,
  * the returned string do correspond to byte
  * and character indexes into the buffer. Contrast with
  * gtk_text_buffer_get_text(). Note that 0xFFFC can occur in normal
- * text as well, so it is not a reliable indicator that a texture or
+ * text as well, so it is not a reliable indicator that a paintable or
  * widget is in the buffer.
  *
  * Returns: (transfer full): an allocated UTF-8 string
@@ -2243,41 +2243,41 @@ gtk_text_buffer_get_slice (GtkTextBuffer     *buffer,
  */
 
 static void
-gtk_text_buffer_real_insert_texture (GtkTextBuffer *buffer,
-                                     GtkTextIter   *iter,
-                                     GdkTexture    *texture)
+gtk_text_buffer_real_insert_paintable (GtkTextBuffer *buffer,
+                                       GtkTextIter   *iter,
+                                       GdkPaintable  *paintable)
 { 
-  _gtk_text_btree_insert_texture (iter, texture);
+  _gtk_text_btree_insert_paintable (iter, paintable);
 
   g_signal_emit (buffer, signals[CHANGED], 0);
 }
 
 /**
- * gtk_text_buffer_insert_texture:
+ * gtk_text_buffer_insert_paintable:
  * @buffer: a #GtkTextBuffer
- * @iter: location to insert the texture
- * @texture: a #GdkTexture
+ * @iter: location to insert the paintable
+ * @paintable: a #GdkPaintable
  *
  * Inserts an image into the text buffer at @iter. The image will be
  * counted as one character in character counts, and when obtaining
  * the buffer contents as a string, will be represented by the Unicode
  * “object replacement character” 0xFFFC. Note that the “slice”
  * variants for obtaining portions of the buffer as a string include
- * this character for texture, but the “text” variants do
+ * this character for paintable, but the “text” variants do
  * not. e.g. see gtk_text_buffer_get_slice() and
  * gtk_text_buffer_get_text().
  **/
 void
-gtk_text_buffer_insert_texture (GtkTextBuffer *buffer,
-                                GtkTextIter   *iter,
-                                GdkTexture    *texture)
+gtk_text_buffer_insert_paintable (GtkTextBuffer *buffer,
+                                  GtkTextIter   *iter,
+                                  GdkPaintable    *paintable)
 {
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
   g_return_if_fail (iter != NULL);
-  g_return_if_fail (GDK_IS_TEXTURE (texture));
+  g_return_if_fail (GDK_IS_PAINTABLE (paintable));
   g_return_if_fail (gtk_text_iter_get_buffer (iter) == buffer);
 
-  g_signal_emit (buffer, signals[INSERT_TEXTURE], 0, iter, texture);
+  g_signal_emit (buffer, signals[INSERT_PAINTABLE], 0, iter, paintable);
 }
 
 /*

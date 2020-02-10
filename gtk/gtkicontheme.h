@@ -40,20 +40,20 @@ typedef struct _GtkIconTheme      GtkIconTheme;
 
 /**
  * GtkIconLookupFlags:
- * @GTK_ICON_LOOKUP_FORCE_SIZE: Always get the icon scaled to the
- *   requested size
  * @GTK_ICON_LOOKUP_FORCE_REGULAR: Try to always load regular icons, even
  *   when symbolic icon names are given
  * @GTK_ICON_LOOKUP_FORCE_SYMBOLIC: Try to always load symbolic icons, even
  *   when regular icon names are given
+ * @GTK_ICON_LOOKUP_PREALOAD: Starts loading the texture in the background
+ *   so it is ready when later needed.
  *
  * Used to specify options for gtk_icon_theme_lookup_icon()
  */
 typedef enum
 {
-  GTK_ICON_LOOKUP_FORCE_SIZE       = 1 << 0,
-  GTK_ICON_LOOKUP_FORCE_REGULAR    = 1 << 1,
-  GTK_ICON_LOOKUP_FORCE_SYMBOLIC   = 1 << 2
+  GTK_ICON_LOOKUP_FORCE_REGULAR  = 1 << 0,
+  GTK_ICON_LOOKUP_FORCE_SYMBOLIC = 1 << 1,
+  GTK_ICON_LOOKUP_PRELOAD        = 1 << 2,
 } GtkIconLookupFlags;
 
 /**
@@ -134,18 +134,21 @@ GtkIconPaintable *gtk_icon_theme_lookup_by_gicon     (GtkIconTheme              
                                                       GtkTextDirection             direction,
                                                       GtkIconLookupFlags           flags);
 GDK_AVAILABLE_IN_ALL
+GtkIconPaintable *gtk_icon_paintable_new_for_file    (GFile                       *file,
+                                                      gint                         size,
+                                                      gint                         scale);
+GDK_AVAILABLE_IN_ALL
 GList *       gtk_icon_theme_list_icons              (GtkIconTheme                *self);
 
 GDK_AVAILABLE_IN_ALL
 GType                 gtk_icon_paintable_get_type         (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-const gchar *         gtk_icon_paintable_get_filename     (GtkIconPaintable  *self);
+GFile *               gtk_icon_paintable_get_file          (GtkIconPaintable  *self);
 GDK_AVAILABLE_IN_ALL
-gboolean              gtk_icon_paintable_is_symbolic      (GtkIconPaintable  *self);
+const gchar *         gtk_icon_paintable_get_icon_name     (GtkIconPaintable  *self);
 GDK_AVAILABLE_IN_ALL
-GdkTexture *          gtk_icon_paintable_download_texture (GtkIconPaintable  *self,
-                                                           GError           **error);
+gboolean              gtk_icon_paintable_is_symbolic       (GtkIconPaintable  *self);
 
 G_END_DECLS
 

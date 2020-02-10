@@ -63,13 +63,13 @@ gboolean _gtk_text_btree_is_end (GtkTextBTree       *tree,
 
 /* Indexable segment mutation */
 
-void _gtk_text_btree_delete        (GtkTextIter *start,
-                                    GtkTextIter *end);
-void _gtk_text_btree_insert        (GtkTextIter *iter,
-                                    const gchar *text,
-                                    gint         len);
-void _gtk_text_btree_insert_texture (GtkTextIter *iter,
-                                     GdkTexture  *texture);
+void _gtk_text_btree_delete           (GtkTextIter  *start,
+                                       GtkTextIter  *end);
+void _gtk_text_btree_insert           (GtkTextIter  *iter,
+                                       const gchar  *text,
+                                       gint          len);
+void _gtk_text_btree_insert_paintable (GtkTextIter  *iter,
+                                       GdkPaintable *texture);
 
 void _gtk_text_btree_insert_child_anchor (GtkTextIter        *iter,
                                           GtkTextChildAnchor *anchor);
@@ -161,6 +161,9 @@ gboolean _gtk_text_btree_get_iter_at_mark_name    (GtkTextBTree       *tree,
 void     _gtk_text_btree_get_iter_at_mark         (GtkTextBTree       *tree,
                                                    GtkTextIter        *iter,
                                                    GtkTextMark        *mark);
+void     _gtk_text_btree_get_iter_at_paintable    (GtkTextBTree       *tree,
+                                                   GtkTextIter        *iter,
+                                                   GtkTextLineSegment *seg);
 void     _gtk_text_btree_get_end_iter             (GtkTextBTree       *tree,
                                                    GtkTextIter        *iter);
 void     _gtk_text_btree_get_iter_at_line         (GtkTextBTree       *tree,
