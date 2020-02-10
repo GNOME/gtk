@@ -397,8 +397,6 @@ testdata = [
   'textview-margins.ui',
   'textview-tags.ref.ui',
   'textview-tags.ui',
-  'toplevel-vs-popup.ref.ui',
-  'toplevel-vs-popup.ui',
   'treeview-crash-too-wide.ref.ui',
   'treeview-crash-too-wide.ui',
   'treeview-fixed-height.css',
