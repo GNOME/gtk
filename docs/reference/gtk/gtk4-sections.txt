@@ -4418,8 +4418,6 @@ gtk_get_default_language
 gtk_get_locale_direction
 gtk_init
 gtk_init_check
-gtk_main
-gtk_main_quit
 
 <SUBSECTION>
 gtk_grab_add
