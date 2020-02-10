@@ -24,18 +24,45 @@
 #include "gtkprivatetypebuiltins.h"
 #include "gtkprivate.h"
 
-void
-gtk_css_lookup_init (GtkCssLookup     *lookup)
+GtkCssLookup *
+gtk_css_lookup_new (void)
 {
-  memset (lookup, 0, sizeof (*lookup));
+  GtkCssLookup *lookup = g_new0 (GtkCssLookup, 1);
 
+  lookup->ref_count = 1;
   lookup->set_values = _gtk_bitmask_new ();
+
+  return lookup;
+}
+
+static void
+gtk_css_lookup_free (GtkCssLookup *lookup)
+{
+  _gtk_bitmask_free (lookup->set_values);
+  g_free (lookup);
+}
+
+GtkCssLookup *
+gtk_css_lookup_ref (GtkCssLookup *lookup)
+{
+  gtk_internal_return_val_if_fail (lookup != NULL, NULL);
+  gtk_internal_return_val_if_fail (lookup->ref_count > 0, NULL);
+
+  lookup->ref_count++;
+
+  return lookup;
 }
 
 void
-gtk_css_lookup_destroy (GtkCssLookup *lookup)
+gtk_css_lookup_unref (GtkCssLookup *lookup)
 {
-  _gtk_bitmask_free (lookup->set_values);
+  gtk_internal_return_if_fail (lookup != NULL);
+  gtk_internal_return_if_fail (lookup->ref_count > 0);
+
+  lookup->ref_count--;
+
+  if (lookup->ref_count == 0)
+    gtk_css_lookup_free (lookup);
 }
 
 gboolean
