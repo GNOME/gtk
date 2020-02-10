@@ -139,13 +139,10 @@
 
 static GtkWindowGroup *gtk_main_get_window_group (GtkWidget   *widget);
 
-static guint gtk_main_loop_level = 0;
 static gint pre_initialized = FALSE;
 static gint gtk_initialized = FALSE;
 static GList *current_events = NULL;
 static GThread *initialized_thread = NULL;
-
-static GSList *main_loops = NULL;      /* stack of currently executing main loops */
 
 typedef struct {
   GdkDisplay *display;
@@ -1011,37 +1008,6 @@ gtk_get_default_language (void)
   return pango_language_get_default ();
 }
 
-/**
- * gtk_main:
- *
- * Runs the main loop until gtk_main_quit() is called.
- *
- * You can nest calls to gtk_main(). In that case gtk_main_quit()
- * will make the innermost invocation of the main loop return.
- */
-void
-gtk_main (void)
-{
-  GMainLoop *loop;
-
-  gtk_main_loop_level++;
-
-  loop = g_main_loop_new (NULL, TRUE);
-  main_loops = g_slist_prepend (main_loops, loop);
-
-  if (g_main_loop_is_running (main_loops->data))
-    g_main_loop_run (loop);
-
-  main_loops = g_slist_remove (main_loops, loop);
-
-  g_main_loop_unref (loop);
-
-  gtk_main_loop_level--;
-
-  if (gtk_main_loop_level == 0)
-    gtk_main_sync ();
-}
-
 typedef struct {
   GMainLoop *store_loop;
   guint n_clipboards;
@@ -1123,20 +1089,6 @@ gtk_main_sync (void)
   
   /* Synchronize the recent manager singleton */
   _gtk_recent_manager_sync ();
-}
-
-/**
- * gtk_main_quit:
- *
- * Makes the innermost invocation of the main loop return
- * when it regains control.
- */
-void
-gtk_main_quit (void)
-{
-  g_return_if_fail (main_loops != NULL);
-
-  g_main_loop_quit (main_loops->data);
 }
 
 static void
