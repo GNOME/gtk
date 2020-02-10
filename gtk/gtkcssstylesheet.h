@@ -30,12 +30,6 @@ G_BEGIN_DECLS
 
 typedef struct _GtkCssStyleSheet GtkCssStyleSheet;
 typedef struct _GtkCssStyleSheetClass GtkCssStyleSheetClass;
-typedef struct _GtkCssStyleSheetPrivate GtkCssStyleSheetPrivate;
-
-struct _GtkCssStyleSheet
-{
-  GObject parent_instance;
-};
 
 
 GDK_AVAILABLE_IN_ALL
