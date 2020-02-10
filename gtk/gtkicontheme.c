@@ -3721,7 +3721,7 @@ gtk_icon_paintable_snapshot_with_colors (GtkIconPaintable *icon,
     }
 
   texture_width = gdk_texture_get_width (texture);
-  texture_height = gdk_texture_get_width (texture);
+  texture_height = gdk_texture_get_height (texture);
 
   /* Keep aspect ratio and center */
   if (texture_width >= texture_height)
@@ -3739,7 +3739,7 @@ gtk_icon_paintable_snapshot_with_colors (GtkIconPaintable *icon,
                                &GRAPHENE_RECT_INIT ((width - render_width) / 2,
                                                     (height - render_height) / 2,
                                                     render_width,
-                                                    render_width));
+                                                    render_height));
 
   if (symbolic)
     gtk_snapshot_pop (snapshot);

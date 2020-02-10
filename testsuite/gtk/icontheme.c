@@ -715,6 +715,64 @@ test_inherit (void)
                       "/icons2/scalable/one-two-symbolic-rtl.svg");
 }
 
+static void
+test_nonsquare_symbolic (void)
+{
+  gint width, height, size;
+  GtkIconTheme *icon_theme;
+  GtkIconPaintable *info;
+  GFile *file;
+  GIcon *icon;
+  GError *error = NULL;
+  GdkPixbuf *pixbuf;
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
+  graphene_rect_t bounds;
+
+  gchar *path = g_build_filename (g_test_get_dir (G_TEST_DIST),
+                                  "icons",
+                                  "scalable",
+                                  "nonsquare-symbolic.svg",
+                                  NULL);
+
+  /* load the original image for reference */
+  pixbuf = gdk_pixbuf_new_from_file (path, &error);
+
+  g_assert_no_error (error);
+  g_assert_nonnull (pixbuf);
+
+  width = gdk_pixbuf_get_width (pixbuf);
+  height = gdk_pixbuf_get_height (pixbuf);
+  size = MAX (width, height);
+  g_object_unref (pixbuf);
+
+  g_assert_cmpint (width, !=, height);
+
+  /* now load it through GtkIconTheme */
+  icon_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
+  file = g_file_new_for_path (path);
+  icon = g_file_icon_new (file);
+  info = gtk_icon_theme_lookup_by_gicon (icon_theme, icon,
+                                         height, 1, GTK_TEXT_DIR_NONE, 0);
+  g_assert_nonnull (info);
+
+  snapshot = gtk_snapshot_new ();
+  gdk_paintable_snapshot (GDK_PAINTABLE (info), snapshot, size, size);
+  node = gtk_snapshot_free_to_node (snapshot);
+
+  /* the original dimensions have been preserved */
+
+  gsk_render_node_get_bounds (node, &bounds);
+  g_assert (bounds.size.width == width);
+  g_assert (bounds.size.height == height);
+
+  gsk_render_node_unref (node);
+  g_free (path);
+  g_object_unref (file);
+  g_object_unref (icon);
+  g_object_unref (info);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -731,6 +789,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/icontheme/size", test_size);
   g_test_add_func ("/icontheme/list", test_list);
   g_test_add_func ("/icontheme/inherit", test_inherit);
+  g_test_add_func ("/icontheme/nonsquare-symbolic", test_nonsquare_symbolic);
 
   return g_test_run();
 }
