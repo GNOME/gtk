@@ -1125,20 +1125,6 @@ gtk_main_sync (void)
 }
 
 /**
- * gtk_main_level:
- *
- * Asks for the current nesting level of the main loop.
- *
- * Returns: the nesting level of the current invocation
- *     of the main loop
- */
-guint
-gtk_main_level (void)
-{
-  return gtk_main_loop_level;
-}
-
-/**
  * gtk_main_quit:
  *
  * Makes the innermost invocation of the main loop return

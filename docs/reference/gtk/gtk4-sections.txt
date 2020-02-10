@@ -4419,7 +4419,6 @@ gtk_get_locale_direction
 gtk_init
 gtk_init_check
 gtk_main
-gtk_main_level
 gtk_main_quit
 
 <SUBSECTION>

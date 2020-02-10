@@ -113,8 +113,6 @@ GtkTextDirection gtk_get_locale_direction (void);
 GDK_AVAILABLE_IN_ALL
 void       gtk_main                (void);
 GDK_AVAILABLE_IN_ALL
-guint      gtk_main_level          (void);
-GDK_AVAILABLE_IN_ALL
 void       gtk_main_quit           (void);
 
 GDK_AVAILABLE_IN_ALL
