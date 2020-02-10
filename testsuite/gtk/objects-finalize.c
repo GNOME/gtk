@@ -31,7 +31,11 @@ static gboolean finalized = FALSE;
 static gboolean
 main_loop_quit_cb (gpointer data)
 {
-  gtk_main_quit ();
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
 
   g_assert (finalized);
   return FALSE;
@@ -51,6 +55,7 @@ test_finalize_object (gconstpointer data)
 {
   GType test_type = GPOINTER_TO_SIZE (data);
   GObject *object;
+  gboolean done;
 
   if (g_str_equal (g_type_name (test_type), "GdkClipboard"))
     object = g_object_new (test_type, "display", gdk_display_get_default (), NULL);
@@ -97,8 +102,10 @@ test_finalize_object (gconstpointer data)
     g_object_unref (object);
 
   /* Even if the object did finalize, it may have left some dangerous stuff in the GMainContext */
-  g_timeout_add (50, main_loop_quit_cb, NULL);
-  gtk_main();
+  done = FALSE;
+  g_timeout_add (50, main_loop_quit_cb, &done);
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 }
 
 static gboolean
