@@ -78,15 +78,16 @@
  *   gtk_widget_show (mainwin);
  *
  *   // Enter the main event loop, and wait for user interaction
- *   gtk_main ();
+ *   while (!done)
+ *     g_main_context_iteration (NULL, TRUE);
  *
  *   // The user lost interest
  *   return 0;
  * }
  * ]|
  *
- * It’s OK to use the GLib main loop directly instead of gtk_main(), though it
- * involves slightly more typing. See #GMainLoop in the GLib documentation.
+ * See #GMainLoop in the GLib documentation to learn more about
+ * main loops and their features.
  */
 
 #include "config.h"
