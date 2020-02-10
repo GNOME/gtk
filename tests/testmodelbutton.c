@@ -35,9 +35,8 @@ on_application_activate (GApplication *gapplication,
     "button.model { background: yellow; }"
     , -1);
   g_assert (GDK_IS_DISPLAY (display));
-  gtk_style_context_add_provider_for_display (display,
-                                              GTK_STYLE_PROVIDER (stylesheet),
-                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_style_sheet_for_display (display, stylesheet);
+  g_object_unref (stylesheet);
 
   action = g_simple_action_new ("beep", NULL);
   g_signal_connect (action, "activate", G_CALLBACK (on_action_beep), NULL);

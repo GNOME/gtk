@@ -96,9 +96,8 @@ create_combo (const char *name,
   gtk_css_style_sheet_load_from_data (stylesheet, css_data, -1);
   g_free (css_data);
 
-  gtk_style_context_add_provider (context,
-                                  GTK_STYLE_PROVIDER (stylesheet),
-                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_style_sheet (context, stylesheet);
+  g_object_unref (stylesheet);
 
   return combo;
 }

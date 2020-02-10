@@ -59,8 +59,8 @@
  * In order to construct the final style information, #GtkStyleContext
  * queries information from all attached #GtkStyleProviders. Style providers
  * can be either attached explicitly to the context through
- * gtk_style_context_add_provider(), or to the display through
- * gtk_style_context_add_provider_for_display(). The resulting style is a
+ * gtk_style_context_add_style_sheet(), or to the display through
+ * gtk_style_context_add_style_sheet_for_display(). The resulting style is a
  * combination of all providers’ information in priority order.
  *
  * For GTK+ widgets, any #GtkStyleContext returned by
@@ -346,34 +346,28 @@ gtk_style_context_new_for_node (GtkCssNode *node)
 }
 
 /**
- * gtk_style_context_add_provider:
+ * gtk_style_context_add_style_sheet:
  * @context: a #GtkStyleContext
- * @provider: a #GtkStyleProvider
- * @priority: the priority of the style provider. The lower
- *            it is, the earlier it will be used in the style
- *            construction. Typically this will be in the range
- *            between %GTK_STYLE_PROVIDER_PRIORITY_FALLBACK and
- *            %GTK_STYLE_PROVIDER_PRIORITY_USER
+ * @stylesheet: (transfer none): a #GtkCssStyleSheet
  *
- * Adds a style provider to @context, to be used in style construction.
- * Note that a style provider added by this function only affects
+ * Adds a style sheet to @context, to be used in style construction.
+ * Note that a style sheet added by this function only affects
  * the style of the widget to which @context belongs. If you want
  * to affect the style of all widgets, use
- * gtk_style_context_add_provider_for_display().
+ * gtk_style_context_add_style_sheet_for_display().
  *
  * Note: If both priorities are the same, a #GtkStyleProvider
  * added through this function takes precedence over another added
- * through gtk_style_context_add_provider_for_display().
+ * through gtk_style_context_add_style_sheet_for_display().
  **/
 void
-gtk_style_context_add_provider (GtkStyleContext  *context,
-                                GtkStyleProvider *provider,
-                                guint             priority)
+gtk_style_context_add_style_sheet (GtkStyleContext  *context,
+                                   GtkCssStyleSheet *stylesheet)
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
+  g_return_if_fail (GTK_IS_CSS_STYLE_SHEET (stylesheet));
 
   if (!gtk_style_context_has_custom_cascade (context))
     {
@@ -382,36 +376,36 @@ gtk_style_context_add_provider (GtkStyleContext  *context,
       new_cascade = _gtk_style_cascade_new ();
       _gtk_style_cascade_set_parent (new_cascade,
                                      gtk_settings_get_style_cascade (gtk_settings_get_for_display (priv->display)));
-      _gtk_style_cascade_add_provider (new_cascade, provider, priority);
+      gtk_style_cascade_add_style_sheet (new_cascade, stylesheet);
       gtk_style_context_set_cascade (context, new_cascade);
       g_object_unref (new_cascade);
     }
   else
     {
-      _gtk_style_cascade_add_provider (priv->cascade, provider, priority);
+      gtk_style_cascade_add_style_sheet (priv->cascade, stylesheet);
     }
 }
 
 /**
- * gtk_style_context_remove_provider:
+ * gtk_style_context_remove_style_sheet:
  * @context: a #GtkStyleContext
- * @provider: a #GtkStyleProvider
+ * @stylesheet: a #GtkCssStyleSheet
  *
- * Removes @provider from the style providers list in @context.
+ * Removes @stylesheet from the style providers list in @context.
  **/
 void
-gtk_style_context_remove_provider (GtkStyleContext  *context,
-                                   GtkStyleProvider *provider)
+gtk_style_context_remove_style_sheet (GtkStyleContext  *context,
+                                      GtkCssStyleSheet *stylesheet)
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
+  g_return_if_fail (GTK_IS_CSS_STYLE_SHEET (stylesheet));
 
   if (!gtk_style_context_has_custom_cascade (context))
     return;
 
-  _gtk_style_cascade_remove_provider (priv->cascade, provider);
+  gtk_style_cascade_remove_style_sheet (priv->cascade, stylesheet);
 }
 
 /**
@@ -445,14 +439,9 @@ gtk_style_context_reset_widgets (GdkDisplay *display)
 }
 
 /**
- * gtk_style_context_add_provider_for_display:
+ * gtk_style_context_add_style_sheet_for_display:
  * @display: a #GdkDisplay
- * @provider: a #GtkStyleProvider
- * @priority: the priority of the style provider. The lower
- *            it is, the earlier it will be used in the style
- *            construction. Typically this will be in the range
- *            between %GTK_STYLE_PROVIDER_PRIORITY_FALLBACK and
- *            %GTK_STYLE_PROVIDER_PRIORITY_USER
+ * @stylesheet: (transfer none): a #GtkCssStyleSheet
  *
  * Adds a global style provider to @display, which will be used
  * in style construction for all #GtkStyleContexts under @display.
@@ -461,43 +450,40 @@ gtk_style_context_reset_widgets (GdkDisplay *display)
  * available.
  *
  * Note: If both priorities are the same, A #GtkStyleProvider
- * added through gtk_style_context_add_provider() takes precedence
+ * added through gtk_style_context_add_style_sheet() takes precedence
  * over another added through this function.
  **/
 void
-gtk_style_context_add_provider_for_display (GdkDisplay       *display,
-                                            GtkStyleProvider *provider,
-                                            guint             priority)
+gtk_style_context_add_style_sheet_for_display (GdkDisplay       *display,
+                                               GtkCssStyleSheet *stylesheet)
 {
   GtkStyleCascade *cascade;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
-  g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
-  g_return_if_fail (!GTK_IS_SETTINGS (provider) || _gtk_settings_get_display (GTK_SETTINGS (provider)) == display);
+  g_return_if_fail (GTK_IS_CSS_STYLE_SHEET (stylesheet));
 
   cascade = gtk_settings_get_style_cascade (gtk_settings_get_for_display (display));
-  _gtk_style_cascade_add_provider (cascade, provider, priority);
+  gtk_style_cascade_add_style_sheet (cascade, stylesheet);
 }
 
 /**
- * gtk_style_context_remove_provider_for_display:
+ * gtk_style_context_remove_style_sheet_for_display:
  * @display: a #GdkDisplay
  * @provider: a #GtkStyleProvider
  *
  * Removes @provider from the global style providers list in @display.
  **/
 void
-gtk_style_context_remove_provider_for_display (GdkDisplay       *display,
-                                               GtkStyleProvider *provider)
+gtk_style_context_remove_style_sheet_for_display (GdkDisplay       *display,
+                                                  GtkCssStyleSheet *stylesheet)
 {
   GtkStyleCascade *cascade;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
-  g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
-  g_return_if_fail (!GTK_IS_SETTINGS (provider));
+  g_return_if_fail (GTK_IS_CSS_STYLE_SHEET (stylesheet));
 
   cascade = gtk_settings_get_style_cascade (gtk_settings_get_for_display (display));
-  _gtk_style_cascade_remove_provider (cascade, provider);
+  gtk_style_cascade_remove_style_sheet (cascade, stylesheet);
 }
 
 /*

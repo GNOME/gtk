@@ -38,7 +38,7 @@ struct _GtkStyleCascade
   GObject object;
 
   GtkStyleCascade *parent;
-  GArray *providers;
+  GArray *stylesheets;
 };
 
 struct _GtkStyleCascadeClass
@@ -52,11 +52,10 @@ GtkStyleCascade *     _gtk_style_cascade_new                    (void);
 
 void                  _gtk_style_cascade_set_parent             (GtkStyleCascade     *cascade,
                                                                  GtkStyleCascade     *parent);
-void                  _gtk_style_cascade_add_provider           (GtkStyleCascade     *cascade,
-                                                                 GtkStyleProvider    *provider,
-                                                                 guint                priority);
-void                  _gtk_style_cascade_remove_provider        (GtkStyleCascade     *cascade,
-                                                                 GtkStyleProvider    *provider);
+void                  gtk_style_cascade_add_style_sheet         (GtkStyleCascade     *cascade,
+                                                                 GtkCssStyleSheet    *stylesheet);
+void                  gtk_style_cascade_remove_style_sheet      (GtkStyleCascade     *cascade,
+                                                                 GtkCssStyleSheet    *stylesheet);
 
 
 G_END_DECLS

@@ -124,7 +124,7 @@ struct _GtkSettingsPrivate
   GtkSettingsPropertyValue *property_values;
   GdkDisplay *display;
   GtkStyleCascade *style_cascade;
-  GtkCssStyleSheet *theme_provider;
+  GtkCssStyleSheet *theme_style_sheet;
   gint font_size;
   gboolean font_size_absolute;
   gchar *font_family;
@@ -224,9 +224,6 @@ static void    settings_update_xsettings         (GtkSettings           *setting
 static void gtk_settings_load_from_key_file      (GtkSettings           *settings,
                                                   const gchar           *path,
                                                   GtkSettingsSource      source);
-static void settings_update_provider             (GdkDisplay            *display,
-                                                  GtkCssStyleSheet       **old,
-                                                  GtkCssStyleSheet        *new);
 
 /* --- variables --- */
 static GQuark            quark_gtk_settings = 0;
@@ -254,7 +251,8 @@ gtk_settings_init (GtkSettings *settings)
   object_list = g_slist_prepend (object_list, settings);
 
   priv->style_cascade = _gtk_style_cascade_new ();
-  priv->theme_provider = gtk_css_style_sheet_new ();
+  priv->theme_style_sheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_set_priority (priv->theme_style_sheet, GTK_STYLE_PROVIDER_PRIORITY_THEME);
 
   /* build up property array for all yet existing properties and queue
    * notification for them (at least notification for internal properties
@@ -977,7 +975,7 @@ gtk_settings_finalize (GObject *object)
 
   g_datalist_clear (&priv->queued_settings);
 
-  settings_update_provider (priv->display, &priv->theme_provider, NULL);
+  g_object_unref (priv->theme_style_sheet);
   g_object_unref (priv->style_cascade);
 
   if (priv->font_options)
@@ -1008,6 +1006,7 @@ settings_init_style (GtkSettings *settings)
       gchar *css_path;
 
       css_style_sheet = gtk_css_style_sheet_new ();
+      gtk_css_style_sheet_set_priority (css_style_sheet, GTK_STYLE_PROVIDER_PRIORITY_USER);
       css_path = g_build_filename (g_get_user_config_dir (),
                                    "gtk-4.0",
                                    "gtk.css",
@@ -1022,13 +1021,8 @@ settings_init_style (GtkSettings *settings)
 
   priv->style_cascade = _gtk_style_cascade_new ();
 
-  _gtk_style_cascade_add_provider (priv->style_cascade,
-                                   GTK_STYLE_PROVIDER (css_style_sheet),
-                                   GTK_STYLE_PROVIDER_PRIORITY_USER);
-
-  _gtk_style_cascade_add_provider (priv->style_cascade,
-                                   GTK_STYLE_PROVIDER (priv->theme_provider),
-                                   GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
+  gtk_style_cascade_add_style_sheet (priv->style_cascade, css_style_sheet);
+  gtk_style_cascade_add_style_sheet (priv->style_cascade, priv->theme_style_sheet),
 
   settings_update_theme (settings);
 }
@@ -1607,31 +1601,6 @@ settings_update_fontconfig (GtkSettings *settings)
 }
 
 static void
-settings_update_provider (GdkDisplay      *display,
-                          GtkCssStyleSheet **old,
-                          GtkCssStyleSheet  *new)
-{
-  if (display != NULL && *old != new)
-    {
-      if (*old)
-        {
-          gtk_style_context_remove_provider_for_display (display,
-                                                         GTK_STYLE_PROVIDER (*old));
-          g_object_unref (*old);
-          *old = NULL;
-        }
-
-      if (new)
-        {
-          gtk_style_context_add_provider_for_display (display,
-                                                      GTK_STYLE_PROVIDER (new),
-                                                      GTK_STYLE_PROVIDER_PRIORITY_THEME);
-          *old = g_object_ref (new);
-        }
-    }
-}
-
-static void
 get_theme_name (GtkSettings  *settings,
                 gchar       **theme_name,
                 gchar       **theme_variant)
@@ -1685,12 +1654,12 @@ settings_update_theme (GtkSettings *settings)
 
   get_theme_name (settings, &theme_name, &theme_variant);
 
-  gtk_css_style_sheet_load_named (priv->theme_provider,
-                               theme_name,
-                               theme_variant);
+  gtk_css_style_sheet_load_named (priv->theme_style_sheet,
+                                  theme_name,
+                                  theme_variant);
 
   /* reload per-theme settings */
-  theme_dir = gtk_css_style_sheet_get_theme_dir (priv->theme_provider);
+  theme_dir = gtk_css_style_sheet_get_theme_dir (priv->theme_style_sheet);
   if (theme_dir)
     {
       path = g_build_filename (theme_dir, "settings.ini", NULL);

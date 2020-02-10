@@ -13,9 +13,7 @@ oriented_test_widget (const gchar *label, const gchar *color)
   stylesheet = gtk_css_style_sheet_new ();
   data = g_strdup_printf ("box { background: %s; }", color);
   gtk_css_style_sheet_load_from_data (stylesheet, data, -1);
-  gtk_style_context_add_provider (gtk_widget_get_style_context (box),
-                                  GTK_STYLE_PROVIDER (stylesheet),
-                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_style_sheet (gtk_widget_get_style_context (box), stylesheet);
   g_free (data);
   g_object_unref (stylesheet);
   gtk_container_add (GTK_CONTAINER (box), widget);

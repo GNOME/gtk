@@ -212,37 +212,35 @@ get_reference_image (const char *ui_file)
   return reference_image;
 }
 
-static GtkStyleProvider *
+static GtkCssStyleSheet *
 add_extra_css (const char *testname,
                const char *extension)
 {
-  GtkStyleProvider *provider = NULL;
+  GtkCssStyleSheet *stylesheet;
   char *css_file;
   
   css_file = get_test_file (testname, extension, TRUE);
   if (css_file == NULL)
     return NULL;
 
-  provider = GTK_STYLE_PROVIDER (gtk_css_style_sheet_new ());
-  gtk_css_style_sheet_load_from_path (GTK_CSS_STYLE_SHEET (provider),
-                                   css_file);
-  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              provider,
-                                              GTK_STYLE_PROVIDER_PRIORITY_FORCE);
+  stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_set_priority (stylesheet, GTK_STYLE_PROVIDER_PRIORITY_FORCE);
+  gtk_css_style_sheet_load_from_path (stylesheet, css_file);
+  gtk_style_context_add_style_sheet_for_display (gdk_display_get_default (), stylesheet);
 
   g_free (css_file);
   
-  return provider;
+  return stylesheet;
 }
 
 static void
-remove_extra_css (GtkStyleProvider *provider)
+remove_extra_css (GtkCssStyleSheet *stylesheet)
 {
-  if (provider == NULL)
+  if (stylesheet == NULL)
     return;
 
-  gtk_style_context_remove_provider_for_display (gdk_display_get_default (),
-                                                 provider);
+  gtk_style_context_remove_style_sheet_for_display (gdk_display_get_default (),
+                                                    stylesheet);
 }
 
 static void
@@ -272,11 +270,11 @@ test_ui_file (GFile *file)
 {
   char *ui_file, *reference_file;
   cairo_surface_t *ui_image, *reference_image, *diff_image;
-  GtkStyleProvider *provider;
+  GtkCssStyleSheet *stylesheet;
 
   ui_file = g_file_get_path (file);
 
-  provider = add_extra_css (ui_file, ".css");
+  stylesheet = add_extra_css (ui_file, ".css");
 
   ui_image = reftest_snapshot_ui_file (ui_file);
 
@@ -302,7 +300,7 @@ test_ui_file (GFile *file)
       g_test_fail ();
     }
 
-  remove_extra_css (provider);
+  remove_extra_css (stylesheet);
 }
 
 static int
