@@ -3204,6 +3204,13 @@ theme_subdir_load (GtkIconTheme *self,
 
 static void icon_paintable_init (GdkPaintableInterface *iface);
 
+enum
+{
+  PROP_0,
+  PROP_FILE,
+  PROP_ICON_NAME,
+  PROP_IS_SYMBOLIC,
+};
 
 G_DEFINE_TYPE_WITH_CODE (GtkIconPaintable, gtk_icon_paintable, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
@@ -3222,9 +3229,10 @@ icon_paintable_new (const char *icon_name,
 {
   GtkIconPaintable *icon;
 
-  icon = g_object_new (GTK_TYPE_ICON_PAINTABLE, NULL);
+  icon = g_object_new (GTK_TYPE_ICON_PAINTABLE,
+                       "icon-name", icon_name,
+                       NULL);
 
-  icon->icon_name = g_strdup (icon_name);
   icon->desired_size = desired_size;
   icon->desired_scale = desired_scale;
 
@@ -3255,11 +3263,119 @@ gtk_icon_paintable_finalize (GObject *object)
 }
 
 static void
+gtk_icon_paintable_get_property (GObject    *object,
+                                 guint       prop_id,
+                                 GValue     *value,
+                                 GParamSpec *pspec)
+{
+  GtkIconPaintable *icon = GTK_ICON_PAINTABLE (object);
+
+  switch (prop_id)
+    {
+    case PROP_FILE:
+      g_value_take_object (value, gtk_icon_paintable_get_file (icon));
+      break;
+
+    case PROP_ICON_NAME:
+      g_value_set_string (value, icon->icon_name);
+      break;
+
+    case PROP_IS_SYMBOLIC:
+      g_value_set_boolean (value, icon->is_symbolic);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gtk_icon_paintable_set_property (GObject      *object,
+                                 guint         prop_id,
+                                 const GValue *value,
+                                 GParamSpec   *pspec)
+{
+  GtkIconPaintable *icon = GTK_ICON_PAINTABLE (object);
+  GFile *file;
+
+  switch (prop_id)
+    {
+    case PROP_FILE:
+      icon->is_resource = FALSE;
+      g_clear_pointer (&icon->filename, g_free);
+
+      file = G_FILE (g_value_get_object (value));
+      if (file)
+        {
+          icon->is_resource = g_file_has_uri_scheme (file, "resource");
+          if (icon->is_resource)
+            {
+              char *uri = g_file_get_uri (file);
+              icon->filename = g_strdup (uri + 11); /* resource:// */
+              g_free (uri);
+            }
+          else
+            icon->filename = g_file_get_path (file);
+        }
+      break;
+
+    case PROP_ICON_NAME:
+      g_free (icon->icon_name);
+      icon->icon_name = g_value_dup_string (value);
+      break;
+
+    case PROP_IS_SYMBOLIC:
+      icon->is_symbolic = g_value_get_boolean (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+
+static void
 gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+  gobject_class->get_property = gtk_icon_paintable_get_property;
+  gobject_class->set_property = gtk_icon_paintable_set_property;
   gobject_class->finalize = gtk_icon_paintable_finalize;
+
+  /**
+   * GtkIconPaintable:file:
+   *
+   * The file representing the icon, if any.
+   */
+  g_object_class_install_property (gobject_class, PROP_FILE,
+                                   g_param_spec_object ("file",
+                                                        P_("file"),
+                                                        P_("The file representing the icon"),
+                                                        G_TYPE_FILE,
+                                                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_BLURB | G_PARAM_STATIC_NICK));
+  /**
+   * GtkIconPaintable:icon-name:
+   *
+   * The icon name that was chosen during lookup.
+   */
+  g_object_class_install_property (gobject_class, PROP_ICON_NAME,
+                                   g_param_spec_string ("icon-name",
+                                                        P_("Icon name"),
+                                                        P_("The icon name choosen during lookup"),
+                                                        NULL,
+                                                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_BLURB | G_PARAM_STATIC_NICK));
+  /**
+   * GtkIconPaintable:is-symbolic:
+   *
+   * Whether the icon is symbolic or not.
+   */
+  g_object_class_install_property (gobject_class, PROP_ICON_NAME,
+                                   g_param_spec_boolean ("is-symbolic",
+                                                        P_("Is symbolic"),
+                                                        P_("If the icon is symbolic"),
+                                                        FALSE,
+                                                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_BLURB | G_PARAM_STATIC_NICK));
 }
 
 static GFile *
