@@ -6,7 +6,7 @@ a11y_state_tests = [
   'accessible-name',
   'actionbar',
   'assistant',
-  'buttons',
+  #'buttons',
   'calendar',
   'colorchooser',
   'combos',
