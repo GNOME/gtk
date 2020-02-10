@@ -1653,7 +1653,7 @@ activate (GApplication *app)
   GtkWidget *stack;
   GtkWidget *dialog;
   GtkAdjustment *adj;
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
   GMenuModel *model;
   static GActionEntry win_entries[] = {
     { "dark", NULL, NULL, "false", change_theme_state },
@@ -1690,12 +1690,12 @@ activate (GApplication *app)
 
   g_type_ensure (my_text_view_get_type ());
 
-  provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_resource (provider, "/org/gtk/WidgetFactory4/widget-factory.css");
+  stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_load_from_resource (stylesheet, "/org/gtk/WidgetFactory4/widget-factory.css");
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER (stylesheet),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-  g_object_unref (provider);
+  g_object_unref (stylesheet);
 
   builder = gtk_builder_new ();
   scope = gtk_builder_cscope_new ();

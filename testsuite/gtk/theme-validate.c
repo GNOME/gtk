@@ -9,7 +9,7 @@ struct _Theme
 };
 
 static void
-theme_parsing_error (GtkCssProvider *provider,
+theme_parsing_error (GtkCssStyleSheet *stylesheet,
                      GtkCssSection  *section,
                      const GError   *error,
                      gpointer        unused)
@@ -29,13 +29,13 @@ static void
 test_theme (gconstpointer data)
 {
   const Theme *theme = data;
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
 
-  provider = gtk_css_provider_new ();
-  g_signal_connect (provider, "parsing-error",
+  stylesheet = gtk_css_style_sheet_new ();
+  g_signal_connect (stylesheet, "parsing-error",
                     G_CALLBACK (theme_parsing_error), NULL);
-  gtk_css_provider_load_named (provider, theme->name, theme->variant);
-  g_object_unref (provider);
+  gtk_css_style_sheet_load_named (stylesheet, theme->name, theme->variant);
+  g_object_unref (stylesheet);
 }
 
 int

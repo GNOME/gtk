@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "gtkcssprovider.h"
+#include "gtkcssstylesheet.h"
 #include "gtkstylecontextprivate.h"
 
 #include <errno.h>

@@ -29,7 +29,7 @@
 #include "gtkadjustment.h"
 #include "gtkbox.h"
 #include "gtkcomboboxtext.h"
-#include "gtkcssproviderprivate.h"
+#include "gtkcssstylesheetprivate.h"
 #include "gtkdebug.h"
 #include "gtkprivate.h"
 #include "gtksettings.h"
@@ -511,7 +511,7 @@ init_theme (GtkInspectorVisual *vis)
     }
   g_strfreev (builtin_themes);
 
-  path = _gtk_get_theme_dir ();
+  path = gtk_get_theme_dir ();
   fill_gtk (path, t);
   g_free (path);
 

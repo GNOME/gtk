@@ -492,17 +492,17 @@ main (int argc, char *argv[])
   GtkWidget *win6;
   GtkWidget *win7;
   GtkWidget *win8;
-  GtkCssProvider *css_provider;
+  GtkCssStyleSheet *css_style_sheet;
 
   gtk_init ();
 
   if (g_getenv ("RTL"))
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
 
-  css_provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (css_provider, css, -1);
+  css_style_sheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_load_from_data (css_style_sheet, css, -1);
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (css_provider),
+                                              GTK_STYLE_PROVIDER (css_style_sheet),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   win1 = test_nonzerox ();

@@ -52,7 +52,7 @@ constraint_editor_application_startup (GApplication *app)
 {
   const char *quit_accels[2] = { "<Ctrl>Q", NULL };
   const char *open_accels[2] = { "<Ctrl>O", NULL };
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
 
   G_APPLICATION_CLASS (constraint_editor_application_parent_class)->startup (app);
 
@@ -62,10 +62,10 @@ constraint_editor_application_startup (GApplication *app)
   gtk_application_set_accels_for_action (GTK_APPLICATION (app), "app.quit", quit_accels);
   gtk_application_set_accels_for_action (GTK_APPLICATION (app), "win.open", open_accels);
 
-  provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_resource (provider, "/org/gtk/gtk4/constraint-editor/constraint-editor.css");
+  stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_load_from_resource (stylesheet, "/org/gtk/gtk4/constraint-editor/constraint-editor.css");
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER (stylesheet),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 

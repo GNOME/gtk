@@ -74,7 +74,7 @@ private_headers = [
   'gtkcssparserprivate.h',
   'gtkcsspathnodeprivate.h',
   'gtkcsspositionvalueprivate.h',
-  'gtkcssproviderprivate.h',
+  'gtkcssstylesheetprivate.h',
   'gtkcssrepeatvalueprivate.h',
   'gtkcssrgbavalueprivate.h',
   'gtkcsssectionprivate.h',

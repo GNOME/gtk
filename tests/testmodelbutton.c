@@ -15,7 +15,7 @@ on_application_activate (GApplication *gapplication,
                          void         *user_data)
 {
   GtkApplication *application = GTK_APPLICATION (gapplication);
-  GtkCssProvider *css_provider = gtk_css_provider_new ();
+  GtkCssStyleSheet *stylesheet = gtk_css_style_sheet_new ();
   GdkDisplay *display = gdk_display_get_default ();
 
   GSimpleAction *action;
@@ -24,7 +24,7 @@ on_application_activate (GApplication *gapplication,
   GtkWidget *model_button;
   GtkWidget *widget;
 
-  gtk_css_provider_load_from_data (css_provider,
+  gtk_css_style_sheet_load_from_data (stylesheet,
     "window > box { padding: 0.5em; }"
     "window > box > * { margin: 0.5em; }"
     /* :iconic == FALSE */
@@ -36,7 +36,7 @@ on_application_activate (GApplication *gapplication,
     , -1);
   g_assert (GDK_IS_DISPLAY (display));
   gtk_style_context_add_provider_for_display (display,
-                                              GTK_STYLE_PROVIDER (css_provider),
+                                              GTK_STYLE_PROVIDER (stylesheet),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   action = g_simple_action_new ("beep", NULL);

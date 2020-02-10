@@ -22,7 +22,7 @@ tests = [
       '../../gtk/gtkconstraintexpression.c',
     ], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']
   ],
-  ['cssprovider'],
+  ['cssstylesheet'],
   ['rbtree-crash', ['../../gtk/gtkrbtree.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
   ['defaultvalue'],
   ['entry'],

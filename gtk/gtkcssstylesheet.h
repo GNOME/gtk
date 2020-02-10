@@ -1,5 +1,6 @@
 /* GTK - The GIMP Toolkit
  * Copyright (C) 2010 Carlos Garnacho <carlosg@gnome.org>
+ *               2020 Benjamin Otte <otte@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,57 +16,57 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_CSS_PROVIDER_H__
-#define __GTK_CSS_PROVIDER_H__
+#ifndef __GTK_CSS_STYLE_SHEET_H__
+#define __GTK_CSS_STYLE_SHEET_H__
 
 #include <gio/gio.h>
 #include <gtk/css/gtkcss.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_CSS_PROVIDER         (gtk_css_provider_get_type ())
-#define GTK_CSS_PROVIDER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_CSS_PROVIDER, GtkCssProvider))
-#define GTK_IS_CSS_PROVIDER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_CSS_PROVIDER))
+#define GTK_TYPE_CSS_STYLE_SHEET         (gtk_css_style_sheet_get_type ())
+#define GTK_CSS_STYLE_SHEET(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_CSS_STYLE_SHEET, GtkCssStyleSheet))
+#define GTK_IS_CSS_STYLE_SHEET(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_CSS_STYLE_SHEET))
 
-typedef struct _GtkCssProvider GtkCssProvider;
-typedef struct _GtkCssProviderClass GtkCssProviderClass;
-typedef struct _GtkCssProviderPrivate GtkCssProviderPrivate;
+typedef struct _GtkCssStyleSheet GtkCssStyleSheet;
+typedef struct _GtkCssStyleSheetClass GtkCssStyleSheetClass;
+typedef struct _GtkCssStyleSheetPrivate GtkCssStyleSheetPrivate;
 
-struct _GtkCssProvider
+struct _GtkCssStyleSheet
 {
   GObject parent_instance;
 };
 
 
 GDK_AVAILABLE_IN_ALL
-GType gtk_css_provider_get_type (void) G_GNUC_CONST;
+GType gtk_css_style_sheet_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkCssProvider * gtk_css_provider_new (void);
+GtkCssStyleSheet * gtk_css_style_sheet_new (void);
 
 GDK_AVAILABLE_IN_ALL
-char *           gtk_css_provider_to_string      (GtkCssProvider  *provider);
+char *           gtk_css_style_sheet_to_string      (GtkCssStyleSheet  *provider);
 
 GDK_AVAILABLE_IN_ALL
-void             gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
+void             gtk_css_style_sheet_load_from_data (GtkCssStyleSheet  *css_style_sheet,
                                                   const gchar     *data,
                                                   gssize           length);
 GDK_AVAILABLE_IN_ALL
-void             gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
+void             gtk_css_style_sheet_load_from_file (GtkCssStyleSheet  *css_style_sheet,
                                                   GFile           *file);
 GDK_AVAILABLE_IN_ALL
-void             gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
+void             gtk_css_style_sheet_load_from_path (GtkCssStyleSheet  *css_style_sheet,
                                                   const gchar     *path);
 
 GDK_AVAILABLE_IN_ALL
-void             gtk_css_provider_load_from_resource (GtkCssProvider *css_provider,
+void             gtk_css_style_sheet_load_from_resource (GtkCssStyleSheet *css_style_sheet,
                                                       const gchar    *resource_path);
 
 GDK_AVAILABLE_IN_ALL
-void             gtk_css_provider_load_named     (GtkCssProvider  *provider,
+void             gtk_css_style_sheet_load_named     (GtkCssStyleSheet  *provider,
                                                   const char      *name,
                                                   const char      *variant);
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_PROVIDER_H__ */
+#endif /* __GTK_CSS_STYLE_SHEET_H__ */

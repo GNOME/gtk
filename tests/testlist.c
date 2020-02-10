@@ -250,7 +250,7 @@ single_click_clicked (GtkButton *check, gpointer data)
 int
 main (int argc, char *argv[])
 {
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
   GtkWidget *window, *hbox, *vbox, *list, *row, *row3, *row_vbox, *row_hbox, *l;
   GtkWidget *check, *button, *combo, *scrolled;
 
@@ -260,10 +260,10 @@ main (int argc, char *argv[])
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (window), hbox);
 
-  provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (provider, css, -1);
+  stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_load_from_data (stylesheet, css, -1);
   gtk_style_context_add_provider_for_display (gtk_widget_get_display (window),
-                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER (stylesheet),
                                               GTK_STYLE_PROVIDER_PRIORITY_USER);
 
 

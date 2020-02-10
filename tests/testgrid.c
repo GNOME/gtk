@@ -5,19 +5,19 @@ oriented_test_widget (const gchar *label, const gchar *color)
 {
   GtkWidget *box;
   GtkWidget *widget;
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
   gchar *data;
 
   widget = gtk_label_new (label);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  provider = gtk_css_provider_new ();
+  stylesheet = gtk_css_style_sheet_new ();
   data = g_strdup_printf ("box { background: %s; }", color);
-  gtk_css_provider_load_from_data (provider, data, -1);
+  gtk_css_style_sheet_load_from_data (stylesheet, data, -1);
   gtk_style_context_add_provider (gtk_widget_get_style_context (box),
-                                  GTK_STYLE_PROVIDER (provider),
+                                  GTK_STYLE_PROVIDER (stylesheet),
                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   g_free (data);
-  g_object_unref (provider);
+  g_object_unref (stylesheet);
   gtk_container_add (GTK_CONTAINER (box), widget);
 
   return box;
