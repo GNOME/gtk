@@ -2295,7 +2295,7 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
 
 static GdkWaylandSeat *
 find_grab_input_seat (GdkSurface *surface,
-                      GdkSurface *transient_for)
+                      GdkSurface *parent)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkWaylandSurface *tmp_impl;
@@ -2307,14 +2307,14 @@ find_grab_input_seat (GdkSurface *surface,
   if (impl->grab_input_seat)
     return GDK_WAYLAND_SEAT (impl->grab_input_seat);
 
-  while (transient_for)
+  while (parent)
     {
-      tmp_impl = GDK_WAYLAND_SURFACE (transient_for);
+      tmp_impl = GDK_WAYLAND_SURFACE (parent);
 
       if (tmp_impl->grab_input_seat)
         return GDK_WAYLAND_SEAT (tmp_impl->grab_input_seat);
 
-      transient_for = tmp_impl->transient_for;
+      parent = parent->parent;
     }
 
   return NULL;
@@ -2376,31 +2376,11 @@ should_map_as_popup (GdkSurface *surface)
   return FALSE;
 }
 
-/* Get the surface that can be used as a parent for a popup, i.e. a xdg_toplevel
- * or xdg_popup. If the surface is not, traverse up the transiency parents until
- * we find one.
- */
-static GdkSurface *
-get_popup_parent (GdkSurface *surface)
-{
-  while (surface)
-    {
-      GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
-      if (is_realized_popup (surface) || is_realized_toplevel (surface))
-        return surface;
-
-      surface = impl->transient_for;
-    }
-
-  return NULL;
-}
-
 static void
 gdk_wayland_surface_map (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  GdkSurface *transient_for = NULL;
+  GdkSurface *parent = NULL;
 
   if (!should_be_mapped (surface))
     return;
@@ -2410,68 +2390,18 @@ gdk_wayland_surface_map (GdkSurface *surface)
 
   if (should_map_as_popup (surface))
     {
-      gboolean create_fallback = FALSE;
       GdkWaylandSeat *grab_input_seat;
 
-      /* Popup menus can appear without a transient parent, which means they
-       * cannot be positioned properly on Wayland. This attempts to guess the
-       * surface they should be positioned with by finding the surface beneath
-       * the device that created the grab for the popup surface.
-       */
-      if (!impl->transient_for && impl->hint == GDK_SURFACE_TYPE_HINT_POPUP_MENU)
-        {
-          GdkDevice *grab_device = NULL;
-
-          if (impl->grab_input_seat)
-            {
-              grab_device = gdk_seat_get_pointer (impl->grab_input_seat);
-              transient_for =
-                gdk_device_get_surface_at_position (grab_device, NULL, NULL);
-            }
-
-          if (transient_for)
-            transient_for = get_popup_parent (transient_for);
-
-          /* If the position was not explicitly set, start the popup at the
-           * position of the device that holds the grab.
-           */
-          if (!impl->has_layout_data && grab_device)
-            {
-              double px, py;
-              gdk_surface_get_device_position (transient_for, grab_device,
-                                               &px, &py, NULL);
-              surface->x = round (px);
-              surface->y = round (py);
-            }
-        }
-      else
-        {
-          transient_for = impl->transient_for;
-          transient_for = get_popup_parent (transient_for);
-        }
-
-      if (!transient_for)
+      parent = surface->parent;
+      if (!parent)
         {
           g_warning ("Couldn't map as surface %p as popup because it doesn't have a parent",
                      surface);
-
-          create_fallback = TRUE;
-        }
-      else
-        {
-          grab_input_seat = find_grab_input_seat (surface, transient_for);
+          return;
         }
 
-      if (!create_fallback)
-        {
-          gdk_wayland_surface_create_xdg_popup (surface,
-                                                transient_for,
-                                                grab_input_seat);
-        }
-      else
-        {
-          gdk_wayland_surface_create_xdg_toplevel (surface);
-        }
+      grab_input_seat = find_grab_input_seat (surface, parent);
+      gdk_wayland_surface_create_xdg_popup (surface, parent, grab_input_seat);
     }
   else
     {
