@@ -116,6 +116,8 @@ struct _GtkCssStyleSheet
 {
   GObject parent_instance;
 
+  guint priority;
+
   GScanner *scanner;
 
   GHashTable *symbolic_colors;
@@ -132,11 +134,18 @@ enum {
   LAST_SIGNAL
 };
 
+enum {
+  PROP_0,
+  PROP_PRIORITY,
+
+  N_PROPS,
+};
+
 static gboolean gtk_keep_css_sections = FALSE;
 
+static GParamSpec *properties[N_PROPS] = { NULL, };
 static guint css_style_sheet_signals[LAST_SIGNAL] = { 0 };
 
-static void gtk_css_style_sheet_finalize (GObject *object);
 static void gtk_css_style_provider_iface_init (GtkStyleProviderInterface *iface);
 static void gtk_css_style_provider_emit_error (GtkStyleProvider *provider,
                                                GtkCssSection    *section,
@@ -176,55 +185,6 @@ gtk_css_style_sheet_parsing_error (GtkCssStyleSheet *self,
 
       g_free (s);
     }
-}
-
-/* This is exported privately for use in GtkInspector.
- * It is the callers responsibility to reparse the current theme.
- */
-void
-gtk_css_style_sheet_set_keep_css_sections (void)
-{
-  gtk_keep_css_sections = TRUE;
-}
-
-static void
-gtk_css_style_sheet_class_init (GtkCssStyleSheetClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  if (g_getenv ("GTK_CSS_DEBUG"))
-    gtk_css_style_sheet_set_keep_css_sections ();
-
-  /**
-   * GtkCssStyleSheet::parsing-error:
-   * @self: the #GtkCssStyleSheet that had a parsing error
-   * @section: section the error happened in
-   * @error: The parsing error
-   *
-   * Signals that a parsing error occurred. the @path, @line and @position
-   * describe the actual location of the error as accurately as possible.
-   *
-   * Parsing errors are never fatal, so the parsing will resume after
-   * the error. Errors may however cause parts of the given
-   * data or even all of it to not be parsed at all. So it is a useful idea
-   * to check that the parsing succeeds by connecting to this signal.
-   *
-   * Note that this signal may be emitted at any time as the style sheet
-   * may opt to defer parsing parts or all of the input to a later time
-   * than when a loading function was called.
-   */
-  css_style_sheet_signals[PARSING_ERROR] =
-    g_signal_new (I_("parsing-error"),
-                  G_TYPE_FROM_CLASS (object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkCssStyleSheetClass, parsing_error),
-                  NULL, NULL,
-                  _gtk_marshal_VOID__BOXED_BOXED,
-                  G_TYPE_NONE, 2, GTK_TYPE_CSS_SECTION, G_TYPE_ERROR);
-
-  object_class->finalize = gtk_css_style_sheet_finalize;
-
-  klass->parsing_error = gtk_css_style_sheet_parsing_error;
 }
 
 static void
@@ -298,6 +258,139 @@ gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
     ruleset->styles[i].section = gtk_css_section_ref (section);
   else
     ruleset->styles[i].section = NULL;
+}
+
+static void
+gtk_css_style_sheet_set_property (GObject      *object,
+                                  guint         prop_id,
+                                  const GValue *value,
+                                  GParamSpec   *pspec)
+
+{
+  GtkCssStyleSheet *self = GTK_CSS_STYLE_SHEET (object);
+
+  switch (prop_id)
+    {
+    case PROP_PRIORITY:
+      gtk_css_style_sheet_set_priority (self, g_value_get_uint (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_css_style_sheet_get_property (GObject    *object,
+                                  guint       prop_id,
+                                  GValue     *value,
+                                  GParamSpec *pspec)
+{
+  GtkCssStyleSheet *self = GTK_CSS_STYLE_SHEET (object);
+
+  switch (prop_id)
+    {
+    case PROP_PRIORITY:
+      g_value_set_uint (value, self->priority);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_css_style_sheet_finalize (GObject *object)
+{
+  GtkCssStyleSheet *self = GTK_CSS_STYLE_SHEET (object);
+  guint i;
+
+  for (i = 0; i < self->rulesets->len; i++)
+    gtk_css_ruleset_clear (&g_array_index (self->rulesets, GtkCssRuleset, i));
+
+  g_array_free (self->rulesets, TRUE);
+  _gtk_css_selector_tree_free (self->tree);
+
+  g_hash_table_destroy (self->symbolic_colors);
+  g_hash_table_destroy (self->keyframes);
+
+  if (self->resource)
+    {
+      g_resources_unregister (self->resource);
+      g_resource_unref (self->resource);
+      self->resource = NULL;
+    }
+
+  g_free (self->path);
+
+  G_OBJECT_CLASS (gtk_css_style_sheet_parent_class)->finalize (object);
+}
+
+/* This is exported privately for use in GtkInspector.
+ * It is the callers responsibility to reparse the current theme.
+ */
+void
+gtk_css_style_sheet_set_keep_css_sections (void)
+{
+  gtk_keep_css_sections = TRUE;
+}
+
+static void
+gtk_css_style_sheet_class_init (GtkCssStyleSheetClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  if (g_getenv ("GTK_CSS_DEBUG"))
+    gtk_css_style_sheet_set_keep_css_sections ();
+
+  object_class->get_property = gtk_css_style_sheet_get_property;
+  object_class->set_property = gtk_css_style_sheet_set_property;
+  object_class->finalize = gtk_css_style_sheet_finalize;
+
+  klass->parsing_error = gtk_css_style_sheet_parsing_error;
+
+  /**
+   * GtkCssStyleSheet:priority:
+   *
+   * Priority for comparing multiple stylesheets.
+   */
+  properties[PROP_PRIORITY] =
+    g_param_spec_uint ("priority",
+                       P_("Priority"),
+                       P_("Priority for comparing stylesheets"),
+                       0, G_MAXUINT, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  /**
+   * GtkCssStyleSheet::parsing-error:
+   * @self: the #GtkCssStyleSheet that had a parsing error
+   * @section: section the error happened in
+   * @error: The parsing error
+   *
+   * Signals that a parsing error occurred. the @path, @line and @position
+   * describe the actual location of the error as accurately as possible.
+   *
+   * Parsing errors are never fatal, so the parsing will resume after
+   * the error. Errors may however cause parts of the given
+   * data or even all of it to not be parsed at all. So it is a useful idea
+   * to check that the parsing succeeds by connecting to this signal.
+   *
+   * Note that this signal may be emitted at any time as the style sheet
+   * may opt to defer parsing parts or all of the input to a later time
+   * than when a loading function was called.
+   */
+  css_style_sheet_signals[PARSING_ERROR] =
+    g_signal_new (I_("parsing-error"),
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkCssStyleSheetClass, parsing_error),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__BOXED_BOXED,
+                  G_TYPE_NONE, 2, GTK_TYPE_CSS_SECTION, G_TYPE_ERROR);
 }
 
 static void
@@ -378,6 +471,8 @@ gtk_css_scanner_would_recurse (GtkCssScanner *scanner,
 static void
 gtk_css_style_sheet_init (GtkCssStyleSheet *self)
 {
+  self->priority = GTK_STYLE_PROVIDER_PRIORITY_APPLICATION;
+
   self->rulesets = g_array_new (FALSE, FALSE, sizeof (GtkCssRuleset));
 
   self->symbolic_colors = g_hash_table_new_full (g_str_hash, g_str_equal,
@@ -499,33 +594,6 @@ gtk_css_style_provider_iface_init (GtkStyleProviderInterface *iface)
   iface->get_keyframes = gtk_css_style_provider_get_keyframes;
   iface->lookup = gtk_css_style_provider_lookup;
   iface->emit_error = gtk_css_style_provider_emit_error;
-}
-
-static void
-gtk_css_style_sheet_finalize (GObject *object)
-{
-  GtkCssStyleSheet *self = GTK_CSS_STYLE_SHEET (object);
-  guint i;
-
-  for (i = 0; i < self->rulesets->len; i++)
-    gtk_css_ruleset_clear (&g_array_index (self->rulesets, GtkCssRuleset, i));
-
-  g_array_free (self->rulesets, TRUE);
-  _gtk_css_selector_tree_free (self->tree);
-
-  g_hash_table_destroy (self->symbolic_colors);
-  g_hash_table_destroy (self->keyframes);
-
-  if (self->resource)
-    {
-      g_resources_unregister (self->resource);
-      g_resource_unref (self->resource);
-      self->resource = NULL;
-    }
-
-  g_free (self->path);
-
-  G_OBJECT_CLASS (gtk_css_style_sheet_parent_class)->finalize (object);
 }
 
 /**
@@ -1510,5 +1578,45 @@ gtk_css_style_sheet_to_string (GtkCssStyleSheet *self)
     }
 
   return g_string_free (str, FALSE);
+}
+
+/**
+ * gtk_css_style_sheet_set_priority:
+ * @self: a #GtkCssStyleSheet
+ * @priority: the priority to use
+ *
+ * Sets the priority for this style sheet.
+ *
+ * The priority determines the order when multiple style sheets are used to look
+ * up styles for a widget. Style sheets with higher priority are looked up first.
+ **/
+void
+gtk_css_style_sheet_set_priority (GtkCssStyleSheet *self,
+                                  guint             priority)
+{
+  g_return_if_fail (GTK_IS_CSS_STYLE_SHEET (self));
+
+  if (self->priority == priority)
+    return;
+
+  self->priority = priority;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PRIORITY]);
+}
+
+/**
+ * gtk_css_style_sheet_get_priority:
+ * @self: a #GtkCssStyleSheet
+ *
+ * Gets the priority set via gtk_css_style_sheet_set_priority().
+ *
+ * Returns: the priority
+ **/
+guint
+gtk_css_style_sheet_get_priority (GtkCssStyleSheet *self)
+{
+  g_return_val_if_fail (GTK_IS_CSS_STYLE_SHEET (self), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+  return self->priority;
 }
 

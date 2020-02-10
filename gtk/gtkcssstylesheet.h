@@ -61,6 +61,12 @@ void                    gtk_css_style_sheet_load_named          (GtkCssStyleShee
                                                                  const char             *name,
                                                                  const char             *variant);
 
+GDK_AVAILABLE_IN_ALL
+void                    gtk_css_style_sheet_set_priority        (GtkCssStyleSheet       *self,
+                                                                 guint                   priority);
+GDK_AVAILABLE_IN_ALL
+guint                   gtk_css_style_sheet_get_priority        (GtkCssStyleSheet       *self) G_GNUC_PURE;
+
 G_END_DECLS
 
 #endif /* __GTK_CSS_STYLE_SHEET_H__ */
