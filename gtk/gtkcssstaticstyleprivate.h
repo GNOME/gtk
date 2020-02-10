@@ -23,6 +23,7 @@
 #include "gtk/gtkcssstyleprivate.h"
 
 #include "gtk/gtkcountingbloomfilterprivate.h"
+#include "gtk/gtkcsslookupprivate.h"
 
 G_BEGIN_DECLS
 
@@ -43,6 +44,7 @@ struct _GtkCssStaticStyle
   GPtrArray             *sections;             /* sections the values are defined in */
 
   GtkCssChange           change;               /* change as returned by value lookup */
+  GtkCssLookup          *lookup;
 };
 
 struct _GtkCssStaticStyleClass
@@ -58,6 +60,7 @@ GtkCssStyle *           gtk_css_static_style_new_compute        (GtkStyleProvide
                                                                  GtkCssNode                     *node,
                                                                  GtkCssChange                    change);
 GtkCssChange            gtk_css_static_style_get_change         (GtkCssStaticStyle              *style);
+GtkCssLookup *          gtk_css_static_style_get_lookup         (GtkCssStaticStyle              *style);
 
 G_END_DECLS
 
