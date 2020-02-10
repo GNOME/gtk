@@ -275,10 +275,9 @@ demo_tagged_entry_tag_init (DemoTaggedEntryTag *tag)
   gtk_widget_add_controller (GTK_WIDGET (tag), GTK_EVENT_CONTROLLER (gesture));
 
   stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_set_priority (stylesheet, 800);
   gtk_css_style_sheet_load_from_resource (stylesheet, "/tagged_entry/tagstyle.css");
-  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (stylesheet),
-                                              800);
+  gtk_style_context_add_style_sheet_for_display (gdk_display_get_default (), stylesheet);
   g_object_unref (stylesheet);
 }
 

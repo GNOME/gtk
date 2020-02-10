@@ -34,8 +34,7 @@ struct _GtkStyleCascadeIter {
 
 struct _GtkStyleProviderData
 {
-  GtkStyleProvider *provider;
-  guint priority;
+  GtkCssStyleSheet *stylesheet;
   guint changed_signal_id;
 };
 
@@ -54,10 +53,11 @@ gtk_style_cascade_iter_next (GtkStyleCascade     *cascade,
       if (iter->cascade_index[ix] <= 0)
         continue;
 
-      data = &g_array_index (cas->providers,
+      data = &g_array_index (cas->stylesheets,
                              GtkStyleProviderData,
                              iter->cascade_index[ix] - 1);
-      if (highest_priority_data == NULL || data->priority > highest_priority_data->priority)
+      if (highest_priority_data == NULL ||
+          gtk_css_style_sheet_get_priority (data->stylesheet) > gtk_css_style_sheet_get_priority (highest_priority_data->stylesheet))
         {
           highest_priority_index = ix;
           highest_priority_data = data;
@@ -67,7 +67,7 @@ gtk_style_cascade_iter_next (GtkStyleCascade     *cascade,
   if (highest_priority_data != NULL)
     {
       iter->cascade_index[highest_priority_index]--;
-      return highest_priority_data->provider;
+      return GTK_STYLE_PROVIDER (highest_priority_data->stylesheet);
     }
   return NULL;
 }
@@ -85,7 +85,7 @@ gtk_style_cascade_iter_init (GtkStyleCascade     *cascade,
 
   iter->cascade_index = g_new (int, iter->n_cascades);
   for (cas = cascade, ix = 0; ix < iter->n_cascades; cas = cas->parent, ix++)
-    iter->cascade_index[ix] = cas->providers->len;
+    iter->cascade_index[ix] = cas->stylesheets->len;
 
   return gtk_style_cascade_iter_next (cascade, iter);
 }
@@ -97,10 +97,10 @@ gtk_style_cascade_iter_clear (GtkStyleCascadeIter *iter)
 }
 
 static GtkCssValue *
-gtk_style_cascade_get_color (GtkStyleProvider *provider,
+gtk_style_cascade_get_color (GtkStyleProvider *stylesheet,
                              const char              *name)
 {
-  GtkStyleCascade *cascade = GTK_STYLE_CASCADE (provider);
+  GtkStyleCascade *cascade = GTK_STYLE_CASCADE (stylesheet);
   GtkStyleCascadeIter iter;
   GtkCssValue *color;
   GtkStyleProvider *item;
@@ -122,10 +122,10 @@ gtk_style_cascade_get_color (GtkStyleProvider *provider,
 }
 
 static GtkCssKeyframes *
-gtk_style_cascade_get_keyframes (GtkStyleProvider *provider,
+gtk_style_cascade_get_keyframes (GtkStyleProvider *stylesheet,
                                  const char       *name)
 {
-  GtkStyleCascade *cascade = GTK_STYLE_CASCADE (provider);
+  GtkStyleCascade *cascade = GTK_STYLE_CASCADE (stylesheet);
   GtkStyleCascadeIter iter;
   GtkCssKeyframes *keyframes;
   GtkStyleProvider *item;
@@ -147,13 +147,13 @@ gtk_style_cascade_get_keyframes (GtkStyleProvider *provider,
 }
 
 static void
-gtk_style_cascade_lookup (GtkStyleProvider             *provider,
+gtk_style_cascade_lookup (GtkStyleProvider             *stylesheet,
                           const GtkCountingBloomFilter *filter,
                           GtkCssNode                   *node,
                           GtkCssLookup                 *lookup,
                           GtkCssChange                 *change)
 {
-  GtkStyleCascade *cascade = GTK_STYLE_CASCADE (provider);
+  GtkStyleCascade *cascade = GTK_STYLE_CASCADE (stylesheet);
   GtkStyleCascadeIter iter;
   GtkStyleProvider *item;
   GtkCssChange iter_change;
@@ -188,7 +188,7 @@ gtk_style_cascade_dispose (GObject *object)
   GtkStyleCascade *cascade = GTK_STYLE_CASCADE (object);
 
   _gtk_style_cascade_set_parent (cascade, NULL);
-  g_array_unref (cascade->providers);
+  g_array_unref (cascade->stylesheets);
 
   G_OBJECT_CLASS (_gtk_style_cascade_parent_class)->dispose (object);
 }
@@ -206,15 +206,15 @@ style_provider_data_clear (gpointer data_)
 {
   GtkStyleProviderData *data = data_;
 
-  g_signal_handler_disconnect (data->provider, data->changed_signal_id);
-  g_object_unref (data->provider);
+  g_signal_handler_disconnect (data->stylesheet, data->changed_signal_id);
+  g_object_unref (data->stylesheet);
 }
 
 static void
 _gtk_style_cascade_init (GtkStyleCascade *cascade)
 {
-  cascade->providers = g_array_new (FALSE, FALSE, sizeof (GtkStyleProviderData));
-  g_array_set_clear_func (cascade->providers, style_provider_data_clear);
+  cascade->stylesheets = g_array_new (FALSE, FALSE, sizeof (GtkStyleProviderData));
+  g_array_set_clear_func (cascade->stylesheets, style_provider_data_clear);
 }
 
 GtkStyleCascade *
@@ -254,53 +254,52 @@ _gtk_style_cascade_set_parent (GtkStyleCascade *cascade,
 }
 
 void
-_gtk_style_cascade_add_provider (GtkStyleCascade  *cascade,
-                                 GtkStyleProvider *provider,
-                                 guint             priority)
+gtk_style_cascade_add_style_sheet (GtkStyleCascade  *cascade,
+                                   GtkCssStyleSheet *stylesheet)
 {
   GtkStyleProviderData data;
   guint i;
 
   gtk_internal_return_if_fail (GTK_IS_STYLE_CASCADE (cascade));
-  gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
-  gtk_internal_return_if_fail (GTK_STYLE_PROVIDER (cascade) != provider);
+  gtk_internal_return_if_fail (GTK_IS_CSS_STYLE_SHEET (stylesheet));
 
-  data.provider = g_object_ref (provider);
-  data.priority = priority;
-  data.changed_signal_id = g_signal_connect_swapped (provider,
+  data.stylesheet = g_object_ref (stylesheet);
+  data.changed_signal_id = g_signal_connect_swapped (stylesheet,
                                                      "gtk-private-changed",
                                                      G_CALLBACK (gtk_style_provider_changed),
                                                      cascade);
 
   /* ensure it gets removed first */
-  _gtk_style_cascade_remove_provider (cascade, provider);
+  gtk_style_cascade_remove_style_sheet (cascade, stylesheet);
 
-  for (i = 0; i < cascade->providers->len; i++)
+  for (i = 0; i < cascade->stylesheets->len; i++)
     {
-      if (g_array_index (cascade->providers, GtkStyleProviderData, i).priority > priority)
+      GtkStyleProviderData *adata = &g_array_index (cascade->stylesheets, GtkStyleProviderData, i);
+
+      if (gtk_css_style_sheet_get_priority (adata->stylesheet) > gtk_css_style_sheet_get_priority (stylesheet))
         break;
     }
-  g_array_insert_val (cascade->providers, i, data);
+  g_array_insert_val (cascade->stylesheets, i, data);
 
   gtk_style_provider_changed (GTK_STYLE_PROVIDER (cascade));
 }
 
 void
-_gtk_style_cascade_remove_provider (GtkStyleCascade  *cascade,
-                                    GtkStyleProvider *provider)
+gtk_style_cascade_remove_style_sheet (GtkStyleCascade  *cascade,
+                                      GtkCssStyleSheet *stylesheet)
 {
   guint i;
 
   gtk_internal_return_if_fail (GTK_IS_STYLE_CASCADE (cascade));
-  gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
+  gtk_internal_return_if_fail (GTK_IS_CSS_STYLE_SHEET (stylesheet));
 
-  for (i = 0; i < cascade->providers->len; i++)
+  for (i = 0; i < cascade->stylesheets->len; i++)
     {
-      GtkStyleProviderData *data = &g_array_index (cascade->providers, GtkStyleProviderData, i);
+      GtkStyleProviderData *data = &g_array_index (cascade->stylesheets, GtkStyleProviderData, i);
 
-      if (data->provider == provider)
+      if (data->stylesheet == stylesheet)
         {
-          g_array_remove_index (cascade->providers, i);
+          g_array_remove_index (cascade->stylesheets, i);
   
           gtk_style_provider_changed (GTK_STYLE_PROVIDER (cascade));
           break;

@@ -188,7 +188,7 @@ foreground color &mdash; use CSS to override their default values.
                                    "}",
                                    -1);
   context = gtk_widget_get_style_context (view);
-  gtk_style_context_add_provider (context,
+  gtk_style_context_add_style_sheet (context,
                                   GTK_STYLE_PROVIDER (stylesheet),
                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 

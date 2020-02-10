@@ -379,10 +379,9 @@ do_dnd (GtkWidget *do_widget)
       gtk_widget_add_controller (fixed, GTK_EVENT_CONTROLLER (multipress));
 
       stylesheet = gtk_css_style_sheet_new ();
+      gtk_css_style_sheet_set_priority (stylesheet, 800);
       gtk_css_style_sheet_load_from_resource (stylesheet, "/dnd/dnd.css");
-      gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                                  GTK_STYLE_PROVIDER (stylesheet),
-                                                  800);
+      gtk_style_context_add_style_sheet_for_display (gdk_display_get_default (), stylesheet);
     }
 
   if (!gtk_widget_get_visible (window))

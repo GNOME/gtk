@@ -175,11 +175,12 @@ set_color (GtkWidget *item,
   context = gtk_widget_get_style_context (item);
   stylesheet = g_object_get_data (G_OBJECT (context), "style-stylesheet");
   if (stylesheet)
-    gtk_style_context_remove_provider (context, GTK_STYLE_PROVIDER (stylesheet));
+    gtk_style_context_remove_style_sheet (context, stylesheet);
 
   stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_set_priority (stylesheet, 800);
   gtk_css_style_sheet_load_from_data (stylesheet, css, -1);
-  gtk_style_context_add_provider (gtk_widget_get_style_context (item), GTK_STYLE_PROVIDER (stylesheet), 800);
+  gtk_style_context_add_style_sheet (gtk_widget_get_style_context (item), stylesheet);
   g_object_set_data_full (G_OBJECT (context), "style-stylesheet", stylesheet, g_object_unref);
 
   g_free (str);
