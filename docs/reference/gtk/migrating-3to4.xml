@@ -199,6 +199,19 @@
       </para>
     </section>
 
+    <section>
+      <title>Stop using gtk_main() and related APIs</title>
+
+      <para>
+        GTK4 removes the gtk_main_ family of APIs. The recommended replacement
+        is GtkApplication, but you can also iterate the GLib mainloop directly,
+        using GMainContext APIs.
+      </para>
+      <para>
+        The replacement for gtk_events_pending() is g_main_context_pending(),
+        the replacement for gtk_main_iteration() is g_main_context_iteration().
+      </para>
+    </section>
   </section>
 
   <section>
