@@ -480,13 +480,13 @@ gtk_css_style_provider_lookup (GtkStyleProvider             *provider,
               GtkCssStyleProperty *prop = ruleset->styles[j].property;
               guint id = _gtk_css_style_property_get_id (prop);
 
-              if (!_gtk_css_lookup_is_missing (lookup, id))
+              if (!gtk_css_lookup_is_missing (lookup, id))
                 continue;
 
-              _gtk_css_lookup_set (lookup,
-                                   id,
-                                   ruleset->styles[j].section,
-                                   ruleset->styles[j].value);
+              gtk_css_lookup_set (lookup,
+                                  id,
+                                  ruleset->styles[j].section,
+                                  ruleset->styles[j].value);
             }
         }
 

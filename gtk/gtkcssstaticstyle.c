@@ -237,7 +237,7 @@ gtk_css_ ## NAME ## _values_init (void) \
 static inline gboolean \
 gtk_css_ ## NAME ## _values_unset (const GtkCssLookup *lookup) \
 { \
-  const GtkBitmask *set_values = _gtk_css_lookup_get_set_values (lookup); \
+  const GtkBitmask *set_values = gtk_css_lookup_get_set_values (lookup); \
   return !_gtk_bitmask_intersects (set_values, gtk_css_ ## NAME ## _values_mask); \
 }
 
@@ -903,7 +903,7 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
   gtk_internal_return_if_fail (GTK_IS_CSS_STATIC_STYLE (style));
   gtk_internal_return_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style));
 
-  if (_gtk_bitmask_is_empty (_gtk_css_lookup_get_set_values (lookup)))
+  if (_gtk_bitmask_is_empty (gtk_css_lookup_get_set_values (lookup)))
     {
       style->background = (GtkCssBackgroundValues *)gtk_css_values_ref (gtk_css_background_initial_values);
       style->border = (GtkCssBorderValues *)gtk_css_values_ref (gtk_css_border_initial_values);
@@ -996,7 +996,7 @@ gtk_css_static_style_new_compute (GtkStyleProvider             *provider,
   GtkCssLookup lookup;
   GtkCssNode *parent;
 
-  _gtk_css_lookup_init (&lookup);
+  gtk_css_lookup_init (&lookup);
 
   if (node)
     gtk_style_provider_lookup (provider,
@@ -1019,7 +1019,7 @@ gtk_css_static_style_new_compute (GtkStyleProvider             *provider,
                           result,
                           parent ? gtk_css_node_get_style (parent) : NULL);
 
-  _gtk_css_lookup_destroy (&lookup);
+  gtk_css_lookup_destroy (&lookup);
 
   return GTK_CSS_STYLE (result);
 }
