@@ -33,33 +33,33 @@ typedef struct _GtkCssStyleSheetClass GtkCssStyleSheetClass;
 
 
 GDK_AVAILABLE_IN_ALL
-GType gtk_css_style_sheet_get_type (void) G_GNUC_CONST;
+GType                   gtk_css_style_sheet_get_type            (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkCssStyleSheet * gtk_css_style_sheet_new (void);
+GtkCssStyleSheet *      gtk_css_style_sheet_new                 (void);
 
 GDK_AVAILABLE_IN_ALL
-char *           gtk_css_style_sheet_to_string      (GtkCssStyleSheet  *provider);
+char *                  gtk_css_style_sheet_to_string           (GtkCssStyleSheet       *self);
 
 GDK_AVAILABLE_IN_ALL
-void             gtk_css_style_sheet_load_from_data (GtkCssStyleSheet  *css_style_sheet,
-                                                  const gchar     *data,
-                                                  gssize           length);
+void                    gtk_css_style_sheet_load_from_data      (GtkCssStyleSheet       *self,
+                                                                 const gchar            *data,
+                                                                 gssize                  length);
 GDK_AVAILABLE_IN_ALL
-void             gtk_css_style_sheet_load_from_file (GtkCssStyleSheet  *css_style_sheet,
-                                                  GFile           *file);
+void                    gtk_css_style_sheet_load_from_file      (GtkCssStyleSheet       *self,
+                                                                 GFile                  *file);
 GDK_AVAILABLE_IN_ALL
-void             gtk_css_style_sheet_load_from_path (GtkCssStyleSheet  *css_style_sheet,
-                                                  const gchar     *path);
+void                    gtk_css_style_sheet_load_from_path      (GtkCssStyleSheet       *self,
+                                                                 const gchar            *path);
 
 GDK_AVAILABLE_IN_ALL
-void             gtk_css_style_sheet_load_from_resource (GtkCssStyleSheet *css_style_sheet,
-                                                      const gchar    *resource_path);
+void                    gtk_css_style_sheet_load_from_resource  (GtkCssStyleSheet       *self,
+                                                                 const gchar            *resource_path);
 
 GDK_AVAILABLE_IN_ALL
-void             gtk_css_style_sheet_load_named     (GtkCssStyleSheet  *provider,
-                                                  const char      *name,
-                                                  const char      *variant);
+void                    gtk_css_style_sheet_load_named          (GtkCssStyleSheet       *self,
+                                                                 const char             *name,
+                                                                 const char             *variant);
 
 G_END_DECLS
 
