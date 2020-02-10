@@ -335,8 +335,8 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                    g_param_spec_int ("year",
                                                      P_("Year"),
                                                      P_("The selected year"),
-                                                     0, G_MAXINT >> 9, 0,
-                                                     G_PARAM_READWRITE));
+                                                     1, 9999, 1,
+                                                     G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCalendar:month:
@@ -350,7 +350,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                      P_("Month"),
                                                      P_("The selected month (as a number between 0 and 11)"),
                                                      0, 11, 0,
-                                                     G_PARAM_READWRITE));
+                                                     G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCalendar:day:
@@ -365,7 +365,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                      P_("Day"),
                                                      P_("The selected day (as a number between 1 and 31, or 0 to unselect the currently selected day)"),
                                                      0, 31, 0,
-                                                     G_PARAM_READWRITE));
+                                                     G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCalendar:show-heading:
@@ -952,24 +952,33 @@ gtk_calendar_set_property (GObject      *object,
                                     g_date_time_get_month (priv->date),
                                     g_date_time_get_day_of_month (priv->date),
                                     0, 0, 0);
-      gtk_calendar_select_day (calendar, date);
-      g_date_time_unref (date);
+      if (date)
+        {
+          gtk_calendar_select_day (calendar, date);
+          g_date_time_unref (date);
+        }
       break;
     case PROP_MONTH:
       date = g_date_time_new_local (g_date_time_get_year (priv->date),
-                                    g_value_get_int (value),
+                                    g_value_get_int (value) + 1,
                                     g_date_time_get_day_of_month (priv->date),
                                     0, 0, 0);
-      gtk_calendar_select_day (calendar, date);
-      g_date_time_unref (date);
+      if (date)
+        {
+          gtk_calendar_select_day (calendar, date);
+          g_date_time_unref (date);
+        }
       break;
     case PROP_DAY:
       date = g_date_time_new_local (g_date_time_get_year (priv->date),
                                     g_date_time_get_month (priv->date),
-                                    g_value_get_int (value),
+                                    g_value_get_int (value) + 1,
                                     0, 0, 0);
-      gtk_calendar_select_day (calendar, date);
-      g_date_time_unref (date);
+      if (date)
+        {
+          gtk_calendar_select_day (calendar, date);
+          g_date_time_unref (date);
+        }
       break;
     case PROP_SHOW_HEADING:
       gtk_calendar_set_show_heading (calendar, g_value_get_boolean (value));
@@ -1001,10 +1010,10 @@ gtk_calendar_get_property (GObject      *object,
       g_value_set_int (value, g_date_time_get_year (priv->date));
       break;
     case PROP_MONTH:
-      g_value_set_int (value, g_date_time_get_month (priv->date));
+      g_value_set_int (value, g_date_time_get_month (priv->date) - 1);
       break;
     case PROP_DAY:
-      g_value_set_int (value, g_date_time_get_day_of_month (priv->date));
+      g_value_set_int (value, g_date_time_get_day_of_month (priv->date) - 1);
       break;
     case PROP_SHOW_HEADING:
       g_value_set_boolean (value, gtk_calendar_get_show_heading (calendar));
