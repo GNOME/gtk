@@ -10,7 +10,11 @@ static gboolean interactive = FALSE;
 static gboolean
 stop_main (gpointer data)
 {
-  gtk_main_quit ();
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
 
   return G_SOURCE_REMOVE;
 }
@@ -40,9 +44,17 @@ on_draw (GtkDrawingArea *da,
 }
 
 static gboolean
-on_keypress (GtkEventControllerKey *key)
+on_keypress (GtkEventControllerKey *key,
+             guint keyval,
+             guint keycode,
+             GdkModifierType state,
+             gpointer data)
 {
-  gtk_main_quit ();
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -53,12 +65,13 @@ test_default_size (void)
   GtkWidget *window;
   GtkWidget *da;
   gint w, h;
+  gboolean done;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   if (interactive)
     {
       GtkEventController *controller = gtk_event_controller_key_new ();
-      g_signal_connect (controller, "key-pressed", G_CALLBACK (on_keypress), window);
+      g_signal_connect (controller, "key-pressed", G_CALLBACK (on_keypress), &done);
       gtk_widget_add_controller (window, controller);
     }
 
@@ -85,9 +98,11 @@ test_default_size (void)
 
   gtk_widget_show (window);
 
+  done = FALSE;
   if (!interactive)
-    g_timeout_add (200, stop_main, NULL);
-  gtk_main ();
+    g_timeout_add (200, stop_main, &done);
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   /* check that the window and its content actually gets the right size */
   gtk_window_get_size (GTK_WINDOW (window), &w, &h);
@@ -105,9 +120,11 @@ test_default_size (void)
   g_assert_cmpint (w, ==, 100);
   g_assert_cmpint (h, ==, 600);
 
+  done = FALSE;
   if (!interactive)
-    g_timeout_add (200, stop_main, NULL);
-  gtk_main ();
+    g_timeout_add (200, stop_main, &done);
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   gtk_window_get_size (GTK_WINDOW (window), &w, &h);
   g_assert_cmpint (w, ==, 300);
@@ -117,9 +134,11 @@ test_default_size (void)
   gtk_widget_hide (window);
   gtk_widget_show (window);
 
+  done = FALSE;
   if (!interactive)
-    g_timeout_add (200, stop_main, NULL);
-  gtk_main ();
+    g_timeout_add (200, stop_main, &done);
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   gtk_window_get_size (GTK_WINDOW (window), &w, &h);
   g_assert_cmpint (w, ==, 300);
@@ -134,6 +153,7 @@ test_resize (void)
   GtkWidget *window;
   GtkWidget *da;
   gint w, h;
+  gboolean done;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   if (interactive)
@@ -160,9 +180,11 @@ test_resize (void)
 
   gtk_widget_show (window);
 
+  done = FALSE;
   if (!interactive)
-    g_timeout_add (200, stop_main, NULL);
-  gtk_main ();
+    g_timeout_add (200, stop_main, &done);
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   /* test that resize before show works */
   gtk_window_get_size (GTK_WINDOW (window), &w, &h);
@@ -175,9 +197,11 @@ test_resize (void)
    */
   gtk_window_resize (GTK_WINDOW (window), 200, 400);
 
+  done = FALSE;
   if (!interactive)
-    g_timeout_add (200, stop_main, NULL);
-  gtk_main ();
+    g_timeout_add (200, stop_main, &done);
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   gtk_window_get_size (GTK_WINDOW (window), &w, &h);
   g_assert_cmpint (w, ==, 200);
@@ -191,6 +215,7 @@ test_resize_popup (void)
 {
   GtkWidget *window;
   gint w, h;
+  gboolean done;
 
   /* testcase for the dnd window */
   window = gtk_window_new (GTK_WINDOW_POPUP);
@@ -202,8 +227,11 @@ test_resize_popup (void)
 
   gtk_widget_show (window);
 
-  g_timeout_add (200, stop_main, NULL);
-  gtk_main ();
+  done = FALSE;
+  if (!interactive)
+    g_timeout_add (200, stop_main, &done);
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   gtk_window_get_size (GTK_WINDOW (window), &w, &h);
   g_assert_cmpint (w, ==, 1);
@@ -217,6 +245,7 @@ test_show_hide (void)
 {
   GtkWidget *window;
   gint w, h, w1, h1;
+  gboolean done;
 
   /*http://bugzilla.gnome.org/show_bug.cgi?id=696882 */
 
@@ -226,15 +255,21 @@ test_show_hide (void)
 
   gtk_widget_show (window);
 
-  g_timeout_add (100, stop_main, NULL);
-  gtk_main ();
+  done = FALSE;
+  if (!interactive)
+    g_timeout_add (200, stop_main, &done);
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   gtk_window_get_size (GTK_WINDOW (window), &w, &h);
 
   gtk_widget_hide (window);
 
-  g_timeout_add (100, stop_main, NULL);
-  gtk_main ();
+  done = FALSE;
+  if (!interactive)
+    g_timeout_add (200, stop_main, &done);
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   gtk_window_get_size (GTK_WINDOW (window), &w1, &h1);
   g_assert_cmpint (w, ==, w1);
@@ -242,8 +277,11 @@ test_show_hide (void)
 
   gtk_widget_show (window);
 
-  g_timeout_add (100, stop_main, NULL);
-  gtk_main ();
+  done = FALSE;
+  if (!interactive)
+    g_timeout_add (200, stop_main, &done);
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   gtk_window_get_size (GTK_WINDOW (window), &w1, &h1);
   g_assert_cmpint (w, ==, w1);

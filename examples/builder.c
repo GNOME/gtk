@@ -8,6 +8,16 @@ print_hello (GtkWidget *widget,
   g_print ("Hello World\n");
 }
 
+static void
+quit_cb (GtkWidget *widget, gpointer data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -15,6 +25,7 @@ main (int   argc,
   GtkBuilder *builder;
   GObject *window;
   GObject *button;
+  gboolean done = FALSE;
 
 #ifdef GTK_SRCDIR
   g_chdir (GTK_SRCDIR);
@@ -28,7 +39,7 @@ main (int   argc,
 
   /* Connect signal handlers to the constructed widgets. */
   window = gtk_builder_get_object (builder, "window");
-  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   button = gtk_builder_get_object (builder, "button1");
   g_signal_connect (button, "clicked", G_CALLBACK (print_hello), NULL);
@@ -37,9 +48,12 @@ main (int   argc,
   g_signal_connect (button, "clicked", G_CALLBACK (print_hello), NULL);
 
   button = gtk_builder_get_object (builder, "quit");
-  g_signal_connect (button, "clicked", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (button, "clicked", G_CALLBACK (quit_cb), &done);
 
-  gtk_main ();
+  gtk_widget_show (GTK_WIDGET (window));
+
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

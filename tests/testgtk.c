@@ -49,6 +49,8 @@
 
 #include "test.xpm"
 
+static gboolean done = FALSE;
+
 gboolean
 file_exists (const char *filename)
 {
@@ -1701,8 +1703,8 @@ create_key_lookup (GtkWidget *widget)
 static gboolean
 cmw_destroy_cb(GtkWidget *widget)
 {
-  /* This is needed to get out of gtk_main */
-  gtk_main_quit ();
+  done = TRUE;
+  g_main_context_wakeup (NULL);
 
   return FALSE;
 }
@@ -1724,7 +1726,8 @@ cmw_color (GtkWidget *widget, GtkWidget *parent)
     
     /* wait until destroy calls gtk_main_quit */
     gtk_widget_show (csd);    
-    gtk_main ();
+    while (!done)
+      g_main_context_iteration (NULL, TRUE);
 }
 
 static void
@@ -1748,7 +1751,8 @@ cmw_file (GtkWidget *widget, GtkWidget *parent)
 
     /* wait until destroy calls gtk_main_quit */
     gtk_widget_show (fs);
-    gtk_main();
+    while (!done)
+      g_main_context_iteration (NULL, TRUE);
 }
 
 
@@ -1804,7 +1808,8 @@ create_modal_window (GtkWidget *widget)
   gtk_widget_show (window);
 
   /* wait until dialog get destroyed */
-  gtk_main();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 }
 
 /*
@@ -5680,65 +5685,6 @@ create_timeout_test (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
-/*
- * Test of recursive mainloop
- */
-
-void
-mainloop_destroyed (GtkWidget *w, GtkWidget **window)
-{
-  *window = NULL;
-  gtk_main_quit ();
-}
-
-void
-create_mainloop (GtkWidget *widget)
-{
-  static GtkWidget *window = NULL;
-  GtkWidget *content_area;
-  GtkWidget *label;
-
-  if (!window)
-    {
-      window = gtk_dialog_new ();
-
-      gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      gtk_window_set_title (GTK_WINDOW (window), "Test Main Loop");
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (mainloop_destroyed),
-			&window);
-
-      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
-
-      label = gtk_label_new ("In recursive main loop...");
-      g_object_set (label, "margin", 20, NULL);
-
-      gtk_container_add (GTK_CONTAINER (content_area), label);
-      gtk_widget_show (label);
-
-      gtk_dialog_add_button (GTK_DIALOG (window),
-                             "Leave",
-                             GTK_RESPONSE_OK);
-      g_signal_connect_swapped (window, "response",
-				G_CALLBACK (gtk_widget_destroy),
-				window);
-    }
-
-  if (!gtk_widget_get_visible (window))
-    {
-      gtk_widget_show (window);
-
-      g_print ("create_mainloop: start\n");
-      gtk_main ();
-      g_print ("create_mainloop: done\n");
-    }
-  else
-    gtk_widget_destroy (window);
-}
-
 static void
 show_native (GtkWidget *button,
              GtkFileChooserNative *native)
@@ -6125,7 +6071,8 @@ void
 do_exit (GtkWidget *widget, GtkWidget *window)
 {
   gtk_widget_destroy (window);
-  gtk_main_quit ();
+  done = TRUE;
+  g_main_context_wakeup (NULL);
 }
 
 struct {
@@ -6164,7 +6111,6 @@ struct {
   { "size groups", create_size_groups },
   { "spinbutton", create_spins },
   { "statusbar", create_statusbar },
-  { "test mainloop", create_mainloop, TRUE },
   { "test timeout", create_timeout_test },
   { "toggle buttons", create_toggle_buttons },
   { "tooltips", create_tooltips },
@@ -6173,6 +6119,17 @@ struct {
   { "window states", create_surface_states }
 };
 int nbuttons = sizeof (buttons) / sizeof (buttons[0]);
+
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
 
 void
 create_main_window (void)
@@ -6191,7 +6148,7 @@ create_main_window (void)
   gtk_widget_set_name (window, "main_window");
   gtk_window_set_default_size (GTK_WINDOW (window), -1, 400);
 
-  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), box1);
@@ -6476,7 +6433,8 @@ main (int argc, char *argv[])
 
   create_main_window ();
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   if (1)
     {

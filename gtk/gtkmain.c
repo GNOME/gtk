@@ -78,15 +78,16 @@
  *   gtk_widget_show (mainwin);
  *
  *   // Enter the main event loop, and wait for user interaction
- *   gtk_main ();
+ *   while (!done)
+ *     g_main_context_iteration (NULL, TRUE);
  *
  *   // The user lost interest
  *   return 0;
  * }
  * ]|
  *
- * It’s OK to use the GLib main loop directly instead of gtk_main(), though it
- * involves slightly more typing. See #GMainLoop in the GLib documentation.
+ * See #GMainLoop in the GLib documentation to learn more about
+ * main loops and their features.
  */
 
 #include "config.h"
@@ -138,13 +139,9 @@
 
 static GtkWindowGroup *gtk_main_get_window_group (GtkWidget   *widget);
 
-static guint gtk_main_loop_level = 0;
 static gint pre_initialized = FALSE;
 static gint gtk_initialized = FALSE;
 static GList *current_events = NULL;
-static GThread *initialized_thread = NULL;
-
-static GSList *main_loops = NULL;      /* stack of currently executing main loops */
 
 typedef struct {
   GdkDisplay *display;
@@ -802,8 +799,6 @@ gtk_init_check (void)
   do_pre_parse_initialization ();
   do_post_parse_initialization ();
 
-  initialized_thread = g_thread_self ();
-
   ret = gdk_display_open_default () != NULL;
 
   if (ret && (gtk_get_debug_flags () & GTK_DEBUG_INTERACTIVE))
@@ -928,19 +923,6 @@ gtk_is_initialized (void)
   return gtk_initialized;
 }
 
-/**
- * gtk_get_main_thread:
- *
- * Get the thread from which GTK was initialized.
- *
- * Returns: (transfer none): The #GThread initialized for GTK, must not be freed
- */
-GThread *
-gtk_get_main_thread (void)
-{
-  return initialized_thread;
-}
-
 
 /**
  * gtk_get_locale_direction:
@@ -1007,37 +989,6 @@ PangoLanguage *
 gtk_get_default_language (void)
 {
   return pango_language_get_default ();
-}
-
-/**
- * gtk_main:
- *
- * Runs the main loop until gtk_main_quit() is called.
- *
- * You can nest calls to gtk_main(). In that case gtk_main_quit()
- * will make the innermost invocation of the main loop return.
- */
-void
-gtk_main (void)
-{
-  GMainLoop *loop;
-
-  gtk_main_loop_level++;
-
-  loop = g_main_loop_new (NULL, TRUE);
-  main_loops = g_slist_prepend (main_loops, loop);
-
-  if (g_main_loop_is_running (main_loops->data))
-    g_main_loop_run (loop);
-
-  main_loops = g_slist_remove (main_loops, loop);
-
-  g_main_loop_unref (loop);
-
-  gtk_main_loop_level--;
-
-  if (gtk_main_loop_level == 0)
-    gtk_main_sync ();
 }
 
 typedef struct {
@@ -1121,107 +1072,6 @@ gtk_main_sync (void)
   
   /* Synchronize the recent manager singleton */
   _gtk_recent_manager_sync ();
-}
-
-/**
- * gtk_main_level:
- *
- * Asks for the current nesting level of the main loop.
- *
- * Returns: the nesting level of the current invocation
- *     of the main loop
- */
-guint
-gtk_main_level (void)
-{
-  return gtk_main_loop_level;
-}
-
-/**
- * gtk_main_quit:
- *
- * Makes the innermost invocation of the main loop return
- * when it regains control.
- */
-void
-gtk_main_quit (void)
-{
-  g_return_if_fail (main_loops != NULL);
-
-  g_main_loop_quit (main_loops->data);
-}
-
-/**
- * gtk_events_pending:
- *
- * Checks if any events are pending.
- *
- * This can be used to update the UI and invoke timeouts etc.
- * while doing some time intensive computation.
- *
- * ## Updating the UI during a long computation
- *
- * |[<!-- language="C" -->
- *  // computation going on...
- *
- *  while (gtk_events_pending ())
- *    gtk_main_iteration ();
- *
- *  // ...computation continued
- * ]|
- *
- * Returns: %TRUE if any events are pending, %FALSE otherwise
- */
-gboolean
-gtk_events_pending (void)
-{
-  return g_main_context_pending (NULL);
-}
-
-/**
- * gtk_main_iteration:
- *
- * Runs a single iteration of the mainloop.
- *
- * If no events are waiting to be processed GTK will block
- * until the next event is noticed. If you don’t want to block
- * look at gtk_main_iteration_do() or check if any events are
- * pending with gtk_events_pending() first.
- *
- * Returns: %TRUE if gtk_main_quit() has been called for the
- *     innermost mainloop
- */
-gboolean
-gtk_main_iteration (void)
-{
-  g_main_context_iteration (NULL, TRUE);
-
-  if (main_loops)
-    return !g_main_loop_is_running (main_loops->data);
-  else
-    return TRUE;
-}
-
-/**
- * gtk_main_iteration_do:
- * @blocking: %TRUE if you want GTK to block if no events are pending
- *
- * Runs a single iteration of the mainloop.
- * If no events are available either return or block depending on
- * the value of @blocking.
- *
- * Returns: %TRUE if gtk_main_quit() has been called for the
- *     innermost mainloop
- */
-gboolean
-gtk_main_iteration_do (gboolean blocking)
-{
-  g_main_context_iteration (NULL, blocking);
-
-  if (main_loops)
-    return !g_main_loop_is_running (main_loops->data);
-  else
-    return TRUE;
 }
 
 static void

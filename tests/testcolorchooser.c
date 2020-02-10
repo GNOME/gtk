@@ -10,6 +10,8 @@ color_changed (GObject *o, GParamSpec *pspect, gpointer data)
            color.red, color.green, color.blue, color.alpha);
 }
 
+static gboolean done = FALSE;
+
 static void
 dialog_response (GtkDialog *dialog, gint response)
 {
@@ -27,7 +29,9 @@ dialog_response (GtkDialog *dialog, gint response)
       break;
     }
 
-  gtk_main_quit ();
+  done = TRUE;
+
+  g_main_context_wakeup (NULL);
 }
 
 int
@@ -96,7 +100,8 @@ main (int argc, char *argv[])
 
   gtk_widget_show (dialog);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

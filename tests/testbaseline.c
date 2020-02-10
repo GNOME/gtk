@@ -66,6 +66,17 @@ set_font_size (GtkWidget *widget, gint size)
   gtk_style_context_add_class (gtk_widget_get_style_context (widget), class[size]);
 }
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int
 main (int    argc,
       char **argv)
@@ -75,6 +86,7 @@ main (int    argc,
   GtkAdjustment *adjustment;
   int i, j;
   GtkCssProvider *provider;
+  gboolean done = FALSE;
 
   gtk_init ();
 
@@ -88,7 +100,7 @@ main (int    argc,
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   g_object_unref (provider);
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  g_signal_connect (G_OBJECT (window), "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (G_OBJECT (window), "destroy", G_CALLBACK (quit_cb), &done);
 
   notebook = gtk_notebook_new ();
   gtk_container_add (GTK_CONTAINER (window), notebook);
@@ -380,7 +392,8 @@ main (int    argc,
 
   gtk_widget_show (window);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

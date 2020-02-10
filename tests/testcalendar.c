@@ -164,6 +164,17 @@ create_frame (const char *caption,
 }
 
 static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
+static void
 create_calendar(void)
 {
   static CalendarData calendar_data;
@@ -182,11 +193,12 @@ create_calendar(void)
     { "show-day-names", "Show Day Names", calendar },
     { "show-week-numbers", "Show Week Numbers", calendar },
   };
+  gboolean done = FALSE;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_hide_on_close (GTK_WINDOW (window), TRUE);
   gtk_window_set_title (GTK_WINDOW (window), "GtkCalendar Example");
-  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
 
@@ -281,7 +293,7 @@ create_calendar(void)
   gtk_widget_set_halign (bbox, GTK_ALIGN_END);
 
   button = gtk_button_new_with_label ("Close");
-  g_signal_connect (button, "clicked", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (button, "clicked", G_CALLBACK (quit_cb), &done);
   gtk_container_add (GTK_CONTAINER (bbox), button);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, DEF_PAD_SMALL);
@@ -297,11 +309,11 @@ create_calendar(void)
   gtk_window_set_default_widget (GTK_WINDOW (window), button);
 
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 0);
-  g_signal_connect (window, "close-request", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "close-request", G_CALLBACK (quit_cb), &done);
   gtk_widget_show (window);
 
-
-  gtk_main();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 }
 
 

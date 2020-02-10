@@ -147,17 +147,29 @@ make_delayed_switch (gboolean is_on,
   return hbox;
 }
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int main (int argc, char *argv[])
 {
   GtkWidget *window;
   GtkWidget *vbox, *hbox;
+  gboolean done = FALSE;
 
   gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "GtkSwitch");
   gtk_window_set_default_size (GTK_WINDOW (window), 400, -1);
-  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   gtk_widget_show (window);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
@@ -178,7 +190,8 @@ int main (int argc, char *argv[])
   hbox = make_delayed_switch (FALSE, TRUE);
   gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return EXIT_SUCCESS;
 }

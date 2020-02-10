@@ -81,9 +81,6 @@ gboolean gtk_init_check           (void);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_is_initialized       (void);
 
-GDK_AVAILABLE_IN_ALL
-GThread * gtk_get_main_thread     (void);
-
 #ifdef G_OS_WIN32
 
 /* Variants that are used to check for correct struct packing
@@ -109,19 +106,6 @@ GDK_AVAILABLE_IN_ALL
 PangoLanguage *gtk_get_default_language (void);
 GDK_AVAILABLE_IN_ALL
 GtkTextDirection gtk_get_locale_direction (void);
-GDK_AVAILABLE_IN_ALL
-gboolean       gtk_events_pending       (void);
-
-GDK_AVAILABLE_IN_ALL
-void       gtk_main                (void);
-GDK_AVAILABLE_IN_ALL
-guint      gtk_main_level          (void);
-GDK_AVAILABLE_IN_ALL
-void       gtk_main_quit           (void);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_main_iteration      (void);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_main_iteration_do   (gboolean            blocking);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_grab_add            (GtkWidget          *widget);

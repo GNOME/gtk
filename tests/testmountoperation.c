@@ -26,6 +26,7 @@ static gboolean dont_ask_domain = FALSE;
 static gboolean dont_ask_password = FALSE;
 static gboolean dont_save_password = FALSE;
 
+static gboolean done = FALSE;
 
 static void
 got_reply (GMountOperation       *op,
@@ -87,7 +88,8 @@ got_reply (GMountOperation       *op,
   else if (G_MOUNT_OPERATION_UNHANDLED)
     g_assert_not_reached ();
 
-  gtk_main_quit ();
+  done = TRUE;
+  g_main_context_wakeup (NULL);
 }
 
 int
@@ -163,6 +165,7 @@ main (int argc, char *argv[])
                              flags);
     }
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
   return 0;
 }

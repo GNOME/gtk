@@ -690,11 +690,23 @@ struct {
     { "page-flipping assistant", create_page_flipping_assistant },
   };
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int
 main (int argc, gchar *argv[])
 {
   GtkWidget *window, *box, *button;
   gint i;
+  gboolean done = FALSE;
 
   gtk_init ();
 
@@ -704,7 +716,7 @@ main (int argc, gchar *argv[])
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_hide_on_close (GTK_WINDOW (window), TRUE);
 
-  g_signal_connect (G_OBJECT (window), "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (G_OBJECT (window), "destroy", G_CALLBACK (quit_cb), &done);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_container_add (GTK_CONTAINER (window), box);
@@ -721,7 +733,9 @@ main (int argc, gchar *argv[])
     }
 
   gtk_widget_show (window);
-  gtk_main ();
+
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

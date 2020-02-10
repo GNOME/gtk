@@ -4693,8 +4693,8 @@ specific_append_after_collapse (void)
   gtk_container_add (GTK_CONTAINER (window), tree_view);
   gtk_widget_realize (tree_view);
 
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
+  while (g_main_context_pending (NULL))
+    g_main_context_iteration (NULL, TRUE);
 
   gtk_tree_store_prepend (store, &iter, NULL);
   gtk_tree_store_set (store, &iter,
@@ -4720,12 +4720,12 @@ specific_append_after_collapse (void)
 
   /* Expand and collapse the tree */
   gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
+  while (g_main_context_pending (NULL))
+    g_main_context_iteration (NULL, TRUE);
 
   gtk_tree_view_collapse_all (GTK_TREE_VIEW (tree_view));
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
+  while (g_main_context_pending (NULL))
+    g_main_context_iteration (NULL, TRUE);
 
   /* Add another it */
   g_object_set_data (G_OBJECT (filter), "private-hide-negative-numbers",
@@ -4741,8 +4741,8 @@ specific_append_after_collapse (void)
 
   /* Expand */
   gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
+  while (g_main_context_pending (NULL))
+    g_main_context_iteration (NULL, TRUE);
 }
 
 
@@ -4813,16 +4813,16 @@ specific_sort_filter_remove_node (void)
   gtk_container_add (GTK_CONTAINER (window), tree_view);
   gtk_widget_realize (tree_view);
 
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
+  while (g_main_context_pending (NULL))
+    g_main_context_iteration (NULL, TRUE);
 
   /* Remove a node */
   gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
   gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
   gtk_tree_store_remove (store, &iter);
 
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
+  while (g_main_context_pending (NULL))
+    g_main_context_iteration (NULL, TRUE);
 }
 
 
@@ -5745,8 +5745,8 @@ specific_bug_301558 (void)
 
   view = gtk_tree_view_new_with_model (filter);
 
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
+  while (g_main_context_pending (NULL))
+    g_main_context_iteration (NULL, TRUE);
 
   add = TRUE;
 
@@ -5829,8 +5829,8 @@ specific_bug_311955 (void)
 
   gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
 
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
+  while (g_main_context_pending (NULL))
+    g_main_context_iteration (NULL, TRUE);
 
   check_level_length (GTK_TREE_MODEL_FILTER (filter), NULL, 2);
   check_level_length (GTK_TREE_MODEL_FILTER (filter), "0", 1);
@@ -5852,8 +5852,8 @@ specific_bug_311955 (void)
         }
     }
 
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
+  while (g_main_context_pending (NULL))
+    g_main_context_iteration (NULL, TRUE);
 
   check_level_length (GTK_TREE_MODEL_FILTER (filter), "0", 3);
   check_level_length (GTK_TREE_MODEL_FILTER (filter), "0:2", 1);
@@ -5912,8 +5912,8 @@ specific_bug_311955_clean (void)
 
   gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
 
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
+  while (g_main_context_pending (NULL))
+    g_main_context_iteration (NULL, TRUE);
 
   check_level_length (GTK_TREE_MODEL_FILTER (filter), NULL, 1);
   check_level_length (GTK_TREE_MODEL_FILTER (filter), "0", 1);
@@ -6355,8 +6355,8 @@ specific_bug_621076 (void)
 
   /* Make sure all groups are expanded, so the filter has the tree cached */
   gtk_tree_view_expand_all (GTK_TREE_VIEW (view));
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
+  while (g_main_context_pending (NULL))
+    g_main_context_iteration (NULL, TRUE);
 
   /* Should only yield a row-changed */
   signal_monitor_append_signal (monitor, ROW_CHANGED, "3:0");
