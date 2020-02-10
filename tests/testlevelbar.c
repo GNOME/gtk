@@ -27,16 +27,16 @@ create_level_bar (void)
 static void
 add_custom_css (void)
 {
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
   const gchar data[] =
   "levelbar block.my-offset {"
   "   background: magenta;"
   "}";
 
-  provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (provider, data, -1);
+  stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_load_from_data (stylesheet, data, -1);
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER (stylesheet),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 

@@ -210,14 +210,14 @@ focus_changed (GtkWidget  *view,
 static void
 set_styles (void)
 {
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
 
-  provider = gtk_css_provider_new ();
+  stylesheet = gtk_css_style_sheet_new ();
 
-  gtk_css_provider_load_from_data (provider, CSS, -1);
+  gtk_css_style_sheet_load_from_data (stylesheet, CSS, -1);
 
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER (stylesheet),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 

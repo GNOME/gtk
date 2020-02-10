@@ -203,7 +203,7 @@ plugin_action (GAction  *action,
 {
   const char *action_name;
   const char *css_to_load;
-  GtkCssProvider *css_provider;
+  GtkCssStyleSheet *stylesheet;
 
   action_name = g_action_get_name (action);
   if (strcmp (action_name, "red") == 0)
@@ -218,10 +218,10 @@ plugin_action (GAction  *action,
 
   g_message ("Color: %s", g_action_get_name (action));
 
-  css_provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (css_provider, css_to_load, -1);
+  stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_load_from_data (stylesheet, css_to_load, -1);
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (css_provider),
+                                              GTK_STYLE_PROVIDER (stylesheet),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 

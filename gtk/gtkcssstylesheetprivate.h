@@ -1,5 +1,6 @@
 /* GTK - The GIMP Toolkit
  * Copyright (C) 2011 Red Hat, Inc.
+ *               2020 Benjamin Otte <otte@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,19 +16,20 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_CSS_PROVIDER_PRIVATE_H__
-#define __GTK_CSS_PROVIDER_PRIVATE_H__
+#ifndef __GTK_CSS_STYLE_SHEET_PRIVATE_H__
+#define __GTK_CSS_STYLE_SHEET_PRIVATE_H__
 
-#include "gtkcssprovider.h"
+#include "gtkcssstylesheet.h"
 
 G_BEGIN_DECLS
 
-gchar *_gtk_get_theme_dir (void);
+gchar *                 gtk_get_theme_dir                               (void);
 
-const gchar *_gtk_css_provider_get_theme_dir (GtkCssProvider *provider);
 
-void   gtk_css_provider_set_keep_css_sections (void);
+const gchar *           gtk_css_style_sheet_get_theme_dir               (GtkCssStyleSheet       *self);
+
+void                    gtk_css_style_sheet_set_keep_css_sections       (void);
 
 G_END_DECLS
 
-#endif /* __GTK_CSS_PROVIDER_PRIVATE_H__ */
+#endif /* __GTK_CSS_STYLE_SHEET_PRIVATE_H__ */

@@ -27,7 +27,7 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
-#include "gtkcssprovider.h"
+#include "gtkcssstylesheet.h"
 
 G_DEFINE_TYPE (GtkCssImageRadial, _gtk_css_image_radial, GTK_TYPE_CSS_IMAGE)
 

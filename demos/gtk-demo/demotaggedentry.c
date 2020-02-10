@@ -263,7 +263,7 @@ static void
 demo_tagged_entry_tag_init (DemoTaggedEntryTag *tag)
 {
   GtkGesture *gesture;
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
 
   tag->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_parent (tag->box, GTK_WIDGET (tag));
@@ -274,12 +274,12 @@ demo_tagged_entry_tag_init (DemoTaggedEntryTag *tag)
   g_signal_connect (gesture, "released", G_CALLBACK (on_released), tag);
   gtk_widget_add_controller (GTK_WIDGET (tag), GTK_EVENT_CONTROLLER (gesture));
 
-  provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_resource (provider, "/tagged_entry/tagstyle.css");
+  stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_load_from_resource (stylesheet, "/tagged_entry/tagstyle.css");
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER (stylesheet),
                                               800);
-  g_object_unref (provider);
+  g_object_unref (stylesheet);
 }
 
 static void
