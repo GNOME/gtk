@@ -1153,33 +1153,6 @@ gtk_main_quit (void)
 }
 
 /**
- * gtk_events_pending:
- *
- * Checks if any events are pending.
- *
- * This can be used to update the UI and invoke timeouts etc.
- * while doing some time intensive computation.
- *
- * ## Updating the UI during a long computation
- *
- * |[<!-- language="C" -->
- *  // computation going on...
- *
- *  while (gtk_events_pending ())
- *    gtk_main_iteration ();
- *
- *  // ...computation continued
- * ]|
- *
- * Returns: %TRUE if any events are pending, %FALSE otherwise
- */
-gboolean
-gtk_events_pending (void)
-{
-  return g_main_context_pending (NULL);
-}
-
-/**
  * gtk_main_iteration:
  *
  * Runs a single iteration of the mainloop.
