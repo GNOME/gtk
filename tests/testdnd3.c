@@ -5,7 +5,7 @@ prepare (GtkDragSource *source,  double x, double y)
 {
   GtkWidget *canvas;
   GtkWidget *item;
-  GdkContentProvider *provider;
+  GdkContentProvider *stylesheet;
   GBytes *bytes;
 
   canvas = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
@@ -15,12 +15,12 @@ prepare (GtkDragSource *source,  double x, double y)
     return NULL;
 
   bytes = g_bytes_new (&item, sizeof (gpointer));
-  provider = gdk_content_provider_new_for_bytes ("CANVAS_ITEM", bytes);
+  stylesheet = gdk_content_provider_new_for_bytes ("CANVAS_ITEM", bytes);
   g_bytes_unref (bytes);
 
   g_object_set_data (G_OBJECT (canvas), "dragged-item", item);
 
-  return provider;
+  return stylesheet;
 }
 
 static void
@@ -167,20 +167,20 @@ set_color (GtkWidget *item,
   char *css;
   char *str;
   GtkStyleContext *context;
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
 
   str = gdk_rgba_to_string (color);
   css = g_strdup_printf ("* { background: %s; padding: 10px; }", str);
 
   context = gtk_widget_get_style_context (item);
-  provider = g_object_get_data (G_OBJECT (context), "style-provider");
-  if (provider)
-    gtk_style_context_remove_provider (context, GTK_STYLE_PROVIDER (provider));
+  stylesheet = g_object_get_data (G_OBJECT (context), "style-stylesheet");
+  if (stylesheet)
+    gtk_style_context_remove_provider (context, GTK_STYLE_PROVIDER (stylesheet));
 
-  provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (provider, css, -1);
-  gtk_style_context_add_provider (gtk_widget_get_style_context (item), GTK_STYLE_PROVIDER (provider), 800);
-  g_object_set_data_full (G_OBJECT (context), "style-provider", provider, g_object_unref);
+  stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_load_from_data (stylesheet, css, -1);
+  gtk_style_context_add_provider (gtk_widget_get_style_context (item), GTK_STYLE_PROVIDER (stylesheet), 800);
+  g_object_set_data_full (G_OBJECT (context), "style-stylesheet", stylesheet, g_object_unref);
 
   g_free (str);
   g_free (css);

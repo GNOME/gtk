@@ -26,7 +26,7 @@
 #include "window.h"
 #include "css-editor.h"
 
-#include "gtkcssprovider.h"
+#include "gtkcssstylesheet.h"
 #include "gtkstyleprovider.h"
 #include "gtkstylecontext.h"
 #include "gtktextview.h"
@@ -44,7 +44,7 @@ struct _GtkInspectorCssEditorPrivate
   GtkWidget *view;
   GtkTextBuffer *text;
   GdkDisplay *display;
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
   GtkToggleButton *disable_button;
   guint timeout;
   GList *errors;
@@ -164,10 +164,10 @@ disable_toggled (GtkToggleButton       *button,
 
   if (gtk_toggle_button_get_active (button))
     gtk_style_context_remove_provider_for_display (ce->priv->display,
-                                                   GTK_STYLE_PROVIDER (ce->priv->provider));
+                                                   GTK_STYLE_PROVIDER (ce->priv->stylesheet));
   else
     gtk_style_context_add_provider_for_display (ce->priv->display,
-                                                GTK_STYLE_PROVIDER (ce->priv->provider),
+                                                GTK_STYLE_PROVIDER (ce->priv->stylesheet),
                                                 GTK_STYLE_PROVIDER_PRIORITY_USER);
 }
 
@@ -259,7 +259,7 @@ update_style (GtkInspectorCssEditor *ce)
   ce->priv->errors = NULL;
 
   text = get_current_text (ce->priv->text);
-  gtk_css_provider_load_from_data (ce->priv->provider, text, -1);
+  gtk_css_style_sheet_load_from_data (ce->priv->stylesheet, text, -1);
   g_free (text);
 }
 
@@ -290,7 +290,7 @@ text_changed (GtkTextBuffer         *buffer,
 }
 
 static void
-show_parsing_error (GtkCssProvider        *provider,
+show_parsing_error (GtkCssStyleSheet        *stylesheet,
                     GtkCssSection         *section,
                     const GError          *error,
                     GtkInspectorCssEditor *ce)
@@ -330,8 +330,8 @@ show_parsing_error (GtkCssProvider        *provider,
 static void
 create_provider (GtkInspectorCssEditor *ce)
 {
-  ce->priv->provider = gtk_css_provider_new ();
-  g_signal_connect (ce->priv->provider, "parsing-error",
+  ce->priv->stylesheet = gtk_css_style_sheet_new ();
+  g_signal_connect (ce->priv->stylesheet, "parsing-error",
                     G_CALLBACK (show_parsing_error), ce);
 
 }
@@ -339,8 +339,8 @@ create_provider (GtkInspectorCssEditor *ce)
 static void
 destroy_provider (GtkInspectorCssEditor *ce)
 {
-  g_signal_handlers_disconnect_by_func (ce->priv->provider, show_parsing_error, ce);
-  g_clear_object (&ce->priv->provider);
+  g_signal_handlers_disconnect_by_func (ce->priv->stylesheet, show_parsing_error, ce);
+  g_clear_object (&ce->priv->stylesheet);
 }
 
 static void
@@ -348,7 +348,7 @@ add_provider (GtkInspectorCssEditor *ce,
               GdkDisplay *display)
 {
   gtk_style_context_add_provider_for_display (display,
-                                              GTK_STYLE_PROVIDER (ce->priv->provider),
+                                              GTK_STYLE_PROVIDER (ce->priv->stylesheet),
                                               GTK_STYLE_PROVIDER_PRIORITY_USER);
 }
 
@@ -357,7 +357,7 @@ remove_provider (GtkInspectorCssEditor *ce,
                  GdkDisplay *display)
 {
   gtk_style_context_remove_provider_for_display (display,
-                                                 GTK_STYLE_PROVIDER (ce->priv->provider));
+                                                 GTK_STYLE_PROVIDER (ce->priv->stylesheet));
 }
 
 static void

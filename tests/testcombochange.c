@@ -76,7 +76,7 @@ create_combo (const char *name,
 {
   GtkCellRenderer *cell_renderer;
   GtkWidget *combo;
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
   GtkStyleContext *context;
   gchar *css_data;
 
@@ -90,14 +90,14 @@ create_combo (const char *name,
 
   context = gtk_widget_get_style_context (combo);
 
-  provider = gtk_css_provider_new ();
+  stylesheet = gtk_css_style_sheet_new ();
   css_data = g_strdup_printf ("#%s { -GtkComboBox-appears-as-list: %s }",
                               name, is_list ? "true" : "false");
-  gtk_css_provider_load_from_data (provider, css_data, -1);
+  gtk_css_style_sheet_load_from_data (stylesheet, css_data, -1);
   g_free (css_data);
 
   gtk_style_context_add_provider (context,
-                                  GTK_STYLE_PROVIDER (provider),
+                                  GTK_STYLE_PROVIDER (stylesheet),
                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   return combo;

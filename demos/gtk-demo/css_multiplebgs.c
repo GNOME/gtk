@@ -8,7 +8,7 @@
 #include <gtk/gtk.h>
 
 static void
-show_parsing_error (GtkCssProvider *provider,
+show_parsing_error (GtkCssStyleSheet *stylesheet,
                     GtkCssSection  *section,
                     const GError   *error,
                     GtkTextBuffer  *buffer)
@@ -39,7 +39,7 @@ show_parsing_error (GtkCssProvider *provider,
 
 static void
 css_text_changed (GtkTextBuffer  *buffer,
-                  GtkCssProvider *provider)
+                  GtkCssStyleSheet *stylesheet)
 {
   GtkTextIter start, end;
   char *text;
@@ -49,7 +49,7 @@ css_text_changed (GtkTextBuffer  *buffer,
   gtk_text_buffer_remove_all_tags (buffer, &start, &end);
 
   text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
-  gtk_css_provider_load_from_data (provider, text, -1);
+  gtk_css_style_sheet_load_from_data (stylesheet, text, -1);
   g_free (text);
 }
 
@@ -67,11 +67,11 @@ drawing_area_draw (GtkDrawingArea *da,
 }
 
 static void
-apply_css (GtkWidget *widget, GtkStyleProvider *provider)
+apply_css (GtkWidget *widget, GtkStyleProvider *stylesheet)
 {
-  gtk_style_context_add_provider (gtk_widget_get_style_context (widget), provider, G_MAXUINT);
+  gtk_style_context_add_provider (gtk_widget_get_style_context (widget), stylesheet, G_MAXUINT);
   if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget), (GtkCallback) apply_css, provider);
+    gtk_container_forall (GTK_CONTAINER (widget), (GtkCallback) apply_css, stylesheet);
 }
 
 GtkWidget *
@@ -82,7 +82,7 @@ do_css_multiplebgs (GtkWidget *do_widget)
   if (!window)
     {
       GtkWidget *paned, *container, *child;
-      GtkStyleProvider *provider;
+      GtkStyleProvider *stylesheet;
       GtkTextBuffer *text;
       GBytes *bytes;
 
@@ -127,7 +127,7 @@ do_css_multiplebgs (GtkWidget *do_widget)
                                   "underline", PANGO_UNDERLINE_ERROR,
                                   NULL);
 
-      provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
+      stylesheet = GTK_STYLE_PROVIDER (gtk_css_style_sheet_new ());
 
       container = gtk_scrolled_window_new (NULL, NULL);
       gtk_container_add (GTK_CONTAINER (paned), container);
@@ -136,18 +136,18 @@ do_css_multiplebgs (GtkWidget *do_widget)
       g_signal_connect (text,
                         "changed",
                         G_CALLBACK (css_text_changed),
-                        provider);
+                        stylesheet);
 
       bytes = g_resources_lookup_data ("/css_multiplebgs/css_multiplebgs.css", 0, NULL);
       gtk_text_buffer_set_text (text, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
       g_bytes_unref (bytes);
 
-      g_signal_connect (provider,
+      g_signal_connect (stylesheet,
                         "parsing-error",
                         G_CALLBACK (show_parsing_error),
                         gtk_text_view_get_buffer (GTK_TEXT_VIEW (child)));
 
-      apply_css (window, provider);
+      apply_css (window, stylesheet);
     }
 
   if (!gtk_widget_get_visible (window))

@@ -103,7 +103,7 @@ create_faces (void)
 }
 
 static GtkWidget *demo_window = NULL;
-static GtkCssProvider *provider = NULL;
+static GtkCssStyleSheet *stylesheet = NULL;
 
 static void
 close_window (GtkWidget *widget)
@@ -113,8 +113,8 @@ close_window (GtkWidget *widget)
     faces[i].face = NULL;
 
   gtk_style_context_remove_provider_for_display (gdk_display_get_default (),
-                                                 GTK_STYLE_PROVIDER (provider));
-  provider = NULL;
+                                                 GTK_STYLE_PROVIDER (stylesheet));
+  stylesheet = NULL;
 
   demo_window = NULL;
 }
@@ -142,12 +142,12 @@ create_demo_window (GtkWidget *do_widget)
   gtk_container_add (GTK_CONTAINER (fixed), cube);
   gtk_widget_set_overflow (fixed, GTK_OVERFLOW_VISIBLE);
 
-  provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_resource (provider, "/fixed/fixed.css");
+  stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_load_from_resource (stylesheet, "/fixed/fixed.css");
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER (stylesheet),
                                               800);
-  g_object_unref (provider);
+  g_object_unref (stylesheet);
 
   return window;
 }

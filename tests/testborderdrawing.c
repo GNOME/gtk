@@ -95,15 +95,15 @@ main (int argc, char **argv)
   GtkWidget *top;
   GtkWidget *bottom;
   GtkWidget *w;
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
   gboolean done = FALSE;
 
   gtk_init ();
 
-  provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (provider, css, -1);
+  stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_load_from_data (stylesheet, css, -1);
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER (stylesheet),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   window = gtk_window_new ();

@@ -32,7 +32,7 @@ int
 main(int argc, char **argv)
 {
   GtkWidget *window, *revealer, *grid, *widget;
-  GtkCssProvider *cssprovider;
+  GtkCssStyleSheet *stylesheet;
   GError *error = NULL;
   guint x, y;
   gboolean done = FALSE;
@@ -65,10 +65,10 @@ main(int argc, char **argv)
   grid = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (revealer), grid);
 
-  cssprovider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (cssprovider, "* { padding: 2px; text-shadow: 5px 5px 2px grey; }", -1);
+  stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_load_from_data (stylesheet, "* { padding: 2px; text-shadow: 5px 5px 2px grey; }", -1);
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (cssprovider),
+                                              GTK_STYLE_PROVIDER (stylesheet),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   for (x = 0; x < 10; x++)

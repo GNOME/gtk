@@ -365,7 +365,7 @@
     <xi:include href="css-overview.xml" />
     <xi:include href="css-properties.xml" />
     <xi:include href="xml/gtkstylecontext.xml" />
-    <xi:include href="xml/gtkcssprovider.xml" />
+    <xi:include href="xml/gtkcssstylesheet.xml" />
     <xi:include href="xml/gtkstyleprovider.xml" />
     <xi:include href="xml/gtkicontheme.xml" />
   </part>

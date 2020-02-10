@@ -31,7 +31,7 @@
 #include "gtklabel.h"
 #include "gtkpopover.h"
 #include "gtk/gtkwidgetprivate.h"
-#include "gtkcssproviderprivate.h"
+#include "gtkcssstylesheetprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkcssvalueprivate.h"

@@ -85,20 +85,20 @@ main (int    argc,
   GtkWidget *vbox, *hbox, *grid_hbox, *spin, *spin2, *toggle, *combo, *image;
   GtkAdjustment *adjustment;
   int i, j;
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
   gboolean done = FALSE;
 
   gtk_init ();
 
-  provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (provider,
+  stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_load_from_data (stylesheet,
     ".small-font { font-size: 5px; }"
     ".medium-font { font-size: 10px; }"
     ".large-font { font-size: 15px; }", -1);
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER (stylesheet),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-  g_object_unref (provider);
+  g_object_unref (stylesheet);
   window = gtk_window_new ();
   g_signal_connect (G_OBJECT (window), "destroy", G_CALLBACK (quit_cb), &done);
 

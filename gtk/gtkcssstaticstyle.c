@@ -695,14 +695,14 @@ gtk_css_static_style_get_default (void)
   if (default_style == NULL)
     {
       GtkCountingBloomFilter filter = GTK_COUNTING_BLOOM_FILTER_INIT;
-      GtkCssProvider *provider;
+      GtkCssStyleSheet *stylesheet;
 
-      provider = gtk_css_provider_new ();
-      default_style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER (provider),
+      stylesheet = gtk_css_style_sheet_new ();
+      default_style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER (stylesheet),
                                                         &filter,
                                                         NULL,
                                                         0);
-      g_object_unref (provider);
+      g_object_unref (stylesheet);
     }
 
   return default_style;

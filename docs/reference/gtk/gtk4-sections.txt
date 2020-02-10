@@ -4631,16 +4631,16 @@ gtk_border_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkcssprovider</FILE>
-<TITLE>GtkCssProvider</TITLE>
-GtkCssProvider
-gtk_css_provider_load_named
-gtk_css_provider_load_from_data
-gtk_css_provider_load_from_file
-gtk_css_provider_load_from_path
-gtk_css_provider_load_from_resource
-gtk_css_provider_new
-gtk_css_provider_to_string
+<FILE>gtkcssstylesheet</FILE>
+<TITLE>GtkCssStyleSheet</TITLE>
+GtkCssStyleSheet
+gtk_css_style_sheet_load_named
+gtk_css_style_sheet_load_from_data
+gtk_css_style_sheet_load_from_file
+gtk_css_style_sheet_load_from_path
+gtk_css_style_sheet_load_from_resource
+gtk_css_style_sheet_new
+gtk_css_style_sheet_to_string
 GTK_CSS_PARSER_ERROR
 GtkCssParserError
 GtkCssParserWarning
@@ -4657,17 +4657,15 @@ gtk_css_section_get_parent
 gtk_css_section_get_start_location
 gtk_css_section_get_end_location
 <SUBSECTION Standard>
-GTK_TYPE_CSS_PROVIDER
-GTK_CSS_PROVIDER
-GTK_CSS_PROVIDER_CLASS
-GTK_CSS_PROVIDER_GET_CLASS
-GTK_IS_CSS_PROVIDER
-GTK_IS_CSS_PROVIDER_CLASS
+GTK_TYPE_CSS_STYLE_SHEET
+GTK_CSS_STYLE_SHEET
+GTK_CSS_STYLE_SHEET_CLASS
+GTK_CSS_STYLE_SHEET_GET_CLASS
+GTK_IS_CSS_STYLE_SHEET
+GTK_IS_CSS_STYLE_SHEET_CLASS
 <SUBSECTION Private>
 GTK_TYPE_CSS_SECTION
-GtkCssProviderPrivate
-gtk_css_provider_get_type
-gtk_css_provider_error_quark
+gtk_css_style_sheet_get_type
 gtk_css_section_get_type
 </SECTION>
 

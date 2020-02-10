@@ -134,7 +134,7 @@ append_error_value (GString *string,
 }
 
 static void
-parsing_error_cb (GtkCssProvider *provider,
+parsing_error_cb (GtkCssStyleSheet *stylesheet,
                   GtkCssSection  *section,
                   const GError   *error,
                   GString        *errors)
@@ -164,7 +164,7 @@ parsing_error_cb (GtkCssProvider *provider,
 static void
 parse_css_file (GFile *file, gboolean generate)
 {
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
   char *css, *css_file, *reference_file, *errors_file;
   GString *errors;
   GBytes *diff;
@@ -173,14 +173,14 @@ parse_css_file (GFile *file, gboolean generate)
   css_file = g_file_get_path (file);
   errors = g_string_new ("");
 
-  provider = gtk_css_provider_new ();
-  g_signal_connect (provider, 
+  stylesheet = gtk_css_style_sheet_new ();
+  g_signal_connect (stylesheet, 
                     "parsing-error",
                     G_CALLBACK (parsing_error_cb),
                     errors);
-  gtk_css_provider_load_from_path (provider, css_file);
+  gtk_css_style_sheet_load_from_path (stylesheet, css_file);
 
-  css = gtk_css_provider_to_string (provider);
+  css = gtk_css_style_sheet_to_string (stylesheet);
 
   if (generate)
     {

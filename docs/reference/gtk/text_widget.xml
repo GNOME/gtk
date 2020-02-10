@@ -170,7 +170,7 @@ foreground color &mdash; use CSS to override their default values.
   PangoFontDescription *font_desc;
   GdkRGBA rgba;
   GtkTextTag *tag;
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
   GtkStyleContext *context;
 
   view = gtk_text_view_new (<!-- -->);
@@ -180,8 +180,8 @@ foreground color &mdash; use CSS to override their default values.
   gtk_text_buffer_set_text (buffer, "Hello, this is some text", -1);
 
   /* Change default font and color throughout the widget */
-  provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (provider,
+  stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_load_from_data (stylesheet,
                                    "textview {"
                                    " font: 15 serif;"
                                    "  color: green;"
@@ -189,7 +189,7 @@ foreground color &mdash; use CSS to override their default values.
                                    -1);
   context = gtk_widget_get_style_context (view);
   gtk_style_context_add_provider (context,
-                                  GTK_STYLE_PROVIDER (provider),
+                                  GTK_STYLE_PROVIDER (stylesheet),
                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   /* Change left margin throughout the widget */

@@ -18,7 +18,7 @@
 #ifndef __GTK_CSS_PARSER_PRIVATE_H__
 #define __GTK_CSS_PARSER_PRIVATE_H__
 
-#include <gtk/gtkcssprovider.h>
+#include <gtk/gtkcssstylesheet.h>
 
 #include <gtk/css/gtkcss.h>
 #include "gtk/css/gtkcsstokenizerprivate.h"

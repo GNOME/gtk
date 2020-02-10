@@ -354,7 +354,7 @@ do_dnd (GtkWidget *do_widget)
     {
       GtkWidget *vbox, *fixed;
       GtkGesture *multipress;
-      GtkCssProvider *provider;
+      GtkCssStyleSheet *stylesheet;
 
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
@@ -378,10 +378,10 @@ do_dnd (GtkWidget *do_widget)
       g_signal_connect (multipress, "released", G_CALLBACK (released_cb), NULL);
       gtk_widget_add_controller (fixed, GTK_EVENT_CONTROLLER (multipress));
 
-      provider = gtk_css_provider_new ();
-      gtk_css_provider_load_from_resource (provider, "/dnd/dnd.css");
+      stylesheet = gtk_css_style_sheet_new ();
+      gtk_css_style_sheet_load_from_resource (stylesheet, "/dnd/dnd.css");
       gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                                  GTK_STYLE_PROVIDER (provider),
+                                                  GTK_STYLE_PROVIDER (stylesheet),
                                                   800);
     }
 

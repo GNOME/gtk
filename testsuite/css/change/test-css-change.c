@@ -118,7 +118,7 @@ load_ui_file (GFile *file, gboolean generate)
   GtkWidget *window;
   char *output, *diff;
   char *ui_file, *css_file, *reference_file;
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
   GError *error = NULL;
 
   ui_file = g_file_get_path (file);
@@ -126,10 +126,10 @@ load_ui_file (GFile *file, gboolean generate)
   css_file = test_get_other_file (ui_file, ".css");
   g_assert (css_file != NULL);
 
-  provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_path (provider, css_file);
+  stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_load_from_path (stylesheet, css_file);
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER (stylesheet),
                                               GTK_STYLE_PROVIDER_PRIORITY_FORCE);
 
   builder = gtk_builder_new_from_file (ui_file);
@@ -169,8 +169,8 @@ load_ui_file (GFile *file, gboolean generate)
 
 out:
   gtk_style_context_remove_provider_for_display (gdk_display_get_default (),
-                                                 GTK_STYLE_PROVIDER (provider));
-  g_object_unref (provider);
+                                                 GTK_STYLE_PROVIDER (stylesheet));
+  g_object_unref (stylesheet);
 
   g_free (output);
   g_free (ui_file);

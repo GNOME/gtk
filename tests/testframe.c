@@ -22,19 +22,19 @@ static void
 spin_hpadding_cb (GtkSpinButton *spin, gpointer user_data)
 {
   GtkWidget *frame = user_data;
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
   GtkStyleContext *context;
   gchar *data;
   GtkBorder pad;
 
   context = gtk_widget_get_style_context (frame);
-  provider = g_object_get_data (G_OBJECT (frame), "provider");
-  if (provider == NULL)
+  stylesheet = g_object_get_data (G_OBJECT (frame), "stylesheet");
+  if (stylesheet == NULL)
     {
-      provider = gtk_css_provider_new ();
-      g_object_set_data (G_OBJECT (frame), "provider", provider);
+      stylesheet = gtk_css_style_sheet_new ();
+      g_object_set_data (G_OBJECT (frame), "stylesheet", stylesheet);
       gtk_style_context_add_provider (context,
-                                      GTK_STYLE_PROVIDER (provider),
+                                      GTK_STYLE_PROVIDER (stylesheet),
                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 
@@ -48,7 +48,7 @@ spin_hpadding_cb (GtkSpinButton *spin, gpointer user_data)
                           pad.top,
                           (gint)gtk_spin_button_get_value (spin));
 
-  gtk_css_provider_load_from_data (provider, data, -1);
+  gtk_css_style_sheet_load_from_data (stylesheet, data, -1);
   g_free (data);
 
   gtk_widget_queue_resize (frame);
@@ -58,19 +58,19 @@ static void
 spin_vpadding_cb (GtkSpinButton *spin, gpointer user_data)
 {
   GtkWidget *frame = user_data;
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
   GtkStyleContext *context;
   gchar *data;
   GtkBorder pad;
 
   context = gtk_widget_get_style_context (frame);
-  provider = g_object_get_data (G_OBJECT (frame), "provider");
-  if (provider == NULL)
+  stylesheet = g_object_get_data (G_OBJECT (frame), "stylesheet");
+  if (stylesheet == NULL)
     {
-      provider = gtk_css_provider_new ();
-      g_object_set_data (G_OBJECT (frame), "provider", provider);
+      stylesheet = gtk_css_style_sheet_new ();
+      g_object_set_data (G_OBJECT (frame), "stylesheet", stylesheet);
       gtk_style_context_add_provider (context,
-                                      GTK_STYLE_PROVIDER (provider),
+                                      GTK_STYLE_PROVIDER (stylesheet),
                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 
@@ -84,7 +84,7 @@ spin_vpadding_cb (GtkSpinButton *spin, gpointer user_data)
                           (gint)gtk_spin_button_get_value (spin),
                           pad.left);
 
-  gtk_css_provider_load_from_data (provider, data, -1);
+  gtk_css_style_sheet_load_from_data (stylesheet, data, -1);
   g_free (data);
 
   gtk_widget_queue_resize (frame);

@@ -22,7 +22,7 @@
 #include "gtktextprivate.h"
 #include "gtkeditable.h"
 #include "gtkbox.h"
-#include "gtkcssprovider.h"
+#include "gtkcssstylesheet.h"
 #include "gtklistbox.h"
 #include "gtklabel.h"
 #include "gtkpopover.h"

@@ -60,13 +60,13 @@ preview_file (const char *filename,
 
   if (cssfile)
     {
-      GtkCssProvider *provider;
+      GtkCssStyleSheet *stylesheet;
 
-      provider = gtk_css_provider_new ();
-      gtk_css_provider_load_from_path (provider, cssfile);
+      stylesheet = gtk_css_style_sheet_new ();
+      gtk_css_style_sheet_load_from_path (stylesheet, cssfile);
 
       gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                                  GTK_STYLE_PROVIDER (provider),
+                                                  GTK_STYLE_PROVIDER (stylesheet),
                                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 

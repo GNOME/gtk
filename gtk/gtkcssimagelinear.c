@@ -26,7 +26,7 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
-#include "gtkcssprovider.h"
+#include "gtkcssstylesheet.h"
 
 G_DEFINE_TYPE (GtkCssImageLinear, _gtk_css_image_linear, GTK_TYPE_CSS_IMAGE)
 

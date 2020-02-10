@@ -1,5 +1,6 @@
 /* GTK - The GIMP Toolkit
  * Copyright (C) 2010 Carlos Garnacho <carlosg@gnome.org>
+ *               2020 Benjamin Otte <otte@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,7 +18,7 @@
 
 #include "config.h"
 
-#include "gtkcssproviderprivate.h"
+#include "gtkcssstylesheetprivate.h"
 
 #include "gtkbitmaskprivate.h"
 #include "gtkcssarrayvalueprivate.h"
@@ -44,19 +45,19 @@
 #include <cairo-gobject.h>
 
 /**
- * SECTION:gtkcssprovider
+ * SECTION:gtkcssstylesheet
  * @Short_description: CSS-like styling for widgets
- * @Title: GtkCssProvider
+ * @Title: GtkCssStyleSheet
  * @See_also: #GtkStyleContext, #GtkStyleProvider
  *
- * GtkCssProvider is an object implementing the #GtkStyleProvider interface.
+ * GtkCssStyleSheet is an object implementing the #GtkStyleProvider interface.
  * It is able to parse [CSS-like][css-overview] input in order to style widgets.
  *
  * An application can make GTK+ parse a specific CSS style sheet by calling
- * gtk_css_provider_load_from_file() or gtk_css_provider_load_from_resource()
+ * gtk_css_style_sheet_load_from_file() or gtk_css_style_sheet_load_from_resource()
  * and adding the provider with gtk_style_context_add_provider() or
  * gtk_style_context_add_provider_for_display().
-
+ *
  * In addition, certain files will be read when GTK+ is initialized. First, the
  * file `$XDG_CONFIG_HOME/gtk-4.0/gtk.css` is loaded if it exists. Then, GTK+
  * loads the first existing file among
@@ -74,13 +75,13 @@
 
 #define MAX_SELECTOR_LIST_LENGTH 64
 
-struct _GtkCssProviderClass
+struct _GtkCssStyleSheetClass
 {
   GObjectClass parent_class;
 
-  void (* parsing_error)                        (GtkCssProvider  *provider,
-                                                 GtkCssSection   *section,
-                                                 const GError *   error);
+  void          (* parsing_error)                               (GtkCssStyleSheet       *self,
+                                                                 GtkCssSection          *section,
+                                                                 const GError           *error);
 };
 
 typedef struct GtkCssRuleset GtkCssRuleset;
@@ -106,12 +107,12 @@ struct GtkCssRuleset
 
 struct _GtkCssScanner
 {
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
   GtkCssParser *parser;
   GtkCssScanner *parent;
 };
 
-struct _GtkCssProviderPrivate
+struct _GtkCssStyleSheetPrivate
 {
   GScanner *scanner;
 
@@ -131,29 +132,29 @@ enum {
 
 static gboolean gtk_keep_css_sections = FALSE;
 
-static guint css_provider_signals[LAST_SIGNAL] = { 0 };
+static guint css_style_sheet_signals[LAST_SIGNAL] = { 0 };
 
-static void gtk_css_provider_finalize (GObject *object);
+static void gtk_css_style_sheet_finalize (GObject *object);
 static void gtk_css_style_provider_iface_init (GtkStyleProviderInterface *iface);
 static void gtk_css_style_provider_emit_error (GtkStyleProvider *provider,
                                                GtkCssSection    *section,
                                                const GError     *error);
 
 static void
-gtk_css_provider_load_internal (GtkCssProvider *css_provider,
-                                GtkCssScanner  *scanner,
-                                GFile          *file,
-                                GBytes         *bytes);
+gtk_css_style_sheet_load_internal (GtkCssStyleSheet *self,
+                                   GtkCssScanner    *scanner,
+                                   GFile            *file,
+                                   GBytes           *bytes);
 
-G_DEFINE_TYPE_EXTENDED (GtkCssProvider, gtk_css_provider, G_TYPE_OBJECT, 0,
-                        G_ADD_PRIVATE (GtkCssProvider)
+G_DEFINE_TYPE_EXTENDED (GtkCssStyleSheet, gtk_css_style_sheet, G_TYPE_OBJECT, 0,
+                        G_ADD_PRIVATE (GtkCssStyleSheet)
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
                                                gtk_css_style_provider_iface_init));
 
 static void
-gtk_css_provider_parsing_error (GtkCssProvider  *provider,
-                                GtkCssSection   *section,
-                                const GError    *error)
+gtk_css_style_sheet_parsing_error (GtkCssStyleSheet *self,
+                                   GtkCssSection    *section,
+                                   const GError     *error)
 {
   /* Only emit a warning when we have no error handlers. This is our
    * default handlers. And in this case erroneous CSS files are a bug
@@ -161,8 +162,8 @@ gtk_css_provider_parsing_error (GtkCssProvider  *provider,
    * Note that these warnings can also be triggered by a broken theme
    * that people installed from some weird location on the internets.
    */
-  if (!g_signal_has_handler_pending (provider,
-                                     css_provider_signals[PARSING_ERROR],
+  if (!g_signal_has_handler_pending (self,
+                                     css_style_sheet_signals[PARSING_ERROR],
                                      0,
                                      TRUE))
     {
@@ -180,22 +181,22 @@ gtk_css_provider_parsing_error (GtkCssProvider  *provider,
  * It is the callers responsibility to reparse the current theme.
  */
 void
-gtk_css_provider_set_keep_css_sections (void)
+gtk_css_style_sheet_set_keep_css_sections (void)
 {
   gtk_keep_css_sections = TRUE;
 }
 
 static void
-gtk_css_provider_class_init (GtkCssProviderClass *klass)
+gtk_css_style_sheet_class_init (GtkCssStyleSheetClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   if (g_getenv ("GTK_CSS_DEBUG"))
-    gtk_css_provider_set_keep_css_sections ();
+    gtk_css_style_sheet_set_keep_css_sections ();
 
   /**
-   * GtkCssProvider::parsing-error:
-   * @provider: the provider that had a parsing error
+   * GtkCssStyleSheet::parsing-error:
+   * @self: the #GtkCssStyleSheet that had a parsing error
    * @section: section the error happened in
    * @error: The parsing error
    *
@@ -207,28 +208,28 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
    * data or even all of it to not be parsed at all. So it is a useful idea
    * to check that the parsing succeeds by connecting to this signal.
    *
-   * Note that this signal may be emitted at any time as the css provider
+   * Note that this signal may be emitted at any time as the style sheet
    * may opt to defer parsing parts or all of the input to a later time
    * than when a loading function was called.
    */
-  css_provider_signals[PARSING_ERROR] =
+  css_style_sheet_signals[PARSING_ERROR] =
     g_signal_new (I_("parsing-error"),
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkCssProviderClass, parsing_error),
+                  G_STRUCT_OFFSET (GtkCssStyleSheetClass, parsing_error),
                   NULL, NULL,
                   _gtk_marshal_VOID__BOXED_BOXED,
                   G_TYPE_NONE, 2, GTK_TYPE_CSS_SECTION, G_TYPE_ERROR);
 
-  object_class->finalize = gtk_css_provider_finalize;
+  object_class->finalize = gtk_css_style_sheet_finalize;
 
-  klass->parsing_error = gtk_css_provider_parsing_error;
+  klass->parsing_error = gtk_css_style_sheet_parsing_error;
 }
 
 static void
-gtk_css_ruleset_init_copy (GtkCssRuleset       *new,
-                           GtkCssRuleset       *ruleset,
-                           GtkCssSelector      *selector)
+gtk_css_ruleset_init_copy (GtkCssRuleset  *new,
+                           GtkCssRuleset  *ruleset,
+                           GtkCssSelector *selector)
 {
   memcpy (new, ruleset, sizeof (GtkCssRuleset));
 
@@ -248,9 +249,9 @@ gtk_css_ruleset_clear (GtkCssRuleset *ruleset)
       for (i = 0; i < ruleset->n_styles; i++)
         {
           _gtk_css_value_unref (ruleset->styles[i].value);
-	  ruleset->styles[i].value = NULL;
-	  if (ruleset->styles[i].section)
-	    gtk_css_section_unref (ruleset->styles[i].section);
+          ruleset->styles[i].value = NULL;
+          if (ruleset->styles[i].section)
+            gtk_css_section_unref (ruleset->styles[i].section);
         }
       g_free (ruleset->styles);
     }
@@ -277,9 +278,9 @@ gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
       if (ruleset->styles[i].property == property)
         {
           _gtk_css_value_unref (ruleset->styles[i].value);
-	  ruleset->styles[i].value = NULL;
-	  if (ruleset->styles[i].section)
-	    gtk_css_section_unref (ruleset->styles[i].section);
+          ruleset->styles[i].value = NULL;
+          if (ruleset->styles[i].section)
+            gtk_css_section_unref (ruleset->styles[i].section);
           break;
         }
     }
@@ -301,7 +302,7 @@ gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
 static void
 gtk_css_scanner_destroy (GtkCssScanner *scanner)
 {
-  g_object_unref (scanner->provider);
+  g_object_unref (scanner->stylesheet);
   gtk_css_parser_unref (scanner->parser);
 
   g_slice_free (GtkCssScanner, scanner);
@@ -312,7 +313,7 @@ gtk_css_style_provider_emit_error (GtkStyleProvider *provider,
                                    GtkCssSection    *section,
                                    const GError     *error)
 {
-  g_signal_emit (provider, css_provider_signals[PARSING_ERROR], 0, section, error);
+  g_signal_emit (provider, css_style_sheet_signals[PARSING_ERROR], 0, section, error);
 }
 
 static void
@@ -329,23 +330,22 @@ gtk_css_scanner_parser_error (GtkCssParser         *parser,
                                  start,
                                  end);
 
-  gtk_css_style_provider_emit_error (GTK_STYLE_PROVIDER (scanner->provider), section, error);
+  gtk_css_style_provider_emit_error (GTK_STYLE_PROVIDER (scanner->stylesheet), section, error);
 
   gtk_css_section_unref (section);
 }
 
 static GtkCssScanner *
-gtk_css_scanner_new (GtkCssProvider *provider,
-                     GtkCssScanner  *parent,
-                     GFile          *file,
-                     GBytes         *bytes)
+gtk_css_scanner_new (GtkCssStyleSheet *stylesheet,
+                     GtkCssScanner    *parent,
+                     GFile            *file,
+                     GBytes           *bytes)
 {
   GtkCssScanner *scanner;
 
   scanner = g_slice_new0 (GtkCssScanner);
 
-  g_object_ref (provider);
-  scanner->provider = provider;
+  scanner->stylesheet = g_object_ref (stylesheet);
   scanner->parent = parent;
 
   scanner->parser = gtk_css_parser_new_for_bytes (bytes,
@@ -375,9 +375,9 @@ gtk_css_scanner_would_recurse (GtkCssScanner *scanner,
 }
 
 static void
-gtk_css_provider_init (GtkCssProvider *css_provider)
+gtk_css_style_sheet_init (GtkCssStyleSheet *self)
 {
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
+  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
 
   priv->rulesets = g_array_new (FALSE, FALSE, sizeof (GtkCssRuleset));
 
@@ -390,12 +390,12 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
 }
 
 static void
-verify_tree_match_results (GtkCssProvider *provider,
-			   GtkCssNode     *node,
-			   GPtrArray      *tree_rules)
+verify_tree_match_results (GtkCssStyleSheet *self,
+                           GtkCssNode       *node,
+                           GPtrArray        *tree_rules)
 {
 #ifdef VERIFY_TREE
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
+  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
   GtkCssRuleset *ruleset;
   gboolean should_match;
   int i, j;
@@ -407,21 +407,21 @@ verify_tree_match_results (GtkCssProvider *provider,
       ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
 
       for (j = 0; j < tree_rules->len; j++)
-	{
-	  if (ruleset == tree_rules->pdata[j])
-	    {
-	      found = TRUE;
-	      break;
-	    }
-	}
+        {
+          if (ruleset == tree_rules->pdata[j])
+            {
+              found = TRUE;
+              break;
+            }
+        }
       should_match = gtk_css_selector_matches (ruleset->selector, node);
       if (found != !!should_match)
-	{
-	  g_error ("expected rule '%s' to %s, but it %s",
-		   _gtk_css_selector_to_string (ruleset->selector),
-		   should_match ? "match" : "not match",
-		   found ? "matched" : "didn't match");
-	}
+        {
+          g_error ("expected rule '%s' to %s, but it %s",
+                   _gtk_css_selector_to_string (ruleset->selector),
+                   should_match ? "match" : "not match",
+                   found ? "matched" : "didn't match");
+        }
     }
 #endif
 }
@@ -430,8 +430,8 @@ static GtkCssValue *
 gtk_css_style_provider_get_color (GtkStyleProvider *provider,
                                   const char       *name)
 {
-  GtkCssProvider *css_provider = GTK_CSS_PROVIDER (provider);
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
+  GtkCssStyleSheet *self = GTK_CSS_STYLE_SHEET (provider);
+  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
 
   return g_hash_table_lookup (priv->symbolic_colors, name);
 }
@@ -440,8 +440,8 @@ static GtkCssKeyframes *
 gtk_css_style_provider_get_keyframes (GtkStyleProvider *provider,
                                       const char       *name)
 {
-  GtkCssProvider *css_provider = GTK_CSS_PROVIDER (provider);
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
+  GtkCssStyleSheet *self = GTK_CSS_STYLE_SHEET (provider);
+  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
 
   return g_hash_table_lookup (priv->keyframes, name);
 }
@@ -453,8 +453,8 @@ gtk_css_style_provider_lookup (GtkStyleProvider             *provider,
                                GtkCssLookup                 *lookup,
                                GtkCssChange                 *change)
 {
-  GtkCssProvider *css_provider = GTK_CSS_PROVIDER (provider);
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
+  GtkCssStyleSheet *self = GTK_CSS_STYLE_SHEET (provider);
+  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
   GtkCssRuleset *ruleset;
   guint j;
   int i;
@@ -466,7 +466,7 @@ gtk_css_style_provider_lookup (GtkStyleProvider             *provider,
   tree_rules = _gtk_css_selector_tree_match_all (priv->tree, filter, node);
   if (tree_rules)
     {
-      verify_tree_match_results (css_provider, node, tree_rules);
+      verify_tree_match_results (self, node, tree_rules);
 
       for (i = tree_rules->len - 1; i >= 0; i--)
         {
@@ -507,10 +507,10 @@ gtk_css_style_provider_iface_init (GtkStyleProviderInterface *iface)
 }
 
 static void
-gtk_css_provider_finalize (GObject *object)
+gtk_css_style_sheet_finalize (GObject *object)
 {
-  GtkCssProvider *css_provider = GTK_CSS_PROVIDER (object);
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
+  GtkCssStyleSheet *self = GTK_CSS_STYLE_SHEET (object);
+  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
   guint i;
 
   for (i = 0; i < priv->rulesets->len; i++)
@@ -531,29 +531,29 @@ gtk_css_provider_finalize (GObject *object)
 
   g_free (priv->path);
 
-  G_OBJECT_CLASS (gtk_css_provider_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_css_style_sheet_parent_class)->finalize (object);
 }
 
 /**
- * gtk_css_provider_new:
+ * gtk_css_style_sheet_new:
  *
- * Returns a newly created #GtkCssProvider.
+ * Returns a newly created #GtkCssStyleSheet.
  *
- * Returns: A new #GtkCssProvider
+ * Returns: A new #GtkCssStyleSheet
  **/
-GtkCssProvider *
-gtk_css_provider_new (void)
+GtkCssStyleSheet *
+gtk_css_style_sheet_new (void)
 {
-  return g_object_new (GTK_TYPE_CSS_PROVIDER, NULL);
+  return g_object_new (GTK_TYPE_CSS_STYLE_SHEET, NULL);
 }
 
 static void
-css_provider_commit (GtkCssProvider  *css_provider,
-                     GtkCssSelector **selectors,
-                     guint            n_selectors,
-                     GtkCssRuleset   *ruleset)
+css_style_sheet_commit (GtkCssStyleSheet  *self,
+                        GtkCssSelector   **selectors,
+                        guint              n_selectors,
+                        GtkCssRuleset     *ruleset)
 {
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
+  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
   guint i;
 
   if (ruleset->styles == NULL)
@@ -573,9 +573,9 @@ css_provider_commit (GtkCssProvider  *css_provider,
 }
 
 static void
-gtk_css_provider_reset (GtkCssProvider *css_provider)
+gtk_css_style_sheet_reset (GtkCssStyleSheet *self)
 {
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
+  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
   guint i;
 
   if (priv->resource)
@@ -650,21 +650,21 @@ parse_import (GtkCssScanner *scanner)
     }
   else if (gtk_css_scanner_would_recurse (scanner, file))
     {
-       char *path = g_file_get_path (file);
-       gtk_css_parser_error (scanner->parser,
-                             GTK_CSS_PARSER_ERROR_IMPORT,
-                             gtk_css_parser_get_block_location (scanner->parser),
-                             gtk_css_parser_get_end_location (scanner->parser),
-                             "Loading '%s' would recurse",
-                             path);
-       g_free (path);
+      char *path = g_file_get_path (file);
+      gtk_css_parser_error (scanner->parser,
+                            GTK_CSS_PARSER_ERROR_IMPORT,
+                            gtk_css_parser_get_block_location (scanner->parser),
+                            gtk_css_parser_get_end_location (scanner->parser),
+                            "Loading '%s' would recurse",
+                            path);
+      g_free (path);
     }
   else
     {
-      gtk_css_provider_load_internal (scanner->provider,
-                                      scanner,
-                                      file,
-                                      NULL);
+      gtk_css_style_sheet_load_internal (scanner->stylesheet,
+                                         scanner,
+                                         file,
+                                         NULL);
     }
 
   g_clear_object (&file);
@@ -675,7 +675,7 @@ parse_import (GtkCssScanner *scanner)
 static gboolean
 parse_color_definition (GtkCssScanner *scanner)
 {
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (scanner->provider);
+  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (scanner->stylesheet);
   GtkCssValue *color;
   char *name;
 
@@ -710,7 +710,7 @@ parse_color_definition (GtkCssScanner *scanner)
 static gboolean
 parse_keyframes (GtkCssScanner *scanner)
 {
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (scanner->provider);
+  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (scanner->stylesheet);
   GtkCssKeyframes *keyframes;
   char *name;
 
@@ -856,15 +856,14 @@ parse_declaration (GtkCssScanner *scanner,
             {
               GtkCssStyleProperty *child = _gtk_css_shorthand_property_get_subproperty (shorthand, i);
               GtkCssValue *sub = _gtk_css_array_value_get_nth (value, i);
-              
+
               gtk_css_ruleset_add (ruleset, child, _gtk_css_value_ref (sub), section);
             }
-          
-            _gtk_css_value_unref (value);
+
+          _gtk_css_value_unref (value);
         }
       else if (GTK_IS_CSS_STYLE_PROPERTY (property))
         {
-
           gtk_css_ruleset_add (ruleset, GTK_CSS_STYLE_PROPERTY (property), value, section);
         }
       else
@@ -927,7 +926,7 @@ parse_ruleset (GtkCssScanner *scanner)
 
   gtk_css_parser_end_block (scanner->parser);
 
-  css_provider_commit (scanner->provider, selectors, n_selectors, &ruleset);
+  css_style_sheet_commit (scanner->stylesheet, selectors, n_selectors, &ruleset);
   gtk_css_ruleset_clear (&ruleset);
 }
 
@@ -957,8 +956,8 @@ parse_stylesheet (GtkCssScanner *scanner)
 }
 
 static int
-gtk_css_provider_compare_rule (gconstpointer a_,
-                               gconstpointer b_)
+gtk_css_style_sheet_compare_rule (gconstpointer a_,
+                                  gconstpointer b_)
 {
   const GtkCssRuleset *a = (const GtkCssRuleset *) a_;
   const GtkCssRuleset *b = (const GtkCssRuleset *) b_;
@@ -972,14 +971,14 @@ gtk_css_provider_compare_rule (gconstpointer a_,
 }
 
 static void
-gtk_css_provider_postprocess (GtkCssProvider *css_provider)
+gtk_css_style_sheet_postprocess (GtkCssStyleSheet *self)
 {
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
+  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
   GtkCssSelectorTreeBuilder *builder;
   guint i;
   gint64 before = g_get_monotonic_time ();
 
-  g_array_sort (priv->rulesets, gtk_css_provider_compare_rule);
+  g_array_sort (priv->rulesets, gtk_css_style_sheet_compare_rule);
 
   builder = _gtk_css_selector_tree_builder_new ();
   for (i = 0; i < priv->rulesets->len; i++)
@@ -989,9 +988,9 @@ gtk_css_provider_postprocess (GtkCssProvider *css_provider)
       ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
 
       _gtk_css_selector_tree_builder_add (builder,
-					  ruleset->selector,
-					  &ruleset->selector_match,
-					  ruleset);
+                                          ruleset->selector,
+                                          &ruleset->selector_match,
+                                          ruleset);
     }
 
   priv->tree = _gtk_css_selector_tree_builder_build (builder);
@@ -1014,10 +1013,10 @@ gtk_css_provider_postprocess (GtkCssProvider *css_provider)
 }
 
 static void
-gtk_css_provider_load_internal (GtkCssProvider *self,
-                                GtkCssScanner  *parent,
-                                GFile          *file,
-                                GBytes         *bytes)
+gtk_css_style_sheet_load_internal (GtkCssStyleSheet *self,
+                                   GtkCssScanner    *parent,
+                                   GFile            *file,
+                                   GBytes           *bytes)
 {
   gint64 before = g_get_monotonic_time ();
 
@@ -1063,7 +1062,7 @@ gtk_css_provider_load_internal (GtkCssProvider *self,
       gtk_css_scanner_destroy (scanner);
 
       if (parent == NULL)
-        gtk_css_provider_postprocess (self);
+        gtk_css_style_sheet_postprocess (self);
 
       g_bytes_unref (bytes);
     }
@@ -1077,24 +1076,24 @@ gtk_css_provider_load_internal (GtkCssProvider *self,
 }
 
 /**
- * gtk_css_provider_load_from_data:
- * @css_provider: a #GtkCssProvider
+ * gtk_css_style_sheet_load_from_data:
+ * @self: a #GtkCssStyleSheet
  * @data: (array length=length) (element-type guint8): CSS data loaded in memory
  * @length: the length of @data in bytes, or -1 for NUL terminated strings. If
  *   @length is not -1, the code will assume it is not NUL terminated and will
  *   potentially do a copy.
  *
- * Loads @data into @css_provider, and by doing so clears any previously loaded
+ * Loads @data into @self, and by doing so clears any previously loaded
  * information.
  **/
 void
-gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
-                                 const gchar     *data,
-                                 gssize           length)
+gtk_css_style_sheet_load_from_data (GtkCssStyleSheet *self,
+                                    const gchar      *data,
+                                    gssize            length)
 {
   GBytes *bytes;
 
-  g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
+  g_return_if_fail (GTK_IS_CSS_STYLE_SHEET (self));
   g_return_if_fail (data != NULL);
 
   if (length < 0)
@@ -1102,97 +1101,97 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
 
   bytes = g_bytes_new_static (data, length);
 
-  gtk_css_provider_reset (css_provider);
+  gtk_css_style_sheet_reset (self);
 
   g_bytes_ref (bytes);
-  gtk_css_provider_load_internal (css_provider, NULL, NULL, bytes);
+  gtk_css_style_sheet_load_internal (self, NULL, NULL, bytes);
   g_bytes_unref (bytes);
 
-  gtk_style_provider_changed (GTK_STYLE_PROVIDER (css_provider));
+  gtk_style_provider_changed (GTK_STYLE_PROVIDER (self));
 }
 
 /**
- * gtk_css_provider_load_from_file:
- * @css_provider: a #GtkCssProvider
+ * gtk_css_style_sheet_load_from_file:
+ * @self: a #GtkCssStyleSheet
  * @file: #GFile pointing to a file to load
  *
- * Loads the data contained in @file into @css_provider, making it
+ * Loads the data contained in @file into @self, making it
  * clear any previously loaded information.
  **/
 void
-gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
-                                 GFile           *file)
+gtk_css_style_sheet_load_from_file (GtkCssStyleSheet *self,
+                                    GFile            *file)
 {
-  g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
+  g_return_if_fail (GTK_IS_CSS_STYLE_SHEET (self));
   g_return_if_fail (G_IS_FILE (file));
 
-  gtk_css_provider_reset (css_provider);
+  gtk_css_style_sheet_reset (self);
 
-  gtk_css_provider_load_internal (css_provider, NULL, file, NULL);
+  gtk_css_style_sheet_load_internal (self, NULL, file, NULL);
 
-  gtk_style_provider_changed (GTK_STYLE_PROVIDER (css_provider));
+  gtk_style_provider_changed (GTK_STYLE_PROVIDER (self));
 }
 
 /**
- * gtk_css_provider_load_from_path:
- * @css_provider: a #GtkCssProvider
+ * gtk_css_style_sheet_load_from_path:
+ * @self: a #GtkCssStyleSheet
  * @path: the path of a filename to load, in the GLib filename encoding
  *
- * Loads the data contained in @path into @css_provider, making it clear
+ * Loads the data contained in @path into @self, making it clear
  * any previously loaded information.
  **/
 void
-gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
-                                 const gchar     *path)
+gtk_css_style_sheet_load_from_path (GtkCssStyleSheet *self,
+                                    const gchar      *path)
 {
   GFile *file;
 
-  g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
+  g_return_if_fail (GTK_IS_CSS_STYLE_SHEET (self));
   g_return_if_fail (path != NULL);
 
   file = g_file_new_for_path (path);
   
-  gtk_css_provider_load_from_file (css_provider, file);
+  gtk_css_style_sheet_load_from_file (self, file);
 
   g_object_unref (file);
 }
 
 /**
- * gtk_css_provider_load_from_resource:
- * @css_provider: a #GtkCssProvider
+ * gtk_css_style_sheet_load_from_resource:
+ * @self: a #GtkCssStyleSheet
  * @resource_path: a #GResource resource path
  *
  * Loads the data contained in the resource at @resource_path into
- * the #GtkCssProvider, clearing any previously loaded information.
+ * the #GtkCssStyleSheet, clearing any previously loaded information.
  *
  * To track errors while loading CSS, connect to the
- * #GtkCssProvider::parsing-error signal.
+ * #GtkCssStyleSheet::parsing-error signal.
  */
 void
-gtk_css_provider_load_from_resource (GtkCssProvider *css_provider,
-			             const gchar    *resource_path)
+gtk_css_style_sheet_load_from_resource (GtkCssStyleSheet *self,
+                                        const gchar      *resource_path)
 {
   GFile *file;
   gchar *uri, *escaped;
 
-  g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
+  g_return_if_fail (GTK_IS_CSS_STYLE_SHEET (self));
   g_return_if_fail (resource_path != NULL);
 
   escaped = g_uri_escape_string (resource_path,
-				 G_URI_RESERVED_CHARS_ALLOWED_IN_PATH, FALSE);
+                                 G_URI_RESERVED_CHARS_ALLOWED_IN_PATH, FALSE);
   uri = g_strconcat ("resource://", escaped, NULL);
   g_free (escaped);
 
   file = g_file_new_for_uri (uri);
   g_free (uri);
 
-  gtk_css_provider_load_from_file (css_provider, file);
+  gtk_css_style_sheet_load_from_file (self, file);
 
   g_object_unref (file);
 }
 
 gchar *
-_gtk_get_theme_dir (void)
+gtk_get_theme_dir (void)
 {
   const gchar *var;
 
@@ -1202,13 +1201,13 @@ _gtk_get_theme_dir (void)
   return g_build_filename (var, "share", "themes", NULL);
 }
 
-/* Return the path that this providers gtk.css was loaded from,
+/* Return the path that this style sheet's gtk.css was loaded from,
  * if it is part of a theme, otherwise NULL.
  */
 const gchar *
-_gtk_css_provider_get_theme_dir (GtkCssProvider *provider)
+gtk_css_style_sheet_get_theme_dir (GtkCssStyleSheet *self)
 {
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
+  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
 
   return priv->path;
 }
@@ -1228,10 +1227,10 @@ _gtk_css_provider_get_theme_dir (GtkCssProvider *provider)
  * and return the first found file.
  */
 static gchar *
-_gtk_css_find_theme_dir (const gchar *dir,
-                         const gchar *subdir,
-                         const gchar *name,
-                         const gchar *variant)
+gtk_css_find_theme_dir (const gchar *dir,
+                        const gchar *subdir,
+                        const gchar *name,
+                        const gchar *variant)
 {
   gchar *file;
   gchar *base;
@@ -1280,12 +1279,12 @@ _gtk_css_find_theme (const gchar *name,
   char *dir;
 
   /* First look in the user's data directory */
-  path = _gtk_css_find_theme_dir (g_get_user_data_dir (), "themes", name, variant);
+  path = gtk_css_find_theme_dir (g_get_user_data_dir (), "themes", name, variant);
   if (path)
     return path;
 
   /* Next look in the user's home directory */
-  path = _gtk_css_find_theme_dir (g_get_home_dir (), ".themes", name, variant);
+  path = gtk_css_find_theme_dir (g_get_home_dir (), ".themes", name, variant);
   if (path)
     return path;
 
@@ -1293,22 +1292,22 @@ _gtk_css_find_theme (const gchar *name,
   dirs = g_get_system_data_dirs ();
   for (i = 0; dirs[i]; i++)
     {
-      path = _gtk_css_find_theme_dir (dirs[i], "themes", name, variant);
+      path = gtk_css_find_theme_dir (dirs[i], "themes", name, variant);
       if (path)
         return path;
     }
 
   /* Finally, try in the default theme directory */
-  dir = _gtk_get_theme_dir ();
-  path = _gtk_css_find_theme_dir (dir, NULL, name, variant);
+  dir = gtk_get_theme_dir ();
+  path = gtk_css_find_theme_dir (dir, NULL, name, variant);
   g_free (dir);
 
   return path;
 }
 
 /**
- * gtk_css_provider_load_named:
- * @provider: a #GtkCssProvider
+ * gtk_css_style_sheet_load_named:
+ * @self: a #GtkCssStyleSheet
  * @name: A theme name
  * @variant: (allow-none): variant to load, for example, "dark", or
  *     %NULL for the default
@@ -1319,17 +1318,17 @@ _gtk_css_find_theme (const gchar *name,
  * theme that GTK uses for loading its own theme.
  **/
 void
-gtk_css_provider_load_named (GtkCssProvider *provider,
-                             const gchar    *name,
-                             const gchar    *variant)
+gtk_css_style_sheet_load_named (GtkCssStyleSheet *self,
+                                const gchar      *name,
+                                const gchar      *variant)
 {
   gchar *path;
   gchar *resource_path;
 
-  g_return_if_fail (GTK_IS_CSS_PROVIDER (provider));
+  g_return_if_fail (GTK_IS_CSS_STYLE_SHEET (self));
   g_return_if_fail (name != NULL);
 
-  gtk_css_provider_reset (provider);
+  gtk_css_style_sheet_reset (self);
 
   /* try loading the resource for the theme. This is mostly meant for built-in
    * themes.
@@ -1341,7 +1340,7 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
 
   if (g_resources_get_info (resource_path, 0, NULL, NULL, NULL))
     {
-      gtk_css_provider_load_from_resource (provider, resource_path);
+      gtk_css_style_sheet_load_from_resource (self, resource_path);
       g_free (resource_path);
       return;
     }
@@ -1351,7 +1350,7 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
   path = _gtk_css_find_theme (name, variant);
   if (path)
     {
-      GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
+      GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
       char *dir, *resource_file;
       GResource *resource;
 
@@ -1363,7 +1362,7 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
       if (resource != NULL)
         g_resources_register (resource);
 
-      gtk_css_provider_load_from_path (provider, path);
+      gtk_css_style_sheet_load_from_path (self, path);
 
       /* Only set this after load, as load_from_path will clear it */
       priv->resource = resource;
@@ -1378,19 +1377,21 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
       if (variant)
         {
           /* If there was a variant, try without */
-          gtk_css_provider_load_named (provider, name, NULL);
+          gtk_css_style_sheet_load_named (self, name, NULL);
         }
       else
         {
           /* Worst case, fall back to the default */
           g_return_if_fail (!g_str_equal (name, DEFAULT_THEME_NAME)); /* infloop protection */
-          gtk_css_provider_load_named (provider, DEFAULT_THEME_NAME, NULL);
+          gtk_css_style_sheet_load_named (self, DEFAULT_THEME_NAME, NULL);
         }
     }
 }
 
 static int
-compare_properties (gconstpointer a, gconstpointer b, gpointer style)
+compare_properties (gconstpointer a,
+                    gconstpointer b,
+                    gpointer      style)
 {
   const guint *ua = a;
   const guint *ub = b;
@@ -1437,8 +1438,8 @@ gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
 }
 
 static void
-gtk_css_provider_print_colors (GHashTable *colors,
-                               GString    *str)
+gtk_css_style_sheet_print_colors (GHashTable *colors,
+                                  GString    *str)
 {
   GList *keys, *walk;
 
@@ -1462,8 +1463,8 @@ gtk_css_provider_print_colors (GHashTable *colors,
 }
 
 static void
-gtk_css_provider_print_keyframes (GHashTable *keyframes,
-                                  GString    *str)
+gtk_css_style_sheet_print_keyframes (GHashTable *keyframes,
+                                     GString    *str)
 {
   GList *keys, *walk;
 
@@ -1489,32 +1490,32 @@ gtk_css_provider_print_keyframes (GHashTable *keyframes,
 }
 
 /**
- * gtk_css_provider_to_string:
- * @provider: the provider to write to a string
+ * gtk_css_style_sheet_to_string:
+ * @self: the #GtkCssStyleSheet to write to a string
  *
- * Converts the @provider into a string representation in CSS
+ * Converts the @self into a string representation in CSS
  * format.
  *
- * Using gtk_css_provider_load_from_data() with the return value
- * from this function on a new provider created with
- * gtk_css_provider_new() will basically create a duplicate of
- * this @provider.
+ * Using gtk_css_style_sheet_load_from_data() with the return value
+ * from this function on a new style sheet created with
+ * gtk_css_style_sheet_new() will basically create a duplicate of
+ * @self.
  *
- * Returns: a new string representing the @provider.
+ * Returns: a new string representing the style sheet.
  **/
 char *
-gtk_css_provider_to_string (GtkCssProvider *provider)
+gtk_css_style_sheet_to_string (GtkCssStyleSheet *self)
 {
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
+  GtkCssStyleSheetPrivate *priv = gtk_css_style_sheet_get_instance_private (self);
   GString *str;
   guint i;
 
-  g_return_val_if_fail (GTK_IS_CSS_PROVIDER (provider), NULL);
+  g_return_val_if_fail (GTK_IS_CSS_STYLE_SHEET (self), NULL);
 
   str = g_string_new ("");
 
-  gtk_css_provider_print_colors (priv->symbolic_colors, str);
-  gtk_css_provider_print_keyframes (priv->keyframes, str);
+  gtk_css_style_sheet_print_colors (priv->symbolic_colors, str);
+  gtk_css_style_sheet_print_keyframes (priv->keyframes, str);
 
   for (i = 0; i < priv->rulesets->len; i++)
     {

@@ -8,9 +8,9 @@
 
 static void
 destroy_provider (GtkWidget      *window,
-                  GtkCssProvider *provider)
+                  GtkCssStyleSheet *stylesheet)
 {
-  gtk_style_context_remove_provider_for_display (gtk_widget_get_display (window), GTK_STYLE_PROVIDER (provider));
+  gtk_style_context_remove_provider_for_display (gtk_widget_get_display (window), GTK_STYLE_PROVIDER (stylesheet));
 }
 
 GtkWidget *
@@ -21,7 +21,7 @@ do_css_accordion (GtkWidget *do_widget)
   if (!window)
     {
       GtkWidget *container, *styled_box, *child;
-      GtkStyleProvider *provider;
+      GtkStyleProvider *stylesheet;
 
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "CSS Accordion");
@@ -56,15 +56,15 @@ do_css_accordion (GtkWidget *do_widget)
       child = gtk_button_new_with_label (":-)");
       gtk_container_add (GTK_CONTAINER (container), child);
 
-      provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
-      gtk_css_provider_load_from_resource (GTK_CSS_PROVIDER (provider), "/css_accordion/css_accordion.css");
+      stylesheet = GTK_STYLE_PROVIDER (gtk_css_style_sheet_new ());
+      gtk_css_style_sheet_load_from_resource (GTK_CSS_STYLE_SHEET (stylesheet), "/css_accordion/css_accordion.css");
 
       gtk_style_context_add_provider_for_display (gtk_widget_get_display (window),
-                                                  GTK_STYLE_PROVIDER (provider),
+                                                  GTK_STYLE_PROVIDER (stylesheet),
                                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
       g_signal_connect (window, "destroy",
-                        G_CALLBACK (destroy_provider), provider);
-      g_object_unref (provider);
+                        G_CALLBACK (destroy_provider), stylesheet);
+      g_object_unref (stylesheet);
     }
 
   if (!gtk_widget_get_visible (window))

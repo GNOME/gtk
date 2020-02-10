@@ -223,8 +223,8 @@ add_extra_css (const char *testname,
   if (css_file == NULL)
     return NULL;
 
-  provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
-  gtk_css_provider_load_from_path (GTK_CSS_PROVIDER (provider),
+  provider = GTK_STYLE_PROVIDER (gtk_css_style_sheet_new ());
+  gtk_css_style_sheet_load_from_path (GTK_CSS_STYLE_SHEET (provider),
                                    css_file);
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
                                               provider,

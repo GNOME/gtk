@@ -19,7 +19,7 @@
 
 #include "gtkstylepropertyprivate.h"
 
-#include "gtkcssprovider.h"
+#include "gtkcssstylesheet.h"
 #include "gtkcssparserprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstylepropertyprivate.h"

@@ -291,10 +291,10 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (box), image);
   gtk_grid_attach (GTK_GRID (grid), box, 1, 7, 1, 1);
 
-  GtkCssProvider *provider;
-  provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (provider, cssdata, -1);
-  gtk_style_context_add_provider_for_display (gdk_display_get_default (), GTK_STYLE_PROVIDER (provider), 800);
+  GtkCssStyleSheet *stylesheet;
+  stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_load_from_data (stylesheet, cssdata, -1);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (), GTK_STYLE_PROVIDER (stylesheet), 800);
   gtk_widget_show (window);
 
   while (!done)

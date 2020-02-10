@@ -187,7 +187,7 @@ create_alpha_window (GtkWidget *widget)
 
   if (!window)
     {
-      static GtkCssProvider *provider = NULL;
+      static GtkCssStyleSheet *stylesheet = NULL;
       GtkWidget *content_area;
       GtkWidget *vbox;
       GtkWidget *label;
@@ -198,18 +198,18 @@ create_alpha_window (GtkWidget *widget)
 					    "_Close", 0,
 					    NULL);
       gtk_widget_add_css_class (window, "alpha");
-      if (provider == NULL)
+      if (stylesheet == NULL)
         {
-          provider = gtk_css_provider_new ();
-          gtk_css_provider_load_from_data (provider,
+          stylesheet = gtk_css_style_sheet_new ();
+          gtk_css_style_sheet_load_from_data (stylesheet,
                                            "dialog.alpha {\n"
                                            "  background: radial-gradient(ellipse at center, #FFBF00, #FFBF0000);\n"
                                            "}\n",
                                            -1);
           gtk_style_context_add_provider_for_display (gtk_widget_get_display (window),
-                                                      GTK_STYLE_PROVIDER (provider),
+                                                      GTK_STYLE_PROVIDER (stylesheet),
                                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-          g_object_unref (provider);
+          g_object_unref (stylesheet);
         }
 
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
@@ -6327,7 +6327,7 @@ usage (void)
 int
 main (int argc, char *argv[])
 {
-  GtkCssProvider *provider, *memory_provider;
+  GtkCssStyleSheet *stylesheet, *memory_provider;
   GdkDisplay *display;
   GtkBindingSet *binding_set;
   int i;
@@ -6345,23 +6345,23 @@ main (int argc, char *argv[])
 
   gtk_init ();
 
-  provider = gtk_css_provider_new ();
+  stylesheet = gtk_css_style_sheet_new ();
 
   /* Check to see if we are being run from the correct
    * directory.
    */
   if (file_exists ("testgtk.css"))
-    gtk_css_provider_load_from_path (provider, "testgtk.css");
+    gtk_css_style_sheet_load_from_path (stylesheet, "testgtk.css");
   else if (file_exists ("tests/testgtk.css"))
-    gtk_css_provider_load_from_path (provider, "tests/testgtk.css");
+    gtk_css_style_sheet_load_from_path (stylesheet, "tests/testgtk.css");
   else
     g_warning ("Couldn't find file \"testgtk.css\".");
 
   display = gdk_display_get_default ();
 
-  gtk_style_context_add_provider_for_display (display, GTK_STYLE_PROVIDER (provider),
+  gtk_style_context_add_provider_for_display (display, GTK_STYLE_PROVIDER (stylesheet),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-  g_object_unref (provider);
+  g_object_unref (stylesheet);
 
   gtk_accelerator_set_default_mod_mask (GDK_SHIFT_MASK |
 					GDK_CONTROL_MASK |
@@ -6422,8 +6422,8 @@ main (int argc, char *argv[])
 				1,
 				G_TYPE_STRING, "GtkWidgetClass <ctrl><release>9 test");
 
-  memory_provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (memory_provider,
+  memory_provider = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_load_from_data (memory_provider,
                                    "#testgtk-version-label {\n"
                                    "  color: #f00;\n"
                                    "  font-family: Sans;\n"

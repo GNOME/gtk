@@ -115,7 +115,7 @@ gtk/gtkconstraint.c
 gtk/gtkcontainer.c
 gtk/gtkcssiconthemevalue.c
 gtk/gtkcssnode.c
-gtk/gtkcssprovider.c
+gtk/gtkcssstylesheet.c
 gtk/gtkcssshorthandproperty.c
 gtk/gtkcssstaticstyle.c
 gtk/gtkcssstyleproperty.c

@@ -43,13 +43,13 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *win, *overlay, *grid, *main_child, *child, *label, *sw;
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
   gchar *str;
 
   gtk_init ();
 
-  provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (provider,
+  stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_load_from_data (stylesheet,
                                    "label { border: 3px solid black; border-radius: 5px; padding: 2px; }"
                                    ".top { border-top-style: none; border-top-right-radius: 0px; border-top-left-radius: 0px; }"
                                    ".bottom { border-bottom-style: none; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px; }"
@@ -57,7 +57,7 @@ main (int argc, char *argv[])
                                    ".right { border-right-style: none; border-top-right-radius: 0px; border-bottom-right-radius: 0px; }",
                                    -1);
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER (stylesheet),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   win = gtk_window_new ();

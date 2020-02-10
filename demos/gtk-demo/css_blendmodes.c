@@ -37,7 +37,7 @@ struct {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"
 static void
-update_css_for_blend_mode (GtkCssProvider *provider,
+update_css_for_blend_mode (GtkCssStyleSheet *stylesheet,
                            const gchar    *blend_mode)
 {
   GBytes *bytes;
@@ -50,7 +50,7 @@ update_css_for_blend_mode (GtkCssProvider *provider,
                          blend_mode,
                          blend_mode);
 
-  gtk_css_provider_load_from_data (provider, css, -1);
+  gtk_css_style_sheet_load_from_data (stylesheet, css, -1);
 
   g_bytes_unref (bytes);
   g_free (css);
@@ -60,18 +60,18 @@ update_css_for_blend_mode (GtkCssProvider *provider,
 static void
 row_activated (GtkListBox     *listbox,
                GtkListBoxRow  *row,
-               GtkCssProvider *provider)
+               GtkCssStyleSheet *stylesheet)
 {
   const gchar *blend_mode;
 
   blend_mode = blend_modes[gtk_list_box_row_get_index (row)].id;
 
-  update_css_for_blend_mode (provider, blend_mode);
+  update_css_for_blend_mode (stylesheet, blend_mode);
 }
 
 static void
 setup_listbox (GtkBuilder       *builder,
-               GtkStyleProvider *provider)
+               GtkStyleProvider *stylesheet)
 {
   GtkWidget *normal_row;
   GtkWidget *listbox;
@@ -81,7 +81,7 @@ setup_listbox (GtkBuilder       *builder,
   listbox = gtk_list_box_new ();
   gtk_container_add (GTK_CONTAINER (WID ("scrolledwindow")), listbox);
 
-  g_signal_connect (listbox, "row-activated", G_CALLBACK (row_activated), provider);
+  g_signal_connect (listbox, "row-activated", G_CALLBACK (row_activated), stylesheet);
 
   /* Add a row for each blend mode available */
   for (i = 0; blend_modes[i].name != NULL; i++)
@@ -118,7 +118,7 @@ do_css_blendmodes (GtkWidget *do_widget)
 
   if (!window)
     {
-      GtkStyleProvider *provider;
+      GtkStyleProvider *stylesheet;
       GtkBuilder *builder;
 
       builder = gtk_builder_new_from_resource ("/css_blendmodes/blendmodes.ui");
@@ -127,14 +127,14 @@ do_css_blendmodes (GtkWidget *do_widget)
       gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (do_widget));
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
 
-      /* Setup the CSS provider for window */
-      provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
+      /* Setup the CSS stylesheet for window */
+      stylesheet = GTK_STYLE_PROVIDER (gtk_css_style_sheet_new ());
 
       gtk_style_context_add_provider_for_display (gdk_display_get_default (),
-                                                  provider,
+                                                  stylesheet,
                                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-      setup_listbox (builder, provider);
+      setup_listbox (builder, stylesheet);
     }
 
   if (!gtk_widget_get_visible (window))

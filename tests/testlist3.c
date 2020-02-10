@@ -157,13 +157,13 @@ main (int argc, char *argv[])
   GtkWidget *hbox, *vbox, *combo, *button;
   gint i;
   gchar *text;
-  GtkCssProvider *provider;
+  GtkCssStyleSheet *stylesheet;
 
   gtk_init ();
 
-  provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (provider, css, -1);
-  gtk_style_context_add_provider_for_display (gdk_display_get_default (), GTK_STYLE_PROVIDER (provider), 800);
+  stylesheet = gtk_css_style_sheet_new ();
+  gtk_css_style_sheet_load_from_data (stylesheet, css, -1);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (), GTK_STYLE_PROVIDER (stylesheet), 800);
   window = gtk_window_new ();
   gtk_window_set_default_size (GTK_WINDOW (window), -1, 300);
 

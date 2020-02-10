@@ -86,7 +86,7 @@
 #include <gtk/gtkconstraintlayout.h>
 #include <gtk/gtkconstraint.h>
 #include <gtk/gtkcontainer.h>
-#include <gtk/gtkcssprovider.h>
+#include <gtk/gtkcssstylesheet.h>
 #include <gtk/gtkcustomlayout.h>
 #include <gtk/gtkdebug.h>
 #include <gtk/gtkdialog.h>

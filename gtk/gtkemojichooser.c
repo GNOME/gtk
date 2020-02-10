@@ -22,7 +22,7 @@
 #include "gtkadjustmentprivate.h"
 #include "gtkbox.h"
 #include "gtkbutton.h"
-#include "gtkcssprovider.h"
+#include "gtkcssstylesheet.h"
 #include "gtkentry.h"
 #include "gtkflowbox.h"
 #include "gtkstack.h"
