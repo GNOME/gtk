@@ -4424,7 +4424,6 @@ gtk_main_level
 gtk_main_quit
 gtk_main_iteration
 gtk_main_iteration_do
-gtk_main_do_event
 
 <SUBSECTION>
 gtk_grab_add
@@ -4444,7 +4443,6 @@ gtk_get_current_event_device
 gtk_get_event_widget
 gtk_get_event_target
 gtk_get_event_target_with_type
-gtk_propagate_event
 
 <SUBSECTION Private>
 gtk_init_abi_check

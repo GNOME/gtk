@@ -113,8 +113,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean       gtk_events_pending       (void);
 
 GDK_AVAILABLE_IN_ALL
-void       gtk_main_do_event       (GdkEvent           *event);
-GDK_AVAILABLE_IN_ALL
 void       gtk_main                (void);
 GDK_AVAILABLE_IN_ALL
 guint      gtk_main_level          (void);
@@ -158,10 +156,6 @@ GtkWidget *gtk_get_event_target         (const GdkEvent  *event);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_get_event_target_with_type (GdkEvent *event,
                                            GType     type);
-
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_propagate_event          (GtkWidget       *widget,
-                                         GdkEvent        *event);
 
 
 G_END_DECLS
