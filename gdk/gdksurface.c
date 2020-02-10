@@ -265,6 +265,8 @@ gdk_surface_move_to_rect_helper (GdkSurface            *surface,
   GdkRectangle final_rect;
   gboolean flipped_x;
   gboolean flipped_y;
+  GdkRectangle monitor_rect;
+  int surface_scale;
   int x, y;
 
   /* This implementation only works for backends that
@@ -282,9 +284,23 @@ gdk_surface_move_to_rect_helper (GdkSurface            *surface,
                                &root_rect.x,
                                &root_rect.y);
 
+  /* Monitors are in physical pixels, convert the surface coords */
+  surface_scale = gdk_surface_get_scale_factor (surface);
+  monitor_rect = root_rect;
+  monitor_rect.x *= surface_scale;
+  monitor_rect.y *= surface_scale;
+  monitor_rect.width *= surface_scale;
+  monitor_rect.height *= surface_scale;
+
   display = get_display_for_surface (surface, surface->transient_for);
-  monitor = get_monitor_for_rect (display, &root_rect);
+  monitor = get_monitor_for_rect (display, &monitor_rect);
   gdk_monitor_get_workarea (monitor, &bounds);
+
+  /* Convert physical monitor sizess back to surface pixels */
+  bounds.x /= surface_scale;
+  bounds.y /= surface_scale;
+  bounds.width /= surface_scale;
+  bounds.height /= surface_scale;
 
   flipped_rect.width = surface->width - surface->shadow_left - surface->shadow_right;
   flipped_rect.height = surface->height - surface->shadow_top - surface->shadow_bottom;
