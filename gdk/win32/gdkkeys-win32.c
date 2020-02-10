@@ -242,7 +242,7 @@ print_keysym_tab (GdkWin32Keymap *keymap)
 
           for (level = 0; level < GDK_WIN32_LEVEL_COUNT; level++)
             {
-              gchar *name = gdk_keyval_name (keymap->keysym_tab[vk * group_size * GDK_WIN32_LEVEL_COUNT + level]);
+              const char *name = gdk_keyval_name (keymap->keysym_tab[vk * group_size * GDK_WIN32_LEVEL_COUNT + level]);
 
               g_print ("%s ", name ? name : "(none)");
             }
