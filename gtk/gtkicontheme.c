@@ -2272,7 +2272,7 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
 
   gtk_icon_theme_unlock (self);
 
-  if (flags & GTK_ICON_LOOKUP_LOAD_IN_THREAD)
+  if (flags & GTK_ICON_LOOKUP_PRELOAD)
     {
       gboolean has_texture = FALSE;
 

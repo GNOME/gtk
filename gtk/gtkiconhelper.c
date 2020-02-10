@@ -99,7 +99,7 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
   icon_theme = gtk_css_icon_theme_value_get_icon_theme (style->core->icon_theme);
   flags = get_icon_lookup_flags (self, style);
   if (preload)
-    flags |= GTK_ICON_LOOKUP_LOAD_IN_THREAD;
+    flags |= GTK_ICON_LOOKUP_PRELOAD;
 
   width = height = gtk_icon_helper_get_size (self);
 
