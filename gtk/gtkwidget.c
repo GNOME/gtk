@@ -57,7 +57,6 @@
 #include "gtkrootprivate.h"
 #include "gtknativeprivate.h"
 #include "gtkscrollable.h"
-#include "gtkselection.h"
 #include "gtksettingsprivate.h"
 #include "gtksizegroup-private.h"
 #include "gtksnapshotprivate.h"

@@ -26,7 +26,6 @@
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtkcellarea.h>
-#include <gtk/gtkselection.h>
 #include <gtk/gtktooltip.h>
 #include <gtk/gtkdragsource.h>
 #include <gtk/gtkdragdest.h>

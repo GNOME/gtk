@@ -39,7 +39,6 @@
 #include <gtk/gtkentrybuffer.h>
 #include <gtk/gtkentrycompletion.h>
 #include <gtk/gtkimage.h>
-#include <gtk/gtkselection.h>
 
 
 G_BEGIN_DECLS
