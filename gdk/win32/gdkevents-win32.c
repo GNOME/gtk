@@ -766,7 +766,7 @@ print_event_state (guint state)
 void
 _gdk_win32_print_event (const GdkEvent *event)
 {
-  gchar *kvname;
+  const char *kvname;
 
   g_print ("%s%*s===> ", (debug_indent > 0 ? "\n" : ""), debug_indent, "");
   switch (event->any.type)
