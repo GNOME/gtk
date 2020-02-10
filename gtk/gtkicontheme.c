@@ -3370,7 +3370,7 @@ gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
    *
    * Whether the icon is symbolic or not.
    */
-  g_object_class_install_property (gobject_class, PROP_ICON_NAME,
+  g_object_class_install_property (gobject_class, PROP_IS_SYMBOLIC,
                                    g_param_spec_boolean ("is-symbolic",
                                                         P_("Is symbolic"),
                                                         P_("If the icon is symbolic"),
