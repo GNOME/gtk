@@ -58,6 +58,13 @@ gtk_css_lookup_get_set_values (const GtkCssLookup *lookup)
   return lookup->set_values;
 }
 
+static inline GtkCssLookupValue *
+gtk_css_lookup_get (GtkCssLookup *lookup,
+                    guint         id)
+{
+  return &lookup->values[id];
+} 
+
 G_END_DECLS
 
 #endif /* __GTK_CSS_LOOKUP_PRIVATE_H__ */
