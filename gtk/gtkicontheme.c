@@ -3262,41 +3262,41 @@ gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
   gobject_class->finalize = gtk_icon_paintable_finalize;
 }
 
-/**
- * gtk_icon_paintable_get_filename:
- * @self: a #GtkIcon
- *
- * Gets the filename for the icon.
- *
- * Returns: (nullable) (type filename): the filename for the icon, or %NULL
- *     if the icon is not represented by a filename.
- */
-const gchar *
-gtk_icon_paintable_get_filename (GtkIconPaintable *icon)
+static GFile *
+new_resource_file (const char *filename)
 {
-  g_return_val_if_fail (icon != NULL, NULL);
+  char *escaped = g_uri_escape_string (filename,
+                                       G_URI_RESERVED_CHARS_ALLOWED_IN_PATH, FALSE);
+  char *uri = g_strconcat ("resource://", escaped, NULL);
+  GFile *file = g_file_new_for_uri (uri);
 
-  if (!icon->is_resource)
-    return icon->filename;
-  return NULL;
+  g_free (escaped);
+  g_free (uri);
+
+  return file;
 }
 
 /**
- * gtk_icon_paintable_get_resource_path:
+ * gtk_icon_paintable_get_file:
  * @self: a #GtkIcon
  *
- * Gets the resource path for the icon.
+ * Gets the #GFile that was used to load the icon, or %NULL if the icon was
+ * not loaded from a file.
  *
- * Returns: (nullable) (type filename): the resource for the icon, or %NULL
- *     if the icon is not represented by a resource.
+ * Returns: (nullable) (transfer full): the #GFile for the icon, or %NULL.
+ *    Free with g_object_unref().
  */
-const gchar *
-gtk_icon_paintable_get_resource_path (GtkIconPaintable *icon)
+GFile *
+gtk_icon_paintable_get_file (GtkIconPaintable *icon)
 {
-  g_return_val_if_fail (icon != NULL, NULL);
+  if (icon->filename)
+    {
+      if (icon->is_resource)
+        return new_resource_file (icon->filename);
+      else
+        return g_file_new_for_path (icon->filename);
+    }
 
-  if (icon->is_resource)
-    return icon->filename;
   return NULL;
 }
 

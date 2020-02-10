@@ -140,9 +140,7 @@ GDK_AVAILABLE_IN_ALL
 GType                 gtk_icon_paintable_get_type         (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-const gchar *         gtk_icon_paintable_get_filename      (GtkIconPaintable  *self);
-GDK_AVAILABLE_IN_ALL
-const gchar *         gtk_icon_paintable_get_resource_path (GtkIconPaintable  *self);
+GFile *               gtk_icon_paintable_get_file          (GtkIconPaintable  *self);
 GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_icon_paintable_get_icon_name     (GtkIconPaintable  *self);
 GDK_AVAILABLE_IN_ALL

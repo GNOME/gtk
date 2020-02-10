@@ -423,7 +423,6 @@ get_file (GValue   *value,
   GtkIconTheme *icon_theme;
   const char *name;
   GtkIconPaintable *info;
-  GFile *file;
 
   name = gtk_image_get_icon_name (GTK_IMAGE (data));
   icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (data)));
@@ -434,9 +433,7 @@ get_file (GValue   *value,
                                      32, 1,
                                      gtk_widget_get_direction (GTK_WIDGET (data)),
                                      0);
-  file = g_file_new_for_path (gtk_icon_paintable_get_filename (info));
-  g_value_set_object (value, file);
-  g_object_unref (file);
+  g_value_take_object (value, gtk_icon_paintable_get_file (info));
   g_object_unref (info);
 }
 
