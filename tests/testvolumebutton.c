@@ -114,7 +114,8 @@ main (int    argc,
   g_signal_emit_by_name (button, "clicked");
   g_timeout_add (4000, (GSourceFunc) show_error, window);
 
-  gtk_main ();
+  while (TRUE)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

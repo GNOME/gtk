@@ -124,6 +124,17 @@ draw_border_cb (GtkToggleButton *toggle_button, GtkFrame *frame)
   gtk_frame_set_shadow_type (frame, shadow_type);
 }
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int main (int argc, char **argv)
 {
   GtkWidget *window, *widget;
@@ -132,13 +143,14 @@ int main (int argc, char **argv)
   GtkGrid *grid;
   gfloat xalign;
   gboolean draw_border;
+  gboolean done = FALSE;
 
   gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
 
-  g_signal_connect (window, "destroy", gtk_main_quit, NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   vbox = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 5));
   g_object_set (vbox, "margin", 12, NULL);
@@ -194,7 +206,8 @@ int main (int argc, char **argv)
 
   gtk_widget_show (window);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

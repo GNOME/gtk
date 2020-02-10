@@ -87,7 +87,11 @@ quit_main_loop_callback (GtkWidget     *widget,
                          GdkFrameClock *frame_clock,
                          gpointer       user_data)
 {
-  gtk_main_quit ();
+  gboolean *done = user_data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
 
   return G_SOURCE_REMOVE;
 }
@@ -108,6 +112,7 @@ void
 gtk_test_widget_wait_for_draw (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  gboolean done = FALSE;
 
   /* We can do this here because the whole tick procedure does not
    * reenter the main loop. Otherwise we'd need to manually get the
@@ -115,10 +120,11 @@ gtk_test_widget_wait_for_draw (GtkWidget *widget)
    */
   gtk_widget_add_tick_callback (widget,
                                 quit_main_loop_callback,
-                                NULL,
+                                &done,
                                 NULL);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 }
 
 static GType *all_registered_types = NULL;

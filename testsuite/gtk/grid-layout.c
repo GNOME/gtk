@@ -150,13 +150,6 @@ test_simple_row (void)
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child3));
   gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 2);
 
-#if 0
-  gtk_widget_show (window);
-
-  g_timeout_add (1000, (GSourceFunc)gtk_main_quit, NULL);
-  gtk_main ();
-#endif
-
   gtk_layout_manager_measure (layout,
                               parent,
                               GTK_ORIENTATION_HORIZONTAL,
@@ -249,13 +242,6 @@ test_simple_column (void)
   gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child3));
   gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 2);
-
-#if 0
-  gtk_widget_show (window);
-
-  g_timeout_add (1000, (GSourceFunc)gtk_main_quit, NULL);
-  gtk_main ();
-#endif
 
   gtk_layout_manager_measure (layout,
                               parent,
@@ -379,13 +365,6 @@ test_spans (void)
   gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
   gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 2);
 
-#if 0
-  gtk_widget_show (window);
-
-  g_timeout_add (1000, (GSourceFunc)gtk_main_quit, NULL);
-  gtk_main ();
-#endif
-
   gtk_layout_manager_measure (layout,
                               parent,
                               GTK_ORIENTATION_HORIZONTAL,
@@ -501,13 +480,6 @@ test_homogeneous (void)
   lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child4));
   gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
   gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
-
-#if 0
-  gtk_widget_show (window);
-
-  g_timeout_add (1000, (GSourceFunc)gtk_main_quit, NULL);
-  gtk_main ();
-#endif
 
   gtk_layout_manager_measure (layout,
                               parent,

@@ -24,7 +24,11 @@ tickle (gpointer data)
 static gboolean
 stop (gpointer data)
 {
-  gtk_main_quit ();
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
 
   return G_SOURCE_REMOVE;
 }
@@ -35,6 +39,7 @@ test_show_popover (void)
   GtkWidget *window;
   GtkWidget *button;
   GtkWidget *popover;
+  gboolean done;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   button = gtk_menu_button_new ();
@@ -47,9 +52,11 @@ test_show_popover (void)
 
   g_timeout_add (1000, pop_up, popover);
   g_timeout_add (2000, tickle, popover);
-  g_timeout_add (3000, stop, NULL);
+  done = FALSE;
+  g_timeout_add (3000, stop, &done);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 }
 
 int

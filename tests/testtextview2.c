@@ -171,16 +171,28 @@ update_mark_position (void)
   gtk_text_buffer_move_mark (buffer, the_mark, &iter);
 }
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int
 main (int argc, char *argv[])
 {
   GtkWidget *window, *sw, *box, *box2, *button;
+  gboolean done = FALSE;
 
   gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
-  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
 
@@ -232,7 +244,8 @@ main (int argc, char *argv[])
 
   gtk_widget_show (window);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

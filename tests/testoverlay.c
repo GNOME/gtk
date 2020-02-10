@@ -529,7 +529,8 @@ main (int argc, char *argv[])
   win8 = test_input_stacking ();
   gtk_widget_show (win8);
 
-  gtk_main ();
+  while (TRUE)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

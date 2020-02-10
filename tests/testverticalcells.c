@@ -288,6 +288,17 @@ create_model (void)
   return GTK_TREE_MODEL (model);
 }
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 gint
 main (gint argc, gchar **argv)
 {
@@ -298,6 +309,7 @@ main (gint argc, gchar **argv)
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
   GtkCellArea *area;
+  gboolean done = FALSE;
   
   gtk_init ();
 
@@ -306,7 +318,7 @@ main (gint argc, gchar **argv)
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Vertical cells in GtkTreeViewColumn example");
-  g_signal_connect (window, "destroy", gtk_main_quit, NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window), GTK_SHADOW_ETCHED_IN);
@@ -371,7 +383,8 @@ main (gint argc, gchar **argv)
 			       800, 400);
 
   gtk_widget_show (window);
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

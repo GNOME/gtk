@@ -70,6 +70,19 @@ toggle_fullscreen (GtkButton *button, gpointer data)
     }
 }
 
+static gboolean done = FALSE;
+
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 static void
 change_header (GtkButton *button, gpointer data)
 {
@@ -100,7 +113,7 @@ change_header (GtkButton *button, gpointer data)
       widget = gtk_button_new_with_label ("_Close");
       gtk_button_set_use_underline (GTK_BUTTON (widget), TRUE);
       gtk_style_context_add_class (gtk_widget_get_style_context (widget), "suggested-action");
-      g_signal_connect (widget, "clicked", G_CALLBACK (gtk_main_quit), NULL);
+      g_signal_connect (widget, "clicked", G_CALLBACK (quit_cb), &done);
 
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), widget);
 
@@ -142,7 +155,6 @@ main (int argc, char *argv[])
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), box);
 
-
   content = gtk_image_new_from_icon_name ("start-here-symbolic");
   gtk_image_set_pixel_size (GTK_IMAGE (content), 512);
 
@@ -162,7 +174,8 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (box), footer);
   gtk_widget_show (window);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   gtk_widget_destroy (window);
 

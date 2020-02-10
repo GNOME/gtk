@@ -4,15 +4,9 @@
 static void
 test_init (void)
 {
-  GThread *self = g_thread_self ();
-
   g_assert (gtk_is_initialized () == FALSE);
-  g_assert (gtk_get_main_thread () == NULL);
-
   g_assert (gtk_init_check ());
   g_assert (gtk_is_initialized () == TRUE);
-
-  g_assert (gtk_get_main_thread () == self);
 }
 
 int

@@ -92,6 +92,17 @@ static GOptionEntry options[] = {
   { NULL }
 };
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -101,6 +112,7 @@ main (int argc, char **argv)
   GtkWidget *grid;
   GError *error = NULL;
   int i;
+  gboolean done = FALSE;
 
   GOptionContext *context = g_option_context_new (NULL);
   g_option_context_add_main_entries (context, options, NULL);
@@ -142,8 +154,10 @@ main (int argc, char **argv)
 
   gtk_widget_show (window);
   g_signal_connect (window, "destroy",
-                    G_CALLBACK (gtk_main_quit), NULL);
-  gtk_main ();
+                    G_CALLBACK (quit_cb), &done);
+
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

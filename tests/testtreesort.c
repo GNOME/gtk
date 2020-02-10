@@ -93,6 +93,17 @@ switch_search_method (GtkWidget *button,
     gtk_tree_view_set_search_entry (GTK_TREE_VIEW (tree_view), NULL);
 }
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -111,6 +122,7 @@ main (int argc, char *argv[])
   GtkWidget *entry, *button;
   GtkWidget *window2, *vbox2, *scrolled_window2, *tree_view2;
   GtkWidget *window3, *vbox3, *scrolled_window3, *tree_view3;
+  gboolean done = FALSE;
 
   gtk_init ();
 
@@ -120,7 +132,7 @@ main (int argc, char *argv[])
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Words, words, words - Window 1");
-  g_signal_connect (window, "destroy", gtk_main_quit, NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
   gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new ("Jonathan and Kristian's list of cool words. (And Anders' cool list of numbers) \n\nThis is just a GtkTreeStore"));
   gtk_container_add (GTK_CONTAINER (window), vbox);
@@ -248,7 +260,7 @@ main (int argc, char *argv[])
       window2 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window2), 
 			    "Words, words, words - window 2");
-      g_signal_connect (window2, "destroy", gtk_main_quit, NULL);
+      g_signal_connect (window2, "destroy", G_CALLBACK (quit_cb), &done);
       vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
       gtk_container_add (GTK_CONTAINER (vbox2), 
 			  gtk_label_new ("Jonathan and Kristian's list of words.\n\nA GtkTreeModelSort wrapping the GtkTreeStore of window 1"));
@@ -317,7 +329,7 @@ main (int argc, char *argv[])
       window3 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window3), 
 			    "Words, words, words - Window 3");
-      g_signal_connect (window3, "destroy", gtk_main_quit, NULL);
+      g_signal_connect (window3, "destroy", G_CALLBACK (quit_cb), &done);
       vbox3 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
       gtk_container_add (GTK_CONTAINER (vbox3), 
 			  gtk_label_new ("Jonathan and Kristian's list of words.\n\nA GtkTreeModelSort wrapping the GtkTreeModelSort of window 2"));
@@ -400,7 +412,8 @@ main (int argc, char *argv[])
 	}
     }
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
   
   return 0;
 }

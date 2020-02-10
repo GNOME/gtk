@@ -612,7 +612,8 @@ main (int argc, char *argv[])
   focus_cell_area ();
   background_area ();
 
-  gtk_main ();
+  while (TRUE)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

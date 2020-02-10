@@ -232,7 +232,7 @@ shoot_one (WidgetInfo *info)
   if (g_list_find (toplevels, info) == NULL)
     {
       g_warning ("Widget not found in queue");
-      gtk_main_quit ();
+      exit (1);
     }
 
   window = gtk_native_get_surface (GTK_NATIVE (info->window));
@@ -259,7 +259,7 @@ shoot_one (WidgetInfo *info)
   /* remove from the queue and try to load up another */
   toplevels = g_list_remove (toplevels, info);
   if (toplevels == NULL)
-    gtk_main_quit ();
+    exit (0);
   else
     queue_show ();
 
@@ -308,7 +308,8 @@ int main (int argc, char **argv)
   toplevels = get_all_widgets ();
 
   queue_show ();
-  gtk_main ();
+  while (TRUE)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

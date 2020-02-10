@@ -1410,7 +1410,6 @@ test_accelerators (void)
     "  <object class=\"GtkWindow\" id=\"window1\">"
     "    <child>"
     "      <object class=\"GtkTreeView\" id=\"treeview1\">"
-    "        <signal name=\"cursor-changed\" handler=\"gtk_main_quit\"/>"
     "      </object>"
     "    </child>"
     "  </object>"
@@ -1990,47 +1989,6 @@ test_add_objects (void)
 }
 
 static void
-test_file (const gchar *filename)
-{
-  GtkBuilder *builder;
-  GError *error = NULL;
-  GSList *l, *objects;
-
-  builder = gtk_builder_new ();
-
-  if (!gtk_builder_add_from_file (builder, filename, &error))
-    {
-      g_error ("%s", error->message);
-      g_error_free (error);
-      return;
-    }
-
-  objects = gtk_builder_get_objects (builder);
-  for (l = objects; l; l = l->next)
-    {
-      GObject *obj = (GObject*)l->data;
-
-      if (GTK_IS_DIALOG (obj))
-	{
-	  g_print ("Running dialog %s.\n",
-		   gtk_widget_get_name (GTK_WIDGET (obj)));
-	  gtk_dialog_run (GTK_DIALOG (obj));
-	}
-      else if (GTK_IS_WINDOW (obj))
-	{
-	  g_signal_connect (obj, "destroy", G_CALLBACK (gtk_main_quit), NULL);
-	  g_print ("Showing %s.\n",
-		   gtk_widget_get_name (GTK_WIDGET (obj)));
-	  gtk_widget_show (GTK_WIDGET (obj));
-	}
-    }
-
-  gtk_main ();
-
-  g_object_unref (builder);
-}
-
-static void
 test_message_area (void)
 {
   GtkBuilder *builder;
@@ -2518,12 +2476,6 @@ main (int argc, char **argv)
 {
   /* initialize test program */
   gtk_test_init (&argc, &argv);
-
-  if (argc > 1)
-    {
-      test_file (argv[1]);
-      return 0;
-    }
 
   g_test_add_func ("/Builder/Parser", test_parser);
   g_test_add_func ("/Builder/Types", test_types);

@@ -138,7 +138,8 @@ main (int argc, char *argv[])
 
   create_window ();
 
-  gtk_main ();
+  while (TRUE)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }

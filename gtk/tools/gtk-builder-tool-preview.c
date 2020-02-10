@@ -143,7 +143,8 @@ preview_file (const char *filename,
 
   gtk_window_present (GTK_WINDOW (window));
 
-  gtk_main ();
+  while (TRUE)
+    g_main_context_iteration (NULL, TRUE);
 
   g_object_unref (builder);
 }

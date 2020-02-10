@@ -391,11 +391,23 @@ create_axis_slider (int axis)
   return box;
 }
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int
 main (int argc, char *argv[])
 {
   GtkWidget *window, *box, *button, *controls;
   int i;
+  gboolean done = FALSE;
 
   gtk_init ();
 
@@ -406,7 +418,7 @@ main (int argc, char *argv[])
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "GtkGLArea - Triangle");
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 600);
-  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE);
   gtk_box_set_spacing (GTK_BOX (box), 6);
@@ -438,7 +450,8 @@ main (int argc, char *argv[])
 
   gtk_widget_show (window);
 
-  gtk_main ();
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return EXIT_SUCCESS;
 }

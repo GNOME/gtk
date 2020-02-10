@@ -72,6 +72,17 @@ value_changed_cb2 (GtkRange *range,
   g_free (text);
 }
 
+static void
+quit_cb (GtkWidget *widget,
+         gpointer   data)
+{
+  gboolean *done = data;
+
+  *done = TRUE;
+
+  g_main_context_wakeup (NULL);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -79,11 +90,12 @@ main (int argc, char **argv)
   GtkWidget *blur_box;
   GtkWidget *scale;
   GtkWidget *value_label;
+  gboolean done = FALSE;
 
   gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   blur_box = g_object_new (gtk_blur_box_get_type (),
                            "orientation", GTK_ORIENTATION_VERTICAL,
@@ -115,7 +127,9 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (window), blur_box);
 
   gtk_widget_show (window);
-  gtk_main ();
+
+  while (!done)
+    g_main_context_iteration (NULL, TRUE);
 
   return 0;
 }
