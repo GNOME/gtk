@@ -142,7 +142,6 @@ static GtkWindowGroup *gtk_main_get_window_group (GtkWidget   *widget);
 static gint pre_initialized = FALSE;
 static gint gtk_initialized = FALSE;
 static GList *current_events = NULL;
-static GThread *initialized_thread = NULL;
 
 typedef struct {
   GdkDisplay *display;
@@ -801,8 +800,6 @@ gtk_init_check (void)
   do_pre_parse_initialization ();
   do_post_parse_initialization ();
 
-  initialized_thread = g_thread_self ();
-
   ret = gdk_display_open_default () != NULL;
 
   if (ret && (gtk_get_debug_flags () & GTK_DEBUG_INTERACTIVE))
@@ -925,19 +922,6 @@ gboolean
 gtk_is_initialized (void)
 {
   return gtk_initialized;
-}
-
-/**
- * gtk_get_main_thread:
- *
- * Get the thread from which GTK was initialized.
- *
- * Returns: (transfer none): The #GThread initialized for GTK, must not be freed
- */
-GThread *
-gtk_get_main_thread (void)
-{
-  return initialized_thread;
 }
 
 
