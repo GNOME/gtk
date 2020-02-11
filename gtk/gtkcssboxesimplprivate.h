@@ -471,16 +471,45 @@ gtk_css_boxes_compute_content_box (GtkCssBoxes *boxes)
 static inline void
 gtk_css_boxes_compute_outline_box (GtkCssBoxes *boxes)
 {
+  const GskRoundedRect *src;
+  GskRoundedRect *dest;
+  double d;
+  int i;
+
   if (boxes->has_box[GTK_CSS_AREA_OUTLINE_BOX])
     return;
 
-  gtk_css_boxes_compute_outline_rect (boxes);
+  gtk_css_boxes_compute_border_box (boxes);
 
-  gtk_css_boxes_apply_border_radius (&boxes->box[GTK_CSS_AREA_OUTLINE_BOX],
-                                     boxes->style->border->border_top_left_radius,
-                                     boxes->style->border->border_top_right_radius,
-                                     boxes->style->border->border_bottom_right_radius,
-                                     boxes->style->border->border_bottom_left_radius);
+  src = &boxes->box[GTK_CSS_AREA_BORDER_BOX];
+  dest = &boxes->box[GTK_CSS_AREA_OUTLINE_BOX];
+
+  d = _gtk_css_number_value_get (boxes->style->outline->outline_offset, 100) +
+      _gtk_css_number_value_get (boxes->style->outline->outline_width, 100);
+
+  /* Grow border rect into outline rect */
+  dest->bounds.origin.x = src->bounds.origin.x - d;
+  dest->bounds.origin.y = src->bounds.origin.y - d;
+  dest->bounds.size.width = src->bounds.size.width + d + d;
+  dest->bounds.size.height = src->bounds.size.height + d + d;
+
+  /* Grow corner radii of border rect */
+  for (i = 0; i < 4; i ++)
+    {
+      if (src->corner[i].width > 0) dest->corner[i].width = src->corner[i].width + d;
+      if (src->corner[i].height > 0) dest->corner[i].height = src->corner[i].height + d;
+
+      if (dest->corner[i].width <= 0 || dest->corner[i].height <= 0)
+        {
+          dest->corner[i].width = 0;
+          dest->corner[i].height = 0;
+        }
+      else
+        {
+          dest->corner[i].width = MIN (dest->corner[i].width, dest->bounds.size.width);
+          dest->corner[i].height = MIN (dest->corner[i].height, dest->bounds.size.height);
+        }
+    }
 
   boxes->has_box[GTK_CSS_AREA_OUTLINE_BOX] = TRUE;
 }
