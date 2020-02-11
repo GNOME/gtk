@@ -996,6 +996,8 @@ gtk_css_static_style_new_compute (GtkStyleProvider             *provider,
                                    lookup,
                                    change == 0 ? &change : NULL);
 
+      gtk_css_lookup_register (lookup);
+
       if (_gtk_bitmask_is_empty (gtk_css_lookup_get_set_values (lookup)))
         {
           gtk_css_lookup_unref (lookup);
