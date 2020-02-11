@@ -271,7 +271,7 @@ gchar          *gtk_text_buffer_get_slice           (GtkTextBuffer     *buffer,
 GDK_AVAILABLE_IN_ALL
 void gtk_text_buffer_insert_paintable      (GtkTextBuffer *buffer,
                                             GtkTextIter   *iter,
-                                            GdkPaintable  *texture);
+                                            GdkPaintable  *paintable);
 
 /* Insert a child anchor */
 GDK_AVAILABLE_IN_ALL

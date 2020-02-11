@@ -2270,7 +2270,7 @@ gtk_text_buffer_real_insert_paintable (GtkTextBuffer *buffer,
 void
 gtk_text_buffer_insert_paintable (GtkTextBuffer *buffer,
                                   GtkTextIter   *iter,
-                                  GdkPaintable    *paintable)
+                                  GdkPaintable  *paintable)
 {
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
   g_return_if_fail (iter != NULL);
