@@ -58,6 +58,7 @@ GtkCssStyle *           gtk_css_static_style_get_default        (void);
 GtkCssStyle *           gtk_css_static_style_new_compute        (GtkStyleProvider               *provider,
                                                                  const GtkCountingBloomFilter   *filter,
                                                                  GtkCssNode                     *node,
+                                                                 GtkCssLookup                   *lookup,
                                                                  GtkCssChange                    change);
 GtkCssChange            gtk_css_static_style_get_change         (GtkCssStaticStyle              *style);
 GtkCssLookup *          gtk_css_static_style_get_lookup         (GtkCssStaticStyle              *style);
