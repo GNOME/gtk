@@ -400,14 +400,36 @@ gtk_revealer_real_size_allocate (GtkWidget *widget,
       return;
     }
 
+  /* We request a different size than the child requested scaled by
+   * this scale as it will render smaller from the transision.
+   * However, we still want to allocate the child widget with its
+   * unscaled size so it renders right instead of e.g. ellipsizing or
+   * some other form of clipping. We do this by reverse-applying
+   * the scale when size allocating the child.
+   *
+   * Unfortunately this causes precision issues, because the scaled
+   * size request is always rounded up to an integer.  For instance if
+   * natural with is 100, and scale is 0.001.  we will request a
+   * natural size of ceil(0.1) == 1, but reversing this results in 1 /
+   * 0.001 == 1000 (rather than 100). In the swing case we can get the
+   * scale arbitrarily near 0 causing arbitrary large problems here.
+   *
+   * In order to avoid such issue we pick an arbitrary maximum upscale
+   * scale factor of 100. This means that in the case where the allocated
+   * size is 1 we never allocate the child at > 100 px. This means
+   * that in large downscaling cases we may run into the clipping issue
+   * described above. However, at these downscaling levels (100 times!)
+   * we're unlikely to notice much detail anyway.
+   */
+
   if (hscale < 1.0)
     {
       g_assert (vscale == 1.0);
-      child_width = MIN (G_MAXINT, ceil (width / hscale));
+      child_width = MIN (100*width, ceil (width / hscale));
     }
   else if (vscale < 1.0)
     {
-      child_height = MIN (G_MAXINT, ceil (height / vscale));
+      child_height = MIN (100*height, ceil (height / vscale));
     }
 
   transform = NULL;
