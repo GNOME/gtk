@@ -3040,9 +3040,7 @@ add_offscreen_ops (GskGLRenderer         *self,
                    gboolean              *is_offscreen,
                    guint                  flags)
 {
-  const float scale = ops_get_scale (builder);
-  const float width  = ceilf (bounds->size.width  * scale);
-  const float height = ceilf (bounds->size.height * scale);
+  float scale, width, height, size, scaled_size;
   const float dx = builder->dx;
   const float dy = builder->dy;
   int render_target;
@@ -3052,6 +3050,7 @@ add_offscreen_ops (GskGLRenderer         *self,
   graphene_matrix_t item_proj;
   float prev_opacity;
   int texture_id = 0;
+  int max_texture_size;
 
   if (node_is_invisible (child_node))
     {
@@ -3085,6 +3084,24 @@ add_offscreen_ops (GskGLRenderer         *self,
         return TRUE;
       }
   }
+
+  scale = ops_get_scale (builder);
+  width = bounds->size.width;
+  height = bounds->size.height;
+
+  /* Tweak the scale factor so that the required texture doesn't
+   * exceed the max texture limit. This will render with a lower
+   * resolution, but this is better than clipping.
+   */
+
+  size = MAX (width, height);
+  scaled_size = ceilf (size * scale);
+  max_texture_size = gsk_gl_driver_get_max_texture_size (self->gl_driver);
+  if (scaled_size > max_texture_size)
+    scale *= (float) max_texture_size / scaled_size;
+
+  width  = ceilf (width * scale);
+  height = ceilf (height * scale);
 
   gsk_gl_driver_create_render_target (self->gl_driver, width, height, &texture_id, &render_target);
   gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,
