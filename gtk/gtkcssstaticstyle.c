@@ -707,6 +707,7 @@ gtk_css_static_style_get_default (void)
       default_style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER (settings),
                                                         &filter,
                                                         NULL,
+                                                        NULL,
                                                         0);
       g_object_set_data_full (G_OBJECT (settings), I_("gtk-default-style"),
                               default_style, clear_default_style);
@@ -993,20 +994,26 @@ GtkCssStyle *
 gtk_css_static_style_new_compute (GtkStyleProvider             *provider,
                                   const GtkCountingBloomFilter *filter,
                                   GtkCssNode                   *node,
+                                  GtkCssLookup                 *lookup,
                                   GtkCssChange                  change)
 {
   GtkCssStaticStyle *result;
-  GtkCssLookup *lookup;
   GtkCssNode *parent;
 
-  lookup = gtk_css_lookup_new ();
-
-  if (node)
-    gtk_style_provider_lookup (provider,
-                               filter,
-                               node,
-                               lookup,
-                               change == 0 ? &change : NULL);
+  if (lookup != NULL && change != 0)
+    {
+      gtk_css_lookup_ref (lookup);
+    }
+  else
+    {
+      lookup = gtk_css_lookup_new ();
+      if (node)
+        gtk_style_provider_lookup (provider,
+                                   filter,
+                                   node,
+                                   lookup,
+                                   change == 0 ? &change : NULL);
+    }
 
   result = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
 
