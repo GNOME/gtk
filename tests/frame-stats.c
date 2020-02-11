@@ -1,6 +1,7 @@
 /* -*- mode: C; c-basic-offset: 2; indent-tabs-mode: nil; -*- */
 
 #include <gtk/gtk.h>
+#include <stdlib.h>
 
 #include "frame-stats.h"
 #include "variable.h"
