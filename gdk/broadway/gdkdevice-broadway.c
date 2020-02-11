@@ -303,7 +303,7 @@ gdk_broadway_device_surface_at_position (GdkDevice       *device,
                                          GdkModifierType *mask,
                                          gboolean         get_toplevel)
 {
-  GdkSurface *surface;
+  GdkSurface *surface = NULL;
 
   gdk_broadway_device_query_state (device, NULL, &surface, NULL, NULL, win_x, win_y, mask);
 

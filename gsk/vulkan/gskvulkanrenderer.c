@@ -37,10 +37,10 @@ typedef struct {
   GQuark cpu_time;
   GQuark gpu_time;
 } ProfileTimers;
-#endif
 
 static guint texture_pixels_counter;
 static guint fallback_pixels_counter;
+#endif
 
 struct _GskVulkanRenderer
 {
