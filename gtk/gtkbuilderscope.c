@@ -495,7 +495,7 @@ gtk_builder_cscope_add_callback_symbols (GtkBuilderCScope *self,
 }
 
 /**
- * gtk_builder_lookup_callback_symbol: (skip)
+ * gtk_builder_cscope_lookup_callback_symbol: (skip)
  * @self: a #GtkBuilderCScope
  * @callback_name: The name of the callback
  *
