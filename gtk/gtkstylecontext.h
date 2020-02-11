@@ -866,9 +866,6 @@ GDK_AVAILABLE_IN_ALL
 gint          gtk_style_context_get_scale    (GtkStyleContext *context);
 
 GDK_AVAILABLE_IN_ALL
-GtkStyleContext *gtk_style_context_get_parent (GtkStyleContext *context);
-
-GDK_AVAILABLE_IN_ALL
 GList *  gtk_style_context_list_classes (GtkStyleContext *context);
 
 GDK_AVAILABLE_IN_ALL
