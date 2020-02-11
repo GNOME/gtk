@@ -17,7 +17,7 @@ flatpak-builder \
         meson \
                 --prefix /app \
                 --libdir /app/lib \
-                --buildtype debug \
+                --buildtype release \
                 -Dx11-backend=true \
                 -Dwayland-backend=true \
                 -Dprint-backends=file \

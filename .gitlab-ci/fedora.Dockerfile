@@ -8,6 +8,7 @@ RUN dnf -y install \
     cairo-devel \
     cairo-gobject-devel \
     ccache \
+    clang \
     colord-devel \
     cups-devel \
     dbus-daemon \
@@ -23,6 +24,7 @@ RUN dnf -y install \
     gettext \
     git \
     glib2-devel \
+    glib2-static \
     glibc-devel \
     glibc-headers \
     gobject-introspection-devel \
@@ -61,9 +63,11 @@ RUN dnf -y install \
     ninja-build \
     pango-devel \
     pcre-devel \
+    pcre-static \
     python3 \
     python3-jinja2 \
     python3-pip \
+    python3-pygments \
     python3-wheel \
     redhat-rpm-config \
     sassc \

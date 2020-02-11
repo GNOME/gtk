@@ -1,4 +1,5 @@
 stages:
+  - style-check
   - build
   - flatpak
   - deploy
@@ -12,16 +13,47 @@ stages:
     - subprojects/libepoxy/
     - subprojects/pango/
 
-fedora-x86_64: &fedora-x86_64-defaults
-  image: registry.gitlab.gnome.org/gnome/gtk/master:v10
-  stage: build
+# Common variables
+variables:
+  COMMON_MESON_FLAGS: "--fatal-meson-warnings --werror"
+  MESON_TEST_TIMEOUT_MULTIPLIER: 2
+  G_MESSAGES_DEBUG: "all"
+  CCACHE_DISABLE: "true"
+
+.only-default:
+  only:
+    - branches
+  except:
+    - tags
+
+style-check-diff:
+  extends: .only-default
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v13
+  stage: style-check
+  allow_failure: true
   script:
-    - bash -x ./.gitlab-ci/test-docker.sh
+    - .gitlab-ci/run-style-check-diff.sh
+
+fedora-x86_64:
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v13
+  stage: build
+  variables:
+    EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
+  script:
+    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS}
+            -Dx11-backend=true
+            -Dwayland-backend=true
+            -Dbroadway-backend=true
+            -Dvulkan=yes
+            -Dprofiler=true
+            _build
+    - ninja -C _build
+    - .gitlab-ci/run-tests.sh _build
   artifacts:
     when: always
     reports:
       junit:
-        - "${CI_PROJECT_DIR}/_build/report.xml" 
+        - "${CI_PROJECT_DIR}/_build/report.xml"
     name: "gtk-${CI_COMMIT_REF_NAME}"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
@@ -34,10 +66,37 @@ fedora-x86_64: &fedora-x86_64-defaults
     key: "$CI_JOB_NAME"
     <<: *cache-paths
 
-fedora-x86_64-staticlibs:
+release-build:
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v13
+  stage: build
   variables:
-    EXTRA_MESON_FLAGS: "-Ddefault_library=both"
-  <<: *fedora-x86_64-defaults
+    EXTRA_MESON_FLAGS: "--buildtype=release"
+  script:
+    - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS}
+            -Dx11-backend=true
+            -Dwayland-backend=true
+            -Dbroadway-backend=true
+            -Dvulkan=yes
+            _build
+    - ninja -C _build
+    - .gitlab-ci/run-tests.sh _build
+  allow_failure: true
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - "${CI_PROJECT_DIR}/_build/report.xml"
+    name: "gtk-${CI_COMMIT_REF_NAME}"
+    paths:
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
+      - "${CI_PROJECT_DIR}/_build/report.xml"
+      - "${CI_PROJECT_DIR}/_build/report.html"
+      - "${CI_PROJECT_DIR}/_build/testsuite/reftests/output/*.png"
+      - "${CI_PROJECT_DIR}/_build/testsuite/gsk/compare/*/*.png"
+      - "${CI_PROJECT_DIR}/_build/testsuite/css/output/*.syscap"
+  cache:
+    key: "$CI_JOB_NAME"
+    <<: *cache-paths
 
 .mingw-defaults: &mingw-defaults
   stage: build
@@ -108,11 +167,12 @@ flatpak-master:icon-browser:
   <<: *flatpak-master
 
 pages:
-  image: registry.gitlab.gnome.org/gnome/gtk/master:v10
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v13
   stage: deploy
+  variables:
+    EXTRA_MESON_FLAGS: "--buildtype=release"
   script:
-    - meson -Dgtk_doc=true _build .
-    - ninja -C _build
+    - meson ${COMMON_MESON_FLAGS} -Dgtk_doc=true _build
     - ninja -C _build gdk4-doc gsk4-doc gtk4-doc
     - mkdir -p public/
     - mv _build/docs/reference/gtk/html/ public/gtk/
