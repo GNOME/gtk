@@ -24,15 +24,6 @@
 #include "gtkprivatetypebuiltins.h"
 #include "gtkprivate.h"
 
-static void
-free_value (gpointer data)
-{
-  GtkCssLookupValue *value = data;
-
-  gtk_css_value_unref (value->value);
-  if (value->section)
-    gtk_css_section_unref (value->section);
-}
 
 GtkCssLookup *
 gtk_css_lookup_new (void)
@@ -50,7 +41,7 @@ gtk_css_lookup_free (GtkCssLookup *lookup)
 {
   _gtk_bitmask_free (lookup->set_values);
   if (lookup->values)
-    g_array_unref (lookup->values);
+    g_ptr_array_unref (lookup->values);
   g_free (lookup);
 }
 
@@ -100,26 +91,35 @@ gtk_css_lookup_is_missing (const GtkCssLookup *lookup,
  * to ensure they are kept alive until _gtk_css_lookup_free() is called.
  **/
 void
-gtk_css_lookup_set (GtkCssLookup  *lookup,
-                    guint          id,
-                    GtkCssSection *section,
-                    GtkCssValue   *value)
+gtk_css_lookup_set (GtkCssLookup      *lookup,
+                    guint              id,
+                    GtkCssLookupValue *value)
 {
-  GtkCssLookupValue v;
-
   gtk_internal_return_if_fail (lookup != NULL);
   gtk_internal_return_if_fail (value != NULL);
 
-  v.value = gtk_css_value_ref (value);
-  v.section = section ? gtk_css_section_ref (section) : NULL;
-  v.id = id;
-
   if (!lookup->values)
+    lookup->values = g_ptr_array_sized_new (16);
+
+  g_ptr_array_add (lookup->values, value);
+  lookup->set_values = _gtk_bitmask_set (lookup->set_values, id, TRUE);
+}
+
+GtkCssSection *
+gtk_css_lookup_get_section (GtkCssLookup *lookup,
+                            guint         id)
+{
+  if (_gtk_bitmask_get (lookup->set_values, id))
     {
-      lookup->values = g_array_sized_new (FALSE, FALSE, sizeof (GtkCssLookupValue), 16);
-      g_array_set_clear_func (lookup->values, free_value);
+      int i;
+
+      for (i = 0; i < lookup->values->len; i++)
+        {
+          GtkCssLookupValue *value = g_ptr_array_index (lookup->values, i);
+          if (value->id == id)
+            return value->section;
+        }
     }
 
-  g_array_append_val (lookup->values, v);
-  lookup->set_values = _gtk_bitmask_set (lookup->set_values, id, TRUE);
+  return NULL;
 }

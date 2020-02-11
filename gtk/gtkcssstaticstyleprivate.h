@@ -41,9 +41,7 @@ struct _GtkCssStaticStyle
 {
   GtkCssStyle parent;
 
-  GPtrArray             *sections;             /* sections the values are defined in */
-
-  GtkCssChange           change;               /* change as returned by value lookup */
+  GtkCssChange           change;              /* change as returned by value lookup */
   GtkCssLookup          *lookup;
 };
 
