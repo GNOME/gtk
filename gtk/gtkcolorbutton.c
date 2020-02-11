@@ -333,7 +333,7 @@ gtk_color_button_init (GtkColorButton *button)
   gdk_content_formats_unref (targets);
 
   source = gtk_drag_source_new ();
-  content = gdk_content_provider_new_with_callback (GDK_TYPE_RGBA, get_rgba_value, button);
+  content = gdk_content_provider_new_with_callback (GDK_TYPE_RGBA, get_rgba_value, button, NULL);
   gtk_drag_source_set_content (source, content);
   g_object_unref (content);
   g_signal_connect (source, "drag-begin", G_CALLBACK (gtk_color_button_drag_begin), button);

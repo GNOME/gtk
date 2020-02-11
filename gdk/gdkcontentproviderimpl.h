@@ -41,7 +41,8 @@ typedef void (*GdkContentProviderGetValueFunc) (GValue   *value,
 GDK_AVAILABLE_IN_ALL
 GdkContentProvider *    gdk_content_provider_new_with_callback (GType                           type,
                                                                 GdkContentProviderGetValueFunc  func,
-                                                                gpointer                        data);
+                                                                gpointer                        data,
+                                                                GDestroyNotify                  notify);
 
 typedef GBytes * (*GdkContentProviderGetBytesFunc) (const char *mime_type,
                                                     gpointer    data);
@@ -49,7 +50,8 @@ typedef GBytes * (*GdkContentProviderGetBytesFunc) (const char *mime_type,
 GDK_AVAILABLE_IN_ALL
 GdkContentProvider *    gdk_content_provider_new_with_formats  (GdkContentFormats              *formats,
                                                                 GdkContentProviderGetBytesFunc  func,
-                                                                gpointer                        data);
+                                                                gpointer                        data,
+                                                                GDestroyNotify                  notify);
 
 G_END_DECLS
 
