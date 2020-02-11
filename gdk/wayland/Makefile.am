@@ -92,14 +92,12 @@ $(shell echo $1 | sed 's/\([a-z\-]\{1,\}\)-[a-z]\{1,\}-v[0-9]\{1,\}/\1/')
 endef
 
 %-protocol.c : $(WAYLAND_PROTOCOLS_DATADIR)/$$(call protostability,$$*)/$$(call protoname,$$*)/$$*.xml
-	$(AM_V_GEN)$(WAYLAND_SCANNER) code < $< > $@
-	$(AM_V_GEN)$(SED) -i -e 's/WL_EXPORT //' $@
+	$(AM_V_GEN)$(WAYLAND_SCANNER) private-code < $< > $@
 %-client-protocol.h : $(WAYLAND_PROTOCOLS_DATADIR)/$$(call protostability,$$*)/$$(call protoname,$$*)/$$*.xml
 	$(AM_V_GEN)$(WAYLAND_SCANNER) client-header < $< > $@
 
 %-protocol.c : $(srcdir)/protocol/%.xml
-	$(AM_V_GEN)$(WAYLAND_SCANNER) code < $< > $@
-	$(AM_V_GEN)$(SED) -i -e 's/WL_EXPORT //' $@
+	$(AM_V_GEN)$(WAYLAND_SCANNER) private-code < $< > $@
 
 %-server-protocol.h : $(srcdir)/protocol/%.xml
 	$(AM_V_GEN)$(WAYLAND_SCANNER) server-header < $< > $@
