@@ -199,19 +199,34 @@ gtk_css_ ## NAME ## _values_new_compute (GtkCssStaticStyle *sstyle, \
                                          GtkCssLookup *lookup) \
 { \
   GtkCssStyle *style = (GtkCssStyle *)sstyle; \
-  int i; \
+  int i, j; \
+  int n; \
 \
   style->NAME = (GtkCss ## TYPE ## Values *)gtk_css_values_new (GTK_CSS_ ## ENUM ## _VALUES); \
 \
+  n = lookup->values ? lookup->values->len : 0; \
+  j = 0; \
   for (i = 0; i < G_N_ELEMENTS (NAME ## _props); i++) \
     { \
       guint id = NAME ## _props[i]; \
-      GtkCssLookupValue *value = gtk_css_lookup_get (lookup, id); \
+      GtkCssValue *value = NULL; \
+      for (; j < n; j++) \
+        { \
+          GtkCssLookupValue *v = g_ptr_array_index (lookup->values, j); \
+          if (v->id > id) \
+            break; \
+          if (v->id == id) \
+            { \
+              value = v->value; \
+              break; \
+            } \
+        } \
+\
       gtk_css_static_style_compute_value (sstyle, \
                                           provider, \
                                           parent_style, \
                                           id, \
-                                          value ? value->value : NULL); \
+                                          value); \
     } \
 } \
 static GtkBitmask * gtk_css_ ## NAME ## _values_mask; \
