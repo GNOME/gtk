@@ -4110,7 +4110,7 @@ add_event_mark (GdkEvent *event,
     }
   else
     {
-      gdk_profiler_add_mark (time * 1000L, duration * 1000L, "event", message);
+      gdk_profiler_add_mark (time * 1000L, duration * 1000L, "event", message ? message : kind);
     }
 
   g_free (message);
