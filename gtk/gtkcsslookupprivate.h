@@ -31,15 +31,15 @@ G_BEGIN_DECLS
 typedef struct _GtkCssLookup GtkCssLookup;
 
 typedef struct {
-  GtkCssSection     *section;
-  GtkCssValue       *value;
-  guint              id;
+  guint                id;
+  GtkCssValue         *value;
+  GtkCssSection       *section;
 } GtkCssLookupValue;
 
 struct _GtkCssLookup {
   int ref_count;
   GtkBitmask *set_values;
-  GArray *values;
+  GPtrArray *values;
 };
 
 GtkCssLookup *           gtk_css_lookup_new (void);
@@ -50,8 +50,9 @@ gboolean                 gtk_css_lookup_is_missing              (const GtkCssLoo
                                                                  guint                       id);
 void                     gtk_css_lookup_set                     (GtkCssLookup               *lookup,
                                                                  guint                       id,
-                                                                 GtkCssSection              *section,
-                                                                 GtkCssValue                *value);
+                                                                 GtkCssLookupValue          *value);
+GtkCssSection *          gtk_css_lookup_get_section             (GtkCssLookup               *lookup,
+                                                                 guint                       id);
 
 static inline const GtkBitmask *
 gtk_css_lookup_get_set_values (const GtkCssLookup *lookup)
@@ -69,7 +70,7 @@ gtk_css_lookup_get (GtkCssLookup *lookup,
 
       for (i = 0; i < lookup->values->len; i++)
         {
-          GtkCssLookupValue *value = &g_array_index (lookup->values, GtkCssLookupValue, i);
+          GtkCssLookupValue *value = g_ptr_array_index (lookup->values, i);
           if (value->id == id)
             return value;
         }
