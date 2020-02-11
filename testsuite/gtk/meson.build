@@ -211,7 +211,7 @@ if get_option ('profiler')
        args: [ '--mark', 'size allocation', join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],
        env: [ 'GTK_THEME=Empty',
               'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir) ],
-       suite: [ 'css' ])
+       suite: [ 'gtk' ])
 
 endif
 
@@ -221,6 +221,6 @@ if get_option ('profiler')
        args: [ '--mark', 'widget snapshot', join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],
        env: [ 'GTK_THEME=Empty',
               'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir) ],
-       suite: [ 'css' ])
+       suite: [ 'gtk' ])
 
 endif
