@@ -80,6 +80,7 @@ release-build:
             _build
     - ninja -C _build
     - .gitlab-ci/run-tests.sh _build
+  allow_failure: true
   artifacts:
     when: always
     reports:
