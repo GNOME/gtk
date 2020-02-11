@@ -364,6 +364,7 @@ gtk_css_node_create_style (GtkCssNode                   *cssnode,
   const GtkCssNodeDeclaration *decl;
   GtkCssStyle *style;
   GtkCssChange style_change;
+  GtkCssLookup *lookup;
 
   style_change = gtk_css_static_style_get_change (GTK_CSS_STATIC_STYLE (static_style));
 
@@ -378,13 +379,19 @@ gtk_css_node_create_style (GtkCssNode                   *cssnode,
 
   created_styles++;
 
-  if (change & GTK_CSS_CHANGE_NEEDS_RECOMPUTE)
+  if ((change & GTK_CSS_CHANGE_SOURCE) == 0 &&
+      (change & style_change) == 0)
+    lookup = gtk_css_static_style_get_lookup (GTK_CSS_STATIC_STYLE (static_style));
+  else
+    lookup = NULL;
+
+  if ((change & GTK_CSS_CHANGE_NEEDS_RECOMPUTE) != 0)
     style_change = 0;
 
   style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
                                             filter,
                                             cssnode,
-                                            NULL,
+                                            lookup,
                                             style_change);
 
   store_in_global_parent_cache (cssnode, decl, style);
