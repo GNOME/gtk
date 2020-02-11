@@ -466,7 +466,6 @@ gtk_css_style_provider_lookup (GtkStyleProvider             *provider,
   GtkCssProvider *css_provider = GTK_CSS_PROVIDER (provider);
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
   GtkCssRuleset *ruleset;
-  guint j;
   int i;
   GPtrArray *tree_rules;
 
@@ -485,15 +484,7 @@ gtk_css_style_provider_lookup (GtkStyleProvider             *provider,
           if (ruleset->styles == NULL)
             continue;
 
-          for (j = 0; j < ruleset->n_styles; j++)
-            {
-              guint id = ruleset->styles[j].id;
-
-              if (!gtk_css_lookup_is_missing (lookup, id))
-                continue;
-
-              gtk_css_lookup_set (lookup, id, (GtkCssLookupValue *)&ruleset->styles[j]);
-            }
+          gtk_css_lookup_merge (lookup, (GtkCssLookupValue *)ruleset->styles, ruleset->n_styles);
         }
 
       g_ptr_array_free (tree_rules, TRUE);

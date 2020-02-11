@@ -68,41 +68,55 @@ gtk_css_lookup_unref (GtkCssLookup *lookup)
     gtk_css_lookup_free (lookup);
 }
 
-gboolean
-gtk_css_lookup_is_missing (const GtkCssLookup *lookup,
-                           guint               id)
-{
-  gtk_internal_return_val_if_fail (lookup != NULL, FALSE);
-
-  return !_gtk_bitmask_get (lookup->set_values, id);
-}
-
-/**
- * _gtk_css_lookup_set:
- * @lookup: the lookup
- * @id: id of the property to set, see _gtk_style_property_get_id()
- * @section: (allow-none): The @section the value was defined in or %NULL
- * @value: the “cascading value” to use
- *
- * Sets the @value for a given @id. No value may have been set for @id
- * before. See _gtk_css_lookup_is_missing(). This function is used to
- * set the “winning declaration” of a lookup. Note that for performance
- * reasons @value and @section are not copied. It is your responsibility
- * to ensure they are kept alive until _gtk_css_lookup_free() is called.
- **/
 void
-gtk_css_lookup_set (GtkCssLookup      *lookup,
-                    guint              id,
-                    GtkCssLookupValue *value)
+gtk_css_lookup_merge (GtkCssLookup      *lookup,
+                      GtkCssLookupValue *values,
+                      guint              n_values)
 {
+  int i, j;
+
   gtk_internal_return_if_fail (lookup != NULL);
-  gtk_internal_return_if_fail (value != NULL);
+  gtk_internal_return_if_fail (values != NULL);
 
   if (!lookup->values)
-    lookup->values = g_ptr_array_sized_new (16);
+    lookup->values = g_ptr_array_sized_new (MAX (16, n_values));
 
-  g_ptr_array_add (lookup->values, value);
-  lookup->set_values = _gtk_bitmask_set (lookup->set_values, id, TRUE);
+  i = j = 0;
+  while (j < n_values)
+    {
+      GtkCssLookupValue *v;
+
+      if (i == lookup->values->len)
+        break;
+
+      v =  g_ptr_array_index (lookup->values, i);
+
+      if (v->id < values[j].id)
+        {
+          i++;
+        }
+      else if (v->id > values[j].id)
+        {
+          /* insert value[j] here */
+          g_ptr_array_insert (lookup->values, i, &values[j]);
+          lookup->set_values = _gtk_bitmask_set (lookup->set_values, values[j].id, TRUE);
+          i++;
+          j++;
+        }
+      else
+        {
+          /* value[j] is already set, skip */
+          i++;
+          j++;
+        }
+    }
+
+  /* append remaining values */
+  for (; j < n_values; j++)
+    {
+      g_ptr_array_add (lookup->values, &values[j]);
+      lookup->set_values = _gtk_bitmask_set (lookup->set_values, values[j].id, TRUE);
+    }
 }
 
 GtkCssSection *
