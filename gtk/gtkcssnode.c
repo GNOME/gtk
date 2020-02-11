@@ -385,6 +385,7 @@ gtk_css_node_create_style (GtkCssNode                   *cssnode,
   style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
                                             filter,
                                             cssnode,
+                                            NULL,
                                             style_change);
 
   store_in_global_parent_cache (cssnode, decl, style);
