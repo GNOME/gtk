@@ -444,7 +444,7 @@ setup_image_dnd (GtkWidget *image)
   GtkDragSource *source;
 
   source = gtk_drag_source_new ();
-  content = gdk_content_provider_new_with_callback (GDK_TYPE_TEXTURE, get_texture, image);
+  content = gdk_content_provider_new_with_callback (GDK_TYPE_TEXTURE, get_texture, image, NULL);
   gtk_drag_source_set_content (source, content);
   g_object_unref (content);
   g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), image);
@@ -458,7 +458,7 @@ setup_scalable_image_dnd (GtkWidget *image)
   GtkDragSource *source;
 
   source = gtk_drag_source_new ();
-  content = gdk_content_provider_new_with_callback (G_TYPE_FILE, get_file, image);
+  content = gdk_content_provider_new_with_callback (G_TYPE_FILE, get_file, image, NULL);
   gtk_drag_source_set_content (source, content);
   g_object_unref (content);
 

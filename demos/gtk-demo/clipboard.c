@@ -154,7 +154,7 @@ prepare_drag (GtkDragSource *source,
               double         y,
               GtkWidget     *image)
 {
-  return gdk_content_provider_new_with_callback (GDK_TYPE_TEXTURE, get_texture, image);
+  return gdk_content_provider_new_with_callback (GDK_TYPE_TEXTURE, get_texture, image, NULL);
 }
 
 static void

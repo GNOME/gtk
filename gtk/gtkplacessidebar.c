@@ -3759,7 +3759,8 @@ on_row_dragged (GtkGestureDrag *gesture,
 
       content = gdk_content_provider_new_with_formats (sidebar->source_targets,
                                                        drag_data_get_callback,
-                                                       sidebar);
+                                                       sidebar,
+                                                       NULL);
  
       surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (sidebar)));
       device = gtk_gesture_get_device (GTK_GESTURE (gesture));

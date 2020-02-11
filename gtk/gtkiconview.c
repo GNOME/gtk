@@ -6055,7 +6055,8 @@ gtk_icon_view_maybe_begin_drag (GtkIconView *icon_view,
 
   content = gdk_content_provider_new_with_formats (icon_view->priv->source_formats,
                                                    gtk_icon_view_drag_data_get,
-                                                   icon_view);
+                                                   icon_view,
+                                                   NULL);
 
   drag = gdk_drag_begin (surface,
                          device,
@@ -6064,7 +6065,7 @@ gtk_icon_view_maybe_begin_drag (GtkIconView *icon_view,
                          icon_view->priv->press_start_x,
                          icon_view->priv->press_start_y);
 
-   g_object_unref (content);
+  g_object_unref (content);
 
   g_signal_connect (drag, "dnd-finished", G_CALLBACK (gtk_icon_view_dnd_finished_cb), icon_view);
 
