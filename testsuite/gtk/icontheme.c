@@ -773,9 +773,18 @@ test_nonsquare_symbolic (void)
   g_object_unref (info);
 }
 
+static void
+require_env (const char *var)
+{
+  if (g_getenv (var) == NULL)
+    g_warning ("Some tests require %s to be set", var);
+}
+
 int
 main (int argc, char *argv[])
 {
+  require_env ("G_TEST_SRCDIR");
+
   gtk_test_init (&argc, &argv);
 
   g_test_add_func ("/icontheme/basics", test_basics);
