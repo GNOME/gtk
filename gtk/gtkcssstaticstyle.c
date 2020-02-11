@@ -970,6 +970,8 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
     gtk_css_other_values_new_compute (sstyle, provider, parent_style, lookup);
 }
 
+extern GHashTable *lookups;
+
 GtkCssStyle *
 gtk_css_static_style_new_compute (GtkStyleProvider             *provider,
                                   const GtkCountingBloomFilter *filter,
@@ -993,6 +995,8 @@ gtk_css_static_style_new_compute (GtkStyleProvider             *provider,
                                    node,
                                    lookup,
                                    change == 0 ? &change : NULL);
+
+      gtk_css_lookup_register (lookup);
     }
 
   result = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
