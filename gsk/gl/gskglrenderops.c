@@ -54,7 +54,7 @@ get_current_program_state (RenderOpBuilder *builder)
   if (!builder->current_program)
     return NULL;
 
-  return &builder->program_state[builder->current_program->index];
+  return &builder->programs->state[builder->current_program->index];
 }
 
 void
@@ -194,31 +194,17 @@ ops_transform_bounds_modelview (const RenderOpBuilder *builder,
 void
 ops_init (RenderOpBuilder *builder)
 {
-  int i;
-
   memset (builder, 0, sizeof (*builder));
 
   builder->current_opacity = 1.0f;
 
   op_buffer_init (&builder->render_ops);
   builder->vertices = g_array_new (FALSE, TRUE, sizeof (GskQuadVertex));
-
-  for (i = 0; i < GL_N_PROGRAMS; i ++)
-    {
-      builder->program_state[i].opacity = 1.0f;
-    }
 }
 
 void
 ops_free (RenderOpBuilder *builder)
 {
-  int i;
-
-  for (i = 0; i < GL_N_PROGRAMS; i ++)
-    {
-      gsk_transform_unref (builder->program_state[i].modelview);
-    }
-
   g_array_unref (builder->vertices);
   op_buffer_destroy (&builder->render_ops);
 }
@@ -238,7 +224,7 @@ ops_set_program (RenderOpBuilder *builder,
 
   builder->current_program = program;
 
-  program_state = &builder->program_state[program->index];
+  program_state = &builder->programs->state[program->index];
 
   if (memcmp (&builder->current_projection, &program_state->projection, sizeof (graphene_matrix_t)) != 0)
     {

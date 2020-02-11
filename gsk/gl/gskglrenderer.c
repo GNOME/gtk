@@ -48,9 +48,9 @@
 
 #define INIT_PROGRAM_UNIFORM_LOCATION(program_name, uniform_basename) \
               G_STMT_START{\
-                self->program_name ## _program.program_name.uniform_basename ## _location = \
-                              glGetUniformLocation(self->program_name ## _program.id, "u_" #uniform_basename);\
-                g_assert_cmpint (self->program_name ## _program.program_name.uniform_basename ## _location, >, -1); \
+                programs->program_name ## _program.program_name.uniform_basename ## _location = \
+                              glGetUniformLocation(programs->program_name ## _program.id, "u_" #uniform_basename);\
+                g_assert_cmpint (programs->program_name ## _program.program_name.uniform_basename ## _location, >, -1); \
               }G_STMT_END
 
 #define INIT_COMMON_UNIFORM_LOCATION(program_ptr, uniform_basename) \
@@ -439,24 +439,7 @@ struct _GskGLRenderer
   GskGLDriver *gl_driver;
   GskGLProfiler *gl_profiler;
 
-  union {
-    Program programs[GL_N_PROGRAMS];
-    struct {
-      Program blend_program;
-      Program blit_program;
-      Program blur_program;
-      Program border_program;
-      Program color_matrix_program;
-      Program color_program;
-      Program coloring_program;
-      Program cross_fade_program;
-      Program inset_shadow_program;
-      Program linear_gradient_program;
-      Program outset_shadow_program;
-      Program repeat_program;
-      Program unblurred_outset_shadow_program;
-    };
-  };
+  GskGLRendererPrograms *programs;
 
   RenderOpBuilder op_builder;
 
@@ -512,7 +495,7 @@ add_rect_outline_ops (GskGLRenderer         *self,
                       RenderOpBuilder       *builder,
                       const graphene_rect_t *rect)
 {
-  ops_set_program (builder, &self->color_program);
+  ops_set_program (builder, &self->programs->color_program);
   ops_set_color (builder, &BLACK);
 
   add_rect_ops (builder,
@@ -571,7 +554,7 @@ render_fallback_node (GskGLRenderer   *self,
 
   if (cached_id != 0)
     {
-      ops_set_program (builder, &self->blit_program);
+      ops_set_program (builder, &self->programs->blit_program);
       ops_set_texture (builder, cached_id);
       load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
       return;
@@ -647,7 +630,7 @@ render_fallback_node (GskGLRenderer   *self,
 
   gsk_gl_driver_set_texture_for_pointer (self->gl_driver, node, texture_id);
 
-  ops_set_program (builder, &self->blit_program);
+  ops_set_program (builder, &self->programs->blit_program);
   ops_set_texture (builder, texture_id);
   load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
 }
@@ -673,11 +656,11 @@ render_text_node (GskGLRenderer   *self,
   /* If the font has color glyphs, we don't need to recolor anything */
   if (!force_color && gsk_text_node_has_color_glyphs (node))
     {
-      ops_set_program (builder, &self->blit_program);
+      ops_set_program (builder, &self->programs->blit_program);
     }
   else
     {
-      ops_set_program (builder, &self->coloring_program);
+      ops_set_program (builder, &self->programs->coloring_program);
       ops_set_color (builder, color);
     }
 
@@ -762,7 +745,7 @@ render_border_node (GskGLRenderer   *self,
     {
       OpShadow *op;
 
-      ops_set_program (builder, &self->inset_shadow_program);
+      ops_set_program (builder, &self->programs->inset_shadow_program);
       op = ops_begin (builder, OP_CHANGE_INSET_SHADOW);
       op->color = &colors[0];
       op->outline = transform_rect (self, builder, rounded_outline);
@@ -875,7 +858,7 @@ render_border_node (GskGLRenderer   *self,
     /* Prepare outline */
     outline = transform_rect (self, builder, rounded_outline);
 
-    ops_set_program (builder, &self->border_program);
+    ops_set_program (builder, &self->programs->border_program);
     ops_set_border_width (builder, widths);
     ops_set_border (builder, &outline);
 
@@ -895,7 +878,7 @@ render_color_node (GskGLRenderer   *self,
                    GskRenderNode   *node,
                    RenderOpBuilder *builder)
 {
-  ops_set_program (builder, &self->color_program);
+  ops_set_program (builder, &self->programs->color_program);
   ops_set_color (builder, gsk_color_node_peek_color (node));
   load_vertex_data (ops_draw (builder, NULL), node, builder);
 }
@@ -958,7 +941,7 @@ render_texture_node (GskGLRenderer       *self,
 
       gsk_gl_driver_slice_texture (self->gl_driver, texture, &slices, &n_slices);
 
-      ops_set_program (builder, &self->blit_program);
+      ops_set_program (builder, &self->programs->blit_program);
       for (i = 0; i < n_slices; i ++)
         {
           const TextureSlice *slice = &slices[i];
@@ -987,7 +970,7 @@ render_texture_node (GskGLRenderer       *self,
 
       upload_texture (self, texture, &r);
 
-      ops_set_program (builder, &self->blit_program);
+      ops_set_program (builder, &self->programs->blit_program);
       ops_set_texture (builder, r.texture_id);
 
       load_vertex_data_with_region (ops_draw (builder, NULL),
@@ -1061,7 +1044,7 @@ render_transform_node (GskGLRenderer   *self,
              */
             ops_push_modelview (builder, node_transform);
             ops_set_texture (builder, region.texture_id);
-            ops_set_program (builder, &self->blit_program);
+            ops_set_program (builder, &self->programs->blit_program);
 
             load_vertex_data_with_region (ops_draw (builder, NULL),
                                           child, builder,
@@ -1098,7 +1081,7 @@ render_opacity_node (GskGLRenderer   *self,
       prev_opacity = ops_set_opacity (builder,
                                       builder->current_opacity * opacity);
 
-      ops_set_program (builder, &self->blit_program);
+      ops_set_program (builder, &self->programs->blit_program);
       ops_set_texture (builder, region.texture_id);
 
       load_vertex_data_with_region (ops_draw (builder, NULL),
@@ -1128,7 +1111,7 @@ render_linear_gradient_node (GskGLRenderer   *self,
   const graphene_point_t *end = gsk_linear_gradient_node_peek_end (node);
   OpLinearGradient *op;
 
-  ops_set_program (builder, &self->linear_gradient_program);
+  ops_set_program (builder, &self->programs->linear_gradient_program);
   op = ops_begin (builder, OP_CHANGE_LINEAR_GRADIENT);
   op->color_stops = stops;
   op->n_color_stops = n_color_stops;
@@ -1245,7 +1228,7 @@ render_rounded_clip_node (GskGLRenderer       *self,
 
       ops_pop_clip (builder);
 
-      ops_set_program (builder, &self->blit_program);
+      ops_set_program (builder, &self->programs->blit_program);
       ops_set_texture (builder, region.texture_id);
 
       load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder);
@@ -1272,7 +1255,7 @@ render_color_matrix_node (GskGLRenderer       *self,
                           RESET_CLIP | RESET_OPACITY))
     g_assert_not_reached ();
 
-  ops_set_program (builder, &self->color_matrix_program);
+  ops_set_program (builder, &self->programs->color_matrix_program);
   ops_set_color_matrix (builder,
                         gsk_color_matrix_node_peek_color_matrix (node),
                         gsk_color_matrix_node_peek_color_offset (node));
@@ -1323,7 +1306,7 @@ blur_texture (GskGLRenderer       *self,
 
   prev_render_target = ops_set_render_target (builder, pass1_render_target);
   ops_begin (builder, OP_CLEAR);
-  ops_set_program (builder, &self->blur_program);
+  ops_set_program (builder, &self->programs->blur_program);
 
   op = ops_begin (builder, OP_CHANGE_BLUR);
   op->size.width = texture_to_blur_width;
@@ -1462,7 +1445,7 @@ render_blur_node (GskGLRenderer   *self,
   g_assert (blurred_region.texture_id != 0);
 
   /* Draw the result */
-  ops_set_program (builder, &self->blit_program);
+  ops_set_program (builder, &self->programs->blit_program);
   ops_set_texture (builder, blurred_region.texture_id);
   load_offscreen_vertex_data (ops_draw (builder, NULL), node, builder); /* Render result to screen */
 
@@ -1483,7 +1466,7 @@ render_unblurred_inset_shadow_node (GskGLRenderer   *self,
 
   g_assert (blur_radius == 0);
 
-  ops_set_program (builder, &self->inset_shadow_program);
+  ops_set_program (builder, &self->programs->inset_shadow_program);
   op = ops_begin (builder, OP_CHANGE_INSET_SHADOW);
   op->color = gsk_inset_shadow_node_peek_color (node);
   op->outline = transform_rect (self, builder, gsk_inset_shadow_node_peek_outline (node));
@@ -1570,7 +1553,7 @@ render_inset_shadow_node (GskGLRenderer   *self,
       ops_begin (builder, OP_CLEAR);
 
       /* Actual inset shadow outline drawing */
-      ops_set_program (builder, &self->inset_shadow_program);
+      ops_set_program (builder, &self->programs->inset_shadow_program);
       op = ops_begin (builder, OP_CHANGE_INSET_SHADOW);
       op->color = gsk_inset_shadow_node_peek_color (node);
       op->outline = transform_rect (self, builder, &outline_to_blur);
@@ -1621,7 +1604,7 @@ render_inset_shadow_node (GskGLRenderer   *self,
         ops_push_clip (builder, &node_clip);
       }
 
-    ops_set_program (builder, &self->blit_program);
+    ops_set_program (builder, &self->programs->blit_program);
     ops_set_texture (builder, blurred_texture_id);
 
     load_vertex_data_with_region (ops_draw (builder, NULL),
@@ -1646,7 +1629,7 @@ render_unblurred_outset_shadow_node (GskGLRenderer   *self,
   const float dy = gsk_outset_shadow_node_get_dy (node);
   OpShadow *op;
 
-  ops_set_program (builder, &self->unblurred_outset_shadow_program);
+  ops_set_program (builder, &self->programs->unblurred_outset_shadow_program);
   op = ops_begin (builder, OP_CHANGE_UNBLURRED_OUTSET_SHADOW);
   op->color = gsk_outset_shadow_node_peek_color (node);
   op->outline = transform_rect (self, builder, outline);
@@ -1739,7 +1722,7 @@ render_outset_shadow_node (GskGLRenderer   *self,
       prev_viewport = ops_set_viewport (builder, &GRAPHENE_RECT_INIT (0, 0, texture_width, texture_height));
 
       /* Draw outline */
-      ops_set_program (builder, &self->color_program);
+      ops_set_program (builder, &self->programs->color_program);
       ops_push_clip (builder, &scaled_outline);
       ops_set_color (builder, &COLOR_WHITE);
       ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
@@ -1776,7 +1759,7 @@ render_outset_shadow_node (GskGLRenderer   *self,
       blurred_texture_id = cached_tid;
     }
 
-  ops_set_program (builder, &self->outset_shadow_program);
+  ops_set_program (builder, &self->programs->outset_shadow_program);
   ops_set_color (builder, color);
   ops_set_texture (builder, blurred_texture_id);
 
@@ -2097,7 +2080,7 @@ render_shadow_node (GskGLRenderer   *self,
           max_y = min_y + shadow_child->bounds.size.height;
         }
 
-      ops_set_program (builder, &self->coloring_program);
+      ops_set_program (builder, &self->programs->coloring_program);
       ops_set_color (builder, &shadow->color);
       ops_set_texture (builder, region.texture_id);
       if (is_offscreen)
@@ -2174,7 +2157,7 @@ render_cross_fade_node (GskGLRenderer   *self,
       return;
     }
 
-  ops_set_program (builder, &self->cross_fade_program);
+  ops_set_program (builder, &self->programs->cross_fade_program);
 
   op = ops_begin (builder, OP_CHANGE_CROSS_FADE);
   op->progress = progress;
@@ -2223,7 +2206,7 @@ render_blend_node (GskGLRenderer   *self,
       return;
     }
 
-  ops_set_program (builder, &self->blend_program);
+  ops_set_program (builder, &self->programs->blend_program);
   ops_set_texture (builder, bottom_region.texture_id);
 
   op = ops_begin (builder, OP_CHANGE_BLEND);
@@ -2272,7 +2255,7 @@ render_repeat_node (GskGLRenderer   *self,
                           RESET_CLIP | RESET_OPACITY))
     g_assert_not_reached ();
 
-  ops_set_program (builder, &self->repeat_program);
+  ops_set_program (builder, &self->programs->repeat_program);
   ops_set_texture (builder, region.texture_id);
 
   op = ops_begin (builder, OP_CHANGE_REPEAT);
@@ -2551,11 +2534,53 @@ gsk_gl_renderer_dispose (GObject *gobject)
   G_OBJECT_CLASS (gsk_gl_renderer_parent_class)->dispose (gobject);
 }
 
-static gboolean
+static GskGLRendererPrograms *
+gsk_gl_renderer_programs_new (void)
+{
+  GskGLRendererPrograms *programs;
+  int i;
+
+  programs = g_new0 (GskGLRendererPrograms, 1);
+  programs->ref_count = 1;
+  for (i = 0; i < GL_N_PROGRAMS; i ++)
+    {
+      programs->state[i].opacity = 1.0f;
+    }
+
+  return programs;
+}
+
+static GskGLRendererPrograms *
+gsk_gl_renderer_programs_ref (GskGLRendererPrograms *programs)
+{
+  programs->ref_count++;
+  return programs;
+}
+
+/* Must be called with the context current */
+static void
+gsk_gl_renderer_programs_unref (GskGLRendererPrograms *programs)
+{
+  int i;
+  programs->ref_count--;
+  if (programs->ref_count == 0)
+    {
+      for (i = 0; i < GL_N_PROGRAMS; i ++)
+        {
+          if (programs->programs[i].id != 0)
+            glDeleteProgram (programs->programs[i].id);
+          gsk_transform_unref (programs->state[i].modelview);
+        }
+      g_free (programs);
+    }
+}
+
+static GskGLRendererPrograms *
 gsk_gl_renderer_create_programs (GskGLRenderer  *self,
                                  GError        **error)
 {
   GskGLShaderBuilder shader_builder;
+  GskGLRendererPrograms *programs = NULL;
   int i;
   static const struct {
     const char *resource_path;
@@ -2575,7 +2600,6 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
     { "/org/gtk/libgsk/glsl/repeat.glsl",                    "repeat" },
     { "/org/gtk/libgsk/glsl/unblurred_outset_shadow.glsl",   "unblurred_outset shadow" },
   };
-  gboolean success = TRUE;
 
   gsk_gl_shader_builder_init (&shader_builder,
                               "/org/gtk/libgsk/glsl/preamble.glsl",
@@ -2614,9 +2638,11 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
       shader_builder.gl3 = TRUE;
     }
 
+  programs = gsk_gl_renderer_programs_new ();
+
   for (i = 0; i < GL_N_PROGRAMS; i ++)
     {
-      Program *prog = &self->programs[i];
+      Program *prog = &programs->programs[i];
 
       prog->index = i;
       prog->id = gsk_gl_shader_builder_create_program (&shader_builder,
@@ -2624,7 +2650,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
                                                        error);
       if (prog->id < 0)
         {
-          success = FALSE;
+          g_clear_pointer (&programs, gsk_gl_renderer_programs_unref);
           goto out;
         }
 
@@ -2695,15 +2721,41 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
    * work in gles. */
   for (i = 0; i < GL_N_PROGRAMS; i++)
     {
-      glUseProgram(self->programs[i].id);
-      glUniform1f (self->programs[i].alpha_location, 1.0);
+      glUseProgram(programs->programs[i].id);
+      glUniform1f (programs->programs[i].alpha_location, 1.0);
     }
 
 out:
   gsk_gl_shader_builder_finish (&shader_builder);
 
-  return success;
+  return programs;
 }
+
+static GskGLRendererPrograms *
+get_programs_for_display (GskGLRenderer  *self,
+                          GdkDisplay     *display,
+                          GError        **error)
+{
+  GskGLRendererPrograms *programs;
+
+  if (g_getenv ("GSK_NO_SHARED_PROGRAMS"))
+    return gsk_gl_renderer_create_programs (self, error);
+
+  programs = (GskGLRendererPrograms *)g_object_get_data (G_OBJECT (display), "gsk-gl-programs");
+  if (programs == NULL)
+    {
+      programs = gsk_gl_renderer_create_programs (self, error);
+      if (programs)
+        g_object_set_data_full (G_OBJECT (display), "gsk-gl-programs",
+                                programs,
+                                (GDestroyNotify) gsk_gl_renderer_programs_unref);
+    }
+
+  if (programs)
+    return gsk_gl_renderer_programs_ref (programs);
+  return NULL;
+}
+
 
 static GskGLTextureAtlases *
 get_texture_atlases_for_display (GdkDisplay *display)
@@ -2795,8 +2847,10 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
   self->gl_driver = gsk_gl_driver_new (self->gl_context);
 
   GSK_RENDERER_NOTE (renderer, OPENGL, g_message ("Creating buffers and programs"));
-  if (!gsk_gl_renderer_create_programs (self, error))
+  self->programs = get_programs_for_display (self, gdk_surface_get_display (surface), error);
+  if (self->programs == NULL)
     return FALSE;
+  self->op_builder.programs = self->programs;
 
   self->atlases = get_texture_atlases_for_display (gdk_surface_get_display (surface));
   self->glyph_cache = get_glyph_cache_for_display (gdk_surface_get_display (surface), self->atlases);
@@ -2813,7 +2867,6 @@ static void
 gsk_gl_renderer_unrealize (GskRenderer *renderer)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
-  guint i;
 
   if (self->gl_context == NULL)
     return;
@@ -2824,10 +2877,9 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
    * as they will be dropped when we finalize the GskGLDriver
    */
   ops_reset (&self->op_builder);
+  self->op_builder.programs = NULL;
 
-  for (i = 0; i < GL_N_PROGRAMS; i ++)
-    glDeleteProgram (self->programs[i].id);
-
+  g_clear_pointer (&self->programs, gsk_gl_renderer_programs_unref);
   g_clear_pointer (&self->glyph_cache, gsk_gl_glyph_cache_unref);
   g_clear_pointer (&self->icon_cache, gsk_gl_icon_cache_unref);
   g_clear_pointer (&self->atlases, gsk_gl_texture_atlases_unref);
@@ -3295,12 +3347,12 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self)
           break;
 
         case OP_CHANGE_CROSS_FADE:
-          g_assert (program == &self->cross_fade_program);
+          g_assert (program == &self->programs->cross_fade_program);
           apply_cross_fade_op (program, ptr);
           break;
 
         case OP_CHANGE_BLEND:
-          g_assert (program == &self->blend_program);
+          g_assert (program == &self->programs->blend_program);
           apply_blend_op (program, ptr);
           break;
 
