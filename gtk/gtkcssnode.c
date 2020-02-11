@@ -89,7 +89,7 @@
  * if we need to change things. */
 #define GTK_CSS_RADICAL_CHANGE (GTK_CSS_CHANGE_ID | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS | \
                                 GTK_CSS_CHANGE_PARENT_ID | GTK_CSS_CHANGE_PARENT_NAME | GTK_CSS_CHANGE_PARENT_CLASS | \
-                                GTK_CSS_CHANGE_SOURCE | GTK_CSS_CHANGE_ROOT | GTK_CSS_CHANGE_PARENT_STYLE)
+                                GTK_CSS_CHANGE_STYLE_SHEET | GTK_CSS_CHANGE_ROOT | GTK_CSS_CHANGE_PARENT_STYLE)
 
 /* When these change, we need to recompute the change flags for the new style
  * since they may have changed.
@@ -1243,7 +1243,7 @@ gtk_css_node_invalidate_style_provider (GtkCssNode *cssnode)
 {
   GtkCssNode *child;
 
-  gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_SOURCE);
+  gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_STYLE_SHEET);
 
   for (child = cssnode->first_child;
        child;
