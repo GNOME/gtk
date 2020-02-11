@@ -205,7 +205,8 @@ gdk_vulkan_strerror (VkResult result)
     case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT:
       return "An operation on a swapchain created with VK_FULL_SCREEN_EXCLUSIVE_APPLICATION_CONTROLLED_EXT failed as it did not have exlusive full-screen access.";
 #endif
-
+    case VK_RESULT_BEGIN_RANGE:
+    case VK_RESULT_END_RANGE:
     case VK_RESULT_RANGE_SIZE:
     case VK_RESULT_MAX_ENUM:
     default:
