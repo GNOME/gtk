@@ -277,6 +277,8 @@ gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
 
   for (i = 0; i < ruleset->n_styles; i++)
     {
+      if (ruleset->styles[i].id > id)
+        break;
       if (ruleset->styles[i].id == id)
         {
           _gtk_css_value_unref (ruleset->styles[i].value);
@@ -286,10 +288,15 @@ gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
           break;
         }
     }
-  if (i == ruleset->n_styles)
+  if (i == ruleset->n_styles || ruleset->styles[i].id != id)
     {
+      ruleset->styles = g_realloc (ruleset->styles, (ruleset->n_styles + 1) * sizeof (PropertyValue));
+
+      if (i < ruleset->n_styles)
+        memmove (&ruleset->styles[i + 1], &ruleset->styles[i], (ruleset->n_styles - i) * sizeof (PropertyValue));
+
       ruleset->n_styles++;
-      ruleset->styles = g_realloc (ruleset->styles, ruleset->n_styles * sizeof (PropertyValue));
+
       ruleset->styles[i].value = NULL;
       ruleset->styles[i].id = id;
     }
