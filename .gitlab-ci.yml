@@ -1,4 +1,5 @@
 stages:
+  - style-check
   - build
   - flatpak
   - deploy
@@ -19,8 +20,22 @@ variables:
   G_MESSAGES_DEBUG: "all"
   CCACHE_DISABLE: "true"
 
+.only-default:
+  only:
+    - branches
+  except:
+    - tags
+
+style-check-diff:
+  extends: .only-default
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v13
+  stage: style-check
+  allow_failure: true
+  script:
+    - .gitlab-ci/run-style-check-diff.sh
+
 fedora-x86_64:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v12
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v13
   stage: build
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
@@ -52,7 +67,7 @@ fedora-x86_64:
     <<: *cache-paths
 
 release-build:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v12
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v13
   stage: build
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
@@ -151,7 +166,7 @@ flatpak-master:icon-browser:
   <<: *flatpak-master
 
 pages:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v12
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora:v13
   stage: deploy
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"

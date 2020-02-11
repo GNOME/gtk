@@ -8,6 +8,7 @@ RUN dnf -y install \
     cairo-devel \
     cairo-gobject-devel \
     ccache \
+    clang \
     colord-devel \
     cups-devel \
     dbus-daemon \
