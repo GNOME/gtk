@@ -336,6 +336,8 @@ gtk_css_static_style_get_static_style (GtkCssStyle *style)
   return (GtkCssStaticStyle *)style;
 }
 
+static GtkCssLookup *the_empty_lookup;
+
 static void
 gtk_css_static_style_class_init (GtkCssStaticStyleClass *klass)
 {
@@ -360,6 +362,8 @@ gtk_css_static_style_class_init (GtkCssStaticStyleClass *klass)
   gtk_css_other_values_init ();
 
   verify_style_groups ();
+
+  the_empty_lookup = gtk_css_lookup_new ();
 }
 
 static void
@@ -980,6 +984,8 @@ gtk_css_static_style_new_compute (GtkStyleProvider             *provider,
   GtkCssStaticStyle *result;
   GtkCssNode *parent;
 
+  result = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
+
   if (lookup != NULL && change != 0)
     {
       gtk_css_lookup_ref (lookup);
@@ -993,9 +999,13 @@ gtk_css_static_style_new_compute (GtkStyleProvider             *provider,
                                    node,
                                    lookup,
                                    change == 0 ? &change : NULL);
-    }
 
-  result = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
+      if (_gtk_bitmask_is_empty (gtk_css_lookup_get_set_values (lookup)))
+        {
+          gtk_css_lookup_unref (lookup);
+          lookup = gtk_css_lookup_ref (the_empty_lookup);
+        }
+    }
 
   result->lookup = lookup;
   result->change = change;
