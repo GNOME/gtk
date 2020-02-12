@@ -461,6 +461,7 @@ gtk_public_headers = files([
   'gtkdragsource.h',
   'gtkdrawingarea.h',
   'gtkeditable.h',
+  'gtkemojichooser.h',
   'gtkentry.h',
   'gtkentrybuffer.h',
   'gtkentrycompletion.h',
