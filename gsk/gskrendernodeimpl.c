@@ -651,7 +651,10 @@ gsk_texture_node_draw (GskRenderNode *node,
   pattern = cairo_pattern_create_for_surface (surface);
   cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
   cairo_set_source (cr, pattern);
-  cairo_paint (cr);
+  cairo_rectangle (cr,
+                   0, 0,
+                   gdk_texture_get_width (self->texture), gdk_texture_get_height (self->texture));
+  cairo_fill (cr);
 
   cairo_restore (cr);
 
@@ -2409,7 +2412,10 @@ gsk_color_matrix_node_draw (GskRenderNode *node,
   cairo_surface_unmap_image (surface, image_surface);
 
   cairo_set_source (cr, pattern);
-  cairo_paint (cr);
+  cairo_rectangle (cr,
+                   node->bounds.origin.x, node->bounds.origin.y,
+                   node->bounds.size.width, node->bounds.size.height);
+  cairo_fill (cr);
 
   cairo_restore (cr);
   cairo_pattern_destroy (pattern);
@@ -2549,7 +2555,10 @@ gsk_repeat_node_draw (GskRenderNode *node,
                             });
 
   cairo_set_source (cr, pattern);
-  cairo_paint (cr);
+  cairo_rectangle (cr,
+                   node->bounds.origin.x, node->bounds.origin.y,
+                   node->bounds.size.width, node->bounds.size.height);
+  cairo_fill (cr);
 
   cairo_pattern_destroy (pattern);
   cairo_surface_destroy (surface);
@@ -2933,7 +2942,10 @@ gsk_shadow_node_draw (GskRenderNode *node,
     }
 
   cairo_set_source (cr, pattern);
-  cairo_paint (cr);
+  cairo_rectangle (cr,
+                   node->bounds.origin.x, node->bounds.origin.y,
+                   node->bounds.size.width, node->bounds.size.height);
+  cairo_fill (cr);
 
   cairo_pattern_destroy (pattern);
 }
@@ -3821,7 +3833,11 @@ gsk_blur_node_draw (GskRenderNode *node,
   cairo_surface_unmap_image (surface, image_surface);
 
   cairo_set_source (cr, pattern);
-  cairo_paint (cr);
+  cairo_rectangle (cr,
+                   node->bounds.origin.x, node->bounds.origin.y,
+                   node->bounds.size.width, node->bounds.size.height);
+  cairo_fill (cr);
+
 
   cairo_restore (cr);
   cairo_pattern_destroy (pattern);
