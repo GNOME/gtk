@@ -30,10 +30,6 @@
 G_BEGIN_DECLS
 
 GDK_AVAILABLE_IN_ALL
-gboolean   gdk_cairo_get_clip_rectangle (cairo_t            *cr,
-                                         GdkRectangle       *rect);
-
-GDK_AVAILABLE_IN_ALL
 void       gdk_cairo_set_source_rgba    (cairo_t              *cr,
                                          const GdkRGBA        *rgba);
 GDK_AVAILABLE_IN_ALL
