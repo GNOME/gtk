@@ -4103,15 +4103,9 @@ add_event_mark (GdkEvent *event,
     }
 
   if (kind != NULL && message != NULL)
-    {
-      gchar *full_message = g_strdup_printf ("%s %s", kind, message);
-      gdk_profiler_add_mark (time * 1000L, duration * 1000L, "event", full_message);
-      g_free (full_message);
-    }
+    gdk_profiler_add_markf (time * 1000L, duration * 1000L, "event", "%s %s", kind, message);
   else
-    {
-      gdk_profiler_add_mark (time * 1000L, duration * 1000L, "event", message ? message : kind);
-    }
+    gdk_profiler_add_mark (time * 1000L, duration * 1000L, "event", message ? message : kind);
 
   g_free (message);
 }
