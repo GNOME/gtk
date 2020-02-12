@@ -122,6 +122,13 @@ static void     gtk_im_context_simple_get_preedit_string (GtkIMContext          
 							  gint                     *cursor_pos);
 static void     gtk_im_context_simple_set_client_widget  (GtkIMContext             *context,
                                                           GtkWidget                *widget);
+static gboolean gtk_im_context_simple_filter_key         (GtkIMContext             *context,
+                                                          GdkSurface               *surface,
+                                                          guint                     keyval,
+                                                          GdkModifierType           state,
+                                                          int                       scancode,
+                                                          gboolean                  press);
+
 
 G_DEFINE_TYPE_WITH_CODE (GtkIMContextSimple, gtk_im_context_simple, GTK_TYPE_IM_CONTEXT,
                          G_ADD_PRIVATE (GtkIMContextSimple)
@@ -893,7 +900,10 @@ beep_surface (GdkSurface *surface)
 static gboolean
 no_sequence_matches (GtkIMContextSimple *context_simple,
                      gint                n_compose,
-                     GdkEventKey        *event)
+                     GdkSurface         *surface,
+                     guint               event_keyval,
+                     GdkModifierType     state,
+                     int                 scancode)
 {
   GtkIMContextSimplePrivate *priv = context_simple->priv;
   GtkIMContext *context;
@@ -913,27 +923,24 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
       gtk_im_context_simple_commit_char (context, priv->tentative_match);
       priv->compose_buffer[0] = 0;
       
-      for (i=0; i < n_compose - len - 1; i++)
+      for (i = 0; i < n_compose - len - 1; i++)
 	{
-	  GdkEvent *tmp_event = gdk_event_copy ((GdkEvent *)event);
-          gdk_event_set_keyval (tmp_event, priv->compose_buffer[len + i]);
-	  
-	  gtk_im_context_filter_keypress (context, (GdkEventKey *)tmp_event);
-	  g_object_unref (tmp_event);
+          keyval = priv->compose_buffer[len + i];
+	  gtk_im_context_simple_filter_key (context, surface, keyval, state, 0, TRUE);
 	}
 
-      return gtk_im_context_filter_keypress (context, event);
+      return gtk_im_context_simple_filter_key (context, surface, event_keyval, state, scancode, TRUE);
     }
-  else if (gdk_event_get_keyval ((GdkEvent *) event, &keyval))
+  else if (event_keyval)
     {
       priv->compose_buffer[0] = 0;
-      if (n_compose > 1)		/* Invalid sequence */
+      if (n_compose > 1)  /* Invalid sequence */
 	{
-	  beep_surface (gdk_event_get_surface ((GdkEvent *) event));
+	  beep_surface (surface);
 	  return TRUE;
 	}
   
-      ch = gdk_keyval_to_unicode (keyval);
+      ch = gdk_keyval_to_unicode (event_keyval);
       if (ch != 0 && !g_unichar_iscntrl (ch))
 	{
 	  gtk_im_context_simple_commit_char (context, ch);
@@ -955,17 +962,15 @@ is_hex_keyval (guint keyval)
 }
 
 static guint
-canonical_hex_keyval (GdkEventKey *event)
+canonical_hex_keyval (GdkSurface *surface,
+                      guint       event_keyval,
+                      guint       event_scancode)
 {
-  GdkSurface *surface = gdk_event_get_surface ((GdkEvent *) event);
   GdkKeymap *keymap = gdk_display_get_keymap (gdk_surface_get_display (surface));
-  guint keyval, event_keyval;
+  guint keyval;
   guint *keyvals = NULL;
   gint n_vals = 0;
   gint i;
-
-  if (!gdk_event_get_keyval ((GdkEvent *) event, &event_keyval))
-    return 0;
 
   /* See if the keyval is already a hex digit */
   if (is_hex_keyval (event_keyval))
@@ -975,7 +980,7 @@ canonical_hex_keyval (GdkEventKey *event)
    * any other state, and return that hex keyval if so
    */
   gdk_keymap_get_entries_for_keycode (keymap,
-                                      gdk_event_get_scancode ((GdkEvent *) event),
+                                      event_scancode,
 				      NULL,
 				      &keyvals, &n_vals);
 
@@ -1003,14 +1008,16 @@ canonical_hex_keyval (GdkEventKey *event)
 }
 
 static gboolean
-gtk_im_context_simple_filter_keypress (GtkIMContext *context,
-				       GdkEventKey  *event)
+gtk_im_context_simple_filter_key (GtkIMContext    *context,
+				  GdkSurface      *surface,
+                                  guint            keyval,
+                                  GdkModifierType  state,
+                                  int              scancode,
+                                  gboolean         press)
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   GtkIMContextSimplePrivate *priv = context_simple->priv;
-  GdkSurface *surface = gdk_event_get_surface ((GdkEvent *) event);
-  GdkDisplay *display = gdk_surface_get_display (surface);
-  GdkKeymap *keymap = gdk_display_get_keymap (display);
+  GdkKeymap *keymap = gdk_display_get_keymap (gdk_surface_get_display (surface));
   GSList *tmp_list;
   int n_compose = 0;
   GdkModifierType hex_mod_mask;
@@ -1024,16 +1031,11 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   gboolean compose_finish;
   gboolean compose_match;
   gunichar output_char;
-  guint keyval, state;
 
   while (priv->compose_buffer[n_compose] != 0)
     n_compose++;
 
-  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval) ||
-      !gdk_event_get_state ((GdkEvent *) event, &state))
-    return GDK_EVENT_PROPAGATE;
-
-  if (gdk_event_get_event_type ((GdkEvent *) event) == GDK_KEY_RELEASE)
+  if (!press)
     {
       if (priv->in_hex_sequence &&
           (keyval == GDK_KEY_Control_L || keyval == GDK_KEY_Control_R ||
@@ -1092,7 +1094,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
                 keyval == GDK_KEY_KP_Enter);
   is_backspace = keyval == GDK_KEY_BackSpace;
   is_escape = keyval == GDK_KEY_Escape;
-  hex_keyval = canonical_hex_keyval (event);
+  hex_keyval = canonical_hex_keyval (surface, keyval, scancode);
 
   /* If we are already in a non-hex sequence, or
    * this keystroke is not hex modifiers + hex digit, don't filter
@@ -1345,7 +1347,30 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     }
   
   /* The current compose_buffer doesn't match anything */
-  return no_sequence_matches (context_simple, n_compose, event);
+  return no_sequence_matches (context_simple, n_compose, surface, keyval, state, scancode);
+}
+
+static gboolean
+gtk_im_context_simple_filter_keypress (GtkIMContext *context,
+				       GdkEventKey  *event)
+{
+  GdkSurface *surface;
+  guint keyval;
+  int scancode;
+  GdkModifierType state;
+  gboolean press;
+
+  surface = gdk_event_get_surface ((GdkEvent *) event);
+
+  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval) ||
+      !gdk_event_get_state ((GdkEvent *) event, &state))
+    return GDK_EVENT_PROPAGATE;
+
+  scancode = gdk_event_get_scancode ((GdkEvent *) event);
+
+  press = gdk_event_get_event_type ((GdkEvent *) event) == GDK_KEY_PRESS;
+
+  return gtk_im_context_simple_filter_key (context, surface, keyval, state, scancode, press);
 }
 
 static void
