@@ -1,30 +1,32 @@
-scss_files = files([
+adwaita_scss_files = files([
   '_colors-public.scss',
   '_colors.scss',
   '_common.scss',
   '_drawing.scss',
 ])
 
-theme_variants = [
+adwaita_theme_variants = [
   'dark',
 ]
 
-theme_deps += custom_target('Adwaita',
-                            input: 'gtk-contained.scss',
-                            output: 'gtk-contained.css',
-                            command: [
-                              sassc, sassc_opts, '@INPUT@', '@OUTPUT@',
-                            ],
-                            depend_files: scss_files,
-                            build_by_default: true)
+adwaita_theme_deps = [
+  custom_target('Adwaita theme',
+    input: 'Adwaita.scss',
+    output: 'Adwaita.css',
+    command: [
+      sassc, sassc_opts, '@INPUT@', '@OUTPUT@',
+    ],
+    depend_files: adwaita_scss_files,
+  ),
+]
 
-foreach variant: theme_variants
-  theme_deps += custom_target('Adwaita-' + variant,
-                              input: 'gtk-contained-@0@.scss'.format(variant),
-                              output: 'gtk-contained-@0@.css'.format(variant),
-                              command: [
-                                sassc, sassc_opts, '@INPUT@', '@OUTPUT@',
-                              ],
-                              depend_files: scss_files,
-                              build_by_default: true)
+foreach variant: adwaita_theme_variants
+  adwaita_theme_deps += custom_target('Adwaita theme variant: ' + variant,
+    input: 'Adwaita-@0@.scss'.format(variant),
+    output: 'Adwaita-@0@.css'.format(variant),
+    command: [
+      sassc, sassc_opts, '@INPUT@', '@OUTPUT@',
+    ],
+    depend_files: adwaita_scss_files,
+  )
 endforeach
