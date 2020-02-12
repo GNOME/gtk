@@ -374,10 +374,6 @@ gboolean  gdk_event_get_keyval          (const GdkEvent *event,
                                          guint          *keyval);
 
 GDK_AVAILABLE_IN_ALL
-void      gdk_event_set_keyval          (GdkEvent *event,
-                                         guint     keyval);
-
-GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_keycode         (const GdkEvent *event,
                                          guint16        *keycode);
 GDK_AVAILABLE_IN_ALL

@@ -1132,15 +1132,6 @@ gdk_event_get_keyval (const GdkEvent *event,
   return fetched;
 }
 
-void
-gdk_event_set_keyval (GdkEvent *event,
-                      guint     keyval)
-{
-  if (event->any.type == GDK_KEY_PRESS ||
-      event->any.type == GDK_KEY_RELEASE)
-    event->key.keyval = keyval;
-}
-
 /**
  * gdk_event_get_keycode:
  * @event: a #GdkEvent
