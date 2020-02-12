@@ -226,6 +226,15 @@ gdk_profiler_add_mark (gint64      start,
 {
 }
 
+void
+gdk_profiler_add_markf (gint64      start,
+                        guint64     duration,
+                        const char *name,
+                        const char *format,
+                        ...)
+{
+}
+
 guint
 gdk_profiler_define_counter (const char *name,
                              const char *description)
