@@ -46,6 +46,7 @@ static char *opt_detail;
 static char *opt_name;
 static char *opt_output;
 static gboolean opt_start_time;
+static gboolean opt_verbose;
 
 static GOptionEntry options[] = {
   { "mark", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_STRING, &opt_mark, "Name of the mark", "NAME" },
@@ -54,6 +55,7 @@ static GOptionEntry options[] = {
   { "runs", '0', G_OPTION_FLAG_NONE, G_OPTION_ARG_INT, &opt_rep, "Number of runs", "COUNT" },
   { "name", '0', G_OPTION_FLAG_NONE, G_OPTION_ARG_STRING, &opt_name, "Name of this test", "NAME" },
   { "output", '0', G_OPTION_FLAG_NONE, G_OPTION_ARG_STRING, &opt_output, "Directory to save syscap files", "DIRECTORY" },
+  { "verbose", '0', G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, &opt_verbose, "Verbose output", NULL },
   { NULL, }
 };
 
@@ -194,6 +196,9 @@ main (int argc, char *argv[])
   /* Ignore the first run, to avoid cache effects */
   for (i = 1; i < opt_rep; i++)
     {
+      if (values[i] == 0)
+        continue;
+
       if (min > values[i])
         min = values[i];
       if (max < values[i])
@@ -202,7 +207,14 @@ main (int argc, char *argv[])
       total += values[i];
     }
 
-  g_print ("%d runs, min %g, max %g, avg %g\n",
+  if (opt_verbose)
+    {
+      for (i = 1; i < opt_rep; i++)
+        g_print ("%g ", MILLISECONDS (values[i]));
+      g_print ("\n");
+    }
+
+  g_print ("%d runs counted, min %g, max %g, avg %g\n",
            count,
            MILLISECONDS (min),
            MILLISECONDS (max),
