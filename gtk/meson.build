@@ -751,7 +751,6 @@ gtk_gresources_xml = configure_file(output: 'gtk.gresources.xml',
                                     ])
 
 # Build the theme files
-theme_deps = []
 sassc = find_program('sassc', required: false)
 if not sassc.found()
   subproject('sassc')
@@ -763,16 +762,22 @@ sassc_opts = [ '-a', '-M', '-t', 'compact' ]
 subdir('theme/Adwaita')
 subdir('theme/HighContrast')
 
+theme_deps = [
+  adwaita_theme_deps,
+  hc_theme_deps,
+]
+
 gtkresources = gnome.compile_resources('gtkresources',
-                                       gtk_gresources_xml,
-                                       dependencies: theme_deps,
-                                       source_dir: [
-                                         # List in order of preference
-                                         meson.current_build_dir(),
-                                         meson.current_source_dir(),
-                                       ],
-                                       c_name: '_gtk',
-                                       extra_args: '--manual-register')
+  gtk_gresources_xml,
+  dependencies: theme_deps,
+  source_dir: [
+    # List in order of preference
+    meson.current_build_dir(),
+    meson.current_source_dir(),
+  ],
+  c_name: '_gtk',
+  extra_args: '--manual-register',
+)
 
 gtk_x11_sources = files([
   'gtkapplication-x11.c',
