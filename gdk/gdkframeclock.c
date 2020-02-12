@@ -647,23 +647,13 @@ gdk_frame_clock_get_refresh_info (GdkFrameClock *frame_clock,
 void
 _gdk_frame_clock_emit_flush_events (GdkFrameClock *frame_clock)
 {
-  gint64 before = g_get_monotonic_time ();
-
   g_signal_emit (frame_clock, signals[FLUSH_EVENTS], 0);
-
-  if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_end_mark (before, "frameclock", "flush-events");
 }
 
 void
 _gdk_frame_clock_emit_before_paint (GdkFrameClock *frame_clock)
 {
-  gint64 before = g_get_monotonic_time ();
-
   g_signal_emit (frame_clock, signals[BEFORE_PAINT], 0);
-
-  if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_end_mark (before, "frameclock", "before-paint");
 }
 
 void
@@ -702,23 +692,13 @@ _gdk_frame_clock_emit_paint (GdkFrameClock *frame_clock)
 void
 _gdk_frame_clock_emit_after_paint (GdkFrameClock *frame_clock)
 {
-  gint64 before = g_get_monotonic_time ();
-
   g_signal_emit (frame_clock, signals[AFTER_PAINT], 0);
-
-  if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_end_mark (before, "frameclock", "after-paint");
 }
 
 void
 _gdk_frame_clock_emit_resume_events (GdkFrameClock *frame_clock)
 {
-  gint64 before = g_get_monotonic_time ();
-
   g_signal_emit (frame_clock, signals[RESUME_EVENTS], 0);
-
-  if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_end_mark (before, "frameclock", "resume-events");
 }
 
 static gint64
