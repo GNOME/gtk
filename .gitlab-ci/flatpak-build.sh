@@ -4,7 +4,7 @@ set -e
 
 appid=$1
 
-builddir=app
+builddir=flatpak_app
 repodir=repo
 
 flatpak-builder \
@@ -12,12 +12,10 @@ flatpak-builder \
         ${builddir} \
         build-aux/flatpak/${appid}.json
 
-flatpak-builder \
-        --run ${builddir} build-aux/flatpak/${appid}.json \
-        meson \
-                --prefix /app \
-                --libdir /app/lib \
-                --buildtype release \
+flatpak build ${builddir} meson \
+                --prefix=/app \
+                --libdir=/app/lib \
+                --buildtype=release \
                 -Dx11-backend=true \
                 -Dwayland-backend=true \
                 -Dprint-backends=file \
@@ -27,9 +25,7 @@ flatpak-builder \
                 -Ddemos=true \
                 _build .
 
-flatpak-builder \
-        --run ${builddir} build-aux/flatpak/${appid}.json \
-        ninja -C _build install
+flatpak build ${builddir} ninja -C _build install
 
 flatpak-builder \
         --finish-only \
@@ -40,5 +36,5 @@ flatpak-builder \
 flatpak build-bundle \
         ${repodir} \
         ${appid}-dev.flatpak \
-        --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo \
+        --runtime-repo=https://nightly.gnome.org/gnome-nightly.flatpakrepo \
         ${appid}

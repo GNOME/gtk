@@ -17,16 +17,18 @@ xvfb-run -a -s "-screen 0 1024x768x24" \
 # generate the reports
 exit_code=$?
 
+cd ${builddir}
+
 $srcdir/.gitlab-ci/meson-junit-report.py \
         --project-name=gtk \
         --job-id="${CI_JOB_NAME}" \
-        --output=${builddir}/report.xml \
-        ${builddir}/meson-logs/testlog.json
+        --output=report.xml \
+        meson-logs/testlog.json
 $srcdir/.gitlab-ci/meson-html-report.py \
         --project-name=gtk \
         --job-id="${CI_JOB_NAME}" \
-        --reftest-output-dir="${builddir}/testsuite/reftests/output" \
-        --output=${builddir}/report.html \
-        ${builddir}/meson-logs/testlog.json
+        --reftest-output-dir="testsuite/reftests/output" \
+        --output=report.html \
+        meson-logs/testlog.json
 
 exit $exit_code
