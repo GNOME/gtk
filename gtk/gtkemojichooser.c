@@ -110,8 +110,8 @@ gtk_emoji_chooser_finalize (GObject *object)
   if (chooser->populate_idle)
     g_source_remove (chooser->populate_idle);
 
-  g_variant_unref (chooser->data);
-  g_object_unref (chooser->settings);
+  g_clear_pointer (&chooser->data, g_variant_unref);
+  g_clear_object (&chooser->settings);
 
   G_OBJECT_CLASS (gtk_emoji_chooser_parent_class)->finalize (object);
 }
