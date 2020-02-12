@@ -980,10 +980,10 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
     }
   else
     {
-      has_npot = epoxy_has_gl_extension ("GL_ARB_texture_non_power_of_two");
-      has_texture_rectangle = epoxy_has_gl_extension ("GL_ARB_texture_rectangle");
+      has_npot = priv->gl_version >= 20 || epoxy_has_gl_extension ("GL_ARB_texture_non_power_of_two");
+      has_texture_rectangle = priv->gl_version >= 31 || epoxy_has_gl_extension ("GL_ARB_texture_rectangle");
 
-      priv->has_gl_framebuffer_blit = epoxy_has_gl_extension ("GL_EXT_framebuffer_blit");
+      priv->has_gl_framebuffer_blit = priv->gl_version >= 30 || epoxy_has_gl_extension ("GL_EXT_framebuffer_blit");
       priv->has_frame_terminator = epoxy_has_gl_extension ("GL_GREMEDY_frame_terminator");
       priv->has_unpack_subimage = TRUE;
       priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
