@@ -1,8 +1,8 @@
 stages:
   - style-check
   - build
-  - flatpak
   - deploy
+  - flatpak
 
 .cache-paths: &cache-paths
   paths:
@@ -175,9 +175,9 @@ pages:
     - meson ${COMMON_MESON_FLAGS} -Dgtk_doc=true _build
     - ninja -C _build gdk4-doc gsk4-doc gtk4-doc
     - mkdir -p public/
-    - mv _build/docs/reference/gtk/html/ public/gtk/
     - mv _build/docs/reference/gdk/html/ public/gdk/
     - mv _build/docs/reference/gsk/html/ public/gsk/
+    - mv _build/docs/reference/gtk/html/ public/gtk/
   artifacts:
     paths:
       - public
