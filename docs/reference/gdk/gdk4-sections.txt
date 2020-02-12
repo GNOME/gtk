@@ -366,7 +366,6 @@ gdk_pango_layout_line_get_clip_region
 <TITLE>Cairo Interaction</TITLE>
 <FILE>cairo_interaction</FILE>
 gdk_surface_create_similar_surface
-gdk_cairo_get_clip_rectangle
 gdk_cairo_set_source_rgba
 gdk_cairo_set_source_pixbuf
 gdk_cairo_rectangle

@@ -40,45 +40,6 @@
 
 
 /**
- * gdk_cairo_get_clip_rectangle:
- * @cr: a cairo context
- * @rect: (out) (allow-none): return location for the clip, or %NULL
- *
- * This is a convenience function around cairo_clip_extents().
- * It rounds the clip extents to integer coordinates and returns
- * a boolean indicating if a clip area exists.
- *
- * Returns: %TRUE if a clip rectangle exists, %FALSE if all of @cr is
- *     clipped and all drawing can be skipped
- */
-gboolean
-gdk_cairo_get_clip_rectangle (cairo_t      *cr,
-                              GdkRectangle *rect)
-{
-  double x1, y1, x2, y2;
-  gboolean clip_exists;
-
-  cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
-
-  clip_exists = x1 < x2 && y1 < y2;
-
-  if (rect)
-    {
-      x1 = floor (x1);
-      y1 = floor (y1);
-      x2 = ceil (x2);
-      y2 = ceil (y2);
-
-      rect->x      = CLAMP (x1,      G_MININT, G_MAXINT);
-      rect->y      = CLAMP (y1,      G_MININT, G_MAXINT);
-      rect->width  = CLAMP (x2 - x1, G_MININT, G_MAXINT);
-      rect->height = CLAMP (y2 - y1, G_MININT, G_MAXINT);
-    }
-
-  return clip_exists;
-}
-
-/**
  * gdk_cairo_set_source_rgba:
  * @cr: a cairo context
  * @rgba: a #GdkRGBA
