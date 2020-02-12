@@ -109,7 +109,7 @@ gsk_gl_profiler_init (GskGLProfiler *self)
   glGenQueries (N_QUERIES, self->gl_queries);
 
   self->first_frame = TRUE;
-  self->has_timer = epoxy_has_gl_extension ("GL_ARB_timer_query");
+  self->has_timer = epoxy_gl_version () >= 33 || epoxy_has_gl_extension ("GL_ARB_timer_query");
 }
 
 GskGLProfiler *
