@@ -4103,15 +4103,9 @@ add_event_mark (GdkEvent *event,
     }
 
   if (kind != NULL && message != NULL)
-    {
-      gchar *full_message = g_strdup_printf ("%s %s", kind, message);
-      gdk_profiler_add_mark (time * 1000L, duration * 1000L, "event", full_message);
-      g_free (full_message);
-    }
+    gdk_profiler_add_markf (time, duration, "event", "%s %s", kind, message);
   else
-    {
-      gdk_profiler_add_mark (time * 1000L, duration * 1000L, "event", message ? message : kind);
-    }
+    gdk_profiler_add_mark (time, duration, "event", message ? message : kind);
 
   g_free (message);
 }
@@ -4138,7 +4132,7 @@ gdk_surface_handle_event (GdkEvent *event)
       g_signal_emit (gdk_event_get_surface (event), signals[EVENT], 0, event, &handled);
     }
 
-  if (gdk_profiler_is_running ())
+  if (GDK_PROFILER_IS_RUNNING)
     add_event_mark (event, begin_time, g_get_monotonic_time () - begin_time);
 
   return handled;
