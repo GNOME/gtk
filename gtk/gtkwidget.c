@@ -12177,8 +12177,8 @@ gtk_widget_render (GtkWidget            *widget,
   GskRenderer *renderer;
   GskRenderNode *root;
   int x, y;
-  gint64 before = g_get_monotonic_time ();
-  gint64 after = 0;
+  gint64 before_snapshot = g_get_monotonic_time ();
+  gint64 before_render = 0;
 
   if (!GTK_IS_NATIVE (widget))
     return;
@@ -12195,8 +12195,8 @@ gtk_widget_render (GtkWidget            *widget,
 
   if (GDK_PROFILER_IS_RUNNING)
     {
-      after = g_get_monotonic_time ();
-      gdk_profiler_add_mark (before, (after - before), "widget snapshot", "");
+      before_render = g_get_monotonic_time ();
+      gdk_profiler_add_mark (before_snapshot, (before_render - before_snapshot), "widget snapshot", "");
     }
 
   if (root != NULL)
@@ -12212,11 +12212,7 @@ gtk_widget_render (GtkWidget            *widget,
       gsk_render_node_unref (root);
 
       if (GDK_PROFILER_IS_RUNNING)
-        {
-          before = after;
-          after = g_get_monotonic_time ();
-          gdk_profiler_add_mark (before, (after - before), "widget render", "");
-        }
+        gdk_profiler_end_mark (before_render, "widget render", "");
     }
 }
 

@@ -1847,7 +1847,7 @@ ensure_valid_themes (GtkIconTheme *self,
       load_themes (self);
 
       if (GDK_PROFILER_IS_RUNNING)
-        gdk_profiler_add_mark (before, (g_get_monotonic_time () - before), "icon theme load", self->current_theme);
+        gdk_profiler_end_mark (before, "icon theme load", self->current_theme);
 
       if (was_valid)
         queue_theme_changed (self);
@@ -3606,7 +3606,7 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
   g_assert (icon->texture != NULL);
 
   if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_add_markf (before, g_get_monotonic_time () - before, in_thread ?  "icon load (thread)" : "icon load" ,
+    gdk_profiler_end_markf (before, in_thread ?  "icon load (thread)" : "icon load" ,
                             "%s size %d@%d", icon->filename, icon->desired_size, icon->desired_scale);
 }
 

@@ -307,7 +307,7 @@ gtk_application_startup (GApplication *g_application)
   before2 = g_get_monotonic_time ();
   gtk_init ();
   if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_add_mark (before2, (g_get_monotonic_time () - before2), "gtk init", NULL);
+    gdk_profiler_end_mark (before2, "gtk init", NULL);
 
   priv->impl = gtk_application_impl_new (application, gdk_display_get_default ());
   gtk_application_impl_startup (priv->impl, priv->register_session);
@@ -315,7 +315,7 @@ gtk_application_startup (GApplication *g_application)
   gtk_application_load_resources (application);
 
   if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_add_mark (before, (g_get_monotonic_time () - before), "gtk application startup", NULL);
+    gdk_profiler_end_mark (before, "gtk application startup", NULL);
 }
 
 static void

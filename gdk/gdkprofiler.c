@@ -100,6 +100,23 @@ gdk_profiler_add_mark (gint64      start,
                                    "gtk", name, message);
 }
 
+static void
+add_markvf (gint64      start,
+            guint64     duration,
+            const char *name,
+            const char *format,
+            va_list      args)
+{
+  char *message;
+  message = g_strdup_vprintf (format, args);
+  sysprof_capture_writer_add_mark (writer,
+                                   start * 1000L,
+                                   -1, getpid (),
+                                   duration * 1000L,
+                                   "gtk", name, message);
+  g_free (message);
+}
+
 void
 gdk_profiler_add_markf (gint64      start,
                         guint64     duration,
@@ -108,22 +125,46 @@ gdk_profiler_add_markf (gint64      start,
                         ...)
 {
   va_list args;
-  char *message;
 
   if (!running)
     return;
 
   va_start (args, format);
-  message = g_strdup_vprintf (format, args);
+  add_markvf (start, duration, name, format, args);
   va_end (args);
+}
+
+void
+gdk_profiler_end_mark (gint64      start,
+                       const char *name,
+                       const char *message)
+{
+  if (!running)
+    return;
 
   sysprof_capture_writer_add_mark (writer,
                                    start * 1000L,
                                    -1, getpid (),
-                                   duration * 1000L,
+                                   (g_get_monotonic_time () - start) * 1000L,
                                    "gtk", name, message);
-  g_free (message);
 }
+
+void
+gdk_profiler_end_markf (gint64      start,
+                        const char *name,
+                        const char *format,
+                        ...)
+{
+  va_list args;
+
+  if (!running)
+    return;
+
+  va_start (args, format);
+  add_markvf (start, g_get_monotonic_time () - start, name, format, args);
+  va_end (args);
+}
+
 
 static guint
 define_counter (const char *name,
@@ -229,6 +270,21 @@ gdk_profiler_add_mark (gint64      start,
 void
 gdk_profiler_add_markf (gint64      start,
                         guint64     duration,
+                        const char *name,
+                        const char *format,
+                        ...)
+{
+}
+
+void
+gdk_profiler_end_mark (gint64      start,
+                       const char *name,
+                       const char *message)
+{
+}
+
+void
+gdk_profiler_end_markf (gint64      start,
                         const char *name,
                         const char *format,
                         ...)

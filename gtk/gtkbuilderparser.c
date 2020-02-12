@@ -1625,5 +1625,5 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   /* restore the original domain */
   gtk_builder_set_translation_domain (builder, domain);
 
-  gdk_profiler_add_mark (before, (g_get_monotonic_time () - before), "builder load", filename);
+  gdk_profiler_end_mark (before, "builder load", filename);
 }
