@@ -148,6 +148,8 @@ gtk_popover_menu_set_active_item (GtkPopoverMenu *menu,
           gtk_widget_set_state_flags (menu->active_item, GTK_STATE_FLAG_SELECTED, FALSE);
           if (GTK_IS_MODEL_BUTTON (item))
             g_object_get (item, "popover", &popover, NULL);
+          else
+            popover = NULL;
 
           if (!popover || popover != menu->open_submenu)
             gtk_widget_grab_focus (menu->active_item);
