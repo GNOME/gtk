@@ -100,6 +100,12 @@ gdk_profiler_add_mark (gint64      start,
                                    "gtk", name, message);
 }
 
+static void add_markvf (gint64      start,
+                        guint64     duration,
+                        const char *name,
+                        const char *format,
+                        va_list      args) G_GNUC_PRINTF(4, 0);
+
 static void
 add_markvf (gint64      start,
             guint64     duration,
