@@ -94,9 +94,9 @@ gdk_profiler_add_mark (gint64      start,
     return;
 
   sysprof_capture_writer_add_mark (writer,
-                                   start,
+                                   start * 1000L,
                                    -1, getpid (),
-                                   duration,
+                                   duration * 1000L,
                                    "gtk", name, message);
 }
 
@@ -118,9 +118,9 @@ gdk_profiler_add_markf (gint64      start,
   va_end (args);
 
   sysprof_capture_writer_add_mark (writer,
-                                   start,
+                                   start * 1000L,
                                    -1, getpid (),
-                                   duration,
+                                   duration * 1000L,
                                    "gtk", name, message);
   g_free (message);
 }
@@ -178,7 +178,7 @@ gdk_profiler_set_counter (guint  id,
 
   value.vdbl = val;
   sysprof_capture_writer_set_counters (writer,
-                                       time,
+                                       time * 1000L,
                                        -1, getpid (),
                                        &id, &value, 1);
 }
@@ -195,7 +195,7 @@ gdk_profiler_set_int_counter (guint  id,
 
   value.v64 = val;
   sysprof_capture_writer_set_counters (writer,
-                                       time,
+                                       time * 1000L,
                                        -1, getpid (),
                                        &id, &value, 1);
 }

@@ -2858,7 +2858,7 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
   gsk_gl_shadow_cache_init (&self->shadow_cache);
 
   if (gdk_profiler_is_running ())
-    gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "gl renderer realize", NULL);
+    gdk_profiler_add_mark (before, (g_get_monotonic_time () - before), "gl renderer realize", NULL);
 
   return TRUE;
 }

@@ -385,7 +385,7 @@ gdk_draw_context_end_frame (GdkDrawContext *context)
 #ifdef G_ENABLE_DEBUG
   if (gdk_profiler_is_running ())
     gdk_profiler_set_int_counter (pixels_counter,
-                                  g_get_monotonic_time () * 1000,
+                                  g_get_monotonic_time (),
                                   region_get_pixels (priv->frame_region));
 #endif
 

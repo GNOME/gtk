@@ -466,7 +466,7 @@ populate_emoji_chooser (gpointer data)
       if (now > start + 8000)
         {
           if (gdk_profiler_is_running ())
-            gdk_profiler_add_mark (start * 1000, (now - start) * 1000, "emojichooser", "populate");
+            gdk_profiler_add_mark (start, (now - start), "emojichooser", "populate");
           return G_SOURCE_CONTINUE;
         }
     }
@@ -479,7 +479,7 @@ populate_emoji_chooser (gpointer data)
   if (gdk_profiler_is_running ())
     {
       now = g_get_monotonic_time ();
-      gdk_profiler_add_mark (start * 1000, (now - start) * 1000, "emojichooser", "populate (finish)");
+      gdk_profiler_add_mark (start, (now - start), "emojichooser", "populate (finish)");
     }
 
   return G_SOURCE_REMOVE;

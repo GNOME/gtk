@@ -1155,7 +1155,7 @@ _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland)
 
   if (gdk_profiler_is_running ())
     {
-      gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "wayland", "load cursor theme");
+      gdk_profiler_add_mark (before, (g_get_monotonic_time () - before), "wayland", "load cursor theme");
     }
 
 }

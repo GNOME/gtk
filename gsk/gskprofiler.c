@@ -262,7 +262,7 @@ gsk_profiler_timer_begin (GskProfiler *profiler,
     return;
 
   timer->in_flight = TRUE;
-  timer->start_time = g_get_monotonic_time () * 1000;
+  timer->start_time = g_get_monotonic_time ();
 }
 
 gint64
@@ -289,7 +289,7 @@ gsk_profiler_timer_end (GskProfiler *profiler,
       return 0;
     }
 
-  diff = (g_get_monotonic_time () * 1000) - timer->start_time;
+  diff = g_get_monotonic_time () - timer->start_time;
 
   timer->in_flight = FALSE;
   timer->value += diff; 
@@ -360,7 +360,7 @@ gsk_profiler_timer_get (GskProfiler *profiler,
     }
 
   if (timer->invert)
-    return (gint64) (1000000000.0 / (double) timer->value);
+    return (gint64) (1000000.0 / (double) timer->value);
 
   return timer->value;
 }
@@ -437,7 +437,7 @@ gsk_profiler_push_samples (GskProfiler *profiler)
       s->id = timer->id;
 
       if (timer->invert)
-        s->value = (gint64) (1000000000.0 / (double) timer->value);
+        s->value = (gint64) (1000000.0 / (double) timer->value);
       else
         s->value = timer->value;
     }
@@ -506,20 +506,19 @@ gsk_profiler_append_timers (GskProfiler *profiler,
     {
       NamedTimer *timer = value_p;
       const char *unit = timer->invert ? "" : "usec";
-      double scale = timer->invert ? 1.0 : 1000.0;
 
       g_string_append_printf (buffer, "%s (%s): %.2f",
                               timer->description,
                               unit,
-                              (double) timer->value / scale);
+                              (double) timer->value);
 
       if (timer->n_samples > 1)
         {
           timer->avg_value = timer->avg_value / timer->n_samples;
           g_string_append_printf (buffer, " Min: %.2f Avg: %.2f Max: %.2f (%" G_GINT64_FORMAT " samples)",
-                                  (double) timer->min_value / scale,
-                                  (double) timer->avg_value / scale,
-                                  (double) timer->max_value / scale,
+                                  (double) timer->min_value,
+                                  (double) timer->avg_value,
+                                  (double) timer->max_value,
                                   timer->n_samples);
         }
 
