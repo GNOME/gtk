@@ -993,8 +993,6 @@ gtk_css_static_style_new_compute (GtkStyleProvider             *provider,
                                    node,
                                    lookup,
                                    change == 0 ? &change : NULL);
-
-      gtk_css_lookup_register (lookup);
     }
 
   result = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
