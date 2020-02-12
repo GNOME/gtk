@@ -883,7 +883,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
           _gdk_x11_surface_grab_check_unmap (surface, xevent->xany.serial);
 
           if (GDK_PROFILER_IS_RUNNING)
-            gdk_profiler_add_markf (g_get_monotonic_time (), 0, "Unmapped window", "0x%lx", GDK_SURFACE_XID (surface));
+            gdk_profiler_add_markf (g_get_monotonic_time (), 0, "unmapped window", "0x%lx", GDK_SURFACE_XID (surface));
         }
 
       return_val = FALSE;
@@ -908,7 +908,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
           if (GDK_PROFILER_IS_RUNNING)
             {
-              gdk_profiler_end_markf (surface_impl->map_time, "Mapped window", "0x%lx", GDK_SURFACE_XID (surface));
+              gdk_profiler_end_markf (surface_impl->map_time, "mapped window", "0x%lx", GDK_SURFACE_XID (surface));
               surface_impl->map_time = 0;
             }
 	}

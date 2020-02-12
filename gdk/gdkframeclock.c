@@ -664,7 +664,7 @@ _gdk_frame_clock_emit_update (GdkFrameClock *frame_clock)
   g_signal_emit (frame_clock, signals[UPDATE], 0);
 
   if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_end_mark (before, "frameclock", "update");
+    gdk_profiler_end_mark (before, "frameclock update", NULL);
 }
 
 void
@@ -675,7 +675,7 @@ _gdk_frame_clock_emit_layout (GdkFrameClock *frame_clock)
   g_signal_emit (frame_clock, signals[LAYOUT], 0);
 
   if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_end_mark (before, "frameclock", "layout");
+    gdk_profiler_end_mark (before, "frameclock layout", NULL);
 }
 
 void
@@ -686,7 +686,7 @@ _gdk_frame_clock_emit_paint (GdkFrameClock *frame_clock)
   g_signal_emit (frame_clock, signals[PAINT], 0);
 
   if (GDK_PROFILER_IS_RUNNING)
-    gdk_profiler_end_mark (before, "frameclock", "paint");
+    gdk_profiler_end_mark (before, "frameclock paint", NULL);
 }
 
 void
@@ -777,7 +777,7 @@ _gdk_frame_clock_add_timings_to_profiler (GdkFrameClock   *clock,
 {
   if (timings->presentation_time != 0)
     {
-      gdk_profiler_add_mark (timings->presentation_time, 0, "frameclock", "presentation");
+      gdk_profiler_add_mark (timings->presentation_time, 0, "presented window", NULL);
       gdk_profiler_set_counter (fps_counter,
                                 timings->presentation_time,
                                 frame_clock_get_fps (clock)); 
