@@ -30,6 +30,11 @@ void     gdk_profiler_add_mark   (gint64           start,
                                   guint64          duration,
                                   const char      *name,
                                   const char      *message);
+void     gdk_profiler_add_markf   (gint64           start,
+                                   guint64          duration,
+                                   const char      *name,
+                                   const char      *format,
+                                   ...)  G_GNUC_PRINTF (4, 5);
 guint    gdk_profiler_define_counter (const char *name,
                                       const char *description);
 void     gdk_profiler_set_counter    (guint  id,

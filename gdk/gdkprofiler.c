@@ -100,6 +100,31 @@ gdk_profiler_add_mark (gint64      start,
                                    "gtk", name, message);
 }
 
+void
+gdk_profiler_add_markf (gint64      start,
+                        guint64     duration,
+                        const char *name,
+                        const char *format,
+                        ...)
+{
+  va_list args;
+  char *message;
+
+  if (!running)
+    return;
+
+  va_start (args, format);
+  message = g_strdup_vprintf (format, args);
+  va_end (args);
+
+  sysprof_capture_writer_add_mark (writer,
+                                   start,
+                                   -1, getpid (),
+                                   duration,
+                                   "gtk", name, message);
+  g_free (message);
+}
+
 static guint
 define_counter (const char *name,
                 const char *description,
