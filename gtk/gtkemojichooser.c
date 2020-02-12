@@ -465,7 +465,7 @@ populate_emoji_chooser (gpointer data)
       now = g_get_monotonic_time ();
       if (now > start + 8000)
         {
-          if (gdk_profiler_is_running ())
+          if (GDK_PROFILER_IS_RUNNING)
             gdk_profiler_add_mark (start, (now - start), "emojichooser", "populate");
           return G_SOURCE_CONTINUE;
         }
@@ -476,7 +476,7 @@ populate_emoji_chooser (gpointer data)
   chooser->box = NULL;
   chooser->populate_idle = 0;
 
-  if (gdk_profiler_is_running ())
+  if (GDK_PROFILER_IS_RUNNING)
     {
       now = g_get_monotonic_time ();
       gdk_profiler_add_mark (start, (now - start), "emojichooser", "populate (finish)");

@@ -23,6 +23,21 @@
 
 G_BEGIN_DECLS
 
+/* Ensure we included config.h as needed for the below HAVE_SYSPROF_CAPTURE check */
+#ifndef GETTEXT_PACKAGE
+#error "config.h was not included before gdkprofilerprivate.h."
+#endif
+
+/* We make this a macro you use as if (GDK_PROFILER_IS_RUNNING) because that
+ * way we can ensure all the code is compiled out when not supported, and
+ * we can add a G_UNLIKELY() for better codegen if it is.
+ */
+#ifdef HAVE_SYSPROF_CAPTURE
+#define GDK_PROFILER_IS_RUNNING G_UNLIKELY (gdk_profiler_is_running ())
+#else
+#define GDK_PROFILER_IS_RUNNING FALSE
+#endif
+
 void     gdk_profiler_start      (int fd);
 void     gdk_profiler_stop       (void);
 gboolean gdk_profiler_is_running (void);

@@ -2857,7 +2857,7 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
   self->icon_cache = get_icon_cache_for_display (gdk_surface_get_display (surface), self->atlases);
   gsk_gl_shadow_cache_init (&self->shadow_cache);
 
-  if (gdk_profiler_is_running ())
+  if (GDK_PROFILER_IS_RUNNING)
     gdk_profiler_add_mark (before, (g_get_monotonic_time () - before), "gl renderer realize", NULL);
 
   return TRUE;
@@ -3561,7 +3561,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
 
   gsk_profiler_push_samples (profiler);
 
-  if (gdk_profiler_is_running ())
+  if (GDK_PROFILER_IS_RUNNING)
     gdk_profiler_add_mark (start_time, cpu_time, "GL render", "");
 
 #endif

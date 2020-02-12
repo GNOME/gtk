@@ -12193,7 +12193,7 @@ gtk_widget_render (GtkWidget            *widget,
   gtk_widget_snapshot (widget, snapshot);
   root = gtk_snapshot_free_to_node (snapshot);
 
-  if (gdk_profiler_is_running ())
+  if (GDK_PROFILER_IS_RUNNING)
     {
       after = g_get_monotonic_time ();
       gdk_profiler_add_mark (before, (after - before), "widget snapshot", "");
@@ -12211,7 +12211,7 @@ gtk_widget_render (GtkWidget            *widget,
 
       gsk_render_node_unref (root);
 
-      if (gdk_profiler_is_running ())
+      if (GDK_PROFILER_IS_RUNNING)
         {
           before = after;
           after = g_get_monotonic_time ();

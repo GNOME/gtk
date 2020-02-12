@@ -501,7 +501,7 @@ gdk_frame_clock_paint_idle (void *data)
   if (priv->freeze_count == 0)
     priv->sleep_serial = get_sleep_serial ();
 
-  if (gdk_profiler_is_running ())
+  if (GDK_PROFILER_IS_RUNNING)
     gdk_profiler_add_mark (before, (g_get_monotonic_time () - before), "frameclock", "paint_idle");
 
   return FALSE;
@@ -565,7 +565,7 @@ gdk_frame_clock_idle_freeze (GdkFrameClock *clock)
 
   if (priv->freeze_count == 0)
     {
-      if (gdk_profiler_is_running ())
+      if (GDK_PROFILER_IS_RUNNING)
         priv->freeze_time = g_get_monotonic_time ();
     }
 
@@ -594,7 +594,7 @@ gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
 
       priv->sleep_serial = get_sleep_serial ();
 
-      if (gdk_profiler_is_running ())
+      if (GDK_PROFILER_IS_RUNNING)
         {
           if (priv->freeze_time != 0)
             {

@@ -383,7 +383,7 @@ gdk_draw_context_end_frame (GdkDrawContext *context)
   GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context, priv->frame_region);
 
 #ifdef G_ENABLE_DEBUG
-  if (gdk_profiler_is_running ())
+  if (GDK_PROFILER_IS_RUNNING)
     gdk_profiler_set_int_counter (pixels_counter,
                                   g_get_monotonic_time (),
                                   region_get_pixels (priv->frame_region));

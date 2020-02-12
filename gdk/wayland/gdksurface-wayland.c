@@ -398,7 +398,7 @@ frame_callback (void               *data,
     _gdk_frame_clock_debug_print_timings (clock, timings);
 #endif
 
-  if (gdk_profiler_is_running ())
+  if (GDK_PROFILER_IS_RUNNING)
     _gdk_frame_clock_add_timings_to_profiler (clock, timings);
 }
 

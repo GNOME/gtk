@@ -1351,7 +1351,7 @@ gtk_css_node_validate (GtkCssNode *cssnode)
 
   gtk_css_node_validate_internal (cssnode, &filter, timestamp);
 
-  if (gdk_profiler_is_running ())
+  if (GDK_PROFILER_IS_RUNNING)
     {
       gint64 after = g_get_monotonic_time ();
       gdk_profiler_add_mark (before, (after - before), "css validation", "");

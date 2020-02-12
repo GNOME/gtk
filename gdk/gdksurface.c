@@ -4132,7 +4132,7 @@ gdk_surface_handle_event (GdkEvent *event)
       g_signal_emit (gdk_event_get_surface (event), signals[EVENT], 0, event, &handled);
     }
 
-  if (gdk_profiler_is_running ())
+  if (GDK_PROFILER_IS_RUNNING)
     add_event_mark (event, begin_time, g_get_monotonic_time () - begin_time);
 
   return handled;
