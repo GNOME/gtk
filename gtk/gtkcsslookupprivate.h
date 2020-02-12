@@ -77,8 +77,6 @@ gtk_css_lookup_get (GtkCssLookup *lookup,
   return NULL;
 } 
 
-void gtk_css_lookup_register (GtkCssLookup *lookup);
-
 G_END_DECLS
 
 #endif /* __GTK_CSS_LOOKUP_PRIVATE_H__ */
