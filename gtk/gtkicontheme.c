@@ -3606,11 +3606,7 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
   g_assert (icon->texture != NULL);
 
   if (gdk_profiler_is_running ())
-    {
-      char *message = g_strdup_printf ("%s size %d@%d", icon->filename, icon->desired_size, icon->desired_scale);
-      gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, in_thread ?  "icon load (thread)" : "icon load" , message);
-      g_free (message);
-    }
+    gdk_profiler_add_markf (before * 1000, (g_get_monotonic_time () - before) * 1000, in_thread ?  "icon load (thread)" : "icon load" , "%s size %d@%d", icon->filename, icon->desired_size, icon->desired_scale);
 }
 
 static GdkTexture *
