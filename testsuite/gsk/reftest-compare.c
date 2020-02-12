@@ -27,20 +27,19 @@ get_surface_size (cairo_surface_t *surface,
                   int             *width,
                   int             *height)
 {
-  GdkRectangle area;
   cairo_t *cr;
+  double x1, x2, y1, y2;
 
   cr = cairo_create (surface);
-  if (!gdk_cairo_get_clip_rectangle (cr, &area))
-    {
-      g_assert_not_reached ();
-    }
+  cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
+  cairo_destroy (cr);
 
-  g_assert (area.x == 0 && area.y == 0);
-  g_assert (area.width > 0 && area.height > 0);
+  g_assert (x1 == 0 && y1 == 0);
+  g_assert (x2 > 0 && y2 > 0);
+  g_assert ((int) x2 == x2 && (int) y2 == y2);
 
-  *width = area.width;
-  *height = area.height;
+  *width = x2;
+  *height = y2;
 }
 
 static cairo_surface_t *
