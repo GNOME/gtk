@@ -770,17 +770,12 @@ draw_shadow (cairo_t             *cr,
 	     GskBlurFlags         blur_flags)
 {
   cairo_t *shadow_cr;
-  gboolean do_blur;
 
   if (has_empty_clip (cr))
     return;
 
   gdk_cairo_set_source_rgba (cr, color);
-  do_blur = (blur_flags & (GSK_BLUR_X | GSK_BLUR_Y)) != 0;
-  if (do_blur)
-    shadow_cr = gsk_cairo_blur_start_drawing (cr, radius, blur_flags);
-  else
-    shadow_cr = cr;
+  shadow_cr = gsk_cairo_blur_start_drawing (cr, radius, blur_flags);
 
   cairo_set_fill_rule (shadow_cr, CAIRO_FILL_RULE_EVEN_ODD);
   gsk_rounded_rect_path (box, shadow_cr);
@@ -791,8 +786,7 @@ draw_shadow (cairo_t             *cr,
 
   cairo_fill (shadow_cr);
 
-  if (do_blur)
-    gsk_cairo_blur_finish_drawing (shadow_cr, radius, color, blur_flags);
+  gsk_cairo_blur_finish_drawing (shadow_cr, radius, color, blur_flags);
 }
 
 typedef struct {

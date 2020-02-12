@@ -281,8 +281,13 @@ gsk_cairo_blur_compute_pixels (double radius)
 }
 
 static gboolean
-needs_blur (float radius)
+needs_blur (float        radius,
+            GskBlurFlags blur_flags)
 {
+  /* Neither blurring horizontal nor vertical means no blurring at all. */
+  if ((blur_flags & (GSK_BLUR_X | GSK_BLUR_Y)) == 0)
+    return FALSE;
+
   /* The code doesn't actually do any blurring for radius 1, as it
    * ends up with box filter size 1 */
   if (radius <= 1.0)
@@ -306,7 +311,7 @@ gsk_cairo_blur_start_drawing (cairo_t         *cr,
   gboolean blur_x = (blur_flags & GSK_BLUR_X) != 0;
   gboolean blur_y = (blur_flags & GSK_BLUR_Y) != 0;
 
-  if (!needs_blur (radius))
+  if (!needs_blur (radius, blur_flags))
     return cr;
 
   gdk_cairo_get_clip_rectangle (cr, &clip_rect);
@@ -372,7 +377,7 @@ gsk_cairo_blur_finish_drawing (cairo_t         *cr,
   cairo_surface_t *surface;
   gdouble x_scale;
 
-  if (!needs_blur (radius))
+  if (!needs_blur (radius, blur_flags))
     return cr;
 
   original_cr = cairo_get_user_data (cr, &original_cr_key);
