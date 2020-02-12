@@ -1009,8 +1009,8 @@ gtk_css_provider_postprocess (GtkCssProvider *css_provider)
     }
 #endif
 
-  if (gdk_profiler_is_running ())
-    gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "create selector tree", NULL);
+  if (GDK_PROFILER_IS_RUNNING)
+    gdk_profiler_end_mark (before, "create selector tree", NULL);
 }
 
 static void
@@ -1068,10 +1068,10 @@ gtk_css_provider_load_internal (GtkCssProvider *self,
       g_bytes_unref (bytes);
     }
 
-  if (gdk_profiler_is_running ())
+  if (GDK_PROFILER_IS_RUNNING)
     {
       char *uri = g_file_get_uri (file);
-      gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "theme load", uri);
+      gdk_profiler_end_mark (before, "theme load", uri);
       g_free (uri);
     }
 }

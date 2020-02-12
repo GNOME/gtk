@@ -78,6 +78,8 @@ struct _GdkX11Surface
 
   int abs_x;
   int abs_y;
+
+  guint64 map_time;
 };
  
 struct _GdkX11SurfaceClass 

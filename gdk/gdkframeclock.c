@@ -647,29 +647,13 @@ gdk_frame_clock_get_refresh_info (GdkFrameClock *frame_clock,
 void
 _gdk_frame_clock_emit_flush_events (GdkFrameClock *frame_clock)
 {
-  gint64 before = g_get_monotonic_time ();
-
   g_signal_emit (frame_clock, signals[FLUSH_EVENTS], 0);
-
-  if (gdk_profiler_is_running ())
-    {
-      gint64 after = g_get_monotonic_time ();
-      gdk_profiler_add_mark (before * 1000, (after - before) * 1000, "frameclock", "flush-events");
-    }
 }
 
 void
 _gdk_frame_clock_emit_before_paint (GdkFrameClock *frame_clock)
 {
-  gint64 before = g_get_monotonic_time ();
-
   g_signal_emit (frame_clock, signals[BEFORE_PAINT], 0);
-
-  if (gdk_profiler_is_running ())
-    {
-      gint64 after = g_get_monotonic_time ();
-      gdk_profiler_add_mark (before * 1000, (after - before) * 1000, "frameclock", "before-paint");
-    }
 }
 
 void
@@ -679,11 +663,8 @@ _gdk_frame_clock_emit_update (GdkFrameClock *frame_clock)
 
   g_signal_emit (frame_clock, signals[UPDATE], 0);
 
-  if (gdk_profiler_is_running ())
-    {
-      gint64 after = g_get_monotonic_time ();
-      gdk_profiler_add_mark (before * 1000, (after - before) * 1000, "frameclock", "update");
-    }
+  if (GDK_PROFILER_IS_RUNNING)
+    gdk_profiler_end_mark (before, "frameclock update", NULL);
 }
 
 void
@@ -693,11 +674,8 @@ _gdk_frame_clock_emit_layout (GdkFrameClock *frame_clock)
 
   g_signal_emit (frame_clock, signals[LAYOUT], 0);
 
-  if (gdk_profiler_is_running ())
-    {
-      gint64 after = g_get_monotonic_time ();
-      gdk_profiler_add_mark (before * 1000, (after - before) * 1000, "frameclock", "layout");
-    }
+  if (GDK_PROFILER_IS_RUNNING)
+    gdk_profiler_end_mark (before, "frameclock layout", NULL);
 }
 
 void
@@ -707,39 +685,20 @@ _gdk_frame_clock_emit_paint (GdkFrameClock *frame_clock)
 
   g_signal_emit (frame_clock, signals[PAINT], 0);
 
-  if (gdk_profiler_is_running ())
-    {
-      gint64 after = g_get_monotonic_time ();
-      gdk_profiler_add_mark (before * 1000, (after - before) * 1000, "frameclock", "paint");
-    }
+  if (GDK_PROFILER_IS_RUNNING)
+    gdk_profiler_end_mark (before, "frameclock paint", NULL);
 }
 
 void
 _gdk_frame_clock_emit_after_paint (GdkFrameClock *frame_clock)
 {
-  gint64 before = g_get_monotonic_time ();
-
   g_signal_emit (frame_clock, signals[AFTER_PAINT], 0);
-
-  if (gdk_profiler_is_running ())
-    {
-      gint64 after = g_get_monotonic_time ();
-      gdk_profiler_add_mark (before * 1000, (after - before) * 1000, "frameclock", "after-paint");
-    }
 }
 
 void
 _gdk_frame_clock_emit_resume_events (GdkFrameClock *frame_clock)
 {
-  gint64 before = g_get_monotonic_time ();
-
   g_signal_emit (frame_clock, signals[RESUME_EVENTS], 0);
-
-  if (gdk_profiler_is_running ())
-    {
-      gint64 after = g_get_monotonic_time ();
-      gdk_profiler_add_mark (before * 1000, (after - before) * 1000, "frameclock", "resume-events");
-    }
 }
 
 static gint64
@@ -818,9 +777,9 @@ _gdk_frame_clock_add_timings_to_profiler (GdkFrameClock   *clock,
 {
   if (timings->presentation_time != 0)
     {
-      gdk_profiler_add_mark (timings->presentation_time * 1000, 0, "frameclock", "presentation");
+      gdk_profiler_add_mark (timings->presentation_time, 0, "presented window", NULL);
       gdk_profiler_set_counter (fps_counter,
-                                timings->presentation_time * 1000,
+                                timings->presentation_time,
                                 frame_clock_get_fps (clock)); 
     }
 }

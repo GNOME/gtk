@@ -211,7 +211,7 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
 
   gsk_profiler_push_samples (profiler);
 
-  if (gdk_profiler_is_running ())
+  if (GDK_PROFILER_IS_RUNNING)
     {
       gdk_profiler_add_mark (start_time, cpu_time, "render", "");
       gdk_profiler_set_int_counter (texture_pixels_counter,

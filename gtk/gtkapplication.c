@@ -306,16 +306,16 @@ gtk_application_startup (GApplication *g_application)
 
   before2 = g_get_monotonic_time ();
   gtk_init ();
-  if (gdk_profiler_is_running ())
-    gdk_profiler_add_mark (before2 * 1000, (g_get_monotonic_time () - before2) * 1000, "gtk init", NULL);
+  if (GDK_PROFILER_IS_RUNNING)
+    gdk_profiler_end_mark (before2, "gtk init", NULL);
 
   priv->impl = gtk_application_impl_new (application, gdk_display_get_default ());
   gtk_application_impl_startup (priv->impl, priv->register_session);
 
   gtk_application_load_resources (application);
 
-  if (gdk_profiler_is_running ())
-    gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "gtk application startup", NULL);
+  if (GDK_PROFILER_IS_RUNNING)
+    gdk_profiler_end_mark (before, "gtk application startup", NULL);
 }
 
 static void
@@ -590,7 +590,7 @@ sysprof_profiler_method_call (GDBusConnection       *connection,
       int fd = -1;
       int idx;
 
-      if (gdk_profiler_is_running ())
+      if (GDK_PROFILER_IS_RUNNING)
         {
           g_dbus_method_invocation_return_error (invocation,
                                                  G_DBUS_ERROR,
@@ -612,7 +612,7 @@ sysprof_profiler_method_call (GDBusConnection       *connection,
     }
   else if (strcmp (method_name, "Stop") == 0)
     {
-      if (!gdk_profiler_is_running ())
+      if (!GDK_PROFILER_IS_RUNNING)
         {
           g_dbus_method_invocation_return_error (invocation,
                                                  G_DBUS_ERROR,
