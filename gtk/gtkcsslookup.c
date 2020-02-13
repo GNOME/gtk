@@ -68,10 +68,19 @@ gtk_css_lookup_unref (GtkCssLookup *lookup)
     gtk_css_lookup_free (lookup);
 }
 
+/*
+ * gtk_css_lookup_fill:
+ * @lookup: the #GtkCssLookup to populate
+ * @values: array of values to place into unpopulated slots in @lookup
+ * @n_values: the length of @values
+ *
+ * Add the @values to @lookup for properties for which
+ * @lookup does not have a value yet.
+ */
 void
-gtk_css_lookup_merge (GtkCssLookup      *lookup,
-                      GtkCssLookupValue *values,
-                      guint              n_values)
+gtk_css_lookup_fill (GtkCssLookup      *lookup,
+                     GtkCssLookupValue *values,
+                     guint              n_values)
 {
   int i, j;
 

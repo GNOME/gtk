@@ -479,7 +479,7 @@ gtk_css_style_provider_lookup (GtkStyleProvider             *provider,
           if (ruleset->styles == NULL)
             continue;
 
-          gtk_css_lookup_merge (lookup, (GtkCssLookupValue *)ruleset->styles, ruleset->n_styles);
+          gtk_css_lookup_fill (lookup, (GtkCssLookupValue *)ruleset->styles, ruleset->n_styles);
         }
 
       g_ptr_array_free (tree_rules, TRUE);

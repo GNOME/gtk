@@ -46,7 +46,7 @@ GtkCssLookup *           gtk_css_lookup_new (void);
 GtkCssLookup *           gtk_css_lookup_ref (GtkCssLookup *lookup);
 void                     gtk_css_lookup_unref (GtkCssLookup *lookup);
 
-void                     gtk_css_lookup_merge                   (GtkCssLookup               *lookup,
+void                     gtk_css_lookup_fill                    (GtkCssLookup               *lookup,
                                                                  GtkCssLookupValue          *values,
                                                                  guint                       n_values);
 GtkCssSection *          gtk_css_lookup_get_section             (GtkCssLookup               *lookup,
