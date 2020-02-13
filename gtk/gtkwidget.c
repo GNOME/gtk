@@ -4762,6 +4762,8 @@ gtk_widget_event (GtkWidget *widget,
 gboolean
 gtk_widget_run_controllers (GtkWidget           *widget,
 			    const GdkEvent      *event,
+                            double               x,
+                            double               y,
 			    GtkPropagationPhase  phase)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
@@ -4797,7 +4799,7 @@ gtk_widget_run_controllers (GtkWidget           *widget,
               gboolean is_gesture;
 
               is_gesture = GTK_IS_GESTURE (controller);
-              this_handled = gtk_event_controller_handle_event (controller, event);
+              this_handled = gtk_event_controller_handle_event (controller, event, x, y);
 
               handled |= this_handled;
 
@@ -4820,16 +4822,15 @@ gtk_widget_run_controllers (GtkWidget           *widget,
 
 static gboolean
 translate_event_coordinates (GdkEvent  *event,
-                             double     event_x,
-                             double     event_y,
+                             double    *x,
+                             double    *y,
                              GtkWidget *widget);
 gboolean
 _gtk_widget_captured_event (GtkWidget *widget,
                             GdkEvent  *event)
 {
   gboolean return_val = FALSE;
-  double old_x, old_y;
-  gboolean reset_event = FALSE;
+  double x, y;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
   g_return_val_if_fail (WIDGET_REALIZED_FOR_EVENT (widget, event), TRUE);
@@ -4837,17 +4838,11 @@ _gtk_widget_captured_event (GtkWidget *widget,
   if (!event_surface_is_still_viewable (event))
     return TRUE;
 
-  if (gdk_event_get_coords (event, &old_x, &old_y))
-    {
-      reset_event = TRUE;
-      translate_event_coordinates (event, old_x, old_y, widget);
-    }
+  x = y = 0;
+  translate_event_coordinates (event, &x, &y, widget);
 
-  return_val = gtk_widget_run_controllers (widget, event, GTK_PHASE_CAPTURE);
+  return_val = gtk_widget_run_controllers (widget, event, x, y, GTK_PHASE_CAPTURE);
   return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
-
-  if (reset_event)
-    gdk_event_set_coords (event, old_x, old_y);
 
   return return_val;
 }
@@ -4891,12 +4886,18 @@ event_surface_is_still_viewable (const GdkEvent *event)
 
 static gboolean
 translate_event_coordinates (GdkEvent  *event,
-                             double     event_x,
-                             double     event_y,
+                             double    *x,
+                             double    *y,
                              GtkWidget *widget)
 {
   GtkWidget *event_widget;
   graphene_point_t p;
+  double event_x, event_y;
+
+  *x = *y = 0;
+
+  if (!gdk_event_get_coords (event, &event_x, &event_y))
+    return FALSE;
 
   event_widget = gtk_get_event_widget (event);
 
@@ -4906,7 +4907,8 @@ translate_event_coordinates (GdkEvent  *event,
                                  &p))
     return FALSE;
 
-  gdk_event_set_coords (event, p.x, p.y);
+  *x = p.x;
+  *y = p.y;
 
   return TRUE;
 }
@@ -4916,8 +4918,7 @@ gtk_widget_event_internal (GtkWidget *widget,
                            GdkEvent  *event)
 {
   gboolean return_val = FALSE;
-  gboolean reset_event = FALSE;
-  double old_x, old_y;
+  double x, y;
 
   /* We check only once for is-still-visible; if someone
    * hides the window in on of the signals on the widget,
@@ -4930,25 +4931,19 @@ gtk_widget_event_internal (GtkWidget *widget,
   if (!_gtk_widget_get_mapped (widget))
     return FALSE;
 
-  if (gdk_event_get_coords (event, &old_x, &old_y))
-    {
-      reset_event = TRUE;
-      translate_event_coordinates (event, old_x, old_y, widget);
-    }
+  x = y = 0;
+  translate_event_coordinates (event, &x, &y, widget);
 
   if (widget == gtk_get_event_target (event))
-    return_val |= gtk_widget_run_controllers (widget, event, GTK_PHASE_TARGET);
+    return_val |= gtk_widget_run_controllers (widget, event, x, y, GTK_PHASE_TARGET);
 
   if (return_val == FALSE)
-    return_val |= gtk_widget_run_controllers (widget, event, GTK_PHASE_BUBBLE);
+    return_val |= gtk_widget_run_controllers (widget, event, x, y, GTK_PHASE_BUBBLE);
 
   if (return_val == FALSE &&
       (event->any.type == GDK_KEY_PRESS ||
        event->any.type == GDK_KEY_RELEASE))
     return_val |= gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *) event);
-
-  if (reset_event)
-    gdk_event_set_coords (event, old_x, old_y);
 
   return return_val;
 }
