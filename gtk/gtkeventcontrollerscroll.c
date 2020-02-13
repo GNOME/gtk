@@ -238,7 +238,9 @@ gtk_event_controller_scroll_get_property (GObject    *object,
 
 static gboolean
 gtk_event_controller_scroll_handle_event (GtkEventController *controller,
-                                          const GdkEvent     *event)
+                                          const GdkEvent     *event,
+                                          double              x,
+                                          double              y)
 {
   GtkEventControllerScroll *scroll = GTK_EVENT_CONTROLLER_SCROLL (controller);
   GdkScrollDirection direction = GDK_SCROLL_SMOOTH;

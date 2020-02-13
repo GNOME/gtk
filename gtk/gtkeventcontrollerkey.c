@@ -147,7 +147,9 @@ update_focus (GtkEventControllerKey *key,
 
 static gboolean
 gtk_event_controller_key_handle_event (GtkEventController *controller,
-                                       const GdkEvent     *event)
+                                       const GdkEvent     *event,
+                                       double              x,
+                                       double              y)
 {
   GtkEventControllerKey *key = GTK_EVENT_CONTROLLER_KEY (controller);
   GdkEventType event_type = gdk_event_get_event_type (event);
@@ -506,13 +508,13 @@ gtk_event_controller_key_forward (GtkEventControllerKey *controller,
   if (!gtk_widget_get_realized (widget))
     gtk_widget_realize (widget);
 
-  if (gtk_widget_run_controllers (widget, controller->current_event,
+  if (gtk_widget_run_controllers (widget, controller->current_event, 0, 0,
 				  GTK_PHASE_CAPTURE))
     return TRUE;
-  if (gtk_widget_run_controllers (widget, controller->current_event,
+  if (gtk_widget_run_controllers (widget, controller->current_event, 0, 0,
 				  GTK_PHASE_TARGET))
     return TRUE;
-  if (gtk_widget_run_controllers (widget, controller->current_event,
+  if (gtk_widget_run_controllers (widget, controller->current_event, 0, 0,
 				  GTK_PHASE_BUBBLE))
     return TRUE;
 

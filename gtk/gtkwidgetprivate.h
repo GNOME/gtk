@@ -344,6 +344,8 @@ void              gtk_widget_cancel_event_sequence         (GtkWidget           
 
 gboolean          gtk_widget_run_controllers               (GtkWidget           *widget,
                                                             const GdkEvent      *event,
+                                                            double               x,
+                                                            double               y,
                                                             GtkPropagationPhase  phase);
 
 
