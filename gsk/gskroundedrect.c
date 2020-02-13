@@ -324,6 +324,65 @@ ellipsis_contains_point (const graphene_size_t *ellipsis,
        + (point->y * point->y) / (ellipsis->height * ellipsis->height) <= 1;
 }
 
+typedef enum
+{
+  INSIDE,
+  OUTSIDE_TOP_LEFT,
+  OUTSIDE_TOP_RIGHT,
+  OUTSIDE_BOTTOM_LEFT,
+  OUTSIDE_BOTTOM_RIGHT,
+  OUTSIDE
+} Location;
+
+static Location
+gsk_rounded_rect_locate_point (const GskRoundedRect   *self,
+                               const graphene_point_t *point)
+{
+  if (point->x < self->bounds.origin.x ||
+      point->y < self->bounds.origin.y ||
+      point->x >= self->bounds.origin.x + self->bounds.size.width ||
+      point->y >= self->bounds.origin.y + self->bounds.size.height)
+    return OUTSIDE;
+
+  if (self->bounds.origin.x + self->corner[GSK_CORNER_TOP_LEFT].width > point->x &&
+      self->bounds.origin.y + self->corner[GSK_CORNER_TOP_LEFT].height > point->y &&
+      !ellipsis_contains_point (&self->corner[GSK_CORNER_TOP_LEFT],
+                                &GRAPHENE_POINT_INIT (
+                                    self->bounds.origin.x + self->corner[GSK_CORNER_TOP_LEFT].width - point->x,
+                                    self->bounds.origin.y + self->corner[GSK_CORNER_TOP_LEFT].height- point->y
+                                )))
+    return OUTSIDE_TOP_LEFT;
+
+  if (self->bounds.origin.x + self->bounds.size.width - self->corner[GSK_CORNER_TOP_RIGHT].width < point->x &&
+      self->bounds.origin.y + self->corner[GSK_CORNER_TOP_RIGHT].height > point->y &&
+      !ellipsis_contains_point (&self->corner[GSK_CORNER_TOP_RIGHT],
+                                &GRAPHENE_POINT_INIT (
+                                    self->bounds.origin.x + self->bounds.size.width - self->corner[GSK_CORNER_TOP_RIGHT].width - point->x,
+                                    self->bounds.origin.y + self->corner[GSK_CORNER_TOP_RIGHT].height- point->y
+                                )))
+    return OUTSIDE_TOP_RIGHT;
+
+  if (self->bounds.origin.x + self->corner[GSK_CORNER_BOTTOM_LEFT].width > point->x &&
+      self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_LEFT].height < point->y &&
+      !ellipsis_contains_point (&self->corner[GSK_CORNER_BOTTOM_LEFT],
+                                &GRAPHENE_POINT_INIT (
+                                    self->bounds.origin.x + self->corner[GSK_CORNER_BOTTOM_LEFT].width - point->x,
+                                    self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_LEFT].height- point->y
+                                )))
+    return OUTSIDE_BOTTOM_LEFT;
+
+  if (self->bounds.origin.x + self->bounds.size.width - self->corner[GSK_CORNER_BOTTOM_RIGHT].width < point->x &&
+      self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_RIGHT].height < point->y &&
+      !ellipsis_contains_point (&self->corner[GSK_CORNER_BOTTOM_RIGHT],
+                                &GRAPHENE_POINT_INIT (
+                                    self->bounds.origin.x + self->bounds.size.width - self->corner[GSK_CORNER_BOTTOM_RIGHT].width - point->x,
+                                    self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_RIGHT].height- point->y
+                                )))
+    return OUTSIDE_BOTTOM_RIGHT;
+
+  return INSIDE;
+}
+
 /**
  * gsk_rounded_rect_contains_point:
  * @self: a #GskRoundedRect
@@ -338,49 +397,7 @@ gboolean
 gsk_rounded_rect_contains_point (const GskRoundedRect   *self,
                                  const graphene_point_t *point)
 {
-  if (point->x < self->bounds.origin.x ||
-      point->y < self->bounds.origin.y ||
-      point->x >= self->bounds.origin.x + self->bounds.size.width ||
-      point->y >= self->bounds.origin.y + self->bounds.size.height)
-    return FALSE;
-
-  if (self->bounds.origin.x + self->corner[GSK_CORNER_TOP_LEFT].width > point->x &&
-      self->bounds.origin.y + self->corner[GSK_CORNER_TOP_LEFT].height > point->y &&
-      !ellipsis_contains_point (&self->corner[GSK_CORNER_TOP_LEFT],
-                                &GRAPHENE_POINT_INIT (
-                                    self->bounds.origin.x + self->corner[GSK_CORNER_TOP_LEFT].width - point->x,
-                                    self->bounds.origin.y + self->corner[GSK_CORNER_TOP_LEFT].height- point->y
-                                )))
-    return FALSE;
-
-  if (self->bounds.origin.x + self->bounds.size.width - self->corner[GSK_CORNER_TOP_RIGHT].width < point->x &&
-      self->bounds.origin.y + self->corner[GSK_CORNER_TOP_RIGHT].height > point->y &&
-      !ellipsis_contains_point (&self->corner[GSK_CORNER_TOP_RIGHT],
-                                &GRAPHENE_POINT_INIT (
-                                    self->bounds.origin.x + self->bounds.size.width - self->corner[GSK_CORNER_TOP_RIGHT].width - point->x,
-                                    self->bounds.origin.y + self->corner[GSK_CORNER_TOP_RIGHT].height- point->y
-                                )))
-    return FALSE;
-
-  if (self->bounds.origin.x + self->corner[GSK_CORNER_BOTTOM_LEFT].width > point->x &&
-      self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_LEFT].height < point->y &&
-      !ellipsis_contains_point (&self->corner[GSK_CORNER_BOTTOM_LEFT],
-                                &GRAPHENE_POINT_INIT (
-                                    self->bounds.origin.x + self->corner[GSK_CORNER_BOTTOM_LEFT].width - point->x,
-                                    self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_LEFT].height- point->y
-                                )))
-    return FALSE;
-
-  if (self->bounds.origin.x + self->bounds.size.width - self->corner[GSK_CORNER_BOTTOM_RIGHT].width < point->x &&
-      self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_RIGHT].height < point->y &&
-      !ellipsis_contains_point (&self->corner[GSK_CORNER_BOTTOM_RIGHT],
-                                &GRAPHENE_POINT_INIT (
-                                    self->bounds.origin.x + self->bounds.size.width - self->corner[GSK_CORNER_BOTTOM_RIGHT].width - point->x,
-                                    self->bounds.origin.y + self->bounds.size.height - self->corner[GSK_CORNER_BOTTOM_RIGHT].height- point->y
-                                )))
-    return FALSE;
-
-  return TRUE;
+  return gsk_rounded_rect_locate_point (self, point) == INSIDE;
 }
 
 /**
@@ -431,10 +448,12 @@ gsk_rounded_rect_intersects_rect (const GskRoundedRect  *self,
   if (!graphene_rect_intersection (&self->bounds, rect, NULL))
     return FALSE;
 
-  if (!gsk_rounded_rect_contains_point (self, &rect->origin) &&
-      !gsk_rounded_rect_contains_point (self, &GRAPHENE_POINT_INIT (rect->origin.x + rect->size.width, rect->origin.y)) &&
-      !gsk_rounded_rect_contains_point (self, &GRAPHENE_POINT_INIT (rect->origin.x, rect->origin.y + rect->size.height)) &&
-      !gsk_rounded_rect_contains_point (self, &GRAPHENE_POINT_INIT (rect->origin.x + rect->size.width, rect->origin.y + rect->size.height)))
+  /* If the bounding boxes intersect but the rectangles don't, one of the rect's corners
+   * must be in the opposite corner's outside region */
+  if (gsk_rounded_rect_locate_point (self, &rect->origin) == OUTSIDE_BOTTOM_RIGHT ||
+      gsk_rounded_rect_locate_point (self, &GRAPHENE_POINT_INIT (rect->origin.x + rect->size.width, rect->origin.y)) == OUTSIDE_BOTTOM_LEFT ||
+      gsk_rounded_rect_locate_point (self, &GRAPHENE_POINT_INIT (rect->origin.x, rect->origin.y + rect->size.height)) == OUTSIDE_TOP_RIGHT ||
+      gsk_rounded_rect_locate_point (self, &GRAPHENE_POINT_INIT (rect->origin.x + rect->size.width, rect->origin.y + rect->size.height)) == OUTSIDE_TOP_LEFT)
     return FALSE;
 
   return TRUE;
