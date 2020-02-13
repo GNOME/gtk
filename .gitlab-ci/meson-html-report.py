@@ -167,49 +167,9 @@ ul.images li {
         <h3><a name="results">Suite: {{ suite_result.suite_name }}</a></h3>
         <ul>
           <li><strong>Units:</strong> {{ suite_result.n_units }}</li>
-          <li><strong>Passed:</strong> {{ suite_result.n_successes }}</li>
           <li><strong>Failed:</strong> {{ suite_result.n_failures }}</li>
+          <li><strong>Passed:</strong> {{ suite_result.n_successes }}</li>
         </ul>
-
-        <div class="successes">
-          <h4><a name="passed">Passed</a></h4>
-          <ul class="passed">
-            {% for success in suite_result.successes if success.result == 'OK' %}
-            <li>{{ success.name }} - result: <span class="result pass">{{ success.result }}</li>
-            {% else %}
-            <li>None</li>
-            {% endfor %}
-          </ul>
-
-          <h4><a name="skipped">Skipped</a></h4>
-          <ul>
-            {% for success in suite_result.successes if success.result == 'SKIP' %}
-            <li>{{ success.name }} - result: <span class="result skip">{{ success.result }}</li>
-            {% else %}
-            <li>None</li>
-            {% endfor %}
-          </ul>
-
-          <h4><a name="expected-fail">Expected failures</a></h4>
-          <ul>
-          {% for success in suite_result.successes if success.result == 'EXPECTEDFAIL' %}
-            <li><a name="{{ success.name }}">{{ success.name }}</a> - result: <span class="result xfail">{{ success.result }}</span><br/>
-            {% if success.stdout %}
-              Output: <pre>{{ success.stdout }}</pre>
-            {% endif %}
-            {% if success.image_data is defined %}
-              <ul class="images">
-                <li><img alt="ref" src="{{ success.image_data.ref }}" /></li>
-                <li><img alt="out" src="{{ success.image_data.out }}" /></li>
-                <li><img alt="diff" src="{{ success.image_data.diff }}" /></li>
-              </ul>
-            {% endif %}
-            </li>
-          {% else %}
-            <li>None</li>
-          {% endfor %}
-          </ul>
-        </div>
 
         <div class="failures">
           <h4><a name="failures">Failures</a></h4>
@@ -243,6 +203,46 @@ ul.images li {
             {% else %}
             <li>None</li>
             {% endfor %}
+          </ul>
+        </div>
+
+        <div class="successes">
+          <h4><a name="skipped">Skipped</a></h4>
+          <ul>
+            {% for success in suite_result.successes if success.result == 'SKIP' %}
+            <li>{{ success.name }} - result: <span class="result skip">{{ success.result }}</li>
+            {% else %}
+            <li>None</li>
+            {% endfor %}
+          </ul>
+
+          <h4><a name="passed">Passed</a></h4>
+          <ul class="passed">
+            {% for success in suite_result.successes if success.result == 'OK' %}
+            <li>{{ success.name }} - result: <span class="result pass">{{ success.result }}</li>
+            {% else %}
+            <li>None</li>
+            {% endfor %}
+          </ul>
+
+          <h4><a name="expected-fail">Expected failures</a></h4>
+          <ul>
+          {% for success in suite_result.successes if success.result == 'EXPECTEDFAIL' %}
+            <li><a name="{{ success.name }}">{{ success.name }}</a> - result: <span class="result xfail">{{ success.result }}</span><br/>
+            {% if success.stdout %}
+              Output: <pre>{{ success.stdout }}</pre>
+            {% endif %}
+            {% if success.image_data is defined %}
+              <ul class="images">
+                <li><img alt="ref" src="{{ success.image_data.ref }}" /></li>
+                <li><img alt="out" src="{{ success.image_data.out }}" /></li>
+                <li><img alt="diff" src="{{ success.image_data.diff }}" /></li>
+              </ul>
+            {% endif %}
+            </li>
+          {% else %}
+            <li>None</li>
+          {% endfor %}
           </ul>
         </div>
 
