@@ -128,6 +128,12 @@ gtk_event_controller_handle_event_default (GtkEventController *self,
 }
 
 static void
+gtk_event_controller_handle_crossing_default (GtkEventController    *self,
+                                              const GtkCrossingData *crossing)
+{
+}
+
+static void
 gtk_event_controller_set_property (GObject      *object,
                                    guint         prop_id,
                                    const GValue *value,
@@ -204,6 +210,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
   klass->unset_widget = gtk_event_controller_unset_widget;
   klass->filter_event = gtk_event_controller_filter_event_default;
   klass->handle_event = gtk_event_controller_handle_event_default;
+  klass->handle_crossing = gtk_event_controller_handle_crossing_default;
 
   object_class->finalize = gtk_event_controller_finalize;
   object_class->set_property = gtk_event_controller_set_property;
@@ -305,6 +312,30 @@ gtk_event_controller_handle_event (GtkEventController *controller,
     }
 
   return retval;
+}
+
+/**
+ * gtk_event_controller_handle_crossing:
+ * @controller: a #GtkEventController
+ * @crossing: a #GtkCrossingData
+ *
+ * Feeds a crossing event into @controller, so it can be interpreted
+ * and the controller actions triggered.
+ **/
+void
+gtk_event_controller_handle_crossing (GtkEventController    *controller,
+                                      const GtkCrossingData *crossing)
+{
+  GtkEventControllerClass *controller_class;
+
+  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
+  g_return_if_fail (crossing != NULL);
+
+  controller_class = GTK_EVENT_CONTROLLER_GET_CLASS (controller);
+
+  g_object_ref (controller);
+  controller_class->handle_crossing (controller, crossing);
+  g_object_unref (controller);
 }
 
 /**
@@ -451,3 +482,33 @@ gtk_event_controller_set_name (GtkEventController *controller,
   g_free (priv->name);
   priv->name = g_strdup (name);
 }
+
+static GtkCrossingData *
+gtk_crossing_data_copy (GtkCrossingData *crossing)
+{
+  GtkCrossingData *copy;
+
+  copy = g_new (GtkCrossingData, 1);
+
+  copy->type = crossing->type;
+  copy->direction = crossing->direction;
+
+  if (crossing->old_target)
+    copy->old_target = g_object_ref (crossing->old_target);
+  if (crossing->new_target)
+    copy->new_target = g_object_ref (crossing->new_target);
+
+  return copy;
+}
+
+static void
+gtk_crossing_data_free (GtkCrossingData *crossing)
+{
+  g_clear_object (&crossing->old_target);
+  g_clear_object (&crossing->new_target);
+
+  g_free (crossing);
+}
+
+G_DEFINE_BOXED_TYPE (GtkCrossingData, gtk_crossing_data,
+                     gtk_crossing_data_copy, gtk_crossing_data_free)

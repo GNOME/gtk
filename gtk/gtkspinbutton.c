@@ -920,14 +920,14 @@ key_controller_key_released (GtkEventControllerKey *key,
 }
 
 static void
-key_controller_focus_out (GtkEventControllerKey *key,
-                          GdkCrossingMode        mode,
-                          GdkNotifyType          detail,
-                          GtkSpinButton         *spin_button)
+key_controller_focus_change (GtkEventController     *controller,
+                             const GtkCrossingData  *crossing,
+                             GtkSpinButton          *spin_button)
 {
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
 
-  if (gtk_editable_get_editable (GTK_EDITABLE (priv->entry)))
+  if (crossing->direction == GTK_CROSSING_OUT &&
+      gtk_editable_get_editable (GTK_EDITABLE (priv->entry)))
     gtk_spin_button_update (spin_button);
 }
 
@@ -1015,8 +1015,8 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-released",
                     G_CALLBACK (key_controller_key_released), spin_button);
-  g_signal_connect (controller, "focus-out",
-                    G_CALLBACK (key_controller_focus_out), spin_button);
+  g_signal_connect (controller, "focus-change",
+                    G_CALLBACK (key_controller_focus_change), spin_button);
   gtk_widget_add_controller (GTK_WIDGET (spin_button), controller);
 }
 

@@ -168,14 +168,14 @@ visible_submenu_changed (GObject        *object,
 }
 
 static void
-focus_out (GtkEventControllerKey *controller,
-           GdkCrossingMode        mode,
-           GdkNotifyType          detail,
-           GtkPopoverMenu        *menu)
+focus_change (GtkEventController     *controller,
+              const GtkCrossingData  *crossing,
+              GtkPopoverMenu         *menu)
 {
   GtkWidget *new_focus = gtk_root_get_focus (gtk_widget_get_root (GTK_WIDGET (menu)));
 
-  if (!gtk_event_controller_key_contains_focus (controller) &&
+  if (crossing->direction == GTK_CROSSING_OUT &&
+      !gtk_event_controller_key_contains_focus (GTK_EVENT_CONTROLLER_KEY (controller)) &&
       new_focus != NULL)
     {
       if (menu->parent_menu &&
@@ -216,7 +216,7 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
   gtk_widget_add_css_class (GTK_WIDGET (popover), "menu");
 
   controller = gtk_event_controller_key_new ();
-  g_signal_connect (controller, "focus-out", G_CALLBACK (focus_out), popover);
+  g_signal_connect (controller, "focus-change", G_CALLBACK (focus_change), popover);
   gtk_widget_add_controller (GTK_WIDGET (popover), controller);
 
   controller = gtk_event_controller_motion_new ();
