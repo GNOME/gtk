@@ -214,7 +214,7 @@ ul.images li {
         <div class="failures">
           <h4><a name="failed">Failed</a></h4>
           <ul class="failed">
-            {% for failure in suite_result.failures if failure.result == 'FAIL' %}
+            {% for failure in suite_result.failures if failure.result in [ 'FAIL', 'UNEXPECTEDPASS' ] %}
             <li><a name="{{ failure.name }}">{{ failure.name }}</a> - result: <span class="result fail">{{ failure.result }}</span><br/>
               {% if failure.stdout %}
               Output: <pre>{{ failure.stdout }}</pre>
@@ -331,7 +331,7 @@ for name, units in suites.items():
     print('Processing {} suite {}:'.format(project_name, suite_name))
 
     def if_failed(unit):
-        if unit['result'] in ['FAIL', 'TIMEOUT']:
+        if unit['result'] in ['FAIL', 'UNEXPECTEDPASS', 'TIMEOUT']:
             return True
         return False
 
