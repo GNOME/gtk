@@ -394,8 +394,8 @@ static void gtk_window_size_allocate      (GtkWidget         *widget,
                                            int                height,
                                            int                  baseline);
 static gboolean gtk_window_close_request  (GtkWindow         *window);
-static void gtk_window_focus_in           (GtkWidget         *widget);
-static void gtk_window_focus_out          (GtkWidget         *widget);
+static void gtk_window_focus_change       (GtkWidget            *widget,
+                                           GtkCrossingDirection  direction);
 static gboolean gtk_window_key_pressed    (GtkWidget         *widget,
                                            guint              keyval,
                                            guint              keycode,
@@ -1847,10 +1847,8 @@ gtk_window_init (GtkWindow *window)
 
   priv->key_controller = gtk_event_controller_key_new ();
   gtk_event_controller_set_propagation_phase (priv->key_controller, GTK_PHASE_CAPTURE);
-  g_signal_connect_swapped (priv->key_controller, "focus-in",
-                            G_CALLBACK (gtk_window_focus_in), window);
-  g_signal_connect_swapped (priv->key_controller, "focus-out",
-                            G_CALLBACK (gtk_window_focus_out), window);
+  g_signal_connect_swapped (priv->key_controller, "focus-change",
+                            G_CALLBACK (gtk_window_focus_change), window);
   g_signal_connect_swapped (priv->key_controller, "key-pressed",
                             G_CALLBACK (gtk_window_key_pressed), window);
   g_signal_connect_swapped (priv->key_controller, "key-released",
@@ -6124,33 +6122,33 @@ gtk_window_has_mnemonic_modifier_pressed (GtkWindow *window)
 }
 
 static void
-gtk_window_focus_in (GtkWidget *widget)
+gtk_window_focus_change (GtkWidget            *widget,
+                         GtkCrossingDirection  direction)
 {
   GtkWindow *window = GTK_WINDOW (widget);
 
-  /* It appears spurious focus in events can occur when
-   *  the window is hidden. So we'll just check to see if
-   *  the window is visible before actually handling the
-   *  event
-   */
-  if (gtk_widget_get_visible (widget))
+  if (direction == GTK_CROSSING_IN)
     {
-      _gtk_window_set_is_active (window, TRUE);
+      /* It appears spurious focus in events can occur when
+       * the window is hidden. So we'll just check to see if
+       * the window is visible before actually handling the
+       * event
+       */
+      if (gtk_widget_get_visible (widget))
+        {
+          _gtk_window_set_is_active (window, TRUE);
 
-      if (gtk_window_has_mnemonic_modifier_pressed (window))
-        _gtk_window_schedule_mnemonics_visible (window);
+          if (gtk_window_has_mnemonic_modifier_pressed (window))
+            _gtk_window_schedule_mnemonics_visible (window);
+        }
     }
-}
+  else
+    {
+      _gtk_window_set_is_active (window, FALSE);
 
-static void
-gtk_window_focus_out (GtkWidget *widget)
-{
-  GtkWindow *window = GTK_WINDOW (widget);
-
-  _gtk_window_set_is_active (window, FALSE);
-
-  /* set the mnemonic-visible property to false */
-  gtk_window_set_mnemonics_visible (window, FALSE);
+      /* set the mnemonic-visible property to false */
+      gtk_window_set_mnemonics_visible (window, FALSE);
+    }
 }
 
 static void
@@ -6350,6 +6348,61 @@ gtk_window_move_focus (GtkWidget        *widget,
     gtk_window_set_focus (GTK_WINDOW (widget), NULL);
 }
 
+static void
+synthesize_focus_change_events (GtkWindow *window,
+                                GtkWidget *old_focus,
+                                GtkWidget *new_focus)
+{
+  GtkCrossingData crossing;
+  GtkWidget *widget, *focus_child;
+  GList *list, *l;
+  GtkStateFlags flags;
+
+  flags = GTK_STATE_FLAG_FOCUSED;
+  if (gtk_window_get_focus_visible (GTK_WINDOW (window)))
+    flags |= GTK_STATE_FLAG_FOCUS_VISIBLE;
+
+  crossing.type = GTK_CROSSING_FOCUS;
+  crossing.mode = GDK_CROSSING_NORMAL;
+  crossing.old_target = old_focus;
+  crossing.new_target = new_focus;
+
+  crossing.direction = GTK_CROSSING_OUT;
+
+  widget = old_focus;
+  while (widget)
+    {
+      gtk_widget_handle_crossing (widget, &crossing, 0, 0);
+      gtk_widget_unset_state_flags (widget, flags);
+      gtk_widget_set_focus_child (widget, NULL);
+      widget = gtk_widget_get_parent (widget);
+    }
+
+  list = NULL;
+  widget = new_focus;
+  while (widget)
+    {
+      list = g_list_prepend (list, widget);
+      widget = gtk_widget_get_parent (widget);
+    }
+
+  crossing.direction = GTK_CROSSING_IN;
+
+  for (l = list; l; l = l->next)
+    {
+      widget = l->data;
+      if (l->next)
+        focus_child = l->next->data;
+      else
+        focus_child = NULL;
+      gtk_widget_handle_crossing (widget, &crossing, 0, 0);
+      gtk_widget_set_state_flags (widget, flags, FALSE);
+      gtk_widget_set_focus_child (widget, focus_child);
+    }
+
+  g_list_free (list);
+}
+
 /**
  * gtk_window_set_focus:
  * @window: a #GtkWindow
@@ -6368,9 +6421,6 @@ gtk_window_set_focus (GtkWindow *window,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *old_focus = NULL;
-  GdkSeat *seat;
-  GdkDevice *device;
-  GdkEvent *event;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
@@ -6384,14 +6434,13 @@ gtk_window_set_focus (GtkWindow *window,
     old_focus = g_object_ref (priv->focus_widget);
   g_set_object (&priv->focus_widget, NULL);
 
-  seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (window)));
-  device = gdk_seat_get_keyboard (seat);
+  if (old_focus)
+    gtk_widget_set_has_focus (old_focus, FALSE);
 
-  event = gdk_event_focus_new (priv->surface, device, device, TRUE);
+  synthesize_focus_change_events (window, old_focus, focus);
 
-  gtk_synthesize_crossing_events (GTK_ROOT (window), old_focus, focus, event, GDK_CROSSING_NORMAL);
-
-  gdk_event_unref (event);
+  if (focus)
+    gtk_widget_set_has_focus (focus, TRUE);
 
   g_set_object (&priv->focus_widget, focus);
 
