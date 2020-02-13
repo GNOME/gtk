@@ -340,8 +340,8 @@ gsk_rounded_rect_locate_point (const GskRoundedRect   *self,
 {
   if (point->x < self->bounds.origin.x ||
       point->y < self->bounds.origin.y ||
-      point->x >= self->bounds.origin.x + self->bounds.size.width ||
-      point->y >= self->bounds.origin.y + self->bounds.size.height)
+      point->x > self->bounds.origin.x + self->bounds.size.width ||
+      point->y > self->bounds.origin.y + self->bounds.size.height)
     return OUTSIDE;
 
   if (self->bounds.origin.x + self->corner[GSK_CORNER_TOP_LEFT].width > point->x &&
@@ -417,8 +417,8 @@ gsk_rounded_rect_contains_rect (const GskRoundedRect  *self,
 {
   if (rect->origin.x < self->bounds.origin.x ||
       rect->origin.y < self->bounds.origin.y ||
-      rect->origin.x + rect->size.width >= self->bounds.origin.x + self->bounds.size.width ||
-      rect->origin.y + rect->size.height >= self->bounds.origin.y + self->bounds.size.height)
+      rect->origin.x + rect->size.width > self->bounds.origin.x + self->bounds.size.width ||
+      rect->origin.y + rect->size.height > self->bounds.origin.y + self->bounds.size.height)
     return FALSE;
 
   if (!gsk_rounded_rect_contains_point (self, &rect->origin) ||
