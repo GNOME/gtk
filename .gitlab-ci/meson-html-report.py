@@ -138,7 +138,7 @@ ul.images li {
 </head>
 <body>
   <header>
-    <h1>{{ report.project_name }} :: Test Reports</h1>
+    <h1>{{ report.project_name }}/{{ report.branch_name }} :: Test Reports</h1>
   </header>
 
   <article>
