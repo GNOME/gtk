@@ -40,6 +40,9 @@ struct _GtkEventControllerClass
                              double              y);
   void     (* reset)        (GtkEventController *controller);
 
+  void     (* handle_focus_change) (GtkEventController     *controller,
+                                    const GtkCrossingEvent *event);
+
   /*<private>*/
 
   /* Tells whether the event is filtered out, %TRUE makes

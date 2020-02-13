@@ -40,6 +40,33 @@ G_BEGIN_DECLS
 #define GTK_EVENT_CONTROLLER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_EVENT_CONTROLLER, GtkEventControllerClass))
 
 
+typedef struct _GtkCrossingEvent GtkCrossingEvent;
+
+/**
+ * GtkCrossingEvent:
+ * @in: whether this is a focus-in or focus-out event
+ * @old_location: The old focus location
+ * @new_location: The new focus location
+ *
+ * The struct that is passed to gtk_event_controller_handle_focus_change()
+ * and is also passed to #GtkEventController::focus-change.
+ *
+ * The @old_location and @new_location fields are set to the old or new
+ * location or to %NULL if the widgets are not descencents of the current
+ * widget.
+ */
+struct _GtkCrossingEvent {
+  gboolean in;
+  GtkWidget *old_location;
+  GtkWidget *new_location;
+};
+
+#define GTK_TYPE_CROSSING_EVENT (gtk_crossing_event_get_type ())
+
+GDK_AVAILABLE_IN_ALL
+GType               gtk_crossing_event_get_type (void) G_GNUC_CONST;
+
+
 GDK_AVAILABLE_IN_ALL
 GType        gtk_event_controller_get_type       (void) G_GNUC_CONST;
 
@@ -51,6 +78,9 @@ gboolean     gtk_event_controller_handle_event   (GtkEventController *controller
                                                   const GdkEvent     *event,
                                                   double              x,
                                                   double              y);
+GDK_AVAILABLE_IN_ALL
+void         gtk_event_controller_handle_focus_change (GtkEventController     *controller,
+                                                       const GtkCrossingEvent *event);
 GDK_AVAILABLE_IN_ALL
 void         gtk_event_controller_reset          (GtkEventController *controller);
 

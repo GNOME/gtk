@@ -128,6 +128,12 @@ gtk_event_controller_handle_event_default (GtkEventController *self,
 }
 
 static void
+gtk_event_controller_handle_focus_change_default (GtkEventController     *self,
+                                                  const GtkCrossingEvent *event)
+{
+}
+
+static void
 gtk_event_controller_set_property (GObject      *object,
                                    guint         prop_id,
                                    const GValue *value,
@@ -204,6 +210,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
   klass->unset_widget = gtk_event_controller_unset_widget;
   klass->filter_event = gtk_event_controller_filter_event_default;
   klass->handle_event = gtk_event_controller_handle_event_default;
+  klass->handle_focus_change = gtk_event_controller_handle_focus_change_default;
 
   object_class->finalize = gtk_event_controller_finalize;
   object_class->set_property = gtk_event_controller_set_property;
@@ -305,6 +312,33 @@ gtk_event_controller_handle_event (GtkEventController *controller,
     }
 
   return retval;
+}
+
+/**
+ * gtk_event_controller_handle_focus_change:
+ * @controller: a #GtkEventController
+ * @event: a #GtkCrossingEvent
+ *
+ * Feeds a focus change event into @controller, so it can be interpreted
+ * and the controller actions triggered.
+ *
+ * Returns: %TRUE if the event was potentially useful to trigger the
+ *          controller action
+ **/
+void
+gtk_event_controller_handle_focus_change (GtkEventController     *controller,
+                                          const GtkCrossingEvent *event)
+{
+  GtkEventControllerClass *controller_class;
+
+  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
+  g_return_if_fail (event != NULL);
+
+  controller_class = GTK_EVENT_CONTROLLER_GET_CLASS (controller);
+
+  g_object_ref (controller);
+  controller_class->handle_focus_change (controller, event);
+  g_object_unref (controller);
 }
 
 /**
@@ -451,3 +485,30 @@ gtk_event_controller_set_name (GtkEventController *controller,
   g_free (priv->name);
   priv->name = g_strdup (name);
 }
+
+static GtkCrossingEvent *
+gtk_crossing_event_copy (GtkCrossingEvent *crossing)
+{
+  GtkCrossingEvent *copy;
+
+  copy = g_new (GtkCrossingEvent, 1);
+
+  if (crossing->old_location)
+    copy->old_location = g_object_ref (crossing->old_location);
+  if (crossing->new_location)
+    copy->new_location = g_object_ref (crossing->new_location);
+
+  return copy;
+}
+
+static void
+gtk_crossing_event_free (GtkCrossingEvent *crossing)
+{
+  g_clear_object (&crossing->old_location);
+  g_clear_object (&crossing->new_location);
+
+  g_free (crossing);
+}
+
+G_DEFINE_BOXED_TYPE (GtkCrossingEvent, gtk_crossing_event,
+                     gtk_crossing_event_copy, gtk_crossing_event_free)

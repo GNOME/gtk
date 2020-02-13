@@ -4818,6 +4818,25 @@ gtk_widget_run_controllers (GtkWidget           *widget,
   return handled;
 }
 
+void
+gtk_widget_handle_focus_change (GtkWidget              *widget,
+                                const GtkCrossingEvent *event)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GList *l;
+
+  g_object_ref (widget);
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      GtkEventController *controller = l->data;
+
+      gtk_event_controller_handle_focus_change (controller, event);
+    }
+
+  g_object_unref (widget);
+}
+
 static gboolean
 translate_event_coordinates (GdkEvent  *event,
                              double    *x,

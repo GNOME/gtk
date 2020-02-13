@@ -383,17 +383,6 @@ gtk_popover_native_check_resize (GtkNative *native)
     }
 }
 
-
-static void
-gtk_popover_focus_in (GtkWidget *widget)
-{
-}
-
-static void
-gtk_popover_focus_out (GtkWidget *widget)
-{
-}
-
 static void
 close_menu (GtkPopover *popover)
 {
@@ -569,8 +558,6 @@ gtk_popover_init (GtkPopover *popover)
   priv->has_arrow = TRUE;
 
   controller = gtk_event_controller_key_new ();
-  g_signal_connect_swapped (controller, "focus-in", G_CALLBACK (gtk_popover_focus_in), popover);
-  g_signal_connect_swapped (controller, "focus-out", G_CALLBACK (gtk_popover_focus_out), popover);
   g_signal_connect_swapped (controller, "key-pressed", G_CALLBACK (gtk_popover_key_pressed), popover);
   gtk_widget_add_controller (GTK_WIDGET (popover), controller);
 
