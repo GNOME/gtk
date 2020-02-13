@@ -2899,9 +2899,14 @@ gsk_shadow_node_draw (GskRenderNode *node,
   cairo_pattern_t *pattern;
   gsize i;
 
+  cairo_save (cr);
+  /* clip so the push_group() creates a small surface */
+  gsk_cairo_rectangle (cr, &self->child->bounds);
+  cairo_clip (cr);
   cairo_push_group (cr);
   gsk_render_node_draw (self->child, cr);
   pattern = cairo_pop_group (cr);
+  cairo_restore (cr);
 
   for (i = 0; i < self->n_shadows; i++)
     {
