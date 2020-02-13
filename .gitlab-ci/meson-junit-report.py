@@ -51,6 +51,7 @@ for line in args.infile:
 
     duration = data['duration']
     return_code = data['returncode']
+    result = data['result']
     log = data['stdout']
 
     unit = {
@@ -58,6 +59,7 @@ for line in args.infile:
         'name': unit_name,
         'duration': duration,
         'returncode': return_code,
+        'result': result,
         'stdout': log,
     }
 
@@ -68,12 +70,12 @@ for name, units in suites.items():
     print('Processing suite {} (units: {})'.format(name, len(units)))
 
     def if_failed(unit):
-        if unit['returncode'] != 0:
+        if unit['result'] in ['FAIL', 'UNEXPECTEDPASS', 'TIMEOUT']:
             return True
         return False
 
     def if_succeded(unit):
-        if unit['returncode'] == 0:
+        if unit['result'] in ['OK', 'EXPECTEDFAIL', 'SKIP']:
             return True
         return False
 
