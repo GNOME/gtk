@@ -139,14 +139,17 @@ ul.images li {
 <body>
   <header>
     <h1>{{ report.project_name }} :: Test Reports</h1>
-    <div class="report-meta">
-      <p><strong>Branch:</strong> {{ report.branch_name }}</p>
-      <p><strong>Date:</strong> <time datetime="{{ report.date.isoformat() }}">{{ report.locale_date }}</time></p>
-      {% if report.job_id %}<p><strong>Job ID:</strong> {{ report.job_id }}</p>{% endif %}
-    </div>
   </header>
 
   <article>
+    <section>
+      <div class="report-meta">
+        <p><strong>Branch:</strong> {{ report.branch_name }}</p>
+        <p><strong>Date:</strong> <time datetime="{{ report.date.isoformat() }}">{{ report.locale_date }}</time></p>
+        {% if report.job_id %}<p><strong>Job ID:</strong> {{ report.job_id }}</p>{% endif %}
+      </div>
+    </section>
+
     <section>
       <div class="summary">
         <h3><a name="summary">Summary</a></h3>
