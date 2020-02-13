@@ -1315,17 +1315,23 @@ send_delete_event (gpointer data)
 {
   GtkWidget *window = data;
   GtkWindowPrivate *priv = GTK_WINDOW (window)->priv;
+  GdkWindow *gdk_window;
 
-  GdkEvent *event;
-
-  event = gdk_event_new (GDK_DELETE);
-
-  event->any.window = g_object_ref (_gtk_widget_get_window (window));
-  event->any.send_event = TRUE;
   priv->delete_event_handler = 0;
 
-  gtk_main_do_event (event);
-  gdk_event_free (event);
+  gdk_window = _gtk_widget_get_window (window);
+  if (gdk_window)
+    {
+      GdkEvent *event;
+
+      event = gdk_event_new (GDK_DELETE);
+      event->any.window = g_object_ref (gdk_window);
+      event->any.send_event = TRUE;
+
+      gtk_main_do_event (event);
+
+      gdk_event_free (event);
+    }
 
   return G_SOURCE_REMOVE;
 }
