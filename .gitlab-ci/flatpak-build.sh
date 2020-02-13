@@ -7,7 +7,7 @@ appid=$1
 builddir=flatpak_app
 repodir=repo
 
-flatpak-builder \
+strace -y -f flatpak-builder -v \
         --stop-at=gtk \
         ${builddir} \
         build-aux/flatpak/${appid}.json
