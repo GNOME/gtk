@@ -40,9 +40,6 @@
  * and to remove the marker, gtk_calendar_unmark_day(). Alternative, all
  * marks can be cleared with gtk_calendar_clear_marks().
  *
- * The way in which the calendar itself is displayed can be altered using
- * gtk_calendar_set_display_options().
- *
  * The selected date can be retrieved from a #GtkCalendar using
  * gtk_calendar_get_date().
  *
@@ -50,6 +47,32 @@
  * legal calendar in most countries, it was adopted progressively
  * between 1582 and 1929. Display before these dates is likely to be
  * historically incorrect.
+ *
+ * # CSS nodes
+ *
+ * |[<!-- language="plain" -->
+ * calendar.view
+ * ├── header
+ * │   ├── button
+ * │   ├── stack.month
+ * │   ├── button
+ * │   ├── button
+ * │   ├── label.year
+ * │   ╰── button
+ * ╰── grid
+ *     ╰── label[.day-name][.week-number][.day-number][.other-month]
+ * ]|
+ *
+ * GtkCalendar has a main node with name calendar. It contains a subnode called header
+ * containing the widgets for switching between years and months.
+ *
+ * The grid subnode contains all day labels, including week numbers on the left (marked
+ * with the .week-number css class) and day names on top (marked with the .day-name
+ * css class).
+ *
+ * Day labels that belong to the previous or next month get the .other-month style class.
+ *
+ * Marked day labels get the :selected state assigned.
  */
 
 #include "config.h"
