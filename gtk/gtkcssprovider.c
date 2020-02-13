@@ -85,15 +85,10 @@ struct _GtkCssProviderClass
 
 typedef struct GtkCssRuleset GtkCssRuleset;
 typedef struct _GtkCssScanner GtkCssScanner;
-typedef struct _PropertyValue PropertyValue;
+typedef GtkCssLookupValue PropertyValue;
 typedef enum ParserScope ParserScope;
 typedef enum ParserSymbol ParserSymbol;
 
-struct _PropertyValue {
-  guint                id;
-  GtkCssValue         *value;
-  GtkCssSection       *section;
-};
 
 struct GtkCssRuleset
 {
