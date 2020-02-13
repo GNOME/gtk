@@ -256,9 +256,8 @@ static gboolean gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *
                                                          guint                  keycode,
                                                          GdkModifierType        state,
                                                          GtkWidget             *widget);
-static void     gtk_calendar_key_controller_focus       (GtkEventControllerKey *controller,
-                                                         GdkCrossingMode        mode,
-                                                         GdkNotifyType          detail,
+static void     gtk_calendar_key_controller_focus       (GtkEventController    *controller,
+                                                         GtkCrossingDirection   direction,
                                                          GtkWidget             *widget);
 static void     gtk_calendar_state_flags_changed  (GtkWidget     *widget,
                                                    GtkStateFlags  previous_state);
@@ -570,10 +569,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (gtk_calendar_key_controller_key_pressed),
                     calendar);
-  g_signal_connect (controller, "focus-in",
-                    G_CALLBACK (gtk_calendar_key_controller_focus),
-                    calendar);
-  g_signal_connect (controller, "focus-out",
+  g_signal_connect (controller, "focus-change",
                     G_CALLBACK (gtk_calendar_key_controller_focus),
                     calendar);
   gtk_widget_add_controller (GTK_WIDGET (calendar), controller);
@@ -1370,10 +1366,9 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
 }
 
 static void
-gtk_calendar_key_controller_focus (GtkEventControllerKey *key,
-                                   GdkCrossingMode        mode,
-                                   GdkNotifyType          detail,
-                                   GtkWidget             *widget)
+gtk_calendar_key_controller_focus (GtkEventController     *controller,
+                                   GtkCrossingDirection    direction,
+                                   GtkWidget              *widget)
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
