@@ -1625,5 +1625,10 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   /* restore the original domain */
   gtk_builder_set_translation_domain (builder, domain);
 
-  gdk_profiler_add_mark (before * 1000, (g_get_monotonic_time () - before) * 1000, "builder load", filename);
+  if (GDK_PROFILER_IS_RUNNING)
+    {
+      guint64 after = g_get_monotonic_time ();
+      if (after - before > 500)
+        gdk_profiler_add_mark (before, after - before, "builder load", filename);
+    }
 }

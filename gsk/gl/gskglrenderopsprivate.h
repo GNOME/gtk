@@ -125,9 +125,32 @@ typedef struct
   };
 } ProgramState;
 
+typedef struct {
+  int ref_count;
+  union {
+    Program programs[GL_N_PROGRAMS];
+    struct {
+      Program blend_program;
+      Program blit_program;
+      Program blur_program;
+      Program border_program;
+      Program color_matrix_program;
+      Program color_program;
+      Program coloring_program;
+      Program cross_fade_program;
+      Program inset_shadow_program;
+      Program linear_gradient_program;
+      Program outset_shadow_program;
+      Program repeat_program;
+      Program unblurred_outset_shadow_program;
+    };
+  };
+  ProgramState state[GL_N_PROGRAMS];
+} GskGLRendererPrograms;
+
 typedef struct
 {
-  ProgramState program_state[GL_N_PROGRAMS];
+  GskGLRendererPrograms *programs;
   const Program *current_program;
   int current_render_target;
   int current_texture;

@@ -1205,6 +1205,7 @@ gdk_x11_surface_show (GdkSurface *surface, gboolean already_mapped)
   GdkToplevelX11 *toplevel;
   Display *xdisplay = GDK_SURFACE_XDISPLAY (surface);
   Window xwindow = GDK_SURFACE_XID (surface);
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
 
   if (!already_mapped)
     set_initial_hints (surface);
@@ -1217,7 +1218,13 @@ gdk_x11_surface_show (GdkSurface *surface, gboolean already_mapped)
       display_x11->user_time != 0 &&
       XSERVER_TIME_IS_LATER (display_x11->user_time, toplevel->user_time))
     gdk_x11_surface_set_user_time (surface, display_x11->user_time);
-  
+
+ if (GDK_PROFILER_IS_RUNNING)
+   {
+     if (impl->map_time == 0)
+       impl->map_time = g_get_monotonic_time ();
+   }
+
   XMapWindow (xdisplay, xwindow);
   
   /* Fullscreen on current monitor is the default, no need to apply this mode

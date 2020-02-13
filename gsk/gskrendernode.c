@@ -194,18 +194,6 @@ gsk_render_node_draw (GskRenderNode *node,
 
   cairo_save (cr);
 
-#ifdef G_ENABLE_DEBUG
-  if (!GSK_DEBUG_CHECK (GEOMETRY))
-    {
-      GSK_NOTE (CAIRO, g_message ("CLIP = { .x = %g, .y = %g, .width = %g, .height = %g }",
-                                node->bounds.origin.x, node->bounds.origin.y,
-                                node->bounds.size.width, node->bounds.size.height));
-
-      cairo_rectangle (cr, node->bounds.origin.x, node->bounds.origin.y, node->bounds.size.width, node->bounds.size.height);
-      cairo_clip (cr);
-    }
-#endif
-
   GSK_NOTE (CAIRO, g_message ("Rendering node %s[%p]",
                             node->node_class->type_name, node));
 

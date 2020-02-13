@@ -638,7 +638,11 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
                                      int           minor)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  gboolean force_gles = FALSE;
   int version, min_ver;
+#ifdef G_ENABLE_DEBUG
+  GdkDisplay *display;
+#endif
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
   g_return_if_fail (!priv->realized);
@@ -651,10 +655,16 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
       return;
     }
 
-  /* Enforce a minimum context version number of 3.2 */
   version = (major * 100) + minor;
 
-  if (priv->use_es > 0 || GDK_DISPLAY_DEBUG_CHECK (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), GL_GLES))
+#ifdef G_ENABLE_DEBUG
+  display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
+  force_gles = GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES);
+#endif
+  /* Enforce a minimum context version number of 3.2 for desktop GL,
+   * and 2.0 for GLES
+   */
+  if (priv->use_es > 0 || force_gles)
     min_ver = 200;
   else
     min_ver = 302;
@@ -683,12 +693,25 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
                                      int          *minor)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  gboolean force_gles = FALSE;
+#ifdef G_ENABLE_DEBUG
+  GdkDisplay *display;
+#endif
   int default_major, default_minor;
   int maj, min;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
-  if (priv->use_es > 0 || GDK_DISPLAY_DEBUG_CHECK (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), GL_GLES))
+#ifdef G_ENABLE_DEBUG
+  display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
+  force_gles = GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES);
+#endif
+
+  /* Default fallback values for uninitialised contexts; we
+   * enforce a context version number of 3.2 for desktop GL,
+   * and 2.0 for GLES
+   */
+  if (priv->use_es > 0 || force_gles)
     {
       default_major = 2;
       default_minor = 0;
@@ -936,6 +959,10 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   gboolean has_npot, has_texture_rectangle;
+  gboolean gl_debug = FALSE;
+#ifdef G_ENABLE_DEBUG
+  GdkDisplay *display;
+#endif
 
   if (!priv->realized)
     return;
@@ -993,7 +1020,12 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
         priv->is_legacy = TRUE;
     }
 
-  if (priv->has_khr_debug && GDK_DISPLAY_DEBUG_CHECK (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), GL_DEBUG))
+#ifdef G_ENABLE_DEBUG
+  display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
+  gl_debug = GDK_DISPLAY_DEBUG_CHECK (display, GL_DEBUG);
+#endif
+
+  if (priv->has_khr_debug && gl_debug)
     {
       priv->use_khr_debug = TRUE;
       glGetIntegerv (GL_MAX_LABEL_LENGTH, &priv->max_debug_label_length);

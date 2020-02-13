@@ -428,7 +428,6 @@ xfails = [
   'window-show-contents-on-map.ui',
   # these depend on details of text layout
   'label-sizing.ui',
-  'label-wrap-justify.ui',
 ]
 
 foreach testname : testdata

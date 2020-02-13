@@ -6316,11 +6316,8 @@ gtk_window_check_resize (GtkWindow *self)
   else if (gtk_widget_get_visible (widget))
     gtk_window_move_resize (self);
 
-  if (gdk_profiler_is_running ())
-    {
-      gint64 after = g_get_monotonic_time ();
-      gdk_profiler_add_mark (before * 1000, (after - before) * 1000, "size allocation", "");
-    }
+  if (GDK_PROFILER_IS_RUNNING)
+    gdk_profiler_end_mark (before, "size allocation", "");
 }
 
 static void

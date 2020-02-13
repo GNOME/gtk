@@ -171,5 +171,5 @@ gsk_gl_profiler_end_gpu_region (GskGLProfiler *profiler)
   else
     elapsed = 0;
 
-  return elapsed;
+  return elapsed / 1000; /* Convert to usec to match other profiler APIs */
 }

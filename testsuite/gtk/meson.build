@@ -70,6 +70,17 @@ tests = [
   ['widgetorder'],
 ]
 
+# Tests that are expected to fail
+xfail = [
+]
+
+# Tests that are expected to fail on non-debug builds
+xfail_nodebug = [
+  'icontheme', # Overrides debugging messages
+]
+
+is_debug = get_option('buildtype').startswith('debug')
+
 test_cargs = []
 
 if os_unix
@@ -90,6 +101,11 @@ foreach t : tests
     install: get_option('install-tests'),
     install_dir: testexecdir)
 
+  expect_fail = xfail.contains(test_name)
+  if not is_debug
+    expect_fail = xfail_nodebug.contains(test_name)
+  endif
+
   test(test_name, test_exe,
        args: [ '--tap', '-k' ],
        env: [ 'GIO_USE_VOLUME_MONITOR=unix',
@@ -102,7 +118,9 @@ foreach t : tests
               'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
               'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
             ],
-       suite: 'gtk')
+       suite: 'gtk',
+       should_fail: expect_fail,
+  )
 endforeach
 
 # FIXME: if objc autotestkeywords_CPPFLAGS += -DHAVE_OBJC=1 -x objective-c++
@@ -193,7 +211,7 @@ if get_option ('profiler')
        args: [ '--mark', 'size allocation', join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],
        env: [ 'GTK_THEME=Empty',
               'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir) ],
-       suite: [ 'css' ])
+       suite: [ 'gtk' ])
 
 endif
 
@@ -203,6 +221,6 @@ if get_option ('profiler')
        args: [ '--mark', 'widget snapshot', join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory') ],
        env: [ 'GTK_THEME=Empty',
               'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir) ],
-       suite: [ 'css' ])
+       suite: [ 'gtk' ])
 
 endif
