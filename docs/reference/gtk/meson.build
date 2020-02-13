@@ -490,7 +490,6 @@ endif
 
 if get_option('man') and xsltproc.found()
   xlstproc_flags = [
-    '--nonet',
     '--stringparam', 'man.output.quietly', '1',
     '--stringparam', 'funcsynopsis.style', 'ansi',
     '--stringparam', 'man.th.extra1.suppress', '1',
