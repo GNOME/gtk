@@ -10329,13 +10329,11 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   gint x2;
   gint vertical_separator;
   GtkCellRendererState flags = 0;
-  gint expander_size;
 
   widget = GTK_WIDGET (tree_view);
   context = gtk_widget_get_style_context (widget);
 
   gtk_widget_style_get (widget,
-                        "expander-size", &expander_size,
                         "vertical-separator", &vertical_separator,
                         NULL);
 
@@ -10369,21 +10367,6 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
 
   gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);
-
-  if (expander_size > 0)
-    {
-      if (expander_size < area.width && area.width % expander_size != 0)
-        {
-          area.x += (area.width % expander_size) / 2;
-          area.width = expander_size;
-        }
-
-      if (expander_size < area.height && area.height % expander_size != 0)
-        {
-          area.y += (area.height % expander_size) / 2;
-          area.height = expander_size;
-        }
-    }
 
   gtk_render_expander (context, cr,
                        area.x, area.y,
