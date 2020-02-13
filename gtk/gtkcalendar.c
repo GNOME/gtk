@@ -60,7 +60,7 @@
  * │   ├── label.year
  * │   ╰── button
  * ╰── grid
- *     ╰── label[.day-name][.week-number][.day-number][.other-month]
+ *     ╰── label[.day-name][.week-number][.day-number][.other-month][.today]
  * ]|
  *
  * GtkCalendar has a main node with name calendar. It contains a subnode called header
@@ -71,6 +71,7 @@
  * css class).
  *
  * Day labels that belong to the previous or next month get the .other-month style class.
+ * The label of the current day get the .today style class.
  *
  * Marked day labels get the :selected state assigned.
  */
@@ -1581,6 +1582,7 @@ gtk_calendar_select_day (GtkCalendar *self,
                          GDateTime   *date)
 {
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (self);
+  GDateTime *today;
   int new_day, new_month, new_year;
   gboolean day_changed, month_changed, year_changed;
   char buffer[255];
@@ -1589,6 +1591,7 @@ gtk_calendar_select_day (GtkCalendar *self,
   struct tm *tm;
   int i;
   int x, y;
+  int today_day;
 
   g_return_if_fail (GTK_IS_CALENDAR (self));
   g_return_if_fail (date != NULL);
@@ -1628,6 +1631,16 @@ gtk_calendar_select_day (GtkCalendar *self,
   gtk_stack_set_visible_child_name (GTK_STACK (priv->month_name_stack),
                                     default_monthname[new_month - 1]);
 
+  today = g_date_time_new_now_local ();
+
+  if (g_date_time_get_year (priv->date) == g_date_time_get_year (today) &&
+      g_date_time_get_month (priv->date) == g_date_time_get_month (today))
+    today_day = g_date_time_get_day_of_month (today);
+  else
+    today_day = -1;
+
+  g_date_time_unref (today);
+
   /* Update day labels */
   for (y = 0; y < 6; y ++)
     for (x = 0; x < 7; x ++)
@@ -1664,6 +1677,11 @@ gtk_calendar_select_day (GtkCalendar *self,
           gtk_widget_set_state_flags (label, GTK_STATE_FLAG_SELECTED, FALSE);
         else
           gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_SELECTED);
+
+        if (day == today_day)
+          gtk_widget_add_css_class (label, "today");
+        else
+          gtk_widget_remove_css_class (label, "today");
       }
 
   /* Update week number labels.
