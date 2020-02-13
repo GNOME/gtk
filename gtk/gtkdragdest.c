@@ -117,7 +117,9 @@ static gboolean gtk_drop_target_accept (GtkDropTarget *dest,
                                         GdkDrop       *drop);
 
 static gboolean gtk_drop_target_handle_event (GtkEventController *controller,
-                                              const GdkEvent     *event);
+                                              const GdkEvent     *event,
+                                              double              x,
+                                              double              y);
 static gboolean gtk_drop_target_filter_event (GtkEventController *controller,
                                               const GdkEvent     *event);
 static void     gtk_drop_target_set_widget   (GtkEventController *controller,
@@ -747,11 +749,12 @@ gtk_drop_set_current_dest (GdkDrop       *drop,
 
 static gboolean
 gtk_drop_target_handle_event (GtkEventController *controller,
-                              const GdkEvent     *event)
+                              const GdkEvent     *event,
+                              double              x,
+                              double              y)
 {
   GtkDropTarget *dest = GTK_DROP_TARGET (controller);
   GdkDrop *drop;
-  double x, y;
   GtkDropStatus status;
   gboolean found = FALSE;
 
@@ -760,8 +763,6 @@ gtk_drop_target_handle_event (GtkEventController *controller,
   status = gtk_drop_target_get_drop_status (dest, drop);
   if (status == GTK_DROP_STATUS_DENIED)
     return FALSE;
-
-  gdk_event_get_coords (event, &x, &y);
 
   switch ((int)gdk_event_get_event_type (event))
     {

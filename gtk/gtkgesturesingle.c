@@ -131,7 +131,9 @@ gtk_gesture_single_cancel (GtkGesture       *gesture,
 
 static gboolean
 gtk_gesture_single_handle_event (GtkEventController *controller,
-                                 const GdkEvent     *event)
+                                 const GdkEvent     *event,
+                                 double              x,
+                                 double              y)
 {
   GdkEventSequence *sequence = NULL;
   GtkGestureSinglePrivate *priv;
@@ -201,8 +203,7 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
     case GDK_TOUCH_CANCEL:
     case GDK_GRAB_BROKEN:
     case GDK_TOUCHPAD_SWIPE:
-      return GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_single_parent_class)->handle_event (controller,
-                                                                                         event);
+      return GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_single_parent_class)->handle_event (controller, event, x, y);
       break;
     default:
       return FALSE;
@@ -226,7 +227,7 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
       priv->current_button = button;
     }
 
-  retval = GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_single_parent_class)->handle_event (controller, event);
+  retval = GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_single_parent_class)->handle_event (controller, event, x, y);
 
   if (sequence == priv->current_sequence &&
       (event_type == GDK_BUTTON_RELEASE || event_type == GDK_TOUCH_END))
