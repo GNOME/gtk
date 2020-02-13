@@ -24,6 +24,47 @@
 #include "gtkprivatetypebuiltins.h"
 #include "gtkprivate.h"
 
+GtkCssLookupValue *
+gtk_css_lookup_value_new (guint          id,
+                          GtkCssValue   *value,
+                          GtkCssSection *section)
+{
+  GtkCssLookupValue *v;
+
+  v = g_new0 (GtkCssLookupValue, 1);
+  v->ref_count = 1;
+
+  v->id = id;
+  v->value = _gtk_css_value_ref (value);
+  if (section)
+    v->section = gtk_css_section_ref (section);
+
+  return v;
+}
+
+static void
+gtk_css_lookup_value_free (GtkCssLookupValue *value)
+{
+  _gtk_css_value_unref (value->value);
+  if (value->section)
+    gtk_css_section_unref (value->section);
+  g_free (value);
+}
+
+GtkCssLookupValue *
+gtk_css_lookup_value_ref (GtkCssLookupValue *value)
+{
+  value->ref_count++;
+  return value;
+}
+
+void
+gtk_css_lookup_value_unref (GtkCssLookupValue *value)
+{
+  value->ref_count--;
+  if (value->ref_count == 0)
+    gtk_css_lookup_value_free (value);
+}
 
 GtkCssLookup *
 gtk_css_lookup_new (void)
@@ -78,9 +119,9 @@ gtk_css_lookup_unref (GtkCssLookup *lookup)
  * @lookup does not have a value yet.
  */
 void
-gtk_css_lookup_fill (GtkCssLookup      *lookup,
-                     GtkCssLookupValue *values,
-                     guint              n_values)
+gtk_css_lookup_fill (GtkCssLookup       *lookup,
+                     GtkCssLookupValue **values,
+                     guint               n_values)
 {
   int i, j;
 
@@ -88,7 +129,8 @@ gtk_css_lookup_fill (GtkCssLookup      *lookup,
   gtk_internal_return_if_fail (values != NULL);
 
   if (!lookup->values)
-    lookup->values = g_ptr_array_sized_new (MAX (16, n_values));
+    lookup->values = g_ptr_array_new_full (MAX (16, n_values),
+                                           (GDestroyNotify)gtk_css_lookup_value_unref);
 
   for (i = 0, j = 0; j < n_values; j++, i++)
     {
@@ -97,14 +139,14 @@ gtk_css_lookup_fill (GtkCssLookup      *lookup,
       for (; i < lookup->values->len; i++)
         {
           v =  g_ptr_array_index (lookup->values, i);
-          if (v->id >= values[j].id)
+          if (v->id >= values[j]->id)
             break;
         }
 
-      if (i == lookup->values->len || v->id > values[j].id)
+      if (i == lookup->values->len || v->id > values[j]->id)
         {
-          g_ptr_array_insert (lookup->values, i, &values[j]);
-          lookup->set_values = _gtk_bitmask_set (lookup->set_values, values[j].id, TRUE);
+          g_ptr_array_insert (lookup->values, i, gtk_css_lookup_value_ref (values[j]));
+          lookup->set_values = _gtk_bitmask_set (lookup->set_values, values[j]->id, TRUE);
         }
     }
 }
