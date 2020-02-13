@@ -4852,6 +4852,27 @@ gtk_widget_run_controllers (GtkWidget           *widget,
   return handled;
 }
 
+void
+gtk_widget_handle_crossing (GtkWidget             *widget,
+                            const GtkCrossingData *crossing,
+                            double                 x,
+                            double                 y)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GList *l;
+
+  g_object_ref (widget);
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      GtkEventController *controller = l->data;
+
+      gtk_event_controller_handle_crossing (controller, crossing, x, y);
+    }
+
+  g_object_unref (widget);
+}
+
 static gboolean
 translate_event_coordinates (GdkEvent  *event,
                              double    *x,

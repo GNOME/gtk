@@ -831,11 +831,11 @@ gtk_tree_view_column_cell_layout_get_area (GtkCellLayout   *cell_layout)
 
 static void
 focus_in (GtkEventControllerKey *controller,
-          GdkCrossingMode        mode,
-          GdkNotifyType          detail,
+          GtkCrossingDirection   direction,
           GtkTreeViewColumn     *column)
 {
-  _gtk_tree_view_set_focus_column (GTK_TREE_VIEW (column->priv->tree_view), column);
+  if (direction == GTK_CROSSING_IN)
+    _gtk_tree_view_set_focus_column (GTK_TREE_VIEW (column->priv->tree_view), column);
 }
 
 /* Button handling code
@@ -866,7 +866,7 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   gtk_widget_add_controller (priv->button, controller);
 
   controller = gtk_event_controller_key_new ();
-  g_signal_connect (controller, "focus-in", G_CALLBACK (focus_in), tree_column);
+  g_signal_connect (controller, "focus-change", G_CALLBACK (focus_in), tree_column);
   gtk_widget_add_controller (priv->button, controller);
 
   priv->frame = gtk_frame_new (NULL);
