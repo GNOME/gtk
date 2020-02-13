@@ -31,10 +31,18 @@ G_BEGIN_DECLS
 typedef struct _GtkCssLookup GtkCssLookup;
 
 typedef struct {
+  int ref_count;
   guint                id;
   GtkCssValue         *value;
   GtkCssSection       *section;
 } GtkCssLookupValue;
+
+GtkCssLookupValue *      gtk_css_lookup_value_new   (guint          id,
+                                                     GtkCssValue   *value,
+                                                     GtkCssSection *section);
+GtkCssLookupValue *      gtk_css_lookup_value_ref   (GtkCssLookupValue *value);
+void                     gtk_css_lookup_value_unref (GtkCssLookupValue *value);
+
 
 struct _GtkCssLookup {
   int ref_count;
@@ -47,7 +55,7 @@ GtkCssLookup *           gtk_css_lookup_ref (GtkCssLookup *lookup);
 void                     gtk_css_lookup_unref (GtkCssLookup *lookup);
 
 void                     gtk_css_lookup_fill                    (GtkCssLookup               *lookup,
-                                                                 GtkCssLookupValue          *values,
+                                                                 GtkCssLookupValue         **values,
                                                                  guint                       n_values);
 GtkCssSection *          gtk_css_lookup_get_section             (GtkCssLookup               *lookup,
                                                                  guint                       id);
