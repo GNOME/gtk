@@ -96,12 +96,12 @@ gtk_custom_layout_init (GtkCustomLayout *self)
 }
 
 /**
- * gtk_custom_layout_new:
+ * gtk_custom_layout_new: (constructor) (skip)
  * @request_mode: (nullable): a function to retrieve
  *   the #GtkSizeRequestMode of the widget using the layout; the
  *   default request mode is %GTK_SIZE_REQUEST_CONSTANT_SIZE
- * @measure: a function to measure the widget using the layout manager
- * @allocate:  a function to allocate the children of the widget using
+ * @measure: (not nullable): a function to measure the widget using the layout manager
+ * @allocate: (not nullable): a function to allocate the children of the widget using
  *   the layout manager
  *
  * Creates a new legacy layout manager.

@@ -399,7 +399,7 @@ make_image (const gchar *icon_name, int hotspot)
   gdk_content_formats_builder_add_gtype (builder, G_TYPE_STRING);
   formats = gdk_content_formats_builder_free_to_formats (builder);
 
-  content = gdk_content_provider_new_with_formats (formats, get_data, image);
+  content = gdk_content_provider_new_with_formats (formats, get_data, image, NULL);
   source = gtk_drag_source_new ();
   gtk_drag_source_set_content (source, content);
   gtk_drag_source_set_actions (source, GDK_ACTION_COPY|GDK_ACTION_MOVE|GDK_ACTION_ASK);

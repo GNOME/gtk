@@ -295,6 +295,7 @@ struct _GdkContentProviderCallback
   GType type;
   GdkContentProviderGetValueFunc func;
   gpointer data;
+  GDestroyNotify notify;
 };
 
 struct _GdkContentProviderCallbackClass
@@ -331,9 +332,27 @@ gdk_content_provider_callback_get_value (GdkContentProvider  *provider,
 }
 
 static void
+gdk_content_provider_callback_dispose (GObject *gobject)
+{
+  GdkContentProviderCallback *self = GDK_CONTENT_PROVIDER_CALLBACK (gobject);
+
+  if (self->notify != NULL)
+    self->notify (self->data);
+
+  self->func = NULL;
+  self->data = NULL;
+  self->notify = NULL;
+
+  G_OBJECT_CLASS (gdk_content_provider_callback_parent_class)->dispose (gobject);
+}
+
+static void
 gdk_content_provider_callback_class_init (GdkContentProviderCallbackClass *class)
 {
   GdkContentProviderClass *provider_class = GDK_CONTENT_PROVIDER_CLASS (class);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+
+  gobject_class->dispose = gdk_content_provider_callback_dispose;
 
   provider_class->ref_formats = gdk_content_provider_callback_ref_formats;
   provider_class->get_value = gdk_content_provider_callback_get_value;
@@ -345,10 +364,12 @@ gdk_content_provider_callback_init (GdkContentProviderCallback *content)
 }
 
 /**
- * gdk_content_provider_new_for_callback:
+ * gdk_content_provider_new_for_callback: (constructor)
  * @type: the type that the callback provides
- * @func: callback to populate a #GValue
+ * @func: (not nullable): callback to populate a #GValue
  * @data: (closure): data that gets passed to @func
+ * @notify: a function to be called to free @data when the content provider
+ *   goes away
  *
  * Create a content provider that provides data that is provided via a callback.
  *
@@ -357,14 +378,18 @@ gdk_content_provider_callback_init (GdkContentProviderCallback *content)
 GdkContentProvider *
 gdk_content_provider_new_with_callback (GType                          type,
                                         GdkContentProviderGetValueFunc func,
-                                        gpointer                       data)
+                                        gpointer                       data,
+                                        GDestroyNotify                 notify)
 {
   GdkContentProviderCallback *content;
+
+  g_return_val_if_fail (func != NULL, NULL);
 
   content = g_object_new (GDK_TYPE_CONTENT_PROVIDER_CALLBACK, NULL);
   content->type = type;
   content->func = func;
   content->data = data;
+  content->notify = notify;
   
   return GDK_CONTENT_PROVIDER (content);
 }
@@ -382,6 +407,7 @@ struct _GdkContentProviderCallback2
   GdkContentFormats *formats;
   GdkContentProviderGetBytesFunc func;
   gpointer data;
+  GDestroyNotify notify;
 };
 
 struct _GdkContentProviderCallback2Class
@@ -473,9 +499,27 @@ gdk_content_provider_callback2_write_mime_type_finish (GdkContentProvider *provi
 }
 
 static void
+gdk_content_provider_callback2_dispose (GObject *gobject)
+{
+  GdkContentProviderCallback2 *self = GDK_CONTENT_PROVIDER_CALLBACK2 (gobject);
+
+  if (self->notify != NULL)
+    self->notify (self->data);
+
+  self->notify = NULL;
+  self->data = NULL;
+  self->func = NULL;
+
+  G_OBJECT_CLASS (gdk_content_provider_callback2_parent_class)->dispose (gobject);
+}
+
+static void
 gdk_content_provider_callback2_class_init (GdkContentProviderCallback2Class *class)
 {
   GdkContentProviderClass *provider_class = GDK_CONTENT_PROVIDER_CLASS (class);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+
+  gobject_class->dispose = gdk_content_provider_callback2_dispose;
 
   provider_class->ref_formats = gdk_content_provider_callback2_ref_formats;
   provider_class->write_mime_type_async = gdk_content_provider_callback2_write_mime_type_async;
@@ -491,7 +535,9 @@ gdk_content_provider_callback2_init (GdkContentProviderCallback2 *content)
  * gdk_content_provider_new_with_formats:
  * @formats: formats to advertise
  * @func: callback to populate a #GValue
- * @data: data that gets passed to @func
+ * @data: (closure func): data that gets passed to @func
+ * @notify: a function called to free @data when the content provider
+ *   goes away
  *
  * Create a content provider that provides data that is provided via a callback.
  *
@@ -500,13 +546,15 @@ gdk_content_provider_callback2_init (GdkContentProviderCallback2 *content)
 GdkContentProvider *
 gdk_content_provider_new_with_formats (GdkContentFormats              *formats,
                                        GdkContentProviderGetBytesFunc  func,
-                                       gpointer                        data)
+                                       gpointer                        data,
+                                       GDestroyNotify                  notify)
 {
   GdkContentProviderCallback2 *content;
   content = g_object_new (GDK_TYPE_CONTENT_PROVIDER_CALLBACK2, NULL);
   content->formats = gdk_content_formats_union_serialize_mime_types (gdk_content_formats_ref (formats));
   content->func = func;
   content->data = data;
+  content->notify = notify;
   
   return GDK_CONTENT_PROVIDER (content);
 }

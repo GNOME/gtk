@@ -598,7 +598,7 @@ gtk_color_swatch_set_rgba (GtkColorSwatch *swatch,
       GtkDragSource *source;
 
       source = gtk_drag_source_new ();
-      content = gdk_content_provider_new_with_callback (GDK_TYPE_RGBA, get_rgba_value, swatch);
+      content = gdk_content_provider_new_with_callback (GDK_TYPE_RGBA, get_rgba_value, swatch, NULL);
       gtk_drag_source_set_content (source, content);
       g_object_unref (content);
       g_signal_connect (source, "drag-begin", G_CALLBACK (gtk_color_swatch_drag_begin), swatch);
@@ -618,7 +618,6 @@ gtk_color_swatch_set_rgba (GtkColorSwatch *swatch,
     {
       gtk_widget_add_css_class (GTK_WIDGET (swatch), "dark");
       gtk_widget_remove_css_class (GTK_WIDGET (swatch), "light");
-
     }
 
   gtk_widget_queue_draw (GTK_WIDGET (swatch));
