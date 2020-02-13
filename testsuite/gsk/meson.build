@@ -184,6 +184,7 @@ foreach test : node_parser_tests
 endforeach
 
 tests = [
+  ['rounded-rect'],
   ['transform'],
 ]
 
