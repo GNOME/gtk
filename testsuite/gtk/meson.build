@@ -74,11 +74,6 @@ tests = [
 xfail = [
 ]
 
-# Tests that are expected to fail on non-debug builds
-xfail_nodebug = [
-  'icontheme', # Overrides debugging messages
-]
-
 is_debug = get_option('buildtype').startswith('debug')
 
 test_cargs = []
@@ -102,9 +97,6 @@ foreach t : tests
     install_dir: testexecdir)
 
   expect_fail = xfail.contains(test_name)
-  if not is_debug
-    expect_fail = xfail_nodebug.contains(test_name)
-  endif
 
   test(test_name, test_exe,
        args: [ '--tap', '-k' ],
