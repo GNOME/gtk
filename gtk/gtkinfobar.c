@@ -375,7 +375,15 @@ static void
 gtk_info_bar_size_allocate (GtkWidget     *widget,
                             GtkAllocation *allocation)
 {
+  GtkAllocation tmp_allocation;
   GdkWindow *window;
+
+  tmp_allocation = *allocation;
+  tmp_allocation.x = 0;
+  tmp_allocation.y = 0;
+
+  GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->size_allocate (widget,
+                                                               &tmp_allocation);
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -384,11 +392,6 @@ gtk_info_bar_size_allocate (GtkWidget     *widget,
     gdk_window_move_resize (window,
                             allocation->x, allocation->y,
                             allocation->width, allocation->height);
-
-  allocation->x = 0;
-  allocation->y = 0;
-
-  GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->size_allocate (widget, allocation);
 }
 
 static void
