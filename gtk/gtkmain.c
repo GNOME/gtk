@@ -1323,6 +1323,8 @@ synth_crossing (GtkWidget       *widget,
       event->focus_change.mode = crossing_mode;
       event->focus_change.detail = notify_type;
 
+g_print ("%s: %s\n", G_OBJECT_TYPE_NAME (widget), enter ? "focus-in" : "focus-out");
+
       flags = GTK_STATE_FLAG_FOCUSED;
       if (!GTK_IS_WINDOW (toplevel) || gtk_window_get_focus_visible (GTK_WINDOW (toplevel)))
         flags |= GTK_STATE_FLAG_FOCUS_VISIBLE;
