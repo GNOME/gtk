@@ -17,7 +17,6 @@ stages:
 variables:
   COMMON_MESON_FLAGS: "--fatal-meson-warnings --werror"
   MESON_TEST_TIMEOUT_MULTIPLIER: 2
-  G_MESSAGES_DEBUG: "all"
 
 .only-default:
   only:
@@ -116,6 +115,7 @@ msys2-mingw32:
 .flatpak-defaults: &flatpak-defaults
   image: registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master
   stage: flatpak
+  allow_failure: true
   artifacts:
     paths:
       - "${APPID}-dev.flatpak"
