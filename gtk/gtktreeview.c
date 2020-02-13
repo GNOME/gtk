@@ -10367,6 +10367,17 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);
 
+  /* Make sure area.height has the same parity as the "expander-size" style
+   * property (which area.width is assumed to be exactly equal to). This is done
+   * to avoid the arrow being vertically centered in a half-pixel, which would
+   * result in a fuzzy rendering.
+   */
+  if (area.height % 2 != area.width % 2)
+    {
+      area.y += 1;
+      area.height -= 1;
+    }
+
   gtk_render_expander (context, cr,
                        area.x, area.y,
                        area.width, area.height);
