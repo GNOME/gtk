@@ -166,6 +166,11 @@ assert_lookup_order (const char         *icon_name,
   GtkIconInfo *info;
   GList *l;
 
+/* this hack is only usable in debug builds */
+#ifndef G_ENABLE_DEBUG
+  g_assert_not_reached ();
+#endif
+
   debug_flags = gtk_get_debug_flags ();
   gtk_set_debug_flags (debug_flags | GTK_DEBUG_ICONTHEME);
   g_log_set_writer_func (log_writer, NULL, NULL);
@@ -196,6 +201,15 @@ assert_lookup_order (const char         *icon_name,
   gtk_set_debug_flags (debug_flags);
 }
 
+#ifdef G_ENABLE_DEBUG
+#define require_debug()
+#else
+#define require_debug() \
+  g_test_skip ("requires G_ENABLE_DEBUG"); \
+  return;
+#endif
+
+
 static void
 test_basics (void)
 {
@@ -206,6 +220,8 @@ test_basics (void)
 static void
 test_lookup_order (void)
 {
+  require_debug ();
+
   assert_lookup_order ("foo-bar-baz", 16, GTK_ICON_LOOKUP_GENERIC_FALLBACK,
                        "foo-bar-baz",
                        "foo-bar",
