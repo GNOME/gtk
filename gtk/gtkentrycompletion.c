@@ -2307,13 +2307,13 @@ accept_completion_callback (GtkEntryCompletion *completion)
   return FALSE;
 }
 
-static gboolean
-text_focus_out (GtkEntryCompletion *completion)
+static void
+text_focus_change (GtkEntryCompletion   *completion,
+                   GtkCrossingDirection  direction) 
 {
-  if (gtk_widget_get_mapped (completion->priv->popup_window))
-    return FALSE;
-
-  return accept_completion_callback (completion);
+  if (direction == GTK_CROSSING_OUT &&
+      !gtk_widget_get_mapped (completion->priv->popup_window))
+    accept_completion_callback (completion);
 }
 
 static void
@@ -2349,7 +2349,7 @@ connect_completion_signals (GtkEntryCompletion *completion)
   controller = priv->entry_key_controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (gtk_entry_completion_key_pressed), completion);
-  g_signal_connect_swapped (controller, "focus-out", G_CALLBACK (text_focus_out), completion);
+  g_signal_connect_swapped (controller, "focus-change", G_CALLBACK (text_focus_change), completion);
   gtk_widget_add_controller (GTK_WIDGET (text), controller);
 
   completion->priv->changed_id =
