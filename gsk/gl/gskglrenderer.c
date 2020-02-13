@@ -2897,6 +2897,8 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
 static void
 gsk_gl_renderer_clear_tree (GskGLRenderer *self)
 {
+  int removed_textures;
+
   if (self->gl_context == NULL)
     return;
 
@@ -2904,9 +2906,9 @@ gsk_gl_renderer_clear_tree (GskGLRenderer *self)
 
   ops_reset (&self->op_builder);
 
-#ifdef G_ENABLE_DEBUG
-  int removed_textures = gsk_gl_driver_collect_textures (self->gl_driver);
+  removed_textures = gsk_gl_driver_collect_textures (self->gl_driver);
 
+#ifdef G_ENABLE_DEBUG
   GSK_RENDERER_NOTE (GSK_RENDERER (self), OPENGL, g_message ("Collected: %d textures", removed_textures));
 #endif
 }
