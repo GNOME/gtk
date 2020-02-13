@@ -192,7 +192,9 @@ gtk_gesture_rotate_filter_event (GtkEventController *controller,
 
 static gboolean
 gtk_gesture_rotate_handle_event (GtkEventController *controller,
-                                 const GdkEvent     *event)
+                                 const GdkEvent     *event,
+                                 double              x,
+                                 double              y)
 {
   GtkGestureRotate *rotate = GTK_GESTURE_ROTATE (controller);
   GtkGestureRotatePrivate *priv;
@@ -213,7 +215,7 @@ gtk_gesture_rotate_handle_event (GtkEventController *controller,
         priv->accum_touchpad_angle += delta;
     }
 
-  return GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_rotate_parent_class)->handle_event (controller, event);
+  return GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_rotate_parent_class)->handle_event (controller, event, x, y);
 }
 
 static void

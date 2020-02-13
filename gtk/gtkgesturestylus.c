@@ -49,17 +49,16 @@ static guint signals[N_SIGNALS] = { 0, };
 
 static gboolean
 gtk_gesture_stylus_handle_event (GtkEventController *controller,
-                                 const GdkEvent     *event)
+                                 const GdkEvent     *event,
+                                 double              x,
+                                 double              y)
 {
   GdkModifierType modifiers;
   guint n_signal;
-  gdouble x, y;
 
-  GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_stylus_parent_class)->handle_event (controller, event);
+  GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_stylus_parent_class)->handle_event (controller, event, x, y);
 
   if (!gdk_event_get_device_tool (event))
-    return FALSE;
-  if (!gdk_event_get_coords (event, &x, &y))
     return FALSE;
 
   switch ((guint) gdk_event_get_event_type (event))
