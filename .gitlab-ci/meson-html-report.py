@@ -155,8 +155,8 @@ ul.images li {
         <h3><a name="summary">Summary</a></h3>
         <ul>
           <li><strong>Total units:</strong> {{ report.total_units }}</li>
-          <li><strong>Passed:</strong> <a href="#passed">{{ report.total_successes }}</a></li>
-          <li><strong>Failed:</strong> <a href="#failures">{{ report.total_failures }}</a></li>
+          <li><strong>Failed:</strong> {{ report.total_failures }}</li>
+          <li><strong>Passed:</strong> {{ report.total_successes }}</li>
         </ul>
       </div>
     </section>
@@ -167,12 +167,12 @@ ul.images li {
         <h3><a name="results">Suite: {{ suite_result.suite_name }}</a></h3>
         <ul>
           <li><strong>Units:</strong> {{ suite_result.n_units }}</li>
-          <li><strong>Failed:</strong> {{ suite_result.n_failures }}</li>
-          <li><strong>Passed:</strong> {{ suite_result.n_successes }}</li>
+          <li><strong>Failed:</strong> <a href="#{{ suite_result.suite_name }}-failed">{{ suite_result.n_failures }}</a></li>
+          <li><strong>Passed:</strong> <a href="#{{ suite_result.suite_name }}-passed">{{ suite_result.n_successes }}</a></li>
         </ul>
 
         <div class="failures">
-          <h4><a name="failures">Failures</a></h4>
+          <h4><a name="{{ suite_result.suite_name }}-failed">Failures</a></h4>
           <ul class="failed">
             {% for failure in suite_result.failures if failure.result in [ 'FAIL', 'UNEXPECTEDPASS' ] %}
             <li><a name="{{ failure.name }}">{{ failure.name }}</a> - result: <span class="result fail">{{ failure.result }}</span><br/>
@@ -192,7 +192,7 @@ ul.images li {
             {% endfor %}
           </ul>
 
-          <h4><a name="timed-out">Timed out</a></h4>
+          <h4><a name="{{ suite_result.suite_name }}-timed-out">Timed out</a></h4>
           <ul class="failed">
             {% for failure in suite_result.failures if failure.result == 'TIMEOUT' %}
             <li><a name="{{ failure.name }}">{{ failure.name }}</a> - result: <span class="result fail">{{ failure.result }}</span><br/>
@@ -207,7 +207,7 @@ ul.images li {
         </div>
 
         <div class="successes">
-          <h4><a name="skipped">Skipped</a></h4>
+          <h4><a name="{{ suite_result.suite_name }}-skipped">Skipped</a></h4>
           <ul>
             {% for success in suite_result.successes if success.result == 'SKIP' %}
             <li>{{ success.name }} - result: <span class="result skip">{{ success.result }}</li>
@@ -216,7 +216,7 @@ ul.images li {
             {% endfor %}
           </ul>
 
-          <h4><a name="passed">Passed</a></h4>
+          <h4><a name="{{ suite_result.suite_name }}-passed">Passed</a></h4>
           <ul class="passed">
             {% for success in suite_result.successes if success.result == 'OK' %}
             <li>{{ success.name }} - result: <span class="result pass">{{ success.result }}</li>
@@ -225,7 +225,7 @@ ul.images li {
             {% endfor %}
           </ul>
 
-          <h4><a name="expected-fail">Expected failures</a></h4>
+          <h4><a name="{{ suite_result.suite_name }}-expected-fail">Expected failures</a></h4>
           <ul>
           {% for success in suite_result.successes if success.result == 'EXPECTEDFAIL' %}
             <li><a name="{{ success.name }}">{{ success.name }}</a> - result: <span class="result xfail">{{ success.result }}</span><br/>
