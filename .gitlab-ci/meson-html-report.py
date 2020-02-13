@@ -331,7 +331,7 @@ for name, units in suites.items():
     print('Processing {} suite {}:'.format(project_name, suite_name))
 
     def if_failed(unit):
-        if unit['result'] in ['FAIL', 'TIMEOUT']:
+        if unit['result'] in ['FAIL', 'UNEXPECTEDPASS', 'TIMEOUT']:
             return True
         return False
 
