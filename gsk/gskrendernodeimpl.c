@@ -30,6 +30,15 @@
 #include "gdk/gdktextureprivate.h"
 #include <cairo-ft.h>
 
+static inline void
+gsk_cairo_rectangle (cairo_t               *cr,
+                     const graphene_rect_t *rect)
+{
+  cairo_rectangle (cr,
+                   rect->origin.x, rect->origin.y,
+                   rect->size.width, rect->size.height);
+}
+
 static void
 rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
                               const graphene_rect_t *graphene)
@@ -71,9 +80,7 @@ gsk_color_node_draw (GskRenderNode *node,
 
   gdk_cairo_set_source_rgba (cr, &self->color);
 
-  cairo_rectangle (cr,
-                   node->bounds.origin.x, node->bounds.origin.y,
-                   node->bounds.size.width, node->bounds.size.height);
+  gsk_cairo_rectangle (cr, &node->bounds);
   cairo_fill (cr);
 }
 
@@ -184,9 +191,7 @@ gsk_linear_gradient_node_draw (GskRenderNode *node,
   cairo_set_source (cr, pattern);
   cairo_pattern_destroy (pattern);
 
-  cairo_rectangle (cr,
-                   node->bounds.origin.x, node->bounds.origin.y,
-                   node->bounds.size.width, node->bounds.size.height);
+  gsk_cairo_rectangle (cr, &node->bounds);
   cairo_fill (cr);
 }
 
@@ -638,28 +643,26 @@ gsk_texture_node_draw (GskRenderNode *node,
   GskTextureNode *self = (GskTextureNode *) node;
   cairo_surface_t *surface;
   cairo_pattern_t *pattern;
+  cairo_matrix_t matrix;
 
   surface = gdk_texture_download_surface (self->texture);
-
-  cairo_save (cr);
-
-  cairo_translate (cr, node->bounds.origin.x, node->bounds.origin.y);
-  cairo_scale (cr,
-               node->bounds.size.width / gdk_texture_get_width (self->texture),
-               node->bounds.size.height / gdk_texture_get_height (self->texture));
-
   pattern = cairo_pattern_create_for_surface (surface);
   cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
+
+  cairo_matrix_init_scale (&matrix,
+                           gdk_texture_get_width (self->texture) / node->bounds.size.width,
+                           gdk_texture_get_height (self->texture) / node->bounds.size.height);
+  cairo_matrix_translate (&matrix,
+                          -node->bounds.origin.x,
+                          -node->bounds.origin.y);
+  cairo_pattern_set_matrix (pattern, &matrix);
+
   cairo_set_source (cr, pattern);
-  cairo_rectangle (cr,
-                   0, 0,
-                   gdk_texture_get_width (self->texture), gdk_texture_get_height (self->texture));
-  cairo_fill (cr);
-
-  cairo_restore (cr);
-
   cairo_pattern_destroy (pattern);
   cairo_surface_destroy (surface);
+
+  gsk_cairo_rectangle (cr, &node->bounds);
+  cairo_fill (cr);
 }
 
 static void
@@ -770,29 +773,21 @@ draw_shadow (cairo_t             *cr,
 	     GskBlurFlags         blur_flags)
 {
   cairo_t *shadow_cr;
-  gboolean do_blur;
 
   if (has_empty_clip (cr))
     return;
 
   gdk_cairo_set_source_rgba (cr, color);
-  do_blur = (blur_flags & (GSK_BLUR_X | GSK_BLUR_Y)) != 0;
-  if (do_blur)
-    shadow_cr = gsk_cairo_blur_start_drawing (cr, radius, blur_flags);
-  else
-    shadow_cr = cr;
+  shadow_cr = gsk_cairo_blur_start_drawing (cr, radius, blur_flags);
 
   cairo_set_fill_rule (shadow_cr, CAIRO_FILL_RULE_EVEN_ODD);
   gsk_rounded_rect_path (box, shadow_cr);
   if (inset)
-    cairo_rectangle (shadow_cr,
-                     clip_box->bounds.origin.x, clip_box->bounds.origin.y,
-                     clip_box->bounds.size.width, clip_box->bounds.size.height);
+    gsk_cairo_rectangle (shadow_cr, &clip_box->bounds);
 
   cairo_fill (shadow_cr);
 
-  if (do_blur)
-    gsk_cairo_blur_finish_drawing (shadow_cr, radius, color, blur_flags);
+  gsk_cairo_blur_finish_drawing (shadow_cr, radius, color, blur_flags);
 }
 
 typedef struct {
@@ -1329,9 +1324,7 @@ gsk_outset_shadow_node_draw (GskRenderNode *node,
 
   cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
   gsk_rounded_rect_path (&self->outline, cr);
-  cairo_rectangle (cr,
-                   clip_box.bounds.origin.x, clip_box.bounds.origin.y,
-                   clip_box.bounds.size.width, clip_box.bounds.size.height);
+  gsk_cairo_rectangle (cr, &clip_box.bounds);
 
   cairo_clip (cr);
 
@@ -1666,9 +1659,7 @@ gsk_cairo_node_get_draw_context (GskRenderNode *node)
       res = cairo_create (self->surface);
     }
 
-  cairo_rectangle (res,
-                   node->bounds.origin.x, node->bounds.origin.y,
-                   node->bounds.size.width, node->bounds.size.height);
+  gsk_cairo_rectangle (res, &node->bounds);
   cairo_clip (res);
 
   return res;
@@ -1904,7 +1895,7 @@ gsk_transform_node_draw (GskRenderNode *node,
   if (gsk_transform_get_category (self->transform) < GSK_TRANSFORM_CATEGORY_2D)
     {
       cairo_set_source_rgb (cr, 255 / 255., 105 / 255., 180 / 255.);
-      cairo_rectangle (cr, node->bounds.origin.x, node->bounds.origin.y, node->bounds.size.width, node->bounds.size.height);
+      gsk_cairo_rectangle (cr, &node->bounds);
       cairo_fill (cr);
       return;
     }
@@ -2220,8 +2211,7 @@ gsk_opacity_node_draw (GskRenderNode *node,
   cairo_save (cr);
 
   /* clip so the push_group() creates a smaller surface */
-  cairo_rectangle (cr, node->bounds.origin.x, node->bounds.origin.y,
-                   node->bounds.size.width, node->bounds.size.height);
+  gsk_cairo_rectangle (cr, &node->bounds);
   cairo_clip (cr);
 
   cairo_push_group (cr);
@@ -2351,8 +2341,7 @@ gsk_color_matrix_node_draw (GskRenderNode *node,
   cairo_save (cr);
 
   /* clip so the push_group() creates a smaller surface */
-  cairo_rectangle (cr, node->bounds.origin.x, node->bounds.origin.y,
-                   node->bounds.size.width, node->bounds.size.height);
+  gsk_cairo_rectangle (cr, &node->bounds);
   cairo_clip (cr);
 
   cairo_push_group (cr);
@@ -2550,15 +2539,12 @@ gsk_repeat_node_draw (GskRenderNode *node,
                                 .x0 = - self->child_bounds.origin.x,
                                 .y0 = - self->child_bounds.origin.y
                             });
-
   cairo_set_source (cr, pattern);
-  cairo_rectangle (cr,
-                   node->bounds.origin.x, node->bounds.origin.y,
-                   node->bounds.size.width, node->bounds.size.height);
-  cairo_fill (cr);
-
   cairo_pattern_destroy (pattern);
   cairo_surface_destroy (surface);
+
+  gsk_cairo_rectangle (cr, &node->bounds);
+  cairo_fill (cr);
 }
 
 static const GskRenderNodeClass GSK_REPEAT_NODE_CLASS = {
@@ -2653,9 +2639,7 @@ gsk_clip_node_draw (GskRenderNode *node,
 
   cairo_save (cr);
 
-  cairo_rectangle (cr,
-                   self->clip.origin.x, self->clip.origin.y,
-                   self->clip.size.width, self->clip.size.height);
+  gsk_cairo_rectangle (cr, &self->clip);
   cairo_clip (cr);
 
   gsk_render_node_draw (self->child, cr);
@@ -2915,9 +2899,14 @@ gsk_shadow_node_draw (GskRenderNode *node,
   cairo_pattern_t *pattern;
   gsize i;
 
+  cairo_save (cr);
+  /* clip so the push_group() creates a small surface */
+  gsk_cairo_rectangle (cr, &self->child->bounds);
+  cairo_clip (cr);
   cairo_push_group (cr);
   gsk_render_node_draw (self->child, cr);
   pattern = cairo_pop_group (cr);
+  cairo_restore (cr);
 
   for (i = 0; i < self->n_shadows; i++)
     {
@@ -3811,8 +3800,7 @@ gsk_blur_node_draw (GskRenderNode *node,
   cairo_save (cr);
 
   /* clip so the push_group() creates a smaller surface */
-  cairo_rectangle (cr, node->bounds.origin.x, node->bounds.origin.y,
-                   node->bounds.size.width, node->bounds.size.height);
+  gsk_cairo_rectangle (cr, &node->bounds);
   cairo_clip (cr);
 
   cairo_push_group (cr);

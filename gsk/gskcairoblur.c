@@ -281,8 +281,13 @@ gsk_cairo_blur_compute_pixels (double radius)
 }
 
 static gboolean
-needs_blur (float radius)
+needs_blur (float        radius,
+            GskBlurFlags blur_flags)
 {
+  /* Neither blurring horizontal nor vertical means no blurring at all. */
+  if ((blur_flags & (GSK_BLUR_X | GSK_BLUR_Y)) == 0)
+    return FALSE;
+
   /* The code doesn't actually do any blurring for radius 1, as it
    * ends up with box filter size 1 */
   if (radius <= 1.0)
@@ -298,7 +303,7 @@ gsk_cairo_blur_start_drawing (cairo_t         *cr,
                               float            radius,
                               GskBlurFlags     blur_flags)
 {
-  cairo_rectangle_int_t clip_rect;
+  double clip_x1, clip_x2, clip_y1, clip_y2, clip_width, clip_height;
   cairo_surface_t *surface;
   cairo_t *blur_cr;
   gdouble clip_radius;
@@ -306,10 +311,12 @@ gsk_cairo_blur_start_drawing (cairo_t         *cr,
   gboolean blur_x = (blur_flags & GSK_BLUR_X) != 0;
   gboolean blur_y = (blur_flags & GSK_BLUR_Y) != 0;
 
-  if (!needs_blur (radius))
+  if (!needs_blur (radius, blur_flags))
     return cr;
 
-  gdk_cairo_get_clip_rectangle (cr, &clip_rect);
+  cairo_clip_extents (cr, &clip_x1, &clip_y1, &clip_x2, &clip_y2);
+  clip_width = clip_x2 - clip_x1;
+  clip_height = clip_y2 - clip_y1;
 
   clip_radius = gsk_cairo_blur_compute_pixels (radius);
 
@@ -319,20 +326,20 @@ gsk_cairo_blur_start_drawing (cairo_t         *cr,
   if (blur_flags & GSK_BLUR_REPEAT)
     {
       if (!blur_x)
-        clip_rect.width = 1;
+        clip_width = 1;
       if (!blur_y)
-        clip_rect.height = 1;
+        clip_height = 1;
     }
 
   /* Create a larger surface to center the blur. */
   surface = cairo_surface_create_similar_image (cairo_get_target (cr),
                                                 CAIRO_FORMAT_A8,
-                                                x_scale * (clip_rect.width + (blur_x ? 2 * clip_radius : 0)),
-                                                y_scale * (clip_rect.height + (blur_y ? 2 * clip_radius : 0)));
+                                                x_scale * (clip_width + (blur_x ? 2 * clip_radius : 0)),
+                                                y_scale * (clip_height + (blur_y ? 2 * clip_radius : 0)));
   cairo_surface_set_device_scale (surface, x_scale, y_scale);
   cairo_surface_set_device_offset (surface,
-                                    x_scale * ((blur_x ? clip_radius : 0) - clip_rect.x),
-                                    y_scale * ((blur_y ? clip_radius : 0) - clip_rect.y));
+                                    x_scale * ((blur_x ? clip_radius : 0) - clip_x1),
+                                    y_scale * ((blur_y ? clip_radius : 0) - clip_y1));
 
   blur_cr = cairo_create (surface);
   cairo_set_user_data (blur_cr, &original_cr_key, cairo_reference (cr), (cairo_destroy_func_t) cairo_destroy);
@@ -372,7 +379,7 @@ gsk_cairo_blur_finish_drawing (cairo_t         *cr,
   cairo_surface_t *surface;
   gdouble x_scale;
 
-  if (!needs_blur (radius))
+  if (!needs_blur (radius, blur_flags))
     return cr;
 
   original_cr = cairo_get_user_data (cr, &original_cr_key);

@@ -27,21 +27,21 @@ get_surface_size (cairo_surface_t *surface,
                   int             *width,
                   int             *height)
 {
-  GdkRectangle area;
   cairo_t *cr;
+  double x1, x2, y1, y2;
 
   cr = cairo_create (surface);
-  if (!gdk_cairo_get_clip_rectangle (cr, &area))
-    {
-      g_assert_not_reached ();
-    }
+  cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
+  cairo_destroy (cr);
 
-  g_assert (area.x == 0 && area.y == 0);
-  g_assert (area.width > 0 && area.height > 0);
+  g_assert (x1 == 0 && y1 == 0);
+  g_assert (x2 > 0 && y2 > 0);
+  g_assert ((int) x2 == x2 && (int) y2 == y2);
 
-  *width = area.width;
-  *height = area.height;
+  *width = x2;
+  *height = y2;
 }
+
 
 static cairo_surface_t *
 coerce_surface_for_comparison (cairo_surface_t *surface,
@@ -61,7 +61,6 @@ coerce_surface_for_comparison (cairo_surface_t *surface,
   cairo_paint (cr);
 
   cairo_destroy (cr);
-  cairo_surface_destroy (surface);
 
   g_assert (cairo_surface_status (coerced) == CAIRO_STATUS_SUCCESS);
 
@@ -152,20 +151,23 @@ reftest_compare_surfaces (cairo_surface_t *surface1,
                           cairo_surface_t *surface2)
 {
   int w1, h1, w2, h2, w, h;
-  cairo_surface_t *diff;
+  cairo_surface_t *coerced1, *coerced2, *diff;
   
   get_surface_size (surface1, &w1, &h1);
   get_surface_size (surface2, &w2, &h2);
   w = MAX (w1, w2);
   h = MAX (h1, h2);
-  surface1 = coerce_surface_for_comparison (surface1, w, h);
-  surface2 = coerce_surface_for_comparison (surface2, w, h);
+  coerced1 = coerce_surface_for_comparison (surface1, w, h);
+  coerced2 = coerce_surface_for_comparison (surface2, w, h);
 
-  diff = buffer_diff_core (cairo_image_surface_get_data (surface1),
-                           cairo_image_surface_get_stride (surface1),
-                           cairo_image_surface_get_data (surface2),
-                           cairo_image_surface_get_stride (surface2),
+  diff = buffer_diff_core (cairo_image_surface_get_data (coerced1),
+                           cairo_image_surface_get_stride (coerced1),
+                           cairo_image_surface_get_data (coerced2),
+                           cairo_image_surface_get_stride (coerced2),
                            w, h);
+
+  cairo_surface_destroy (coerced1);
+  cairo_surface_destroy (coerced2);
 
   return diff;
 }
