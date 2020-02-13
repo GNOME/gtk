@@ -90,41 +90,22 @@ gtk_css_lookup_fill (GtkCssLookup      *lookup,
   if (!lookup->values)
     lookup->values = g_ptr_array_sized_new (MAX (16, n_values));
 
-  i = j = 0;
-  while (j < n_values)
+  for (i = 0, j = 0; j < n_values; j++, i++)
     {
-      GtkCssLookupValue *v;
+      GtkCssLookupValue *v = NULL;
 
-      if (i == lookup->values->len)
-        break;
-
-      v =  g_ptr_array_index (lookup->values, i);
-
-      if (v->id < values[j].id)
+      for (; i < lookup->values->len; i++)
         {
-          i++;
+          v =  g_ptr_array_index (lookup->values, i);
+          if (v->id >= values[j].id)
+            break;
         }
-      else if (v->id > values[j].id)
+
+      if (i == lookup->values->len || v->id > values[j].id)
         {
-          /* insert value[j] here */
           g_ptr_array_insert (lookup->values, i, &values[j]);
           lookup->set_values = _gtk_bitmask_set (lookup->set_values, values[j].id, TRUE);
-          i++;
-          j++;
         }
-      else
-        {
-          /* value[j] is already set, skip */
-          i++;
-          j++;
-        }
-    }
-
-  /* append remaining values */
-  for (; j < n_values; j++)
-    {
-      g_ptr_array_add (lookup->values, &values[j]);
-      lookup->set_values = _gtk_bitmask_set (lookup->set_values, values[j].id, TRUE);
     }
 }
 
