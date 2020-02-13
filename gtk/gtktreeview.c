@@ -9581,8 +9581,7 @@ gtk_tree_view_get_arrow_xrange (GtkTreeView *tree_view,
 
   if (tmp_column &&
       gtk_tree_view_column_get_visible (tmp_column))
-    /* +1 because x2 isn't included in the range. */
-    *x2 = *x1 + expander_render_size + 1;
+    *x2 = *x1 + expander_render_size;
   else
     *x2 = *x1;
 }
