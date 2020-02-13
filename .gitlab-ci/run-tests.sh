@@ -8,10 +8,11 @@ builddir=$1
 
 export GDK_BACKEND=x11
 xvfb-run -a -s "-screen 0 1024x768x24" \
-        meson test -C ${builddir} \
-                --print-errorlogs \
-                --suite=gtk \
-                --no-suite=gtk:a11y
+        dbus-run-session -- \
+                meson test -C ${builddir} \
+                        --print-errorlogs \
+                        --suite=gtk \
+                        --no-suite=gtk:a11y
 
 # Store the exit code for the CI run, but always
 # generate the reports
