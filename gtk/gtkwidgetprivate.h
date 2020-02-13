@@ -347,6 +347,8 @@ gboolean          gtk_widget_run_controllers               (GtkWidget           
                                                             double               x,
                                                             double               y,
                                                             GtkPropagationPhase  phase);
+void              gtk_widget_handle_crossing               (GtkWidget             *widget,
+                                                            const GtkCrossingData *crossing);
 
 
 guint             gtk_widget_add_surface_transform_changed_callback (GtkWidget                          *widget,

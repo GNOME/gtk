@@ -259,12 +259,12 @@ match_func (GtkEntryCompletion *compl,
 }
 
 static void
-chooser_entry_focus_out (GtkEventControllerKey *key_controller,
-                         GdkCrossingMode        mode,
-                         GdkNotifyType          detail,
-                         GtkFileChooserEntry   *chooser_entry)
+chooser_entry_focus_change (GtkEventController     *controller,
+                            const GtkCrossingData  *crossing,
+                            GtkFileChooserEntry    *chooser_entry)
 {
-  set_complete_on_load (chooser_entry, FALSE);
+  if (crossing->direction == GTK_CROSSING_OUT)
+    set_complete_on_load (chooser_entry, FALSE);
 }
 
 static void
@@ -312,7 +312,7 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
                     G_CALLBACK (gtk_file_chooser_entry_tab_handler),
                     chooser_entry);
   g_signal_connect (controller,
-		    "focus-out", G_CALLBACK (chooser_entry_focus_out),
+		    "focus-change", G_CALLBACK (chooser_entry_focus_change),
 		    chooser_entry);
   gtk_widget_add_controller (GTK_WIDGET (chooser_entry), controller);
 

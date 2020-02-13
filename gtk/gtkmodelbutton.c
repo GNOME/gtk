@@ -1352,19 +1352,21 @@ leave_cb (GtkEventController *controller,
 }
 
 static void
-focus_in_cb (GtkEventController *controller,
-             GdkCrossingMode     mode,
-             GdkNotifyType       type,
-             gpointer            data)
+focus_change_cb (GtkEventController    *controller,
+                 const GtkCrossingData *crossing,
+                 gpointer               data)
 {
   GtkWidget *target;
   GtkWidget *popover;
 
-  target = gtk_event_controller_get_widget (controller);
-  popover = gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_MENU);
+  if (crossing->direction == GTK_CROSSING_IN)
+    {
+      target = gtk_event_controller_get_widget (controller);
+      popover = gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_MENU);
 
-  if (popover)
-    gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (popover), target);
+      if (popover)
+        gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (popover), target);
+    }
 }
 
 static void
@@ -1393,7 +1395,7 @@ gtk_model_button_init (GtkModelButton *self)
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   controller = gtk_event_controller_key_new ();
-  g_signal_connect (controller, "focus-in", G_CALLBACK (focus_in_cb), NULL);
+  g_signal_connect (controller, "focus-change", G_CALLBACK (focus_change_cb), NULL);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   gesture = gtk_gesture_click_new ();
