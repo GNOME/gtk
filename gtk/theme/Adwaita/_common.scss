@@ -3403,6 +3403,14 @@ calendar {
     > label.week-number {
     }
 
+    > label.today {
+      box-shadow: inset 0px -2px $borders_color;
+
+      &:selected {
+        box-shadow: none;
+      }
+    }
+
     > label.day-number {
       padding: 4px;
 
