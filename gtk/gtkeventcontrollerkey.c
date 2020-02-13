@@ -38,6 +38,7 @@
 #include "gtkbindings.h"
 #include "gtkenums.h"
 #include "gtkmain.h"
+#include "gtktypebuiltins.h"
 
 #include <gdk/gdk.h>
 
@@ -50,6 +51,7 @@ struct _GtkEventControllerKey
   GdkModifierType state;
 
   const GdkEvent *current_event;
+  const GtkCrossingData *current_crossing;
 
   guint is_focus       : 1;
   guint contains_focus : 1;
@@ -65,8 +67,7 @@ enum {
   KEY_RELEASED,
   MODIFIERS,
   IM_UPDATE,
-  FOCUS_IN,
-  FOCUS_OUT,
+  FOCUS_CHANGE,
   N_SIGNALS
 };
 
@@ -94,57 +95,6 @@ gtk_event_controller_key_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_event_controller_key_parent_class)->finalize (object);
 }
 
-static void
-update_focus (GtkEventControllerKey *key,
-              gboolean               focus_in,
-              GdkNotifyType          detail)
-{
-  gboolean is_focus;
-  gboolean contains_focus;
-
-  switch (detail)
-    {
-    case GDK_NOTIFY_VIRTUAL:
-    case GDK_NOTIFY_NONLINEAR_VIRTUAL:
-      is_focus = FALSE;
-      contains_focus = focus_in;
-      break;
-    case GDK_NOTIFY_ANCESTOR:
-    case GDK_NOTIFY_NONLINEAR:
-      is_focus = focus_in;
-      contains_focus = is_focus;
-      break;
-    case GDK_NOTIFY_INFERIOR:
-      is_focus = focus_in;
-      contains_focus = TRUE;
-      break;
-    case GDK_NOTIFY_UNKNOWN:
-    default:
-      g_warning ("Unknown focus change detail");
-      return;
-    }
-
-  g_object_freeze_notify (G_OBJECT (key));
-  if (key->is_focus != is_focus)
-    {
-      key->is_focus = is_focus;
-      g_object_notify (G_OBJECT (key), "is-focus");
-      if (key->im_context)
-        {
-          if (focus_in)
-            gtk_im_context_focus_in (key->im_context);
-          else
-            gtk_im_context_focus_out (key->im_context);
-        }
-    }
-  if (key->contains_focus != contains_focus)
-    {
-      key->contains_focus = contains_focus;
-      g_object_notify (G_OBJECT (key), "contains-focus");
-    }
-  g_object_thaw_notify (G_OBJECT (key));
-}
-
 static gboolean
 gtk_event_controller_key_handle_event (GtkEventController *controller,
                                        const GdkEvent     *event,
@@ -157,30 +107,6 @@ gtk_event_controller_key_handle_event (GtkEventController *controller,
   guint16 keycode;
   guint keyval;
   gboolean handled = FALSE;
-
-  if (event_type == GDK_FOCUS_CHANGE)
-    {
-      gboolean focus_in;
-      GdkCrossingMode mode;
-      GdkNotifyType detail;
-
-      gdk_event_get_focus_in (event, &focus_in);
-      gdk_event_get_crossing_mode (event, &mode);
-      gdk_event_get_crossing_detail (event, &detail);
-
-      update_focus (key, focus_in, detail);
-
-      key->current_event = event;
-
-      if (focus_in)
-        g_signal_emit (controller, signals[FOCUS_IN], 0, mode, detail);
-      else
-        g_signal_emit (controller, signals[FOCUS_OUT], 0, mode, detail);
-
-      key->current_event = NULL;
-
-      return FALSE;
-    }
 
   if (event_type != GDK_KEY_PRESS && event_type != GDK_KEY_RELEASE)
     return FALSE;
@@ -230,6 +156,64 @@ gtk_event_controller_key_handle_event (GtkEventController *controller,
 }
 
 static void
+update_focus (GtkEventController    *controller,
+              const GtkCrossingData *crossing)
+{
+  GtkEventControllerKey *key = GTK_EVENT_CONTROLLER_KEY (controller);
+  GtkWidget *widget = gtk_event_controller_get_widget (controller);
+  gboolean is_focus = FALSE;
+  gboolean contains_focus = FALSE;
+
+  if (crossing->direction == GTK_CROSSING_IN)
+    {
+      if (crossing->new_target == widget)
+        is_focus = TRUE;
+      if (crossing->new_target != NULL)
+        contains_focus = TRUE;
+    }
+
+  g_object_freeze_notify (G_OBJECT (key));
+  if (key->is_focus != is_focus)
+    {
+      key->is_focus = is_focus;
+      g_object_notify (G_OBJECT (key), "is-focus");
+      if (key->im_context)
+        {
+          if (is_focus)
+            gtk_im_context_focus_in (key->im_context);
+          else
+            gtk_im_context_focus_out (key->im_context);
+        }
+    }
+  if (key->contains_focus != contains_focus)
+    {
+      key->contains_focus = contains_focus;
+      g_object_notify (G_OBJECT (key), "contains-focus");
+    }
+  g_object_thaw_notify (G_OBJECT (key));
+}
+
+static void
+gtk_event_controller_key_handle_crossing (GtkEventController    *controller,
+                                          const GtkCrossingData *crossing,
+                                          double                 x,
+                                          double                 y)
+{
+  GtkEventControllerKey *key = GTK_EVENT_CONTROLLER_KEY (controller);
+
+  if (crossing->type != GTK_CROSSING_FOCUS)
+    return;
+
+  key->current_crossing = crossing;
+
+  update_focus (controller, crossing);
+
+  g_signal_emit (controller, signals[FOCUS_CHANGE], 0, crossing->direction);
+
+  key->current_crossing = NULL;
+}
+
+static void
 gtk_event_controller_key_get_property (GObject    *object,
                                        guint       prop_id,
                                        GValue     *value,
@@ -261,6 +245,7 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
   object_class->finalize = gtk_event_controller_key_finalize;
   object_class->get_property = gtk_event_controller_key_get_property;
   controller_class->handle_event = gtk_event_controller_key_handle_event;
+  controller_class->handle_crossing = gtk_event_controller_key_handle_crossing;
 
   /**
    * GtkEventControllerKey:is-focus:
@@ -366,7 +351,7 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
 
   /**
    * GtkEventControllerKey::im-update:
-   * @controller: the object which received the signal.
+   * @controller: the object which received the signal
    *
    * This signal is emitted whenever the input method context filters away a
    * keypress and prevents the @controller receiving it. See
@@ -382,46 +367,27 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
                   G_TYPE_NONE, 0);
 
   /**
-   * GtkEventControllerKey::focus-in:
-   * @controller: the object which received the signal.
-   * @mode: crossing mode indicating what caused this change
-   * @detail: detail indication where the focus is coming from
+   * GtkEventControllerKey::focus-change:
+   * @controller: the object which received the signal
+   * @direction: the direction of this crossing event
    *
-   * This signal is emitted whenever the widget controlled
-   * by the @controller or one of its descendants) is given
-   * the keyboard focus.
+   * This signal is emitted whenever the focus change from or
+   * to a widget that is a descendant of the widget to which
+   * @controller is attached.
+   *
+   * Handlers for this signal can use
+   * gtk_event_controller_key_get_focus_origin() and
+   * gtk_event_controller_key_get_focus_target() to find
+   * the old and new focus locations.
    */
-  signals[FOCUS_IN] =
-    g_signal_new (I_("focus-in"),
+  signals[FOCUS_CHANGE] =
+    g_signal_new (I_("focus-change"),
                   GTK_TYPE_EVENT_CONTROLLER_KEY,
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
                   NULL,
-                  G_TYPE_NONE,
-                  2,
-                  GDK_TYPE_CROSSING_MODE,
-                  GDK_TYPE_NOTIFY_TYPE);
-
-  /**
-   * GtkEventControllerKey::focus-out:
-   * @controller: the object which received the signal.
-   * @mode: crossing mode indicating what caused this change
-   * @detail: detail indication where the focus is going
-   *
-   * This signal is emitted whenever the widget controlled
-   * by the @controller (or one of its descendants) loses
-   * the keyboard focus.
-   */
-  signals[FOCUS_OUT] =
-    g_signal_new (I_("focus-out"),
-                  GTK_TYPE_EVENT_CONTROLLER_KEY,
-                  G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE,
-                  2,
-                  GDK_TYPE_CROSSING_MODE,
-                  GDK_TYPE_NOTIFY_TYPE);
+                  G_TYPE_NONE, 1,
+                  GTK_TYPE_CROSSING_DIRECTION);
 }
 
 static void
@@ -553,29 +519,17 @@ gtk_event_controller_key_get_group (GtkEventControllerKey *controller)
  * Returns the widget that was holding focus before.
  *
  * This function can only be used in handlers for the
- * #GtkEventControllerKey::focus-in and
- * #GtkEventControllerKey::focus-out signals.
+ * #GtkEventControllerKey::focus-changed signal.
  *
  * Returns: (transfer none): the previous focus
  */
 GtkWidget *
 gtk_event_controller_key_get_focus_origin (GtkEventControllerKey *controller)
 {
-  gboolean focus_in;
-  GtkWidget *origin;
-
   g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_KEY (controller), NULL);
-  g_return_val_if_fail (controller->current_event != NULL, NULL);
-  g_return_val_if_fail (gdk_event_get_event_type (controller->current_event) == GDK_FOCUS_CHANGE, NULL);
+  g_return_val_if_fail (controller->current_crossing != NULL, NULL);
 
-  gdk_event_get_focus_in (controller->current_event, &focus_in);
-
-  if (focus_in)
-    origin = (GtkWidget *)gdk_event_get_related_target (controller->current_event);
-  else
-    origin = (GtkWidget *)gdk_event_get_target (controller->current_event);
-
-  return origin;
+  return controller->current_crossing->old_target;
 }
 
 /**
@@ -585,26 +539,17 @@ gtk_event_controller_key_get_focus_origin (GtkEventControllerKey *controller)
  * Returns the widget that will be holding focus afterwards.
  *
  * This function can only be used in handlers for the
- * #GtkEventControllerKey::focus-in and
- * #GtkEventControllerKey::focus-out signals.
+ * #GtkEventControllerKey::focus-changed signal.
  *
  * Returns: (transfer none): the next focus
  */
 GtkWidget *
 gtk_event_controller_key_get_focus_target (GtkEventControllerKey *controller)
 {
-  gboolean focus_in;
-
   g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_KEY (controller), NULL);
-  g_return_val_if_fail (controller->current_event != NULL, NULL);
-  g_return_val_if_fail (gdk_event_get_event_type (controller->current_event) == GDK_FOCUS_CHANGE, NULL);
+  g_return_val_if_fail (controller->current_crossing != NULL, NULL);
 
-  gdk_event_get_focus_in (controller->current_event, &focus_in);
-
-  if (focus_in)
-    return (GtkWidget *)gdk_event_get_target (controller->current_event);
-  else
-    return (GtkWidget *)gdk_event_get_related_target (controller->current_event);
+  return controller->current_crossing->new_target;
 }
 
 /**
