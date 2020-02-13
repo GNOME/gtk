@@ -2882,7 +2882,8 @@ gtk_notebook_motion (GtkEventController *controller,
 
       content = gdk_content_provider_new_with_formats (priv->source_targets,
                                                        gtk_notebook_drag_data_get,
-                                                       widget);
+                                                       widget,
+                                                       NULL);
       drag = gdk_drag_begin (surface, device, content, GDK_ACTION_MOVE, priv->drag_begin_x, priv->drag_begin_y);
       g_object_unref (content);
 

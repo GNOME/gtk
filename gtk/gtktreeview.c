@@ -7109,7 +7109,10 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView *tree_view)
 
   surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (tree_view)));
   device = gtk_gesture_get_device (GTK_GESTURE (tree_view->drag_gesture)),
-  content = gdk_content_provider_new_with_formats (di->source_formats, gtk_tree_view_drag_data_get, tree_view);
+  content = gdk_content_provider_new_with_formats (di->source_formats,
+                                                   gtk_tree_view_drag_data_get,
+                                                   tree_view,
+                                                   NULL);
 
   drag = gdk_drag_begin (surface, device, content, di->source_actions, start_x, start_y);
 
