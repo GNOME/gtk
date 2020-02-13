@@ -212,7 +212,7 @@ ul.images li {
         </div>
 
         <div class="failures">
-          <h4><a name="failed">Failed</a></h4>
+          <h4><a name="failures">Failures</a></h4>
           <ul class="failed">
             {% for failure in suite_result.failures if failure.result in [ 'FAIL', 'UNEXPECTEDPASS' ] %}
             <li><a name="{{ failure.name }}">{{ failure.name }}</a> - result: <span class="result fail">{{ failure.result }}</span><br/>
