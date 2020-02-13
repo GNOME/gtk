@@ -307,13 +307,14 @@ gtk_gesture_click_reset (GtkEventController *controller)
 
 static gboolean
 gtk_gesture_click_handle_event (GtkEventController *controller,
-                                const GdkEvent     *event)
+                                const GdkEvent     *event,
+                                double              x,
+                                double              y)
 {
   GtkEventControllerClass *parent_controller;
   GtkGestureClickPrivate *priv;
   GdkEventSequence *sequence;
   guint button;
-  gdouble x, y;
 
   priv = gtk_gesture_click_get_instance_private (GTK_GESTURE_CLICK (controller));
   parent_controller = GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_click_parent_class);
@@ -326,12 +327,11 @@ gtk_gesture_click_handle_event (GtkEventController *controller,
     {
       if (!gdk_event_get_button (event, &button))
         button = 0;
-      gdk_event_get_coords (event, &x, &y);
       g_signal_emit (controller, signals[UNPAIRED_RELEASE], 0,
                      x, y, button, sequence);
     }
 
-  return parent_controller->handle_event (controller, event);
+  return parent_controller->handle_event (controller, event, x, y);
 }
 
 static void

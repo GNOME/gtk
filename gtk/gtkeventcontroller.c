@@ -120,7 +120,9 @@ gtk_event_controller_filter_event_default (GtkEventController *self,
 
 static gboolean
 gtk_event_controller_handle_event_default (GtkEventController *self,
-                                           const GdkEvent     *event)
+                                           const GdkEvent     *event,
+                                           double              x,
+                                           double              y)
 {
   return FALSE;
 }
@@ -269,6 +271,8 @@ gtk_event_controller_init (GtkEventController *controller)
  * gtk_event_controller_handle_event:
  * @controller: a #GtkEventController
  * @event: a #GdkEvent
+ * @x: event position in widget coordinates, or 0 if not a pointer event
+ * @y: event position in widget coordinates, or 0 if not a pointer event
  *
  * Feeds an event into @controller, so it can be interpreted
  * and the controller actions triggered.
@@ -278,7 +282,9 @@ gtk_event_controller_init (GtkEventController *controller)
  **/
 gboolean
 gtk_event_controller_handle_event (GtkEventController *controller,
-                                   const GdkEvent     *event)
+                                   const GdkEvent     *event,
+                                   double              x,
+                                   double              y)
 {
   GtkEventControllerClass *controller_class;
   gboolean retval = FALSE;
@@ -294,7 +300,7 @@ gtk_event_controller_handle_event (GtkEventController *controller,
   if (controller_class->handle_event)
     {
       g_object_ref (controller);
-      retval = controller_class->handle_event (controller, event);
+      retval = controller_class->handle_event (controller, event, x, y);
       g_object_unref (controller);
     }
 

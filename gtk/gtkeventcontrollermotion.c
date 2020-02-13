@@ -117,7 +117,9 @@ update_pointer_focus (GtkEventControllerMotion *motion,
 
 static gboolean
 gtk_event_controller_motion_handle_event (GtkEventController *controller,
-                                          const GdkEvent     *event)
+                                          const GdkEvent     *event,
+                                          double              x,
+                                          double              y)
 {
   GtkEventControllerMotion *motion = GTK_EVENT_CONTROLLER_MOTION (controller);
   GtkEventControllerClass *parent_class;
@@ -126,11 +128,9 @@ gtk_event_controller_motion_handle_event (GtkEventController *controller,
   type = gdk_event_get_event_type (event);
   if (type == GDK_ENTER_NOTIFY)
     {
-      double x, y;
       GdkCrossingMode mode;
       GdkNotifyType detail;
 
-      gdk_event_get_coords (event, &x, &y);
       gdk_event_get_crossing_mode (event, &mode);
       gdk_event_get_crossing_detail (event, &detail);
 
@@ -160,16 +160,12 @@ gtk_event_controller_motion_handle_event (GtkEventController *controller,
     }
   else if (type == GDK_MOTION_NOTIFY)
     {
-      double x, y;
-
-      gdk_event_get_coords (event, &x, &y);
-
       g_signal_emit (controller, signals[MOTION], 0, x, y);
     }
 
   parent_class = GTK_EVENT_CONTROLLER_CLASS (gtk_event_controller_motion_parent_class);
 
-  return parent_class->handle_event (controller, event);
+  return parent_class->handle_event (controller, event, x, y);
 }
 
 static void
