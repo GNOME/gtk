@@ -229,7 +229,9 @@ gtk_pad_controller_filter_event (GtkEventController *controller,
 
 static gboolean
 gtk_pad_controller_handle_event (GtkEventController *controller,
-                                 const GdkEvent     *event)
+                                 const GdkEvent     *event,
+                                 double              x,
+                                 double              y)
 {
   GtkPadController *pad_controller = GTK_PAD_CONTROLLER (controller);
   GdkEventType event_type = gdk_event_get_event_type (event);

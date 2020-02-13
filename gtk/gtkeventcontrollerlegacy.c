@@ -59,7 +59,9 @@ G_DEFINE_TYPE (GtkEventControllerLegacy, gtk_event_controller_legacy,
 
 static gboolean
 gtk_event_controller_legacy_handle_event (GtkEventController *controller,
-                                          const GdkEvent     *event)
+                                          const GdkEvent     *event,
+                                          double              x,
+                                          double              y)
 {
   gboolean handled;
 

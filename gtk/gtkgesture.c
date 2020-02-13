@@ -414,36 +414,6 @@ _update_touchpad_deltas (PointData *data)
     }
 }
 
-static void
-_get_event_coordinates (PointData *data,
-                        gdouble   *x,
-                        gdouble   *y)
-{
-  gdouble event_x, event_y;
-
-  g_assert (data->event != NULL);
-
-  gdk_event_get_coords (data->event, &event_x, &event_y);
-  event_x += data->accum_dx;
-  event_y += data->accum_dy;
-
-  if (x)
-    *x = event_x;
-  if (y)
-    *y = event_y;
-}
-
-static void
-_update_widget_coordinates (GtkGesture *gesture,
-                            PointData  *data)
-{
-  gdouble event_x, event_y;
-
-  _get_event_coordinates (data, &event_x, &event_y);
-  data->widget_x = event_x;
-  data->widget_y = event_y;
-}
-
 static GtkEventSequenceState
 gtk_gesture_get_group_state (GtkGesture       *gesture,
                              GdkEventSequence *sequence)
@@ -470,6 +440,8 @@ gtk_gesture_get_group_state (GtkGesture       *gesture,
 static gboolean
 _gtk_gesture_update_point (GtkGesture     *gesture,
                            const GdkEvent *event,
+                           double          x,
+                           double          y,
                            gboolean        add)
 {
   GdkEventSequence *sequence;
@@ -533,8 +505,9 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
     g_object_unref (data->event);
 
   data->event = g_object_ref ((gpointer) event);
+  data->widget_x = x;
+  data->widget_y = y;
   _update_touchpad_deltas (data);
-  _update_widget_coordinates (gesture, data);
 
   /* Deny the sequence right away if the expected
    * number of points is exceeded, so this sequence
@@ -627,7 +600,9 @@ gtk_gesture_filter_event (GtkEventController *controller,
 
 static gboolean
 gtk_gesture_handle_event (GtkEventController *controller,
-                          const GdkEvent     *event)
+                          const GdkEvent     *event,
+                          double              x,
+                          double              y)
 {
   GtkGesture *gesture = GTK_GESTURE (controller);
   GdkEventSequence *sequence;
@@ -658,7 +633,7 @@ gtk_gesture_handle_event (GtkEventController *controller,
       (event_type == GDK_TOUCHPAD_SWIPE && phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN) ||
       (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN))
     {
-      if (_gtk_gesture_update_point (gesture, event, TRUE))
+      if (_gtk_gesture_update_point (gesture, event, x, y, TRUE))
         {
           gboolean triggered_recognition;
 
@@ -692,7 +667,7 @@ gtk_gesture_handle_event (GtkEventController *controller,
     {
       gboolean was_claimed;
 
-      if (_gtk_gesture_update_point (gesture, event, FALSE))
+      if (_gtk_gesture_update_point (gesture, event, x, y, FALSE))
         {
           if (was_recognized &&
               _gtk_gesture_check_recognized (gesture, sequence))
@@ -717,7 +692,7 @@ gtk_gesture_handle_event (GtkEventController *controller,
             return FALSE;
         }
 
-      if (_gtk_gesture_update_point (gesture, event, FALSE) &&
+      if (_gtk_gesture_update_point (gesture, event, x, y, FALSE) &&
           _gtk_gesture_check_recognized (gesture, sequence))
         g_signal_emit (gesture, signals[UPDATE], 0, sequence);
     }
