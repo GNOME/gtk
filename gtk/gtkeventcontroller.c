@@ -129,7 +129,9 @@ gtk_event_controller_handle_event_default (GtkEventController *self,
 
 static void
 gtk_event_controller_handle_crossing_default (GtkEventController    *self,
-                                              const GtkCrossingData *crossing)
+                                              const GtkCrossingData *crossing,
+                                              double                 x,
+                                              double                 y)
 {
 }
 
@@ -318,13 +320,17 @@ gtk_event_controller_handle_event (GtkEventController *controller,
  * gtk_event_controller_handle_crossing:
  * @controller: a #GtkEventController
  * @crossing: a #GtkCrossingData
+ * @x: event position in widget coordinates
+ * @y: event position in widget coordinates
  *
  * Feeds a crossing event into @controller, so it can be interpreted
  * and the controller actions triggered.
  **/
 void
 gtk_event_controller_handle_crossing (GtkEventController    *controller,
-                                      const GtkCrossingData *crossing)
+                                      const GtkCrossingData *crossing,
+                                      double                 x,
+                                      double                 y)
 {
   GtkEventControllerClass *controller_class;
 
@@ -334,7 +340,7 @@ gtk_event_controller_handle_crossing (GtkEventController    *controller,
   controller_class = GTK_EVENT_CONTROLLER_GET_CLASS (controller);
 
   g_object_ref (controller);
-  controller_class->handle_crossing (controller, crossing);
+  controller_class->handle_crossing (controller, crossing, x, y);
   g_object_unref (controller);
 }
 

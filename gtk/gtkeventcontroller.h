@@ -43,7 +43,8 @@ G_BEGIN_DECLS
 typedef struct _GtkCrossingData GtkCrossingData;
 
 typedef enum {
-  GTK_CROSSING_FOCUS
+  GTK_CROSSING_FOCUS,
+  GTK_CROSSING_POINTER
 } GtkCrossingType;
 
 typedef enum {
@@ -90,7 +91,9 @@ gboolean     gtk_event_controller_handle_event   (GtkEventController *controller
                                                   double              y);
 GDK_AVAILABLE_IN_ALL
 void         gtk_event_controller_handle_crossing (GtkEventController    *controller,
-                                                   const GtkCrossingData *crossing);
+                                                   const GtkCrossingData *crossing,
+                                                   double                 x,
+                                                   double                 y);
 GDK_AVAILABLE_IN_ALL
 void         gtk_event_controller_reset          (GtkEventController *controller);
 

@@ -6371,7 +6371,7 @@ synthesize_focus_change_events (GtkWindow *window,
   widget = old_focus;
   while (widget)
     {
-      gtk_widget_handle_crossing (widget, &crossing);
+      gtk_widget_handle_crossing (widget, &crossing, 0, 0);
       gtk_widget_unset_state_flags (widget, flags);
       gtk_widget_set_focus_child (widget, NULL);
       widget = gtk_widget_get_parent (widget);
@@ -6394,7 +6394,7 @@ synthesize_focus_change_events (GtkWindow *window,
         focus_child = l->next->data;
       else
         focus_child = NULL;
-      gtk_widget_handle_crossing (widget, &crossing);
+      gtk_widget_handle_crossing (widget, &crossing, 0, 0);
       gtk_widget_set_state_flags (widget, flags, FALSE);
       gtk_widget_set_focus_child (widget, focus_child);
     }
