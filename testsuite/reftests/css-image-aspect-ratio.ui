@@ -3,6 +3,6 @@
   <object class="GtkWindow" id="window1">
     <property name="width_request">48</property>
     <property name="height_request">24</property>
-    <property name="type">popup</property>
+    <property name="decorated">0</property>
   </object>
 </interface>
