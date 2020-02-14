@@ -764,6 +764,13 @@ GdkEvent * gdk_event_pad_group_mode_new (GdkSurface      *surface,
                                          guint            group,
                                          guint            mode);
 
+GdkEvent * gdk_event_drag_new           (GdkEventType     type,
+                                         GdkSurface      *surface,
+                                         GdkDevice       *device,
+                                         GdkDrop         *drop,
+                                         guint32          time,
+                                         double           x,
+                                         double           y);
 
 #endif /* __GDK_EVENTS_PRIVATE_H__ */
 

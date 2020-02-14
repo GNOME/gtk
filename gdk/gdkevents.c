@@ -2834,3 +2834,31 @@ gdk_event_pad_group_mode_new (GdkSurface *surface,
 
   return event;
 }
+
+GdkEvent *
+gdk_event_drag_new (GdkEventType  type,
+                    GdkSurface   *surface,
+                    GdkDevice    *device,
+                    GdkDrop      *drop,
+                    guint32       time,
+                    double        x,
+                    double        y)
+{
+  GdkEvent *event;
+
+  g_return_val_if_fail (type == GDK_DRAG_ENTER ||
+                        type == GDK_DRAG_MOTION ||
+                        type == GDK_DRAG_LEAVE ||
+                        type == GDK_DROP_START, NULL);
+
+  event = gdk_event_new (type);
+
+  event->any.surface = g_object_ref (surface);
+  event->any.device = g_object_ref (device);
+  event->dnd.drop = g_object_ref (drop);
+  event->dnd.time = time;
+  event->dnd.x = x;
+  event->dnd.y = y;
+
+  return event;
+}
