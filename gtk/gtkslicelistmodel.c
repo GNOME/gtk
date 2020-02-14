@@ -133,7 +133,7 @@ gtk_slice_list_model_items_changed_cb (GListModel        *model,
   if (position < self->offset)
     {
       guint skip = MIN (removed, added);
-      skip = MIN (skip, position - self->offset);
+      skip = MIN (skip, self->offset - position);
 
       position += skip;
       removed -= skip;
@@ -149,7 +149,7 @@ gtk_slice_list_model_items_changed_cb (GListModel        *model,
 
       g_assert (position >= self->offset);
       position -= self->offset;
-      changed = MIN (changed, self->size) - position;
+      changed = MIN (changed, self->size - position);
 
       g_list_model_items_changed (G_LIST_MODEL (self), position, changed, changed);
     }
