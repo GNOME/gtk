@@ -651,5 +651,170 @@ GObject *      gdk_event_get_related_target      (const GdkEvent *event);
 
 gboolean       check_event_sanity (GdkEvent *event);
 
+GdkEvent * gdk_event_button_new         (GdkEventType     type,
+                                         GdkSurface      *surface,
+                                         GdkDevice       *device,
+                                         GdkDevice       *source_device,
+                                         GdkDeviceTool   *tool,
+                                         guint32          time,
+                                         double           x,
+                                         double           y,
+                                         guint            button,
+                                         GdkModifierType  state);
+                             
+GdkEvent * gdk_event_motion_new         (GdkSurface      *surface,
+                                         GdkDevice       *device,
+                                         GdkDevice       *source_device,
+                                         GdkDeviceTool   *tool,
+                                         guint32          time,
+                                         GdkModifierType  state,
+                                         double           x,
+                                         double           y);
+
+GdkEvent * gdk_event_crossing_new       (GdkEventType     type,
+                                         GdkSurface      *surface,
+                                         GdkDevice       *device,
+                                         GdkDevice       *source_device,
+                                         guint32          time,
+                                         GdkModifierType  state,
+                                         double           x,
+                                         double           y,
+                                         GdkCrossingMode  mode,
+                                         GdkNotifyType    notify);
+                                          
+GdkEvent * gdk_event_proximity_new      (GdkEventType     type,
+                                         GdkSurface      *surface,
+                                         GdkDevice       *device,
+                                         GdkDevice       *source_device,
+                                         GdkDeviceTool   *tool,
+                                         guint32          time);
+
+GdkEvent * gdk_event_key_new            (GdkEventType     type,
+                                         GdkSurface      *surface,
+                                         GdkDevice       *device,
+                                         GdkDevice       *source_device,
+                                         guint32          time,
+                                         GdkModifierType  state,
+                                         guint            keyval,
+                                         guint16          keycode,
+                                         guint16          scancode,
+                                         guint8           group,
+                                         gboolean         is_modifier);
+
+GdkEvent * gdk_event_focus_new          (GdkSurface      *surface,
+                                         GdkDevice       *device,
+                                         GdkDevice       *source_device,
+                                         gboolean         focus_in);
+
+GdkEvent * gdk_event_configure_new      (GdkSurface      *surface,
+                                         int              width,
+                                         int              height);
+
+GdkEvent * gdk_event_delete_new         (GdkSurface      *surface);
+
+GdkEvent * gdk_event_scroll_new         (GdkSurface      *surface,
+                                         GdkDevice       *device,
+                                         GdkDevice       *source_device,
+                                         GdkDeviceTool   *tool,
+                                         guint32          time,
+                                         GdkModifierType  state,
+                                         double           delta_x,
+                                         double           delta_y,
+                                         gboolean         is_stop);
+
+GdkEvent * gdk_event_discrete_scroll_new (GdkSurface         *surface,
+                                          GdkDevice          *device,
+                                          GdkDevice          *source_device,
+                                          GdkDeviceTool      *tool,
+                                          guint32             time,
+                                          GdkModifierType     state,
+                                          GdkScrollDirection  direction,
+                                          gboolean            emulated);
+
+GdkEvent * gdk_event_touch_new          (GdkEventType      type,
+                                         GdkEventSequence *sequence,
+                                         GdkSurface       *surface,
+                                         GdkDevice        *device,
+                                         GdkDevice        *source_device,
+                                         guint32           time,
+                                         GdkModifierType   state,
+                                         double            x,
+                                         double            y,
+                                         gboolean          emulating);
+ 
+GdkEvent * gdk_event_touchpad_swipe_new (GdkSurface      *surface,
+                                         GdkDevice       *device,
+                                         GdkDevice       *source_device,
+                                         guint32          time,
+                                         GdkModifierType  state,
+                                         double           x,
+                                         double           y,
+                                         int              n_fingers,
+                                         double           dx,
+                                         double           dy);
+
+GdkEvent * gdk_event_touchpad_pinch_new (GdkSurface              *surface,
+                                         GdkDevice               *device,
+                                         GdkDevice               *source_device,
+                                         guint32                  time,
+                                         GdkModifierType          state,
+                                         GdkTouchpadGesturePhase  phase,
+                                         double                   x,
+                                         double                   y,
+                                         int                      n_fingers,
+                                         double                   dx,
+                                         double                   dy,
+                                         double                   scale,
+                                         double                   angle_delta);
+
+GdkEvent * gdk_event_pad_ring_new       (GdkSurface      *surface,
+                                         GdkDevice       *device,
+                                         GdkDevice       *source_device,
+                                         guint32          time,
+                                         guint            group,
+                                         guint            index,
+                                         guint            mode,
+                                         double           value);
+
+GdkEvent * gdk_event_pad_strip_new      (GdkSurface      *surface,
+                                         GdkDevice       *device,
+                                         GdkDevice       *source_device,
+                                         guint32          time,
+                                         guint            group,
+                                         guint            index,
+                                         guint            mode,
+                                         double           value);
+
+GdkEvent * gdk_event_pad_button_new     (GdkEventType     type,
+                                         GdkSurface      *surface,
+                                         GdkDevice       *device,
+                                         GdkDevice       *source_device,
+                                         guint32          time,
+                                         guint            group,
+                                         guint            button,
+                                         guint            mode);
+
+GdkEvent * gdk_event_pad_group_mode_new (GdkSurface      *surface,
+                                         GdkDevice       *device,
+                                         GdkDevice       *source_device,
+                                         guint32          time,
+                                         guint            group,
+                                         guint            mode);
+
+GdkEvent * gdk_event_drag_new           (GdkEventType     type,
+                                         GdkSurface      *surface,
+                                         GdkDevice       *device,
+                                         GdkDrop         *drop,
+                                         guint32          time,
+                                         double           x,
+                                         double           y);
+
+GdkEvent * gdk_event_grab_broken_new    (GdkSurface      *surface,
+                                         GdkDevice       *device,
+                                         GdkDevice       *source_device,
+                                         GdkSurface      *grab_surface,
+                                         gboolean         implicit);
+
 
 #endif /* __GDK_EVENTS_PRIVATE_H__ */
+
