@@ -2243,15 +2243,18 @@ gdk_drag_update (GdkDrag         *drag,
 }
 
 static gboolean
-gdk_dnd_handle_motion_event (GdkDrag              *drag,
-                             const GdkEventMotion *event)
+gdk_dnd_handle_motion_event (GdkDrag        *drag,
+                             const GdkEvent *event)
 {
   GdkModifierType state;
+  int x_root, y_root;
 
   if (!gdk_event_get_state ((GdkEvent *) event, &state))
     return FALSE;
 
-  gdk_drag_update (drag, event->x_root, event->y_root, state,
+  x_root = event->any.surface->x + event->motion.x;
+  y_root = event->any.surface->y + event->motion.y;
+  gdk_drag_update (drag, x_root, y_root, state,
                    gdk_event_get_time ((GdkEvent *) event));
   return TRUE;
 }
@@ -2407,7 +2410,7 @@ gdk_x11_drag_handle_event (GdkDrag        *drag,
   switch ((guint) event->any.type)
     {
     case GDK_MOTION_NOTIFY:
-      return gdk_dnd_handle_motion_event (drag, &event->motion);
+      return gdk_dnd_handle_motion_event (drag, event);
     case GDK_BUTTON_RELEASE:
       return gdk_dnd_handle_button_event (drag, &event->button);
     case GDK_KEY_PRESS:
