@@ -159,7 +159,7 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
                 <layout>
                   <property name="left_attach">0</property>
                   <property name="top_attach">0</property>
-                  <property name="column-span">3</property>
+                  <property name="column-span">2</property>
                   <property name="row-span">1</property>
                 </layout>
               </object>
@@ -187,7 +187,7 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
                 <layout>
                   <property name="left_attach">1</property>
                   <property name="top_attach">1</property>
-                  <property name="column-span">2</property>
+                  <property name="column-span">1</property>
                   <property name="row-span">1</property>
                 </layout>
               </object>
@@ -210,11 +210,12 @@ For example, &quot;Work&quot; or &quot;Personal&quot;.</property>
             <child>
               <object class="GtkEntry" id="entry5">
                 <property name="can_focus">1</property>
+                <property name="hexpand">1</property>
                 <property name="invisible_char">●</property>
                 <layout>
                   <property name="left_attach">1</property>
                   <property name="top_attach">2</property>
-                  <property name="column-span">2</property>
+                  <property name="column-span">1</property>
                   <property name="row-span">1</property>
                 </layout>
               </object>
