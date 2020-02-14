@@ -79,9 +79,6 @@ struct _GdkEventAny
  *   buttons. See #GdkModifierType.
  * @device: the master device that the event originated from. Use
  * gdk_event_get_source_device() to get the slave device.
- * @x_root: the x coordinate of the pointer relative to the root of the
- *   screen.
- * @y_root: the y coordinate of the pointer relative to the root of the
  *   screen.
  *
  * Generated when the pointer moves.
@@ -95,7 +92,6 @@ struct _GdkEventMotion
   gdouble *axes;
   guint state;
   GdkDeviceTool *tool;
-  gdouble x_root, y_root;
   GList *history;
 };
 
@@ -118,9 +114,6 @@ struct _GdkEventMotion
  *   often be simulated by pressing both mouse buttons together.
  * @device: the master device that the event originated from. Use
  * gdk_event_get_source_device() to get the slave device.
- * @x_root: the x coordinate of the pointer relative to the root of the
- *   screen.
- * @y_root: the y coordinate of the pointer relative to the root of the
  *   screen.
  *
  * Used for button press and button release events. The
@@ -136,7 +129,6 @@ struct _GdkEventButton
   guint state;
   guint button;
   GdkDeviceTool *tool;
-  gdouble x_root, y_root;
 };
 
 /*
@@ -158,9 +150,6 @@ struct _GdkEventButton
  *   pointer event
  * @device: the master device that the event originated from. Use
  * gdk_event_get_source_device() to get the slave device.
- * @x_root: the x coordinate of the pointer relative to the root of the
- *   screen
- * @y_root: the y coordinate of the pointer relative to the root of the
  *   screen
  *
  * Used for touch events.
@@ -184,7 +173,6 @@ struct _GdkEventTouch
   guint state;
   GdkEventSequence *sequence;
   gboolean emulating_pointer;
-  gdouble x_root, y_root;
 };
 
 /*
@@ -203,10 +191,6 @@ struct _GdkEventTouch
  *   %GDK_SCROLL_SMOOTH).
  * @device: the master device that the event originated from. Use
  * gdk_event_get_source_device() to get the slave device.
- * @x_root: the x coordinate of the pointer relative to the root of the
- *   screen.
- * @y_root: the y coordinate of the pointer relative to the root of the
- *   screen.
  * @delta_x: the x coordinate of the scroll delta
  * @delta_y: the y coordinate of the scroll delta
  *
@@ -227,7 +211,6 @@ struct _GdkEventScroll
   gdouble y;
   guint state;
   GdkScrollDirection direction;
-  gdouble x_root, y_root;
   gdouble delta_x;
   gdouble delta_y;
   guint is_stop : 1;
@@ -274,8 +257,6 @@ struct _GdkEventKey
  * @time: the time of the event in milliseconds.
  * @x: the x coordinate of the pointer relative to the surface.
  * @y: the y coordinate of the pointer relative to the surface.
- * @x_root: the x coordinate of the pointer relative to the root of the screen.
- * @y_root: the y coordinate of the pointer relative to the root of the screen.
  * @mode: the crossing mode (%GDK_CROSSING_NORMAL, %GDK_CROSSING_GRAB,
  *  %GDK_CROSSING_UNGRAB, %GDK_CROSSING_GTK_GRAB, %GDK_CROSSING_GTK_UNGRAB or
  *  %GDK_CROSSING_STATE_CHANGED).  %GDK_CROSSING_GTK_GRAB, %GDK_CROSSING_GTK_UNGRAB,
@@ -298,8 +279,6 @@ struct _GdkEventCrossing
   guint32 time;
   gdouble x;
   gdouble y;
-  gdouble x_root;
-  gdouble y_root;
   GdkCrossingMode mode;
   GdkNotifyType detail;
   gboolean focus;
@@ -408,10 +387,6 @@ struct _GdkEventGrabBroken {
  * @send_event: %TRUE if the event was sent explicitly.
  * @drop: the #GdkDrop for the current DND operation.
  * @time: the time of the event in milliseconds.
- * @x_root: the x coordinate of the pointer relative to the root of the
- *   screen, only set for %GDK_DRAG_MOTION and %GDK_DROP_START.
- * @y_root: the y coordinate of the pointer relative to the root of the
- *   screen, only set for %GDK_DRAG_MOTION and %GDK_DROP_START.
  *
  * Generated during DND operations.
  */
@@ -420,7 +395,6 @@ struct _GdkEventDND {
   GdkDrop *drop;
 
   guint32 time;
-  double x_root, y_root;
   double x;
   double y;
 };
@@ -437,10 +411,6 @@ struct _GdkEventDND {
  * @y: The Y coordinate of the pointer
  * @dx: Movement delta in the X axis of the swipe focal point
  * @dy: Movement delta in the Y axis of the swipe focal point
- * @x_root: The X coordinate of the pointer, relative to the
- *   root of the screen.
- * @y_root: The Y coordinate of the pointer, relative to the
- *   root of the screen.
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
  *   buttons. See #GdkModifierType.
@@ -456,7 +426,6 @@ struct _GdkEventTouchpadSwipe {
   gdouble y;
   gdouble dx;
   gdouble dy;
-  gdouble x_root, y_root;
   guint state;
 };
 
@@ -476,10 +445,6 @@ struct _GdkEventTouchpadSwipe {
  *   denote counter-clockwise movements
  * @scale: The current scale, relative to that at the time of
  *   the corresponding %GDK_TOUCHPAD_GESTURE_PHASE_BEGIN event
- * @x_root: The X coordinate of the pointer, relative to the
- *   root of the screen.
- * @y_root: The Y coordinate of the pointer, relative to the
- *   root of the screen.
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
  *   buttons. See #GdkModifierType.
@@ -497,7 +462,6 @@ struct _GdkEventTouchpadPinch {
   gdouble dy;
   gdouble angle_delta;
   gdouble scale;
-  gdouble x_root, y_root;
   guint state;
 };
 
