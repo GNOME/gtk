@@ -163,7 +163,6 @@ typedef struct
   GtkWidget *close_button;
   GtkWidget *revealer;
 
-  gboolean show_close_button;
   GtkMessageType message_type;
   int default_response;
   gboolean default_response_sensitive;
@@ -1247,9 +1246,8 @@ gtk_info_bar_set_show_close_button (GtkInfoBar *info_bar,
 
   g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
 
-  if (setting != priv->show_close_button)
+  if (setting != gtk_info_bar_get_show_close_button (info_bar))
     {
-      priv->show_close_button = setting;
       gtk_widget_set_visible (priv->close_button, setting);
       g_object_notify_by_pspec (G_OBJECT (info_bar), props[PROP_SHOW_CLOSE_BUTTON]);
     }
@@ -1270,7 +1268,7 @@ gtk_info_bar_get_show_close_button (GtkInfoBar *info_bar)
 
   g_return_val_if_fail (GTK_IS_INFO_BAR (info_bar), FALSE);
 
-  return priv->show_close_button;
+  return gtk_widget_get_visible (priv->close_button);
 }
 
 /**
