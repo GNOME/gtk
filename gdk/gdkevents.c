@@ -478,15 +478,11 @@ gdk_event_constructed (GObject *object)
     case GDK_MOTION_NOTIFY:
       new_event->motion.x = 0.;
       new_event->motion.y = 0.;
-      new_event->motion.x_root = 0.;
-      new_event->motion.y_root = 0.;
       break;
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       new_event->button.x = 0.;
       new_event->button.y = 0.;
-      new_event->button.x_root = 0.;
-      new_event->button.y_root = 0.;
       break;
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_UPDATE:
@@ -494,14 +490,10 @@ gdk_event_constructed (GObject *object)
     case GDK_TOUCH_CANCEL:
       new_event->touch.x = 0.;
       new_event->touch.y = 0.;
-      new_event->touch.x_root = 0.;
-      new_event->touch.y_root = 0.;
       break;
     case GDK_SCROLL:
       new_event->scroll.x = 0.;
       new_event->scroll.y = 0.;
-      new_event->scroll.x_root = 0.;
-      new_event->scroll.y_root = 0.;
       new_event->scroll.delta_x = 0.;
       new_event->scroll.delta_y = 0.;
       new_event->scroll.is_stop = FALSE;
@@ -510,16 +502,12 @@ gdk_event_constructed (GObject *object)
     case GDK_LEAVE_NOTIFY:
       new_event->crossing.x = 0.;
       new_event->crossing.y = 0.;
-      new_event->crossing.x_root = 0.;
-      new_event->crossing.y_root = 0.;
       break;
     case GDK_TOUCHPAD_SWIPE:
       new_event->touchpad_swipe.x = 0;
       new_event->touchpad_swipe.y = 0;
       new_event->touchpad_swipe.dx = 0;
       new_event->touchpad_swipe.dy = 0;
-      new_event->touchpad_swipe.x_root = 0;
-      new_event->touchpad_swipe.y_root = 0;
       break;
     case GDK_TOUCHPAD_PINCH:
       new_event->touchpad_pinch.x = 0;
@@ -528,8 +516,6 @@ gdk_event_constructed (GObject *object)
       new_event->touchpad_pinch.dy = 0;
       new_event->touchpad_pinch.angle_delta = 0;
       new_event->touchpad_pinch.scale = 0;
-      new_event->touchpad_pinch.x_root = 0;
-      new_event->touchpad_pinch.y_root = 0;
       break;
     default:
       break;
@@ -2455,8 +2441,6 @@ gdk_event_button_new (GdkEventType     type,
   event->button.button = button;
   event->button.x = x;
   event->button.y = y;
-  event->button.x_root = NAN;
-  event->button.y_root = NAN;
   event->button.axes = axes;
 
   return event;
@@ -2483,9 +2467,8 @@ gdk_event_motion_new (GdkSurface      *surface,
   event->motion.state = state;
   event->motion.x = x;
   event->motion.y = y;
-  event->motion.x_root = NAN;
-  event->motion.y_root = NAN;
   event->motion.axes = axes;
+  event->motion.state = state;
 
   return event;
 }
@@ -2516,8 +2499,6 @@ gdk_event_crossing_new (GdkEventType     type,
   event->crossing.state = state;
   event->crossing.x = x;
   event->crossing.y = y;
-  event->crossing.x_root = NAN;
-  event->crossing.y_root = NAN;
   event->crossing.mode = mode;
   event->crossing.detail = detail;
 
@@ -2644,8 +2625,6 @@ gdk_event_scroll_new (GdkSurface      *surface,
   event->scroll.state = state;
   event->scroll.x = NAN;
   event->scroll.y = NAN;
-  event->scroll.x_root = NAN;
-  event->scroll.y_root = NAN;
   event->scroll.direction = GDK_SCROLL_SMOOTH;
   event->scroll.delta_x = delta_x;
   event->scroll.delta_y = delta_y;
@@ -2674,8 +2653,6 @@ gdk_event_discrete_scroll_new (GdkSurface         *surface,
   event->scroll.state = state;
   event->scroll.x = NAN;
   event->scroll.y = NAN;
-  event->scroll.x_root = NAN;
-  event->scroll.y_root = NAN;
   event->scroll.direction = direction;
   gdk_event_set_pointer_emulated (event, emulated);
 
@@ -2712,8 +2689,6 @@ gdk_event_touch_new (GdkEventType      type,
   event->touch.state = state;
   event->touch.x = x;
   event->touch.y = y;
-  event->touch.x_root = NAN;
-  event->touch.y_root = NAN;
   event->touch.axes = axes;
   event->touch.emulating_pointer = emulating;
   gdk_event_set_pointer_emulated (event, emulating);
