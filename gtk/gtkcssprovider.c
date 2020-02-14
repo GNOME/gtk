@@ -1362,10 +1362,10 @@ compare_properties (gconstpointer a, gconstpointer b, gpointer style)
 {
   const guint *ua = a;
   const guint *ub = b;
-  GtkCssLookupValue *styles = style;
+  GtkCssLookupValue **styles = style;
 
-  return strcmp (_gtk_style_property_get_name (GTK_STYLE_PROPERTY (_gtk_css_style_property_lookup_by_id (styles[*ua].id))),
-                 _gtk_style_property_get_name (GTK_STYLE_PROPERTY (_gtk_css_style_property_lookup_by_id (styles[*ub].id))));
+  return strcmp (_gtk_style_property_get_name (GTK_STYLE_PROPERTY (_gtk_css_style_property_lookup_by_id (styles[*ua]->id))),
+                 _gtk_style_property_get_name (GTK_STYLE_PROPERTY (_gtk_css_style_property_lookup_by_id (styles[*ub]->id))));
 }
 
 static void
