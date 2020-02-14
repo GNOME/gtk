@@ -1711,18 +1711,18 @@ test_value_from_string (void)
   g_error_free (error);
   error = NULL;
 
-  g_assert (gtk_builder_value_from_string_type (builder, GTK_TYPE_WINDOW_TYPE, "toplevel", &value, &error) == TRUE);
+  g_assert (gtk_builder_value_from_string_type (builder, GTK_TYPE_TEXT_DIRECTION, "rtl", &value, &error) == TRUE);
   g_assert (G_VALUE_HOLDS_ENUM (&value));
-  g_assert (g_value_get_enum (&value) == GTK_WINDOW_TOPLEVEL);
+  g_assert (g_value_get_enum (&value) == GTK_TEXT_DIR_RTL);
   g_value_unset (&value);
 
-  g_assert (gtk_builder_value_from_string_type (builder, GTK_TYPE_WINDOW_TYPE, "sliff", &value, &error) == FALSE);
+  g_assert (gtk_builder_value_from_string_type (builder, GTK_TYPE_TEXT_DIRECTION, "sliff", &value, &error) == FALSE);
   g_value_unset (&value);
   g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE);
   g_error_free (error);
   error = NULL;
 
-  g_assert (gtk_builder_value_from_string_type (builder, GTK_TYPE_WINDOW_TYPE, "foobar", &value, &error) == FALSE);
+  g_assert (gtk_builder_value_from_string_type (builder, GTK_TYPE_TEXT_DIRECTION, "foobar", &value, &error) == FALSE);
   g_value_unset (&value);
   g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE);
   g_error_free (error);
