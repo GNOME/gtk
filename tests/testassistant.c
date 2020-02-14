@@ -713,7 +713,7 @@ main (int argc, gchar *argv[])
   if (g_getenv ("RTL"))
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_hide_on_close (GTK_WINDOW (window), TRUE);
 
   g_signal_connect (G_OBJECT (window), "destroy", G_CALLBACK (quit_cb), &done);

@@ -711,7 +711,7 @@ main (int argc, char **argv)
   /* Extra controls for manipulating the test environment
    */
 
-  control_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  control_window = gtk_window_new ();
 
   vbbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (control_window), vbbox);

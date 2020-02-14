@@ -106,7 +106,7 @@ main (int argc, char *argv[])
 
   gtk_font_button_set_use_font (GTK_FONT_BUTTON (font_button), TRUE);
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_container_add (GTK_CONTAINER (window), font_button);
   gtk_widget_show (window);
 

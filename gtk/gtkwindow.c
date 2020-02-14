@@ -2390,20 +2390,12 @@ gtk_window_native_interface_init (GtkNativeInterface *iface)
 
 /**
  * gtk_window_new:
- * @type: type of window
  * 
  * Creates a new #GtkWindow, which is a toplevel window that can
- * contain other widgets. Nearly always, the type of the window should
- * be #GTK_WINDOW_TOPLEVEL. If you’re implementing something like a
- * popup menu from scratch (which is a bad idea, just use #GtkMenu),
- * you might use #GTK_WINDOW_POPUP. #GTK_WINDOW_POPUP is not for
- * dialogs, though in some other toolkits dialogs are called “popups”.
- * In GTK+, #GTK_WINDOW_POPUP means a pop-up menu or pop-up tooltip.
- * On X11, popup windows are not controlled by the
- * [window manager][gtk-X11-arch].
+ * contain other widgets.
  *
- * If you simply want an undecorated window (no window borders), use
- * gtk_window_set_decorated(), don’t use #GTK_WINDOW_POPUP.
+ * To get an undecorated window (no window borders), use
+ * gtk_window_set_decorated().
  *
  * All top-level windows created by gtk_window_new() are stored in
  * an internal top-level window list.  This list can be obtained from
@@ -2416,15 +2408,9 @@ gtk_window_native_interface_init (GtkNativeInterface *iface)
  * Returns: a new #GtkWindow.
  **/
 GtkWidget*
-gtk_window_new (GtkWindowType type)
+gtk_window_new (void)
 {
-  GtkWindow *window;
-
-  g_return_val_if_fail (type >= GTK_WINDOW_TOPLEVEL && type <= GTK_WINDOW_POPUP, NULL);
-
-  window = g_object_new (GTK_TYPE_WINDOW, "type", type, NULL);
-
-  return GTK_WIDGET (window);
+  return g_object_new (GTK_TYPE_WINDOW, NULL);
 }
 
 static void
@@ -4539,7 +4525,7 @@ gtk_window_resize (GtkWindow *window,
  * way that this code:
  *
  * |[<!-- language="C" -->
- *   GtkWindow *window = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+ *   GtkWindow *window = GTK_WINDOW (gtk_window_new ());
  *   int width = 500;
  *   int height = 300;
  *   gtk_window_resize (window, width, height);

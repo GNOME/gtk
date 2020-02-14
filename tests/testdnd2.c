@@ -467,7 +467,7 @@ main (int argc, char *Argv[])
 
   gtk_init ();
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Drag And Drop");
   gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 

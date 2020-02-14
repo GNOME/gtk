@@ -112,7 +112,7 @@ typedef enum
 GDK_AVAILABLE_IN_ALL
 GType      gtk_window_get_type                 (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_window_new                      (GtkWindowType        type);
+GtkWidget* gtk_window_new                      (void);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_title                (GtkWindow           *window,
 						const gchar         *title);

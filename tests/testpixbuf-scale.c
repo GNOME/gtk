@@ -99,7 +99,7 @@ main(int argc, char **argv)
         if (creator)
                 g_print ("%s was created by '%s'\n", argv[1], creator);
 
-	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	window = gtk_window_new ();
 	g_signal_connect (window, "destroy",
 			  G_CALLBACK (quit_cb), &done);
 	
