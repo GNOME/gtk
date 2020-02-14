@@ -140,7 +140,7 @@
  *
  *   adjustment = gtk_adjustment_new (50.0, 0.0, 100.0, 1.0, 5.0, 0.0);
  *
- *   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+ *   window = gtk_window_new ();
  *
  *   // creates the spinbutton, with no decimal places
  *   button = gtk_spin_button_new (adjustment, 1.0, 0);
@@ -171,7 +171,7 @@
  *
  *   adjustment = gtk_adjustment_new (2.500, 0.0, 5.0, 0.001, 0.1, 0.0);
  *
- *   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+ *   window = gtk_window_new ();
  *
  *   // creates the spinbutton, with three decimal places
  *   button = gtk_spin_button_new (adjustment, 0.001, 3);

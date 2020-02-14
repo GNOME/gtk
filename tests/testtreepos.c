@@ -93,7 +93,7 @@ int main (int argc, char *argv[])
 
   gtk_init ();
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (window), sw);
   tv = gtk_tree_view_new ();

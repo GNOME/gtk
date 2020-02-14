@@ -33,7 +33,7 @@ int main (int argc, char *argv[])
   has_display = gtk_init_check ();
   g_assert (!has_display);
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   button = gtk_button_new ();
   gtk_container_add (GTK_CONTAINER (window), button);
 

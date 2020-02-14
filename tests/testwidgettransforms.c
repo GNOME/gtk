@@ -308,7 +308,7 @@ main (int argc, char **argv)
                                               GTK_STYLE_PROVIDER (provider),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   matrix_chooser = g_object_new (GTK_TYPE_MATRIX_CHOOSER, NULL);
   transform_tester = g_object_new (GTK_TYPE_TRANSFORM_TESTER, NULL);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);

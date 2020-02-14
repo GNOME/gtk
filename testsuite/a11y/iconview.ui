@@ -15,7 +15,7 @@
   </object>
   <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
-    <property name="type">popup</property>
+    <property name="decorated">0</property>
     <child>
       <object class="GtkIconView" id="iv1">
         <property name="visible">True</property>

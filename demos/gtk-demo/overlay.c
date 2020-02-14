@@ -31,7 +31,7 @@ do_overlay (GtkWidget *do_widget)
       int i, j;
       char *text;
 
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_default_size (GTK_WINDOW (window), 500, 510);
       gtk_window_set_title (GTK_WINDOW (window), "Interactive Overlay");
 

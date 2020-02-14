@@ -138,7 +138,7 @@ main (int argc, char **argv)
       return -1;
     }
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   view = g_object_new (GTK_TYPE_TEXTURE_VIEW, NULL);
   ((GtkTextureView*)view)->texture = g_steal_pointer (&texture);

@@ -23,7 +23,7 @@ do_headerbar (GtkWidget *do_widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),  gtk_widget_get_display (do_widget));
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);

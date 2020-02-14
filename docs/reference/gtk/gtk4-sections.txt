@@ -4286,7 +4286,6 @@ gtk_requisition_get_type
 <TITLE>GtkWindow</TITLE>
 GtkWindow
 GtkWindowClass
-GtkWindowType
 gtk_window_new
 gtk_window_set_title
 gtk_window_set_resizable

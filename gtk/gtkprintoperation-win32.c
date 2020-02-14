@@ -1756,7 +1756,7 @@ gtk_print_operation_run_with_dialog (GtkPrintOperation *op,
   
   if (parent == NULL)
     {
-      invisible = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      invisible = gtk_window_new ();
       parentHWnd = get_parent_hwnd (invisible);
     }
   else

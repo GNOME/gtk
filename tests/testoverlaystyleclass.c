@@ -60,7 +60,7 @@ main (int argc, char *argv[])
                                               GTK_STYLE_PROVIDER (provider),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-  win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  win = gtk_window_new ();
   gtk_window_set_default_size (GTK_WINDOW (win), 600, 600);
 
   grid = gtk_grid_new ();

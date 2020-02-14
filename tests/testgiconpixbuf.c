@@ -48,7 +48,7 @@ main (int argc,
   gtk_init ();
 
   pixbuf = gdk_pixbuf_new_from_file ("apple-red.png", NULL);
-  toplevel = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  toplevel = gtk_window_new ();
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   gtk_container_add (GTK_CONTAINER (toplevel), hbox);
 

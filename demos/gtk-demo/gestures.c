@@ -146,7 +146,7 @@ do_gestures (GtkWidget *do_widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
       gtk_window_set_title (GTK_WINDOW (window), "Gestures");
       g_signal_connect (window, "destroy",
