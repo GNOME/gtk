@@ -1,5 +1,5 @@
 window1
-  "window"
+  "frame"
   index: 0
   state: enabled resizable sensitive showing visible
   toolkit: gtk
@@ -7,6 +7,14 @@ window1
   <AtkComponent>
   layer: window
   alpha: 1
+  unnamed-GtkContainerAccessible-0
+    "panel"
+    parent: window1
+    state: enabled sensitive showing visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
   box1
     "filler"
     parent: window1
@@ -81,9 +89,9 @@ window1
         <AtkComponent>
         layer: widget
         alpha: 1
-        unnamed-GtkStackAccessible-0
+        unnamed-GtkStackAccessible-1
           "panel"
-          parent: unnamed-GtkWidgetAccessible-1
+          parent: unnamed-GtkWidgetAccessible-2
           index: 0
           state: enabled sensitive visible
           toolkit: gtk
@@ -112,9 +120,9 @@ window1
         <AtkComponent>
         layer: widget
         alpha: 1
-        unnamed-GtkStackAccessible-2
+        unnamed-GtkStackAccessible-3
           "panel"
-          parent: unnamed-GtkWidgetAccessible-3
+          parent: unnamed-GtkWidgetAccessible-4
           index: 0
           state: enabled sensitive visible
           toolkit: gtk
@@ -184,9 +192,9 @@ window1
         <AtkComponent>
         layer: widget
         alpha: 1
-        unnamed-GtkStackAccessible-4
+        unnamed-GtkStackAccessible-5
           "panel"
-          parent: unnamed-GtkWidgetAccessible-5
+          parent: unnamed-GtkWidgetAccessible-6
           index: 0
           state: enabled sensitive visible
           toolkit: gtk
@@ -215,9 +223,9 @@ window1
         <AtkComponent>
         layer: widget
         alpha: 1
-        unnamed-GtkStackAccessible-6
+        unnamed-GtkStackAccessible-7
           "panel"
-          parent: unnamed-GtkWidgetAccessible-7
+          parent: unnamed-GtkWidgetAccessible-8
           index: 0
           state: enabled sensitive visible
           toolkit: gtk

@@ -1,6 +1,5 @@
 <interface>
   <object class="GtkWindow" id="window1">
-    <property name="type">popup</property>
     <child>
       <object class="GtkHeaderBar" id="headerbar1">
         <property name="title">Title</property>

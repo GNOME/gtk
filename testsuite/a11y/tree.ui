@@ -14,7 +14,6 @@
   </object>
   <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
-    <property name="type">popup</property>
     <child>
       <object class="GtkTreeView" id="tv">
         <property name="visible">True</property>
