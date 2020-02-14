@@ -624,42 +624,6 @@ gtk_info_bar_add_action_widget (GtkInfoBar *info_bar,
 }
 
 /**
- * gtk_info_bar_get_action_area:
- * @info_bar: a #GtkInfoBar
- *
- * Returns the action area of @info_bar.
- *
- * Returns: (transfer none): the action area
- */
-GtkWidget*
-gtk_info_bar_get_action_area (GtkInfoBar *info_bar)
-{
-  GtkInfoBarPrivate *priv = gtk_info_bar_get_instance_private (info_bar);
-
-  g_return_val_if_fail (GTK_IS_INFO_BAR (info_bar), NULL);
-
-  return priv->action_area;
-}
-
-/**
- * gtk_info_bar_get_content_area:
- * @info_bar: a #GtkInfoBar
- *
- * Returns the content area of @info_bar.
- *
- * Returns: (transfer none): the content area
- */
-GtkWidget*
-gtk_info_bar_get_content_area (GtkInfoBar *info_bar)
-{
-  GtkInfoBarPrivate *priv = gtk_info_bar_get_instance_private (info_bar);
-
-  g_return_val_if_fail (GTK_IS_INFO_BAR (info_bar), NULL);
-
-  return priv->content_area;
-}
-
-/**
  * gtk_info_bar_add_button:
  * @info_bar: a #GtkInfoBar
  * @button_text: text of button
