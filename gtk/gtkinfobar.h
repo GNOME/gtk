@@ -54,10 +54,6 @@ GtkWidget     *gtk_info_bar_new_with_buttons       (const gchar    *first_button
                                                     ...);
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget     *gtk_info_bar_get_action_area        (GtkInfoBar     *info_bar);
-GDK_AVAILABLE_IN_ALL
-GtkWidget     *gtk_info_bar_get_content_area       (GtkInfoBar     *info_bar);
-GDK_AVAILABLE_IN_ALL
 void           gtk_info_bar_add_action_widget      (GtkInfoBar     *info_bar,
                                                     GtkWidget      *child,
                                                     gint            response_id);
