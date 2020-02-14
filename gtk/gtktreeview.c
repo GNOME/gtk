@@ -9581,8 +9581,7 @@ gtk_tree_view_get_arrow_xrange (GtkTreeView *tree_view,
 
   if (tmp_column &&
       gtk_tree_view_column_get_visible (tmp_column))
-    /* +1 because x2 isn't included in the range. */
-    *x2 = *x1 + expander_render_size + 1;
+    *x2 = *x1 + expander_render_size;
   else
     *x2 = *x1;
 }
@@ -10329,13 +10328,11 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   gint x2;
   gint vertical_separator;
   GtkCellRendererState flags = 0;
-  gint expander_size;
 
   widget = GTK_WIDGET (tree_view);
   context = gtk_widget_get_style_context (widget);
 
   gtk_widget_style_get (widget,
-                        "expander-size", &expander_size,
                         "vertical-separator", &vertical_separator,
                         NULL);
 
@@ -10370,19 +10367,15 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);
 
-  if (expander_size > 0)
+  /* Make sure area.height has the same parity as the "expander-size" style
+   * property (which area.width is assumed to be exactly equal to). This is done
+   * to avoid the arrow being vertically centered in a half-pixel, which would
+   * result in a fuzzy rendering.
+   */
+  if (area.height % 2 != area.width % 2)
     {
-      if (expander_size < area.width && area.width % expander_size != 0)
-        {
-          area.x += (area.width % expander_size) / 2;
-          area.width = expander_size;
-        }
-
-      if (expander_size < area.height && area.height % expander_size != 0)
-        {
-          area.y += (area.height % expander_size) / 2;
-          area.height = expander_size;
-        }
+      area.y += 1;
+      area.height -= 1;
     }
 
   gtk_render_expander (context, cr,
