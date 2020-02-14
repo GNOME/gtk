@@ -322,6 +322,44 @@ test_changes (void)
   g_object_unref (slice);
 }
 
+static void
+test_bug_added_equals_removed (void)
+{
+  GtkSliceListModel *slice;
+  GListStore *store;
+  
+  store = new_store (1, 10, 1);
+  slice = new_model (store, 0, 10);
+  assert_model (slice, "1 2 3 4 5 6 7 8 9 10");
+  assert_changes (slice, "");
+
+  splice (store, 9, 1, (guint[]) { 11 }, 1);
+  assert_model (slice, "1 2 3 4 5 6 7 8 9 11");
+  assert_changes (slice, "9-1+1");
+
+  g_object_unref (store);
+  g_object_unref (slice);
+}
+
+static void
+test_bug_skip_amount (void)
+{
+  GtkSliceListModel *slice;
+  GListStore *store;
+  
+  store = new_store (1, 5, 1);
+  slice = new_model (store, 2, 2);
+  assert_model (slice, "3 4");
+  assert_changes (slice, "");
+
+  splice (store, 0, 5, (guint[]) { 11, 12, 13, 14, 15 }, 5);
+  assert_model (slice, "13 14");
+  assert_changes (slice, "0-2+2");
+
+  g_object_unref (store);
+  g_object_unref (slice);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -338,6 +376,8 @@ main (int argc, char *argv[])
 #if GLIB_CHECK_VERSION (2, 58, 0) /* g_list_store_splice() is broken before 2.58 */
   g_test_add_func ("/slicelistmodel/changes", test_changes);
 #endif
+  g_test_add_func ("/slicelistmodel/bug/added_equals_removed", test_bug_added_equals_removed);
+  g_test_add_func ("/slicelistmodel/bug/skip_amount", test_bug_skip_amount);
 
   return g_test_run ();
 }
