@@ -30,6 +30,7 @@
 #include "gtkcontainerprivate.h"
 #include "gtkprivate.h"
 #include "gtkcenterbox.h"
+#include "gtkbinlayout.h"
 
 #include <string.h>
 
@@ -148,40 +149,6 @@ gtk_action_bar_child_type (GtkContainer *container)
 }
 
 static void
-gtk_action_bar_size_allocate (GtkWidget *widget,
-                              int        width,
-                              int        height,
-                              int        baseline)
-{
-  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
-
-  gtk_widget_size_allocate (priv->revealer,
-                            &(GtkAllocation) {
-                              0, 0,
-                              width, height
-                            },
-                            baseline);
-}
-
-static void
-gtk_action_bar_measure_ (GtkWidget *widget,
-                        GtkOrientation orientation,
-                        int        for_size,
-                        int       *minimum,
-                        int       *natural,
-                        int       *minimum_baseline,
-                        int       *natural_baseline)
-{
-  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
-
-  gtk_widget_measure (priv->revealer,
-                      orientation,
-                      for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
-}
-
-static void
 gtk_action_bar_set_property (GObject      *object,
                              guint         prop_id,
                              const GValue *value,
@@ -250,8 +217,6 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
   object_class->get_property = gtk_action_bar_get_property;
   object_class->finalize = gtk_action_bar_finalize;
 
-  widget_class->size_allocate = gtk_action_bar_size_allocate;
-  widget_class->measure = gtk_action_bar_measure_;
   widget_class->destroy = gtk_action_bar_destroy;
 
   container_class->add = gtk_action_bar_add;
@@ -269,6 +234,7 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_PANEL);
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("actionbar"));
 }
 
