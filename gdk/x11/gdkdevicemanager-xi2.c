@@ -1639,8 +1639,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             event->scroll.time = xev->time;
             event->scroll.x = (gdouble) xev->event_x / scale;
             event->scroll.y = (gdouble) xev->event_y / scale;
-            event->scroll.x_root = (gdouble) xev->root_x / scale;
-            event->scroll.y_root = (gdouble) xev->root_y / scale;
             event->scroll.delta_x = 0;
             event->scroll.delta_y = 0;
 
@@ -1662,8 +1660,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             event->button.time = xev->time;
             event->button.x = (gdouble) xev->event_x / scale;
             event->button.y = (gdouble) xev->event_y / scale;
-            event->button.x_root = (gdouble) xev->root_x / scale;
-            event->button.y_root = (gdouble) xev->root_y / scale;
 
             device = g_hash_table_lookup (device_manager->id_table,
                                           GUINT_TO_POINTER (xev->deviceid));
@@ -1746,8 +1742,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             event->scroll.time = xev->time;
             event->scroll.x = (gdouble) xev->event_x / scale;
             event->scroll.y = (gdouble) xev->event_y / scale;
-            event->scroll.x_root = (gdouble) xev->root_x / scale;
-            event->scroll.y_root = (gdouble) xev->root_y / scale;
             event->scroll.delta_x = delta_x;
             event->scroll.delta_y = delta_y;
 
@@ -1763,8 +1757,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->motion.time = xev->time;
         event->motion.x = (gdouble) xev->event_x / scale;
         event->motion.y = (gdouble) xev->event_y / scale;
-        event->motion.x_root = (gdouble) xev->root_x / scale;
-        event->motion.y_root = (gdouble) xev->root_y / scale;
 
         gdk_event_set_device (event, device);
         gdk_event_set_source_device (event, source_device);
@@ -1809,8 +1801,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->touch.time = xev->time;
         event->touch.x = (gdouble) xev->event_x / scale;
         event->touch.y = (gdouble) xev->event_y / scale;
-        event->touch.x_root = (gdouble) xev->root_x / scale;
-        event->touch.y_root = (gdouble) xev->root_y / scale;
 
         device = g_hash_table_lookup (device_manager->id_table,
                                       GUINT_TO_POINTER (xev->deviceid));
@@ -1872,8 +1862,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->touch.time = xev->time;
         event->touch.x = (gdouble) xev->event_x / scale;
         event->touch.y = (gdouble) xev->event_y / scale;
-        event->touch.x_root = (gdouble) xev->root_x / scale;
-        event->touch.y_root = (gdouble) xev->root_y / scale;
 
         device = g_hash_table_lookup (device_manager->id_table,
                                       GINT_TO_POINTER (xev->deviceid));
@@ -1927,8 +1915,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         event->crossing.x = (gdouble) xev->event_x / scale;
         event->crossing.y = (gdouble) xev->event_y / scale;
-        event->crossing.x_root = (gdouble) xev->root_x / scale;
-        event->crossing.y_root = (gdouble) xev->root_y / scale;
         event->crossing.time = xev->time;
         event->crossing.focus = xev->focus;
 
