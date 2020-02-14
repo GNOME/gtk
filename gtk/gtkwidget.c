@@ -3539,6 +3539,8 @@ gtk_widget_realize (GtkWidget *widget)
 
       if (priv->context)
 	gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
+      else
+        gtk_widget_get_style_context (widget);
 
       gtk_widget_pop_verify_invariants (widget);
     }
