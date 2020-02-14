@@ -647,7 +647,8 @@ xdnd_position_filter (GdkSurface   *surface,
   if ((drop != NULL) &&
       (drop_x11->source_window == source_window))
     {
-      impl = GDK_X11_SURFACE (gdk_drop_get_surface (drop));
+      surface = gdk_drop_get_surface (drop);
+      impl = GDK_X11_SURFACE (surface);
 
       drop_x11->suggested_action = xdnd_action_from_atom (display, action);
       gdk_x11_drop_update_actions (drop_x11);
@@ -655,7 +656,7 @@ xdnd_position_filter (GdkSurface   *surface,
       drop_x11->last_x = x_root / impl->surface_scale;
       drop_x11->last_y = y_root / impl->surface_scale;
 
-      gdk_drop_emit_motion_event (drop, FALSE, drop_x11->last_x, drop_x11->last_y, time);
+      gdk_drop_emit_motion_event (drop, FALSE, drop_x11->last_x - surface->x, drop_x11->last_y - surface->y, time);
     }
 
   return TRUE;
@@ -687,9 +688,10 @@ xdnd_drop_filter (GdkSurface   *surface,
   if ((drop != NULL) &&
       (drop_x11->source_window == source_window))
     {
-      gdk_x11_surface_set_user_time (gdk_drop_get_surface (drop), time);
+      GdkSurface *s = gdk_drop_get_surface (drop);
+      gdk_x11_surface_set_user_time (s, time);
 
-      gdk_drop_emit_drop_event (drop, FALSE, drop_x11->last_x, drop_x11->last_y, time);
+      gdk_drop_emit_drop_event (drop, FALSE, drop_x11->last_x - s->x, drop_x11->last_y - s->y, time);
     }
 
   return TRUE;
