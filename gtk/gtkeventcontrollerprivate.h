@@ -41,7 +41,9 @@ struct _GtkEventControllerClass
   void     (* reset)        (GtkEventController *controller);
 
   void     (* handle_crossing) (GtkEventController    *controller,
-                                const GtkCrossingData *crossing);
+                                const GtkCrossingData *crossing,
+                                double                 x,
+                                double                 y);
 
   /*<private>*/
 

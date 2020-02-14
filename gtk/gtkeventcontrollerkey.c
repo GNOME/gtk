@@ -193,7 +193,9 @@ update_focus (GtkEventController    *controller,
 
 static void
 gtk_event_controller_key_handle_crossing (GtkEventController    *controller,
-                                          const GtkCrossingData *crossing)
+                                          const GtkCrossingData *crossing,
+                                          double                 x,
+                                          double                 y)
 {
   if (crossing->type != GTK_CROSSING_FOCUS)
     return;

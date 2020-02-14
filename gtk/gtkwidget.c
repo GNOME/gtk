@@ -4822,7 +4822,9 @@ gtk_widget_run_controllers (GtkWidget           *widget,
 
 void
 gtk_widget_handle_crossing (GtkWidget             *widget,
-                            const GtkCrossingData *crossing)
+                            const GtkCrossingData *crossing,
+                            double                 x,
+                            double                 y)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GList *l;
@@ -4833,7 +4835,7 @@ gtk_widget_handle_crossing (GtkWidget             *widget,
     {
       GtkEventController *controller = l->data;
 
-      gtk_event_controller_handle_crossing (controller, crossing);
+      gtk_event_controller_handle_crossing (controller, crossing, x, y);
     }
 
   g_object_unref (widget);
