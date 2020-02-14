@@ -356,21 +356,14 @@ store_in_global_parent_cache (GtkCssNode                  *node,
 }
 
 static GtkCssStyle *
-gtk_css_node_create_style (GtkCssNode                   *cssnode,
-                           GtkCssStyle                  *static_style,
-                           const GtkCountingBloomFilter *filter,
-                           GtkCssChange                  change)
+compute_style (GtkStyleProvider             *provider,
+               const GtkCountingBloomFilter *filter,
+               GtkCssNode                   *cssnode,
+               GtkCssLookup                 *lookup,
+               GtkCssChange                  change)
 {
   const GtkCssNodeDeclaration *decl;
   GtkCssStyle *style;
-  GtkCssChange style_change;
-  GtkCssLookup *lookup;
-
-  style_change = gtk_css_static_style_get_change (GTK_CSS_STATIC_STYLE (static_style));
-
-  if ((change & GTK_CSS_RADICAL_CHANGE) == 0 &&
-      (change & style_change) == 0)
-    return g_object_ref (static_style);
 
   decl = gtk_css_node_get_declaration (cssnode);
   style = lookup_in_global_parent_cache (cssnode, decl);
@@ -379,24 +372,37 @@ gtk_css_node_create_style (GtkCssNode                   *cssnode,
 
   created_styles++;
 
-  if ((change & GTK_CSS_CHANGE_SOURCE) == 0 &&
-      (change & style_change) == 0)
-    lookup = gtk_css_static_style_get_lookup (GTK_CSS_STATIC_STYLE (static_style));
-  else
-    lookup = NULL;
-
-  if ((change & GTK_CSS_CHANGE_NEEDS_RECOMPUTE) != 0)
-    style_change = 0;
-
-  style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
-                                            filter,
-                                            cssnode,
-                                            lookup,
-                                            style_change);
-
+  style = gtk_css_static_style_new_compute (provider, filter, cssnode, lookup, change);
   store_in_global_parent_cache (cssnode, decl, style);
 
   return style;
+}
+
+static GtkCssStyle *
+gtk_css_node_create_style (GtkCssNode                   *cssnode,
+                           GtkCssStyle                  *style,
+                           const GtkCountingBloomFilter *filter,
+                           GtkCssChange                  change)
+{
+  GtkCssStyle *new_style;
+  GtkCssChange style_change;
+  GtkCssLookup *lookup;
+  GtkStyleProvider *provider;
+
+  provider = gtk_css_node_get_style_provider (cssnode);
+  style_change = gtk_css_static_style_get_change (GTK_CSS_STATIC_STYLE (style));
+  lookup = gtk_css_static_style_get_lookup (GTK_CSS_STATIC_STYLE (style));
+
+  if (change & (GTK_CSS_RADICAL_CHANGE & ~GTK_CSS_CHANGE_PARENT_STYLE))
+    new_style = compute_style (provider, filter, cssnode, NULL, 0);
+  else if (change & style_change)
+    new_style = compute_style (provider, filter, cssnode, NULL, style_change);
+  else if (change & GTK_CSS_CHANGE_PARENT_STYLE)
+    new_style = compute_style (provider, filter, cssnode, lookup, style_change);
+  else
+    new_style = g_object_ref (style);
+
+  return new_style;
 }
 
 static gboolean
