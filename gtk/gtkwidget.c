@@ -13103,6 +13103,24 @@ gtk_widget_class_query_action (GtkWidgetClass      *widget_class,
 }
 
 /**
+ * gtk_widget_get_css_name:
+ * @self: a #GtkWidget
+ *
+ * Returns the CSS name that is used for @self.
+ *
+ * Returns: the CSS name
+ **/
+const char *
+gtk_widget_get_css_name (GtkWidget *self)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
+
+  g_return_val_if_fail (GTK_IS_WIDGET (self), NULL);
+
+  return g_quark_to_string (gtk_css_node_get_name (priv->cssnode));
+}
+
+/**
  * gtk_widget_add_css_class:
  * @widget: a #GtkWidget
  * @css_class: The style class to add to @widget, without
