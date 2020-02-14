@@ -20,11 +20,12 @@ gtk3_icon_browser_SOURCES = \
 	main.c \
 	iconbrowserapp.c iconbrowserapp.h \
 	iconbrowserwin.c iconbrowserwin.h \
-	iconstore.c iconstore.h \
+	iconstore.c iconstore.h
+nodist_gtk3_icon_browser_SOURCES = \
 	resources.c
 
-BUILT_SOURCES = \
-	resources.c
+BUILT_SOURCES = $(nodist_gtk3_icon_browser_SOURCES)
+CLEANFILES = $(BUILT_SOURCES)
 
 resources.c: iconbrowser.gresource.xml $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --generate-dependencies $(srcdir)/iconbrowser.gresource.xml)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/iconbrowser.gresource.xml \
@@ -40,7 +41,7 @@ EXTRA_DIST = \
 # ------------------- MSVC Build Items ----------------
 MSVCPROJS = gtk3-icon-browser
 
-gtk3_icon_browser_FILES = $(gtk3_icon_browser_SOURCES)
+gtk3_icon_browser_FILES = $(gtk3_icon_browser_SOURCES) $(nodist_gtk3_icon_browser_SOURCES)
 gtk3_icon_browser_EXCLUDES = dummy
 
 include $(top_srcdir)/build/Makefile.msvcproj

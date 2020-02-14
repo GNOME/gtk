@@ -150,8 +150,10 @@ keyhash_CFLAGS =					\
 keyhash_SOURCES	=		\
 	keyhash.c 		\
 	gtkkeyhash.c 		\
-	gtkresources.c 		\
 	gtkprivate.c 		\
+	$(NULL)
+nodist_keyhash_SOURCES	=	\
+	gtkresources.c 		\
 	$(NULL)
 
 gtkkeyhash.c: $(top_srcdir)/gtk/gtkkeyhash.c
