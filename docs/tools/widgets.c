@@ -375,7 +375,7 @@ create_info_bar (void)
   widget = gtk_info_bar_new ();
   gtk_info_bar_set_show_close_button (GTK_INFO_BAR (widget), TRUE);
   gtk_info_bar_set_message_type (GTK_INFO_BAR (widget), GTK_MESSAGE_INFO);
-  gtk_container_add (GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (widget))),
+  gtk_container_add (GTK_CONTAINER (widget),
                      gtk_label_new ("Info Bar"));
 
   gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
