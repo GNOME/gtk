@@ -707,6 +707,15 @@ gdk_event_finalize (GObject *object)
       g_list_free_full (event->motion.history, g_free);
       break;
 
+    case GDK_PROXIMITY_IN:
+    case GDK_PROXIMITY_OUT:
+      g_clear_object (&event->proximity.tool);
+      break;
+
+    case GDK_SCROLL:
+      g_clear_object (&event->scroll.tool);
+      break;
+
     default:
       break;
     }
@@ -1825,6 +1834,11 @@ gdk_event_get_device_tool (const GdkEvent *event)
     return event->button.tool;
   else if (event->any.type == GDK_MOTION_NOTIFY)
     return event->motion.tool;
+  else if (event->any.type == GDK_PROXIMITY_IN ||
+           event->any.type == GDK_PROXIMITY_OUT)
+    return event->proximity.tool;
+  else if (event->any.type == GDK_SCROLL)
+    return event->scroll.tool;
 
   return NULL;
 }
@@ -1845,6 +1859,11 @@ gdk_event_set_device_tool (GdkEvent      *event,
     g_set_object (&event->button.tool, tool);
   else if (event->any.type == GDK_MOTION_NOTIFY)
     g_set_object (&event->motion.tool, tool);
+  else if (event->any.type == GDK_PROXIMITY_IN ||
+           event->any.type == GDK_PROXIMITY_OUT)
+    g_set_object (&event->proximity.tool, tool);
+  else if (event->any.type == GDK_SCROLL)
+    g_set_object (&event->scroll.tool, tool);
 }
 
 void

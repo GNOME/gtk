@@ -231,6 +231,7 @@ struct _GdkEventScroll
   gdouble delta_x;
   gdouble delta_y;
   guint is_stop : 1;
+  GdkDeviceTool *tool;
 };
 
 /*
@@ -370,6 +371,7 @@ struct _GdkEventProximity
 {
   GdkEventAny any;
   guint32 time;
+  GdkDeviceTool *tool;
 };
 
 /*
