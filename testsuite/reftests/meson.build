@@ -422,7 +422,6 @@ xfails = [
   'background-color-transparent.ui',
   'background-image-multiple.ui',
   'background-origin.ui',
-  'sizegroups-evolution-identity-page.ui',
   'textview-border-windows.ui',
   'window-show-contents-on-map.ui',
   # these depend on details of text layout
