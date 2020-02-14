@@ -218,8 +218,8 @@ test_resize_popup (void)
   gboolean done;
 
   /* testcase for the dnd window */
-  window = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_window_set_display (GTK_WINDOW (window), gdk_display_get_default ());
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_decorated (GTK_WINDOW (window), FALSE);
   gtk_window_resize (GTK_WINDOW (window), 1, 1);
   gtk_window_get_size (GTK_WINDOW (window), &w, &h);
   g_assert_cmpint (w, ==, 1);
