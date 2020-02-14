@@ -14,7 +14,7 @@
     </data>
   </object>
   <object class="GtkWindow" id="window">
-    <property name="type">popup</property>
+    <property name="decorated">0</property>
     <child>
       <object class="GtkTreeView" id="treeview1">
         <property name="can_focus">1</property>
