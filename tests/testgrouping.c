@@ -121,7 +121,7 @@ main (int argc, char **argv)
 
   model = create_model ();
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   gtk_window_set_default_size (GTK_WINDOW (window), 320, 480);
 

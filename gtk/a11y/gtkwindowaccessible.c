@@ -76,22 +76,6 @@ gtk_window_accessible_notify_gtk (GObject    *obj,
     GTK_WIDGET_ACCESSIBLE_CLASS (gtk_window_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
-static void
-gtk_window_accessible_initialize (AtkObject *obj,
-                                  gpointer   data)
-{
-  GtkWidget *widget = GTK_WIDGET (data);
-
-  ATK_OBJECT_CLASS (gtk_window_accessible_parent_class)->initialize (obj, data);
-
-  _gtk_widget_accessible_set_layer (GTK_WIDGET_ACCESSIBLE (obj), ATK_LAYER_WINDOW);
-
-  if (gtk_window_get_window_type (GTK_WINDOW (widget)) == GTK_WINDOW_POPUP)
-    obj->role = ATK_ROLE_WINDOW;
-  else
-    obj->role = ATK_ROLE_FRAME;
-}
-
 static GtkWidget *
 find_label_child (GtkContainer *container)
 {
@@ -351,7 +335,6 @@ gtk_window_accessible_class_init (GtkWindowAccessibleClass *klass)
   class->get_index_in_parent = gtk_window_accessible_get_index_in_parent;
   class->ref_relation_set = gtk_window_accessible_ref_relation_set;
   class->ref_state_set = gtk_window_accessible_ref_state_set;
-  class->initialize = gtk_window_accessible_initialize;
   class->focus_event = gtk_window_accessible_focus_event;
   class->get_n_children = gtk_window_accessible_get_n_children;
   class->ref_child = gtk_window_accessible_ref_child;

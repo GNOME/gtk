@@ -1,5 +1,5 @@
 window1
-  "window"
+  "frame"
   index: 0
   state: enabled resizable sensitive showing visible
   toolkit: gtk
@@ -7,6 +7,14 @@ window1
   <AtkComponent>
   layer: window
   alpha: 1
+  unnamed-GtkContainerAccessible-0
+    "panel"
+    parent: window1
+    state: enabled sensitive showing visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
   actionbar
     "panel"
     parent: window1
@@ -18,7 +26,7 @@ window1
     alpha: 1
     button1
       "push button"
-      parent: unnamed-GtkContainerAccessible-0
+      parent: unnamed-GtkContainerAccessible-1
       index: 0
       name: Start 1
       state: enabled focusable focused sensitive showing visible
@@ -34,7 +42,7 @@ window1
       action 0 description: Clicks the button
     button2
       "push button"
-      parent: unnamed-GtkContainerAccessible-0
+      parent: unnamed-GtkContainerAccessible-1
       index: 1
       name: Start 2
       state: enabled focusable sensitive showing visible
@@ -50,7 +58,7 @@ window1
       action 0 description: Clicks the button
     button5
       "push button"
-      parent: unnamed-GtkWidgetAccessible-1
+      parent: unnamed-GtkWidgetAccessible-2
       index: 1
       name: Center
       state: enabled focusable sensitive showing visible
@@ -66,7 +74,7 @@ window1
       action 0 description: Clicks the button
     button4
       "push button"
-      parent: unnamed-GtkContainerAccessible-2
+      parent: unnamed-GtkContainerAccessible-3
       index: 0
       name: End 2
       state: enabled focusable sensitive showing visible
@@ -82,7 +90,7 @@ window1
       action 0 description: Clicks the button
     button3
       "push button"
-      parent: unnamed-GtkContainerAccessible-2
+      parent: unnamed-GtkContainerAccessible-3
       index: 1
       name: End 1
       state: enabled focusable sensitive showing visible

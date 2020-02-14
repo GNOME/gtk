@@ -171,7 +171,7 @@ main (int argc, char **argv)
 
   gtk_init ();
 
-  toplevel = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  toplevel = gtk_window_new ();
   grid = gtk_grid_new ();
 
   w1 = gtk_label_new ("File:");

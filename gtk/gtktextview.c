@@ -4118,7 +4118,7 @@ find_child_for_window_type (GtkTextView       *text_view,
 /**
  * gtk_text_view_get_gutter:
  * @text_view: a #GtkTextView
- * @win: a #GtkWindowType
+ * @win: a #GtkTextWindowType
  *
  * Gets a #GtkWidget that has previously been set with
  * gtk_text_view_set_gutter().

@@ -4189,6 +4189,7 @@ gtk_widget_insert_after
 gtk_widget_set_layout_manager
 gtk_widget_get_layout_manager
 gtk_widget_should_layout
+gtk_widget_get_css_name
 gtk_widget_add_css_class
 gtk_widget_remove_css_class
 gtk_widget_has_css_class
@@ -4286,7 +4287,6 @@ gtk_requisition_get_type
 <TITLE>GtkWindow</TITLE>
 GtkWindow
 GtkWindowClass
-GtkWindowType
 gtk_window_new
 gtk_window_set_title
 gtk_window_set_resizable
@@ -4354,7 +4354,6 @@ gtk_window_get_accept_focus
 gtk_window_get_focus_on_map
 gtk_window_get_group
 gtk_window_has_group
-gtk_window_get_window_type
 gtk_window_resize
 gtk_window_set_default_icon_name
 gtk_window_set_icon_name

@@ -140,7 +140,7 @@ main (int argc, char *argv[])
 
   gtk_init ();
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_style_context_add_class (gtk_widget_get_style_context (window), "main");
 
   provider = gtk_css_provider_new ();

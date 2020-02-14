@@ -1,5 +1,5 @@
 window1
-  "window"
+  "frame"
   index: 0
   state: enabled resizable sensitive showing visible
   toolkit: gtk
@@ -7,6 +7,14 @@ window1
   <AtkComponent>
   layer: window
   alpha: 1
+  unnamed-GtkContainerAccessible-0
+    "panel"
+    parent: window1
+    state: enabled sensitive showing visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
   tv
     "table"
     parent: window1
@@ -23,12 +31,12 @@ window1
     columns: 1
     selected rows: 0
     column 0 description: Test
-    column 0 header: unnamed-GtkButtonAccessible-0
+    column 0 header: unnamed-GtkButtonAccessible-1
     table indexes:
       ✓✓tv
       ✓✓tv
       ✓✓tv
-    unnamed-GtkButtonAccessible-0
+    unnamed-GtkButtonAccessible-1
       "table column header"
       parent: tv
       index: 0
@@ -61,7 +69,7 @@ window1
       action 2 description: Activates the cell
       <AtkTableCell>
       table: tv
-      column-header[0]: unnamed-GtkButtonAccessible-0
+      column-header[0]: unnamed-GtkButtonAccessible-1
       column-span: 1
       row-span: 1
       tv
@@ -110,7 +118,7 @@ window1
         action 2 description: Activates the cell
         <AtkTableCell>
         table: tv
-        column-header[0]: unnamed-GtkButtonAccessible-0
+        column-header[0]: unnamed-GtkButtonAccessible-1
         column-span: 1
         row-span: 1
       tv
@@ -159,7 +167,7 @@ window1
         action 2 description: Activates the cell
         <AtkTableCell>
         table: tv
-        column-header[0]: unnamed-GtkButtonAccessible-0
+        column-header[0]: unnamed-GtkButtonAccessible-1
         column-span: 1
         row-span: 1
     tv
@@ -179,7 +187,7 @@ window1
       action 2 description: Activates the cell
       <AtkTableCell>
       table: tv
-      column-header[0]: unnamed-GtkButtonAccessible-0
+      column-header[0]: unnamed-GtkButtonAccessible-1
       column-span: 1
       row-span: 1
       position: 1 0
@@ -229,7 +237,7 @@ window1
         action 2 description: Activates the cell
         <AtkTableCell>
         table: tv
-        column-header[0]: unnamed-GtkButtonAccessible-0
+        column-header[0]: unnamed-GtkButtonAccessible-1
         column-span: 1
         row-span: 1
         position: 1 0
@@ -279,7 +287,7 @@ window1
         action 2 description: Activates the cell
         <AtkTableCell>
         table: tv
-        column-header[0]: unnamed-GtkButtonAccessible-0
+        column-header[0]: unnamed-GtkButtonAccessible-1
         column-span: 1
         row-span: 1
         position: 1 0
@@ -300,7 +308,7 @@ window1
       action 2 description: Activates the cell
       <AtkTableCell>
       table: tv
-      column-header[0]: unnamed-GtkButtonAccessible-0
+      column-header[0]: unnamed-GtkButtonAccessible-1
       column-span: 1
       row-span: 1
       position: 2 0
@@ -350,7 +358,7 @@ window1
         action 2 description: Activates the cell
         <AtkTableCell>
         table: tv
-        column-header[0]: unnamed-GtkButtonAccessible-0
+        column-header[0]: unnamed-GtkButtonAccessible-1
         column-span: 1
         row-span: 1
         position: 2 0
@@ -400,7 +408,7 @@ window1
         action 2 description: Activates the cell
         <AtkTableCell>
         table: tv
-        column-header[0]: unnamed-GtkButtonAccessible-0
+        column-header[0]: unnamed-GtkButtonAccessible-1
         column-span: 1
         row-span: 1
         position: 2 0

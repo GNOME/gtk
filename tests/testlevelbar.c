@@ -89,7 +89,7 @@ main (int argc, char *argv[])
 
   add_custom_css ();
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_default_size (GTK_WINDOW (window), 500, 100);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
   g_object_set (box, "margin", 20, NULL);

@@ -1,5 +1,5 @@
 window1
-  "window"
+  "frame"
   index: 0
   name: Page 1
   state: enabled resizable sensitive showing visible

@@ -1,5 +1,5 @@
 window1
-  "window"
+  "frame"
   index: 0
   state: enabled resizable sensitive showing visible
   toolkit: gtk
@@ -7,6 +7,14 @@ window1
   <AtkComponent>
   layer: window
   alpha: 1
+  unnamed-GtkContainerAccessible-0
+    "panel"
+    parent: window1
+    state: enabled sensitive showing visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
   spinner1
     "animation"
     parent: window1
@@ -19,5 +27,5 @@ window1
     layer: widget
     alpha: 1
     <AtkImage>
-    image size: 16 x 16
+    image size: 240 x 68
     image description: (null)

@@ -503,7 +503,7 @@ popup_cb (gpointer data)
 	  int i, j;
           GdkContentFormats *targets;
 	  
-	  popup_window = gtk_window_new (GTK_WINDOW_POPUP);
+	  popup_window = gtk_window_new ();
 
 	  grid = gtk_grid_new ();
           targets = gdk_content_formats_new_for_gtype (G_TYPE_STRING);
@@ -615,7 +615,7 @@ main (int argc, char **argv)
   
   gtk_init ();
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   g_signal_connect (window, "destroy",
 		    G_CALLBACK (quit_cb), &done);
 

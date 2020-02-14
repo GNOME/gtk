@@ -198,7 +198,7 @@ main(int argc, char **argv)
   g_print ("# Resizing?: %s\n",
            cb_no_resize ? "no" : "yes");
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   frame_stats_ensure (GTK_WINDOW (window));
 
   da = gtk_drawing_area_new ();
