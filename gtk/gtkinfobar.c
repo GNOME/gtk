@@ -630,7 +630,7 @@ gtk_info_bar_add_action_widget (GtkInfoBar *info_bar,
  *
  * Returns the action area of @info_bar.
  *
- * Returns: (transfer none): the action area
+ * Returns: (type Gtk.Box) (transfer none): the action area
  */
 GtkWidget*
 gtk_info_bar_get_action_area (GtkInfoBar *info_bar)
@@ -648,7 +648,7 @@ gtk_info_bar_get_action_area (GtkInfoBar *info_bar)
  *
  * Returns the content area of @info_bar.
  *
- * Returns: (transfer none): the content area
+ * Returns: (type Gtk.Box) (transfer none): the content area
  */
 GtkWidget*
 gtk_info_bar_get_content_area (GtkInfoBar *info_bar)
