@@ -77,7 +77,7 @@ main (int argc, char *argv[])
 
   fontchooser = gtk_font_chooser_widget_new ();
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_widget_set_size_request (window, 600, 600);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_container_add (GTK_CONTAINER (window), box);

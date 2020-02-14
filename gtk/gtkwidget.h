@@ -971,6 +971,8 @@ void                    gtk_widget_snapshot_child       (GtkWidget   *widget,
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_widget_should_layout        (GtkWidget   *widget);
 GDK_AVAILABLE_IN_ALL
+const char *            gtk_widget_get_css_name         (GtkWidget   *self) G_GNUC_PURE;
+GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_add_css_class        (GtkWidget   *widget,
                                                          const char  *css_class);
 GDK_AVAILABLE_IN_ALL

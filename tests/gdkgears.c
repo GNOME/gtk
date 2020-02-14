@@ -129,7 +129,7 @@ main (int argc, char *argv[])
 
   gtk_init ();
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_titlebar (GTK_WINDOW (window), g_object_new (GTK_TYPE_HEADER_BAR, "visible", TRUE, "title", "GdkGears", NULL));
   gtk_window_set_default_size (GTK_WINDOW (window), 640, 640);
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);

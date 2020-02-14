@@ -828,7 +828,7 @@ test_construct_only_property (void)
   const gchar buffer[] =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
-    "    <property name=\"type\">popup</property>"
+    "    <property name=\"css-name\">amazing</property>"
     "  </object>"
     "</interface>";
   const gchar buffer2[] =
@@ -839,12 +839,10 @@ test_construct_only_property (void)
     "  </object>"
     "</interface>";
   GObject *widget, *tagtable, *textbuffer;
-  GtkWindowType type;
   
   builder = builder_new_from_string (buffer, -1, NULL);
   widget = gtk_builder_get_object (builder, "window1");
-  g_object_get (widget, "type", &type, NULL);
-  g_assert (type == GTK_WINDOW_POPUP);
+  g_assert_cmpstr (gtk_widget_get_css_name (GTK_WIDGET (widget)), ==, "amazing");
 
   gtk_widget_destroy (GTK_WIDGET (widget));
   g_object_unref (builder);
@@ -1713,18 +1711,18 @@ test_value_from_string (void)
   g_error_free (error);
   error = NULL;
 
-  g_assert (gtk_builder_value_from_string_type (builder, GTK_TYPE_WINDOW_TYPE, "toplevel", &value, &error) == TRUE);
+  g_assert (gtk_builder_value_from_string_type (builder, GTK_TYPE_TEXT_DIRECTION, "rtl", &value, &error) == TRUE);
   g_assert (G_VALUE_HOLDS_ENUM (&value));
-  g_assert (g_value_get_enum (&value) == GTK_WINDOW_TOPLEVEL);
+  g_assert (g_value_get_enum (&value) == GTK_TEXT_DIR_RTL);
   g_value_unset (&value);
 
-  g_assert (gtk_builder_value_from_string_type (builder, GTK_TYPE_WINDOW_TYPE, "sliff", &value, &error) == FALSE);
+  g_assert (gtk_builder_value_from_string_type (builder, GTK_TYPE_TEXT_DIRECTION, "sliff", &value, &error) == FALSE);
   g_value_unset (&value);
   g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE);
   g_error_free (error);
   error = NULL;
 
-  g_assert (gtk_builder_value_from_string_type (builder, GTK_TYPE_WINDOW_TYPE, "foobar", &value, &error) == FALSE);
+  g_assert (gtk_builder_value_from_string_type (builder, GTK_TYPE_TEXT_DIRECTION, "foobar", &value, &error) == FALSE);
   g_value_unset (&value);
   g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE);
   g_error_free (error);

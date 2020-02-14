@@ -35,7 +35,7 @@ do_sidebar (GtkWidget *do_widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
       gtk_widget_set_size_request (window, 500, 350);
 

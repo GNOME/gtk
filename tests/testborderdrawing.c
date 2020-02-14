@@ -106,7 +106,7 @@ main (int argc, char **argv)
                                               GTK_STYLE_PROVIDER (provider),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 40);
   top = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
   bottom = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);

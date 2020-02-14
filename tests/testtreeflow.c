@@ -142,7 +142,7 @@ main (int argc, char *argv[])
   gtk_init ();
 
   path = gtk_tree_path_new_from_string ("80");
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Reflow test");
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);

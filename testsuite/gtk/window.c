@@ -67,7 +67,7 @@ test_default_size (void)
   gint w, h;
   gboolean done;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   if (interactive)
     {
       GtkEventController *controller = gtk_event_controller_key_new ();
@@ -155,7 +155,7 @@ test_resize (void)
   gint w, h;
   gboolean done;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   if (interactive)
     {
       GtkEventController *controller = gtk_event_controller_key_new ();
@@ -218,8 +218,8 @@ test_resize_popup (void)
   gboolean done;
 
   /* testcase for the dnd window */
-  window = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_window_set_display (GTK_WINDOW (window), gdk_display_get_default ());
+  window = gtk_window_new ();
+  gtk_window_set_decorated (GTK_WINDOW (window), FALSE);
   gtk_window_resize (GTK_WINDOW (window), 1, 1);
   gtk_window_get_size (GTK_WINDOW (window), &w, &h);
   g_assert_cmpint (w, ==, 1);
@@ -251,7 +251,7 @@ test_show_hide (void)
 
   /* test that hide/show does not affect the size */
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
 
   gtk_widget_show (window);
 

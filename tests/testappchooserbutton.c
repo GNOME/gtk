@@ -80,7 +80,7 @@ main (int argc,
 
   gtk_init ();
 
-  toplevel = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  toplevel = gtk_window_new ();
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_container_add (GTK_CONTAINER (toplevel), box);

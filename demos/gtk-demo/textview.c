@@ -474,7 +474,7 @@ do_textview (GtkWidget *do_widget)
       GtkWidget *sw;
       GtkTextBuffer *buffer;
 
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       gtk_window_set_default_size (GTK_WINDOW (window),
@@ -588,7 +588,7 @@ easter_egg_callback (GtkWidget *button,
 
   g_object_unref (buffer);
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_AUTOMATIC,

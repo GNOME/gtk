@@ -1,5 +1,5 @@
 window1
-  "window"
+  "frame"
   index: 0
   state: enabled resizable sensitive showing visible
   toolkit: gtk
@@ -7,6 +7,14 @@ window1
   <AtkComponent>
   layer: window
   alpha: 1
+  unnamed-GtkContainerAccessible-0
+    "panel"
+    parent: window1
+    state: enabled sensitive showing visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
   bar1
     "info bar"
     parent: window1
@@ -17,7 +25,7 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    unnamed-GtkContainerAccessible-0
+    unnamed-GtkContainerAccessible-1
       "panel"
       parent: bar1
       index: 0
@@ -26,18 +34,18 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GtkContainerAccessible-1
+      unnamed-GtkContainerAccessible-2
         "filler"
-        parent: unnamed-GtkContainerAccessible-0
+        parent: unnamed-GtkContainerAccessible-1
         index: 0
         state: enabled horizontal sensitive showing visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
-        unnamed-GtkContainerAccessible-2
+        unnamed-GtkContainerAccessible-3
           "filler"
-          parent: unnamed-GtkContainerAccessible-1
+          parent: unnamed-GtkContainerAccessible-2
           index: 0
           state: enabled horizontal sensitive showing visible
           toolkit: gtk
@@ -46,7 +54,7 @@ window1
           alpha: 1
           label1
             "label"
-            parent: unnamed-GtkContainerAccessible-2
+            parent: unnamed-GtkContainerAccessible-3
             index: 0
             name: Some important info
             state: enabled multi-line sensitive showing visible
@@ -84,18 +92,18 @@ window1
                                 weight: <omitted>
                                 wrap-mode: word
             <AtkHypertext>
-        unnamed-GtkContainerAccessible-3
+        unnamed-GtkContainerAccessible-4
           "filler"
-          parent: unnamed-GtkContainerAccessible-1
+          parent: unnamed-GtkContainerAccessible-2
           index: 1
           state: enabled horizontal sensitive showing visible
           toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
-        unnamed-GtkButtonAccessible-4
+        unnamed-GtkButtonAccessible-5
           "push button"
-          parent: unnamed-GtkContainerAccessible-1
+          parent: unnamed-GtkContainerAccessible-2
           index: 2
           name: Close
           state: enabled focusable sensitive

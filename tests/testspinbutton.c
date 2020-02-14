@@ -41,7 +41,7 @@ prepare_window_for_orientation (GtkOrientation orientation)
   GtkWidget *window, *mainbox, *wrap_button;
   int max;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   g_signal_connect (window, "close-request", G_CALLBACK (on_delete), NULL);
 
   mainbox = gtk_box_new (GTK_ORIENTATION_VERTICAL ^ orientation, 2);

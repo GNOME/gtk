@@ -24,7 +24,7 @@ test_9d6da33ff5c5e41e3521e1afd63d2d67bc915753 (void)
 {
   GtkWidget *window, *label;
 
-  window = gtk_window_new (GTK_WINDOW_POPUP);
+  window = gtk_window_new ();
   label = gtk_label_new ("I am sensitive.");
   gtk_container_add (GTK_CONTAINER (window), label);
 
@@ -43,7 +43,7 @@ test_94f00eb04dd1433cf1cc9a3341f485124e38abd1 (void)
 {
   GtkWidget *window, *label;
 
-  window = gtk_window_new (GTK_WINDOW_POPUP);
+  window = gtk_window_new ();
   label = gtk_label_new ("I am insensitive.");
   gtk_container_add (GTK_CONTAINER (window), label);
 

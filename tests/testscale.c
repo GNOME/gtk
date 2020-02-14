@@ -128,7 +128,7 @@ int main (int argc, char *argv[])
 
   gtk_init ();
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), "Ranges with marks");
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
   box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);

@@ -1,6 +1,5 @@
 <interface>
   <object class="GtkAssistant" id="window1">
-    <property name="type">popup</property>
     <child>
       <object class="GtkAssistantPage">
         <property name="title" translatable="yes">Page 1</property>
