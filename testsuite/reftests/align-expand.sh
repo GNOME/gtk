@@ -30,7 +30,7 @@ cat << EOF
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkWindow" id="window">
     <property name="can_focus">False</property>
-    <property name="type">popup</property>
+    <property name="decorated">0</property>
     <child>
       <object class="GtkGrid" id="grid">
         <property name="visible">True</property>

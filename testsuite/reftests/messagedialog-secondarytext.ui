@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkMessageDialog" id="messagedialog1">
-    <property name="type">popup</property>
+    <property name="decorated">0</property>
     <property name="type_hint">dialog</property>
     <property name="buttons">ok</property>
     <property name="text" translatable="yes">Text</property>

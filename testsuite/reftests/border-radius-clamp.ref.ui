@@ -2,7 +2,7 @@
 <interface>
   <object class="GtkWindow" id="window1">
     <property name="name">reference</property>
-    <property name="type">popup</property>
+    <property name="decorated">0</property>
     <child>
       <object class="GtkProgressBar" id="progressbar1">
         <property name="width_request">150</property>

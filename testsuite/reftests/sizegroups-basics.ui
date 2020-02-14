@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkWindow" id="window1">
-    <property name="type">popup</property>
+    <property name="decorated">0</property>
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="orientation">vertical</property>
