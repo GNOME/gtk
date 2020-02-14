@@ -1089,8 +1089,7 @@ toplevel_filter_func (gpointer item,
   if (g_str_equal (G_OBJECT_TYPE_NAME (item), "GtkInspectorWindow"))
     return FALSE;
 
-  return gtk_window_get_window_type (item) == GTK_WINDOW_TOPLEVEL &&
-         gtk_widget_get_display (item) == display;
+  return gtk_widget_get_display (item) == display;
 }
 
 static GListModel *

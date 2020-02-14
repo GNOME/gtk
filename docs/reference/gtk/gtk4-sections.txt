@@ -4287,7 +4287,6 @@ gtk_requisition_get_type
 <TITLE>GtkWindow</TITLE>
 GtkWindow
 GtkWindowClass
-GtkWindowType
 gtk_window_new
 gtk_window_set_title
 gtk_window_set_resizable
@@ -4355,7 +4354,6 @@ gtk_window_get_accept_focus
 gtk_window_get_focus_on_map
 gtk_window_get_group
 gtk_window_has_group
-gtk_window_get_window_type
 gtk_window_resize
 gtk_window_set_default_icon_name
 gtk_window_set_icon_name

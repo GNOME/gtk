@@ -1303,7 +1303,6 @@ create_tooltips (GtkWidget *widget)
     {
       window =
 	g_object_new (gtk_window_get_type (),
-			"GtkWindow::type", GTK_WINDOW_TOPLEVEL,
 			"GtkWindow::title", "Tooltips",
 			"GtkWindow::resizable", FALSE,
 			NULL);
@@ -3545,7 +3544,6 @@ create_display_screen (GtkWidget *widget)
 
   window = g_object_new (gtk_window_get_type (),
 			 "display", display,
-			 "type", GTK_WINDOW_TOPLEVEL,
 			 "title", "Screen or Display selection",
                          10, NULL);
   g_signal_connect (window, "destroy", 

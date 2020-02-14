@@ -249,7 +249,6 @@ typedef struct
   guint    resizable                 : 1;
   guint    stick_initially           : 1;
   guint    transient_parent_group    : 1;
-  guint    type                      : 4; /* GtkWindowType */
   guint    gravity                   : 5; /* GdkGravity */
   guint    csd_requested             : 1;
   guint    client_decorated          : 1; /* Decorations drawn client-side */
@@ -296,9 +295,6 @@ enum {
 
 enum {
   PROP_0,
-
-  /* Construct */
-  PROP_TYPE,
 
   /* Normal Props */
   PROP_TITLE,
@@ -814,14 +810,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   klass->enable_debugging = gtk_window_enable_debugging;
   klass->close_request = gtk_window_close_request;
 
-  window_props[PROP_TYPE] =
-      g_param_spec_enum ("type",
-                         P_("Window Type"),
-                         P_("The type of the window"),
-                         GTK_TYPE_WINDOW_TYPE,
-                         GTK_WINDOW_TOPLEVEL,
-                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
-
   window_props[PROP_TITLE] =
       g_param_spec_string ("title",
                            P_("Window Title"),
@@ -1206,6 +1194,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_WINDOW_ACCESSIBLE);
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FRAME);
   gtk_widget_class_set_css_name (widget_class, I_("window"));
 }
 
@@ -1633,8 +1622,7 @@ edge_under_coordinates (GtkWindow     *window,
   gboolean supports_edge_constraints;
   guint constraints;
 
-  if (priv->type != GTK_WINDOW_TOPLEVEL ||
-      !priv->client_decorated ||
+  if (!priv->client_decorated ||
       !priv->resizable ||
       priv->fullscreen ||
       priv->maximized)
@@ -1794,7 +1782,6 @@ gtk_window_init (GtkWindow *window)
 
   priv->title = NULL;
   priv->geometry_info = NULL;
-  priv->type = GTK_WINDOW_TOPLEVEL;
   priv->focus_widget = NULL;
   priv->default_widget = NULL;
   priv->configure_request_count = 0;
@@ -1897,24 +1884,21 @@ gtk_window_constructed (GObject *object)
 
   G_OBJECT_CLASS (gtk_window_parent_class)->constructed (object);
 
-  if (priv->type == GTK_WINDOW_TOPLEVEL)
-    {
-      priv->click_gesture = gtk_gesture_click_new ();
-      gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->click_gesture), 0);
-      gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->click_gesture),
-                                                  GTK_PHASE_BUBBLE);
-      g_signal_connect (priv->click_gesture, "pressed",
-                        G_CALLBACK (click_gesture_pressed_cb), object);
-      gtk_widget_add_controller (GTK_WIDGET (object), GTK_EVENT_CONTROLLER (priv->click_gesture));
+  priv->click_gesture = gtk_gesture_click_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->click_gesture), 0);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->click_gesture),
+                                              GTK_PHASE_BUBBLE);
+  g_signal_connect (priv->click_gesture, "pressed",
+                    G_CALLBACK (click_gesture_pressed_cb), object);
+  gtk_widget_add_controller (GTK_WIDGET (object), GTK_EVENT_CONTROLLER (priv->click_gesture));
 
-      priv->drag_gesture = create_drag_gesture (window);
-      gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture),
-                                                  GTK_PHASE_CAPTURE);
+  priv->drag_gesture = create_drag_gesture (window);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture),
+                                              GTK_PHASE_CAPTURE);
 
-      priv->bubble_drag_gesture = create_drag_gesture (window);
-      gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->bubble_drag_gesture),
-                                                  GTK_PHASE_BUBBLE);
-    }
+  priv->bubble_drag_gesture = create_drag_gesture (window);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->bubble_drag_gesture),
+                                              GTK_PHASE_BUBBLE);
 
   g_list_store_append (toplevel_list, window);
   g_object_unref (window);
@@ -1927,13 +1911,9 @@ gtk_window_set_property (GObject      *object,
 			 GParamSpec   *pspec)
 {
   GtkWindow  *window = GTK_WINDOW (object);
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
   switch (prop_id)
     {
-    case PROP_TYPE:
-      priv->type = g_value_get_enum (value);
-      break;
     case PROP_TITLE:
       gtk_window_set_title (window, g_value_get_string (value));
       break;
@@ -2025,9 +2005,6 @@ gtk_window_get_property (GObject      *object,
   switch (prop_id)
     {
       GtkWindowGeometryInfo *info;
-    case PROP_TYPE:
-      g_value_set_enum (value, priv->type);
-      break;
     case PROP_TITLE:
       g_value_set_string (value, priv->title);
       break;
@@ -3116,11 +3093,6 @@ gtk_window_unset_transient_for  (GtkWindow *window)
  *
  * Passing %NULL for @parent unsets the current transient window.
  *
- * This function can also be used to attach a new
- * #GTK_WINDOW_POPUP to a #GTK_WINDOW_TOPLEVEL parent already mapped
- * on screen so that the #GTK_WINDOW_POPUP will be
- * positioned relative to the #GTK_WINDOW_TOPLEVEL surface.
- *
  * On Windows, this function puts the child window on top of the parent,
  * much as the window manager would have done on X.
  */
@@ -4069,10 +4041,6 @@ gtk_window_realize_icon (GtkWindow *window)
 
   g_return_if_fail (priv->surface != NULL);
 
-  /* no point setting an icon on override-redirect */
-  if (priv->type == GTK_WINDOW_POPUP)
-    return;
-
   info = ensure_icon_info (window);
 
   if (info->realized)
@@ -4285,9 +4253,6 @@ gtk_window_update_csd_size (GtkWindow *window,
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkBorder window_border = { 0 };
   gint w, h;
-
-  if (priv->type != GTK_WINDOW_TOPLEVEL)
-    return;
 
   if (!priv->decorated ||
       priv->fullscreen)
@@ -4829,9 +4794,6 @@ gtk_window_should_use_csd (GtkWindow *window)
   if (!priv->decorated)
     return FALSE;
 
-  if (priv->type == GTK_WINDOW_POPUP)
-    return FALSE;
-
   csd_env = g_getenv ("GTK_CSD");
 
 #ifdef GDK_WINDOWING_BROADWAY
@@ -4867,9 +4829,6 @@ create_decoration (GtkWidget *widget)
     return;
 
   gtk_window_enable_csd (window);
-
-  if (priv->type == GTK_WINDOW_POPUP)
-    return;
 
   if (priv->title_box == NULL)
     {
@@ -4972,16 +4931,14 @@ gtk_window_map (GtkWidget *widget)
 
   gdk_surface_set_keep_below (surface, priv->below_initially);
 
-  if (priv->type == GTK_WINDOW_TOPLEVEL)
-    gtk_window_set_theme_variant (window);
+  gtk_window_set_theme_variant (window);
 
   /* No longer use the default settings */
   priv->need_default_size = FALSE;
 
   gdk_surface_show (surface);
 
-  if (!disable_startup_notification &&
-      priv->type != GTK_WINDOW_POPUP)
+  if (!disable_startup_notification)
     {
       /* Do we have a custom startup-notification id? */
       if (priv->startup_id != NULL)
@@ -5330,12 +5287,9 @@ get_shadow_width (GtkWindow *window,
   shadows = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BOX_SHADOW);
   gtk_css_shadow_value_get_extents (shadows, &border);
 
-  if (priv->type != GTK_WINDOW_POPUP)
-    {
-      /* ... and compare it to the margin size, which we use for resize grips */
-      gtk_style_context_get_margin (context, &margin);
-      max_borders (&border, &margin);
-    }
+  /* ... and compare it to the margin size, which we use for resize grips */
+  gtk_style_context_get_margin (context, &margin);
+  max_borders (&border, &margin);
 
   sum_borders (&d, &border);
   *shadow_width = d;
@@ -5371,8 +5325,7 @@ update_csd_shape (GtkWindow *window)
    * outside the border windows go through.
    */
 
-  if (priv->type != GTK_WINDOW_POPUP)
-    subtract_borders (&window_border, &border);
+  subtract_borders (&window_border, &border);
 
   rect.x = window_border.left;
   rect.y = window_border.top;
@@ -5530,21 +5483,9 @@ gtk_window_realize (GtkWidget *widget)
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  switch (priv->type)
-    {
-    case GTK_WINDOW_TOPLEVEL:
-      surface = gdk_surface_new_toplevel (gtk_widget_get_display (widget),
-                                          allocation.width,
-                                          allocation.height);
-      break;
-    case GTK_WINDOW_POPUP:
-      surface = gdk_surface_new_temp (gtk_widget_get_display (widget), &allocation);
-      break;
-    default:
-      g_error (G_STRLOC": Unknown window type %d!", priv->type);
-      break;
-    }
-
+  surface = gdk_surface_new_toplevel (gtk_widget_get_display (widget),
+                                      allocation.width,
+                                      allocation.height);
   priv->surface = surface;
   gdk_surface_set_widget (surface, widget);
 
@@ -6986,7 +6927,6 @@ gtk_window_move_resize (GtkWindow *window)
     hints_changed = TRUE;
 
 #if 0
-  if (priv->type == GTK_WINDOW_TOPLEVEL)
     {
       GtkAllocation alloc;
 
@@ -7147,34 +7087,31 @@ gtk_window_move_resize (GtkWindow *window)
        * we don't get the ConfigureNotify back, the resize queue will never be run.
        */
 
-      if (priv->type != GTK_WINDOW_POPUP)
-        {
-	  /* Increment the number of have-not-yet-received-notify requests.
-           * This is done before gdk_surface[_move]_resize(), because
-           * that call might be synchronous (depending on which GDK backend
-           * is being used), so any preparations for its effects must
-           * be done beforehand.
-           */
-	  priv->configure_request_count += 1;
+      /* Increment the number of have-not-yet-received-notify requests.
+       * This is done before gdk_surface[_move]_resize(), because
+       * that call might be synchronous (depending on which GDK backend
+       * is being used), so any preparations for its effects must
+       * be done beforehand.
+       */
+      priv->configure_request_count += 1;
 
-          gdk_surface_freeze_toplevel_updates (priv->surface);
+      gdk_surface_freeze_toplevel_updates (priv->surface);
 
-	  /* for GTK_RESIZE_QUEUE toplevels, we are now awaiting a new
-	   * configure event in response to our resizing request.
-	   * the configure event will cause a new resize with
-	   * ->configure_notify_received=TRUE.
-	   * until then, we want to
-	   * - discard expose events
-	   * - coalesce resizes for our children
-	   * - defer any window resizes until the configure event arrived
-	   * to achieve this, we queue a resize for the window, but remove its
-	   * resizing handler, so resizing will not be handled from the next
-	   * idle handler but when the configure event arrives.
-	   *
-	   * FIXME: we should also dequeue the pending redraws here, since
-	   * we handle those ourselves upon ->configure_notify_received==TRUE.
-	   */
-	}
+      /* for GTK_RESIZE_QUEUE toplevels, we are now awaiting a new
+       * configure event in response to our resizing request.
+       * the configure event will cause a new resize with
+       * ->configure_notify_received=TRUE.
+       * until then, we want to
+       * - discard expose events
+       * - coalesce resizes for our children
+       * - defer any window resizes until the configure event arrived
+       * to achieve this, we queue a resize for the window, but remove its
+       * resizing handler, so resizing will not be handled from the next
+       * idle handler but when the configure event arrives.
+       *
+       * FIXME: we should also dequeue the pending redraws here, since
+       * we handle those ourselves upon ->configure_notify_received==TRUE.
+       */
 
       /* Now send the configure request */
       if (configure_request_pos_changed)
@@ -7182,19 +7119,6 @@ gtk_window_move_resize (GtkWindow *window)
 
       gdk_surface_resize (priv->surface,
 			  new_request.width, new_request.height);
-
-      if (priv->type == GTK_WINDOW_POPUP)
-        {
-          GtkAllocation allocation;
-
-	  /* Directly size allocate for override redirect (popup) windows. */
-          allocation.x = 0;
-	  allocation.y = 0;
-	  allocation.width = new_request.width;
-	  allocation.height = new_request.height;
-
-          gtk_widget_size_allocate (widget, &allocation, -1);
-	}
     }
   else
     {
@@ -8128,10 +8052,7 @@ gtk_window_on_theme_variant_changed (GtkSettings *settings,
                                      GParamSpec  *pspec,
                                      GtkWindow   *window)
 {
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (priv->type == GTK_WINDOW_TOPLEVEL)
-    gtk_window_set_theme_variant (window);
+  gtk_window_set_theme_variant (window);
 }
 #endif
 
@@ -8565,24 +8486,6 @@ void
 gtk_window_set_auto_startup_notification (gboolean setting)
 {
   disable_startup_notification = !setting;
-}
-
-/**
- * gtk_window_get_window_type:
- * @window: a #GtkWindow
- *
- * Gets the type of the window. See #GtkWindowType.
- *
- * Returns: the type of the window
- **/
-GtkWindowType
-gtk_window_get_window_type (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), GTK_WINDOW_TOPLEVEL);
-
-  return priv->type;
 }
 
 /**
