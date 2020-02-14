@@ -105,8 +105,6 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
         event->crossing.time = message->base.time;
         event->crossing.x = message->pointer.win_x;
         event->crossing.y = message->pointer.win_y;
-        event->crossing.x_root = message->pointer.root_x;
-        event->crossing.y_root = message->pointer.root_y;
         event->crossing.state = message->pointer.state;
         event->crossing.mode = message->crossing.mode;
         event->crossing.detail = GDK_NOTIFY_ANCESTOR;
@@ -125,8 +123,6 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
         event->crossing.time = message->base.time;
         event->crossing.x = message->pointer.win_x;
         event->crossing.y = message->pointer.win_y;
-        event->crossing.x_root = message->pointer.root_x;
-        event->crossing.y_root = message->pointer.root_y;
         event->crossing.state = message->pointer.state;
         event->crossing.mode = message->crossing.mode;
         event->crossing.detail = GDK_NOTIFY_ANCESTOR;
@@ -148,8 +144,6 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
         event->motion.time = message->base.time;
         event->motion.x = message->pointer.win_x;
         event->motion.y = message->pointer.win_y;
-        event->motion.x_root = message->pointer.root_x;
-        event->motion.y_root = message->pointer.root_y;
         event->motion.state = message->pointer.state;
         gdk_event_set_device (event, gdk_seat_get_pointer (seat));
 
@@ -172,8 +166,6 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
         event->button.time = message->base.time;
         event->button.x = message->pointer.win_x;
         event->button.y = message->pointer.win_y;
-        event->button.x_root = message->pointer.root_x;
-        event->button.y_root = message->pointer.root_y;
         event->button.button = message->button.button;
         event->button.state = message->pointer.state;
         gdk_event_set_device (event, gdk_seat_get_pointer (seat));
@@ -192,8 +184,6 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
         event->scroll.time = message->base.time;
         event->scroll.x = message->pointer.win_x;
         event->scroll.y = message->pointer.win_y;
-        event->scroll.x_root = message->pointer.root_x;
-        event->scroll.y_root = message->pointer.root_y;
         event->scroll.direction = message->scroll.dir == 0 ? GDK_SCROLL_UP : GDK_SCROLL_DOWN;
         gdk_event_set_device (event, gdk_seat_get_pointer (seat));
 
@@ -233,8 +223,6 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
         event->touch.time = message->base.time;
         event->touch.x = message->touch.win_x;
         event->touch.y = message->touch.win_y;
-        event->touch.x_root = message->touch.root_x;
-        event->touch.y_root = message->touch.root_y;
         event->touch.state = message->touch.state;
 
         gdk_event_set_device (event, gdk_seat_get_pointer (seat));
