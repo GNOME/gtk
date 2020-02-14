@@ -983,26 +983,21 @@ gdk_drop_emit_enter_event (GdkDrop  *self,
 void
 gdk_drop_emit_motion_event (GdkDrop  *self,
                             gboolean  dont_queue,
-                            double    x_root,
-                            double    y_root,
+                            double    x,
+                            double    y,
                             guint32   time)
 {
   GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
   GdkEvent *event;
-  int x, y;
 
   g_warn_if_fail (priv->entered);
-
-  gdk_surface_get_origin (priv->surface, &x, &y);
 
   event = gdk_event_new (GDK_DRAG_MOTION);
   event->any.surface = g_object_ref (priv->surface);
   event->dnd.drop = g_object_ref (self);
   event->dnd.time = time;
-  event->dnd.x_root = x_root;
-  event->dnd.y_root = y_root;
-  event->dnd.x = x_root - x;
-  event->dnd.y = y_root - y;
+  event->dnd.x = x;
+  event->dnd.y = y;
   gdk_event_set_device (event, priv->device);
 
   gdk_drop_do_emit_event (event, dont_queue);
@@ -1032,27 +1027,22 @@ gdk_drop_emit_leave_event (GdkDrop  *self,
 void
 gdk_drop_emit_drop_event (GdkDrop  *self,
                           gboolean  dont_queue,
-                          double    x_root,
-                          double    y_root,
+                          double    x,
+                          double    y,
                           guint32   time)
 {
   GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
   GdkEvent *event;
-  int x, y;
 
   g_warn_if_fail (priv->entered);
   g_warn_if_fail (priv->state == GDK_DROP_STATE_NONE);
-
-  gdk_surface_get_origin (priv->surface, &x, &y);
 
   event = gdk_event_new (GDK_DROP_START);
   event->any.surface = g_object_ref (priv->surface);
   event->dnd.drop = g_object_ref (self);
   event->dnd.time = time;
-  event->dnd.x_root = x_root;
-  event->dnd.y_root = y_root;
-  event->dnd.x = x_root - x;
-  event->dnd.y = y_root - y;
+  event->dnd.x = x;
+  event->dnd.y = y;
   gdk_event_set_device (event, priv->device);
 
   priv->state = GDK_DROP_STATE_DROPPING;
