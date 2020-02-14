@@ -828,7 +828,7 @@ test_construct_only_property (void)
   const gchar buffer[] =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
-    "    <property name=\"type\">popup</property>"
+    "    <property name=\"css-name\">amazing</property>"
     "  </object>"
     "</interface>";
   const gchar buffer2[] =
@@ -839,12 +839,10 @@ test_construct_only_property (void)
     "  </object>"
     "</interface>";
   GObject *widget, *tagtable, *textbuffer;
-  GtkWindowType type;
   
   builder = builder_new_from_string (buffer, -1, NULL);
   widget = gtk_builder_get_object (builder, "window1");
-  g_object_get (widget, "type", &type, NULL);
-  g_assert (type == GTK_WINDOW_POPUP);
+  g_assert_cmpstr (gtk_widget_get_css_name (GTK_WIDGET (widget)), ==, "amazing");
 
   gtk_widget_destroy (GTK_WIDGET (widget));
   g_object_unref (builder);
