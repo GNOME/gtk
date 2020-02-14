@@ -1248,6 +1248,52 @@ check_event_in_child_popover (GtkWidget *event_widget,
   return (popover_parent == grab_widget || gtk_widget_is_ancestor (popover_parent, grab_widget));
 }
 
+static void
+synthesize_pointer_change_events (GtkWindow *toplevel,
+                                  GtkWidget *old_target,
+                                  GtkWidget *new_target)
+{
+  GtkCrossingData crossing;
+  GtkWidget *widget;
+  GList *list, *l;
+  GtkStateFlags flags;
+
+  flags = GTK_STATE_FLAG_PRELIGHT;
+
+  crossing.type = GTK_CROSSING_POINTER;
+  crossing.old_target = old_target;
+  crossing.new_target = new_target;
+
+  crossing.direction = GTK_CROSSING_OUT;
+
+  widget = old_target;
+  while (widget)
+    {
+      gtk_widget_handle_crossing (widget, &crossing, 0, 0);
+      gtk_widget_unset_state_flags (widget, flags);
+      widget = gtk_widget_get_parent (widget);
+    }
+
+  list = NULL;
+  widget = new_target;
+  while (widget)
+    {
+      list = g_list_prepend (list, widget);
+      widget = gtk_widget_get_parent (widget);
+    }
+
+  crossing.direction = GTK_CROSSING_IN;
+
+  for (l = list; l; l = l->next)
+    {
+      widget = l->data;
+      gtk_widget_handle_crossing (widget, &crossing, 0, 0);
+      gtk_widget_set_state_flags (widget, flags, FALSE);
+    }
+
+  g_list_free (list);
+}
+
 static GdkNotifyType
 get_virtual_notify_type (GdkNotifyType notify_type)
 {
@@ -1605,8 +1651,7 @@ handle_pointing_event (GdkEvent *event)
       old_target = update_pointer_focus_state (toplevel, event, NULL);
 
       if (event->any.type == GDK_LEAVE_NOTIFY)
-        gtk_synthesize_crossing_events (GTK_ROOT (toplevel), old_target, NULL,
-                                        event, event->crossing.mode);
+        synthesize_pointer_change_events (toplevel, old_target, NULL);
       break;
     case GDK_ENTER_NOTIFY:
       if (event->crossing.mode == GDK_CROSSING_GRAB ||
@@ -1631,8 +1676,7 @@ handle_pointing_event (GdkEvent *event)
           if (!gtk_window_lookup_pointer_focus_implicit_grab (toplevel, device,
                                                               sequence))
             {
-              gtk_synthesize_crossing_events (GTK_ROOT (toplevel), old_target, target,
-                                              event, GDK_CROSSING_NORMAL);
+              synthesize_pointer_change_events (toplevel, old_target, target);
             }
 
           gtk_window_maybe_update_cursor (toplevel, NULL, device);
@@ -1661,8 +1705,7 @@ handle_pointing_event (GdkEvent *event)
           new_target = gtk_widget_pick (GTK_WIDGET (native), x, y, GTK_PICK_DEFAULT);
           if (new_target == NULL)
             new_target = GTK_WIDGET (toplevel);
-          gtk_synthesize_crossing_events (GTK_ROOT (toplevel), target, new_target, event,
-                                          GDK_CROSSING_UNGRAB);
+          synthesize_pointer_change_events (toplevel, target, new_target);
           gtk_window_maybe_update_cursor (toplevel, NULL, device);
         }
 
