@@ -2744,7 +2744,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
     {
       _gdk_event_queue_remove_link (display, event_link);
       g_list_free_1 (event_link);
-      g_object_unref (event);
+      gdk_event_unref (event);
     }
 
   /* This does two things - first it sees if there are motions at the

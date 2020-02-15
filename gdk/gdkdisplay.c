@@ -469,7 +469,7 @@ gdk_display_peek_event (GdkDisplay *display)
   tmp_list = _gdk_event_queue_find_first (display);
   
   if (tmp_list != NULL)
-    return g_object_ref (tmp_list->data);
+    return gdk_event_ref (tmp_list->data);
 
   return NULL;
 }
@@ -489,7 +489,7 @@ gdk_display_put_event (GdkDisplay     *display,
   g_return_if_fail (GDK_IS_DISPLAY (display));
   g_return_if_fail (event != NULL);
 
-  _gdk_event_queue_append (display, g_object_ref ((GdkEvent *)event));
+  _gdk_event_queue_append (display, gdk_event_ref ((GdkEvent *)event));
 }
 
 static void
