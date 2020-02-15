@@ -15,7 +15,6 @@ button:focus(visible),
 checkbutton:focus(visible),
 radiobutton:focus(visible),
 switch:focus(visible),
-scale:focus(visible),
 label:focus(visible),
 row:focus(visible),
 flowboxchild:focus(visible) {
@@ -26,6 +25,14 @@ flowboxchild:focus(visible) {
   outline-color: gtkalpha(currentColor, 0.3);
   outline-style: dashed;
   outline-offset: -3px;
+  outline-width: 1px;
+}
+
+// Widgets that draw their focus indicator outset and not inset
+scale:focus(visible) > trough {
+  outline-color: gtkalpha(currentColor, 0.3);
+  outline-style: dashed;
+  outline-offset: 2px;
   outline-width: 1px;
 }
 
@@ -2583,8 +2590,6 @@ scale {
       margin: -9px;
     }
   }
-
-  &:focus { outline: none; }
 
   // click-and-hold the slider to activate
   &.fine-tune {
