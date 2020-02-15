@@ -446,20 +446,24 @@ _gdk_event_queue_flush (GdkDisplay *display)
     }
 }
 
-/**
- * gdk_event_new:
- * @type: a #GdkEventType 
- * 
- * Creates a new event of the given type. All fields are set to 0.
- * 
- * Returns: a newly-allocated #GdkEvent. Free with g_object_unref()
- */
-GdkEvent*
+static GdkEvent *
 gdk_event_new (GdkEventType type)
 {
   return g_object_new (GDK_TYPE_EVENT,
                        "event-type", type,
                        NULL);
+}
+
+GdkEvent *
+gdk_event_ref (GdkEvent *event)
+{
+  return g_object_ref (event);
+}
+
+void
+gdk_event_unref (GdkEvent *event)
+{
+  g_object_unref (event);
 }
 
 static void
@@ -547,106 +551,6 @@ gboolean
 gdk_event_get_pointer_emulated (GdkEvent *event)
 {
   return (event->any.flags & GDK_EVENT_POINTER_EMULATED) != 0;
-}
-
-static GdkTimeCoord *
-copy_time_coord (const GdkTimeCoord *coord)
-{
-  return g_memdup (coord, sizeof (GdkTimeCoord));
-}
-
-/**
- * gdk_event_copy:
- * @event: a #GdkEvent
- *
- * Copies a #GdkEvent, copying or incrementing the reference count of the
- * resources associated with it (e.g. #GdkSurface’s and strings).
- *
- * Returns: (transfer full): a copy of @event. Free with g_object_unref()
- */
-GdkEvent*
-gdk_event_copy (const GdkEvent *event)
-{
-  GdkEvent *new_event;
-
-  g_return_val_if_fail (event != NULL, NULL);
-
-  new_event = gdk_event_new (event->any.type);
-
-  memcpy (EVENT_PAYLOAD (new_event),
-          EVENT_PAYLOAD (event),
-          EVENT_PAYLOAD_SIZE);
-
-  if (new_event->any.surface)
-    g_object_ref (new_event->any.surface);
-  if (new_event->any.device)
-    g_object_ref (new_event->any.device);
-  if (new_event->any.source_device)
-    g_object_ref (new_event->any.source_device);
-  if (new_event->any.target)
-    g_object_ref (new_event->any.target);
-
-  switch ((guint) event->any.type)
-    {
-    case GDK_ENTER_NOTIFY:
-    case GDK_LEAVE_NOTIFY:
-      if (event->crossing.child_surface != NULL)
-        g_object_ref (event->crossing.child_surface);
-      if (event->crossing.related_target)
-        g_object_ref (event->crossing.related_target);
-      break;
-
-    case GDK_FOCUS_CHANGE:
-      if (event->focus_change.related_target)
-        g_object_ref (event->focus_change.related_target);
-      break;
-
-    case GDK_DRAG_ENTER:
-    case GDK_DRAG_LEAVE:
-    case GDK_DRAG_MOTION:
-    case GDK_DROP_START:
-      g_object_ref (event->dnd.drop);
-      break;
-
-    case GDK_BUTTON_PRESS:
-    case GDK_BUTTON_RELEASE:
-      if (event->button.axes)
-        new_event->button.axes = g_memdup (event->button.axes,
-                                           sizeof (gdouble) * gdk_device_get_n_axes (event->any.device));
-      if (event->button.tool)
-        g_object_ref (new_event->button.tool);
-      break;
-
-    case GDK_TOUCH_BEGIN:
-    case GDK_TOUCH_UPDATE:
-    case GDK_TOUCH_END:
-    case GDK_TOUCH_CANCEL:
-      if (event->touch.axes)
-        new_event->touch.axes = g_memdup (event->touch.axes,
-                                           sizeof (gdouble) * gdk_device_get_n_axes (event->any.device));
-      break;
-
-    case GDK_MOTION_NOTIFY:
-      if (event->motion.axes)
-        new_event->motion.axes = g_memdup (event->motion.axes,
-                                           sizeof (gdouble) * gdk_device_get_n_axes (event->any.device));
-      if (event->motion.tool)
-        g_object_ref (new_event->motion.tool);
-
-      if (event->motion.history)
-        {
-          new_event->motion.history = g_list_copy_deep (event->motion.history,
-                                                        (GCopyFunc) copy_time_coord, NULL);
-        }
-      break;
-
-    default:
-      break;
-    }
-
-  _gdk_display_event_data_copy (gdk_event_get_display (event), event, new_event);
-
-  return new_event;
 }
 
 static void

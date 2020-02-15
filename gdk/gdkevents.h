@@ -341,9 +341,9 @@ GDK_AVAILABLE_IN_ALL
 GType     gdk_event_sequence_get_type   (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GdkEvent* gdk_event_new                 (GdkEventType    type);
+GdkEvent * gdk_event_ref   (GdkEvent *event);
 GDK_AVAILABLE_IN_ALL
-GdkEvent* gdk_event_copy     		(const GdkEvent *event);
+void       gdk_event_unref (GdkEvent *event);
 
 GDK_AVAILABLE_IN_ALL
 GdkSurface *gdk_event_get_surface       (const GdkEvent *event);
