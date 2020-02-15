@@ -4108,7 +4108,6 @@ add_event_mark (GdkEvent *event,
     case GDK_PAD_GROUP_MODE:
     case GDK_GRAB_BROKEN:
     case GDK_DELETE:
-    case GDK_DESTROY:
     case GDK_FOCUS_CHANGE:
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:
