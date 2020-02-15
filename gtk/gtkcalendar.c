@@ -827,6 +827,8 @@ calendar_set_month_prev (GtkCalendar *calendar)
 
   gtk_calendar_select_day (calendar, new_date);
   g_date_time_unref (new_date);
+
+  g_signal_emit (calendar, gtk_calendar_signals[PREV_MONTH_SIGNAL], 0);
 }
 
 static void
@@ -839,6 +841,8 @@ calendar_set_month_next (GtkCalendar *calendar)
 
   gtk_calendar_select_day (calendar, new_date);
   g_date_time_unref (new_date);
+
+  g_signal_emit (calendar, gtk_calendar_signals[NEXT_MONTH_SIGNAL], 0);
 }
 
 static void
@@ -851,6 +855,8 @@ calendar_set_year_prev (GtkCalendar *calendar)
 
   gtk_calendar_select_day (calendar, new_date);
   g_date_time_unref (new_date);
+
+  g_signal_emit (calendar, gtk_calendar_signals[PREV_YEAR_SIGNAL], 0);
 }
 
 static void
@@ -863,6 +869,8 @@ calendar_set_year_next (GtkCalendar *calendar)
 
   gtk_calendar_select_day (calendar, new_date);
   g_date_time_unref (new_date);
+
+  g_signal_emit (calendar, gtk_calendar_signals[NEXT_YEAR_SIGNAL], 0);
 }
 
 static void
