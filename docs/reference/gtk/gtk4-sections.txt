@@ -4191,6 +4191,8 @@ gtk_widget_get_css_name
 gtk_widget_add_css_class
 gtk_widget_remove_css_class
 gtk_widget_has_css_class
+gtk_widget_get_css_classes
+gtk_widget_set_css_classes
 
 <SUBSECTION>
 gtk_widget_get_style_context
