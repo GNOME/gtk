@@ -135,6 +135,8 @@ typedef struct _GdkAppLaunchContext   GdkAppLaunchContext;
 typedef struct _GdkSeat               GdkSeat;
 typedef struct _GdkSnapshot           GdkSnapshot;
 
+typedef struct _GdkGeometry           GdkGeometry;
+
 typedef struct _GdkDrawingContext     GdkDrawingContext;
 typedef struct _GdkDrawContext        GdkDrawContext;
 typedef struct _GdkCairoContext       GdkCairoContext;
