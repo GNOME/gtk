@@ -97,6 +97,13 @@ gdk_wayland_drop_drop_set_status (GdkWaylandDrop *drop_wayland,
       const char *const *mimetypes;
       gsize i, n_mimetypes;
       
+      /* This is a local drag, treat it like that */
+      if (gdk_drop_get_drag (GDK_DROP (drop_wayland)))
+        {
+          wl_data_offer_accept (drop_wayland->offer, drop_wayland->serial, GDK_WAYLAND_LOCAL_DND_MIME_TYPE);
+          return;
+        }
+
       mimetypes = gdk_content_formats_get_mime_types (gdk_drop_get_formats (GDK_DROP (drop_wayland)), &n_mimetypes);
       for (i = 0; i < n_mimetypes; i++)
         {
