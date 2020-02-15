@@ -240,11 +240,11 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
 
   /* apply XSettings filters */
   if (xevent->xany.window == XRootWindow (dpy, 0))
-    result = gdk_xsettings_root_window_filter (xevent, event, x11_screen);
+    result = gdk_xsettings_root_window_filter (xevent,x11_screen);
 
   if (result == GDK_FILTER_CONTINUE &&
       xevent->xany.window == x11_screen->xsettings_manager_window)
-    result = gdk_xsettings_manager_window_filter (xevent, event, x11_screen);
+    result = gdk_xsettings_manager_window_filter (xevent, x11_screen);
 
   cache = gdk_surface_cache_get (display);
   if (cache)
