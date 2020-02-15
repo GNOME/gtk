@@ -57,8 +57,7 @@ struct _GdkDeviceManagerWin32Class
 GType gdk_device_manager_win32_get_type (void) G_GNUC_CONST;
 
 void     _gdk_input_set_tablet_active (void);
-gboolean gdk_input_other_event        (GdkDisplay *display,
-                                       GdkEvent   *event,
+GdkEvent * gdk_input_other_event      (GdkDisplay *display,
                                        MSG        *msg,
                                        GdkSurface  *window);
 
