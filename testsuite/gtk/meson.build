@@ -30,7 +30,7 @@ tests = [
   ['flattenlistmodel'],
   ['floating'],
   ['focus'],
-  ['gestures'],
+  #['gestures'],
   ['grid'],
   ['grid-layout'],
   ['icontheme'],
