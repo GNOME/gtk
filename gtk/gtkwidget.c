@@ -2066,47 +2066,58 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
       event->any.type == GDK_TOUCH_UPDATE ||
       event->any.type == GDK_TOUCH_END)
     {
-      press = gdk_event_copy (event);
-      press->any.type = GDK_TOUCH_BEGIN;
+      press = gdk_event_touch_new (GDK_TOUCH_BEGIN,
+                                   event->any.surface,
+                                   event->any.device,
+                                   event->any.source_device,
+                                   event->touch.time,
+                                   event->touch.state,
+                                   p.x, p.y,
+                                   event->touch.emulating_pointer);
     }
   else if (event->any.type == GDK_BUTTON_PRESS ||
            event->any.type == GDK_BUTTON_RELEASE)
     {
       press = gdk_event_copy (event);
       press->any.type = GDK_BUTTON_PRESS;
+      press = gdk_event_button_new (GDK_BUTTON_PRESS,
+                                    event->any.surface,
+                                    event->any.device,
+                                    event->any.source_device,
+                                    event->button.tool,
+                                    event->button.time,
+                                    p.x, p.y,
+                                    event->button.button,
+                                    event->button.state);
     }
   else if (event->any.type == GDK_MOTION_NOTIFY)
     {
-      press = gdk_event_new (GDK_BUTTON_PRESS);
-      press->any.surface = g_object_ref (event->any.surface);
-      press->button.time = event->motion.time;
-      press->button.state = event->motion.state;
-
-      press->button.axes = g_memdup (event->motion.axes,
-                                     sizeof (gdouble) *
-                                     gdk_device_get_n_axes (event->any.device));
-
+      int button;
       if (event->motion.state & GDK_BUTTON3_MASK)
-        press->button.button = 3;
+        button = 3;
       else if (event->motion.state & GDK_BUTTON2_MASK)
-        press->button.button = 2;
+        button = 2;
       else
         {
           if ((event->motion.state & GDK_BUTTON1_MASK) == 0)
             g_critical ("Guessing button number 1 on generated button press event");
 
-          press->button.button = 1;
+          button = 1;
         }
 
-      gdk_event_set_device (press, gdk_event_get_device (event));
-      gdk_event_set_source_device (press, gdk_event_get_source_device (event));
+      press = gdk_event_button_new (GDK_BUTTON_PRESS,
+                                    event->any.surface,
+                                    event->any.device,
+                                    event->any.source_device,
+                                    NULL,
+                                    event->motion.time,
+                                    p.x, p.y,
+                                    button,
+                                    event->motion.state);
     }
   else
     return;
 
-  gdk_event_set_coords (press, p.x, p.y);
-
-  press->any.send_event = TRUE;
   next_child = event_widget;
   parent = _gtk_widget_get_parent (next_child);
 
@@ -7945,23 +7956,19 @@ synth_crossing (GtkWidget       *widget,
                 GdkNotifyType    detail)
 {
   GdkEvent *event;
+  double x, y;
+  GdkModifierType state;
 
-  event = gdk_event_new (type);
-
-  event->any.surface = g_object_ref (surface);
-  event->any.send_event = TRUE;
-  event->crossing.child_surface = g_object_ref (surface);
-  event->crossing.time = GDK_CURRENT_TIME;
-  gdk_surface_get_device_position (surface,
-                                   device,
-                                   &event->crossing.x,
-                                   &event->crossing.y,
-                                   NULL);
-  event->crossing.mode = mode;
-  event->crossing.detail = detail;
-  event->crossing.focus = FALSE;
-  event->crossing.state = 0;
-  gdk_event_set_device (event, device);
+  gdk_surface_get_device_position (surface, device, &x, &y, &state);
+  event = gdk_event_crossing_new (type,
+                                  surface,
+                                  device,
+                                  device,
+                                  GDK_CURRENT_TIME,
+                                  state,
+                                  x, y, 
+                                  mode,
+                                  detail);
 
   if (!widget)
     widget = gtk_get_event_widget (event);
