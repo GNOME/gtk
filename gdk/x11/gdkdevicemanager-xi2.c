@@ -1646,7 +1646,8 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
           }
         else
           {
-
+            double x, y;
+            double *axes;
 
             device = g_hash_table_lookup (device_manager->id_table,
                                           GUINT_TO_POINTER (xev->deviceid));
@@ -1654,6 +1655,23 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             source_device = g_hash_table_lookup (device_manager->id_table,
                                                  GUINT_TO_POINTER (xev->sourceid));
 
+            axes = translate_axes (device,
+                                   event->button.x,
+                                   event->button.y,
+                                   event->any.surface,
+                                   &xev->valuators);
+
+            if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
+              {
+                /* Update event coordinates from axes */
+                gdk_device_get_axis (device, event->button.axes, GDK_AXIS_X, &x);
+                gdk_device_get_axis (device, event->button.axes, GDK_AXIS_Y, &y);
+              }
+            else
+              {
+                x = (double) xev->event_x / scale;
+                y = (double) xev->event_y / scale;
+              }
 
             event = gdk_event_button_new (ev->evtype == XI_ButtonPress
                                             ? GDK_BUTTON_PRESS
@@ -1663,26 +1681,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                           source_device,
                                           source_device->last_tool,
                                           xev->time,
-                                          (double) xev->event_x / scale,
-                                          (double) xev->event_y / scale,
+                                          _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group),
                                           xev->detail,
-                                          _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group));
-
-#if 0
-   //FIXME axes
-            event->button.axes = translate_axes (device,
-                                                 event->button.x,
-                                                 event->button.y,
-                                                 event->any.surface,
-                                                 &xev->valuators);
-
-            if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
-              {
-                /* Update event coordinates from axes */
-                gdk_device_get_axis (device, event->button.axes, GDK_AXIS_X, &event->button.x);
-                gdk_device_get_axis (device, event->button.axes, GDK_AXIS_Y, &event->button.y);
-              }
-#endif
+                                          x, y,
+                                          axes);
           }
 
         if (ev->evtype == XI_ButtonPress)
@@ -1695,6 +1697,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         gdouble delta_x, delta_y;
+
+        double x, y;
+        double *axes;
 
 #ifdef XINPUT_2_2
         if (xev->flags & XIPointerEmulated)
@@ -1735,30 +1740,33 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             break;
           }
 
+        axes = translate_axes (device,
+                               event->motion.x,
+                               event->motion.y,
+                               event->any.surface,
+                               &xev->valuators);
+
+        if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
+          {
+            /* Update event coordinates from axes */
+            gdk_device_get_axis (device, event->motion.axes, GDK_AXIS_X, &x);
+            gdk_device_get_axis (device, event->motion.axes, GDK_AXIS_Y, &y);
+          }
+        else
+          {
+            x = (double) xev->event_x / scale;
+            y = (double) xev->event_y / scale;
+          }
+
         event = gdk_event_motion_new (surface,
                                       device,
                                       source_device,
                                       source_device->last_tool,
                                       xev->time,
                                       _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group),
-                                      (double) xev->event_x / scale,
-                                      (double) xev->event_y / scale);
+                                      x, y,
+                                      axes);
                                        
-#if 0
-   // FIXME axes
-        event->motion.axes = translate_axes (device,
-                                             event->motion.x,
-                                             event->motion.y,
-                                             event->any.surface,
-                                             &xev->valuators);
-
-        if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
-          {
-            /* Update event coordinates from axes */
-            gdk_device_get_axis (device, event->motion.axes, GDK_AXIS_X, &event->motion.x);
-            gdk_device_get_axis (device, event->motion.axes, GDK_AXIS_Y, &event->motion.y);
-          }
-#endif
       }
       break;
 
@@ -1768,6 +1776,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         GdkModifierType state;
+
+        double x, y;
+        double *axes;
 
         GDK_DISPLAY_NOTE (display, EVENTS,
                  g_message ("touch %s:\twindow %ld\n\ttouch id: %u\n\tpointer emulating: %s",
@@ -1786,6 +1797,23 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         if (ev->evtype == XI_TouchBegin)
           state |= GDK_BUTTON1_MASK;
 
+        axes = translate_axes (device,
+                               event->touch.x,
+                               event->touch.y,
+                               event->any.surface,
+                               &xev->valuators);
+
+        if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
+          {
+            /* Update event coordinates from axes */
+            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_X, &x);
+            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_Y, &y);
+          }
+        else
+          {
+            x = (double) xev->event_x / scale;
+            y = (double) xev->event_y / scale;
+          }
         event = gdk_event_touch_new (ev->evtype == XI_TouchBegin
                                        ? GDK_TOUCH_BEGIN
                                        : GDK_TOUCH_END,
@@ -1795,25 +1823,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                      source_device,
                                      xev->time,
                                      state,
-                                     (double) xev->event_x / scale,
-                                     (double) xev->event_y / scale,
+                                     x, y,
+                                     axes,
                                      xev->flags & XITouchEmulatingPointer);
 
-#if 0
-  // FIXME axes
-        event->touch.axes = translate_axes (device,
-                                            event->touch.x,
-                                            event->touch.y,
-                                            event->any.surface,
-                                            &xev->valuators);
-
-        if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
-          {
-            /* Update event coordinates from axes */
-            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_X, &event->touch.x);
-            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_Y, &event->touch.y);
-          }
-#endif
         if (ev->evtype == XI_TouchBegin)
           set_user_time (event);
       }
@@ -1823,6 +1836,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         GdkModifierType state;
+
+        double x, y;
+        double *axes;
 
         GDK_DISPLAY_NOTE (display, EVENTS,
                  g_message ("touch update:\twindow %ld\n\ttouch id: %u\n\tpointer emulating: %s",
@@ -1839,6 +1855,24 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
         state |= GDK_BUTTON1_MASK;
 
+        axes = translate_axes (device,
+                               event->touch.x,
+                               event->touch.y,
+                               event->any.surface,
+                               &xev->valuators);
+
+        if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
+          {
+            /* Update event coordinates from axes */
+            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_X, &x);
+            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_Y, &y);
+          }
+        else
+          {
+            x = (double) xev->event_x / scale;
+            y = (double) xev->event_y / scale;
+          }
+
         event = gdk_event_touch_new (GDK_TOUCH_UPDATE,
                                      GUINT_TO_POINTER (xev->detail),
                                      surface,
@@ -1846,24 +1880,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                      source_device,
                                      xev->time,
                                      state,
-                                     (double) xev->event_x / scale,
-                                     (double) xev->event_y / scale,
+                                     x, y,
+                                     axes,
                                      xev->flags & XITouchEmulatingPointer);
-#if 0
-  // FIXME axes
-        event->touch.axes = translate_axes (device,
-                                            event->touch.x,
-                                            event->touch.y,
-                                            event->any.surface,
-                                            &xev->valuators);
-
-        if (gdk_device_get_mode (device) == GDK_MODE_SURFACE)
-          {
-            /* Update event coordinates from axes */
-            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_X, &event->touch.x);
-            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_Y, &event->touch.y);
-          }
-#endif
       }
       break;
 #endif  /* XINPUT_2_2 */
