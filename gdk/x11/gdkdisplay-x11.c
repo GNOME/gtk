@@ -994,11 +994,21 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	    }
 	  if (!is_substructure)
 	    {
-              if (surface->x != event->configure.x ||
-                  surface->y != event->configure.y)
+              int new_abs_x, new_abs_y;
+
+              new_abs_x = event->configure.x;
+              new_abs_y = event->configure.y;
+
+              surface_impl->abs_x = new_abs_x;
+              surface_impl->abs_y = new_abs_y;
+
+              if (surface->parent)
                 {
-                  surface->x = event->configure.x;
-                  surface->y = event->configure.y;
+                  GdkX11Surface *parent_impl =
+                    GDK_X11_SURFACE (surface->parent);
+
+                  surface->x = new_abs_x - parent_impl->abs_x;
+                  surface->y = new_abs_y - parent_impl->abs_y;
                 }
 
               if (surface_impl->unscaled_width != xevent->xconfigure.width ||
