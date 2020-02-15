@@ -566,14 +566,12 @@ gtk_drop_target_accept (GtkDropTarget *dest,
 {
   GdkDragAction dest_actions;
   GdkDragAction actions;
-  GdkAtom target;
 
   dest_actions = gtk_drop_target_get_actions (dest);
 
   actions = dest_actions & gdk_drop_get_actions (drop);
-  target = gtk_drop_target_match (dest, drop);
 
-  return actions && target;
+  return actions && gdk_content_formats_match (dest->formats, gdk_drop_get_formats (drop));
 }
 
 static void
