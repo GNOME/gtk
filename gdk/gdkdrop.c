@@ -941,11 +941,12 @@ gdk_drop_emit_enter_event (GdkDrop  *self,
   GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
   GdkEvent *event;
 
-  event = gdk_event_new (GDK_DRAG_ENTER);
-  event->any.surface = g_object_ref (priv->surface);
-  event->dnd.drop = g_object_ref (self);
-  event->dnd.time = time;
-  gdk_event_set_device (event, priv->device);
+  event = gdk_event_drag_new (GDK_DRAG_ENTER,
+                              priv->surface,
+                              priv->device,
+                              self,
+                              time,
+                              0, 0);
 
   gdk_drop_do_emit_event (event, dont_queue);
 }
@@ -960,13 +961,12 @@ gdk_drop_emit_motion_event (GdkDrop  *self,
   GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
   GdkEvent *event;
 
-  event = gdk_event_new (GDK_DRAG_MOTION);
-  event->any.surface = g_object_ref (priv->surface);
-  event->dnd.drop = g_object_ref (self);
-  event->dnd.time = time;
-  event->dnd.x = x;
-  event->dnd.y = y;
-  gdk_event_set_device (event, priv->device);
+  event = gdk_event_drag_new (GDK_DRAG_MOTION,
+                              priv->surface,
+                              priv->device,
+                              self,
+                              time,
+                              x, y);
 
   gdk_drop_do_emit_event (event, dont_queue);
 }
@@ -979,11 +979,12 @@ gdk_drop_emit_leave_event (GdkDrop  *self,
   GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
   GdkEvent *event;
 
-  event = gdk_event_new (GDK_DRAG_LEAVE);
-  event->any.surface = g_object_ref (priv->surface);
-  event->dnd.drop = g_object_ref (self);
-  event->dnd.time = time;
-  gdk_event_set_device (event, priv->device);
+  event = gdk_event_drag_new (GDK_DRAG_LEAVE,
+                              priv->surface,
+                              priv->device,
+                              self,
+                              time,
+                              0, 0);
 
   gdk_drop_do_emit_event (event, dont_queue);
 }
@@ -998,13 +999,12 @@ gdk_drop_emit_drop_event (GdkDrop  *self,
   GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
   GdkEvent *event;
 
-  event = gdk_event_new (GDK_DROP_START);
-  event->any.surface = g_object_ref (priv->surface);
-  event->dnd.drop = g_object_ref (self);
-  event->dnd.time = time;
-  event->dnd.x = x;
-  event->dnd.y = y;
-  gdk_event_set_device (event, priv->device);
+  event = gdk_event_drag_new (GDK_DROP_START,
+                              priv->surface,
+                              priv->device,
+                              self,
+                              time,
+                              x, y);
 
   gdk_drop_do_emit_event (event, dont_queue);
 }
