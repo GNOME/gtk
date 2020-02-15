@@ -383,7 +383,8 @@ translate_hints (GtkInputHints   input_hints,
     hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_TITLECASE;
   if (input_hints & GTK_INPUT_HINT_UPPERCASE_SENTENCES)
     hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_AUTO_CAPITALIZATION;
-
+  if (input_hints & GTK_INPUT_HINT_INHIBIT_OSK)
+    hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_ON_SCREEN_INPUT_PROVIDED;
   if (purpose == GTK_INPUT_PURPOSE_PIN ||
       purpose == GTK_INPUT_PURPOSE_PASSWORD)
     {
@@ -491,17 +492,13 @@ released_cb (GtkGestureMultiPress *gesture,
              gdouble               y,
              GtkIMContextWayland  *context)
 {
-  GtkInputHints hints;
   gboolean result;
 
   if (!global->current)
     return;
 
-  g_object_get (context, "input-hints", &hints, NULL);
-
   if (global->focused &&
       n_press == 1 &&
-      (hints & GTK_INPUT_HINT_INHIBIT_OSK) == 0 &&
       !gtk_drag_check_threshold (context->widget,
                                  context->press_x,
                                  context->press_y,
