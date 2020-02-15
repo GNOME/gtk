@@ -354,7 +354,6 @@ gdk_surface_cache_add (GdkSurfaceCache *cache,
 
 GdkFilterReturn
 gdk_surface_cache_shape_filter (const XEvent *xevent,
-                                GdkEvent     *event,
                                 gpointer      data)
 {
   GdkSurfaceCache *cache = data;
@@ -388,7 +387,6 @@ gdk_surface_cache_shape_filter (const XEvent *xevent,
 
 GdkFilterReturn
 gdk_surface_cache_filter (const XEvent *xevent,
-                          GdkEvent     *event,
                           gpointer      data)
 {
   GdkSurfaceCache *cache = data;
