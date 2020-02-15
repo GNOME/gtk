@@ -1316,15 +1316,19 @@ synth_crossing (GtkWidget       *widget,
                 GdkNotifyType    notify_type,
                 GdkCrossingMode  crossing_mode)
 {
+  GdkSurface *surface;
+  GdkDevice *device;
+  GdkDevice *source_device;
   GdkEvent *event;
   GtkStateFlags flags;
 
+  surface = gtk_native_get_surface (gtk_widget_get_native (toplevel));
+  device = gdk_event_get_device (source);
+  source_device = gdk_event_get_source_device (source);
+
   if (gdk_event_get_event_type (source) == GDK_FOCUS_CHANGE)
     {
-      event = gdk_event_new (GDK_FOCUS_CHANGE);
-      event->focus_change.in = enter;
-      event->focus_change.mode = crossing_mode;
-      event->focus_change.detail = notify_type;
+      event = gdk_event_focus_new (surface, device, source_device, enter);
 
       flags = GTK_STATE_FLAG_FOCUSED;
       if (!GTK_IS_WINDOW (toplevel) || gtk_window_get_focus_visible (GTK_WINDOW (toplevel)))
@@ -1332,28 +1336,24 @@ synth_crossing (GtkWidget       *widget,
     }
   else
     {
-      gdouble x, y;
-      event = gdk_event_new (enter ? GDK_ENTER_NOTIFY : GDK_LEAVE_NOTIFY);
-      if (related_target)
-        {
-          GdkSurface *surface;
+      double x, y;
 
-          surface = gtk_native_get_surface (gtk_widget_get_native (related_target));
-          event->crossing.child_surface = g_object_ref (surface);
-        }
       gdk_event_get_coords (source, &x, &y);
-      event->crossing.x = x;
-      event->crossing.y = y;
-      event->crossing.mode = crossing_mode;
-      event->crossing.detail = notify_type;
+      event = gdk_event_crossing_new (enter ? GDK_ENTER_NOTIFY : GDK_LEAVE_NOTIFY,
+                                      surface,
+                                      device,
+                                      source_device,
+                                      GDK_CURRENT_TIME,
+                                      0,
+                                      x, y,
+                                      crossing_mode,
+                                      notify_type);
 
       flags = GTK_STATE_FLAG_PRELIGHT;
     }
 
   gdk_event_set_target (event, G_OBJECT (target));
   gdk_event_set_related_target (event, G_OBJECT (related_target));
-  gdk_event_set_device (event, gdk_event_get_device (source));
-  gdk_event_set_source_device (event, gdk_event_get_source_device (source));
 
   event->any.surface = gtk_native_get_surface (gtk_widget_get_native (toplevel));
   if (event->any.surface)
