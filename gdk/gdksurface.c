@@ -558,13 +558,13 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                   0,
                   g_signal_accumulator_true_handled,
                   NULL,
-                  _gdk_marshal_BOOLEAN__OBJECT,
+                  _gdk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN,
                   1,
                   GDK_TYPE_EVENT);
   g_signal_set_va_marshaller (signals[EVENT],
                               G_OBJECT_CLASS_TYPE (object_class),
-                              _gdk_marshal_BOOLEAN__OBJECTv);
+                              _gdk_marshal_BOOLEAN__BOXEDv);
 }
 
 static void
