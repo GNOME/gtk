@@ -2046,7 +2046,7 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_int (value, gtk_widget_get_scale_factor (widget));
       break;
     case PROP_CSS_NAME:
-      g_value_set_string (value, g_quark_to_string (gtk_css_node_get_name (priv->cssnode)));
+      g_value_set_string (value, gtk_widget_get_css_name (widget));
       break;
     case PROP_CSS_CLASSES:
       g_value_take_boxed (value, gtk_widget_get_css_classes (widget));
@@ -13127,7 +13127,7 @@ gtk_widget_class_query_action (GtkWidgetClass      *widget_class,
  *
  * Returns the CSS name that is used for @self.
  *
- * Returns: the CSS name
+ * Returns: (transfer none): the CSS name
  **/
 const char *
 gtk_widget_get_css_name (GtkWidget *self)
