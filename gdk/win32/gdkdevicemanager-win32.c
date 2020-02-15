@@ -874,9 +874,8 @@ gdk_device_manager_find_wintab_device (GdkDeviceManagerWin32 *device_manager,
   return NULL;
 }
 
-gboolean
+GdkEvent *
 gdk_input_other_event (GdkDisplay *display,
-                       GdkEvent   *event,
                        MSG        *msg,
                        GdkSurface  *window)
 {
@@ -884,21 +883,29 @@ gdk_input_other_event (GdkDisplay *display,
   GdkDeviceWintab *source_device = NULL;
   GdkDeviceGrabInfo *last_grab;
   guint key_state;
+  GdkEvent *event;
 
   PACKET packet;
   gint root_x, root_y;
   gint num_axes;
   double x, y;
   guint translated_buttons, button_diff, button_mask;
+
+  GdkEventType event_type;
+  int event_button;
+  GdkModifierType event_state;
+  double event_x, event_y;
+  double *axes;
+
   /* Translation from tablet button state to GDK button state for
    * buttons 1-3 - swap button 2 and 3.
    */
   static guint button_map[8] = {0, 1, 4, 5, 2, 3, 6, 7};
 
-  if (event->any.surface != wintab_window)
+  if (window != wintab_window)
     {
       g_warning ("gdk_input_other_event: not wintab_window?");
-      return FALSE;
+      return NULL;
     }
 
   device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
@@ -914,7 +921,7 @@ gdk_input_other_event (GdkDisplay *display,
   if (msg->message == WT_PACKET || msg->message == WT_CSRCHANGE)
     {
       if (!(*p_WTPacket) ((HCTX) msg->lParam, msg->wParam, &packet))
-        return FALSE;
+        return NULL;
     }
 
   switch (msg->message)
@@ -966,7 +973,7 @@ gdk_input_other_event (GdkDisplay *display,
 
       if (source_device == NULL ||
 	  gdk_device_get_mode (GDK_DEVICE (source_device)) == GDK_MODE_DISABLED)
-	return FALSE;
+	return NULL;
 
       /* Don't produce any button or motion events while a window is being
        * moved or resized, see bug #151090.
@@ -974,7 +981,7 @@ gdk_input_other_event (GdkDisplay *display,
       if (_modal_operation_in_progress & GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)
         {
           GDK_NOTE (EVENTS_OR_INPUT, g_print ("... ignored when moving/sizing\n"));
-          return FALSE;
+          return NULL;
         }
 
       last_grab = _gdk_display_get_last_device_grab (display, GDK_DEVICE (source_device));
@@ -989,7 +996,7 @@ gdk_input_other_event (GdkDisplay *display,
       if (window == NULL)
         {
           GDK_NOTE (EVENTS_OR_INPUT, g_print ("... is root\n"));
-          return FALSE;
+          return NULL;
         }
 
       num_axes = 0;
@@ -1018,7 +1025,7 @@ gdk_input_other_event (GdkDisplay *display,
           button_diff = translated_buttons ^ source_device->button_state;
 
           /* Gdk buttons are numbered 1.. */
-          event->button.button = 1;
+          event_button = 1;
 
           for (button_mask = 1; button_mask != 0x80000000;
                button_mask <<= 1, event->button.button++)
@@ -1032,47 +1039,49 @@ gdk_input_other_event (GdkDisplay *display,
 
           if (!(translated_buttons & button_mask))
             {
-              event->any.type = GDK_BUTTON_RELEASE;
+              event_type = GDK_BUTTON_RELEASE;
             }
           else
             {
-              event->any.type = GDK_BUTTON_PRESS;
+              event_type = GDK_BUTTON_PRESS;
             }
           source_device->button_state ^= button_mask;
         }
       else
         {
-          event->any.type = GDK_MOTION_NOTIFY;
+          event_type = GDK_MOTION_NOTIFY;
         }
 
-      event->any.surface = window;
       key_state = get_modifier_key_state ();
-      if (event->any.type == GDK_BUTTON_PRESS ||
-          event->any.type == GDK_BUTTON_RELEASE)
+      if (event_type == GDK_BUTTON_PRESS ||
+          event_type == GDK_BUTTON_RELEASE)
         {
-          event->button.time = _gdk_win32_get_next_tick (msg->time);
-	  if (source_device->sends_core)
-	    gdk_event_set_device (event, device_manager->core_pointer);
-          gdk_event_set_source_device (event, GDK_DEVICE (source_device));
-
-          event->button.axes = g_new (gdouble, num_axes);
-	  gdk_surface_get_origin (window, &root_x, &root_y);
+          axes = g_new (gdouble, num_axes);
 
           _gdk_device_wintab_translate_axes (source_device,
                                              window,
                                              event->button.axes,
-                                             &event->button.x,
-                                             &event->button.y);
+                                             &event_x,
+                                             &event_y);
+          g_free (axes);
 
-          event->button.x_root = event->button.x + root_x;
-          event->button.y_root = event->button.y + root_y;
-
-          event->button.state =
+          event_state =
             key_state | ((source_device->button_state << 8)
                          & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK
                             | GDK_BUTTON3_MASK | GDK_BUTTON4_MASK
                             | GDK_BUTTON5_MASK));
 
+          event = gdk_event_button_new (event_type,
+                                        window,
+                                        device_manager->core_pointer,
+                                        source_device,
+                                        NULL,
+                                        _gdk_win32_get_next_tick (msg->time),
+                                        event_x,
+                                        event_y,
+                                        event_button,
+                                        event_state);
+                                          
           GDK_NOTE (EVENTS_OR_INPUT,
                     g_print ("WINTAB button %s:%d %g,%g\n",
                              (event->any.type == GDK_BUTTON_PRESS ?
@@ -1082,33 +1091,33 @@ gdk_input_other_event (GdkDisplay *display,
         }
       else
         {
-          event->motion.time = _gdk_win32_get_next_tick (msg->time);
-          gdk_event_set_device (event, device_manager->core_pointer);
-          gdk_event_set_source_device (event, GDK_DEVICE (source_device));
-
-          event->motion.axes = g_new (gdouble, num_axes);
-	  gdk_surface_get_origin (window, &root_x, &root_y);
-
+          axes = g_new (gdouble, num_axes);
           _gdk_device_wintab_translate_axes (source_device,
                                              window,
-                                             event->motion.axes,
-                                             &event->motion.x,
-                                             &event->motion.y);
+                                             axes,
+                                             &event_x,
+                                             &event_y);
+          g_free (axes);
 
-          event->motion.x_root = event->motion.x + root_x;
-          event->motion.y_root = event->motion.y + root_y;
-
-          event->motion.state =
+          event_state =
             key_state | ((source_device->button_state << 8)
                          & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK
                             | GDK_BUTTON3_MASK | GDK_BUTTON4_MASK
                             | GDK_BUTTON5_MASK));
 
+          event = gdk_event_motion_new (window,
+                                        device_manager->core_pointer,
+                                        source_device,
+                                        NULL,
+                                        _gdk_win32_get_next_tick (msg->time),
+                                        event_state,
+                                        event_x,
+                                        event_y);
           GDK_NOTE (EVENTS_OR_INPUT,
                     g_print ("WINTAB motion: %g,%g\n",
                              event->motion.x, event->motion.y));
         }
-      return TRUE;
+      return event;
 
     case WT_CSRCHANGE:
       if (device_manager->dev_entered_proximity > 0)
@@ -1117,7 +1126,7 @@ gdk_input_other_event (GdkDisplay *display,
       if ((source_device = gdk_device_manager_find_wintab_device (device_manager,
 								  (HCTX) msg->lParam,
 								  packet.pkCursor)) == NULL)
-	return FALSE;
+	return NULL;
 
       if (source_device->sends_core &&
 	  gdk_device_get_mode (GDK_DEVICE (source_device)) != GDK_MODE_DISABLED)
@@ -1127,7 +1136,7 @@ gdk_input_other_event (GdkDisplay *display,
 	  _gdk_input_ignore_core += 1;
 	}
 
-      return FALSE;
+      return NULL;
 
     case WT_PROXIMITY:
       if (LOWORD (msg->lParam) == 0)
@@ -1146,8 +1155,8 @@ gdk_input_other_event (GdkDisplay *display,
 	  device_manager->dev_entered_proximity += 1;
 	}
 
-      return FALSE;
+      return NULL;
     }
 
-  return FALSE;
+  return NULL;
 }
