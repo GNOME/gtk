@@ -557,6 +557,7 @@ enum {
   PROP_EXPAND,
   PROP_SCALE_FACTOR,
   PROP_CSS_NAME,
+  PROP_CSS_CLASSES,
   PROP_LAYOUT_MANAGER,
   NUM_PROPERTIES
 };
@@ -1326,6 +1327,18 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
   /**
+   * GtkWidget:css-classes:
+   *
+   * A list of css classes applied to this widget.
+   */
+  widget_props[PROP_CSS_CLASSES] =
+      g_param_spec_boxed ("classes",
+                          P_("Style Classes"),
+                          P_("List of classes"),
+                          G_TYPE_STRV,
+                          GTK_PARAM_READWRITE);
+
+  /**
    * GtkWidget:layout-manager:
    *
    * The #GtkLayoutManager instance to use to compute the preferred size
@@ -1886,6 +1899,9 @@ gtk_widget_set_property (GObject         *object,
       if (g_value_get_string (value) != NULL)
         gtk_css_node_set_name (priv->cssnode, g_quark_from_string (g_value_get_string (value)));
       break;
+    case PROP_CSS_CLASSES:
+      gtk_widget_set_css_classes (widget, g_value_get_boxed (value));
+      break;
     case PROP_LAYOUT_MANAGER:
       gtk_widget_set_layout_manager (widget, g_value_dup_object (value));
       break;
@@ -2031,6 +2047,9 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_CSS_NAME:
       g_value_set_string (value, g_quark_to_string (gtk_css_node_get_name (priv->cssnode)));
+      break;
+    case PROP_CSS_CLASSES:
+      g_value_take_boxed (value, gtk_widget_get_css_classes (widget));
       break;
     case PROP_LAYOUT_MANAGER:
       g_value_set_object (value, gtk_widget_get_layout_manager (widget));
@@ -13141,6 +13160,7 @@ gtk_widget_add_css_class (GtkWidget  *widget,
   g_return_if_fail (css_class[0] != '.');
 
   gtk_css_node_add_class (priv->cssnode, g_quark_from_string (css_class));
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CSS_CLASSES]);
 }
 
 /**
@@ -13169,6 +13189,7 @@ gtk_widget_remove_css_class (GtkWidget  *widget,
     return;
 
   gtk_css_node_remove_class (priv->cssnode, class_quark);
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CSS_CLASSES]);
 }
 
 /**
@@ -13199,4 +13220,57 @@ gtk_widget_has_css_class (GtkWidget  *widget,
     return FALSE;
 
   return gtk_css_node_has_class (priv->cssnode, class_quark);
+}
+
+/**
+ * gtk_widget_get_css_classes:
+ * @widget: a #GtkWidget
+ *
+ * Returns the list of css classes applied to @widget.
+ *
+ * Returns: (transfer full): a %NULL-terminated list of
+ *   css classes currently applied to @widget. The returned
+ *   list can be freed using g_strfreev.
+ */
+char **
+gtk_widget_get_css_classes (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  const GQuark *classes;
+  guint n_classes;
+  char **strv;
+  guint i;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  classes = gtk_css_node_list_classes (priv->cssnode, &n_classes);
+  strv = g_new (char *, n_classes + 1);
+
+  for (i = 0; i < n_classes; i++)
+    strv[i] = g_strdup (g_quark_to_string (classes[i]));
+
+  strv[n_classes] = NULL;
+
+  return strv;
+}
+
+/**
+ * gtk_widget_set_css_classes:
+ * @widget: a #GtkWidget
+ * @classes: (transfer none): %NULL-terminated list
+ *   of css classes to apply to @widget.
+ *
+ * Will clear all css classes applied to @widget
+ * and replace them with @classes.
+ */
+void
+gtk_widget_set_css_classes (GtkWidget   *widget,
+                            const char **classes)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_css_node_set_classes (priv->cssnode, classes);
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CSS_CLASSES]);
 }

@@ -981,6 +981,11 @@ void                    gtk_widget_remove_css_class     (GtkWidget   *widget,
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_widget_has_css_class        (GtkWidget   *widget,
                                                          const char  *css_class);
+GDK_AVAILABLE_IN_ALL
+char **                 gtk_widget_get_css_classes      (GtkWidget   *widget);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_set_css_classes      (GtkWidget   *widget,
+                                                         const char **classes);
 
 
 
