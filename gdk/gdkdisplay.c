@@ -89,8 +89,6 @@ enum {
 
 static void gdk_display_dispose     (GObject         *object);
 static void gdk_display_finalize    (GObject         *object);
-static void gdk_display_put_event_nocopy (GdkDisplay *display,
-                                          GdkEvent   *event);
 
 
 static GdkAppLaunchContext *gdk_display_real_get_app_launch_context (GdkDisplay *display);
@@ -476,19 +474,12 @@ gdk_display_peek_event (GdkDisplay *display)
   return NULL;
 }
 
-static void
-gdk_display_put_event_nocopy (GdkDisplay *display,
-                              GdkEvent   *event)
-{
-  _gdk_event_queue_append (display, event);
-}
-
 /**
  * gdk_display_put_event:
  * @display: a #GdkDisplay
- * @event: a #GdkEvent.
+ * @event (transfer none): a #GdkEvent.
  *
- * Appends a copy of the given event onto the front of the event
+ * Appends the given event onto the front of the event
  * queue for @display.
  **/
 void
@@ -498,7 +489,7 @@ gdk_display_put_event (GdkDisplay     *display,
   g_return_if_fail (GDK_IS_DISPLAY (display));
   g_return_if_fail (event != NULL);
 
-  gdk_display_put_event_nocopy (display, gdk_event_copy (event));
+  _gdk_event_queue_append (display, gdk_event_ref ((GdkEvent *)event));
 }
 
 static void
@@ -520,7 +511,7 @@ generate_grab_broken_event (GdkDisplay *display,
                                          grab_surface,
                                          implicit);
 
-      gdk_display_put_event_nocopy (display, event);
+      _gdk_event_queue_append (display, event);
     }
 }
 
