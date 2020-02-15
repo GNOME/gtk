@@ -131,7 +131,6 @@ typedef union  _GdkEvent	    GdkEvent;
  * @GDK_DELETE: the window manager has requested that the toplevel surface be
  *   hidden or destroyed, usually when the user clicks on a special icon in the
  *   title bar.
- * @GDK_DESTROY: the surface has been destroyed.
  * @GDK_MOTION_NOTIFY: the pointer (usually a mouse) has moved.
  * @GDK_BUTTON_PRESS: a mouse button has been pressed.
  * @GDK_BUTTON_RELEASE: a mouse button has been released.
@@ -187,7 +186,6 @@ typedef enum
 {
   GDK_NOTHING,
   GDK_DELETE,
-  GDK_DESTROY,
   GDK_MOTION_NOTIFY,
   GDK_BUTTON_PRESS,
   GDK_BUTTON_RELEASE,
