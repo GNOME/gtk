@@ -7962,7 +7962,7 @@ synth_crossing (GtkWidget       *widget,
   if (widget)
     gtk_widget_event_internal (widget, event);
 
-  g_object_unref (event);
+  gdk_event_unref (event);
 }
 
 /*

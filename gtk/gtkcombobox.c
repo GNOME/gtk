@@ -1800,7 +1800,7 @@ gtk_combo_box_menu_key (GtkEventControllerKey *key,
       gtk_event_controller_key_forward (key, GTK_WIDGET (combo_box));
     }
 
-  g_object_unref (event);
+  gdk_event_unref (event);
 
   return TRUE;
 }
