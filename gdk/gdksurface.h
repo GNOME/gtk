@@ -37,8 +37,6 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GdkGeometry          GdkGeometry;
-
 /**
  * GdkSurfaceType:
  * @GDK_SURFACE_TOPLEVEL: toplevel window (used to implement #GtkWindow)
