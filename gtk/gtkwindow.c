@@ -6384,12 +6384,7 @@ gtk_window_set_focus (GtkWindow *window,
   seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (window)));
   device = gdk_seat_get_keyboard (seat);
 
-  event = gdk_event_new (GDK_FOCUS_CHANGE);
-  gdk_event_set_display (event, gtk_widget_get_display (GTK_WIDGET (window)));
-  gdk_event_set_device (event, device);
-  event->any.surface = priv->surface;
-  if (event->any.surface)
-    g_object_ref (event->any.surface);
+  event = gdk_event_focus_new (priv->surface, device, device, TRUE);
 
   gtk_synthesize_crossing_events (GTK_ROOT (window), old_focus, focus, event, GDK_CROSSING_NORMAL);
 
