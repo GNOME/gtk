@@ -115,12 +115,10 @@ handle_focus_change (GdkEventCrossing *event)
     {
       GdkEvent *focus_event;
 
-      focus_event = gdk_event_new (GDK_FOCUS_CHANGE);
-      focus_event->any.surface = g_object_ref (event->any.surface);
-      focus_event->any.send_event = FALSE;
-      focus_event->focus_change.in = focus_in;
-      gdk_event_set_device (focus_event, gdk_event_get_device ((GdkEvent *) event));
-
+      focus_event = gdk_event_focus_new (event->any.surface,
+                                         gdk_event_get_device ((GdkEvent *)event),
+                                         gdk_event_get_source_device ((GdkEvent *)event),
+                                         focus_in);
       gdk_display_put_event (gdk_surface_get_display (event->any.surface), focus_event);
       g_object_unref (focus_event);
     }
@@ -137,20 +135,17 @@ create_synth_crossing_event (GdkEventType     evtype,
 
   g_assert (evtype == GDK_ENTER_NOTIFY || evtype == GDK_LEAVE_NOTIFY);
 
-  event = gdk_event_new (evtype);
-  event->any.send_event = TRUE;
-  event->any.surface = g_object_ref (real_event->any.surface);
-  event->crossing.detail = GDK_NOTIFY_ANCESTOR;
-  event->crossing.mode = mode;
-  event->crossing.time = gdk_event_get_time (real_event);
-  gdk_event_set_device (event, gdk_event_get_device (real_event));
-  gdk_event_set_source_device (event, gdk_event_get_device (real_event));
-
-  if (gdk_event_get_state (real_event, &state))
-    event->crossing.state = state;
-
-  if (gdk_event_get_coords (real_event, &x, &y))
-    gdk_event_set_coords (event, x, y);
+  gdk_event_get_state (real_event, &state);
+  gdk_event_get_coords (real_event, &x, &y);
+  event = gdk_event_crossing_new (evtype,
+                                  real_event->any.surface,
+                                  gdk_event_get_device (real_event),
+                                  gdk_event_get_source_device (real_event),
+                                  gdk_event_get_time (real_event),
+                                  state,
+                                  x, y,
+                                  mode,
+                                  GDK_NOTIFY_ANCESTOR);
 
   return event;
 }
