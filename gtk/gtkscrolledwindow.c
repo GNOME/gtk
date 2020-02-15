@@ -1223,7 +1223,7 @@ captured_motion (GtkScrolledWindow *sw,
         indicator_set_over (&priv->hindicator, FALSE);
     }
 
-  g_object_unref (event);
+  gdk_event_unref (event);
 }
 
 static gboolean
