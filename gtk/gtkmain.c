@@ -1841,6 +1841,7 @@ gtk_main_do_event (GdkEvent *event)
       break;
 
     case GDK_DELETE:
+    case GDK_DESTROY:
       g_object_ref (target_widget);
       if (!gtk_window_group_get_current_grab (window_group) ||
           GTK_WIDGET (gtk_widget_get_root (gtk_window_group_get_current_grab (window_group))) == target_widget)
@@ -1850,20 +1851,6 @@ gtk_main_do_event (GdkEvent *event)
             gtk_widget_destroy (target_widget);
         }
       g_object_unref (target_widget);
-      break;
-
-    case GDK_DESTROY:
-      /* Unexpected GDK_DESTROY from the outside, ignore for
-       * child windows, handle like a GDK_DELETE for toplevels
-       */
-      if (!gtk_widget_get_parent (target_widget))
-        {
-          g_object_ref (target_widget);
-          if (!gtk_widget_event (target_widget, event) &&
-              gtk_widget_get_realized (target_widget))
-            gtk_widget_destroy (target_widget);
-          g_object_unref (target_widget);
-        }
       break;
 
     case GDK_FOCUS_CHANGE:
