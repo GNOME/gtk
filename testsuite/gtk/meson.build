@@ -10,6 +10,7 @@ endif
 tests = [
   ['accel'],
   ['accessible'],
+  ['accessor-apis'],
   ['action'],
   ['adjustment'],
   ['bitmask', ['../../gtk/gtkallocatedbitmask.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
