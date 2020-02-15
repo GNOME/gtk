@@ -1,8 +1,21 @@
 #include <gtk/gtk.h>
 
-static const char *entries[] = {
-  "GTK_LIST_BOX_ROW"
-};
+static GdkContentProvider *
+prepare (GtkDragSource *source,
+         double         x,
+         double         y,
+         GtkWidget     *row)
+{
+  GdkContentProvider *content;
+  GValue value = G_VALUE_INIT;
+
+  g_value_init (&value, GTK_TYPE_LIST_BOX_ROW);
+  g_value_set_object (&value, row);
+  content = gdk_content_provider_new_for_value (&value);
+  g_value_unset (&value);
+
+  return content;
+}
 
 static void
 drag_begin (GtkDragSource *source,
@@ -29,46 +42,49 @@ got_row (GObject      *src,
          GAsyncResult *result,
          gpointer      data)
 {
-  GtkDropTarget *dest = GTK_DROP_TARGET (src);
+  GdkDrop *drop = GDK_DROP (src);
   GtkWidget *target = data;
-  GtkWidget *row;
   GtkWidget *source;
   int pos;
-  GtkSelectionData *selection_data;
 
-  selection_data = gtk_drop_target_read_selection_finish (dest, result, NULL);
+  source = g_value_get_object (gdk_drop_read_value_finish (drop, result, NULL));
+  if (source == NULL)
+    {
+      gdk_drop_finish (drop, 0);
+      return;
+    }
 
   pos = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (target));
-  row = (gpointer)* (gpointer*)gtk_selection_data_get_data (selection_data);
-  source = gtk_widget_get_ancestor (row, GTK_TYPE_LIST_BOX_ROW);
-
-  gtk_selection_data_free (selection_data);
-
   if (source == target)
-    return;
+    {
+      gdk_drop_finish (drop, 0);
+      return;
+    }
 
   g_object_ref (source);
   gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (source)), source);
   gtk_list_box_insert (GTK_LIST_BOX (gtk_widget_get_parent (target)), source, pos);
   g_object_unref (source);
+
+  gdk_drop_finish (drop, GDK_ACTION_MOVE);
 }
 
-static void
+static gboolean
 drag_drop (GtkDropTarget    *dest,
            GdkDrop          *drop,
            int               x,
            int               y,
            gpointer          data)
 {
-  gtk_drop_target_read_selection (dest, "GTK_LIST_BOX_ROW", NULL, got_row, data);
+  gdk_drop_read_value_async (drop, GTK_TYPE_LIST_BOX_ROW, G_PRIORITY_DEFAULT, NULL, got_row, data);
+
+  return TRUE;
 }
 
 static GtkWidget *
 create_row (const gchar *text)
 {
   GtkWidget *row, *box, *label, *image;
-  GBytes *bytes;
-  GdkContentProvider *content;
   GdkContentFormats *targets;
   GtkDragSource *source;
   GtkDropTarget *dest;
@@ -83,15 +99,13 @@ create_row (const gchar *text)
   gtk_container_add (GTK_CONTAINER (box), label);
   gtk_container_add (GTK_CONTAINER (box), image);
 
-  bytes = g_bytes_new (&row, sizeof (gpointer));
-  content = gdk_content_provider_new_for_bytes ("GTK_LIST_BOX_ROW", bytes);
   source = gtk_drag_source_new ();
-  gtk_drag_source_set_content (source, content);
   gtk_drag_source_set_actions (source, GDK_ACTION_MOVE);
   g_signal_connect (source, "drag-begin", G_CALLBACK (drag_begin), image);
+  g_signal_connect (source, "prepare", G_CALLBACK (prepare), row);
   gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (source));
 
-  targets = gdk_content_formats_new (entries, 1);
+  targets = gdk_content_formats_new_for_gtype (GTK_TYPE_LIST_BOX_ROW);
   dest = gtk_drop_target_new (targets, GDK_ACTION_MOVE);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), row);
   gtk_widget_add_controller (GTK_WIDGET (row), GTK_EVENT_CONTROLLER (dest));

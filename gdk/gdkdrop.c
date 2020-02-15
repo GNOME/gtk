@@ -163,6 +163,23 @@ gdk_drop_read_local_finish (GdkDrop         *self,
 }
 
 static void
+gdk_drop_add_formats (GdkDrop           *self,
+                      GdkContentFormats *formats)
+{
+  GdkDropPrivate *priv = gdk_drop_get_instance_private (self);
+
+  formats = gdk_content_formats_union_deserialize_gtypes (gdk_content_formats_ref (formats));
+
+  if (priv->formats)
+    {
+      formats = gdk_content_formats_union (formats, priv->formats);
+      gdk_content_formats_unref (priv->formats);
+    }
+
+  priv->formats = formats;
+}
+
+static void
 gdk_drop_set_property (GObject      *gobject,
                        guint         prop_id,
                        const GValue *value,
@@ -186,10 +203,11 @@ gdk_drop_set_property (GObject      *gobject,
 
     case PROP_DRAG:
       priv->drag = g_value_dup_object (value);
+      gdk_drop_add_formats (self, gdk_drag_get_formats (priv->drag));
       break;
 
     case PROP_FORMATS:
-      priv->formats = g_value_dup_boxed (value);
+      gdk_drop_add_formats (self, g_value_get_boxed (value));
       g_assert (priv->formats != NULL);
       break;
 
