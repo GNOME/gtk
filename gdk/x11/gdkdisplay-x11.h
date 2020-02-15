@@ -179,7 +179,8 @@ gboolean        gdk_x11_display_request_selection_notification  (GdkDisplay     
                                                                  const char             *selection);
 
 GdkFilterReturn _gdk_wm_protocols_filter        (const XEvent   *xevent,
-                                                 GdkEvent       *event,
+                                                 GdkSurface     *win,
+                                                 GdkEvent      **event,
                                                  gpointer        data);
 
 G_END_DECLS
