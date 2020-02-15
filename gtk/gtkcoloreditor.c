@@ -394,7 +394,7 @@ gtk_color_editor_init (GtkColorEditor *editor)
    * supported by template GtkBuilder xml (it would be possible to set this up in the xml
    * but require 4 separate callbacks and would be rather ugly).
    */
-  gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (editor->priv->h_entry), scaled_adjustment (editor->priv->h_adj, 100));
+  gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (editor->priv->h_entry), scaled_adjustment (editor->priv->h_adj, 360));
   gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (editor->priv->s_entry), scaled_adjustment (editor->priv->s_adj, 100));
   gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (editor->priv->v_entry), scaled_adjustment (editor->priv->v_adj, 100));
   gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (editor->priv->a_entry), scaled_adjustment (editor->priv->a_adj, 100));
