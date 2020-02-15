@@ -514,13 +514,11 @@ generate_grab_broken_event (GdkDisplay *display,
     {
       GdkEvent *event;
 
-      event = gdk_event_new (GDK_GRAB_BROKEN);
-      event->any.surface = g_object_ref (surface);
-      event->any.send_event = FALSE;
-      event->grab_broken.implicit = implicit;
-      event->grab_broken.grab_surface = grab_surface;
-      gdk_event_set_device (event, device);
-      event->grab_broken.keyboard = (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD) ? TRUE : FALSE;
+      event = gdk_event_grab_broken_new (surface,
+                                         device,
+                                         device,
+                                         grab_surface,
+                                         implicit);
 
       gdk_display_put_event_nocopy (display, event);
     }
