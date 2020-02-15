@@ -469,7 +469,7 @@ gdk_display_peek_event (GdkDisplay *display)
   tmp_list = _gdk_event_queue_find_first (display);
   
   if (tmp_list != NULL)
-    return g_object_ref (tmp_list->data);
+    return gdk_event_ref (tmp_list->data);
 
   return NULL;
 }
