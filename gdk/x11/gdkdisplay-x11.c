@@ -831,7 +831,8 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
       if (!is_substructure)
 	{
-	  event->any.type = GDK_DESTROY;
+          /* handle destroy like delete */
+	  event->any.type = GDK_DELETE;
 	  event->any.surface = surface;
 
 	  return_val = surface && !GDK_SURFACE_DESTROYED (surface);
