@@ -506,7 +506,6 @@ check_manager_window (GdkX11Screen *x11_screen,
 
 GdkFilterReturn
 gdk_xsettings_root_window_filter (const XEvent *xev,
-                                  GdkEvent     *event,
                                   gpointer      data)
 {
   GdkX11Screen *x11_screen = data;
@@ -530,7 +529,6 @@ gdk_xsettings_root_window_filter (const XEvent *xev,
 
 GdkFilterReturn
 gdk_xsettings_manager_window_filter (const XEvent *xev,
-                                     GdkEvent     *event,
                                      gpointer      data)
 {
   GdkX11Screen *x11_screen = data;
