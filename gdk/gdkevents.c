@@ -64,87 +64,10 @@
  * of related touch events.
  */
 
-/* Private variable declarations
- */
 
-static void gdk_event_constructed (GObject *object);
-static void gdk_event_finalize (GObject *object);
-
-G_DEFINE_TYPE (GdkEvent, gdk_event, G_TYPE_OBJECT)
-
-enum {
-  PROP_0,
-  PROP_EVENT_TYPE,
-  N_PROPS
-};
-
-static GParamSpec *event_props[N_PROPS] = { NULL, };
-
-#define EVENT_PAYLOAD(ev) (&(ev)->any.type)
-#define EVENT_PAYLOAD_SIZE (sizeof (GdkEvent) - sizeof (GObject))
-
-static void
-gdk_event_init (GdkEvent *event)
-{
-}
-
-static void
-gdk_event_real_get_property (GObject    *object,
-                             guint       prop_id,
-                             GValue     *value,
-                             GParamSpec *pspec)
-{
-  GdkEvent *event = GDK_EVENT (object);
-
-  switch (prop_id)
-    {
-    case PROP_EVENT_TYPE:
-      g_value_set_enum (value, event->any.type);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-static void
-gdk_event_real_set_property (GObject      *object,
-                             guint         prop_id,
-                             const GValue *value,
-                             GParamSpec   *pspec)
-{
-  GdkEvent *event = GDK_EVENT (object);
-
-  switch (prop_id)
-    {
-    case PROP_EVENT_TYPE:
-      event->any.type = g_value_get_enum (value);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-static void
-gdk_event_class_init (GdkEventClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->get_property = gdk_event_real_get_property;
-  object_class->set_property = gdk_event_real_set_property;
-  object_class->constructed = gdk_event_constructed;
-  object_class->finalize = gdk_event_finalize;
-
-  event_props[PROP_EVENT_TYPE] =
-    g_param_spec_enum ("event-type",
-                       P_("Event type"),
-                       P_("Event type"),
-                       GDK_TYPE_EVENT_TYPE, GDK_NOTHING,
-                       G_PARAM_READWRITE |
-                       G_PARAM_CONSTRUCT_ONLY);
-  g_object_class_install_properties (object_class, N_PROPS, event_props);
-}
+G_DEFINE_BOXED_TYPE (GdkEvent, gdk_event,
+                     gdk_event_ref,
+                     gdk_event_unref)
 
 gboolean
 check_event_sanity (GdkEvent *event)
@@ -449,83 +372,27 @@ _gdk_event_queue_flush (GdkDisplay *display)
 static GdkEvent *
 gdk_event_new (GdkEventType type)
 {
-  return g_object_new (GDK_TYPE_EVENT,
-                       "event-type", type,
-                       NULL);
+  GdkEvent *event = g_new0 (GdkEvent, 1);
+  event->any.ref_count = 1;
+  event->any.type = type;
+  return event;
 }
 
 GdkEvent *
 gdk_event_ref (GdkEvent *event)
 {
-  return g_object_ref (event);
+  event->any.ref_count++;
+  return event;
 }
+
+static void gdk_event_free (GdkEvent *event);
 
 void
 gdk_event_unref (GdkEvent *event)
 {
-  g_object_unref (event);
-}
-
-static void
-gdk_event_constructed (GObject *object)
-{
-  GdkEvent *new_event = GDK_EVENT (object);
-
-  /*
-   * Bytewise 0 initialization is reasonable for most of the 
-   * current event types. Explicitely initialize double fields
-   * since I trust bytewise 0 == 0. less than for integers
-   * or pointers.
-   */
-  switch ((guint) new_event->any.type)
-    {
-    case GDK_MOTION_NOTIFY:
-      new_event->motion.x = 0.;
-      new_event->motion.y = 0.;
-      break;
-    case GDK_BUTTON_PRESS:
-    case GDK_BUTTON_RELEASE:
-      new_event->button.x = 0.;
-      new_event->button.y = 0.;
-      break;
-    case GDK_TOUCH_BEGIN:
-    case GDK_TOUCH_UPDATE:
-    case GDK_TOUCH_END:
-    case GDK_TOUCH_CANCEL:
-      new_event->touch.x = 0.;
-      new_event->touch.y = 0.;
-      break;
-    case GDK_SCROLL:
-      new_event->scroll.x = 0.;
-      new_event->scroll.y = 0.;
-      new_event->scroll.delta_x = 0.;
-      new_event->scroll.delta_y = 0.;
-      new_event->scroll.is_stop = FALSE;
-      break;
-    case GDK_ENTER_NOTIFY:
-    case GDK_LEAVE_NOTIFY:
-      new_event->crossing.x = 0.;
-      new_event->crossing.y = 0.;
-      break;
-    case GDK_TOUCHPAD_SWIPE:
-      new_event->touchpad_swipe.x = 0;
-      new_event->touchpad_swipe.y = 0;
-      new_event->touchpad_swipe.dx = 0;
-      new_event->touchpad_swipe.dy = 0;
-      break;
-    case GDK_TOUCHPAD_PINCH:
-      new_event->touchpad_pinch.x = 0;
-      new_event->touchpad_pinch.y = 0;
-      new_event->touchpad_pinch.dx = 0;
-      new_event->touchpad_pinch.dy = 0;
-      new_event->touchpad_pinch.angle_delta = 0;
-      new_event->touchpad_pinch.scale = 0;
-      break;
-    default:
-      break;
-    }
-
-  G_OBJECT_CLASS (gdk_event_parent_class)->constructed (object);
+  event->any.ref_count--;
+  if (event->any.ref_count == 0)
+    gdk_event_free (event);
 }
 
 void
@@ -554,9 +421,8 @@ gdk_event_get_pointer_emulated (GdkEvent *event)
 }
 
 static void
-gdk_event_finalize (GObject *object)
+gdk_event_free (GdkEvent *event)
 {
-  GdkEvent *event = GDK_EVENT (object);
   GdkDisplay *display;
 
   switch ((guint) event->any.type)
@@ -621,7 +487,7 @@ gdk_event_finalize (GObject *object)
   g_clear_object (&event->any.source_device);
   g_clear_object (&event->any.target);
 
-  G_OBJECT_CLASS (gdk_event_parent_class)->finalize (object);
+  g_free (event);
 }
 
 /**
