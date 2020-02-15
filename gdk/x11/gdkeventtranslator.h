@@ -38,10 +38,9 @@ struct _GdkEventTranslatorIface
   GTypeInterface iface;
 
   /* VMethods */
-  gboolean (* translate_event) (GdkEventTranslator *translator,
-                                GdkDisplay         *display,
-                                GdkEvent           *event,
-                                const XEvent       *xevent);
+  GdkEvent * (* translate_event) (GdkEventTranslator *translator,
+                                  GdkDisplay         *display,
+                                  const XEvent       *xevent);
 
   GdkEventMask (* get_handled_events)    (GdkEventTranslator *translator);
   void         (* select_surface_events) (GdkEventTranslator *translator,
