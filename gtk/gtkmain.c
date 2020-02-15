@@ -1314,76 +1314,26 @@ synth_crossing (GtkWidget       *widget,
                 GdkCrossingMode  crossing_mode)
 {
   GdkEvent *event;
-  GtkStateFlags flags;
+  gdouble x, y;
 
-  if (gdk_event_get_event_type (source) == GDK_FOCUS_CHANGE)
-    {
-      event = gdk_event_new (GDK_FOCUS_CHANGE);
-      event->focus_change.in = enter;
-      event->focus_change.mode = crossing_mode;
-      event->focus_change.detail = notify_type;
-
-      flags = GTK_STATE_FLAG_FOCUSED;
-      if (!GTK_IS_WINDOW (toplevel) || gtk_window_get_focus_visible (GTK_WINDOW (toplevel)))
-        flags |= GTK_STATE_FLAG_FOCUS_VISIBLE;
-    }
-  else
-    {
-      gdouble x, y;
-      event = gdk_event_new (enter ? GDK_ENTER_NOTIFY : GDK_LEAVE_NOTIFY);
-      if (related_target)
-        {
-          GdkSurface *surface;
-
-          surface = gtk_native_get_surface (gtk_widget_get_native (related_target));
-          event->crossing.child_surface = g_object_ref (surface);
-        }
-      gdk_event_get_coords (source, &x, &y);
-      event->crossing.x = x;
-      event->crossing.y = y;
-      event->crossing.mode = crossing_mode;
-      event->crossing.detail = notify_type;
-
-      flags = GTK_STATE_FLAG_PRELIGHT;
-    }
-
+  gdk_event_get_coords (source, &x, &y);
+  event = gdk_event_crossing_new (enter ? GDK_ENTER_NOTIFY : GDK_LEAVE_NOTIFY,
+                                  gtk_native_get_surface (gtk_widget_get_native (toplevel)),
+                                  source->any.device,
+                                  source->any.source_device,
+                                  GDK_CURRENT_TIME,
+                                  0,
+                                  x, y,
+                                  crossing_mode,
+                                  notify_type); 
   gdk_event_set_target (event, G_OBJECT (target));
   gdk_event_set_related_target (event, G_OBJECT (related_target));
-  gdk_event_set_device (event, gdk_event_get_device (source));
-  gdk_event_set_source_device (event, gdk_event_get_source_device (source));
-
-  event->any.surface = gtk_native_get_surface (gtk_widget_get_native (toplevel));
-  if (event->any.surface)
-    g_object_ref (event->any.surface);
 
   if (is_or_contains (enter, notify_type))
-    gtk_widget_set_state_flags (widget, flags, FALSE);
+    gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
   else
-    gtk_widget_unset_state_flags (widget, flags);
+    gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
 
-  if (gdk_event_get_event_type (source) == GDK_FOCUS_CHANGE)
-    {
-      /* maintain focus chain */
-      if (enter || notify_type == GDK_NOTIFY_INFERIOR)
-        {
-          GtkWidget *parent = gtk_widget_get_parent (widget);
-          if (parent)
-            gtk_widget_set_focus_child (parent, widget);
-        }
-      else if (!enter && notify_type != GDK_NOTIFY_INFERIOR)
-        {
-          GtkWidget *parent = gtk_widget_get_parent (widget);
-          if (parent)
-            gtk_widget_set_focus_child (parent, NULL);
-        }
-
-      /* maintain widget state */
-      if (notify_type == GDK_NOTIFY_ANCESTOR ||
-          notify_type == GDK_NOTIFY_INFERIOR ||
-          notify_type == GDK_NOTIFY_NONLINEAR)
-        gtk_widget_set_has_focus (widget, enter);
-    }
-    
   gtk_widget_event (widget, event);
   g_object_unref (event);
 }
