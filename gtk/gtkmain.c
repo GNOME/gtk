@@ -1077,77 +1077,84 @@ gtk_main_sync (void)
   _gtk_recent_manager_sync ();
 }
 
-static void
-rewrite_events_translate (GdkSurface *old_surface,
-                          GdkSurface *new_surface,
-                          gdouble   *x,
-                          gdouble   *y)
-{
-  if (!gdk_surface_translate_coordinates (old_surface, new_surface, x, y))
-    {
-      *x = 0;
-      *y = 0;
-    }
-}
-
 static GdkEvent *
 rewrite_event_for_surface (GdkEvent  *event,
 			   GdkSurface *new_surface)
 {
-  event = gdk_event_copy (event);
+  double x, y;
+
+  if (!gdk_event_get_coords (event, &x, &y) ||
+      !gdk_surface_translate_coordinates (event->any.surface, new_surface, &x, &y))
+    {
+      x = y = 0;
+    }
 
   switch ((guint) event->any.type)
     {
-    case GDK_SCROLL:
-      rewrite_events_translate (event->any.surface,
-                                new_surface,
-                                &event->scroll.x, &event->scroll.y);
-      break;
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
-      rewrite_events_translate (event->any.surface,
-                                new_surface,
-                                &event->button.x, &event->button.y);
-      break;
+      return gdk_event_button_new (event->any.type,
+                                   new_surface,
+                                   event->any.device,
+                                   event->any.source_device,
+                                   event->button.tool,
+                                   event->button.time,
+                                   event->button.state,
+                                   event->button.button,
+                                   x, y,
+                                   NULL); // FIXME copy axes
     case GDK_MOTION_NOTIFY:
-      rewrite_events_translate (event->any.surface,
-                                new_surface,
-                                &event->motion.x, &event->motion.y);
-      break;
+      return gdk_event_motion_new (new_surface,
+                                   event->any.device,
+                                   event->any.source_device,
+                                   event->motion.tool,
+                                   event->motion.time,
+                                   event->motion.state,
+                                   x, y,
+                                   NULL); // FIXME copy axes
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_UPDATE:
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
-      rewrite_events_translate (event->any.surface,
-                                new_surface,
-                                &event->touch.x, &event->touch.y);
-      break;
+      return gdk_event_touch_new (event->any.type,
+                                  event->touch.sequence,
+                                  new_surface,
+                                  event->any.device,
+                                  event->any.source_device,
+                                  event->touch.time,
+                                  event->touch.state,
+                                  x, y,
+                                  NULL, // FIXME copy axes
+                                  event->touch.emulating_pointer);
     case GDK_TOUCHPAD_SWIPE:
-      rewrite_events_translate (event->any.surface,
-                                new_surface,
-                                &event->touchpad_swipe.x,
-                                &event->touchpad_swipe.y);
-      break;
+      return gdk_event_touchpad_swipe_new (new_surface,
+                                           event->any.device,
+                                           event->any.source_device,
+                                           event->touchpad_swipe.time,
+                                           event->touchpad_swipe.state,
+                                           event->touchpad_swipe.phase,
+                                           x, y,
+                                           event->touchpad_swipe.n_fingers,
+                                           event->touchpad_swipe.dx,
+                                           event->touchpad_swipe.dy);
     case GDK_TOUCHPAD_PINCH:
-      rewrite_events_translate (event->any.surface,
-                                new_surface,
-                                &event->touchpad_pinch.x,
-                                &event->touchpad_pinch.y);
-      break;
-    case GDK_KEY_PRESS:
-    case GDK_KEY_RELEASE:
-    case GDK_PROXIMITY_IN:
-    case GDK_PROXIMITY_OUT:
-      break;
-
+      return gdk_event_touchpad_pinch_new (new_surface,
+                                           event->any.device,
+                                           event->any.source_device,
+                                           event->touchpad_pinch.time,
+                                           event->touchpad_pinch.state,
+                                           event->touchpad_pinch.phase,
+                                           x, y,
+                                           event->touchpad_pinch.n_fingers,
+                                           event->touchpad_pinch.dx,
+                                           event->touchpad_pinch.dy,
+                                           event->touchpad_pinch.scale,
+                                           event->touchpad_pinch.angle_delta);
     default:
-      return event;
+      break;
     }
 
-  g_object_unref (event->any.surface);
-  event->any.surface = g_object_ref (new_surface);
-
-  return event;
+  return NULL;
 }
 
 /* If there is a pointer or keyboard grab in effect with owner_events = TRUE,
