@@ -6391,7 +6391,7 @@ gtk_window_set_focus (GtkWindow *window,
 
   gtk_synthesize_crossing_events (GTK_ROOT (window), old_focus, focus, event, GDK_CROSSING_NORMAL);
 
-  g_object_unref (event);
+  gdk_event_unref (event);
 
   g_set_object (&priv->focus_widget, focus);
 

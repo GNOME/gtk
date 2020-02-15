@@ -1391,7 +1391,7 @@ synth_crossing (GtkWidget       *widget,
     }
     
   gtk_widget_event (widget, event);
-  g_object_unref (event);
+  gdk_event_unref (event);
 }
 
 void
