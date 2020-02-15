@@ -793,7 +793,6 @@ gdk_event_get_time (const GdkEvent *event)
       case GDK_FOCUS_CHANGE:
       case GDK_NOTHING:
       case GDK_DELETE:
-      case GDK_DESTROY:
       case GDK_GRAB_BROKEN:
       case GDK_EVENT_LAST:
       default:
@@ -866,7 +865,6 @@ gdk_event_get_state (const GdkEvent  *event,
       case GDK_DROP_START:
       case GDK_NOTHING:
       case GDK_DELETE:
-      case GDK_DESTROY:
       case GDK_GRAB_BROKEN:
       case GDK_PAD_BUTTON_PRESS:
       case GDK_PAD_BUTTON_RELEASE:

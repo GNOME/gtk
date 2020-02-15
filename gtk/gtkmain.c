@@ -1781,7 +1781,6 @@ gtk_main_do_event (GdkEvent *event)
       break;
 
     case GDK_DELETE:
-    case GDK_DESTROY:
       g_object_ref (target_widget);
       if (!gtk_window_group_get_current_grab (window_group) ||
           GTK_WIDGET (gtk_widget_get_root (gtk_window_group_get_current_grab (window_group))) == target_widget)
@@ -2289,7 +2288,7 @@ gtk_get_event_widget (const GdkEvent *event)
 
   widget = NULL;
   if (event && event->any.surface &&
-      (event->any.type == GDK_DESTROY || !gdk_surface_is_destroyed (event->any.surface)))
+      (!gdk_surface_is_destroyed (event->any.surface)))
     widget = gtk_native_get_for_surface (event->any.surface);
 
   return widget;
