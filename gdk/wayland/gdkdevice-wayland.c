@@ -1127,6 +1127,10 @@ data_offer_offer (void                 *data,
       return;
     }
 
+  /* skip magic mime types */
+  if (g_str_equal (type, GDK_WAYLAND_LOCAL_DND_MIME_TYPE))
+    return;
+
   gdk_content_formats_builder_add_mime_type (seat->pending_builder, type);
 }
 
