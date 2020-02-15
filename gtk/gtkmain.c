@@ -1392,7 +1392,7 @@ synth_crossing (GtkWidget       *widget,
     }
     
   gtk_widget_event (widget, event);
-  g_object_unref (event);
+  gdk_event_unref (event);
 }
 
 void
@@ -1907,7 +1907,7 @@ gtk_main_do_event (GdkEvent *event)
   g_list_free_1 (tmp_list);
 
   if (rewritten_event)
-    g_object_unref (rewritten_event);
+    gdk_event_unref (rewritten_event);
 }
 
 static GtkWindowGroup *
@@ -2262,7 +2262,7 @@ GdkEvent*
 gtk_get_current_event (void)
 {
   if (current_events)
-    return g_object_ref (current_events->data);
+    return gdk_event_ref (current_events->data);
   else
     return NULL;
 }

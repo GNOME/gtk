@@ -926,7 +926,7 @@ gdk_drop_do_emit_event (GdkEvent *event,
   if (dont_queue)
     {
       _gdk_event_emit (event);
-      g_object_unref (event);
+      gdk_event_unref (event);
     }
   else
     {
