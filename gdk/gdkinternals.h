@@ -308,6 +308,18 @@ struct _GdkWindow
     gboolean surface_needs_composite;
     gboolean use_gl;
   } current_paint;
+
+  struct {
+    /* The temporary surface from the previous paint. It will be reused if
+     * it has the right size, display and rendering mode. This results in a
+     * significant performance benefit when GL is in use. */
+    cairo_surface_t *surface;
+    int surface_width;
+    int surface_height;
+    GdkDisplay *display;
+    GdkRenderingMode rendering_mode;
+  } previous_paint;
+  
   GdkGLContext *gl_paint_context;
 
   cairo_region_t *update_area;
