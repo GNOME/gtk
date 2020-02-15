@@ -8636,7 +8636,7 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
     return;
 
   if (event)
-    trigger_event = gdk_event_copy (event);
+    trigger_event = (GdkEvent *)event;
   else
     trigger_event = gtk_get_current_event ();
 
@@ -8714,7 +8714,8 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
 
   gtk_popover_popup (GTK_POPOVER (priv->popup_menu));
 
-  g_clear_object (&trigger_event);
+  if (trigger_event && trigger_event != event)
+    g_object_unref (trigger_event);
 }
 
 static gboolean
