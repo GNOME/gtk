@@ -293,12 +293,6 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
     }
 
   if (event &&
-      event->any.type == GDK_NOTHING)
-    {
-      g_clear_object (&event);
-    }
-
-  if (event &&
       (event->any.type == GDK_ENTER_NOTIFY ||
        event->any.type == GDK_LEAVE_NOTIFY) &&
       event->any.surface != NULL)
