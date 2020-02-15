@@ -3219,7 +3219,7 @@ gdk_wayland_tablet_flush_frame_event (GdkWaylandTabletData *tablet,
   if (!event)
     return;
 
-  g_object_ref (event);
+  gdk_event_ref (event);
 
   if (event->any.type == GDK_PROXIMITY_OUT)
     emulate_crossing (event->any.surface, NULL,
@@ -3234,7 +3234,7 @@ gdk_wayland_tablet_flush_frame_event (GdkWaylandTabletData *tablet,
                       tablet->master, GDK_ENTER_NOTIFY,
                       GDK_CROSSING_NORMAL, time);
 
-  g_object_unref (event);
+  gdk_event_unref (event);
 }
 
 static void
