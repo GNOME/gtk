@@ -1451,26 +1451,24 @@ gtk_range_allocate_trough (GtkGizmo *gizmo,
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
           highlight_alloc.y = 0;
+          highlight_alloc.width = MAX (min, value * width);
           highlight_alloc.height = height;
 
           if (!should_invert (range))
             highlight_alloc.x = 0;
           else
-            highlight_alloc.x = (width * (1 - value));
-
-          highlight_alloc.width = MAX (min, width * value);
+            highlight_alloc.x = width - highlight_alloc.width;
         }
       else
         {
           highlight_alloc.x = 0;
           highlight_alloc.width = width;
+          highlight_alloc.height = MAX (min, height * value);
 
           if (!should_invert (range))
             highlight_alloc.y = 0;
           else
-            highlight_alloc.y = (height * (1 - value));
-
-          highlight_alloc.height = MAX (min, height * value);
+            highlight_alloc.y = height - highlight_alloc.height;
         }
 
       gtk_widget_size_allocate (priv->highlight_widget, &highlight_alloc, -1);
