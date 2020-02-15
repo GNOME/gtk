@@ -5438,11 +5438,11 @@ gtk_tree_view_key_controller_key_pressed (GtkEventControllerKey *key,
   event = gtk_get_current_event ();
   if (gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *)event))
     {
-      g_object_unref (event);
+      gdk_event_unref (event);
       return TRUE;
     }
 
-  g_object_unref (event);
+  gdk_event_unref (event);
 
   if (tree_view->search_entry_avoid_unhandled_binding)
     {
@@ -5497,7 +5497,7 @@ gtk_tree_view_key_controller_key_released (GtkEventControllerKey *key,
   /* Handle the keybindings. */
   event = gtk_get_current_event ();
   gtk_bindings_activate_event (G_OBJECT (tree_view), (GdkEventKey *)event);
-  g_object_unref (event);
+  gdk_event_unref (event);
 }
 
 static void

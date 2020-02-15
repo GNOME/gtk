@@ -420,7 +420,7 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
             GDK_BUTTON4_MASK | GDK_BUTTON5_MASK)))
         gdk_event_push_history (last_motion, pending_motions->data);
 
-      g_object_unref (pending_motions->data);
+      gdk_event_unref (pending_motions->data);
       g_queue_delete_link (&display->queued_events, pending_motions);
       pending_motions = next;
     }
