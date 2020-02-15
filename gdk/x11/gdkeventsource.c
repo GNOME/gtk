@@ -232,11 +232,9 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
   x11_screen = GDK_X11_DISPLAY (display)->screen;
   dpy = GDK_DISPLAY_XDISPLAY (display);
 
-  event = gdk_event_new (GDK_NOTHING);
+  event = NULL;
   filter_surface = gdk_event_source_get_filter_surface (event_source, xevent,
                                                       &event_translator);
-  if (filter_surface)
-    event->any.surface = g_object_ref (filter_surface);
 
   /* apply XSettings filters */
   if (xevent->xany.window == XRootWindow (dpy, 0))
@@ -258,7 +256,7 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
     }
 
   if (result == GDK_FILTER_CONTINUE)
-    result = _gdk_wm_protocols_filter (xevent, event, NULL);
+    result = _gdk_wm_protocols_filter (xevent, filter_surface, &event, NULL);
 
   if (result == GDK_FILTER_CONTINUE &&
       gdk_x11_drop_filter (event->any.surface, xevent))
@@ -267,16 +265,10 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
   if (result != GDK_FILTER_CONTINUE)
     {
       if (result == GDK_FILTER_REMOVE)
-        {
-          g_object_unref (event);
-          return NULL;
-        }
+        return NULL;
       else /* GDK_FILTER_TRANSLATE */
         return event;
     }
-
-  g_object_unref (event);
-  event = NULL;
 
   if (event_translator)
     {
