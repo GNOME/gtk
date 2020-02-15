@@ -913,10 +913,20 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
       gtk_im_context_simple_commit_char (context, priv->tentative_match);
       priv->compose_buffer[0] = 0;
       
-      for (i=0; i < n_compose - len - 1; i++)
+      for (i = 0; i < n_compose - len - 1; i++)
 	{
-	  GdkEvent *tmp_event = gdk_event_copy ((GdkEvent *)event);
-          gdk_event_set_keyval (tmp_event, priv->compose_buffer[len + i]);
+          guint tmp_keyval = priv->compose_buffer[len + i];
+          GdkEvent *tmp_event = gdk_event_key_new (GDK_KEY_PRESS,
+                                                   event->any.surface,
+                                                   event->any.device,
+                                                   event->any.source_device,
+                                                   event->time,
+                                                   event->state,
+                                                   tmp_keyval,
+                                                   tmp_keyval,
+                                                   tmp_keyval,
+                                                   0,
+                                                   0);
 	  
 	  gtk_im_context_filter_keypress (context, (GdkEventKey *)tmp_event);
 	  g_object_unref (tmp_event);
