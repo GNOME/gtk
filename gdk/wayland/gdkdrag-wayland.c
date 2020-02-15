@@ -358,6 +358,7 @@ gdk_wayland_drag_create_data_source (GdkDrag *drag)
             g_message ("create data source, mime types=%s", s);
             g_free (s);});
 
+  wl_data_source_offer (drag_wayland->data_source, GDK_WAYLAND_LOCAL_DND_MIME_TYPE);
   for (i = 0; i < n_mimetypes; i++)
     wl_data_source_offer (drag_wayland->data_source, mimetypes[i]);
 

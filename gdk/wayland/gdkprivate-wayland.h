@@ -44,6 +44,13 @@
 #define WL_SURFACE_HAS_BUFFER_SCALE 3
 #define WL_POINTER_HAS_FRAME 5
 
+/* the magic mime type we use for local DND operations.
+ * We offer it to every dnd operation, but will strip it out on the drop
+ * site unless we can prove it's a local DND - then we will use only
+ * this type
+ */
+#define GDK_WAYLAND_LOCAL_DND_MIME_TYPE "application/x-gtk-local-dnd"
+
 GdkKeymap *_gdk_wayland_keymap_new (GdkDisplay *display);
 void       _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
                                                uint32_t   format,
