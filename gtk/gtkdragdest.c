@@ -564,14 +564,10 @@ static gboolean
 gtk_drop_target_accept (GtkDropTarget *dest,
                         GdkDrop       *drop)
 {
-  GdkDragAction dest_actions;
-  GdkDragAction actions;
+  if ((gdk_drop_get_actions (drop) & gtk_drop_target_get_actions (dest)) == 0)
+    return FALSE;
 
-  dest_actions = gtk_drop_target_get_actions (dest);
-
-  actions = dest_actions & gdk_drop_get_actions (drop);
-
-  return actions && gdk_content_formats_match (dest->formats, gdk_drop_get_formats (drop));
+  return gdk_content_formats_match (dest->formats, gdk_drop_get_formats (drop));
 }
 
 static void
