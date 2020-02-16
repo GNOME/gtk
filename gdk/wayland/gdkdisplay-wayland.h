@@ -127,6 +127,7 @@ struct _GdkWaylandDisplay
   GList *orphan_dialogs;
 
   GList *current_popups;
+  GList *current_grabbing_popups;
 
   struct wl_cursor_theme *cursor_theme;
   gchar *cursor_theme_name;

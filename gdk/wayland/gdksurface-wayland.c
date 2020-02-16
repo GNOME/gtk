@@ -2184,6 +2184,21 @@ create_dynamic_positioner (GdkSurface *surface)
   g_assert_not_reached ();
 }
 
+static gboolean
+can_map_grabbing_popup (GdkSurface *surface,
+                        GdkSurface *parent)
+{
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  GdkSurface *top_most_popup;
+
+  if (!display_wayland->current_grabbing_popups)
+    return TRUE;
+
+  top_most_popup = g_list_first (display_wayland->current_grabbing_popups)->data;
+  return top_most_popup == parent;
+}
+
 static void
 gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
                                       GdkSurface     *parent,
@@ -2210,13 +2225,11 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
       g_warning ("Can't map popup, already mapped");
       return;
     }
+
   if (grab_input_seat &&
-      ((display->current_popups &&
-        g_list_last (display->current_popups)->data != parent) ||
-       (!display->current_popups &&
-        !is_realized_toplevel (parent))))
+      !can_map_grabbing_popup (surface, parent))
     {
-      g_warning ("Tried to map a popup with a non-top most parent");
+      g_warning ("Tried to map a grabbing popup with a non-top most parent");
       return;
     }
 
@@ -2291,6 +2304,11 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
 
   impl->popup_parent = parent;
   display->current_popups = g_list_append (display->current_popups, surface);
+  if (grab_input_seat)
+    {
+      display->current_grabbing_popups =
+        g_list_prepend (display->current_grabbing_popups, surface);
+    }
 }
 
 static GdkWaylandSeat *
@@ -2490,6 +2508,8 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
           impl->display_server.xdg_popup = NULL;
           display_wayland->current_popups =
             g_list_remove (display_wayland->current_popups, surface);
+          display_wayland->current_grabbing_popups =
+            g_list_remove (display_wayland->current_grabbing_popups, surface);
         }
       if (impl->display_server.xdg_surface)
         {
@@ -2512,6 +2532,8 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
           impl->display_server.zxdg_popup_v6 = NULL;
           display_wayland->current_popups =
             g_list_remove (display_wayland->current_popups, surface);
+          display_wayland->current_grabbing_popups =
+            g_list_remove (display_wayland->current_grabbing_popups, surface);
         }
       if (impl->display_server.zxdg_surface_v6)
         {
