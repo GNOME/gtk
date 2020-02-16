@@ -11147,7 +11147,7 @@ _gtk_widget_remove_attached_window (GtkWidget    *widget,
 }
 
 /**
- * gtk_widget_class_set_css_name:
+ * gtk_widget_class_set_css_name: (rename-to gtk_widget_class_set_class_css_name)
  * @widget_class: class to set the name on
  * @name: name to use
  *
@@ -11177,7 +11177,7 @@ gtk_widget_class_get_visible_by_default (GtkWidgetClass *widget_class)
 }
 
 /**
- * gtk_widget_class_get_css_name:
+ * gtk_widget_class_get_css_name: (rename-to gtk_widget_class_get_class_css_name)
  * @widget_class: class to set the name on
  *
  * Gets the name used by this class for matching in CSS code. See
