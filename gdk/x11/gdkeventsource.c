@@ -127,7 +127,7 @@ handle_focus_change (GdkEventCrossing *event)
 static GdkEvent *
 create_synth_crossing_event (GdkEventType     evtype,
                              GdkCrossingMode  mode,
-                             const GdkEvent  *real_event)
+                             GdkEvent        *real_event)
 {
   GdkEvent *event;
   gdouble x, y;

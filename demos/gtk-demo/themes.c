@@ -135,7 +135,7 @@ clicked (GtkGestureClick *gesture,
          gpointer data)
 {
   GtkWidget *window;
-  const GdkEvent *event;
+  GdkEvent *event;
   GdkModifierType state;
 
   window = gtk_widget_get_ancestor (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)), GTK_TYPE_WINDOW);

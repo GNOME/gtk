@@ -688,7 +688,7 @@ static void gtk_widget_set_usize_internal (GtkWidget          *widget,
 					   gint                width,
 					   gint                height);
 
-static gboolean event_surface_is_still_viewable (const GdkEvent *event);
+static gboolean event_surface_is_still_viewable (GdkEvent *event);
 
 static void gtk_widget_update_input_shape (GtkWidget *widget);
 
@@ -2044,7 +2044,7 @@ gtk_widget_get_property (GObject         *object,
 
 static void
 _gtk_widget_emulate_press (GtkWidget      *widget,
-                           const GdkEvent *event,
+                           GdkEvent       *event,
                            GtkWidget      *event_widget)
 {
   GtkWidget *next_child, *parent;
@@ -2134,14 +2134,14 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
   g_object_unref (press);
 }
 
-static const GdkEvent *
+static GdkEvent *
 _gtk_widget_get_last_event (GtkWidget         *widget,
                             GdkEventSequence  *sequence,
                             GtkWidget        **target)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkEventController *controller;
-  const GdkEvent *event;
+  GdkEvent *event;
   GList *l;
 
   for (l = priv->event_controllers; l; l = l->next)
@@ -2175,7 +2175,7 @@ _gtk_widget_get_emulating_sequence (GtkWidget         *widget,
 
   if (sequence)
     {
-      const GdkEvent *last_event;
+      GdkEvent *last_event;
       GtkWidget *target;
 
       last_event = _gtk_widget_get_last_event (widget, sequence, &target);
@@ -2247,7 +2247,7 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   gboolean emulates_pointer, sequence_handled = FALSE;
-  const GdkEvent *mimic_event;
+  GdkEvent *mimic_event;
   GtkWidget *target;
   GList *group = NULL, *l;
   GdkEventSequence *seq;
@@ -4781,7 +4781,7 @@ gtk_widget_event (GtkWidget *widget,
 
 gboolean
 gtk_widget_run_controllers (GtkWidget           *widget,
-                            const GdkEvent      *event,
+                            GdkEvent            *event,
                             GtkWidget           *target,
                             double               x,
                             double               y,
@@ -4891,7 +4891,7 @@ _gtk_widget_captured_event (GtkWidget *widget,
 }
 
 static gboolean
-event_surface_is_still_viewable (const GdkEvent *event)
+event_surface_is_still_viewable (GdkEvent *event)
 {
   /* Check that we think the event's window is viewable before
    * delivering the event, to prevent surprises. We do this here
@@ -11896,7 +11896,7 @@ gtk_widget_cancel_event_sequence (GtkWidget             *widget,
   gboolean handled = FALSE;
   GtkWidget *event_widget;
   gboolean cancel = TRUE;
-  const GdkEvent *event;
+  GdkEvent *event;
 
   handled = _gtk_widget_set_sequence_state_internal (widget, sequence,
                                                      state, gesture);

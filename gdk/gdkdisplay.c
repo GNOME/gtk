@@ -133,7 +133,7 @@ gdk_display_real_opened (GdkDisplay *display)
 
 static void
 gdk_display_real_event_data_copy (GdkDisplay     *display,
-                                  const GdkEvent *src,
+                                  GdkEvent       *src,
                                   GdkEvent       *dst)
 {
 }
@@ -484,7 +484,7 @@ gdk_display_peek_event (GdkDisplay *display)
  **/
 void
 gdk_display_put_event (GdkDisplay     *display,
-		       const GdkEvent *event)
+		       GdkEvent       *event)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
   g_return_if_fail (event != NULL);
@@ -688,7 +688,7 @@ switch_to_pointer_grab (GdkDisplay        *display,
 
 void
 _gdk_display_update_last_event (GdkDisplay     *display,
-                                const GdkEvent *event)
+                                GdkEvent       *event)
 {
   if (gdk_event_get_time (event) != GDK_CURRENT_TIME)
     display->last_event_time = gdk_event_get_time (event);
@@ -1290,7 +1290,7 @@ _gdk_display_unpause_events (GdkDisplay *display)
 
 void
 _gdk_display_event_data_copy (GdkDisplay     *display,
-                              const GdkEvent *event,
+                              GdkEvent       *event,
                               GdkEvent       *new_event)
 {
   GDK_DISPLAY_GET_CLASS (display)->event_data_copy (display, event, new_event);

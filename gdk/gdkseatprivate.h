@@ -46,7 +46,7 @@ struct _GdkSeatClass
                             GdkSeatCapabilities     capabilities,
                             gboolean                owner_events,
                             GdkCursor              *cursor,
-                            const GdkEvent         *event,
+                            GdkEvent               *event,
                             GdkSeatGrabPrepareFunc  prepare_func,
                             gpointer                prepare_func_data);
   void          (* ungrab) (GdkSeat                *seat);
