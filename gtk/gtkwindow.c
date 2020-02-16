@@ -1508,8 +1508,7 @@ drag_gesture_update_cb (GtkGestureDrag *gesture,
 
       if (gtk_event_controller_get_propagation_phase (GTK_EVENT_CONTROLLER (gesture)) == GTK_PHASE_CAPTURE)
         {
-          const GdkEvent *event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-          GtkWidget *event_widget = GTK_WIDGET (gdk_event_get_target (event));
+          GtkWidget *event_widget = gtk_gesture_get_last_target (GTK_GESTURE (gesture), sequence);
 
           /* Check whether the target widget should be left alone at handling
            * the sequence, this is better done late to give room for gestures

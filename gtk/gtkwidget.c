@@ -2044,14 +2044,13 @@ gtk_widget_get_property (GObject         *object,
 
 static void
 _gtk_widget_emulate_press (GtkWidget      *widget,
-                           const GdkEvent *event)
+                           const GdkEvent *event,
+                           GtkWidget      *event_widget)
 {
-  GtkWidget *event_widget, *next_child, *parent;
+  GtkWidget *next_child, *parent;
   GdkEvent *press;
   gdouble x, y;
   graphene_point_t p;
-
-  event_widget = GTK_WIDGET (gdk_event_get_target (event));
 
   if (event_widget == widget)
     return;
@@ -2136,8 +2135,9 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
 }
 
 static const GdkEvent *
-_gtk_widget_get_last_event (GtkWidget        *widget,
-                            GdkEventSequence *sequence)
+_gtk_widget_get_last_event (GtkWidget         *widget,
+                            GdkEventSequence  *sequence,
+                            GtkWidget        **target)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkEventController *controller;
@@ -2151,12 +2151,15 @@ _gtk_widget_get_last_event (GtkWidget        *widget,
       if (!GTK_IS_GESTURE (controller))
         continue;
 
-      event = gtk_gesture_get_last_event (GTK_GESTURE (controller),
-                                          sequence);
+      event = gtk_gesture_get_last_event (GTK_GESTURE (controller), sequence);
       if (event)
-        return event;
+        {
+          *target = gtk_gesture_get_last_target (GTK_GESTURE (controller), sequence);
+          return event;
+        }
     }
 
+  *target = NULL;
   return NULL;
 }
 
@@ -2173,8 +2176,9 @@ _gtk_widget_get_emulating_sequence (GtkWidget         *widget,
   if (sequence)
     {
       const GdkEvent *last_event;
+      GtkWidget *target;
 
-      last_event = _gtk_widget_get_last_event (widget, sequence);
+      last_event = _gtk_widget_get_last_event (widget, sequence, &target);
 
       if (last_event &&
           (last_event->any.type == GDK_TOUCH_BEGIN ||
@@ -2244,6 +2248,7 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   gboolean emulates_pointer, sequence_handled = FALSE;
   const GdkEvent *mimic_event;
+  GtkWidget *target;
   GList *group = NULL, *l;
   GdkEventSequence *seq;
   gint n_handled = 0;
@@ -2255,7 +2260,7 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
     group = gtk_gesture_get_group (emitter);
 
   emulates_pointer = _gtk_widget_get_emulating_sequence (widget, sequence, &seq);
-  mimic_event = _gtk_widget_get_last_event (widget, seq);
+  mimic_event = _gtk_widget_get_last_event (widget, seq, &target);
 
   for (l = priv->event_controllers; l; l = l->next)
     {
@@ -2318,7 +2323,7 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
   if (n_handled > 0 && sequence_handled &&
       state == GTK_EVENT_SEQUENCE_DENIED &&
       gtk_widget_needs_press_emulation (widget, sequence))
-    _gtk_widget_emulate_press (widget, mimic_event);
+    _gtk_widget_emulate_press (widget, mimic_event, target);
 
   g_list_free (group);
 
@@ -11899,12 +11904,10 @@ gtk_widget_cancel_event_sequence (GtkWidget             *widget,
   if (!handled || state != GTK_EVENT_SEQUENCE_CLAIMED)
     return;
 
-  event = _gtk_widget_get_last_event (widget, sequence);
+  event = _gtk_widget_get_last_event (widget, sequence, &event_widget);
 
   if (!event)
     return;
-
-  event_widget = GTK_WIDGET (gdk_event_get_target (event));
 
   while (event_widget)
     {
