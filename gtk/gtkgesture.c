@@ -145,6 +145,7 @@ enum {
 struct _PointData
 {
   GdkEvent *event;
+  GtkWidget *target;
   gdouble widget_x;
   gdouble widget_y;
 
@@ -440,6 +441,7 @@ gtk_gesture_get_group_state (GtkGesture       *gesture,
 static gboolean
 _gtk_gesture_update_point (GtkGesture     *gesture,
                            const GdkEvent *event,
+                           GtkWidget      *target,
                            double          x,
                            double          y,
                            gboolean        add)
@@ -612,6 +614,7 @@ gtk_gesture_handle_event (GtkEventController *controller,
   GdkEventType event_type;
   GdkTouchpadGesturePhase phase;
   GdkModifierType state;
+  GtkWidget *target;
 
   source_device = gdk_event_get_source_device (event);
 
@@ -625,6 +628,8 @@ gtk_gesture_handle_event (GtkEventController *controller,
   gdk_event_get_state (event, &state);
   gdk_event_get_touchpad_gesture_phase (event, &phase);
 
+  target = gtk_event_controller_get_target (controller);
+
   if (gtk_gesture_get_sequence_state (gesture, sequence) != GTK_EVENT_SEQUENCE_DENIED)
     priv->last_sequence = sequence;
 
@@ -633,7 +638,7 @@ gtk_gesture_handle_event (GtkEventController *controller,
       (event_type == GDK_TOUCHPAD_SWIPE && phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN) ||
       (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN))
     {
-      if (_gtk_gesture_update_point (gesture, event, x, y, TRUE))
+      if (_gtk_gesture_update_point (gesture, event, target, x, y, TRUE))
         {
           gboolean triggered_recognition;
 
@@ -667,7 +672,7 @@ gtk_gesture_handle_event (GtkEventController *controller,
     {
       gboolean was_claimed;
 
-      if (_gtk_gesture_update_point (gesture, event, x, y, FALSE))
+      if (_gtk_gesture_update_point (gesture, event, target, x, y, FALSE))
         {
           if (was_recognized &&
               _gtk_gesture_check_recognized (gesture, sequence))
@@ -692,7 +697,7 @@ gtk_gesture_handle_event (GtkEventController *controller,
             return FALSE;
         }
 
-      if (_gtk_gesture_update_point (gesture, event, x, y, FALSE) &&
+      if (_gtk_gesture_update_point (gesture, event, target, x, y, FALSE) &&
           _gtk_gesture_check_recognized (gesture, sequence))
         g_signal_emit (gesture, signals[UPDATE], 0, sequence);
     }
@@ -872,6 +877,9 @@ free_point_data (gpointer data)
 
   if (point->event)
     gdk_event_unref (point->event);
+
+  if (point->target)
+    g_object_unref (point->target);
 
   g_free (point);
 }
@@ -1158,6 +1166,24 @@ gtk_gesture_get_last_event (GtkGesture       *gesture,
     return NULL;
 
   return data->event;
+}
+
+GtkWidget *
+gtk_gesture_get_last_target (GtkGesture        *gesture,
+                             GdkEventSequence  *sequence)
+{
+  GtkGesturePrivate *priv;
+  PointData *data;
+
+  g_return_val_if_fail (GTK_IS_GESTURE (gesture), NULL);
+
+  priv = gtk_gesture_get_instance_private (gesture);
+  data = g_hash_table_lookup (priv->points, sequence);
+
+  if (!data)
+    return NULL;
+
+  return data->target;
 }
 
 /**
