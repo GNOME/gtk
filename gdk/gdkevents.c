@@ -415,11 +415,6 @@ gdk_event_free (GdkEvent *event)
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
       g_clear_object (&event->crossing.child_surface);
-      g_clear_object (&event->crossing.related_target);
-      break;
-
-    case GDK_FOCUS_CHANGE:
-      g_clear_object (&event->focus_change.related_target);
       break;
 
     case GDK_DRAG_ENTER:
@@ -470,7 +465,6 @@ gdk_event_free (GdkEvent *event)
 
   g_clear_object (&event->any.device);
   g_clear_object (&event->any.source_device);
-  g_clear_object (&event->any.target);
 
   g_free (event);
 }
@@ -1641,42 +1635,6 @@ gdk_event_get_scancode (GdkEvent *event)
     return event->key.key_scancode;
 
   return 0;
-}
-
-void
-gdk_event_set_target (GdkEvent *event,
-                      GObject  *target)
-{
-  g_set_object (&event->any.target, target);
-}
-
-GObject *
-gdk_event_get_target (const GdkEvent *event)
-{
-  return event->any.target;
-}
-
-void
-gdk_event_set_related_target (GdkEvent *event,
-                              GObject  *target)
-{
-  if (event->any.type == GDK_ENTER_NOTIFY ||
-      event->any.type == GDK_LEAVE_NOTIFY)
-    g_set_object (&event->crossing.related_target, target);
-  else if (event->any.type == GDK_FOCUS_CHANGE)
-    g_set_object (&event->focus_change.related_target, target);
-}
-
-GObject *
-gdk_event_get_related_target (const GdkEvent *event)
-{
-  if (event->any.type == GDK_ENTER_NOTIFY ||
-      event->any.type == GDK_LEAVE_NOTIFY)
-    return event->crossing.related_target;
-  else if (event->any.type == GDK_FOCUS_CHANGE)
-    return event->focus_change.related_target;
-
-  return NULL;
 }
 
 /**
