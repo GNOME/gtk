@@ -213,7 +213,7 @@ gtk_gesture_click_begin (GtkGesture       *gesture,
   event_type = gdk_event_get_event_type (event);
 
   if (event_type == GDK_BUTTON_PRESS)
-    gdk_event_get_button (event, &button);
+    button = gdk_button_event_get_button (event);
   else if (event_type == GDK_TOUCH_BEGIN)
     button = 1;
   else
@@ -325,7 +325,9 @@ gtk_gesture_click_handle_event (GtkEventController *controller,
       (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE ||
        gdk_event_get_event_type (event) == GDK_TOUCH_END))
     {
-      if (!gdk_event_get_button (event, &button))
+      if (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE)
+        button = gdk_button_event_get_button (event);
+      else
         button = 0;
       g_signal_emit (controller, signals[UNPAIRED_RELEASE], 0,
                      x, y, button, sequence);

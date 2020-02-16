@@ -1430,7 +1430,7 @@ click_gesture_pressed_cb (GtkGestureClick *gesture,
           double tx, ty;
           gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
-          gdk_event_get_coords (event, &tx, &ty);
+          gdk_event_get_position (event, &tx, &ty);
           gdk_surface_begin_resize_drag_for_device (priv->surface,
 						    (GdkSurfaceEdge) region,
 						    gdk_event_get_device ((GdkEvent *) event),
@@ -5997,7 +5997,7 @@ _gtk_window_query_nonaccels (GtkWindow      *window,
 /**
  * gtk_window_propagate_key_event:
  * @window:  a #GtkWindow
- * @event:   a #GdkEventKey
+ * @event:   a #GdkEvent
  *
  * Propagate a key press or release event to the focus widget and
  * up the focus container chain until a widget handles @event.
@@ -6009,8 +6009,8 @@ _gtk_window_query_nonaccels (GtkWindow      *window,
  * Returns: %TRUE if a widget in the focus chain handled the event.
  */
 gboolean
-gtk_window_propagate_key_event (GtkWindow        *window,
-                                GdkEventKey      *event)
+gtk_window_propagate_key_event (GtkWindow *window,
+                                GdkEvent  *event)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   gboolean handled = FALSE;
@@ -8181,8 +8181,8 @@ _gtk_window_set_window_group (GtkWindow      *window,
 }
 
 static gboolean
-gtk_window_activate_menubar (GtkWindow   *window,
-                             GdkEventKey *event)
+gtk_window_activate_menubar (GtkWindow *window,
+                             GdkEvent  *event)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   guint keyval = 0;
@@ -8196,12 +8196,16 @@ gtk_window_activate_menubar (GtkWindow   *window,
       return FALSE;
     }
 
+  if (!(gdk_event_get_event_type (event) == GDK_KEY_PRESS ||
+        gdk_event_get_event_type (event) == GDK_KEY_RELEASE))
+    return FALSE;
+
   /* FIXME this is wrong, needs to be in the global accel resolution
    * thing, to properly consider i18n etc., but that probably requires
    * AccelGroup changes etc.
    */
-  if (event->keyval == keyval &&
-      ((event->state & gtk_accelerator_get_default_mod_mask ()) ==
+  if (gdk_key_event_get_keyval (event) == keyval &&
+      ((gdk_event_get_modifier_state (event) & gtk_accelerator_get_default_mod_mask ()) ==
        (mods & gtk_accelerator_get_default_mod_mask ())))
     {
       GList *tmp_menubars, *l;
@@ -8385,7 +8389,7 @@ gtk_window_free_key_hash (GtkWindow *window)
 /**
  * gtk_window_activate_key:
  * @window:  a #GtkWindow
- * @event:   a #GdkEventKey
+ * @event:   a #GdkEvent
  *
  * Activates mnemonics and accelerators for this #GtkWindow. This is normally
  * called by the default ::key_press_event handler for toplevel windows,
@@ -8395,8 +8399,8 @@ gtk_window_free_key_hash (GtkWindow *window)
  * Returns: %TRUE if a mnemonic or accelerator was found and activated.
  */
 gboolean
-gtk_window_activate_key (GtkWindow   *window,
-			 GdkEventKey *event)
+gtk_window_activate_key (GtkWindow *window,
+			 GdkEvent  *event)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkKeyHash *key_hash;
@@ -8406,16 +8410,20 @@ gtk_window_activate_key (GtkWindow   *window,
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
+  if (!(gdk_event_get_event_type (event) == GDK_KEY_PRESS ||
+        gdk_event_get_event_type (event) == GDK_KEY_RELEASE))
+    return FALSE;
+
   key_hash = gtk_window_get_key_hash (window);
 
   if (key_hash)
     {
       GSList *tmp_list;
       GSList *entries = _gtk_key_hash_lookup (key_hash,
-					      event->hardware_keycode,
-					      event->state,
+					      gdk_key_event_get_keycode (event),
+                                              gdk_event_get_modifier_state (event),
 					      gtk_accelerator_get_default_mod_mask (),
-					      event->group);
+					      gdk_key_event_get_group (event));
 
       g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
                     "gtk-enable-accels", &enable_accels,

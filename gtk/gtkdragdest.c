@@ -758,7 +758,7 @@ gtk_drop_target_handle_event (GtkEventController *controller,
   GtkDropStatus status;
   gboolean found = FALSE;
 
-  drop = gdk_event_get_drop (event);
+  drop = gdk_drag_event_get_drop (event);
 
   status = gtk_drop_target_get_drop_status (dest, drop);
   if (status == GTK_DROP_STATUS_DENIED)
@@ -810,7 +810,7 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
   g_return_if_fail (event != NULL);
 
   event_type = gdk_event_get_event_type (event);
-  drop = gdk_event_get_drop (event);
+  drop = gdk_drag_event_get_drop (event);
 
   switch ((guint) event_type)
     {

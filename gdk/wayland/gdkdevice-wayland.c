@@ -1474,7 +1474,7 @@ gdk_wayland_seat_set_frame_event (GdkWaylandSeat *seat,
                                   GdkEvent       *event)
 {
   if (seat->pointer_info.frame.event &&
-      seat->pointer_info.frame.event->any.type != event->any.type)
+      gdk_event_get_event_type (seat->pointer_info.frame.event) != gdk_event_get_event_type (event))
     gdk_wayland_seat_flush_frame_event (seat);
 
   seat->pointer_info.frame.event = event;
@@ -1608,10 +1608,13 @@ pointer_handle_motion (void              *data,
                                 NULL);
   gdk_wayland_seat_set_frame_event (seat, event);
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("motion %f %f, seat %p state %d",
-                       event->motion.x, event->motion.y,
-		       seat, event->motion.state));
+  if (GDK_DISPLAY_DEBUG_CHECK (gdk_seat_get_display (GDK_SEAT (seat)), EVENTS))
+    {
+      double x, y;
+      gdk_event_get_position (event, &x, &y);
+      g_message ("motion %f %f, seat %p state %d",
+                 x, y, seat, gdk_event_get_modifier_state (event));
+    }
 
   if (display->seat_version < WL_POINTER_HAS_FRAME)
     gdk_wayland_seat_flush_frame_event (seat);
@@ -1679,10 +1682,10 @@ pointer_handle_button (void              *data,
 
   GDK_SEAT_NOTE (seat, EVENTS,
 	    g_message ("button %d %s, seat %p state %d",
-		       event->button.button,
+		       gdk_button_event_get_button (event),
 		       state ? "press" : "release",
                        seat,
-                       event->button.state));
+                       gdk_event_get_modifier_state (event)));
 
   if (display->seat_version < WL_POINTER_HAS_FRAME)
     gdk_wayland_seat_flush_frame_event (seat);
@@ -1946,7 +1949,7 @@ keyboard_handle_leave (void               *data,
 
   GDK_SEAT_NOTE (seat, EVENTS,
             g_message ("focus out, seat %p surface %p",
-                       seat, event->any.surface));
+                       seat, gdk_event_get_surface (event)));
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 }
@@ -2044,9 +2047,10 @@ deliver_key_event (GdkWaylandSeat *seat,
                        "mods 0x%x",
                        (state ? "press" : "release"),
                        (from_key_repeat ? " (repeat)" : ""),
-                       event->any.surface,
-                       event->key.hardware_keycode, event->key.keyval,
-                       event->key.state));
+                       gdk_event_get_surface (event),
+                       gdk_key_event_get_keycode (event),
+                       gdk_key_event_get_keyval (event),
+                       gdk_event_get_modifier_state (event)));
 
   if (!xkb_keymap_key_repeats (xkb_keymap, key))
     return;
@@ -2300,8 +2304,12 @@ touch_handle_down (void              *data,
       mimic_pointer_emulating_touch_info (seat->touch_master, touch);
     }
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("touch begin %f %f", event->touch.x, event->touch.y));
+  if (GDK_DISPLAY_DEBUG_CHECK (gdk_seat_get_display (GDK_SEAT (seat)), EVENTS))
+    {
+      double xx, yy;
+      gdk_event_get_position (event, &xx, &yy);
+      g_message ("touch begin %f %f", xx, yy);
+    }
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 }
@@ -2332,8 +2340,12 @@ touch_handle_up (void            *data,
                                NULL,
                                touch->initial_touch);
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("touch end %f %f", event->touch.x, event->touch.y));
+  if (GDK_DISPLAY_DEBUG_CHECK (gdk_seat_get_display (GDK_SEAT (seat)), EVENTS))
+    {
+      double x, y;
+      gdk_event_get_position (event, &x, &y);
+      g_message ("touch end %f %f", x, y);
+    }
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 
@@ -2373,8 +2385,12 @@ touch_handle_motion (void            *data,
                                NULL,
                                touch->initial_touch);
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("touch update %f %f", event->touch.x, event->touch.y));
+  if (GDK_DISPLAY_DEBUG_CHECK (gdk_seat_get_display (GDK_SEAT (seat)), EVENTS))
+    {
+      double xx, yy;
+      gdk_event_get_position (event, &xx, &yy);
+      g_message ("touch update %f %f", xx, yy);
+    }
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 }
@@ -2447,11 +2463,14 @@ emit_gesture_swipe_event (GdkWaylandSeat          *seat,
                                         n_fingers,
                                         dx, dy);
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("swipe event %d, coords: %f %f, seat %p state %d",
-                       event->any.type, event->touchpad_swipe.x,
-                       event->touchpad_swipe.y, seat,
-                       event->touchpad_swipe.state));
+  if (GDK_DISPLAY_DEBUG_CHECK (gdk_seat_get_display (GDK_SEAT (seat)), EVENTS))
+    {
+      double x, y;
+      gdk_event_get_position (event, &x, &y);
+      g_message ("swipe event %d, coords: %f %f, seat %p state %d",
+                 gdk_event_get_event_type (event), x, y, seat,
+                 gdk_event_get_modifier_state (event));
+    }
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 }
@@ -2542,11 +2561,15 @@ emit_gesture_pinch_event (GdkWaylandSeat          *seat,
                                         dx, dy,
                                         scale, angle_delta * G_PI / 180);
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("pinch event %d, coords: %f %f, seat %p state %d",
-                       event->any.type, event->touchpad_pinch.x,
-                       event->touchpad_pinch.y, seat,
-                       event->touchpad_pinch.state));
+  if (GDK_DISPLAY_DEBUG_CHECK (gdk_seat_get_display (GDK_SEAT (seat)), EVENTS))
+    {
+      double x, y;
+      gdk_event_get_position (event, &x, &y);
+      g_message ("pinch event %d, coords: %f %f, seat %p state %d",
+                       gdk_event_get_event_type (event),
+                       x, y, seat,
+                       gdk_event_get_modifier_state (event));
+    }
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 }
@@ -3213,6 +3236,7 @@ gdk_wayland_tablet_flush_frame_event (GdkWaylandTabletData *tablet,
                                       guint32               time)
 {
   GdkEvent *event;
+  GdkEventType type;
 
   event = tablet->pointer_info.frame.event;
   tablet->pointer_info.frame.event = NULL;
@@ -3222,16 +3246,18 @@ gdk_wayland_tablet_flush_frame_event (GdkWaylandTabletData *tablet,
 
   gdk_event_ref (event);
 
-  if (event->any.type == GDK_PROXIMITY_OUT)
-    emulate_crossing (event->any.surface, NULL,
+  type = gdk_event_get_event_type (event);
+
+  if (type == GDK_PROXIMITY_OUT)
+    emulate_crossing (gdk_event_get_surface (event), NULL,
                       tablet->master, GDK_LEAVE_NOTIFY,
                       GDK_CROSSING_NORMAL, time);
 
   _gdk_wayland_display_deliver_event (gdk_seat_get_display (tablet->seat),
                                       event);
 
-  if (event->any.type == GDK_PROXIMITY_IN)
-    emulate_crossing (event->any.surface, NULL,
+  if (type == GDK_PROXIMITY_IN)
+    emulate_crossing (gdk_event_get_surface (event), NULL,
                       tablet->master, GDK_ENTER_NOTIFY,
                       GDK_CROSSING_NORMAL, time);
 
@@ -3243,7 +3269,7 @@ gdk_wayland_tablet_set_frame_event (GdkWaylandTabletData *tablet,
                                     GdkEvent             *event)
 {
   if (tablet->pointer_info.frame.event &&
-      tablet->pointer_info.frame.event->any.type != event->any.type)
+      gdk_event_get_event_type (tablet->pointer_info.frame.event) != gdk_event_get_event_type (event))
     gdk_wayland_tablet_flush_frame_event (tablet, GDK_CURRENT_TIME);
 
   tablet->pointer_info.frame.event = event;
@@ -3699,7 +3725,7 @@ tablet_tool_handle_frame (void                      *data,
 
   frame_event = tablet->pointer_info.frame.event;
 
-  if (frame_event && frame_event->any.type == GDK_PROXIMITY_OUT)
+  if (frame_event && gdk_event_get_event_type (frame_event) == GDK_PROXIMITY_OUT)
     {
       tool->current_tablet = NULL;
       tablet->current_tool = NULL;

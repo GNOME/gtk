@@ -1024,12 +1024,9 @@ gtk_cell_area_real_event (GtkCellArea          *area,
 
   if (event_type == GDK_KEY_PRESS && (flags & GTK_CELL_RENDERER_FOCUSED) != 0)
     {
-      guint keyval;
-
       /* Cancel any edits in progress */
       if (priv->edited_cell &&
-          gdk_event_get_keyval (event, &keyval) &&
-          keyval == GDK_KEY_Escape)
+          gdk_key_event_get_keyval (event) == GDK_KEY_Escape)
         {
           gtk_cell_area_stop_editing (area, TRUE);
           retval = TRUE;
@@ -1039,7 +1036,8 @@ gtk_cell_area_real_event (GtkCellArea          *area,
     {
       guint button;
 
-      if (gdk_event_get_button (event, &button) && button == GDK_BUTTON_PRIMARY)
+      button = gdk_button_event_get_button (event);
+      if (button == GDK_BUTTON_PRIMARY)
         {
           GtkCellRenderer *renderer = NULL;
           GtkCellRenderer *focus_renderer;
@@ -1048,7 +1046,7 @@ gtk_cell_area_real_event (GtkCellArea          *area,
 
           /* We may need some semantics to tell us the offset of the event
            * window we are handling events for (i.e. GtkTreeView has a bin_window) */
-          gdk_event_get_coords (event, &event_x, &event_y);
+          gdk_event_get_position (event, &event_x, &event_y);
 
           /* Dont try to search for an event coordinate that is not in the area, that will
            * trigger a runtime warning.

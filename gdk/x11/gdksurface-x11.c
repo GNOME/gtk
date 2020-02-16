@@ -4619,7 +4619,7 @@ gdk_x11_surface_show_window_menu (GdkSurface *surface,
                                             g_intern_static_string ("_GTK_SHOW_WINDOW_MENU")))
     return FALSE;
 
-  gdk_event_get_coords (event, &x, &y);
+  gdk_event_get_position (event, &x, &y);
   gdk_x11_surface_get_root_coords (surface, x, y, &x_root, &y_root);
   device = gdk_event_get_device (event);
   g_object_get (G_OBJECT (device),

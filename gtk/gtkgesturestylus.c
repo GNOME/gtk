@@ -70,7 +70,7 @@ gtk_gesture_stylus_handle_event (GtkEventController *controller,
       n_signal = UP;
       break;
     case GDK_MOTION_NOTIFY:
-      gdk_event_get_state (event, &modifiers);
+      modifiers = gdk_event_get_modifier_state (event);
 
       if (modifiers & GDK_BUTTON1_MASK)
         n_signal = MOTION;
