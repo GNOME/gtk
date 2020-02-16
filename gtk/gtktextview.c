@@ -1611,7 +1611,6 @@ static void
 gtk_text_view_init (GtkTextView *text_view)
 {
   GtkWidget *widget = GTK_WIDGET (text_view);
-  GdkContentFormats *formats;
   GtkDropTarget *dest;
   GtkTextViewPrivate *priv;
   GtkEventController *controller;
@@ -1640,9 +1639,7 @@ gtk_text_view_init (GtkTextView *text_view)
 
   priv->scroll_after_paste = FALSE;
 
-  formats = gdk_content_formats_new_for_gtype (GTK_TYPE_TEXT_BUFFER);
-  dest = gtk_drop_target_new (formats, GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  gdk_content_formats_unref (formats);
+  dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (GTK_TYPE_TEXT_BUFFER), GDK_ACTION_COPY | GDK_ACTION_MOVE);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_text_view_drag_leave), text_view);
   g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_text_view_drag_motion), text_view);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (gtk_text_view_drag_drop), text_view);

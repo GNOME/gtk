@@ -121,15 +121,12 @@ static GtkWidget *
 get_droptarget (void)
 {
   GtkWidget *label;
-  GdkContentFormats *targets;
   GtkDropTarget *dest;
 
   label = gtk_label_new ("Drop here");
-  targets = gdk_content_formats_new (entries, G_N_ELEMENTS (entries));
-  dest = gtk_drop_target_new (targets, GDK_ACTION_COPY);
+  dest = gtk_drop_target_new (gdk_content_formats_new (entries, G_N_ELEMENTS (entries)), GDK_ACTION_COPY);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), NULL);
   gtk_widget_add_controller (label, GTK_EVENT_CONTROLLER (dest));
-  gdk_content_formats_unref (targets);
 
   return label;
 }

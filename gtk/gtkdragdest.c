@@ -392,7 +392,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
 
 /**
  * gtk_drop_target_new:
- * @formats: (nullable): the supported data formats
+ * @formats: (nullable) (transfer full): the supported data formats
  * @actions: the supported actions
  *
  * Creates a new #GtkDropTarget object.
@@ -403,10 +403,16 @@ GtkDropTarget *
 gtk_drop_target_new (GdkContentFormats *formats,
                      GdkDragAction      actions)
 {
-  return g_object_new (GTK_TYPE_DROP_TARGET,
-                       "formats", formats,
-                       "actions", actions,
-                       NULL);
+  GtkDropTarget *result;
+
+  result = g_object_new (GTK_TYPE_DROP_TARGET,
+                         "formats", formats,
+                         "actions", actions,
+                         NULL);
+
+  g_clear_pointer (&formats, gdk_content_formats_unref);
+
+  return result;
 }
 
 /**

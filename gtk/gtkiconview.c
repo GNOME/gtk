@@ -6453,7 +6453,7 @@ gtk_icon_view_enable_model_drag_dest (GtkIconView       *icon_view,
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), NULL);
   GtkCssNode *widget_node;
 
-  icon_view->priv->dest = gtk_drop_target_new (formats, actions);
+  icon_view->priv->dest = gtk_drop_target_new (gdk_content_formats_ref (formats), actions);
   g_signal_connect (icon_view->priv->dest, "drag-leave", G_CALLBACK (gtk_icon_view_drag_leave), icon_view);
   g_signal_connect (icon_view->priv->dest, "drag-motion", G_CALLBACK (gtk_icon_view_drag_motion), icon_view);
   g_signal_connect (icon_view->priv->dest, "drag-drop", G_CALLBACK (gtk_icon_view_drag_drop), icon_view);

@@ -139,7 +139,6 @@ canvas_new (void)
   GtkWidget *canvas;
   GtkDragSource *source;
   GtkDropTarget *dest;
-  GdkContentFormats *formats;
 
   canvas = gtk_fixed_new ();
   gtk_widget_set_hexpand (canvas, TRUE);
@@ -154,11 +153,9 @@ canvas_new (void)
   g_signal_connect (source, "drag-cancel", G_CALLBACK (drag_cancel), NULL);
   gtk_widget_add_controller (canvas, GTK_EVENT_CONTROLLER (source));
 
-  formats = gdk_content_formats_new_for_gtype (GTK_TYPE_WIDGET);
-  dest = gtk_drop_target_new (formats, GDK_ACTION_MOVE);
+  dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (GTK_TYPE_WIDGET), GDK_ACTION_MOVE);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (drag_drop), NULL);
   gtk_widget_add_controller (canvas, GTK_EVENT_CONTROLLER (dest));
-  gdk_content_formats_unref (formats);
 
   return canvas;
 }

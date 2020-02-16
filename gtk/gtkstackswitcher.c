@@ -113,16 +113,13 @@ static void
 gtk_stack_switcher_init (GtkStackSwitcher *switcher)
 {
   GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (switcher);
-  GdkContentFormats *formats;
   GtkDropTarget *dest;
 
   priv->buttons = g_hash_table_new_full (g_direct_hash, g_direct_equal, g_object_unref, NULL);
 
   gtk_widget_add_css_class (GTK_WIDGET (switcher), "linked");
 
-  formats = gdk_content_formats_new (NULL, 0);
-  dest = gtk_drop_target_new (formats, 0);
-  gdk_content_formats_unref (formats);
+  dest = gtk_drop_target_new (NULL, 0);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_stack_switcher_drag_leave), switcher);
   g_signal_connect (dest, "accept", G_CALLBACK (gtk_stack_switcher_drag_accept), switcher);
   g_signal_connect (dest, "drag-motion", G_CALLBACK (gtk_stack_switcher_drag_motion), switcher);

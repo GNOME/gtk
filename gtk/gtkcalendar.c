@@ -536,7 +536,6 @@ gtk_calendar_init (GtkCalendar *calendar)
 #else
   gchar *week_start;
 #endif
-  GdkContentFormats *formats;
   GtkDropTarget *dest;
   int min_year_width;
   GDateTime *now;
@@ -718,9 +717,8 @@ gtk_calendar_init (GtkCalendar *calendar)
 
   priv->in_drag = 0;
 
-  formats = gdk_content_formats_new_for_gtype (G_TYPE_STRING);
-  dest = gtk_drop_target_new (formats, GDK_ACTION_COPY);
-  gdk_content_formats_unref (formats);
+  dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (G_TYPE_STRING),
+                              GDK_ACTION_COPY);
 
   g_signal_connect (dest, "accept", G_CALLBACK (gtk_calendar_drag_accept), calendar);
   g_signal_connect (dest, "drag-leave", G_CALLBACK (gtk_calendar_drag_leave), calendar);

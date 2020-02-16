@@ -293,17 +293,14 @@ create_notebook_with_notebooks (gchar           **labels,
 static GtkWidget*
 create_trash_button (void)
 {
-  GdkContentFormats *targets;
   GtkWidget *button;
   GtkDropTarget *dest;
 
   button = gtk_button_new_with_mnemonic ("_Delete");
 
-  targets = gdk_content_formats_new (button_targets, G_N_ELEMENTS (button_targets));
-  dest = gtk_drop_target_new (targets, GDK_ACTION_MOVE);
+  dest = gtk_drop_target_new (gdk_content_formats_new (button_targets, G_N_ELEMENTS (button_targets)), GDK_ACTION_MOVE);
   g_signal_connect (dest, "drag-drop", G_CALLBACK (on_button_drag_drop), NULL);
   gtk_widget_add_controller (button, GTK_EVENT_CONTROLLER (dest));
-  gdk_content_formats_unref (targets);
 
   return button;
 }

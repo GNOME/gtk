@@ -661,10 +661,8 @@ gtk_color_swatch_set_can_drop (GtkColorSwatch *swatch,
 
   if (can_drop && !priv->dest)
     {
-      GdkContentFormats *formats;
-
-      formats = gdk_content_formats_new_for_gtype (GDK_TYPE_RGBA);
-      priv->dest = gtk_drop_target_new (formats, GDK_ACTION_COPY);
+      priv->dest = gtk_drop_target_new (gdk_content_formats_new_for_gtype (GDK_TYPE_RGBA),
+                                        GDK_ACTION_COPY);
       g_signal_connect (priv->dest, "drag-drop", G_CALLBACK (swatch_drag_drop), swatch);
       gtk_widget_add_controller (GTK_WIDGET (swatch), GTK_EVENT_CONTROLLER (priv->dest));
     }
