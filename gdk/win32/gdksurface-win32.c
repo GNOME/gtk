@@ -1289,18 +1289,21 @@ gdk_win32_surface_move (GdkSurface *surface,
 }
 
 static void
-gdk_win32_surface_moved_to_rect (GdkSurface   *surface,
-                                 GdkRectangle  final_rect)
+gdk_win32_surface_layout_popup (GdkSurface     *surface,
+                                int             width,
+                                int             height,
+                                GdkPopupLayout *layout)
 {
-  GdkSurface *toplevel;
+  GdkRectangle final_rect;
   int x, y;
 
-  if (surface->surface_type == GDK_SURFACE_POPUP)
-    toplevel = surface->parent;
-  else
-    toplevel = surface->transient_for;
+  gdk_surface_layout_popup_helper (surface,
+                                   width,
+                                   height,
+                                   layout,
+                                   &final_rect);
 
-  gdk_surface_get_origin (toplevel, &x, &y);
+  gdk_surface_get_origin (surface->parent, &x, &y);
   x += final_rect.x;
   y += final_rect.y;
 
@@ -1308,8 +1311,10 @@ gdk_win32_surface_moved_to_rect (GdkSurface   *surface,
       final_rect.height != surface->height)
     {
       gdk_win32_surface_move_resize (surface,
-                                     x, y,
-                                     final_rect.width, final_rect.height);
+                                     x,
+                                     y,
+                                     final_rect.width,
+                                     final_rect.height);
     }
   else
     {
@@ -1318,22 +1323,49 @@ gdk_win32_surface_moved_to_rect (GdkSurface   *surface,
 }
 
 static void
-gdk_win32_surface_move_to_rect (GdkSurface         *surface,
-                                const GdkRectangle *rect,
-                                GdkGravity          rect_anchor,
-                                GdkGravity          surface_anchor,
-                                GdkAnchorHints      anchor_hints,
-                                gint                rect_anchor_dx,
-                                gint                rect_anchor_dy)
+show_popup (GdkSurface *surface)
 {
-  gdk_surface_move_to_rect_helper (surface,
-                                   rect,
-                                   rect_anchor,
-                                   surface_anchor,
-                                   anchor_hints,
-                                   rect_anchor_dx,
-                                   rect_anchor_dy,
-                                   gdk_win32_surface_moved_to_rect);
+  gdk_surface_raise (surface);
+  gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
+  _gdk_surface_update_viewable (surface);
+  show_window_internal (window, FALSE, FALSE);
+  gdk_surface_invalidate_rect (surface, NULL);
+}
+
+static void
+show_grabbing_popup (GdkSeat    *seat,
+                     GdkSurface *surface,
+                     gpointer    user_data)
+{
+  show_popup (surface);
+}
+
+static gboolean
+gdk_win32_surface_present_popup (GdkSurface     *surface,
+                                 int             width,
+                                 int             height,
+                                 GdkPopupLayout *layout)
+{
+  gdk_win32_surface_layout_popup (surface, width, height, layout);
+
+  if (GDK_SURFACE_IS_MAPPED (surface))
+    return TRUE;
+
+  if (surface->autohide)
+    {
+      gdk_seat_grab (gdk_display_get_default_seat (surface->display),
+                     surface,
+                     GDK_SEAT_CAPABILITY_ALL,
+                     TRUE,
+                     NULL, NULL,
+                     show_grabbing_popup, NULL);
+    }
+  else
+    {
+      show_popup (surface);
+    }
+
+  return GDK_SURFACE_IS_MAPPED (surface);
 }
 
 static void
@@ -5161,7 +5193,8 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
   impl_class->lower = gdk_win32_surface_lower;
   impl_class->restack_toplevel = gdk_win32_surface_restack_toplevel;
   impl_class->toplevel_resize = gdk_win32_surface_toplevel_resize;
-  impl_class->move_to_rect = gdk_win32_surface_move_to_rect;
+  impl_class->layout_popup = gdk_win32_surface_layout_popup;
+  impl_class->show_popup = gdk_win32_surface_show_popup;
   impl_class->get_geometry = gdk_win32_surface_get_geometry;
   impl_class->get_device_state = gdk_surface_win32_get_device_state;
   impl_class->get_root_coords = gdk_win32_surface_get_root_coords;

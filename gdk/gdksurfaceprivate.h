@@ -73,6 +73,11 @@ struct _GdkSurface
   guint frame_clock_events_paused : 1;
   guint autohide : 1;
 
+  struct {
+    GdkGravity surface_anchor;
+    GdkGravity rect_anchor;
+  } popup;
+
   guint update_and_descendants_freeze_count;
 
   gint width, height;
@@ -116,13 +121,10 @@ struct _GdkSurfaceClass
   void         (* toplevel_resize)      (GdkSurface      *surface,
                                          gint             width,
                                          gint             height);
-  void         (* move_to_rect)         (GdkSurface       *surface,
-                                         const GdkRectangle *rect,
-                                         GdkGravity       rect_anchor,
-                                         GdkGravity       surface_anchor,
-                                         GdkAnchorHints   anchor_hints,
-                                         gint             rect_anchor_dx,
-                                         gint             rect_anchor_dy);
+  gboolean     (* present_popup)        (GdkSurface     *surface,
+                                         int             width,
+                                         int             height,
+                                         GdkPopupLayout *layout);
 
   void         (* get_geometry)         (GdkSurface       *surface,
                                          gint            *x,
@@ -255,18 +257,71 @@ struct _GdkSurfaceClass
 void gdk_surface_set_state (GdkSurface      *surface,
                             GdkSurfaceState  new_state);
 
-typedef void (* GdkSurfaceMovedToRect) (GdkSurface   *surface,
-                                        GdkRectangle  final_rect);
+void gdk_surface_layout_popup_helper (GdkSurface     *surface,
+                                      int             width,
+                                      int             height,
+                                      GdkPopupLayout *layout,
+                                      GdkRectangle   *out_final_rect);
 
-void
-gdk_surface_move_to_rect_helper (GdkSurface            *surface,
-                                 const GdkRectangle    *rect,
-                                 GdkGravity             rect_anchor,
-                                 GdkGravity             surface_anchor,
-                                 GdkAnchorHints         anchor_hints,
-                                 gint                   rect_anchor_dx,
-                                 gint                   rect_anchor_dy,
-                                 GdkSurfaceMovedToRect  moved_to_rect);
+static inline GdkGravity
+gdk_gravity_flip_horizontally (GdkGravity anchor)
+{
+  switch (anchor)
+    {
+    default:
+    case GDK_GRAVITY_STATIC:
+    case GDK_GRAVITY_NORTH_WEST:
+      return GDK_GRAVITY_NORTH_EAST;
+    case GDK_GRAVITY_NORTH:
+      return GDK_GRAVITY_NORTH;
+    case GDK_GRAVITY_NORTH_EAST:
+      return GDK_GRAVITY_NORTH_WEST;
+    case GDK_GRAVITY_WEST:
+      return GDK_GRAVITY_EAST;
+    case GDK_GRAVITY_CENTER:
+      return GDK_GRAVITY_CENTER;
+    case GDK_GRAVITY_EAST:
+      return GDK_GRAVITY_WEST;
+    case GDK_GRAVITY_SOUTH_WEST:
+      return GDK_GRAVITY_SOUTH_EAST;
+    case GDK_GRAVITY_SOUTH:
+      return GDK_GRAVITY_SOUTH;
+    case GDK_GRAVITY_SOUTH_EAST:
+      return GDK_GRAVITY_SOUTH_WEST;
+    }
+
+  g_assert_not_reached ();
+}
+
+static inline GdkGravity
+gdk_gravity_flip_vertically (GdkGravity anchor)
+{
+  switch (anchor)
+    {
+    default:
+    case GDK_GRAVITY_STATIC:
+    case GDK_GRAVITY_NORTH_WEST:
+      return GDK_GRAVITY_SOUTH_WEST;
+    case GDK_GRAVITY_NORTH:
+      return GDK_GRAVITY_SOUTH;
+    case GDK_GRAVITY_NORTH_EAST:
+      return GDK_GRAVITY_SOUTH_EAST;
+    case GDK_GRAVITY_WEST:
+      return GDK_GRAVITY_WEST;
+    case GDK_GRAVITY_CENTER:
+      return GDK_GRAVITY_CENTER;
+    case GDK_GRAVITY_EAST:
+      return GDK_GRAVITY_EAST;
+    case GDK_GRAVITY_SOUTH_WEST:
+      return GDK_GRAVITY_NORTH_WEST;
+    case GDK_GRAVITY_SOUTH:
+      return GDK_GRAVITY_NORTH;
+    case GDK_GRAVITY_SOUTH_EAST:
+      return GDK_GRAVITY_NORTH_EAST;
+    }
+
+  g_assert_not_reached ();
+}
 
 G_END_DECLS
 
