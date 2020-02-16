@@ -1774,7 +1774,6 @@ gtk_window_init (GtkWindow *window)
   GdkSeat *seat;
   GtkEventController *motion_controller;
 #ifdef GDK_WINDOWING_X11
-  GdkContentFormats *targets;
   GtkDropTarget *dest;
 #endif
 
@@ -1828,9 +1827,7 @@ gtk_window_init (GtkWindow *window)
   priv->scale = gtk_widget_get_scale_factor (widget);
 
 #ifdef GDK_WINDOWING_X11
-  targets = gdk_content_formats_new (dnd_dest_targets, G_N_ELEMENTS (dnd_dest_targets));
-  dest = gtk_drop_target_new (targets, GDK_ACTION_MOVE);
-  gdk_content_formats_unref (targets);
+  dest = gtk_drop_target_new (gdk_content_formats_new (dnd_dest_targets, G_N_ELEMENTS (dnd_dest_targets)), GDK_ACTION_MOVE);
   gtk_widget_add_controller (GTK_WIDGET (window), GTK_EVENT_CONTROLLER (dest));
 #endif
 

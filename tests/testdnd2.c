@@ -416,8 +416,6 @@ make_image (const gchar *icon_name, int hotspot)
   g_signal_connect (dest, "drag-drop", G_CALLBACK (image_drag_drop), image);
   gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (dest));
 
-  gdk_content_formats_unref (formats);
-
   return image;
 }
 
