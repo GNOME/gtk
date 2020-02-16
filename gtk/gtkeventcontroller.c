@@ -82,14 +82,14 @@ gtk_event_controller_unset_widget (GtkEventController *self)
 
 static gboolean
 gtk_event_controller_filter_event_default (GtkEventController *self,
-                                           const GdkEvent     *event)
+                                           GdkEvent           *event)
 {
   return FALSE;
 }
 
 static gboolean
 gtk_event_controller_handle_event_default (GtkEventController *self,
-                                           const GdkEvent     *event,
+                                           GdkEvent           *event,
                                            double              x,
                                            double              y)
 {
@@ -263,7 +263,7 @@ same_native (GtkWidget *widget,
 
 static gboolean
 gtk_event_controller_filter_event (GtkEventController *controller,
-                                   const GdkEvent     *event,
+                                   GdkEvent           *event,
                                    GtkWidget          *target)
 {
   GtkEventControllerPrivate *priv;
@@ -318,7 +318,7 @@ gtk_event_controller_filter_crossing (GtkEventController    *controller,
  **/
 gboolean
 gtk_event_controller_handle_event (GtkEventController *controller,
-                                   const GdkEvent     *event,
+                                   GdkEvent           *event,
                                    GtkWidget          *target,
                                    double              x,
                                    double              y)

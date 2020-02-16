@@ -440,7 +440,7 @@ gtk_gesture_get_group_state (GtkGesture       *gesture,
 
 static gboolean
 _gtk_gesture_update_point (GtkGesture     *gesture,
-                           const GdkEvent *event,
+                           GdkEvent       *event,
                            GtkWidget      *target,
                            double          x,
                            double          y,
@@ -538,7 +538,7 @@ _gtk_gesture_check_empty (GtkGesture *gesture)
 
 static void
 _gtk_gesture_remove_point (GtkGesture     *gesture,
-                           const GdkEvent *event)
+                           GdkEvent       *event)
 {
   GdkEventSequence *sequence;
   GtkGesturePrivate *priv;
@@ -587,7 +587,7 @@ gesture_within_surface (GtkGesture *gesture,
 
 static gboolean
 gtk_gesture_filter_event (GtkEventController *controller,
-                          const GdkEvent     *event)
+                          GdkEvent           *event)
 {
   /* Even though GtkGesture handles these events, we want
    * touchpad gestures disabled by default, it will be
@@ -602,7 +602,7 @@ gtk_gesture_filter_event (GtkEventController *controller,
 
 static gboolean
 gtk_gesture_handle_event (GtkEventController *controller,
-                          const GdkEvent     *event,
+                          GdkEvent           *event,
                           double              x,
                           double              y)
 {
@@ -1150,7 +1150,7 @@ gtk_gesture_get_last_updated_sequence (GtkGesture *gesture)
  *
  * Returns: (transfer none) (nullable): The last event from @sequence
  **/
-const GdkEvent *
+GdkEvent *
 gtk_gesture_get_last_event (GtkGesture       *gesture,
                             GdkEventSequence *sequence)
 {
@@ -1336,7 +1336,7 @@ gtk_gesture_get_bounding_box_center (GtkGesture *gesture,
                                      gdouble    *x,
                                      gdouble    *y)
 {
-  const GdkEvent *last_event;
+  GdkEvent *last_event;
   GdkRectangle rect;
   GdkEventSequence *sequence;
 

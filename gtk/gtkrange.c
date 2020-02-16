@@ -1852,7 +1852,7 @@ gtk_range_click_gesture_pressed (GtkGestureClick *gesture,
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
   GdkDevice *source_device;
   GdkEventSequence *sequence;
-  const GdkEvent *event;
+  GdkEvent *event;
   GdkInputSource source;
   gboolean primary_warps;
   gboolean shift_pressed;

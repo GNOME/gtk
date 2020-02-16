@@ -2199,7 +2199,7 @@ gtk_get_current_event_device (void)
  *     received @event, or %NULL
  */
 GtkWidget*
-gtk_get_event_widget (const GdkEvent *event)
+gtk_get_event_widget (GdkEvent *event)
 {
   GtkWidget *widget;
 

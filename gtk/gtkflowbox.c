@@ -2708,7 +2708,7 @@ gtk_flow_box_click_gesture_released (GtkGestureClick *gesture,
         {
           GdkEventSequence *sequence;
           GdkInputSource source;
-          const GdkEvent *event;
+          GdkEvent *event;
           gboolean modify;
           gboolean extend;
 

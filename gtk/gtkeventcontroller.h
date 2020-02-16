@@ -76,7 +76,7 @@ GtkWidget  * gtk_event_controller_get_widget     (GtkEventController *controller
 
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_event_controller_handle_event   (GtkEventController *controller,
-                                                  const GdkEvent     *event,
+                                                  GdkEvent           *event,
                                                   GtkWidget          *target,
                                                   double              x,
                                                   double              y);
