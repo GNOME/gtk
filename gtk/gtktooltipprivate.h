@@ -31,7 +31,8 @@
 
 G_BEGIN_DECLS
 
-void _gtk_tooltip_handle_event           (GdkEvent           *event);
+void _gtk_tooltip_handle_event           (GtkWidget          *target,
+                                          GdkEvent           *event);
 void _gtk_tooltip_hide                   (GtkWidget          *widget);
 void gtk_tooltip_trigger_tooltip_query   (GtkWidget          *widget);
 
