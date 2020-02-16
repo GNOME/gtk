@@ -76,7 +76,7 @@ static gboolean
 _gtk_gesture_zoom_get_distance (GtkGestureZoom *zoom,
                                 gdouble        *distance)
 {
-  const GdkEvent *last_event;
+  GdkEvent *last_event;
   gdouble x1, y1, x2, y2;
   GtkGesture *gesture;
   GList *sequences = NULL;
@@ -149,7 +149,7 @@ _gtk_gesture_zoom_check_emit (GtkGestureZoom *gesture)
 
 static gboolean
 gtk_gesture_zoom_filter_event (GtkEventController *controller,
-                               const GdkEvent     *event)
+                               GdkEvent           *event)
 {
   /* Let 2-finger touchpad pinch events go through */
   if (gdk_event_get_event_type (event) == GDK_TOUCHPAD_PINCH)

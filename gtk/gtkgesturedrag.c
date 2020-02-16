@@ -60,7 +60,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkGestureDrag, gtk_gesture_drag, GTK_TYPE_GESTURE_S
 
 static gboolean
 gtk_gesture_drag_filter_event (GtkEventController *controller,
-                               const GdkEvent     *event)
+                               GdkEvent           *event)
 {
   /* Let touchpad swipe events go through, only if they match n-points  */
   if (gdk_event_get_event_type (event) == GDK_TOUCHPAD_SWIPE)

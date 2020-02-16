@@ -236,7 +236,7 @@ gchar *_gdk_win32_rect_to_string       (const RECT  *rect);
 gchar *_gdk_win32_gdkrectangle_to_string (const GdkRectangle *rect);
 gchar *_gdk_win32_cairo_region_to_string (const cairo_region_t    *box);
 
-void   _gdk_win32_print_event            (const GdkEvent     *event);
+void   _gdk_win32_print_event            (GdkEvent     *event);
 
 #endif
 

@@ -238,7 +238,7 @@ gtk_event_controller_scroll_get_property (GObject    *object,
 
 static gboolean
 gtk_event_controller_scroll_handle_event (GtkEventController *controller,
-                                          const GdkEvent     *event,
+                                          GdkEvent           *event,
                                           double              x,
                                           double              y)
 {
