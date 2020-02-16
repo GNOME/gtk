@@ -33,7 +33,7 @@ atk_req            = '>= 2.15.1'
 cairo_req          = '>= 1.14.0'
 gdk_pixbuf_req     = '>= 2.30.0'
 introspection_req  = '>= 1.39.0'
-wayland_proto_req  = '>= 1.14'
+wayland_proto_req  = '>= 1.20'
 wayland_req        = '>= 1.14.91'
 graphene_req       = '>= 1.9.1'
 epoxy_req          = '>= 1.4'
@@ -469,9 +469,15 @@ atk_pkgs = ['atk']
 wayland_pkgs = []
 if wayland_enabled
   wlclientdep    = dependency('wayland-client', version:  wayland_req)
-  wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req)
+  wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req, required: false)
   wlegldep       = dependency('wayland-egl')
   backend_immodules += ['wayland']
+
+  if not wlprotocolsdep.found()
+    wlproto_dir = subproject('wayland-protocols').get_variable('wayland_protocols_srcdir')
+  else
+    wlproto_dir = wlprotocolsdep.get_pkgconfig_variable('pkgdatadir')
+  endif
 
   wayland_pkgs = [
     'wayland-client', wayland_req,

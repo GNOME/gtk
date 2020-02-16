@@ -648,7 +648,7 @@ foreach p: proto_sources
     else
       proto_version = p.get(2)
       output_base = '@0@-@1@-@2@'.format(proto_name, proto_stability, proto_version)
-      input = join_paths(proto_dir, '@0@/@1@/@2@.xml'.format(proto_stability, proto_name, output_base))
+      input = join_paths(wlproto_dir, '@0@/@1@/@2@.xml'.format(proto_stability, proto_name, output_base))
     endif
 
     # wayland_scanner is defined in gdk/wayland/meson.build
